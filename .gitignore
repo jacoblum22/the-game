@@ -1,0 +1,7 @@
+# OS / editor junk
+.DS_Store
+Thumbs.db
+desktop.ini
+*.log
+
+# Build/dependency ignores will be added once a tech stack is chosen in /speckit-plan.
