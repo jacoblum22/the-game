@@ -13,6 +13,7 @@ from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Literal, Optional, Union
 
+from resolution import resolve
 from state import ActionAttempt, CharacterState  # noqa: F401  (ActionAttempt re-exported for reuse)
 
 CommitmentType = Literal["invariant", "ordering", "achievement"]
@@ -262,3 +263,138 @@ def validate_world_state_references(
                 errors.append(f"Commitment {c.commitment_id!r} references unknown key {ref!r}")
 
     return errors
+
+
+# --- Tool-calling extension for multi-category state (T013 -- a real, reasoned deviation) ---
+#
+# Feature 001's src/tools.py stays completely unchanged (plan.md's Project Structure). FR-003
+# said roll_check/get_state/update_state would be reused "without modification to those tools'
+# contracts" -- that holds for roll_check and update_state below (byte-for-byte identical
+# behavior to Feature 001's ToolHandlers), but WorldState's extra categories (named resources
+# beyond the one CharacterState resource, possessions, position, status_flags) genuinely need
+# a way to be written that didn't exist in Feature 001's scope, since Feature 001 only ever had
+# one resource to update. Rather than force update_state's signature to do something it wasn't
+# designed for, two new tools are added ADDITIVELY -- update_resource and set_fact -- rather
+# than modifying the original three's contracts. This is documented here as a real, reasoned
+# deviation discovered during implementation, not a silent scope change; see
+# contracts/pipeline-prompts.md for the corresponding contract note.
+
+EXTRA_TOOL_SCHEMAS: list[dict] = [
+    {
+        "name": "update_resource",
+        "description": (
+            "Apply a change to one of the world's additional tracked resources (not the "
+            "character's primary resource -- use update_state for that). Call this whenever "
+            "a turn's outcome implies a change to a named resource in `resources`."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "name": {"type": "string", "description": "The resource's name, matching a key in `resources`."},
+                "delta": {"type": "integer", "description": "Signed change to apply."},
+                "reason": {"type": "string", "description": "Short reason for the change, for the audit log."},
+            },
+            "required": ["name", "delta", "reason"],
+        },
+    },
+    {
+        "name": "set_fact",
+        "description": (
+            "Set a possession, status flag, or the current position to a new value. Call "
+            "this whenever a turn's outcome implies such a change -- do not narrate a fact "
+            "change without also calling this."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "category": {
+                    "type": "string",
+                    "enum": ["possessions", "status_flags", "position"],
+                    "description": "Which category of fact to set.",
+                },
+                "key": {
+                    "type": "string",
+                    "description": "The fact's key within its category (ignored for 'position').",
+                },
+                "value": {
+                    "type": "string",
+                    "description": "The new value, as a string ('true'/'false' for booleans).",
+                },
+                "reason": {"type": "string", "description": "Short reason for the change, for the audit log."},
+            },
+            "required": ["category", "key", "value", "reason"],
+        },
+    },
+]
+
+
+def _coerce_fact_value(value: str) -> bool | str:
+    """status_flags may be boolean or a short string; possessions are always boolean."""
+    if value.strip().lower() in ("true", "false"):
+        return value.strip().lower() == "true"
+    return value
+
+
+class WorldStateToolHandlers:
+    """Same dispatch interface as tools.ToolHandlers (roll_check/get_state/update_state),
+    backed by a WorldState instead of a bare CharacterState, plus the two additive tools
+    above. roll_check and update_state keep byte-for-byte identical behavior to Feature 001's
+    ToolHandlers -- only what get_state returns (the whole WorldState, richer than just the
+    character) differs.
+    """
+
+    def __init__(self, world_state: WorldState, default_modifier: int = 2) -> None:
+        self.world_state = world_state
+        self.default_modifier = default_modifier
+
+    def roll_check(self, dc: int, modifier: Optional[int] = None) -> dict:
+        result = resolve(dc=dc, modifier=modifier if modifier is not None else self.default_modifier)
+        return {
+            "roll": result.roll,
+            "modifier": result.modifier,
+            "total": result.total,
+            "degree": result.degree,
+        }
+
+    def get_state(self) -> dict:
+        return self.world_state.to_dict()
+
+    def update_state(self, delta: int, reason: str) -> dict:
+        self.world_state.character.apply_delta(delta)
+        return {
+            "resource_current": self.world_state.character.resource_current,
+            "resource_max": self.world_state.character.resource_max,
+        }
+
+    def update_resource(self, name: str, delta: int, reason: str) -> dict:
+        if name not in self.world_state.resources:
+            raise ValueError(f"Unknown resource {name!r} -- not in world_state.resources")
+        entry = self.world_state.resources[name]
+        entry["current"] = max(0, min(entry["max"], entry["current"] + delta))
+        return {"name": name, "current": entry["current"], "max": entry["max"]}
+
+    def set_fact(self, category: str, key: str, value: str, reason: str) -> dict:
+        if category == "position":
+            self.world_state.position = value
+            return {"category": "position", "value": self.world_state.position}
+        if category == "possessions":
+            coerced = _coerce_fact_value(value)
+            self.world_state.possessions[key] = coerced if isinstance(coerced, bool) else True
+            return {"category": "possessions", "key": key, "value": self.world_state.possessions[key]}
+        if category == "status_flags":
+            self.world_state.status_flags[key] = _coerce_fact_value(value)
+            return {"category": "status_flags", "key": key, "value": self.world_state.status_flags[key]}
+        raise ValueError(f"Unknown fact category: {category!r}")
+
+    def dispatch(self, tool_name: str, tool_input: dict) -> dict:
+        if tool_name == "roll_check":
+            return self.roll_check(**tool_input)
+        if tool_name == "get_state":
+            return self.get_state()
+        if tool_name == "update_state":
+            return self.update_state(**tool_input)
+        if tool_name == "update_resource":
+            return self.update_resource(**tool_input)
+        if tool_name == "set_fact":
+            return self.set_fact(**tool_input)
+        raise ValueError(f"Unknown tool: {tool_name}")

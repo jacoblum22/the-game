@@ -173,19 +173,21 @@ def get_model_name() -> str:
     return os.environ.get("GAME_DM_MODEL", DEFAULT_MODEL)
 
 
-def _build_tool() -> types.Tool:
+def build_tool(tool_schemas: list[dict[str, Any]] | None = None) -> types.Tool:
+    """Public since Feature 002 onward: builds a types.Tool from any TOOL_SCHEMAS-shaped list,
+    not just Feature 001's original three -- see world_state.py's EXTRA_TOOL_SCHEMAS for why."""
     declarations = [
         types.FunctionDeclaration(
             name=schema["name"],
             description=schema["description"],
             parameters_json_schema=schema["input_schema"],
         )
-        for schema in TOOL_SCHEMAS
+        for schema in (tool_schemas if tool_schemas is not None else TOOL_SCHEMAS)
     ]
     return types.Tool(function_declarations=declarations)
 
 
-_TOOL = _build_tool()
+_TOOL = build_tool()
 
 
 def run_turn(
@@ -194,22 +196,30 @@ def run_turn(
     conversation: list[types.Content],
     player_input: str,
     max_tool_iterations: int = 5,
+    tool_schemas: list[dict[str, Any]] | None = None,
+    system_prompt: str | None = None,
 ) -> TurnResult:
     """Run one player turn to completion, handling any tool-use round-trips.
 
     Mutates `conversation` in place (appends the user turn and all model/tool turns).
     Returns a TurnResult with the DM's final narration and a record of any tool calls made.
+
+    `tool_schemas` and `system_prompt` default to Feature 001's originals (None means "use the
+    module defaults") -- Feature 002 passes its own extended tool list and system prompt
+    without this function's default behavior changing for any existing Feature 001 caller.
     """
     conversation.append(types.Content(role="user", parts=[types.Part.from_text(text=player_input)]))
     tool_call_log: list[dict[str, Any]] = []
+    tool = _TOOL if tool_schemas is None else build_tool(tool_schemas)
+    active_system_prompt = system_prompt if system_prompt is not None else SYSTEM_PROMPT
 
     for _ in range(max_tool_iterations):
         response = client.models.generate_content(
             model=get_model_name(),
             contents=conversation,
             config=types.GenerateContentConfig(
-                system_instruction=SYSTEM_PROMPT,
-                tools=[_TOOL],
+                system_instruction=active_system_prompt,
+                tools=[tool],
             ),
         )
         model_content = response.candidates[0].content

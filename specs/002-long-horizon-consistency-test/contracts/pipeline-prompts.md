@@ -6,6 +6,18 @@ line between each generation call's output and the structural validation that ch
 it's trusted. Each call below is a plain `generate_content` request (no function-calling tools
 involved) — the "contract" is the expected JSON output shape and what validates it.
 
+**Amendment discovered during implementation (T013)**: FR-003 said Feature 001's
+`roll_check`/`get_state`/`update_state` would be reused "without modification to those tools'
+contracts." That held exactly for `roll_check` and `update_state` — `src/tools.py` is untouched,
+and `world_state.WorldStateToolHandlers` reproduces their behavior byte-for-byte. But
+`WorldState`'s extra categories (named resources beyond the character's one, possessions,
+position, status flags) have no way to be *written* under the original three tools, since
+Feature 001 never needed to write anything but one resource. Rather than overload
+`update_state`'s signature to do something it wasn't designed for, two tools were added
+additively in `src/world_state.py`: `update_resource(name, delta, reason)` (for the `resources`
+dict) and `set_fact(category, key, value, reason)` (for possessions/status_flags/position). The
+original three tools' contracts are unmodified; two new ones exist alongside them.
+
 ## 1. Trajectory extraction (`scenario_pipeline.extract_trajectory`)
 
 **Input**: a short, original campaign outline (plain text).
