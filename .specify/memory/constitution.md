@@ -1,7 +1,16 @@
 <!--
 Sync Impact Report
-Version change: 1.3.0 → 1.4.0 (MINOR: first live probe session — adds P16 and P17, extends P13
-  with an empirical finding)
+Version change: 1.4.0 → 1.5.0 (MINOR: resolves Principle III's long-open TODO)
+Modified principles:
+  - III. Rule Flexibility Within Bounds — retitled from "(Deferred Mechanism)" to "(Base-Model
+    Judgment by Default)". RESOLVED: default is the narrating AI's own judgment constrained by
+    P12/P16/P17; no judge-gate (Jev or otherwise) is adopted now. This is an explicit default
+    pending observed failure, not a claim that judgment is proven sufficient — a single probe
+    session cannot establish that either way. TODO(RULE_OVERRIDE_MECHANISM) is closed and
+    replaced with a concrete revisit trigger: adopt a gate only once sustained real play (not
+    a short probe) surfaces a recorded, concrete failure case.
+Version change (prior): 1.3.0 → 1.4.0 (MINOR: first live probe session — adds P16 and P17,
+  extends P13 with an empirical finding)
 Added patterns:
   - P16. Always Leave an Actionable Next Step (No Silent Dead Ends)
   - P17. Graduated Information Reveal for Compound Queries
@@ -65,21 +74,31 @@ The project builds a custom tabletop-style ruleset rather than adapting an exist
 overwhelm a human running the table, so the ruleset MUST be designed to exploit that capacity
 rather than staying constrained to what a human DM could manage alone.
 
-### III. Rule Flexibility Within Bounds (Deferred Mechanism)
+### III. Rule Flexibility Within Bounds (Base-Model Judgment by Default)
 The rules SHOULD allow for built-in flexibility or exceptions. The AI MUST NOT be granted
-blanket authority to override rules purely for narrative convenience — but the precise
-mechanism for principled flexibility (e.g. explicit exception clauses within the rules
-themselves, vs. some other approach) is not yet decided.
-TODO(RULE_OVERRIDE_MECHANISM): resolve before or during /speckit-plan for any feature where
-this distinction matters; do not assume full AI override authority in the meantime.
+blanket authority to override rules purely for narrative convenience.
 
-Candidate direction (not yet adopted): a bounded natural-language classifier — e.g. TypeSafe's
-Jev, which returns only a yes/no with confidence, a category pick from a fixed list, or a
-numeric score, rather than open-ended generation — could gate exception decisions (e.g.
-"does this action warrant a rule exception: yes/no", or "which of these fixed exception
-categories applies"). This would keep exceptions auditable and bounded instead of left to the
-narrating AI's open-ended judgment. Same class of tool may also help structure freeform player
-input into resolvable actions. Neither use is committed; both are deferred to /speckit-plan.
+RESOLVED (supersedes the prior open TODO): the default mechanism is the narrating AI's own
+judgment, constrained by this project's existing behavioral patterns — P12's limitation/
+weakness/cost vocabulary, P16's no-silent-dead-ends rule, P17's graduated-reveal rule — rather
+than a separate classifier or judge-gate. No dedicated exception-gating tool (e.g. TypeSafe's
+Jev) is adopted at this time.
+
+This is a default, not a conclusion that base-model judgment is sufficient at scale. The first
+probe session offered a couple of encouraging anecdotes (it improvised sensibly when a player
+tried to compress many attack attempts into one action; it accepted a live rule correction
+mid-session), but a single 13-turn session cannot actually test whether judgment holds up under
+sustained, compounding complexity — that is only observable once a more complete system has
+been running for longer, with more rules and more chances to break down. Defaulting to
+base-model judgment is therefore not evidence-based confidence that it will hold up; it is a
+deliberate refusal to build speculative infrastructure (a judge-gate) for a failure mode that
+has not actually been observed yet.
+
+TRIGGER FOR REVISITING: adopt a dedicated exception-gating mechanism (Jev or otherwise) only
+once real, sustained play (not a short probe) surfaces a concrete, observed case of the base
+model's rule-breakdown judgment failing in a way that matters — not preemptively. Whoever
+observes such a case should record it before proposing the amendment, so any future revisit is
+grounded in a real example, not a hypothetical.
 
 ### IV. MVP Scope Discipline
 Version 1 MUST be single-player only (no multiplayer/co-op) and text-based only (no voice,
@@ -343,4 +362,4 @@ bumps follow semantic versioning: MAJOR for backward-incompatible principle remo
 redefinitions, MINOR for new principles/patterns or materially expanded guidance, PATCH for
 wording or clarification only.
 
-**Version**: 1.4.0 | **Ratified**: 2026-09-27 | **Last Amended**: 2026-09-28
+**Version**: 1.5.0 | **Ratified**: 2026-09-27 | **Last Amended**: 2026-09-28
