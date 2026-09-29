@@ -369,25 +369,53 @@ if __name__ == "__main__":
 
     outcomes: list[SessionOutcome] = []
     first_scenario = None
-    for name, outline in outline_items:
-        try:
-            trajectory, commitments, world_state = generate_scenario(outline)
-        except IsolationViolationError as exc:
-            print(f"Skipping scenario {name!r} for session-running -- isolation check failed: {exc}")
-            continue
-        if first_scenario is None:
-            first_scenario = (trajectory, commitments, world_state)
-        for persona in personas:
-            run_id = f"{name}-{persona}"
-            outcome = run_session(trajectory, commitments, world_state, persona, args.turns, run_id)
-            outcomes.append(outcome)
-            outcome.save(Path(f"{run_id}.scenario.json"))
+    stopped_early = False
+    stop_reason = None
+
+    try:
+        for name, outline in outline_items:
+            try:
+                trajectory, commitments, world_state = generate_scenario(outline)
+            except IsolationViolationError as exc:
+                print(f"Skipping scenario {name!r} for session-running -- isolation check failed: {exc}")
+                continue
+            if first_scenario is None:
+                first_scenario = (trajectory, commitments, world_state)
+            for persona in personas:
+                run_id = f"{name}-{persona}"
+                # Each run is only added to `outcomes` and saved to disk once it fully
+                # completes -- a failure or interrupt DURING a run's turns still loses that
+                # run's own progress (not resumable mid-session), but every already-completed
+                # run before it is safe either way.
+                outcome = run_session(trajectory, commitments, world_state, persona, args.turns, run_id)
+                outcomes.append(outcome)
+                outcome.save(Path(f"{run_id}.scenario.json"))
+    except KeyboardInterrupt:
+        stopped_early = True
+        stop_reason = "Interrupted by user (Ctrl+C)."
+    except Exception as exc:  # noqa: BLE001 -- deliberately broad: quota/rate-limit/network
+        # errors from the API surface as various exception types depending on cause; the
+        # point here is "don't crash with a raw traceback and lose everything completed so
+        # far," not to distinguish every possible failure mode.
+        stopped_early = True
+        stop_reason = f"Stopped early due to an error: {exc!r}"
 
     print("=" * 60)
-    print(f"Completed {len(outcomes)} run(s).\n")
+    if stopped_early:
+        print(f"{stop_reason}")
+        print(f"{len(outcomes)} run(s) completed before the stop -- reporting on those now (nothing lost from them).\n")
+    else:
+        print(f"Completed {len(outcomes)} run(s) (no interruption).\n")
 
-    report = build_report(outcomes)
-    print_report(report)
+    if outcomes:
+        report = build_report(outcomes)
+        print_report(report)
+    else:
+        print("No runs completed -- nothing to report.")
 
-    if args.category_coverage and first_scenario is not None:
+    if args.category_coverage and first_scenario is not None and not stopped_early:
         run_category_coverage_check(*first_scenario)
+    elif args.category_coverage and stopped_early:
+        print("\nSkipping the category-coverage check since the run was stopped early.")
+
+    sys.exit(1 if stopped_early else 0)
