@@ -67,7 +67,7 @@ that degree — no character creation, combat, or other system involved.
 - [X] T010 [US1] Implement `src/main.py` as the CLI entry point: initialize a `CharacterState`, run one interactive turn loop reading player input and printing the DM's narration
 - [X] T011 [US1] *(Satisfied as a side effect of T009's system prompt — rule 1 already states this classification instruction; no separate change needed.)*
 - [X] T012 [US1] *(Satisfied as a side effect of T009's `run_turn` loop and system prompt rules 2-3; no separate change needed.)*
-- [X] T013 [P] [US1] Implement a minimal `tests/probe/run_scripted_session.py` that sends one fixed, real-stakes action description through the live loop, asserts a computed degree was produced, and logs the turn — covers spec.md's User Story 1 Acceptance Scenarios 1-2. **Written but NOT executed** — blocked on `ANTHROPIC_API_KEY`, which is not set in this environment.
+- [X] T013 [P] [US1] Implement a minimal `tests/probe/run_scripted_session.py` that sends one fixed, real-stakes action description through the live loop, asserts a computed degree was produced, and logs the turn — covers spec.md's User Story 1 Acceptance Scenarios 1-2. **Executed live against Gemini and PASSED**: `roll_check` was actually called (dc=15, modifier=1, roll=12, total=13, degree=failure), and narration matched the computed Failure exactly while also proactively introducing two new leads per Pattern P16.
 
 **Checkpoint**: User Story 1 is fully functional and testable independently — a single action can be resolved end-to-end with real tool-calling.
 

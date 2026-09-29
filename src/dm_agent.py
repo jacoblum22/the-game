@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import os
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Any
 
 from google import genai
@@ -25,7 +26,34 @@ from google.genai import types
 
 from tools import TOOL_SCHEMAS, ToolHandlers
 
-DEFAULT_MODEL = "gemini-2.5-flash"
+DEFAULT_MODEL = "gemini-3.8-flash"
+
+
+def _load_dotenv(path: Path | None = None) -> None:
+    """Minimal .env loader -- sets os.environ from KEY=VALUE lines in a .env file at the
+    repo root, without overriding anything already set in the real environment.
+
+    Exists because shell-set environment variables don't reliably survive across this
+    project's separate tool/terminal processes (Bash tool, PowerShell tool, and the user's
+    own terminal panel are three different processes); a file on disk sidesteps that
+    entirely. Deliberately not using python-dotenv to avoid a dependency for ~10 lines.
+    """
+    if path is None:
+        path = Path(__file__).resolve().parent.parent / ".env"
+    if not path.exists():
+        return
+    for line in path.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, _, value = line.partition("=")
+        key = key.strip()
+        value = value.strip().strip('"').strip("'")
+        if key and key not in os.environ:
+            os.environ[key] = value
+
+
+_load_dotenv()
 
 SYSTEM_PROMPT = """You are the AI Dungeon Master for a probe test of a custom tabletop-style RPG's core resolution loop.
 
@@ -156,7 +184,12 @@ def run_turn(
             tool_call_log.append({"name": call.name, "input": dict(call.args), "result": result})
             response_parts.append(types.Part.from_function_response(name=call.name, response=result))
 
-        conversation.append(types.Content(role="tool", parts=response_parts))
+        # The API's error message for an invalid role lists valid roles as: SYSTEM, SYSTEM_1,
+        # USER, ASSISTANT, DEVELOPER, CONTEXT, USER_CONTEXT, MODEL -- no "tool" role, despite
+        # the google-genai README's own example using role='tool'. Using "user" here matches
+        # Anthropic's equivalent convention (tool results sent as a user-role message) and is
+        # confirmed valid by the API's own error output.
+        conversation.append(types.Content(role="user", parts=response_parts))
 
     raise RuntimeError(
         f"Exceeded max_tool_iterations ({max_tool_iterations}) without a final text response"
