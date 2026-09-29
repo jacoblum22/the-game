@@ -15,6 +15,7 @@ One entry in the generated scenario's ordered plot outline.
 | `key_delta` | string | The observable, world-state-level change this node causes — not a mental-state-only change (per NCP-Bench's definition). |
 | `pov_note` | string | What the player-character could plausibly know at/after this node — enforces the point-of-view constraint during generation. |
 | `sequence_index` | integer | Position in the trajectory's order; used by the isolation check to determine what's "not yet true" at the seed point. |
+| `references` | list[string] | *(Added during implementation.)* Dotted `WorldState` keys this node's `key_delta` affects (e.g. `"status_flags.door_north_locked"`). Explicit rather than inferred from free text, so `world_state.validate_world_state_references` is a deterministic check, not a text-parsing heuristic. |
 
 ## Commitment
 
@@ -29,6 +30,7 @@ A typed, machine-checkable rule the DM's narration must not violate.
 | `violation_condition` | string | Explicit, fact-based condition for this commitment being broken. |
 | `anchor_node_id` | string | The `TrajectoryNode.node_id` this commitment is conditioned on. |
 | `status` | enum | One of `pending`, `satisfied`, `violated`. Starts `pending`; updated by the auditor as the session runs. |
+| `references` | list[string] | *(Added during implementation.)* Same convention as `TrajectoryNode.references` — dotted `WorldState` keys this commitment's conditions depend on. |
 
 **Validation**: excludes static background facts (names, occupations) per NCP-Bench's
 construction rule — a commitment must be about something that can actually be violated during

@@ -31,7 +31,7 @@ a new module boundary.
 
 ## Phase 1: Setup
 
-- [ ] T001 [P] Add `*.scenario.json` to `.gitignore` for generated scenario seed files — the same category of machine-generated, per-run artifact as Feature 001's `*.session.json` pattern
+- [X] T001 [P] Add `*.scenario.json` to `.gitignore` for generated scenario seed files — the same category of machine-generated, per-run artifact as Feature 001's `*.session.json` pattern
 
 **Checkpoint**: No new dependencies to install (plan.md confirms `google-genai`/`pytest` are
 reused unchanged) — Setup is intentionally this thin.
@@ -44,14 +44,14 @@ reused unchanged) — Setup is intentionally this thin.
 the isolation check, the player persona, and the conflict auditor — the atomic pieces every
 user story composes. No user story work can begin until this phase is complete.
 
-- [ ] T002 Implement `TrajectoryNode`, `Commitment`, `WorldState`, `ConflictRecord`, `SessionOutcome` dataclasses in `src/world_state.py` per data-model.md's field lists, extending (not modifying) Feature 001's `CharacterState` from `src/state.py`
-- [ ] T003 Implement structural validation functions in `src/world_state.py`: `validate_trajectory` (unique `node_id`, gapless `sequence_index` ordering), `validate_commitments` (unique `commitment_id`, every `anchor_node_id` references a real trajectory node, `type` is one of the three allowed values), `validate_world_state_references` (every `resources`/`possessions`/`status_flags` key referenced anywhere in the trajectory or commitment set exists in the initial `WorldState` or is documented not-yet-true) — per data-model.md's validation notes and contracts/pipeline-prompts.md
-- [ ] T004 [P] Unit tests for T003's validators in `tests/unit/test_scenario_schema.py`, covering both valid cases and each failure mode (duplicate ID, a commitment referencing a nonexistent trajectory node, a sequence-index gap, an orphaned `resources`/`possessions`/`status_flags` key) — no network calls, pure structural checks
-- [ ] T005 Implement JSON load/save for `WorldState` and `SessionOutcome` in `src/world_state.py`, mirroring `state.py`'s `SessionLog.save`/`load` pattern (flat file, no database, per plan.md's Storage decision)
-- [ ] T006 Implement the three extraction-call functions in `src/scenario_pipeline.py` — `extract_trajectory(outline)`, `extract_commitments(outline, trajectory)`, `extract_initial_facts(outline, trajectory, commitments)` — per contracts/pipeline-prompts.md's call contracts #1-3, each parsing the model's JSON output and immediately calling the matching T003 validator, raising on validation failure rather than proceeding with malformed data
-- [ ] T007 Implement `check_isolation(trajectory, world_state)` in `src/scenario_pipeline.py` per contracts/pipeline-prompts.md's call contract #4, returning the `{isolated, violations}` shape
-- [ ] T008 Implement `next_action(conversation_history, persona_mode)` in `src/player_agent.py` per contracts/pipeline-prompts.md's call contract #5 — a plain freeform action string, capped at roughly 50 words, restricted to visible history only, with `persona_mode` of `adversarial` or `natural`
-- [ ] T009 Implement `check_turn(narration, world_state, commitments)` in `src/auditor.py` per contracts/pipeline-prompts.md's call contract #6, extending `dm_agent.judge_consistency`'s bounded-call pattern into a fuller fact/commitment/player-input conflict classifier with state-category attribution, returning a `ConflictRecord` or `None`
+- [X] T002 Implemented `TrajectoryNode`, `Commitment`, `WorldState`, `ConflictRecord`, `SessionOutcome` dataclasses in `src/world_state.py`. *Amended: added a `references: list[str]` field to `TrajectoryNode`/`Commitment` (data-model.md updated to match) — needed to make key-reference validation deterministic rather than fragile free-text parsing.*
+- [X] T003 Implemented `validate_trajectory`, `validate_commitments`, `validate_world_state_references` in `src/world_state.py`.
+- [X] T004 [P] Unit tests in `tests/unit/test_scenario_schema.py` — **12/12 passing** (24/24 total with Feature 001's suite).
+- [X] T005 JSON load/save for `WorldState`/`SessionOutcome` in `src/world_state.py`.
+- [X] T006 Implemented `extract_trajectory`/`extract_commitments`/`extract_initial_facts` in `src/scenario_pipeline.py`, using a new shared `dm_agent.call_json` helper (JSON output mode). **Executed live against Gemini and PASSED** end-to-end on a real campaign outline: 6-node trajectory, 5 commitments, and a fully-populated initial `WorldState`, all passing their respective validators on the first real run.
+- [X] T007 Implemented `check_isolation` in `src/scenario_pipeline.py`. **Executed live**: correctly reported `isolated: True, violations: []` on the same real scenario.
+- [X] T008 Implemented `next_action` in `src/player_agent.py`. **Executed live** for both modes on the same test prompt — adversarial persona proposed an exploit (removing door hinges instead of picking the lock), natural persona proposed a cautious, in-character action. Visibly different behavior per mode, as intended.
+- [X] T009 Implemented `check_turn` in `src/auditor.py`. **Executed live** on a matched pair: a consistent narration correctly returned no conflict; a deliberately contradictory narration (door narrated as opening despite `status_flags.storeroom_locked: true`) was correctly caught as a `fact` conflict, category `status_flags`, with an accurate description.
 
 **Checkpoint**: Foundation ready — every atomic piece (state model, validators, extraction
 calls, isolation check, player persona, auditor) exists and is unit-tested where testable in

@@ -16,6 +16,7 @@ visible and inspectable rather than hidden inside SDK-internal auto-execution.
 
 from __future__ import annotations
 
+import json
 import os
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -234,6 +235,26 @@ def run_turn(
     raise RuntimeError(
         f"Exceeded max_tool_iterations ({max_tool_iterations}) without a final text response"
     )
+
+
+def call_json(prompt: str) -> dict | list:
+    """Shared helper (feature 002 onward): calls the model with JSON output mode and parses
+    the result. Uses response_mime_type="application/json" -- a well-established, low-risk way
+    to request structured output -- rather than response_schema; callers validate the parsed
+    structure themselves against their own exact dataclasses immediately after, so a simpler
+    request mode plus our own robust validation is preferred over betting on a more complex
+    schema-binding feature not independently verified for this SDK version. Builds its own
+    client rather than taking one as a parameter, matching this module's other module-level
+    call functions (run_turn is the exception, since it needs a persistent client across a
+    whole session's turns; one-shot calls like this one don't)."""
+    client = build_client()
+    response = client.models.generate_content(
+        model=get_model_name(),
+        contents=[types.Content(role="user", parts=[types.Part.from_text(text=prompt)])],
+        config=types.GenerateContentConfig(response_mime_type="application/json"),
+    )
+    text = (response.text or "").strip()
+    return json.loads(text)
 
 
 def judge_consistency(client: genai.Client, narration: str, degree: str) -> bool:

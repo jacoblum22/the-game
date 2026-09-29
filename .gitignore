@@ -15,4 +15,5 @@ venv/
 # Secrets / local config
 .env
 *.session.json
+*.scenario.json
 
