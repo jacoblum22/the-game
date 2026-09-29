@@ -1,6 +1,38 @@
 <!--
 Sync Impact Report
-Version change: 1.4.0 → 1.5.0 (MINOR: resolves Principle III's long-open TODO)
+Version change: 1.5.0 → 1.6.0 (MINOR: fifth research pass resolves Pattern P5's direction)
+Modified patterns:
+  - P5 (Emergent-by-History Power Acquisition) — retitled from "(Open Design Priority)" to
+    "(Direction Resolved, Specifics Deferred)". Architecture resolved for both flavors: (1)
+    specific-ability-from-source+method uses a source-gated bounded sub-pool plus a
+    method-selected fill mechanism (Diablo/PoE/Borderlands' item-generation pattern), with
+    slot-claiming conflicts resolved via P6's priority-rank companion mechanism; (2)
+    class/archetype emergence is a narrative label DERIVED from an underlying, hard-capped
+    combinatorial ability-slot system (never an independent ability-dispensing system of its
+    own), eligibility gated by deterministic dual-tier thresholds (Delve's Primary/Secondary
+    Requirement model) keyed to a small fixed set of category axes, resolved by a calibrated,
+    model-family-independent classifier (per Pattern P13) that scores a bounded candidate set
+    and returns a confidence value per candidate rather than a forced pick, decided via a
+    three-valued grant/offer-to-player/abstain policy, with mixed histories resolved by
+    presenting a named hybrid option for the player to choose rather than a computed
+    tie-break formula. The exact class list, thresholds, confidence cutoffs, and bonus values
+    remain deferred to a future /speckit-plan — this amendment resolves architecture, not
+    numbers.
+  - P6 (Named Composite Bonuses) — added a cross-reference noting Pattern P5's class-synergy
+    bonus is an instance of this mechanism, not a separate one.
+Added patterns: n/a
+Removed sections: n/a
+Deferred / TODO items carried forward unchanged:
+  - TODO(TECH_STACK): still open (Technology Constraints).
+Newly deferred by this amendment:
+  - P5's exact class list, numeric thresholds, confidence cutoffs, and synergy-bonus values —
+    architecture is resolved; numbers are not, and are left for a future /speckit-plan.
+Research basis: this amendment is sourced from a fifth dedicated research pass (ARPG procedural
+  affix/effect generation, roguelike/roguelite build-synergy architecture, and LitRPG
+  class-from-aggregate-playstyle precedent) commissioned specifically to resolve Pattern P5,
+  the project's longest-standing open design priority. Full report:
+  reports/Emergent power acquisition mechanisms.md.
+Version change (prior): 1.4.0 → 1.5.0 (MINOR: resolves Principle III's long-open TODO)
 Modified principles:
   - III. Rule Flexibility Within Bounds — retitled from "(Deferred Mechanism)" to "(Base-Model
     Judgment by Default)". RESOLVED: default is the narrating AI's own judgment constrained by
@@ -212,17 +244,58 @@ vice versa) once, at character creation, not something that changes later. Separ
 Game's tested fix for "how do you let someone play the hybrid superclass without everyone else
 sucking" — breadth of access is not itself a source of day-one power.
 
-**P5. Emergent-by-History Power Acquisition (Open Design Priority).** Abilities/effects derived
-from what a character actually did — what they fought, killed, or otherwise experienced —
-rather than picked from a menu, are considered one of the most important goals of this project
-and warrant dedicated design work, not a quick decision. This is explicitly NOT settled.
-Whatever mechanism is eventually designed MUST derive the acquired effect from a combination of
-what the source actually was (the monster/entity's own nature or abilities) and how it was
-defeated or acquired — not from an arbitrary lookup table (unmanageable at scale) and not from
-a fully open, uncapped pool (Underworld's unbounded "copy any ability," which every source
-agrees became untrackable). Hemalurgy's location-plus-method encoding is a useful structural
-reference for *how* to build a compact generative rule, even though its specific inputs
-(body location, cause of death) are not themselves what we want to copy.
+**P5. Emergent-by-History Power Acquisition (Direction Resolved, Specifics Deferred).**
+Abilities/effects derived from what a character actually did — what they fought, killed, or
+otherwise experienced — rather than picked from a menu, remain one of the most important goals
+of this project. A fifth research pass (ARPG procedural affix/effect generation, roguelike
+build-synergy architecture, and LitRPG class-from-playstyle precedent; full report:
+`reports/Emergent power acquisition mechanisms.md`) resolves the *architecture* for this
+pattern, across both of its flavors below — the exact class list, thresholds, confidence
+cutoffs, and bonus values remain deferred to a future `/speckit-plan`, not settled here.
+
+*Specific-ability-from-source-and-method.* Whatever mechanism is built MUST derive an acquired
+effect from a combination of what the source actually was (a monster/entity's own nature, or a
+category of action performed) and how it was defeated, acquired, or performed — never an
+arbitrary lookup table (unmanageable at scale) and never a fully open, uncapped pool
+(Underworld's unbounded "copy any ability," which every source agrees became untrackable). The
+resolved shape, confirmed convergently across Diablo/PoE/Borderlands' item-generation systems
+and Hades/Delve's curated-table designs: the **source categorically gates a small, bounded
+sub-pool of eligible effects** (the way a monster's nature gates which effect-templates are
+even possible, mirroring how Borderlands' manufacturer identity gates its parts pool), and the
+**acquisition method then selects how one is filled from that gated pool** — a guaranteed pick,
+a weighted/biased roll, or a deterministic addition, mirroring Path of Exile's Essence/Fossil/
+Crafting-Bench split. For acquired effects that claim an exclusive behavioral slot (override a
+basic action) rather than stacking additively, resolve conflicts with a priority-rank field per
+effect (Pattern P6's companion mechanism, independently reinvented by Binding of Isaac's
+designers for the identical problem), not a bespoke pairwise rule.
+
+*Class/archetype emergence.* The underlying combinatorial ability-slot system (small, fixed
+slots times bounded option pools, recombined — HWFWM's and Stormlight's model, already this
+project's general build-diversity approach) is what generates real mechanical diversity, and it
+MUST carry a hard total-slot ceiling (mirroring HWFWM's fixed 20-ability cap) rather than
+growing without bound. A "class" or title is a **derived narrative label computed over that
+combinatorial state** (e.g., which fraction of filled slots are blade-tagged vs. arcane-tagged)
+— it MUST NOT become an independent system that hands out an ability list of its own; doing so
+would reintroduce the menu-driven, non-emergent model this pattern exists to avoid. Eligibility
+for a class-consideration moment MUST be gated by deterministic, engine-tracked counters, not
+narration — a dual-tier threshold (a rank/ratio across a small, fixed set of category axes,
+plus a cumulative action counter, per Delve's Primary/Secondary Requirement structure) keyed to
+a small, author-fixed set of axes, never to the full, ever-growing ability or monster list (the
+same low-cardinality-keying trick Hades uses for its Duo Boon table). Once eligible, a
+calibrated classifier — which MUST NOT share a model family with the narrating AI, per Pattern
+P13's existing independence requirement — scores the bounded, eligible candidate set (not the
+full class list) using the character's actual combinatorial state, returning a confidence value
+per candidate rather than a forced single answer. Resolve those scores with a three-valued
+policy: high confidence grants directly; mid confidence presents the candidate(s) as real,
+player-chosen options rather than an auto-applied result (consistent with Pattern P1's existing
+"player may defer or gamble" value); all-low-confidence abstains and re-checks later rather than
+forcing a decision the evidence doesn't support. Mixed/hybrid histories — for which no source in
+the fifth research pass supplied an explicit numeric tie-break formula — are resolved by
+surfacing a named hybrid candidate (The Wandering Inn's "consolidation" precedent) alongside the
+single-track options and letting the player choose, rather than requiring the system to compute
+a winner. A recognized class MAY unlock a small, bounded, audited synergy bonus requiring the
+class's specific combination to trigger (Pattern P6's named composite bonus, or Pattern P14's
+cadence differentiation) — never a new ability list of its own.
 
 **P6. Named Composite Bonuses for Aligned Combinations.** Combining two specific, aligned
 primitives SHOULD yield a distinct, named emergent bonus (Stormlight's "Three Lashings" from
@@ -239,6 +312,11 @@ Fork beats Chain beats Return, so "a piercing, forking, chaining projectile will
 its maximum, then fork, then chain," with no authored name for that specific combination).
 Reserve P6's bespoke named effects for the smaller set of combinations distinctive enough to
 deserve one; use the priority-ordered tag mechanism for everything else.
+
+Fifth-research-pass note: Pattern P5's class-emergence mechanism uses this pattern directly — a
+recognized class's bounded synergy bonus (e.g. a hybrid-only technique requiring both a magic
+slot and a weapon slot to trigger) is an instance of this named-composite-bonus mechanism, not
+a separate one.
 
 **P7. Player-Facing Reference Layer.** The system MUST provide an opt-in, queryable reference
 ("codex") of a character's own rules/state/abilities, separate from in-scene narration —
@@ -362,4 +440,4 @@ bumps follow semantic versioning: MAJOR for backward-incompatible principle remo
 redefinitions, MINOR for new principles/patterns or materially expanded guidance, PATCH for
 wording or clarification only.
 
-**Version**: 1.5.0 | **Ratified**: 2026-09-27 | **Last Amended**: 2026-09-28
+**Version**: 1.6.0 | **Ratified**: 2026-09-27 | **Last Amended**: 2026-09-29
