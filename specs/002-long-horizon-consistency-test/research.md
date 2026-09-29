@@ -87,3 +87,51 @@ trajectory node sensible, does this commitment actually reflect the outline) is 
 deterministically checkable and isn't unit-tested; it's exercised live via the scripted harness.
 
 **Output**: All Technical Context items resolved above; no remaining `NEEDS CLARIFICATION`.
+
+## Amendment (post-T021): fast-forward seeding revisits the rejected "freehand recap" alternative
+
+**Context**: this feature's own initial research brief proposed exactly what the "freehand
+recap" alternative above rejected — a synthetic "story so far" plus a pre-populated state, to
+avoid paying for 80+ real sequential turns to reach a long-session state. What actually got
+built for T021 played every turn live from `sequence_index 0` instead, at real cost roughly
+proportional to the full turn count. After T021 (which needed several corrective iterations
+before its numbers were trustworthy — see `implementation-results.md`), the project owner asked
+why a synthetic recap wasn't used, given the whole session's trajectory and commitments are
+already generated ahead of time.
+
+**Resolution**: re-reading the original rejection shows it was about the *lack of isolation
+discipline* in a freehand recap — "hand-extracting state from it," with no independent check
+that it doesn't leak future knowledge — not about the fast-forward concept itself. The existing
+pipeline's isolation discipline (Decision 1, above) generalizes cleanly to an arbitrary cutoff
+point instead of always `sequence_index 0`: `extract_state_at_cutoff` and `check_isolation` both
+take a `cutoff_index` now (default `-1`, the original t=0 behavior, so no existing caller
+changes). See `contracts/pipeline-prompts.md` §7 for the full contract. This is not a reversal of
+the original decision's reasoning, only a correction of scope: the rejected alternative and this
+addition are different things that happened to use the word "recap."
+
+**Second correction, before this ever ran a real batch**: the first implementation of the above
+generated a short (3-6 sentence) prose recap and injected it into the DM's system prompt. Caught
+in review before any live session used it: a short summary doesn't test what "long-horizon
+consistency" is actually about. NCP-Bench-style degradation is about whether a genuinely *large
+volume* of accumulated turn content in the model's context causes attention/recall problems — a
+five-sentence briefing has essentially none of that volume, no matter how accurate it is.
+Testing against a recap measures "can the DM correctly continue given an accurate summary," a
+real but much narrower and easier question than the one this feature exists to ask.
+
+**Final design**: `generate_synthetic_transcript` produces a full alternating
+`(player_action, dm_narration)` transcript, granular enough to total a real target turn count
+(not one turn per plot beat — ordinary investigative/conversational turns between beats too),
+generated in chunks rather than one shot. `check_transcript` verifies it holistically before
+trust: isolation, internal self-consistency, agreement with the independently-computed cutoff
+state, and commitment compliance. The harness splices this transcript directly into the real
+conversation history as literal prior turns, so the model contends with actual bulk context
+instead of a compressed stand-in for it.
+
+**Known limitation of this design, stated honestly**: the synthetic transcript is authored
+together, in one or a few generation passes, not turn-by-turn independently the way a real
+session unfolds — the model can effectively "see" the whole thing at once while writing it. This
+likely makes it *more* internally consistent than an organically-generated turn-by-turn history
+would be. If real turns run on top of this transcript show few conflicts, that is a genuinely
+weaker result than the same finding from a fully live session would be — a much better proxy for
+"does bulk context cause degradation" than a recap, but not a perfect substitute for actually
+playing out every turn.

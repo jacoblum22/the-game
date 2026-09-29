@@ -295,6 +295,20 @@ def validate_world_state_references(
     """
     errors: list[str] = []
 
+    # Found live (fast-forward batch): a generation pass seeded the SAME resource name as both
+    # `character.resource_name` (the one primary resource, written via update_state) and a key
+    # in `resources` (an additional resource, written via update_resource) -- two independently
+    # tracked state slots sharing a name, with no way for the DM to know only one is "real."
+    # The DM correctly called update_state; the auditor correctly checked resources[name], which
+    # nothing had touched, and (correctly, given what it was shown) flagged a conflict. The seed
+    # itself was the bug, not the DM or the auditor.
+    if world_state.character.resource_name in world_state.resources:
+        errors.append(
+            f"Resource name {world_state.character.resource_name!r} is used for both "
+            f"character.resource_name and a key in resources -- these are two separately "
+            f"tracked state slots and must not share a name"
+        )
+
     for node in trajectory:
         for ref in node.references:
             if not _reference_exists(world_state, ref):

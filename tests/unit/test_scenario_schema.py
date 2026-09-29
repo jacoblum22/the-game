@@ -149,6 +149,16 @@ def test_bare_position_and_character_resource_always_valid():
     assert validate_world_state_references(ws, nodes, []) == []
 
 
+def test_resource_name_colliding_with_character_resource_name_fails():
+    # Found live (fast-forward batch): a generation pass seeded "lantern_oil" as BOTH
+    # character.resource_name (written via update_state) and a resources dict key (written via
+    # update_resource) -- two separately tracked slots for the same name, causing the DM's
+    # correct tool call to update one while the auditor checked the other, untouched, slot.
+    ws = make_world_state(resources={"Vitality": {"current": 5, "max": 10}})
+    errors = validate_world_state_references(ws, [], [])
+    assert any("used for both character.resource_name and a key in resources" in e for e in errors)
+
+
 # --- from_dict defensive parsing (found live during T021) ---
 # The extraction pipeline runs in plain JSON mode (no schema binding), so the model can emit a
 # stray top-level key instead of putting it where it belongs (observed: a literal
