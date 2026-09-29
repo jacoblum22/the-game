@@ -7,8 +7,8 @@ templates, but follow the same structure and enforce the same T=0 Absolute Isola
 Principle. Each extraction function validates its own output immediately (T003's validators)
 and raises on failure rather than returning malformed data -- per contracts/pipeline-prompts.md.
 
-generate_scenario(), which orchestrates all four steps into one call, is User Story 1's own
-task (T010), not implemented here -- this module only provides the atomic pieces.
+generate_scenario() (T010, User Story 1) orchestrates all four stages into one call, at the
+bottom of this file.
 """
 
 from __future__ import annotations
@@ -180,3 +180,36 @@ Starting world state:
 {world_state_json}
 """
     return call_json(prompt)
+
+
+class IsolationViolationError(RuntimeError):
+    """Raised when a generated scenario fails the isolation check and cannot be salvaged
+    within the retry budget. Per spec.md's Edge Cases, an isolated=false scenario MUST be
+    blocked from use -- this is that block."""
+
+
+def generate_scenario(
+    outline: str, max_isolation_retries: int = 2
+) -> tuple[list[TrajectoryNode], list[Commitment], WorldState]:
+    """T010 (User Story 1): orchestrates all four pipeline stages into one scenario.
+
+    The trajectory and commitments are generated once; if the isolation check fails, only
+    the initial-facts stage (the one actually responsible for isolation) is regenerated, up
+    to `max_isolation_retries` times, rather than restarting the whole pipeline -- cheaper,
+    and the trajectory/commitments aren't where an isolation leak originates.
+    """
+    trajectory = extract_trajectory(outline)
+    commitments = extract_commitments(outline, trajectory)
+
+    last_violations = None
+    for attempt in range(max_isolation_retries + 1):
+        world_state = extract_initial_facts(outline, trajectory, commitments)
+        result = check_isolation(trajectory, world_state)
+        if result.get("isolated"):
+            return trajectory, commitments, world_state
+        last_violations = result.get("violations")
+
+    raise IsolationViolationError(
+        f"Scenario failed isolation check after {max_isolation_retries + 1} attempts. "
+        f"Last violations: {last_violations}"
+    )

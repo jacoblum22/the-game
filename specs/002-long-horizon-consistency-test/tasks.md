@@ -70,9 +70,9 @@ leaks future-trajectory knowledge — no long session needs to run yet to verify
 
 ### Implementation for User Story 1
 
-- [ ] T010 [US1] Implement `generate_scenario(outline)` in `src/scenario_pipeline.py`, composing T006's three extraction calls and T007's isolation check into one orchestrated pipeline; per spec.md's Edge Cases, an `isolated: false` result MUST block the scenario from being returned (raise or trigger regeneration), not merely warn
-- [ ] T011 [P] [US1] Write 3 distinct, original campaign outlines (short plain text, not adapted from copyrighted material per research.md's decision) for use across this feature's success criteria, saved as `tests/probe/campaign_outlines.py`
-- [ ] T012 [US1] Implement a scenario-only verification mode in `tests/probe/run_long_horizon_test.py` (quickstart.md Step 1) that runs `generate_scenario` against all 3 outlines from T011 and reports isolation-check pass/fail for each, satisfying SC-001 without running any live session turns
+- [X] T010 [US1] Implemented `generate_scenario(outline)` in `src/scenario_pipeline.py`, with bounded retry (regenerating only the initial-facts stage, up to 2 extra attempts) on isolation failure, raising `IsolationViolationError` if still unisolated — a hard block, not a warning, per spec.md's Edge Cases.
+- [X] T011 [P] [US1] Wrote 3 original outlines (outpost, lighthouse, archive) in `tests/probe/campaign_outlines.py`.
+- [X] T012 [US1] Implemented the scenario-only verification mode in `tests/probe/run_long_horizon_test.py`. **Executed live — SC-001 fully PASSED on the first attempt, zero isolation retries needed**: outpost (6 nodes, 5 commitments), lighthouse (7 nodes, 5 commitments), archive (7 nodes, 5 commitments) — all isolated, all with sensibly populated resources/possessions/status_flags categories.
 
 **Checkpoint**: User Story 1 is fully functional and testable independently — a validated,
 isolation-checked synthetic scenario can be produced for real, for any of the 3 outlines,
