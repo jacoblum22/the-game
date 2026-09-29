@@ -4,4 +4,15 @@ Thumbs.db
 desktop.ini
 *.log
 
-# Build/dependency ignores will be added once a tech stack is chosen in /speckit-plan.
+# Python (feature 001: action-resolution-probe)
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+
+# Secrets / local config
+.env
+*.session.json
+

@@ -29,9 +29,9 @@ repository root.
 
 ## Phase 1: Setup
 
-- [ ] T001 Create the project structure at repository root per plan.md's Project Structure: `src/`, `tests/unit/`, `tests/probe/`
-- [ ] T002 Initialize Python dependencies in `requirements.txt` at repository root: `anthropic`, `pytest` (per plan.md's Primary Dependencies/Testing)
-- [ ] T003 [P] Add `.env.example` at repository root documenting `ANTHROPIC_API_KEY` and a model-name environment variable, per research.md's "model is a runtime-configurable parameter" decision
+- [X] T001 Create the project structure at repository root per plan.md's Project Structure: `src/`, `tests/unit/`, `tests/probe/`
+- [X] T002 Initialize Python dependencies in `requirements.txt` at repository root: `anthropic`, `pytest` (per plan.md's Primary Dependencies/Testing)
+- [X] T003 [P] Add `.env.example` at repository root documenting `ANTHROPIC_API_KEY` and a model-name environment variable, per research.md's "model is a runtime-configurable parameter" decision
 
 **Checkpoint**: Repo structure and dependency list exist; nothing runnable yet.
 
@@ -42,12 +42,12 @@ repository root.
 **Purpose**: The state model, deterministic resolution logic, tool boundary, and agent loop that
 all three user stories depend on. No user story work can begin until this phase is complete.
 
-- [ ] T004 Implement `CharacterState`, `ActionAttempt`, and `SessionLog` data structures in `src/state.py` per data-model.md's field lists, including the validation rule `0 <= resource_current <= resource_max`
-- [ ] T005 Implement `SessionLog` JSON load/save functions in `src/state.py` (flat file per plan.md's Storage decision — no database)
-- [ ] T006 [P] Implement the pure `resolve(dc, modifier)` function in `src/resolution.py` per research.md's exact formula: roll 1d20, total = roll + modifier; Critical Success if total >= dc+10 OR raw roll is a natural 20; Critical Failure if total <= dc-10 OR raw roll is a natural 1; otherwise Success if total >= dc, else Failure. No network calls, no I/O.
-- [ ] T007 [P] Unit tests for `src/resolution.py` in `tests/unit/test_resolution.py` covering: a normal Success, a normal Failure, Critical Success via the +10 threshold, Critical Success via a natural 20 below threshold, Critical Failure via the -10 threshold, Critical Failure via a natural 1 above threshold, and the exact-boundary cases (total == dc, total == dc+10, total == dc-10)
-- [ ] T008 Implement tool schemas and handler functions for `roll_check`, `get_state`, and `update_state` in `src/tools.py` per contracts/tools.md's exact input/output shapes, wrapping `resolution.py` and `state.py` — this module is the literal boundary between free narration and deterministic mechanics (Principle I, Pattern P13)
-- [ ] T009 Implement `src/dm_agent.py`: an Anthropic API client wrapper that reads the model name from the environment variable added in T003, a system prompt encoding Pattern P8 (degrees-of-success as the default resolution), Pattern P12 (limitation/weakness/cost as distinct vocabulary), Pattern P16 (never leave a silent dead end), Pattern P17 (graduated information reveal for compound/bundled questions), and Principle III's resolved default (the model's own judgment for rule-breakdown situations, no separate gate) — and the tool-use loop wired to `src/tools.py`
+- [X] T004 Implement `CharacterState`, `ActionAttempt`, and `SessionLog` data structures in `src/state.py` per data-model.md's field lists, including the validation rule `0 <= resource_current <= resource_max`
+- [X] T005 Implement `SessionLog` JSON load/save functions in `src/state.py` (flat file per plan.md's Storage decision — no database)
+- [X] T006 [P] Implement the pure `resolve(dc, modifier)` function in `src/resolution.py` per research.md's exact formula: roll 1d20, total = roll + modifier; Critical Success if total >= dc+10 OR raw roll is a natural 20; Critical Failure if total <= dc-10 OR raw roll is a natural 1; otherwise Success if total >= dc, else Failure. No network calls, no I/O.
+- [X] T007 [P] Unit tests for `src/resolution.py` in `tests/unit/test_resolution.py` covering: a normal Success, a normal Failure, Critical Success via the +10 threshold, Critical Success via a natural 20 below threshold, Critical Failure via the -10 threshold, Critical Failure via a natural 1 above threshold, and the exact-boundary cases (total == dc, total == dc+10, total == dc-10) — **12/12 passing**
+- [X] T008 Implement tool schemas and handler functions for `roll_check`, `get_state`, and `update_state` in `src/tools.py` per contracts/tools.md's exact input/output shapes, wrapping `resolution.py` and `state.py` — this module is the literal boundary between free narration and deterministic mechanics (Principle I, Pattern P13)
+- [X] T009 Implement `src/dm_agent.py`: an Anthropic API client wrapper that reads the model name from the environment variable added in T003, a system prompt encoding Pattern P8 (degrees-of-success as the default resolution), Pattern P12 (limitation/weakness/cost as distinct vocabulary), Pattern P16 (never leave a silent dead end), Pattern P17 (graduated information reveal for compound/bundled questions), and Principle III's resolved default (the model's own judgment for rule-breakdown situations, no separate gate) — and the tool-use loop wired to `src/tools.py`. **Not yet exercised against a live API call** — `ANTHROPIC_API_KEY` isn't set in this environment; verified only that it imports cleanly and constructs correctly.
 
 **Checkpoint**: State model, resolution math, tool boundary, and agent loop all exist and are unit-tested where testable in isolation (T007). User story implementation can now begin.
 
