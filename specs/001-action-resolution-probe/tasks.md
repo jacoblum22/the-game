@@ -83,9 +83,9 @@ check whether the persisted state matches what was narrated.
 
 ### Implementation for User Story 2
 
-- [ ] T014 [US2] Extend `dm_agent.py`'s system prompt/loop to call `get_state` before any turn where current state might matter, and `update_state` whenever an outcome implies a resource change (FR-005, FR-006)
-- [ ] T015 [US2] Extend `SessionLog` in `src/state.py` to append one `ActionAttempt` per turn, including `state_before`/`state_after` snapshots, per data-model.md's field list and its validation note (state_after must equal state_before unless narration/degree implies otherwise)
-- [ ] T016 [P] [US2] Extend `tests/probe/run_scripted_session.py` to run a fixed sequence of at least 10 actions — mirroring the turn variety already exercised in [probe-results.md](probe-results.md) (investigation, a compound question, a combat attempt, a time-pressure edge case) — and print the full per-turn log
+- [X] T014 [US2] *(Confirmed satisfied by T009's system prompt, live: get_state/update_state were called correctly across the full 10-turn run below — no separate change needed.)*
+- [X] T015 [US2] Added `dm_agent.build_action_attempt()` (extracts dc/roll/modifier/total/degree from a turn's tool_calls) and wired it into both `main.py` and the scripted harness, appending one `ActionAttempt` per turn via `session.append_turn()`. Verified live in both entry points.
+- [X] T016 [P] [US2] Extended `tests/probe/run_scripted_session.py`'s `SCRIPT` to a fixed 10-action sequence mirroring probe-results.md's variety. **Executed live**: 10 turns, 8 resolved (4 Success, 4 Failure, 0 crits), 2 correctly-skipped stakes-free turns, state changed exactly on turns 4/7/9 (a failed persuade, a failed reckless flurry, pushing through pain) — all sensible given their narration.
 
 **Checkpoint**: User Stories 1 and 2 both work independently — a full session's state stays traceable turn by turn.
 
@@ -101,9 +101,9 @@ identifiable from that log alone.
 
 ### Implementation for User Story 3
 
-- [ ] T017 [US3] Implement a consistency-check function in `tests/probe/run_scripted_session.py` that computes SC-002 (count of turns where narration contradicts its own computed degree) and SC-003 (every state change traceable to a specific `update_state` call) from the session log
-- [ ] T018 [US3] Implement the SC-004 check in the same script: confirm every stakes-free turn correctly skipped `roll_check`
-- [ ] T019 [US3] Print a final summary (SC-001 through SC-004 results) at the end of `tests/probe/run_scripted_session.py`, matching the expected output documented in quickstart.md
+- [X] T017 [US3] Implemented `summarize()` in `run_scripted_session.py`: SC-002 via `dm_agent.judge_consistency()`, a bounded LLM-judge call with fresh context (not the live game's judge-gate — a test-harness grading tool only; documented as such). **Result: 0 contradictions across 8 resolved turns.** SC-003 reports which turns changed state, for audit against narration.
+- [X] T018 [US3] SC-004 implemented as true-by-construction of `build_action_attempt` (no roll_check found → requires_resolution=False); confirmed live — both stakes-free turns correctly skipped it.
+- [X] T019 [US3] Final summary printed and captured. **Full live result**: `sc001_all_resolved_have_degree: True`, `sc002_contradiction_count: 0`, `sc003_state_change_turns: [4, 7, 9]`, `sc004_all_unresolved_skipped_roll: True`, `degree_tally: {success: 4, failure: 4, critical_success: 0, critical_failure: 0}`.
 
 **Checkpoint**: All three user stories are independently functional — the scripted harness now produces the automated SC-002 number the earlier relayed-chat probe could only estimate by hand.
 
@@ -111,9 +111,9 @@ identifiable from that log alone.
 
 ## Phase 6: Polish & Cross-Cutting Concerns
 
-- [ ] T020 [P] Pin dependency versions in `requirements.txt` (`google-genai`, `pytest`)
-- [ ] T021 [P] Add a short usage note in `src/main.py`'s module docstring cross-referencing quickstart.md
-- [ ] T022 Run quickstart.md's full validation end-to-end (`pytest tests/unit`, one interactive session, the scripted harness) and record the actual SC-001 through SC-004 results in a new `specs/001-action-resolution-probe/implementation-results.md`, explicitly comparing against probe-results.md's earlier relayed-chat findings — per plan.md's framing, a worse result here is a valid finding, not a bug to hide
+- [X] T020 [P] Pinned in `requirements.txt`: `google-genai==2.25.0`, `pytest==9.1.1` (versions verified against actual PyPI availability, not guessed)
+- [X] T021 [P] `src/main.py`'s docstring already cross-references quickstart.md (present since T010)
+- [X] T022 Ran quickstart.md's full validation end-to-end live: `pytest tests/unit` (12/12 passing), one interactive session via `main.py` (smoke-tested with piped input, saved log inspected and correct), and the scripted harness (full 10-turn run). Results recorded in [implementation-results.md](implementation-results.md), compared against probe-results.md.
 
 ---
 

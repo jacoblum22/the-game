@@ -24,6 +24,7 @@ from typing import Any
 from google import genai
 from google.genai import types
 
+from state import ActionAttempt
 from tools import TOOL_SCHEMAS, ToolHandlers
 
 DEFAULT_MODEL = "gemini-3.8-flash"
@@ -121,6 +122,45 @@ class TurnResult:
     tool_calls: list[dict[str, Any]] = field(default_factory=list)
 
 
+def build_action_attempt(
+    turn_number: int,
+    action_description: str,
+    state_before: dict[str, Any],
+    state_after: dict[str, Any],
+    result: TurnResult,
+) -> ActionAttempt:
+    """Build a loggable ActionAttempt from a completed turn (data-model.md; T015).
+
+    A roll_check call in result.tool_calls is what "requires resolution" means
+    operationally (FR-002/FR-003) -- its presence or absence drives requires_resolution
+    directly, rather than re-deriving that judgment separately.
+    """
+    roll_calls = [c for c in result.tool_calls if c["name"] == "roll_check"]
+    if roll_calls:
+        call_result = roll_calls[0]["result"]
+        return ActionAttempt(
+            turn_number=turn_number,
+            action_description=action_description,
+            requires_resolution=True,
+            narration=result.narration,
+            state_before=state_before,
+            state_after=state_after,
+            dc=roll_calls[0]["input"].get("dc"),
+            roll=call_result["roll"],
+            modifier=call_result["modifier"],
+            total=call_result["total"],
+            degree=call_result["degree"],
+        )
+    return ActionAttempt(
+        turn_number=turn_number,
+        action_description=action_description,
+        requires_resolution=False,
+        narration=result.narration,
+        state_before=state_before,
+        state_after=state_after,
+    )
+
+
 def build_client() -> genai.Client:
     api_key = os.environ.get("GEMINI_API_KEY")
     if not api_key:
@@ -194,3 +234,34 @@ def run_turn(
     raise RuntimeError(
         f"Exceeded max_tool_iterations ({max_tool_iterations}) without a final text response"
     )
+
+
+def judge_consistency(client: genai.Client, narration: str, degree: str) -> bool:
+    """Bounded consistency check for SC-002: does narration contradict the computed degree?
+
+    This is a test-harness grading tool, not a live-gameplay judge-gate -- it does not
+    contradict Principle III's decision against building a rule-breakdown gate into the game
+    itself; it exists only so this script can measure SC-002 automatically instead of a human
+    eyeballing it (probe-results.md's actual limitation). Uses a fresh call with no prior
+    conversation context specifically to avoid the narrating turn's own potential bias.
+
+    Known limitation: this is one bounded LLM call, not a proven-reliable classifier -- a
+    "NO" here is evidence of no *detected* contradiction, not a guarantee of consistency.
+    """
+    prompt = (
+        f"A tabletop RPG action was resolved with this computed degree: {degree}.\n\n"
+        f"Here is the narration written for that outcome:\n\n{narration}\n\n"
+        "Does this narration clearly and unambiguously assert an outcome that CONTRADICTS "
+        "the computed degree -- e.g. narrating a clean, unambiguous success when the degree "
+        "was failure or critical_failure, or an unambiguous failure when the degree was "
+        "success or critical_success? A partial/complicated outcome on a Success, or a "
+        "setback-with-a-silver-lining on a Failure, is NOT a contradiction -- only a clearly "
+        "opposite-outcome narration counts.\n\n"
+        "Answer with exactly one word: YES or NO."
+    )
+    response = client.models.generate_content(
+        model=get_model_name(),
+        contents=[types.Content(role="user", parts=[types.Part.from_text(text=prompt)])],
+    )
+    answer = (response.text or "").strip().upper()
+    return answer.startswith("YES")

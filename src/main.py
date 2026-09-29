@@ -11,7 +11,7 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
-from dm_agent import build_client, run_turn
+from dm_agent import build_action_attempt, build_client, run_turn
 from state import CharacterState, SessionLog
 from tools import ToolHandlers
 
@@ -59,7 +59,12 @@ def main() -> None:
             continue
 
         turn_number += 1
+        state_before = session.character.to_dict()
         result = run_turn(client, handlers, conversation, player_input)
+        state_after = session.character.to_dict()
+        session.append_turn(
+            build_action_attempt(turn_number, player_input, state_before, state_after, result)
+        )
         print(f"\n{result.narration}\n")
 
     session.save(log_path)
