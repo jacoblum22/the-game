@@ -1,6 +1,22 @@
 <!--
 Sync Impact Report
-Version change: 1.2.0 → 1.3.0 (MINOR: fourth research pass — WoW/MMORPG/PoE2 — amends
+Version change: 1.3.0 → 1.4.0 (MINOR: first live probe session — adds P16 and P17, extends P13
+  with an empirical finding)
+Added patterns:
+  - P16. Always Leave an Actionable Next Step (No Silent Dead Ends)
+  - P17. Graduated Information Reveal for Compound Queries
+Modified patterns:
+  - P13 (AI Game Master Architecture) — added a first empirical data point (an unearned
+    pronoun the DM's own self-assessment failed to catch) directly supporting the
+    independent-verification requirement, rather than resting solely on external research.
+Research/evidence basis: results of specs/001-action-resolution-probe/probe-results.md, the
+  project's first live test of an AI DM (13 turns, 10 resolved actions, run via a Haiku
+  subagent with the project owner playing in real time). Mechanical resolution/state tracking
+  (P8/P13's core claim) held up with zero contradictions; the two new patterns below capture
+  the DM-craft and resolution-granularity gaps that surfaced instead. Per that report's scope
+  caveats, this was a relayed-chat test, not the actual tool-calling/externalized-state/judge-
+  gate architecture — P13's core claims remain otherwise untested at that level.
+Version change (prior): 1.2.0 → 1.3.0 (MINOR: fourth research pass — WoW/MMORPG/PoE2 — amends
   Principle VI and Pattern P3, extends P6, adds P14 and P15)
 Modified principles:
   - VI. Mandatory Consolidation of Aging Content — added a provisional-by-default
@@ -258,6 +274,14 @@ state consistency). No source researched documents this exact architecture used 
 game-mastering before — this is understood to be a novel application, not proven prior art, and
 should be budgeted and tested as such.
 
+First empirical data point (from this project's own first probe session, not external
+research): asked to self-assess a completed session for inconsistencies, the narrating model
+reported none, yet a human reviewer found it had introduced an unearned detail (a character's
+gender/pronoun that was never established) partway through. This is a small instance of exactly
+the failure this pattern is designed against — the narrating model's own self-report is not a
+reliable substitute for independent verification, confirmed in this project's own data, not
+only in the literature.
+
 **P14. Asymmetric Base Cadence for Class Differentiation.** A single cadence parameter (e.g.
 the base delay between actions) MAY differ by class/archetype group, rather than being
 uniform, as a low-overhead way to create a durable, structural feel-difference between groups
@@ -275,6 +299,34 @@ problem by construction — a character cannot be optimal everywhere because the
 is elapsed time, not points to police — at the cost of slower respec/pivoting. Recorded as a
 named alternative for a future /speckit-plan decision under P4 or P11, not adopted outright.
 
+**P16. Always Leave an Actionable Next Step (No Silent Dead Ends).** After resolving any
+action, the AI DM MUST ensure the player has at least one concrete, actionable path forward —
+a lead, a threat, a choice, a consequence — rather than a dead end of purely atmospheric or
+inconclusive description. If several resolution attempts in a row (e.g. three or more) have
+failed to produce a new actionable lead, the AI DM MUST proactively introduce one (an
+environmental event, an NPC, a ticking clock) rather than waiting for the player to notice
+they're stuck and ask for one. Rationale: this project's first probe session hit exactly this
+failure at turn 6-8 — a player reported feeling "soft-locked" after several escalating-but-
+inconclusive clues — confirming in practice what the third research pass already found in
+theory: spotlight balance and scene pacing do not fall out of good mechanical design for free
+and must be engineered as an explicit heuristic, not assumed.
+
+**P17. Graduated Information Reveal for Compound Queries.** When a single player action
+bundles multiple distinct sub-questions or pieces of information into one attempt (e.g. "is it
+a demon, is it fey, does it have a weakness, is it intelligent" — really four or five separate
+pieces of information in one roll), the degree of success MUST gate *how much* information is
+revealed, not simply *whether* any is revealed: Critical Success reveals essentially all
+bundled sub-answers; Success reveals roughly half (the DM's choice of which, favoring
+narratively useful ones), leaving the rest genuinely unresolved rather than wrong; Failure
+reveals at most one vague, uncertain impression; Critical Failure reveals nothing reliable
+(optionally something misleading). Re-attempting the same bundled question MUST NOT be a free
+retry — it should cost something (time, risk of detection, an escalating consequence)
+consistent with whatever tension is already established in the scene. Rationale: this pattern
+was identified live, by the player, during this project's first probe session, extending
+Pattern P8's binary degrees-of-success into a "how much," not just "whether," axis. It was
+accepted by the AI DM mid-session but was not re-exercised afterward — treat as
+adopted-but-unverified until tested again.
+
 ## Governance
 
 This constitution supersedes ad-hoc practice for this project. `/speckit-specify`,
@@ -291,4 +343,4 @@ bumps follow semantic versioning: MAJOR for backward-incompatible principle remo
 redefinitions, MINOR for new principles/patterns or materially expanded guidance, PATCH for
 wording or clarification only.
 
-**Version**: 1.3.0 | **Ratified**: 2026-09-27 | **Last Amended**: 2026-09-28
+**Version**: 1.4.0 | **Ratified**: 2026-09-27 | **Last Amended**: 2026-09-28
