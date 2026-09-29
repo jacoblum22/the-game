@@ -64,10 +64,10 @@ that degree — no character creation, combat, or other system involved.
 
 ### Implementation for User Story 1
 
-- [ ] T010 [US1] Implement `src/main.py` as the CLI entry point: initialize a `CharacterState`, run one interactive turn loop reading player input and printing the DM's narration
-- [ ] T011 [US1] In `dm_agent.py`'s system prompt, add the resolution-need classification instruction so the model recognizes stakes-free descriptions and does not call `roll_check` for them (FR-002)
-- [ ] T012 [US1] Wire the tool-use loop so that, when resolution is needed, `roll_check` is called before narration is produced, and the narrated outcome must be stated consistently with the returned degree (FR-003, FR-004)
-- [ ] T013 [P] [US1] Implement a minimal `tests/probe/run_scripted_session.py` that sends one fixed, real-stakes action description through the live loop, asserts a computed degree was produced, and logs the turn — covers spec.md's User Story 1 Acceptance Scenarios 1-2
+- [X] T010 [US1] Implement `src/main.py` as the CLI entry point: initialize a `CharacterState`, run one interactive turn loop reading player input and printing the DM's narration
+- [X] T011 [US1] *(Satisfied as a side effect of T009's system prompt — rule 1 already states this classification instruction; no separate change needed.)*
+- [X] T012 [US1] *(Satisfied as a side effect of T009's `run_turn` loop and system prompt rules 2-3; no separate change needed.)*
+- [X] T013 [P] [US1] Implement a minimal `tests/probe/run_scripted_session.py` that sends one fixed, real-stakes action description through the live loop, asserts a computed degree was produced, and logs the turn — covers spec.md's User Story 1 Acceptance Scenarios 1-2. **Written but NOT executed** — blocked on `ANTHROPIC_API_KEY`, which is not set in this environment.
 
 **Checkpoint**: User Story 1 is fully functional and testable independently — a single action can be resolved end-to-end with real tool-calling.
 
