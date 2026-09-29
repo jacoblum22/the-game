@@ -126,10 +126,10 @@ to the published benchmark literature.
 
 ## Phase 6: Polish & Cross-Cutting Concerns
 
-- [ ] T019 [P] Run quickstart.md Step 1 (scenario-only check) live against all 3 campaign outlines and confirm isolation-check results
-- [ ] T020 Run quickstart.md Step 2 (one short ~15-20 turn run) live; verify the auditor and category-attribution logic behave sensibly before scaling up, per research.md's sequencing decision — fix any issues found here before T021, since this is deliberately the cheap checkpoint
-- [ ] T021 Run quickstart.md Step 3 (the full SC-002 batch: 3 scenarios × 5+ runs mixing both persona conditions) live and record the actual results — survival/success rates, category breakdown, NCP-Bench comparison — in a new `specs/002-long-horizon-consistency-test/implementation-results.md`, explicitly comparing against Feature 001's `implementation-results.md` and the published benchmark figures; per plan.md's framing, most runs not reaching the turn cap intact is an expected, valid finding, not a failure to hide
-- [ ] T022 [P] Confirm no new dependencies were actually introduced (plan.md's claim) by diffing `requirements.txt` before/after this feature's implementation
+- [X] T019 [P] Run quickstart.md Step 1 live — done repeatedly during T012/T013 development, not just once: all 3 outlines confirmed generating isolated scenarios across multiple independent generations (one run did hit an isolation failure on `lighthouse` and was correctly blocked/retried — see T010's live notes — confirming the block works, not just the happy path).
+- [X] T020 Run quickstart.md Step 2 live — done repeatedly during T013/T016/T018 development, well beyond a single short run: found and fixed three real bugs (checkpoint gap, malformed reference format, SC-001 gating session-running incorrectly) before any large-scale run was attempted, exactly what this cheap checkpoint exists for.
+- [ ] T021 Run quickstart.md Step 3 (the full SC-002 batch: 3 scenarios × 5+ runs mixing both persona conditions, up to 50 turns each) live and record the actual results — survival/success rates, category breakdown, NCP-Bench comparison — in a new `specs/002-long-horizon-consistency-test/implementation-results.md`, explicitly comparing against Feature 001's `implementation-results.md` and the published benchmark figures. **Deliberately paused before this step**: it's a real jump in API cost/time versus everything done so far (potentially 100+ calls), so checking with the project owner before spending it rather than assuming — per plan.md's own framing, most runs not reaching the turn cap intact is an expected, valid finding, not a failure to hide, but the *decision to spend the budget* is not mine to make unilaterally.
+- [X] T022 [P] Confirmed via `git diff` against the pre-feature-002 commit: `requirements.txt` has zero changes across this entire feature's implementation. Plan.md's claim holds exactly.
 
 ---
 
