@@ -197,6 +197,146 @@ def run_session(
     )
 
 
+NCP_BENCH_BASELINE = {
+    "fact_conflict_rate_range": "40-68% (among failing episodes, across 6 tested models)",
+    "best_model_survival_at_turn_20": "42% (GPT-5.2, the best tested model)",
+}
+
+
+def build_report(outcomes: list[SessionOutcome]) -> dict:
+    """T016: per-run and aggregate survival/success rates, turn-of-first-conflict (and its
+    normalized position), and a conflict-type x state-category breakdown, per FR-008."""
+    total = len(outcomes)
+    survived_count = sum(1 for o in outcomes if o.survived)
+    succeeded_count = sum(1 for o in outcomes if o.succeeded)
+
+    type_category_counts: dict[str, int] = {}
+    for o in outcomes:
+        for c in o.conflicts:
+            key = f"{c.conflict_type}/{c.state_category or 'n/a'}"
+            type_category_counts[key] = type_category_counts.get(key, 0) + 1
+
+    total_conflicts = sum(len(o.conflicts) for o in outcomes)
+    fact_conflicts = sum(1 for o in outcomes for c in o.conflicts if c.conflict_type == "fact")
+
+    per_run = []
+    for o in outcomes:
+        normalized = (
+            round(o.turn_of_first_conflict / o.turns_completed, 3)
+            if o.turn_of_first_conflict and o.turns_completed
+            else None
+        )
+        per_run.append(
+            {
+                "run_id": o.run_id,
+                "persona_condition": o.persona_condition,
+                "survived": o.survived,
+                "succeeded": o.succeeded,
+                "turns_completed": o.turns_completed,
+                "turn_of_first_conflict": o.turn_of_first_conflict,
+                "normalized_position_of_first_conflict": normalized,
+                "conflict_count": len(o.conflicts),
+            }
+        )
+
+    return {
+        "total_runs": total,
+        "survival_rate": (survived_count / total) if total else None,
+        "success_rate": (succeeded_count / total) if total else None,
+        "fact_conflict_rate_of_all_conflicts": (fact_conflicts / total_conflicts) if total_conflicts else None,
+        "type_category_breakdown": type_category_counts,
+        "per_run": per_run,
+    }
+
+
+def print_report(report: dict) -> None:
+    print(f"Total runs: {report['total_runs']}")
+    print(f"Survival rate: {report['survival_rate']}")
+    print(f"Success rate: {report['success_rate']}")
+    print(f"Fact-conflict rate (share of all detected conflicts): {report['fact_conflict_rate_of_all_conflicts']}")
+    print("Conflict type/category breakdown:", report["type_category_breakdown"])
+    print("\nPer-run detail:")
+    for r in report["per_run"]:
+        print(
+            f"  {r['run_id']} ({r['persona_condition']}): survived={r['survived']} "
+            f"succeeded={r['succeeded']} turns={r['turns_completed']} "
+            f"first_conflict_turn={r['turn_of_first_conflict']} "
+            f"(normalized={r['normalized_position_of_first_conflict']}) conflicts={r['conflict_count']}"
+        )
+
+    print("\n--- T017: Comparison against published NCP-Bench baselines (SC-003) ---")
+    print(f"  This run's survival rate: {report['survival_rate']}")
+    print(f"  NCP-Bench's best-model survival at turn 20: {NCP_BENCH_BASELINE['best_model_survival_at_turn_20']}")
+    print(f"  This run's fact-conflict rate: {report['fact_conflict_rate_of_all_conflicts']}")
+    print(f"  NCP-Bench's fact-conflict rate range: {NCP_BENCH_BASELINE['fact_conflict_rate_range']}")
+    print("  (A comparison point, not a pass/fail gate -- per SC-003 and this project's SC-002 precedent.)")
+
+
+def run_category_coverage_check(
+    trajectory: list[TrajectoryNode],
+    commitments: list[Commitment],
+    world_state: WorldState,
+) -> dict:
+    """T018: SC-004 -- deliberately targets each of the four seeded state categories
+    (resources, possessions, position, status_flags) with a real action, confirming that
+    whatever conflict-or-no-conflict outcome results is correctly category-attributed. This
+    tests OUR attribution mechanism's coverage across all four categories -- it does not claim
+    every targeted action forces an actual conflict, only that our own code correctly
+    classifies whatever happens.
+    """
+    handlers = WorldStateToolHandlers(world_state)
+    system_prompt = build_dm_system_prompt(trajectory, commitments)
+    client = build_client()
+    conversation: list = []
+
+    run_turn(
+        client, handlers, conversation,
+        "Begin the session: narrate a brief opening scene consistent with the seeded world state.",
+        tool_schemas=COMBINED_TOOL_SCHEMAS, system_prompt=system_prompt,
+    )
+
+    targets: list[tuple[str, str]] = []
+    if world_state.resources:
+        rname = next(iter(world_state.resources))
+        targets.append(("resources", f"I push myself hard, straining my {rname.replace('_', ' ')}."))
+    if world_state.possessions:
+        pname = next(iter(world_state.possessions))
+        targets.append(("possessions", f"I check whether I am carrying the {pname.replace('_', ' ')}."))
+    targets.append(("position", "I state clearly, out loud, exactly where I am standing right now."))
+    if world_state.status_flags:
+        sname = next(iter(world_state.status_flags))
+        targets.append(("status_flags", f"I double-check the current status of the {sname.replace('_', ' ')}."))
+
+    results: dict[str, dict] = {}
+    for turn_number, (category, action) in enumerate(targets, start=1):
+        result = run_turn(
+            client, handlers, conversation, action,
+            tool_schemas=COMBINED_TOOL_SCHEMAS, system_prompt=system_prompt,
+        )
+        conflict = check_turn(turn_number, result.narration, action, world_state, commitments)
+        results[category] = {
+            "action": action,
+            "conflict_found": conflict is not None,
+            "attributed_category": conflict.state_category if conflict else None,
+        }
+
+    print("\n--- T018: SC-004 category-coverage check ---")
+    required = {"resources", "possessions", "position", "status_flags"}
+    covered = required & set(results.keys())
+    for category, info in results.items():
+        print(
+            f"  {category}: action={info['action']!r} "
+            f"conflict_found={info['conflict_found']} attributed={info['attributed_category']}"
+        )
+    missing = required - covered
+    if missing:
+        print(f"  WARNING: categories never exercised (scenario had no seeded facts for): {missing}")
+    else:
+        print("  All 4 required categories exercised.")
+
+    return results
+
+
 def parse_args() -> argparse.Namespace:
     """T015: CLI args per quickstart.md's Step 2/3 usage."""
     parser = argparse.ArgumentParser(description="Long-horizon consistency stress test")
@@ -207,6 +347,10 @@ def parse_args() -> argparse.Namespace:
         "--personas", type=str, default="natural",
         help="Comma-separated persona modes to run per scenario, e.g. 'adversarial,natural' (default: natural)",
     )
+    parser.add_argument(
+        "--category-coverage", action="store_true",
+        help="Also run T018's SC-004 category-coverage check on the first generated scenario",
+    )
     return parser.parse_args()
 
 
@@ -215,17 +359,24 @@ if __name__ == "__main__":
 
     scenario_ok = run_scenario_checks()
     print("=" * 60)
-    print("SC-001 result:", "PASS -- all scenarios isolated" if scenario_ok else "FAIL -- see above")
+    print("SC-001 result:", "PASS -- all scenarios isolated" if scenario_ok else "FAIL -- see above (informational; does not block session-running below, which regenerates its own scenarios independently)")
 
-    if args.scenarios_only or not scenario_ok:
+    if args.scenarios_only:
         sys.exit(0 if scenario_ok else 1)
 
     personas = [p.strip() for p in args.personas.split(",") if p.strip()]
     outline_items = list(OUTLINES.items())[: args.runs]
 
     outcomes: list[SessionOutcome] = []
+    first_scenario = None
     for name, outline in outline_items:
-        trajectory, commitments, world_state = generate_scenario(outline)
+        try:
+            trajectory, commitments, world_state = generate_scenario(outline)
+        except IsolationViolationError as exc:
+            print(f"Skipping scenario {name!r} for session-running -- isolation check failed: {exc}")
+            continue
+        if first_scenario is None:
+            first_scenario = (trajectory, commitments, world_state)
         for persona in personas:
             run_id = f"{name}-{persona}"
             outcome = run_session(trajectory, commitments, world_state, persona, args.turns, run_id)
@@ -233,4 +384,10 @@ if __name__ == "__main__":
             outcome.save(Path(f"{run_id}.scenario.json"))
 
     print("=" * 60)
-    print(f"Completed {len(outcomes)} run(s). See T016-T018 for aggregate reporting.")
+    print(f"Completed {len(outcomes)} run(s).\n")
+
+    report = build_report(outcomes)
+    print_report(report)
+
+    if args.category_coverage and first_scenario is not None:
+        run_category_coverage_check(*first_scenario)

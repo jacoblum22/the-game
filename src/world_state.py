@@ -183,6 +183,17 @@ class SessionOutcome:
 # run, per data-model.md's validation notes.
 
 VALID_COMMITMENT_TYPES = ("invariant", "ordering", "achievement")
+VALID_REFERENCE_PREFIXES = ("resources.", "possessions.", "status_flags.")
+VALID_BARE_REFERENCES = ("position", "character_resource")
+
+
+def _is_well_formed_reference(ref: str) -> bool:
+    """Checks a reference string uses one of the 5 allowed forms, catching a model inventing
+    its own category (e.g. "npc.clerk.is_alive") at the stage it's generated, rather than two
+    stages later when validate_world_state_references would otherwise be the first to notice."""
+    if ref in VALID_BARE_REFERENCES:
+        return True
+    return any(ref.startswith(prefix) and len(ref) > len(prefix) for prefix in VALID_REFERENCE_PREFIXES)
 
 
 def validate_trajectory(nodes: list[TrajectoryNode]) -> list[str]:
@@ -200,6 +211,14 @@ def validate_trajectory(nodes: list[TrajectoryNode]) -> list[str]:
         errors.append(
             f"sequence_index values must be a gapless 0..N-1 ordering; got {indices}, expected {expected}"
         )
+
+    for n in nodes:
+        for ref in n.references:
+            if not _is_well_formed_reference(ref):
+                errors.append(
+                    f"Trajectory node {n.node_id!r} has malformed reference {ref!r} -- must be "
+                    f"one of {VALID_BARE_REFERENCES} or start with one of {VALID_REFERENCE_PREFIXES}"
+                )
 
     return errors
 
@@ -222,6 +241,12 @@ def validate_commitments(commitments: list[Commitment], trajectory: list[Traject
             )
         if c.type not in VALID_COMMITMENT_TYPES:
             errors.append(f"Commitment {c.commitment_id!r} has invalid type {c.type!r}")
+        for ref in c.references:
+            if not _is_well_formed_reference(ref):
+                errors.append(
+                    f"Commitment {c.commitment_id!r} has malformed reference {ref!r} -- must be "
+                    f"one of {VALID_BARE_REFERENCES} or start with one of {VALID_REFERENCE_PREFIXES}"
+                )
 
     return errors
 

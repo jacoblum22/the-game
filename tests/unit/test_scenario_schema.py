@@ -71,6 +71,13 @@ def test_sequence_index_duplicate_fails():
     assert len(errors) == 1
 
 
+def test_malformed_trajectory_reference_fails():
+    # A model inventing its own category ("npc.") instead of one of the 5 allowed forms.
+    nodes = [make_node("n0", 0, references=["npc.clerk.is_alive"])]
+    errors = validate_trajectory(nodes)
+    assert any("malformed reference" in e for e in errors)
+
+
 # --- validate_commitments ---
 
 
@@ -99,6 +106,13 @@ def test_invalid_commitment_type_fails():
     commitments = [make_commitment("c0", "n0", commitment_type="not_a_real_type")]
     errors = validate_commitments(commitments, nodes)
     assert any("invalid type" in e for e in errors)
+
+
+def test_malformed_commitment_reference_fails():
+    nodes = [make_node("n0", 0)]
+    commitments = [make_commitment("c0", "n0", references=["npc.clerk.is_alive"])]
+    errors = validate_commitments(commitments, nodes)
+    assert any("malformed reference" in e for e in errors)
 
 
 # --- validate_world_state_references ---
