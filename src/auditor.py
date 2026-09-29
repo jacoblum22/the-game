@@ -23,25 +23,45 @@ def check_turn(
     player_action: str,
     world_state: WorldState,
     commitments: list[Commitment],
+    state_before: Optional[dict] = None,
 ) -> Optional[ConflictRecord]:
     """Checks one turn's narration against the seeded fact ledger and active commitments.
 
     Returns a ConflictRecord if a conflict is found, or None. Uses a fresh call with no prior
     conversation context, same discipline as judge_consistency, to avoid the narrating turn's
     own potential bias influencing the check.
+
+    `state_before` -- found live (T021 verification): without this, the auditor was only ever
+    given the CURRENT (i.e. already-mutated-by-this-turn's-own-tool-calls) world state, with no
+    way to tell "this was already true before the action" apart from "this became true because
+    of the tool call THIS turn's own narration is describing." It was systematically flagging
+    ordinary cause-and-effect (narration says "you find the spyglass," this turn's own tool
+    call granted the spyglass) as a contradiction, and fabricating incorrect "before" values
+    for resource deltas it was never actually shown. Passing the real pre-turn snapshot
+    explicitly, separate from the post-turn one, removes the guesswork. Optional and defaults
+    to None (old behavior) only so any other caller isn't forced to supply it immediately.
     """
     world_state_json = json.dumps(world_state.to_dict(), indent=2)
+    state_before_json = (
+        json.dumps(state_before, indent=2) if state_before is not None else "(not provided)"
+    )
     active_commitments = [c for c in commitments if c.status == "pending"]
     commitments_json = json.dumps([c.to_dict() for c in active_commitments], indent=2)
 
-    prompt = f"""A tabletop RPG session is being audited for consistency. Below are the
-current known world state, the active commitments (rules the narration must not violate),
+    prompt = f"""A tabletop RPG session is being audited for consistency. Below are the world
+state BEFORE this turn's action, the world state AFTER it (reflecting any tool calls this
+turn's own resolution made), the active commitments (rules the narration must not violate),
 the player's action this turn, and the game master's narration in response to it.
 
 Check for a conflict of exactly one of these three types:
-- "fact": the narration asserts something that contradicts the current world state (e.g. a
-  door listed as locked is narrated as freely open with no unlocking event described this
-  turn or previously; a character listed as alive is narrated as dead with no killing event)
+- "fact": the narration asserts something that contradicts the state. A change between the
+  BEFORE and AFTER state that the narration itself describes happening THIS turn (e.g. the
+  AFTER state shows a door unlocked, and the narration describes unlocking it this turn) is
+  NOT a conflict -- that is the narration correctly explaining the change. Only flag a fact
+  conflict when the narration is inconsistent with the state and nothing in the narration (this
+  turn) explains the discrepancy -- e.g. the AFTER state still shows a door locked but the
+  narration describes walking through it freely open; or a resource's actual BEFORE-to-AFTER
+  delta doesn't match the delta the narration itself claims happened.
 - "commitment": the narration violates one of the active commitments' violation_condition
 - "player_input": the narration ignores or substitutes a different action than what the
   player actually attempted, without any in-fiction justification (note: the game master
@@ -60,7 +80,10 @@ Output a single JSON object with exactly these fields:
 
 Output ONLY the JSON object, no other text, no markdown code fences.
 
-Current world state:
+World state BEFORE this turn's action:
+{state_before_json}
+
+World state AFTER this turn's action:
 {world_state_json}
 
 Active commitments:

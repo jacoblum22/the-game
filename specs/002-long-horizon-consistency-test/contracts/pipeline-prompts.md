@@ -113,8 +113,21 @@ answer key.
 
 ## 6. Conflict audit (`auditor.check_turn`)
 
-**Input**: the turn's narration (from `dm_agent.TurnResult`), the current `WorldState`, and the
-active `Commitment` set.
+**Input**: the turn's narration (from `dm_agent.TurnResult`), the `WorldState` snapshot from
+**before** this turn's tool calls ran, the `WorldState` **after** them, and the active
+`Commitment` set.
+
+**Amendment discovered during T021 verification**: the original contract only passed the
+*current* (post-turn) `WorldState`, with no "before" reference. This was a real, confirmed
+design flaw, not just a theoretical gap — it produced concrete, verifiable false positives:
+narration describing an item being found, with that same turn's own tool call granting it, was
+routinely flagged as "the world state shows this was already true," because the auditor had no
+way to distinguish "already true before this action" from "became true because of this turn's
+own tool call." A resource-delta conflict was also traced to the auditor fabricating an
+incorrect "before" value it was never actually shown, rather than a real DM math error. Passing
+the real pre-turn snapshot explicitly (`state_before`, an optional parameter defaulting to
+`None` for any other caller) and revising the "fact" conflict criterion to explicitly exempt a
+before→after change the narration itself explains, removed the guesswork.
 
 **Output** (one `ConflictRecord`, or null if no conflict):
 ```json
@@ -122,7 +135,7 @@ active `Commitment` set.
   "turn_number": 14,
   "conflict_type": "fact",
   "state_category": "status_flags",
-  "description": "Narration states the north door is open; status_flags['door_north_locked'] is still true with no unlocking event narrated this turn or previously."
+  "description": "Narration states the north door is open; status_flags['door_north_locked'] is still true in the AFTER state, and nothing in the narration or the BEFORE/AFTER diff explains an unlocking event."
 }
 ```
 
@@ -132,4 +145,6 @@ narration against one computed degree; `auditor.check_turn` checks against an en
 ledger and commitment set, so its prompt and output shape are necessarily richer. It shares the
 same documented limitation: it is not an independent-model-family judge per Pattern P13's
 eventual requirement, only a same-family bounded check, same as Feature 001's implementation
-already disclosed.
+already disclosed — and, per the amendment above, confirmed capable of its own false positives
+even setting that limitation aside, which is exactly why this feature's numeric results should
+be read as "what this specific auditor implementation detected," not a ground-truth measurement.

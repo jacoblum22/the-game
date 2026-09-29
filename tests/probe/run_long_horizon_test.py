@@ -43,6 +43,14 @@ from world_state import (  # noqa: E402
 
 COMBINED_TOOL_SCHEMAS = TOOL_SCHEMAS + EXTRA_TOOL_SCHEMAS
 
+# Found live during T021's first attempt: dm_agent.run_turn's default max_tool_iterations (5)
+# was sized for Feature 001's 3-tool surface. Feature 002's 5 tools plus the system prompt's
+# "call get_state liberally" instruction mean a single turn can legitimately need more
+# round-trips (e.g. get_state, roll_check, update_resource, set_fact, THEN narration -- already
+# 5 iterations before the final text reply). Scoped to this harness only, not Feature 001's
+# shared default, per this project's additive-extension pattern.
+MAX_TOOL_ITERATIONS = 10
+
 
 def run_scenario_checks() -> bool:
     """T012: SC-001 -- generate a scenario for all 3 outlines, report isolation pass/fail."""
@@ -139,27 +147,44 @@ def run_session(
         conversation,
         "Begin the session: narrate a brief opening scene consistent with the seeded world "
         "state and invite the player's first action.",
+        max_tool_iterations=MAX_TOOL_ITERATIONS,
         tool_schemas=COMBINED_TOOL_SCHEMAS,
         system_prompt=system_prompt,
     )
     visible_turns.append(("(session start)", opening.narration))
     print(f"[{run_id}] Opening: {opening.narration[:150]}...")
+    for call in opening.tool_calls:
+        print(f"    tool_call: {call['name']}({call['input']}) -> {call['result']}")
 
     for turn_number in range(1, turn_cap + 1):
         history_text = render_visible_history(visible_turns)
         action = next_action(history_text, persona_mode)
+        # Captured BEFORE run_turn's tool calls mutate world_state, so the auditor can tell
+        # "already true before this action" apart from "became true because of it" -- see
+        # auditor.check_turn's docstring for why this matters.
+        state_before = world_state.to_dict()
         result = run_turn(
             client, handlers, conversation, action,
+            max_tool_iterations=MAX_TOOL_ITERATIONS,
             tool_schemas=COMBINED_TOOL_SCHEMAS, system_prompt=system_prompt,
         )
         visible_turns.append((action, result.narration))
         turns_completed = turn_number
 
-        conflict = check_turn(turn_number, result.narration, action, world_state, commitments)
+        conflict = check_turn(
+            turn_number, result.narration, action, world_state, commitments,
+            state_before=state_before,
+        )
         print(
             f"[{run_id}] Turn {turn_number}: {action[:60]!r} -> "
             f"{'CONFLICT: ' + conflict.description[:80] if conflict else 'ok'}"
         )
+        # Diagnostic (added to verify the "narration lags its own tool call" hypothesis before
+        # trusting it): print exactly what tools were called this turn, with what arguments and
+        # what they returned, so a conflict can be checked against ground truth instead of only
+        # the auditor's own English description of it.
+        for call in result.tool_calls:
+            print(f"    tool_call: {call['name']}({call['input']}) -> {call['result']}")
 
         if conflict:
             conflicts.append(conflict)
@@ -292,6 +317,7 @@ def run_category_coverage_check(
     run_turn(
         client, handlers, conversation,
         "Begin the session: narrate a brief opening scene consistent with the seeded world state.",
+        max_tool_iterations=MAX_TOOL_ITERATIONS,
         tool_schemas=COMBINED_TOOL_SCHEMAS, system_prompt=system_prompt,
     )
 
@@ -309,11 +335,16 @@ def run_category_coverage_check(
 
     results: dict[str, dict] = {}
     for turn_number, (category, action) in enumerate(targets, start=1):
+        state_before = world_state.to_dict()
         result = run_turn(
             client, handlers, conversation, action,
+            max_tool_iterations=MAX_TOOL_ITERATIONS,
             tool_schemas=COMBINED_TOOL_SCHEMAS, system_prompt=system_prompt,
         )
-        conflict = check_turn(turn_number, result.narration, action, world_state, commitments)
+        conflict = check_turn(
+            turn_number, result.narration, action, world_state, commitments,
+            state_before=state_before,
+        )
         results[category] = {
             "action": action,
             "conflict_found": conflict is not None,
@@ -378,6 +409,13 @@ if __name__ == "__main__":
                 trajectory, commitments, world_state = generate_scenario(outline)
             except IsolationViolationError as exc:
                 print(f"Skipping scenario {name!r} for session-running -- isolation check failed: {exc}")
+                continue
+            except (ValueError, TypeError) as exc:
+                # Found live (T021): a malformed generation (bad structural shape, or the kind
+                # of stray-key issue world_state.py's from_dict now filters defensively) should
+                # cost this one scenario, not the whole batch -- same reasoning as the
+                # IsolationViolationError case just above.
+                print(f"Skipping scenario {name!r} for session-running -- generation failed: {exc}")
                 continue
             if first_scenario is None:
                 first_scenario = (trajectory, commitments, world_state)

@@ -9,7 +9,8 @@ Field names and validation rules follow specs/002-long-horizon-consistency-test/
 from __future__ import annotations
 
 import json
-from dataclasses import asdict, dataclass, field
+import copy
+from dataclasses import asdict, dataclass, field, fields
 from pathlib import Path
 from typing import Literal, Optional, Union
 
@@ -44,7 +45,13 @@ class TrajectoryNode:
 
     @classmethod
     def from_dict(cls, data: dict) -> "TrajectoryNode":
-        return cls(**data)
+        # Found live (T021): the extraction call runs in plain JSON mode, not a schema-bound
+        # mode, so the model can emit a stray top-level key (observed: a literal
+        # "possessions.keeper_logbook" field sitting beside "references" instead of being an
+        # item inside it). Filtering to known fields turns that into a silently-dropped key
+        # instead of a raw TypeError crashing the whole pipeline before validation ever runs.
+        known = {f.name for f in fields(cls)}
+        return cls(**{k: v for k, v in data.items() if k in known})
 
 
 @dataclass
@@ -67,7 +74,9 @@ class Commitment:
 
     @classmethod
     def from_dict(cls, data: dict) -> "Commitment":
-        return cls(**data)
+        # Same defensive filtering as TrajectoryNode.from_dict -- see its comment.
+        known = {f.name for f in fields(cls)}
+        return cls(**{k: v for k, v in data.items() if k in known})
 
 
 @dataclass
@@ -81,12 +90,21 @@ class WorldState:
     status_flags: dict[str, Union[bool, str]] = field(default_factory=dict)
 
     def to_dict(self) -> dict:
+        # Found live (T021 verification): the old version returned these three dicts by
+        # LIVE REFERENCE, not as a snapshot. Confirmed end-to-end (including through the
+        # google-genai SDK's own Part construction, which also holds a live reference rather
+        # than copying) that an EARLIER get_state() result silently changes if a LATER tool
+        # call in the same turn mutates world_state -- meaning the model (and our own auditor)
+        # could receive an already-mutated "snapshot" disguised as an earlier one. resources
+        # needs a deep copy since update_resource mutates its inner per-resource dicts in
+        # place; possessions/status_flags only ever hold scalar values, so a shallow copy of
+        # the outer dict is enough to stop them aliasing the live object.
         return {
             "character": self.character.to_dict(),
-            "resources": self.resources,
-            "possessions": self.possessions,
+            "resources": copy.deepcopy(self.resources),
+            "possessions": dict(self.possessions),
             "position": self.position,
-            "status_flags": self.status_flags,
+            "status_flags": dict(self.status_flags),
         }
 
     @classmethod
