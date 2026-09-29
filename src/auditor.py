@@ -13,6 +13,7 @@ from __future__ import annotations
 import json
 from typing import Optional
 
+from ability_pool import SOURCE_ARCHETYPES, AbilityGrant
 from dm_agent import call_json
 from world_state import Commitment, ConflictRecord, WorldState
 
@@ -24,6 +25,7 @@ def check_turn(
     world_state: WorldState,
     commitments: list[Commitment],
     state_before: Optional[dict] = None,
+    ability_grant: Optional[AbilityGrant] = None,
 ) -> Optional[ConflictRecord]:
     """Checks one turn's narration against the seeded fact ledger and active commitments.
 
@@ -40,6 +42,13 @@ def check_turn(
     for resource deltas it was never actually shown. Passing the real pre-turn snapshot
     explicitly, separate from the post-turn one, removes the guesswork. Optional and defaults
     to None (old behavior) only so any other caller isn't forced to supply it immediately.
+
+    `ability_grant` -- feature 003 (T013): when this turn called `grant_ability`, pass the
+    resulting `AbilityGrant` so the auditor also checks whether the narration matches what was
+    actually granted (name, description, and any stated limitation), reusing this same
+    narration-vs-structured-state comparison rather than a separate mechanism, per
+    contracts/tools.md. Optional and defaults to None so ordinary (non-granting) turns are
+    unaffected.
     """
     world_state_json = json.dumps(world_state.to_dict(), indent=2)
     state_before_json = (
@@ -47,6 +56,26 @@ def check_turn(
     )
     active_commitments = [c for c in commitments if c.status == "pending"]
     commitments_json = json.dumps([c.to_dict() for c in active_commitments], indent=2)
+
+    ability_grant_block = ""
+    if ability_grant is not None:
+        template = next(
+            t
+            for t in SOURCE_ARCHETYPES[ability_grant.source_archetype].pool
+            if t.template_id == ability_grant.template_id
+        )
+        ability_grant_block = f"""
+
+This turn also granted a new ability. Check whether the narration is consistent with it -- does
+it describe the effect this ability actually has (including its stated limitation), without
+contradicting or inventing a different effect? A narration that doesn't mention the grant at
+all is fine (it may be covered by other narration); only flag it if the narration actively
+describes something that contradicts the granted ability.
+
+Granted ability:
+- name: {template.name}
+- description: {template.description}
+"""
 
     prompt = f"""A tabletop RPG session is being audited for consistency. Below are the world
 state BEFORE this turn's action, the world state AFTER it (reflecting any tool calls this
@@ -67,15 +96,16 @@ Check for a conflict of exactly one of these three types:
   player actually attempted, without any in-fiction justification (note: the game master
   narrating that an action FAILS or has an unexpected consequence is NOT a player_input
   conflict -- only narrating a DIFFERENT action than the one the player took is)
-
+{ability_grant_block}
 If a fact-type conflict is found, also identify which category of the world state it belongs
-to: "character_resource", "resources", "possessions", "position", or "status_flags".
+to: "character_resource", "resources", "possessions", "position", "status_flags", or
+"abilities" (use "abilities" specifically for a granted-ability/narration mismatch).
 
 Output a single JSON object with exactly these fields:
 - "conflict_found": true or false
 - "conflict_type": one of "fact", "commitment", "player_input", or null if no conflict
 - "state_category": one of "character_resource", "resources", "possessions", "position",
-  "status_flags", or null (null also if conflict_type is not "fact")
+  "status_flags", "abilities", or null (null also if conflict_type is not "fact")
 - "description": a short explanation of the conflict, or null if no conflict
 
 Output ONLY the JSON object, no other text, no markdown code fences.
