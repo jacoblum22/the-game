@@ -20,9 +20,12 @@ every choice below is picked to be cheap to change later, not to be permanently 
 
 **Language/Version**: Python 3.11+
 
-**Primary Dependencies**: `anthropic` (official Python SDK, used for real tool-use/function
+**Primary Dependencies**: `google-genai` (Google's Gen AI SDK, used for real tool-use/function
 calling — no MCP for this feature; MCP's interoperability-across-clients value doesn't apply to
-a single-process script and can be added later if it ever matters)
+a single-process script and can be added later if it ever matters). *Amended during
+implementation from the originally-planned Anthropic SDK — see research.md's amendment note;
+only `src/dm_agent.py` changed as a result, confirming the "cheap to reverse" property this
+decision was chosen for.*
 
 **Storage**: A flat JSON session-log file (no database) — sufficient for one continuous session
 per spec.md's Assumptions; cross-session persistence is explicitly out of scope
@@ -93,7 +96,7 @@ src/
 ├── tools.py          # Tool schemas + handler functions exposed to the model, wrapping
 │                    # resolution.py and state.py -- this module IS the P13 boundary between
 │                    # free-form narration and deterministic mechanics.
-├── dm_agent.py       # Anthropic API client wrapper: system prompt (encodes P8/P12/P16/P17
+├── dm_agent.py       # Gemini API client wrapper: system prompt (encodes P8/P12/P16/P17
 │                    # and Principle III's base-model-judgment default), tool-use loop.
 └── main.py           # CLI entry point for an interactive session.
 

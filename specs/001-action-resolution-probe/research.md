@@ -3,7 +3,31 @@
 Technical Context left no `NEEDS CLARIFICATION` markers, so this phase documents the rationale
 behind each decision rather than resolving open unknowns.
 
-## Decision: Python 3.11+, direct Anthropic SDK tool-use, no MCP, flat JSON storage
+## Amendment (during implementation): swapped Anthropic → Google Gemini as the model provider
+
+**What changed**: `src/dm_agent.py` was originally implemented against the Anthropic API
+(`anthropic` SDK). Mid-implementation, the project owner decided to avoid paid Anthropic API
+usage and use an existing Gemini API key instead. Only `dm_agent.py` changed — `state.py`,
+`resolution.py`, and `tools.py`'s actual logic (the `TOOL_SCHEMAS` list, `ToolHandlers` class)
+were untouched, and `main.py`/`tests/probe/run_scripted_session.py` only needed to switch from
+treating `run_turn`'s return value as a plain string to reading `.narration` off a small
+`TurnResult` dataclass. That refactor — returning a provider-agnostic `TurnResult` instead of
+letting callers inspect raw SDK response objects — was added at the same time specifically so
+this kind of swap stays contained going forward.
+
+**Rationale**: this is the "model is a runtime-configurable parameter, cheap to reverse"
+decision (below) actually being exercised, not a mistake being corrected. The whole point of
+keeping the provider choice out of `state.py`/`resolution.py`/`tools.py` was to make exactly
+this kind of swap cheap — one file, not a rewrite.
+
+**Provider-specific note**: Google's Gen AI SDK (`google-genai`) names the tool-parameter-schema
+field `parameters_json_schema`, not `parameters` — confirmed against the SDK's own GitHub
+README (googleapis/python-genai) after an initial web search suggested a different, apparently
+newer/unconfirmed "Interactions API" surface that could not be verified against an authoritative
+source. Worth remembering if this is swapped again later: verify field names against the SDK's
+own README/reference, not just the first search result.
+
+## Decision: Python 3.11+, direct-SDK tool-use, no MCP, flat JSON storage
 
 **Rationale**: This feature exists to test one narrow question (does real tool-calling +
 externalized state hold up), not to establish the game's production architecture. Every choice

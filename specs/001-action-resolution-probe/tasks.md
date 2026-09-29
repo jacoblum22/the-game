@@ -30,7 +30,7 @@ repository root.
 ## Phase 1: Setup
 
 - [X] T001 Create the project structure at repository root per plan.md's Project Structure: `src/`, `tests/unit/`, `tests/probe/`
-- [X] T002 Initialize Python dependencies in `requirements.txt` at repository root: `anthropic`, `pytest` (per plan.md's Primary Dependencies/Testing)
+- [X] T002 Initialize Python dependencies in `requirements.txt` at repository root: `anthropic`, `pytest` (per plan.md's Primary Dependencies/Testing). *Amended: swapped to `google-genai` mid-implementation — see research.md's amendment note.*
 - [X] T003 [P] Add `.env.example` at repository root documenting `ANTHROPIC_API_KEY` and a model-name environment variable, per research.md's "model is a runtime-configurable parameter" decision
 
 **Checkpoint**: Repo structure and dependency list exist; nothing runnable yet.
@@ -47,7 +47,7 @@ all three user stories depend on. No user story work can begin until this phase 
 - [X] T006 [P] Implement the pure `resolve(dc, modifier)` function in `src/resolution.py` per research.md's exact formula: roll 1d20, total = roll + modifier; Critical Success if total >= dc+10 OR raw roll is a natural 20; Critical Failure if total <= dc-10 OR raw roll is a natural 1; otherwise Success if total >= dc, else Failure. No network calls, no I/O.
 - [X] T007 [P] Unit tests for `src/resolution.py` in `tests/unit/test_resolution.py` covering: a normal Success, a normal Failure, Critical Success via the +10 threshold, Critical Success via a natural 20 below threshold, Critical Failure via the -10 threshold, Critical Failure via a natural 1 above threshold, and the exact-boundary cases (total == dc, total == dc+10, total == dc-10) — **12/12 passing**
 - [X] T008 Implement tool schemas and handler functions for `roll_check`, `get_state`, and `update_state` in `src/tools.py` per contracts/tools.md's exact input/output shapes, wrapping `resolution.py` and `state.py` — this module is the literal boundary between free narration and deterministic mechanics (Principle I, Pattern P13)
-- [X] T009 Implement `src/dm_agent.py`: an Anthropic API client wrapper that reads the model name from the environment variable added in T003, a system prompt encoding Pattern P8 (degrees-of-success as the default resolution), Pattern P12 (limitation/weakness/cost as distinct vocabulary), Pattern P16 (never leave a silent dead end), Pattern P17 (graduated information reveal for compound/bundled questions), and Principle III's resolved default (the model's own judgment for rule-breakdown situations, no separate gate) — and the tool-use loop wired to `src/tools.py`. **Not yet exercised against a live API call** — `ANTHROPIC_API_KEY` isn't set in this environment; verified only that it imports cleanly and constructs correctly.
+- [X] T009 Implement `src/dm_agent.py`: an Anthropic API client wrapper that reads the model name from the environment variable added in T003, a system prompt encoding Pattern P8 (degrees-of-success as the default resolution), Pattern P12 (limitation/weakness/cost as distinct vocabulary), Pattern P16 (never leave a silent dead end), Pattern P17 (graduated information reveal for compound/bundled questions), and Principle III's resolved default (the model's own judgment for rule-breakdown situations, no separate gate) — and the tool-use loop wired to `src/tools.py`. *Amended: rewritten against `google-genai` instead of `anthropic` mid-implementation — see research.md's amendment note; `TOOL_SCHEMAS`/`ToolHandlers` in tools.py were untouched by the swap.*
 
 **Checkpoint**: State model, resolution math, tool boundary, and agent loop all exist and are unit-tested where testable in isolation (T007). User story implementation can now begin.
 
@@ -111,7 +111,7 @@ identifiable from that log alone.
 
 ## Phase 6: Polish & Cross-Cutting Concerns
 
-- [ ] T020 [P] Pin dependency versions in `requirements.txt` (`anthropic`, `pytest`)
+- [ ] T020 [P] Pin dependency versions in `requirements.txt` (`google-genai`, `pytest`)
 - [ ] T021 [P] Add a short usage note in `src/main.py`'s module docstring cross-referencing quickstart.md
 - [ ] T022 Run quickstart.md's full validation end-to-end (`pytest tests/unit`, one interactive session, the scripted harness) and record the actual SC-001 through SC-004 results in a new `specs/001-action-resolution-probe/implementation-results.md`, explicitly comparing against probe-results.md's earlier relayed-chat findings — per plan.md's framing, a worse result here is a valid finding, not a bug to hide
 

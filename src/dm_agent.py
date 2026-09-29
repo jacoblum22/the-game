@@ -1,20 +1,31 @@
-"""Anthropic API client wrapper + tool-use loop for the AI DM (feature 001).
+"""Gemini API client wrapper + tool-use loop for the AI DM (feature 001).
 
 Encodes Patterns P8, P12, P16, P17 and Principle III's resolved default directly in the
-system prompt (plan.md's Foundational task T009). The model is read from an environment
-variable, never hardcoded (research.md's "model is a runtime-configurable parameter" decision).
+system prompt (plan.md's Foundational task T009). The model AND the provider are both
+runtime-configurable, not hardcoded: this file originally called Anthropic's API directly;
+it was swapped to Google's Gemini API (google-genai SDK) once the project owner decided to
+avoid paid Anthropic API usage and use an existing Gemini key instead. Only this file changed
+-- state.py, resolution.py, and tools.py's actual logic were untouched, which is exactly the
+"cheap to reverse" property research.md's original decision was chosen for.
+
+Automatic function calling is not used: tools are passed as schema-only FunctionDeclaration
+objects (no attached Python callable), so the SDK has nothing to auto-execute -- dispatch
+happens explicitly through ToolHandlers, keeping the Principle I / Pattern P13 boundary
+visible and inspectable rather than hidden inside SDK-internal auto-execution.
 """
 
 from __future__ import annotations
 
 import os
+from dataclasses import dataclass, field
 from typing import Any
 
-from anthropic import Anthropic
+from google import genai
+from google.genai import types
 
 from tools import TOOL_SCHEMAS, ToolHandlers
 
-DEFAULT_MODEL = "claude-haiku-4-5-20251001"
+DEFAULT_MODEL = "gemini-2.5-flash"
 
 SYSTEM_PROMPT = """You are the AI Dungeon Master for a probe test of a custom tabletop-style RPG's core resolution loop.
 
@@ -69,54 +80,83 @@ making clear what that lead is.
 """
 
 
-def build_client() -> Anthropic:
-    return Anthropic()  # reads ANTHROPIC_API_KEY from the environment
+@dataclass
+class TurnResult:
+    """What happened during one player turn -- provider-agnostic on purpose.
+
+    Callers (main.py, tests/probe/run_scripted_session.py) should only ever touch this,
+    never raw Gemini response/content objects, so a future provider swap stays contained to
+    this file, matching research.md's "cheap to reverse" design intent.
+    """
+
+    narration: str
+    tool_calls: list[dict[str, Any]] = field(default_factory=list)
+
+
+def build_client() -> genai.Client:
+    api_key = os.environ.get("GEMINI_API_KEY")
+    if not api_key:
+        raise RuntimeError("GEMINI_API_KEY is not set. Set it and try again (see .env.example).")
+    return genai.Client(api_key=api_key)
 
 
 def get_model_name() -> str:
     return os.environ.get("GAME_DM_MODEL", DEFAULT_MODEL)
 
 
+def _build_tool() -> types.Tool:
+    declarations = [
+        types.FunctionDeclaration(
+            name=schema["name"],
+            description=schema["description"],
+            parameters_json_schema=schema["input_schema"],
+        )
+        for schema in TOOL_SCHEMAS
+    ]
+    return types.Tool(function_declarations=declarations)
+
+
+_TOOL = _build_tool()
+
+
 def run_turn(
-    client: Anthropic,
+    client: genai.Client,
     handlers: ToolHandlers,
-    conversation: list[dict[str, Any]],
+    conversation: list[types.Content],
     player_input: str,
     max_tool_iterations: int = 5,
-) -> str:
+) -> TurnResult:
     """Run one player turn to completion, handling any tool-use round-trips.
 
-    Mutates `conversation` in place (appends the user turn and all assistant/tool turns).
-    Returns the DM's final narration text for this turn.
+    Mutates `conversation` in place (appends the user turn and all model/tool turns).
+    Returns a TurnResult with the DM's final narration and a record of any tool calls made.
     """
-    conversation.append({"role": "user", "content": player_input})
+    conversation.append(types.Content(role="user", parts=[types.Part.from_text(text=player_input)]))
+    tool_call_log: list[dict[str, Any]] = []
 
     for _ in range(max_tool_iterations):
-        response = client.messages.create(
+        response = client.models.generate_content(
             model=get_model_name(),
-            max_tokens=1024,
-            system=SYSTEM_PROMPT,
-            tools=TOOL_SCHEMAS,
-            messages=conversation,
+            contents=conversation,
+            config=types.GenerateContentConfig(
+                system_instruction=SYSTEM_PROMPT,
+                tools=[_TOOL],
+            ),
         )
-        conversation.append({"role": "assistant", "content": response.content})
+        model_content = response.candidates[0].content
+        conversation.append(model_content)
 
-        tool_uses = [block for block in response.content if block.type == "tool_use"]
-        if not tool_uses:
-            text_blocks = [block.text for block in response.content if block.type == "text"]
-            return "\n".join(text_blocks)
+        function_calls = response.function_calls
+        if not function_calls:
+            return TurnResult(narration=response.text or "", tool_calls=tool_call_log)
 
-        tool_results = []
-        for tool_use in tool_uses:
-            result = handlers.dispatch(tool_use.name, tool_use.input)
-            tool_results.append(
-                {
-                    "type": "tool_result",
-                    "tool_use_id": tool_use.id,
-                    "content": str(result),
-                }
-            )
-        conversation.append({"role": "user", "content": tool_results})
+        response_parts = []
+        for call in function_calls:
+            result = handlers.dispatch(call.name, dict(call.args))
+            tool_call_log.append({"name": call.name, "input": dict(call.args), "result": result})
+            response_parts.append(types.Part.from_function_response(name=call.name, response=result))
+
+        conversation.append(types.Content(role="tool", parts=response_parts))
 
     raise RuntimeError(
         f"Exceeded max_tool_iterations ({max_tool_iterations}) without a final text response"

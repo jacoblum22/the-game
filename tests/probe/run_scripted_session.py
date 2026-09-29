@@ -2,8 +2,8 @@
 
 Replaces the earlier relayed-chat probe's human-in-the-loop relay (probe-results.md) with a
 real, repeatable script driven against the live API with actual tool-calling. Requires
-ANTHROPIC_API_KEY to be set -- this is NOT a pytest unit test (tests/unit/ covers the pure
-parts); it makes real, billed API calls, so it's run manually via:
+GEMINI_API_KEY to be set -- this is NOT a pytest unit test (tests/unit/ covers the pure
+parts); it makes real API calls, so it's run manually via:
 
     python tests/probe/run_scripted_session.py
 
@@ -11,6 +11,9 @@ Built incrementally per tasks.md:
 - T013 (US1): one fixed action, asserts a computed degree was produced.
 - T016 (US2): extends to a full 10+ action sequence, mirroring probe-results.md's turn variety.
 - T017-T019 (US3): adds the SC-002/SC-003/SC-004 consistency checks and a final summary.
+
+Uses only dm_agent.TurnResult's provider-agnostic tool_calls list -- never raw Gemini/Anthropic
+response internals -- so this script doesn't need to change again if the provider changes.
 """
 
 from __future__ import annotations
@@ -25,40 +28,6 @@ from state import CharacterState, SessionLog  # noqa: E402
 from tools import ToolHandlers  # noqa: E402
 
 
-def find_tool_use_and_result(conversation: list[dict], tool_name: str, since_index: int):
-    """Scan conversation turns from since_index for a matching tool_use and its result.
-
-    Returns (tool_use_block, result_dict_str) or (None, None) if not found. This is how T013
-    checks a degree was actually produced, before US2/US3 (T014-T019) build proper per-turn
-    ActionAttempt logging into SessionLog itself.
-    """
-    tool_use_block = None
-    for message in conversation[since_index:]:
-        if message["role"] != "assistant":
-            continue
-        for block in message["content"]:
-            block_type = getattr(block, "type", None) or (
-                block.get("type") if isinstance(block, dict) else None
-            )
-            if block_type == "tool_use":
-                name = getattr(block, "name", None) or block.get("name")
-                if name == tool_name:
-                    tool_use_block = block
-    if tool_use_block is None:
-        return None, None
-
-    tool_use_id = getattr(tool_use_block, "id", None) or tool_use_block.get("id")
-    for message in conversation[since_index:]:
-        if message["role"] != "user":
-            continue
-        for block in message["content"]:
-            if not isinstance(block, dict):
-                continue
-            if block.get("type") == "tool_result" and block.get("tool_use_id") == tool_use_id:
-                return tool_use_block, block.get("content")
-    return tool_use_block, None
-
-
 def run_us1_check() -> bool:
     """T013: one fixed, real-stakes action; assert a computed degree was produced."""
     character = CharacterState(
@@ -68,7 +37,7 @@ def run_us1_check() -> bool:
     handlers = ToolHandlers(session)
     client = build_client()
 
-    conversation: list[dict] = []
+    conversation: list = []
     run_turn(
         client,
         handlers,
@@ -76,22 +45,19 @@ def run_us1_check() -> bool:
         "Begin the session: narrate a one-sentence opening scene and invite my first action.",
     )
 
-    before_index = len(conversation)
     action = "I try to force open the heavy oak door blocking the passage."
-    narration = run_turn(client, handlers, conversation, action)
+    result = run_turn(client, handlers, conversation, action)
 
-    tool_use, result = find_tool_use_and_result(conversation, "roll_check", before_index)
     print(f"Action: {action}")
-    print(f"Narration:\n{narration}\n")
+    print(f"Narration:\n{result.narration}\n")
+    print(f"Tool calls this turn: {result.tool_calls}")
 
-    if tool_use is None:
+    roll_calls = [c for c in result.tool_calls if c["name"] == "roll_check"]
+    if not roll_calls:
         print("FAIL (SC-001): roll_check was never called for a real-stakes action.")
         return False
-    if result is None:
-        print("FAIL: roll_check was called but no result was found in the conversation.")
-        return False
 
-    print(f"roll_check result: {result}")
+    print(f"roll_check result: {roll_calls[0]['result']}")
     print("PASS (SC-001): a computed degree was produced for this action.")
     return True
 

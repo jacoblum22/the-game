@@ -6,8 +6,8 @@ the actual code, not here.
 ## Prerequisites
 
 - Python 3.11+
-- An Anthropic API key, set as `ANTHROPIC_API_KEY`
-- `pip install anthropic pytest`
+- A Gemini API key ([aistudio.google.com/apikey](https://aistudio.google.com/apikey)), set as `GEMINI_API_KEY`
+- `pip install -r requirements.txt` (or `pip install google-genai pytest`)
 
 ## Run an interactive session
 
