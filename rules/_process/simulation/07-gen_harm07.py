@@ -220,7 +220,7 @@ HARM = {
                              'a setback fact (setback.defeated | .yielded | .captured | .dying_entered | .threshold | .retreated {severity} | .companion_dead)',
                              'at least one actionable lead (P16): PR-07-7 refuses to finish without one'],
     'captivity': {
-        'holding_place_order': ["the victor's recorded objective, if it names a place", "the victor faction's nearest hold (11, 13)", "the victor's lair", 'a camp created at the nearest suitable place'],
+        'holding_place_order': ["the victor's recorded objective, if it names a place", "the victor faction's nearest hold (11; the region's seed, 12.16.10)", "the victor's lair", 'a camp created at the nearest suitable place'],
         'fates': {'default_by_org': {'org.crown': 'trial', 'org.faith': 'trial', 'org.order': 'interrogation', 'org.guild': 'ransom',
                                      'org.company': 'ransom', 'org.clan': 'labor', 'org.outlaw': 'ransom', 'org.cult': 'sacrifice'},
                   'closed_list': ['trial', 'sale', 'sacrifice', 'interrogation', 'ransom', 'labor', 'the larder'],

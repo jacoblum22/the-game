@@ -1,0 +1,723 @@
+# data/world_seed.yaml
+# Purpose: the world seed (12.16): the procedure that builds a starting world from nothing, so the game runs with
+#   no pre-made setting. It holds the seed's steps, the session-zero questions (each with closed options and an
+#   oracle roll, so a step is answered by the player, by the engine, or both), the oracle tables the steps roll
+#   on (premises, keepers, peoples' presence, names, places, havens, inciting incidents), the canon defaults of
+#   05.7.10, 07 and 15, and the requirements list: everything the other chapters read from a region, with the
+#   seed key that supplies it and the check `12-world-seed.py` runs on a seed. A seed is written as a region
+#   record of the shape of `region_*.yaml` (SCHEMAS.md#region_yaml); chapter 13's `region_thallen.yaml` is one
+#   optional pre-made seed of that shape.
+# Owner: 12-dm-procedures (12.16). Schema: data/SCHEMAS.md#world_seedyaml.
+# Reference implementation: _process/simulation/12-world-seed.py (runs every step from this file and the
+#   files it names; validates the seed against `requirements`; one generated example committed beside it).
+# Every entry lifecycle: provisional (00.16.3). Basis: [12.16] [05.7.10] [02.2.2-02.4.8] [10.2.4, T-10-2]
+#   [11.3.18, PR-11-8] [PR-10-6, PR-10-10] [R5 P-22..P-36 (solo sandbox generation)] [DL-12-21..DL-12-24]
+# [revision: I-028]
+
+schema_version: 1
+lifecycle: provisional
+
+modes:
+  - {id: guided, text: "the player answers every question from its options (or states a custom answer the DM classifies to the nearest option, 12.16.2)"}
+  - {id: oracle, text: "the engine rolls every question's oracle; the player sees the result and may veto one answer per step (re-rolled once)"}
+  - {id: mixed, text: "per question: the player answers the ones they care about; the engine rolls the rest (the default)"}
+
+# ------------------------------------------------------------------------------------------- steps
+# Run in this order (12.16.3). `writes` are region keys (SCHEMAS.md#region_yaml); `rolls` are the tables and
+# procedures each step uses.
+steps:
+  - {id: ws.step.premise, n: 1, name: "Premise: what went wrong here", rule: "12.16.4", questions: [ws.q.wound, ws.q.climate], writes: ["region/pitch", "region/truths", "region/climate", "region/wound"]}
+  - {id: ws.step.canon, n: 2, name: "Canon: what is impossible, and how magic works", rule: "12.16.5", questions: [ws.q.magic_level, ws.q.magic_law, ws.q.spirits, ws.q.arcane_source, ws.q.extra_impossible, ws.q.regrowth, ws.q.closed_school, ws.q.relics_magic, ws.q.hybrid_none], writes: ["canon_impossible", "canon"]}
+  - {id: ws.step.faith, n: 3, name: "Faith: the keepers and who answers at death's door", rule: "12.16.6", questions: [ws.q.keeper_count, ws.q.keepers, ws.q.bargainer], writes: ["keepers", "canon/facts"]}
+  - {id: ws.step.peoples, n: 4, name: "Peoples and tongues", rule: "12.16.7", questions: [ws.q.presence, ws.q.second_tongue], writes: ["peoples", "absent_origins", "names", "tongues"]}
+  - {id: ws.step.land, n: 5, name: "The land: rings, areas and routes", rule: "12.16.8", questions: [ws.q.terrain], writes: ["region/rings", "terrain_by_ring", "places (the region and its areas)", "places[]/links"]}
+  - {id: ws.step.haven, n: 6, name: "The haven", rule: "12.16.9", questions: [ws.q.haven_tier, ws.q.haven_site], writes: ["region/haven", "places (settlements and buildings)", "places_of_acceptance", "fight_locations", "stock"]}
+  - {id: ws.step.factions, n: 7, name: "Factions with running clocks", rule: "12.16.10", questions: [ws.q.rulers, ws.q.fourth_faction], writes: ["factions", "clocks", "values"]}
+  - {id: ws.step.cast, n: 8, name: "The cast", rule: "12.16.11", questions: [], writes: ["npcs", "bond_placement"]}
+  - {id: ws.step.sites, n: 9, name: "Sites, lairs and threats", rule: "12.16.12", questions: [], writes: ["places (sites)", "situations", "clocks", "bestiary"]}
+  - {id: ws.step.tables, n: 10, name: "Encounter tables", rule: "12.16.13", questions: [], writes: ["encounter_tables", "encounter_table_audit"]}
+  - {id: ws.step.rumors, n: 11, name: "Rumors", rule: "12.16.14", questions: [], writes: ["rumor_tables"]}
+  - {id: ws.step.calendar, n: 12, name: "The calendar", rule: "12.16.15", questions: [ws.q.month_names], writes: ["calendar"]}
+  - {id: ws.step.opening, n: 13, name: "The opening and the pregens", rule: "12.16.16", questions: [ws.q.inciting], writes: ["opening", "pregens"]}
+  - {id: ws.step.check, n: 14, name: "The seed check", rule: "12.16.17", questions: [], writes: ["seed/check"]}
+
+# ---------------------------------------------------------------------------------------- questions
+# Every question: `ask` (what the DM asks, out of fiction, 12.15), `options` (closed list; `text` is shown),
+# `oracle` (the engine's roll when the player does not answer). Option effects are read by the step's rule.
+questions:
+  - id: ws.q.wound
+    step: ws.step.premise
+    ask: "Every frontier has a trouble. What went wrong in this land, a generation or two ago?"
+    oracle: {die: d12, table: tbl.12.seed.wound}
+    options_from: tbl.12.seed.wound
+  - id: ws.q.climate
+    step: ws.step.premise
+    ask: "What is the land like to live in?"
+    options:
+      - {id: temperate, text: "temperate: green summers, wet autumns, snow some winters"}
+      - {id: northern, text: "northern: short summers, long hard winters"}
+      - {id: highland, text: "highland: high valleys, cold nights, storms off the peaks"}
+      - {id: arid, text: "arid: dry hills and scrub, hot days, cold nights"}
+      - {id: coastal, text: "coastal: mild and wet, fog and sea-storms"}
+    oracle: {die: d6, results: [{range: "1-3", option: temperate}, {range: "4", option: northern}, {range: "5", option: highland}, {range: "6", option: coastal}]}
+    note: "arid is chosen only by the player or by a wound that names it (the oracle keeps the starting land green enough to forage)"
+  - id: ws.q.magic_level
+    step: ws.step.canon
+    ask: "How common is magic?"
+    options:
+      - {id: rare, text: "rare: a village may never have seen a working; casters are spoken of", spirits: rare, arcane_teacher_at: city}
+      - {id: uncommon, text: "uncommon: every town knows a hedge-witch and a priest who can heal", spirits: rare, arcane_teacher_at: town}
+      - {id: common, text: "common: wards on the gates, a mage in the council", spirits: uncommon, arcane_teacher_at: village}
+    oracle: {die: d6, results: [{range: "1-2", option: rare}, {range: "3-5", option: uncommon}, {range: "6", option: common}]}
+  - id: ws.q.magic_law
+    step: ws.step.canon
+    ask: "Where the game begins, is working magic in the open lawful, licensed, or feared? (05.7.10 item 6)"
+    options:
+      - {id: lawful, text: "lawful: no one minds a working in the market"}
+      - {id: licensed, text: "licensed: lawful for those who hold the rulers' licence; a visible working without it is a method consequence (01.11.2)"}
+      - {id: feared, text: "feared: lawful on paper; any visible working draws a crowd, a priest or a mob (a method consequence, 01.11.2)"}
+    oracle: {die: d6, by: ws.q.magic_level, results: {rare: [{range: "1-2", option: lawful}, {range: "3-4", option: feared}, {range: "5-6", option: licensed}], uncommon: [{range: "1-3", option: lawful}, {range: "4-5", option: licensed}, {range: "6", option: feared}], common: [{range: "1-4", option: lawful}, {range: "5-6", option: licensed}]}}
+  - id: ws.q.spirits
+    step: ws.step.canon
+    ask: "How common are spirits of place? (the Oracle's odds, 05.7.10 item 5)"
+    options:
+      - {id: rare, text: "rare: Unlikely in any given place; Likely at a place with resonance"}
+      - {id: uncommon, text: "uncommon: Even odds in wild places; Likely at a place with resonance"}
+      - {id: common, text: "common: Likely anywhere wild; Certain at a place with resonance"}
+    oracle: {from: ws.q.magic_level, map: {rare: rare, uncommon: rare, common: uncommon}}
+  - id: ws.q.arcane_source
+    step: ws.step.canon
+    ask: "Who can learn arcane magic? (05.7.10 item 2)"
+    options:
+      - {id: anyone_literate, text: "anyone literate with a teacher or a text (the default)"}
+      - {id: order_only, text: "only those an arcane order admits: a teacher outside the order is a crime; a text is contraband", requires: "the arcane training licenses' requires gain: admitted by the region's arcane order (a faction rank)"}
+      - {id: gifted_only, text: "only those born with the gift: the Touched livelihood's birth gift, or a birth result naming arcane", requires: "the arcane training licenses' requires gain: a birth gift or Touched spark naming arcane"}
+    oracle: {die: d6, results: [{range: "1-4", option: anyone_literate}, {range: "5", option: order_only}, {range: "6", option: gifted_only}]}
+  - id: ws.q.extra_impossible
+    step: ws.step.canon
+    ask: "Beyond the five things no magic does anywhere (12.16.5), is anything else impossible here? Pick none, one or two."
+    options_from: tbl.12.seed.extra_impossible
+    oracle: {die: d6, results: [{range: "1-3", option: none}, {range: "4-5", count: 1, table: tbl.12.seed.extra_impossible}, {range: "6", count: 2, table: tbl.12.seed.extra_impossible}]}
+  - id: ws.q.regrowth
+    step: ws.step.canon
+    ask: "Can any rite regrow a lost limb or eye? (07.7.6)"
+    options:
+      - {id: "no", text: "no (the default): prosthetics, healers' craft and the maim's other offsets only"}
+      - {id: great_rite, text: "yes, but only by a great rite at a place of power (a rite of band 4, its components scarce)"}
+    oracle: {die: d6, results: [{range: "1-5", option: "no"}, {range: "6", option: great_rite}]}
+  - id: ws.q.closed_school
+    step: ws.step.canon
+    ask: "Is any school of magic closed in this world, or unknown here? (05.7.10 item 8)"
+    options:
+      - {id: none, text: "none (the default)"}
+      - {id: necromancy, school: deed.arcane.necromancy, text: "necromancy is lost: no teacher, no text; workings found in ruins only"}
+      - {id: summoning, school: deed.arcane.summoning, text: "summoning is lost"}
+      - {id: pact, school: deed.divine.pact, text: "no power here makes pacts"}
+      - {id: shapeshifting, school: deed.primal.shapeshifting, text: "shapeshifting is lost"}
+    oracle: {die: d12, results: [{range: "1-8", option: none}, {range: "9", option: necromancy}, {range: "10", option: summoning}, {range: "11", option: pact}, {range: "12", option: shapeshifting}]}
+  - id: ws.q.relics_magic
+    step: ws.step.canon
+    ask: "Does someone who refuses magic (15's `magic` refusal) also refuse relics and enchanted things?"
+    options:
+      - {id: "yes", text: "yes: a relic is magic to those who fear magic (the default)"}
+      - {id: holy_exempt, text: "holy relics of a keeper are exempt; other enchanted things are not"}
+    oracle: {die: d6, results: [{range: "1-4", option: "yes"}, {range: "5-6", option: holy_exempt}]}
+  - id: ws.q.hybrid_none
+    step: ws.step.canon
+    ask: "Do the four hybrid pairs chapter 04 leaves empty stay empty here (T-04-x: e.g. divine × primal)?"
+    options:
+      - {id: hold, text: "they hold: a named power and the nameless world share no servant (the default)"}
+    oracle: {die: d6, results: [{range: "1-6", option: hold}]}
+    note: "a seed that wants a hybrid for a none pair authors it as setting content under 04.4's audit; the seed procedure itself never does"
+  - id: ws.q.keeper_count
+    step: ws.step.faith
+    ask: "How many powers answer prayers here?"
+    options: [{id: "2", text: "two"}, {id: "3", text: "three"}, {id: "4", text: "four"}]
+    oracle: {die: d6, results: [{range: "1-2", option: "2"}, {range: "3-5", option: "3"}, {range: "6", option: "4"}]}
+  - id: ws.q.keepers
+    step: ws.step.faith
+    ask: "What are they? (pick a form for each; the engine names them)"
+    options_from: tbl.12.seed.keeper_form
+    oracle: {die: d12, table: tbl.12.seed.keeper_form, distinct: true, weights_by: ws.q.wound}
+  - id: ws.q.bargainer
+    step: ws.step.faith
+    ask: "Who, if anyone, answers at the door of death to bargain? (07.5.5)"
+    options:
+      - {id: death_keeper, text: "the keeper of death and crossing, if there is one; else none"}
+      - {id: none, text: "no one: the dying bargain with no one"}
+      - {id: fey, text: "a fey lord of the borderlands (arch.fey_noble), for a price paid later"}
+      - {id: fiend, text: "a tempter (arch.tempter) who collects"}
+    oracle: {die: d6, results: [{range: "1-3", option: death_keeper}, {range: "4", option: none}, {range: "5", option: fey}, {range: "6", option: fiend}]}
+  - id: ws.q.presence
+    step: ws.step.peoples
+    ask: "Which peoples live here, and how many? (common / uncommon / rare / absent for each of the eight)"
+    oracle: {die: d6, table: tbl.12.seed.presence, by: people}
+    rule: "humans are at least uncommon; at least one non-human people is present; a people absent here may still be met far away (a traveller), never as a local"
+  - id: ws.q.second_tongue
+    step: ws.step.peoples
+    ask: "Besides the Common tongue, what is the land's second tongue? (02.2.2's creation default reads it)"
+    options:
+      - {id: old_tongue, text: "the Old Tongue, as the speech of whatever fell (renamed by the region)"}
+      - {id: people, text: "the native tongue of the land's most common non-human people"}
+    oracle: {die: d6, results: [{range: "1-3", option: people}, {range: "4-6", option: old_tongue}]}
+  - id: ws.q.terrain
+    step: ws.step.land
+    ask: "What lies around the haven, ring by ring? (pick a terrain for each ring, or let the land roll)"
+    oracle: {die: d12, table: tbl.12.seed.terrain_by_climate, by: ws.q.climate}
+  - id: ws.q.haven_tier
+    step: ws.step.haven
+    ask: "Is the haven a village or a town?"
+    options: [{id: village, text: "a village: a few hundred souls, a shrine, an inn"}, {id: town, text: "a walled town: a market, a temple, guilds"}]
+    oracle: {die: d6, results: [{range: "1-2", option: village}, {range: "3-6", option: town}]}
+  - id: ws.q.haven_site
+    step: ws.step.haven
+    ask: "Where does the haven stand?"
+    options_from: tbl.12.seed.haven_site
+    oracle: {die: d8, table: tbl.12.seed.haven_site}
+  - id: ws.q.rulers
+    step: ws.step.factions
+    ask: "Who rules the haven?"
+    options_from: tbl.12.seed.rulers
+    oracle: {die: d6, table: tbl.12.seed.rulers, by: ws.q.haven_tier}
+  - id: ws.q.fourth_faction
+    step: ws.step.factions
+    ask: "Who else has power here? (one more faction; the engine adds the rest)"
+    oracle: {die: d12, table: "factions.yaml#tbl.11.faction_seed"}
+  - id: ws.q.month_names
+    step: ws.step.calendar
+    ask: "Do the months have names here, or are they just counted?"
+    options: [{id: named, text: "named: the engine names them from the land's own words"}, {id: counted, text: "counted: 'the second month of spring' (calendar.yaml's default)"}]
+    oracle: {die: d6, results: [{range: "1-4", option: named}, {range: "5-6", option: counted}]}
+  - id: ws.q.inciting
+    step: ws.step.opening
+    ask: "How does the story begin? (the inciting incident pairs with the character's long vow, 02.9.1)"
+    options_from: tbl.12.seed.inciting
+    oracle: {die: d8, table: tbl.12.seed.inciting}
+
+# ------------------------------------------------------------------------------------------- tables
+# Oracle tables the steps roll on (RC-RNG, 00.12.7 order). A wound's fields are read by later steps:
+# `gates` (creature tags weighted x3 in encounter pools, 12.16.13), `situation` (the big threat's template,
+# 12.16.12), `threat_org` (the threat faction's org kind), `themes` (site themes weighted x3), `keeper_bias`
+# (keeper forms weighted x3), `era` (the calendar's era name), `truths` (three lines; {haven} and {region}
+# are filled at the end).
+tables:
+  - id: tbl.12.seed.wound
+    name: "What went wrong here (12.16.4)"
+    die: d12
+    results:
+      - range: "1"
+        option: fallen_realm
+        threat_goal: {text: "take the old crown and the realm with it", kind: dominate, rating: sway}
+        threat_temperament: cautious
+        text: "a fallen realm: a kingdom broke two generations ago; its roads, keeps and heirs remain"
+        pitch: "{region} was the heartland of a realm that fell in a single bad winter. Its roads still run; its keeps are ruins, and too many people remember they once had a claim."
+        truths: ["The old realm's roads still run, and its ruins are full of what it left behind.", "Three families claim the old crown, and each has a seal to prove it.", "Something ended the realm in one winter, and no one agrees what."]
+        gates: [creature.undead.mindless, creature.folk.human, creature.construct]
+        situation: sit_t.succession
+        threat_org: org.crown.noble
+        themes: [site.theme.ancient, site.theme.ravaged, site.theme.fortified]
+        keeper_bias: [kf.saint, kf.ancestors]
+        era: "years since the Fall"
+      - range: "2"
+        option: plague
+        threat_goal: {text: "spread the sickness to the haven before the summer ends", kind: change, rating: cunning}
+        threat_temperament: secretive
+        text: "a plague: a sickness of land or folk that comes back each hot season"
+        pitch: "A wasting sickness took one in three in {region} a generation ago, and every summer someone coughs and the whole valley holds its breath."
+        truths: ["The sickness comes back in the hot months, and no healer knows why.", "The dead of the plague years lie in pits outside every village, unblessed.", "A cure was found once and lost again."]
+        gates: [creature.undead, creature.beast.vermin, creature.horror.fungal]
+        situation: sit_t.sickness
+        threat_org: org.cult.undeath
+        themes: [site.theme.haunted, site.theme.infested, site.theme.hallowed]
+        keeper_bias: [kf.healer, kf.death]
+        era: "years since the Wasting"
+      - range: "3"
+        option: invasion
+        threat_goal: {text: "break the watch on the passes and burn the lowlands again", kind: dominate, rating: force}
+        threat_temperament: aggressive
+        text: "an invasion: a horde came over the mountains, was driven back, and is coming again"
+        pitch: "The horde came down from the passes thirty winters ago and burned {region} to the river. It was driven back. The watchfires on the passes were lit again this spring."
+        truths: ["The horde is gathering again beyond the passes.", "Some who fought it are still alive, and some of them took its gold.", "The old forts on the passes are held by too few, or by no one."]
+        gates: [creature.folk.orc, creature.folk.goblin, creature.folk.giant]
+        situation: sit_t.war_comes
+        threat_org: org.clan.tribe
+        themes: [site.theme.fortified, site.theme.ravaged]
+        keeper_bias: [kf.war, kf.hearth]
+        era: "years since the Burning"
+      - range: "4"
+        option: curse
+        threat_goal: {text: "keep the curse from being lifted, and profit by it", kind: grow, rating: cunning}
+        threat_temperament: secretive
+        text: "a curse: a wrong was done, and the land answers it"
+        pitch: "Someone in {region} did a terrible thing, and the land has not forgiven it: crops fail on certain fields, wells sour, and children are born with old eyes."
+        truths: ["The curse has a source, a place and a name, and both are forgotten.", "The curse is spreading one field a year.", "Someone profits from the curse and does not want it lifted."]
+        gates: [creature.spirit.fey.hag, creature.undead.spectral, creature.horror]
+        situation: sit_t.cursed_ground
+        threat_org: org.cult.forbidden
+        themes: [site.theme.corrupted, site.theme.haunted, site.theme.wild]
+        keeper_bias: [kf.land, kf.healer]
+        era: "years since the Wrong"
+      - range: "5"
+        option: sundering
+        threat_goal: {text: "recover the scattered pieces of the working and finish it", kind: change, rating: cunning}
+        threat_temperament: secretive
+        text: "a sundering: a great working went wrong and broke something"
+        pitch: "The mages of {region} tried to bind something greater than themselves. The tower that held them is a crater now, and the sky over it is the wrong colour."
+        truths: ["What the mages tried to bind is not dead.", "Pieces of the working are scattered across the land, and they are valuable.", "The surviving mages blame each other, and one of them is lying."]
+        gates: [creature.construct, creature.elemental, creature.horror.aberration]
+        situation: sit_t.the_enemy
+        threat_org: org.order.arcane
+        themes: [site.theme.ancient, site.theme.corrupted, site.theme.ravaged]
+        keeper_bias: [kf.sky, kf.knowledge]
+        era: "years since the Sundering"
+      - range: "6"
+        option: silent_god
+        threat_goal: {text: "complete the rite that will put a new power in the silent one's place", kind: change, rating: sway}
+        threat_temperament: zealous
+        text: "a silent power: the land's great keeper stopped answering"
+        pitch: "For a thousand years the keeper of {region} answered every true prayer. Twelve years ago it stopped. Its temple still stands, and its priests still pray, and nothing answers."
+        truths: ["The silent keeper is not dead; something keeps it from answering.", "Other powers, and worse things, are moving into the silence.", "A relic of the silent keeper could wake it, and someone else wants it first."]
+        gates: [creature.fiend, creature.spirit, creature.undead.spectral]
+        situation: sit_t.the_rite
+        threat_org: org.cult.fiendish
+        themes: [site.theme.hallowed, site.theme.corrupted]
+        keeper_bias: [kf.sky, kf.saint]
+        era: "years since the Silence"
+      - range: "7"
+        option: long_winter
+        threat_goal: {text: "buy up every granary before the next winter", kind: grow, rating: wealth}
+        threat_temperament: mercantile
+        text: "a long winter: the seasons broke and have not mended"
+        pitch: "Winter came early to {region} eleven years ago and stayed a month too long, and every year since, it has stayed a little longer."
+        truths: ["Each winter is longer than the last, and the old folk can name the day it began.", "The cold has a heart somewhere in the high country.", "Granaries are emptying, and someone is hoarding grain."]
+        gates: [creature.elemental.frost, creature.beast.predator, creature.folk.giant]
+        situation: sit_t.hunger
+        threat_org: org.company.trading
+        themes: [site.theme.wild, site.theme.ancient]
+        keeper_bias: [kf.hearth, kf.land]
+        era: "years since the Long Winter"
+      - range: "8"
+        option: restless_dead
+        threat_goal: {text: "raise an army from the unburied battlefield", kind: grow, rating: force}
+        threat_temperament: zealous
+        text: "the restless dead: the dead do not stay in their graves"
+        pitch: "In {region} the dead do not always stay buried. Every village keeps a watch on its graveyard, and every family burns its dead or pays the price."
+        truths: ["The dead began to rise after a great battle, and the battlefield is still unburied.", "Someone learned to command the risen dead.", "A rite that once laid them is half-remembered."]
+        gates: [creature.undead]
+        situation: sit_t.the_missing
+        threat_org: org.cult.undeath
+        themes: [site.theme.haunted, site.theme.corrupted]
+        keeper_bias: [kf.death, kf.saint]
+        era: "years since the Rising"
+      - range: "9"
+        option: frontier
+        threat_goal: {text: "drive the settlers back across the river", kind: dominate, rating: force}
+        threat_temperament: zealous
+        text: "a frontier: settlers pushing into a wild land that was never theirs"
+        pitch: "{region} was wild country until a charter opened it to settlers ten years ago. The farms are new, the roads are mud, and the wild has not agreed to any of it."
+        truths: ["The charter's borders cross land older peoples call theirs.", "The settlers' sponsors in the capital want results, and soon.", "Something in the deep wild has started to notice the axes."]
+        gates: [creature.beast, creature.spirit.fey, creature.spirit.place]
+        situation: sit_t.hunting_ground
+        threat_org: org.order.druidic
+        themes: [site.theme.wild, site.theme.ancient, site.theme.infested]
+        keeper_bias: [kf.land, kf.hearth]
+        era: "years of the Charter"
+      - range: "10"
+        option: schism
+        threat_goal: {text: "take the great temple and declare the other order heretic", kind: dominate, rating: sway}
+        threat_temperament: zealous
+        text: "a schism: one faith split in two, and both halves claim the temples"
+        pitch: "The faithful of {region} split over a prophecy twenty years ago. Two orders now claim the same temples, the same relics and the same dead."
+        truths: ["The prophecy at the heart of the schism was forged, and the forger is alive.", "Both orders are recruiting swords.", "The keeper itself has given a sign, and only a few have seen it."]
+        gates: [creature.folk.human, creature.spirit.celestial, creature.undead.spectral]
+        situation: sit_t.feud
+        threat_org: org.order.knightly
+        themes: [site.theme.hallowed, site.theme.fortified, site.theme.ravaged]
+        keeper_bias: [kf.saint, kf.sky]
+        era: "years since the Sundered Creed"
+      - range: "11"
+        option: tyrant
+        threat_goal: {text: "bring the free haven under the Iron Peace", kind: dominate, rating: force}
+        threat_temperament: aggressive
+        text: "a tyrant: a cruel power rules the land beyond the haven"
+        pitch: "Beyond the free haven, {region} answers to a lord who taxes in blood. The haven pays its tithe and keeps its gates shut, and refugees climb its walls at night."
+        truths: ["The tyrant's power rests on one thing that could be taken.", "The haven pays the tyrant secretly, and some of its leaders profit.", "Resistance exists, and it is not as noble as it looks."]
+        gates: [creature.folk.human, creature.fiend.devil, creature.beast.predator.canine]
+        situation: sit_t.road_of_knives
+        threat_org: org.crown.military
+        themes: [site.theme.fortified, site.theme.ravaged, site.theme.corrupted]
+        keeper_bias: [kf.war, kf.saint]
+        era: "years of the Iron Peace"
+      - range: "12"
+        option: waking
+        threat_goal: {text: "wake what sleeps under the hills", kind: change, rating: cunning}
+        threat_temperament: secretive
+        text: "an awakening: something very old is waking under the land"
+        pitch: "The ground under {region} shakes in the night now, and wells run warm. The old songs say something sleeps under the hills. The old songs never said what wakes it."
+        truths: ["Something under the land is waking, and its dreams leak into the waking world.", "A people who lived here before knew how to keep it asleep.", "Some want it to wake, and are helping."]
+        gates: [creature.horror, creature.dragon, creature.elemental.earth]
+        situation: sit_t.the_enemy
+        threat_org: org.cult.doomsday
+        themes: [site.theme.ancient, site.theme.corrupted, site.theme.wild]
+        keeper_bias: [kf.land, kf.knowledge]
+        era: "years since the First Tremor"
+
+  - id: tbl.12.seed.extra_impossible
+    name: "One more thing no magic does here (12.16.5)"
+    die: d8
+    results:
+      - {range: "1", option: no_teleport, text: "No one crosses space in an instant: no working moves a creature from one place to another without passing between.", scope: magic}
+      - {range: "2", option: no_flight, text: "No working lets a person fly; levitation lifts no higher than a tall man's reach.", scope: magic}
+      - {range: "3", option: no_conjured_food, text: "No working makes food or drink from nothing; magic can keep or purify, never create, sustenance.", scope: magic}
+      - {range: "4", option: no_true_names, text: "No one can be commanded by their name; names have no power here.", scope: magic}
+      - {range: "5", option: no_far_speech, text: "No working carries words beyond a day's walk.", scope: magic}
+      - {range: "6", option: no_undying, text: "Nothing living stops ageing; no working lengthens a life beyond its people's span.", scope: magic}
+      - {range: "7", option: no_gold_making, text: "No working makes gold, silver or gems (08's transmutation canon).", scope: magic}
+      - {range: "8", option: no_weather_command, text: "No working commands the weather of a whole region; a rite may call rain on one field, never a season.", scope: magic}
+
+  - id: tbl.12.seed.keeper_form
+    name: "Keeper forms (12.16.6)"
+    die: d12
+    note: "a form gives the keeper's kind, schools (05.7.4), the conduct axes it cares for and despises (04.9.2), its sign and its faith's org kind; the name comes from the name tables"
+    results:
+      - {range: "1", option: kf.sky, kind: god, what: "the keeper of the open sky, of oaths sworn under it and of storms", schools: [deed.divine.oaths, deed.divine.smiting, deed.divine.revelation], axes: [conduct.honesty, conduct.justice], despises: [conduct.honesty, conduct.loyalty], sign: "a silver disc on a chain (item.tool.implement.holy_symbol)", faith_org: org.faith.temple, title: ["the High One", "Father of Storms", "the Oath-Keeper"]}
+      - {range: "2", option: kf.hearth, kind: god, what: "the keeper of hearth, harvest and shelter, who feeds the hungry and keeps the door", schools: [deed.divine.healing, deed.divine.warding, deed.divine.rites], axes: [conduct.generosity, conduct.protection], despises: [conduct.generosity, conduct.mercy], sign: "a clay lamp or a sheaf-knot (item.tool.implement.holy_symbol)", faith_org: org.faith.shrine, title: ["the Hearth-Mother", "Keeper of the Door", "the Giver"]}
+      - {range: "3", option: kf.death, kind: god, what: "the keeper of death and crossing, who meets every soul at the ford and lets none return", schools: [deed.divine.rites, deed.divine.exorcism, deed.divine.revelation], axes: [conduct.piety, conduct.mercy], despises: [conduct.piety, conduct.honesty], sign: "a black ribbon or a ferry-coin (item.tool.implement.holy_symbol)", faith_org: org.faith.temple, title: ["the Ferrywoman", "the Last Friend", "Warden of the Ford"], death: true}
+      - {range: "4", option: kf.war, kind: god, what: "the keeper of the shield-wall and the just war, who asks courage and repays it", schools: [deed.divine.smiting, deed.divine.oaths, deed.divine.warding], axes: [conduct.courage, conduct.loyalty], despises: [conduct.courage, conduct.loyalty], sign: "a small iron shield-boss (item.tool.implement.holy_symbol)", faith_org: org.order.knightly, title: ["the Shield", "the Red Banner", "Lord of the Line"]}
+      - {range: "5", option: kf.healer, kind: saint, what: "a healer raised to power after death, who walks among the sick", schools: [deed.divine.healing, deed.divine.rites, deed.divine.exorcism], axes: [conduct.mercy, conduct.humility], despises: [conduct.mercy, conduct.restraint], sign: "a green cord knotted three times (item.tool.implement.holy_symbol)", faith_org: org.faith.mission, title: ["the Kind Hand", "Saint of the Sickbed", "the Physician"]}
+      - {range: "6", option: kf.saint, kind: saint, what: "a hero of the land's history, raised to power for one great deed and keeper of its memory", schools: [deed.divine.warding, deed.divine.oaths, deed.divine.exorcism], axes: [conduct.courage, conduct.protection], despises: [conduct.courage, conduct.piety], sign: "a pewter badge of the saint's emblem (item.tool.implement.holy_symbol)", faith_org: org.faith.shrine, title: ["the Defender", "the First Warden", "Saint of the Wall"]}
+      - {range: "7", option: kf.ancestors, kind: ancestor_host, what: "the gathered dead of the land's first people, who watch their descendants and judge them", schools: [deed.divine.rites, deed.divine.revelation, deed.divine.warding], axes: [conduct.loyalty, conduct.piety], despises: [conduct.loyalty, conduct.honesty], sign: "a carved bone bead strung with a grandparent's name (item.tool.implement.holy_symbol)", faith_org: org.clan.lineage, title: ["the Old Ones", "the Watchers in the Hill", "the Many Fathers"]}
+      - {range: "8", option: kf.land, kind: great_spirit, what: "the spirit of the land itself, old and slow, honoured at stones and springs", schools: [deed.divine.healing, deed.divine.rites, deed.divine.warding], axes: [conduct.restraint, conduct.protection], despises: [conduct.restraint, conduct.generosity], sign: "a river-stone with a hole worn through (item.tool.implement.holy_symbol)", faith_org: org.order.druidic, title: ["the Green Lady", "the Old Man of the Hill", "She Under the Stones"]}
+      - {range: "9", option: kf.knowledge, kind: god, what: "the keeper of letters, measures and hidden things, who rewards the patient seeker", schools: [deed.divine.revelation, deed.divine.warding, deed.divine.oaths], axes: [conduct.honesty, conduct.humility], despises: [conduct.honesty, conduct.justice], sign: "a brass stylus or a key (item.tool.implement.holy_symbol)", faith_org: org.order.monastic, title: ["the Lamp", "the Keeper of Keys", "the Patient Eye"]}
+      - {range: "10", option: kf.justice, kind: god, what: "the keeper of law and the scales, who judges every bargain", schools: [deed.divine.oaths, deed.divine.smiting, deed.divine.revelation], axes: [conduct.justice, conduct.honesty], despises: [conduct.justice, conduct.mercy], sign: "a small pair of bronze scales (item.tool.implement.holy_symbol)", faith_org: org.faith.temple, title: ["the Judge", "the Balance", "the Even Hand"]}
+      - {range: "11", option: kf.sea, kind: god, what: "the keeper of rivers and the sea, of travellers and of what the water takes", schools: [deed.divine.warding, deed.divine.revelation, deed.divine.rites], axes: [conduct.generosity, conduct.courage], despises: [conduct.generosity, conduct.humility], sign: "a shell or a fish-hook of bone (item.tool.implement.holy_symbol)", faith_org: org.faith.shrine, title: ["the Tide", "Mother of Rivers", "the Drowned King"]}
+      - {range: "12", option: kf.pact, kind: pact_power, what: "a power that bargains: it gives readily and always collects, and its servants are many and quiet", schools: [deed.divine.pact, deed.divine.revelation, deed.divine.smiting], axes: [conduct.loyalty, conduct.honesty], despises: [conduct.loyalty, conduct.restraint], pole_override: {conduct.honesty: "-"}, sign: "a ring of black iron (item.tool.implement.holy_symbol)", faith_org: org.cult.forbidden, title: ["the Lender", "the Quiet Patron", "the Open Hand"], dark: true}
+
+  - id: tbl.12.seed.presence
+    name: "How many of each people live here (12.16.7)"
+    die: d6
+    note: "one roll per people; a wound that names a folk tag in its gates moves that people one column up (more present)"
+    by_people:
+      orig.people.human: [{range: "1-4", present: common}, {range: "5-6", present: uncommon}]
+      orig.people.halfling: [{range: "1-2", present: common}, {range: "3-4", present: uncommon}, {range: "5", present: rare}, {range: "6", present: absent}]
+      orig.people.dwarf: [{range: "1", present: common}, {range: "2-3", present: uncommon}, {range: "4-5", present: rare}, {range: "6", present: absent}]
+      orig.people.elf: [{range: "1", present: uncommon}, {range: "2-4", present: rare}, {range: "5-6", present: absent}]
+      orig.people.orc_kin: [{range: "1", present: uncommon}, {range: "2-3", present: rare}, {range: "4-6", present: absent}]
+      orig.people.goblin_kin: [{range: "1", present: uncommon}, {range: "2-3", present: rare}, {range: "4-6", present: absent}]
+      orig.people.giant_kin: [{range: "1-2", present: rare}, {range: "3-6", present: absent}]
+      orig.people.beastfolk: [{range: "1", present: uncommon}, {range: "2-3", present: rare}, {range: "4-6", present: absent}]
+
+  - id: tbl.12.seed.terrain_by_climate
+    name: "Terrain by ring and climate (12.16.8)"
+    die: d12
+    note: "ring 1 is the haven's farm country; rings 2-5 roll one primary terrain per area; the second terrain of an area is the haven site's when it is water or road"
+    ring1: {temperate: [terrain.plains.farmland, terrain.forest.woodland], northern: [terrain.plains.farmland, terrain.forest.woodland], highland: [terrain.plains.farmland, terrain.highland.hills], arid: [terrain.plains.farmland, terrain.arid.badlands], coastal: [terrain.plains.farmland, terrain.water.coast]}
+    climates:
+      temperate:   [{range: "1-2", terrain: terrain.forest.woodland}, {range: "3", terrain: terrain.forest.deepwood}, {range: "4-5", terrain: terrain.plains.grassland}, {range: "6", terrain: terrain.plains.moor}, {range: "7-8", terrain: terrain.highland.hills}, {range: "9", terrain: terrain.wetland.marsh}, {range: "10", terrain: terrain.wetland.fen}, {range: "11", terrain: terrain.ruin}, {range: "12", terrain: terrain.highland.mountains}]
+      northern:    [{range: "1-2", terrain: terrain.forest.woodland}, {range: "3-4", terrain: terrain.forest.deepwood}, {range: "5", terrain: terrain.plains.moor}, {range: "6-7", terrain: terrain.highland.hills}, {range: "8", terrain: terrain.wetland.fen}, {range: "9", terrain: terrain.ruin}, {range: "10-11", terrain: terrain.frozen.tundra}, {range: "12", terrain: terrain.highland.mountains}]
+      highland:    [{range: "1-3", terrain: terrain.highland.hills}, {range: "4-5", terrain: terrain.forest.woodland}, {range: "6", terrain: terrain.plains.moor}, {range: "7", terrain: terrain.ruin}, {range: "8-10", terrain: terrain.highland.mountains}, {range: "11", terrain: terrain.frozen.glacier}, {range: "12", terrain: terrain.forest.deepwood}]
+      arid:        [{range: "1-5", terrain: terrain.arid.badlands}, {range: "6-7", terrain: terrain.arid.desert}, {range: "8", terrain: terrain.highland.hills}, {range: "9-10", terrain: terrain.ruin}, {range: "11", terrain: terrain.plains.grassland}, {range: "12", terrain: terrain.highland.mountains}]
+      coastal:     [{range: "1-2", terrain: terrain.forest.woodland}, {range: "3-4", terrain: terrain.plains.grassland}, {range: "5", terrain: terrain.plains.moor}, {range: "6-7", terrain: terrain.water.coast}, {range: "8", terrain: terrain.wetland.marsh}, {range: "9", terrain: terrain.highland.hills}, {range: "10", terrain: terrain.ruin}, {range: "11", terrain: terrain.forest.deepwood}, {range: "12", terrain: terrain.highland.mountains}]
+
+  - id: tbl.12.seed.haven_site
+    name: "Where the haven stands (12.16.9)"
+    die: d8
+    results:
+      - {range: "1", option: river_ford, text: "at a ford of a river", terrain: [terrain.water.river], fight: ["chokepoint: the ford's one safe line", "hazard: the river (haz.swift_water)"], feature: "the ford"}
+      - {range: "2", option: river_bridge, text: "at a bridge over a river", terrain: [terrain.water.river, terrain.road.bridge], fight: ["chokepoint: the bridge", "height: the bridge-house roof", "hazard: the river below (haz.swift_water)"], feature: "the bridge"}
+      - {range: "3", option: crossroads, text: "where two roads cross", terrain: [terrain.road], fight: ["open ground: the market square", "loose objects: carts and stalls"], feature: "the crossroads cross"}
+      - {range: "4", option: hill, text: "on a walled hill above the fields", terrain: [terrain.highland.hills], fight: ["height: the gate tower", "chokepoint: the gate", "slope: the hill road"], feature: "the hill gate"}
+      - {range: "5", option: harbour, text: "at a harbour", terrain: [terrain.water.coast], fight: ["edge: the quay (a fall into the harbour)", "loose objects: crates and nets", "height: the harbour lamp-tower"], feature: "the quay"}
+      - {range: "6", option: lakeshore, text: "on a lake shore", terrain: [terrain.water.lake], fight: ["edge: the jetties", "cover: the boat-sheds"], feature: "the jetties"}
+      - {range: "7", option: old_fort, text: "inside the walls of an old fort", terrain: [terrain.ruin.fortress], fight: ["height: the old curtain wall", "chokepoint: the barbican", "cover: the fallen keep"], feature: "the barbican"}
+      - {range: "8", option: forest_edge, text: "at the edge of a great wood", terrain: [terrain.forest.woodland], fight: ["cover: the timber yards", "obscurement: the woodsmoke of the charcoal pits"], feature: "the timber yards"}
+
+  - id: tbl.12.seed.rulers
+    name: "Who rules the haven (12.16.10)"
+    die: d6
+    by: {village: [{range: "1-2", org: org.clan.family, text: "an old family whose head is the headman"}, {range: "3-4", org: org.crown.noble, text: "a lord in a manor above the village"}, {range: "5", org: org.faith.shrine, text: "the shrine's priests"}, {range: "6", org: org.crown.civic, text: "a council of elders"}],
+         town: [{range: "1-2", org: org.crown.civic, text: "a town council and its watch"}, {range: "3-4", org: org.crown.noble, text: "a noble house in the castle"}, {range: "5", org: org.guild.merchant, text: "the merchants' guild"}, {range: "6", org: org.faith.temple, text: "the temple"}]}
+
+  - id: tbl.12.seed.inciting
+    name: "How the story begins (12.16.16)"
+    die: d8
+    note: "every incident starts in the haven at a moment of decision (12.5.2 step 5) and names the situation or faction its first lead points to"
+    results:
+      - {range: "1", option: alarm, text: "the haven's alarm sounds: something from the wound is at the gate", lead_to: situation, scene: "the gate, at the moment the bar comes down"}
+      - {range: "2", option: dying_messenger, text: "a rider dies in the market with a message for someone who is not there", lead_to: faction_threat, scene: "the market, the rider falling from the saddle"}
+      - {range: "3", option: missing, text: "a child (or an elder, or a priest) is missing since last night, and the trail leads out of the haven", lead_to: site_ring1, scene: "the square, the search being organised"}
+      - {range: "4", option: offer, text: "a powerful person offers the character work, coin and a warning", lead_to: faction_goal, scene: "the hall of the rulers, the offer on the table"}
+      - {range: "5", option: theft, text: "something sacred is stolen from the temple in the night", lead_to: faction_threat, scene: "the temple at dawn, the empty niche"}
+      - {range: "6", option: omen, text: "an omen of the wound in the sky or the earth, and the whole haven sees it", lead_to: situation, scene: "the walls, everyone looking the same way"}
+      - {range: "7", option: refugees, text: "refugees arrive with a story nobody believes", lead_to: site_ring2, scene: "the gate, the refugees and the guards"}
+      - {range: "8", option: duel, text: "a quarrel in the inn turns to a challenge, and the challenger is more than they seem", lead_to: faction_goal, scene: "the inn's common room, the blade drawn"}
+
+  - id: tbl.12.seed.names
+    name: "Name parts by people (12.16.7)"
+    note: >-
+      The seed writes one name table per present people (tbl.<region>.names.<people>, d20 given names and d12
+      family names or epithets, as chapter 13's tables), by joining a start and an end drawn without
+      repeats (RC-RNG); a result that repeats an earlier name is redrawn. Humans get two styles when common
+      (the land's own folk and incomers). These parts are the engine's; a player may supply a table instead.
+    by_people:
+      orig.people.human:
+        styles:
+          - name: "the land's folk"
+            given_start: [Al, Bran, Cal, Dun, Ed, Fen, Gar, Hal, Is, Jor, Ker, Lor, Mar, Ned, Os, Per, Ran, Sel, Tam, Wil, Ald, Bet, Cor, Ev]
+            given_end: [a, ric, win, da, mund, ett, ys, an, wen, bert, ine, ard, ella, o, ey, red]
+            family_start: [Ash, Black, Bright, Cold, Deep, Elder, Fair, Gold, Green, Hart, Iron, Long, Mill, Oak, Red, Stone, Thorn, Well, White, Wood]
+            family_end: [ford, wood, ley, well, hill, brook, field, smith, ward, more, cote, by]
+          - name: "incomers"
+            given_start: [Aur, Bel, Cas, Dar, Eli, Fla, Ger, Hel, Iv, Lis, Mau, Ner, Oct, Rom, Sev, Tib, Val, Ves]
+            given_end: [ian, ia, ius, ella, ine, o, as, ette, ard, ano]
+            family_start: [de Bel, de Mor, Vas, Cor, Lan, Mar, Sal, Ter, Var, Ver]
+            family_end: [ac, ois, ent, ier, ande, ence, ault, ay]
+      orig.people.elf:
+        given_start: [Ae, Cae, Ela, Fae, Ili, Lae, Mir, Nae, Syl, Tha, Ves, Ys, Ari, Eru, Ilo]
+        given_end: [wen, rion, ndil, sse, thas, riel, lorn, nae, wyn, dra, lith, ion]
+        epithets: ["of the Silver Bough", "of the Long Shore", "of the Hollow Hill", "Starlit", "of the Last Song", "Who Walks Alone", "of the Grey Havens", "Dawnborn", "of the Quiet Wood", "Leafward", "of the Seven Springs", "the Rememberer"]
+      orig.people.dwarf:
+        given_start: [Bor, Dur, Grim, Har, Kaz, Mor, Nor, Thra, Ul, Vor, Bal, Dag, Hel, Ing, Ost]
+        given_end: [in, ak, grim, dun, ra, hild, ek, ur, ga, ri, dis, ain]
+        family_start: [Stone, Iron, Coal, Anvil, Deep, Copper, Granite, Silver, Flint, Ember]
+        family_end: [hammer, beard, delve, forge, born, hand, helm, shield]
+      orig.people.halfling:
+        given_start: [Bel, Cor, Dil, Fal, Hob, Lil, Mil, Nib, Pip, Ros, Tob, Wil, Mag, Tan, Sam]
+        given_end: [bo, wise, ly, ett, o, ie, kin, by, a, wen]
+        family_start: [Under, Green, Bramble, Honey, Tum, Fair, Hay, Mug, Thistle, Apple]
+        family_end: [hill, bottle, foot, wort, burrow, wick, barrel, dale]
+      orig.people.orc_kin:
+        given_start: [Gr, Ur, Mak, Zug, Thrak, Brug, Dush, Ogg, Rak, Shag, Ghaz, Lug, Murz, Yag]
+        given_end: [ash, ak, ogg, ul, ra, za, um, gar, ka, nak]
+        epithets: ["Iron-Tusk", "Red-Hand", "Bone-Breaker", "Wall-Climber", "Who Came Back", "Three-Scar", "the Quiet", "Ash-Walker", "Horse-Eater", "Long-Spear", "Half-Ear", "the Mender"]
+      orig.people.goblin_kin:
+        given_start: [Snik, Grib, Nub, Skab, Zit, Wik, Fiz, Krat, Mog, Rik, Bix, Tib]
+        given_end: [le, nik, bit, git, sy, ok, ka, zle]
+        epithets: ["of the Wet Warren", "Lamp-Thief", "Coin-Biter", "of the Roof Clan", "Quick-Fingers", "Rope-Dancer", "of the Ditch", "Bell-Ringer", "Nose", "Lucky", "of the Cellars", "Twice-Hanged"]
+      orig.people.giant_kin:
+        given_start: [Hrod, Ymm, Bor, Gunn, Skal, Hald, Brum, Ost, Ragn, Thol]
+        given_end: [vald, mund, a, ulf, hild, rek, gard, ny]
+        epithets: ["Mountain-born", "Stone-Shoulders", "of the High Pass", "Cloud-Walker", "the Gentle", "Ox-Lifter", "of the Cold Lake", "Tree-Breaker", "the Silent", "Hearth-Builder", "of the Long Winter", "Bridge-Maker"]
+      orig.people.beastfolk:
+        given_start: [Ssa, Kree, Rrak, Tik, Hssa, Yip, Kaa, Zzi, Sket, Varr]
+        given_end: [ss, ka, rik, tch, aa, ri, ash, oo]
+        epithets: ["of the Reed Clan", "Long-Tooth", "of the Burrow", "Grey-Muzzle", "Sun-Basker", "of the Marsh Kin", "Swift", "Scale-Bright", "of the Hill Den", "Night-Eye", "the Patient", "Mud-Walker"]
+
+  - id: tbl.12.seed.place_names
+    name: "Place-name parts (12.16.8)"
+    note: "a place name is start + end (a settlement, a landmark), or 'the' + adjective + noun (a region, an area); the noun list is chosen by the area's terrain branch"
+    start: [Ash, Barrow, Bel, Black, Bram, Brock, Cal, Cold, Corn, Crow, Dun, Elder, Fal, Fern, Gar, Gold, Grey, Hal, Hart, Hawk, Holly, Kings, Lark, Long, Marl, Mere, Mill, Moss, Nether, Oak, Old, Pen, Raven, Red, Rook, Rush, Salt, Sand, Shep, Silver, Stan, Stone, Swan, Thorn, Wend, Whit, Wil, Wolf]
+    end: [ford, ton, by, wick, ham, stead, ley, well, bridge, mouth, holt, more, crag, mere, field, burn, cross, hollow, gate, wall]
+    region_adjective: [Grey, Green, High, Broken, Golden, Hollow, Long, Quiet, Red, Silver, Weeping, Windy, Ashen, Bright, Elder, Lost, Merry, Tangled, Cold, Iron]
+    region_noun: [March, Vale, Reach, Downs, Fells, Marches, Weald, Hundred, Wolds, Mark]
+    area_adjective: [Whispering, Grey, Black, Long, Old, Drowned, Broken, Bright, Still, Tangled, Crooked, Sunken, Hungry, Weeping, Red, Thorny, Lonely, Burning, Bitter, Hollow]
+    area_noun_by_terrain:
+      terrain.plains: [Meads, Fields, Downs, Heath, Leas, Moor, Plain, Grassland]
+      terrain.forest: [Wood, Holt, Weald, Thicket, Greenwood, Shaws, Forest, Coppice]
+      terrain.highland: [Hills, Tors, Fells, Crags, Heights, Ridge, Pikes, Edge]
+      terrain.wetland: [Fen, Mire, Marsh, Mosses, Carrs, Reeds, Bog, Wash]
+      terrain.arid: [Waste, Barrens, Dunes, Flats, Scarps, Sands, Badlands, Dry]
+      terrain.frozen: [Snows, Whites, Wastes, Rime, Ice, Drifts, Tundra, Cold]
+      terrain.water: [Water, Shore, Strand, Mere, Sound, Shallows, Reach, Coast]
+      terrain.ruin: [Ruins, Stones, Walls, Graves, Barrows, Halls, Towers, Fields of the Dead]
+    site_patterns: ["the {domain} of {name}", "{name}'s {domain}", "the {adjective} {domain}"]
+    domain_nouns: {site.domain.barrow: Barrow, site.domain.crypt: Crypt, site.domain.cavern: Caves, site.domain.flooded_cave: Drowned Caves, site.domain.mine: Delving, site.domain.warren: Warren, site.domain.underkeep: Undercroft, site.domain.temple: Temple, site.domain.stronghold: Keep, site.domain.tower: Tower, site.domain.sewer: Sluices, site.domain.tanglewood: Tangle, site.domain.fen: Mire, site.domain.icereach: Icefall}
+
+  - id: tbl.12.seed.calendar_names
+    name: "Month, day and festival names (12.16.15)"
+    note: "named months: one word per month from its season's list (no repeats), the season's name kept; day names from the weekday list; the four quarter-day festivals are named for the main keeper (spring), the harvest (autumn) and the wound (winter: a remembrance) and a fair (summer)"
+    months_by_season:
+      spring: [Thaw, Seedtime, Lambing, Blossom, Greening, Plough]
+      summer: [Haying, High Sun, Midsummer, Ripening, Swarming, Long Light]
+      autumn: [Reaping, Apple, Gleaning, Leaf-Fall, Brewing, Ember]
+      winter: [Frost, Hearth, Deep Dark, Wolf, Ice, Snow]
+    month_patterns: ["{word}-month", "{word}", "the Month of {word}"]
+    weekdays: [Moonday, Ironday, Waterday, Woodday, Fireday, Starday, Restday]
+    festival_patterns: {spring: "{keeper}'s Day", summer: "the Midsummer Fair", autumn: "Harvest Home", winter: "the Night of Remembrance"}
+
+  - id: tbl.12.seed.acceptance
+    name: "A place of acceptance for primal workers (12.16.9; 02.5.5, 05.9.4)"
+    die: d6
+    note: "written as a landmark in ring 1 or 2 with resonance deed.primal and a spirit of place; its three primal schools are drawn without repeats from the seven"
+    results:
+      - {range: "1", form: spring, name: "{name} Spring", spirit: "the lady of the spring (creature.spirit.place.water)", asks: "a promise to leave one living thing better than you found it each season"}
+      - {range: "2", form: stone, name: "the {name} Stone", spirit: "the old one in the standing stone (creature.spirit.place)", asks: "a night's vigil at the stone each new moon, and silence about what was heard"}
+      - {range: "3", form: grove, name: "{name} Grove", spirit: "the oak-father of the grove (creature.spirit.place)", asks: "never to fell a living tree without asking it first"}
+      - {range: "4", form: barrow, name: "{name} Howe", spirit: "the sleeper in the green mound (creature.spirit.ancestor)", asks: "to bring the howe a gift from each journey"}
+      - {range: "5", form: pool, name: "the {name} Pool", spirit: "the fish-king of the deep pool (creature.spirit.place.water)", asks: "never to take more from the wild than one can carry home"}
+      - {range: "6", form: hill, name: "{name} Hill", spirit: "the wind that lives on the hill (creature.spirit.place)", asks: "to climb the hill at every quarter day and tell it the news"}
+
+  - id: tbl.12.seed.faction_names
+    name: "Faction names by kind (12.16.10)"
+    note: "{place} is a place name drawn fresh, {haven} the haven's name, {keeper} the keeper's short name; the first pattern whose org is an ancestor of the faction's org kind is used, one of its forms drawn"
+    by_org:
+      org.crown.civic: ["the council of {haven}", "the {haven} Moot", "the aldermen of {haven}"]
+      org.crown.noble: ["the house of {place}", "the lords of {place}", "House {place}"]
+      org.crown.military: ["the {place} Garrison", "the Iron Lord's men", "the March-Wardens"]
+      org.crown: ["the crown's officers"]
+      org.faith: ["the faithful of {keeper}", "the servants of {keeper}"]
+      org.order.knightly: ["the Knights of {place}", "the Sworn of {keeper}", "the {place} Brotherhood"]
+      org.order.monastic: ["the brothers of {place}", "the Quiet House of {keeper}"]
+      org.order.arcane: ["the Circle of {place}", "the {place} Collegium"]
+      org.order.druidic: ["the Green Wardens", "the Circle of the {place} Stones"]
+      org.order.hunters: ["the {place} Lodge", "the hunters of {place}"]
+      org.guild.merchant: ["the merchants' guild of {haven}", "the {place} Company of Merchants"]
+      org.guild.craft: ["the {place} Guild of Makers", "the smiths' and wrights' guild"]
+      org.guild.scholarly: ["the {place} Library", "the Society of {place}"]
+      org.company.mercenary: ["the {place} Free Company", "the Grey Cloaks"]
+      org.company.trading: ["the {place} Traders", "the grain-lords of {place}"]
+      org.company.exploring: ["the {place} Wayfarers"]
+      org.clan.family: ["the {place} family", "the kin of {place}"]
+      org.clan.tribe: ["the tribes of the {place} Pass", "the Horde of the {place}"]
+      org.clan.lineage: ["the children of {keeper}", "the {place} line"]
+      org.outlaw.bandits: ["the {place} Wolves", "the Company of the {place} Road"]
+      org.outlaw.thieves: ["the {place} Rats", "the Lantern Gang"]
+      org.outlaw.smugglers: ["the {place} runners"]
+      org.outlaw.assassins: ["the Quiet Knives"]
+      org.cult.undeath: ["the Pale Congregation", "the Sleepers' Choir"]
+      org.cult.fiendish: ["the Choir of the Silence", "the Open Hand"]
+      org.cult.forbidden: ["the Hidden Hand", "the {place} Circle"]
+      org.cult.doomsday: ["the Wakers", "the Children of the Tremor"]
+      org.cult: ["the {place} Circle"]
+
+# ------------------------------------------------------------------------------------------ defaults
+# What the seed writes when a step's question is not answered otherwise; the bracketed defaults of 05.7.10,
+# 07.7.6 and 15's relics rule, and the haven's furnishing by tier (08.6, 15.13, 16.3.2).
+defaults:
+  canon_impossible:
+    - {key: "resurrection", text: "No working, rite or power returns the truly dead to life.", scope: magic, basis: ["05.7.10 item 1"]}
+    - {key: "time", text: "No one travels in time, or undoes what has happened.", scope: magic, basis: ["05.7.10 item 1"]}
+    - {key: "soul_making", text: "No one makes a soul; a made thing has none, whatever it says.", scope: magic, basis: ["05.7.10 item 1"]}
+    - {key: "absent_mind", text: "No one reads or speaks into a mind that is not present in the scene.", scope: magic, basis: ["05.7.10 item 1"]}
+    - {key: "unmaking_keepers", text: "No one destroys a keeper; a keeper may be forgotten, never killed.", scope: magic, basis: ["05.7.10 item 1"]}
+    - {key: "transmutation", text: "No working turns one substance into another (lead into gold, stone into bread); 08.6's crafting, not magic, changes what a thing is made of.", scope: magic, basis: ["08 To 13 (AI-1)", "08.6"]}
+  sources:
+    arcane: "anyone literate with a teacher or a text (05.9.4)"
+    divine: "anyone a keeper accepts (05.7.4)"
+    primal: "anyone a place or a spirit accepts (05.9.4)"
+  regrowth: "no rite regrows a limb or an eye (07.7.6)"
+  relics: "a relic is magic to those who refuse magic (15's `magic` refusal)"
+  hybrid_none_pairs: "hold (04)"
+  components_by_band:
+    - {band: 1, name: "a pinch of salt, a candle of beeswax and clean water", price: 2}
+    - {band: 2, name: "silver dust, incense and a written prayer", price: 15}
+    - {band: 3, name: "a gem worth a season's wages, or a relic of the faith", price: 120}
+    - {band: 4, name: "a part of a creature of band 4, or a gem of the first water", price: 600}
+    - {band: 5, name: "something unique: a keeper's tear, a dragon's heart", price: null}
+  rare_metals:
+    - {name: "moonsilver", what: "a pale metal that holds a working (08.4.3's rare metal)", band: 3}
+    - {name: "star-iron", what: "black iron from fallen stars, cold to the touch and bane to fey", band: 3}
+    - {name: "red gold", what: "a warm gold that never tarnishes, prized by every keeper's priests", band: 3}
+    - {name: "deepsteel", what: "dwarf-mined steel from the bottom of the world, light and hard", band: 3}
+  haven_by_tier:
+    village:
+      market_depth: 30
+      crafters: [{trade: deed.craft.smithing, grade: trained}, {trade: deed.craft.woodcraft, grade: trained}, {trade: deed.craft.leathercraft, grade: trained}, {trade: deed.craft.textiles, grade: trained}]
+      hire: {roles: [cmp.porter, cmp.guide, cmp.camp_hand, cmp.militia, cmp.hound, cmp.mount_donkey, cmp.mount_pony, cmp.mount_mule], max_band: 1}
+      buildings: [shrine, inn, smithy, hall, gate]
+    town:
+      market_depth: 150
+      crafters: [{trade: deed.craft.smithing, grade: expert}, {trade: deed.craft.woodcraft, grade: trained}, {trade: deed.craft.leathercraft, grade: trained}, {trade: deed.craft.textiles, grade: trained}, {trade: deed.craft.alchemy, grade: trained}, {trade: deed.craft.scribing, grade: expert}, {trade: deed.craft.building, grade: trained}]
+      hire: {roles: [cmp.porter, cmp.guide, cmp.camp_hand, cmp.soldier, cmp.archer, cmp.scout, cmp.healer, cmp.locksmith, cmp.minstrel, cmp.sage, cmp.thief, cmp.militia, cmp.hound, cmp.mount_donkey, cmp.mount_pony, cmp.mount_mule, cmp.mount_riding_horse, cmp.mount_draft_horse], max_band: 2}
+      buildings: [temple, inn, smithy, hall, gate, market, healer]
+  market_by_terrain:
+    terrain.plains: {common: [bi.grain, bi.cloth_bolt], scarce: [bi.timber, bi.iron_ore]}
+    terrain.forest: {common: [bi.timber, bi.furs], scarce: [bi.grain, bi.salt]}
+    terrain.highland: {common: [bi.iron_ore, bi.furs], scarce: [bi.grain, bi.wine]}
+    terrain.wetland: {common: [bi.dyes, bi.furs], scarce: [bi.timber, bi.iron_ore]}
+    terrain.arid: {common: [bi.salt, bi.dyes], scarce: [bi.timber, bi.grain]}
+    terrain.frozen: {common: [bi.furs, bi.salt], scarce: [bi.grain, bi.wine]}
+    terrain.water: {common: [bi.salt, bi.trade_stock], scarce: [bi.iron_ore, bi.timber]}
+    always_scarce: [bi.spices, bi.wine]
+  sentry_floors:
+    gate: {day: suspicious, night: alert}
+    temple: {day: unaware, night: suspicious}
+    shrine: {day: unaware, night: suspicious}
+    hall: {day: suspicious, night: suspicious}
+  rings: "T-10-2 (travel.yaml#rings): ring 0 the haven; ring 1 home band 1 settled; ring 2 bands 1-2 wild; ring 3 bands 2-3 wild or perilous; ring 4 bands 3-4 perilous; ring 5 bands 4-5 deadly"
+  areas_per_ring: {1: 3, 2: 3, 3: 3, 4: 2, 5: 2}
+  watches_between: {same_ring: [2, 3], next_ring: [3, 4]}
+  uses_generic:
+    - {key: "tables (events)", generic: "world_turn.yaml#tbl.11.local_events", note: "a seed may write tbl.<region>.events to replace it (10.9.4 V face)"}
+    - {key: "tables (hooks)", generic: "world_turn.yaml#tbl.11.hook", note: "11.5.10's hook supply"}
+    - {key: "tables (season events)", generic: "world_turn.yaml#tbl.11.season_events.*"}
+    - {key: "tables (npc)", generic: "oracles.yaml#tbl.npc_role, tbl.npc_detail, tbl.npc_gender and the rest of 12.11.1's tables", note: "the seed's name tables replace tbl.name_given / tbl.name_family"}
+    - {key: "tables (omens)", generic: "oracles.yaml#tbl.twist_* omens (12.6)"}
+    - {key: "tables (chase ground)", generic: "conflict.yaml#tbl.chase_ground (06.12)"}
+    - {key: "tables (hire quirks)", generic: "companions.yaml#tbl.16.hire_quirk"}
+    - {key: "cases", generic: "PR-15-6 builds a case when a mystery hook arises (15.9.1)"}
+    - {key: "storied_items", generic: "none at the start; 08.4.8's storied items are authored when a site's objective or a great deed calls for one"}
+    - {key: "bestiary entries", generic: "adversaries.yaml (the seed's tables name archetypes; PR-09-1 builds any entry not in the bestiary)"}
+    - {key: "origins", generic: "origins.yaml (the seed adds no setting origins; a player-guided seed may, under PR-02-9)"}
+    - {key: "afflictions", generic: "afflictions.yaml (no regional afflictions)"}
+    - {key: "weather regimes", generic: "weather.yaml#regimes for the seed's climate"}
+
+# -------------------------------------------------------------------------------------- requirements
+# T-12-16: everything the other chapters read from a region, the seed key that supplies it, and the check
+# `12-world-seed.py` runs on a seed (12.16.17). Built from every chapter's "To 13" interface request and every
+# rule that names region data (the same list chapter 13 answered in region_thallen.yaml#interface_checklist,
+# plus the rules that read a region without a request). `generic` names the default the rules use when the
+# seed leaves a key to a generic table (defaults.uses_generic).
+requirements:
+  - {id: ws.req.01_canon_impossible, from: "01", need: "canon_impossible: G4 test 2 (CONTRADICTS CANON)", rules: ["01.3.7", "05.7.10 item 1"], key: "canon_impossible", check: canon_impossible}
+  - {id: ws.req.01_spirits, from: "01", need: "what spirits of place understand, and how common they are", rules: ["WE-01-11", "05.7.10 item 5"], key: "canon/spirits", check: nonempty}
+  - {id: ws.req.01_tongues, from: "01", need: "language licenses and their fallbacks", rules: ["01.18", "02.4.6"], key: "tongues", check: tongues}
+  - {id: ws.req.01_oracle_canon, from: "01", need: "settled canon facts for the Oracle's Certain / Impossible", rules: ["00.12.7", "12.6.2"], key: "canon/facts", check: min_count, min: 4}
+  - {id: ws.req.02_peoples, from: "02", need: "which peoples are present (C2 shows them)", rules: ["02.4.2", "PR-02-1 C2"], key: "peoples", check: peoples}
+  - {id: ws.req.02_names, from: "02", need: "a name table per present people", rules: ["02.9.7", "12.11.1"], key: "names", check: names}
+  - {id: ws.req.02_second_tongue, from: "02", need: "second_tongue (the fast path's tongue pick)", rules: ["02.2.2"], key: "tongues/second_tongue", check: second_tongue}
+  - {id: ws.req.02_keepers, from: "02", need: "the powers an Acolyte may keep, with their faiths", rules: ["02.5.5", "05.7.4"], key: "keepers", check: keepers}
+  - {id: ws.req.02_acceptance, from: "02", need: "a place of acceptance for a Hedge-taught character (primal)", rules: ["02.5.5", "05.9.4"], key: "places_of_acceptance", check: acceptance}
+  - {id: ws.req.02_org_ties, from: "02", need: "a faction (or an explicit none) for each org kind the origins name", rules: ["02.9.5", "PR-11-4"], key: "factions/org_tie_map", check: org_tie_map}
+  - {id: ws.req.02_bonds, from: "02", need: "where each bond kind is placed", rules: ["02.9.2", "02.9.8"], key: "bond_placement", check: bond_placement}
+  - {id: ws.req.02_pregens, from: "02", need: "at least four pregens passing PR-02-9: a fighter, a sneak, a talker or scholar, a worker of magic; one non-human", rules: ["02.2.5", "PR-02-9 item 13"], key: "pregens", check: pregens}
+  - {id: ws.req.02_inciting, from: "02", need: "the inciting incident that pairs with the long vow", rules: ["02.9.1", "12.5.2 step 5"], key: "opening/inciting", check: inciting}
+  - {id: ws.req.02_location, from: "02", need: "the opening place (the PC's starting location)", rules: ["02.7 state table", "PR-02-1 step 4"], key: "opening/start/place", check: ref_place}
+  - {id: ws.req.03_consecrated, from: "03", need: "facts marking graves, shrines and holy places consecrated or tended", rules: ["03.1.8 (piety: a consecrated or tended grave)", "T-07-16 (aff.grave_chill: its cure)"], key: "places[]/facts", check: consecrated}
+  - {id: ws.req.03_homes, from: "03", need: "NPC homes (witness scopes)", rules: ["03.10"], key: "npcs[]/home", check: npc_homes}
+  - {id: ws.req.04_keeper_axes, from: "04", need: "keepers with the conduct axes each cares for", rules: ["04.9.2"], key: "keepers[]/axes", check: keepers}
+  - {id: ws.req.04_institutions, from: "04", need: "institutions per deed branch (V3, V9; institutions_matching)", rules: ["04.6 V3, V9", "11.8.1"], key: "factions/institutions", check: institutions}
+  - {id: ws.req.04_hybrid_none, from: "04", need: "whether the four none hybrid pairs hold", rules: ["04.4"], key: "canon/hybrid_none_pairs", check: nonempty}
+  - {id: ws.req.05_resonance, from: "04/05/10", need: "place resonance (places of power)", rules: ["05.6.9", "05.7.10 item 4"], key: "places[]/resonance", check: resonance}
+  - {id: ws.req.05_magic_canon, from: "05", need: "05.7.10 items 1-8", rules: ["05.7.10"], key: "canon/magic", check: magic_canon}
+  - {id: ws.req.05_rites_known, from: "05", need: "which rites are known in the region", rules: ["05.8"], key: "places[]/settlement/rites_known", check: rites_known}
+  - {id: ws.req.05_components, from: "05/08", need: "rite components by price band; where texts and teachers are", rules: ["05.7.10 item 7", "08.4"], key: "stock/components", check: components}
+  - {id: ws.req.06_chase_ground, from: "06", need: "regional chase-ground tables (or the generic one)", rules: ["06.12"], key: "tables (chase ground)", check: generic_or_table, generic: "conflict.yaml#tbl.chase_ground"}
+  - {id: ws.req.06_fight_locations, from: "06", need: "feature-rich fight locations", rules: ["06.3.8"], key: "fight_locations", check: fight_locations}
+  - {id: ws.req.06_bestiary, from: "06/09", need: "the region's creatures: what its tables field (nerve and objectives come from 09's build)", rules: ["09.11", "PR-09-1"], key: "bestiary", check: bestiary}
+  - {id: ws.req.07_bargainer, from: "07/09", need: "a default bargainer at the door of death, or none", rules: ["07.5.5"], key: "canon/facts", check: bargainer}
+  - {id: ws.req.07_regrowth, from: "07", need: "whether any rite regrows a limb", rules: ["07.7.6"], key: "canon/facts", check: regrowth}
+  - {id: ws.req.07_havens, from: "07/10", need: "havens (safe places for 07's long rest and 10's venture end)", rules: ["07.8", "10.2.2"], key: "region/haven", check: haven}
+  - {id: ws.req.07_afflictions, from: "07", need: "regional afflictions (optional)", rules: ["07.9"], key: "afflictions", check: generic_or_table, generic: "afflictions.yaml"}
+  - {id: ws.req.08_market, from: "08", need: "regional stock: what is common and scarce, crafters by settlement, curio dealers", rules: ["08.8.4", "08.6"], key: "places[]/settlement/market", check: market}
+  - {id: ws.req.08_transmutation, from: "08", need: "canon_impossible on transmutation", rules: ["08.6 (AI-1)"], key: "canon_impossible", check: transmutation}
+  - {id: ws.req.08_storied, from: "08", need: "storied items and sets (optional at the start)", rules: ["08.4.8"], key: "storied_items", check: generic_or_table, generic: "none at the start (08.4.8)"}
+  - {id: ws.req.08_boons, from: "08", need: "faction boon bases and signatures", rules: ["08.7"], key: "factions/instances[]/boon_base", check: boons}
+  - {id: ws.req.08_rare_metal, from: "08", need: "the region's rare metal", rules: ["08.4.3"], key: "stock/rare_metal", check: nonempty}
+  - {id: ws.req.09_subset, from: "09", need: "a regional subset of the bestiary", rules: ["09.11.2"], key: "bestiary/archetypes", check: bestiary}
+  - {id: ws.req.10_places, from: "10", need: "places with every 10.1.2 field (or terrain defaults)", rules: ["10.1.2"], key: "places", check: places}
+  - {id: ws.req.10_links, from: "10", need: "route links with lengths in watches", rules: ["10.1.3"], key: "places[]/links", check: links}
+  - {id: ws.req.10_rings, from: "10", need: "danger rings per T-10-2", rules: ["10.2.4", "T-10-2"], key: "region/rings", check: rings}
+  - {id: ws.req.10_encounters, from: "10", need: "regional encounter tables in the two-sub-table shape, passing PR-10-8", rules: ["10.10.1", "10.10.2", "PR-10-8"], key: "encounter_tables", check: encounter_tables}
+  - {id: ws.req.10_signs_events, from: "10", need: "archetype signs (travel.yaml's) and local events", rules: ["10.9.4", "10.9.6"], key: "tables (events)", check: generic_or_table, generic: "travel.yaml#archetype_signs; world_turn.yaml#tbl.11.local_events"}
+  - {id: ws.req.10_sites, from: "10", need: "site placements: theme, domain, band, size, objective", rules: ["10.13.2", "PR-10-6"], key: "places[]/site", check: sites}
+  - {id: ws.req.10_rest, from: "10", need: "havens and rest sites", rules: ["10.2.3", "07.8.4"], key: "places[]/rest_site", check: rest_sites}
+  - {id: ws.req.10_climate, from: "10", need: "climate per region (weather regimes)", rules: ["10.11.2"], key: "region/climate", check: climate}
+  - {id: ws.req.11_factions, from: "11", need: "factions conforming to 11.3.1, linchpin fates sealed, at least three full with running goal clocks", rules: ["11.3.1", "11.3.10", "PR-11-8"], key: "factions/instances", check: factions}
+  - {id: ws.req.11_calendar, from: "11", need: "month, weekday, quarter-day, festival and era names (or the counted defaults)", rules: ["11.10.1", "11.10.4"], key: "calendar", check: calendar}
+  - {id: ws.req.11_tables, from: "11", need: "tbl.11.season_events.<region>, tbl.11.hook.<region>, tbl.<region>.events (or the generic ones)", rules: ["11.5.10", "11.11.3"], key: "tables (hooks, season events)", check: generic_or_table, generic: "world_turn.yaml#tbl.11.hook, tbl.11.season_events.*, tbl.11.local_events"}
+  - {id: ws.req.11_values, from: "11", need: "regional values for region scopes", rules: ["11.7.6"], key: "values", check: values}
+  - {id: ws.req.11_lifespans, from: "11", need: "lifespans for its peoples", rules: ["11.10.5"], key: "calendar/lifespans", check: generic_or_table, generic: "calendar.yaml#lifespans"}
+  - {id: ws.req.11_situations, from: "11", need: "situations with default timelines (the land's trouble in motion)", rules: ["11.4.1", "11.4.2"], key: "situations", check: situations}
+  - {id: ws.req.11_rumors, from: "11/15", need: "rumor tables, each rumor's truth sealed and pointing somewhere real", rules: ["11.6.1", "11.6.4"], key: "rumor_tables", check: rumors}
+  - {id: ws.req.12_npc_tables, from: "12", need: "region roster, role, name and furnishing tables (or the generic ones)", rules: ["12.11.1"], key: "names; tables (npc)", check: generic_or_table, generic: "oracles.yaml#tbl.npc_*"}
+  - {id: ws.req.12_cast, from: "12", need: "the starting cast: principal NPCs the opening and the factions need", rules: ["12.11.1", "11.3.17"], key: "npcs", check: npcs}
+  - {id: ws.req.12_opening, from: "12", need: "the opening: start place, date, weather, and at least three leads (12.8: no dead end at the start)", rules: ["12.5.1", "12.5.2", "12.8.1"], key: "opening", check: opening}
+  - {id: ws.req.15_tiers, from: "15/16", need: "settlement tiers (carousing, asking around, recruiting)", rules: ["15.13.8", "15.13.9", "16.3.2"], key: "places[]/settlement/tier", check: settlement_tiers}
+  - {id: ws.req.15_teachers, from: "15", need: "teacher availability per settlement", rules: ["PR-15-8", "15.13.9"], key: "places[]/settlement/teachers", check: teachers}
+  - {id: ws.req.15_sentries, from: "15", need: "sentries' post floors", rules: ["15.8 (alertness)"], key: "places[]/settlement/sentry_floors", check: sentries}
+  - {id: ws.req.15_cases, from: "15", need: "case templates (or PR-15-6 on demand)", rules: ["15.9.1", "PR-15-6"], key: "cases", check: generic_or_table, generic: "PR-15-6"}
+  - {id: ws.req.15_lifestyles, from: "15", need: "NPC lifestyles where they differ from the role default", rules: ["15.2 (lifestyle)"], key: "places[]/settlement/lifestyle_overrides", check: present}
+  - {id: ws.req.15_relics, from: "15", need: "whether relics count as magic for the magic refusal", rules: ["15.3 (refusals)"], key: "canon/relics_and_refusal", check: nonempty}
+  - {id: ws.req.16_hire, from: "16", need: "regional hire roles (and quirks, or the generic table), beasts and mounts available, the band limit by tier", rules: ["16.3.2", "16.3.3"], key: "places[]/settlement/hire", check: hire}
+  - {id: ws.req.16_recruits, from: "16", need: "named NPCs who might be recruited", rules: ["16.3.4"], key: "npcs[]/recruit", check: recruits}

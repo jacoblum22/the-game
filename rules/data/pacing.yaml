@@ -50,7 +50,7 @@ pause_points:                             # 12.2.6 (closed list) with the defaul
   - {id: rewind_or_correction, default_on_new_declaration: accept_forward}
 
 claim_check:                              # 12.3
-  classes: [existence, identity, quantity, harm_condition, position, possession, location_time, knowledge, capability, clock, attitude, outcome, sealed]
+  classes: [existence, identity, quantity, harm_condition, position, possession, location_time, knowledge, capability, clock, attitude, outcome, action, sealed]   # action: [revision: I-030] (16.13.3)
   verdicts: [supported, new_element, undetermined, contradicted, unsourced_change, overreach, leak, pc_agency]
   writable_verdicts: [new_element, undetermined]   # only these may cause a write (write-on-mention / Oracle); unsourced_change never
   max_redrafts: 2
@@ -287,14 +287,14 @@ dm_questions:                             # 12.6.1; T-12-4 (first match)
 
 clock_templates:                          # clocks created by ch.12's twist rows (oracles.yaml tbl.twist_s2..s4); 00.8.1 shape
   # ch.12 owns these templates (00.17.1 Q7). '<opposition>' / '<champion>' are filled with entity ids at creation.
-  # Region tables (ch.13) may supply regional omen lists that replace these generic ones.
+  # A region's seed (12.16) may supply regional omen lists that replace these generic ones.
   - id: clk.twist_rival_first
     name: "The rival reaches it first"
     kind: progress
     segments: 4
     visibility: sensed
     direction: fill
-    tick_sources: [{on: "boundary:scene_end", ticks: 1, condition: "the rival is active and unopposed this scene"}, {on: cost.twist, ticks: 1, condition: null}]
+    tick_sources: [{'on': "boundary:scene_end", ticks: 1, condition: "the rival is active and unopposed this scene"}, {'on': cost.twist, ticks: 1, condition: null}]
     auto_ticks: []
     decay: []
     omens:
@@ -310,7 +310,7 @@ clock_templates:                          # clocks created by ch.12's twist rows
     segments: 6
     visibility: hidden
     direction: fill
-    tick_sources: [{on: trait.sense.loud, ticks: 1, condition: "within the opposition's territory"}, {on: cost.exposure, ticks: "U(severity)", condition: null}, {on: cost.twist, ticks: 1, condition: null}]
+    tick_sources: [{'on': trait.sense.loud, ticks: 1, condition: "within the opposition's territory"}, {'on': cost.exposure, ticks: "U(severity)", condition: null}, {'on': cost.twist, ticks: 1, condition: null}]
     auto_ticks: [{boundary: day, ticks: 1, condition: null}]
     decay: []
     omens:
@@ -326,7 +326,7 @@ clock_templates:                          # clocks created by ch.12's twist rows
     segments: 4
     visibility: sensed
     direction: fill
-    tick_sources: [{on: "boundary:watch", ticks: 1, condition: "the PC travels openly"}, {on: cost.time, ticks: "U(severity)", condition: null}, {on: cost.twist, ticks: 1, condition: null}]
+    tick_sources: [{'on': "boundary:watch", ticks: 1, condition: "the PC travels openly"}, {'on': cost.time, ticks: "U(severity)", condition: null}, {'on': cost.twist, ticks: 1, condition: null}]
     auto_ticks: []
     decay: [{boundary: day, ticks: -1, only_if: "no tick since last day"}]
     omens:
@@ -342,7 +342,7 @@ clock_templates:                          # clocks created by ch.12's twist rows
     segments: 6
     visibility: hidden
     direction: fill
-    tick_sources: [{on: "boundary:day", ticks: 1, condition: null}, {on: cost.exposure, ticks: "U(severity)", condition: null}, {on: cost.twist, ticks: 1, condition: null}]
+    tick_sources: [{'on': "boundary:day", ticks: 1, condition: null}, {'on': cost.exposure, ticks: "U(severity)", condition: null}, {'on': cost.twist, ticks: 1, condition: null}]
     auto_ticks: []
     decay: []
     omens:
@@ -358,14 +358,14 @@ clock_templates:                          # clocks created by ch.12's twist rows
     segments: 6
     visibility: sensed
     direction: fill
-    tick_sources: [{on: trait.sense.loud, ticks: 1, condition: null}, {on: cost.exposure, ticks: "U(severity)", condition: null}, {on: cost.twist, ticks: 3, condition: null}]
+    tick_sources: [{'on': trait.sense.loud, ticks: 1, condition: null}, {'on': cost.exposure, ticks: "U(severity)", condition: null}, {'on': cost.twist, ticks: 3, condition: null}]
     auto_ticks: [{boundary: interval, ticks: 1, condition: "the PC is inside this place"}]
     decay: []
     omens:
       stirring: ["a shout somewhere behind walls", "a door slams and boots run"]
       building: ["lanterns lit one after another", "a bell's first tentative stroke"]
       imminent: ["the gate's bar dropping into place", "orders called in every corridor"]
-    on_complete: {effects: [{effect_id: eff.summon, params: {template: "the place's guards (ch.10/13)", location: "converging on the PC", duration: scene}}], interrupting: true, then: close}
+    on_complete: {effects: [{effect_id: eff.summon, params: {template: "the place's guards (ch.10; the region's seed)", location: "converging on the PC", duration: scene}}], interrupting: true, then: close}
     races_with: null
     lifecycle: provisional
   - id: clk.twist_champion_hunt
@@ -374,7 +374,7 @@ clock_templates:                          # clocks created by ch.12's twist rows
     segments: 8
     visibility: hidden
     direction: fill
-    tick_sources: [{on: "boundary:week", ticks: 1, condition: null}, {on: cost.exposure, ticks: "U(severity)", condition: null}, {on: cost.twist, ticks: 2, condition: null}]
+    tick_sources: [{'on': "boundary:week", ticks: 1, condition: null}, {'on': cost.exposure, ticks: "U(severity)", condition: null}, {'on': cost.twist, ticks: 2, condition: null}]
     auto_ticks: []
     decay: []
     omens:

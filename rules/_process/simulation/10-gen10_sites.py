@@ -116,8 +116,8 @@ theme('haunted', 'Haunted', 'The dead do not rest: a barrow, a plague-house, a b
    'imminent': ['every niche empty that was full', 'a crowd of shapes at the edge of the light']},
   {'range': '6', 'die': 'd6'}, ['haunted'])
 theme('infested', 'Infested', 'Overrun by things that breed: rats, spiders, goblins, fungus, an ooze-choked cistern.', 'wild',
-  ['creature.beast.vermin', 'creature.beast.predator', 'creature.horror.ooze', 'creature.horror.fungal', 'creature.folk.goblin'],
-  {'creature.beast.vermin': 4, 'creature.horror.fungal': 2, 'creature.horror.ooze': 1, 'creature.folk.goblin': 2, 'creature.beast.predator': 1},
+  ['creature.beast.vermin', 'creature.beast.predator', 'creature.horror.ooze', 'creature.horror.fungal', 'creature.folk.goblin', 'creature.beast.monstrous'],
+  {'creature.beast.vermin': 4, 'creature.horror.fungal': 2, 'creature.horror.ooze': 1, 'creature.folk.goblin': 2, 'creature.beast.predator': 1, 'creature.beast.monstrous': 1},
   ['creature.beast.vermin', 'creature.horror.fungal', 'material.botanical.fungus'],
   [D('denizen', 'a swarm boils out of a crack'), D('hazard', 'a vermin nest', 'haz.vermin_nest'), D('hazard', 'a spore-shelf', 'haz.spore_cloud'), D('denizen', 'the brood-mother\'s guards'),
    D('barrier', 'webs choking the passage (Force or fire)'), D('trap', 'a goblin snare'), D('clock', 'the scuttling grows: the danger clock +1'), D('hazard', 'foul water', 'haz.foul_water'),
@@ -341,12 +341,34 @@ for th in themes:
         pairs[(th['id'], dm['id'])] = lst
         if len(lst) < 3: thin.append((th['id'].split('.')[-1], dm['id'].split('.')[-1], len(lst)))
 print('pairs with < 3 archetypes by terrain:', len(thin), thin[:40])
-fallback_rule = ('If the theme x domain gate leaves fewer than 3 archetypes, the domain terrain filter is dropped for that pair '
-                 '(the theme gate alone builds the table: the creatures came from elsewhere to this place).')
+# Revision B (I-022): archetype terrain lists were widened in 09_data_arch*.py so that every theme x domain pair
+# gates at least 3 archetypes; the pair pools are listed below and PR-10-10 builds the per-band table from them.
+assert not thin, ('I-022: every theme x domain pair must gate at least 3 archetypes', thin)
+def _weight(th, a):
+    best, depth = 1, -1
+    for g, w in th['creature_weights'].items():
+        for c in a['creature_tags']:
+            if (c == g or c.startswith(g + '.')) and g.count('.') > depth:
+                best, depth = w, g.count('.')
+    return best
+_archd = {a['id']: a for a in arch}
+denizen_pools = []
+for th in themes:
+    for dm in domains:
+        lst = pairs[(th['id'], dm['id'])]
+        bands = {b: sum(1 for x in lst if _archd[x]['bands'][0] <= b <= _archd[x]['bands'][1]) for b in range(1, 6)}
+        denizen_pools.append({'theme': th['id'], 'domain': dm['id'],
+                              'archetypes': [{'ref': x, 'weight': _weight(th, _archd[x])} for x in lst],
+                              'fielded_by_band': bands})
+fallback_rule = ('PR-10-10 builds the table from the pair pool (denizen_pools). A slot no pool archetype can fill at its '
+                 'band draws from the theme gate alone (the creatures came from elsewhere to this place); only if that '
+                 'also fails does it take the nearest band a pool archetype has.')
 doc = {'schema_version': 1, 'site_themes': themes, 'site_domains': domains, 'sizes': sizes, 'clock_templates': clock_templates,
        'tables': tables, 'denizen_table_rule': {'gate': 'archetype creature_tags match a theme creature_gate_tag (ancestor match, 00.5.4c) AND archetype encounter.terrain matches a domain terrain tag (either direction of ancestry)',
-                                                 'weights': 'theme creature_weights by the deepest matching tag (default 1)', 'bands': 'home band = site band; 30/55/15 across band-1/band/band+1 (10.10.2)', 'fallback': fallback_rule,
-                                                 'pairs_needing_fallback': [f'{a} x {b} ({n})' for a, b, n in thin]},
+                                                 'weights': 'theme creature_weights by the deepest matching tag (default 1)', 'bands': 'home band = site band; 30/55/15 across band-1/band/band+1 (10.10.2)',
+                                                 'build': 'PR-10-10 (10_table_builder.py): eight slots, start shapes T-10-25, stepped down until each row is at most fair (home+1: hard); passes PR-10-8 by construction (10-site-tables.py: all 560 pair x band tables)',
+                                                 'fallback': fallback_rule},
+       'denizen_pools': denizen_pools,
        'blocks': []}
 hdr = """# data/sites.yaml
 # Purpose: the Delve-style site cards (10.13): eight themes (what happened to the place) and fourteen
@@ -359,11 +381,12 @@ hdr = """# data/sites.yaml
 #   loot_gate_tags, features, dangers, clock_templates) plus ch.10's optional keys (documented in 10.13.2):
 #   description, danger, creature_weights, discoveries, climax, danger_clock_omens, regrowth, place_facts,
 #   light, explore_tier, typical_size, rest_site, openness, shift, hazards, traps; top-level sizes, tables,
-#   denizen_table_rule.
+#   denizen_table_rule, denizen_pools (one per theme x domain pair: its gated archetypes with weights and the
+#   number fielded at each band; PR-10-10 builds the per-band table from it) [revision: I-022].
 # Rows: every die table is a list of {range, result, kind?, ref?} rows; features carry 06.3.8 feature_kind
 #   and, for heights, drop_ft (10.12.5: 20 ft+ is a Heavy source).
-# Validation: gen10_sites.py checks every tag, archetype, hazard and trap id, and lists the theme x domain
-#   pairs whose terrain-filtered denizen gate holds fewer than 3 archetypes (denizen_table_rule.fallback).
+# Validation: gen10_sites.py checks every tag, archetype, hazard and trap id, and fails if any theme x domain
+#   pair's terrain-filtered denizen gate holds fewer than 3 archetypes (none does since revision B, I-022).
 # Basis: [R5 P-28 (Ironsworn: Delve themes x domains)] [C:P5] [R2 #13] [DL-10-13..16]
 """
 txt = hdr + "\n" + yaml.safe_dump(doc, sort_keys=False, allow_unicode=True, width=120, default_flow_style=None)

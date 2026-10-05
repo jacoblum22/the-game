@@ -115,7 +115,7 @@ rituals:
   acquisition_paths:
   - {type: mentor, detail: 'taught by one who knows it: 3 ticks per training week', clock: 'clk.learn_rite (6 segments, project, public)', requires: the training license at the rite's grade}
   - {type: project, detail: 'studied from its text: 2 ticks per week', clock: 'clk.learn_rite (6 segments, project, public)', requires: the training license at the rite's grade; the text}
-  - {type: discovery, detail: 'found as a text, an inscription or a spirit''s teaching (ch.10, ch.13)', clock: null, requires: null}
+  - {type: discovery, detail: 'found as a text, an inscription or a spirit''s teaching (ch.10; the region''s seed, 12.16)', clock: null, requires: null}
   canon_check: false
   narration_may_not_imply: [that the rite succeeded before its progress clock is full, an effect beyond the listed effects, a component not consumed]
   lifecycle: provisional
@@ -190,7 +190,7 @@ rituals:
   acquisition_paths:
   - {type: mentor, detail: 'taught by one who knows it: 3 ticks per training week', clock: 'clk.learn_rite (6 segments, project, public)', requires: the training license at the rite's grade}
   - {type: project, detail: 'studied from its text: 2 ticks per week', clock: 'clk.learn_rite (6 segments, project, public)', requires: the training license at the rite's grade; the text}
-  - {type: discovery, detail: 'found as a text, an inscription or a spirit''s teaching (ch.10, ch.13)', clock: null, requires: null}
+  - {type: discovery, detail: 'found as a text, an inscription or a spirit''s teaching (ch.10; the region''s seed, 12.16)', clock: null, requires: null}
   canon_check: false
   narration_may_not_imply: [that the rite succeeded before its progress clock is full, an effect beyond the listed effects, a component not consumed]
   lifecycle: provisional
@@ -262,7 +262,7 @@ rituals:
   acquisition_paths:
   - {type: mentor, detail: 'taught by one who knows it: 3 ticks per training week', clock: 'clk.learn_rite (6 segments, project, public)', requires: the training license at the rite's grade}
   - {type: project, detail: 'studied from its text: 2 ticks per week', clock: 'clk.learn_rite (6 segments, project, public)', requires: the training license at the rite's grade; the text}
-  - {type: discovery, detail: 'found as a text, an inscription or a spirit''s teaching (ch.10, ch.13)', clock: null, requires: null}
+  - {type: discovery, detail: 'found as a text, an inscription or a spirit''s teaching (ch.10; the region''s seed, 12.16)', clock: null, requires: null}
   canon_check: false
   narration_may_not_imply: [that the rite succeeded before its progress clock is full, an effect beyond the listed effects, a component not consumed]
   lifecycle: provisional
@@ -336,7 +336,7 @@ rituals:
   acquisition_paths:
   - {type: mentor, detail: 'taught by one who knows it: 3 ticks per training week', clock: 'clk.learn_rite (6 segments, project, public)', requires: the training license at the rite's grade}
   - {type: project, detail: 'studied from its text: 2 ticks per week', clock: 'clk.learn_rite (6 segments, project, public)', requires: the training license at the rite's grade; the text}
-  - {type: discovery, detail: 'found as a text, an inscription or a spirit''s teaching (ch.10, ch.13)', clock: null, requires: null}
+  - {type: discovery, detail: 'found as a text, an inscription or a spirit''s teaching (ch.10; the region''s seed, 12.16)', clock: null, requires: null}
   canon_check: false
   narration_may_not_imply: [that the rite succeeded before its progress clock is full, an effect beyond the listed effects, a component not consumed]
   notes: a circle's break with a hostile being inside is a lethal_context if the being's archetype is (09)
@@ -409,7 +409,7 @@ rituals:
   acquisition_paths:
   - {type: mentor, detail: 'taught by one who knows it: 3 ticks per training week', clock: 'clk.learn_rite (6 segments, project, public)', requires: the training license at the rite's grade}
   - {type: project, detail: 'studied from its text: 2 ticks per week', clock: 'clk.learn_rite (6 segments, project, public)', requires: the training license at the rite's grade; the text}
-  - {type: discovery, detail: 'found as a text, an inscription or a spirit''s teaching (ch.10, ch.13)', clock: null, requires: null}
+  - {type: discovery, detail: 'found as a text, an inscription or a spirit''s teaching (ch.10; the region''s seed, 12.16)', clock: null, requires: null}
   canon_check: false
   narration_may_not_imply: [that the rite succeeded before its progress clock is full, an effect beyond the listed effects, a component not consumed]
   lifecycle: provisional
@@ -482,10 +482,10 @@ rituals:
   acquisition_paths:
   - {type: mentor, detail: 'taught by one who knows it: 3 ticks per training week', clock: 'clk.learn_rite (6 segments, project, public)', requires: the training license at the rite's grade}
   - {type: project, detail: 'studied from its text: 2 ticks per week', clock: 'clk.learn_rite (6 segments, project, public)', requires: the training license at the rite's grade; the text}
-  - {type: discovery, detail: 'found as a text, an inscription or a spirit''s teaching (ch.10, ch.13)', clock: null, requires: null}
+  - {type: discovery, detail: 'found as a text, an inscription or a spirit''s teaching (ch.10; the region''s seed, 12.16)', clock: null, requires: null}
   canon_check: true
   narration_may_not_imply: [that the rite succeeded before its progress clock is full, an effect beyond the listed effects, a component not consumed]
-  notes: ch.13 decides whether shades exist and what calling them costs
+  notes: the region's canon (12.16.5) decides whether shades exist and what calling them costs
   lifecycle: provisional
   basis: [05.8.1, 05.8.2, R5 MG-04, DL-05-24]
 - id: rit.seal_the_way
@@ -555,7 +555,7 @@ rituals:
   acquisition_paths:
   - {type: mentor, detail: 'taught by one who knows it: 3 ticks per training week', clock: 'clk.learn_rite (6 segments, project, public)', requires: the training license at the rite's grade}
   - {type: project, detail: 'studied from its text: 2 ticks per week', clock: 'clk.learn_rite (6 segments, project, public)', requires: the training license at the rite's grade; the text}
-  - {type: discovery, detail: 'found as a text, an inscription or a spirit''s teaching (ch.10, ch.13)', clock: null, requires: null}
+  - {type: discovery, detail: 'found as a text, an inscription or a spirit''s teaching (ch.10; the region''s seed, 12.16)', clock: null, requires: null}
   canon_check: false
   narration_may_not_imply: [that the rite succeeded before its progress clock is full, an effect beyond the listed effects, a component not consumed]
   lifecycle: provisional
@@ -627,7 +627,7 @@ rituals:
   acquisition_paths:
   - {type: mentor, detail: 'taught by one who knows it: 3 ticks per training week', clock: 'clk.learn_rite (6 segments, project, public)', requires: the training license at the rite's grade}
   - {type: project, detail: 'studied from its text: 2 ticks per week', clock: 'clk.learn_rite (6 segments, project, public)', requires: the training license at the rite's grade; the text}
-  - {type: discovery, detail: 'found as a text, an inscription or a spirit''s teaching (ch.10, ch.13)', clock: null, requires: null}
+  - {type: discovery, detail: 'found as a text, an inscription or a spirit''s teaching (ch.10; the region''s seed, 12.16)', clock: null, requires: null}
   canon_check: false
   narration_may_not_imply: [that the rite succeeded before its progress clock is full, an effect beyond the listed effects, a component not consumed]
   lifecycle: provisional
@@ -701,7 +701,7 @@ rituals:
   acquisition_paths:
   - {type: mentor, detail: 'taught by one who knows it: 3 ticks per training week', clock: 'clk.learn_rite (6 segments, project, public)', requires: the training license at the rite's grade}
   - {type: project, detail: 'studied from its text: 2 ticks per week', clock: 'clk.learn_rite (6 segments, project, public)', requires: the training license at the rite's grade; the text}
-  - {type: discovery, detail: 'found as a text, an inscription or a spirit''s teaching (ch.10, ch.13)', clock: null, requires: null}
+  - {type: discovery, detail: 'found as a text, an inscription or a spirit''s teaching (ch.10; the region''s seed, 12.16)', clock: null, requires: null}
   canon_check: false
   narration_may_not_imply: [that the rite succeeded before its progress clock is full, an effect beyond the listed effects, a component not consumed]
   lifecycle: provisional
@@ -775,7 +775,7 @@ rituals:
   acquisition_paths:
   - {type: mentor, detail: 'taught by one who knows it: 3 ticks per training week', clock: 'clk.learn_rite (6 segments, project, public)', requires: the training license at the rite's grade}
   - {type: project, detail: 'studied from its text: 2 ticks per week', clock: 'clk.learn_rite (6 segments, project, public)', requires: the training license at the rite's grade; the text}
-  - {type: discovery, detail: 'found as a text, an inscription or a spirit''s teaching (ch.10, ch.13)', clock: null, requires: null}
+  - {type: discovery, detail: 'found as a text, an inscription or a spirit''s teaching (ch.10; the region''s seed, 12.16)', clock: null, requires: null}
   canon_check: false
   narration_may_not_imply: [that the rite succeeded before its progress clock is full, an effect beyond the listed effects, a component not consumed]
   lifecycle: provisional
@@ -851,7 +851,7 @@ rituals:
   acquisition_paths:
   - {type: mentor, detail: 'taught by one who knows it: 3 ticks per training week', clock: 'clk.learn_rite (6 segments, project, public)', requires: the training license at the rite's grade}
   - {type: project, detail: 'studied from its text: 2 ticks per week', clock: 'clk.learn_rite (6 segments, project, public)', requires: the training license at the rite's grade; the text}
-  - {type: discovery, detail: 'found as a text, an inscription or a spirit''s teaching (ch.10, ch.13)', clock: null, requires: null}
+  - {type: discovery, detail: 'found as a text, an inscription or a spirit''s teaching (ch.10; the region''s seed, 12.16)', clock: null, requires: null}
   canon_check: false
   narration_may_not_imply: [that the rite succeeded before its progress clock is full, an effect beyond the listed effects, a component not consumed]
   lifecycle: provisional
@@ -925,7 +925,7 @@ rituals:
   acquisition_paths:
   - {type: mentor, detail: 'taught by one who knows it: 3 ticks per training week', clock: 'clk.learn_rite (6 segments, project, public)', requires: the training license at the rite's grade}
   - {type: project, detail: 'studied from its text: 2 ticks per week', clock: 'clk.learn_rite (6 segments, project, public)', requires: the training license at the rite's grade; the text}
-  - {type: discovery, detail: 'found as a text, an inscription or a spirit''s teaching (ch.10, ch.13)', clock: null, requires: null}
+  - {type: discovery, detail: 'found as a text, an inscription or a spirit''s teaching (ch.10; the region''s seed, 12.16)', clock: null, requires: null}
   canon_check: false
   narration_may_not_imply: [that the rite succeeded before its progress clock is full, an effect beyond the listed effects, a component not consumed]
   lifecycle: provisional
@@ -999,7 +999,7 @@ rituals:
   acquisition_paths:
   - {type: mentor, detail: 'taught by one who knows it: 3 ticks per training week', clock: 'clk.learn_rite (6 segments, project, public)', requires: the training license at the rite's grade}
   - {type: project, detail: 'studied from its text: 2 ticks per week', clock: 'clk.learn_rite (6 segments, project, public)', requires: the training license at the rite's grade; the text}
-  - {type: discovery, detail: 'found as a text, an inscription or a spirit''s teaching (ch.10, ch.13)', clock: null, requires: null}
+  - {type: discovery, detail: 'found as a text, an inscription or a spirit''s teaching (ch.10; the region''s seed, 12.16)', clock: null, requires: null}
   canon_check: false
   narration_may_not_imply: [that the rite succeeded before its progress clock is full, an effect beyond the listed effects, a component not consumed]
   notes: counts as one healing effect for the recipient (05.7.8)
@@ -1070,7 +1070,7 @@ rituals:
   acquisition_paths:
   - {type: mentor, detail: 'taught by one who knows it: 3 ticks per training week', clock: 'clk.learn_rite (6 segments, project, public)', requires: the training license at the rite's grade}
   - {type: project, detail: 'studied from its text: 2 ticks per week', clock: 'clk.learn_rite (6 segments, project, public)', requires: the training license at the rite's grade; the text}
-  - {type: discovery, detail: 'found as a text, an inscription or a spirit''s teaching (ch.10, ch.13)', clock: null, requires: null}
+  - {type: discovery, detail: 'found as a text, an inscription or a spirit''s teaching (ch.10; the region''s seed, 12.16)', clock: null, requires: null}
   canon_check: false
   narration_may_not_imply: [that the rite succeeded before its progress clock is full, an effect beyond the listed effects, a component not consumed]
   lifecycle: provisional
@@ -1144,7 +1144,7 @@ rituals:
   acquisition_paths:
   - {type: mentor, detail: 'taught by one who knows it: 3 ticks per training week', clock: 'clk.learn_rite (6 segments, project, public)', requires: the training license at the rite's grade}
   - {type: project, detail: 'studied from its text: 2 ticks per week', clock: 'clk.learn_rite (6 segments, project, public)', requires: the training license at the rite's grade; the text}
-  - {type: discovery, detail: 'found as a text, an inscription or a spirit''s teaching (ch.10, ch.13)', clock: null, requires: null}
+  - {type: discovery, detail: 'found as a text, an inscription or a spirit''s teaching (ch.10; the region''s seed, 12.16)', clock: null, requires: null}
   canon_check: false
   narration_may_not_imply: [that the rite succeeded before its progress clock is full, an effect beyond the listed effects, a component not consumed]
   notes: when the presence is lethal by archetype, 07's lethal warning applies before the first step
@@ -1219,7 +1219,7 @@ rituals:
   acquisition_paths:
   - {type: mentor, detail: 'taught by one who knows it: 3 ticks per training week', clock: 'clk.learn_rite (6 segments, project, public)', requires: the training license at the rite's grade}
   - {type: project, detail: 'studied from its text: 2 ticks per week', clock: 'clk.learn_rite (6 segments, project, public)', requires: the training license at the rite's grade; the text}
-  - {type: discovery, detail: 'found as a text, an inscription or a spirit''s teaching (ch.10, ch.13)', clock: null, requires: null}
+  - {type: discovery, detail: 'found as a text, an inscription or a spirit''s teaching (ch.10; the region''s seed, 12.16)', clock: null, requires: null}
   canon_check: false
   narration_may_not_imply: [that the rite succeeded before its progress clock is full, an effect beyond the listed effects, a component not consumed]
   lifecycle: provisional
@@ -1289,7 +1289,7 @@ rituals:
   acquisition_paths:
   - {type: mentor, detail: 'taught by one who knows it: 3 ticks per training week', clock: 'clk.learn_rite (6 segments, project, public)', requires: the training license at the rite's grade}
   - {type: project, detail: 'studied from its text: 2 ticks per week', clock: 'clk.learn_rite (6 segments, project, public)', requires: the training license at the rite's grade; the text}
-  - {type: discovery, detail: 'found as a text, an inscription or a spirit''s teaching (ch.10, ch.13)', clock: null, requires: null}
+  - {type: discovery, detail: 'found as a text, an inscription or a spirit''s teaching (ch.10; the region''s seed, 12.16)', clock: null, requires: null}
   canon_check: false
   narration_may_not_imply: [that the rite succeeded before its progress clock is full, an effect beyond the listed effects, a component not consumed]
   notes: the one regional rite authored; master grade
@@ -1360,7 +1360,7 @@ rituals:
   acquisition_paths:
   - {type: mentor, detail: 'taught by one who knows it: 3 ticks per training week', clock: 'clk.learn_rite (6 segments, project, public)', requires: the training license at the rite's grade}
   - {type: project, detail: 'studied from its text: 2 ticks per week', clock: 'clk.learn_rite (6 segments, project, public)', requires: the training license at the rite's grade; the text}
-  - {type: discovery, detail: 'found as a text, an inscription or a spirit''s teaching (ch.10, ch.13)', clock: null, requires: null}
+  - {type: discovery, detail: 'found as a text, an inscription or a spirit''s teaching (ch.10; the region''s seed, 12.16)', clock: null, requires: null}
   canon_check: false
   narration_may_not_imply: [that the rite succeeded before its progress clock is full, an effect beyond the listed effects, a component not consumed]
   lifecycle: provisional
@@ -1432,7 +1432,7 @@ rituals:
   acquisition_paths:
   - {type: mentor, detail: 'taught by one who knows it: 3 ticks per training week', clock: 'clk.learn_rite (6 segments, project, public)', requires: the training license at the rite's grade}
   - {type: project, detail: 'studied from its text: 2 ticks per week', clock: 'clk.learn_rite (6 segments, project, public)', requires: the training license at the rite's grade; the text}
-  - {type: discovery, detail: 'found as a text, an inscription or a spirit''s teaching (ch.10, ch.13)', clock: null, requires: null}
+  - {type: discovery, detail: 'found as a text, an inscription or a spirit''s teaching (ch.10; the region''s seed, 12.16)', clock: null, requires: null}
   canon_check: false
   narration_may_not_imply: [that the rite succeeded before its progress clock is full, an effect beyond the listed effects, a component not consumed]
   lifecycle: provisional
@@ -1506,7 +1506,7 @@ rituals:
   acquisition_paths:
   - {type: mentor, detail: 'taught by one who knows it: 3 ticks per training week', clock: 'clk.learn_rite (6 segments, project, public)', requires: the training license at the rite's grade}
   - {type: project, detail: 'studied from its text: 2 ticks per week', clock: 'clk.learn_rite (6 segments, project, public)', requires: the training license at the rite's grade; the text}
-  - {type: discovery, detail: 'found as a text, an inscription or a spirit''s teaching (ch.10, ch.13)', clock: null, requires: null}
+  - {type: discovery, detail: 'found as a text, an inscription or a spirit''s teaching (ch.10; the region''s seed, 12.16)', clock: null, requires: null}
   canon_check: false
   narration_may_not_imply: [that the rite succeeded before its progress clock is full, an effect beyond the listed effects, a component not consumed]
   lifecycle: provisional
@@ -1580,7 +1580,7 @@ rituals:
   acquisition_paths:
   - {type: mentor, detail: 'taught by one who knows it: 3 ticks per training week', clock: 'clk.learn_rite (6 segments, project, public)', requires: the training license at the rite's grade}
   - {type: project, detail: 'studied from its text: 2 ticks per week', clock: 'clk.learn_rite (6 segments, project, public)', requires: the training license at the rite's grade; the text}
-  - {type: discovery, detail: 'found as a text, an inscription or a spirit''s teaching (ch.10, ch.13)', clock: null, requires: null}
+  - {type: discovery, detail: 'found as a text, an inscription or a spirit''s teaching (ch.10; the region''s seed, 12.16)', clock: null, requires: null}
   canon_check: false
   narration_may_not_imply: [that the rite succeeded before its progress clock is full, an effect beyond the listed effects, a component not consumed]
   notes: 03 records conduct evidence (mercy, restraint) when the cursed being is not a declared foe
@@ -1653,7 +1653,7 @@ rituals:
   acquisition_paths:
   - {type: mentor, detail: 'taught by one who knows it: 3 ticks per training week', clock: 'clk.learn_rite (6 segments, project, public)', requires: the training license at the rite's grade}
   - {type: project, detail: 'studied from its text: 2 ticks per week', clock: 'clk.learn_rite (6 segments, project, public)', requires: the training license at the rite's grade; the text}
-  - {type: discovery, detail: 'found as a text, an inscription or a spirit''s teaching (ch.10, ch.13)', clock: null, requires: null}
+  - {type: discovery, detail: 'found as a text, an inscription or a spirit''s teaching (ch.10; the region''s seed, 12.16)', clock: null, requires: null}
   canon_check: false
   narration_may_not_imply: [that the rite succeeded before its progress clock is full, an effect beyond the listed effects, a component not consumed]
   lifecycle: provisional
@@ -1725,7 +1725,7 @@ rituals:
   acquisition_paths:
   - {type: mentor, detail: 'taught by one who knows it: 3 ticks per training week', clock: 'clk.learn_rite (6 segments, project, public)', requires: the training license at the rite's grade}
   - {type: project, detail: 'studied from its text: 2 ticks per week', clock: 'clk.learn_rite (6 segments, project, public)', requires: the training license at the rite's grade; the text}
-  - {type: discovery, detail: 'found as a text, an inscription or a spirit''s teaching (ch.10, ch.13)', clock: null, requires: null}
+  - {type: discovery, detail: 'found as a text, an inscription or a spirit''s teaching (ch.10; the region''s seed, 12.16)', clock: null, requires: null}
   canon_check: false
   narration_may_not_imply: [that the rite succeeded before its progress clock is full, an effect beyond the listed effects, a component not consumed]
   lifecycle: provisional
@@ -1795,7 +1795,7 @@ rituals:
   acquisition_paths:
   - {type: mentor, detail: 'taught by one who knows it: 3 ticks per training week', clock: 'clk.learn_rite (6 segments, project, public)', requires: the training license at the rite's grade}
   - {type: project, detail: 'studied from its text: 2 ticks per week', clock: 'clk.learn_rite (6 segments, project, public)', requires: the training license at the rite's grade; the text}
-  - {type: discovery, detail: 'found as a text, an inscription or a spirit''s teaching (ch.10, ch.13)', clock: null, requires: null}
+  - {type: discovery, detail: 'found as a text, an inscription or a spirit''s teaching (ch.10; the region''s seed, 12.16)', clock: null, requires: null}
   canon_check: false
   narration_may_not_imply: [that the rite succeeded before its progress clock is full, an effect beyond the listed effects, a component not consumed]
   notes: attribute Intellect; its miscast is the branch of the property seated

@@ -34,7 +34,7 @@ drop_check:
   rule: before rung lookup, the engine rolls d100 against the source's yield; a miss means NO property item (materials, coin and the source's own gear only)
   yield:
     none: 0
-    trophy: {T1: 10, T2: 20, T3: 35, T4: 50, T5: 70}
+    trophy: {T1: 10, T2: 15, T3: 30, T4: 40, T5: 55}
     hoard: 100
     always: 100
   principal: 'a principal NPC (12.11.1) or an archetype marked loot.yield: always drops on every defeat'
@@ -57,33 +57,32 @@ quality_map:
 - {circumstance: scavenged, degree: failure, quality_rung: common}
 - {circumstance: scavenged, degree: critical_failure, quality_rung: common}
 hoard_map:
-  rule: 'a hoard (yield: hoard, or a site''s treasure with source = the place) generates by band, circumstance as classified (usually scavenged or decisive)'
+  rule: 'a hoard (yield: hoard, or a site''s treasure with source = the place) generates by band, circumstance as classified (usually scavenged or decisive); a hoard is found where it is kept: a hoard-keeper
+    defeated away from its lair or vault drops as trophy, and its hoard waits there (08.3.12) [revision: I-018]'
   T1:
   - {rung: fine, count: 1}
   T2:
   - {rung: masterwork, count: 1}
   T3:
   - {rung: masterwork, count: 1}
-  - {rung: fine, count: 1}
   T4:
   - {rung: wondrous, count: 1}
-  - {rung: masterwork, count: 1}
   T5:
   - {rung: wondrous, count: 1}
-  - {rung: masterwork, count: 2}
+  - {rung: masterwork, count: 1}
   coin_table: economy.yaml#hoard_coin
   goods_table: economy.yaml#hoard_goods
 degree_effects: {critical_success: greater, critical_failure: flawed}
 degree_effect_rules: {greater: 'one property (the signature first, else the first magnitude) gains +1 tier, which may exceed tier_cap by at most 1 (00.11.3 step 5)', flawed: 'loot: the item''s one magnitude
     slot is removed (a fine find becomes a common one) and the item is created damaged'}
-tier_rule: {signature: tier_cap, magnitude: 'tier_cap - 1, minimum 1', tier_cap: the source's threat band (T1 -> 1 ... T5 -> 5); a place's tier_cap is its site band (10/13)}
+tier_rule: {signature: tier_cap, magnitude: 'tier_cap - 1, minimum 1', tier_cap: 'the source''s threat band (T1 -> 1 ... T5 -> 5); a place''s tier_cap is its site band (10; a region''s seed, 12.16.12)'}
 recency_window: 5
 slot_cap: the base item's slot_cap (base_items.yaml)
 pool_gate: {source_tags: the archetype's creature_tags (most specific first) + its harm_tags + its evidence_tags (deed.*) + its org tags + loot.pool_gate_tags (09) + the trophy base's material_tags, made_by_hands: 'an
-    armament (weapon, armor, shield) taken from a folk or undead source adds creature.folk to the source tags: the folk-made mundane properties are open to it', place_tags: the terrain tags of the place
-    where it was won (10/13); they open ONLY entries flagged place_gated, base_kinds: an entry is kept only if one of its base_kinds is an ancestor-or-equal of the generated base item's tags, excluded: an
-    entry is dropped if any excluded_tag matches the source, signature_only: entries marked signature_only may fill only the signature slot, saturation: 'an entry whose family the base item already fills
-    to the item share (e.g. keen on a versatile weapon: harm_edge) is dropped (08.2.4)'}
+    armament (weapon, armor, shield) taken from a folk or undead source adds creature.folk to the source tags: the folk-made mundane properties are open to it', place_tags: 'the terrain tags of the place
+    where it was won (10; a region''s seed, 12.16.8); they open ONLY entries flagged place_gated', base_kinds: an entry is kept only if one of its base_kinds is an ancestor-or-equal of the generated base
+    item's tags, excluded: an entry is dropped if any excluded_tag matches the source, signature_only: entries marked signature_only may fill only the signature slot, saturation: 'an entry whose family
+    the base item already fills to the item share (e.g. keen on a versatile weapon: harm_edge) is dropped (08.2.4)'}
 base_selection:
   rule: 'the item''s base: (1) the archetype''s loot.trophy_base if 09 names one (an item tag or a bi.* id); else (2) the trophy default for the source''s creature branch below; (3) for folk and armed sources,
     one of the source''s own carried items chosen by d6 from its gear list (09); a tag resolves by drawing uniformly among base items carrying it with trophy_eligible not false'

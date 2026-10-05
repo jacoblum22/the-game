@@ -85,7 +85,7 @@ def parse_knobs(s):
         if any(k == f["knob"] for f in found):
             continue
         end = ms[j + 1].start() if j + 1 < len(ms) else len(s)
-        tail = s[m.end():end].strip(" ;,.:()`").strip()
+        tail = re.sub(r"\s+", " ", s[m.end():end]).strip(" ;,.:()`").strip()   # [revision: I-031] wrapped card text
         default, deltas = None, []
         if "→" in tail or "->" in tail:
             a, _, b = re.split(r"(→|->)", tail, 1)

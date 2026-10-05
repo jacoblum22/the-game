@@ -315,3 +315,14 @@ Closed I-003, I-004, I-007, I-008, I-009, I-015, I-020, all with seeded-simulati
 - Opened I-033 (T-05-9 prices lingering conditions too high) and I-034 (ch.04's pacing tables and worked example use the old opposition model). Both go to Revision C.
 - I-025 closed as wontfix: per owner direction, the setting is not used.
 Validator: 0 ERROR / 0 WARN.
+
+## Revision B returned (world, encounters, DM, items): report `_process/reports/revision-B-report.md`
+Closed I-001, I-016, I-017, I-018, I-019, I-022, I-028, I-029, I-030, I-031 and I-032.
+- World seed: section 12.16 and PR-12-9, with `data/world_seed.yaml`. Seed 1, a player-guided seed and 200 random seeds pass all 62 checks, and 2,600 regional tables pass PR-10-8.
+- Generic encounter word audit: 55/55 cases pass (was 7/55).
+- Denizen tables: 560/560 pass.
+- Loot repeat worst case: 14.6%.
+- Campaign wealth sim: magic items were routine; drop rates retuned.
+- Rules defect found by the agenda fix: a friendly faction aided the PC every turn. Fixed in 11.3.7 (c).
+New rows: I-035 (wontfix, Vale), and I-036 (P3 item count 13 vs 8–12; coin sinks not modelled), assigned to Revision C.
+Validator: 0 ERROR / 0 WARN. All data YAML parses.

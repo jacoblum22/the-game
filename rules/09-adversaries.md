@@ -187,13 +187,13 @@ the creature facet (00.5.1) and every level-2 tag under them except where one ar
 goblins; gnolls; lizardfolk; ogres; trolls; true giants), undead 9, spirits 6, fiends 6, constructs 4,
 elementals 5, dragons 4, horrors 5. The count is deliberately high: archetypes are *instances* of the nine
 low-cardinality families, which are what key hybrid and absorption tables (R3 §09.6). A new archetype is a
-data entry in 09's file (or 13's owner-block for adversaries), never a new rule.
+data entry in 09's file (or a pre-made setting's owner-block for adversaries, 13), never a new rule.
 
 **09.2.4 Classifying an unlisted creature.** `[J:enum]`
 ```
 ### 09.2.4  Which archetype is this creature?                     [J:enum] [D]
 Trigger [T]:        a creature is introduced (write-on-mention, 00.6.6) that matches no bestiary entry
-                    and no region entry (13), or a player asks what kind of thing it is (G0)
+                    and no region entry (12.16.12; a pre-made setting's), or a player asks what kind of thing it is (G0)
 Loads in:           situation.conflict.*, situation.exploration.*
 License check:      none (classification)
 Decisions (J):      1. BRANCH [J:enum] the creature facet's nine branches, by data/tags.yaml's definitions
@@ -223,7 +223,8 @@ Examples:           inside: "a hulking thing of stitched corpses" -> horror -> a
                     non-example: "the bandit leader is basically a demon" -> a figure of speech; he is folk
                     (arch.brigand), and the player's words create no fact (SG-06).
 Anchor:             yes. Intent verbs: identify, classify, what is it, size it up.
-                    Knobs: none beyond the two enums.
+                    Knobs: [revision: I-031] (the two enums decide; only these are fixed) targets (one
+                    creature; each creature of a mixed group is classified alone), time_cost (none).
 Basis:              [00.5.1] [data/tags.yaml creature facet] [R4 §9 09 item 4] [DL-09-02]
 ```
 
@@ -272,7 +273,7 @@ rules apply, with no further judgment:
 ### 09.3 Threat bands (no character levels)
 
 **09.3.1 Assigning a threat band.** `[J:rung]` Every adversary entry in data carries its band; the DM assigns
-one only when building an unlisted creature (PR-09-2) or when chapter 13 adds one.
+one only when building an unlisted creature (PR-09-2) or when a pre-made setting adds one.
 ```
 ### 09.3.1  Threat band                                             [J:rung] [D]
 Trigger [T]:        PR-09-2 builds an unlisted adversary; 13 or 11 adds an entry
@@ -450,7 +451,7 @@ R3 §09.4 (GW2: no encounter requires a role of the PC)].
 | `swarm` | many tiny bodies (06.10.5) | its primary attack, one roll per engaged Guard | mob | it is a swarm or a mob of tiny things |
 
 *Decision* `[J:enum]` (improvised creatures only): the role whose "true only when" fits the creature's
-fiction; tie-break: the archetype's first listed role. *Worst case:* a neighboring role: a different primary
+fiction; tie-break: the archetype's first listed role. *Worst case (J):* a neighboring role: a different primary
 attack and default list; the numbers are re-solved to the same band budget, so the fight is no harder or
 easier than the band says, only different in shape (class i).
 
@@ -623,8 +624,8 @@ no levers), the base severity of that attack with mastery (06.4.5), its Guard, i
 reaction to Fend with. **Output:** the word, the estimated win and Staggered percentages and the harm ratio,
 logged with the encounter; the word only is shown to the player (09.6.5). **Consumers:** chapter 07's lethal
 warning (cause `advisory`: the word is lethal) and danger notice (the word is hard) (07.3.3, 07.3.8);
-chapter 12's pacing (the push filter of 12.7.4 and the recovery cap of 12.7.5: "fair or easier"); chapter 13's
-encounter tables (09.8.3); chapter 04's evidence pacing (I-005, 09.8.9).
+chapter 12's pacing (the push filter of 12.7.4 and the recovery cap of 12.7.5: "fair or easier"); a region's
+encounter tables (09.8.3; the world seed's, 12.16.13, or a pre-made setting's); chapter 04's evidence pacing (I-005, 09.8.9).
 
 **09.6.2 The estimator.** `[D]` The word is computed by **PR-09-4**, a closed-form estimate of the fight
 chapter 06 simulates, not a lookup of a summed rating. In outline:
@@ -790,7 +791,7 @@ true only when state establishes that the creature could know it: it perceived t
 Observe or passive notice of its own, 01.4.6), was told it (a fact on its side's knowledge, 15), or it is
 plainly visible in the scene. *"Could this creature know this?"* True only for a perceived, told, or plainly
 visible fact; false for what only the player or the narrator knows (the PC's Vitality number, a hidden
-companion, an unspoken plan, the PC's power band). Uncertain → false. *Worst case:* a creature acts on
+companion, an unspoken plan, the PC's power band). Uncertain → false. *Worst case (J):* a creature acts on
 something it could not know: one action of one turn, corrected by 12.3.4 (class iv); the opposite error
 makes it act a turn late (class i). [R1 §09 ("smart adversaries must not become omniscient counters"); 15's
 knowledge records]. The `mind` sets the *quality* of tactics, and the lists already encode it: mindless lists
@@ -814,7 +815,7 @@ fearless member that is not broken fights on with that member alone (06.11.5).
 - `yield_when`: when the side accepts *its own* yield (it surrenders) besides its break row.
 - `retreat_when`: when the side leaves the fight short of breaking (06.13.1 b): a lurker after its first
   failed ambush, a caster bloodied and engaged, a territorial beast once the intruder has left.
-Whether a recorded fact makes a row's condition true is the `[J:flag]` of 09.7.4. *Worst case:* a parley
+Whether a recorded fact makes a row's condition true is the `[J:flag]` of 09.7.4. *Worst case (J):* a parley
 allowed one round early or late (class iv: the next behavior row corrects it).
 
 **09.7.7 Solo phases.** `[D]` A solo's `pow.second_wind` fires once, the first time it is bloodied, writing
@@ -863,7 +864,7 @@ Three consequences are rules:
 **09.8.2 Encounters belong to places.** `[D]` + `[N]` In a sandbox the world does not scale to the PC: a
 region, a site and a lair have bands of their own (10, 13), and their encounter tables field what lives
 there. The advisory tells the truth about what was rolled. What keeps that fair is structure, not tuning:
-- **Danger rings.** A region's encounter table is written for a **home band** (13): most rows at the home
+- **Danger rings.** A region's encounter table is written for a **home band** (its area's ring, 12.16.8, 10.2.4): most rows at the home
   band or one below, a few at one above, and the rows above that are **lairs, not wanderers** — a place
   with a known occupant, reachable only by going there, signposted by rumor and omen (11, 10).
 - **Distance and notice.** A rolled encounter begins at the distance the terrain and the watch allow
@@ -902,7 +903,7 @@ last appeared; when a table offers a complication, or the pacing director needs 
 `tbl.09.complication` (d12: slick footing, a height, the dark, a hazard, a chokepoint, something else they
 want, someone to protect, a clock, reinforcements, they would rather talk, a split position, mixing) and
 rerolls a result whose axis is not the stalest available, up to twice [R1 #8 (terrain, intelligent tactics,
-outnumbering, objectives, time pressure, mixing); R2 #12]. *Worst case of an axis flag:* the rotation ledger
+outnumbering, objectives, time pressure, mixing); R2 #12]. *Worst case (J) of an axis flag:* the rotation ledger
 is one entry off; the next draw is one axis less stale than it could be (class i). The six levers of R1 #8
 are all present: terrain (`axis.ground`), tactics (the behavior lists), outnumbering (`axis.numbers`, mobs),
 objectives (`axis.objective`, 06.13.2), time pressure (`axis.clock`) and mixing (`tbl.09.mixing`); two are
@@ -923,7 +924,7 @@ never the DM's choice:
 - **Animals**, and any archetype with `reaction_roll: false` that is not mindless, roll `tbl.09.beast_mood`
   (2d6: 2–4 hunting, 5–6 territorial, 7–9 wary, 10–11 indifferent, 12 curious; −2 if starving or near its
   young or lair, +2 if offered food, +1 if the PC is downwind and quiet; each modifier a `[J:flag]` citing a
-  fact). *Worst case:* one flag wrong is a two-point shift: one row of the table, shown in fiction before
+  fact). *Worst case (J):* one flag wrong is a two-point shift: one row of the table, shown in fiction before
   any blow (class i).
 - **Mindless creatures** follow their behavior list from first perception: a guard attacks intruders on its
   ground; a horde moves toward the living.
@@ -962,7 +963,7 @@ its hoard"). `[J:flag]` *"Is a `kill_when` fact of this side now true in state?"
 named is recorded this scene (a defeat, a write on the altar, the item in the PC's possessions); false for
 anything the side merely suspects. Uncertain → false. When true, the switch is a recorded behavior change
 (`set_fact(side.defeat_disposition_toward_pc = kill)`), which raises 07's `disposition` warning (07.3.3)
-before it can matter. *Worst case:* a wrong true is a warning the player sees and a fight that can now kill
+before it can matter. *Worst case (J):* a wrong true is a warning the player sees and a fight that can now kill
 (class ii: the warning takes effect only after the player's next declaration, 07.3.5); a wrong false leaves
 the disposition milder (errs safe, class iv).
 
@@ -1147,7 +1148,8 @@ mobs or swarms), 16 elite, 15 solo; every creature branch at several bands (beas
 spirits 8, fiends 8, constructs 7, elementals 6, dragons 9, horrors 11). Every entry carries every field of
 T-09-14, every id it cites is validated against the canonical data (tags, effects and contrib effects,
 conditions, abilities, afflictions, base items, flaws, the absorbable pool), and every entry's band fidelity
-is within tolerance (09.4.5). T-09-12b indexes them. Chapter 13 selects a regional subset and may add its own
+is within tolerance (09.4.5). T-09-12b indexes them. A region's seed lists the subset its tables field (`bestiary`, 12.16.12); a pre-made
+setting (chapter 13) may add its own
 in the file's owner-block (`blocks: [{owner: "13", entries: [...]}]`), built by the same procedure (PR-09-1;
 the generator accepts 13's roster lines in the same five-field form).
 
@@ -2040,13 +2042,13 @@ a recorded fact), 06.11.7 Yield and parley (a list's `parley_when`), 07.4.1 Yiel
   the elemental's trophy base `item.armor.medium` acceptable (4 entries).
 - `loot.flaw` uses `flaw.binding` (lich, tempter) and `flaw.thirsty` (hag, greater demon).
 
-### To 10 (Exploration, Travel, Sites) and 13 (Starter setting)
+### To 10 (Exploration, Travel, Sites) and 13 (Starter setting; now the region's seed, 12.16, T-12-16 `ws.req.06_bestiary`, `ws.req.09_subset`, `ws.req.07_bargainer`) [revision: I-028]
 
 - Encounter tables cite archetype groups or adversary ids, a home band, and which rows roll a complication;
   lairs above the home band are places, not wanderers (09.8.2). Encounter distance and notice are 10's.
-- 13 selects a regional subset of the bestiary and may add entries in `adversaries.yaml`'s owner-block "13"
+- the region's seed lists the subset of the bestiary it fields (12.16.12); a pre-made setting (13) may add entries in `adversaries.yaml`'s owner-block "13"
   built by PR-09-1 (the roster line form of `09_data_adv.py`).
-- 13 names the setting's default bargainer for 07.5.5 if any; this chapter's `can_bargain` archetypes are the
+- the region's seed names the default bargainer for 07.5.5 if any (12.16.6); this chapter's `can_bargain` archetypes are the
   candidates.
 
 ### To 11 (Living World)
@@ -2079,10 +2081,10 @@ a recorded fact), 06.11.7 Yield and parley (a list's `parley_when`), 07.4.1 Yiel
 | Id | Question | Default shipped | Named test |
 |---|---|---|---|
 | OEQ-09-1 | Does the closed-form advisory stay within one word of real play, not just of the reference simulation? | PR-09-4 with buffer 1.75 and Staggered margin 0.5 (09-estimator-tune.py) | **T-09-ADV**: log the advisory and the outcome of the first 200 played conflicts; target ≥ 85% of outcomes inside the word's band (e.g. a fair fight won without the menu) and no word whose observed menu rate exceeds 07's target by more than half again |
-| OEQ-09-2 | Are mixed groups with a leader estimated well? | leader's nerve, strength interpolated (79% exact, 100% within one) | **T-09-MIX**: 100 mixed encounters from 13's tables simulated and estimated; if exact < 80%, model the escort's own break when the leader falls |
+| OEQ-09-2 | Are mixed groups with a leader estimated well? | leader's nerve, strength interpolated (79% exact, 100% within one) | **T-09-MIX**: 100 mixed encounters from a world seed's tables (`12-world-seed-example.yaml`) simulated and estimated; if exact < 80%, model the escort's own break when the leader falls |
 | OEQ-09-3 | Is the power premium the right price for riders and powers? | T-09-6 (0.06 / 0.03 / 0.10 / 0.04, cap 0.40) | **T-09-PREM**: extend the fight model with riders (knockdown, grab, bleed) and shaped powers; compare each bestiary entry's simulated difficulty with the standard's; refit the premiums so 90% of entries sit within fidelity 0.8–1.25 |
 | OEQ-09-4 | Do the variant multipliers give the intended words with Focus and abilities in play? | T-09-5 (no-Focus fit) | **T-09-VAR**: 20 played solo fights per band; target solos won 55–85% with the PC spending Focus |
-| OEQ-09-5 | Does the encounter budget produce the intended mix of words over a campaign? | 09.8.2 (fair or easier two in three; Δ 30/55/15) | **T-09-MIX-CAMPAIGN**: simulate 13's tables over 60 sessions of travel; target the word distribution easy 25 / fair 40 / hard 30 / lethal ≤ 5 at the region's home band |
+| OEQ-09-5 | Does the encounter budget produce the intended mix of words over a campaign? | 09.8.2 (fair or easier two in three; Δ 30/55/15) | **T-09-MIX-CAMPAIGN**: simulate a world seed's tables (`12-world-seed-example.yaml`) over 60 sessions of travel; target the word distribution easy 25 / fair 40 / hard 30 / lethal ≤ 5 at the region's home band |
 | OEQ-09-6 | Do tells carry threat without numbers? | band tells T-09-13 + archetype tells | **T-09-TELL**: in 3 playtests, ask the player to rank five unseen creatures by danger from narration alone; target Spearman ≥ 0.8 against their bands |
 | OEQ-09-7 | Do Nemesis results produce memorable rivals without punishing play? | tbl.09.nemesis | **T-09-NEM**: across 3 long campaigns, count rivals and the player's rating of their returns; target ≥ 1 rival per 10 sessions and no Nemesis result rated unfair |
 

@@ -285,7 +285,7 @@ def emit_origins():
         if e["kind"] != cur:
             cur = e["kind"]; s += "\n  # ============================ %s ============================\n" % cur.upper()
         s += entry(e, flow_keys=("tags", "trainings", "licenses", "birth_pool", "org_tags", "basis", "backstory", "technique_suggestions", "grants")) + "\n"
-    s += "\nblocks: []   # chapter 13 adds setting origins here: [{owner: \"13\", entries: [...]}], each passing PR-02-9\n"
+    s += "\nblocks: []   # a pre-made seed (ch.13) adds setting origins here: [{owner: \"13\", entries: [...]}], each passing PR-02-9\n"
     return s
 
 # ---------- gen_birth ----------

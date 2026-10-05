@@ -9,11 +9,12 @@
 #   loot_gate_tags, features, dangers, clock_templates) plus ch.10's optional keys (documented in 10.13.2):
 #   description, danger, creature_weights, discoveries, climax, danger_clock_omens, regrowth, place_facts,
 #   light, explore_tier, typical_size, rest_site, openness, shift, hazards, traps; top-level sizes, tables,
-#   denizen_table_rule.
+#   denizen_table_rule, denizen_pools (one per theme x domain pair: its gated archetypes with weights and the
+#   number fielded at each band; PR-10-10 builds the per-band table from it) [revision: I-022].
 # Rows: every die table is a list of {range, result, kind?, ref?} rows; features carry 06.3.8 feature_kind
 #   and, for heights, drop_ft (10.12.5: 20 ft+ is a Heavy source).
-# Validation: gen10_sites.py checks every tag, archetype, hazard and trap id, and lists the theme x domain
-#   pairs whose terrain-filtered denizen gate holds fewer than 3 archetypes (denizen_table_rule.fallback).
+# Validation: gen10_sites.py checks every tag, archetype, hazard and trap id, and fails if any theme x domain
+#   pair's terrain-filtered denizen gate holds fewer than 3 archetypes (none does since revision B, I-022).
 # Basis: [R5 P-28 (Ironsworn: Delve themes x domains)] [C:P5] [R2 #13] [DL-10-13..16]
 
 schema_version: 1
@@ -243,9 +244,10 @@ site_themes:
   tags: []
   description: 'Overrun by things that breed: rats, spiders, goblins, fungus, an ooze-choked cistern.'
   danger: wild
-  creature_gate_tags: [creature.beast.vermin, creature.beast.predator, creature.horror.ooze, creature.horror.fungal, creature.folk.goblin]
+  creature_gate_tags: [creature.beast.vermin, creature.beast.predator, creature.horror.ooze, creature.horror.fungal, creature.folk.goblin,
+    creature.beast.monstrous]
   creature_weights: {creature.beast.vermin: 4, creature.horror.fungal: 2, creature.horror.ooze: 1, creature.folk.goblin: 2,
-    creature.beast.predator: 1}
+    creature.beast.predator: 1, creature.beast.monstrous: 1}
   loot_gate_tags: [creature.beast.vermin, creature.horror.fungal, material.botanical.fungus]
   dangers:
   - {range: '1', kind: denizen, result: a swarm boils out of a crack}
@@ -1143,15 +1145,1252 @@ tables:
     area''s terrain or terrain.ruin / terrain.underground (re-roll non-matching up to twice, then take the nearest); band:
     the area''s home band (d6: 1 = home - 1, 6 = home + 1 as a known lair); size: d6 1-2 small, 3-4 medium, 5 large, 6 the
     domain''s typical size'
-denizen_table_rule:
-  gate: archetype creature_tags match a theme creature_gate_tag (ancestor match, 00.5.4c) AND archetype encounter.terrain
-    matches a domain terrain tag (either direction of ancestry)
-  weights: theme creature_weights by the deepest matching tag (default 1)
-  bands: home band = site band; 30/55/15 across band-1/band/band+1 (10.10.2)
-  fallback: 'If the theme x domain gate leaves fewer than 3 archetypes, the domain terrain filter is dropped for that pair
-    (the theme gate alone builds the table: the creatures came from elsewhere to this place).'
-  pairs_needing_fallback: [ancient x tanglewood (1), ancient x fen (2), ancient x icereach (0), corrupted x icereach (0),
-    fortified x fen (1), fortified x icereach (2), hallowed x tanglewood (2), hallowed x fen (0), hallowed x icereach (0),
-    haunted x tanglewood (0), haunted x fen (2), haunted x icereach (0), infested x fen (1), infested x icereach (1), ravaged
-      x icereach (2), wild x cavern (2), wild x flooded_cave (2), wild x mine (2), wild x sewer (2), wild x icereach (1)]
+denizen_table_rule: {gate: 'archetype creature_tags match a theme creature_gate_tag (ancestor match, 00.5.4c) AND archetype
+    encounter.terrain matches a domain terrain tag (either direction of ancestry)', weights: theme creature_weights by the
+    deepest matching tag (default 1), bands: home band = site band; 30/55/15 across band-1/band/band+1 (10.10.2), build: 'PR-10-10
+    (10_table_builder.py): eight slots, start shapes T-10-25, stepped down until each row is at most fair (home+1: hard);
+    passes PR-10-8 by construction (10-site-tables.py: all 560 pair x band tables)', fallback: PR-10-10 builds the table from
+    the pair pool (denizen_pools). A slot no pool archetype can fill at its band draws from the theme gate alone (the creatures
+    came from elsewhere to this place); only if that also fails does it take the nearest band a pool archetype has.}
+denizen_pools:
+- theme: site.theme.ancient
+  domain: site.domain.barrow
+  archetypes:
+  - {ref: arch.giant_vermin, weight: 2}
+  - {ref: arch.vermin_swarm, weight: 2}
+  - {ref: arch.skeleton, weight: 2}
+  - {ref: arch.zombie, weight: 2}
+  - {ref: arch.ancestor, weight: 2}
+  - {ref: arch.golem, weight: 3}
+  - {ref: arch.animated, weight: 3}
+  - {ref: arch.clockwork, weight: 3}
+  - {ref: arch.homunculus, weight: 3}
+  - {ref: arch.ooze, weight: 1}
+  fielded_by_band: {1: 8, 2: 10, 3: 7, 4: 4, 5: 1}
+- theme: site.theme.ancient
+  domain: site.domain.crypt
+  archetypes:
+  - {ref: arch.giant_vermin, weight: 2}
+  - {ref: arch.vermin_swarm, weight: 2}
+  - {ref: arch.skeleton, weight: 2}
+  - {ref: arch.zombie, weight: 2}
+  - {ref: arch.ancestor, weight: 2}
+  - {ref: arch.golem, weight: 3}
+  - {ref: arch.animated, weight: 3}
+  - {ref: arch.clockwork, weight: 3}
+  - {ref: arch.homunculus, weight: 3}
+  - {ref: arch.ooze, weight: 1}
+  fielded_by_band: {1: 8, 2: 10, 3: 7, 4: 4, 5: 1}
+- theme: site.theme.ancient
+  domain: site.domain.cavern
+  archetypes:
+  - {ref: arch.giant_vermin, weight: 2}
+  - {ref: arch.vermin_swarm, weight: 2}
+  - {ref: arch.skeleton, weight: 2}
+  - {ref: arch.golem, weight: 3}
+  - {ref: arch.clockwork, weight: 3}
+  - {ref: arch.ooze, weight: 1}
+  fielded_by_band: {1: 5, 2: 6, 3: 5, 4: 3, 5: 1}
+- theme: site.theme.ancient
+  domain: site.domain.flooded_cave
+  archetypes:
+  - {ref: arch.giant_vermin, weight: 2}
+  - {ref: arch.vermin_swarm, weight: 2}
+  - {ref: arch.skeleton, weight: 2}
+  - {ref: arch.golem, weight: 3}
+  - {ref: arch.clockwork, weight: 3}
+  - {ref: arch.ooze, weight: 1}
+  fielded_by_band: {1: 5, 2: 6, 3: 5, 4: 3, 5: 1}
+- theme: site.theme.ancient
+  domain: site.domain.mine
+  archetypes:
+  - {ref: arch.giant_vermin, weight: 2}
+  - {ref: arch.vermin_swarm, weight: 2}
+  - {ref: arch.skeleton, weight: 2}
+  - {ref: arch.golem, weight: 3}
+  - {ref: arch.clockwork, weight: 3}
+  - {ref: arch.ooze, weight: 1}
+  fielded_by_band: {1: 5, 2: 6, 3: 5, 4: 3, 5: 1}
+- theme: site.theme.ancient
+  domain: site.domain.warren
+  archetypes:
+  - {ref: arch.giant_vermin, weight: 2}
+  - {ref: arch.vermin_swarm, weight: 2}
+  - {ref: arch.skeleton, weight: 2}
+  - {ref: arch.zombie, weight: 2}
+  - {ref: arch.golem, weight: 3}
+  - {ref: arch.animated, weight: 3}
+  - {ref: arch.clockwork, weight: 3}
+  - {ref: arch.homunculus, weight: 3}
+  - {ref: arch.ooze, weight: 1}
+  fielded_by_band: {1: 8, 2: 9, 3: 6, 4: 3, 5: 1}
+- theme: site.theme.ancient
+  domain: site.domain.underkeep
+  archetypes:
+  - {ref: arch.giant_vermin, weight: 2}
+  - {ref: arch.vermin_swarm, weight: 2}
+  - {ref: arch.skeleton, weight: 2}
+  - {ref: arch.zombie, weight: 2}
+  - {ref: arch.golem, weight: 3}
+  - {ref: arch.animated, weight: 3}
+  - {ref: arch.clockwork, weight: 3}
+  - {ref: arch.homunculus, weight: 3}
+  - {ref: arch.ooze, weight: 1}
+  fielded_by_band: {1: 8, 2: 9, 3: 6, 4: 3, 5: 1}
+- theme: site.theme.ancient
+  domain: site.domain.temple
+  archetypes:
+  - {ref: arch.giant_vermin, weight: 2}
+  - {ref: arch.vermin_swarm, weight: 2}
+  - {ref: arch.skeleton, weight: 2}
+  - {ref: arch.zombie, weight: 2}
+  - {ref: arch.golem, weight: 3}
+  - {ref: arch.animated, weight: 3}
+  - {ref: arch.clockwork, weight: 3}
+  - {ref: arch.homunculus, weight: 3}
+  - {ref: arch.ooze, weight: 1}
+  fielded_by_band: {1: 8, 2: 9, 3: 6, 4: 3, 5: 1}
+- theme: site.theme.ancient
+  domain: site.domain.stronghold
+  archetypes:
+  - {ref: arch.giant_vermin, weight: 2}
+  - {ref: arch.vermin_swarm, weight: 2}
+  - {ref: arch.skeleton, weight: 2}
+  - {ref: arch.zombie, weight: 2}
+  - {ref: arch.golem, weight: 3}
+  - {ref: arch.animated, weight: 3}
+  - {ref: arch.clockwork, weight: 3}
+  - {ref: arch.homunculus, weight: 3}
+  - {ref: arch.ooze, weight: 1}
+  fielded_by_band: {1: 8, 2: 9, 3: 6, 4: 3, 5: 1}
+- theme: site.theme.ancient
+  domain: site.domain.tower
+  archetypes:
+  - {ref: arch.giant_vermin, weight: 2}
+  - {ref: arch.vermin_swarm, weight: 2}
+  - {ref: arch.skeleton, weight: 2}
+  - {ref: arch.zombie, weight: 2}
+  - {ref: arch.golem, weight: 3}
+  - {ref: arch.animated, weight: 3}
+  - {ref: arch.clockwork, weight: 3}
+  - {ref: arch.homunculus, weight: 3}
+  - {ref: arch.ooze, weight: 1}
+  fielded_by_band: {1: 8, 2: 9, 3: 6, 4: 3, 5: 1}
+- theme: site.theme.ancient
+  domain: site.domain.sewer
+  archetypes:
+  - {ref: arch.giant_vermin, weight: 2}
+  - {ref: arch.vermin_swarm, weight: 2}
+  - {ref: arch.skeleton, weight: 2}
+  - {ref: arch.golem, weight: 3}
+  - {ref: arch.clockwork, weight: 3}
+  - {ref: arch.ooze, weight: 1}
+  fielded_by_band: {1: 5, 2: 6, 3: 5, 4: 3, 5: 1}
+- theme: site.theme.ancient
+  domain: site.domain.tanglewood
+  archetypes:
+  - {ref: arch.giant_vermin, weight: 2}
+  - {ref: arch.vermin_swarm, weight: 2}
+  - {ref: arch.ancestor, weight: 2}
+  - {ref: arch.ooze, weight: 1}
+  fielded_by_band: {1: 3, 2: 4, 3: 3, 4: 2, 5: 0}
+- theme: site.theme.ancient
+  domain: site.domain.fen
+  archetypes:
+  - {ref: arch.giant_vermin, weight: 2}
+  - {ref: arch.vermin_swarm, weight: 2}
+  - {ref: arch.zombie, weight: 2}
+  - {ref: arch.ancestor, weight: 2}
+  - {ref: arch.ooze, weight: 1}
+  fielded_by_band: {1: 4, 2: 5, 3: 3, 4: 2, 5: 0}
+- theme: site.theme.ancient
+  domain: site.domain.icereach
+  archetypes:
+  - {ref: arch.skeleton, weight: 2}
+  - {ref: arch.ancestor, weight: 2}
+  - {ref: arch.golem, weight: 3}
+  fielded_by_band: {1: 1, 2: 3, 3: 3, 4: 2, 5: 1}
+- theme: site.theme.corrupted
+  domain: site.domain.barrow
+  archetypes:
+  - {ref: arch.brigand, weight: 2}
+  - {ref: arch.cultist, weight: 2}
+  - {ref: arch.folk_mage, weight: 2}
+  - {ref: arch.skeleton, weight: 2}
+  - {ref: arch.zombie, weight: 2}
+  - {ref: arch.ghoul, weight: 2}
+  - {ref: arch.wight, weight: 2}
+  - {ref: arch.vampire, weight: 2}
+  - {ref: arch.ghost, weight: 2}
+  - {ref: arch.wraith, weight: 2}
+  - {ref: arch.lich, weight: 2}
+  - {ref: arch.deathlord, weight: 2}
+  - {ref: arch.lesser_demon, weight: 3}
+  - {ref: arch.greater_demon, weight: 3}
+  - {ref: arch.enforcer, weight: 3}
+  - {ref: arch.hellbeast, weight: 3}
+  - {ref: arch.ooze, weight: 2}
+  - {ref: arch.abomination, weight: 2}
+  fielded_by_band: {1: 9, 2: 12, 3: 14, 4: 13, 5: 8}
+- theme: site.theme.corrupted
+  domain: site.domain.crypt
+  archetypes:
+  - {ref: arch.brigand, weight: 2}
+  - {ref: arch.cultist, weight: 2}
+  - {ref: arch.folk_mage, weight: 2}
+  - {ref: arch.skeleton, weight: 2}
+  - {ref: arch.zombie, weight: 2}
+  - {ref: arch.ghoul, weight: 2}
+  - {ref: arch.wight, weight: 2}
+  - {ref: arch.vampire, weight: 2}
+  - {ref: arch.ghost, weight: 2}
+  - {ref: arch.wraith, weight: 2}
+  - {ref: arch.lich, weight: 2}
+  - {ref: arch.deathlord, weight: 2}
+  - {ref: arch.lesser_demon, weight: 3}
+  - {ref: arch.greater_demon, weight: 3}
+  - {ref: arch.enforcer, weight: 3}
+  - {ref: arch.hellbeast, weight: 3}
+  - {ref: arch.ooze, weight: 2}
+  - {ref: arch.abomination, weight: 2}
+  fielded_by_band: {1: 9, 2: 12, 3: 14, 4: 13, 5: 8}
+- theme: site.theme.corrupted
+  domain: site.domain.cavern
+  archetypes:
+  - {ref: arch.cultist, weight: 2}
+  - {ref: arch.skeleton, weight: 2}
+  - {ref: arch.ghoul, weight: 2}
+  - {ref: arch.wraith, weight: 2}
+  - {ref: arch.lich, weight: 2}
+  - {ref: arch.lesser_demon, weight: 3}
+  - {ref: arch.greater_demon, weight: 3}
+  - {ref: arch.aberration, weight: 2}
+  - {ref: arch.ooze, weight: 2}
+  - {ref: arch.fungal, weight: 2}
+  - {ref: arch.monstrous_plant, weight: 2}
+  - {ref: arch.abomination, weight: 2}
+  fielded_by_band: {1: 7, 2: 8, 3: 10, 4: 8, 5: 6}
+- theme: site.theme.corrupted
+  domain: site.domain.flooded_cave
+  archetypes:
+  - {ref: arch.cultist, weight: 2}
+  - {ref: arch.skeleton, weight: 2}
+  - {ref: arch.ghoul, weight: 2}
+  - {ref: arch.wraith, weight: 2}
+  - {ref: arch.lich, weight: 2}
+  - {ref: arch.lesser_demon, weight: 3}
+  - {ref: arch.greater_demon, weight: 3}
+  - {ref: arch.aberration, weight: 2}
+  - {ref: arch.ooze, weight: 2}
+  - {ref: arch.fungal, weight: 2}
+  - {ref: arch.monstrous_plant, weight: 2}
+  - {ref: arch.abomination, weight: 2}
+  fielded_by_band: {1: 7, 2: 8, 3: 10, 4: 8, 5: 6}
+- theme: site.theme.corrupted
+  domain: site.domain.mine
+  archetypes:
+  - {ref: arch.cultist, weight: 2}
+  - {ref: arch.skeleton, weight: 2}
+  - {ref: arch.ghoul, weight: 2}
+  - {ref: arch.wraith, weight: 2}
+  - {ref: arch.lich, weight: 2}
+  - {ref: arch.lesser_demon, weight: 3}
+  - {ref: arch.greater_demon, weight: 3}
+  - {ref: arch.aberration, weight: 2}
+  - {ref: arch.ooze, weight: 2}
+  - {ref: arch.fungal, weight: 2}
+  - {ref: arch.monstrous_plant, weight: 2}
+  - {ref: arch.abomination, weight: 2}
+  fielded_by_band: {1: 7, 2: 8, 3: 10, 4: 8, 5: 6}
+- theme: site.theme.corrupted
+  domain: site.domain.warren
+  archetypes:
+  - {ref: arch.brigand, weight: 2}
+  - {ref: arch.cultist, weight: 2}
+  - {ref: arch.folk_mage, weight: 2}
+  - {ref: arch.skeleton, weight: 2}
+  - {ref: arch.zombie, weight: 2}
+  - {ref: arch.ghoul, weight: 2}
+  - {ref: arch.vampire, weight: 2}
+  - {ref: arch.ghost, weight: 2}
+  - {ref: arch.wraith, weight: 2}
+  - {ref: arch.lich, weight: 2}
+  - {ref: arch.lesser_demon, weight: 3}
+  - {ref: arch.greater_demon, weight: 3}
+  - {ref: arch.enforcer, weight: 3}
+  - {ref: arch.hellbeast, weight: 3}
+  - {ref: arch.aberration, weight: 2}
+  - {ref: arch.ooze, weight: 2}
+  - {ref: arch.fungal, weight: 2}
+  - {ref: arch.monstrous_plant, weight: 2}
+  - {ref: arch.abomination, weight: 2}
+  fielded_by_band: {1: 11, 2: 13, 3: 16, 4: 13, 5: 9}
+- theme: site.theme.corrupted
+  domain: site.domain.underkeep
+  archetypes:
+  - {ref: arch.brigand, weight: 2}
+  - {ref: arch.cultist, weight: 2}
+  - {ref: arch.folk_mage, weight: 2}
+  - {ref: arch.skeleton, weight: 2}
+  - {ref: arch.zombie, weight: 2}
+  - {ref: arch.vampire, weight: 2}
+  - {ref: arch.ghost, weight: 2}
+  - {ref: arch.wraith, weight: 2}
+  - {ref: arch.lich, weight: 2}
+  - {ref: arch.lesser_demon, weight: 3}
+  - {ref: arch.greater_demon, weight: 3}
+  - {ref: arch.enforcer, weight: 3}
+  - {ref: arch.hellbeast, weight: 3}
+  - {ref: arch.ooze, weight: 2}
+  - {ref: arch.abomination, weight: 2}
+  fielded_by_band: {1: 8, 2: 10, 3: 12, 4: 11, 5: 7}
+- theme: site.theme.corrupted
+  domain: site.domain.temple
+  archetypes:
+  - {ref: arch.brigand, weight: 2}
+  - {ref: arch.cultist, weight: 2}
+  - {ref: arch.folk_mage, weight: 2}
+  - {ref: arch.skeleton, weight: 2}
+  - {ref: arch.zombie, weight: 2}
+  - {ref: arch.vampire, weight: 2}
+  - {ref: arch.ghost, weight: 2}
+  - {ref: arch.wraith, weight: 2}
+  - {ref: arch.lich, weight: 2}
+  - {ref: arch.lesser_demon, weight: 3}
+  - {ref: arch.greater_demon, weight: 3}
+  - {ref: arch.enforcer, weight: 3}
+  - {ref: arch.hellbeast, weight: 3}
+  - {ref: arch.ooze, weight: 2}
+  - {ref: arch.abomination, weight: 2}
+  fielded_by_band: {1: 8, 2: 10, 3: 12, 4: 11, 5: 7}
+- theme: site.theme.corrupted
+  domain: site.domain.stronghold
+  archetypes:
+  - {ref: arch.brigand, weight: 2}
+  - {ref: arch.cultist, weight: 2}
+  - {ref: arch.folk_mage, weight: 2}
+  - {ref: arch.skeleton, weight: 2}
+  - {ref: arch.zombie, weight: 2}
+  - {ref: arch.vampire, weight: 2}
+  - {ref: arch.ghost, weight: 2}
+  - {ref: arch.wraith, weight: 2}
+  - {ref: arch.lich, weight: 2}
+  - {ref: arch.deathlord, weight: 2}
+  - {ref: arch.lesser_demon, weight: 3}
+  - {ref: arch.greater_demon, weight: 3}
+  - {ref: arch.enforcer, weight: 3}
+  - {ref: arch.hellbeast, weight: 3}
+  - {ref: arch.ooze, weight: 2}
+  - {ref: arch.abomination, weight: 2}
+  fielded_by_band: {1: 8, 2: 10, 3: 12, 4: 12, 5: 8}
+- theme: site.theme.corrupted
+  domain: site.domain.tower
+  archetypes:
+  - {ref: arch.brigand, weight: 2}
+  - {ref: arch.cultist, weight: 2}
+  - {ref: arch.folk_mage, weight: 2}
+  - {ref: arch.skeleton, weight: 2}
+  - {ref: arch.zombie, weight: 2}
+  - {ref: arch.vampire, weight: 2}
+  - {ref: arch.ghost, weight: 2}
+  - {ref: arch.wraith, weight: 2}
+  - {ref: arch.lich, weight: 2}
+  - {ref: arch.deathlord, weight: 2}
+  - {ref: arch.lesser_demon, weight: 3}
+  - {ref: arch.greater_demon, weight: 3}
+  - {ref: arch.enforcer, weight: 3}
+  - {ref: arch.hellbeast, weight: 3}
+  - {ref: arch.ooze, weight: 2}
+  - {ref: arch.abomination, weight: 2}
+  fielded_by_band: {1: 8, 2: 10, 3: 12, 4: 12, 5: 8}
+- theme: site.theme.corrupted
+  domain: site.domain.sewer
+  archetypes:
+  - {ref: arch.cultist, weight: 2}
+  - {ref: arch.skeleton, weight: 2}
+  - {ref: arch.ghoul, weight: 2}
+  - {ref: arch.wraith, weight: 2}
+  - {ref: arch.lich, weight: 2}
+  - {ref: arch.lesser_demon, weight: 3}
+  - {ref: arch.greater_demon, weight: 3}
+  - {ref: arch.aberration, weight: 2}
+  - {ref: arch.ooze, weight: 2}
+  - {ref: arch.fungal, weight: 2}
+  - {ref: arch.monstrous_plant, weight: 2}
+  - {ref: arch.abomination, weight: 2}
+  fielded_by_band: {1: 7, 2: 8, 3: 10, 4: 8, 5: 6}
+- theme: site.theme.corrupted
+  domain: site.domain.tanglewood
+  archetypes:
+  - {ref: arch.brigand, weight: 2}
+  - {ref: arch.folk_mage, weight: 2}
+  - {ref: arch.ghost, weight: 2}
+  - {ref: arch.wraith, weight: 2}
+  - {ref: arch.ooze, weight: 2}
+  - {ref: arch.fungal, weight: 2}
+  - {ref: arch.monstrous_plant, weight: 2}
+  fielded_by_band: {1: 6, 2: 6, 3: 7, 4: 5, 5: 3}
+- theme: site.theme.corrupted
+  domain: site.domain.fen
+  archetypes:
+  - {ref: arch.brigand, weight: 2}
+  - {ref: arch.folk_mage, weight: 2}
+  - {ref: arch.zombie, weight: 2}
+  - {ref: arch.ghost, weight: 2}
+  - {ref: arch.wraith, weight: 2}
+  - {ref: arch.ooze, weight: 2}
+  - {ref: arch.monstrous_plant, weight: 2}
+  fielded_by_band: {1: 6, 2: 6, 3: 6, 4: 5, 5: 3}
+- theme: site.theme.corrupted
+  domain: site.domain.icereach
+  archetypes:
+  - {ref: arch.skeleton, weight: 2}
+  - {ref: arch.wight, weight: 2}
+  - {ref: arch.ghost, weight: 2}
+  - {ref: arch.wraith, weight: 2}
+  fielded_by_band: {1: 2, 2: 3, 3: 4, 4: 3, 5: 1}
+- theme: site.theme.fortified
+  domain: site.domain.barrow
+  archetypes:
+  - {ref: arch.brigand, weight: 3}
+  - {ref: arch.cultist, weight: 3}
+  - {ref: arch.folk_mage, weight: 3}
+  - {ref: arch.goblin, weight: 2}
+  fielded_by_band: {1: 4, 2: 4, 3: 3, 4: 2, 5: 1}
+- theme: site.theme.fortified
+  domain: site.domain.crypt
+  archetypes:
+  - {ref: arch.brigand, weight: 3}
+  - {ref: arch.cultist, weight: 3}
+  - {ref: arch.folk_mage, weight: 3}
+  - {ref: arch.goblin, weight: 2}
+  fielded_by_band: {1: 4, 2: 4, 3: 3, 4: 2, 5: 1}
+- theme: site.theme.fortified
+  domain: site.domain.cavern
+  archetypes:
+  - {ref: arch.cultist, weight: 3}
+  - {ref: arch.dwarf_holdguard, weight: 1}
+  - {ref: arch.orc, weight: 2}
+  - {ref: arch.goblin, weight: 2}
+  - {ref: arch.troll, weight: 1}
+  fielded_by_band: {1: 3, 2: 4, 3: 4, 4: 4, 5: 1}
+- theme: site.theme.fortified
+  domain: site.domain.flooded_cave
+  archetypes:
+  - {ref: arch.cultist, weight: 3}
+  - {ref: arch.dwarf_holdguard, weight: 1}
+  - {ref: arch.orc, weight: 2}
+  - {ref: arch.goblin, weight: 2}
+  - {ref: arch.troll, weight: 1}
+  fielded_by_band: {1: 3, 2: 4, 3: 4, 4: 4, 5: 1}
+- theme: site.theme.fortified
+  domain: site.domain.mine
+  archetypes:
+  - {ref: arch.cultist, weight: 3}
+  - {ref: arch.dwarf_holdguard, weight: 1}
+  - {ref: arch.orc, weight: 2}
+  - {ref: arch.goblin, weight: 2}
+  - {ref: arch.troll, weight: 1}
+  fielded_by_band: {1: 3, 2: 4, 3: 4, 4: 4, 5: 1}
+- theme: site.theme.fortified
+  domain: site.domain.warren
+  archetypes:
+  - {ref: arch.brigand, weight: 3}
+  - {ref: arch.cultist, weight: 3}
+  - {ref: arch.folk_mage, weight: 3}
+  - {ref: arch.dwarf_holdguard, weight: 1}
+  - {ref: arch.orc, weight: 2}
+  - {ref: arch.goblin, weight: 2}
+  - {ref: arch.troll, weight: 1}
+  fielded_by_band: {1: 5, 2: 6, 3: 6, 4: 5, 5: 2}
+- theme: site.theme.fortified
+  domain: site.domain.underkeep
+  archetypes:
+  - {ref: arch.brigand, weight: 3}
+  - {ref: arch.cultist, weight: 3}
+  - {ref: arch.folk_mage, weight: 3}
+  - {ref: arch.goblin, weight: 2}
+  fielded_by_band: {1: 4, 2: 4, 3: 3, 4: 2, 5: 1}
+- theme: site.theme.fortified
+  domain: site.domain.temple
+  archetypes:
+  - {ref: arch.brigand, weight: 3}
+  - {ref: arch.cultist, weight: 3}
+  - {ref: arch.folk_mage, weight: 3}
+  - {ref: arch.goblin, weight: 2}
+  fielded_by_band: {1: 4, 2: 4, 3: 3, 4: 2, 5: 1}
+- theme: site.theme.fortified
+  domain: site.domain.stronghold
+  archetypes:
+  - {ref: arch.brigand, weight: 3}
+  - {ref: arch.cultist, weight: 3}
+  - {ref: arch.folk_mage, weight: 3}
+  - {ref: arch.goblin, weight: 2}
+  fielded_by_band: {1: 4, 2: 4, 3: 3, 4: 2, 5: 1}
+- theme: site.theme.fortified
+  domain: site.domain.tower
+  archetypes:
+  - {ref: arch.brigand, weight: 3}
+  - {ref: arch.cultist, weight: 3}
+  - {ref: arch.folk_mage, weight: 3}
+  - {ref: arch.goblin, weight: 2}
+  fielded_by_band: {1: 4, 2: 4, 3: 3, 4: 2, 5: 1}
+- theme: site.theme.fortified
+  domain: site.domain.sewer
+  archetypes:
+  - {ref: arch.cultist, weight: 3}
+  - {ref: arch.dwarf_holdguard, weight: 1}
+  - {ref: arch.orc, weight: 2}
+  - {ref: arch.goblin, weight: 2}
+  - {ref: arch.troll, weight: 1}
+  fielded_by_band: {1: 3, 2: 4, 3: 4, 4: 4, 5: 1}
+- theme: site.theme.fortified
+  domain: site.domain.tanglewood
+  archetypes:
+  - {ref: arch.wolf, weight: 1}
+  - {ref: arch.brigand, weight: 3}
+  - {ref: arch.folk_mage, weight: 3}
+  - {ref: arch.elf_warden, weight: 1}
+  - {ref: arch.goblin, weight: 2}
+  - {ref: arch.ogre, weight: 1}
+  - {ref: arch.troll, weight: 1}
+  fielded_by_band: {1: 4, 2: 6, 3: 6, 4: 4, 5: 2}
+- theme: site.theme.fortified
+  domain: site.domain.fen
+  archetypes:
+  - {ref: arch.brigand, weight: 3}
+  - {ref: arch.folk_mage, weight: 3}
+  - {ref: arch.goblin, weight: 2}
+  - {ref: arch.lizardfolk, weight: 1}
+  - {ref: arch.troll, weight: 1}
+  fielded_by_band: {1: 4, 2: 4, 3: 4, 4: 2, 5: 2}
+- theme: site.theme.fortified
+  domain: site.domain.icereach
+  archetypes:
+  - {ref: arch.wolf, weight: 1}
+  - {ref: arch.orc, weight: 2}
+  - {ref: arch.goblin, weight: 2}
+  - {ref: arch.troll, weight: 1}
+  - {ref: arch.giant, weight: 1}
+  fielded_by_band: {1: 3, 2: 3, 3: 3, 4: 3, 5: 2}
+- theme: site.theme.hallowed
+  domain: site.domain.barrow
+  archetypes:
+  - {ref: arch.brigand, weight: 1}
+  - {ref: arch.cultist, weight: 1}
+  - {ref: arch.folk_mage, weight: 1}
+  - {ref: arch.ancestor, weight: 3}
+  - {ref: arch.golem, weight: 2}
+  - {ref: arch.animated, weight: 2}
+  - {ref: arch.clockwork, weight: 2}
+  - {ref: arch.homunculus, weight: 2}
+  fielded_by_band: {1: 6, 2: 8, 3: 7, 4: 5, 5: 2}
+- theme: site.theme.hallowed
+  domain: site.domain.crypt
+  archetypes:
+  - {ref: arch.brigand, weight: 1}
+  - {ref: arch.cultist, weight: 1}
+  - {ref: arch.folk_mage, weight: 1}
+  - {ref: arch.ancestor, weight: 3}
+  - {ref: arch.golem, weight: 2}
+  - {ref: arch.animated, weight: 2}
+  - {ref: arch.clockwork, weight: 2}
+  - {ref: arch.homunculus, weight: 2}
+  fielded_by_band: {1: 6, 2: 8, 3: 7, 4: 5, 5: 2}
+- theme: site.theme.hallowed
+  domain: site.domain.cavern
+  archetypes:
+  - {ref: arch.cultist, weight: 1}
+  - {ref: arch.golem, weight: 2}
+  - {ref: arch.clockwork, weight: 2}
+  fielded_by_band: {1: 2, 2: 3, 3: 3, 4: 3, 5: 1}
+- theme: site.theme.hallowed
+  domain: site.domain.flooded_cave
+  archetypes:
+  - {ref: arch.cultist, weight: 1}
+  - {ref: arch.golem, weight: 2}
+  - {ref: arch.clockwork, weight: 2}
+  fielded_by_band: {1: 2, 2: 3, 3: 3, 4: 3, 5: 1}
+- theme: site.theme.hallowed
+  domain: site.domain.mine
+  archetypes:
+  - {ref: arch.cultist, weight: 1}
+  - {ref: arch.golem, weight: 2}
+  - {ref: arch.clockwork, weight: 2}
+  fielded_by_band: {1: 2, 2: 3, 3: 3, 4: 3, 5: 1}
+- theme: site.theme.hallowed
+  domain: site.domain.warren
+  archetypes:
+  - {ref: arch.brigand, weight: 1}
+  - {ref: arch.cultist, weight: 1}
+  - {ref: arch.folk_mage, weight: 1}
+  - {ref: arch.golem, weight: 2}
+  - {ref: arch.animated, weight: 2}
+  - {ref: arch.clockwork, weight: 2}
+  - {ref: arch.homunculus, weight: 2}
+  fielded_by_band: {1: 6, 2: 7, 3: 6, 4: 4, 5: 2}
+- theme: site.theme.hallowed
+  domain: site.domain.underkeep
+  archetypes:
+  - {ref: arch.brigand, weight: 1}
+  - {ref: arch.cultist, weight: 1}
+  - {ref: arch.folk_mage, weight: 1}
+  - {ref: arch.golem, weight: 2}
+  - {ref: arch.animated, weight: 2}
+  - {ref: arch.clockwork, weight: 2}
+  - {ref: arch.homunculus, weight: 2}
+  fielded_by_band: {1: 6, 2: 7, 3: 6, 4: 4, 5: 2}
+- theme: site.theme.hallowed
+  domain: site.domain.temple
+  archetypes:
+  - {ref: arch.brigand, weight: 1}
+  - {ref: arch.cultist, weight: 1}
+  - {ref: arch.folk_mage, weight: 1}
+  - {ref: arch.celestial, weight: 2}
+  - {ref: arch.golem, weight: 2}
+  - {ref: arch.animated, weight: 2}
+  - {ref: arch.clockwork, weight: 2}
+  - {ref: arch.homunculus, weight: 2}
+  fielded_by_band: {1: 6, 2: 7, 3: 7, 4: 5, 5: 3}
+- theme: site.theme.hallowed
+  domain: site.domain.stronghold
+  archetypes:
+  - {ref: arch.brigand, weight: 1}
+  - {ref: arch.cultist, weight: 1}
+  - {ref: arch.folk_mage, weight: 1}
+  - {ref: arch.golem, weight: 2}
+  - {ref: arch.animated, weight: 2}
+  - {ref: arch.clockwork, weight: 2}
+  - {ref: arch.homunculus, weight: 2}
+  fielded_by_band: {1: 6, 2: 7, 3: 6, 4: 4, 5: 2}
+- theme: site.theme.hallowed
+  domain: site.domain.tower
+  archetypes:
+  - {ref: arch.brigand, weight: 1}
+  - {ref: arch.cultist, weight: 1}
+  - {ref: arch.folk_mage, weight: 1}
+  - {ref: arch.golem, weight: 2}
+  - {ref: arch.animated, weight: 2}
+  - {ref: arch.clockwork, weight: 2}
+  - {ref: arch.homunculus, weight: 2}
+  fielded_by_band: {1: 6, 2: 7, 3: 6, 4: 4, 5: 2}
+- theme: site.theme.hallowed
+  domain: site.domain.sewer
+  archetypes:
+  - {ref: arch.cultist, weight: 1}
+  - {ref: arch.golem, weight: 2}
+  - {ref: arch.clockwork, weight: 2}
+  fielded_by_band: {1: 2, 2: 3, 3: 3, 4: 3, 5: 1}
+- theme: site.theme.hallowed
+  domain: site.domain.tanglewood
+  archetypes:
+  - {ref: arch.brigand, weight: 1}
+  - {ref: arch.folk_mage, weight: 1}
+  - {ref: arch.ancestor, weight: 3}
+  fielded_by_band: {1: 2, 2: 3, 3: 3, 4: 2, 5: 1}
+- theme: site.theme.hallowed
+  domain: site.domain.fen
+  archetypes:
+  - {ref: arch.brigand, weight: 1}
+  - {ref: arch.folk_mage, weight: 1}
+  - {ref: arch.ancestor, weight: 3}
+  fielded_by_band: {1: 2, 2: 3, 3: 3, 4: 2, 5: 1}
+- theme: site.theme.hallowed
+  domain: site.domain.icereach
+  archetypes:
+  - {ref: arch.ancestor, weight: 3}
+  - {ref: arch.celestial, weight: 2}
+  - {ref: arch.golem, weight: 2}
+  fielded_by_band: {1: 0, 2: 2, 3: 3, 4: 3, 5: 2}
+- theme: site.theme.haunted
+  domain: site.domain.barrow
+  archetypes:
+  - {ref: arch.skeleton, weight: 2}
+  - {ref: arch.zombie, weight: 2}
+  - {ref: arch.ghoul, weight: 2}
+  - {ref: arch.wight, weight: 2}
+  - {ref: arch.vampire, weight: 2}
+  - {ref: arch.ghost, weight: 3}
+  - {ref: arch.wraith, weight: 3}
+  - {ref: arch.lich, weight: 1}
+  - {ref: arch.deathlord, weight: 1}
+  - {ref: arch.ancestor, weight: 1}
+  fielded_by_band: {1: 4, 2: 6, 3: 7, 4: 7, 5: 4}
+- theme: site.theme.haunted
+  domain: site.domain.crypt
+  archetypes:
+  - {ref: arch.skeleton, weight: 2}
+  - {ref: arch.zombie, weight: 2}
+  - {ref: arch.ghoul, weight: 2}
+  - {ref: arch.wight, weight: 2}
+  - {ref: arch.vampire, weight: 2}
+  - {ref: arch.ghost, weight: 3}
+  - {ref: arch.wraith, weight: 3}
+  - {ref: arch.lich, weight: 1}
+  - {ref: arch.deathlord, weight: 1}
+  - {ref: arch.ancestor, weight: 1}
+  fielded_by_band: {1: 4, 2: 6, 3: 7, 4: 7, 5: 4}
+- theme: site.theme.haunted
+  domain: site.domain.cavern
+  archetypes:
+  - {ref: arch.skeleton, weight: 2}
+  - {ref: arch.ghoul, weight: 2}
+  - {ref: arch.wraith, weight: 3}
+  - {ref: arch.lich, weight: 1}
+  fielded_by_band: {1: 2, 2: 2, 3: 3, 4: 2, 5: 2}
+- theme: site.theme.haunted
+  domain: site.domain.flooded_cave
+  archetypes:
+  - {ref: arch.skeleton, weight: 2}
+  - {ref: arch.ghoul, weight: 2}
+  - {ref: arch.wraith, weight: 3}
+  - {ref: arch.lich, weight: 1}
+  fielded_by_band: {1: 2, 2: 2, 3: 3, 4: 2, 5: 2}
+- theme: site.theme.haunted
+  domain: site.domain.mine
+  archetypes:
+  - {ref: arch.skeleton, weight: 2}
+  - {ref: arch.ghoul, weight: 2}
+  - {ref: arch.wraith, weight: 3}
+  - {ref: arch.lich, weight: 1}
+  fielded_by_band: {1: 2, 2: 2, 3: 3, 4: 2, 5: 2}
+- theme: site.theme.haunted
+  domain: site.domain.warren
+  archetypes:
+  - {ref: arch.skeleton, weight: 2}
+  - {ref: arch.zombie, weight: 2}
+  - {ref: arch.ghoul, weight: 2}
+  - {ref: arch.vampire, weight: 2}
+  - {ref: arch.ghost, weight: 3}
+  - {ref: arch.wraith, weight: 3}
+  - {ref: arch.lich, weight: 1}
+  fielded_by_band: {1: 4, 2: 4, 3: 5, 4: 4, 5: 3}
+- theme: site.theme.haunted
+  domain: site.domain.underkeep
+  archetypes:
+  - {ref: arch.skeleton, weight: 2}
+  - {ref: arch.zombie, weight: 2}
+  - {ref: arch.vampire, weight: 2}
+  - {ref: arch.ghost, weight: 3}
+  - {ref: arch.wraith, weight: 3}
+  - {ref: arch.lich, weight: 1}
+  fielded_by_band: {1: 3, 2: 3, 3: 4, 4: 4, 5: 3}
+- theme: site.theme.haunted
+  domain: site.domain.temple
+  archetypes:
+  - {ref: arch.skeleton, weight: 2}
+  - {ref: arch.zombie, weight: 2}
+  - {ref: arch.vampire, weight: 2}
+  - {ref: arch.ghost, weight: 3}
+  - {ref: arch.wraith, weight: 3}
+  - {ref: arch.lich, weight: 1}
+  fielded_by_band: {1: 3, 2: 3, 3: 4, 4: 4, 5: 3}
+- theme: site.theme.haunted
+  domain: site.domain.stronghold
+  archetypes:
+  - {ref: arch.skeleton, weight: 2}
+  - {ref: arch.zombie, weight: 2}
+  - {ref: arch.vampire, weight: 2}
+  - {ref: arch.ghost, weight: 3}
+  - {ref: arch.wraith, weight: 3}
+  - {ref: arch.lich, weight: 1}
+  - {ref: arch.deathlord, weight: 1}
+  fielded_by_band: {1: 3, 2: 3, 3: 4, 4: 5, 5: 4}
+- theme: site.theme.haunted
+  domain: site.domain.tower
+  archetypes:
+  - {ref: arch.skeleton, weight: 2}
+  - {ref: arch.zombie, weight: 2}
+  - {ref: arch.vampire, weight: 2}
+  - {ref: arch.ghost, weight: 3}
+  - {ref: arch.wraith, weight: 3}
+  - {ref: arch.lich, weight: 1}
+  - {ref: arch.deathlord, weight: 1}
+  fielded_by_band: {1: 3, 2: 3, 3: 4, 4: 5, 5: 4}
+- theme: site.theme.haunted
+  domain: site.domain.sewer
+  archetypes:
+  - {ref: arch.skeleton, weight: 2}
+  - {ref: arch.ghoul, weight: 2}
+  - {ref: arch.wraith, weight: 3}
+  - {ref: arch.lich, weight: 1}
+  fielded_by_band: {1: 2, 2: 2, 3: 3, 4: 2, 5: 2}
+- theme: site.theme.haunted
+  domain: site.domain.tanglewood
+  archetypes:
+  - {ref: arch.ghost, weight: 3}
+  - {ref: arch.wraith, weight: 3}
+  - {ref: arch.ancestor, weight: 1}
+  fielded_by_band: {1: 1, 2: 2, 3: 3, 4: 3, 5: 1}
+- theme: site.theme.haunted
+  domain: site.domain.fen
+  archetypes:
+  - {ref: arch.zombie, weight: 2}
+  - {ref: arch.ghost, weight: 3}
+  - {ref: arch.wraith, weight: 3}
+  - {ref: arch.ancestor, weight: 1}
+  fielded_by_band: {1: 2, 2: 3, 3: 3, 4: 3, 5: 1}
+- theme: site.theme.haunted
+  domain: site.domain.icereach
+  archetypes:
+  - {ref: arch.skeleton, weight: 2}
+  - {ref: arch.wight, weight: 2}
+  - {ref: arch.ghost, weight: 3}
+  - {ref: arch.wraith, weight: 3}
+  - {ref: arch.ancestor, weight: 1}
+  fielded_by_band: {1: 2, 2: 4, 3: 5, 4: 4, 5: 1}
+- theme: site.theme.infested
+  domain: site.domain.barrow
+  archetypes:
+  - {ref: arch.giant_vermin, weight: 4}
+  - {ref: arch.vermin_swarm, weight: 4}
+  - {ref: arch.monstrous_beast, weight: 1}
+  - {ref: arch.goblin, weight: 2}
+  - {ref: arch.ooze, weight: 1}
+  fielded_by_band: {1: 4, 2: 5, 3: 3, 4: 2, 5: 1}
+- theme: site.theme.infested
+  domain: site.domain.crypt
+  archetypes:
+  - {ref: arch.giant_vermin, weight: 4}
+  - {ref: arch.vermin_swarm, weight: 4}
+  - {ref: arch.monstrous_beast, weight: 1}
+  - {ref: arch.goblin, weight: 2}
+  - {ref: arch.ooze, weight: 1}
+  fielded_by_band: {1: 4, 2: 5, 3: 3, 4: 2, 5: 1}
+- theme: site.theme.infested
+  domain: site.domain.cavern
+  archetypes:
+  - {ref: arch.bear, weight: 1}
+  - {ref: arch.giant_vermin, weight: 4}
+  - {ref: arch.vermin_swarm, weight: 4}
+  - {ref: arch.monstrous_beast, weight: 1}
+  - {ref: arch.goblin, weight: 2}
+  - {ref: arch.ooze, weight: 1}
+  - {ref: arch.fungal, weight: 2}
+  fielded_by_band: {1: 5, 2: 7, 3: 5, 4: 3, 5: 1}
+- theme: site.theme.infested
+  domain: site.domain.flooded_cave
+  archetypes:
+  - {ref: arch.bear, weight: 1}
+  - {ref: arch.giant_vermin, weight: 4}
+  - {ref: arch.vermin_swarm, weight: 4}
+  - {ref: arch.monstrous_beast, weight: 1}
+  - {ref: arch.goblin, weight: 2}
+  - {ref: arch.ooze, weight: 1}
+  - {ref: arch.fungal, weight: 2}
+  fielded_by_band: {1: 5, 2: 7, 3: 5, 4: 3, 5: 1}
+- theme: site.theme.infested
+  domain: site.domain.mine
+  archetypes:
+  - {ref: arch.giant_vermin, weight: 4}
+  - {ref: arch.vermin_swarm, weight: 4}
+  - {ref: arch.monstrous_beast, weight: 1}
+  - {ref: arch.goblin, weight: 2}
+  - {ref: arch.ooze, weight: 1}
+  - {ref: arch.fungal, weight: 2}
+  fielded_by_band: {1: 5, 2: 6, 3: 4, 4: 2, 5: 1}
+- theme: site.theme.infested
+  domain: site.domain.warren
+  archetypes:
+  - {ref: arch.giant_vermin, weight: 4}
+  - {ref: arch.vermin_swarm, weight: 4}
+  - {ref: arch.monstrous_beast, weight: 1}
+  - {ref: arch.goblin, weight: 2}
+  - {ref: arch.ooze, weight: 1}
+  - {ref: arch.fungal, weight: 2}
+  fielded_by_band: {1: 5, 2: 6, 3: 4, 4: 2, 5: 1}
+- theme: site.theme.infested
+  domain: site.domain.underkeep
+  archetypes:
+  - {ref: arch.giant_vermin, weight: 4}
+  - {ref: arch.vermin_swarm, weight: 4}
+  - {ref: arch.monstrous_beast, weight: 1}
+  - {ref: arch.goblin, weight: 2}
+  - {ref: arch.ooze, weight: 1}
+  fielded_by_band: {1: 4, 2: 5, 3: 3, 4: 2, 5: 1}
+- theme: site.theme.infested
+  domain: site.domain.temple
+  archetypes:
+  - {ref: arch.giant_vermin, weight: 4}
+  - {ref: arch.vermin_swarm, weight: 4}
+  - {ref: arch.monstrous_beast, weight: 1}
+  - {ref: arch.goblin, weight: 2}
+  - {ref: arch.ooze, weight: 1}
+  fielded_by_band: {1: 4, 2: 5, 3: 3, 4: 2, 5: 1}
+- theme: site.theme.infested
+  domain: site.domain.stronghold
+  archetypes:
+  - {ref: arch.giant_vermin, weight: 4}
+  - {ref: arch.vermin_swarm, weight: 4}
+  - {ref: arch.monstrous_beast, weight: 1}
+  - {ref: arch.goblin, weight: 2}
+  - {ref: arch.ooze, weight: 1}
+  fielded_by_band: {1: 4, 2: 5, 3: 3, 4: 2, 5: 1}
+- theme: site.theme.infested
+  domain: site.domain.tower
+  archetypes:
+  - {ref: arch.giant_vermin, weight: 4}
+  - {ref: arch.vermin_swarm, weight: 4}
+  - {ref: arch.monstrous_beast, weight: 1}
+  - {ref: arch.goblin, weight: 2}
+  - {ref: arch.ooze, weight: 1}
+  fielded_by_band: {1: 4, 2: 5, 3: 3, 4: 2, 5: 1}
+- theme: site.theme.infested
+  domain: site.domain.sewer
+  archetypes:
+  - {ref: arch.giant_vermin, weight: 4}
+  - {ref: arch.vermin_swarm, weight: 4}
+  - {ref: arch.monstrous_beast, weight: 1}
+  - {ref: arch.goblin, weight: 2}
+  - {ref: arch.ooze, weight: 1}
+  - {ref: arch.fungal, weight: 2}
+  fielded_by_band: {1: 5, 2: 6, 3: 4, 4: 2, 5: 1}
+- theme: site.theme.infested
+  domain: site.domain.tanglewood
+  archetypes:
+  - {ref: arch.wolf, weight: 1}
+  - {ref: arch.great_cat, weight: 1}
+  - {ref: arch.bear, weight: 1}
+  - {ref: arch.giant_vermin, weight: 4}
+  - {ref: arch.vermin_swarm, weight: 4}
+  - {ref: arch.monstrous_beast, weight: 1}
+  - {ref: arch.goblin, weight: 2}
+  - {ref: arch.ooze, weight: 1}
+  - {ref: arch.fungal, weight: 2}
+  fielded_by_band: {1: 6, 2: 9, 3: 7, 4: 3, 5: 1}
+- theme: site.theme.infested
+  domain: site.domain.fen
+  archetypes:
+  - {ref: arch.giant_vermin, weight: 4}
+  - {ref: arch.vermin_swarm, weight: 4}
+  - {ref: arch.monstrous_beast, weight: 1}
+  - {ref: arch.goblin, weight: 2}
+  - {ref: arch.ooze, weight: 1}
+  fielded_by_band: {1: 4, 2: 5, 3: 3, 4: 2, 5: 1}
+- theme: site.theme.infested
+  domain: site.domain.icereach
+  archetypes:
+  - {ref: arch.wolf, weight: 1}
+  - {ref: arch.great_cat, weight: 1}
+  - {ref: arch.bear, weight: 1}
+  - {ref: arch.monstrous_beast, weight: 1}
+  - {ref: arch.goblin, weight: 2}
+  fielded_by_band: {1: 2, 2: 5, 3: 4, 4: 2, 5: 1}
+- theme: site.theme.ravaged
+  domain: site.domain.barrow
+  archetypes:
+  - {ref: arch.giant_vermin, weight: 2}
+  - {ref: arch.vermin_swarm, weight: 2}
+  - {ref: arch.monstrous_beast, weight: 1}
+  - {ref: arch.brigand, weight: 2}
+  - {ref: arch.cultist, weight: 2}
+  - {ref: arch.folk_mage, weight: 2}
+  - {ref: arch.goblin, weight: 1}
+  - {ref: arch.ghoul, weight: 1}
+  - {ref: arch.wight, weight: 1}
+  - {ref: arch.vampire, weight: 1}
+  fielded_by_band: {1: 7, 2: 9, 3: 8, 4: 5, 5: 3}
+- theme: site.theme.ravaged
+  domain: site.domain.crypt
+  archetypes:
+  - {ref: arch.giant_vermin, weight: 2}
+  - {ref: arch.vermin_swarm, weight: 2}
+  - {ref: arch.monstrous_beast, weight: 1}
+  - {ref: arch.brigand, weight: 2}
+  - {ref: arch.cultist, weight: 2}
+  - {ref: arch.folk_mage, weight: 2}
+  - {ref: arch.goblin, weight: 1}
+  - {ref: arch.ghoul, weight: 1}
+  - {ref: arch.wight, weight: 1}
+  - {ref: arch.vampire, weight: 1}
+  fielded_by_band: {1: 7, 2: 9, 3: 8, 4: 5, 5: 3}
+- theme: site.theme.ravaged
+  domain: site.domain.cavern
+  archetypes:
+  - {ref: arch.bear, weight: 2}
+  - {ref: arch.giant_vermin, weight: 2}
+  - {ref: arch.vermin_swarm, weight: 2}
+  - {ref: arch.reptile, weight: 1}
+  - {ref: arch.monstrous_beast, weight: 1}
+  - {ref: arch.cultist, weight: 2}
+  - {ref: arch.dwarf_holdguard, weight: 1}
+  - {ref: arch.orc, weight: 1}
+  - {ref: arch.goblin, weight: 1}
+  - {ref: arch.troll, weight: 1}
+  - {ref: arch.ghoul, weight: 1}
+  fielded_by_band: {1: 7, 2: 10, 3: 9, 4: 7, 5: 2}
+- theme: site.theme.ravaged
+  domain: site.domain.flooded_cave
+  archetypes:
+  - {ref: arch.bear, weight: 2}
+  - {ref: arch.giant_vermin, weight: 2}
+  - {ref: arch.vermin_swarm, weight: 2}
+  - {ref: arch.reptile, weight: 1}
+  - {ref: arch.monstrous_beast, weight: 1}
+  - {ref: arch.cultist, weight: 2}
+  - {ref: arch.dwarf_holdguard, weight: 1}
+  - {ref: arch.orc, weight: 1}
+  - {ref: arch.goblin, weight: 1}
+  - {ref: arch.troll, weight: 1}
+  - {ref: arch.ghoul, weight: 1}
+  fielded_by_band: {1: 7, 2: 10, 3: 9, 4: 7, 5: 2}
+- theme: site.theme.ravaged
+  domain: site.domain.mine
+  archetypes:
+  - {ref: arch.giant_vermin, weight: 2}
+  - {ref: arch.vermin_swarm, weight: 2}
+  - {ref: arch.monstrous_beast, weight: 1}
+  - {ref: arch.cultist, weight: 2}
+  - {ref: arch.dwarf_holdguard, weight: 1}
+  - {ref: arch.orc, weight: 1}
+  - {ref: arch.goblin, weight: 1}
+  - {ref: arch.troll, weight: 1}
+  - {ref: arch.ghoul, weight: 1}
+  fielded_by_band: {1: 6, 2: 8, 3: 7, 4: 5, 5: 2}
+- theme: site.theme.ravaged
+  domain: site.domain.warren
+  archetypes:
+  - {ref: arch.giant_vermin, weight: 2}
+  - {ref: arch.vermin_swarm, weight: 2}
+  - {ref: arch.monstrous_beast, weight: 1}
+  - {ref: arch.brigand, weight: 2}
+  - {ref: arch.cultist, weight: 2}
+  - {ref: arch.folk_mage, weight: 2}
+  - {ref: arch.dwarf_holdguard, weight: 1}
+  - {ref: arch.orc, weight: 1}
+  - {ref: arch.goblin, weight: 1}
+  - {ref: arch.troll, weight: 1}
+  - {ref: arch.ghoul, weight: 1}
+  - {ref: arch.vampire, weight: 1}
+  fielded_by_band: {1: 8, 2: 10, 3: 10, 4: 7, 5: 4}
+- theme: site.theme.ravaged
+  domain: site.domain.underkeep
+  archetypes:
+  - {ref: arch.giant_vermin, weight: 2}
+  - {ref: arch.vermin_swarm, weight: 2}
+  - {ref: arch.monstrous_beast, weight: 1}
+  - {ref: arch.brigand, weight: 2}
+  - {ref: arch.cultist, weight: 2}
+  - {ref: arch.folk_mage, weight: 2}
+  - {ref: arch.goblin, weight: 1}
+  - {ref: arch.vampire, weight: 1}
+  fielded_by_band: {1: 6, 2: 7, 3: 6, 4: 4, 5: 3}
+- theme: site.theme.ravaged
+  domain: site.domain.temple
+  archetypes:
+  - {ref: arch.giant_vermin, weight: 2}
+  - {ref: arch.vermin_swarm, weight: 2}
+  - {ref: arch.monstrous_beast, weight: 1}
+  - {ref: arch.brigand, weight: 2}
+  - {ref: arch.cultist, weight: 2}
+  - {ref: arch.folk_mage, weight: 2}
+  - {ref: arch.goblin, weight: 1}
+  - {ref: arch.vampire, weight: 1}
+  fielded_by_band: {1: 6, 2: 7, 3: 6, 4: 4, 5: 3}
+- theme: site.theme.ravaged
+  domain: site.domain.stronghold
+  archetypes:
+  - {ref: arch.giant_vermin, weight: 2}
+  - {ref: arch.vermin_swarm, weight: 2}
+  - {ref: arch.monstrous_beast, weight: 1}
+  - {ref: arch.brigand, weight: 2}
+  - {ref: arch.cultist, weight: 2}
+  - {ref: arch.folk_mage, weight: 2}
+  - {ref: arch.goblin, weight: 1}
+  - {ref: arch.vampire, weight: 1}
+  fielded_by_band: {1: 6, 2: 7, 3: 6, 4: 4, 5: 3}
+- theme: site.theme.ravaged
+  domain: site.domain.tower
+  archetypes:
+  - {ref: arch.giant_vermin, weight: 2}
+  - {ref: arch.vermin_swarm, weight: 2}
+  - {ref: arch.monstrous_beast, weight: 1}
+  - {ref: arch.brigand, weight: 2}
+  - {ref: arch.cultist, weight: 2}
+  - {ref: arch.folk_mage, weight: 2}
+  - {ref: arch.goblin, weight: 1}
+  - {ref: arch.vampire, weight: 1}
+  fielded_by_band: {1: 6, 2: 7, 3: 6, 4: 4, 5: 3}
+- theme: site.theme.ravaged
+  domain: site.domain.sewer
+  archetypes:
+  - {ref: arch.giant_vermin, weight: 2}
+  - {ref: arch.vermin_swarm, weight: 2}
+  - {ref: arch.reptile, weight: 1}
+  - {ref: arch.monstrous_beast, weight: 1}
+  - {ref: arch.cultist, weight: 2}
+  - {ref: arch.dwarf_holdguard, weight: 1}
+  - {ref: arch.orc, weight: 1}
+  - {ref: arch.goblin, weight: 1}
+  - {ref: arch.troll, weight: 1}
+  - {ref: arch.ghoul, weight: 1}
+  fielded_by_band: {1: 7, 2: 9, 3: 8, 4: 6, 5: 2}
+- theme: site.theme.ravaged
+  domain: site.domain.tanglewood
+  archetypes:
+  - {ref: arch.wolf, weight: 2}
+  - {ref: arch.great_cat, weight: 2}
+  - {ref: arch.bear, weight: 2}
+  - {ref: arch.herd_beast, weight: 1}
+  - {ref: arch.giant_vermin, weight: 2}
+  - {ref: arch.vermin_swarm, weight: 2}
+  - {ref: arch.monstrous_beast, weight: 1}
+  - {ref: arch.brigand, weight: 2}
+  - {ref: arch.folk_mage, weight: 2}
+  - {ref: arch.elf_warden, weight: 1}
+  - {ref: arch.goblin, weight: 1}
+  - {ref: arch.ogre, weight: 1}
+  - {ref: arch.troll, weight: 1}
+  fielded_by_band: {1: 7, 2: 12, 3: 11, 4: 6, 5: 3}
+- theme: site.theme.ravaged
+  domain: site.domain.fen
+  archetypes:
+  - {ref: arch.herd_beast, weight: 1}
+  - {ref: arch.giant_vermin, weight: 2}
+  - {ref: arch.vermin_swarm, weight: 2}
+  - {ref: arch.reptile, weight: 1}
+  - {ref: arch.monstrous_beast, weight: 1}
+  - {ref: arch.brigand, weight: 2}
+  - {ref: arch.folk_mage, weight: 2}
+  - {ref: arch.goblin, weight: 1}
+  - {ref: arch.lizardfolk, weight: 1}
+  - {ref: arch.troll, weight: 1}
+  fielded_by_band: {1: 8, 2: 9, 3: 8, 4: 4, 5: 3}
+- theme: site.theme.ravaged
+  domain: site.domain.icereach
+  archetypes:
+  - {ref: arch.wolf, weight: 2}
+  - {ref: arch.great_cat, weight: 2}
+  - {ref: arch.bear, weight: 2}
+  - {ref: arch.monstrous_beast, weight: 1}
+  - {ref: arch.orc, weight: 1}
+  - {ref: arch.goblin, weight: 1}
+  - {ref: arch.troll, weight: 1}
+  - {ref: arch.giant, weight: 1}
+  - {ref: arch.wight, weight: 1}
+  fielded_by_band: {1: 3, 2: 7, 3: 7, 4: 6, 5: 3}
+- theme: site.theme.wild
+  domain: site.domain.barrow
+  archetypes:
+  - {ref: arch.giant_vermin, weight: 1}
+  - {ref: arch.vermin_swarm, weight: 1}
+  - {ref: arch.monstrous_beast, weight: 1}
+  fielded_by_band: {1: 2, 2: 3, 3: 2, 4: 1, 5: 1}
+- theme: site.theme.wild
+  domain: site.domain.crypt
+  archetypes:
+  - {ref: arch.giant_vermin, weight: 1}
+  - {ref: arch.vermin_swarm, weight: 1}
+  - {ref: arch.monstrous_beast, weight: 1}
+  fielded_by_band: {1: 2, 2: 3, 3: 2, 4: 1, 5: 1}
+- theme: site.theme.wild
+  domain: site.domain.cavern
+  archetypes:
+  - {ref: arch.bear, weight: 3}
+  - {ref: arch.giant_vermin, weight: 1}
+  - {ref: arch.vermin_swarm, weight: 1}
+  - {ref: arch.reptile, weight: 1}
+  - {ref: arch.monstrous_beast, weight: 1}
+  - {ref: arch.monstrous_plant, weight: 2}
+  fielded_by_band: {1: 4, 2: 6, 3: 5, 4: 4, 5: 2}
+- theme: site.theme.wild
+  domain: site.domain.flooded_cave
+  archetypes:
+  - {ref: arch.bear, weight: 3}
+  - {ref: arch.giant_vermin, weight: 1}
+  - {ref: arch.vermin_swarm, weight: 1}
+  - {ref: arch.reptile, weight: 1}
+  - {ref: arch.monstrous_beast, weight: 1}
+  - {ref: arch.monstrous_plant, weight: 2}
+  fielded_by_band: {1: 4, 2: 6, 3: 5, 4: 4, 5: 2}
+- theme: site.theme.wild
+  domain: site.domain.mine
+  archetypes:
+  - {ref: arch.giant_vermin, weight: 1}
+  - {ref: arch.vermin_swarm, weight: 1}
+  - {ref: arch.monstrous_beast, weight: 1}
+  - {ref: arch.monstrous_plant, weight: 2}
+  fielded_by_band: {1: 3, 2: 4, 3: 3, 4: 2, 5: 2}
+- theme: site.theme.wild
+  domain: site.domain.warren
+  archetypes:
+  - {ref: arch.giant_vermin, weight: 1}
+  - {ref: arch.vermin_swarm, weight: 1}
+  - {ref: arch.monstrous_beast, weight: 1}
+  - {ref: arch.monstrous_plant, weight: 2}
+  fielded_by_band: {1: 3, 2: 4, 3: 3, 4: 2, 5: 2}
+- theme: site.theme.wild
+  domain: site.domain.underkeep
+  archetypes:
+  - {ref: arch.giant_vermin, weight: 1}
+  - {ref: arch.vermin_swarm, weight: 1}
+  - {ref: arch.monstrous_beast, weight: 1}
+  fielded_by_band: {1: 2, 2: 3, 3: 2, 4: 1, 5: 1}
+- theme: site.theme.wild
+  domain: site.domain.temple
+  archetypes:
+  - {ref: arch.giant_vermin, weight: 1}
+  - {ref: arch.vermin_swarm, weight: 1}
+  - {ref: arch.monstrous_beast, weight: 1}
+  fielded_by_band: {1: 2, 2: 3, 3: 2, 4: 1, 5: 1}
+- theme: site.theme.wild
+  domain: site.domain.stronghold
+  archetypes:
+  - {ref: arch.giant_vermin, weight: 1}
+  - {ref: arch.vermin_swarm, weight: 1}
+  - {ref: arch.monstrous_beast, weight: 1}
+  fielded_by_band: {1: 2, 2: 3, 3: 2, 4: 1, 5: 1}
+- theme: site.theme.wild
+  domain: site.domain.tower
+  archetypes:
+  - {ref: arch.giant_vermin, weight: 1}
+  - {ref: arch.vermin_swarm, weight: 1}
+  - {ref: arch.monstrous_beast, weight: 1}
+  fielded_by_band: {1: 2, 2: 3, 3: 2, 4: 1, 5: 1}
+- theme: site.theme.wild
+  domain: site.domain.sewer
+  archetypes:
+  - {ref: arch.giant_vermin, weight: 1}
+  - {ref: arch.vermin_swarm, weight: 1}
+  - {ref: arch.reptile, weight: 1}
+  - {ref: arch.monstrous_beast, weight: 1}
+  - {ref: arch.monstrous_plant, weight: 2}
+  fielded_by_band: {1: 4, 2: 5, 3: 4, 4: 3, 5: 2}
+- theme: site.theme.wild
+  domain: site.domain.tanglewood
+  archetypes:
+  - {ref: arch.wolf, weight: 3}
+  - {ref: arch.great_cat, weight: 3}
+  - {ref: arch.bear, weight: 3}
+  - {ref: arch.herd_beast, weight: 1}
+  - {ref: arch.giant_vermin, weight: 1}
+  - {ref: arch.vermin_swarm, weight: 1}
+  - {ref: arch.monstrous_beast, weight: 1}
+  - {ref: arch.fey_noble, weight: 2}
+  - {ref: arch.wild_fey, weight: 2}
+  - {ref: arch.hag, weight: 2}
+  - {ref: arch.place_spirit, weight: 1}
+  - {ref: arch.monstrous_plant, weight: 2}
+  fielded_by_band: {1: 6, 2: 11, 3: 11, 4: 6, 5: 4}
+- theme: site.theme.wild
+  domain: site.domain.fen
+  archetypes:
+  - {ref: arch.herd_beast, weight: 1}
+  - {ref: arch.giant_vermin, weight: 1}
+  - {ref: arch.vermin_swarm, weight: 1}
+  - {ref: arch.reptile, weight: 1}
+  - {ref: arch.monstrous_beast, weight: 1}
+  - {ref: arch.wild_fey, weight: 2}
+  - {ref: arch.hag, weight: 2}
+  - {ref: arch.monstrous_plant, weight: 2}
+  fielded_by_band: {1: 6, 2: 8, 3: 7, 4: 4, 5: 2}
+- theme: site.theme.wild
+  domain: site.domain.icereach
+  archetypes:
+  - {ref: arch.wolf, weight: 3}
+  - {ref: arch.great_cat, weight: 3}
+  - {ref: arch.bear, weight: 3}
+  - {ref: arch.monstrous_beast, weight: 1}
+  - {ref: arch.place_spirit, weight: 1}
+  fielded_by_band: {1: 1, 2: 5, 3: 5, 4: 3, 5: 2}
 blocks: []

@@ -6,7 +6,7 @@ CREATION_BLOCK = """creation_defaults:          # what the fast path uses when t
   typical_rule: true                 # a non-human people defaults to its Typical rule
   typical_rule_except: {when: "the livelihood is a magic livelihood (02.5.5) and the people's Typical rule fixes its casting attribute (05.7.2) at -1", then: free_rule, rule: "02.3.5", basis: [I-009, DL-02-25]}   # the fast path never makes a caster who cannot cast
   birth_circumstance: unremarked
-  second_tongue: lic.lang.dwarvish   # ch.13 overrides with its region's commonest second tongue
+  second_tongue: lic.lang.dwarvish   # the region's seed (12.16.7) overrides with its commonest second tongue
   learning_pick_order: [lic.lang.letters, "raise lic.lang.common one grade (if below native)", "the second tongue at accented", lic.lang.old_tongue]
   human_extra_training: "the first tag on the livelihood's list that no pick has taken"
   kit_choice: first_option

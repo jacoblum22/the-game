@@ -49,13 +49,27 @@ Expected supply a watch: licensed forager (+4) 2.05 / 1.35 / 0.85 / 0.30; unlice
 
 ## Generators (data/*.yaml for chapter 10)
 - `10-gen10_hazards.py` → `data/hazards.yaml` (47 entries; validates tags, afflictions, ≥ 2 signs each).
-- `10-gen10_sites.py` → `data/sites.yaml` (8 themes, 14 domains; validates tags, archetypes, hazards; lists
-  the 20 theme × domain pairs whose terrain-filtered denizen gate holds fewer than 3 archetypes, which use the
-  theme gate alone).
+- `10-gen10_sites.py` → `data/sites.yaml` (8 themes, 14 domains; validates tags, archetypes, hazards; emits
+  `denizen_pools`, one per theme × domain pair, and fails if any pair gates fewer than 3 archetypes — 20 did
+  before revision B widened archetype terrains, 0 now; I-022).
 - `10-gen10_traps.py` → `data/traps.yaml` (20 traps; validates tags and afflictions; asserts no subtle
   telltale where harm is S3+).
-- `10-gen10_travel.py` → `data/travel.yaml` (validates every tag and archetype; audits all 11 generic
-  encounter tables at exactly 6 / 11 / 3 of 20 = 30 / 55 / 15 by relative band; 63 archetype sign sets; 34
-  activities).
+- `10-gen10_travel.py` → `data/travel.yaml` (validates every tag and archetype, and that each threat
+  archetype lives in its table's terrain; reads the generic encounter tables from `10_data_enc.py` — 11
+  terrains × 5 home bands — and checks each at exactly 6 / 11 / 3 of 20 = 30 / 55 / 15 by relative band; 63
+  archetype sign sets; 34 activities). `python 10_data_enc.py` renders T-10-16.
+
+## 10-word-audit.py — PR-10-8 on the generic encounter tables (I-027, I-029)
+Every generic table at every home band, fielded with 09's PR-09-1 code, the word with the counter held
+(no-counter word printed beside it). Revision B (I-029): 55 of 55 pass (the first draft: 7 of 55, 139
+failures). No lethal face at the middle or high count; at least 14 of 20 faces fair or easier in each table;
+word mix trivial 35.7 / easy 21.5 / fair 34.5 / hard 8.2 / lethal 0 %; repeat chance (two threat faces in a
+row naming the same archetype) mean 0.156, max 0.195. Output `10-word-audit-output.txt`; deterministic.
+
+## 10_table_builder.py and 10-site-tables.py — PR-10-10 (I-022, I-028)
+`10_table_builder.py` is PR-10-10's reference code (imported by `10-site-tables.py` and `12-world-seed.py`).
+`10-site-tables.py` (seed 1022) builds the threat table of every site theme × domain pair at every band from
+`sites.yaml#denizen_pools`: 560 of 560 pass PR-10-8; 4,456 of 4,480 slots from the pair pool, 24 from the
+theme gate alone, 0 by nearest band. Output `10-site-tables-output.txt`.
 - `data/weather.yaml` is hand-written; its validation (14 states, 20 regimes of 12, every link a state) is in
   the chapter author's log.

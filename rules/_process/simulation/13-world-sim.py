@@ -78,7 +78,7 @@ def _snap(week, facs):
 G = {"__name__": "world11_for_13", "_build_13": _build_13, "_snap": _snap}
 sys.argv = [sys.argv[0]] + [a for a in sys.argv[1:] if a.isdigit()]  # 11's module code reads argv[1] as its seed count
 exec(compile(src, "11-world-sim.py (run verbatim, factions substituted)", "exec"), G)
-G["AGENDA"]["steadfast"] = {1: "recover", 2: "goal", 3: "strike", 4: "goal", 5: "goal", 6: "goal"}
+# 11-world-sim.py now carries 11.3.7's steadfast row itself, aid_pc included [revision: I-032]
 run, q = G["run"], G["q"]
 
 print("rule cap (11.3.4): native in 11-world-sim.py (integration, I-026)%s" % ("; --rule-cap given (no-op)" if RULE_CAP else ""))

@@ -18,7 +18,7 @@
 > go anywhere and try anything; the world answers from its own data.
 
 **Reading this chapter.** Rules 10.1–10.15 are the binding text; each is a self-contained card
-(SG-26). Procedures PR-10-1…PR-10-9 are the algorithms. Tables T-10-1…T-10-24 summarize the data in
+(SG-26). Procedures PR-10-1…PR-10-10 are the algorithms. Tables T-10-1…T-10-25 summarize the data in
 `data/travel.yaml`, `data/weather.yaml`, `data/hazards.yaml`, `data/sites.yaml` and `data/traps.yaml`,
 which are canonical for every number and id (00.1.4 line 5). Worked examples WE-10-1…WE-10-6 follow
 **Wren** (00's example character: Might +1, Agility +3, Endurance +1, Wits +2, Intellect 0, Presence 0,
@@ -116,8 +116,9 @@ closed list, T-10-1) fixes what rules load there:
 belongs to exactly one parent; an area's region gives it its home band and danger rating unless the area
 overrides them.
 
-**10.1.2 The place record.** `[D]` Chapter 10 extends 00.6.2's `Place` with these fields (all data; 13
-authors them for the starter region; generated places get them from the generator that made them):
+**10.1.2 The place record.** `[D]` Chapter 10 extends 00.6.2's `Place` with these fields (all data; the world seed
+writes them for the starting region, 12.16.8, and a pre-made setting such as 13 authors its own; generated
+places get them from the generator that made them) [revision: I-028]:
 
 ```yaml
 Place (extends 00.6.2 Place):
@@ -135,7 +136,7 @@ Place (extends 00.6.2 Place):
   landmarks: [place_id]       # visible landmarks (10.4.4)
   water_source: bool|null     # a spring, river or well a traveler can drink from (10.6.2)
   grazing: bool|null          # mounts may graze here in season (10.8.3)
-  encounter_table: tbl_id     # 13's regional table, else the generic terrain table (10.10.1)
+  encounter_table: tbl_id     # the region's table (12.16.13), else the generic terrain table (10.10.1)
   hazards: [{hazard_id, where, active_when}]   # standing hazards of the place (10.12)
   resonance: [tag]            # deed keys, branches or conduct axes (04 V11; 05.6.9)
   settlement_scope: place_id|null   # the nearest settlement ancestor or patron settlement (03.10 scope)
@@ -148,8 +149,8 @@ Place (extends 00.6.2 Place):
 Facts a place may carry, read by other chapters: `desecrated`, `consecrated`, `dead_ground` (05.7.2; dead
 ground is the fact that makes primal workings G4 there), `haunted` (a dread source, 07.11.2),
 `weather.today` and `weather.tomorrow` (10.11; 05.7.3 reads the first), `light` (10.7.2), `roused` (a
-site, 10.13.9), and the starter region's two setting facts `hushed` and `true_bell` (13.2; read only through
-the region's hazards and the Waking rule) [integration: IR ch.13]. Each is written with `set_fact` and never
+site, 10.13.9), and a pre-made setting's own facts (chapter 13's Thallen Vale adds `hushed` and `true_bell`, 13.2, read only
+through that region's hazards and the Waking rule) [integration: IR ch.13; revision: I-028]. Each is written with `set_fact` and never
 implied by narration alone.
 
 **10.1.3 The route link.** `[D]` A link (00.6.2: `{to, route, travel_watches}`) carries:
@@ -223,13 +224,13 @@ the rumor still sealed (11).
 
 **10.1.6 The settlement scope.** `[D]` Every area and site carries `settlement_scope`: the place id of the
 settlement whose people would hear of what is done there (the nearest settlement by route watches, or the
-one 13 names as the area's market). Chapter 03's witness scopes (03.10) and chapter 11's reputation read
+one the region's seed or setting names as the area's market). Chapter 03's witness scopes (03.10) and chapter 11's reputation read
 it. A settlement's own scope is itself. Areas with no settlement within 8 travel watches carry `null`:
 deeds done there carry only to witnesses' own scopes.
 
 **10.1.7 Places of power.** `[D]` `resonance: [tag]` on a place names the deed keys, branches or conduct
 axes it answers (04's V11 *The Place Answers*; 05.6.9's resonant rest: +1 Focus on a breather or short
-rest when a held calling or ability matches). Resonance is data (13) or a written result of a rite
+rest when a held calling or ability matches). Resonance is data (the region's seed, 12.16.9, 12.16.12) or a written result of a rite
 (`rit.consecrate_ground`, 05). `consecrated`, `desecrated` and `dead_ground` are facts with sources;
 T-10-24 (`data/hazards.yaml#zones`) lists the magical-zone hazards that go with them (a desecrated
 place's dread, dead ground's silence of primal workings).
@@ -279,14 +280,15 @@ a written world change (a faction takes it; a situation's default timeline burns
 narration. Danger may still enter a haven through chapter 11 (a World Turn event, a bang), chapter 12's
 pushes, or a clock — never through this chapter's die.
 
-**10.2.4 The West Marches shape.** `[N]` The starter region (13) is laid out as a haven at the center and
+**10.2.4 The West Marches shape.** `[N]` A starting region (the world seed's, 12.16.8, or a pre-made one) is laid
+out as a haven at the center and
 **concentric danger rings** (R6 B-15, B-R7): the farther from the base, the higher an area's home band and
 danger rating, so distance is the difficulty dial in a game with no character levels (C:P2). This chapter
 gives the dial its meaning: band (how strong what lives there is, 09.8.2) and danger rating (how often it
 comes, 10.9.2) are separate fields, and both are shown to the player before a journey (10.3.4) as words,
 never numbers. T-10-2 is the reference ring layout 13 should start from.
 
-**T-10-2 Reference danger rings** (`data/travel.yaml#rings`; 13 may alter any ring with a DL entry).
+**T-10-2 Reference danger rings** (`data/travel.yaml#rings`; the world seed uses them as given, 12.16.8; a pre-made setting may alter a ring with a DL entry).
 
 | Ring | Typical distance from the haven | Home band | Danger rating | In words to the player |
 |---|---|---|---|---|
@@ -318,7 +320,7 @@ path is reached by a **trackless** leg across the area toward it (10.4). The pla
 `{journey_id, legs, pace, schedule, roles, started_at, progress_points}` written at departure.
 
 **10.3.2 Length and pace.** `[D]` A route's length is its `travel_watches` (W): watches at **normal**
-walking pace in fair weather, unburdened, with terrain already folded in by the author (13 writes "3" for
+walking pace in fair weather, unburdened, with terrain already folded in by the author (a region writes "3" for
 a day and a half over the moor). The engine converts it to **progress points**: a leg needs **6 × W**
 points, and each travel watch earns points by the party's **effective pace** on the pace ladder
 (`travel.yaml#pace`):
@@ -523,7 +525,7 @@ critical failure): a trained navigator at +4 is off course 10% at Easy, 35% at M
 fallback (+3 against DC +5) is off course 40% at Easy and 65% at Moderate — which is why taking the time
 (half points, no roll) and the long way by road exist: patience and the beaten way are open to everyone.
 
-**10.4.3 The area's navigation tier is stored.** `[D]` Every area carries `nav_tier` (13 writes it; a
+**10.4.3 The area's navigation tier is stored.** `[D]` Every area carries `nav_tier` (the region's seed writes it, 12.16.8; a
 generated area takes T-10-12's default for its primary terrain). It is the obstacle's stored DC for every
 way-finding beat in that area (00.3.8 source 1) and is never re-rated in play; weather, night and pace
 are snags and levers on the roll, never tier changes (DL-00A-10).
@@ -534,7 +536,7 @@ area (or a river or road in it) visible now?"* True only when the area's `landma
 AND visibility allows it: daylight and no fog, blizzard or storm for a distant landmark (a peak, a tower);
 any light for a near one (a stream walked beside); the sun itself counts under a `clear` or `fair` sky in
 an `open` or `broken` area. False in `closed` areas without a stream (deepwood canopy, jungle, swamp,
-caves), in fog, and at night without stars or light. Uncertain → false. *Worst case:* a fallback allowed
+caves), in fog, and at night without stars or light. Uncertain → false. *Worst case (J):* a fallback allowed
 without a visible landmark — the roll is still made at +5 and Limited (class i).
 
 **10.4.5 When no way-finding is possible.** `[D]` With no license and no usable landmark, way-finding is G3
@@ -607,7 +609,7 @@ role was being performed when it came. An ally keeps at most two watches a day i
 16.8.3); a third falls under 07.8.10's `watches_awake` [integration: IR ch.16 to 10 (b)].
 
 **10.5.3 Roles from licenses.** `[D]` A license whose scope covers a journey task gives the role at the pace
-it names (none in the core pool do; 05 and 13 may add one, such as a ranger's "forage at normal pace").
+it names (none in the core pool do; 05 or a pre-made setting may add one, such as a ranger's "forage at normal pace").
 Roles never add actions, and no one holds two roles in one watch (one watch, one activity).
 
 ### 10.6 Supply, want, foraging and hunting
@@ -760,7 +762,7 @@ snow lying or frozen terrain (normal pace there; G4 elsewhere). Barding and war 
 one step slower (08.10.1).
 
 **10.8.2 Feeding mounts.** `[D]` A mount eats **1 supply a day** (10.6.2) unless it **grazes**: the camp
-watch (default evening) was spent where `grazing` holds — the area's fact (13), defaulting to true in
+watch (default evening) was spent where `grazing` holds — the area's fact (its region's data), defaulting to true in
 `terrain.plains.*`, `terrain.highland.hills` and `terrain.forest.woodland` from spring to autumn, false
 otherwise and always in winter. A mount left unfed takes the want rule (one `cond.exhausted` stack; 16/07).
 Mounts drink where people drink; in arid country they need the extra water too.
@@ -794,7 +796,7 @@ The DM never rolls the die, never chooses a face, and narrates only what the fac
 
 **10.9.2 Danger ratings.** `[J:rung]` + `[D]` Every region, area, site and route link carries a **danger
 rating** (`danger`), a five-rung ladder of *how often* the place's dangers come (its *band* says how strong
-they are). Data holds it for authored places (13); the DM picks it only for a generated place without one:
+they are). Data holds it for authored places (the region's seed, 12.16.8); the DM picks it only for a generated place without one:
 
 ```
 ### 10.9.2  Danger rating                                          [J:rung] [D]
@@ -849,7 +851,7 @@ Torchbearer insight that time in a dungeon is measured in what you do [R5 P-13, 
 - **O · Omen.** If a threat is pending, its second sign shows and it **arrives** (it was close). Otherwise
   roll the encounter table: a threat row becomes pending and shows its first omen; a non-threat row shows a
   sign of travelers ahead (it arrives at the next E face, or the party may seek it).
-- **V · Local event.** `roll_table(tbl.<region>.events)` if 13 provides one, else 12's
+- **V · Local event.** `roll_table(tbl.<region>.events)` if the region provides one, else 12's
   `roll_table(tbl.event_focus, {phase})` (12.6.5 source d): the world acting on its own, bounded by 12.6.5
   (never harms, never costs).
 - **D · Depletion.** `roll_table(tbl.10.depletion)` (d6): 1–2 one supply spoils or is spilled (−1; if none
@@ -926,7 +928,7 @@ without an omen first.** Concretely:
 2. A threat row drawn by any face becomes a **pending threat** (`enc.pending`, sealed; one at a time per
    party): `{id, row, adversary refs, count, sign_stage: 1, checks_since: 0, created_at, place}`. Its first
    sign is narrated at once: an omen drawn from the row's archetype `signs` (`travel.yaml#archetype_signs`;
-   13's regional signs override), never naming the creature, always perceivable (tracks, spoor, a sound,
+   a region's own signs override), never naming the creature, always perceivable (tracks, spoor, a sound,
    a smell, the silence of birds, a dead traveler, smoke on the ridge).
 3. It **arrives** at the first of: the next **E** face; the next **O** face (whose result is then its
    second, nearer sign in the same breath as its arrival); or the **fourth check after** its creation,
@@ -955,7 +957,7 @@ and the blow.
 | **Ignore** | do nothing | it arrives on its schedule |
 
 `[J:enum]` *Which answer is the player's beat?* Classified from the declaration; uncertain → Investigate
-(the safest reading: it changes nothing until the player commits). *Worst case:* an avoidance read as
+(the safest reading: it changes nothing until the player commits). *Worst case (J):* an avoidance read as
 preparation leaves the threat on schedule — the player sees the result line and may still act (class ii).
 
 **10.9.7 Reading the pacing phase (opt-in).** `[D]` Chapter 10 opts in to 12's pacing director (12's
@@ -981,17 +983,21 @@ a face, a clock fill); that nothing will come of an omen.
 ### 10.10 Encounters: tables, distance, awareness, reaction
 
 **10.10.1 The encounter table format.** `[D]` Encounters belong to places (09.8.2). Every area, route link
-and site points at an **encounter table** (`encounter_table`): chapter 13's regional tables, or this
-chapter's **generic terrain tables** (`travel.yaml#encounter_tables`, one per terrain branch, d12) for any
-place 13 did not cover. Every row is a record:
+and site points at an **encounter table** (`encounter_table`): its region's tables (written by the world seed,
+12.16, with PR-10-10, or supplied by an optional pre-made setting such as chapter 13), a site's own table
+(10.13.13), or this chapter's **generic terrain tables** (`travel.yaml#encounter_tables`, one per terrain
+branch, with a threat sub-table for each home band 1–5) for any place nothing else covers
+[revision: I-028, I-029]. Every row is a record:
 
 ```yaml
 EncounterRow:
   range: str                # die faces, e.g. "1-2"
   kind: enum                # adversary | people | beasts | sign_only | situation
   ref: [arch.* | adv.* | npc_template | situation_seed]   # 09's archetype groups or bestiary ids
-  band: enum|int            # "home" | "home-1" | "home+1" | a fixed band 1..5 (13's tables)
+  band: enum|int            # "home" | "home-1" | "home+1" | a fixed band 1..5 (a regional table may fix it)
   count: str                # "1", "2-4", "group" (the archetype's encounter.group, 09.8.3)
+  variant: enum             # minion | standard | elite | solo (09.4.6); default standard [revision: I-029]
+  leader: bool              # an elite of the same archetype and band heads the row's group; default false
   threat: bool              # 10.9.5
   ambush: bool              # 10.9.5 item 5
   complication: bool        # roll tbl.09.complication on arrival (09.8.5)
@@ -1000,23 +1006,35 @@ EncounterRow:
   signs: [str] | null       # row-specific omen signs (else the archetype's)
 ```
 
-**Two sub-tables.** The generic tables, and every regional table 13 writes in the same shape, are split into a
-**threat** sub-table (d20, rows by relative band: 6 faces' worth at home − 1, 11 at home, 3 at home + 1 — exactly
-09.8.2's 30/55/15) and a **non-threat** sub-table (d6). An E or O face with nothing pending first rolls d12 against
+**Two sub-tables.** The generic tables, and every regional table written in the same shape (a world seed's,
+12.16, or a pre-made setting's), are split into a **threat** sub-table (d20, rows by relative band: 6 faces'
+worth at home − 1, 11 at home, 3 at home + 1 — exactly 09.8.2's 30/55/15) and a **non-threat** sub-table (d6).
+A generic table holds one threat sub-table per home band (`threat_by_home`): the engine rolls the one for the
+place's home band. Its rows are written at bands their archetypes are fielded at, so no row is clamped: at home
+band 1 the home − 1 faces field band-1 creatures (there is no band 0) and are written small; at home band 5
+the home + 1 faces field band-5 **solos** (09.8.2's top ring) [revision: I-029]. An E or O face with nothing pending first rolls d12 against
 the place's danger rating — threat on **1–3** settled, **1–7** wild, **1–9** perilous, **1–10** deadly (25 / 58 / 75 /
 83%, the shares `sim10_travel.py` assumed) — and then rolls the chosen sub-table (`travel.yaml#watch_check.threat_share_d12`).
 So the same terrain table serves every ring, and the mixture rule of 10.10.2 item 4 holds by construction.
 
-The engine fields a row as 09.8.3 does: it resolves `band` against the place's home band (clamped to the
-archetype's fielded bands, `archetypes.yaml#bands`; an archetype that cannot be fielded at the band re-rolls
-the row once, then takes the nearest band it has), picks the bestiary entry of that archetype at that band
-(`adversaries.yaml`), rolls the count (`tbl.09.group_shape`), folds four or more of one template into a
-**mob** (06.10.2), and adds a leader when the group lists one.
+The engine fields a row as 09.8.3 does: it resolves `band` against the place's home band (a table that
+passed PR-10-8 never names an archetype outside its fielded bands, `archetypes.yaml#bands`; should an
+unaudited table do so, the row re-rolls once, then takes the nearest band the archetype has), picks the
+bestiary entry of that archetype, band and variant (`adversaries.yaml`; else builds it by PR-09-1), rolls the
+count (`tbl.09.group_shape`), folds four or more of one template into a **mob** of minions (06.10.2), and adds
+a leader when the row or the group lists one.
 
-**10.10.2 The table budget (09's contract).** `[D]` Every encounter table, generic or regional, must pass
-the audit PR-10-8 before use (13 runs it on its tables). The generic tables meet items 1, 4 and 5 by construction.
-Item 3 is checked on them at every home band 1–5, with item 2's shapes applied, by
-`_process/simulation/10-word-audit.py`; at integration 48 of their 55 table-and-home-band cases failed item 3, which is open as issue I-029 [integration: I-027]:
+**10.10.2 The table budget (09's contract).** `[D]` Every encounter table, generic, regional or a site's,
+must pass the audit PR-10-8 before use. A table built by PR-10-10 (a world seed's regional tables, a site's
+denizen table) passes it by construction; a hand-written table (the generic ones, a pre-made setting's) is
+audited. The generic tables are audited at every home band 1–5 by `_process/simulation/10-word-audit.py`:
+all 55 terrain-and-home-band tables pass every item, with no lethal face (mid or high), at least 14 of 20
+threat faces fair or easier in each, and a word mix over all of them of trivial 35.7 / easy 21.5 / fair
+34.5 / hard 8.2 / lethal 0 %. (The first, band-relative draft failed item 3 in 48 of 55 cases: one row such
+as "orcs, home band, their usual group" was fair at one home band and lethal at another, and archetypes
+clamped to their fielded bands overshot; I-029 replaced it with one sub-table per home band.) The repeat
+chance — two threat faces in a row naming the same archetype — is at most 0.195 per table (mean 0.156;
+the first draft's mean 0.176) [integration: I-027; revision: I-029]:
 1. **Bands**: among threat rows, by weight, about **30% at home − 1, 55% at home, 15% at home + 1**; no row
    above home + 1 — anything stronger is a **lair**, a place with a known occupant reachable only by going
    there, signposted by rumor and omen (09.8.2).
@@ -1266,7 +1284,7 @@ effect DC by the rung; the rating stored on the source). This chapter adds only 
 choice: `[J:enum]` *exposure* (it harms once, on contact: a falling beam), *round* (it keeps harming in a
 fight: a burning floor), *interval* (it harms while one stays in it in a site: smoke in a corridor),
 *watch* (it harms while one travels or camps in it: a hot wind). Uncertain → the shorter cadence (the
-player can leave sooner). *Worst case:* one cadence step too long — one extra exposure before the player
+player can leave sooner). *Worst case (J):* one cadence step too long — one extra exposure before the player
 can act, never lethal without a warning on record (class i).
 
 **10.12.10 Aftermath.** `[D]` When a hazard puts a PC **Down** (07.2.9), the entry's `aftermath` says where
@@ -1348,7 +1366,7 @@ gates everything found inside, so 8 themes × 14 domains give 112 kinds of site 
 | fortified | held and defended by those within | wild | folk (soldiers, brigands, orcs, goblins), beast (war-hounds) | — |
 | hallowed | holy, or once holy, guarded by its faith | settled | spirit.celestial, spirit.ancestor, construct, folk (wardens) | `consecrated`; `resonance` the keeper's axes |
 | haunted | the dead do not rest here | perilous | undead.spectral, undead, spirit.ancestor | `haunted` |
-| infested | overrun by creatures that breed | wild | beast.vermin, beast.predator, horror (ooze, fungal), folk.goblin | — |
+| infested | overrun by creatures that breed | wild | beast.vermin, beast.predator, beast.monstrous, horror (ooze, fungal), folk.goblin | — |
 | ravaged | broken by war, fire or disaster | wild | beast (scavengers), folk (looters), undead.ravenous | — |
 | wild | taken back by nature and the primal world | wild | beast, spirit.fey, spirit.place, horror.plant | `resonance` primal |
 
@@ -1373,9 +1391,9 @@ Each card holds (`sites.yaml`): `terrain_tags`, `creature_gate_tags` and `creatu
 denizens live there), `loot_gate_tags` (08.3.4 item 4: the place axis of the loot pool gate), `features`
 (d12, the look of an area), `dangers` (d12, what a danger result becomes), `discoveries` (d6),
 `shift` (d6, the H face), `hazards` and `traps` (weighted lists), `climax` (d6, what guards the heart;
-themes), the danger clock's `omens` (themes), `regrowth` (themes), and the place facts above. Chapter 13
-may add regional cards in the owner-block and must set any site's theme, domain, band and size it places
-by hand; a site generated in play takes them from the region's site tables (`tbl.<region>.sites`, else
+themes), the danger clock's `omens` (themes), `regrowth` (themes), and the place facts above. A region places
+sites with their theme, domain, band and size (the world seed by PR-10-6, 12.16.12; a pre-made setting by
+hand, and it may add regional cards in the owner-block); a site generated in play takes them from the region's site tables (`tbl.<region>.sites`, else
 `sites.yaml#site_generation`).
 
 **10.13.3 The site record.** `[D]`
@@ -1390,7 +1408,7 @@ SiteRecord:
   explore_tier: easy | moderate | hard | very_hard   # domain's, +1 rung at band 4-5; stored (00.3.8)
   progress_clock: clk.*      # "The heart of <site>", public (10.13.8)
   danger_clock: clk.*        # "<site> wakes", sensed (10.13.8)
-  objective: {kind, ref, sealed: bool}   # 10.13.10; authored by 13 or rolled from the theme's climax
+  objective: {kind, ref, sealed: bool}   # 10.13.10; authored by a region or rolled from the theme's climax
   areas: [place_id]          # every area generated, in order
   frontier: place_id         # the deepest area reached on the main way
   path: [place_id]           # the known way from the entrance to the frontier
@@ -1548,7 +1566,7 @@ danger clock (PR-00-3 step 3; 07.3.3 `clock` row) — the place's waking can kil
 before it does.
 
 **10.13.10 The heart.** `[D]` When the progress clock completes, the next area generated is **the heart**:
-the objective the site holds. It is authored by 13 for placed sites, or rolled once at the site's creation
+the objective the site holds. It is set by the region for placed sites (12.16.12), or rolled once at the site's creation
 from the theme's `climax` (d6) and sealed until reached. Objective kinds (closed): **hoard** (08.3.12's hoard
 at the site band, the place as its source: its domain terrain tags and its theme's loot tags gate the pool,
 08.3.4 item 4; circumstance `decisive` if its keeper was defeated by the PC, else `scavenged` with the search
@@ -1559,7 +1577,7 @@ objective behind it); **rite in progress** (a cultist rite or a waking: a countd
 05's rite as its content); **the lost** (a captive, a body, a relic someone wants, a thread's object, 11);
 **a place of power** (a spring, an altar, a tree: `resonance` written; 04's V11 and 05's resonant rest read
 it; a cleansing or consecration may be done here); **a way through** (the site was a pass: the far exit opens
-a route link). A site may hold several objectives (13); the progress clock leads to the first, and a further
+a route link). A site may hold several objectives (a region may give them); the progress clock leads to the first, and a further
 objective is a new progress clock of the site's size − 2 (minimum 4), linked from the first.
 
 **10.13.11 Retreat, rest and return.** `[D]` *Anchor: yes (retreat).*
@@ -1591,11 +1609,14 @@ is written `cleared` (11 may give it to a faction, a squatter or a new occupant 
 narration). A PC may make a cleared site a holding through 11.
 
 **10.13.13 Who lives there: the site's denizen table.** `[D]` A site's encounter table is built once, at
-creation (PR-10-6), and stored on the record: the archetypes whose `creature_tags` match the theme's
-`creature_gate_tags` (00.5.4c) and whose `encounter.terrain` includes one of the domain's terrain tags
-(or an ancestor), weighted by the theme's `creature_weights`, fielded at the site's band by 10.10.1–10.10.2
-(home band = the site band; 30/55/15 across band − 1 / band / band + 1; crowds as mobs). Thirteen's
-authored sites may give their own table. This is constitution P5's pool gate applied to where creatures
+creation (PR-10-6), and stored on the record. Its pool is the pair's **denizen pool**
+(`sites.yaml#denizen_pools`, one per theme × domain pair, each of at least three archetypes): the archetypes
+whose `creature_tags` match the theme's `creature_gate_tags` (00.5.4c) and whose `encounter.terrain` includes
+one of the domain's terrain tags (or an ancestor), weighted by the theme's `creature_weights`. PR-10-10 builds
+the threat sub-table from that pool at the site's band (home band = the site band; 30/55/15 across band − 1 /
+band / band + 1), with the theme gate alone as its fallback, so the table passes 10.10.2 by construction
+[revision: I-022]. An authored site (a world seed's, or a pre-made setting's) may give its own table, which
+PR-10-8 then audits. This is constitution P5's pool gate applied to where creatures
 live: the theme × domain pair is what fundamentally characterizes the place, so it gates what is met, what
 is found and what can be harvested — the same pair gates the place-gated loot (08.3.4 item 4) and the
 hoard (08.3.12) [C:P5; R2 #13; R5 P-28].
@@ -1628,7 +1649,7 @@ Trap:
   aftermath: str|null
 ```
 
-**10.14.2 Where traps are.** `[D]` Traps are placed by 13 in authored sites, by the area-contents roll
+**10.14.2 Where traps are.** `[D]` Traps are placed by a pre-made setting in authored sites, by the area-contents roll
 (10.13.7 result 7), by a theme danger, or by a denizen's behavior list (a goblin warren's snares). A trap's
 exact position and nature are **sealed** (00.6.5) until perceived; its **telltale** is not (10.14.3).
 
@@ -1671,7 +1692,7 @@ existing verb (T-10-19, `traps.yaml#ways`):
 | **Avoid** | another route (a side passage), or wait for it to reset | — | no roll | — |
 
 `[J:enum]` *Which way is the player's method?* Classified from the declared method; uncertain → the way
-with the lower stakes (Understand before Disarm). *Worst case:* the neighboring way's DC and consequence
+with the lower stakes (Understand before Disarm). *Worst case (J):* the neighboring way's DC and consequence
 for one beat (class i), shown in the OFFER. The unlicensed are never stuck: jam, spring, bypass, break,
 understand, use and avoid are basic verbs (C:VII redirect: "a thief could teach you to disarm it").
 
@@ -1823,17 +1844,18 @@ looking) is a new beat at its own repetition (01.14.3).
    (10.10.6); start a pursuit pending threat if a chase ended with pursuers hunting (10.10.7).
 
 **PR-10-6 Creating a site.** `[D]` (10.13.2–10.13.4, 10.13.13)
-1. Theme, domain, band, size: authored (13), or rolled by `sites.yaml#tables.tbl.10.site_generation`.
+1. Theme, domain, band, size: authored (a region's seed, 12.16.12, or a pre-made setting), or rolled by
+   `sites.yaml#tables.tbl.10.site_generation`.
 2. `danger` from the theme (+1 rung at band 4–5); `explore_tier` from the domain (+1 rung at band 4–5);
    store both.
 3. Clocks from `clk.10.site_progress` and `clk.10.site_danger` with the size's segments and the theme's
    omens.
 4. Objective: authored, or `roll_table` the theme's `climax` (d6), sealed until reached.
-5. Denizen table: archetypes gated by the theme's `creature_gate_tags` and the domain's terrain
-   (`sites.yaml#denizen_table_rule`; fallback to the theme gate alone for the 20 pairs listed there),
-   weighted by `creature_weights`, split into threat and non-threat by each archetype's mind and
-   disposition (a `rob`, `capture`, `kill`, `drag_to_lair` disposition or a mindless guard is a threat),
-   bands 30/55/15 around the site band. Store it on the record.
+5. Denizen table: the pair's pool (`sites.yaml#denizen_pools`) split into threat and non-threat by each
+   archetype's mind and disposition (a `rob`, `capture`, `kill`, `drag_to_lair` disposition or a mindless
+   guard is a threat); the threat sub-table is built by PR-10-10 at the site band with the theme gate alone
+   as the fallback pool; the non-threat archetypes form the non-threat sub-table. Store it on the record
+   [revision: I-022].
 6. Place facts from the theme (`desecrated`, `consecrated`, `haunted`, resonance); place hazards from
    the theme where its dangers name standing hazards.
 7. Write the record; the entrance area is generated by PR-10-7 on first entry.
@@ -1854,22 +1876,49 @@ looking) is a new beat at its own repetition (01.14.3).
    (10.13.10).
 7. `h.10.site_time` advances the beat's intervals at `beat_end`; site checks run on their cadence.
 
-**PR-10-8 Auditing an encounter table.** `[D]` (10.10.2; run by 13 on every regional table and by the
-generator for the generic ones — `gen10_travel.py` prints the result)
+**PR-10-8 Auditing an encounter table.** `[D]` (10.10.2; run on every hand-written regional table and on the
+generic ones — `10-word-audit.py`; `gen10_travel.py` checks item 1 and the refs; PR-10-10 runs step 2 on every
+row it writes)
 1. Sum the threat sub-table's weight by relative band: it must be 30 / 55 / 15 (± one d20 face) at home − 1
    / home / home + 1, and nothing above home + 1.
-2. For each threat row, field it against a reference PC of the home band with the archetype's usual group;
-   apply the shape rules (crowds as mobs; bands 4–5 never two equal individuals); compute the advisory
+2. For each threat row, field it against a reference PC of the home band at the row's count (the middle face
+   of `tbl.09.group_shape`; "group" reads the archetype's usual group) and variant; check the shape rules
+   (crowds as mobs; at most two home-band individuals; bands 4–5 never two equal individuals) as failures,
+   not repairs; compute the advisory
    word **with the archetype's counter held** (09.6.4's `advisory_alone` convention: the reference PC
    carries the named counter, e.g. fire against a troll), and print the no-counter word
    (`advisory_without_counter`) beside it, so a row whose danger hangs on a counter is visible. At least two
    thirds of the threat weight must be `fair` or easier, none `lethal` (both tests read the counter-held
-   word). A generic (band-relative) table is audited at every home band 1–5
-   (`_process/simulation/10-word-audit.py`) [integration: I-027; DL-INT-04].
+   word); the high face of a ranged count (a third of rolls) must not be `lethal` either (09.8.1 rule 3); a
+   row naming an archetype outside its fielded bands fails. A generic table is audited at every home band 1–5
+   (`_process/simulation/10-word-audit.py`) [integration: I-027; DL-INT-04; revision: I-029].
 3. The non-threat sub-table must exist (d6, six rows) unless the table is marked deadly-only.
 4. Every row cites archetype or adversary ids that exist, and every threat archetype has `signs`
    (`travel.yaml#archetype_signs` or a regional override).
-5. A failing table is not used; the generic table of its terrain branch stands in, and an issue is logged.
+5. A failing table is not used; the generic table of its terrain branch at the place's home band stands in
+   (it passes, 10.10.2), and an issue is logged.
+
+**PR-10-10 Building an encounter table from a gate.** `[D]` (10.10.2, 10.13.13, 12.16; revision: I-022, I-028.
+Reference code `_process/simulation/10_table_builder.py`.) Input: a **pool** (archetype ids with weights: a
+site's theme × domain pool, `sites.yaml#denizen_pools`; a region's pool from the world seed, 12.16.6), a
+**fallback pool** (a site's theme gate alone; a region's terrain branch), the home band, and the engine RNG.
+1. Lay out eight slots: faces 3 + 3 at home − 1, 3 + 3 + 3 + 2 at home, 2 + 1 at home + 1 (30/55/15). A slot's
+   band is home + its offset, at least 1 and at most 5.
+2. For each slot in order, draw an archetype from the pool by weight among those fielded at the slot's band,
+   skipping archetypes already on the table while another is available.
+3. Give the slot its start shape from **T-10-25** and step down the shape ladder — 6–8 minions (a mob), 4–6
+   minions, 2, 1 elite, 1–2, 1, 2 minions, 1 minion (a solo slot: solo, elite, standard, minion) — until the
+   row's PR-10-8 word (step 2, counter held) is at most **fair** (home − 1 and home slots) or **hard** (home + 1
+   slots), its high face is not lethal and its shape is legal. An archetype that fails at the bottom rung is
+   set aside and step 2 draws again.
+4. A slot no pool archetype can fill draws from the fallback pool by steps 2–3; only if that fails too does it
+   take the pool archetype nearest in band, fielded at its own nearest band, one standard.
+5. The second home slot carries `complication: true`; a lurker archetype's row is an `ambush`; `when: any`.
+6. Store the table on its owner (the site record; the region). It passes PR-10-8 by construction: every home
+   − 1 and home row is fair or easier (17 of 20 faces) and only the three home + 1 faces may be hard.
+*Proof:* `10-site-tables.py` builds the table of every site theme × domain pair at every band (560 tables,
+seed 1022): all 560 pass PR-10-8; of 4,480 slots, 4,456 filled from the pair pool, 24 from the theme gate,
+0 by the nearest band. `12-world-seed.py` builds a world seed's regional tables the same way.
 
 **PR-10-9 Leaving and returning to a site.** `[D]` (10.13.11)
 1. Leaving: the PC walks the path back (1 interval per 2 areas, halved with a map); site checks run; if the
@@ -1914,6 +1963,7 @@ and id (00.1.4 line 5).
 | T-10-22 | Traps | 10.14 | `traps.yaml#traps` (below) |
 | T-10-23 | Handlers registered by ch.10 | 10.2.5 | `data/boundaries.yaml owner-block 10` |
 | T-10-24 | Magical zones | 10.12.8 | `hazards.yaml` (zone entries) |
+| T-10-25 | Start shapes for building a table from a gate | PR-10-10 | `_process/simulation/10_table_builder.py#START` (below) |
 
 **T-10-3 Route kinds.**
 
@@ -1971,22 +2021,80 @@ winter; "none" = G4: nothing to gather or hunt; water: true, false, foul, with f
 | underground.sewer | moderate | hard | none | closed | no | foul |
 | ruin (all) | moderate | hard | hard | broken | no | Even |
 
-**T-10-16 Generic encounter tables** (`travel.yaml#encounter_tables`; threat d20 with relative bands —
-faces 1–6 home − 1, 7–17 home, 18–20 home + 1 — and non-threat d6; every table audited 30/55/15).
+**T-10-16 Generic encounter tables** (`travel.yaml#encounter_tables`; rendered from `_process/simulation/10_data_enc.py` by running it). Each terrain branch has one threat sub-table per home band (`threat_by_home`, d20: faces 1–6 home − 1, 7–17 home, 18–20 home + 1) and one non-threat sub-table (d6). A row reads *archetype [band offset]: what it is × count and variant*; "minion", "elite" and "solo" are 09.4.6's variants. Every table passes PR-10-8 at its home band (`10-word-audit-output.txt`) [revision: I-029].
 
-| Terrain | Threat rows (d20) | Non-threat rows (d6) |
+| Terrain | Home | Threat rows (d20: faces 1-6 home - 1 · 7-17 home · 18-20 home + 1) |
 |---|---|---|
-| road | footpads (ambush) · wolves · highwaymen with a captain (complication) · deserters · orc raiders · goblin ambush · ogre (+1) · troll under a bridge (+1) | merchants · pilgrims · road wardens · a messenger · a tinker · refugees |
-| settlement | footpads (night) · stray dogs · thugs · cultists (night) · ghouls (night) · a hag (+1, night) | townsfolk · a beggar with news · the watch · a merchant · a drunk · a procession |
-| forest | wolves · spiders (ambush) · brigands (ambush) · wolf pack (complication) · bear · wild fey · monstrous beast (+1) · troll (+1) | woodcutters · a hunter · deer · charcoal-burners · a hermit · a warden of the wood |
-| highland | wolves · goblins (ambush) · orcs · bear · raptor · ogre (complication) · giant (+1) · wyvern (+1) | shepherds · wild goats · dwarf traders · prospectors · an eagle's circling (sign) · a pilgrim |
-| plains | wolves · mounted raiders · gnolls · orcs (complication) · stampede · monstrous beast · great cat (+1) · wyvern (+1) | drovers · a caravan · wild horses · a lord's hunt · a farmer · travelers |
-| wetland | giant vermin · reptiles · lizardfolk (ambush) · bog-dead · a hag · water beast · troll (+1) · strangling plant (+1) | eel-fishers · a punt-man · herons rising (sign) · a hermit · lizardfolk traders · a will-o'-the-wisp (sign) |
-| arid | scorpions · reptiles · gnolls · raiders (ambush) · fire elemental · great cat · drake (+1) · earth elemental (+1) | a caravan · nomads · a well-keeper · a mirage (sign) · pilgrims · a wanderer half-dead |
-| frozen | wolves · bear · wolf pack (complication) · giant · frost elemental · troll (+1) · giant (+1) | trappers · reindeer · a sled party · an ice-fisher · a cairn (sign) · an abandoned camp (sign) |
-| water | water beasts · river pirates · pirates (complication) · water elemental · lizardfolk · a great water beast (+1) · a serpent of the deep (+1) | fisherfolk · a ferry · a barge · merchants · a drowned body (sign) · seals or otters |
-| underground | giant vermin · goblins (ambush) · ooze · fungal · orcs · skeletons · aberration (+1) · drake (+1) | dwarf miners · a lost delver · blind fish (sign) · myconid traders · tool marks (sign) · bats (sign) |
-| ruin | giant vermin · skeletons · ghouls · looters · cultists · a ghost · a wight (+1) · a golem (+1) | scavengers · a scholar · a pilgrim · crows (sign) · a lone dog · rival treasure-hunters |
+| road | 1 | brigand [−1]: a pair of footpads at a narrows × 1-2 (ambush) · wolf [−1]: a hungry wolf shadowing the carts × 1-2 · goblin: goblins rolling a log across the road × 6-8 minion (ambush) · brigand: a mob of hungry men at a toll they invented × 6-8 minion (complication) · orc: an orc raiding party on the road × 6-8 minion · ghost: a hanged man at the crossroads gibbet × 1 (night) · ogre [+1]: an ogre demanding a toll at a ford × 1 · orc [+1]: an orc outrider ahead of a raid × 1 |
+|  | 2 | brigand [−1]: a ragged gang of footpads × 4-6 minion (ambush) · goblin [−1]: goblins in the ditches × 4-6 minion (ambush) · brigand: highwaymen on good horses × 2 · soldier: corrupt toll-men with a writ × 2 (complication) · ogre: an ogre sitting in the road eating a horse × 1 elite · tempter: a well-dressed stranger with an offer × 1 · orc [+1]: an orc scout who has seen too much × 1 minion · troll [+1]: a young troll under a bridge × 1 minion |
+|  | 3 | brigand [−1]: a robber band at an ambush cut × 6-8 minion (ambush) · orc [−1]: orc raiders on the road × 6-8 minion · soldier: a lord's sergeant collecting a tax that is not owed × 1 elite · troll: two young trolls under a bridge × 2 minion · knight: a hedge knight who holds the bridge against all comers × 1 (complication) · vampire: a pale coachman who offers a ride × 1 minion (night) · ogre [+1]: an ogre's whelp foraging along the verge × 1 minion · fey noble [+1]: a rider of the Wild Hunt, lost from it × 1 minion (night) |
+|  | 4 | brigand [−1]: a robber-baron's tax-collector, armed and mounted × 1 (ambush) · troll [−1]: a bridge troll grown fat on tolls × 1 · knight: a champion holding the road for a pretender × 1 · tempter: a crossroads devil with a contract × 1 · soldier: a press-gang's recruiter: the war needs bodies × 1 minion (complication) · ogre: an ogre chieftain's toll-gate × 1 · vampire [+1]: a coach with no driver, and a passenger who wants company × 1 minion (night) · fey noble [+1]: the Wild Hunt passing: one rider turns aside × 1 minion (night) |
+|  | 5 | knight [−1]: a renegade champion and his oath × 1 · troll [−1]: an old troll who has eaten three bridge-wardens × 1 · tempter: a devil's factor on its master's business × 1 minion · folk mage: an archmage on the road, in a temper × 1 · vampire: a vampire's herald, hunting for its lord × 1 minion (night) · fey noble: a lord of the Wild Hunt × 1 · fey noble [+1]: the Erl-King's ride crossing the road × 1 solo · vampire [+1]: a vampire lord abroad in its coach × 1 solo (night) |
+| settlement | 1 | brigand [−1]: footpads in an alley × 1-2 (ambush) (night) · vermin swarm [−1]: rats boiling out of a granary × 1 · brigand: a gang's thugs collecting × 6-8 minion · cultist: cultists at a cellar rite × 6-8 minion (night) · zombie: the dead walk out of the old graveyard × 6-8 minion (night) · homunculus: a wizard's escaped familiar, stealing × 1 · ghost [+1]: a ghost in the well-house × 1 (night) · possessor [+1]: a child speaking in a stranger's voice × 1 minion |
+|  | 2 | brigand [−1]: a street gang × 4-6 minion (ambush) (night) · animated [−1]: a dead alchemist's shop-guardians × 2 · soldier: the watch, bribed to make you vanish × 2 (complication) · cultist: a cult cell's enforcers × 2 (night) · ghost: a murdered servant who wants a name spoken × 1 elite (night) · folk mage: a hedge-wizard selling curses × 1 elite · vampire [+1]: a vampire's thrall feeding in the stews × 1 minion (night) · enforcer [+1]: a debt-collector from below × 1 minion |
+|  | 3 | cultist [−1]: a mob whipped up by a preacher × 6-8 minion (night) · soldier [−1]: a guild's hired swords × 2 · possessor: a respected burgher, possessed × 1 elite · ghost: the ghosts of a fire in a counting-house × 2 minion (night) · cultist: a cult's inquisitor, hunting heretics × 1 elite (complication) · animated: a guildhall's bronze guardian woken × 1 elite · vampire [+1]: a vampire's get, newly made and starving × 1 minion (night) · tempter [+1]: a smiling broker of souls × 1 minion |
+|  | 4 | soldier [−1]: a magistrate's bravos × 2 · cultist [−1]: the high priest of a cult in the temple cellars × 1 elite (night) · enforcer: an imp-bailiff come to collect on an old contract × 1 minion (complication) · possessor: a councillor ridden by a demon × 1 · folk mage: a court sorcerer with a grudge × 1 · ghost: a plague-pit's ghost × 1 (night) · vampire [+1]: the vampire's favoured child × 1 minion (night) · tempter [+1]: a devil in the guise of a banker × 1 minion |
+|  | 5 | knight [−1]: a lord's champion sent to arrest you × 1 · possessor [−1]: a bishop who is no longer himself × 1 · folk mage: the city's archmage, displeased × 1 · tempter: a devil's emissary with an offer for the city × 1 minion · enforcer: an infernal bailiff serving a writ × 1 minion · vampire: a vampire's herald in the masked ball × 1 minion (night) · vampire [+1]: the vampire who owns the city's nights × 1 solo (night) · enforcer [+1]: a duke of hell's magistrate × 1 solo |
+| forest | 1 | wolf [−1]: a wolf at the edge of the firelight × 1-2 · giant vermin [−1]: a spider dropping from the canopy × 1 (ambush) · wolf: a wolf pack on a cold trail × 6-8 minion · goblin: goblins with nets × 6-8 minion (ambush) · wild fey: a swarm of sprites who steal what you set down × 6-8 minion (complication) · brigand: outlaws of the greenwood × 2 (ambush) · bear [+1]: a bear with cubs × 1 · monstrous plant [+1]: a strangling creeper across the path × 1 minion |
+|  | 2 | wolf [−1]: wolves circling × 4-6 minion · giant vermin [−1]: spiders in the canopy × 2 (ambush) · bear: a great bear defending a kill × 1 elite · brigand: outlaws of the greenwood × 2 (ambush) · elf warden: wardens who want you gone from the wood × 2 (complication) · hag: an old woman by a cauldron, too kind × 1 · troll [+1]: a troll-kit, hungry × 1 minion · monstrous beast [+1]: an owlbear yearling × 1 minion |
+|  | 3 | great cat [−1]: a pair of hunting cats × 2 (ambush) · wolf [−1]: a wolf pack in winter × 6-8 minion · monstrous beast: an owlbear × 1 elite · troll: a troll in a deadfall den × 1 elite · fey noble: a fey knight errant who wants a contest × 1 minion (complication) · place spirit: the wood's anger made flesh × 1 elite · hag [+1]: a hag's apprentice × 1 minion · monstrous plant [+1]: a treant's sapling that walks × 1 minion |
+|  | 4 | bear [−1]: two great bears fighting over a carcass × 2 · elf warden [−1]: a warden captain and her sworn × 1 · troll: an old troll who knows the paths × 1 · hag: a hag who wants a bargain × 1 (complication) · monstrous plant: a walking tree, angry × 1 · monstrous beast: a chimera's brood, hunting × 1 minion · fey noble [+1]: a fey lord's huntsman × 1 minion · place spirit [+1]: the grove-spirit's outrider × 1 minion |
+|  | 5 | hag [−1]: a hag-grandmother × 1 · troll [−1]: a troll king's gamekeeper × 1 · monstrous plant: a treant older than the kingdom × 1 · fey noble: a fey courtier with a wager × 1 minion · place spirit: the wood's guardian, half-awake × 1 minion · folk mage: a druid of the old circle × 1 · fey noble [+1]: the Erl-King riding × 1 solo · monstrous beast [+1]: the Questing Beast × 1 solo |
+| highland | 1 | wolf [−1]: a wolf on a ridge × 1-2 · goblin [−1]: goblin slingers among the rocks × 2 (ambush) · orc: an orc war-band's foragers × 6-8 minion · raptor: great eagles that want your mule × 1-2 · goblin: goblins on a scree slope × 6-8 minion (ambush) (complication) · brigand: hill bandits × 2 · bear [+1]: a cave bear woken early × 1 · ogre [+1]: a young ogre throwing rocks × 1 minion |
+|  | 2 | orc [−1]: an orc war-band's stragglers × 4-6 minion · wolf [−1]: wolves on the high pasture × 4-6 minion · ogre: an ogre in a pass × 1 elite (complication) · bear: a bear in the berry-scrub × 1 · dwarf holdguard: holdguards who think you are thieves × 2 · drake: a rock drake sunning itself × 1 · wyvern [+1]: a young wyvern × 1 minion · troll [+1]: a troll-kit in a cave × 1 minion |
+|  | 3 | orc [−1]: orc raiders × 6-8 minion · ogre [−1]: a pair of ogre shepherds × 2 · wyvern: a wyvern on the hunt × 1 elite · troll: a hill troll × 1 · orc: an orc war-chief out for a name × 1 elite (complication) · earth elemental: a rockslide that stands up × 1 elite · giant [+1]: a giant's child × 1 minion · drake [+1]: a drake's brood × 1 minion |
+|  | 4 | wyvern [−1]: a wyvern × 1 · orc [−1]: an orc war-band's champion, scouting ahead × 1 · giant: a hill giant × 1 · troll: a troll that has learned to set ambushes × 1 (complication) · air elemental: a storm that will not pass × 1 · drake: a mountain drake × 1 · great dragon [+1]: a dragon's wyrmling × 1 minion · celestial [+1]: a sky-herald on the peak × 1 minion |
+|  | 5 | wyvern [−1]: a wyvern × 1 · drake [−1]: a war-drake × 1 · great dragon: a dragon's young, hunting × 1 minion · giant: a giant jarl's outrider × 1 minion · air elemental: a gale off the peaks with a will × 1 minion · celestial: a guardian of the high places × 1 minion · giant [+1]: a storm giant × 1 solo · earth elemental [+1]: the mountain itself, awake × 1 solo |
+| plains | 1 | wolf [−1]: a wolf in the long grass × 1-2 · gnoll [−1]: a gnoll scavenger × 1 · gnoll: a gnoll pack × 6-8 minion · orc: orc horse-thieves × 6-8 minion · herd beast: a stampede × 6-8 minion (complication) · raptor: giant hawks × 1-2 · great cat [+1]: a lion × 1 · orc [+1]: an orc rider far ahead of its band × 1 minion |
+|  | 2 | gnoll [−1]: gnolls on a trail × 4-6 minion · wolf [−1]: wolves following a herd × 4-6 minion · orc: orc riders × 2 (complication) · great cat: a lioness × 1 · herd beast: a stampede led by a great bull × 1 elite · gnoll: a gnoll pack-mother × 1 · monstrous beast [+1]: a manticore's cub × 1 minion · wyvern [+1]: a young wyvern × 1 minion |
+|  | 3 | gnoll [−1]: gnoll raiders × 6-8 minion · orc [−1]: orc foot × 6-8 minion · knight: a knight on quest who mistakes you for his quarry × 1 (complication) · monstrous beast: a manticore × 1 elite · orc: an orc war-chief riding alone × 1 elite · wyvern: a wyvern hunting the herds × 1 elite · giant [+1]: a giant's child herding aurochs × 1 minion · air elemental [+1]: a dust devil that follows × 1 minion |
+|  | 4 | wyvern [−1]: a wyvern × 1 · orc [−1]: orc champions × 2 · giant: a hill giant on the move × 1 · knight: a champion and his oath × 1 · air elemental: a whirlwind with a mind × 1 (complication) · place spirit: the spirit of a battlefield × 1 · monstrous beast [+1]: a sphinx's get × 1 minion · place spirit [+1]: the herald-wind of a storm × 1 minion |
+|  | 5 | giant [−1]: a giant warband's scout × 1 · wyvern [−1]: a wyvern hunting the herds × 1 · knight: a dread lord's outrider × 1 minion · air elemental: a storm-front with a will × 1 minion · monstrous beast: a sphinx's errand-beast × 1 minion · place spirit: the wind of the steppe × 1 minion · monstrous beast [+1]: a sphinx with a riddle and a hunger × 1 solo · air elemental [+1]: the great storm of the age × 1 solo |
+| wetland | 1 | giant vermin [−1]: a giant leech × 1 · reptile [−1]: a marsh viper × 1 · lizardfolk: lizardfolk hunters × 6-8 minion (ambush) · zombie: the bog-dead × 6-8 minion · vermin swarm: a cloud of biting flies × 1 (complication) · wild fey: will-o'-the-wisps that lead astray × 1-2 · hag [+1]: a bog-hag's daughter × 1 minion · reptile [+1]: a great crocodile × 1 |
+|  | 2 | lizardfolk [−1]: lizardfolk raiders × 4-6 minion (ambush) · zombie [−1]: drowned dead × 4-6 minion · hag: a hag who trades in names × 1 elite (complication) · reptile: crocodiles under the causeway × 2 · water elemental: a pool that rises × 1 · goblin: bog-goblins × 2 (ambush) · troll [+1]: a fen-troll's whelp × 1 minion · wraith [+1]: a wraith out of a sunken barrow × 1 minion |
+|  | 3 | lizardfolk [−1]: a lizardfolk war-party × 6-8 minion · hag [−1]: a hag × 1 · troll: a fen-troll × 1 elite · wraith: a wraith that rises from the sedge × 1 elite (night) · wyrm: a marsh-wyrm's young × 1 minion (complication) · monstrous plant: a strangling mangrove × 1 elite · reptile [+1]: a crocodile the size of a barge × 1 minion · water elemental [+1]: a flood-spirit × 1 minion |
+|  | 4 | troll [−1]: a fen-troll × 1 · wraith [−1]: a barrow-wraith × 1 · hag: a coven-mother × 1 · wyrm: a marsh-wyrm grown fat × 1 minion (complication) · monstrous plant: a bog-tree that walks × 1 · water elemental: the tide of the fen × 1 · wraith [+1]: a drowned king's herald × 1 minion · wyrm [+1]: a black wyrm's spawn × 1 minion |
+|  | 5 | hag [−1]: a hag-queen's daughter × 1 · reptile [−1]: the great crocodile of the delta × 1 · monstrous plant: a swamp-god's idol of root and mire × 1 · wyrm: a black wyrm hunting × 1 minion · wraith: a drowned king's champion × 1 minion · water elemental: a flood with a will × 1 minion · wyrm [+1]: the Black Wyrm of the fen × 1 solo · wraith [+1]: the drowned king himself × 1 solo |
+| arid | 1 | giant vermin [−1]: a giant scorpion × 1 · reptile [−1]: a sand viper × 1 · gnoll: gnolls following the caravan × 6-8 minion · brigand: desert raiders at a well × 6-8 minion (ambush) · orc: orc water-thieves × 6-8 minion (complication) · giant vermin: scorpions under the stones × 2 · hellbeast [+1]: a hell-hound in the heat-shimmer × 1 minion · great cat [+1]: a desert lion × 1 |
+|  | 2 | gnoll [−1]: a gnoll pack × 4-6 minion · brigand [−1]: raiders on camels × 4-6 minion (ambush) · drake: a dune drake × 1 elite · fire elemental: a flame that walks × 1 · great cat: a lion pride's hunters × 2 (complication) · gnoll: a gnoll pack-mother × 1 · monstrous beast [+1]: a manticore's cub × 1 minion · hellbeast [+1]: a hell-hound off its leash × 1 minion |
+|  | 3 | gnoll [−1]: a gnoll war-pack × 6-8 minion · orc [−1]: orc raiders × 6-8 minion · hellbeast: a hell-hound × 1 elite · drake: a drake at the only water × 1 (complication) · monstrous beast: a manticore × 1 elite · place spirit: a djinn of the dunes × 1 elite · fire elemental [+1]: a fire elemental's spark × 1 minion · earth elemental [+1]: a sandstorm with a shape × 1 minion |
+|  | 4 | hellbeast [−1]: a pair of hell-hounds × 2 · drake [−1]: a dune drake × 1 · fire elemental: a fire elemental × 1 · orc: an orc warlord of the waste × 1 (complication) · air elemental: a sandstorm with a mind × 1 · monstrous beast: a sphinx, hungry × 1 · great dragon [+1]: a desert dragon's wyrmling × 1 minion · place spirit [+1]: a djinn's servant × 1 minion |
+|  | 5 | drake [−1]: a war-drake × 1 · hellbeast [−1]: the hound of a burning god × 1 · great dragon: a desert dragon on the wing × 1 · fire elemental: an efreet's herald × 1 minion · place spirit: a djinn bound to a ruin × 1 minion · air elemental: the wind of the deep desert × 1 minion · fire elemental [+1]: an efreet lord × 1 solo · monstrous beast [+1]: the great sphinx × 1 solo |
+| frozen | 1 | wolf [−1]: a white wolf × 1-2 · goblin [−1]: snow goblins under white hides × 2 (ambush) · skeleton: an old army under the ice × 6-8 minion (complication) · orc: orc reavers × 6-8 minion · ghost: the ghost of a frozen army's captain × 1 elite (night) · wolf: a pair of white wolves × 2 · bear [+1]: an ice bear × 1 · great cat [+1]: a snow cat × 1 minion |
+|  | 2 | wolf [−1]: wolves × 4-6 minion · orc [−1]: orc reavers × 4-6 minion · bear: an ice bear × 1 elite · frost elemental: a blizzard that walks × 1 (complication) · great cat: snow leopards × 2 · wight: a barrow-wight of the ice × 1 elite · troll [+1]: an ice-troll's whelp × 1 minion · wraith [+1]: a wraith in the white-out × 1 minion |
+|  | 3 | bear [−1]: two ice bears × 2 · wolf [−1]: a winter pack × 6-8 minion · troll: an ice troll × 1 elite · frost elemental: a frost elemental × 1 elite · wight: a wight leading the frozen dead × 1 (complication) · wyrm: an ice-wyrm's young × 1 minion · giant [+1]: a frost giant's thrall × 1 minion · celestial [+1]: a herald of the aurora × 1 minion |
+|  | 4 | troll [−1]: an ice troll × 1 · wight [−1]: a barrow-king's wight × 1 · giant: a frost giant × 1 · frost elemental: the blizzard's heart × 1 (complication) · wyrm: an ice-wyrm × 1 · golem: an ice-golem from a drowned age × 1 · giant [+1]: a frost-jarl's herald × 1 minion · wraith [+1]: a wraith of the long night × 1 minion |
+|  | 5 | troll [−1]: an ice-troll chieftain × 1 · wyrm [−1]: an ice-wyrm × 1 · giant: a frost jarl's huscarl × 1 minion · frost elemental: the cold that walks × 1 minion · wraith: a lord of the long night's herald × 1 minion · golem: a sentinel of the old ice × 1 minion · giant [+1]: the frost jarl × 1 solo · frost elemental [+1]: the white death × 1 solo |
+| water | 1 | reptile [−1]: a water snake × 1 · raptor [−1]: a fish-eagle that wants your catch × 1 · brigand: river pirates × 6-8 minion (ambush) · lizardfolk: lizardfolk in dugouts × 6-8 minion · wild fey: nixies who want a song × 6-8 minion (complication) · ghost: a drowned ferryman × 1 (night) · water beast [+1]: a pike as long as the boat × 1 · reptile [+1]: a river crocodile × 1 |
+|  | 2 | brigand [−1]: river pirates × 4-6 minion (ambush) · lizardfolk [−1]: lizardfolk raiders × 4-6 minion · water beast: a river-shark × 1 elite · water elemental: a current with a will × 1 (complication) · brigand: a pirate captain and her mate × 2 · place spirit: the river's spirit, offended × 1 · wyrm [+1]: a water-wyrm's young × 1 minion · reptile [+1]: a crocodile grown old × 1 minion |
+|  | 3 | lizardfolk [−1]: lizardfolk raiders × 2 · brigand [−1]: a pirate crew × 6-8 minion · water beast: a giant octopus under the hull × 1 (complication) · water elemental: a water elemental × 1 elite · reptile: a great crocodile × 1 elite · place spirit: the lake's lady, displeased × 1 elite · wyrm [+1]: a sea-serpent's young × 1 minion · aberration [+1]: something from the deep, testing the hull × 1 minion |
+|  | 4 | reptile [−1]: crocodiles in the shallows × 2 · water elemental [−1]: a whirlpool × 1 · wyrm: a sea-serpent × 1 · water beast: a giant octopus × 1 (complication) · place spirit: the river-god's anger × 1 · aberration: a tentacled thing under the jetty × 1 minion · wyrm [+1]: a dragon-turtle's get × 1 minion · great dragon [+1]: a sea dragon's young × 1 minion |
+|  | 5 | wyrm [−1]: a sea-serpent × 1 · water beast [−1]: a kraken's young × 1 · aberration: a tendril of the thing in the abyss × 1 minion · water elemental: a wave with a will × 1 minion · place spirit: a river-god's messenger × 1 minion · great dragon: a sea dragon × 1 · wyrm [+1]: the leviathan × 1 solo · water elemental [+1]: the flood of the age × 1 solo |
+| underground | 1 | giant vermin [−1]: a cave spider × 1 · vermin swarm [−1]: a stream of rats × 1 · goblin: goblins in the dark × 6-8 minion (ambush) · skeleton: skeletons on an old watch × 6-8 minion · ooze: a slime on the ceiling × 1 (complication) · fungal: walking fungus × 1-2 · clockwork [+1]: a dwarf-made sentry still on duty × 1 · lesser demon [+1]: an imp from a crack × 1 minion |
+|  | 2 | goblin [−1]: a goblin war-party × 4-6 minion (ambush) · skeleton [−1]: a skeleton patrol × 4-6 minion · ghoul: ghouls × 2 · dwarf holdguard: holdguards defending a seam × 2 · clockwork: a clockwork guardian on a broken errand × 1 elite (complication) · ooze: an ooze × 1 elite · troll [+1]: a cave-troll's whelp × 1 minion · aberration [+1]: a thing from the deep dark × 1 minion |
+|  | 3 | ghoul [−1]: a ghoul pack × 6-8 minion · cultist [−1]: cultists of the deep × 6-8 minion · troll: a cave troll × 1 elite · aberration: a mind-thing's servant × 1 minion (complication) · drake: a cave drake × 1 elite · golem: a golem guarding nothing × 1 · wraith [+1]: a wraith from a sealed vault × 1 minion · earth elemental [+1]: a rock that moves × 1 minion |
+|  | 4 | troll [−1]: a cave troll × 1 · golem [−1]: a golem × 1 · aberration: a mind-thing × 1 · wyrm: a purple worm in its tunnel × 1 (complication) · earth elemental: an earth elemental × 1 · abomination: an abomination loose from a lab × 1 · lich [+1]: a lich's apprentice × 1 minion · greater demon [+1]: a demon prince's hound × 1 minion |
+|  | 5 | aberration [−1]: a mind-thing × 1 · wyrm [−1]: a purple worm × 1 · lich: a lich at its studies × 1 · greater demon: a demon prince's champion × 1 minion · golem: an iron sentinel × 1 minion · abomination: a flesh-horror × 1 minion · aberration [+1]: the elder brain × 1 solo · fire elemental [+1]: the fire at the root of the world × 1 solo |
+| ruin | 1 | giant vermin [−1]: a giant centipede × 1 · skeleton [−1]: skeletons × 1-2 · ghoul: a ghoul pack × 6-8 minion · brigand: looters who were here first × 6-8 minion (complication) · cultist: cultists at an old altar × 6-8 minion · animated: armour that stands up × 2 · ghost [+1]: a ghost × 1 · wight [+1]: a wight's sworn × 1 minion |
+|  | 2 | skeleton [−1]: skeletons × 4-6 minion · zombie [−1]: the dead of the ruin × 4-6 minion · ghoul: a ghoul pair × 2 · wight: a wight lord of a fallen hall × 1 elite (complication) · cultist: a cult's priests × 2 · golem: a stone guardian × 1 · vampire [+1]: a vampire spawn × 1 minion · wraith [+1]: a wraith × 1 minion |
+|  | 3 | ghoul [−1]: a ghoul pack × 6-8 minion · wight [−1]: a pair of wights × 2 · wraith: a wraith × 1 elite · vampire: a vampire's get × 1 minion (complication) · golem: a golem × 1 elite · enforcer: a devil's debt-collector × 1 minion · lich [+1]: a lich's apprentice × 1 minion · deathlord [+1]: a deathlord's herald × 1 minion |
+|  | 4 | wraith [−1]: a wraith × 1 · golem [−1]: a golem × 1 · vampire: a vampire × 1 · lich: a lich's apprentice × 1 minion (complication) · deathlord: a deathlord's champion × 1 minion · celestial: a fallen guardian × 1 minion · great dragon [+1]: a dragon's wyrmling × 1 minion · greater demon [+1]: a demon's herald × 1 minion |
+|  | 5 | vampire [−1]: a vampire × 1 · wraith [−1]: a wraith-lord × 1 · lich: a lich × 1 · deathlord: a deathlord's champion × 1 minion · greater demon: a demon's herald × 1 minion · great dragon: a dragon on its hoard × 1 · deathlord [+1]: the deathlord × 1 solo · lich [+1]: the lich-king × 1 solo |
+
+| Terrain | Non-threat rows (d6) |
+|---|---|
+| --- | --- |
+| road | merchants · pilgrims · road wardens · a messenger · a tinker · refugees |
+| settlement | townsfolk · a beggar with news · the watch · a merchant · a drunk · a procession |
+| forest | woodcutters · a hunter · deer · charcoal-burners · a hermit · a warden of the wood |
+| highland | shepherds · wild goats · dwarf traders · prospectors · an eagle's circling (sign) · a pilgrim |
+| plains | drovers · a caravan · wild horses · a lord's hunt · a farmer · travelers |
+| wetland | eel-fishers · a punt-man · herons rising (sign) · a hermit · lizardfolk traders · a will-o'-the-wisp (sign) |
+| arid | a caravan · nomads · a well-keeper · a mirage (sign) · pilgrims · a wanderer half-dead |
+| frozen | trappers · reindeer · a sled party · an ice-fisher · a cairn (sign) · an abandoned camp (sign) |
+| water | fisherfolk · a ferry · a barge · merchants · a drowned body (sign) · seals or otters |
+| underground | dwarf miners · a lost delver · blind fish (sign) · myconid traders · tool marks (sign) · bats (sign) |
+| ruin | scavengers · a scholar · a pilgrim · crows (sign) · a lone dog · rival treasure-hunters |
 
 **T-10-22 Traps** (`traps.yaml`; tiers and severities by site band 1→5; telltale plain from S3).
 
@@ -2034,6 +2142,19 @@ faces 1–6 home − 1, 7–17 home, 18–20 home + 1 — and non-threat d6; eve
 | h.10.scene_frame | scene_start, mode_change | 7 | no | 10.7.2, 10.13.4 |
 | h.10.venture | venture_start, venture_end | 9 | no | 10.2.2 |
 
+**T-10-25 Start shapes for building a table from a gate** (PR-10-10 step 3; `10_table_builder.py#START`). Slots
+in order: two at home − 1 (3 faces each), four at home (3, 3, 3, 2), two at home + 1 (2, 1). Each slot steps
+down the shape ladder from here until its word is at most fair (home + 1: hard). The start shapes are the
+largest shape T-09-10 and the measured words (`10-word-audit.py`) put at fair for most archetypes at that band.
+
+| Home band | home − 1 slots | home slots | home + 1 slots |
+|---|---|---|---|
+| 1 | 1–2 · 1–2 | 6–8 minions · 6–8 minions · 2 · 1 elite | 1 · 2 minions |
+| 2 | 4–6 minions · 2 | 2 · 1 elite · 4–6 minions · 2 | 1 minion · 1 minion |
+| 3 | 6–8 minions · 2 | 1 elite · 2 minions · 1 elite · 1 | 1 minion · 1 minion |
+| 4 | 2 · 1 elite | 1 · 1 elite · 1 · 1 | 1 minion · 1 minion |
+| 5 | 2 · 1 | 1 · 1 minion · 1 minion · 1 | 1 solo · 1 solo |
+
 ---
 
 ## Worked examples
@@ -2041,7 +2162,7 @@ faces 1–6 home − 1, 7–17 home, 18–20 home + 1 — and non-threat d6; eve
 All examples follow **Wren** (P1; Wits +2, Agility +3, Might +1, Endurance +1; competence `deed` +1,
 `deed.wilds.tracking` +2, `deed.martial.archery` +2; her forester origin's `lic.training.wilds_tracking` at
 `trained`, 02; Vitality 13; Focus 4; fate 1; capacity 12). She holds no navigation, foraging or thievery
-license. Region data are illustrative stand-ins for chapter 13's *(illustrative; 13 owns)*; every rule,
+license. Region data are illustrative stand-ins for a region's own *(illustrative; the region's seed owns them, 12.16)*; every rule,
 table and number from this chapter is exact. Dice are the engine's.
 
 ### WE-10-1 Three days to the drowned chapel: an omen, an encounter interrupt, and a storm
@@ -2415,11 +2536,14 @@ knobs move (00.2.7). Typical reaches:
   turn back. Starvation is warned at three stacks (07.8.10): no one starves without being told.
 - **Foraging in farm country.** The farmland's forage tier is Easy, and the food belongs to someone: a method
   consequence (01.11.2: a trace) and, if seen, `cost.exposure` toward the farmer's standing (15).
-- **A site whose theme × domain gate is thin.** The 20 pairs listed in `sites.yaml#denizen_table_rule` use
-  the theme gate alone: an icereach shrine of the hallowed dead draws ancestors and celestials who came
-  there, though they would not live on ice. Thirteen may author better tables for any pair it places.
-- **Out-of-band rows on a generic table at home band 5.** `home+1` is band 6, which does not exist: the row is
-  fielded at band 5 as an elite (09.4.6) and its sign still carries the band tell.
+- **A site whose theme × domain gate is thin at its band.** Every pair gates at least three archetypes
+  (`sites.yaml#denizen_pools`), but not always at every band: an infested fen of band 5 has no band-5 vermin.
+  PR-10-10 step 4 then draws the slot from the theme gate alone — a monstrous beast that came to the fen to
+  breed — exactly as an icereach shrine of the hallowed dead draws ancestors and celestials who would not
+  live on ice. A pre-made setting may author better tables for any pair it places [revision: I-022].
+- **Out-of-band rows on a generic table at home band 5.** `home+1` is band 6, which does not exist: the
+  home-5 sub-tables write those faces as band-5 **solos** (09.4.6; 09.8.2's top ring), and the sign still
+  carries the band tell [revision: I-029].
 - **A haven that becomes unsafe.** 11 writes `safe: false` (the town is sacked); the next watch there rolls the
   die at the place's new danger rating, which 11's world change also sets.
 
@@ -2491,7 +2615,7 @@ knobs move (00.2.7). Typical reaches:
 | 08 | mounts' and vehicles' pace and carry; burdened/overloaded travel pace | 10.3.2, 10.3.7, 10.8; T-10-5 |
 | 08 | place terrain tags and site bands open place-gated properties and set hoard bands | 10.13.10, 10.13.13; `sites.yaml` `loot_gate_tags`; site band = tier cap |
 | 08 | harvest is an exploration activity of 1 interval or 1 hour | `act.harvest` (T-10-20) |
-| 09 | encounters belong to places; T-09-10 budget; crowds as mobs; never two equal-band T4/T5; Δ 30/55/15 | 10.10.1–10.10.2, PR-10-8; every generic table audited 6/11/3 of 20 |
+| 09 | encounters belong to places; T-09-10 budget; crowds as mobs; never two equal-band T4/T5; Δ 30/55/15 | 10.10.1–10.10.2, PR-10-8, PR-10-10; all 55 generic terrain × home-band tables pass PR-10-8 (`10-word-audit-output.txt`); every site pair at every band (`10-site-tables-output.txt`) |
 | 09 | out-of-band foes always warned | 10.9.5 item 4 (the omen already says it), 10.10.5 (09.6.6 at perception) |
 | 09 | encounter distance and notice are 10's | 10.10.3–10.10.4, T-10-15 |
 | 12 | watch/interval check rows may name `tbl.event_focus` | the V face (10.9.4) |
@@ -2531,13 +2655,14 @@ knobs move (00.2.7). Typical reaches:
   what the creature looks like; a sign is the trace it leaves before it is seen).
 - **To 11:** consume the venture record at `h.11.reckoning`; place `occupants`, `cleared` sites and `evaded`
   pending threats as World Turn inputs; `safe` changes are 11's writes; regional events table
-  `tbl.<region>.events` (if 11 or 13 want region-specific V faces); calendar season ids for
+  `tbl.<region>.events` (if 11 or a region's seed want region-specific V faces); calendar season ids for
   `h.10.weather_regime`.
 - **To 12:** the V face calls `tbl.event_focus` (12.6.5 d); the time-tick die's results are a legal
   complication source (01.11.3 item 5); `[JOURNEY]` is an out-of-fiction block for 12.15 (format 10.3.4);
   12.4.6's skip narration reads this chapter's returned lists; the anchors of this chapter for
   `anchors.yaml`.
-- **To 13:** for the starter region — places with every 10.1.2 field (or terrain defaults), route links with
+- **To 13 (now the region's seed, 12.16, which writes all of these for any region: T-12-16 `ws.req.10_*`; ch.13 is
+  one optional pre-made seed) [revision: I-028]:** for the starting region — places with every 10.1.2 field (or terrain defaults), route links with
   lengths in watches, danger rings per T-10-2, regional encounter tables in the two-sub-table shape (PR-10-8
   audit), regional `archetype_signs` and events, site placements with theme, domain, band, size and objective,
   havens (`safe: true`) and rest sites, `resonance` places, climate per region, weather regimes if the region's

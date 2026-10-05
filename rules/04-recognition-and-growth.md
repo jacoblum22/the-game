@@ -1431,7 +1431,7 @@ on the second.)
 | **wilds** | | | **Naturalist** · *Field Notes* (wilds → lore, Precision) | **none**: formula is learned in a study; hold both callings | **Pilgrim** ⚖ · *Road Blessing* (divine → wilds, Protective) | **Wildwarden** · *The Land Answers* (wilds → primal, Amplifying) | **Caravaneer** · *Trail Law* (wilds → influence, Precision) | **Trapper** · *Field-Made* (wilds → craft, Precision) |
 | **lore** | | | | **Magister** · *Theory into Practice* (lore → arcane, Precision) | **Inquisitor** ⚖ · *Cited Scripture* (lore → divine, Precision) | **Cunning-folk** · *Old Knowing* (lore → primal, Precision) | **Counselor** · *Precedent* (lore → influence, Amplifying) | **Inventor** · *Worked Out on Paper* (lore → craft, Protective) |
 | **arcane** | | | | | **Theurge** ⚖ · *Twin Invocation* (Focus on arcane → divine, Precision) | **none**: formula commands, the living force is asked | **Spellsinger** · *Voice and Weave* (influence → arcane, Amplifying) | **Artificer** · *Bound in the Making* (craft → arcane, Amplifying) |
-| **divine** | | | | | | **none**: a named power and the nameless world share no servant (ch.13 may author one) | **Preacher** ⚖ · *Word and Witness* (influence → divine, Amplifying) | **Reliquarist** ⚖ · *Hallowed Work* (craft → divine, Precision) |
+| **divine** | | | | | | **none**: a named power and the nameless world share no servant (a pre-made setting may author one; the world seed never does, 12.16.5) | **Preacher** ⚖ · *Word and Witness* (influence → divine, Amplifying) | **Reliquarist** ⚖ · *Hallowed Work* (craft → divine, Precision) |
 | **primal** | | | | | | | **none**: spirits are bargained with, not persuaded; the Spirit-talker covers it | **Hedgewitch** · *Cauldron and Charm* (craft → primal, Amplifying) |
 | **influence** | | | | | | | | **Magnate** · *Name on the Work* (craft → influence, Amplifying) |
 
@@ -2151,9 +2151,11 @@ revision I-020), and a record in the scene log when a creature uses a power (the
 condition). `threat_advisory` consumes `power_band`. The simulation assumed opposition from the PC's band to
 band + 2; encounter budgets that differ will move the pacing of tiers 3–5 (OEQ-04-1).
 
-**To 10 and 13.** Places may carry `resonance: [tag]` (deed keys, branches or conduct axes) for V11. Ch.13:
-the powers that serve as keepers, with the conduct axes each cares for; institutions per deed branch for V3
-and V9; whether the four `none` pairs hold in the setting (it may author a hybrid for `divine × primal`).
+**To 10 and 13 (now the region's seed, 12.16; ch.13 is one optional pre-made seed).** Places may carry
+`resonance: [tag]` (deed keys, branches or conduct axes) for V11. The region's seed: the powers that serve
+as keepers, with the conduct axes each cares for (12.16.6); institutions per deed branch for V3 and V9
+(12.16.10); whether the four `none` pairs hold in the setting (12.16.5: they do; only a pre-made setting may
+author a hybrid for `divine × primal`). T-12-16 checks all three (`ws.req.04_*`) [revision: I-028].
 
 **To 11.** Consume `recognition_event` (04.7.8) for reputation, epithets (V1's wording is 11's), rumors,
 faction status and ranks; apply a standing step only when `decline_cost` is set. Provide

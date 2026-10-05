@@ -63,8 +63,9 @@ top-level `clock_templates` key (IR ch.12). The documented optional keys, by fil
 | factions.yaml, world_turn.yaml, calendar.yaml, legacy.yaml | T-11-1 |
 | hazards.yaml, travel.yaml, sites.yaml, traps.yaml, weather.yaml | headers; ch.10 Tables (band-indexed tiers `dc_tier_by_band`, `severity_by_band`; sub-tables; `archetype_signs`; `terrain_defaults`; `states`; `climates`) |
 | oracles.yaml, pacing.yaml, anchors.yaml | headers; ch.12 Tables (row fields `writes`, `tags`, `phase_substitute`, `fallback`, `recency_window` …; pacing extensions incl. `packet`) |
+| world_seed.yaml | header; ch.12 T-12-15, T-12-16 [revision: I-028] |
 | origins.yaml, gen_birth.yaml, kits.yaml | T-02-14 |
-| region_*.yaml | T-13-16 |
+| region_*.yaml | T-13-16; 12.16 (`seed`, `calendar`, a site record's `denizen_table`) [revision: I-028] |
 | resolution.yaml | header; ch.01 Tables |
 | social.yaml, investigation.yaml, downtime.yaml | headers; ch.15 Tables |
 | companions.yaml | T-16-1 … T-16-22 |
@@ -278,10 +279,15 @@ Owner 10 (owner-block 13). Key `hazards`. **Hazard**: `id` haz.*, `terrain_tags`
 ## travel.yaml
 Owner 10. Keys: `pace` [..], `activities` [{id, duration, verb?, effects}], `watch_check` {die,
 results [{range, result}]}, `navigation` {..}, `supply` {..}, `exploration_activities` [{id, duration}].
+`encounter_tables` [{id tbl.10.enc.*, terrain, threat_die d20, `threat_by_home` {1..5: [EncounterRow]},
+non_threat_die d6, non_threat [EncounterRow]}]; EncounterRow (10.10.1) gains optional `variant`
+(minion|standard|elite|solo) and `leader` bool [revision: I-029].
 
 ## sites.yaml
 Owner 10. Key `site_themes`, `site_domains`. **Theme/Domain**: `id` site.*, `terrain_tags`,
 `creature_gate_tags`, `loot_gate_tags`, `features` [..], `dangers` [..], `clock_templates`.
+`denizen_pools` [{theme, domain, archetypes [{ref arch.*, weight}], fielded_by_band {1..5: int}}], one per
+theme × domain pair, read by PR-10-10 [revision: I-022].
 
 ## traps.yaml
 Owner 10. Key `traps`. **Trap**: `id` trap.*, `detect` {verb, dc_tier}, `disarm` {license, dc_tier},
@@ -321,12 +327,24 @@ Owner 12. Keys: `tension` {min 1, max 9, start 5, rules}, `intensity` {phases}, 
 {threshold 3, table}.
 
 ## region_*.yaml
-Owner 13. One file per region. Keys: `places` [Place], `npcs` [NPC], `factions` (refs or instances),
+Owner 12 (the world seed's output, 12.16) / 13 (`region_thallen.yaml`, an optional pre-made seed) [revision: I-028].
+One file per region; the world seed writes one (example: `_process/simulation/12-world-seed-example.yaml`). Keys: `places` [Place], `npcs` [NPC], `factions` (refs or instances),
 `clocks` [Clock], `encounter_tables`, `rumor_tables`, `names`, `canon_impossible` [str]. Entities use
 00.6.2 shapes. Optional keys (T-13-16; amended at integration): `region`, `canon`, `keepers` (`keeper.*`),
 `tongues`, `peoples`, `absent_origins`, `places_of_acceptance`, `fight_locations`, `objects` (`obj.*`),
 `bond_placement`, `values`, `situations`, `encounter_table_audit`, `tables`, `terrain_by_ring`, `cases`,
-`bestiary`, `storied_items`, `storied_sets`, `stock`, `pregens`, `opening`, `interface_checklist`.
+`bestiary`, `storied_items`, `storied_sets`, `stock`, `pregens`, `opening`, `interface_checklist`; and, from the
+world seed (12.16): `seed` {procedure, seed, mode, answers [{question, answer, source}], uses_generic},
+`calendar` {months, day_names, era, festivals, opening_date}, and a site record's `denizen_table` (PR-10-10).
+A region is complete when it passes the seed check (12.16.17, T-12-16) [revision: I-028].
+
+## world_seed.yaml
+Owner 12 (12.16). Keys: `modes` [{id, text}], `steps` [{id `ws.step.*`, n, name, rule, questions, writes}],
+`questions` [{id `ws.q.*`, step, ask, options [{id, text, …}] | options_from, oracle {die, table | results |
+from/map, by?}}], `tables` [{id `tbl.12.seed.*`, die?, results | by_people | by | climates …}], `defaults`
+{canon_impossible [{key, text, scope}], sources, components_by_band, rare_metals, haven_by_tier, market_by_terrain,
+sentry_floors, areas_per_ring, watches_between, uses_generic}, `requirements` [{id `ws.req.*`, from, need, rules,
+key (a path, `/`-separated), check, generic?}] [revision: I-028].
 
 ## codex.yaml
 Owner 14. Keys: `views` [{id, shows [state family], class_filter [visibility class], layout}],
@@ -338,8 +356,8 @@ Owner 15. Keys: `standing_effects` [{standing, dc_mod, behavior}], `claim_plausi
 
 ## investigation.yaml
 Owner 15. Keys: `clue_graph_template` {nodes [{id, sealed_fact, placements (≥3), prerequisites}]},
-`delivery` {..}. Optional `cases` [{id `case.*`, …}]: concrete case graphs (15's and the region's; the
-starter region's three were moved here at integration).
+`delivery` {..}. Optional `cases` [{id `case.*`, …}]: concrete case graphs (15's and a region's; chapter 13's
+Thallen Vale's three were moved here at integration).
 
 ## downtime.yaml
 Owner 15. Key `activities`. **Activity**: `id` (`dt.*`), `duration`, `verb`?, `clock`? clock_template,

@@ -16,7 +16,7 @@ PROP_VALUE = {1: 20, 2: 50, 3: 125, 4: 300, 5: 750}
 
 # ------------------------------------------------------------------ base_items.yaml
 base_hdr = HDR("base_items.yaml", "every base item of every item.* branch: weapons (on 06's T-06-6/T-06-7), armor (07.2.2), shields,\n#   garments, jewelry, tools (kits, implements, trade tools, light, containers), consumables, goods, conveyances.\n#   Kits (02) and loot trophies resolve item tags to these entries (08.1.11).",
- "# Optional fields (T-08-1): weapon_weight, harm, strike_cost, hands, weapon_properties (<=2, T-06-7), deed_tag,\n#   training_license, reload_actions, armor_class, reduction, carried_weight, snags, don_time, sleep, guard_edge,\n#   shield_class, body_slot, intrinsic (base effects, not properties), status, implement, serves, grants_lever,\n#   uses, quantity, quantity_name, light_source, holds, effects, priority_rank, spread, conveyance, carry_capacity,\n#   travel_pace, upkeep_week, companion_hint, crew, hull_clock, make {license, deed_tag, time_per_tick},\n#   default_for (the tag this entry resolves), trophy_eligible, note. `weight` is LOAD in load units (08.9.1);\n#   `price` is coins at quality common (1 coin = one day's plain food and lodging, 08.8.1).\n")
+ "# Optional fields (T-08-1): weapon_weight, harm, strike_cost, hands, weapon_properties (<=2, T-06-7), deed_tag,\n#   training_license, reload_actions, armor_class, reduction, carried_weight, snags, don_time, sleep, guard_edge,\n#   shield_class, body_slot, intrinsic (base effects, not properties), status, implement, serves, grants_lever,\n#   uses, quantity, quantity_name, light_source, holds, effects, priority_rank, spread, conveyance, carry_capacity,\n#   travel_pace, upkeep_week, companion_hint, crew, hull_clock, make {license, deed_tag, time_per_tick},\n#   default_for (the tag this entry resolves), trophy_eligible, note, offsets {maim, narrows, never} and\n#   fitted_to_bearer (prostheses, 07.7.6 [revision: I-016]). `weight` is LOAD in load units (08.9.1);\n#   `price` is coins at quality common (1 coin = one day's plain food and lodging, 08.8.1).\n")
 dump("base_items.yaml", base_hdr, {"schema_version": 1, "lifecycle": "provisional",
      "quality_rungs_ref": "economy.yaml#quality_rungs and 08.1.4", "kit_resolution": KIT_RES, "base_items": BI})
 
@@ -52,7 +52,7 @@ gen_loot = {
  "fill_map": [{"circumstance": "decisive", "fill_method": "signature"}, {"circumstance": "costly", "fill_method": "biased", "bias_tag": "ward"},
               {"circumstance": "merciful", "fill_method": "chosen"}, {"circumstance": "scavenged", "fill_method": "weighted"}],
  "drop_check": {"rule": "before rung lookup, the engine rolls d100 against the source's yield; a miss means NO property item (materials, coin and the source's own gear only)",
-                "yield": {"none": 0, "trophy": {"T1": 10, "T2": 20, "T3": 35, "T4": 50, "T5": 70}, "hoard": 100, "always": 100},
+                "yield": {"none": 0, "trophy": {"T1": 10, "T2": 15, "T3": 30, "T4": 40, "T5": 55}, "hoard": 100, "always": 100},
                 "principal": "a principal NPC (12.11.1) or an archetype marked loot.yield: always drops on every defeat",
                 "basis": ["Diablo II treasure classes' NoDrop weight, R3 08.1/A-1", "DL-08-08"]},
  "quality_rungs": [{"id": q["id"], "index": q["index"], "signature_slots": q["signature_slots"], "magnitude_slots": q["magnitude_slots"]} for q in QUALITY[:5]],
@@ -62,19 +62,19 @@ gen_loot = {
    {"circumstance": "merciful", "degree": "critical_success", "quality_rung": "masterwork"}, {"circumstance": "merciful", "degree": "success", "quality_rung": "masterwork"},
    {"circumstance": "scavenged", "degree": "critical_success", "quality_rung": "fine"}, {"circumstance": "scavenged", "degree": "success", "quality_rung": "fine"},
    {"circumstance": "scavenged", "degree": "failure", "quality_rung": "common"}, {"circumstance": "scavenged", "degree": "critical_failure", "quality_rung": "common"}],
- "hoard_map": {"rule": "a hoard (yield: hoard, or a site's treasure with source = the place) generates by band, circumstance as classified (usually scavenged or decisive)",
-               "T1": [{"rung": "fine", "count": 1}], "T2": [{"rung": "masterwork", "count": 1}], "T3": [{"rung": "masterwork", "count": 1}, {"rung": "fine", "count": 1}],
-               "T4": [{"rung": "wondrous", "count": 1}, {"rung": "masterwork", "count": 1}], "T5": [{"rung": "wondrous", "count": 1}, {"rung": "masterwork", "count": 2}],
+ "hoard_map": {"rule": "a hoard (yield: hoard, or a site's treasure with source = the place) generates by band, circumstance as classified (usually scavenged or decisive); a hoard is found where it is kept: a hoard-keeper defeated away from its lair or vault drops as trophy, and its hoard waits there (08.3.12) [revision: I-018]",
+               "T1": [{"rung": "fine", "count": 1}], "T2": [{"rung": "masterwork", "count": 1}], "T3": [{"rung": "masterwork", "count": 1}],
+               "T4": [{"rung": "wondrous", "count": 1}], "T5": [{"rung": "wondrous", "count": 1}, {"rung": "masterwork", "count": 1}],
                "coin_table": "economy.yaml#hoard_coin", "goods_table": "economy.yaml#hoard_goods"},
  "degree_effects": {"critical_success": "greater", "critical_failure": "flawed"},
  "degree_effect_rules": {"greater": "one property (the signature first, else the first magnitude) gains +1 tier, which may exceed tier_cap by at most 1 (00.11.3 step 5)",
                          "flawed": "loot: the item's one magnitude slot is removed (a fine find becomes a common one) and the item is created damaged"},
- "tier_rule": {"signature": "tier_cap", "magnitude": "tier_cap - 1, minimum 1", "tier_cap": "the source's threat band (T1 -> 1 ... T5 -> 5); a place's tier_cap is its site band (10/13)"},
+ "tier_rule": {"signature": "tier_cap", "magnitude": "tier_cap - 1, minimum 1", "tier_cap": "the source's threat band (T1 -> 1 ... T5 -> 5); a place's tier_cap is its site band (10; a region's seed, 12.16.12)"},
  "recency_window": 5, "slot_cap": "the base item's slot_cap (base_items.yaml)",
  "pool_gate": {
    "source_tags": "the archetype's creature_tags (most specific first) + its harm_tags + its evidence_tags (deed.*) + its org tags + loot.pool_gate_tags (09) + the trophy base's material_tags",
    "made_by_hands": "an armament (weapon, armor, shield) taken from a folk or undead source adds creature.folk to the source tags: the folk-made mundane properties are open to it",
-   "place_tags": "the terrain tags of the place where it was won (10/13); they open ONLY entries flagged place_gated",
+   "place_tags": "the terrain tags of the place where it was won (10; a region's seed, 12.16.8); they open ONLY entries flagged place_gated",
    "base_kinds": "an entry is kept only if one of its base_kinds is an ancestor-or-equal of the generated base item's tags",
    "excluded": "an entry is dropped if any excluded_tag matches the source",
    "signature_only": "entries marked signature_only may fill only the signature slot",
@@ -139,7 +139,7 @@ dump("gen_craft.yaml", HDR("gen_craft.yaml", "the crafting domain of the gate->f
 gen_gift = {
  "schema_version": 1, "lifecycle": "provisional", "domain": "gen.gift", "output_kind": "item | ability",
  "pool_ref": "item: item_properties.yaml#properties where domains contains gift; ability: gen_item_ability.yaml#pool (deed-gated entries) granted into the ACQUIRED partition (05.8.7)",
- "source": "the giver: a faction (its org tags + its patron deed tags, 11), an NPC (role_tags, 12), or a power (a creature.spirit/fiend/celestial entity or a keeper with deed.divine/primal tags, 13)",
+ "source": "the giver: a faction (its org tags + its patron deed tags, 11), an NPC (role_tags, 12), or a power (a creature.spirit/fiend/celestial entity or a keeper with deed.divine/primal tags; the region's seed, 12.16.6)",
  "who_decides_to_give": "never this file: a faction's or NPC's choice to give is 11's (World Turn, rewards of threads) or 15's (standing, bargains) or 04.11.3's (an authority lends an item); gen.gift only decides WHAT",
  "circumstances": [
    {"id": "earned", "true_only_when": "a thread, a commitment or a bargain fact names a reward owed to the PC by this giver and the PC has met its terms", "false_for": "a gift given out of goodwill with nothing owed (favored); a gift in exchange for a NEW obligation (bargained)"},
@@ -153,7 +153,7 @@ gen_gift = {
  "degree_effects": {"critical_success": "none", "critical_failure": "none"},
  "tier_rule": {"tier_cap": "the giver's band: a faction's tier mapped 0-1 -> 1, 2 -> 2, 3 -> 3, 4 -> 4, 5+ -> 5 (11); an NPC's or power's threat band",
                "signature": "tier_cap", "magnitude": "tier_cap - 1, minimum 1"},
- "signature_rule": "the giver's boon_signature (a faction's or power's `boon_signature` prop, 11/13) is always eligible for its gifts regardless of gate tags (it IS the giver's identity), subject to base kinds and tier; favored places it (signature fill); earned and bargained show it among the chosen candidates; default boon signature: the default_signature of the giver's first creature tag, else none",
+ "signature_rule": "the giver's boon_signature (a faction's or power's `boon_signature` prop, 11; a region's keepers, 12.16.6) is always eligible for its gifts regardless of gate tags (it IS the giver's identity), subject to base kinds and tier; favored places it (signature fill); earned and bargained show it among the chosen candidates; default boon signature: the default_signature of the giver's first creature tag, else none",
  "ability_gifts": {"who": "only a power (creature.spirit, creature.fiend, a keeper of deed.divine or deed.primal) may give an ability", "partition": "acquired, provisional (05.8.7)",
                    "pool": "gen_item_ability.yaml#pool entries whose gate matches the giver's deed tags", "rank": 1, "condition": "may carry the giver's condition as a commitment fact (05.8.7)"},
  "chosen_display": "the tool shows up to three eligible entries per slot (00.11.3 step 4), drawn by weight without replacement; the player picks one per slot",
@@ -321,7 +321,7 @@ economy = {
  "ammunition": {"arrows": "20 for 2 coins (1 load)", "bolts": "20 for 3 coins (1 load)", "sling_bullets": "20 for 1 coin (1 load)", "recovery": "half of those spent, rounded down, after a conflict (06.4.9)"},
  "mount_upkeep": "base_items.yaml upkeep_week per mount stabled; grazing in grassland or farmland in spring-autumn costs nothing; on a venture a mount eats 1 supply per day unless grazing (10)",
  "anti_inflation": [
-   {"id": "AI-1", "rule": "Magic never mints coin: anything conjured, summoned or transmuted carries conjured: true, has price 0 and cannot be sold; turning base matter into precious matter is G4 unless 13's canon allows it, and then the result is conjured"},
+   {"id": "AI-1", "rule": "Magic never mints coin: anything conjured, summoned or transmuted carries conjured: true, has price 0 and cannot be sold; turning base matter into precious matter is G4 unless the region's canon (12.16.5) allows it, and then the result is conjured"},
    {"id": "AI-2", "rule": "The labor cap: an item the seller made sells for at most its materials' price + the maker's craft wage for the days worked"},
    {"id": "AI-3", "rule": "Property items sell for half of list and only through clk.find_buyer; villages and camps never buy them"},
    {"id": "AI-4", "rule": "Market depth per settlement per week caps coin paid to the PC for non-trade goods"},

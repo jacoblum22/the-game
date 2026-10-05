@@ -302,7 +302,7 @@ tags:
   - {id: material.metal.silver, name: Silver, parent: material.metal, level: 2, lifecycle: provisional, definition: "Silver."}
   - {id: material.metal.gold, name: Gold, parent: material.metal, level: 2, lifecycle: provisional, definition: "Gold."}
   - {id: material.metal.copper, name: Copper and bronze, parent: material.metal, level: 2, lifecycle: provisional, definition: "Copper, bronze, brass."}
-  - {id: material.metal.rare, name: Rare metal, parent: material.metal, level: 2, lifecycle: provisional, definition: "Exotic metals named by the setting (13)."}
+  - {id: material.metal.rare, name: Rare metal, parent: material.metal, level: 2, lifecycle: provisional, definition: "Exotic metals named by the region's seed (12.16.5)."}
   - {id: material.wood, name: Wood, parent: material, level: 1, lifecycle: provisional, definition: "Wood."}
   - {id: material.wood.timber, name: Timber, parent: material.wood, level: 2, lifecycle: provisional, definition: "Common wood."}
   - {id: material.wood.fine, name: Fine wood, parent: material.wood, level: 2, lifecycle: provisional, definition: "Yew, ash, ebony and other prized woods."}
@@ -4074,3 +4074,13 @@ tags:
     definition: "True only when keeping a party's stores, gear and beasts sound on the road or in camp: rationing, packing against spoilage and damp, mending straps and harness, keeping lights trimmed. False for finding new food (deed.wilds.foraging), making shelter or fire (deed.wilds.survival.shelter, deed.wilds.survival.firecraft) and cooking a meal as a craft (deed.craft.cookery)."
     distinguish: "vs deed.wilds.survival.hardship: provisioning keeps the party supplied; hardship is enduring want oneself."
     aliases: ["quartermaster", "provisioning", "keeping the stores"]
+
+  # adopted by integration-merge.py (PR-03-6 on 03's behalf; 00.5.5)
+  # from tags.08.yaml
+  - id: "item.tool.kit.prosthesis"
+    name: "Prosthesis"
+    parent: "item.tool.kit"
+    level: 3
+    lifecycle: "provisional"
+    definition: "True only when a made replacement or support for a lost or ruined part of the body, fitted to one bearer (07.7.6). False for armor, a crutch or a walking staff anyone may lean on."
+    distinguish: "vs armor: does it stand in for the body rather than cover it? Prosthesis."

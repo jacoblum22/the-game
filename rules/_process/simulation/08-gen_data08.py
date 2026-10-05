@@ -96,6 +96,7 @@ ptag("item.consumable.remedy.antidote", "Antidote", "True only when a remedy tha
 ptag("item.conveyance.mount.war", "War mount", "True only when a mount trained to bear a rider in a fight (06 flag.mounted, combat-trained). False for riding and draft animals.")
 ptag("item.conveyance.vehicle.cart", "Cart or wagon", "True only when a wheeled vehicle drawn by animals or people. False for sledges and vessels.")
 ptag("item.conveyance.vessel.boat", "Boat", "True only when a small craft rowed, poled or sailed by its passengers. False for ships with a crew of more than six.")
+ptag("item.tool.kit.prosthesis", "Prosthesis", "True only when a made replacement or support for a lost or ruined part of the body, fitted to one bearer (07.7.6). False for armor, a crutch or a walking staff anyone may lean on.", "vs armor: does it stand in for the body rather than cover it? Prosthesis.")  # [revision: I-016]
 ptag("item.conveyance.vessel.ship", "Ship", "True only when a vessel needing a crew of more than six. False for boats.")
 
 # ------------------------------------------------------------------ helpers
@@ -330,6 +331,27 @@ for iid, nm, pr, ld, use in [("crowbar", "Crowbar", 2, 1, "a Precision lever on 
                               ("spyglass", "Spyglass", 60, 0, "a Precision lever on Observe beyond band.far"), ("mirror", "Steel mirror", 5, 0, "see around corners; signal by sun"),
                               ("tent", "Tent", 5, 3, "a rest site of camp quality in foul weather (07.8)"), ("fishing_gear", "Fishing gear", 2, 1, "a Precision lever on foraging for food by water (10)")]:
     tool(iid, nm, "item.tool.trade", pr, ld, ["material.metal.iron"], use=use)
+
+# ---- prostheses: 07.7.6's made offsets, one per maim that names a made thing (inj.maim.* `offset`) [revision: I-016]
+# Each narrows its maim's restriction and never restores the attribute (07.7.6); fitted to one bearer (a fitting
+# frame by the maker, 08.6); price band 2 (modest, 08.8.2). `offsets` names the maim and exactly what changes.
+for iid, nm, pr, mats, craft, ctag, maim, narrows in [
+    ("hook_hand", "Hook (for a lost hand)", 8, ["material.metal.iron", "material.hide.leather"], "lic.training.craft_smithing", "deed.craft.smithing",
+     "inj.maim.lost_hand", "the hook holds a strap, a rope or a strapped shield: 'a shield with a weapon' is allowed again; methods that need two hands stay forbidden"),
+    ("arm_brace", "Arm brace", 10, ["material.hide.leather", "material.metal.iron"], "lic.training.craft_leathercraft", "deed.craft.leathercraft",
+     "inj.maim.ruined_arm", "the status penalty on Grapple and Might-based Force and Exert is -1 instead of -2 while it is worn"),
+    ("peg_leg", "Peg or fitted boot", 6, ["material.wood.fine", "material.hide.leather"], "lic.training.craft_woodcraft", "deed.craft.woodcraft",
+     "inj.maim.lost_foot", "Pace -1 applies only on difficult ground, in a run, flight or chase (06.12), or when climbing; on firm level ground the bearer moves at pace"),
+    ("knee_brace", "Hinged knee brace", 12, ["material.metal.iron", "material.hide.leather"], "lic.training.craft_smithing", "deed.craft.smithing",
+     "inj.maim.ruined_knee", "the status penalty on Exert to jump, run or climb is -1 instead of -2 while it is worn"),
+    ("glass_eye", "Glass eye", 15, ["material.gem.crystal"], "lic.training.craft_jewelcraft", "deed.craft.jewelcraft",
+     "inj.maim.lost_eye", "nothing mechanical: the Precision snag stands; the loss is no longer visible to those who have not seen the bearer without it (the maim's `visible` fact is hidden)"),
+    ("ear_trumpet", "Ear trumpet", 6, ["material.metal.copper"], "lic.training.craft_artifice", "deed.craft.artifice",
+     "inj.maim.deaf_ear", "out of a fight, the Precision snag does not apply to hearing a speaker at band.close; in a fight it cannot be used (both hands, 06)"),
+]:
+    e = tool(iid, nm, "item.tool.kit.prosthesis", pr, 0, mats, craft=craft, craft_tag=ctag, slot="fitted", make_time="days:2",
+             offsets={"maim": maim, "narrows": narrows, "never": "restores the attribute (07.7.6)"}, fitted_to_bearer=True,
+             trophy_eligible=False, basis=["07.7.6", "08.1", "08.6", "T-08-3"])
 
 # ---- consumables
 def cons(id, name, tag, price, load, effects, mats, craft, craft_tag, rank=None, uses=1, **kw):
@@ -915,6 +937,85 @@ for fl in FLAWS:
     fl["lifecycle"] = "provisional"; fl["basis"] = ["00.11.3 step 5", "08.6.6", "T-08-12"]
     for e in fl["effects"]:
         chk_eff(e["effect_id"], fl["id"])
+
+# ---------- I-019: a water-gated tier-1 property (the water elemental's tier-1 pool had 2 entries) [revision: I-019]
+prop("tidesense", "Tide-sense", "passive", "lever", ["creature.elemental.water", "creature.beast.aquatic", "terrain.water"], "tides", 2,
+     T((1, [eff("eff.grant_lever", type="precision", for_verbs=["verb.observe", "verb.move"], for_tags=[], duration="while equipped", applies_when="in, on or under water: reading a current, a depth, or what moves beneath")])),
+     ["item.jewelry", "item.garment.footwear"], "sense",
+     "A Precision lever on Observe and Move in, on or under water: currents, depths, and what moves beneath.", place=True)
+
+# ---------- I-017: wider gates, so that no source that yields loot repeats its magnitude property in more than 15% of
+# consecutive decisive drops (08-loot-sim.py, every archetype of data/archetypes.yaml at every band). Each addition is a
+# kind of creature the property's own fiction already fits (a wolf-pelt cloak is warm; acid eats the armor it strikes).
+# [revision: I-017]
+EXTRA_GATES = {
+ "warm":          ["creature.beast.predator.canine", "creature.beast.predator.feline", "creature.beast.aquatic", "creature.beast.herd", "creature.beast.monstrous", "creature.elemental.fire"],
+ "cool":          ["creature.elemental.water", "creature.elemental.air"],
+ "sturdy":        ["creature.elemental.earth", "creature.elemental.frost", "creature.fiend", "creature.dragon", "creature.beast.herd", "creature.undead.mindless"],
+ "keen":          ["creature.fiend.demon", "creature.dragon", "creature.horror.ooze"],
+ "light_make":    ["creature.construct.clockwork"],
+ "masters_mark":  ["creature.construct.clockwork"],
+ "guarding":      ["creature.beast.monstrous", "creature.beast.herd"],
+ "reinforced":    ["creature.beast.reptile", "creature.beast.herd"],
+ "supple":        ["creature.beast.reptile"],
+ "quiet":         ["creature.beast.reptile"],
+ "wayfinder":     ["creature.elemental.water", "creature.construct.clockwork"],
+ "minstrels":     ["creature.construct.clockwork"],
+ "stalkers":      ["creature.beast.aquatic.shark", "creature.beast.predator.canine", "creature.beast.monstrous"],
+ "tracker":       ["creature.beast.monstrous"],
+ "survivor":      ["creature.horror.plant"],
+ "climbers":      ["creature.horror.plant"],
+ "craft_alchemy": ["creature.horror.plant"],
+ "craft_textiles": ["creature.horror.plant"],
+ "physicks":      ["creature.horror.plant"],
+ "lorekeepers":   ["creature.elemental.earth", "creature.elemental.frost"],
+ "piercing_eye":  ["creature.beast.avian.raptor"],
+ "commanding":    ["creature.beast.avian.raptor"],
+ "dread":         ["creature.beast.monstrous", "creature.elemental.fire", "creature.folk.beastfolk.gnoll", "creature.folk.giant.troll", "creature.fiend.hellbeast", "org.order.knightly"],
+ "darksight":     ["creature.beast.avian", "creature.elemental.earth", "creature.horror.fungal", "creature.horror.abomination", "creature.construct.homunculus", "creature.folk.beastfolk.gnoll", "creature.folk.giant.troll"],
+ "keen_ears":     ["creature.beast.avian", "creature.beast.herd", "creature.beast.monstrous", "creature.elemental.air", "creature.folk.beastfolk.lizardfolk"],
+ "scent":         ["creature.beast.aquatic.shark", "creature.folk.giant", "creature.fiend.hellbeast"],
+ "spirit_sight":  ["creature.elemental", "creature.construct.homunculus"],
+ "mind_guard":    ["creature.horror.abomination", "creature.undead.mindless"],
+ "tremor":        ["creature.horror.fungal"],
+ "featherfall":   ["creature.beast.predator.feline"],
+ "glowing":       ["creature.elemental.frost", "creature.construct.clockwork"],
+ "pack_mule":     ["creature.elemental.earth"],
+ "waybread":      ["creature.horror.fungal"],
+ "knitting":      ["creature.horror.abomination"],
+ "resist_cut":    ["creature.beast.aquatic", "creature.elemental.earth", "creature.horror.abomination", "creature.folk.beastfolk.lizardfolk", "org.order.knightly"],
+ "resist_pierce": ["creature.elemental.earth", "creature.undead.mindless"],
+ "resist_crush":  ["creature.elemental.water", "creature.horror.plant", "creature.horror.abomination", "creature.beast.herd", "creature.folk.dwarf"],
+ "resist_fire":   ["creature.elemental.water"],
+ "hazard_frost":  ["creature.elemental.water", "creature.beast.aquatic"],
+ "resist_storm":  ["creature.beast.avian"],
+ "hazard_storm":  ["creature.beast.avian"],
+ "resist_venom":  ["creature.construct.homunculus", "creature.folk.beastfolk.lizardfolk"],
+ "hazard_venom":  ["creature.construct.homunculus", "creature.folk.beastfolk.lizardfolk"],
+ "resist_blight": ["creature.horror.fungal", "creature.horror.abomination"],
+ "hazard_blight": ["creature.horror.fungal", "creature.horror.abomination"],
+ "resist_arcane": ["creature.beast.monstrous.magical"],
+ "hazard_arcane": ["creature.beast.monstrous.magical"],
+ "onhit_bleed":   ["creature.fiend.demon", "creature.dragon"],
+ "onhit_dread":   ["creature.dragon"],
+ "onhit_stagger": ["creature.fiend.demon", "org.order.knightly"],
+ "hazard_mind":   ["creature.horror.fungal"],
+ "fine_cut":      ["creature.beast.predator.feline"],
+ "onhit_expose":  ["creature.horror.ooze", "deed.guile.ambush"],
+ "bane_construct": ["creature.horror.ooze"],
+ "lore_whispers": ["creature.undead.mindless"],
+ "onhit_venom":   ["creature.folk.beastfolk.lizardfolk"],
+ "strike_venom":  ["creature.folk.beastfolk.lizardfolk"],
+ "bane_undead":   ["org.order.knightly"],
+}
+_byid = {p["id"]: p for p in PROPS}
+for k, tags in EXTRA_GATES.items():
+    pp = _byid["prop." + k]
+    for t in tags:
+        chk_tag(t, "EXTRA_GATES " + k)
+        if t in pp["gate_tags"]:
+            DEFECTS.append("EXTRA_GATES %s: %s already gated" % (k, t))
+        pp["gate_tags"] = pp["gate_tags"] + [t]   # a new list: family members share their gate list objects
 
 SIG_GROUPS = {'sig_wyvern_sting': 'on_hit', 'sig_thornward': 'retort', 'sig_hellfire': 'strike_form', 'sig_drakefire': 'strike_form', 'sig_acid_bite': 'strike_form', 'sig_fire_heart': 'resist_fire', 'sig_frost_heart': 'resist_frost', 'sig_brimstone_hide': 'resist_fire', 'sig_bone_ward': 'resist_physical', 'sig_alien_ward': 'resist_mind', 'sig_spore_ward': 'resist_venom', 'sig_plague_proof': 'resist_blight', 'sig_monster_hide': 'armor_red'}
 for p in PROPS:

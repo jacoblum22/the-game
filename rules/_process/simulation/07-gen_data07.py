@@ -248,20 +248,20 @@ def maims():
     SN = lambda fact, when: E('eff.06.grant_snag', type='precision', sign='snag', to='the bearer', fact=fact,
                               applies_when=when, duration='permanent')
     S = lambda amount, when: E('eff.status_modifier', amount=amount, applies_when=when)
-    prosthetic = lambda what: [{'type': 'item', 'detail': '%s (08): narrows the restriction, never restores the attribute' % what},
+    prosthetic = lambda what, made=False: [{'type': 'item', 'detail': '%s (%s): narrows the restriction, never restores the attribute' % (what, '08: base_items.yaml, item.tool.kit.prosthesis' if made else '08')},  # [revision: I-016]
                                {'type': 'recognition', 'detail': 'a calling that takes the loss as its ground (04, offered)'},
-                               {'type': 'discovery', 'detail': 'a rite of regrowth, only if setting canon allows one (13; default: none)'}]
+                               {'type': 'discovery', 'detail': 'a rite of regrowth, only if the region\'s canon allows one (12.16.5; default: none)'}]
     return [
         maim('lost_hand', 'Lost hand', 'arm', ['agility', 'might'],
              R(methods=['any method that needs two hands', 'a weapon of weight heavy or bow', 'a shield with a weapon']),
-             'Agility -1 (else Might). No method that needs two hands.', prosthetic('a hook or a strapped shield')),
+             'Agility -1 (else Might). No method that needs two hands.', prosthetic('a hook or a strapped shield', made=True)),
         maim('ruined_arm', 'Ruined arm', 'arm', ['might', 'agility'],
              S(-2, 'Grapple, and Might-based Force and Exert'),
-             'Might -1 (else Agility). -2 status on Grapple and Might-based Force and Exert.', prosthetic('a brace')),
+             'Might -1 (else Agility). -2 status on Grapple and Might-based Force and Exert.', prosthetic('a brace', made=True)),
         maim('lost_foot', 'Lost foot', 'leg', ['agility', 'might'], E('eff.06.pace', amount=-1, applies_when='always'),
-             'Agility -1 (else Might). Pace -1: each band transition costs one action more.', prosthetic('a peg or a fitted boot')),
+             'Agility -1 (else Might). Pace -1: each band transition costs one action more.', prosthetic('a peg or a fitted boot', made=True)),
         maim('ruined_knee', 'Ruined knee', 'leg', ['agility', 'endurance'], S(-2, 'Exert beats to jump, run or climb'),
-             'Agility -1 (else Endurance). -2 status on Exert to jump, run or climb.', prosthetic('a hinged brace')),
+             'Agility -1 (else Endurance). -2 status on Exert to jump, run or climb.', prosthetic('a hinged brace', made=True)),
         maim('broken_wind', 'Broken wind', 'body', ['endurance', 'might'],
              E('eff.status_modifier', amount=-2, applies_when='Endure to keep going or hold breath; breath is held half as long (07.10.4)'),
              'Endurance -1 (else Might). Breath is held half as long; -2 status on Endure to keep going.',
@@ -273,9 +273,9 @@ def maims():
         maim('lost_eye', 'Lost eye', 'head', ['wits', 'agility'],
              SN('maim.lost_eye', 'ranged attacks and sight-based Observe beyond band.near'),
              'Wits -1 (else Agility). A Precision snag on ranged attacks and sight-based Observe beyond band.near.',
-             prosthetic('nothing restores the depth; a glass eye hides it')),
+             prosthetic('nothing restores the depth; a glass eye hides it', made=True)),
         maim('deaf_ear', 'Deaf ear', 'head', ['wits', 'presence'], SN('maim.deaf_ear', 'hearing-based Observe; noticing unseen movers'),
-             'Wits -1 (else Presence). A Precision snag on hearing-based Observe.', prosthetic('an ear trumpet, out of a fight')),
+             'Wits -1 (else Presence). A Precision snag on hearing-based Observe.', prosthetic('an ear trumpet, out of a fight', made=True)),
         maim('broken_face', 'Broken face', 'head', ['presence', 'wits'],
              S(-1, 'Talk with those who have not met the bearer before; any disguise is G4 without a full mask'),
              'Presence -1 (else Wits). -1 status on Talk with strangers; no disguise without a full mask.',
@@ -335,7 +335,7 @@ def haunts():
 INJ_HEADER = """# data/injuries.yaml
 # Purpose: every wound, the brink wound, scars, brink marks, maims and haunts (07.2.4-07.2.5, 07.2.8, 07.7, 07.11.5).
 #   kind: wound  - taken while Staggered or Dying; keyed by harm family x site x severity (PR-07-2). Effects go through
-#                  the four carrier conditions cond.wound_<site> (data/contrib/conditions.07.yaml), which hold the
+#                  the four carrier conditions cond.wound_<site> (data/conditions.yaml owner-block 07), which hold the
 #                  site's status penalty and restrictions by severity (T-07-4).
 #   kind: brink  - inj.the_brink, taken each time a character is stabilized from Dying (07.2.8).
 #   kind: scar   - left when a Grievous or Catastrophic wound heals (07.7.2). No modifier.
@@ -679,7 +679,7 @@ def afflictions():
              stage(2, DIS, 'S2', [VM(2)], text='Grey at the lips.'),
              stage(3, DIS, 'S3', [VM(4), E('eff.07.dread', units=1, check=False, hook='on_boundary', boundary='day')],
                    text='The dead feel nearer than the living.')],
-            ['a long rest at a consecrated or tended place (13): one stage down', 'a working of deed.divine.healing that names it',
+            ['a long rest at a consecrated or tended place (the region\'s seed, 12.16.9): one stage down', 'a working of deed.divine.healing that names it',
              'medicine does not touch it'], terminal='holds at stage 3'),
         aff('aff.rat_plague', 'Rat plague', 'disease', ['harm.blight.disease'], ['vermin bites', 'close contact with a bearer'], 'hard',
             'days:3', 'days:1',
@@ -687,7 +687,7 @@ def afflictions():
              stage(2, DIS, 'S2', [AC('cond.exhausted', 'S2', 'while the stage lasts')], text='Fever; black swellings.'),
              stage(3, DIS, 'S3', [AC('cond.exhausted', 'S2', 'while the stage lasts')], harm='S2', text='The swellings burst.'),
              stage(4, DIS, 'S4', [AC('cond.exhausted', 'S2', 'while the stage lasts')], harm='S3', text='Bleeding under the skin.')],
-            ['Treat (07.8.8)', 'a week of convalescence with treatment: one stage down', 'a specific remedy, if the setting has one (13)'],
+            ['Treat (07.8.8)', 'a week of convalescence with treatment: one stage down', 'a specific remedy, if the region\'s seed or setting has one'],
             lethal=True, warn_stage=3, contagious=True, terminal='S3 harm at each check while stage 4 holds'),
         aff('aff.lockjaw', 'Lockjaw', 'disease', ['harm.blight.disease'], ['a deep puncture from rusted or fouled metal'], 'hard',
             'days:4', 'days:1',
@@ -748,7 +748,7 @@ AFF_HEADER = """# data/afflictions.yaml
 # Purpose: staged afflictions: poisons, diseases and curses (07.9). An affliction is an exposure check, an onset, then
 #   a stage check at each cadence boundary: critical success two stages down, success one down, failure by 3 or less
 #   holds, failure one up, critical failure two up (07.9.3). Stage 0 is cured. Each stage applies one carrier
-#   condition (cond.poisoned, ch.06; cond.diseased, cond.cursed, contrib/conditions.07.yaml) at the stage's severity,
+#   condition (cond.poisoned, ch.06; cond.diseased, cond.cursed, data/conditions.yaml owner-block 07) at the stage's severity,
 #   optional stage harm at each check (no reduction, periodic, lethal only after the warn_stage warning is effective,
 #   07.9.5), and listed effects.
 # Owner: 07-harm-recovery-death. Schema: data/SCHEMAS.md#afflictionsyaml (Affliction: id, harm_tags, stages [{stage,

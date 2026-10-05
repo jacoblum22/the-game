@@ -1,0 +1,31 @@
+=== ch.08 campaign wealth and power simulation (I-018; 300 campaigns x 70 sessions; seeded) ===
+p10 / median / p90 per campaign, per band (P1 s1-9, P2 s10-19, P3 s20-34, P4 s35-56, P5 s57-70)
+band | property items won in band (08.2.7 typical) | per session | masterwork / wondrous / fine | bound-power items won | attuned at band end | bound attuned | top signature tier | coin at band end -> tier (08.8.10 typical)
+P1 | 2 / 4.0 / 6 (2-4) | 0.43 | 1.4 / 0.0 / 2.4 | 0 / 0.0 / 0 | 2 / 4.0 / 5 | 0 / 0.0 / 0 | 0 / 1.0 / 2 | 0 / 8.5 / 54 -> W1 (W1-W2)
+     property items by source (mean): fight (always) 0.2, fight (trophy) 1.4, site treasure 2.2
+     fights by yield (mean): always 0.2, none 1.5, trophy 16.3
+     wealth tiers at band end: W1 89%, W2 11%, W3 0%, W4 0%, W5 0%
+P2 | 4 / 6.0 / 9 (4-6) | 0.63 | 5.7 / 0.0 / 0.6 | 0 / 0.0 / 1 | 5 / 5.0 / 5 | 0 / 0.0 / 1 | 2 / 3.0 / 4 | 42 / 247.5 / 494 -> W2 (W2)
+     property items by source (mean): fight (always) 1.4, fight (hoard) 0.1, fight (trophy) 2.4, site treasure 2.5
+     fights by yield (mean): always 1.6, hoard 0.2, none 0.9, trophy 17.3
+     wealth tiers at band end: W1 11%, W2 53%, W3 36%, W4 0%, W5 0%
+P3 | 9 / 13.0 / 17 (8-12) | 0.86 | 11.5 / 0.0 / 1.4 | 1 / 3.0 / 5 | 5 / 5.0 / 5 | 0 / 1.0 / 3 | 4 / 4.0 / 5 | 1293 / 2374.0 / 3640 -> W4 (W3)
+     property items by source (mean): fight (always) 3.7, fight (hoard) 0.6, fight (trophy) 4.9, site treasure 3.7
+     fights by yield (mean): always 4.2, hoard 2.0, none 1.3, trophy 22.5
+     wealth tiers at band end: W1 0%, W2 0%, W3 15%, W4 85%, W5 0%
+P4 | 19 / 24.0 / 29 (15-25) | 1.09 | 15.7 / 5.4 / 2.8 | 3 / 5.0 / 8 | 5 / 5.0 / 5 | 1 / 2.0 / 3 | 4 / 4.0 / 6 | 9663 / 15641.0 / 22787 -> W5 (W4)
+     property items by source (mean): fight (always) 6.8, fight (hoard) 3.4, fight (trophy) 8.4, site treasure 5.4
+     fights by yield (mean): always 7.6, hoard 8.1, none 2.0, trophy 26.4
+     wealth tiers at band end: W1 0%, W2 0%, W3 0%, W4 4%, W5 96%
+P5 | 17 / 21.0 / 28 (25-+) | 1.56 | 16.1 / 3.4 / 2.3 | 3 / 5.0 / 8 | 5 / 5.0 / 5 | 1 / 2.0 / 3 | 5 / 5.0 / 5 | 27037 / 45490.0 / 63709 -> W5 (W5)
+     property items by source (mean): fight (always) 6.2, fight (hoard) 3.0, fight (trophy) 5.7, site treasure 6.9
+     fights by yield (mean): always 7.0, hoard 6.7, none 1.9, trophy 12.5
+     wealth tiers at band end: W1 0%, W2 0%, W3 0%, W4 0%, W5 100%
+
+08.2.7 check (VI revisit trigger: density more than one row ahead of the table):
+  P1 median 4.0 items vs typical 2-4: within its row
+  P2 median 6.0 items vs typical 4-6: within its row
+  P3 median 13.0 items vs typical 8-12: above its row, short of the next
+  P4 median 24.0 items vs typical 15-25: within its row
+  P5 median 21.0 items vs typical 25-+: below its row
+rungs of property items over the campaign: masterwork 73%, wondrous 13%, fine 14%

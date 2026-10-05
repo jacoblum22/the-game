@@ -1759,6 +1759,27 @@ chapter 06's fight model and T-06-12 lines), output `07-harm-sim-output.txt`, wr
 - Serves: goal 1.
 - Revisit if: crafting-heavy play logs show smiths playing fewer than a third of their works as scenes (the judged path would then be too rare in practice).
 
+### DL-08-31: The loot variety test runs on the real bestiary, and pools are widened until every case passes
+- Decision: [revision: I-017, I-019] `08-loot-sim.py` checks every archetype of `archetypes.yaml` that yields loot, at each of its bands, with its own `trophy_base`; 58 properties gain 114 thematic gate tags (`08-gen_data08.py#EXTRA_GATES`), and `prop.tidesense` (Tide-sense: a Precision lever on Observe and Move in, on or under water) is the water-gated tier-1 entry I-019 asked for.
+- Alternatives considered: stronger recency (×¼ instead of ×½, 00.11.3 step 7: rejected, it would change every generator domain to fix one); broader trophy base lists in 09's data (rejected as the main lever: 09 owns `trophy_base`, and a decisive drop's signature fixes the base kind anyway).
+- Evidence: 186 cases, mean repeat 8.0%, worst 14.6% (was 75 cases above 15%, worst 100%); 09 contract 186/186 (was 171/186); reference set worst 14.6% (clockwork sentinel 5.5%, slime 11.6%); drop rates, rungs and item-share compliance unchanged (T-08-16).
+- Serves: goal 3 (variety: loot that keeps surprising); OEQ-00-5.
+- Revisit if: 09 adds an archetype (the sim fails it until its pools pass).
+
+### DL-08-32: Prostheses are base items
+- Decision: [revision: I-016] Six `base_items.yaml` entries tagged `item.tool.kit.prosthesis` (hook, arm brace, peg or fitted boot, hinged knee brace, glass eye, ear trumpet), price band 2, crafted under the matching trade, body slot `fitted`, `trophy_eligible: false`, each with `offsets {maim, narrows, never}` naming its 07 maim and exactly what it narrows (a hook allows a strapped shield; a brace halves a status penalty; a glass eye hides the loss and changes no number). 07.7.6, 07's maim `offset` texts and 08.5.1 point to them.
+- Alternatives considered: one generic "made replacement" entry (rejected: 07.7.6 names the things, and each narrows a different restriction).
+- Evidence: the generators' validation passes; the loot sim's drops are unchanged (prostheses are never trophies).
+- Serves: goal 2 (no rule names an item the data lacks); the brief's maim-as-story stance (07).
+- Revisit if: a playtest asks for a prosthesis of a wondrous rung (a relic hand): that is a crafting project on these bases.
+
+### DL-08-33: Fewer drops and leaner hoards, so magic items are not routine at P3–P5
+- Decision: [revision: I-018] The drop check becomes T1 10 · T2 15 · T3 30 · T4 40 · T5 55 (was 10/20/35/50/70); hoards lose one item at T3–T5 (T3 one masterwork, T4 one wondrous, T5 one wondrous and one masterwork); a hoard is generated where it is kept, so a hoard-keeper defeated away from its lair or vault rolls as a trophy and its hoard waits there (08.3.3, 08.3.12, PR-08-1 step 3, `gen_loot.yaml`). The masterwork rate is unchanged.
+- Alternatives considered: lowering the masterwork rate (costly wins giving fine items: rejected, it changed the share of masterworks from 74% to 52% but not the count of items, which was the problem); counting hoards into 08.2.7's table instead (rejected: the table is the design target that 09's tuning and 12's pacing read).
+- Evidence: `08-campaign-sim.py`, 300 campaigns × 70 sessions (T-08-17): property items won per band P1 4 / P2 6 / P3 13 / P4 24 against 08.2.7's 2–4 / 4–6 / 8–12 / 15–25 (before: P3 22, P4 45.5 in a 60-campaign run); bound abilities attuned and top signature tiers within 08.2.7's columns; coin one tier ahead at P3–P4 with lifestyle the only sink. `08-loot-sim.py` re-run: rates 7.3/16.0/32.5/38.8/55.3%, compliance 1,000/1,000.
+- Serves: goal 3 (loot that matters because it is not routine); the brief's item-density assumption (08.2.7) that 09 and 12 rely on.
+- Revisit if: playtests (T-08-DENSITY) count more than one row ahead, or coin runs two tiers ahead once real sinks are spent (OEQ-08-4).
+
 ## DL-09 — Adversaries
 
 ### DL-09-01: Archetypes are manufacturers; 63 of them over the nine creature branches
@@ -1928,6 +1949,13 @@ chapter 06's fight model and T-06-12 lines), output `07-harm-sim-output.txt`, wr
 - Evidence: [R2 §09] [R4 §6.2 item 4] [07.3.3]
 - Serves: BRIEF §4.
 - Revisit if: players report being surprised by a creature's danger after perceiving it.
+
+### DL-09-25: Archetype terrain lists widened so every terrain table and every site pair has its own creatures
+- Decision: [revision: I-022, I-029] thirty-four archetypes gained `encounter.terrain` tags (`09_data_arch.py`, `09_data_arch2.py` → `archetypes.yaml`): e.g. wolf + road; troll + road, wetland, frozen; ghost + road, wetland, frozen, deepwood, water; monstrous beast + plains, arid, underground, wetland, frozen; brigand + wetland, arid, water, settlement, plains, ruin; aberration and great dragon + sea. Each is a place the creature plausibly lives or hunts; no band, stat or loot changed.
+- Alternatives considered: let tables and site gates draw creatures from outside their terrain (rejected: `encounter.terrain` is the only data that says where a creature lives, so 10's tables would contradict 09's data); new archetypes for the thin terrains (rejected: the existing ones fit once their range was stated honestly, and new archetypes need bestiary, loot and absorbable data).
+- Evidence: before, 20 of 112 site pairs gated fewer than three archetypes and frozen held 3 archetypes, arid 5 (`10-gen10_sites.py`); after, 0 pairs below three, and the generic tables draw 12–22 archetypes per terrain. `09-gen_data09.py` output is unchanged apart from the terrain lists.
+- Serves: goal 2 (data says where things live; tables and gates agree), goal 1 (varied encounters).
+- Revisit if: a pre-made setting or world seed wants a creature excluded from a terrain (it overrides with its own regional table).
 
 ## DL-10 — Exploration, Travel, and Sites
 
@@ -2105,6 +2133,20 @@ chapter 06's fight model and T-06-12 lines), output `07-harm-sim-output.txt`, wr
 - Evidence: [R5 EX-02] [R: https://thealexandrian.net/wordpress/17308/roleplaying-games/hexcrawl (veering)] [01.4.7] [C:P16]
 - Serves: goal 2 (sealed state), goal 1 (getting lost is an adventure, not a trap).
 - Revisit if: OEQ-10-4 finds lost days dead-end.
+
+### DL-10-26: The generic encounter tables are written per home band, and the audit fails what it used to repair
+- Decision: [revision: I-029] each terrain branch's generic table (`travel.yaml#encounter_tables`) holds one d20 threat sub-table per home band 1–5 (`threat_by_home`, 55 in all; T-10-16), hand-written in `_process/simulation/10_data_enc.py` against T-09-10's shapes, with two new row fields: `variant` (09.4.6) and `leader`. Every row names an archetype fielded at its band, so the engine never clamps; at home 1 the home − 1 faces are band-1 creatures written small, at home 5 the home + 1 faces are band-5 solos (09.8.2). PR-10-8 now also fails a lethal high face, an archetype outside its fielded bands and a broken shape rule (it used to repair the shape silently). Thirty-four archetypes gained terrain tags (`09_data_arch*.py`, DL-09-25) so each table draws only creatures that live in its terrain (`10-gen10_travel.py` checks it).
+- Alternatives considered: keep one band-relative table and tune counts (rejected: the same row is fair at one home band and lethal at another; groups of three or more at the home band are lethal from P2 up by T-09-10, so no single count works across bands, and archetype band ranges force clamps); generate the generic tables with PR-10-10 (rejected for the generic ones: they are the hand-written, flavoured fallback every region leans on; PR-10-10 is kept for pools nobody wrote by hand); add ladders of archetypes to one row (rejected: harder to audit and to read than five short tables).
+- Evidence: `10-word-audit-output.txt`: 55 of 55 tables pass (was 7 of 55); no lethal face at the middle or high count; word mix trivial 35.7 / easy 21.5 / fair 34.5 / hard 8.2 / lethal 0 %; 12–22 distinct archetypes per terrain; repeat chance ≤ 0.195 per table (first draft mean 0.176, max 0.255). T-09-10 and the shape matrix in the audit's history (I-029).
+- Serves: goal 2 (the fallback table is in budget at every band, so PR-10-8 step 5 is safe), goal 1 (a world that does not scale to the PC is still survivable where its band says it should be).
+- Revisit if: T-09-MIX-CAMPAIGN (OEQ-09-5) finds the word mix too gentle (hard 8% against its 30% target) — then raise start shapes at home bands 2–4 and re-run the audit.
+
+### DL-10-27: One builder for every table nobody wrote by hand (PR-10-10), and a pool for every site pair
+- Decision: [revision: I-022, I-028] PR-10-10 builds a threat sub-table from a weighted pool: eight slots in 30/55/15, an archetype drawn per slot among those fielded at its band, a start shape (T-10-25) stepped down a fixed ladder until the row's PR-10-8 word is at most fair (home + 1: hard). A site's denizen table uses its pair's pool (`sites.yaml#denizen_pools`, all 112 pairs now gate at least three archetypes, so the old 20-pair fallback list is gone) with the theme gate alone as fallback; a world seed's regional tables use the seed's pool (12.16). Tables built this way pass PR-10-8 by construction.
+- Alternatives considered: authoring 112 × 5 site tables (rejected: 560 hand tables, and a world seed's regions are unknown in advance); the old rule "the archetype's usual group at band − 1 / band / band + 1" (rejected: it is the shape that failed I-029 on the generic tables).
+- Evidence: `10-site-tables-output.txt` (seed 1022): 560 of 560 pair × band tables pass PR-10-8; 4,456 of 4,480 slots from the pair pool, 24 from the theme gate, 0 by nearest band. `12-world-seed-output.txt` audits a seed's regional tables built the same way.
+- Serves: goal 2 (no judgment in table building; P5's pool gate applied to who lives where), goal 1.
+- Revisit if: played delves report site tables that feel samey (then add per-theme start-shape offsets).
 
 ## DL-11 — The Living World
 
@@ -2290,6 +2332,14 @@ chapter 06's fight model and T-06-12 lines), output `07-harm-sim-output.txt`, wr
 - Serves: goal 1 (the successor belongs to the world); Principle VI.
 - Revisit if: T-11-LEGACY shows fewer than two of three candidates drawn from sources 1–3.
 
+### DL-11-27: The world sims run 11.3.7's agenda exactly; override (c) needs a due aid or a d6 of 1
+- Decision: [revision: I-032] `11-world-sim.py` now selects every faction action by 11.3.7 cell for cell (`choose_action()`: overrides (a) slip, (b) war on a d6 of 1–3, (c) `aid_pc`; each temperament row with its own condition; a failed condition reads as `goal`; strike/scheme/court targets by the ladders), and models `court`, `aid_pc`, `lie_low`, a discovered `scheme` and `recover`'s DC per 11.3.6. `13-world-sim.py` no longer patches the steadfast row. The exact run exposed a rules defect: `aid_pc`'s last result (an opportunity bang) is always eligible, so override (c) as written made every faction at status +2 or better spend every turn aiding the PC (20.5% of all faction turns in the engaged run; that faction never worked its goal). 11.3.7 (c), PR-11-2 and `factions.yaml#agenda.overrides` now read: status ≥ +2 and either one of `aid_pc`'s first three results is due (a ransom, a threat bang naming the PC's holding, a reward owed) or a d6 shows 1 (the opportunity bang).
+- Alternatives considered: dropping (c) and leaving `aid_pc` to the steadfast row (rejected: a Devoted faction would never pay a due ransom); (c) on a d6 of 1–3 like war (rejected: a friendly faction would then give up half its turns, which no other contract row asks for).
+- Evidence: T-11-24 re-run (300 seeds × 104 weeks, byte-reproducible): goals 15 per region per two years (13 / 15 / 18), about 2 per faction per year (target 1.5–3.5); 67–70% of faction turns go to goals; `aid_pc` 3%; mean tier 1.75 → 2.37; tier 5 in 0%. The Thallen re-run: 1.81–2.05 goals per faction per year; 8 entanglements in two years for a PC at war.
+- Kept, with the evidence: war is decisive. Under override (b) two tier-1 neighbours at relation −3 strike each other on half their turns, and the sim's Ember Cult collapses at a median week 10–12 (p90 35–44); 11.3.9's vacuum refills the map. This is the rule's intent ("war is news in both seats", 11.3.14); a seed never starts a pair at −3 (12.16.10 starts the threat at −2 to its foes), and 11.3.14's cooling returns a quiet war to −2.
+- Serves: P-world (a world that moves by rule, not by the DM's inclination); goal 2.
+- Revisit if: playtests show wars between small factions ending before the PC can take a side (then cap override (b) at d6 1–2 or make a faction's first hold loss in a season absorb the second).
+
 ## DL-12 — DM Procedures
 
 ### DL-12-01: The turn loop is two passes — adjudicate (state) then narrate — with a claim-by-claim check before delivery, as a rule of play
@@ -2431,6 +2481,49 @@ chapter 06's fight model and T-06-12 lines), output `07-harm-sim-output.txt`, wr
 - Evidence: [01.7.1, 01.9.3, 01.10.3]; [R4 §7.3]; https://arxiv.org/abs/2502.19519.
 - Serves: goal 1.
 - Revisit if: playtest logs show a pause point left unanswered more than 20% of the time (its default may need to change).
+
+### DL-12-21: The world seed: a session-zero procedure that writes a whole starting region, so no setting is required
+- Decision: [revision: I-028] 12.16 and PR-12-9 build the starting world in fourteen steps (premise, canon, faith, peoples and tongues, land, haven, factions, cast, sites, encounter tables, rumors, calendar, opening and pregens, the seed check) from `data/world_seed.yaml`'s questions and oracle tables, reusing every generator the rules already had (PR-11-8 and 11.3.18 for factions, PR-10-6 for sites, 12.11.1 for people, `world_turn.yaml`'s situation templates and rumor truth, T-10-2's rings, 02's creation defaults for pregens) and one new one (PR-10-10 for tables). Its output is a region record of the `region_*.yaml` shape, so every chapter reads a seed exactly as it read chapter 13's region; chapter 13's Thallen Vale is re-framed as one optional pre-made seed, and 220 references across the chapters that treated chapter 13 as required now name the region's seed. It lives in ch.12 because it is a DM procedure run at session zero (12.5.1), and it orchestrates 10's, 11's and 02's procedures rather than owning their content.
+- Alternatives considered: a short "truths" list only (Ironsworn's) — rejected: the rules read 62 distinct things from a region (T-12-16), from teachers and sentry floors to org-tie maps and the second tongue, and a list of truths supplies none of them mechanically; generating the world lazily, on first need — rejected: chapter 02 reads peoples, tongues, keepers and names before the first scene, and the opening needs factions already in motion and three leads; keeping chapter 13 as the default — rejected by the owner (FINISH-PLAN, 2026-10-05).
+- Evidence: `_process/simulation/12-world-seed.py` (deterministic): seed 1 and a guided run pass 62 of 62 checks; 200 further oracle seeds pass every check; 2,600 regional tables built and all pass PR-10-8. The requirement list is built from every chapter's "To 13" requests (77 answered in `region_thallen.yaml#interface_checklist`) and every rule that reads region data (a grep of all chapters: 220 lines). [R5 P-22..P-36] [R: https://www.ironswornrpg.com/ (truths)] [R6 B-12, B-15, B-20].
+- Serves: goal 1 (a player can start in a world they shaped, or one that surprises them), goal 2 (everything a setting supplies is state, written by procedure, never improvised in narration).
+- Revisit if: T-12-SEED (OEQ-12-11) finds more than three setting gaps a session in a seeded world.
+
+### DL-12-22: Every seed question has closed options and an oracle; a custom answer is classified, its words kept as description
+- Decision: [revision: I-028] 12.16.2: guided, oracle or mixed mode per question; a player's own words are classified `[J:enum]` to the nearest option (the only judgment in the procedure) and kept as the entity's description, never as a mechanic; one veto per step in oracle mode.
+- Alternatives considered: free-text answers parsed into data (rejected: an open judgment per answer, the leniency failure R4 measured); oracle only (rejected: goal 1 — the player should be able to shape their world).
+- Evidence: [R4 §3.2 S1 (closed-set classification is the AI's reliable form)]; the guided run in `12-world-seed.py` (fourteen player answers, one a classified custom answer) passes every check.
+- Serves: goal 1, goal 2.
+- Revisit if: players report the options too coarse for the worlds they want (then add options, never free text).
+
+### DL-12-23: The seed writes the world at the depth play starts with; deeper content is generated on demand by its owner
+- Decision: [revision: I-028] 12.16.18 and `world_seed.yaml#defaults.uses_generic`: the seed writes 13 areas, about 11 sites, 4 full factions, about 17 NPCs and the haven in full, and leaves events, hooks, season events, NPC tables beyond names, omens, chase ground, hire quirks, cases, storied items, regional afflictions and setting origins to the generic tables or their owners' on-demand rules, each named in the seed record. A new region past ring 5 re-runs steps 5, 9, 10 and 11.
+- Alternatives considered: authoring regional versions of every generic table per seed (rejected: no rule needs them, and each would need its own audit); a deeper seed (more settlements, more NPCs) (rejected: write-on-mention already covers them, and a larger seed costs context the DM must carry).
+- Evidence: T-12-16 marks 11 requirements `generic_or_table`; all 62 pass on 201 seeds.
+- Serves: goal 2 (proportional state), goal 1.
+- Revisit if: playtests show a generic table breaking a region's tone (then the seed writes that table).
+
+### DL-12-24: The seed check defines what a setting must supply, and every setting (generated or pre-made) must pass it
+- Decision: [revision: I-028] 12.16.17: `world_seed.yaml#requirements` (T-12-16) is the single list of what the rules read from a region, each with the seed key and a mechanical check; a generated seed re-runs the failing step; a pre-made seed (chapter 13's, or any) must pass the same check.
+- Alternatives considered: trusting each chapter's interface requests (rejected: they were addressed to chapter 13 and never checked against a generated world); a checklist in prose (rejected: unenforceable).
+- Evidence: `12-world-seed.py` implements every check; 62 of 62 pass on the committed example.
+- Serves: goal 2 (AI correctness: no rule reads a key that can be missing).
+- Revisit if: a chapter adds a region read (then add its requirement and re-run the script).
+
+### DL-12-25: Claim class `action`, and the review of every later chapter's "To 12" note
+- Decision: [revision: I-030] 12.3.1 gains a fourteenth claim class, `action` (a non-player entity's act), checked against the act's closed source in the turn's adjudication record (12.2.9; for an ally, 16.13.3's six reasons); an act with no source takes the existing verdict `unsourced_change`, so no new verdict is needed. `pacing.yaml#claim_check.classes` lists it. Every "To 12" note in chapters 01–11, 15 and 16 was checked against chapter 12, item by item (66 items). Applied: `action`; owed `[WARNING]`/`[STATUS]` blocks fail the claim check and survive the plain fallback (07); `harm_condition` checks a narrated death against `harm_state.dead` (07); `position` checks T-06-4's flag words (06); PR-06-6 named as 12.2.9's enemy-turn step (06); T-12-3 cites 06.2.1 and 06.13.1 and lists 06.13.1's four end conditions (06); a `[CONFLICT]` status line row in 12.15.15 for windups, bands, flags and a sensed morale clock (06: the "status line" 06.9.5 and WE-06-8 cite had no format); ability prices (Focus, uses, flare, overdraw) and the relic surcharge on the OFFER's Costs line (05 c, 08); one-line drops in RESULT (08); held abilities' cards in the packet with their rank text verbatim (05 a); ch.09's eight challenge axes kept by the rotation ledger (09.8.5 said 12.9.2 keeps them; it did not); T-09-13 cited for band tells (09); the reason-to-lie flag in 12.11.5 (15); T-15-2 cited in 12.11.6 (15); the V face cited in 12.6.5 (10); any ally's death is a setback and an open personal thread is a lead-injection source (16 c, e); the stale field name `reaction` corrected to `reaction_roll` in 12's own "To 09" note.
+- Not applied, and why: 01's six items, 02's, 03's T6/`scene_end`/disputes, 04's, 09's `reaction_roll` and `threat_advisory`, 10's `[JOURNEY]` and skip narration, 11's five and 15's `kind`/lead-audit items were already in force (registered integration items, or written into 12 before the note). 03's reflection sweep is 03's own handler at `reflection`, returned through 12.2.3 item 8, and "narration never mentions recording" is T-12-1's T10 ("no numbers or rules words in the fiction"). 03's `last_exercised` is offered, not required: the rotation ledger counts facets its own way (12.9.1). 05 (b) needs nothing: `roll_table` rolls any registered table. 05 (d), 07's and 10's anchors are compiled by `12-compile_anchors.py` (I-031). 07's "triggers are returned by `get_active_triggers`" is 12.2.3 item 3. 08's "generation log available" is 08's visibility, which 12.15.1 already honours. 10's time-tick die is a boundary handler, 01.11.3 source (5). 15's clue delivery (12.10.4), principal depth and walk-on promotion on a Talk target (12.11.1) were already 12's rules. 16 (a) facets and (d) memories were adopted as written; banter's budget (16.13.4) is loaded with the ally card.
+- Alternatives considered: re-wording 16.13.3 to an existing class (rejected: `outcome` is about the PC's frames and `attitude` about standing; no class covered a non-player act, so NPC acts with no source were also unchecked); a new verdict `unsourced_action` (rejected: `unsourced_change` already means "no write or source this turn", and its fix, cut it, is the right one).
+- Evidence: the 66-item review is listed in `_process/reports/revision-B-report.md` (step 4); validator 0 ERROR / 0 WARN.
+- Serves: goal 2 (AI correctness: an NPC or ally acting from nowhere is now a checkable claim); P13.
+- Revisit if: a playtest log shows `action` claims flagged on ordinary scene furniture (a crowd moving), which would call for an exemption like `new_element`'s scene-furniture rule.
+
+### DL-12-26: Every anchor card states its knobs and intent verbs in compiler terms; the anchor compile is warning-free
+- Decision: [revision: I-031] the 13 compile warnings are cleared at their sources, not suppressed. Cards with no T-00-20 knob now name them, fixed where nothing may change: 02.9.4 (`stakes` Safe and `targets` the character's own past, both fixed: the two flags decide), 06.5.4 (`targets`, `reach_unit`, `condition`), 06.5.10 (the seven knobs its Computation line already allowed, at most two per frame), 08.6.7 (`dc`, `time_cost`), 09.2.4 (`targets`, `time_cost` none: the two enums decide). 08.6.4, 08.6.7 and 08.6.8 gained intent verbs ("make, forge, brew…", "repair, mend…", "salvage, break it down…") instead of the compiler's title fallback. T-06-9 rows 20, 24, 33, 35 and 39 name a basic verb first: Move (across difficult ground; `action_cost` +1 per Move), Strike called at the held object, Evade as Defend, Evade resisted, Evade as Full defense (06.1.5 defines Defend as a named use of `verb.evade`). The compiler now collapses wrapped card text inside knob defaults (four anchors' defaults lost their embedded runs of spaces; no value changed otherwise).
+- Alternatives considered: teaching the compiler to accept "none" as a knob list (rejected: retrieval scores knobs, and a card with none could not be adapted, 00.2.7); mapping Defend to a sixteenth verb (rejected: 06.1.5 says it is Evade).
+- Evidence: `12-compile_anchors.py`: 129 anchors, 0 errors, 0 warnings (was 13 warnings).
+- Serves: goal 2 (AI correctness: every anchor the DM retrieves has machine-readable knobs and a basic verb).
+- Revisit if: a new anchor card is added without `Intent verbs:` and `Knobs:` (the compiler warns again).
 
 ## DL-13 — The Starter Setting: the Thallen March
 
@@ -3053,3 +3146,10 @@ Full record: `_process/integration-report.md`.
 - Serves: goal 2 (every id resolves to one defining file; the engine can route any id by its prefix).
 - Revisit if: Wave 4's audit finds a registry-only prefix that collides in meaning with a named one (then
   rename it in data, with `superseded_by`, and regenerate).
+
+### DL-INT-12: A [J] rule may give its worst case inline, under one canonical label (I-001)
+- Decision: [revision: I-001] 00.2.5 accepts two forms for a rule with a `[J:*]` decision: the template block, or the inline form (the decision as options or a "true only when" test, the default when uncertain, and the worst case labelled *Worst case (J):*, with an optional qualifier: *Worst case (J, tier):*, *Worst case (J) of a one-rung error:*). The worst case is never omitted. A script normalized the 127 inline labels in chapters 00–12, 15 and 16 that read *Worst case:*, *Worst case (tier):* or *Worst case of …* (ch.13 is left as written, per the owner's constraint; its one legacy label is accepted and counted apart). `validate_ruleset.py` now fails any `[J:*]` rule whose worst case is missing or carries a non-canonical inline label.
+- Alternatives considered: converting every inline judgment to the full block (rejected: 152 rules, most of them one judgment inside a `[D]` rule, would gain eight to ten empty or repeated fields each and lose the prose that says why the judgment is bounded; the block's value is the worst case, which the inline form keeps); accepting any wording (rejected: an auditor and the anchor index need one string to find).
+- Evidence: 239 rules with a `[J:*]` decision: 86 in block form, 152 inline with the canonical label, 1 legacy label in ch.13, 0 missing (validator summary); the normalizer is idempotent (a second run changes nothing).
+- Serves: goal 2 (every judgment's worst case is stated and machine-findable); constitution P-B.
+- Revisit if: a playtest's ruling ledger shows a judgment whose real worst case exceeded the stated one (then that rule moves to the block form with examples).

@@ -25,7 +25,8 @@ Turn and the Year Turn; 11.12 the chronicle; 11.13 retirement and legacy. Proced
 tables T-11-*, worked examples WE-11-*. Machine-readable companions: `data/factions.yaml` (faction
 templates, generic factions, the agenda and entanglement tables), `data/world_turn.yaml` (the steps,
 world-reaction rules, rumor, hook, epithet and seasonal tables, thread ranks, attention),
-`data/calendar.yaml` (the engine; 13 names months and festivals in its owner-block) and
+`data/calendar.yaml` (the engine; the region's seed names months and festivals, 12.16.15, and a pre-made
+setting may use its owner-block) and
 `data/legacy.yaml` (endings, settlement, legend ranks, ledgers, inheritance, timeskips). Additions to
 shared files are in `data/boundaries.yaml owner-block 11`, `effects.11.yaml` and `tags.11.yaml`.
 
@@ -147,7 +148,7 @@ clock or a ledger of 00.6.1; none lives in narration or in the DM's context [C:P
 reads three levels of it and uses them as **scopes** everywhere a thing spreads, is known or is held:
 - a **settlement** scope: a place tagged `terrain.settlement.*` and everything inside it;
 - a **region** scope: a place of chapter 10's kind `region` (one home band and one danger rating);
-- the **realm** scope: every region of the campaign (one per campaign unless chapter 13 says otherwise).
+- the **realm** scope: every region of the campaign (one at the start; a new region joins it by 12.16.18).
 A faction id (`fac.*`) is also a scope: the faction's members and officers, wherever they are (03.10.5).
 Every NPC that chapter 12 generates at depth recurring or principal has a `home` (a settlement or, for
 a wanderer, a region) and its faction memberships (`member_of: [fac.*]`); this chapter writes the
@@ -253,7 +254,8 @@ world scale: the world grows by replacing, never by piling up [C:VI; DL-11-12].
 
 **11.3.1 The faction record.** `[D]` Every faction conforms to this shape (`data/SCHEMAS.md#factions.yaml`
 plus the optional fields listed in T-11-1). Templates and generic factions are in
-`data/factions.yaml`; chapter 13 adds its region's factions in its owner-block [R6 B-R2; R5 P-22, P-23].
+`data/factions.yaml`; a region's factions are written by its seed (12.16.10; a pre-made setting such as
+chapter 13 uses its owner-block) [R6 B-R2; R5 P-22, P-23] [revision: I-028].
 
 ```yaml
 Faction (extends Entity, kind faction):
@@ -379,8 +381,11 @@ chapter 07's rout may move them (12.6.5; 07.4.3) [R6 B-01, B-02; R5 P-23; DL-11-
 **11.3.7 Which action: the agenda table.** `[D]` The DM never chooses what a faction does. Before
 rolling, the first of these that holds is the action: (a) a **slip** last turn → `recover`; (b) the
 faction is **at war** (relation −3) with a faction that has its seat or a hold in the same region, and a
-d6 shows 1–3 → `strike` against it; (c) its status toward the PC is +2 or more and an `aid_pc` result is
-eligible → `aid_pc`. Otherwise the engine rolls a d6 on the faction's **temperament** row
+d6 shows 1–3 → `strike` against it; (c) its status toward the PC is +2 or more and either one of
+`aid_pc`'s first three results is due (a ransom due, a threat bang naming the PC's holding, a reward owed) or a
+d6 shows 1 (it brings the PC work: the opportunity bang) → `aid_pc` [revision: I-032: the opportunity bang is
+always eligible, so the unqualified override made a friendly faction aid the PC every week and never work its
+own goal]. Otherwise the engine rolls a d6 on the faction's **temperament** row
 (`factions.yaml#agenda`); a row whose condition fails reads as `goal`:
 
 | d6 | aggressive | cautious | mercantile | zealous | secretive | steadfast |
@@ -439,7 +444,7 @@ these rules, which the Season Turn applies (11.11.2 step 2) except where "at onc
 **The weight of size.** At each Season Turn a faction of tier 3 or more rolls `d20 + its highest rating +
 stage modifier` against `10 + 2 × tier`; on a failure it loses hold. Great institutions bleed without
 anyone attacking them, which is what keeps the map from filling with tier-5 powers (T-11-24: across 300
-two-year runs the mean tier rose about 0.25 and no faction passed tier 3) [R6 B-05; DL-11-06] [integration: I-026].
+two-year runs the mean tier rose about 0.6 and no faction passed tier 3) [revision: I-032] [R6 B-05; DL-11-06] [integration: I-026].
 
 **A collapse** removes the faction from the World Turn. Its holds become unowned places; its officers
 become free NPCs who keep their records; its members keep their personal offsets toward the PC; it
@@ -587,7 +592,7 @@ loud expedition becomes a world that has noticed, with no one remembering to mak
 10's request; DL-11-13].
 
 **11.3.14 Factions against factions.** `[D]` Each faction holds a relation toward every other faction it
-knows, on the standing scale (−3…+3; default 0, data or chapter 13 sets the rest). Relations move only
+knows, on the standing scale (−3…+3; default 0, data or the region's seed sets the rest, 12.16.10). Relations move only
 by these rows: the defender of a successful `strike` → its relation toward the striker −1 (−2 on a
 critical success); a `scheme` discovered → −1; a successful `court` → +1 toward the courtier; a completed
 `dominate` goal → the target's relation toward the victor −1; a faction at +3 toward a struck faction →
@@ -676,16 +681,17 @@ status toward the PC leaves 0 becomes full at once (11.3.2) [R5 P-25; DL-11-05].
   (6, hidden, +1 a week, omens), which on completion queues a threat bang with specificity `pc_deed`.
 
 **11.3.18 Where factions come from.** `[D]` + `[J:enum]`
-- **Data:** chapter 13 writes its region's factions in its owner-block of `factions.yaml`, conforming
-  to 11.3.1 and to a template (`factions.yaml#templates`).
+- **Data:** the region's seed writes its factions (12.16.10: at least three full, goal clocks running), and a
+  pre-made setting writes them in its owner-block of `factions.yaml` (chapter 13); either way they conform
+  to 11.3.1 and to a template (`factions.yaml#templates`) [revision: I-028].
 - **Templates:** `factions.yaml#templates` holds eighteen templates, each keyed to a level-2 `org`
   kind, eight of them also marked as their branch's default (`branch_default_for`): ratings by tier, temperament, values, patron deeds, rank ladder,
   duties, fields, boon base and signature, omens for its goal and attention clocks, and its goal list.
   Choosing the template is `[J:enum]` over the faction's `org_tags`: the deepest tag with a template,
-  else its branch's (most-specific-wins, 00.5.4). *Worst case:* a sibling template (a smugglers'
+  else its branch's (most-specific-wins, 00.5.4). *Worst case (J):* a sibling template (a smugglers'
   template for a thieves' guild): ratings and temperament of a near kind, fixed at creation (class i).
-- **Vacuums** (11.3.9) and **new regions** (a region discovered or generated by chapter 10's or 13's
-  procedures with no factions recorded) roll `tbl.11.faction_seed` (d12 by the region's settlement
+- **Vacuums** (11.3.9) and **new regions** (a region discovered or generated by chapter 10's procedures
+  or 12.16.18 with no factions recorded) roll `tbl.11.faction_seed` (d12 by the region's settlement
   tier and terrain) for one to three factions, tier by `tbl.11.faction_tier` (d6: 1–2 tier 0, 3–4 tier
   1, 5 tier 2, 6 tier 3), each written with its linchpins' fates sealed at once (11.3.10).
 - **The PC's own:** a faction the PC founds (11.9.7) or a holding large enough to be one (a keep is a
@@ -728,7 +734,7 @@ with the role slots filled from state (which faction, which NPC, which place) an
 fixed. It is never "decided later" [R4 W8; 00.6.5]. Templates (`world_turn.yaml#situation_templates`,
 sixteen generic shapes: feud, sickness, road of knives, succession, hunger, the hunting ground, the
 rite, war comes, flood and fire, the debt, the missing, the festival's trouble, the cursed ground, the
-prisoner, the scandal, the enemy) are what chapter 13 and the generators instantiate.
+prisoner, the scandal, the enemy) are what the world seed (12.16.12) and the generators instantiate.
 
 **11.4.2 Running the timelines.** `[D]` + `[T]` Handler `h.11.situation_timelines` (`day`, phase 6,
 interrupting per 11.2.5) tests every active situation of cadence `day`; World Turn step 3 tests those of
@@ -747,7 +753,7 @@ that the PC "probably stopped it", but by the facts their deeds wrote [R6 B-12; 
 row 5); a seasonal event (11.11.4); a world reaction (11.4.6) whose candidate names a template; chapter
 12's random event handing over a situation seed (12.6.5 item iv); `tbl.twist_s5` row 8 (the land
 changes: 12's table, written here by `new_situation(template, region)`); a world change of a great
-project (T-11-17); chapter 13's data; and a creation hook of kind `question` or `enemy` when it is
+project (T-11-17); the region's seed (12.16.12); and a creation hook of kind `question` or `enemy` when it is
 activated (11.5.6). A region holds at most eight active situations; the Season Turn retires the oldest
 whose actors have all left or collapsed, then the oldest concluded-but-unretired (11.11.3).
 
@@ -934,7 +940,7 @@ Thread (entity kind thread):
   it and acts on it; until then the situation runs unseen).
 `[J:enum]` only when a matter could be two kinds: true **vow** only when a commitment of kind vow or oath
 is written for it; true **situation** only when it is a situation's own thread; else **quest**. Uncertain
-→ quest. *Worst case:* a vow filed as a quest could expire unseen; vows are always written as
+→ quest. *Worst case (J):* a vow filed as a quest could expire unseen; vows are always written as
 commitments first, so the engine checks the commitment before expiring anything (class iv).
 
 **11.5.3 Rank and size.**
@@ -977,7 +983,7 @@ Basis:              [R5 P-14 (Ironsworn ranks: troublesome ... epic)] [00.8.3 cl
 - a resolved beat that **serves** the thread → **delivered reach** (0–4). `[J:flag]` *"Does this beat's
   intent move the thread's named obstacle?"* True only when the beat's intent, if it succeeds, changes a
   fact about the obstacle, its holder, its place or its clue graph; false for beats that merely happen
-  near it. Uncertain → false. *Worst case:* one beat's reach ticked wrongly, logged with its frame id
+  near it. Uncertain → false. *Worst case (J):* one beat's reach ticked wrongly, logged with its frame id
   (class i);
 - a **core clue** of its case found (15.9) → 1;
 - a **milestone** → 2: a necessary node of its case reached, a step of its situation prevented, its
@@ -1015,7 +1021,7 @@ thread record and its text; **activating** it writes the rest:
    entities when any fits (`[J:flag]` *"Does an existing entity of this kind satisfy the hook's text?"*;
    uncertain → yes if the entity is within the region and not dead or departed), else created
    (12.11.1 for NPCs; 10 for places; 11.3.18 for factions) [R1 11 "improvise, write it down, bring it
-   back"; R4 W10]. *Worst case:* a reused NPC fits less well than a new one would: a written fact the
+   back"; R4 W10]. *Worst case (J):* a reused NPC fits less well than a new one would: a written fact the
    world keeps (class iv).
 2. **Graph:** a case of chapter 15's shape is generated (PR-15-6) with at least **three clue placements**
    per necessary conclusion, of at least **two holder kinds** (person, place, object, rumor), one of them a
@@ -1309,7 +1315,7 @@ cannot un-earn it [R6 A-18, A-19; DL-11-15].
 
 **11.7.6 Valence: the same deed, praised and damned.** `[D]` An entry's **valence** in a scope is computed,
 never judged: the scope's **values** are the values of the faction whose seat is that settlement (or the
-faction itself for a faction scope; the region's dominant faction or chapter 13's regional values for a
+faction itself for a faction scope; the region's dominant faction or the seed's regional values (12.16.10) for a
 region). Valence is **admired** (+) when the key is a pole those values admire or a deed branch among that
 faction's `patron_deeds`; **despised** (−) when the key is a pole they despise, or `defeat`, or `scandal`;
 **neutral** otherwise (renown without judgment). So "the one who burned the Guild's pens" is a hero in
@@ -1387,7 +1393,7 @@ guildmaster; an order's novice, brother, knight, commander, grand master):
 | 5 head | 1 | status +3; score ≥ 4; the head's seat empty (a linchpin fate, a retirement, a death) or won |
 
 **11.8.3 Sittings and offers.** `[D]` Ranks are conferred at the faction's **sittings** (its `sittings`;
-default the first week of each season; chapter 13 may name festivals). `next_sitting` is the first sitting
+default the first week of each season; the region's seed names festivals, 12.16.15). `next_sitting` is the first sitting
 after now. Rung 1 may be given at any time by an accepted offer. A rank is offered through chapter 04's
 protocol (V3 the order seeks you out; V9 the rite or trial; 04.7), or, for rungs 2–5, at a sitting when its
 requirements hold (a sitting offer, institutional, with the price `obligation`). A trial decides only when
@@ -1603,13 +1609,14 @@ deed against its giver (T-11-3) if the giver learns of it.
 weather regimes read) of **13 weeks** = **91 days** each. Within a season, day 1 is the season's **quarter
 day**, which belongs to no month (spring's quarter day is the year's first day), and days 2–91 are three
 **months** of 30 days. Weeks of 7 days run unbroken through the year, so every season begins on the first
-day of a week and every year on the same weekday; the year has 52 weeks and 12 months. Chapter 13 names the
-months, weekdays, quarter days, festivals and the era in its owner-block of `calendar.yaml`; until it does,
+day of a week and every year on the same weekday; the year has 52 weeks and 12 months. The region's seed names the
+months, weekdays, quarter days, festivals and the era (`calendar`, 12.16.15; a pre-made setting may use
+its owner-block of `calendar.yaml`); until one does,
 the engine's neutral names stand ("the second month of spring") [R5 TM-07; DL-11-21].
 
 **11.10.2 Dates.** `[D]` `date(timestamp)` renders `{quarter day of <season> | <day> of <month>}, <weekday>,
 year <n> <era>` and the watch; the codex shows it (shown, 00.6.3). Campaign year 1 begins on spring's quarter
-day unless chapter 13 sets an opening date. All of this chapter's durations ("8 weeks", "a season") are
+day unless the region's seed sets an opening date (12.16.15). All of this chapter's durations ("8 weeks", "a season") are
 counted in the ladder's units, so the calendar's names never change a duration.
 
 **11.10.3 The moon.** `[D]` The moon runs a 28-day cycle, thirteen to the year, starting new on the year's
@@ -1623,11 +1630,11 @@ waived in haggling, 08/15); **sitting** (factions whose sittings name it confer 
 surge** (all rumors circulating in the scope are drawn at weight 3; Carouse yields one more); **truce** (in
 its scope that week, faction strikes read as `goal`); **rite day** (a named school's rituals there count one
 scale lower in cost, 05); **hiring fair** (16's recruiting delivers one more candidate). The four quarter
-days are festivals with `market` and `sitting` unless chapter 13 says otherwise.
+days are festivals with `market` and `sitting` unless the region's seed says otherwise.
 
 **11.10.5 Aging.** `[D]` + `[T]` A PC has an **age** in years: the one the player stated, or by 02's
 `age_band` young 18, grown 30, old 55; it rises by 1 at each Year Turn. A character's people fix when
-**aging** begins (`calendar.yaml#lifespans`, by `creature.folk` tag; chapter 13 may adjust): orc and
+**aging** begins (`calendar.yaml#lifespans`, by `creature.folk` tag; a pre-made setting may adjust): orc and
 goblin 35; human, halfling and beastfolk 50; giant 80; dwarf 120; elf 300. From that age, at each Year
 Turn, the PC makes an **aging check**: Endure with Endurance (00.12.5), the engine rolling, against
 **Easy** in the first decade of aging, **Moderate** in the second, **Hard** in the third, **Very hard**
@@ -1677,7 +1684,7 @@ obligation, take up a thread, visit a mentor), which is what "telegraphed" means
 3. **Situations.** Over the cap of eight per region, retire the oldest whose actors have all left or
    collapsed, then the oldest concluded (11.4.3).
 4. **Seasonal events and world phenomena.** For each region, roll `tbl.11.season_events.<season>` (d12,
-   `world_turn.yaml`; chapter 13 may give a region its own): about one result in three is a **world
+   `world_turn.yaml`; a region's seed or setting may give it its own): about one result in three is a **world
    phenomenon** (11.11.4), one in four a new situation, the rest nothing remarkable. Then review the
    phenomena of the season just ended (11.11.4).
 5. **Threads.** Retire threads per 11.5.5; enforce the caps (11.5.9).
@@ -1700,7 +1707,7 @@ intervention). A phenomenon never extends itself by narration.
 
 **11.11.5 The Year Turn.** `[D]` Handler `h.11.year_turn` (`year`, phase 6) runs after the spring Season
 Turn of the same instant (00.7.6: `season` before `year`): (1) **aging** for the PC and named NPCs
-(11.10.5); (2) the **annual festival** of chapter 13's calendar, if any; (3) the **year's digest** line,
+(11.10.5); (2) the **annual festival** of the region's calendar, if any (12.16.15); (3) the **year's digest** line,
 built from the year's raw chronicle entries, never from the season digests (00.6.9 d); (4) **legend
 review**: every reputation entry of score 5 writes its epithet as permanent world vocabulary (it no longer
 fades even if its points fall), the first quiet step of a legend; (5) each retired PC still living as an
@@ -1912,7 +1919,7 @@ Ties within a source: the higher standing toward the character, then more scenes
 shown with one **tie** (+) and one **thorn** (−) read from their own record: the tie is their best faction
 status or bond, the thorn their worst faction status or an owed commitment (`[J:flag]` per candidate, only
 when their record holds neither: "does any recorded fact give this person an ally or an enemy?"; false →
-`tbl.11.successor_traits`, d8 pairs; *worst case:* a rolled pair where a recorded one existed: a written
+`tbl.11.successor_traits`, d8 pairs; *worst case (J):* a rolled pair where a recorded one existed: a written
 tie the world keeps, class iv) — Rogue Legacy's three heirs with visible trade-offs [R6 D-13]. The **newcomer**
 is always offered: chapter 02's full procedure, from anywhere. Whoever is chosen is made by **02.2.7**: the
 floor, nothing of the predecessor's power, origins fixed by recorded facts, a fresh birth draw.
@@ -1991,7 +1998,7 @@ the same world, a little older, with a statue in the square.
 **PR-11-2 A faction's turn.** `[D]`
 1. If the faction is collapsed: skip. If petty: d6 (11.3.16); stop.
 2. Overrides, first match: slip → `recover`; at war in region and d6 ≤ 3 → `strike` at the war enemy;
-   status ≥ +2 and an `aid_pc` result eligible → `aid_pc`.
+   status ≥ +2 and (a ransom, a threatened holding or a reward is due, or d6 = 1) → `aid_pc` [revision: I-032].
 3. Else roll d6 on its temperament row; if the row's condition fails, `goal`.
 4. Target by 11.3.7's ladder; if no target, `goal`.
 5. Compute the DC (11.3.5); roll `d20 + rating + 2 × tier + stage + lever`; read the degree (00.3.10).
@@ -2021,7 +2028,7 @@ is voiced in fiction; the herald already told the player what is due).
 | a cache and its clock (07.6.4) | cache rumors (T-11-10); a quest thread to recover it (11.5.12) when the PC learns where |
 | `lc.road_ends`, `career_end`, death (07) | retirement or legacy (11.13.1) |
 | `cost.exposure` at S5 (01.13.6) | reputation (11.7.2 item 4); a rumor; the observer's faction learns the deed (11.3.11 known: true) |
-| creation's hooks, long vow, faction ties, prologue (02.9, 02.11.2) | hooks (11.5.6); the long vow's thread; each faction tie: the faction of that `org` kind in the region (chapter 13's mapping) gets status +1, or +2 and −2 for "sworn and hunted"; prologue lines appended |
+| creation's hooks, long vow, faction ties, prologue (02.9, 02.11.2) | hooks (11.5.6); the long vow's thread; each faction tie: the faction of that `org` kind in the region (the seed's org-tie map, 12.16.10) gets status +1, or +2 and −2 for "sworn and hunted"; prologue lines appended |
 | the venture record (10.2.2) | the reckoning (11.3.13) |
 | a Nemesis result (09.9.3) | boasts as rumors (source `boast`); hunt clocks; victors' promotion (11.3.17) |
 | chapter 12's chronicle offers (12.4.8–9) | accepted as entries (11.12.2) |
@@ -2109,33 +2116,44 @@ follows 11.3.4 (rising above tier 3 needs a completed realm-scope `grow` goal; a
 strengthens the hold), and its AGENDA carries 11.3.7's `steadfast` row; the numbers below are the re-run's, with every
 random draw seeded so the output reproduces exactly (the
 first version let `expand` raise tier-3+ factions and reported tier 5 in 7–8% of faction-runs) [integration: I-026].
+**Re-run for I-032** [revision: I-032]: the script's agenda is now 11.3.7 cell for cell — the three overrides first
+(slip, war on a d6 of 1–3, `aid_pc`), each row's own condition (a failed one reads as `goal`), the target ladders,
+and `court`, `aid_pc` and `lie_low` with their 11.3.6 effects — where the first version read several rows as `goal`
+and let steadfast strike at −2. `recover` uses its 11.3.6 DC. The figures below are this re-run's.
 
 | Measure | Engaged PC | PC at war with one faction | No PC (a timeskip) |
 |---|---|---|---|
-| faction goals completed (region) | 18 / 21 / 23 | 18 / 21 / 23 | 18 / 21 / 23 |
-| goals completed per faction | 2 / 5 / 6 | 2 / 5 / 6 | 2 / 5 / 6 |
-| tier rises / tier falls | 5 / 5 (medians) | 5 / 5 | 5 / 5 |
-| collapses (a vacuum filled) | 0 / 1 / 2 | 0 / 1 / 1 | 0 / 1 / 2 |
-| strikes / strikes that landed | 16 / 7 (medians) | 16 / 7 | 15 / 7 |
-| entanglements + moves on the PC | 0 + 1 (medians) | 7 + 4 (p90 11 + 8) | 0 |
-| hooks seeded | 55 / 60 / 66 | 54 / 61 / 66 | 52 / 55 / 59 |
-| threads taken up / completed / failed | 32 / 19 / 11 (medians) | 32 / 19 / 11 | — |
-| hooks expired untaken | 19 / 24 / 29 | 19 / 24 / 29 | 48 / 51 / 54 |
-| situations created | 10 / 13 / 17 | 10 / 13 / 17 | 10 / 14 / 17 |
-| traces emitted (rumors, news, omens) | 266 / 285 / 302 | 267 / 285 / 301 | 271 / 287 / 305 |
+| faction goals completed (region) | 13 / 15 / 18 | 13 / 15 / 18 | 13 / 16 / 19 |
+| goals completed per faction | 2 / 4 / 5 | 2 / 4 / 5 | 2 / 4 / 5 |
+| tier rises / tier falls | 5 / 5 (medians) | 6 / 5 | 5 / 5 |
+| collapses (a vacuum filled) | 1 / 2 / 2 | 1 / 2 / 2 | 1 / 2 / 2 |
+| strikes / strikes that landed | 17 / 9 (medians) | 16 / 9 | 16 / 8.5 |
+| entanglements + moves on the PC | 0 + 0 (p90 0 + 1) | 0 + 0 (p90 4 + 2) | 0 |
+| hooks seeded | 54 / 59 / 65 | 54 / 59 / 65 | 51 / 55 / 58 |
+| threads taken up / completed / failed | 33 / 19 / 11 (medians) | 32 / 19 / 11 | — |
+| hooks expired untaken | 18 / 23 / 28 | 18 / 23 / 28 | 47 / 50 / 54 |
+| situations created | 8 / 12 / 16 | 8 / 12 / 16 | 9 / 13 / 16 |
+| traces emitted (rumors, news, omens) | 234 / 249 / 267 | 233 / 250 / 268 | 241 / 257 / 273 |
 | most open matters known at once | 8 / 9 / 10 | 8 / 9 / 10 | 6 / 7 / 8 |
 | weeks the PC knew fewer than three | 3 / 4 / 5 (of 104) | 3 / 4 / 5 | — |
-| bang queue at its fullest | 0 / 1 / 1 | 1 / 2 / 2 | 0 |
-| final tiers (start mean 1.75) | mean 2.01; highest tier reached 3; tier 5 in 0% of faction-runs | mean 1.99; 0% | mean 1.98; 0% |
+| bang queue at its fullest | 1 / 1 / 2 | 1 / 1 / 2 | 0 |
+| faction turns by action (11.3.7) | goal 67.6%, recover 9.4%, court 6.0%, expand 5.4%, strike 4.4%, scheme 3.9%, aid_pc 3.2% | goal 67.3%, recover 9.7%, court 6.0%, expand 5.4%, strike 4.4%, scheme 4.0%, aid_pc 3.0%, move_on_pc 0.2%, lie_low 0.1% | goal 70.0%, recover 10.1%, court 6.1%, expand 5.3%, strike 4.3%, scheme 4.0% |
+| the Wardens–Cult war (relation −3): week the Cult collapsed | 5 / 10.5 / 35 (104 = still standing) | 5 / 12 / 44 | 6 / 10 / 38 |
+| final tiers (start mean 1.75) | mean 2.37; highest tier reached 3; tier 5 in 0% of faction-runs | mean 2.38; 0% | mean 2.41; 0% |
 
-*Reading.* The world produces a steady stream: about one faction goal every five weeks in a region, about
-two and a half traces a week, a new hook every ten or eleven days, and a new situation every eight weeks,
-whether or not the PC acts. The PC's register never empties (fewer than three known matters in four weeks
+*Reading.* The world produces a steady stream: about one faction goal every seven weeks in a region, about
+two and a half traces a week, a new hook every twelve or thirteen days, and a new situation every eight or nine
+weeks, whether or not the PC acts. Two faction turns in three go to the faction's own goal; the rest go to rivals,
+to itself and, when its status allows, to the PC. The PC's register never empties (fewer than three known matters in four weeks
 of 104, each then refilled by the supply rule) and never floods (at most ten). Escalation is bounded: tiers
-drift up by about 0.25 over two years while the weight of size, strikes and collapses pull them down, and no
-faction passes tier 3 in two years, because rising above it needs a completed realm-scope grow goal (11.3.4);
-a war with one faction produces an entanglement or a move about every ten weeks on average, never a pile-up
-(the queue held two at most). An earlier draft with goal ticks of 3/2/1 completed goals every eight weeks per faction and
+drift up by about 0.6 over two years while the weight of size, strikes and collapses pull them down, and no
+faction passes tier 3 in two years, because rising above it needs a completed realm-scope grow goal (11.3.4).
+**War is decisive:** override (b) has two tier-1 neighbours at relation −3 strike each other on half their turns,
+so the Ember Cult falls at a median week 10–12 (p90 35–44) and the Ash Wardens in about half the runs; each
+vacuum is refilled by a rising faction (11.3.9). Because this model's hostile faction is the Cult, its "PC at war"
+column mostly measures a war that ends early (entanglements p90 4); the Thallen re-run, whose hostile faction
+stands, gives 8 entanglements in two years (p10 5, p90 11), about one every thirteen weeks and never a pile-up
+(the queue held two at most) (`13-world-sim-output.txt`) [revision: I-032]. An earlier draft with goal ticks of 3/2/1 completed goals every eight weeks per faction and
 drove 47% of factions to tier 5 in two years; the halved ticks, scope terms and the weight of size are what
 fixed it (DL-11-03, DL-11-06).
 
@@ -2143,8 +2161,8 @@ fixed it (DL-11-03, DL-11-06).
 
 ## Worked examples
 
-All examples follow **Wren** (00's continuous character) in a region of chapter 13's West Marches shape.
-Places, factions and NPCs are *illustrative; ch.13 owns the content*; every mechanic of this chapter is
+All examples follow **Wren** (00's continuous character) in a region of the West Marches shape (10.2.4; the world seed's, 12.16).
+Places, factions and NPCs are *illustrative; the region's seed owns the content*; every mechanic of this chapter is
 exact. Dice are the engine's.
 
 The region (*illustrative*): **Ashford** (a town, the haven; seat of the Salt Guild), **Harl's Crossing**
@@ -2475,7 +2493,7 @@ change** (build, found, clear for good, unite, bring down, change the law; knobs
   `career_end` (07); holdings' prices and gift configuration (08); archetypes and Nemesis results (09); NPC
   records, scene records, pacing phase, rotation ledger, cast and thread lists (12); standing, commitments,
   cases, lies, downtime (15); allies, retinue, personal threads (16); creation hooks, ties, prologue (02);
-  calendar names (13).
+  calendar names (the region's seed, 12.16.15).
 - **Written (owned by this chapter, 00.6.3):** factions (entities) and their clocks; relationships faction→PC and
   faction→faction; situations; the bang queue; world reactions' cooldowns; threads and hooks; rumors and news;
   reputation entries and epithets; ranks and obligations (commitments); holdings records and their damage clocks;
@@ -2535,7 +2553,7 @@ chapter's "To 11" section).
 | 04 | `h.11.season_turn` (phase 6) before `h.04.season_consolidation` (phase 8) | 11.11.1 |
 | 04 | retirement reads `apotheosis_available` and retires every calling | 11.13.1, 11.13.2, 11.13.7 |
 | 04 | a crystallization staged before carriers sends a public packet; a tier-5 recognition's regional spread | PR-11-4; 11.7.4 |
-| 05 | standing with a keeper's faith; settlement tiers for abilities (13); threads from rites and spirit bargains | Edge cases (keeper's faith = faction status); 11.5.12 |
+| 05 | standing with a keeper's faith; settlement tiers for abilities (the region's seed, 12.16.9); threads from rites and spirit bargains | Edge cases (keeper's faith = faction status); 11.5.12 |
 | 07 | consume `victory_over_pc`, defeat reputation packets, the belief `pc.dead`, cache rumors, the rout's clock tick (faction goal clocks as candidates) | 11.3.17; 11.7.2 item 3; 11.6.8; T-11-10; 11.3.6 (goal clocks list `rout`) |
 | 07 | the Bargain's vow as a thread racing a countdown | 11.5.12 |
 | 07 | retirement from The Road Ends and the fourth break; legacy for Last Stand and a lost Gamble | 11.13.1 |
@@ -2547,7 +2565,7 @@ chapter's "To 11" section).
 | 09 | factions field adversaries by archetype and band with the org tag added | 11.3.3; 11.3.17 |
 | 10 | consume the venture record at `h.11.reckoning`; occupants, cleared sites, evaded threats | 11.3.13 |
 | 10 | `safe` changes are 11's writes | 11.3.13 (pacify), 11.9.2, 11.9.5, 11.4.10, T-11-17 |
-| 10 | regional events table `tbl.<region>.events`; calendar season ids for weather | `world_turn.yaml#tbl.11.local_events` (generic V-face table chapter 13 may replace per region); 11.10.1 (`spring`…`winter`) |
+| 10 | regional events table `tbl.<region>.events`; calendar season ids for weather | `world_turn.yaml#tbl.11.local_events` (generic V-face table a region's seed or setting may replace); 11.10.1 (`spring`…`winter`) |
 | 12 | clocks list `random_event` as a tick source | 11.3.6; 11.5.4 |
 | 12 | bangs carry `intensity_delta` (threat 3 / social 1 / opportunity 0) and a specificity key | 11.4.4 |
 | 12 | thread status `stalled` with its fallback queued | 11.5.5; 11.5.7 |
@@ -2586,7 +2604,8 @@ chapter's "To 11" section).
 - **To 12:** the pacing push draws from this chapter's queue as 12.7.4 says; fallback bangs fire at the next
   `scene_start` (12.8.4); kickers (11.4.5) read the rotation ledger (12.9.2); render `[SEASON]` and `[RETIRE]`;
   NPC generation writes `home` and `member_of` (11.1.2).
-- **To 13:** factions in the `factions.yaml` owner-block conforming to 11.3.1 with linchpin fates sealed;
+- **To 13 (now the region's seed, 12.16, which writes them for any region: T-12-16 `ws.req.11_*`; ch.13 is one
+  optional pre-made seed) [revision: I-028]:** factions in the `factions.yaml` owner-block conforming to 11.3.1 with linchpin fates sealed;
   the mapping from 02's tie kinds to regional factions; month, weekday, quarter-day, festival and era names in
   `calendar.yaml`; regional `tbl.11.season_events.<region>`, `tbl.11.hook` and `tbl.<region>.events`; regional
   values for region scopes (11.7.6); lifespans for its peoples if they differ.
@@ -2601,8 +2620,8 @@ chapter's "To 11" section).
 
 | Id | Question | Default shipped | Named test |
 |---|---|---|---|
-| OEQ-11-1 | Does a weekly World Turn give the right density of world change for a solo player? | weekly; ≈ one faction goal per five weeks per region (T-11-24) | **T-11-PULSE**: 3 campaigns × 20 sessions; after each session the player rates "the world moved on its own" and "too much happened to follow" (1–5); target ≥ 4 and ≤ 2 respectively; adjust goal ticks (crit 2 / success 1) before cadence |
-| OEQ-11-2 | Are faction goals paced right (not too fast, not stalled)? | local 8 / regional 12 / realm 12+12, DC 13/15/17 net | **T-11-GOALS**: re-run `11-world-sim.py` with chapter 13's real factions; target 1.5–3.5 goal completions per faction per year and ≤ 10% of factions at tier 5 after two years |
+| OEQ-11-1 | Does a weekly World Turn give the right density of world change for a solo player? | weekly; ≈ one faction goal per seven weeks per region (T-11-24; [revision: I-032]) | **T-11-PULSE**: 3 campaigns × 20 sessions; after each session the player rates "the world moved on its own" and "too much happened to follow" (1–5); target ≥ 4 and ≤ 2 respectively; adjust goal ticks (crit 2 / success 1) before cadence |
+| OEQ-11-2 | Are faction goals paced right (not too fast, not stalled)? | local 8 / regional 12 / realm 12+12, DC 13/15/17 net | **T-11-GOALS**: re-run `11-world-sim.py` with a world seed's factions (`12-world-seed-example.yaml`; chapter 13's are one pre-made set, `13-world-sim.py`); target 1.5–3.5 goal completions per faction per year and ≤ 10% of factions at tier 5 after two years |
 | OEQ-11-3 | Does the hook supply keep the register full without flooding? | ≥ 3 known open matters; seeded hooks expire at 8 weeks; caps 8 seeded / 12 active | **T-11-HOOKS**: playtest logs; count sessions that open with no actionable lead (target 0) and sessions where the player says they have "too many threads" (target ≤ 1 in 10) |
 | OEQ-11-4 | Do players perceive the World Turn's traces? | ≥ 1 trace per consequential change; news on arrival ≤ 3 items | **T-11-TRACE**: after 10 sessions, ask the player to name three things a faction did off-screen; target ≥ 2 correct |
 | OEQ-11-5 | Is reputation's growth rate right? | triangular thresholds 1/3/6/10/15 | **T-11-REP**: 3 campaigns; record sessions to score 3 in the home settlement; target 4–8 sessions for a focused PC; epithet coined by session 3–5 |

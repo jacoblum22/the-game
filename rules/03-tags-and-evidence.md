@@ -186,7 +186,7 @@ is obvious: an agreeable DM would add "tactics" to every shot. So a secondary ta
 
 The DM proposes the secondary tag and cites the ground. The flag decided is *"Does the cited ground carry this
 tag?"*, and the engine checks it against the data, so it is in effect `[D]`. An ungrounded secondary is
-refused with the reason logged, and the primary tag is unaffected. *Worst case:* a grounded but irrelevant
+refused with the reason logged, and the primary tag is unaffected. *Worst case (J):* a grounded but irrelevant
 secondary (the item was carried but barely mattered) adds half-weight evidence to an ancestor-related node;
 diminishing returns cap it at that node's per-scene budget (03.5.2), and it is visible on the ledger line
 (class iii). The simulation's ungrounded-leniency case (every beat tagged `tactics`) grew a spurious tactics
@@ -220,7 +220,7 @@ positive and a negative pole, an **act test** for each pole, and exclusions. The
 (rows this chapter may not edit) and are the tests the DM applies. A
 conduct event names the axis and the sign, and grounds them in a state write (03.3.3). At most **two** conduct
 axes may be recorded per beat, and they may carry different signs (freeing a guilty man out of pity: mercy +1,
-justice −1). The decisions, their defaults and their *Worst case* line are in 03.3.3: one wrong entry is at
+justice −1). The decisions, their defaults and their *Worst case (J)* line are in 03.3.3: one wrong entry is at
 most 4 points on one axis, capped at 7 per scene, and voidable.
 
 **03.1.9 Tags proposed by other chapters.** `[D]` Any chapter may use a level-3 tag that is not yet in the
@@ -511,7 +511,7 @@ Basis:              [C:P5 values-expressive evidence] [R1 §03 T-9: record the a
 judged event (the DM forgot to record one). For each, the DM may record the event now under the same frame
 and the same rules. The event keeps its original scene and time and settles into that scene's budget after
 the fact. The sweep can only restore evidence that a frame already qualified. It cannot add moments that had
-no frame, and it never prompts for conduct. *Worst case:* no more than 03.3.2's, because the inputs are the
+no frame, and it never prompts for conduct. *Worst case (J):* no more than 03.3.2's, because the inputs are the
 same pre-committed frames [R6 A-14, Forbidden Lands' end-of-session questions, adapted to frames; DL-03-21].
 
 ### 03.4 Weighting
@@ -947,7 +947,7 @@ and constructs witness but do not carry. Foes who survive are carriers. Their re
 fletching, a theft traced through a fence. When a fact written later links a recorded event to its actor in
 some NPC's knowledge (`record_knowledge`, 15), the DM calls `add_witness(event_id, entity, how: aftermath,
 fact_id)`. The flag is *"Does the cited fact identify this actor as the doer to this entity?"*; uncertain →
-no. The event enters that entity's scopes at the next settlement. Capability is unchanged. *Worst case:* a
+no. The event enters that entity's scopes at the next settlement. Capability is unchanged. *Worst case (J):* a
 reputation entry in one scope (class iv).
 
 **03.10.4 Bonded witnesses.** `[D]` An entity named in a bond or oath record by 04 (a god, a patron, an order,
@@ -1896,7 +1896,7 @@ prompt at `reflection`. Disputes about ledger lines route to PR-03-4. `scene_end
 since settlement hangs on it. `last_exercised` is available to the rotation ledger. Narration never mentions
 recording.
 
-**To 13 (Starter setting).** Facts that mark graves, shrines and holy places as consecrated or tended (piety).
+**To 13 (Starter setting; now the region's seed, 12.16).** Facts that mark graves, shrines and holy places as consecrated or tended (piety): the world seed writes them (12.16.9, 12.16.12; T-12-16 `ws.req.03_consecrated`) [revision: I-028].
 Setting-specific tags by PR-03-6. NPC homes.
 
 **To 14 (Player's guide).** A codex view "Deeds" rendering `evidence.yaml#ledger_view`. The guide should tell

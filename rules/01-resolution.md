@@ -178,7 +178,7 @@ Yes → separate beats. No → one beat. Each beat is then classified by **shape
 
 Default when uncertain between `single` and `extended`: `single` if the result could plausibly be known
 within the mode's time per beat (00.7.3), else `extended`. Default between `bundled` and several beats:
-several beats (each with its own roll; this never grants more than the bundle would). *Worst case:* a
+several beats (each with its own roll; this never grants more than the bundle would). *Worst case (J):* a
 wrong shape changes how many rolls resolve the intent, not whether it is possible; the OFFER shows the
 structure before any commitment (class ii). [R7 §4.0 step 1, §3.3 F7; R3 01.7; R4 §9 01 #7]
 
@@ -193,7 +193,7 @@ turn, never compressed. Reason: one declaration must not become many effects wit
 *"Would the answer change the gate class, the anchor, or the stakes?"* is true. Otherwise the DM states
 the reading it is assuming, in one sentence, and continues; the player may correct it at OFFER at no
 cost. Reason: models that assume silently "do not recover", while a stated assumption is correctable
-[R: https://arxiv.org/abs/2505.06120; R7 §4.0 step 1]. *Worst case:* a wrong assumed reading reaches
+[R: https://arxiv.org/abs/2505.06120; R7 §4.0 step 1]. *Worst case (J):* a wrong assumed reading reaches
 OFFER, where the player sees it and can change it for free (class ii).
 
 **01.2.5 The target is resolved before GATE.** `[J:enum]` + `[D]` A beat's target must be one id. If
@@ -201,7 +201,7 @@ the player's words plus relationship-state (06) leave exactly one legal candidat
 several, the stated default applies (in conflict: the nearest engaged foe; otherwise: the most recently
 mentioned addressable element of the right kind); if none fits, ask (this counts as the one clarifying
 question). A beat never resolves against an unresolved target, and self-harm is never narrated unless a
-resolved result licenses it (a critical-failure cost). *Worst case:* the default picks the wrong one of
+resolved result licenses it (a critical-failure cost). *Worst case (J):* the default picks the wrong one of
 several candidates; the OFFER names the target before commitment, so the player corrects it at no cost
 (class ii). [integration: 00.2.3 audit] [R3 01.9; R: ChatRPG v1 "self-inflicted trip" failure, R3 FP6]
 
@@ -281,7 +281,7 @@ only when success would let the actor sense what cannot be sensed, know what was
 where bodies cannot, compel a mind or body, enter what is sealed, detect what magic hides, or escape
 what physically binds — beyond what a basic verb's `covers` list states. If true, the beat is **not
 G1**: it needs a license whose scope names that upgrade, else G3 or G4. False for ordinary uses of the
-senses, memory and movement listed under Observe, Recall and Move. Uncertain → true. *Worst case:* an
+senses, memory and movement listed under Observe, Recall and Move. Uncertain → true. *Worst case (J):* an
 ordinary act (listening at a door) sent to G3 — the redirect's fallback is the basic verb itself, so the
 player loses one sentence (class ii).
 
@@ -298,7 +298,7 @@ beat is split before framing:
    succeeding or failing on its own roll, nothing more. "The flames part around you" from a harm
    reduction is an embellishment and is forbidden (INV-8; the probe's invented cold vulnerability).
 Which parts exist is `[J:enum]` over the license's scope clauses (each clause is covered or not); default
-for a clause that "sort of" applies: not covered. *Worst case:* a clause wrongly held covered grants one
+for a clause that "sort of" applies: not covered. *Worst case (J):* a clause wrongly held covered grants one
 beat's worth of the license's own literal effect — never more than the license can ever do (class i).
 [R7 §4.0 step 2, §5 Ex.3, Ex.12; 00.12.2]
 
@@ -317,7 +317,7 @@ entry missing one of these fields reads as `stretch: null`, `emulate: null`, `cr
 the gap is logged as a `rule_conflict` ruling for ch.05. When **no license entry in data** covers a G3
 method at all, the redirect names the deed branch that would hold such a license (`deed.arcane`,
 `deed.guile.thievery`…) and the generic acquisition types `mentor` and `recognition`, offers the nearest
-basic verb, and logs a `rule_conflict` ruling so ch.05/13 can author the license. *Worst case:* a wrongly
+basic verb, and logs a `rule_conflict` ruling so ch.05/13 can author the license. *Worst case (J):* a wrongly
 allowed stretch gives one beat at a raised DC and capped reach — worse than a licensed use by
 construction, and logged with the principle sentence it relied on (class i/iv). [R2 #4 (Mother of
 Learning structured vs unstructured); R7 §4.4; R: https://www.d20srd.org/srd/skills/useMagicDevice.htm;
@@ -355,7 +355,8 @@ Decisions (J):      1. CONTRADICTS A FACT [J:flag]: "Does success require an est
                        false?" True only when a fact id in state is contradicted (the guard has no
                        sister; the door is bricked) [integration: I-024]. Cite the fact id.
                     2. CONTRADICTS CANON [J:flag]: "Is this impossible for anyone in the setting, per
-                       ch.13's canon_impossible list or an established world law?" True only when the list
+                       the region's canon_impossible list (the world seed's, 12.16.5, or a pre-made
+                       setting's) or an established world law?" True only when the list
                        or a fact says so (no mortal flies unaided). Never true merely because it is unusual.
                     3. ZERO REACH [J:flag]: "Do two or more effect factors stand against this method
                        reaching this intent, with nothing offsetting them?" Factors (closed list):
@@ -400,7 +401,7 @@ my odds if I climb?", "how was that ruled?") is answered from the codex and a fr
 fictional time. The test between (2) and (3) is `[J:flag]` *"Would the character already know this
 without doing anything?"* True only for common knowledge of the character's origin, culture or trade
 (Recall's `covers`) and facts the character has learned. Uncertain → false (a Recall beat, which may
-roll). *Worst case:* a free answer that should have needed a Recall roll — one item of common knowledge
+roll). *Worst case (J):* a free answer that should have needed a Recall roll — one item of common knowledge
 (class i).
 
 **01.3.9 "Yes, and" and default-deny work at different layers.** `[N]` The DM says yes to *premises and
@@ -473,7 +474,7 @@ the first of these holds (checked by the engine against state):
 5. the player **pays the re-attempt cost**: one `cost.time` or `cost.exposure` (player's choice where both
    fit) at the frame's stakes severity (S1 when Safe), paid up front whatever the new roll shows.
 "Is this the same obstacle and approach?" is `[J:flag]` — true only when the target id, anchor id and
-method class all match; uncertain → true (the failure stands). *Worst case:* a legitimately new approach
+method class all match; uncertain → true (the failure stands). *Worst case (J):* a legitimately new approach
 treated as riding — the player names the difference at OFFER and the engine re-checks (class ii).
 [R: https://thealexandrian.net/wordpress/38313/roleplaying-games/the-art-of-rulings-part-8-let-it-ride;
 R7 §2.13 (Year Zero no-retry); C:P17]
@@ -628,7 +629,7 @@ matches, the DM reuses its numbers (tier, stakes rung, reach rung, knob values) 
 differs: `[J:flag]` *"Is there an established fact now that was absent (or present) in the precedent and
 that changes the tier, stakes or reach?"* True only when that fact's id can be named; the new record then
 cites it in `precedent.differing_fact`. Uncertain → false (reuse). A new wet-rope fact is a snag on the
-reused frame, not a departure (WE-00-9). *Worst case:* a precedent reused where a fact differed — the
+reused frame, not a departure (WE-00-9). *Worst case (J):* a precedent reused where a fact differed — the
 player can cite the fact; a new ruling supersedes (class iv). [R7 §4.8; R4 SG-20; 00.15.6]
 
 **01.5.3 Adapting an anchor: knobs and the two-change limit.** `[D]` + `[J:enum]` An anchor card
@@ -645,7 +646,7 @@ deltas and each justified by a cited fact:
 - `duration`, `condition`, `harm_severity`, `harm_tags`, `targets`, `focus_cost` — as named.
 Picking the stakes rung or reach rung in FRAME is not a knob change; changing *where* stakes or reach
 come from is. A third needed change means the anchor is wrong (re-anchor to a closer card) or the beat
-is compound (return to PARSE and split). *Worst case:* one wrong knob value — one rung of DC, one
+is compound (return to PARSE and split). *Worst case (J):* one wrong knob value — one rung of DC, one
 severity step, one condition — shown in the OFFER (class i). [R7 §3.4; 00.2.7]
 
 **01.5.4 Logging and review.** `[D]` Every beat that used deltas, a precedent departure, an Oracle
@@ -669,7 +670,7 @@ described*, using the distinguishing tests of 00.4.1. True only when the method 
 of act; false when the player merely prefers that attribute. When the method fits two allowed attributes
 equally, the frame uses the **lower** and the OFFER names the method that would use the higher ("if
 instead you vault it, Agility"); the player may re-declare at no cost (00.4.5). A method outside the
-allowed list is a knob change (01.5.3). *Worst case:* the lower of two attributes, shown before
+allowed list is a knob change (01.5.3). *Worst case (J):* the lower of two attributes, shown before
 commitment (class ii). *Example:* "I haul myself up the rope hand over hand" → Might; "I walk the rope
 like a beam" → Agility; "I climb it all night to the tower top" → Endurance. *Non-example:* "I climb
 the wall — carefully, which is Agility, my best stat" — "carefully" describes no different act from
@@ -682,7 +683,7 @@ Traits start from the anchor's `traits` list; the DM adds a trait only by a `[J:
 only when" line in T-01-13 (01.17). The one trait flag the DM must always ask is **loud**: *"Does the
 method involve breaking, smashing, shouting, metal on metal, a heavy fall, or an explosion?"* True →
 `trait.sense.loud` is a method consequence regardless of degree. Uncertain → true (a noise consequence
-is the less lenient reading). *Worst case:* one missing trait fails to tick one listening clock (class i;
+is the less lenient reading). *Worst case (J):* one missing trait fails to tick one listening clock (class i;
 the claim-vs-state check catches narrated noise that no trait recorded).
 
 **01.6.3 The obstacle and its identity.** `[D]` + `[J:flag]` Every rolled beat that is not opposed by an
@@ -692,7 +693,7 @@ obstacle** when they target the same obstacle id with the same anchor signature 
 `dc` knob delta, 01.5.3); a different signature on the same entity is a different obstacle (breaking
 the hasp is not picking the lock; vaulting the wall is not climbing it) [R7 §5 Ex.5]. Stored DCs are
 keyed `dc.<obstacle_id>.<signature>` (e.g. `dc.wall_north.verb.exert` for the climb,
-`dc.wall_north.verb.exert+dc:vault` for the vault). *Worst case:* two beats judged to face one obstacle
+`dc.wall_north.verb.exert+dc:vault` for the vault). *Worst case (J):* two beats judged to face one obstacle
 (or one judged as two): a stored DC is reused where a fresh tier would apply, or the reverse; both come
 from the same ladder, so the error is at most one rung, shown in the OFFER as the DC's source (class i). [integration: 00.2.3 audit]
 
@@ -761,7 +762,7 @@ Basis:              [00.3.16–00.3.17; T-00-5] [R4 §4.6 (Story-Engine "do not 
 defense; resisted effects make the target roll Endure or Evade against the effect DC. Test: *"Does the
 effect need the source to get past the target?"* True → aimed; false → resisted; uncertain → aimed.
 Adversaries' attacks are rolled by the engine against the PC's defense; the player decides, the engine
-rolls. Ties: a total equal to the DC succeeds (the acting side wins ties). *Worst case:* the wrong side
+rolls. Ties: a total equal to the DC succeeds (the acting side wins ties). *Worst case (J):* the wrong side
 rolls; odds move by at most the difference between the two sides' modifiers, and the OFFER shows them
 (class i).
 
@@ -904,7 +905,7 @@ one **alternate** `{menu_id, form_intent}` that also fits. The threatened cost i
 the alternate. Selection follows 01.13.1. A Safe frame also names a threatened cost, used only on a
 critical failure or a success-at-cost (both at S1). Declaring the cost before the roll is the single
 strongest anti-drift commitment the research found (Burning Wheel's stated failure, 7th Sea's announced
-consequences, Blades' position) [R7 §3.3 F8; R4 SG-08]. *Worst case:* a poorly fitting cost is
+consequences, Blades' position) [R7 §3.3 F8; R4 SG-08]. *Worst case (J):* a poorly fitting cost is
 declared — the player sees it before committing and may withdraw (class ii).
 
 **01.6.12 Frame computation.** `[D]` `frame_check` runs PR-00-1: attribute, competence (primary deed
@@ -1127,7 +1128,7 @@ exclusive alternatives into one ("demon, fey or shade?" = one item: *what kind o
 whose answer is sealed behind a gate this beat cannot open (a letter's contents before anyone has the
 letter) is **ineligible**: it is not counted, and the DM says at OFFER how it could be learned (P16).
 After deduplication N is 1…5; N > 5 is not one act's worth — the beat is split or becomes `extended`.
-*Worst case:* two items merged that were distinct — one item fewer at stake, shown in the OFFER where
+*Worst case (J):* two items merged that were distinct — one item fewer at stake, shown in the OFFER where
 the player can object (class ii).
 
 **01.10.3 The player ranks.** `[D]` The player ranks the N items at OFFER; if they do not, declaration
@@ -1162,7 +1163,7 @@ nothing reliable — exactly P17's four rows, now computed. Items land in rank o
 **01.10.5 Which content answers each item.** `[J:enum]` For each delivered item, the DM chooses which
 permitted node of the target's sealed slice answers it (the relevance judgment the AI is good at), never
 content beyond the permitted slice (INV-10) [R4 §5.2 #3; R1 01.D]. Delivered answers are written with
-`record_knowledge` and `set_fact` before narration. *Worst case:* a less relevant permitted node answers an
+`record_knowledge` and `set_fact` before narration. *Worst case (J):* a less relevant permitted node answers an
 item; the player still learns only permitted, true content, and the question stays open for a later beat
 (01.10.6) (class iii). [integration: 00.2.3 audit]
 
@@ -1185,7 +1186,7 @@ failure; the player's pick of threatened or alternate for a success-at-cost. The
 never a form of another severity — and `apply_costs(frame_id, [{menu_id, form}])` performs the entry's
 state writes. If the entry cannot land in full (01.9.4), the alternate applies; if neither can, the
 selection order of 01.13.1 picks the next fitting entry. The DM chooses *which fictional form*; the
-table fixes *whether* and *how big* (SG-09). *Worst case:* a less apt form of the right entry and
+table fixes *whether* and *how big* (SG-09). *Worst case (J):* a less apt form of the right entry and
 severity — the same mechanical weight, logged with the frame (class i).
 
 **01.11.2 Method consequences.** `[J:flag]` + `[D]` A method consequence is what the *method* causes
@@ -1198,7 +1199,7 @@ necessarily creates (`[J:flag]` *"Would this state exist after the act whether o
 succeeded?"* — true only for physical traces of the act itself). Consequences are applied at RECORD
 through their own writes (a `trait.sense.loud` beat ticks every clock that lists it; a scent trail is
 written as a fact) [R: https://theangrygm.com/adjudicate-actions-like-a-boss/ (outcome vs
-consequence); R7 §4.0 step 10]. *Worst case:* one consequence missed or added — one listed tick or one
+consequence); R7 §4.0 step 10]. *Worst case (J):* one consequence missed or added — one listed tick or one
 fact (class i), caught by the claim-vs-state check.
 
 **01.11.3 The closed list of complications.** `[D]` Nothing bad happens to the PC unless it comes from
@@ -1218,7 +1219,7 @@ omen), and if none exists in state, ch.12's lead injection fires. For ch.12's in
 counter (`h.12.inconclusive_streak`), a beat is **inconclusive** `[D]` when it wrote no new fact the PC
 learned, no clock change, no position change and no delivered reach ≥ 1 — a Safe failure, a vague
 impression only, or a restated ride. Three inconclusive beats in a row raise the trigger [C:P16].
-*Worst case:* the check passes when no real option exists; the inconclusive-streak counter fires ch.12's
+*Worst case (J):* the check passes when no real option exists; the inconclusive-streak counter fires ch.12's
 lead injection within three beats (class iv). [integration: 00.2.3 audit]
 
 ### 01.12 RECORD — state first, then words
@@ -1427,7 +1428,7 @@ kill.
 | S4 | an escalation: a threat up to the scene's band + 1, an existing danger clock +3, or the opposition's allies arrive |
 | S5 | a reversal (world events only): an ally turns, a haven falls, a thread fails |
 
-*Worst case:* a less fitting fictional form is chosen for the rolled row; the row, its severity and its
+*Worst case (J):* a less fitting fictional form is chosen for the rolled row; the row, its severity and its
 writes are the table's, so nothing mechanical moves (class i). [integration: 00.2.3 audit]
 
 ### 01.14 Compound shapes, groups, help and setup
@@ -1466,7 +1467,7 @@ instance is; quantity belongs to the action economy [R7 §5 Ex.7; R1 01.C; R: ht
    conflict, instances of the same verb against the same obstacle. Uncertain → counts. The window resets
    at its end. Ch.06 owns the attack numbers and may set any non-increasing sequence within the ±4 cap
    (the default here, 0/−2/−4, is DL-01-08); every other repeated act uses this default.
-*Worst case:* one instance wrongly counted or uncounted — a 2-point difference on one roll (class i).
+*Worst case (J):* one instance wrongly counted or uncounted — a 2-point difference on one roll (class i).
 *Arithmetic:* Wren (Agility +3, archery +2 = +5) shooting three times at Guard 16 in one turn: 50%,
 40%, 30% → P(at least one hit) = 1 − 0.50 × 0.60 × 0.70 = **79%**; the probe's single DC-25 roll gave 5%.
 
@@ -1489,7 +1490,7 @@ OFFER shows the structure first (class ii). [R7 §2.1 Fate contests; R: https://
 **01.14.6 Extended actions (clocks).** `[D]` + `[J:rung]` An `extended` beat creates or advances a
 **progress clock named for the obstacle** (SG-24: "The sealed vault", not "Crack the vault"), per 00.8:
 - **Size** `[J:rung]` from 00.8.3 (4 a scene's worth; 6 complicated; 8 daunting; 12 a long project) unless
-  a template in data fixes it. *Worst case:* one rung = 2–4 segments (class i).
+  a template in data fixes it. *Worst case (J):* one rung = 2–4 segments (class i).
 - **Tick interval**: the clock declares one (per round, interval, hour, scene, day or week, by the mode).
   At most one roll per interval ticks it (let it ride applies to the interval, 01.4.2 item 4).
 - **Each roll**: the obstacle's DC (stored on the clock's obstacle); ticks = **delivered reach** (0–4,
@@ -1512,7 +1513,7 @@ group test `[J:flag]` *"Must every member succeed for the group to succeed?"*:
   that member unless another member's method engaged the cost's source.
 - **Any may** (search a hall together, spot the ambush, recall a fact among you): the roll uses the
   **highest** base modifier.
-Other members may give Help (01.14.8), at most one Help lever. Uncertain → all must. *Worst case:* the
+Other members may give Help (01.14.8), at most one Help lever. Uncertain → all must. *Worst case (J):* the
 wrong one of two members' modifiers (class i), shown in the OFFER. [R: 5e group checks via R7 §2.8; DL-01-10]
 
 **01.14.8 Help (`verb.help`).** `[J:flag]` + `[D]`
@@ -1564,7 +1565,7 @@ knob lets a Setup apply one of `cond.distracted`, `cond.off_balance`, `cond.expo
 method that can do it (grit, glare, smoke), `cond.blinded`, until the end of the target's next turn; the
 condition's own effects apply (06) and the condition is itself citable as a lever. A Setup cannot create
 a license, a fact about something unestablished (that is the Oracle's), or more than one lever type.
-*Worst case:* the wrong lever type is declared: +2 on a roll instead of one stakes or reach rung, or the
+*Worst case (J):* the wrong lever type is declared: +2 on a roll instead of one stakes or reach rung, or the
 reverse, declared at FRAME and shown before commitment (class i). [integration: 00.2.3 audit]
 
 **01.14.10 Ready (`verb.ready`).** `[D]` + `[J:flag]` Ready holds a beat for a stated trigger. The beat
@@ -1573,7 +1574,7 @@ occurs. The trigger must be an **observable event** `[J:flag]` ("when the door o
 true only for something the actor would perceive; false for another's intent or a hidden fact. If the
 trigger never occurs before the readied window ends (ch.06: the actor's next turn; outside conflict:
 scene end), the beat lapses with nothing spent but the action. Ch.06 owns how Ready interacts with
-reactions and turn order. *Worst case:* an unobservable trigger is accepted and the readied beat fires a
+reactions and turn order. *Worst case (J):* an unobservable trigger is accepted and the readied beat fires a
 moment early or late; it was framed and offered when readied, so its odds and stakes do not change
 (class i). [integration: 00.2.3 audit]
 
@@ -1587,7 +1588,7 @@ existence questions behind a search (sealed, 01.15.6). It is not asked for: esta
 re-rolled); things somebody is actively attempting (a fortune check, 01.6.7); content choices a
 `roll_table` answers better (who answers the door, what the rumor says — ch.12's tables); anything the
 DM could decide "for drama" (SG-12). Test: *"Is there a fact id that answers it, or does canon/scene
-type settle it?"* True → no roll (Certain or Impossible, or read the fact). *Worst case:* a question that
+type settle it?"* True → no roll (Certain or Impossible, or read the fact). *Worst case (J):* a question that
 canon or the scene settles is rolled instead of read; its odds still come from the scene, so it departs from
 the settled answer only on a long-odds roll, and a contradiction with recorded canon is caught by the
 claim check and corrected (12.3; class iv). [integration: 00.2.3 audit] [R7 §4.7; R5 P-01–P-03; R:
@@ -1668,7 +1669,7 @@ kept). The answer then takes one of six shapes, first match:
 - **no** — false; the DM says in the same breath what *is* there (P16).
 - **no, and** — false and strongly so: the opposite is true, or a complication comes with the absence;
   the engine rolls the "and" from ch.12's meaning table.
-The chosen qualifier is written as its own fact with the answer. *Worst case:* a less apt qualifier —
+The chosen qualifier is written as its own fact with the answer. *Worst case (J):* a less apt qualifier —
 the qualifier's kind is fixed by the roll, only its form is chosen (class i). [R5 P-03 (six-way answer
 shape); R: https://ironsworn-rpg.fandom.com/wiki/Ask_the_Oracle]
 
@@ -1690,7 +1691,7 @@ answer?"* true → same key; uncertain → same key). A question whose answer fo
 answer is read, not rolled. Only a fact with a time scope (is the guard at the gate *this watch*?)
 may be asked again, and only once its scope has passed. A player fishing ("a ballista? a dragon
 egg?") gets odds from the scene, so absurd fishing lands on Remote or Impossible, and every yes is a
-fact the world keeps — the world fills in consistently instead of bending. *Worst case:* a new question
+fact the world keeps — the world fills in consistently instead of bending. *Worst case (J):* a new question
 is judged a re-ask and read from the existing answer (the player is told which fact settles it and may ask
 something else), or a rephrased re-ask is rolled while the engine still refuses an identical key
 (class iv). [integration: 00.2.3 audit] [R7 §6; 00.12.7]
@@ -1737,7 +1738,7 @@ remembering them (PF2e's attack/manipulate/move/concentrate traits) [R7 §2.9, �
 R4 SG-11]. A beat's traits come from its anchor card; the DM adds one only when that trait's "true only
 when" line holds (`[J:flag]`, uncertain → add it for sense traits, which cost the actor; omit it for
 others). Ch.03 owns the tag definitions; this rule owns what each pulls in. Numbers owned elsewhere are
-named. *Worst case:* a trait wrongly added or omitted pulls in, or leaves out, one general rule for one beat
+named. *Worst case (J):* a trait wrongly added or omitted pulls in, or leaves out, one general rule for one beat
 (a loud tick, a provoked reaction); the tie-break adds sense traits, which cost the actor (class i). [integration: 00.2.3 audit]
 
 **T-01-13 Trait rules.**
@@ -1755,7 +1756,7 @@ named. *Worst case:* a trait wrongly added or omitted pulls in, or leaves out, o
 | `trait.sense.scent` | the act leaves a smell (blood, smoke, a strong perfume) | writes a trail fact; trackers following it gain a Precision lever (10) |
 | `trait.delivery.touch` | the effect needs contact | needs `band.engaged` and an aimed roll against Agility defense unless the target is willing or helpless |
 | `trait.delivery.melee` / `.ranged` / `.area` / `.aura` / `.line` | per ch.06's definitions | range bands, cover snags, multi-target selection over relationship-state (06) |
-| `trait.nature.magical` | the effect is magic | sensed by magic-sensing licenses; warded and dispelled (05); inert where canon forbids magic (13) |
+| `trait.nature.magical` | the effect is magic | sensed by magic-sensing licenses; warded and dispelled (05); inert where the region's canon forbids magic (12.16.5) |
 | `trait.nature.sacred` / `.profane` | holy / unholy power | keys resistances and vulnerabilities by `creature.*` tags (09) |
 | `trait.nature.mental` | the effect acts on a mind | targets resist with Resolve; mindless entities (`creature.undead.mindless`, `creature.construct`) are unaffected → G4 for that intent |
 | `trait.nature.illusion` | a false sensation | a target who interacts with it physically, or is told with cause, may Observe (Wits) against the effect DC to disbelieve; success ends it for that target |
@@ -2392,13 +2393,13 @@ harsher** than the fiction justified (5% vs 79%), because it treated quantity as
 
 ### WE-01-11 "I ask the river to calm down so I can cross."
 
-- **GATE, G0 first.** In the setting spirits of place exist but are rare *(canon; 13 owns)*. Is there one
+- **GATE, G0 first.** In the setting spirits of place exist but are rare *(canon; the region's seed owns it: 12.16.5 item 3)*. Is there one
   in *this* river? Unestablished → Oracle, **Unlikely (76+)**.
 - d100 = 62 → **no** → `set_fact(river_ash.spirit = none)`. Talking a river with nobody in it → **G4**
   (fact). "It is only water, fast and cold. Downstream the banks widen over a gravel bar." Whether the bar
   is a ford is its own Oracle question (a lowland river after dry weeks → **Likely**).
 - *Other branch:* d100 = 83 → **yes** (not in the 76–80 "but" band, not a double). A spirit exists → Talk
-  is G1 (13's canon: spirits of place understand heartfelt speech). DC: the spirit's Resolve defense
+  is G1 (the region's canon, `canon.spirits`: spirits of place understand heartfelt speech, 12.16.5). DC: the spirit's Resolve defense
   *(illustrative)* 10 + 4 + 2 = **16**; Presence 0 + floor 1 = +1 → 15+ (30%). Reach: a river is a
   whole category larger than one voice (scale) → **Limited** (a short calm stretch, for a while). Stakes:
   the lasting enmity of a powerful spirit → **Dire**; threatened `cost.closed_door`. The OFFER lets the
@@ -2678,8 +2679,10 @@ tells for secret frames; `lethal_context` per archetype.
 (01.15.4); compile the fifteen cards into `anchors.yaml`; the inconclusive-streak counter reads 01.11.4's
 definition; the tension dial shifts Oracle odds by at most one rung; the OFFER script renders 01.7.1;
 error correction per 01.8.5.
-**To 13:** `canon_impossible` (G4 test 2); what spirits of place understand; language licenses and their
-fallbacks; the Oracle's Certain/Impossible depend on setting canon.
+**To 13 (now: the region's seed, 12.16; ch.13 is one optional pre-made seed):** `canon_impossible` (G4 test
+2); what spirits of place understand; language licenses and their fallbacks; the Oracle's Certain/Impossible
+depend on setting canon. All four are world-seed outputs checked by T-12-16 (`ws.req.01_*`) [revision:
+I-028].
 **To 14:** the codex renders frames, OFFERs and fate; the `auto_commit` preference (01.7.4).
 **To 15:** compose social DCs on the Talk card's `against` (Resolve vs persuasion/intimidation, Wits vs
 deception) with standing and claim plausibility (doubtful: one snag; outrageous: reach Limited; known

@@ -406,7 +406,7 @@ elevated, the target in cover), both are cited and they sum inside the cap.
   (`cond.distracted`, alertness below `alert`). `[J:flag]` *"Is there a recorded cover feature, veil or
   distraction between this actor and every enemy who could see it?"* True → the Sneak may be
   attempted (against the highest notice among them, 01.18.13); false → G4 for hiding, with the
-  redirect "get behind something first". Uncertain → false. *Worst case:* a hide attempt wrongly
+  redirect "get behind something first". Uncertain → false. *Worst case (J):* a hide attempt wrongly
   allowed still has to succeed against notice, and yields one lever on one attack (class i).
 - **Darkness.** `scene.light` is `bright`, `dim` or `dark` (ch.10 owns light sources). Dim: everyone
   beyond `band.close` is `flag.obscured` to observers without night-sight. Dark: everyone not in a
@@ -430,7 +430,7 @@ kind fixes what the feature does, so an improvised use is a lookup (06.5.10, T-0
 
 *Decision* `[J:enum]`: when narration introduces something usable, the DM classifies it once (default
 when uncertain between two kinds: the first in this table's order; a thing honestly of two kinds, such
-as an overturned brazier that is `hazard` and `veil`, is written as two features). *Worst case:* a
+as an overturned brazier that is `hazard` and `veil`, is written as two features). *Worst case (J):* a
 feature classified as the neighboring kind gives the neighboring kind's single effect (class i), and
 the classification is a stored fact the player can question. A feature the scene would plausibly hold
 but narration has not established ("surely there's a chandelier") is a G0 question for the Oracle
@@ -441,7 +441,7 @@ participant's band to the PC from what the scene has established: a participant 
 with at arm's length is `band.engaged` only if a weapon was already at a throat, else `band.close`;
 someone across a room is `near`; someone across a field or on a far wall is `far`. Default when
 unestablished: `band.near`. Flags are set only from recorded facts (a participant on a gallery feature
-gets `flag.elevated`). *Worst case:* one band (class i).
+gets `flag.elevated`). *Worst case (J):* one band (class i).
 
 **06.3.10 Size.** `[D]` Every creature has a **size** from a six-rung ladder stored in its template
 (09; a PC is `medium`): `tiny` · `small` · `medium` · `large` · `huge` · `colossal`. The DM never picks
@@ -671,7 +671,7 @@ counts toward the ±4 cap [integration: IR ch.08 to 06].
   unarmed Strikes: no change. Edged, pointed and shot weapons: one Precision snag. At 0 Vitality the
   target is defeated and `cond.unconscious` for the scene, alive. Harm dealt is the same.
 - **restraint**: the intent is to hold, not harm. It is not a Strike: use Grapple (06.5.2).
-*Worst case:* the default applied where the player meant mercy: the OFFER states the mode in its beat
+*Worst case (J):* the default applied where the player meant mercy: the OFFER states the mode in its beat
 line ("to kill" / "to drop him alive"), so it is seen before commitment (class ii). Chapter 03 reads
 the mode for `conduct.mercy`. [R4 §9 06 item 2; R5 CF-10]
 
@@ -698,7 +698,7 @@ get **one** effect from this closed list on a success. One call per Strike. (`da
 `[J:enum]` *Decision:* which call the player's words name; default when the words name a body part not
 listed: **the leg** for anything that carries the creature, **the arm** for anything that holds or
 strikes, else no call (an ordinary Strike, and the narration may still place the blow there). *Worst
-case:* the neighboring call applied: one rung of harm or one short condition (class i). Called shots
+case (J):* the neighboring call applied: one rung of harm or one short condition (class i). Called shots
 are the no-Focus answer to armor: against a T4 foe with reduction 2, calling the gap raised the
 simulated baseline from 62% to 73% at P3 (T-06-14). *Tempting non-example:* "I shoot him in the eye, so
 he's blind for the fight" → the call's own result is the list's: dazed until the end of his next turn;
@@ -751,7 +751,7 @@ next rung, or an ability (01.18.8 "distinguish").
   for an arm, while held); `dc`; `duration`.
 - *Decision* `[J:enum]`: Grapple or Force? The actor keeps hold → Grapple; the target is moved away or
   down → Force. Default: Grapple when the declaration says "hold", "grab", "pin", "wrestle". *Worst
-  case:* the other verb's ladder, same defense, same cost (class i).
+  case (J):* the other verb's ladder, same defense, same cost (class i).
 
 **06.5.3 Shove, trip and throw (Force).** `[D]` *Anchor: yes.* Card 01.18.10, against the higher of
 Might or Agility defense. Ladder: 1 → `cond.off_balance`; 2 → pushed **one band** away (the engagement
@@ -764,7 +764,10 @@ push of one band delivers the target to it: the hazard then acts by its own entr
 with the `reach_unit` knob at "position into a feature"; the OFFER states the hazard's severity before
 commitment, and the frame's stakes do not change, because the danger is the target's. Size: 06.3.10.
 
-**06.5.4 Disarm.** `[D]` *Anchor: yes.* Three routes, each already a rule; the player's method picks:
+**06.5.4 Disarm.** `[D]` *Anchor: yes* (Intent verbs: "disarm", "knock it from his hand", "make her drop it",
+"take his sword". Knobs: `targets` (the held object, or the arm); `reach_unit` (2+: in the actor's hand or fallen
+at the holder's position; 1: it falls); `condition` (the arm route: cond.weakened). Examples: T-06-9 row 24)
+[revision: I-031]. Three routes, each already a rule; the player's method picks:
 (a) **snatch it** (Grapple, a free hand; reach 2+ and it is in the actor's hand, reach 1 and it falls);
 (b) **beat it from the grip** (a called shot at a held object, 06.4.10: reach 2+ and it falls at the
 holder's position); (c) **wrench the arm** (a called shot at the arm: `cond.weakened`, and on a
@@ -816,7 +819,7 @@ creature shoved toward a drop it could catch itself at gets that Evade too.
 | **heavy** | several people or a mechanism move it; it hangs, leans or rolls | cannot be wielded | S3 | an iron chandelier, a statue, a loaded cart, a stack of casks / a ship's boom swinging |
 | **massive** | part of the building or the land | cannot be wielded | S4 | a wall section, a portcullis, a felled tree, a boulder / a collapsing roof (S5 as a ch.10 hazard) |
 
-*Worst case of a one-rung error:* 2–4 Vitality (class i), shown in the OFFER as the harm on a hit.
+*Worst case (J) of a one-rung error:* 2–4 Vitality (class i), shown in the OFFER as the harm on a hit.
 
 **06.5.9 Aim.** `[D]` One action, no roll, only while engaged with nobody and not `cond.off_balance`:
 the actor steadies and picks its moment. It writes `aimed.<actor>.<target>`, a **Precision lever** for
@@ -877,6 +880,8 @@ Examples:           inside: "I cut the rope and drop the chandelier on him" -> S
                     with its own action and roll; sand buys only the Setup's result.
 Anchor:             yes (this rule is the anchor index for T-06-9). Intent verbs: swing from, drop
                     on, kick over, pull down, throw (a thing), slam, cut the rope, use the (thing).
+                    Knobs: [revision: I-031] at most two per frame (00.2.7), from reach_unit, dc (the
+                    object's tier), harm_severity, harm_tags, targets, condition, stakes (the drop or fire).
 Basis:              [R7 §3.4, §5 Ex.1, Ex.9] [01.5.3] [R1 §06 "the environment is the cheapest source
                     of variety"] [R5 CF-12] [R7 §2.8 (improvised weapons by resemblance), §2.21 (stunts are just attacks)] [DL-06-11]
 ```
@@ -929,7 +934,7 @@ one-action beat and a trigger; the OFFER is shown and committed then. When the t
 the start of the actor's next turn, the beat resolves **as the actor's reaction** (so it needs the
 reaction to be unspent, and it uses it). A readied attack is outside any repetition window. If the
 trigger never occurs the action is spent and the reaction is kept. The trigger must be an observable
-event (`[J:flag]`, 01.14.10: true only for something the actor would perceive; *worst case:* a beat
+event (`[J:flag]`, 01.14.10: true only for something the actor would perceive; *worst case (J):* a beat
 readied on an unobservable trigger simply never fires, class iv). A readied beat is a *declared* beat:
 depth 0 (hooks fire on it). Adversaries Ready only when a behavior row names the trigger ("hold the
 shot until someone shows at the door").
@@ -1168,7 +1173,7 @@ R: https://2e.aonprd.com/Rules.aspx?ID=3365 (troops); R: https://cairnrpg.com/fi
 template acting together, written as a single adversary entity with a `members` count. `[J:flag]`
 *"Are these creatures of one kind, in one group, with one purpose?"* True → one mob. False → separate
 participants; a leader, a champion or anything with its own name is **never** folded into a mob.
-Uncertain → a mob when they number four or more. *Worst case:* a crowd run as individuals or the
+Uncertain → a mob when they number four or more. *Worst case (J):* a crowd run as individuals or the
 reverse; the advisory (T-06-13) is computed for the form chosen and shown before the fight (class ii).
 - **Vitality** is pooled: `members × the template's Vitality`. Each time the pool falls past a multiple
   of one member's Vitality, a member is **defeated** (harm carries over: one great blow can drop two).
@@ -1349,7 +1354,7 @@ only if its leader rallies them (one action, fortune check against Hard).
   outcome `truce`, bands and facts persist in the scene, and the first attack-trait beat by anyone
   marks a new `conflict_start` with the old positions. `[J:flag]` *"Does a recorded objective of this
   side forbid stopping (it was sent to kill; it is starving)?"* True → G4 for the truce, with what it
-  would stop for. *Worst case:* a truce allowed that the objective forbade: one round's pause, undone
+  would stop for. *Worst case (J):* a truce allowed that the objective forbade: one round's pause, undone
   by that side's next behavior row (class iv).
 
 ### 06.12 Getting away, and running down
@@ -1388,7 +1393,7 @@ Reach Standard: 2 ticks; levers, the push and the "go big" trade apply as anywhe
 (01.14.6): the same verb may not tick the escape clock on two rounds running, so a chase is a string of
 different ideas. Knobs: `dc` (ground tier → opposed by the lead pursuer); `reach_unit` (ticks);
 `time_cost` (a chase round → an interval, for a long pursuit across country, 10); `stakes`.
-*Decision* `[J:enum]`: the anchor verb for the declared method, as 06.5.10 decision 1. *Worst case:* a
+*Decision* `[J:enum]`: the anchor verb for the declared method, as 06.5.10 decision 1. *Worst case (J):* a
 neighboring verb, same DC, same ticks (class i).
 
 **06.12.4 The pursuit beat and the finish.** `[D]` Handler `h.06.chase_round`: after the fleer's beat
@@ -1438,7 +1443,7 @@ the player's stated intent (default `defeat`):
 alive) · `rob` · `drive_off` · `escape` · `hold` (keep a place or person until a named clock
 completes) · `reach` (get to a place or person) · `protect` (a named person or thing) · `delay`.
 Objectives make the fight's end legible ("they want the ledger, not you") and feed attention (06.9.3)
-and acceptance of a Yield. *Worst case of a wrong classification:* the opposition leaves a round early
+and acceptance of a Yield. *Worst case (J) of a wrong classification:* the opposition leaves a round early
 or late, or accepts a Yield it should not (class iv: the next behavior row corrects it)
 [R1 §06 "victory conditions should be a field of the encounter"].
 
@@ -1740,11 +1745,11 @@ ruled by 06.5.10 and logged; a logged ruling is reused before this table is cons
 | 17 | throw a net, bolas or weighted rope | Grapple at range (`entangling`) | `dc` unchanged; band → close | higher of Might or Agility defense | `cond.grabbed` (S1 at reach 1, S2 at 2+) by the net; no hold to maintain | break free against the net's tier (Moderate) |
 | 18 | stampede the horses (loose the hounds, the hive) at them | Handle or Talk (animals) | `targets` → the animals; `reach_unit` → a created mob | the animals' Resolve defense or Easy tier | the animals become a **mob** acting on its own default list toward the nearest creatures away from the actor, for 2 rounds | the mob is no one's companion |
 | 19 | drop the portcullis / release the counterweight | Handle | `reach_unit` → feature state | the mechanism's tier | `barrier` shut; one under it: Evade vs Hard or S3 and `restrained` | |
-| 20 | fight on the ice, in the surf, on the roof ridge | — (a `difficult_ground` or `hazard` feature) | — | — | Moves cost +1; a critical failure on any physical beat there threatens `cost.footing` | applies to everyone on it |
+| 20 | fight on the ice, in the surf, on the roof ridge | Move (across a `difficult_ground` or `hazard` feature) [revision: I-031] | `action_cost` → +1 per Move | — | Moves cost +1; a critical failure on any physical beat there threatens `cost.footing` | applies to everyone on it |
 | 21 | grab its leg (tail, wing) | Grapple | `targets` → a limb | higher of Might or Agility defense | the creature is `cond.slowed` (leg) or `cond.weakened` (arm) while held; no size snag | 06.5.2; WE-06-3 |
 | 22 | climb onto its back | Grapple (mount clause) | `condition` → `flag.mounted` | higher of Might or Agility defense | `flag.mounted` on it at reach 2+ | 06.15.5 |
 | 23 | trip it with my staff, a rope, a chain | Force | `condition` → prone | higher of Might or Agility defense | `cond.prone`; a rope held by two cancels one size step | |
-| 24 | knock the weapon from its hand | called Strike (held object) or Grapple (snatch) | `condition` / `reach_unit` | Guard, or higher of Might or Agility defense | the weapon falls, or is in my hand | 06.5.4 |
+| 24 | knock the weapon from its hand | Strike, called at the held object, or Grapple (snatch) [revision: I-031] | `condition` (the arm); `reach_unit` (the snatch) | Guard, or higher of Might or Agility defense | the weapon falls, or is in my hand | 06.5.4 |
 | 25 | pin its cloak (sleeve) to the wall with a knife or arrow | Strike | `condition` → grabbed S1; `harm_severity` → none | Guard, with the *called* snag | `cond.grabbed` S1 (by the object) until it spends 1 action | needs a wall or post in its group |
 | 26 | smash the bridge ropes / kick away the ladder | Force (object) | `reach_unit` → feature state | the object's tier (rope Moderate; ladder Easy) | the feature is gone: those on it fall (06.5.8); `no_line` for movement across | stakes rise if I am on it |
 | 27 | shout to startle it, bang my shield, flash the mirror | Setup | `condition` → distracted | Wits defense | `cond.distracted` ENT | loud |
@@ -1753,17 +1758,18 @@ ruled by 06.5.10 and logged; a logged ruling is reused before this table is cons
 | 30 | pour the oil (marbles, caltrops) across the floor | Handle | `reach_unit` → feature state | Trivial unless contested | a `difficult_ground` feature; a creature Moving across it fast (2+ bands a turn) Evades vs Moderate or falls prone | lamp oil can then be lit (row 7) |
 | 31 | set the thatch (hay, dry reeds) alight | Handle | `reach_unit` → feature state | Easy with a flame in hand | a `hazard` (fire S2) and a `veil` (smoke) feature growing one group a round (10) | harms both sides; ticks nearby clocks listing loud or fire |
 | 32 | hide under the wagon and stab at their legs | Sneak, then called Strike (the leg) | none beyond the two cards | notice; then Guard | `flag.hidden`, then the leg's result | two beats |
-| 33 | parry with the chair, the lantern pole, a cloak round my arm | Defend | none | — | the Defend snag; the object is then a body- or hand-rung improvised item | flavor costs nothing |
+| 33 | parry with the chair, the lantern pole, a cloak round my arm | Evade as Defend (06.1.5) [revision: I-031] | none | — | the Defend snag; the object is then a body- or hand-rung improvised item | flavor costs nothing |
 | 34 | throw my weapon | Strike (thrown) | — if `thrown`; else `harm_severity` → hand rung S1 and a Precision snag | Guard | the weapon's harm; it lies at the target's position | |
-| 35 | dive behind the pillar as the breath comes | resisted Evade (free) | — | the effect DC | `flag.in_cover` was needed *before*: now it is a Protective lever only if already held | 06.8.2 |
+| 35 | dive behind the pillar as the breath comes | Evade, resisted (free) [revision: I-031] | — | the effect DC | `flag.in_cover` was needed *before*: now it is a Protective lever only if already held | 06.8.2 |
 | 36 | wedge the door with my dagger / spike the wheel | Handle | `reach_unit` → feature state; `duration` | Easy | the `barrier` or mechanism holds against one Force attempt | the dagger stays there (`cost.gear` by choice) |
 | 37 | hang by one hand from the gallery and kick | Force, with a snag fact | — | higher of Might or Agility defense | as Force; my `hanging` fact is a Precision snag | WE-12-2 |
 | 38 | drag my fallen friend out of the fight | Move, carrying | `action_cost` → +1 per transition | Trivial unless opposed | both move; I provoke as usual | a companion can be commanded to do it |
-| 39 | dig in behind my shield and wait them out | Full defense | `action_cost` → 2 | — | the Defend snag and `flag.in_cover` vs ranged | 06.1.5 |
+| 39 | dig in behind my shield and wait them out | Evade as Full defense (06.1.5) [revision: I-031] | `action_cost` → 2 | — | the Defend snag and `flag.in_cover` vs ranged | 06.1.5 |
 | 40 | fire ten arrows / swing as many times as I can | Strike, repeated | none: throttled by 06.1.6 | Guard | up to three Strikes at 0 / −2 / −4 | never a higher DC (WE-06-2) |
 
 **T-06-9b Chase ground** `[D]` (`data/conflict.yaml#chase.ground_tables`; the engine draws one row a
-round with `roll_table`, d6, no immediate repeat; chapter 13 may replace these with regional tables).
+round with `roll_table`, d6, no immediate repeat; a region's seed or a pre-made setting may replace these
+with regional tables; the world seed keeps them, 12.16.17).
 
 | d6 | Settlement | Wild (forest, hill, marsh) | Indoors or underground |
 |---|---|---|---|
@@ -2375,14 +2381,15 @@ envelope's middle are "lethal" in pairs to a PC of their own band.
 
 **To 10.** Hazard entries as features (`feature_kind: hazard`) with severity and cadence;
 `scene.light`; fall severities; tracking a fled quarry or fleeing PC after `band.distant`;
-`tbl.chase_ground` may be replaced by regional tables (13).
+`tbl.chase_ground` may be replaced by regional tables (a region's seed, 12.16).
 
 **To 12.** The enemy-turn step (12.2.9 item 1) is PR-06-6; the claim class `position` checks T-06-4's
 words; the status line shows windups and the morale clock's existence; T-12-3's transitions are
 06.2.1 and 06.13.1.
 
-**To 13.** Regional chase-ground tables; feature-rich fight locations in the starter region; nerve and
-objectives for the starter bestiary.
+**To 13 (now the region's seed, 12.16; ch.13 is one optional pre-made seed).** Regional chase-ground
+tables (the world seed uses the generic ones); feature-rich fight locations in the starting region (12.16.9);
+nerve and objectives for the region's bestiary (09's build, 12.16.12). T-12-16 `ws.req.06_*` [revision: I-028].
 
 **To 14.** Codex views: the turn summary (T-06-2); positions in words; conditions with remaining
 durations; standing answers for reactions; the morale clock as "sensed"; chase clocks as public.

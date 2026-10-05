@@ -13,6 +13,13 @@
 > all generated and audited against every other chapter's schemas by
 > `rules/_process/simulation/13-gen_region.py`. Nothing here adds a rule the other chapters lack; every
 > procedure in this chapter is a binding of their procedures to this place.
+>
+> **An optional pre-made seed.** No rule depends on this chapter. A campaign starts from the **world seed**
+> (12.16), which writes a region of this file's shape from session-zero questions and oracle tables; the
+> Thallen March is one optional pre-made seed of that shape, loaded in its place and checked by the same
+> seed check (12.16.17, T-12-16). Where other chapters once said "chapter 13 supplies…", they now name the
+> region's seed; this chapter is an example module and is not maintained further (FINISH-PLAN, owner
+> direction 2026-10-05) [revision: I-028].
 
 ## Design intent
 
@@ -1087,14 +1094,16 @@ who cannot choose is offered Tamsin (the most forgiving in a fight) or Corin (th
 - **Day 1–2.** The Harrowby three set at the next dawn; Merrin accuses Tobin; the village splits.
 - **Week 1.** Half of Harrowby's lowland families come to Tolling; Vantry's outriders arrive in Harrowby; the
   hush-hounds take a dog. The faction clocks move a tick or two each.
-- **Week 4.** Median goal fills: Vantry 5/12, the Bellwardens 5/8, Pell 6/12, the Choir 4/8 (p10 2, p90 5); no full
+- **Week 4.** Median goal fills: Vantry 4–5/12, the Bellwardens 5/8, Pell 6/12, the Choir 4/8 (p10 2, p90 5); no full
   faction has completed its goal in the first month (0–2%). The reeve rules for the Casks; Tobin is turned out; the
   Wakeful have taken up his claim.
-- **Week 8–16.** The Choir silences the Last Bell at a median of **week 11** (p10 8, p90 16; 75–81% by week 13,
-  every run by week 26): Tolling's north ward goes quiet, the Quiet's clock jumps three, and the Brightfields turn
-  wild. The Bellwardens' Hem-tower is usually raised in the same season (they complete about three goals a year).
-- **The long run.** Each full faction completes 2.0–3.0 goals a year (mean 2.57–2.71 across scenarios; target
-  1.5–3.5), no faction collapses in two years, and the Quiet, untouched, wakes in seven years (seven Year Turns), in
+- **Week 8–18.** The Choir silences the Last Bell at a median of **week 11–12** (p10 8, p90 17–18; 66–76% by week 13,
+  99–100% by week 26) [revision: I-032: figures from the re-run with 11.3.7's exact agenda]: Tolling's north ward goes quiet, the Quiet's clock jumps three, and the Brightfields turn
+  wild. The Bellwardens' Hem-tower is usually raised in the same season (they complete two to three goals a year).
+- **The long run.** Each full faction completes about 2 goals a year (median 2.0, p10 0.5, p90 3.0; mean 1.81–2.05
+  across scenarios; target 1.5–3.5); in a median run one full faction collapses within two years (Pell, Vantry or
+  the Choir, once schemes found out and failed courtships harden a rivalry into war) and a rising one fills the
+  vacuum; and the Quiet, untouched, wakes in seven years (seven Year Turns), in
   four if the Last Bell falls silent. The campaign's horizon is therefore real but
   distant: something the player can push back (recast bells, the Mother Bell) or ignore for years.
 
@@ -1153,8 +1162,9 @@ re-derives every file from `13_data_*.py`, runs every audit (PR-10-8, 11.3.1, PR
 05.7.10, the checklist), and writes nothing if any error remains. `--tables-only` prints the encounter audit row by
 row. `python 13-world-sim.py [seeds] [--rule-cap]` re-runs 11's World Turn with the region's factions. Since
 integration `11-world-sim.py` follows 11.3.4 and carries the `steadfast` row itself, so `--rule-cap` changes
-nothing: the verbatim re-run gives 2.66–2.71 goals per full faction per year and 0% at tier 5
-(`13-world-sim-output.txt`) [integration: I-026].
+nothing. Since revision B the script also follows 11.3.7's agenda exactly (overrides, row conditions, targets): the
+verbatim re-run gives 1.81–2.05 goals per full faction per year (mean across scenarios; target 1.5–3.5) and 0% at
+tier 5 (`13-world-sim-output.txt`) [integration: I-026] [revision: I-032].
 
 ## Tables
 

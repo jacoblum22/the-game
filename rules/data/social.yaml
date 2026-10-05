@@ -312,11 +312,11 @@ truth_out:                 # 15.5.4
   segments_by_plausibility: {plausible: 8, doubtful: 6, outrageous: 4}
   persona_segments: 8
   tick_sources:
-    - {on: "boundary week, while any truth-holder shares a place or faction with any believer", ticks: 1, auto: true}
-    - {on: "the PC extends the lie (new believer or load-bearing detail)", ticks: 1}
-    - {on: "the PC acts before a believer in a way the lie contradicts", ticks: 2}
-    - {on: "a believer takes cost.exposure S2+ on a beat involving the PC", ticks: "U(severity)"}
-    - {on: "a believer investigates (NPC fortune check)", ticks: delivered_reach}
+    - {'on': "boundary week, while any truth-holder shares a place or faction with any believer", ticks: 1, auto: true}
+    - {'on': "the PC extends the lie (new believer or load-bearing detail)", ticks: 1}
+    - {'on': "the PC acts before a believer in a way the lie contradicts", ticks: 2}
+    - {'on': "a believer takes cost.exposure S2+ on a beat involving the PC", ticks: "U(severity)"}
+    - {'on': "a believer investigates (NPC fortune check)", ticks: delivered_reach}
   omens:
     stirring: ["someone asks an odd question about the story", "a detail of the story is repeated back slightly wrong", "a believer mentions writing to someone who would remember"]
     building: ["the believer goes quiet when the subject comes up", "a letter arrives for the believer from someone who knew the truth", "the believer watches the PC a moment too long"]

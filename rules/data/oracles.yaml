@@ -3,7 +3,7 @@
 #   content, descriptions), the twist rows by severity (target of cost.twist, 01.13.10), random-event focus,
 #   the scene test and scene adjustments, lead-injection forms, vignettes, and NPC generation, reaction and
 #   action tables. The DM never picks 'at random': it rolls these (00.3.2, SG-12).
-# Owner: 12-dm-procedures (00.17.1 Q6; T-00-19). Region tables (ch.13) replace the generic NPC and name
+# Owner: 12-dm-procedures (00.17.1 Q6; T-00-19). A region's seed tables (12.16.7, 12.16.11) replace the generic NPC and name
 #   tables where they exist.
 # Schema: data/SCHEMAS.md#oraclesyaml (Table: id, die, results [{range, result, effects?, sub_table?}],
 #   recency, context_filters) plus the common envelope. Optional fields used here (documented in 12 Tables):
@@ -921,7 +921,7 @@ tables:
   context_rule: the severity passed by cost.twist selects the row; no die is rolled on this table
   constraints:
   - a twist never deals harm directly (that is cost.harm) and never kills
-  - every creature or hazard a row creates is drawn from the scene's own encounter, hazard or trap tables (ch.10/13) filtered
+  - every creature or hazard a row creates is drawn from the scene's own encounter, hazard or trap tables (ch.10; the region's seed, 12.16.13) filtered
     by the stated band; nothing is invented
   - a row whose prerequisite is absent (no companion present; no existing danger clock) falls to the row named in its fallback
   - the DM chooses the fictional form; the row fixes what enters play
@@ -1458,7 +1458,7 @@ tables:
   - '[12.5.2]'
   - '[12.7.4]'
 - id: tbl.npc_role
-  name: NPC role (generic; ch.13 region tables replace)
+  name: NPC role (generic; a region's seed tables replace)
   tags: []
   die: d20
   recency: true
@@ -1744,7 +1744,7 @@ tables:
     pronouns: he/him
   lifecycle: provisional
   basis: *id003
-  notes_rule: rolled at walk-on and written at once; a ch.13 region table or the player's session-zero preferences (ch.14)
+  notes_rule: rolled at walk-on and written at once; a region's seed table (12.16.11) or the player's session-zero preferences (ch.14)
     may replace this table with other distributions or identities; narration never uses a pronoun the store does not hold
 - id: tbl.npc_age
   name: Age band

@@ -252,7 +252,7 @@ vehicles:
     witness_required: false
     scope: "the place"
     when: [arrival, reflection]
-    requires: ["the PC's location, or an ancestor place, carries a `resonance` list (ch.13 / ch.11 data) containing the calling's key, branch or conduct axis"]
+    requires: ["the PC's location, or an ancestor place, carries a `resonance` list (the region's seed, 12.16 / ch.11 data) containing the calling's key, branch or conduct axis"]
     families: [divine, primal, arcane, wilds, sacred]
     specificity: 8
     price_kinds: [price.shadow, price.seat, price.oath]

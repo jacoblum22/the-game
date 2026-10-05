@@ -105,7 +105,7 @@ archetypes:
     signature: ab.abs_predators_nose
   lore: {deed_tag: deed.lore.bestiary, rarity: common}
   encounter:
-    terrain: [terrain.forest, terrain.plains, terrain.highland, terrain.frozen]
+    terrain: [terrain.forest, terrain.plains, terrain.highland, terrain.frozen, terrain.road]
     group: {usual: mob, count: 4-8, leader: elite}
     objective_default: null
   lifecycle: provisional
@@ -188,7 +188,7 @@ archetypes:
     signature: ab.abs_pounce
   lore: {deed_tag: deed.lore.bestiary, rarity: common}
   encounter:
-    terrain: [terrain.forest, terrain.highland, terrain.plains]
+    terrain: [terrain.forest, terrain.highland, terrain.plains, terrain.frozen, terrain.arid]
     group: {usual: alone}
     objective_default: null
   lifecycle: provisional
@@ -272,7 +272,7 @@ archetypes:
     signature: ab.abs_thick_hide
   lore: {deed_tag: deed.lore.bestiary, rarity: common}
   encounter:
-    terrain: [terrain.forest, terrain.highland]
+    terrain: [terrain.forest, terrain.highland, terrain.frozen, terrain.underground.cave]
     group: {usual: alone}
     objective_default: null
   lifecycle: provisional
@@ -418,7 +418,7 @@ archetypes:
     signature: ab.abs_wall_crawl
   lore: {deed_tag: deed.lore.bestiary, rarity: common}
   encounter:
-    terrain: [terrain.underground, terrain.forest.deepwood, terrain.ruin]
+    terrain: [terrain.underground, terrain.forest.deepwood, terrain.ruin, terrain.wetland, terrain.arid]
     group: {usual: alone or pair}
     objective_default: null
   lifecycle: provisional
@@ -492,7 +492,7 @@ archetypes:
     cannot_absorb: [ab.abs_thick_hide]
   lore: {deed_tag: deed.lore.bestiary, rarity: common}
   encounter:
-    terrain: [terrain.underground, terrain.settlement, terrain.wetland, terrain.ruin]
+    terrain: [terrain.underground, terrain.settlement, terrain.wetland, terrain.ruin, terrain.forest.deepwood]
     group: {usual: swarm}
     objective_default: null
   lifecycle: provisional
@@ -576,7 +576,7 @@ archetypes:
     signature: ab.abs_scale_ward
   lore: {deed_tag: deed.lore.bestiary, rarity: common}
   encounter:
-    terrain: [terrain.wetland, terrain.water.river, terrain.forest.jungle]
+    terrain: [terrain.wetland, terrain.water.river, terrain.forest.jungle, terrain.arid, terrain.water, terrain.underground.cave, terrain.underground.sewer]
     group: {usual: alone}
     objective_default: null
   lifecycle: provisional
@@ -660,7 +660,7 @@ archetypes:
     signature: ab.abs_night_eyes
   lore: {deed_tag: deed.lore.bestiary, rarity: common}
   encounter:
-    terrain: [terrain.highland, terrain.plains, terrain.water.coast]
+    terrain: [terrain.highland, terrain.plains, terrain.water.coast, terrain.water]
     group: {usual: alone or pair}
     objective_default: null
   lifecycle: provisional
@@ -827,7 +827,7 @@ archetypes:
     signature: ab.abs_pounce
   lore: {deed_tag: deed.lore.bestiary, rarity: common}
   encounter:
-    terrain: [terrain.forest, terrain.highland, terrain.ruin]
+    terrain: [terrain.forest, terrain.highland, terrain.ruin, terrain.plains, terrain.arid, terrain.underground, terrain.wetland, terrain.frozen]
     group: {usual: alone or pair}
     objective_default: null
   lifecycle: provisional
@@ -907,7 +907,8 @@ archetypes:
   absorbable: {pool: none, reason: 'gen_absorb no_pool: the human-like folk (learned arts, not natural powers)'}
   lore: {deed_tag: deed.lore.bestiary, rarity: common}
   encounter:
-    terrain: [terrain.road, terrain.forest, terrain.highland]
+    terrain: [terrain.road, terrain.forest, terrain.highland, terrain.wetland, terrain.arid, terrain.water, terrain.settlement, terrain.plains,
+      terrain.ruin]
     group: {usual: band, count: 3-6, leader: elite}
     objective_default: rob
   lifecycle: provisional
@@ -1229,7 +1230,7 @@ archetypes:
   absorbable: {pool: none, reason: 'gen_absorb no_pool: the human-like folk (learned arts, not natural powers)'}
   lore: {deed_tag: deed.lore.bestiary, rarity: common}
   encounter:
-    terrain: [terrain.settlement, terrain.ruin, terrain.forest]
+    terrain: [terrain.settlement, terrain.ruin, terrain.forest, terrain.road, terrain.wetland]
     group: {usual: alone, escort: arch.brigand}
     objective_default: null
   lifecycle: provisional
@@ -1468,7 +1469,7 @@ archetypes:
   absorbable: {pool: none, reason: 'gen_absorb no_pool: the human-like folk (learned arts, not natural powers)'}
   lore: {deed_tag: deed.lore.bestiary, rarity: common}
   encounter:
-    terrain: [terrain.plains, terrain.highland, terrain.arid]
+    terrain: [terrain.plains, terrain.highland, terrain.arid, terrain.road, terrain.frozen, terrain.underground]
     group: {usual: band, count: 3-8, leader: elite}
     objective_default: rob
   lifecycle: provisional
@@ -1547,7 +1548,7 @@ archetypes:
   absorbable: {pool: none, reason: 'gen_absorb no_pool: the human-like folk (learned arts, not natural powers)'}
   lore: {deed_tag: deed.lore.bestiary, rarity: common}
   encounter:
-    terrain: [terrain.underground, terrain.forest, terrain.ruin]
+    terrain: [terrain.underground, terrain.forest, terrain.ruin, terrain.road, terrain.wetland, terrain.highland, terrain.frozen]
     group: {usual: mob, count: 4-10, leader: elite}
     objective_default: rob
   lifecycle: provisional
@@ -1714,7 +1715,7 @@ archetypes:
     natural_folk: 'giant-kin and beastfolk carry natural powers: gen_absorb''s no_pool covers only the human-like folk (I-020)'
   lore: {deed_tag: deed.lore.bestiary, rarity: common}
   encounter:
-    terrain: [terrain.wetland]
+    terrain: [terrain.wetland, terrain.water]
     group: {usual: band, count: 2-5}
     objective_default: null
   lifecycle: provisional
@@ -1885,7 +1886,7 @@ archetypes:
     natural_folk: 'giant-kin and beastfolk carry natural powers: gen_absorb''s no_pool covers only the human-like folk (I-020)'
   lore: {deed_tag: deed.lore.bestiary, rarity: common}
   encounter:
-    terrain: [terrain.highland, terrain.forest.deepwood, terrain.underground]
+    terrain: [terrain.highland, terrain.forest.deepwood, terrain.underground, terrain.road, terrain.wetland, terrain.frozen]
     group: {usual: alone}
     objective_default: null
   lifecycle: provisional
@@ -1970,7 +1971,7 @@ archetypes:
     natural_folk: 'giant-kin and beastfolk carry natural powers: gen_absorb''s no_pool covers only the human-like folk (I-020)'
   lore: {deed_tag: deed.lore.bestiary, rarity: common}
   encounter:
-    terrain: [terrain.highland.mountains, terrain.frozen]
+    terrain: [terrain.highland.mountains, terrain.frozen, terrain.plains]
     group: {usual: alone}
     objective_default: null
   lifecycle: provisional
@@ -2061,7 +2062,7 @@ archetypes:
     signature: ab.abs_grave_chill
   lore: {deed_tag: deed.lore.religion, rarity: common}
   encounter:
-    terrain: [terrain.ruin.tomb, terrain.ruin, terrain.underground]
+    terrain: [terrain.ruin.tomb, terrain.ruin, terrain.underground, terrain.frozen]
     group: {usual: mob, count: 3-8}
     objective_default: hold
   lifecycle: provisional
@@ -2317,7 +2318,7 @@ archetypes:
     signature: ab.abs_grave_chill
   lore: {deed_tag: deed.lore.religion, rarity: uncommon}
   encounter:
-    terrain: [terrain.ruin.tomb]
+    terrain: [terrain.ruin.tomb, terrain.frozen]
     group: {usual: alone, escort: arch.skeleton}
     objective_default: kill
   lifecycle: provisional
@@ -2411,7 +2412,7 @@ archetypes:
     signature: ab.abs_life_drink
   lore: {deed_tag: deed.lore.religion, rarity: uncommon}
   encounter:
-    terrain: [terrain.settlement, terrain.ruin.fortress]
+    terrain: [terrain.settlement, terrain.ruin.fortress, terrain.road, terrain.ruin]
     group: {usual: alone, escort: arch.ghoul}
     objective_default: null
   lifecycle: provisional
@@ -2486,7 +2487,7 @@ archetypes:
     signature: ab.abs_ghost_step
   lore: {deed_tag: deed.lore.religion, rarity: common}
   encounter:
-    terrain: [terrain.ruin, terrain.settlement]
+    terrain: [terrain.ruin, terrain.settlement, terrain.road, terrain.wetland, terrain.frozen, terrain.forest.deepwood, terrain.water]
     group: {usual: alone}
     objective_default: drive_off
   lifecycle: provisional
@@ -2561,7 +2562,7 @@ archetypes:
     signature: ab.abs_ghost_step
   lore: {deed_tag: deed.lore.religion, rarity: uncommon}
   encounter:
-    terrain: [terrain.ruin, terrain.wetland, terrain.underground]
+    terrain: [terrain.ruin, terrain.wetland, terrain.underground, terrain.frozen, terrain.forest.deepwood]
     group: {usual: alone or pair}
     objective_default: kill
   lifecycle: provisional
@@ -2835,7 +2836,7 @@ archetypes:
     signature: ab.abs_glamour_skin
   lore: {deed_tag: deed.lore.history, rarity: uncommon}
   encounter:
-    terrain: [terrain.forest, terrain.highland.hills]
+    terrain: [terrain.forest, terrain.highland.hills, terrain.road]
     group: {usual: alone, escort: arch.wild_fey}
     objective_default: null
   lifecycle: provisional
@@ -2922,7 +2923,7 @@ archetypes:
     signature: ab.abs_glamour_skin
   lore: {deed_tag: deed.lore.history, rarity: common}
   encounter:
-    terrain: [terrain.forest, terrain.wetland]
+    terrain: [terrain.forest, terrain.wetland, terrain.water.river]
     group: {usual: swarm or alone}
     objective_default: null
   lifecycle: provisional
@@ -3094,7 +3095,7 @@ archetypes:
     signature: ab.abs_spirit_sight
   lore: {deed_tag: deed.lore.religion, rarity: uncommon}
   encounter:
-    terrain: [terrain.forest, terrain.water.river, terrain.highland]
+    terrain: [terrain.forest, terrain.water.river, terrain.highland, terrain.plains, terrain.arid, terrain.frozen, terrain.water]
     group: {usual: alone}
     objective_default: drive_off
   lifecycle: provisional
@@ -3181,7 +3182,7 @@ archetypes:
     signature: ab.abs_spirit_sight
   lore: {deed_tag: deed.lore.history, rarity: uncommon}
   encounter:
-    terrain: [terrain.highland, terrain.ruin.tomb]
+    terrain: [terrain.highland, terrain.ruin.tomb, terrain.frozen, terrain.forest, terrain.wetland]
     group: {usual: alone or pair}
     objective_default: protect
   lifecycle: provisional
@@ -3272,7 +3273,7 @@ archetypes:
     cannot_absorb: [ab.abs_spirit_sight]
   lore: {deed_tag: deed.lore.religion, rarity: rare}
   encounter:
-    terrain: [terrain.highland, terrain.ruin.temple]
+    terrain: [terrain.highland, terrain.ruin.temple, terrain.frozen]
     group: {usual: alone}
     objective_default: protect
   lifecycle: provisional
@@ -3881,7 +3882,7 @@ archetypes:
     signature: ab.abs_stone_flesh
   lore: {deed_tag: deed.lore.arcana, rarity: uncommon}
   encounter:
-    terrain: [terrain.ruin, terrain.underground]
+    terrain: [terrain.ruin, terrain.underground, terrain.frozen]
     group: {usual: alone or pair}
     objective_default: hold
   lifecycle: provisional
@@ -4287,7 +4288,7 @@ archetypes:
     signature: ab.abs_stone_flesh
   lore: {deed_tag: deed.lore.arcana, rarity: uncommon}
   encounter:
-    terrain: [terrain.underground, terrain.highland.mountains]
+    terrain: [terrain.underground, terrain.highland.mountains, terrain.arid]
     group: {usual: alone}
     objective_default: null
   lifecycle: provisional
@@ -4458,7 +4459,7 @@ archetypes:
     signature: ab.abs_storm_step
   lore: {deed_tag: deed.lore.arcana, rarity: uncommon}
   encounter:
-    terrain: [terrain.highland, terrain.plains]
+    terrain: [terrain.highland, terrain.plains, terrain.arid]
     group: {usual: alone}
     objective_default: null
   lifecycle: provisional
@@ -4648,7 +4649,7 @@ archetypes:
     signature: ab.abs_dragon_breath
   lore: {deed_tag: deed.lore.bestiary, rarity: rare}
   encounter:
-    terrain: [terrain.highland.mountains, terrain.ruin]
+    terrain: [terrain.highland.mountains, terrain.ruin, terrain.arid, terrain.water.sea]
     group: {usual: alone}
     objective_default: kill
   lifecycle: provisional
@@ -4818,7 +4819,7 @@ archetypes:
     signature: ab.abs_scale_ward
   lore: {deed_tag: deed.lore.bestiary, rarity: common}
   encounter:
-    terrain: [terrain.highland]
+    terrain: [terrain.highland, terrain.plains]
     group: {usual: alone or pair}
     objective_default: null
   lifecycle: provisional
@@ -4901,7 +4902,7 @@ archetypes:
     signature: ab.abs_scale_ward
   lore: {deed_tag: deed.lore.bestiary, rarity: uncommon}
   encounter:
-    terrain: [terrain.water.sea, terrain.wetland, terrain.underground]
+    terrain: [terrain.water.sea, terrain.wetland, terrain.underground, terrain.frozen, terrain.water]
     group: {usual: alone}
     objective_default: null
   lifecycle: provisional
@@ -4990,7 +4991,7 @@ archetypes:
     signature: ab.abs_alien_mind
   lore: {deed_tag: deed.lore.arcana, rarity: rare}
   encounter:
-    terrain: [terrain.underground]
+    terrain: [terrain.underground, terrain.water.sea]
     group: {usual: alone, escort: arch.cultist}
     objective_default: null
   lifecycle: provisional
@@ -5065,7 +5066,7 @@ archetypes:
     signature: ab.abs_acid_touch
   lore: {deed_tag: deed.lore.bestiary, rarity: common}
   encounter:
-    terrain: [terrain.underground, terrain.ruin]
+    terrain: [terrain.underground, terrain.ruin, terrain.wetland, terrain.forest.deepwood]
     group: {usual: alone}
     objective_default: kill
   lifecycle: provisional
@@ -5250,7 +5251,7 @@ archetypes:
     signature: ab.abs_rooted
   lore: {deed_tag: deed.lore.bestiary, rarity: uncommon}
   encounter:
-    terrain: [terrain.forest, terrain.wetland, terrain.forest.jungle]
+    terrain: [terrain.forest, terrain.wetland, terrain.forest.jungle, terrain.underground]
     group: {usual: alone}
     objective_default: hold
   lifecycle: provisional

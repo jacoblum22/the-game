@@ -629,8 +629,8 @@ afflictions:
       params: {units: 1, check: false, hook: on_boundary, boundary: day}
     text: The dead feel nearer than the living.
   terminal: holds at stage 3
-  cure: ['a long rest at a consecrated or tended place (13): one stage down', a working of deed.divine.healing that names
-      it, medicine does not touch it]
+  cure: ['a long rest at a consecrated or tended place (the region''s seed, 12.16.9): one stage down', a working of deed.divine.healing
+      that names it, medicine does not touch it]
   lift: null
   lifecycle: provisional
   basis: ['07.9', R5 HR-08, 'R: https://2e.aonprd.com/Rules.aspx?ID=2319']
@@ -693,8 +693,8 @@ afflictions:
       params: {condition: cond.exhausted, severity: S2, duration: while the stage lasts, target: the bearer}
     text: Bleeding under the skin.
   terminal: S3 harm at each check while stage 4 holds
-  cure: [Treat (07.8.8), 'a week of convalescence with treatment: one stage down', 'a specific remedy, if the setting
-      has one (13)']
+  cure: [Treat (07.8.8), 'a week of convalescence with treatment: one stage down', 'a specific remedy, if the region''s
+      seed or setting has one']
   lift: null
   lifecycle: provisional
   basis: ['07.9', R5 HR-08, 'R: https://2e.aonprd.com/Rules.aspx?ID=2319']

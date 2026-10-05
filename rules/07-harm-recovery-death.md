@@ -476,7 +476,7 @@ impact"; DL-07-02]
    lethal (10; 07.9.5); (iv) a periodic tick that inherits from one of these (07.2.11);
 3. the target is a PC or a companion (others need no key).
 Engine-side this is a lookup; `apply_harm` ignores a `lethal: true` argument that fails test 1 or 3 and
-logs the refusal. *Worst case:* the DM omits a warning the triggers did not cover (an improvised danger
+logs the refusal. *Worst case (J):* the DM omits a warning the triggers did not cover (an improvised danger
 with no data behind it): the frame cannot be lethal, the worst outcome is Down, and the `severity` row
 catches the source the next time it is perceived (class iv, errs safe).
 
@@ -660,7 +660,7 @@ Decisions (J):      1. STRIKE [J:flag], per option that survived the engine's re
                     2. BARGAINER [J:flag], only for option 3: "Is there a recorded power here that
                        could take a debt?" True only when an entity present or bound to the scene
                        carries `can_bargain: true` (the victor's master, a keeper the PC serves, the
-                       power of the place), or setting canon names a default bargainer (13).
+                       power of the place), or the region's canon names a default bargainer (12.16.6).
 Computation [D]:    PR-07-5. The engine evaluates each option's `requires` in data/last_chance.yaml
                     against state, applies strikes, and then VALIDATES: at least three options remain
                     and at least one of them is not death. The three always-available options (maimed
@@ -720,7 +720,7 @@ and its wounds. If the Threshold is reached again in the same scene, this option
 - **The ask** `[J:enum]`: the first recorded `want` of the bargainer that the PC could fulfil (15); if it
   has none, an engine roll on `tbl.bargain_asks` (d6: return what was taken from it; bring it a named
   person or thing; end a named enemy of it; serve it one season in four for a year; carry its sign and
-  its message to a named place; give up a named bond or possession). *Worst case:* a less fitting ask of
+  its message to a named place; give up a named bond or possession). *Worst case (J):* a less fitting ask of
   the same weight; the player sees it before choosing (class ii).
 - **The debt.** A vow thread (11) whose progress clock the PC fills, racing `clk.deaths_debt`
   (countdown, 8 segments, public, +1 at each `week`). The curse `aff.deaths_debt` sits at stage 1 while
@@ -786,7 +786,7 @@ evidence in the ordinary way; surviving the Threshold is not itself a deed (03's
 the character's death?"* True only when the player says so in plain words; uncertain → ask (01.2.4's one
 question). If true, the engine raises the `chosen` warning; the player confirms out of fiction; a lethal
 context of any cause must hold or be written by that confirmation; then 07.5.9 runs from whatever harm
-state the character is in. *Worst case:* a heroic risk misread as a chosen death; the confirmation step
+state the character is in. *Worst case (J):* a heroic risk misread as a chosen death; the confirmation step
 catches it before anything is written (class ii).
 
 ### 07.6 Defeat: what the victor does, and what the world keeps
@@ -831,13 +831,13 @@ A hazard has no disposition: a PC put Down by one is treated as `leave`, with th
 a clock, and ways out, in that order (PR-07-7).
 - **Holding place** `[J:enum]`: among the places the engine returns (the victor's faction's holds within
   reach, 11 and 13; the victor's lair; else a camp it creates at the nearest suitable place), the first
-  by distance unless the victor's recorded objective names another. *Worst case:* a different hold of
+  by distance unless the victor's recorded objective names another. *Worst case (J):* a different hold of
   the same side (class i: the journey's length).
 - **The captors' clock** `clk.captors_intent`: countdown, 6 segments, sensed, +1 a day, named for what
   the captors mean to do (`[J:enum]` from the archetype's `captive_fate`, 09: trial, sale, sacrifice,
   interrogation, ransom, labor, the larder; default by org tag in `harm.yaml#captivity.fates`). Omens
   are mandatory (INV-14). If its completion would be lethal, the lethal warning fires at imminent.
-  *Worst case:* a neighboring fate of the same clock size; its omens tell the player which (class ii).
+  *Worst case (J):* a neighboring fate of the same clock size; its omens tell the player which (class ii).
 - **Three openings** drawn by the engine from `tbl.captivity_openings` (d8, no repeats), each written
   as a fact the player can act on, with at least one that needs no roll to *find*: a careless or
   bribable guard; a bond or bar that can be worked; an ally or rival of the captors who wants the PC
@@ -927,8 +927,8 @@ embraces a mark (the scarred veteran, the one who came back) is an **offer**, ne
 [R2 §07 "scars a character accepts as self"; R3 §07.2]. Chapter 11 reads marks for epithets.
 
 **07.7.6 Offsetting a maim.** `[D]` A maim's entry lists its `offset` paths, each a real cost elsewhere:
-a made replacement (08: a hook, a brace, a glass eye; removes the restriction or narrows it, never
-restores the attribute); a rite (05, if 13's canon allows regrowth; default: it does not); a calling
+a made replacement (08: a hook, a brace, a glass eye; `base_items.yaml` entries tagged `item.tool.kit.prosthesis`, whose
+`offsets` say what each narrows [revision: I-016]; removes the restriction or narrows it, never restores the attribute); a rite (05, if the region's canon allows regrowth, 12.16.5; default: it does not); a calling
 identity that turns the restriction's ground into its own (04). No path is free and none is automatic.
 
 ### 07.8 Rest and recovery
@@ -2284,7 +2284,7 @@ chronicle); RC-RETRIEVE (trigger-loaded cards for the warning, the exits card an
   should fail a turn that owes a warning or a status block and lacks it, and any narration of death
   without `harm_state.dead`. Anchors for the index: 07.4.1, 07.4.3, 07.8.8, 07.10.2 and the five shapes
   listed under Edge cases.
-- **To 13.** Whether a default bargainer exists in canon (who answers at the door of death); which places
+- **To 13 (now the region's seed, 12.16; T-12-16 `ws.req.07_*`) [revision: I-028].** Whether a default bargainer exists in canon (who answers at the door of death); which places
   are consecrated or tended (grave-chill's cure); whether any rite regrows a limb (default: none);
   regional afflictions as an owner-block of `afflictions.yaml` if 00 grants one.
 - **To 14.** The codex shows: Vitality and its maximum with what lowers it; the harm state; wounds with

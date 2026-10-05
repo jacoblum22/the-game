@@ -36,4 +36,6 @@ tags:
     for sledges and vessels.}
 - {id: item.conveyance.vessel.boat, name: Boat, parent: item.conveyance.vessel, level: 3, lifecycle: provisional, definition: 'True only when a small craft rowed, poled or sailed by its passengers. False
     for ships with a crew of more than six.'}
+- {id: item.tool.kit.prosthesis, name: Prosthesis, parent: item.tool.kit, level: 3, lifecycle: provisional, definition: 'True only when a made replacement or support for a lost or ruined part of the body,
+    fitted to one bearer (07.7.6). False for armor, a crutch or a walking staff anyone may lean on.', distinguish: 'vs armor: does it stand in for the body rather than cover it? Prosthesis.'}
 - {id: item.conveyance.vessel.ship, name: Ship, parent: item.conveyance.vessel, level: 3, lifecycle: provisional, definition: True only when a vessel needing a crew of more than six. False for boats.}

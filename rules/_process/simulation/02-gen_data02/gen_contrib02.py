@@ -48,7 +48,7 @@ def lang(id_, name, who, note=None):
     return d
 
 LICS = [
- lang("lic.lang.common", "the Common tongue", "The tongue of roads, markets and mixed company; nearly everyone met in a settlement holds it at accented or better.", "Chapter 13 names it for its region and may rename this entry (lifecycle: retired + superseded_by)."),
+ lang("lic.lang.common", "the Common tongue", "The tongue of roads, markets and mixed company; nearly everyone met in a settlement holds it at accented or better.", "The region's seed (12.16.7) names it for its region and may rename this entry (lifecycle: retired + superseded_by)."),
  lang("lic.lang.elvish", "Elvish", "The speech of elves among themselves."),
  lang("lic.lang.dwarvish", "Dwarvish", "The speech of dwarf-holds; its runes are cut wherever dwarves have built."),
  lang("lic.lang.orcish", "Orcish", "The speech of orc clans and war-bands."),
@@ -113,8 +113,8 @@ HEAD = """# data/contrib/licenses.02.yaml
 #     - nine LANGUAGE licenses with grades broken < accented < native, and lic.lang.letters (literacy);
 #     - seven PEOPLE GIFTS (kind: fact): one small innate capability per non-human people.
 #   Training licenses (lic.training.*) are chapter 05's; origins grant those by id and never redefine them.
-# Setting note: these are the setting-agnostic tongues the eight peoples of origins.yaml need. Chapter 13 owns
-#   languages for its region (T-00-19 owner-block 13): it may add tongues, and may retire one of these with
+# Setting note: these are the setting-agnostic tongues the eight peoples of origins.yaml need. The region's seed
+#   owns its tongues (12.16.7; a pre-made seed such as ch.13 through T-00-19 owner-block 13): it may add tongues, and may retire one of these with
 #   `superseded_by` when the region names it differently (00.16.3).
 # Every entry carries explicit principle, scope, excludes, crude_fallback, stretch, emulate and acquisition_paths
 #   (ch.01's requirement). stretch and emulate are null: a tongue or an inborn sense cannot be stretched or emulated.

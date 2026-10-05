@@ -309,7 +309,7 @@ so nothing about the NPC is invented to suit the request [R4 §5.2 item 1 "seal 
 *Serving a want* `[J:flag]`: *"Would the offered act or thing, if delivered, advance this want as written?"*
 True only when the want's object and the offer match by id or tag (the want names "their daughter's
 future" and the offer is an apprenticeship for the daughter, a fact); false for a general benefit the
-want does not name (coin offered to an NPC who wants revenge). Uncertain → false. *Worst case:* one term
+want does not name (coin offered to an NPC who wants revenge). Uncertain → false. *Worst case (J):* one term
 wrongly allowed = one request rung (class i), auditable by the want id.
 *Fulfilled and new wants.* When a want's `served_by` fact is written, it becomes `fulfilled` (and a
 `helped` memory is written if the PC served it); at the NPC's next scene the engine rolls a replacement at
@@ -467,7 +467,7 @@ Yes → intimidate. Request vs bargain — *is the core of it an exchange of val
 Win over vs request — *is anything asked beyond goodwill?* Yes → request. Deceive vs Sneak (01.18.13) —
 *must they believe something, or merely not notice?* Believe → deceive. Talk vs Setup by words — *is the
 character after the listener's decision (Talk) or a moment of distraction to exploit (Setup)?* Default
-when uncertain: **request** (the method with the fewest special effects). *Worst case:* the wrong method
+when uncertain: **request** (the method with the fewest special effects). *Worst case (J):* the wrong method
 uses the wrong defense (at most the gap between the NPC's Resolve and Wits, typically 0–3) and is shown in
 the OFFER, where the player may restate (class ii) [01.18.7; 00.4.1; R4 §3.2 S1; DL-15-08].
 
@@ -660,7 +660,7 @@ catalog (T-15-8, `data/social.yaml#levers`) lists the social facts that typicall
 
 Memories act through standing (15.1.6), never again as snags, with one exception: a `caught_lying`
 memory worsens claim plausibility (15.5.2). A reputation (11) acts as a lever or snag only where the NPC
-knows it (12.10.6) and the reputation's content bears on the request [00.3.9; 01.6.8]. *Worst case:* one
+knows it (12.10.6) and the reputation's content bears on the request [00.3.9; 01.6.8]. *Worst case (J):* one
 wrongly allowed lever or snag: ±2 on the roll, one stakes rung or one reach rung, and the cited fact id makes
 it auditable (00.3.9; class i). [integration: 00.2.3 audit]
 
@@ -729,7 +729,7 @@ the request's effective size is R1 and the NPC is Neutral or warmer, or the effe
 and nothing in the scene would make granting it costly to them (`[J:flag]` *"Is there an established
 reason this NPC would hesitate now — a watcher, a superior, a fear?"* True only with a cited fact; true
 → roll). Plain speech that asks for no decision (telling, greeting, asking a question anyone would
-answer) is the free activity "speak a few words" (00.12.6) and is never framed. *Worst case:* a request
+answer) is the free activity "speak a few words" (00.12.6) and is never framed. *Worst case (J):* a request
 treated as certain that should have rolled — the cheap end of the leniency failure, bounded at two rungs
 below the ceiling (class i); a cited hesitation reason always restores the roll.
 
@@ -870,7 +870,7 @@ urge to do; the redirect names what *would* bait them, if the PC has read them, 
 cost to them (15.3.2); no ceiling by standing (anger ignores regard); standing does not enter the DC.
 Delivery: Standard = they do it now (in conflict: their behavior row is overridden for their next turn,
 06's provoke); Great = they do it recklessly (they give up their next reaction, or leave a lever
-open). Always: memory `insulted` (−1) on the target, whatever the degree, and patience −1. *Worst case:*
+open). Always: memory `insulted` (−1) on the target, whatever the degree, and patience −1. *Worst case (J):*
 TEMPTING wrongly true → one rash act the record did not support (class iv: the provoked act is logged
 with the record field cited). *Anchor: yes* — intent verbs: taunt, goad, bait, provoke, needle; knobs:
 dc, targets, reach_unit.
@@ -910,7 +910,7 @@ follower (16), a soldier under the PC's recorded rank (11), a servant of the PC'
 `[J:flag]`: *"Is the order within the subordinate's recorded duty (the hireling's role, the soldier's
 post)?"* True → R1 and certain if they are Neutral or warmer (15.3.10); false → a request (15.4.1) with
 their standing, or a refusal of their own. Companions in conflict are commanded by 06's command action;
-their loyalty and refusals are 16's. *Worst case:* an out-of-duty order treated as within duty — one act
+their loyalty and refusals are 16's. *Worst case (J):* an out-of-duty order treated as within duty — one act
 the subordinate grants without a roll (class i; 16's loyalty clock still reads the deed).
 
 **15.4.7 Crowds and groups.** `[D]` A **group** that decides together (three guards, a family, a council
@@ -1096,7 +1096,7 @@ preparation in downtime (papers, clothes, a rehearsed story; 15.13.13), it makes
 the persona* start at plausible, and **all** lies told under it share one lie record and one truth-out
 clock (size 8), so a persona is safer than a string of separate lies and, once exposed, exposes everything
 said under it. *Consistent* `[J:flag]`: true only when the claim follows from the persona's recorded story.
-*Worst case:* a claim wrongly judged consistent starts one plausibility rung better than it should (one snag
+*Worst case (J):* a claim wrongly judged consistent starts one plausibility rung better than it should (one snag
 fewer); every lie under the persona shares its truth-out clock, so the error is exposed with the persona
 (class i). [integration: 00.2.3 audit]
 
@@ -1118,8 +1118,8 @@ record: at least suspicious); a site becoming **roused** (10.13.9: denizens alar
 hearing (alarmed); a failed deception against them (by its exposure cost). *Default* at write-on-mention:
 unaware; a sentry on duty `suspicious` at night; anyone in a roused site `alert`. *Decay* `[D]`
 (`h.15.alertness_decay`, `hour`, phase 5): an observer not raised during the past hour steps down one rung,
-but never below its **floor**: a sentry's post floor (suspicious at night, unaware by day; 10 and 13 may set
-others), and `suspicious` for the rest of the day for anyone who reached `alarmed`. Alertness is
+but never below its **floor**: a sentry's post floor (suspicious at night, unaware by day; 10 and the region's seed set
+others, 12.16.9), and `suspicious` for the rest of the day for anyone who reached `alarmed`. Alertness is
 background; the narrator voices it through the observer's conduct (12.14.7) [01.13.6; 06.2.4; 03 Interface
 request; DL-15-18].
 
@@ -1185,7 +1185,7 @@ with a cited field; false → they tell what they know, within T-15-1's *share* 
 PC's **insight defense** `10 + Wits + competence (influence.insight) + edge + status`. NPC failure → the PC
 receives a tell, the fact `pc.suspects.<npc>.<topic>` (certainty `believed`; a citable Precision lever for
 a Read on that topic; journal: "something didn't sit right"). NPC success → nothing is perceived. Neither
-result reveals the truth. *Worst case:* a lie told without a cited reason — the claim check flags an NPC
+result reveals the truth. *Worst case (J):* a lie told without a cited reason — the claim check flags an NPC
 acting against its record (class iv) [00.3.3; 12.10.6; R4 W7].
 
 **15.6.3 What reading can never do.** `[D]` A read reveals the NPC's own state, never content beyond its
@@ -1373,7 +1373,7 @@ sides. The clock reaching full carries the motion; reaching 0 defeats it; after 
 (the body's patience) without either, the side above half wins narrowly (a compromise as 15.8.2 attaches
 to a narrow PC win), and exactly half keeps the status quo. *Is the opponent present and arguing?*
 `[J:flag]`: true only with an NPC id in the scene holding a stake; false → it is a request to the body
-(15.4.7 group). *Worst case:* a debate run where a request was owed — the OFFER shows the structure first
+(15.4.7 group). *Worst case (J):* a debate run where a request was owed — the OFFER shows the structure first
 (class ii) [01.14.5; R5 TOR councils; DL-15-23]. *Anchor: yes* — intent verbs: argue before, plead the case,
 debate, sway the council, petition the court; knobs: duration (6/8), targets (decider), dc.
 
@@ -1394,7 +1394,7 @@ subject, or the method torture): the subject is `misleadable` at every degree sh
 at success, the lowest-ranked delivered item is a plausible falsehood (01.10.4), because people in pain say
 what ends it; the subject's standing falls by `harmed`; and the deed writes conduct evidence (03:
 `conduct.mercy`, negative). `[J:flag]` *"Did any beat in this interrogation inflict harm on the subject?"*
-true only with a cited frame. *Worst case:* a harmful interrogation's falsehood missed (class iii: the next
+true only with a cited frame. *Worst case (J):* a harmful interrogation's falsehood missed (class iii: the next
 success on the subject reveals it, 01.10.4). *Anchor: yes* — intent verbs: interrogate, question, grill,
 break him, sweat a confession; knobs: duration, time_cost, dc.
 
@@ -1516,7 +1516,7 @@ Default when uncertain between two: the one whose anchor is a basic verb the bea
 | **interrogation** | 15.8.4 | per method | 1 interval a beat | person |
 | **deduce** | 15.9.9 (no roll) | — | 1 interval of thought (free mode: none) | conclusions (from held clues) |
 
-*Worst case:* the wrong class — the beat reaches nothing at a holder that a neighbor method would have
+*Worst case (J):* the wrong class — the beat reaches nothing at a holder that a neighbor method would have
 reached; the journal lists the leads' method hints and the redirect names the fitting method (class ii).
 
 **15.9.7 Graduated delivery of findings (P17).** `[D]` + `[J:enum]` A rolled investigative beat at a
@@ -1538,7 +1538,7 @@ holder delivers through 01.10 and 12.10.4:
 5. **Re-asking** rides on the result (01.10.6): a new method, a new lever, a passed interval, or the
    re-attempt cost.
 6. **Which content** `[J:enum]` for each delivered item: 12.10.4 step 1, never beyond the slice.
-*Worst case:* a less useful true placement chosen — the count of true findings is unchanged (class i).
+*Worst case (J):* a less useful true placement chosen — the count of true findings is unchanged (class i).
 
 **15.9.8 Leads.** `[D]` A **lead** is knowledge that a placement exists ("the ferryman saw something that
 night"; "the factor keeps a second ledger") without its content. Leads come only from: a found clue's
@@ -1646,7 +1646,7 @@ ticked by delivered reach, one beat per day (or per downtime week); completion d
 placement for the subject in that collection and the lore keys it holds. A **sage** (08.8.8: 10 coins a
 question) answers one question as a fortune check of the sage's Intellect + lore competence against the
 question's tier, delivered as one item (01.6.7). Knobs: dc (tier), time_cost (hour → day → week), duration
-(clock size). *Worst case of the tier:* one rung = 5 DC, shown (class i).
+(clock size). *Worst case (J) of the tier:* one rung = 5 DC, shown (class i).
 
 **15.9.15 Surveillance.** `[D]` Watching or following someone or somewhere over time. *Anchor: yes.* A
 progress clock "<Target>'s routine" — **4** (their daily habits) or **6** (what they hide: meetings,
@@ -1708,7 +1708,7 @@ threat, active conflict, or clock that would complete within the first day?"* Tr
 rest-site fact and no such clock; false → downtime cannot begin (the DM names what is pressing). Downtime
 ends when the plan runs out, the player stops it, or an **interrupt** (00.7.8) halts `advance_time`: the
 DM frames a scene at the interrupting event, and the unspent remainder of the plan resumes afterwards if
-the player wishes [00.7.3; 00.7.8; R5 P-12 Blades session cycle]. *Worst case:* downtime begins with a
+the player wishes [00.7.3; 00.7.8; R5 P-12 Blades session cycle]. *Worst case (J):* downtime begins with a
 pressing clock unnoticed; `advance_time` still runs every boundary, and the clock's own interrupt halts the
 plan at the moment it matters (00.7.8; class iv). [integration: 00.2.3 audit]
 
@@ -1739,7 +1739,7 @@ improvisation [R4 §9 10 #6] — but goal 1 still holds: a player who wants to s
 something unlisted ("I write a ballad about the siege"; "I court the baker's daughter") has it anchored to
 the nearest activity `[J:enum]` (a project; Cultivate; perform as work) under the two-change limit
 (00.2.7), and the ruling is logged. Uncertain → **project** (15.12), the most general container. *Worst
-case:* a near-but-wrong anchor, bounded by the two-change limit and logged (class iv).
+case (J):* a near-but-wrong anchor, bounded by the two-change limit and logged (class iv).
 
 **15.10.5 Rolls in downtime.** `[D]` A downtime activity that rolls makes **one roll per its interval**
 (a day activity once that day; a week activity once that week): let it ride applies to the interval
@@ -1817,14 +1817,14 @@ request. *Finding*: from a lead, a bond (a mentor bond, 02.9.2), an institution 
 teaches <target>?" at **Likely** (a common trade in a town or city), **Even** (a common trade in a village;
 an uncommon art in a city), **Unlikely** (an uncommon art in a town; magic in a village), **Remote** (magic
 of a rare school outside a city) — odds committed before the roll, answer written as a fact (00.12.7);
-ch.13's settlement facts override. *Securing*: "teach me" is a request (15.4.1) of size **R3** for a
+the region's settlement facts override (`teachers`, 12.16.11). *Securing*: "teach me" is a request (15.4.1) of size **R3** for a
 trained-grade course or a tongue (a week of their time, repeated), **R4** for an ability of min_tier 3+, a
 magic license, or a rite (their art's secrets). The weekly fee is a **Payment** term when it meets the
 price (it usually does: a modest teacher's R3 price is 14 coins against 28 in fees for a four-week course).
 A teacher at Friendly or better may waive the fee (an R2 favor; certain at Friendly per 15.3.10). The
 magic `requires` of 05.9.4 are refusals in effect: a keeper that has not accepted the PC teaches nothing
 divine (G4 with the redirect "first be accepted"). A secured teacher writes `npc.<id>.agreed: teach
-<target>` (15.7.6) and keeps teaching each week while paid. *Worst case:* the Oracle's odds rung for "is
+<target>` (15.7.6) and keeps teaching each week while paid. *Worst case (J):* the Oracle's odds rung for "is
 there a teacher" is one step off (15–25 points), committed before the roll and logged; securing the teacher
 is still a request with its own frame (class i). [integration: 00.2.3 audit]
 
@@ -2845,7 +2845,7 @@ that carry training; `institutions_matching` returns teachers; the ransom countd
 NPC depth; walk-ons are promoted when a Talk targets them (15.2.1); `tbl.npc_refusal` rows should carry
 the `kind` field of T-15-6 (one-to-one); the lead audit runs after `h.15.placement_audit` (phase 7 after
 6); the reason-to-lie flag (15.6.2) belongs in 12.11.5's decision list.
-**To 13.** Settlement tiers (carousing, asking around), teacher availability per settlement, sentries'
+**To 13 (now the region's seed, 12.16: T-12-16 `ws.req.15_*`) [revision: I-028].** Settlement tiers (carousing, asking around), teacher availability per settlement, sentries'
 post floors, regional case templates (`case.*`), NPC lifestyles where they differ from the role default,
 and whether relics count as magic for the `magic` refusal.
 **To 14.** The journal view (T-15-15); the codex shows standing rung names, known wants, fears and

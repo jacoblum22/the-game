@@ -209,8 +209,8 @@ light: {torch: 'lot of 5 for 1 coin; each burns intervals:6; bright to band.clos
 ammunition: {arrows: 20 for 2 coins (1 load), bolts: 20 for 3 coins (1 load), sling_bullets: 20 for 1 coin (1 load), recovery: 'half of those spent, rounded down, after a conflict (06.4.9)'}
 mount_upkeep: base_items.yaml upkeep_week per mount stabled; grazing in grassland or farmland in spring-autumn costs nothing; on a venture a mount eats 1 supply per day unless grazing (10)
 anti_inflation:
-- {id: AI-1, rule: 'Magic never mints coin: anything conjured, summoned or transmuted carries conjured: true, has price 0 and cannot be sold; turning base matter into precious matter is G4 unless 13''s
-    canon allows it, and then the result is conjured'}
+- {id: AI-1, rule: 'Magic never mints coin: anything conjured, summoned or transmuted carries conjured: true, has price 0 and cannot be sold; turning base matter into precious matter is G4 unless the region''s
+    canon (12.16.5) allows it, and then the result is conjured'}
 - {id: AI-2, rule: 'The labor cap: an item the seller made sells for at most its materials'' price + the maker''s craft wage for the days worked'}
 - {id: AI-3, rule: Property items sell for half of list and only through clk.find_buyer; villages and camps never buy them}
 - {id: AI-4, rule: Market depth per settlement per week caps coin paid to the PC for non-trade goods}

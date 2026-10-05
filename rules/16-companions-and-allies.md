@@ -145,7 +145,7 @@ their own reasons) or a follower (drawn by the PC's name).
 us"), the DM classifies the kind by the first row whose "true only when" holds, in table order; a
 person who could be two kinds (paid *and* devoted) is the kind of their **recorded** reason (contract →
 hireling; joining term → companion; oath → follower). Uncertain → `scene_ally` until a recruitment frame
-(16.3) records a reason. *Worst case:* the wrong kind for one ally — the wrong upkeep line and loyalty
+(16.3) records a reason. *Worst case (J):* the wrong kind for one ally — the wrong upkeep line and loyalty
 starting point, both corrected at the next recruitment or contract frame, which is where the reason is
 recorded (class iv).
 
@@ -292,7 +292,7 @@ one cause), who move and fight as a single ally — chapter 06's mob seen from t
 R: https://github.com/amazingrando/blades-in-the-dark-srd-content/blob/main/Blades-in-the-Dark-SRD.md (gangs and experts)].
 `[J:flag]` *"Are these allies of one template, joined for one recorded reason, and does the player want
 them to act together?"* True → one cohort record. False → separate allies. A named leader is never folded
-in: the sergeant of the spears is his own ally. Uncertain → separate allies. *Worst case:* a group run as
+in: the sergeant of the spears is his own ally. Uncertain → separate allies. *Worst case (J):* a group run as
 individuals or the reverse — the same places and wages either way (16.2.2), differing only in command
 bookkeeping (class iv: the player may split or merge at any `scene_end`).
 - **Line:** the template's line at the serving band; **Vitality pooled** (`members × the line's
@@ -333,7 +333,7 @@ swear in, tame, bind — passes these tests in order (PR-16-1). Each failure is 
 | 6 | **The frame** | 15's request (16.3.3–16.3.5) at the size of T-16-9 or T-16-10, with its ceiling (15.3.4) | 15's own redirects: a smaller ask, a term, a campaign (15.8.1) |
 
 The only judgment in tests 1–5 is the classification of an unlisted creature's archetype (09.2.4); every
-other value is read from state. *Worst case:* a test applied to the wrong field (own band read as serving
+other value is read from state. *Worst case (J):* a test applied to the wrong field (own band read as serving
 band) — one refused or one wrongly admitted recruit, visible in the OFFER, which names the cap and the
 places (class ii).
 
@@ -356,7 +356,7 @@ text names the job, else the player is asked). Each candidate is generated at on
 4. **Drives** (16.5.5) are rolled only when a contract is signed; until then the candidate is a
    recurring NPC like any other.
 Candidates not hired remain in the settlement as recurring NPCs (write-on-mention) and may be hired
-later without a second Recruit. *Worst case (role classification):* the wrong role for a job described
+later without a second Recruit. *Worst case (J, role classification):* the wrong role for a job described
 in words — one candidate of a neighboring template, which the player sees before hiring (class ii).
 
 **16.3.3 Hiring: a deal whose price is the wage.** `[J:rung]` + `[J:flag]` + `[D]`
@@ -443,7 +443,7 @@ On success: `ally_kind: companion`, `joining` recorded with the term's id, promo
 depth (12.11.1: secret, three ranked wants, ties), drives rolled (16.5.5), and a personal thread seeded
 (16.12). A person whose request is above the ceiling by exactly one rung with a term may be won over by a
 **persuasion campaign** (15.8.1), which is how most companions worth having are recruited: a few scenes of
-showing them the road serves their want. *Worst case:* one rung (class i), shown with the ceiling in the
+showing them the road serves their want. *Worst case (J):* one rung (class i), shown with the ceiling in the
 OFFER; the joining term is auditable because it cites a want, commitment or fact id (INV-20).
 
 **16.3.5 Bonds from creation.** `[D]` A person named in a creation bond (02.9.2) may be invited by 16.3.4
@@ -488,7 +488,7 @@ leaving a follower behind a calling the PC no longer holds [04.1; 03.10; R6 A-R1
    beast ally at standing **Wary** (it tolerates the PC), rising by care (16.15.3). `[J:flag]` *"Is this
    beast one that can be tamed at all?"* True only for `creature.beast` whose archetype is not
    `creature.beast.monstrous` and whose own band ≤ the PC's power band; false for any other creature (a
-   monstrous beast can be bound only by a rite that says so). Uncertain → false. *Worst case:* a beast
+   monstrous beast can be bound only by a rite that says so). Uncertain → false. *Worst case (J):* a beast
    admitted to taming that should not be — one project's time spent on a clock that the beast's behavior
    list (09) can still end by fleeing (class iv).
 Mounts are bought as items (08.10.1) and created as beast allies at once (standing Neutral; 0 places,
@@ -515,7 +515,7 @@ A former foe's starting standing is its current standing (15.1.4: a cunning crea
 fight), so most such recruitments are campaigns with terms — which is the honest shape of "turn an enemy
 into a friend". Intent verbs: recruit, win over to my side, take into service, adopt, tame, enlist.
 Knobs: `time_cost` (a scene per campaign beat → a week in downtime), `targets` (one person → a group that
-decides together, 15.4.7, joining as a cohort). *Worst case (mind classification):* read from 09's
+decides together, 15.4.7, joining as a cohort). *Worst case (J, mind classification):* read from 09's
 archetype field, so the only judgment is the archetype of an unlisted creature (09.2.4), bounded by 09's
 own worst case.
 
@@ -1180,7 +1180,7 @@ retinue fight in one of two ways:
    champion against one band-3 foe 90%; a band-3 knight against one band-1 foe 96%, against a band-1 mob of six
    75%); holders a band below, or facing a mob of four of their own band, **23–34%** — so "the knight holds the bridge" is a
    good bet, "the villagers hold the gate" a hope, and the clock shows which as it moves [DL-16-14].
-`[J:enum]` (which foes are held): *Worst case:* the wrong group held — a different set of foes in the PC's
+`[J:enum]` (which foes are held): *Worst case (J):* the wrong group held — a different set of foes in the PC's
 fight, which the advisory recomputes and shows (class ii). Intent verbs: hold the line, cover my back,
 keep them busy, take the left flank, hold the bridge while I. Knobs: `targets` (which foes are held),
 `duration` (clock size 6 → 4 for a small skirmish, 8 for a battle's corner). *Why:* "my allies hold them off
@@ -1196,7 +1196,7 @@ with its numbers (16.7.7) and shown to the player as an OFFER. Its will is the s
 (16.7.2, stakes and refusal), and, for a hireling or a follower, chapter 15's duty rule (15.4.6): `[J:flag]`
 *"Is this within its recorded duty (the contract's duty text; a follower's oath)?"* True → certain
 compliance if it is Neutral or warmer; false → a request at its standing (15.4.1), sized by 15.3.2, which
-the ally may refuse. *Worst case:* an out-of-duty task treated as duty — one act done without a roll (class
+the ally may refuse. *Worst case (J):* an out-of-duty task treated as duty — one act done without a roll (class
 i); the grievance sources still read what happened (G3 if it was dangerous). A companion's "duty" is
 nothing: everything it does for the PC beyond following is a request at its standing — which, at Friendly
 (ceiling R4), is nearly everything.
@@ -1240,7 +1240,7 @@ extend"):
   `deed.wilds.navigation`; lookout — the highest Wits base among the rest; scout — at slow or normal pace,
   an ally holding `lic.training.wilds_tracking` or `lic.training.guile_stealth`, else none; forager — at
   slow pace, an ally holding `lic.training.wilds_foraging`, else none. `[J:enum]` only when the player names
-  a role in words ("someone watch our back") — classified to the role; uncertain → lookout. *Worst case:* a
+  a role in words ("someone watch our back") — classified to the role; uncertain → lookout. *Worst case (J):* a
   role mis-assigned for one watch (class i).
 - **The night rota.** In camp, the retinue may keep watch in turns so the PC sleeps: any watch with a
   conscious ally as lookout leaves the PC not `unaware` at an arrival (10.5.2). An ally may hold at most
@@ -1334,7 +1334,7 @@ opposing morale clock (06.11.3) and a chronicle line (07.12.3). This chapter add
 its mechanical form is the vow) [00.3.9; DL-16-16].
 
 **16.9.6 Death is final.** `[D]` A dead ally stays dead unless a working whose scope says so (05) and
-setting canon (13) allow a return; there is no ally-specific resurrection. A raised dead ally is a **bound**
+setting canon (the region's seed, 12.16.5) allow a return; there is no ally-specific resurrection. A raised dead ally is a **bound**
 being (16.15.6), not the person it was: it has no standing, no drives, and no memories but what its working
 gives it.
 
@@ -1607,7 +1607,7 @@ template carries `dread: S<n>` (09), the rider makes the same Handle beat agains
 (S1 Easy … S4 Very hard); failure: the mount bolts one band away from the creature, rider and all, and the
 rider is `cond.off_balance`. `[J:flag]` *"Does the mount perceive the creature?"* True only when it is within
 `band.far` and in sight, or its scent is established on the wind; uncertain → true (a mount knows before its
-rider does). *Worst case:* one unneeded Handle beat (class i). War mounts never roll either check.
+rider does). *Worst case (J):* one unneeded Handle beat (class i). War mounts never roll either check.
 
 **16.15.5 Familiars.** `[D]` A familiar bound by `rit.bind_familiar` (05) is a band-1 tiny beast ally
 (`cmp.familiar`: Vitality 3, one place), understands the PC's speech, lends its senses for one interval a
@@ -2331,7 +2331,7 @@ rule (16.13.3) belongs in the claim-vs-state check: a narrated ally act with no 
 memories follow 12.11.7 unchanged; the shared record (16.13.2) is a scene-log query. (e) Ally deaths are setbacks
 (12.7.5; adopted).
 
-**To 13.** Regional hire roles and quirks (replacing `tbl.16.hire_quirk` where flavor demands), the region's
+**To 13 (now the region's seed, 12.16: T-12-16 `ws.req.16_*`) [revision: I-028].** Regional hire roles and quirks (replacing `tbl.16.hire_quirk` where flavor demands), the region's
 settlements' tiers (village / town / city, for 16.3.2's band limit), named NPCs who might be recruited (with
 own bands), and beasts and mounts available in the region.
 

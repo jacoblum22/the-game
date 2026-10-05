@@ -3,7 +3,12 @@
 Rules as written in rules/11-living-world.md (11.2-11.11) and data/world_turn.yaml, data/factions.yaml:
 - faction check: d20 + rating + 2*tier + stage_mod vs DC; degrees by 00.3.10 (crit +-10, nat20/1 step);
   near miss = failure with margin >= -3.
-- goal clock ticks: crit 3 / success 2 / near-miss 1 / failure 0 / crit-fail 0 + slip (trace, next action recover).
+- goal clock ticks (11.3.6): crit +2 / success +1 / failure 0 / crit-fail 0 + slip (trace, next action recover).
+- agenda (11.3.7, exactly; revision I-032): overrides first (a) slip -> recover, (b) at war (relation -3; every faction
+  here shares the region) and d6 1-3 -> strike that faction, (c) status >= +2 -> aid_pc (the opportunity bang
+  eligible only on a d6 of 1 unless a ransom, holding threat or reward is due; none is modelled); else the temperament row of factions.yaml#agenda with its conditions; a failed condition reads as goal.
+  Targets: strike/scheme the eligible rival with the lowest relation, then fullest goal clock, highest tier, lowest id;
+  court the non-rival (relation 0..+1) with the highest relation (no allies are modelled), else goal.
 - strike: DC = 10 + defender max(force, cunning) + 2*defender tier (+1 entrenched); success: defender loses hold
   (strong->weak; weak -> tier-1 and strong); crit: + one hold place seized; crit fail: attacker loses hold.
 - goal completion: grow -> hold up (weak->strong; strong -> tier+1 weak), dominate -> target loses hold,
@@ -79,15 +84,71 @@ def gain_hold(f, stats, realm_grow=False):
     elif f.tier < 3 or (realm_grow and f.tier < 5):
         f.tier += 1; f.hold = 0; f.tier_changes += 1; stats['tier_up'] += 1
 
-AGENDA = {  # d6 -> action (first row whose condition holds; else 'goal')
-    'aggressive': {1: 'strike', 2: 'strike', 3: 'move_pc', 4: 'goal', 5: 'goal', 6: 'goal'},
-    'cautious':   {1: 'recover', 2: 'scheme', 3: 'goal', 4: 'goal', 5: 'goal', 6: 'goal'},
-    'mercantile': {1: 'expand', 2: 'scheme', 3: 'goal', 4: 'goal', 5: 'goal', 6: 'goal'},
-    'zealous':    {1: 'strike', 2: 'court', 3: 'goal', 4: 'goal', 5: 'goal', 6: 'goal'},
-    'secretive':  {1: 'scheme', 2: 'scheme', 3: 'move_pc', 4: 'goal', 5: 'goal', 6: 'goal'},
-    # 11.3.7's steadfast row (integration, I-026): 1 recover if weak; 2 aid_pc (modelled as goal); 3 strike (a rival at -3); 4-6 goal
-    'steadfast':  {1: 'recover', 2: 'goal', 3: 'strike', 4: 'goal', 5: 'goal', 6: 'goal'},
+# 11.3.7's temperament rows, cell for cell (factions.yaml#agenda.rows) [revision: I-032]. Each cell is (action, condition);
+# a condition that fails reads as 'goal'. Conditions: ('rival', n) a rival at relation <= n; ('rival_eq', -3) a rival at
+# exactly -3; ('weak',) hold weak; ('status_le', n[, 'attention_half']) status toward the PC <= n (and its attention clock
+# at half or more); ('status_ge', 2); ('imminent',) its attention clock on the PC imminent; None: always.
+AGENDA = {
+    'aggressive': {1: ('strike', ('rival', -2)), 2: ('strike', ('rival', -2)), 3: ('move_pc', ('status_le', -2, 'pc_in_region')),
+                   4: ('expand', None), 5: ('goal', None), 6: ('goal', None)},
+    'cautious':   {1: ('recover', ('weak',)), 2: ('scheme', ('rival', -1)), 3: ('court', None),
+                   4: ('goal', None), 5: ('goal', None), 6: ('goal', None)},
+    'mercantile': {1: ('expand', None), 2: ('scheme', ('rival', -1)), 3: ('court', None),
+                   4: ('goal', None), 5: ('goal', None), 6: ('goal', None)},
+    'zealous':    {1: ('strike', ('rival', -2)), 2: ('court', None), 3: ('move_pc', ('status_le', -2)),
+                   4: ('goal', None), 5: ('goal', None), 6: ('goal', None)},
+    'secretive':  {1: ('scheme', ('rival', -1)), 2: ('scheme', ('rival', -1)), 3: ('move_pc', ('status_le', -1, 'attention_half')),
+                   4: ('lie_low', ('imminent',)), 5: ('goal', None), 6: ('goal', None)},
+    'steadfast':  {1: ('recover', ('weak',)), 2: ('aid_pc', ('status_ge', 2)), 3: ('strike', ('rival_eq', -3)),
+                   4: ('goal', None), 5: ('goal', None), 6: ('goal', None)},
 }
+ATTENTION_SIZE = 8   # 11.3.12; half = 4 filled; imminent = remaining <= max(1, 8 // 4) = 2, i.e. 6 filled
+
+def rank_rivals(f, cands):
+    # 11.3.7 targets: lowest relation, then the fullest goal clock, then the highest tier, then the lowest id
+    return sorted(cands, key=lambda g: (f.rel.get(g.id, 0), -g.filled, -g.tier, g.id))
+
+def choose_action(rng, f, facs, pc_in_region=True):
+    """11.3.7 exactly: (action, target). Overrides (a)-(c) first, then the d6 on the temperament row."""
+    others = [g for g in facs if g.alive and g is not f]
+    if f.slip:                                                     # (a)
+        return 'recover', None
+    war = [g for g in others if f.rel.get(g.id, 0) <= -3]
+    if war:                                                        # (b): the d6 is rolled only when a war exists
+        if rng.randint(1, 6) <= 3:
+            return 'strike', rank_rivals(f, war)[0]
+    if f.status >= 2 and rng.randint(1, 6) == 1:                    # (c): no ransom, holding or reward is modelled,
+        return 'aid_pc', None                                      #      so only the d6 = 1 opportunity bang fires
+    act, cond = AGENDA[f.temper][rng.randint(1, 6)]
+    tgt = None
+    ok = True
+    if cond:
+        c = cond[0]
+        if c == 'rival':
+            el = [g for g in others if f.rel.get(g.id, 0) <= cond[1]]
+            ok = bool(el); tgt = rank_rivals(f, el)[0] if el else None
+        elif c == 'rival_eq':
+            el = [g for g in others if f.rel.get(g.id, 0) == cond[1]]
+            ok = bool(el); tgt = rank_rivals(f, el)[0] if el else None
+        elif c == 'weak':
+            ok = f.hold == 0
+        elif c == 'status_le':
+            ok = f.status <= cond[1]
+            if ok and len(cond) > 2 and cond[2] == 'attention_half': ok = f.attention >= ATTENTION_SIZE // 2
+            if ok and len(cond) > 2 and cond[2] == 'pc_in_region': ok = pc_in_region
+        elif c == 'status_ge':
+            ok = f.status >= cond[1]
+        elif c == 'imminent':
+            ok = ATTENTION_SIZE - f.attention <= max(1, ATTENTION_SIZE // 4)
+    if ok and act == 'court':                                      # court target (ii); (i) allies are not modelled
+        el = [g for g in others if 0 <= f.rel.get(g.id, 0) < 2]
+        if el:
+            tgt = sorted(el, key=lambda g: (-f.rel.get(g.id, 0), -g.tier, g.id))[0]
+        else:
+            ok = False                                             # (iii) else goal
+    if not ok:
+        return 'goal', None
+    return act, tgt
 
 def run(seed, scenario='engaged'):
     rng = random.Random(seed)
@@ -95,7 +156,9 @@ def run(seed, scenario='engaged'):
     stats = dict(collapses=0, tier_up=0, tier_down=0, goal_done=0, strikes=0, strike_hits=0,
                  entanglements=0, moves_on_pc=0, hooks_seeded=0, hooks_expired=0, threads_completed=0,
                  threads_failed=0, threads_activated=0, threads_retired=0, rumors=0, strain_losses=0, max_known_hooks=0,
-                 weeks_known_lt3=0, bangs_max=0, situations=0, new_factions=0, slips=0)
+                 weeks_known_lt3=0, bangs_max=0, situations=0, new_factions=0, slips=0,
+                 acts={k: 0 for k in ('goal', 'strike', 'scheme', 'expand', 'recover', 'court', 'move_pc', 'aid_pc', 'lie_low')},
+                 courts_won=0, cult_weeks=WEEKS, wardens_weeks=WEEKS)
     facs = [Faction('salt_guild', 2, {'force': 2, 'cunning': 3, 'wealth': 4, 'sway': 2}, 'mercantile'),
             Faction('ash_wardens', 1, {'force': 3, 'cunning': 2, 'wealth': 1, 'sway': 2}, 'zealous', 'rising'),
             Faction('margrave', 3, {'force': 4, 'cunning': 3, 'wealth': 3, 'sway': 4}, 'cautious', 'entrenched'),
@@ -151,14 +214,9 @@ def run(seed, scenario='engaged'):
         # step 4 faction actions
         for f in facs:
             if not f.alive: continue
-            roll = rng.randint(1, 6)
-            act = AGENDA[f.temper][roll]
-            enemies = [g for g in facs if g.alive and g is not f and f.rel.get(g.id, 0) <= -2]
-            if f.slip: act = 'recover'; f.slip = False
-            if act == 'strike' and not enemies: act = 'goal'
-            if act == 'move_pc' and not (f.status <= -2 and f.attention >= 4): act = 'goal'
-            if act == 'recover' and f.hold == 1: act = 'goal'
-            if act == 'court': act = 'goal' if rng.random() < 0.5 else 'court'
+            enemies = [g for g in facs if g.alive and g is not f and f.rel.get(g.id, 0) <= -2]  # dominate goals' targets
+            act, tgt = choose_action(rng, f, facs)       # 11.3.7 [revision: I-032]
+            stats['acts'][act] += 1
             if act == 'goal':
                 scope, kind = f.goal
                 dg, near = check(rng, f, f.rating_for('goal'), 10 + 2 * f.tier + GOAL_SCOPE[scope])
@@ -177,7 +235,7 @@ def run(seed, scenario='engaged'):
                     if f.stage in ('declining',): f.stage = 'rising'; f.seasons_in_stage = 0
                     f.new_goal(rng)
             elif act == 'strike':
-                tgt = rng.choice(enemies); stats['strikes'] += 1
+                stats['strikes'] += 1
                 dc = 10 + max(tgt.r['force'], tgt.r['cunning']) + 2 * tgt.tier + (1 if tgt.stage == 'entrenched' else 0)
                 dg, near = check(rng, f, f.r['force'], dc)
                 if dg >= 2:
@@ -187,20 +245,29 @@ def run(seed, scenario='engaged'):
             elif act == 'expand':
                 dg, near = check(rng, f, f.r['wealth'], 15 + 2 * f.tier)
                 if dg >= 2: gain_hold(f, stats); stats['rumors'] += 1
-            elif act == 'recover':
-                dg, near = check(rng, f, max(f.r['wealth'], f.r['sway']), 15)
-                if dg >= 2: f.hold = 1
+            elif act == 'recover':                        # 11.3.6: DC 10 + 2 x tier + 3; success clears the slip
+                dg, near = check(rng, f, max(f.r['wealth'], f.r['sway']), 13 + 2 * f.tier)
+                if dg >= 2: f.hold = 1; f.slip = False
+                if dg == 3: f.filled += 1
             elif act == 'scheme':
-                if enemies:
-                    tgt = rng.choice(enemies)
-                    dg, near = check(rng, f, f.r['cunning'], 10 + tgt.r['cunning'] + 2 * tgt.tier)
-                    if dg >= 2: f.filled += 1; stats['rumors'] += 1
-                else:
-                    f.filled += 1
+                dg, near = check(rng, f, f.r['cunning'], 10 + tgt.r['cunning'] + 2 * tgt.tier)
+                if dg >= 2: f.filled += 1; stats['rumors'] += 1   # the inside lever, spent toward its goal
+                elif dg == 0: tgt.rel[f.id] = max(-3, tgt.rel.get(f.id, 0) - 1)   # discovered
             elif act == 'move_pc':
                 stats['moves_on_pc'] += 1; bangs += 1
-            elif act == 'court':
-                stats['rumors'] += 1
+            elif act == 'court':                          # 11.3.6: sway vs 10 + the target's sway + 2 x its tier
+                dg, near = check(rng, f, f.r['sway'], 10 + tgt.r['sway'] + 2 * tgt.tier + (1 if tgt.stage == 'entrenched' else 0))
+                if dg >= 2:
+                    tgt.rel[f.id] = min(3, tgt.rel.get(f.id, 0) + 1); f.rel[tgt.id] = min(3, f.rel.get(tgt.id, 0) + 1)
+                    stats['courts_won'] += 1; stats['rumors'] += 1
+                elif dg == 0:
+                    tgt.rel[f.id] = max(-3, tgt.rel.get(f.id, 0) - 1)
+            elif act == 'aid_pc':                         # an opportunity bang (11.3.6)
+                bangs += 1
+            elif act == 'lie_low':                        # its attention clock decays 1 extra (11.3.6)
+                f.attention = max(0, f.attention - 1)
+        for fid, key in (('ember_cult', 'cult_weeks'), ('ash_wardens', 'wardens_weeks')):   # the war's length [revision: I-032]
+            if stats[key] == WEEKS and not any(g.id == fid and g.alive for g in facs): stats[key] = week
         # minors
         for m in minors:
             r = rng.randint(1, 6)
@@ -297,3 +364,9 @@ if __name__ == '__main__':
     from collections import Counter
     print('final tier distribution (start 2,1,3,1):', sorted(Counter(tiers).items()))
     print('max tier reached anywhere: ', max(tiers))
+    tot = Counter(); [tot.update(r['acts']) for r in runs]; n = sum(tot.values())
+    print('faction actions (11.3.7 agenda), share of all turns: ' + ', '.join('%s %.1f%%' % (k, 100.0 * tot[k] / n) for k in
+          ('goal', 'strike', 'scheme', 'expand', 'recover', 'court', 'move_pc', 'aid_pc', 'lie_low')))
+    print('courts won per 2y p10/med/p90', q([r['courts_won'] for r in runs]))
+    print('the Wardens-Cult war (relation -3): week the Cult collapsed p10/med/p90 %s (104 = stood); the Wardens %s' % (
+          q([r['cult_weeks'] for r in runs]), q([r['wardens_weeks'] for r in runs])))

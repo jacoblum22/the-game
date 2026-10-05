@@ -80,7 +80,7 @@ blocks:
     stretch: null
     emulate: null
     acquisition_paths:
-    - {type: bargain, detail: "a request R2 to a host (R1 where the custom of the place offers it to all travellers, 13)", clock: null, requires: null}
+    - {type: bargain, detail: "a request R2 to a host (R1 where the custom of the place offers it to all travellers, as the region's seed says)", clock: null, requires: null}
     source: the host
     lifecycle: provisional
     basis: ['C:VII', '15.1.2', DL-15-31]

@@ -99,7 +99,7 @@ ROWS = [
 
 MAGIC = ('arcane', 'divine', 'primal')
 REQUIRES = {
-    'arcane': "literacy, and a text or teacher of the school (ch.13 may tighten)",
+    'arcane': "literacy, and a text or teacher of the school (the region's seed may tighten, 12.16.5)",
     'divine': "a keeper that accepts you: a fact pc.keeper.<school> written when the license is acquired (05.7.4)",
     'primal': "a place or spirit that accepts you: an established fact, or the Oracle at a place of resonance (05.7.3)",
 }
@@ -176,6 +176,6 @@ FOCUS_LICENSES = [
          attribute='resolve', crude_fallback='none', stretch=None, emulate=None,
          acquisition_paths=[dict(type='mentor', detail='a training week with one who holds it ticks 2', clock='clk.train (8 segments, project, public)', requires='any training license'),
                             dict(type='project', detail='a week of study from a text that teaches it ticks 1', clock='clk.train (8 segments, project, public)', requires='a text'),
-                            dict(type='origin', detail='an origin may grant it (ch.02, ch.13)', clock=None, requires=None)],
+                            dict(type='origin', detail='an origin may grant it (ch.02; the region\'s seed, 12.16.7)', clock=None, requires=None)],
          source='data', lifecycle='provisional', basis=['05.6.12', 'R2 #8 (Feruchemy)', 'DL-05-15']),
 ]

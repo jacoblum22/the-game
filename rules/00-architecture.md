@@ -113,7 +113,7 @@ State always beats narration; among state writes, the latest write wins [R1 §4 
 within the rules), the order is: (1) the player's safety settings (lines and veils, 14); (2) state
 truth — never narrate against state; (3) rules integrity — no MUST is broken; (4) player intent
 fidelity — acknowledge the stated intent, never substitute another, never silently reset
-[R1 #3]; (5) fairness — declared stakes are honored exactly; (6) pacing and drama. *Worst case of a
+[R1 #3]; (5) fairness — declared stakes are honored exactly; (6) pacing and drama. *Worst case (J) of a
 wrong call:* a scene paced worse than it could be; items 1–5 are protected by `[D]` rules elsewhere.
 [R1 §4 T-7]
 
@@ -243,8 +243,14 @@ this ruleset's names; SG-21…SG-28 are added by this chapter.
   ladder (00.7) or as a named boundary event; "a while", "soon", "later" are not durations.
 
 **00.2.5 The rule template.** `[N]` Every numbered rule in chapters 01–16 that contains a `[J:*]`
-decision uses this template in full; `[D]`, `[T]`, `[S]` and `[N]`-only rules may omit fields marked
-(J). Fields map one-to-one to the rule-card record (00.15.2).
+decision supplies the template's (J) fields; `[D]`, `[T]`, `[S]` and `[N]`-only rules may omit them. Fields map
+one-to-one to the rule-card record (00.15.2). **Two forms comply** [revision: I-001]: the **block** below, used
+where a rule is mainly a judgment (several decisions, examples worth a boundary pair); and the **inline form**,
+used where one judgment sits inside a `[D]` rule: the decision stated as options or a "true only when" test, its
+default when uncertain, and its worst case under the label *Worst case (J):* (a qualifier may follow inside the
+parentheses or after them: *Worst case (J, tier):*, *Worst case (J) of a one-rung error:*). Either way the worst
+case is never omitted; `validate_ruleset.py` fails a `[J:*]` rule that has neither the block's `Worst case (J):`
+field nor an inline *Worst case (J…* label.
 
 ```
 ### CC.S.R  <Rule name>                                    <kinds, e.g. [J:rung] [D]>
@@ -316,7 +322,7 @@ that is acting; the other side contributes a static number.
 - The test between the two is `[J:flag]` *"Does the effect need the source to get past the target?"*
   True only when the source's skill or aim decides whether it lands; false when it lands by default
   and the target's body or will decides whether it takes hold. Uncertain → aimed (the acting side
-  rolls). *Worst case:* the wrong side rolls; odds shift by at most the difference between the two
+  rolls). *Worst case (J):* the wrong side rolls; odds shift by at most the difference between the two
   sides' modifiers, and the OFFER shows them (class i). Chapter 06 applies this to conflict, 07 to
   afflictions, 10 to hazards, 05 to abilities.
 - Adversaries' attacks are therefore rolled by the engine for the adversary against the PC's defense.
@@ -388,7 +394,7 @@ ch.09 #3; DL-09-09].
   separate DCs, DL-01-21; numbers are stable, anchor property 6); (2) an **opposed defense**: `10 + the defender's attribute +
   competence + edge + status` for the attribute and tag the method works against; (3) the **obstacle
   tier** `[J:rung]` (T-00-5), whose numbers ch.01 owns. The first time (3) is used, the DC is written
-  to the obstacle as a stored DC. *Worst case (tier):* one rung = one DC step, shown in the OFFER.
+  to the obstacle as a stored DC. *Worst case (J, tier):* one rung = one DC step, shown in the OFFER.
 - An **effect DC** (for resisted effects) uses the same formula as a defense, from the source's side:
   `10 + source attribute + competence + edge`. A hazard's effect DC is the tier matching its severity
   (S1 → Easy … S5 → Legendary) unless ch.10 lists a specific DC.
@@ -418,7 +424,7 @@ the resulting stakes and reach are clamped to their ladders; (d) one fact yields
 (e) the type follows from what the fact does, and if a fact honestly fits two types the player picks;
 (f) an effect that "grants a lever" (00.10.3 op `lever`) creates a citable fact and still counts
 toward the two-lever limit; (g) snags the *engine* applies by rule (the repetition snags of ch.01,
-DL-01-08) do not count toward the two-snag limit but do count toward the ±4 cap. *Worst case:* one wrongly allowed lever = +2, one stakes rung, or one reach
+DL-01-08) do not count toward the two-snag limit but do count toward the ±4 cap. *Worst case (J):* one wrongly allowed lever = +2, one stakes rung, or one reach
 rung (class i), and the cited fact id makes it auditable.
 
 **00.3.10 Degrees of success.** `[D]` Every roll produces exactly one of four degrees,
@@ -445,7 +451,7 @@ factions. Its values are fixed here (T-00-3):
 *Harm* is the Vitality loss before mitigation. *Unit magnitude U* is how many units a cost of that
 severity removes from anything counted in units: clock ticks, Focus, supply, standing steps, uses.
 R7's "standard cost" is S2 and its "severe cost" is S3. The words *minor, major, severe* are not rung
-names (T-00-22). *Worst case of a one-rung error* when a rule asks the DM to classify severity: harm
+names (T-00-22). *Worst case (J) of a one-rung error* when a rule asks the DM to classify severity: harm
 differs by 2–4 Vitality or one unit (class i).
 
 **00.3.12 Vitality.** `[D]` Vitality is the primary harm resource: wind, luck, and the ability to
@@ -474,11 +480,11 @@ the frame before the roll [BRIEF A2 #2].
 | **Dire** | Failure costs something heavy, and may be lethal. | one **S3** cost from the menu | leaping a chasm / fighting a troll in its lair |
 
 - A critical failure raises the cost severity one rung (default; ch.01 owns the READ table).
-- *Worst case of a one-rung framing error:* one severity rung of cost (class i), visible in the OFFER.
+- *Worst case (J) of a one-rung framing error:* one severity rung of cost (class i), visible in the OFFER.
 - **`lethal`** is a separate `[J:flag]` on the frame, legal only when stakes are Dire **and** the scene
   or threat carries `lethal_context: true` recorded *before* the declaration (the lethal warning,
   ch.07). *True only when* failure could move the PC to Dying or beyond; the OFFER must then say so in
-  plain words. **No roll whose frame is not lethal can cause death** (invariant INV-6). *Worst case:*
+  plain words. **No roll whose frame is not lethal can cause death** (invariant INV-6). *Worst case (J):*
   lethal wrongly false → the PC cannot die from that roll (errs safe, class iv); wrongly true → legal
   only if the warning was already on record, and the player saw it before committing.
 
@@ -488,7 +494,7 @@ Computed rungs: **Zero (0)**, where the method cannot reach the intent (the beat
 **Exceptional (4)**, reachable only by a critical success stepping up from Great. *Delivered reach* is
 a number 0–4, and everything that consumes success reads that number: progress-clock ticks = delivered
 reach; a harm-dealing anchor's severity shifts by `(delivered reach − 2)` steps; information units per
-ch.01's delivery table; NPC movement per ch.15. *Worst case of a one-rung framing error:* one tick,
+ch.01's delivery table; NPC movement per ch.15. *Worst case (J) of a one-rung framing error:* one tick,
 one severity step, or one information unit (class i).
 
 **00.3.16 Other shared scales.** `[D]` (numbers and names in T-00-3 and `data/scales.yaml`)
@@ -578,7 +584,7 @@ most the one derived value below. No other derivation from attributes is permitt
 **00.4.5 Basic verb → attribute map.** `[J:enum]` The attribute for a beat is chosen from the verb's
 allowed list by the *method as described* (T-00-11). When the method fits two allowed attributes
 equally, the frame uses the **lower**, and the OFFER names the alternative method that would use the
-higher ("if instead you [method], use Agility"); the player may re-declare at no cost. *Worst case:*
+higher ("if instead you [method], use Agility"); the player may re-declare at no cost. *Worst case (J):*
 the lower of two attributes is used (at most 5 points), shown before commitment (class ii).
 [R4 §4.6 step 1; R7 §4.1]
 
@@ -659,7 +665,7 @@ tags and any number of `trait` tags (T-00-7). A secondary deed tag earns evidenc
 **grounded** — the frame cites a state element of one of the ground kinds `ability`, `license`, `item`,
 `setup_beat`, `companion`, `mount`, `position` (03.1.6) — and then at half value; competence still reads
 only the primary tag [amended: DL-03-14]. *Worst
-case:* the primary tag is one level too shallow (competence from an ancestor applies, which is the
+case (J):* the primary tag is one level too shallow (competence from an ancestor applies, which is the
 same or lower, class i) or on the wrong sibling (the floor applies instead of a specialty; shown in the
 OFFER breakdown, class ii).
 
@@ -702,7 +708,7 @@ Entity:            # base of every entity
   id: str            # e.g. "npc.tam_harlan", "pc.wren", "item.i0042"
   kind: enum         # pc | npc | adversary | companion | item | place | faction | thread | rumor | clue | object
                      # companion: every ally kind, told apart by Ally.ally_kind (16.1.2) [amended: IR ch.16]
-                     # object: named objects (obj.*, 13) and the subtypes situation, legacy (11) [amended: IR ch.11, IR ch.13]
+                     # object: named objects (obj.*, a region's: the world seed 12.16, or a pre-made setting such as 13) and the subtypes situation, legacy (11) [amended: IR ch.11, IR ch.13; revision: I-028]
   name: str
   tags: [tag]
   exists: enum       # exists | destroyed | dead | departed | unknown
@@ -791,7 +797,7 @@ Item (extends Entity; 08):
   #   relic, feeds_evidence, cost_immune, slot, attuned, condition (intact|damaged|broken|serviceable_until_rest_long)
 Property: {prop_id: str, tier: int, effects: [{effect_id: str, params: map}]}
 
-Place (extends Entity; 10/13):
+Place (extends Entity; 10; a region's seed, 12.16) [revision: I-028]:
   parent: place_id
   links: [{to: place_id, route: str, travel_watches: int}]   # + route_kind, terrain, current, known, danger, hazards, vehicle_ok (10.1.3)
   terrain: [tag]
@@ -900,7 +906,7 @@ If true, the element is recorded **before** the narration is delivered: `create_
 and the properties the narration implies) or `set_fact`. Properties the narration implies are fixed
 now; properties it does not imply stay **undetermined** and are settled by the Oracle when first needed
 (00.12.7), with odds set by the facts established at that moment [R4 SG-13; R: https://ianbicking.org/blog/2025/07/intra-llm-text-adventure].
-*Worst case:* an atmospheric detail is recorded needlessly (harmless), or a relevant one is not (the
+*Worst case (J):* an atmospheric detail is recorded needlessly (harmless), or a relevant one is not (the
 claim-vs-state check in ch.12 catches the narrated-but-unrecorded element, class iv).
 
 **00.6.7 Assertion is not fact.** `[D]` A player's statement about the world is stored only as the
@@ -954,7 +960,7 @@ cooldown and recurrence in the ruleset is expressed in these units (SG-28) [R5 �
 | **day** | 24 hours, dawn to dawn | 4 watches | the day ends at dawn, after the night watch |
 | **week** | 7 days | | the World Turn cadence (11) |
 | **season** | 13 weeks = 91 days | | the consolidation boundary (VI) |
-| **year** | 4 seasons = 364 days | | exact; ch.13 names months, days and festivals inside it but adds no days |
+| **year** | 4 seasons = 364 days | | exact; the region's seed (12.16.15; a pre-made setting such as ch.13) names months, days and festivals inside it but adds no days [revision: I-028] |
 
 A timestamp is `{year, season, week, day, watch, hour, interval, round}` plus a monotone beat counter.
 
@@ -991,7 +997,7 @@ which fixes how much time a beat consumes:
 | `downtime` | each downtime activity = its listed days; the week is the planning unit | recovery, projects, training, trade |
 
 The DM classifies the mode `[J:enum]` at each `scene_start` (default: the mode of the previous scene;
-uncertain → `free`). *Worst case:* a scene run in `free` that should have been `site` under-consumes
+uncertain → `free`). *Worst case (J):* a scene run in `free` that should have been `site` under-consumes
 intervals; the omission is bounded by the scene, and the site's own danger clock still ticks from
 costs (class i).
 
@@ -1091,7 +1097,7 @@ ticks, logged with the frame id (class i or iv) [R4 §4.3 "clock" row].
 **00.8.3 Sizing.** `[J:rung]` When a rule creates a clock without a template size, the DM picks the
 size from the ladder: **4** a simple obstacle or a scene's worth of effort; **6** complicated, several
 distinct steps; **8** daunting, needs sustained effort across scenes; **12** a long project across
-downtime. *Worst case:* one rung = 2–4 segments (class i). Templates in data fix sizes wherever
+downtime. *Worst case (J):* one rung = 2–4 segments (class i). Templates in data fix sizes wherever
 possible.
 
 **00.8.4 Visibility and omens.** `[D]` + `[N]` A **public** clock's fill is shown in the codex. A
@@ -1517,7 +1523,7 @@ chapter refers to [R7 §4.0 step 2]:
 | **G3 Unlicensed** | beyond the basic verbs, no held license covers it, but someone *could* | never narrated as possible; redirect to the domain's `crude_fallback` (if not `none`) and name at least one `acquisition_path`; no time or action spent unless the player accepts the alternative |
 | **G4 Impossible** | contradicts an established fact or the setting's canon for anyone, or delivered reach would be Zero, or an active condition forbids the method | no roll; one sentence of fiction saying why; offer the nearest achievable intent or method (P16) |
 
-Default when uncertain between G2 and G3: G3 (SG-05). *Worst case:* a licensed attempt is redirected
+Default when uncertain between G2 and G3: G3 (SG-05). *Worst case (J):* a licensed attempt is redirected
 (the player sees the license id that was checked and can point out the error; class iv), or an
 unlicensed attempt is allowed as G2 (the frame records the license id cited, which the auditor checks;
 class iv).
@@ -1558,7 +1564,7 @@ roll, yes) · Likely · Even · Unlikely · Remote · Impossible (no roll, no). 
 and the doubles-as-twist rule; ch.12 owns the DM's use of the same Oracle for its own questions and
 any tension shift, which may move the rung by at most one. The answer is written as a fact at once
 (`source: oracle`), and a "no" is followed in the same breath by what *is* there (P16). Established
-facts are never asked again. *Worst case:* a one-rung odds error shifts the chance by 15–25 points,
+facts are never asked again. *Worst case (J):* a one-rung odds error shifts the chance by 15–25 points,
 logged with the question (class i).
 
 ### 00.13 The resolution frame
@@ -1750,7 +1756,7 @@ RulingRecord:
 **00.15.6 Precedent rule.** `[D]` + `[J:flag]` Before framing any beat that needs an anchor adaptation,
 an Oracle call, a Good Idea, or a G3/G4 decision, the DM calls `find_rulings`. If a record matches the
 signature, the DM reuses its numbers, unless a stated fact differs, which the new record names in
-`differing_fact` [R7 §4.8; R5 G-13]. *Worst case:* a precedent reused where a fact differed (class iv:
+`differing_fact` [R7 §4.8; R5 G-13]. *Worst case (J):* a precedent reused where a fact differed (class iv:
 the player can cite the fact; a new ruling supersedes). The ledger also supplies the "recorded concrete
 failure case" that constitution III's revisit trigger requires [C:III].
 
@@ -1776,7 +1782,7 @@ activities, `case.` investigation cases, `lie.` recorded lies (15), `cmp.` compa
 companion knacks (16), `sit.` situations, `sit_t.` situation templates, `bang.` bangs, `wr.` world
 reactions, `thr.` threads, `rum.` rumors, `rep.` reputation entries, `chr.` chronicle entries, `imp.`
 improvements, `ftpl.` faction templates, `legacy.` legacy records (11), `keeper.` keepers, `obj.` named
-objects (13). Tags use facet paths (`deed.…`) with no prefix.
+objects (a region's: the world seed, 12.16, or a pre-made setting such as 13 [revision: I-028]). Tags use facet paths (`deed.…`) with no prefix.
 
 **00.16.2a The id-prefix registry.** `[D]` Generated at integration from the ids defined in `data/` (`_process/simulation/integration-prefix-registry.py`); every prefix in use is registered here with the file(s) that define it and the owning chapter (T-00-19). 00.16.2's named prefixes are the core of this list; a new prefix is added by regenerating the table [amended: integration, DL-INT-11].
 
@@ -1795,10 +1801,10 @@ objects (13). Tags use facet paths (`deed.…`) with no prefix.
 | `birth.` | `gen_birth.yaml` | 02 | |
 | `cal.` | `calendar.yaml` | 11 | |
 | `call.` | `callings.yaml` | 04 | |
-| `canon.` | `region_thallen.yaml` | 13 | |
+| `canon.` | `region_thallen.yaml` | 12 (a world seed's output, 12.16) / 13 (`region_thallen.yaml`, an optional pre-made seed) [revision: I-028] | |
 | `case.` | `investigation.yaml` | 15 | |
-| `ci.` | `region_thallen.yaml` | 13 | |
-| `clk.` | `abilities.yaml (inline clock spec)`, `behaviors.yaml`, `behaviors.yaml (inline clock spec)`, `companions.yaml`, `conflict.yaml`, `downtime.yaml`, `economy.yaml (inline clock spec)`, `factions.yaml`, `harm.yaml`, `investigation.yaml`, `licenses.yaml (inline clock spec)`, `pacing.yaml`, `region_thallen.yaml`, `rituals.yaml (inline clock spec)`, `sites.yaml`, `social.yaml`, `world_turn.yaml (inline clock spec)` | 05; 06; 07; 08; 09; 10; 11; 12; 13; 15; 16 | clock templates and instances (00.8); families declared by `id_pattern` |
+| `ci.` | `region_thallen.yaml` | 12 (a world seed's output, 12.16) / 13 (`region_thallen.yaml`, an optional pre-made seed) [revision: I-028] | |
+| `clk.` | `abilities.yaml (inline clock spec)`, `behaviors.yaml`, `behaviors.yaml (inline clock spec)`, `companions.yaml`, `conflict.yaml`, `downtime.yaml`, `economy.yaml (inline clock spec)`, `factions.yaml`, `harm.yaml`, `investigation.yaml`, `licenses.yaml (inline clock spec)`, `pacing.yaml`, `region_thallen.yaml`, `rituals.yaml (inline clock spec)`, `sites.yaml`, `social.yaml`, `world_turn.yaml (inline clock spec)` | 05; 06; 07; 08; 09; 10; 11; 12; 12 (a world seed's output, 12.16) / 13 (`region_thallen.yaml`, an optional pre-made seed) [revision: I-028]; 15; 16 | clock templates and instances (00.8); families declared by `id_pattern` |
 | `clu.` | `investigation.yaml` | 15 | |
 | `cmp.` | `companions.yaml` | 16 | |
 | `cnt.` | `evidence.yaml` | 03 | |
@@ -1826,25 +1832,25 @@ objects (13). Tags use facet paths (`deed.…`) with no prefix.
 | `imethod.` | `investigation.yaml` | 15 | |
 | `imp.` | `world_turn.yaml` | 11 | |
 | `inj.` | `injuries.yaml` | 07 | |
-| `item.` | `region_thallen.yaml` | 13 | item entities (00.6.2: `item.i0042`; the region's storied items) share their first segment with the tag facet `item`; ids and tags never coincide |
+| `item.` | `region_thallen.yaml` | 12 (a world seed's output, 12.16) / 13 (`region_thallen.yaml`, an optional pre-made seed) [revision: I-028] | item entities (00.6.2: `item.i0042`; the region's storied items) share their first segment with the tag facet `item`; ids and tags never coincide |
 | `journal.` | `investigation.yaml` | 15 | |
-| `keeper.` | `region_thallen.yaml` | 13 | |
+| `keeper.` | `region_thallen.yaml` | 12 (a world seed's output, 12.16) / 13 (`region_thallen.yaml`, an optional pre-made seed) [revision: I-028] | |
 | `kit.` | `kits.yaml` | 02 | |
 | `kn.` | `companions.yaml` | 16 | |
 | `lc.` | `harm.yaml`, `last_chance.yaml` | 07 | |
 | `ledger.` | `legacy.yaml` | 11 | |
 | `lic.` | `licenses.yaml` | 05 | |
-| `loc.` | `region_thallen.yaml` | 13 | |
+| `loc.` | `region_thallen.yaml` | 12 (a world seed's output, 12.16) / 13 (`region_thallen.yaml`, an optional pre-made seed) [revision: I-028] | |
 | `mat.` | `materials.yaml` | 08 | |
 | `month.` | `calendar.yaml` | 11 | |
 | `nem.` | `behaviors.yaml` | 09 | |
-| `npc.` | `region_thallen.yaml` | 13 | |
-| `obj.` | `region_thallen.yaml` | 13 | |
+| `npc.` | `region_thallen.yaml` | 12 (a world seed's output, 12.16) / 13 (`region_thallen.yaml`, an optional pre-made seed) [revision: I-028] | |
+| `obj.` | `region_thallen.yaml` | 12 (a world seed's output, 12.16) / 13 (`region_thallen.yaml`, an optional pre-made seed) [revision: I-028] | |
 | `orig.` | `origins.yaml` | 02 | |
 | `ph.` | `world_turn.yaml` | 11 | |
 | `plaus.` | `social.yaml` | 15 | |
 | `pow.` | `archetypes.yaml` | 09 | |
-| `pregen.` | `region_thallen.yaml` | 13 | |
+| `pregen.` | `region_thallen.yaml` | 12 (a world seed's output, 12.16) / 13 (`region_thallen.yaml`, an optional pre-made seed) [revision: I-028] | |
 | `price.` | `vehicles.yaml` | 04 | |
 | `prop.` | `item_properties.yaml` | 08 | |
 | `quarter.` | `calendar.yaml` | 11 | |
@@ -1854,7 +1860,7 @@ objects (13). Tags use facet paths (`deed.…`) with no prefix.
 | `rit.` | `rituals.yaml` | 05 | |
 | `rl.` | `factions.yaml` | 11 | |
 | `seam.` | `legacy.yaml` | 11 | |
-| `sit.` | `region_thallen.yaml` | 13 | |
+| `sit.` | `region_thallen.yaml` | 12 (a world seed's output, 12.16) / 13 (`region_thallen.yaml`, an optional pre-made seed) [revision: I-028] | |
 | `sit_t.` | `world_turn.yaml` | 11 | |
 | `site.` | `sites.yaml` | 10 | |
 | `skip.` | `legacy.yaml` | 11 | |
@@ -1863,7 +1869,7 @@ objects (13). Tags use facet paths (`deed.…`) with no prefix.
 | `st.` | `world_turn.yaml` | 11 | |
 | `standing.` | `social.yaml` | 15 | |
 | `svc.` | `economy.yaml` | 08 | |
-| `tbl.` | `archetypes.yaml`, `behaviors.yaml`, `companions.yaml`, `companions.yaml#drives`, `companions.yaml#tbl.16.betrayal (key)`, `conflict.yaml`, `factions.yaml#tbl.11.entanglement (key)`, `factions.yaml#tbl.11.faction_seed (key)`, `factions.yaml#tbl.11.faction_tier (key)`, `factions.yaml#tbl.11.vacuum (key)`, `harm.yaml`, `investigation.yaml`, `legacy.yaml#tbl.11.successor_traits (key)`, `oracles.yaml`, `origins.yaml`, `region_thallen.yaml`, `rituals.yaml`, `sites.yaml`, `travel.yaml`, `weather.yaml`, `world_turn.yaml#tbl.11.distortion (key)`, `world_turn.yaml#tbl.11.epithet_forms (key)`, `world_turn.yaml#tbl.11.fallback_form (key)`, `world_turn.yaml#tbl.11.hook (key)`, `world_turn.yaml#tbl.11.land_changes (key)`, `world_turn.yaml#tbl.11.local_events (key)`, `world_turn.yaml#tbl.11.rumor_truth (key)`, `world_turn.yaml#tbl.11.rumors (key)`, `world_turn.yaml#tbl.11.season_events.autumn (key)`, `world_turn.yaml#tbl.11.season_events.spring (key)`, `world_turn.yaml#tbl.11.season_events.summer (key)`, `world_turn.yaml#tbl.11.season_events.winter (key)` | 02; 05; 06; 07; 09; 10; 11; 12; 13; 15; 16 | tables, wherever they live (keyed or with an id) |
+| `tbl.` | `archetypes.yaml`, `behaviors.yaml`, `companions.yaml`, `companions.yaml#drives`, `companions.yaml#tbl.16.betrayal (key)`, `conflict.yaml`, `factions.yaml#tbl.11.entanglement (key)`, `factions.yaml#tbl.11.faction_seed (key)`, `factions.yaml#tbl.11.faction_tier (key)`, `factions.yaml#tbl.11.vacuum (key)`, `harm.yaml`, `investigation.yaml`, `legacy.yaml#tbl.11.successor_traits (key)`, `oracles.yaml`, `origins.yaml`, `region_thallen.yaml`, `rituals.yaml`, `sites.yaml`, `travel.yaml`, `weather.yaml`, `world_seed.yaml`, `world_turn.yaml#tbl.11.distortion (key)`, `world_turn.yaml#tbl.11.epithet_forms (key)`, `world_turn.yaml#tbl.11.fallback_form (key)`, `world_turn.yaml#tbl.11.hook (key)`, `world_turn.yaml#tbl.11.land_changes (key)`, `world_turn.yaml#tbl.11.local_events (key)`, `world_turn.yaml#tbl.11.rumor_truth (key)`, `world_turn.yaml#tbl.11.rumors (key)`, `world_turn.yaml#tbl.11.season_events.autumn (key)`, `world_turn.yaml#tbl.11.season_events.spring (key)`, `world_turn.yaml#tbl.11.season_events.summer (key)`, `world_turn.yaml#tbl.11.season_events.winter (key)` | 02; 05; 06; 07; 09; 10; 11; 12; 12 (a world seed's output, 12.16) / 13 (`region_thallen.yaml`, an optional pre-made seed) [revision: I-028]; 15; 16 | tables, wherever they live (keyed or with an id) |
 | `term.` | `social.yaml` | 15 | |
 | `thr.` | `harm.yaml` | 07 | |
 | `trap.` | `sites.yaml`, `traps.yaml` | 10 | |
@@ -1872,6 +1878,7 @@ objects (13). Tags use facet paths (`deed.…`) with no prefix.
 | `wage.` | `economy.yaml` | 08 | |
 | `wc.` | `world_turn.yaml` | 11 | |
 | `wr.` | `world_turn.yaml` | 11 | |
+| `ws.` | `world_seed.yaml` | 12 | |
 
 **00.16.3 Lifecycle (VI at content scale).** `[D]` Every entry carries `lifecycle: provisional` until the
 verification wave promotes it to `permanent`; retirement is `lifecycle: retired` with `superseded_by`
@@ -1916,8 +1923,8 @@ Addendum A and the digests' interface requests is decided here.
 | Q16 | Rests and their durations | Durations fixed by 00.7.2 (breather 1 interval; short 1 hour; long 1 watch of sleep, once per day); effects and interruption rules 07; Focus 05. |
 | Q17 | Starting kit vs item ids | **02** writes kits as `{item_tag, quality, quantity}` using `item.*` tags; **08** resolves tags to base items. So 02 never needs 08's ids. |
 | Q18 | Hazards: 07 or 10? | **10** owns hazard entries (`data/hazards.yaml`: severity, harm tags, effect DC, exposure cadence); **07** owns what harm does. Hazard harm uses the severity scale. |
-| Q19 | Calendar | **00** fixes the ladder arithmetic (364-day year); **11** owns the calendar engine and the Season Turn; **13** names months, days and festivals. |
-| Q20 | Magic | **05** owns magic as a subsystem (spells as abilities, rituals as clocked extended tasks, research, learning by observation = `emulate`); **13** owns setting canon about magic (what is impossible for the Oracle's Impossible rung). |
+| Q19 | Calendar | **00** fixes the ladder arithmetic (364-day year); **11** owns the calendar engine and the Season Turn; the region's seed (**12.16.15**; a pre-made setting such as **13**) names months, days and festivals [revision: I-028]. |
+| Q20 | Magic | **05** owns magic as a subsystem (spells as abilities, rituals as clocked extended tasks, research, learning by observation = `emulate`); the region's seed (**12.16.5**, written by the world seed; a pre-made setting such as **13** supplies its own) holds setting canon about magic (what is impossible for the Oracle's Impossible rung) [revision: I-028]. |
 | Q21 | P9 vs P14 | **06** resolves in its DL; the architecture constraint is INV-11: no build, calling or effect gains actions; cadence differences may live only in tempo, reactions, or what one action contains. |
 | Q22 | Reputation vs recognition | Recognition (capability) is 04's; reputation (what the world says) is 11's; ranks (seats in institutions) are 11's; losing a rank never removes capability [R6 §A.6 R-A5]. |
 
@@ -1935,10 +1942,10 @@ Addendum A and the digests' interface requests is decided here.
 | **07 Harm, Recovery, Death** | Vitality semantics; staggered, wounds, dying ladder, death; the Two-Key rule and the lethal-warning trigger (writes `lethal_context`); last-chance menu; Yield and Retreat outcomes; defeat dispositions → world-state writes; marks and scars; rest definitions and rest events with quality; Vitality recovery; afflictions (`data/afflictions.yaml`), injuries (`data/injuries.yaml`), mental strain; companion harm; `apply_harm` semantics; the reduction cap | 00 severity scale, conditions schema; 06 conditions; 01 `fate`; 09 `defeat_disposition`, `lethal_context`; 10 hazards; 11 world-state writes; 03 evidence for marks |
 | **08 Items, Loot, Crafting** | item schema; `data/base_items.yaml`, `data/item_properties.yaml`, `data/materials.yaml`, `data/economy.yaml`; generator domains `gen.loot`, `gen.craft`, `gen.gift`, `gen.item_ability`; quality rungs and slot counts; relics; crafting as clocked extended tasks; prices, wealth, encumbrance (from Might), supply goods, mounts and vehicles; the item-layer power budget | 00 gate→fill, substrate; 09 archetype tags and threat bands; 01 degrees; 05 equipped partition |
 | **09 Adversaries** | archetypes as manufacturers (`data/archetypes.yaml`: evidence tags, loot pool gate, absorbable pool, behaviors); threat bands T1–T5 stat templates within the 00.3.7 envelope; `threat_advisory`; solo encounter budgets; behavior priority lists and morale thresholds; `lethal_context` and `defeat_disposition` per archetype; tells; `data/adversaries.yaml` | 04 `power_band`; 06 conditions and economy; 07 harm; 08 pools |
-| **10 Exploration, Travel, Sites** | travel by watches; supply; navigation; the overloaded encounter/omen check per watch and per interval; weather; `data/hazards.yaml`; sites (Delve-style procedure, one interval per significant beat); traps; foraging; light; place graph semantics; exploration activity durations; `venture_start/end` | 00 time ladder, clocks, boundaries; 13 region content; 09 encounters; 07 harm |
+| **10 Exploration, Travel, Sites** | travel by watches; supply; navigation; the overloaded encounter/omen check per watch and per interval; weather; `data/hazards.yaml`; sites (Delve-style procedure, one interval per significant beat); traps; foraging; light; place graph semantics; exploration activity durations; `venture_start/end` | 00 time ladder, clocks, boundaries; the region's content (12.16's world seed, or a pre-made setting such as 13) [revision: I-028]; 09 encounters; 07 harm |
 | **11 Living World** | World Turn (`h.11.world_turn` on `week`); Season Turn (`season`); factions (`data/factions.yaml`); situations and default timelines; threads register; rumors with truth values; reputation; ranks; holdings; calendar engine; chronicle; retirement and legacy; `institutions_matching` | 04 `recognition_event`; 03 evidence; 00 clocks, time; 01/12 Oracle |
-| **12 DM Procedures** | the turn loop (adjudication before narration; claim-vs-state check; error correction); mode transitions; scene framing; the DM's Oracle use and tension dial; pacing director; P16 counter and lead-injection table; P17 in practice; NPC generation and reaction roll; `data/oracles.yaml`; `data/anchors.yaml` (compiled); ruling ledger use; session moves; spotlight rotation for one player; twist table (target of `cost.twist`); OFFER script | everything |
-| **13 Starter Setting** | the region as data (places, NPCs, factions with running clocks, bestiary subset, loot pools subset, encounter and rumor tables, names); setting canon (what is impossible); calendar names; languages as licenses; first-session teaching arc; pregens | every chapter's schemas |
+| **12 DM Procedures** | the turn loop (adjudication before narration; claim-vs-state check; error correction); mode transitions; scene framing; the DM's Oracle use and tension dial; pacing director; P16 counter and lead-injection table; P17 in practice; NPC generation and reaction roll; `data/oracles.yaml`; `data/anchors.yaml` (compiled); ruling ledger use; session moves; spotlight rotation for one player; twist table (target of `cost.twist`); OFFER script; the **world seed** (12.16, `data/world_seed.yaml`): a complete starting region from session-zero questions and oracle tables, checked against everything the rules read from a region (T-12-16) [revision: I-028] | everything |
+| **13 Starter Setting (optional)** | one optional pre-made world seed: a region record of the world seed's shape (places, NPCs, factions with running clocks, bestiary subset, loot pools subset, encounter and rumor tables, names, setting canon, calendar names, languages as licenses, a first-session teaching arc, pregens), which must pass the seed check (12.16.17); no rule depends on it [revision: I-028] | every chapter's schemas; 12.16 |
 | **14 Player's Guide** | the player-facing rules; codex spec rendering the visibility classes; out-of-fiction offer markers; session zero and safety; auto-commit preference; fast creation presentation | 00 visibility; 02; 04 offers; 12 session moves |
 | **15 Social, Investigation, Downtime** | standing semantics and social DC composition (on 00.3.8); negotiation; deception, insight and claim plausibility; NPC wants, refusals and walk-away; investigation clue graphs (sealed nodes, ≥ 3 placements); `record_knowledge`; downtime activities and long projects (clocked, week cadence) | 11 reputation and factions; 12 NPC generation; 00 clocks, Oracle, sealing |
 | **16 Companions & Allies** | companion, hireling and follower templates; loyalty; journey roles; companion behaviors; costs; recognition interplay (companions as witnesses) | 06 command action; 07 companion harm; 10 journeys; 11 factions; 15 standing |
@@ -2093,7 +2100,7 @@ chapter's rule is canonical) [amended: IR ch.02, 03, 04, 05, 06, 07, 08, 10, 11,
   level-2 key in each branch (04.5.2). **specialty**: a frozen competence entry kept from a consolidated or
   forked calling `{tag, value, grade, tier_reached}` (04.8.5). **variant**: a calling sharing a level-2
   calling's key with one added requirement (04.2.6).
-- **keeper**: the bonded witness of an oath, with its axes and forbidden acts (04.9.2; 13's `keeper.*`).
+- **keeper**: the bonded witness of an oath, with its axes and forbidden acts (04.9.2; a region's `keeper.*`, written by the world seed 12.16.6 or a pre-made setting [revision: I-028]).
   **shadow**: the dark reading every calling carries (04.9.1). **Fraying**: the shadow's stages, **Dimmed**
   (1), **Fraying** (2), **the Choice** (3) (04.9.2). **turn**: taking the shadow at the Choice (04.9.5).
 - **lapse** / **fork** / **fold** / **consolidation**: the four structural retirements: a provisional grant
@@ -2565,8 +2572,8 @@ attacked); `slot.body_form` (one transformed shape at a time); `slot.stance` (on
 | archetypes.yaml, adversaries.yaml, behaviors.yaml | 09 | adversaries: 13 |
 | hazards.yaml, travel.yaml, sites.yaml, traps.yaml, weather.yaml | 10 | 13 (regional entries) |
 | factions.yaml, world_turn.yaml, calendar.yaml, legacy.yaml | 11 | factions, calendar: 13 |
-| oracles.yaml, anchors.yaml, pacing.yaml | 12 | anchors compiled from every chapter |
-| region_*.yaml | 13 | — |
+| oracles.yaml, anchors.yaml, pacing.yaml, world_seed.yaml | 12 | anchors compiled from every chapter [world_seed.yaml: revision I-028] |
+| region_*.yaml | 12 (a world seed's output, 12.16) / 13 (`region_thallen.yaml`, an optional pre-made seed) [revision: I-028] | — |
 | codex.yaml | 14 | — |
 | social.yaml, investigation.yaml, downtime.yaml | 15 | — |
 | companions.yaml | 16 | — |
@@ -2725,7 +2732,7 @@ whose trigger fits the method (`cost.exposure`: noise). State writes: `door_arch
 
 ### WE-00-5 A hidden clock ticks with omens, and two clocks race
 
-`clk.alarm_grey_keep` *(template content illustrative; 10/13)*: kind danger, 6 segments, **hidden**;
+`clk.alarm_grey_keep` *(template content illustrative; 10, or a region's seed, 12.16)*: kind danger, 6 segments, **hidden**;
 tick sources: a `trait.sense.loud` beat inside the keep → 1; `cost.exposure` → U(severity);
 auto_ticks: +1 at each `hour` boundary while the PC is inside after dusk; omens — stirring: "a dog
 barks twice somewhere below", "a door closes across the yard"; building: "lantern light moves along the

@@ -4,7 +4,7 @@ generated data files exactly as the chapter states them, then reports drop rates
 distributions, gated pool sizes, repeat rates, bound-power and relic shares, and item-layer budget compliance.
 Seeded and deterministic. Copy kept at rules/_process/simulation/08-loot-sim.py; output at 08-loot-sim-output.txt.
 """
-import random, collections, statistics, os, sys
+import random, collections, statistics, os, sys, zlib
 import yaml
 
 D = os.environ.get("GAME_RULES_DATA", os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "data")))
@@ -221,7 +221,9 @@ class Gen:
         bias = FILL[circ].get("bias_tag")
         src = arch["tags"] + arch["harm"] + arch["deeds"] + arch["orgs"]
         # base selection (signature-honoring when the fill is signature)
-        if arch["gear"]:
+        if arch.get("trophy"):                      # 08.3.6 (1): the archetype's own trophy_base first [revision: I-017]
+            bases = base_candidates(arch["trophy"])
+        elif arch["gear"]:
             bases = list(arch["gear"])
         else:
             bases = []
@@ -370,7 +372,7 @@ P("gated pool size per item: min", min(ps), "median", statistics.median(ps), "ma
 P("--- 09 contract check: gated pool at tier_cap 1 and at the archetype's band, per archetype (smallest base) ---")
 low = []
 for a in ARCH:
-    bases = a["gear"] or [b for t in TROPHY[branch(a["tags"])] if t != "the source's own gear" for b in base_candidates(t)]
+    bases = (base_candidates(a["trophy"]) if a.get("trophy") else None) or a["gear"] or [b for t in TROPHY[branch(a["tags"])] if t != "the source's own gear" for b in base_candidates(t)]
     hands = lambda b: (["creature.folk"] if BI[b]["kind"] in ("weapon", "armor", "shield") and a["tags"][0].startswith(("creature.folk", "creature.undead")) else [])
     s1 = min(len(gated_pool(a["tags"] + a["harm"] + a["deeds"] + a["orgs"] + hands(b), [], b, 1)) for b in bases)
     sb = min(len(gated_pool(a["tags"] + a["harm"] + a["deeds"] + a["orgs"] + hands(b), [], b, a["band"])) for b in bases)
@@ -386,7 +388,7 @@ P("signature tiers:", dict(sorted(td.items())))
 P("--- repeat rates (200 consecutive drops per archetype, decisive success, no place) ---")
 rep_mag, rep_item = [], []
 for a in ARCH:
-    gg = Gen(hash(a["id"]) % 10000)
+    gg = Gen(zlib.crc32(a["id"].encode()) % 10000)   # a stable seed: hash() is salted per process [revision: I-017]
     prev = None; prevm = None; same_m = same_i = 0; n = 0
     for k in range(200):
         it = gg.generate(a, "decisive", "success", [])
@@ -403,7 +405,43 @@ for a in ARCH:
 P("  same magnitude property as the previous drop: mean", round(statistics.mean(rep_mag), 1), "% max", round(max(rep_mag), 1), "% (target <= 15%, OEQ-00-5)")
 P("  identical whole item to the previous drop: mean", round(statistics.mean(rep_item), 1), "% max", round(max(rep_item), 1), "%")
 worst = sorted(zip(rep_mag, [a["id"] for a in ARCH]), reverse=True)[:5]
+P("  the narrow natures of OEQ-08-1 [revision: I-017]:", [(a["id"], round(v, 1)) for v, a in zip(rep_mag, ARCH) if a["id"] in ("clockwork_sentinel", "slime")])
 P("  worst magnitude repeat:", [(n, round(v, 1)) for v, n in worst])
+# ---- every archetype of data/archetypes.yaml that yields loot, at every band it can appear at [revision: I-017, I-019]
+P("--- data/archetypes.yaml: every archetype that yields loot, at each of its bands (trophy_base, gear, tags as 09 data) ---")
+REAL = []
+for x in L("archetypes.yaml")["archetypes"]:
+    if x["loot"]["yield"] == "none":
+        continue
+    lo, hi = x["bands"]
+    for band in range(lo, hi + 1):
+        REAL.append(dict(id=x["id"], tags=list(x["creature_tags"]), harm=list(x["harm_tags"]), band=band, gear=list(x.get("gear") or []),
+                         trophy=x["loot"]["trophy_base"], deeds=list(x.get("evidence_tags") or []), orgs=list(x.get("org_tags") or []), yld=x["loot"]["yield"]))
+real_low, real_rep, real_rows = [], [], []
+for a in REAL:
+    bases = (base_candidates(a["trophy"]) if a["trophy"] else None) or a["gear"] or [b for t in TROPHY[branch(a["tags"])] if t != "the source's own gear" for b in base_candidates(t)]
+    hands = lambda b: (["creature.folk"] if BI[b]["kind"] in ("weapon", "armor", "shield") and a["tags"][0].startswith(("creature.folk", "creature.undead")) else [])
+    s1 = min(len(gated_pool(a["tags"] + a["harm"] + a["deeds"] + a["orgs"] + hands(b), [], b, 1)) for b in bases)
+    gg = Gen(zlib.crc32(("%s@%d" % (a["id"], a["band"])).encode()) % 10000)
+    prevm, same_m, n = None, 0, 0
+    for k in range(200):
+        it = gg.generate(a, "decisive", "success", [])
+        mags = tuple(sorted(p for p, _, sl, _ in it["props"] if sl == "magnitude"))
+        if prevm is not None:
+            n += 1
+            same_m += bool(mags and mags == prevm)
+        prevm = mags
+    r = 100.0 * same_m / n
+    real_rows.append((a["id"], a["band"], s1, r))
+    if s1 < 3: real_low.append("%s@T%d" % (a["id"], a["band"]))
+    real_rep.append(r)
+P("  archetype x band cases:", len(REAL), "| tier-1 pool below 3 (09 contract):", real_low or "none")
+P("  same magnitude property as the previous drop: mean", round(statistics.mean(real_rep), 1), "% max", round(max(real_rep), 1),
+  "% (target <= 15% for every case)")
+P("  cases over 15%:", [("%s@T%d" % (i, b), round(r, 1)) for i, b, _, r in sorted(real_rows, key=lambda t: -t[3]) if r > 15] or "none")
+P("  smallest tier-1 pools:", [("%s@T%d" % (i, b), s) for i, b, s, _ in sorted(real_rows, key=lambda t: t[2])[:6]])
+P("  worst repeats:", [("%s@T%d" % (i, b), round(r, 1)) for i, b, _, r in sorted(real_rows, key=lambda t: -t[3])[:6]])
+P("  arch.clockwork and arch.water_elemental by band (repeat %, tier-1 pool):", [("%s@T%d" % (i[5:], b), round(r, 1), s) for i, b, s, r in real_rows if i in ("arch.clockwork", "arch.water_elemental")])
 # character-level budget: a PC attunes the 5 strongest-looking of 20 random drops at band 3
 P("--- character level: 500 PCs each attune 5 of 20 random drops (bands 2-4) ---")
 clamps = collections.Counter()

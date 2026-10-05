@@ -2,7 +2,7 @@
 # Purpose: the calendar engine on 00's 364-day year (11.10): seasons (ids read by ch.10's weather regimes),
 #   quarter days, months, weekdays, the moon, festivals and their closed effect list, lifespans and aging.
 # Owner: 11-living-world (engine); owner-block "13" supplies names (months, weekdays, quarter days, era) and
-#   festivals (T-00-19; 00.17.1 Q19). The neutral names below stand until 13 replaces them by id.
+#   festivals (T-00-19; 00.17.1 Q19). The neutral names below stand until the region's seed replaces them by id (12.16.15).
 # Schema: data/SCHEMAS.md#calendar.yaml (year_days, seasons, weeks_per_season, day_names, festivals) plus
 #   T-11-1's optional keys (quarter_days, months, moon, lifespans, aging, festival_effects, era).
 # Every entry lifecycle: provisional (00.16.3).
@@ -46,7 +46,7 @@ months:
 
 day_names: ["First-day", "Second-day", "Third-day", "Fourth-day", "Fifth-day", "Sixth-day", "Rest-day"]
 
-era: {name: "of the campaign", year_one: "the campaign's first spring quarter day unless 13 sets an opening date", lifecycle: provisional, basis: ["11.10.2"]}
+era: {name: "of the campaign", year_one: "the campaign's first spring quarter day unless the region's seed sets an opening date (12.16.16)", lifecycle: provisional, basis: ["11.10.2"]}
 
 date_format: "{quarter day of <season> | <day> of <month>}, <weekday>, year <n> <era>, <watch>"
 
@@ -76,7 +76,7 @@ festivals:
 age_defaults: {young: 18, grown: 30, old: 55}
 
 lifespans:
-  # the age at which aging checks begin, by people (creature.folk tag); 13 may adjust for its peoples
+  # the age at which aging checks begin, by people (creature.folk tag); the region's seed may adjust for its peoples (12.16.7)
   - {tag: creature.folk.orc, aging_from: 35}
   - {tag: creature.folk.goblin, aging_from: 35}
   - {tag: creature.folk.human, aging_from: 50}

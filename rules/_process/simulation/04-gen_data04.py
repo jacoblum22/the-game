@@ -293,7 +293,7 @@ HY = [  # (a, b, id, name, composite name, from(branch whose deed opens), to, tr
  ('arcane', 'primal', None, None, 'The formula commands and the living force is asked; each undoes the other in the same hand. No hybrid: a character may hold a calling in each.', None, None, None, None, None),
  ('arcane', 'influence', 'spellsinger', 'Spellsinger', 'Voice and Weave', 'influence', 'arcane', 'success', 'amplifying', None),
  ('arcane', 'craft', 'artificer', 'Artificer', 'Bound in the Making', 'craft', 'arcane', 'success', 'amplifying', None),
- ('divine', 'primal', None, None, 'A named power and the nameless living world do not share a servant in this setting; ch.13 may author one for a syncretic faith.', None, None, None, None, None),
+ ('divine', 'primal', None, None, 'A named power and the nameless living world do not share a servant in this setting; a pre-made setting may author one for a syncretic faith; the world seed never does (12.16.5).', None, None, None, None, None),
  ('divine', 'influence', 'preacher', 'Preacher', 'Word and Witness', 'influence', 'divine', 'success', 'amplifying',
     dict(keeper='power_served', axes=['conduct.honesty', 'conduct.piety'], words='personal',
          forbidden=[('preach_for_coin', 'Sell a blessing, a rite or a pardon for your own gain.', 'conduct.generosity', False)])),

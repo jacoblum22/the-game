@@ -33,7 +33,7 @@ properties:
   name: Keen
   kind: mundane
   family: harm_edge
-  gate_tags: [creature.folk, material.metal, org, material.bone.fang, material.stone.volcanic, material.gem.crystal]
+  gate_tags: [creature.folk, material.metal, org, material.bone.fang, material.stone.volcanic, material.gem.crystal, creature.fiend.demon, creature.dragon, creature.horror.ooze]
   excluded_tags: []
   base_kinds: &id001 [item.weapon]
   mod_group: harm_edge
@@ -84,7 +84,7 @@ properties:
   name: Guarding
   kind: mundane
   family: edge
-  gate_tags: [creature.folk, material.metal, org, material.wood.fine.ironwood, creature.construct]
+  gate_tags: [creature.folk, material.metal, org, material.wood.fine.ironwood, creature.construct, creature.beast.monstrous, creature.beast.herd]
   excluded_tags: []
   base_kinds: [item.armor, item.garment]
   mod_group: guard_edge
@@ -109,7 +109,8 @@ properties:
   name: Sturdy
   kind: mundane
   family: durability
-  gate_tags: [creature.folk, material.metal, org, material.metal.iron, material.wood.fine.ironwood, creature.folk.dwarf, creature.construct]
+  gate_tags: [creature.folk, material.metal, org, material.metal.iron, material.wood.fine.ironwood, creature.folk.dwarf, creature.construct, creature.elemental.earth, creature.elemental.frost, creature.fiend,
+    creature.dragon, creature.beast.herd, creature.undead.mindless]
   excluded_tags: []
   base_kinds: &id002 [item.weapon, item.armor, item.shield, item.garment, item.jewelry, item.tool]
   mod_group: durability
@@ -133,7 +134,7 @@ properties:
   name: Light make
   kind: mundane
   family: carry
-  gate_tags: [creature.folk, material.metal, org, material.wood.fine, creature.folk.elf, material.fiber.silk]
+  gate_tags: [creature.folk, material.metal, org, material.wood.fine, creature.folk.elf, material.fiber.silk, creature.construct.clockwork]
   excluded_tags: []
   base_kinds: [item.armor, item.weapon, item.shield, item.tool]
   mod_group: load
@@ -157,7 +158,7 @@ properties:
   name: Quiet
   kind: mundane
   family: snag_waiver
-  gate_tags: [creature.folk.elf, creature.folk.halfling, material.hide, creature.beast.predator.feline, creature.spirit.fey]
+  gate_tags: [creature.folk.elf, creature.folk.halfling, material.hide, creature.beast.predator.feline, creature.spirit.fey, creature.beast.reptile]
   excluded_tags: []
   base_kinds: [item.armor]
   mod_group: armor_snag
@@ -181,7 +182,7 @@ properties:
   name: Supple
   kind: mundane
   family: snag_waiver
-  gate_tags: [creature.folk.dwarf, material.hide.scale, creature.beast.aquatic, material.fiber.silk]
+  gate_tags: [creature.folk.dwarf, material.hide.scale, creature.beast.aquatic, material.fiber.silk, creature.beast.reptile]
   excluded_tags: []
   base_kinds: [item.armor]
   mod_group: armor_snag
@@ -205,7 +206,7 @@ properties:
   name: Reinforced
   kind: mundane
   family: reduction
-  gate_tags: [creature.folk, material.metal, org, material.hide.scale, material.hide.chitin, material.bone, creature.beast.monstrous]
+  gate_tags: [creature.folk, material.metal, org, material.hide.scale, material.hide.chitin, material.bone, creature.beast.monstrous, creature.beast.reptile, creature.beast.herd]
   excluded_tags: []
   base_kinds: [item.armor.light, item.armor.medium]
   mod_group: armor_red
@@ -232,7 +233,7 @@ properties:
   name: Fine cut
   kind: mundane
   family: lever
-  gate_tags: [creature.folk.human, creature.folk.elf, org.crown, org.guild, material.fiber.silk, creature.spirit.fey]
+  gate_tags: [creature.folk.human, creature.folk.elf, org.crown, org.guild, material.fiber.silk, creature.spirit.fey, creature.beast.predator.feline]
   excluded_tags: []
   base_kinds: [item.garment, item.jewelry]
   mod_group: social
@@ -285,7 +286,8 @@ properties:
   name: Warm
   kind: mundane
   family: hazard
-  gate_tags: [material.hide.fur, creature.elemental.frost, creature.beast.predator.ursine, terrain.frozen]
+  gate_tags: [material.hide.fur, creature.elemental.frost, creature.beast.predator.ursine, terrain.frozen, creature.beast.predator.canine, creature.beast.predator.feline, creature.beast.aquatic, creature.beast.herd,
+    creature.beast.monstrous, creature.elemental.fire]
   excluded_tags: []
   base_kinds: [item.garment, item.armor.light, item.jewelry]
   mod_group: env_cold
@@ -312,7 +314,7 @@ properties:
   name: Cool
   kind: mundane
   family: hazard
-  gate_tags: [material.fiber.silk, creature.elemental.fire, terrain.arid]
+  gate_tags: [material.fiber.silk, creature.elemental.fire, terrain.arid, creature.elemental.water, creature.elemental.air]
   excluded_tags: []
   base_kinds: [item.garment, item.jewelry]
   mod_group: env_heat
@@ -363,7 +365,7 @@ properties:
   name: Master's mark
   kind: mundane
   family: lever
-  gate_tags: [creature.folk, org.guild.craft]
+  gate_tags: [creature.folk, org.guild.craft, creature.construct.clockwork]
   excluded_tags: []
   base_kinds: *id002
   mod_group: social
@@ -392,7 +394,8 @@ properties:
   name: Stalker's
   kind: passive
   family: edge
-  gate_tags: [creature.beast.predator.feline, creature.spirit.fey, creature.folk.goblin, creature.folk.halfling, creature.undead.spectral, terrain.forest]
+  gate_tags: [creature.beast.predator.feline, creature.spirit.fey, creature.folk.goblin, creature.folk.halfling, creature.undead.spectral, terrain.forest, creature.beast.aquatic.shark, creature.beast.predator.canine,
+    creature.beast.monstrous]
   excluded_tags: []
   base_kinds: [item.garment.footwear, item.garment.cloak]
   mod_group: skill_edge
@@ -442,7 +445,7 @@ properties:
   name: Tracker's
   kind: passive
   family: edge
-  gate_tags: [creature.beast.predator.canine, creature.folk.beastfolk, org.order.hunters]
+  gate_tags: [creature.beast.predator.canine, creature.folk.beastfolk, org.order.hunters, creature.beast.monstrous]
   excluded_tags: []
   base_kinds: [item.garment.footwear, item.jewelry.charm]
   mod_group: skill_edge
@@ -467,7 +470,7 @@ properties:
   name: Wayfinder's
   kind: passive
   family: edge
-  gate_tags: [creature.beast.avian, creature.spirit.place, creature.elemental.air, terrain.water.sea]
+  gate_tags: [creature.beast.avian, creature.spirit.place, creature.elemental.air, terrain.water.sea, creature.elemental.water, creature.construct.clockwork]
   excluded_tags: []
   base_kinds: [item.jewelry, item.tool]
   mod_group: skill_edge
@@ -492,7 +495,7 @@ properties:
   name: Survivor's
   kind: passive
   family: edge
-  gate_tags: [creature.beast, creature.spirit.place, terrain.arid, terrain.frozen]
+  gate_tags: [creature.beast, creature.spirit.place, terrain.arid, terrain.frozen, creature.horror.plant]
   excluded_tags: []
   base_kinds: [item.garment, item.tool.container]
   mod_group: skill_edge
@@ -517,7 +520,7 @@ properties:
   name: Climber's
   kind: passive
   family: edge
-  gate_tags: [creature.beast.vermin.arachnid, creature.beast.reptile.lizard, creature.folk.giant, creature.beast.herd, terrain.highland]
+  gate_tags: [creature.beast.vermin.arachnid, creature.beast.reptile.lizard, creature.folk.giant, creature.beast.herd, terrain.highland, creature.horror.plant]
   excluded_tags: []
   base_kinds: [item.garment.gloves, item.garment.footwear]
   mod_group: skill_edge
@@ -567,7 +570,7 @@ properties:
   name: Lorekeeper's
   kind: passive
   family: edge
-  gate_tags: [creature.spirit.ancestor, creature.folk.dwarf, creature.folk.elf, terrain.ruin]
+  gate_tags: [creature.spirit.ancestor, creature.folk.dwarf, creature.folk.elf, terrain.ruin, creature.elemental.earth, creature.elemental.frost]
   excluded_tags: []
   base_kinds: [item.jewelry.circlet, item.jewelry.amulet]
   mod_group: skill_edge
@@ -642,7 +645,8 @@ properties:
   name: Dread
   kind: passive
   family: edge
-  gate_tags: [creature.folk.orc, creature.horror.abomination, creature.beast.predator.ursine, creature.fiend.demon, creature.dragon]
+  gate_tags: [creature.folk.orc, creature.horror.abomination, creature.beast.predator.ursine, creature.fiend.demon, creature.dragon, creature.beast.monstrous, creature.elemental.fire, creature.folk.beastfolk.gnoll,
+    creature.folk.giant.troll, creature.fiend.hellbeast, org.order.knightly]
   excluded_tags: []
   base_kinds: [item.armor, item.garment.headwear, item.jewelry.charm]
   mod_group: skill_edge
@@ -667,7 +671,7 @@ properties:
   name: Piercing
   kind: passive
   family: edge
-  gate_tags: [creature.fiend.devil, creature.fiend.possessor, creature.spirit.celestial]
+  gate_tags: [creature.fiend.devil, creature.fiend.possessor, creature.spirit.celestial, creature.beast.avian.raptor]
   excluded_tags: []
   base_kinds: [item.jewelry]
   mod_group: skill_edge
@@ -692,7 +696,7 @@ properties:
   name: Minstrel's
   kind: passive
   family: edge
-  gate_tags: [creature.spirit.fey, creature.folk.elf, creature.folk.halfling]
+  gate_tags: [creature.spirit.fey, creature.folk.elf, creature.folk.halfling, creature.construct.clockwork]
   excluded_tags: []
   base_kinds: [item.tool.instrument, item.jewelry]
   mod_group: skill_edge
@@ -767,7 +771,7 @@ properties:
   name: Physician's
   kind: passive
   family: edge
-  gate_tags: [creature.spirit.celestial, material.botanical.herb.healing, org.faith]
+  gate_tags: [creature.spirit.celestial, material.botanical.herb.healing, org.faith, creature.horror.plant]
   excluded_tags: []
   base_kinds: [item.tool.kit.healer, item.jewelry.amulet, item.garment.gloves]
   mod_group: skill_edge
@@ -867,7 +871,7 @@ properties:
   name: Craftsman's (textiles)
   kind: passive
   family: edge
-  gate_tags: [creature.beast.vermin.arachnid, material.fiber, creature.spirit.fey]
+  gate_tags: [creature.beast.vermin.arachnid, material.fiber, creature.spirit.fey, creature.horror.plant]
   excluded_tags: []
   base_kinds: [item.tool.trade, item.garment.gloves]
   mod_group: craft_edge
@@ -892,7 +896,7 @@ properties:
   name: Craftsman's (alchemy)
   kind: passive
   family: edge
-  gate_tags: [material.essence, material.botanical, creature.horror.fungal, creature.horror.ooze]
+  gate_tags: [material.essence, material.botanical, creature.horror.fungal, creature.horror.ooze, creature.horror.plant]
   excluded_tags: []
   base_kinds: [item.tool.trade, item.garment.gloves]
   mod_group: craft_edge
@@ -1067,7 +1071,8 @@ properties:
   name: Ember-warded
   kind: passive
   family: reduction
-  gate_tags: &id003 [creature.elemental.fire, creature.dragon, creature.fiend.demon, creature.fiend.hellbeast, material.essence.gland.fire, material.stone.volcanic, deed.arcane.fire, terrain.underground.cave.volcanic]
+  gate_tags: [creature.elemental.fire, creature.dragon, creature.fiend.demon, creature.fiend.hellbeast, material.essence.gland.fire, material.stone.volcanic, deed.arcane.fire, terrain.underground.cave.volcanic,
+    creature.elemental.water]
   excluded_tags: []
   base_kinds: &id004 [item.armor, item.shield, item.garment, item.jewelry]
   mod_group: resist_fire
@@ -1118,7 +1123,7 @@ properties:
   name: Ember-forged
   kind: passive
   family: strike_delivery
-  gate_tags: *id003
+  gate_tags: &id003 [creature.elemental.fire, creature.dragon, creature.fiend.demon, creature.fiend.hellbeast, material.essence.gland.fire, material.stone.volcanic, deed.arcane.fire, terrain.underground.cave.volcanic]
   excluded_tags: []
   base_kinds: *id001
   mod_group: strike_form
@@ -1393,7 +1398,7 @@ properties:
   name: Thunder-warded
   kind: passive
   family: reduction
-  gate_tags: &id006 [creature.elemental.air, creature.dragon.serpentine, deed.arcane.storm, deed.primal.weather, terrain.highland.mountains.peak]
+  gate_tags: [creature.elemental.air, creature.dragon.serpentine, deed.arcane.storm, deed.primal.weather, terrain.highland.mountains.peak, creature.beast.avian]
   excluded_tags: []
   base_kinds: *id004
   mod_group: resist_storm
@@ -1444,7 +1449,7 @@ properties:
   name: Thunder-forged
   kind: passive
   family: strike_delivery
-  gate_tags: *id006
+  gate_tags: &id006 [creature.elemental.air, creature.dragon.serpentine, deed.arcane.storm, deed.primal.weather, terrain.highland.mountains.peak]
   excluded_tags: []
   base_kinds: *id001
   mod_group: strike_form
@@ -1719,8 +1724,8 @@ properties:
   name: Venom-warded
   kind: passive
   family: reduction
-  gate_tags: &id008 [creature.beast.reptile.serpent, creature.beast.vermin, creature.dragon.wyvern, creature.horror.fungal, material.essence.gland.venom, material.botanical.herb.toxic, deed.guile.poisoncraft,
-    terrain.wetland]
+  gate_tags: [creature.beast.reptile.serpent, creature.beast.vermin, creature.dragon.wyvern, creature.horror.fungal, material.essence.gland.venom, material.botanical.herb.toxic, deed.guile.poisoncraft,
+    terrain.wetland, creature.construct.homunculus, creature.folk.beastfolk.lizardfolk]
   excluded_tags: []
   base_kinds: *id004
   mod_group: resist_venom
@@ -1771,7 +1776,8 @@ properties:
   name: Venom-forged
   kind: passive
   family: strike_delivery
-  gate_tags: *id008
+  gate_tags: [creature.beast.reptile.serpent, creature.beast.vermin, creature.dragon.wyvern, creature.horror.fungal, material.essence.gland.venom, material.botanical.herb.toxic, deed.guile.poisoncraft,
+    terrain.wetland, creature.folk.beastfolk.lizardfolk]
   excluded_tags: []
   base_kinds: *id001
   mod_group: strike_form
@@ -1838,7 +1844,8 @@ properties:
   name: Venom-touched
   kind: passive
   family: on_hit
-  gate_tags: *id008
+  gate_tags: [creature.beast.reptile.serpent, creature.beast.vermin, creature.dragon.wyvern, creature.horror.fungal, material.essence.gland.venom, material.botanical.herb.toxic, deed.guile.poisoncraft,
+    terrain.wetland, creature.folk.beastfolk.lizardfolk]
   excluded_tags: []
   base_kinds: *id001
   mod_group: on_hit
@@ -1883,7 +1890,7 @@ properties:
   name: Grave-warded
   kind: passive
   family: reduction
-  gate_tags: &id009 [creature.undead, creature.fiend, material.essence.residue.grave_dust, deed.arcane.necromancy, terrain.ruin.tomb]
+  gate_tags: [creature.undead, creature.fiend, material.essence.residue.grave_dust, deed.arcane.necromancy, terrain.ruin.tomb, creature.horror.fungal, creature.horror.abomination]
   excluded_tags: []
   base_kinds: *id004
   mod_group: resist_blight
@@ -1934,7 +1941,7 @@ properties:
   name: Grave-forged
   kind: passive
   family: strike_delivery
-  gate_tags: *id009
+  gate_tags: &id008 [creature.undead, creature.fiend, material.essence.residue.grave_dust, deed.arcane.necromancy, terrain.ruin.tomb]
   excluded_tags: []
   base_kinds: *id001
   mod_group: strike_form
@@ -2001,7 +2008,7 @@ properties:
   name: Grave-touched
   kind: passive
   family: on_hit
-  gate_tags: *id009
+  gate_tags: *id008
   excluded_tags: []
   base_kinds: *id001
   mod_group: on_hit
@@ -2046,7 +2053,7 @@ properties:
   name: Dawn-warded
   kind: passive
   family: reduction
-  gate_tags: &id010 [creature.spirit.celestial, org.faith, deed.divine, material.metal.silver.pure]
+  gate_tags: &id009 [creature.spirit.celestial, org.faith, deed.divine, material.metal.silver.pure]
   excluded_tags: []
   base_kinds: *id004
   mod_group: resist_radiance
@@ -2097,7 +2104,7 @@ properties:
   name: Dawn-forged
   kind: passive
   family: strike_delivery
-  gate_tags: *id010
+  gate_tags: *id009
   excluded_tags: []
   base_kinds: *id001
   mod_group: strike_form
@@ -2164,7 +2171,7 @@ properties:
   name: Dawn-touched
   kind: passive
   family: on_hit
-  gate_tags: *id010
+  gate_tags: *id009
   excluded_tags: []
   base_kinds: *id001
   mod_group: on_hit
@@ -2209,7 +2216,7 @@ properties:
   name: Dream-warded
   kind: passive
   family: reduction
-  gate_tags: &id011 [creature.horror.aberration, creature.fiend.possessor, creature.spirit.fey.court, deed.arcane.mind]
+  gate_tags: &id010 [creature.horror.aberration, creature.fiend.possessor, creature.spirit.fey.court, deed.arcane.mind]
   excluded_tags: []
   base_kinds: *id004
   mod_group: resist_mind
@@ -2260,7 +2267,7 @@ properties:
   name: Dream-forged
   kind: passive
   family: strike_delivery
-  gate_tags: *id011
+  gate_tags: *id010
   excluded_tags: []
   base_kinds: *id001
   mod_group: strike_form
@@ -2327,7 +2334,7 @@ properties:
   name: Dream-touched
   kind: passive
   family: on_hit
-  gate_tags: *id011
+  gate_tags: *id010
   excluded_tags: []
   base_kinds: *id001
   mod_group: on_hit
@@ -2372,7 +2379,7 @@ properties:
   name: Spell-warded
   kind: passive
   family: reduction
-  gate_tags: &id012 [creature.construct, creature.spirit, material.essence, material.gem.crystal, deed.arcane, org.order.arcane]
+  gate_tags: [creature.construct, creature.spirit, material.essence, material.gem.crystal, deed.arcane, org.order.arcane, creature.beast.monstrous.magical]
   excluded_tags: []
   base_kinds: *id004
   mod_group: resist_arcane
@@ -2423,7 +2430,7 @@ properties:
   name: Spell-forged
   kind: passive
   family: strike_delivery
-  gate_tags: *id012
+  gate_tags: &id011 [creature.construct, creature.spirit, material.essence, material.gem.crystal, deed.arcane, org.order.arcane]
   excluded_tags: []
   base_kinds: *id001
   mod_group: strike_form
@@ -2490,7 +2497,7 @@ properties:
   name: Spell-touched
   kind: passive
   family: on_hit
-  gate_tags: *id012
+  gate_tags: *id011
   excluded_tags: []
   base_kinds: *id001
   mod_group: on_hit
@@ -2649,7 +2656,7 @@ properties:
   name: Rime-proof
   kind: passive
   family: hazard
-  gate_tags: *id005
+  gate_tags: [creature.elemental.frost, creature.dragon.great, material.hide.fur.winter, deed.arcane.frost, terrain.frozen, creature.elemental.water, creature.beast.aquatic]
   excluded_tags: []
   base_kinds: [item.armor, item.shield, item.garment, item.jewelry, item.tool.container]
   mod_group: env_cold
@@ -2763,7 +2770,7 @@ properties:
   name: Thunder-proof
   kind: passive
   family: hazard
-  gate_tags: *id006
+  gate_tags: [creature.elemental.air, creature.dragon.serpentine, deed.arcane.storm, deed.primal.weather, terrain.highland.mountains.peak, creature.beast.avian]
   excluded_tags: []
   base_kinds: [item.armor, item.shield, item.garment, item.jewelry, item.tool.container]
   mod_group: env_storm
@@ -2964,7 +2971,8 @@ properties:
   name: Venom-proof
   kind: passive
   family: hazard
-  gate_tags: *id008
+  gate_tags: [creature.beast.reptile.serpent, creature.beast.vermin, creature.dragon.wyvern, creature.horror.fungal, material.essence.gland.venom, material.botanical.herb.toxic, deed.guile.poisoncraft,
+    terrain.wetland, creature.construct.homunculus, creature.folk.beastfolk.lizardfolk]
   excluded_tags: []
   base_kinds: [item.armor, item.shield, item.garment, item.jewelry, item.tool.container]
   mod_group: env_venom
@@ -2991,7 +2999,8 @@ properties:
   name: Venom-thorned
   kind: passive
   family: retort
-  gate_tags: *id008
+  gate_tags: [creature.beast.reptile.serpent, creature.beast.vermin, creature.dragon.wyvern, creature.horror.fungal, material.essence.gland.venom, material.botanical.herb.toxic, deed.guile.poisoncraft,
+    terrain.wetland]
   excluded_tags: []
   base_kinds: [item.armor, item.shield, item.garment.cloak, item.jewelry.amulet]
   mod_group: retort
@@ -3051,7 +3060,7 @@ properties:
   name: Grave-proof
   kind: passive
   family: hazard
-  gate_tags: *id009
+  gate_tags: [creature.undead, creature.fiend, material.essence.residue.grave_dust, deed.arcane.necromancy, terrain.ruin.tomb, creature.horror.fungal, creature.horror.abomination]
   excluded_tags: []
   base_kinds: [item.armor, item.shield, item.garment, item.jewelry, item.tool.container]
   mod_group: env_blight
@@ -3078,7 +3087,7 @@ properties:
   name: Grave-thorned
   kind: passive
   family: retort
-  gate_tags: *id009
+  gate_tags: *id008
   excluded_tags: []
   base_kinds: [item.armor, item.shield, item.garment.cloak, item.jewelry.amulet]
   mod_group: retort
@@ -3138,7 +3147,7 @@ properties:
   name: Grave-hardened
   kind: passive
   family: ward
-  gate_tags: *id009
+  gate_tags: *id008
   excluded_tags: []
   base_kinds: *id004
   mod_group: cond_ward_weakened
@@ -3165,7 +3174,7 @@ properties:
   name: Dawn-proof
   kind: passive
   family: hazard
-  gate_tags: *id010
+  gate_tags: *id009
   excluded_tags: []
   base_kinds: [item.armor, item.shield, item.garment, item.jewelry, item.tool.container]
   mod_group: env_radiance
@@ -3192,7 +3201,7 @@ properties:
   name: Dawn-thorned
   kind: passive
   family: retort
-  gate_tags: *id010
+  gate_tags: *id009
   excluded_tags: []
   base_kinds: [item.armor, item.shield, item.garment.cloak, item.jewelry.amulet]
   mod_group: retort
@@ -3252,7 +3261,7 @@ properties:
   name: Dream-proof
   kind: passive
   family: hazard
-  gate_tags: *id011
+  gate_tags: [creature.horror.aberration, creature.fiend.possessor, creature.spirit.fey.court, deed.arcane.mind, creature.horror.fungal]
   excluded_tags: []
   base_kinds: [item.armor, item.shield, item.garment, item.jewelry, item.tool.container]
   mod_group: env_mind
@@ -3279,7 +3288,7 @@ properties:
   name: Dream-thorned
   kind: passive
   family: retort
-  gate_tags: *id011
+  gate_tags: *id010
   excluded_tags: []
   base_kinds: [item.armor, item.shield, item.garment.cloak, item.jewelry.amulet]
   mod_group: retort
@@ -3339,7 +3348,7 @@ properties:
   name: Dream-hardened
   kind: passive
   family: ward
-  gate_tags: *id011
+  gate_tags: *id010
   excluded_tags: []
   base_kinds: *id004
   mod_group: cond_ward_distracted
@@ -3366,7 +3375,7 @@ properties:
   name: Spell-proof
   kind: passive
   family: hazard
-  gate_tags: *id012
+  gate_tags: [creature.construct, creature.spirit, material.essence, material.gem.crystal, deed.arcane, org.order.arcane, creature.beast.monstrous.magical]
   excluded_tags: []
   base_kinds: [item.armor, item.shield, item.garment, item.jewelry, item.tool.container]
   mod_group: env_arcane
@@ -3393,7 +3402,7 @@ properties:
   name: Spell-thorned
   kind: passive
   family: retort
-  gate_tags: *id012
+  gate_tags: *id011
   excluded_tags: []
   base_kinds: [item.armor, item.shield, item.garment.cloak, item.jewelry.amulet]
   mod_group: retort
@@ -3453,7 +3462,7 @@ properties:
   name: Spell-hardened
   kind: passive
   family: ward
-  gate_tags: *id012
+  gate_tags: *id011
   excluded_tags: []
   base_kinds: *id004
   mod_group: cond_ward_silenced
@@ -3480,7 +3489,8 @@ properties:
   name: Cut-proof
   kind: passive
   family: reduction
-  gate_tags: [creature.beast.reptile, creature.beast.predator, material.hide.scale, creature.dragon, creature.construct.golem, creature.beast.monstrous]
+  gate_tags: [creature.beast.reptile, creature.beast.predator, material.hide.scale, creature.dragon, creature.construct.golem, creature.beast.monstrous, creature.beast.aquatic, creature.elemental.earth,
+    creature.horror.abomination, creature.folk.beastfolk.lizardfolk, org.order.knightly]
   excluded_tags: []
   base_kinds: *id004
   mod_group: resist_physical
@@ -3531,7 +3541,7 @@ properties:
   name: Pierce-proof
   kind: passive
   family: reduction
-  gate_tags: [material.hide.chitin, creature.beast.vermin, creature.construct, creature.beast.herd, creature.horror.plant]
+  gate_tags: [material.hide.chitin, creature.beast.vermin, creature.construct, creature.beast.herd, creature.horror.plant, creature.elemental.earth, creature.undead.mindless]
   excluded_tags: []
   base_kinds: *id004
   mod_group: resist_physical
@@ -3582,7 +3592,8 @@ properties:
   name: Crush-proof
   kind: passive
   family: reduction
-  gate_tags: [creature.horror.ooze, creature.beast.monstrous, creature.folk.giant, creature.elemental.earth, material.hide.fur, creature.beast.predator.ursine]
+  gate_tags: [creature.horror.ooze, creature.beast.monstrous, creature.folk.giant, creature.elemental.earth, material.hide.fur, creature.beast.predator.ursine, creature.elemental.water, creature.horror.plant,
+    creature.horror.abomination, creature.beast.herd, creature.folk.dwarf]
   excluded_tags: []
   base_kinds: *id004
   mod_group: resist_physical
@@ -3633,7 +3644,7 @@ properties:
   name: Rending
   kind: passive
   family: on_hit
-  gate_tags: [creature.beast.predator, material.bone.fang, creature.undead.ravenous, creature.beast.monstrous]
+  gate_tags: [creature.beast.predator, material.bone.fang, creature.undead.ravenous, creature.beast.monstrous, creature.fiend.demon, creature.dragon]
   excluded_tags: []
   base_kinds: *id001
   mod_group: on_hit
@@ -3678,7 +3689,7 @@ properties:
   name: Staggering
   kind: passive
   family: on_hit
-  gate_tags: [creature.folk.giant, creature.beast.herd, creature.construct.golem, creature.elemental.earth]
+  gate_tags: [creature.folk.giant, creature.beast.herd, creature.construct.golem, creature.elemental.earth, creature.fiend.demon, org.order.knightly]
   excluded_tags: []
   base_kinds: *id001
   mod_group: on_hit
@@ -3723,7 +3734,7 @@ properties:
   name: Dreadful
   kind: passive
   family: on_hit
-  gate_tags: [creature.undead.sovereign, creature.fiend, creature.horror.abomination, creature.dragon.great]
+  gate_tags: [creature.undead.sovereign, creature.fiend, creature.horror.abomination, creature.dragon.great, creature.dragon]
   excluded_tags: []
   base_kinds: *id001
   mod_group: on_hit
@@ -3813,7 +3824,7 @@ properties:
   name: Hunter's
   kind: passive
   family: on_hit
-  gate_tags: [creature.beast.predator, creature.folk.beastfolk, org.order.hunters]
+  gate_tags: [creature.beast.predator, creature.folk.beastfolk, org.order.hunters, creature.horror.ooze, deed.guile.ambush]
   excluded_tags: []
   base_kinds: *id001
   mod_group: on_hit
@@ -3858,7 +3869,7 @@ properties:
   name: Undeath-bane
   kind: passive
   family: harm_edge
-  gate_tags: [material.metal.silver.pure, org.faith, creature.spirit.celestial, deed.divine.exorcism]
+  gate_tags: [material.metal.silver.pure, org.faith, creature.spirit.celestial, deed.divine.exorcism, org.order.knightly]
   excluded_tags: []
   base_kinds: *id001
   mod_group: harm_edge
@@ -4074,7 +4085,7 @@ properties:
   name: Construct-bane
   kind: passive
   family: harm_edge
-  gate_tags: [creature.construct, creature.elemental.air, deed.arcane.storm]
+  gate_tags: [creature.construct, creature.elemental.air, deed.arcane.storm, creature.horror.ooze]
   excluded_tags: []
   base_kinds: *id001
   mod_group: harm_edge
@@ -4146,7 +4157,8 @@ properties:
   name: Darksight
   kind: passive
   family: lever
-  gate_tags: [creature.folk.dwarf, creature.folk.goblin, creature.beast.predator.feline, creature.undead, terrain.underground, creature.beast.vermin]
+  gate_tags: [creature.folk.dwarf, creature.folk.goblin, creature.beast.predator.feline, creature.undead, terrain.underground, creature.beast.vermin, creature.beast.avian, creature.elemental.earth, creature.horror.fungal,
+    creature.horror.abomination, creature.construct.homunculus, creature.folk.beastfolk.gnoll, creature.folk.giant.troll]
   excluded_tags: []
   base_kinds: [item.jewelry, item.garment.headwear]
   mod_group: senses
@@ -4175,7 +4187,8 @@ properties:
   name: Keen ears
   kind: passive
   family: lever
-  gate_tags: [creature.beast.predator, creature.beast.herd.cervine, creature.folk.elf, creature.folk.beastfolk.gnoll]
+  gate_tags: [creature.beast.predator, creature.beast.herd.cervine, creature.folk.elf, creature.folk.beastfolk.gnoll, creature.beast.avian, creature.beast.herd, creature.beast.monstrous, creature.elemental.air,
+    creature.folk.beastfolk.lizardfolk]
   excluded_tags: []
   base_kinds: *id004
   mod_group: senses
@@ -4204,7 +4217,7 @@ properties:
   name: Scenting
   kind: passive
   family: lever
-  gate_tags: [creature.beast.predator.canine, creature.folk.beastfolk, creature.undead.ravenous.ghoul]
+  gate_tags: [creature.beast.predator.canine, creature.folk.beastfolk, creature.undead.ravenous.ghoul, creature.beast.aquatic.shark, creature.folk.giant, creature.fiend.hellbeast]
   excluded_tags: []
   base_kinds: *id004
   mod_group: senses
@@ -4233,7 +4246,7 @@ properties:
   name: Tremor-sense
   kind: passive
   family: lever
-  gate_tags: [creature.elemental.earth, creature.beast.vermin, creature.construct.golem.stone, terrain.underground]
+  gate_tags: [creature.elemental.earth, creature.beast.vermin, creature.construct.golem.stone, terrain.underground, creature.horror.fungal]
   excluded_tags: []
   base_kinds: [item.garment.footwear, item.jewelry]
   mod_group: senses
@@ -4262,7 +4275,7 @@ properties:
   name: Spirit-sight
   kind: passive
   family: lever
-  gate_tags: [creature.spirit, creature.undead.spectral, deed.divine.revelation, deed.primal.spirits]
+  gate_tags: [creature.spirit, creature.undead.spectral, deed.divine.revelation, deed.primal.spirits, creature.elemental, creature.construct.homunculus]
   excluded_tags: []
   base_kinds: [item.jewelry, item.tool.implement]
   mod_group: senses
@@ -4339,7 +4352,7 @@ properties:
   name: Featherfall
   kind: passive
   family: hazard
-  gate_tags: [creature.beast.avian, creature.elemental.air, creature.spirit.fey, terrain.highland.cliffs]
+  gate_tags: [creature.beast.avian, creature.elemental.air, creature.spirit.fey, terrain.highland.cliffs, creature.beast.predator.feline]
   excluded_tags: []
   base_kinds: [item.garment.cloak, item.jewelry, item.garment.footwear]
   mod_group: fall
@@ -4570,7 +4583,7 @@ properties:
   name: Mind-guard
   kind: passive
   family: edge
-  gate_tags: [creature.horror.aberration, creature.fiend.possessor, creature.undead.sovereign, deed.arcane.warding, deed.divine.warding]
+  gate_tags: [creature.horror.aberration, creature.fiend.possessor, creature.undead.sovereign, deed.arcane.warding, deed.divine.warding, creature.horror.abomination, creature.undead.mindless]
   excluded_tags: []
   base_kinds: [item.jewelry, item.garment.headwear]
   mod_group: resolve_edge
@@ -4595,7 +4608,7 @@ properties:
   name: Knitting flesh
   kind: passive
   family: sustain
-  gate_tags: [creature.folk.giant.troll, creature.undead.ravenous, creature.horror.plant, creature.horror.ooze]
+  gate_tags: [creature.folk.giant.troll, creature.undead.ravenous, creature.horror.plant, creature.horror.ooze, creature.horror.abomination]
   excluded_tags: []
   base_kinds: *id004
   mod_group: sustain
@@ -4639,7 +4652,7 @@ properties:
   name: Glowing
   kind: passive
   family: light
-  gate_tags: [creature.elemental.fire, creature.spirit.celestial, creature.undead.spectral, material.gem.crystal, creature.folk.elf]
+  gate_tags: [creature.elemental.fire, creature.spirit.celestial, creature.undead.spectral, material.gem.crystal, creature.folk.elf, creature.elemental.frost, creature.construct.clockwork]
   excluded_tags: []
   base_kinds: *id002
   mod_group: light
@@ -4663,7 +4676,7 @@ properties:
   name: Pack-bearer
   kind: passive
   family: carry
-  gate_tags: [creature.beast.herd, creature.beast.predator.ursine, creature.folk.giant, creature.construct.golem]
+  gate_tags: [creature.beast.herd, creature.beast.predator.ursine, creature.folk.giant, creature.construct.golem, creature.elemental.earth]
   excluded_tags: []
   base_kinds: [item.armor, item.garment, item.jewelry, item.tool.container]
   mod_group: load
@@ -4692,7 +4705,7 @@ properties:
   name: Waybread
   kind: passive
   family: supply
-  gate_tags: [creature.spirit.fey, creature.spirit.place, creature.folk.halfling, material.botanical]
+  gate_tags: [creature.spirit.fey, creature.spirit.place, creature.folk.halfling, material.botanical, creature.horror.fungal]
   excluded_tags: []
   base_kinds: [item.tool.container, item.jewelry.charm]
   mod_group: supply
@@ -4746,7 +4759,7 @@ properties:
   name: Commanding
   kind: passive
   family: lever
-  gate_tags: [org.crown.military, org.crown.noble, creature.folk.orc, creature.fiend.devil.enforcer, creature.dragon.great]
+  gate_tags: [org.crown.military, org.crown.noble, creature.folk.orc, creature.fiend.devil.enforcer, creature.dragon.great, creature.beast.avian.raptor]
   excluded_tags: []
   base_kinds: [item.jewelry, item.armor, item.garment.headwear]
   mod_group: social
@@ -4775,7 +4788,7 @@ properties:
   name: Whispering
   kind: passive
   family: lever
-  gate_tags: [creature.spirit.ancestor, creature.undead.spectral, terrain.ruin, creature.undead.sovereign.lich]
+  gate_tags: [creature.spirit.ancestor, creature.undead.spectral, terrain.ruin, creature.undead.sovereign.lich, creature.undead.mindless]
   excluded_tags: []
   base_kinds: [item.jewelry, item.goods]
   mod_group: lore
@@ -4804,7 +4817,7 @@ properties:
   name: Conduit
   kind: passive
   family: edge
-  gate_tags: &id013 [deed.arcane, material.wood.witchwood, material.gem.crystal, creature.spirit, org.order.arcane]
+  gate_tags: &id012 [deed.arcane, material.wood.witchwood, material.gem.crystal, creature.spirit, org.order.arcane]
   excluded_tags: []
   base_kinds: [item.tool.implement]
   mod_group: effect_dc_edge
@@ -4829,7 +4842,7 @@ properties:
   name: Conduit (thrift)
   kind: passive
   family: focus_cost
-  gate_tags: *id013
+  gate_tags: *id012
   excluded_tags: []
   base_kinds: [item.tool.implement]
   mod_group: focus_thrift
@@ -4853,7 +4866,7 @@ properties:
   name: Blessed
   kind: passive
   family: edge
-  gate_tags: &id014 [deed.divine, org.faith, creature.spirit.celestial, material.metal.silver]
+  gate_tags: &id013 [deed.divine, org.faith, creature.spirit.celestial, material.metal.silver]
   excluded_tags: []
   base_kinds: [item.tool.implement]
   mod_group: effect_dc_edge
@@ -4878,7 +4891,7 @@ properties:
   name: Blessed (thrift)
   kind: passive
   family: focus_cost
-  gate_tags: *id014
+  gate_tags: *id013
   excluded_tags: []
   base_kinds: [item.tool.implement]
   mod_group: focus_thrift
@@ -4902,7 +4915,7 @@ properties:
   name: Wild-bound
   kind: passive
   family: edge
-  gate_tags: &id015 [deed.primal, creature.spirit.place, creature.spirit.fey.wild, material.botanical, org.order.druidic]
+  gate_tags: &id014 [deed.primal, creature.spirit.place, creature.spirit.fey.wild, material.botanical, org.order.druidic]
   excluded_tags: []
   base_kinds: [item.tool.implement]
   mod_group: effect_dc_edge
@@ -4927,7 +4940,7 @@ properties:
   name: Wild-bound (thrift)
   kind: passive
   family: focus_cost
-  gate_tags: *id015
+  gate_tags: *id014
   excluded_tags: []
   base_kinds: [item.tool.implement]
   mod_group: focus_thrift
@@ -7421,6 +7434,35 @@ properties:
         duration: while equipped
         applies_when: bargaining for passage, lodging or a ride on the road
   text: A Precision lever on Talk to bargain for passage or lodging.
+  tags: []
+  lifecycle: provisional
+  basis: ['08.3', '08.4', T-08-9]
+  value_by_tier: {1: 20, 2: 50, 3: 125, 4: 300, 5: 750}
+- id: prop.tidesense
+  name: Tide-sense
+  kind: passive
+  family: lever
+  gate_tags: [creature.elemental.water, creature.beast.aquatic, terrain.water]
+  excluded_tags: []
+  base_kinds: [item.jewelry, item.garment.footwear]
+  mod_group: tides
+  weight: 2
+  signature_eligible: false
+  min_tier: 1
+  place_gated: true
+  bias: sense
+  domains: [loot, craft, gift]
+  tiers:
+  - tier: 1
+    effects:
+    - effect_id: eff.grant_lever
+      params:
+        type: precision
+        for_verbs: [verb.observe, verb.move]
+        for_tags: []
+        duration: while equipped
+        applies_when: 'in, on or under water: reading a current, a depth, or what moves beneath'
+  text: 'A Precision lever on Observe and Move in, on or under water: currents, depths, and what moves beneath.'
   tags: []
   lifecycle: provisional
   basis: ['08.3', '08.4', T-08-9]

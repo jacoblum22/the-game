@@ -12,7 +12,8 @@ lifecycle: provisional
 domain: gen.gift
 output_kind: item | ability
 pool_ref: 'item: item_properties.yaml#properties where domains contains gift; ability: gen_item_ability.yaml#pool (deed-gated entries) granted into the ACQUIRED partition (05.8.7)'
-source: 'the giver: a faction (its org tags + its patron deed tags, 11), an NPC (role_tags, 12), or a power (a creature.spirit/fiend/celestial entity or a keeper with deed.divine/primal tags, 13)'
+source: 'the giver: a faction (its org tags + its patron deed tags, 11), an NPC (role_tags, 12), or a power (a creature.spirit/fiend/celestial entity or a keeper with deed.divine/primal tags; the region''s
+  seed, 12.16.6)'
 who_decides_to_give: 'never this file: a faction''s or NPC''s choice to give is 11''s (World Turn, rewards of threads) or 15''s (standing, bargains) or 04.11.3''s (an authority lends an item); gen.gift
   only decides WHAT'
 circumstances:
@@ -40,8 +41,9 @@ quality_rungs:
 degree_effects: {critical_success: none, critical_failure: none}
 tier_rule: {tier_cap: 'the giver''s band: a faction''s tier mapped 0-1 -> 1, 2 -> 2, 3 -> 3, 4 -> 4, 5+ -> 5 (11); an NPC''s or power''s threat band', signature: tier_cap, magnitude: 'tier_cap - 1, minimum
     1'}
-signature_rule: 'the giver''s boon_signature (a faction''s or power''s `boon_signature` prop, 11/13) is always eligible for its gifts regardless of gate tags (it IS the giver''s identity), subject to base
-  kinds and tier; favored places it (signature fill); earned and bargained show it among the chosen candidates; default boon signature: the default_signature of the giver''s first creature tag, else none'
+signature_rule: 'the giver''s boon_signature (a faction''s or power''s `boon_signature` prop, 11; a region''s keepers, 12.16.6) is always eligible for its gifts regardless of gate tags (it IS the giver''s
+  identity), subject to base kinds and tier; favored places it (signature fill); earned and bargained show it among the chosen candidates; default boon signature: the default_signature of the giver''s first
+  creature tag, else none'
 ability_gifts: {who: 'only a power (creature.spirit, creature.fiend, a keeper of deed.divine or deed.primal) may give an ability', partition: 'acquired, provisional (05.8.7)', pool: gen_item_ability.yaml#pool
     entries whose gate matches the giver's deed tags, rank: 1, condition: may carry the giver's condition as a commitment fact (05.8.7)}
 chosen_display: the tool shows up to three eligible entries per slot (00.11.3 step 4), drawn by weight without replacement; the player picks one per slot

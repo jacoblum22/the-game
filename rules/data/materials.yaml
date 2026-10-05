@@ -448,7 +448,7 @@ materials:
   lifecycle: provisional
   basis: [08.6.2, T-08-13]
   fallback_signature: prop.sig_hunters_sense
-  gated_pool_size: 31
+  gated_pool_size: 34
 - id: mat.winter_pelt
   name: Winter pelt
   tags: &id032 [material.hide.fur.winter]
@@ -462,7 +462,7 @@ materials:
   lifecycle: provisional
   basis: [08.6.2, T-08-13]
   fallback_signature: prop.sig_hunters_sense
-  gated_pool_size: 31
+  gated_pool_size: 34
 - id: mat.hide
   name: Hide
   tags: &id033 [material.hide.leather]
@@ -476,7 +476,7 @@ materials:
   lifecycle: provisional
   basis: [08.6.2, T-08-13]
   fallback_signature: prop.sig_long_stride
-  gated_pool_size: 30
+  gated_pool_size: 36
 - id: mat.scales
   name: Scales
   tags: &id034 [material.hide.scale]
@@ -490,7 +490,7 @@ materials:
   lifecycle: provisional
   basis: [08.6.2, T-08-13]
   fallback_signature: prop.sig_shed_skin
-  gated_pool_size: 34
+  gated_pool_size: 41
 - id: mat.dragon_scale
   name: Dragon scale
   tags: &id035 [material.hide.scale.dragon]
@@ -503,7 +503,7 @@ materials:
   weight: 2
   lifecycle: provisional
   basis: [08.6.2, T-08-13]
-  gated_pool_size: 24
+  gated_pool_size: 26
 - id: mat.chitin
   name: Chitin plates
   tags: &id036 [material.hide.chitin]
@@ -531,7 +531,7 @@ materials:
   lifecycle: provisional
   basis: [08.6.2, T-08-13]
   fallback_signature: prop.sig_hunters_sense
-  gated_pool_size: 42
+  gated_pool_size: 46
 - id: mat.horn
   name: Horn and antler
   tags: &id038 [material.bone.horn]
@@ -545,7 +545,7 @@ materials:
   lifecycle: provisional
   basis: [08.6.2, T-08-13]
   fallback_signature: prop.sig_long_stride
-  gated_pool_size: 40
+  gated_pool_size: 44
 - id: mat.ivory
   name: Tusk ivory
   tags: &id039 [material.bone.ivory]
@@ -559,7 +559,7 @@ materials:
   lifecycle: provisional
   basis: [08.6.2, T-08-13]
   fallback_signature: prop.sig_long_stride
-  gated_pool_size: 29
+  gated_pool_size: 35
 - id: mat.bones
   name: Bones
   tags: &id040 [material.bone.bone]
@@ -573,7 +573,7 @@ materials:
   lifecycle: provisional
   basis: [08.6.2, T-08-13]
   fallback_signature: prop.sig_bone_ward
-  gated_pool_size: 20
+  gated_pool_size: 23
 - id: mat.silk_gland
   name: Spinner's silk
   tags: &id041 [material.fiber.silk]
@@ -600,7 +600,7 @@ materials:
   weight: 0
   lifecycle: provisional
   basis: [08.6.2, T-08-13]
-  gated_pool_size: 23
+  gated_pool_size: 25
 - id: mat.venom_sac
   name: Venom sac
   tags: &id043 [material.essence.gland.venom]
@@ -614,7 +614,7 @@ materials:
   lifecycle: provisional
   basis: [08.6.2, T-08-13]
   fallback_signature: prop.sig_plague_proof
-  gated_pool_size: 46
+  gated_pool_size: 54
 - id: mat.fire_gland
   name: Fire gland
   tags: &id044 [material.essence.gland.fire]
@@ -628,7 +628,7 @@ materials:
   lifecycle: provisional
   basis: [08.6.2, T-08-13]
   fallback_signature: prop.sig_brimstone_hide
-  gated_pool_size: 41
+  gated_pool_size: 45
 - id: mat.gland
   name: Strange gland
   tags: &id045 [material.essence.gland]
@@ -642,7 +642,7 @@ materials:
   lifecycle: provisional
   basis: [08.6.2, T-08-13]
   fallback_signature: prop.sig_monster_hide
-  gated_pool_size: 28
+  gated_pool_size: 33
 - id: mat.beast_heart
   name: Beast heart
   tags: &id046 [material.essence.heart.beast]
@@ -656,7 +656,7 @@ materials:
   lifecycle: provisional
   basis: [08.6.2, T-08-13]
   fallback_signature: prop.sig_hunters_sense
-  gated_pool_size: 37
+  gated_pool_size: 42
 - id: mat.elemental_core
   name: Elemental core
   tags: &id047 [material.essence.heart.elemental]
@@ -670,7 +670,7 @@ materials:
   lifecycle: provisional
   basis: [08.6.2, T-08-13]
   fallback_signature: prop.sig_unyielding
-  gated_pool_size: 27
+  gated_pool_size: 28
 - id: mat.heart
   name: Heart of power
   tags: &id048 [material.essence.heart]
@@ -684,7 +684,7 @@ materials:
   lifecycle: provisional
   basis: [08.6.2, T-08-13]
   fallback_signature: prop.sig_crown_of_dread
-  gated_pool_size: 61
+  gated_pool_size: 62
 - id: mat.blood
   name: Potent blood
   tags: &id049 [material.essence.blood]
@@ -698,7 +698,7 @@ materials:
   lifecycle: provisional
   basis: [08.6.2, T-08-13]
   fallback_signature: prop.sig_monster_hide
-  gated_pool_size: 47
+  gated_pool_size: 51
 - id: mat.ichor
   name: Ichor
   tags: &id050 [material.essence.ichor]
@@ -712,7 +712,7 @@ materials:
   lifecycle: provisional
   basis: [08.6.2, T-08-13]
   fallback_signature: prop.sig_hellfire
-  gated_pool_size: 40
+  gated_pool_size: 42
 - id: mat.ectoplasm
   name: Ectoplasm
   tags: &id051 [material.essence.residue.ectoplasm]
@@ -740,7 +740,7 @@ materials:
   lifecycle: provisional
   basis: [08.6.2, T-08-13]
   fallback_signature: prop.sig_bone_ward
-  gated_pool_size: 35
+  gated_pool_size: 37
 - id: mat.residue
   name: Spirit residue
   tags: &id053 [material.essence.residue]
@@ -768,7 +768,7 @@ materials:
   lifecycle: provisional
   basis: [08.6.2, T-08-13]
   fallback_signature: prop.sig_unyielding
-  gated_pool_size: 29
+  gated_pool_size: 32
 - id: mat.clockwork
   name: Clockwork parts
   tags: &id055 [material.metal.copper]
@@ -782,7 +782,7 @@ materials:
   lifecycle: provisional
   basis: [08.6.2, T-08-13]
   fallback_signature: prop.sig_guardian_weave
-  gated_pool_size: 27
+  gated_pool_size: 30
 - id: mat.living_wood
   name: Living wood
   tags: &id056 [material.wood.witchwood]
@@ -796,7 +796,7 @@ materials:
   lifecycle: provisional
   basis: [08.6.2, T-08-13]
   fallback_signature: prop.sig_wayfinder
-  gated_pool_size: 35
+  gated_pool_size: 40
 - id: mat.spore_cap
   name: Spore cap
   tags: &id057 [material.botanical.fungus]
@@ -810,7 +810,7 @@ materials:
   lifecycle: provisional
   basis: [08.6.2, T-08-13]
   fallback_signature: prop.sig_spore_ward
-  gated_pool_size: 22
+  gated_pool_size: 27
 - id: mat.feathers
   name: Feathers
   tags: &id058 [material.fiber.cordage]
@@ -824,7 +824,7 @@ materials:
   lifecycle: provisional
   basis: [08.6.2, T-08-13]
   fallback_signature: prop.sig_keen_eye
-  gated_pool_size: 17
+  gated_pool_size: 21
 - id: mat.residuum
   name: Residuum (salvaged essence)
   tags: &id059 [material.essence.residue]

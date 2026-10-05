@@ -62,7 +62,7 @@ RITES = [
      "Call the shade of a dead person whose remains or prized possession you hold, and who was not laid to rest by rite. It answers three questions with what it knew in life, truthfully if its standing toward the asker was Neutral or better, evasively otherwise.",
      [('the dead laid to rest by ab.last_rites or rit.funeral', 'G4'), ('what the dead one did not know', 'it cannot tell it'), ('returning the dead to life', 'canon_impossible')],
      [E('eff.reveal', sealed_ref='three answers from what the dead person knew in life'), E('eff.write_fact', subject='the shade', predicate='called_by', value='the leader (03 records the conduct evidence when the dead was unwilling)')],
-     ['cost.harm', 'cost.exposure', 'cost.twist'], True, 'ch.13 decides whether shades exist and what calling them costs'),
+     ['cost.harm', 'cost.exposure', 'cost.twist'], True, 'the region\'s canon (12.16.5) decides whether shades exist and what calling them costs'),
     ('rit.seal_the_way', 'Seal the Way', 'deed.arcane.warding.sealing', 'local', None, 'intervals:1',
      [('a lock, bar or latch on the thing sealed', 1), ('wax and a seal of your own', 1)], 1, None,
      'Close a door or lid so that only its word opens it.',

@@ -2032,8 +2032,8 @@ licenses:
         then: close
   acquisition_paths:
   - {type: origin, detail: granted by an origin at creation (ch.02), clock: null, requires: null}
-  - {type: mentor, detail: a training week with a mentor ticks 2 (ch.15; writes cnt.training), clock: 'clk.train (8 segments, project, public)', requires: 'a mentor who holds lic.call.proof for this tag or this license at expert; literacy, and a text or teacher of the school (ch.13 may tighten)'}
-  - {type: project, detail: a week of study from a manual ticks 1, clock: 'clk.train (8 segments, project, public)', requires: 'a text that teaches the trade; literacy, and a text or teacher of the school (ch.13 may tighten)'}
+  - {type: mentor, detail: a training week with a mentor ticks 2 (ch.15; writes cnt.training), clock: 'clk.train (8 segments, project, public)', requires: 'a mentor who holds lic.call.proof for this tag or this license at expert; literacy, and a text or teacher of the school (the region''s seed may tighten, 12.16.5)'}
+  - {type: project, detail: a week of study from a manual ticks 1, clock: 'clk.train (8 segments, project, public)', requires: 'a text that teaches the trade; literacy, and a text or teacher of the school (the region''s seed may tighten, 12.16.5)'}
   - {type: recognition, detail: 'a calling whose key is at or above this tag: its Mark (lic.call.mark) gives use of this license at the tier''s grade (04.5.1)', clock: null, requires: null}
   source: data
   lifecycle: provisional
@@ -2087,8 +2087,8 @@ licenses:
         then: close
   acquisition_paths:
   - {type: origin, detail: granted by an origin at creation (ch.02), clock: null, requires: null}
-  - {type: mentor, detail: a training week with a mentor ticks 2 (ch.15; writes cnt.training), clock: 'clk.train (8 segments, project, public)', requires: 'a mentor who holds lic.call.proof for this tag or this license at expert; literacy, and a text or teacher of the school (ch.13 may tighten)'}
-  - {type: project, detail: a week of study from a manual ticks 1, clock: 'clk.train (8 segments, project, public)', requires: 'a text that teaches the trade; literacy, and a text or teacher of the school (ch.13 may tighten)'}
+  - {type: mentor, detail: a training week with a mentor ticks 2 (ch.15; writes cnt.training), clock: 'clk.train (8 segments, project, public)', requires: 'a mentor who holds lic.call.proof for this tag or this license at expert; literacy, and a text or teacher of the school (the region''s seed may tighten, 12.16.5)'}
+  - {type: project, detail: a week of study from a manual ticks 1, clock: 'clk.train (8 segments, project, public)', requires: 'a text that teaches the trade; literacy, and a text or teacher of the school (the region''s seed may tighten, 12.16.5)'}
   - {type: recognition, detail: 'a calling whose key is at or above this tag: its Mark (lic.call.mark) gives use of this license at the tier''s grade (04.5.1)', clock: null, requires: null}
   source: data
   lifecycle: provisional
@@ -2142,8 +2142,8 @@ licenses:
         then: close
   acquisition_paths:
   - {type: origin, detail: granted by an origin at creation (ch.02), clock: null, requires: null}
-  - {type: mentor, detail: a training week with a mentor ticks 2 (ch.15; writes cnt.training), clock: 'clk.train (8 segments, project, public)', requires: 'a mentor who holds lic.call.proof for this tag or this license at expert; literacy, and a text or teacher of the school (ch.13 may tighten)'}
-  - {type: project, detail: a week of study from a manual ticks 1, clock: 'clk.train (8 segments, project, public)', requires: 'a text that teaches the trade; literacy, and a text or teacher of the school (ch.13 may tighten)'}
+  - {type: mentor, detail: a training week with a mentor ticks 2 (ch.15; writes cnt.training), clock: 'clk.train (8 segments, project, public)', requires: 'a mentor who holds lic.call.proof for this tag or this license at expert; literacy, and a text or teacher of the school (the region''s seed may tighten, 12.16.5)'}
+  - {type: project, detail: a week of study from a manual ticks 1, clock: 'clk.train (8 segments, project, public)', requires: 'a text that teaches the trade; literacy, and a text or teacher of the school (the region''s seed may tighten, 12.16.5)'}
   - {type: recognition, detail: 'a calling whose key is at or above this tag: its Mark (lic.call.mark) gives use of this license at the tier''s grade (04.5.1)', clock: null, requires: null}
   source: data
   lifecycle: provisional
@@ -2197,8 +2197,8 @@ licenses:
         then: close
   acquisition_paths:
   - {type: origin, detail: granted by an origin at creation (ch.02), clock: null, requires: null}
-  - {type: mentor, detail: a training week with a mentor ticks 2 (ch.15; writes cnt.training), clock: 'clk.train (8 segments, project, public)', requires: 'a mentor who holds lic.call.proof for this tag or this license at expert; literacy, and a text or teacher of the school (ch.13 may tighten)'}
-  - {type: project, detail: a week of study from a manual ticks 1, clock: 'clk.train (8 segments, project, public)', requires: 'a text that teaches the trade; literacy, and a text or teacher of the school (ch.13 may tighten)'}
+  - {type: mentor, detail: a training week with a mentor ticks 2 (ch.15; writes cnt.training), clock: 'clk.train (8 segments, project, public)', requires: 'a mentor who holds lic.call.proof for this tag or this license at expert; literacy, and a text or teacher of the school (the region''s seed may tighten, 12.16.5)'}
+  - {type: project, detail: a week of study from a manual ticks 1, clock: 'clk.train (8 segments, project, public)', requires: 'a text that teaches the trade; literacy, and a text or teacher of the school (the region''s seed may tighten, 12.16.5)'}
   - {type: recognition, detail: 'a calling whose key is at or above this tag: its Mark (lic.call.mark) gives use of this license at the tier''s grade (04.5.1)', clock: null, requires: null}
   source: data
   lifecycle: provisional
@@ -2252,8 +2252,8 @@ licenses:
         then: close
   acquisition_paths:
   - {type: origin, detail: granted by an origin at creation (ch.02), clock: null, requires: null}
-  - {type: mentor, detail: a training week with a mentor ticks 2 (ch.15; writes cnt.training), clock: 'clk.train (8 segments, project, public)', requires: 'a mentor who holds lic.call.proof for this tag or this license at expert; literacy, and a text or teacher of the school (ch.13 may tighten)'}
-  - {type: project, detail: a week of study from a manual ticks 1, clock: 'clk.train (8 segments, project, public)', requires: 'a text that teaches the trade; literacy, and a text or teacher of the school (ch.13 may tighten)'}
+  - {type: mentor, detail: a training week with a mentor ticks 2 (ch.15; writes cnt.training), clock: 'clk.train (8 segments, project, public)', requires: 'a mentor who holds lic.call.proof for this tag or this license at expert; literacy, and a text or teacher of the school (the region''s seed may tighten, 12.16.5)'}
+  - {type: project, detail: a week of study from a manual ticks 1, clock: 'clk.train (8 segments, project, public)', requires: 'a text that teaches the trade; literacy, and a text or teacher of the school (the region''s seed may tighten, 12.16.5)'}
   - {type: recognition, detail: 'a calling whose key is at or above this tag: its Mark (lic.call.mark) gives use of this license at the tier''s grade (04.5.1)', clock: null, requires: null}
   source: data
   lifecycle: provisional
@@ -2307,8 +2307,8 @@ licenses:
         then: close
   acquisition_paths:
   - {type: origin, detail: granted by an origin at creation (ch.02), clock: null, requires: null}
-  - {type: mentor, detail: a training week with a mentor ticks 2 (ch.15; writes cnt.training), clock: 'clk.train (8 segments, project, public)', requires: 'a mentor who holds lic.call.proof for this tag or this license at expert; literacy, and a text or teacher of the school (ch.13 may tighten)'}
-  - {type: project, detail: a week of study from a manual ticks 1, clock: 'clk.train (8 segments, project, public)', requires: 'a text that teaches the trade; literacy, and a text or teacher of the school (ch.13 may tighten)'}
+  - {type: mentor, detail: a training week with a mentor ticks 2 (ch.15; writes cnt.training), clock: 'clk.train (8 segments, project, public)', requires: 'a mentor who holds lic.call.proof for this tag or this license at expert; literacy, and a text or teacher of the school (the region''s seed may tighten, 12.16.5)'}
+  - {type: project, detail: a week of study from a manual ticks 1, clock: 'clk.train (8 segments, project, public)', requires: 'a text that teaches the trade; literacy, and a text or teacher of the school (the region''s seed may tighten, 12.16.5)'}
   - {type: recognition, detail: 'a calling whose key is at or above this tag: its Mark (lic.call.mark) gives use of this license at the tier''s grade (04.5.1)', clock: null, requires: null}
   source: data
   lifecycle: provisional
@@ -2362,8 +2362,8 @@ licenses:
         then: close
   acquisition_paths:
   - {type: origin, detail: granted by an origin at creation (ch.02), clock: null, requires: null}
-  - {type: mentor, detail: a training week with a mentor ticks 2 (ch.15; writes cnt.training), clock: 'clk.train (8 segments, project, public)', requires: 'a mentor who holds lic.call.proof for this tag or this license at expert; literacy, and a text or teacher of the school (ch.13 may tighten)'}
-  - {type: project, detail: a week of study from a manual ticks 1, clock: 'clk.train (8 segments, project, public)', requires: 'a text that teaches the trade; literacy, and a text or teacher of the school (ch.13 may tighten)'}
+  - {type: mentor, detail: a training week with a mentor ticks 2 (ch.15; writes cnt.training), clock: 'clk.train (8 segments, project, public)', requires: 'a mentor who holds lic.call.proof for this tag or this license at expert; literacy, and a text or teacher of the school (the region''s seed may tighten, 12.16.5)'}
+  - {type: project, detail: a week of study from a manual ticks 1, clock: 'clk.train (8 segments, project, public)', requires: 'a text that teaches the trade; literacy, and a text or teacher of the school (the region''s seed may tighten, 12.16.5)'}
   - {type: recognition, detail: 'a calling whose key is at or above this tag: its Mark (lic.call.mark) gives use of this license at the tier''s grade (04.5.1)', clock: null, requires: null}
   source: data
   lifecycle: provisional
@@ -2417,8 +2417,8 @@ licenses:
         then: close
   acquisition_paths:
   - {type: origin, detail: granted by an origin at creation (ch.02), clock: null, requires: null}
-  - {type: mentor, detail: a training week with a mentor ticks 2 (ch.15; writes cnt.training), clock: 'clk.train (8 segments, project, public)', requires: 'a mentor who holds lic.call.proof for this tag or this license at expert; literacy, and a text or teacher of the school (ch.13 may tighten)'}
-  - {type: project, detail: a week of study from a manual ticks 1, clock: 'clk.train (8 segments, project, public)', requires: 'a text that teaches the trade; literacy, and a text or teacher of the school (ch.13 may tighten)'}
+  - {type: mentor, detail: a training week with a mentor ticks 2 (ch.15; writes cnt.training), clock: 'clk.train (8 segments, project, public)', requires: 'a mentor who holds lic.call.proof for this tag or this license at expert; literacy, and a text or teacher of the school (the region''s seed may tighten, 12.16.5)'}
+  - {type: project, detail: a week of study from a manual ticks 1, clock: 'clk.train (8 segments, project, public)', requires: 'a text that teaches the trade; literacy, and a text or teacher of the school (the region''s seed may tighten, 12.16.5)'}
   - {type: recognition, detail: 'a calling whose key is at or above this tag: its Mark (lic.call.mark) gives use of this license at the tier''s grade (04.5.1)', clock: null, requires: null}
   source: data
   lifecycle: provisional
@@ -2472,8 +2472,8 @@ licenses:
         then: close
   acquisition_paths:
   - {type: origin, detail: granted by an origin at creation (ch.02), clock: null, requires: null}
-  - {type: mentor, detail: a training week with a mentor ticks 2 (ch.15; writes cnt.training), clock: 'clk.train (8 segments, project, public)', requires: 'a mentor who holds lic.call.proof for this tag or this license at expert; literacy, and a text or teacher of the school (ch.13 may tighten)'}
-  - {type: project, detail: a week of study from a manual ticks 1, clock: 'clk.train (8 segments, project, public)', requires: 'a text that teaches the trade; literacy, and a text or teacher of the school (ch.13 may tighten)'}
+  - {type: mentor, detail: a training week with a mentor ticks 2 (ch.15; writes cnt.training), clock: 'clk.train (8 segments, project, public)', requires: 'a mentor who holds lic.call.proof for this tag or this license at expert; literacy, and a text or teacher of the school (the region''s seed may tighten, 12.16.5)'}
+  - {type: project, detail: a week of study from a manual ticks 1, clock: 'clk.train (8 segments, project, public)', requires: 'a text that teaches the trade; literacy, and a text or teacher of the school (the region''s seed may tighten, 12.16.5)'}
   - {type: recognition, detail: 'a calling whose key is at or above this tag: its Mark (lic.call.mark) gives use of this license at the tier''s grade (04.5.1)', clock: null, requires: null}
   source: data
   lifecycle: provisional
@@ -2527,8 +2527,8 @@ licenses:
         then: close
   acquisition_paths:
   - {type: origin, detail: granted by an origin at creation (ch.02), clock: null, requires: null}
-  - {type: mentor, detail: a training week with a mentor ticks 2 (ch.15; writes cnt.training), clock: 'clk.train (8 segments, project, public)', requires: 'a mentor who holds lic.call.proof for this tag or this license at expert; literacy, and a text or teacher of the school (ch.13 may tighten)'}
-  - {type: project, detail: a week of study from a manual ticks 1, clock: 'clk.train (8 segments, project, public)', requires: 'a text that teaches the trade; literacy, and a text or teacher of the school (ch.13 may tighten)'}
+  - {type: mentor, detail: a training week with a mentor ticks 2 (ch.15; writes cnt.training), clock: 'clk.train (8 segments, project, public)', requires: 'a mentor who holds lic.call.proof for this tag or this license at expert; literacy, and a text or teacher of the school (the region''s seed may tighten, 12.16.5)'}
+  - {type: project, detail: a week of study from a manual ticks 1, clock: 'clk.train (8 segments, project, public)', requires: 'a text that teaches the trade; literacy, and a text or teacher of the school (the region''s seed may tighten, 12.16.5)'}
   - {type: recognition, detail: 'a calling whose key is at or above this tag: its Mark (lic.call.mark) gives use of this license at the tier''s grade (04.5.1)', clock: null, requires: null}
   source: data
   lifecycle: provisional
@@ -2582,8 +2582,8 @@ licenses:
         then: close
   acquisition_paths:
   - {type: origin, detail: granted by an origin at creation (ch.02), clock: null, requires: null}
-  - {type: mentor, detail: a training week with a mentor ticks 2 (ch.15; writes cnt.training), clock: 'clk.train (8 segments, project, public)', requires: 'a mentor who holds lic.call.proof for this tag or this license at expert; literacy, and a text or teacher of the school (ch.13 may tighten)'}
-  - {type: project, detail: a week of study from a manual ticks 1, clock: 'clk.train (8 segments, project, public)', requires: 'a text that teaches the trade; literacy, and a text or teacher of the school (ch.13 may tighten)'}
+  - {type: mentor, detail: a training week with a mentor ticks 2 (ch.15; writes cnt.training), clock: 'clk.train (8 segments, project, public)', requires: 'a mentor who holds lic.call.proof for this tag or this license at expert; literacy, and a text or teacher of the school (the region''s seed may tighten, 12.16.5)'}
+  - {type: project, detail: a week of study from a manual ticks 1, clock: 'clk.train (8 segments, project, public)', requires: 'a text that teaches the trade; literacy, and a text or teacher of the school (the region''s seed may tighten, 12.16.5)'}
   - {type: recognition, detail: 'a calling whose key is at or above this tag: its Mark (lic.call.mark) gives use of this license at the tier''s grade (04.5.1)', clock: null, requires: null}
   source: data
   lifecycle: provisional
@@ -4555,7 +4555,7 @@ licenses:
   acquisition_paths:
   - {type: mentor, detail: a training week with one who holds it ticks 2, clock: 'clk.train (8 segments, project, public)', requires: any training license}
   - {type: project, detail: a week of study from a text that teaches it ticks 1, clock: 'clk.train (8 segments, project, public)', requires: a text}
-  - {type: origin, detail: 'an origin may grant it (ch.02, ch.13)', clock: null, requires: null}
+  - {type: origin, detail: 'an origin may grant it (ch.02; the region''s seed, 12.16.7)', clock: null, requires: null}
   source: data
   lifecycle: provisional
   basis: [05.6.12, 'R2 #8 (Feruchemy)', DL-05-15]
@@ -4567,8 +4567,8 @@ blocks:   # owner-blocks merged at integration from _process/merged-contrib/lice
   #     - nine LANGUAGE licenses with grades broken < accented < native, and lic.lang.letters (literacy);
   #     - seven PEOPLE GIFTS (kind: fact): one small innate capability per non-human people.
   #   Training licenses (lic.training.*) are chapter 05's; origins grant those by id and never redefine them.
-  # Setting note: these are the setting-agnostic tongues the eight peoples of origins.yaml need. Chapter 13 owns
-  #   languages for its region (T-00-19 owner-block 13): it may add tongues, and may retire one of these with
+  # Setting note: these are the setting-agnostic tongues the eight peoples of origins.yaml need. The region's seed
+  #   owns its tongues (12.16.7; a pre-made seed such as ch.13 through T-00-19 owner-block 13): it may add tongues, and may retire one of these with
   #   `superseded_by` when the region names it differently (00.16.3).
   # Every entry carries explicit principle, scope, excludes, crude_fallback, stretch, emulate and acquisition_paths
   #   (ch.01's requirement). stretch and emulate are null: a tongue or an inborn sense cannot be stretched or emulated.
@@ -4606,7 +4606,7 @@ blocks:   # owner-blocks merged at integration from _process/merged-contrib/lice
         source: data
         lifecycle: provisional
         basis: ["02.4.6", "00.12.1", "01.18 (Talk: a language not held)", WE-01-4, DL-02-12]
-        notes: "Chapter 13 names it for its region and may rename this entry (lifecycle: retired + superseded_by)."
+        notes: "The region's seed (12.16.7) names it for its region and may rename this entry (lifecycle: retired + superseded_by)."
       - id: lic.lang.elvish
         name: Elvish
         kind: language
@@ -5344,7 +5344,7 @@ blocks:   # owner-blocks merged at integration from _process/merged-contrib/lice
       stretch: null
       emulate: null
       acquisition_paths:
-      - {type: bargain, detail: "a request R2 to a host (R1 where the custom of the place offers it to all travellers, 13)", clock: null, requires: null}
+      - {type: bargain, detail: "a request R2 to a host (R1 where the custom of the place offers it to all travellers, as the region's seed says)", clock: null, requires: null}
       source: the host
       lifecycle: provisional
       basis: ['C:VII', '15.1.2', DL-15-31]

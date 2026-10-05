@@ -66,6 +66,9 @@ roles = [
   {'id': 'lookout', 'allowed_at': ['slow', 'normal', 'ride', 'camp'], 'effect': 'arrivals never surprise the party; distance +1 band in open and broken country; omens carry the archetype family; sleepers woken in time', 'evidence_tag': 'deed.wilds.survival.weathersense'},
   {'id': 'scout', 'allowed_at': ['slow', 'normal', 'ride'], 'effect': 'perceives arrivals first (other side unaware unless its notice beats the scout\'s stored Sneak); may slip away; on a discovery face finds the nearest undiscovered site or landmark; starts encounters at band.far from the party', 'evidence_tag': 'deed.wilds.tracking.sign'},
   {'id': 'forager', 'allowed_at': ['slow'], 'effect': 'a forage beat at the watch end with an engine-cited Precision snag "on the move", yield delivered reach - 1', 'evidence_tag': 'deed.wilds.foraging.food'},
+  # ch.16's fifth role (16.8.3), added at integration; ported into the generator in revision B
+  {'id': 'quartermaster', 'allowed_at': ['slow', 'normal', 'fast', 'ride', 'hard_ride', 'camp'], 'held_by': 'an ally with kn.quartermaster, or a holder of lic.training.wilds_survival',
+   'effect': 'once per day, one depletion face (tbl.10.depletion rows 1-4) is prevented and counts as a lull without its progress point', 'evidence_tag': 'deed.wilds.survival.provisioning'},
 ]
 watch_check = {
   'die': 'd12', 'handler': 'h.10.watch_check', 'boundary': 'watch', 'phase': 7, 'night_watch_rung': '+1 (cap deadly)',
@@ -105,7 +108,7 @@ tables = [
      'a rope or pole frays (one damaged)', 'the air turns bad for a moment: a burning light -2 intervals'])},
   {'id': 'tbl.10.find', 'name': 'A find (face F with nothing undiscovered)', 'die': 'd12', 'results': rows([
      {'result': 'a spring', 'writes': 'landmark; water_source for the area'}, {'result': 'a waymark cairn', 'writes': 'landmark; a way-finding lever in this area'},
-     {'result': 'an old campsite', 'writes': 'a camp rest site with a fire ring'}, {'result': 'a roadside shrine', 'writes': 'landmark; resonance per 13 or an Oracle question'},
+     {'result': 'an old campsite', 'writes': 'a camp rest site with a fire ring'}, {'result': 'a roadside shrine', 'writes': 'landmark; resonance per the region\'s seed or an Oracle question'},
      {'result': 'a cache', 'writes': '08.3.12 hoard at band - 1, coin and goods only'}, {'result': 'a fallen statue', 'writes': 'landmark; lore (act.study)'},
      {'result': 'a carcass worth harvesting', 'writes': 'a fresh body of a beast of the area\'s table (08.3.10)'}, {'result': 'a wreck or abandoned cart', 'writes': 'act.scavenge: 08.3.11 gear and coin by band'},
      {'result': 'a signpost', 'writes': 'a known link: a route name and direction (a known route link)'}, {'result': 'fresh sign of passage', 'writes': 'a track link; act.track Easy to follow'},
@@ -208,10 +211,32 @@ enc['terrain.underground'] = {'threat': [TR('1-3', 'arch.giant_vermin', 'home-1'
 enc['terrain.ruin'] = {'threat': [TR('1-3', 'arch.giant_vermin', 'home-1', 'group'), TR('4-6', 'arch.skeleton', 'home-1', 'group'), TR('7-9', 'arch.ghoul', 'home', 'group'),
    TR('10-12', 'arch.brigand', 'home', 'group', note='looters'), TR('13-14', 'arch.cultist', 'home', 'group'), TR('15-17', 'arch.ghost', 'home', '1'), TR('18-19', 'arch.wight', 'home+1', '1'), TR('20', 'arch.golem', 'home+1', '1')],
   'non_threat': [NT('1', 'scavengers picking over the stones'), NT('2', 'a scholar copying inscriptions'), NT('3', 'a pilgrim to an old altar'), NT('4', 'crows on a fresh kill: a sign', 'sign_only'), NT('5', 'a lone dog that follows'), NT('6', 'treasure-hunters with a map (rivals)')]}
+# Revision B (I-029): the threat sub-tables are written per home band in 10_data_enc.py (exec'd here); the
+# band-relative rows above (`enc[...]['threat']`) were the first draft and are kept only as its record.
+import os as _os
+_ns = {}
+exec(open(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)), '10_data_enc.py'), encoding='utf-8').read(), _ns)
+ENC = _ns['ENC']
+assert set(ENC) == set(enc), (set(ENC) ^ set(enc))
+def threat_rows(spec):
+    out, face = [], 1
+    for d in spec:
+        lo, hi = face, face + d['w'] - 1
+        face = hi + 1
+        r = {'range': str(lo) if lo == hi else '%d-%d' % (lo, hi), 'kind': 'adversary', 'ref': d['ref'], 'band': d['band'], 'count': d['count']}
+        if d['variant'] != 'standard': r['variant'] = d['variant']
+        if d['leader']: r['leader'] = True
+        r.update({'threat': True, 'ambush': d['ambush'], 'complication': d['complication'], 'when': d['when']})
+        if d.get('note'): r['note'] = d['note']
+        out.append(r)
+    assert face == 21, ('d20 not covered', spec)
+    return out
 encounter_tables = []
 for t, d in enc.items():
-    encounter_tables.append({'id': 'tbl.10.enc.' + t.split('.')[-1], 'terrain': t, 'threat_die': 'd20', 'threat': d['threat'], 'non_threat_die': 'd6', 'non_threat': d['non_threat'],
-                             'lifecycle': 'provisional', 'basis': ['10.10.1', '09.8.2', 'T-09-10']})
+    encounter_tables.append({'id': 'tbl.10.enc.' + t.split('.')[-1], 'terrain': t, 'threat_die': 'd20',
+                             'threat_by_home': {h: threat_rows(ENC[t][h]) for h in range(1, 6)},
+                             'non_threat_die': 'd6', 'non_threat': d['non_threat'],
+                             'lifecycle': 'provisional', 'basis': ['10.10.1', '09.8.2', 'T-09-10', 'PR-10-8']})
 # ---- archetype signs (omen text, stage 1 then stage 2) ----
 S = {
  'arch.wolf': ['wolf scat full of hair on the trail', 'a howl answered from two directions'], 'arch.great_cat': ['claw-scores high on a tree', 'a deer carcass dragged up into a fork'],
@@ -291,10 +316,14 @@ activities = [
 bad = []
 for t in list(terrain_defaults) + [e['terrain'] for e in encounter_tables]:
     if t not in tags: bad.append(t)
+def _anc(a, b): return a == b or a.startswith(b + '.')
 for e in encounter_tables:
-    for r in e['threat'] + e['non_threat']:
+    for r in [x for h in e['threat_by_home'] for x in e['threat_by_home'][h]] + e['non_threat']:
         for ref in r.get('ref', []):
-            if ref not in archs: bad.append(ref)
+            if ref not in archs: bad.append(ref); continue
+            # every archetype on a terrain's table lives in that terrain (archetypes.yaml#encounter.terrain)
+            if r.get('threat') and not any(_anc(at, e['terrain']) or _anc(e['terrain'], at) for at in archs[ref]['encounter']['terrain']):
+                bad.append('%s not in %s' % (ref, e['terrain']))
 for a in activities:
     if a['primary_tag'] and a['primary_tag'] not in tags: bad.append(a['primary_tag'])
 for r in roles:
@@ -303,13 +332,14 @@ print('bad', bad, 'missing signs', missing)
 # audit: bands among threat rows by d20 weight
 audit = {}
 for e in encounter_tables:
-    w = {'home-1': 0, 'home': 0, 'home+1': 0}
-    for r in e['threat']:
-        a, b = (r['range'].split('-') + [r['range']])[:2]
-        w[r['band']] += int(b) - int(a) + 1
-    audit[e['id']] = w
-    assert w == {'home-1': 6, 'home': 11, 'home+1': 3}, (e['id'], w)
-print('band audit ok: every generic table is 6/11/3 of 20 = 30/55/15')
+    for h, rows_h in e['threat_by_home'].items():
+        w = {'home-1': 0, 'home': 0, 'home+1': 0}
+        for r in rows_h:
+            a, b = (r['range'].split('-') + [r['range']])[:2]
+            w[r['band']] += int(b) - int(a) + 1
+        assert w == {'home-1': 6, 'home': 11, 'home+1': 3}, (e['id'], h, w)
+    audit[e['id']] = {'bands_each_home': w, 'words': 'PR-10-8 word step: _process/simulation/10-word-audit.py (every home band 1-5)'}
+print('band audit ok: every generic table, at every home band, is 6/11/3 of 20 = 30/55/15')
 doc = {'schema_version': 1, 'rings': rings, 'pace': pace, 'vessel_pace': vessel_pace, 'march': march, 'activities_by_watch': watch_activities, 'roles': roles,
        'watch_check': watch_check, 'site_check': site_check, 'pending_threat': pending, 'tables': tables,
        'terrain_defaults': terrain_defaults, 'terrain_defaults_rule': terrain_defaults_rule,
@@ -326,18 +356,25 @@ hdr = """# data/travel.yaml
 #   paces, the march allowance, watch activities, journey roles, the overloaded time-tick check for travel
 #   (watch_check) and sites (site_check), the pending-threat record, the face result tables (depletion,
 #   find, opportunity, veer, encounter distance), terrain defaults (nav, forage, game, openness, grazing,
-#   water), the generic encounter tables by terrain branch (used where 13 provides none), archetype omen
+#   water), the generic encounter tables by terrain branch and home band (used where a region provides none;
+#   a world seed's regional tables are built by PR-10-10, 12.16.13), archetype omen
 #   signs, the exploration activity catalog (T-10-20), navigation and supply summaries.
 # Owner: 10-exploration-travel-sites (owner-block 13 for regional encounter tables, events and signs).
 # Schema: data/SCHEMAS.md#travelyaml (pace, activities, watch_check {die, results}, navigation, supply,
 #   exploration_activities) plus ch.10's optional keys listed above (the exploration activity catalog is
 #   the key `activities`; the per-watch activity list is `activities_by_watch`).
-# Encounter tables: threat sub-table d20 with relative bands (6 rows' worth home-1, 11 home, 3 home+1 =
-#   30/55/15, 09.8.2, audited by gen10_travel.py), non-threat sub-table d6; the danger rating's
-#   threat_share_d12 picks the sub-table (10.9.4-10.9.5).
+# Encounter tables: one threat sub-table per home band (`threat_by_home`, d20, rows at home-1 / home / home+1 =
+#   6/11/3 faces = 30/55/15, 09.8.2; bands checked by gen10_travel.py, words by 10-word-audit.py, PR-10-8) and one
+#   non-threat sub-table d6; the danger rating's threat_share_d12 picks the sub-table (10.9.4-10.9.5) [revision: I-029].
 # Basis: [10.3-10.10, 10.15] [R5 P-30..P-36] [R6 B-14, B-15, B-R5] [09.8] [DL-10-02..10]
 """
 txt = hdr + "\n" + yaml.safe_dump(doc, sort_keys=False, allow_unicode=True, width=120, default_flow_style=None)
+_qm = '- id: quartermaster\n'
+assert txt.count(_qm) == 1
+txt = txt.replace(_qm, "- id: quartermaster             # ch.16's fifth role (16.8.3), added at integration\n")
+_w = 'counts as a lull without its progress\n    point\n'
+assert txt.count(_w) == 1
+txt = txt.replace(_w, 'counts as a lull without its progress point\n')
 open(OUT, 'w', encoding='utf-8').write(txt)
 yaml.safe_load(open(OUT, encoding='utf-8'))
 print('ok', len(encounter_tables), 'tables', len(S), 'signs', len(activities), 'activities')

@@ -16,35 +16,35 @@ compiled_from:
 - file: data/basic_verbs.yaml
   sha256_16: 3188c5a7ebcfa419
 - file: 01-resolution.md
-  sha256_16: 7f9932b36d24ca2a
+  sha256_16: 168d0a9057936e0f
 - file: 02-character.md
-  sha256_16: a1dc2ad3e059e2f4
+  sha256_16: ee6cb180bbe160ff
 - file: 03-tags-and-evidence.md
-  sha256_16: 45ae52964a530ea2
+  sha256_16: 5799f2a8df3e0dbd
 - file: 04-recognition-and-growth.md
-  sha256_16: fb2d0923d7d88f16
+  sha256_16: 02c1c4d7b50092e8
 - file: 05-abilities-focus-magic.md
-  sha256_16: cce40551e6db4657
+  sha256_16: 49b7404d5dd8bff4
 - file: 06-conflict.md
-  sha256_16: dc4b3cc197b2b018
+  sha256_16: f5d6035d7760cea8
 - file: 07-harm-recovery-death.md
-  sha256_16: b7ab5d5d36991b8b
+  sha256_16: bc800871e3dc6ef9
 - file: 08-items-loot-crafting.md
-  sha256_16: b837a684c9b38e47
+  sha256_16: 65c7edbc6c13a550
 - file: 09-adversaries.md
-  sha256_16: 4f931b027624257a
+  sha256_16: 243e63089d322270
 - file: 10-exploration-travel-sites.md
-  sha256_16: fd93b21e5153b59d
+  sha256_16: 10770b6f6695bdf3
 - file: 11-living-world.md
-  sha256_16: 201f23c15a591caa
+  sha256_16: cb89de391e940ecc
 - file: 12-dm-procedures.md
-  sha256_16: 77b2ceaf01ff4cf7
+  sha256_16: 914a2f6b866a38cf
 - file: 13-starter-setting.md
-  sha256_16: 70b23fd86ab0347d
+  sha256_16: 9dd8a6cbb473d2d5
 - file: 15-social-investigation-downtime.md
-  sha256_16: b470d8d7745c4bb9
+  sha256_16: bb9c40a2d8c3e8fb
 - file: 16-companions-and-allies.md
-  sha256_16: de6c0d99a474dad8
+  sha256_16: 4c714e1ce2a590c9
 compiled_at: integration (Wave 3 -> 4)
 compile:
   rule: 12.13.6
@@ -205,20 +205,7 @@ compile:
     verb_cards: 15
     total: 129
   errors: []
-  warnings:
-  - '02-character.md 02.9.4: no knobs found in T-00-20 terms'
-  - '06-conflict.md 06.5.4: no knobs found in T-00-20 terms'
-  - '06-conflict.md 06.5.10: no knobs found in T-00-20 terms'
-  - '08-items-loot-crafting.md 08.6.4: intent verb taken from the rule''s title (crafting project)'
-  - '08-items-loot-crafting.md 08.6.7: intent verb taken from the rule''s title (repair)'
-  - '08-items-loot-crafting.md 08.6.7: no knobs found in T-00-20 terms'
-  - '08-items-loot-crafting.md 08.6.8: intent verb taken from the rule''s title (salvage)'
-  - '09-adversaries.md 09.2.4: no knobs found in T-00-20 terms'
-  - 'T-06-9 row 20: anchor ''— (a `difficult_ground` or `hazard` feature)'' is not a basic-verb name'
-  - 'T-06-9 row 24: anchor ''called Strike (held object) or Grapple (snatch)'' is not a basic-verb name'
-  - 'T-06-9 row 33: anchor ''Defend'' is not a basic-verb name'
-  - 'T-06-9 row 35: anchor ''resisted Evade (free)'' is not a basic-verb name'
-  - 'T-06-9 row 39: anchor ''Full defense'' is not a basic-verb name'
+  warnings: []
 anchors:
 - id: anc.01_18_4
   name: Move (basic-verb card)
@@ -971,7 +958,14 @@ anchors:
   deed_tags:
   - deed.primal.spirits
   situation_tags: []
-  knobs: []
+  knobs:
+  - knob: stakes
+    default: Safe, fixed
+    allowed_deltas: []
+  - knob: targets
+    default: the character's own person, ties and past, fixed (the two flags decide between an established fact, a belief
+      with a seal
+    allowed_deltas: []
   degree_table: 02-character.md#02.9.4 (the rule's own ladder or its anchor card's)
   specificity: chapter_rule
   tags: []
@@ -1163,11 +1157,10 @@ anchors:
     default: default +1; no delta
     allowed_deltas: []
   - knob: reach_unit
-    default: 'default: the ability''s own; allowed delta:                     object state or clock ticks when the target
-      is a thing'
+    default: 'default: the ability''s own; allowed delta: object state or clock ticks when the target is a thing'
     allowed_deltas: []
   - knob: targets
-    default: 'default one;                     allowed delta: none upward'
+    default: 'default one; allowed delta: none upward'
     allowed_deltas: []
   degree_table: 05-abilities-focus-magic.md#05.5.2 (the rule's own ladder or its anchor card's)
   specificity: chapter_rule
@@ -1196,7 +1189,7 @@ anchors:
     default: default x2; no delta
     allowed_deltas: []
   - knob: reach_unit
-    default: the                     technique's own
+    default: the technique's own
     allowed_deltas: []
   - knob: targets
     default: the technique's own; no delta
@@ -1230,8 +1223,7 @@ anchors:
     default: object state
     allowed_deltas: []
   - knob: time_cost
-    default: 'the tool''s). Covers: tool-equivalent effects of a held                     school. Does not cover: anything
-      on the False'
+    default: 'the tool''s). Covers: tool-equivalent effects of a held school. Does not cover: anything on the False list above'
     allowed_deltas: []
   degree_table: 05-abilities-focus-magic.md#05.7.6 (the rule's own ladder or its anchor card's)
   specificity: chapter_rule
@@ -1259,7 +1251,7 @@ anchors:
     default: by scale; no delta
     allowed_deltas: []
   - knob: time_cost
-    default: 'by scale; allowed delta: one step longer as a                     drawn'
+    default: 'by scale; allowed delta: one step longer as a drawn'
     allowed_deltas: []
   - knob: condition
     default: null
@@ -1291,10 +1283,10 @@ anchors:
   situation_tags: []
   knobs:
   - knob: dc
-    default: 'default the rite''s tier; allowed                     delta: none'
+    default: 'default the rite''s tier; allowed delta: none'
     allowed_deltas: []
   - knob: time_cost
-    default: 'default the rite''s time_per_tick; allowed delta: one step                     longer'
+    default: 'default the rite''s time_per_tick; allowed delta: one step longer'
     allowed_deltas: []
   - knob: targets
     default: the rite's own
@@ -1303,7 +1295,7 @@ anchors:
     default: the rite's own
     allowed_deltas: []
   - knob: stakes
-    default: 'default                     Risky; allowed delta: Dire when a hostile presence is in the place'
+    default: 'default Risky; allowed delta: Dire when a hostile presence is in the place'
     allowed_deltas: []
   degree_table: 05-abilities-focus-magic.md#05.8.2 (the rule's own ladder or its anchor card's)
   specificity: chapter_rule
@@ -1328,19 +1320,19 @@ anchors:
   situation_tags: []
   knobs:
   - knob: dc
-    default: 'default the effect''s STORED effect DC; allowed delta:                     a Precision snag when the opposer''s
-      branch dif'
+    default: 'default the effect''s STORED effect DC; allowed delta: a Precision snag when the opposer''s branch differs from
+      the effect'
     allowed_deltas: []
   - knob: attribute
     default: the opposer's casting
     allowed_deltas: []
   - knob: reach_unit
-    default: 'default: 1 suppress for                     rounds:3, 2 end, 3 end and learn the maker''s signature, 4 end one
-      more of th'
+    default: 'default: 1 suppress for rounds:3, 2 end, 3 end and learn the maker''s signature, 4 end one more of the same
+      maker'
     allowed_deltas: []
   - knob: targets
-    default: 'one effect; allowed delta: none). Covers: any attempt to end                     something lasting that someone
-      made: a '
+    default: 'one effect; allowed delta: none). Covers: any attempt to end something lasting that someone made: a ward, a
+      curse, a sum'
     allowed_deltas: []
   degree_table: 05-abilities-focus-magic.md#05.7.7 (the rule's own ladder or its anchor card's)
   specificity: chapter_rule
@@ -1364,14 +1356,14 @@ anchors:
   situation_tags: []
   knobs:
   - knob: focus_cost
-    default: 'default 1; allowed                     delta: none'
+    default: 'default 1; allowed delta: none'
     allowed_deltas: []
   - knob: reach_unit
     default: the beat's own
     allowed_deltas: []
   - knob: stakes
-    default: 'the beat''s own). Covers: any                     wish to trade a personal reserve for a better result or a
-      safer failure'
+    default: 'the beat''s own). Covers: any wish to trade a personal reserve for a better result or a safer failure on a trained
+      beat. '
     allowed_deltas: []
   degree_table: 05-abilities-focus-magic.md#05.6.7 (the rule's own ladder or its anchor card's)
   specificity: chapter_rule
@@ -1549,12 +1541,25 @@ anchors:
   rule_id: 06.5.4
   source: 06-conflict.md#06.5.4 (marker+table)
   intent_verbs:
+  - disarm
+  - knock it from his hand
+  - make her drop it
+  - take his sword
   - knock away
   - snatch
   - wrench
   deed_tags: []
   situation_tags: []
-  knobs: []
+  knobs:
+  - knob: targets
+    default: the held object, or the arm
+    allowed_deltas: []
+  - knob: reach_unit
+    default: '2+: in the actor''s hand or fallen at the holder''s position; 1: it falls'
+    allowed_deltas: []
+  - knob: condition
+    default: 'the arm route: cond.weakened'
+    allowed_deltas: []
   degree_table: 06-conflict.md#06.5.4 (the rule's own ladder or its anchor card's)
   specificity: chapter_rule
   tags: []
@@ -1658,12 +1663,32 @@ anchors:
   - throw (a thing)
   - slam
   - cut the rope
-  - 'use the (thing). Basis: [R7 §3.4'
-  - §5 Ex.1
+  - use the (thing)
   deed_tags: []
   situation_tags:
   - situation.conflict
-  knobs: []
+  knobs:
+  - knob: reach_unit
+    default: null
+    allowed_deltas: []
+  - knob: dc
+    default: the object's tier
+    allowed_deltas: []
+  - knob: harm_severity
+    default: null
+    allowed_deltas: []
+  - knob: harm_tags
+    default: null
+    allowed_deltas: []
+  - knob: targets
+    default: null
+    allowed_deltas: []
+  - knob: condition
+    default: null
+    allowed_deltas: []
+  - knob: stakes
+    default: the drop or fire
+    allowed_deltas: []
   degree_table: 06-conflict.md#06.5.10 (the rule's own ladder or its anchor card's)
   specificity: chapter_rule
   tags: []
@@ -1984,7 +2009,12 @@ anchors:
   rule_id: 08.6.4
   source: 08-items-loot-crafting.md#08.6.4 (list+marker)
   intent_verbs:
-  - crafting project
+  - make
+  - forge
+  - brew
+  - build
+  - sew
+  - craft me a
   deed_tags: []
   situation_tags: []
   knobs:
@@ -1992,10 +2022,10 @@ anchors:
     default: by target rung
     allowed_deltas: []
   - knob: time_cost
-    default: by make time
+    default: the base's make time per tick
     allowed_deltas: []
   - knob: reach_unit
-    default: = progress ticks
+    default: progress ticks
     allowed_deltas: []
   - knob: stakes
     default: null
@@ -2014,9 +2044,18 @@ anchors:
   source: 08-items-loot-crafting.md#08.6.7 (marker)
   intent_verbs:
   - repair
+  - mend
+  - patch up
+  - fix
   deed_tags: []
   situation_tags: []
-  knobs: []
+  knobs:
+  - knob: dc
+    default: by rung, below
+    allowed_deltas: []
+  - knob: time_cost
+    default: an interval, an hour, or a project clock
+    allowed_deltas: []
   degree_table: 08-items-loot-crafting.md#08.6.7 (the rule's own ladder or its anchor card's)
   specificity: chapter_rule
   tags: []
@@ -2031,17 +2070,20 @@ anchors:
   source: 08-items-loot-crafting.md#08.6.8 (list+marker)
   intent_verbs:
   - salvage
+  - break it down
+  - melt down
+  - strip it for parts
   deed_tags: []
   situation_tags: []
   knobs:
   - knob: dc
-    default: null
+    default: Moderate; improvised +5
     allowed_deltas: []
   - knob: time_cost
-    default: null
+    default: 1 hour
     allowed_deltas: []
   - knob: reach_unit
-    default: = yield
+    default: the yield
     allowed_deltas: []
   degree_table: 08-items-loot-crafting.md#08.6.8 (the rule's own ladder or its anchor card's)
   specificity: chapter_rule
@@ -2097,7 +2139,13 @@ anchors:
   situation_tags:
   - situation.conflict
   - situation.exploration
-  knobs: []
+  knobs:
+  - knob: targets
+    default: one creature; each creature of a mixed group is classified alone
+    allowed_deltas: []
+  - knob: time_cost
+    default: none
+    allowed_deltas: []
   degree_table: 09-adversaries.md#09.2.4 (the rule's own ladder or its anchor card's)
   specificity: chapter_rule
   tags: []
@@ -2468,21 +2516,20 @@ anchors:
   - situation.conflict
   knobs:
   - knob: targets
-    default: 'the sides and their clocks; default as computed; allowed                     delta: a third side with its own
-      clock'
+    default: 'the sides and their clocks; default as computed; allowed delta: a third side with its own clock'
     allowed_deltas: []
   - knob: time_cost
-    default: default by tier; allowed delta                     one rung
+    default: default by tier; allowed delta one rung
     allowed_deltas: []
   - knob: dc
-    default: default force vs force; allowed delta +2 for a prepared position or                     a wall
+    default: default force vs force; allowed delta +2 for a prepared position or a wall
     allowed_deltas: []
   - knob: reach_unit
     default: default delivered reach
     allowed_deltas:
     - ticks
-    - 'allowed delta: +2 for an                     officer or champion felled). Covers: any clash of organized forces too
-      large for                     06''s mobs. Does not cover: fights the PC can resolve as a conflict (06'
+    - 'allowed delta: +2 for an officer or champion felled). Covers: any clash of organized forces too large for 06''s mobs.
+      Does not cover: fights the PC can resolve as a conflict (06'
   degree_table: 11-living-world.md#11.3.15 (the rule's own ladder or its anchor card's)
   specificity: chapter_rule
   tags: []
@@ -2513,8 +2560,8 @@ anchors:
     default: the place or faction
     allowed_deltas: []
   - knob: reach_unit
-    default: 'ticks per week). Covers any deliberate, lasting change to the map.                     Does not cover: a change
-      one scen'
+    default: 'ticks per week). Covers any deliberate, lasting change to the map. Does not cover: a change one scene makes
+      (that is a b'
     allowed_deltas: []
   degree_table: 11-living-world.md#11.9.7 (the rule's own ladder or its anchor card's)
   specificity: chapter_rule
@@ -3666,15 +3713,19 @@ anchors:
   name: 'T-06-9 #20: fight on the ice, in the surf, on the roof ridge'
   rule_id: 06.5.10
   source: 06-conflict.md#T-06-9 row 20
-  verb: null
+  verb: verb.move
   intent_verbs:
   - fight on the ice, in the surf, on the roof ridge
   deed_tags: []
   situation_tags:
   - situation.conflict
-  knobs: []
-  degree_table: 'the anchor card''s (— (a `difficult_ground` or `hazard` feature)); on a success: Moves cost +1; a critical
-    failure on any physical beat there threatens `cost.footing`'
+  knobs:
+  - knob: action_cost
+    default: null
+    allowed_deltas:
+    - +1 per Move
+  degree_table: 'the anchor card''s (Move (across a `difficult_ground` or `hazard` feature) [revision: I-031]); on a success:
+    Moves cost +1; a critical failure on any physical beat there threatens `cost.footing`'
   specificity: table_ruling
   rolled_against: —
   notes: applies to everyone on it
@@ -3764,7 +3815,7 @@ anchors:
   name: 'T-06-9 #24: knock the weapon from its hand'
   rule_id: 06.5.10
   source: 06-conflict.md#T-06-9 row 24
-  verb: null
+  verb: verb.strike
   intent_verbs:
   - knock the weapon from its hand
   deed_tags: []
@@ -3772,13 +3823,13 @@ anchors:
   - situation.conflict
   knobs:
   - knob: condition
-    default: /
+    default: the arm
     allowed_deltas: []
   - knob: reach_unit
-    default: null
+    default: the snatch
     allowed_deltas: []
-  degree_table: 'the anchor card''s (called Strike (held object) or Grapple (snatch)); on a success: the weapon falls, or
-    is in my hand'
+  degree_table: 'the anchor card''s (Strike, called at the held object, or Grapple (snatch) [revision: I-031]); on a success:
+    the weapon falls, or is in my hand'
   specificity: table_ruling
   rolled_against: Guard, or higher of Might or Agility defense
   notes: 06.5.4
@@ -4000,15 +4051,15 @@ anchors:
   name: 'T-06-9 #33: parry with the chair, the lantern pole, a cloak round my arm'
   rule_id: 06.5.10
   source: 06-conflict.md#T-06-9 row 33
-  verb: null
+  verb: verb.evade
   intent_verbs:
   - parry with the chair, the lantern pole, a cloak round my arm
   deed_tags: []
   situation_tags:
   - situation.conflict
   knobs: []
-  degree_table: 'the anchor card''s (Defend); on a success: the Defend snag; the object is then a body- or hand-rung improvised
-    item'
+  degree_table: 'the anchor card''s (Evade as Defend (06.1.5) [revision: I-031]); on a success: the Defend snag; the object
+    is then a body- or hand-rung improvised item'
   specificity: table_ruling
   rolled_against: —
   notes: flavor costs nothing
@@ -4047,15 +4098,15 @@ anchors:
   name: 'T-06-9 #35: dive behind the pillar as the breath comes'
   rule_id: 06.5.10
   source: 06-conflict.md#T-06-9 row 35
-  verb: null
+  verb: verb.evade
   intent_verbs:
   - dive behind the pillar as the breath comes
   deed_tags: []
   situation_tags:
   - situation.conflict
   knobs: []
-  degree_table: 'the anchor card''s (resisted Evade (free)); on a success: `flag.in_cover` was needed *before*: now it is
-    a Protective lever only if already held'
+  degree_table: 'the anchor card''s (Evade, resisted (free) [revision: I-031]); on a success: `flag.in_cover` was needed *before*:
+    now it is a Protective lever only if already held'
   specificity: table_ruling
   rolled_against: the effect DC
   notes: 06.8.2
@@ -4143,7 +4194,7 @@ anchors:
   name: 'T-06-9 #39: dig in behind my shield and wait them out'
   rule_id: 06.5.10
   source: 06-conflict.md#T-06-9 row 39
-  verb: null
+  verb: verb.evade
   intent_verbs:
   - dig in behind my shield and wait them out
   deed_tags: []
@@ -4154,7 +4205,8 @@ anchors:
     default: null
     allowed_deltas:
     - '2'
-  degree_table: 'the anchor card''s (Full defense); on a success: the Defend snag and `flag.in_cover` vs ranged'
+  degree_table: 'the anchor card''s (Evade as Full defense (06.1.5) [revision: I-031]); on a success: the Defend snag and
+    `flag.in_cover` vs ranged'
   specificity: table_ruling
   rolled_against: —
   notes: 06.1.5

@@ -116,3 +116,10 @@ Full record: `_process/integration-report.md`.
 - Serves: goal 2 (every id resolves to one defining file; the engine can route any id by its prefix).
 - Revisit if: Wave 4's audit finds a registry-only prefix that collides in meaning with a named one (then
   rename it in data, with `superseded_by`, and regenerate).
+
+### DL-INT-12: A [J] rule may give its worst case inline, under one canonical label (I-001)
+- Decision: [revision: I-001] 00.2.5 accepts two forms for a rule with a `[J:*]` decision: the template block, or the inline form (the decision as options or a "true only when" test, the default when uncertain, and the worst case labelled *Worst case (J):*, with an optional qualifier: *Worst case (J, tier):*, *Worst case (J) of a one-rung error:*). The worst case is never omitted. A script normalized the 127 inline labels in chapters 00–12, 15 and 16 that read *Worst case:*, *Worst case (tier):* or *Worst case of …* (ch.13 is left as written, per the owner's constraint; its one legacy label is accepted and counted apart). `validate_ruleset.py` now fails any `[J:*]` rule whose worst case is missing or carries a non-canonical inline label.
+- Alternatives considered: converting every inline judgment to the full block (rejected: 152 rules, most of them one judgment inside a `[D]` rule, would gain eight to ten empty or repeated fields each and lose the prose that says why the judgment is bounded; the block's value is the worst case, which the inline form keeps); accepting any wording (rejected: an auditor and the anchor index need one string to find).
+- Evidence: 239 rules with a `[J:*]` decision: 86 in block form, 152 inline with the canonical label, 1 legacy label in ch.13, 0 missing (validator summary); the normalizer is idempotent (a second run changes nothing).
+- Serves: goal 2 (every judgment's worst case is stated and machine-findable); constitution P-B.
+- Revisit if: a playtest's ruling ledger shows a judgment whose real worst case exceeded the stated one (then that rule moves to the block form with examples).

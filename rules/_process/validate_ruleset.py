@@ -4,7 +4,8 @@
     python rules/_process/validate_ruleset.py --json out # also write the findings as JSON
 
 Checks (each finding is ERROR, WARN or INFO; the summary counts them):
-  1. YAML      every data/*.yaml parses (and every fragment in _process/merged-contrib/).
+  1. YAML      every data/*.yaml parses (and every fragment in _process/merged-contrib/); no mapping key parses as a
+               boolean (an unquoted on/off/yes/no/true/false key).
   2. IDS       every prefixed id defined in data/ (a mapping's `id`, tags and facets in tags.yaml, handler ids, reserved
                ids) is defined exactly once; every id prefix is registered (00.16.2 + the generated registry 00.16.2a).
   3. REFS-DATA every id referenced anywhere in data/ (any string value; effect_id, condition, tags, refs, notes...)
@@ -48,6 +49,21 @@ for p in sorted(glob.glob(os.path.join(R, "_process", "merged-contrib", "*.yaml"
         yaml.safe_load(open(p, encoding="utf-8"))
     except Exception as e:
         add("ERROR", "YAML", "merged-contrib/" + os.path.basename(p), "does not parse: %s" % e)
+# a mapping key that YAML 1.1 reads as a boolean (on / off / yes / no / true / false unquoted) is a defect: the
+# engine looks the key up by its word (e.g. a tick source's `on`) [revision B: 54 such keys were found and quoted]
+def _boolkeys(x, path):
+    if isinstance(x, dict):
+        for k, v in x.items():
+            if isinstance(k, bool):
+                yield path
+            yield from _boolkeys(v, "%s/%s" % (path, k))
+    elif isinstance(x, list):
+        for i, v in enumerate(x):
+            yield from _boolkeys(v, "%s[%d]" % (path, i))
+for _f, _d in DOCS.items():
+    _bk = list(_boolkeys(_d, ""))
+    if _bk:
+        add("ERROR", "YAML", _f, "%d mapping key(s) parse as booleans (quote on/off/yes/no/true/false): %s" % (len(_bk), ", ".join(_bk[:4])))
 
 # ====================================================================== 2. definitions
 FACETS = ["deed", "conduct", "creature", "harm", "material", "item", "terrain", "situation", "trait", "org"]
@@ -392,9 +408,15 @@ for c in CHAPTERS:
         if not re.search(r"\[J:(?:flag|enum|rung|open)\]|\[J\]", first_lines): continue
         J_STATS["rules_with_J"] += 1
         tmpl = bool(re.search(r"^Worst case \(J\):", body, re.M))
-        inline = bool(re.search(r"worst[\s*_]+case", body, re.I)) and not tmpl
+        # 00.2.5 [revision: I-001]: the inline form's label is *Worst case (J…*; ch.13 (not edited) keeps its legacy labels
+        inline = bool(re.search(r"\*[Ww]orst\s+case \(J", body)) and not tmpl
+        legacy = bool(re.search(r"worst[\s*_]+case", body, re.I)) and not (tmpl or inline)
         if tmpl: J_STATS["template_form"] += 1
         elif inline: J_STATS["inline_form"] += 1
+        elif legacy and c == "13": J_STATS["inline_form_legacy_13"] += 1
+        elif legacy:
+            J_STATS["noncanonical"] += 1
+            add("ERROR", "JRULES", rid, "inline worst case without the *Worst case (J):* label (00.2.5)")
         else:
             J_STATS["missing"] += 1
             J_MISSING.append(rid)
@@ -448,8 +470,9 @@ if __name__ == "__main__":
     print("=" * 100)
     print("validate_ruleset.py — data files: %d; ids defined: %d (+ %d tags); handlers: %d; rule-level ids indexed: %d"
           % (len(DOCS), len(DEF), len(TAGS), len(HANDLERS), len(RDEF)))
-    print("[J:*] rules: %d — Worst case in template form %d, inline form %d, missing %d"
-          % (J_STATS["rules_with_J"], J_STATS["template_form"], J_STATS["inline_form"], J_STATS["missing"]))
+    print("[J:*] rules: %d — Worst case in template form %d, inline form %d (ch.13 legacy label %d), non-canonical %d, missing %d"
+          % (J_STATS["rules_with_J"], J_STATS["template_form"], J_STATS["inline_form"], J_STATS["inline_form_legacy_13"],
+             J_STATS["noncanonical"], J_STATS["missing"]))
     print("=" * 100)
     for (lv, ck), n in sorted(c.items()):
         print("%-6s %-11s %d" % (lv, ck, n))

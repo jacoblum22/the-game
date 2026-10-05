@@ -114,7 +114,7 @@ else about the character exists until play writes it.
 | `fate` | `{current: 1, max: 3}` | 02.7.3 |
 | `harm_state`, `wounds`, `marks`, `conditions`, dread | `active`; none; none; none; 0 | 02.7.3 |
 | `possessions` | the two kits' items, each an entity with an id; coin | 02.8 |
-| `location` | chapter 13's opening place | 13 |
+| `location` | the region seed's opening place (12.16.16) | 12 |
 | `relationships` | one or two bonds; zero to two faction ties | 02.9.2, 02.9.5 |
 | `commitments` | the long vow or the creed; any debt a bond or hook carries | 02.9.1 |
 | `aspirations` | one to three `{text, tags}` | 02.9.3 |
@@ -193,7 +193,7 @@ taken ("If you move on without choosing: …", 12.15.6), so a default is never a
 | breadth profile; picks; technique | the livelihood's `defaults` |
 | the human's extra training | the first tag on the livelihood's list that no pick has taken |
 | an upbringing's license choice | the first on its list not already held |
-| a tongue to pick | chapter 13's `second_tongue` for the region; without one, Dwarvish |
+| a tongue to pick | the region seed's `second_tongue` (12.16.7); without one, Dwarvish |
 | learning picks, in order | Letters; then Common to its next grade; then the second tongue; then the Old Tongue |
 | manner of childhood | `unremarked` (or `hard` for Bound service; `gifted` for Touched) |
 | kit choice | the first option |
@@ -201,7 +201,7 @@ taken ("If you move on without choosing: …", 12.15.6), so a default is never a
 | anchor bond | the upbringing's first `bond_seeds` line |
 | thorn bond, the one true thing, faction tie | **open** (02.9.8) |
 | aspiration | the one the drive answer names, if it names one; otherwise **open** (02.9.8) |
-| name; look | rolled on chapter 13's name table for the people; left to narration |
+| name; look | rolled on the region seed's name table for the people (12.16.7); left to narration |
 | pacing profile; pillar weights | `standard`; all `same` (12.7.3, 12.5.9) |
 
 **"Surprise me."** If the player asks for chance to decide a people, an upbringing or a livelihood, the
@@ -290,13 +290,13 @@ Basis:              [R5 §4 item 6: Cypher's "I am an adjective noun who verbs"]
 ```
 
 **02.2.5 Ready-made characters.** `[D]` A pregenerated character is a complete creation record with
-every choice of C1–C5 and C7–C8 already made, authored by chapter 13 for its region and stored as
-data. It is produced by PR-02-1 and must pass PR-02-9 like any character; it differs from a character
+every choice of C1–C5 and C7–C8 already made, written by the region's seed (12.16.16; a pre-made setting
+such as chapter 13 authors its own) and stored as data [revision: I-028]. It is produced by PR-02-1 and must pass PR-02-9 like any character; it differs from a character
 the player built only in who chose. Three things are **not** fixed in a pregen:
 (a) the **birth draw** (C6) is made live when the player picks the pregen, so two players who pick the
 same one still diverge (P1); (b) the **name** may be changed; (c) the **creation window** (02.2.6)
 applies, so the player may revise it once after trying it. A pregen's bonds, faction tie and hooks
-point at entities of chapter 13's region by id. Chapter 13 authors at least four, covering among them a
+point at entities of the region by id. The seed writes at least four, covering among them a
 fighter, a sneak, a talker or scholar, and a worker of magic, and at least one non-human
 [R5 CC-12; R5 §4 item 1 (starter sets use pregens so the first session starts in minutes); DL-02-01].
 
@@ -468,8 +468,8 @@ Human, Elf, Dwarf, Halfling, Orc-kin, Goblin-kin, Giant-kin, Beastfolk (T-02-2).
   hold Common at `native`; a halfling also picks one further tongue at `accented`);
 - its `creature.folk.*` tag on the character entity (reaction rolls, 12.11.2, and pool gates read it).
 
-A people sets no training, no competence and no kit. Chapter 13 decides which peoples live in its
-region and may add peoples in its owner-block (02.4.8). A gift is never learned, lost or bought.
+A people sets no training, no competence and no kit. The region's seed decides which peoples live in
+its region (12.16.7); a pre-made setting may add peoples in its owner-block (02.4.8) [revision: I-028]. A gift is never learned, lost or bought.
 
 **02.4.3 The human's extra training.** `[D]` A human takes **one extra training license held as access**
 (grade `trained`, no competence above the floor) on any level-2 deed tag outside the three magic
@@ -517,7 +517,8 @@ shared nouns; DC +5, reach Limited; 01.18). **Letters** (`lic.lang.letters`) let
 write every tongue they hold at accented or native; without it, reading is Observe's excluded method
 and falls to the license's crude fallback (numerals, seals, a few signs). Nine tongues are defined for
 the eight peoples: Common, Elvish, Dwarvish, Orcish, Goblin, Giantish, Kin-speech, the Old Tongue (dead;
-at most accented), and the Cant. Chapter 13 owns the tongues of its region and may rename or add
+at most accented), and the Cant. The region's seed sets the tongues of its region (12.16.7) and may rename
+them; a pre-made setting may add one [revision: I-028]
 [00.4.4: Intellect's one derived value is tongues and lore at creation; 05.9.4: the arcane path
 requires literacy; DL-02-12].
 
@@ -532,9 +533,9 @@ one's trade (T-00-11) at the floor unless `lic.training.martial_tactics` is held
 [R4 §9 02 #4; R7 §2.24 (13th Age backgrounds are argued into relevance each time, which an AI decides
 inconsistently: hence facts plus explicit licenses here); SG-06].
 
-**02.4.8 Setting origins and the origin audit.** `[D]` Chapter 13 may add peoples, upbringings and
-livelihoods for its setting in `origins.yaml#blocks` (owner "13"), and may mark any entry here as
-absent from its region. Every added entry must pass PR-02-9, whose tests are the invariants of this
+**02.4.8 Setting origins and the origin audit.** `[D]` A pre-made setting (chapter 13 is one) may add
+peoples, upbringings and livelihoods in `origins.yaml#blocks` (owner "13"), and any region's seed marks
+entries absent from its region (`absent_origins`, 12.16.7); the world seed itself adds none [revision: I-028]. Every added entry must pass PR-02-9, whose tests are the invariants of this
 part: a people has exactly one floor of +2, one floor of +1 and one fixed −1 (or is Free), at most one
 gift whose effect is one effect reference, and grants no training; an upbringing spends exactly three
 units; a livelihood lists five to eight level-2 deed tags, gives a kit inside 02.8.2, and grants
@@ -616,7 +617,7 @@ magic from the first scene only if a livelihood gave them a school's training li
 | Livelihood | Branch; casting attribute (05.7.2) | Schools to choose one from | How the license's `requires` is satisfied at creation | Facts and items written |
 |---|---|---|---|---|
 | **Apprentice** | arcane; Intellect | fire, frost, storm, earth, illusion, divination, warding, mind, summoning, necromancy, alteration | literacy and a text or teacher | `lic.lang.letters`; a spellbook in the kit with the fact `teaches: <the gifted spell>`; a master as a mentor bond |
-| **Acolyte** | divine; Presence | healing, warding, smiting, rites, oaths, revelation, exorcism, pact | a keeper that accepts the character (05.7.4) | `pc.keeper.<school> = <a power of chapter 13's>`; the keeper's sign (`item.tool.implement.holy_symbol`) in the kit; the keeper's faith starts at Warm (02.9.5), so the keeper's regard holds |
+| **Acolyte** | divine; Presence | healing, warding, smiting, rites, oaths, revelation, exorcism, pact | a keeper that accepts the character (05.7.4) | `pc.keeper.<school> = <a keeper of the region's seed, 12.16.6>`; the keeper's sign (`item.tool.implement.holy_symbol`) in the kit; the keeper's faith starts at Warm (02.9.5), so the keeper's regard holds |
 | **Hedge-taught** | primal; Resolve | growth, beastkin, weather, shapeshifting, spirits, elements, hexcraft | a place or spirit that accepts the character | `pc.accepted.primal.<school> = <a place, named with the player>`; the teacher as a mentor bond |
 | **Touched** | primal; Resolve | the same seven, named by the player or left to birth (02.6.3) | none to satisfy: the gift is the acceptance | `pc.accepted.primal.<school> = innate`, written by `gen.birth` |
 
@@ -919,7 +920,8 @@ Basis:              [R5 CC-08, CC-09, P-40 (Ironsworn: a background vow and an i
                     Laws: a character needs "a need and desire to join in the story")] [DL-02-17]
 ```
 
-Chapter 13 supplies the other half of a strong start: the inciting incident of its opening.
+The region's seed supplies the other half of a strong start: the inciting incident of its opening
+(12.16.16) [revision: I-028].
 
 **02.9.2 Bonds.** `[D]` A bond is a named person who matters to the character from the first minute. A
 new character has **two bond slots**: an **anchor** (someone who holds them to the world) and a
@@ -943,8 +945,8 @@ the tables for the rest, and sets the standing in the table with `set_relationsh
 A bond's standing is **set, not rolled**: the reaction roll is for first impressions (12.11.2), and a
 bond is not one; no bond starts at Devoted. For a **lost** bond the engine asks the Oracle one sealed
 question at rung Even ("does this person still live?") and seals the answer; its gate is a clue
-(chapter 15). Chapter 13 places each bond NPC in its region: the anchor within the opening settlement
-or a day of it, the thorn wherever chapter 11's situations want them. Standing then moves only by
+(chapter 15). The region's seed places each bond kind (`bond_placement`, 12.16.11): the anchor within the
+opening settlement or a day of it, the thorn wherever chapter 11's situations want them [revision: I-028]. Standing then moves only by
 chapter 15's rules; a bond can be lost [Blades in the Dark: mark one close friend and one rival,
 R: https://bladesinthedark.com/character-creation; Dungeon World bonds, R1 M-30; R5 CC-10; DL-02-17].
 
@@ -1033,7 +1035,7 @@ Worst case (J):     CAPABILITY wrongly false: a sentence with a capability in it
                        fact. It still licenses nothing: the gate reads licenses, never this fact
                        (00.12.2), so the first attempt to USE it is a G3 redirect (class iv).
                     WORLD wrongly false: a claim about the world is recorded as established; the
-                       claim check and chapter 13's canon catch a contradiction at first use, and
+                       claim check and the region's canon (12.16.5) catch a contradiction at first use, and
                        the correction procedure (12.3.4) demotes it to a belief (class iv).
 Examples:           both false: "I am the only one who walked out of Ember Hollow." "I have never
                       told a lie, and people can tell." (a reputation is others' business; this
@@ -1069,7 +1071,8 @@ Basis:              [13th Age: One Unique Thing is narrative, never a mechanical
 | **sworn and hunted** | one tie at **+2 Friendly** and one at **−2 Unfriendly** | you belong somewhere in earnest, and that has made you an enemy |
 
 A tie names an **organization kind** (a level-2 `org.*` tag: each upbringing and livelihood suggests
-two), not a faction. Chapter 13 maps the kind to a faction of its region and chapter 11 writes the
+two), not a faction. The region seed's org-tie map (12.16.10) maps the kind to a faction of its region
+(or to none) and chapter 11 writes the
 faction's status toward the PC (the standing scale, 00.3.16; 00.17.1 Q13: its members' default standing
 is that status). If the region has no faction of that kind, the tie is held open (02.9.8). An
 **Acolyte's** tie to their keeper's faith at Warm is required by 02.5.5 and *is* their foot in the
@@ -1079,7 +1082,7 @@ positive, conflicted or negative: R: https://roll20.net/compendium/13thage/Rules
 R1 M-28; C:P11; DL-02-17].
 
 **02.9.6 Name and look.** `[N]` + `[D]` The player gives the character a **name** (or asks for one from
-chapter 13's name table for the people: the engine offers three) and states the character's **pronouns**;
+the region seed's name table for the people, 12.16.7: the engine offers three) and states the character's **pronouns**;
 the engine never rolls a PC's pronouns and the narration never uses one the player did not give
 (P13's first data point was an unearned pronoun). **Look** and **age** are optional sentences recorded
 as shown facts (`pc.look`, `pc.age_band`: young, grown, old); they have no mechanical weight and
@@ -1095,7 +1098,7 @@ CreationHook:
   kind: enum              # thread | rumor | npc | place | debt | enemy | question
   text: str               # the origin's line, or the player's own words
   source: str             # orig.people.* | orig.up.* | orig.life.* | drive | bond.<npc id> | true_thing | faction_tie
-  entities: [id]          # the bond NPC, a faction, a place; empty until chapter 13 or 11 binds them
+  entities: [id]          # the bond NPC, a faction, a place; empty until the region's seed (12.16) or 11 binds them
   tags: [tag]             # the origin's tags, the aspiration's or drive's tags
   state: seeded
 ```
@@ -1115,7 +1118,8 @@ thorn bond, the one true thing, the faction tie and (unless the drive answer nam
 start **open**; on any path the player may leave any of those four open. An open slot is filled later, **out of fiction, at a
 reflection or a session start**, by the same rule that would have filled it at creation, with one
 added limit that keeps a late answer from being a lever on the scene in front of the player:
-- a bond filled late creates a **new** NPC, never one already in the cast, and chapter 13 or 11 places
+- a bond filled late creates a **new** NPC, never one already in the cast, and the seed's bond placement
+  (12.16.11) or 11 places
   them at least one scene away;
 - a faction tie filled late may name only a faction the PC has **not yet dealt with**;
 - a true thing filled late passes 02.9.4 and may not concern any entity in the current scene.
@@ -1186,7 +1190,7 @@ Every procedure is run by the DM with the engine's tools. Creation happens out o
 0. **C0 Preferences.** Run chapter 14's session zero; ask 02.10.1's questions; record.
 1. **C1 Livelihood.** Show the first seven livelihoods and "more"; or classify the player's sentence
    (02.2.4). The player confirms one. Keep everything else in their sentence for C8.
-2. **C2 People.** Show the peoples available in the region (chapter 13), each with its one-line
+2. **C2 People.** Show the peoples present in the region (the seed's `peoples`, 12.16.7), each with its one-line
    trade-off (T-02-2). If not human: ask "typical of your kind (+7, three placements decided) or
    uncommon (+5, free)?" (02.3.2, 02.3.4), showing both arrays.
 3. **C3 Upbringing.** Show the nine (T-02-4), the livelihood's default marked. Resolve its license
@@ -1216,7 +1220,7 @@ runs PR-02-4 with the default manner, and then runs PR-02-6. The player may say 
 exchange to open that step as PR-02-1 does, and return.
 
 **PR-02-3 A ready-made character.** `[D]`
-1. Show chapter 13's pregens: for each, the name, one sentence, what they are good at, and what they
+1. Show the region seed's pregens (12.16.16): for each, the name, one sentence, what they are good at, and what they
    want. 2. The player picks one; may rename it. 3. Load the pregen's record (it has passed PR-02-9).
 4. Run PR-02-4 live (02.2.5). 5. Run PR-02-6. The creation window applies.
 
@@ -1273,7 +1277,7 @@ phase 8)
    `set_relationship`, and any commitment; aspirations; faction-tie seeds and hooks to chapter 11;
    prologue lines (`chronicle_append`); facets to chapter 12; `pc.creation` with `window: open`.
 3. **Show the sheet** (format below) and the three first-use notes if `player.new_to_this` (PR-02-7).
-4. Hand over to chapter 13's opening (`mark_boundary(session_start)` if not yet marked).
+4. Hand over to the region seed's opening (12.16.16; `mark_boundary(session_start)` if not yet marked).
 
 ```
 [SHEET] <Name> (<pronouns>) — <People> · <Upbringing> · <Livelihood>
@@ -1389,7 +1393,7 @@ default line from 02.2.2):
    `[CORRECTION]` (12.15.9) so the record and the story agree.
 
 **PR-02-9 Authoring and auditing an origin, a kit or a pregen.** `[D]` Run by the data loader
-(RC-DATA) on every entry, and by chapter 13's author on every pregen. An entry or record that fails
+(RC-DATA) on every entry, and by the seed check (12.16.17) on every pregen. An entry or record that fails
 any test is rejected.
 
 | # | Test | Applies to |
@@ -1766,7 +1770,7 @@ Three characters are made end to end, with every number: one on the full path (W
 character), one on the fast path (a newcomer's first character), one unusual concept. Every birth draw
 below was made by running the shipped `gen_birth.yaml` through the generator's steps with a seeded
 random source (scratchpad `draws02.py`): pool sizes, total weights and rolls are the script's output.
-Names of gods, lodges and places are *(illustrative; chapter 13 owns)*.
+Names of gods, lodges and places are *(illustrative; the region's seed owns them, 12.16)*.
 
 ### WE-02-1 The full path: Wren
 
@@ -1839,7 +1843,7 @@ food, tinderbox and torches; 5 coin): 8 coin. Guard with the spear readied: 10 +
 - *The one true thing:* "I am the only one who has seen the burned stag and lived." CAPABILITY: no
   ability, sense or number → false. WORLD: it is about her own past; no one need agree → false. Recorded
   as an established, shown fact, with a hook of kind `question`.
-- *Faction tie:* a foot in the door: `org.order.hunters` at +1 (chapter 13 maps it to a lodge).
+- *Faction tie:* a foot in the door: `org.order.hunters` at +1 (the seed's org-tie map, 12.16.10, maps it to a lodge).
 - *Hooks (7):* Human "a countryman or cousin…" (npc); Wilds "something has been taking animals or
   people from the edge of the country you grew up in" (thread); Hunter "a quarry you wounded and lost
   is still out there" (thread); the drive (thread); Sella (npc); Brask (npc); the burned stag (question).
@@ -2092,7 +2096,7 @@ something the spirit-talkers learn." (INV-8; 01.3.6.)
   what makes them different, and call the livelihood whatever the player likes: the **name is fiction,
   the entry is rules**. A gravedigger is a Laborer with `lore.religion` off-list; a retired pirate is a
   Sailor on the Focused profile with blades; the strongman is a Performer with `martial.athletics` deep.
-- *A people not on the list.* If chapter 13 has added it, use that entry. If not, and the concept needs
+- *A people not on the list.* If a pre-made setting has added it, use that entry. If not, and the concept needs
   no capability the entry lacks, take the nearest entry and describe it freely (a cat-person is
   Beastfolk). A body that would itself be a capability (wings, four legs, a hand's height) is not
   granted by description: flying is `slot.movement_mode` and needs a license (G3), and the DM says what
@@ -2101,7 +2105,7 @@ something the spirit-talkers learn." (INV-8; 01.3.6.)
   the off-list pick, a bond, a hook, and one line of the prologue. The Rounded and Broad profiles exist
   for exactly this.
 - *Born with a power that is not primal* ("she has healed by touch since she was a child"). Divine
-  power needs a keeper (05.7.4). Build her as an Acolyte whose keeper is a power of chapter 13's that
+  power needs a keeper (05.7.4). Build her as an Acolyte whose keeper is one of the region seed's keepers (12.16.6) that
   she does not understand (the hook is a `question`), or as a Touched with the green hand, whose
   renewal is the nearest primal thing. An innate arcane gift does not exist: arcane is formula (05.7.2).
 
@@ -2142,8 +2146,8 @@ something the spirit-talkers learn." (INV-8; 01.3.6.)
   livelihoods seven at a time; the codex's creation view (chapter 14) may show the tables of this
   chapter whole. Depth is never withheld; it is never pushed.
 - *The region lacks something creation points at* (no faction of the tie's kind, no shrine of the
-  keeper, no second tongue). The slot is held open (02.9.8) and the hook stays seeded; chapter 13 is
-  asked for the entity (Interface requests). The character is still legal.
+  keeper, no second tongue). The slot is held open (02.9.8) and the hook stays seeded; the entity is
+  written on demand by its owner's rule (12.16.18: a faction by 11.3.18, a place by 10.1.4). The character is still legal.
 - *A name the cast already uses.* The engine checks the cast list; the DM asks for another or a byname.
 - *Death or retirement before the window closes.* The window dies with the character. The successor is
   a new creation (02.2.7).
@@ -2156,7 +2160,7 @@ something the spirit-talkers learn." (INV-8; 01.3.6.)
 
 | Anchor | Reach for it when | Knobs (T-00-20) | Does not cover |
 |---|---|---|---|
-| **02.9.4 The one true thing** (`Anchor: yes`) | in play, the player proposes a fact about their own character's past ("I worked these docks as a boy", "I've met this man") | none: the two flags decide between an established fact, a belief with a sealed truth, and a redirect | facts about the present scene (the Oracle, 00.12.7); anything that would be a license |
+| **02.9.4 The one true thing** (`Anchor: yes`) [revision: I-031] | in play, the player proposes a fact about their own character's past ("I worked these docks as a boy", "I've met this man") | `stakes` Safe, fixed; `targets` the character's own person, ties and past, fixed (the two flags decide between an established fact, a belief with a sealed truth, and a redirect) | facts about the present scene (the Oracle, 00.12.7); anything that would be a license |
 | **02.6.2 the quirk shape** (a pattern, not a card) | a mark, a boon or a long habit should leave a small permanent trace and no entry exists | the owning chapter authors it as *one* effect reference: a lever in a stated circumstance, a hazard step of one rung, or one daily reveal | anything that adds to a roll everywhere (that is competence or an edge, and has an owner) |
 | **Origins as a quick past for an NPC** | chapter 12 or 16 needs to know what a recurring NPC or a hireling can do | people × upbringing × livelihood with the livelihood's default picks gives two +2 tags, tongues and letters | adversary stat blocks (chapter 09) |
 | **02.2.6 the second look** | a player learns that a choice does not do what they thought, early | none: once, inside the window | anything after the lock (Retrain, chapter 15; chapter 05's paths) |
@@ -2190,7 +2194,7 @@ something the spirit-talkers learn." (INV-8; 01.3.6.)
 - **Handed to other owners:** hooks and the thread seed (11); facets (12); preferences (14).
 
 **Reads:** `data/origins.yaml`, `gen_birth.yaml`, `kits.yaml`, `licenses.yaml`, `abilities.yaml`,
-`tags.yaml`; chapter 13's region data (peoples present, names, second tongue, keepers, factions by
+`tags.yaml`; the region seed's data (12.16: peoples present, names, second tongue, keepers, factions by
 kind, pregens); the frame log (count of resolved frames by deed branch with the PC as actor, for the
 Bent: no tally is read); the reflection count.
 
@@ -2327,7 +2331,8 @@ block. Bond NPCs are generated at depth recurring with standing **set** by 02.9.
 12.11.2's roll, since a bond is not a first impression). The first "you said" line is the drive. Add
 `[CREATE]` and `[SHEET]` to 12.15.
 
-**To 13 (starter setting).** Needed from the region: which peoples are present; a name table per
+**To 13 (starter setting; now answered by the world seed, 12.16, for any region; ch.13 is one optional
+pre-made seed).** Needed from the region (each is a T-12-16 requirement, `ws.req.02_*`) [revision: I-028]: which peoples are present; a name table per
 people; `second_tongue`; the powers an Acolyte may keep, with their faiths; a place of acceptance for a
 Hedge-taught character; a faction for each `org.*` kind the origins name (or an explicit "none");
 where each bond is placed; at least four pregens passing PR-02-9 (02.2.5); the inciting incident that

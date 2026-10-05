@@ -44,6 +44,20 @@ per region (13 per faction), 47% of factions at tier 5 after two years — runaw
 relative to tier, clocks 8/12/24, entrenched −1, weight of size): 38 goals (9 per faction), 9% tier 5. Third
 (ticks 2/1/0): the shipped numbers above. Decision: DL-11-03, DL-11-06.
 
+**Re-run for revision B (issue I-032).** The agenda is now 11.3.7 cell for cell (`choose_action()`): overrides
+(a) slip → `recover`, (b) war (relation −3, every faction here shares the region) on a d6 of 1–3 → `strike` that
+faction, (c) status ≥ +2 → `aid_pc` (as qualified in the same revision: a ransom, a threatened holding or a reward
+due, or a d6 of 1; the unqualified override let a friendly faction aid the PC every turn, 20.5% of all turns, and
+starved its goal); then each temperament row with its own condition (aggressive 3 `move_on_pc` and 4 `expand`;
+cautious and mercantile 3 `court`; zealous 3 `move_on_pc`; secretive 3 `move_on_pc` at attention half, 4
+`lie_low` at imminent; steadfast 2 `aid_pc`, 3 `strike` only at −3); targets by 11.3.7's ladders; `court`,
+`aid_pc`, `lie_low` and a discovered `scheme` with their 11.3.6 effects; `recover` at its 11.3.6 DC. The 13 sim no
+longer patches the steadfast row. Headlines (T-11-24): goals 15 per region in two years (about 2 per faction per
+year; was 21 and 2.5); mean tier 1.75 → 2.37–2.41 (was 2.0); still 0% at tier 5; faction turns go 67–70% to goals.
+War became decisive: the Wardens–Cult war ends with the Cult's collapse at a median week 10–12, so the "PC at war"
+column now shows a median 0 entanglements; the Thallen re-run, whose hostile faction stands, gives 8 (p10 5, p90
+11). `11-world-sim-output.txt` and `13-world-sim-output*.txt` reproduce byte for byte.
+
 **Exhaustive odds used in the chapter** (d20, 00.3.10 step rule): goal check at rating 3 — local 55% success-or-
 better (5% critical failure), regional 45% (10%), realm 35% (20%); equal strike 55%; steward +3 vs 15 45% (10%
 critical failure), +5 55% (5%); aging Endure +1 vs Easy/Moderate/Hard/Very hard failure-or-worse 40/65/90/95%;

@@ -314,7 +314,7 @@ capability (04), or out of scope. Adding a form is an amendment to this chapter.
   check (12) and by the frame's breakdown, which lists every passive that contributed.
 - An **active** ability is invoked by the player, costs Focus or a use or both, and passes through
   `use_ability` (05.4.1). Any ability with a `cost`, a `limits` entry or a duration is active.
-- *Worst case of a wrong fiction-clause call:* one passive wrongly applied gives its listed number once
+- *Worst case (J) of a wrong fiction-clause call:* one passive wrongly applied gives its listed number once
   (at most +2 edge, one lever, one severity step) and appears by id in the OFFER breakdown (class i).
 - Passives are budgeted lower than actives by construction (05.11.2), and a passive may never contain
   `prevent`, a condition of the hard-control group, or harm of S3 or more (T-05-9).
@@ -553,7 +553,7 @@ do any of the following. Each line is a refusal by lookup, voiced with 01.3.6's 
    standing change the degree table did not deliver (INV-7).
 7. **Add an action**, a second rider, or a second sustained working (INV-11; 05.4.3; 05.4.7).
 8. **Supply a sensitive upgrade** its scope does not name (01.3.3).
-9. **Contradict setting canon** (`canon_impossible`, ch.13): that is G4 for everyone.
+9. **Contradict setting canon** (`canon_impossible`, the region's seed, 12.16.5): that is G4 for everyone.
 10. **Affect more targets** than its spread tag's cap (05.10.4).
 
 **05.5.4 Emulate (learning by observation).**
@@ -775,7 +775,7 @@ boundaries, after 07's `h.07.rest_recovery`, and reads the rest's `quality` from
 | `rest_short` (1 hour) | **+ half of `focus.max`, rounded up** | + a quarter of max, rounded up | +1 | the first **2** short rests of a day restore this much; later ones restore as a breather |
 | `rest_long` (a watch of sleep) | **to `focus.max`**; reserve banking resolves (05.6.12) | to three quarters of max, rounded up (never lowering `current`) | as a `rest_short` of quality `partial` | at most one per day (00.7.2) |
 
-- **Resonant place.** When the rest is taken at a place whose `resonance` list (ch.10/13) contains a tag
+- **Resonant place.** When the rest is taken at a place whose `resonance` list (ch.10; the region's seed, 12.16) contains a tag
   at or above the key of a calling the character holds, or at or above the first tag of an ability they
   hold, a `breather` or `rest_short` restores **+1** more (Cradle's matched aura: the place refills what
   it resembles) [R2 §05 recovery channels].
@@ -861,8 +861,8 @@ Magic is a named subsystem and not a separate engine [00.17.1 Q20; R5 G-16]. A s
 rite is a clock; a mage's training is a license. What makes it *magic* is four things this part adds:
 a **source** with its own way of failing, a **signature** each branch carries in P12's three fields,
 **rites** for what a single beat cannot hold, and **learning** by teacher, text and observation. What
-magic is in the world (where it comes from, who may use it, what it can never do) is ch.13's canon; this
-chapter fixes what canon must answer (05.7.10).
+magic is in the world (where it comes from, who may use it, what it can never do) is the region's canon (written by the world seed, 12.16.5, or supplied by a pre-made setting such as
+ch.13); this chapter fixes what canon must answer (05.7.10) [revision: I-028].
 
 **05.7.1 A spell.** `[D]` A spell is an entry of `data/abilities.yaml` with `kind: spell`: its first tag
 is under `deed.arcane`, `deed.divine` or `deed.primal`, and it carries `trait.nature.magical`. It
@@ -930,7 +930,7 @@ Basis:              [R2 §05 Cradle: aura of a matching place] [R7 §5 Ex.11] [0
 
 **05.7.4 The keeper's regard (divine).** `[D]` Every holder of a divine training license has a
 **keeper** recorded as a fact when the license is acquired (`pc.keeper.<school> = <power, order or
-oath>`; ch.13 supplies the powers and their conduct axes). Divine workings are usable while the keeper's
+oath>`; the region's seed supplies the powers and their conduct axes, 12.16.6). Divine workings are usable while the keeper's
 regard holds:
 - for a character whose divine calling carries an oath: while the calling is below Fraying stage 2
   (04.9.3 suspends the tier's grants at stage 2 and the calling at stage 3);
@@ -1039,8 +1039,8 @@ for every mage"]
 
 **05.7.8 Healing and its limits.** `[D]` Magical healing restores **Vitality** through `eff.restore`
 and removes conditions through `eff.cleanse`. It does not remove wounds, marks or afflictions unless the
-ability or rite says so by id (those are 07's), and it never raises the dead (ch.13's canon decides
-whether anything does). Each being accepts at most **2 healing effects that restore Vitality between its
+ability or rite says so by id (those are 07's), and it never raises the dead (the region's canon decides
+whether anything does, 12.16.5). Each being accepts at most **2 healing effects that restore Vitality between its
 long rests** (`healings_since_long_rest`, a counter on the recipient, reset by `h.05.rest_recharge`);
 a third restores 0 and the tool says so before Focus is spent. The cap is what stops Focus from being
 converted into unbounded Vitality across a day, and it is the recipient's limit, so two healers do not
@@ -1053,8 +1053,8 @@ the sensitive-upgrade test (01.3.3) is answered by the spell's scope text. "It's
 reason: a spell does its literal text, a stretch keeps its principle, and a wish the pool does not hold
 is a rite to be designed (05.8.4) or a G3 with paths.
 
-**05.7.10 What setting canon must supply.** `[D]` Chapter 13 owns these; until it is written the defaults
-in brackets apply, and each is a fact the Oracle treats as settled:
+**05.7.10 What setting canon must supply.** `[D]` The region's seed writes these (12.16.5–12.16.6; a pre-made
+setting such as chapter 13 supplies its own); where a seed leaves one open the defaults in brackets apply [revision: I-028], and each is a fact the Oracle treats as settled:
 1. `canon_impossible` for magic: what no working can do for anyone [true resurrection; travel through
    time; creating a soul; reading a mind that is not present; destroying a keeper].
 2. The **source** of each branch in the world's own words, and whether anyone can learn each or a gift is
@@ -1285,7 +1285,8 @@ Higher grades grant no competence of their own.
   the calling's key at the tier's grade;
 - for the three magic branches, an added `requires`: arcane, literacy and a text or teacher; divine, a
   keeper who accepts the character (05.7.4); primal, a place or spirit that accepts them (a fact, or
-  the Oracle at a place of resonance). Chapter 13 may tighten these.
+  the Oracle at a place of resonance). The region's seed may tighten these (12.16.5: an arcane order's
+admission, or a birth gift).
 There is no cap on how many training licenses a character holds. The bound is time: each costs a month
 with a teacher or two alone, grants +2 and the lowest grade, and opens four acquired slots' worth of
 techniques at rank 1. Breadth is available and is not power [C:P4; C:P15; C:P11: nothing is bought with
@@ -2549,10 +2550,10 @@ it (the `witnessed` fact). (b) Tells are what `ab.read_the_field` and `ab.know_t
 Focus-emptying powers only at T4–T5 with a tell (05.6.13). (d) Each adversary's effect DC is stored on
 its lasting effects.
 
-**To 10 (Exploration) and 13 (Starter setting).** (a) Place `resonance: [tag]`, and `desecrated`,
+**To 10 (Exploration) and 13 (Starter setting; now the region's seed, 12.16, which answers (a)–(f): T-12-16 `ws.req.05_*`) [revision: I-028].** (a) Place `resonance: [tag]`, and `desecrated`,
 `consecrated` and dead-ground facts. (b) The weather record as a fact the source-present test reads.
 (c) The eight canon items of 05.7.10. (d) Keepers with axes, signs and faiths. (e) Where teachers and
-texts are; which rites are known in the region. (f) 13 may tighten the `requires` of magic training.
+texts are; which rites are known in the region. (f) the seed may tighten the `requires` of magic training.
 
 **To 11 (Living world).** Standing with a keeper's faith (05.7.4); settlement tiers used as DCs by
 `ab.word_on_the_street`, `ab.web_of_whispers`, `ab.black_market`; morale and social clocks ticked by

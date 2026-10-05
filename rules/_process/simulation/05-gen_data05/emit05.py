@@ -315,7 +315,7 @@ def emit(abilities, stats, EFF05, EU_TABLE, TAGS, ROOT):
         e['emulate'] = None
         e['acquisition_paths'] = [dict(type='mentor', detail='taught by one who knows it: 3 ticks per training week', clock='clk.learn_rite (6 segments, project, public)', requires='the training license at the rite\'s grade'),
                                   dict(type='project', detail='studied from its text: 2 ticks per week', clock='clk.learn_rite (6 segments, project, public)', requires='the training license at the rite\'s grade; the text'),
-                                  dict(type='discovery', detail='found as a text, an inscription or a spirit\'s teaching (ch.10, ch.13)', clock=None, requires=None)]
+                                  dict(type='discovery', detail='found as a text, an inscription or a spirit\'s teaching (ch.10; the region\'s seed, 12.16)', clock=None, requires=None)]
         e['canon_check'] = canon
         e['narration_may_not_imply'] = ['that the rite succeeded before its progress clock is full', 'an effect beyond the listed effects', 'a component not consumed']
         if note:
