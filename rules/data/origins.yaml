@@ -42,6 +42,7 @@ creation_defaults:          # what the fast path uses when the player makes no c
   first_seven: [orig.life.soldier, orig.life.hunter, orig.life.thief, orig.life.healer, orig.life.apprentice, orig.life.performer, orig.life.wanderer]   # shown first at C1 (PR-02-7)
   shape: peaked
   typical_rule: true                 # a non-human people defaults to its Typical rule
+  typical_rule_except: {when: "the livelihood is a magic livelihood (02.5.5) and the people's Typical rule fixes its casting attribute (05.7.2) at -1", then: free_rule, rule: "02.3.5", basis: [I-009, DL-02-25]}   # the fast path never makes a caster who cannot cast
   birth_circumstance: unremarked
   second_tongue: lic.lang.dwarvish   # ch.13 overrides with its region's commonest second tongue
   learning_pick_order: [lic.lang.letters, "raise lic.lang.common one grade (if below native)", "the second tongue at accented", lic.lang.old_tongue]
@@ -1059,7 +1060,7 @@ origins:
       technique: ab.root_snare
       attribute_priority: [resolve, wits, endurance, agility, presence, intellect, might]
       upbringing: orig.up.wilds
-    technique_suggestions: [ab.root_snare, ab.beast_speech, ab.gust, ab.claws, ab.spirit_tongue, ab.cinder_stride, ab.evil_eye, ab.green_larder]
+    technique_suggestions: [ab.root_snare, ab.beast_speech, ab.gust, ab.claws, ab.spirit_tongue, ab.cinder_stride, ab.undertow, ab.heave, ab.stolen_breath, ab.evil_eye, ab.green_larder]
     kit_id: kit.life.hedge_taught
     kit:
       - {item_tag: item.tool.implement.totem, quality: common, quantity: 1}
@@ -1104,7 +1105,7 @@ origins:
       technique: ab.cinder_stride
       attribute_priority: [resolve, agility, wits, endurance, presence, might, intellect]
       upbringing: orig.up.village
-    technique_suggestions: [ab.root_snare, ab.beast_speech, ab.gust, ab.claws, ab.spirit_tongue, ab.cinder_stride, ab.evil_eye]
+    technique_suggestions: [ab.root_snare, ab.beast_speech, ab.gust, ab.claws, ab.spirit_tongue, ab.cinder_stride, ab.undertow, ab.heave, ab.stolen_breath, ab.evil_eye]
     kit_id: kit.life.touched
     kit:
       - {item_tag: item.weapon.blade.dagger, quality: common, quantity: 1}

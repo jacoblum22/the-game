@@ -184,7 +184,8 @@ revocation], `recognizer`, `staging`, `offer_form` {accept, decline, defer}, `wi
 ## abilities.yaml
 Owner 05. Key `abilities`. **Ability** = License (00.12.1) with `kind: ability|spell`, plus required:
 `activation` active|passive, `regime`, `effects` [effect_ref], `cost` {focus}, `limits`, `slot_class`
-calling|acquired|equipped, `limitation` str, `weakness`? str, `cost_text`? str (P12 separate fields),
+calling|acquired|equipped|license (`license`: a branch working held through a magic training license, no slot,
+with `granted_by`, `deed_tag_rule`, `rank_rule`; 05.7.11, revision I-009), `limitation` str, `weakness`? str, `cost_text`? str (P12 separate fields),
 `narration_may_not_imply` [str], `principle`, `stretch`, `emulate`?. The top-level `scope`, `effects`, `cost` and
 `limits` are rank 1; a file may instead let the loader read them from `ranks[0]`, provided the expanded record is
 identical (amended at integration: IR ch.05).

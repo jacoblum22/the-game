@@ -1,0 +1,31 @@
+=== I-003 parity: session at which the focus calling reaches each tier (p10/median/p90; 99 = not within 90 sessions; 200 seeds) ===
+archer (combat calling, 03 scenario A tags)  current  T1: 3/4/6  T2: 8/10/12  T3: 17/19/22  T4: 30/34/36  T5: 47/51/55 | T5 within 90: 200 of 200
+envoy (social contests)                      current  T1: 2/3/4  T2: 6/7/9  T3: 13/15/19  T4: 24/27/30  T5: 40/44/48 | T5 within 90: 200 of 200
+envoy (social contests)                      revised  T1: 3/4/5  T2: 7/9/11  T3: 15/18/21  T4: 27/31/34  T5: 42/46/51 | T5 within 90: 200 of 200
+smith (craft contests: works)                current  T1: 3/4/5  T2: 7/9/11  T3: 99/99/99  T4: 99/99/99  T5: 99/99/99 | T5 within 90: 0 of 200
+smith (craft contests: works)                revised  T1: 3/4/5  T2: 8/9/12  T3: 15/18/20  T4: 27/31/33  T5: 41/45/49 | T5 within 90: 200 of 200
+scholar (lore contests: sealed truths)       current  T1: 2/3/4  T2: 6/7/9  T3: 13/15/21  T4: 24/27/30  T5: 41/44/48 | T5 within 90: 200 of 200
+scholar (lore contests: sealed truths)       revised  T1: 3/4/5  T2: 7/9/11  T3: 15/17/21  T4: 27/30/34  T5: 43/46/50 | T5 within 90: 200 of 200
+envoy, 04's original social shape (2-4 beats, 15% Dire) current  T1: 2/3/5  T2: 7/8/10  T3: 15/18/34  T4: 28/31/43  T5: 47/53/64 | T5 within 90: 199 of 200
+envoy, 04's original social shape (2-4 beats, 15% Dire) revised  T1: 3/4/6  T2: 9/10/13  T3: 18/20/25  T4: 32/35/40  T5: 50/54/59 | T5 within 90: 200 of 200
+
+| Calling | rules | median T3 | vs archer | median T5 | vs archer | within +-20%% at both |
+|---|---|---|---|---|---|---|
+| archer (combat calling, 03 scenario A tags) | (combat) | 19 | - | 51 | - | - |
+| envoy (social contests) | current | 15 | -21% | 44 | -14% | no |
+| envoy (social contests) | revised | 18 | -5% | 46 | -10% | yes |
+| smith (craft contests: works) | current | 99 | +421% | never | - | no |
+| smith (craft contests: works) | revised | 18 | -5% | 45 | -12% | yes |
+| scholar (lore contests: sealed truths) | current | 15 | -21% | 44 | -14% | no |
+| scholar (lore contests: sealed truths) | revised | 17 | -11% | 46 | -10% | yes |
+| envoy, 04's original social shape (2-4 beats, 15% Dire) | current | 18 | -5% | 53 | +4% | yes |
+| envoy, 04's original social shape (2-4 beats, 15% Dire) | revised | 20 | +5% | 54 | +6% | yes |
+
+=== R9 (I-004): counted / weighted at the focus key after 10 sessions (p10/median/p90 of the ratio; 200 seeds) ===
+  archer (combat calling, 03 scenario A tags)  current  0.20 / 0.23 / 0.27
+  envoy (social contests)                      current  0.15 / 0.19 / 0.23
+  envoy (social contests)                      revised  0.25 / 0.31 / 0.39
+  smith (craft contests: works)                current  0.67 / 0.75 / 0.86
+  smith (craft contests: works)                revised  0.64 / 0.76 / 0.90
+  scholar (lore contests: sealed truths)       current  0.15 / 0.18 / 0.23
+  scholar (lore contests: sealed truths)       revised  0.24 / 0.31 / 0.39

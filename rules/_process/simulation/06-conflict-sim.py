@@ -135,7 +135,22 @@ class Morale:
 
 
 def fight(rng, pband, foes, policy='steady', weapon='one', armor=None, shield=False, use_focus=False,
-          fearless=False, pc_over=None, fend=True, called=False):
+          fearless=False, pc_over=None, fend=True, called=False, caster=None, foe_fend=False, log=None):
+    """caster (revision I-009): None for a weapon fighter, else a dict describing a caster's beats:
+         sev    -- base severity of the branch working (05.7.11: rank 1/2/3 = S2/S3/S4); its aimed check
+                   uses p['atk'] as casting attribute + competence; it costs 1 action like a Strike (06.1.3)
+                   and needs no Move to engage (band.near or band.close)
+         elemental -- True when the working's harm is not harm.physical: reduction from armor does not
+                   apply (09.3.6; 07.2.2); spell burning (harm.fire) is likewise unreduced
+         profane_step -- divine Rebuke: one rung heavier against a profane foe (the foe here is not)
+         push_on_crit -- arcane Force Bolt: a critical success pushes the foe one band (it must Move back)
+         spell  -- None, or dict(cost, sev, burning): a Focus spell cast as the first beat of a turn while
+                   Focus lasts (e.g. Flame Lance rank 2: cost 1, S3, one stack of cond.burning)
+         With use_focus and no spell, Focus pushes the first working of each turn (05.6.7).
+       foe_fend (ch.09 09_core): adversaries of T3+ Fend the PC's first attack each round (-2).
+       log (revision I-004): a list that receives ('beat', modifier, defense, degree, steps) for every PC attack
+       and ('defeat', foe band, members fallen) for every foe or mob member defeated, and ('fled', band) for each
+       foe still standing when its side's morale breaks -- the raw material of ch.03's evidence events."""
     p = dict(PC[pband])
     if pc_over:
         p.update(pc_over)
@@ -143,7 +158,13 @@ def fight(rng, pband, foes, policy='steady', weapon='one', armor=None, shield=Fa
     if armor is None:
         armor = p['armor']
     st = dict(vit=p['vit'], focus=p['focus'] if use_focus else 0, staggered=False, extra=0, lost=0,
-              defending=False, fend=True)
+              defending=False, fend=True, focus_spent=0)
+    if caster is not None:
+        weapon = 'one'
+        sev_w = caster['sev']
+    for f in foes:
+        f.burning = 0
+        f.fended = False
     sev = p['sev'] + (1 if weapon == 'heavy' else 0)
     mor = Morale(None if fearless else max(f.morale for f in foes), foes)
     t = rng.randint(1, 20) + p['tempo']
@@ -158,7 +179,7 @@ def fight(rng, pband, foes, policy='steady', weapon='one', armor=None, shield=Fa
         if not live:
             return
         tgt = min(live, key=lambda f: (not f.engaged, f.vit))
-        if not tgt.engaged:
+        if not tgt.engaged and caster is None:
             tgt.engaged = True
             acts -= 1                                   # Move: close -> engaged
         while acts > 0:
@@ -169,6 +190,8 @@ def fight(rng, pband, foes, policy='steady', weapon='one', armor=None, shield=Fa
                 eng = [f for f in live if f.engaged]
                 if eng:
                     tgt = min(eng, key=lambda f: f.vit)
+                elif caster is not None:
+                    tgt = min(live, key=lambda f: f.vit)   # a working reaches band.near: no Move
                 else:
                     tgt = min(live, key=lambda f: f.vit)
                     tgt.engaged = True
@@ -185,19 +208,45 @@ def fight(rng, pband, foes, policy='steady', weapon='one', armor=None, shield=Fa
                 continue
             steps = 0
             reckless = (policy == 'reckless' and k == 0)
-            if reckless:
+            bsev = sev
+            burn = 0
+            if caster is not None:
+                bsev = sev_w
+                spell = caster.get('spell')
+                if spell and k == 0 and st['focus'] >= spell['cost']:
+                    st['focus'] -= spell['cost']
+                    st['focus_spent'] += spell['cost']
+                    bsev = spell['sev']
+                    burn = spell.get('burning', 0)
+                elif not spell and st['focus'] > 0 and k == 0:
+                    st['focus'] -= 1
+                    st['focus_spent'] += 1
+                    steps = 1                           # Focus push on the working
+            elif reckless:
                 steps = 1
             elif st['focus'] > 0 and k == 0:
                 st['focus'] -= 1
+                st['focus_spent'] += 1
                 steps = 1                               # Focus push: reach +1
             mod = p['atk'] + REP[min(k, 2)]
+            if foe_fend and tgt.band >= 3 and not tgt.fended:
+                tgt.fended = True
+                mod -= 2                                # adversary Fend (06.6.5; 09_core)
             red = tgt.red
+            if caster is not None and caster.get('elemental'):
+                red = 0
             if called and tgt.red >= 2:
                 mod -= 2                                # called shot at a gap: ignore worn armor
                 red = 0
             deg = degree(rng, mod, tgt.guard)
+            if log is not None:
+                log.append(('beat', mod, tgt.guard, deg, steps))
             if deg >= 2:
-                h = harm(sev, steps + (1 if deg == 3 else 0), 0, red)
+                h = harm(bsev, steps + (1 if deg == 3 else 0), 0, red)
+                if burn:
+                    tgt.burning = min(3, tgt.burning + burn)
+                if caster is not None and caster.get('push_on_crit') and deg == 3:
+                    tgt.engaged = False                 # Force Bolt: pushed one band; it must Move back
                 before_m = tgt.cur_members()
                 tgt.vit -= h
                 if h >= 8:
@@ -206,6 +255,8 @@ def fight(rng, pband, foes, policy='steady', weapon='one', armor=None, shield=Fa
                     tgt.bloodied = True
                     mor.tick(1)
                 fallen = before_m - tgt.cur_members()
+                if log is not None and fallen > 0:
+                    log.append(('defeat', tgt.band, fallen))
                 if fallen > 0:
                     mor.tick(fallen + (1 if tgt.leader and not tgt.alive else 0))
                 mor.strength()
@@ -222,6 +273,7 @@ def fight(rng, pband, foes, policy='steady', weapon='one', armor=None, shield=Fa
     def foe_turn(f):
         if not f.alive or mor.broken:
             return
+        f.fended = False
         acts = 2
         k = 0
         if not f.engaged:
@@ -256,6 +308,9 @@ def fight(rng, pband, foes, policy='steady', weapon='one', armor=None, shield=Fa
                     mor.tick(-1)
             acts -= 1
             k += 1
+        if f.burning and f.alive:                       # cond.burning: S1 per stack at turn end, reduced
+            f.vit -= max(0, HARM[1] - (0 if caster is not None and caster.get('elemental') else f.red)) * f.burning
+            mor.strength()
 
     rounds = 0
     while rounds < 30:
@@ -274,9 +329,14 @@ def fight(rng, pband, foes, policy='steady', weapon='one', armor=None, shield=Fa
             break
     over = mor.broken or not any(f.alive for f in foes)
     won = over and st['extra'] < 2
+    if log is not None and won and mor.broken:
+        for f in foes:
+            if f.alive:
+                log.append(('fled', f.band, f.cur_members()))
     return dict(won=won, clean=won and not st['staggered'], staggered=st['staggered'],
                 dying=st['extra'] >= 2, rounds=rounds, lost=min(st['lost'], p['vit']),
-                broke=mor.broken and any(f.alive for f in foes), focus_left=st['focus'])
+                broke=mor.broken and any(f.alive for f in foes), focus_left=st['focus'],
+                focus_spent=st['focus_spent'])
 
 
 def run(label, pband, mk, **kw):
@@ -485,3 +545,69 @@ if __name__ == '__main__':
     chase_row("P1 (+5) from T1 rabble (+2), start close", pc_mod=5, foe_mod=2, dc_pool=mixed, start_pursuit=2)
     chase_row("Sensitivity: clocks 4 and 4, P1 from T2, start near", pc_mod=5, foe_mod=4, dc_pool=mixed, start_pursuit=1, escape_size=4, pursuit_size=4)
     chase_row("Sensitivity: clocks 6 and 6, P1 from T2, start near", pc_mod=5, foe_mod=4, dc_pool=mixed, start_pursuit=1, escape_size=6, pursuit_size=6)
+
+
+# ---------------------------------------------------------------- J. casters and the branch working (I-009)
+# A caster line by band (05.7.11; revision I-009): casting attribute +3 (+4 from the tier-4 increase) + competence
+# (no calling +2 at creation; a calling's +3/+4/+5/+5/+6 at tiers 1-5, 04.5.2); Guard 10 + Agility +1 + floor +1 = 12;
+# no armor; Vitality 12 + 2 x (band - 1) (07.1.2); Focus 4 + tier (05.6.1). The working's severity follows the
+# caster's grade in the casting school's license (trained S2, expert S3, master S4; narrow callings: expert at
+# tier 3, master at tier 5), as a weapon's Strike follows mastery (06.4.5).
+CASTER = {
+    0: dict(atk=5, guard=12, vit=12, armor=0, tempo=2, focus=4),     # new character, no calling (ch.02)
+    1: dict(atk=6, guard=12, vit=12, armor=0, tempo=2, focus=5),
+    2: dict(atk=7, guard=12, vit=14, armor=0, tempo=2, focus=6),
+    3: dict(atk=8, guard=12, vit=16, armor=0, tempo=3, focus=7),
+    4: dict(atk=9, guard=12, vit=18, armor=0, tempo=3, focus=8),
+    5: dict(atk=10, guard=12, vit=20, armor=0, tempo=4, focus=9),
+}
+WORK_SEV = {0: 2, 1: 2, 2: 2, 3: 3, 4: 3, 5: 4}
+BRANCH = {   # how each branch working is modelled (05.7.11)
+    'arcane Force Bolt': dict(elemental=True, push_on_crit=True),     # harm.arcane.force: armor does not reduce it
+    'divine Rebuke': dict(elemental=True),                            # radiant/necrotic; the opposed-nature rung is not modelled
+    'primal Wild Lash': dict(elemental=False),                        # thorn, stone, water, wind: physical; reduction applies
+}
+
+if __name__ == '__main__':
+    table("J1. New casters (ch.02, no calling) using only their branch working (S2, no Focus) -- I-009 acceptance >= 75% vs one T2")
+    for name, bw in BRANCH.items():
+        for lab, mk in (("1xT1", lambda: [Foe(1)]), ("2xT1", lambda: [Foe(1), Foe(1)]), ("1xT2", lambda: [Foe(2)])):
+            run("new caster +5 G12 V12, %s vs %s" % (name, lab), 1, mk, pc_over=CASTER[0], caster=dict(sev=2, **bw))
+    for name, bw in BRANCH.items():
+        run("weakest legal caster (+1, G10, V11), %s vs 1xT2" % name, 1, lambda: [Foe(2)],
+            pc_over=dict(atk=1, guard=10, vit=11, armor=0, tempo=0), caster=dict(sev=2, **bw))
+        run("weakest legal caster (+1, G10, V11), %s vs 1xT1" % name, 1, lambda: [Foe(1)],
+            pc_over=dict(atk=1, guard=10, vit=11, armor=0, tempo=0), caster=dict(sev=2, **bw))
+    run("reference: the same new caster with a staff, no working (+1 S2)", 1, lambda: [Foe(2)], pc_over=dict(CASTER[0], atk=1))
+    run("reference: martial P1 line, no Focus", 1, lambda: [Foe(2)])
+
+    table("J2. A Spent tier-3 caster (rank 2, S3) -- I-009 acceptance >= 40% vs one T3; martial baseline beside it")
+    for name, bw in BRANCH.items():
+        run("Spent P3 caster, %s vs 1xT3" % name, 3, lambda: [Foe(3)], pc_over=CASTER[3], caster=dict(sev=3, **bw))
+        run("  the same, T3 Fends (09's final rule)" , 3, lambda: [Foe(3)], pc_over=CASTER[3], caster=dict(sev=3, **bw), foe_fend=True)
+        run("  the same, Vitality 12 (WE-05 Ash's sheet)", 3, lambda: [Foe(3)], pc_over=dict(CASTER[3], vit=12), caster=dict(sev=3, **bw))
+    run("Ash before I-009: Spent, staff +2 S2 (section E)", 3, lambda: [Foe(3)], pc_over=dict(atk=2, guard=12, vit=12, sev=2, armor=0))
+    run("martial specialist P3, no Focus (I-006 baseline)", 3, lambda: [Foe(3)])
+    run("martial specialist P3, no Focus, T3 Fends", 3, lambda: [Foe(3)], foe_fend=True)
+    run("broad martial P3, no Focus", 3, lambda: [Foe(3)], pc_over=dict(sev=2, atk=8, guard=17))
+
+    table("J3. The branch working at every band, Spent, against one foe of the caster's band; martial no-Focus baseline beside it")
+    for b in (1, 2, 3, 4, 5):
+        for name, bw in BRANCH.items():
+            run("Spent P%d caster (S%d), %s vs 1xT%d" % (b, WORK_SEV[b], name, b), b, lambda b=b: [Foe(b)],
+                pc_over=CASTER[b], caster=dict(sev=WORK_SEV[b], **bw))
+        run("martial specialist P%d, no Focus" % b, b, lambda b=b: [Foe(b)])
+
+    table("J4. Focus still pays: the same P3 caster Spent, pushing the working, or casting a 1-Focus spell first each turn")
+    lance = dict(cost=1, sev=3, burning=1)        # ab.flame_lance rank 2: S3 fire and one stack of cond.burning
+    for lab, mk in (("1xT3", lambda: [Foe(3)]), ("1xT4", lambda: [Foe(4)]), ("2xT3", lambda: [Foe(3), Foe(3)]),
+                    ("2xT2", lambda: [Foe(2), Foe(2)])):
+        bw = BRANCH['arcane Force Bolt']
+        run("P3 caster vs %s: Spent (Force Bolt only)" % lab, 3, mk, pc_over=CASTER[3], caster=dict(sev=3, **bw))
+        run("P3 caster vs %s: Focus 7, push the first bolt each turn" % lab, 3, mk, pc_over=CASTER[3], caster=dict(sev=3, **bw), use_focus=True)
+        run("P3 caster vs %s: Focus 7, Flame Lance first each turn" % lab, 3, mk, pc_over=CASTER[3], caster=dict(sev=3, spell=lance, **bw), use_focus=True)
+        run("martial specialist P3 vs %s: no Focus" % lab, 3, mk)
+        run("martial specialist P3 vs %s: Focus push" % lab, 3, mk, use_focus=True)
+    table("J5. Sensitivity: the working one rung lighter at tier 3 (S2), the alternative DL-05-31 rejected")
+    for name, bw in BRANCH.items():
+        run("Spent P3 caster, %s at S2 vs 1xT3" % name, 3, lambda: [Foe(3)], pc_over=CASTER[3], caster=dict(sev=2, **bw))

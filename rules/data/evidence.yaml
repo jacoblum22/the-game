@@ -28,7 +28,7 @@ weights:
     - {band: 3, dc_min: 18, dc_max: 22, points: 0}
     - {band: 4, dc_min: 23, dc_max: 27, points: 0}
     - {band: 5, dc_min: 28, points: 0}
-  challenge_band_source: "the frame's final DC; no-roll bases use the obstacle's stored DC or tier; conduct-only events use the highest threat band among aware opposing entities present, else 1 (03.4.3)"
+  challenge_band_source: "the frame's final DC; no-roll bases use the obstacle's stored DC or tier; conduct-only events use the highest threat band among aware opposing entities present, else 1 (03.4.3). In a conflict: power_band shifted by the advisory word (trivial -2, easy -1, fair 0, hard +1, lethal +2), clamped 1-5 (03.4.3; DL-00-05). In a contest (social, craft or lore; revision I-003): max(DC band, contest band), the contest band being the opposing party's threat band or its faction's tier (0-1 -> 1 ... 5 -> 5), or the work's type-tier (03.4.3; 15.3.11; 15.9.20; 08.6.4)"
   quality:                      # 03.4.1: base odds = success-or-better % with circumstance = 0
     - {id: routine, base_odds_min: 70, points: 2}
     - {id: difficult, base_odds_min: 40, base_odds_max: 65, points: 4}
@@ -42,7 +42,7 @@ weights:
     training: none
     origin: {fixed_points: 24, recorded_as: difficult}
   stakes: {safe: 0, risky: 2, dire: 4}
-  lethal_context: 2             # added when frame.stakes.lethal = true
+  lethal_context: 2             # added when frame.stakes.lethal = true, or when the event is ruinous (03.4.5; revision I-003)
   critical_success: 2
   novelty: 2                    # 03.4.4
   witnessed: 0                  # witnesses never weight capability (03.4.6, DL-03-09); they feed public()
@@ -56,7 +56,9 @@ weights:
     - "the scene's situation tag at level 2"
   novelty_test: "context_class not present among the actor's settled events on the same level-2 deed node within the recency window"
   flags:                        # 03.4.5; flags never add points
-    crisis: "lethal_context = true OR actor harm_state in [staggered, dying] at declaration OR (stakes = dire AND quality = challenging)"
+    crisis: "lethal_context = true OR actor harm_state in [staggered, dying] at declaration OR (stakes = dire AND quality = challenging) OR ruinous OR (contest AND contest.brink) (revision I-003)"
+    ruinous: "outside conflict: stakes = dire AND the threatened cost at its critical-failure severity is irreversible: cost.closed_door S4-S5 against a principal or faction; cost.gear on a unique item or irreplaceable material; a necessary clue node's last placement or the case lost; a project's spoilage on an irreplaceable material (03.4.5; revision I-003)"
+    brink: "a contest beat declared while the contest's opposing clock stands one segment from full: a campaign's or council's patience (15.8), a case's opposition clock (15.9.13), a project's spoilage clock (08.6.4) (03.4.5; revision I-003)"
     peak: "degree in [success, critical_success] AND challenge_band >= power_band(actor) + 1"
 
 # --------------------------------------------------------------------------------------------------
@@ -145,6 +147,8 @@ tag_event_fields:
   - {name: significance, type: "{consequential, pressured, own_act, cites}", supplied_by: engine}
   - {name: justification, type: str, supplied_by: dm}
   - {name: novel, type: bool, supplied_by: engine}
+  - {name: contest, type: "{kind: social|craft|lore, band: int 1-5, brink: bool}|null", supplied_by: engine, note: "03.4.3; revision I-003"}
+  - {name: ruinous, type: bool, supplied_by: engine, note: "03.4.5; revision I-003"}
   - {name: crisis, type: bool, supplied_by: engine}
   - {name: peak, type: bool, supplied_by: engine}
   - {name: points, type: int, supplied_by: engine, sealed: true}

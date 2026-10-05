@@ -1132,9 +1132,11 @@ PC's own method's.
 signature}`: the gate is its creature tags; `eligible` lists the `gen_absorb.yaml` entries the gate admits
 (computed by the generator); `cannot_absorb` names the exclusions; `signature` names the one entry
 `gen.item_ability` and the Taking's decisive fill use (which 04 records as `signature_of` on that entry:
-Interface requests). Folk have no pool (04's `no_pool: creature.folk`: their arts are learned) with one
-exception this chapter requests: giant-kin and beastfolk (ogres, trolls, true giants, gnolls, lizardfolk) have
-natural powers (a troll's grip, a gnoll's nose), and their archetypes list their eligible entries. The Taking
+Interface requests). The human-like folk have no pool (04's `no_pool`: human, elf, dwarf, halfling, orc,
+goblin; their arts are learned); giant-kin and beastfolk (ogres, trolls, true giants, gnolls, lizardfolk) have
+natural powers (a troll's grip, a gnoll's nose), and their archetypes list their eligible entries [revision:
+I-020: 04 narrowed `no_pool` and records `signature_of`; this chapter's generator reads `no_pool` from the data
+and fails when `signature_of` disagrees with the archetypes]. The Taking
 needs the PC to have witnessed the creature act (09.5.4).
 
 ### 09.12 The bestiary
@@ -1989,10 +1991,12 @@ a recorded fact), 06.11.7 Yield and parley (a list's `parley_when`), 07.4.1 Yiel
 
 - `absorbable` on every archetype, with `eligible`, `cannot_absorb` and `signature` (09.11.3): done. Please
   record **`signature_of`** on the `gen_absorb.yaml` entries named as signatures (the list is
-  `archetypes.yaml`'s `absorbable.signature` values; 46 archetypes name one).
+  `archetypes.yaml`'s `absorbable.signature` values; 46 archetypes name one). **Met** (revision I-020): 25
+  entries carry it.
 - **Narrow `no_pool: [creature.folk]`** to the human-like folk (human, elf, dwarf, halfling, orc, goblin):
   giant-kin and beastfolk have natural powers; `ab.abs_stone_grip` already gates on `creature.folk.giant`,
-  which the current `no_pool` contradicts.
+  which the current `no_pool` contradicts. **Met** (revision I-020); beastfolk gates added to Predator's Nose, Night Eyes,
+  Gills and Scale Ward so gnolls, ratfolk and lizardfolk have entries.
 - The pacing assumption (opposition at band to band+2) should become 09.8.2's 30/55/15 with 03's
   advisory-offset challenge band (above); if 03 declines, 04's great-deed gate should accept deeds at the
   current band for tiers 2–3.

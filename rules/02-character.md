@@ -418,7 +418,16 @@ the rules follow the entry.
 livelihood's `defaults.attribute_priority` (an ordering of the seven attributes): among all legal
 placements of the chosen shape, it takes the one that gives the highest value to the first attribute in
 the ordering, then the highest possible to the second, and so on (lexicographic maximum). The result
-for every livelihood and people is tabulated in T-02-6. *Example:* Soldier's priority is Might,
+for every livelihood and people is tabulated in T-02-6. **Caster exception** `[revision: I-009]`: for a
+magic livelihood (02.5.5) whose people's Typical rule fixes the livelihood's casting attribute (05.7.2) at
+−1, the default uses the **Free rule** (02.3.4) instead, and the DM says so in one line; the player may
+still choose the Typical rule, and the DM then states the effect DC it produces (Edge cases, "Choices
+against the grain"). Four cells
+change: the Orc-kin apprentice, the Goblin-kin acolyte, and the Beastfolk hedge-taught and Touched, whose
+casting attribute moves from −1 to +3 (`origins.yaml#creation_defaults.typical_rule_except`). *Why:* the
+fast path should never make a caster who cannot cast; with the default, every default-path new caster
+beats one T2 foe 90.5–94.8% of the time on its branch working, where a Typical-rule caster at +1 does
+62–73% (`sim02.py`) [DL-02-25]. *Example:* Soldier's priority is Might,
 Endurance, Agility, Wits, Resolve, Presence, Intellect. Human, Peaked (+3, +2, +1, 0, 0, 0, −1): Might
 +3, Endurance +2, Agility +1, Wits 0, Resolve 0, Presence 0, Intellect −1. Dwarf, Typical, Peaked
 (+3, +2, +2, +1, 0, 0, −1; Endurance ≥ +2, Resolve ≥ +1, Agility −1): Might +3, Endurance +2, Agility
@@ -683,7 +692,10 @@ always been able to call the wind"), the source carries that one school tag, one
 gate, and it fills the slot. If the player **left it to birth**, the source carries all seven school
 tags and the engine draws one, equal weights. The gift entry grants the school's training license at
 `trained` as an innate license, competence +2 at the school, the acceptance fact, and its listed
-first working at rank 1 (T-02-7). This is the innate spark that chapter 04's Elementalist needs
+first working at rank 1 (T-02-7). **The spark** names an element as well: fire, water, earth or air,
+named in the concept or drawn by the engine with equal weights in the same draw (fact `pc.spark.element`),
+and its first working is that element's: Cinder Stride, Undertow, Heave or Stolen Breath
+(`gifted_ability_by_element`) [revision: I-015; DL-02-24]. This is the innate spark that chapter 04's Elementalist needs
 (04.2.7), generalized to all seven primal schools because all seven are things one can be born to
 [HWFWM's awakening stones fill a slot by a roll shaped by who the person is, with no reroll; racial
 gifts are a small fixed package: R2 02; 04 Interface request; DL-02-09].
@@ -1530,8 +1542,8 @@ Level-2 deed tags per branch, for reference: arcane 11, craft 11, divine 8, guil
 least one livelihood list or upbringing; any may be the off-list pick (magic schools excepted).
 
 **T-02-6 Default attribute placements** (02.3.5; Peaked shape; humans under the Free rule, the others
-under their Typical rule). Each cell lists Might, Agility, Endurance, Wits, Intellect, Presence,
-Resolve, in that order.
+under their Typical rule, except the cells marked † which take the Free rule by 02.3.5's caster
+exception). Each cell lists Might, Agility, Endurance, Wits, Intellect, Presence, Resolve, in that order.
 
 | Livelihood (priority) | Human | Elf | Dwarf | Halfling | Orc-kin | Goblin-kin | Giant-kin | Beastfolk |
 |---|---|---|---|---|---|---|---|---|
@@ -1545,10 +1557,10 @@ Resolve, in that order.
 | Herder (End Wit Res Agi Mig Pre Int) | 0 0 +3 +2 −1 0 +1 | +1 +2 −1 +3 0 0 +2 | +1 −1 +3 +2 0 0 +2 | −1 +2 +3 +2 0 0 +1 | +2 0 +3 +2 −1 0 +1 | 0 +1 +3 +2 0 −1 +2 | +2 +1 +3 −1 0 0 +2 | +1 +2 +3 +2 0 0 −1 |
 | Scholar (Int Wit Pre Res Agi End Mig) | −1 0 0 +2 +3 +1 0 | 0 +2 −1 +2 +3 +1 0 | 0 −1 +2 +2 +3 0 +1 | −1 +2 0 +2 +3 0 +1 | +2 0 0 +3 −1 +2 +1 | 0 +1 0 +2 +3 −1 +2 | +2 0 +1 −1 +3 +2 0 | 0 +1 0 +2 +3 +2 −1 |
 | Healer (Int Wit Pre Res End Agi Mig) | −1 0 0 +2 +3 +1 0 | 0 +2 −1 +2 +3 +1 0 | 0 −1 +2 +2 +3 0 +1 | −1 +2 0 +2 +3 0 +1 | +2 0 0 +3 −1 +2 +1 | 0 +1 0 +2 +3 −1 +2 | +2 0 +1 −1 +3 +2 0 | 0 +1 0 +2 +3 +2 −1 |
-| Apprentice (Int Wit Res Agi Pre End Mig) | −1 0 0 +2 +3 0 +1 | 0 +2 −1 +2 +3 0 +1 | 0 −1 +2 +2 +3 0 +1 | −1 +2 0 +2 +3 0 +1 | +2 +1 0 +3 −1 0 +2 | 0 +1 0 +2 +3 −1 +2 | +2 0 +1 −1 +3 0 +2 | 0 +2 0 +2 +3 +1 −1 |
-| Acolyte (Pre Res Wit End Int Mig Agi) | 0 −1 0 +1 0 +3 +2 | 0 +2 −1 +1 0 +3 +2 | 0 −1 +2 +1 0 +3 +2 | −1 +2 0 +1 0 +3 +2 | +2 0 0 +1 −1 +3 +2 | 0 +1 +2 +2 0 −1 +3 | +2 0 +1 −1 0 +3 +2 | 0 +1 +2 +2 0 +3 −1 |
-| Hedge-taught (Res Wit End Agi Pre Int Mig) | −1 0 +1 +2 0 0 +3 | 0 +2 −1 +2 0 +1 +3 | 0 −1 +2 +2 0 +1 +3 | −1 +2 +1 +2 0 0 +3 | +2 0 +1 +2 −1 0 +3 | 0 +1 +2 +2 0 −1 +3 | +2 +1 +2 −1 0 0 +3 | 0 +2 +2 +3 0 +1 −1 |
-| Touched (Res Agi Wit End Pre Mig Int) | 0 +2 0 +1 −1 0 +3 | 0 +2 −1 +2 0 +1 +3 | 0 −1 +2 +2 0 +1 +3 | −1 +2 +1 +2 0 0 +3 | +2 +2 0 +1 −1 0 +3 | 0 +2 +1 +2 0 −1 +3 | +2 +2 +1 −1 0 0 +3 | 0 +3 +2 +2 0 +1 −1 |
+| Apprentice (Int Wit Res Agi Pre End Mig) | −1 0 0 +2 +3 0 +1 | 0 +2 −1 +2 +3 0 +1 | 0 −1 +2 +2 +3 0 +1 | −1 +2 0 +2 +3 0 +1 | −1 0 0 +2 +3 0 +1† | 0 +1 0 +2 +3 −1 +2 | +2 0 +1 −1 +3 0 +2 | 0 +2 0 +2 +3 +1 −1 |
+| Acolyte (Pre Res Wit End Int Mig Agi) | 0 −1 0 +1 0 +3 +2 | 0 +2 −1 +1 0 +3 +2 | 0 −1 +2 +1 0 +3 +2 | −1 +2 0 +1 0 +3 +2 | +2 0 0 +1 −1 +3 +2 | 0 −1 0 +1 0 +3 +2† | +2 0 +1 −1 0 +3 +2 | 0 +1 +2 +2 0 +3 −1 |
+| Hedge-taught (Res Wit End Agi Pre Int Mig) | −1 0 +1 +2 0 0 +3 | 0 +2 −1 +2 0 +1 +3 | 0 −1 +2 +2 0 +1 +3 | −1 +2 +1 +2 0 0 +3 | +2 0 +1 +2 −1 0 +3 | 0 +1 +2 +2 0 −1 +3 | +2 +1 +2 −1 0 0 +3 | −1 0 +1 +2 0 0 +3† |
+| Touched (Res Agi Wit End Pre Mig Int) | 0 +2 0 +1 −1 0 +3 | 0 +2 −1 +2 0 +1 +3 | 0 −1 +2 +2 0 +1 +3 | −1 +2 +1 +2 0 0 +3 | +2 +2 0 +1 −1 0 +3 | 0 +2 +1 +2 0 −1 +3 | +2 +2 +1 −1 0 0 +3 | 0 +2 0 +1 −1 0 +3† |
 | Merchant (Pre Wit Int Res End Agi Mig) | −1 0 0 +2 +1 +3 0 | 0 +2 −1 +2 +1 +3 0 | 0 −1 +2 +2 0 +3 +1 | −1 +2 0 +2 0 +3 +1 | +2 0 0 +2 −1 +3 +1 | 0 +1 0 +3 +2 −1 +2 | +2 0 +1 −1 +2 +3 0 | 0 +1 0 +2 +2 +3 −1 |
 | Performer (Pre Agi Wit Int Res End Mig) | −1 +2 0 +1 0 +3 0 | 0 +2 −1 +2 +1 +3 0 | 0 −1 +2 +2 0 +3 +1 | −1 +2 0 +2 0 +3 +1 | +2 +2 0 0 −1 +3 +1 | 0 +3 0 +2 +2 −1 +1 | +2 +2 +1 −1 0 +3 0 | 0 +2 0 +2 +1 +3 −1 |
 | Courtier (Pre Wit Int Res Agi End Mig) | −1 0 0 +2 +1 +3 0 | 0 +2 −1 +2 +1 +3 0 | 0 −1 +2 +2 0 +3 +1 | −1 +2 0 +2 0 +3 +1 | +2 0 0 +2 −1 +3 +1 | 0 +1 0 +3 +2 −1 +2 | +2 0 +1 −1 +2 +3 0 | 0 +1 0 +2 +2 +3 −1 |
@@ -1566,7 +1578,10 @@ Resolve, in that order.
 | **Wind-called** | `deed.primal.weather` | *Gust* (`ab.gust`) | A blast of wind strikes up to two targets within band.near in a line from you (each rolls Endure (Might) against your effect DC): on a failure each is pushed one band away and knocked prone. | 1 |
 | **Skin-turner** | `deed.primal.shapeshifting` | *Claws* (`ab.claws`) | For the scene your unarmed Strikes deal cutting harm one severity rung heavier (base Moderate), +1. | 1 |
 | **The sight** | `deed.primal.spirits` | *Spirit Tongue* (`ab.spirit_tongue`) | For the scene you perceive the spirits present at this place and may Talk with them. | 0 |
-| **The spark** | `deed.primal.elements` | *Cinder Stride* (`ab.cinder_stride`) | For 3 rounds your Strikes deal fire harm in place of their own type, +1. | 1 |
+| **The spark** (fire) | `deed.primal.elements` | *Cinder Stride* (`ab.cinder_stride`) | For 3 rounds your Strikes deal fire harm in place of their own type, +1. | 1 |
+| **The spark** (water) | `deed.primal.elements` | *Undertow* (`ab.undertow`) | Water rises around one being within band.near (it rolls Endure (Might) against your effect DC): on a failure it takes Light crushing harm, is dragged one band toward the water and knocked prone. | 1 |
+| **The spark** (earth) | `deed.primal.elements` | *Heave* (`ab.heave`) | The ground under one being within band.near bucks and heaves (it rolls Evade against your effect DC): on a failure it takes Light crushing harm, is knocked prone and is slowed until the end of its next turn. | 1 |
+| **The spark** (air) | `deed.primal.elements` | *Stolen Breath* (`ab.stolen_breath`) | Pull the air from the lungs of one breathing being within band.near (it rolls Endure (Endurance) against your effect DC): on a failure it takes Moderate harm from lack of air and is choking until the end of its next turn. | 1 |
 | **The eye** | `deed.primal.hexcraft` | *Evil Eye* (`ab.evil_eye`) | One being within band.near that can see you rolls Endure (Resolve) against your effect DC: on a failure it is weakened and distracted until the scene ends. | 1 |
 
 **T-02-8 Birth quirks.** (`gen_birth.yaml`, layer `trait`; total weight 40. A lever granted by a quirk
@@ -2092,8 +2107,11 @@ something the spirit-talkers learn." (INV-8; 01.3.6.)
 
 **Choices against the grain.**
 - *A magic livelihood under a Typical rule that fixes the casting attribute at −1* (an Orc-kin
-  Apprentice, a Goblin-kin Acolyte, a Beastfolk Hedge-taught). Legal. Before confirming, the DM states
-  the effect DC it produces (10 − 1 + 2 = 11) and offers 02.3.4. WE-02-3 is the worked case.
+  Apprentice, a Goblin-kin Acolyte, a Beastfolk Hedge-taught or Touched). The default already takes the
+  Free rule (02.3.5's caster exception); a player who asks for the Typical rule anyway may have it. Before
+  confirming, the DM states the effect DC it produces (10 − 1 + 2 = 11) and the first-fight odds it means
+  (one T2 foe: 62–73% on the branch working, against 90–95% at +3; `sim02.py`). WE-02-3 is the worked
+  case [revision: I-009].
 - *A character built weak on purpose* (the frail scholar, the cowardly knight). Legal; the arrays allow
   only one −1, and the floor stands. Nothing is given in exchange.
 - *A bodily or mental condition from before the story* (blind in one eye, a lame leg, mute). It is a
@@ -2258,9 +2276,12 @@ ability, acquired partition, rank 1, `source.kind: gift`; each magic livelihood 
 license's `requires`. Decided: no origin grants `lic.focus.reserve` (it stays a thing learned).
 Requests: (a) only *Cinder Stride* (fire) and *Stone Shape* exist under `deed.primal.elements`; a
 `min_tier: 1` working for water and for air would let a spark of those elements start with its own
-element; (b) issue I-009 (one zero-cost attack working per magic branch) matters most to new
+element (**met**, revision I-015: Undertow, Heave and Stolen Breath, and the spark grants its element's
+working, 02.6.3); (b) issue I-009 (one zero-cost attack working per magic branch) matters most to new
 characters: a starting caster has 3–5 Focus and one spell, and this chapter's simulation shows what
-happens to one who must fight without it (OEQ-02-10); (c) confirm that an innate license granted by
+happens to one who must fight without it (OEQ-02-10) (**met**, revision I-009: 05.7.11's branch working,
+held through the livelihood's training license with no slot; a default-path new caster now beats one T2
+90.5–94.8%); (c) confirm that an innate license granted by
 `gen.birth` needs no further `requires` (the fact `pc.accepted.primal.<school> = innate` is meant to
 satisfy 05.9.4).
 
@@ -2283,7 +2304,8 @@ frame: treat the holder as Might +1 for carrying capacity only. Food ×N in a ki
 
 **To 09 (adversaries).** `threat_advisory` reads `power_band`, and every new character is band 1; but
 this chapter's simulation (OEQ-02-10) shows band-1 characters differ widely in a melee: against one T2
-foe a new soldier wins 99% and a new acolyte without Focus 31%. Please let the advisory read the PC's
+foe a new soldier wins 99% and a new acolyte without Focus 31% (90.5% since revision I-009, on her branch
+working; a caster who kept a Typical rule with the casting attribute at −1, 62–73%). Please let the advisory read the PC's
 actual attack modifier and Guard at band 1 (or rate T2 "hard" for a PC whose best attack is below +3),
 so the lethal warning speaks before a scholar is put sword to sword with a soldier.
 
@@ -2338,4 +2360,4 @@ Each has a shipped default in the rules above and a named test.
 | OEQ-02-7 | Is first recognition timely with no backstory evidence? | tallies start at zero (02.11.1) | **T-02-FIRST**: median session of the first calling offer for focused play; target ≤ 5 (04's simulation: 4). If later, adopt 03.2.8 for deep trainings only and re-test |
 | OEQ-02-8 | Is base Focus priced right against knowledge? | Focus 5 = 2 units, 4 = 1, 3 = 0 (02.4.4) | **T-02-FOCUS**: share of Gifted characters choosing a Focus-5 upbringing; if above 70%, price Focus 5 at 3 units (it then buys nothing else) |
 | OEQ-02-9 | Is one second look enough, and is it abused? | once, before the first reflection (02.2.6) | **T-02-WINDOW**: share of characters using it (expected 10–30%) and what they change; any use that follows a failed roll by under one scene is logged as a candidate for review |
-| OEQ-02-10 | Do the weakest legal characters survive a first fight? | Vitality 11–15, Guard 10–16 (T-02-1) | **T-02-FIRSTFIGHT**: chapter 06's simulation run on this chapter's lines (`_process/simulation/02-character-sim.md`; 20,000 fights a row, no Focus spent). Result now: every martial line beats one T1 foe 100%, two T1 99.8–100%, one T2 98–99.8%; a new acolyte or apprentice **without Focus, in melee** beats one T1 98.6–99.5%, two T1 80–91%, one T2 only 31–55% (the weakest legal line 97% / 73% / 21%). Target: with 05's zero-cost workings (I-009) and 09's advisory reading the real line, no legal new character meets a fight rated "fair" that it loses more than 15% of the time; re-run when 05 and 09 are final |
+| OEQ-02-10 | Do the weakest legal characters survive a first fight? | Vitality 11–15, Guard 10–16 (T-02-1) | **T-02-FIRSTFIGHT**: chapter 06's simulation run on this chapter's lines (`_process/simulation/02-character-sim.md`; 20,000 fights a row, no Focus spent). Result now (revision I-009): every martial line beats one T1 foe 100%, two T1 99.8–100%, one T2 98–99.8%; every default-path new caster **using its branch working (05.7.11), no Focus** beats one T1 100%, two T1 98.4–99.3%, one T2 90.5–94.8% (in melee with a staff or mace it was 31–55%); a caster who keeps a Typical rule with the casting attribute at −1 (a choice against the grain, 02.3.5) 62–73% against one T2; the weakest legal line (+1, Guard 10, Vitality 11) 98.9% / 83.5% / 39.3%. Target: no default-path new character meets a fight rated "fair" that it loses more than 15% of the time: **met** (worst 9.5% lost). The against-the-grain lines remain 09's advisory to warn of (it reads the real line, 09.6) |

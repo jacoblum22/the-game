@@ -221,12 +221,14 @@ def brk_of(a):
     return b
 
 
+NO_POOL = ABSORB["no_pool"]   # revision I-020: read from gen_absorb.yaml (the human-like folk), never hard-coded
+
+
 def absorbable(a):
     ct = a["creature_tags"]
     natural_folk = any(t.startswith(("creature.folk.giant", "creature.folk.beastfolk")) for t in ct)
-    folk = any(t.startswith("creature.folk") for t in ct)
-    if folk and not natural_folk:
-        return {"pool": "none", "reason": "gen_absorb no_pool: creature.folk (learned arts, not natural powers)"}
+    if ct and all(any(matches(n, t) for n in NO_POOL) for t in ct):
+        return {"pool": "none", "reason": "gen_absorb no_pool: the human-like folk (learned arts, not natural powers)"}
     pool = [p for p, e in ABS_POOL.items()
             if any(matches(g, t) for g in e["gate_tags"] for t in ct)
             and not any(matches(x, t) for x in (e.get("excluded_tags") or []) for t in ct)]
@@ -234,7 +236,7 @@ def absorbable(a):
     if a["absorb"].get("signature"):
         out["signature"] = a["absorb"]["signature"]
     if natural_folk:
-        out["no_pool_exception"] = "giant-kin and beastfolk carry natural powers (interface request to 04)"
+        out["natural_folk"] = "giant-kin and beastfolk carry natural powers: gen_absorb's no_pool covers only the human-like folk (I-020)"
     return out
 
 
@@ -507,7 +509,7 @@ try:
     cut = src.index("# ---------------------------------------------------------------- reference archetypes")
     tail = src.index("def base_candidates")
     head = src[:cut] + src[tail:src.index("def contributions")]
-    ns = {}
+    ns = {"__file__": os.path.join(HERE, "08-loot-sim.py")}
     exec(compile(head, "08-loot-sim-head", "exec"), ns)
     L08 = ns
 except Exception as ex:  # pragma: no cover
@@ -577,6 +579,18 @@ def arch_entry(a):
         "lifecycle": "provisional",
         "basis": ["09.2", "R3 §6 #14", "R6 C-R5"],
     }
+
+
+# revision I-020: gen_absorb.yaml records `signature_of` on each entry an archetype names as its signature;
+# the two must agree, so a future archetype edit cannot leave the record stale.
+_sig = {}
+for _a in ARCH.values():
+    _v = absorbable(_a).get("signature")
+    if _v:
+        _sig.setdefault(_v, set()).add(_a["id"])
+for _pid, _p in ABS_POOL.items():
+    if set(_p.get("signature_of") or []) != _sig.get(_pid, set()):
+        err("gen_absorb %s: signature_of %s, but archetypes name it for %s" % (_pid, sorted(_p.get("signature_of") or []), sorted(_sig.get(_pid, set()))))
 
 
 if not errors:

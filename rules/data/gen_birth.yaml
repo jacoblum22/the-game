@@ -170,13 +170,17 @@ pool:
     signature_of: [orig.life.touched]
     signature_eligible: true
     min_tier: 1
+    element:
+      choices: [fire, water, earth, air]
+      chosen_by: "the player's concept names it; otherwise the engine draws one, equal weights, in the same draw (02.6.3)"
     tiers:
-      - {tier: 1, effects: [{effect_id: eff.grant_license, params: {license: lic.training.primal_elements, grade: trained, duration: permanent}}, {effect_id: eff.write_fact, params: {subject: pc, predicate: accepted.primal.elements, value: innate}}, {effect_id: eff.grant_license, params: {license: ab.cinder_stride, grade: "rank 1 (acquired partition, source.kind gift)", duration: permanent}}]}
+      - {tier: 1, effects: [{effect_id: eff.grant_license, params: {license: lic.training.primal_elements, grade: trained, duration: permanent}}, {effect_id: eff.write_fact, params: {subject: pc, predicate: accepted.primal.elements, value: innate}}, {effect_id: eff.write_fact, params: {subject: pc, predicate: spark.element, value: "the element named or drawn: fire | water | earth | air"}}, {effect_id: eff.grant_license, params: {license: "gifted_ability_by_element[pc.spark.element]", grade: "rank 1 (acquired partition, source.kind gift)", duration: permanent}}]}
     competence: {tag: deed.primal.elements, value: 2}
-    gifted_ability: ab.cinder_stride
-    text: "Fire, water, stone or air has known your name since you were small. You hold lic.training.primal_elements as an innate training (+2) and Cinder Stride at rank 1."
+    gifted_ability: by_element
+    gifted_ability_by_element: {fire: ab.cinder_stride, water: ab.undertow, earth: ab.heave, air: ab.stolen_breath}
+    text: "Fire, water, stone or air has known your name since you were small. You hold lic.training.primal_elements as an innate training (+2) and, at rank 1, the working of your element: Cinder Stride (fire), Undertow (water), Heave (earth), Stolen Breath (air)."
     lifecycle: provisional
-    basis: ["02.6.3", "04.2.7", "05.9.4", DL-02-09]
+    basis: ["02.6.3", "04.2.7", "05.9.4", DL-02-09, I-015, DL-02-24]
   - id: birth.gift.hexcraft
     name: "The eye"
     layer: gift

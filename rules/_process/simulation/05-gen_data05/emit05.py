@@ -117,7 +117,8 @@ def emit(abilities, stats, EFF05, EU_TABLE, TAGS, ROOT):
         elif 'composite_key' in a:
             del a['composite_key']
     absorbed = mirror_absorbed(ROOT)
-    n_pool = sum(1 for a in abilities if 'requires_conduct' not in a)
+    n_branch = sum(1 for a in abilities if a.get('slot_class') == 'license')
+    n_pool = sum(1 for a in abilities if 'requires_conduct' not in a) - n_branch
     n_oath = sum(1 for a in abilities if 'requires_conduct' in a)
     total = len(abilities) + len(absorbed)
 
@@ -127,8 +128,9 @@ def emit(abilities, stats, EFF05, EU_TABLE, TAGS, ROOT):
 #   is a license with mechanics (00.12.1), tagged by the deed or conduct it is evidence of, carrying a minimum
 #   tier. Calling tiers grant PICKS into the calling partition from this pool, gated by the calling's tags
 #   (04.8.4); the same entries may be learned into the acquired partition (05.8.5). %d entries: %d in the
-#   tag-gated pool (covering all 81 level-2 deed tags), %d oath-gated by conduct axis and pole, %d mirrors of
-#   ch.04's absorbable powers (slot_class acquired).
+#   tag-gated pool (covering all 81 level-2 deed tags), %d oath-gated by conduct axis and pole, %d branch
+#   workings held through the magic training licenses (slot_class license, 05.7.11), %d mirrors of ch.04's
+#   absorbable powers (slot_class acquired).
 # Owner: 05-abilities-focus-magic (T-00-19). Rules: 05-abilities-focus-magic.md. GENERATED and validated by
 #   rules/_process/simulation/05-gen_data05/gen_data05.py from individually authored tables (ab_*.py): ids, tags, effect
 #   ids, hooks, slots, conditions, bands, flags, duration forms, the eight-form grammar, text lint (SG-15,
@@ -142,7 +144,7 @@ def emit(abilities, stats, EFF05, EU_TABLE, TAGS, ROOT):
 #   ability held in the acquired partition is rank 1). `emulate` is null on abilities: emulation is licensed by
 #   the training license of the ability's first tag (licenses.yaml). `crude_fallback` is that license's.
 # Basis: [C:P5] [C:V] [C:VI] [C:VII] [C:P6] [C:P9] [C:P10] [C:P12] [00.10] [00.12] [R1 05, M-17..M-22]
-#   [R2 05, #3, #4, #8] [R3 05.1-05.16, #2, #3, #12, #13] [R4 9 05] [04.8.4] [DL-05-01..DL-05-30]""" % (total, n_pool, n_oath, len(absorbed))
+#   [R2 05, #3, #4, #8] [R3 05.1-05.16, #2, #3, #12, #13] [R4 9 05] [04.8.4] [DL-05-01..DL-05-30]""" % (total, n_pool, n_oath, n_branch, len(absorbed))
     const = collections.OrderedDict()
     const['schema_version'] = 1
     const['lifecycle'] = 'provisional'
@@ -152,7 +154,7 @@ def emit(abilities, stats, EFF05, EU_TABLE, TAGS, ROOT):
                       'provisional': {'non_pick': 'permanent at the first reflection after use in 3 different scenes; shelved at the second season boundary otherwise'}}
     const['forms'] = [{'id': k.lower(), 'regime': v['regime'], 'timings': sorted(v['timings'])} for k, v in G.FORMS.items()]
     const['timings'] = {'beat': 'the activation is the declared beat', 'rider': 'attaches to the holder\'s own beat; one rider per beat', 'reaction': 'on its hook, uses the holder\'s reaction (06)', 'trigger': 'on its hook, from the holder\'s own resolved beat or a boundary; no action', 'passive': 'applies whenever its applies_when holds'}
-    const['rank_rule'] = "rank = min(highest authored rank, 1 + floor((holding calling's tier - min_tier) / 2)); acquired partition: rank 1; equipped: the item's stated rank"
+    const['rank_rule'] = "rank = min(highest authored rank, 1 + floor((holding calling's tier - min_tier) / 2)); acquired partition: rank 1; equipped: the item's stated rank; branch workings (slot_class license): the grade in the casting school's training license (05.7.11)"
     const['recharge_types'] = [
         {'id': 'at_will', 'form': 'cost.focus 0, limits null'}, {'id': 'focus_only', 'form': 'cost.focus 1-4, limits null'},
         {'id': 'per_round', 'form': '{per: round}', 'handler': 'h.05.round_recharge'}, {'id': 'per_conflict', 'form': '{per: conflict_end}', 'handler': 'h.05.conflict_recharge'},
@@ -223,7 +225,7 @@ def emit(abilities, stats, EFF05, EU_TABLE, TAGS, ROOT):
         'effect_units': [{'effect': a, 'units': b, 'ids': c} for a, b, c in EU_TABLE]}
     by_branch = collections.Counter()
     for a in abilities:
-        by_branch['oath (%s)' % a['conduct_pole'] if 'requires_conduct' in a else '.'.join(a['tags'][0].split('.')[:2])] += 1
+        by_branch['oath (%s)' % a['conduct_pole'] if 'requires_conduct' in a else ('branch working' if a.get('slot_class') == 'license' else '.'.join(a['tags'][0].split('.')[:2]))] += 1
     by_branch['absorbed (mirrors)'] = len(absorbed)
     const['census'] = {'total': total, 'by_group': dict(sorted(by_branch.items())), 'ranks_authored': stats['ranks'],
                        'by_form': {k[5:].lower(): v for k, v in sorted(stats.items()) if k.startswith('form.')},
@@ -250,7 +252,7 @@ def emit(abilities, stats, EFF05, EU_TABLE, TAGS, ROOT):
 #   and is what makes emulation (05.5.4), stretch grades (05.5.2), learning (05.8.5) and flares available for
 #   abilities under its tag. Callings set the grade by tier (04.5.1); every other path grants `trained`.
 # Owner: 05-abilities-focus-magic (T-00-19). Owner-blocks: 02 (origin licenses), 08 (item licenses), 13 (languages,
-#   setting licenses), and 04 (the six lic.call.* capability licenses, data/contrib/licenses.04.yaml, approved).
+#   setting licenses), and 04 (the six lic.call.* capability licenses, data/licenses.yaml owner-block 04, approved).
 # Schema: data/SCHEMAS.md#licensesyaml (License, 00.12.1). EVERY entry carries explicit principle, scope, excludes,
 #   crude_fallback, stretch, emulate and acquisition_paths (01 Interface request; a missing field would be read
 #   as null and logged as a rule_conflict). Generated by rules/_process/simulation/05-gen_data05/gen_data05.py.
@@ -339,7 +341,7 @@ def emit(abilities, stats, EFF05, EU_TABLE, TAGS, ROOT):
                                   design_conditions={'table': 'tbl.05.rite_conditions', 'die': 'd8', 'draw': 'the scale\'s number of conditions, without repeats (roll_table)', 'results': [dict(range=n, id=i, text=t) for n, i, t in rites05.CONDITIONS]},
                                   custom_rites={'id_form': 'rit.custom.<n>', 'lifecycle': 'provisional; permanent when completed twice; retired at the second season boundary if never completed', 'effects': 'one to three effect references with parameters inside their declared ranges, or an existing ability\'s effects at larger scale'},
                                   learn_clock={'name': 'learning <rite>', 'kind': 'project', 'segments': 6, 'visibility': 'public', 'tick_sources': [{'on': 'a training week with one who knows it', 'ticks': 3}, {'on': 'a week of study from its text', 'ticks': 2}]})
-    body = dump(dict(doc)) + '\nrituals:\n' + '\n'.join(indent_list_item(dump([e])) for e in rites)
+    body = dump(dict(doc)).replace('design_conditions:\n  table: tbl.05.rite_conditions', "design_conditions:\n  id: tbl.05.rite_conditions          # the table's own id, so roll_table resolves it (integration)\n  table: tbl.05.rite_conditions", 1) + '\nrituals:\n' + '\n'.join(indent_list_item(dump([e])) for e in rites)
     write(os.path.join(DATA, 'rituals.yaml'), head, body)
 
     # ------------------------------------------------ composites.yaml ------------------------------------------------
@@ -369,7 +371,7 @@ def emit(abilities, stats, EFF05, EU_TABLE, TAGS, ROOT):
 #   keys, and the companion mechanism for everything else: the priority-rank bands of the behavioral slots and
 #   the ordered spread tags. Chapter 05 authors three key kinds: harm_branch (8), conduct_axis (5) and
 #   composite_key_license (9: pairs of abilities flagged composite_key in abilities.yaml). The 32 deed_branch
-#   composites (one per named hybrid calling) are ch.04's owner-block, data/contrib/composites.04.yaml.
+#   composites (one per named hybrid calling) are ch.04's owner-block, data/composites.yaml owner-block 04.
 # Owner: 05-abilities-focus-magic (T-00-19; owner-block 04). Rules: 05.10. Schema: data/SCHEMAS.md#compositesyaml.
 #   Optional fields added by ch.05: name, text, limits, budget. Every composite is at most 4 effect units
 #   (05.11.4) and is built from effects of effects.yaml or the 05 owner-block.
@@ -378,13 +380,13 @@ def emit(abilities, stats, EFF05, EU_TABLE, TAGS, ROOT):
                                   presence_rules={'harm_branch': 'a depth-0 harm event of one key\'s branch lands on a target carrying a condition tagged with the other key\'s branch (cascade applies)',
                                                   'conduct_axis': 'the actor holds, unsuspended, at least one oath-gated ability on each axis at the positive pole',
                                                   'composite_key_license': 'the actor holds both abilities and the entry\'s stated circumstance holds',
-                                                  'deed_branch': 'ch.04: the actor holds the named hybrid calling (data/contrib/composites.04.yaml)',
+                                                  'deed_branch': 'ch.04: the actor holds the named hybrid calling (data/composites.yaml owner-block 04)',
                                                   'suppressed': 'a suppressed priority-exclusive claimant never counts as present (WE-00-6)'},
                                   priority_rank_bands=comp05.PRIORITY_BANDS,
                                   priority_rules=['the highest rank owns the slot; lower claimants are fully suppressed unless cosmetic_merge', 'ties go to the earlier-acquired effect', 'the holder may drop a running claim of their own as a free activity', 'a suppressed claim keeps counting down its duration and resumes if the owner ends first'],
                                   spread_tags=comp05.SPREAD_TAGS, spread_total_cap=comp05.SPREAD_TOTAL_CAP,
                                   spread_rule='a working carries at most one spread tag natively; when flares, items or composites add others they resolve in `order`, each applied to the targets the previous produced, never above spread_total_cap in total')
-    body = dump(dict(doc)) + '\ncomposites:\n' + '\n'.join(indent_list_item(dump([e])) for e in comps) + '\nblocks: []   # owner-block 04 (32 deed_branch composites) is merged here from data/contrib/composites.04.yaml\n'
+    body = dump(dict(doc)).replace('\nspread_total_cap:', "\nspread_form_map: {line: pierce, burst: burst, cone: cone, chain: chain, zone: linger, bolt: null, touch: null}   # eff.05.spell_delivery forms as shapes (06's request, integration)\nspread_total_cap:", 1).replace("note: ch.06 T-06-15 (inserted at integration so both files carry one order; spell-delivery form cone)}", "note: 'ch.06 T-06-15 (inserted at integration so both files carry one order; spell-delivery form cone)'}", 1) + '\ncomposites:\n' + '\n'.join(indent_list_item(dump([e])) for e in comps) + '\nblocks: []   # owner-block 04 (32 deed_branch composites) is merged here from data/contrib/composites.04.yaml\n'
     write(os.path.join(DATA, 'composites.yaml'), head, body)
 
     # ------------------------------------------------ contrib fragments ------------------------------------------------
@@ -431,7 +433,7 @@ def emit(abilities, stats, EFF05, EU_TABLE, TAGS, ROOT):
         for e in errs + G.errors:
             print('  ', e)
         raise SystemExit(1)
-    print('census:', total, 'abilities =', n_pool, 'pool +', n_oath, 'oath +', len(absorbed), 'absorbed;', len(lic) + 2, 'licenses;', len(rites), 'rites;', len(comps), 'composites')
+    print('census:', total, 'abilities =', n_pool, 'pool +', n_oath, 'oath +', n_branch, 'branch workings +', len(absorbed), 'absorbed;', len(lic) + 2, 'licenses;', len(rites), 'rites;', len(comps), 'composites')
 
 
 def indent_list_item(s):

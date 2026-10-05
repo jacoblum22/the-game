@@ -1,8 +1,8 @@
 """gen_data04.py -- generates ch.04's calling data from compact tables and validates every tag id against
 data/tags.yaml. Outputs: rules/data/callings.yaml, rules/data/hybrids.yaml, rules/data/contrib/composites.04.yaml.
 Numbers mirror the ladders verified by recog04.py."""
-import re, sys, io
-ROOT = 'C:/Users/jacob/the-game/rules/'
+import re, sys, io, os
+ROOT = os.environ.get('GAME_RULES', os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..'))) + os.sep
 TAGS = set(re.findall(r"\bid: ([a-z_]+(?:\.[a-z_]+)+)", open(ROOT + 'data/tags.yaml', encoding='utf-8').read()))
 PROPOSED = {'deed.wilds.animals.falconry'}
 
@@ -235,6 +235,7 @@ monk_oath = dict(keeper='order_or_ideal', axes=['conduct.restraint'], words='per
 CALLINGS.append(entry('monk', 'Monk', 'specialist', 'narrow', 'martial', ['deed.martial.unarmed'], attrs=['agility', 'resolve'],
                       oath=monk_oath, variant='monk',
                       extra={'variant_of': 'call.brawler', 'pool_gate': {'own': ['deed.martial.unarmed'], 'kin': ['deed.martial'], 'conduct': ['conduct.restraint']},
+                             'pole': 'positive',   # revision I-007: the Monk's oath draws the positive restraint abilities (05.3.10; 04.8.4)
                              'variant_requirement': 'req.variant.monk'},
                       shadow={'name': 'The Cold Fist', 'conduct': ['conduct.restraint', 'conduct.mercy'], 'pole': 'negative', 'shows_at': 'req.shadow', 'turns_to': 'call.brawler', 'forbidden_acts': []},
                       basis=['04.2.6', 'R3 04.1 (Delve variant families)', 'DL-04-06']))
@@ -494,7 +495,7 @@ def dump_calling(c):
         lines.append('      - ' + q(t))
     return '\n'.join(lines)
 
-HEADER = open('callings_header.yaml', encoding='utf-8').read()
+HEADER = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), '04-callings_header.yaml'), encoding='utf-8').read()
 out = io.StringIO()
 out.write(HEADER)
 out.write('''

@@ -1,5 +1,7 @@
 # gen02.py -- validates data02.py against the shipped data files, emits ch.02's data files,
 # and runs the audits whose numbers the chapter reports.
+import os as _os
+_RULES = _os.environ.get('GAME_RULES', _os.path.normpath(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)), '..', '..', '..')))
 import re, json, itertools, sys, os, random
 from collections import Counter, defaultdict
 from fractions import Fraction
@@ -7,7 +9,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 from data02 import *
 from creation_block import CREATION_BLOCK
 
-ROOT = r"C:\Users\jacob\the-game\rules"
+ROOT = _RULES
 D = os.path.join(ROOT, "data")
 EMIT = "--emit" in sys.argv
 
@@ -116,7 +118,8 @@ for tr in TRAITS:
     for x in tr["gate"] + tr["tags"]: need(x in TAGS, tr["id"] + " " + x)
     for e in tr["effects"]: need(e["effect_id"] in EFFECTS, tr["id"] + " " + e["effect_id"])
 for s, nm, ab, txt in GIFTS:
-    need("deed.primal." + s in TAGS and ab in ABIL and under(ABIL[ab]["first"], "deed.primal." + s) and ABIL[ab]["min_tier"] == 1, "gift " + s)
+    for x in (ab.values() if isinstance(ab, dict) else [ab]):
+        need("deed.primal." + s in TAGS and x in ABIL and under(ABIL[x]["first"], "deed.primal." + s) and ABIL[x]["min_tier"] == 1, "gift " + s + " " + x)
 for a, br in BENT_GATES.items():
     for b in br: need(b in TAGS, b)
 # every magic branch has an origin granting a first license (04/05 interface request)
@@ -254,7 +257,7 @@ HEAD_ORIGINS = """# data/origins.yaml
 #   attribute; `floors` are minimums; `free_points` = sum minus the fixed values (schema field; no pool is spent).
 # `backstory` is declared and EMPTY on every entry: ordinary creation writes no evidence (02.11.1, DL-02-14).
 # `hooks` use the micro-format "<kind>: <text>", kind in thread | rumor | npc | place | debt | enemy | question (02.9.7).
-# Languages: {license, grade}; grades broken < accented < native (data/contrib/licenses.02.yaml).
+# Languages: {license, grade}; grades broken < accented < native (data/licenses.yaml owner-block 02).
 # GENERATED and validated by scratchpad ch02/gen02.py from authored tables (ids checked against tags.yaml,
 #   licenses.yaml, abilities.yaml; budgets and placements checked mechanically).
 # Basis: [C:P1] [C:P2] [C:P4] [C:P11] [C:VII] [00.3.6] [00.4.3] [00.4.4] [R1 02, #14] [R2 02, #10] [R3 02.1-02.7]
@@ -309,6 +312,22 @@ def gift_entries():
     out = []
     for s, nm, ab, txt in GIFTS:
         tag = "deed.primal." + s
+        if isinstance(ab, dict):
+            # revision I-015 (the spark): the element is named by the player or drawn by the engine with equal
+            # weights at the gift draw (02.6.3); the gifted working is that element's min_tier-1 working.
+            els = list(ab)
+            out.append(dict(id="birth.gift." + s, name=nm, layer="gift", tags=[tag, "trait.nature.magical"], gate_tags=[tag], excluded_tags=[],
+                            mod_group="gift", weight=1, signature_of=["orig.life.touched"], signature_eligible=True, min_tier=1,
+                            element=dict(choices=els, chosen_by="the player's concept names it; otherwise the engine draws one, equal weights, in the same draw (02.6.3)"),
+                            tiers=[dict(tier=1, effects=[
+                                dict(effect_id="eff.grant_license", params=dict(license=lic_of(tag), grade="trained", duration="permanent")),
+                                dict(effect_id="eff.write_fact", params=dict(subject="pc", predicate="accepted.primal." + s, value="innate")),
+                                dict(effect_id="eff.write_fact", params=dict(subject="pc", predicate="spark.element", value="the element named or drawn: " + " | ".join(els))),
+                                dict(effect_id="eff.grant_license", params=dict(license="gifted_ability_by_element[pc.spark.element]", grade="rank 1 (acquired partition, source.kind gift)", duration="permanent"))])],
+                            competence=dict(tag=tag, value=2), gifted_ability="by_element", gifted_ability_by_element=dict(ab),
+                            text=txt + " You hold %s as an innate training (+2) and, at rank 1, the working of your element: %s." % (lic_of(tag), ", ".join("%s (%s)" % (ABIL[ab[e]]["name"], e) for e in els)),
+                            lifecycle="provisional", basis=["02.6.3", "04.2.7", "05.9.4", "DL-02-09", "I-015", "DL-02-24"]))
+            continue
         out.append(dict(id="birth.gift." + s, name=nm, layer="gift", tags=[tag, "trait.nature.magical"], gate_tags=[tag], excluded_tags=[],
                         mod_group="gift", weight=1, signature_of=["orig.life.touched"], signature_eligible=True, min_tier=1,
                         tiers=[dict(tier=1, effects=[
@@ -455,6 +474,14 @@ if EMIT:
         with open(os.path.join(D, fn), "w", encoding="utf-8", newline="\n") as f: f.write(txt)
         print("wrote", fn, len(txt.split()), "words")
 
+def default_rule_typical(p, t):
+    """02.3.5 (revision I-009): a non-human defaults to its Typical rule, except that a magic livelihood whose
+    casting attribute (05.7.2) the Typical rule fixes at -1 defaults to the Free rule (02.3.4)."""
+    if not p["floors"]:
+        return False
+    ca = (t.get("magic") or {}).get("casting_attribute")
+    return not (ca and p["fixed"].get(ca, 0) < 0)
+
 # ================= AUDITS =================
 print("\n== A1. legal attribute placements ==")
 for p in PEOPLES:
@@ -472,8 +499,8 @@ print("\n== A2. default placements (peaked shape) for each trade x people ==")
 for t in TRADES:
     row = []
     for p in PEOPLES:
-        typical = bool(p["floors"])
-        a = default_placement((SHAPES_TYPICAL if typical else SHAPES_FREE)["peaked"], p["floors"], p["fixed"], t["priority"])
+        typical = default_rule_typical(p, t)
+        a = default_placement((SHAPES_TYPICAL if typical else SHAPES_FREE)["peaked"], p["floors"] if typical else {}, p["fixed"] if typical else {}, t["priority"])
         row.append("".join("%+d" % a[x] for x in ATTRS))
     print("%-13s %s" % (t["name"], "  ".join(row)))
 print("order of attributes:", ATTRS, "| peoples:", [p["name"] for p in PEOPLES])

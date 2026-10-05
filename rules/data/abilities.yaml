@@ -2,9 +2,10 @@
 # Purpose: THE shared ability pool (constitution P5: a calling hands out no ability list of its own). Every entry
 #   is a license with mechanics (00.12.1), tagged by the deed or conduct it is evidence of, carrying a minimum
 #   tier. Calling tiers grant PICKS into the calling partition from this pool, gated by the calling's tags
-#   (04.8.4); the same entries may be learned into the acquired partition (05.8.5). 251 entries: 176 in the
-#   tag-gated pool (covering all 81 level-2 deed tags), 48 oath-gated by conduct axis and pole, 27 mirrors of
-#   ch.04's absorbable powers (slot_class acquired).
+#   (04.8.4); the same entries may be learned into the acquired partition (05.8.5). 266 entries: 179 in the
+#   tag-gated pool (covering all 81 level-2 deed tags), 57 oath-gated by conduct axis and pole, 3 branch
+#   workings held through the magic training licenses (slot_class license, 05.7.11), 27 mirrors of ch.04's
+#   absorbable powers (slot_class acquired).
 # Owner: 05-abilities-focus-magic (T-00-19). Rules: 05-abilities-focus-magic.md. GENERATED and validated by
 #   rules/_process/simulation/05-gen_data05/gen_data05.py from individually authored tables (ab_*.py): ids, tags, effect
 #   ids, hooks, slots, conditions, bands, flags, duration forms, the eight-form grammar, text lint (SG-15,
@@ -56,7 +57,7 @@ forms:
   regime: independent_trigger
   timings: [reaction, rider, trigger]
 timings: {beat: the activation is the declared beat, rider: attaches to the holder's own beat; one rider per beat, reaction: 'on its hook, uses the holder''s reaction (06)', trigger: 'on its hook, from the holder''s own resolved beat or a boundary; no action', passive: applies whenever its applies_when holds}
-rank_rule: 'rank = min(highest authored rank, 1 + floor((holding calling''s tier - min_tier) / 2)); acquired partition: rank 1; equipped: the item''s stated rank'
+rank_rule: 'rank = min(highest authored rank, 1 + floor((holding calling''s tier - min_tier) / 2)); acquired partition: rank 1; equipped: the item''s stated rank; branch workings (slot_class license): the grade in the casting school''s training license (05.7.11)'
 recharge_types:
 - {id: at_will, form: 'cost.focus 0, limits null'}
 - {id: focus_only, form: 'cost.focus 1-4, limits null'}
@@ -250,13 +251,13 @@ budget:
   - {effect: 'Establish a fact (a mark, a sign, a bond)', units: '1', ids: eff.write_fact}
   - {effect: 'A temporary license for another, or a method beyond the basic verbs (ordinary / world-bending)', units: 2 / 4, ids: 'eff.grant_license, Permission scope'}
 census:
-  total: 251
-  by_group: {absorbed (mirrors): 27, deed.arcane: 26, deed.craft: 23, deed.divine: 17, deed.guile: 17, deed.influence: 18, deed.lore: 18, deed.martial: 26, deed.primal: 17, deed.wilds: 14, oath (negative): 18, oath (positive): 30}
-  ranks_authored: 499
-  by_form: {edge: 25, exception: 11, form: 14, lever: 13, permission: 14, reaction: 24, reserve: 4, working: 119}
-  by_timing: {beat: 116, passive: 42, reaction: 17, rider: 39, trigger: 10}
-  by_min_tier: {1: 100, 2: 31, 3: 44, 4: 20, 5: 29}
-  budget_slack: {on_allowance: 173, one_under: 173, two_under: 153}
+  total: 266
+  by_group: {absorbed (mirrors): 27, branch working: 3, deed.arcane: 26, deed.craft: 23, deed.divine: 17, deed.guile: 17, deed.influence: 18, deed.lore: 18, deed.martial: 26, deed.primal: 20, deed.wilds: 14, oath (negative): 27, oath (positive): 30}
+  ranks_authored: 526
+  by_form: {edge: 25, exception: 11, form: 17, lever: 13, permission: 14, reaction: 25, reserve: 5, working: 129}
+  by_timing: {beat: 126, passive: 42, reaction: 18, rider: 42, trigger: 11}
+  by_min_tier: {1: 106, 2: 31, 3: 44, 4: 20, 5: 38}
+  budget_slack: {on_allowance: 175, one_under: 180, two_under: 171}
 
 abilities:
 - id: ab.riposte
@@ -6360,6 +6361,74 @@ abilities:
   source: the shared pool (05.1.1)
   lifecycle: provisional
   basis: ['05.3', '05.11']
+- id: ab.force_bolt
+  name: Force Bolt
+  kind: spell
+  tags: [deed.arcane, harm.arcane.force, trait.action.attack, trait.delivery.ranged, trait.sense.audible, trait.sense.visible, trait.nature.magical, trait.action.speech, trait.action.manipulate]
+  min_tier: 1
+  mod_group: branch_arcane
+  slot_class: license
+  granted_by: lic.training.arcane_* (any one, requires met)
+  deed_tag_rule: 'the frame''s deed tag is the level-2 school of deed.arcane through which it is cast: one whose training license the caster holds, their choice (default: the highest competence). Competence, evidence (03), cnt.focus, stretch grade and flares read that school (05.7.11)'
+  rank_rule: 'rank = the caster''s grade in that school''s training license: trained 1, expert 2, master 3 (05.7.11; the same steps as 06.4.5''s mastery)'
+  form: working
+  activation: active
+  timing: beat
+  regime: independent_trigger
+  hook: on_declare
+  principle: Throw unshaped formula at one target as raw force.
+  scope: Throw a bolt of unshaped force at one target you can see within band.near. On a success it takes Moderate force harm (shifted by delivered reach); on a critical success it is also pushed one band away from you.
+  limitation: Applies to one being or object you can see within band.near.
+  excludes:
+  - {what: 'a shaped effect: fire, frost, a ward, a charm', needs: a spell of that school}
+  - {what: a target beyond band.near, needs: 'the Far flare, or a spell that reaches further'}
+  - {what: 'lighting, chilling or nudging a thing', needs: a small working (05.7.6)}
+  attribute: intellect
+  check: {mode: aimed, verb: verb.strike, against: the target's Guard}
+  cost: {focus: 0}
+  limits: null
+  effects:
+  - {effect_id: eff.deal_harm, params: {severity: S2, harm_tags: [harm.arcane.force], target: the target}}
+  - {effect_id: eff.reposition, params: {target: the target, band_change: 1, flags_add: [], flags_remove: []}}
+  ranks:
+  - rank: 1
+    at_tier: 1
+    text: Throw a bolt of unshaped force at one target you can see within band.near. On a success it takes Moderate force harm (shifted by delivered reach); on a critical success it is also pushed one band away from you.
+    effects:
+    - {effect_id: eff.deal_harm, params: {severity: S2, harm_tags: [harm.arcane.force], target: the target}}
+    - {effect_id: eff.reposition, params: {target: the target, band_change: 1, flags_add: [], flags_remove: []}}
+    cost: {focus: 0}
+    limits: null
+  - rank: 2
+    at_tier: 3
+    text: Throw a bolt of unshaped force at one target you can see within band.near. On a success it takes Heavy force harm (shifted by delivered reach); on a critical success it is also pushed one band away from you.
+    effects:
+    - {effect_id: eff.deal_harm, params: {severity: S3, harm_tags: [harm.arcane.force], target: the target}}
+    - {effect_id: eff.reposition, params: {target: the target, band_change: 1, flags_add: [], flags_remove: []}}
+    cost: {focus: 0}
+    limits: null
+  - rank: 3
+    at_tier: 5
+    text: Throw a bolt of unshaped force at one target you can see within band.near. On a success it takes Grievous force harm (shifted by delivered reach); on a critical success it is also pushed one band away from you.
+    effects:
+    - {effect_id: eff.deal_harm, params: {severity: S4, harm_tags: [harm.arcane.force], target: the target}}
+    - {effect_id: eff.reposition, params: {target: the target, band_change: 1, flags_add: [], flags_remove: []}}
+    cost: {focus: 0}
+    limits: null
+  crude_fallback: none
+  stretch: {dc_shift: 5, cost_add: 1, reach_cap: limited, within: principle}
+  emulate: null
+  acquisition_paths:
+  - {type: license, detail: 'held by every holder of a deed.arcane training license (lic.training.arcane_*) whose requires is met (05.9.4); it takes no slot and is never picked, learned, taught, absorbed, gifted or put on an item (05.7.11)', clock: null, requires: null}
+  flares: [hard, far, wide, quiet, sure]
+  narration_may_not_imply: ['a harm type, target, band or duration other than the text''s', a weakness this record does not hold, an effect on anything outside the stated targets, 'that the bolt sets things alight, freezes, binds or lingers']
+  budget:
+  - {rank: 1, value: 3, allowance: 4, terms: {tier: 2, focus: 0, recharge: 0, timing: 2, limitation: 0, weakness: 0, other_cost: 0}}
+  - {rank: 2, value: 4, allowance: 6, terms: {tier: 4, focus: 0, recharge: 0, timing: 2, limitation: 0, weakness: 0, other_cost: 0}}
+  - {rank: 3, value: 6, allowance: 8, terms: {tier: 6, focus: 0, recharge: 0, timing: 2, limitation: 0, weakness: 0, other_cost: 0}}
+  source: the shared pool (05.1.1)
+  lifecycle: provisional
+  basis: ['05.3', '05.11', 05.7.11, 06 Interface request (b) to 05, I-009, DL-05-31]
 - id: ab.mend_flesh
   name: Mend Flesh
   kind: spell
@@ -7440,6 +7509,74 @@ abilities:
   source: the shared pool (05.1.1)
   lifecycle: provisional
   basis: ['05.3', '05.11']
+- id: ab.rebuke
+  name: Rebuke
+  kind: spell
+  tags: [deed.divine, harm.radiance.holy, harm.blight.necrotic, trait.action.attack, trait.sense.visible, trait.sense.audible, trait.nature.magical, trait.nature.sacred, trait.action.speech]
+  min_tier: 1
+  mod_group: branch_divine
+  slot_class: license
+  granted_by: lic.training.divine_* (any one, requires met)
+  deed_tag_rule: 'the frame''s deed tag is the level-2 school of deed.divine through which it is cast: one whose training license the caster holds, their choice (default: the highest competence). Competence, evidence (03), cnt.focus, stretch grade and flares read that school (05.7.11)'
+  rank_rule: 'rank = the caster''s grade in that school''s training license: trained 1, expert 2, master 3 (05.7.11; the same steps as 06.4.5''s mastery)'
+  form: working
+  activation: active
+  timing: beat
+  regime: independent_trigger
+  hook: on_declare
+  principle: Turn your keeper's regard on one being as a blow.
+  scope: 'Hold up your keeper''s sign against one being within band.close that can see it or hear you. On a success it takes Moderate harm of your keeper''s kind (shifted by delivered reach): radiant for a sacred keeper, necrotic for a profane one; one severity rung heavier if the being is of the opposed nature.'
+  limitation: Applies to one being within band.close that can see your keeper's sign or hear your invocation.
+  excludes:
+  - {what: a being beyond band.close, needs: 'the Far flare, or ab.searing_light'}
+  - {what: a being that can neither see the sign nor hear you, needs: G4 for this working}
+  - {what: turning or banishing, needs: ab.turn_undead; ab.cast_out}
+  attribute: presence
+  check: {mode: aimed, verb: verb.strike, against: the target's Guard}
+  cost: {focus: 0}
+  limits: null
+  effects:
+  - {effect_id: eff.deal_harm, params: {severity: S2, harm_tags: [harm.radiance.holy, harm.blight.necrotic], target: the target}}
+  - {effect_id: eff.harm_severity_step, params: {ladder: severity, steps: 1, applies_when: 'the target is creature.undead or creature.fiend (a sacred keeper), or carries trait.nature.sacred (a profane keeper)'}}
+  ranks:
+  - rank: 1
+    at_tier: 1
+    text: 'Hold up your keeper''s sign against one being within band.close that can see it or hear you. On a success it takes Moderate harm of your keeper''s kind (shifted by delivered reach): radiant for a sacred keeper, necrotic for a profane one; one severity rung heavier if the being is of the opposed nature.'
+    effects:
+    - {effect_id: eff.deal_harm, params: {severity: S2, harm_tags: [harm.radiance.holy, harm.blight.necrotic], target: the target}}
+    - {effect_id: eff.harm_severity_step, params: {ladder: severity, steps: 1, applies_when: 'the target is creature.undead or creature.fiend (a sacred keeper), or carries trait.nature.sacred (a profane keeper)'}}
+    cost: {focus: 0}
+    limits: null
+  - rank: 2
+    at_tier: 3
+    text: 'Hold up your keeper''s sign against one being within band.close that can see it or hear you. On a success it takes Heavy harm of your keeper''s kind (shifted by delivered reach): radiant for a sacred keeper, necrotic for a profane one; one severity rung heavier if the being is of the opposed nature.'
+    effects:
+    - {effect_id: eff.deal_harm, params: {severity: S3, harm_tags: [harm.radiance.holy, harm.blight.necrotic], target: the target}}
+    - {effect_id: eff.harm_severity_step, params: {ladder: severity, steps: 1, applies_when: 'the target is creature.undead or creature.fiend (a sacred keeper), or carries trait.nature.sacred (a profane keeper)'}}
+    cost: {focus: 0}
+    limits: null
+  - rank: 3
+    at_tier: 5
+    text: 'Hold up your keeper''s sign against one being within band.close that can see it or hear you. On a success it takes Grievous harm of your keeper''s kind (shifted by delivered reach): radiant for a sacred keeper, necrotic for a profane one; one severity rung heavier if the being is of the opposed nature.'
+    effects:
+    - {effect_id: eff.deal_harm, params: {severity: S4, harm_tags: [harm.radiance.holy, harm.blight.necrotic], target: the target}}
+    - {effect_id: eff.harm_severity_step, params: {ladder: severity, steps: 1, applies_when: 'the target is creature.undead or creature.fiend (a sacred keeper), or carries trait.nature.sacred (a profane keeper)'}}
+    cost: {focus: 0}
+    limits: null
+  crude_fallback: none
+  stretch: {dc_shift: 5, cost_add: 1, reach_cap: limited, within: principle}
+  emulate: null
+  acquisition_paths:
+  - {type: license, detail: 'held by every holder of a deed.divine training license (lic.training.divine_*) whose requires is met (05.9.4); it takes no slot and is never picked, learned, taught, absorbed, gifted or put on an item (05.7.11)', clock: null, requires: null}
+  flares: [hard, far, wide, quiet, sure]
+  narration_may_not_imply: ['a harm type, target, band or duration other than the text''s', a weakness this record does not hold, an effect on anything outside the stated targets, 'that the keeper itself acts, speaks or takes notice', a lasting mark on the target]
+  budget:
+  - {rank: 1, value: 4, allowance: 4, terms: {tier: 2, focus: 0, recharge: 0, timing: 2, limitation: 0, weakness: 0, other_cost: 0}}
+  - {rank: 2, value: 5, allowance: 6, terms: {tier: 4, focus: 0, recharge: 0, timing: 2, limitation: 0, weakness: 0, other_cost: 0}}
+  - {rank: 3, value: 7, allowance: 8, terms: {tier: 6, focus: 0, recharge: 0, timing: 2, limitation: 0, weakness: 0, other_cost: 0}}
+  source: the shared pool (05.1.1)
+  lifecycle: provisional
+  basis: ['05.3', '05.11', 05.7.11, 05.7.4, 06 Interface request (b) to 05, I-009, DL-05-31]
 - id: ab.root_snare
   name: Root Snare
   kind: spell
@@ -8361,6 +8498,229 @@ abilities:
   source: the shared pool (05.1.1)
   lifecycle: provisional
   basis: ['05.3', '05.11']
+- id: ab.undertow
+  name: Undertow
+  kind: spell
+  tags: [deed.primal.elements.water, harm.physical.crush, trait.delivery.ranged, trait.sense.visible, trait.sense.audible, trait.nature.magical]
+  min_tier: 1
+  mod_group: water_drag
+  slot_class: calling
+  form: working
+  activation: active
+  timing: beat
+  regime: independent_trigger
+  hook: on_declare
+  principle: Make water rise and drag a body down.
+  scope: 'Water rises around one being within band.near (it rolls Endure (Might) against your effect DC): on a failure it takes Light crushing harm, is dragged one band toward the water and knocked prone.'
+  limitation: Applies to one being within band.near that stands in, on or beside standing or running water.
+  excludes:
+  - {what: a dry place, needs: 'G4: the source is absent (05.7.3); a waterskin poured out supplies it once'}
+  - {what: drowning a being outright, needs: 'a rite, or holding it under by verb.grapple'}
+  attribute: resolve
+  check: {mode: resisted, resist_verb: verb.endure, resist_attribute: might, dc: your effect DC (10 + attribute + competence at the first tag + edge), degree_table: 01.18.3}
+  cost: {focus: 1}
+  limits: null
+  effects:
+  - {effect_id: eff.force_check, params: {verb: endure, effect_dc_source: your effect DC, degree_table: 01.18.3}}
+  - {effect_id: eff.deal_harm, params: {severity: S1, harm_tags: [harm.physical.crush], target: the target}}
+  - {effect_id: eff.reposition, params: {target: the target, band_change: 1, flags_add: [], flags_remove: []}}
+  - {effect_id: eff.apply_condition, params: {condition: cond.prone, severity: S1, duration: 'rounds:1', target: the target}}
+  ranks:
+  - rank: 1
+    at_tier: 1
+    text: 'Water rises around one being within band.near (it rolls Endure (Might) against your effect DC): on a failure it takes Light crushing harm, is dragged one band toward the water and knocked prone.'
+    effects:
+    - {effect_id: eff.force_check, params: {verb: endure, effect_dc_source: your effect DC, degree_table: 01.18.3}}
+    - {effect_id: eff.deal_harm, params: {severity: S1, harm_tags: [harm.physical.crush], target: the target}}
+    - {effect_id: eff.reposition, params: {target: the target, band_change: 1, flags_add: [], flags_remove: []}}
+    - {effect_id: eff.apply_condition, params: {condition: cond.prone, severity: S1, duration: 'rounds:1', target: the target}}
+    cost: {focus: 1}
+    limits: null
+  - rank: 2
+    at_tier: 3
+    text: 'Water rises around one being within band.near (it rolls Endure (Might) against your effect DC): on a failure it takes Moderate crushing harm, is dragged one band toward the water, knocked prone, and choking until the end of its next turn.'
+    effects:
+    - {effect_id: eff.force_check, params: {verb: endure, effect_dc_source: your effect DC, degree_table: 01.18.3}}
+    - {effect_id: eff.deal_harm, params: {severity: S2, harm_tags: [harm.physical.crush], target: the target}}
+    - {effect_id: eff.reposition, params: {target: the target, band_change: 1, flags_add: [], flags_remove: []}}
+    - {effect_id: eff.apply_condition, params: {condition: cond.prone, severity: S1, duration: 'rounds:1', target: the target}}
+    - {effect_id: eff.apply_condition, params: {condition: cond.choking, severity: S1, duration: 'rounds:1', target: the target}}
+    cost: {focus: 1}
+    limits: null
+  - rank: 3
+    at_tier: 5
+    text: 'Water rises around one being within band.near (it rolls Endure (Might) against your effect DC): on a failure it takes Heavy crushing harm, is dragged one band toward the water, knocked prone, and choking until the end of its next turn.'
+    effects:
+    - {effect_id: eff.force_check, params: {verb: endure, effect_dc_source: your effect DC, degree_table: 01.18.3}}
+    - {effect_id: eff.deal_harm, params: {severity: S3, harm_tags: [harm.physical.crush], target: the target}}
+    - {effect_id: eff.reposition, params: {target: the target, band_change: 1, flags_add: [], flags_remove: []}}
+    - {effect_id: eff.apply_condition, params: {condition: cond.prone, severity: S1, duration: 'rounds:1', target: the target}}
+    - {effect_id: eff.apply_condition, params: {condition: cond.choking, severity: S1, duration: 'rounds:1', target: the target}}
+    cost: {focus: 1}
+    limits: null
+  crude_fallback: none
+  stretch: {dc_shift: 5, cost_add: 1, reach_cap: limited, within: principle}
+  emulate: null
+  acquisition_paths:
+  - {type: recognition, detail: 'a pick through a calling whose pool gate covers deed.primal.elements.water, at tier 1 or higher (04.8.4)', clock: null, requires: null}
+  - {type: mentor, detail: 'taught into the acquired partition at rank 1: 3 ticks per training week (05.8.5)', clock: clk.learn (6 segments), requires: lic.training.primal_elements at a grade whose technique cap covers min_tier 1}
+  - {type: project, detail: 'learned by emulation (delivered reach per success), from a text (2 per week) or by practice after witnessing it (1 per week) (05.8.5)', clock: clk.learn (6 segments), requires: lic.training.primal_elements at a grade whose technique cap covers min_tier 1}
+  flares: [hard, far, wide, lasting, quiet, sure]
+  narration_may_not_imply: ['a harm type, target, band or duration other than the text''s', a weakness this record does not hold, an effect on anything outside the stated targets]
+  budget:
+  - {rank: 1, value: 4, allowance: 6, terms: {tier: 2, focus: 2, recharge: 0, timing: 2, limitation: 0, weakness: 0, other_cost: 0}}
+  - {rank: 2, value: 7, allowance: 8, terms: {tier: 4, focus: 2, recharge: 0, timing: 2, limitation: 0, weakness: 0, other_cost: 0}}
+  - {rank: 3, value: 8, allowance: 10, terms: {tier: 6, focus: 2, recharge: 0, timing: 2, limitation: 0, weakness: 0, other_cost: 0}}
+  source: the shared pool (05.1.1)
+  lifecycle: provisional
+  basis: ['05.3', '05.11', I-015, 02.6.3, DL-05-32]
+- id: ab.stolen_breath
+  name: Stolen Breath
+  kind: spell
+  tags: [deed.primal.elements.air, harm.physical.asphyxia, trait.delivery.ranged, trait.nature.magical]
+  min_tier: 1
+  mod_group: air_breath
+  slot_class: calling
+  form: working
+  activation: active
+  timing: beat
+  regime: independent_trigger
+  hook: on_declare
+  principle: Draw the air out of a breathing body.
+  scope: 'Pull the air from the lungs of one breathing being within band.near (it rolls Endure (Endurance) against your effect DC): on a failure it takes Moderate harm from lack of air and is choking until the end of its next turn.'
+  limitation: Applies to one being that breathes, within band.near, where air moves (05.7.3).
+  excludes:
+  - {what: 'a being that does not breathe (the undead, constructs, spirits)', needs: G4 for this working}
+  - {what: 'a sealed, still room', needs: 'G4: the source is absent (05.7.3)'}
+  attribute: resolve
+  check: {mode: resisted, resist_verb: verb.endure, resist_attribute: endurance, dc: your effect DC (10 + attribute + competence at the first tag + edge), degree_table: 01.18.3}
+  cost: {focus: 1}
+  limits: null
+  effects:
+  - {effect_id: eff.force_check, params: {verb: endure, effect_dc_source: your effect DC, degree_table: 01.18.3}}
+  - {effect_id: eff.deal_harm, params: {severity: S2, harm_tags: [harm.physical.asphyxia], target: the target}}
+  - {effect_id: eff.apply_condition, params: {condition: cond.choking, severity: S1, duration: 'rounds:1', target: the target}}
+  ranks:
+  - rank: 1
+    at_tier: 1
+    text: 'Pull the air from the lungs of one breathing being within band.near (it rolls Endure (Endurance) against your effect DC): on a failure it takes Moderate harm from lack of air and is choking until the end of its next turn.'
+    effects:
+    - {effect_id: eff.force_check, params: {verb: endure, effect_dc_source: your effect DC, degree_table: 01.18.3}}
+    - {effect_id: eff.deal_harm, params: {severity: S2, harm_tags: [harm.physical.asphyxia], target: the target}}
+    - {effect_id: eff.apply_condition, params: {condition: cond.choking, severity: S1, duration: 'rounds:1', target: the target}}
+    cost: {focus: 1}
+    limits: null
+  - rank: 2
+    at_tier: 3
+    text: 'Pull the air from the lungs of one breathing being within band.near (it rolls Endure (Endurance) against your effect DC): on a failure it takes Heavy harm from lack of air, is choking until the end of its next turn and distracted until the end of its next turn.'
+    effects:
+    - {effect_id: eff.force_check, params: {verb: endure, effect_dc_source: your effect DC, degree_table: 01.18.3}}
+    - {effect_id: eff.deal_harm, params: {severity: S3, harm_tags: [harm.physical.asphyxia], target: the target}}
+    - {effect_id: eff.apply_condition, params: {condition: cond.choking, severity: S1, duration: 'rounds:1', target: the target}}
+    - {effect_id: eff.apply_condition, params: {condition: cond.distracted, severity: S1, duration: 'rounds:1', target: the target}}
+    cost: {focus: 1}
+    limits: null
+  - rank: 3
+    at_tier: 5
+    text: 'Pull the air from the lungs of one breathing being within band.near (it rolls Endure (Endurance) against your effect DC): on a failure it takes Grievous harm from lack of air, is choking until the end of its next turn and distracted until the end of its next turn.'
+    effects:
+    - {effect_id: eff.force_check, params: {verb: endure, effect_dc_source: your effect DC, degree_table: 01.18.3}}
+    - {effect_id: eff.deal_harm, params: {severity: S4, harm_tags: [harm.physical.asphyxia], target: the target}}
+    - {effect_id: eff.apply_condition, params: {condition: cond.choking, severity: S1, duration: 'rounds:1', target: the target}}
+    - {effect_id: eff.apply_condition, params: {condition: cond.distracted, severity: S1, duration: 'rounds:1', target: the target}}
+    cost: {focus: 1}
+    limits: null
+  crude_fallback: none
+  stretch: {dc_shift: 5, cost_add: 1, reach_cap: limited, within: principle}
+  emulate: null
+  acquisition_paths:
+  - {type: recognition, detail: 'a pick through a calling whose pool gate covers deed.primal.elements.air, at tier 1 or higher (04.8.4)', clock: null, requires: null}
+  - {type: mentor, detail: 'taught into the acquired partition at rank 1: 3 ticks per training week (05.8.5)', clock: clk.learn (6 segments), requires: lic.training.primal_elements at a grade whose technique cap covers min_tier 1}
+  - {type: project, detail: 'learned by emulation (delivered reach per success), from a text (2 per week) or by practice after witnessing it (1 per week) (05.8.5)', clock: clk.learn (6 segments), requires: lic.training.primal_elements at a grade whose technique cap covers min_tier 1}
+  flares: [hard, far, wide, lasting, quiet, sure]
+  narration_may_not_imply: ['a harm type, target, band or duration other than the text''s', a weakness this record does not hold, an effect on anything outside the stated targets]
+  budget:
+  - {rank: 1, value: 4, allowance: 6, terms: {tier: 2, focus: 2, recharge: 0, timing: 2, limitation: 0, weakness: 0, other_cost: 0}}
+  - {rank: 2, value: 6, allowance: 8, terms: {tier: 4, focus: 2, recharge: 0, timing: 2, limitation: 0, weakness: 0, other_cost: 0}}
+  - {rank: 3, value: 8, allowance: 10, terms: {tier: 6, focus: 2, recharge: 0, timing: 2, limitation: 0, weakness: 0, other_cost: 0}}
+  source: the shared pool (05.1.1)
+  lifecycle: provisional
+  basis: ['05.3', '05.11', I-015, 02.6.3, DL-05-32]
+- id: ab.heave
+  name: Heave
+  kind: spell
+  tags: [deed.primal.elements.earth, harm.physical.crush, trait.delivery.area, trait.sense.loud, trait.sense.visible, trait.nature.magical]
+  min_tier: 1
+  mod_group: earth_heave
+  slot_class: calling
+  form: working
+  activation: active
+  timing: beat
+  regime: independent_trigger
+  hook: on_declare
+  principle: Make the ground buck under a being's feet.
+  scope: 'The ground under one being within band.near bucks and heaves (it rolls Evade against your effect DC): on a failure it takes Light crushing harm, is knocked prone and is slowed until the end of its next turn.'
+  limitation: Applies to beings within band.near that stand on bare earth or unworked stone.
+  excludes:
+  - {what: 'worked stone, timber floors, ships'' decks', needs: 'G4: the source is absent (05.7.3)'}
+  - {what: a being aloft, needs: it stands on nothing}
+  attribute: resolve
+  check: {mode: resisted, resist_verb: verb.evade, resist_attribute: agility, dc: your effect DC (10 + attribute + competence at the first tag + edge), degree_table: 01.18.3}
+  cost: {focus: 1}
+  limits: null
+  effects:
+  - {effect_id: eff.force_check, params: {verb: evade, effect_dc_source: your effect DC, degree_table: 01.18.3}}
+  - {effect_id: eff.deal_harm, params: {severity: S1, harm_tags: [harm.physical.crush], target: the target}}
+  - {effect_id: eff.apply_condition, params: {condition: cond.prone, severity: S1, duration: 'rounds:1', target: the target}}
+  - {effect_id: eff.apply_condition, params: {condition: cond.slowed, severity: S1, duration: 'rounds:1', target: the target}}
+  ranks:
+  - rank: 1
+    at_tier: 1
+    text: 'The ground under one being within band.near bucks and heaves (it rolls Evade against your effect DC): on a failure it takes Light crushing harm, is knocked prone and is slowed until the end of its next turn.'
+    effects:
+    - {effect_id: eff.force_check, params: {verb: evade, effect_dc_source: your effect DC, degree_table: 01.18.3}}
+    - {effect_id: eff.deal_harm, params: {severity: S1, harm_tags: [harm.physical.crush], target: the target}}
+    - {effect_id: eff.apply_condition, params: {condition: cond.prone, severity: S1, duration: 'rounds:1', target: the target}}
+    - {effect_id: eff.apply_condition, params: {condition: cond.slowed, severity: S1, duration: 'rounds:1', target: the target}}
+    cost: {focus: 1}
+    limits: null
+  - rank: 2
+    at_tier: 3
+    text: 'The ground under up to two beings within band.near bucks and heaves (each rolls Evade against your effect DC): on a failure each takes Moderate crushing harm, is knocked prone and is slowed until the end of its next turn.'
+    effects:
+    - {effect_id: eff.force_check, params: {verb: evade, effect_dc_source: your effect DC, degree_table: 01.18.3}}
+    - {effect_id: eff.deal_harm, params: {severity: S2, harm_tags: [harm.physical.crush], target: the target}}
+    - {effect_id: eff.apply_condition, params: {condition: cond.prone, severity: S1, duration: 'rounds:1', target: the target}}
+    - {effect_id: eff.apply_condition, params: {condition: cond.slowed, severity: S1, duration: 'rounds:1', target: the target}}
+    cost: {focus: 1}
+    limits: null
+  - rank: 3
+    at_tier: 5
+    text: 'The ground under up to three beings within band.near bucks and heaves (each rolls Evade against your effect DC): on a failure each takes Heavy crushing harm, is knocked prone and is slowed until the end of its next turn.'
+    effects:
+    - {effect_id: eff.force_check, params: {verb: evade, effect_dc_source: your effect DC, degree_table: 01.18.3}}
+    - {effect_id: eff.deal_harm, params: {severity: S3, harm_tags: [harm.physical.crush], target: the target}}
+    - {effect_id: eff.apply_condition, params: {condition: cond.prone, severity: S1, duration: 'rounds:1', target: the target}}
+    - {effect_id: eff.apply_condition, params: {condition: cond.slowed, severity: S1, duration: 'rounds:1', target: the target}}
+    cost: {focus: 1}
+    limits: null
+  crude_fallback: none
+  stretch: {dc_shift: 5, cost_add: 1, reach_cap: limited, within: principle}
+  emulate: null
+  acquisition_paths:
+  - {type: recognition, detail: 'a pick through a calling whose pool gate covers deed.primal.elements.earth, at tier 1 or higher (04.8.4)', clock: null, requires: null}
+  - {type: mentor, detail: 'taught into the acquired partition at rank 1: 3 ticks per training week (05.8.5)', clock: clk.learn (6 segments), requires: lic.training.primal_elements at a grade whose technique cap covers min_tier 1}
+  - {type: project, detail: 'learned by emulation (delivered reach per success), from a text (2 per week) or by practice after witnessing it (1 per week) (05.8.5)', clock: clk.learn (6 segments), requires: lic.training.primal_elements at a grade whose technique cap covers min_tier 1}
+  flares: [hard, far, lasting, quiet, sure]
+  spread: burst
+  narration_may_not_imply: ['a harm type, target, band or duration other than the text''s', a weakness this record does not hold, an effect on anything outside the stated targets]
+  budget:
+  - {rank: 1, value: 4, allowance: 6, terms: {tier: 2, focus: 2, recharge: 0, timing: 2, limitation: 0, weakness: 0, other_cost: 0}}
+  - {rank: 2, value: 6, allowance: 8, terms: {tier: 4, focus: 2, recharge: 0, timing: 2, limitation: 0, weakness: 0, other_cost: 0}}
+  - {rank: 3, value: 8, allowance: 10, terms: {tier: 6, focus: 2, recharge: 0, timing: 2, limitation: 0, weakness: 0, other_cost: 0}}
+  source: the shared pool (05.1.1)
+  lifecycle: provisional
+  basis: ['05.3', '05.11', I-015, 02.6.3, DL-05-32]
 - id: ab.evil_eye
   name: Evil Eye
   kind: spell
@@ -8497,6 +8857,73 @@ abilities:
   source: the shared pool (05.1.1)
   lifecycle: provisional
   basis: ['05.3', '05.11']
+- id: ab.wild_lash
+  name: Wild Lash
+  kind: spell
+  tags: [deed.primal, harm.physical.pierce, harm.physical.crush, harm.physical.cut, harm.fire.flame, trait.action.attack, trait.delivery.ranged, trait.sense.visible, trait.nature.magical]
+  min_tier: 1
+  mod_group: branch_primal
+  slot_class: license
+  granted_by: lic.training.primal_* (any one, requires met)
+  deed_tag_rule: 'the frame''s deed tag is the level-2 school of deed.primal through which it is cast: one whose training license the caster holds, their choice (default: the highest competence). Competence, evidence (03), cnt.focus, stretch grade and flares read that school (05.7.11)'
+  rank_rule: 'rank = the caster''s grade in that school''s training license: trained 1, expert 2, master 3 (05.7.11; the same steps as 06.4.5''s mastery)'
+  form: working
+  activation: active
+  timing: beat
+  regime: independent_trigger
+  hook: on_declare
+  principle: Let the source present strike one target for you.
+  scope: 'The source present lashes one being within band.near: a thorned vine, a flung stone, a fist of water, a tongue of flame or a cut of wind. On a success it takes Moderate harm of the source''s kind (shifted by delivered reach) and is off-balance until the end of its next turn.'
+  limitation: Applies to one being within band.near of you and of the source present (05.7.3).
+  excludes:
+  - {what: a place with no source present, needs: 'G4: the source is absent (05.7.3)'}
+  - {what: 'holding, shaping or calling the source', needs: 'a spell of that school (ab.root_snare, ab.gust, ab.stone_shape)'}
+  attribute: resolve
+  check: {mode: aimed, verb: verb.strike, against: the target's Guard}
+  cost: {focus: 0}
+  limits: null
+  effects:
+  - {effect_id: eff.deal_harm, params: {severity: S2, harm_tags: [harm.physical.pierce, harm.physical.crush, harm.physical.cut, harm.fire.flame], target: the target}}
+  - {effect_id: eff.apply_condition, params: {condition: cond.off_balance, severity: S1, duration: 'rounds:1', target: the target}}
+  ranks:
+  - rank: 1
+    at_tier: 1
+    text: 'The source present lashes one being within band.near: a thorned vine, a flung stone, a fist of water, a tongue of flame or a cut of wind. On a success it takes Moderate harm of the source''s kind (shifted by delivered reach) and is off-balance until the end of its next turn.'
+    effects:
+    - {effect_id: eff.deal_harm, params: {severity: S2, harm_tags: [harm.physical.pierce, harm.physical.crush, harm.physical.cut, harm.fire.flame], target: the target}}
+    - {effect_id: eff.apply_condition, params: {condition: cond.off_balance, severity: S1, duration: 'rounds:1', target: the target}}
+    cost: {focus: 0}
+    limits: null
+  - rank: 2
+    at_tier: 3
+    text: 'The source present lashes one being within band.near: a thorned vine, a flung stone, a fist of water, a tongue of flame or a cut of wind. On a success it takes Heavy harm of the source''s kind (shifted by delivered reach) and is off-balance until the end of its next turn.'
+    effects:
+    - {effect_id: eff.deal_harm, params: {severity: S3, harm_tags: [harm.physical.pierce, harm.physical.crush, harm.physical.cut, harm.fire.flame], target: the target}}
+    - {effect_id: eff.apply_condition, params: {condition: cond.off_balance, severity: S1, duration: 'rounds:1', target: the target}}
+    cost: {focus: 0}
+    limits: null
+  - rank: 3
+    at_tier: 5
+    text: 'The source present lashes one being within band.near: a thorned vine, a flung stone, a fist of water, a tongue of flame or a cut of wind. On a success it takes Grievous harm of the source''s kind (shifted by delivered reach) and is off-balance until the end of its next turn.'
+    effects:
+    - {effect_id: eff.deal_harm, params: {severity: S4, harm_tags: [harm.physical.pierce, harm.physical.crush, harm.physical.cut, harm.fire.flame], target: the target}}
+    - {effect_id: eff.apply_condition, params: {condition: cond.off_balance, severity: S1, duration: 'rounds:1', target: the target}}
+    cost: {focus: 0}
+    limits: null
+  crude_fallback: none
+  stretch: {dc_shift: 5, cost_add: 1, reach_cap: limited, within: principle}
+  emulate: null
+  acquisition_paths:
+  - {type: license, detail: 'held by every holder of a deed.primal training license (lic.training.primal_*) whose requires is met (05.9.4); it takes no slot and is never picked, learned, taught, absorbed, gifted or put on an item (05.7.11)', clock: null, requires: null}
+  flares: [hard, far, wide, lasting, quiet, sure]
+  narration_may_not_imply: ['a harm type, target, band or duration other than the text''s', a weakness this record does not hold, an effect on anything outside the stated targets, a source no fact holds, that the source stays roused after the lash]
+  budget:
+  - {rank: 1, value: 3, allowance: 4, terms: {tier: 2, focus: 0, recharge: 0, timing: 2, limitation: 0, weakness: 0, other_cost: 0}}
+  - {rank: 2, value: 4, allowance: 6, terms: {tier: 4, focus: 0, recharge: 0, timing: 2, limitation: 0, weakness: 0, other_cost: 0}}
+  - {rank: 3, value: 6, allowance: 8, terms: {tier: 6, focus: 0, recharge: 0, timing: 2, limitation: 0, weakness: 0, other_cost: 0}}
+  source: the shared pool (05.1.1)
+  lifecycle: provisional
+  basis: ['05.3', '05.11', 05.7.11, 05.7.3, 06 Interface request (b) to 05, I-009, DL-05-31]
 - id: ab.silver_tongue
   name: Silver Tongue
   kind: ability
@@ -13837,10 +14264,481 @@ abilities:
   source: the shared pool (05.1.1)
   lifecycle: provisional
   basis: ['05.3', '05.11']
+- id: ab.no_quarter
+  name: No Quarter
+  kind: ability
+  tags: [deed.influence.intimidation.threat, conduct.mercy]
+  min_tier: 5
+  mod_group: dark_mercy_c
+  slot_class: calling
+  form: form
+  activation: active
+  timing: rider
+  regime: priority_exclusive
+  slot: slot.stance
+  rides: [any]
+  principle: Give no quarter and let every foe know it.
+  scope: 'Enter the No Quarter stance for the scene: your Strikes against a bloodied, prone or frightened foe deal harm one severity rung heavier and hold an Amplifying lever; each foe you defeat ticks its side''s morale clock by 1 more; and you cannot be frightened.'
+  limitation: Applies to yourself until the scene ends.
+  weakness:
+    text: 'While in the stance you cannot accept a Yield: a foe that yields to you is refused and fights on (06.11.7), and its side''s morale clock does not tick for it.'
+    effect: {effect_id: eff.restrict, params: {forbid: {methods: [accepting a Yield offered to you]}, target: self, duration: scene}}
+  excludes:
+  - {what: sparing one foe this scene, needs: end the stance first; it ends with the scene}
+  - {what: the mindless, needs: they have no morale clock to tick}
+  attribute: by_method
+  check: {mode: none}
+  cost: {focus: 1}
+  limits: null
+  effects:
+  - {effect_id: eff.stance, params: {priority_rank: 10, form: no quarter, effects: [{effect_id: eff.harm_severity_step, params: {ladder: severity, steps: 1, applies_when: 'your Strikes against a bloodied, prone or frightened foe'}}, {effect_id: eff.grant_lever, params: {type: amplifying, duration: scene, applies_when: 'your Strikes against a bloodied, prone or frightened foe', for_verbs: [verb.strike]}}, {effect_id: eff.tick_clock, params: {clock: the defeated foe's side's morale clock, ticks: 1}}, {effect_id: eff.condition_immunity, params: {forbid: {conditions: [cond.frightened]}, target: self}}]}}
+  ranks:
+  - rank: 1
+    at_tier: 5
+    text: 'Enter the No Quarter stance for the scene: your Strikes against a bloodied, prone or frightened foe deal harm one severity rung heavier and hold an Amplifying lever; each foe you defeat ticks its side''s morale clock by 1 more; and you cannot be frightened.'
+    effects:
+    - {effect_id: eff.stance, params: {priority_rank: 10, form: no quarter, effects: [{effect_id: eff.harm_severity_step, params: {ladder: severity, steps: 1, applies_when: 'your Strikes against a bloodied, prone or frightened foe'}}, {effect_id: eff.grant_lever, params: {type: amplifying, duration: scene, applies_when: 'your Strikes against a bloodied, prone or frightened foe', for_verbs: [verb.strike]}}, {effect_id: eff.tick_clock, params: {clock: the defeated foe's side's morale clock, ticks: 1}}, {effect_id: eff.condition_immunity, params: {forbid: {conditions: [cond.frightened]}, target: self}}]}}
+    cost: {focus: 1}
+    limits: null
+  crude_fallback: {verb: verb.talk, method: threaten plainly, dc_shift: 0, reach_cap: standard, consequence: null}
+  stretch: null
+  emulate: null
+  acquisition_paths:
+  - {type: recognition, detail: 'a pick through a calling whose pool gate lists conduct.mercy at the negative pole, at tier 5 or higher (04.8.4; 05.3.10)', clock: null, requires: the calling is not suspended by the Fraying}
+  flares: [hard, lasting]
+  requires_conduct: [conduct.mercy]
+  conduct_pole: negative
+  narration_may_not_imply: ['a harm type, target, band or duration other than the text''s', a weakness this record does not hold, an effect on anything outside the stated targets]
+  budget:
+  - {rank: 1, value: 7, allowance: 9, terms: {tier: 6, focus: 2, recharge: 0, timing: 0, limitation: 0, weakness: 1, other_cost: 0}}
+  source: the shared pool (05.1.1)
+  lifecycle: provisional
+  basis: ['05.3', '05.11', I-007, DL-05-33]
+- id: ab.web_of_lies
+  name: Web of Lies
+  kind: ability
+  tags: [deed.guile.deception.con, conduct.honesty]
+  min_tier: 5
+  mod_group: dark_honesty_c
+  slot_class: calling
+  form: working
+  activation: active
+  timing: beat
+  regime: independent_trigger
+  hook: on_declare
+  principle: Bind many minds to one story you made.
+  scope: Tell up to four listeners one story of events they did not see (Talk, Presence, against the highest Wits defense among them). On a success it is recorded as believed by each until they meet proof against it; each one's standing toward you is recorded one step warmer for the scene; your Talk beats built on the story hold a Precision lever and are framed one stakes rung lower this scene.
+  limitation: Applies to up to four listeners who hear you, about events they did not see.
+  excludes:
+  - {what: a listener who saw the event otherwise, needs: 'G4 for that listener (15: known false)'}
+  - {what: a written record, needs: 'forgery: deed.guile.disguise.forgery'}
+  attribute: presence
+  check: {mode: aimed, verb: verb.talk, against: the highest Wits defense among the listeners}
+  cost: {focus: 2}
+  limits: {per: scene_end, uses: 1}
+  effects:
+  - {effect_id: eff.write_fact, params: {subject: each listener, predicate: believes, value: the stated story}}
+  - {effect_id: eff.write_fact, params: {subject: each listener, predicate: standing_to_pc, value: one step warmer this scene}}
+  - {effect_id: eff.grant_lever, params: {type: precision, duration: scene, applies_when: Talk beats built on the story, for_verbs: [verb.talk]}}
+  - {effect_id: eff.stakes_step, params: {ladder: stakes, steps: -1, applies_when: Talk beats built on the story}}
+  ranks:
+  - rank: 1
+    at_tier: 5
+    text: Tell up to four listeners one story of events they did not see (Talk, Presence, against the highest Wits defense among them). On a success it is recorded as believed by each until they meet proof against it; each one's standing toward you is recorded one step warmer for the scene; your Talk beats built on the story hold a Precision lever and are framed one stakes rung lower this scene.
+    effects:
+    - {effect_id: eff.write_fact, params: {subject: each listener, predicate: believes, value: the stated story}}
+    - {effect_id: eff.write_fact, params: {subject: each listener, predicate: standing_to_pc, value: one step warmer this scene}}
+    - {effect_id: eff.grant_lever, params: {type: precision, duration: scene, applies_when: Talk beats built on the story, for_verbs: [verb.talk]}}
+    - {effect_id: eff.stakes_step, params: {ladder: stakes, steps: -1, applies_when: Talk beats built on the story}}
+    cost: {focus: 2}
+    limits: {per: scene_end, uses: 1}
+  crude_fallback: {verb: verb.talk, method: tell a plain lie, dc_shift: 0, reach_cap: standard, consequence: null}
+  stretch: null
+  emulate: null
+  acquisition_paths:
+  - {type: recognition, detail: 'a pick through a calling whose pool gate lists conduct.honesty at the negative pole, at tier 5 or higher (04.8.4; 05.3.10)', clock: null, requires: the calling is not suspended by the Fraying}
+  flares: [wide, lasting, sure]
+  dictates_choice: true
+  requires_conduct: [conduct.honesty]
+  conduct_pole: negative
+  narration_may_not_imply: ['a harm type, target, band or duration other than the text''s', a weakness this record does not hold, an effect on anything outside the stated targets]
+  budget:
+  - {rank: 1, value: 13, allowance: 13, terms: {tier: 6, focus: 4, recharge: 1, timing: 2, limitation: 0, weakness: 0, other_cost: 0}}
+  source: the shared pool (05.1.1)
+  lifecycle: provisional
+  basis: ['05.3', '05.11', I-007, DL-05-33]
+- id: ab.last_embrace
+  name: The Last Embrace
+  kind: ability
+  tags: [deed.guile.ambush.assassination, conduct.loyalty, trait.action.attack]
+  min_tier: 5
+  mod_group: dark_loyalty_c
+  slot_class: calling
+  form: working
+  activation: active
+  timing: beat
+  regime: independent_trigger
+  hook: on_declare
+  principle: Kill with the closeness that trust allowed.
+  scope: Strike one who trusts you, before they see you turn (aimed against their Guard, with a Precision lever). On a hit the harm is your weapon's two severity rungs heavier and they are dazed until the end of their next turn; up to two of their allies within band.near who see it are distracted until the end of their next turn; and the betrayal is recorded.
+  limitation: Applies to a Strike against one being engaged with you whose standing toward you is Warm or better, or who fights on your side, and who has not seen you turn.
+  excludes:
+  - {what: a declared foe, needs: ab.backstab}
+  - {what: one who has already seen you turn this scene, needs: 'they are a foe now: verb.strike'}
+  attribute: by_method
+  check: {mode: aimed, verb: verb.strike, against: the target's Guard}
+  cost: {focus: 2}
+  limits: {per: scene_end, uses: 1}
+  effects:
+  - {effect_id: eff.deal_harm, params: {severity: weapon base +2 rungs, harm_tags: [the weapon's harm tags], target: the target}}
+  - {effect_id: eff.grant_lever, params: {type: precision, duration: beat, applies_when: this Strike}}
+  - {effect_id: eff.apply_condition, params: {condition: cond.dazed, severity: S1, duration: 'rounds:1', target: the target}}
+  - {effect_id: eff.apply_condition, params: {condition: cond.distracted, severity: S1, duration: 'rounds:1', target: each ally of the target within band.near who sees it}}
+  - {effect_id: eff.write_fact, params: {subject: the target, predicate: betrayed_by, value: pc}}
+  ranks:
+  - rank: 1
+    at_tier: 5
+    text: Strike one who trusts you, before they see you turn (aimed against their Guard, with a Precision lever). On a hit the harm is your weapon's two severity rungs heavier and they are dazed until the end of their next turn; up to two of their allies within band.near who see it are distracted until the end of their next turn; and the betrayal is recorded.
+    effects:
+    - {effect_id: eff.deal_harm, params: {severity: weapon base +2 rungs, harm_tags: [the weapon's harm tags], target: the target}}
+    - {effect_id: eff.grant_lever, params: {type: precision, duration: beat, applies_when: this Strike}}
+    - {effect_id: eff.apply_condition, params: {condition: cond.dazed, severity: S1, duration: 'rounds:1', target: the target}}
+    - {effect_id: eff.apply_condition, params: {condition: cond.distracted, severity: S1, duration: 'rounds:1', target: each ally of the target within band.near who sees it}}
+    - {effect_id: eff.write_fact, params: {subject: the target, predicate: betrayed_by, value: pc}}
+    cost: {focus: 2}
+    limits: {per: scene_end, uses: 1}
+  crude_fallback: {verb: verb.sneak, method: wait in hiding and strike with the basic Strike, dc_shift: 0, reach_cap: standard, consequence: null}
+  stretch: null
+  emulate: null
+  acquisition_paths:
+  - {type: recognition, detail: 'a pick through a calling whose pool gate lists conduct.loyalty at the negative pole, at tier 5 or higher (04.8.4; 05.3.10)', clock: null, requires: the calling is not suspended by the Fraying}
+  flares: [hard, far, wide, lasting, sure]
+  requires_conduct: [conduct.loyalty]
+  conduct_pole: negative
+  narration_may_not_imply: ['a harm type, target, band or duration other than the text''s', a weakness this record does not hold, an effect on anything outside the stated targets]
+  budget:
+  - {rank: 1, value: 12, allowance: 14, terms: {tier: 6, focus: 4, recharge: 1, timing: 2, limitation: 1, weakness: 0, other_cost: 0}}
+  source: the shared pool (05.1.1)
+  lifecycle: provisional
+  basis: ['05.3', '05.11', I-007, DL-05-33]
+- id: ab.hoard_heart
+  name: Hoard-Heart
+  kind: ability
+  tags: [deed.guile.thievery.pickpocketing, conduct.generosity]
+  min_tier: 5
+  mod_group: dark_generosity_c
+  slot_class: calling
+  form: reserve
+  activation: active
+  timing: trigger
+  regime: independent_trigger
+  hook: on_fact_set
+  when: an object of value passes from another being to you by stealth, snatch or threat
+  principle: Draw strength from what you have taken.
+  scope: When you take something of value from another being, regain 2 Focus; you hold a Protective lever on your beats until the scene ends and an Amplifying lever on your next beat; and the thing is recorded as yours.
+  limitation: Applies when you take an object of value from another being by stealth, snatch or threat.
+  excludes:
+  - {what: a gift freely given, needs: it gives nothing}
+  - {what: an unattended object, needs: no one was robbed}
+  attribute: by_method
+  check: {mode: none}
+  cost: {focus: 0}
+  limits: {per: rest_long, uses: 1}
+  effects:
+  - {effect_id: eff.restore, params: {quantity: focus, units: 2, target: self}}
+  - {effect_id: eff.grant_lever, params: {type: protective, duration: scene, applies_when: your beats}}
+  - {effect_id: eff.grant_lever, params: {type: amplifying, duration: beat, applies_when: your next beat}}
+  - {effect_id: eff.write_fact, params: {subject: the object, predicate: owner, value: pc}}
+  ranks:
+  - rank: 1
+    at_tier: 5
+    text: When you take something of value from another being, regain 2 Focus; you hold a Protective lever on your beats until the scene ends and an Amplifying lever on your next beat; and the thing is recorded as yours.
+    effects:
+    - {effect_id: eff.restore, params: {quantity: focus, units: 2, target: self}}
+    - {effect_id: eff.grant_lever, params: {type: protective, duration: scene, applies_when: your beats}}
+    - {effect_id: eff.grant_lever, params: {type: amplifying, duration: beat, applies_when: your next beat}}
+    - {effect_id: eff.write_fact, params: {subject: the object, predicate: owner, value: pc}}
+    cost: {focus: 0}
+    limits: {per: rest_long, uses: 1}
+  crude_fallback: {verb: verb.force, method: 'break the lock, hasp or hinges', dc_shift: 0, reach_cap: standard, consequence: trait.sense.loud}
+  stretch: null
+  emulate: null
+  acquisition_paths:
+  - {type: recognition, detail: 'a pick through a calling whose pool gate lists conduct.generosity at the negative pole, at tier 5 or higher (04.8.4; 05.3.10)', clock: null, requires: the calling is not suspended by the Fraying}
+  flares: []
+  requires_conduct: [conduct.generosity]
+  conduct_pole: negative
+  narration_may_not_imply: ['a harm type, target, band or duration other than the text''s', a weakness this record does not hold, an effect on anything outside the stated targets]
+  budget:
+  - {rank: 1, value: 8, allowance: 9, terms: {tier: 6, focus: 0, recharge: 3, timing: 0, limitation: 0, weakness: 0, other_cost: 0}}
+  source: the shared pool (05.1.1)
+  lifecycle: provisional
+  basis: ['05.3', '05.11', I-007, DL-05-33]
+- id: ab.iron_decree
+  name: Iron Decree
+  kind: ability
+  tags: [deed.influence.command.discipline, conduct.justice, trait.nature.mental, trait.action.speech]
+  min_tier: 5
+  mod_group: dark_justice_c
+  slot_class: calling
+  form: working
+  activation: active
+  timing: beat
+  regime: independent_trigger
+  hook: on_declare
+  principle: Forbid by your word alone.
+  scope: 'Issue one decree forbidding one act you name. Up to six beings within band.near who hear you and are in your power or of lower station roll Endure (Resolve) against your effect DC: on a failure each cannot do the forbidden act until the scene ends and is frightened of you until the end of its next turn; your Talk beats with them hold a Precision lever this scene.'
+  limitation: Applies to beings within band.near who hear you and are in your power or of lower station.
+  excludes:
+  - {what: an equal or a superior, needs: verb.talk; ab.heavy_hand does not reach them either}
+  - {what: an act that would plainly kill the one forbidden, needs: 'they do it anyway or fail the decree outright: the decree forbids, it does not compel'}
+  attribute: by_method
+  check: {mode: resisted, resist_verb: verb.endure, resist_attribute: resolve, dc: your effect DC (10 + attribute + competence at the first tag + edge), degree_table: 01.18.3}
+  cost: {focus: 2}
+  limits: {per: scene_end, uses: 1}
+  effects:
+  - {effect_id: eff.force_check, params: {verb: endure, effect_dc_source: your effect DC, degree_table: 01.18.3}}
+  - {effect_id: eff.restrict, params: {forbid: {methods: [the forbidden act]}, target: each being that fails, duration: scene}}
+  - {effect_id: eff.apply_condition, params: {condition: cond.frightened, severity: S1, duration: 'rounds:1', target: each being that fails}}
+  - {effect_id: eff.grant_lever, params: {type: precision, duration: scene, applies_when: your Talk beats with them, for_verbs: [verb.talk]}}
+  ranks:
+  - rank: 1
+    at_tier: 5
+    text: 'Issue one decree forbidding one act you name. Up to six beings within band.near who hear you and are in your power or of lower station roll Endure (Resolve) against your effect DC: on a failure each cannot do the forbidden act until the scene ends and is frightened of you until the end of its next turn; your Talk beats with them hold a Precision lever this scene.'
+    effects:
+    - {effect_id: eff.force_check, params: {verb: endure, effect_dc_source: your effect DC, degree_table: 01.18.3}}
+    - {effect_id: eff.restrict, params: {forbid: {methods: [the forbidden act]}, target: each being that fails, duration: scene}}
+    - {effect_id: eff.apply_condition, params: {condition: cond.frightened, severity: S1, duration: 'rounds:1', target: each being that fails}}
+    - {effect_id: eff.grant_lever, params: {type: precision, duration: scene, applies_when: your Talk beats with them, for_verbs: [verb.talk]}}
+    cost: {focus: 2}
+    limits: {per: scene_end, uses: 1}
+  crude_fallback: {verb: verb.talk, method: shout an order to those who already follow you, dc_shift: 5, reach_cap: limited, consequence: null}
+  stretch: null
+  emulate: null
+  acquisition_paths:
+  - {type: recognition, detail: 'a pick through a calling whose pool gate lists conduct.justice at the negative pole, at tier 5 or higher (04.8.4; 05.3.10)', clock: null, requires: the calling is not suspended by the Fraying}
+  flares: [hard, far, wide, lasting, sure]
+  dictates_choice: true
+  requires_conduct: [conduct.justice]
+  conduct_pole: negative
+  narration_may_not_imply: ['a harm type, target, band or duration other than the text''s', a weakness this record does not hold, an effect on anything outside the stated targets]
+  budget:
+  - {rank: 1, value: 11, allowance: 13, terms: {tier: 6, focus: 4, recharge: 1, timing: 2, limitation: 0, weakness: 0, other_cost: 0}}
+  source: the shared pool (05.1.1)
+  lifecycle: provisional
+  basis: ['05.3', '05.11', I-007, DL-05-33]
+- id: ab.peerless
+  name: Peerless
+  kind: ability
+  tags: [deed.martial.tactics.single_combat, conduct.humility]
+  min_tier: 5
+  mod_group: dark_humility_c
+  slot_class: calling
+  form: form
+  activation: active
+  timing: rider
+  regime: priority_exclusive
+  slot: slot.stance
+  rides: [any]
+  principle: Stand alone against the strongest and suffer no rival.
+  scope: 'Enter the Peerless stance for the scene: against a foe at or above your band that you face alone, you gain +1 Guard and your Strikes deal +2 harm; and you cannot be frightened or charmed.'
+  limitation: Applies to yourself, against a foe at or above your band that no ally of yours is engaged with.
+  excludes:
+  - {what: a foe an ally is also fighting, needs: the stance gives nothing against it}
+  - {what: accepting Help, needs: you may; the stance gives nothing on that beat}
+  attribute: by_method
+  check: {mode: none}
+  cost: {focus: 1}
+  limits: null
+  effects:
+  - {effect_id: eff.stance, params: {priority_rank: 10, form: peerless, effects: [{effect_id: eff.defense_edge, params: {amount: 1, attribute: agility, applies_when: the attacker is at or above your band and no ally of yours is engaged with it}}, {effect_id: eff.harm_edge, params: {amount: 2, applies_when: your Strikes against that foe}}, {effect_id: eff.condition_immunity, params: {forbid: {conditions: [cond.frightened, cond.charmed]}, target: self}}]}}
+  ranks:
+  - rank: 1
+    at_tier: 5
+    text: 'Enter the Peerless stance for the scene: against a foe at or above your band that you face alone, you gain +1 Guard and your Strikes deal +2 harm; and you cannot be frightened or charmed.'
+    effects:
+    - {effect_id: eff.stance, params: {priority_rank: 10, form: peerless, effects: [{effect_id: eff.defense_edge, params: {amount: 1, attribute: agility, applies_when: the attacker is at or above your band and no ally of yours is engaged with it}}, {effect_id: eff.harm_edge, params: {amount: 2, applies_when: your Strikes against that foe}}, {effect_id: eff.condition_immunity, params: {forbid: {conditions: [cond.frightened, cond.charmed]}, target: self}}]}}
+    cost: {focus: 1}
+    limits: null
+  crude_fallback: {verb: verb.observe, method: judge the fight by eye, dc_shift: 5, reach_cap: limited, consequence: null}
+  stretch: null
+  emulate: null
+  acquisition_paths:
+  - {type: recognition, detail: 'a pick through a calling whose pool gate lists conduct.humility at the negative pole, at tier 5 or higher (04.8.4; 05.3.10)', clock: null, requires: the calling is not suspended by the Fraying}
+  flares: []
+  requires_conduct: [conduct.humility]
+  conduct_pole: negative
+  narration_may_not_imply: ['a harm type, target, band or duration other than the text''s', a weakness this record does not hold, an effect on anything outside the stated targets]
+  budget:
+  - {rank: 1, value: 8, allowance: 9, terms: {tier: 6, focus: 2, recharge: 0, timing: 0, limitation: 1, weakness: 0, other_cost: 0}}
+  source: the shared pool (05.1.1)
+  lifecycle: provisional
+  basis: ['05.3', '05.11', I-007, DL-05-33]
+- id: ab.wrath_unbound
+  name: Wrath Unbound
+  kind: ability
+  tags: [deed.martial.axe.great, conduct.restraint]
+  min_tier: 5
+  mod_group: dark_restraint_c
+  slot_class: calling
+  form: form
+  activation: active
+  timing: rider
+  regime: priority_exclusive
+  slot: slot.stance
+  rides: [any]
+  principle: Burn the body to keep the fury going.
+  scope: 'Enter the Wrath Unbound stance until the conflict ends: your Strikes deal harm one severity rung heavier, +1; you ignore status penalties from wounds; physical harm you take is reduced by 1; and you cannot be frightened.'
+  limitation: Applies to yourself until the conflict ends.
+  weakness:
+    text: While in the stance you cannot Retreat or Yield, and when the conflict ends you are exhausted until your next long rest.
+    effect: {effect_id: eff.apply_condition, params: {condition: cond.exhausted, severity: S1, duration: 'until_rest:rest_long', target: self}}
+  excludes:
+  - {what: ending the stance by choice, needs: it ends with the conflict}
+  - {what: a fight you mean to leave, needs: do not enter it}
+  attribute: by_method
+  check: {mode: none}
+  cost: {focus: 2}
+  limits: null
+  effects:
+  - {effect_id: eff.stance, params: {priority_rank: 10, form: wrath unbound, effects: [{effect_id: eff.harm_severity_step, params: {ladder: severity, steps: 1, applies_when: your Strikes}}, {effect_id: eff.harm_edge, params: {amount: 1, applies_when: your Strikes}}, {effect_id: eff.05.waive, params: {event_kind: status penalties from wounds (07.2.5), applies_when: you hold the stance}}, {effect_id: eff.harm_reduction, params: {amount: 1, harm_tags: [harm.physical]}}, {effect_id: eff.condition_immunity, params: {forbid: {conditions: [cond.frightened]}, target: self}}]}}
+  ranks:
+  - rank: 1
+    at_tier: 5
+    text: 'Enter the Wrath Unbound stance until the conflict ends: your Strikes deal harm one severity rung heavier, +1; you ignore status penalties from wounds; physical harm you take is reduced by 1; and you cannot be frightened.'
+    effects:
+    - {effect_id: eff.stance, params: {priority_rank: 10, form: wrath unbound, effects: [{effect_id: eff.harm_severity_step, params: {ladder: severity, steps: 1, applies_when: your Strikes}}, {effect_id: eff.harm_edge, params: {amount: 1, applies_when: your Strikes}}, {effect_id: eff.05.waive, params: {event_kind: status penalties from wounds (07.2.5), applies_when: you hold the stance}}, {effect_id: eff.harm_reduction, params: {amount: 1, harm_tags: [harm.physical]}}, {effect_id: eff.condition_immunity, params: {forbid: {conditions: [cond.frightened]}, target: self}}]}}
+    cost: {focus: 2}
+    limits: null
+  crude_fallback: {verb: verb.strike, method: swing the axe untrained, dc_shift: 0, reach_cap: standard, consequence: null}
+  stretch: null
+  emulate: null
+  acquisition_paths:
+  - {type: recognition, detail: 'a pick through a calling whose pool gate lists conduct.restraint at the negative pole, at tier 5 or higher (04.8.4; 05.3.10)', clock: null, requires: the calling is not suspended by the Fraying}
+  flares: [hard]
+  requires_conduct: [conduct.restraint]
+  conduct_pole: negative
+  narration_may_not_imply: ['a harm type, target, band or duration other than the text''s', a weakness this record does not hold, an effect on anything outside the stated targets]
+  budget:
+  - {rank: 1, value: 9, allowance: 11, terms: {tier: 6, focus: 4, recharge: 0, timing: 0, limitation: 0, weakness: 1, other_cost: 0}}
+  source: the shared pool (05.1.1)
+  lifecycle: provisional
+  basis: ['05.3', '05.11', I-007, DL-05-33]
+- id: ab.unhallow
+  name: Unhallow
+  kind: ability
+  tags: [deed.lore.religion.profane, conduct.piety, trait.nature.profane, trait.sense.visible]
+  min_tier: 5
+  mod_group: dark_piety_c
+  slot_class: calling
+  form: working
+  activation: active
+  timing: beat
+  regime: independent_trigger
+  hook: on_declare
+  principle: Turn a holy place against what made it holy.
+  scope: Unhallow the ground within band.near of you until the next dawn (roll against the place's stored effect DC, or Hard). On a success every sacred effect on it ends; it is recorded as desecrated; divine workings cast on it take -2; you learn which keeper it was sacred to; and each divine caster on it is distracted until the end of their next turn.
+  limitation: Applies to a sacred place or the ground within band.near of you, for a day.
+  excludes:
+  - {what: a keeper itself, needs: canon_impossible}
+  - {what: a lasting desecration beyond the day, needs: a designed rite (05.8.4)}
+  attribute: resolve
+  check: {mode: aimed, verb: verb.handle, against: 'the place''s stored effect DC, or obstacle tier hard'}
+  cost: {focus: 2}
+  limits: {per: rest_long, uses: 1}
+  effects:
+  - {effect_id: eff.05.end_working, params: {target: every effect with trait.nature.sacred on the ground}}
+  - {effect_id: eff.write_fact, params: {subject: the ground, predicate: desecrated, value: true}}
+  - {effect_id: eff.status_modifier, params: {amount: -2, applies_when: 'a divine working is cast on the unhallowed ground, until the next dawn'}}
+  - {effect_id: eff.reveal, params: {sealed_ref: the keeper to whom the place was sacred}}
+  - {effect_id: eff.apply_condition, params: {condition: cond.distracted, severity: S1, duration: 'rounds:1', target: each divine caster on the ground}}
+  - {effect_id: eff.grant_lever, params: {type: protective, duration: scene, applies_when: your beats on the unhallowed ground}}
+  ranks:
+  - rank: 1
+    at_tier: 5
+    text: Unhallow the ground within band.near of you until the next dawn (roll against the place's stored effect DC, or Hard). On a success every sacred effect on it ends; it is recorded as desecrated; divine workings cast on it take -2; you learn which keeper it was sacred to; and each divine caster on it is distracted until the end of their next turn.
+    effects:
+    - {effect_id: eff.05.end_working, params: {target: every effect with trait.nature.sacred on the ground}}
+    - {effect_id: eff.write_fact, params: {subject: the ground, predicate: desecrated, value: true}}
+    - {effect_id: eff.status_modifier, params: {amount: -2, applies_when: 'a divine working is cast on the unhallowed ground, until the next dawn'}}
+    - {effect_id: eff.reveal, params: {sealed_ref: the keeper to whom the place was sacred}}
+    - {effect_id: eff.apply_condition, params: {condition: cond.distracted, severity: S1, duration: 'rounds:1', target: each divine caster on the ground}}
+    - {effect_id: eff.grant_lever, params: {type: protective, duration: scene, applies_when: your beats on the unhallowed ground}}
+    cost: {focus: 2}
+    limits: {per: rest_long, uses: 1}
+  crude_fallback: {verb: verb.recall, method: recall the common observances of your own faith, dc_shift: 5, reach_cap: limited, consequence: null}
+  stretch: null
+  emulate: null
+  acquisition_paths:
+  - {type: recognition, detail: 'a pick through a calling whose pool gate lists conduct.piety at the negative pole, at tier 5 or higher (04.8.4; 05.3.10)', clock: null, requires: the calling is not suspended by the Fraying}
+  flares: [hard, far, wide, lasting, sure]
+  requires_conduct: [conduct.piety]
+  conduct_pole: negative
+  narration_may_not_imply: ['a harm type, target, band or duration other than the text''s', a weakness this record does not hold, an effect on anything outside the stated targets]
+  budget:
+  - {rank: 1, value: 13, allowance: 15, terms: {tier: 6, focus: 4, recharge: 3, timing: 2, limitation: 0, weakness: 0, other_cost: 0}}
+  source: the shared pool (05.1.1)
+  lifecycle: provisional
+  basis: ['05.3', '05.11', I-007, DL-05-33]
+- id: ab.cold_calculus
+  name: The Cold Calculus
+  kind: ability
+  tags: [deed.guile.escape.evasion, conduct.protection]
+  min_tier: 5
+  mod_group: dark_protection_c
+  slot_class: calling
+  form: reaction
+  activation: active
+  timing: reaction
+  regime: independent_trigger
+  hook: on_hit_taken
+  when: the hit would bring you to 0 Vitality and another being is within band.close
+  principle: Spend another life to keep your own.
+  scope: When a hit would bring you to 0 Vitality, turn it onto any other being within band.close; move up to two bands away; gain flag.hidden against the attacker until the end of your next turn; regain 1 Focus; your next beat holds a Precision lever; and you hold a Protective lever on your beats until the scene ends.
+  limitation: Applies to a hit that would bring you to 0 Vitality while another being is within band.close of you.
+  excludes:
+  - {what: an area effect, needs: verb.evade}
+  - {what: a hit that would not drop you, needs: ab.human_shield}
+  attribute: by_method
+  check: {mode: none}
+  cost: {focus: 2}
+  limits: {per: rest_long, uses: 1}
+  effects:
+  - {effect_id: eff.intercept, params: {new_target: 'any other being within band.close of you, your choice', applies_when: a hit would bring you to 0 Vitality}}
+  - {effect_id: eff.reposition, params: {target: self, band_change: 2, flags_add: [flag.hidden], flags_remove: []}}
+  - {effect_id: eff.restore, params: {quantity: focus, units: 1, target: self}}
+  - {effect_id: eff.grant_lever, params: {type: precision, duration: beat, applies_when: your next beat}}
+  - {effect_id: eff.grant_lever, params: {type: protective, duration: scene, applies_when: your beats}}
+  ranks:
+  - rank: 1
+    at_tier: 5
+    text: When a hit would bring you to 0 Vitality, turn it onto any other being within band.close; move up to two bands away; gain flag.hidden against the attacker until the end of your next turn; regain 1 Focus; your next beat holds a Precision lever; and you hold a Protective lever on your beats until the scene ends.
+    effects:
+    - {effect_id: eff.intercept, params: {new_target: 'any other being within band.close of you, your choice', applies_when: a hit would bring you to 0 Vitality}}
+    - {effect_id: eff.reposition, params: {target: self, band_change: 2, flags_add: [flag.hidden], flags_remove: []}}
+    - {effect_id: eff.restore, params: {quantity: focus, units: 1, target: self}}
+    - {effect_id: eff.grant_lever, params: {type: precision, duration: beat, applies_when: your next beat}}
+    - {effect_id: eff.grant_lever, params: {type: protective, duration: scene, applies_when: your beats}}
+    cost: {focus: 2}
+    limits: {per: rest_long, uses: 1}
+  crude_fallback: {verb: verb.exert, method: strain against the bonds, dc_shift: 5, reach_cap: limited, consequence: trait.sense.audible}
+  stretch: null
+  emulate: null
+  acquisition_paths:
+  - {type: recognition, detail: 'a pick through a calling whose pool gate lists conduct.protection at the negative pole, at tier 5 or higher (04.8.4; 05.3.10)', clock: null, requires: the calling is not suspended by the Fraying}
+  flares: []
+  requires_conduct: [conduct.protection]
+  conduct_pole: negative
+  narration_may_not_imply: ['a harm type, target, band or duration other than the text''s', a weakness this record does not hold, an effect on anything outside the stated targets]
+  budget:
+  - {rank: 1, value: 12, allowance: 14, terms: {tier: 6, focus: 4, recharge: 3, timing: 1, limitation: 0, weakness: 0, other_cost: 0}}
+  source: the shared pool (05.1.1)
+  lifecycle: provisional
+  basis: ['05.3', '05.11', I-007, DL-05-33]
 - id: ab.abs_predators_nose
   name: Predator's Nose
   kind: ability
-  tags: [deed.lore.bestiary.monsters, creature.beast.predator]
+  tags: [deed.lore.bestiary.monsters, creature.beast.predator, creature.folk.beastfolk.gnoll, creature.folk.beastfolk.ratfolk]
   min_tier: 1
   mod_group: abs_senses
   slot_class: acquired
@@ -13980,7 +14878,7 @@ abilities:
 - id: ab.abs_night_eyes
   name: Night Eyes
   kind: ability
-  tags: [deed.lore.bestiary.monsters, creature.beast.predator, creature.beast.avian, creature.undead]
+  tags: [deed.lore.bestiary.monsters, creature.beast.predator, creature.beast.avian, creature.undead, creature.folk.beastfolk.ratfolk]
   min_tier: 1
   mod_group: abs_senses
   slot_class: acquired
@@ -14050,7 +14948,7 @@ abilities:
 - id: ab.abs_gills
   name: Gills
   kind: ability
-  tags: [deed.lore.bestiary.monsters, creature.beast.aquatic, creature.elemental.water]
+  tags: [deed.lore.bestiary.monsters, creature.beast.aquatic, creature.elemental.water, creature.folk.beastfolk.lizardfolk]
   min_tier: 1
   mod_group: abs_breath
   slot_class: acquired
@@ -14610,7 +15508,7 @@ abilities:
 - id: ab.abs_scale_ward
   name: Scale-Ward
   kind: ability
-  tags: [deed.lore.bestiary.monsters, creature.dragon, creature.beast.reptile]
+  tags: [deed.lore.bestiary.monsters, creature.dragon, creature.beast.reptile, creature.folk.beastfolk.lizardfolk]
   min_tier: 2
   mod_group: abs_hide
   slot_class: acquired

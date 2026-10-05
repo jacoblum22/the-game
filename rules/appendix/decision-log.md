@@ -583,6 +583,20 @@ Decisions made in `00-architecture.md` (Wave 2). Digest shorthand `[R1 §x]`…`
 - Serves: goal 2.
 - Revisit if: 00's glossary adopts other words.
 
+### DL-02-24: The spark grants the working of its own element (revision I-015)
+- Decision: `birth.gift.elements` names an element (fire, water, earth, air), chosen in the concept or drawn by the engine with equal weights in the gift draw, writes `pc.spark.element`, and grants that element's `min_tier` 1 working (Cinder Stride, Undertow, Heave, Stolen Breath) through `gifted_ability_by_element`.
+- Alternatives considered: one fixed working for every spark (rejected: the gift's own text names four elements, and a water-born character starting with fire contradicts the concept); a separate gift per element (rejected: it would weight the elements school four times in the seven-school draw).
+- Evidence: 02.6.3; T-02-7 (rendered by `tables02.py`); DL-05-32; I-015.
+- Serves: goal 1.
+- Revisit if: ch.13-style settings add elements (the map is data and grows with them).
+
+### DL-02-25: A caster's default placement never fixes its casting attribute at −1 (revision I-009)
+- Decision: 02.3.5's default takes the Free rule for a magic livelihood when the people's Typical rule fixes that livelihood's casting attribute at −1 (Orc-kin apprentice, Goblin-kin acolyte, Beastfolk hedge-taught and Touched); data `origins.yaml#creation_defaults.typical_rule_except`.
+- Alternatives considered: leave it, relying on the DM's offer of 02.3.4 (rejected: the fast path is exactly where no offer is read, and its default would lose a first fight to a trained foe 27–38% of the time on the branch working, against 5–10% at +3); forbid the combination (rejected: it is a legitimate concept, and remains available by choice).
+- Evidence: `02-gen_data02/sim02-output.txt` (revision rows); A2 audit in `gen02-output.txt`; T-02-6.
+- Serves: goal 1 (a quick-start caster can cast), goal 2 (the default needs no judgment).
+- Revisit if: A3's quantity-versus-freedom audit is rerun and a people's Typical rule is changed.
+
 ## DL-03 — Tags and Evidence
 
 ### DL-03-01: Deed significance is computed from the frame's pre-committed fields; fresh judgment is kept only for tags and conduct
@@ -760,6 +774,20 @@ Decisions made in `00-architecture.md` (Wave 2). Digest shorthand `[R1 §x]`…`
 - Serves: goal 1.
 - Revisit if: 02 declines it or 04's thresholds make it decisive.
 
+### DL-03-26: Contests, ruinous stakes and the brink: the non-combat crisis and challenge band (revision I-003)
+- Decision: outside conflict, a beat in a **contest** (social: a Talk frame on a principal or a faction's spokesman, 15.3.11; craft: a crafting project's step, 08.6.4; lore: a case or research a principal or faction keeps, 15.9.20) takes `challenge_band = max(DC band, contest band)`, the contest band being the opposing party's threat band or its faction's tier, or the work's type-tier. A Dire non-conflict frame whose threatened cost at its critical-failure severity is irreversible is **ruinous**: +2 points like lethal (03.4.2) and a crisis (03.4.5). A contest beat declared with the contest's opposing clock one segment from full is **at the brink**, a crisis like Staggered. All three are engine-read from records (faction tier, threat band, type-tier, the declared cost, the clock), never judged.
+- Alternatives considered: (a) OEQ-04-10's own fallback, counting a Dire challenging success twice for non-combat branches: rejected, it multiplies one event instead of naming the non-combat events that are as grave as a lethal fight, and it does nothing for the band cap; (b) a counted analogue of `cnt.defeat` for a contest won (`cnt.prevail`, units = contest band): simulated and dropped, because the contest pillars' counted share already clears 04.3.3's tenth (R9 of `04-recog-parity.py`) and it changed no pacing; (c) lowering tier 3–5's crisis and great-deed counts for non-combat callings: rejected, it would make the tiers mean less for one pillar instead of giving that pillar the same kinds of deed.
+- Evidence: `04-recog-parity.py` (200 seeds, 90 sessions, one play shape for every pillar): medians to tier 3 / tier 5 — archer 19 / 51; envoy 18 / 46; smith 18 / 45; scholar 17 / 46 under the revised rules (all within ±20% at both tiers); under the earlier rules the smith never reached tier 3, and the envoy and scholar ran 21% faster than the archer to tier 3 (the band they faced was modelled as band to band + 2, which the contest band now replaces with the same offset a fight has). [03.4.3; 03.4.5; 15.3.11; 15.9.20; 08.6.4; I-003; R1 #13]
+- Serves: goal 1 (every calling has a real path to tier 5), goal 2 (no new judgment: every input is a record).
+- Revisit if: live pick and tier logs (T-04-CRISIS) show any pillar's tier-3 median outside ±20% of the combat median.
+
+### DL-03-27: Counted yield measured, not estimated (revision I-004)
+- Decision: 03.7.3's arithmetic estimate is replaced by a measurement: `03-counted-yield.py` runs chapter 06's conflict engine and applies this chapter's points and saturation to every beat, defeat, flight and Focus push. Counted share at the weapon node per band 1–5: 0.11 / 0.15 / 0.22 / 0.23 / 0.33 without Focus, 0.26–0.44 when pushing; the contest pillars 0.31 (social), 0.76 (craft) and 0.31 (lore) at the median, and never below 0.24 at the tenth percentile (`04-recog-parity.py` R9).
+- Alternatives considered: keep the estimate (rejected: I-004); measure in 04's play model only (rejected: its defeat and Focus rates are themselves assumptions; the conflict engine produces them from the rules).
+- Evidence: `03-counted-yield-output.txt` (4,000 fights a row); integer halving makes a second band-1 defeat in one scene worth 0, which is why band 1 is lowest.
+- Serves: goal 2 (numbers backed by measurement).
+- Revisit if: live play (T-03-COUNT, T-04-COUNT) yields a counted share under 0.10 at any PC's top node.
+
 ## DL-04 — Recognition and Growth
 
 Fragment for `appendix/decision-log.md`. Format: BRIEF §11. Simulation references are to
@@ -907,6 +935,34 @@ Fragment for `appendix/decision-log.md`. Format: BRIEF §11. Simulation referenc
 
 ### DL-04-24: Companions that track evidence hold at most one calling, to tier 3
 - Decision: 04 Edge cases. Evidence: 03.2.7; 00.17 Q8. Revisit if: ch.16 wants growth beyond tier 3 for a squire who becomes a PC.
+
+### DL-04-25: The Monk's conduct gate carries the positive pole (revision I-007)
+- Decision: `call.monk` gains `pole: positive`, so its `pool_gate.conduct: [conduct.restraint]` admits the restraint vow's abilities (04.8.4 requires the ability's `conduct_pole` to equal the calling's `pole`).
+- Alternatives considered: drop the conduct gate from the Monk (rejected: the variant is defined by restraint, and its oath names that axis); give oath-bearing callings a pole by rule rather than data (rejected: one explicit field is what the pick gate reads).
+- Evidence: `05-ladder-check.py` reported the gate as dead data (no oath-gated ability admitted); after the fix the Monk's restraint row reads 1/0/1/0/1 at the positive pole.
+- Serves: goal 2 (data and rule agree).
+- Revisit if: another oath-bearing calling adds a conduct axis to its pool gate (the ladder check will flag a missing pole).
+
+### DL-04-26: `no_pool` covers the human-like folk only; `signature_of` recorded (revision I-020)
+- Decision: `gen_absorb.yaml#no_pool` lists human, elf, dwarf, halfling, orc and goblin. Giant-kin and beastfolk carry natural powers and are gated like any creature: Stone Grip already gated giants; gnolls and ratfolk are added to Predator's Nose, ratfolk to Night Eyes, lizardfolk to Gills and Scale Ward. The 25 pool entries named as an archetype's signature record those archetypes in `signature_of` (46 in all). `signature_of` (what a source's decisive fill takes) and `signature_eligible` (what the fallback draw may take when the named entry is gated out, 00.11 step 6) stay distinct fields.
+- Alternatives considered: keep `no_pool: creature.folk` with an exception list in ch.09 (rejected: two sources of truth, and the shipped Stone Grip contradicted it); derive `signature_of` at load time only (rejected: the field is in the schema and ch.08's decisive fill reads it; the generator check keeps it from going stale).
+- Evidence: ch.09's interface requests to 04; `09-gen_data09.py` now reads `no_pool` from the data and fails when `signature_of` disagrees with `archetypes.yaml` (0 errors after the change; gnoll, lizardfolk now list eligible entries).
+- Serves: goal 1 (a Devourer can take a troll's grip, as the fiction promises), goal 2 (one source of truth).
+- Revisit if: new folk peoples are added (decide human-like or natural per people).
+
+### DL-04-27: The counted divisor stays at 10, on measurement (revision I-004)
+- Decision: 04.3.3's counted requirement stays at the weighted threshold ÷ 10. Measured on chapter 06's conflict engine (`03-counted-yield.py`), it costs extra play only for a band-1 fighter who meets nothing but mobs and never spends Focus: one fight more than the weighted threshold already needs (9 instead of 8) for tier 1, and nothing at tiers 2–5 or with any Focus spent. The contest pillars measure 0.31 (social), 0.76 (craft) and 0.31 (lore) at the median, and never below 0.24 at the tenth percentile, above the tenth. OEQ-04-2's pre-set trigger (lower to ÷ 15 if a pillar yields under 0.12) was a proxy for "the requirement binds honest play"; band 1 without Focus measures 0.11, but measured directly the binding is one fight in one corner, and ÷ 15 would loosen the requirement for every pillar to spare it. The trigger is restated as the direct test: lower the divisor if the counted requirement delays any pillar's tier by more than one session.
+- Alternatives considered: ÷ 15 everywhere (rejected above); a band-1 exception (rejected: a rule for a one-fight effect).
+- Evidence: `03-counted-yield-output.txt`; `04-recog-parity-output.txt` R9. [04.3.3; OEQ-04-2; I-004]
+- Serves: goal 2.
+- Revisit if: T-04-COUNT in live play shows a session's delay in any pillar.
+
+### DL-04-28: Non-combat parity accepted on simulation (revision I-003)
+- Decision: the requirement sets of 04.3 are unchanged; parity comes from what the evidence rules now count (DL-03-26: contest band, ruinous, brink; 15.3.11, 15.9.20, 08.6.4). OEQ-04-10 is answered: envoy, smith and scholar reach tier 3 at sessions 18 / 18 / 17 and tier 5 at 46 / 45 / 46, against the archer's 19 and 51 in the same play shape.
+- Alternatives considered: separate, lower ladders for non-combat callings (rejected: the tiers would mean different things by pillar); OEQ-04-10's "count a Dire challenging success as two crises" (rejected in DL-03-26).
+- Evidence: `04-recog-parity.py` and its output; `04-recognition-sim.md` (I-003 section). The play shape (55% of scenes in one's pillar, 3–6 beats, a quarter of pillar scenes Dire) is an assumption shared by every style; with 04's original thinner social shape (2–4 beats, 15% Dire) the envoy still reaches tier 3 at 20 and tier 5 at 54.
+- Serves: goal 1 (R1 #13: every calling needs a real path).
+- Revisit if: T-04-CRISIS fails in live logs.
 
 ## DL-05 — Abilities, Focus, and Magic
 
@@ -1121,6 +1177,34 @@ Format per BRIEF §11. Citations per 00.1.6. Numbers consumed by other chapters 
 - Evidence: [00.16.4] [03 and 04 used the same method]
 - Serves: goal 2.
 - Revisit if: the engine's loader takes over validation.
+
+### DL-05-31: One zero-cost branch working per magic branch, held through training (revision I-009)
+- Decision: add Force Bolt (arcane), Rebuke (divine) and Wild Lash (primal) as `ab.*` records with `slot_class: license` (05.7.11). Every holder of a training license of the branch holds its working; it takes no slot and is never picked. 0 Focus, at will, one action, aimed against Guard. Severity follows the grade in the casting school's license (trained S2, expert S3, master S4), the same steps as 06.4.5's weapon mastery. Each branch keeps a fictional identity: raw force that can shove (arcane), the keeper's regard against its opposite (divine), and the source present striking for you (primal). The frame's deed tag is the school the caster names, so competence, evidence and `cnt.focus` land there.
+- Alternatives considered: (a) ordinary pool abilities picked into a slot: rejected, because a fighter's Strike costs no slot, so a caster would pay a slot tax for the same floor, and a new character (who holds one ability at most, 02.5.4) could not have both its spell and its working. (b) Severity by calling tier, as 05.3.9's rank rule gives: rejected, because a broad caster would then outgrow a broad fighter at tier 3; reading the grade keeps the two in step. (c) One rung lighter (S1/S2/S3): simulated (section J5), a Spent P3 caster beats one T3 66.0% with Force Bolt, 60.6% with Rebuke and 27.9% with Wild Lash, whose physical harm armor reduces; the primal branch fails the ≥ 40% acceptance, and keeping it would need a severity per branch instead of one rule shared with 06.4.5's mastery. (d) Forbidding the push on the working, so that Focus flows only into spells: rejected, because 05.6.7 makes the push universal and the simulation shows the push gives a caster the same gain it gives a fighter.
+- Evidence: `06-conflict-sim.py` section J (20,000 fights a row): a new caster (+5) on the working alone beats one T2 92.8–93.6% (staff 51.3%); a Spent P3 caster beats one T3 80.7–91.0% (74.5–86.8% against 09's Fend), against 0.4% before; at P1–P5 the best branch gives 100 / 99 / 91 / 48 / 30% against the no-Focus specialist's 100 / 100 / 99.7 / 87 / 80%. Focus: the push lifts a P3 caster against one T4 from 34% to 55% and against two T3 from 26% to 47% (a fighter: 62→84, 73→90). `02-gen_data02/sim02.py`: every default-path new caster beats one T2 90.5–94.8%. [06.10.6; 06 IR (b) to 05; I-006; I-009; R5 MG-07]
+- Serves: goal 1 (a caster can always try something in a fight) and goal 2 (the working is a record the engine executes; the DM never invents a staff-swing for a mage).
+- Revisit if: T-05-BUDGET or playtests show 1-Focus damage spells chosen in under 20% of a caster's Focus spends (the working plus a push crowding them out; see the ledger row on damage-over-time weighting), or a Spent caster's win rate against an equal-band foe exceeds the broad fighter's at any band.
+
+### DL-05-32: A min_tier-1 working for each primal element (revision I-015)
+- Decision: add Undertow (water), Stolen Breath (air) and Heave (earth) under `deed.primal.elements`, each a 1-Focus resisted Working budgeted at tier 1 with three ranks. The Touched's spark grants the working of the element the player names or the engine draws (02.6.3; `gen_birth.yaml#birth.gift.elements.gifted_ability_by_element`).
+- Alternatives considered: water and air only, as the ledger asked: rejected, because the only earth ability (Stone Shape) has `min_tier` 3 and is not a legal gifted technique (02.5.4), so an earth spark would also have started with nothing of its own; giving every spark Cinder Stride: rejected, the gift's text names four elements.
+- Evidence: 02.6.3; 02.5.4; T-02-7; I-015.
+- Serves: goal 1 (the concept "I have always been able to call the water" plays from the first scene).
+- Revisit if: pick logs show one element's working dominating the elements pool (T-05-PICKRATE).
+
+### DL-05-33: Tier-5 abilities for every dark pole, and a ladder proved by script (revision I-007)
+- Decision: author one `min_tier` 5 ability per negative pole (No Quarter, Web of Lies, The Last Embrace, Hoard-Heart, Iron Decree, Peerless, Wrath Unbound, Unhallow, The Cold Calculus), budgeted at tier 5 like the positive set and each carrying its pole's appetite as a mechanic (refused quarter, a planted story, a betrayal recorded, Focus from theft, a forbidding decree, glory alone, fury that burns the body, a desecration, a life spent for one's own). `05-ladder-check.py` applies 04.8.4's pool gate to every calling × axis × tier and fails on a pick with no candidate; the generator's coverage check now requires min_tier 1, 3 and 5 on every pole a calling uses. The check also found the Monk's conduct gate dead (no `pole`), fixed in ch.04's generator (`pole: positive`).
+- Alternatives considered: let the tier-5 dark pick fall back to any oath ability on the axis regardless of pole: rejected, 04.8.4 forbids crossing poles; give dark callings a smaller allowance: rejected, it would make the dark road strictly worse rather than different. Middle tiers: the allowance rises only at tiers 1, 3 and 5, and the light poles also have nothing at 2 and 4, so nothing was added there.
+- Evidence: `05-ladder-check-output.txt` (183 callings, 20 conduct calling × axis rows, 0 failures; against the pre-revision data 19 failures: 18 dark tier-5 holes and the Monk gate). [04.8.4; 05.2.4; 05.3.10; I-007]
+- Serves: goal 1 (a dark road is a full road), goal 2 (no pick is silently kept).
+- Revisit if: T-05-PICKRATE shows a dark tier-5 ability never taken when offered.
+
+### DL-05-34: `replaces` chains and derived flare lists are not gaps (revision I-008)
+- Decision: neither is a gap; both are kept and now checked. (1) `replaces`: an ability grows by restated ranks (05.3.9), so no upgrade chain is needed for growth; `replaces` is the content-lifecycle link of 05.12.3 (a new entry sharing a `mod_group` must replace or retire the old) and of 05.2.5 (the upgrade takes the old slot). The generator now enforces 05.12.3 (a shared `mod_group` without a `replaces` link, or a link to an unknown id, is an error); the current pool has no shared `mod_group`, so no chain is owed. (2) Flare lists are derived from each record's effects by 05.6.8's "listed when" column, which is the rule; a hand-picked list would drift from the effects it describes. The audit found one place where the derivation and the rule text disagreed: 35 spells list Quiet without a sense trait. The derivation is right (a working of magic is always perceived through its limitation: word, sign or stirred source), so 05.6.8's column now says so.
+- Alternatives considered: hand-authored flare lists (rejected: unverifiable at 239 records); authoring upgrade chains now (rejected: it would duplicate what ranks already do and grow the pool without a coverage hole, against 05.11.6).
+- Evidence: audit in revision A (`gen_data05.py` check; 0 shared mod_groups; 35 Quiet-without-sense spells, all magic). [05.2.5; 05.3.9; 05.6.8; 05.12.3]
+- Serves: goal 2.
+- Revisit if: content passes add abilities in an existing `mod_group` (the script will then demand the chain).
 
 ## DL-06 — Conflict
 
@@ -1667,6 +1751,13 @@ chapter 06's fight model and T-06-12 lines), output `07-harm-sim-output.txt`, wr
 - Evidence: 08-loot-sim.py contract check.
 - Serves: goal 2 (no empty pools).
 - Revisit if: 09 tags undead armaments differently.
+
+### DL-08-30: A crafting project is a craft contest (revision I-003)
+- Decision: 08.6.4 item 6: a step's challenge band is at least the work's type-tier; a step on a work with an irreplaceable material is Dire and its `cost.gear` on that material is ruinous; a step with spoilage one from full is at the brink; fine-or-better works may be played as scenes, and a masterwork's or wondrous work's completing beat always is.
+- Alternatives considered: let crafting steps stay Risky and DC-banded (rejected: no work then rose above band 4 and no step was ever a crisis, so a smith's calling stopped at tier 2 in every simulated run); judged evidence from every downtime step (rejected: it would turn the week planner into a grind, against 15.10.6).
+- Evidence: `04-recog-parity.py`: smith tier 3 never (earlier rules) → 18; tier 5 never → 45 (archer 19 / 51).
+- Serves: goal 1.
+- Revisit if: crafting-heavy play logs show smiths playing fewer than a third of their works as scenes (the judged path would then be too rare in practice).
 
 ## DL-09 — Adversaries
 
@@ -2680,6 +2771,13 @@ chapter 06's fight model and T-06-12 lines), output `07-harm-sim-output.txt`, wr
 - Evidence: [C:VII] [00.12.1]
 - Serves: goal 2; goal 1 via redirects.
 - Revisit if: the audience gate is reported as a wall (then make its fallback reach Standard for petitions with evidence).
+
+### DL-15-32: Social and lore contests carry a band, and ruin and the brink are crises (revision I-003)
+- Decision: 15.3.11 (social contests on principals or a faction's spokesman) and 15.9.20 (cases and research a principal or faction keeps) give their beats the contest band of 03.4.3; 15.3.8's Dire `cost.closed_door` against a principal or a faction is ruinous (03.4.5); a beat with the campaign's patience or the case's opposition clock one from full is at the brink.
+- Alternatives considered: rating social deeds by the DC alone (rejected: the deed's greatness in the world is the party moved, not one exchange's difficulty, as a fight is rated by the fight); a judged "this negotiation matters" flag (rejected: a judgment where records already answer).
+- Evidence: DL-03-26; `04-recog-parity.py` (envoy 18 / 46 against the archer's 19 / 51; scholar 17 / 46).
+- Serves: goal 1, goal 2.
+- Revisit if: as DL-03-26.
 
 ## DL-16 — Companions and Allies
 

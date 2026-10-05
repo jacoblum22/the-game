@@ -7,7 +7,7 @@ Seeded and deterministic. Copy kept at rules/_process/simulation/08-loot-sim.py;
 import random, collections, statistics, os, sys
 import yaml
 
-D = r"C:\Users\jacob\the-game\rules\data"
+D = os.environ.get("GAME_RULES_DATA", os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "data")))
 L = lambda f: yaml.safe_load(open(os.path.join(D, f), encoding="utf-8"))
 BI = {b["id"]: b for b in L("base_items.yaml")["base_items"]}
 IP = L("item_properties.yaml")

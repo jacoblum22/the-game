@@ -167,3 +167,32 @@ tier 4 at session 37 (martial 998, wilds 605). Wilds 907 at session 60: no tier 
    second-pillar characters on the line.
 5. Every number here depends on 03's point scale and on the play model. If live play yields differ
    (OEQ-03-3, OEQ-04-1), the weighted thresholds scale by one common factor; the structure does not change.
+
+## Revision A (2026-10-05): non-combat parity (I-003) and counted yield (I-004)
+
+**`04-recog-parity.py`** (output `04-recog-parity-output.txt`) loads `04-recog04.py` unchanged and runs one
+play shape for every pillar (55% of scenes in the calling's own pillar, 3–6 beats, a quarter Dire and 40% of
+those carrying the pillar's worst stakes, 10% of Dire scenes at the brink; conflicts at DL-00-05's advisory
+offsets; 200 seeds, 90 sessions). It compares the rules before revision A (contest beats banded by DC; craft
+steps always Risky and capped at band 4; no ruinous or brink crisis) with the revised rules (03.4.3 contest
+band; 03.4.5 ruinous and brink; 15.3.11; 15.9.20; 08.6.4 item 6).
+
+| Calling | Rules | Tier 3 median | vs archer | Tier 5 median | vs archer |
+|---|---|---|---|---|---|
+| archer (combat) | — | 19 | — | 51 | — |
+| envoy | earlier / revised | 15 / 18 | −21% / −5% | 44 / 46 | −14% / −10% |
+| smith | earlier / revised | never / 18 | — / −5% | never / 45 | — / −12% |
+| scholar | earlier / revised | 15 / 17 | −21% / −11% | 44 / 46 | −14% / −10% |
+| envoy, 04's thin shape (2–4 beats, 15% Dire) | earlier / revised | 18 / 20 | −5% / +5% | 53 / 54 | +4% / +6% |
+
+Acceptance (I-003): tier-3 and tier-5 medians within ±20% of the combat calling: met by all three under the
+revised rules. Under the earlier rules the smith never passed tier 2 (no crisis, no band-5 work), which was
+the structural defect; the envoy's original lag (28 / never) came from its thinner scene shape and the
+pre-DL-00-05 fight model, and is gone in a like-for-like comparison. A counted analogue of `cnt.defeat` for a
+contest won was trialled and dropped (it changed no median).
+
+**R9 in the same script and `03-counted-yield.py`** (I-004): counted / weighted at the key after 10 sessions,
+medians: archer 0.23; envoy 0.19 → 0.31; smith 0.75 → 0.76; scholar 0.18 → 0.31 (earlier → revised).
+Measured on 06's conflict engine: fighter bands 1–5 0.11 / 0.15 / 0.22 / 0.23 / 0.33 without Focus,
+0.26–0.44 pushing; the ÷ 10 counted rule costs one extra fight in eight to a band-1, mob-only, no-Focus
+fighter and nothing elsewhere, so it stands (DL-04-27).

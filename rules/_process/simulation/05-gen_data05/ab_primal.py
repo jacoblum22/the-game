@@ -167,6 +167,49 @@ ab('ab.stone_shape', 'Stone Shape', P + 'elements.earth', 3, 'shape_earth', 'Per
        [perm(4), move('one being behind the raised wall', 0, add=['flag.in_cover']), reach('Force beats against earth or unworked stone'), lev('amplifying', 'Force beats against earth or unworked stone', 'scene', verbs=['verb.force']), cond('cond.grabbed', 1, 'scene', 'one being standing on the shaped ground')], f=2)],
    traits=['trait.delivery.touch', 'trait.sense.visible'], x=[('worked stone, mortar, brick or metal', 'verb.force; lic.training.craft_building'), ('making a lasting building', 'craft (08): the shape holds, but it is rough')])
 
+END = ('resisted', 'endure', 'endurance')
+
+# Revision I-015: a min_tier-1 working for each of water, air and earth, so the Touched's spark (02.6.3, T-02-7)
+# starts with a working of the element it names. (Stone Shape is min_tier 3 and cannot be a gifted technique.)
+ab('ab.undertow', 'Undertow', P + 'elements.water', 1, 'water_drag', 'Working', 'beat',
+   'Make water rise and drag a body down.',
+   'Applies to one being within band.near that stands in, on or beside standing or running water.',
+   [rk("Water rises around one being within band.near (it rolls Endure (Might) against your effect DC): on a failure it takes Light crushing harm, is dragged one band toward the water and knocked prone.",
+       [fchk('endure'), harm(1, ['harm.physical.crush'], T), move(T, 1), cond('cond.prone', 1, 'rounds:1', T)], f=1),
+    rk("Water rises around one being within band.near (it rolls Endure (Might) against your effect DC): on a failure it takes Moderate crushing harm, is dragged one band toward the water, knocked prone, and choking until the end of its next turn.",
+       [fchk('endure'), harm(2, ['harm.physical.crush'], T), move(T, 1), cond('cond.prone', 1, 'rounds:1', T), cond('cond.choking', 1, 'rounds:1', T)], f=1),
+    rk("Water rises around one being within band.near (it rolls Endure (Might) against your effect DC): on a failure it takes Heavy crushing harm, is dragged one band toward the water, knocked prone, and choking until the end of its next turn.",
+       [fchk('endure'), harm(3, ['harm.physical.crush'], T), move(T, 1), cond('cond.prone', 1, 'rounds:1', T), cond('cond.choking', 1, 'rounds:1', T)], f=1)],
+   check=MIG, harm_tags=['harm.physical.crush'], traits=['trait.delivery.ranged', 'trait.sense.visible', 'trait.sense.audible'],
+   x=[('a dry place', 'G4: the source is absent (05.7.3); a waterskin poured out supplies it once'), ('drowning a being outright', 'a rite, or holding it under by verb.grapple')],
+   basis=['I-015', '02.6.3', 'DL-05-32'])
+
+ab('ab.stolen_breath', 'Stolen Breath', P + 'elements.air', 1, 'air_breath', 'Working', 'beat',
+   'Draw the air out of a breathing body.',
+   'Applies to one being that breathes, within band.near, where air moves (05.7.3).',
+   [rk("Pull the air from the lungs of one breathing being within band.near (it rolls Endure (Endurance) against your effect DC): on a failure it takes Moderate harm from lack of air and is choking until the end of its next turn.",
+       [fchk('endure'), harm(2, ['harm.physical.asphyxia'], T), cond('cond.choking', 1, 'rounds:1', T)], f=1),
+    rk("Pull the air from the lungs of one breathing being within band.near (it rolls Endure (Endurance) against your effect DC): on a failure it takes Heavy harm from lack of air, is choking until the end of its next turn and distracted until the end of its next turn.",
+       [fchk('endure'), harm(3, ['harm.physical.asphyxia'], T), cond('cond.choking', 1, 'rounds:1', T), cond('cond.distracted', 1, 'rounds:1', T)], f=1),
+    rk("Pull the air from the lungs of one breathing being within band.near (it rolls Endure (Endurance) against your effect DC): on a failure it takes Grievous harm from lack of air, is choking until the end of its next turn and distracted until the end of its next turn.",
+       [fchk('endure'), harm(4, ['harm.physical.asphyxia'], T), cond('cond.choking', 1, 'rounds:1', T), cond('cond.distracted', 1, 'rounds:1', T)], f=1)],
+   check=END, harm_tags=['harm.physical.asphyxia'], traits=['trait.delivery.ranged'],
+   x=[('a being that does not breathe (the undead, constructs, spirits)', 'G4 for this working'), ('a sealed, still room', 'G4: the source is absent (05.7.3)')],
+   basis=['I-015', '02.6.3', 'DL-05-32'])
+
+ab('ab.heave', 'Heave', P + 'elements.earth', 1, 'earth_heave', 'Working', 'beat',
+   'Make the ground buck under a being\'s feet.',
+   'Applies to beings within band.near that stand on bare earth or unworked stone.',
+   [rk("The ground under one being within band.near bucks and heaves (it rolls Evade against your effect DC): on a failure it takes Light crushing harm, is knocked prone and is slowed until the end of its next turn.",
+       [fchk('evade'), harm(1, ['harm.physical.crush'], T), cond('cond.prone', 1, 'rounds:1', T), cond('cond.slowed', 1, 'rounds:1', T)], f=1),
+    rk("The ground under up to two beings within band.near bucks and heaves (each rolls Evade against your effect DC): on a failure each takes Moderate crushing harm, is knocked prone and is slowed until the end of its next turn.",
+       [fchk('evade'), harm(2, ['harm.physical.crush'], T), cond('cond.prone', 1, 'rounds:1', T), cond('cond.slowed', 1, 'rounds:1', T), tgt(1)], f=1),
+    rk("The ground under up to three beings within band.near bucks and heaves (each rolls Evade against your effect DC): on a failure each takes Heavy crushing harm, is knocked prone and is slowed until the end of its next turn.",
+       [fchk('evade'), harm(3, ['harm.physical.crush'], T), cond('cond.prone', 1, 'rounds:1', T), cond('cond.slowed', 1, 'rounds:1', T), tgt(2)], f=1)],
+   check=EVA, spread='burst', harm_tags=['harm.physical.crush'], traits=['trait.delivery.area', 'trait.sense.loud', 'trait.sense.visible'],
+   x=[('worked stone, timber floors, ships\' decks', 'G4: the source is absent (05.7.3)'), ('a being aloft', 'it stands on nothing')],
+   basis=['I-015', '02.6.3', 'DL-05-32'])
+
 # ---------------- hexcraft ----------------
 ab('ab.evil_eye', 'Evil Eye', P + 'hexcraft.cursing', 1, 'hex', 'Working', 'beat',
    'Lay ill luck on one who meets your gaze.',
@@ -189,3 +232,19 @@ ab('ab.lift_the_hex', 'Lift the Hex', P + 'hexcraft.unhexing', 2, 'unhex', 'Work
        [endw('one curse or hex on the being or object touched'), cleanse('one condition the curse caused', T), cleanse('a second condition the curse caused', T), rev('who laid the curse'), lev('protective', "the freed being's checks against that maker's hexes", 'scene')], f=2)],
    check=('aimed', 'verb.handle', "the curse's stored effect DC"), traits=['trait.delivery.touch'],
    x=[('arcane wards', 'ab.unbinding (primal unhexing takes a Precision snag against them)'), ('a curse laid by a rite of regional scale', 'rit.lift_curse')])
+
+# ---------------- the branch working (05.7.11; revision I-009) ----------------
+ab('ab.wild_lash', 'Wild Lash', 'deed.primal', 1, 'branch_primal', 'Working', 'beat',
+   'Let the source present strike one target for you.',
+   'Applies to one being within band.near of you and of the source present (05.7.3).',
+   [rk("The source present lashes one being within band.near: a thorned vine, a flung stone, a fist of water, a tongue of flame or a cut of wind. On a success it takes Moderate harm of the source's kind (shifted by delivered reach) and is off-balance until the end of its next turn.",
+       [harm(2, ['harm.physical.pierce', 'harm.physical.crush', 'harm.physical.cut', 'harm.fire.flame'], T), cond('cond.off_balance', 1, 'rounds:1', T)]),
+    rk("The source present lashes one being within band.near: a thorned vine, a flung stone, a fist of water, a tongue of flame or a cut of wind. On a success it takes Heavy harm of the source's kind (shifted by delivered reach) and is off-balance until the end of its next turn.",
+       [harm(3, ['harm.physical.pierce', 'harm.physical.crush', 'harm.physical.cut', 'harm.fire.flame'], T), cond('cond.off_balance', 1, 'rounds:1', T)]),
+    rk("The source present lashes one being within band.near: a thorned vine, a flung stone, a fist of water, a tongue of flame or a cut of wind. On a success it takes Grievous harm of the source's kind (shifted by delivered reach) and is off-balance until the end of its next turn.",
+       [harm(4, ['harm.physical.pierce', 'harm.physical.crush', 'harm.physical.cut', 'harm.fire.flame'], T), cond('cond.off_balance', 1, 'rounds:1', T)])],
+   check=('aimed', 'verb.strike', "the target's Guard"), harm_tags=['harm.physical.pierce', 'harm.physical.crush', 'harm.physical.cut', 'harm.fire.flame'], branch_working=True,
+   traits=['trait.action.attack', 'trait.delivery.ranged', 'trait.sense.visible'],
+   x=[('a place with no source present', 'G4: the source is absent (05.7.3)'), ('holding, shaping or calling the source', 'a spell of that school (ab.root_snare, ab.gust, ab.stone_shape)')],
+   nmi=['a source no fact holds', 'that the source stays roused after the lash'],
+   basis=['05.7.11', '05.7.3', '06 Interface request (b) to 05', 'I-009', 'DL-05-31'])

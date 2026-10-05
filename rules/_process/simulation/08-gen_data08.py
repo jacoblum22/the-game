@@ -10,7 +10,7 @@ Copy kept at rules/_process/simulation/08-gen_data08.py.
 import sys, os, glob, json, re
 import yaml
 
-ROOT = r"C:\Users\jacob\the-game\rules"
+ROOT = os.environ.get("GAME_RULES", os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..")))
 D = os.path.join(ROOT, "data")
 OUT = D
 

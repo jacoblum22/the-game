@@ -45,3 +45,25 @@ Run from that folder with Python 3.12 (`gen02.py` needs no third-party module; `
 Reading: every legal martial start is robust; a new caster who must melee a trained foe without Focus
 loses more often than not. This is the case for issue I-009 (05's zero-cost workings) and for 09's
 advisory reading the PC's actual line at band 1 (02 Interface requests to 05 and 09).
+
+- **sim02, revision I-009**: the same harness, new casters using their **branch working** (05.7.11: rank 1,
+  Moderate harm, one action, no Focus, no slot). Casting modifier = casting attribute + the school's +2;
+  Vitality 12 + Endurance; Guard 10 + Agility + 1. Since I-009, 02.3.5 defaults a magic livelihood to the
+  Free rule where its Typical rule would fix the casting attribute at −1.
+
+| Line | vs 1×T1 win | vs 2×T1 win | vs 1×T2 win |
+|---|---|---|---|
+| Thessaly, Free acolyte, Rebuke (+5, 11, 12) | 100.0 | 98.4 | 90.5 |
+| Elf Typical apprentice, Force Bolt (+5, 13, 11) | 100.0 | 99.1 | 94.4 |
+| Human Free hedge-taught (default), Wild Lash (+5, 11, 13) | 100.0 | 99.0 | 92.1 |
+| Human Free Touched (default), Wild Lash (+5, 13, 12) | 100.0 | 99.3 | 94.8 |
+| Orc-kin apprentice (default since I-009, Free rule), Force Bolt (+5, 11, 12) | 100.0 | 98.6 | 91.6 |
+| Goblin-kin acolyte keeping the Typical rule (Presence −1), Rebuke (+1, 12, 14) | 99.8 | 94.5 | 64.3 |
+| Orc-kin apprentice keeping the Typical rule (Intellect −1), Force Bolt (+1, 12, 12) | 99.8 | 92.7 | 62.0 |
+| Beastfolk hedge-taught keeping the Typical rule (Resolve −1), Wild Lash (+1, 13, 14) | 99.9 | 96.2 | 72.8 |
+| Weakest legal caster (+1, Guard 10, Vit 11), Wild Lash | 98.9 | 83.5 | 39.3 |
+
+Reading: every default-path new caster beats one trained foe 90.5–94.8% on the working alone (I-009's
+acceptance: ≥ 75%). The casters below 75% have chosen a Typical rule that fixes their casting attribute at
+−1, against 02.3.5's default; the DM states those odds before the player confirms, and 09's advisory reads
+the real line. Rows read from `02-gen_data02/sim02-output.txt` (the earlier rows are unchanged).

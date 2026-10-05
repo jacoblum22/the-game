@@ -187,3 +187,19 @@ ab('ab.blood_price', 'Blood Price', D + 'pact.sacrifice', 5, 'sacrifice', 'Worki
    verbs=['any'], oc=2, cost_text='3 Vitality (harm.blight.necrotic, no reduction, never lethal: refused if it would bring you to 0)',
    traits=['trait.nature.profane'], x=[('paying with another\'s blood', 'no pool ability; a rite with a sacrifice condition (05.8.4), and 03 records it')],
    nmi=['a lasting mark from the payment'])
+
+# ---------------- the branch working (05.7.11; revision I-009) ----------------
+ab('ab.rebuke', 'Rebuke', 'deed.divine', 1, 'branch_divine', 'Working', 'beat',
+   'Turn your keeper\'s regard on one being as a blow.',
+   'Applies to one being within band.close that can see your keeper\'s sign or hear your invocation.',
+   [rk("Hold up your keeper's sign against one being within band.close that can see it or hear you. On a success it takes Moderate harm of your keeper's kind (shifted by delivered reach): radiant for a sacred keeper, necrotic for a profane one; one severity rung heavier if the being is of the opposed nature.",
+       [harm(2, ['harm.radiance.holy', 'harm.blight.necrotic'], T), sev(1, "the target is creature.undead or creature.fiend (a sacred keeper), or carries trait.nature.sacred (a profane keeper)")]),
+    rk("Hold up your keeper's sign against one being within band.close that can see it or hear you. On a success it takes Heavy harm of your keeper's kind (shifted by delivered reach): radiant for a sacred keeper, necrotic for a profane one; one severity rung heavier if the being is of the opposed nature.",
+       [harm(3, ['harm.radiance.holy', 'harm.blight.necrotic'], T), sev(1, "the target is creature.undead or creature.fiend (a sacred keeper), or carries trait.nature.sacred (a profane keeper)")]),
+    rk("Hold up your keeper's sign against one being within band.close that can see it or hear you. On a success it takes Grievous harm of your keeper's kind (shifted by delivered reach): radiant for a sacred keeper, necrotic for a profane one; one severity rung heavier if the being is of the opposed nature.",
+       [harm(4, ['harm.radiance.holy', 'harm.blight.necrotic'], T), sev(1, "the target is creature.undead or creature.fiend (a sacred keeper), or carries trait.nature.sacred (a profane keeper)")])],
+   check=('aimed', 'verb.strike', "the target's Guard"), harm_tags=['harm.radiance.holy', 'harm.blight.necrotic'], branch_working=True,
+   traits=['trait.action.attack', 'trait.sense.visible', 'trait.sense.audible'],
+   x=[('a being beyond band.close', 'the Far flare, or ab.searing_light'), ('a being that can neither see the sign nor hear you', 'G4 for this working'), ('turning or banishing', 'ab.turn_undead; ab.cast_out')],
+   nmi=['that the keeper itself acts, speaks or takes notice', 'a lasting mark on the target'],
+   basis=['05.7.11', '05.7.4', '06 Interface request (b) to 05', 'I-009', 'DL-05-31'])

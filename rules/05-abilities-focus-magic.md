@@ -15,7 +15,7 @@
 > fold) wherever something new arrives.
 
 **Reading this chapter.** Rules are 05.1–05.12. The data is canonical for numbers and ids:
-`data/abilities.yaml` (the pool: 251 abilities), `data/licenses.yaml` (81 training licenses and the Focus
+`data/abilities.yaml` (the pool: 266 abilities), `data/licenses.yaml` (81 training licenses and the Focus
 licenses), `data/rituals.yaml` (24 rites and the rite-design tables), `data/composites.yaml` (named
 composites and the priority tables), with additions to shared files in `data/effects.yaml owner-block 05` and
 `data/boundaries.yaml owner-block 05`. The data files are generated and validated by
@@ -38,9 +38,11 @@ present), and tools compute cost, legality, uses, composition and effect [BRIEF 
 
 **The bets this chapter makes.**
 
-1. **One pool, tag-gated, tier-floored.** 176 calling-partition abilities cover all 81 level-2 deed tags
-   (at least two each, one usable at tier 1) and all nine branches at every minimum tier; 48 more are
-   gated by conduct axes for vows and dark callings; 27 mirror ch.04's absorbable powers. A calling's
+1. **One pool, tag-gated, tier-floored.** 179 calling-partition abilities cover all 81 level-2 deed tags
+   (at least two each, one usable at tier 1) and all nine branches at every minimum tier; 57 more are
+   gated by conduct axes for vows and dark callings, three at each pole a calling uses (tiers 1, 3 and 5);
+   27 mirror ch.04's absorbable powers; and three **branch workings** are held through magic training
+   itself, so that a caster is never weaponless (05.7.11) [revision: I-007, I-009, I-015]. A calling's
    picks are drawn from this pool through its tags (04.8.4). The count is justified in 05.11.6
    [C:P5; C:V; DL-05-02].
 2. **A closed grammar of eight forms** (Edge, Lever, Permission, Working, Reaction, Form, Exception,
@@ -112,7 +114,9 @@ tools the DM operates (00, Principle I).
 first tag is under `deed.arcane`, `deed.divine` or `deed.primal`; it is the same record with `kind:
 spell` and the trait `trait.nature.magical`. Everything else a character may be licensed to do
 (training, languages, calling capabilities, fact licenses, rites) is a license **without** a slot
-(05.2.3). An ability is read literally at its active rank (INV-8): it does what its `scope` and `effects`
+(05.2.3). The one exception is the three **branch workings** (05.7.11): `ab.*` records with `slot_class:
+license`, held by every holder of a magic training license of their branch and occupying no slot
+[revision: I-009]. An ability is read literally at its active rank (INV-8): it does what its `scope` and `effects`
 say and nothing else, and narration may never describe it doing more [00.12.2; 01.3.3].
 
 **05.1.2 Abilities in state.** `[D]` `Character.slots` (00.6.2) holds three lists of held abilities.
@@ -175,7 +179,7 @@ that grows [C:V; C:P5 "hard total-slot ceiling"; INV-13].
 **05.2.3 What does not take a slot.** `[D]` Only `ab.*` entries are held in slots. These are licenses
 and take none: training licenses (`lic.training.*`, 05.9), languages, the calling capabilities
 (`lic.call.*`, 04.5.3), the Focus licenses (`lic.focus.*`, 05.6), fact licenses (01.3.2), known rites
-(`rit.*`, 05.8.1), the passive and mundane properties of items (08's item-layer budget), a calling's
+(`rit.*`, 05.8.1), the branch working a magic training license carries (05.7.11) [revision: I-009], the passive and mundane properties of items (08's item-layer budget), a calling's
 Focus trigger, boon or composite (04.5.4), and conditions. Each of those is bounded by its own owner:
 training by time (05.9.4), rites by material and time, item properties by 08's budget, family mechanics
 by one per calling.
@@ -252,7 +256,7 @@ on a named scale, or a table reference (00.16.4).
 |---|---|---|
 | `id`, `name`, `kind` | `ab.*`; `ability` or `spell` | |
 | `tags` | the **first** tag is a `deed` tag at level 2 or 3 (it is the ability's evidence tag, competence tag and pool-gate tag); then any `conduct`, `harm` and `trait` tags | |
-| `min_tier`, `mod_group`, `slot_class` | 1–5; the exclusion family; `calling`, `acquired` or `equipped` | |
+| `min_tier`, `mod_group`, `slot_class` | 1–5; the exclusion family; `calling`, `acquired`, `equipped`, or `license` (the three branch workings, 05.7.11, which also carry `granted_by`, `deed_tag_rule` and `rank_rule`) | |
 | `form` | one of the eight forms (05.3.2) | |
 | `activation`, `timing` | `passive` or `active`; for actives `beat`, `rider`, `reaction` or `trigger` (05.3.4) | |
 | `regime`, `hook`, `slot` | the combination regime (00.10.7), with its hook or behavioral slot | |
@@ -662,7 +666,7 @@ near-equal effects; DL-05-11]:
 
 | Focus | Band name | Typical content | Lowest `min_tier` |
 |---|---|---|---|
-| 0 | **knack** | a rider or permission worth using every time | 1 |
+| 0 | **knack** | a rider or permission worth using every time; a branch working (05.7.11) | 1 |
 | 1 | **lesser** | one notch above a basic action: a severity rung, a condition, a lever that lasts | 1 |
 | 2 | **greater** | a scene-shaping effect, several targets, a hard counter | 1 |
 | 3 | **grand** | what a fight or a venture turns on | 3 |
@@ -695,6 +699,9 @@ leaves the user deflated]. While Spent:
   (−2; outside the two-snag count and inside the ±4 cap, like 01's repetition snags);
 - the character cannot flare or push;
 - abilities that cost 0 Focus still work; so do passives, items, and everything the basic verbs cover.
+  For a caster this includes the **branch working** (05.7.11), so Spent is weak, never weaponless: a
+  Spent tier-3 caster beats one foe of its band 81–91% of the time on the working alone (06-conflict-sim J2)
+  [revision: I-009].
 Spent ends the moment `focus.current ≥ 1`, by any channel. It is not a condition and nothing cleanses
 it but Focus. *Narration may not imply* collapse, unconsciousness, harm, or any lasting mark: Spent is
 being out of reserves, and the two effects above are all it does.
@@ -747,7 +754,7 @@ carries a stated drawback) in one closed list [R2 #8; R3 05.3; DL-05-13].
 | **Far** | its range is one band further | it names a band |
 | **Wide** | one more target that the ability's own targeting rule allows (inside the spread cap) | it is a Working on one target |
 | **Lasting** | its duration is one step longer: `rounds:N` → `scene`; `scene` or `conflict` → `until_rest:rest_short`; `intervals:N` → `hours:N` | it has one of those durations |
-| **Quiet** | it loses `trait.sense.loud`, `.audible` and `.visible` (its *effect* is still perceivable where it lands), and the flare tell below | it carries a sense trait |
+| **Quiet** | it loses `trait.sense.loud`, `.audible` and `.visible` (its *effect* is still perceivable where it lands), and the flare tell below | it carries a sense trait, or it is a spell: every working of magic is perceived through its branch's limitation (the spoken word, the shown sign, the stirred source; 05.7.2) [revision: I-008] |
 | **Sure** | a Precision lever on its aimed check, or a Precision snag on each target's resist check (counts toward the two-lever or two-snag limit) | its `check` is `aimed` or `resisted` |
 
 - **The tell (the drawback).** A flared activation is `trait.sense.visible` and `trait.sense.audible`
@@ -1062,6 +1069,44 @@ in brackets apply, and each is a fact the Oracle treats as settled:
 7. Named **components** for rites by price band (08), and where texts and teachers are found.
 8. Any school canon closes or opens [none closed; `deed.arcane.necromancy.raising` and `deed.divine.pact`
    write conduct evidence when used on the unwilling, 03].
+
+**05.7.11 The branch working.** `[D]` `[revision: I-009]` Every magic branch has one **branch working**: the
+source used raw, without a school's shaping. It is the caster's equivalent of a Strike with a weapon they
+are trained in, so that a caster at 0 Focus is weak and never weaponless [06.10.6; 06 Interface request
+(b) to 05; R5 MG-07].
+
+| Branch | Working | Reach and target | Harm | Its own touch |
+|---|---|---|---|---|
+| Arcane | **Force Bolt** (`ab.force_bolt`) | one being or object you can see within `band.near` | force (`harm.arcane.force`) | a critical success also pushes the target one band away |
+| Divine | **Rebuke** (`ab.rebuke`) | one being within `band.close` that can see the keeper's sign or hear the invocation | radiant for a sacred keeper, necrotic for a profane one | one rung heavier against the opposed nature (`creature.undead` or `creature.fiend` for a sacred keeper; `trait.nature.sacred` for a profane one) |
+| Primal | **Wild Lash** (`ab.wild_lash`) | one being within `band.near` of you and of the source present (05.7.3) | the source's: piercing (growing things), crushing (stone, water), cutting (wind) or fire | the target is off-balance until the end of its next turn |
+
+1. **Held through training, in no slot.** A character who holds any training license of the branch with
+   its `requires` met (05.9.4) holds that branch's working. It has `slot_class: license`: it occupies no
+   slot, is never picked, learned, taught, absorbed, gifted or bound to an item, and is not counted by
+   05.2.9's one-of-each rules. Losing every license of the branch (or the keeper's regard, 05.7.4) loses it.
+2. **The school it is cast through.** The frame's deed tag is one level-2 school of the branch whose
+   training license the caster holds (the player names it; default: the highest competence). Competence,
+   ch.03's evidence, `cnt.focus` from a push, the stretch grade and the flare count all read that school.
+3. **Rank by grade.** Rank 1, 2 or 3 at grade `trained`, `expert` or `master` in that school's license
+   (05.9.2): Moderate, Heavy or Grievous harm, shifted by delivered reach like a Strike. These are exactly
+   06.4.5's mastery steps for a weapon, so a caster's baseline grows when a fighter's does and never
+   beyond it.
+4. **Cost and resolution.** 0 Focus, at will, timing `beat`; anchored to `verb.strike` (one action,
+   06.1.3) and aimed against Guard with the branch's casting attribute. It carries its branch's
+   limitation, weakness and miscast like any spell (05.7.2, 05.7.5). It accepts the push (05.6.7) and the
+   flares its record lists; while Spent neither is available, but the working is.
+5. **What it is not.** It shapes nothing: it does not burn, freeze, bind, charm, ward or linger. A shaped
+   effect is a spell of a school; a tool's worth of effect is a small working (05.7.6).
+
+*Budget* (05.11): allowance 4 / 6 / 8 at ranks 1–3 (tier term 2 / 4 / 6, beat 2, no Focus); values 3–4 /
+4–6 / 6–7. *Simulated* (`06-conflict-sim.py` section J, 20,000 fights a row; ch.02's `sim02.py`): a new
+caster (+5) beats one T2 foe 92.8–93.6% on the working alone (a staff gave 51%); a Spent tier-3 caster
+beats one T3 foe 80.7–91.0% (74.5–86.8% when the T3 Fends, as 09's templates do), where it won 0.4%
+before; at every band the working stays below the martial specialist with no Focus (P3 81–91% against
+99.7%; P4 11–48% against 87%; P5 7–30% against 80%). Focus still pays as much as it pays a fighter:
+pushing the working raises a P3 caster's odds against one T4 from 34% to 55% (a fighter's push: 62% to
+84%) and against two T3 from 26% to 47% (73% to 90%) [DL-05-31].
 
 ### 05.8 Rites, research and learning
 
@@ -1414,18 +1459,24 @@ them (every entry's `budget` field in the data shows the same arithmetic):
 | `ab.flame_lance` r3 | same, rank 3 | 6 + 2 + 2 = **10** | S4 fire harm (5) + burning (3) | **8** |
 | `ab.firestorm` r1 | Working · beat · 3 Focus · per long rest | 6 + 6 + 3 + 2 = **17** | S4 harm (5) + five more targets (5) + burning (3) + lingering S2 (2) | **15** |
 
-Across the 224 budgeted abilities and their 499 ranks: 173 ranks sit exactly on their allowance, 173 are
-one unit under, 153 are two under, and none is over (`abilities.yaml#census.budget_slack`). The 27
+Across the 239 budgeted abilities and their 526 ranks: 175 ranks sit exactly on their allowance, 180 are
+one unit under, 171 are two under, and none is over (`abilities.yaml#census.budget_slack`) [revision:
+I-007, I-009, I-015]. The 27
 absorbed powers are ch.04's and are costed by 04.10.4's three separate costs, not by this table.
 
-**05.11.6 How many abilities, and why.** `[D]` The pool holds **251** entries: 176 tag-gated, 48
-oath-gated, 27 absorbed. The count is set by coverage, not by taste [C:V; DL-05-02]:
+**05.11.6 How many abilities, and why.** `[D]` The pool holds **266** entries: 179 tag-gated, 57
+oath-gated, 3 branch workings, 27 absorbed [revision: I-007, I-009, I-015]. The count is set by coverage, not by taste [C:V; DL-05-02]:
 - **Every level-2 deed tag has at least two** (one usable at tier 1), because ch.04 has a calling for
   every level-2 tag and that calling's *own* pool is its tag (04.8.4): 81 tags × 2 = 162 is the floor.
 - **Every branch has at least two at each minimum tier 1–5**, so a branch calling and a narrow calling's
   kin pool always have a candidate at each new tier: this adds 14.
-- **Every conduct axis has three at the positive pole (tiers 1, 3, 5) and two at the negative**, which is
-  what a vow's three picks and a dark calling's first two need: 30 + 18.
+- **Every conduct axis has three at each pole a calling uses (tiers 1, 3, 5)**, which is what a vow's or
+  a dark calling's three picks need (allowance 1, 1, 2, 2, 3): 30 + 27 (courage has no dark calling).
+  The first pool had two at the negative pole, so a dark calling's tier-5 pick was kept for want of a
+  candidate; `05-ladder-check.py` now proves every calling × axis × tier ladder complete [revision: I-007].
+- **Every primal element has a `min_tier` 1 working** (fire, water, earth, air), because the Touched's
+  spark names one of the four and must start with its own (02.6.3): this adds 3 [revision: I-015].
+- **One branch working per magic branch** (05.7.11), outside the pick pool: this adds 3 [revision: I-009].
 - **Above that floor the pool is deliberately not grown.** A narrow calling sees its own two or three and
   the rest of its branch (14 to 26); three candidates are shown per pick (04.8.4); and the eight forms,
   six flares, three ranks and one stretch per ability multiply what each entry can do. The research is
@@ -1673,13 +1724,14 @@ one DC step, one Focus, one condition; shown before any time is spent (class i).
 | `deed.lore` | 18 | 9 | 3 | 2 | 2 | 2 | 9 of 9 |
 | `deed.arcane` | 26 | 11 | 5 | 4 | 3 | 3 | 11 of 11 |
 | `deed.divine` | 17 | 8 | 2 | 3 | 2 | 2 | 8 of 8 |
-| `deed.primal` | 17 | 7 | 3 | 3 | 2 | 2 | 7 of 7 |
+| `deed.primal` | 20 | 10 | 3 | 3 | 2 | 2 | 7 of 7 |
 | `deed.influence` | 18 | 9 | 3 | 2 | 2 | 2 | 9 of 9 |
 | `deed.craft` | 23 | 11 | 4 | 3 | 3 | 2 | 11 of 11 |
+| branch workings (05.7.11; held through training, no slot) | 3 | 3 | 0 | 0 | 0 | 0 | one per magic branch |
 | oath-gated, positive pole | 30 | 10 | 0 | 10 | 0 | 10 | 10 axes x 3 |
-| oath-gated, negative pole | 18 | 9 | 0 | 9 | 0 | 0 | 9 axes x 2 |
+| oath-gated, negative pole | 27 | 9 | 0 | 9 | 0 | 9 | 9 axes x 3 |
 | absorbed powers (ch.04) | 27 | 16 | 9 | 2 | 0 | 0 | gated by creature tags |
-| **all** | **251** | 116 | 40 | 46 | 20 | 29 | 81 of 81 |
+| **all** | **266** | 122 | 40 | 46 | 20 | 38 | 81 of 81 |
 
 **T-05-14 Index of the pool.** `[D]` One row per level-2 deed tag, then per conduct axis. Each ability is shown as *Name* (minimum tier · Focus at rank 1 · timing). The data file is canonical.
 
@@ -1744,7 +1796,7 @@ one DC step, one Focus, one condition; shown before any time is spent (class i).
 | `primal.weather` | *Gust* (1 · 1F · beat); *Fog Bank* (2 · 2F · beat); *Call Lightning* (5 · 3F · beat, /scene) |
 | `primal.shapeshifting` | *Claws* (1 · 1F · rider); *Beast Form* (3 · 2F · beat); *Elemental Form* (5 · 3F · beat, /short rest) |
 | `primal.spirits` | *Spirit Tongue* (1 · 0F · beat); *Spirit Bargain* (4 · 2F · beat, /scene) |
-| `primal.elements` | *Cinder Stride* (1 · 1F · rider); *Stone Shape* (3 · 2F · beat) |
+| `primal.elements` | *Cinder Stride* (1 · 1F · rider); *Undertow* (1 · 1F · beat); *Stolen Breath* (1 · 1F · beat); *Heave* (1 · 1F · beat); *Stone Shape* (3 · 2F · beat) |
 | `primal.hexcraft` | *Evil Eye* (1 · 1F · beat); *Lift the Hex* (2 · 2F · beat) |
 | `influence.persuasion` | *Silver Tongue* (1 · — · passive); *Turn the Room* (3 · 1F · beat) |
 | `influence.command` | *Rally* (1 · 1F · beat); *Hold the Line* (4 · 2F · rider) |
@@ -1776,15 +1828,18 @@ one DC step, one Focus, one condition; shown before any time is spent (class i).
 | `conduct.piety` (positive) | *The Daily Office* (1 · 0F · trigger, /day); *Hallow* (3 · 1F · beat, /scene); *Intercession* (5 · 2F · beat, /long rest) |
 | `conduct.protection` (positive) | *Interpose* (1 · 0F · reaction, 1/round); *Shelter the Weak* (3 · 1F · rider); *None Shall Pass* (5 · 2F · rider) |
 | `conduct.restraint` (positive) | *Measured Blow* (1 · 0F · rider); *Still Water* (3 · 1F · reaction, /scene); *The Empty Hand* (5 · 1F · rider) |
-| `conduct.generosity` (negative) | *Grasping Hand* (1 · — · passive); *The Price of Everything* (3 · 0F · beat) |
-| `conduct.honesty` (negative) | *Forked Tongue* (1 · — · passive); *False Witness* (3 · 1F · beat) |
-| `conduct.humility` (negative) | *None My Equal* (1 · — · passive); *Towering Will* (3 · — · passive) |
-| `conduct.justice` (negative) | *Heavy Hand* (1 · 0F · rider); *Make an Example* (3 · 1F · beat, /scene) |
-| `conduct.loyalty` (negative) | *Knife in the Back* (1 · 0F · rider); *Turncoat* (3 · 1F · beat, /scene) |
-| `conduct.mercy` (negative) | *Twist the Knife* (1 · 0F · rider); *Terror of Example* (3 · 1F · trigger, /scene) |
-| `conduct.piety` (negative) | *Defiler's Touch* (1 · 1F · beat); *Scorn the Holy* (3 · — · passive) |
-| `conduct.protection` (negative) | *Cull the Weak* (1 · 0F · rider); *Living Shield* (3 · 1F · reaction, /scene) |
-| `conduct.restraint` (negative) | *Red Mist* (1 · 0F · rider); *Blood for Blood* (3 · 0F · trigger, 1/round) |
+| `conduct.generosity` (negative) | *Grasping Hand* (1 · — · passive); *The Price of Everything* (3 · 0F · beat); *Hoard-Heart* (5 · 0F · trigger, /long rest) |
+| `conduct.honesty` (negative) | *Forked Tongue* (1 · — · passive); *False Witness* (3 · 1F · beat); *Web of Lies* (5 · 2F · beat, /scene) |
+| `conduct.humility` (negative) | *None My Equal* (1 · — · passive); *Towering Will* (3 · — · passive); *Peerless* (5 · 1F · rider) |
+| `conduct.justice` (negative) | *Heavy Hand* (1 · 0F · rider); *Make an Example* (3 · 1F · beat, /scene); *Iron Decree* (5 · 2F · beat, /scene) |
+| `conduct.loyalty` (negative) | *Knife in the Back* (1 · 0F · rider); *Turncoat* (3 · 1F · beat, /scene); *The Last Embrace* (5 · 2F · beat, /scene) |
+| `conduct.mercy` (negative) | *Twist the Knife* (1 · 0F · rider); *Terror of Example* (3 · 1F · trigger, /scene); *No Quarter* (5 · 1F · rider) |
+| `conduct.piety` (negative) | *Defiler's Touch* (1 · 1F · beat); *Scorn the Holy* (3 · — · passive); *Unhallow* (5 · 2F · beat, /long rest) |
+| `conduct.protection` (negative) | *Cull the Weak* (1 · 0F · rider); *Living Shield* (3 · 1F · reaction, /scene); *The Cold Calculus* (5 · 2F · reaction, /long rest) |
+| `conduct.restraint` (negative) | *Red Mist* (1 · 0F · rider); *Blood for Blood* (3 · 0F · trigger, 1/round); *Wrath Unbound* (5 · 2F · rider) |
+| branch working (`deed.arcane`) | *Force Bolt* (1 · 0F · beat) |
+| branch working (`deed.divine`) | *Rebuke* (1 · 0F · beat) |
+| branch working (`deed.primal`) | *Wild Lash* (1 · 0F · beat) |
 
 **T-05-13 The authored rites.** `[D]` (`data/rituals.yaml`; every rite also has a 4-segment strain clock.)
 
@@ -2149,6 +2204,20 @@ instead of 2. `on_focus_spent` carries `deed.wilds.tracking.trailing`.
   (and lockpicking is G3 for her anyway): a push is refused; nothing is spent.
 - *Non-example:* "I push for +2 on the roll." A push buys reach or stakes, never the roll (05.6.7).
 
+**Spent, and still casting (05.7.11)** `[revision: I-009]`. Ash, Spent and at Vitality 5 after the overdraw,
+the second ghoul (T2, Guard 13) engaged with him. He casts **Force Bolt** through his fire school: one
+action, 0 Focus, Intellect +3 + competence +5 = **+8** against Guard 13 (needs a 5: 80%). Grade `expert`
+→ rank 2 → Heavy (S3). Spent adds no snag: the bolt is not `trait.action.concentrate`. d20 = 14 → 22,
+margin +9: success, 5 force harm (armor would not reduce it, 09.3.6); the ghoul at 10 is bloodied. His
+second bolt (−2 repetition) needs a 7; a natural 20 on it would be a critical success, S4, and push the
+ghoul to `band.close`. No Focus moves, and no flare or push is possible while Spent.
+- *Boundary:* the same bolt flared Hard. Refused: a flare costs Focus and he is Spent (05.6.5). The
+  working itself is still offered.
+- *Boundary:* Ash an hour later at Focus 4, pushing the bolt: 1 Focus, framed reach Great, Grievous on a
+  plain success. `cnt.focus` lands at `deed.arcane.fire` (the school he cast it through).
+- *Non-example:* "I use Force Bolt to set the ghoul's rags alight." The working shapes nothing; burning is
+  Flame Lance's (or a stretch of it), and the redirect says so.
+
 ### WE-05-9 Tempting non-examples, with the refusal each gets
 
 | The player says | Why it is tempting | The ruling, by lookup |
@@ -2417,10 +2486,11 @@ evidence (00.11.5; 04's item 11).
 1. Calling partition **12**, acquired **4**: adopted (05.2.1).
 2. Every `slot_class: calling` ability has its first tag at deed level 2 or 3, `min_tier` 1–5,
    `mod_group`, and 1–3 `ranks` as complete restatements; `requires_conduct` and `conduct_pole` on the
-   48 oath-gated ones; `replaces` is supported and unused in this first pool.
+   57 oath-gated ones; `replaces` is supported and unused, by decision (DL-05-34): growth inside an
+   ability is its ranks, and `replaces` is the content-lifecycle link 05.12.3 now enforces by script.
 3. Coverage: every one of the 81 level-2 deed tags has at least two abilities, one at `min_tier` 1;
    every branch has at least 14 with two or more at each `min_tier` (T-05-12); every conduct axis has
-   three at the positive pole (`min_tier` 1, 3, 5).
+   three at each pole a calling uses (`min_tier` 1, 3, 5) [revision: I-007].
 4. Rank rule kept, with one addition **requested of 04**: for a pick carried through a consolidation or
    fork, the tier read is the higher of the new calling's tier and the specialty's `tier_reached`
    (05.3.9), and `T_high` for the Focus maximum reads the same (05.6.1). Without it a consolidation to a
@@ -2435,11 +2505,12 @@ evidence (00.11.5; 04's item 11).
 9. `composites.04.yaml` merges as owner-block 04; this chapter's 22 composites use the other three key
    kinds and do not touch deed-branch pairs.
 10. **New requests of 04:** (a) the pick gate should require `conduct_pole` to equal the calling's
-    `pole` (vows and dark callings share an axis in `pool_gate.conduct`, and the 30 positive and 18
+    `pole` (vows and dark callings share an axis in `pool_gate.conduct`, and the 30 positive and 27
     negative abilities must not cross); (b) **promotion** (05.8.6): an ability held in the acquired
     partition or on the shelf should be eligible for a pick and ranked first; (c) negative-pole
-    coverage is two per axis (`min_tier` 1 and 3): a dark calling's third pick at tier 5 is kept, or
-    filled when a later content pass authors tier-5 dark abilities (OEQ-05-6).
+    coverage is now three per axis (`min_tier` 1, 3 and 5), so a dark calling's tier-5 pick has its
+    candidate; and the Monk, an oath-bearing calling with `conduct.restraint` in its pool gate, carries
+    `pole: positive` so the gate admits the restraint abilities (`05-ladder-check.py`) [revision: I-007].
 
 **To 06 (Conflict).** (a) Define the reserved conditions as this chapter's data uses them: `exposed`
 gives attackers a lever (the Focus simulation and Quarry's Mark assume a Precision lever); `dazed`,
@@ -2519,7 +2590,7 @@ Each ships a concrete default and names the test that would settle it.
 | OEQ-05-3 | Does the AI apply the SAME OPERATION flag for stretches consistently? | 05.5.2, tie-break false, precedent ledger | **T-05-STRETCH**: 40 proposed stretches (20 designed inside, 20 outside) × 3 independent DM runs; target ≥ 85% agreement with the designed answer, and no outside case allowed in more than 1 of 3 runs |
 | OEQ-05-4 | Do the three miscast shapes feel different in play, and is S4 Backlash (8 harm) too swingy for a 12-Vitality caster? | 05.7.5 | **T-05-MISCAST**: simulate 1,000 castings per branch at each stakes rung; measure how often a miscast changes a fight's outcome; target ≤ 5% of fights decided by a miscast at Risky stakes |
 | OEQ-05-5 | Is the generation cap of 3 per scene ever binding, and do the nine family triggers fire at comparable rates? | 05.6.10 | **T-05-TRIGGER**: per-family trigger counts over 10 sessions of play; target each family 0.3–0.8 fires per scene at tier 2–3; retune the outliers' conditions (04 owns the data) |
-| OEQ-05-6 | Is a pool of 251 enough variety across a long campaign, and are any abilities never picked (dead) or always picked (mandatory)? | 05.11.6; 05.12.3 | **T-05-PICKRATE**: pick logs across 30 characters; an ability shown ≥ 10 times and picked in < 5% or > 60% of showings is flagged for re-pricing, folding or retirement |
+| OEQ-05-6 | Is a pool of 266 enough variety across a long campaign, and are any abilities never picked (dead) or always picked (mandatory)? | 05.11.6; 05.12.3 | **T-05-PICKRATE**: pick logs across 30 characters; an ability shown ≥ 10 times and picked in < 5% or > 60% of showings is flagged for re-pricing, folding or retirement |
 | OEQ-05-7 | Does the narrator keep to the literal rank text (no invented weaknesses or extra effects)? | 05.3.6, 05.3.7; verbatim text in the packet | **T-05-LITERAL**: 100 activations audited with `check_claims`; target ≤ 2% narrated effects not in the packet (the probe's baseline was 1 in 6) |
 | OEQ-05-8 | Is one-link composition enough for the designed synergies of this pool? | 05.10.5 | **T-00-DEPTH** (00's test) run on this data: of the 22 composites and every rider-plus-trigger pair, count intended synergies that need a second link; target < 5% |
 | OEQ-05-9 | Are learning times right (two weeks with a teacher for a tier-1 technique; six emulations without)? | 05.8.5 | **T-05-LEARN**: over 10 sessions, count learning clocks started, completed and abandoned; target ≥ 50% of started clocks completed within a season of play |

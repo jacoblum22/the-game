@@ -60,6 +60,23 @@ P1 74% (95% with).
 cited lever every round 81%; slower pursuers 87%; mounted pursuers 51%; a character with no
 competence 45%; about 3.4 chase rounds. With clocks of 4 and 4: 50% in 1.8 rounds; 6 and 6: 47%.
 
+**Casters and the branch working (section J; revision I-009).** The script gained a caster mode: the
+caster attacks with its branch working (05.7.11: one action, aimed against Guard, casting attribute +
+competence, severity S2/S3/S4 by the casting school's grade), needs no Move to engage, and its non-physical
+harm passes armor (09.3.6); Force Bolt's critical push makes the foe Move back; a Focus spell (Flame Lance
+rank 2 with its burning) or the push can be spent on the first beat of a turn; `foe_fend` adds 09's
+adversary Fend. Every earlier row reproduces byte for byte.
+- New caster (+5, Guard 12, Vitality 12) vs one T2: Force Bolt 93.6, Rebuke 92.8, Wild Lash 92.8 (a staff:
+  51.3; the martial P1 line 98.7). Weakest legal caster (+1, Guard 10, Vitality 11): 39.3–42.0.
+- Spent P3 caster (+8, Guard 12, Vitality 16) vs one T3: 91.0 / 90.3 / 80.7; with T3 Fend 86.8 / 86.2 /
+  74.5; at Vitality 12 (Ash's sheet) 84.6 / 83.6 / 70.6. Before I-009: 0.4.
+- Spent caster vs one equal-band foe, P1–P5 (best branch): 100 / 99.0 / 91.0 / 48.4 / 30.1, against the
+  no-Focus specialist's 100 / 100 / 99.7 / 87.3 / 79.6; Wild Lash (physical, armor reduces it) 100 /
+  98.6 / 80.7 / 11.0 / 6.7.
+- Focus at P3 (Focus 7): pushing the first bolt each turn, vs one T3 91.0→95.9, vs one T4 33.6→54.9, vs
+  two T3 26.4→47.4, vs two T2 91.4→96.5 (the fighter's push: 99.7→99.9, 62.3→84.0, 73.0→89.6, 100→100);
+  casting Flame Lance first each turn instead: 92.1 / 44.3 / 26.8 / 91.8.
+
 ## 4. What the numbers were used to decide
 
 - **3 actions against 2** (DL-06-01): gives a lone PC the edge against one foe and makes the second
@@ -75,6 +92,10 @@ competence 45%; about 3.4 chase rounds. With clocks of 4 and 4: 50% in 1.8 round
   not and lasts three or four beats.
 - **The advisory matrix** (T-06-13): chapter 09's `threat_advisory` should be this table re-run on
   its final templates, not a formula.
+- **Branch workings** (DL-05-31; revision I-009): severity by grade (S2/S3/S4) meets both acceptance
+  lines (a new caster ≥ 75% against one T2; a Spent tier-3 caster ≥ 40% against one T3) while staying
+  under the specialist at every band; one rung lighter (section J5) passes for Force Bolt (66.0) and Rebuke
+  (60.6) but fails for Wild Lash (27.9), so one shared rule needs the mastery steps.
 
 ## 5. Limits
 

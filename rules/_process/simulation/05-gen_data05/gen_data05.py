@@ -13,7 +13,7 @@ import sys, re, os, collections, importlib, yaml
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
-ROOT = os.environ.get('GAME_RULES', r'C:\Users\jacob\the-game\rules')
+ROOT = os.environ.get('GAME_RULES', os.path.normpath(os.path.join(HERE, '..', '..', '..')))
 DATA = os.path.join(ROOT, 'data')
 REPORT_ONLY = '--report' in sys.argv
 
@@ -237,7 +237,13 @@ def build_abilities(train_fallback):
         if tag not in TAGS:
             err('%s: unknown tag %s' % (w, tag))
             continue
-        if not tag.startswith('deed.') or TAGS[tag]['level'] not in (2, 3):
+        bw = a.get('branch_working')
+        if bw:
+            # 05.7.11 (revision I-009): a branch working's first tag is the level-1 magic branch; the frame's deed
+            # tag is the school through which it is cast. It is held through the branch's training licenses.
+            if tag not in MAGIC or a['mt'] != 1 or a['ranks'][0]['f'] != 0 or a['form'] != 'Working':
+                err('%s: a branch working is a min_tier-1, zero-cost Working whose first tag is a magic branch' % w)
+        elif not tag.startswith('deed.') or TAGS[tag]['level'] not in (2, 3):
             err('%s: first tag must be a deed tag at level 2 or 3 (%s)' % (w, tag))
         br = branch_of(tag)
         magic = br in MAGIC
@@ -333,7 +339,9 @@ def build_abilities(train_fallback):
         stretchable = active and form in ('Working', 'Permission', 'Form', 'Reaction') and not conduct
         l2 = l2_of(tag)
         fb = 'none' if magic else train_fallback.get(l2, 'none')
-        if conduct:
+        if bw:
+            paths = [dict(type='license', detail="held by every holder of a %s training license (lic.training.%s_*) whose requires is met (05.9.4); it takes no slot and is never picked, learned, taught, absorbed, gifted or put on an item (05.7.11)" % (br, br[5:]), clock=None, requires=None)]
+        elif conduct:
             paths = [dict(type='recognition', detail="a pick through a calling whose pool gate lists %s at the %s pole, at tier %d or higher (04.8.4; 05.3.10)" % (conduct[0], conduct[1], a['mt']), clock=None, requires='the calling is not suspended by the Fraying')]
         else:
             paths = [dict(type='recognition', detail="a pick through a calling whose pool gate covers %s, at tier %d or higher (04.8.4)" % (tag, a['mt']), clock=None, requires=None),
@@ -347,7 +355,12 @@ def build_abilities(train_fallback):
         e['tags'] = tags
         e['min_tier'] = a['mt']
         e['mod_group'] = a['grp']
-        e['slot_class'] = 'calling'
+        e['slot_class'] = 'license' if bw else 'calling'
+        if bw:
+            e['granted_by'] = 'lic.training.%s_* (any one, requires met)' % br[5:]
+            e['deed_tag_rule'] = "the frame's deed tag is the level-2 school of %s through which it is cast: one whose training license the caster holds, their choice (default: the highest competence). Competence, evidence (03), cnt.focus, stretch grade and flares read that school (05.7.11)" % br
+            e['rank_rule'] = "rank = the caster's grade in that school's training license: trained 1, expert 2, master 3 (05.7.11; the same steps as 06.4.5's mastery)"
+        e['form'] = form.lower()
         e['form'] = form.lower()
         e['activation'] = 'active' if active else 'passive'
         e['timing'] = a['timing']
@@ -408,6 +421,20 @@ def build_abilities(train_fallback):
         stats['timing.' + a['timing']] += 1
         stats['mt.%d' % a['mt']] += 1
         stats['ranks'] += len(a['ranks'])
+    # 05.12.3 (revision I-008): a new entry may share a mod_group with one already in the pool only through a
+    # `replaces` link to it (an upgrade path, 05.2.5) or by retiring the older entry. Checked here, not assumed.
+    byg = collections.defaultdict(list)
+    for e in out:
+        byg[e['mod_group']].append(e)
+    for g, es in byg.items():
+        if len(es) > 1:
+            ids = {e['id'] for e in es}
+            for e in es[1:]:
+                if e.get('replaces') not in ids:
+                    err('%s: shares mod_group %s with %s and names no `replaces` among them (05.12.3)' % (e['id'], g, es[0]['id']))
+    for e in out:
+        if e.get('replaces') and e['replaces'] not in {x['id'] for x in out}:
+            err('%s: replaces unknown ability %s' % (e['id'], e['replaces']))
     return out, stats
 
 
@@ -419,6 +446,8 @@ def coverage(abilities):
     cond_pos = collections.defaultdict(list)
     cond_neg = collections.defaultdict(list)
     for a in abilities:
+        if a.get('slot_class') == 'license':
+            continue
         if a.get('requires_conduct'):
             (cond_pos if a['conduct_pole'] == 'positive' else cond_neg)[a['requires_conduct'][0]].append(a['min_tier'])
             continue
@@ -441,6 +470,12 @@ def coverage(abilities):
         ms = cond_pos.get(ax, [])
         if len(ms) < 2 or 1 not in ms or 3 not in ms:
             err('COVERAGE conduct+ %s: %s' % (ax, ms))
+        # revision I-007: every pole that a calling uses has a ladder at min_tier 1, 3 and 5 (the vow and dark
+        # allowance 1, 1, 2, 2, 3 needs one new candidate at tiers 1, 3 and 5); courage has no dark calling.
+        for pole, d in (('+', cond_pos), ('-', cond_neg)):
+            ms = d.get(ax, [])
+            if (pole == '+' or ax != 'conduct.courage') and not {1, 3, 5} <= set(ms):
+                err('COVERAGE conduct%s %s: ladder %s lacks min_tier 1, 3 or 5' % (pole, ax, ms))
     return rep, {k: sorted(v) for k, v in cond_pos.items()}, {k: sorted(v) for k, v in cond_neg.items()}
 
 

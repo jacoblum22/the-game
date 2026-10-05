@@ -306,3 +306,12 @@ DL-INT-11 added; anchors recompiled (129, deterministic). Ledger: I-023/I-024/I-
 New rows: I-029 (MAJOR, generic encounter tables fail danger-word audit), I-030, I-031, I-032 (MINOR).
 I-028 (world-seed procedure) stays open for Wave 5.
 Next: Wave 4 verification, one agent at a time — (a) simulation re-run + campaign sim.
+
+## Revision A returned (progression and magic): report `_process/reports/revision-A-report.md`
+Closed I-003, I-004, I-007, I-008, I-009, I-015, I-020, all with seeded-simulation evidence.
+- Branch workings (05.7.11): a new caster wins 93% vs one T2; a Spent tier-3 caster wins 81–91% vs one T3. Casters stay below the martial baseline.
+- Recognition parity: the envoy, smith and scholar reach tier 3 by session 17–18 vs 19 for the combat calling, and tier 5 by session 45–46 vs 51.
+- Generators for ch.02, 04, 05, 08 and 09 now reproduce `data/` exactly; they had drifted, and hard-coded Windows paths were removed.
+- Opened I-033 (T-05-9 prices lingering conditions too high) and I-034 (ch.04's pacing tables and worked example use the old opposition model). Both go to Revision C.
+- I-025 closed as wontfix: per owner direction, the setting is not used.
+Validator: 0 ERROR / 0 WARN.

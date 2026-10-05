@@ -278,6 +278,8 @@ EvidenceEvent:
   significance: {consequential: bool, pressured: bool, own_act: bool, cites: [id]}   # (engine) 03.3.2
   justification: str         # one line: why these tags fit, naming the observable facts (NCP)
   novel: bool                # (engine) 03.4.4
+  contest: {kind: social|craft|lore, band: 1-5, brink: bool}|null   # (engine) 03.4.3; null outside a contest
+  ruinous: bool              # (engine) 03.4.5: Dire stakes with an irreversible threatened cost, outside conflict
   crisis: bool               # (engine) 03.4.5
   peak: bool                 # (engine) 03.4.5
   points: int                # (engine, sealed) pre-settlement points, 03.4.2
@@ -546,7 +548,7 @@ defender's defense.
 |---|---|
 | Quality | routine **2** · difficult **4** · challenging **6** |
 | Stakes | safe **+0** · risky **+2** · dire **+4** |
-| Lethal (`frame.stakes.lethal = true`) | **+2** |
+| Lethal (`frame.stakes.lethal = true`), or **ruinous** outside conflict (03.4.5) `[revision: I-003]` | **+2** |
 | Critical success | **+2** |
 | Novelty (03.4.4) | **+2** |
 | Failure or critical failure | the sum above is **halved, rounded down**. A Safe failure is never significant (D1). |
@@ -580,7 +582,20 @@ both. A tier-4 crystallization should be able to require a band-4 deed whatever 
   came from one strong foe or from many weak ones, which T-09-10 makes the normal fair fight; with the foe's
   own band, a crowd of lower-band foes counted as a low-band deed and stalled tiers 3–5 (09.12.3: median tier
   sessions 7 / 20 / 31 / 46 / never, against 5 / 11 / 22 / 39 / 60 with this rule) [integration: DL-00-05;
-  closes I-005]. Outside conflict the DC rule above stands.
+  closes I-005]. Outside conflict the DC rule above stands, except in a contest.
+- **In a contest** `[revision: I-003]`. A **contest** is a non-conflict undertaking with an opposing party or a
+  work at stake, resolved over several beats: a social contest (a Talk frame on a request, bargain,
+  deception, intimidation, interrogation or persuasion campaign aimed at a principal or at someone who speaks
+  for a faction; 15.3.11), a craft contest (a step of a crafting project, 08.6.4) or a lore contest (a beat on
+  a case or on research whose truth a principal or a faction keeps; 15.9.20). A beat in a contest takes
+  `challenge_band = max(the DC's band, the contest band)`. The **contest band** is the opposition's, rated as
+  a fight's is: for social and lore, the higher of the opposing party's threat band (09) and the tier of the
+  faction it acts for (11.3; tier 0–1 → 1, 2 → 2 … 5 → 5); for craft, the work's **type-tier** (08.6.1). It
+  is engine-read from those records, never chosen. *Why:* a deed's band is how great it is in the world, and a
+  bargain struck with a duke or a blade made from dragon steel is a band-5 deed even when one exchange's DC
+  is moderate; with the DC alone a smith's work could never rise above band 4 (wondrous work is Very hard)
+  and the tier-5 great-deed requirement was closed to every crafter (`04-recog-parity.py`: tier 3 never
+  reached in 90 sessions; with this rule 18 and tier 5 at 45, beside the archer's 19 and 51).
 
 **03.4.4 Novelty and the context class.** `[D]` Each event's `context_class` is the first of:
 (a) the opposing entity's most specific `creature` tag, truncated to level 2 (`creature.undead.ravenous`);
@@ -597,7 +612,19 @@ hyper-specialisation, and novelty is its positive form [R2 §03] [DL-03-08].
 **03.4.5 Crisis and peak flags.** `[D]` Two flags that 04's crystallization and V5 awakening rules read
 (T-03-11):
 - **crisis** is true when any of: `lethal_context` is true; the actor's harm state was `staggered` or `dying`
-  when the beat was declared; or stakes are Dire **and** quality is challenging.
+  when the beat was declared; stakes are Dire **and** quality is challenging; the frame is **ruinous**; or
+  the beat is declared in a contest **at the brink** `[revision: I-003]`.
+- **ruinous** `[revision: I-003]` is true for a frame outside conflict whose stakes are Dire and whose
+  threatened cost at its critical-failure severity is irreversible in the world, read from the frame:
+  `cost.closed_door` at S4–S5 against a principal NPC or a faction (a refusal for good, standing or
+  faction status lost; 15.3.8); `cost.gear` on a unique item or an irreplaceable material (rarity 4, or a
+  harvested part of a named source; 08.6.4); a necessary clue node or the case itself lost (15.9.20); or a
+  project's spoilage completing on an irreplaceable material. Ruinous is to a contest what lethal is to a
+  fight: it adds the same +2 (03.4.2) and makes a crisis. It is engine-derived from the declared cost, never
+  judged after the roll.
+- **at the brink** `[revision: I-003]`: a contest beat declared while the contest's opposing clock stands
+  one segment from full (a persuasion campaign's patience, 15.8.1; a case's opposition clock, 15.9.13; a
+  project's spoilage clock, 08.6.4). It is the contest's Staggered: the last chance before it is lost.
 - **peak** is true when the degree is success or better **and** `challenge_band ≥ power_band(actor) + 1`
   (04's `power_band`; an unrecognized PC is band 1). A peak deed is beyond the character's established level
   of power. In a conflict this means a success in a fight whose advisory was hard or lethal (03.4.3).
@@ -746,10 +773,16 @@ settles.
 **03.7.3 Counted saturation.** `[D]` At settlement, counted units are capped per counter and per node exactly
 as in 03.5.2 (1st full, 2nd half, 3rd a quarter, rest 0, sorted by units). The same-target day cap of 03.5.4
 also applies (one counted defeat of one foe per day; a foe "defeated" twice by a yield and a re-escape counts
-once). The routine cap does not apply, because counted events carry no quality. *Estimated yield (arithmetic,
-not simulated; OEQ-03-4):* a focused combatant with about 2.25 fights per session against about three band-2
-foes defeats roughly 2 + 1 + 0.5 → 3 units per fight at their weapon node, plus Focus spent, so about **6–9
-counted units per session** at the focus node.
+once). The routine cap does not apply, because counted events carry no quality. *Measured yield* `[revision:
+I-004]` (`03-counted-yield.py`: chapter 06's conflict engine, 4,000 fights a row, this chapter's points and
+saturation applied to every beat, defeat, flight and push): per fight at the weapon node a fighter of band
+1–5 earns **1–4 counted units without Focus and 2–7 with pushes**, against 6–15 weighted points, a counted
+share of **0.11 / 0.15 / 0.22 / 0.23 / 0.33** at bands 1–5 without Focus and **0.26–0.44** when pushing. The
+social, craft and lore contests of 03.4.3 yield 0.31, 0.76 and 0.31 at the median (never below 0.24 at the
+tenth percentile; `04-recog-parity.py` R9). Integer halving makes a
+second band-1 defeat in one scene worth 0, which is why band 1 sits lowest; 04.3.3's divisor of 10 binds only
+a band-1 fighter who meets nothing but mobs and never spends Focus, and costs that one fighter one extra fight
+in eight (OEQ-03-4 answered; the live-play test stays).
 
 **03.7.4 Counted evidence and abilities.** `[D]` `cnt.focus` is the evidence channel for magic and
 active-ability callings, and it costs the DM nothing (R3 03.12: Delve counts the resource spent *through* a category of ability). Because
@@ -1893,7 +1926,7 @@ Each has a shipped default and a named test.
 | OEQ-03-1 | Do the judged calls (conduct, secondaries, witnesses) still skew lenient under the citation rules? | 03.3.3, 03.1.6, 03.3.4 | **T-03-CALIB** (R4's T-R4-05): 60 narrated moments, half built as non-evidence, on the production model; target ≤ 10% false-positive conduct entries, 0 ungrounded secondaries accepted, and no change when tallies are hidden vs shown (they are always hidden in play) |
 | OEQ-03-2 | Can the DM classify level-3 deed tags reliably? | 270 level-3 tags; stop when unsure | **T-03-TAG**: 100 novel methods × 3 independent runs; target ≥ 90% same branch, ≥ 85% same level-2 tag, ≥ 70% same level-3 tag; sibling pairs confused more than 20% of the time get a sharper test or are merged |
 | OEQ-03-3 | Do the point steps give the intended yields in real play? | quality 2/4/6; stakes 0/2/4; +2 lethal, crit, novelty | **T-03-YIELD**: log settled points per session over 10 real sessions; target 15–35 per session at the player's focus level-2 node; if outside, 04 moves thresholds (the points stay) |
-| OEQ-03-4 | What do the counters actually yield? | units per T-03-7; estimate 6–9 per session at a focus node | **T-03-COUNT**: the same 10 sessions; report units per counter per session; 04 sets counted thresholds from it |
+| OEQ-03-4 | What do the counters actually yield? | units per T-03-7; measured (revision I-004): 1–4 counted units a fight without Focus, 2–7 pushing; counted share 0.11–0.33 / 0.26–0.44 by band; contests 0.31 / 0.76 / 0.31 (03.7.3) | **T-03-COUNT**: the same 10 sessions of live play; report units per counter per session; 04 re-checks its divisor against it |
 | OEQ-03-5 | Is a 24-scene window (12 full, 12 half) the right recency? | 03.6.2 | **T-03-PIVOT**: three playtests with a deliberate change of style; target the new style's recent passing the old within 2–4 sessions, and no loss of recent across a downtime skip |
 | OEQ-03-6 | Does one routine event per node per day starve honestly routine trades (crafters, healers treating many patients)? | 03.5.3 | **T-03-ROUTINE**: in the same logs, the share of a crafter's or healer's eligible events removed by the cap; if above 60%, raise the cap to 2 per day for `deed.craft` and `deed.lore.medicine` |
 | OEQ-03-7 | Is working strain off at half rate felt as fair? | 03.8.3 | **T-03-STRAIN**: playtests with one grave act; sessions until strain 0 without atonement; target 4–8 sessions; ask the player whether the road back felt earned |

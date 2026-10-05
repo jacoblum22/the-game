@@ -1,6 +1,8 @@
 # draws02.py -- performs the gen.birth draws used in the chapter's worked examples, from the SHIPPED gen_birth.yaml
+import os as _os
+_RULES = _os.environ.get('GAME_RULES', _os.path.normpath(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)), '..', '..', '..')))
 import yaml, random
-B = yaml.safe_load(open(r"C:\Users\jacob\the-game\rules\data\gen_birth.yaml", encoding="utf-8"))
+B = yaml.safe_load(open(_os.path.join(_RULES, 'data', 'gen_birth.yaml'), encoding="utf-8"))
 POOL = B["pool"]
 def matches(gate, src):  # 00.5.4c: G equals S or G is an ancestor of S
     return any(s == g or s.startswith(g + ".") for g in gate for s in src)

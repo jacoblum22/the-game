@@ -305,7 +305,7 @@ TRADES = [
               requires="a place or spirit that accepts you: this livelihood writes pc.accepted.primal.<school> = the place your teacher brought you to, and gives you that teacher as a bond",
               schools=["growth", "beastkin", "weather", "shapeshifting", "spirits", "elements", "hexcraft"]),
    profile="gifted", deep=["deed.primal.growth"], access=[], technique="ab.root_snare",
-   techniques=["ab.root_snare", "ab.beast_speech", "ab.gust", "ab.claws", "ab.spirit_tongue", "ab.cinder_stride", "ab.evil_eye", "ab.green_larder"],
+   techniques=["ab.root_snare", "ab.beast_speech", "ab.gust", "ab.claws", "ab.spirit_tongue", "ab.cinder_stride", "ab.undertow", "ab.heave", "ab.stolen_breath", "ab.evil_eye", "ab.green_larder"],
    priority=["resolve", "wits", "endurance", "agility", "presence", "intellect", "might"],
    upbringing="orig.up.wilds", kit="kit.life.hedge_taught", org_tags=["org.order.druidic", "org.clan.family"], branches=["deed.primal", "deed.wilds"],
    bond_seeds=["mentor: the old one who showed you the place and what it wants", "enemy: a priest, reeve or neighbor who has decided what you are"],
@@ -319,7 +319,7 @@ TRADES = [
               schools=["growth", "beastkin", "weather", "shapeshifting", "spirits", "elements", "hexcraft"]),
    birth_circumstance="gifted",
    profile="gifted", deep=["deed.primal.elements"], access=[], technique="ab.cinder_stride",
-   techniques=["ab.root_snare", "ab.beast_speech", "ab.gust", "ab.claws", "ab.spirit_tongue", "ab.cinder_stride", "ab.evil_eye"],
+   techniques=["ab.root_snare", "ab.beast_speech", "ab.gust", "ab.claws", "ab.spirit_tongue", "ab.cinder_stride", "ab.undertow", "ab.heave", "ab.stolen_breath", "ab.evil_eye"],
    priority=["resolve", "agility", "wits", "endurance", "presence", "might", "intellect"],
    upbringing="orig.up.village", kit="kit.life.touched", org_tags=["org.order.druidic", "org.cult.forbidden"], branches=["deed.primal", "deed.guile"],
    bond_seeds=["kin: the one person who saw it happen and kept your secret", "enemy: someone who saw it happen and did not"],
@@ -525,7 +525,8 @@ GIFTS = [
  ("weather", "Wind-called", "ab.gust", "The air moves when you want it to."),
  ("shapeshifting", "Skin-turner", "ab.claws", "Your body remembers other shapes."),
  ("spirits", "The sight", "ab.spirit_tongue", "You see and hear what stands just outside the world."),
- ("elements", "The spark", "ab.cinder_stride", "Fire, water, stone or air has known your name since you were small."),
+ ("elements", "The spark", {"fire": "ab.cinder_stride", "water": "ab.undertow", "earth": "ab.heave", "air": "ab.stolen_breath"},
+  "Fire, water, stone or air has known your name since you were small."),   # revision I-015: one working per element
  ("hexcraft", "The eye", "ab.evil_eye", "What you wish on people has a way of arriving."),
 ]
 

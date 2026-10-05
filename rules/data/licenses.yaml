@@ -1988,7 +1988,7 @@ licenses:
   kind: training
   tags: [deed.arcane.fire]
   principle: Practise the trade or art of fire sorcery as one trained in it.
-  scope: 'Cast the fire spells you hold; small workings of flame and heat; sense arcane magic within band.near; end your own workings. Also: hold, learn (05.8.5) and emulate (05.5.4) abilities whose first tag is at or under deed.arcane.fire, and stretch them at your grade''s price (T-05-6). The grade caps the obstacle tier at which these methods can succeed: trained Hard, expert Very hard, master Legendary.'
+  scope: 'Cast the fire spells you hold; small workings of flame and heat; sense arcane magic within band.near; end your own workings; cast your branch working, Force Bolt (ab.force_bolt), at no Focus and in no slot (05.7.11). Also: hold, learn (05.8.5) and emulate (05.5.4) abilities whose first tag is at or under deed.arcane.fire, and stretch them at your grade''s price (T-05-6). The grade caps the obstacle tier at which these methods can succeed: trained Hard, expert Very hard, master Legendary.'
   excludes:
   - {what: methods and abilities of any other level-2 deed tag, needs: that tag's own lic.training.* license}
   - {what: an ability of this tag that you neither hold nor have witnessed, needs: 'a pick (04.8.4), a teacher or text (05.8.5), or lic.call.open_art'}
@@ -2043,7 +2043,7 @@ licenses:
   kind: training
   tags: [deed.arcane.frost]
   principle: Practise the trade or art of frost sorcery as one trained in it.
-  scope: 'Cast the frost spells you hold; small workings of cold and ice; sense arcane magic within band.near; end your own workings. Also: hold, learn (05.8.5) and emulate (05.5.4) abilities whose first tag is at or under deed.arcane.frost, and stretch them at your grade''s price (T-05-6). The grade caps the obstacle tier at which these methods can succeed: trained Hard, expert Very hard, master Legendary.'
+  scope: 'Cast the frost spells you hold; small workings of cold and ice; sense arcane magic within band.near; end your own workings; cast your branch working, Force Bolt (ab.force_bolt), at no Focus and in no slot (05.7.11). Also: hold, learn (05.8.5) and emulate (05.5.4) abilities whose first tag is at or under deed.arcane.frost, and stretch them at your grade''s price (T-05-6). The grade caps the obstacle tier at which these methods can succeed: trained Hard, expert Very hard, master Legendary.'
   excludes:
   - {what: methods and abilities of any other level-2 deed tag, needs: that tag's own lic.training.* license}
   - {what: an ability of this tag that you neither hold nor have witnessed, needs: 'a pick (04.8.4), a teacher or text (05.8.5), or lic.call.open_art'}
@@ -2098,7 +2098,7 @@ licenses:
   kind: training
   tags: [deed.arcane.storm]
   principle: Practise the trade or art of storm sorcery as one trained in it.
-  scope: 'Cast the storm spells you hold; small workings of spark, breeze and sound; sense arcane magic within band.near; end your own workings. Also: hold, learn (05.8.5) and emulate (05.5.4) abilities whose first tag is at or under deed.arcane.storm, and stretch them at your grade''s price (T-05-6). The grade caps the obstacle tier at which these methods can succeed: trained Hard, expert Very hard, master Legendary.'
+  scope: 'Cast the storm spells you hold; small workings of spark, breeze and sound; sense arcane magic within band.near; end your own workings; cast your branch working, Force Bolt (ab.force_bolt), at no Focus and in no slot (05.7.11). Also: hold, learn (05.8.5) and emulate (05.5.4) abilities whose first tag is at or under deed.arcane.storm, and stretch them at your grade''s price (T-05-6). The grade caps the obstacle tier at which these methods can succeed: trained Hard, expert Very hard, master Legendary.'
   excludes:
   - {what: methods and abilities of any other level-2 deed tag, needs: that tag's own lic.training.* license}
   - {what: an ability of this tag that you neither hold nor have witnessed, needs: 'a pick (04.8.4), a teacher or text (05.8.5), or lic.call.open_art'}
@@ -2153,7 +2153,7 @@ licenses:
   kind: training
   tags: [deed.arcane.earth]
   principle: Practise the trade or art of earth sorcery as one trained in it.
-  scope: 'Cast the earth spells you hold; small workings of stone, metal and soil; sense arcane magic within band.near; end your own workings. Also: hold, learn (05.8.5) and emulate (05.5.4) abilities whose first tag is at or under deed.arcane.earth, and stretch them at your grade''s price (T-05-6). The grade caps the obstacle tier at which these methods can succeed: trained Hard, expert Very hard, master Legendary.'
+  scope: 'Cast the earth spells you hold; small workings of stone, metal and soil; sense arcane magic within band.near; end your own workings; cast your branch working, Force Bolt (ab.force_bolt), at no Focus and in no slot (05.7.11). Also: hold, learn (05.8.5) and emulate (05.5.4) abilities whose first tag is at or under deed.arcane.earth, and stretch them at your grade''s price (T-05-6). The grade caps the obstacle tier at which these methods can succeed: trained Hard, expert Very hard, master Legendary.'
   excludes:
   - {what: methods and abilities of any other level-2 deed tag, needs: that tag's own lic.training.* license}
   - {what: an ability of this tag that you neither hold nor have witnessed, needs: 'a pick (04.8.4), a teacher or text (05.8.5), or lic.call.open_art'}
@@ -2208,7 +2208,7 @@ licenses:
   kind: training
   tags: [deed.arcane.illusion]
   principle: Practise the trade or art of illusion as one trained in it.
-  scope: 'Cast the illusions you hold; small workings of false light, color and sound; sense arcane magic within band.near; end your own workings. Also: hold, learn (05.8.5) and emulate (05.5.4) abilities whose first tag is at or under deed.arcane.illusion, and stretch them at your grade''s price (T-05-6). The grade caps the obstacle tier at which these methods can succeed: trained Hard, expert Very hard, master Legendary.'
+  scope: 'Cast the illusions you hold; small workings of false light, color and sound; sense arcane magic within band.near; end your own workings; cast your branch working, Force Bolt (ab.force_bolt), at no Focus and in no slot (05.7.11). Also: hold, learn (05.8.5) and emulate (05.5.4) abilities whose first tag is at or under deed.arcane.illusion, and stretch them at your grade''s price (T-05-6). The grade caps the obstacle tier at which these methods can succeed: trained Hard, expert Very hard, master Legendary.'
   excludes:
   - {what: methods and abilities of any other level-2 deed tag, needs: that tag's own lic.training.* license}
   - {what: an ability of this tag that you neither hold nor have witnessed, needs: 'a pick (04.8.4), a teacher or text (05.8.5), or lic.call.open_art'}
@@ -2263,7 +2263,7 @@ licenses:
   kind: training
   tags: [deed.arcane.divination]
   principle: Practise the trade or art of divination as one trained in it.
-  scope: 'Cast the divinations you hold; small workings (know north, the hour, whether a thing in hand is magical); sense arcane magic within band.near; end your own workings. Also: hold, learn (05.8.5) and emulate (05.5.4) abilities whose first tag is at or under deed.arcane.divination, and stretch them at your grade''s price (T-05-6). The grade caps the obstacle tier at which these methods can succeed: trained Hard, expert Very hard, master Legendary.'
+  scope: 'Cast the divinations you hold; small workings (know north, the hour, whether a thing in hand is magical); sense arcane magic within band.near; end your own workings; cast your branch working, Force Bolt (ab.force_bolt), at no Focus and in no slot (05.7.11). Also: hold, learn (05.8.5) and emulate (05.5.4) abilities whose first tag is at or under deed.arcane.divination, and stretch them at your grade''s price (T-05-6). The grade caps the obstacle tier at which these methods can succeed: trained Hard, expert Very hard, master Legendary.'
   excludes:
   - {what: methods and abilities of any other level-2 deed tag, needs: that tag's own lic.training.* license}
   - {what: an ability of this tag that you neither hold nor have witnessed, needs: 'a pick (04.8.4), a teacher or text (05.8.5), or lic.call.open_art'}
@@ -2318,7 +2318,7 @@ licenses:
   kind: training
   tags: [deed.arcane.warding]
   principle: Practise the trade or art of warding as one trained in it.
-  scope: 'Cast the wards and counters you hold; small workings (a tell-tale thread on a door, a chalk line that smudges if crossed); sense arcane magic within band.near; end your own workings. Also: hold, learn (05.8.5) and emulate (05.5.4) abilities whose first tag is at or under deed.arcane.warding, and stretch them at your grade''s price (T-05-6). The grade caps the obstacle tier at which these methods can succeed: trained Hard, expert Very hard, master Legendary.'
+  scope: 'Cast the wards and counters you hold; small workings (a tell-tale thread on a door, a chalk line that smudges if crossed); sense arcane magic within band.near; end your own workings; cast your branch working, Force Bolt (ab.force_bolt), at no Focus and in no slot (05.7.11). Also: hold, learn (05.8.5) and emulate (05.5.4) abilities whose first tag is at or under deed.arcane.warding, and stretch them at your grade''s price (T-05-6). The grade caps the obstacle tier at which these methods can succeed: trained Hard, expert Very hard, master Legendary.'
   excludes:
   - {what: methods and abilities of any other level-2 deed tag, needs: that tag's own lic.training.* license}
   - {what: an ability of this tag that you neither hold nor have witnessed, needs: 'a pick (04.8.4), a teacher or text (05.8.5), or lic.call.open_art'}
@@ -2373,7 +2373,7 @@ licenses:
   kind: training
   tags: [deed.arcane.mind]
   principle: Practise the trade or art of mind sorcery as one trained in it.
-  scope: 'Cast the mind spells you hold; small workings (a word carried to one ear within band.close; a name called to mind); sense arcane magic within band.near; end your own workings. Also: hold, learn (05.8.5) and emulate (05.5.4) abilities whose first tag is at or under deed.arcane.mind, and stretch them at your grade''s price (T-05-6). The grade caps the obstacle tier at which these methods can succeed: trained Hard, expert Very hard, master Legendary.'
+  scope: 'Cast the mind spells you hold; small workings (a word carried to one ear within band.close; a name called to mind); sense arcane magic within band.near; end your own workings; cast your branch working, Force Bolt (ab.force_bolt), at no Focus and in no slot (05.7.11). Also: hold, learn (05.8.5) and emulate (05.5.4) abilities whose first tag is at or under deed.arcane.mind, and stretch them at your grade''s price (T-05-6). The grade caps the obstacle tier at which these methods can succeed: trained Hard, expert Very hard, master Legendary.'
   excludes:
   - {what: methods and abilities of any other level-2 deed tag, needs: that tag's own lic.training.* license}
   - {what: an ability of this tag that you neither hold nor have witnessed, needs: 'a pick (04.8.4), a teacher or text (05.8.5), or lic.call.open_art'}
@@ -2428,7 +2428,7 @@ licenses:
   kind: training
   tags: [deed.arcane.summoning]
   principle: Practise the trade or art of summoning as one trained in it.
-  scope: 'Cast the summonings you hold; small workings (a spark of an unseen hand that can lift a cup); sense arcane magic within band.near; end your own workings. Also: hold, learn (05.8.5) and emulate (05.5.4) abilities whose first tag is at or under deed.arcane.summoning, and stretch them at your grade''s price (T-05-6). The grade caps the obstacle tier at which these methods can succeed: trained Hard, expert Very hard, master Legendary.'
+  scope: 'Cast the summonings you hold; small workings (a spark of an unseen hand that can lift a cup); sense arcane magic within band.near; end your own workings; cast your branch working, Force Bolt (ab.force_bolt), at no Focus and in no slot (05.7.11). Also: hold, learn (05.8.5) and emulate (05.5.4) abilities whose first tag is at or under deed.arcane.summoning, and stretch them at your grade''s price (T-05-6). The grade caps the obstacle tier at which these methods can succeed: trained Hard, expert Very hard, master Legendary.'
   excludes:
   - {what: methods and abilities of any other level-2 deed tag, needs: that tag's own lic.training.* license}
   - {what: an ability of this tag that you neither hold nor have witnessed, needs: 'a pick (04.8.4), a teacher or text (05.8.5), or lic.call.open_art'}
@@ -2483,7 +2483,7 @@ licenses:
   kind: training
   tags: [deed.arcane.necromancy]
   principle: Practise the trade or art of necromancy as one trained in it.
-  scope: 'Cast the necromancies you hold; small workings (know whether a body is dead and how long; wilt a cut flower); sense arcane magic within band.near; end your own workings. Also: hold, learn (05.8.5) and emulate (05.5.4) abilities whose first tag is at or under deed.arcane.necromancy, and stretch them at your grade''s price (T-05-6). The grade caps the obstacle tier at which these methods can succeed: trained Hard, expert Very hard, master Legendary.'
+  scope: 'Cast the necromancies you hold; small workings (know whether a body is dead and how long; wilt a cut flower); sense arcane magic within band.near; end your own workings; cast your branch working, Force Bolt (ab.force_bolt), at no Focus and in no slot (05.7.11). Also: hold, learn (05.8.5) and emulate (05.5.4) abilities whose first tag is at or under deed.arcane.necromancy, and stretch them at your grade''s price (T-05-6). The grade caps the obstacle tier at which these methods can succeed: trained Hard, expert Very hard, master Legendary.'
   excludes:
   - {what: methods and abilities of any other level-2 deed tag, needs: that tag's own lic.training.* license}
   - {what: an ability of this tag that you neither hold nor have witnessed, needs: 'a pick (04.8.4), a teacher or text (05.8.5), or lic.call.open_art'}
@@ -2538,7 +2538,7 @@ licenses:
   kind: training
   tags: [deed.arcane.alteration]
   principle: Practise the trade or art of alteration as one trained in it.
-  scope: 'Cast the alterations you hold; small workings (mend a tear, clean a stain, warm or cool what you hold); sense arcane magic within band.near; end your own workings. Also: hold, learn (05.8.5) and emulate (05.5.4) abilities whose first tag is at or under deed.arcane.alteration, and stretch them at your grade''s price (T-05-6). The grade caps the obstacle tier at which these methods can succeed: trained Hard, expert Very hard, master Legendary.'
+  scope: 'Cast the alterations you hold; small workings (mend a tear, clean a stain, warm or cool what you hold); sense arcane magic within band.near; end your own workings; cast your branch working, Force Bolt (ab.force_bolt), at no Focus and in no slot (05.7.11). Also: hold, learn (05.8.5) and emulate (05.5.4) abilities whose first tag is at or under deed.arcane.alteration, and stretch them at your grade''s price (T-05-6). The grade caps the obstacle tier at which these methods can succeed: trained Hard, expert Very hard, master Legendary.'
   excludes:
   - {what: methods and abilities of any other level-2 deed tag, needs: that tag's own lic.training.* license}
   - {what: an ability of this tag that you neither hold nor have witnessed, needs: 'a pick (04.8.4), a teacher or text (05.8.5), or lic.call.open_art'}
@@ -2593,7 +2593,7 @@ licenses:
   kind: training
   tags: [deed.divine.healing]
   principle: Practise the trade or art of sacred healing as one trained in it.
-  scope: 'Cast the healing prayers you hold; small workings (ease pain for a breath, stop a nosebleed, know whether a body is sick); sense divine magic within band.near. Also: hold, learn (05.8.5) and emulate (05.5.4) abilities whose first tag is at or under deed.divine.healing, and stretch them at your grade''s price (T-05-6). The grade caps the obstacle tier at which these methods can succeed: trained Hard, expert Very hard, master Legendary.'
+  scope: 'Cast the healing prayers you hold; small workings (ease pain for a breath, stop a nosebleed, know whether a body is sick); sense divine magic within band.near; cast your branch working, Rebuke (ab.rebuke), at no Focus and in no slot (05.7.11). Also: hold, learn (05.8.5) and emulate (05.5.4) abilities whose first tag is at or under deed.divine.healing, and stretch them at your grade''s price (T-05-6). The grade caps the obstacle tier at which these methods can succeed: trained Hard, expert Very hard, master Legendary.'
   excludes:
   - {what: methods and abilities of any other level-2 deed tag, needs: that tag's own lic.training.* license}
   - {what: an ability of this tag that you neither hold nor have witnessed, needs: 'a pick (04.8.4), a teacher or text (05.8.5), or lic.call.open_art'}
@@ -2648,7 +2648,7 @@ licenses:
   kind: training
   tags: [deed.divine.warding]
   principle: Practise the trade or art of sacred warding as one trained in it.
-  scope: 'Cast the wards and blessings you hold; small workings (bless food and water as wholesome, mark a threshold with your keeper''s sign); sense divine magic within band.near. Also: hold, learn (05.8.5) and emulate (05.5.4) abilities whose first tag is at or under deed.divine.warding, and stretch them at your grade''s price (T-05-6). The grade caps the obstacle tier at which these methods can succeed: trained Hard, expert Very hard, master Legendary.'
+  scope: 'Cast the wards and blessings you hold; small workings (bless food and water as wholesome, mark a threshold with your keeper''s sign); sense divine magic within band.near; cast your branch working, Rebuke (ab.rebuke), at no Focus and in no slot (05.7.11). Also: hold, learn (05.8.5) and emulate (05.5.4) abilities whose first tag is at or under deed.divine.warding, and stretch them at your grade''s price (T-05-6). The grade caps the obstacle tier at which these methods can succeed: trained Hard, expert Very hard, master Legendary.'
   excludes:
   - {what: methods and abilities of any other level-2 deed tag, needs: that tag's own lic.training.* license}
   - {what: an ability of this tag that you neither hold nor have witnessed, needs: 'a pick (04.8.4), a teacher or text (05.8.5), or lic.call.open_art'}
@@ -2703,7 +2703,7 @@ licenses:
   kind: training
   tags: [deed.divine.smiting]
   principle: Practise the trade or art of smiting as one trained in it.
-  scope: 'Cast the smiting prayers you hold; small workings (your sign gives a candle''s light); sense divine magic within band.near. Also: hold, learn (05.8.5) and emulate (05.5.4) abilities whose first tag is at or under deed.divine.smiting, and stretch them at your grade''s price (T-05-6). The grade caps the obstacle tier at which these methods can succeed: trained Hard, expert Very hard, master Legendary.'
+  scope: 'Cast the smiting prayers you hold; small workings (your sign gives a candle''s light); sense divine magic within band.near; cast your branch working, Rebuke (ab.rebuke), at no Focus and in no slot (05.7.11). Also: hold, learn (05.8.5) and emulate (05.5.4) abilities whose first tag is at or under deed.divine.smiting, and stretch them at your grade''s price (T-05-6). The grade caps the obstacle tier at which these methods can succeed: trained Hard, expert Very hard, master Legendary.'
   excludes:
   - {what: methods and abilities of any other level-2 deed tag, needs: that tag's own lic.training.* license}
   - {what: an ability of this tag that you neither hold nor have witnessed, needs: 'a pick (04.8.4), a teacher or text (05.8.5), or lic.call.open_art'}
@@ -2758,7 +2758,7 @@ licenses:
   kind: training
   tags: [deed.divine.rites]
   principle: Practise the trade or art of rites as one trained in it.
-  scope: 'Perform the ceremonies of your faith with their sacred effect: blessings, funerals, marriages, consecrations; lead the rites you know. Also: hold, learn (05.8.5) and emulate (05.5.4) abilities whose first tag is at or under deed.divine.rites, and stretch them at your grade''s price (T-05-6). The grade caps the obstacle tier at which these methods can succeed: trained Hard, expert Very hard, master Legendary.'
+  scope: 'Perform the ceremonies of your faith with their sacred effect: blessings, funerals, marriages, consecrations; lead the rites you know; cast your branch working, Rebuke (ab.rebuke), at no Focus and in no slot (05.7.11). Also: hold, learn (05.8.5) and emulate (05.5.4) abilities whose first tag is at or under deed.divine.rites, and stretch them at your grade''s price (T-05-6). The grade caps the obstacle tier at which these methods can succeed: trained Hard, expert Very hard, master Legendary.'
   excludes:
   - {what: methods and abilities of any other level-2 deed tag, needs: that tag's own lic.training.* license}
   - {what: an ability of this tag that you neither hold nor have witnessed, needs: 'a pick (04.8.4), a teacher or text (05.8.5), or lic.call.open_art'}
@@ -2813,7 +2813,7 @@ licenses:
   kind: training
   tags: [deed.divine.oaths]
   principle: Practise the trade or art of oaths as one trained in it.
-  scope: 'Swear, witness and enforce sacred vows with the prayers you hold; know whether an oath taken before you was meant. Also: hold, learn (05.8.5) and emulate (05.5.4) abilities whose first tag is at or under deed.divine.oaths, and stretch them at your grade''s price (T-05-6). The grade caps the obstacle tier at which these methods can succeed: trained Hard, expert Very hard, master Legendary.'
+  scope: 'Swear, witness and enforce sacred vows with the prayers you hold; know whether an oath taken before you was meant; cast your branch working, Rebuke (ab.rebuke), at no Focus and in no slot (05.7.11). Also: hold, learn (05.8.5) and emulate (05.5.4) abilities whose first tag is at or under deed.divine.oaths, and stretch them at your grade''s price (T-05-6). The grade caps the obstacle tier at which these methods can succeed: trained Hard, expert Very hard, master Legendary.'
   excludes:
   - {what: methods and abilities of any other level-2 deed tag, needs: that tag's own lic.training.* license}
   - {what: an ability of this tag that you neither hold nor have witnessed, needs: 'a pick (04.8.4), a teacher or text (05.8.5), or lic.call.open_art'}
@@ -2868,7 +2868,7 @@ licenses:
   kind: training
   tags: [deed.divine.revelation]
   principle: Practise the trade or art of revelation as one trained in it.
-  scope: 'Cast the prayers of revelation you hold; small workings (know which way your keeper''s nearest holy place lies); sense divine magic within band.near. Also: hold, learn (05.8.5) and emulate (05.5.4) abilities whose first tag is at or under deed.divine.revelation, and stretch them at your grade''s price (T-05-6). The grade caps the obstacle tier at which these methods can succeed: trained Hard, expert Very hard, master Legendary.'
+  scope: 'Cast the prayers of revelation you hold; small workings (know which way your keeper''s nearest holy place lies); sense divine magic within band.near; cast your branch working, Rebuke (ab.rebuke), at no Focus and in no slot (05.7.11). Also: hold, learn (05.8.5) and emulate (05.5.4) abilities whose first tag is at or under deed.divine.revelation, and stretch them at your grade''s price (T-05-6). The grade caps the obstacle tier at which these methods can succeed: trained Hard, expert Very hard, master Legendary.'
   excludes:
   - {what: methods and abilities of any other level-2 deed tag, needs: that tag's own lic.training.* license}
   - {what: an ability of this tag that you neither hold nor have witnessed, needs: 'a pick (04.8.4), a teacher or text (05.8.5), or lic.call.open_art'}
@@ -2923,7 +2923,7 @@ licenses:
   kind: training
   tags: [deed.divine.exorcism]
   principle: Practise the trade or art of exorcism as one trained in it.
-  scope: 'Cast the turnings and castings-out you hold; small workings (know whether an undead or fiend is within band.close); sense divine magic within band.near. Also: hold, learn (05.8.5) and emulate (05.5.4) abilities whose first tag is at or under deed.divine.exorcism, and stretch them at your grade''s price (T-05-6). The grade caps the obstacle tier at which these methods can succeed: trained Hard, expert Very hard, master Legendary.'
+  scope: 'Cast the turnings and castings-out you hold; small workings (know whether an undead or fiend is within band.close); sense divine magic within band.near; cast your branch working, Rebuke (ab.rebuke), at no Focus and in no slot (05.7.11). Also: hold, learn (05.8.5) and emulate (05.5.4) abilities whose first tag is at or under deed.divine.exorcism, and stretch them at your grade''s price (T-05-6). The grade caps the obstacle tier at which these methods can succeed: trained Hard, expert Very hard, master Legendary.'
   excludes:
   - {what: methods and abilities of any other level-2 deed tag, needs: that tag's own lic.training.* license}
   - {what: an ability of this tag that you neither hold nor have witnessed, needs: 'a pick (04.8.4), a teacher or text (05.8.5), or lic.call.open_art'}
@@ -2978,7 +2978,7 @@ licenses:
   kind: training
   tags: [deed.divine.pact]
   principle: Practise the trade or art of pact as one trained in it.
-  scope: 'Call on the power you bargained with through the invocations you hold; small workings (its mark shows or hides on your skin; a whisper of its attention); sense profane magic within band.near. Also: hold, learn (05.8.5) and emulate (05.5.4) abilities whose first tag is at or under deed.divine.pact, and stretch them at your grade''s price (T-05-6). The grade caps the obstacle tier at which these methods can succeed: trained Hard, expert Very hard, master Legendary.'
+  scope: 'Call on the power you bargained with through the invocations you hold; small workings (its mark shows or hides on your skin; a whisper of its attention); sense profane magic within band.near; cast your branch working, Rebuke (ab.rebuke), at no Focus and in no slot (05.7.11). Also: hold, learn (05.8.5) and emulate (05.5.4) abilities whose first tag is at or under deed.divine.pact, and stretch them at your grade''s price (T-05-6). The grade caps the obstacle tier at which these methods can succeed: trained Hard, expert Very hard, master Legendary.'
   excludes:
   - {what: methods and abilities of any other level-2 deed tag, needs: that tag's own lic.training.* license}
   - {what: an ability of this tag that you neither hold nor have witnessed, needs: 'a pick (04.8.4), a teacher or text (05.8.5), or lic.call.open_art'}
@@ -3033,7 +3033,7 @@ licenses:
   kind: training
   tags: [deed.primal.growth]
   principle: Practise the trade or art of growth as one trained in it.
-  scope: 'Cast the growth workings you hold; small workings (a bud opens, a seed sprouts in your hand, a vine shifts aside); sense primal magic within band.near. Also: hold, learn (05.8.5) and emulate (05.5.4) abilities whose first tag is at or under deed.primal.growth, and stretch them at your grade''s price (T-05-6). The grade caps the obstacle tier at which these methods can succeed: trained Hard, expert Very hard, master Legendary.'
+  scope: 'Cast the growth workings you hold; small workings (a bud opens, a seed sprouts in your hand, a vine shifts aside); sense primal magic within band.near; cast your branch working, Wild Lash (ab.wild_lash), at no Focus and in no slot (05.7.11). Also: hold, learn (05.8.5) and emulate (05.5.4) abilities whose first tag is at or under deed.primal.growth, and stretch them at your grade''s price (T-05-6). The grade caps the obstacle tier at which these methods can succeed: trained Hard, expert Very hard, master Legendary.'
   excludes:
   - {what: methods and abilities of any other level-2 deed tag, needs: that tag's own lic.training.* license}
   - {what: an ability of this tag that you neither hold nor have witnessed, needs: 'a pick (04.8.4), a teacher or text (05.8.5), or lic.call.open_art'}
@@ -3088,7 +3088,7 @@ licenses:
   kind: training
   tags: [deed.primal.beastkin]
   principle: Practise the trade or art of beast-kinship as one trained in it.
-  scope: 'Cast the beast-kin workings you hold; small workings (know a beast''s mood, call a small bird to your hand); sense primal magic within band.near. Also: hold, learn (05.8.5) and emulate (05.5.4) abilities whose first tag is at or under deed.primal.beastkin, and stretch them at your grade''s price (T-05-6). The grade caps the obstacle tier at which these methods can succeed: trained Hard, expert Very hard, master Legendary.'
+  scope: 'Cast the beast-kin workings you hold; small workings (know a beast''s mood, call a small bird to your hand); sense primal magic within band.near; cast your branch working, Wild Lash (ab.wild_lash), at no Focus and in no slot (05.7.11). Also: hold, learn (05.8.5) and emulate (05.5.4) abilities whose first tag is at or under deed.primal.beastkin, and stretch them at your grade''s price (T-05-6). The grade caps the obstacle tier at which these methods can succeed: trained Hard, expert Very hard, master Legendary.'
   excludes:
   - {what: methods and abilities of any other level-2 deed tag, needs: that tag's own lic.training.* license}
   - {what: an ability of this tag that you neither hold nor have witnessed, needs: 'a pick (04.8.4), a teacher or text (05.8.5), or lic.call.open_art'}
@@ -3143,7 +3143,7 @@ licenses:
   kind: training
   tags: [deed.primal.weather]
   principle: Practise the trade or art of weather-working as one trained in it.
-  scope: 'Cast the weather workings you hold; small workings (a breath of wind, know the weather until nightfall); sense primal magic within band.near. Also: hold, learn (05.8.5) and emulate (05.5.4) abilities whose first tag is at or under deed.primal.weather, and stretch them at your grade''s price (T-05-6). The grade caps the obstacle tier at which these methods can succeed: trained Hard, expert Very hard, master Legendary.'
+  scope: 'Cast the weather workings you hold; small workings (a breath of wind, know the weather until nightfall); sense primal magic within band.near; cast your branch working, Wild Lash (ab.wild_lash), at no Focus and in no slot (05.7.11). Also: hold, learn (05.8.5) and emulate (05.5.4) abilities whose first tag is at or under deed.primal.weather, and stretch them at your grade''s price (T-05-6). The grade caps the obstacle tier at which these methods can succeed: trained Hard, expert Very hard, master Legendary.'
   excludes:
   - {what: methods and abilities of any other level-2 deed tag, needs: that tag's own lic.training.* license}
   - {what: an ability of this tag that you neither hold nor have witnessed, needs: 'a pick (04.8.4), a teacher or text (05.8.5), or lic.call.open_art'}
@@ -3198,7 +3198,7 @@ licenses:
   kind: training
   tags: [deed.primal.shapeshifting]
   principle: Practise the trade or art of shapeshifting as one trained in it.
-  scope: 'Cast the shape-workings you hold; small workings (your eyes or voice take a beast''s cast for a moment); sense primal magic within band.near. Also: hold, learn (05.8.5) and emulate (05.5.4) abilities whose first tag is at or under deed.primal.shapeshifting, and stretch them at your grade''s price (T-05-6). The grade caps the obstacle tier at which these methods can succeed: trained Hard, expert Very hard, master Legendary.'
+  scope: 'Cast the shape-workings you hold; small workings (your eyes or voice take a beast''s cast for a moment); sense primal magic within band.near; cast your branch working, Wild Lash (ab.wild_lash), at no Focus and in no slot (05.7.11). Also: hold, learn (05.8.5) and emulate (05.5.4) abilities whose first tag is at or under deed.primal.shapeshifting, and stretch them at your grade''s price (T-05-6). The grade caps the obstacle tier at which these methods can succeed: trained Hard, expert Very hard, master Legendary.'
   excludes:
   - {what: methods and abilities of any other level-2 deed tag, needs: that tag's own lic.training.* license}
   - {what: an ability of this tag that you neither hold nor have witnessed, needs: 'a pick (04.8.4), a teacher or text (05.8.5), or lic.call.open_art'}
@@ -3253,7 +3253,7 @@ licenses:
   kind: training
   tags: [deed.primal.spirits]
   principle: Practise the trade or art of spirit-speaking as one trained in it.
-  scope: 'Cast the spirit-workings you hold; small workings (know whether a spirit is present here); sense primal magic within band.near. Also: hold, learn (05.8.5) and emulate (05.5.4) abilities whose first tag is at or under deed.primal.spirits, and stretch them at your grade''s price (T-05-6). The grade caps the obstacle tier at which these methods can succeed: trained Hard, expert Very hard, master Legendary.'
+  scope: 'Cast the spirit-workings you hold; small workings (know whether a spirit is present here); sense primal magic within band.near; cast your branch working, Wild Lash (ab.wild_lash), at no Focus and in no slot (05.7.11). Also: hold, learn (05.8.5) and emulate (05.5.4) abilities whose first tag is at or under deed.primal.spirits, and stretch them at your grade''s price (T-05-6). The grade caps the obstacle tier at which these methods can succeed: trained Hard, expert Very hard, master Legendary.'
   excludes:
   - {what: methods and abilities of any other level-2 deed tag, needs: that tag's own lic.training.* license}
   - {what: an ability of this tag that you neither hold nor have witnessed, needs: 'a pick (04.8.4), a teacher or text (05.8.5), or lic.call.open_art'}
@@ -3308,7 +3308,7 @@ licenses:
   kind: training
   tags: [deed.primal.elements]
   principle: Practise the trade or art of raw elements as one trained in it.
-  scope: 'Cast the elemental workings you hold; small workings (coax an ember to flame, still a cup of water, firm a handful of earth); sense primal magic within band.near. Also: hold, learn (05.8.5) and emulate (05.5.4) abilities whose first tag is at or under deed.primal.elements, and stretch them at your grade''s price (T-05-6). The grade caps the obstacle tier at which these methods can succeed: trained Hard, expert Very hard, master Legendary.'
+  scope: 'Cast the elemental workings you hold; small workings (coax an ember to flame, still a cup of water, firm a handful of earth); sense primal magic within band.near; cast your branch working, Wild Lash (ab.wild_lash), at no Focus and in no slot (05.7.11). Also: hold, learn (05.8.5) and emulate (05.5.4) abilities whose first tag is at or under deed.primal.elements, and stretch them at your grade''s price (T-05-6). The grade caps the obstacle tier at which these methods can succeed: trained Hard, expert Very hard, master Legendary.'
   excludes:
   - {what: methods and abilities of any other level-2 deed tag, needs: that tag's own lic.training.* license}
   - {what: an ability of this tag that you neither hold nor have witnessed, needs: 'a pick (04.8.4), a teacher or text (05.8.5), or lic.call.open_art'}
@@ -3363,7 +3363,7 @@ licenses:
   kind: training
   tags: [deed.primal.hexcraft]
   principle: Practise the trade or art of hexcraft as one trained in it.
-  scope: 'Cast the hexes and unhexings you hold; make small charms (a knot against nightmares, a sign over a door); sense primal magic and curses within band.near. Also: hold, learn (05.8.5) and emulate (05.5.4) abilities whose first tag is at or under deed.primal.hexcraft, and stretch them at your grade''s price (T-05-6). The grade caps the obstacle tier at which these methods can succeed: trained Hard, expert Very hard, master Legendary.'
+  scope: 'Cast the hexes and unhexings you hold; make small charms (a knot against nightmares, a sign over a door); sense primal magic and curses within band.near; cast your branch working, Wild Lash (ab.wild_lash), at no Focus and in no slot (05.7.11). Also: hold, learn (05.8.5) and emulate (05.5.4) abilities whose first tag is at or under deed.primal.hexcraft, and stretch them at your grade''s price (T-05-6). The grade caps the obstacle tier at which these methods can succeed: trained Hard, expert Very hard, master Legendary.'
   excludes:
   - {what: methods and abilities of any other level-2 deed tag, needs: that tag's own lic.training.* license}
   - {what: an ability of this tag that you neither hold nor have witnessed, needs: 'a pick (04.8.4), a teacher or text (05.8.5), or lic.call.open_art'}

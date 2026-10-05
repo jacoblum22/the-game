@@ -111,8 +111,9 @@ PRIORITY_BANDS = [
 SPREAD_TAGS = [
     dict(id='pierce', order=1, selection='the primary target and each further being carrying flag.lined_up with it, nearest first', cap=4, harm='full to each'),
     dict(id='burst', order=2, selection='the primary target and each being within band.engaged of it (or of the named point), friend and foe', cap=6, harm='full to each'),
-    dict(id='fork', order=3, selection='the primary target and one more eligible being within band.close of it per extra target the text grants', cap=5, harm='full to each'),
-    dict(id='chain', order=4, selection='after the primary resolves, the nearest other being within band.close of the last target, friend or foe', cap=3, harm='one severity rung lighter at each leap'),
-    dict(id='linger', order=5, selection="the place itself: a being that enters it or ends its turn there, until the duration ends", cap=5, harm='as the ability states for the lingering effect'),
+    dict(id='cone', order=3, selection="each being at band.engaged with the source, then each at band.close in the primary target's group; friend and foe", cap=4, harm='full to each', note='ch.06 T-06-15 (inserted at integration so both files carry one order; spell-delivery form cone)'),
+    dict(id='fork', order=4, selection='the primary target and one more eligible being within band.close of it per extra target the text grants', cap=5, harm='full to each'),
+    dict(id='chain', order=5, selection='after the primary resolves, the nearest other being within band.close of the last target, friend or foe', cap=3, harm='one severity rung lighter at each leap'),
+    dict(id='linger', order=6, selection="the place itself: a being that enters it or ends its turn there, until the duration ends", cap=5, harm='as the ability states for the lingering effect'),
 ]
 SPREAD_TOTAL_CAP = 6

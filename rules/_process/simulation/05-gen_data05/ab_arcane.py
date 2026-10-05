@@ -60,7 +60,7 @@ ab('ab.glaze', 'Glaze', A + 'frost.shaping', 3, 'ice_ground', 'Working', 'beat',
     rk("Ice covers a patch of ground or still water within band.near for the scene (it bears weight). Up to five beings on it roll Evade against your effect DC or fall prone and take Light frost harm; any being moving on it is slowed.",
        [fchk('evade'), cond('cond.prone', 1, 'rounds:1', 'each being on the ice that fails'), cond('cond.slowed', 1, 'scene', 'any being moving on the ice'), tgt(4), fact('the patch', 'surface', 'ice until scene_end'), harm(1, ['harm.frost.ice'], 'each being on the ice that fails')], f=2)],
    check=EVA, spread='linger', harm_tags=['harm.frost.ice'], traits=['trait.delivery.area', 'trait.sense.visible'],
-   x=[('running water or the sea', 'rit.custom; a stretch freezes only still water')])
+   x=[('running water or the sea', 'a designed rite (05.8.4); a stretch freezes only still water')])
 
 # ---------------- storm ----------------
 ab('ab.arc_bolt', 'Arc Bolt', A + 'storm.lightning', 1, 'lightning_bolt', 'Working', 'beat',
@@ -157,11 +157,11 @@ ab('ab.foresee', 'Foresee', A + 'divination.foresight', 4, 'forewarning', 'React
 ab('ab.spell_ward', 'Spell Ward', A + 'warding.shielding', 1, 'ward', 'Reaction', 'reaction',
    'Raise a plane of force against a blow.',
    'Applies to one hit against you that you perceive, of any harm type.',
-   [rk("When you are hit, the harm is one severity rung lighter; if it is magical harm, two rungs lighter.",
+   [rk("In place of Fend, when you are hit, the harm is one severity rung lighter; if it is magical harm, two rungs lighter.",
        [dreact('spell ward', [sev(-1, 'the hit being warded'), sev(-1, 'the hit being warded has trait.nature.magical')])], f=1),
-    rk("When you are hit, the harm is two severity rungs lighter, and your next resisted check against that attacker this scene is framed one stakes rung lower.",
+    rk("In place of Fend, when you are hit, the harm is two severity rungs lighter, and your next resisted check against that attacker this scene is framed one stakes rung lower.",
        [dreact('spell ward', [sev(-2, 'the hit being warded'), lev('protective', 'your next resisted check against that attacker', 'scene')])], f=1),
-    rk("When you are hit, the harm is two severity rungs lighter; if it is magical harm, the hit is negated.",
+    rk("In place of Fend, when you are hit, the harm is two severity rungs lighter; if it is magical harm, the hit is negated.",
        [dreact('spell ward', [sev(-2, 'the hit being warded'), prevent('the hit has trait.nature.magical')])], f=1)],
    hook='on_hit_taken', when='you perceive the attack', slot='slot.defense_reaction', ckey=True,
    x=[('warding another being', 'ab.sanctuary; ab.stoneskin'), ('a hit you did not perceive', 'no reaction is possible')])
@@ -204,7 +204,7 @@ ab('ab.compel', 'Compel', A + 'mind.compulsion', 4, 'command', 'Working', 'beat'
    [rk("Speak one command of a single act. The target rolls Endure (Resolve) against your effect DC: on a failure it spends its next turn doing that act and nothing else, cannot act against you until that turn ends, and afterwards does not recall that the will was not its own.",
        [fchk('endure'), perm(4), cond('cond.charmed', 1, 'rounds:1', T), restr({'methods': ['acting against the caster']}, T, 'rounds:1'), fact(T, 'remembers_compulsion', False)], f=3)],
    check=RES, traits=['trait.nature.mental'], dictates=True,
-   x=[('an act that would plainly kill or maim the target', 'the command fails at once'), ('a command lasting beyond one turn', 'rit.custom; a geas is a rite')])
+   x=[('an act that would plainly kill or maim the target', 'the command fails at once'), ('a command lasting beyond one turn', 'a designed rite (05.8.4); a geas is a rite')])
 
 # ---------------- summoning ----------------
 ab('ab.call_servant', 'Call Servant', A + 'summoning.calling', 1, 'summon_servant', 'Working', 'beat',
@@ -281,3 +281,20 @@ ab('ab.long_step', 'Long Step', A + 'alteration.translocation', 2, 'blink', 'Wor
     rk("Step to a place you can see within two bands, across any gap or drop, provoking no reaction, and bring one willing being you touch.",
        [move('self', 2), perm(4), waive('reactions provoked by this movement', 'this beat'), tgt(1)], f=2)],
    traits=['trait.action.move'], x=[('a place you cannot see, or through a wall or closed door', 'G4 for this working; rit.custom'), ('carrying an unwilling being', 'verb.grapple first, and it is still unwilling')])
+
+# ---------------- the branch working (05.7.11; revision I-009) ----------------
+# Held through every arcane training license; no slot; zero Focus. Rank = grade in the casting school's license.
+ab('ab.force_bolt', 'Force Bolt', 'deed.arcane', 1, 'branch_arcane', 'Working', 'beat',
+   'Throw unshaped formula at one target as raw force.',
+   'Applies to one being or object you can see within band.near.',
+   [rk("Throw a bolt of unshaped force at one target you can see within band.near. On a success it takes Moderate force harm (shifted by delivered reach); on a critical success it is also pushed one band away from you.",
+       [harm(2, ['harm.arcane.force'], T), move(T, 1)]),
+    rk("Throw a bolt of unshaped force at one target you can see within band.near. On a success it takes Heavy force harm (shifted by delivered reach); on a critical success it is also pushed one band away from you.",
+       [harm(3, ['harm.arcane.force'], T), move(T, 1)]),
+    rk("Throw a bolt of unshaped force at one target you can see within band.near. On a success it takes Grievous force harm (shifted by delivered reach); on a critical success it is also pushed one band away from you.",
+       [harm(4, ['harm.arcane.force'], T), move(T, 1)])],
+   check=('aimed', 'verb.strike', "the target's Guard"), harm_tags=['harm.arcane.force'], branch_working=True,
+   traits=['trait.action.attack', 'trait.delivery.ranged', 'trait.sense.audible', 'trait.sense.visible'],
+   x=[('a shaped effect: fire, frost, a ward, a charm', 'a spell of that school'), ('a target beyond band.near', 'the Far flare, or a spell that reaches further'), ('lighting, chilling or nudging a thing', 'a small working (05.7.6)')],
+   nmi=['that the bolt sets things alight, freezes, binds or lingers'],
+   basis=['05.7.11', '06 Interface request (b) to 05', 'I-009', 'DL-05-31'])

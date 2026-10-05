@@ -489,3 +489,89 @@ ab('ab.human_shield', 'Living Shield', 'deed.guile.escape.evasion', 3, 'dark_pro
        [({'effect_id': 'eff.intercept', 'params': {'new_target': 'a being engaged with you or grabbed by you, your choice', 'applies_when': 'you are hit'}}, 4), move('self', 1, add=['flag.hidden']), lev('precision', 'your next beat'), lev('protective', 'your next beat')], f=1, per='scene_end')],
    hook='on_hit_taken', when='another being is engaged with you or grabbed by you', conduct=c('protection', NEG),
    x=[('an area effect', 'verb.evade')])
+
+# ============================== NEGATIVE POLES, TIER 5 (revision I-007) ==============================
+# One min_tier-5 ability per negative pole, so a dark calling's third pick (allowance 1, 1, 2, 2, 3; 05.2.4) has a
+# candidate, exactly as each positive pole's tier-5 ability serves a vow. Budgeted at tier 5 like the positive set.
+ab('ab.no_quarter', 'No Quarter', 'deed.influence.intimidation.threat', 5, 'dark_mercy_c', 'Form', 'rider',
+   'Give no quarter and let every foe know it.',
+   'Applies to yourself until the scene ends.',
+   [rk("Enter the No Quarter stance for the scene: your Strikes against a bloodied, prone or frightened foe deal harm one severity rung heavier and hold an Amplifying lever; each foe you defeat ticks its side's morale clock by 1 more; and you cannot be frightened.",
+       [stance('no quarter', [sev(1, 'your Strikes against a bloodied, prone or frightened foe'), lev('amplifying', 'your Strikes against a bloodied, prone or frightened foe', 'scene', verbs=['verb.strike']), tick("the defeated foe's side's morale clock", 1), immune(['cond.frightened'])])], f=1)],
+   slot='slot.stance', verbs=['any'], wk=1,
+   weak=("While in the stance you cannot accept a Yield: a foe that yields to you is refused and fights on (06.11.7), and its side's morale clock does not tick for it.", restr({'methods': ['accepting a Yield offered to you']}, 'self', 'scene')),
+   conduct=c('mercy', NEG), x=[('sparing one foe this scene', 'end the stance first; it ends with the scene'), ('the mindless', 'they have no morale clock to tick')],
+   basis=['I-007', 'DL-05-33'])
+
+ab('ab.web_of_lies', 'Web of Lies', 'deed.guile.deception.con', 5, 'dark_honesty_c', 'Working', 'beat',
+   'Bind many minds to one story you made.',
+   'Applies to up to four listeners who hear you, about events they did not see.',
+   [rk("Tell up to four listeners one story of events they did not see (Talk, Presence, against the highest Wits defense among them). On a success it is recorded as believed by each until they meet proof against it; each one's standing toward you is recorded one step warmer for the scene; your Talk beats built on the story hold a Precision lever and are framed one stakes rung lower this scene.",
+       [perm(4), fact('each listener', 'believes', 'the stated story'), tgt(3), fact('each listener', 'standing_to_pc', 'one step warmer this scene'), lev('precision', 'Talk beats built on the story', 'scene', verbs=['verb.talk']), stakes('Talk beats built on the story')], f=2, per='scene_end')],
+   attr='presence', check=('aimed', 'verb.talk', "the highest Wits defense among the listeners"), conduct=c('honesty', NEG), dictates=True,
+   x=[('a listener who saw the event otherwise', 'G4 for that listener (15: known false)'), ('a written record', 'forgery: deed.guile.disguise.forgery')],
+   basis=['I-007', 'DL-05-33'])
+
+ab('ab.last_embrace', 'The Last Embrace', 'deed.guile.ambush.assassination', 5, 'dark_loyalty_c', 'Working', 'beat',
+   'Kill with the closeness that trust allowed.',
+   'Applies to a Strike against one being engaged with you whose standing toward you is Warm or better, or who fights on your side, and who has not seen you turn.',
+   [rk("Strike one who trusts you, before they see you turn (aimed against their Guard, with a Precision lever). On a hit the harm is your weapon's two severity rungs heavier and they are dazed until the end of their next turn; up to two of their allies within band.near who see it are distracted until the end of their next turn; and the betrayal is recorded.",
+       [harmw(2, 'the target'), lev('precision', 'this Strike'), cond('cond.dazed', 1, 'rounds:1', 'the target'), cond('cond.distracted', 1, 'rounds:1', "each ally of the target within band.near who sees it"), tgt(2), fact('the target', 'betrayed_by', 'pc')], f=2, per='scene_end')],
+   lim=1, check=('aimed', 'verb.strike', "the target's Guard"), conduct=c('loyalty', NEG), traits=['trait.action.attack'],
+   x=[('a declared foe', 'ab.backstab'), ('one who has already seen you turn this scene', 'they are a foe now: verb.strike')],
+   basis=['I-007', 'DL-05-33'])
+
+ab('ab.hoard_heart', 'Hoard-Heart', 'deed.guile.thievery.pickpocketing', 5, 'dark_generosity_c', 'Reserve', 'trigger',
+   'Draw strength from what you have taken.',
+   'Applies when you take an object of value from another being by stealth, snatch or threat.',
+   [rk("When you take something of value from another being, regain 2 Focus; you hold a Protective lever on your beats until the scene ends and an Amplifying lever on your next beat; and the thing is recorded as yours.",
+       [foc(2), lev('protective', 'your beats', 'scene'), lev('amplifying', 'your next beat'), fact('the object', 'owner', 'pc')], per='rest_long')],
+   hook='on_fact_set', when='an object of value passes from another being to you by stealth, snatch or threat', conduct=c('generosity', NEG),
+   x=[('a gift freely given', 'it gives nothing'), ('an unattended object', 'no one was robbed')],
+   basis=['I-007', 'DL-05-33'])
+
+ab('ab.iron_decree', 'Iron Decree', 'deed.influence.command.discipline', 5, 'dark_justice_c', 'Working', 'beat',
+   'Forbid by your word alone.',
+   'Applies to beings within band.near who hear you and are in your power or of lower station.',
+   [rk("Issue one decree forbidding one act you name. Up to six beings within band.near who hear you and are in your power or of lower station roll Endure (Resolve) against your effect DC: on a failure each cannot do the forbidden act until the scene ends and is frightened of you until the end of its next turn; your Talk beats with them hold a Precision lever this scene.",
+       [fchk('endure'), restr({'methods': ['the forbidden act']}, 'each being that fails', 'scene'), tgt(5), cond('cond.frightened', 1, 'rounds:1', 'each being that fails'), lev('precision', 'your Talk beats with them', 'scene', verbs=['verb.talk'])], f=2, per='scene_end')],
+   check=('resisted', 'endure', 'resolve'), conduct=c('justice', NEG), dictates=True, traits=['trait.nature.mental', 'trait.action.speech'],
+   x=[('an equal or a superior', 'verb.talk; ab.heavy_hand does not reach them either'), ('an act that would plainly kill the one forbidden', 'they do it anyway or fail the decree outright: the decree forbids, it does not compel')],
+   basis=['I-007', 'DL-05-33'])
+
+ab('ab.peerless', 'Peerless', 'deed.martial.tactics.single_combat', 5, 'dark_humility_c', 'Form', 'rider',
+   'Stand alone against the strongest and suffer no rival.',
+   'Applies to yourself, against a foe at or above your band that no ally of yours is engaged with.',
+   [rk("Enter the Peerless stance for the scene: against a foe at or above your band that you face alone, you gain +1 Guard and your Strikes deal +2 harm; and you cannot be frightened or charmed.",
+       [stance('peerless', [dedge(1, 'agility', 'the attacker is at or above your band and no ally of yours is engaged with it'), hedge(2, 'your Strikes against that foe'), immune(['cond.frightened', 'cond.charmed'])])], f=1)],
+   slot='slot.stance', verbs=['any'], lim=1, conduct=c('humility', NEG),
+   x=[('a foe an ally is also fighting', 'the stance gives nothing against it'), ('accepting Help', 'you may; the stance gives nothing on that beat')],
+   basis=['I-007', 'DL-05-33'])
+
+ab('ab.wrath_unbound', 'Wrath Unbound', 'deed.martial.axe.great', 5, 'dark_restraint_c', 'Form', 'rider',
+   'Burn the body to keep the fury going.',
+   'Applies to yourself until the conflict ends.',
+   [rk("Enter the Wrath Unbound stance until the conflict ends: your Strikes deal harm one severity rung heavier, +1; you ignore status penalties from wounds; physical harm you take is reduced by 1; and you cannot be frightened.",
+       [stance('wrath unbound', [sev(1, 'your Strikes'), hedge(1, 'your Strikes'), waive('status penalties from wounds (07.2.5)', 'you hold the stance'), red(1, ['harm.physical']), immune(['cond.frightened'])])], f=2)],
+   slot='slot.stance', verbs=['any'], wk=1,
+   weak=("While in the stance you cannot Retreat or Yield, and when the conflict ends you are exhausted until your next long rest.", cond('cond.exhausted', 1, 'until_rest:rest_long', 'self')),
+   conduct=c('restraint', NEG), x=[('ending the stance by choice', 'it ends with the conflict'), ('a fight you mean to leave', 'do not enter it')],
+   basis=['I-007', 'DL-05-33'])
+
+ab('ab.unhallow', 'Unhallow', 'deed.lore.religion.profane', 5, 'dark_piety_c', 'Working', 'beat',
+   'Turn a holy place against what made it holy.',
+   'Applies to a sacred place or the ground within band.near of you, for a day.',
+   [rk("Unhallow the ground within band.near of you until the next dawn (roll against the place's stored effect DC, or Hard). On a success every sacred effect on it ends; it is recorded as desecrated; divine workings cast on it take -2; you learn which keeper it was sacred to; and each divine caster on it is distracted until the end of their next turn.",
+       [endw('every effect with trait.nature.sacred on the ground'), fact('the ground', 'desecrated', True), ({'effect_id': 'eff.status_modifier', 'params': {'amount': -2, 'applies_when': 'a divine working is cast on the unhallowed ground, until the next dawn'}}, 2), rev('the keeper to whom the place was sacred'), cond('cond.distracted', 1, 'rounds:1', 'each divine caster on the ground'), tgt(2), lev('protective', 'your beats on the unhallowed ground', 'scene')], f=2, per='rest_long')],
+   attr='resolve', check=('aimed', 'verb.handle', "the place's stored effect DC, or obstacle tier hard"), conduct=c('piety', NEG), traits=['trait.nature.profane', 'trait.sense.visible'],
+   x=[('a keeper itself', 'canon_impossible'), ('a lasting desecration beyond the day', 'a designed rite (05.8.4)')],
+   basis=['I-007', 'DL-05-33'])
+
+ab('ab.cold_calculus', 'The Cold Calculus', 'deed.guile.escape.evasion', 5, 'dark_protection_c', 'Reaction', 'reaction',
+   'Spend another life to keep your own.',
+   'Applies to a hit that would bring you to 0 Vitality while another being is within band.close of you.',
+   [rk("When a hit would bring you to 0 Vitality, turn it onto any other being within band.close; move up to two bands away; gain flag.hidden against the attacker until the end of your next turn; regain 1 Focus; your next beat holds a Precision lever; and you hold a Protective lever on your beats until the scene ends.",
+       [({'effect_id': 'eff.intercept', 'params': {'new_target': 'any other being within band.close of you, your choice', 'applies_when': 'a hit would bring you to 0 Vitality'}}, 4), move('self', 2, add=['flag.hidden']), foc(1), lev('precision', 'your next beat'), lev('protective', 'your beats', 'scene')], f=2, per='rest_long')],
+   hook='on_hit_taken', when='the hit would bring you to 0 Vitality and another being is within band.close', conduct=c('protection', NEG),
+   x=[('an area effect', 'verb.evade'), ('a hit that would not drop you', 'ab.human_shield')],
+   basis=['I-007', 'DL-05-33'])

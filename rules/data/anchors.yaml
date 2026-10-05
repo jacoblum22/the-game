@@ -18,21 +18,21 @@ compiled_from:
 - file: 01-resolution.md
   sha256_16: 7f9932b36d24ca2a
 - file: 02-character.md
-  sha256_16: 33ab6f28c1aadfe2
+  sha256_16: a1dc2ad3e059e2f4
 - file: 03-tags-and-evidence.md
-  sha256_16: 1841052731073a9e
+  sha256_16: 45ae52964a530ea2
 - file: 04-recognition-and-growth.md
-  sha256_16: 6328bfdf77658284
+  sha256_16: fb2d0923d7d88f16
 - file: 05-abilities-focus-magic.md
-  sha256_16: c6f1aaa4feda016c
+  sha256_16: cce40551e6db4657
 - file: 06-conflict.md
-  sha256_16: 989d7382788d7cc7
+  sha256_16: dc4b3cc197b2b018
 - file: 07-harm-recovery-death.md
   sha256_16: b7ab5d5d36991b8b
 - file: 08-items-loot-crafting.md
-  sha256_16: 71648221846b64a9
+  sha256_16: b837a684c9b38e47
 - file: 09-adversaries.md
-  sha256_16: efd8115b937e46e5
+  sha256_16: 4f931b027624257a
 - file: 10-exploration-travel-sites.md
   sha256_16: fd93b21e5153b59d
 - file: 11-living-world.md
@@ -42,7 +42,7 @@ compiled_from:
 - file: 13-starter-setting.md
   sha256_16: 70b23fd86ab0347d
 - file: 15-social-investigation-downtime.md
-  sha256_16: 0ba8b5fef2fea29a
+  sha256_16: b470d8d7745c4bb9
 - file: 16-companions-and-allies.md
   sha256_16: de6c0d99a474dad8
 compiled_at: integration (Wave 3 -> 4)

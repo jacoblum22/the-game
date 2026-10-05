@@ -1249,8 +1249,13 @@ tier-3 specialist with no Focus wins 99.7% against that foe, a broad-calling fig
 is 06.4.5 (mastery), the three-action economy against the adversary's two, and Fend. A Spent caster
 remains nearly helpless in melee against an elite, which is the correct picture of that character and
 is answered by the exits (Defend, Withdraw, Retreat, a chase: 70% from `band.near`) and by keeping a
-last point of Focus; this chapter recommends, and asks of 05, one zero-cost attack working per magic
-branch at Moderate severity so that "Spent" is weak, not weaponless (Interface requests).
+last point of Focus; this chapter recommended, and asked of 05, one zero-cost attack working per magic
+branch at Moderate severity so that "Spent" is weak, not weaponless (Interface requests). **Done
+(revision I-009):** 05.7.11's branch workings (Force Bolt, Rebuke, Wild Lash) cost no Focus and one
+action, and their severity follows the casting school's grade as a weapon's follows mastery (06.4.5).
+Simulation J (`06-conflict-sim.py`): a Spent tier-3 caster now beats one T3 80.7–91.0% (74.5–86.8% when
+it Fends), a new caster beats one T2 92.8–93.6%, and at every band the working stays below the
+no-Focus specialist (P4 11–48% against 87%, P5 7–30% against 80%).
 
 **T-06-13 The advisory matrix** is in Tables. It is this chapter's contract with chapter 09
 (00.17.1 Q5): `threat_advisory` should return the cell's word for the encounter's shape, read one row
@@ -2335,7 +2340,8 @@ and `yielded` manners on `on_defeat` (06.11.5).
 **To 05.** (a) Map `eff.05.spell_delivery` forms to shapes: `line` → `pierce`, `burst` → `burst`,
 `cone` → `cone` (the sixth shape here; cap 4), `chain` → `chain`, `zone` → `linger`. (b) One zero-cost
 attack working per magic branch (Moderate harm, `band.near`, at will) so a Spent caster keeps a
-baseline (06.10.6). (c) `ab.shield_block` and similar claim `slot.defense_reaction` at rank 10+ and so
+baseline (06.10.6). **Met** by 05.7.11 (revision I-009); an aimed working is not a "shot", so 06.4.7's
+crowded snag does not apply to it. (c) `ab.shield_block` and similar claim `slot.defense_reaction` at rank 10+ and so
 replace Fend (06.6.4): their texts should say "in place of Fend". (d) `ab.finishing_stroke` and
 `ab.throat_of_night` deal S5: as PC abilities they need no windup; if an **adversary** holds them
 (09), 06.9.5 applies. (e) Mastery (06.4.5) reads the training license grade; riders that add "one rung

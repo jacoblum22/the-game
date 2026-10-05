@@ -904,7 +904,7 @@ archetypes:
   gear: [bi.sword, bi.leather, bi.dagger, bi.shortbow]
   purse: band
   harvest: default (materials.yaml source_tags)
-  absorbable: {pool: none, reason: 'gen_absorb no_pool: creature.folk (learned arts, not natural powers)'}
+  absorbable: {pool: none, reason: 'gen_absorb no_pool: the human-like folk (learned arts, not natural powers)'}
   lore: {deed_tag: deed.lore.bestiary, rarity: common}
   encounter:
     terrain: [terrain.road, terrain.forest, terrain.highland]
@@ -984,7 +984,7 @@ archetypes:
   gear: [bi.spear, bi.mail, bi.round_shield, bi.light_crossbow]
   purse: band
   harvest: default (materials.yaml source_tags)
-  absorbable: {pool: none, reason: 'gen_absorb no_pool: creature.folk (learned arts, not natural powers)'}
+  absorbable: {pool: none, reason: 'gen_absorb no_pool: the human-like folk (learned arts, not natural powers)'}
   lore: {deed_tag: deed.lore.bestiary, rarity: common}
   encounter:
     terrain: [terrain.settlement, terrain.road]
@@ -1065,7 +1065,7 @@ archetypes:
   gear: [bi.sword, bi.plate, bi.kite_shield, bi.lance]
   purse: band
   harvest: default (materials.yaml source_tags)
-  absorbable: {pool: none, reason: 'gen_absorb no_pool: creature.folk (learned arts, not natural powers)'}
+  absorbable: {pool: none, reason: 'gen_absorb no_pool: the human-like folk (learned arts, not natural powers)'}
   lore: {deed_tag: deed.lore.bestiary, rarity: common}
   encounter:
     terrain: [terrain.road, terrain.settlement, terrain.plains]
@@ -1146,7 +1146,7 @@ archetypes:
   gear: [bi.dagger, bi.padded]
   purse: band
   harvest: default (materials.yaml source_tags)
-  absorbable: {pool: none, reason: 'gen_absorb no_pool: creature.folk (learned arts, not natural powers)'}
+  absorbable: {pool: none, reason: 'gen_absorb no_pool: the human-like folk (learned arts, not natural powers)'}
   lore: {deed_tag: deed.lore.bestiary, rarity: common}
   encounter:
     terrain: [terrain.underground, terrain.ruin, terrain.settlement]
@@ -1226,7 +1226,7 @@ archetypes:
   gear: [bi.staff, bi.dagger]
   purse: band
   harvest: default (materials.yaml source_tags)
-  absorbable: {pool: none, reason: 'gen_absorb no_pool: creature.folk (learned arts, not natural powers)'}
+  absorbable: {pool: none, reason: 'gen_absorb no_pool: the human-like folk (learned arts, not natural powers)'}
   lore: {deed_tag: deed.lore.bestiary, rarity: common}
   encounter:
     terrain: [terrain.settlement, terrain.ruin, terrain.forest]
@@ -1306,7 +1306,7 @@ archetypes:
   gear: [bi.longbow, bi.dagger, bi.leather]
   purse: band
   harvest: default (materials.yaml source_tags)
-  absorbable: {pool: none, reason: 'gen_absorb no_pool: creature.folk (learned arts, not natural powers)'}
+  absorbable: {pool: none, reason: 'gen_absorb no_pool: the human-like folk (learned arts, not natural powers)'}
   lore: {deed_tag: deed.lore.bestiary, rarity: common}
   encounter:
     terrain: [terrain.forest]
@@ -1385,7 +1385,7 @@ archetypes:
   gear: [bi.battle_axe, bi.plate, bi.round_shield]
   purse: band
   harvest: default (materials.yaml source_tags)
-  absorbable: {pool: none, reason: 'gen_absorb no_pool: creature.folk (learned arts, not natural powers)'}
+  absorbable: {pool: none, reason: 'gen_absorb no_pool: the human-like folk (learned arts, not natural powers)'}
   lore: {deed_tag: deed.lore.bestiary, rarity: common}
   encounter:
     terrain: [terrain.underground, terrain.highland.mountains]
@@ -1465,7 +1465,7 @@ archetypes:
   gear: [bi.battle_axe, bi.hide, bi.round_shield, bi.javelin]
   purse: band
   harvest: default (materials.yaml source_tags)
-  absorbable: {pool: none, reason: 'gen_absorb no_pool: creature.folk (learned arts, not natural powers)'}
+  absorbable: {pool: none, reason: 'gen_absorb no_pool: the human-like folk (learned arts, not natural powers)'}
   lore: {deed_tag: deed.lore.bestiary, rarity: common}
   encounter:
     terrain: [terrain.plains, terrain.highland, terrain.arid]
@@ -1544,7 +1544,7 @@ archetypes:
   gear: [bi.knife, bi.sling, bi.padded]
   purse: band
   harvest: default (materials.yaml source_tags)
-  absorbable: {pool: none, reason: 'gen_absorb no_pool: creature.folk (learned arts, not natural powers)'}
+  absorbable: {pool: none, reason: 'gen_absorb no_pool: the human-like folk (learned arts, not natural powers)'}
   lore: {deed_tag: deed.lore.bestiary, rarity: common}
   encounter:
     terrain: [terrain.underground, terrain.forest, terrain.ruin]
@@ -1626,9 +1626,9 @@ archetypes:
   harvest: default (materials.yaml source_tags)
   absorbable:
     pool_gate_tags: *id011
-    eligible: []
+    eligible: [ab.abs_predators_nose]
     cannot_absorb: []
-    no_pool_exception: giant-kin and beastfolk carry natural powers (interface request to 04)
+    natural_folk: 'giant-kin and beastfolk carry natural powers: gen_absorb''s no_pool covers only the human-like folk (I-020)'
   lore: {deed_tag: deed.lore.bestiary, rarity: common}
   encounter:
     terrain: [terrain.plains, terrain.arid]
@@ -1709,9 +1709,9 @@ archetypes:
   harvest: default (materials.yaml source_tags)
   absorbable:
     pool_gate_tags: *id012
-    eligible: []
+    eligible: [ab.abs_gills, ab.abs_scale_ward]
     cannot_absorb: []
-    no_pool_exception: giant-kin and beastfolk carry natural powers (interface request to 04)
+    natural_folk: 'giant-kin and beastfolk carry natural powers: gen_absorb''s no_pool covers only the human-like folk (I-020)'
   lore: {deed_tag: deed.lore.bestiary, rarity: common}
   encounter:
     terrain: [terrain.wetland]
@@ -1794,7 +1794,7 @@ archetypes:
     pool_gate_tags: *id013
     eligible: [ab.abs_stone_grip]
     cannot_absorb: []
-    no_pool_exception: giant-kin and beastfolk carry natural powers (interface request to 04)
+    natural_folk: 'giant-kin and beastfolk carry natural powers: gen_absorb''s no_pool covers only the human-like folk (I-020)'
   lore: {deed_tag: deed.lore.bestiary, rarity: common}
   encounter:
     terrain: [terrain.highland.hills, terrain.forest, terrain.road]
@@ -1882,7 +1882,7 @@ archetypes:
     eligible: [ab.abs_stone_grip]
     cannot_absorb: []
     signature: ab.abs_stone_grip
-    no_pool_exception: giant-kin and beastfolk carry natural powers (interface request to 04)
+    natural_folk: 'giant-kin and beastfolk carry natural powers: gen_absorb''s no_pool covers only the human-like folk (I-020)'
   lore: {deed_tag: deed.lore.bestiary, rarity: common}
   encounter:
     terrain: [terrain.highland, terrain.forest.deepwood, terrain.underground]
@@ -1967,7 +1967,7 @@ archetypes:
     eligible: [ab.abs_stone_grip]
     cannot_absorb: []
     signature: ab.abs_stone_grip
-    no_pool_exception: giant-kin and beastfolk carry natural powers (interface request to 04)
+    natural_folk: 'giant-kin and beastfolk carry natural powers: gen_absorb''s no_pool covers only the human-like folk (I-020)'
   lore: {deed_tag: deed.lore.bestiary, rarity: common}
   encounter:
     terrain: [terrain.highland.mountains, terrain.frozen]

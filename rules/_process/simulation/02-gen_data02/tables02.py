@@ -1,10 +1,12 @@
 # tables02.py -- renders the data-derived tables of chapter 02 as markdown (so no number is transcribed by hand)
+import os as _os
+_RULES = _os.environ.get('GAME_RULES', _os.path.normpath(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)), '..', '..', '..')))
 import sys, os, re, itertools
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 from data02 import *
 import yaml
-D = r"C:\Users\jacob\the-game\rules\data"
+D = _os.path.join(_RULES, 'data')
 LIC = yaml.safe_load(open(os.path.join(D, "..", "_process", "merged-contrib", "licenses.02.yaml"), encoding="utf-8"))["blocks"][0]["entries"]
 LN = {l["id"]: l["name"] for l in LIC}
 AB = {}
@@ -92,13 +94,20 @@ r = ["| Livelihood (priority) | " + " | ".join(p["name"] for p in PEOPLES) + " |
 for t in TRADES:
     cells = []
     for p in PEOPLES:
-        typ = bool(p["floors"])
-        cells.append(code(default_placement((SHAPES_TYPICAL if typ else SHAPES_FREE)["peaked"], p["floors"], p["fixed"], t["priority"])))
+        ca = (t.get("magic") or {}).get("casting_attribute")
+        typ = bool(p["floors"]) and not (ca and p["fixed"].get(ca, 0) < 0)   # 02.3.5 caster exception (I-009)
+        cell = code(default_placement((SHAPES_TYPICAL if typ else SHAPES_FREE)["peaked"], p["floors"] if typ else {}, p["fixed"] if typ else {}, t["priority"]))
+        cells.append(cell + ("†" if bool(p["floors"]) and not typ else ""))
     r.append("| %s (%s) | %s |" % (t["name"], " ".join(x[:3].capitalize() for x in t["priority"]), " | ".join(cells)))
 out["T-02-6"] = "\n".join(r)
 # ---- T-02-7 gifts
 r = ["| Gift | School (innate license, competence +2) | First working (rank 1, acquired partition) | Its literal text | Focus |", "|---|---|---|---|---|"]
 for s, nm, ab, txt in GIFTS:
+    if isinstance(ab, dict):   # the spark: one working per element (revision I-015)
+        for el, x in ab.items():
+            a = AB[x]
+            r.append("| **%s** (%s) | `deed.primal.%s` | *%s* (`%s`) | %s | %s |" % (nm, el, s, a["name"], x, a["scope"], a["cost"]["focus"] if a.get("cost") else 0))
+        continue
     a = AB[ab]
     r.append("| **%s** | `deed.primal.%s` | *%s* (`%s`) | %s | %s |" % (nm, s, a["name"], ab, a["scope"], a["cost"]["focus"] if a.get("cost") else 0))
 out["T-02-7"] = "\n".join(r)

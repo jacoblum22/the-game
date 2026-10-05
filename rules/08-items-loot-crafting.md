@@ -710,7 +710,7 @@ circumstance, degree)` with the parent call's source and circumstance:
 - **The pool is not authored anew.** It is ch.04's **absorbed natural powers** (the active entries of
   `gen_absorb.yaml`, gated on creature tags: a beast's trophy holds a beast's power) and ch.05's **calling
   techniques** (every active `calling` ability without a conduct requirement, gated on its first deed tag);
-  159 entries in `gen_item_ability.yaml#pool`. A source with no deed tags of its own reaches techniques
+  162 entries in `gen_item_ability.yaml#pool` (159 before revision A added three primal element workings). A source with no deed tags of its own reaches techniques
   through `source_to_deed` (a fire elemental → `deed.arcane.fire`, `deed.primal.elements`; an order of
   hunters → `deed.wilds`, `deed.martial.archery`). Never in the pool: oath-gated or conduct-gated
   abilities, `adversary_only` entries, passive abilities (an item passive is a property), and any ability
@@ -978,6 +978,19 @@ trained smith cannot attempt a wondrous blade: its DC is above what the license 
 master's workshop (+9) 74%; an expert (+10 to +12) 85–90%. A wondrous work at an expert's +11 completes 33%
 (57% with a recipe); a master's +13, 62% (81%). Fine work is safe from +5 (89%), common work always. Masterwork
 is "Hard: challenges a practiced professional" (T-00-5) and the numbers say so [R4 §9 08 #5 "crafting as an extended task (clock)"; 05.8.2; DL-08-16].
+6. **A project is a craft contest** `[revision: I-003]` (03.4.3). Each step's `challenge_band` is at least
+   the work's **type-tier** (08.6.1), so a wondrous blade of dragon steel is a band-5 deed though its steps are
+   Very hard, the highest DC a work sets. A step on a work whose material set includes an **irreplaceable
+   material** (rarity band 4, or a harvested part that carries a named source's provenance) is framed
+   **Dire**, and its `cost.gear` on that material is **ruinous** (03.4.5): the steel cannot be bought again.
+   A step taken while the spoilage clock stands one segment from full is **at the brink** (a crisis, 03.4.5).
+   Steps run in the week planner are a montage and yield counted evidence only (15.10.6); the player may
+   instead have the steps of a fine or better work **played as a scene** (15.10.6's "a scene framed inside
+   downtime is play"), and the completing beat of a masterwork or wondrous work is always played: those
+   beats are judged deeds like any other. *Why:* before this, every step was Risky and no work rose above
+   band 4, so a smith's calling could not meet tier 3's crises or tier 5's great deeds at all
+   (`04-recog-parity.py`: tier 3 never reached in 90 sessions; with this rule tier 3 at session 18 and
+   tier 5 at 45, beside the archer's 19 and 51) [DL-08-30].
 
 **08.6.5 Commissioning.** `[D]` An NPC crafter's availability follows the settlement (`economy.yaml#buying`):
 a village has trained crafters (common and fine), a town trained and expert (masterwork), a city expert

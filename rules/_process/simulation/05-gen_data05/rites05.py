@@ -188,7 +188,7 @@ RITES = [
     ('rit.imbue', 'Imbue', 'deed.craft.enchanting.imbuing', 'local', None, 'hours:1',
      [('the item, of at least fine quality', 2), ('a material that gates the property (ch.08)', 2)], 1, None,
      'Seat one magical property in a made thing for a season.',
-     "Seat one property that the materials gate (ch.08's gen.craft pool, fill method recipe) in an item of fine quality or better, for a season. Made lasting, it is a crafting project of 08's with this rite as its final step.",
+     "Seat one property that the materials gate (ch.08's gen.craft pool, fill method recipe) in an item of fine quality or better, for a season. Made lasting, it is a crafting project of 08's with this rite as its final step, and the property is the item's one worked property (08.6.10, one per item, ever).",
      [('a property the materials do not gate', 'ch.08: materials gate the pool'), ('an imbuer with no magic training license of the property\'s branch', 'G3')],
      [E('eff.write_fact', subject='the item', predicate='holds_property', value='the named property, until the next season boundary (08 generates it by recipe)')],
      ['cost.gear', 'cost.time', 'cost.drain'], False, 'attribute Intellect; its miscast is the branch of the property seated'),

@@ -221,7 +221,8 @@ session 5 (median); one who does so now and then (03's honest baseline) at sessi
 **04.2.6 Variants.** `[D]` A **variant** shares a level-2 calling's key and adds one requirement of a
 different kind: Delve's shape of one primary with different secondaries [R3 04.1]. Two exist. **Monk**
 (`variant_of: call.brawler`): the Brawler's requirement plus `conduct(conduct.restraint).net ≥ 8` with no
-strain. **Devourer** (`variant_of: call.bestiarist`): the Bestiarist's requirement plus a hunter's record
+strain. Its pool gate adds `conduct.restraint` at the positive pole (`pole: positive`), so its picks may
+take the restraint vow's abilities (04.8.4) [revision: I-007; DL-04-25]. **Devourer** (`variant_of: call.bestiarist`): the Bestiarist's requirement plus a hunter's record
 (at least 5 distinct non-folk opponent kinds, counted defeats ≥ 20 at the root, and one crisis against a
 non-folk creature); it is offered only by V13 and is the gate of 04.10. A variant and its base share one
 lineage (04.8.3): holding one, the other arrives as a fork [DL-04-06].
@@ -306,10 +307,13 @@ points at a node (03.5.2), so 80 already needs three scenes; five makes it a pat
 **04.3.3 The counted requirement.** `[D]` Counted = the weighted threshold ÷ 10, rounded down, at every tier
 (8, 20, 44, 80, 130 for a narrow calling). Any counter of 03.7.2 credited at the key's node counts.
 `cnt.training` units (a completed week of downtime training, 03.5.5) count toward **at most half** of it: a
-mentor speeds recognition up and never substitutes for deeds [R6 A-27]. In simulation the counted tally ran
-at 15–21% of the weighted tally (combat 0.21, burglary 0.19, negotiation 0.15; T-04-8 R9), so a tenth binds
-only play that yields less than about half the modelled outcomes: the case of judged evidence with nothing
-behind it. The yields are an estimate until measured in live play (OEQ-04-2) [DL-04-09].
+mentor speeds recognition up and never substitutes for deeds [R6 A-27]. **Measured** `[revision: I-004]`:
+on chapter 06's conflict engine with 03's rules applied to every beat, defeat and push (`03-counted-yield.py`)
+a fighter's counted share at the weapon node is 0.11 / 0.15 / 0.22 / 0.23 / 0.33 at bands 1–5 without Focus
+and 0.26–0.44 when pushing; the social, craft and lore contests run 0.31 / 0.76 / 0.31 (T-04-8 R12). A tenth
+therefore binds only judged evidence with nothing behind it, and one corner of honest play: a band-1 fighter
+who meets nothing but mobs and never spends Focus needs one fight more than the weighted line already asks
+(9 instead of 8). The divisor stays at 10 (OEQ-04-2) [DL-04-09; DL-04-27].
 
 **04.3.4 Deepening (tiers 2–5): a different kind of evidence each time.** `[D]` A higher tier needs the
 cumulative weighted and counted totals of its ladder **and** a set of things done **since the last
@@ -323,7 +327,8 @@ crystallization**. Each tier asks for a kind of evidence that repetition cannot 
 | 5 Paragon | 975 / 1,300 / 1,950 / 975 | 22 · 14 | 4 at band 5 | 4 | 5 | done at the edge of what mortals can do |
 
 A **great deed** is a settled deed at the key whose `challenge_band` (03.4.3: the obstacle's absolute rung,
-DC 13–17 is band 2 … DC ≥ 28 is band 5) is at least the number of the tier being entered; at least one of the
+DC 13–17 is band 2 … DC ≥ 28 is band 5; in a conflict the fight's advisory band; in a social, craft or lore
+**contest** the opposing party's or the work's band) is at least the number of the tier being entered; at least one of the
 required deeds must be a success. The band is tied to **this calling's** tier and not to `power_band`, so a
 second calling deepens on its own merits (a Paragon archer's new Tracker calling needs band-2 deeds for tier
 2, not band-5 ones). For a hybrid the since-fields are summed over both branches, with at least one great
@@ -342,13 +347,31 @@ p10 / median / p90; T-04-8 R1–R4):
 | Archer who scouts (03's scenario A), key `martial.archery` | 3 / **4** / 5 | 7 / **9** / 11 | 16 / **19** / 22 | 31 / **34** / 38 | 52 / **56** / — (165 of 200 within 60) |
 | Swordsman who fights in 70% of scenes | 2 / 2 / 3 | 5 / 6 / 7 | 11 / 12 / 13 | 19 / 21 / 23 | 32 / 35 / 37 |
 | Burglar, key `guile.thievery` | 3 / 4 / 5 | 8 / 10 / 11 | 18 / 21 / 29 | 32 / 35 / 40 | 53 / 59 / — |
-| Envoy, key `influence.persuasion` | 4 / 5 / 7 | 9 / 12 / 14 | 23 / 28 / 48 | 44 / 49 / — | not within 60 |
+| Envoy, key `influence.persuasion` (before revision A; see below) | 4 / 5 / 7 | 9 / 12 / 14 | 23 / 28 / 48 | 44 / 49 / — | not within 60 |
 | Mixed-weapons Warrior (broad) | 3 / 3 / 4 | 7 / 8 / 9 | 14 / 15 / 17 | 26 / 29 / 31 | 46 / 49 / 52 |
 | Deliberate 50/50 hybrid | 2 / 3 / 4 | 5 / 6 / 8 | 11 / 13 / 14 | 21 / 23 / 25 | 36 / 39 / 42 |
 | Lockbreaker (fine key) under the burglar | 3 / 4 / 6 | 8 / 10 / 12 | 18 / 22 / 37 | 34 / 38 / 46 | 58 / — / — |
 
 A whole character with every key live and three seats held three callings by session 10 if every offer was
 accepted, with the highest tier at sessions 10 / 20 / 40 / 60 at 2 / 3 / 4 / 5 (archer) (T-04-8 R6).
+
+**Non-combat parity** `[revision: I-003]`. The envoy's lag above came from the evidence rules: a social,
+craft or lore deed could not be rated by what it faced, a crafting step was never Dire, and nothing outside
+a fight was ever as grave as a lethal frame. 03.4.3's **contest band**, 03.4.5's **ruinous** and **brink**
+crises, 15.3.11, 15.9.20 and 08.6.4 (item 6) close that gap. `04-recog-parity.py` gives every pillar the
+same play shape (55% of scenes in one's own pillar, 3–6 beats, a quarter of them Dire; conflicts at the
+advisory offsets of DL-00-05; 200 seeds, 90 sessions) and compares (median sessions; T-04-8 R11):
+
+| Calling (key) | Tier 3 | vs archer | Tier 5 | vs archer |
+|---|---|---|---|---|
+| Archer `martial.archery` (combat) | 19 | — | 51 | — |
+| Envoy `influence.persuasion` | 18 | −5% | 46 | −10% |
+| Smith `craft.smithing` | 18 | −5% | 45 | −12% |
+| Scholar `lore.history` | 17 | −11% | 46 | −10% |
+| *the smith under the earlier rules* | *never* | | *never* | |
+
+All three are within ±20% of the combat calling at both tiers. With 04's thinner social shape (2–4 beats,
+15% Dire) the envoy reaches tier 3 at 20 and tier 5 at 54 [DL-03-26; DL-04-28].
 
 ### 04.4 Confidence and the three-valued policy
 
@@ -1203,8 +1226,13 @@ restraint); it turns to the Pitiless.
 
 **04.10.5 The pool.** `[D]` `gen_absorb.yaml#pool` holds 27 powers gated by creature tags (beast, undead,
 spirit, fiend, construct, elemental, dragon, horror), each a short list of core effects by tier, with literal
-positive-scoped text. `creature.folk` has no pool: what folk can do is learned, and is learned by emulation
-(ch.05). Ch.09 names each archetype's signature entry and any `cannot_absorb` exclusions [DL-04-21].
+positive-scoped text. The **human-like folk** (human, elf, dwarf, halfling, orc, goblin; `no_pool`) have no
+pool: what they can do is learned, and is learned by emulation (ch.05). Giant-kin and beastfolk carry
+natural powers and are gated like any creature (a troll's or giant's Stone Grip; a gnoll's or ratfolk's
+Predator's Nose; a lizardfolk's Gills and Scale Ward). Ch.09 names each archetype's signature entry and any
+`cannot_absorb` exclusions; each named entry records the archetypes that name it in `signature_of` (25
+entries, 46 archetypes), which the decisive fill and `gen.item_ability` read, and ch.09's generator fails if
+the two disagree [revision: I-020; DL-04-21; DL-04-26].
 
 ### 04.11 Ranks, teachers and endings
 
@@ -1445,6 +1473,8 @@ copied with full output to `rules/_process/simulation/`. 200 seeds unless noted;
 | R7 | Calibration of confidence (1,723 level-2 candidates, nothing accepted) | would be confirmed, by score 0–5: 37, 59, 64, 73, 91, 97 in 100. By policy: grant 91, offer 74, abstain 38 in 100. A designed pillar of the play style: grant 98, offer 74, abstain 22 in 100 |
 | R8 | A tier-2 grant, then a turn to fire sorcery | tier 2 lapsed in 181 of 199 runs when the archer stopped at once; 65 of 199 after one more session of archery; 9 of 199 after two; 0 of 199 when she never stopped. The new calling was first recognized 2 / 3 / 5 sessions after the turn |
 | R9 | Counted against weighted at a focus node, session 10 | archery 50 vs 237 (0.21) · thievery 42 vs 220 (0.19) · persuasion 27 vs 176 (0.15) |
+| R11 | Non-combat parity (`04-recog-parity.py`, revision I-003) | medians to tier 3 / 5: archer 19 / 51; envoy 18 / 46; smith 18 / 45; scholar 17 / 46 (earlier rules: smith never past tier 2) |
+| R12 | Counted share measured (`03-counted-yield.py` on 06's engine; parity R9; revision I-004) | fighter bands 1–5: 0.11 / 0.15 / 0.22 / 0.23 / 0.33 without Focus, 0.26–0.44 pushing; contests: social 0.31, craft 0.76, lore 0.31 (medians) |
 | R10 | Sessions for one conduct axis to reach 16 / 40 / 80 / 140 / 220 positive points | costly choice taken in 60% of fights: 5 / 12 / 24 / 42 / 65 (medians) · in 30%: 10 / 24 / 47 / 83 / — · in 15%: 18 / 48 / — / — / — |
 | Wren | One continuous character, seed 7 | the long example WE-04-1 |
 
@@ -1912,9 +1942,11 @@ so the count does not advance and nothing lapses (03.6.1).
 
 **Tiers, picks and seats**
 - **Fewer than three eligible abilities.** The block shows what there is; with none, the pick is kept
-  (PR-04-5 step 2). The engine never invents an ability and never widens the gate. A dark calling's tier-5 pick
-  is the standing case: ch.05 authored two abilities per negative pole (`min_tier` 1 and 3), so that pick is
-  kept until tier-5 dark abilities exist (issue I-007, 05's revision) [integration: IR ch.05 to 04 (d)].
+  (PR-04-5 step 2). The engine never invents an ability and never widens the gate. No calling meets this
+  case with the shipped pool: every negative pole now has abilities at `min_tier` 1, 3 and 5, so a dark
+  calling's tier-5 pick has its candidate, and `05-ladder-check.py` proves every calling × axis × tier ladder
+  complete under this gate (the Monk's restraint gate needed `pole: positive` to admit its oath's abilities)
+  [revision: I-007; DL-05-33].
 - **An ability picked through one calling when that calling is consolidated or forked.** It stays (04.8.5
   step 4). If its first tag is outside the new calling's pool gate it is kept as **legacy**: usable at the
   rank it had, never ranked up, and the first to be named when a replacement is needed.
@@ -2114,7 +2146,8 @@ log (the Taking's circumstance). Penance uses one S3 cost from 01's menu.
 **To 08.** The Taking's crude fallback is harvesting materials; see item 11 to 00 about relics.
 
 **To 09.** Each archetype: `absorbable {pool_gate_tags, cannot_absorb}`, at most one `signature_of` entry
-among `gen_absorb.yaml#pool`, and a record in the scene log when a creature uses a power (the "witnessed"
+among `gen_absorb.yaml#pool` (09's requests to 04 on `signature_of` and on narrowing `no_pool` are met:
+revision I-020), and a record in the scene log when a creature uses a power (the "witnessed"
 condition). `threat_advisory` consumes `power_band`. The simulation assumed opposition from the PC's band to
 band + 2; encounter budgets that differ will move the pacing of tiers 3–5 (OEQ-04-1).
 
@@ -2156,7 +2189,7 @@ Each has a shipped default and a named test.
 | Id | Question | Default shipped | Named test |
 |---|---|---|---|
 | OEQ-04-1 | Do the thresholds give the intended pacing in real play, where scene mix and opposition differ from the model? | W 80 / 200 / 440 / 800 / 1,300 (narrow) and the other ladders; 04.3 | **T-04-PACE**: log the session of each recognition over three campaigns of 20+ sessions; target tier 1 at sessions 3–6, tier 2 at 8–12, tier 3 at 16–24; if outside, scale every W by one common factor (the since-requirements stay) |
-| OEQ-04-2 | What do the counters actually yield, by pillar? | counted = W ÷ 10 (04.3.3) | **T-04-COUNT** (with 03's T-03-COUNT): counted ÷ weighted at each PC's top three nodes after 10 sessions; target 0.10 never binding for honest play in any pillar; if a pillar yields under 0.12, lower its counted requirement to W ÷ 15 |
+| OEQ-04-2 | What do the counters actually yield, by pillar? | counted = W ÷ 10 (04.3.3) | **T-04-COUNT** (with 03's T-03-COUNT): counted ÷ weighted at each PC's top three nodes after 10 sessions; target 0.10 never binding for honest play in any pillar. **Measured** (revision I-004; T-04-8 R12): binds only a band-1, mob-only, no-Focus fighter, by one fight in eight; ÷ 10 kept (DL-04-27). Live-play test kept: lower the divisor if it delays any pillar's tier by more than one session |
 | OEQ-04-3 | Is confidence calibrated in live play as it is in simulation? | K1–K5; grant at 4+ (04.4.2–04.4.3) | **T-04-CALIB**: for every first-eligible candidate, record its score and whether the grant or accepted offer was later confirmed; target confirmation ≥ 85% at scores 4–5 and a rate that rises with the score; if grants confirm under 80%, raise the grant cutoff to 5 |
 | OEQ-04-4 | Does the hybrid trigger separate deliberate mixing from incidental use? | min 60, balance 2/5, joint scenes 5 (04.2.4) | **T-04-HYB** (R3 G-1): in the same logs, classify each PC's play by hand as single-track, second-pillar or mixed; target no hybrid offer for single-track, an offer for every mixed PC by session 6 |
 | OEQ-04-5 | Do players feel a grant as recognition or as an imposition? | grant, provisional and renounceable (04.4.3, 04.8.2) | **T-04-GRANT**: after each grant ask one out-of-fiction question ("did that feel like yours?"); if more than a quarter say no, make every first recognition an offer (the policy's row 3 is removed) |
@@ -2164,6 +2197,6 @@ Each has a shipped default and a named test.
 | OEQ-04-7 | Are the Fraying stages felt as fair warning? | strain 4 / 8 / 12; forbidden act → stage 3 (04.9.2) | **T-04-FRAY** (with 03's T-03-STRAIN): playtests with one grave act and with one forbidden act; the player can state, before stage 3, what would cause it; time from stage 1 to clear by deeds 2–6 sessions |
 | OEQ-04-8 | Is 12 / 24 evidence-bearing scenes the right trial? | confirm from 12, lapse at 24 (04.8.2) | **T-04-PROV** (R3 G-4): lapse rate of provisional grants in live play; target under 10% for players who did not change style, over 70% for those who abandoned the key at once; ask whether a lapse was expected |
 | OEQ-04-9 | Are three deed seats and one oath seat the right cap? | 3 + 1 (04.8.1) | **T-04-SEATS**: how often a fourth candidate arrives before session 20 and what the player does; if consolidation is declined and a release is chosen more than half the time, test 4 seats with S unchanged |
-| OEQ-04-10 | Can non-combat callings meet the crisis and great-deed requirements of tiers 3–5? | crises 2 / 3 / 4; great deeds by band (04.3.4) | **T-04-CRISIS**: sessions to tier 3 for PCs whose key is in lore, influence or craft; target within 1.5× the combat median; if not, count for those branches a Dire, challenging success as two crises |
+| OEQ-04-10 | Can non-combat callings meet the crisis and great-deed requirements of tiers 3–5? | crises 2 / 3 / 4; great deeds by band (04.3.4) | **T-04-CRISIS**: sessions to tier 3 for PCs whose key is in lore, influence or craft; target within 1.5× the combat median. **Answered** (revision I-003): with 03.4.3's contest band and 03.4.5's ruinous and brink crises, envoy, smith and scholar reach tier 3 at 18 / 18 / 17 and tier 5 at 46 / 45 / 46 against the archer's 19 / 51 (within ±20%; T-04-8 R11). Live-play test kept as stated |
 | OEQ-04-11 | Is the Taking worth its seat, and bounded? | 2 Focus; one per long rest; library 4–12; banes (04.10) | **T-04-TAKE**: simulate a Devourer against ch.09's bestiary for 30 sessions; target 4–8 library powers by session 20, never more than the acquired slots in use, and a win rate within 5 points of a same-tier Slayer |
 | OEQ-04-12 | Is the Leanings view the right transparency? | key name and band word only (04.6.5) | **T-04-LEAN** (R3 G-16): two groups, one with the view and one without; compare how often players report pursuing an identity on purpose and whether recognition still surprised them pleasantly |

@@ -1,6 +1,8 @@
 # gen_contrib02.py -- emits ch.02's contrib fragments: licenses.02.yaml, effects.02.yaml, boundaries.02.yaml
+import os as _os
+_RULES = _os.environ.get('GAME_RULES', _os.path.normpath(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)), '..', '..', '..')))
 import json, os, re
-D = r"C:\Users\jacob\the-game\rules\_process\merged-contrib"
+D = _os.path.join(_RULES, '_process', 'merged-contrib')
 def q(s): return json.dumps(s, ensure_ascii=False)
 def flow(v):
     if isinstance(v, dict): return "{" + ", ".join("%s: %s" % (k, flow(x)) for k, x in v.items()) + "}"
