@@ -1,5 +1,6 @@
 """13-world-sim.py -- re-runs chapter 11's World Turn simulation (11-world-sim.py, its run() VERBATIM) with the
-Thallen March's real factions from data/contrib/factions.13.yaml, and adds a starting-state projection.
+Thallen March's real factions from _process/merged-contrib/factions.13.yaml (owner-block '13' of data/factions.yaml),
+and adds a starting-state projection.
 
 What is substituted into 11's run() (nothing else changes):
   - the four illustrative factions -> the region's FULL factions at their data tier, hold, ratings, temperament,
@@ -7,10 +8,12 @@ What is substituted into 11's run() (nothing else changes):
   - the three illustrative minors -> the region's PETTY factions, each a 6-segment clock at its data start
     (11's minor model: d6 a week, 4-5 +1, 6 +2);
   - the PC's side: helps the Bellwardens, opposes the Hushed Choir; thread sponsors drawn from the region's factions;
-  - 11's AGENDA has no 'steadfast' row; 11.3.7's is added (1 recover if weak, 2 aid_pc -> goal in the sim,
-    3 strike at -3 -> strike, 4-6 goal).
+  - 11.3.7's 'steadfast' row (1 recover if weak, 2 aid_pc -> goal in the sim, 3 strike at -3 -> strike, 4-6 goal);
+    11-world-sim.py carries the same row since integration (I-026), so setting it here changes nothing.
 Targets (OEQ-11-2 / T-11-GOALS): 1.5-3.5 goal completions per faction per year; <= 10% of factions at tier 5 after
-two years. Usage: python 13-world-sim.py [seeds]
+two years. Usage: python 13-world-sim.py [seeds] [--rule-cap]
+(--rule-cap is accepted for old command lines and changes nothing: since integration, I-026, 11-world-sim.py's
+gain_hold() applies 11.3.4 itself.)
 """
 import importlib.util
 import os
@@ -38,12 +41,9 @@ for old, new in (("fac = rng.choice(['ash_wardens', 'margrave', None, None])", "
         raise SystemExit("11-world-sim.py changed; substitution not found: " + old)
     src = src.replace(old, new)
 
-RULE_CAP = "--rule-cap" in sys.argv
-if RULE_CAP:
-    old = "scope != 'realm'): gain_hold(f, stats)"
-    if old not in src:
-        raise SystemExit("11-world-sim.py changed: goal-completion gain_hold call not found")
-    src = src.replace(old, "scope != 'realm'): gain_hold(f, stats, scope == 'realm')")
+RULE_CAP = "--rule-cap" in sys.argv  # a no-op since integration (I-026): 11.3.4 is native in 11-world-sim.py
+if "gain_hold(f, stats, realm_grow=(scope == 'realm'))" not in src or "realm_grow and f.tier < 5" not in src:
+    raise SystemExit("11-world-sim.py changed: 11.3.4's realm-grow cap not found in gain_hold() or its goal-completion call")
 FAC = yaml.safe_load(open(os.path.join(DATA, "..", "_process", "merged-contrib", "factions.13.yaml"), encoding="utf-8"))["blocks"][0]["entries"]
 FULL = [f for f in FAC if f["full"]]
 PETTY = [f for f in FAC if not f["full"]]
@@ -76,21 +76,12 @@ def _snap(week, facs):
 
 
 G = {"__name__": "world11_for_13", "_build_13": _build_13, "_snap": _snap}
+sys.argv = [sys.argv[0]] + [a for a in sys.argv[1:] if a.isdigit()]  # 11's module code reads argv[1] as its seed count
 exec(compile(src, "11-world-sim.py (run verbatim, factions substituted)", "exec"), G)
-if RULE_CAP:
-    # 11.3.4: "Rising above tier 3 needs a completed grow goal of realm scope; any other gain at tier 3 or more only
-    # makes the hold strong." 11-world-sim.py's gain_hold() lets expand and court raise a tier-3+ faction; this flag
-    # applies the rule as written (goal completions already respect it in run()).
-    def _gain_hold_rule(f, stats, _realm_grow=False):
-        if f.hold == 0:
-            f.hold = 1
-        elif f.tier < 3 or (_realm_grow and f.tier < 5):
-            f.tier += 1; f.hold = 0; f.tier_changes += 1; stats['tier_up'] += 1
-    G["gain_hold"] = _gain_hold_rule
 G["AGENDA"]["steadfast"] = {1: "recover", 2: "goal", 3: "strike", 4: "goal", 5: "goal", 6: "goal"}
 run, q = G["run"], G["q"]
 
-print("rule cap (11.3.4) applied:", RULE_CAP)
+print("rule cap (11.3.4): native in 11-world-sim.py (integration, I-026)%s" % ("; --rule-cap given (no-op)" if RULE_CAP else ""))
 print("Thallen March factions in the sim: full %s; petty %d" % ([f["id"].split(".")[-1] for f in FULL], len(PETTY)))
 for scenario in ("engaged", "war", "absent"):
     SNAPS.clear()

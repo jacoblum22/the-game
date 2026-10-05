@@ -329,8 +329,8 @@ spoken in this fixed four-part shape, fiction first, with the out-of-fiction lin
 1. **Acknowledge the intent** in the player's own terms ("You want the door open without waking the
    keep").
 2. **Why, in one sentence of fiction**, naming what is missing: the license (G3: "the wards are guild-cut;
-   nothing in your hands knows how to read them") or the fact (G4: "he has no brother, and he'd know it on
-   sight"). The out-of-fiction line names the id checked (`lic.training.guile_thievery`; `npc.tam_harlan.siblings`).
+   nothing in your hands knows how to read them") or the fact (G4: "he has no sister, and he'd know it on
+   sight") [integration: I-024]. The out-of-fiction line names the id checked (`lic.training.guile_thievery`; `npc.tam_harlan.siblings`).
 3. **What is possible now**: the crude fallback if there is one (with its odds on request, through a free
    OFFER), else the nearest basic verb that serves the same intent, else the nearest achievable intent. At
    least one concrete option is always given (P16).
@@ -353,7 +353,7 @@ Loads in:           core
 License check:      —
 Decisions (J):      1. CONTRADICTS A FACT [J:flag]: "Does success require an established fact to be
                        false?" True only when a fact id in state is contradicted (the guard has no
-                       brother; the door is bricked). Cite the fact id.
+                       sister; the door is bricked) [integration: I-024]. Cite the fact id.
                     2. CONTRADICTS CANON [J:flag]: "Is this impossible for anyone in the setting, per
                        ch.13's canon_impossible list or an established world law?" True only when the list
                        or a fact says so (no mortal flies unaided). Never true merely because it is unusual.

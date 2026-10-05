@@ -91,6 +91,7 @@ AGENDA = {  # d6 -> action (first row whose condition holds; else 'goal')
 
 def run(seed, scenario='engaged'):
     rng = random.Random(seed)
+    random.seed(seed)  # Faction.__init__ draws its first goal from the module RNG; seeding it makes every run reproducible (integration, I-026)
     stats = dict(collapses=0, tier_up=0, tier_down=0, goal_done=0, strikes=0, strike_hits=0,
                  entanglements=0, moves_on_pc=0, hooks_seeded=0, hooks_expired=0, threads_completed=0,
                  threads_failed=0, threads_activated=0, threads_retired=0, rumors=0, strain_losses=0, max_known_hooks=0,

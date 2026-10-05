@@ -1328,9 +1328,8 @@ it). Both resolved at integration (I-026). (3) A data-authored situation (`sit.t
 **To 14.** Render the Truths (13.1.5) at session zero; the `[HOW THIS WORKS]`, `[JOURNEY]`, `[CLUE]`,
 `[REFUSAL]`, `[WARNING]`, `[CLOCK]` first-use notes of the teaching arc; the pregen cards (13.16.2).
 
-**To 15.** Three cases in the region file (`cases`) — moved into `investigation.yaml#cases` at integration (the region's
-`cases` key now lists their ids) [integration: IR ch.13 to 15]; 15 may move them into `investigation.yaml#cases` at
-integration (the shape is identical, validity re-checked).
+**To 15.** Three cases in the region file (`cases`) — moved into `investigation.yaml#cases` at integration (the shape is
+identical, validity re-checked; the region's `cases` key now lists their ids; DL-INT-07) [integration: IR ch.13 to 15].
 
 **To 02.** The two setting origins and their kits are in owner-blocks; `orig.up.woken` adds an optional `peoples`
 field (which peoples may take it).

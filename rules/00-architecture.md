@@ -675,7 +675,7 @@ value has a defined initial value and update rule [R2 §00].
 | **entity** | anything with identity: id, kind, name, tags, existence status, `introduced_at` | PC, NPC, adversary, companion, item, place, faction, thread, rumor, clue node | `create_entity` |
 | **quantity** | a revisable integer with min/max, changed by deltas with reasons | Vitality, Focus, coin, supply, ammunition, fate | `update_quantity` |
 | **flag** | a boolean or enum property of an entity | `door_archive.locked = true`; `guard_07.alertness = drowsy` | `set_fact` |
-| **fact** | an atomic declarative proposition with source, certainty and visibility | "The Salt Guild owns the north warehouse"; "Guard Tam has no brothers" | `set_fact` |
+| **fact** | an atomic declarative proposition with source, certainty and visibility | "The Salt Guild owns the north warehouse"; "Guard Tam has no sister" [integration: I-024] | `set_fact` |
 | **relationship** | a typed edge between two entities, usually on the standing scale | NPC→PC standing; faction→PC status; membership; ownership; bond | `set_relationship` |
 | **position** | where an entity is: (a) location in the place graph; (b) in a conflict, the range band to each other participant plus positional flags | Wren at `loc.grey_keep.archive`; Wren–captain `close`, flag `flanked` | `set_position` |
 | **knowledge** | who knows which fact, since when, and how | PC learned the watch changes at midnight; the captain knows Wren's face | `record_knowledge` |
@@ -1798,7 +1798,7 @@ objects (13). Tags use facet paths (`deed.…`) with no prefix.
 | `canon.` | `region_thallen.yaml` | 13 | |
 | `case.` | `investigation.yaml` | 15 | |
 | `ci.` | `region_thallen.yaml` | 13 | |
-| `clk.` | `abilities.yaml (inline clock spec)`, `behaviors.yaml`, `behaviors.yaml (inline clock spec)`, `companions.yaml`, `conflict.yaml`, `downtime.yaml`, `economy.yaml (inline clock spec)`, `factions.yaml`, `harm.yaml`, `investigation.yaml`, `licenses.yaml (inline clock spec)`, `pacing.yaml`, `region_thallen.yaml`, `rituals.yaml (inline clock spec)`, `sites.yaml`, `social.yaml`, `world_turn.yaml (inline clock spec)` | 06; 07; 09; 10; 11; 12; 13; 15; 16; ? | clock templates and instances (00.8); families declared by `id_pattern` |
+| `clk.` | `abilities.yaml (inline clock spec)`, `behaviors.yaml`, `behaviors.yaml (inline clock spec)`, `companions.yaml`, `conflict.yaml`, `downtime.yaml`, `economy.yaml (inline clock spec)`, `factions.yaml`, `harm.yaml`, `investigation.yaml`, `licenses.yaml (inline clock spec)`, `pacing.yaml`, `region_thallen.yaml`, `rituals.yaml (inline clock spec)`, `sites.yaml`, `social.yaml`, `world_turn.yaml (inline clock spec)` | 05; 06; 07; 08; 09; 10; 11; 12; 13; 15; 16 | clock templates and instances (00.8); families declared by `id_pattern` |
 | `clu.` | `investigation.yaml` | 15 | |
 | `cmp.` | `companions.yaml` | 16 | |
 | `cnt.` | `evidence.yaml` | 03 | |
@@ -1817,7 +1817,7 @@ objects (13). Tags use facet paths (`deed.…`) with no prefix.
 | `forb.` | `callings.yaml` | 04 | |
 | `ftpl.` | `factions.yaml` | 11 | |
 | `fx.` | `calendar.yaml` | 11 | |
-| `gen.` | `00-architecture.md#00.11.1 (PR-04-5 over abilities.yaml)`, `gen_absorb.yaml`, `gen_birth.yaml`, `gen_craft.yaml`, `gen_gift.yaml`, `gen_item_ability.yaml`, `gen_loot.yaml` | 02; 04; 08; ? | |
+| `gen.` | `00-architecture.md#00.11.1 (PR-04-5 over abilities.yaml)`, `gen_absorb.yaml`, `gen_birth.yaml`, `gen_craft.yaml`, `gen_gift.yaml`, `gen_item_ability.yaml`, `gen_loot.yaml` | 00; 02; 04; 08 | |
 | `h.` | `boundaries.yaml` | 00 | boundary handlers (T-00-9) |
 | `harm_state.` | `harm.yaml` | 07 | |
 | `haz.` | `hazards.yaml`, `sites.yaml` | 10 | |
@@ -1849,7 +1849,7 @@ objects (13). Tags use facet paths (`deed.…`) with no prefix.
 | `prop.` | `item_properties.yaml` | 08 | |
 | `quarter.` | `calendar.yaml` | 11 | |
 | `refusal.` | `social.yaml` | 15 | |
-| `req.` | `callings.yaml#requirements` | ? | |
+| `req.` | `callings.yaml#requirements` | 04 | |
 | `request.` | `social.yaml` | 15 | |
 | `rit.` | `rituals.yaml` | 05 | |
 | `rl.` | `factions.yaml` | 11 | |
@@ -1863,7 +1863,7 @@ objects (13). Tags use facet paths (`deed.…`) with no prefix.
 | `st.` | `world_turn.yaml` | 11 | |
 | `standing.` | `social.yaml` | 15 | |
 | `svc.` | `economy.yaml` | 08 | |
-| `tbl.` | `archetypes.yaml`, `behaviors.yaml`, `companions.yaml`, `companions.yaml#drives`, `companions.yaml#tbl.16.betrayal (key)`, `conflict.yaml`, `factions.yaml#tbl.11.entanglement (key)`, `factions.yaml#tbl.11.faction_seed (key)`, `factions.yaml#tbl.11.faction_tier (key)`, `factions.yaml#tbl.11.vacuum (key)`, `harm.yaml`, `investigation.yaml`, `legacy.yaml#tbl.11.successor_traits (key)`, `oracles.yaml`, `origins.yaml`, `region_thallen.yaml`, `rituals.yaml`, `sites.yaml`, `travel.yaml`, `weather.yaml`, `world_turn.yaml#tbl.11.distortion (key)`, `world_turn.yaml#tbl.11.epithet_forms (key)`, `world_turn.yaml#tbl.11.fallback_form (key)`, `world_turn.yaml#tbl.11.hook (key)`, `world_turn.yaml#tbl.11.land_changes (key)`, `world_turn.yaml#tbl.11.local_events (key)`, `world_turn.yaml#tbl.11.rumor_truth (key)`, `world_turn.yaml#tbl.11.rumors (key)`, `world_turn.yaml#tbl.11.season_events.autumn (key)`, `world_turn.yaml#tbl.11.season_events.spring (key)`, `world_turn.yaml#tbl.11.season_events.summer (key)`, `world_turn.yaml#tbl.11.season_events.winter (key)` | 02; 05; 06; 07; 09; 10; 12; 13; 15; 16; ? | tables, wherever they live (keyed or with an id) |
+| `tbl.` | `archetypes.yaml`, `behaviors.yaml`, `companions.yaml`, `companions.yaml#drives`, `companions.yaml#tbl.16.betrayal (key)`, `conflict.yaml`, `factions.yaml#tbl.11.entanglement (key)`, `factions.yaml#tbl.11.faction_seed (key)`, `factions.yaml#tbl.11.faction_tier (key)`, `factions.yaml#tbl.11.vacuum (key)`, `harm.yaml`, `investigation.yaml`, `legacy.yaml#tbl.11.successor_traits (key)`, `oracles.yaml`, `origins.yaml`, `region_thallen.yaml`, `rituals.yaml`, `sites.yaml`, `travel.yaml`, `weather.yaml`, `world_turn.yaml#tbl.11.distortion (key)`, `world_turn.yaml#tbl.11.epithet_forms (key)`, `world_turn.yaml#tbl.11.fallback_form (key)`, `world_turn.yaml#tbl.11.hook (key)`, `world_turn.yaml#tbl.11.land_changes (key)`, `world_turn.yaml#tbl.11.local_events (key)`, `world_turn.yaml#tbl.11.rumor_truth (key)`, `world_turn.yaml#tbl.11.rumors (key)`, `world_turn.yaml#tbl.11.season_events.autumn (key)`, `world_turn.yaml#tbl.11.season_events.spring (key)`, `world_turn.yaml#tbl.11.season_events.summer (key)`, `world_turn.yaml#tbl.11.season_events.winter (key)` | 02; 05; 06; 07; 09; 10; 11; 12; 13; 15; 16 | tables, wherever they live (keyed or with an id) |
 | `term.` | `social.yaml` | 15 | |
 | `thr.` | `harm.yaml` | 07 | |
 | `trap.` | `sites.yaml`, `traps.yaml` | 10 | |

@@ -439,7 +439,7 @@ these rules, which the Season Turn applies (11.11.2 step 2) except where "at onc
 **The weight of size.** At each Season Turn a faction of tier 3 or more rolls `d20 + its highest rating +
 stage modifier` against `10 + 2 × tier`; on a failure it loses hold. Great institutions bleed without
 anyone attacking them, which is what keeps the map from filling with tier-5 powers (T-11-24: across 300
-two-year runs the mean tier rose 0.6 and a tier-5 power arose in 8% of faction-runs) [R6 B-05; DL-11-06].
+two-year runs the mean tier rose about 0.25 and no faction passed tier 3) [R6 B-05; DL-11-06] [integration: I-026].
 
 **A collapse** removes the faction from the World Turn. Its holds become unowned places; its officers
 become free NPCs who keep their records; its members keep their personal offsets toward the PC; it
@@ -2106,26 +2106,27 @@ opportunity 12–19, trouble ≤ 11).
 104 weeks; four full factions — tiers 2, 1, 3, 1, two at war, one feud — three petty factions; the PC pursues threads 70% of
 weeks; p10 / median / p90 per two years). **Re-run at integration** (issue I-026): the script's `gain_hold()` now
 follows 11.3.4 (rising above tier 3 needs a completed realm-scope `grow` goal; any other gain at tier 3+ only
-strengthens the hold), and its AGENDA carries 11.3.7's `steadfast` row; the numbers below are the re-run's (the
+strengthens the hold), and its AGENDA carries 11.3.7's `steadfast` row; the numbers below are the re-run's, with every
+random draw seeded so the output reproduces exactly (the
 first version let `expand` raise tier-3+ factions and reported tier 5 in 7–8% of faction-runs) [integration: I-026].
 
 | Measure | Engaged PC | PC at war with one faction | No PC (a timeskip) |
 |---|---|---|---|
-| faction goals completed (region) | 18 / 21 / 23 | 18 / 21 / 23 | 18 / 21 / 24 |
+| faction goals completed (region) | 18 / 21 / 23 | 18 / 21 / 23 | 18 / 21 / 23 |
 | goals completed per faction | 2 / 5 / 6 | 2 / 5 / 6 | 2 / 5 / 6 |
 | tier rises / tier falls | 5 / 5 (medians) | 5 / 5 | 5 / 5 |
-| collapses (a vacuum filled) | 0 / 1 / 2 | 0 / 1 / 2 | 0 / 1 / 2 |
-| strikes / strikes that landed | 15 / 7 (medians) | 15 / 8 | 15 / 7 |
-| entanglements + moves on the PC | 0 + 1 (medians) | 6 + 4 (p90 11 + 8) | 0 |
-| hooks seeded | 55 / 61 / 67 | 54 / 60 / 67 | 51 / 55 / 59 |
+| collapses (a vacuum filled) | 0 / 1 / 2 | 0 / 1 / 1 | 0 / 1 / 2 |
+| strikes / strikes that landed | 16 / 7 (medians) | 16 / 7 | 15 / 7 |
+| entanglements + moves on the PC | 0 + 1 (medians) | 7 + 4 (p90 11 + 8) | 0 |
+| hooks seeded | 55 / 60 / 66 | 54 / 61 / 66 | 52 / 55 / 59 |
 | threads taken up / completed / failed | 32 / 19 / 11 (medians) | 32 / 19 / 11 | — |
-| hooks expired untaken | 19 / 24 / 29 | 19 / 24 / 30 | 47 / 51 / 54 |
-| situations created | 10 / 14 / 17 | 10 / 13 / 17 | 10 / 14 / 17 |
-| traces emitted (rumors, news, omens) | 267 / 285 / 303 | 265 / 284 / 303 | 266 / 284 / 304 |
+| hooks expired untaken | 19 / 24 / 29 | 19 / 24 / 29 | 48 / 51 / 54 |
+| situations created | 10 / 13 / 17 | 10 / 13 / 17 | 10 / 14 / 17 |
+| traces emitted (rumors, news, omens) | 266 / 285 / 302 | 267 / 285 / 301 | 271 / 287 / 305 |
 | most open matters known at once | 8 / 9 / 10 | 8 / 9 / 10 | 6 / 7 / 8 |
 | weeks the PC knew fewer than three | 3 / 4 / 5 (of 104) | 3 / 4 / 5 | — |
 | bang queue at its fullest | 0 / 1 / 1 | 1 / 2 / 2 | 0 |
-| final tiers (start mean 1.75) | mean 2.00; highest tier reached 3; tier 5 in 0% of faction-runs | mean 1.99; 0% | mean 2.01; 0% |
+| final tiers (start mean 1.75) | mean 2.01; highest tier reached 3; tier 5 in 0% of faction-runs | mean 1.99; 0% | mean 1.98; 0% |
 
 *Reading.* The world produces a steady stream: about one faction goal every five weeks in a region, about
 two and a half traces a week, a new hook every ten or eleven days, and a new situation every eight weeks,

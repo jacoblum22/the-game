@@ -14,7 +14,19 @@ active 70% of weeks, 1–3 serving beats a week at +5 vs 15; half of the taken t
 (+1 a week). Scenarios: an engaged PC; a PC at war with the cult (venture loudness quiet/contained/loud/wild
 40/30/20/10%); no PC (a timeskip).
 
-**Results** (p10 / median / p90 per two years): see T-11-24 in `11-living-world.md`. Headlines:
+**Results** (p10 / median / p90 per two years): see T-11-24 in `11-living-world.md`.
+
+**Re-run at integration (issue I-026).** `gain_hold()` now follows 11.3.4: rising above tier 3 needs a completed
+realm-scope `grow` goal, and any other gain at tier 3 or more only strengthens the hold. The first version let
+`expand` and `court` raise a tier-3+ faction. AGENDA now carries 11.3.7's `steadfast` row, and `run()` seeds the
+module RNG (`Faction.__init__` draws a first goal from it), so `11-world-sim-output.txt` reproduces byte for byte.
+Re-run headlines: goals 21 per region in two years (2.5 per faction per year); mean tier 1.75 → 2.01 (engaged),
+1.99 (war), 1.98 (no PC); highest tier reached 3; tier 5 in 0% of faction-runs. Against the committed pre-integration
+output file, every other measure moved by at most 1 at any quantile, except traces (rumors), which moved by up to
+5 (266 → 271 at p10 with no PC; under 2%). The headlines below are the original pre-integration run, kept for the record; where
+they differ, T-11-24 and the re-run govern.
+
+Headlines (original run):
 - Faction goals: 2.5 per faction per year (median 5 in two years); about one completed goal every five weeks in a
   region. Tiers drift up 0.6 on average over two years; a tier-5 power arises in 8% of faction-runs; ~1 collapse
   per two years, each replaced (vacuum).

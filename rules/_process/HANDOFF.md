@@ -1,5 +1,9 @@
 # Handoff: finish Wave 3c integration (cloud continuation)
 
+> **Status (2026-10-05): COMPLETED by the cloud continuation.** See `integration-report.md` ("Continuation" C1–C6,
+> the back-fill, and the final summary). Validator: 0 ERROR, 0 WARN. New issues I-029..I-032; I-028 deferred to Wave 5.
+> Nothing committed; the rollback point is `cbbd27e`.
+
 Context for a session with no memory of the prior chats.
 
 ## Project

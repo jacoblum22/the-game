@@ -1014,7 +1014,9 @@ the row once, then takes the nearest band it has), picks the bestiary entry of t
 **mob** (06.10.2), and adds a leader when the group lists one.
 
 **10.10.2 The table budget (09's contract).** `[D]` Every encounter table, generic or regional, must pass
-the audit PR-10-8 before use (13 runs it on its tables; the generic tables pass it by construction):
+the audit PR-10-8 before use (13 runs it on its tables). The generic tables meet items 1, 4 and 5 by construction.
+Item 3 is checked on them at every home band 1–5, with item 2's shapes applied, by
+`_process/simulation/10-word-audit.py`; at integration 48 of their 55 table-and-home-band cases failed item 3, which is open as issue I-029 [integration: I-027]:
 1. **Bands**: among threat rows, by weight, about **30% at home − 1, 55% at home, 15% at home + 1**; no row
    above home + 1 — anything stronger is a **lair**, a place with a known occupant reachable only by going
    there, signposted by rumor and omen (09.8.2).

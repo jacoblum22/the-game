@@ -1616,6 +1616,14 @@ open-slot reminder (02.9.8) follows [integration: IR ch.04, IR ch.02 to 12].
 [FLAG] This touches <flagged topic>. Continue, veil it, or steer away?
 ```
 
+**12.15.14 RULES, UNKNOWN, SESSION, CUT?**
+```
+[RULES] 01.4.2 — one resolved beat settles one obstacle for one approach; try a new approach or accept a cost.
+[UNKNOWN] Your character doesn't know that. (The codex shows: <whatever is shown>.)
+[SESSION] Paused. / Ending here — anything to focus on next time? (optional)
+[CUT?] Move on to the morning, or stay a while?
+```
+
 **12.15.15 Labels added by other chapters** [integration: IR ch.02, 04, 07, 10, 11 to 12]. Each follows
 12.15.1 and the order rule above; its contents are its owner's format.
 
@@ -1629,14 +1637,6 @@ open-slot reminder (02.9.8) follows [integration: IR ch.04, IR ch.02 to 12].
 | `[JOURNEY]` | 10.3.4: the journey plan, points, supply against need, way-finding | with the RESULT blocks at a journey's planning and each day |
 | `[SEASON]` | 11.11.2: the season herald, one week before the Season Turn | after the fiction |
 | `[RETIRE]` | 11.13.1: the retirement offer listing the endings available (04.7's protocol: accept, decline, defer) | as the pause block |
-
-**12.15.14 RULES, UNKNOWN, SESSION, CUT?**
-```
-[RULES] 01.4.2 — one resolved beat settles one obstacle for one approach; try a new approach or accept a cost.
-[UNKNOWN] Your character doesn't know that. (The codex shows: <whatever is shown>.)
-[SESSION] Paused. / Ending here — anything to focus on next time? (optional)
-[CUT?] Move on to the morning, or stay a while?
-```
 
 ---
 

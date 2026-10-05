@@ -203,6 +203,7 @@ for ch in CHAPTERS:
             ("basis", ["[%s]" % rid, "[00.2.6]", "[12.13.6]"])]))
         per_chapter[ch] += 1
 
+_ADDED_SOURCES = ["06's T-06-9 ready rulings (specificity table_ruling)", "07's anchors by shape (specificity shape)"]
 # ---------------------------------------------------------------- (c) T-06-9 ready rulings
 t06 = read(glob.glob(os.path.join(RULES, "06-*.md"))[0]).split("\n")
 i0 = [i for i, l in enumerate(t06) if l.startswith("**T-06-9 ")][0]
@@ -264,7 +265,7 @@ doc = OrderedDict([("schema_version", 1),
     ("compiled_from", [{"file": f, "sha256_16": hashlib.sha256(t.encode("utf-8")).hexdigest()[:16]} for f, t in srcs]),
     ("compiled_at", "integration (Wave 3 -> 4)"),
     ("compile", OrderedDict([("rule", "12.13.6"), ("compiler", "_process/simulation/12-compile_anchors.py"),
-        ("sources", old["compile"]["sources"] + ["06's T-06-9 ready rulings (specificity table_ruling)", "07's anchors by shape (specificity shape)"]),
+        ("sources", [s for s in old["compile"]["sources"] if s not in _ADDED_SOURCES] + _ADDED_SOURCES),  # idempotent: never appended twice
         ("id_form", old["compile"]["id_form"]), ("validation", old["compile"]["validation"]),
         ("retrieval", old["compile"]["retrieval"]), ("specificity_order", ["chapter_rule", "table_ruling", "shape", "license_rule", "verb_card"]),
         ("verb_tag_map", VERB_TAG_MAP), ("counts", dict(per_chapter, verb_cards=15, total=len(anchors))),

@@ -2190,7 +2190,7 @@ People · Places · Rumors heard · Lies told · Debts and promises. Visibility:
 | `dt.recruit` | Recruit | day | Talk vs settlement tier | candidates (16) (15.13.14) | — |
 | `dt.lie_low` | Lie low | week | none | attention −2 (11) (15.13.15) | — |
 | `dt.rest` | Rest | day | none | — (15.13.16) | lifestyle |
-| `dt.11.train_successor` | Train a successor | week | d20 + base modifier on the tag vs Moderate, Safe | the candidate's training clock (12); banked tags (11.13.10; defined in `legacy.yaml#train_successor`) | — |
+| `dt.11.train_successor` | Train a successor | week | d20 + base modifier on the tag vs Moderate, Safe | the candidate's training clock (12); banked tags (11.13.10; defined in `legacy.yaml#train_successor`) [integration: IR ch.11 to 15] | — |
 
 **T-15-17 Project scope** (`downtime.yaml#project_scopes`): personal 8 (0 coin/week) · local 12 (7) ·
 regional 12+12 (25) · realm 12+12+12 (100). Ticks = delivered reach (1/2/3/4); delegation 1/week at wages;

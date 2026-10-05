@@ -16,6 +16,10 @@ for line in open(os.path.join(R, "00-architecture.md"), encoding="utf-8"):
         for f in re.findall(r"[a-z_*]+\.yaml", m.group(1)):
             OWNER[f] = m.group(2).strip()
 def owner(f):
+    # f may carry a locator or note ("callings.yaml#requirements", "abilities.yaml (inline clock spec)"): look up its file
+    if f.startswith("00-architecture.md"): return "00"
+    m = re.match(r"[a-z_]+\.yaml", f)
+    if m: f = m.group(0)
     if f in OWNER: return OWNER[f]
     for k, v in OWNER.items():
         if "*" in k and re.match(k.replace("*", ".*"), f): return v

@@ -298,3 +298,11 @@ at a time.
 
 ## Owner question: is a starter setting required?
 Answer recorded: rules are setting-agnostic and generate most content; a setting supplies ~4 canon decisions (impossible list, magic/faith canon, peoples/tongues, haven + factions). Ch.13 kept as an optional module (useful for the first newcomer session and as the playtest bed); I-028 opened to add a world-seed procedure for setting-free play. Integration resumed.
+
+## INTEGRATION COMPLETE (Wave 3c, cloud continuation)
+Report: `_process/integration-report.md`. Validator: 0 ERROR / 0 WARN / 78 INFO (expected illustrative ids).
+All 42 contrib fragments merged (data/contrib/ removed); 379 decision-log entries, all 414 cited DL ids resolve;
+DL-INT-11 added; anchors recompiled (129, deterministic). Ledger: I-023/I-024/I-026/I-027 and I-005 closed.
+New rows: I-029 (MAJOR, generic encounter tables fail danger-word audit), I-030, I-031, I-032 (MINOR).
+I-028 (world-seed procedure) stays open for Wave 5.
+Next: Wave 4 verification, one agent at a time — (a) simulation re-run + campaign sim.

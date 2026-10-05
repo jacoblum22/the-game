@@ -1,4 +1,4 @@
-rule cap (11.3.4) applied: False
+rule cap (11.3.4): native in 11-world-sim.py (integration, I-026)
 Thallen March factions in the sim: full ['vantry', 'bellwardens', 'pell_company', 'hushed_choir']; petty 15
 === scenario: engaged (300 seeds x 104 weeks) ===
   goal_done          p10/med/p90 (19, 21.0, 24)

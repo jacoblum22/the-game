@@ -2034,7 +2034,7 @@ chapter 06's fight model and T-06-12 lines), output `07-harm-sim-output.txt`, wr
 ### DL-11-03: Faction actions are d20 checks: d20 + rating + 2 × tier vs DCs whose scope term cancels the actor's tier; goal ticks 2/1/0
 - Decision: one faction check on 00.3.10's degrees; goal DC = 10 + 2 × tier + 3/5/7 by scope; opposed DC = 10 + defender rating + 2 × defender tier; goal clock ticks critical success 2, success 1, else 0; critical failure is a slip.
 - Alternatives considered: SWN's opposed d10s (a second die family for checks, against 00.3.1); Mausritter's d6 for everyone (too coarse for factions the player engages); ticks of 3/2/1 — simulated: goals every 8 weeks per faction and 47% of factions at tier 5 in two years (runaway).
-- Evidence: [R6 B-01, B-02] [R5 P-23, P-25] [rules/_process/simulation/11-world-sim.py: 2.5 goals per faction per year, mean tier +0.6 over two years, 8% tier 5]
+- Evidence: [R6 B-01, B-02] [R5 P-23, P-25] [rules/_process/simulation/11-world-sim.py: 2.5 goals per faction per year, mean tier +0.6 over two years, 8% tier 5; re-run at integration with 11.3.4's realm-grow cap applied in the script (I-026): mean tier +0.25, highest tier 3, 0% tier 5 (T-11-24)]
 - Serves: goal 2 (the AI never decides outcomes for factions).
 - Revisit if: T-11-GOALS falls outside 1.5–3.5 goals per faction per year with real regional factions.
 
@@ -2841,7 +2841,7 @@ chapter 06's fight model and T-06-12 lines), output `07-harm-sim-output.txt`, wr
 
 Decisions the integrator took while making the fifteen chapters one ruleset. None redesigns a rule: each applies
 an approved amendment, resolves an ambiguity in the direction an existing rule already fixed, or records a
-mechanical repair. Genuine design conflicts were logged as issues instead (`_process/issue-ledger.md`, I-028 on).
+mechanical repair. Genuine design conflicts were logged as issues instead (`_process/issue-ledger.md`, I-029 to I-032).
 Full record: `_process/integration-report.md`.
 
 ### DL-INT-01: Owner-block fragments are merged by text, entries preserved exactly, and stay re-mergeable
@@ -2935,3 +2935,23 @@ Full record: `_process/integration-report.md`.
 - Evidence: I-024; WE-01-2's frame (doubtful, not outrageous).
 - Serves: goal 2 (examples that teach the rule they show).
 - Revisit if: never.
+
+### DL-INT-11: Every id prefix in use is registered in a generated table, 00.16.2a
+- Decision: 00.16.2 names 53 prefixes, but the merged data defines ids under 90. The other 37 are file-local
+  families such as `act.`, `cnt.`, `flag.`, `req.`, `standing.` and `wage.`. Under 00.16.2 every id's prefix
+  must say which file defines it. So a registry table, 00.16.2a, is generated from the ids actually defined in
+  `data/` by `_process/simulation/integration-prefix-registry.py`. Each row gives the prefix, the defining
+  file(s) and the owning chapter, read from T-00-19. 00.16.2's prose list stays the core. The validator counts
+  00.16.2 plus 00.16.2a as "registered" and reports any other prefix as an ERROR. A new prefix is added by
+  re-running the script. The continuation session fixed the script's owner lookup for annotated file names
+  (`callings.yaml#requirements`, `abilities.yaml (inline clock spec)`, `00-architecture.md#…`), which had
+  printed "?" for `clk.`, `gen.`, `req.` and `tbl.`.
+- Alternatives considered: (a) appending 37 prefixes to 00.16.2's prose by hand. That would be unreadable
+  and stale at the next data change, the same failure DL-INT-08 fixed for T-00-9. (b) Renaming file-local
+  ids under registered prefixes. That would rewrite authored data across a dozen files, beyond what
+  integration may do.
+- Evidence: 00.16.2 ("the prefix tells any reader which file defines them"); 00.1.4 item 5 (data is
+  canonical); `validate_ruleset.py` § prefix registry; DL-INT-08 (the same pattern for T-00-9).
+- Serves: goal 2 (every id resolves to one defining file; the engine can route any id by its prefix).
+- Revisit if: Wave 4's audit finds a registry-only prefix that collides in meaning with a named one (then
+  rename it in data, with `superseded_by`, and regenerate).

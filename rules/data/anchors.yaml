@@ -14,9 +14,9 @@
 schema_version: 1
 compiled_from:
 - file: data/basic_verbs.yaml
-  sha256_16: 4bdd3eeafb08c586
+  sha256_16: 3188c5a7ebcfa419
 - file: 01-resolution.md
-  sha256_16: 01cec57682bf74fc
+  sha256_16: 7f9932b36d24ca2a
 - file: 02-character.md
   sha256_16: 33ab6f28c1aadfe2
 - file: 03-tags-and-evidence.md
@@ -30,21 +30,21 @@ compiled_from:
 - file: 07-harm-recovery-death.md
   sha256_16: b7ab5d5d36991b8b
 - file: 08-items-loot-crafting.md
-  sha256_16: 8a45b60ef26b81dd
+  sha256_16: 71648221846b64a9
 - file: 09-adversaries.md
   sha256_16: efd8115b937e46e5
 - file: 10-exploration-travel-sites.md
-  sha256_16: 0ffbbb06631db1c9
+  sha256_16: fd93b21e5153b59d
 - file: 11-living-world.md
-  sha256_16: 8ab52786c1b09594
+  sha256_16: 201f23c15a591caa
 - file: 12-dm-procedures.md
-  sha256_16: e1a21e9336a92463
+  sha256_16: 77b2ceaf01ff4cf7
 - file: 13-starter-setting.md
-  sha256_16: 3eb34f302510d2b2
+  sha256_16: 70b23fd86ab0347d
 - file: 15-social-investigation-downtime.md
-  sha256_16: 4a10046d8cdf2571
+  sha256_16: 0ba8b5fef2fea29a
 - file: 16-companions-and-allies.md
-  sha256_16: 8b60779fb506e2da
+  sha256_16: de6c0d99a474dad8
 compiled_at: integration (Wave 3 -> 4)
 compile:
   rule: 12.13.6
@@ -53,10 +53,6 @@ compile:
   - data/basic_verbs.yaml anchor fields (01.18)
   - 'every rule card in chapters 01-16 whose template says ''Anchor: yes'' (00.2.6, 00.15.2 anchor block)'
   - data entries that declare an anchor block in their own files
-  - 06's T-06-9 ready rulings (specificity table_ruling)
-  - 07's anchors by shape (specificity shape)
-  - 06's T-06-9 ready rulings (specificity table_ruling)
-  - 07's anchors by shape (specificity shape)
   - 06's T-06-9 ready rulings (specificity table_ruling)
   - 07's anchors by shape (specificity shape)
   id_form: anc. + rule id with dots as underscores
