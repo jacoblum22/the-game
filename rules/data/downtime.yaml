@@ -1,0 +1,132 @@
+# data/downtime.yaml
+# Purpose: the closed menu of downtime activities with durations, methods, costs and effects; the week
+#   plan; learning rates (restating 05.8.5, 05.9.4, 02.4.6, 05.8.7 - those chapters stay canonical for
+#   their own numbers); retrain; project scopes and delegation.
+# Owner: 15-social-investigation-downtime (15.10-15.13). Canonical for its own numbers (00.1.4 item 5).
+# Schema: data/SCHEMAS.md#downtimeyaml. Required key: activities ({id, duration, verb?, clock?, costs,
+#   effects}). Optional keys added by ch.15: week_plan, entering, learning, retrain, project_scopes,
+#   projects, teacher_odds.
+# Ids: dt.* (prefix requested of 00, 15 Interface requests).
+# Basis: [15.10-15.13] [R5 TM-06, P-45, P-24] [R6 B-05] [C:VII] [C:P15] [DL-15-27..DL-15-29]
+
+schema_version: 1
+
+entering:                  # 15.10.1
+  requires: "a haven (07.8 rest site) in a settlement or holding; no pending threat, conflict or clock completing within a day"
+  mode: downtime
+  ends: [plan_exhausted, player_stops, interrupt]
+  interrupt: "00.7.8: frame the scene; the remainder resumes on the player's word"
+  camp_allowed: [dt.convalesce, dt.solace, dt.craft, dt.train, dt.rest, dt.project]
+
+week_plan:                 # 15.10.2
+  options: ["one week activity (5 days) + up to two day activities", "seven day activities"]
+  week_activity_days_required: 5
+  handlers: {day: h.15.downtime_day, week: h.15.downtime_week}
+  one_learning_clock_per_week: true
+  rolls: "one per activity per its interval (let it ride)"
+  default_stakes: "safe unless a cost source exists (01.6.9)"
+  evidence: "counted only: cnt.training, cnt.progress, cnt.made (03.5.5)"
+  reflection: h.00.reflection_if_downtime
+
+activities:                # T-15-16
+  - {id: dt.convalesce, name: Convalesce, tags: [situation.downtime.recovery], scale: day, duration: {days: 1}, verb: null, clock: null,
+     costs: {lifestyle: weekly, optional: "healer's care 2 coins a day (08.8.8)"},
+     effects: ["07.8.11: bed_rest_today; treated_today with a licensed tender; one cond.exhausted stack removed; a full week sets dread 0 and shifts a disease one stage"],
+     rule: "15.13.1", lifecycle: provisional, basis: ["07.8.11"]}
+  - {id: dt.solace, name: Solace, tags: [situation.downtime.carousing], scale: day, duration: {days: 1}, verb: null, clock: null, costs: {},
+     effects: ["07.11.7: dread -2, at most once per week (07 owns dread)"], forms: [carousing, prayer, worship, time_with_a_bond],
+     rule: "15.13.2", lifecycle: provisional, basis: ["07.11.7"]}
+  - {id: dt.treat, name: Treat another, tags: [situation.downtime.recovery], scale: day, duration: {days: 1}, verb: "07's treatment", clock: null, costs: {supplies: "per 07"},
+     effects: ["07: the day counts as a Treat at reach 1 with no roll for ordinary nursing"], rule: "15.13.3", lifecycle: provisional, basis: ["07 Interface requests"]}
+  - {id: dt.train, name: Train, tags: [situation.downtime.training], scale: week, duration: {weeks: 1}, verb: null, clock: "per learning target", costs: {fee_per_week: "7 | 25 | 100 by target (learning table)"},
+     effects: ["tick the target's learning clock by the source's rate", "cnt.training 1 unit on the target's tag", "grant (provisional) on completion"],
+     rule: "15.11.1", lifecycle: provisional, basis: ["05.8.5", "05.9.4", "02.4.6", "03.5.5", "08.8.8"]}
+  - {id: dt.retrain, name: Retrain, tags: [situation.downtime.training], scale: week, duration: "1 week (a calling pick) | 2 weeks (a training license or an origin competence entry)", verb: null, clock: null,
+     costs: {fee_per_week: "as Train"}, effects: ["15.11.4"], rule: "15.11.4", lifecycle: provisional, basis: ["04.8.7", "02.2.6"]}
+  - {id: dt.penance, name: Penance, tags: [situation.downtime], scale: week, duration: {weeks: 1}, verb: null, clock: "clk.atonement.<calling> (04.9.4)",
+     costs: {cost: "one S3 cost from 01's menu, in the keeper's form"}, effects: [{effect_id: eff.tick_clock, params: {clock: "clk.atonement.<calling>", ticks: 3}}],
+     requires: "the keeper's place or representative within reach", rule: "15.11.5", lifecycle: provisional, basis: ["04.9.4"]}
+  - {id: dt.research, name: Research week, tags: [situation.investigation.research, situation.downtime.project], scale: week, duration: {weeks: 1}, verb: verb.observe,
+     attribute: intellect, primary_tag: deed.lore.investigation.records, dc: "the collection's tier (investigation.yaml#research)", clock: "a research clock (4/6/8) or 05.8.4's rite research clock",
+     costs: {access: "a request R2-R4 for a private collection", optional: "1 coin a day for copies"}, effects: ["ticks = delivered reach", "document placements and lore keys on completion"],
+     rule: "15.13.4", lifecycle: provisional, basis: ["15.9.14", "05.8.4"]}
+  - {id: dt.craft, name: Craft, tags: [situation.downtime.project], scale: "day or week by make.time_per_tick", duration: "08.6.4", verb: "per the license", clock: "08.6.4's progress and spoilage",
+     costs: {materials: "08"}, effects: ["08.6.4", "cnt.made on completion"], rule: "15.13.5", lifecycle: provisional, basis: ["08.6.4"]}
+  - {id: dt.project, name: Pursue a project, tags: [situation.downtime.project], scale: week, duration: {weeks: 1}, verb: "the project's anchor", clock: "project_scopes",
+     costs: {coin_per_week: "0 | 7 | 25 | 100 by scope"}, effects: ["ticks = delivered reach", "on_complete writes"], rule: "15.12.1", lifecycle: provisional, basis: ["15.12.1"]}
+  - {id: dt.cultivate, name: Cultivate, tags: [situation.downtime, deed.influence.persuasion.rapport], scale: day, duration: {days: 1}, verb: null, clock: null,
+     costs: {coin: "at most 1 Unit"}, effects: ["memory helped (+1, small source, weekly cap, cap Friendly)", "a running persuasion campaign +2"],
+     requires: "a known want, or an errand the NPC names", rule: "15.13.6", lifecycle: provisional, basis: ["15.1.7", "15.8.1"]}
+  - {id: dt.work, name: Work, tags: [situation.downtime.commerce], scale: week, duration: {weeks: 1}, verb: null, clock: null, costs: {},
+     effects: [{wage: {unskilled: 7, trained: 10, expert: 25, master: 60}}], settlement_limit: {village: trained, town: expert, city: master},
+     rule: "15.13.7", lifecycle: provisional, basis: ["08.8.8", "08.8.9"]}
+  - {id: dt.perform, name: Perform for coin, tags: [situation.social.performance, situation.downtime.commerce], scale: day, duration: {evenings: 1}, verb: verb.talk,
+     primary_tag: deed.influence.performance, dc: "audience tier (social.yaml#audience_tiers)", clock: null, costs: {}, effects: ["social.yaml#performance_coin"],
+     rule: "15.4.5", lifecycle: provisional, basis: ["15.4.5"]}
+  - {id: dt.carouse, name: Carouse, tags: [situation.downtime.carousing], scale: day, duration: {days: 1}, verb: verb.talk, attribute: presence,
+     primary_tag: "deed.guile.streetwise.informants | deed.influence.persuasion.rapport", dc: {camp: easy, village: easy, town: moderate, city: hard}, clock: null,
+     costs: {coin: "2, or 1 Unit at comfortable or richer"},
+     effects: ["rumors heard = delivered reach (11's regional rumor tables)", "reach 3+: a contact (tbl.15.carousing_contact)", "failure: one rumor", "critical failure: tbl.15.carousing_trouble", "counts as solace"],
+     rule: "15.13.8", lifecycle: provisional, basis: ["15.13.8", "R5 P-45"]}
+  - {id: dt.ask_around, name: Ask around, tags: [situation.investigation.inquiry], scale: day, duration: {days: 1}, verb: verb.talk, primary_tag: deed.lore.investigation.inquiry,
+     dc: "the settlement's tier", clock: null, costs: {}, effects: ["person-held placements and rumors on the subject in this settlement (15.9.7)", "core placements shareable at R1 without a roll"],
+     stakes: "risky when someone recorded does not want the question asked (cost.exposure)", rule: "15.13.9", lifecycle: provisional, basis: ["15.13.9"]}
+  - {id: dt.shop, name: Shop and sell, tags: [situation.downtime.commerce], scale: day, duration: {days: 1}, verb: verb.talk, clock: "clk.find_buyer (08.8.5)", costs: {coin: prices},
+     effects: ["08.8.4-08.8.7; 15.7.3"], rule: "15.13.10", lifecycle: provisional, basis: ["08.8"]}
+  - {id: dt.maintain, name: Maintain holdings, tags: [situation.downtime], scale: "day or week", duration: "1 day (oversight) | 1 week (repair)", verb: "none | verb.handle under craft.building", clock: "the holding's damage clock (11)",
+     costs: {}, effects: ["day: fact managed_this_week (a Precision lever on 11's yield roll)", "week: the holding's damage clock -2"], rule: "15.13.11", lifecycle: provisional, basis: ["08.8.8"]}
+  - {id: dt.worship, name: Worship and serve, tags: [situation.downtime], scale: "day or week", duration: "1 day | 1 week", verb: null, clock: null, costs: {optional: offerings},
+     effects: ["day: solace; fact rites_kept.<keeper>.<season>", "week of service: officiant memory helped (+1); reputation in the faith's scope (11)"], rule: "15.13.12", lifecycle: provisional, basis: ["05.7.4"]}
+  - {id: dt.persona, name: Prepare a persona, tags: [situation.downtime, deed.guile.disguise], scale: week, duration: {weeks: 1}, verb: "forgery beat if forging (deed.guile.disguise.forgery, Hard)", clock: null,
+     costs: {coin: "1 Unit"}, effects: [{effect_id: eff.grant_license, params: {license: lic.15.persona, grade: held, duration: permanent}}], rule: "15.13.13", lifecycle: provisional, basis: ["15.5.6"]}
+  - {id: dt.recruit, name: Recruit, tags: [situation.downtime], scale: day, duration: {days: 1}, verb: verb.talk, dc: "the settlement's tier", clock: null, costs: {wages: "08.8.8 on hiring"},
+     effects: ["candidates = delivered reach (16's templates)"], rule: "15.13.14", lifecycle: provisional, basis: ["16", "00.4.4"]}
+  - {id: dt.lie_low, name: Lie low, tags: [situation.downtime], scale: week, duration: {weeks: 1}, verb: null, clock: "11's notice/attention clock", costs: {},
+     effects: ["the PC's notice clock in this region -2 (11)"], rule: "15.13.15", lifecycle: provisional, basis: ["R5 LW-14"]}
+  - {id: dt.rest, name: Rest, tags: [situation.downtime], scale: day, duration: {days: 1}, verb: null, clock: null, costs: {lifestyle: weekly}, effects: [], rule: "15.13.16", lifecycle: provisional, basis: ["15.13.16"]}
+
+learning:                  # T-15-18 (restates 05/02; those chapters are canonical for their numbers)
+  - {target: training_license, clock: "clk.train.<lic>", segments: 8, mentor: 2, text: 1, fee: 7, mentor_must_hold: "the license at expert, or lic.call.proof for its tag"}
+  - {target: ability_min_tier_1_2, clock: "clk.learn.<ab>", segments: 6, mentor: 3, text: 2, practice_alone: 1, fee: 7, mentor_must_hold: "the ability at rank 2+ or lic.call.proof"}
+  - {target: ability_min_tier_3_4, clock: "clk.learn.<ab>", segments: 8, mentor: 3, text: 2, practice_alone: 1, fee: 25}
+  - {target: ability_min_tier_5, clock: "clk.learn.<ab>", segments: 12, mentor: 3, text: 2, practice_alone: 1, fee: 100}
+  - {target: tongue_grade_step, clock: clk.learn_tongue, segments: 8, mentor: 1, text: 1, immersion: 2, fee: 7, mentor_must_hold: "the tongue at accented or better"}
+  - {target: letters, clock: clk.learn_letters, segments: 8, mentor: 2, text: 1, fee: 7}
+  - {target: rite, clock: clk.learn_rite, segments: 6, mentor: 3, text: 2, fee_by_scale: {personal: 7, local: 7, site: 25, regional: 100}}
+  - {target: drill_tag, clock: null, mentor: "cnt.training 1", fee_by_mentor_grade: {trained: 7, expert: 25, master: 100}}
+learning_rules:
+  cnt_training_per_week: 1
+  grants: "provisional; confirmed or lapsed at the season boundary (04, 05)"
+  rolls_never_grant: true
+  grade_cap: trained
+  requires: "05.9.4 (arcane: letters and a text or teacher; divine: a keeper's acceptance; primal: a place or spirit's acceptance)"
+
+teacher_odds:              # 15.11.2 (Oracle rung for "is there someone here who teaches X?")
+  common_trade: {city: likely, town: likely, village: even, camp: unlikely}
+  uncommon_art: {city: even, town: unlikely, village: remote, camp: remote}
+  magic_common_school: {city: even, town: unlikely, village: remote, camp: impossible}
+  magic_rare_school: {city: unlikely, town: remote, village: remote, camp: impossible}
+  teach_request_size: {trained_course_or_tongue: R3, ability_min_tier_3_plus_magic_or_rite: R4}
+
+retrain:                   # 15.11.4
+  - {what: calling_pick, weeks: 1, procedure: PR-04-5, teacher: none}
+  - {what: origin_training_license, weeks: 2, teacher: "a teacher of the new license", result: "old revoked; new granted at trained"}
+  - {what: origin_competence_entry, weeks: 2, teacher: "a teacher of the new tag", requires: "the PC holds the new tag's training license"}
+retrain_rules:
+  one_at_a_time: true
+  never_changes: [attributes, origins, birth_results, callings, calling_grade_licenses]
+
+menu_also:                 # activities listed in T-15-16 but defined in another chapter's file (no duplicate ids)
+  - {ref: dt.11.train_successor, defined_in: "legacy.yaml#train_successor", rule: "11.13.10", scale: week, note: "listed at integration (IR ch.11 to 15)"}
+project_scopes:            # T-15-17
+  - {scope: personal, clocks: [8], coin_per_week: 0, examples: ["a book", "a reputation in one circle", "a garden"]}
+  - {scope: local, clocks: [12], coin_per_week: 7, examples: ["a village bridge", "a school", "a lawsuit"]}
+  - {scope: regional, clocks: [12, 12], coin_per_week: 25, examples: ["a market charter", "a road for a valley"]}
+  - {scope: realm, clocks: [12, 12, 12], coin_per_week: 100, examples: ["a law changed", "an order founded"]}
+projects:
+  ticks: delivered_reach
+  delegation: {ticks_per_week: 1, cost: "the worker's wage (08.8.8)", max_per_project_per_week: 1}
+  obstacles: {cap: "half the clock until removed", removed_ticks: 2}
+  decay: {influence_campaign: "-1 per week with no tick", other: none}
+  building: "08.8.8 holdings: price paid as materials over the build; build weeks are the clock"
+  clock_template: {id: clk.15.project, name: "<the obstacle>", kind: project, owner: "15", visibility: public, direction: fill}

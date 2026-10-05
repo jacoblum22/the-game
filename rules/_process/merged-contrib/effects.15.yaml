@@ -1,0 +1,59 @@
+# data/contrib/effects.15.yaml -- chapter 15's effect owner-block (merged into data/effects.yaml#blocks).
+# Owner: 15-social-investigation-downtime. Schema: data/SCHEMAS.md#effects.yaml.
+# Chapter 15 builds most of its mechanics as engine rules (standing, terms, ceilings, clue delivery) that
+#   call tools directly; these five definitions exist so that ITEMS, ABILITIES, CONDITIONS and CLOCK
+#   COMPLETIONS (04.9.4's atonement for an NPC grudge; a truth-out clock; a charm; a "silver tongue" talent)
+#   can produce social results through the substrate rather than prose (00.16.4).
+# Pending 00 amendments (15 Interface requests to 00, items 6): (a) the `step` op admits the ladders
+#   `request_size` (R1..R5) and `plausibility` (known_false..plausible); (b) eff.15.standing_step and
+#   eff.15.alertness_step use op set_fact whose write is `set_relationship` / the NPC alertness field.
+#   Until then, a data entry may use them only as clock-completion effects (engine-applied, 15.1.5 source 3/5).
+# Basis: [00.10.1] [PR-00-8] [15.1.5] [15.3.4] [15.5.2] [15.5.4] [15.5.7] [DL-15-30]
+
+schema_version: 1
+blocks:
+  - owner: "15"
+    entries:
+      - id: eff.15.standing_step
+        op: set_fact
+        regime: independent_trigger
+        hook: per source (on_clock_complete for atonement and campaign clocks; on_boundary for an item's effect)
+        params: {target: npc_id, toward: "pc | companion id", steps: "-3..3", cap: "warm | friendly | devoted", reason: str}
+        text: "{target}'s standing toward {toward} moves {steps} (not above {cap})."
+        why_not_core: no core effect writes a relationship; 15.1.5 requires every standing change to cite a source, which this records
+        lifecycle: provisional
+        basis: ['15.1.5', '15.1.7', '04.9.4 (an atoned grudge writes a standing step)', DL-15-30]
+      - id: eff.15.request_step
+        op: step
+        regime: additive
+        params: {ladder: request_size, steps: "-1..1", applies_when: expr}
+        text: "Requests {applies_when} count {steps} rung on the request ladder (15.3.2); the ceiling still applies."
+        why_not_core: eff.reach_step and eff.stakes_step cover reach and stakes; the request ladder is 15's
+        lifecycle: provisional
+        basis: ['15.3.2', '15.3.4', DL-15-30]
+      - id: eff.15.plausibility_step
+        op: step
+        regime: additive
+        params: {ladder: plausibility, steps: "-1..1", applies_when: expr}
+        text: "Claims {applies_when} are judged {steps} rung on the plausibility ladder (15.5.2); never past known false."
+        why_not_core: plausibility is a 4-rung ladder owned by 15
+        lifecycle: provisional
+        basis: ['15.5.2', DL-15-30]
+      - id: eff.15.alertness_step
+        op: set_fact
+        regime: independent_trigger
+        hook: per source (on_boundary, on_condition_applied, on_clock_tick)
+        params: {target: target_rule, steps: "-2..2", toward: "id | intruders"}
+        text: "{target}'s alertness toward {toward} moves {steps} rung(s) (unaware, suspicious, alert, alarmed)."
+        why_not_core: alertness is a stored NPC field (15.5.7), not a quantity or condition
+        lifecycle: provisional
+        basis: ['15.5.7', '01.13.6', DL-15-30]
+      - id: eff.15.expose_lie
+        op: reveal
+        regime: independent_trigger
+        hook: on_clock_complete
+        params: {lie: lie_id, believers: "all | id"}
+        text: "The lie {lie} is exposed to {believers} (PR-15-3)."
+        why_not_core: eff.reveal unseals a fact to the narrator; exposure also supersedes beliefs and writes memories (15.5.5)
+        lifecycle: provisional
+        basis: ['15.5.4', '15.5.5', DL-15-17]

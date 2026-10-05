@@ -1,0 +1,74 @@
+=== R1. Pacing: session at which the focus calling reaches each tier (p10/median/p90; 99 = not within 60 sessions) ===
+focused archer who scouts by stealth (03 scenario A) key deed.martial.archery
+    T1: 3/4/5  T2: 7/9/11  T3: 16/19/22  T4: 31/34/38  T5: 52/56/99  | reached T4 / T5 within 60: 200 / 165 of 200
+    first recognition policy: {'grant': 198, 'offer': 2}  confidence then: {2: 1, 3: 1, 4: 188, 5: 10}
+single-track swordsman (fights 70% of scenes)        key deed.martial.blade
+    T1: 2/2/3  T2: 5/6/7  T3: 11/12/13  T4: 19/21/23  T5: 32/35/37  | reached T4 / T5 within 60: 200 / 200 of 200
+    first recognition policy: {'grant': 200}  confidence then: {4: 186, 5: 14}
+burglar: site scenes 60%                             key deed.guile.thievery
+    T1: 3/4/5  T2: 8/10/11  T3: 18/21/29  T4: 32/35/40  T5: 53/59/99  | reached T4 / T5 within 60: 199 / 133 of 200
+    first recognition policy: {'grant': 200}  confidence then: {4: 194, 5: 6}
+envoy: social scenes 55%                             key deed.influence.persuasion
+    T1: 4/5/7  T2: 9/12/14  T3: 23/28/48  T4: 44/49/99  T5: 99/99/99  | reached T4 / T5 within 60: 177 / 0 of 200
+    first recognition policy: {'grant': 187, 'offer': 13}  confidence then: {2: 7, 3: 6, 4: 185, 5: 2}
+
+=== R2. Fine (level-3) key: lockpicking under the burglar (W x 3/4) ===
+    T1: 3/4/6  T2: 8/10/12  T3: 18/22/37  T4: 34/38/46  T5: 58/99/99
+
+=== R3. Broad (branch) calling: who is offered Warrior (deed.martial) at tier 1? ===
+   focused archer who scouts by stealth (03 scenario A) first at session 6/99/99; never in 30 sessions: 166/200; top child share of martial at s10 0.71/0/0.85
+   single-track swordsman (fights 70% of scenes)        first at session 99/99/99; never in 30 sessions: 199/200; top child share of martial at s10 0.81/0/0.91
+   mixed-weapons fighter                                first at session 3/3/4; never in 30 sessions: 0/200; top child share of martial at s10 0.41/0/0.55
+   mixed-weapons Warrior tiers: T1: 3/3/4  T2: 7/8/9  T3: 14/15/17  T4: 26/29/31  T5: 46/49/52
+
+=== R4. Hybrid trigger (martial x arcane): offered within 20 sessions, by mix (R3 G-1 acceptance test) ===
+   100/0   offered in   0/200 runs; first offer session -; balance at s20 median 0.0
+    95/5   offered in   0/200 runs; first offer session -; balance at s20 median 0.12
+    90/10  offered in   9/200 runs; first offer session 4/5/9; balance at s20 median 0.23
+    80/20  offered in 173/200 runs; first offer session 3/5/11; balance at s20 median 0.405
+    70/30  offered in 200/200 runs; first offer session 2/3/5; balance at s20 median 0.64
+    60/40  offered in 200/200 runs; first offer session 2/3/4; balance at s20 median 0.79
+    50/50  offered in 200/200 runs; first offer session 2/3/4; balance at s20 median 0.93
+   archer with stealth as a second pillar (25% of scenes): martial x guile hybrid offered in 65/200 runs by session 20
+   deliberate 50/50 hybrid tiers: T1: 2/3/4  T2: 5/6/8  T3: 11/13/14  T4: 21/23/25  T5: 36/39/42
+
+=== R5. The grinder (03 scenario B): rats every scene, 20 sessions ===
+   recognized in 0/200 runs; archery weighted at s20 median 340; counted median 100; difficult-or-better events 0, routine 60
+
+=== R6. A whole character (level-2 keys + branch keys + curated level-3 keys live; 3 seats; accepts everything) ===
+   focused archer who scouts by stealth (03 scenario A) first recognition at session 3/4/5; callings at s5/10/20/40 (median): 1/3/3/3; highest tier at s10/20/40/60: 2/3/4/5
+      first calling recognized: {'deed.martial.archery': 91, 'deed.martial': 4, "('deed.martial', 'deed.guile')": 3, 'deed.guile.stealth': 2}
+   single-track swordsman (fights 70% of scenes)        first recognition at session 2/2/3; callings at s5/10/20/40 (median): 1/2/2/3; highest tier at s10/20/40/60: 2/3/5/5
+      first calling recognized: {'deed.martial.blade': 100}
+   burglar: site scenes 60%                             first recognition at session 3/4/5; callings at s5/10/20/40 (median): 2/3/3/3; highest tier at s10/20/40/60: 2/2/4/4
+      first calling recognized: {'deed.guile.thievery.lockpicking': 51, 'deed.guile.thievery': 43, 'deed.guile.stealth': 4, 'deed.martial.blade': 2}
+   three-branch generalist                              first recognition at session 3/5/7; callings at s5/10/20/40 (median): 1/3/3/3; highest tier at s10/20/40/60: 1/2/3/4
+      first calling recognized: {"('deed.martial', 'deed.arcane')": 36, 'deed.martial.blade': 24, 'deed.divine.smiting': 22, 'deed.arcane.fire': 13}
+
+=== R7. Confidence calibration: confirmation rate by confidence (level-2 candidates, nothing accepted) ===
+   confidence 0:  427 candidates; would confirm 37%; a designed pillar 21%
+   confidence 1:  202 candidates; would confirm 59%; a designed pillar 41%
+   confidence 2:  193 candidates; would confirm 64%; a designed pillar 76%
+   confidence 3:  108 candidates; would confirm 73%; a designed pillar 72%
+   confidence 4:  755 candidates; would confirm 91%; a designed pillar 98%
+   confidence 5:   38 candidates; would confirm 97%; a designed pillar 100%
+   policy grant   :  534 candidates; would confirm 91%; a designed pillar 98%
+   policy offer   :  738 candidates; would confirm 74%; a designed pillar 74%
+   policy abstain :  451 candidates; would confirm 38%; a designed pillar 22%
+
+=== R8. Provisional grants: a tier-2 grant, then the archer turns to fire sorcery (04.8.2) ===
+   archer who stops at once                   : tier 2 confirmed  18 / lapsed 181 of 199
+   archer who keeps shooting one more session : tier 2 confirmed 134 / lapsed  65 of 199
+   archer who two more sessions               : tier 2 confirmed 190 / lapsed   9 of 199
+   archer who never stops                     : tier 2 confirmed 199 / lapsed   0 of 199
+   the new fire calling is first recognized 2/3/5 sessions after the pivot (pivot the session after the grant)
+
+=== R9. Yields 04 depends on (session 10): weighted / counted / recent at the focus node ===
+   deed.martial.archery: weighted 188/237/281   counted 35/50/62   recent 55/80/112   counted/weighted median 0.21
+   deed.guile.thievery: weighted 184/220/259   counted 31/42/55   recent 58/77/103   counted/weighted median 0.19
+   deed.influence.persuasion: weighted 138/176/223   counted 19/27/37   recent 42/60/82   counted/weighted median 0.15
+
+=== R10. Vow (conduct-keyed) pacing: session at which positive points on one axis reach P (p10/median/p90) ===
+   sworn in all but name (takes the costly choice in 60% of fights) 16: 4/5/8  40: 9/12/16  80: 19/24/29  140: 35/42/49  220: 57/65/75
+   often (30% of fights)                                            16: 6/10/16  40: 17/24/33  80: 38/47/59  140: 71/83/99  220: 99/99/99
+   now and then (03 scenario A: 15%)                                16: 11/18/31  40: 32/48/68  80: 73/99/99  140: 99/99/99  220: 99/99/99

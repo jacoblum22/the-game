@@ -1,0 +1,1797 @@
+# data/conditions.yaml
+# Purpose: every condition in the game, in 00.9.1's schema. 27 entries: the 23 ids reserved by 00 (T-00-15) and
+#   four added by ch.06 (cond.surprised, cond.silenced, cond.broken, cond.heartened; DL-06-12). Chapter 07 adds
+#   affliction stages and wound carriers in its owner-block under `blocks:`.
+# Owner: 06-conflict (06.7). Schema: data/SCHEMAS.md#conditionsyaml (Condition, 00.9.1).
+# Conventions used here (06.7.2, the three voices; DL-06-13):
+#   - status effects (eff.status_modifier, eff.defense_status) act on the BEARER's own checks and defenses;
+#   - eff.grant_lever / eff.06.grant_snag with `to:` give an ENGINE-CITED lever or snag to those acting against
+#     the bearer; they count toward the two-per-roll limit and the +-4 cap (00.3.9);
+#   - eff.restrict forbids verbs, methods and senses (a union across conditions; forbidden = G4 for the beat);
+#   - "rounds:1" is "until the end of the bearer's next turn" (counted at its turn_end, 06.1.8);
+#   - `diminishing` on control conditions shares ONE counter per target across the group `control` (06.7.4);
+#     cond.charmed and cond.frightened at S3 join that group by rule (06.7.4), not by this field.
+# Optional fields added by ch.06 (documented in 06 Tables): reserved_by_00, intent, diminishing.group,
+#   diminishing.counter_decay.
+# Generated and validated by rules/_process/simulation/06-gen_data06.py.
+# Basis: [00.9] [T-00-15] [R2 #3] [R3 06.7] [06.7] [DL-06-12..14]
+
+schema_version: 1
+conditions:
+- id: cond.off_balance
+  name: Off-balance
+  tags: []
+  category: physical
+  severity: S1
+  severity_variable: false
+  stacking: refresh
+  max_stacks: 1
+  escalates_to: null
+  duration: rounds:1
+  decay: []
+  cleanse:
+  - means: 'one action by the bearer (verb.handle): recover footing'
+    requires: null
+    check: null
+  exclusion_group: null
+  priority_rank: 0
+  neutralizes: []
+  diminishing: null
+  modifies:
+  - effect_id: eff.status_modifier
+    params:
+      amount: -2
+      applies_when: attribute in [might, agility]
+  periodic: []
+  on_apply: []
+  on_remove: []
+  visible: true
+  narration_may_not_imply:
+  - a wound, a mark or lasting harm
+  - a condition other than this one
+  - a duration longer than the instance holds
+  - that the bearer fell (that is cond.prone)
+  reserved_by_00: true
+  intent: Footing lost. The bearer is worse at physical acts; others may cite it as one lever (type by use); the engine
+    does not cite it automatically.
+  lifecycle: provisional
+  basis:
+  - '00.9'
+  - T-00-15
+  - '06.7'
+  - DL-06-13
+- id: cond.prone
+  name: Prone
+  tags: []
+  category: positional
+  severity: S2
+  severity_variable: false
+  stacking: unique
+  max_stacks: 1
+  escalates_to: null
+  duration: until_cleansed
+  decay: []
+  cleanse:
+  - means: 'Stand: one action; provokes an Opportunity Strike (06.6.2 c)'
+    requires: null
+    check: null
+  exclusion_group: null
+  priority_rank: 0
+  neutralizes: []
+  diminishing: null
+  modifies:
+  - effect_id: eff.status_modifier
+    params:
+      amount: -2
+      applies_when: verb in [verb.strike, verb.force, verb.grapple] and delivery is melee
+  - effect_id: eff.grant_lever
+    params:
+      type: precision
+      to: each entity making the beat against the bearer
+      for_verbs:
+      - verb.strike
+      - verb.grapple
+      - verb.force
+      for_tags:
+      - aimed workings
+      duration: while the condition lasts
+      engine_cited: true
+      applies_when: the attack is melee
+  - effect_id: eff.06.grant_snag
+    params:
+      type: precision
+      to: each entity attacking the bearer
+      applies_when: the attack is ranged from band.near or farther
+      fact: prone target at range
+  - effect_id: eff.06.pace
+    params:
+      amount: -1
+      note: each band transition costs +1 action; at most one band a turn
+  periodic: []
+  on_apply: []
+  on_remove: []
+  visible: true
+  narration_may_not_imply:
+  - a wound, a mark or lasting harm
+  - a condition other than this one
+  - a duration longer than the instance holds
+  reserved_by_00: true
+  intent: On the ground.
+  lifecycle: provisional
+  basis:
+  - '00.9'
+  - T-00-15
+  - '06.7'
+  - DL-06-13
+- id: cond.grabbed
+  name: Grabbed
+  tags: []
+  category: positional
+  severity: S1
+  severity_variable: true
+  stacking: replace_stronger
+  max_stacks: 1
+  escalates_to: null
+  duration: while:the hold lasts
+  decay: []
+  cleanse:
+  - means: 'break free: one action'
+    requires: null
+    check:
+      verb: verb.grapple
+      dc_tier: 'opposed: the holder''s Might defense (or the binding object''s tier)'
+  - means: the holder releases, is moved away, or is stunned, unconscious or defeated
+    requires: null
+    check: null
+  exclusion_group: hold
+  priority_rank: 1
+  neutralizes: []
+  diminishing: null
+  modifies:
+  - effect_id: eff.restrict
+    params:
+      forbid:
+        methods:
+        - change band away from the holder
+      target: the bearer
+      duration: while the condition lasts
+  - effect_id: eff.status_modifier
+    params:
+      amount: -2
+      applies_when: severity is S2 and (trait.action.manipulate or (verb is verb.strike and weapon lacks close_quarters))
+  periodic: []
+  on_apply: []
+  on_remove: []
+  visible: true
+  narration_may_not_imply:
+  - a wound, a mark or lasting harm
+  - a condition other than this one
+  - a duration longer than the instance holds
+  reserved_by_00: true
+  intent: 'Held; cannot move away. S1: may otherwise act. S2: hands hampered, and dragged when the holder Moves.'
+  lifecycle: provisional
+  basis:
+  - '00.9'
+  - T-00-15
+  - '06.7'
+  - DL-06-13
+  - 01.18.9
+  - 06.5.2
+- id: cond.restrained
+  name: Restrained
+  tags: []
+  category: positional
+  severity: S3
+  severity_variable: false
+  stacking: replace_stronger
+  max_stacks: 1
+  escalates_to: null
+  duration: while:the hold or bonds last
+  decay: []
+  cleanse:
+  - means: 'break free: one action'
+    requires: null
+    check:
+      verb: verb.grapple
+      dc_tier: 'opposed: the holder''s Might defense; bonds: their tier (rope Moderate, chain Very hard)'
+  exclusion_group: hold
+  priority_rank: 2
+  neutralizes: []
+  diminishing:
+    window: conflict
+    group: control
+    halve_after: 1
+    immune_after: 2
+    counter_decay: &id001
+      boundary: round
+      amount: -1
+      only_if: the target carried no control condition this round
+  modifies:
+  - effect_id: eff.restrict
+    params:
+      forbid:
+        verbs:
+        - verb.move
+        methods:
+        - Strike with a weapon lacking close_quarters
+        - the Fend reaction
+      target: the bearer
+      duration: while the condition lasts
+  - effect_id: eff.status_modifier
+    params:
+      amount: -2
+      applies_when: attribute in [might, agility]
+  - effect_id: eff.defense_status
+    params:
+      amount: -2
+      attribute: agility
+      applies_when: any aimed attack against the bearer
+  - effect_id: eff.grant_lever
+    params:
+      type: precision
+      to: each entity making the beat against the bearer
+      for_verbs:
+      - verb.strike
+      - verb.grapple
+      - verb.force
+      for_tags:
+      - aimed workings
+      duration: while the condition lasts
+      engine_cited: true
+  periodic: []
+  on_apply: []
+  on_remove: []
+  visible: true
+  narration_may_not_imply:
+  - a wound, a mark or lasting harm
+  - a condition other than this one
+  - a duration longer than the instance holds
+  reserved_by_00: true
+  intent: Bound or held fast; Move forbidden.
+  lifecycle: provisional
+  basis:
+  - '00.9'
+  - T-00-15
+  - '06.7'
+  - DL-06-13
+- id: cond.pinned
+  name: Pinned
+  tags: []
+  category: positional
+  severity: S4
+  severity_variable: false
+  stacking: replace_stronger
+  max_stacks: 1
+  escalates_to: null
+  duration: while:the hold lasts
+  decay: []
+  cleanse:
+  - means: 'break free: one action'
+    requires: null
+    check:
+      verb: verb.grapple
+      dc_tier: 'opposed: the holder''s Might defense'
+  exclusion_group: hold
+  priority_rank: 3
+  neutralizes: []
+  diminishing:
+    window: conflict
+    group: control
+    halve_after: 1
+    immune_after: 2
+    counter_decay: *id001
+  modifies:
+  - effect_id: eff.restrict
+    params:
+      forbid:
+        verbs:
+        - verb.move
+        - verb.strike
+        - verb.force
+        - verb.exert
+        methods:
+        - any beat with trait.action.manipulate
+        - Grapple other than to break free
+        - the Fend reaction
+      target: the bearer
+      duration: while the condition lasts
+  - effect_id: eff.defense_status
+    params:
+      amount: -4
+      attribute: agility
+      applies_when: any aimed attack against the bearer
+  - effect_id: eff.grant_lever
+    params:
+      type: precision
+      to: each entity making the beat against the bearer
+      for_verbs:
+      - verb.strike
+      - verb.grapple
+      - verb.force
+      for_tags:
+      - aimed workings
+      duration: while the condition lasts
+      engine_cited: true
+  periodic: []
+  on_apply: []
+  on_remove: []
+  visible: true
+  narration_may_not_imply:
+  - a wound, a mark or lasting harm
+  - a condition other than this one
+  - a duration longer than the instance holds
+  reserved_by_00: true
+  intent: Held down; most physical verbs forbidden; helpless (06.7.6).
+  lifecycle: provisional
+  basis:
+  - '00.9'
+  - T-00-15
+  - '06.7'
+  - DL-06-13
+- id: cond.blinded
+  name: Blinded
+  tags: []
+  category: sensory
+  severity: S3
+  severity_variable: false
+  stacking: refresh
+  max_stacks: 1
+  escalates_to: null
+  duration: rounds:1
+  decay: []
+  cleanse:
+  - means: 'one action by the bearer (verb.handle): wipe or wash the eyes, when the source is grit, glare or a covering'
+    requires: null
+    check: null
+  exclusion_group: null
+  priority_rank: 0
+  neutralizes: []
+  diminishing:
+    window: conflict
+    group: control
+    halve_after: 1
+    immune_after: 2
+    counter_decay: *id001
+  modifies:
+  - effect_id: eff.status_modifier
+    params:
+      amount: -4
+      applies_when: the beat relies on sight (Strike, aimed working, opposed Move)
+  - effect_id: eff.defense_status
+    params:
+      amount: -2
+      attribute: agility
+      applies_when: any aimed attack against the bearer
+  - effect_id: eff.grant_lever
+    params:
+      type: precision
+      to: each entity making the beat against the bearer
+      for_verbs:
+      - verb.strike
+      - verb.grapple
+      - verb.force
+      for_tags:
+      - aimed workings
+      duration: while the condition lasts
+      engine_cited: true
+  - effect_id: eff.restrict
+    params:
+      forbid:
+        senses:
+        - sight
+        methods:
+        - sight-based Observe
+        - reactions against what the bearer cannot see
+        - targeting beyond band.engaged except a suspected place at two snags
+      target: the bearer
+      duration: while the condition lasts
+  periodic: []
+  on_apply: []
+  on_remove: []
+  visible: true
+  narration_may_not_imply:
+  - a wound, a mark or lasting harm
+  - a condition other than this one
+  - a duration longer than the instance holds
+  reserved_by_00: true
+  intent: Cannot see.
+  lifecycle: provisional
+  basis:
+  - '00.9'
+  - T-00-15
+  - '06.7'
+  - DL-06-13
+- id: cond.deafened
+  name: Deafened
+  tags: []
+  category: sensory
+  severity: S2
+  severity_variable: false
+  stacking: refresh
+  max_stacks: 1
+  escalates_to: null
+  duration: rounds:1
+  decay: []
+  cleanse: []
+  exclusion_group: null
+  priority_rank: 0
+  neutralizes: []
+  diminishing: null
+  modifies:
+  - effect_id: eff.status_modifier
+    params:
+      amount: -2
+      applies_when: the check is the tempo check or notice against an unseen mover
+  - effect_id: eff.restrict
+    params:
+      forbid:
+        senses:
+        - hearing
+        methods:
+        - hearing-based Observe
+      target: the bearer
+      duration: while the condition lasts
+  - effect_id: eff.condition_immunity
+    params:
+      forbid:
+        effects_with_trait:
+        - trait.action.speech
+      target: self
+  periodic: []
+  on_apply: []
+  on_remove: []
+  visible: true
+  narration_may_not_imply:
+  - a wound, a mark or lasting harm
+  - a condition other than this one
+  - a duration longer than the instance holds
+  reserved_by_00: true
+  intent: Cannot hear; beats that work through speech do not affect the bearer.
+  lifecycle: provisional
+  basis:
+  - '00.9'
+  - T-00-15
+  - '06.7'
+  - DL-06-13
+- id: cond.dazed
+  name: Dazed
+  tags:
+  - trait.nature.mental
+  category: mental
+  severity: S2
+  severity_variable: false
+  stacking: refresh
+  max_stacks: 1
+  escalates_to: null
+  duration: rounds:1
+  decay: []
+  cleanse: []
+  exclusion_group: null
+  priority_rank: 0
+  neutralizes: []
+  diminishing:
+    window: conflict
+    group: control
+    halve_after: 1
+    immune_after: 2
+    counter_decay: *id001
+  modifies:
+  - effect_id: eff.06.fewer_actions
+    params:
+      actions_delta: -1
+      minimum_actions: 1
+      reactions_delta: -1
+  periodic: []
+  on_apply: []
+  on_remove: []
+  visible: true
+  narration_may_not_imply:
+  - a wound, a mark or lasting harm
+  - a condition other than this one
+  - a duration longer than the instance holds
+  reserved_by_00: true
+  intent: 'Reduced actions: one action fewer each turn (never fewer than one); no reaction.'
+  lifecycle: provisional
+  basis:
+  - '00.9'
+  - T-00-15
+  - '06.7'
+  - DL-06-13
+- id: cond.stunned
+  name: Stunned
+  tags: []
+  category: mental
+  severity: S3
+  severity_variable: false
+  stacking: refresh
+  max_stacks: 1
+  escalates_to: null
+  duration: rounds:1
+  decay: []
+  cleanse: []
+  exclusion_group: null
+  priority_rank: 0
+  neutralizes: []
+  diminishing:
+    window: conflict
+    group: control
+    halve_after: 1
+    immune_after: 2
+    counter_decay: *id001
+  modifies:
+  - effect_id: eff.06.fewer_actions
+    params:
+      actions_delta: -3
+      minimum_actions: 0
+      reactions_delta: -1
+  - effect_id: eff.defense_status
+    params:
+      amount: -2
+      attribute: agility
+      applies_when: any aimed attack against the bearer
+  - effect_id: eff.grant_lever
+    params:
+      type: precision
+      to: each entity making the beat against the bearer
+      for_verbs:
+      - verb.strike
+      - verb.grapple
+      - verb.force
+      for_tags:
+      - aimed workings
+      duration: while the condition lasts
+      engine_cited: true
+  periodic: []
+  on_apply:
+  - effect_id: eff.cleanse
+    params:
+      condition_or_category: sustained workings held by the bearer
+      target: the bearer
+  on_remove: []
+  visible: true
+  narration_may_not_imply:
+  - a wound, a mark or lasting harm
+  - a condition other than this one
+  - a duration longer than the instance holds
+  reserved_by_00: true
+  intent: No actions and no reactions; sustained workings end.
+  lifecycle: provisional
+  basis:
+  - '00.9'
+  - T-00-15
+  - '06.7'
+  - DL-06-13
+- id: cond.unconscious
+  name: Unconscious
+  tags: []
+  category: physical
+  severity: S4
+  severity_variable: false
+  stacking: unique
+  max_stacks: 1
+  escalates_to: null
+  duration: scene
+  decay: []
+  cleanse:
+  - means: 'woken: one action by another, or any harm (ordinary sleep only)'
+    requires: the source is sleep
+    check: null
+  - means: the scene ends, or treatment (07)
+    requires: the source is a nonlethal defeat
+    check: null
+  exclusion_group: null
+  priority_rank: 0
+  neutralizes: []
+  diminishing: null
+  modifies:
+  - effect_id: eff.06.fewer_actions
+    params:
+      actions_delta: -3
+      minimum_actions: 0
+      reactions_delta: -1
+  - effect_id: eff.defense_status
+    params:
+      amount: -4
+      attribute: agility
+      applies_when: any aimed attack against the bearer
+  - effect_id: eff.grant_lever
+    params:
+      type: precision
+      to: each entity making the beat against the bearer
+      for_verbs:
+      - verb.strike
+      - verb.grapple
+      - verb.force
+      for_tags:
+      - aimed workings
+      duration: while the condition lasts
+      engine_cited: true
+  - effect_id: eff.restrict
+    params:
+      forbid:
+        senses:
+        - sight
+        - hearing
+        verbs:
+        - verb.observe
+      target: the bearer
+      duration: while the condition lasts
+  periodic: []
+  on_apply:
+  - effect_id: eff.apply_condition
+    params:
+      condition: cond.prone
+      severity: S2
+      duration: until_cleansed
+      target: the bearer
+  on_remove: []
+  visible: true
+  narration_may_not_imply:
+  - a wound, a mark or lasting harm
+  - a condition other than this one
+  - a duration longer than the instance holds
+  reserved_by_00: true
+  intent: Helpless and unaware; no actions.
+  lifecycle: provisional
+  basis:
+  - '00.9'
+  - T-00-15
+  - '06.7'
+  - DL-06-13
+- id: cond.frightened
+  name: Frightened
+  tags:
+  - trait.nature.mental
+  - harm.mind
+  category: mental
+  severity: S1
+  severity_variable: true
+  stacking: replace_stronger
+  max_stacks: 1
+  escalates_to: null
+  duration: until_cleansed
+  decay:
+  - boundary: turn_end
+    action: reduce_severity
+  cleanse: []
+  exclusion_group: null
+  priority_rank: 0
+  neutralizes: []
+  diminishing: null
+  modifies:
+  - effect_id: eff.status_modifier
+    params:
+      amount: -1
+      applies_when: severity is S1 and the source is perceived
+  - effect_id: eff.status_modifier
+    params:
+      amount: -2
+      applies_when: severity in [S2, S3] and the source is perceived
+  - effect_id: eff.restrict
+    params:
+      forbid:
+        methods:
+        - willingly Move closer to the source
+      target: the bearer
+      duration: while the condition lasts
+  - effect_id: eff.restrict
+    params:
+      forbid:
+        methods:
+        - any first action of the turn other than moving away from the source, if moving away is possible
+      target: the bearer
+      duration: while severity is S3
+  periodic: []
+  on_apply:
+  - effect_id: eff.tick_clock
+    params:
+      clock: clk.morale.<the bearer's side>
+      ticks: 1
+      limit: once per round per side
+  on_remove: []
+  visible: true
+  narration_may_not_imply:
+  - a wound, a mark or lasting harm
+  - a condition other than this one
+  - a duration longer than the instance holds
+  - that the bearer fled further than it Moved
+  reserved_by_00: true
+  intent: Fear of a recorded source; cannot willingly approach it. Decays one rung at each of the bearer's turn ends. At
+    S3 it counts as a control condition (06.7.4).
+  lifecycle: provisional
+  basis:
+  - '00.9'
+  - T-00-15
+  - '06.7'
+  - DL-06-13
+  - 06.7.4
+- id: cond.charmed
+  name: Charmed
+  tags:
+  - trait.nature.mental
+  category: mental
+  severity: S2
+  severity_variable: false
+  stacking: unique
+  max_stacks: 1
+  escalates_to: null
+  duration: scene
+  decay: []
+  cleanse:
+  - means: the source or its allies harm the bearer
+    requires: null
+    check: null
+  exclusion_group: null
+  priority_rank: 0
+  neutralizes: []
+  diminishing: null
+  modifies:
+  - effect_id: eff.restrict
+    params:
+      forbid:
+        methods:
+        - attack-trait beats against the source
+      target: the bearer
+      duration: while the condition lasts
+  - effect_id: eff.grant_lever
+    params:
+      type: precision
+      to: the source
+      for_verbs:
+      - verb.talk
+      for_tags: []
+      duration: while the condition lasts
+      engine_cited: true
+  periodic: []
+  on_apply: []
+  on_remove: []
+  visible: true
+  narration_may_not_imply:
+  - a wound, a mark or lasting harm
+  - a condition other than this one
+  - a duration longer than the instance holds
+  - that the bearer obeys commands
+  - that the bearer attacks its allies
+  reserved_by_00: true
+  intent: Regards the source as a friend. Counts as a control condition (06.7.4). A charmed PC stays under the player's
+    control; only the restriction and the lever apply.
+  lifecycle: provisional
+  basis:
+  - '00.9'
+  - T-00-15
+  - '06.7'
+  - DL-06-13
+- id: cond.distracted
+  name: Distracted
+  tags: []
+  category: mental
+  severity: S1
+  severity_variable: false
+  stacking: refresh
+  max_stacks: 1
+  escalates_to: null
+  duration: rounds:1
+  decay: []
+  cleanse: []
+  exclusion_group: null
+  priority_rank: 0
+  neutralizes: []
+  diminishing: null
+  modifies:
+  - effect_id: eff.status_modifier
+    params:
+      amount: -2
+      applies_when: attribute is wits
+  - effect_id: eff.defense_status
+    params:
+      amount: -2
+      attribute: wits
+      applies_when: any
+  periodic: []
+  on_apply: []
+  on_remove: []
+  visible: true
+  narration_may_not_imply:
+  - a wound, a mark or lasting harm
+  - a condition other than this one
+  - a duration longer than the instance holds
+  reserved_by_00: true
+  intent: 'Attention split: worse at noticing, easier to slip past or feint.'
+  lifecycle: provisional
+  basis:
+  - '00.9'
+  - T-00-15
+  - '06.7'
+  - DL-06-13
+- id: cond.exposed
+  name: Exposed
+  tags: []
+  category: physical
+  severity: S1
+  severity_variable: false
+  stacking: refresh
+  max_stacks: 1
+  escalates_to: null
+  duration: rounds:1
+  decay: []
+  cleanse: []
+  exclusion_group: null
+  priority_rank: 0
+  neutralizes: []
+  diminishing: null
+  modifies:
+  - effect_id: eff.grant_lever
+    params:
+      type: precision
+      to: each entity making the beat against the bearer
+      for_verbs:
+      - verb.strike
+      - verb.grapple
+      - verb.force
+      for_tags:
+      - aimed workings
+      duration: while the condition lasts
+      engine_cited: true
+  periodic: []
+  on_apply: []
+  on_remove: []
+  visible: true
+  narration_may_not_imply:
+  - a wound, a mark or lasting harm
+  - a condition other than this one
+  - a duration longer than the instance holds
+  reserved_by_00: true
+  intent: 'Defenses opened: attackers hold a Precision lever (05.6; Quarry''s Mark; a Setup).'
+  lifecycle: provisional
+  basis:
+  - '00.9'
+  - T-00-15
+  - '06.7'
+  - DL-06-13
+  - 05 Interface request (a)
+- id: cond.slowed
+  name: Slowed
+  tags: []
+  category: physical
+  severity: S2
+  severity_variable: false
+  stacking: refresh
+  max_stacks: 1
+  escalates_to: null
+  duration: rounds:1
+  decay: []
+  cleanse: []
+  exclusion_group: null
+  priority_rank: 0
+  neutralizes: []
+  diminishing: null
+  modifies:
+  - effect_id: eff.06.pace
+    params:
+      amount: -1
+      note: each band transition costs +1 action
+  - effect_id: eff.restrict
+    params:
+      forbid:
+        methods:
+        - Withdraw and Strike in the same turn
+      target: the bearer
+      duration: while the condition lasts
+  periodic: []
+  on_apply: []
+  on_remove: []
+  visible: true
+  narration_may_not_imply:
+  - a wound, a mark or lasting harm
+  - a condition other than this one
+  - a duration longer than the instance holds
+  reserved_by_00: true
+  intent: Fewer bands per move.
+  lifecycle: provisional
+  basis:
+  - '00.9'
+  - T-00-15
+  - '06.7'
+  - DL-06-13
+- id: cond.weakened
+  name: Weakened
+  tags: []
+  category: physical
+  severity: S1
+  severity_variable: true
+  stacking: replace_stronger
+  max_stacks: 1
+  escalates_to: null
+  duration: rounds:1
+  decay: []
+  cleanse: []
+  exclusion_group: null
+  priority_rank: 0
+  neutralizes: []
+  diminishing: null
+  modifies:
+  - effect_id: eff.status_modifier
+    params:
+      amount: -2
+      applies_when: attribute is might
+  - effect_id: eff.harm_severity_step
+    params:
+      ladder: severity
+      steps: -1
+      applies_when: harm dealt by the bearer and severity of the condition is S1
+  - effect_id: eff.harm_severity_step
+    params:
+      ladder: severity
+      steps: -2
+      applies_when: harm dealt by the bearer and severity of the condition is S2
+  periodic: []
+  on_apply: []
+  on_remove: []
+  visible: true
+  narration_may_not_imply:
+  - a wound, a mark or lasting harm
+  - a condition other than this one
+  - a duration longer than the instance holds
+  reserved_by_00: true
+  intent: Reduced harm dealt.
+  lifecycle: provisional
+  basis:
+  - '00.9'
+  - T-00-15
+  - '06.7'
+  - DL-06-13
+- id: cond.exhausted
+  name: Exhausted
+  tags: []
+  category: physical
+  severity: S2
+  severity_variable: false
+  stacking: intensify
+  max_stacks: 3
+  escalates_to: null
+  duration: until_rest:rest_long
+  decay:
+  - boundary: rest_long
+    action: reduce_stack
+  cleanse: []
+  exclusion_group: null
+  priority_rank: 0
+  neutralizes: []
+  diminishing: null
+  modifies:
+  - effect_id: eff.status_modifier
+    params:
+      amount: -1
+      applies_when: any; per stack (stacks 1..3 give -1, -2, -3)
+  - effect_id: eff.06.pace
+    params:
+      amount: -1
+      applies_when: stacks is 3
+      note: as cond.slowed
+  periodic: []
+  on_apply: []
+  on_remove: []
+  visible: true
+  narration_may_not_imply:
+  - a wound, a mark or lasting harm
+  - a condition other than this one
+  - a duration longer than the instance holds
+  reserved_by_00: true
+  intent: Worn down. Three stacks at most; one stack leaves at each completed long rest (07).
+  lifecycle: provisional
+  basis:
+  - '00.9'
+  - T-00-15
+  - '06.7'
+  - DL-06-13
+  - 05.6.6 (overdraw adds a stack)
+- id: cond.bleeding
+  name: Bleeding
+  tags:
+  - harm.physical.cut
+  category: physical
+  severity: S1
+  severity_variable: false
+  stacking: intensify
+  max_stacks: 3
+  escalates_to: null
+  duration: scene
+  decay: []
+  cleanse:
+  - means: 'staunch it: one action'
+    requires: null
+    check:
+      verb: verb.handle
+      dc_tier: easy
+  - means: any magical healing of the bearer
+    requires: null
+    check: null
+  exclusion_group: null
+  priority_rank: 0
+  neutralizes: []
+  diminishing: null
+  modifies: []
+  periodic:
+  - boundary: turn_end
+    effect_id: eff.06.internal_harm
+    params:
+      vitality_per_stack: 1
+      harm_tags:
+      - harm.physical.cut
+      no_reduction: true
+  on_apply: []
+  on_remove: []
+  visible: true
+  narration_may_not_imply:
+  - a wound, a mark or lasting harm
+  - a condition other than this one
+  - a duration longer than the instance holds
+  reserved_by_00: true
+  intent: Loses 1 Vitality per stack at each of its turn ends.
+  lifecycle: provisional
+  basis:
+  - '00.9'
+  - T-00-15
+  - '06.7'
+  - DL-06-13
+- id: cond.burning
+  name: Burning
+  tags:
+  - harm.fire.flame
+  category: physical
+  severity: S1
+  severity_variable: false
+  stacking: intensify
+  max_stacks: 3
+  escalates_to: null
+  duration: rounds:3
+  decay: []
+  cleanse:
+  - means: 'one action by the bearer (verb.handle): beat out the flames'
+    requires: null
+    check: null
+  - means: water, or dropping to roll (the bearer becomes prone)
+    requires: null
+    check: null
+  exclusion_group: null
+  priority_rank: 0
+  neutralizes:
+  - cond.chilled
+  - cond.frozen
+  diminishing: null
+  modifies: []
+  periodic:
+  - boundary: turn_end
+    effect_id: eff.deal_harm
+    params:
+      severity: S1
+      harm_tags:
+      - harm.fire.flame
+      target: the bearer
+      times: stacks
+  on_apply: []
+  on_remove: []
+  visible: true
+  narration_may_not_imply:
+  - a wound, a mark or lasting harm
+  - a condition other than this one
+  - a duration longer than the instance holds
+  reserved_by_00: true
+  intent: Takes S1 fire harm per stack at each of its turn ends (reduction applies to each).
+  lifecycle: provisional
+  basis:
+  - '00.9'
+  - T-00-15
+  - '06.7'
+  - DL-06-13
+- id: cond.chilled
+  name: Chilled
+  tags:
+  - harm.frost.cold
+  category: physical
+  severity: S1
+  severity_variable: false
+  stacking: escalate
+  max_stacks: 2
+  escalates_to:
+    condition: cond.frozen
+    at_stacks: 2
+  duration: rounds:2
+  decay: []
+  cleanse:
+  - means: a fire or warmth for one action
+    requires: null
+    check: null
+  exclusion_group: null
+  priority_rank: 0
+  neutralizes:
+  - cond.burning
+  diminishing: null
+  modifies:
+  - effect_id: eff.status_modifier
+    params:
+      amount: -1
+      applies_when: attribute is agility
+  periodic: []
+  on_apply: []
+  on_remove: []
+  visible: true
+  narration_may_not_imply:
+  - a wound, a mark or lasting harm
+  - a condition other than this one
+  - a duration longer than the instance holds
+  reserved_by_00: true
+  intent: Cold slows the hands and feet; a second stack freezes.
+  lifecycle: provisional
+  basis:
+  - '00.9'
+  - T-00-15
+  - '06.7'
+  - DL-06-13
+- id: cond.frozen
+  name: Frozen
+  tags:
+  - harm.frost.ice
+  category: physical
+  severity: S3
+  severity_variable: false
+  stacking: unique
+  max_stacks: 1
+  escalates_to: null
+  duration: rounds:1
+  decay: []
+  cleanse: []
+  exclusion_group: null
+  priority_rank: 0
+  neutralizes: []
+  diminishing:
+    window: conflict
+    group: control
+    halve_after: 1
+    immune_after: 2
+    counter_decay: *id001
+  modifies:
+  - effect_id: eff.restrict
+    params:
+      forbid:
+        verbs:
+        - verb.move
+      target: the bearer
+      duration: while the condition lasts
+  - effect_id: eff.status_modifier
+    params:
+      amount: -2
+      applies_when: attribute in [might, agility]
+  - effect_id: eff.defense_status
+    params:
+      amount: -2
+      attribute: agility
+      applies_when: any aimed attack against the bearer
+  - effect_id: eff.grant_lever
+    params:
+      type: precision
+      to: each entity making the beat against the bearer
+      for_verbs:
+      - verb.strike
+      - verb.grapple
+      - verb.force
+      for_tags:
+      - aimed workings
+      duration: while the condition lasts
+      engine_cited: true
+  periodic: []
+  on_apply: []
+  on_remove:
+  - effect_id: eff.apply_condition
+    params:
+      condition: cond.chilled
+      severity: S1
+      duration: rounds:2
+      target: the bearer
+  visible: true
+  narration_may_not_imply:
+  - a wound, a mark or lasting harm
+  - a condition other than this one
+  - a duration longer than the instance holds
+  reserved_by_00: true
+  intent: Locked by cold; Move forbidden. Thaws to one stack of chilled.
+  lifecycle: provisional
+  basis:
+  - '00.9'
+  - T-00-15
+  - '06.7'
+  - DL-06-13
+- id: cond.choking
+  name: Choking
+  tags:
+  - harm.physical.asphyxia
+  category: physical
+  severity: S2
+  severity_variable: false
+  stacking: refresh
+  max_stacks: 1
+  escalates_to: null
+  duration: while:the source lasts
+  decay: []
+  cleanse:
+  - means: leave the source (the smoke, the water) or break the hold
+    requires: null
+    check: null
+  exclusion_group: null
+  priority_rank: 0
+  neutralizes: []
+  diminishing: null
+  modifies:
+  - effect_id: eff.status_modifier
+    params:
+      amount: -2
+      applies_when: any
+  - effect_id: eff.restrict
+    params:
+      forbid:
+        methods:
+        - any beat with trait.action.speech
+      target: the bearer
+      duration: while the condition lasts
+  periodic:
+  - boundary: turn_end
+    effect_id: eff.06.internal_harm
+    params:
+      vitality_per_stack: 1
+      harm_tags:
+      - harm.physical.asphyxia
+      no_reduction: true
+  on_apply: []
+  on_remove: []
+  visible: true
+  narration_may_not_imply:
+  - a wound, a mark or lasting harm
+  - a condition other than this one
+  - a duration longer than the instance holds
+  reserved_by_00: true
+  intent: Cannot speak; loses 1 Vitality at each of its turn ends while the source lasts. Holding breath is ch.07's Endure.
+  lifecycle: provisional
+  basis:
+  - '00.9'
+  - T-00-15
+  - '06.7'
+  - DL-06-13
+- id: cond.poisoned
+  name: Poisoned
+  tags:
+  - harm.venom
+  category: affliction_stage
+  severity: S1
+  severity_variable: true
+  stacking: replace_stronger
+  max_stacks: 1
+  escalates_to: null
+  duration: until_cleansed
+  decay: []
+  cleanse:
+  - means: the affliction's stage table (ch.07) or a remedy
+    requires: null
+    check: null
+  exclusion_group: null
+  priority_rank: 0
+  neutralizes: []
+  diminishing: null
+  modifies:
+  - effect_id: eff.status_modifier
+    params:
+      amount: -1
+      applies_when: severity is S1
+  - effect_id: eff.status_modifier
+    params:
+      amount: -2
+      applies_when: severity in [S2, S3]
+  - effect_id: eff.status_modifier
+    params:
+      amount: -3
+      applies_when: severity in [S4, S5]
+  periodic: []
+  on_apply: []
+  on_remove: []
+  visible: true
+  narration_may_not_imply:
+  - a wound, a mark or lasting harm
+  - a condition other than this one
+  - a duration longer than the instance holds
+  reserved_by_00: true
+  intent: The generic carrier for ch.07's staged afflictions; periodic effects are the affliction's.
+  lifecycle: provisional
+  basis:
+  - '00.9'
+  - T-00-15
+  - '06.7'
+  - DL-06-13
+- id: cond.surprised
+  name: Surprised
+  tags: []
+  category: mental
+  severity: S2
+  severity_variable: false
+  stacking: unique
+  max_stacks: 1
+  escalates_to: null
+  duration: while:its first turn has not ended
+  decay: []
+  cleanse: []
+  exclusion_group: null
+  priority_rank: 0
+  neutralizes: []
+  diminishing: null
+  modifies:
+  - effect_id: eff.06.fewer_actions
+    params:
+      actions_delta: to one action on its first turn
+      minimum_actions: 1
+      reactions_delta: -1
+  - effect_id: eff.grant_lever
+    params:
+      type: precision
+      to: each entity making the beat against the bearer
+      for_verbs:
+      - verb.strike
+      - verb.grapple
+      - verb.force
+      for_tags:
+      - aimed workings
+      duration: while the condition lasts
+      engine_cited: true
+  - effect_id: eff.write_fact
+    params:
+      subject: the bearer
+      predicate: acts_last_in_round
+      value: 1
+  periodic: []
+  on_apply: []
+  on_remove: []
+  visible: true
+  narration_may_not_imply:
+  - a wound, a mark or lasting harm
+  - a condition other than this one
+  - a duration longer than the instance holds
+  reserved_by_00: false
+  intent: Caught unaware at the start of a conflict (06.2.4).
+  lifecycle: provisional
+  basis:
+  - '00.9'
+  - T-00-15
+  - '06.7'
+  - DL-06-13
+  - 06.2.4
+  - DL-06-12
+- id: cond.silenced
+  name: Silenced
+  tags: []
+  category: sensory
+  severity: S2
+  severity_variable: false
+  stacking: refresh
+  max_stacks: 1
+  escalates_to: null
+  duration: rounds:1
+  decay: []
+  cleanse: []
+  exclusion_group: null
+  priority_rank: 0
+  neutralizes: []
+  diminishing: null
+  modifies:
+  - effect_id: eff.restrict
+    params:
+      forbid:
+        methods:
+        - any beat with trait.action.speech
+        - workings that need the voice
+      target: the bearer
+      duration: while the condition lasts
+  periodic: []
+  on_apply: []
+  on_remove: []
+  visible: true
+  narration_may_not_imply:
+  - a wound, a mark or lasting harm
+  - a condition other than this one
+  - a duration longer than the instance holds
+  reserved_by_00: false
+  intent: Cannot speak (a gag, a spell, a crushed throat).
+  lifecycle: provisional
+  basis:
+  - '00.9'
+  - T-00-15
+  - '06.7'
+  - DL-06-13
+  - 01.17 trait.action.speech
+  - DL-06-12
+- id: cond.broken
+  name: Broken
+  tags:
+  - trait.nature.mental
+  category: mental
+  severity: S3
+  severity_variable: false
+  stacking: unique
+  max_stacks: 1
+  escalates_to: null
+  duration: conflict
+  decay: []
+  cleanse: []
+  exclusion_group: null
+  priority_rank: 0
+  neutralizes: []
+  diminishing: null
+  modifies:
+  - effect_id: eff.status_modifier
+    params:
+      amount: -2
+      applies_when: the beat has trait.action.attack
+  - effect_id: eff.restrict
+    params:
+      forbid:
+        methods:
+        - attack-trait beats unless flag.cornered or attacked while unable to flee
+      target: the bearer
+      duration: while the condition lasts
+  - effect_id: eff.grant_lever
+    params:
+      type: precision
+      to: each entity demanding its surrender
+      for_verbs:
+      - verb.talk
+      for_tags: []
+      duration: while the condition lasts
+      engine_cited: true
+  periodic: []
+  on_apply: []
+  on_remove: []
+  visible: true
+  narration_may_not_imply:
+  - a wound, a mark or lasting harm
+  - a condition other than this one
+  - a duration longer than the instance holds
+  reserved_by_00: false
+  intent: 'Its side''s morale clock completed (06.11.5): it flees, yields or cowers.'
+  lifecycle: provisional
+  basis:
+  - '00.9'
+  - T-00-15
+  - '06.7'
+  - DL-06-13
+  - 06.11.5
+  - DL-06-12
+- id: cond.heartened
+  name: Heartened
+  tags:
+  - trait.nature.mental
+  category: mental
+  severity: S1
+  severity_variable: true
+  stacking: replace_stronger
+  max_stacks: 1
+  escalates_to: null
+  duration: scene
+  decay: []
+  cleanse: []
+  exclusion_group: null
+  priority_rank: 0
+  neutralizes: []
+  diminishing: null
+  modifies:
+  - effect_id: eff.status_modifier
+    params:
+      amount: 1
+      applies_when: severity is S1
+  - effect_id: eff.status_modifier
+    params:
+      amount: 2
+      applies_when: severity is S2
+  - effect_id: eff.condition_immunity
+    params:
+      forbid:
+        conditions:
+        - cond.frightened at S1
+      target: self
+  periodic: []
+  on_apply: []
+  on_remove: []
+  visible: true
+  narration_may_not_imply:
+  - a wound, a mark or lasting harm
+  - a condition other than this one
+  - a duration longer than the instance holds
+  reserved_by_00: false
+  intent: 'Lifted by a rally, a blessing, a cause: the one status bonus (+1 or +2).'
+  lifecycle: provisional
+  basis:
+  - '00.9'
+  - T-00-15
+  - '06.7'
+  - DL-06-13
+  - 00.3.5 status best bonus +2
+  - DL-06-12
+blocks:   # owner-blocks merged at integration from _process/merged-contrib/conditions.NN.yaml (integration-merge.py)
+  # ---- merged from conditions.07.yaml ----
+  # data/contrib/conditions.07.yaml
+  # Purpose: ch.07's owner-block for data/conditions.yaml (T-00-19: "conditions: 07 (affliction carriers)"). Six
+  #   carriers: four wound carriers by site (the mechanical face of data/injuries.yaml wounds, T-07-4) and two
+  #   affliction carriers beside ch.06's cond.poisoned. Harm states (staggered, dying, dead) are NOT conditions (00.9.4).
+  # Confirmed, not redefined: cond.exhausted (ch.06: intensify, 3 stacks, -1 per stack, slowed at 3; 07.8.10) and
+  #   cond.poisoned (ch.06: -1 / -2 / -3 by severity; the carrier of every affliction of kind poison).
+  # Owner: 07-harm-recovery-death. Schema: data/SCHEMAS.md#conditionsyaml (Condition, 00.9.1); optional field `intent`
+  #   as ch.06 uses it. Generated and validated by rules/_process/simulation/07-gen_data07.py.
+  # Basis: [00.9] [06.7.1] [07.2.5] [07.9.1] [DL-07-10]
+  - owner: '07'
+    entries:
+
+    - id: cond.wound_arm
+      name: Wounded arm
+      tags: [harm.physical]
+      category: physical
+      severity: S2
+      severity_variable: true
+      stacking: replace_stronger
+      max_stacks: 1
+      escalates_to: null
+      duration: until_cleansed
+      decay: []
+      cleanse:
+      - {means: 'the wound''s recovery (07.8.5-07.8.7): the carrier ends when the wound record heals', requires: null, check: null}
+      exclusion_group: null
+      priority_rank: 0
+      neutralizes: []
+      diminishing: null
+      modifies:
+      - effect_id: eff.status_modifier
+        params: {amount: -1, applies_when: 'severity is S2; attack-trait and manipulate-trait beats with that arm, Grapple,
+            Might-based Force and Exert'}
+      - effect_id: eff.status_modifier
+        params: {amount: -2, applies_when: 'severity in [S3, S4]; attack-trait and manipulate-trait beats with that arm, Grapple,
+            Might-based Force and Exert'}
+      - effect_id: eff.status_modifier
+        params: {amount: -3, applies_when: 'severity is S5; attack-trait and manipulate-trait beats with that arm, Grapple,
+            Might-based Force and Exert'}
+      - effect_id: eff.restrict
+        params:
+          forbid:
+            methods: [a weapon of weight heavy, a bow]
+          target: the bearer
+          duration: while the condition lasts
+          applies_when: severity in [S3, S4, S5]
+      - effect_id: eff.restrict
+        params:
+          forbid:
+            methods: ['anything held in that hand: a shield, a second weapon, a two-handed method']
+          target: the bearer
+          duration: while the condition lasts
+          applies_when: severity in [S4, S5]
+      - effect_id: eff.restrict
+        params:
+          forbid:
+            methods: [Exert to climb or swim without help]
+          target: the bearer
+          duration: while the condition lasts
+          applies_when: severity is S5
+      periodic: []
+      on_apply: []
+      on_remove: []
+      visible: true
+      narration_may_not_imply: [a wound of another site or severity than the record, healing that the recovery clock has not
+          delivered]
+      intent: a wound of the arm or hand; penalty and restrictions by severity (T-07-4)
+      lifecycle: provisional
+      basis: ['00.9', 07.2.5, T-07-4, DL-07-10]
+    - id: cond.wound_leg
+      name: Wounded leg
+      tags: [harm.physical]
+      category: physical
+      severity: S2
+      severity_variable: true
+      stacking: replace_stronger
+      max_stacks: 1
+      escalates_to: null
+      duration: until_cleansed
+      decay: []
+      cleanse:
+      - {means: 'the wound''s recovery (07.8.5-07.8.7): the carrier ends when the wound record heals', requires: null, check: null}
+      exclusion_group: null
+      priority_rank: 0
+      neutralizes: []
+      diminishing: null
+      modifies:
+      - effect_id: eff.status_modifier
+        params: {amount: -1, applies_when: 'severity is S2; Move, Evade, and Exert or Sneak carried by the legs'}
+      - effect_id: eff.status_modifier
+        params: {amount: -2, applies_when: 'severity in [S3, S4]; Move, Evade, and Exert or Sneak carried by the legs'}
+      - effect_id: eff.status_modifier
+        params: {amount: -3, applies_when: 'severity is S5; Move, Evade, and Exert or Sneak carried by the legs'}
+      - effect_id: eff.06.pace
+        params: {amount: -1, applies_when: 'severity in [S3, S4, S5]'}
+      - effect_id: eff.restrict
+        params:
+          forbid:
+            methods: [Exert to jump or run]
+          target: the bearer
+          duration: while the condition lasts
+          applies_when: severity in [S4, S5]
+      - effect_id: eff.restrict
+        params:
+          forbid:
+            methods: ['standing unsupported: the bearer is cond.prone unless it leans on a staff, a wall or a companion; Move
+                is one band a turn at most']
+          target: the bearer
+          duration: while the condition lasts
+          applies_when: severity is S5
+      periodic: []
+      on_apply: []
+      on_remove: []
+      visible: true
+      narration_may_not_imply: [a wound of another site or severity than the record, healing that the recovery clock has not
+          delivered]
+      intent: a wound of the leg or foot; penalty and restrictions by severity (T-07-4)
+      lifecycle: provisional
+      basis: ['00.9', 07.2.5, T-07-4, DL-07-10]
+    - id: cond.wound_body
+      name: Wounded body
+      tags: [harm.physical]
+      category: physical
+      severity: S2
+      severity_variable: true
+      stacking: replace_stronger
+      max_stacks: 1
+      escalates_to: null
+      duration: until_cleansed
+      decay: []
+      cleanse:
+      - {means: 'the wound''s recovery (07.8.5-07.8.7): the carrier ends when the wound record heals', requires: null, check: null}
+      exclusion_group: null
+      priority_rank: 0
+      neutralizes: []
+      diminishing: null
+      modifies:
+      - effect_id: eff.status_modifier
+        params: {amount: -1, applies_when: 'severity is S2; Endure with Endurance, and sustained Exert'}
+      - effect_id: eff.status_modifier
+        params: {amount: -2, applies_when: 'severity in [S3, S4]; Endure with Endurance, and sustained Exert'}
+      - effect_id: eff.status_modifier
+        params: {amount: -3, applies_when: 'severity is S5; Endure with Endurance, and sustained Exert'}
+      - effect_id: eff.07.rest_cap
+        params:
+          rests: [breather]
+          quality: interrupted
+          applies_when: severity in [S3, S4, S5]
+      - effect_id: eff.apply_condition
+        params: {condition: cond.weakened, severity: S1, duration: while the condition lasts, target: the bearer, applies_when: 'severity
+            in [S4, S5]'}
+      - effect_id: eff.06.fewer_actions
+        params: {actions_delta: -1, minimum_actions: 1, reactions_delta: 0, applies_when: severity is S5}
+      periodic: []
+      on_apply: []
+      on_remove: []
+      visible: true
+      narration_may_not_imply: [a wound of another site or severity than the record, healing that the recovery clock has not
+          delivered]
+      intent: a wound of the trunk; penalty and restrictions by severity (T-07-4)
+      lifecycle: provisional
+      basis: ['00.9', 07.2.5, T-07-4, DL-07-10]
+    - id: cond.wound_head
+      name: Wounded head
+      tags: [harm.physical]
+      category: physical
+      severity: S2
+      severity_variable: true
+      stacking: replace_stronger
+      max_stacks: 1
+      escalates_to: null
+      duration: until_cleansed
+      decay: []
+      cleanse:
+      - {means: 'the wound''s recovery (07.8.5-07.8.7): the carrier ends when the wound record heals', requires: null, check: null}
+      exclusion_group: null
+      priority_rank: 0
+      neutralizes: []
+      diminishing: null
+      modifies:
+      - effect_id: eff.status_modifier
+        params: {amount: -1, applies_when: 'severity is S2; checks with Wits or Intellect (including tempo), and beats with
+            trait.action.concentrate'}
+      - effect_id: eff.status_modifier
+        params: {amount: -2, applies_when: 'severity in [S3, S4]; checks with Wits or Intellect (including tempo), and beats
+            with trait.action.concentrate'}
+      - effect_id: eff.status_modifier
+        params: {amount: -3, applies_when: 'severity is S5; checks with Wits or Intellect (including tempo), and beats with
+            trait.action.concentrate'}
+      - effect_id: eff.06.grant_snag
+        params: {type: precision, sign: snag, to: the bearer, fact: wound.head.blurred, applies_when: 'severity in [S3, S4,
+            S5]; ranged attacks and sight-based Observe beyond band.near', duration: while the condition lasts}
+      - effect_id: eff.restrict
+        params:
+          forbid:
+            senses: ['one sense, as the wound entry names: sight on one side, or hearing']
+          target: the bearer
+          duration: while the condition lasts
+          applies_when: severity in [S4, S5]
+      - effect_id: eff.06.fewer_actions
+        params: {actions_delta: -1, minimum_actions: 1, reactions_delta: 0, applies_when: severity is S5}
+      periodic: []
+      on_apply: []
+      on_remove: []
+      visible: true
+      narration_may_not_imply: [a wound of another site or severity than the record, healing that the recovery clock has not
+          delivered]
+      intent: a wound of the head or face; penalty and restrictions by severity (T-07-4)
+      lifecycle: provisional
+      basis: ['00.9', 07.2.5, T-07-4, DL-07-10]
+    - id: cond.diseased
+      name: Diseased
+      tags: [harm.blight.disease]
+      category: affliction_stage
+      severity: S1
+      severity_variable: true
+      stacking: replace_stronger
+      max_stacks: 1
+      escalates_to: null
+      duration: until_cleansed
+      decay: []
+      cleanse:
+      - {means: the affliction's stage table or a cure (07.9.6), requires: null, check: null}
+      exclusion_group: null
+      priority_rank: 0
+      neutralizes: []
+      diminishing: null
+      modifies:
+      - effect_id: eff.status_modifier
+        params: {amount: -1, applies_when: severity is S1}
+      - effect_id: eff.status_modifier
+        params: {amount: -2, applies_when: 'severity in [S2, S3]'}
+      - effect_id: eff.status_modifier
+        params: {amount: -3, applies_when: 'severity in [S4, S5]'}
+      - effect_id: eff.07.rest_cap
+        params:
+          rests: [rest_short, rest_long]
+          quality: partial
+          applies_when: severity in [S2, S3, S4, S5]
+      periodic: []
+      on_apply: []
+      on_remove: []
+      visible: true
+      narration_may_not_imply: [a stage other than the one held, 'a cure that no check, remedy or treatment delivered']
+      intent: the carrier for staged diseases (07.9.8); the same status numbers as cond.poisoned
+      lifecycle: provisional
+      basis: [00.9.4, 07.9.1, 07.9.8, R5 HR-08]
+    - id: cond.cursed
+      name: Cursed
+      tags: [trait.nature.magical]
+      category: magical
+      severity: S1
+      severity_variable: true
+      stacking: independent
+      max_stacks: 3
+      escalates_to: null
+      duration: until_cleansed
+      decay: []
+      cleanse:
+      - {means: the curse's lift (07.9.7), requires: 'the sealed lift fact, once learned', check: null}
+      - means: 'eff.05.end_working: one stage down'
+        requires: a working that ends magical effects
+        check: {verb: by the working, dc_tier: the curse's virulence}
+      exclusion_group: null
+      priority_rank: 0
+      neutralizes: []
+      diminishing: null
+      modifies:
+      - effect_id: eff.status_modifier
+        params: {amount: -1, applies_when: severity is S1; only the checks the curse entry names}
+      - effect_id: eff.status_modifier
+        params: {amount: -2, applies_when: 'severity in [S2, S3]; only the checks the curse entry names'}
+      - effect_id: eff.status_modifier
+        params: {amount: -3, applies_when: 'severity in [S4, S5]; only the checks the curse entry names'}
+      periodic: []
+      on_apply: []
+      on_remove: []
+      visible: true
+      narration_may_not_imply: [a stage other than the one held, that the curse is lifted before its lift fact is written]
+      intent: the carrier for staged curses (07.9.7); one instance per curse, up to three curses
+      lifecycle: provisional
+      basis: [00.9.4, 07.9.7, R5 HR-08]

@@ -1,0 +1,40 @@
+medium prog8 vs danger sizes, care, wild, mod5
+6 {'objective': 0.541, 'roused': 0.459, 'beats': 8.5, 'intervals': 12.0, 'fights': 0.51}
+8 {'objective': 0.739, 'roused': 0.261, 'beats': 9.5, 'intervals': 13.1, 'fights': 0.59}
+10 {'objective': 0.864, 'roused': 0.136, 'beats': 10.0, 'intervals': 13.7, 'fights': 0.63}
+12 {'objective': 0.941, 'roused': 0.059, 'beats': 10.2, 'intervals': 13.9, 'fights': 0.64}
+approach x mod, prog8 danger8? and 10
+8 care 3 {'objective': 0.54, 'roused': 0.46, 'beats': 9.9, 'intervals': 14.1, 'fights': 0.67}
+8 care 5 {'objective': 0.749, 'roused': 0.251, 'beats': 9.5, 'intervals': 13.1, 'fights': 0.58}
+8 care 7 {'objective': 0.878, 'roused': 0.122, 'beats': 8.4, 'intervals': 11.4, 'fights': 0.46}
+8 care 9 {'objective': 0.963, 'roused': 0.037, 'beats': 7.4, 'intervals': 9.6, 'fights': 0.32}
+8 stealth 3 {'objective': 0.585, 'roused': 0.415, 'beats': 10.2, 'intervals': 9.6, 'fights': 0.39}
+8 stealth 5 {'objective': 0.791, 'roused': 0.209, 'beats': 9.6, 'intervals': 8.8, 'fights': 0.33}
+8 stealth 7 {'objective': 0.91, 'roused': 0.09, 'beats': 8.5, 'intervals': 7.6, 'fights': 0.24}
+8 stealth 9 {'objective': 0.973, 'roused': 0.027, 'beats': 7.4, 'intervals': 6.4, 'fights': 0.17}
+8 haste 3 {'objective': 0.459, 'roused': 0.541, 'beats': 6.7, 'intervals': 6.2, 'fights': 0.15}
+8 haste 5 {'objective': 0.638, 'roused': 0.362, 'beats': 6.5, 'intervals': 5.8, 'fights': 0.14}
+8 haste 7 {'objective': 0.793, 'roused': 0.207, 'beats': 6.0, 'intervals': 5.2, 'fights': 0.11}
+8 haste 9 {'objective': 0.915, 'roused': 0.085, 'beats': 5.3, 'intervals': 4.4, 'fights': 0.07}
+10 care 3 {'objective': 0.695, 'roused': 0.305, 'beats': 10.9, 'intervals': 15.3, 'fights': 0.75}
+10 care 5 {'objective': 0.873, 'roused': 0.127, 'beats': 10.0, 'intervals': 13.6, 'fights': 0.62}
+10 care 7 {'objective': 0.955, 'roused': 0.045, 'beats': 8.6, 'intervals': 11.5, 'fights': 0.47}
+10 care 9 {'objective': 0.991, 'roused': 0.009, 'beats': 7.5, 'intervals': 9.7, 'fights': 0.33}
+10 stealth 3 {'objective': 0.74, 'roused': 0.26, 'beats': 11.1, 'intervals': 10.3, 'fights': 0.43}
+10 stealth 5 {'objective': 0.898, 'roused': 0.102, 'beats': 10.0, 'intervals': 9.2, 'fights': 0.34}
+10 stealth 7 {'objective': 0.967, 'roused': 0.033, 'beats': 8.7, 'intervals': 7.7, 'fights': 0.25}
+10 stealth 9 {'objective': 0.993, 'roused': 0.007, 'beats': 7.5, 'intervals': 6.5, 'fights': 0.17}
+10 haste 3 {'objective': 0.605, 'roused': 0.395, 'beats': 7.4, 'intervals': 6.8, 'fights': 0.2}
+10 haste 5 {'objective': 0.783, 'roused': 0.217, 'beats': 6.9, 'intervals': 6.2, 'fights': 0.16}
+10 haste 7 {'objective': 0.902, 'roused': 0.098, 'beats': 6.2, 'intervals': 5.3, 'fights': 0.11}
+10 haste 9 {'objective': 0.969, 'roused': 0.031, 'beats': 5.4, 'intervals': 4.5, 'fights': 0.08}
+sizes small6/8, medium8/10, large12/12, vast12/12 at mod5 care wild
+6 8 {'objective': 0.884, 'roused': 0.116, 'beats': 7.2, 'intervals': 9.5, 'fights': 0.34}
+8 10 {'objective': 0.865, 'roused': 0.135, 'beats': 10.0, 'intervals': 13.6, 'fights': 0.62}
+12 12 {'objective': 0.741, 'roused': 0.259, 'beats': 14.9, 'intervals': 21.2, 'fights': 1.16}
+12 10 {'objective': 0.578, 'roused': 0.422, 'beats': 14.0, 'intervals': 20.1, 'fights': 1.08}
+ratings at 8/10
+settled {'objective': 0.906, 'roused': 0.094, 'beats': 10.1, 'intervals': 13.8, 'fights': 0.19}
+wild {'objective': 0.867, 'roused': 0.133, 'beats': 10.0, 'intervals': 13.6, 'fights': 0.62}
+perilous {'objective': 0.814, 'roused': 0.186, 'beats': 9.8, 'intervals': 13.4, 'fights': 0.79}
+deadly {'objective': 0.58, 'roused': 0.42, 'beats': 8.8, 'intervals': 12.4, 'fights': 2.24}

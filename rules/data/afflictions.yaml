@@ -1,0 +1,1003 @@
+# data/afflictions.yaml
+# Purpose: staged afflictions: poisons, diseases and curses (07.9). An affliction is an exposure check, an onset, then
+#   a stage check at each cadence boundary: critical success two stages down, success one down, failure by 3 or less
+#   holds, failure one up, critical failure two up (07.9.3). Stage 0 is cured. Each stage applies one carrier
+#   condition (cond.poisoned, ch.06; cond.diseased, cond.cursed, data/conditions.yaml owner-block 07) at the stage's severity,
+#   optional stage harm at each check (no reduction, periodic, lethal only after the warn_stage warning is effective,
+#   07.9.5), and listed effects.
+# Owner: 07-harm-recovery-death. Schema: data/SCHEMAS.md#afflictionsyaml (Affliction: id, harm_tags, stages [{stage,
+#   condition, severity, duration, check {verb, dc_tier}, on_fail, on_success}], onset, cure). Optional fields added by
+#   ch.07 (documented in 07 Tables): kind, delivery, virulence, cadence, max_checks, lethal, warn_stage, contagious,
+#   terminal, lift, stage.harm, stage.effects, stage.text, check.attribute.
+# Cadence handlers: rounds -> the carrier's periodic at the bearer's turn_end (06.1.8); intervals -> h.07.affliction_onset;
+#   days:1 -> h.07.affliction_day; days:7 -> h.07.curse_cycle; trigger -> the named event.
+# Generated and validated by rules/_process/simulation/07-gen_data07.py.
+# Basis: [07.9] [R5 HR-08, G-8] [R: https://2e.aonprd.com/Rules.aspx?ID=2319] [DL-07-17]
+
+schema_version: 1
+afflictions:
+
+- id: aff.adder_venom
+  name: Adder venom
+  kind: poison
+  tags: [harm.venom.poison]
+  harm_tags: [harm.venom.poison]
+  delivery: [wound]
+  virulence: moderate
+  onset: rounds:1
+  cadence: rounds:1
+  max_checks: 4
+  lethal: false
+  warn_stage: null
+  contagious: false
+  stages:
+  - stage: 1
+    condition: cond.poisoned
+    severity: S1
+    duration: rounds:1
+    check: {verb: verb.endure, attribute: endurance, dc_tier: moderate}
+    on_fail: 'rise one stage (critical failure: two)'
+    on_success: 'fall one stage (critical success: two)'
+    harm: {severity: S1, no_reduction: true, periodic: true, at: each stage check}
+    effects: []
+    text: A burning ache spreads from the bite.
+  - stage: 2
+    condition: cond.poisoned
+    severity: S2
+    duration: rounds:1
+    check: {verb: verb.endure, attribute: endurance, dc_tier: moderate}
+    on_fail: 'rise one stage (critical failure: two)'
+    on_success: 'fall one stage (critical success: two)'
+    harm: {severity: S2, no_reduction: true, periodic: true, at: each stage check}
+    effects: []
+    text: The limb swells; the head swims.
+  - stage: 3
+    condition: cond.poisoned
+    severity: S3
+    duration: rounds:1
+    check: {verb: verb.endure, attribute: endurance, dc_tier: moderate}
+    on_fail: 'rise one stage (critical failure: two)'
+    on_success: 'fall one stage (critical success: two)'
+    harm: {severity: S2, no_reduction: true, periodic: true, at: each stage check}
+    effects:
+    - effect_id: eff.apply_condition
+      params: {condition: cond.weakened, severity: S1, duration: while the stage lasts, target: the bearer}
+    text: Strength drains out of the grip.
+  terminal: holds at stage 3
+  cure: ['a general antidote (item.consumable.remedy): one stage down', Treat (07.8.8), eff.cleanse naming cond.poisoned
+      (07.9.6), runs its course after 4 checks]
+  lift: null
+  lifecycle: provisional
+  basis: ['07.9', R5 HR-08, 'R: https://2e.aonprd.com/Rules.aspx?ID=2319']
+- id: aff.widow_venom
+  name: Weaver's venom
+  kind: poison
+  tags: [harm.venom.poison]
+  harm_tags: [harm.venom.poison]
+  delivery: [wound]
+  virulence: hard
+  onset: intervals:1
+  cadence: intervals:1
+  max_checks: 6
+  lethal: false
+  warn_stage: null
+  contagious: false
+  stages:
+  - stage: 1
+    condition: cond.poisoned
+    severity: S1
+    duration: intervals:1
+    check: {verb: verb.endure, attribute: endurance, dc_tier: hard}
+    on_fail: 'rise one stage (critical failure: two)'
+    on_success: 'fall one stage (critical success: two)'
+    effects:
+    - effect_id: eff.apply_condition
+      params: {condition: cond.slowed, severity: S2, duration: while the stage lasts, target: the bearer}
+    text: The legs grow heavy.
+  - stage: 2
+    condition: cond.poisoned
+    severity: S2
+    duration: intervals:1
+    check: {verb: verb.endure, attribute: endurance, dc_tier: hard}
+    on_fail: 'rise one stage (critical failure: two)'
+    on_success: 'fall one stage (critical success: two)'
+    effects:
+    - effect_id: eff.apply_condition
+      params: {condition: cond.slowed, severity: S2, duration: while the stage lasts, target: the bearer}
+    - effect_id: eff.apply_condition
+      params: {condition: cond.weakened, severity: S2, duration: while the stage lasts, target: the bearer}
+    text: The hands will not close.
+  - stage: 3
+    condition: cond.poisoned
+    severity: S3
+    duration: intervals:1
+    check: {verb: verb.endure, attribute: endurance, dc_tier: hard}
+    on_fail: 'rise one stage (critical failure: two)'
+    on_success: 'fall one stage (critical success: two)'
+    effects:
+    - effect_id: eff.apply_condition
+      params: {condition: cond.restrained, severity: S3, duration: while the stage lasts, target: the bearer}
+    - effect_id: eff.06.fewer_actions
+      params: {actions_delta: -2, minimum_actions: 1, reactions_delta: -1}
+    text: 'Awake and unable to move: what great spiders want of their prey.'
+  terminal: holds at stage 3
+  cure: ['a general antidote (item.consumable.remedy): one stage down', Treat (07.8.8), eff.cleanse naming cond.poisoned
+      (07.9.6), runs its course after 6 checks]
+  lift: null
+  notes: The venom of creatures whose disposition is drag_to_lair.
+  lifecycle: provisional
+  basis: ['07.9', R5 HR-08, 'R: https://2e.aonprd.com/Rules.aspx?ID=2319']
+- id: aff.nightshade
+  name: Nightshade
+  kind: poison
+  tags: [harm.venom.poison]
+  harm_tags: [harm.venom.poison]
+  delivery: [ingested]
+  virulence: hard
+  onset: intervals:1
+  cadence: intervals:1
+  max_checks: 8
+  lethal: true
+  warn_stage: 2
+  contagious: false
+  stages:
+  - stage: 1
+    condition: cond.poisoned
+    severity: S2
+    duration: intervals:1
+    check: {verb: verb.endure, attribute: endurance, dc_tier: hard}
+    on_fail: 'rise one stage (critical failure: two)'
+    on_success: 'fall one stage (critical success: two)'
+    effects:
+    - effect_id: eff.apply_condition
+      params: {condition: cond.distracted, severity: S1, duration: while the stage lasts, target: the bearer}
+    text: Dry mouth, wide pupils, a racing heart.
+  - stage: 2
+    condition: cond.poisoned
+    severity: S3
+    duration: intervals:1
+    check: {verb: verb.endure, attribute: endurance, dc_tier: hard}
+    on_fail: 'rise one stage (critical failure: two)'
+    on_success: 'fall one stage (critical success: two)'
+    harm: {severity: S2, no_reduction: true, periodic: true, at: each stage check}
+    effects: []
+    text: Visions; the heart stumbles.
+  - stage: 3
+    condition: cond.poisoned
+    severity: S4
+    duration: intervals:1
+    check: {verb: verb.endure, attribute: endurance, dc_tier: hard}
+    on_fail: 'rise one stage (critical failure: two)'
+    on_success: 'fall one stage (critical success: two)'
+    harm: {severity: S3, no_reduction: true, periodic: true, at: each stage check}
+    effects: []
+    text: Convulsions.
+  terminal: S3 harm at each check while stage 3 holds
+  cure: ['a specific remedy (charcoal and mustard-water, taken within the first two stages): two stages down', 'a general
+      antidote (item.consumable.remedy): one stage down', Treat (07.8.8), eff.cleanse naming cond.poisoned (07.9.6), runs
+      its course after 8 checks]
+  lift: null
+  lifecycle: provisional
+  basis: ['07.9', R5 HR-08, 'R: https://2e.aonprd.com/Rules.aspx?ID=2319']
+- id: aff.drowse
+  name: Drowse
+  kind: poison
+  tags: [harm.venom.poison]
+  harm_tags: [harm.venom.poison]
+  delivery: [ingested, inhaled]
+  virulence: moderate
+  onset: intervals:1
+  cadence: intervals:1
+  max_checks: 3
+  lethal: false
+  warn_stage: null
+  contagious: false
+  stages:
+  - stage: 1
+    condition: cond.poisoned
+    severity: S1
+    duration: intervals:1
+    check: {verb: verb.endure, attribute: endurance, dc_tier: moderate}
+    on_fail: 'rise one stage (critical failure: two)'
+    on_success: 'fall one stage (critical success: two)'
+    effects:
+    - effect_id: eff.apply_condition
+      params: {condition: cond.distracted, severity: S1, duration: while the stage lasts, target: the bearer}
+    text: Eyelids like lead.
+  - stage: 2
+    condition: cond.poisoned
+    severity: S2
+    duration: intervals:1
+    check: {verb: verb.endure, attribute: endurance, dc_tier: moderate}
+    on_fail: 'rise one stage (critical failure: two)'
+    on_success: 'fall one stage (critical success: two)'
+    effects:
+    - effect_id: eff.apply_condition
+      params: {condition: cond.unconscious, severity: S4, duration: 'until woken by harm or by one action of another,
+          then stage 1', target: the bearer}
+    text: Asleep.
+  terminal: holds at stage 2
+  cure: [being woken (stage 2 to stage 1), runs its course after 3 checks, 'a general antidote (item.consumable.remedy):
+      one stage down', Treat (07.8.8), eff.cleanse naming cond.poisoned (07.9.6)]
+  lift: null
+  notes: The carrier for ab.slow_draught and any sleeping draught (05's request).
+  lifecycle: provisional
+  basis: ['07.9', R5 HR-08, 'R: https://2e.aonprd.com/Rules.aspx?ID=2319']
+- id: aff.wyvern_venom
+  name: Wyvern venom
+  kind: poison
+  tags: [harm.venom.poison]
+  harm_tags: [harm.venom.poison]
+  delivery: [wound]
+  virulence: very_hard
+  onset: rounds:1
+  cadence: rounds:1
+  max_checks: 6
+  lethal: true
+  warn_stage: 1
+  contagious: false
+  stages:
+  - stage: 1
+    condition: cond.poisoned
+    severity: S2
+    duration: rounds:1
+    check: {verb: verb.endure, attribute: endurance, dc_tier: very_hard}
+    on_fail: 'rise one stage (critical failure: two)'
+    on_success: 'fall one stage (critical success: two)'
+    harm: {severity: S2, no_reduction: true, periodic: true, at: each stage check}
+    effects: []
+    text: Fire in the blood.
+  - stage: 2
+    condition: cond.poisoned
+    severity: S3
+    duration: rounds:1
+    check: {verb: verb.endure, attribute: endurance, dc_tier: very_hard}
+    on_fail: 'rise one stage (critical failure: two)'
+    on_success: 'fall one stage (critical success: two)'
+    harm: {severity: S3, no_reduction: true, periodic: true, at: each stage check}
+    effects: []
+    text: The heart labors.
+  - stage: 3
+    condition: cond.poisoned
+    severity: S4
+    duration: rounds:1
+    check: {verb: verb.endure, attribute: endurance, dc_tier: very_hard}
+    on_fail: 'rise one stage (critical failure: two)'
+    on_success: 'fall one stage (critical success: two)'
+    harm: {severity: S3, no_reduction: true, periodic: true, at: each stage check}
+    effects:
+    - effect_id: eff.apply_condition
+      params: {condition: cond.slowed, severity: S2, duration: while the stage lasts, target: the bearer}
+    text: The limbs stiffen.
+  terminal: S3 harm at each check while stage 3 holds
+  cure: ['a specific remedy (wyvern-bane, 08): two stages down', 'a general antidote (item.consumable.remedy): one stage
+      down', Treat (07.8.8), eff.cleanse naming cond.poisoned (07.9.6), runs its course after 6 checks]
+  lift: null
+  notes: 'A round-cadence killer: the warning fires at stage 1, and its bearer is a T4 foe whose severity row has usually
+    fired already.'
+  lifecycle: provisional
+  basis: ['07.9', R5 HR-08, 'R: https://2e.aonprd.com/Rules.aspx?ID=2319']
+- id: aff.ghoul_ichor
+  name: Ghoul ichor
+  kind: poison
+  tags: [harm.venom.poison, harm.blight.necrotic]
+  harm_tags: [harm.venom.poison, harm.blight.necrotic]
+  delivery: [wound]
+  virulence: moderate
+  onset: rounds:1
+  cadence: rounds:1
+  max_checks: 3
+  lethal: false
+  warn_stage: null
+  contagious: false
+  stages:
+  - stage: 1
+    condition: cond.poisoned
+    severity: S1
+    duration: rounds:1
+    check: {verb: verb.endure, attribute: endurance, dc_tier: moderate}
+    on_fail: 'rise one stage (critical failure: two)'
+    on_success: 'fall one stage (critical success: two)'
+    effects:
+    - effect_id: eff.apply_condition
+      params: {condition: cond.slowed, severity: S2, duration: while the stage lasts, target: the bearer}
+    text: Cold stiffness in the wound.
+  - stage: 2
+    condition: cond.poisoned
+    severity: S2
+    duration: rounds:1
+    check: {verb: verb.endure, attribute: endurance, dc_tier: moderate}
+    on_fail: 'rise one stage (critical failure: two)'
+    on_success: 'fall one stage (critical success: two)'
+    effects:
+    - effect_id: eff.apply_condition
+      params: {condition: cond.restrained, severity: S3, duration: 'rounds:1', target: the bearer}
+    text: 'Rigid for a breath (a control condition: 06.7.4 applies).'
+  terminal: holds at stage 2
+  cure: ['a general antidote (item.consumable.remedy): one stage down', Treat (07.8.8), eff.cleanse naming cond.poisoned
+      (07.9.6), runs its course after 3 checks]
+  lift: null
+  lifecycle: provisional
+  basis: ['07.9', R5 HR-08, 'R: https://2e.aonprd.com/Rules.aspx?ID=2319']
+- id: aff.blackroot
+  name: Blackroot
+  kind: poison
+  tags: [harm.venom.poison]
+  harm_tags: [harm.venom.poison]
+  delivery: [wound, ingested]
+  virulence: hard
+  onset: intervals:1
+  cadence: intervals:1
+  max_checks: 6
+  lethal: true
+  warn_stage: 2
+  contagious: false
+  stages:
+  - stage: 1
+    condition: cond.poisoned
+    severity: S2
+    duration: intervals:1
+    check: {verb: verb.endure, attribute: endurance, dc_tier: hard}
+    on_fail: 'rise one stage (critical failure: two)'
+    on_success: 'fall one stage (critical success: two)'
+    effects: []
+    text: A numb line creeping from the cut.
+  - stage: 2
+    condition: cond.poisoned
+    severity: S3
+    duration: intervals:1
+    check: {verb: verb.endure, attribute: endurance, dc_tier: hard}
+    on_fail: 'rise one stage (critical failure: two)'
+    on_success: 'fall one stage (critical success: two)'
+    harm: {severity: S2, no_reduction: true, periodic: true, at: each stage check}
+    effects: []
+    text: Black veins; cold sweat.
+  - stage: 3
+    condition: cond.poisoned
+    severity: S4
+    duration: intervals:1
+    check: {verb: verb.endure, attribute: endurance, dc_tier: hard}
+    on_fail: 'rise one stage (critical failure: two)'
+    on_success: 'fall one stage (critical success: two)'
+    harm: {severity: S3, no_reduction: true, periodic: true, at: each stage check}
+    effects: []
+    text: The breath comes short.
+  terminal: S3 harm at each check while stage 3 holds
+  cure: ['a specific remedy (bitterwort draught, 08): two stages down', 'a general antidote (item.consumable.remedy):
+      one stage down', Treat (07.8.8), eff.cleanse naming cond.poisoned (07.9.6), runs its course after 6 checks]
+  lift: null
+  notes: An assassin's blade venom.
+  lifecycle: provisional
+  basis: ['07.9', R5 HR-08, 'R: https://2e.aonprd.com/Rules.aspx?ID=2319']
+- id: aff.grey_spore
+  name: Grey spore
+  kind: poison
+  tags: [harm.venom.gas]
+  harm_tags: [harm.venom.gas]
+  delivery: [inhaled]
+  virulence: moderate
+  onset: rounds:2
+  cadence: intervals:1
+  max_checks: 4
+  lethal: false
+  warn_stage: null
+  contagious: false
+  stages:
+  - stage: 1
+    condition: cond.poisoned
+    severity: S1
+    duration: intervals:1
+    check: {verb: verb.endure, attribute: endurance, dc_tier: moderate}
+    on_fail: 'rise one stage (critical failure: two)'
+    on_success: 'fall one stage (critical success: two)'
+    effects:
+    - effect_id: eff.apply_condition
+      params: {condition: cond.distracted, severity: S1, duration: while the stage lasts, target: the bearer}
+    text: A cough that will not clear.
+  - stage: 2
+    condition: cond.poisoned
+    severity: S2
+    duration: intervals:1
+    check: {verb: verb.endure, attribute: endurance, dc_tier: moderate}
+    on_fail: 'rise one stage (critical failure: two)'
+    on_success: 'fall one stage (critical success: two)'
+    effects:
+    - effect_id: eff.apply_condition
+      params: {condition: cond.exhausted, severity: S2, duration: 'until_rest:rest_long', target: the bearer}
+    text: Lungs like wet wool.
+  terminal: holds at stage 2
+  cure: ['clean air for an interval: one stage down', 'a general antidote (item.consumable.remedy): one stage down', Treat
+      (07.8.8), eff.cleanse naming cond.poisoned (07.9.6), runs its course after 4 checks]
+  lift: null
+  lifecycle: provisional
+  basis: ['07.9', R5 HR-08, 'R: https://2e.aonprd.com/Rules.aspx?ID=2319']
+- id: aff.marsh_fever
+  name: Marsh fever
+  kind: disease
+  tags: [harm.blight.disease]
+  harm_tags: [harm.blight.disease]
+  delivery: [a wetland hazard (10), insect bites]
+  virulence: moderate
+  onset: days:2
+  cadence: days:1
+  max_checks: null
+  lethal: true
+  warn_stage: 3
+  contagious: false
+  stages:
+  - stage: 1
+    condition: cond.diseased
+    severity: S1
+    duration: days:1
+    check: {verb: verb.endure, attribute: endurance, dc_tier: moderate}
+    on_fail: 'rise one stage (critical failure: two)'
+    on_success: 'fall one stage (critical success: two)'
+    effects: []
+    text: Chills at dusk.
+  - stage: 2
+    condition: cond.diseased
+    severity: S2
+    duration: days:1
+    check: {verb: verb.endure, attribute: endurance, dc_tier: moderate}
+    on_fail: 'rise one stage (critical failure: two)'
+    on_success: 'fall one stage (critical success: two)'
+    effects:
+    - effect_id: eff.apply_condition
+      params: {condition: cond.exhausted, severity: S2, duration: while the stage lasts (this stack cannot be removed),
+        target: the bearer}
+    text: Fever and shaking.
+  - stage: 3
+    condition: cond.diseased
+    severity: S3
+    duration: days:1
+    check: {verb: verb.endure, attribute: endurance, dc_tier: moderate}
+    on_fail: 'rise one stage (critical failure: two)'
+    on_success: 'fall one stage (critical success: two)'
+    harm: {severity: S2, no_reduction: true, periodic: true, at: each stage check}
+    effects:
+    - effect_id: eff.apply_condition
+      params: {condition: cond.exhausted, severity: S2, duration: while the stage lasts, target: the bearer}
+    text: Burning up; the mind wanders.
+  - stage: 4
+    condition: cond.diseased
+    severity: S4
+    duration: days:1
+    check: {verb: verb.endure, attribute: endurance, dc_tier: moderate}
+    on_fail: 'rise one stage (critical failure: two)'
+    on_success: 'fall one stage (critical success: two)'
+    harm: {severity: S3, no_reduction: true, periodic: true, at: each stage check}
+    effects:
+    - effect_id: eff.apply_condition
+      params: {condition: cond.exhausted, severity: S2, duration: while the stage lasts, target: the bearer}
+    text: Delirium.
+  terminal: S3 harm at each check while stage 4 holds
+  cure: ['a specific remedy (feverbark tea, 08): two stages down', Treat (07.8.8), 'a week of convalescence: one stage
+      down (07.8.11)']
+  lift: null
+  lifecycle: provisional
+  basis: ['07.9', R5 HR-08, 'R: https://2e.aonprd.com/Rules.aspx?ID=2319']
+- id: aff.wound_rot
+  name: Wound rot
+  kind: disease
+  tags: [harm.blight.disease]
+  harm_tags: [harm.blight.disease]
+  delivery: [a Grievous wound untended for 7 days, a wound taken in filth]
+  virulence: hard
+  onset: days:2
+  cadence: days:1
+  max_checks: null
+  lethal: true
+  warn_stage: 2
+  contagious: false
+  stages:
+  - stage: 1
+    condition: cond.diseased
+    severity: S2
+    duration: days:1
+    check: {verb: verb.endure, attribute: endurance, dc_tier: hard}
+    on_fail: 'rise one stage (critical failure: two)'
+    on_success: 'fall one stage (critical success: two)'
+    effects: []
+    text: 'Heat and a smell. The wound it sits in stops healing: its recovery clock does not tick.'
+  - stage: 2
+    condition: cond.diseased
+    severity: S3
+    duration: days:1
+    check: {verb: verb.endure, attribute: endurance, dc_tier: hard}
+    on_fail: 'rise one stage (critical failure: two)'
+    on_success: 'fall one stage (critical success: two)'
+    harm: {severity: S2, no_reduction: true, periodic: true, at: each stage check}
+    effects: []
+    text: Red lines running from the wound.
+  - stage: 3
+    condition: cond.diseased
+    severity: S4
+    duration: days:1
+    check: {verb: verb.endure, attribute: endurance, dc_tier: hard}
+    on_fail: 'rise one stage (critical failure: two)'
+    on_success: 'fall one stage (critical success: two)'
+    harm: {severity: S3, no_reduction: true, periodic: true, at: each stage check}
+    effects: []
+    text: Black at the edges.
+  terminal: S3 harm at each check while stage 3 holds, and the wound it sits in becomes one severity rung heavier (to
+    S5 at most)
+  cure: ['Treat at Hard, reach 2 or more (cutting it clean): two stages down', 'a general remedy (a poultice): one stage
+      down', 'a week of convalescence with treatment: one stage down']
+  lift: null
+  lifecycle: provisional
+  basis: ['07.9', R5 HR-08, 'R: https://2e.aonprd.com/Rules.aspx?ID=2319']
+- id: aff.red_flux
+  name: Red flux
+  kind: disease
+  tags: [harm.blight.disease]
+  harm_tags: [harm.blight.disease]
+  delivery: [bad water, spoiled food]
+  virulence: moderate
+  onset: days:1
+  cadence: days:1
+  max_checks: 7
+  lethal: false
+  warn_stage: null
+  contagious: true
+  stages:
+  - stage: 1
+    condition: cond.diseased
+    severity: S1
+    duration: days:1
+    check: {verb: verb.endure, attribute: endurance, dc_tier: moderate}
+    on_fail: 'rise one stage (critical failure: two)'
+    on_success: 'fall one stage (critical success: two)'
+    effects:
+    - effect_id: eff.status_modifier
+      params: {amount: 0, applies_when: supply use of water is doubled (10)}
+    text: Cramps.
+  - stage: 2
+    condition: cond.diseased
+    severity: S2
+    duration: days:1
+    check: {verb: verb.endure, attribute: endurance, dc_tier: moderate}
+    on_fail: 'rise one stage (critical failure: two)'
+    on_success: 'fall one stage (critical success: two)'
+    effects:
+    - effect_id: eff.apply_condition
+      params: {condition: cond.exhausted, severity: S2, duration: while the stage lasts, target: the bearer}
+    text: Cannot keep water down.
+  - stage: 3
+    condition: cond.diseased
+    severity: S3
+    duration: days:1
+    check: {verb: verb.endure, attribute: endurance, dc_tier: moderate}
+    on_fail: 'rise one stage (critical failure: two)'
+    on_success: 'fall one stage (critical success: two)'
+    effects:
+    - effect_id: eff.apply_condition
+      params: {condition: cond.exhausted, severity: S2, duration: while the stage lasts, target: the bearer}
+    - effect_id: eff.apply_condition
+      params: {condition: cond.weakened, severity: S1, duration: while the stage lasts, target: the bearer}
+    text: Wrung out.
+  terminal: holds at stage 3
+  cure: ['clean water and rest: a full-quality long rest lowers it one stage', 'a general remedy: one stage down', runs
+      its course after 7 checks]
+  lift: null
+  lifecycle: provisional
+  basis: ['07.9', R5 HR-08, 'R: https://2e.aonprd.com/Rules.aspx?ID=2319']
+- id: aff.grave_chill
+  name: Grave-chill
+  kind: disease
+  tags: [harm.blight.necrotic]
+  harm_tags: [harm.blight.necrotic]
+  delivery: [the touch of the walking dead, a night in a barrow]
+  virulence: hard
+  onset: watches:1
+  cadence: days:1
+  max_checks: null
+  lethal: false
+  warn_stage: null
+  contagious: false
+  stages:
+  - stage: 1
+    condition: cond.diseased
+    severity: S1
+    duration: days:1
+    check: {verb: verb.endure, attribute: endurance, dc_tier: hard}
+    on_fail: 'rise one stage (critical failure: two)'
+    on_success: 'fall one stage (critical success: two)'
+    effects: []
+    text: A cold that fire does not reach.
+  - stage: 2
+    condition: cond.diseased
+    severity: S2
+    duration: days:1
+    check: {verb: verb.endure, attribute: endurance, dc_tier: hard}
+    on_fail: 'rise one stage (critical failure: two)'
+    on_success: 'fall one stage (critical success: two)'
+    effects:
+    - effect_id: eff.07.vitality_max_penalty
+      params: {amount: -2}
+    text: Grey at the lips.
+  - stage: 3
+    condition: cond.diseased
+    severity: S3
+    duration: days:1
+    check: {verb: verb.endure, attribute: endurance, dc_tier: hard}
+    on_fail: 'rise one stage (critical failure: two)'
+    on_success: 'fall one stage (critical success: two)'
+    effects:
+    - effect_id: eff.07.vitality_max_penalty
+      params: {amount: -4}
+    - effect_id: eff.07.dread
+      params: {units: 1, check: false, hook: on_boundary, boundary: day}
+    text: The dead feel nearer than the living.
+  terminal: holds at stage 3
+  cure: ['a long rest at a consecrated or tended place (13): one stage down', a working of deed.divine.healing that names
+      it, medicine does not touch it]
+  lift: null
+  lifecycle: provisional
+  basis: ['07.9', R5 HR-08, 'R: https://2e.aonprd.com/Rules.aspx?ID=2319']
+- id: aff.rat_plague
+  name: Rat plague
+  kind: disease
+  tags: [harm.blight.disease]
+  harm_tags: [harm.blight.disease]
+  delivery: [vermin bites, close contact with a bearer]
+  virulence: hard
+  onset: days:3
+  cadence: days:1
+  max_checks: null
+  lethal: true
+  warn_stage: 3
+  contagious: true
+  stages:
+  - stage: 1
+    condition: cond.diseased
+    severity: S1
+    duration: days:1
+    check: {verb: verb.endure, attribute: endurance, dc_tier: hard}
+    on_fail: 'rise one stage (critical failure: two)'
+    on_success: 'fall one stage (critical success: two)'
+    effects: []
+    text: Headache; swollen glands.
+  - stage: 2
+    condition: cond.diseased
+    severity: S2
+    duration: days:1
+    check: {verb: verb.endure, attribute: endurance, dc_tier: hard}
+    on_fail: 'rise one stage (critical failure: two)'
+    on_success: 'fall one stage (critical success: two)'
+    effects:
+    - effect_id: eff.apply_condition
+      params: {condition: cond.exhausted, severity: S2, duration: while the stage lasts, target: the bearer}
+    text: Fever; black swellings.
+  - stage: 3
+    condition: cond.diseased
+    severity: S3
+    duration: days:1
+    check: {verb: verb.endure, attribute: endurance, dc_tier: hard}
+    on_fail: 'rise one stage (critical failure: two)'
+    on_success: 'fall one stage (critical success: two)'
+    harm: {severity: S2, no_reduction: true, periodic: true, at: each stage check}
+    effects:
+    - effect_id: eff.apply_condition
+      params: {condition: cond.exhausted, severity: S2, duration: while the stage lasts, target: the bearer}
+    text: The swellings burst.
+  - stage: 4
+    condition: cond.diseased
+    severity: S4
+    duration: days:1
+    check: {verb: verb.endure, attribute: endurance, dc_tier: hard}
+    on_fail: 'rise one stage (critical failure: two)'
+    on_success: 'fall one stage (critical success: two)'
+    harm: {severity: S3, no_reduction: true, periodic: true, at: each stage check}
+    effects:
+    - effect_id: eff.apply_condition
+      params: {condition: cond.exhausted, severity: S2, duration: while the stage lasts, target: the bearer}
+    text: Bleeding under the skin.
+  terminal: S3 harm at each check while stage 4 holds
+  cure: [Treat (07.8.8), 'a week of convalescence with treatment: one stage down', 'a specific remedy, if the setting
+      has one (13)']
+  lift: null
+  lifecycle: provisional
+  basis: ['07.9', R5 HR-08, 'R: https://2e.aonprd.com/Rules.aspx?ID=2319']
+- id: aff.lockjaw
+  name: Lockjaw
+  kind: disease
+  tags: [harm.blight.disease]
+  harm_tags: [harm.blight.disease]
+  delivery: [a deep puncture from rusted or fouled metal]
+  virulence: hard
+  onset: days:4
+  cadence: days:1
+  max_checks: null
+  lethal: true
+  warn_stage: 2
+  contagious: false
+  stages:
+  - stage: 1
+    condition: cond.diseased
+    severity: S1
+    duration: days:1
+    check: {verb: verb.endure, attribute: endurance, dc_tier: hard}
+    on_fail: 'rise one stage (critical failure: two)'
+    on_success: 'fall one stage (critical success: two)'
+    effects:
+    - effect_id: eff.status_modifier
+      params: {amount: -1, applies_when: beats with trait.action.speech}
+    text: A stiff jaw.
+  - stage: 2
+    condition: cond.diseased
+    severity: S2
+    duration: days:1
+    check: {verb: verb.endure, attribute: endurance, dc_tier: hard}
+    on_fail: 'rise one stage (critical failure: two)'
+    on_success: 'fall one stage (critical success: two)'
+    effects:
+    - effect_id: eff.apply_condition
+      params: {condition: cond.silenced, severity: S2, duration: while the stage lasts, target: the bearer}
+    - effect_id: eff.apply_condition
+      params: {condition: cond.slowed, severity: S2, duration: while the stage lasts, target: the bearer}
+    text: The jaw locks; the neck arches.
+  - stage: 3
+    condition: cond.diseased
+    severity: S3
+    duration: days:1
+    check: {verb: verb.endure, attribute: endurance, dc_tier: hard}
+    on_fail: 'rise one stage (critical failure: two)'
+    on_success: 'fall one stage (critical success: two)'
+    harm: {severity: S2, no_reduction: true, periodic: true, at: each stage check}
+    effects:
+    - effect_id: eff.apply_condition
+      params: {condition: cond.silenced, severity: S2, duration: while the stage lasts, target: the bearer}
+    - effect_id: eff.apply_condition
+      params: {condition: cond.restrained, severity: S3, duration: while the stage lasts, target: the bearer}
+    text: Spasms that bend the spine.
+  terminal: S3 harm at each check while stage 3 holds
+  cure: ['Treat at Hard (cleaning the wound deep) within the onset: prevents it', Treat (07.8.8), a working that names
+      it]
+  lift: null
+  lifecycle: provisional
+  basis: ['07.9', R5 HR-08, 'R: https://2e.aonprd.com/Rules.aspx?ID=2319']
+- id: aff.deaths_debt
+  name: Death's debt
+  kind: curse
+  tags: [trait.nature.magical]
+  harm_tags: [trait.nature.magical]
+  delivery: [lc.bargain (07.5.5)]
+  virulence: legendary
+  onset: rounds:0
+  cadence: trigger
+  max_checks: null
+  lethal: true
+  warn_stage: 3
+  contagious: false
+  stages:
+  - stage: 1
+    condition: cond.cursed
+    severity: S1
+    duration: trigger
+    check: null
+    on_fail: 'no check: moves only by its trigger'
+    on_success: 'no check: moves only by its trigger'
+    effects:
+    - effect_id: eff.07.rest_cap
+      params:
+        rests: [rest_long]
+        quality: partial
+        applies_when: 'for easing dread only: rests ease no dread'
+    text: The debtor's sign shows. While the debt is honored it stays here.
+  - stage: 2
+    condition: cond.cursed
+    severity: S2
+    duration: trigger
+    check: null
+    on_fail: 'no check: moves only by its trigger'
+    on_success: 'no check: moves only by its trigger'
+    effects:
+    - effect_id: eff.07.block_restore
+      params: {event_kind: a Vitality-restoring effect on the bearer, source_filter: trait.nature.magical, amount: all}
+    text: Healing magic slides off you.
+  - stage: 3
+    condition: cond.cursed
+    severity: S3
+    duration: trigger
+    check: null
+    on_fail: 'no check: moves only by its trigger'
+    on_success: 'no check: moves only by its trigger'
+    effects:
+    - effect_id: eff.07.vitality_max_penalty
+      params: {amount: -4}
+    - effect_id: eff.07.rest_cap
+      params:
+        rests: [rest_long]
+        quality: partial
+        applies_when: always
+    text: You are being called in.
+  - stage: 4
+    condition: cond.cursed
+    severity: S4
+    duration: trigger
+    check: null
+    on_fail: 'no check: moves only by its trigger'
+    on_success: 'no check: moves only by its trigger'
+    effects: []
+    text: 'Forfeit: at the next scene_start you stand at the Threshold again, without the bargain (07.5.5).'
+  terminal: stage 4 is the forfeit
+  cure: [the lift only]
+  lift: the vow the bargainer asked is fulfilled (11)
+  notes: Advances one stage each time clk.deaths_debt completes unpaid; no stage checks. eff.05.end_working does not touch
+    it.
+  lifecycle: provisional
+  basis: [07.5.5, 07.9.7, R6 C-14]
+- id: aff.evil_eye
+  name: The evil eye
+  kind: curse
+  tags: [trait.nature.magical]
+  harm_tags: [trait.nature.magical]
+  delivery: ['a hex (rit.lay_curse, a hedge-witch, a dying breath)']
+  virulence: moderate
+  onset: days:1
+  cadence: days:1
+  max_checks: 7
+  lethal: false
+  warn_stage: null
+  contagious: false
+  stages:
+  - stage: 1
+    condition: cond.cursed
+    severity: S1
+    duration: days:1
+    check: {verb: verb.endure, attribute: resolve, dc_tier: moderate}
+    on_fail: 'rise one stage (critical failure: two)'
+    on_success: 'fall one stage (critical success: two)'
+    effects:
+    - effect_id: eff.06.grant_snag
+      params: {type: precision, sign: snag, to: the bearer, fact: curse.evil_eye, applies_when: the bearer's first rolled
+          beat of each scene (engine-cited), duration: while the stage lasts}
+    text: Small things go wrong first.
+  - stage: 2
+    condition: cond.cursed
+    severity: S2
+    duration: days:1
+    check: {verb: verb.endure, attribute: resolve, dc_tier: moderate}
+    on_fail: 'rise one stage (critical failure: two)'
+    on_success: 'fall one stage (critical success: two)'
+    effects:
+    - effect_id: eff.06.grant_snag
+      params: {type: precision, sign: snag, to: the bearer, fact: curse.evil_eye, applies_when: the bearer's first two
+          rolled beats of each scene (engine-cited), duration: while the stage lasts}
+    text: Then larger ones.
+  - stage: 3
+    condition: cond.cursed
+    severity: S3
+    duration: days:1
+    check: {verb: verb.endure, attribute: resolve, dc_tier: moderate}
+    on_fail: 'rise one stage (critical failure: two)'
+    on_success: 'fall one stage (critical success: two)'
+    effects:
+    - effect_id: eff.06.grant_snag
+      params: {type: precision, sign: snag, to: the bearer, fact: curse.evil_eye, applies_when: the bearer's first two
+          rolled beats of each scene (engine-cited), duration: while the stage lasts}
+    - effect_id: eff.stakes_step
+      params: {ladder: stakes, steps: 1, applies_when: the bearer's first Risky frame of each scene}
+    text: And what goes wrong goes badly.
+  terminal: holds at stage 3
+  cure: [the lift, 'eff.05.end_working against Moderate: one stage down', runs its course after 7 checks]
+  lift: the one who laid it forgives the bearer, or receives a gift freely given
+  lifecycle: provisional
+  basis: ['07.9', R5 HR-08, 'R: https://2e.aonprd.com/Rules.aspx?ID=2319']
+- id: aff.wasting
+  name: The wasting
+  kind: curse
+  tags: [trait.nature.magical]
+  harm_tags: [trait.nature.magical]
+  delivery: [rit.lay_curse (05), a power wronged]
+  virulence: hard
+  onset: days:1
+  cadence: days:7
+  max_checks: null
+  lethal: false
+  warn_stage: null
+  contagious: false
+  stages:
+  - stage: 1
+    condition: cond.cursed
+    severity: S2
+    duration: days:7
+    check: {verb: verb.endure, attribute: resolve, dc_tier: hard}
+    on_fail: 'rise one stage (critical failure: two)'
+    on_success: 'fall one stage (critical success: two)'
+    effects:
+    - effect_id: eff.07.vitality_max_penalty
+      params: {amount: -2}
+    text: Thinner each week.
+  - stage: 2
+    condition: cond.cursed
+    severity: S3
+    duration: days:7
+    check: {verb: verb.endure, attribute: resolve, dc_tier: hard}
+    on_fail: 'rise one stage (critical failure: two)'
+    on_success: 'fall one stage (critical success: two)'
+    effects:
+    - effect_id: eff.07.vitality_max_penalty
+      params: {amount: -4}
+    - effect_id: eff.apply_condition
+      params: {condition: cond.exhausted, severity: S2, duration: while the stage lasts (this stack cannot be removed),
+        target: the bearer}
+    text: Grey and slow.
+  - stage: 3
+    condition: cond.cursed
+    severity: S4
+    duration: days:7
+    check: {verb: verb.endure, attribute: resolve, dc_tier: hard}
+    on_fail: 'rise one stage (critical failure: two)'
+    on_success: 'fall one stage (critical success: two)'
+    effects:
+    - effect_id: eff.07.vitality_max_penalty
+      params: {amount: -4}
+    - effect_id: eff.apply_condition
+      params: {condition: cond.exhausted, severity: S2, duration: while the stage lasts, target: the bearer}
+    - effect_id: eff.07.rest_cap
+      params:
+        rests: [rest_long]
+        quality: partial
+        applies_when: always
+    text: A shadow of yourself.
+  terminal: holds at stage 3
+  cure: [the lift, 'eff.05.end_working against Hard: one stage down']
+  lift: written when the curse is laid (the wrong righted, the thing returned); sealed until learned, with three clue
+    placements (15)
+  lifecycle: provisional
+  basis: ['07.9', R5 HR-08, 'R: https://2e.aonprd.com/Rules.aspx?ID=2319']
+- id: aff.grave_bound
+  name: Grave-bound
+  kind: curse
+  tags: [trait.nature.magical, harm.blight.necrotic]
+  harm_tags: [trait.nature.magical, harm.blight.necrotic]
+  delivery: [taking from the dead, a barrow-king's word]
+  virulence: hard
+  onset: days:1
+  cadence: days:7
+  max_checks: null
+  lethal: false
+  warn_stage: null
+  contagious: false
+  stages:
+  - stage: 1
+    condition: cond.cursed
+    severity: S2
+    duration: days:7
+    check: {verb: verb.endure, attribute: resolve, dc_tier: hard}
+    on_fail: 'rise one stage (critical failure: two)'
+    on_success: 'fall one stage (critical success: two)'
+    effects:
+    - effect_id: eff.07.block_restore
+      params: {event_kind: a Vitality-restoring effect on the bearer, source_filter: rest, amount: half}
+    text: 'No fire warms you: rests restore half the Vitality they would.'
+  - stage: 2
+    condition: cond.cursed
+    severity: S3
+    duration: days:7
+    check: {verb: verb.endure, attribute: resolve, dc_tier: hard}
+    on_fail: 'rise one stage (critical failure: two)'
+    on_success: 'fall one stage (critical success: two)'
+    effects:
+    - effect_id: eff.07.block_restore
+      params: {event_kind: a Vitality-restoring effect on the bearer, source_filter: rest, amount: half}
+    - effect_id: eff.07.block_restore
+      params: {event_kind: a Vitality-restoring effect on the bearer, source_filter: trait.nature.magical, amount: all}
+    text: Nor does any healing hand.
+  - stage: 3
+    condition: cond.cursed
+    severity: S4
+    duration: days:7
+    check: {verb: verb.endure, attribute: resolve, dc_tier: hard}
+    on_fail: 'rise one stage (critical failure: two)'
+    on_success: 'fall one stage (critical success: two)'
+    effects:
+    - effect_id: eff.07.block_restore
+      params: {event_kind: a Vitality-restoring effect on the bearer, source_filter: any, amount: all}
+    text: Nothing restores you.
+  terminal: holds at stage 3
+  cure: [the lift, 'eff.05.end_working against Hard: one stage down']
+  lift: what was taken from the dead is returned to them, or the dead are laid to rest (a rite, 05)
+  lifecycle: provisional
+  basis: [07.9.7, R6 C.3 worked example ("no warmth heals you")]

@@ -1,0 +1,75 @@
+# data/contrib/effects.06.yaml
+# Purpose: ch.06's owner-block for data/effects.yaml. Four definitions, each added because no core effect with
+#   parameters expresses the mechanic (PR-00-8), each using one of the 20 closed operations and one regime.
+#   Everything else in conditions.yaml and conflict.yaml references the core library.
+# Owner: 06-conflict. Schema: data/SCHEMAS.md#effectsyaml. Decision: DL-06-24.
+
+schema_version: 1
+blocks:
+- owner: '06'
+  entries:
+  - id: eff.06.fewer_actions
+    op: economy
+    regime: additive
+    params:
+      actions_delta: -3..-1 (never positive)
+      minimum_actions: 0..1
+      reactions_delta: -1..0
+    text: '{actions_delta} actions each turn (never fewer than {minimum_actions}); {reactions_delta} reactions.'
+    why_not_core: no core effect removes actions; eff.reaction_grant only adds a reaction. INV-11 forbids adding actions,
+      not removing them; substrate.yaml lists economy with reactions_delta only (Interface request to 00, item 1)
+    lifecycle: provisional
+    basis:
+    - 06.1.2
+    - INV-11
+    - T-00-15 (cond.dazed, cond.stunned)
+    - DL-06-24
+  - id: eff.06.pace
+    op: modify
+    quantity: speed
+    family: adjust
+    regime: additive
+    params:
+      amount: -1..1, or a mount's pace
+      applies_when: expr
+    text: 'Pace {amount}: each band transition costs one action more (negative) or the costs of pace 2 apply (positive).'
+    why_not_core: the core library has no modify on the quantity speed (T-00-13 names it as ch.06 bands per move action)
+    lifecycle: provisional
+    basis:
+    - 06.3.3
+    - T-00-13
+    - DL-06-24
+  - id: eff.06.grant_snag
+    op: lever
+    regime: additive
+    params:
+      type: precision|protective|amplifying
+      sign: snag
+      to: who suffers it (those acting against the bearer, or the bearer)
+      fact: str
+      applies_when: expr
+      duration: duration
+    text: Counts as an established {type} snag, citing {fact}, {applies_when}.
+    why_not_core: eff.grant_lever creates lever facts only; cover, concealment, Defend, Fend and a prone target at range
+      need the mirror
+    lifecycle: provisional
+    basis:
+    - 00.3.9
+    - 06.3.6
+    - 06.4.7
+    - DL-06-24
+  - id: eff.06.internal_harm
+    op: harm
+    regime: independent_trigger
+    hook: on_turn_end
+    params:
+      vitality_per_stack: '1'
+      harm_tags: '[tag]'
+      no_reduction: true
+    text: At the end of its turn the bearer loses {vitality_per_stack} Vitality per stack ({harm_tags}); no reduction applies.
+    why_not_core: eff.deal_harm passes through the receiver's reduction; bleeding and choking are inside the armor
+    lifecycle: provisional
+    basis:
+    - 06.7 (cond.bleeding, cond.choking)
+    - '05 uses apply_harm(no_reduction: true) for strain'
+    - DL-06-24

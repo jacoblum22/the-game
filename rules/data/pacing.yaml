@@ -1,0 +1,386 @@
+# data/pacing.yaml
+# Purpose: every number and closed list ch.12's DM procedures own: the turn packet, the claim check, scene
+#   rules, the tension dial, the scene test, the pacing director (intensity, phases, profiles, adaptation),
+#   P16's lead injection, the rotation ledger, NPC memory, narration limits, the review list, check-ins, and
+#   the mode-transition and DM-question maps. Changing a number here changes play; the chapter cites these keys.
+# Owner: 12-dm-procedures (T-00-19).
+# Schema: data/SCHEMAS.md#pacingyaml (required keys: tension {min 1, max 9, start 5, rules}, intensity {phases},
+#   lead_injection {threshold 3, table}); every other key is an optional extension documented in ch.12 Tables.
+# Entries carry lifecycle: provisional (00.16.3).
+# Basis: [C:P16]; [R5 P-01, P-05, P-07..P-11]; [R6 B-10, B-11, B-16, B-19, B-R3, B-R4];
+#   [R4 W6, W10..W13, SG-11, SG-12, SG-19]; [R1 #2, #3, #8, #9, 12.A-12.D]; DL-12-01..DL-12-20.
+
+schema_version: 1
+lifecycle: provisional
+
+packet:                                   # 12.2.4
+  core: [turn_loop_checklist (T-12-1), invariants (T-00-1), gate_classes (00.12.3), stakes_reach_lever_card (00.3.9, 00.3.14-15), active_triggers]
+  max_loaded_cards: 12                    # beyond the core; priority: triggers > anchors > situation cards by specificity
+  verbatim_exchanges: 4                   # player message + DM response pairs kept verbatim (OEQ-12-1)
+  current_message: verbatim_complete
+  older_context: state_only               # chronicle, threads, journal, scene header; never a summary of a summary
+  core_checklist: >-
+    Every turn. T1 Store the message verbatim. T2 Classify its parts; safety first. T3 Load triggers, the
+    narrator view and the cards for this scene; handle every fired trigger this turn. T4 Adjudicate before
+    writing prose: questions from state, canon or the Oracle; declarations through the pipeline (PARSE, GATE,
+    NECESSITY, ANCHOR, FRAME, OFFER, ROLL, READ, DELIVER, CONSEQUENCE, RECORD); check precedent before any
+    adaptation, Oracle call, Good Idea, G3 or G4; stop at a pause point. T5 Let the world respond only from its
+    sources: adversaries' behavior, NPCs' frames, wants, refusals or the action table, clocks and omens,
+    triggers, time. T6 Write all state, then re-read it. T7 Draft from the record and the fresh view. T8 Write
+    on mention every new addressable thing; roll what is unsettled. T9 Check every claim against the store;
+    fix or cut; never write a change to match prose. T10 Intent acknowledged, not substituted, not reset; a
+    next step exists; no line crossed; no words or feelings given to the character; no numbers or rules words
+    in the fiction; end on an open prompt or one pause block. T11 Deliver. T12 Log it; count dead air; cut the
+    scene if its question is answered. Never: choose a number; pick at random; decide what is true; change a
+    committed frame; add a complication from nowhere; narrate a sealed fact; speak for the character; voice a
+    mechanic. If unsure: roll (a check, the Oracle, a table) rather than decide; grant less rather than more.
+
+input_classes:                            # 12.2.2, in handling order
+  [SAFETY, SESSION, DISPUTE, PENDING_ANSWER, OOF_QUESTION, FICTION_QUESTION, DECLARATION, SPEECH]
+
+pause_points:                             # 12.2.6 (closed list) with the default when the player moves on
+  - {id: offer, default_on_new_declaration: withdrawn}
+  - {id: clarify, default_on_new_declaration: stated_assumption}
+  - {id: redirect_choice, default_on_new_declaration: declined}
+  - {id: near_miss, default_on_new_declaration: failure}
+  - {id: ranking, default_on_new_declaration: declaration_order}
+  - {id: last_chance_and_yield, default_on_new_declaration: "per ch.07"}
+  - {id: recognition_or_institutional_offer, default_on_new_declaration: "stays open per ch.04/11"}
+  - {id: chosen_fill, default_on_new_declaration: "first listed"}
+  - {id: rewind_or_correction, default_on_new_declaration: accept_forward}
+
+claim_check:                              # 12.3
+  classes: [existence, identity, quantity, harm_condition, position, possession, location_time, knowledge, capability, clock, attitude, outcome, sealed]
+  verdicts: [supported, new_element, undetermined, contradicted, unsourced_change, overreach, leak, pc_agency]
+  writable_verdicts: [new_element, undetermined]   # only these may cause a write (write-on-mention / Oracle); unsourced_change never
+  max_redrafts: 2
+  on_exhausted: plain_fallback            # + RulingRecord kind rule_conflict, review_flag true
+  sweep_classes_at_scene_end: [position, possession, quantity, harm_condition]
+
+corrections:                              # 12.3.4
+  forms: [in_fiction_reconciliation, oof_note]
+  default_form: oof_note
+  record_error_form: oof_note
+  rewind_scope: current_scene_only        # never past the error's turn or the scene start
+  make_whole: spent_quantities_only       # coin, Focus, supply, consumables, fate spent because of the falsehood
+  never_corrected: [valid_roll, correctly_resolved_degree_reach_or_cost, own_method_consequence, lethal_resolution, accepted_recognition, session_boundary]
+
+scenes:                                   # 12.4
+  cut_triggers: [agenda_answered, place_change, time_jump, interrupt, conflict_end, player_cut, dead_air]
+  dead_air_turns: 2
+  untested: [direct_continuation_under_one_interval, conflict, interrupt_scene, downtime_in_haven]
+  framing_hardness: [in_medias_res, at_threshold, open]
+  framing_default: at_threshold
+  impetus_order: [scene_test_result, fired_trigger, pc_declared_purpose, npc_recorded_want, clock_latest_omen, overdue_rotation_opportunity]
+
+scene_test:                               # 12.4.4; T-12-9
+  table: tbl.scene_test
+  die: d10
+  deviate_if_roll_lte: "tension - 3"
+  odd: altered
+  even: interrupted
+  rates_percent:                          # exhaustive (pace12.py): {tension: [altered, interrupted]}
+    1: [0, 0]
+    2: [0, 0]
+    3: [0, 0]
+    4: [10, 0]
+    5: [10, 10]
+    6: [20, 10]
+    7: [20, 20]
+    8: [30, 20]
+    9: [30, 30]
+
+tension:                                  # 12.6.3-12.6.4
+  min: 1
+  max: 9
+  start: 5
+  rules:
+    update_boundary: scene_end
+    handler: h.12.tension_update
+    delta: "+1 if chaos_points > control_points; -1 if control_points > chaos_points; 0 on a tie; clamp 1..9"
+    chaos_points:                         # one point per item, each at most once per scene
+      - scene_test_altered_or_interrupted_or_interrupt_framed
+      - agenda_answered_against_pc_hope
+      - pc_paid_cost_s3_or_heavier
+      - pc_staggered_dying_defeated_yielded_or_captured
+      - twist_s3_or_heavier_landed
+      - opposition_clock_imminent_or_completed
+    control_points:
+      - agenda_answered_as_pc_hoped
+      - pc_completed_progress_clock_thread_milestone_or_vow_step
+      - pc_overcame_opposition_paying_no_cost_above_s2
+      - pc_framed_scene_by_own_purpose_and_test_expected
+      - pc_raised_an_npc_standing
+      - pc_unsealed_a_secret_of_an_active_thread
+  effects:
+    scene_test: "deviate when d10 <= T - 3"
+    random_event_on_oracle_doubles: "doubles 11..99 whose digit <= T trigger a random event; 100 never"
+    oracle_shift:
+      eventful_tag: ["yes", "no", "none"]       # [J:enum], tagged when odds are chosen, before rolling; uncertain -> none
+      toward_eventful_when_tension_gte: 7
+      away_from_eventful_when_tension_lte: 3
+      max_rungs: 1                        # 00.12.7; scales.yaml oracle_odds.tension_shift_max_rungs
+      shiftable_rungs: [likely, even, unlikely, remote]   # never onto or off certain/impossible
+      player_g0_questions: none           # always tagged none: tension never moves the odds of what the player asks
+  never_changes: [dc, frame, modifier, cost, clock_tick, player_question_odds]
+
+events:                                   # 12.6.5
+  table: tbl.event_focus
+  sources: [oracle_doubles_lte_tension, interrupted_scene, session_vignette_when_nothing_presses, other_chapter_table_row]
+  allowed_writes: [create_entity, set_fact_generation, npc_action, one_tick_on_clock_listing_random_event, situation_seed_to_ch11]
+  never: [harm_pc, apply_cost, kill, grant_license_or_item_outside_tables, reveal_sealed_without_gate]
+  offscreen_resolution_protect_scenes: 12 # a thread the PC vowed or progressed within 12 scenes cannot resolve off-screen
+  meaning_reroll_max: 1                   # only when every reading contradicts a named fact
+
+lists:                                    # 12.6.6 (cast and thread lists)
+  weight_min: 1
+  weight_max: 3
+  raise_when: [was_scene_agenda, acted_in_scene, named_in_delivered_lead]
+  lower_after_scenes_unfeatured: 6
+  repeat_draw: redraw_once
+
+intensity:                                # 12.7.1-12.7.2
+  min: 0
+  max: 10
+  update: "intensity = min(10, max(scene_points, previous_intensity - 3))"
+  drain_per_scene: 3
+  scene_cap: 10
+  points:
+    conflict_scene: 2
+    pc_frame_failed_risky: 1
+    pc_frame_failed_dire: 2
+    cost_paid_s2: 1
+    cost_paid_s3: 2
+    cost_paid_s4_or_heavier: 3
+    lethal_frame_declared_once: 2
+    pc_staggered_once: 3
+    pc_dying_once: 4
+    opposition_clock_imminent: 1
+    opposition_clock_completed: 2
+    opened_with_interrupt_or_ambush: 1
+  phases:
+    - {id: build, pushes: allowed, enter: default, exit: "intensity >= peak_threshold -> peak"}
+    - {id: peak, pushes: none, threat_event_foci: omen, interrupted_scene_reads_as: altered, exit: "first scene_end whose scene_points < peak_threshold -> relax"}
+    - {id: relax, pushes: none, threat_event_foci: omen, interrupted_scene_reads_as: altered, lead_injection: "allowed; threat forms excluded", exit: "after relax_scenes -> build"}
+  flatline_guard: "in build, flat_run consecutive scenes each scoring <= 1 point raise trg.pacing_push"
+  default_push_intensity_delta: {threat_bang: 3, social_bang: 1, opportunity: 0}
+
+profiles:                                 # 12.7.3 (chosen at session zero; changeable at check-ins)
+  default: standard
+  standard:   {peak_threshold: 7, relax_scenes: 2, flat_run: 3, recovery_scenes: 3}
+  gentle:     {peak_threshold: 6, relax_scenes: 3, flat_run: 4, recovery_scenes: 4}
+  relentless: {peak_threshold: 8, relax_scenes: 1, flat_run: 2, recovery_scenes: 2}
+
+adaptation:                               # 12.7.5
+  setback_triggers: [pc_entered_dying, pc_defeated, pc_captured, pc_forced_to_yield, retreat_with_cost_s3_plus, companion_killed]
+  recovery: {phase: relax, push_after_recovery: {max_intensity_delta: 1, max_threat_advisory: fair}}
+  streak_triggers:
+    - "3 consecutive conflict scenes with no PC cost above S1 and advisory easy or trivial"
+    - "3 consecutive scenes with control_points > chaos_points"
+  escalation: {next_push_max_threat_advisory: hard, challenge_type_change: mandatory}
+  never: [change_established_numbers, add_or_remove_foes_outside_clocks_behaviors_morale_tables, soften_or_sharpen_costs]
+
+push:                                     # 12.7.4
+  handler: h.12.pacing_push               # scene_start phase 7: a boundary handler (01.11.3 source 5)
+  candidates: [ch11_bang_queue, tbl.vignette, overdue_rotation_opportunity]
+  specificity_rank: [this_pc_and_their_deed, npc_or_faction_pc_dealt_with, this_region, generic]
+  ties: [stalest_rotation_axis, roll_table]
+
+lead_injection:                           # 12.8; T-12-8
+  threshold: 3                            # consecutive inconclusive beats (01.11.4 definition)
+  counter_handler: h.12.inconclusive_streak
+  trigger: trg.lead_injection
+  table: tbl.lead_injection
+  source_ladder:
+    - unfound_clue_of_scene_thread
+    - scene_thread_proactive_fallback
+    - unfound_clue_of_other_active_thread_by_weight
+    - most_advanced_opposition_clock_omen_as_trace     # no tick
+    - cast_npc_with_unfulfilled_want_by_weight
+    - region_rumor_pointing_to_existing_node
+    - new_hook_from_ch11
+  lead_tests: [concrete, actionable_now, connected]
+  prohibitions: [solves_thread, costs_pc, threat_during_peak_or_relax]
+  stuck_answer_leads: [2, 3]              # 12.8.5
+  live_lead_audit: {handler: h.12.lead_audit, min_live_leads_per_thread: 1, min_clue_placements_per_thread: 3}
+
+rotation:                                 # 12.9
+  axes: [pillar, challenge_type, facet]
+  pillars: [conflict, exploration, social, investigation, travel, downtime]
+  challenge_types:
+    - {id: terrain, true_only_when: "the ground itself is the main difficulty: footing, height, water, fire, darkness, choke points, cover"}
+    - {id: cunning_foe, true_only_when: "an opponent plans, feints, retreats, uses the ground or sets traps"}
+    - {id: outnumbered, true_only_when: "more opposing bodies than the PC can face at once"}
+    - {id: objective, true_only_when: "the goal is something other than winning: protect, rescue, carry, stop a ritual, avoid bloodshed, get out"}
+    - {id: clock, true_only_when: "a visible countdown or racing clock decides the outcome"}
+    - {id: attrition, true_only_when: "resources running out decide it: supply, light, Focus, ammunition, rest"}
+    - {id: mixed, true_only_when: "two different kinds of opposition at once"}
+    - {id: social_stakes, true_only_when: "a person must be moved, deceived or faced down under pressure, or a hard choice between people"}
+    - {id: mystery, true_only_when: "something must be figured out: a puzzle, a clue chain, a lock of logic"}
+  facet_sources: [recognized_calling, held_ability_or_spell, training_or_language_license, specialty_tag_competence_2_plus, origin_hook, aspiration, bond, companion]
+  overdue:
+    pillar_scenes: 6
+    challenge_type_scenes_with_opposition: 6
+    facet_scenes: 8
+    untested_facet_scenes_after_acquired: 4
+  player_weights: {more: 0.5, same: 1, less: 2}    # multiply the pillar threshold (3 / 6 / 12 scenes)
+  diversification: "never the same challenge type as both of the last two opposition scenes when an alternative exists; mandatory change under escalation"
+  uses: [tie_break, opportunity, stuck_answer_order]
+
+npc:                                      # 12.11
+  depths:
+    walk_on: {when: first_mention_as_addressable, fields: [role, name, gender_pronouns, age_band, detail, demeanor]}
+    recurring: {when: [second_scene_interaction, talk_frame_targets, named_in_lead_or_thread], fields: [want, fear, voice_register, voice_habit, refusal, knowledge_scope]}
+    principal: {when: [thread_node_or_linchpin, companion, faction_officer], fields: [secret_sealed, three_ranked_wants, ties]}
+  reaction:
+    member: {table: tbl.npc_reaction_member, base: faction_status}
+    unaffiliated: {table: tbl.npc_reaction, modifier_clamp: [-2, 2], first_impression_max: 2}
+  memory:
+    valences: [helped, harmed, lied_to, caught_lying, impressed, insulted, owed, owes, promised, betrayed, spared, threatened]
+    salience: {standing_changed_or_harm_or_cost: 3, promise_debt_or_lie_detected: 2, other: 1}
+    active_cap: 5
+    archive: queryable
+    relevance_order: [same_deed, same_people, same_place, highest_salience]
+  voice_registers: [formal, plain, rough, flowery, terse, nervous, jovial, cold]
+  habit_max_per_scene: 1
+
+narration:                                # 12.14
+  beat_max_words: 200
+  conflict_turn_max_words: 150
+  scene_open_max_words: 200
+  recap_max_words: 120
+  skip_max_words: 150
+  freshness: {opening_patterns_remembered: 3, images_per_entity_remembered: 10, image_repeat_turns: 10}
+  forbidden_recognition_phrasing: ["you gain", "you have unlocked", "your skill increases", "level", "experience", "class", "achievement", "stat names in any in-world voice", "bracketed or boxed text inside fiction", "a disembodied announcing voice"]
+
+oof_formats:                              # 12.15 (ch.14 owns rendering and the marker)
+  order: [safety_and_session, correction, fiction, result, redirect, pause_block_last]
+  labels: [OFFER, "OFFER — auto", RESULT, "NEAR MISS", REDIRECT, CHOICE, CLARIFY, ASSUMING, RULING, CORRECTION, LEADS, SITUATION, CHECK-IN, OK, FLAG, RULES, UNKNOWN, SESSION, "CUT?"]
+
+checkin:                                  # 12.5.9
+  at: [session_zero, every_n_sessions, on_request]
+  every_sessions: 4
+  questions: [pillar_more_same_less, pace_faster_same_slower, safety_additions]
+  never_changes: [dc, odds, costs]
+
+review:                                   # 12.12.4, 12.12.6
+  flag_sources: [ch01_conditions, correction, plain_fallback, upheld_dispute, breach_12_1_3]
+  iii_candidate: {min_overturned_records: 3, same_error_class: true, min_sessions: 2}
+  rule_candidate_min_reuses: 3
+
+modes:                                    # 12.4.5; T-12-3
+  - {to: conflict, when: [adversary_behavior_attacks, pc_harmful_beat_vs_resisting_creature, npc_action_attacks, clock_completion_creates_attacking_encounter], cards: [situation.conflict]}
+  - {to: previous, from: conflict, when: [conflict_end], cards: previous}
+  - {to: site, when: [enter_site_place, room_by_room_search], cards: [situation.exploration]}
+  - {to: travel, when: [depart_along_route], cards: [situation.travel]}
+  - {to: downtime, when: [haven_downtime_declared, span_of_days_in_haven], cards: [situation.downtime]}
+  - {to: free, when: [leave_site_for_settlement, arrive_from_travel, end_downtime, otherwise], cards: [situation.social, situation.investigation]}
+
+dm_questions:                             # 12.6.1; T-12-4 (first match)
+  - {when: settled_by_fact_canon_or_scene_type, tool: read}
+  - {when: actor_with_capability_attempts, tool: fortune_check}
+  - {when: which_of_several_specific_table_exists, tool: roll_table_specific}
+  - {when: npc_decision_undecided, tool: tbl.npc_action}
+  - {when: yes_no_fact, tool: oracle}
+  - {when: meaning_form_or_and, tool: tbl.meaning}
+  - {when: a_person_must_exist, tool: npc_generation}
+
+clock_templates:                          # clocks created by ch.12's twist rows (oracles.yaml tbl.twist_s2..s4); 00.8.1 shape
+  # ch.12 owns these templates (00.17.1 Q7). '<opposition>' / '<champion>' are filled with entity ids at creation.
+  # Region tables (ch.13) may supply regional omen lists that replace these generic ones.
+  - id: clk.twist_rival_first
+    name: "The rival reaches it first"
+    kind: progress
+    segments: 4
+    visibility: sensed
+    direction: fill
+    tick_sources: [{on: "boundary:scene_end", ticks: 1, condition: "the rival is active and unopposed this scene"}, {on: cost.twist, ticks: 1, condition: null}]
+    auto_ticks: []
+    decay: []
+    omens:
+      stirring: ["someone was asking the same questions here an hour ago", "a fresh boot-print over yours"]
+      building: ["the person you meant to see has already been visited", "a door you need is newly locked"]
+      imminent: ["word that the rival has found a guide", "the rival's horse, saddled and waiting"]
+    on_complete: {effects: [{effect_id: eff.write_fact, params: {subject: "<rival>", predicate: holds, value: "the contested goal"}}], interrupting: false, then: close}
+    races_with: "the PC's goal clock, if one exists"
+    lifecycle: provisional
+  - id: clk.twist_word_reaches
+    name: "Word reaches <opposition>"
+    kind: danger
+    segments: 6
+    visibility: hidden
+    direction: fill
+    tick_sources: [{on: trait.sense.loud, ticks: 1, condition: "within the opposition's territory"}, {on: cost.exposure, ticks: "U(severity)", condition: null}, {on: cost.twist, ticks: 1, condition: null}]
+    auto_ticks: [{boundary: day, ticks: 1, condition: null}]
+    decay: []
+    omens:
+      stirring: ["a rider leaves town at speed on the road you came by", "a stranger watching from across the street turns away"]
+      building: ["a tavern falls quiet when you enter", "a face you saw yesterday, now in the opposition's colors"]
+      imminent: ["men asking after someone of your description", "a signal fire on the ridge"]
+    on_complete: {effects: [{effect_id: eff.write_fact, params: {subject: "<opposition>", predicate: knows, value: "the PC's identity and recent movements"}}], interrupting: false, then: close}
+    races_with: null
+    lifecycle: provisional
+  - id: clk.twist_pursuit
+    name: "They are on your trail"
+    kind: danger
+    segments: 4
+    visibility: sensed
+    direction: fill
+    tick_sources: [{on: "boundary:watch", ticks: 1, condition: "the PC travels openly"}, {on: cost.time, ticks: "U(severity)", condition: null}, {on: cost.twist, ticks: 1, condition: null}]
+    auto_ticks: []
+    decay: [{boundary: day, ticks: -1, only_if: "no tick since last day"}]
+    omens:
+      stirring: ["hoofbeats far behind, then nothing", "crows lifting from the trees you passed"]
+      building: ["a campfire's smoke on your back trail", "the same riders on the ridge, closer"]
+      imminent: ["voices on the road, near", "a horse's whicker just beyond the bend"]
+    on_complete: {effects: [{effect_id: eff.summon, params: {template: "the pursuers, as an encounter", location: band.far, duration: scene}}], interrupting: true, then: close}
+    races_with: null
+    lifecycle: provisional
+  - id: clk.twist_ambush_prep
+    name: "<opposition> prepares an ambush"
+    kind: danger
+    segments: 6
+    visibility: hidden
+    direction: fill
+    tick_sources: [{on: "boundary:day", ticks: 1, condition: null}, {on: cost.exposure, ticks: "U(severity)", condition: null}, {on: cost.twist, ticks: 1, condition: null}]
+    auto_ticks: []
+    decay: []
+    omens:
+      stirring: ["a hired man in a tavern counting coin he should not have", "rope and nails bought in quantity at the chandler's"]
+      building: ["the usual road suddenly empty of travelers", "fresh-cut branches along a narrow stretch of track"]
+      imminent: ["birds silent where they should be loud", "a glint of metal in the gorse ahead"]
+    on_complete: {effects: [{effect_id: eff.summon, params: {template: "an ambush encounter (lethal_context per ch.09)", location: "the PC's next route", duration: scene}}], interrupting: true, then: close}
+    races_with: null
+    lifecycle: provisional
+  - id: clk.twist_alarm_raised
+    name: "The alarm in this place"
+    kind: danger
+    segments: 6
+    visibility: sensed
+    direction: fill
+    tick_sources: [{on: trait.sense.loud, ticks: 1, condition: null}, {on: cost.exposure, ticks: "U(severity)", condition: null}, {on: cost.twist, ticks: 3, condition: null}]
+    auto_ticks: [{boundary: interval, ticks: 1, condition: "the PC is inside this place"}]
+    decay: []
+    omens:
+      stirring: ["a shout somewhere behind walls", "a door slams and boots run"]
+      building: ["lanterns lit one after another", "a bell's first tentative stroke"]
+      imminent: ["the gate's bar dropping into place", "orders called in every corridor"]
+    on_complete: {effects: [{effect_id: eff.summon, params: {template: "the place's guards (ch.10/13)", location: "converging on the PC", duration: scene}}], interrupting: true, then: close}
+    races_with: null
+    lifecycle: provisional
+  - id: clk.twist_champion_hunt
+    name: "<champion> hunts you"
+    kind: danger
+    segments: 8
+    visibility: hidden
+    direction: fill
+    tick_sources: [{on: "boundary:week", ticks: 1, condition: null}, {on: cost.exposure, ticks: "U(severity)", condition: null}, {on: cost.twist, ticks: 2, condition: null}]
+    auto_ticks: []
+    decay: []
+    omens:
+      stirring: ["someone has been asking your old landlady about you", "your name spoken in a place you have never been"]
+      building: ["a friend warns you a stranger paid well for your description", "a token of the champion left where you will find it"]
+      imminent: ["the champion's horse stabled at your inn", "a letter in your own hand you never wrote"]
+    on_complete: {effects: [{effect_id: eff.summon, params: {template: "the champion's confrontation (lethal_context per ch.09)", location: "where the PC is, at the champion's choosing", duration: scene}}], interrupting: true, then: close}
+    races_with: null
+    lifecycle: provisional

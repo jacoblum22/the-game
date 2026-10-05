@@ -1,0 +1,11 @@
+16-heldline-sim.py: 6-segment tug clock from 3; exact
+  band-3 knight (+7) vs a T1 mob of 4 (Guard 12 +2)          P(hold and win)  89.9%  mean rounds  4.7  (CF/F/S/CS 5/25/50/20%)
+  band-3 knight (+7) vs a T1 mob of 6 (Guard 12 +4)          P(hold and win)  75.0%  mean rounds  6.3  (CF/F/S/CS 5/35/50/10%)
+  band-3 knight (+7) vs one T1 (Guard 12)                    P(hold and win)  96.2%  mean rounds  3.6  (CF/F/S/CS 5/15/50/30%)
+  band-2 escort (+5) vs one T2 (Guard 15)                    P(hold and win)  61.8%  mean rounds  7.2  (CF/F/S/CS 5/40/50/5%)
+  band-2 escort (+5) vs two T2 (15)                          P(hold and win)  61.8%  mean rounds  7.2  (CF/F/S/CS 5/40/50/5%)
+  band-2 escort (+5) vs a T2 mob of 4 (15 +2)                P(hold and win)  34.4%  mean rounds  6.6  (CF/F/S/CS 10/45/40/5%)
+  band-1 militia cohort of 4 (+2 +2) vs a T2 mob of 4 (15 +2) P(hold and win)  22.9%  mean rounds  5.8  (CF/F/S/CS 15/45/35/5%)
+  band-1 villagers, one (+2) vs one T2 (15)                  P(hold and win)  22.9%  mean rounds  5.8  (CF/F/S/CS 15/45/35/5%)
+  band-3 knight (+7) vs one T3 (Guard 17)                    P(hold and win)  61.8%  mean rounds  7.2  (CF/F/S/CS 5/40/50/5%)
+  band-4 champion (+10) vs one T3 (17)                       P(hold and win)  89.9%  mean rounds  4.7  (CF/F/S/CS 5/25/50/20%)

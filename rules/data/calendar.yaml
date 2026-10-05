@@ -1,0 +1,295 @@
+# data/calendar.yaml
+# Purpose: the calendar engine on 00's 364-day year (11.10): seasons (ids read by ch.10's weather regimes),
+#   quarter days, months, weekdays, the moon, festivals and their closed effect list, lifespans and aging.
+# Owner: 11-living-world (engine); owner-block "13" supplies names (months, weekdays, quarter days, era) and
+#   festivals (T-00-19; 00.17.1 Q19). The neutral names below stand until 13 replaces them by id.
+# Schema: data/SCHEMAS.md#calendar.yaml (year_days, seasons, weeks_per_season, day_names, festivals) plus
+#   T-11-1's optional keys (quarter_days, months, moon, lifespans, aging, festival_effects, era).
+# Every entry lifecycle: provisional (00.16.3).
+# Basis: [00.7.1] [R5 TM-07, TM-08, HR-10, P-44] [DL-11-21] [DL-11-22]
+
+schema_version: 1
+
+year_days: 364
+weeks_per_season: 13
+days_per_week: 7
+days_per_season: 91
+year_starts: "the spring quarter day (day 1 of spring); weeks run unbroken, so every season and year begins on weekday 1"
+
+seasons:
+  - {id: spring, name: Spring, order: 1, lifecycle: provisional, basis: ["11.10.1"]}
+  - {id: summer, name: Summer, order: 2, lifecycle: provisional, basis: ["11.10.1"]}
+  - {id: autumn, name: Autumn, order: 3, lifecycle: provisional, basis: ["11.10.1"]}
+  - {id: winter, name: Winter, order: 4, lifecycle: provisional, basis: ["11.10.1"]}
+
+quarter_days:
+  # day 1 of each season; belongs to no month; a festival with market and sitting unless 13 says otherwise
+  - {id: quarter.spring, name: "Quarter day of spring (the year's first day)", season: spring, day_of_season: 1, lifecycle: provisional, basis: ["11.10.1"]}
+  - {id: quarter.summer, name: "Quarter day of summer", season: summer, day_of_season: 1, lifecycle: provisional, basis: ["11.10.1"]}
+  - {id: quarter.autumn, name: "Quarter day of autumn", season: autumn, day_of_season: 1, lifecycle: provisional, basis: ["11.10.1"]}
+  - {id: quarter.winter, name: "Quarter day of winter", season: winter, day_of_season: 1, lifecycle: provisional, basis: ["11.10.1"]}
+
+months:
+  # three 30-day months per season, days 2-31, 32-61, 62-91 of the season
+  - {id: month.1, name: "First month of spring", season: spring, days_of_season: [2, 31], lifecycle: provisional, basis: ["11.10.1"]}
+  - {id: month.2, name: "Second month of spring", season: spring, days_of_season: [32, 61], lifecycle: provisional, basis: ["11.10.1"]}
+  - {id: month.3, name: "Third month of spring", season: spring, days_of_season: [62, 91], lifecycle: provisional, basis: ["11.10.1"]}
+  - {id: month.4, name: "First month of summer", season: summer, days_of_season: [2, 31], lifecycle: provisional, basis: ["11.10.1"]}
+  - {id: month.5, name: "Second month of summer", season: summer, days_of_season: [32, 61], lifecycle: provisional, basis: ["11.10.1"]}
+  - {id: month.6, name: "Third month of summer", season: summer, days_of_season: [62, 91], lifecycle: provisional, basis: ["11.10.1"]}
+  - {id: month.7, name: "First month of autumn", season: autumn, days_of_season: [2, 31], lifecycle: provisional, basis: ["11.10.1"]}
+  - {id: month.8, name: "Second month of autumn", season: autumn, days_of_season: [32, 61], lifecycle: provisional, basis: ["11.10.1"]}
+  - {id: month.9, name: "Third month of autumn", season: autumn, days_of_season: [62, 91], lifecycle: provisional, basis: ["11.10.1"]}
+  - {id: month.10, name: "First month of winter", season: winter, days_of_season: [2, 31], lifecycle: provisional, basis: ["11.10.1"]}
+  - {id: month.11, name: "Second month of winter", season: winter, days_of_season: [32, 61], lifecycle: provisional, basis: ["11.10.1"]}
+  - {id: month.12, name: "Third month of winter", season: winter, days_of_season: [62, 91], lifecycle: provisional, basis: ["11.10.1"]}
+
+day_names: ["First-day", "Second-day", "Third-day", "Fourth-day", "Fifth-day", "Sixth-day", "Rest-day"]
+
+era: {name: "of the campaign", year_one: "the campaign's first spring quarter day unless 13 sets an opening date", lifecycle: provisional, basis: ["11.10.2"]}
+
+date_format: "{quarter day of <season> | <day> of <month>}, <weekday>, year <n> <era>, <watch>"
+
+moon:
+  cycle_days: 28
+  cycles_per_year: 13
+  starts: "new on the year's first day"
+  phases: [{day_of_cycle: 1, id: new}, {day_of_cycle: 8, id: waxing_half}, {day_of_cycle: 15, id: full}, {day_of_cycle: 22, id: waning_half}]
+  writes: "fact moon.phase at each day boundary (h.11.moon)"
+  lifecycle: provisional
+  basis: ["11.10.3"]
+
+festival_effects:
+  - {id: fx.market, effect: "that week, find-buyer clocks tick +1 and one price notch is waived in haggling (08, 15)"}
+  - {id: fx.sitting, effect: "factions whose sittings name it confer ranks (11.8.3)"}
+  - {id: fx.rumor_surge, effect: "rumors circulating in its scope drawn at weight 3; Carouse yields one more"}
+  - {id: fx.truce, effect: "in its scope that week, faction strikes read as goal"}
+  - {id: fx.rite_day, effect: "a named school's rituals there count one scale lower in cost (05)"}
+  - {id: fx.hiring_fair, effect: "16's recruiting delivers one more candidate"}
+
+festivals:
+  - {id: fest.quarter_spring, name: "Spring quarter day", season: spring, week: 1, day: 1, effects: [fx.market, fx.sitting], lifecycle: provisional, basis: ["11.10.4"]}
+  - {id: fest.quarter_summer, name: "Summer quarter day", season: summer, week: 1, day: 1, effects: [fx.market, fx.sitting], lifecycle: provisional, basis: ["11.10.4"]}
+  - {id: fest.quarter_autumn, name: "Autumn quarter day", season: autumn, week: 1, day: 1, effects: [fx.market, fx.sitting, fx.hiring_fair], lifecycle: provisional, basis: ["11.10.4"]}
+  - {id: fest.quarter_winter, name: "Winter quarter day", season: winter, week: 1, day: 1, effects: [fx.market, fx.sitting], lifecycle: provisional, basis: ["11.10.4"]}
+
+age_defaults: {young: 18, grown: 30, old: 55}
+
+lifespans:
+  # the age at which aging checks begin, by people (creature.folk tag); 13 may adjust for its peoples
+  - {tag: creature.folk.orc, aging_from: 35}
+  - {tag: creature.folk.goblin, aging_from: 35}
+  - {tag: creature.folk.human, aging_from: 50}
+  - {tag: creature.folk.halfling, aging_from: 50}
+  - {tag: creature.folk.beastfolk, aging_from: 50}
+  - {tag: creature.folk.giant, aging_from: 80}
+  - {tag: creature.folk.dwarf, aging_from: 120}
+  - {tag: creature.folk.elf, aging_from: 300}
+
+aging:
+  check: "Endure with Endurance at each Year Turn from aging_from; fate may reroll (01.16.3)"
+  dc_by_decade_of_aging: {1: Easy, 2: Moderate, 3: Hard, 4: "Very hard"}
+  results:
+    critical_success: "nothing; no aging check next year"
+    success: "nothing"
+    failure: "an aging mark: -1 to Might, Agility or Endurance (player's choice among those not yet lowered by age), within 00.4.3 (c); once all three are lowered, counted only"
+    critical_failure: "an aging mark and the retirement offer at the next reflection"
+  thresholds: {offer_every_year_turn_from_marks: 3, career_end_at_marks: 5}
+  never_kills: "age ends careers, never lives in play (INV-6)"
+  npc_death_oracle: {first_decade: Remote, second_decade: Unlikely, third_decade: Even, later: Likely}
+  lifecycle: provisional
+  basis: ["11.10.5", "R5 HR-10", "R5 P-44", "DL-11-22"]
+
+blocks:   # owner-blocks merged at integration from _process/merged-contrib/calendar.NN.yaml (integration-merge.py)
+  # ---- merged from calendar.13.yaml ----
+  # data/contrib/calendar.13.yaml
+  # Purpose: the March's names for the calendar engine (00.17.1 Q19; 11.10)
+  # Owner: 13-starter-setting (owner-block '13' of calendar.yaml).
+  # Schema: data/SCHEMAS.md#calendar.yaml
+  # GENERATED by rules/_process/simulation/13-gen_region.py from 13_data_*.py; do not hand-edit (regenerate).
+  # Basis: [11.10] [13.9]
+  - owner: '13'
+    entries:
+    - id: cal.thallen
+      name: The reckoning of the March
+      tags: []
+      seasons:
+      - id: spring
+        name: Thawing
+      - id: summer
+        name: High Summer
+      - id: autumn
+        name: Tithing
+      - id: winter
+        name: the Long Dark
+      quarter_days:
+      - id: quarter.spring
+        name: Ringing Day
+        note: the year's first day; the Last Bell's great peal at dawn; market, sitting and hiring fair
+      - id: quarter.summer
+        name: Longday Fair
+        note: market, sitting, the Longday truce
+      - id: quarter.autumn
+        name: Tithe Day
+        note: market, sitting, hiring fair; the Margravine's tithe falls due
+      - id: quarter.winter
+        name: Hush-eve
+        note: the anniversary of the Hush; every bell in the March is rung all night (the Long Peal)
+      months:
+      - id: month.1
+        name: Rimewane
+      - id: month.2
+        name: Furrowtide
+      - id: month.3
+        name: Blossomfall
+      - id: month.4
+        name: Haysel
+      - id: month.5
+        name: Highsun
+      - id: month.6
+        name: Reaping
+      - id: month.7
+        name: Gleaning
+      - id: month.8
+        name: Russet
+      - id: month.9
+        name: Emberfall
+      - id: month.10
+        name: Deepcold
+      - id: month.11
+        name: Wolfmonth
+      - id: month.12
+        name: Thawhope
+      day_names:
+      - Dawnday
+      - Hearthday
+      - Weighday
+      - Fordsday
+      - Toilday
+      - Marketday
+      - Bellday
+      era:
+        name: since the Hush (S.H.)
+        year_one: the spring quarter day after Hush-eve
+        opening_date: Ringing Day (spring quarter day), year 42 S.H., dawn watch
+      festivals:
+      - id: fest.quarter_spring
+        name: Ringing Day
+        season: spring
+        week: 1
+        day: 1
+        effects:
+        - fx.market
+        - fx.sitting
+        - fx.hiring_fair
+        lifecycle: provisional
+        basis:
+        - 11.10.4
+        - '13.9'
+      - id: fest.quarter_summer
+        name: Longday Fair
+        season: summer
+        week: 1
+        day: 1
+        effects:
+        - fx.market
+        - fx.sitting
+        - fx.truce
+        lifecycle: provisional
+        basis:
+        - 11.10.4
+        - '13.9'
+      - id: fest.quarter_autumn
+        name: Tithe Day
+        season: autumn
+        week: 1
+        day: 1
+        effects:
+        - fx.market
+        - fx.sitting
+        - fx.hiring_fair
+        lifecycle: provisional
+        basis:
+        - 11.10.4
+        - '13.9'
+      - id: fest.quarter_winter
+        name: Hush-eve (the Long Peal)
+        season: winter
+        week: 1
+        day: 1
+        effects:
+        - fx.market
+        - fx.sitting
+        - fx.rumor_surge
+        - fx.rite_day
+        rite_school: deed.divine.warding
+        lifecycle: provisional
+        basis:
+        - 11.10.4
+        - '13.9'
+      - id: fest.thallen.waking_day
+        name: Waking Day
+        season: spring
+        week: 6
+        day: 7
+        effects:
+        - fx.rumor_surge
+        note: the Wakeful's feast for the year's Woken, at the Waking House
+        lifecycle: provisional
+        basis:
+        - 11.10.4
+        - '13.9'
+      - id: fest.thallen.fordwake
+        name: Fordwake
+        season: autumn
+        week: 13
+        day: 4
+        effects:
+        - fx.rite_day
+        rite_school: deed.divine.rites
+        note: 'Weyla''s night: lamps floated down the Wend for the year''s dead and for the Stilled'
+        lifecycle: provisional
+        basis:
+        - 11.10.4
+        - '13.9'
+      - id: fest.thallen.founders_pour
+        name: Founders' Pour
+        season: summer
+        week: 9
+        day: 6
+        effects:
+        - fx.market
+        note: Clan Gorrund pours its year's bells at the Delve; the one day outsiders are welcome in the foundry
+        lifecycle: provisional
+        basis:
+        - 11.10.4
+        - '13.9'
+      lifespans:
+      - tag: creature.folk.human
+        aging_from: 50
+        note: a Woken's age counts only waking years (canon.woken)
+      - tag: creature.folk.halfling
+        aging_from: 50
+        note: ''
+      - tag: creature.folk.dwarf
+        aging_from: 120
+        note: ''
+      - tag: creature.folk.elf
+        aging_from: 300
+        note: the Lingerers say the Hush aged them; no rule follows
+      - tag: creature.folk.goblin
+        aging_from: 35
+        note: ''
+      - tag: creature.folk.orc
+        aging_from: 35
+        note: ''
+      - tag: creature.folk.giant
+        aging_from: 80
+        note: ''
+      - tag: creature.folk.beastfolk
+        aging_from: 50
+        note: reedfolk
+      lifecycle: provisional
+      basis:
+      - '11.10'
+      - '13.9'

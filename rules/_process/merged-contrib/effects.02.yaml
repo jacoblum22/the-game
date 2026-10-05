@@ -1,0 +1,22 @@
+# data/contrib/effects.02.yaml
+# Purpose: ch.02's addition to data/effects.yaml. ONE definition, added because no core effect expresses it
+#   (PR-00-8). T-00-19 lists owner-blocks 04-11, 15, 16 for effects.yaml; ch.02 REQUESTS an owner-block "02"
+#   for this single entry (02 Interface requests, item 00-1).
+# Owner: 02-character. Schema: data/SCHEMAS.md#effectsyaml. Decision: DL-02-11.
+
+schema_version: 1
+blocks:
+- owner: '02'
+  entries:
+  - id: eff.02.bent
+    op: set_fact
+    regime: independent_trigger
+    params: {attribute: attr_id, amount: '1'}
+    applies_when: "the player ACCEPTED the Bent offer (02.6.6); the attribute is +2 or lower"
+    limits: {per: lifetime, uses: 1}
+    player_only: true
+    text: 'Permanently raises {attribute} by {amount}, never above +3 (00.4.3 a).'
+    why_not_core: attributes are not quantities of the evaluation pass (T-00-13) and no modify effect may change them
+      (00.4.3); the birth Bent is the one write 00.4.3 a allows, expressed as a recorded fact, as ch.07 did for eff.07.maim
+    lifecycle: provisional
+    basis: [00.4.3 a, 02.6.5, 02.6.6, 'C:P1', DL-02-11]

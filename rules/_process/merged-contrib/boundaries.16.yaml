@@ -1,0 +1,22 @@
+# data/contrib/boundaries.16.yaml
+# Purpose: ch.16's owner-block for data/boundaries.yaml. The one handler 00 reserved for ch.16
+#   (h.16.retinue_upkeep) is DEFINED in chapter 16 (rule ids below) and restated here; seven handlers are added.
+# Owner: 16-companions-and-allies. Schema: data/SCHEMAS.md#boundariesyaml. Phases per 00.7.5; within a phase,
+#   owner chapter then id: at `week` phase 4, h.08.upkeep runs before h.16.retinue_upkeep (a shortfall falls on
+#   the PC's lifestyle first); at `reflection` phase 8, h.04.recognition_pass runs before h.16.follower_offers;
+#   at `season` phase 8, h.04.season_consolidation runs before h.16.season_growth; at `conflict_start` phase 9,
+#   h.06.tempo_setup runs before h.16.conflict_orders.
+# Basis: [00.7.4-00.7.8] [16.2.1] [16.3.6] [16.5.3-16.5.4] [16.7.3] [16.7.12] [16.10.1] [16.14] [DL-16-21]
+
+schema_version: 1
+blocks:
+- owner: '16'
+  handlers:
+  - {id: h.16.retinue_upkeep, boundary: week, phase: 4, interrupting: false, effect: "for each ally in the retinue or posted: charge wage or keep (venture weeks accrue wages); write paid or unpaid; tick G4 (grace weeks by standing); a hireling unpaid two consecutive weeks departs (cause unpaid); weekly sources G8, G9, R4; posted tasks (tbl.16.posted_task); overflow over the retinue cap", rule_id: "16.14.3; 16.2.1; 16.2.3; PR-16-9", status: "reserved by 00; defined"}
+  - {id: h.16.contract_term, boundary: day, phase: 6, interrupting: false, effect: "mark hireling contracts whose term ends today (venture terms at venture_end); at the next haven pay off, renew, make the Friendly-after-four-weeks offer to stay as a companion, or depart (cause contract_end)", rule_id: 16.14.4, status: added}
+  - {id: h.16.conflict_orders, boundary: conflict_start, phase: 9, interrupting: false, effect: "give each ally present its template default order, adjusted by loyalty (its fallback order when its rung refuses the default); no action spent", rule_id: 16.7.3, status: added}
+  - {id: h.16.follower_offers, boundary: reflection, phase: 8, interrupting: false, effect: "at most one follower offer a season: a confirmed calling tier of 2 or more with a carrier witness in the last season, or a rank granting followers; generate the follower (T-16-20) and offer_create; defer automatically when the retinue is full", rule_id: 16.3.6, status: added}
+  - {id: h.16.season_growth, boundary: season, phase: 8, interrupting: false, effect: "raise an ally's own band by one when below its template max, it served the whole season, and it fought two conflicts defeating a foe of its band or one hard or lethal conflict; apply protege tiers; rebuild lines; reset per-season caps", rule_id: "16.10.1; 16.10.4; PR-16-10", status: added}
+  - {id: h.16.venture_end, boundary: venture_end, phase: 9, interrupting: false, effect: "pay contract shares of coin found (or tick G5); tick R5 (the road together) for allies who completed the venture", rule_id: "16.14.6; T-16-8 R5", status: added}
+  - {id: h.16.held_line, boundary: round, phase: 7, interrupting: "when a held line reaches 0 (the held foes enter the PC's fight next round)", effect: "for each active clk.16.held_line: one fortune check by the holders (base attack, +2 per numbers step) against the held foes' highest Guard (+2 per numbers step): critical success +2, success +1, failure -1, critical failure -2", rule_id: "16.7.12; PR-16-11", status: added}
+  - {id: h.16.loyalty_record, boundary: scene_end, phase: 9, interrupting: false, effect: "test the scene-end loyalty sources (G3 danger beyond the bargain; G7 left to fall; R3 shared danger, once per scene); queue confrontations for completed grievance clocks; fire departures pending at a scene_end not in danger", rule_id: "16.5.4; 16.5.9; 16.6.2; 16.6.3", status: added}

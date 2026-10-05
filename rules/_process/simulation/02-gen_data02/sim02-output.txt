@@ -1,0 +1,39 @@
+
+### New characters (band 1, no Focus spent) against one T1 foe (rabble)
+
+| Matchup                                                    | win%  | clean | stag% | dying | rnds | lost | broke |
+|------------------------------------------------------------|-------|-------|-------|-------|------|------|-------|
+| 06's reference P1 line (+5, Guard 14, Vit 12, armor 1)     | 100.0 | 100.0 |   0.0 |   0.0 |  1.5 |  1.0 |   0.0 |
+| Wren: Free hunter (+5, Guard 14, Vit 12, armor 1, tempo +3) | 100.0 | 100.0 |   0.0 |   0.0 |  1.5 |  1.0 |   0.0 |
+| Bram: Free soldier, shield (+5, Guard 14, Vit 14, armor 1, tempo +1) | 100.0 | 100.0 |   0.0 |   0.0 |  1.4 |  1.0 |   0.0 |
+| Dwarf Typical soldier (+5, Guard 12, Vit 14, armor 1, tempo +3) | 100.0 | 100.0 |   0.0 |   0.0 |  1.5 |  1.2 |   0.0 |
+| Orc-kin Typical soldier, knack on blades (+6, Guard 15, Vit 14, armor 1) | 100.0 | 100.0 |   0.0 |   0.0 |  1.3 |  0.8 |   0.0 |
+| Thessaly: Free acolyte, mace, no Focus (+0, Guard 11, Vit 12, no armor) |  98.6 |  91.5 |   8.5 |   1.4 |  2.2 |  4.3 |   0.0 |
+| Elf Typical apprentice, staff, no Focus (+1, Guard 13, Vit 11, no armor) |  99.5 |  95.2 |   4.8 |   0.5 |  2.0 |  3.0 |   0.0 |
+| Weakest legal line (+0, Guard 10, Vit 11, no armor, tempo +0) |  97.2 |  86.7 |  13.3 |   2.8 |  2.2 |  4.6 |   0.0 |
+
+### New characters (band 1, no Focus spent) against two T1 foes
+
+| Matchup                                                    | win%  | clean | stag% | dying | rnds | lost | broke |
+|------------------------------------------------------------|-------|-------|-------|-------|------|------|-------|
+| 06's reference P1 line (+5, Guard 14, Vit 12, armor 1)     |  99.9 |  98.8 |   1.2 |   0.1 |  1.5 |  2.0 |  98.3 |
+| Wren: Free hunter (+5, Guard 14, Vit 12, armor 1, tempo +3) |  99.9 |  98.8 |   1.2 |   0.1 |  1.5 |  1.9 |  98.4 |
+| Bram: Free soldier, shield (+5, Guard 14, Vit 14, armor 1, tempo +1) |  99.9 |  99.4 |   0.6 |   0.1 |  1.5 |  2.1 |  99.1 |
+| Dwarf Typical soldier (+5, Guard 12, Vit 14, armor 1, tempo +3) |  99.8 |  99.0 |   1.0 |   0.2 |  1.5 |  2.3 |  98.8 |
+| Orc-kin Typical soldier, knack on blades (+6, Guard 15, Vit 14, armor 1) | 100.0 |  99.8 |   0.2 |   0.0 |  1.4 |  1.5 |  99.5 |
+| Thessaly: Free acolyte, mace, no Focus (+0, Guard 11, Vit 12, no armor) |  80.5 |  62.0 |  38.0 |  19.5 |  2.3 |  7.1 |  76.5 |
+| Elf Typical apprentice, staff, no Focus (+1, Guard 13, Vit 11, no armor) |  90.9 |  75.7 |  24.3 |   9.1 |  2.2 |  5.1 |  87.6 |
+| Weakest legal line (+0, Guard 10, Vit 11, no armor, tempo +0) |  72.7 |  53.1 |  46.9 |  27.3 |  2.2 |  7.2 |  69.4 |
+
+### New characters (band 1, no Focus spent) against one T2 foe (trained)
+
+| Matchup                                                    | win%  | clean | stag% | dying | rnds | lost | broke |
+|------------------------------------------------------------|-------|-------|-------|-------|------|------|-------|
+| 06's reference P1 line (+5, Guard 14, Vit 12, armor 1)     |  98.7 |  91.5 |   8.5 |   1.3 |  3.4 |  5.6 |   0.0 |
+| Wren: Free hunter (+5, Guard 14, Vit 12, armor 1, tempo +3) |  98.7 |  91.6 |   8.4 |   1.3 |  3.4 |  5.6 |   0.0 |
+| Bram: Free soldier, shield (+5, Guard 14, Vit 14, armor 1, tempo +1) |  99.4 |  96.1 |   3.9 |   0.6 |  3.4 |  5.7 |   0.0 |
+| Dwarf Typical soldier (+5, Guard 12, Vit 14, armor 1, tempo +3) |  98.2 |  90.1 |   9.9 |   1.9 |  3.4 |  7.1 |   0.0 |
+| Orc-kin Typical soldier, knack on blades (+6, Guard 15, Vit 14, armor 1) |  99.8 |  98.3 |   1.7 |   0.1 |  3.1 |  4.6 |   0.0 |
+| Thessaly: Free acolyte, mace, no Focus (+0, Guard 11, Vit 12, no armor) |  30.9 |  11.8 |  88.2 |  69.1 |  4.5 | 11.5 |   0.0 |
+| Elf Typical apprentice, staff, no Focus (+1, Guard 13, Vit 11, no armor) |  54.9 |  26.4 |  73.6 |  45.1 |  4.6 |  9.8 |   0.0 |
+| Weakest legal line (+0, Guard 10, Vit 11, no armor, tempo +0) |  21.0 |   6.3 |  93.7 |  79.0 |  4.1 | 10.7 |   0.0 |

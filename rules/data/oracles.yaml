@@ -1,0 +1,2325 @@
+# data/oracles.yaml
+# Purpose: every table ch.12's DM procedures roll: meaning pairs (the 'and' of yes-and/no-and, random-event
+#   content, descriptions), the twist rows by severity (target of cost.twist, 01.13.10), random-event focus,
+#   the scene test and scene adjustments, lead-injection forms, vignettes, and NPC generation, reaction and
+#   action tables. The DM never picks 'at random': it rolls these (00.3.2, SG-12).
+# Owner: 12-dm-procedures (00.17.1 Q6; T-00-19). Region tables (ch.13) replace the generic NPC and name
+#   tables where they exist.
+# Schema: data/SCHEMAS.md#oraclesyaml (Table: id, die, results [{range, result, effects?, sub_table?}],
+#   recency, context_filters) plus the common envelope. Optional fields used here (documented in 12 Tables):
+#   writes (the state writes a row makes), tags (row tags; 'threat' rows are filtered by the pacing phase),
+#   phase_substitute, fallback, target_list, means, kind, rooted_in, pronouns, standing, standing_delta,
+#   recency_window (default 5; meaning lists 20), context_rule, rule, modifier, constraints, never, base,
+#   clamp, notes_rule, fallback_forms.
+# Dice: table dice only (00.3.1): d6, d8, d10, d12, d20, d100, 2d6; rolled by roll_table with RC-RNG.
+# All word lists are original to this ruleset (not copied from any published oracle).
+# Basis: [R5 §2.1-2.3 P-01..P-11]; [R4 SG-12, W6, W10]; [R6 B-16]; [01.13.10]; DL-12-01..DL-12-20.
+
+schema_version: 1
+tables:
+- id: tbl.meaning
+  name: Meaning (dispatcher)
+  tags: []
+  die: d6
+  recency: false
+  context_filters:
+  - meaning_kind
+  results:
+  - range: 1-3
+    result: action pair
+    sub_table:
+    - tbl.meaning_verb
+    - tbl.meaning_subject
+  - range: 4-6
+    result: description pair
+    sub_table:
+    - tbl.meaning_descriptor
+    - tbl.meaning_focus
+  lifecycle: provisional
+  basis: &id001
+  - '[R5 P-04 (Mythic meaning tables; UNE)]'
+  - '[R4 W10, SG-12]'
+  - '[12.6.7]'
+  context_rule: 'when the caller passes meaning_kind: action or description, the die is not rolled and that row is used; yes-and
+    / no-and and random events pass action; ''what is it like'' passes description'
+- id: tbl.meaning_verb
+  name: 'Meaning: action verb'
+  tags: []
+  die: d100
+  recency: true
+  context_filters: []
+  results:
+  - range: '1'
+    result: abandon
+  - range: '2'
+    result: accuse
+  - range: '3'
+    result: ally with
+  - range: '4'
+    result: ambush
+  - range: '5'
+    result: answer
+  - range: '6'
+    result: arrive
+  - range: '7'
+    result: awaken
+  - range: '8'
+    result: bargain for
+  - range: '9'
+    result: befriend
+  - range: '10'
+    result: betray
+  - range: '11'
+    result: bind
+  - range: '12'
+    result: break
+  - range: '13'
+    result: build
+  - range: '14'
+    result: burn
+  - range: '15'
+    result: bury
+  - range: '16'
+    result: call upon
+  - range: '17'
+    result: capture
+  - range: '18'
+    result: carry
+  - range: '19'
+    result: challenge
+  - range: '20'
+    result: change
+  - range: '21'
+    result: chase
+  - range: '22'
+    result: claim
+  - range: '23'
+    result: command
+  - range: '24'
+    result: conceal
+  - range: '25'
+    result: confess
+  - range: '26'
+    result: corrupt
+  - range: '27'
+    result: curse
+  - range: '28'
+    result: deceive
+  - range: '29'
+    result: defend
+  - range: '30'
+    result: delay
+  - range: '31'
+    result: demand
+  - range: '32'
+    result: deny
+  - range: '33'
+    result: depart
+  - range: '34'
+    result: desecrate
+  - range: '35'
+    result: destroy
+  - range: '36'
+    result: discover
+  - range: '37'
+    result: disguise
+  - range: '38'
+    result: divide
+  - range: '39'
+    result: dream of
+  - range: '40'
+    result: drown
+  - range: '41'
+    result: endure
+  - range: '42'
+    result: escape
+  - range: '43'
+    result: expose
+  - range: '44'
+    result: fail
+  - range: '45'
+    result: feast
+  - range: '46'
+    result: flee
+  - range: '47'
+    result: follow
+  - range: '48'
+    result: forge
+  - range: '49'
+    result: forget
+  - range: '50'
+    result: free
+  - range: '51'
+    result: gather
+  - range: '52'
+    result: guard
+  - range: '53'
+    result: guide
+  - range: '54'
+    result: harvest
+  - range: '55'
+    result: heal
+  - range: '56'
+    result: hide
+  - range: '57'
+    result: hunt
+  - range: '58'
+    result: imprison
+  - range: '59'
+    result: inherit
+  - range: '60'
+    result: inspire
+  - range: '61'
+    result: invade
+  - range: '62'
+    result: judge
+  - range: '63'
+    result: lead
+  - range: '64'
+    result: lie about
+  - range: '65'
+    result: lose
+  - range: '66'
+    result: mourn
+  - range: '67'
+    result: oppose
+  - range: '68'
+    result: pursue
+  - range: '69'
+    result: persuade
+  - range: '70'
+    result: plead for
+  - range: '71'
+    result: poison
+  - range: '72'
+    result: possess
+  - range: '73'
+    result: praise
+  - range: '74'
+    result: protect
+  - range: '75'
+    result: punish
+  - range: '76'
+    result: question
+  - range: '77'
+    result: rebel against
+  - range: '78'
+    result: rebuild
+  - range: '79'
+    result: release
+  - range: '80'
+    result: remember
+  - range: '81'
+    result: repay
+  - range: '82'
+    result: rescue
+  - range: '83'
+    result: return
+  - range: '84'
+    result: reveal
+  - range: '85'
+    result: ruin
+  - range: '86'
+    result: sacrifice
+  - range: '87'
+    result: seek
+  - range: '88'
+    result: seize
+  - range: '89'
+    result: sell
+  - range: '90'
+    result: settle
+  - range: '91'
+    result: shatter
+  - range: '92'
+    result: spy on
+  - range: '93'
+    result: steal
+  - range: '94'
+    result: summon
+  - range: '95'
+    result: swear by
+  - range: '96'
+    result: tempt
+  - range: '97'
+    result: trade
+  - range: '98'
+    result: transform
+  - range: '99'
+    result: warn
+  - range: '100'
+    result: wound
+  lifecycle: provisional
+  basis: *id001
+  recency_window: 20
+- id: tbl.meaning_subject
+  name: 'Meaning: action subject'
+  tags: []
+  die: d100
+  recency: true
+  context_filters: []
+  results:
+  - range: '1'
+    result: an oath
+  - range: '2'
+    result: a debt
+  - range: '3'
+    result: a child
+  - range: '4'
+    result: a stranger
+  - range: '5'
+    result: a rival
+  - range: '6'
+    result: a stolen thing
+  - range: '7'
+    result: the dead
+  - range: '8'
+    result: a grave
+  - range: '9'
+    result: a bloodline
+  - range: '10'
+    result: an heir
+  - range: '11'
+    result: a map
+  - range: '12'
+    result: a key
+  - range: '13'
+    result: a letter
+  - range: '14'
+    result: a ledger
+  - range: '15'
+    result: a relic
+  - range: '16'
+    result: a blade
+  - range: '17'
+    result: a crown
+  - range: '18'
+    result: a hoard
+  - range: '19'
+    result: a road
+  - range: '20'
+    result: a bridge
+  - range: '21'
+    result: a well
+  - range: '22'
+    result: a river
+  - range: '23'
+    result: a ford
+  - range: '24'
+    result: a mill
+  - range: '25'
+    result: a harvest
+  - range: '26'
+    result: a herd
+  - range: '27'
+    result: a hound
+  - range: '28'
+    result: a horse
+  - range: '29'
+    result: a ship
+  - range: '30'
+    result: a caravan
+  - range: '31'
+    result: a fortress
+  - range: '32'
+    result: a tower
+  - range: '33'
+    result: a ruin
+  - range: '34'
+    result: a shrine
+  - range: '35'
+    result: a temple
+  - range: '36'
+    result: a god
+  - range: '37'
+    result: a spirit
+  - range: '38'
+    result: a curse
+  - range: '39'
+    result: a beast
+  - range: '40'
+    result: a monster
+  - range: '41'
+    result: a sickness
+  - range: '42'
+    result: a fire
+  - range: '43'
+    result: a storm
+  - range: '44'
+    result: a winter
+  - range: '45'
+    result: a famine
+  - range: '46'
+    result: a feast
+  - range: '47'
+    result: a festival
+  - range: '48'
+    result: a wedding
+  - range: '49'
+    result: a funeral
+  - range: '50'
+    result: a trial
+  - range: '51'
+    result: a law
+  - range: '52'
+    result: a tax
+  - range: '53'
+    result: a border
+  - range: '54'
+    result: a war
+  - range: '55'
+    result: a truce
+  - range: '56'
+    result: a prisoner
+  - range: '57'
+    result: a hostage
+  - range: '58'
+    result: a traitor
+  - range: '59'
+    result: a spy
+  - range: '60'
+    result: a messenger
+  - range: '61'
+    result: a secret
+  - range: '62'
+    result: a rumor
+  - range: '63'
+    result: a lie
+  - range: '64'
+    result: a promise
+  - range: '65'
+    result: a betrayal
+  - range: '66'
+    result: a lover
+  - range: '67'
+    result: a family
+  - range: '68'
+    result: a mentor
+  - range: '69'
+    result: a guild
+  - range: '70'
+    result: a noble house
+  - range: '71'
+    result: a priesthood
+  - range: '72'
+    result: an order of knights
+  - range: '73'
+    result: a band of outlaws
+  - range: '74'
+    result: a cult
+  - range: '75'
+    result: the watch
+  - range: '76'
+    result: the crown
+  - range: '77'
+    result: a merchant
+  - range: '78'
+    result: a beggar
+  - range: '79'
+    result: a healer
+  - range: '80'
+    result: a smith
+  - range: '81'
+    result: a hunter
+  - range: '82'
+    result: a witch
+  - range: '83'
+    result: a scholar
+  - range: '84'
+    result: a soldier
+  - range: '85'
+    result: an old enemy
+  - range: '86'
+    result: an old friend
+  - range: '87'
+    result: a name
+  - range: '88'
+    result: a memory
+  - range: '89'
+    result: a prophecy
+  - range: '90'
+    result: a dream
+  - range: '91'
+    result: a door
+  - range: '92'
+    result: a tomb
+  - range: '93'
+    result: a mine
+  - range: '94'
+    result: the wilds
+  - range: '95'
+    result: a village
+  - range: '96'
+    result: the city
+  - range: '97'
+    result: power
+  - range: '98'
+    result: freedom
+  - range: '99'
+    result: revenge
+  - range: '100'
+    result: home
+  lifecycle: provisional
+  basis: *id001
+  recency_window: 20
+- id: tbl.meaning_descriptor
+  name: 'Meaning: descriptor'
+  tags: []
+  die: d100
+  recency: true
+  context_filters: []
+  results:
+  - range: '1'
+    result: abandoned
+  - range: '2'
+    result: ancient
+  - range: '3'
+    result: ashen
+  - range: '4'
+    result: bitter
+  - range: '5'
+    result: bleak
+  - range: '6'
+    result: blessed
+  - range: '7'
+    result: bloody
+  - range: '8'
+    result: bold
+  - range: '9'
+    result: broken
+  - range: '10'
+    result: brooding
+  - range: '11'
+    result: burning
+  - range: '12'
+    result: careful
+  - range: '13'
+    result: cold
+  - range: '14'
+    result: cracked
+  - range: '15'
+    result: crooked
+  - range: '16'
+    result: cruel
+  - range: '17'
+    result: cursed
+  - range: '18'
+    result: dark
+  - range: '19'
+    result: dead
+  - range: '20'
+    result: desperate
+  - range: '21'
+    result: distant
+  - range: '22'
+    result: drowned
+  - range: '23'
+    result: dry
+  - range: '24'
+    result: dusty
+  - range: '25'
+    result: eager
+  - range: '26'
+    result: elegant
+  - range: '27'
+    result: empty
+  - range: '28'
+    result: faded
+  - range: '29'
+    result: faithful
+  - range: '30'
+    result: 'false'
+  - range: '31'
+    result: feral
+  - range: '32'
+    result: fierce
+  - range: '33'
+    result: foul
+  - range: '34'
+    result: fragile
+  - range: '35'
+    result: frozen
+  - range: '36'
+    result: gentle
+  - range: '37'
+    result: gilded
+  - range: '38'
+    result: gloomy
+  - range: '39'
+    result: graceful
+  - range: '40'
+    result: grim
+  - range: '41'
+    result: guarded
+  - range: '42'
+    result: hallowed
+  - range: '43'
+    result: harsh
+  - range: '44'
+    result: haunted
+  - range: '45'
+    result: heavy
+  - range: '46'
+    result: hidden
+  - range: '47'
+    result: hollow
+  - range: '48'
+    result: holy
+  - range: '49'
+    result: honest
+  - range: '50'
+    result: hungry
+  - range: '51'
+    result: iron
+  - range: '52'
+    result: jagged
+  - range: '53'
+    result: lonely
+  - range: '54'
+    result: lost
+  - range: '55'
+    result: loud
+  - range: '56'
+    result: mended
+  - range: '57'
+    result: mighty
+  - range: '58'
+    result: mocking
+  - range: '59'
+    result: mournful
+  - range: '60'
+    result: narrow
+  - range: '61'
+    result: noble
+  - range: '62'
+    result: old
+  - range: '63'
+    result: overgrown
+  - range: '64'
+    result: pale
+  - range: '65'
+    result: patient
+  - range: '66'
+    result: poor
+  - range: '67'
+    result: proud
+  - range: '68'
+    result: quiet
+  - range: '69'
+    result: ragged
+  - range: '70'
+    result: rich
+  - range: '71'
+    result: rotten
+  - range: '72'
+    result: rusted
+  - range: '73'
+    result: sacred
+  - range: '74'
+    result: savage
+  - range: '75'
+    result: scarred
+  - range: '76'
+    result: secret
+  - range: '77'
+    result: shadowed
+  - range: '78'
+    result: sharp
+  - range: '79'
+    result: shining
+  - range: '80'
+    result: silent
+  - range: '81'
+    result: simple
+  - range: '82'
+    result: slow
+  - range: '83'
+    result: sorrowful
+  - range: '84'
+    result: stained
+  - range: '85'
+    result: stolen
+  - range: '86'
+    result: strange
+  - range: '87'
+    result: sullen
+  - range: '88'
+    result: sunken
+  - range: '89'
+    result: sweet
+  - range: '90'
+    result: swift
+  - range: '91'
+    result: tangled
+  - range: '92'
+    result: tender
+  - range: '93'
+    result: twisted
+  - range: '94'
+    result: unbroken
+  - range: '95'
+    result: veiled
+  - range: '96'
+    result: warm
+  - range: '97'
+    result: weary
+  - range: '98'
+    result: wild
+  - range: '99'
+    result: wise
+  - range: '100'
+    result: young
+  lifecycle: provisional
+  basis: *id001
+  recency_window: 20
+- id: tbl.meaning_focus
+  name: 'Meaning: focus'
+  tags: []
+  die: d100
+  recency: true
+  context_filters: []
+  results:
+  - range: '1'
+    result: ash
+  - range: '2'
+    result: banner
+  - range: '3'
+    result: bell
+  - range: '4'
+    result: blood
+  - range: '5'
+    result: bone
+  - range: '6'
+    result: book
+  - range: '7'
+    result: bread
+  - range: '8'
+    result: bridge
+  - range: '9'
+    result: candle
+  - range: '10'
+    result: chain
+  - range: '11'
+    result: cloak
+  - range: '12'
+    result: coin
+  - range: '13'
+    result: crow
+  - range: '14'
+    result: crown
+  - range: '15'
+    result: door
+  - range: '16'
+    result: dust
+  - range: '17'
+    result: ember
+  - range: '18'
+    result: eye
+  - range: '19'
+    result: feather
+  - range: '20'
+    result: field
+  - range: '21'
+    result: fire
+  - range: '22'
+    result: flood
+  - range: '23'
+    result: flower
+  - range: '24'
+    result: fog
+  - range: '25'
+    result: forest
+  - range: '26'
+    result: gate
+  - range: '27'
+    result: gift
+  - range: '28'
+    result: glass
+  - range: '29'
+    result: grave
+  - range: '30'
+    result: hand
+  - range: '31'
+    result: harp
+  - range: '32'
+    result: hearth
+  - range: '33'
+    result: hill
+  - range: '34'
+    result: horn
+  - range: '35'
+    result: hound
+  - range: '36'
+    result: ice
+  - range: '37'
+    result: ink
+  - range: '38'
+    result: iron
+  - range: '39'
+    result: key
+  - range: '40'
+    result: knife
+  - range: '41'
+    result: ladder
+  - range: '42'
+    result: lamp
+  - range: '43'
+    result: lantern
+  - range: '44'
+    result: mask
+  - range: '45'
+    result: mirror
+  - range: '46'
+    result: moon
+  - range: '47'
+    result: mountain
+  - range: '48'
+    result: name
+  - range: '49'
+    result: needle
+  - range: '50'
+    result: oath
+  - range: '51'
+    result: oak
+  - range: '52'
+    result: path
+  - range: '53'
+    result: pearl
+  - range: '54'
+    result: pit
+  - range: '55'
+    result: rain
+  - range: '56'
+    result: raven
+  - range: '57'
+    result: ring
+  - range: '58'
+    result: river
+  - range: '59'
+    result: road
+  - range: '60'
+    result: rope
+  - range: '61'
+    result: rose
+  - range: '62'
+    result: rust
+  - range: '63'
+    result: salt
+  - range: '64'
+    result: scar
+  - range: '65'
+    result: seal
+  - range: '66'
+    result: seed
+  - range: '67'
+    result: shadow
+  - range: '68'
+    result: shield
+  - range: '69'
+    result: ship
+  - range: '70'
+    result: shroud
+  - range: '71'
+    result: silver
+  - range: '72'
+    result: smoke
+  - range: '73'
+    result: snake
+  - range: '74'
+    result: song
+  - range: '75'
+    result: spear
+  - range: '76'
+    result: spring
+  - range: '77'
+    result: stair
+  - range: '78'
+    result: star
+  - range: '79'
+    result: stone
+  - range: '80'
+    result: storm
+  - range: '81'
+    result: sword
+  - range: '82'
+    result: tear
+  - range: '83'
+    result: thorn
+  - range: '84'
+    result: threshold
+  - range: '85'
+    result: throne
+  - range: '86'
+    result: tide
+  - range: '87'
+    result: torch
+  - range: '88'
+    result: tower
+  - range: '89'
+    result: tree
+  - range: '90'
+    result: voice
+  - range: '91'
+    result: wall
+  - range: '92'
+    result: water
+  - range: '93'
+    result: well
+  - range: '94'
+    result: wheel
+  - range: '95'
+    result: wind
+  - range: '96'
+    result: window
+  - range: '97'
+    result: wine
+  - range: '98'
+    result: wing
+  - range: '99'
+    result: wolf
+  - range: '100'
+    result: lock
+  lifecycle: provisional
+  basis: *id001
+  recency_window: 20
+- id: tbl.twist
+  name: Twist (dispatcher by severity)
+  tags: []
+  die: none
+  recency: false
+  context_filters:
+  - severity
+  - scene_tags
+  - band
+  results:
+  - range: S1
+    result: roll tbl.twist_s1
+    sub_table:
+    - tbl.twist_s1
+  - range: S2
+    result: roll tbl.twist_s2
+    sub_table:
+    - tbl.twist_s2
+  - range: S3
+    result: roll tbl.twist_s3
+    sub_table:
+    - tbl.twist_s3
+  - range: S4
+    result: roll tbl.twist_s4
+    sub_table:
+    - tbl.twist_s4
+  - range: S5
+    result: roll tbl.twist_s5
+    sub_table:
+    - tbl.twist_s5
+  lifecycle: provisional
+  basis: &id002
+  - '[01.13.10 (cost.twist; rows per severity requested of ch.12)]'
+  - '[R7 §4.3 Twist row]'
+  - '[R5 P-16]'
+  - '[12.9.4]'
+  context_rule: the severity passed by cost.twist selects the row; no die is rolled on this table
+  constraints:
+  - a twist never deals harm directly (that is cost.harm) and never kills
+  - every creature or hazard a row creates is drawn from the scene's own encounter, hazard or trap tables (ch.10/13) filtered
+    by the stated band; nothing is invented
+  - a row whose prerequisite is absent (no companion present; no existing danger clock) falls to the row named in its fallback
+  - the DM chooses the fictional form; the row fixes what enters play
+  - clocks created by rows use the templates in data/pacing.yaml#clock_templates (ch.12 owns them; omens included)
+  - 'S5 rows are legal only from world events (01.13.10): a twist on a PC frame never rolls S5'
+- id: tbl.twist_s1
+  name: Twist rows at S1
+  tags: []
+  die: d8
+  recency: true
+  context_filters:
+  - scene_tags
+  - band
+  results:
+  - range: '1'
+    result: 'An unwelcome witness: someone arrives who sees what you are doing.'
+    writes:
+    - create_entity(npc walk-on, 12.11.1)
+    - record_knowledge(witness, the act)
+  - range: '2'
+    result: 'An interruption: someone needs your attention now.'
+    writes:
+    - create_entity(npc walk-on with an urgent request)
+    - ignoring it is free; it is recorded in that NPC's memory
+  - range: '3'
+    result: 'A small snag: a stuck latch, a patch of mud, a press of bodies.'
+    writes:
+    - 'set_fact(snag: Precision -2 on the next beat of this method this scene)'
+  - range: '4'
+    result: 'Something mislaid: a carried, unequipped, non-unique item is dropped or set down here.'
+    writes:
+    - set_fact(item.location = this place)
+    - a free search after the scene recovers it
+  - range: '5'
+    result: 'Drawn attention: the nearest observer grows more alert (not hostile).'
+    writes:
+    - alertness +1 step on the nearest observer (ch.15 ladder)
+  - range: '6'
+    result: 'A delay: the next activity in this scene takes longer.'
+    writes:
+    - the next activity's time cost +1 unit of the mode (01 T-01-9)
+  - range: '7'
+    result: A small false rumor about you starts here.
+    writes:
+    - create rumor (ch.11), truth false, scope this place
+  - range: '8'
+    result: The light or weather turns a step worse here.
+    writes:
+    - set_fact(scene light/weather one step worse) - a snag for sight-based beats this scene
+  lifecycle: provisional
+  basis: *id002
+- id: tbl.twist_s2
+  name: Twist rows at S2
+  tags: []
+  die: d8
+  recency: true
+  context_filters:
+  - scene_tags
+  - band
+  results:
+  - range: '1'
+    result: 'A barrier: a door bars, a plank gives, a path floods.'
+    writes:
+    - create obstacle entity with the tier of the beat's own obstacle; it needs its own beat
+  - range: '2'
+    result: Someone stands in the way and must be talked past.
+    writes:
+    - create_entity(npc walk-on)
+    - reaction roll (12.11.2)
+    - a Talk beat is needed to pass
+  - range: '3'
+    result: The trail, the target or the quarry is lost for now.
+    writes:
+    - set_fact(lost)
+    - an Observe or tracking beat regains it
+  - range: '4'
+    result: 'A demand: someone with authority wants payment, papers or an explanation first.'
+    writes:
+    - create_entity(npc with authority, or use one present)
+    - 'set_fact(refusal: will not let you pass until satisfied)'
+  - range: '5'
+    result: 'Your gear fouls: the tool or item you were using must be freed or fixed before reuse.'
+    writes:
+    - set_fact(item.state = fouled); a Handle beat clears it (ch.08 defines fouled vs damaged)
+  - range: '6'
+    result: A rival for the same goal appears.
+    writes:
+    - create_entity(npc rival)
+    - 'create_clock(clk.twist_rival_first: progress 4, sensed, races the PC''s goal clock if one exists)'
+  - range: '7'
+    result: The way you meant to take is closed; another exists.
+    writes:
+    - set_fact(route closed)
+    - name the alternative route from the place graph
+  - range: '8'
+    result: Someone now knows what you wanted hidden, and wants something to keep quiet.
+    writes:
+    - record_knowledge(npc, the hidden fact)
+    - 'set_fact(npc want: a price for silence)'
+  lifecycle: provisional
+  basis: *id002
+- id: tbl.twist_s3
+  name: Twist rows at S3
+  tags: []
+  die: d8
+  recency: true
+  context_filters:
+  - scene_tags
+  - band
+  results:
+  - range: '1'
+    result: Hostiles arrive.
+    writes:
+    - roll the scene's encounter table filtered to threat band <= the scene's band
+    - they arrive at band.near or farther
+    tags:
+    - threat
+  - range: '2'
+    result: 'A hazard wakes: fire spreads, ice cracks, stone begins to fall.'
+    writes:
+    - a hazard from data/hazards.yaml matching the terrain tags, severity <= S3
+    tags:
+    - threat
+  - range: '3'
+    result: Someone has seen you and will report it.
+    writes:
+    - 'create_clock(clk.twist_word_reaches: danger 6, hidden, 1 tick)'
+    tags:
+    - threat
+  - range: '4'
+    result: Pursuit begins.
+    writes:
+    - 'create_clock(clk.twist_pursuit: danger 4, sensed, 1 tick)'
+    tags:
+    - threat
+  - range: '5'
+    result: A trap or snare lies ahead on your path.
+    writes:
+    - a trap from data/traps.yaml of tier <= the scene's tier, placed on the PC's route
+    tags:
+    - threat
+  - range: '6'
+    result: A beast is drawn by noise, blood or food.
+    writes:
+    - an adversary tagged creature.beast from the scene's encounter table, band <= the scene's
+    tags:
+    - threat
+  - range: '7'
+    result: 'Someone with you is put in danger: separated, seized or caught.'
+    writes:
+    - a companion or friendly NPC present gains a condition or a position change that needs the PC's response
+    fallback: row 1 when no companion or friendly NPC is present
+    tags:
+    - threat
+  - range: '8'
+    result: The opposition prepares something for you.
+    writes:
+    - 'create_clock(clk.twist_ambush_prep: danger 6, hidden, 1 tick)'
+    tags:
+    - threat
+  lifecycle: provisional
+  basis: *id002
+- id: tbl.twist_s4
+  name: Twist rows at S4
+  tags: []
+  die: d8
+  recency: true
+  context_filters:
+  - scene_tags
+  - band
+  results:
+  - range: '1'
+    result: 'Reinforcements: the opposition''s allies arrive.'
+    writes:
+    - add adversaries from the scene's table (band <= the scene's) until ch.09's advisory is one step harder
+    tags:
+    - threat
+  - range: '2'
+    result: A greater threat enters.
+    writes:
+    - one adversary of threat band = the scene's band + 1, at band.far
+    tags:
+    - threat
+  - range: '3'
+    result: A danger lurches forward.
+    writes:
+    - the most advanced existing danger clock that lists cost.twist as a tick source ticks +3
+    fallback: row 1 when no such clock exists
+    tags:
+    - threat
+  - range: '4'
+    result: 'The ground gives way: collapse, flood or firestorm.'
+    writes:
+    - a hazard at S4 from data/hazards.yaml matching the terrain; escaping it needs Evade or Exert beats
+    tags:
+    - threat
+  - range: '5'
+    result: 'Cornered: your way out closes.'
+    writes:
+    - the scene's exits are blocked or the PC gains flag.cornered (ch.06)
+    tags:
+    - threat
+  - range: '6'
+    result: They seize something or someone you value.
+    writes:
+    - an NPC ally present is taken, or an unequipped carried item changes possession to the opposition
+    fallback: row 2
+    tags:
+    - threat
+  - range: '7'
+    result: The alarm is raised.
+    writes:
+    - advance this place's alarm clock to its imminent stage, or create clk.twist_alarm_raised (danger 6, sensed) at its imminent
+      stage
+    tags:
+    - threat
+  - range: '8'
+    result: The opposition's champion takes notice and begins to hunt you personally.
+    writes:
+    - a named opposition NPC is promoted to principal depth (12.11.1)
+    - 'create_clock(clk.twist_champion_hunt: danger 8, hidden, 2 ticks)'
+    tags:
+    - threat
+  lifecycle: provisional
+  basis: *id002
+- id: tbl.twist_s5
+  name: Twist rows at S5
+  tags: []
+  die: d8
+  recency: true
+  context_filters:
+  - scene_tags
+  - band
+  results:
+  - range: '1'
+    result: An ally turns against you.
+    writes:
+    - a Warm-or-better NPC's standing -2 steps; one of their wants now opposes the PC's (logged with its cause)
+  - range: '2'
+    result: A haven falls.
+    writes:
+    - a place the PC uses as a haven becomes unsafe (occupied, burned, closed); downtime there is unavailable until restored
+  - range: '3'
+    result: A thread fails.
+    writes:
+    - an active thread's opposing clock completes; its on_complete runs
+  - range: '4'
+    result: A patron withdraws support.
+    writes:
+    - an institutional offer or support is withdrawn (ch.11); ranks follow ch.11's rules
+  - range: '5'
+    result: A secret of yours comes out.
+    writes:
+    - a fact the PC kept hidden becomes public in a scope (ch.11 reputation entry)
+  - range: '6'
+    result: A rival triumphs.
+    writes:
+    - 'a rival''s progress clock completes: they reach the goal first'
+    fallback: row 3
+  - range: '7'
+    result: A debt is called in, now.
+    writes:
+    - a commitment the PC owes falls due at once (ch.11), with its stated consequence for refusal
+    fallback: row 2
+  - range: '8'
+    result: 'The land changes: a road closes, a bridge falls, war or plague reaches the region.'
+    writes:
+    - a new situation (ch.11) with a default timeline
+  lifecycle: provisional
+  basis: *id002
+- id: tbl.event_focus
+  name: Random-event focus
+  tags: []
+  die: d100
+  recency: false
+  context_filters:
+  - phase
+  results:
+  - range: 1-8
+    result: remote event
+    means: something happens elsewhere; it reaches the PC as news or rumor
+  - range: 9-24
+    result: NPC action
+    means: a cast-list NPC acts on a recorded want
+    target_list: cast
+  - range: 25-30
+    result: new NPC
+    means: a new person enters the PC's world (12.11.1)
+  - range: 31-40
+    result: faction move
+    means: a faction acts visibly (ch.11 list; one tick on a clock that lists random_event)
+    target_list: faction
+  - range: 41-50
+    result: thread advances
+    means: a thread moves toward resolution or opens an opportunity
+    target_list: thread
+  - range: 51-56
+    result: thread complicates
+    means: a thread worsens or gains an obstacle
+    tags:
+    - threat
+    phase_substitute:
+      peak: omen
+      relax: omen
+    target_list: thread
+  - range: 57-58
+    result: thread resolves off-screen
+    means: a thread ends without the PC (protected threads read as 'thread complicates', 12.6.5)
+    target_list: thread
+  - range: 59-66
+    result: PC opportunity
+    means: something useful comes within the PC's reach
+  - range: 67-74
+    result: PC complication
+    means: a difficulty arises around the PC (never direct harm or a cost)
+    tags:
+    - threat
+    phase_substitute:
+      peak: omen
+      relax: omen
+  - range: 75-80
+    result: rumor arrives
+    means: a rumor reaches the PC (ch.11 rumor tables)
+  - range: 81-86
+    result: omen
+    means: the most advanced hidden or sensed clock shows its current omen again, concretely (no tick)
+  - range: 87-94
+    result: current context
+    means: something within the scene's current focus shifts
+  - range: 95-100
+    result: ambiguous
+    means: something strange and unexplained occurs; its meaning is a fact sealed until investigated
+  lifecycle: provisional
+  basis:
+  - '[R5 P-11 (Mythic event focus, reweighted for a faction sandbox)]'
+  - '[R6 B-16]'
+  - '[12.6.5]'
+- id: tbl.scene_test
+  name: Scene test
+  tags: []
+  die: d10
+  recency: false
+  context_filters:
+  - tension
+  results:
+  - range: 1-10
+    result: 'compare with tension T: roll <= T-3 deviates; odd = altered, even = interrupted; otherwise expected'
+  lifecycle: provisional
+  basis:
+  - '[R5 P-05]'
+  - '[12.4.4]'
+  - '[DL-12-06]'
+  rule:
+    deviate_if_roll_lte: tension - 3
+    odd: altered
+    even: interrupted
+- id: tbl.scene_adjustment
+  name: Scene adjustment (altered scenes)
+  tags: []
+  die: d10
+  recency: true
+  context_filters: []
+  results:
+  - range: '1'
+    result: add a person
+    writes:
+    - a cast-list NPC by weight, or a walk-on (12.11.1)
+  - range: '2'
+    result: remove a person
+    writes:
+    - an expected NPC is absent (Oracle with time scope for where)
+  - range: '3'
+    result: intensify the activity
+    writes:
+    - what was expected is happening harder, faster or louder
+  - range: '4'
+    result: reduce the activity
+    writes:
+    - what was expected is quieter, slower or nearly over
+  - range: '5'
+    result: add an object
+    writes:
+    - an addressable object is present (write-on-mention; descriptor pair from tbl.meaning)
+  - range: '6'
+    result: remove an object
+    writes:
+    - an expected object is missing (a fact; where it went is undetermined)
+  - range: '7'
+    result: shift the time
+    writes:
+    - 'the PC arrives later than meant: part of the expected moment has passed'
+  - range: '8'
+    result: change a feature of the place
+    writes:
+    - light, crowding or weather differ (a fact)
+  - range: '9'
+    result: two adjustments
+    writes:
+    - roll twice more on 1-8, ignoring repeats
+  - range: '10'
+    result: someone is already here for the same reason
+    writes:
+    - a rival, ally or stranger with the PC's purpose is present (12.11.1)
+  lifecycle: provisional
+  basis:
+  - '[R5 P-05 (Mythic 2e scene adjustment)]'
+  - '[12.4.4]'
+- id: tbl.lead_injection
+  name: 'Lead injection: how the lead arrives'
+  tags: []
+  die: d12
+  recency: true
+  context_filters:
+  - phase
+  results:
+  - range: '1'
+    result: 'Someone brings it: a messenger, a child, a worried relative.'
+  - range: '2'
+    result: 'Overheard: a conversation not meant for you.'
+  - range: '3'
+    result: 'A found object: a dropped letter, a mark, a token.'
+  - range: '4'
+    result: 'The opposition''s mistake: a trace left, a wrong man sent.'
+  - range: '5'
+    result: 'A sign in the land: tracks, smoke, a disturbed grave.'
+  - range: '6'
+    result: An old contact remembers something.
+  - range: '7'
+    result: 'An offer: someone trades what they know for a favor.'
+  - range: '8'
+    result: 'Someone seeks you out: they have heard of you.'
+  - range: '9'
+    result: A detail you had overlooked, seen fresh.
+  - range: '10'
+    result: 'Pressure shows itself: the threat makes a visible move.'
+    tags:
+    - threat
+    phase_substitute:
+      peak: reroll
+      relax: reroll
+  - range: '11'
+    result: A plea for help from someone caught up in it.
+  - range: '12'
+    result: 'Common talk: it is on everyone''s lips in a public place.'
+  lifecycle: provisional
+  basis:
+  - '[C:P16]'
+  - '[R4 R-12]'
+  - '[R6 B-R4, B-13]'
+  - '[12.8.2]'
+  fallback_forms:
+    sources_1_3_4: A detail you had overlooked, seen fresh.
+    sources_2_5_6_7: 'Someone seeks you out: they have heard of you.'
+- id: tbl.vignette
+  name: Session-start and push vignette
+  tags: []
+  die: d12
+  recency: true
+  context_filters:
+  - phase
+  - rotation_axis
+  results:
+  - range: '1'
+    kind: danger
+    result: A threat's sign appears near where you rest.
+    rooted_in: an existing thread, clock or NPC (never new content alone)
+    tags:
+    - threat
+    phase_substitute:
+      peak: row 9-12 (insight)
+      relax: row 9-12 (insight)
+  - range: '2'
+    kind: danger
+    result: Someone you know is in trouble.
+    rooted_in: an existing thread, clock or NPC (never new content alone)
+    tags:
+    - threat
+    phase_substitute:
+      peak: row 9-12 (insight)
+      relax: row 9-12 (insight)
+  - range: '3'
+    kind: danger
+    result: A faction's move is felt here.
+    rooted_in: an existing thread, clock or NPC (never new content alone)
+    tags:
+    - threat
+    phase_substitute:
+      peak: row 9-12 (insight)
+      relax: row 9-12 (insight)
+  - range: '4'
+    kind: danger
+    result: A clock's omen arrives in person.
+    rooted_in: an existing thread, clock or NPC (never new content alone)
+    tags:
+    - threat
+    phase_substitute:
+      peak: row 9-12 (insight)
+      relax: row 9-12 (insight)
+  - range: '5'
+    kind: opportunity
+    result: 'Work is offered: someone needs what you can do.'
+    rooted_in: an existing thread, clock or NPC (never new content alone)
+  - range: '6'
+    kind: opportunity
+    result: 'A way opens: a place you could not reach becomes reachable.'
+    rooted_in: an existing thread, clock or NPC (never new content alone)
+  - range: '7'
+    kind: opportunity
+    result: 'An old deed repays you: someone who owes you settles it.'
+    rooted_in: an existing thread, clock or NPC (never new content alone)
+  - range: '8'
+    kind: opportunity
+    result: A teacher or a source of a capability you lack appears (an acquisition path).
+    rooted_in: an existing thread, clock or NPC (never new content alone)
+  - range: '9'
+    kind: insight
+    result: 'Two things you know connect: a memory, a dream, a second look.'
+    rooted_in: an existing thread, clock or NPC (never new content alone)
+  - range: '10'
+    kind: insight
+    result: Someone shares news of one of your threads.
+    rooted_in: an existing thread, clock or NPC (never new content alone)
+  - range: '11'
+    kind: insight
+    result: A pattern shows in the talk around you.
+    rooted_in: an existing thread, clock or NPC (never new content alone)
+  - range: '12'
+    kind: insight
+    result: Something reminds you of what you swore or want; a choice presents itself.
+    rooted_in: an existing thread, clock or NPC (never new content alone)
+  lifecycle: provisional
+  basis:
+  - '[R5 P-10 (Begin a Session vignette)]'
+  - '[12.5.2]'
+  - '[12.7.4]'
+- id: tbl.npc_role
+  name: NPC role (generic; ch.13 region tables replace)
+  tags: []
+  die: d20
+  recency: true
+  context_filters:
+  - place_tags
+  results:
+  - range: '1'
+    result: farmer
+  - range: '2'
+    result: laborer
+  - range: '3'
+    result: merchant
+  - range: '4'
+    result: innkeeper or tavern-keeper
+  - range: '5'
+    result: guard or watch
+  - range: '6'
+    result: priest or acolyte
+  - range: '7'
+    result: crafter (smith, weaver, cooper, potter)
+  - range: '8'
+    result: hunter or trapper
+  - range: '9'
+    result: beggar
+  - range: '10'
+    result: servant of a great house
+  - range: '11'
+    result: scholar or scribe
+  - range: '12'
+    result: boatman or sailor
+  - range: '13'
+    result: herder
+  - range: '14'
+    result: healer or midwife
+  - range: '15'
+    result: minstrel or storyteller
+  - range: '16'
+    result: soldier off duty
+  - range: '17'
+    result: child
+  - range: '18'
+    result: elder
+  - range: '19'
+    result: thief or fence
+  - range: '20'
+    result: traveler or pilgrim
+  lifecycle: provisional
+  basis: &id003
+  - '[R5 NP-01, P-04 (UNE), P-06]'
+  - '[R4 SG-12]'
+  - '[C:P13 (the unearned pronoun)]'
+  - '[12.11.1]'
+- id: tbl.name_given
+  name: Given names (generic fallback)
+  tags: []
+  die: d100
+  recency: true
+  context_filters: []
+  results:
+  - range: 1-2
+    result: Aldric
+  - range: 3-4
+    result: Bryn
+  - range: 5-6
+    result: Cael
+  - range: 7-8
+    result: Dara
+  - range: 9-10
+    result: Edda
+  - range: 11-12
+    result: Fenn
+  - range: 13-14
+    result: Gilda
+  - range: 15-16
+    result: Harl
+  - range: 17-18
+    result: Isolde
+  - range: 19-20
+    result: Jory
+  - range: 21-22
+    result: Kesta
+  - range: 23-24
+    result: Lom
+  - range: 25-26
+    result: Maren
+  - range: 27-28
+    result: Nell
+  - range: 29-30
+    result: Osric
+  - range: 31-32
+    result: Petra
+  - range: 33-34
+    result: Quill
+  - range: 35-36
+    result: Rhosyn
+  - range: 37-38
+    result: Sabel
+  - range: 39-40
+    result: Tam
+  - range: 41-42
+    result: Ulla
+  - range: 43-44
+    result: Varn
+  - range: 45-46
+    result: Wenna
+  - range: 47-48
+    result: Yorick
+  - range: 49-50
+    result: Ada
+  - range: 51-52
+    result: Bram
+  - range: 53-54
+    result: Corra
+  - range: 55-56
+    result: Dunstan
+  - range: 57-58
+    result: Elsbeth
+  - range: 59-60
+    result: Garrick
+  - range: 61-62
+    result: Hild
+  - range: 63-64
+    result: Ivo
+  - range: 65-66
+    result: Jessamy
+  - range: 67-68
+    result: Kell
+  - range: 69-70
+    result: Liesl
+  - range: 71-72
+    result: Merrow
+  - range: 73-74
+    result: Nim
+  - range: 75-76
+    result: Orla
+  - range: 77-78
+    result: Piet
+  - range: 79-80
+    result: Rowan
+  - range: 81-82
+    result: Senna
+  - range: 83-84
+    result: Thane
+  - range: 85-86
+    result: Una
+  - range: 87-88
+    result: Wil
+  - range: 89-90
+    result: Agna
+  - range: 91-92
+    result: Berric
+  - range: 93-94
+    result: Cressa
+  - range: 95-96
+    result: Dov
+  - range: 97-98
+    result: Ester
+  - range: 99-100
+    result: Fitch
+  lifecycle: provisional
+  basis: *id003
+- id: tbl.name_family
+  name: Family names and bynames (generic fallback)
+  tags: []
+  die: d100
+  recency: true
+  context_filters: []
+  results:
+  - range: 1-2
+    result: Ashdown
+  - range: 3-4
+    result: Barrow
+  - range: 5-6
+    result: Coldwell
+  - range: 7-8
+    result: Dunmore
+  - range: 9-10
+    result: Elling
+  - range: 11-12
+    result: Fairholt
+  - range: 13-14
+    result: Greaves
+  - range: 15-16
+    result: Hollin
+  - range: 17-18
+    result: Ivers
+  - range: 19-20
+    result: Kettle
+  - range: 21-22
+    result: Larkin
+  - range: 23-24
+    result: Marsh
+  - range: 25-26
+    result: Netley
+  - range: 27-28
+    result: Oakes
+  - range: 29-30
+    result: Pike
+  - range: 31-32
+    result: Quarry
+  - range: 33-34
+    result: Rook
+  - range: 35-36
+    result: Sallow
+  - range: 37-38
+    result: Tanner
+  - range: 39-40
+    result: Underhill
+  - range: 41-42
+    result: Vane
+  - range: 43-44
+    result: Wicke
+  - range: 45-46
+    result: Yarrow
+  - range: 47-48
+    result: Amberley
+  - range: 49-50
+    result: Brack
+  - range: 51-52
+    result: Cobb
+  - range: 53-54
+    result: Dorne
+  - range: 55-56
+    result: Eastry
+  - range: 57-58
+    result: Fletcher
+  - range: 59-60
+    result: Gorse
+  - range: 61-62
+    result: Hale
+  - range: 63-64
+    result: Irons
+  - range: 65-66
+    result: Jessop
+  - range: 67-68
+    result: Kemp
+  - range: 69-70
+    result: Lowe
+  - range: 71-72
+    result: Mire
+  - range: 73-74
+    result: Nash
+  - range: 75-76
+    result: Orme
+  - range: 77-78
+    result: Pell
+  - range: 79-80
+    result: Reed
+  - range: 81-82
+    result: Stoker
+  - range: 83-84
+    result: Tolley
+  - range: 85-86
+    result: Upton
+  - range: 87-88
+    result: Voss
+  - range: 89-90
+    result: Wade
+  - range: 91-92
+    result: Yeoman
+  - range: 93-94
+    result: Ashby
+  - range: 95-96
+    result: Bracken
+  - range: 97-98
+    result: Crane
+  - range: 99-100
+    result: Dale
+  lifecycle: provisional
+  basis: *id003
+- id: tbl.npc_gender
+  name: Gender and pronouns
+  tags: []
+  die: d10
+  recency: false
+  context_filters: []
+  results:
+  - range: 1-5
+    result: woman
+    pronouns: she/her
+  - range: 6-10
+    result: man
+    pronouns: he/him
+  lifecycle: provisional
+  basis: *id003
+  notes_rule: rolled at walk-on and written at once; a ch.13 region table or the player's session-zero preferences (ch.14)
+    may replace this table with other distributions or identities; narration never uses a pronoun the store does not hold
+- id: tbl.npc_age
+  name: Age band
+  tags: []
+  die: d6
+  recency: false
+  context_filters: []
+  results:
+  - range: '1'
+    result: young (in their teens)
+  - range: 2-3
+    result: adult
+  - range: 4-5
+    result: middle-aged
+  - range: '6'
+    result: old
+  lifecycle: provisional
+  basis: *id003
+- id: tbl.npc_detail
+  name: Distinctive detail
+  tags: []
+  die: d100
+  recency: true
+  context_filters: []
+  results:
+  - range: 1-2
+    result: a burn scar across one hand
+  - range: 3-4
+    result: two fingers missing
+  - range: 5-6
+    result: a finely embroidered collar
+  - range: 7-8
+    result: eyes of two colors
+  - range: 9-10
+    result: a stooped back
+  - range: 11-12
+    result: ink-stained fingers
+  - range: 13-14
+    result: a fresh black eye
+  - range: 15-16
+    result: a good coat worn threadbare
+  - range: 17-18
+    result: an iron ring on every finger
+  - range: 19-20
+    result: a shaved head with an old tattoo
+  - range: 21-22
+    result: the smell of woodsmoke
+  - range: 23-24
+    result: a pronounced limp
+  - range: 25-26
+    result: a carved bone pendant
+  - range: 27-28
+    result: a braided beard strung with beads
+  - range: 29-30
+    result: one clouded eye
+  - range: 31-32
+    result: freckles across a sunburnt face
+  - range: 33-34
+    result: unusual height
+  - range: 35-36
+    result: short and very broad
+  - range: 37-38
+    result: hands that never stop moving
+  - range: 39-40
+    result: a hood never lowered
+  - range: 41-42
+    result: mud to the knees
+  - range: 43-44
+    result: a holy symbol worn openly
+  - range: 45-46
+    result: a holy symbol hidden but glimpsed
+  - range: 47-48
+    result: a dog always at heel
+  - range: 49-50
+    result: a dry cough
+  - range: 51-52
+    result: jewelry too fine for their station
+  - range: 53-54
+    result: a soldier's bearing
+  - range: 55-56
+    result: a sailor's tattoos
+  - range: 57-58
+    result: a healer's satchel
+  - range: 59-60
+    result: a notched ear
+  - range: 61-62
+    result: a laugh too loud for the room
+  - range: 63-64
+    result: a habit of counting under their breath
+  - range: 65-66
+    result: immaculate gloves
+  - range: 67-68
+    result: a long scar along the jaw
+  - range: 69-70
+    result: silver-streaked hair though young
+  - range: 71-72
+    result: a child clinging to them
+  - range: 73-74
+    result: a pipe never lit
+  - range: 75-76
+    result: a sword they plainly cannot use
+  - range: 77-78
+    result: a crutch
+  - range: 79-80
+    result: a badly set broken nose
+  - range: 81-82
+    result: a strange perfume
+  - range: 83-84
+    result: a cloak of foreign cut
+  - range: 85-86
+    result: a ledger always under one arm
+  - range: 87-88
+    result: merchant's scales at the belt
+  - range: 89-90
+    result: a hunting horn
+  - range: 91-92
+    result: a mourning band
+  - range: 93-94
+    result: a gap-tooth that whistles
+  - range: 95-96
+    result: paint on their hands
+  - range: 97-98
+    result: a raven-feather token
+  - range: 99-100
+    result: a brand on the wrist
+  lifecycle: provisional
+  basis: *id003
+- id: tbl.npc_demeanor
+  name: Demeanor
+  tags: []
+  die: d12
+  recency: true
+  context_filters: []
+  results:
+  - range: '1'
+    result: cheerful
+  - range: '2'
+    result: weary
+  - range: '3'
+    result: suspicious
+  - range: '4'
+    result: flustered
+  - range: '5'
+    result: proud
+  - range: '6'
+    result: kindly
+  - range: '7'
+    result: bored
+  - range: '8'
+    result: fearful
+  - range: '9'
+    result: ambitious
+  - range: '10'
+    result: grieving
+  - range: '11'
+    result: sly
+  - range: '12'
+    result: stern
+  lifecycle: provisional
+  basis: *id003
+- id: tbl.npc_want_verb
+  name: 'Want: verb'
+  tags: []
+  die: d20
+  recency: true
+  context_filters: []
+  results:
+  - range: '1'
+    result: protect
+  - range: '2'
+    result: find
+  - range: '3'
+    result: escape
+  - range: '4'
+    result: win
+  - range: '5'
+    result: keep
+  - range: '6'
+    result: recover
+  - range: '7'
+    result: prove
+  - range: '8'
+    result: avenge
+  - range: '9'
+    result: earn
+  - range: '10'
+    result: hide
+  - range: '11'
+    result: learn
+  - range: '12'
+    result: reach
+  - range: '13'
+    result: punish
+  - range: '14'
+    result: impress
+  - range: '15'
+    result: repay
+  - range: '16'
+    result: sell
+  - range: '17'
+    result: marry
+  - range: '18'
+    result: rule
+  - range: '19'
+    result: heal
+  - range: '20'
+    result: leave
+  lifecycle: provisional
+  basis: *id003
+- id: tbl.npc_want_object
+  name: 'Want: object'
+  tags: []
+  die: d20
+  recency: true
+  context_filters: []
+  results:
+  - range: '1'
+    result: their family
+  - range: '2'
+    result: their good name
+  - range: '3'
+    result: a lost love
+  - range: '4'
+    result: money
+  - range: '5'
+    result: a debt cleared
+  - range: '6'
+    result: a secret
+  - range: '7'
+    result: a place of their own
+  - range: '8'
+    result: an enemy's downfall
+  - range: '9'
+    result: their master's favor
+  - range: '10'
+    result: the truth about the past
+  - range: '11'
+    result: safe passage
+  - range: '12'
+    result: their faith
+  - range: '13'
+    result: a cure
+  - range: '14'
+    result: a stolen thing
+  - range: '15'
+    result: standing in the town
+  - range: '16'
+    result: their freedom
+  - range: '17'
+    result: a rival's ruin
+  - range: '18'
+    result: peace and quiet
+  - range: '19'
+    result: a child's future
+  - range: '20'
+    result: recognition
+  lifecycle: provisional
+  basis: *id003
+  notes_rule: read verb + object as one want in the NPC's own terms ('avenge' + 'a debt cleared' = 'make whoever ruined them
+    pay what is owed'); ch.15 owns what wants do
+- id: tbl.npc_fear
+  name: Fear
+  tags: []
+  die: d12
+  recency: true
+  context_filters: []
+  results:
+  - range: '1'
+    result: the watch and the law
+  - range: '2'
+    result: poverty
+  - range: '3'
+    result: a particular person
+  - range: '4'
+    result: the dark
+  - range: '5'
+    result: magic
+  - range: '6'
+    result: being found out
+  - range: '7'
+    result: the dead
+  - range: '8'
+    result: sickness
+  - range: '9'
+    result: losing their place
+  - range: '10'
+    result: the wilds
+  - range: '11'
+    result: violence
+  - range: '12'
+    result: being alone
+  lifecycle: provisional
+  basis: *id003
+- id: tbl.npc_voice_register
+  name: Voice register (closed list of eight)
+  tags: []
+  die: d8
+  recency: true
+  context_filters: []
+  results:
+  - range: '1'
+    result: formal
+  - range: '2'
+    result: plain
+  - range: '3'
+    result: rough
+  - range: '4'
+    result: flowery
+  - range: '5'
+    result: terse
+  - range: '6'
+    result: nervous
+  - range: '7'
+    result: jovial
+  - range: '8'
+    result: cold
+  lifecycle: provisional
+  basis:
+  - '[R5 NP-01, P-04 (UNE), P-06]'
+  - '[R4 SG-12]'
+  - '[C:P13 (the unearned pronoun)]'
+  - '[12.11.1]'
+  - '[12.11.3]'
+- id: tbl.npc_voice_habit
+  name: Voice habit
+  tags: []
+  die: d20
+  recency: true
+  context_filters: []
+  results:
+  - range: '1'
+    result: calls everyone by a nickname
+  - range: '2'
+    result: answers a question with a question
+  - range: '3'
+    result: swears by a saint or a god
+  - range: '4'
+    result: quotes proverbs
+  - range: '5'
+    result: trails off mid-sentence
+  - range: '6'
+    result: speaks of themselves by name
+  - range: '7'
+    result: uses the jargon of their trade
+  - range: '8'
+    result: laughs before bad news
+  - range: '9'
+    result: says 'mark me' before anything important
+  - range: '10'
+    result: whispers secrets far too loudly
+  - range: '11'
+    result: repeats your last word back
+  - range: '12'
+    result: counts on their fingers while thinking
+  - range: '13'
+    result: never says no outright
+  - range: '14'
+    result: apologizes constantly
+  - range: '15'
+    result: brings up an old deed of theirs
+  - range: '16'
+    result: gets names slightly wrong
+  - range: '17'
+    result: tells everything as a long tale
+  - range: '18'
+    result: uses old-fashioned courtesies
+  - range: '19'
+    result: mutters to a pet or a charm
+  - range: '20'
+    result: clicks their tongue when displeased
+  lifecycle: provisional
+  basis:
+  - '[R5 NP-01, P-04 (UNE), P-06]'
+  - '[R4 SG-12]'
+  - '[C:P13 (the unearned pronoun)]'
+  - '[12.11.1]'
+  - '[12.11.3]'
+- id: tbl.npc_refusal
+  name: Refusal (ch.15 owns its semantics)
+  # kind: the 1:1 refusal kind of social.yaml#refusal_kinds (T-15-6), added at integration (IR ch.15 to 12)
+  tags: []
+  die: d12
+  recency: true
+  context_filters: []
+  results:
+  - range: '1'
+    result: will not betray their family
+    kind: refusal.family
+  - range: '2'
+    result: will not break the law openly
+    kind: refusal.open_law
+  - range: '3'
+    result: will not go into the wilds or the dark
+    kind: refusal.wilds
+  - range: '4'
+    result: will not take a bribe
+    kind: refusal.bribe
+  - range: '5'
+    result: will not speak of their past
+    kind: refusal.past
+  - range: '6'
+    result: will not harm a child or an innocent
+    kind: refusal.innocent
+  - range: '7'
+    result: will not cross their master or their people
+    kind: refusal.master
+  - range: '8'
+    result: will not leave this place
+    kind: refusal.place
+  - range: '9'
+    result: will not deal with magic
+    kind: refusal.magic
+  - range: '10'
+    result: will not lend money
+    kind: refusal.lend
+  - range: '11'
+    result: will not lie under oath
+    kind: refusal.oath
+  - range: '12'
+    result: will not fight
+    kind: refusal.fight
+  lifecycle: provisional
+  basis:
+  - '[R5 NP-01, P-04 (UNE), P-06]'
+  - '[R4 SG-12]'
+  - '[C:P13 (the unearned pronoun)]'
+  - '[12.11.1]'
+  - '[R4 W4]'
+- id: tbl.npc_secret
+  name: Secret (written sealed, with a gate)
+  tags: []
+  die: d12
+  recency: true
+  context_filters: []
+  results:
+  - range: '1'
+    result: owes a dangerous debt
+  - range: '2'
+    result: is not who they claim to be
+  - range: '3'
+    result: secretly serves a faction
+  - range: '4'
+    result: committed a crime that is still sought
+  - range: '5'
+    result: is hiding a person
+  - range: '6'
+    result: knows where something valuable lies
+  - range: '7'
+    result: is sick and hiding it
+  - range: '8'
+    result: keeps a forbidden faith or practice
+  - range: '9'
+    result: once betrayed someone who trusted them
+  - range: '10'
+    result: is being blackmailed
+  - range: '11'
+    result: loves someone they must not
+  - range: '12'
+    result: witnessed something they should not have
+  lifecycle: provisional
+  basis:
+  - '[R5 NP-01, P-04 (UNE), P-06]'
+  - '[R4 SG-12]'
+  - '[C:P13 (the unearned pronoun)]'
+  - '[12.11.1]'
+  - '[R4 §5.2 (seal at creation)]'
+- id: tbl.npc_reaction
+  name: Reaction roll (unaffiliated NPCs)
+  tags: []
+  die: 2d6
+  recency: false
+  context_filters:
+  - reaction_modifier
+  results:
+  - range: 2 or less
+    result: hostile
+    standing: -3
+  - range: 3-4
+    result: unfriendly
+    standing: -2
+  - range: 5-6
+    result: wary
+    standing: -1
+  - range: 7-8
+    result: neutral
+    standing: 0
+  - range: 9-10
+    result: warm
+    standing: 1
+  - range: 11 or more
+    result: friendly
+    standing: 2
+  lifecycle: provisional
+  basis: &id004
+  - '[R6 §B.3 B-R2 (starting standing rolled, never chosen)]'
+  - '[R5 AV-07 (B/X and WWN 2d6 reaction)]'
+  - '[00.3.16]'
+  - '[00.17.1 Q13]'
+  - '[12.11.2]'
+  - '[DL-12-10]'
+  modifier:
+    sources:
+    - reputation in scope favors / disfavors people like this NPC (+1/-1)
+    - shared origin, faith or trade / a group the NPC is recorded as hating (+1/-1)
+    - arrives as someone welcomed (customer, guest, rescuer) / as a threat (bloody or armed for violence, trespassing, or
+      the NPC is under threat from someone like the PC) (+1/-1)
+    each: a [J:flag] citing a fact id
+    total_clamp:
+    - -2
+    - 2
+  never: devoted (+3) is never a first impression
+- id: tbl.npc_reaction_member
+  name: 'Reaction roll (faction members: individual step)'
+  tags: []
+  die: 2d6
+  recency: false
+  context_filters:
+  - faction_status
+  results:
+  - range: 2-4
+    result: one step below the faction's status
+    standing_delta: -1
+  - range: 5-9
+    result: the faction's status
+    standing_delta: 0
+  - range: 10-12
+    result: one step above the faction's status
+    standing_delta: 1
+  lifecycle: provisional
+  basis: *id004
+  base: the faction's status toward the PC (ch.11)
+  clamp:
+  - -3
+  - 3
+- id: tbl.npc_action
+  name: NPC action when nothing else decides
+  tags: []
+  die: d10
+  recency: false
+  context_filters:
+  - standing
+  results:
+  - range: '1'
+    result: 'escalates: threatens, calls for others, attacks only if able and hostile'
+    tags:
+    - threat
+  - range: '2'
+    result: ends the exchange and withdraws
+  - range: '3'
+    result: 'hinders quietly: delays, misdirects'
+  - range: '4'
+    result: 'wants something first: names a price or a favor'
+  - range: '5'
+    result: carries on with their own business
+  - range: '6'
+    result: acts on one of their own wants
+  - range: '7'
+    result: asks the PC something
+  - range: '8'
+    result: offers partial help
+  - range: '9'
+    result: helps as asked
+  - range: '10'
+    result: helps beyond what was asked
+  lifecycle: provisional
+  basis:
+  - '[R5 P-06 (Mythic NPC behavior)]'
+  - '[R4 W4]'
+  - '[12.11.5]'
+  modifier:
+    add: the NPC's standing toward the PC (-3..+3)
+    clamp:
+    - 1
+    - 10
+  constraints:
+  - never overrides a recorded refusal
+  - never resolves what a Talk frame should resolve
+  - 'phase PEAK/RELAX does not filter this table: an NPC''s own reaction is not a director push'

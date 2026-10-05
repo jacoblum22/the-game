@@ -1,0 +1,15 @@
+# data/contrib/boundaries.08.yaml
+# Purpose: ch.08's owner-block for data/boundaries.yaml (h.08.upkeep is reserved in T-00-9; the rest are added).
+# Owner: 08-items-loot-crafting. Schema: data/SCHEMAS.md#boundariesyaml.
+
+schema_version: 1
+blocks:
+- owner: 08
+  handlers:
+  - {id: h.08.upkeep, boundary: week, phase: 4, interrupting: false, effect: 'charge the lifestyle (if any day of the week was spent in a settlement), mount stabling, holdings'' upkeep and hirelings'' coin
+      wages not paid by 16''s handler; shortfall drops the lifestyle one rung (08.8.6)', rule_id: 08.8.6}
+  - {id: h.08.markets, boundary: week, phase: 6, interrupting: false, effect: recover one notch of glut per good per settlement; reset market depth; restock curio dealers (d4 property items in cities);
+      tick each clk.find_buyer by its settlement's weekly ticks, rule_id: 08.8.5}
+  - {id: h.08.durations, boundary: '*', phase: 1, interrupting: false, effect: 'expire item effect instances with uses: or duration forms (oils, elixirs, imbued properties at season), mark spent light sources',
+    rule_id: 08.1.9}
+  - {id: h.08.craft_decay, boundary: week, phase: 5, interrupting: false, effect: covered by h.00.clock_auto (crafting project clocks carry decay rows); listed for traceability only, rule_id: 08.6.4}

@@ -1,0 +1,158 @@
+# data/scales.yaml
+# Purpose: every shared scale and envelope of the ruleset (canonical ids and numbers).
+# Owner: 00-architecture (00.3, 00.7). Values marked owner_of_values belong to that chapter,
+#   which may change them only within the stated envelope and calibration targets.
+# Schema: data/SCHEMAS.md#scalesyaml.
+# Basis: [R4 §3.4, §4.4 SG-01/02]; [R7 §4.2, §4.7]; [R6 §C.3]; [R5 §3.3]; [DL-00A-01..05, 10..12]
+
+schema_version: 1
+
+dice:
+  check: d20
+  oracle: d100
+  table_dice: [d4, d6, d8, d10, d12]     # only inside data tables rolled by roll_table
+  roller: engine                           # INV-4
+
+check_modifier:
+  families: [attribute, competence, edge, circumstance, status]
+  caps:
+    competence: {min: 0, max: 6}
+    competence_floor_pc: {tag: deed, value: 1, allowed: [0, 2]}   # 02 may set 0..2
+    edge: {max: 2}
+    circumstance: {min: -4, max: 4, max_levers: 2, max_snags: 2, lever_value: 2}
+    status: {worst_penalty: -4, best_bonus: 2}
+    base_pc: {max: 12}
+    base_non_pc: {max: 14}
+    total: {min: -8, max: 16}
+
+degrees:
+  ids: [critical_success, success, failure, critical_failure]
+  critical_band: 10
+  natural_20: step_up        # owner_of_values: "01" — confirmed by ch.01 (DL-01-02)
+  natural_1: step_down       # owner_of_values: "01"
+  near_miss: {min_margin: -3, max_margin: null, requires_degree: failure}   # owner_of_values: "01" — DL-01-03: includes a nat-1 step-down of a success (margin >= 0)
+
+obstacle_tiers:
+  owner_of_values: "01"      # ch.01: reference ladder CONFIRMED unchanged (DL-01-01); proof 01 T-01-3; feasible per CT: easy 8-11, moderate 14-16, hard 19-21, very_hard 24-26, legendary 29-31
+  rungs:
+    - {id: trivial, dc: null, roll: false}
+    - {id: easy, dc: 10}
+    - {id: moderate, dc: 15}
+    - {id: hard, dc: 20}
+    - {id: very_hard, dc: 25}
+    - {id: legendary, dc: 30}
+    - {id: beyond, dc: null, gate: G4}
+  allowed_shift_per_rung: 2
+  calibration_targets:
+    CT-1: "easy: +2 succeeds >= 60%"
+    CT-2: "moderate: +5 succeeds 50-65%; +1 succeeds 30-40%"
+    CT-3: "hard: +5 succeeds 25-35%; +9 succeeds 45-55%"
+    CT-4: "very_hard: +5 <= 10%; +12 succeeds 35-45%"
+    CT-5: "legendary: +14 succeeds 20-30%; <= +9 natural 20 only"
+    CT-6: "where success >= 50%, critical failure <= 10%"
+
+severity:
+  - {id: S1, name: Light, harm: 1, units: 1, hazard_tier: easy, anchor: "a nuisance; recovers within the scene"}
+  - {id: S2, name: Moderate, harm: 3, units: 1, hazard_tier: moderate, anchor: "a real setback; lasts the scene or needs a rest"}
+  - {id: S3, name: Heavy, harm: 5, units: 2, hazard_tier: hard, anchor: "a serious blow; lasts until a long rest or treatment"}
+  - {id: S4, name: Grievous, harm: 8, units: 3, hazard_tier: very_hard, anchor: "could end a fight or a life; lasts days or leaves a mark"}
+  - {id: S5, name: Catastrophic, harm: 12, units: 4, hazard_tier: legendary, anchor: "lethal to most; lasting or permanent"}
+
+stakes:
+  rungs:
+  - {id: safe, failure_cost: null, success_at_cost_severity: S1, anchor: "failure only means it doesn't happen"}
+  - {id: risky, failure_cost: S2, anchor: "failure costs something real"}
+  - {id: dire, failure_cost: S3, lethal_allowed: true, anchor: "failure costs something heavy, and may be lethal"}
+  critical_failure_step: 1        # owner_of_values: "01" — one cost per beat; Safe CF = S1 (DL-01-04; 01 T-01-5)
+  lethal_requires: [stakes_dire, lethal_context_recorded_before_declaration]
+
+reach:
+  rungs:
+  - {id: zero, value: 0, framed: false, meaning: "the method cannot reach the intent (G4)"}
+  - {id: limited, value: 1, framed: true}
+  - {id: standard, value: 2, framed: true}
+  - {id: great, value: 3, framed: true}
+  - {id: exceptional, value: 4, framed: false, meaning: "only via a critical success from great"}
+  harm_step_rule: "severity steps = delivered_reach - 2"
+  clock_ticks_rule: "ticks = delivered_reach"
+
+levers:
+  - {id: precision, lever: {roll: 2}, snag: {roll: -2}}
+  - {id: protective, lever: {stakes_steps: -1}, snag: {stakes_steps: 1}}
+  - {id: amplifying, lever: {reach_steps: 1}, snag: {reach_steps: -1}}
+
+standing:
+  - {value: -3, id: hostile}
+  - {value: -2, id: unfriendly}
+  - {value: -1, id: wary}
+  - {value: 0, id: neutral}
+  - {value: 1, id: warm}
+  - {value: 2, id: friendly}
+  - {value: 3, id: devoted}
+
+bands:
+  rungs:
+  - {band: 1, pc: novice, threat: rabble, pc_best_base: [4, 6], threat_mod: [0, 2], threat_vitality: [2, 5], tier_cap: 1}
+  - {band: 2, pc: seasoned, threat: trained, pc_best_base: [6, 8], threat_mod: [3, 5], threat_vitality: [6, 12], tier_cap: 2}
+  - {band: 3, pc: elite, threat: elite, pc_best_base: [8, 10], threat_mod: [6, 8], threat_vitality: [12, 20], tier_cap: 3}
+  - {band: 4, pc: champion, threat: champion, pc_best_base: [10, 11], threat_mod: [9, 11], threat_vitality: [20, 32], tier_cap: 4}
+  - {band: 5, pc: legend, threat: legend, pc_best_base: [12, 12], threat_mod: [12, 14], threat_vitality: [32, 60], tier_cap: 5}
+  threat_vitality_reference: {1: 5, 2: 12, 3: 18, 4: 24, 5: 36}   # owner_of_values: "09" - the standard line, T-09-3 (DL-09-04; T4/T5 lowered from 26/40 for adversary Fend)
+  threat_vitality_scope: "the threat_vitality envelope binds the standard line and, from below, minions; elite, solo and mob pools exceed it by 09's variant multipliers (00.3.7, amended at integration)"
+  advisory_by_difference:          # RETIRED at integration (00.3.7; IR ch.06 #7, IR ch.09 #3): superseded by 09's T-09-9 matrix and PR-09-4 estimator
+    lifecycle: retired
+    superseded_by: "threat_advisory(encounter, pc): ch.09 PR-09-4 over the T-09-9 matrix, with ch.16's ally adjustment (16.7.11)"
+    values: {"-2": trivial, "-1": easy, "0": fair, "1": hard, "2": lethal}   # kept so old records still resolve (00.16.3)
+
+resources:
+  vitality: {pc_creation: [10, 16], pc_reference: 12, pc_cap: 24, owner: "07", creation_formula: "12 + endurance (02, DL-02-16)", growth_per_band_above_1: 2, max_formula: "base + 2 x (power_band - 1), cap 24 (DL-00-04; 07.1.2)"}
+  focus: {pc_creation: [3, 5], pc_reference: 4, cap: 12, activation_base: [0, 4], activation_max: 6, owner: "05"}
+  fate: {min: 0, max: 3, start: 1, owner: "01"}   # earn/spend: resolution.yaml#fate (DL-01-06)
+  harm_reduction_total: {min: 0, max: 4, owner_of_values: "07"}
+
+ability_slots:
+  owner_of_values: "05"
+  total: {min: 12, max: 24, reference: 20}
+  partitions: [calling, acquired, equipped]
+  reference_split: {calling: 12, acquired: 4, equipped: 4}
+
+clock_sizes: [4, 6, 8, 12]
+clock_omen_stages:
+  stirring: "filled < half"
+  building: "filled >= half and not imminent"
+  imminent: "segments - filled <= max(1, floor(segments / 4))"
+
+oracle_odds:
+  owner_of_values: "01"
+  rungs:
+    - {id: certain, roll: false, answer: yes}
+    - {id: likely, yes_on: 26}
+    - {id: even, yes_on: 51}
+    - {id: unlikely, yes_on: 76}
+    - {id: remote, yes_on: 91}
+    - {id: impossible, roll: false, answer: no}
+  doubles: "11,22,...,99 and 100: extreme answer (yes-and / no-and; the 'and' rolled on tbl.meaning)"   # ch.01 (DL-01-11)
+  but_band: 5                    # yes-but on threshold..+4, no-but on threshold-5..-1 (ch.01)
+  tension_shift_max_rungs: 1     # owner: "12"
+
+time:
+  units:
+    - {id: round, seconds: 6}
+    - {id: interval, minutes: 10, rounds: 100}
+    - {id: hour, intervals: 6}
+    - {id: watch, hours: 6, names: [morning, afternoon, evening, night]}
+    - {id: day, watches: 4, starts_at: dawn}
+    - {id: week, days: 7}
+    - {id: season, weeks: 13}
+    - {id: year, seasons: 4, days: 364}
+  rests:
+    - {id: breather, duration: {intervals: 1}}
+    - {id: rest_short, duration: {hours: 1}}
+    - {id: rest_long, duration: {watches: 1}, max_per_day: 1, requires: sleep}
+  rest_payload: {quality: [full, partial, interrupted], site: [haven, camp, rough], treated: bool}   # computed by ch.07 when it marks the rest boundary (00.7.2, amended; 07.8.1)
+  modes: [conflict, site, free, travel, downtime]
+  real_time_matters: false
+
+visibility_classes: [shown, available, background, sealed]
+lifecycle: [provisional, permanent, retired]
+gate_classes: [G0, G1, G2, G3, G4]

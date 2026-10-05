@@ -1,0 +1,47 @@
+# data/contrib/boundaries.12.yaml
+# Purpose: ch.12's additional boundary handlers, for merge into data/boundaries.yaml owner-block "12".
+#   (Ch.12's reserved handlers — h.12.inconclusive_streak, h.12.intensity, h.12.scene_test, h.12.tension_update,
+#   h.12.bookkeeping, h.12.venture_bookkeeping, h.12.session_open, h.12.session_close, h.12.mode_change — are
+#   already in boundaries.yaml; their behavior is defined in 12-dm-procedures.md, rule ids listed in its
+#   "State touched" section.)
+# Owner: 12-dm-procedures. Schema: data/SCHEMAS.md#boundariesyaml (Handler).
+# Basis: [12.4.8] [12.7] [12.8.4] [12.9.1] [12.11.7]; DL-12-09, DL-12-11, DL-12-12, DL-12-13.
+schema_version: 1
+blocks:
+  - owner: "12"
+    handlers:
+      - id: h.12.pacing_push
+        boundary: scene_start
+        phase: 7
+        interrupting: false
+        effect: "if trg.pacing_push is raised (flatline guard or end of a recovery window), choose one push for the scene being framed: eligible ch.11 bangs, a tbl.vignette row, or the most overdue rotation opportunity, filtered by the phase target and ranked by specificity (12.7.4)"
+        rule_id: "12.7.4; 12.7.5"
+        lifecycle: provisional
+      - id: h.12.lead_audit
+        boundary: scene_end
+        phase: 7
+        interrupting: false
+        effect: "check every active thread for at least one live lead; mark a thread with none 'stalled' and queue its proactive fallback (ch.11); flag threads with fewer than three clue placements as a content defect (12.8.4)"
+        rule_id: "12.8.4"
+        lifecycle: provisional
+      - id: h.12.intensity_scene
+        boundary: scene_end
+        phase: 9
+        interrupting: false
+        effect: "intensity = min(10, max(scene points, previous - 3)); move the pacing phase (build/peak/relax); count recovery and flat-run scenes; raise trg.pacing_push when due (12.7.1-12.7.2, 12.7.5)"
+        rule_id: "12.7.1; 12.7.2; 12.7.5"
+        lifecycle: provisional
+      - id: h.12.rotation_update
+        boundary: scene_end
+        phase: 9
+        interrupting: false
+        effect: "increment scenes-since for every pillar, challenge type and facet not foregrounded; reset those foregrounded (from frames and the scene record); recompute overdue axes (12.9.1-12.9.2)"
+        rule_id: "12.9.1; 12.9.2"
+        lifecycle: provisional
+      - id: h.12.npc_memory
+        boundary: scene_end
+        phase: 9
+        interrupting: false
+        effect: "commit the scene's NPC memories (valence, salience); keep at most five active per NPC by salience then recency; archive the rest (12.11.7)"
+        rule_id: "12.11.7"
+        lifecycle: provisional

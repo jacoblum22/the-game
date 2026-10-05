@@ -1,0 +1,29 @@
+# data/contrib/boundaries.03.yaml
+# Purpose: ch.03's additional boundary handler, for merge into data/boundaries.yaml owner-block "03".
+#   (Ch.03's reserved handlers, h.03.antigrind_reset and h.03.recency_update, are already in
+#   boundaries.yaml; their behaviour is defined in 03-tags-and-evidence.md: PR-03-2 and PR-03-3. The
+#   `effect` text of the two reserved rows should be updated at integration to the wording below.)
+# Owner: 03-tags-and-evidence. Schema: data/SCHEMAS.md#boundariesyaml (Handler).
+# Basis: [03.5.1] [03.6.4] [PR-03-2] [PR-03-3]; DL-03-05, DL-03-10.
+schema_version: 1
+blocks:
+  - owner: "03"
+    handlers:
+      - id: h.03.day_settle
+        boundary: day
+        phase: 9
+        interrupting: false
+        effect: "settle the pending evidence of any scene still open at the day boundary, exactly as h.03.antigrind_reset does at scene_end (PR-03-2), so that a scene spanning several days settles once per day"
+        rule_id: "03.5.1; PR-03-2"
+        lifecycle: provisional
+reserved_row_wording:          # proposed effect text for the two rows 00 seeded (ids unchanged)
+  - id: h.03.antigrind_reset
+    boundary: scene_end
+    phase: 9
+    effect: "settle the scene's pending evidence (PR-03-2): carriers and scopes; same-target cap; cascade; routine cap; diminishing returns per node (1, 1/2, 1/4, 0); conduct and counted tallies; public_deed packets to ch.11; fire on_tag_event per settled event"
+    rule_id: "03.5.1-03.5.4; PR-03-2"
+  - id: h.03.recency_update
+    boundary: reflection
+    phase: 8
+    effect: "reflection sweep (03.3.5); recompute recent values over the evidence-bearing scene window; build the sealed reflection digest for h.04.recognition_pass (PR-03-3)"
+    rule_id: "03.6.2; 03.6.4; PR-03-3"

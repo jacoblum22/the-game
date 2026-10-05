@@ -1,0 +1,85 @@
+# data/contrib/effects.11.yaml -- chapter 11's effect owner-block (merged into data/effects.yaml#blocks).
+# Owner: 11-living-world. Schema: data/SCHEMAS.md#effects.yaml.
+# Why: linchpin fates, world reactions, situation steps, world phenomena and great projects must write world
+#   state through the substrate (00.16.4), and no core effect writes a faction's hold or status, a relation, a
+#   reputation entry, a bang, a situation or a hook. Each is engine-applied (boundary handlers, clock
+#   completions, on_fact_set reactions); none is ever a PC ability's effect, so none can touch the PC's person
+#   (11.2.4).
+# Basis: [00.10.1] [PR-00-8] [11.3.4] [11.3.10] [11.3.11] [11.4.1] [11.4.4] [11.5.6] [11.7.3] [DL-11-08]
+
+schema_version: 1
+blocks:
+  - owner: "11"
+    entries:
+      - id: eff.11.hold_step
+        op: set_fact
+        regime: independent_trigger
+        hook: "per source (on_clock_complete, on_fact_set, on_boundary)"
+        params: {faction: fac_id, steps: "-2..2"}
+        text: "{faction} gains or loses hold {steps} time(s) (11.3.4)."
+        why_not_core: "hold and tier are a two-rung ladder with tier carry (11.3.4), not a quantity or plain fact the core writes"
+        lifecycle: provisional
+        basis: ['11.3.4', '11.3.10', DL-11-06]
+      - id: eff.11.stage_set
+        op: set_fact
+        regime: independent_trigger
+        hook: "per source"
+        params: {faction: fac_id, stage: "rising|flourishing|entrenched|declining|collapsed"}
+        text: "{faction} is now {stage} (11.3.9)."
+        why_not_core: "a stage change carries the collapse procedure (11.3.9)"
+        lifecycle: provisional
+        basis: ['11.3.9']
+      - id: eff.11.status_step
+        op: set_fact
+        regime: independent_trigger
+        hook: "per source"
+        params: {faction: fac_id, steps: "-3..3", reason: str}
+        text: "{faction}'s status toward the PC moves {steps} ({reason}); its members are recomputed (15.1.3)."
+        why_not_core: "a relationship write with the member-standing recompute attached (15's request)"
+        lifecycle: provisional
+        basis: ['11.3.11', '15.1.3', DL-11-09]
+      - id: eff.11.relation_step
+        op: set_fact
+        regime: independent_trigger
+        hook: "per source"
+        params: {faction: fac_id, toward: fac_id, steps: "-3..3"}
+        text: "{faction}'s relation toward {toward} moves {steps}."
+        why_not_core: "a faction-to-faction relationship write"
+        lifecycle: provisional
+        basis: ['11.3.14']
+      - id: eff.11.reputation_points
+        op: set_fact
+        regime: independent_trigger
+        hook: "per source"
+        params: {actor: id, key: str, scope: scope_id, points: "1..2", content: str}
+        text: "Adds {points} to what {scope} says of {actor} ({key})."
+        why_not_core: "reputation entries are an owned record with thresholds (11.7.3)"
+        lifecycle: provisional
+        basis: ['11.7.2', '11.7.3', DL-11-15]
+      - id: eff.11.queue_bang
+        op: create
+        regime: independent_trigger
+        hook: "per source"
+        params: {kind: "timeline|fallback|entanglement|kicker|opportunity|world", tag: "threat|social|opportunity", intensity_delta: "0..4", specificity: "pc_deed|npc|faction|region|generic", content: str, ways_out: "[str] (>= 2)", expires: duration}
+        text: "Queues a bang: {content}."
+        why_not_core: "a bang is a queue entry read by ch.12's pacing director (11.4.4), not an entity eff.summon makes"
+        lifecycle: provisional
+        basis: ['11.4.4', '12.7.4', DL-11-10]
+      - id: eff.11.new_situation
+        op: create
+        regime: independent_trigger
+        hook: "per source"
+        params: {template: sit_t_id, region: place_id, roles: map}
+        text: "A new situation begins: {template} in {region}."
+        why_not_core: "a situation is instantiated from a template with roles bound from state and a sealed timeline (11.4.1)"
+        lifecycle: provisional
+        basis: ['11.4.1', '11.4.3', DL-11-07]
+      - id: eff.11.seed_hook
+        op: create
+        regime: independent_trigger
+        hook: "per source"
+        params: {text: str, source: str, entities: "[id]", delivery: "rumor|person|letter"}
+        text: "A hook is seeded: {text}."
+        why_not_core: "a hook is a thread record at status seeded with a delivery trace (11.5.6)"
+        lifecycle: provisional
+        basis: ['11.5.6', DL-11-17]

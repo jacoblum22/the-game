@@ -1,0 +1,154 @@
+# data/substrate.yaml
+# Purpose: the closed vocabularies of the composition substrate: hooks, effect operations,
+#   quantities, modifier families, stacking families, regimes, behavioral slots, the evaluation pass,
+#   condition stacking rules, and the recursion terminator.
+# Owner: 00-architecture (00.9, 00.10). Every list here is CLOSED: additions require an amendment to 00.
+# Schema: data/SCHEMAS.md#substrateyaml.
+# Amended at integration (approved 00 amendments, INTERFACE-REQUESTS): economy may remove actions (06); lever covers
+#   snags (06); prevent may negate a named snag or provoked reaction and remove_condition may end a magical
+#   effect_instance (05); step admits request_size and plausibility (15); quantity travel_points (10); item shares per
+#   family (08); reserved ids added by 06; generator domain gen.pick (04); license kind universal (05). Hook
+#   subscribers may filter on events targeting or near them (05); 03's evidence counters are engine listeners on these
+#   hooks at any depth, not subscribers (03).
+# Basis: [R3 §00.1, §00.5-00.8, §05.4-05.5, §6 #2-3]; [R2 #3]; [C:P6]; [C:P9]; [DL-00A-16..17]
+
+schema_version: 1
+
+hooks:
+  - {id: on_declare, group: resolution, fires: "a beat is declared, before GATE"}
+  - {id: on_frame, group: resolution, fires: "a frame is computed, before OFFER"}
+  - {id: on_roll, group: resolution, fires: "the d20 is rolled, before the degree is read"}
+  - {id: on_degree, group: resolution, fires: "the degree is known", params: [degree]}
+  - {id: on_check_against, group: resolution, fires: "an aimed action targets this entity, before its roll"}
+  - {id: on_attack_hit, group: conflict, fires: "an attack by this entity succeeds"}
+  - {id: on_attack_miss, group: conflict, fires: "an attack by this entity fails"}
+  - {id: on_hit_taken, group: conflict, fires: "an attack against this entity succeeds, before harm is applied"}
+  - {id: on_harm_dealt, group: conflict, fires: "harm from this entity has been applied"}
+  - {id: on_harm_taken, group: conflict, fires: "harm to this entity has been applied"}
+  - {id: on_vitality_threshold, group: conflict, fires: "Vitality crosses half or reaches 0", params: [threshold]}
+  - {id: on_defeat, group: conflict, fires: "this entity defeats a foe"}
+  - {id: on_move, group: conflict, fires: "this entity's range band or positional flags change"}
+  - {id: on_condition_applied, group: status, fires: "a condition is applied to or by this entity", params: [to_or_by]}
+  - {id: on_condition_removed, group: status, fires: "a condition ends on this entity"}
+  - {id: on_focus_spent, group: resources, fires: "this entity spends Focus", params: [ability_tags]}
+  - {id: on_resource_depleted, group: resources, fires: "a quantity of this entity reaches its minimum", params: [quantity]}
+  - {id: on_turn_start, group: time, fires: "this entity's turn begins"}
+  - {id: on_turn_end, group: time, fires: "this entity's turn ends"}
+  - {id: on_boundary, group: time, fires: "a named boundary fires", params: [boundary]}
+  - {id: on_item_acquired, group: things, fires: "this entity gains an item"}
+  - {id: on_equip, group: things, fires: "an item is equipped"}
+  - {id: on_unequip, group: things, fires: "an item is unequipped"}
+  - {id: on_tag_event, group: world, fires: "evidence with a matching tag is recorded for this entity", params: [tag]}
+  - {id: on_clock_tick, group: world, fires: "a named clock or clock kind ticks", params: [clock]}
+  - {id: on_clock_complete, group: world, fires: "a named clock or clock kind completes", params: [clock]}
+  - {id: on_fact_set, group: world, fires: "a fact matching a key pattern is written", params: [pattern]}
+  - {id: on_dying, group: harm_state, fires: "this entity enters Dying"}
+  - {id: on_stabilize, group: harm_state, fires: "this entity leaves Dying"}
+
+operations:
+  - {id: modify, params: [quantity, family, amount, applies_when]}
+  - {id: step, params: [ladder, steps, applies_when]}          # ladder: severity | reach | stakes | tier | request_size | plausibility (15, amended)
+  - {id: multiply, params: [quantity, factor, harm_tags]}      # factor: 2 | 0.5
+  - {id: harm, params: [severity, harm_tags, target]}
+  - {id: resource, params: [quantity, delta_units, target]}    # delta in units or U(severity)
+  - {id: apply_condition, params: [condition, severity, duration, target]}
+  - {id: remove_condition, params: [condition_or_category, target]}   # also ends a magical effect_instance that is not a condition (eff.05.end_working, amended)
+  - {id: restrict, params: [forbid, target, duration]}         # forbid: verb | method | sense | license ids
+  - {id: grant_license, params: [license, grade, duration]}
+  - {id: lever, params: [type, for_verbs, for_tags, duration, sign, to, engine_cited, fact, applies_when]}   # sign: lever | snag (06, amended); engine_cited snags sit outside the two-cited count (00.3.9 g)
+  - {id: claim_slot, params: [slot, priority_rank, form, cosmetic_merge]}
+  - {id: move, params: [target, band_change, flags_add, flags_remove]}
+  - {id: tick, params: [clock_or_kind, ticks_rule]}
+  - {id: reveal, params: [sealed_ref]}
+  - {id: create, params: [template, location]}
+  - {id: trigger_check, params: [verb, effect_dc_source, degree_table]}
+  - {id: prevent, params: [event_kind, limits]}                # event_kind may be a named snag or a provoked reaction (eff.05.waive, amended)
+  - {id: redirect, params: [event_kind, new_target_rule]}
+  - {id: set_fact, params: [subject, predicate, value]}        # on a relationship it writes through set_relationship (eff.15.standing_step, amended)
+  - {id: economy, params: [reactions_delta, actions_delta]}    # INV-11: actions_delta <= 0 always (06, amended); never adds actions
+
+quantities: [check_total, defense, dc, effect_dc, harm_dealt, harm_taken, focus_cost, duration, clock_ticks, reach, stakes, vitality_max, focus_max, speed, carry, price, supply_use, travel_points]   # travel_points added (10, DL-10-03)
+
+modifier_families:
+  # item_share: the part of the family items may fill, summed and clamped at E4 before the family cap (08.2.2; DL-08-07, amended)
+  - {id: attribute, applies_to: [check_total, defense, effect_dc], stacking: single, item_share: none}
+  - {id: competence, applies_to: [check_total, defense, effect_dc], stacking: highest_only, cap: 6, item_share: none}
+  - {id: edge, applies_to: [check_total, defense, effect_dc], stacking: sum_capped, cap: 2, item_share: "+1 per quantity"}
+  - {id: circumstance, applies_to: [check_total], stacking: sum_capped, cap: 4, source: "levers and snags only", item_share: "one item lever per roll"}
+  - {id: status, applies_to: [check_total, defense], stacking: worst_and_best, cap_penalty: -4, cap_bonus: 2}
+  - {id: step, applies_to: [reach, stakes, harm_dealt, harm_taken, duration], stacking: steps_clamped, cap_from_effects: 2, item_share: "+-1"}
+  - {id: harm_edge, applies_to: [harm_dealt], stacking: sum_capped, cap: 2, item_share: "+1"}
+  - {id: reduction, applies_to: [harm_taken], stacking: sum_capped, cap_owner: "07", cap_envelope: [0, 4], item_share: "3 per harm tag"}
+  - {id: multiplier, applies_to: [harm_dealt, harm_taken], stacking: multiplier_pair, item_share: "x0.5 resistance only from a tier-4+ signature"}
+  - {id: adjust, applies_to: [focus_cost, duration, clock_ticks, vitality_max, focus_max, speed, carry, price, supply_use, travel_points], stacking: sum_capped, cap: "the quantity's own envelope (scales.yaml)", item_share: "carry +4; supply -1 a day; items never touch vitality_max or focus_max"}
+
+stacking_families:
+  - {id: single, rule: "exactly one value applies"}
+  - {id: highest_only, rule: "the largest applicable value applies"}
+  - {id: sum_capped, rule: "sum all applicable values, then apply the cap"}
+  - {id: worst_and_best, rule: "the single worst penalty and the single best bonus apply, each capped"}
+  - {id: steps_clamped, rule: "sum rung shifts (effect shifts capped), then clamp to the ladder"}
+  - {id: multiplier_pair, rule: "at most one x2 and one x0.5 apply; both present cancel"}
+same_effect_rule: "Two instances of the same effect id never stack; the strongest applies (INV-13)."
+
+evaluation_pass:
+  - {step: E0, name: collect}
+  - {step: E1, name: base, note: "a claim_slot owner replaces the base form"}
+  - {step: E2, name: steps}
+  - {step: E3, name: convert, note: "rungs to numbers via scales.yaml"}
+  - {step: E4, name: add, order: [attribute, competence, edge, circumstance, status, harm_edge, reduction, adjust]}
+  - {step: E5, name: multiply}
+  - {step: E6, name: clamp}
+  - {step: E7, name: round, rule: down}
+
+regimes:
+  - {id: additive, requires: [quantity, family]}
+  - {id: independent_trigger, requires: [hook], chance_form: "natural d20 range, rolled by the engine"}
+  - {id: priority_exclusive, requires: [slot, priority_rank], loser: "fully suppressed unless cosmetic_merge", tie: "earlier acquired wins"}
+  - {id: named_composite, requires: [keys_exactly_two], key_kinds: [deed_branch, conduct_axis, harm_branch, composite_key_license], file: composites.yaml}
+
+trigger_order: ["target prevent/redirect", "acting entity", "other entities"]
+trigger_order_within_group: ["priority_rank desc", "acquisition time asc"]
+
+behavioral_slots:
+  - {id: slot.strike_delivery, meaning: "what a Strike deals and in which harm type"}
+  - {id: slot.spell_delivery, meaning: "how a spell projects: bolt, cone, touch, burst"}
+  - {id: slot.movement_mode, meaning: "walk, climb, swim, fly, burrow"}
+  - {id: slot.defense_reaction, meaning: "the reaction used when attacked"}
+  - {id: slot.body_form, meaning: "one transformed shape at a time"}
+  - {id: slot.stance, meaning: "one combat stance"}
+  - {id: slot.aura, meaning: "one active aura"}
+
+recursion:
+  depth_zero_sources: [declared_beat, adversary_action, condition_periodic, boundary_handler, clock_completion]
+  triggered_depth: 1
+  subscribers_fire_on_depth: [0]
+  core_rules_ignore_depth: true
+  listeners_ignore_depth: "ch.03's evidence counters are engine listeners, not effect subscribers; they fire at any depth and write counted evidence only (00.10.2, amended)"
+
+condition_stacking:
+  - {id: unique, on_reapply: "ignored while an instance exists"}
+  - {id: refresh, on_reapply: "remaining = max(old, new); severity unchanged"}
+  - {id: replace_stronger, on_reapply: "keep the higher severity; ties refresh"}
+  - {id: intensify, on_reapply: "stacks +1 up to max_stacks; duration refreshes"}
+  - {id: independent, on_reapply: "new separate instance up to max_stacks"}
+  - {id: escalate, on_reapply: "stacks +1; at at_stacks replace with escalates_to"}
+
+condition_categories: [physical, sensory, mental, positional, magical, affliction_stage]
+
+duration_forms: ["rounds:N", "intervals:N", "hours:N", "watches:N", "days:N", "scene", "conflict", "until_rest:<breather|rest_short|rest_long>", "until_cleansed", "permanent", "while:<state expr>", "uses:N"]
+
+limits_form: {per: "<boundary id>", uses: "int"}
+
+reserved_ids:
+  range_bands: [band.engaged, band.close, band.near, band.far, band.distant]
+  positional_flags: [flag.flanked, flag.cornered, flag.in_cover, flag.elevated, flag.hidden, flag.mounted, flag.lined_up, flag.obscured, flag.in_chokepoint, flag.aloft]   # last three added by 06
+  harm_states: [harm_state.active, harm_state.staggered, harm_state.dying, harm_state.dead]
+  cost_menu: [cost.harm, cost.drain, cost.gear, cost.time, cost.exposure, cost.footing, cost.shortfall, cost.closed_door, cost.twist]
+  conditions: [cond.off_balance, cond.prone, cond.grabbed, cond.restrained, cond.pinned, cond.blinded, cond.deafened, cond.dazed, cond.stunned, cond.unconscious, cond.frightened, cond.charmed, cond.distracted, cond.exposed, cond.slowed, cond.weakened, cond.exhausted, cond.bleeding, cond.burning, cond.chilled, cond.frozen, cond.choking, cond.poisoned, cond.surprised, cond.silenced, cond.broken, cond.heartened]   # last four added by 06
+  generator_domains: [gen.loot, gen.craft, gen.gift, gen.item_ability, gen.absorb, gen.birth, gen.pick]   # gen.pick added (04)
+  fill_methods: [signature, biased, chosen, weighted, recipe]
+  degree_effects: [greater, flawed]
+  clock_kinds: [danger, progress, countdown, faction_goal, project, tug]
+  license_kinds: [basic_verb, ability, spell, calling_capability, training, language, item_property, fact, condition_grant, rank, universal]   # universal added (05)
+  acquisition_path_types: [recognition, mentor, project, item, origin, institution, bargain, discovery]

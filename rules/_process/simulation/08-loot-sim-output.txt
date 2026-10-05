@@ -1,0 +1,52 @@
+=== ch.08 loot simulation (seeded) ===
+drop check: events by band {1: 359, 2: 1028, 3: 944, 4: 495, 5: 216} drops {1: 29, 2: 222, 3: 331, 4: 254, 5: 164} rates {1: 8.1, 2: 21.6, 3: 35.1, 4: 51.3, 5: 75.9}
+rungs: {'masterwork': 759, 'common': 107, 'fine': 134}
+property count per item: {0: 107, 1: 156, 2: 737}
+   masterwork {1: 22, 2: 737}
+   common {0: 107}
+   fine {1: 134}
+property kinds: {'passive': 1299, 'mundane': 176, 'item_ability': 140, 'license': 15}
+items with a bound power (relic, item-bound active): 140 = 14.0 %
+relics (bound power or license): 155 = 15.5 %
+empty slots (pool exhausted after mod groups): 5
+cap violations caught and refilled: 16
+base redraws (pool smaller than the rung's slots): 0 ; signature-driven base overrides: 49
+post-generation item-share compliance: 1000 / 1000
+gated pool size per item: min 3 median 9.0 max 18
+--- 09 contract check: gated pool at tier_cap 1 and at the archetype's band, per archetype (smallest base) ---
+  wolf                 T2 pool@1 min   3  pool@band min   3 max   7  signature prop.sig_hunters_sense
+  dire_bear            T3 pool@1 min   8  pool@band min   9 max  10  signature prop.sig_hunters_sense
+  giant_spider         T2 pool@1 min   5  pool@band min   5 max   7  signature prop.sig_plague_proof
+  great_serpent        T2 pool@1 min   4  pool@band min   4 max   6  signature prop.sig_shed_skin
+  griffon              T3 pool@1 min   4  pool@band min   5 max   9  signature prop.sig_monster_hide
+  bandit               T1 pool@1 min   5  pool@band min   5 max   6  signature prop.sig_well_made
+  orc_raider           T2 pool@1 min   3  pool@band min   3 max   8  signature prop.sig_war_cry
+  goblin_skulk         T1 pool@1 min   5  pool@band min   5 max   6  signature prop.sig_dirty_trick
+  troll                T3 pool@1 min   7  pool@band min   8 max  12  signature prop.sig_giants_grip
+  knight_errant        T3 pool@1 min   4  pool@band min   6 max   8  signature prop.sig_well_made
+  skeleton             T1 pool@1 min   4  pool@band min   4 max   7  signature prop.sig_bone_ward
+  ghoul                T2 pool@1 min   4  pool@band min   5 max   9  signature prop.sig_hungers_edge
+  wraith               T3 pool@1 min   7  pool@band min   8 max  11  signature prop.sig_grave_sight
+  lich                 T5 pool@1 min   8  pool@band min  10 max  16  signature prop.sig_crown_of_dread
+  dryad                T2 pool@1 min   6  pool@band min  10 max  11  signature prop.sig_glamour
+  barrow_shade         T2 pool@1 min   5  pool@band min   7 max   9  signature prop.sig_ancestral_counsel
+  lesser_demon         T3 pool@1 min   4  pool@band min   7 max   7  signature prop.sig_hellfire
+  tempter              T4 pool@1 min   3  pool@band min   4 max   8  signature prop.sig_silver_tongue
+  stone_golem          T3 pool@1 min   7  pool@band min  11 max  14  signature prop.sig_unyielding
+  clockwork_sentinel   T2 pool@1 min   5  pool@band min   5 max   7  signature prop.sig_precise
+  fire_elemental       T3 pool@1 min   5  pool@band min   7 max   8  signature prop.sig_fire_heart
+  rime_wyrmling        T4 pool@1 min   7  pool@band min  12 max  14  signature prop.sig_dragonscale
+  wyvern               T4 pool@1 min   7  pool@band min  11 max  12  signature prop.sig_wyvern_sting
+  slime                T2 pool@1 min   4  pool@band min   4 max   5  signature prop.sig_acid_bite
+  elder_dragon         T5 pool@1 min   7  pool@band min  12 max  14  signature prop.sig_dragonscale
+  mind_flayer          T4 pool@1 min   2  pool@band min   3 max   9  signature prop.sig_alien_ward
+archetypes below 3 at tier 1 on some base: ['mind_flayer']
+signature tiers: {1: 12, 2: 134, 3: 226, 4: 195, 5: 139, 6: 36}
+--- repeat rates (200 consecutive drops per archetype, decisive success, no place) ---
+  same magnitude property as the previous drop: mean 13.5 % max 31.7 % (target <= 15%, OEQ-00-5)
+  identical whole item to the previous drop: mean 3.9 % max 14.1 %
+  worst magnitude repeat: [('clockwork_sentinel', 31.7), ('slime', 25.6), ('lesser_demon', 22.6), ('griffon', 21.6), ('wolf', 17.6)]
+--- character level: 500 PCs each attune 5 of 20 random drops (bands 2-4) ---
+  share of characters whose 5 attuned items would exceed an item share without the E4 clamp: {'harm_edge': '19.4%', 'edge (same quantity and scope)': '18.4%', 'reduction': '26.6%'}
+--- crafting check: a troll-hide coat (mat.hide from the troll) commissioned at masterwork, bias ward, trained crafter (tier cap 2) ---
+  craft pool size 10 top magnitude picks [('prop.guarding', 44), ('prop.resist_crush', 35), ('prop.reinforced', 31), ('prop.sturdy', 26), ('prop.knitting', 20), ('prop.sig_giants_grip', 17)]

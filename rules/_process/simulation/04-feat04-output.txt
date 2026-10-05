@@ -1,0 +1,37 @@
+candidates 1383 overall confirm 70%
+margin: weighted >= 100                      true: n= 268 confirm 80% | false: n=1115 confirm 67%
+counted margin: counted >= 10                true: n=1065 confirm 70% | false: n= 318 confirm 67%
+counted >= 2C                                true: n= 377 confirm 69% | false: n=1006 confirm 70%
+quality: challenging >= routine and dc >= 12 true: n= 804 confirm 70% | false: n= 579 confirm 70%
+recent >= 20                                 true: n=1259 confirm 73% | false: n= 124 confirm 34%
+recent >= 30                                 true: n=1019 confirm 79% | false: n= 364 confirm 43%
+recent >= 40                                 true: n= 754 confirm 85% | false: n= 629 confirm 51%
+recent >= 50                                 true: n= 538 confirm 91% | false: n= 845 confirm 56%
+recent >= 60                                 true: n= 357 confirm 94% | false: n=1026 confirm 61%
+share of root >= 0.1                         true: n=1317 confirm 72% | false: n=  66 confirm 23%
+share of root >= 0.15                        true: n=1043 confirm 81% | false: n= 340 confirm 34%
+share of root >= 0.2                         true: n= 775 confirm 87% | false: n= 608 confirm 47%
+share of root >= 0.25                        true: n= 542 confirm 92% | false: n= 841 confirm 55%
+share of root >= 0.33                        true: n= 311 confirm 96% | false: n=1072 confirm 62%
+leading level-2 node of the character        true: n= 296 confirm 97% | false: n=1087 confirm 62%
+among the top three level-2 nodes            true: n= 852 confirm 84% | false: n= 531 confirm 47%
+became eligible by session 4                 true: n= 213 confirm 96% | false: n=1170 confirm 65%
+became eligible by session 6                 true: n= 418 confirm 94% | false: n= 965 confirm 59%
+became eligible by session 8                 true: n= 675 confirm 89% | false: n= 708 confirm 51%
+became eligible by session 10                true: n= 873 confirm 85% | false: n= 510 confirm 44%
+recent >= half of weighted (fast riser)      true: n= 591 confirm 89% | false: n= 792 confirm 55%
+recent >= 3/4 of weighted                    true: n= 230 confirm 94% | false: n=1153 confirm 65%
+conf_a = [recent>=40, share_root>=1/5, top3, counted margin, quality]
+   0 29 55%
+   1 252 48%
+   2 262 44%
+   3 197 70%
+   4 332 87%
+   5 311 92%
+conf_b = [recent>=40, recent>=w/2, share_root>=1/5, counted margin, quality]
+   0 42 57%
+   1 307 50%
+   2 288 50%
+   3 162 73%
+   4 300 87%
+   5 284 93%

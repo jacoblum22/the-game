@@ -1,0 +1,135 @@
+# data/contrib/licenses.04.yaml
+# Purpose: the calling-capability licenses ch.04 grants, for merge into data/licenses.yaml (owner 05). T-00-19
+#   lists owner-blocks 02, 08 and 13 for that file; ch.04 REQUESTS an owner-block "04" (04 Interface requests).
+#   Five universal capabilities, one per tier of the ladder, plus the Devourer's special capability. They are
+#   universal on purpose: a calling is a derived label and hands out no list of its own (constitution P5). Each
+#   license is held ONCE (INV-13); its scope reads the holder's callings, so a second calling widens the scope
+#   without a second instance.
+# Owner: 04-recognition-and-growth. Schema: data/SCHEMAS.md#licensesyaml (License, 00.12.1).
+# "Your key" below means: the key tag(s) of any calling you hold, unsuspended, at the stated tier or higher.
+#   For a hybrid the keys are its two roads; for a vow or dark calling, its conduct axis (only where stated).
+# Basis: [C:VII] [C:P5] [C:P2] [R3 04.6 tier rewards are capabilities] [R1 04 qualitative growth]
+#   [R2 #4 mastery widens the reliable envelope] [DL-04-01] [DL-04-23]
+
+schema_version: 1
+blocks:
+  - owner: "04"
+    entries:
+      - id: lic.call.mark
+        name: The Mark of the Calling
+        kind: calling_capability
+        tags: [deed]
+        principle: "The world has grounds to treat you as a practitioner of what you do."
+        scope: "Use every training license whose first tag is at or under your key at the grade your calling's tier sets (callings.yaml#tier_ladder.training_grade). Present yourself as a recognized practitioner of your key wherever a rule, license or institution requires one (guild work, an order's rites, a trial's entry)."
+        excludes:
+          - "a rank or seat in any institution (ch.11 grants ranks; a rank is never capability)"
+          - "techniques of a training license whose first tag lies outside your key (acquire that license by its own paths)"
+        attribute: by_method
+        crude_fallback: none
+        stretch: null
+        emulate: null
+        acquisition_paths:
+          - {type: recognition, detail: "tier 1 (Called) of any calling", clock: null, requires: "04.5.3"}
+        source: "calling tier 1"
+        lifecycle: provisional
+        basis: ["04.5.3", "C:VII"]
+      - id: lic.call.proof
+        name: Proven
+        kind: calling_capability
+        tags: [deed.influence.teaching]
+        principle: "What you have proven you can pass on."
+        scope: "Act as the mentor in the mentor acquisition path of any training license whose first tag is at or under your key, up to the grade one below your own, for a companion or an NPC (ch.15's training activity; ch.16 for companions). Your teaching ticks the learner's clock at the rate ch.15 sets for a mentor."
+        excludes:
+          - "teaching an ability (abilities are picked or acquired, never taught by this license)"
+          - "granting a calling to anyone (a calling comes only from the learner's own deeds)"
+        attribute: presence
+        crude_fallback: {verb: verb.help, method: "work beside the learner on one task", dc_shift: 0, reach_cap: standard, consequence: null}
+        stretch: null
+        emulate: null
+        acquisition_paths:
+          - {type: recognition, detail: "tier 2 (Proven) of any calling", clock: null, requires: "04.5.3"}
+        source: "calling tier 2"
+        lifecycle: provisional
+        basis: ["04.5.3", "R6 A-27 (a mentor accelerates, never substitutes)"]
+      - id: lic.call.sure_hand
+        name: Sure Hand
+        kind: calling_capability
+        tags: [deed]
+        principle: "Mastery widens what you can reliably reach past the letter of what you know."
+        scope: "When you stretch or emulate (00.12.4) a license or ability whose first tag is at or under your key, you may cite your mastery as a Precision lever on that beat."
+        excludes:
+          - "ordinary use of a license within its literal scope (no lever)"
+          - "a stretch or emulation outside your key"
+        attribute: by_method
+        effects:
+          - {effect_id: eff.grant_lever, params: {type: precision, for_tags: ["your key"], applies_when: "frame.gate.mode in [stretch, emulate]", duration: permanent}}
+        crude_fallback: none
+        stretch: null
+        emulate: null
+        acquisition_paths:
+          - {type: recognition, detail: "tier 3 (Tempered) of a deed-keyed calling", clock: null, requires: "04.5.3"}
+        source: "calling tier 3"
+        lifecycle: provisional
+        basis: ["04.5.3", "R2 #4", "00.3.9 (f): an effect-granted lever counts toward the two-lever limit"]
+      - id: lic.call.masters_eye
+        name: Master's Eye
+        kind: calling_capability
+        tags: [deed]
+        principle: "You can read the true measure of a task of your own art before you commit to it."
+        scope: "Once per scene, when a beat whose primary deed tag is at or under your key is framed, the OFFER shows the obstacle's DC and its source even if the frame is secret, and the engine reveals one sealed tell of the obstacle or defender (its highest and lowest defense by name, or one resistance or vulnerability by harm tag)."
+        excludes:
+          - "sealed facts that are not properties of the obstacle or defender (motives, secrets, clues: ch.15)"
+          - "beats outside your key"
+        attribute: by_method
+        effects:
+          - {effect_id: eff.reveal, params: {sealed_ref: "the framed obstacle's DC source and one tell"}, hook: on_frame, when: "deed_tag under your key", limits: {per: scene_end, uses: 1}}
+        limits: {per: scene_end, uses: 1}
+        crude_fallback: {verb: verb.observe, method: "study it the ordinary way", dc_shift: 0, reach_cap: standard, consequence: null}
+        stretch: null
+        emulate: null
+        acquisition_paths:
+          - {type: recognition, detail: "tier 4 (Exalted) of a deed-keyed calling", clock: null, requires: "04.5.3"}
+        source: "calling tier 4"
+        lifecycle: provisional
+        basis: ["04.5.3", "00.6.5 (unseal is the only way sealed content enters narration)"]
+      - id: lic.call.open_art
+        name: The Open Art
+        kind: calling_capability
+        tags: [deed]
+        principle: "At the summit the whole of an art is within reach, at a price."
+        scope: "You may emulate (00.12.4), at the license's or ability's emulate price, any ability or license whose first tag is at or under your key and whose min_tier is 5 or lower, whether or not you have witnessed it. A success ticks its learning clock as usual."
+        excludes:
+          - "abilities whose first tag lies outside your key"
+          - "abilities marked adversary_only or cannot_absorb"
+          - "holding the emulated ability (it takes no slot until picked or learned)"
+        attribute: by_method
+        crude_fallback: none
+        stretch: null
+        emulate: null
+        acquisition_paths:
+          - {type: recognition, detail: "tier 5 (Paragon) of any calling; for a vow or dark calling the key is its conduct axis and the pool is the abilities carrying that axis", clock: null, requires: "04.5.3"}
+        source: "calling tier 5"
+        lifecycle: provisional
+        basis: ["04.5.3", "R2 #4 (structured / unstructured use)"]
+      - id: lic.call.taking
+        name: The Taking
+        kind: calling_capability
+        tags: [deed.lore.bestiary.monsters, deed.primal.shapeshifting.partial]
+        principle: "What you have beaten and understood, you can carry."
+        scope: "After you defeat a creature by your own resolved deed (or it yields to you and is spared), and before the scene ends or within 1 interval while you are engaged with the body or the creature, attempt to take one of its natural powers: spend 2 Focus and make the Taking check (data/gen_absorb.yaml#taking_check). On a success the engine generates one power from the creature's absorbable pool (generate(gen.absorb, ...)) into your library. Slot powers from your library into free acquired slots at a long rest. Limits: one attempt per creature; one success per long rest; library size by calling tier."
+        excludes:
+          - "the learned arts of folk (creature.folk has no pool; learn those by emulate, ch.05)"
+          - "powers flagged cannot_absorb or adversary_only (ch.09)"
+          - "a creature you found dead or that another defeated (circumstance scavenged: the gate refuses)"
+          - "using a library power that is not slotted"
+        attribute: resolve
+        cost: {focus: 2}
+        limits: {per: rest_long, uses: 1}
+        crude_fallback: {verb: verb.handle, method: "harvest the body for materials (ch.08 gen.loot / materials)", dc_shift: 0, reach_cap: standard, consequence: null}
+        stretch: null
+        emulate: null
+        acquisition_paths:
+          - {type: recognition, detail: "tier 1 of call.devourer (offered only by veh.V13)", clock: null, requires: "req.narrow.1 + req.variant.devourer"}
+        source: "call.devourer tier 1"
+        lifecycle: provisional
+        basis: ["04.10", "C:P5", "00.11", "DL-04-19"]

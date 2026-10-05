@@ -1,0 +1,1157 @@
+# data/sites.yaml
+# Purpose: the Delve-style site cards (10.13): eight themes (what happened to the place) and fourteen
+#   domains (what kind of place it is). The theme x domain pair gates the denizens, the dangers, the
+#   discoveries, the features, the hazards and traps met inside, and the place axis of the loot pool gate
+#   (08.3.4 item 4; 08.3.12 hoards). Also: site sizes and their clocks, the two clock templates, the
+#   area-contents and site-opportunity tables, and the rule for generating a site in play.
+# Owner: 10-exploration-travel-sites (owner-block 13 for regional cards and authored sites).
+# Schema: data/SCHEMAS.md#sitesyaml (site_themes, site_domains: id, terrain_tags, creature_gate_tags,
+#   loot_gate_tags, features, dangers, clock_templates) plus ch.10's optional keys (documented in 10.13.2):
+#   description, danger, creature_weights, discoveries, climax, danger_clock_omens, regrowth, place_facts,
+#   light, explore_tier, typical_size, rest_site, openness, shift, hazards, traps; top-level sizes, tables,
+#   denizen_table_rule.
+# Rows: every die table is a list of {range, result, kind?, ref?} rows; features carry 06.3.8 feature_kind
+#   and, for heights, drop_ft (10.12.5: 20 ft+ is a Heavy source).
+# Validation: gen10_sites.py checks every tag, archetype, hazard and trap id, and lists the theme x domain
+#   pairs whose terrain-filtered denizen gate holds fewer than 3 archetypes (denizen_table_rule.fallback).
+# Basis: [R5 P-28 (Ironsworn: Delve themes x domains)] [C:P5] [R2 #13] [DL-10-13..16]
+
+schema_version: 1
+site_themes:
+- id: site.theme.ancient
+  name: Ancient
+  tags: []
+  description: Forgotten by all; old works, old wards, old guardians that still keep their charge.
+  danger: wild
+  creature_gate_tags: [creature.construct, creature.spirit.ancestor, creature.undead.mindless, creature.beast.vermin, creature.horror.ooze]
+  creature_weights: {creature.construct: 3, creature.spirit.ancestor: 2, creature.undead.mindless: 2, creature.beast.vermin: 2,
+    creature.horror.ooze: 1}
+  loot_gate_tags: [creature.construct, material.gem.crystal, org.order.arcane, material.stone.fine]
+  dangers:
+  - {range: '1', kind: gatekeeper, result: 'a guardian construct wakes at a threshold (a gatekeeper: +1 progress when defeated)',
+    ref: creature.construct}
+  - {range: '2', kind: trap, result: 'an old ward-trap still armed (a glyph or a mechanism, band-scaled)'}
+  - {range: '3', kind: barrier, result: 'a sealed door whose mechanism is a puzzle (Understand first: a lever)'}
+  - {range: '4', kind: hazard, result: 'the floor gives onto a lower hall (a height: fall by the drop)', ref: haz.fall_20}
+  - {range: '5', kind: hazard, result: 'stale, dead air in a sealed room', ref: haz.bad_air}
+  - {range: '6', kind: denizen, result: vermin pour from a burst wall}
+  - {range: '7', kind: dread, result: the faces carved on the walls all turn to follow you (dread S1)}
+  - {range: '8', kind: clock, result: 'something deep below begins to grind: the danger clock +1'}
+  - {range: '9', kind: patrol, result: a construct walks its ancient round (a pending threat on the path behind)}
+  - {range: '10', kind: hazard, result: a ceiling held up by one cracked pillar, ref: haz.cave_in}
+  - {range: '11', kind: barrier, result: 'the way on is a shaft with rusted rungs (a climb, recorded height)'}
+  - {range: '12', kind: denizen, result: an ooze that has eaten everything else here}
+  discoveries:
+  - {range: '1', result: 'a wall map of the whole site (progress +2, once)'}
+  - {range: '2', result: 'the builders'' script: a language clue (15)'}
+  - {range: '3', result: an intact mechanism worth salvage (08.6.8)}
+  - {range: '4', result: 'a dead delver''s journal (a clue toward the heart: progress +1)'}
+  - {range: '5', result: a still-burning everlamp (a glowing light source)}
+  - {range: '6', result: a sealed niche of grave goods (a cache)}
+  climax:
+  - {range: '1', kind: guardian, result: a great construct bound to the heart, ref: arch.golem}
+  - {range: '2', kind: sealed_way, result: a vault door of the old makers}
+  - {range: '3', kind: guardian, result: 'the ancestor-spirit of the builders, who asks a question first', ref: arch.ancestor}
+  - {range: '4', kind: place_of_power, result: 'the engine or altar the place was built around (resonance: arcane)'}
+  - {range: '5', kind: hoard, result: 'the makers'' treasury, unguarded but trapped'}
+  - {range: '6', kind: the_lost, result: the remains of the last expedition and what they carried}
+  danger_clock_omens:
+    stirring: ['a click deep in the walls, like a lock turning', dust falling in a thin line from a seam]
+    building: [a rhythmic grinding far below, every carved eye in the hall seems newer than it was]
+    imminent: [a great weight shifting somewhere ahead, lights kindling one after another down a hall no one entered]
+  regrowth: {range: null}
+  place_facts: []
+  lifecycle: provisional
+  basis: &id001 ['10.13', R5 P-28, 'C:P5', 'R2 #13']
+- id: site.theme.corrupted
+  name: Corrupted
+  tags: []
+  description: 'Twisted by dark power: a fiend''s nest, a cult''s temple, a place where something was sacrificed.'
+  danger: perilous
+  creature_gate_tags: [creature.fiend, creature.undead, creature.horror, creature.folk.human]
+  creature_weights: {creature.fiend: 3, creature.undead: 2, creature.horror: 2, creature.folk.human: 2}
+  loot_gate_tags: [creature.fiend, deed.arcane.necromancy, org.cult, material.essence.blood]
+  dangers:
+  - {range: '1', kind: denizen, result: cultists at a rite (a pending threat; the rite is a countdown of 4 if not stopped)}
+  - {range: '2', kind: dread, result: a sight that should not be (dread S2)}
+  - {range: '3', kind: hazard, result: the ground here is desecrated, ref: haz.desecrated_ground}
+  - {range: '4', kind: trap, result: a profane glyph on the threshold (magical trap)}
+  - {range: '5', kind: gatekeeper, result: a bound fiend chained to guard a door, ref: creature.fiend}
+  - {range: '6', kind: patrol, result: the walking dead shuffle the corridors (pending threat)}
+  - {range: '7', kind: hazard, result: a pit of filth and bones, ref: haz.foul_water}
+  - {range: '8', kind: clock, result: 'a voice begins to chant somewhere: the danger clock +2'}
+  - {range: '9', kind: denizen, result: a horror feeding on what the cult leaves}
+  - {range: '10', kind: barrier, result: 'a door sealed with blood: it opens to blood (Handle with a cost of S1 harm) or to
+      force'}
+  - {range: '11', kind: hazard, result: blight seeps from the walls, ref: haz.blight_zone}
+  - {range: '12', kind: denizen, result: a tempter offers a bargain instead of a fight (talk first)}
+  discoveries:
+  - {range: '1', result: 'the cult''s ledger: names of members in the town (a thread, 11)'}
+  - {range: '2', result: a captive alive in a cell (the lost)}
+  - {range: '3', result: a profane implement (loot with a flaw)}
+  - {range: '4', result: 'a map of the catacombs with the altar marked (progress +2, once)'}
+  - {range: '5', result: a desecrated relic that could be restored (a thread)}
+  - {range: '6', result: a list of sacrifices still to come (a clock to race)}
+  climax:
+  - {range: '1', kind: rite, result: 'a summoning in progress: a countdown of 4'}
+  - {range: '2', kind: guardian, result: a greater fiend half-manifest, ref: arch.greater_demon}
+  - {range: '3', kind: guardian, result: the cult's priest and their faithful (elite + mob), ref: arch.cultist}
+  - {range: '4', kind: guardian, result: a wight-lord who made the place a court, ref: arch.wight}
+  - {range: '5', kind: the_lost, result: the one taken for the sacrifice}
+  - {range: '6', kind: place_of_power, result: 'the profane altar: break it (Force, Hard) to cleanse the site'}
+  danger_clock_omens:
+    stirring: [a smell of hot iron and burnt hair, 'a drum somewhere, slow']
+    building: [candles lit in a room you passed in the dark, the drum quickening; voices with it]
+    imminent: [the walls sweating something dark, every voice in the place falling silent at once]
+  regrowth: {range: 5-6, die: d6}
+  place_facts: [desecrated]
+  lifecycle: provisional
+  basis: *id001
+- id: site.theme.fortified
+  name: Fortified
+  tags: []
+  description: 'Held and defended: a bandit hold, an orc fort, a goblin warren, a renegade''s tower.'
+  danger: wild
+  creature_gate_tags: [creature.folk, creature.beast.predator.canine]
+  creature_weights: {creature.folk.human: 3, creature.folk.orc: 2, creature.folk.goblin: 2, creature.folk.giant: 1, creature.beast.predator.canine: 1}
+  loot_gate_tags: [creature.folk, org.outlaw, org.crown.military, item.weapon]
+  dangers:
+  - {range: '1', kind: patrol, result: a patrol on its round (a pending threat)}
+  - {range: '2', kind: alarm, result: 'an alarm line or a bell (alarm trap: 2 ticks)'}
+  - {range: '3', kind: denizen, result: a guard post with a sentry (unaware on a 1-3)}
+  - {range: '4', kind: barrier, result: 'a barred door (Hard to force; a key exists somewhere: discovery)'}
+  - {range: '5', kind: trap, result: a murder-hole or a spiked pit by the gate}
+  - {range: '6', kind: denizen, result: war-hounds loosed in the yard}
+  - {range: '7', kind: clock, result: 'a horn sounds: the danger clock +2'}
+  - {range: '8', kind: gatekeeper, result: the sergeant of the watch (a gatekeeper)}
+  - {range: '9', kind: hazard, result: burning oil prepared above a stair, ref: haz.fire}
+  - {range: '10', kind: denizen, result: prisoners who might be freed (non-threat; an ally or a complication)}
+  - {range: '11', kind: barrier, result: a portcullis down (Force Very hard; the winch is elsewhere)}
+  - {range: '12', kind: denizen, result: a deserter who will talk for a price (non-threat)}
+  discoveries:
+  - {range: '1', result: 'the duty roster (when the guard changes: a lever)'}
+  - {range: '2', result: a key ring}
+  - {range: '3', result: the strongbox (a cache)}
+  - {range: '4', result: 'a captured map of the region (11: a rumor and a route)'}
+  - {range: '5', result: 'the armory (gear, 08.3.11)'}
+  - {range: '6', result: letters from a patron (a thread)}
+  climax:
+  - {range: '1', kind: guardian, result: the chieftain and the bodyguard (elite + mob), ref: arch.orc}
+  - {range: '2', kind: guardian, result: the bandit captain and the band, ref: arch.brigand}
+  - {range: '3', kind: hoard, result: the warchest}
+  - {range: '4', kind: the_lost, result: the hostage the hold was built to keep}
+  - {range: '5', kind: guardian, result: an ogre the garrison keeps chained, ref: arch.ogre}
+  - {range: '6', kind: sealed_way, result: 'the inner keep, barred'}
+  danger_clock_omens:
+    stirring: ['a shout, then laughter, somewhere above', a dog barking twice and stopping]
+    building: ['boots on the stair, unhurried', torches carried along the wall walk]
+    imminent: [someone calling a name and getting no answer, the horn-bearer running for the tower]
+  regrowth: {range: null, note: fortified sites re-arm one disarmed trap a week and replace fallen guards from the region's
+      faction (11)}
+  place_facts: []
+  lifecycle: provisional
+  basis: *id001
+- id: site.theme.hallowed
+  name: Hallowed
+  tags: []
+  description: 'Holy, or once holy: a shrine, an abbey, a saint''s tomb, guarded by its faith or its dead.'
+  danger: settled
+  creature_gate_tags: [creature.spirit.celestial, creature.spirit.ancestor, creature.construct, creature.folk.human]
+  creature_weights: {creature.spirit.celestial: 2, creature.spirit.ancestor: 3, creature.construct: 2, creature.folk.human: 1}
+  loot_gate_tags: [org.faith, deed.divine, creature.spirit.celestial, material.metal.silver]
+  dangers:
+  - {range: '1', kind: dread, result: 'a voice asks why you have come (answer: Talk, or dread S1)'}
+  - {range: '2', kind: trap, result: a warding glyph against the unworthy (magical trap)}
+  - {range: '3', kind: gatekeeper, result: a temple guardian that asks a sign of faith, ref: creature.construct}
+  - {range: '4', kind: denizen, result: pilgrims or keepers (non-threat; standing per their faith)}
+  - {range: '5', kind: barrier, result: 'a door that opens to a prayer of the faith (Recall religion, or Force)'}
+  - {range: '6', kind: hazard, result: the floor of a crypt gives way, ref: haz.fall_10}
+  - {range: '7', kind: denizen, result: an ancestor spirit restless at the intrusion}
+  - {range: '8', kind: clock, result: 'the bells ring by themselves: the danger clock +1'}
+  - {range: '9', kind: dread, result: the saint's image weeps (dread S1)}
+  - {range: '10', kind: barrier, result: a reliquary sealed in silver}
+  - {range: '11', kind: denizen, result: 'robbers already here, looting (a mixed encounter)'}
+  - {range: '12', kind: trap, result: a falling-stone trap set by the old wardens}
+  discoveries:
+  - {range: '1', result: 'a prayer book of the faith (a text, 05)'}
+  - {range: '2', result: 'the saint''s relic (the lost, or the heart)'}
+  - {range: '3', result: 'an offering bowl (a cache, coin)'}
+  - {range: '4', result: a record of miracles (lore; resonance clue)}
+  - {range: '5', result: a hidden stair to the crypt (a branch)}
+  - {range: '6', result: holy water (a consumable)}
+  climax:
+  - {range: '1', kind: place_of_power, result: 'the shrine itself (resonance: the keeper''s axes)'}
+  - {range: '2', kind: guardian, result: the celestial warden, ref: arch.celestial}
+  - {range: '3', kind: the_lost, result: the relic everyone seeks}
+  - {range: '4', kind: guardian, result: the guardian-dead of the order, ref: arch.ancestor}
+  - {range: '5', kind: hoard, result: the treasury of offerings}
+  - {range: '6', kind: sealed_way, result: 'the sanctum, opened by a rite'}
+  danger_clock_omens:
+    stirring: [a bell note with no ringer, candles flickering toward you]
+    building: [a hum like many voices at prayer, the air growing cold and bright]
+    imminent: [every flame in the place standing straight up, 'a voice speaking your name, gently']
+  regrowth: {range: null}
+  place_facts: [consecrated]
+  lifecycle: provisional
+  basis: *id001
+- id: site.theme.haunted
+  name: Haunted
+  tags: []
+  description: 'The dead do not rest: a barrow, a plague-house, a battlefield crypt, a drowned chapel.'
+  danger: perilous
+  creature_gate_tags: [creature.undead, creature.spirit.ancestor]
+  creature_weights: {creature.undead.spectral: 3, creature.undead.mindless: 2, creature.undead.ravenous: 2, creature.undead.sovereign: 1,
+    creature.spirit.ancestor: 1}
+  loot_gate_tags: [creature.undead.spectral, creature.spirit.ancestor, terrain.ruin.tomb, deed.arcane.necromancy]
+  dangers:
+  - {range: '1', kind: dread, result: a cold hand on the neck (dread S2)}
+  - {range: '2', kind: denizen, result: the restless dead rise from their niches}
+  - {range: '3', kind: hazard, result: the place's haunting deepens, ref: haz.haunting}
+  - {range: '4', kind: hazard, result: barrow air, ref: haz.barrow_air}
+  - {range: '5', kind: patrol, result: a ghost walks its last route (pending threat)}
+  - {range: '6', kind: trap, result: 'a grave-trap: the lid drops, the floor tips'}
+  - {range: '7', kind: clock, result: 'a wail rises and falls: the danger clock +2'}
+  - {range: '8', kind: barrier, result: a door that will not open while the light burns}
+  - {range: '9', kind: gatekeeper, result: the barrow-guard, ref: creature.undead}
+  - {range: '10', kind: dread, result: you see yourself lying among the dead (dread S1)}
+  - {range: '11', kind: denizen, result: a ghoul pack that came for the dead}
+  - {range: '12', kind: hazard, result: lights burn blue and low (light −2 intervals)}
+  discoveries:
+  - {range: '1', result: 'the name of the dead (lets them be laid to rest: a thread)'}
+  - {range: '2', result: grave goods (a cache)}
+  - {range: '3', result: a death mask (a clue)}
+  - {range: '4', result: a letter never sent}
+  - {range: '5', result: bones that still hold a weapon worth taking}
+  - {range: '6', result: a funeral inscription (lore)}
+  climax:
+  - {range: '1', kind: guardian, result: the barrow-wight on its throne, ref: arch.wight}
+  - {range: '2', kind: guardian, result: a wailing ghost bound to its bones, ref: arch.ghost}
+  - {range: '3', kind: the_lost, result: the body someone needs buried}
+  - {range: '4', kind: hoard, result: 'the grave-hoard (cursed: flaw.binding possible)'}
+  - {range: '5', kind: guardian, result: a wraith that drinks warmth, ref: arch.wraith}
+  - {range: '6', kind: rite, result: 'the dead rising tonight: a countdown of 4'}
+  danger_clock_omens:
+    stirring: [your breath smoking in a room that was warm, a whisper that is almost your name]
+    building: ['footsteps matching yours, a beat behind', a lantern guttering though the air is still]
+    imminent: [every niche empty that was full, a crowd of shapes at the edge of the light]
+  regrowth: {range: '6', die: d6}
+  place_facts: [haunted]
+  lifecycle: provisional
+  basis: *id001
+- id: site.theme.infested
+  name: Infested
+  tags: []
+  description: 'Overrun by things that breed: rats, spiders, goblins, fungus, an ooze-choked cistern.'
+  danger: wild
+  creature_gate_tags: [creature.beast.vermin, creature.beast.predator, creature.horror.ooze, creature.horror.fungal, creature.folk.goblin]
+  creature_weights: {creature.beast.vermin: 4, creature.horror.fungal: 2, creature.horror.ooze: 1, creature.folk.goblin: 2,
+    creature.beast.predator: 1}
+  loot_gate_tags: [creature.beast.vermin, creature.horror.fungal, material.botanical.fungus]
+  dangers:
+  - {range: '1', kind: denizen, result: a swarm boils out of a crack}
+  - {range: '2', kind: hazard, result: a vermin nest, ref: haz.vermin_nest}
+  - {range: '3', kind: hazard, result: a spore-shelf, ref: haz.spore_cloud}
+  - {range: '4', kind: denizen, result: the brood-mother's guards}
+  - {range: '5', kind: barrier, result: webs choking the passage (Force or fire)}
+  - {range: '6', kind: trap, result: a goblin snare}
+  - {range: '7', kind: clock, result: 'the scuttling grows: the danger clock +1'}
+  - {range: '8', kind: hazard, result: foul water, ref: haz.foul_water}
+  - {range: '9', kind: patrol, result: a hunting pack (pending threat)}
+  - {range: '10', kind: gatekeeper, result: a giant of its kind at a chokepoint}
+  - {range: '11', kind: denizen, result: 'eggs, and what guards them'}
+  - {range: '12', kind: hazard, result: the floor is rotten, ref: haz.fall_10}
+  discoveries:
+  - {range: '1', result: the bones of the last delver and their pack (a cache)}
+  - {range: '2', result: 'the nest''s heart: where they come from (progress +1)'}
+  - {range: '3', result: a vein of glowing fungus (a light source)}
+  - {range: '4', result: web-silk worth harvesting}
+  - {range: '5', result: 'an old exit, overgrown (a way out)'}
+  - {range: '6', result: a chewed map (progress +1)}
+  climax:
+  - {range: '1', kind: guardian, result: the brood-mother, ref: arch.giant_vermin}
+  - {range: '2', kind: guardian, result: the goblin boss and the mob, ref: arch.goblin}
+  - {range: '3', kind: guardian, result: a great ooze, ref: arch.ooze}
+  - {range: '4', kind: the_lost, result: the one dragged down here}
+  - {range: '5', kind: hoard, result: everything they dragged in}
+  - {range: '6', kind: place_of_power, result: the fungal heart (burn it to clear the site)}
+  danger_clock_omens:
+    stirring: [a rustling in the walls, 'a smell of musk, faint']
+    building: ['the rustling everywhere, and close', droppings fresh and warm]
+    imminent: [the floor ahead moving, a sound like rain that is not rain]
+  regrowth: {range: 5-6, die: d6}
+  place_facts: []
+  lifecycle: provisional
+  basis: *id001
+- id: site.theme.ravaged
+  name: Ravaged
+  tags: []
+  description: 'Broken by war, fire or disaster: a sacked town, a burned abbey, a flooded mine, a fallen tower.'
+  danger: wild
+  creature_gate_tags: [creature.beast, creature.folk, creature.undead.ravenous]
+  creature_weights: {creature.beast.predator: 2, creature.beast.vermin: 2, creature.folk.human: 2, creature.folk.goblin: 1,
+    creature.undead.ravenous: 1}
+  loot_gate_tags: [creature.folk, terrain.ruin, item.goods.treasure]
+  dangers:
+  - {range: '1', kind: hazard, result: a wall that leans, ref: haz.rockfall}
+  - {range: '2', kind: hazard, result: a floor burned through to the cellar, ref: haz.fall_20}
+  - {range: '3', kind: denizen, result: scavengers on a carcass}
+  - {range: '4', kind: denizen, result: looters with a cart (a mixed encounter)}
+  - {range: '5', kind: barrier, result: the way choked with rubble (a dig clock of 4)}
+  - {range: '6', kind: hazard, result: smouldering timbers, ref: haz.smoke}
+  - {range: '7', kind: clock, result: 'something collapses deeper in: the danger clock +1'}
+  - {range: '8', kind: dread, result: the dead where they fell (dread S1)}
+  - {range: '9', kind: patrol, result: ghouls drawn by the dead (pending threat)}
+  - {range: '10', kind: hazard, result: water flooding the lower rooms, ref: haz.cold_water}
+  - {range: '11', kind: gatekeeper, result: a beast that has made the ruin its den}
+  - {range: '12', kind: trap, result: 'a defender''s last trap, still set'}
+  discoveries:
+  - {range: '1', result: 'a survivor in hiding (the lost, or an ally)'}
+  - {range: '2', result: what the attackers missed (a cache)}
+  - {range: '3', result: 'a broken banner (whose? a thread)'}
+  - {range: '4', result: a diary of the last days}
+  - {range: '5', result: 'the well, clean (a water source)'}
+  - {range: '6', result: a mason's plan of the building (progress +2)}
+  climax:
+  - {range: '1', kind: hoard, result: the strongroom the attackers never found}
+  - {range: '2', kind: guardian, result: the beast that took the ruin, ref: arch.monstrous_beast}
+  - {range: '3', kind: the_lost, result: 'the survivor, or the remains'}
+  - {range: '4', kind: guardian, result: a looter-captain and their crew, ref: arch.brigand}
+  - {range: '5', kind: a_way_through, result: 'the far gate: a route beyond'}
+  - {range: '6', kind: sealed_way, result: the vault under the collapse (a dig clock of 6)}
+  danger_clock_omens:
+    stirring: [stone ticking as it settles, crows lifting from the roofs]
+    building: [a slow slide of rubble somewhere close, the smell of fresh smoke]
+    imminent: [the whole ceiling groaning, a cloud of dust rolling down the hall toward you]
+  regrowth: {range: '6', die: d6}
+  place_facts: []
+  lifecycle: provisional
+  basis: *id001
+- id: site.theme.wild
+  name: Wild
+  tags: []
+  description: 'Taken back by the living world: a fey ring, a beast''s lair, a strangling grove, a spirit''s pool.'
+  danger: wild
+  creature_gate_tags: [creature.beast, creature.spirit.fey, creature.spirit.place, creature.horror.plant]
+  creature_weights: {creature.beast.predator: 3, creature.beast.reptile: 1, creature.spirit.fey: 2, creature.spirit.place: 1,
+    creature.horror.plant: 2}
+  loot_gate_tags: [creature.spirit.fey, deed.primal, creature.beast, material.wood.witchwood]
+  dangers:
+  - {range: '1', kind: denizen, result: the lair's beast is home}
+  - {range: '2', kind: hazard, result: a fey crossing, ref: haz.fey_crossing}
+  - {range: '3', kind: barrier, result: 'thorns as thick as a wrist (Force, or fire)'}
+  - {range: '4', kind: hazard, result: a mire, ref: haz.mire}
+  - {range: '5', kind: denizen, result: a fey creature that wants a game or a gift}
+  - {range: '6', kind: trap, result: a hunter's old snare}
+  - {range: '7', kind: clock, result: 'the wood itself seems to close behind: the danger clock +1'}
+  - {range: '8', kind: gatekeeper, result: the guardian of the grove, ref: creature.spirit.place}
+  - {range: '9', kind: dread, result: eyes in every shadow (dread S1)}
+  - {range: '10', kind: denizen, result: a strangling vine that moves}
+  - {range: '11', kind: patrol, result: a hunting cat on your trail (pending threat)}
+  - {range: '12', kind: hazard, result: a hidden drop under the leaves, ref: haz.fall_10}
+  discoveries:
+  - {range: '1', result: a spring of clear water (water source; resonance primal)}
+  - {range: '2', result: a tree marked with old signs (a way-finding lever)}
+  - {range: '3', result: 'the beast''s leavings: bones of what it ate'}
+  - {range: '4', result: herbs worth gathering (forage Easy here)}
+  - {range: '5', result: a fey token (a thread)}
+  - {range: '6', result: 'a sleeping place, sheltered (a secured area)'}
+  climax:
+  - {range: '1', kind: guardian, result: the great beast of the place, ref: arch.monstrous_beast}
+  - {range: '2', kind: guardian, result: the fey lord of the ring, ref: arch.fey_noble}
+  - {range: '3', kind: place_of_power, result: the spirit's pool (resonance primal)}
+  - {range: '4', kind: guardian, result: the strangling heart-tree, ref: arch.monstrous_plant}
+  - {range: '5', kind: the_lost, result: the child the wood took}
+  - {range: '6', kind: a_way_through, result: the hidden path through to the far side}
+  danger_clock_omens:
+    stirring: [birdsong stopping all at once, branches moving without wind]
+    building: ['a musk on the air, strong', the path behind you no longer where it was]
+    imminent: [every living thing silent, something large breathing just beyond the light]
+  regrowth: {range: '6', die: d6}
+  place_facts: []
+  lifecycle: provisional
+  basis: *id001
+site_domains:
+- id: site.domain.barrow
+  name: Barrow
+  tags: [terrain.ruin.tomb.barrow]
+  terrain_tags: [terrain.ruin.tomb.barrow]
+  light: dark
+  explore_tier: moderate
+  typical_size: small
+  rest_site: rough
+  openness: closed
+  features:
+  - {range: '1', result: a low passage of dry-stone walls, feature_kind: chokepoint}
+  - {range: '2', result: a chamber of stone shelves with bones, feature_kind: cover}
+  - {range: '3', result: a fallen capstone half-blocking the way, feature_kind: cover}
+  - {range: '4', result: 'a burial pit, 10 ft deep', feature_kind: height, drop_ft: 10}
+  - {range: '5', result: a corbelled chamber with a smoke-hole far above}
+  - {range: '6', result: a niche with a slumped skeleton and grave goods, feature_kind: loose_object}
+  - {range: '7', result: roots hanging through the ceiling, feature_kind: veil}
+  - {range: '8', result: a standing stone carved with spirals}
+  - {range: '9', result: 'a forecourt of fitted slabs, one loose', feature_kind: loose_object}
+  - {range: '10', result: a passage half-filled with fallen earth, feature_kind: difficult_ground}
+  - {range: '11', result: a sealed stone door with a carved face, feature_kind: barrier}
+  - {range: '12', result: a ring of cairns inside the mound}
+  shift:
+  - {range: '1', result: earth sifts down; a passage behind narrows}
+  - {range: '2', result: 'a draught snuffs unshielded flames (light: unshuttered sources −1 interval)'}
+  - {range: '3', result: a stone slab slides shut behind (a barrier on the way out)}
+  - {range: '4', result: 'water seeps in: the floor becomes difficult ground'}
+  - {range: '5', result: a sound carries from deeper in}
+  - {range: '6', result: the air turns close (haz.bad_air begins in this area)}
+  discoveries:
+  - {range: '1', result: a carved king-list (lore)}
+  - {range: '2', result: a bronze torc (a cache)}
+  - {range: '3', result: charcoal from an old fire (others came this way)}
+  - {range: '4', result: a grave-offering bowl with coins}
+  - {range: '5', result: 'a runic warning (lore: the heart''s nature)'}
+  - {range: '6', result: a shaft of daylight (a way out)}
+  hazards:
+  - {id: haz.barrow_air, weight: 3}
+  - {id: haz.bad_air, weight: 2}
+  - {id: haz.cave_in, weight: 1}
+  - {id: haz.fall_10, weight: 2}
+  traps:
+  - {id: trap.falling_slab, weight: 2}
+  - {id: trap.pit, weight: 2}
+  - {id: trap.needle_lock, weight: 1}
+  - {id: trap.curse_glyph, weight: 1}
+  lifecycle: provisional
+  basis: *id001
+- id: site.domain.crypt
+  name: Crypt or catacomb
+  tags: [terrain.ruin.tomb.crypt]
+  terrain_tags: [terrain.ruin.tomb.crypt, terrain.ruin.tomb.catacomb]
+  light: dark
+  explore_tier: moderate
+  typical_size: medium
+  rest_site: rough
+  openness: closed
+  features:
+  - {range: '1', result: a long gallery of niches stacked to the vault}
+  - {range: '2', result: an ossuary of skulls set in patterns, feature_kind: cover}
+  - {range: '3', result: a sarcophagus on a dais, feature_kind: cover}
+  - {range: '4', result: a narrow stair spiralling down, feature_kind: chokepoint}
+  - {range: '5', result: 'a flooded lower vault, knee-deep', feature_kind: difficult_ground}
+  - {range: '6', result: a chapel with a broken altar}
+  - {range: '7', result: iron gates rusted half-open, feature_kind: barrier}
+  - {range: '8', result: 'a well shaft, 40 ft', feature_kind: height, drop_ft: 40}
+  - {range: '9', result: a collapsed section with a way through the bones, feature_kind: difficult_ground}
+  - {range: '10', result: a mourners' hall with stone benches, feature_kind: cover}
+  - {range: '11', result: a hanging censer on a chain, feature_kind: loose_object}
+  - {range: '12', result: a crossroads of four galleries}
+  shift:
+  - {range: '1', result: 'bones shift and fall from a niche (noise: the danger clock +1)'}
+  - {range: '2', result: a gate swings shut behind (a barrier)}
+  - {range: '3', result: water rises a foot in the lower vaults}
+  - {range: '4', result: a draught snuffs unshielded flames}
+  - {range: '5', result: a slab cracks underfoot (haz.fall_10 to the vault below)}
+  - {range: '6', result: chanting heard far off (or imagined)}
+  discoveries:
+  - {range: '1', result: a family's names and dates (lore)}
+  - {range: '2', result: a sealed burial with grave goods (a cache)}
+  - {range: '3', result: a map of the catacomb on a mason's slate (progress +2)}
+  - {range: '4', result: fresh footprints in the dust}
+  - {range: '5', result: a hidden door behind a sarcophagus (a branch)}
+  - {range: '6', result: a lamp with oil (a light source)}
+  hazards:
+  - {id: haz.barrow_air, weight: 2}
+  - {id: haz.bad_air, weight: 2}
+  - {id: haz.foul_water, weight: 1}
+  - {id: haz.fall_40, weight: 1}
+  - {id: haz.cave_in, weight: 1}
+  traps:
+  - {id: trap.pit, weight: 2}
+  - {id: trap.falling_slab, weight: 2}
+  - {id: trap.dart_wall, weight: 1}
+  - {id: trap.curse_glyph, weight: 1}
+  - {id: trap.collapsing_stair, weight: 1}
+  lifecycle: provisional
+  basis: *id001
+- id: site.domain.cavern
+  name: Cavern
+  tags: [terrain.underground.cave]
+  terrain_tags: [terrain.underground.cave]
+  light: dark
+  explore_tier: moderate
+  typical_size: medium
+  rest_site: rough
+  openness: closed
+  features:
+  - {range: '1', result: a vaulted chamber with dripping stone teeth}
+  - {range: '2', result: a squeeze between two walls of rock, feature_kind: chokepoint}
+  - {range: '3', result: an underground stream crossing the floor, feature_kind: difficult_ground}
+  - {range: '4', result: a ledge over a 40-ft drop, feature_kind: height, drop_ft: 40}
+  - {range: '5', result: a boulder choke, feature_kind: cover}
+  - {range: '6', result: a pool of black still water, feature_kind: hazard}
+  - {range: '7', result: a chimney climbing up into darkness, feature_kind: height, drop_ft: 20}
+  - {range: '8', result: a sand floor with tracks}
+  - {range: '9', result: a hall of crystal that throws back the light}
+  - {range: '10', result: a slope of loose scree, feature_kind: hazard}
+  - {range: '11', result: bats in thousands on the ceiling, feature_kind: veil}
+  - {range: '12', result: 'a natural bridge over a chasm, 80 ft', feature_kind: height, drop_ft: 80}
+  shift:
+  - {range: '1', result: 'the stream rises: the low passage behind floods'}
+  - {range: '2', result: a rock falls somewhere (haz.rockfall in this area if anyone lingers)}
+  - {range: '3', result: bats stream past (veil; the danger clock +1)}
+  - {range: '4', result: 'a draught from ahead: an exit near (progress +1)'}
+  - {range: '5', result: the air turns bad}
+  - {range: '6', result: a deep boom far below}
+  discoveries:
+  - {range: '1', result: 'blind white fish in a pool (food: 1 supply)'}
+  - {range: '2', result: old torches in a niche (a light source)}
+  - {range: '3', result: cave paintings (lore)}
+  - {range: '4', result: a crystal vein worth taking (material)}
+  - {range: '5', result: a draught from a crack (a way out)}
+  - {range: '6', result: a skeleton with a rope and pick}
+  hazards:
+  - {id: haz.rockfall, weight: 2}
+  - {id: haz.bad_air, weight: 1}
+  - {id: haz.cold_water, weight: 1}
+  - {id: haz.scree, weight: 2}
+  - {id: haz.fall_20, weight: 1}
+  - {id: haz.spore_cloud, weight: 1}
+  traps:
+  - {id: trap.pit, weight: 1}
+  - {id: trap.snare, weight: 1}
+  - {id: trap.deadfall, weight: 1}
+  lifecycle: provisional
+  basis: *id001
+- id: site.domain.flooded_cave
+  name: Flooded cave
+  tags: [terrain.underground.cave.flooded]
+  terrain_tags: [terrain.underground.cave.flooded]
+  light: dark
+  explore_tier: hard
+  typical_size: medium
+  rest_site: rough
+  openness: closed
+  features:
+  - {range: '1', result: 'a sump: the way on is under water for 20 ft', feature_kind: hazard}
+  - {range: '2', result: a chamber half-filled with black water, feature_kind: difficult_ground}
+  - {range: '3', result: a ledge just above the waterline, feature_kind: height, drop_ft: 10}
+  - {range: '4', result: a waterfall pouring from a crack, feature_kind: veil}
+  - {range: '5', result: a dry gallery high above the water, feature_kind: height, drop_ft: 20}
+  - {range: '6', result: an eddy that turns in circles, feature_kind: hazard}
+  - {range: '7', result: a pool with something pale moving in it}
+  - {range: '8', result: stalactites reaching to the water, feature_kind: cover}
+  - {range: '9', result: a mud bank, feature_kind: difficult_ground}
+  - {range: '10', result: an air pocket in a drowned passage}
+  - {range: '11', result: a rope someone left across the water}
+  - {range: '12', result: a channel where the current runs fast, feature_kind: hazard}
+  shift:
+  - {range: '1', result: 'the water rises a foot (every low area: swim)'}
+  - {range: '2', result: the current strengthens}
+  - {range: '3', result: a light is soaked (unshielded torches out)}
+  - {range: '4', result: an air pocket fouls (haz.bad_air)}
+  - {range: '5', result: mud slides into the passage behind}
+  - {range: '6', result: 'the water falls, opening a dry way (progress +1)'}
+  discoveries:
+  - {range: '1', result: a drowned delver's pack (a cache)}
+  - {range: '2', result: a sealed air pocket with old supplies}
+  - {range: '3', result: a carving above the high-water line (lore)}
+  - {range: '4', result: a way up to a dry gallery (a branch)}
+  - {range: '5', result: fish (1 supply)}
+  - {range: '6', result: a float or a coracle (a vessel for the water)}
+  hazards:
+  - {id: haz.cold_water, weight: 3}
+  - {id: haz.swift_water, weight: 2}
+  - {id: haz.drowning, weight: 1}
+  - {id: haz.bad_air, weight: 1}
+  traps:
+  - {id: trap.snare, weight: 1}
+  lifecycle: provisional
+  basis: *id001
+- id: site.domain.mine
+  name: Mine
+  tags: [terrain.underground.mine]
+  terrain_tags: [terrain.underground.mine]
+  light: dark
+  explore_tier: moderate
+  typical_size: medium
+  rest_site: rough
+  openness: closed
+  features:
+  - {range: '1', result: a gallery shored with timber, feature_kind: cover}
+  - {range: '2', result: 'a vertical shaft with a rotten ladder, 40 ft', feature_kind: height, drop_ft: 40}
+  - {range: '3', result: ore carts on rails, feature_kind: loose_object}
+  - {range: '4', result: a flooded sump at a gallery's end, feature_kind: hazard}
+  - {range: '5', result: a winding-wheel over a shaft, feature_kind: loose_object}
+  - {range: '6', result: a cave-in half-blocking the drift, feature_kind: difficult_ground}
+  - {range: '7', result: a miners' rest with a cold hearth}
+  - {range: '8', result: a seam of glittering ore}
+  - {range: '9', result: a narrow crawl to a richer seam, feature_kind: chokepoint}
+  - {range: '10', result: a tool store, feature_kind: cover}
+  - {range: '11', result: 'a stope: a great hollow mined out, 20 ft deep', feature_kind: height, drop_ft: 20}
+  - {range: '12', result: props bowed and cracking, feature_kind: hazard}
+  shift:
+  - {range: '1', result: timbers groan (haz.cave_in omen in this area)}
+  - {range: '2', result: a cart rolls by itself down the rails (a loose object in motion)}
+  - {range: '3', result: firedamp gathers (haz.firedamp here)}
+  - {range: '4', result: 'water seeps: the low galleries flood'}
+  - {range: '5', result: 'a distant pick, tapping'}
+  - {range: '6', result: dust from a fall closes the way back (a dig clock of 4)}
+  discoveries:
+  - {range: '1', result: a miners' map (progress +2)}
+  - {range: '2', result: a lantern and oil (a light source)}
+  - {range: '3', result: a strongbox of wages (a cache)}
+  - {range: '4', result: 'ore worth hauling (goods, 08)'}
+  - {range: '5', result: a canary's empty cage (bad air near)}
+  - {range: '6', result: the last shift's tally board (lore)}
+  hazards:
+  - {id: haz.cave_in, weight: 2}
+  - {id: haz.firedamp, weight: 1}
+  - {id: haz.bad_air, weight: 2}
+  - {id: haz.fall_40, weight: 1}
+  - {id: haz.cold_water, weight: 1}
+  traps:
+  - {id: trap.collapsing_stair, weight: 1}
+  - {id: trap.deadfall, weight: 1}
+  - {id: trap.pit, weight: 1}
+  lifecycle: provisional
+  basis: *id001
+- id: site.domain.warren
+  name: Warren
+  tags: [terrain.ruin.dungeon.warren]
+  terrain_tags: [terrain.ruin.dungeon.warren, terrain.underground.tunnel]
+  light: dark
+  explore_tier: hard
+  typical_size: large
+  rest_site: rough
+  openness: closed
+  features:
+  - {range: '1', result: a low tunnel that forks three ways, feature_kind: chokepoint}
+  - {range: '2', result: a midden heap, feature_kind: difficult_ground}
+  - {range: '3', result: a den with bedding, feature_kind: cover}
+  - {range: '4', result: a murder-hole above the tunnel, feature_kind: height, drop_ft: 10}
+  - {range: '5', result: a crawl too low to stand, feature_kind: chokepoint}
+  - {range: '6', result: a guardroom with a crude door, feature_kind: barrier}
+  - {range: '7', result: a pit with stakes, feature_kind: hazard}
+  - {range: '8', result: a fungus garden}
+  - {range: '9', result: a chieftain's hall with a throne of bones, feature_kind: cover}
+  - {range: '10', result: a larder of hanging meat, feature_kind: veil}
+  - {range: '11', result: a slave pen, feature_kind: barrier}
+  - {range: '12', result: a dead end that is not (a hidden door)}
+  shift:
+  - {range: '1', result: a gong sounds somewhere (the danger clock +1)}
+  - {range: '2', result: smoke drifts in (haz.smoke in this area)}
+  - {range: '3', result: a door slams behind and bars (a barrier)}
+  - {range: '4', result: tunnel collapses behind (a dig clock of 4)}
+  - {range: '5', result: 'a cry of alarm, then silence'}
+  - {range: '6', result: young ones scatter (they will tell)}
+  discoveries:
+  - {range: '1', result: a chieftain's map scratched on hide (progress +2)}
+  - {range: '2', result: loot from a caravan (a cache)}
+  - {range: '3', result: a prisoner (the lost or an ally)}
+  - {range: '4', result: a bolt-hole to the surface (a way out)}
+  - {range: '5', result: a shrine to an ugly god (lore)}
+  - {range: '6', result: stolen weapons (gear)}
+  hazards:
+  - {id: haz.vermin_nest, weight: 2}
+  - {id: haz.smoke, weight: 1}
+  - {id: haz.foul_water, weight: 1}
+  - {id: haz.fall_10, weight: 1}
+  traps:
+  - {id: trap.snare, weight: 2}
+  - {id: trap.spiked_pit, weight: 2}
+  - {id: trap.alarm_line, weight: 2}
+  - {id: trap.deadfall, weight: 1}
+  lifecycle: provisional
+  basis: *id001
+- id: site.domain.underkeep
+  name: Underkeep
+  tags: [terrain.ruin.dungeon]
+  terrain_tags: [terrain.ruin.dungeon, terrain.ruin.dungeon.vault]
+  light: dark
+  explore_tier: moderate
+  typical_size: large
+  rest_site: rough
+  openness: closed
+  features:
+  - {range: '1', result: a pillared hall, feature_kind: cover}
+  - {range: '2', result: a long corridor of cells, feature_kind: chokepoint}
+  - {range: '3', result: a guardroom with a table and benches, feature_kind: cover}
+  - {range: '4', result: 'a stair down, 20 ft', feature_kind: height, drop_ft: 20}
+  - {range: '5', result: a well chamber, feature_kind: hazard}
+  - {range: '6', result: a torture room with chains, feature_kind: loose_object}
+  - {range: '7', result: a vault door of iron, feature_kind: barrier}
+  - {range: '8', result: 'a gallery above a hall, 20 ft', feature_kind: height, drop_ft: 20}
+  - {range: '9', result: a flooded cistern, feature_kind: difficult_ground}
+  - {range: '10', result: a collapsed corridor, feature_kind: difficult_ground}
+  - {range: '11', result: a chapel to a forgotten god}
+  - {range: '12', result: a library of rotten books}
+  shift:
+  - {range: '1', result: a door swings shut and its bar drops (a barrier)}
+  - {range: '2', result: 'water drips faster: the cistern rises'}
+  - {range: '3', result: a draught snuffs unshielded flames}
+  - {range: '4', result: dust from the ceiling (haz.cave_in omen)}
+  - {range: '5', result: a scream far off}
+  - {range: '6', result: a portcullis rattles down somewhere (the way out changes)}
+  discoveries:
+  - {range: '1', result: a prison register (lore)}
+  - {range: '2', result: a key on a dead guard}
+  - {range: '3', result: the gaoler's chest (a cache)}
+  - {range: '4', result: a plan of the levels (progress +2)}
+  - {range: '5', result: a secret passage behind a shelf (a branch)}
+  - {range: '6', result: a lamp and oil (a light source)}
+  hazards:
+  - {id: haz.bad_air, weight: 1}
+  - {id: haz.foul_water, weight: 1}
+  - {id: haz.cave_in, weight: 1}
+  - {id: haz.fall_20, weight: 1}
+  - {id: haz.vermin_nest, weight: 1}
+  traps:
+  - {id: trap.pit, weight: 2}
+  - {id: trap.dart_wall, weight: 2}
+  - {id: trap.falling_portcullis, weight: 1}
+  - {id: trap.needle_lock, weight: 1}
+  - {id: trap.scything_blade, weight: 1}
+  - {id: trap.flooding_room, weight: 1}
+  lifecycle: provisional
+  basis: *id001
+- id: site.domain.temple
+  name: Temple
+  tags: [terrain.ruin.temple]
+  terrain_tags: [terrain.ruin.temple]
+  light: dim
+  explore_tier: easy
+  typical_size: medium
+  rest_site: camp
+  openness: broken
+  features:
+  - {range: '1', result: a nave of broken pews, feature_kind: cover}
+  - {range: '2', result: an altar under a fallen roof, feature_kind: cover}
+  - {range: '3', result: 'a bell tower, 40 ft', feature_kind: height, drop_ft: 40}
+  - {range: '4', result: a cloister around an overgrown garth, feature_kind: veil}
+  - {range: '5', result: a sacristy with a locked press, feature_kind: barrier}
+  - {range: '6', result: a crypt stair, feature_kind: chokepoint}
+  - {range: '7', result: 'statues of saints, one fallen', feature_kind: loose_object}
+  - {range: '8', result: a scriptorium with ink-stained desks}
+  - {range: '9', result: a font of still water}
+  - {range: '10', result: stained glass scattered on the floor, feature_kind: difficult_ground}
+  - {range: '11', result: 'a choir loft, 10 ft', feature_kind: height, drop_ft: 10}
+  - {range: '12', result: a chapter house with stone seats}
+  shift:
+  - {range: '1', result: 'the bell moves in the wind (noise: the danger clock +1)'}
+  - {range: '2', result: a statue tips}
+  - {range: '3', result: rain pours through the roof (fire Moderate here)}
+  - {range: '4', result: a door to the crypt opens on its own}
+  - {range: '5', result: doves burst from the rafters}
+  - {range: '6', result: a stone falls from the arch (haz.rockfall)}
+  discoveries:
+  - {range: '1', result: 'a psalter (a text, 05)'}
+  - {range: '2', result: 'the poor box (a cache, coin)'}
+  - {range: '3', result: a saint's bones in a reliquary}
+  - {range: '4', result: records of the brothers (lore)}
+  - {range: '5', result: holy water (a consumable)}
+  - {range: '6', result: a hidden stair to the treasury (a branch)}
+  hazards:
+  - {id: haz.rockfall, weight: 2}
+  - {id: haz.fall_40, weight: 1}
+  - {id: haz.desecrated_ground, weight: 1}
+  traps:
+  - {id: trap.falling_slab, weight: 1}
+  - {id: trap.curse_glyph, weight: 1}
+  - {id: trap.alarm_line, weight: 1}
+  lifecycle: provisional
+  basis: *id001
+- id: site.domain.stronghold
+  name: Stronghold
+  tags: [terrain.ruin.fortress]
+  terrain_tags: [terrain.ruin.fortress]
+  light: dim
+  explore_tier: easy
+  typical_size: large
+  rest_site: camp
+  openness: broken
+  features:
+  - {range: '1', result: a gatehouse with a jammed portcullis, feature_kind: barrier}
+  - {range: '2', result: a courtyard with a well, feature_kind: hazard}
+  - {range: '3', result: 'a curtain wall walk, 30 ft', feature_kind: height, drop_ft: 30}
+  - {range: '4', result: a great hall with a broken table, feature_kind: cover}
+  - {range: '5', result: a kitchen with a hearth big enough to stand in, feature_kind: cover}
+  - {range: '6', result: a barracks of rotten bunks, feature_kind: cover}
+  - {range: '7', result: 'an armory, looted'}
+  - {range: '8', result: a tower stair, feature_kind: chokepoint}
+  - {range: '9', result: stables, feature_kind: veil}
+  - {range: '10', result: a chapel}
+  - {range: '11', result: the lord's solar, feature_kind: barrier}
+  - {range: '12', result: 'a postern gate to a ditch, 20 ft', feature_kind: height, drop_ft: 20}
+  shift:
+  - {range: '1', result: a stone falls from the battlements (haz.rockfall)}
+  - {range: '2', result: 'crows rise and wheel (noise carries: the danger clock +1)'}
+  - {range: '3', result: a door bangs in the wind}
+  - {range: '4', result: smoke from a fire somewhere}
+  - {range: '5', result: a horn far off}
+  - {range: '6', result: the well's rope breaks}
+  discoveries:
+  - {range: '1', result: the steward's accounts (lore; a thread)}
+  - {range: '2', result: a hidden strongroom behind the hearth (a branch)}
+  - {range: '3', result: weapons in a forgotten rack (gear)}
+  - {range: '4', result: the lord's seal (a key to doors and to people)}
+  - {range: '5', result: a plan of the castle (progress +2)}
+  - {range: '6', result: a postern key}
+  hazards:
+  - {id: haz.rockfall, weight: 2}
+  - {id: haz.fall_20, weight: 1}
+  - {id: haz.fall_40, weight: 1}
+  - {id: haz.fire, weight: 1}
+  traps:
+  - {id: trap.murder_hole, weight: 2}
+  - {id: trap.falling_portcullis, weight: 1}
+  - {id: trap.alarm_line, weight: 2}
+  - {id: trap.spiked_pit, weight: 1}
+  lifecycle: provisional
+  basis: *id001
+- id: site.domain.tower
+  name: Tower
+  tags: [terrain.ruin.fortress]
+  terrain_tags: [terrain.ruin.fortress]
+  light: dim
+  explore_tier: moderate
+  typical_size: small
+  rest_site: camp
+  openness: closed
+  features:
+  - {range: '1', result: 'a spiral stair, broken in places', feature_kind: chokepoint}
+  - {range: '2', result: a study crammed with books, feature_kind: cover}
+  - {range: '3', result: 'a floor with a hole to the room below, 10 ft', feature_kind: height, drop_ft: 10}
+  - {range: '4', result: a laboratory of glass and stains, feature_kind: loose_object}
+  - {range: '5', result: a balcony over a 60-ft drop, feature_kind: height, drop_ft: 60}
+  - {range: '6', result: a bedchamber with a canopied bed, feature_kind: cover}
+  - {range: '7', result: a summoning circle chalked on the floor}
+  - {range: '8', result: a storeroom of crates, feature_kind: cover}
+  - {range: '9', result: a roof with a telescope, feature_kind: height, drop_ft: 80}
+  - {range: '10', result: a cellar with barrels, feature_kind: cover}
+  - {range: '11', result: a locked door with no handle, feature_kind: barrier}
+  - {range: '12', result: a room of mirrors, feature_kind: veil}
+  shift:
+  - {range: '1', result: the stair groans and a step falls}
+  - {range: '2', result: a glass shatters by itself}
+  - {range: '3', result: a draught snuffs unshielded flames}
+  - {range: '4', result: the circle flares for a moment (the danger clock +1)}
+  - {range: '5', result: books fall from a shelf}
+  - {range: '6', result: the wind howls through the top}
+  discoveries:
+  - {range: '1', result: 'a spellbook or its pages (a text, 05)'}
+  - {range: '2', result: 'reagents (components, 08)'}
+  - {range: '3', result: a journal (lore; the heart's nature)}
+  - {range: '4', result: a wand-blank or implement (an item)}
+  - {range: '5', result: a key to the locked door}
+  - {range: '6', result: a scrying glass (a clue)}
+  hazards:
+  - {id: haz.fall_10, weight: 1}
+  - {id: haz.fall_40, weight: 1}
+  - {id: haz.wild_magic, weight: 1}
+  - {id: haz.fire, weight: 1}
+  traps:
+  - {id: trap.curse_glyph, weight: 2}
+  - {id: trap.needle_lock, weight: 1}
+  - {id: trap.collapsing_stair, weight: 1}
+  - {id: trap.flame_jet, weight: 1}
+  lifecycle: provisional
+  basis: *id001
+- id: site.domain.sewer
+  name: Sewer
+  tags: [terrain.underground.sewer]
+  terrain_tags: [terrain.underground.sewer]
+  light: dark
+  explore_tier: moderate
+  typical_size: medium
+  rest_site: rough
+  openness: closed
+  features:
+  - {range: '1', result: a brick channel with a walkway, feature_kind: chokepoint}
+  - {range: '2', result: a junction of four tunnels}
+  - {range: '3', result: 'a cistern, 20 ft to the water', feature_kind: height, drop_ft: 20}
+  - {range: '4', result: a grate to the street above}
+  - {range: '5', result: a smugglers' cache room, feature_kind: cover}
+  - {range: '6', result: an overflow weir, feature_kind: hazard}
+  - {range: '7', result: a collapsed section to older tunnels, feature_kind: difficult_ground}
+  - {range: '8', result: a vaulted chamber where the gangs meet, feature_kind: cover}
+  - {range: '9', result: a ladder up a shaft, feature_kind: height, drop_ft: 20}
+  - {range: '10', result: a rubbish choke, feature_kind: difficult_ground}
+  - {range: '11', result: an iron door with a bar, feature_kind: barrier}
+  - {range: '12', result: a dead body in the water, feature_kind: loose_object}
+  shift:
+  - {range: '1', result: the water rises (the walkways flood)}
+  - {range: '2', result: voices come down a grate from the street}
+  - {range: '3', result: rats in a river (haz.vermin_nest)}
+  - {range: '4', result: a grate slams}
+  - {range: '5', result: firedamp gathers}
+  - {range: '6', result: 'a sluice opens far off: a surge comes'}
+  discoveries:
+  - {range: '1', result: 'a smuggler''s ledger (a thread, 11)'}
+  - {range: '2', result: a key to a merchant's cellar (a branch)}
+  - {range: '3', result: 'a lost purse (a cache, coin)'}
+  - {range: '4', result: a map of the old tunnels (progress +2)}
+  - {range: '5', result: chalk marks of the thieves' guild (lore)}
+  - {range: '6', result: a body with a message}
+  hazards:
+  - {id: haz.foul_water, weight: 3}
+  - {id: haz.vermin_nest, weight: 2}
+  - {id: haz.firedamp, weight: 1}
+  - {id: haz.swift_water, weight: 1}
+  - {id: haz.bad_air, weight: 1}
+  traps:
+  - {id: trap.alarm_line, weight: 2}
+  - {id: trap.snare, weight: 1}
+  - {id: trap.flooding_room, weight: 1}
+  lifecycle: provisional
+  basis: *id001
+- id: site.domain.tanglewood
+  name: Tanglewood
+  tags: [terrain.forest.deepwood.tangle]
+  terrain_tags: [terrain.forest.deepwood.tangle]
+  light: dim
+  explore_tier: hard
+  typical_size: medium
+  rest_site: rough
+  openness: closed
+  features:
+  - {range: '1', result: a wall of thorn, feature_kind: barrier}
+  - {range: '2', result: a hollow under great roots, feature_kind: cover}
+  - {range: '3', result: a fallen giant tree to climb over, feature_kind: height, drop_ft: 10}
+  - {range: '4', result: a stream in a gully, feature_kind: difficult_ground}
+  - {range: '5', result: a clearing ringed with mushrooms}
+  - {range: '6', result: a bog under moss, feature_kind: hazard}
+  - {range: '7', result: hanging creepers, feature_kind: veil}
+  - {range: '8', result: a game trail}
+  - {range: '9', result: an ancient oak with a hollow heart, feature_kind: cover}
+  - {range: '10', result: 'a ravine, 40 ft', feature_kind: height, drop_ft: 40}
+  - {range: '11', result: 'a dead grove, grey and silent'}
+  - {range: '12', result: a hunter's hide in a tree, feature_kind: height, drop_ft: 20}
+  shift:
+  - {range: '1', result: the trail behind closes over}
+  - {range: '2', result: a branch falls}
+  - {range: '3', result: mist rises from the ground (veil)}
+  - {range: '4', result: every bird stops singing (the danger clock +1)}
+  - {range: '5', result: rain begins under the canopy}
+  - {range: '6', result: the light goes green and dim}
+  discoveries:
+  - {range: '1', result: a hunter's blaze on a tree (a way-finding lever)}
+  - {range: '2', result: herbs (forage Easy here)}
+  - {range: '3', result: an old camp with a cache}
+  - {range: '4', result: a fey token hung in a branch}
+  - {range: '5', result: a skull with something in its mouth}
+  - {range: '6', result: a spring (water source)}
+  hazards:
+  - {id: haz.mire, weight: 2}
+  - {id: haz.fall_10, weight: 1}
+  - {id: haz.fey_crossing, weight: 1}
+  - {id: haz.spore_cloud, weight: 1}
+  traps:
+  - {id: trap.snare, weight: 2}
+  - {id: trap.deadfall, weight: 1}
+  - {id: trap.spiked_pit, weight: 1}
+  lifecycle: provisional
+  basis: *id001
+- id: site.domain.fen
+  name: Fen
+  tags: [terrain.wetland.fen]
+  terrain_tags: [terrain.wetland.fen, terrain.wetland.marsh]
+  light: bright
+  explore_tier: hard
+  typical_size: medium
+  rest_site: rough
+  openness: open
+  features:
+  - {range: '1', result: a causeway of sunken logs, feature_kind: chokepoint}
+  - {range: '2', result: a reed bed taller than a man, feature_kind: veil}
+  - {range: '3', result: an island with a dead tree}
+  - {range: '4', result: a pool of black water, feature_kind: hazard}
+  - {range: '5', result: 'a stilt-hut, abandoned', feature_kind: cover}
+  - {range: '6', result: a quaking bog, feature_kind: hazard}
+  - {range: '7', result: a drowned chapel's tower, feature_kind: height, drop_ft: 30}
+  - {range: '8', result: a channel to wade, feature_kind: difficult_ground}
+  - {range: '9', result: a heron colony}
+  - {range: '10', result: a sunken boat, feature_kind: loose_object}
+  - {range: '11', result: mist banks, feature_kind: veil}
+  - {range: '12', result: a standing stone half in water}
+  shift:
+  - {range: '1', result: the mist thickens (fog for the scene)}
+  - {range: '2', result: water rises a hand}
+  - {range: '3', result: midges in clouds (haz.marsh_miasma)}
+  - {range: '4', result: a bittern booms (the danger clock +1)}
+  - {range: '5', result: a will-o'-the-wisp lights ahead}
+  - {range: '6', result: the causeway behind sinks}
+  discoveries:
+  - {range: '1', result: a punt and pole (a vessel)}
+  - {range: '2', result: eel traps (2 supply)}
+  - {range: '3', result: a bog body with a torc (a cache)}
+  - {range: '4', result: a waymark post (a way-finding lever)}
+  - {range: '5', result: a fisher's hut with supplies}
+  - {range: '6', result: a drowned shrine (lore)}
+  hazards:
+  - {id: haz.mire, weight: 3}
+  - {id: haz.quicksand, weight: 1}
+  - {id: haz.marsh_miasma, weight: 2}
+  - {id: haz.cold_water, weight: 1}
+  - {id: haz.foul_water, weight: 1}
+  traps:
+  - {id: trap.snare, weight: 1}
+  lifecycle: provisional
+  basis: *id001
+- id: site.domain.icereach
+  name: Icereach
+  tags: [terrain.frozen.glacier]
+  terrain_tags: [terrain.frozen.glacier]
+  light: bright
+  explore_tier: hard
+  typical_size: medium
+  rest_site: rough
+  openness: open
+  features:
+  - {range: '1', result: a crevasse bridged by snow, feature_kind: hazard}
+  - {range: '2', result: an ice cave glowing blue, feature_kind: cover}
+  - {range: '3', result: a serac leaning over the path, feature_kind: hazard}
+  - {range: '4', result: 'a frozen waterfall to climb, 40 ft', feature_kind: height, drop_ft: 40}
+  - {range: '5', result: a wind-scoured shelf}
+  - {range: '6', result: a snow field with hidden holes, feature_kind: hazard}
+  - {range: '7', result: a meltwater channel, feature_kind: difficult_ground}
+  - {range: '8', result: a cairn of an old expedition}
+  - {range: '9', result: an ice wall with something frozen in it}
+  - {range: '10', result: a moraine of loose stone, feature_kind: hazard}
+  - {range: '11', result: a cornice over a 80-ft drop, feature_kind: height, drop_ft: 80}
+  - {range: '12', result: a cave of icicles, feature_kind: veil}
+  shift:
+  - {range: '1', result: the wind rises (bitter cold for the scene)}
+  - {range: '2', result: a crack runs through the ice underfoot}
+  - {range: '3', result: a serac falls (haz.avalanche omen)}
+  - {range: '4', result: snow begins}
+  - {range: '5', result: the light blinds (sight snag in bright snow)}
+  - {range: '6', result: a deep groan from the glacier (the danger clock +1)}
+  discoveries:
+  - {range: '1', result: an expedition's cache (supply and rope)}
+  - {range: '2', result: a creature frozen in the ice (harvest when thawed)}
+  - {range: '3', result: a rope fixed by others (a lever on climbs)}
+  - {range: '4', result: a sheltered ice cave (a secured area)}
+  - {range: '5', result: old crampons (a lever on ice)}
+  - {range: '6', result: a frozen journal (lore)}
+  hazards:
+  - {id: haz.thin_ice, weight: 1}
+  - {id: haz.fall_40, weight: 1}
+  - {id: haz.fall_80, weight: 1}
+  - {id: haz.avalanche, weight: 1}
+  - {id: haz.bitter_cold, weight: 2}
+  - {id: haz.cold_water, weight: 1}
+  traps:
+  - {id: trap.snare, weight: 1}
+  lifecycle: provisional
+  basis: *id001
+sizes:
+- {id: small, progress: 6, danger: 8, note: 'a barrow, a tower, a lair'}
+- {id: medium, progress: 8, danger: 8, note: 'a crypt, a cave system, a temple'}
+- {id: large, progress: 12, danger: 12, note: 'an underkeep, a warren, a stronghold'}
+- id: vast
+  progress: [12, 12]
+  danger: 12
+  note: two progress clocks in sequence (the halls, then the deep)
+clock_templates:
+- id: clk.10.site_progress
+  name: The heart of <site>
+  kind: progress
+  segments: by size
+  visibility: public
+  direction: fill
+  tick_sources:
+  - {'on': 'frame:act.explore_onward', ticks: delivered_reach, condition: null}
+  - {'on': 'table:tbl.10.site_opportunity rows 2 and 5', ticks: 1, condition: null}
+  - {'on': 'fact:site map acquired (once)', ticks: 2, condition: once per site}
+  - {'on': 'on_defeat:gatekeeper', ticks: 1, condition: a denizen placed by a theme danger row of kind gatekeeper}
+  auto_ticks: []
+  decay: []
+  omens: null
+  on_complete:
+    effects:
+    - effect_id: eff.write_fact
+      params: {subject: site, predicate: next_area_is_heart, value: true}
+    interrupting: false
+    then: close
+  races_with: null
+  lifecycle: provisional
+- id: clk.10.site_danger
+  name: <site> wakes
+  kind: danger
+  segments: by size
+  visibility: sensed
+  direction: fill
+  tick_sources:
+  - {'on': trait.sense.loud, ticks: 1, condition: a beat inside the site}
+  - {'on': cost.exposure, ticks: U(severity), condition: null}
+  - {'on': cost.time, ticks: U(severity), condition: null}
+  - {'on': 'face:S (site check)', ticks: 1, condition: null}
+  - {'on': 'boundary:conflict_start', ticks: 1, condition: the conflict is inside the site}
+  - {'on': trap.alarm_ticks, ticks: the trap's listed ticks, condition: null}
+  - {'on': 'table:theme dangers kind clock', ticks: the row's listed ticks, condition: null}
+  auto_ticks: []
+  decay:
+  - {boundary: day, ticks: -2, only_if: no tick since last day}
+  omens: the theme's danger_clock_omens
+  links:
+  - {when: 'reaches:half', action: roll the theme dangers table once (a written danger)}
+  on_complete:
+    effects:
+    - effect_id: eff.write_fact
+      params: {subject: site, predicate: roused, value: true}
+    interrupting: true
+    then: reset
+  races_with: null
+  lifecycle: provisional
+tables:
+- id: tbl.10.area_contents
+  name: What is in a new area (10.13.7)
+  die: d12
+  results:
+  - {range: '1', result: nothing more than the feature}
+  - {range: '2', result: nothing more than the feature}
+  - {range: '3', result: nothing more than the feature}
+  - {range: '4', result: 'a discovery (theme or domain discoveries, engine picks the card by d6: 1-3 domain, 4-6 theme)'}
+  - {range: '5', result: 'denizens (site denizen table; omen-first: a pending threat arrives here, else a threat row becomes
+      pending and its sign is here)'}
+  - {range: '6', result: denizens (as 5)}
+  - {range: '7', result: 'a trap (the domain trap list, theme-weighted)'}
+  - {range: '8', result: a hazard (the domain hazard list)}
+  - {range: '9', result: 'an obstacle on the way on (a barrier, a rubble choke, or a gap with a recorded drop; tier = explore
+      tier)'}
+  - {range: '10', result: 'a branch: a side passage to a side area (side areas do not advance progress; their contents roll
+      +2, max 12)'}
+  - {range: '11', result: 'a cache (08.3.12 hoard at site band - 1, coin and goods; or one gen.loot item if found by a Search
+      beat)'}
+  - {range: '12', result: a theme danger (roll the theme dangers)}
+- id: tbl.10.site_opportunity
+  name: Site opportunity (face P, critical success on Explore onward)
+  die: d8
+  results:
+  - {range: '1', result: 'a secure corner: this area becomes rest_site camp (secured)'}
+  - {range: '2', result: 'a clue toward the heart: progress clock +1'}
+  - {range: '3', result: 'a forgotten cache: 08.3.12 hoard at site band - 1, coin and goods only'}
+  - {range: '4', result: 'an unguarded moment: the next denizen met is unaware'}
+  - {range: '5', result: 'a short way: progress clock +1'}
+  - {range: '6', result: 'old marks of earlier delvers: a Precision lever on Explore onward in this site (fact)'}
+  - {range: '7', result: 'a light source: a lantern with 12 intervals of oil, or three torches'}
+  - {range: '8', result: 'a way out: a new exit link from this area to the surface or a known area'}
+- id: tbl.10.site_generation
+  name: A site generated in play (no regional table)
+  die: d8
+  results:
+  - range: '1'
+    result: theme by d8
+    values: [ancient, corrupted, fortified, hallowed, haunted, infested, ravaged, wild]
+  rule: 'theme: d8 over the eight themes (13 weights regionally); domain: d12 over the domains whose terrain_tags match the
+    area''s terrain or terrain.ruin / terrain.underground (re-roll non-matching up to twice, then take the nearest); band:
+    the area''s home band (d6: 1 = home - 1, 6 = home + 1 as a known lair); size: d6 1-2 small, 3-4 medium, 5 large, 6 the
+    domain''s typical size'
+denizen_table_rule:
+  gate: archetype creature_tags match a theme creature_gate_tag (ancestor match, 00.5.4c) AND archetype encounter.terrain
+    matches a domain terrain tag (either direction of ancestry)
+  weights: theme creature_weights by the deepest matching tag (default 1)
+  bands: home band = site band; 30/55/15 across band-1/band/band+1 (10.10.2)
+  fallback: 'If the theme x domain gate leaves fewer than 3 archetypes, the domain terrain filter is dropped for that pair
+    (the theme gate alone builds the table: the creatures came from elsewhere to this place).'
+  pairs_needing_fallback: [ancient x tanglewood (1), ancient x fen (2), ancient x icereach (0), corrupted x icereach (0),
+    fortified x fen (1), fortified x icereach (2), hallowed x tanglewood (2), hallowed x fen (0), hallowed x icereach (0),
+    haunted x tanglewood (0), haunted x fen (2), haunted x icereach (0), infested x fen (1), infested x icereach (1), ravaged
+      x icereach (2), wild x cavern (2), wild x flooded_cave (2), wild x mine (2), wild x sewer (2), wild x icereach (1)]
+blocks: []
