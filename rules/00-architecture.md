@@ -2446,8 +2446,8 @@ a success down (DL-01-03); recomputed at integration, which changes the +9…+16
 | deed.arcane | fire, frost, storm, earth, illusion, divination, warding, mind, summoning, necromancy, alteration |
 | deed.divine | healing, warding, smiting, rites, oaths, revelation, exorcism, pact |
 | deed.primal | growth, beastkin, weather, shapeshifting, spirits, elements, hexcraft |
-| deed.influence | persuasion, command, performance, intimidation, intrigue, trade, etiquette, insight |
-| deed.craft | smithing, woodcraft, leathercraft, textiles, alchemy, cookery, building, artifice, jewelcraft, enchanting |
+| deed.influence | persuasion, command, performance, intimidation, intrigue, trade, etiquette, insight, teaching |
+| deed.craft | smithing, woodcraft, leathercraft, textiles, alchemy, cookery, building, artifice, jewelcraft, enchanting, scribing |
 | conduct (signed axes, no level 2) | mercy, honesty, courage, loyalty, generosity, justice, humility, restraint, piety, protection |
 | creature.beast | predator, herd, vermin, reptile, avian, aquatic, monstrous |
 | creature.folk | human, elf, dwarf, halfling, orc, goblin, giant, beastfolk |
@@ -2667,13 +2667,13 @@ not costly, not merciful, not scavenged) and calls
    `tier_cap` + 1 = 3).
 5. **Signature slot.** `prop.ember_ward` at tier 2 + 1 = **3**: reduce fire harm by 3. Its mod_group
    `resist_fire` is removed from the pool.
-6. **Magnitude slot.** Weights: warm_blood 2 × ½ (recency: generated three loot draws ago from a fire
-   beetle) = 1; hounds_nose 2; snarl 1. Total 4 → 25% / 50% / 25%. The engine draws d100 = 63 → bands
+6. **Magnitude slot.** Weights: warm_blood 4 × ½ (recency: generated three loot draws ago from a fire
+   beetle; weights are doubled first, 00.11.3 step 7) = 2; hounds_nose 4; snarl 2. Total 8 → 25% / 50% / 25%. [verification: V1-002] The engine draws d100 = 63 → bands
    1–25 warm_blood, 26–75 hounds_nose, 76–100 snarl → **`prop.hounds_nose`**, tier `tier_cap − 1` = 1.
 7. **Caps.** Charm slot cap 2 and the item budget (reduction 3, inside ch.07's cap of 4): pass.
 8. **Output.** `item.i0107`, base `bi.fang_charm`, quality fine, signature `[ember_ward T3]`,
    magnitude `[hounds_nose T1]`, provenance {cinder_hound_07, decisive, critical_success}, log {pool 4 →
-   4 → 3; weights 1/2/1; d100 63}.
+   4 → 3; weights 2/4/2; d100 63}.
 
 The DM names it ("a fang on a thong, still warm") and narrates only what it holds. *Non-example:* "the
 charm keeps the chill of the rain off you" is forbidden: warm_blood was not generated (INV-2, SG-15).

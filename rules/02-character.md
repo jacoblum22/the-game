@@ -1875,9 +1875,7 @@ Wits}, roll 2 of 3 → **Endurance**.
          twice in all)        No default: nothing changes until you choose.
 ```
 She accepts: `eff.02.bent {endurance, 1}`; Vitality 13/13. Her attributes are now Might +1, Agility +3,
-Endurance +1, Wits +2, Intellect 0, Presence 0, Resolve −1: exactly the sheet 00 gave her. (00's
-illustrative sheet shows Vitality 12; by 02.7.1 it is 13 once the Bent is taken. See Interface
-requests, 00-3.)
+Endurance +1, Wits +2, Intellect 0, Presence 0, Resolve −1: exactly the sheet 00 gave her. (00's sheet now shows Vitality 13/13, which is 02.7.1's value once the Bent is taken [verification: V1-001].)
 *The other branch.* Had she deferred, hoping for Wits: Endurance is struck; at the draw two reflections
 and ten frames later the pool is {Might, Wits}; the script's roll is 2 of 2 → Wits. She would have had
 the one she wanted at 1 chance in 2, and the price was two sessions without the +1.
@@ -2235,9 +2233,9 @@ instances of chapter 05's training-clock shape and are created by chapter 15's a
   fallback is exact: mod-group exclusion alone yields one knack and one quirk, and the cap step yields
   the same Bent pool with one redraw.
 - **00-3** 00's illustrative Wren (WE-00 sheet) is Might +1, Agility +3, Endurance +1, Wits +2,
-  Intellect 0, Presence 0, Resolve −1, Vitality 12. Under this chapter that is Wren *after* her Bent
-  (creation sum +5, Bent +1 on Endurance); her Vitality is then 12 + 1 = 13. One number in an
-  illustrative sheet; no rule conflicts.
+  Intellect 0, Presence 0, Resolve −1, Vitality 13. Under this chapter that is Wren *after* her Bent
+  (creation sum +5, Bent +1 on Endurance); her Vitality is 12 + 1 = 13. *Met:* 00 was corrected to 13
+  [verification: V1-001].
 - **00-4** 00.4.3 a ("the P1 deferred birth reroll") is the Bent (02.6.5–02.6.7). T-00-4 might note
   that a PC's attribute sum after creation is at most +8 (Typical + Bent) or +9 with chapter 04's tier-4
   increase; each attribute still obeys −2…+4.

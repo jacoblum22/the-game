@@ -27,7 +27,7 @@ step lists the DM and engine execute. *Tables* (T-01-*) are canonical in `data/r
 (WE-01-*) re-rule every example in R7 through the final rules with real numbers, and add boundary pairs
 and tempting non-examples for every `[J]` rule. The continuous character is **Wren** from 00 (Might +1,
 Agility +3, Endurance +1, Wits +2, Intellect 0, Presence 0, Resolve −1; competence `deed` +1 floor,
-`deed.wilds.tracking` +2, `deed.martial.archery` +2; Vitality 12, Focus 4, fate 1; the fifteen basic
+`deed.wilds.tracking` +2, `deed.martial.archery` +2; Vitality 13 (12 + Endurance +1) [verification: V1-001], Focus 4, fate 1; the fifteen basic
 verbs and `lic.lang.common` native). Numbers owned by other chapters are marked *(illustrative; ch.NN
 owns)*; every resolution number is exact. All odds in this chapter were computed by exhaustive d20 and
 d100 enumeration (scratchpad `odds01.py`, `oracle01.py`, `fate01.py`; results in T-01-3, T-01-14).
@@ -2145,7 +2145,7 @@ Oracle, table, generator or others' fortune rolls); `spend_fate(n)` for ch.07's 
 ## Worked examples
 
 Wren's sheet is 00's (Might +1, Agility +3, Endurance +1, Wits +2, Intellect 0, Presence 0, Resolve −1;
-competence `deed` +1, `deed.wilds.tracking` +2, `deed.martial.archery` +2; Vitality 12; Focus 4; fate 1).
+competence `deed` +1, `deed.wilds.tracking` +2, `deed.martial.archery` +2; Vitality 13; Focus 4; fate 1) [verification: V1-001].
 Every odds figure is from exhaustive enumeration (T-01-3). Adversary, hazard, license and social numbers
 are *(illustrative; ch.NN owns)*. WE-01-1…13 re-rule R7's thirteen examples through the final rules;
 WE-01-14…20 add boundary pairs and tempting non-examples.
@@ -2242,22 +2242,22 @@ S4 crush to anyone inside). The DM gave the lethal warning when the roof first g
 - **Round 1 — find the horse.** Observe: Wits +2, floor +1; tier **Easy 10** (a horse in a barn is not
   hard to find: intrinsic); snag: `barn.smoke` (Precision −2) → **+1** vs 10: 9+ (60%). Stakes: the roof
   clock listens to `cost.time` and can crush → **Dire**; threatened `cost.time`; lethal false (the cost
-  is time, not harm). d20 = 14 → 15 → **success**. Flames: S2 = 3 → ×½ → **1** (V 12 → 11). Smoke:
+  is time, not harm). d20 = 14 → 15 → **success**. Flames: S2 = 3 → ×½ → **1** (V 13 → 12). Smoke:
   Endure (Endurance +1, floor +1 = +2) vs 15: d20 = 16 → 18 ✓. Roof auto → 1/4. Narration names the trough
   of water by the door (write-on-mention: `barn.trough`).
 - **Round 2 — calm and lead it.** Handle (animals: Presence 0 + floor 1 = +1); DC the horse's Resolve
   defense 10 + 1 = **11**; lever: Wren's cloak over its eyes (Precision +2); snag: smoke, which panics
   the horse (the obligation of 01.6.8: a fitting hindrance is always applied) → **+1** vs 11: 55%.
-  d20 = 11 → 12 → **success**. Flames 1 (V 10). Smoke: d20 = 6 → 8 ✗ → the effect: `cond.choking`
-  (*status −2, 06 owns*) and 1 asphyxia (V 9). Roof auto → 2/4 (building: "a beam cracks overhead").
+  d20 = 11 → 12 → **success**. Flames 1 (V 11). Smoke: d20 = 6 → 8 ✗ → the effect: `cond.choking`
+  (*status −2, 06 owns*) and 1 asphyxia (V 10). Roof auto → 2/4 (building: "a beam cracks overhead").
 - **Round 3 — get out.** Move through the burning doorway: Agility +3, floor +1; tier **Moderate 15**;
   lever: the route in is known (`barn.doorway`, Precision +2); snag: smoke −2; status: choking −2 →
   **+2** vs 15. Stakes: a beam could take her → **Dire**, threatened `cost.harm` (S3 beam) → with
   `lethal_context`, **lethal** — the OFFER says "this can kill you". The player cites the trough by the
   door as **Protective** (she can plunge through it): stakes → **Risky**, and lethal falls away (it is
   legal only at Dire). OFFER: 13+ (40%), threatened harm S2. d20 = 15 → 17 → **success**. Flames 1
-  (V 8). She is out; the roof completes behind her with no one inside.
-- *What the license was worth:* without it, flames 3 + 3 + 3 and smoke 1 → V 2. It made the plan
+  (V 9). She is out; the roof completes behind her with no one inside.
+- *What the license was worth:* without it, flames 3 + 3 + 3 and smoke 1 → V 3. It made the plan
   survivable, not free, and the player saw that before committing.
 
 ### WE-01-4 "I learn the ogres' language by listening to them."

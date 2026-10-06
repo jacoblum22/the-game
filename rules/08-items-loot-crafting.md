@@ -1667,7 +1667,7 @@ carries frame #417). She was never below half Vitality.
 1. **Trigger** (08.3.1): `conflict_end`; one defeated side (the spider) → one loot call.
 2. **Circumstance** `[J:enum]`: her own resolved beat defeated it; never Staggered; no lethal frame →
    **decisive** (cites frame #417). Fill **signature**.
-3. **Drop check** (08.3.3): T2 trophy → d100 = **14** ≤ 20 → a property item drops.
+3. **Drop check** (08.3.3): T2 trophy → d100 = **14** ≤ 15 → a property item drops [verification: V1-005].
 4. **Rung:** decisive + success → **masterwork** (1 signature + 1 magnitude). Tier cap **2**.
 5. **Base** (08.3.6): no trophy base from 09; beast defaults [charm, cloak, leather armor]; the signature
    (`default_signatures[creature.beast.vermin]` = **Plague-proof**, base kinds: worn things) accepts all
@@ -1754,7 +1754,7 @@ things), and the signature is fixed by provenance.
 against her companion's advice, lets it go back to the pit (fact `mercy.ash_imp`).
 
 1. **Circumstance:** merciful (it yielded, she spared it). Fill **chosen**; rung masterwork; tier cap **3**.
-   Drop check: d100 = 22 ≤ 35 ✓.
+   Drop check: d100 = 22 ≤ 30 ✓ [verification: V1-005].
 2. **Base:** fiend defaults [weapon, ring]; d6 = 4 → **ring**. Signature-eligible entries for a ring: Hellfire
    is weapon-only (excluded); the only signature-eligible entry left is the **Bound power** (min tier 3 ≤ 3).
    The tool shows it; Wren takes it.

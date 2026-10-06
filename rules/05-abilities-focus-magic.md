@@ -2059,7 +2059,7 @@ not lend (05.2.1). Acquired slots are filled only by learning, teaching, absorpt
 
 ### WE-05-5 A Focus economy across a fight, a rest and a day
 
-*One fight, traced.* Wren the Archer (Focus 5/5; attack +6; Guard 14; Vitality 12) against a cinder hound
+*One fight, traced.* Wren the Archer (Focus 5/5; attack +6; Guard 14; Vitality 13 [verification: V1-001]) against a cinder hound
 (T2: Vitality 10, Guard 13, attack +4, S2 harm *(illustrative; 09)*). One beat per round each
 *(illustrative; 06 owns the action economy)*.
 
@@ -2067,7 +2067,7 @@ not lend (05.2.1). Acquired slots are filled only by learning, teaching, absorpt
 |---|---|---|---|
 | 1 | Strike with **Aimed Shot** (rider, 1 Focus; she has not moved): Precision lever +2, total +8, needs 5. d20 = 11 → 19: success. Harm S2 + one rung = S3 = **5**. | 5 → 4 | 10 → 5 (bloodied) |
 | | Her attack hit: **Quarry's Mark** asks (trigger, 1 Focus, once per scene). Yes: the hound is exposed until the scene ends. | 4 → 3 | exposed |
-| | | | It bites: +4 against 14, d20 = 13 → 17: S2 = 3. Wren 12 → 9. |
+| | | | It bites: +4 against 14, d20 = 13 → 17: S2 = 3. Wren 13 → 10. |
 | 2 | Aimed Shot again; exposed gives her a second Precision lever (a different fact): +10, needs 3. d20 = 6 → 16: success. S3 = 5. | 3 → 2 | 5 → 0: defeated |
 
 Three Focus spent in two rounds; she ends at 2/5 and is not Spent. `conflict_end` and `scene_end`
@@ -2083,16 +2083,17 @@ stated there and are 00.3.7's):
 | Wren, tier 1, Focus 5, **spends none** | 87.0% | 4.44 | 0 | 5.00 | 0% | 6.7 |
 | Wren, tier 1, Focus 5, spends freely | 99.6% | 2.36 | 3.34 | 1.66 | 6.2% | 9.7 |
 | Wren, tier 1, **starting at 2** | 96.9% | 3.04 | 2.00 | 0.00 | 100% | 8.6 |
-| Ash, tier 3, Focus 7, **spends none** (a staff) vs T3 | 0.1% | 3.00 | 0 | 7.00 | 0% | 3.4 |
+| Ash, tier 3, Focus 7, **spends none** (a staff, no branch working: the model before 05.7.11) vs T3 | 0.1% | 3.00 | 0 | 7.00 | 0% | 3.4 |
 | Ash, tier 3, Focus 7, spends freely vs T3 | 81.3% | 3.60 | 5.64 | 1.84 | 30.5% | 7.9 |
 | Ash, tier 3, **starting at 3** vs T3 | 40.7% | 3.31 | 3.09 | 0.21 | 80.5% | 5.8 |
 
 What the numbers say: (1) a full pool roughly **halves** a fair fight (4.4 rounds to 2.4) and turns the
 remaining risk into spent Focus; (2) a fight at one band costs a tier-1 character about **two thirds of
 the pool** and a tier-3 caster about **four fifths**, so every fight leaves a real decision about the
-next one; (3) a martial character without Focus is weakened, a caster without Focus is nearly helpless
-against an equal foe (0.1%), which is the lever that makes overdraw (05.6.6) and the rest ladder matter
-to casters most; (4) a caster who starts a fight at 3 of 7 is at 41%: the codex shows the pool, and the
+next one; (3) a martial character without Focus is weakened, a caster without Focus but with a branch working
+(05.7.11) is weakened, not helpless: a Spent tier-3 caster beats one T3 80.7–91.0% of the time (06-conflict-sim J2;
+the 0.1% row is the pre-05.7.11 staff model), so Focus is a lever, not a gate, and matters to casters as it does to
+fighters [verification: V1-004]; (4) a caster who starts a fight at 3 of 7 is at 41%: the codex shows the pool, and the
 threat advisory (09) plus this number is the telegraph.
 
 *A venture day* (Wren, five fights against T2 foes; a breather after every fight, of which only two
