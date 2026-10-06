@@ -335,3 +335,10 @@ Validator: 0 ERROR / 0 WARN. All data YAML parses.
 - I-010, I-012, I-014 and I-021 accepted.
 - New rows I-037 to I-062: 5 MAJOR (I-037 to I-041), 21 MINOR.
 Next: Revision C (Sonnet): the MAJOR rows plus the cheap MINOR ones; the remainder becomes open empirical questions with defaults.
+
+## RULESET FROZEN AS v1.0 RELEASE CANDIDATE (owner, 2026-10-06)
+The owner set a $20 budget and asked to get the system verified and ready for build planning.
+- Revision C and Completion (ch.14, the constitution amendment, the editor pass) are cut for now.
+- The 29 open ledger rows (5 MAJOR) stay open as known issues. They are summarised in `rules/README.md` and none blocks building.
+- `rules/README.md` written: layout, tooling, known issues and build notes.
+Next: tech stack and build planning.
