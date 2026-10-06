@@ -106,7 +106,7 @@ The owner asked to conserve cost: use smaller models, less reasoning, and less w
 - **Revision C:** fix only the MAJOR rows plus the cheap MINOR ones. Any remaining MINOR row is recorded as
   an open empirical question with a concrete default. Nothing is silently dropped.
 - **Completion:**
-  - ch.14 Player's Guide and the codex spec, kept concise;
+  - ch.14 Player's Guide and the codex spec, kept concise and written by the orchestrator directly, not by a subagent (owner, 2026-10-06);
   - `rules/README.md`;
   - `appendix/open-empirical-questions.md`;
   - the constitution amendment, which the orchestrator writes;
