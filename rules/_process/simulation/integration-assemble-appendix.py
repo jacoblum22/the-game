@@ -100,8 +100,9 @@ for ch, rs in srcs:
 
 REQ_FALLBACK = {"P14": "Asymmetric cadence (MAY), never as extra actions", "P15": "Time-gated specialization as an alternative to point audit"}
 ISSUES = {  # open issues (issue-ledger.md) bearing on a clause; listed, they do not change the fragments' status
-    "P2": ["I-003", "I-028"], "P5": ["I-003", "I-007", "I-020"], "P9": ["I-009"], "V": ["I-009", "I-015"],
-    "VI": ["I-028"], "P6": ["I-008"],
+    # [verification: V1-007] rebuilt from the OPEN rows of issue-ledger.md (the old list named rows now resolved)
+    "P1": ["I-060"], "P2": ["I-037", "I-039", "I-045"], "P4": ["I-047"], "P5": ["I-037", "I-041", "I-047"],
+    "P9": ["I-033"], "P12": ["I-038"], "V": ["I-033", "I-037"], "VI": ["I-043", "I-049"],
 }
 def status_of(k):
     ss = [(ch, s.lower()) for ch, s, _ in stat[k]]

@@ -326,3 +326,12 @@ Closed I-001, I-016, I-017, I-018, I-019, I-022, I-028, I-029, I-030, I-031 and 
 - Rules defect found by the agenda fix: a friendly faction aided the PC every turn. Fixed in 11.3.7 (c).
 New rows: I-035 (wontfix, Vale), and I-036 (P3 item count 13 vs 8–12; coin sinks not modelled), assigned to Revision C.
 Validator: 0 ERROR / 0 WARN. All data YAML parses.
+
+## Verification returned (lean, Sonnet, about 365k tokens): reports `_process/reports/verification-*.md`
+- 7 mechanical fixes (V1-001 to V1-007).
+- Completeness: of R5's 189 rows, 175 are covered, 7 belong to ch.14, 5 are partial and 2 are missing (FN-11, FN-12).
+- Red team: of 10 exploits, 5 are stopped, 2 partly stopped and 3 have no stop.
+- One paper playtest in the seed world.
+- I-010, I-012, I-014 and I-021 accepted.
+- New rows I-037 to I-062: 5 MAJOR (I-037 to I-041), 21 MINOR.
+Next: Revision C (Sonnet): the MAJOR rows plus the cheap MINOR ones; the remainder becomes open empirical questions with defaults.

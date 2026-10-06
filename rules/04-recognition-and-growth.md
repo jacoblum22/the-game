@@ -525,7 +525,7 @@ band_by_tier[ladder][tier], and each calling's inherited_band)`.
 The band also sets the PC's maximum Vitality: **+2 per band above the first** (creation value + 2 ×
 (power_band − 1), cap 24), applied by ch.07's `h.07.vitality_max`; current Vitality rises by the same amount when
 the band rises (07.1.2) [integration: DL-00-04]. (07.1.2 reads the band "from confirmed tiers only", while this
-rule counts provisional tiers: see issue I-028.)
+rule counts provisional tiers: see issue I-037 [verification: V1-006].)
 
 | Ladder | Tier 1 | 2 | 3 | 4 | 5 |
 |---|---|---|---|---|---|

@@ -16,21 +16,21 @@ compiled_from:
 - file: data/basic_verbs.yaml
   sha256_16: 3188c5a7ebcfa419
 - file: 01-resolution.md
-  sha256_16: 168d0a9057936e0f
+  sha256_16: 42363ff4d91da7ed
 - file: 02-character.md
-  sha256_16: ee6cb180bbe160ff
+  sha256_16: 1b3cd69b6b98fa74
 - file: 03-tags-and-evidence.md
   sha256_16: 5799f2a8df3e0dbd
 - file: 04-recognition-and-growth.md
-  sha256_16: 02c1c4d7b50092e8
+  sha256_16: 54a4aa30a020fcb5
 - file: 05-abilities-focus-magic.md
-  sha256_16: 49b7404d5dd8bff4
+  sha256_16: 0fdcbcaf8f7b6125
 - file: 06-conflict.md
   sha256_16: f5d6035d7760cea8
 - file: 07-harm-recovery-death.md
   sha256_16: bc800871e3dc6ef9
 - file: 08-items-loot-crafting.md
-  sha256_16: 65c7edbc6c13a550
+  sha256_16: c84f014a0ee9bcb7
 - file: 09-adversaries.md
   sha256_16: 243e63089d322270
 - file: 10-exploration-travel-sites.md
