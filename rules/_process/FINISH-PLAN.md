@@ -87,3 +87,28 @@ remains. Every agent in this phase reads this file first.
 - **Report:** keep a running report at `_process/reports/<wave>-report.md`, appended after every
   step.
 - **Git:** never commit or push. The orchestrator does.
+
+## Cost-conscious revision (owner, 2026-10-06)
+The owner asked to conserve cost: use smaller models, less reasoning, and less work. From here on:
+- **Model:** subagents run on Sonnet, not Opus, and there is at most one subagent at a time.
+- **Verification** is one Sonnet agent with this scope:
+  - Finish the consistency read of ch.04–12, 15 and 16. Ch.00–03 are already read; their findings are in
+    `reports/verification-1-notes.md`. The read focuses on stale numbers and broken procedures.
+  - Run a grep-level completeness check against R5's checklist.
+  - Run a focused red team of the 10 highest-risk exploits.
+  - Run ONE combined paper playtest in the example world seed, covering newcomer, adversarial and long-arc
+    moments.
+  - Dropped from scope:
+    - full constitution re-audit (the traceability matrix already maps every principle);
+    - web-citation fetching. I-010, I-012, I-014 and I-021 close as "accepted: claims are cited to the
+      research digests, which were read".
+    - three separate playtests.
+- **Revision C:** fix only the MAJOR rows plus the cheap MINOR ones. Any remaining MINOR row is recorded as
+  an open empirical question with a concrete default. Nothing is silently dropped.
+- **Completion:**
+  - ch.14 Player's Guide and the codex spec, kept concise;
+  - `rules/README.md`;
+  - `appendix/open-empirical-questions.md`;
+  - the constitution amendment, which the orchestrator writes;
+  - validator clean.
+  - Dropped: the separate fresh-reader editor pass.
