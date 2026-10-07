@@ -477,7 +477,9 @@ if __name__ == "__main__":
     for (lv, ck), n in sorted(c.items()):
         print("%-6s %-11s %d" % (lv, ck, n))
     print("-" * 100)
+    verbose = "-v" in sys.argv  # INFO lines are expected illustrative ids; shown only with -v
     for lv, ck, where, msg in F:
+        if lv == "INFO" and not verbose: continue
         print("%-6s %-11s %-40s %s" % (lv, ck, where, msg))
     if out_json:
         json.dump({"stats": dict(J_STATS), "counts": {"%s %s" % k: v for k, v in c.items()},

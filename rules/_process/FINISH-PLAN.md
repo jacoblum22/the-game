@@ -112,3 +112,29 @@ The owner asked to conserve cost: use smaller models, less reasoning, and less w
   - the constitution amendment, which the orchestrator writes;
   - validator clean.
   - Dropped: the separate fresh-reader editor pass.
+
+## Back to the full plan, as short agents (owner, 2026-10-07, Claude Max)
+The owner restored the full plan: Opus subagents for Verification, Revision C and Completion. The
+orchestrator writes ch.14 itself, as before.
+
+Transcript analysis showed 80–88% of subagent cost was re-reading the agent's own growing context. Revision B
+ran 940 turns at an average context of 397k tokens. Cost therefore grows with agent length squared, so:
+- **Scope:** each agent gets a tight scope (2–4 issues or one audit) and ends early, leaving a handoff in its
+  report.
+- **Sequencing:** one agent at a time, as before.
+- **Lookups:** agents use `rules/tools/rq.py` instead of reading chapters, and follow the root `CLAUDE.md`
+  conventions.
+- **Validator:** it now hides INFO lines unless run with `-v`.
+
+Remaining queue:
+- **V2a:** a full consistency read of ch.04–08 (skipped by the lean pass), plus the constitution audit.
+- **V2b:** a full consistency read of ch.09–12, 15 and 16.
+- **V2c:** two more playtests (adversarial and long-arc), plus web-citation verification. This reopens
+  I-010, I-012, I-014 and I-021 if needed.
+- **Revision C:** about four agents by chapter cluster, closing every open ledger row:
+  - C1: 00/01/03/12/15
+  - C2: 04/05/07/16
+  - C3: 08/09/10/11
+  - C4: housekeeping and remaining rows
+- **Completion:** ch.14 (orchestrator), constitution v1.8.0, open-empirical-questions, an editor pass on
+  each chapter (short agents), and the final README update.
