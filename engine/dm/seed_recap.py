@@ -8,10 +8,12 @@ reads instead: at most a few sentences, the shown parts only, and who chose what
 
 from __future__ import annotations
 
+import zlib
 from collections.abc import Callable
 from typing import Any
 
 from engine.dm import setup_text as T
+from engine.gen._seed_lib import data as seed_data
 from engine.gen._seed_steps import STEP_QUESTIONS
 from engine.gen.world_seed import SeedAnswer, SeedStep
 
@@ -100,7 +102,7 @@ def _s3(st: dict[str, Any], step: SeedStep, words: dict[str, str]) -> list[str]:
         k = next((k for k in keepers if k.get("id") == who), None)
         death = f"{k['name'] + ',' if k and ',' in k['name'] else k['name'] if k else 'The god of death'} " \
                 "meets the dying, and may bargain."
-    return [f"{count} gods (keepers) answer prayers: {_and(named)}.", death]
+    return [f"{count} gods answer prayers here (this world calls its gods keepers): {_and(named)}.", death]
 
 
 def _s4(st: dict[str, Any], step: SeedStep, words: dict[str, str]) -> list[str]:
@@ -152,16 +154,40 @@ def _s6(st: dict[str, Any], step: SeedStep, words: dict[str, str]) -> list[str]:
             continue
         name = str(P[b]["name"])
         inside.append(name if kind in name.lower() or kind in ("hall", "market") else f"{name} ({kind})")
-    return [f"Your home town is {hav['name']}, {desc}. It is your home base (the haven).",
+    return [f"Your home town is {hav['name']}, {desc}. It is your haven: the safe home base where you rest, heal "
+            "and trade between journeys.",
             f"In town there are {_and(inside)}."]
 
 
-def _s7(st: dict[str, Any], step: SeedStep, words: dict[str, str]) -> list[str]:
+SHORT = 8  # a list this long or shorter is shown in full; a longer one is cut, and "show all" shows it
+
+
+def _cut(items: list[str], keep: int) -> list[str]:
+    return items if len(items) <= SHORT else items[:keep] + [f"{len(items) - keep:d} more"]
+
+
+def _show_all(items: list[str]) -> list[str]:
+    return [str(T.seed("summary", "show_all"))] if len(items) > SHORT else []
+
+
+def _powers(st: dict[str, Any]) -> list[str]:
     seat = "village" if st.get("tier") == "village" else "town"
-    names = [f"{f['name']} ({_ROLE[f['role']]} the {seat})" if f.get("role") in _ROLE else str(f["name"])
-             for f in st["factions"]]
-    more = len(names) - 4
-    return [f"The powers here are {_and(names[:4] + ([f'{more:d} more'] if more > 0 else []))}."]
+    return [f"{f['name']} ({_ROLE[f['role']]} the {seat})" if f.get("role") in _ROLE else str(f["name"])
+            for f in st["factions"]]
+
+
+def _people(st: dict[str, Any]) -> list[str]:
+    return [f"{n['name']} ({n['role'].replace(' of The ', ' of the ')})" for n in st["S"]["npcs"]]
+
+
+def _sites(st: dict[str, Any]) -> list[str]:
+    P = _places(st)
+    return [P[s]["name"] for s in st["sites"] if P[s]["known"]]
+
+
+def _s7(st: dict[str, Any], step: SeedStep, words: dict[str, str]) -> list[str]:
+    names = _powers(st)
+    return [f"The powers here are {_and(_cut(names, 4))}.", *_show_all(names)]
 
 
 def _s8(st: dict[str, Any], step: SeedStep, words: dict[str, str]) -> list[str]:
@@ -171,24 +197,49 @@ def _s8(st: dict[str, Any], step: SeedStep, words: dict[str, str]) -> list[str]:
     picked += [n for n in npcs if n["role"] in ("innkeeper", "smith", "captain of the gate", "healer")]
     shown = [f"{n['name']} ({n['role'].replace(' of The ', ' of the ')})" for n in picked[:4]]
     home = _places(st)[st["hid"]]["name"]
-    return [f"There are {len(npcs):d} people you may meet in and around {home}, including {_and(shown)}."]
+    if len(npcs) <= SHORT:
+        return [f"The people you may meet in and around {home} are {_and(_people(st))}."]
+    return [f"There are {len(npcs):d} people you may meet in and around {home}, including {_and(shown)}.",
+            *_show_all(_people(st))]
 
 
 def _s9(st: dict[str, Any], step: SeedStep, words: dict[str, str]) -> list[str]:
-    P = _places(st)
-    known = [P[s]["name"] for s in st["sites"] if P[s]["known"]]
-    head = _and(known[:3] + ([f"{len(known) - 3:d} more"] if len(known) > 3 else []))
+    known = _sites(st)
     trouble = _and([_low(str(s["title"])) for s in st["situations"]])
-    return [f"People talk about dangerous places such as {head}.", f"Trouble is brewing over {trouble}."]
+    return [f"People talk about dangerous places such as {_and(_cut(known, 3))}.", *_show_all(known),
+            f"Trouble is brewing over {trouble}."]
 
 
 def _s10(st: dict[str, Any], step: SeedStep, words: dict[str, str]) -> list[str]:
-    return ["The dice stocked the wilds with beasts and dangers. You will meet them in play."]
+    arch = seed_data().ARCHD  # the archetypes' plain names
+    seen: list[str] = []
+    for t in sorted(st["enc_tables"], key=lambda t: t.get("home_band", 0)):  # nearest home first
+        for row in t.get("threat") or []:
+            for ref in row.get("ref") or []:
+                name = str((arch.get(ref) or {}).get("name") or "").lower()
+                name = name and ("an " if name[0] in "aeiou" else "a ") + name
+                if name and name not in seen:
+                    seen.append(name)
+    such = f", such as {_and(seen[:4])}" if seen else ""
+    return [f"The dice stocked the wilds with beasts and dangers{such}. You will meet them in play."]
 
 
 def _s11(st: dict[str, Any], step: SeedStep, words: dict[str, str]) -> list[str]:
-    n = len(st["rumor_tables"][0]["results"])
-    return [f"There are {n:d} rumors going around town, and some of them are true."]
+    rows = st["rumor_tables"][0]["results"]
+    # a few, picked by their words (not their place in the table, which follows truth); the truth stays sealed
+    some = sorted(rows, key=lambda r: zlib.crc32(str(r["text"]).encode()))[:3]
+    heard = " ".join(f'"{r["text"]}"' for r in some)
+    return [f"There are {len(rows):d} rumors going around town. A few of them: {heard} "
+            "A rumor may not be true."]
+
+
+def more(n: int, st: dict[str, Any]) -> list[str]:
+    """The whole of a list a step's recap shortens (asked for with "show all" or a question)."""
+    lists = {7: ("powers", _powers), 8: ("people", _people), 9: ("places", _sites)}
+    if n not in lists:
+        return []
+    key, fn = lists[n]
+    return [str(T.seed("lists", key)).format(items=_and(fn(st)))]
 
 
 def _s12(st: dict[str, Any], step: SeedStep, words: dict[str, str]) -> list[str]:
@@ -249,4 +300,4 @@ def rolled(step: SeedStep) -> list[SeedAnswer]:
     return [a for a in step.answers if a.source == "oracle" and a.question not in AUTO]
 
 
-__all__ = ["AUTO", "recap", "rolled", "who_chose"]
+__all__ = ["AUTO", "more", "recap", "rolled", "who_chose"]

@@ -30,7 +30,7 @@ from engine.dm import setup_text as T
 from engine.dm.context import TurnContext
 from engine.dm.response import Choice, OofBlock, Pause, Response
 from engine.dm.roles.interpret import DETAILS, MOVE_ON, OWN_WORDS, SUGGEST, InterpretResult
-from engine.dm.seed_flow import PHASE_KEY, close_pause, flow_tx, open_pause, present_pause
+from engine.dm.seed_flow import PHASE_KEY, answer_pause, close_pause, flow_tx, open_pause, present_pause
 from engine.gen.birth import BentState, birth_draw, circumstance_for, source_tags
 from engine.store.db import Transaction
 from engine.store.events import WORLD, EntityRecord, Event, LicenseInstance, PauseRecord, Quantity
@@ -644,7 +644,7 @@ def sheet(rec: dict[str, Any], rules: Any, state: WorldState | None = None) -> s
                a_people=_a(str(OR[rec["people"]]["name"]).lower()), life=str(OR[rec["livelihood"]]["name"]).lower(),
                upbringing=OR[rec["upbringing"]]["name"],
                grew_up=grew.get(rec["upbringing"], str(OR[rec["upbringing"]]["name"]).lower())),
-             "  " + attrs,
+             "  " + attrs + (f" {w('attrs_note')}" if W.get("attrs_note") else ""),
              "  " + w("body", vitality=rec["vitality"], focus=rec["focus_base"], fate=rec["fate"]),
              "  " + w("guard", guard=guard, dread=rec["dread_threshold"]),
              "  " + w("good", deep=deep, access=also)]
@@ -892,16 +892,41 @@ class CreationFlow:
             res = T.read_answer(self.ctx, message or "", rec, tag="[CREATE]", classes=spec.classes if spec else (),
                                 lines_and_veils=bool(spec and spec.limits), cards=spec.cards if spec else ("PR-02-7",))
         if res.choice == DETAILS or (bid == "c1" and res.choice == "more"):
-            if bid == "c1":
+            if bid == "c1":  # every way of life, so the answer can speak of any of them
+                choices = block_spec("c1", d, st, self.ctx.rules, show_all=True).options
+            note = [] if res.choice == "more" else [OofBlock(kind="NOTE", text=T.explain(
+                message or "", choices, self._about(bid, rec, choices), answer=res.answer))]
+            if bid == "c1" and not rec.detail.get("all"):
                 with flow_tx(self.ctx) as tx:
                     close_pause(tx, rec, "more", "option")
-                    return self._ask(tx, [], "c1", fold(tx.state), show_all=True)
-            return present_pause(rec, "creation", [OofBlock(kind="NOTE", text=_details(choices, rec))])
+                    return self._ask(tx, note, "c1", fold(tx.state), show_all=True)
+            return answer_pause(rec, "creation", note[0].text) if note else self.present()
         with flow_tx(self.ctx) as tx:
             notes = self._apply(tx, rec, bid, d, res, message)
             if notes is None:  # the block stays open (a name is required; names were offered)
                 return self._ask(tx, self.retry, bid, fold(tx.state), reopen=rec)
             return self.advance(tx, notes)
+
+    def _about(self, bid: str, rec: PauseRecord, choices: list[Choice]) -> dict[str, str]:
+        """What each option of a block would do, for a player who asks: the plain explanation (setup.yaml), a way
+        of life's skills, else the rules' fuller wording where the screen shortened it."""
+        told = dict(T.block(bid).get("explain") or {})
+        orig = dict(rec.detail.get("orig") or {})
+        OR = _origins(self.ctx.rules)
+        out: dict[str, str] = {}
+        for c in choices:
+            if told.get(c.id):
+                out[c.id] = str(told[c.id])
+            elif bid == "c1" and c.id in OR:
+                life = OR[c.id]
+                good = [t["tag"].rsplit(".", 1)[-1].replace("_", " ") for t in life.get("competence") or []]
+                more = [t.rsplit(".", 1)[-1].replace("_", " ") for t in life.get("trainings") or []]
+                more = [m for m in more if m not in good]
+                start = f"you start good at {_and_list(good)}" if good else "you start with no special skill"
+                out[c.id] = f"{c.label}: {start}" + (f", and can train in {_and_list(more)}." if more else ".")
+            elif orig.get(c.id):
+                out[c.id] = f"{c.label}: {orig[c.id]}"
+        return out
 
     def _apply(self, tx: Transaction, rec: PauseRecord, bid: str, d: Draft, res: InterpretResult,
                message: str | None) -> list[OofBlock] | None:  # rule: PR-02-7
@@ -923,7 +948,7 @@ class CreationFlow:
         if bid == "c0":
             return self._apply_c0(tx, rec, res, words, message or "")
         if bid in ("c9.name", "rm.name"):
-            return self._apply_name(tx, rec, bid, d, res, words)
+            return self._apply_name(tx, rec, bid, d, res, words, message)
         if bid == "c9.pronouns":
             val = picked or (parse_name(words or "")[1] if words else None) or (words.strip() if words else None)
             if not val:
@@ -1009,7 +1034,7 @@ class CreationFlow:
         return []
 
     def _apply_name(self, tx: Transaction, rec: PauseRecord, bid: str, d: Draft, res: InterpretResult,
-                    words: str | None) -> list[OofBlock] | None:  # rule: 02.9.6
+                    words: str | None, message: str | None = None) -> list[OofBlock] | None:  # rule: 02.9.6
         opts = [c["id"] for c in rec.choices]
         if res.choice == MOVE_ON and bid == "c9.name":  # nothing to take: a character needs a name (02.9.6)
             self.retry = [OofBlock(kind="NOTE", text=_text("c9.name", "retry", "Type a name for your character."))]
@@ -1032,6 +1057,7 @@ class CreationFlow:
             name, pron, src = pg.get("name"), pg.get("pronouns"), "default" if res.choice == MOVE_ON else "player_option"
         else:
             name, pron = parse_name(words or "")
+            pron = pron or parse_name(message or "")[1]  # "Branric, she": Interpret may copy the name alone
             src = "player_words"
             if name and not plausible_name(name):  # "1", "skip", "?": ask again, never accept it as a name
                 self.retry = [OofBlock(kind="NOTE", text=f'"{name}" does not sound like a name. '
@@ -1175,9 +1201,5 @@ def _birth_tale(entries: list[dict[str, Any]]) -> str:  # rule: 02.6.8
     return "; ".join(out)
 
 
-def _details(choices: list[Choice], rec: PauseRecord) -> str:
-    """'details': each option, with the rules' fuller wording beside it where the screen shortened it."""
-    orig = dict(rec.detail.get("orig") or {})
-    return "\n".join([str(T.seed("details_head"))] + [f"{i + 1}. {c.label}" + (f" ({orig[c.id]})" if orig.get(c.id)
-                                                                                 else "")
-                                                       for i, c in enumerate(choices)])
+def _and_list(xs: list[str]) -> str:
+    return xs[0] if len(xs) == 1 else ", ".join(xs[:-1]) + " and " + xs[-1] if xs else "nothing yet"

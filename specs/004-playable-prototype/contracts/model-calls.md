@@ -24,6 +24,7 @@ InterpretOutput:
   own_words_class: enum[<12.16.2 / 02 classification options for this step>] | null
   own_words_text: str | null          # kept verbatim as the player's answer when it is their own words
   lines_and_veils: [str]              # creation 1(b) only: the player's limits, verbatim
+  answer: str | null                  # with `details`: 1-3 plain sentences answering the player's question
 ```
 
 The engine writes each answer with its source (player option, player words, oracle roll) and runs the

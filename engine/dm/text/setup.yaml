@@ -24,6 +24,11 @@ seed:
       guided: "I'll answer every question myself."
       oracle: "Let the dice decide everything. (I can re-roll one result at each step.)"
       mixed: "A mix. I'll choose which questions to answer, and the dice will decide the rest."
+    # what each mode does, for a player who asks
+    explain:
+      guided: "Answer everything: you answer each question about the world yourself, one at a time (about twenty short questions)."
+      oracle: "Dice for everything: the dice answer every question. After each step you see what they made and may re-roll one part of it, once."
+      mixed: "A mix: next you see a list of the questions and pick the ones you want to answer yourself; the dice answer all the others. You may still re-roll one dice result at each step."
   pick:
     header: "Choosing your questions"
     prompt: "Which of these questions would you like to answer yourself? The dice will decide the rest."
@@ -40,8 +45,18 @@ seed:
     rolled_some: "You chose {mine}, and the dice chose {rolled}."
     rolled_rest: "The dice chose {rolled}, and you chose the rest."
     chose_all: "You chose all of this."
+    # what each choice at a summary does, for a player who asks
+    explain_keep: "Keep it: this result stays, and we go on to the next step."
+    explain_reroll: "{label}: the dice roll {what} again, and the rest of this step is rebuilt to fit, so names may change too. You get one re-roll per step, and the new result is final."
+    explain_reroll_step: "{label}: the dice make this whole step again. You get one re-roll per step, and the new result is final."
+    could_be: "It could come out as: {options}."
+    show_all: "Type \"show all\" to see the whole list."
+  lists:
+    powers: "All the powers here: {items}."
+    people: "Everyone you may meet: {items}."
+    places: "All the dangerous places people talk about: {items}."
   suggest_note: "The dice will decide this one. You can re-roll it once after you see the result."
-  details_head: "Here is a little more about each choice:"
+  details_none: "There is nothing more to tell about this yet. You will find out more in play."
   check:
     title: "Finished"
     ok: "Everything fits together. Welcome to {region}."
@@ -196,7 +211,7 @@ seed:
       options:
         hold: "Yes"
     ws.q.keeper_count:
-      prompt: "How many gods (keepers) answer prayers here?"
+      prompt: "How many gods answer prayers here? (This world calls its gods keepers.)"
       pick: "How many gods"
       what: "how many gods"
       options:
@@ -255,7 +270,7 @@ seed:
         old_tongue: "The Old Tongue, which was spoken by whatever fell"
         people: "The language of the main non-human people here"
     ws.q.haven_site:
-      prompt: "Where does your home town (the haven) stand?"
+      prompt: "Where does your home town stand? (It is your haven, the safe base you come back to.)"
       pick: "Where your home town stands"
       what: "where the town stands"
       options:
@@ -346,11 +361,24 @@ seed:
   tongues:
     lic.lang.common: "Common"
     lic.lang.old_tongue: "the Old Tongue"
-    lic.lang.cant: "thieves' cant"
+    lic.lang.cant: "thieves' cant (a secret street slang)"
+    lic.lang.kinspeech: "Kinspeech (the beastfolk's language)"
   presence:
     common: "many"
     uncommon: "some"
     rare: "a few"
+
+# Words a player may ask about at any setup step ("what does haven mean?"): `words` are matched at the start of
+# a word in the question; the peoples are glossed from creation c2.people below.
+glossary:
+  keepers: {words: [keeper], text: "Keepers: this world's name for its gods, the powers that answer prayers."}
+  haven: {words: [haven], text: "Haven: your home base, the safe town or village where you can rest, heal and trade between journeys."}
+  kinspeech: {words: [kinspeech], text: "Kinspeech: the language of the beastfolk."}
+  cant: {words: [cant], text: "Thieves' cant: a secret slang of thieves and street folk."}
+  dread: {words: [dread], text: "Dread: the fear and horror that stay with your character. The number on your sheet is how much they can bear."}
+  resolve: {words: [resolve], text: "Resolve: strength of mind. It helps your character hold out against fear, pain and temptation, and sets how much dread they can bear."}
+  focus: {words: [focus], text: "Focus: what your character spends on special moves and spells."}
+  guard: {words: [guard], text: "Guard: how hard your character is to hit."}
 
 creation:
   header: "Making your character, step {n} of {total}: {title}"
@@ -363,6 +391,10 @@ creation:
         - "- Is there anything you would rather never see in the story, or see only off-stage?"
         - "- How do you want to make your character?"
       footer: "Answer in a sentence (for example, \"fights and mysteries, no spiders, quick start\"), type a number, or press Enter for a quick start."
+      explain:
+        fast: "Quick start: you make your own character in five short questions; everything else takes sensible defaults."
+        full: "The full workshop: you make your own character and decide every detail yourself, about fifteen questions."
+        ready_made: "A ready-made character: you pick one of the characters already made for this world and start at once (you may rename them)."
       options:
         fast: "Quick start, which takes five questions and a few minutes"
         full: "The full workshop, with every choice (about fifteen questions)"
@@ -484,6 +516,9 @@ creation:
       options:
         begin: "Begin"
         change: "Change something"
+      explain:
+        begin: "Begin: the story starts now. You can still change these choices once, any time before your first night's rest."
+        change: "Change something: pick one of your answers to give again; the rest stay as they are."
     change:
       title: "Change something"
       prompt: "What would you like to change?"
@@ -493,7 +528,8 @@ creation:
   sheet:
     head: "{name} ({pronouns}) is {a_people} {life} who grew up {grew_up}."
     body: "Health (Vitality) {vitality}, Focus {focus} (spent on special moves and spells), Luck (fate) {fate}"
-    guard: "Guard {guard} (how hard you are to hit), dread {dread} (how much fear you can bear)"
+    attrs_note: "(Resolve is strength of mind, against fear, pain and temptation.)"
+    guard: "Guard {guard} (how hard you are to hit), dread {dread} (dread is the fear that stays with you; this is how much you can bear)"
     good: "You are good at {deep}, and also trained in {access}."
     technique: "Special move: {name} (costs {focus} Focus)"
     birth: "Since birth, you have had {what}."
