@@ -1,0 +1,511 @@
+# Plain wording for world setup (the seed) and character creation: what the PLAYER reads.
+#
+# The rules data keeps its own wording (rules/data/world_seed.yaml, origins.yaml); this table owns only what the
+# screens say. Keys are the rules' ids (step numbers, question ids, option ids, creation block ids), so recorded
+# answers, events and the Interpret role's options never change. Anything missing here falls back to the old,
+# sanitized rules text, and tests/engine/test_setup_text.py lists every missing entry.
+#
+# {enter} in a footer is what pressing Enter does ("to let the dice decide", "for Soldier").
+
+footer:
+  pick: "Pick a number, describe your own, or press Enter {enter}."
+  pick_many: "Pick numbers (like 2, 5), describe your own, or press Enter {enter}."
+  number: "Pick a number, or press Enter {enter}."
+  words: "Write it in a sentence, or press Enter {enter}."
+  dice: "to let the dice decide"
+
+seed:
+  header: "World {n} of 14 · {title}"
+  mode:
+    header: "Before your character: the world"
+    prompt: "Who decides what the world is like?"
+    enter: "to mix"
+    options:
+      guided: "You answer every question"
+      oracle: "The dice decide everything (you can re-roll one result per step)"
+      mixed: "Mix: you choose which questions to answer, the dice roll the rest"
+  pick:
+    header: "Before your character: your questions"
+    prompt: "Which questions do you want to answer yourself? The dice roll the rest."
+    footer: "Pick numbers (like 1, 4, 9), or press Enter to let the dice roll them all."
+    all: "All of them"
+  summary:
+    prompt: "Keep this?"
+    keep: "Keep it"
+    reroll: "Re-roll {what}"
+    reroll_step: "Re-roll this"
+    enter: "to keep it"
+    rerolled: "(Re-rolled. This one stands.)"
+    rolled_all: "The dice chose all of this."
+    rolled_some: "You chose {mine}; the dice chose {rolled}."
+    rolled_rest: "The dice chose {rolled}; you chose the rest."
+    chose_all: "You chose all of this."
+  suggest_note: "The dice will decide. You can re-roll it once when you see the result."
+  details_head: "More about each choice:"
+  check:
+    title: "All set"
+    ok: "Everything fits together. Welcome to {region}."
+    rerun: "The dice re-rolled part of the world so everything fits together."
+
+  steps:
+    1: "What went wrong in this land"
+    2: "How magic works"
+    3: "Gods and the dead"
+    4: "Peoples and languages"
+    5: "The lands around your home town"
+    6: "Your home town"
+    7: "Who holds power"
+    8: "People you will meet"
+    9: "Dangerous places"
+    10: "What roams the wilds"
+    11: "Rumors"
+    12: "The calendar"
+    13: "How the story begins"
+
+  # Each question: prompt (one short question), pick (its line in the mixed-mode list), what (its name in
+  # "Re-roll ..." and "You chose ..."), options (plain labels), short (a few words for the recap, optional).
+  questions:
+    ws.q.wound:
+      prompt: "What went wrong in this land, a generation or two ago?"
+      pick: "What went wrong in this land"
+      what: "the trouble"
+      options:
+        fallen_realm: "A fallen kingdom: its roads, keeps and heirs remain"
+        plague: "A plague: a sickness that comes back every hot season"
+        invasion: "An invasion: a horde was driven back, and is coming again"
+        curse: "A curse: a wrong was done, and the land answers it"
+        sundering: "A sundering: a great spell went wrong and broke something"
+        silent_god: "A silent god: the land's great god stopped answering"
+        long_winter: "A long winter: the seasons broke and have not mended"
+        restless_dead: "The restless dead: the dead do not stay in their graves"
+        frontier: "A frontier: settlers pushing into a wild land not theirs"
+        schism: "A schism: one faith split in two, both claim the temples"
+        tyrant: "A tyrant: a cruel power rules the land beyond your town"
+        waking: "An awakening: something very old is waking under the land"
+    ws.q.climate:
+      prompt: "What is the weather like here?"
+      pick: "The weather"
+      what: "the weather"
+      options:
+        temperate: "Mild: green summers, wet autumns, snow some winters"
+        northern: "Northern: short summers, long hard winters"
+        highland: "Highland: high valleys, cold nights, mountain storms"
+        arid: "Dry: scrubby hills, hot days, cold nights"
+        coastal: "Coastal: mild and wet, fog and sea-storms"
+    ws.q.magic_level:
+      prompt: "How common is magic?"
+      pick: "How common magic is"
+      what: "how common magic is"
+      options:
+        rare: "Rare: most villages have never seen a spell"
+        uncommon: "Uncommon: every town has a hedge-witch and a healing priest"
+        common: "Common: wards on the gates, a mage on the council"
+      short:
+        rare: "Magic is rare."
+        uncommon: "Magic is uncommon."
+        common: "Magic is common."
+    ws.q.magic_law:
+      prompt: "Is casting spells in public allowed?"
+      pick: "The law on magic"
+      what: "the law on magic"
+      options:
+        lawful: "Allowed: no one minds a spell in the market"
+        licensed: "Licensed: only with the rulers' permission"
+        feared: "Feared: legal, but any spell draws a crowd, a priest or a mob"
+      short:
+        lawful: "Anyone may cast spells in the open."
+        licensed: "Casting in public needs the rulers' licence."
+        feared: "Casting is legal but feared; a spell in public draws a crowd."
+    ws.q.spirits:
+      prompt: "How often do you meet spirits of a place (of springs, stones, old trees)?"
+      pick: "Spirits of places"
+      what: "the spirits"
+      options:
+        rare: "Rarely, except at places of old power"
+        uncommon: "Sometimes in the wild, often at places of old power"
+        common: "Often anywhere wild, always at places of old power"
+      short:
+        rare: "Spirits of places are rare."
+        uncommon: "Spirits of places turn up now and then."
+        common: "Spirits of places are everywhere in the wild."
+    ws.q.arcane_source:
+      prompt: "Who can learn to cast spells?"
+      pick: "Who can learn magic"
+      what: "who can learn magic"
+      options:
+        anyone_literate: "Anyone who can read, with a teacher or a book"
+        order_only: "Only members of a wizards' order; teaching outside it is a crime"
+        gifted_only: "Only those born with the gift"
+      short:
+        anyone_literate: "Anyone who can read can learn spells."
+        order_only: "Only a wizards' order may teach spells."
+        gifted_only: "Only those born with the gift can cast spells."
+    ws.q.extra_impossible:
+      prompt: "Some things no magic can do anywhere (raise the dead, turn back time). Is anything else impossible here? Pick up to two."
+      pick: "What else magic cannot do"
+      what: "what else is impossible"
+      options:
+        none: "Nothing else"
+        no_teleport: "No teleporting"
+        no_flight: "No flying"
+        no_conjured_food: "No conjuring food or drink"
+        no_true_names: "No commanding anyone by their true name"
+        no_far_speech: "No speaking across more than a day's walk"
+        no_undying: "No living forever"
+        no_gold_making: "No making gold, silver or gems"
+        no_weather_command: "No controlling a whole region's weather"
+    ws.q.regrowth:
+      prompt: "Can magic regrow a lost arm or eye?"
+      pick: "Whether magic can regrow a lost limb"
+      what: "regrowing limbs"
+      options:
+        "no": "No: what is lost stays lost"
+        great_rite: "Yes, but only by a rare great ritual at a place of power"
+      short:
+        "no": "No magic regrows a lost limb."
+        great_rite: "Only a rare great ritual regrows a lost limb."
+    ws.q.closed_school:
+      prompt: "Is any kind of magic lost or unknown here?"
+      pick: "A lost kind of magic"
+      what: "lost magic"
+      options:
+        none: "None: every kind is known"
+        necromancy: "Necromancy (magic of the dead) is lost"
+        summoning: "Summoning is lost"
+        pact: "No power here makes pacts"
+        shapeshifting: "Shapeshifting is lost"
+      short:
+        none: ""
+        necromancy: "Necromancy is lost."
+        summoning: "Summoning is lost."
+        pact: "No power here makes pacts."
+        shapeshifting: "Shapeshifting is lost."
+    # Auto-rolled (never asked): a rules setting about a later character choice (refusing magic).
+    ws.q.relics_magic:
+      prompt: "Do people who shun magic also shun magic items?"
+      pick: "Whether those who shun magic shun magic items"
+      what: "magic items"
+      options:
+        "yes": "Yes: an enchanted thing is magic too"
+        holy_exempt: "Holy relics are fine; other magic items are not"
+    # Auto-taken (never asked): it has only one possible answer.
+    ws.q.hybrid_none:
+      prompt: "Do some kinds of magic stay unmixable here?"
+      pick: "Unmixable magic"
+      what: "unmixable magic"
+      options:
+        hold: "Yes"
+    ws.q.keeper_count:
+      prompt: "How many gods (keepers) answer prayers here?"
+      pick: "How many gods"
+      what: "how many gods"
+      options:
+        "2": "Two"
+        "3": "Three"
+        "4": "Four"
+    ws.q.keepers:
+      prompt: "What kinds of gods are they? Pick one for each god (two to four); the dice fill any you leave."
+      pick: "What the gods are"
+      what: "the gods"
+      options:
+        kf.sky: "The sky: oaths and storms"
+        kf.hearth: "The hearth: harvest, shelter, the hungry fed"
+        kf.death: "Death: meets every soul at the crossing"
+        kf.war: "War: the shield-wall, courage, the just fight"
+        kf.healer: "A healer raised to godhood after death"
+        kf.saint: "A local hero raised to godhood for one great deed"
+        kf.ancestors: "The ancestors: the land's first people, watching and judging"
+        kf.land: "The land itself: old and slow, honoured at stones and springs"
+        kf.knowledge: "Knowledge: letters, measures and hidden things"
+        kf.justice: "Justice: law and the scales, judge of every bargain"
+        kf.sea: "Rivers and the sea: travellers, and what the water takes"
+        kf.pact: "A dealmaker: gives readily, always collects"
+      short:
+        kf.sky: "god of the sky and oaths"
+        kf.hearth: "god of hearth and harvest"
+        kf.death: "god of death"
+        kf.war: "god of war"
+        kf.healer: "a healer made a god"
+        kf.saint: "a local hero made a god"
+        kf.ancestors: "the ancestors"
+        kf.land: "the spirit of the land"
+        kf.knowledge: "god of knowledge"
+        kf.justice: "god of justice"
+        kf.sea: "god of rivers and the sea"
+        kf.pact: "a power that bargains"
+    ws.q.bargainer:
+      prompt: "When someone is dying, does anyone offer them a deal?"
+      pick: "Who bargains with the dying"
+      what: "the deal at death's door"
+      options:
+        death_keeper: "The god of death, if there is one"
+        none: "No one"
+        fey: "A fey lord, for a price paid later"
+        fiend: "A tempter, who always collects"
+    ws.q.presence:
+      prompt: "Which peoples live here?"
+      pick: "Which peoples live here"
+      what: "who lives here"
+      options: {}
+    ws.q.second_tongue:
+      prompt: "Besides Common, what is the land's other language?"
+      pick: "The land's second language"
+      what: "the other language"
+      options:
+        old_tongue: "The Old Tongue, spoken by whatever fell"
+        people: "The language of the land's main non-human people"
+    ws.q.haven_site:
+      prompt: "Where does your home town (the haven) stand?"
+      pick: "Where your home town stands"
+      what: "where the town stands"
+      options:
+        river_ford: "At a river ford"
+        river_bridge: "At a bridge over a river"
+        crossroads: "Where two roads cross"
+        hill: "On a walled hill above the fields"
+        harbour: "At a harbour"
+        lakeshore: "On a lake shore"
+        old_fort: "Inside the walls of an old fort"
+        forest_edge: "At the edge of a great wood"
+    ws.q.terrain:
+      prompt: "What is the land around like?"
+      pick: "The land around"
+      what: "the land around"
+      options: {}
+    ws.q.haven_tier:
+      prompt: "Is your home a village or a town?"
+      pick: "Village or town"
+      what: "village or town"
+      options:
+        village: "A village: a few hundred people, a shrine, an inn"
+        town: "A walled town: a market, a temple, guilds"
+    ws.q.rulers:
+      prompt: "Who rules your home town?"
+      pick: "Who rules your home town"
+      what: "who rules"
+      # the rulers on offer depend on whether the haven is a village or a town
+      options_by_tier:
+        village:
+          org.clan.family: "An old family; its head is the headman"
+          org.crown.noble: "A lord in a manor above the village"
+          org.faith.shrine: "The shrine's priests"
+          org.crown.civic: "A council of elders"
+        town:
+          org.crown.civic: "A town council and its watch"
+          org.crown.noble: "A noble house in the castle"
+          org.guild.merchant: "The merchants' guild"
+          org.faith.temple: "The temple"
+    ws.q.fourth_faction:
+      prompt: "Who else has power here? The dice add the rest."
+      pick: "Another power in the land"
+      what: "the other power"
+      options:
+        org.outlaw.bandits: "Bandits"
+        org.faith.shrine: "A shrine and its faithful"
+        org.crown.civic: "A council"
+        org.guild.merchant: "A merchants' guild"
+        org.order.hunters: "Monster hunters"
+        org.clan.family: "A powerful family"
+        org.cult: "A secret cult"
+        org.company.trading: "A trading company"
+        org.crown.noble: "A noble house"
+        org.order.druidic: "Druids"
+        org.outlaw.thieves: "A thieves' guild"
+        org.order.arcane: "An order of wizards"
+    ws.q.month_names:
+      prompt: "Do the months have names?"
+      pick: "Month names"
+      what: "the month names"
+      options:
+        named: "Yes, names in the land's own words"
+        counted: "No, just counted (\"the second month of spring\")"
+    ws.q.inciting:
+      prompt: "How does the story begin?"
+      pick: "How the story begins"
+      what: "how the story begins"
+      options:
+        alarm: "The alarm bell: something is at the gate"
+        dying_messenger: "A rider dies in the market with a message for someone else"
+        missing: "Someone is missing, and the trail leads out of town"
+        offer: "A powerful person offers you work, coin and a warning"
+        theft: "Something sacred is stolen from the temple"
+        omen: "An omen in the sky or the earth that everyone sees"
+        refugees: "Refugees arrive with a story nobody believes"
+        duel: "An inn quarrel becomes a challenge from someone strange"
+
+  # words used by the step recaps
+  peoples:
+    orig.people.human: "humans"
+    orig.people.elf: "elves"
+    orig.people.dwarf: "dwarves"
+    orig.people.halfling: "halflings"
+    orig.people.orc_kin: "orc-kin"
+    orig.people.goblin_kin: "goblin-kin"
+    orig.people.giant_kin: "giant-kin"
+    orig.people.beastfolk: "beastfolk"
+  tongues:
+    lic.lang.common: "Common"
+    lic.lang.old_tongue: "the Old Tongue"
+    lic.lang.cant: "thieves' cant"
+  presence:
+    common: "many"
+    uncommon: "some"
+    rare: "a few"
+
+creation:
+  header: "Your character {n} of {total} · {title}"
+  header_plain: "Your character · {title}"
+  blocks:
+    c0:
+      title: "Before we begin"
+      lines:
+        - "- What would you like plenty of? Up to two: fights, exploring, talking your way through, mysteries, journeys, building something of your own."
+        - "- Is there anything you would rather never see in the story, or see only off-stage?"
+        - "- How do you want to make your character?"
+      footer: "Answer in a sentence (like \"fights and mysteries, no spiders, quick start\"), pick a number, or press Enter for a quick start."
+      options:
+        fast: "Quick start: five questions, a few minutes"
+        full: "Full workshop: every choice, about fifteen questions"
+        ready_made: "Ready-made: pick a character and go"
+    c1:
+      title: "Who are you?"
+      prompt: "What did your character do before this story?"
+      lines:
+        - "You are human unless you say otherwise (like \"an elf hunter\")."
+      enter: "for Soldier"
+      more: "{n} other lives"
+    c2.people:
+      title: "Your people"
+      prompt: "Who were you born among?"
+      enter: "for Human"
+      options:
+        orig.people.human: "Human: no fixed strengths or weaknesses"
+        orig.people.elf: "Elf: quick and keen-eyed, a little frail; sees by starlight"
+        orig.people.dwarf: "Dwarf: tough and steady, a little clumsy; senses stone"
+        orig.people.halfling: "Halfling: nimble and brave, not strong; slips underfoot"
+        orig.people.orc_kin: "Orc-kin: strong and stubborn, not bookish; shrugs off poison"
+        orig.people.goblin_kin: "Goblin-kin: sharp and quick, not charming; sees in the dark"
+        orig.people.giant_kin: "Giant-kin: big and strong, slow to notice; hard to wrestle"
+        orig.people.beastfolk: "Beastfolk: quick, with a keen nose; easily startled"
+    c2.rule:
+      title: "Your people"
+      prompt: "Are you typical of your people, or unusual?"
+      enter: "for {default}"
+      options:
+        typical: "Typical: your people's strengths and weaknesses, a little stronger overall"
+        free: "Unusual: no fixed strengths or weaknesses, a little weaker overall"
+    c3:
+      title: "Where did you grow up?"
+      prompt: "Where did you grow up?"
+      lines:
+        - "(Focus is what you spend on special moves and spells.)"
+      enter: "for {default}"
+      options:
+        orig.up.wilds: "In the wilds: outdoor skills; cannot read, almost no money"
+        orig.up.village: "In a village: animals and a craft; cannot read, little money"
+        orig.up.streets: "On the streets: street smarts and thieves' cant; no money"
+        orig.up.townhouse: "In a guild quarter: reading, a trade and a craft; less Focus"
+        orig.up.court: "At court: reading, manners, a second language, money; less Focus"
+        orig.up.cloister: "In a cloister: reading and extra Focus; nothing else"
+        orig.up.road: "On the road: finding your way and a second language; no home"
+        orig.up.sea: "On the water: sailing and a second language; some money"
+        orig.up.bonded: "In service: extra Focus and one hard-won skill; nothing else"
+    c4:
+      title: "What are you made of?"
+      prompt: "How are your strengths shaped?"
+      stands: "Here is how {a_life} usually stands:"
+      lines:
+        - "Pick a shape; your strengths are placed to suit your life."
+      enter: "to keep it as shown"
+      options:
+        peaked: "Peaked: one great strength, some good ones"
+        even: "Even: four good strengths, no great one"
+        broad: "Broad: many fair strengths, none great"
+    c5:
+      title: "What are you good at?"
+      prompt: "How are your skills spread?"
+      enter: "for {default}"
+      options:
+        focused: "Focused: really good at two things"
+        gifted: "Gifted: really good at one thing, plus a special move or spell"
+        rounded: "Rounded: really good at one thing, trained in two more"
+        broad: "Broad: trained in five things, expert in none"
+    c6:
+      title: "Your early years"
+      prompt: "Was anything said about your birth or childhood?"
+      lines:
+        - "Like \"born in a hard winter\" or \"born under an omen\"."
+      enter: "for nothing remarkable"
+    c7:
+      title: "What you carry"
+      prompt: "Which of these do you carry?"
+      enter: "for the first"
+    c8.drive:
+      title: "What do you want?"
+      prompt: "What does your character want most? Say it in one sentence, or take one of these:"
+      enter: "for the first"
+    c8.anchor:
+      title: "Who matters to you?"
+      prompt: "Who would your character cross the country for? Say who they are to you, or take one of these:"
+      enter: "for the first"
+    c8.aspiration:
+      title: "Who do you hope to become?"
+      prompt: "Who does your character hope to become?"
+      enter: "to leave it open"
+      open: "Leave it open, to find in play"
+    c8.true_thing:
+      title: "One true thing"
+      prompt: "Tell me one thing about your character that is simply true."
+      enter: "to leave it open"
+    c9.name:
+      title: "Your name"
+      prompt: "What is your character called? Add he, she or they if you like."
+      footer: "Type a name, or say \"suggest\" for three ideas."
+      retry: "Type a name for your character."
+    c9.pronouns:
+      title: "Your name"
+      prompt: "How should I speak of {name}?"
+      footer: "Pick a number, or say it your own way."
+    rm.pick:
+      title: "A ready-made character"
+      prompt: "Pick one; you can rename them."
+      enter: "for {default}"
+    rm.name:
+      title: "Their name"
+      prompt: "Keep the name {name}, or give another?"
+      footer: "Pick a number, type another name, or press Enter to keep {name}."
+      keep: "Keep {name}"
+    ready:
+      title: "Ready?"
+      prompt: "Ready to begin?"
+      lines:
+        - "You can still change these choices once, any time before your first night's rest."
+      enter: "to begin"
+      options:
+        begin: "Begin"
+        change: "Change something"
+    change:
+      title: "Change something"
+      prompt: "What would you like to change?"
+      enter: "to begin"
+      begin: "Nothing after all: begin"
+  # the character sheet shown before "Ready?"; game terms are introduced once, in brackets
+  sheet:
+    head: "Your character: {name} ({pronouns}) — {people} · {upbringing} · {life}"
+    body: "Health (Vitality) {vitality} · Focus {focus}, spent on special moves and spells · Luck (fate) {fate}"
+    guard: "Hard to hit (Guard) {guard} · Fear you can bear (dread) {dread}"
+    good: "Good at: {deep}. Also trained in: {access}."
+    technique: "Special move: {name} (costs {focus} Focus)"
+    birth: "Since birth: {what}."
+    speaks: "Speaks: {tongues}; {letters}."
+    reads: "can read"
+    cannot_read: "cannot read"
+    carries: "Carries: {items}, and {coin} coin."
+    wants: "Wants: \"{drive}\""
+    matters: "Cares about: {anchor}"
+    hopes: "Hopes to become: {aspiration}"
+    open: "Left open, to find in play: {what}."
+    open_words:
+      thorn: "a rival (thorn bond)"
+      true_thing: "one true thing about you"
+      aspiration: "who you hope to become"

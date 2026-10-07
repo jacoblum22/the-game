@@ -730,3 +730,24 @@ readers take a `WorldState`. Errors: `engine.world.common.WorldError`. The PC is
   (`engine.harm.apply.wake`, 07.2.9); "what are my options?" gets `turn.stuck_answer` ([LEADS], 12.8.5); claims
   that restate a record note the engine gives (`claims.GIVEN_NOTES`: the inciting incident, leads) are supported;
   cost.exposure's observer defaults to someone present. Kit items are named from `base_items.yaml`.
+
+## Plain setup wording (world seed + creation screens)
+- **One table** (`engine/dm/text/setup.yaml`, read by `engine.dm.setup_text` as `T`): the player's wording for the
+  seed (`seed.mode`, `seed.pick`, `seed.steps.<n>`, `seed.questions.<qid>.{prompt,pick,what,options,short}`,
+  `ws.q.rulers` `options_by_tier`) and creation (`creation.blocks.<bid>.{title,prompt,lines,options,enter,footer}`,
+  `creation.sheet`). Keys are the rules' ids; ids, recorded answers and events are unchanged. A missing entry falls
+  back to the rules' sanitized text; `tests/engine/test_setup_text.py` lists every missing entry and any jargon.
+- `T.pause_block(header, prompt, lines, choices, footer)` builds a pause block (lettered options; the CLI numbers
+  them in place, `render.strip_listing(in_place=True)`); `T.footer(kind, enter)` is the one "how to answer" line
+  (pick | pick_many | number | words). Pause `detail["orig"]` = {option id: rules label} where the plain one differs.
+- `T.read_answer(ctx, message, rec, tag="[SEED]"|"[CREATE]", classes=, cards=, multi=, lines_and_veils=)`:
+  `direct_choice` on the plain labels, else Interpret sees "plain (rules wording)" labels; same schema.
+- **Seed recaps** (`engine.dm.seed_recap`): `recap(step, ws.st, ws.words) -> list[str]` (a few plain lines per step +
+  who chose what); `rolled(step)` = re-rollable answers. `SeedStep.summary` (the rules' dump) is kept for the record.
+  `AUTO` = `ws.q.hybrid_none` (one option) and `ws.q.relics_magic` (a rules setting): never asked, never re-rolled.
+  Steps 10 and 11 (contents hidden) offer no re-roll. Headers: "World n of 14 · <title>",
+  "Your character n of N · <title>".
+- **Enter** (`play/cli.py Session.enter`): an open pause's `default_choice` is taken (echoed "(Keep it)", "(the dice
+  decide)"); a seed/creation default that is not an option (`move_on`, c8.true_thing's `open`) is sent as `move_on`;
+  creation c6 now carries `move_on` as its pause default. No default: nothing sent, except the name block, which
+  says "Type a name for your character." The engine says the same for "skip"; "suggest" offers three names.

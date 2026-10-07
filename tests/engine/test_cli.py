@@ -243,3 +243,33 @@ def test_letter_picks_and_a_number_with_nothing_to_pick(tmp_path: Path) -> None:
     assert FakeGame.last.calls[:3] == [("answer", "mixed"), ("submit", "I climb"), ("answer", "change")]
     assert "Nothing to pick by number here" in out and ("submit", "3") not in FakeGame.last.calls
     assert out.count("1) Commit") == 1 and "  1) Commit\n  2) Change approach\n  3) Withdraw" in out
+
+
+def test_enter_takes_the_pause_default_and_asks_for_a_name(tmp_path: Path) -> None:
+    keep = Pause(kind="seed_step", prompt="Keep this?", default_choice="keep",
+                 choices=[Choice(id="keep", label="Keep it"), Choice(id="veto", label="Re-roll this")])
+    question = Pause(kind="seed_step", prompt="How common is magic?", default_choice="move_on",
+                     choices=[Choice(id="rare", label="Rare: few have seen a spell")])
+    name = Pause(kind="create_step", prompt="What is your character called?", default_choice=None)
+    seed = Response(phase="seed", oof_blocks=[OofBlock(kind="SEED", text="World 2 of 14 · How magic works")],
+                    pause=question)
+    FakeGame.script = [Response(phase="seed", pause=keep), seed,
+                       Response(phase="creation", pause=name), play_resp("Begun.", "turn.1")]
+    # Enter at the mode question (default "mixed"), Enter at a summary (keep), Enter at a question (the dice),
+    # Enter at the name (no default: a hint, nothing sent), a name, then Enter in play (nothing sent)
+    class ModeGame(FakeGame):
+        @classmethod
+        def new(cls, path: Path, config: Any, seed: int | None = None) -> tuple[FakeGame, Response]:
+            game, resp = FakeGame.new(path, config, seed)
+            assert resp.pause is not None
+            return game, resp.model_copy(update={"pause": resp.pause.model_copy(update={"default_choice": "mixed"})})
+
+    out_io = io.StringIO()
+    cli.main(["new", "g"], stdin=io.StringIO("\n\n\n\nWren, she\n\n/quit\n"), stdout=out_io, saves=tmp_path,
+             game_cls=ModeGame, config=lambda offline: {"offline": offline})
+    out = out_io.getvalue()
+    assert FakeGame.last.calls[:4] == [("answer", "mixed"), ("answer", "keep"), ("answer", "move_on"),
+                                       ("submit", "Wren, she")]
+    assert "(Mixed)" in out and "(Keep it)" in out and "(the dice decide)" in out
+    assert out.count("Type a name for your character.") == 1
+    assert len([c for c in FakeGame.last.calls if c[0] in ("submit", "answer")]) == 4

@@ -50,7 +50,12 @@ HELP = """Commands (out of fiction; never sent to a model):
   /autocommit on|off   auto-commit safe offers (a lethal frame never is)
   /fix <what>          dispute something: the DM checks the record and corrects a seen error
   /quit                save and exit (nothing is ever lost)
-At a pause, a number (or letter) picks that choice; any other text is what your character does or says."""
+At a pause, a number (or letter) picks that choice, Enter takes the default it names, and any other text is what
+your character does or says. While making the world and your character, "details" tells you more about each
+choice and "suggest" lets the dice pick."""
+# Pauses of the world setup and character creation: Enter there moves on (the step's own default).
+FLOW_PAUSES = frozenset({"seed_step", "create_step"})
+NAME_HINT = "Type a name for your character."
 
 
 class Quit(Exception):
@@ -281,6 +286,7 @@ class Session:
 
     def handle(self, text: str) -> None:
         if not text:
+            self.enter()
             return
         if text.startswith("/"):
             self.command(text)
@@ -299,6 +305,27 @@ class Session:
             self.pick(choices[n - 1].id)
             return
         self.send(self.game.submit, text)
+
+    def enter(self) -> None:
+        """An empty line: take the open pause's default (echoed in a line), else nothing. A name has no default:
+        the player is told to type one."""
+        p = self.pause
+        if p is None:
+            return
+        ids = [c.id for c in p.choices]
+        if p.default_choice is None:
+            if p.kind == "create_step" and all(i.startswith("name:") for i in ids):
+                self.app.say(NAME_HINT)
+            return
+        if p.default_choice in ids:
+            label = p.choices[ids.index(p.default_choice)].label
+            choice, echo = p.default_choice, label.split(": ")[0].split(" — ")[0].strip()
+        elif p.kind in FLOW_PAUSES:  # the step's default is not one of its options: "move on" means it
+            choice, echo = "move_on", "the dice decide" if p.kind == "seed_step" else "moving on"
+        else:
+            return
+        self.app.say(f"({echo})")
+        self.pick(choice)
 
     def pick(self, choice_id: str) -> None:
         if choice_id in ("quit", "stop_here"):  # an ending's quit, the budget pause's stop: the game stays open

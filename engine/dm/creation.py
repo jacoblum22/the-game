@@ -26,9 +26,10 @@ from pydantic import BaseModel, Field
 from engine import ids
 from engine.abilities.focus import define_focus
 from engine.audit.safety import SafetyEntry, safety_fact
+from engine.dm import setup_text as T
 from engine.dm.context import TurnContext
 from engine.dm.response import Choice, OofBlock, Pause, Response
-from engine.dm.roles.interpret import DETAILS, MOVE_ON, OWN_WORDS, SUGGEST, InterpretResult, interpret
+from engine.dm.roles.interpret import DETAILS, MOVE_ON, OWN_WORDS, SUGGEST, InterpretResult
 from engine.dm.seed_flow import PHASE_KEY, close_pause, flow_tx, open_pause, present_pause
 from engine.gen.birth import BentState, birth_draw, circumstance_for, source_tags
 from engine.store.db import Transaction
@@ -192,43 +193,78 @@ class Block(BaseModel):
     lines: list[str]
     options: list[Choice] = Field(default_factory=list)
     default: str | None = None
-    default_line: str
+    default_line: str = ""
     classes: list[str] = Field(default_factory=list)
     limits: bool = False
-    inline: bool = False  # the options are named in the question lines (1(c)), not listed again
     cards: tuple[str, ...] = ("PR-02-7",)
+    prompt: str = ""  # the one short question (plain wording, engine/dm/text/setup.yaml)
+    footer: str = ""  # how to answer, and what Enter does
+    orig: dict[str, str] = Field(default_factory=dict)  # option id -> the rules' wording (Interpret, "details")
 
 
-def _numbering(bid: str, d: Draft, rules: Any) -> str:
+# how each block is answered: pick (a number or own words), words (a sentence), else number
+_PICK_OWN = frozenset({"c1", "c2.people", "c3", "c8.drive", "c8.anchor", "c8.aspiration"})
+_WORDS = frozenset({"c6", "c8.true_thing"})
+NAME_BLOCKS = ("c9.name", "c9.pronouns")
+
+
+def _position(bid: str, d: Draft, rules: Any) -> tuple[int, int]:
     seq = [b for b in sequence(d, rules) if b != "c9.pronouns"]
     key = "c9.name" if bid == "c9.pronouns" else bid
     n = seq.index(key) + 1 if key in seq else len(seq)
     total = 5 if d.path == "fast" or "c0" not in d.answered else len(seq)
+    return n, total
+
+
+def _numbering(bid: str, d: Draft, rules: Any) -> str:
+    n, total = _position(bid, d, rules)
     return f"[CREATE {n:d}/{total:d}]"
 
 
-def _letters(options: list[Choice]) -> list[str]:
-    return [f"({chr(97 + i)}) {c.label}" for i, c in enumerate(options)]
+def _text(bid: str, key: str, fallback: str = "", **fmt: Any) -> str:
+    """A block's plain wording (setup.yaml), else the fallback; `fmt` fills its {fields}."""
+    v = T.block(bid).get(key)
+    out = str(v) if v is not None else fallback
+    return out.format(**fmt) if fmt else out
+
+
+def _a(word: str) -> str:
+    return ("an " if word[:1].lower() in "aeiou" else "a ") + word
+
+
+def _finish_spec(spec: Block) -> Block:
+    """The footer: the block's own (setup.yaml), else the standard line for its kind with what Enter takes."""
+    if not spec.footer:
+        dflt = next((c.label for c in spec.options if c.id == spec.default), "")
+        enter = _text(spec.id, "enter", "to move on", default=T.name_of(dflt) if dflt else "")
+        kind = "words" if spec.id in _WORDS else ("pick" if spec.id in _PICK_OWN else "number")
+        spec.footer = T.footer(kind, enter)
+    return spec
+
+
+def _plain(bid: str, rules_opts: list[Choice]) -> tuple[list[Choice], dict[str, str]]:
+    """Options relabelled from setup.yaml (ids unchanged), and the rules' labels they replace."""
+    opts = [Choice(id=c.id, label=T.block_option(bid, c.id, c.label)) for c in rules_opts]
+    return opts, T.originals(opts, {c.id: c.label for c in rules_opts})
 
 
 def block_spec(bid: str, d: Draft, state: WorldState, rules: Any, *, show_all: bool = False) -> Block:
     # rule: PR-02-7
-    """The fixed parts of one block: title, question, options in the rules' order, default line."""
+    """The fixed parts of one block: title, question, options in the rules' order, default, how to answer."""
+    return _finish_spec(_spec(bid, d, state, rules, show_all=show_all))
+
+
+def _spec(bid: str, d: Draft, state: WorldState, rules: Any, *, show_all: bool = False) -> Block:
     OR = _origins(rules)
     life = OR[d.get("c1", SOLDIER)]
     up_id = d.get("c3") or life["defaults"]["upbringing"]
     up = OR[up_id]
+    title, prompt, lines = _text(bid, "title", bid), _text(bid, "prompt"), list(T.block(bid).get("lines") or [])
     if bid == "c0":
-        return Block(id=bid, title="Before we begin", options=[Choice(id=i, label=t) for i, t in PATHS if
-                                                                 i != "ready_made" or state.meta.get("world.pregens")],
-                     lines=["(a) What would you like plenty of? Up to two: fights · exploring · talking your way "
-                            "through · mysteries · journeys · building something of your own. Anything you'd "
-                            "like less of?",
-                            "(b) Is there anything you would rather never see in the story, or only off-stage?",
-                            "(c) Quick start (five questions, a few minutes), the full workshop, or a ready-made "
-                            "character?"],
-                     default="fast", default_line="a bit of everything · nothing ruled out (you can say so at any "
-                     "time) · quick start", classes=[t for t, _ in TASTES], limits=True, inline=True,
+        opts, orig = _plain(bid, [Choice(id=i, label=t) for i, t in PATHS
+                                  if i != "ready_made" or state.meta.get("world.pregens")])
+        return Block(id=bid, title=title, options=opts, orig=orig, lines=lines, footer=_text(bid, "footer"),
+                     default="fast", default_line="quick start", classes=[t for t, _ in TASTES], limits=True,
                      cards=("PR-02-7", "12.5.6"))
     if bid == "c1":
         lives = _of_kind(rules, "livelihood")
@@ -236,111 +272,105 @@ def block_spec(bid: str, d: Draft, state: WorldState, rules: Any, *, show_all: b
         shown = lives if show_all else first
         opts = [Choice(id=x, label=f"{OR[x]['name']} — {OR[x].get('gloss', '')}".rstrip(" —")) for x in shown]
         if not show_all:
-            opts.append(Choice(id="more", label=f"{len(lives) - len(first):d} other lives"))
-        return Block(id=bid, title="Who are you?", options=opts, default=SOLDIER, default_line="Soldier.",
-                     lines=["Pick a life your character led before this story, or describe them in a sentence and I "
-                            "will find the nearest.",
-                            "You are human unless you tell me otherwise (\"peoples\" shows the others)."],
-                     classes=lives, cards=("PR-02-7", "02.2.4"))
+            opts.append(Choice(id="more", label=_text(bid, "more", "{n} other lives", n=len(lives) - len(first))))
+        return Block(id=bid, title=title, prompt=prompt, options=opts, default=SOLDIER, default_line="Soldier.",
+                     lines=lines, classes=lives, cards=("PR-02-7", "02.2.4"))
     if bid == "c2.people":
         ps = present_peoples(state, rules)
-        return Block(id=bid, title="Your people.", lines=["Who were you born among?"], default=HUMAN,
-                     options=[Choice(id=p, label=f"{OR[p]['name']} — {OR[p].get('tradeoff', '')}") for p in ps],
+        opts, orig = _plain(bid, [Choice(id=p, label=f"{OR[p]['name']} — {OR[p].get('tradeoff', '')}") for p in ps])
+        return Block(id=bid, title=title, prompt=prompt, lines=lines, default=HUMAN, options=opts, orig=orig,
                      default_line="Human.", classes=ps)
     if bid == "c2.rule":
-        return Block(id=bid, title="Your people.", lines=["Typical of your kind, or uncommon?"],
-                     options=[Choice(id="typical", label="typical of your kind (+7, three placements decided)"),
-                              Choice(id="free", label="uncommon (+5, free)")],
+        opts, orig = _plain(bid, [Choice(id="typical", label="typical of your kind (+7, three placements decided)"),
+                                  Choice(id="free", label="uncommon (+5, free)")])
+        return Block(id=bid, title=title, prompt=prompt, lines=lines, options=opts, orig=orig,
                      default=_default_rule(d.get("c2.people", HUMAN), life["id"], rules), default_line="typical.")
     if bid == "c3":
         ups = _of_kind(rules, "upbringing")
-        return Block(id=bid, title="Where did you grow up?", lines=["Where did you grow up?"],
-                     options=[Choice(id=u, label=f"{OR[u]['name']} — {OR[u].get('tradeoff', '')}") for u in ups],
-                     default=life["defaults"]["upbringing"], default_line=f"{OR[life['defaults']['upbringing']]['name']}.",
-                     classes=ups)
+        opts, orig = _plain(bid, [Choice(id=u, label=f"{OR[u]['name']} — {OR[u].get('tradeoff', '')}") for u in ups])
+        return Block(id=bid, title=title, prompt=prompt, lines=lines, options=opts, orig=orig,
+                     default=life["defaults"]["upbringing"],
+                     default_line=f"{OR[life['defaults']['upbringing']]['name']}.", classes=ups)
     if bid == "c4":
         rule = _rule(d, rules)
         shapes = _shapes(d.get("c2.people", HUMAN), rule, rules)
-        opts = [Choice(id=s, label=f"{s}: {', '.join(f'{v:+d}' for v in arr)}") for s, arr in shapes.items()]
+        nums = {s: ", ".join(f"{v:+d}" for v in arr) for s, arr in shapes.items()}
+        rules_opts = [Choice(id=s, label=f"{s}: {nums[s]}") for s in shapes]
+        opts = [Choice(id=c.id, label=f"{T.block_option(bid, c.id, c.id)} ({nums[c.id]})") for c in rules_opts]
         place = default_placement(d.get("c2.people", HUMAN), rule, "peaked", life["defaults"]["attribute_priority"],
                                   rules)
-        return Block(id=bid, title="What are you made of?",
-                     lines=[f"Here is how a {life['name'].lower()} usually stands: " + _attr_line(place) + ".",
-                            "Pick a shape; the engine places it by your life's priorities."],
-                     options=opts, default="peaked", default_line="peaked, placed as shown.")
+        stands = _text(bid, "stands", "Here is how {a_life} usually stands:", a_life=_a(life["name"].lower()))
+        return Block(id=bid, title=title, prompt=prompt, lines=[f"{stands} {_attr_line(place)}.", *lines],
+                     options=opts, orig=T.originals(opts, {c.id: c.label for c in rules_opts}), default="peaked",
+                     default_line="peaked, placed as shown.")
     if bid == "c5":
         profs = list(_odoc(rules)["profiles"])
-        return Block(id=bid, title="What can you do?",
-                     lines=["Deep in two, a trick up your sleeve, well-rounded, or a bit of everything?"],
-                     options=[Choice(id=p["id"], label=f"{p['name']} — {p['text']}") for p in profs],
+        opts, orig = _plain(bid, [Choice(id=p["id"], label=f"{p['name']} — {p['text']}") for p in profs])
+        return Block(id=bid, title=title, prompt=prompt, lines=lines, options=opts, orig=orig,
                      default=life["defaults"]["profile"], default_line=f"{life['defaults']['profile']}.")
     if bid == "c6":
-        return Block(id=bid, title="Your early years.",
-                     lines=["Was anything said about your birth, or about your early years?"],
-                     default=None, default_line="nothing remarked.", classes=list(MANNERS),
-                     cards=("PR-02-7", "02.6.4"))
+        return Block(id=bid, title=title, prompt=prompt, lines=lines, default=None, default_line="nothing remarked.",
+                     classes=list(MANNERS), cards=("PR-02-7", "02.6.4"))
     if bid == "c7":
         kit = _kits(rules)[life["kit_id"]]
         opts = [Choice(id=f"kit:{i:d}", label=" + ".join(_item_name(it["item_tag"], it.get("note"), rules)
                                                          for it in opt))
                 for i, opt in enumerate(kit["choices"][0]["options"])]
-        return Block(id=bid, title="What you carry.", lines=[f"{kit['name']}: which do you carry?"], options=opts,
-                     default="kit:0", default_line="the first.")
+        return Block(id=bid, title=title, prompt=prompt or f"{kit['name']}: which do you carry?", lines=lines,
+                     options=opts, default="kit:0", default_line="the first.")
     if bid == "c8.drive":
         seeds = list(life["drive_seeds"])
-        return Block(id=bid, title="What do you want?",
-                     lines=["One sentence: the thing your character wants most, or believes most. Or take one of "
-                            "these:"], options=[Choice(id=f"drive:{i:d}", label=f'"{s}"') for i, s in enumerate(seeds)],
+        return Block(id=bid, title=title, prompt=prompt, lines=lines,
+                     options=[Choice(id=f"drive:{i:d}", label=f'"{s}"') for i, s in enumerate(seeds)],
                      default="drive:0", default_line="the first one.")
     if bid == "c8.anchor":
         seeds = [up["bond_seeds"][0], life["bond_seeds"][0]]
-        return Block(id=bid, title="Who matters to you?",
-                     lines=["Name one person your character would cross the country for, and what they are to you. "
-                            "Or:"], options=[Choice(id=f"bond:{i:d}", label=_bond_text(s)) for i, s in enumerate(seeds)],
+        return Block(id=bid, title=title, prompt=prompt, lines=lines,
+                     options=[Choice(id=f"bond:{i:d}", label=_bond_text(s)) for i, s in enumerate(seeds)],
                      default="bond:0", default_line="the first one.")
     if bid == "c8.aspiration":
         asp = list(life.get("aspiration_seeds") or [])
-        opts = [Choice(id=f"asp:{i:d}", label=a["text"]) for i, a in enumerate(asp)] + [Choice(id=OPEN,
-                                                                                         label="leave it open")]
-        return Block(id=bid, title="Who you hope to become", lines=["Who does your character hope to become?"],
-                     options=opts, default=OPEN, default_line="open (it can be found in play).")
+        opts = [Choice(id=f"asp:{i:d}", label=a["text"]) for i, a in enumerate(asp)] + [
+            Choice(id=OPEN, label=_text(bid, "open", "leave it open"))]
+        return Block(id=bid, title=title, prompt=prompt, lines=lines, options=opts, default=OPEN,
+                     default_line="open (it can be found in play).")
     if bid == "c8.true_thing":
-        return Block(id=bid, title="One true thing", lines=["One thing about your character that is simply true?"],
-                     default=OPEN, default_line="open.")
+        return Block(id=bid, title=title, prompt=prompt, lines=lines, default=OPEN, default_line="open.")
     if bid in ("c9.name", "rm.name"):
         opts = [Choice(id=PREFIX_NAME + n, label=n) for n in d.names_offered]
-        lines = ["A name, and how I should speak of your character (he, she, they, or as you like).",
-                 "Say \"suggest\" and I will offer three names."]
         default: str | None = None
-        line = "I will offer three names and wait; a character needs a name."
+        foot = _text("c9.name", "footer")
         if bid == "rm.name":
             pg = _pregen(state, d.get("rm.pick"))
-            lines = [f"{pg.get('name')} ({pg.get('pronouns')}), or another name?"] + lines[1:]
-            opts = [Choice(id="keep", label=f"keep {pg.get('name')}")] + opts
-            default, line = "keep", f"{pg.get('name')}."
-        return Block(id=bid, title="What are you called?", lines=lines, options=opts, default=default,
-                     default_line=line, cards=("PR-02-7", "02.9.6"))
+            name = str(pg.get("name"))
+            prompt = _text(bid, "prompt", "{name}, or another name?", name=name)
+            opts = [Choice(id="keep", label=_text(bid, "keep", "keep {name}", name=name))] + opts
+            default, foot = "keep", _text(bid, "footer", "", name=name)
+        return Block(id=bid, title=title, prompt=prompt, lines=lines, options=opts, default=default, footer=foot,
+                     cards=("PR-02-7", "02.9.6"))
     if bid == "c9.pronouns":
         nm = (d.get("c9.name") or {}).get("name", "your character")
-        return Block(id=bid, title="What are you called?", lines=[f"How should I speak of {nm}?"],
-                     options=[Choice(id=p, label=p) for p, _ in PRONOUNS], default=None,
-                     default_line="I will wait; I never guess a character's pronouns.", cards=("PR-02-7", "02.9.6"))
+        return Block(id=bid, title=title, prompt=_text(bid, "prompt", "How should I speak of {name}?", name=nm),
+                     lines=lines, options=[Choice(id=p, label=p) for p, _ in PRONOUNS], default=None,
+                     footer=_text(bid, "footer"), cards=("PR-02-7", "02.9.6"))
     if bid == "rm.pick":
         pgs = state.meta.get("world.pregens") or []
-        opts = [Choice(id=p["id"], label=f"{p['name']} — {p['sentence']} Good at: {p['good_at']}. Wants: "
-                       f"\"{p['drive']}\"") for p in pgs]
-        return Block(id=bid, title="A ready-made character", lines=["Pick one; you may rename them."], options=opts,
+        opts = [Choice(id=p["id"], label=_pregen_label(p)) for p in pgs]
+        return Block(id=bid, title=title, prompt=prompt, lines=lines, options=opts,
                      default=opts[0].id if opts else None, default_line=f"{pgs[0]['name']}." if pgs else "",
                      cards=("PR-02-3",))
     raise CreationError(f"unknown creation block {bid}")
 
 
-def _render(spec: Block, numbering: str) -> str:
-    lines = [f"{numbering} {spec.title}"] + ["  " + x for x in spec.lines]
-    if spec.options and not spec.inline:
-        lines += ["  " + x for x in _letters(spec.options)]
-    lines.append(f"  If you move on without choosing: {spec.default_line}")
-    return "\n".join(lines)
+def _pregen_label(p: dict[str, Any]) -> str:
+    """'Ranwin Greenby: soldier of Hartmouth, good at blade, shield' (the sentence without its own name)."""
+    who = str(p.get("sentence", "")).removeprefix(f"{p['name']}, ").rstrip(".")
+    good = f", good at {p['good_at']}" if p.get("good_at") else ""
+    return f"{p['name']}: {who}{good}"
+
+
+def _render(spec: Block, header: str) -> str:
+    return T.pause_block(header, spec.prompt, spec.lines, spec.options, spec.footer)
 
 
 # ------------------------------------------------------------------------------------------- numbers
@@ -588,9 +618,14 @@ def validate(rec: dict[str, Any], state: WorldState, rules: Any) -> list[tuple[s
 # ------------------------------------------------------------------------------------------- the sheet
 
 
-def sheet(rec: dict[str, Any], rules: Any) -> str:  # rule: PR-02-6
-    """The [SHEET] block (PR-02-6 step 3); Guard and dread are computed for display only (02.7.4)."""
+def sheet(rec: dict[str, Any], rules: Any, state: WorldState | None = None) -> str:  # rule: PR-02-6
+    """The sheet block (PR-02-6 step 3) in plain words; Guard and dread are computed for display only (02.7.4)."""
     OR = _origins(rules)
+    W = dict(T.creation("sheet") or {})
+
+    def w(key: str, **fmt: Any) -> str:
+        return str(W.get(key, key)).format(**fmt)
+
     a = rec["attributes"]
     attrs = " · ".join(f"{k.capitalize()} {a[k]:+d}" if a[k] else f"{k.capitalize()} 0" for k in ATTRS)
     tags = {it["item_tag"] for it in rec["items"]}
@@ -598,38 +633,44 @@ def sheet(rec: dict[str, Any], rules: Any) -> str:  # rule: PR-02-6
     weapons = {t.split(".")[2] for t in tags if t.startswith("item.weapon.") and len(t.split(".")) > 2}
     comp = 2 if any(t.split(".")[-1] in weapons | ({"shield"} if shield else set()) for t in rec["competence"]) else 1
     guard = 10 + a["agility"] + comp + (1 if shield else 0)  # 06.4.1, coarse: the readied weapon or shield
-    plain = ", ".join(t.split(".")[-1].replace("_", " ") for t in rec["deep"]) or "nothing yet"
-    also = ", ".join(t.split(".")[-1].replace("_", " ") for t in rec["access"]) or "none"
-    lines = [f"[SHEET] {rec['name']} ({rec['pronouns']}) — {OR[rec['people']]['name']} · "
-             f"{OR[rec['upbringing']]['name']} · {OR[rec['livelihood']]['name']}",
+    deep = ", ".join(t.split(".")[-1].replace("_", " ") for t in rec["deep"]) or "nothing yet"
+    also = ", ".join(t.split(".")[-1].replace("_", " ") for t in rec["access"]) or "nothing else"
+    lines = [w("head", name=rec["name"], pronouns=rec["pronouns"], people=OR[rec["people"]]["name"],
+               upbringing=OR[rec["upbringing"]]["name"], life=OR[rec["livelihood"]]["name"]),
              "  " + attrs,
-             f"  Vitality {rec['vitality']:d}/{rec['vitality']:d} · Focus {rec['focus_base']:d}/{rec['focus_base']:d} · "
-             f"fate {rec['fate']:d} · Guard {guard:d} · dread 0 of {rec['dread_threshold']:d}",
-             f"  Good at (+2): {plain}      Also trained: {also}"]
+             "  " + w("body", vitality=rec["vitality"], focus=rec["focus_base"], fate=rec["fate"]),
+             "  " + w("guard", guard=guard, dread=rec["dread_threshold"]),
+             "  " + w("good", deep=deep, access=also)]
     for ab in rec["abilities"]:
         e = rules.abilities.get(ab) or {}
-        cost = e.get("cost") or {}
-        lines.append(f"  Technique: {e.get('name', ab)} — {cost.get('focus', 0)} Focus")
-    birth = rec.get("birth_entries") or []
-    if birth:
-        lines.append("  From birth: " + " · ".join(f"{b['name']}" for b in birth))
-    letters = "reads" if "lic.lang.letters" in rec["licenses"] else "cannot read"
+        lines.append("  " + w("technique", name=e.get("name", ab), focus=(e.get("cost") or {}).get("focus", 0)))
+    told = _birth_tale(rec.get("birth_entries") or [])
+    if told:
+        lines.append("  " + w("birth", what=told))
     tongue = ", ".join(f"{lic.split('.')[-1].replace('_', ' ').capitalize()} ({g})" for lic, g in rec["tongues"].items())
-    lines.append(f"  Speaks: {tongue} · {letters}")
-    items = ", ".join(it.get("name") or _item_name(it["item_tag"], it.get("note"), rules) for it in rec["items"])
-    lines.append(f"  Carries: {items} · {rec['coin']:d} coin")
-    asp = rec["aspiration"]["text"] if isinstance(rec.get("aspiration"), dict) else (rec.get("aspiration") or OPEN)
-    lines.append(f"  Wants: \"{rec['drive']}\"   Hopes to become: {asp}   Matters: {_anchor_text(rec['anchor'])}")
-    still = [k for k, v in (("thorn bond", None), ("true thing", rec.get("true_thing")),
-                            ("aspiration", rec.get("aspiration"))) if not v]
-    lines.append(f"  Still open: {', '.join(still) or 'nothing'}   · You may adjust your choices once before your first "
-                 "night's rest.")
+    lines.append("  " + w("speaks", tongues=tongue,
+                          letters=w("reads" if "lic.lang.letters" in rec["licenses"] else "cannot_read")))
+    names = [str(it.get("name") or _item_name(it["item_tag"], it.get("note"), rules)) for it in rec["items"]]
+    items = ", ".join(n if names.count(n) == 1 else f"{n} (×{names.count(n):d})" for n in dict.fromkeys(names))
+    lines.append("  " + w("carries", items=items, coin=rec["coin"]))
+    lines.append("  " + w("wants", drive=rec["drive"]))
+    lines.append("  " + w("matters", anchor=_anchor_text(rec["anchor"], state)))
+    asp = rec["aspiration"]["text"] if isinstance(rec.get("aspiration"), dict) else rec.get("aspiration")
+    if asp and asp != OPEN:
+        lines.append("  " + w("hopes", aspiration=asp))
+    words = dict(W.get("open_words") or {})
+    still = [str(words.get(k, k)) for k, v in (("thorn", None), ("true_thing", rec.get("true_thing")),
+                                               ("aspiration", asp if asp != OPEN else None)) if not v]
+    if still:
+        lines.append("  " + w("open", what=", ".join(still)))
     return "\n".join(lines)
 
 
-def _anchor_text(anchor: Any) -> str:
+def _anchor_text(anchor: Any, state: WorldState | None = None) -> str:
     if isinstance(anchor, dict):
-        return f"{anchor.get('npc')} ({anchor.get('kind', 'friend')})"
+        npc = str(anchor.get("npc"))
+        ent = state.entities.get(npc) if state is not None else None
+        return f"{ent.name if ent is not None else npc} ({anchor.get('kind', 'friend')})"
     return str(anchor)
 
 
@@ -841,15 +882,14 @@ class CreationFlow:
         else:
             spec = block_spec(bid, d, st, self.ctx.rules, show_all=bool(rec.detail.get("all"))) \
                 if bid not in ("ready", "change") else None
-            res = interpret(self.ctx, message or "", choices=choices, block=_block_text(rec),
-                            classes=spec.classes if spec else (), lines_and_veils=bool(spec and spec.limits),
-                            cards=spec.cards if spec else ("PR-02-7",))
+            res = T.read_answer(self.ctx, message or "", rec, tag="[CREATE]", classes=spec.classes if spec else (),
+                                lines_and_veils=bool(spec and spec.limits), cards=spec.cards if spec else ("PR-02-7",))
         if res.choice == DETAILS or (bid == "c1" and res.choice == "more"):
             if bid == "c1":
                 with flow_tx(self.ctx) as tx:
                     close_pause(tx, rec, "more", "option")
                     return self._ask(tx, [], "c1", fold(tx.state), show_all=True)
-            return present_pause(rec, "creation", [OofBlock(kind="NOTE", text=_details(choices))])
+            return present_pause(rec, "creation", [OofBlock(kind="NOTE", text=_details(choices, rec))])
         with flow_tx(self.ctx) as tx:
             notes = self._apply(tx, rec, bid, d, res, message)
             if notes is None:  # the block stays open (a name is required; names were offered)
@@ -897,6 +937,12 @@ class CreationFlow:
                 tx.add(_ev("c2.people", people, "player_words", message, rule="PR-02-2"))
             life = _origins(self.ctx.rules)[value]
             notes.append(OofBlock(kind="NOTE", text=f"{life['name']}, then: {life.get('gloss', '')}."))
+            absent = None if people else self._people_named(message or words or "", among=_of_kind(self.ctx.rules,
+                                                                                                     "people"))
+            if absent:  # named, but the seed left that people out of this land (12.16.7)
+                plural = str((T.seed("peoples") or {}).get(absent, _origins(self.ctx.rules)[absent]["name"]))
+                notes.append(OofBlock(kind="NOTE", text=f"No {plural} live in this land, so you will pick from the "
+                                                        "peoples who do."))
         return notes
 
     def _value(self, bid: str, spec: Block, picked: str | None, res: InterpretResult,
@@ -957,6 +1003,10 @@ class CreationFlow:
     def _apply_name(self, tx: Transaction, rec: PauseRecord, bid: str, d: Draft, res: InterpretResult,
                     words: str | None) -> list[OofBlock] | None:  # rule: 02.9.6
         opts = [c["id"] for c in rec.choices]
+        if res.choice == MOVE_ON and bid == "c9.name":  # nothing to take: a character needs a name (02.9.6)
+            self.retry = [OofBlock(kind="NOTE", text=_text("c9.name", "retry", "Type a name for your character."))]
+            close_pause(tx, rec, None, "withdrawn")
+            return None
         if res.choice in (SUGGEST, MOVE_ON) and not (bid == "rm.name" and res.choice == MOVE_ON):
             people = d.get("c2.people", HUMAN) if bid == "c9.name" else _pregen(tx.state, d.get("rm.pick")).get(
                 "people", HUMAN)
@@ -976,8 +1026,8 @@ class CreationFlow:
             name, pron = parse_name(words or "")
             src = "player_words"
             if name and not plausible_name(name):  # "1", "skip", "?": ask again, never accept it as a name
-                self.retry = [OofBlock(kind="NOTE", text=f'"{name}" does not sound like a name. What is your '
-                                       'character called? (Say "suggest" for three names.)')]
+                self.retry = [OofBlock(kind="NOTE", text=f'"{name}" does not sound like a name. '
+                                       + _text("c9.name", "retry", "Type a name for your character."))]
                 name = None
             elif name and name.islower():
                 name = name.title()
@@ -990,11 +1040,12 @@ class CreationFlow:
         tx.add(_ev(bid, {"name": name, "pronouns": pron}, src, words, rule="02.9.6"))
         return []
 
-    def _people_named(self, text: str) -> str | None:  # rule: PR-02-2
-        """C2 only if the player names a people (in their C1 answer): the first present people named."""
+    def _people_named(self, text: str, among: list[str] | None = None) -> str | None:  # rule: PR-02-2
+        """C2 only if the player names a people (in their C1 answer): the first present people named (`among`:
+        look in those peoples instead)."""
         low = text.lower()
         OR = _origins(self.ctx.rules)
-        for p in present_peoples(self.ctx.state, self.ctx.rules):
+        for p in among if among is not None else present_peoples(self.ctx.state, self.ctx.rules):
             if p == HUMAN:
                 continue
             stem = OR[p]["name"].lower().split("-")[0].rstrip("s")
@@ -1047,35 +1098,36 @@ class CreationFlow:
             d = fold(tx.state)
             nxt = bid if bid in sequence(d, rules) else (next_block(d, rules) or "c9.name")
             return self._ask(tx, [*blocks, OofBlock(kind="NOTE", text=f"Not yet: {why}.")], nxt, d)
-        told = _birth_tale(rec["birth_entries"])
-        out = [*blocks, *([OofBlock(kind="NOTE", text=told)] if told else []), OofBlock(kind="SHEET", text=sheet(rec, rules))]
+        out = [*blocks, OofBlock(kind="SHEET", text=sheet(rec, rules, tx.state))]  # the birth is told on the sheet
         if tx.state.meta.get("player.new_to_this") is not False:  # no answer: treated as new (02.10.1)
             out.append(OofBlock(kind="RULES", text=FIRST_USE))
-        choices = [Choice(id=BEGIN, label="begin"), Choice(id=CHANGE, label="change something (say what, or "
-                                                                             "\"details\")")]
-        text = ("[CREATE] Ready? Begin, or change something (say what, or \"details\").\n"
-                "         You may also adjust these choices once after you have tried them, any time before your "
-                "character's first night's rest.\n"
-                "         If you move on without choosing: begin.")
-        return self._pause(tx, out, text, "Ready?", choices, BEGIN, {"block": "ready"})
+        choices = [Choice(id=i, label=T.block_option("ready", i, i)) for i in (BEGIN, CHANGE)]
+        text = T.pause_block(T.creation_header(None, None, _text("ready", "title", "Ready?")),
+                             _text("ready", "prompt", "Ready?"), list(T.block("ready").get("lines") or []), choices,
+                             T.footer("number", _text("ready", "enter", "to begin")))
+        return self._pause(tx, out, text, _text("ready", "prompt", "Ready?"), choices, BEGIN, {"block": "ready"})
 
     def _ask_change(self, tx: Transaction, blocks: list[OofBlock], d: Draft) -> Response:
         seq = [b for b in sequence(d, self.ctx.rules) if b not in ("c0", "c9.pronouns")]
         choices = [Choice(id=b, label=block_spec(b, d, tx.state, self.ctx.rules).title) for b in seq]
-        choices.append(Choice(id=BEGIN, label="nothing after all: begin"))
-        text = "[CREATE] What would you like to change?\n" + "\n".join("  " + x for x in _letters(choices)) + \
-            "\n  If you move on without choosing: begin."
-        return self._pause(tx, blocks, text, "What would you like to change?", choices, BEGIN, {"block": "change"})
+        choices.append(Choice(id=BEGIN, label=_text("change", "begin", "nothing after all: begin")))
+        prompt = _text("change", "prompt", "What would you like to change?")
+        text = T.pause_block(T.creation_header(None, None, _text("change", "title", "Change something")), prompt, [],
+                             choices, T.footer("number", _text("change", "enter", "to begin")))
+        return self._pause(tx, blocks, text, prompt, choices, BEGIN, {"block": "change"})
 
     def _ask(self, tx: Transaction, blocks: list[OofBlock], bid: str, d: Draft, *, show_all: bool = False,
              reopen: PauseRecord | None = None) -> Response:
         spec = block_spec(bid, d, tx.state, self.ctx.rules, show_all=show_all)
-        text = _render(spec, _numbering(bid, d, self.ctx.rules))
+        n, total = _position(bid, d, self.ctx.rules)
+        text = _render(spec, T.creation_header(n, total, spec.title))
         lead: list[OofBlock] = []
         if bid == "c0" and reopen is None:
             lead = [OofBlock(kind="NOTE", text=WELCOME)]
-        return self._pause(tx, blocks, text, spec.title, spec.options, spec.default,
-                           {"block": bid, "all": show_all}, lead=lead)
+        # Enter takes the block's default; a block whose default is "nothing" (c6) moves on. A name never has one.
+        default = spec.default if spec.default is not None or bid in NAME_BLOCKS else MOVE_ON
+        return self._pause(tx, blocks, text, spec.prompt or spec.title, spec.options, default,
+                           {"block": bid, "all": show_all, **({"orig": spec.orig} if spec.orig else {})}, lead=lead)
 
     def _pause(self, tx: Transaction, blocks: list[OofBlock], text: str, prompt: str, choices: list[Choice],
                default: str | None, detail: dict[str, Any], lead: list[OofBlock] | None = None) -> Response:
@@ -1100,14 +1152,24 @@ def new_character(ctx: TurnContext) -> Response:  # rule: PR-02-7
     return CreationFlow(ctx).begin(new=True)
 
 
+_MECHANICS = re.compile(r"\d|\+|\blic\.|\bdeed\b|\blever\b|\bedge\b|\brank\b|Precision", re.I)
+
+
 def _birth_tale(entries: list[dict[str, Any]]) -> str:  # rule: 02.6.8
-    """The birth results told as things that were always true (one sentence each, no numbers)."""
-    return " ".join(str(e.get("text", "")).rstrip(".") + "." for e in entries if e.get("text"))
+    """The birth results told as things that were always true, no numbers: each entry's opening words when they
+    are plain ("strangers believe you when you are telling the truth"), else its name ("a knack for blades")."""
+    out = []
+    for e in entries:
+        first = re.split(r":|(?<=\.)\s", str(e.get("text", "")))[0].strip().rstrip(".")
+        said = first if first and not _MECHANICS.search(first) else str(e.get("name", ""))
+        if said:
+            out.append(said[:1].lower() + said[1:] if not said[1:2].isupper() else said)
+    return "; ".join(out)
 
 
-def _details(choices: list[Choice]) -> str:
-    return "\n".join(f"{i + 1}. {c.label}" for i, c in enumerate(choices))
-
-
-def _block_text(rec: PauseRecord) -> str:
-    return "\n".join(str(b.get("text", "")) for b in rec.detail.get("blocks", []))
+def _details(choices: list[Choice], rec: PauseRecord) -> str:
+    """'details': each option, with the rules' fuller wording beside it where the screen shortened it."""
+    orig = dict(rec.detail.get("orig") or {})
+    return "\n".join([str(T.seed("details_head"))] + [f"{i + 1}. {c.label}" + (f" ({orig[c.id]})" if orig.get(c.id)
+                                                                                 else "")
+                                                       for i, c in enumerate(choices)])

@@ -25,6 +25,10 @@ from tests.fixtures.game import new_store
 RULES = load_rules()
 
 
+NAME = "What is your character called?"  # the name block's question (engine/dm/text/setup.yaml)
+READY = "Ready to begin?"
+
+
 def pz(r: Response) -> Pause:
     """The response's open pause (asserted)."""
     assert r.pause is not None
@@ -58,17 +62,17 @@ def test_parsers():
 def test_quick_start_skipped_answers_take_the_defaults(tmp_path: Path):
     store, ctx, flow = seeded(tmp_path)
     r = flow.present()
-    assert "[CREATE 1/5] Before we begin" in r.oof_blocks[-1].text and pz(r).default_choice == "fast"
+    assert "Your character 1 of 5 · Before we begin" in r.oof_blocks[-1].text and pz(r).default_choice == "fast"
     r = flow.submit("")
-    assert "[CREATE 2/5] Who are you?" in r.oof_blocks[-1].text
+    assert "Your character 2 of 5 · Who are you?" in r.oof_blocks[-1].text
     assert [c.id for c in pz(r).choices][:2] == ["orig.life.soldier", "orig.life.hunter"]
     r = flow.submit("skip")
     assert r.oof_blocks[0].text.startswith("Soldier, then")
     r = flow.submit("")
     r = flow.submit("")
-    assert "[CREATE 5/5] What are you called?" in r.oof_blocks[-1].text and pz(r).default_choice is None
+    assert "Your character 5 of 5 · Your name" in r.oof_blocks[-1].text and pz(r).default_choice is None
     r = flow.submit("Wren, she/her")
-    assert any(b.kind == "SHEET" for b in r.oof_blocks) and pz(r).prompt == "Ready?"
+    assert any(b.kind == "SHEET" for b in r.oof_blocks) and pz(r).prompt == READY
     r = flow.submit("")
     assert r.phase == "play" and r.pause is None
     a = answers(store)
@@ -89,20 +93,22 @@ def test_a_name_is_required(tmp_path: Path):
     store, ctx, flow = seeded(tmp_path)
     for msg in ("", "", "", ""):
         r = flow.submit(msg)
-    assert pz(r).prompt == "What are you called?"
-    r = flow.submit("")  # no name: three are offered and the block waits (no default)
-    assert pz(r).prompt == "What are you called?" and pz(r).default_choice is None
+    assert pz(r).prompt.startswith(NAME) and pz(r).default_choice is None
+    r = flow.submit("")  # no name: the block asks for one and waits (no default, no names drawn)
+    assert r.oof_blocks[0].text == "Type a name for your character." and pz(r).prompt.startswith(NAME)
+    assert pz(r).default_choice is None and not pz(r).choices
+    r = flow.submit("suggest")  # three names on request (02.9.6)
     names = [c.id for c in pz(r).choices]
     assert len(names) == 3 and all(n.startswith("name:") for n in names)
-    r = flow.submit("skip")
-    assert pz(r).prompt == "What are you called?"
+    r = flow.submit("skip")  # still no name: asked again, the same three names kept
+    assert r.oof_blocks[0].text == "Type a name for your character." and [c.id for c in pz(r).choices] == names
     r = flow.answer(pz(r).choices[0].id)
-    assert pz(r).prompt == "What are you called?" and [c.id for c in pz(r).choices] == ["she/her", "he/him",
-                                                                                            "they/them"]
+    assert pz(r).prompt.startswith("How should I speak of") and [c.id for c in pz(r).choices] == [
+        "she/her", "he/him", "they/them"]
     r = flow.submit("")  # pronouns are never guessed (02.9.6)
     assert [c.id for c in pz(r).choices] == ["she/her", "he/him", "they/them"]
     r = flow.answer("they/them")
-    assert pz(r).prompt == "Ready?"
+    assert pz(r).prompt == READY
     r = flow.answer("begin")
     pc = store.state.meta["pc.active"]
     assert store.state.entities[pc].data["pronouns"] == "they/them"
@@ -115,7 +121,7 @@ def test_lines_and_veils_are_kept_verbatim(tmp_path: Path):
                                 "own_words_text": "Mysteries and journeys. No spiders; torture only off-stage.",
                                 "lines_and_veils": ["spiders", "torture only off-stage"]})
     r = flow.submit("Quick start, please. Mysteries and journeys. No spiders; torture only off-stage.")
-    assert "[CREATE 2/5]" in r.oof_blocks[-1].text
+    assert "Your character 2 of 5" in r.oof_blocks[-1].text
     prefs = {(e.kind, e.topic) for e in safety_prefs(store.state)}
     assert prefs == {("line", "spiders"), ("veil", "torture only off-stage")}
     a = answers(store)
@@ -167,10 +173,10 @@ def test_ready_made_character(tmp_path: Path):
     store, ctx, flow = seeded(tmp_path)
     pregens = store.state.meta["world.pregens"]
     r = flow.answer("ready_made")
-    assert "[CREATE 2/3] A ready-made character" in r.oof_blocks[-1].text
+    assert "Your character 2 of 3 · A ready-made character" in r.oof_blocks[-1].text
     assert [c.id for c in pz(r).choices] == [p["id"] for p in pregens]
     r = flow.answer(pregens[1]["id"])
-    assert "[CREATE 3/3]" in r.oof_blocks[-1].text and pz(r).default_choice == "keep"
+    assert "Your character 3 of 3" in r.oof_blocks[-1].text and pz(r).default_choice == "keep"
     r = flow.submit("")
     assert any(b.kind == "SHEET" for b in r.oof_blocks)
     flow.answer("begin")
@@ -186,12 +192,11 @@ def test_workshop_all_defaults(tmp_path: Path):
     store, ctx, flow = seeded(tmp_path)
     r = flow.answer("full")
     titles = []
-    while r.pause and pz(r).prompt != "Ready?":
+    while r.pause and pz(r).prompt != READY:
         titles.append(r.oof_blocks[-1].text.splitlines()[0])
-        r = flow.submit("Wren, she/her" if pz(r).prompt == "What are you called?" else "")
-    assert titles[0].startswith("[CREATE 2/") and titles[-1].startswith("[CREATE ") and "What are you called?" in \
-        titles[-1]
-    n = int(titles[-1].split("/")[1].split("]")[0])
+        r = flow.submit("Wren, she/her" if pz(r).prompt.startswith(NAME) else "")
+    assert titles[0].startswith("Your character 2 of ") and titles[-1].endswith("· Your name")
+    n = int(titles[-1].split(" of ")[1].split(" ")[0])
     assert n == len(titles) + 1
     flow.answer("begin")
     assert store.state.meta["pc.creation"]["path"] == "full"
@@ -206,7 +211,7 @@ def test_change_something_reopens_a_block(tmp_path: Path):
     r = flow.answer("c1")
     assert "Who are you?" in r.oof_blocks[-1].text
     r = flow.answer("orig.life.thief")
-    assert pz(r).prompt == "Ready?"
+    assert pz(r).prompt == READY
     flow.answer("begin")
     pc = store.state.meta["pc.active"]
     assert store.state.entities[pc].data["livelihood"] == "orig.life.thief"
@@ -227,7 +232,7 @@ def test_resume_mid_creation_and_a_second_character(tmp_path: Path):
         flow2.submit(msg)
     first = store.state.meta["pc.active"]
     r = new_character(ctx2)
-    assert r.phase == "creation" and "[CREATE 1/5]" in r.oof_blocks[-1].text
+    assert r.phase == "creation" and "Your character 1 of 5" in r.oof_blocks[-1].text
     finish_fast(flow2, name="Ash, he/him")
     second = store.state.meta["pc.active"]
     assert second != first and store.state.entities[second].name == "Ash"

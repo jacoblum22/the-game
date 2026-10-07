@@ -112,10 +112,12 @@ def _numbered_line(line: str, n: int) -> bool:
     return line.strip().startswith("1)") and nums == list(range(1, n + 1))
 
 
-def strip_listing(text: str, pause: Any) -> str:
+def strip_listing(text: str, pause: Any, *, in_place: bool = False) -> str:
     """The block without its own listing of the pause's choices (the renderer prints them once, numbered): an
     inline numbered line, or a run of lettered `(a) ...` items matching the choices. Lettered items that are not
-    the choices (sub-questions) become plain bullets, so letters never compete with the numbers."""
+    the choices (sub-questions) become plain bullets, so letters never compete with the numbers. `in_place`: the
+    matching lettered run becomes the numbered choices where it stands (lines after it, such as a "how to
+    answer" line, stay after it)."""
     labels = [c.label for c in pause.choices]
     lines = text.split("\n")
     lines = [ln for ln in lines if not _numbered_line(ln, len(labels))]
@@ -138,16 +140,18 @@ def strip_listing(text: str, pause: Any) -> str:
             group.append((ind, text_, raw))
         if len(group) == len(labels) and all(_same(t, _bare(lab)) for (_, t, _), lab in zip(group, labels,
                                                                                             strict=True)):
-            continue  # the choices themselves: printed once below
+            if in_place:
+                out.append(choice_lines(pause, indent=" " * group[0][0]))
+            continue  # the choices themselves: printed once (here, or below)
         for _ind, _, raw in group:
             out.append(_OPT_MARK.sub(r"\1- ", raw[0]))
             out += raw[1:]
     return "\n".join(out)
 
 
-def choice_lines(pause: Any) -> str:
+def choice_lines(pause: Any, indent: str = "  ") -> str:
     """The pause's choices, one per line: `  1) Commit`."""
-    return "\n".join(f"  {i}) {_bare(c.label)}" for i, c in enumerate(pause.choices, 1))
+    return "\n".join(f"{indent}{i}) {_bare(c.label)}" for i, c in enumerate(pause.choices, 1))
 
 
 def render_response(resp: Any, width: int) -> str:
@@ -165,7 +169,14 @@ def render_response(resp: Any, width: int) -> str:
             parts.append(t.strip())
     if pause is not None:
         shown = "\n\n".join(parts)
-        if pause.prompt and pause.prompt.strip() not in shown:
+        asked = not pause.prompt or pause.prompt.strip() in shown
+        if choices and asked and resp.oof_blocks:  # the question is in its block: number the choices there
+            last = resp.oof_blocks[-1].text
+            placed = strip_listing(last, pause, in_place=True)
+            if placed != strip_listing(last, pause) and parts and parts[-1] == strip_listing(last, pause).strip():
+                parts[-1] = placed.strip()
+                return "\n\n".join(wrap(p, width) for p in parts)
+        if not asked:
             parts.append(pause.prompt.strip())
         if choices:
             parts.append(choice_lines(pause))

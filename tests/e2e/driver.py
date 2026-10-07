@@ -100,9 +100,9 @@ class Driver:
                     r = self.call("answer", veto)
                 else:
                     r = self.call("answer", "keep")
-            elif p is not None and "Name as many" in (p.prompt + " ".join(b.text for b in r.oof_blocks)):
+            elif p is not None and "all" in ids_:  # the mixed-mode list of questions to answer
                 r = self.call("submit", "1, 3")
-            elif p is not None and any(c.id == "own_words" for c in p.choices) or "own words" in r.text():
+            elif p is not None and any(c.id == "own_words" for c in p.choices) or "describe your own" in r.text():
                 r = self.call("submit", self.rng.choice(["the dead do not stay buried", "magic is rare and feared",
                                                          ""]))
             else:

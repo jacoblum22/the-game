@@ -21,9 +21,11 @@ from contextlib import contextmanager
 from typing import Any
 
 from engine import ids
+from engine.dm import setup_text as T
 from engine.dm.context import TurnContext
 from engine.dm.response import Choice, OofBlock, Pause, Response
-from engine.dm.roles.interpret import DETAILS, MOVE_ON, OWN_WORDS, SUGGEST, InterpretResult, interpret
+from engine.dm.roles.interpret import DETAILS, MOVE_ON, OWN_WORDS, SUGGEST, InterpretResult
+from engine.dm.seed_recap import AUTO, recap, rolled
 from engine.gen import _seed_steps as steps
 from engine.gen._seed_lib import data as seed_data
 from engine.gen.world_seed import (
@@ -48,7 +50,9 @@ ALL = "all"
 NONE_OPT = "none"
 MULTI = {"ws.q.extra_impossible": 2, "ws.q.keepers": 4}  # questions answered with a list (12.16.5, 12.16.6)
 # No closed list of options: the oracle always rolls these (the player may veto them at the step's summary).
-UNASKED = ("ws.q.presence", "ws.q.terrain")
+# AUTO: never asked either (one possible answer, or a rules setting a new player cannot weigh; never vetoed).
+UNASKED = ("ws.q.presence", "ws.q.terrain", *AUTO)
+NO_VETO_STEPS = (10, 11)  # what these steps made is not shown, so a re-roll would mean nothing to the player
 CARDS = ("12.16.2", "PR-12-9")
 PHASE_KEY = "game.phase"
 
@@ -89,6 +93,12 @@ def question_options(qid: str, ws: WorldSeed | None = None) -> list[Choice]:  # 
     if qid == "ws.q.extra_impossible":
         out = [Choice(id=NONE_OPT, label="nothing else")] + out
     return out
+
+
+def plain_options(qid: str, ws: WorldSeed | None = None) -> list[Choice]:
+    """A question's options as the player reads them (engine/dm/text/setup.yaml), same ids and order."""
+    tier = (ws.st.get("tier") if ws is not None else None) or "village"
+    return [Choice(id=c.id, label=T.option_label(qid, c.id, c.label, tier)) for c in question_options(qid, ws)]
 
 
 def askable(n: int | None = None) -> list[str]:
@@ -268,8 +278,8 @@ class SeedFlow:
         else:
             qid = rec.detail.get("question")
             classes = [c.id for c in choices] if stage == "question" else []
-            res = interpret(self.ctx, message or "", choices=choices, block=_block_text(rec), classes=classes,
-                            cards=CARDS, multi=stage == "pick" or qid in MULTI)
+            res = T.read_answer(self.ctx, message or "", rec, tag="[SEED]", classes=classes, cards=CARDS,
+                                multi=stage == "pick" or qid in MULTI)
         if res.choice == DETAILS:
             return present_pause(rec, "seed", [OofBlock(kind="NOTE", text=_details(rec))])
         words = res.own_words_text or (message if res.choice == OWN_WORDS else None)
@@ -317,7 +327,7 @@ class SeedFlow:
         assert self._ws is not None
         step = self._ws.history[-1]
         self._op_run_record(tx, step)
-        return [OofBlock(kind="SEED", text=step.summary + "\n  (vetoed once: these answers stand)")]
+        return [OofBlock(kind="SEED", text=self._recap(step) + "\n  " + str(T.seed("summary", "rerolled")))]
 
     def _on_question(self, tx: Transaction, rec: PauseRecord, res: InterpretResult, words: str | None,
                      message: str | None) -> list[OofBlock]:  # rule: 12.16.2
@@ -340,8 +350,7 @@ class SeedFlow:
                     by, words if src == "player_words" else None)
         self._op(tx, _ev_answer(qid, value, src, words if src == "player_words" else None))
         if value is None and res.choice == SUGGEST:
-            notes.append(OofBlock(kind="NOTE", text="The oracle rolls it; you may veto it once when the step's "
-                                                    "summary is shown."))
+            notes.append(OofBlock(kind="NOTE", text=str(T.seed("suggest_note"))))
         return notes
 
     def _complete_multi(self, tx: Transaction, qid: str, picks: list[str]) -> list[str]:
@@ -389,7 +398,7 @@ class SeedFlow:
                 vetoes = self._veto_choices(ws, step)
                 if vetoes:
                     return self._ask_summary(tx, blocks, step, vetoes)
-                blocks.append(OofBlock(kind="SEED", text=step.summary))
+                blocks.append(OofBlock(kind="SEED", text=self._recap(step)))
                 continue
             return self._finish(tx, ws, blocks)
 
@@ -412,56 +421,67 @@ class SeedFlow:
         return next((q for q in wanted if q not in ws.given and q not in ws.sources), None)
 
     def _veto_choices(self, ws: WorldSeed, step: SeedStep) -> list[Choice]:  # rule: 12.16.2
-        """keep, then one veto per rolled answer (or the whole step when it asks nothing); none once vetoed."""
-        if step.n in ws._vetoed:  # noqa: SLF001 -- WorldSeed exposes no accessor for its veto set
+        """keep, then one veto per rolled answer (or the whole step when it asks nothing); none once vetoed, none
+        for an auto-taken answer, none for a step whose result is not shown."""
+        if step.n in ws._vetoed or step.n in NO_VETO_STEPS:  # noqa: SLF001 -- no accessor for the veto set
             return []
-        rolled = [a for a in step.answers if a.source == "oracle"]
+        reroll = str(T.seed("summary", "reroll"))
         if steps.STEP_QUESTIONS.get(step.n):
-            opts = [Choice(id=f"veto:{a.question}", label=f"veto {a.question.split('.')[-1].replace('_', ' ')}: "
-                           "roll it again once") for a in rolled]
+            opts = [Choice(id=f"veto:{a.question}", label=reroll.format(what=T.question_what(a.question)))
+                    for a in rolled(step)]
         else:
-            opts = [Choice(id="veto", label="veto: roll this step again once")]
-        return [Choice(id=KEEP, label="keep it"), *opts] if opts else []
+            opts = [Choice(id="veto", label=str(T.seed("summary", "reroll_step")))]
+        return [Choice(id=KEEP, label=str(T.seed("summary", "keep"))), *opts] if opts else []
+
+    def _recap(self, step: SeedStep) -> str:
+        """The step's plain recap under its header (the rules' summary stays on SeedStep.summary)."""
+        ws = self._ws
+        assert ws is not None
+        lines = recap(step, ws.st, ws.words)
+        return "\n".join([T.seed_header(step.n, step.name), *(f"  {x}" for x in lines)])
 
     # ---------------------------------------------------------------- pauses
 
     def _pause(self, tx: Transaction, blocks: list[OofBlock], block: str, prompt: str, choices: list[Choice],
-               default: str | None, detail: dict[str, Any]) -> Response:
+               default: str | None, detail: dict[str, Any], orig: dict[str, str] | None = None) -> Response:
         own = [OofBlock(kind="SEED", text=block)]
+        if orig:
+            detail = {**detail, "orig": T.originals(choices, orig)}
         detail = {"flow": FLOW, **detail, "blocks": [b.model_dump() for b in own]}
         rec = open_pause(tx, "seed_step", prompt, choices, default, detail, "PR-12-9")
         return Response(phase="seed", oof_blocks=[*blocks, *own], pause=Pause.of(rec))
 
     def _ask_mode(self, tx: Transaction, blocks: list[OofBlock]) -> Response:  # rule: 12.16.2
-        modes = [Choice(id=m["id"], label=m["text"]) for m in seed_data().WS["modes"]]
-        prompt = "Before your character, the world. Who answers its questions?"
-        block = _render("[SEED 0/14] How the world is made", prompt, modes,
-                        "If you move on without choosing: mixed.")
-        return self._pause(tx, blocks, block, prompt, modes, DEFAULT_MODE, {"stage": "mode"})
+        rules_text = {str(m["id"]): str(m["text"]) for m in seed_data().WS["modes"]}
+        modes = [Choice(id=i, label=str(T.seed("mode", "options", i) or t)) for i, t in rules_text.items()]
+        prompt = str(T.seed("mode", "prompt"))
+        block = T.pause_block(str(T.seed("mode", "header")), prompt, [], modes,
+                              T.footer("number", str(T.seed("mode", "enter"))))
+        return self._pause(tx, blocks, block, prompt, modes, DEFAULT_MODE, {"stage": "mode"}, rules_text)
 
     def _ask_pick(self, tx: Transaction, blocks: list[OofBlock]) -> Response:  # rule: PR-12-9
-        qs = [Choice(id=q, label=seed_data().QS[q]["ask"]) for q in askable()]
-        qs.append(Choice(id=ALL, label="all of them"))
-        prompt = "Which of these questions would you like to answer yourself? The oracle rolls the rest."
-        block = _render("[SEED 0/14] Your questions", prompt + " Name as many as you like (\"2, 5, 9\").", qs,
-                        "If you move on without choosing: the oracle rolls them all.")
-        return self._pause(tx, blocks, block, prompt, qs, MOVE_ON, {"stage": "pick"})
+        asks = {q: str(seed_data().QS[q]["ask"]) for q in askable()}
+        qs = [Choice(id=q, label=T.question_pick(q, a)) for q, a in asks.items()]
+        qs.append(Choice(id=ALL, label=str(T.seed("pick", "all"))))
+        prompt = str(T.seed("pick", "prompt"))
+        block = T.pause_block(str(T.seed("pick", "header")), prompt, [], qs, str(T.seed("pick", "footer")))
+        return self._pause(tx, blocks, block, prompt, qs, MOVE_ON, {"stage": "pick"}, asks)
 
     def _ask_question(self, tx: Transaction, blocks: list[OofBlock], ws: WorldSeed, qid: str) -> Response:
         q = seed_data().QS[qid]
-        opts = question_options(qid, ws)
+        opts = plain_options(qid, ws)
         n = step_of(qid)
-        many = {"ws.q.keepers": " (one for each power; any you leave are rolled)"}.get(qid, "")
-        prompt = q["ask"] + many
-        block = _render(f"[SEED {n:d}/14] {step_info(n)['name']}", prompt, opts,
-                        "Or answer in your own words · \"details\" for more · \"suggest\" and the oracle rolls it\n"
-                        "  If you move on without choosing: the oracle rolls it.")
+        prompt = T.question_prompt(qid, str(q["ask"]))
+        block = T.pause_block(T.seed_header(n, step_info(n)["name"]), prompt, [], opts,
+                              T.footer("pick_many" if qid in MULTI else "pick", T.dice()))
+        orig = {c.id: c.label for c in question_options(qid, ws)}
         return self._pause(tx, blocks, block, prompt, opts, MOVE_ON, {"stage": "question", "question": qid,
-                                                                      "step": n})
+                                                                      "step": n}, orig)
 
     def _ask_summary(self, tx: Transaction, blocks: list[OofBlock], step: SeedStep, vetoes: list[Choice]) -> Response:
-        prompt = "Keep this, or veto one rolled answer (it is rolled again once)?"
-        block = step.summary + "\n" + _options(vetoes) + "\n  If you move on without choosing: keep it."
+        prompt = str(T.seed("summary", "prompt"))
+        block = T.pause_block(self._recap(step), prompt, [], vetoes,
+                              T.footer("number", str(T.seed("summary", "enter"))))
         return self._pause(tx, blocks, block, prompt, vetoes, KEEP, {"stage": "summary", "step": step.n})
 
     # ---------------------------------------------------------------- the end of the seed
@@ -470,11 +490,11 @@ class SeedFlow:
         """Step 4 (the seed check) and step 5 (hand over to creation)."""
         self._op(tx, _ev_answer(CHECK, None, "oracle_roll", rule="12.16.17"))
         world = ws.world()
-        reruns = [h.summary for h in ws.history if h.n == CHECK_STEP]
-        ok = sum(1 for c in world.check if c.ok)
-        blocks += [OofBlock(kind="SEED", text=t) for t in reruns]
-        blocks.append(OofBlock(kind="SEED", text=f"[SEED 14/14] The seed check\n  all {ok:d} requirements hold. "
-                                                 f"Welcome to {world.region.name}."))
+        reran = any(h.n == CHECK_STEP for h in ws.history)
+        lines = ([str(T.seed("check", "rerun"))] if reran else []) + \
+            [str(T.seed("check", "ok")).format(region=world.region.name)]
+        head = str(T.seed("header")).format(n=CHECK_STEP, title=T.seed("check", "title"))
+        blocks.append(OofBlock(kind="SEED", text="\n".join([head, *(f"  {x}" for x in lines)])))
         write_world(tx, world)
         from engine.dm.creation import open_creation  # creation reads the seeded world; imported late
 
@@ -504,30 +524,18 @@ def write_world(tx: Transaction, world: SeededWorld) -> None:  # rule: 12.16.1
 # ------------------------------------------------------------------------------------------- rendering
 
 
-def _options(choices: list[Choice]) -> str:
-    return "\n".join(f"  ({_letter(i)}) {c.label}" for i, c in enumerate(choices))
-
-
-def _letter(i: int) -> str:
-    return chr(97 + i) if i < 26 else str(i + 1)
-
-
-def _render(title: str, prompt: str, choices: list[Choice], tail: str) -> str:
-    return f"{title}\n  {prompt}\n{_options(choices)}\n  {tail}"
-
-
-def _block_text(rec: PauseRecord) -> str:
-    return "\n".join(str(b.get("text", "")) for b in rec.detail.get("blocks", []))
-
-
 def _details(rec: PauseRecord) -> str:
-    """'details': the question's options in full, and its note when the rules give one."""
+    """'details': each option with the rules' fuller wording beside it, and the question's note when the rules give
+    one."""
     qid = rec.detail.get("question")
-    lines = [f"{i + 1}. {c['label']}" for i, c in enumerate(rec.choices)]
+    orig = dict(rec.detail.get("orig") or {})
+    lines = [str(T.seed("details_head"))]
+    lines += [f"{i + 1}. {c['label']}" + (f" ({orig[c['id']]})" if orig.get(c["id"]) else "")
+              for i, c in enumerate(rec.choices)]
     if qid:
         note = seed_data().QS[qid].get("note")
         if note:
             lines.append(f"Note: {note}")
     if rec.detail.get("stage") == "mode":
-        lines.append("In oracle and mixed mode you may veto one rolled answer per step; it is rolled again once.")
+        lines.append("When the dice decide, you may re-roll one result per step, once.")
     return "\n".join(lines)

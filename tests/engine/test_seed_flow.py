@@ -55,17 +55,17 @@ def test_mixed_seed_answers_rolls_and_one_veto(tmp_path: Path):
     assert [c.id for c in pz(r).choices][:-1] == qs  # the questions in T-12-15 order, then "all"
     r = flow.submit(f"{qs.index('ws.q.wound') + 1}, {qs.index('ws.q.magic_level') + 1}")  # numbers: no model call
     assert not model.calls
-    assert "ws.q.wound" in r.oof_blocks[-1].text or pz(r).prompt.startswith("Every frontier")
+    assert pz(r).prompt.startswith("What went wrong in this land")
     wounds = [c.id for c in question_options("ws.q.wound")]
     r = flow.submit("2")  # the second wound, by number
     wound = [a for a in store.state.seed_answers if a["step"] == "ws.q.wound"]
     assert [(a["choice"], a["source"]) for a in wound] == [(wounds[1], "player_option")]
     # step 1 ran: the climate was rolled, so a veto is offered
-    assert pz(r).prompt.startswith("Keep this") and "[SEED 1/14]" in r.oof_blocks[-1].text
+    assert pz(r).prompt == "Keep this?" and r.oof_blocks[-1].text.startswith("World 1 of 14 · ")
     assert [c.id for c in pz(r).choices] == ["keep", "veto:ws.q.climate"]
     first = store.state.seed_answers[-1]["choice"]  # ws.ran.1: what step 1 rolled
     r = flow.answer("veto:ws.q.climate")
-    assert any("vetoed once" in b.text for b in r.oof_blocks)
+    assert any("(Re-rolled. This one stands.)" in b.text for b in r.oof_blocks)
     # step 2: magic level in the player's own words, classified to the nearest option (12.16.2)
     assert pz(r).prompt == "How common is magic?"
     model.push(Role.INTERPRET, {"choice": "own_words", "own_words_class": "common",
@@ -75,7 +75,7 @@ def test_mixed_seed_answers_rolls_and_one_veto(tmp_path: Path):
     assert (ans["choice"], ans["source"], ans["words"]) == ("common", "player_words", "every village has its witch")
     r = _drain(flow, r)
     assert r.phase == "creation" and r.pause and pz(r).kind == "create_step"
-    assert any(b.text.startswith("[SEED 14/14]") for b in r.oof_blocks)
+    assert any(b.text.startswith("World 14 of 14 · All set") for b in r.oof_blocks)
     st = store.state
     vetoes = [a for a in st.seed_answers if a["step"].startswith("ws.veto.")]
     assert [(a["step"], a["choice"]) for a in vetoes] == [("ws.veto.1", "ws.q.climate")]
@@ -98,14 +98,14 @@ def test_guided_mode_details_and_suggest(tmp_path: Path):
     flow = _flow(store)
     flow.start()
     r = flow.answer("guided")
-    assert pz(r).prompt.startswith("Every frontier")  # guided: no pick list, straight to the questions
+    assert pz(r).prompt.startswith("What went wrong")  # guided: no pick list, straight to the questions
     before = len(list(store.events()))
     r2 = flow.submit("details")
     assert r2.oof_blocks[0].kind == "NOTE" and r2.pause == r.pause and len(list(store.events())) == before
     r3 = flow.submit("suggest")  # handed to the oracle
     a = store.state.seed_answers[-1]
     assert (a["step"], a["choice"], a["source"]) == ("ws.q.wound", None, "oracle_roll")
-    assert any("oracle rolls it" in b.text for b in r3.oof_blocks)
+    assert any("The dice will decide" in b.text for b in r3.oof_blocks)
 
 
 def _run(store: Store, inputs: list[str], *, reopen_at: int | None = None, path: Path | None = None):
