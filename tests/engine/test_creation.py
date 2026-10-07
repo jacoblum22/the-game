@@ -258,3 +258,32 @@ def test_new_character_closes_the_ending_menu(tmp_path: Path):
     r = new_character(ctx)
     assert r.phase == "creation" and pz(r).kind == "create_step"
     assert [p.kind for p in store.state.pauses] == ["create_step"]
+
+
+def test_every_sheet_competence_passes_the_gate(tmp_path: Path):
+    """What the sheet calls "good at" / "trained in" (deep + access) is a held training license (02.5.3) and a
+    G3 proposal on it gates G2 (01.3.1): every livelihood x profile, and every ready-made character."""
+    from types import SimpleNamespace
+
+    from engine.dm.creation import Draft, _of_kind, _odoc, _training_license, build_record
+    from engine.resolve.gate import check_gate
+    from engine.resolve.types import Beat
+    from engine.store.events import LicenseInstance
+
+    store, _, _ = seeded(tmp_path)
+    st = store.state
+    drafts = [Draft(values={"c0": "workshop", "c1": life, "c5": prof["id"]})
+              for life in _of_kind(RULES, "livelihood") for prof in _odoc(RULES)["profiles"]]
+    drafts += [Draft(values={"c0": "ready_made", "rm.pick": p["id"]}) for p in st.meta["world.pregens"]]
+    bad = []
+    for d in drafts:
+        rec = build_record(d, st, RULES)
+        held = SimpleNamespace(licenses={"pc": [LicenseInstance(license_id=x) for x in rec["licenses"]]},
+                               conditions_on=lambda _: [])
+        for tag in rec["deep"] + rec["access"]:
+            lid = _training_license(tag, RULES)
+            beat = Beat(id="beat.1", actor="pc", intent=f"use {tag}", method=f"use {tag}", gate="G3",
+                        would_be_license=lid)
+            if lid not in rec["licenses"] or check_gate(beat, state=held, rules=RULES).gate != "G2":
+                bad.append((rec["livelihood"], rec["profile"], tag, lid))
+    assert not bad, bad
