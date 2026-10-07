@@ -346,9 +346,14 @@ could confirm or contradict, extracted as `{subject id, claim class, predicate, 
 | `action` | "the guard steps aside"; "your companion cuts the rope"; "the merchant pockets the coin and leaves" | the act's closed source in this turn's adjudication record (12.2.9): a behavior list, a Talk frame's outcome, a recorded want or refusal, a `tbl.npc_action` row, a clock or trigger; for an ally, one of 16.13.3's six reasons [revision: I-030] |
 | `sealed` | anything matching a sealed fact's content | the sealed partition (a match is a leak) |
 
-Extraction is `[J:enum]`: every sentence of the draft is read and each assertion assigned to a class;
-uncertain whether a phrase asserts anything → extract it (SG-05 spirit; an atmospheric phrase checked
-needlessly costs nothing). *Worst case (J):* a claim not extracted escapes the check — it is caught later by
+Extraction is `[J:enum]`: every sentence of the draft is read and each assertion assigned to a class.
+**Atmosphere is never a claim** [revision: I-127; DL-12-37]: sensory and ambient detail that names nothing
+addressable (weather, light, sky, smell, temperature, a sound with no source the player could approach, the
+murmur of an unnamed crowd, mood) is not extracted, matching 00.6.6, which never records it. Such detail is
+checked only against `location_time` (it may not contradict the hour, season, weather or climate the store
+holds) and the lines and veils (12.5.6). When it is uncertain whether a phrase is atmosphere or names an
+addressable element, it is an element: extract it, and it is written on mention if it is ordinary furniture
+(12.3.2). *Worst case (J):* a claim not extracted escapes the check — it is caught later by
 the scene-end sweep (12.4.8) or the player (12.3.4), class iv.
 
 **12.3.2 Verdicts.** `[D]` `check_claims(claims)` (00.14.2 tool 32, RC-AUDIT) returns one verdict per
@@ -357,7 +362,7 @@ claim (closed list):
 | Verdict | Means | Required fix |
 |---|---|---|
 | `supported` | the store holds it | none |
-| `new_element` | a new addressable element the store does not hold, contradicting nothing | if it is ordinary scene furniture (12.14.13), write it on mention now (00.6.6) with only the properties the draft implies; otherwise, or if unsure, cut it |
+| `new_element` | a new addressable element the store does not hold, contradicting nothing | write it on mention now (00.6.6) with only the properties the draft implies, unless 12.14.13 forbids it: only a clue, an item beyond common value, a hazard or trap, an adversary, or a person with a want, secret or thread knowledge is cut (or brought in through its owning procedure). An element not written at the draft's write-on-mention step is still written here; an unknown subject is never cut merely for being new [revision: I-127] |
 | `undetermined` | a property of an existing element the store has not settled (is the door locked? her pronoun?) | ask the Oracle or roll the table that settles it, then redraft to the answer; or cut it |
 | `contradicted` | the store holds a different value | redraft to the store's value |
 | `unsourced_change` | the draft says something *changed* (a quantity, a condition, a possession, a position, a standing) with no write this turn, or says a non-player entity *acted* with no source in the adjudication record (an `action` claim; an ally's act with none of 16.13.3's reasons) [revision: I-030] | cut it; a change is never written to match prose (INV-1) |
@@ -376,7 +381,9 @@ never be, because a change needs a resolved source (a frame, a handler, an effec
 [INV-1; 00.6.6; R1 T-14 (tool state wins; "latest wins" only among writes)].
 
 **12.3.3 The redraft cycle and the plain fallback.** `[D]` A draft with any verdict other than `supported`
-is fixed by the table's rule and re-checked. At most **two redrafts** (`pacing.yaml#claim_check.max_redrafts`).
+is fixed by the table's rule and re-checked. A redraft instruction names each failing claim and its fix. It never
+asks the narrator to shorten, simplify or play safe, and a redraft keeps every sentence that passed
+(atmosphere included) [revision: I-127; DL-12-37]. At most **two redrafts** (`pacing.yaml#claim_check.max_redrafts`).
 If the third check still fails, the DM delivers the **plain fallback**: narration built only from the
 adjudication record's fields (each frame's restated beat, its degree in words, the chosen cost form, the
 visible conditions, the omens, the changed positions) and the scene header, one sentence each, with no
