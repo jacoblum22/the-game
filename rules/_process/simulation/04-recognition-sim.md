@@ -61,11 +61,12 @@ of 200 runs (confidence 4 or 5): the grant branch is what a single clear identit
 
 | Play style | Offered within 30 sessions | First at session | Largest child's share of `martial` at session 10 |
 |---|---|---|---|
-| mixed-weapons fighter | 200 of 200 | 3/3/4 | 0.41–0.55 |
-| bow-focused archer | 34 of 200 | — | 0.71–0.85 |
-| single-track swordsman | 1 of 200 | — | 0.81–0.91 |
+| mixed-weapons fighter | 200 of 200 | 3/4/5 | 0.43–0.59 |
+| bow-focused archer | 46 of 200 | 7/—/— | 0.67–0.85 |
+| single-track swordsman | 4 of 200 | — | 0.77–0.93 |
 
-Mixed-weapons Warrior tiers: 3/3/4 · 7/8/9 · 14/15/17 · 26/29/31 · 46/49/52. (An earlier trial with a share
+Mixed-weapons Warrior tiers: 3/4/5 · 7/8/10 · 13/15/16 · 23/25/27 · 43/46/49. [revision: I-108: R3, R7 and R8
+re-quoted from the current `04-recog04-output.txt`, which agrees with T-04-8.] (An earlier trial with a share
 cap of 3/4 and children at 20 offered Warrior to 93 of 200 archers.)
 
 **R4. The hybrid trigger** (martial × arcane; `min` ≥ 60, `balance` ≥ 2/5, joint scenes ≥ 5, `recent_min` ≥
@@ -100,21 +101,21 @@ live; three seats; accepts everything; 100 seeds).
 | three-branch generalist | 3/5/7 | 1 / 3 / 3 / 3 | 1 / 2 / 3 / 4 | martial × arcane 36, Blade 24, Templar 22, Pyromancer 13 |
 
 **R7. Calibration of confidence.** Six play styles × 60 seeds, 20 sessions, nothing accepted; each level-2
-candidate is scored at the pass where it first becomes eligible (1,723 candidates). "Would confirm" = its
+candidate is scored at the pass where it first becomes eligible (1,711 candidates). "Would confirm" = its
 `recent` is at least 24 after 24 further evidence-bearing scenes (the candidate is still being lived).
 "Designed pillar" = the key holds at least 15% of the character's settled deeds at session 20.
 
 | Confidence | Candidates | Would confirm | Designed pillar |
 |---|---|---|---|
-| 0 | 427 | 37 in 100 | 21 in 100 |
-| 1 | 202 | 59 | 41 |
-| 2 | 193 | 64 | 76 |
-| 3 | 108 | 73 | 72 |
-| 4 | 755 | 91 | 98 |
-| 5 | 38 | 97 | 100 |
-| policy **grant** | 534 | 91 | 98 |
-| policy **offer** | 738 | 74 | 74 |
-| policy **abstain** | 451 | 38 | 22 |
+| 0 | 411 | 38 in 100 | 23 in 100 |
+| 1 | 200 | 46 | 45 |
+| 2 | 255 | 65 | 83 |
+| 3 | 107 | 68 | 89 |
+| 4 | 677 | 90 | 98 |
+| 5 | 61 | 91 | 98 |
+| policy **grant** | 496 | 90 | 98 |
+| policy **offer** | 756 | 70 | 81 |
+| policy **abstain** | 459 | 38 | 25 |
 
 How the five confirmations were chosen (`04-feat04.py`, 1,383 candidates over seven play styles, 40 seeds;
 share that would confirm when the fact is true / false): recent ≥ 40: 85 / 51 · recent ≥ half of weighted:
@@ -129,12 +130,12 @@ currency and clear field was not monotone (62, 74, 65, 72, 96 in 100 for scores 
 
 | After the grant she… | Confirmed | Lapsed |
 |---|---|---|
-| stops shooting at once | 18 | 181 |
-| keeps shooting for one more session | 134 | 65 |
-| for two more sessions | 190 | 9 |
-| never stops | 199 | 0 |
+| stops shooting at once | 7 | 172 |
+| keeps shooting for one more session | 112 | 67 |
+| for two more sessions | 170 | 9 |
+| never stops | 179 | 0 |
 
-The new calling (Pyromancer) is first recognized 2 / 3 / 5 sessions after the turn. (An earlier rule that
+(179 runs reach the tier-2 grant.) The new calling (Pyromancer) is first recognized 2 / 4 / 5 sessions after the turn. (An earlier rule that
 tested `recent ≥ 24` confirmed abandoned tiers, because the recency window still held pre-grant evidence.)
 
 **R9. Counted against weighted** at the focus node, session 10: archery 50 against 237 (0.21); thievery 42
@@ -145,15 +146,16 @@ threshold, so it binds only play that yields less than about half of this.
 costly choice is taken in 60% of fights: 4/5/8 · 9/12/16 · 19/24/29 · 35/42/49 · 57/65/75; in 30%: 6/10/16 ·
 17/24/33 · 38/47/59 · 71/83/— · —; in 15% (03's honest baseline): 11/18/31 · 32/48/68 · 73/—/— · — · —.
 
-**Wren (seed 7).** Archer granted at session 4 (weighted 85, counted 18, recent 64, quality events 15,
-scenes 9; confirmations K1–K4; confidence 4). Wayfarer eligible at session 7 scene 32 (weighted 123).
-Tracker eligible at session 7 scene 35 (weighted 80, counted 14, quality events 6, scenes 9). Archer tier 2
-at session 9 (weighted 212; since tier 1: quality events 25, scenes 12, deeds at band ≥ 2: 25). Tier 3 at
-session 15 (weighted 450; since: quality events 52, deeds at band ≥ 3: 41, crises 13). Ranger eligible at
-session 17 (martial 591, wilds 240, balance 240/591, joint scenes 5). Shadow: confidence 0 at scene 97
-(weighted 99, recent 28), confidence 1 at scene 99 (weighted 103). Tracker tier 2 at session 25 (weighted
-201). Consolidation at the season boundary after session 26: martial 770, wilds 403 → Ranger tier 3. Ranger
-tier 4 at session 37 (martial 998, wilds 605). Wilds 907 at session 60: no tier 5.
+**Wren (seed 7, current ladder; `04-wren04-output.txt`) [revision: I-109].** Archer granted at session 2,
+scene 10 (weighted 84, counted 12, recent 84, quality events 11, scenes 8; K1–K4; confidence 4; at the tags:
+bow 84, acrobatics 37, spear 20). Archer tier 2 at scene 42 (weighted 181). Tracker eligible at scene 70
+(weighted 84, recent 30, confidence 0: abstain at scenes 70, 72, 74 and 75), offered at scene 77 (weighted
+101, recent 41, confidence 2). Archer tier 3 in the crisis of scene 80 (weighted 384). Wayfarer at scene 89
+(weighted 203, confidence 3, a broaden fork). Shadow first eligible at scene 95 (weighted 115, recent 31,
+confidence 1: offered and declined). Ranger eligible at scene 97 (martial 565, wilds 227). Tracker tier 2 at
+scene 112 (weighted 162). Consolidation at the season boundary after session 26: martial 695, wilds 336 →
+Ranger tier 3. Ranger tier 4 at scene 170 (martial 894, wilds 486). Wilds 933 at session 60: no
+tier 5. (The earlier trace in this place was the pre-I-089 run; WE-04-2 and WE-04-3 had quoted it.)
 
 ## Reading
 
@@ -162,7 +164,7 @@ tier 4 at session 37 (martial 998, wilds 605). Wilds 907 at session 60: no tier 
    [revision: I-089] With conflicts at power band + the advisory offset (DL-00-05) the same ladder gave
    5 / 12 / 23 / 40 / 60, the weighted total binding tiers 2–5; tiers 2–5 were retuned to 160 / 340 / 640 /
    1,200 (fine and hybrid ×¾, broad ×1½), giving 5 / 10 / 18 / 32 / 54 (`04-recog04-output.txt`; DL-04-32).
-   The trace above is the pre-revision run; `04-wren04-output.txt` holds the current one.
+   The Wren trace above is the current one (`04-wren04-output.txt`) [revision: I-109].
 2. The since-last-tier requirements rarely bind a focused adventurer (the weighted total binds); they bind
    play that avoids danger, which is their purpose. For social play they slow tiers 3–5.
 3. Confidence as defined is monotone in two independent measures of "was this recognition right", which is

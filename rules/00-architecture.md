@@ -2167,7 +2167,8 @@ chapter's rule is canonical) [amended: IR ch.02, 03, 04, 05, 06, 07, 08, 10, 11,
   unslotted acquired abilities (05.2.6). **promotion**: an acquired or shelved ability taken by a pick
   (05.8.6). **form**: an ability that replaces how something works (`claim_slot`; 05.3.2); *distinguish*
   `slot.body_form`. **timing**: when an activation may be used (beat, rider, reaction, trigger; 05.4.1).
-- **working**: an activation that is itself the beat; **rider**: one that attaches to the character's own
+- **working**: an activation that is itself the beat, or a Working-form rider that adds effects of its own
+  to the holder's beat (05.3.2) [revision: I-125]; **rider**: one that attaches to the character's own
   beat (05.1.3). **flare**: one optional surcharge on an activation (05.6.8). **push**: spending Focus on an
   ordinary beat (05.6.7); **grit**: the push declared to ignore wound penalties for a beat (07.2.5).
   **Spent**: at 0 Focus. **overdraw**: paying Focus with Vitality (05.6). **reserve** / **vessel**: banked

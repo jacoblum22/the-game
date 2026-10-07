@@ -66,6 +66,10 @@ def my_pass(eng_, ch_, session, scene, keys, hybrids, accept=True, allow_broad=T
               4*w >= 5*r.W[r.kind_of(key)][0])
         policy = 'abstain' if (conf == 0 or not current) else 'grant' if (conf >= 4 and clear and r.lvl(key) >= 2 and not lineage) else 'offer'
         events.append((session, scene, f"CANDIDATE {key}: {snap(eng_, key)}; deed root {eng_.weighted['deed']}; K1..K5 {ks} -> confidence {conf}; current {current}; clear field {clear}; lineage conflict {lineage}; policy {policy}"))
+        if key == 'deed.martial.archery' and policy == 'grant':  # [revision: I-109] the pick table of WE-04-5 reads these
+            tags = ['deed.martial.archery', 'deed.martial.archery.bow', 'deed.martial.athletics.acrobatics', 'deed.martial.athletics.climbing',
+                    'deed.martial.athletics', 'deed.martial.tactics.reading', 'deed.martial.polearm.spear', 'deed.martial']
+            events.append((session, scene, "  (weighted at tags: " + ', '.join(f"{t.replace('deed.martial.', '')} {eng_.weighted.get(t, 0)}" for t in tags) + ")"))
         if policy != 'abstain':
             seen_first[key] = session
             if not lineage and len(ch_.callings) < r.SEATS and key in ('deed.martial.archery', 'deed.wilds.tracking'):

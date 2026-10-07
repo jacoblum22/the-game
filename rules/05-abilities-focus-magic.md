@@ -145,7 +145,8 @@ slots, ranks, uses, Focus and the shelf are **shown**; `witnessed` and learning 
 
 **05.1.3 The words.** `[N]` [DL-05-04; DL-05-07; DL-05-08; revision: I-065] **Hold**: have an ability in a slot. **Pick**: a calling tier's right to
 fill a calling slot from the pool (04.8.4). **Activation**: one use of an active ability. **Working**: an
-activation that is itself the character's beat. **Rider**: an activation that attaches to the
+activation that is itself the character's beat, or a Working-form rider that adds effects of its own to that
+beat (05.3.2) [revision: I-110]. **Rider**: an activation that attaches to the
 character's own beat. **Stretch**, **emulate**, **crude fallback**: the three priced ways past a
 license's text (01.3.5). **Flare**: one optional surcharge on an activation (05.6.8). **Push**: spending
 Focus on an ordinary beat (05.6.7). **Spent**: at 0 Focus. **Overdraw**: paying Focus with Vitality.
@@ -295,11 +296,18 @@ numbers are [R1 M-17; C:P10; DL-05-04].
 | **Edge** | a number in narrow circumstances | additive · passive | `modify` (edge, harm_edge, reduction, adjust), `multiply`, `step` | action bonus |
 | **Lever** | a citable fact under a stated condition | additive · passive, or rider | `lever` | action bonus |
 | **Permission** | a method the basic verbs exclude, resolved by an ordinary frame | additive · beat | `grant_license`, `claim_slot` on `slot.movement_mode`, or none (the scope is the permission) | add a new action |
-| **Working** | the activation *is* the beat: it produces effects through an aimed or resisted check | independent_trigger · beat | `harm`, `apply_condition`, `remove_condition`, `resource`, `move`, `tick`, `reveal`, `create`, `trigger_check`, `set_fact` | add a new action |
+| **Working** | the activation *is* the beat, or rides one: it produces effects through an aimed or resisted check, or as a rider through the roll of the beat it rides | independent_trigger · beat or rider | `harm`, `apply_condition`, `remove_condition`, `resource`, `move`, `tick`, `reveal`, `create`, `trigger_check`, `set_fact`; and, as part of the activation's package, `lever`, `step`, `modify`, `restrict`, `prevent`, `multiply`, `redirect`, `claim_slot`, `grant_license` [revision: I-126] | add a new action |
 | **Reaction** | fires on a hook, off the holder's own beat | independent_trigger · reaction or trigger | `prevent`, `redirect`, `harm`, `apply_condition`, `move`, `resource`, `lever` | rules exception |
 | **Form** | replaces *how* something works for a duration | priority_exclusive · beat or rider | `claim_slot` (with the effects the claim carries) | rules exception |
 | **Exception** | one stated exception to one stated rule in a narrow context | additive · passive, or rider | `restrict` (as an immunity), `step`, `modify` on a cap-bound quantity, `economy` (reactions only) | rules exception |
 | **Reserve** | converts or returns a resource | independent_trigger · rider, reaction or trigger | `resource`, `modify` (`focus_cost`, maxima) | (fate-point economy; this game allows it inside 05.6's caps) |
+
+A **rider Working** [revision: I-110; DL-05-42] is an active ability that adds produced effects (harm, a severity rung,
+a condition, movement) to the holder's own beat of a named verb, as Aimed Shot, Hew and Cleaving Arc do on a
+Strike. It has `check: none` and `hook: on_degree`: it rides that beat's roll and its effects apply on the
+degrees its text names (05.3.5), resolving as an independent trigger on that hook (05.10.1) at depth 0
+(05.10.5). It costs no action, so the budget's timing term is 0 against a beat Working's 2 (05.11.2), and it is
+bounded by one rider per beat (05.4.3). A Lever rider gives only a lever; anything more is a Working. What separates a Working from an Edge, Lever or Exception is its regime and timing (an activated independent trigger, not a passive additive), not its operations: a beat Working may confer levers or edges on a target, and a rider Working may add a harm edge [revision: I-126].
 
 A proposed ability that fits no form is not an ability: it is a rite (05.8), an item (08), a calling
 capability (04), or out of scope. Adding a form is an amendment to this chapter.
@@ -324,7 +332,7 @@ capability (04), or out of scope. Adding a form is an amendment to this chapter.
 | Timing | When it is used | Action cost | Limit |
 |---|---|---|---|
 | `beat` | it is the declared beat (a Working, a Permission, entering a Form) | whatever ch.06 charges for the verb the ability is anchored to (`check.verb`) | one beat is one activation |
-| `rider` | declared with the holder's own beat of a named verb or tag, in the same frame | none beyond the beat | **one rider per beat** (05.4.3) |
+| `rider` | declared with the holder's own beat of a named verb or tag, in the same frame (a Lever, a Working, entering a Form, an Exception or a Reserve; 05.3.2) | none beyond the beat | **one rider per beat** (05.4.3) |
 | `reaction` | on its hook, in response to another's act | the holder's reaction (06) | one reaction per trigger event; 06 sets reactions per round |
 | `trigger` | on its hook, as a consequence of the holder's own resolved beat or of a boundary | none | fires at most once per event; subject to depth (05.10.5) |
 

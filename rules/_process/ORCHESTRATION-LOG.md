@@ -444,3 +444,8 @@ Resolved all 12 rows: I-038 (Oracle lever cap; sim shows +3.7 down to +0.8 per r
 - **Appendix:** `open-empirical-questions.md` (140 questions; `_process/build-oeq-appendix.py`) and `credits.md`.
 - **README:** ruleset_version 1.0.0; status; issue status (100 rows: 92 resolved, 4 accepted, 4 wontfix).
 - Validator 0 ERROR / 0 WARN. Next: editor pass on the most-edited chapters (short agents).
+
+## Editor pass and final closure
+- E1 (ch.04–05): 34 clarity fixes. E2 (ch.10, 12, 14): 46 fixes; T-14-3 now matches 00.6.3.
+- Findings closed: I-108..I-110 by C8 (ch.04 figures and Wren examples re-derived from seed 7; Working riders allowed); I-120..I-124 by the orchestrator (DL-14-13); I-125 and I-126 by the orchestrator (glossary; complete Working operations list, verified by script over the data).
+- Ledger: 110 rows, all closed (102 resolved, 4 accepted, 4 wontfix). Validator 0/0. RULESET 1.0.0 DONE.

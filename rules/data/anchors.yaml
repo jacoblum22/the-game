@@ -22,9 +22,9 @@ compiled_from:
 - file: 03-tags-and-evidence.md
   sha256_16: 9b1e7c1764efd404
 - file: 04-recognition-and-growth.md
-  sha256_16: a670490cdf7eee92
+  sha256_16: 456c1dc66b577d7e
 - file: 05-abilities-focus-magic.md
-  sha256_16: 2cb1ae59eca546b3
+  sha256_16: bb246f09d5c2cded
 - file: 06-conflict.md
   sha256_16: 9be4c49bb046634a
 - file: 07-harm-recovery-death.md

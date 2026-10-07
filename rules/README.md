@@ -19,7 +19,7 @@ complexity is deliberately not a constraint, because the AI carries the rules.
   - an R5 completeness check;
   - a red team;
   - three paper playtests (newcomer, adversarial, long arc) in a generated world.
-- **Issues:** every ledger issue is closed: 92 resolved, 4 accepted, 4 wontfix (setting-only). See
+- **Issues:** every ledger issue is closed: 102 resolved, 4 accepted, 4 wontfix (setting-only). See
   "Issue status" below.
 
 ## Layout
@@ -68,7 +68,7 @@ All simulations are seeded and deterministic. Each output file sits next to its 
 
 ## Issue status (`_process/issue-ledger.md`)
 
-All 100 issues are closed. Each row records its evidence and resolution.
+All 110 issues are closed. Each row records its evidence and resolution.
 - **Accepted (4):** I-010, I-012, I-014 and I-021. These are web citations that could not be fetched from
   the build environment; 38 of the 39 are backed by a research-digest citation
   (`_process/reports/verification-citations.md`).
