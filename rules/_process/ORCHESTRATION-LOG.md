@@ -425,3 +425,5 @@ Resolved all 12 rows: I-038 (Oracle lever cap; sim shows +3.7 down to +0.8 per r
 - Resolved I-041 (non-enemies count weekly; no repeat loot for a season), I-036 (wealth sim with real coin sinks; T3 drop 25%), I-086 (patron job fees by band), I-079 and I-090 (on-hit stacks and estimator riders).
 - New rows I-091 (ch.11/15 should cite job fees) and I-092 (crude-repair limit text).
 - Ch.09 data regenerated, then the integration merge, appendix and anchors rebuilt. Validator 0/0.
+
+## Revision C6d merged: ch.15–16 basis tags (130 cards; DL-16-25, DL-16-26). BASIS covers 1084 cards. New row I-105 (renumbered from I-098): tamed beasts may leave before reaching Neutral.
