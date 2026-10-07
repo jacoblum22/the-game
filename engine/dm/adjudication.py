@@ -137,6 +137,8 @@ class WriteRef(BaseModel):
             if isinstance(v, str):
                 key = v
                 break
+        if ev.type == "time_advanced":
+            key = " ".join(p.boundaries)  # type: ignore[attr-defined]  # what passed: "beat_end", "interval", ...
         inst = getattr(p, "instance", None)
         if inst is not None and getattr(inst, "condition_id", None):
             key = inst.condition_id

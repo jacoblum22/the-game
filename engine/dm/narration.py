@@ -103,7 +103,9 @@ def _ask_oracle(ctx: TurnContext, record: AdjudicationRecord, c: Claim) -> str |
     tx = ctx.need_tx()
     st = tx.state
     subject = c.subject if c.subject in st.entities else WORLD
-    pred = ids.slug(c.predicate or c.cls)[:60] or c.cls
+    # the asked value is in the predicate, so the stored yes/no says what it answers ("shutters_closed": False);
+    # engine/audit/claims.py `_oracle_settled` reads it back
+    pred = ids.slug(" ".join(x for x in (c.predicate or c.cls, c.value) if x))[:60]
     start = len(tx.events)
     res = ask_oracle(OracleQuestion(subject=subject, predicate=pred, question=f"{c.predicate} {c.value}?".strip(),
                                     odds="even", asker="dm"),
@@ -116,10 +118,49 @@ def _ask_oracle(ctx: TurnContext, record: AdjudicationRecord, c: Claim) -> str |
         else str(res.answer)
 
 
-def _plan(ctx: TurnContext, record: AdjudicationRecord, claims: Sequence[Claim], verdicts: Sequence[Verdict],
-          sents: Sequence[str]) -> _Plan:  # rule: PR-12-2
+def _settle(ctx: TurnContext, record: AdjudicationRecord, claims: Sequence[Claim],
+            verdicts: Sequence[Verdict]) -> list[Verdict]:  # rule: 12.3.2
+    """`undetermined` with fix `oracle`: ask the Oracle now. A yes is the draft's own value, so the claim is
+    `supported` and nothing is redrafted; any other answer is the redraft's (`store_value`); no answer: cut."""
+    out = []
+    for v in verdicts:
+        if v.verdict != "supported" and v.fix == "oracle":
+            ans = _ask_oracle(ctx, record, claims[v.claim])
+            if ans == "yes":
+                v = Verdict(claim=v.claim, verdict="supported", reason="the Oracle settled it as drafted")
+            elif ans is None:
+                v = v.model_copy(update={"fix": "cut", "reason": "nothing settles it; cut"})
+            else:
+                v = v.model_copy(update={"store_value": ans, "reason": f"the Oracle settled it: {ans}"})
+        out.append(v)
+    return out
+
+
+def _key(sentence: str) -> str:
+    return " ".join(re.findall(r"\w+", sentence.lower()))
+
+
+def _carry(claims: Sequence[Claim], verdicts: Sequence[Verdict], sents: Sequence[str],
+           passed: set[str]) -> list[Verdict]:  # rule: 12.3.3
+    """A redraft keeps every sentence that passed (12.3.3): a sentence unchanged from a check it passed keeps that
+    pass, and fresh claims read from it are not judged again; only new or changed sentences are."""
+    out = []
+    for v in verdicts:
+        n = claims[v.claim].sentence
+        if v.verdict != "supported" and 0 <= n < len(sents) and _key(sents[n]) in passed:
+            v = Verdict(claim=v.claim, verdict="supported", reason="unchanged since a check it passed (12.3.3)")
+        out.append(v)
+    return out
+
+
+def _passed(claims: Sequence[Claim], verdicts: Sequence[Verdict], sents: Sequence[str]) -> set[str]:
+    bad = {claims[v.claim].sentence for v in failing(verdicts)}
+    return {_key(s) for n, s in enumerate(sents) if n not in bad}
+
+
+def _plan(claims: Sequence[Claim], verdicts: Sequence[Verdict], sents: Sequence[str]) -> _Plan:  # rule: PR-12-2
     """PR-12-2 steps 3–6 for the failing verdicts: what to cut, what the redraft must change (with the store's
-    values), what the Oracle settled."""
+    values), what the Oracle settled (`_settle` asked it)."""
     plan = _Plan()
     for v in failing(verdicts):
         c = claims[v.claim]
@@ -127,14 +168,9 @@ def _plan(ctx: TurnContext, record: AdjudicationRecord, claims: Sequence[Claim],
         s = sents[n] if 0 <= n < len(sents) else ""
         head = f'sentence {n} "{s}": {v.verdict} ({c.cls}: {c.predicate} {c.value})'.replace("  ", " ")
         if v.fix == "oracle":
-            ans = _ask_oracle(ctx, record, c)
-            if ans is None:
-                plan.cut.add(n)
-                plan.lines.append(f"{head}; nothing settles it: cut it")
-            else:
-                plan.needs_narrator = True
-                plan.settled.append(f"{c.predicate}: {ans}")
-                plan.lines.append(f"{head}; the Oracle settled it: {ans}. Redraft to that answer")
+            plan.needs_narrator = True
+            plan.settled.append(f"{c.predicate}: {v.store_value}")
+            plan.lines.append(f"{head}; the Oracle settled it: {v.store_value}. Redraft to that answer")
         elif v.fix == "redraft_to_store":
             plan.needs_narrator = True
             plan.lines.append(f"{head}; the store holds: {v.store_value or 'something else'}. Make it agree")
@@ -224,6 +260,7 @@ def narrate_checked(ctx: TurnContext, record: AdjudicationRecord, *, player_mess
     verdicts: list[Verdict] = []
     version: dict[str, Any] = {}
     reasons: list[str] = []
+    passed: set[str] = set()  # sentences (normalised) that passed a check this call: 12.3.3 keeps them
     while True:
         try:
             if text is None:  # T7 (or D)
@@ -248,17 +285,23 @@ def narrate_checked(ctx: TurnContext, record: AdjudicationRecord, *, player_mess
             reasons = [f"{exc.__class__.__name__}: {exc}"]
             break
         verdicts = check_claims(claims, tx.state, record, scene_ids, rules=rules)
+        verdicts = _carry(claims, verdicts, sents, passed)
         verdicts = _apply_writes(ctx, record, claims, verdicts)
+        verdicts = _settle(ctx, record, claims, verdicts)
+        passed |= _passed(claims, verdicts, sents)
         version["claims"], version["verdicts"] = _dump(claims), _dump(verdicts)
         bad = failing(verdicts)
         if bad:
             reasons = [f"{v.verdict}: {v.reason}" for v in bad]
-            if redrafts >= max_r:
+            plan = _plan(claims, verdicts, sents)
+            keep_prompt = record.pause is not None or (len(sents) - 1) not in plan.cut
+            pure_cut = not plan.needs_narrator and plan.cut and len(plan.cut) < len(sents) and keep_prompt
+            # past the budget a pure cut is still the table's own fix: delivered when a sentence is left besides
+            # the closing prompt, instead of the plain fallback
+            if redrafts >= max_r and not (pure_cut and len(sents) - len(plan.cut) >= (1 if record.pause else 2)):
                 break
             redrafts += 1
-            plan = _plan(ctx, record, claims, verdicts, sents)
-            keep_prompt = record.pause is not None or (len(sents) - 1) not in plan.cut
-            if not plan.needs_narrator and plan.cut and len(plan.cut) < len(sents) and keep_prompt:
+            if pure_cut:
                 sents, claims = _renumber(claims, sents, plan.cut)  # a pure cut: code removes the sentences
                 text = " ".join(sents)
                 version = {"kind": "cut", "text": text, "mentions": [], "claims": [], "verdicts": [],

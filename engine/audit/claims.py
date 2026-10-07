@@ -125,7 +125,7 @@ _COND_WORDS: dict[str, list[str]] = {  # in-fiction words for conditions (T-12-1
 _NEAR = ["shoulder", "beside", "next to", "at your side", "close", "adjacent", "within reach", "elbow"]
 _FAR = ["far", "distant", "across the", "out of reach", "away"]
 _WATCH_WORDS: dict[int, list[str]] = {
-    0: ["dawn", "morning", "sunrise", "daybreak"],
+    0: ["dawn", "morning", "sunrise", "daybreak", "first light"],
     1: ["noon", "midday", "afternoon"],
     2: ["dusk", "evening", "sunset", "twilight", "nightfall"],
     3: ["night", "midnight", "small hours"],
@@ -147,7 +147,8 @@ _SUCCESS = ["make it", "succeed", "gives", "give way", "opens", "open", "works",
             "slip through", "clear", "win", "pass"]
 _FAILURE = ["fail", "holds firm", "the lock holds", "won't budge", "will not budge", "slip", "miss", "nothing",
             "no luck", "stuck", "falls short", "fall short", "refuse", "can't", "cannot", "not enough", "in vain",
-            "resists", "does not give", "doesn't give", "stays shut", "remains shut", "unmoved"]
+            "resists", "does not give", "doesn't give", "stays shut", "remains shut", "unmoved",
+            "breaks off", "goes cold", "gone cold", "go cold", "lose the", "lost", "blurs", "gone under"]
 _COST = ["cost", "costs", "price", "pay for", "at a cost", "toll"]
 _BIG = ["perfectly", "flawlessly", "effortlessly", "completely", "entirely", "utterly", "at once", "easily",
         "without a trace", "and more", "every last", "masterfully", "with ease"]
@@ -269,6 +270,8 @@ class _Ctx:
 def _v(c: Claim, idx: int, verdict: VerdictName, store_value: Any = None, *, fix: Fix | None | Literal["default"] = "default",
        reason: str = "") -> Verdict:
     sv = None if store_value is None else (store_value if isinstance(store_value, str) else _words(store_value))
+    if not reason and sv and verdict != "supported":
+        reason = f"the store holds: {sv}"  # the redraft is told why, never an empty reason
     return Verdict(claim=idx, verdict=verdict, store_value=sv,
                    fix=_DEFAULT_FIX[verdict] if fix == "default" else fix, reason=reason)
 
@@ -506,10 +509,26 @@ def _identity(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: 12.3.1
             return _v(c, i, "supported")
         return _v(c, i, "contradicted", e.data.get("pronouns") or e.data.get("gender") or store_g)
     if store is None:
-        return _v(c, i, "undetermined", reason=f"{c.predicate or 'property'} not settled in the store")
+        return _oracle_settled(ctx, c, i, pred_slug) or _v(
+            c, i, "undetermined", reason=f"{c.predicate or 'property'} not settled in the store")
     if tx.same(c.value, store) or tx.covers(c.value, _flat(store), ratio=0.5) or tx.covers(_flat(store), c.value):
         return _v(c, i, "supported")
     return _v(c, i, "contradicted", store)
+
+
+def _oracle_settled(ctx: _Ctx, c: Claim, i: int, pred_slug: str) -> Verdict | None:  # rule: 12.3.2
+    """A yes/no the Oracle settled for this property at check time: a fact `<predicate>_<asked value>` = bool
+    (engine/dm/narration.py `_ask_oracle`). The claimed value asked before: yes supports it, no contradicts it;
+    another value is unsettled (None). ponytail: no antonyms ("open" after "closed? no" is asked anew)."""
+    if not pred_slug:
+        return None
+    for f in ctx.state.facts.values():
+        if f.subject == c.subject and isinstance(f.value, bool) and f.predicate.startswith(pred_slug + "_"):
+            asked = f.predicate[len(pred_slug) + 1:].replace("_", " ")
+            if tx.covers(c.value, asked, ratio=1.0):
+                return _v(c, i, "supported") if f.value else _v(
+                    c, i, "contradicted", f"not {asked}", reason=f"the Oracle settled {c.predicate}: not {asked}")
+    return None
 
 
 def _quantity_name(ctx: _Ctx, subject: str, text: str) -> str | None:
@@ -702,15 +721,38 @@ def _location_time(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: 12.3.1
             if c.asserts_change and not any(wr.type == "time_advanced" for wr in ctx.record.writes) and hit not in _WATCH_EDGES:
                 return _v(c, i, "unsourced_change", _WATCH_NAMES.get(watch), reason="no time passed this turn")
             return _v(c, i, "supported")
+    if _has(text, _ELAPSED):  # "an hour goes by": time passed this turn beyond the beat itself
+        passed = any(w.type == "time_advanced" and set((w.key or "").split()) - {"beat_end", "round"}
+                     for w in ctx.record.writes)
+        if passed:  # ponytail: the span is not compared with the clock's step; compare to.from_ when it matters
+            return _v(c, i, "supported")
+        if c.asserts_change:
+            return _v(c, i, "unsourced_change", reason="no time passed this turn")
     place = ctx.entity_named(text, kinds=("place",))
     if place is not None:
+        subj = s.entities.get(c.subject)
+        if subj is not None and subj.kind == "place":
+            return _v(c, i, "supported")  # a place described or a landmark named: nobody's whereabouts
         who = c.subject if c.subject in s.entities else ctx.pc
         loc = s.positions[who].location if who in s.positions and s.positions[who].location else None
         here = loc or (s.scene.place_id if s.scene else None)
-        if here is not None and here != place:
-            return _v(c, i, "contradicted", ctx.name(here))
+        if here is not None and place not in _within(s, here):
+            return _v(c, i, "contradicted", ctx.name(here), reason=f"the store places them at {ctx.name(here)}")
         return _v(c, i, "supported")
     return _v(c, i, "undetermined", fix="cut", reason="a time or place the store cannot compute")
+
+
+_ELAPSED = ["hour", "minute", "goes by", "go by", "went by", "passes", "time passes", "elapsed", "a while",
+            "the morning wears", "wears on", "moved on"]
+
+
+def _within(s: WorldState, place: str) -> list[str]:
+    """`place` and the places it lies within (`data.parent`, 00.11), innermost first."""
+    out = [place]
+    while (e := s.entities.get(out[-1])) is not None and isinstance(e.data.get("parent"), str) \
+            and e.data["parent"] not in out:
+        out.append(e.data["parent"])
+    return out
 
 
 def _knowledge(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: 12.3.1
@@ -838,9 +880,9 @@ def _outcome(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: 12.3.1
     failed_claim = _has(text, _FAILURE) or (_negated(text) and not _has(text, _COST))
     ok = _beat_success(b)
     if failed_claim and ok:
-        return _v(c, i, "contradicted", degree_words)
+        return _v(c, i, "contradicted", degree_words, reason=f"the attempt's result was {degree_words}")
     if not failed_claim and not ok and (_has(text, _SUCCESS) or not _has(text, _COST)):
-        return _v(c, i, "contradicted", degree_words)
+        return _v(c, i, "contradicted", degree_words, reason=f"the attempt's result was {degree_words}")
     if _has(text, _BIG) and b.degree != "critical_success":
         return _v(c, i, "overreach", ", ".join(b.reach_words) or degree_words, reason="beyond the delivered reach")
     if _has(text, _COST):
