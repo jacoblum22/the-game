@@ -44,7 +44,17 @@ def build_index():
     for f in md_files():
         lines = open(f, encoding="utf-8").read().split("\n")
         defs = []  # (line_no, id, kind, level, title)
+        # [verification: V2a-001] headings inside ``` fences (procedure cards) are not section boundaries
+        fenced, inf = set(), False
         for i, l in enumerate(lines):
+            if l.lstrip().startswith("```"):
+                inf = not inf
+                fenced.add(i)
+            elif inf:
+                fenced.add(i)
+        for i, l in enumerate(lines):
+            if i in fenced:
+                continue
             m = RE_HEAD.match(l)
             if m:
                 defs.append((i, m.group(2), "heading", len(m.group(1)), m.group(3).strip()))
@@ -56,7 +66,7 @@ def build_index():
             m = RE_ROW.match(l)
             if m:
                 defs.append((i, m.group(1), "row", 10, m.group(2).strip()[:90]))
-        heads = [(i, len(RE_ANYHEAD.match(l).group(1))) for i, l in enumerate(lines) if RE_ANYHEAD.match(l)]
+        heads = [(i, len(RE_ANYHEAD.match(l).group(1))) for i, l in enumerate(lines) if i not in fenced and RE_ANYHEAD.match(l)]
         for k, (i, did, kind, lvl, title) in enumerate(defs):
             if kind == "heading":
                 end = next((j for j, hl in heads if j > i and hl <= lvl), len(lines))

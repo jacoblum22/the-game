@@ -654,7 +654,7 @@ Stakes:             none
 State writes:       knowledge: the PC has heard this reading (journal, ch.15); nothing else
 Narration may not imply: a calling's name; a count, a threshold or how near in any measure; a promise
                     that anything will come; that the reader caused or can grant anything
-Examples:           inside: Wren, 3 sessions in, asks the hedge-witch. Archery weighted 62 of 80 ->
+Examples:           inside: Wren, 3 sessions in, asks the hedge-witch. Archery weighted 52 of 80 [verification: V2a-002] ->
                       becoming: "You are becoming it. Others would see it before you do," and she
                       names the shot at the ford.
                     inside (threshold): weighted 84, counted 9, but quality events 4 of 6 ->
@@ -801,7 +801,7 @@ Basis:              [R6 V4, A-01 "spoken in pieces across a conversation"] [R2 #
                     truths] [03.10.4] [DL-04-16]
 ```
 
-**04.7.5 Prices.** `[D]` Every accepted offer binds exactly one **price** from the closed list
+**04.7.5 Prices.** `[D]` Every accepted offer binds at most one **price** [verification: V2a-003] from the closed list
 (`vehicles.yaml#prices`) in addition to the seat and the shadow, which every calling carries: **oath** (V4;
 axes, forbidden acts, a bonded witness), **obligation** (V3, V9; an institution's duties, written by ch.11),
 **bond** (V2, V12; a debt to a teacher: a named service or a season's work), **bane** (V13; a standing
@@ -1120,7 +1120,7 @@ replacement, and **defer** leaves it suspended.
 **04.9.6 Revocation, and permanence.** `[D]` A calling still at stage 3 at the **second** `season` boundary
 after the stage began, with no atonement completed, **lapses**: it is retired, its picks return to the pool,
 its seat is freed, its training licenses stay at `trained` (`recognition_event(kind: revocation)`). By then
-the player has seen three stage notices, the CHOICE block at every reflection, and `lapse_warning` at the
+the player has seen every stage notice (one when a forbidden act opened stage 3, three when strain did) [verification: V2a-004], the CHOICE block at every reflection, and `lapse_warning` at the
 first of the two boundaries. That is the meaning of "never a surprise". A **Paragon** calling (tier 5) cannot
 lapse and cannot be revoked: at stage 3 it stays suspended until atoned, however long that takes
 [Stormlight's Fifth Ideal: R2 #2]. Tier 5 is also exempt from the staleness fold offer.
