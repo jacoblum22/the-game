@@ -33,3 +33,4 @@
 | R5 LW-09 | Player-driven world change | 15.12 (with 11) | satisfied (with 11) |
 | R5 MG-04 | Magical research as downtime project | 15.13.4 (ticks 05.8.4) | satisfied |
 | R5 AD-05 | Retraining | 15.11.4 | satisfied |
+| BRIEF §6 | Every rule cites its basis (`[C:]`, `[R]` or `[DL-]`) at card level | every rule card of 15 (104); 57 tagged at revision C6d; validator BASIS (DL-INT-13) | satisfied |

@@ -161,7 +161,7 @@ The NPC's standing exists in state from that write onward; the claim check (12.3
 attitude before it exists (claim class `attitude`). Starting standing is a first impression, never a
 verdict: everything in 15.1.5 moves it [12.11.2; 02.9.2; 09.2.7; R5 AV-07].
 
-**15.1.5 How standing moves: the closed list of sources.** `[D]` Standing changes only through these
+**15.1.5 How standing moves: the closed list of sources.** `[D]` [DL-15-03; DL-15-04; C:I; R5 NP-03; revision: I-065] Standing changes only through these
 sources, each writing `set_relationship(npc, pc, steps, reason, source_ref)` and a memory (12.11.7):
 1. **A Talk frame's delivered reach** on a win-over (15.4.2) — +1 step, never above Warm.
 2. **A cost**: `cost.closed_door` at S3 (−1) and S4–S5 (−2) (01.13.9).
@@ -177,7 +177,7 @@ Nothing else moves standing. In particular: the passage of time does not warm or
 pleasant conversation with no frame does not; the DM's sense that the NPC "would come round by now" does
 not (12.11.6) [00.3.16; SG-02].
 
-**15.1.6 Memory valences to steps.** `[D]` + `[J:flag]` Chapter 12 writes an NPC memory for every beat that
+**15.1.6 Memory valences to steps.** `[D]` + `[J:flag]` [DL-15-03; C:III; revision: I-065] Chapter 12 writes an NPC memory for every beat that
 touches them (12.11.7), with one **valence** from a closed list. This table (T-15-2, canonical
 `data/social.yaml#memory_steps`) is the one mapping from memories to standing steps; it applies at RECORD
 of the beat that wrote the memory (the NPC's attitude changes in the scene, not later), except
@@ -253,14 +253,14 @@ Basis:              [12.11.7] [R6 B-19] [R4 W4] [DL-15-03]
 these caps make friendship take the time it takes in fiction (Starforged's connections progress by
 relationship rank, not by conversation count) [R5 P-27; R4 W4; DL-15-04].
 
-**15.1.8 Standing between others.** `[D]` Standing toward companions (16) uses this chapter's rules with
+**15.1.8 Standing between others.** `[D]` [DL-00A-27; DL-12-10; R5 NP-03; revision: I-065] Standing toward companions (16) uses this chapter's rules with
 the companion in the PC's place. NPC-to-NPC standing is written only when a rule needs it (a rival's
 grudge that a Talk exploits, a council member's ally): it is generated at need by the reaction roll with no
 modifiers (12.11.2 step 2), or by the Oracle when the two are already connected in state ("are the
 reeve and the miller on good terms?", Even), and moved by the same sources. Faction-to-faction relations
 are 11's.
 
-**15.1.9 Standing is behavior, not a number.** `[N]` The narrator voices standing through the row of
+**15.1.9 Standing is behavior, not a number.** `[N]` [DL-15-01; C:P3; revision: I-065] The narrator voices standing through the row of
 T-15-1 (12.14.7): manner, what the NPC volunteers, what they withhold, what they call the PC (by name only
 once they know it, 12.10.2). *Narration may not imply:* a rung other than the stored one; warmth that
 promises a grant the ceiling forbids ("of course I'll help you break him out" from a Neutral jailer); a
@@ -299,7 +299,7 @@ atmosphere tag (12.10.3). *A walk-on has no wants, fears or refusals yet.* The m
 them they are promoted to recurring (12.11.1) and those fields are rolled **before the frame is built**,
 so nothing about the NPC is invented to suit the request [R4 §5.2 item 1 "seal at creation"; DL-15-05].
 
-**15.2.2 Wants: what they do.** `[D]` + `[J:flag]` A want is the NPC's own goal in their own terms
+**15.2.2 Wants: what they do.** `[D]` + `[J:flag]` [DL-15-12; DL-15-34; DL-12-13; revision: I-065] A want is the NPC's own goal in their own terms
 ("make whoever ruined my father pay what is owed"), read from `tbl.npc_want_verb` × `tbl.npc_want_object`
 (12.11.1). Wants are the main thing the player can *find out and use*. A want:
 1. is a **term** when a request or the PC's offer serves it (15.3.5 Want);
@@ -412,7 +412,7 @@ kinds (any act of theirs that knowingly brings it about, including helping anoth
 | — | `parley` / `yield` (archetype) | stopping a fight / surrendering | — | lifts | 09.7.6's field condition |
 | — | `oath_bound` (oath) | the oath's prohibition | — | absolute | — |
 
-**15.2.5 Fears.** `[D]` A fear (`tbl.npc_fear`) is what the NPC's courage gives way to. It matters in three
+**15.2.5 Fears.** `[D]` [DL-15-12; DL-15-34; C:P12; revision: I-065] A fear (`tbl.npc_fear`) is what the NPC's courage gives way to. It matters in three
 places: (1) a **credible threat** that invokes a recorded fear is a Leverage term in intimidation (15.4.3)
 even with no weapon drawn ("the watch would be very interested in what is in your cellar" to an NPC who
 fears the law); (2) a want and a fear in conflict decide `tbl.npc_action` row 6 ("acts on their own want")
@@ -438,7 +438,7 @@ counter that makes leaving the NPC's default once reasons run out [R4 W4; R: htt
 Patience also stops the fishing loop ("I ask again, differently") that let-it-ride (01.4.2) only blocks
 for the *same* request [DL-15-07].
 
-**15.2.7 Minds and tongues.** `[D]` Who can be talked to at all is read from state, never judged:
+**15.2.7 Minds and tongues.** `[D]` [DL-09-18; DL-02-12; C:VII; R5 SO-04; revision: I-065] Who can be talked to at all is read from state, never judged:
 - **Mind** (09.2.7): `mindless` — Talk is G4 (no one to talk to); `animal` — Talk is G4 except calming and
   intimidating by manner (Handle with Presence; requests at most R1: go, stay, calm); `cunning` — Talk is
   legal, standing starts Hostile in a fight, requests above R2 need a term; `sapient` — all of this
@@ -458,7 +458,7 @@ Every social beat is an ordinary frame (01.6) whose fields this part fills from 
 three questions it answers in order are: **which method** (15.3.1), **how big is the ask** (15.3.2), and
 **what does the player bring** (15.3.5–15.3.6). The DC and the ceiling then follow by table.
 
-**15.3.1 Social methods.** `[J:enum]` Every Talk beat aimed at a person is classified into one method of
+**15.3.1 Social methods.** `[J:enum]` [DL-15-08; R5 SO-01; revision: I-065] Every Talk beat aimed at a person is classified into one method of
 T-15-4 (canonical `data/social.yaml#methods`) from the **method as described** — what the character says
 and does — never from the intent (00.4.1). The method fixes the attribute, the defense, the defender's
 competence tag, the primary deed tag (00.5.6; the DM classifies to level 3 where the method is clear),
@@ -670,7 +670,7 @@ Basis:              [R: https://2e.aonprd.com/Rules.aspx?ID=1201 (discover and c
                     [R5 SO-07 favors and debts] [R4 SG-06] [DL-15-12]
 ```
 
-**15.3.6 Social levers and snags.** `[J:flag]` + `[J:enum]` Levers and snags in social play are 00.3.9's,
+**15.3.6 Social levers and snags.** `[J:flag]` + `[J:enum]` [DL-00A-10; C:III; revision: I-065] Levers and snags in social play are 00.3.9's,
 unchanged: each cites a fact established before the declaration; at most two of each; Precision ±2,
 Protective ±1 stakes rung, Amplifying ±1 reach rung; the obligation to apply a fitting snag (01.6.8). This
 catalog (T-15-8, `data/social.yaml#levers`) lists the social facts that typically qualify, so the DM's
@@ -715,7 +715,7 @@ character (a silver tongue is `deed.influence` competence, earned through 03–0
 method, finding a real want (15.6.1), bringing terms, and creating facts with Setup. *Narration may not
 imply* that a well-made speech is why it worked; the narration credits the cited facts.
 
-**15.3.8 Stakes and threatened costs in social play.** `[D]` Stakes follow 01.6.9 and 15.3.2: R1 Safe;
+**15.3.8 Stakes and threatened costs in social play.** `[D]` [DL-15-32; DL-00A-11; R5 SO-01; revision: I-065] Stakes follow 01.6.9 and 15.3.2: R1 Safe;
 R2+ Risky (goodwill is a cost source); Dire when the HEAVY test holds. The **threatened cost** (01.6.11) is
 chosen by 01.13.1 from these fits: **`cost.closed_door`** (the default for request, win-over, bargain and
 command: "I've heard enough"; S3 and up cost standing, S4 writes a refusal, 01.13.9); **`cost.exposure`**
@@ -727,7 +727,7 @@ is `cost.closed_door` against a principal or a faction is **ruinous** (03.4.5): 
 writes a refusal for good or costs faction status, which nothing undoes on the day; the evidence it yields
 counts like a lethal fight's (+2, a crisis) [revision: I-003].
 
-**15.3.9 Reach and delivery in social play.** `[D]` Reach is framed per 01.6.10: Standard by default;
+**15.3.9 Reach and delivery in social play.** `[D]` [DL-15-13; C:P8; revision: I-065] Reach is framed per 01.6.10: Standard by default;
 Limited when one effect factor stands against the method (an `alien` mind, 15.2.7; a crowd's scale; a
 language fallback); Great only through an Amplifying lever or the OFFER trade. What delivered reach
 **means** is T-15-5 (canonical `data/social.yaml#delivery`), which specializes the Talk card's reach
@@ -749,7 +749,7 @@ threatened or alternate cost is paid. A "yes" binds the NPC to the act asked and
 written as a fact or a commitment of the NPC's (`npc.<id>.agreed: <act>`, with its due time), and the
 NPC's later conduct follows it unless a new fact releases them (12.11.4) [01.9; 01.18.7; DL-15-13].
 
-**15.3.10 When talk needs no roll.** `[D]` + `[J:flag]` A social beat is **certain** (01.4.1, no roll) when
+**15.3.10 When talk needs no roll.** `[D]` + `[J:flag]` [DL-15-33; DL-15-34; revision: I-065] A social beat is **certain** (01.4.1, no roll) when
 the request's **certainty size** is R1 and the NPC is Neutral or warmer, or the certainty size is at least
 **two rungs below** the ceiling (Warm: R1; Friendly: R1–R2; Devoted: R1–R3) — and no refusal covers it,
 and nothing in the scene would make granting it costly to them (`[J:flag]` *"Is there an established
@@ -906,7 +906,7 @@ In conflict, a demand that a foe surrender is this method resolved on 06's moral
 ticks the foe side's morale clock (06.11.2) rather than granting the surrender outright, and the foe's
 `yield_when` refusal (09.7.6) applies (06.11.7).
 
-**15.4.4 Provoke.** `[J:flag]` + `[D]` A taunt, a goad, a public slight meant to make an NPC do something
+**15.4.4 Provoke.** `[J:flag]` + `[D]` [DL-15-14; R5 SO-01; revision: I-065] A taunt, a goad, a public slight meant to make an NPC do something
 rash. *Tempting* `[J:flag]`: *"Does the act served by the provocation fit the NPC's recorded anger,
 pride, wants or behavior list (attack the one who insults them, chase the thief, blurt the boast)?"* True
 only with a cited record field; false → G4 for the intent (no one can be goaded into what they have no
@@ -949,7 +949,7 @@ Anchor:             yes. Intent verbs: perform, play, sing, recite, preach, orat
 Basis:              [T-00-5] [deed.influence.performance] [DL-15-15]
 ```
 
-**15.4.6 Command.** `[D]` + `[J:flag]` An order to someone a fact says must obey the PC — a hireling or
+**15.4.6 Command.** `[D]` + `[J:flag]` [DL-15-09; DL-15-33; C:III; revision: I-065] An order to someone a fact says must obey the PC — a hireling or
 follower (16), a soldier under the PC's recorded rank (11), a servant of the PC's household. *Within duty*
 `[J:flag]`: *"Is the order within the subordinate's recorded duty (the hireling's role, the soldier's
 post)?"* True → R1 and certain if they are Neutral or warmer (15.3.10); false → a request (15.4.1) with
@@ -957,7 +957,7 @@ their standing, or a refusal of their own. Companions in conflict are commanded 
 their loyalty and refusals are 16's. *Worst case (J):* an out-of-duty order treated as within duty — one act
 the subordinate grants without a roll (class i; 16's loyalty clock still reads the deed).
 
-**15.4.7 Crowds and groups.** `[D]` A **group** that decides together (three guards, a family, a council
+**15.4.7 Crowds and groups.** `[D]` [DL-15-15; DL-06-20; C:IV; revision: I-065] A **group** that decides together (three guards, a family, a council
 of five) is one listener with the highest defense among its deciding members and the lowest standing
 among them (the doubter sets the bar); its patience is the lowest. A **crowd** (a market, a mob, a
 congregation, a mustered company) is an obstacle, not a person: Talk to a crowd is resolved as perform
@@ -1115,7 +1115,7 @@ A lie with no truth-holders left alive and in contact never auto-ticks: some lie
 believers or any public believer, ch.11 writes a rumor ("they say the stranger at Harlan's was never his
 brother") [R: https://bladesinthedark.com/progress-clocks; 00.8; DL-15-17].
 
-**15.5.5 Exposure.** `[T]` + `[D]` A lie is exposed **to one believer** when `record_knowledge(believer,
+**15.5.5 Exposure.** `[T]` + `[D]` [DL-15-17; C:I; revision: I-065] A lie is exposed **to one believer** when `record_knowledge(believer,
 fact)` writes a fact that the lie's `contradicted_by` matches (they are told the truth, they see the
 proof, the real brother walks in), or **to all** when the clock completes. For each exposed believer:
 1. the belief is superseded (`truth: false`, `certainty: established`, known to them);
@@ -1130,7 +1130,7 @@ superseded and the memory is `lied_to → confessed`, a **−1** step instead of
 penalty afterward. Honesty, late, is still worth a rung. A believer who **dies or departs** for good is
 removed; a lie with no believers is `dead` and its clock voided.
 
-**15.5.6 Disguise and false identities.** `[D]` + `[J:flag]` Passing as *a kind* of person (a pilgrim, a
+**15.5.6 Disguise and false identities.** `[D]` + `[J:flag]` [DL-15-31; DL-15-16; C:VII; revision: I-065] Passing as *a kind* of person (a pilgrim, a
 tinker, a guardsman) is a claim (15.5.2) whose costume, papers or tools are evidence (one rung better).
 Passing as *a specific* person is G3 without `lic.training.guile_disguise` (05) and, with it, a deceive
 whose claim is "I am X" against everyone who knows X's face (their knowledge, 12.10.6); a recorded scar or
@@ -1294,14 +1294,14 @@ Anchor:             yes. Intent verbs: haggle, bargain, negotiate terms, beat do
 Basis:              [08.8.7] [R5 SO-03] [DL-15-20]
 ```
 
-**15.7.3 Haggling over goods.** `[D]` Buying and selling goods is 08.8.7's frame, which this chapter
+**15.7.3 Haggling over goods.** `[D]` [DL-15-20; DL-15-01; R5 SO-03; revision: I-065] Buying and selling goods is 08.8.7's frame, which this chapter
 composes: the trader's standing toward the PC enters the DC (T-15-1); the asking price takes the standing
 row's **price shift** (Unfriendly +1 notch; Friendly −1 notch; Devoted at cost, never below 08.8.7's floor;
 a Hostile trader will not trade); a refusal of kind `pc_requests` makes ROOM false; a claimed rival offer
 is a claim (15.5.2), a recorded one is a lever. `clk.find_buyer` (08.8.5) ticks by the delivered reach of
 one bargain beat per week under `deed.influence.trade`.
 
-**15.7.4 Standing and money.** `[D]` Standing changes the price of things only through T-15-1's price
+**15.7.4 Standing and money.** `[D]` [DL-15-01; R5 SO-03; revision: I-065] Standing changes the price of things only through T-15-1's price
 shift and the DC. It never changes a posted fee, a wage table, or the market depth (08.8.5). A Friendly
 smith gives the PC a better price; a Devoted one sells at cost; neither works for free, unless asked as a
 request (R2–R3 by the value: a favor) — which is a request, with its own frame and its own weekly cap
@@ -1318,7 +1318,7 @@ G4-redirect of 07.4 and 09.7.6 (`parley_when`). **Prisoners the PC holds** (06.1
 (15.8.4), exchanged (a deal), or released (`spared`, +2, T-15-2); a released prisoner's faction status may
 move (11) [07.4; 09.9; 06.11.7; DL-15-21].
 
-**15.7.6 Keeping deals.** `[D]` Every agreed deal writes two commitments: the NPC's agreed act
+**15.7.6 Keeping deals.** `[D]` [DL-15-20; DL-15-03; R5 SO-07; revision: I-065] Every agreed deal writes two commitments: the NPC's agreed act
 (`npc.<id>.agreed`, with its due condition) and the PC's side (an obligation or a payment made). Handler
 `h.15.commitments_due` (`day`, phase 6) checks due conditions. **The NPC performs its act when due**
 unless, first match: (1) it was coerced (15.4.3: its retaliation question may already have undone it); (2)
@@ -1395,7 +1395,7 @@ compromise / mean beats): a P1 talker (+5) against a commoner (defense 10) — W
 the skilled and the great they are real contests. The cost the numbers do not show is **time**: one
 beat per day at most, a want-serving deed for the ticks a roll cannot give, and a world that moves meanwhile.
 
-**15.8.2 Compromise.** `[D]` When a campaign's progress completes, the patience clock's fill decides the
+**15.8.2 Compromise.** `[D]` [DL-15-22; revision: I-065] When a campaign's progress completes, the patience clock's fill decides the
 price (Burning Wheel's winner owes a compromise in proportion to the ground they gave): **below half**
 → a clean yes; **half or more (building)** → yes with **one compromise**: the NPC attaches a condition
 drawn from its top-ranked open want (or, if none can be served, a payment of the target rung's price),
@@ -1421,7 +1421,7 @@ to a narrow PC win), and exactly half keeps the status quo. *Is the opponent pre
 (class ii) [01.14.5; R5 TOR councils; DL-15-23]. *Anchor: yes* — intent verbs: argue before, plead the case,
 debate, sway the council, petition the court; knobs: duration (6/8), targets (decider), dc.
 
-**15.8.4 Interrogation.** `[J:flag]` + `[D]` Questioning an unwilling holder of information (a captive, a
+**15.8.4 Interrogation.** `[J:flag]` + `[D]` [C:P8; C:III; R5 SO-01; revision: I-065] Questioning an unwilling holder of information (a captive, a
 suspect, a hostile witness) over time. One progress clock "<NPC>'s silence on <subject>" sized by the
 information's request rung (R3 4, R4 6, R5 8; 15.3.2), racing **"<NPC> hardens"** (6). Each beat is one
 interval (an hour in a cell) by any method — request with terms, intimidate with a credible threat,
@@ -1453,7 +1453,7 @@ fallbacks — is written **sealed at creation**, before the player can probe it,
 [R4 §5.2 item 1; R: https://arxiv.org/abs/2601.06973]. The narrator sees only unsealed content and the
 case's atmosphere tag (12.10.3).
 
-**15.9.2 The graph.** `[D]` (shapes in `data/investigation.yaml#clue_graph_template`; T-15-14)
+**15.9.2 The graph.** `[D]` [DL-15-24; DL-15-26; R5 EX-11; revision: I-065] (shapes in `data/investigation.yaml#clue_graph_template`; T-15-14)
 - **Solution**: the sealed facts of what is true (who, what, how, why, where) — ordinary facts with
   `visibility: sealed`, `truth: true`.
 - **Conclusion nodes** `clu.<case>.<node>`: each a proposition the PC may come to know ("the fire was
@@ -1475,7 +1475,7 @@ case's atmosphere tag (12.10.3).
 - **Fallbacks**: at least one proactive node (15.9.12). **Opposition clock**: the case's clock, if the
   truth is still unfolding (the arsonist means to strike again; 15.9.13).
 
-**15.9.3 What a clue is.** `[D]` Finding a placement writes, at RECORD: `clu.<case>.<node>.p<n>.found =
+**15.9.3 What a clue is.** `[D]` [C:P5; C:I; R5 EX-11; revision: I-065] Finding a placement writes, at RECORD: `clu.<case>.<node>.p<n>.found =
 true` with the frame id (03's `cnt.clue` listens to `clu.*.found`, 03.7.2); `record_knowledge(pc,
 content_fact, how)`; the content fact unsealed through its gate (12.10.3); the leads of `reveals_lead`;
 and journal entries (15.9.16). A clue is the **content** — the oil-soaked rag under the miller's bench —
@@ -1542,7 +1542,7 @@ Basis:              [R: https://pelgranepress.com/gumshoe/files/GUMSHOE%20SRD%20
                     [C:P16] [DL-15-25]
 ```
 
-**15.9.6 Investigative methods.** `[J:enum]` Every investigative beat is one method kind of T-15-13
+**15.9.6 Investigative methods.** `[J:enum]` [C:V; R5 EX-11; revision: I-065] Every investigative beat is one method kind of T-15-13
 (canonical `data/investigation.yaml#methods`), which fixes its anchor, attribute, DC source and time.
 Default when uncertain between two: the one whose anchor is a basic verb the beat already uses.
 
@@ -1584,7 +1584,7 @@ holder delivers through 01.10 and 12.10.4:
 6. **Which content** `[J:enum]` for each delivered item: 12.10.4 step 1, never beyond the slice.
 *Worst case (J):* a less useful true placement chosen — the count of true findings is unchanged (class i).
 
-**15.9.8 Leads.** `[D]` A **lead** is knowledge that a placement exists ("the ferryman saw something that
+**15.9.8 Leads.** `[D]` [DL-15-24; DL-12-11; R5 EX-11; revision: I-065] A **lead** is knowledge that a placement exists ("the ferryman saw something that
 night"; "the factor keeps a second ledger") without its content. Leads come only from: a found clue's
 `reveals_lead`; a rumor whose `points_to` is a placement or node (11); lead injection (12.8.2); an NPC's
 sharing within their T-15-1 row; a vague impression (15.9.7). Leads are journal entries with the holder,
@@ -1652,7 +1652,7 @@ realize you were right"). A conclusion is **confirmed** — recorded `certainty:
    `harmed` (by its consequence) and may write reputation (11): being wrong has a cost.
 A theory is **refuted** only when a found clue directly contradicts it [12.10.3; DL-15-26].
 
-**15.9.11 The truth does not move.** `[D]` The sealed solution is immutable (INV-10; 00.6.5). The DM never
+**15.9.11 The truth does not move.** `[D]` [DL-15-26; C:P13; revision: I-065] The sealed solution is immutable (INV-10; 00.6.5). The DM never
 revises who did it, how, or why to match a player's theory, however elegant, nor to make a dramatic reveal
 land. If play exposes a contradiction inside the authored graph (two solution facts that cannot both
 hold), the DM logs a `rule_conflict` ruling and repairs it with the smallest change that keeps every
@@ -1669,7 +1669,7 @@ the world as the fallback fires (the witness arrives knowing it). Ch.11 fires fa
 authors them and guarantees each delivers a necessary node's core clue [R6 B-R4; 12.8.2 source 2;
 DL-15-24].
 
-**15.9.13 The opposition clock and investigating omens.** `[D]` A case whose truth is still unfolding
+**15.9.13 The opposition clock and investigating omens.** `[D]` [DL-00A-20; R5 EX-11; revision: I-065] A case whose truth is still unfolding
 carries an **opposition clock** (hidden, with omens; 00.8): the culprit's plan (`clk.<case>.<plan>`, "The
 arsonist strikes again", 6). Its omens are perceivable traces and, by this chapter, **leads**: each omen
 rendered is written as a lead toward the placement the omen's stage names (the case data lists, per
@@ -1678,7 +1678,7 @@ surveillance beat on the trace) that delivers **reach 2 or more** raises the clo
 (hidden → sensed → public); **reach 4** raises it two steps (00.8.4). A public opposition clock is the
 player's deadline, shown in the codex.
 
-**15.9.14 Research.** `[J:rung]` + `[D]` Finding things out from records, books and archives. *Anchor:
+**15.9.14 Research.** `[J:rung]` + `[D]` [DL-01-01; DL-00A-20; R5 EX-11; revision: I-065] Finding things out from records, books and archives. *Anchor:
 yes.* One beat = one hour in free mode; in downtime, a **Research week** (15.13.4). Method `research`:
 Intellect, `deed.lore.investigation.records` (a script needs its language and `lic.lang.letters`, 02). DC =
 the archive's **tier** `[J:rung]` by how obscure the subject is *in that collection*: Easy (a parish
@@ -1692,7 +1692,7 @@ question) answers one question as a fortune check of the sage's Intellect + lore
 question's tier, delivered as one item (01.6.7). Knobs: dc (tier), time_cost (hour → day → week), duration
 (clock size). *Worst case (J) of the tier:* one rung = 5 DC, shown (class i).
 
-**15.9.15 Surveillance.** `[D]` Watching or following someone or somewhere over time. *Anchor: yes.* A
+**15.9.15 Surveillance.** `[D]` [DL-15-18; DL-00A-20; R5 EX-11; revision: I-065] Watching or following someone or somewhere over time. *Anchor: yes.* A
 progress clock "<Target>'s routine" — **4** (their daily habits) or **6** (what they hide: meetings,
 caches) — racing **"<Target> notices the watcher"** (4, danger). Each beat is one **watch** of Observe
 (Wits, from a fixed post) or Sneak (Agility, following), against the target's Wits defense (their
@@ -1702,7 +1702,7 @@ delivered (who they meet, where they go, when). Notice complete → the target's
 alert and their routine **changes**: routine placements are `lost` and the placement audit replaces them
 (15.9.4). Knobs: duration, time_cost (watch → day), targets.
 
-**15.9.16 The journal.** `[D]` The **journal** is the player's view of what the character knows (00.6.3:
+**15.9.16 The journal.** `[D]` [C:P7; C:IV; DL-00A-22; revision: I-065] The **journal** is the player's view of what the character knows (00.6.3:
 "Clues found, PC knowledge — 15, shown"), rendered by the codex (14) from `record_knowledge`,
 commitments and memories. It contains nothing sealed. Sections (T-15-15, `data/investigation.yaml#journal`):
 **Cases** (each open case: clues found with their content and invited lore keys; live leads with holder,
@@ -1724,13 +1724,13 @@ claim told to an NPC (`told`; belief follows 15.5); every witness of a beat (12.
 **Consistency invariant:** an NPC's dialogue and decisions use only their knowledge records and beliefs
 (12.10.6); the PC's narration uses only the PC's (12.10.1) [R1 §10 "knowledge contradictions"; 12.10.5–12.10.6].
 
-**15.9.18 Rumors as clues.** `[D]` A rumor (11; `{text_seed, source, truth, points_to}`, truth sealed) heard
+**15.9.18 Rumors as clues.** `[D]` [DL-11-11; R5 SO-06; revision: I-065] A rumor (11; `{text_seed, source, truth, points_to}`, truth sealed) heard
 by the PC is recorded `rumored` and, if its `points_to` is a placement or node, is a **lead** (15.9.8). A
 rumor is never itself a clue toward a conclusion's `deducible_from` (hearsay entails nothing); finding the
 placement it points to is. A rumor whose truth is `false` points to a placement that exists and **refutes**
 it — a false rumor still leads somewhere real.
 
-**15.9.19 Small mysteries from other chapters.** `[D]` Chapter 02's lost bond (a sealed fate whose gate is
+**15.9.19 Small mysteries from other chapters.** `[D]` [DL-15-24; C:P16; revision: I-065] Chapter 02's lost bond (a sealed fate whose gate is
 a clue) and chapter 07's curse lifts (sealed conditions with three clue placements) are cases of one
 necessary node each, generated by PR-15-6 with the minimum graph of 15.9.4 (three placements, two kinds,
 one core, one fallback) [02 Interface requests; 07 Interface requests].
@@ -1774,7 +1774,7 @@ Blades gives two downtime actions; a week with one serious undertaking and a cou
 rhythm at this game's week cadence, and it makes breadth cost time, which is the point (P15) [R6 B-05;
 R5 P-45; C:P15; DL-15-27].
 
-**15.10.3 What downtime costs.** `[D]` (1) **Lifestyle**, charged by 08's `h.08.upkeep` every week the PC
+**15.10.3 What downtime costs.** `[D]` [DL-15-27; DL-08-20; R5 TM-06; revision: I-065] (1) **Lifestyle**, charged by 08's `h.08.upkeep` every week the PC
 spends any day in a settlement (08.8.6: 0/4/7/14/35/100); (2) each activity's own coin (fees, materials,
 an evening's drinking), charged when the activity is resolved, refused if the PC cannot pay (the activity
 does not happen, the day is not spent); (3) **time**, during which the world moves: every day runs ch.11's
@@ -1790,14 +1790,14 @@ the nearest activity `[J:enum]` (a project; Cultivate; perform as work) under th
 (00.2.7), and the ruling is logged. Uncertain → **project** (15.12), the most general container. *Worst
 case (J):* a near-but-wrong anchor, bounded by the two-change limit and logged (class iv).
 
-**15.10.5 Rolls in downtime.** `[D]` A downtime activity that rolls makes **one roll per its interval**
+**15.10.5 Rolls in downtime.** `[D]` [DL-15-27; R5 TM-06; revision: I-065] A downtime activity that rolls makes **one roll per its interval**
 (a day activity once that day; a week activity once that week): let it ride applies to the interval
 (01.14.6). Its stakes are **Safe** unless a cost source exists (01.6.9) — failure then spends the time and
 the coin and delivers nothing. Levers and snags are cited facts as everywhere (a master's workshop; a
 library's catalogue; a rival's sabotage). Downtime rolls are ordinary frames: the OFFER shows them, and
 `auto_commit` (14) may resolve the routine ones.
 
-**15.10.6 Evidence and reflection in downtime.** `[D]` Downtime yields **counted** evidence only:
+**15.10.6 Evidence and reflection in downtime.** `[D]` [C:P5; C:P2; DL-03-12; revision: I-065] Downtime yields **counted** evidence only:
 `cnt.training` (1 unit per trained tag per week, 03.5.5), `cnt.progress` (project and campaign ticks,
 03.7.2), `cnt.made` (crafting). It never yields judged evidence: a montage is not a deed (03.5.5); a scene
 framed inside downtime (an interrupt, a social call played out) is play, and yields evidence as play does.
@@ -1860,7 +1860,7 @@ Anchor:             yes. Intent verbs: train, study, learn, apprentice, be taugh
 Basis:              [05.8.5] [05.9.4] [02.4.6 tongues] [03.5.5] [04.3.3] [08.8.8] [C:VII] [C:P15] [DL-15-28]
 ```
 
-**15.11.2 Finding and securing a teacher.** `[D]` + `[J:flag]` A teacher is a person, and teaching is a
+**15.11.2 Finding and securing a teacher.** `[D]` + `[J:flag]` [DL-15-28; DL-11-18; DL-15-09; revision: I-065] A teacher is a person, and teaching is a
 request. *Finding*: from a lead, a bond (a mentor bond, 02.9.2), an institution (11's
 `institutions_matching(deed_branch, region)`), or the Oracle — "is there someone in <settlement> who
 teaches <target>?" at **Likely** (a common trade in a town or city), **Even** (a common trade in a village;
@@ -1877,7 +1877,7 @@ divine (G4 with the redirect "first be accepted"). A secured teacher writes `npc
 there a teacher" is one step off (15–25 points), committed before the roll and logged; securing the teacher
 is still a request with its own frame (class i). [integration: 00.2.3 audit]
 
-**15.11.3 Learning a new license: Principle VII's paths.** `[D]` This is the main way a character
+**15.11.3 Learning a new license: Principle VII's paths.** `[D]` [DL-15-28; DL-00A-19; C:VII; revision: I-065] This is the main way a character
 legitimately gains a capability outside recognition. When a beat is G3 (unlicensed), its redirect names
 the license's `acquisition_paths` (00.12.1). PR-15-8 runs the chosen path:
 | Path type (00.12.1) | Where it runs | What it takes |
@@ -1893,7 +1893,7 @@ the license's `acquisition_paths` (00.12.1). PR-15-8 runs the chosen path:
 Rolls never grant a license (INV-7); the clock or the gift does. Every new grant is provisional until the
 season boundary (04, 05).
 
-**15.11.4 Retrain.** `[D]` The only way to exchange what is already learned (02.2.6 "a training is
+**15.11.4 Retrain.** `[D]` [R5 AD-05; C:VI; revision: I-065] The only way to exchange what is already learned (02.2.6 "a training is
 exchanged only by chapter 15's Retrain"; 04.8.7). A Retrain is a week activity; one at a time:
 - **A calling pick** (04.8.7): one week, one pick swapped by PR-04-5 (outside the free re-pick at the
   season boundary).
@@ -1905,13 +1905,13 @@ exchanged only by chapter 15's Retrain"; 04.8.7). A Retrain is a week activity; 
 Retrain never changes attributes, origins, birth results, callings, or a calling's grade-given licenses.
 Fees as Train. Each week writes `cnt.training` on the new tag.
 
-**15.11.5 Penance.** `[D]` Ch.04's atonement form PENANCE (04.9.4): one downtime week at the keeper's place
+**15.11.5 Penance.** `[D]` [DL-04-22; DL-15-27; revision: I-065] Ch.04's atonement form PENANCE (04.9.4): one downtime week at the keeper's place
 (a shrine, an order's house), one cost at S3 from 01's menu in the form the keeper's nature suggests;
 completed, it ticks the atonement clock 3. It counts as the week's main activity. It also serves as the
 week of NPC atonement 04.9.4 allows for grudges with no oath (its completion writes a standing step: +1 on
 the wronged NPC, as a kept promise).
 
-**15.11.6 What learning never does.** `[D]` It never grants a calling or a tier (04.11.3); never grants a
+**15.11.6 What learning never does.** `[D]` [DL-15-28; C:P2; C:VII; revision: I-065] It never grants a calling or a tier (04.11.3); never grants a
 grade above `trained` (expert and master come only from tiers, 05.9.2); never compresses time (one
 learning clock ticks per week; a Retrain occupies the week); never grants by roll; and never ignores a
 `requires` (05.9.4) or a teacher's refusal.
@@ -1979,40 +1979,40 @@ Basis:              [R: https://bladesinthedark.com/downtime-activities] [R5 P-2
 Each is a row of T-15-16 with its full mechanics in `data/downtime.yaml`; the rules below are their
 binding text.
 
-**15.13.1 Convalesce** (day; 07.8.11). In a haven: each day sets `bed_rest_today` (and `treated_today` with a
+**15.13.1 Convalesce** [DL-15-27; DL-07-11; R5 TM-06; revision: I-065] (day; 07.8.11). In a haven: each day sets `bed_rest_today` (and `treated_today` with a
 licensed tender), removes one `cond.exhausted` stack; a full week sets dread to 0 and shifts a disease one
 stage (07). No roll. Cost: lifestyle; a healer's care 2 coins a day (08.8.8) if hired.
 
-**15.13.2 Solace** (day; 07.11.7). Carousing, prayer and worship, or a day with a bond NPC: dread −2, at most
+**15.13.2 Solace** [DL-15-27; DL-07-15; R5 TM-06; revision: I-065] (day; 07.11.7). Carousing, prayer and worship, or a day with a bond NPC: dread −2, at most
 once per week (a full week of downtime in a haven sets it to 0 anyway). A Carouse or Worship day may count
 as the week's solace.
 
-**15.13.3 Treat** (day). Tending a companion or another person's wounds and afflictions: 07's treatment
+**15.13.3 Treat** [DL-15-27; DL-07-13; R5 TM-06; revision: I-065] (day). Tending a companion or another person's wounds and afflictions: 07's treatment
 rules (the day counts as a Treat at reach 1 with no roll for ordinary nursing), the license 07 names.
 
-**15.13.4 Research week** (week). Five days in a collection: one research roll at the collection's tier
+**15.13.4 Research week** [DL-15-27; DL-05-24; R5 MG-04; revision: I-065] (week). Five days in a collection: one research roll at the collection's tier
 (15.9.14), ticking a research clock by delivered reach, or delivering a non-extended question's items;
 also the research clock of a rite design (05.8.4: "ticked by a research week: delivered reach").
 Access to a private collection is a request (R2–R4 by whose it is). Cost: 1 coin a day for a scribe's copy
 of what is found (optional).
 
-**15.13.5 Craft** (day or week, by the item's `make.time_per_tick`; 08.6.4). Runs 08's crafting project:
+**15.13.5 Craft** [DL-15-27; DL-08-16; R5 TM-06; revision: I-065] (day or week, by the item's `make.time_per_tick`; 08.6.4). Runs 08's crafting project:
 each step is a beat at the target rung's tier, progress racing spoilage. Materials, tools and a workplace
 per 08. Writes `cnt.made` at completion.
 
-**15.13.6 Cultivate** (day). A day spent on an NPC's want — an errand they named or a known want served in
+**15.13.6 Cultivate** [DL-15-27; DL-15-04; R5 TM-06; revision: I-065] (day). A day spent on an NPC's want — an errand they named or a known want served in
 a small way (an R2 favor *from* the PC: a day's work and at most 1 Unit). No roll for the favor itself
 unless it meets an obstacle (then it is a beat). It writes `helped` (+1, a small source: weekly cap, cap
 Friendly; 15.1.7) and, in a running persuasion campaign, ticks progress 2 (15.8.1). Asking "what can I do
 for you?" makes the NPC name the errand from their record (15.7.1's counter).
 
-**15.13.7 Work** (week). Earning a living: the week's wage by the best grade the PC holds in a trade the
+**15.13.7 Work** [DL-15-27; DL-08-19; R5 TM-06; revision: I-065] (week). Earning a living: the week's wage by the best grade the PC holds in a trade the
 settlement has work for (08.8.8: unskilled labor 7; a trained trade 10; expert 25; master 60; a village has
 work up to trained, a town up to expert, a city up to master). No roll for ordinary work; a performer may
 instead perform each evening (15.4.5; coin per T-15-11). Work pays a living and no more (08.8.9 AI-2's labor
 cap). It writes no evidence (routine, 03.5.3).
 
-**15.13.8 Carouse** (day). An evening and a night in the settlement's taverns and gathering places: costs
+**15.13.8 Carouse** [DL-15-27; R5 TM-06; R5 SO-06; revision: I-065] (day). An evening and a night in the settlement's taverns and gathering places: costs
 2 coins (a comfortable or richer lifestyle: 1 Unit); one Talk roll, Presence, primary tag
 `deed.guile.streetwise.informants` (or `deed.influence.persuasion.rapport` among the respectable), against
 the settlement's tier (camp or village Easy, town Moderate, city Hard). Delivered reach: **rumors** heard =
@@ -2022,39 +2022,39 @@ they point); at reach **3+** also a **contact** — a new recurring NPC at Warm,
 (`tbl.15.carousing_trouble`: a brawl, a debt, a lost item, an offended local now Hostile, a night in the
 lockup, a rival's attention). Counts as **solace**.
 
-**15.13.9 Ask around** (day). Inquiry about a case or a person across a settlement: a Talk request for
+**15.13.9 Ask around** [DL-15-27; DL-15-25; R5 SO-06; revision: I-065] (day). Inquiry about a case or a person across a settlement: a Talk request for
 information against the settlement's tier, delivering person-held placements and rumors about the named
 subject that are in this settlement (15.9.7 with the settlement as holder); core placements held by
 anyone here who would share them at R1 are delivered without a roll. *Stakes:* Risky when someone in the
 settlement is recorded as not wanting the question asked (`cost.exposure`: word gets back to them).
 
-**15.13.10 Shop and sell** (day). Buying, selling and haggling (08.8.4–08.8.7; 15.7.3); one bargain beat
+**15.13.10 Shop and sell** [DL-15-27; DL-15-20; R5 SO-03; revision: I-065] (day). Buying, selling and haggling (08.8.4–08.8.7; 15.7.3); one bargain beat
 per `clk.find_buyer` per week.
 
-**15.13.11 Maintain holdings** (day or week). For a holding the PC owns (08.8.8; 11): a day of oversight
+**15.13.11 Maintain holdings** [DL-15-27; DL-11-19; R5 TM-06; revision: I-065] (day or week). For a holding the PC owns (08.8.8; 11): a day of oversight
 writes `managed_this_week` (a Precision lever on 11's weekly yield roll for that holding); a week of
 repair ticks the holding's damage clock down 2 (or runs a craft beat under `craft.building`). Upkeep is
 08's handler.
 
-**15.13.12 Worship and serve** (day or week). A day keeping the rites of the PC's keeper (05.7.4): solace,
+**15.13.12 Worship and serve** [DL-15-27; DL-15-03; DL-11-15; revision: I-065] (day or week). A day keeping the rites of the PC's keeper (05.7.4): solace,
 and the fact `rites_kept.<keeper>.<season>` that 05's divine standing may read. A **week of service** at a
 temple, shrine or order's house is a deed for its officiant (`helped`, +1) and a reputation entry in that
 faith's scope (11).
 
-**15.13.13 Prepare a persona** (week). Papers, clothes, a rehearsed story: grants `lic.15.persona` for one
+**15.13.13 Prepare a persona** [DL-15-27; DL-15-31; revision: I-065] (week). Papers, clothes, a rehearsed story: grants `lic.15.persona` for one
 named false identity (15.5.6). Cost: 1 Unit for papers and dress; forged papers need a forgery beat
 (`deed.guile.disguise.forgery`, Hard) or a forger's service.
 
-**15.13.14 Recruit** (day). Finding hirelings and followers (16): a Talk request against the settlement's
+**15.13.14 Recruit** [DL-15-27; DL-16-05; DL-16-02; revision: I-065] (day). Finding hirelings and followers (16): a Talk request against the settlement's
 tier; delivered reach = candidates presented (16's templates; wages per 08.8.8), none of a band higher than the
 settlement's hire band or the PC's power band (16.3.2) [integration: IR ch.16 to 15 (d)]. Presence sets the
 retinue cap (00.4.4). Allies' own downtime duties (T-16-15) resolve in `h.15.downtime_week`, and an ally's
 promise of silence (16.11.1) is a request sized by 15.3.2 [integration: IR ch.16 to 15 (e, f)].
 
-**15.13.15 Lie low** (week). No public activity, no evidence, no trade: ticks down the PC's notice or
+**15.13.15 Lie low** [DL-15-27; DL-11-13; R5 LW-14; revision: I-065] (week). No public activity, no evidence, no trade: ticks down the PC's notice or
 attention clock in this region by 2 (ch.11 owns the clock; Interface request).
 
-**15.13.16 Rest** (day). Doing nothing in particular. Lifestyle is charged; the world moves.
+**15.13.16 Rest** [DL-15-27; R5 TM-06; revision: I-065] (day). Doing nothing in particular. Lifestyle is charged; the world moves.
 
 ---
 

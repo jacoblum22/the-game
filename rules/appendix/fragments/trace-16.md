@@ -21,3 +21,4 @@
 | INV-6 | No death without both keys | 16.9.1–16.9.2 (Key 1 for allies; the bleeding-out clock as Key 2), 16.6.6 (betrayal never lethal) | satisfied |
 | INV-11 | No effect grants actions | 16.7.1, 16.7.3–16.7.5 (orders written by the engine, no actions), 16.4.7 (no knack adds an action), 16.7.12 (held lines instead of allied turns) | satisfied |
 | INV-14 | Every tick of a sensed or hidden clock renders an omen | 16.5.8 (loyalty omens per tick, T-16-16) | satisfied |
+| BRIEF §6 | Every rule cites its basis (`[C:]`, `[R]` or `[DL-]`) at card level | every rule card of 16 (101); 73 tagged at revision C6d, 16.3.7, 16.15.2 and 16.15.5 by the new DL-16-25, 16.6.5 by the new DL-16-26; validator BASIS (DL-INT-13) | satisfied |

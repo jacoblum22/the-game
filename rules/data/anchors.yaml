@@ -42,9 +42,9 @@ compiled_from:
 - file: 13-starter-setting.md
   sha256_16: 9dd8a6cbb473d2d5
 - file: 15-social-investigation-downtime.md
-  sha256_16: 6ca215b1cd355148
+  sha256_16: 42cefa4801527712
 - file: 16-companions-and-allies.md
-  sha256_16: e92666331e896446
+  sha256_16: 658690901696f1ad
 compiled_at: integration (Wave 3 -> 4)
 compile:
   rule: 12.13.6

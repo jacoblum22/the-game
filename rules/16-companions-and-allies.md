@@ -124,7 +124,7 @@ companion". "The PC" is the player character.
 
 ### 16.1 What an ally is
 
-**16.1.1 The seven kinds.** `[D]` + `[J:enum]` Every ally is exactly one kind (T-16-1;
+**16.1.1 The seven kinds.** `[D]` + `[J:enum]` [C:V; C:III; R5 NP-05; revision: I-065] Every ally is exactly one kind (T-16-1;
 `data/companions.yaml#kinds`). The kind is the *bond* — why they follow — and is independent of the
 *template* (16.4), which is what they can do: a soldier may be a hireling (paid), a companion (come for
 their own reasons) or a follower (drawn by the PC's name).
@@ -149,7 +149,7 @@ hireling; joining term → companion; oath → follower). Uncertain → `scene_a
 starting point, both corrected at the next recruitment or contract frame, which is where the reason is
 recorded (class iv).
 
-**16.1.2 The ally record.** `[D]` + `[S]` An ally is an entity of kind `companion` (00.6.1; the entity
+**16.1.2 The ally record.** `[D]` + `[S]` [C:II; DL-00A-22; R5 NP-05; revision: I-065] An ally is an entity of kind `companion` (00.6.1; the entity
 kind covers all seven of T-16-1, whose ally kind is the field `ally_kind`) that extends 00.6.2's NPC shape
 with these fields (`data/companions.yaml#record_fields`; owner 16):
 
@@ -185,7 +185,7 @@ Ally (extends NPC):
   wound: ref | null                  # at most one (07.12.2)
 ```
 
-**16.1.3 Visibility.** `[D]` Per 00.6.4, classified once here (the codex renders exactly this, 14):
+**16.1.3 Visibility.** `[D]` [C:P3; DL-00A-22; revision: I-065] Per 00.6.4, classified once here (the codex renders exactly this, 14):
 
 | Field family | Visibility | Why |
 |---|---|---|
@@ -197,7 +197,7 @@ Ally (extends NPC):
 | secrets (principal depth, 12.11.1) | **sealed** with a gate | 00.6.5 |
 | own band, if above the serving band | **available** ("he was a knight's man once") | the player should know who is being held back by the cap |
 
-**16.1.4 Allies are people first.** `[N]` An ally is an NPC (or a beast) who has chosen to follow. Every
+**16.1.4 Allies are people first.** `[N]` [DL-12-13; DL-00A-27; R5 NP-05; revision: I-065] An ally is an NPC (or a beast) who has chosen to follow. Every
 NPC rule still applies to them unless this chapter replaces it: they hold standing toward the PC and
 toward each other (15.1.8), keep memories (12.11.7), have voice and habit (12.11.3), wants, a refusal and,
 at principal depth, a secret (12.11.1); they may be lied to, persuaded, bribed by others and courted by
@@ -226,7 +226,7 @@ follower; the simulation shows two followers already move a fight by one to two 
 by up to four (T-16-21). Two at an average Presence, one for the cold and the awkward, six only for the
 most magnetic person in the world, keeps a retinue a party's texture and never a second army [DL-16-02].
 
-**16.2.2 Retinue places.** `[D]` (`data/companions.yaml#retinue.places`)
+**16.2.2 Retinue places.** `[D]` [DL-16-02; revision: I-065] (`data/companions.yaml#retinue.places`)
 
 **T-16-2 Places.**
 
@@ -288,7 +288,7 @@ advisory words in 4 of 16 tested shapes (P2 against two T2 goes from fair to tri
 hard to easy); with the cap, one companion moves it **at most one** word in every shape (T-16-21) — exactly
 chapter 09's contract (09.6.3) [DL-16-01].
 
-**16.2.5 A full retinue.** `[D]` A recruitment that would exceed `retinue_cap` is G4 for the intent
+**16.2.5 A full retinue.** `[D]` [DL-16-02; C:P16; revision: I-065] A recruitment that would exceed `retinue_cap` is G4 for the intent
 "join me", and the redirect names, in the fiction, the three honest ways forward: let someone go (16.6.4),
 post someone (16.2.3), or have this person stand with the PC as a scene ally for what is at hand. Follower
 offers (16.3.6) that arrive while the retinue is full are **deferred** automatically and re-presented at
@@ -327,7 +327,7 @@ bookkeeping (class iv: the player may split or merge at any `scene_end`).
 
 ### 16.3 Recruitment
 
-**16.3.1 The recruitment gate.** `[J:enum]` + `[D]` Any attempt to make someone follow — hire, invite,
+**16.3.1 The recruitment gate.** `[J:enum]` + `[D]` [DL-16-01; C:P16; C:VII; revision: I-065] Any attempt to make someone follow — hire, invite,
 swear in, tame, bind — passes these tests in order (PR-16-1). Each failure is a redirect, never a bare no
 (P16; 00.12.3):
 
@@ -345,7 +345,7 @@ other value is read from state. *Worst case (J):* a test applied to the wrong fi
 band) — one refused or one wrongly admitted recruit, visible in the OFFER, which names the cap and the
 places (class ii).
 
-**16.3.2 Finding hands: who is available.** `[D]` + `[J:enum]` Hirelings are found by chapter 15's
+**16.3.2 Finding hands: who is available.** `[D]` + `[J:enum]` [DL-16-05; DL-16-01; revision: I-065] Hirelings are found by chapter 15's
 **Recruit** day activity (`dt.recruit`, 15.13.14): a Talk request against the settlement's tier (camp or
 village Easy, town Moderate, city Hard); **delivered reach = the number of candidates presented** (0–4). In
 `free` mode the same frame ("I ask around the docks for hands") takes one **watch** instead of a day. The
@@ -430,7 +430,7 @@ Basis:              [15.3.2-15.3.5] [15.7.1] [08.8.8] [R: https://loottheroom.uk
                     (hirelings flee when asked to do more than they signed on for)] [DL-16-05]
 ```
 
-**16.3.4 Inviting a companion.** `[J:rung]` + `[J:flag]` + `[D]` A person met in play who would come for
+**16.3.4 Inviting a companion.** `[J:rung]` + `[J:flag]` + `[D]` [DL-15-09; C:III; C:P8; revision: I-065] A person met in play who would come for
 their own reasons is asked by a **request** (15.4.1) "come with me", sized `[J:rung]` by what following
 costs **them** (T-16-10; `data/companions.yaml#join_sizes`):
 
@@ -454,7 +454,7 @@ depth (12.11.1: secret, three ranked wants, ties), drives rolled (16.5.5), and a
 showing them the road serves their want. *Worst case (J):* one rung (class i), shown with the ceiling in the
 OFFER; the joining term is auditable because it cites a want, commitment or fact id (INV-20).
 
-**16.3.5 Bonds from creation.** `[D]` A person named in a creation bond (02.9.2) may be invited by 16.3.4
+**16.3.5 Bonds from creation.** `[D]` [DL-16-23; DL-02-17; revision: I-065] A person named in a creation bond (02.9.2) may be invited by 16.3.4
 at their set standing (an anchor friend at Friendly has ceiling R4, so a "come with me" that costs them
 their home is a single roll with one term). An animal named in a bond (02's request: "an animal named in
 a bond is a candidate companion") joins as a beast at Friendly with no frame if it is the PC's own (a dog
@@ -482,7 +482,7 @@ confirmed, witnessed tiers:* the fiction's "people follow you" must rest on some
 recognition's witness gate is exactly that, and confirmation (not provisional grant) keeps a lapse from
 leaving a follower behind a calling the PC no longer holds [04.1; 03.10; R6 A-R1; DL-16-09].
 
-**16.3.7 Beasts.** `[D]` + `[J:flag]` A beast follows by one of three roads:
+**16.3.7 Beasts.** `[D]` + `[J:flag]` [DL-16-25; DL-16-01; C:III; revision: I-065] A beast follows by one of three roads:
 1. **Bought trained** (a hound from a kennel, a hawk from a falconer, a war dog): an item purchase (08)
    creating a beast ally with standing **Neutral** and its template's training. Prices are 08's; until
    `base_items.yaml` carries them, the `price` field of the template (T-16-19) applies (Interface
@@ -502,12 +502,12 @@ leaving a follower behind a calling the PC no longer holds [04.1; 03.10; R6 A-R1
 Mounts are bought as items (08.10.1) and created as beast allies at once (standing Neutral; 0 places,
 16.2.2); they take a retinue place only when bonded.
 
-**16.3.8 Bound beings.** `[D]` Chapter 05's workings create them (`eff.summon` with a template "as a
+**16.3.8 Bound beings.** `[D]` [DL-16-01; C:VII; revision: I-065] Chapter 05's workings create them (`eff.summon` with a template "as a
 companion of threat band B (ch.16)"). This chapter supplies only: the templates (`cmp.bound_servant`,
 `cmp.bound_dead`, `cmp.bound_automaton`, `cmp.familiar`), the serving-band cap (16.2.4), the places
 (16.2.2), and their obedience rule (16.15.6). There is no recruitment frame: the working is the frame.
 
-**16.3.9 Recruiting anyone.** `[D]` + `[J:enum]` *Anchor: yes.* Players will try to recruit the troll under
+**16.3.9 Recruiting anyone.** `[D]` + `[J:enum]` [DL-16-01; DL-09-18; C:P16; revision: I-065] *Anchor: yes.* Players will try to recruit the troll under
 the bridge, the captive goblin, the ghost in the chapel, the captain who just tried to kill them. The gate
 of 16.3.1 answers every case by lookup, and the template follows the creature:
 - a **sapient or cunning** creature (09.2.7) that can be talked to joins by 16.3.4 (or 16.3.3 if it will
@@ -529,7 +529,7 @@ own worst case.
 
 ### 16.4 Templates: what an ally is made of
 
-**16.4.1 A template is a role, not a person.** `[D]` A **template** (`cmp.*`, `data/companions.yaml#templates`,
+**16.4.1 A template is a role, not a person.** `[D]` [DL-16-04; DL-16-22; revision: I-065] A **template** (`cmp.*`, `data/companions.yaml#templates`,
 T-16-19) is what an ally can do: its attribute rungs, its trained deed tags, its attacks and armor, its
 knacks, its allowed orders and journey roles, its carry and supply, its hire band and wage line, and the
 band range it can grow through. The kind (16.1.1) is why the ally follows; the template is what it brings.
@@ -557,7 +557,7 @@ Base modifiers are therefore exactly 09's: a trained `high` attack is +2 / +5 / 
 1–5, a Guard of 12 / 15 / 17 / 20 / 22 — always a band below the PC who leads it (16.2.4), so always
 below the PC's own line (T-06-12: +5 / +7 / +9 / +11 / +12, Guard 14–20) [09.3.2; DL-16-04].
 
-**16.4.3 Companion Vitality and armor.** `[D]` (T-16-4; `data/companions.yaml#line_by_band`)
+**16.4.3 Companion Vitality and armor.** `[D]` [DL-16-04; revision: I-065] (T-16-4; `data/companions.yaml#line_by_band`)
 
 **T-16-4 The companion line by serving band** (a `high` attack and Guard; Vitality for a medium-sized ally).
 
@@ -590,7 +590,7 @@ below the PC's own line (T-06-12: +5 / +7 / +9 / +11 / +12, Guard 14–20) [09.3
   replaces the template's (16.4.8).
 - **Recovery:** allies recover Vitality and heal their one wound as PCs do (07.12.2).
 
-**16.4.4 Focus and abilities.** `[D]` An ally's **Focus** is chapter 09's adversary base by serving band
+**16.4.4 Focus and abilities.** `[D]` [DL-16-04; C:P9; revision: I-065] An ally's **Focus** is chapter 09's adversary base by serving band
 (0 / 1 / 2 / 3 / 4) plus 1 for a template whose `role` is `caster`; it is refilled at each `rest_long` and
 at no other time (05's channels are the PC's). An ally holds **at most three abilities** (`ab.*` from
 chapter 05's pool, at rank 1 unless 16.10.4 says otherwise), listed by the template or earned as a protégé;
@@ -600,7 +600,7 @@ reaction (06.14.4). Abilities that dictate another's choices or summon further b
 ally (`dictates_choice: true` or op `create`): a follower never brings its own followers [INV-11; 03's
 request on `dictates_choice`].
 
-**16.4.5 Base modifiers for group actions and Help.** `[D]` Chapter 01 asked for these (01.14.7–01.14.8).
+**16.4.5 Base modifiers for group actions and Help.** `[D]` [DL-16-04; revision: I-065] Chapter 01 asked for these (01.14.7–01.14.8).
 An ally's **base modifier** on a beat is `rung(attribute) + competence + edge`, exactly 00.3.5's base for
 anyone; its competence is `c_b` when the beat's primary deed tag or an ancestor is one of its trained tags,
 and 0 otherwise. T-16-5 is the lookup for the common cases; the engine computes the rest.
@@ -626,13 +626,13 @@ and 0 otherwise. T-16-5 is the lookup for the common cases; the engine computes 
   band-4 ally under a P5 PC reaches +12); it is stated so that no item or knack can make a follower the
   better hand at the hero's own trade [16.2.4; DL-16-04].
 
-**16.4.6 Never out-power the hero: the check.** `[D]` At every line build the engine verifies, and logs a
+**16.4.6 Never out-power the hero: the check.** `[D]` [DL-16-04; DL-16-01; C:P13; revision: I-065] At every line build the engine verifies, and logs a
 `rule_conflict` ruling if any fails (it then clamps): the ally's serving band ≤ `band_cap(pc)`; every base
 modifier ≤ the PC's band floor (16.4.5); its maximum Vitality < the PC's maximum Vitality; its harm per
 blow ≤ the PC's Strike base severity (T-06-12) — the last always holds at the band below. This is the
 mechanical form of "a companion never out-powers the PC's band" [00.17.1 Q8].
 
-**16.4.7 Knacks: a small closed set.** `[D]` A **knack** (`kn.*`, T-16-6, `data/companions.yaml#knacks`) is
+**16.4.7 Knacks: a small closed set.** `[D]` [DL-16-06; revision: I-065] A **knack** (`kn.*`, T-16-6, `data/companions.yaml#knacks`) is
 one of fifteen closed capabilities an ally may have. An ally holds **at most three**: its template's
 (`knacks`, zero to two), plus at most one gained by training (16.10.2), plus its template's
 `signature_knack` once its personal thread is complete (16.12.3), never more than three in all — a fourth
@@ -667,7 +667,7 @@ what a hireling "would be able to do"; growth is a choice among these, not a new
 R: https://github.com/amazingrando/blades-in-the-dark-srd-content/blob/main/Blades-in-the-Dark-SRD.md
 (expert edges: Independent, Loyal, Tenacious, Fearsome); DL-16-06].
 
-**16.4.8 Gear, gifts and loot.** `[D]` An ally carries its template's kit (`kit`: item tags, 02/08's
+**16.4.8 Gear, gifts and loot.** `[D]` [DL-08-14; DL-16-04; revision: I-065] An ally carries its template's kit (`kit`: item tags, 02/08's
 format) and anything the PC gives it. Given items work for the ally by 08's rules (edge, reduction, harm
 tags, the item sub-cap), with three limits: an ally never uses an item-bound **active** ability (it holds
 no equipped partition, 05); a relic license works for an ally only if its text says "any bearer"; and
@@ -679,7 +679,7 @@ case: the PC's own beat did not defeat it).
 
 ### 16.5 Loyalty
 
-**16.5.1 Loyalty is standing.** `[D]` An ally's **loyalty** is its standing toward the PC on chapter 15's
+**16.5.1 Loyalty is standing.** `[D]` [DL-00A-27; DL-16-07; DL-16-08; revision: I-065] An ally's **loyalty** is its standing toward the PC on chapter 15's
 scale (−3 Hostile … +3 Devoted; 00.17.1 Q8; 15.1.1). Everything chapter 15 says about standing holds for an
 ally: its starting value (15.1.4: a hireling's reaction roll; a bond's set value; a follower's Friendly by
 16.3.6), its behavior contract for social play (T-15-1), its movement by 15.1.5's listed sources (a
@@ -690,7 +690,7 @@ into rare standing steps (16.5.3); and the **breaking points** where loyalty run
 clocks are a new standing source for allies only, filed as an amendment to 15.1.5 (Interface requests):
 *source 8 — an ally's regard or grievance clock completing (16.5.3)*.
 
-**16.5.2 The companion contract per rung.** `[D]` Each rung is a contract the ally keeps whatever the
+**16.5.2 The companion contract per rung.** `[D]` [DL-16-07; revision: I-065] Each rung is a contract the ally keeps whatever the
 narrator's mood (15.1.2's principle, extended to following). The stakes column is the WILL test chapter
 06 delegates to this chapter (06.14.2 decision 2): a commanded beat is **obeyed** when its frame's stakes
 are within the larger of the rung's acceptance and the contract's (16.7.2), and it does not cross its refusal.
@@ -741,7 +741,7 @@ friendship (one event is one tick of six), fast enough that a campaign of cruelt
 companion ends the following within two weeks of play [R: https://bg3.wiki/wiki/Approval (approval
 accrues from many small reactions and is warned before it breaks); DL-16-08].
 
-**16.5.4 The tick sources (closed).** `[D]` + `[J:flag]` Only these tick an ally's regard or grievance
+**16.5.4 The tick sources (closed).** `[D]` + `[J:flag]` [DL-16-08; C:I; C:III; revision: I-065] Only these tick an ally's regard or grievance
 clock (`data/companions.yaml#loyalty_sources`). The DM decides only *whether* a listed source fired, citing
 the event, frame or fact id (00.8.2); the amount is the table's. A posted ally (16.2.3) or one not present
 ticks only from sources marked "absent too".
@@ -802,7 +802,7 @@ Anchor:             no
 Basis:              [00.8.2] [03.10] [15.1.5] [R: https://bg3.wiki/wiki/Approval] [DL-16-08]
 ```
 
-**16.5.5 Drives: who this person is.** `[D]` + `[S]` Every ally that is a person (hireling, companion,
+**16.5.5 Drives: who this person is.** `[D]` + `[S]` [DL-12-13; DL-00A-15; C:II; revision: I-065] Every ally that is a person (hireling, companion,
 follower, cohort) holds **drives**, rolled once when it joins and never chosen (`data/companions.yaml#drives`):
 - **Two values**: `tbl.16.drive_values` — d10 for the axis (the ten `conduct` axes in 00.5.1 order: mercy,
   honesty, courage, loyalty, generosity, justice, humility, restraint, piety, protection), d6 for the pole
@@ -869,7 +869,7 @@ Basis:              [R: https://bg3.wiki/wiki/Approval] [00.3.14 the telegraph p
 Counsel is the telegraph of loyalty, as the lethal warning is the telegraph of death: no ally's grievance
 should surprise a player who was paying attention.
 
-**16.5.8 Omens of the two clocks.** `[N]` + `[D]` Every tick renders one omen (INV-14), chosen by the
+**16.5.8 Omens of the two clocks.** `[N]` + `[D]` [DL-16-08; DL-00A-20; revision: I-065] Every tick renders one omen (INV-14), chosen by the
 engine from the ally's clock stage and narrated in the ally's voice and manner (T-16-16,
 `data/companions.yaml#loyalty_omens`; the narrator chooses the words, never the stage):
 
@@ -923,7 +923,7 @@ dislikes, made deterministic [R: https://steamcommunity.com/app/48700/discussion
 
 ### 16.6 Breaking points: departure, dismissal and betrayal
 
-**16.6.1 Why allies leave (closed).** `[D]` An ally stops following for exactly one of these causes
+**16.6.1 Why allies leave (closed).** `[D]` [DL-16-11; C:V; revision: I-065] An ally stops following for exactly one of these causes
 (T-16-18; `data/companions.yaml#departure_causes`), each with its own writes. Nothing else ends a following:
 not the DM's sense that "she would have had enough by now".
 
@@ -958,14 +958,14 @@ enough that a player who ignores it loses the ally inside a venture. Together wi
 ultimatum omen (T-16-16) and the confrontation (16.5.9), the player is warned **three times** before a
 loyal ally walks: Baldur's Gate 3 warns twice [R: https://bg3.wiki/wiki/Approval; DL-16-11].
 
-**16.6.3 Unfriendly: leaving now.** `[D]` An ally reaching **Unfriendly** says it is leaving, in its voice,
+**16.6.3 Unfriendly: leaving now.** `[D]` [DL-16-11; revision: I-065] An ally reaching **Unfriendly** says it is leaving, in its voice,
 the moment the step is written, and departs at the next `scene_end` not in danger (cause
 `loyalty_unfriendly`). Until then it obeys only Withdraw and *stay back* (T-16-7). It takes what it wears
 and its own kit; it hands back party goods it carries (supply, the PC's packs, items lent to carry) unless
 it is owed wages, in which case it keeps goods worth the arrears (an engine choice by price among non-relic
 items it carries) and says so. A beast that reaches Unfriendly runs off at the next night watch.
 
-**16.6.4 Dismissal.** `[D]` + `[J:flag]` The PC may let any ally go at any time (free activity, no roll).
+**16.6.4 Dismissal.** `[D]` + `[J:flag]` [DL-15-03; C:III; revision: I-065] The PC may let any ally go at any time (free activity, no roll).
 The engine settles: wages and shares due are paid now or written as a debt commitment to the ally
 (15.7.6; unpaid later → `betrayed`); items lent are returned; the ally leaves with a memory of the parting.
 `[J:flag]` *"Is the ally being left somewhere it cannot safely get home from (the wild, a site, among
@@ -976,14 +976,14 @@ A dismissed ally remains a recurring or principal NPC at its standing (`exists: 
 simply leaves the retinue and `ally_kind` becomes null), with its memories, its thread (now an ordinary
 NPC's want), and its knowledge of the PC — which it may tell (it is a carrier, 03.10.2).
 
-**16.6.5 A want fulfilled.** `[D]` When the want an ally joined for (`joining.kind: want`) is fulfilled —
+**16.6.5 A want fulfilled.** `[D]` [DL-16-26; C:V; revision: I-065] When the want an ally joined for (`joining.kind: want`) is fulfilled —
 its thread completed (16.12.3) or the want's fact written true — the ally's choice follows its standing:
 - **Warm or below:** it leaves content at the next haven (cause `want_fulfilled`), with a `helped` memory
   and a chronicle line; it is a friend left behind, often a contact (15) and a later source of hooks.
 - **Friendly or Devoted:** it stays; its joining becomes `{kind: bond}`; a new want is rolled on 12's
   tables (its story goes on with the PC's).
 
-**16.6.6 Betrayal.** `[T]` + `[D]` + `[J:enum]` An ally betrays the PC only when **all** of these hold:
+**16.6.6 Betrayal.** `[T]` + `[D]` + `[J:enum]` [DL-16-12; revision: I-065] An ally betrays the PC only when **all** of these hold:
 1. its standing is **Hostile**;
 2. its grievance clock's **imminent** omen (the ultimatum) was rendered to the PC at least once since it
    joined (the record is in the clock's history);
@@ -1013,14 +1013,14 @@ recoverable by the thread it writes). *Why so many conditions:* betrayal is the 
 companion can do, and the least forgivable thing an AI can improvise; this chapter makes it earned,
 warned, and drawn from what the companion actually had in reach [R6 C (telegraph before loss); DL-16-12].
 
-**16.6.7 Coming back.** `[D]` A departed ally remains in the world at its standing with its memories. It
+**16.6.7 Coming back.** `[D]` [DL-12-10; DL-16-20; revision: I-065] A departed ally remains in the world at its standing with its memories. It
 may be re-recruited by 16.3 (its old drives kept; a fresh reaction roll is never made), met as a contact,
 or — if it left Hostile or betrayed — met again as a rival whose memories make it dangerous (11). A
 companion who left content (16.6.5) is a standing **successor candidate** (16.16.1).
 
 ### 16.7 Allies in conflict
 
-**16.7.1 What chapter 06 fixes.** `[D]` (restated so this card stands alone; 06.14 is canonical) An ally in a
+**16.7.1 What chapter 06 fixes.** `[D]` [DL-06-01; DL-06-19; C:P9; revision: I-065] (restated so this card stands alone; 06.14 is canonical) An ally in a
 conflict has **0 actions** and **1 reaction** a round, its own position, defenses, Vitality and
 conditions, and no place in the tempo order (06.1.1). It acts in exactly three ways (06.14.1): when the PC
 spends an action to **Command** it (06.14.2: 1 PC action buys one companion beat; 2 for a beat that costs 2;
@@ -1032,7 +1032,7 @@ it: the ally's **will** (16.7.2), its **default order** (16.7.3), when it **lose
 **kind** may be commanded to do (16.7.6), and how allies change the **advisory** (16.7.11) [00.17.1 Q8;
 INV-11].
 
-**16.7.2 Will: will it obey?** `[D]` The WILL test of 06.14.2 decision 2. A commanded beat or order is
+**16.7.2 Will: will it obey?** `[D]` [DL-16-07; C:VII; revision: I-065] The WILL test of 06.14.2 decision 2. A commanded beat or order is
 **obeyed** when all four hold, and **refused** otherwise — the refusal announced, in the ally's voice,
 before the PC's action is spent (06.14.2):
 1. **Capability:** the beat gates G1 or G2 for the **ally** (its verbs, its knacks' licenses, its
@@ -1051,7 +1051,7 @@ the beat's size; intimidation or leverage succeeds at the price of G2 if the bea
 *Worst case:* none — every input is state (a wrong value is a data error, caught by the OFFER, which
 shows the refusal and its reason before commitment).
 
-**16.7.3 Default orders: what they do when not told.** `[D]` + `[T]` Handler `h.16.conflict_orders`
+**16.7.3 Default orders: what they do when not told.** `[D]` + `[T]` [DL-06-19; DL-16-07; DL-16-21; revision: I-065] Handler `h.16.conflict_orders`
 (`conflict_start`, phase 9, after `h.06.tempo_setup`) gives every ally present its template's
 `default_order` (T-16-12), with no action spent, adjusted by loyalty: an ally whose rung refuses the default
 (*guard me* at Neutral or below; anything but *stay back* at Wary or below) takes its template's
@@ -1092,7 +1092,7 @@ by its reaction (Devoted: even with no order; T-16-7). It does **not** stabilize
 first aid is a beat, and a Dying PC still has its one action (07's edge case) to command it. This is R6's
 "Dying creates an explicit rescue objective for companions" inside INV-11 [R6 C-R2].
 
-**16.7.6 What each kind may be commanded to do.** `[D]` (T-16-13; `data/companions.yaml#command_scope`)
+**16.7.6 What each kind may be commanded to do.** `[D]` [DL-06-19; DL-16-07; revision: I-065] (T-16-13; `data/companions.yaml#command_scope`)
 
 **T-16-13 Commanded beats by kind.**
 
@@ -1105,7 +1105,7 @@ first aid is a beat, and a Dying PC still has its one action (07's edge case) to
 | bound being | what its working's text allows (05), and otherwise as a beast | anything the working excludes |
 | scene ally under the PC's lead | as a person of its template, within its standing's acceptance (T-16-7 by its standing) | as a person |
 
-**16.7.7 An ally's check: who rolls, with what.** `[D]` The engine rolls every ally beat (00.3.2; the PC
+**16.7.7 An ally's check: who rolls, with what.** `[D]` [DL-00A-03; C:I; C:P8; revision: I-065] The engine rolls every ally beat (00.3.2; the PC
 decides, the engine rolls). The commanded beat is framed with the **ally's** numbers: its attribute by the
 method, its competence (`c_b` on a trained tag or ancestor, else 0), its edge (gear, knacks), circumstance
 (levers and snags citing facts — the PC's Setup facts serve "the actor or an ally", 01.14.9, so a PC's
@@ -1116,7 +1116,7 @@ each ally keeps its own window per PC turn (its second attack-trait beat in one 
 Resisted effects aimed at the ally are rolled by the ally (00.3.3), with its own defenses. Evidence from
 the beat is the ally's own (03.2.6; tracked only for protégés, 16.10.4); the PC's Command beat is the PC's.
 
-**16.7.8 Help and Setup between the PC and allies.** `[D]` In conflict, an ally's Help is bought with a
+**16.7.8 Help and Setup between the PC and allies.** `[D]` [DL-01-24; DL-06-07; DL-06-19; revision: I-065] In conflict, an ally's Help is bought with a
 Command and gives the PC's **next** beat one Precision lever (06.14.2; 01.14.8 eligibility: the ally must
 be able to attempt the helped beat alone). An ally's commanded Setup creates its fact for the PC's next
 beat (01.14.9). A commanded **Flank** (06.3.5: the ally engaged with a foe the PC is engaged with, one
@@ -1124,13 +1124,13 @@ action, no roll) puts `flag.flanked` on that foe, so the PC's melee attacks hold
 classic two-person trick, priced at one of the PC's three actions. At most one Help lever per beat; the
 two-lever cap (00.3.9) holds for everything.
 
-**16.7.9 Reactions.** `[D]` An ally's one reaction a round is: Fend with no order (−2 on one attack against
+**16.7.9 Reactions.** `[D]` [DL-06-01; DL-06-22; DL-16-07; revision: I-065] An ally's one reaction a round is: Fend with no order (−2 on one attack against
 it, 06.6.3); its standing order's reaction (06.14.4); or a reaction ability or knack (`ab.interpose`,
 `ab.shield_block`, `kn.bodyguard`), all competing for the same one. A Devoted ally may Intercept for the PC
 by its reaction with **no** order (T-16-7). No effect gives an ally a second reaction unless 06's own grant
 rules allow it (06.1.1; `reaction_cap_with_grants: 2`).
 
-**16.7.10 Allies as targets.** `[D]` Adversaries choose among the PC and allies by 06.9.3's attention order
+**16.7.10 Allies as targets.** `[D]` [DL-06-16; revision: I-065] Adversaries choose among the PC and allies by 06.9.3's attention order
 (an enemy engaged with it that dealt it the most harm since its last turn; else the nearest, the PC before
 an ally) or by their behavior list (09.7: "the weakest", "the one carrying the light"). An ally that strikes
 a foe draws that foe's attention as anyone does — which is how a companion protects the PC without a
@@ -1199,7 +1199,7 @@ anchor 06 already uses for chases and battles (06.12; 06's edge case "A battle")
 
 ### 16.8 Allies outside conflict: asking, the party's time, journeys and downtime
 
-**16.8.1 Asking.** `[D]` + `[J:flag]` Outside conflict there is no Command action: the PC asks (the free
+**16.8.1 Asking.** `[D]` + `[J:flag]` [DL-16-07; C:III; revision: I-065] Outside conflict there is no Command action: the PC asks (the free
 activity "speak a few words", 00.12.6) and the ally acts as the actor of its own beat, framed and rolled
 with its numbers (16.7.7) and shown to the player as an OFFER. Its will is the same test as in conflict
 (16.7.2, stakes and refusal), and, for a hireling or a follower, chapter 15's duty rule (15.4.6): `[J:flag]`
@@ -1227,7 +1227,7 @@ searching two rooms in one interval would halve every site's danger for any part
 exploit would be hiring a porter to search. In free time and downtime parallel work is cheap and true to
 life, and nothing listens to the clock as closely [10.5; 10.10; DL-16-15].
 
-**16.8.3 Journey roles.** `[D]` + `[J:enum]` Allies take chapter 10's four roles by 10's rules (10.5.1:
+**16.8.3 Journey roles.** `[D]` + `[J:enum]` [DL-16-15; DL-10-19; revision: I-065] Allies take chapter 10's four roles by 10's rules (10.5.1:
 **navigator**, **lookout**, **scout**, **forager**; one role per traveler per watch; evidence by 03's
 `cnt.journey` for a tracked protégé), plus this chapter's fifth, as 03 and 10 provided ("10/16 may
 extend"):
@@ -1259,12 +1259,12 @@ extend"):
   (10.3.5, 10.8), carry their load (08.10.1), and hold no role. A porter carries **10** load units (08.8.8); every
   ally's `carry` adds to the party's capacity while it is present.
 
-**16.8.4 Camp and rest.** `[D]` Allies rest as PCs do (07.8: breather, short and long rests, site, quality),
+**16.8.4 Camp and rest.** `[D]` [DL-07-11; DL-16-04; revision: I-065] Allies rest as PCs do (07.8: breather, short and long rests, site, quality),
 recover Vitality and heal their one wound (07.12.2), and refill Focus at a long rest (16.4.4). An ally with
 `kn.healer` may Treat the PC and the others during a rest (07.8.8), which is how a party heals faster than a
 lone wanderer: the treated wound heals on the haven or road schedule of 07.8.7.
 
-**16.8.5 Downtime duties.** `[D]` In downtime (15.10), each ally takes **one duty** for the week in parallel
+**16.8.5 Downtime duties.** `[D]` [DL-16-15; revision: I-065] In downtime (15.10), each ally takes **one duty** for the week in parallel
 with the PC's own week plan (`h.15.downtime_week` resolves it; `data/companions.yaml#downtime_duties`):
 
 **T-16-15 Downtime duties.**
@@ -1305,13 +1305,13 @@ rounds; (3) nobody spent one beat to stabilize it. A single unlucky roll can dro
 one. *Why:* the owner's lock — "death is real but telegraphed" — is about characters the player cares
 for, and a companion is the second character a solo player cares for [BRIEF §4; DL-16-16].
 
-**16.9.3 Carrying and tending.** `[D]` A fallen ally can be carried out by the PC or by another ally (one
+**16.9.3 Carrying and tending.** `[D]` [DL-07-20; DL-07-19; revision: I-065] A fallen ally can be carried out by the PC or by another ally (one
 body each, 07.12.1; a commanded ally drags a fallen friend: T-06-9 row 38), stabilized by a commanded ally
 (16.7.6: first aid is a person's commanded beat), or reached and tended by the PC. Leaving a fallen ally
 among enemies when the PC leaves is 07.12.3 (the victor's disposition toward it: captive, robbed, left for
 dead, or killed only under an effective lethal context).
 
-**16.9.4 After the fall: body and loyalty.** `[D]` Body (07.12.2): an ally that was Down wakes at
+**16.9.4 After the fall: body and loyalty.** `[D]` [DL-16-16; DL-15-03; DL-16-08; revision: I-065] Body (07.12.2): an ally that was Down wakes at
 `scene_end` at Vitality 1 with a Moderate body wound; one stabilized from bleeding out wakes after a long rest
 with a Heavy body wound on a 4-segment recovery clock and refuses attack-trait commands until it heals.
 Loyalty (this chapter):
@@ -1342,7 +1342,7 @@ opposing morale clock (06.11.3) and a chronicle line (07.12.3). This chapter add
 (12.7.5), the other allies' loyalty movements. The dead ally is never a lever ("for Brack!" is narration;
 its mechanical form is the vow) [00.3.9; DL-16-16].
 
-**16.9.6 Death is final.** `[D]` A dead ally stays dead: true resurrection is impossible in every region's canon (12.16.5
+**16.9.6 Death is final.** `[D]` [DL-16-16; revision: I-065] A dead ally stays dead: true resurrection is impossible in every region's canon (12.16.5
 item 1; 05.7.10 item 1), and there is no ally-specific resurrection [verification: V2b-026]. A raised dead ally is a **bound**
 being (16.15.6), not the person it was: it has no standing, no drives, and no memories but what its working
 gives it.
@@ -1362,12 +1362,12 @@ crystallizations and the Season Turn (11) run on the same boundary, so an ally's
 world's, and one band a season means a porter becomes a veteran in no less than two seasons of hard road
 [C:VI (boundary points); 04.8; DL-16-17].
 
-**16.10.2 Training.** `[D]` An ally may learn **one knack a season** by the downtime duty `train` (T-16-15)
+**16.10.2 Training.** `[D]` [DL-16-06; DL-15-28; revision: I-065] An ally may learn **one knack a season** by the downtime duty `train` (T-16-15)
 under a teacher (15.11's learning clock and fees, the ally as the learner): a `kn.trained` with a named
 training license, or any other knack of T-16-6 its template's family allows (`trainable_knacks`). An ally holds
 at most three knacks; a fourth **replaces** one (VI).
 
-**16.10.3 Gear.** `[D]` An ally's power grows also through what the PC gives it (16.4.8), inside 08's item
+**16.10.3 Gear.** `[D]` [DL-16-04; revision: I-065] An ally's power grows also through what the PC gives it (16.4.8), inside 08's item
 caps and 16.4.6's ceiling.
 
 **16.10.4 Protégés: a bounded calling of their own.** `[D]` A template marked `protege: true` (the squire, the
@@ -1388,12 +1388,12 @@ Ironsworn's legacies); refusing it would make every companion static. The bounds
 band cap, three abilities, the competence clamp — keep the arc under the hero, and a protégé is the natural
 successor when the hero retires (16.16) [04's edge case; 03.2.7; R6 D-R4; DL-16-18].
 
-**16.10.5 What never grows.** `[D]` An ally's actions (0), reactions (1), retinue place cost, and the band
+**16.10.5 What never grows.** `[D]` [DL-06-01; DL-16-17; C:P9; revision: I-065] An ally's actions (0), reactions (1), retinue place cost, and the band
 cap. An ally never gains a slot partition, fate, dread, marks, a last-chance menu, or an oath seat.
 
 ### 16.11 Witnesses, recognition and reputation
 
-**16.11.1 Allies are witnesses and carriers.** `[D]` An ally present at a deed is a **witness** by 03.10.1's
+**16.11.1 Allies are witnesses and carriers.** `[D]` [DL-03-09; DL-11-15; revision: I-065] An ally present at a deed is a **witness** by 03.10.1's
 test like anyone, and every ally that can tell others — every person, and any ally flagged `speaks: true`
 — is a **carrier** (03.10.2 names "a companion" explicitly). Beasts, bound beings without speech and
 mounts witness but do not carry. Consequences, all through other chapters' machinery:
@@ -1406,7 +1406,7 @@ Neutral, sized by 15.3.2 by what silence costs it; R4 if the deed affronted one 
 success writes the commitment that 03.10.2(c) reads ("no commitment binds it to silence"); breaking it is
 the ally's own act (Hostile allies may sell it: T-16-11 row 2).
 
-**16.11.2 Allies as recognition's voices.** `[D]` + `[N]` Chapter 04 chooses the vehicle (04.6;
+**16.11.2 Allies as recognition's voices.** `[D]` + `[N]` [DL-04-12; C:III; revision: I-065] Chapter 04 chooses the vehicle (04.6;
 `data/vehicles.yaml`); allies are valid recognizers or witnesses for these, and the DM, when 04's vehicle
 selection returns one of them and an ally is present, stages it through the ally whose drives fit best
 (`[J:enum]` among present allies, by the first that holds: a value axis matching the calling's conduct, a
@@ -1426,7 +1426,7 @@ trained tag on the calling's deed branch, the highest standing; default the high
 An ally voices recognition but never grants it, never names a calling as a mechanic, and never states a
 number (12.14.4–12.14.5).
 
-**16.11.3 Allies and the PC's reputation.** `[D]` Reputation is 11's (00.17.1 Q22). This chapter adds only: an
+**16.11.3 Allies and the PC's reputation.** `[D]` [DL-11-15; DL-03-09; revision: I-065] Reputation is 11's (00.17.1 Q22). This chapter adds only: an
 ally's standing toward the PC is information others can learn (a Read, 15.6.1, of the ally; a rumor), and
 11 may read "how the PC treats their people" from the retinue's departure record (causes `unpaid`,
 `loyalty_*`, `death` after abandonment) as reputation content in the scopes where those allies came from
@@ -1444,26 +1444,26 @@ lost). The thread is written **sealed** (its truth and its people) with **at lea
 (11's and 15's rule for every hook: 15.9.4), and a proactive **fallback** (a person from its past arrives:
 12.8's lead injection may draw it) [R5 G-3; R6 B (hooks with three clues and a fallback)].
 
-**16.12.2 When it opens.** `[T]` + `[D]` The thread opens (becomes **shown** in the quest register, 00.6.3)
+**16.12.2 When it opens.** `[T]` + `[D]` [R5 G-3; DL-16-08; revision: I-065] The thread opens (becomes **shown** in the quest register, 00.6.3)
 at the first of: the ally reaches **Friendly** (it confides — the regard moment, T-16-16); the ally joined
 with a want term naming it (16.3.4: the thread is why it came); its fallback arrives. Opening unseals the
 want (16.5.6 item 4) and places the thread's first clue in the ally's own telling.
 
-**16.12.3 Its completion.** `[D]` A thread completed by resolved beats (11's completion; the progress clock
+**16.12.3 Its completion.** `[D]` [DL-16-23; DL-16-06; DL-16-08; revision: I-065] A thread completed by resolved beats (11's completion; the progress clock
 filled by delivered reach) is a **deed of weight** for that ally: standing **+1** (to Devoted allowed,
 16.5.10), its `signature_knack` gained (T-16-19; replacing one if it already holds three), a chronicle line,
 and 16.6.5's choice (stay with a new want at Friendly or Devoted; leave content at Warm or below). Each beat
 that ticked the thread's clock ticked regard (R7). This is Mass Effect 2's loyalty mission in this ruleset's
 terms: the companion's devotion is earned by solving the companion's problem.
 
-**16.12.4 Abandoned, failed, or orphaned.** `[D]` A thread the PC abandons while the ally is present (the
+**16.12.4 Abandoned, failed, or orphaned.** `[D]` [DL-16-08; DL-11-16; revision: I-065] A thread the PC abandons while the ally is present (the
 PC declares it closed, or its clock is voided by the PC's choice) ticks grievance **+3** (G2's weight: it was
 told it would be helped; record it under G1's row as "value affronted: loyalty"), and the ally's want stays
 open. A thread **failed** by the world (its clock voided by a racing clock, 00.8.5) ticks nothing — the
 ally grieves the outcome, not the PC. A thread whose ally dies becomes a thread about its **absence** (kin
 to tell, a debt to pay, a wrong to right), which is what 16.9.5's vow attaches to.
 
-**16.12.5 Allies as hooks into the world.** `[D]` An ally's ties (12.11.1: factions and NPCs by Oracle) are
+**16.12.5 Allies as hooks into the world.** `[D]` [DL-16-12; DL-11-01; revision: I-065] An ally's ties (12.11.1: factions and NPCs by Oracle) are
 facts other chapters use: 11's World Turn may have a faction **court** an ally (`courted_by`, sealed, with
 an omen: the ally comes back late from town), a creditor come for its debt, its kin send word. Each such
 event is 11's (its clocks, its event tables); this chapter asks only that ally ties be eligible targets
@@ -1472,12 +1472,12 @@ moment (an ally's honesty value +1 reports it at once); one at Wary or worse kee
 
 ### 16.13 Voice, memory, and staying in character
 
-**16.13.1 Voice.** `[N]` + `[D]` Every person-ally keeps 12's **register** and **habit** (12.11.3) — rolled at
+**16.13.1 Voice.** `[N]` + `[D]` [DL-12-13; R5 NP-06; revision: I-065] Every person-ally keeps 12's **register** and **habit** (12.11.3) — rolled at
 recurring depth, kept forever — and speaks in them; its habit is used at most once a scene. A beast is
 described, never voiced: its temperament (16.15.3) is shown in its body (a hound's hackles, a mule's ears).
 What an ally calls the PC follows its standing (T-15-1's "voiced as" row) and what it knows.
 
-**16.13.2 Memory of shared events.** `[D]` An ally keeps 12.11.7's **memories** of the PC (at most five
+**16.13.2 Memory of shared events.** `[D]` [DL-12-13; C:P3; revision: I-065] An ally keeps 12.11.7's **memories** of the PC (at most five
 active, kept by salience then recency, the rest archived and queryable), written whenever it witnessed or
 took part in a beat involving the PC. In addition, the **shared record**: the engine keeps, for each ally,
 the list of conflicts, ventures and scenes it shared with the PC (ids and dates, from the scene log), so
@@ -1504,13 +1504,13 @@ disapproval only through counsel (16.5.7) and the omens of its clocks (16.5.8); 
 complain and tell stories in its voice, but it may not state a judgment of the PC's conduct its drives did
 not produce [R4 W4; R: https://arxiv.org/abs/2606.20708 (agreeable-persona bias); DL-16-10].
 
-**16.13.4 How much an ally speaks.** `[N]` + `[D]` Allies are company, not a chorus. Per scene, at most: one
+**16.13.4 How much an ally speaks.** `[N]` + `[D]` [DL-16-10; C:IV; revision: I-065] Allies are company, not a chorus. Per scene, at most: one
 line of **banter** from one ally at `scene_start` (rotating among present allies, the one least recently
 heard first — the spotlight rule of 12's facets, 16.13.5), plus whatever its counsel, omens, memories,
 commanded beats and confrontations require. A player who asks an ally something gets an answer (free
 activity) in its voice and within its knowledge (12.10.6).
 
-**16.13.5 Allies are facets of the spotlight.** `[D]` Chapter 12 counts each companion as a **facet** of the PC
+**16.13.5 Allies are facets of the spotlight.** `[D]` [DL-12-12; revision: I-065] Chapter 12 counts each companion as a **facet** of the PC
 (12.9: "each companion (16)"), foregrounded when a resolved frame in a scene cited it (a commanded beat, a
 Help, a role, a knack) or the scene's agenda or a delivered lead named it, and rotated like every facet so a
 companion untested for a while gets a scene (its thread's clues are the natural material). Ally deaths are
@@ -1518,7 +1518,7 @@ setbacks (12.7.5).
 
 ### 16.14 Wages, keep and contracts
 
-**16.14.1 Who costs what.** `[D]` (`data/companions.yaml#upkeep`; prices are 08's, `economy.yaml#wages`)
+**16.14.1 Who costs what.** `[D]` [DL-08-20; DL-16-05; revision: I-065] (`data/companions.yaml#upkeep`; prices are 08's, `economy.yaml#wages`)
 
 | Ally | Weekly cost in a settlement or a haven | On a venture |
 |---|---|---|
@@ -1531,14 +1531,14 @@ setbacks (12.7.5).
 Keeping a companion at the PC's own lifestyle or better (paying its keep at that rung) is generosity: the
 weekly difference above 4 counts toward T-16-8 R4 when it is at least 1 Unit of the ally's lifestyle.
 
-**16.14.2 The contract.** `[D]` A hireling's contract (written at hire, 16.3.3) is a commitment of two sides
+**16.14.2 The contract.** `[D]` [DL-16-05; DL-15-20; revision: I-065] A hireling's contract (written at hire, 16.3.3) is a commitment of two sides
 (15.7.6): `{duty, wage_week, hazard, term: weeks n | venture | open, share, paid_through}`. The PC's side is
 to pay; the hireling's is to serve within its duty and hazard. Its **term** is a number of weeks, the
 current venture (ends at `venture_end`), or open (ends on a week's notice from either side). A contract may
 be **renegotiated** at any haven (a request at the new terms' size: a longer term is one rung lower than a
 new hire because the hireling knows the PC; a higher hazard is the new hazard's rung).
 
-**16.14.3 Upkeep at the week.** `[D]` + `[T]` Handler `h.16.retinue_upkeep` (`week`, phase 4; reserved by 00)
+**16.14.3 Upkeep at the week.** `[D]` + `[T]` [DL-16-21; DL-16-08; revision: I-065] Handler `h.16.retinue_upkeep` (`week`, phase 4; reserved by 00)
 for each ally in the retinue or posted: charge its weekly cost (16.14.1) from the PC's coin; on a venture
 week only supply is charged (10's daily handler) and wages accrue to be paid at the next haven
 (`paid_through` lags); write `paid` or `unpaid`; roll the posted task (16.2.3); run T-16-8's weekly sources
@@ -1560,33 +1560,33 @@ whose term ends today (or `venture_end` for venture terms). At the end of a term
 henchman's best moment and the M&B companion's; making it an offer at Friendly after a month makes it
 earned and visible [R: https://oldschoolessentials.necroticgnome.com/srd/index.php/Retainers; DL-16-19].
 
-**16.14.5 Unpaid.** `[D]` Each `week` boundary at which a wage or keep due is not paid ticks G4 (16.5.4:
+**16.14.5 Unpaid.** `[D]` [DL-16-08; DL-16-07; revision: I-065] Each `week` boundary at which a wage or keep due is not paid ticks G4 (16.5.4:
 hireling +2, others +1). A **Friendly** ally serves two weeks unpaid without grievance, a **Devoted** one four
 (T-16-7). A **hireling** unpaid at two consecutive `week` boundaries leaves at once (cause `unpaid`), holding
 the debt (15's `owed`); a broken contract is 15's `betrayed` toward it (−3) if the PC refuses the debt when
 next met. Followers and companions are never owed wages, only keep; unfed or unkept they tick grievance by
 G4 and G8 but do not leave for it alone.
 
-**16.14.6 Shares.** `[D]` Handler `h.16.venture_end` (`venture_end`, phase 9): for every hireling whose
+**16.14.6 Shares.** `[D]` [DL-16-21; DL-16-08; revision: I-065] Handler `h.16.venture_end` (`venture_end`, phase 9): for every hireling whose
 contract has a share, compute its share of coin found during the venture (half share = ½ of one equal
 part, full share = one equal part, where parts are the PC plus each sharing hireling), rounded down; pay it
 or tick G5. Also: T-16-8 R5 (the road together) for every ally who completed the venture.
 
 ### 16.15 Beasts, mounts and bound beings
 
-**16.15.1 Beasts are allies without words.** `[D]` A beast ally has no drives, no counsel, no personal
+**16.15.1 Beasts are allies without words.** `[D]` [DL-16-08; C:V; revision: I-065] A beast ally has no drives, no counsel, no personal
 thread, no Talk, and no NPC depth; it has a **temperament** and a **beast loyalty** on the standing scale
 that only care and harm move. It hears by `voice` (it knows its name and simple commands within
 `band.near`), by `signs` (`kn.sign_trained`), or by `bond` (`rit.beast_bond`: intent without words, any
 distance at which the PC could call it). A beast's commanded beats are T-16-13's beast row.
 
-**16.15.2 Temperament.** `[D]` One of four, from the template (rolled d4 for a tamed wild beast): `steady`
+**16.15.2 Temperament.** `[D]` [DL-16-25; DL-16-07; revision: I-065] One of four, from the template (rolled d4 for a tamed wild beast): `steady`
 (never loses heart while Neutral or warmer), `skittish` (loses heart at Warm too, 16.7.4), `fierce` (its
 default order is *harry that one* if allowed; it will not take *stay back* while a foe is engaged with the
 PC — it must be commanded twice), `gentle` (refuses Strike and Grapple against folk unless Devoted). The
 narrator shows temperament in the beast's body, never in words it does not have.
 
-**16.15.3 Beast loyalty.** `[D]` A beast's regard and grievance clocks tick only from this list
+**16.15.3 Beast loyalty.** `[D]` [DL-16-08; C:V; revision: I-065] A beast's regard and grievance clocks tick only from this list
 (`data/companions.yaml#beast_sources`), replacing T-16-8 for beasts:
 
 | Id | Source | Clock | Ticks |
@@ -1603,7 +1603,7 @@ A beast at Unfriendly runs off at the next night watch (16.6.3); a Hostile beast
 cornered, otherwise flees. Beasts never betray. A bonded beast (`rit.beast_bond`) cannot fall below Wary while
 the bond lasts (the rite's text); its bond ends only with its life or the rite's undoing.
 
-**16.15.4 Mounts in conflict, and fright.** `[D]` + `[J:flag]` A mount carries its rider and shares the
+**16.15.4 Mounts in conflict, and fright.** `[D]` + `[J:flag]` [C:III; R5 EQ-10; revision: I-065] A mount carries its rider and shares the
 rider's participant (06.15.1). A mount **without** `kn.war_trained` in a conflict needs a **Handle (ride)**
 beat at the start of each of the rider's turns (06.15's "controlling a mount amid a melee"; this is the
 "16 owns the check" of 08.10.1): `verb.handle`, Presence or Agility, against **Moderate**, Easy if the mount
@@ -1618,12 +1618,12 @@ rider is `cond.off_balance`. `[J:flag]` *"Does the mount perceive the creature?"
 `band.far` and in sight, or its scent is established on the wind; uncertain → true (a mount knows before its
 rider does). *Worst case (J):* one unneeded Handle beat (class i). War mounts never roll either check.
 
-**16.15.5 Familiars.** `[D]` A familiar bound by `rit.bind_familiar` (05) is a band-1 tiny beast ally
+**16.15.5 Familiars.** `[D]` [DL-16-25; DL-16-08; revision: I-065] A familiar bound by `rit.bind_familiar` (05) is a band-1 tiny beast ally
 (`cmp.familiar`: Vitality 3, one place), understands the PC's speech, lends its senses for one interval a
 day (05's scope), and acts only when commanded. Its loyalty is the bond's: it starts Friendly and is moved
 by the beast list (16.15.3). It is a valid lookout (it has eyes) but holds no other journey role.
 
-**16.15.6 Bound beings: obedience, not loyalty.** `[D]` A summoned servant, a raised dead or an automaton
+**16.15.6 Bound beings: obedience, not loyalty.** `[D]` [DL-16-01; C:VII; revision: I-065] A summoned servant, a raised dead or an automaton
 (05; templates `cmp.bound_servant`, `cmp.bound_dead`, `cmp.bound_automaton`) has **no standing, no drives, no
 clocks, no memories and no will**: it obeys every command its working's text allows (WILL's capability and
 order tests only; stakes and refusals do not apply) and nothing else; uncommanded it keeps its order or stands
@@ -1634,14 +1634,14 @@ template has an attack.
 
 ### 16.16 Legacy: allies when the hero's road ends
 
-**16.16.1 Allies as successors.** `[D]` When the PC retires or dies (11's legacy procedure; R6 D-R4's three
+**16.16.1 Allies as successors.** `[D]` [DL-16-20; DL-11-26; R6 D-R4; revision: I-065] When the PC retires or dies (11's legacy procedure; R6 D-R4's three
 pre-connected successor candidates), every ally at **Friendly or warmer**, every protégé, and every
 companion who left content (16.6.5) is a **successor candidate** for 11 to offer. A chosen successor starts
 as a new PC at chapter 02's baseline — never at its ally line, its band or its protégé tier (retirement is
 a structural reset, R6 D-R4) — keeping its name, its drives as background hooks (02's aspirations and bonds),
 its memories as knowledge, and its standing toward the others as bonds.
 
-**16.16.2 The retinue after the hero.** `[D]` At the PC's retirement each ally's fate follows its standing:
+**16.16.2 The retinue after the hero.** `[D]` [DL-16-20; revision: I-065] At the PC's retirement each ally's fate follows its standing:
 Devoted and Friendly allies stay with the PC's household or legacy (11) and may serve the successor (they
 re-join at their standing toward the new PC, which is their old standing toward the predecessor minus one:
 loyalty to a person is not loyalty to their heir); Warm and below disperse to their homes as recurring NPCs.
