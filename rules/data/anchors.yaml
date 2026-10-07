@@ -16,7 +16,7 @@ compiled_from:
 - file: data/basic_verbs.yaml
   sha256_16: 3188c5a7ebcfa419
 - file: 01-resolution.md
-  sha256_16: 8429d7a56a2202a0
+  sha256_16: 5af64c22e9ebdb44
 - file: 02-character.md
   sha256_16: bcdef683a413cc98
 - file: 03-tags-and-evidence.md
@@ -30,7 +30,7 @@ compiled_from:
 - file: 07-harm-recovery-death.md
   sha256_16: 341928c0c1e03599
 - file: 08-items-loot-crafting.md
-  sha256_16: 8b09a148ca5f52cc
+  sha256_16: e958fb3464e1779f
 - file: 09-adversaries.md
   sha256_16: 409f13c2a0c02a01
 - file: 10-exploration-travel-sites.md
@@ -42,7 +42,7 @@ compiled_from:
 - file: 13-starter-setting.md
   sha256_16: 9dd8a6cbb473d2d5
 - file: 15-social-investigation-downtime.md
-  sha256_16: 6ca215b1cd355148
+  sha256_16: 29fbfe6032c351c3
 - file: 16-companions-and-allies.md
   sha256_16: e92666331e896446
 compiled_at: integration (Wave 3 -> 4)

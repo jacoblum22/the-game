@@ -99,6 +99,7 @@ themselves change the status). Rule ids are grouped by chapter; the full text of
 | 08 | 00.17.1 Q2 | one item-bound active; no slots added; passives against item budget | 08.4.1, 08.2.1, 08.2.2 | met |
 | 08 | 00.17.1 Q17 | kits by tag resolve to base items | 08.1.12, base_items.yaml#kit_resolution | met |
 | 08 | R5 EQ-01…EQ-13 | equipment, encumbrance, currency, buying/selling, lifestyle, loot, crafting, durability, consumables/light/supply, mounts/vehicles, services/hirelings, holdings (prices), treasure calibration | 08.1, 08.9.1, 08.8.1, 08.8.4–5, 08.8.6, 08.3, 08.6, 08.1.9/08.6.7, 08.9.4–6, 08.10, 08.8.8, 08.8.8 (11 owns play), 08.8.10 | met |
+| 08 | BRIEF §6 | Every rule cites its basis (`[C:]`, `[R]` or `[DL-]`) at card level | every rule card of 08 (82); 46 tagged at revision C6e, 08.5.1, 08.6.11 and 08.10.4 by the new DL-08-39..41; validator BASIS (DL-INT-13) | satisfied |
 | 09 | BRIEF §4 | Death real but telegraphed; defeat changes the situation | 09.6.5–6, 09.9.1–2, 09.5.6 (no kill-outright effect), 09.3.5 (windups), 09.9.5 (menu rates by word) | satisfied |
 | 09 | 00.17.2 (09 row) | archetypes as manufacturers; T1–T5 templates; threat_advisory; solo budgets; behavior lists and morale; lethal_context and defeat_disposition; tells; bestiary | 09.2, 09.3–09.4, 09.6, 09.8, 09.7, 09.9, 09.10, 09.12 | satisfied |
 | 09 | 00.17.1 Q5 | `threat_advisory(encounter, pc)` from bands, count and power band; lethal feeds 07 | 09.6.1–09.6.5, PR-09-4 | satisfied |

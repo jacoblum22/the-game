@@ -303,7 +303,7 @@ economy = {
  "craft_wages": {"trained": 10, "expert": 25, "master": 60, "unit": "coins per week of work; the labor cap of 08.8.9 and the commission price of 08.6.5"},
  # [revision: I-086] a patron's job pays a fee by the job's challenge band (03.4.3): four weeks of that band's hire wage
  "job_fees": [{"band": 1, "fee": 40}, {"band": 2, "fee": 85}, {"band": 3, "fee": 200}, {"band": 4, "fee": 600}, {"band": 5, "fee": 2000}],
- "job_fee_rules": "paid by the patron when a job taken from it completes (11's quest thread, 'a faction's commission' or an NPC's request with a Payment term, 15.3); keyed by the job's challenge band (03.4.3: the opposition's threat band, the faction's tier, or the work's type-tier); half up front if the patron's standing is below Warm; 15's bargaining may move it one notch (08.8.2); a failed or abandoned job pays only what was paid up front (08.8.8) [revision: I-086]",
+ "job_fee_rules": "paid by the patron when a job taken from it completes (11's quest thread, 'a faction's commission' or an NPC's paid request, 15.7.1 item 4 [revision: I-091]); keyed by the job's challenge band (03.4.3: the opposition's threat band, the faction's tier, or the work's type-tier); half up front if the patron's standing is below Warm; 15's bargaining may move it one notch (08.8.2); a failed or abandoned job pays only what was paid up front (08.8.8) [revision: I-086]",
  "holdings": [
    {"id": "hold.cottage", "buy": 150, "build_weeks": 6, "upkeep_week": 1, "staff": 0, "yield_week": 0, "what": "a home: a haven rest site; modest lifestyle at 4 coins/week while living there"},
    {"id": "hold.townhouse", "buy": 600, "build_weeks": 12, "upkeep_week": 3, "staff": 1, "yield_week": 0, "what": "a town home; comfortable lifestyle at 9/week while living there"},
@@ -330,7 +330,7 @@ economy = {
    {"id": "AI-3", "rule": "Property items sell for half of list and only through clk.find_buyer; villages and camps never buy them"},
    {"id": "AI-4", "rule": "Market depth per settlement per week caps coin paid to the PC: one depth for trade goods and materials, one for everything else (08.8.5) [revision: I-079]"},
    {"id": "AI-5", "rule": "Glut: repeated sales of the same good in one place lower its price one notch per sale per week"},
-   {"id": "AI-6", "rule": "Coin enters only from purses, hoards, wages, job fees and rewards (11; job_fees here), sales and holdings' yields, each from a table here or in 11 -- never from a DM's choice (INV-3)"},
+   {"id": "AI-6", "rule": "Coin enters only from purses, hoards, wages, job fees (job_fees here; a patron's coin reward for an 11 thread is the job fee of its band) [revision: I-091], sales and holdings' yields, each from a table here or in 11 -- never from a DM's choice (INV-3)"},
    {"id": "AI-7", "rule": "Supply-saving and carry-raising items are capped by the item share (08.2.2): -1 supply/day, +4 capacity"},
    {"id": "AI-8", "rule": "Holdings yield at most the labor of their staff and their land's rents; a yield table is 11's and is rolled, never chosen"}],
 }

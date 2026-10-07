@@ -186,7 +186,7 @@ quantity of 20 per lot; half of what is spent is recovered after a conflict (06.
 06 retunes T-06-6 or T-06-7, `base_items.yaml` is regenerated from the same script; no rule text here
 changes [06 Interface request to 08; DL-08-04].
 
-**08.1.6 Armor.** `[D]` Worn armor reduces `harm.physical` from attacks and shaped effects by **light 1,
+**08.1.6 Armor.** `[D]` [DL-07-14; DL-08-07; C:P12; R5 EQ-01; revision: I-065] Worn armor reduces `harm.physical` from attacks and shaped effects by **light 1,
 medium 2, heavy 3** (07.2.2; T-06-11); total reduction from all sources is capped at 4 by chapter 07, and
 items' share of it is 3 (08.2.2). Armor pays for its reduction in the other pillars, each a data field:
 
@@ -206,7 +206,7 @@ the two-cited count, inside the ±4 cap, like 06's repetition snags); the mundan
 *Supple* waive them (`eff.05.waive`). A helm is a garment, not armor: it carries no reduction and is the
 base for head-slot properties [07 Interface request to 08; 06 "armor carries its costs in other pillars"].
 
-**08.1.7 Shields.** `[D]` A shield gives **+1 edge to Guard** (T-06-7 `shield_light` / `shield_heavy`) and
+**08.1.7 Shields.** `[D]` [DL-06-08; DL-07-14; R5 EQ-01; revision: I-065] A shield gives **+1 edge to Guard** (T-06-7 `shield_light` / `shield_heavy`) and
 **reduces nothing** (07.2.2). Four base items: **buckler** (light; load 0; does not grant Full defense's
 cover; the shield hand may also hold a lit torch or a light item, not a weapon), **round shield** (light;
 grants Full defense's cover), **kite shield** (heavy; usable mounted; Exert and Sneak take a snag),
@@ -215,7 +215,7 @@ feature for one ally engaged with the bearer). A shield bash is an unarmed-weigh
 `deed.martial.shield.bash`. Because a shield already fills the item share of Guard edge (+1), a Guarding
 property never generates on a shield or alongside a parrying weapon (08.2.4).
 
-**08.1.8 The other branches.** `[D]` (Every entry in `base_items.yaml`; the table is the summary.)
+**08.1.8 The other branches.** `[D]` [DL-00A-13; C:II; R5 EQ-01; revision: I-065] (Every entry in `base_items.yaml`; the table is the summary.)
 
 | Branch | Base items | What the base does on its own |
 |---|---|---|
@@ -298,7 +298,7 @@ Basis:              [01 Interface request: "improvised weapons use the resembled
                     [06.5.8 improvised ladder] [R7 §4.4 crude fallbacks] [DL-08-06]
 ```
 
-**08.1.12 Resolving item tags to base items.** `[D]` Wherever a rule names an item by **tag** (02's kits,
+**08.1.12 Resolving item tags to base items.** `[D]` [DL-02-13; DL-00A-13; revision: I-065] Wherever a rule names an item by **tag** (02's kits,
 00.17.1 Q17; 09's trophy bases; a region's stock, 12.16.9), the engine resolves it in this first-match order:
 (1) a base item whose `default_for` is that tag; (2) for a level-3 tag, the first base item carrying it;
 (3) for a level-2 tag with no default, the first base item carrying it or a descendant. Two tags resolve
@@ -358,7 +358,7 @@ whose cloak is Ember-warded (reduce fire 2) and whose amulet is too (2) has an i
 is one sum-and-clamp per family before E4's family stacking (Interface request to 00) [R3 00.13 "a per-layer
 power budget"; R3 #11; PG5's jewel-socket meta; DL-08-07].
 
-**08.2.3 Per-item caps.** `[D]` One item holds at most its rung's slots (08.1.4), clamped to its base
+**08.2.3 Per-item caps.** `[D]` [DL-08-02; DL-08-28; DL-08-27; C:V; C:P11; revision: I-065] One item holds at most its rung's slots (08.1.4), clamped to its base
 `slot_cap` (weapons, armor, shields, jewelry, implements 3; garments, tools, mounts 2; consumables and
 goods 0), plus its one `worked` property only if a magnitude slot is open for it (08.6.10). At most one
 property per `mod_group` (00.11.3 step 6), at most one **on-hit** trigger (mod group `on_hit`), at most one
@@ -366,7 +366,7 @@ property per `mod_group` (00.11.3 step 6), at most one **on-hit** trigger (mod g
 **license** property (mod group `relic_license`, also signature-only). These make every item readable in
 one line of the codex.
 
-**08.2.4 Saturation at generation.** `[D]` When the generator (00.11.3 step 1) gates a pool, it drops every
+**08.2.4 Saturation at generation.** `[D]` [DL-08-07; C:P11; revision: I-065] When the generator (00.11.3 step 1) gates a pool, it drops every
 entry whose family the **base item already fills to the item share**: harm-edge properties on a versatile
 weapon; Guarding on a shield or beside a parrying weapon; Reinforced on heavy armor (3 of 3). At step 9 it
 checks the item's whole contribution against the item share and, on a breach, drops that pick and refills
@@ -525,7 +525,7 @@ near 08.2.7's density (simulated rates 7 / 16 / 27 / 39 / 57%, T-08-16 [revision
 T-08-17) [revision: I-018] [R3 A-1 (Diablo II's treasure-table
 "NoDrop" weight); DL-08-08].
 
-**08.3.4 The pool gate: nature and place (the contract with chapter 09).** `[D]` The gated pool for a loot
+**08.3.4 The pool gate: nature and place (the contract with chapter 09).** `[D]` [DL-08-13; DL-08-29; DL-00A-18; C:P5; revision: I-065] The gated pool for a loot
 call is every entry of `item_properties.yaml` whose `domains` include `loot` and whose `gate_tags` match
 (00.5.4c: an entry gated on G matches a source tag S when G = S or G is an ancestor of S) one of:
 1. the source archetype's **`creature_tags`** (09: most specific first), **`harm_tags`**, **`evidence_tags`**
@@ -576,7 +576,7 @@ kind (a wyvern's sting needs a weapon: a wyvern-fang dagger, not a scale shield)
 base's gated pool holds fewer entries than the rung has slots, the base is redrawn once from the same list
 (the simulation needed 0 redraws and 49 signature-driven overrides in 1,000 drops) [DL-08-10].
 
-**08.3.7 Quality rung and slots.** `[D]` From the circumstance and degree (08.3.2's table): decisive,
+**08.3.7 Quality rung and slots.** `[D]` [DL-08-09; DL-08-02; DL-08-33; revision: I-065] From the circumstance and degree (08.3.2's table): decisive,
 costly and merciful wins give **masterwork** (one signature slot, one magnitude slot); a scavenged find
 gives **fine** (one magnitude slot) on a success or critical success and **common** (no property) on a
 failure. Hoards give their table's rungs (08.3.12). Slots are clamped to the base's `slot_cap` (08.1.4).
@@ -584,7 +584,7 @@ Wondrous items come only from hoards of T4–T5, from bargained gifts (08.7) and
 crafting (08.6) — never from an ordinary kill, which keeps the rung legible: a masterwork trophy is what a
 fair fight is worth.
 
-**08.3.8 Fill, slot by slot.** `[D]` (00.11.3 steps 4 and 6; PR-08-1.)
+**08.3.8 Fill, slot by slot.** `[D]` [DL-08-09; DL-08-10; DL-08-24; DL-00A-18; revision: I-065] (00.11.3 steps 4 and 6; PR-08-1.)
 - **Signature slot first.** `signature`: the archetype's signature property (09's, else
   `default_signatures` of its most specific creature tag) if it survived the pool gate; if it did not, a
   weighted draw among `signature_eligible` entries **excluding relics** (a decisive win never falls back to a
@@ -601,7 +601,7 @@ fair fight is worth.
   (00.11.3 step 7; OEQ-00-5).
 - An empty pool leaves a slot empty (the item keeps its rung; its price counts only filled slots).
 
-**08.3.9 Degree effects, caps and output.** `[D]`
+**08.3.9 Degree effects, caps and output.** `[D]` [DL-00A-18; DL-08-09; C:P8; revision: I-065]
 - **Greater** (critical success): the signature, or the first magnitude property if there is no signature,
   gains +1 tier (00.11.3 step 5); the item record marks it `greater: true`.
 - **Flawed** (critical failure, possible only on a scavenged search): the find's magnitude slot is removed
@@ -667,14 +667,14 @@ Basis:              [04.10.1 "the Taking's crude fallback is to harvest the body
                     [R: https://en.wikipedia.org/wiki/Monster_Hunter_Wilds (carving)] [R2 #13] [DL-08-12]
 ```
 
-**08.3.11 Coin, gear and goods.** `[D]` A defeated, yielded or robbed carrier that is not spent (08.3.1,
+**08.3.11 Coin, gear and goods.** `[D]` [DL-08-08; DL-08-34; DL-08-19; R5 EQ-13; revision: I-065] A defeated, yielded or robbed carrier that is not spent (08.3.1,
 once a season) [revision: I-041] gives: (a) its **purse**, one
 roll on `economy.yaml#purses` by band (T1 1d4−1 coins; T2 2d6; T3 4d6+5; T4 6d10+20; T5 10d10+80), only for
 carriers of coin (09 marks beasts `purse: none`); (b) its **gear**: every base item it carried, at `worn`
 (T1–T2) or `common` (T3+) unless 09 says otherwise, with no properties; (c) goods 09 lists. Gear and coin
 are generated by tables, never chosen (INV-3).
 
-**08.3.12 Hoards and places.** `[D]` A hoard (`yield: hoard`, a lair, a vault, a site's treasure keyed by
+**08.3.12 Hoards and places.** `[D]` [DL-08-33; DL-08-08; revision: I-065] A hoard (`yield: hoard`, a lair, a vault, a site's treasure keyed by
 10 or the region's seed, 12.16.12) generates by its band (`gen_loot.yaml#hoard_map`): T1 one fine item; T2 one masterwork; T3 one
 masterwork; T4 one wondrous; T5 one wondrous and one masterwork [revision: I-018: was T3 +1 fine, T4 +1 masterwork,
 T5 +1 masterwork; T-08-17]; plus
@@ -683,7 +683,7 @@ hoard's keeper if known (a dragon's hoard is gated by the dragon), else the **pl
 tags and site theme (10) act as the source tags, so a barrow's treasure is tomb-warded and whispering. The
 circumstance is decisive if its keeper was defeated by the PC, else scavenged with the search beat's degree.
 
-**08.3.13 Telling the player.** `[N]` The DM names what was found in fiction ("a fang on a thong, still
+**08.3.13 Telling the player.** `[N]` [C:IV; C:P7; DL-08-26; revision: I-065] The DM names what was found in fiction ("a fang on a thong, still
 warm", "the captain's sword, notched near the hilt") and nothing more; the codex shows the item's rung,
 known properties, sealed slots and price. A drop is narrated in one line unless the player asks, because
 The Land's ten-minute loot readouts are the genre's documented failure (R2 08). *Narration may not imply:*
@@ -708,7 +708,7 @@ power: a relic) — the last two only in the signature slot, so **at most one** 
 and at most one item-bound active per item as 00.17.1 Q2 requires. The kind follows from where the
 generator puts things, not from the DM's sense of what would be nice [C:P5; 00.11.5; R3 08.10].
 
-**08.4.2 Passive properties: how they fire.** `[D]` A passive property is a set of effect references (00.10),
+**08.4.2 Passive properties: how they fire.** `[D]` [DL-08-01; C:P10; revision: I-065] A passive property is a set of effect references (00.10),
 active while its item is equipped and attuned. Additive ones join the evaluation pass in their family,
 under the item share (08.2.2). Triggered ones subscribe to one hook (00.10.2) with a **chance** expressed as
 a natural d20 range on the triggering roll's own die (00.10.7): tier 1 "20", tier 2 "19–20", tier 3 "18–20",
@@ -718,7 +718,7 @@ claim on a behavioral slot (an elemental strike, a movement mode) carries `prior
 tier), above abilities (10–12) and below applied consumables (20–24), per 05.10.3. Uses-limited properties
 count their uses on the engine (00.10.9).
 
-**08.4.3 Item-bound active abilities (`gen.item_ability`).** `[D]` When the bound power fills a signature
+**08.4.3 Item-bound active abilities (`gen.item_ability`).** `[D]` [DL-08-23; DL-08-24; C:V; revision: I-065] When the bound power fills a signature
 slot (only at tier 3+; its `min_tier` is 3), the tool calls `generate(gen.item_ability, source,
 circumstance, degree)` with the parent call's source and circumstance:
 - **The pool is not authored anew.** It is ch.04's **absorbed natural powers** (the active entries of
@@ -772,7 +772,7 @@ higher Stormlight cost and with none of the bond's growth (R2 #9). The surcharge
 and the missing growth are three independent levers (P12: cost, limitation, weakness), each a number in data
 [R2 #9; C:P12; 04.11.3 "lend an item that licenses a capability while carried"; DL-08-11].
 
-**08.4.5 Consumables.** `[D]` A consumable's `effects` apply when it is used, and its `uses` fall by one.
+**08.4.5 Consumables.** `[D]` [DL-05-23; DL-05-41; R5 EQ-09; revision: I-065] A consumable's `effects` apply when it is used, and its `uses` fall by one.
 Using one is a beat or a free activity as 06 classes it (drinking a draught, applying an oil and throwing a
 firepot are actions in a conflict; eating is a free activity outside one, 00.12.6). Caps that bind them:
 healing draughts count toward 05's two healing effects per recipient per long rest; Focus draughts toward
@@ -786,7 +786,7 @@ unwilling. A **scroll** holds one ability (inscribed by `deed.craft.enchanting.i
 reading it activates that ability once at rank 1, needing no equipped slot, at its Focus (+1 relic
 surcharge without the training license), and is consumed.
 
-**08.4.6 Teaching texts and recipes.** `[D]` A document item may carry the fact `teaches: <id>` (02's
+**08.4.6 Teaching texts and recipes.** `[D]` [DL-05-08; DL-05-24; DL-08-17; revision: I-065] A document item may carry the fact `teaches: <id>` (02's
 spellbook; 05.8.5; 05.8.7; 05.9):
 - `teaches: ab.*` or `rit.*` (a **spellbook**, `bi.spellbook`): each downtime week of study ticks the
   learning clock **2** (05.8.5) or the rite clock (05.8.7); reading needs `lic.lang.letters` and the text's
@@ -798,7 +798,7 @@ A text is an item: it can be copied (craft.scribing, 08.6.11), stolen, burned an
 loot is generated as a `bi.spellbook`/`bi.manual`/`bi.pattern_book` whose taught id is drawn from the gated
 pool (techniques of the source's deed tags; properties of its signature family) [05 Interface request (f)].
 
-**08.4.7 Implements: signs and vessels.** `[D]` An implement (`item.tool.implement`: wand, casting staff,
+**08.4.7 Implements: signs and vessels.** `[D]` [DL-05-15; DL-05-35; DL-08-07; revision: I-065] An implement (`item.tool.implement`: wand, casting staff,
 orb, holy symbol, totem; never called a "focus", T-00-22) serves two of 05's rules through facts on the
 item: it is a keeper's **sign** (05.7.4) when it bears the fact `sign_of: <keeper>` (made or blessed so);
 it is a reserve's **vessel** (05.6.12) when it bears `kept_since:` a time at least a season ago or
@@ -817,7 +817,7 @@ attuned (00.10.7) — Diablo's set bonuses as constitution P6 composites, bounde
 
 ### 08.5 Equipping, attunement and identification
 
-**08.5.1 Body slots.** `[D]` Equipped items occupy body slots; carried items are in the pack and count
+**08.5.1 Body slots.** `[D]` [DL-08-39; DL-08-32; revision: I-065] Equipped items occupy body slots; carried items are in the pack and count
 only toward load (08.9.1).
 
 | Slot | Holds | Count |
@@ -834,7 +834,7 @@ A buckler and a lit torch may share a hand (08.1.7). Drawing, stowing and handin
 00.12.6 and 06's action costs; donning or doffing armor takes its `don_time` and cannot happen in a
 conflict. An item out of its slot (in the pack, in another's hands) is not equipped: its properties stop.
 
-**08.5.2 Attunement.** `[D]` (`lic.08.attunement`, held by every character.) At a **breather** outside a
+**08.5.2 Attunement.** `[D]` [DL-08-14; C:V; revision: I-065] (`lic.08.attunement`, held by every character.) At a **breather** outside a
 conflict, a character may attune one equipped item that carries a passive, license or item-ability
 property; at most **five** at a time (08.2.5), and an ally's attunements count against its PC's five
 (16.4.8) [integration: IR ch.16 to 08 (c)]. Attuning: (a) makes its passive and license properties work
@@ -844,7 +844,7 @@ storied item `cost_immune` (08.1.10). Ending an attunement is a free activity, e
 flaw (08.5.4). Attunement persists while the item is unequipped and ends automatically when the item is not
 in the bearer's possession at the end of a `rest_long`. Mundane properties need no attunement.
 
-**08.5.3 Sealed properties and identification.** `[S]` + `[D]` + `[J:flag]`
+**08.5.3 Sealed properties and identification.** `[S]` + `[D]` + `[J:flag]` [DL-08-26; DL-00A-22; C:P17; revision: I-065]
 - **What is sealed** (00.6.5): on an item from loot or a gift, the **signature's name and kind are
   apparent** (that it is troll-work, that it holds a power), but its exact effect, the magnitude properties,
   the bound ability's identity and any flaw are `sealed_properties`. A crafted item is fully known to its
@@ -866,7 +866,7 @@ in the bearer's possession at the end of a `rest_long`. Mundane properties need 
 - A flaw is revealed by attunement or a study whose delivered reach covers every property, never by sale
   talk; selling an item with a known flaw without saying so is a `conduct.honesty` event (03).
 
-**08.5.4 Flaws and cursed items.** `[D]` Flaws (`item_properties.yaml#flaws`) are what a Flawed degree
+**08.5.4 Flaws and cursed items.** `[D]` [DL-08-16; DL-08-26; DL-00A-18; revision: I-065] Flaws (`item_properties.yaml#flaws`) are what a Flawed degree
 effect writes on a crafted item (08.6.6) and what some loot carries: *Heavy* (carry −1), *Loud* (a Sneak
 snag), *Brittle* (`cost.gear` one rung heavier), *Marked* (recognizable as its source's or former owner's),
 *Thirsty* (supply use +1 per day while attuned), *Unwelcome* (a Talk snag with the source's kind), *Restless*
@@ -889,7 +889,7 @@ Flawed. The Land's two ladders are kept as two independent axes: a **type-tier**
 rarity band and the crafter's grade (the tier cap: what can be made at all), and a **quality-tier** fixed by
 the declared target rung and its obstacle (how well it is made) [R2 #13; R3 08.11; `gen_craft.yaml`].
 
-**08.6.2 Materials.** `[D]` (`data/materials.yaml`: 59 entries, including `mat.residuum` for salvage.)
+**08.6.2 Materials.** `[D]` [DL-08-37; DL-08-12; DL-08-17; R5 EQ-07; revision: I-065] (`data/materials.yaml`: 59 entries, including `mat.residuum` for salvage.)
 - **Stock** (iron, steel, timber, cloth, leather, herbs, silver, gold, yew, cold iron, pure silver, ironwood,
   witchwood, volcanic glass, spell-crystal, precious gems, rare metal, reagent herbs, cave fungus …) is
   bought at market by rarity band (band 0 anywhere; 1 villages; 2 towns; 3 cities; 4 never sold).
@@ -1013,7 +1013,7 @@ is "Hard: challenges a practiced professional" (T-00-5) and the numbers say so [
    tier 5 at 45, beside the archer's 19 and 51; on 04's current ladder 14 and 40 beside 15 and 47, 04.3.5
    [revision: I-089]) [DL-08-30].
 
-**08.6.5 Commissioning.** `[D]` An NPC crafter's availability follows the settlement (`economy.yaml#buying`):
+**08.6.5 Commissioning.** `[D]` [DL-08-15; DL-08-16; R5 EQ-11; revision: I-065] An NPC crafter's availability follows the settlement (`economy.yaml#buying`):
 a village has trained crafters (common and fine), a town trained and expert (masterwork), a city expert
 and, by Oracle question at Unlikely, a master (wondrous). The engine runs the project with the crafter's
 modifier (09/12's NPC template for the trade: trained +5, expert +8, master +11) as engine fortune checks
@@ -1025,7 +1025,7 @@ means the crafter starts over at their own cost once; a second spoilage returns 
 deposit. The player names one **bias tag**, which is the commission's whole say over its properties; a
 known recipe the player brings (a pattern book) lets them name one property exactly.
 
-**08.6.6 What the completing beat decides.** `[D]` The made item's rung is the target rung (completion) —
+**08.6.6 What the completing beat decides.** `[D]` [DL-08-16; DL-08-30; C:P8; revision: I-065] The made item's rung is the target rung (completion) —
 quality-tier is the *declared ambition*, not the luck of one roll. The degree of the **completing beat**
 then applies 00.11.3's degree effects: **Greater** on a critical success (one property +1 tier, may exceed
 the tier cap by 1; for an improvised item the rung rises one instead, common → fine); **Flawed** when the
@@ -1064,7 +1064,7 @@ signature property>` (Diablo IV's Codex of Power: once found, a power becomes a 
 bound ability is not salvaged (abilities are learned, 05.8.5). Salvage is the release valve for 08.2.7's
 surplus: the sixth masterwork trophy becomes material and knowledge, not coin [R3 08.10, A-10; DL-08-17].
 
-**08.6.9 Recipes.** `[D]` A recipe is the fact `knows_recipe: prop.*` on a character. It comes from a
+**08.6.9 Recipes.** `[D]` [DL-08-17; DL-08-15; C:P15; revision: I-065] A recipe is the fact `knows_recipe: prop.*` on a character. It comes from a
 pattern book (08.4.6), a salvage (08.6.8c), a mentor's training week in the property's craft (15; the
 mentor must know it), or a crafted completion that is a critical success, which writes the recipe of one
 property the crafter chose for it. A recipe lets its holder (a) **name** that property for one slot of any
@@ -1072,7 +1072,7 @@ project whose gated pool contains it (fill method `recipe`: deterministic), and 
 **Amplifying** lever on that project's steps. A recipe does not open a property the materials do not gate:
 the troll-hide recipe for *Knitting flesh* still needs troll hide or another part that gates it.
 
-**08.6.10 Enchanting: the one worked property.** `[D]` Enchanting adds **one** property to an existing item
+**08.6.10 Enchanting: the one worked property.** `[D]` [DL-08-27; R3 A-23; revision: I-065] Enchanting adds **one** property to an existing item
 — its `worked` property — and never more than one in the item's life (PoE2's single crafted modifier, R3
 A-23):
 - **Requirements:** the item is fine or better with an open magnitude slot (a kit's fine item, a
@@ -1090,7 +1090,7 @@ A-23):
   like any other; a worked property that would breach it cannot be chosen (08.2.4).
 - A worked property is never a license or a bound power: identity is made, not added.
 
-**08.6.11 Consumables, scrolls and copies.** `[D]` Consumables are made in **batches**: a project of 4
+**08.6.11 Consumables, scrolls and copies.** `[D]` [DL-08-40; DL-08-16; revision: I-065] Consumables are made in **batches**: a project of 4
 (common) or 6 (fine: the elixirs, antidotes, oils and greater draughts) at a watch per tick yields **three**
 doses of one consumable base item, consuming its materials at half its price per dose. A **scroll** is
 inscribed by a holder of `lic.training.craft_enchanting` who holds or has a text of the ability: a project
@@ -1099,14 +1099,14 @@ base_items.yaml), yielding one scroll (08.4.5). A **copy** of a teaching text is
 `lic.training.craft_scribing` (copying): a project of 6 at Moderate, a day per tick, with the original at
 hand and the text's language; the copy teaches as the original does.
 
-**08.6.12 Improvised making.** `[D]` Anyone may make crude things with Handle (01.18.14 "crude making and
+**08.6.12 Improvised making.** `[D]` [DL-08-15; DL-00A-19; revision: I-065] Anyone may make crude things with Handle (01.18.14 "crude making and
 repair"): a club, a sling, a spear from a sapling and a knife, a travois, field arrows (10 per watch), a
 torch from resin and cloth, a snare. Improvised projects use the same clocks with the crude fallback's +5
 DC and Limited reach cap; the rung is at most common (fine only by Greater), the fill weighted, and the
 item is `worn` when the completing beat was a success at a cost. *Why allow it:* goal 1 — a stranded
 character can always make *something* — and the rung cap keeps it from replacing the trade.
 
-**08.6.13 Building.** `[D]` Structures are crafting projects under `lic.training.craft_building`: a
+**08.6.13 Building.** `[D]` [DL-11-19; DL-08-19; R5 EQ-12; revision: I-065] Structures are crafting projects under `lic.training.craft_building`: a
 holding's `build_weeks` (economy.yaml) become one 12-segment progress clock per 13 weeks of building or
 part of 13, ticked weekly by the master builder's step (engine fortune checks for NPC builders), with
 workers paid at `wage.porter`/`wage.skilled`. 11 owns what a holding does once it stands.
@@ -1165,7 +1165,7 @@ Anchor:             no
 Basis:              [00.11.1 gift domain] [R3 08.15] [R6 V13 patron] [05.8.7] [DL-08-18]
 ```
 
-**08.7.3 Abilities as gifts.** `[D]` Only a **power** (a `creature.spirit`, `creature.fiend` or celestial
+**08.7.3 Abilities as gifts.** `[D]` [DL-08-18; DL-08-23; revision: I-065] Only a **power** (a `creature.spirit`, `creature.fiend` or celestial
 entity, or a keeper of `deed.divine` or `deed.primal`, 12.16.6) may give an ability. The output is one ability
 from `gen_item_ability.yaml#pool` whose gate tags match the giver's deed tags, granted straight into the
 **acquired** partition as `provisional` at rank 1 (05.8.7), possibly with the giver's condition as a
@@ -1174,7 +1174,7 @@ relic surcharge, and evidence from its use counts normally (a gift of power is h
 04.11.3's V13). An institution (crown, guild, order) never gives an ability; it gives items, ranks (11) and
 training (05.9) [05 Interface request (g); 04.11.3].
 
-**08.7.4 The gifted base.** `[D]` The giver names the base by its customary gift (an order's blade, a
+**08.7.4 The gifted base.** `[D]` [DL-08-18; C:III; revision: I-065] The giver names the base by its customary gift (an order's blade, a
 guild's ring, a temple's amulet; 11 or the region's seed records it as `boon_base`), or the player names an item tag the giver
 plausibly has (`[J:flag]` "Would this giver plausibly own such a thing?" true only when the giver's role or
 wealth implies it; uncertain → the customary gift; *worst case:* a different base of the same rung, class
@@ -1189,7 +1189,7 @@ is a `conduct.loyalty` event with the giver (03, 11).
 **lot** (5 torches, 2 days' trail rations, 10 candles, 20 sling bullets, 2 flasks of lamp oil for 1 coin),
 which keeps every price an integer (SG-23). One hundred coins weigh one load unit [DL-08-19].
 
-**08.8.2 Price bands and notches.** `[D]` Every price falls in a **band**, and each band has a fixed
+**08.8.2 Price bands and notches.** `[D]` [DL-08-19; revision: I-065] Every price falls in a **band**, and each band has a fixed
 **notch**: the step by which haggling, gluts and fees move a price (`economy.yaml#price_bands`). Notches are
 looked up, never computed, so no percentage ever appears.
 
@@ -1205,13 +1205,13 @@ looked up, never computed, so no percentage ever appears.
 
 Band 3 is the **valuable** band 07.6.1's `rob` row takes (07 Interface request).
 
-**08.8.3 The list price.** `[D]` An item's list price = base price × its rung's multiplier (worn ×½,
+**08.8.3 The list price.** `[D]` [DL-08-25; DL-08-02; revision: I-065] An item's list price = base price × its rung's multiplier (worn ×½,
 rounded down, minimum 1; common ×1; fine ×3; masterwork ×10; wondrous ×30) + the sum of its properties'
 values by tier (**20 / 50 / 125 / 300 / 750** for tiers 1–5; a bound power ×2; a license property as its
 tier) − 1 notch for a known flaw. Storied items carry an authored price. A fine dagger lists at 6; a
 masterwork fang charm with a tier-2 signature and a tier-1 magnitude property at 1×10 + 50 + 20 = **80**.
 
-**08.8.4 Buying.** `[D]` A trader's **asking** price is list + 1 notch. What can be bought depends on the
+**08.8.4 Buying.** `[D]` [DL-08-19; R5 EQ-04; revision: I-065] A trader's **asking** price is list + 1 notch. What can be bought depends on the
 settlement (`economy.yaml#buying`): a camp or waystation sells band 0–1 goods, `worn` and `common`; a
 village up to band 2, fine goods on a weekly 1-in-6; a town up to band 3, fine goods, special stock of rarity
 band ≤ 2, masterwork only by commission (08.6.5); a city up to band 5, special stock ≤ 3, and a **curio
@@ -1318,7 +1318,7 @@ Basis:              [15 negotiation (owner of the social frame)] [00.3.9 levers]
   150 / 25 plus a full share, and only for a thread they believe in; legend (T5) never for coin. Crafters'
   weekly wages: trained 10, expert 25, master 60.
 - **Job fees** (11 and 15 consume; `economy.yaml#job_fees`) [revision: I-086]: a job the PC takes from a
-  patron (11's quest thread — "a faction's commission" — or an NPC's request with a Payment term, 15.3) pays
+  patron (11's quest thread — "a faction's commission" — or an NPC's paid request, 15.7.1 item 4 [revision: I-091]) pays
   on completion a fee by the job's challenge band (03.4.3: the opposition's threat band, the faction's tier, or
   the work's type-tier): band 1 **40**, 2 **85**, 3 **200**, 4 **600**, 5 **2,000** (four weeks of the band's
   hire wage above; band 5 fixed, since a legend is never hired). Half is paid up front when the patron's
@@ -1342,14 +1342,14 @@ enforced by a tool, not by the DM's restraint:
 3. **Property items** sell for half of list, and only through `clk.find_buyer` in towns and cities.
 4. **Market depth** caps the coin a settlement pays the PC per week.
 5. **Glut** lowers the price of repeated sales.
-6. **Coin enters only through tables:** purses, hoards, wages, job fees (08.8.8) and rewards (11), sales and
-   holdings' yields [revision: I-086] —
+6. **Coin enters only through tables:** purses, hoards, wages, job fees (08.8.8; a patron's coin reward for a
+   thread, 11, is the job fee of its challenge band [revision: I-091]), sales and holdings' yields [revision: I-086] —
    never a DM's choice (INV-3).
 7. **Item shares cap economic properties:** supply use −1 a day, carrying capacity +4.
 8. **Holdings yield** labor and rents, rolled by 11, never chosen.
 [R2 08 "magic that bypasses the economy"; R2 #13; R1 08 "wealth is the most fragile state"; DL-08-19]
 
-**08.8.10 Wealth tiers and the treasure curve.** `[D]` + `[N]` Wealth tiers name what a character holds in
+**08.8.10 Wealth tiers and the treasure curve.** `[D]` + `[N]` [DL-08-20; DL-08-35; DL-08-36; R5 EQ-13; revision: I-065] Wealth tiers name what a character holds in
 coin and liquid valuables: **W1** scraping 0–50, **W2** solvent 51–300, **W3** prosperous 301–1,500, **W4**
 rich 1,501–8,000, **W5** magnate 8,001+ (`economy.yaml#wealth_tiers`). The tables are calibrated so that a
 character fighting at their own band and living comfortably drifts up about one tier per power band. The
@@ -1377,7 +1377,7 @@ most (T-08-17) [revision: I-036]. *Revisit if* a campaign's PC sits two tiers ab
 
 ### 08.9 Carrying, supply, light and ammunition
 
-**08.9.1 Load and capacity.** `[D]` Every item has a **load** in load units (`weight` in base_items.yaml):
+**08.9.1 Load and capacity.** `[D]` [DL-08-22; R5 EQ-02; revision: I-065] Every item has a **load** in load units (`weight` in base_items.yaml):
 most hand-held things 1; heavy weapons 2–3; armor worn 1 / 2 / 3 (light / medium / heavy), carried 2 / 4 / 6;
 light shields 0–1, heavy 2–3; worn clothing, jewelry, coins under 100, and small things 0; supply 1 per 2
 units or part (08.9.4); trade goods by their entry. **Carrying capacity** — the one value Might may feed
@@ -1385,7 +1385,7 @@ units or part (08.9.4); trade goods by their entry. **Carrying capacity** — th
 counts Might +1 for this only (02 Interface request); items add at most +4 (08.2.2). The engine computes load
 on every possession change.
 
-**08.9.2 Burdened and overloaded.** `[T]` + `[D]` Load above capacity → **burdened**: the engine cites the
+**08.9.2 Burdened and overloaded.** `[T]` + `[D]` [DL-08-22; R5 EQ-02; revision: I-065] Load above capacity → **burdened**: the engine cites the
 Precision snag *burdened* on Evade, Sneak and Exert (outside the two-cited count, inside ±4), Move pace is
 one step slower (06), and travel pace one step slower (10). Load above twice capacity → **overloaded**: the
 character cannot Move or travel holding it all; they may drag one load-unit-heavy thing one band per round
@@ -1395,29 +1395,29 @@ exactly; the numbers sit so that a P1 archer (Might +1, capacity 12) carries bow
 rope, bedroll and four days' food (1+1+1+1+1+1+2 = 8) with room for loot, while a knight in plate with a
 greatsword and kite shield (3+2+2 = 7) and a week's food (4) is near the line.
 
-**08.9.3 What the pack holds.** `[N]` Nothing in the pack is at hand: drawing a pack item in a conflict is
+**08.9.3 What the pack holds.** `[N]` [R5 EQ-02; DL-06-01; revision: I-065] Nothing in the pack is at hand: drawing a pack item in a conflict is
 06's action, not a free one; outside a conflict it costs no time.
 
-**08.9.4 Supply.** `[D]` **Supply** is a quantity (10 owns its consumption and want): 1 supply = one person's
+**08.9.4 Supply.** `[D]` [DL-10-06; R5 EQ-09; revision: I-065] **Supply** is a quantity (10 owns its consumption and want): 1 supply = one person's
 food and water for one day. Trail rations sell 2 supply per coin; market food 1 coin per supply in a camp. A
 kit's "food ×N" is N supply (02). Every 2 supply (or part) weighs 1 load unit. Mounts eat 1 supply a day on a
 venture unless grazing (08.10.2). Items lower a character's daily use by at most 1 (*Waybread*).
 
-**08.9.5 Light.** `[D]` Light sources are goods; 10 runs `h.10.light` and darkness (06's light values):
+**08.9.5 Light.** `[D]` [DL-10-23; R5 EQ-09; revision: I-065] Light sources are goods; 10 runs `h.10.light` and darkness (06's light values):
 torches (a lot of 5 per coin; each burns 6 intervals; bright to `band.close`, dim to `band.near`); a lantern
 (5 coins; a flask of oil burns 24 intervals; same light; hooded, it can be shut to darkness as a free
 activity); candles (a lot of 10 per coin; each burns 6 intervals; dim to `band.close`); a tinderbox lights a
 fire or torch in 1 interval (1 hour in rain). A spent source is marked by `h.08.durations`. *Glowing* items
 shed dim light to `band.close` and burn nothing.
 
-**08.9.6 Ammunition.** `[D]` Arrows (20 for 2 coins), bolts (20 for 3), sling bullets (20 for 1) are
+**08.9.6 Ammunition.** `[D]` [DL-08-04; R5 EQ-09; revision: I-065] Arrows (20 for 2 coins), bolts (20 for 3), sling bullets (20 for 1) are
 quantities, one load unit per 20; each shot writes `ammunition −1` (06.4.9); after a conflict half of those
 spent, rounded down, are recovered. A quiver of arrows tipped with an oil carries the oil only for its 3
 Strikes.
 
 ### 08.10 Mounts, vehicles and vessels
 
-**08.10.1 Mounts are items and companions.** `[D]` A mount is bought as an item (`item.conveyance.mount`;
+**08.10.1 Mounts are items and companions.** `[D]` [R5 EQ-10; DL-16-02; revision: I-065] A mount is bought as an item (`item.conveyance.mount`;
 price, carry capacity, travel pace, weekly upkeep) **and** created as a companion entity whose template,
 loyalty and harm are chapter 16's (`companion_hint`: threat band, size, combat-trained). It carries its
 own load capacity: donkey 20, pony 20, mule 30, riding horse 25, draft horse 40, courser 25, destrier 30 —
@@ -1428,16 +1428,16 @@ check: 16.15.4). Trained beasts that are not mounts are bought at their companio
 purchase; `base_items.yaml` carries no entry for them [integration: IR ch.16 to 08]. Saddle and tack cost 10; riding without them puts a Precision snag on Handle (ride). Barding (light
 60, heavy 300) is the mount's armor (reduction 1 / 2) and makes its travel pace one step slower.
 
-**08.10.2 Upkeep.** `[D]` Stabled in a settlement a mount costs its `upkeep_week` (donkey 2, pony 3, mule 3,
+**08.10.2 Upkeep.** `[D]` [DL-08-20; R5 EQ-10; revision: I-065] Stabled in a settlement a mount costs its `upkeep_week` (donkey 2, pony 3, mule 3,
 riding horse 5, draft horse 5, courser 8, destrier 10) through `h.08.upkeep`; grazing in grassland or
 farmland from spring to autumn costs nothing; on a venture it eats 1 supply a day unless the region grazes
 (10). An unfed mount's want is 10's and 16's.
 
-**08.10.3 Vehicles.** `[D]` Carts and wagons are items with carry capacity and crew: handcart 15 (pushed by
+**08.10.3 Vehicles.** `[D]` [R5 EQ-10; revision: I-065] Carts and wagons are items with carry capacity and crew: handcart 15 (pushed by
 one), cart 60 (one draft animal), wagon 150 (two; roads only — off-road terrain is G4 for it), sledge 40 (snow
 and ice), carriage 4 passengers (two horses, roads). Pace and the terrain they cross are 10's.
 
-**08.10.4 Vessels.** `[D]` Raft (20 load; downstream), rowboat (30; four people), keelboat (150; crew 6),
+**08.10.4 Vessels.** `[D]` [DL-08-41; R5 EQ-10; revision: I-065] Raft (20 load; downstream), rowboat (30; four people), keelboat (150; crew 6),
 river barge (300; crew 8), sailing cog (2,000; crew 12). A vessel has a **hull clock** (4 under 100 coins, 6
 under 1,000, 8 above): `cost.gear` against it ticks the clock by U(severity) instead of writing damaged or
 broken; a full hull clock is foundering (10). Most travelers buy **passage** (08.8.8), not ships.

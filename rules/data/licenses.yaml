@@ -3925,7 +3925,7 @@ licenses:
   attribute: might
   grants_competence:
   - {tag: deed.craft.smithing, value: 2, when: 'acquired by the mentor or text path (an origin sets its own value, at most +2; a calling sets its own, 04.5.2)'}
-  crude_fallback: {verb: verb.handle, method: 'crude repair: straighten, bind, patch', dc_shift: 5, reach_cap: limited, consequence: the item is serviceable until the next rest_long only}
+  crude_fallback: {verb: verb.handle, method: 'crude repair: straighten, bind, patch', dc_shift: 5, reach_cap: limited, consequence: 'the item is serviceable until the next rest_long only; worn, common or fine items only (08.6.7)'}
   stretch:
     dc_shift: 5
     cost_add: 1

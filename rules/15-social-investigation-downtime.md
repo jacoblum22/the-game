@@ -1257,13 +1257,18 @@ characters do worst [R4 W4]:
 3. **Accepting the counter** applies the terms to the frame (15.3.5): the request then rolls at its
    effective size, or is certain (15.3.10). The NPC's acceptance of a deal is not itself the roll; the
    roll decides whether they *trust and agree* at the effective size.
+4. **A patron's job reverses the deal** [revision: I-091]: when the NPC (or 11's faction commission) asks the
+   PC to do a job for coin, the offer is 08.8.8's **job fee** for the job's challenge band (03.4.3;
+   `economy.yaml#job_fees`: 40 / 85 / 200 / 600 / 2,000), never a figure the DM picks. Half is paid up front when
+   the patron's standing is below Warm; a failed or abandoned job leaves the PC only that half. The PC may
+   argue the fee (15.7.2), by one notch at most.
 
 **15.7.2 Bargain: argue the terms.** `[J:flag]` + `[D]`
 
 ```
 ### 15.7.2  Bargain: argue the terms of a deal                     [J:flag] [D]
 Trigger [T]:        the PC disputes the payment or the conditions the NPC named (15.7.1), or a service's
-                    fee, a hire's wage, a ransom
+                    fee, a hire's wage, a ransom, or a patron's job fee (15.7.1 item 4)
 Loads in:           situation.social.bargaining, situation.social.parley, situation.downtime.commerce
 License check:      basic verb: verb.talk
 Decisions (J):      1. ROOM [J:flag] "Is the NPC free to move on this price?" (08.8.7's test: false for a
@@ -1273,7 +1278,9 @@ Computation [D]:    frame: bargain (T-15-4), primary tag deed.influence.trade.ha
                     competence + edge + status + standing mod (no request mod: the deal was already
                     sized). Asking = price + 1 notch (08.8.2's notch of the payment's band);
                     delivered reach 0 -> asking stands; 1 -> the price; 2 -> -1 notch; 3 -> -2 notches;
-                    4 -> -3 notches; floor half the price. For a non-coin condition: each delivered
+                    4 -> -3 notches; floor half the price. A patron's job fee (08.8.8) moves the other
+                    way and by one notch only: delivered reach 2+ -> +1 notch; less -> the fee stands
+                    [revision: I-091]. For a non-coin condition: each delivered
                     reach rung from 2 up removes one of the NPC's named conditions or reduces an
                     obligation's due (a year's service -> a season's). One bargain per deal per day
                     (01.4.2). Levers: a rival offer that is a fact; the NPC's need (a want served by
@@ -2010,7 +2017,9 @@ for you?" makes the NPC name the errand from their record (15.7.1's counter).
 settlement has work for (08.8.8: unskilled labor 7; a trained trade 10; expert 25; master 60; a village has
 work up to trained, a town up to expert, a city up to master). No roll for ordinary work; a performer may
 instead perform each evening (15.4.5; coin per T-15-11). Work pays a living and no more (08.8.9 AI-2's labor
-cap). It writes no evidence (routine, 03.5.3).
+cap). It writes no evidence (routine, 03.5.3). A job taken from a patron is not Work: it is a venture or a
+task of its own, paid on completion by 08.8.8's job fee for its challenge band (`economy.yaml#job_fees`;
+15.7.1 item 4) [revision: I-091].
 
 **15.13.8 Carouse** (day). An evening and a night in the settlement's taverns and gathering places: costs
 2 coins (a comfortable or richer lifestyle: 1 Unit); one Talk roll, Presence, primary tag

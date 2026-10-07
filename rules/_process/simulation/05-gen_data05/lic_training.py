@@ -84,7 +84,7 @@ ROWS = [
     ('influence.insight', 'Insight', 'wits', "Read motive, mood and deceit in a person using its techniques (the basic Observe already covers reading a person).", BASIC('verb.observe', 'watch their face and hands'), []),
     ('influence.teaching', 'Teaching', 'presence', "Instruct another in a training or technique you hold, as a mentor for learning clocks (05.8.5, 05.9.4).", F('verb.help', 'show them once and correct them', 5, 'limited', 'the learning clock ticks 1 instead of the mentor\'s rate'), []),
     # ---------------- craft ----------------
-    ('craft.smithing', 'Smithing', 'might', "Forge and mend weapons, armor and tools of metal (08's crafting).", F('verb.handle', 'crude repair: straighten, bind, patch', 5, 'limited', 'the item is serviceable until the next rest_long only'), []),
+    ('craft.smithing', 'Smithing', 'might', "Forge and mend weapons, armor and tools of metal (08's crafting).", F('verb.handle', 'crude repair: straighten, bind, patch', 5, 'limited', 'the item is serviceable until the next rest_long only; worn, common or fine items only (08.6.7)'), []),  # [revision: I-092]
     ('craft.woodcraft', 'Woodcraft', 'agility', "Make bows, shafts, furniture, carts and carved work; frame a structure in timber.", F('verb.handle', 'lash and wedge a crude fix', 5, 'limited'), []),
     ('craft.leathercraft', 'Leathercraft', 'agility', "Tan hides and make or mend leather goods, harness and light armor.", F('verb.handle', 'stitch a crude patch', 5, 'limited'), []),
     ('craft.textiles', 'Textiles', 'agility', "Spin, weave, sew and make rope; tailor garments to a purpose.", F('verb.handle', 'tie and patch crudely', 5, 'limited'), []),

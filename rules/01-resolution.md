@@ -1353,7 +1353,7 @@ carried.
 |---|---|---|
 | S1 | `location = ground at the actor's position` (picking it up: free outside conflict; an action in conflict, 06) | dropped, knocked from the hand, slips from the belt |
 | S2 | `location = <a named place>`, not held | left on the far side of the wall, falls down the well shaft, stuck high in a beam |
-| S3 | `condition = damaged` — its edge, harm_edge and reduction properties (08) do not apply until repaired (Handle crude repair: Easy, 1 interval; or a craft license) | notched, bent, cracked, a torn strap |
+| S3 | `condition = damaged` — its edge, harm_edge and reduction properties (08) do not apply until repaired (Handle crude repair: Easy, 1 interval, on worn, common or fine items only; finer work needs the lasting repair, 08.6.7 [revision: I-092]; or a craft license) | notched, bent, cracked, a torn strap |
 | S4 | `condition = broken` (unusable until repaired under a craft license) **or** `location = <an opponent's possession>` | snapped, shattered, wrenched away and held by the foe |
 | S5 | `exists = destroyed`, or location sealed as unknown; an item with a signature or a bound ability always takes the location form, never `destroyed` (08.1.9) [integration: IR ch.08 to 01] | burned to ash, swept away in the flood (signature or bound items: lost in the flood, its place unknown) |
 
