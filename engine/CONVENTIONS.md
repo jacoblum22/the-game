@@ -401,3 +401,58 @@ readers take a `WorldState`. Errors: `engine.world.common.WorldError`. The PC is
 - **Handlers** registered by `engine/world/handlers.py` (imported from h12.py/h15.py): h.12.scene_test,
   pacing_push, tension_update, inconclusive_streak, lead_audit, rotation_update, npc_memory, bookkeeping
   (12.4.8 steps 3 and 8); h.15.patience_reset, commitments_due (interrupts when a deal falls due unkept).
+
+## engine/audit API and the adjudication record (T043–T047, T107)
+- **Adjudication record** (`engine.dm.adjudication.AdjudicationRecord`, Pydantic, `.dump()` JSON): what T1–T6
+  produced and all T7–T10 may narrate from. Fields: `turn_id`, `pc`, `parts` [`PartEntry(text, class, handled,
+  beat_id)`], `beats` [`BeatEntry(beat_id, frame_id, part, actor, targets, restatement, gate, gate_words,
+  approach_words, difficulty_words, stakes, rolled, degree, near_miss, success_at_cost, reach, reach_words,
+  costs [CostEntry(menu_id, severity, form)], harm [HarmEntry(target, words, condition_ids)], conditions (words),
+  positions [PositionEntry(entity, words)], license)`], `oracle` [`OracleEntry(question, answer, fact_id, subject,
+  predicate)`], `npc_actions` [`NpcActionEntry(npc, action, source: talk_outcome|want|refusal|table_row|behavior|
+  clock|trigger|ally_reason|frame, source_ref, tags)`], `omens` [`OmenEntry(clock_id, stage, omen, completed,
+  ticked)`], `scene` `SceneEntry(cut, ended, started, header)`, `writes` [`WriteRef(seq, type, entities, key)`],
+  `triggers` (active trigger ids), `pause` `PauseEntry(kind, frame_id, prompt, options)`, `notes`. Fill `writes`
+  with `rec.add_writes(appended_events)` (entities and key derived per event: quantity name, fact predicate,
+  condition id, relationship kind, clock id). **Every write this turn must be added**: a change claim is
+  supported only when a write backs it, and an NPC act only when `npc_actions`/`beats`/`omens` source it. Words
+  only, no numbers (INV-3); strings in the record are what the plain fallback prints.
+- `engine.audit.claims`: `Claim` (data-model §4; alias `class`, `sentence` accepts "3"), `Verdict(claim, verdict,
+  store_value, fix, reason)`; `check_claims(claims, state_or_store, record, scene_ids, *, rules=None) ->
+  list[Verdict]` (12.3.2: PC agency → leak via the sealed partition → `unknown` subject = cut, never an entity
+  (an unknown subject whose text names an entity created this turn resolves to it) → per-class store comparison);
+  `owed_blocks(triggers, response) -> ["[WARNING]", "[STATUS]"]` missing (counts as contradicted);
+  `failing(verdicts)`; `OWED_BLOCKS`. Fixes: new_element → `write_on_mention` (a feature of the place) or `cut`;
+  undetermined → `oracle` (or `cut` when nothing can settle it); contradicted/overreach → `redraft_to_store`;
+  unsourced_change/pc_agency → `cut`; leak → `replace_with_slice` when the seal has a slice, else `cut`.
+  PC `action` claims are judged by the Checker's `pc_words_or_feelings` flag only; an NPC `action` without
+  `asserts_change` (an ongoing description) needs no source. Store conventions it reads: identity in
+  `EntityRecord.data` (gender, pronouns, age, role, detail, demeanor, people, aliases) or facts; possession =
+  an item's `data.holder|owner|carried_by|held_by` or fact `holder`, facts carries/holds/has/equipped/... on the
+  holder, or a quantity; standing = relationship `<npc>|<pc>|standing`; harm = conditions, `harm_state`,
+  `vitality`, `exists`. **Turn loop:** offer the Checker every id a claim may name (scene scope plus ids created
+  this turn) and list the PC as `pc.x: Name, you, your` so pronoun claims resolve.
+- `engine.audit.fallback`: `plain_fallback(record, *, names={id: name}, verdicts=()) -> FallbackResult(fiction,
+  review_flag=True, owed_blocks, ruling: RulingRecord(kind="rule_conflict", review_flag=True))` (12.3.3; one
+  sentence per record item; ends "What do you do?" unless `record.pause`); log it with `log_ruling(fb.ruling, ...)`.
+  `plain(text)` strips ids, snake_case and digits.
+- `engine.audit.screen`: `screen_draft(fiction, *, flags=checker["screen"], record, verdicts, safety,
+  pause_blocks_text=[rendered OOF pause blocks], rules, names=entity names) -> ScreenResult(passed, reasons,
+  screen)`; `screen` has exactly `TurnRecord.screen`'s keys. Also `mechanics_in_fiction(text, rules=, names=)`
+  (12.14.4: digits, dice, rules phrases; attribute / DC tier / condition names only in rules forms or Title-case
+  mid-sentence), `ends_on_prompt`, `numbered_options`, `pause_blocks(blocks) -> labels`.
+- `engine.audit.safety` (separate from the Checker, FR-036): preferences are current facts `pref.safety.lines` /
+  `pref.safety.veils` / `pref.safety.flags` on `player` (else `world`), value a list of topic strings or
+  `{topic, tags}`. `safety_prefs(state)`, `safety_fact(SafetyEntry(kind, topic, tags), state, mint)` (append,
+  supersedes), `screen_safety(draft, entries_or_state) -> SafetyResult(ok, cuts, veils, flags, reasons)` (line =
+  cut; veil ok as one plain sentence ≤ 20 words; flag = pause with `flag_prompt(topic)`), `matches_line(text,
+  entries)` (screen a table row or generator output before use), `handle_safety_part(text) -> SafetyResponse(
+  pause, oof_line, reframing, chosen_by, options, record, ledger)` (12.5.7; `line: X` / `veil: X` records one).
+- `engine.dm.mentions`: `write_mentions(mentions, *, tx, rules, rng, settle=None, place=None) ->
+  MentionResult(created {name: id}, reused, refused, settled [Settled(entity, property, value, how, fact_id)],
+  unsettled, seqs)` — stages the writes itself (add `seqs`' events to the record). Kinds written: npc, item,
+  object, place (others refused → cut). Dedupe by name, alias, id tail (and role for NPCs): `find_existing`.
+  NPC by description with no identity implied → `engine.world.social.meet_npc`; a proper name or implied
+  identity → `walk_on` with the implied fields fixed (name, gender ⇄ pronouns), position, cast list. Unsettled
+  properties: `settle(entity, prop)` if given, else table `tbl.<kind>_<prop>` / `tbl.<prop>`, else the Oracle
+  (Even), each written as a fact.

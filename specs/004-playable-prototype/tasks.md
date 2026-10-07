@@ -133,15 +133,15 @@ no delivered contradiction of stored state.
 
 ### Tests for User Story 3
 
-- [ ] T043 [P] [US3] Build ≥40 seeded-error drafts (≥3 per verdict) with their expected verdicts as data in `tests/seeded_errors/cases.yaml`, and a test that `check_claims` returns the expected verdict for each given the extracted claims, in `tests/seeded_errors/test_verdicts.py`
+- [x] T043 [P] [US3] Build ≥40 seeded-error drafts (≥3 per verdict) with their expected verdicts as data in `tests/seeded_errors/cases.yaml`, and a test that `check_claims` returns the expected verdict for each given the extracted claims, in `tests/seeded_errors/test_verdicts.py`
 
 ### Implementation for User Story 3
 
-- [ ] T044 [US3] Implement `check_claims` (12.3.2, `[D]`): the 14 claim classes and 8 verdicts from data-model.md §4, with fixes `write_on_mention | oracle | redraft_to_store | cut | replace_with_slice`; "`subject: unknown` never creates an entity", in `engine/audit/claims.py`
-- [ ] T045 [US3] Implement the plain fallback (12.3.3) built from the adjudication record only, in `engine/audit/fallback.py`
-- [ ] T046 [US3] Implement the T10 screen checks (12.2.7, 01.11.4, 12.5.6, 12.14.3, 12.14.4, 12.14.9) combining code checks with the Checker's flags, in `engine/audit/screen.py`
-- [ ] T107 [US3] Implement the separate safety screen (FR-036): the SAFETY part class handled first at T2 (12.5), and a code check of every draft against the player's lines and veils (12.5.6), in `engine/audit/safety.py`; not part of the Checker call
-- [ ] T047 [US3] Implement write-on-mention (PR-00-7, 00.6.6): record each mention with only what the draft implies, settle unsettled properties via Oracle or tables, NPCs via PR-12-5, in `engine/dm/mentions.py`
+- [x] T044 [US3] Implement `check_claims` (12.3.2, `[D]`): the 14 claim classes and 8 verdicts from data-model.md §4, with fixes `write_on_mention | oracle | redraft_to_store | cut | replace_with_slice`; "`subject: unknown` never creates an entity", in `engine/audit/claims.py`
+- [x] T045 [US3] Implement the plain fallback (12.3.3) built from the adjudication record only, in `engine/audit/fallback.py`
+- [x] T046 [US3] Implement the T10 screen checks (12.2.7, 01.11.4, 12.5.6, 12.14.3, 12.14.4, 12.14.9) combining code checks with the Checker's flags, in `engine/audit/screen.py`
+- [x] T107 [US3] Implement the separate safety screen (FR-036): the SAFETY part class handled first at T2 (12.5), and a code check of every draft against the player's lines and veils (12.5.6), in `engine/audit/safety.py`; not part of the Checker call
+- [x] T047 [US3] Implement write-on-mention (PR-00-7, 00.6.6): record each mention with only what the draft implies, settle unsettled properties via Oracle or tables, NPCs via PR-12-5, in `engine/dm/mentions.py`
 - [ ] T048 [US3] Implement the Narrator (B/D) and Checker (C) roles in `engine/dm/roles/narrator.py` and `engine/dm/roles/checker.py`; the Checker never sees the narrator's prompt or reasoning (FR-034)
 - [ ] T049 [US3] Implement OOF block rendering from state (12.15: OFFER, STATUS, WARNING, REDIRECT, CLARIFY, NEAR_MISS, LAST_CHANCE, RECAP, NOTE) in `engine/dm/oof.py`; fiction carries no numbers or rules words (12.14.4)
 - [ ] T050 [US3] Implement T7–T12 in `engine/dm/turn.py` (an OFFER pause with nothing resolved before it skips drafting and checking and delivers the restatement plus the OFFER block): draft, mention, check, ≤2 redrafts, fallback with `review_flag`, screen, deliver, record the `TurnRecord` (data-model.md §4), counters, scene cut marking

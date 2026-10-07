@@ -1,0 +1,80 @@
+"""check_claims beyond the seeded set: Store input, unknown subjects, mention-created subjects, owed blocks."""
+
+from __future__ import annotations
+
+from pathlib import Path
+from typing import Any
+
+import pytest
+
+from engine.audit.claims import Claim, check_claims, failing, owed_blocks
+from engine.data.loader import load_rules
+from engine.dm.adjudication import AdjudicationRecord, WriteRef
+from engine.store.events import Event
+from tests.fixtures.game import entity, new_store
+
+
+@pytest.fixture(scope="module")
+def rules() -> Any:
+    return load_rules()
+
+
+def _store(tmp_path: Path) -> Any:
+    store = new_store(tmp_path)
+    with store.transaction("turn.0") as tx:
+        tx.add(entity("pc", "Wren", tx=tx, quantities={"coin": (5, 0, None)}))
+        tx.add(entity("npc", "Mara Voss", tx=tx, data={"gender": "woman", "pronouns": "she/her"}))
+    return store
+
+
+def test_store_or_state_and_claim_alias(tmp_path: Path, rules: Any) -> None:
+    store = _store(tmp_path)
+    claim = {"sentence": "0", "subject": "pc.wren", "class": "quantity", "predicate": "coin", "value": "five coins",
+             "asserts_change": False, "pc_words_or_feelings": False}
+    assert Claim.model_validate(claim).sentence == 0
+    for st in (store, store.state):
+        [v] = check_claims([claim], st, AdjudicationRecord(), ["pc.wren"], rules=rules)
+        assert v.verdict == "supported" and v.fix is None
+
+
+def test_unknown_subject_never_creates(tmp_path: Path, rules: Any) -> None:
+    store = _store(tmp_path)
+    before = store.state.model_copy(deep=True)
+    claims = [Claim.model_validate({"subject": "unknown", "class": "identity", "predicate": "name", "value": "Bo"}),
+              Claim.model_validate({"subject": "npc.nobody", "class": "existence", "predicate": "is", "value": "here"})]
+    vs = check_claims(claims, store.state, AdjudicationRecord(), [], rules=rules)
+    assert [(v.verdict, v.fix) for v in vs] == [("new_element", "cut"), ("new_element", "cut")]
+    assert store.state == before
+
+
+def test_subject_created_on_mention_this_turn(tmp_path: Path, rules: Any) -> None:
+    store = _store(tmp_path)
+    with store.transaction("turn.1") as tx:
+        seq = tx.add(entity("object", "Rope Ladder", tx=tx))
+    rec = AdjudicationRecord(writes=[WriteRef.of(store.event(seq))])  # type: ignore[arg-type]
+    claim = {"subject": "unknown", "class": "existence", "predicate": "hangs", "value": "a rope ladder hangs here"}
+    [v] = check_claims([claim], store.state, rec, ["pc.wren"], rules=rules)
+    assert v.verdict == "supported"
+
+
+def test_change_needs_a_write_this_turn(tmp_path: Path, rules: Any) -> None:
+    store = _store(tmp_path)
+    claim = {"subject": "pc.wren", "class": "quantity", "predicate": "coin", "value": "four", "asserts_change": True}
+    [v] = check_claims([claim], store.state, AdjudicationRecord(), [], rules=rules)
+    assert v.verdict == "unsourced_change"
+    with store.transaction("turn.1") as tx:
+        seq = tx.add(Event.of("quantity_changed", entity="pc.wren", quantity="coin", delta=-1, new_value=4,
+                              reason="paid"))
+    rec = AdjudicationRecord()
+    rec.add_writes([store.event(seq)])  # type: ignore[list-item]
+    [v] = check_claims([claim], store.state, rec, [], rules=rules)
+    assert v.verdict == "supported"
+    [v] = check_claims([{**claim, "value": "three"}], store.state, rec, [], rules=rules)
+    assert v.verdict == "contradicted" and v.store_value == "4"
+    assert failing([v]) == [v]
+
+
+def test_owed_blocks() -> None:
+    assert owed_blocks(["trg.lethal_warning", "trg.exits"], "fiction only") == ["[WARNING]", "[STATUS]"]
+    assert owed_blocks(["trg.lethal_warning"], "x\n[WARNING] THIS CAN KILL YOU") == []
+    assert owed_blocks(["trg.pacing_push"], "") == []
