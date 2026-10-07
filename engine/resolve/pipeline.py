@@ -532,11 +532,24 @@ def _cost_params(env: PipelineEnv, frame: Frame, menu: str) -> dict[str, Any]:
     return p
 
 
+_SPANS = ((100, "a few minutes pass"), (300, "a good while passes"), (900, "about an hour passes"),
+          (3_000, "a few hours pass"), (14_400, "much of the day passes"))
+
+
+def _span_words(amount: int, unit: str) -> str:  # rule: 12.14.4
+    """A time cost's form in plain words: the cost form is read into the fiction, so no digits or rules units
+    ("intervals", "watches") — "about an hour passes" [verification: fallback text quality]."""
+    from engine.time.clock import ROUNDS, unit_of
+
+    rounds = amount * ROUNDS[unit_of(unit)]
+    return next((w for cap, w in _SPANS if rounds <= cap), "days pass")
+
+
 def _deferred(env: PipelineEnv, deferred: dict[str, Any], frame: Frame) -> str:
     if "advance_time" in deferred:  # rule: 01.13.5
         (unit, amount), = dict(deferred["advance_time"]).items()
         advance_time(env.time_ctx(), int(amount), str(unit), f"cost.time {frame.id}")
-        return f"time passes ({amount} {unit})"
+        return _span_words(int(amount), str(unit))
     if "footing" in deferred:  # a non-condition footing form: written as a fact on the actor
         env.add(Event.of("fact_set", {"source": "ruling"}, source=frame.id or "cost", rule_id="01.13.7",
                          fact_id=env.tx.mint(ids.FACT), subject=frame.beat.actor, predicate="footing",
