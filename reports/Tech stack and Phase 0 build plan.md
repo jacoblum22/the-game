@@ -46,7 +46,8 @@ notes. Re-check any price or exact figure before committing to it.
   - A Claude-family claim extractor (Haiku 4.5), different family from the narrator, as P13
     requires.
   - Textual for the UI, Logfire for tracing.
-  - Estimated cost is **~3.5–6¢ per turn**, with a typical turn taking **6–10 s**.
+  - Estimated cost is **~3.5–6¢ per turn unoptimized, ~1¢ with caching and a cheaper
+    cross-family checker** (section 6). A typical turn takes **6–10 s**.
 - **"Laya" is a real, three-week-old model, not a typo.** It is a ~420M-parameter decision
   classifier from Convai Innovations that you are expected to fine-tune. It fits our `[J:enum]` /
   `[J:flag]` classification steps well, *after training*. It is unusable zero-shot. Worth a
@@ -344,13 +345,31 @@ against Jev.
 
 **Where it fits.** Our rules are deliberately built out of exactly what Laya does: 231 `[J:flag]`
 (yes/no checks, which map to `noul`) and 180 `[J:enum]` (closed-list choices, which map to
-`choice`), each with inside/outside/non-example cases already written. The best candidates:
+`choice`). Each already has inside/outside/non-example cases written, and each `[J]` rule states its
+worst case, so we know where a cheap mistake is acceptable. Step by step:
 
-1. **T2 message classification.** Eight classes, a short input, it runs every turn, and errors are
-   cheap.
-2. **12.2.2's SPEECH vs. DECLARATION** decision, and the other single-flag checks in T10 SCREEN
-   (PC agency, mechanics stated in the fiction).
-3. **Choosing the ANCHOR among ≤8 candidates.** This fits under its ~20-label ceiling.
+| Step | Fit | Why |
+|---|---|---|
+| T2: classify the message (8 classes) | **Good** | Short input, 8 labels, runs every turn |
+| SPEECH vs. DECLARATION (12.2.2) | **Good** | A single yes/no |
+| NECESSITY: is a roll needed? (7 reasons) | **Good** | Short closed list |
+| ANCHOR: choose among ≤8 candidates | **Good** | Under the ~20-label ceiling |
+| Attribute (7) | **Good** | |
+| T10 SCREEN flags (PC agency, mechanics in fiction, …) | **Good** | A ~300-word draft fits 512 tokens |
+| Levers and snags | **Possible** | One `noul` per fact in the scene ("does fact F help this action?"). About 20 batched questions take ~150 ms |
+| Deed tag (hundreds of tags) | **Possible** | Needs two stages: coarse branch, then a shortlist of ≤20 |
+| PARSE (split into intent / method / assertion) | **No** | That's rewriting text, not classifying it |
+| GATE: can the character even attempt this? | **Not at first** | Principle VII's capability gate. A false "yes" lets the player do something impossible |
+| Stakes and lethal flag | **Not at first** | It's a ladder (`score` is Laya's weakest type), and a lethal mistake can't be reversed |
+| Narration, claim extraction | **No** | Generation |
+
+**Use it as a first pass, with a fallback.**
+- Laya answers every eligible step first.
+- Its answer is accepted when its calibrated confidence clears a threshold tuned for that step.
+  Otherwise the step falls through to call A.
+- Savings scale with how often it's confident, and accuracy is protected where it isn't.
+- **The likely gain is ~1.5–2.5 s of latency per turn and ~0.2–0.3¢** (section 6). Generating the
+  narration and extracting claims still dominate cost, and Laya can do neither.
 
 **Where it doesn't fit:**
 
@@ -368,8 +387,9 @@ against Jev.
 - Every logged turn whose label was confirmed downstream becomes a new labelled row.
 - Always hold out a hand-labelled set taken from real play.
 
-**Verdict.** A good Phase 0 **spike** (one to two days, T2 only), measured against Flash-Lite on
-accuracy, calibration and latency. It is three weeks old and has a single main author, so put it
+**Verdict.** A good Phase 0 **spike** (two to three days) covering T2 plus the four other "Good"
+closed-list steps, with the fallback in place. Measure it against Flash-Lite on accuracy,
+calibration, the share of answers it is confident about, and latency. It is three weeks old and has a single main author, so put it
 behind the same `Classifier` interface and keep the model-based classifier as the fallback.
 
 **Letta (MemGPT): don't adopt it.**
@@ -395,36 +415,82 @@ behind the same `Classifier` interface and keep the model-based classifier as th
 
 ## 6. Cost and latency per turn (estimate)
 
-Assumptions: about four model calls per turn (section 3.1), the core cached, and a redraft on about
-30% of turns. Prices are from the stack notes, and the Gemini prices are not verified first-hand.
+**These figures are estimates.** The token counts are assumptions until Phase 0's traces measure
+them. Prices come from the stack notes; the Gemini, OpenAI and open-weight prices are not verified
+first-hand.
+
+### 6.1 The unoptimized baseline: 3.7–6¢
+
+This baseline assumes about four model calls per turn (section 3.1), only the rules core cached, a
+redraft on about 30% of turns, and Haiku as the checker.
 
 | Call | Tokens (in cached / in new / out) | Promo price (to 2026-12-31) | From 2027-01-01 |
 |---|---|---|---|
 | A. Adjudicate (Flash) | 10k / 8k / 1.5k | $0.012 | $0.024 |
 | B. Draft (Flash) | 6k / 6k / 0.8k | $0.008 | $0.016 |
 | C. Extract claims (Haiku 4.5) | 3k / 4k / 1k | $0.009 | $0.009 |
-| D. Redraft (30% of turns, B + C again) | — | $0.005 | $0.008 |
+| D. Redraft (30% of turns: B + C again) | — | $0.005 | $0.008 |
 | Classifier, retrieval, background jobs | — | ~$0.002 | ~$0.002 |
 | **Total per turn** | | **~$0.037** | **~$0.060** |
-| **5,000-turn campaign** | | **~$185** | **~$300** |
 
-The stack research reached a similar range independently: $0.043–0.072 per turn.
+**Why it's that high:**
+- Every call pays full price for ~6–8k tokens of fresh context: state, cards and recent exchanges.
+- Thinking tokens are billed as output.
+- Haiku is expensive for an extraction job.
+- 30% of turns need a redraft.
 
-**Latency.**
+### 6.2 Reductions, biggest first
 
-- A typical turn takes about 2.5 s (A) + 1.5 s (B) + 1.5 s (C) ≈ **6 s**. A turn that needs a
-  redraft takes **10–12 s**.
-- Rolled beats split at the OFFER pause, and the player's commit time hides call A entirely.
+1. **Cache everything stable.** Order each prompt as system → core → scene state → cards → recent
+   exchanges → message. The three calls in a turn then share a cached prefix, and the scene changes
+   little from one turn to the next. Cached input is 10× cheaper. This alone roughly halves calls A
+   and B.
+2. **Use a cheaper cross-family checker.** P13 only requires a *different family*, not a premium
+   model. Options:
+   - gpt-oss-120b on Groq: ~0.15¢ per call;
+   - DeepSeek V4 Flash: ~0.06¢, but hosted in China;
+   - later, a fine-tuned small Qwen: close to free.
+
+   This takes call C from 0.9¢ to about 0.1¢.
+3. **Low or no thinking on call A.** It is mostly closed-list choices. Flash-Lite (~3× cheaper,
+   price unverified) is the next step down.
+4. **Skip work on easy turns.** SPEECH, FICTION_QUESTION and OOF turns need no frame, so call A is
+   tiny or absent. Laya or regex handles T2 (section 5).
+5. **Repair the span, not the whole draft.** Together with a tighter render packet, the redraft rate
+   should fall to ~15%, and each redraft gets cheaper.
+
+### 6.3 Optimized estimates
+
+| Setup | Per turn | ~200-turn session | 5,000-turn campaign |
+|---|---|---|---|
+| Unoptimized baseline (6.1) | 3.7–6¢ | $7–12 | $185–300 |
+| Flash + caching + gpt-oss checker + low thinking | **~1¢** | ~$2 | ~$50 |
+| Same, plus Laya on the closed-list steps | ~0.7–0.8¢ | ~$1.50 | ~$35–40 |
+| Same, with Flash-Lite for call A | ~0.6¢ | ~$1.20 | ~$30 |
+| All open-weight (e.g. DeepSeek V4 Flash throughout) | ~0.3¢ | ~$0.60 | ~$15 |
+| Fully local models | ~0 marginal | — | — |
+
+Flash doubles in price on 2027-01-01, which takes the ~1¢ row to ~1.5–2¢. Fully local models need a
+decent GPU and give weaker prose.
+
+**The constraint on all of this is extraction recall.** Correctness is bounded by the recall of the
+claim extractor (section 2). A cheaper checker that misses claims saves money by letting errors
+through. Phase 0's eval harness should pick **the cheapest checker that meets the recall target**.
+That's a quick comparison once the harness exists. **Phase 0 target: ≤1¢ per turn at the recall
+target.**
+
+### 6.4 Latency
+
+| Turn | Time |
+|---|---|
+| Baseline | ≈ 2.5 s (A) + 1.5 s (B) + 1.5 s (C) ≈ **6 s** |
+| Needs a redraft | 10–12 s |
+| With Laya on the closed-list steps | ~1.5–2.5 s faster |
+
+- On rolled beats, the player's commit time at the OFFER pause hides call A.
 - Show a "thinking" indicator. Friends & Fables shows its research step for the same reason.
-
-**What moves cost and speed most:**
-
-- **Thinking tokens.** Track them per call.
-- **How many redrafts we need.**
-- **Whether Laya or regex absorbs T2 and the flags.**
-
-Sonnet 5.5 as narrator roughly doubles the cost for noticeably better prose. That trade is best made
-with eval data rather than up front.
+- Sonnet 5.5 as narrator roughly doubles the cost for noticeably better prose. Make that trade with
+  eval data, not up front.
 
 ## 7. Phase 0 plan
 
@@ -491,11 +557,11 @@ resume.
   3. **Auditor false-positive rate** (Feature 002's lesson)
   4. **Input fidelity**, i.e. NCP-Bench's player-input conflicts (HiAgent's lesson: consistency
      fixes can make the narrator ignore the player)
-  5. **Cost, latency and thinking tokens per turn**
+  5. **Cost, latency and thinking tokens per turn** (target ≤1¢)
 
 **0.5 Spikes (time-boxed, can run alongside the rest)**
 
-- **Laya on T2:** 1–2 days, compared against Flash-Lite.
+- **Laya on T2 and the other closed-list steps**, with a fallback: 2–3 days, compared against Flash-Lite.
 - **Narrator comparison:** Flash against Sonnet 5.5 on the same replayed inputs, judged by a
   cross-family judge.
 
@@ -503,7 +569,7 @@ resume.
 
 - A 50-turn persona-driven session runs end to end on the new engine.
 - Its conflict rate is at or below Feature 002's.
-- Turns stay within about 10 s and about 6¢.
+- Turns stay within about 10 s and about 1¢.
 - Every metric above is reported.
 
 ## 8. Decisions I need from you
@@ -515,6 +581,6 @@ resume.
    streaming with a post-hoc correction, which would mean amending 12.3.
 3. **Auto-commit:** should rolled beats pause for OFFER by default, or should auto-commit (01.7.4)
    be the default, with the pause only on risky or dire stakes? This decides how chatty play feels.
-4. **The Laya spike:** worth 1–2 days in Phase 0?
+4. **The Laya spike:** worth 2–3 days in Phase 0?
 5. **Merge timing:** OK to treat the end of V2b as the freeze point, and merge the integration branch
    to `main` before Feature 004 starts?
