@@ -138,3 +138,33 @@ Contract: `specs/004-playable-prototype/contracts/model-calls.md`. Nothing in `e
   `.add(rec)`, `.totals(turn_id=None) -> SpendTotals(turn_usd, session_usd, game_usd, budget_usd)`
   (= `game.spend()`), `.over_budget(budget_usd=None)`, `.warning() -> str | None`, `.new_session()`.
   `GeminiModel` fills `record.cost_usd`; never raises over budget.
+## engine/build (cards and coverage)
+- `from engine.build.compile_cards import load_cards` → `CardIndex`: `get(id) -> RuleCard` (KeyError if missing), `by_tag(tag)` (also returns cards tagged with a parent tag or `any`), `core()` (00.15.4 strict: T-12-1, T-00-1, 00.12.3, 00.3.9, 00.3.14, 00.3.15), iteration, `in`.
+- `RuleCard` (frozen): 00.15.2 fields + kind, chapter, section, file, lines, tokens (~len/4), body, `tags_derived`, `.model_judged`.
+- 16 ch.01 cards are tagged `core` ("Loads in: core") but are not in `core()`; retrieval decides.
+- Rebuild: `python engine/build/compile_cards.py` (`--check` exits 1 when stale). Coverage: `python engine/build/coverage.py --milestone 1 [--list to-build]`; tags are `# rule: <id>` and `# coarse: <id>` comments.
+
+## engine/time API (T015, T016)
+- **Clock** (`engine/time/clock.py`): `Timestamp` is the store's (re-exported). Fields nest like the ladder: season
+  1..4, week 1..13, day 1..7, watch 0..3 (morning..night), hour 0..5 *within the watch*, interval 0..5, round
+  0..99; epoch = Y1 S1 W1 D1 dawn. `to_rounds(ts)`, `from_rounds(n, beat=)`, `advance(ts, n, unit)` (units or
+  plurals: "hours"), `crossings(start, end, rounds=False)`, `crossed(start, end, unit)`, `split(rounds)` ->
+  {"watch": 2, ...}, `day_index(ts)`, `fmt(ts)`. Modes: `MODES`, `mode_of(state.time.mode)` (anything not a
+  00.7.3 mode, e.g. the store default "scene", reads as `free`), `beat_cost(mode, significant=, listed=)`.
+- **Scheduler** (`engine/time/scheduler.py`), always inside a transaction: `ctx = TimeContext(tx, rules, rng)`
+  (milestone defaults to the game's). `advance_time(ctx, amount, unit, reason, marks=[Mark("rest_long",
+  payload, after=rounds|None)], mode=None) -> AdvanceResult(start, target, end, boundaries, interrupt,
+  remainder_rounds, unfired; .remainder, .halted_at, .narration)`. `mark_boundary(ctx, boundary, payload)`
+  -> `list[BoundaryResult]` (event boundaries only; `beat_end` bumps the beat counter). `set_mode(ctx, mode,
+  reason)` (the only way to change `state.time.mode`; marks `mode_change`). Rests: ch.07 advances the rest's
+  length with a `Mark` for the completion (an interrupt before it lands in `unfired`). Resume after an
+  interrupt with `advance_time(ctx, res.remainder_rounds, "round", ...)`.
+- Round boundaries are crossed only in `conflict` mode (round is conflict-only, 00.7.1). On an interrupt the
+  scheduler finishes every boundary at that instant (not only the interrupting one), so no boundary is lost.
+- **Handlers** (`engine/time/handlers/`): write yours in the owner's stub `hNN.py` with
+  `@handler("h.NN.x")`, `def fn(ctx: TimeContext) -> HandlerResult | None`; stage events with `ctx.emit(*events)`
+  (stamps the boundary instant and the handler id as source); read `ctx.state`, `ctx.boundary`, `ctx.payload`,
+  `ctx.now`. `HandlerResult(summary, interrupt, narration, chain=[(event boundary, payload)], effects)`. Only
+  rows whose `interrupting` is not false may interrupt. `MILESTONE_HANDLERS` / `live_handlers(m)` /
+  `milestone_of(id)`; a handler not live or not registered logs `handler_skipped` each time it would run.
+  Built: `h.00.durations` (conditions: numeric, scene, conflict, until_rest), `h.00.clock_auto`, `h.00.reflection`.

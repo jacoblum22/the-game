@@ -61,10 +61,10 @@ pytest), at the repository root, as in plan.md "Project Structure". `src/` (the 
 - [x] T012 Implement `engine/store/projection.py`: `WorldState` (data-model.md §3) built by pure reducers per event type; families not in M1 (tally, effect_instance, offer) are stubs that raise; snapshots at `scene_end` and on save; rebuild from events must equal the live projection
 - [x] T013 Implement `engine/store/views.py`: `narrator`, `codex` and `audit` views (00.6.4, 00.6.5); sealed fields replaced by permitted slices in the narrator view (INV-10); `facts_idx` queries are bi-temporal (`valid_from_seq`/`valid_to_seq`)
 - [x] T014 [P] Implement `engine/rng.py`: named `random.Random` streams seeded from the game seed; every draw logged to `rng_draws` with its purpose; `d(sides)`, `d100()`, `pick(table)` helpers
-- [ ] T015 Implement the time ladder and modes in `engine/time/clock.py` (00.7.1 timestamp, 00.7.3 modes) and `advance_time` / `mark_boundary` (PR-00-2) in `engine/time/scheduler.py`: phases and ordering from `rules/data/boundaries.yaml` (00.7.6), skipping time runs every crossed boundary (00.7.7), interrupts
-- [ ] T016 Implement the handler registry `engine/time/handlers/__init__.py`: handlers register by id; every id in `boundaries.yaml` that is not live for the current milestone logs `handler_skipped` with "not yet built" and the milestone that builds it (FR-026)
+- [x] T015 Implement the time ladder and modes in `engine/time/clock.py` (00.7.1 timestamp, 00.7.3 modes) and `advance_time` / `mark_boundary` (PR-00-2) in `engine/time/scheduler.py`: phases and ordering from `rules/data/boundaries.yaml` (00.7.6), skipping time runs every crossed boundary (00.7.7), interrupts
+- [x] T016 Implement the handler registry `engine/time/handlers/__init__.py`: handlers register by id; every id in `boundaries.yaml` that is not live for the current milestone logs `handler_skipped` with "not yet built" and the milestone that builds it (FR-026)
 - [x] T017 [P] Implement clocks (PR-00-3) and conditions (PR-00-5, 00.9 stacking) in `engine/store/clocks.py` and `engine/store/conditions.py`
-- [ ] T018 [P] Tests for the store, projection rebuild, views (no sealed field in the narrator view), RNG logging and scheduler ordering in `tests/engine/test_store.py`, `tests/engine/test_rng.py`, `tests/engine/test_scheduler.py`
+- [x] T018 [P] Tests for the store, projection rebuild, views (no sealed field in the narrator view), RNG logging and scheduler ordering in `tests/engine/test_store.py`, `tests/engine/test_rng.py`, `tests/engine/test_scheduler.py`
 
 ### Retrieval
 

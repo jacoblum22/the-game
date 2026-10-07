@@ -121,7 +121,7 @@ class SceneRecord(BaseModel):
 
     scene_id: str
     place_id: str | None = None
-    mode: str = "scene"
+    mode: str = "free"
     agenda: str = ""
     hoped_answer: str = ""
     pillar: str | None = None

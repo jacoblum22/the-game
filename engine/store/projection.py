@@ -102,7 +102,7 @@ class Application(BaseModel):  # one condition application, for diminishing retu
 
 class TimeState(BaseModel):
     now: Timestamp = Field(default_factory=Timestamp)
-    mode: str = "scene"
+    mode: str = "free"
     last_boundary: dict[str, int] = Field(default_factory=dict)  # boundary id -> seq it was last marked
 
 

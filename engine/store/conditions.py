@@ -110,6 +110,14 @@ def apply_condition(state: WorldState, mint: Callable[[str], str], rules: Any, t
                                on_apply=list(cdef.get("on_apply") or ()), hooks=["on_condition_applied"],
                                must_narrate=bool(cdef.get("visible")))
 
+    def refreshed(old: ConditionInstance, dur: str) -> ConditionInstance:
+        # rule: 00.9.2 refresh: the longer of old and new. A new duration at least as long as the old one
+        # restarts the clock now (applied_at is stamped by the projection); a shorter one leaves the old
+        # instance as it is (approximation: the old instance's elapsed time is not subtracted).
+        if longer(old.remaining, dur) == dur:
+            return old.model_copy(update={"remaining": dur, "applied_at": None})
+        return old
+
     def new_instance(stacks: int = 1) -> ConditionInstance:
         return ConditionInstance(instance_id=mint(ids.CONDITION_INSTANCE), condition_id=condition_id, target=target,
                                  severity=sev, stacks=stacks, remaining=dur, source=src,  # type: ignore[arg-type]
@@ -123,15 +131,15 @@ def apply_condition(state: WorldState, mint: Callable[[str], str], rules: Any, t
     if stacking in ("unique", "independent"):
         return ConditionResult(events=[], outcome="ignored", instance_id=old.instance_id)
     if stacking == "refresh":
-        return emit(old.model_copy(update={"remaining": longer(old.remaining, dur)}), "refreshed")
+        return emit(refreshed(old, dur), "refreshed")
     if stacking == "replace_stronger":
         if SEVERITIES.index(sev) > SEVERITIES.index(old.severity):
-            return emit(old.model_copy(update={"severity": sev, "remaining": dur, "source": src}), "replaced")
+            return emit(old.model_copy(update={"severity": sev, "remaining": dur, "source": src, "applied_at": None}), "replaced")
         if sev == old.severity:
-            return emit(old.model_copy(update={"remaining": longer(old.remaining, dur)}), "refreshed")
+            return emit(refreshed(old, dur), "refreshed")
         return ConditionResult(events=[], outcome="ignored", instance_id=old.instance_id)
     if stacking == "intensify":
-        return emit(old.model_copy(update={"stacks": min(max_stacks, old.stacks + 1), "remaining": dur}),
+        return emit(old.model_copy(update={"stacks": min(max_stacks, old.stacks + 1), "remaining": dur, "applied_at": None}),
                     "intensified")
     if stacking == "escalate":
         esc = cdef["escalates_to"]
