@@ -97,7 +97,7 @@ person; "the character" or "the PC" is who they play.
 
 ### 02.1 The character at creation
 
-**02.1.1 What creation produces.** `[D]` Creation ends with one `Character` entity (00.6.2) whose fields
+**02.1.1 What creation produces.** `[D]` [DL-02-01; DL-00A-22; C:P3; revision: I-065] Creation ends with one `Character` entity (00.6.2) whose fields
 hold exactly what this table lists, each written by a typed tool call with reason `creation`. Nothing
 else about the character exists until play writes it.
 
@@ -123,7 +123,7 @@ else about the character exists until play writes it.
 | meta `pc.creation` | path taken, every choice and whether it was a default, the birth results, open slots, window state, Bent state | 02.2.6, 02.6 |
 | tallies, evidence ledger, reputation | empty | 02.11.1 |
 
-**02.1.2 The order of creation.** `[D]` Creation is ten steps, always in this order, because each step's
+**02.1.2 The order of creation.** `[D]` [DL-02-01; revision: I-065] Creation is ten steps, always in this order, because each step's
 options depend only on earlier ones. A path (02.2) changes how many of them the player is *asked*
 about, never which are *done*.
 
@@ -150,7 +150,7 @@ institution; (h) Vitality outside 11–15, Focus outside 3–5, fate other than 
 02.8.2 forbids; (j) a fact about the world beyond the character's own person, ties and past.
 [C:P2; C:P5; C:VII; 00.3.6; 00.4.3; 04 and 05 Interface requests; DL-02-14]
 
-**02.1.4 Who decides what.** `[D]` In creation, as everywhere (00.14.3; INV-3; INV-4):
+**02.1.4 Who decides what.** `[D]` [DL-00A-02; C:I; C:P13; revision: I-065] In creation, as everywhere (00.14.3; INV-3; INV-4):
 - the **player** chooses among options and states names, sentences and preferences;
 - the **engine** places numbers, validates every choice against `data/origins.yaml`, and makes every
   random draw (`generate` for birth; `roll_table` for "surprise me");
@@ -396,7 +396,7 @@ complete freedom and one extra training (02.4.3)
 [C:P4; R2 02 (The Land: humans 4 free points, other races more with forced allocation; "only works if
 every option is calibrated to feel roughly equal in total value"); R3 02.1; DL-02-04].
 
-**02.3.3 Placement and validation.** `[D]` A placement is legal when (a) the multiset of the seven
+**02.3.3 Placement and validation.** `[D]` [DL-02-03; DL-02-04; revision: I-065] A placement is legal when (a) the multiset of the seven
 values equals the chosen array; (b) under the Typical rule, the people's two floors hold and its fixed
 attribute holds −1. The engine validates on every change and refuses an illegal placement, naming the
 constraint ("Dwarf, Typical: Agility is fixed at −1"). There are 1,680 legal placements under the Free
@@ -433,7 +433,7 @@ Endurance, Agility, Wits, Resolve, Presence, Intellect. Human, Peaked (+3, +2, +
 (+3, +2, +2, +1, 0, 0, −1; Endurance ≥ +2, Resolve ≥ +1, Agility −1): Might +3, Endurance +2, Agility
 −1, Wits +2, Resolve +1, Presence 0, Intellect 0.
 
-**02.3.6 Attributes after creation.** `[D]` After the creation window closes, an attribute changes only
+**02.3.6 Attributes after creation.** `[D]` [DL-00A-07; DL-02-11; DL-02-26; revision: I-065] After the creation window closes, an attribute changes only
 by: the **Bent** (02.6.5; +1 to one attribute, never above +3, once, if accepted); chapter 04's one +1
 at a confirmed tier 4 (never above +4); chapter 07's maims (−1, never below −2). So a Free character's
 sum runs +5 at creation and +6 with the Bent; a Typical character's +7 and +8. Derived values follow
@@ -457,7 +457,7 @@ the attribute at once (maximum Vitality, 02.7.1; dread threshold; Guard; tempo)
 detail": R: https://bladesinthedark.com/character-creation; Burning Wheel builds a character from the
 lifepaths they walked: R: http://rpgsystems.wikidot.com/burning-wheel; R1 M-30; DL-02-22]
 
-**02.4.2 People.** `[D]` The eight peoples are the eight `creature.folk.*` tags of 00's vocabulary:
+**02.4.2 People.** `[D]` [DL-02-22; DL-02-04; revision: I-065] The eight peoples are the eight `creature.folk.*` tags of 00's vocabulary:
 Human, Elf, Dwarf, Halfling, Orc-kin, Goblin-kin, Giant-kin, Beastfolk (T-02-2). A people grants:
 - its **attribute rule** (02.3.2), or the Free rule if the player chooses 02.3.4;
 - one **gift**: a license of kind `fact` in `data/licenses.yaml owner-block 02`, with its effect given as an
@@ -471,7 +471,7 @@ Human, Elf, Dwarf, Halfling, Orc-kin, Goblin-kin, Giant-kin, Beastfolk (T-02-2).
 A people sets no training, no competence and no kit. The region's seed decides which peoples live in
 its region (12.16.7); a pre-made setting may add peoples in its owner-block (02.4.8) [revision: I-028]. A gift is never learned, lost or bought.
 
-**02.4.3 The human's extra training.** `[D]` A human takes **one extra training license held as access**
+**02.4.3 The human's extra training.** `[D]` [DL-02-04; revision: I-065] A human takes **one extra training license held as access**
 (grade `trained`, no competence above the floor) on any level-2 deed tag outside the three magic
 branches. It is in addition to the breadth profile's picks (02.5.2) and is chosen at C5.
 
@@ -493,7 +493,7 @@ tongues, trades): the Cloister gives Focus 5 and letters and nothing else; the C
 etiquette and a tongue at Focus 3 [C:P4; 00.3.13; DL-02-05; DL-02-10]. Where an upbringing offers a
 choice of license, the player picks one from its list.
 
-**02.4.5 Livelihood.** `[D]` The twenty-one livelihoods (T-02-5) are what the character did before the
+**02.4.5 Livelihood.** `[D]` [DL-02-06; DL-02-23; revision: I-065] The twenty-one livelihoods (T-02-5) are what the character did before the
 story: Soldier, Hunter, Rider, Laborer, Thief, Charlatan, Sailor, Herder, Scholar, Healer, Apprentice,
 Acolyte, Hedge-taught, Touched, Merchant, Performer, Courtier, Artisan, Watchman, Tinker, Wanderer.
 A livelihood is **not a calling**: it grants no calling, tier or pick, and a Soldier who spends her
@@ -533,7 +533,7 @@ one's trade (T-00-11) at the floor unless `lic.training.martial_tactics` is held
 [R4 §9 02 #4; R7 §2.24 (13th Age backgrounds are argued into relevance each time, which an AI decides
 inconsistently: hence facts plus explicit licenses here); SG-06].
 
-**02.4.8 Setting origins and the origin audit.** `[D]` A pre-made setting (chapter 13 is one) may add
+**02.4.8 Setting origins and the origin audit.** `[D]` [DL-02-22; DL-13-07; revision: I-065] A pre-made setting (chapter 13 is one) may add
 peoples, upbringings and livelihoods in `origins.yaml#blocks` (owner "13"), and any region's seed marks
 entries absent from its region (`absent_origins`, 12.16.7); the world seed itself adds none [revision: I-028]. Every added entry must pass PR-02-9, whose tests are the invariants of this
 part: a people has exactly one floor of +2, one floor of +1 and one fixed −1 (or is Free), at most one
@@ -583,7 +583,7 @@ and is not power"; DL-02-07]. *Audit:* counting an access license as 1 unit and 
 technique as 2, the profiles are worth 4, 4, 4 and 5: Broad is paid one unit for holding nothing above
 the floor.
 
-**02.5.3 Making the picks.** `[D]`
+**02.5.3 Making the picks.** `[D]` [DL-02-07; DL-02-06; C:VII; revision: I-065]
 1. Each pick is a level-2 deed tag on the livelihood's `trainings` list; its training license is
    `lic.training.<branch>_<tag>` (`data/licenses.yaml`).
 2. **One pick may be off-list**: any level-2 deed tag outside the three magic branches. (The life you
@@ -630,13 +630,13 @@ confirms; (d) on **Broad** the school is one of the five access picks; (e) the T
 Gifted, because the gift decides both picks. One school only: a second school is learned in play by
 chapter 05's paths [04.2.7 coverage audit; 04 and 05 Interface requests; DL-02-06; DL-02-09].
 
-**02.5.6 Learning picks (Intellect's derived value).** `[D]` A character has **learning picks** equal
+**02.5.6 Learning picks (Intellect's derived value).** `[D]` [DL-02-12; DL-00A-07; revision: I-065] A character has **learning picks** equal
 to their Intellect, minimum 0 (00.4.4: the one value Intellect derives). Each pick is one of: a tongue
 at `accented`; one grade more in a tongue already held; `lic.lang.letters`; or one `lic.training.lore_*`
 license held as access. Learning picks never grant competence. A character who gains Intellect later
 (the Bent, a tier) gains no pick: the picks are a fact about their youth.
 
-**02.5.7 Duplicates.** `[D]` No one holds two instances of a license (INV-13). If two sources grant the
+**02.5.7 Duplicates.** `[D]` [DL-00A-16; DL-02-05; C:P4; revision: I-065] No one holds two instances of a license (INV-13). If two sources grant the
 same training license: deep beats access (the license is held once, with the +2); and the source whose
 grant was absorbed gives, in its place, the next license on its own list that is not held (an
 upbringing's choice list, a livelihood's list), or, if it has no list or the list is exhausted, one
@@ -663,7 +663,7 @@ visible choices still diverge"), and variance after creation that is never force
 knack and quirk are the first half; the Bent is the second [C:P1; 00.11.1; R3 02.7 "the origin is the
 pool gate, and a birth roll is the fill"; R4 §9 02 #2: birth variance is an engine roll; DL-02-08].
 
-**02.6.2 The creation draw.** `[D]` At C6 the engine calls
+**02.6.2 The creation draw.** `[D]` [DL-02-08; DL-00A-18; C:P1; revision: I-065] At C6 the engine calls
 `generate(gen.birth, source: pc, circumstance, degree: none)` (PR-02-4). On the `plain` quality rung it
 fills two magnitude slots, one from each of the layers knack and quirk:
 - **Knack.** The pool gate admits the knacks of every deed branch in the source's tags: two branches
@@ -791,7 +791,7 @@ removed [C:P1 "a deliberate departure from every source researched"; Diablo III'
 partial precedent, lets a player re-roll one property and keep the old result if they prefer: R3 02.2;
 DL-02-11].
 
-**02.6.7 Spacing.** `[D]` After a deferral, the next draw is made at the first `reflection` at which
+**02.6.7 Spacing.** `[D]` [DL-02-11; DL-02-26; C:P1; revision: I-065] After a deferral, the next draw is made at the first `reflection` at which
 both hold: at least **two** reflections have passed since the deferral, and the PC has been the actor in
 at least **ten** further resolved frames (engine-counted). An open offer the player has not answered is
 re-shown at each session start in the SITUATION block (12.15.11) and never re-drawn. *Narration may not
@@ -820,17 +820,17 @@ attribute that feeds Vitality (00.4.4), and one point of it is worth one Vitalit
 Moderate blow, so that toughness matters and no character is built on it alone [00.3.12; 07 Interface
 request; DL-02-16].
 
-**02.7.2 Focus.** `[D]` `focus.base` is the upbringing's `focus_base`: **3, 4 or 5** (02.4.4). It derives
+**02.7.2 Focus.** `[D]` [DL-02-10; DL-00A-09; C:P9; revision: I-065] `focus.base` is the upbringing's `focus_base`: **3, 4 or 5** (02.4.4). It derives
 from no attribute (00.3.13; DL-00A-09) and never changes after creation (05.6.1). A new character's
 maximum Focus equals the base (no calling yet: `T_high = 0`), and current equals maximum. Chapter 05
 owns all growth, costs and recovery. What a new character spends Focus on: the push, on beats under a
 deep training (05.6.7); a gifted technique's cost; grit (07).
 
-**02.7.3 Fate, dread, harm state.** `[D]` A new character has `fate.current = 1` (01.16.1), dread 0,
+**02.7.3 Fate, dread, harm state.** `[D]` [DL-01-06; DL-00A-28; revision: I-065] A new character has `fate.current = 1` (01.16.1), dread 0,
 harm state `active`, no wounds, no marks, no conditions, no afflictions. A new character's power band is
 1 (04's `power_band`: no confirmed tier).
 
-**02.7.4 Computed values the sheet shows.** `[D]` These are computed by their owning chapters from the
+**02.7.4 Computed values the sheet shows.** `[D]` [DL-00A-07; C:P7; revision: I-065] These are computed by their owning chapters from the
 record and are shown at C9 so the player sees what their choices did; this chapter stores none of them:
 **Guard** = 10 + Agility + competence of the readied melee weapon or shield + a shield's +1 edge
 (06.4.1); **tempo** = Wits + competence at `deed.martial.tactics.reading` or an ancestor (06.2.2);
@@ -839,7 +839,7 @@ record and are shown at C9 so the player sees what their choices did; this chapt
 
 ### 02.8 Kit
 
-**02.8.1 Two kits.** `[D]` A new character receives the **pack** of their upbringing (clothes, sundries,
+**02.8.1 Two kits.** `[D]` [DL-02-13; revision: I-065] A new character receives the **pack** of their upbringing (clothes, sundries,
 food, coin) and the **kit** of their livelihood (tools and arms, and a little more coin), both from
 `data/kits.yaml`. Kits name items by `item.*` tag with a quality and a quantity; chapter 08 resolves
 each tag to a base item (00.17.1 Q17), so this chapter uses none of 08's ids. Where a kit offers a
@@ -1083,7 +1083,7 @@ grant, in play [13th Age spreads three points across relationships with the sett
 positive, conflicted or negative: R: https://roll20.net/compendium/13thage/Rules:Creating%20Characters;
 R1 M-28; C:P11; DL-02-17].
 
-**02.9.6 Name and look.** `[N]` + `[D]` The player gives the character a **name** (or asks for one from
+**02.9.6 Name and look.** `[N]` + `[D]` [C:P13; revision: I-065] The player gives the character a **name** (or asks for one from
 the region seed's name table for the people, 12.16.7: the engine offers three) and states the character's **pronouns**;
 the engine never rolls a PC's pronouns and the narration never uses one the player did not give
 (P13's first data point was an unearned pronoun). **Look** and **age** are optional sentences recorded
@@ -1145,7 +1145,7 @@ through chapter 14's preference record, because they are best asked while a char
 
 No answer changes a number, an odds or a cost anywhere (12.5.9). Every question may be skipped [R1 02 session zero, Robin's Laws; 12.5.9; DL-02-19].
 
-**02.10.2 What creation hands on.** `[D]` At C9 the engine gives chapter 12's rotation ledger the
+**02.10.2 What creation hands on.** `[D]` [DL-02-17; C:P16; revision: I-065] At C9 the engine gives chapter 12's rotation ledger the
 character's first **facets** (02.11.3), gives chapter 14's codex the sheet, and writes the SITUATION
 block's first "you said" line from the drive ("Last time you said: <the drive>", 12.15.11), so the
 first session opens pointed at what the player told the game they wanted.
@@ -1167,7 +1167,7 @@ session without it (04's pacing: median session 4), which is where a newcomer's 
 should fall. (4) The one case where a past *was* played is the trained successor, and there the
 mechanism is used (02.2.7 item 4). [C:P5; C:P2; R3 02.3 considered seeding tallies; DL-02-14]
 
-**02.11.2 The prologue.** `[D]` + `[N]` So that the world can speak of the character's past, the engine
+**02.11.2 The prologue.** `[D]` + `[N]` [DL-02-14; revision: I-065] So that the world can speak of the character's past, the engine
 appends three to five lines to the chronicle (`chronicle_append`, dated before play, tagged `prologue`),
 built from the origins' descriptions, the bonds and the birth account: "Raised at a hunter's steading
 in the high forest." "Took her first deer with her mother's bow." "Left when the wardens came." These

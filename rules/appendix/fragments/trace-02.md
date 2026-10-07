@@ -26,3 +26,4 @@
 | P15 | Time-gated specialization | 02.2.6 (after the lock, breadth only through chapter 05's time-costed paths) | Satisfied (as complement) |
 | P16 | Always a next step | 02.9.7 (5–8 hooks seeded), 02.9.1 (long vow → thread), 02.10.2 (first "you said" line) | Satisfied |
 | P17 | Graduated reveal | not touched | n/a |
+| BRIEF §6 | Every rule cites its basis (`[C:]`, `[R]` or `[DL-]`) at card level | every rule card of 02 (60); 21 tagged at revision C6b; validator BASIS (DL-INT-13) | satisfied |

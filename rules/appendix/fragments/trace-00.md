@@ -24,3 +24,4 @@
 | P13 | Tools own mechanics; external store owns state; verification | 00.6 (external typed store), 00.14 (tool surface, RC list), 00.14 `check_claims` | Satisfied (architecture; judge-gate remains per C:III) |
 | P16 | Always an actionable next step | T-00-9 `h.12.inconclusive_streak`; 00.12.3 (G3/G4 always redirect); 00.12.7 (a "no" is followed by what is there) | Satisfied (hooks; procedure in 12) |
 | P17 | Graduated reveal | 00.13 (`deliver` in the frame), 00.3.15 (delivered reach feeds delivery counts), 00.14 `deliver` | Satisfied (frame; counts in 01) |
+| BRIEF §6 | Every rule cites its basis (`[C:]`, `[R]` or `[DL-]`) at card level | every rule card of 00 (113); 37 tagged at revision C6b, 00.1.3 by the new DL-00A-33; validator BASIS (DL-INT-13) | Satisfied |

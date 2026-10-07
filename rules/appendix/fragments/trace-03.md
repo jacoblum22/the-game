@@ -27,3 +27,4 @@
 | C:P16 | No silent dead ends | not applicable to evidence; 03.11.2 gives the player a dispute path | n/a |
 | BRIEF §8 | Tag vocabulary content; `tag_event` capture mechanism | 03.1 + `data/tags.yaml`; 03.2–03.6 + `data/evidence.yaml` | resolved |
 | 00.17.2 (03 contract) | tags below level 2; `record_evidence` and full schema; significance; weighting; saturation; recency; counted hooks; `tally` | 03.1; 03.2; 03.3; 03.4; 03.5; 03.6; 03.7; 03.9.2 | satisfied |
+| BRIEF §6 | Every rule cites its basis (`[C:]`, `[R]` or `[DL-]`) at card level | every rule card of 03 (63); 22 tagged at revision C6b; validator BASIS (DL-INT-13) | satisfied |

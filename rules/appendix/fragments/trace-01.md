@@ -29,3 +29,4 @@
 | 00.17.1 Q6 | One Oracle mechanism (01) | 01.15 | satisfied |
 | 00.17.1 Q9 | fate 0–3; earn, spend, cap; 07 `spend_fate` | 01.16 | satisfied |
 | R5 RS-01…RS-19 (01 rows) | gate, when to roll, DCs, modifiers, degrees, costs, advantage-type (levers), opposed, extended, help, retry, secret rolls, fortune rolls, P17, compound, meta-currency, knowledge | 01.3, 01.4, 01.6, 01.8, 01.9, 01.13, 01.6.8, 01.14.5, 01.14.6, 01.14.8, 01.4.2, 01.4.7, 01.6.7, 01.10, 01.14, 01.16, 01.18.6 | satisfied (RS-14/15 shared with 12) |
+| BRIEF §6 | Every rule cites its basis (`[C:]`, `[R]` or `[DL-]`) at card level | every rule card of 01 (121); 61 tagged at revision C6b, 01.7.4 by the new DL-01-28; validator BASIS (DL-INT-13) | satisfied |

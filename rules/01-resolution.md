@@ -106,19 +106,19 @@ PARSE with the new method. From ROLL on, the frame is immutable except for READ,
 RECORD fields (00.13.2). Narration happens after RECORD and restates only what the store holds (INV-2).
 [C:VII; C:P8; C:P17; R7 §4.0; R4 §7.1; R: https://arxiv.org/abs/2502.19519]
 
-**01.1.2 The beat.** `[D]` A **beat** is one method, aimed at one target (an entity, an obstacle, or a
+**01.1.2 The beat.** `[D]` [DL-00A-19; DL-01-20; revision: I-065] A **beat** is one method, aimed at one target (an entity, an obstacle, or a
 question), intending one change. A turn (06) may hold several beats; a declaration may hold several beats;
 one beat is never split across two frames except by the partial-license split of 01.3.4. The beat's
 `actor` is the entity whose method it is; the beat's `target` must be resolved to an id before GATE
 (01.2.5).
 
-**01.1.3 No roll without a committed frame.** `[D]` `roll_check(frame_id)` refuses unless the frame
+**01.1.3 No roll without a committed frame.** `[D]` [DL-00A-23; C:P13; revision: I-065] `roll_check(frame_id)` refuses unless the frame
 passes every validation of 00.13.2 and of PR-01-2 step 12: gate class G1 or G2 (or an accepted G3
 fallback) with the verb or license id present; every lever and snag citing an established fact that
 existed before the declaration; stakes set; `lethal` legal; a threatened cost declared when stakes are
 Risky or Dire; offer choice `commit` (or `auto` under 01.7.4). *Invariant INV-5* [SG-08].
 
-**01.1.4 What the DM supplies to the pipeline.** `[D]` Ids, enum values, rungs, flags, the player's own
+**01.1.4 What the DM supplies to the pipeline.** `[D]` [DL-00A-02; C:I; revision: I-065] Ids, enum values, rungs, flags, the player's own
 stated quantities, and short text (intent, method, reasons, fictional forms). Never a DC, modifier,
 odds, harm amount, tick count, duration or price (INV-3; 00.14.3). Where this chapter says "the DM
 picks", the pick is always from a closed list defined here or in data.
@@ -262,7 +262,7 @@ Anchor:             no
 Basis:              [C:VII] [R7 §4.0 step 2, §4.4] [R4 SG-05, SG-07] [R1 01.B] [00.12.2–00.12.3]
 ```
 
-**01.3.2 What counts as a license.** `[D]` A license is any held entry of the 00.12.1 schema: an
+**01.3.2 What counts as a license.** `[D]` [DL-00A-19; C:V; revision: I-065] A license is any held entry of the 00.12.1 schema: an
 ability (`ab.*`), a spell, a calling capability, a training license (`lic.training.*`), a language
 (`lic.lang.*` at a grade), an item property granting a license while equipped, a rank, a
 condition-granted license, or a **fact license** (`kind: fact`) — an established narrative fact that
@@ -403,7 +403,7 @@ Anchor:             no
 Basis:              [C:VII] [R7 §3.3 F4, §4.0 step 2, §4.2] [R: https://bladesinthedark.com/effect]
 ```
 
-**01.3.8 G0 — questions about the world.** `[D]` + `[J:flag]` A G0 beat is answered by the first match:
+**01.3.8 G0 — questions about the world.** `[D]` + `[J:flag]` [DL-00A-19; DL-01-13; C:VII; revision: I-065] A G0 beat is answered by the first match:
 (1) from state, through the character's permitted slice (sealed content is never returned, INV-10);
 (2) from the character's own established knowledge — free (00.12.6); (3) if the answer requires
 *finding out* (looking, searching, recalling specialist lore, reading a person), it is not G0 but an
@@ -677,7 +677,7 @@ FRAME fills the frame's judgment fields; `frame_check` (00.14.2 tool 1) then com
 **DC** follows the obstacle, **levers and snags** follow established facts, **stakes** follow what
 failure would cost, **reach** follows what success can achieve [R7 §3.3 F2].
 
-**01.6.1 Attribute.** `[J:enum]` The attribute is chosen from the anchor's allowed list
+**01.6.1 Attribute.** `[J:enum]` [DL-00A-08; revision: I-065] The attribute is chosen from the anchor's allowed list
 (`basic_verbs.yaml` `attribute` + `alt_attributes`, or the license's `attribute`) by the *method as
 described*, using the distinguishing tests of 00.4.1. True only when the method is that attribute's kind
 of act; false when the player merely prefers that attribute. When the method fits two allowed attributes
@@ -690,7 +690,7 @@ the wall — carefully, which is Agility, my best stat" — "carefully" describe
 climbing by strength and grip; Might, with the OFFER naming the Agility method (a balance traverse along
 the ledge) if one exists.
 
-**01.6.2 Primary deed tag and traits.** `[J:enum]` + `[J:flag]` The primary deed tag is the most
+**01.6.2 Primary deed tag and traits.** `[J:enum]` + `[J:flag]` [DL-00A-06; DL-00A-13; revision: I-065] The primary deed tag is the most
 specific `deed` tag that describes the method, classified one tag depth at a time — branch, then child (00.5.6); competence reads it.
 Traits start from the anchor's `traits` list; the DM adds a trait only by a `[J:flag]` from its "true
 only when" line in T-01-13 (01.17). The one trait flag the DM must always ask is **loud**: *"Does the
@@ -710,7 +710,7 @@ keyed `dc.<obstacle_id>.<signature>` (e.g. `dc.wall_north.verb.exert` for the cl
 (or one judged as two): a stored DC is reused where a fresh tier would apply, or the reverse; both come
 from the same ladder, so the error is at most one rung, shown in the OFFER as the DC's source (class i). [integration: 00.2.3 audit]
 
-**01.6.4 Where the DC comes from.** `[D]` First match (00.3.8, restated):
+**01.6.4 Where the DC comes from.** `[D]` [DL-00A-02; DL-01-21; revision: I-065] First match (00.3.8, restated):
 1. **Stored DC** — `dc.<obstacle>.<signature>` exists → use it. A stored DC changes only when a fact
    changes the obstacle itself (the lock is damaged; the rope is frayed), by a new write that supersedes
    the old and cites that fact.
@@ -771,7 +771,7 @@ Basis:              [00.3.16–00.3.17; T-00-5] [R4 §4.6 (Story-Engine "do not 
 | Legendary | **30** | the edge of mortal ability; needs levers or licenses | hold a collapsing gate alone for a minute; talk a sworn enemy into laying down arms mid-battle | climb the smooth inside of a well shaft without gear — *not Beyond: a master with chimney technique has done it* |
 | Beyond | G4 | no mortal without a license that changes the category | leap a 30-ft chasm unaided; persuade a river with no spirit in it | lift a portcullis alone — *Beyond for a mortal (quality and scale), which a strength-granting license could make Legendary* |
 
-**01.6.6 Who rolls.** `[J:flag]` The active side rolls once (00.3.3): aimed methods roll against a
+**01.6.6 Who rolls.** `[J:flag]` [DL-00A-03; revision: I-065] The active side rolls once (00.3.3): aimed methods roll against a
 defense; resisted effects make the target roll Endure or Evade against the effect DC. Test: *"Does the
 effect need the source to get past the target?"* True → aimed; false → resisted; uncertain → aimed.
 Adversaries' attacks are rolled by the engine against the PC's defense; the player decides, the engine
@@ -922,7 +922,7 @@ strongest anti-drift commitment the research found (Burning Wheel's stated failu
 consequences, Blades' position) [R7 §3.3 F8; R4 SG-08]. *Worst case (J):* a poorly fitting cost is
 declared — the player sees it before committing and may withdraw (class ii).
 
-**01.6.12 Frame computation.** `[D]` `frame_check` runs PR-00-1: attribute, competence (primary deed
+**01.6.12 Frame computation.** `[D]` [DL-00A-02; DL-00A-04; C:I; revision: I-065] `frame_check` runs PR-00-1: attribute, competence (primary deed
 tag and ancestors, highest), edge (cap +2), circumstance (levers and snags, cap ±4), status (worst
 penalty and best bonus), clamp −8…+16; DC by 01.6.4; odds by exhaustive enumeration of the twenty
 faces under the degree rule (01.8.1): success-or-better, critical success, critical failure and
@@ -977,7 +977,7 @@ or stakes −1 rung, on a beat the character is trained at) is declared here too
 combinable with it, as is its alternate use **grit** (07.2.5: ignore wound penalties for the beat, no
 reach) [integration: IR ch.05 to 01, IR ch.07].
 
-**01.7.4 Auto-commit.** `[D]` A player may set the preference `auto_commit` (ch.14). Then frames whose
+**01.7.4 Auto-commit.** `[D]` [DL-01-28; revision: I-065] A player may set the preference `auto_commit` (ch.14). Then frames whose
 stakes are Safe or Risky, that are not lethal, not secret, carry no mode price (no fallback, stretch or
 emulate), and show success-or-better ≥ 50%, roll without waiting (`offer.choice = auto`); the OFFER is
 still written to the log and shown with the result. Every other frame waits for an explicit commit. A
@@ -1002,21 +1002,21 @@ punitive ones where the lethality lock forbids them. Under the step rule "only a
 plain success, which is the honest message for the OFFER [R7 §5.9, §7.1 #1; R1 01.A; R2 01; R4 §9 01 #5;
 R: https://2e.aonprd.com/Rules.aspx?ID=2286].
 
-**01.8.2 Near miss.** `[D]` `near_miss = true` when the final degree is `failure` **and** margin ≥ −3.
+**01.8.2 Near miss.** `[D]` [DL-01-03; C:P8; revision: I-065] `near_miss = true` when the final degree is `failure` **and** margin ≥ −3.
 This covers the ordinary near miss (a total 1–3 short) *and* a success that a natural 1 stepped down to
 failure (margin ≥ 0) — the die betrayed a roll that met the DC, and the player may buy the success back
 at a cost (01.9.3). A critical failure is never a near miss; a natural 20 that lifts a failure lands in
 success. Width −3 is kept from R7 (15% of faces at mid-range DCs; T-01-3), making "success in some form"
 at +2 vs Moderate 55% instead of 40% without erasing failure (DL-01-03; OEQ-01-1).
 
-**01.8.3 What a critical means, in general.** `[D]` A critical success delivers one more reach rung than
+**01.8.3 What a critical means, in general.** `[D]` [DL-01-02; DL-01-04; revision: I-065] A critical success delivers one more reach rung than
 framed (T-01-4) and, where the anchor's degree table lists a critical effect (a Strike's harm step, a
 Setup's two uses), that effect. A critical failure raises the cost severity by one rung (T-01-5) and,
 where the anchor lists one, adds its critical-failure effect (a Recall's plausible falsehood, an
 emulation's backlash). Neither ever changes whether the beat was legal, and a critical failure on a
 non-lethal frame can never kill (INV-6).
 
-**01.8.4 The roll hook.** `[D]` Between the die and the degree, the `on_roll` hook fires (00.10.2):
+**01.8.4 The roll hook.** `[D]` [DL-00A-16; DL-01-06; revision: I-065] Between the die and the degree, the `on_roll` hook fires (00.10.2):
 rerolls from abilities and the fate reroll (01.16.3) resolve here, in the substrate's trigger order
 (target's effects, then the actor's, then others'). A reroll replaces the die; the second result stands.
 Then the degree is read and `on_degree` fires.
@@ -1072,7 +1072,7 @@ evidence gives no reason to (OEQ-01-2 names the test that would).
 
 ### 01.9 READ — what was achieved and what is due
 
-**01.9.1 Delivered reach.** `[D]` (T-01-4; `resolution.yaml#read_delivery`)
+**01.9.1 Delivered reach.** `[D]` [DL-00A-11; DL-01-22; revision: I-065] (T-01-4; `resolution.yaml#read_delivery`)
 
 | Degree | Delivered reach (0–4) |
 |---|---|
@@ -1090,7 +1090,7 @@ more at the delivered number (a door is simply open; the cap of a ladder is reac
 (at most one) becomes a follow-up **Precision lever** — a fact `momentum.<actor>.<target>` usable on the
 actor's next beat against the same target or situation within the scene (00.3.9f), then expired.
 
-**01.9.2 Cost severity.** `[D]` (T-01-5; `resolution.yaml#read_costs`) Exactly one cost from the menu is
+**01.9.2 Cost severity.** `[D]` [DL-01-04; revision: I-065] (T-01-5; `resolution.yaml#read_costs`) Exactly one cost from the menu is
 due per resolved beat, at this severity (stakes after levers, snags and the trade):
 
 | Stakes | failure | near miss + success-at-cost | critical failure |
@@ -1121,7 +1121,7 @@ success") [R: https://bladesinthedark.com/consequences-harm; R7 §4.3]. On a Saf
 failure is always free; on a Risky or Dire frame, taking the failure costs the same severity as
 success-at-cost does, so the choice is *whether the attempt lands*, not how much it hurts.
 
-**01.9.4 A cost must land in full.** `[D]` `apply_costs` refuses a menu entry whose target cannot bear
+**01.9.4 A cost must land in full.** `[D]` [DL-01-15; DL-01-07; revision: I-065] `apply_costs` refuses a menu entry whose target cannot bear
 its full severity (a `cost.drain` of 3 Focus from a pool of 1; a `cost.gear` on a character carrying
 nothing breakable; a `cost.shortfall` on a Limited beat). The DM then uses the alternate, else another
 fitting entry by 01.13.1. A cost is never partially applied and never silently skipped.
@@ -1137,7 +1137,7 @@ mechanical effects beyond an anchor's own reach unit: an effect beyond harm (the
 is a separate change that needs a reach rung or its own beat, never a free rider (Feng Shui's stunt line,
 R7 §2.21).
 
-**01.10.2 Deduplicate and count.** `[J:enum]` + `[D]` The DM lists the sub-items, then merges mutually
+**01.10.2 Deduplicate and count.** `[J:enum]` + `[D]` [DL-01-12; C:P17; revision: I-065] The DM lists the sub-items, then merges mutually
 exclusive alternatives into one ("demon, fey or shade?" = one item: *what kind of creature?*). An item
 whose answer is sealed behind a gate this beat cannot open (a letter's contents before anyone has the
 letter) is **ineligible**: it is not counted, and the DM says at OFFER how it could be learned (P16).
@@ -1145,7 +1145,7 @@ After deduplication N is 1…5; N > 5 is not one act's worth — the beat is spl
 *Worst case (J):* two items merged that were distinct — one item fewer at stake, shown in the OFFER where
 the player can object (class ii).
 
-**01.10.3 The player ranks.** `[D]` The player ranks the N items at OFFER; if they do not, declaration
+**01.10.3 The player ranks.** `[D]` [DL-01-12; C:P17; revision: I-065] The player ranks the N items at OFFER; if they do not, declaration
 order is the ranking. The ranking is deterministic and player-favoring, and removes the "DM's choice of
 which half" that P17's original text left open to drift.
 
@@ -1181,19 +1181,19 @@ content beyond the permitted slice (INV-10) [R4 §5.2 #3; R1 01.D]. Delivered an
 item; the player still learns only permitted, true content, and the question stays open for a later beat
 (01.10.6) (class iii). [integration: 00.2.3 audit]
 
-**01.10.6 Undelivered items stay unresolved, not wrong.** `[D]` They remain open questions. Re-asking
+**01.10.6 Undelivered items stay unresolved, not wrong.** `[D]` [DL-01-16; C:P17; revision: I-065] They remain open questions. Re-asking
 them is a new beat on the same obstacle and rides on this one (01.4.2): it needs a new method, a new
 lever, a passed interval, or the re-attempt cost (one `cost.time` or `cost.exposure` at the frame's
 stakes severity, S1 if Safe, paid up front). This is P17's no-free-retry rule.
 
-**01.10.7 Sub-intents.** `[D]` A bundle of changes from one act ("I kick the brazier over to set the
+**01.10.7 Sub-intents.** `[D]` [DL-01-12; DL-01-20; revision: I-065] A bundle of changes from one act ("I kick the brazier over to set the
 tapestry burning, scatter the guards and block the stair with coals") delivers changes by the same
 count and the player's ranking; each delivered change is written as its own state write. Each
 sub-intent must be something the act could produce by itself (else it is not in the bundle, 01.2.2).
 
 ### 01.11 CONSEQUENCE — costs, method consequences, and what's next
 
-**01.11.1 Applying the due cost.** `[J:enum]` + `[D]` If READ made a cost due (T-01-5 or a
+**01.11.1 Applying the due cost.** `[J:enum]` + `[D]` [DL-01-04; DL-01-07; DL-01-15; revision: I-065] If READ made a cost due (T-01-5 or a
 success-at-cost), CONSEQUENCE applies exactly one cost: the threatened cost for a failure or critical
 failure; the player's pick of threatened or alternate for a success-at-cost. The DM chooses the
 **form** `[J:enum]` from that menu entry's allowed forms *at the computed severity* (01.13, T-01-7) —
@@ -1249,14 +1249,14 @@ which runs every `beat_end` handler of T-00-9 (`h.04.crisis_check`, `h.01.ruling
 `h.12.inconclusive_streak`). Only then is narration written, and it restates only what the store
 holds (INV-2).
 
-**01.12.2 What narration of any resolved beat may not imply.** `[N]` Any of: a degree other than the
+**01.12.2 What narration of any resolved beat may not imply.** `[N]` [C:P13; DL-00A-02; DL-00A-20; revision: I-065] Any of: a degree other than the
 computed one; reach beyond the delivered number; a cost of another menu entry or severity; a license
 doing more than its scope; a new fact not written this turn; a mechanical number voiced in fiction
 (T-00-22); a sealed fact; "almost" on a secret frame; a death on a non-lethal frame. Narration *must*
 name: every visible condition applied, one omen per hidden or sensed clock tick (INV-14), every changed
 range band or positional flag, and the chosen cost's form.
 
-**01.12.3 The ruling-log handler.** `[D]` `h.01.ruling_log` (boundary `beat_end`, phase 9): finalizes the
+**01.12.3 The ruling-log handler.** `[D]` [DL-00A-12; DL-00A-24; revision: I-065] `h.01.ruling_log` (boundary `beat_end`, phase 9): finalizes the
 frame (immutable thereafter), writes the ruling record when 01.5.4 requires one, and closes any Setup or
 Help lever uses consumed by the beat.
 
@@ -1309,7 +1309,7 @@ Anchor:             no
 Basis:              [R7 §4.3] [R: https://bladesinthedark.com/consequences-harm] [R: Ironsworn Pay the Price via R5 P-16] [R4 SG-09]
 ```
 
-**01.13.2 `cost.harm` — Harm.** `[D]`
+**01.13.2 `cost.harm` — Harm.** `[D]` [DL-01-15; DL-00A-29; revision: I-065]
 *Fits when:* the method exposes the actor's body to an established source of harm (a fall, a blow, a
 blade, fire, cold, water, a thorn hedge, the creature being wrestled, a hazard). *False for:* purely
 mental or social beats, or when no source is established.
@@ -1327,7 +1327,7 @@ request to 07).
 | S4 | 8 | a broken bone, a grievous wound (ch.07 decides wounds and marks) |
 | S5 | 12 | crushing, drowning, burning at the heart of a fire (hazards and lethal frames only) |
 
-**01.13.3 `cost.drain` — Drain.** `[D]`
+**01.13.3 `cost.drain` — Drain.** `[D]` [DL-01-15; revision: I-065]
 *Fits when:* the method spent effort or consumed something: Focus (only when the beat used an ability,
 concentration, or the ch.05 push), supply, ammunition, light, a consumable's uses, coin carried for the
 purpose. *False for:* a quantity the method did not engage.
@@ -1343,7 +1343,7 @@ purpose. *False for:* a quantity the method did not engage.
 
 Must land in full (01.9.4): a pool holding fewer units than U cannot be drained at that severity.
 
-**01.13.4 `cost.gear` — Gear.** `[D]`
+**01.13.4 `cost.gear` — Gear.** `[D]` [DL-01-15; DL-08-05; revision: I-065]
 *Fits when:* the method uses a carried item or exposes one (a weapon, a tool, a pack while climbing).
 *False for:* items flagged `cost_immune: true` by ch.08 (bound relics) and items not established as
 carried.
@@ -1357,7 +1357,7 @@ carried.
 | S4 | `condition = broken` (unusable until repaired under a craft license) **or** `location = <an opponent's possession>` | snapped, shattered, wrenched away and held by the foe |
 | S5 | `exists = destroyed`, or location sealed as unknown; an item with a signature or a bound ability always takes the location form, never `destroyed` (08.1.9) [integration: IR ch.08 to 01] | burned to ash, swept away in the flood (signature or bound items: lost in the flood, its place unknown) |
 
-**01.13.5 `cost.time` — Time.** `[D]`
+**01.13.5 `cost.time` — Time.** `[D]` [DL-01-15; revision: I-065]
 *Fits when:* the method takes time while something else moves — a clock in the scene lists `cost.time`
 as a tick source (pursuit, deadline, a roof collapsing, a guard returning), or the mode's time matters
 (light burning down, night coming, a journey's days). *False in conflict mode* unless a listening clock
@@ -1379,7 +1379,7 @@ every boundary crossed (INV-15):
 *Allowed forms:* fumbling, backtracking, waiting for a second chance, a detour, a delay while the
 opportunity passes.
 
-**01.13.6 `cost.exposure` — Exposure.** `[D]`
+**01.13.6 `cost.exposure` — Exposure.** `[D]` [DL-01-15; DL-15-18; revision: I-065]
 *Fits when:* the method involves stealth, deception, trespass or noise, and an observer, listener or
 listening clock is established. *False for:* a scene with no one to notice.
 *Writes:* tick every active clock listing `cost.exposure` by U(severity), plus:
@@ -1392,7 +1392,7 @@ listening clock is established. *False for:* a scene with no one to notice.
 | S4 | + `record_knowledge(observer, identity and deed of the actor)` | identified: your face seen, your name spoken, your forged letter recognized |
 | S5 | + the deed and identity become known to the observer's faction or the public: a reputation content entry (11) | exposed: the story is all over town by nightfall |
 
-**01.13.7 `cost.footing` — Footing.** `[D]`
+**01.13.7 `cost.footing` — Footing.** `[D]` [DL-01-15; DL-00A-21; revision: I-065]
 *Fits when:* the actor's body position, balance, grip or place in a fight or on terrain is at stake.
 *False for:* purely mental or social beats. Conditions are ch.06's definitions of the reserved ids.
 
@@ -1406,14 +1406,14 @@ listening clock is established. *False for:* a scene with no one to notice.
 Moving the actor into a hazard does not also deal harm as part of this cost; the hazard then acts on its
 own cadence (10), which the OFFER must have shown.
 
-**01.13.8 `cost.shortfall` — Shortfall.** `[D]`
+**01.13.8 `cost.shortfall` — Shortfall.** `[D]` [DL-01-15; revision: I-065]
 *Fits when:* only on a success-at-cost, and only when the method could plausibly have worked partway.
 *Writes:* delivered reach −1 (S1, S2) or −2 (S3), never below 1. Illegal when delivered reach is already
 1. S4/S5: not applicable (success-at-cost never exceeds S3).
 *Allowed forms:* the door opens a hand's breadth; he believes half of it; the rope holds but the far
 anchor is loose; you get the gist, not the details.
 
-**01.13.9 `cost.closed_door` — Closed door.** `[D]`
+**01.13.9 `cost.closed_door` — Closed door.** `[D]` [DL-01-15; DL-00A-27; revision: I-065]
 *Fits when:* the method is a one-shot attempt against something that can refuse or seize up: a
 persuasion, bargain, bluff or request to an entity or institution; a mechanism that jams; a trust that
 can be spent. *False for:* a repeatable physical attempt against an inert obstacle.
@@ -1427,7 +1427,7 @@ can be spent. *False for:* a repeatable physical attempt against an inert obstac
 | S5 | S4 + the target's faction status toward the PC −1 (11) | the guild closes its doors to you |
 Standing writes are legal only on entities that carry standing.
 
-**01.13.10 `cost.twist` — Twist.** `[D]` + `[J:enum]`
+**01.13.10 `cost.twist` — Twist.** `[D]` + `[J:enum]` [DL-01-15; DL-12-15; revision: I-065]
 *Fits when:* always — but it is picked only when no other entry fits (01.13.1 d).
 *Writes:* `roll_table(tbl.twist, context {severity, scene tags, band})` (ch.12 owns the table and must
 provide rows for each severity band); the row's writes create the entities, clocks or facts. The DM
@@ -1461,7 +1461,7 @@ beat [R7 §4.6; Burning Wheel linked tests, R7 §2.14]:
 The later beat's frame is built after the earlier beat's RECORD, so any fact the earlier beat created is
 established before the later declaration and may be cited as a lever (00.3.9a).
 
-**01.14.2 Bundled beats.** `[D]` One act, N items: DELIVER (01.10).
+**01.14.2 Bundled beats.** `[D]` [DL-01-12; revision: I-065] One act, N items: DELIVER (01.10).
 
 **01.14.3 Repeated acts and the repeated-attempt shape.** `[D]` + `[J:flag]` "I shoot it ten times"
 is a `repeated` beat. It is resolved by two rules and never by raising the DC — the DC is how hard one
@@ -1582,7 +1582,7 @@ a license, a fact about something unestablished (that is the Oracle's), or more 
 *Worst case (J):* the wrong lever type is declared: +2 on a roll instead of one stakes or reach rung, or the
 reverse, declared at FRAME and shown before commitment (class i). [integration: 00.2.3 audit]
 
-**01.14.10 Ready (`verb.ready`).** `[D]` + `[J:flag]` Ready holds a beat for a stated trigger. The beat
+**01.14.10 Ready (`verb.ready`).** `[D]` + `[J:flag]` [DL-00A-19; revision: I-065] Ready holds a beat for a stated trigger. The beat
 is framed and offered when readied (so its stakes and odds are committed), and rolled when the trigger
 occurs. The trigger must be an **observable event** `[J:flag]` ("when the door opens", "if he draws") —
 true only for something the actor would perceive; false for another's intent or a hidden fact. If the
@@ -1652,7 +1652,7 @@ Anchor:             no
 Basis:              [R7 §4.7] [R4 S5 (relative likelihood is a strength), W6 (sampling is not)] [R5 P-01, P-02]
 ```
 
-**01.15.3 Thresholds and the answer shape.** `[D]` The engine rolls d100 (1–100). **Yes** when the roll
+**01.15.3 Thresholds and the answer shape.** `[D]` [DL-01-11; revision: I-065] The engine rolls d100 (1–100). **Yes** when the roll
 is at or above the rung's threshold: Likely 26, Even 51, Unlikely 76, Remote 91 (the Ironsworn ladder,
 kept). The answer then takes one of six shapes, first match:
 1. **Doubles** — 11, 22, 33, 44, 55, 66, 77, 88, 99, 100 (read as 00) — make the answer **extreme**:
@@ -1687,12 +1687,12 @@ The chosen qualifier is written as its own fact with the answer. *Worst case (J)
 the qualifier's kind is fixed by the roll, only its form is chosen (class i). [R5 P-03 (six-way answer
 shape); R: https://ironsworn-rpg.fandom.com/wiki/Ask_the_Oracle]
 
-**01.15.5 Recording and "no" never ends at a wall.** `[D]` The answer is written as a fact (`set_fact`,
+**01.15.5 Recording and "no" never ends at a wall.** `[D]` [DL-01-11; DL-01-26; C:P16; revision: I-065] The answer is written as a fact (`set_fact`,
 `source: oracle`) before it is narrated; the question, its asker (a player's character, or the DM), its odds
 rung, the d100 and the shape go to the oracle log, so a **free fact** (01.15.8) can be told from the rest
 [revision: I-038]. A "no" is always followed by what *is* there, drawn from state or from the no-but qualifier.
 
-**01.15.6 The sealed Oracle.** `[D]` When the answer is something the character must *discover* (does
+**01.15.6 The sealed Oracle.** `[D]` [DL-01-13; revision: I-065] When the answer is something the character must *discover* (does
 this study hide a compartment?), the engine writes the answer as a **sealed** fact whose gate is
 discovery; the player does not see the d100 or the answer. The search that follows is a secret frame
 (01.4.7). When no secret exists, a successful search reports "nothing hidden here" with the same
@@ -1711,7 +1711,7 @@ is judged a re-ask and read from the existing answer (the player is told which f
 something else), or a rephrased re-ask is rolled while the engine still refuses an identical key
 (class iv). [integration: 00.2.3 audit] [R7 §6; 00.12.7]
 
-**01.15.8 Oracle facts and levers.** `[D]` An Oracle answer to a question asked *before* a declaration
+**01.15.8 Oracle facts and levers.** `[D]` [DL-01-26; DL-00A-10; revision: I-065] An Oracle answer to a question asked *before* a declaration
 is an established fact and may be a lever for that declaration. An answer to a question *embedded in* a
 declaration may make the method possible (the rope exists, so the swing has something to swing on) but
 is not a lever for that same beat; it may be one from the next beat on (00.3.9a).
@@ -1735,7 +1735,7 @@ allowed, auditable from the cited fact's source and the oracle log (class i). [r
 
 ### 01.16 Fate
 
-**01.16.1 The pool.** `[D]` `fate` is the ruleset's only player-spendable luck currency (00.17.1 Q9): an
+**01.16.1 The pool.** `[D]` [DL-00A-26; DL-01-06; revision: I-065] `fate` is the ruleset's only player-spendable luck currency (00.17.1 Q9): an
 integer quantity 0–3 on the PC (`fate {current, max: 3}`), shown in the codex. A new PC starts with
 **1**. Gains beyond 3 are lost. Fate is never a cost-menu target and never drained by effects.
 
@@ -1749,7 +1749,7 @@ Deeds (threads and vows) are the only way to reach 3. Rationale: fate is a comeb
 (Ironsworn momentum's shape, R5 P-15) and a reward for finished stories (great deeds, R6 C-R3 item 6),
 never for rhetoric; hard luck's cap of 2 keeps the reprieve at the brink scarce. [DL-01-06]
 
-**01.16.3 Spending fate in resolution: the reroll.** `[D]` During `on_roll` of a check whose d20 the
+**01.16.3 Spending fate in resolution: the reroll.** `[D]` [DL-01-06; revision: I-065] During `on_roll` of a check whose d20 the
 player has seen — one the PC makes, or one an adversary makes against the PC — the player may spend 1
 fate to have the engine **reroll** that d20; the second die stands. At most one fate per roll. Not
 allowed on: secret frames (the die is unseen), Oracle rolls (world facts are not the character's luck),
@@ -1757,7 +1757,7 @@ table rolls, generator draws, fortune checks the PC is not part of. Fate buys lu
 licenses, degrees or cancelled costs. *Arithmetic:* a reroll of a non-success turns 40% into 64% at +2 vs
 Moderate, and 30% into 51% at +5 vs Hard (`fate01.py`).
 
-**01.16.4 The interface to ch.07.** `[D]` `spend_fate(n) → bool`: if `fate.current ≥ n`, subtract n and
+**01.16.4 The interface to ch.07.** `[D]` [DL-00A-26; DL-07-07; revision: I-065] `spend_fate(n) → bool`: if `fate.current ≥ n`, subtract n and
 return true; else change nothing and return false. Ch.07's last-chance menu consumes it: an option in
 `last_chance.yaml` with `fate_cost: n` (1…3, ch.07's choice) is available only while `fate.current ≥ n`.
 Fate at 0 is itself a telegraph, and the OFFER of every lethal frame shows the current fate.
@@ -1796,7 +1796,7 @@ named. *Worst case (J):* a trait wrongly added or omitted pulls in, or leaves ou
 
 ### 01.18 The basic-verb anchor cards
 
-**01.18.1 What a verb card is.** `[D]` Each of the fifteen basic verbs (00.12.5; ids, coverage and
+**01.18.1 What a verb card is.** `[D]` [DL-00A-19; DL-00A-01; revision: I-065] Each of the fifteen basic verbs (00.12.5; ids, coverage and
 attributes fixed by 00) carries an **anchor card**: the 00.2.6 anchor standard filled in — intent verbs,
 knobs with defaults and allowed deltas (T-00-20), a degree table for all five results, scope and
 exclusions, traits, method consequences, the defense a target uses (`against`), and a distinguishing
@@ -1806,7 +1806,7 @@ spine of the reach-and-adapt substrate: when an action matches no rule, the DM r
 card and moves at most two knobs (01.5.3). Every card is `Anchor: yes`; every card is composable as a beat
 in a sequence and as a tick source for a clock (anchor property 7).
 
-**01.18.2 The generic degree table.** `[D]` Every card's degree table specializes this one; a card lists
+**01.18.2 The generic degree table.** `[D]` [DL-01-02; DL-01-22; revision: I-065] Every card's degree table specializes this one; a card lists
 only where it differs.
 
 | Result | Generic reading |
@@ -1817,7 +1817,7 @@ only where it differs.
 | failure | delivered reach 0; the threatened cost at S2 (Risky) / S3 (Dire); nothing if Safe |
 | critical failure | delivered reach 0; the threatened cost one rung heavier (S1 / S3 / S4) and the card's critical-failure effect, if any |
 
-**01.18.3 Resisted effects (Endure, Evade) read the source's severity.** `[D]` When a beat resists a
+**01.18.3 Resisted effects (Endure, Evade) read the source's severity.** `[D]` [DL-01-23; revision: I-065] When a beat resists a
 sourced effect (a poison, a falling rock, a dragon's fear, a trap's blade), the effect's own severity sets
 the frame's stakes (S1–S2 → Risky; S3+ → Dire) and its threatened cost is the effect itself: **critical
 success** — no effect, plus a follow-up Precision lever (you shook it off and saw your opening);
@@ -1835,7 +1835,7 @@ not cover* (from 00; exclusions name the license) · *Attribute* (default, then 
 1/2/3/4 means) · *Degrees* (only differences from 01.18.2) · *Knobs* (default → allowed deltas) ·
 *Traits / consequences* · *Distinguish*.
 
-**01.18.4 `verb.move` — Move.** *Intent verbs:* reposition, get past, dash, withdraw, slip through,
+**01.18.4 `verb.move` — Move.** [DL-00A-19; DL-00A-08; revision: I-065] *Intent verbs:* reposition, get past, dash, withdraw, slip through,
 retreat, travel on foot. *Covers:* reposition, dash, withdraw, slip through a crowd, travel on foot,
 retreat. *Does not cover:* flying, teleporting (a `slot.movement_mode` license). *Attribute:* Agility;
 Might forcing a way through; Endurance for long hauls. *Against:* an entity blocking the way — the
@@ -1851,7 +1851,7 @@ provoke reactions (06); Retreat's outcome is ch.07's. *Distinguish:* Move vs Exe
 (Move) or a climb, jump or swim (Exert); Move vs Evade — going where you choose (Move) or getting out of
 the way of a specific threat (Evade).
 
-**01.18.5 `verb.observe` — Observe.** *Intent verbs:* search, look for, study, listen, track, spot,
+**01.18.5 `verb.observe` — Observe.** [DL-00A-19; DL-00A-08; revision: I-065] *Intent verbs:* search, look for, study, listen, track, spot,
 read a person, read a scene, appraise. *Covers:* search, study, listen, track by sight, read a person or
 a scene. *Does not cover:* reading an unknown script (a language or training license); magical sight (a
 license). *Attribute:* Wits; Intellect for sustained study of a thing. *Against:* a hiding entity — its
@@ -1867,7 +1867,7 @@ search leaves traces (things moved) — a method consequence when the searched p
 *Distinguish:* Observe vs Recall — the answer is in front of you (Observe) or in your head (Recall);
 Observe vs passive noticing — casual looking is free and only compares notice to concealment (01.4.6).
 
-**01.18.6 `verb.recall` — Recall.** *Intent verbs:* remember, know, recognize, recall. *Covers:* common
+**01.18.6 `verb.recall` — Recall.** [DL-00A-19; DL-00A-08; DL-02-12; revision: I-065] *Intent verbs:* remember, know, recognize, recall. *Covers:* common
 knowledge of one's origin, culture and trade. *Does not cover:* specialist lore (history, bestiary,
 arcana, law, medicine at specialist depth) — a training license (`lic.training.*`) or origin lore
 specialty. *Attribute:* Intellect. *Against:* tier by obscurity within common knowledge (Easy: widely
@@ -1880,7 +1880,7 @@ recognition); `time_cost` (none → 1 interval with reference books, which are a
 (free) or might misremember (Recall); Recall vs licensed lore — any adult from that background (Recall)
 or a scholar (license).
 
-**01.18.7 `verb.talk` — Talk.** *Intent verbs:* persuade, convince, deceive, lie, intimidate,
+**01.18.7 `verb.talk` — Talk.** [DL-00A-19; DL-00A-08; revision: I-065] *Intent verbs:* persuade, convince, deceive, lie, intimidate,
 threaten, bargain, haggle, taunt, provoke, perform, inform, ask, surrender, yield. *Covers:* inform,
 persuade, deceive, intimidate, bargain, taunt, perform, yield. *Does not cover:* speaking a language not
 held (a language license; crude fallback: gesture, tone and shared nouns, DC +5, reach Limited).
@@ -1901,7 +1901,7 @@ WE-01-2). *Distinguish:* Talk vs Setup-by-words — seeking the listener's decis
 distraction to exploit (Setup); deceive (Talk) vs Sneak — making them believe something false, or
 making them not notice.
 
-**01.18.8 `verb.strike` — Strike.** *Intent verbs:* hit, attack, stab, cut, shoot, throw at, punch,
+**01.18.8 `verb.strike` — Strike.** [DL-00A-19; DL-00A-08; DL-00A-29; revision: I-065] *Intent verbs:* hit, attack, stab, cut, shoot, throw at, punch,
 bash, cut down, knock out. *Covers:* hit with body, weapon or improvised object; shoot; throw. *Does not
 cover:* weapon techniques (ability licenses). *Attribute:* Might; Agility for finesse, aimed and thrown.
 *Against:* the target's attack defense (ch.06; default Agility defense); an object — tier by size and
@@ -1919,7 +1919,7 @@ ammunition used. *Distinguish:* Strike vs Force — harm (Strike) or position/ob
 effect *beyond* harm (pin, disarm, trip) is not a free rider on a Strike — it is Force, Grapple or Setup,
 or a Great-reach clause the anchor's knob change must declare (Feng Shui's line, R7 §2.21).
 
-**01.18.9 `verb.grapple` — Grapple.** *Intent verbs:* grab, seize, hold, wrestle, pin, restrain,
+**01.18.9 `verb.grapple` — Grapple.** [DL-00A-19; DL-00A-08; revision: I-065] *Intent verbs:* grab, seize, hold, wrestle, pin, restrain,
 snatch, tackle-and-hold, climb onto (a large creature), break free. *Covers:* seize, hold, pin,
 restrain, snatch a held item, mount a large creature; breaking or slipping a hold. *Does not cover:* —.
 *Attribute:* Might; Agility to slip or break a hold. *Against:* the higher of the target's Might or
@@ -1933,7 +1933,7 @@ creature: scale factor, reach Limited unless levers); `duration` (until the hold
 breaks free). *Traits:* `trait.action.attack`, `trait.delivery.touch`. *Distinguish:* Grapple vs Force
 — the actor keeps hold (Grapple) or the target is moved away or down (Force).
 
-**01.18.10 `verb.force` — Force.** *Intent verbs:* shove, push, trip, topple, knock over, break, smash,
+**01.18.10 `verb.force` — Force.** [DL-00A-19; DL-00A-08; revision: I-065] *Intent verbs:* shove, push, trip, topple, knock over, break, smash,
 burst, pry, bend, lift a bar off. *Covers:* shove, trip, topple, break, burst, pry. *Does not cover:*
 picking a lock (`lic.training.guile_thievery`). *Attribute:* Might. *Against:* a creature — the
 higher of its Might or Agility defense; an object — its stored tier by hardness and make. *Reach ladder:*
@@ -1947,7 +1947,7 @@ prone); `targets`; `time_cost` (one action → an interval of prying for Hard ob
 whatever the degree). *Consequences:* a broken thing stays broken (a fact). *Distinguish:* Force vs
 Handle — overcoming the object's resistance (Force) or using it as it is meant to be used (Handle).
 
-**01.18.11 `verb.exert` — Exert.** *Intent verbs:* climb, jump, leap, vault, swim, lift, carry, haul,
+**01.18.11 `verb.exert` — Exert.** [DL-00A-19; DL-00A-08; revision: I-065] *Intent verbs:* climb, jump, leap, vault, swim, lift, carry, haul,
 balance, run far, hold (a door shut), push through (a current). *Covers:* climb, jump, swim, lift,
 balance, run far. *Does not cover:* —. *Attribute:* Might; Agility for balance or a precise leap;
 Endurance for sustained effort. *Against:* tier, stored per obstacle and anchor (a wall climbed and the
@@ -1962,7 +1962,7 @@ rounds per 10 ft for long climbs, ch.10); `stakes` (height source → current, c
 (Endure); Exert vs Force — the body's own movement or burden (Exert) or defeating an object's resistance
 (Force).
 
-**01.18.12 `verb.evade` — Evade.** *Intent verbs:* dodge, duck, dive clear, take cover, get out of the
+**01.18.12 `verb.evade` — Evade.** [DL-00A-19; DL-00A-08; DL-01-23; revision: I-065] *Intent verbs:* dodge, duck, dive clear, take cover, get out of the
 way, jump aside. *Covers:* dodge, duck, take cover, get clear of a hazard. *Does not cover:* —.
 *Attribute:* Agility. *Against:* the effect DC of what is evaded (resisted effect, 01.18.3), or tier
 for reaching cover under threat. *Reach ladder:* resisting — the 01.18.3 table; taking cover — 1 partial
@@ -1972,7 +1972,7 @@ cover (a Protective lever citing it next beat), 2 `flag.in_cover`, 3 cover plus 
 *Traits:* `trait.action.move`. *Distinguish:* Evade vs Endure — getting out of the way (Evade) or taking
 it and holding out (Endure); for any effect the test is 00.3.3 and the effect's own `resist` field.
 
-**01.18.13 `verb.sneak` — Sneak.** *Intent verbs:* hide, sneak, creep, slip past unseen, conceal,
+**01.18.13 `verb.sneak` — Sneak.** [DL-00A-19; DL-00A-08; revision: I-065] *Intent verbs:* hide, sneak, creep, slip past unseen, conceal,
 palm, shadow, lift from a pocket. *Covers:* hide, move quietly, conceal an object, palm. *Does not cover:*
 disguise as a specific person (a license). *Attribute:* Agility; Wits for blending into a crowd or picking
 the moment. *Against:* the highest notice (Wits defense, 01.4.6) among observers who could perceive the
@@ -1986,7 +1986,7 @@ follow-up lever. *Degrees:* failure — the threatened cost, almost always `cost
 absence of sense traits; a noisy method adds `audible`). *Distinguish:* Sneak vs Talk-deceive (above);
 Sneak vs Observe — avoiding notice (Sneak) or gaining it (Observe).
 
-**01.18.14 `verb.handle` — Handle.** *Intent verbs:* use, operate, light, tie, rig, patch, mend,
+**01.18.14 `verb.handle` — Handle.** [DL-00A-19; DL-00A-08; revision: I-065] *Intent verbs:* use, operate, light, tie, rig, patch, mend,
 bandage, stabilize, calm (an animal), lead, ride, cook, improvise a tool. *Covers:* use an object as its
 nature suggests; crude making and repair; first aid (stabilize only); calm or lead an animal; ride.
 *Does not cover:* surgery (a medicine license); smithing and fine crafts (a craft license); lockpicking (a
@@ -2002,7 +2002,7 @@ for a crude repair); `duration` (how long the rig holds). *Traits:* `trait.actio
 together (Handle) or a made thing needing skill (license; crude fallback for most crafts is Handle with
 reach Limited).
 
-**01.18.15 `verb.endure` — Endure.** *Intent verbs:* resist, withstand, bear, hold breath, push on,
+**01.18.15 `verb.endure` — Endure.** [DL-00A-19; DL-00A-08; DL-01-23; revision: I-065] *Intent verbs:* resist, withstand, bear, hold breath, push on,
 stay awake, keep going, shake off. *Covers:* resist cold, poison, disease, fear, pain; hold breath; keep
 going. *Does not cover:* —. *Attribute:* Endurance; Resolve for fear, pain, temptation, domination.
 *Against:* the effect DC (resisted effect, 01.18.3); a hazard's tier by severity. *Reach ladder:* the
@@ -2012,7 +2012,7 @@ beyond the limit (ch.07/10). *Knobs:* `attribute` (Endurance ↔ Resolve by what
 strain carries `trait.nature.mental` from its source). *Distinguish:* Endure vs Evade (above); Endure vs
 Exert (above).
 
-**01.18.16 `verb.setup` — Setup.** *Intent verbs:* feint, distract, create an opening, blind, prepare,
+**01.18.16 `verb.setup` — Setup.** [DL-00A-19; DL-00A-08; DL-00A-10; revision: I-065] *Intent verbs:* feint, distract, create an opening, blind, prepare,
 lure, bait, grease, rig a trap, set an ambush. *Covers:* create a lever for yourself or an ally.
 *Attribute:* by method (the method's own attribute: a feint is Agility, a distracting story Presence, a
 prepared snare Wits). *Against:* a creature — its defense by the method (feint vs Wits; blinding throw vs
@@ -2023,21 +2023,21 @@ cost. *Knobs:* `condition` (none → distracted, off_balance, exposed, blinded b
 method (`attack` if it hinders a creature against its will). *Distinguish:* Setup vs Help — creating a
 fact in the world (Setup) or lending your effort directly to another's roll (Help).
 
-**01.18.17 `verb.help` — Help.** *Intent verbs:* help, assist, steady, back up, boost, cover (for).
+**01.18.17 `verb.help` — Help.** [DL-00A-19; DL-00A-08; DL-01-24; revision: I-065] *Intent verbs:* help, assist, steady, back up, boost, cover (for).
 *Covers:* give a Precision lever to another's attempt, only if the helper could attempt it alone.
 *Attribute:* by method (only if the help itself rolls). *Reach ladder:* one Precision lever (never more
 than one Help lever per beat). *Knobs:* `action_cost`; `time_cost`. *Details:* 01.14.8.
 *Distinguish:* Help vs group action (01.14.7) — Help assists one roll; a group action is one roll for
 several actors.
 
-**01.18.18 `verb.ready` — Ready.** *Intent verbs:* wait for, hold, cover (a door), be ready to, when X
+**01.18.18 `verb.ready` — Ready.** [DL-00A-19; DL-00A-08; revision: I-065] *Intent verbs:* wait for, hold, cover (a door), be ready to, when X
 then Y. *Covers:* hold an action for a stated trigger. *Does not cover:* reactions beyond ch.06's (an
 ability). *Attribute:* none at readying; the readied beat's own when it fires. *Reach ladder:* none (the
 readied beat has its own). *Knobs:* `action_cost`; `duration` (until the window ends). *Details:*
 01.14.10. *Distinguish:* Ready vs a conditional declaration — Ready waits for an observable event; a
 conditional (01.14.4) depends on a fact or result.
 
-**01.18.19 Yield and Retreat.** `[D]` Yield (a Talk that surrenders on terms) and Retreat (a Move that
+**01.18.19 Yield and Retreat.** `[D]` [DL-00A-19; revision: I-065] Yield (a Talk that surrenders on terms) and Retreat (a Move that
 withdraws from a conflict) are always legal named uses (00.12.5); they are G1 with no license. Their
 outcomes are ch.07's; resolution frames them only when ch.07 says their acceptance or escape is
 uncertain.

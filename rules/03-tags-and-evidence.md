@@ -98,7 +98,7 @@ tracked (03.2.7).
 
 ### 03.1 The tag vocabulary: content, classification, authoring
 
-**03.1.1 What the vocabulary must answer.** `[N]` One hierarchy (00.5.1) answers four questions, and each
+**03.1.1 What the vocabulary must answer.** `[N]` [DL-00A-13; DL-03-15; revision: I-065] One hierarchy (00.5.1) answers four questions, and each
 facet's depth was set by the question it serves:
 
 | Question | Facets | Who keys on it | Depth this chapter gives it |
@@ -127,7 +127,7 @@ These additions leave `deed.influence` at 9 and `deed.craft` at 11 level-2 child
 admitted oversized sets (tested by OEQ-00-1's level-2 stratum); no further level-2 child is added to an
 oversized branch [revision: I-044].
 
-**03.1.4 Reading a tag entry.** `[N]` Every entry in `data/tags.yaml` carries `id`, `name`, `parent`,
+**03.1.4 Reading a tag entry.** `[N]` [DL-00A-13; DL-03-15; revision: I-065] Every entry in `data/tags.yaml` carries `id`, `name`, `parent`,
 `level`, `lifecycle` and a `definition` of the form "True only when … False for … (sibling id)". Entries
 below level 2 also carry `distinguish`, which is the test against the nearest overlapping sibling or cousin,
 and `aliases`, which are natural-language words for retrieval and classification. Aliases are not tags. A
@@ -217,7 +217,7 @@ wins (SG-10):
 5. **The scene's situation tag and the target's creature tag are never deed tags.** They feed the context
    class (03.4.4) and the diversity measures (03.9.3).
 
-**03.1.8 The conduct axes.** `[J:enum]` + `[J:flag]` The ten axes are leaves at level 1 (00.5.3). Each has a
+**03.1.8 The conduct axes.** `[J:enum]` + `[J:flag]` [DL-00A-15; DL-03-13; revision: I-065] The ten axes are leaves at level 1 (00.5.3). Each has a
 positive and a negative pole, an **act test** for each pole, and exclusions. These are in T-03-4, canonical in
 `data/evidence.yaml#conduct_tests`. They sharpen the one-line definitions 00 seeded in `data/tags.yaml`
 (rows this chapter may not edit) and are the tests the DM applies. A
@@ -226,14 +226,14 @@ axes may be recorded per beat, and they may carry different signs (freeing a gui
 justice −1). The decisions, their defaults and their *Worst case (J)* line are in 03.3.3: one wrong entry is at
 most 4 points on one axis, capped at 7 per scene, and voidable.
 
-**03.1.9 Tags proposed by other chapters.** `[D]` Any chapter may use a level-3 tag that is not yet in the
+**03.1.9 Tags proposed by other chapters.** `[D]` [DL-00A-13; DL-03-15; revision: I-065] Any chapter may use a level-3 tag that is not yet in the
 file if it follows 00.5.5 and lists the tag under its Interface requests or in `data/contrib/tags.NN.yaml`.
 This chapter (or the orchestrator acting under these rules) reconciles each proposal by PR-03-6. If the
 proposal is the same kind as an existing tag, it becomes an **alias** of that tag and the proposing data is
 rewritten to the existing id. Otherwise it is admitted with the full entry form. Two tags for one kind are
 never kept.
 
-**03.1.10 The non-deed facets in evidence.** `[D]` Evidence reads the other facets in exactly three places:
+**03.1.10 The non-deed facets in evidence.** `[D]` [DL-03-08; DL-03-14; revision: I-065] Evidence reads the other facets in exactly three places:
 (a) the **context class** of an event (03.4.4) is built from the opposing entity's `creature` tag at level 2,
 or the obstacle's own most specific tag at level 2, or the scene's `situation` tag at level 2;
 (b) **grounding** (03.1.6) reads `item` tags through T-03-3;
@@ -243,7 +243,7 @@ or the obstacle's own most specific tag at level 2, or the scene's `situation` t
 
 ### 03.2 The evidence event and `record_evidence`
 
-**03.2.1 The EvidenceEvent schema.** `[D]` It extends 00.6.8. The fourteen core fields are unchanged; every
+**03.2.1 The EvidenceEvent schema.** `[D]` [DL-00A-22; DL-03-09; C:P5; revision: I-065] It extends 00.6.8. The fourteen core fields are unchanged; every
 field below the divider is added by this chapter. Fields marked *(engine)* are computed by `record_evidence`
 and settlement, never supplied by the DM. Fields marked *(sealed)* are never returned to the narrator.
 
@@ -297,7 +297,7 @@ EvidenceEvent:
   void_reason: str|null
 ```
 
-**03.2.2 `record_evidence` semantics.** `[D]` Tool #25 (00.14.2). Input: an EvidenceEvent with the fields the
+**03.2.2 `record_evidence` semantics.** `[D]` [DL-03-01; DL-03-05; C:I; revision: I-065] Tool #25 (00.14.2). Input: an EvidenceEvent with the fields the
 DM supplies (actor, deed, basis, frame_id or the grounding refs, primary_tag, secondary, conduct, target,
 witnesses, justification). The tool:
 1. **Validates eligibility** (03.3.1). It refuses with a named reason any event that has no resolved basis,
@@ -317,7 +317,7 @@ witnesses, justification). The tool:
 6. **Returns** the event id and nothing else. No tally, weight, point or threshold is ever returned (00.14.2
    #25; INV-10).
 
-**03.2.3 Kinds and bases.** `[D]` `kind: judged` covers every event the DM records at RECORD: the bases
+**03.2.3 Kinds and bases.** `[D]` [DL-03-12; DL-03-04; revision: I-065] `kind: judged` covers every event the DM records at RECORD: the bases
 `roll`, `success_at_cost`, `good_idea`, `take_the_time`, `certain_with_cost` and `choice`. `kind: counted`
 covers events written by the engine's counters (`basis: hook`) and by downtime training (`basis: training`).
 `basis: atonement` is written only by 04's atonement procedure (03.8.4). `basis: origin` is written once, at
@@ -405,7 +405,7 @@ request from 01; R3 #8]. Note that a take-the-time success is, by 01.4.4, unoppo
 quality is always routine. It therefore passes D2 (03.3.2) only when the beat ticks a progress or project
 clock, as craft and research work does (WE-03-11).
 
-**03.3.2 Stage B — the deed significance predicate.** `[D]` For a judged deed event, `significant =
+**03.3.2 Stage B — the deed significance predicate.** `[D]` [DL-03-01; C:P5; revision: I-065] For a judged deed event, `significant =
 consequential AND pressured AND own_act`, and each part is computed from the frame:
 
 | Test | True only when (all engine-checked) | False for |
@@ -655,7 +655,7 @@ tomb is still done; (b) weighting by witnesses would push the player to perform 
 stealth and wilderness callings, whose deeds are unseen by design; (c) the research separates the tally from
 the witness and the moment [R6 executive summary #1, R-A1] [DL-03-09].
 
-**03.4.7 Conduct and counted points are separate scales.** `[D]` Conduct points (±2 or ±4, 03.3.3) and counted
+**03.4.7 Conduct and counted points are separate scales.** `[D]` [DL-03-12; DL-03-13; revision: I-065] Conduct points (±2 or ±4, 03.3.3) and counted
 units (03.7) never mix with deed points. Each has its own tally family (03.9).
 
 ### 03.5 Settlement, saturation and anti-grind
@@ -710,7 +710,7 @@ may let training count toward a tier's counted requirement (Kingdom Come's train
 recognition up but never substitute for it [R6 A-27]). This keeps EVE-style time-gated learning available to
 04 and 05 [C:P15] without letting a montage stand in for deeds.
 
-**03.5.6 Provisional reading mid-scene.** `[D]` `tally(actor, tag, include_pending: true)` returns the values as
+**03.5.6 Provisional reading mid-scene.** `[D]` [DL-03-05; DL-03-18; revision: I-065] `tally(actor, tag, include_pending: true)` returns the values as
 if the scene settled now. Only 04's crisis check (V5 awakening, which must fire inside a scene) may call it. The
 pending events then settle normally at `scene_end`, so nothing is counted twice.
 
@@ -723,7 +723,7 @@ recovering in a monastery does not make a ranger forget the woods. The next time
 history is still their history. A pivot in what the character does shows up as soon as they do it [R3 T-8,
 G-3; R6 A-08 Avatar Legends' fast balance versus slow center] [DL-03-10].
 
-**03.6.2 The recent value.** `[D]` For any node:
+**03.6.2 The recent value.** `[D]` [DL-03-10; revision: I-065] For any node:
 `recent = Σ settled points in the newest 12 evidence-bearing scenes + floor(Σ settled points in scenes 13–24 / 2)`.
 Scenes older than 24 contribute nothing to `recent`. They remain in `weighted` permanently. The half-weighted
 second block smooths the cliff at the window's edge. At the model's rate of five evidence-bearing scenes per
@@ -764,7 +764,7 @@ defeated, Focus spent, harm warded, clocks advanced, things made) that no judgme
 C:P5 dual-tier]. 04 is asked to require **both** for every recognition (Interface requests). Judgment can
 inflate the first; nothing but play can inflate the second [DL-03-12].
 
-**03.7.2 The counters.** `[D]` Each counter is an engine listener registered on one 00.10.2 hook. It is not an
+**03.7.2 The counters.** `[D]` [DL-03-12; C:V; C:P9; revision: I-065] Each counter is an engine listener registered on one 00.10.2 hook. It is not an
 effect. It observes the hook's event at **any depth**, because recording evidence is a core engine write and
 never itself causes an event, so INV-12's loop concern cannot arise. Counters never listen to `on_tag_event`.
 Canonical list: `data/evidence.yaml#counted`.
@@ -787,7 +787,7 @@ Counted events are `kind: counted` with `basis: hook` or `training`. They carry 
 They pass no significance test, since a mechanical outcome is its own proof. They are pending until the scene
 settles.
 
-**03.7.3 Counted saturation.** `[D]` At settlement, counted units are capped per counter and per node exactly
+**03.7.3 Counted saturation.** `[D]` [DL-03-27; DL-03-05; DL-03-07; revision: I-065] At settlement, counted units are capped per counter and per node exactly
 as in 03.5.2 (1st full, 2nd half, 3rd a quarter, rest 0, sorted by units). The same-target day cap of 03.5.4
 also applies (one counted defeat of one foe per day; a foe "defeated" twice by a yield and a re-escape counts
 once). The routine cap does not apply, because counted events carry no quality. Units written **outside a
@@ -811,11 +811,11 @@ at least one deed tag (its first `tags` entry is the one credited).
 
 ### 03.8 Conduct tallies
 
-**03.8.1 Signed points.** `[D]` Each conduct entry carries an axis, a sign (+1 or −1) and a magnitude (2 or 4)
+**03.8.1 Signed points.** `[D]` [DL-03-13; DL-00A-15; revision: I-065] Each conduct entry carries an axis, a sign (+1 or −1) and a magnitude (2 or 4)
 read from its ground (03.3.3). The conduct tally keeps the positive and negative poles separately; it never
 nets them inside an event.
 
-**03.8.2 Settlement.** `[D]` Per scene, per axis, per sign: diminishing returns of 03.5.2 (best full, second
+**03.8.2 Settlement.** `[D]` [DL-03-13; DL-03-05; revision: I-065] Per scene, per axis, per sign: diminishing returns of 03.5.2 (best full, second
 half, third a quarter, rest 0). One scene's conduct on one axis and one sign is therefore at most 4 + 2 + 1 =
 **7**.
 
@@ -868,7 +868,7 @@ return no weights: `public` to 11, `last_exercised` to 12, and `evidence_for_fra
 context. The codex shows the ledger lines only (03.11). Seer-type readings (04's V6) are 04's qualitative
 bands computed from these values, never the values themselves [R4 §9 03 #2].
 
-**03.9.2 `tally(actor, tag, include_pending = false) → {raw, weighted, recent}`.** `[D]` The 00.17.2 contract
+**03.9.2 `tally(actor, tag, include_pending = false) → {raw, weighted, recent}`.** `[D]` [DL-03-10; DL-03-11; C:P5; revision: I-065] The 00.17.2 contract
 function, defined exactly:
 - `raw`: the number of settled judged deed events whose settled contribution to `tag`'s node is greater than
   0;
@@ -917,7 +917,7 @@ with T-03-10 as calibration:
 - *Confidence* (04 must define it [BRIEF A3]): suggested inputs are threshold margins expressed as rational
   pairs, `balance`, and `recent / weighted`. This chapter fixes the inputs, never the formula.
 
-**03.9.5 Determinism and audit.** `[D]` Every function is a pure function of the settled ledger, so recomputing
+**03.9.5 Determinism and audit.** `[D]` [C:P13; C:P3; revision: I-065] Every function is a pure function of the settled ledger, so recomputing
 from the ledger alone gives the same values (RC-LOG + RC-QUERY). Any value 04 used to grant or offer is
 logged with the offer (04's `recognition_event`), so the reason for any recognition can be audited back to deed
 lines.
@@ -963,14 +963,14 @@ commitment binds it to silence about this act (a bribe, an oath of secrecy, a fa
 and constructs witness but do not carry. Foes who survive are carriers. Their recognition often comes first
 (R6 V8, the Nemesis rival) [R6 A-20].
 
-**03.10.3 Aftermath witnesses.** `[D]` + `[J:flag]` A deed can become known later: bodies found with the PC's
+**03.10.3 Aftermath witnesses.** `[D]` + `[J:flag]` [DL-03-09; revision: I-065] A deed can become known later: bodies found with the PC's
 fletching, a theft traced through a fence. When a fact written later links a recorded event to its actor in
 some NPC's knowledge (`record_knowledge`, 15), the DM calls `add_witness(event_id, entity, how: aftermath,
 fact_id)`. The flag is *"Does the cited fact identify this actor as the doer to this entity?"*; uncertain →
 no. The event enters that entity's scopes at the next settlement. Capability is unchanged. *Worst case (J):* a
 reputation entry in one scope (class iv).
 
-**03.10.4 Bonded witnesses.** `[D]` An entity named in a bond or oath record by 04 (a god, a patron, an order,
+**03.10.4 Bonded witnesses.** `[D]` [DL-03-09; revision: I-065] An entity named in a bond or oath record by 04 (a god, a patron, an order,
 a bonded spirit) witnesses **every** event on the bond's axes and tags wherever it happens (`how: bonded`). It
 carries only to its own scope (the order's faction id), and it never counts toward local reputation. This is
 how an oath's keeper "knows" without being present (R6 A-01, A-02).
@@ -986,7 +986,7 @@ primary node is at least **6** (a difficult, risky success or better), or any co
 This is Ars Magica's "noteworthy act in front of witnesses who will talk" made exact [R6 A-15]. 11 owns
 reputation content, score and spread, and epithets (V1) [00.17 Q22].
 
-**03.10.6 Witnesses never change points.** `[D]` See 03.4.6.
+**03.10.6 Witnesses never change points.** `[D]` [DL-03-09; revision: I-065] See 03.4.6.
 
 ### 03.11 The evidence ledger and the codex
 
@@ -997,7 +997,7 @@ superseded). It never shows points, tallies, recent values, thresholds or nearne
 settled. The ledger is the player's view into "what the world has seen me do", and it is the basis for
 disputes [R2 §03 Voyager; R6 A.5 item 1].
 
-**03.11.2 Disputes and corrections.** `[D]` A player may dispute a ledger line out of fiction (12.3.6): wrong
+**03.11.2 Disputes and corrections.** `[D]` [DL-03-11; C:P16; revision: I-065] A player may dispute a ledger line out of fiction (12.3.6): wrong
 tag, wrong sign, or "that never happened". If 12's dispute procedure upholds the objection, PR-03-4 voids or
 re-records the event. If 12's claim check (12.3) or a `revert_writes` removes a write that an event cited as its
 ground or frame, the event is voided automatically. A lenient error in the player's favour is still an error.
