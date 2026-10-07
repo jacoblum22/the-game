@@ -57,14 +57,14 @@ OPEN = "open"
 BEGIN, CHANGE = "begin", "change"
 PREFIX_NAME = "name:"
 
-WELCOME = ("Welcome. This is an adventure told in words. You say what your character does, in your own words,\n"
-           "and I tell you what happens. There is no menu and no wrong way to ask. I keep the rules, and when\n"
-           "the dice matter I show you the odds before you commit. Your character can die, but never without\n"
+WELCOME = ("Welcome. This is an adventure told in words. You say what your character does, in your own words, "
+           "and I tell you what happens. There is no menu and no wrong way to ask. I keep the rules, and when "
+           "the dice matter I show you the odds before you commit. Your character can die, but never without "
            "a plain warning and a choice first.")
-FIRST_USE = ("[RULES] Say what you do in your own words. You can always ask \"what are my options?\" or \"what do\n"
-             "        I know?\" and I will answer plainly.\n"
-             "[RULES] When something is risky I will show you the odds and what failure would cost before you\n"
-             "        commit. You can change your mind then.\n"
+FIRST_USE = ("[RULES] Say what you do in your own words. You can always ask \"what are my options?\" or \"what do "
+             "I know?\" and I will answer plainly.\n"
+             "[RULES] When something is risky I will show you the odds and what failure would cost before you "
+             "commit. You can change your mind then.\n"
              "[RULES] No roll can kill your character unless I have warned you first, in these brackets.")
 
 
@@ -222,7 +222,7 @@ def block_spec(bid: str, d: Draft, state: WorldState, rules: Any, *, show_all: b
         return Block(id=bid, title="Before we begin", options=[Choice(id=i, label=t) for i, t in PATHS if
                                                                  i != "ready_made" or state.meta.get("world.pregens")],
                      lines=["(a) What would you like plenty of? Up to two: fights · exploring · talking your way "
-                            "through ·\n      mysteries · journeys · building something of your own. Anything you'd "
+                            "through · mysteries · journeys · building something of your own. Anything you'd "
                             "like less of?",
                             "(b) Is there anything you would rather never see in the story, or only off-stage?",
                             "(c) Quick start (five questions, a few minutes), the full workshop, or a ready-made "
@@ -239,7 +239,7 @@ def block_spec(bid: str, d: Draft, state: WorldState, rules: Any, *, show_all: b
             opts.append(Choice(id="more", label=f"{len(lives) - len(first):d} other lives"))
         return Block(id=bid, title="Who are you?", options=opts, default=SOLDIER, default_line="Soldier.",
                      lines=["Pick a life your character led before this story, or describe them in a sentence and I "
-                            "will\n  find the nearest.",
+                            "will find the nearest.",
                             "You are human unless you tell me otherwise (\"peoples\" shows the others)."],
                      classes=lives, cards=("PR-02-7", "02.2.4"))
     if bid == "c2.people":
@@ -290,13 +290,13 @@ def block_spec(bid: str, d: Draft, state: WorldState, rules: Any, *, show_all: b
         return Block(id=bid, title="What do you want?",
                      lines=["One sentence: the thing your character wants most, or believes most. Or take one of "
                             "these:"], options=[Choice(id=f"drive:{i:d}", label=f'"{s}"') for i, s in enumerate(seeds)],
-                     default="drive:0", default_line="(a).")
+                     default="drive:0", default_line="the first one.")
     if bid == "c8.anchor":
         seeds = [up["bond_seeds"][0], life["bond_seeds"][0]]
         return Block(id=bid, title="Who matters to you?",
                      lines=["Name one person your character would cross the country for, and what they are to you. "
                             "Or:"], options=[Choice(id=f"bond:{i:d}", label=_bond_text(s)) for i, s in enumerate(seeds)],
-                     default="bond:0", default_line="(a).")
+                     default="bond:0", default_line="the first one.")
     if bid == "c8.aspiration":
         asp = list(life.get("aspiration_seeds") or [])
         opts = [Choice(id=f"asp:{i:d}", label=a["text"]) for i, a in enumerate(asp)] + [Choice(id=OPEN,
@@ -730,6 +730,25 @@ def parse_name(text: str) -> tuple[str | None, str | None]:  # rule: 02.9.6
     return (name or None), pron
 
 
+_NOT_NAMES = frozenset({"skip", "yes", "no", "ok", "okay", "begin", "quick", "none", "nothing", "default", "next",
+                        "move on", "pass", "details", "suggest", "random", "anything", "whatever", "idk"})
+
+
+_NOT_NAME_WORDS = frozenset({"my", "your", "his", "her", "our", "their", "who", "which", "that", "is", "am", "are",
+                             "was", "i", "me", "and", "with"})
+
+
+def plausible_name(name: str) -> bool:  # rule: 02.9.6
+    """Words that could be a character's name: letters (with ' - and spaces), 2-40 long, at most five words,
+    not a bare number or a menu word."""
+    n = name.strip()
+    words = n.lower().split()
+    if words and (words[0] in ("the", "a", "an") or _NOT_NAME_WORDS & set(words)):
+        return False  # "my sister Ada", "the one who waits": a description, not a name
+    return (bool(re.fullmatch(r"[^\W\d_][^\W\d_'’ -]*(?:['’ -]+[^\W\d_]+)*\.?", n)) and 2 <= len(n) <= 40
+            and len(n.split()) <= 5 and n.lower().rstrip(".") not in _NOT_NAMES)
+
+
 def suggest_names(ctx: TurnContext, people: str, n: int = 3) -> list[str]:  # rule: 02.9.6
     """Three names from the seed's name table for the people (12.16.7), else the generic fallback table."""
     tables = [t for t in ctx.state.meta.get("world.names") or [] if t.get("people") == people] or \
@@ -760,6 +779,7 @@ class CreationFlow:
 
     def __init__(self, ctx: TurnContext):
         self.ctx = ctx
+        self.retry: list[OofBlock] = []  # a note shown when a block is asked again (a name that is not one)
 
     # ---------------------------------------------------------------- public
 
@@ -816,7 +836,7 @@ class CreationFlow:
         with flow_tx(self.ctx) as tx:
             notes = self._apply(tx, rec, bid, d, res, message)
             if notes is None:  # the block stays open (a name is required; names were offered)
-                return self._ask(tx, [], bid, fold(tx.state), reopen=rec)
+                return self._ask(tx, self.retry, bid, fold(tx.state), reopen=rec)
             return self.advance(tx, notes)
 
     def _apply(self, tx: Transaction, rec: PauseRecord, bid: str, d: Draft, res: InterpretResult,
@@ -938,6 +958,12 @@ class CreationFlow:
         else:
             name, pron = parse_name(words or "")
             src = "player_words"
+            if name and not plausible_name(name):  # "1", "skip", "?": ask again, never accept it as a name
+                self.retry = [OofBlock(kind="NOTE", text=f'"{name}" does not sound like a name. What is your '
+                                       'character called? (Say "suggest" for three names.)')]
+                name = None
+            elif name and name.islower():
+                name = name.title()
         if not name:
             close_pause(tx, rec, None, "withdrawn")
             return None
@@ -1010,9 +1036,9 @@ class CreationFlow:
             out.append(OofBlock(kind="RULES", text=FIRST_USE))
         choices = [Choice(id=BEGIN, label="begin"), Choice(id=CHANGE, label="change something (say what, or "
                                                                              "\"details\")")]
-        text = ("[CREATE] Ready?  (a) begin · (b) change something (say what, or \"details\")\n"
-                "         You may also adjust these choices once after you have tried them, any time before your\n"
-                "         character's first night's rest.\n"
+        text = ("[CREATE] Ready? Begin, or change something (say what, or \"details\").\n"
+                "         You may also adjust these choices once after you have tried them, any time before your "
+                "character's first night's rest.\n"
                 "         If you move on without choosing: begin.")
         return self._pause(tx, out, text, "Ready?", choices, BEGIN, {"block": "ready"})
 

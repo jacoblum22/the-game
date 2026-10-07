@@ -234,3 +234,12 @@ def test_replay_identical_and_divergent(tmp_path: Path) -> None:
     assert replay(tmp_path / "g.db", lines.append, FakeGame) == 0
     assert replay(tmp_path / "g.db", lines.append, FakeGame) == 1
     assert "identical" in lines[0] and "seq 41" in lines[1]
+
+
+def test_letter_picks_and_a_number_with_nothing_to_pick(tmp_path: Path) -> None:
+    FakeGame.script = [play_resp("Begun.", "turn.0"), offer("turn.1"), play_resp("You land.", "turn.2")]
+    _, out = run(["new", "g"], "a\nI climb\nb\n3\n/quit\n", tmp_path)
+    # "a" picks the seed step's first option; "b" picks the offer's second; "3" with no pause open is not sent
+    assert FakeGame.last.calls[:3] == [("answer", "mixed"), ("submit", "I climb"), ("answer", "change")]
+    assert "Nothing to pick by number here" in out and ("submit", "3") not in FakeGame.last.calls
+    assert out.count("1) Commit") == 1 and "  1) Commit\n  2) Change approach\n  3) Withdraw" in out

@@ -265,6 +265,12 @@ def _adjudicate(ctx: TurnContext, rec: AdjudicationRecord, reader: ReaderResult,
         elif part.cls == "SPEECH":
             part.handled = "answered"  # a free activity; whether an NPC answers is the NPC's (12.2.9)
     kind = rest_kind(message) if "DECLARATION" in classes and rec.pc else None
+    held = tx.state.open_pause()
+    if kind is not None and held is not None and held.detail.get("stage") in ("offer", "warning", "redirect",
+                                                                              "near_miss"):
+        res = close_by_default(_env(ctx), held)  # 12.2.6: the rest is a new declaration; the pause closes first
+        _take(rec, res, oof, None)
+        outcomes += res.outcomes
     if kind is not None and tx.state.open_pause() is None:
         _rest(ctx, rec, kind, oof)
         for p in rec.parts:

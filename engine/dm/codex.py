@@ -177,10 +177,23 @@ def conditions(state: WorldState, rules: Any = None) -> CodexView:  # rule: 00.6
     return CodexView(section="conditions", text="\n".join(lines), data={"conditions": conds})
 
 
+def _value_words(v: Any) -> str:
+    """A fact value in words: a record's own words (`form`, `text`, `name`), a list joined, else as is."""
+    if isinstance(v, dict):
+        for key in ("form", "text", "name", "value"):
+            if v.get(key):
+                return str(v[key]).rstrip(".")
+        return ", ".join(str(x) for x in v.values() if isinstance(x, str | int | float))
+    if isinstance(v, list | tuple):
+        return ", ".join(_value_words(x) for x in v)
+    return str(v)
+
+
 def journal(state: WorldState, rules: Any = None, limit: int = 30) -> CodexView:  # rule: 11.12.4
     # rule: 00.6.4
     """The chronicle (player-facing entries) and what the character has learned (recorded knowledge of shown or
     available facts)."""
+    from engine.dm.oof import short_text
     from engine.world.chronicle import PREFIX, chronicle
 
     cv = codex_view(state)
@@ -202,13 +215,16 @@ def journal(state: WorldState, rules: Any = None, limit: int = 30) -> CodexView:
         subj = cv["entities"].get(f["subject"], {}).get("name") if f["subject"] != "world" else "the world"
         if subj is None:  # about something the codex does not show
             continue
-        known.append({"fact_id": fid, "about": subj, "what": f["predicate"].replace("_", " "), "value": f["value"],
-                      "how": k.how})
+        ent = state.entities.get(f["subject"])
+        if ent is not None and ent.kind == "thread":
+            subj = short_text(ent.data.get("text") or subj)
+        what = "a lead" if f["predicate"].startswith("lead.") else f["predicate"].replace("_", " ").replace(".", " ")
+        known.append({"fact_id": fid, "about": subj, "what": what, "value": f["value"], "how": k.how})
     lines = ["[JOURNAL]"]
     lines += [f"  {e['time']}: {e['text']}" for e in entries[-limit:]]
     if known:
         lines.append("  Known:")
-        lines += [f"    {k['about']}: {k['what']} — {k['value']} ({k['how']})" for k in known[-limit:]]
+        lines += [f"    {k['about']}: {k['what']} — {_value_words(k['value'])} ({k['how']})" for k in known[-limit:]]
     if len(lines) == 1:
         lines.append("  nothing yet")
     return CodexView(section="journal", text="\n".join(lines), data={"chronicle": entries, "known": known})

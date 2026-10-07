@@ -215,6 +215,11 @@ def _start(env: PipelineEnv, plan: BeatPlan, queued: list[BeatPlan]) -> BeatOutc
     return _frame(env, plan, dec, queued)
 
 
+def decision_json(dec: GateDecision) -> str:
+    """The GateDecision the REDIRECT block is rendered from (engine.dm.oof.redirect_block), JSON."""
+    return dec.model_dump_json(exclude={"events", "precedent"})
+
+
 def _refused(beat: Beat, dec: GateDecision, gate: str) -> BeatOutcome:  # rule: 01.3.6
     red = dec.redirect
     options = [o.method for o in red.options] if red else []
@@ -222,7 +227,7 @@ def _refused(beat: Beat, dec: GateDecision, gate: str) -> BeatOutcome:  # rule: 
     if red and red.acquisition_paths:
         words += ". To gain it: " + "; ".join(str(p.get("detail") or p.get("type")) for p in red.acquisition_paths)
     return BeatOutcome(status="refused", entry=_entry(beat, gate=gate, gate_words=words),
-                       oof=[{"kind": "REDIRECT", "text": words}])
+                       oof=[{"kind": "REDIRECT", "text": words, "decision": decision_json(dec)}])
 
 
 def _redirect(env: PipelineEnv, plan: BeatPlan, dec: GateDecision, queued: list[BeatPlan]) -> BeatOutcome:
@@ -235,13 +240,14 @@ def _redirect(env: PipelineEnv, plan: BeatPlan, dec: GateDecision, queued: list[
     assert red is not None
     words = (f"Without {red.missing} this is beyond you as tried. Possible now: {fallback.method}"
              + (f" (harder, at most {fallback.reach_cap} reach)" if fallback.reach_cap else ""))
-    choices = [{"id": f"accept:{fallback.license}", "label": f"accept: {fallback.method}"},
-               {"id": "other", "label": "try another way"}]
+    choices = [{"id": f"accept:{fallback.license}", "label": f"Try it anyway: {fallback.method}"},
+               {"id": "other", "label": "Do something else"}]
     detail = {"stage": "redirect", "plan": plan.model_dump(mode="json"), "queued": _dump(queued),
-              "fallback": fallback.model_dump(mode="json"), "missing": red.missing}
+              "fallback": fallback.model_dump(mode="json"), "missing": red.missing,
+              "decision": dec.model_dump(mode="json", exclude={"events", "precedent"})}
     _open(env, "redirect", words, choices, "other", detail)
     return BeatOutcome(status="paused", entry=_entry(plan.beat, gate="G3", gate_words=words),
-                       oof=[{"kind": "REDIRECT", "text": words}])
+                       oof=[{"kind": "REDIRECT", "text": words, "decision": decision_json(dec)}])
 
 
 def _no_roll(env: PipelineEnv, plan: BeatPlan, dec: GateDecision) -> BeatOutcome:  # rule: 01.4.1
@@ -313,7 +319,7 @@ def _warn(env: PipelineEnv, plan: BeatPlan, proposed: ProposedFrame, cands: list
           queued: list[BeatPlan], warning: LethalWarning) -> BeatOutcome:  # rule: 07.3.4
     """The lethal warning comes before a lethal frame, with a choice (07.3.4; PR-07-4; SC-006)."""
     env.add(*warning.events)
-    choices = [{"id": "continue", "label": "go on (you will see the offer)"}, {"id": "withdraw", "label": "back off"}]
+    choices = [{"id": "continue", "label": "Go on (you will see the offer)"}, {"id": "withdraw", "label": "Back off"}]
     detail = {"stage": "warning", "plan": plan.model_dump(mode="json"), "queued": _dump(queued),
               "proposed": proposed.model_dump(mode="json"), "candidates": cands, "source": warning.source}
     _open(env, "offer", warning.block, choices, "withdraw", detail)
@@ -334,9 +340,9 @@ def _offer(env: PipelineEnv, plan: BeatPlan, proposed: ProposedFrame, frame: Fra
         out = _roll(env, plan, frame, queued)
         out.oof.insert(0, {"kind": "OFFER", "text": offer_text(view) + " (auto-committed)"})
         return out
-    choices = [{"id": "commit", "label": "commit"}, {"id": "change", "label": "change the approach"},
-               {"id": "withdraw", "label": "withdraw (nothing is spent)"}]
-    choices += [{"id": TRADE_IDS[t], "label": t.replace("_", " ")} for t in legal_trades(frame)]
+    choices = [{"id": "commit", "label": "Commit"}, {"id": "change", "label": "Change approach"},
+               {"id": "withdraw", "label": "Withdraw (nothing is spent)"}]
+    choices += [{"id": TRADE_IDS[t], "label": t.replace("_", " ").capitalize()} for t in legal_trades(frame)]
     detail = {"stage": "offer", "plan": plan.model_dump(mode="json"), "queued": _dump(queued),
               "proposed": proposed.model_dump(mode="json"), "frame": frame.record(), "candidates": cands,
               "offer": view.model_dump(mode="json"), "warned": warned}
@@ -424,11 +430,9 @@ def _answer_redirect(env: PipelineEnv, plan: BeatPlan, d: dict[str, Any], choice
 def _roll(env: PipelineEnv, plan: BeatPlan, frame: Frame, queued: list[BeatPlan]) -> BeatOutcome:  # rule: PR-01-3
     roll = roll_check(frame, env.rng)
     if roll.near_miss:  # rule: 01.9.3
-        tc, ac = frame.threatened_cost, frame.alternate_cost
-        choices = [{"id": "failure", "label": "take the failure"},
-                   {"id": f"success_at_cost:{tc.menu_id}", "label": f"succeed at a cost: {tc.menu_id}"}]
-        if ac is not None:
-            choices.append({"id": f"success_at_cost:{ac.menu_id}", "label": f"succeed at a cost: {ac.menu_id}"})
+        from engine.dm.oof import near_miss_choices  # the labels in words (12.15.4)
+
+        choices = near_miss_choices(frame, env.rules)
         prompt = f"So close: {frame.beat.restatement or frame.beat.intent}. Take the failure, or succeed at a cost?"
         detail = {"stage": "near_miss", "plan": plan.model_dump(mode="json"), "queued": _dump(queued),
                   "frame": frame.record(), "roll": roll.model_dump(mode="json")}
@@ -500,8 +504,7 @@ def _consequence(env: PipelineEnv, frame: Frame, read: ReadResult,
         decl = frame.threatened_cost if m == frame.threatened_cost.menu_id else frame.alternate_cost
         return [CostEntry(menu_id=m, severity=app.severity, form=form or (decl.form_intent if decl else ""))], \
             app.reach_delta, notes
-    return [CostEntry(menu_id=order[0] if order else "none", severity=read.cost_severity,
-                      form="could not land: " + "; ".join(notes))], 0, notes
+    return [], 0, notes  # no candidate could land (01.13.1): nothing is paid, and none is narrated as paid
 
 
 def _cost_params(env: PipelineEnv, frame: Frame, menu: str) -> dict[str, Any]:

@@ -36,6 +36,7 @@ from engine import ids
 from engine.data.loader import Rules, load_rules
 from engine.dm import oof
 from engine.dm.context import TurnContext
+from engine.dm.player_text import clean, clean_response, entity_names
 from engine.dm.response import Flags, Response
 from engine.dm.seed_flow import PHASE_KEY, SeedFlow, flow_of, present_pause
 from engine.llm.base import ModelError, Role, RoleModel, StructuredModel
@@ -182,7 +183,10 @@ class Game:
         """`sheet` (default), `abilities`, `conditions`, `journal`, `threads`, `rules <id>` (00.6.4)."""
         from engine.dm.codex import codex
 
-        return codex(self.store.state, section, self.rules)
+        view = codex(self.store.state, section, self.rules)
+        if view.section.startswith("rules"):
+            return view  # the player asked for the rule card itself
+        return view.model_copy(update={"text": clean(view.text, self.rules, entity_names(self.store.state))})
 
     def turn_record(self, turn_id: str) -> TurnRecord | None:
         return self.store.turn(turn_id)
@@ -330,6 +334,8 @@ class Game:
             raise
         if n is not None:
             self.store.conn.execute("UPDATE game_inputs SET outcome='ok' WHERE n=?", (n,))
+        if isinstance(out, Response):  # every engine-written player string, without rule refs or ids
+            out = clean_response(out, self.rules, self.store.state)
         return out
 
     def _record(self, rec: Any) -> None:

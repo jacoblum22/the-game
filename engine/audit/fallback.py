@@ -50,7 +50,7 @@ def _beat_line(b: BeatEntry) -> str:
         result = "it works, at a cost" if b.success_at_cost else "it falls just short"
     else:
         result = DEGREE_WORDS.get(b.degree, "it is settled")
-    return _sentence(f"{restated}: {result}" if restated else result)
+    return " ".join(x for x in (_sentence(restated), _sentence(result)) if x)
 
 
 class FallbackResult(BaseModel):

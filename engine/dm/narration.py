@@ -329,30 +329,57 @@ def pause_blocks(ctx: TurnContext, pause: PauseRecord, items: Sequence[dict[str,
         if stage == "near_miss":
             return [oof.near_miss_block(Frame.model_validate(d["frame"]), RollResult.model_validate(d["roll"]),
                                         rules=rules)]
+        if stage == "redirect" and d.get("decision"):
+            return [_redirect(ctx, d["decision"])]
     except Exception:  # noqa: BLE001 - a stored frame this build cannot read: the stored prompt still shows
         pass
-    choices = " · ".join(c.get("label", c.get("id", "")) for c in pause.choices)
+    # the pause's choices are not repeated here: the front end lists them, numbered, after the block
     if stage == "offer":
         return [_labelled("OFFER", f"[OFFER] {pause.prompt}")]
     if stage == "warning":
         warn = last.get("WARNING") or pause.prompt
-        return [_labelled("WARNING", warn), oof.note_block(f"Continue, or withdraw (nothing is spent)? {choices}",
-                                                           "CHOICE")]
+        return [_labelled("WARNING", warn), oof.note_block("Go on, or back off (nothing is spent)?", "CHOICE")]
     if stage == "near_miss":
-        return [_labelled("NEAR_MISS", f"[NEAR MISS] {pause.prompt} {choices}")]
+        return [_labelled("NEAR_MISS", f"[NEAR MISS] {pause.prompt}")]
     if stage == "redirect":
-        return [_labelled("REDIRECT", f"[REDIRECT] {pause.prompt}\n  {choices}")]
+        return [_labelled("REDIRECT", f"[REDIRECT] {pause.prompt}")]
     if stage == "dispute":
-        return [OofBlock(kind="CLARIFY", text=f"[CLARIFY] {pause.prompt}\n  {choices}")]
+        return [OofBlock(kind="CLARIFY", text=f"[CLARIFY] {pause.prompt}")]
     if pause.kind == "clarify":
         return [oof.clarify_block(pause.prompt)]
     if pause.kind == "last_chance":
-        return [_labelled("LAST_CHANCE", last.get("LAST_CHANCE") or f"[CHOICE] {pause.prompt}\n  {choices}")]
-    return [oof.note_block(f"{pause.prompt} {choices}".strip(), "CHOICE")]
+        return [_labelled("LAST_CHANCE", last.get("LAST_CHANCE") or f"[CHOICE] {pause.prompt}")]
+    return [oof.note_block(pause.prompt.strip() or "Choose one.", "CHOICE")]
+
+
+def _redirect(ctx: TurnContext, decision: Any) -> OofBlock:  # rule: 12.15.5
+    """The REDIRECT block from the stored GateDecision (a dict, or its JSON)."""
+    from engine.resolve.gate import GateDecision
+
+    dec = (GateDecision.model_validate_json(decision) if isinstance(decision, str)
+           else GateDecision.model_validate(decision))
+    return oof.redirect_block(dec, state=ctx.state, rules=ctx.rules)
+
+
+def shown_pause(pause: PauseRecord, owned: Sequence[OofBlock]) -> Pause:  # rule: 12.15
+    """The API Pause for an open pause whose own block is shown: the block carries the prompt (the OFFER, the
+    near miss, the redirect, ...), so the pipeline's one-line summary is not delivered a second time."""
+    p = Pause.of(pause)
+    return p.model_copy(update={"prompt": ""}) if owned else p
 
 
 _PAUSE_ITEM = {"offer": ("OFFER", "WARNING"), "near_miss": ("NEAR_MISS",), "redirect": ("REDIRECT",),
                "last_chance": ("LAST_CHANCE",), "clarify": ("CLARIFY",)}
+
+
+def _item_block(ctx: TurnContext, item: dict[str, str]) -> OofBlock:
+    """One owed block; a REDIRECT that carries its GateDecision is rendered in words from it."""
+    if item["kind"] == "REDIRECT" and item.get("decision"):
+        try:
+            return _redirect(ctx, item["decision"])
+        except Exception:  # noqa: BLE001 - an unreadable decision: the pipeline's words still show
+            pass
+    return _labelled(item["kind"], item["text"])
 
 
 def turn_blocks(ctx: TurnContext, oof_items: Sequence[dict[str, str]], record: AdjudicationRecord,
@@ -367,7 +394,7 @@ def turn_blocks(ctx: TurnContext, oof_items: Sequence[dict[str, str]], record: A
             idx = max((i for i, it in enumerate(items) if it["kind"] == kind), default=None)
             if idx is not None:
                 items.pop(idx)
-    blocks = [_labelled(i["kind"], i["text"]) for i in items]
+    blocks = [_item_block(ctx, i) for i in items]
     texts = {b.text for b in blocks} | {b.text for b in owned}
     for n in record.notes:
         if n.lstrip().startswith("[WARNING") and n.strip() not in texts:
@@ -440,7 +467,7 @@ def record_turn_end(ctx: TurnContext, record: AdjudicationRecord, writes: Sequen
 
 
 def skip_drafting(record: AdjudicationRecord, pause: PauseRecord | None) -> bool:  # rule: 12.2.6
-    """An OFFER pause with nothing resolved before it: deliver the restatement and the OFFER block only."""
+    """An OFFER pause with nothing resolved before it: deliver the OFFER block only (it restates the beat)."""
     if pause is None or (pause.detail or {}).get("stage") != "offer":
         return False
     return (len(record.beats) <= 1 and not record.oracle and not record.npc_actions and not record.omens
@@ -458,13 +485,6 @@ def pure_oof(record: AdjudicationRecord) -> bool:  # rule: 12.15
             and not record.scene.ended)
 
 
-def _restatement(record: AdjudicationRecord) -> str:
-    b = record.beats[-1] if record.beats else None
-    text = (b.restatement if b else "") or (record.parts[0].text if record.parts else "")
-    text = text.strip()
-    return text if not text or text[-1] in ".!?" else text + "."
-
-
 def narrate_turn(ctx: TurnContext, adj: Any, message: str) -> TurnOutcome:  # rule: PR-12-1
     """T7–T12 for an `AdjudicationResult` (engine/dm/turn.py): the delivered Response and the full TurnRecord."""
     from engine.dm.turn import recent_exchanges
@@ -480,8 +500,8 @@ def narrate_turn(ctx: TurnContext, adj: Any, message: str) -> TurnOutcome:  # ru
         try:
             if pure_oof(rec):
                 narr = NarrationResult(fiction="", skipped=True)
-            elif skip_drafting(rec, pause):
-                narr = NarrationResult(fiction=_restatement(rec), skipped=True)
+            elif skip_drafting(rec, pause):  # the OFFER block restates the beat (01.7.1): not said twice
+                narr = NarrationResult(fiction="", skipped=True)
             else:
                 narr = narrate_checked(ctx, rec, player_message=message, exchanges=exchanges,
                                        pause_blocks=owned if pause is not None else ())
@@ -492,7 +512,7 @@ def narrate_turn(ctx: TurnContext, adj: Any, message: str) -> TurnOutcome:  # ru
     rec.add_writes(events)
     st = store.state
     resp = Response(turn_id=adj.turn_id, phase="ending" if ending_state(st) else "play", fiction=narr.fiction,
-                    oof_blocks=oof.ordered(blocks), pause=Pause.of(pause) if pause is not None else None,
+                    oof_blocks=oof.ordered(blocks), pause=shown_pause(pause, owned) if pause is not None else None,
                     scene_ended=bool(rec.scene.ended) and st.scene is None,
                     flags=Flags(fallback_used=narr.fallback_used, review_flag=narr.review_flag))
     extra = owed(ctx, rec, resp.text())
@@ -512,4 +532,4 @@ def narrate_turn(ctx: TurnContext, adj: Any, message: str) -> TurnOutcome:  # ru
 
 
 __all__ = ["FRAME_NEXT", "NarrationResult", "TurnOutcome", "moves_on", "narrate_checked", "narrate_turn", "owed",
-           "pause_blocks", "pure_oof", "record_turn_end", "skip_drafting", "stays", "turn_blocks"]
+           "pause_blocks", "pure_oof", "record_turn_end", "shown_pause", "skip_drafting", "stays", "turn_blocks"]

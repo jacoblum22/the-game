@@ -50,7 +50,7 @@ HELP = """Commands (out of fiction; never sent to a model):
   /autocommit on|off   auto-commit safe offers (a lethal frame never is)
   /fix <what>          dispute something: the DM checks the record and corrects a seen error
   /quit                save and exit (nothing is ever lost)
-At a pause, a number picks that choice; any other text is what your character does or says."""
+At a pause, a number (or letter) picks that choice; any other text is what your character does or says."""
 
 
 class Quit(Exception):
@@ -286,6 +286,11 @@ class Session:
             self.command(text)
             return
         choices = self.pause.choices if self.pause is not None else []
+        if choices and len(text) == 1 and "a" <= text.lower() <= "z" and ord(text.lower()) - 96 <= len(choices):
+            text = str(ord(text.lower()) - 96)  # a letter picks too: a is 1)
+        if not choices and text.isdigit():
+            self.app.say("Nothing to pick by number here: answer in words (or /help).")
+            return
         if choices and text.isdigit():
             n = int(text)
             if not 1 <= n <= len(choices):

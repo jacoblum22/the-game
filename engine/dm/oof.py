@@ -9,6 +9,7 @@ Each builder returns an `engine.dm.response.OofBlock(kind, text)` (the engine-ap
 
 from __future__ import annotations
 
+import re
 from collections.abc import Iterable, Sequence
 from typing import Any, Literal
 
@@ -66,6 +67,15 @@ def name_of(rules: Any, data_id: str | None) -> str:
     return tail.replace("_", " ").capitalize()
 
 
+def _menu_form(rules: Any, menu_id: str | None, severity: str | None) -> str:
+    """The cost menu's own example words for a severity (resolution.yaml cost_menu `forms.<S>.text`)."""
+    try:
+        forms = rules.get(menu_id).get("forms") or {} if rules is not None and menu_id and rules.has(menu_id) else {}
+        return str((forms.get(severity or "S1") or {}).get("text") or "")
+    except (KeyError, AttributeError, TypeError):
+        return ""
+
+
 def _difficulty_phrase(words: str) -> str:
     w = (words or "").strip()
     phrases = {"stored": "a difficulty already set", "their defense": "against their defense",
@@ -114,7 +124,7 @@ def _cost_words(rules: Any, cost: dict[str, Any] | None, *, with_severity: bool)
     if not cost or not cost.get("menu_id"):
         return ""
     menu = name_of(rules, cost.get("menu_id")).lower()
-    form = (cost.get("form") or "").strip()
+    form = (cost.get("form") or "").strip() or _menu_form(rules, cost.get("menu_id"), cost.get("severity_on_failure"))
     sev = ""
     if with_severity and cost.get("severity_on_failure"):
         sev = f", {cost['severity_on_failure']}"
@@ -141,7 +151,7 @@ def offer_block(src: Frame | OfferPreview, *, rules: Any = None, fate: int | Non
     if lic and ap.get("verb"):
         how += f", {name_of(rules, lic)}"
     diff = _difficulty_phrase(v.difficulty_words)
-    first = f"{v.restated_beat} — {how}" + (f", {diff}" if diff else "") + "."
+    first = f"{v.restated_beat.rstrip(' .')} — {how}" + (f", {diff}" if diff else "") + "."
     rest: list[str] = []
     mp = v.mode_price
     if mp and mp.get("mode") and mp.get("mode") != "normal":
@@ -170,6 +180,13 @@ def offer_block(src: Frame | OfferPreview, *, rules: Any = None, fate: int | Non
     threat = _cost_words(rules, v.threatened_cost, with_severity=True)
     if threat and v.threatened_cost.get("severity_on_failure"):
         stakes += f" If it goes wrong: {threat}."
+    elif threat and v.threatened_cost.get("severity_on_critical_failure"):
+        crit = dict(v.threatened_cost, severity_on_failure=v.threatened_cost["severity_on_critical_failure"],
+                    severity_on_critical_failure=None)
+        stakes += (" If it goes wrong: it just doesn't work, at no other cost; on a critical failure, "
+                   f"{_cost_words(rules, crit, with_severity=True)}.")
+    elif v.threatened_cost.get("menu_id"):
+        stakes += " If it goes wrong: it just doesn't work, at no other cost."
     alt = _cost_words(rules, v.alternate_cost, with_severity=False)
     if alt:
         stakes += f" Or instead: {alt}."
@@ -182,10 +199,7 @@ def offer_block(src: Frame | OfferPreview, *, rules: Any = None, fate: int | Non
     if fate is not None:
         rest.append(f"Fate: {fate}.")
     label = "OFFER — auto" if auto else "OFFER"
-    text = _block(label, first, rest)
-    if not auto:
-        text += "\n  " + "   ".join(f"{i}) {c['label']}" for i, c in enumerate(offer_choices(v), 1))
-    return OofBlock(kind="OFFER", text=text)
+    return OofBlock(kind="OFFER", text=_block(label, first, rest))  # the pause's choices follow it, numbered
 
 
 # ------------------------------------------------------------------------------------------- harm blocks
@@ -217,53 +231,82 @@ def last_chance_block(menu: Menu) -> OofBlock:  # rule: 07.5.2
 # ------------------------------------------------------------------------------------------- REDIRECT
 
 
-def _fact_line(state: WorldState | None, fact_id: str | None) -> str:
-    if not fact_id:
-        return "an established fact"
-    f = state.facts.get(fact_id) if state is not None else None
+def _fact_line(state: WorldState | None, fact_id: str | None, rules: Any = None) -> str:
+    """An established fact in words (`the Guard's siblings: two brothers`), or a plain phrase when unseen."""
+    f = state.facts.get(fact_id) if state is not None and fact_id else None
     if f is None or f.visibility not in PLAYER_FACING:
-        return f"an established fact ({fact_id})"
-    return f"{f.subject}.{f.predicate} = {f.value} (established)"
+        return "something already settled stands against it"
+    who = _ent_name(state, f.subject) if state is not None else ""
+    pred = f.predicate.replace("_", " ").replace(".", " ")
+    return f"{who + chr(39) + 's ' if who else ''}{pred} is {f.value}, as already settled"
+
+
+def _why(dec: GateDecision, state: WorldState | None, rules: Any) -> str:
+    """One plain line: what stands in the way."""
+    red = dec.redirect
+    if red is None:
+        return "that is not possible as tried"
+    if red.missing_kind == "license":
+        return f"that needs {name_of(rules, red.missing)}, which you have not learned"
+    if red.missing_kind == "deed_branch":
+        if "." in red.missing:
+            return f"that needs training in {name_of(rules, red.missing).lower()}, which you do not have"
+        return "nothing you know how to do covers it as tried"
+    if red.missing_kind == "condition":
+        return f"{name_of(rules, red.missing).lower()} prevents it right now"
+    if red.missing_kind == "canon":
+        return "no one in this world can do that"
+    if red.missing_kind == "zero_reach":
+        return "too much stands against that way of doing it to get anywhere"
+    return _fact_line(state, dec.fact_cited or red.missing, rules)
+
+
+_GENERIC = ("another way to ", "look for what could serve")
+_LEARN = {"mentor": "train with someone who knows it", "project": "study it from a book that teaches it",
+          "recognition": "earn it through a calling", "item": "find or make a thing that grants it",
+          "institution": "join an order or guild that grants it", "bargain": "ask someone with the authority to grant it",
+          "origin": "it can only come from where you were born and raised"}
+
+
+def redirect_options(dec: GateDecision, rules: Any = None, *, limit: int = 3) -> list[str]:  # rule: 01.3.6
+    """1-3 concrete things the player could do instead, in words they can type."""
+    red = dec.redirect
+    out: list[str] = []
+    for o in red.options if red else []:
+        if o.method.startswith(_GENERIC):
+            continue
+        bits = []
+        if o.kind == "fallback":
+            if o.dc_shift:
+                bits.append(f"harder: difficulty +{o.dc_shift}")
+            if o.reach_cap:
+                bits.append(f"at most {o.reach_cap} effect")
+            if o.consequence:
+                bits.append(str(o.consequence))
+        out.append(o.method[:1].upper() + o.method[1:] + (f" ({'; '.join(bits)})" if bits else ""))
+    if len(out) < 2:
+        out += ["Look around for something here that would help", "Ask someone nearby who could do it"]
+    return list(dict.fromkeys(out))[:limit]
 
 
 def redirect_block(dec: GateDecision, *, state: WorldState | None = None,
                    rules: Any = None) -> OofBlock:  # rule: 12.15.5
     # rule: PR-01-5
     # rule: 01.3.6
-    """`[REDIRECT]` for a G3 or G4 decision: what was checked, what is possible now, how to learn it."""
+    """`[REDIRECT]` for a G3 or G4 decision in plain words: what cannot be done and why in one line, then 1-3
+    things to do instead, then how it could be learned (a missing licence)."""
     red = dec.redirect
-    if red is None:
-        return OofBlock(kind="REDIRECT", text=_block("REDIRECT", f"{dec.gate} — {dec.reason or 'not possible as tried'}."))
-    if red.missing_kind in ("license", "deed_branch"):
-        first = f"{dec.gate} — checked {red.missing} (not held)."
-    elif red.missing_kind == "condition":
-        first = f"{dec.gate} — {red.missing} prevents it."
-    else:
-        first = f"{dec.gate} — " + _fact_line(state, dec.fact_cited or red.missing) + "."
-    opts = []
-    for o in red.options:
-        bits = []
-        if o.verb:
-            bits.append(o.verb)
-        if o.kind == "fallback":
-            if o.dc_shift:
-                bits.append(f"DC +{o.dc_shift}")
-            if o.reach_cap:
-                bits.append(f"reach capped at {o.reach_cap}")
-            if o.consequence:
-                bits.append(o.consequence)
-        if o.verb:
-            bits.append("ask for odds")
-        opts.append(o.method + (f" ({'; '.join(bits)})" if bits else ""))
-    rest = [f"Possible now: {' · '.join(opts)}" if opts else ""]
-    paths = []
-    for p in red.acquisition_paths:
-        detail = str(p.get("detail") or p.get("text") or "").strip()
-        kind = str(p.get("type") or "").strip()
-        paths.append(f"{detail} ({kind})" if detail and kind else detail or kind)
-    if paths:
-        rest.append(f"Learn it: {' · '.join(x for x in paths if x)}")
-    return OofBlock(kind="REDIRECT", text=_block("REDIRECT", first, rest))
+    rest = ["You could instead:", *(f"- {o}" for o in redirect_options(dec, rules))]
+    if red is not None and red.missing_kind == "license":
+        paths = []
+        for p in red.acquisition_paths:
+            kind = str(p.get("type") or "")
+            detail = _LEARN.get(kind) or str(p.get("detail") or p.get("text") or kind).strip()
+            if detail and detail not in paths:
+                paths.append(detail)
+        if paths:
+            rest.append(f"To learn it: {'; '.join(paths[:3])}.")
+    return OofBlock(kind="REDIRECT", text=_block("REDIRECT", f"Not as tried: {_why(dec, state, rules)}.", rest))
 
 
 # ------------------------------------------------------------------------------------------- CLARIFY, NEAR MISS
@@ -278,32 +321,30 @@ def clarify_block(question: str, *, assuming: bool = False) -> OofBlock:  # rule
     return OofBlock(kind="CLARIFY", text=f"[CLARIFY] One question: {q}")
 
 
-def near_miss_choices(frame: Frame) -> list[dict[str, str]]:  # rule: 01.9.3
-    """Pause choices: success at a cost (threatened, then alternate), or take the failure."""
-    out = [{"id": f"success_at_cost:{frame.threatened_cost.menu_id}",
-            "label": f"succeed and pay {frame.threatened_cost.menu_id}"}]
-    if frame.alternate_cost is not None:
-        out.append({"id": f"success_at_cost:{frame.alternate_cost.menu_id}",
-                    "label": f"succeed and pay {frame.alternate_cost.menu_id}"})
-    out.append({"id": "failure", "label": "let it fail"})
+def _price(rules: Any, cost: Any, severity: str | None) -> str:
+    form = (getattr(cost, "form_intent", None) or "").strip() or _menu_form(rules, cost.menu_id, severity)
+    menu = name_of(rules, cost.menu_id).lower()
+    sev = f", {severity}" if severity else ""
+    return f"{form} ({menu}{sev})" if form else f"{menu}{sev}"
+
+
+def near_miss_choices(frame: Frame, rules: Any = None) -> list[dict[str, str]]:  # rule: 01.9.3
+    """Pause choices: success at a cost (threatened, then alternate), or take the failure, in words."""
+    sac = cost_severity(frame.stakes, "failure", success_at_cost=True, rules=rules)
+    fail = cost_severity(frame.stakes, "failure", rules=rules)
+    costs = [frame.threatened_cost] + ([frame.alternate_cost] if frame.alternate_cost else [])
+    out = [{"id": f"success_at_cost:{c.menu_id}", "label": f"Succeed, and pay: {_price(rules, c, sac)}"}
+           for c in costs]
+    lose = f": {_price(rules, frame.threatened_cost, fail)}" if fail else " (nothing more is lost)"
+    out.append({"id": "failure", "label": f"Let it fail{lose}"})
     return out
 
 
 def near_miss_block(frame: Frame, roll: RollResult, *, rules: Any = None) -> OofBlock:  # rule: 12.15.4
     # rule: 01.9.3
-    """`[NEAR MISS] <total> vs <DC>. Succeed and pay one — (a) … · (b) … — or (c) let it fail (…)`."""
-    sac = cost_severity(frame.stakes, "failure", success_at_cost=True, rules=rules)
-    fail = cost_severity(frame.stakes, "failure", rules=rules)
-    costs = [frame.threatened_cost] + ([frame.alternate_cost] if frame.alternate_cost else [])
-    letters = "abcdefg"
-    paid = []
-    for i, c in enumerate(costs):
-        form = f": {c.form_intent}" if c.form_intent else ""
-        paid.append(f"({letters[i]}) {name_of(rules, c.menu_id)} ({sac}){form}")
-    fail_words = (f"{name_of(rules, frame.threatened_cost.menu_id)} {fail} applies" if fail else "nothing applies")
+    """`[NEAR MISS] <total> vs <DC>. So close: succeed and pay a price, or let it fail.` (the choices follow)."""
     vs = "hidden" if frame.secret else f"{roll.total} vs {frame.dc}"
-    first = f"{vs}. Succeed and pay one — {' · '.join(paid)}"
-    return OofBlock(kind="NEAR_MISS", text=_block("NEAR MISS", first, [f"— or ({letters[len(costs)]}) let it fail ({fail_words})."]))
+    return OofBlock(kind="NEAR_MISS", text=f"[NEAR MISS] {vs}. So close: succeed and pay a price, or let it fail.")
 
 
 # ------------------------------------------------------------------------------------------- RECAP, NOTE, passthroughs
@@ -316,12 +357,28 @@ def _ent_name(state: WorldState, eid: str | None) -> str:
     return e.name
 
 
+def when_words(ts: Any) -> str:
+    """'the morning of day 3': game time in words (no internal counters)."""
+    from engine.time.clock import day_index
+
+    watches = ("morning", "afternoon", "evening", "night")
+    watch = watches[ts.watch] if 0 <= ts.watch < len(watches) else ""
+    return f"the {watch} of day {day_index(ts) + 1}" if watch else f"day {day_index(ts) + 1}"
+
+
+def short_text(text: str, limit: int = 80) -> str:
+    """The first sentence of `text`, cut at a word boundary with an ellipsis when longer than `limit`."""
+    t = re.split(r"(?<=[.!?])\s", str(text).strip(), maxsplit=1)[0].rstrip(".")
+    if len(t) <= limit:
+        return t
+    return t[:limit].rsplit(" ", 1)[0].rstrip(",;:") + "…"
+
+
 def recap_block(state: WorldState, *, since_seq: int = 0, pc: str | None = None,
                 max_lines: int = 6) -> OofBlock:  # rule: 12.5.3
     # rule: 12.15.11
     """A recap from state only (never from narration): where and when, pressing clocks as shown, active threads,
     the chronicle since `since_seq`, and the last scene's agenda."""
-    from engine.time.clock import fmt
     from engine.world.chronicle import chronicle
     from engine.world.common import active_pc
     from engine.world.places import location
@@ -329,7 +386,7 @@ def recap_block(state: WorldState, *, since_seq: int = 0, pc: str | None = None,
 
     pc = pc or active_pc(state)
     where = _ent_name(state, location(state, pc)) if pc else ""
-    first = "Where: " + ", ".join(x for x in (where, fmt(state.time.now)) if x)
+    first = "Where: " + ", ".join(x for x in (where, when_words(state.time.now)) if x)
     clocks = []
     for c in state.clocks.values():
         if c.status != "active" or c.visibility == "hidden":
@@ -338,10 +395,10 @@ def recap_block(state: WorldState, *, since_seq: int = 0, pc: str | None = None,
     rest = []
     if clocks:
         rest.append("Pressing: " + " · ".join(clocks[:4]))
-    threads = [t["name"] for t in thread_list(state)
+    threads = [short_text(t["text"] or t["name"]) for t in thread_list(state)
                if t["status"] == "active" and _ent_name(state, t["id"])]
     if threads:
-        rest.append("Threads: " + " · ".join(threads[:5]))
+        rest += ["Open threads:", *(f"- {t}" for t in threads[:4])]
     facts = state.facts
     lines = [e.text for e in chronicle(state, since_seq=since_seq)
              if (fid := state.current_fact_id("world", f"chronicle.{e.id}")) and facts[fid].visibility in PLAYER_FACING

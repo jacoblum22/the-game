@@ -19,7 +19,11 @@ def begin_play(ctx: TurnContext, before: Response | None = None) -> Response:  #
     """The opening for the active character, after whatever creation said last (its blocks come first)."""
     resp = opening(ctx)
     if before is not None and before.oof_blocks:
-        resp.oof_blocks = oof.ordered([*before.oof_blocks, *resp.oof_blocks])
+        # "<Name> is ready. The story begins." is said before the story does, not after its first lines
+        lead = [b.text for b in before.oof_blocks if b.kind == "NOTE" and not b.text.startswith("[")]
+        rest = [b for b in before.oof_blocks if b.kind != "NOTE" or b.text.startswith("[")]
+        resp.fiction = "\n\n".join([*lead, resp.fiction] if resp.fiction else lead)
+        resp.oof_blocks = oof.ordered([*rest, *resp.oof_blocks])
     return resp
 
 

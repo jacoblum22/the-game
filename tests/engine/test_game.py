@@ -97,7 +97,7 @@ def test_new_game_to_play_thirty_turns_quit_mid_offer_and_resume(tmp_path: Path)
     pc = st.meta["pc.active"]
     assert r.phase == "play" and r.fiction and r.turn_id is not None
     assert st.scene is not None and st.meta["opening.pc"] == pc and st.meta["game.phase"] == "play"
-    assert any(b.text.endswith("The story begins.") for b in r.oof_blocks)
+    assert "The story begins." in r.fiction.split("\n\n")[0]  # said before the opening's first lines
 
     played, offers, moved, rested = 0, 0, False, False
     generic = ["I look around the square.", "I ask the nearest person what happened here.", "Is there a well here?",

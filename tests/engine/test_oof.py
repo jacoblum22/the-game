@@ -61,7 +61,7 @@ def test_offer_block_matches_the_cli_layout(s: Scene) -> None:
     assert lines[2].strip().startswith("Stakes: risky. If it goes wrong: you tire (drain, S2")
     assert "Or instead: you slip (footing)." in lines[2]
     assert "Reach: standard." in blk.text and "Fate: 1." in blk.text
-    assert lines[-1] == "  1) Commit   2) Change approach   3) Withdraw   4) Go big   5) Play it safe"
+    assert "1) Commit" not in blk.text  # the front end lists the pause's choices once, after the block
     assert [c["id"] for c in offer_choices(f)] == ["commit", "change", "withdraw", "go_big", "play_safe"]
 
 
@@ -94,11 +94,12 @@ def test_near_miss_block(s: Scene) -> None:
                       near_miss=True)
     blk = near_miss_block(f, roll, rules=s.rules)
     assert blk.kind == "NEAR_MISS"
-    assert blk.text.startswith("[NEAR MISS] 13 vs 15. Succeed and pay one — (a) Drain (S2): you tire · "
-                               "(b) Footing (S2): you slip")
-    assert blk.text.splitlines()[1].strip() == "— or (c) let it fail (Drain S2 applies)."
-    assert [c["id"] for c in near_miss_choices(f)] == ["success_at_cost:cost.drain", "success_at_cost:cost.footing",
-                                                       "failure"]
+    assert blk.text == "[NEAR MISS] 13 vs 15. So close: succeed and pay a price, or let it fail."
+    picks = near_miss_choices(f, s.rules)
+    assert [c["id"] for c in picks] == ["success_at_cost:cost.drain", "success_at_cost:cost.footing", "failure"]
+    assert [c["label"] for c in picks] == ["Succeed, and pay: you tire (drain, S2)",
+                                           "Succeed, and pay: you slip (footing, S2)",
+                                           "Let it fail: you tire (drain, S2)"]
 
 
 def test_redirect_g3_and_g4(s: Scene) -> None:
@@ -107,17 +108,18 @@ def test_redirect_g3_and_g4(s: Scene) -> None:
         options=[RedirectOption(kind="basic_verb", verb="verb.force", method="break it"),
                  RedirectOption(kind="intent", method="find another way in")],
         acquisition_paths=[{"type": "mentor", "detail": "a locksmith could teach you"}]))
-    lines = redirect_block(g3).text.splitlines()
-    assert lines[0] == "[REDIRECT] G3 — checked lic.training.lockwork (not held)."
-    assert lines[1].strip() == "Possible now: break it (verb.force; ask for odds) · find another way in"
-    assert lines[2].strip() == "Learn it: a locksmith could teach you (mentor)"
+    lines = redirect_block(g3, rules=s.rules).text.splitlines()
+    assert lines[0].startswith("[REDIRECT] Not as tried: that needs ") and "which you have not learned." in lines[0]
+    assert [ln.strip() for ln in lines[1:4]] == ["You could instead:", "- Break it", "- Find another way in"]
+    assert lines[4].strip() == "To learn it: train with someone who knows it."
+    assert not any(x in "\n".join(lines) for x in ("G3", "lic.", "verb."))
     fid = s.fact("npc.guard", "siblings", "two brothers")
     g4 = GateDecision(gate="G4", proposed="G4", fact_cited=fid, redirect=Redirect(
         intent="greet his sister", missing=fid, missing_kind="fact",
         options=[RedirectOption(kind="intent", method="tell him the truth")]))
     text = redirect_block(g4, state=s.state).text
-    assert text.startswith("[REDIRECT] G4 — npc.guard.siblings = two brothers (established).")
-    assert "Possible now: tell him the truth" in text
+    assert text.startswith("[REDIRECT] Not as tried: Guard's siblings is two brothers, as already settled.")
+    assert "- Tell him the truth" in text
 
 
 def test_clarify_note_passthroughs_and_order() -> None:

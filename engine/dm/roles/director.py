@@ -66,6 +66,9 @@ def direct(ctx: TurnContext, *, situation: str, player_message: str = "", happen
     mode = st.scene.mode if st.scene else None
     cards = load_cards_for(Role.DIRECTOR, scene_situation_tags(st, ctx.rules), mode, triggers, rules=ctx.rules)
     msg = [f"RAISED: {situation}"]
+    named = [f"- {p}: {st.entities[p].name}" for p in sctx.places if p in st.entities]
+    if named:  # the player names places in words; the enum holds ids
+        msg += ["PLACES (here first, then reachable):", *named]
     if happened:
         msg.append(f"THIS TURN: {happened}")
     msg.append(f'THE PLAYER\'S MESSAGE: "{player_message}"' if player_message else "THE PLAYER'S MESSAGE: (none)")

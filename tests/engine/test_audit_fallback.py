@@ -43,7 +43,7 @@ def test_built_only_from_the_record() -> None:
     rec = _record()
     fb = plain_fallback(rec, names=NAMES, verdicts=[Verdict(claim=0, verdict="contradicted", fix="redraft_to_store")])
     assert tx.content(fb.fiction) <= _vocab(rec), tx.content(fb.fiction) - _vocab(rec)
-    for piece in ("forces the hasp", "it works, at a cost", "The bar shrieks", "Boots on the upper stairs",
+    for piece in ("forces the hasp", "It works, at a cost", "The bar shrieks", "Boots on the upper stairs",
                   "Tam turns toward the noise", "The old archive, morning."):
         assert piece in fb.fiction
     assert fb.fiction.endswith("What do you do?")

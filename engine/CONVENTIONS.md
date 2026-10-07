@@ -690,3 +690,22 @@ readers take a `WorldState`. Errors: `engine.world.common.WorldError`. The PC is
 - `engine/gen/_data.py` pickles each parsed data file under `engine/gen/_cache/` keyed by the file's sha256.
   `h.02.creation_lock` and `h.02.open_slots` are built (`engine/time/handlers/h02.py`; the reminder is shown by
   `open_session`); `h.02.bent_offer` is not (logged as skipped).
+
+## Player-facing polish (feature 004 polish pass)
+- **Sanitizer** (`engine.dm.player_text`): `clean(text, rules, names)` (idempotent; strips section/code/chapter
+  citations and backticks, names data ids from rules data or entity names, snake_case → words),
+  `strip_citations`, `name_ids`, `display_name`, `humanize`, `entity_names(state)`, `clean_response(resp, rules,
+  state)` (OOF blocks, pause prompt + labels, budget notice; fiction only in seed/creation). `Game._call` applies it
+  to every Response; `codex()` cleans all but the rules section. Narrator fiction in play is never cleaned.
+- `narration.shown_pause(pause, owned)`: blanks the prompt when the pause's block is already shown.
+- `oof`: `offer_block` has no choice line and always says "If it goes wrong: …" in words; `redirect_block(dec,
+  state=, rules=)` renders a stored GateDecision ("Not as tried: <why>", 1–3 alternatives, "To learn it: …");
+  `redirect_options`, `near_miss_choices(frame, rules)` (successes first, then "Let it fail"), `when_words(ts)`,
+  `short_text(text, limit)`.
+- `pipeline.decision_json(dec)`: the GateDecision stored on redirect/refusal oof items and pause details
+  (`"decision"`). A cost that cannot land records nothing (no "could not land" entry).
+- `creation.plausible_name(name)` (02.9.6): a bare number or non-name re-asks the name with a NOTE.
+- Director packet: a "PLACES (here first, then reachable):" section, one `- <id>: <name>` per place.
+- CLI (`play/render.py`): `reflow` joins hard wraps; `strip_listing` drops a block's own copy of the choices;
+  `choice_lines` prints `  N) label` once. A single in-range letter picks a choice; a bare number with no choices
+  open is not sent.

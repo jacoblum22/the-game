@@ -222,13 +222,37 @@ def test_director_cuts_after_quiet_turns() -> None:
     assert fill(Role.DIRECTOR, view="")["cut_now"] is False
 
 
-def test_narrator_uses_only_view_names_and_no_numbers() -> None:
-    out = fill(Role.NARRATOR, "degree: success_at_cost; roll 14 vs 12", view="name: Mara Voss")
-    assert "Mara Voss" in out["fiction"] and "not cleanly" in out["fiction"]
-    assert not any(ch.isdigit() for ch in out["fiction"])
-    assert out["fiction"].endswith("?") and out["mentions"] == []
+RECORD = ("Narrate this turn from the record.\nADJUDICATION RECORD (narrate exactly this, no better and no worse):\n"
+          '- part [DECLARATION] "I climb the wall."\n- part [SPEECH] "\\"Hold the rope, Mara.\\""\n'
+          "- beat: You climb the wall; approach: Exert; result: success at cost (it works, and the cost is paid)\n"
+          "- end by handing the moment back (12.14.9)")
+
+
+def test_director_cuts_to_the_named_reachable_place() -> None:
+    places = "PLACES (here first, then reachable):\n- place.salt_market: the Salt Market\n- place.docks: the docks\n"
+    out = fill(Role.DIRECTOR, places + 'THE PLAYER\'S MESSAGE: "I head down to the docks."', view="")
+    assert out["cut_now"] is True and out["next_scene"]["place"] == "place.docks"
+    assert out["next_scene"]["cast"] == ["new_npc"]  # someone to meet there
+    stay = fill(Role.DIRECTOR, places + 'THE PLAYER\'S MESSAGE: "I look at the docks."', view="")
+    assert stay["cut_now"] is False
+
+
+def test_narrator_words_the_record_and_uses_only_view_names() -> None:
+    out = fill(Role.NARRATOR, RECORD + "\nroll 14 vs 12", view="npc.mara_voss: Mara Voss\n  name: Mara Voss")
+    fiction = out["fiction"]
+    assert fiction.startswith("You climb the wall. It works, but not cleanly.")
+    assert "Mara Voss hears you out" in fiction  # speech gets a reply from a present NPC, by name
+    assert not any(ch.isdigit() for ch in fiction) and fiction.endswith("?") and out["mentions"] == []
     bare = fill(Role.NARRATOR, "anything", view="")["fiction"]
     assert "Mara" not in bare and not any(ch.isdigit() for ch in bare)
+    # a question gets an answer-shaped line; a roll-less beat never claims a degree
+    q = fill(Role.NARRATOR, '- question "Is the gate barred?": the answer is no\n'
+                            "- beat: You wait by the door; no roll: no roll: trivial")["fiction"]
+    assert "No, it is not so." in q and "better than" not in q and "You wait by the door." in q
+    look = fill(Role.NARRATOR, "- beat: You look around; no roll: no roll: trivial",
+                view="scene: scn.1 at loc.dock; mode free\nloc.dock: the dock\n  desc: wet planks\n"
+                     "npc.mara_voss: Mara Voss")["fiction"]
+    assert look == "You look around. You take in the dock: wet planks. Mara Voss is here. What do you do?"
 
 
 def test_checker_extracts_claims_and_screen() -> None:
@@ -255,7 +279,8 @@ def test_scripted_queue_fallback_and_exhaustion() -> None:
     model = ScriptedModel({Role.NARRATOR: [{"fiction": "Bad 7 draft", "mentions": []}]})
     first = call_role(model, Role.NARRATOR, NARRATOR, Packet())
     assert first.data["fiction"] == "Bad 7 draft" and first.record.provider == "scripted"
-    second = call_role(model, Role.NARRATOR, NARRATOR, Packet(view="name: Old Tam"))
+    second = call_role(model, Role.NARRATOR, NARRATOR, Packet(view="npc.old_tam: Old Tam",
+                                                              message='- part [SPEECH] "Evening."'))
     assert "Old Tam" in second.data["fiction"]  # fell back to OfflineModel
     model.push(Role.CHECKER, lambda schema, packet: {"claims": [], "screen": {}})
     assert model.fill(Role.CHECKER, CHECKER, Packet(), turn_id=None, attempt=0).data["claims"] == []

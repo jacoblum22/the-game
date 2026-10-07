@@ -138,12 +138,13 @@ def _save(ctx: TurnContext, turn_id: str, label: str, resp: Response, narr: Any 
 
 
 def _pause_blocks(ctx: TurnContext) -> tuple[list[OofBlock], Pause | None]:
-    from engine.dm.narration import pause_blocks
+    from engine.dm.narration import pause_blocks, shown_pause
 
     p = ctx.store.state.open_pause()
     if p is None:
         return [], None
-    return pause_blocks(ctx, p), Pause.of(p)
+    blocks = pause_blocks(ctx, p)
+    return blocks, shown_pause(p, blocks)
 
 
 def needs_opening(state: WorldState) -> bool:  # rule: 12.16.16

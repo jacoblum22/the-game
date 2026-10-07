@@ -102,7 +102,7 @@ def test_offer_with_nothing_resolved_skips_the_narrator(tmp_path: Path) -> None:
     assert r.pause is not None and r.pause.kind == "offer" and out.narration.skipped
     assert not calls(model, Role.NARRATOR) and not calls(model, Role.CHECKER)
     assert r.oof_blocks[-1].kind == "OFFER" and r.oof_blocks[-1].text.startswith("[OFFER]")
-    assert "%" in r.oof_blocks[-1].text and r.fiction  # the restatement, then the block
+    assert "%" in r.oof_blocks[-1].text and not r.fiction  # the block restates the beat; no second copy
     assert out.turn_record.pause and out.turn_record.pause["kind"] == "offer"
     # the pick is narrated (the roll resolved something)
     model.push(Role.WORLD, QUIET_WORLD)

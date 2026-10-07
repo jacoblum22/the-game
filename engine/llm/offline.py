@@ -295,6 +295,40 @@ def verb_keywords() -> dict[str, list[str]]:
     return out
 
 
+# The everyday verb a sentence leads with decides the basic verb (rules/data/basic_verbs.yaml's names and covers:
+# Observe searches and studies, Talk asks and persuades, Exert climbs and jumps, Move goes and runs, Strike
+# attacks, Sneak hides, Grapple seizes, Force breaks, Evade dodges, Recall remembers, Handle uses things).
+PRIMARY_VERBS: dict[str, tuple[str, ...]] = {
+    "verb.observe": ("look", "search", "examine", "inspect", "study", "listen", "watch", "peer", "scan", "check",
+                     "investigate", "observe", "survey", "spot", "track", "read"),
+    "verb.talk": ("ask", "tell", "talk", "speak", "say", "persuade", "convince", "greet", "plead", "haggle",
+                  "bargain", "threaten", "lie", "question", "chat", "call", "shout", "warn", "negotiate", "sing",
+                  "perform", "joke", "introduce myself", "thank"),
+    "verb.exert": ("climb", "jump", "leap", "swim", "vault", "lift", "carry", "haul", "balance", "scale"),
+    "verb.move": ("go", "run", "walk", "head", "travel", "move", "approach", "enter", "leave", "follow", "return",
+                  "cross", "ride", "hurry", "dash", "retreat", "make my way", "set out"),
+    "verb.strike": ("attack", "hit", "strike", "stab", "slash", "punch", "shoot", "fight", "kick", "swing", "cut"),
+    "verb.sneak": ("sneak", "hide", "creep", "steal", "pickpocket", "slip past", "lurk", "conceal"),
+    "verb.grapple": ("grab", "grapple", "wrestle", "pin", "seize", "tackle", "restrain"),
+    "verb.force": ("break", "smash", "force", "shove", "push", "pry", "batter", "kick down"),
+    "verb.evade": ("dodge", "duck", "evade", "dive clear"),
+    "verb.recall": ("remember", "recall", "recognize", "think back"),
+    "verb.handle": ("open", "use", "light", "bandage", "mend", "pick up", "take", "tie", "cook", "repair", "eat",
+                    "drink", "sit", "wait", "pray", "buy", "pay", "give", "put", "drop", "wash"),
+}
+
+
+def primary_verb(text: str) -> tuple[str, list[str]] | None:
+    """The basic verb of the first everyday verb in `text` ("climb onto the roof" climbs: Exert)."""
+    best: tuple[int, int, str, str] | None = None
+    for vid, words in PRIMARY_VERBS.items():
+        for w in words:
+            m = re.search(rf"(?<![\w]){re.escape(w)}(?:s|es|ed|ing)?(?![\w])", text, re.IGNORECASE)
+            if m and (best is None or (m.start(), -len(w)) < (best[0], best[1])):
+                best = (m.start(), -len(w), vid, w)
+    return (best[2], [best[3]]) if best else None
+
+
 def match_verb(text: str) -> tuple[str, list[str]] | None:
     """The basic verb whose longest keyword occurs in `text`, with every matched keyword."""
     best: tuple[int, str] | None = None
@@ -349,8 +383,47 @@ def _interpret(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:
     if any(_has_word(low, w) for w in ("suggest", "you pick", "you choose", "surprise me", "dealer's choice")):
         return {**out, "choice": "suggest"}
     classes = enum_at(schema, "own_words_class")
-    return {**out, "choice": "own_words", "own_words_class": classes[0] if classes else None,
-            "own_words_text": msg}
+    labels = _block_options(packet.render())
+    scored = sorted(((_overlap(msg, lab), i) for i, lab in enumerate(labels[: len(options)])), reverse=True)
+    if scored and scored[0][0] >= 0.5 and len(_content(msg)) >= 2:  # a clear paraphrase of one option
+        opt = options[scored[0][1]]
+        return {**out, "choice": opt, "own_words_class": _pick_enum(opt, classes) if opt in classes else None,
+                "own_words_text": None}
+    best = max(classes, key=lambda c: (_overlap(msg, _norm(c) + " " + _label_for(c, options, labels)),
+                                       -classes.index(c)), default=None)
+    return {**out, "choice": "own_words", "own_words_class": best, "own_words_text": msg}
+
+
+_FILLER = {"the", "a", "an", "of", "and", "or", "to", "in", "on", "at", "is", "are", "it", "its", "do", "does", "not",
+           "no", "i", "my", "me", "we", "our", "they", "their", "this", "that", "with", "for", "be", "was", "were",
+           "who", "what", "one", "some", "any", "there", "here", "have", "has", "had", "but", "so", "very"}
+
+
+def _content(text: str) -> set[str]:
+    """Content words, crudely stemmed (dead / deaths / dying share nothing; graves / grave do)."""
+    words = re.findall(r"[a-z']+", str(text).lower())
+    return {re.sub(r"(?:ies|es|s|ed|ing)$", "", w) or w for w in words if w not in _FILLER and len(w) > 2}
+
+
+def _overlap(msg: str, label: str) -> float:
+    """The share of the message's content words that the label also uses."""
+    m = _content(msg)
+    return len(m & _content(label)) / len(m) if m else 0.0
+
+
+def _block_options(context: str) -> list[str]:
+    """The lettered options of the last question block shown before THIS MESSAGE, in order."""
+    head = context.split("[THIS MESSAGE]")[0]
+    start = max(head.rfind("[SEED"), head.rfind("[CREATE"))
+    return [m.group(1) for m in re.finditer(r"(?m)^\s*\([a-z]\)\s+(.*)$", head[max(start, 0):])]
+
+
+def _label_for(cls: Any, options: list[Any], labels: list[str]) -> str:
+    """The shown label of the option a classification id names (same id, or its last segment), else ""."""
+    for i, opt in enumerate(options[: len(labels)]):
+        if _norm(opt) == _norm(cls) or _norm(opt).rsplit(".", 1)[-1] == _norm(cls).rsplit(".", 1)[-1]:
+            return labels[i]
+    return ""
 
 
 def _reader(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:
@@ -371,10 +444,13 @@ def _reader(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:
             parts.append({"text": sent, "class": "PENDING_ANSWER"})
         elif _QUOTE.search(sent):
             parts.append({"text": sent, "class": "SPEECH"})
-        elif sent.rstrip().endswith("?"):
+        elif not re.search(r"[A-Za-z]{2}", sent):
+            parts.append({"text": sent, "class": "OOF_QUESTION"})  # "1", "?" with nothing open: not an act
+        elif sent.rstrip().endswith("?") or _ASKS.match(sent):
             oof = "/" in sent or any(_has_word(sent, w) for w in OOF_WORDS)
             parts.append({"text": sent, "class": "OOF_QUESTION" if oof else "FICTION_QUESTION"})
-            if not oof:
+            if not oof and not _WH.match(sent):  # only a yes/no question goes to the Oracle; "who is here?" is
+                # answered from what the scene shows
                 hit = named_entity(sent, subjects)
                 questions.append({
                     "subject": hit[0] if hit else None, "predicate": sent.rstrip("?").strip(),
@@ -384,13 +460,15 @@ def _reader(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:
             parts.append({"text": sent, "class": "DECLARATION"})
             declared.append(sent)
     for sent in declared[:3]:
-        verb = match_verb(sent)
+        verb = primary_verb(sent) or match_verb(sent)
         target = named_entity(sent, targets)
         licence = named_entity(sent, licences)
         if licence:
             gate = "G2"
         elif verb:
             gate = "G1"
+        elif target and str(target[0]).startswith(("npc.", "ally.", "foe.")):  # words to someone: talk, not G3
+            verb, gate = ("verb.talk", []), "G1"
         else:
             gate = "G3"  # 01.3.1: default when uncertain between G1 and G3
         risky = any(_has_word(sent, w) for w in RISKY_WORDS)
@@ -410,6 +488,11 @@ def _reader(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:
         "clarifying_question": None, "restatement": restated,
         "player_quantity": int(quantity.group(1)) if quantity else None,
     }
+
+
+_WH = re.compile(r"^\s*(?:\w+,\s*)?(?:what|who|whom|whose|where|when|why|how|which)\b", re.IGNORECASE)
+_ASKS = re.compile(r"^\s*(?:what|who|whom|whose|where|when|why|how|which|is|are|was|were|do|does|did|can|could|"
+                   r"would|will|should|has|have|had)\b[^.!]*$", re.IGNORECASE)
 
 
 def _pending_pick(low: str, pending: list[Any]) -> Any:
@@ -460,40 +543,197 @@ def _world(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:
     ]}
 
 
+_GOING = re.compile(r"\b(go|goes|going|head|heads|travel|travels|leave|leaves|walk|walks|ride|rides|return|returns|"
+                    r"set out|make (?:my|our) way|move on|cross|crosses)\b", re.IGNORECASE)
+
+
+def _player_message(message: str) -> str:
+    m = re.search(r"THE PLAYER'S MESSAGE: \"?(.*?)\"?$", message, re.MULTILINE)
+    return "" if not m or m.group(1).strip() == "(none)" else m.group(1).strip()
+
+
 def _director(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:
-    m = re.search(r"quiet[_ ]turns\s*[:=]\s*(\d+)", packet.render(), re.IGNORECASE)
+    context = packet.render()
+    m = re.search(r"quiet[_ ]turns\s*[:=]\s*(\d+)", context, re.IGNORECASE)
+    cut = bool(m and int(m.group(1)) >= QUIET_TURNS_TO_CUT)
+    place = None
+    said = _player_message(packet.message)
+    places = enum_at(schema, "next_scene", "place")
+    if said and _GOING.search(said) and places:  # "I go to the smithy": cut to that reachable place
+        here = re.search(r"(?m)^\s*position: (\S+)", context)
+        names = dict(re.findall(r"(?m)^- ([\w.]+): (.+)$", packet.message))  # the PLACES lines, one per place
+        aliases: dict[str, list[str]] = {}
+        for pid in places:
+            if here and pid == here.group(1):
+                continue
+            nm = names.get(pid, "").strip().lower()
+            aliases[pid] = [x for x in (nm, nm.removeprefix("the "), _norm(pid.rsplit(".", 1)[-1])) if len(x) > 2]
+        hit = named_entity(said, aliases)
+        if hit:
+            cut, place = True, hit[0]
+    # someone to talk to in the new scene: PR-12-5 meets a resident of the place first, else a walk-on
+    cast = ["new_npc"] if "new_npc" in enum_at(schema, "next_scene", "cast", "[]") else []
     return {
-        "cut_now": bool(m and int(m.group(1)) >= QUIET_TURNS_TO_CUT),
+        "cut_now": cut,
         "next_scene": {
-            "mode": "free", "place": None, "agenda": "follow the most pressing open thread",
-            "hoped_answer": "you get what you came for", "pillar": None, "challenge_type": None, "cast": [],
+            "mode": "free", "place": place, "agenda": "follow the most pressing open thread",
+            "hoped_answer": "you get what you came for", "pillar": None, "challenge_type": None, "cast": cast,
         },
         "push": "none", "lead": None,
     }
 
 
-_DEGREES = [
-    ("critical_success", "It works better than you hoped."),
-    ("success_at_cost", "It works, but not cleanly."),
-    ("critical_failure", "It goes badly wrong."),
-    ("near_miss", "It almost holds, and everything hangs on the next breath."),
-    ("failure", "It does not go the way you wanted."),
+_RESULTS = [  # result words of the record's beat lines (engine/dm/roles/narrator.py DEGREE_WORDS), most specific first
+    ("success at cost", "It works, but not cleanly."),
+    ("critical success", "It works, and better than anyone could expect."),
+    ("critical failure", "It goes badly wrong."),
+    ("a near miss", "It almost holds, and everything hangs on the next breath."),
+    ("failure", "It does not work, and the moment turns against you."),
     ("success", "It works."),
 ]
+_ANSWERS = {"yes": "Yes, that is so.", "no": "No, it is not so.", "yes, and": "Yes, and more than that.",
+            "yes, but": "Yes, though not cleanly.", "no, and": "No, and worse than that.",
+            "no, but": "No, though not entirely."}
+
+
+def _sentence(text: str) -> str:
+    t = re.sub(r"\b(?:the character|the PC)\b", "you", text.strip().strip('"').rstrip(" .;"))
+    return (t[:1].upper() + t[1:] + ".") if t else ""
+
+
+def _npcs(view: str) -> dict[str, str]:
+    """{npc id: name} for the people in the narrator view (its top-level `npc.x: Name` lines)."""
+    return {m.group(1): m.group(2).strip() for m in re.finditer(r"(?m)^(npc\.[\w.]+): (.+)$", view)}
+
+
+def _place(view: str) -> tuple[str, str]:
+    """(name, description) of the scene's place in the narrator view, else ("", "")."""
+    m = re.search(r"(?m)^scene: \S+ at (\S+?);", view)
+    if not m:
+        return "", ""
+    name = re.search(rf"(?m)^{re.escape(m.group(1))}: (.+)$", view)
+    block = view.split(f"\n{m.group(1)}: ", 1)[-1] if name else ""
+    desc = re.search(r"(?m)^  desc: (.+)$", block)
+    return (name.group(1).strip() if name else ""), (desc.group(1).strip() if desc else "")
+
+
+def _look(view: str, npcs: dict[str, str]) -> list[str]:
+    """What a look around shows: the place and who is in it, from the view only."""
+    place, desc = _place(view)
+    out = []
+    if place:
+        out.append(_sentence(f"You take in {place}" + (f": {desc}" if desc and desc.lower() != place.lower() else "")))
+    names = list(npcs.values())
+    if names:
+        out.append(f"{' and '.join(names[:3])} {'is' if len(names[:3]) == 1 else 'are'} here.")
+    else:
+        out.append("No one else is in sight.")
+    return out
+
+
+def _wh_answer(question: str, view: str, npcs: dict[str, str]) -> list[str]:
+    """An answer-shaped line for a who / where / what question, from the view only."""
+    q = question.lower()
+    if re.search(r"\bwho\b", q):
+        names = list(npcs.values())
+        return [f"{' and '.join(names[:3])} {'is' if len(names[:3]) == 1 else 'are'} here." if names
+                else "No one else is in sight."]
+    if re.search(r"\bwhere\b", q):
+        place, _ = _place(view)
+        return [f"You are at {place}."] if place else []
+    return _look(view, npcs) if re.search(r"\b(see|here|around)\b", q) else ["Nothing here answers that yet."]
 
 
 def _narrator(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:
-    names = view_names(packet.view)
-    result = "The world waits on you."
-    for haystack in (packet.message, packet.render()):
-        low = haystack.lower()
-        hit = next((line for key, line in _DEGREES if key in low or key.replace("_", " ") in low), None)
-        if hit:
-            result = hit
-            break
-    lines = [f"The moment settles over {names[0]}." if names else "The moment settles.", result,
-             "What do you do?"]
-    return {"fiction": " ".join(lines), "mentions": []}
+    # The record in THIS MESSAGE, line by line, in words (never the rules text elsewhere in the packet).
+    msg = packet.message
+    npcs = _npcs(packet.view)
+    asked = {m.group(1).rstrip("?") for m in re.finditer(r'(?m)^- question "(.*)": the answer is', msg)}
+    lines: list[str] = []
+    replies: list[str] = []  # speech is answered after what happened
+    paused = False
+    for raw in msg.splitlines():
+        line = raw.strip()
+        if line.startswith("- a new scene opens:"):
+            head = line.split(":", 1)[1].split("; frame it")[0].strip()
+            where, _, when = head.partition(", ")
+            lines.append(f"It is {when} at {where}." if when else _sentence(head))
+        elif line.startswith("- note: the inciting incident:"):
+            lines.append(_sentence(line.split("incident:", 1)[1]))
+        elif line.startswith("- beat:"):
+            bits = dict(b.split(": ", 1) for b in line[2:].split("; ") if ": " in b)
+            res = bits.get("result")
+            undone = bits.get("no roll") is not None and not bits["no roll"].startswith("no roll")
+            if undone:  # refused, redirected, withdrawn: the act did not happen (the block says why)
+                lines.append(_sentence("You size up how to " + re.sub(r"^you\s+", "", bits.get("beat", ""), flags=re.I)))
+                continue
+            lines.append(_sentence(bits.get("beat", "")))
+            verb = (primary_verb(bits.get("beat", "")) or ("", []))[0]
+            looks = verb == "verb.observe"
+            if verb == "verb.talk" and not res:  # words to someone: they answer, or no one is there to
+                who = named_entity(bits.get("beat", ""), {k: [v.lower()] for k, v in npcs.items()})
+                name = npcs[who[0]] if who else next(iter(npcs.values()), None)
+                replies.append(f"{name} hears you out, and answers in kind." if name else "No one here answers.")
+                continue
+            if looks and (not res or "success" in res):
+                lines += _look(packet.view, npcs)
+                if not res:
+                    continue
+            if res:
+                if "a near miss" in res and "- the turn stops at a pause" not in msg:
+                    res = res.replace("a near miss", "")  # the near miss was settled: the failure stands
+                lines.append(next((t for k, t in _RESULTS if k in res), "It is done."))
+            elif "not resolved yet" in line:
+                paused = True
+            for key in ("cost paid", "delivered"):
+                if bits.get(key):
+                    lines.append(_sentence(bits[key]))
+        elif line.startswith("- question "):
+            m = re.match(r'- question "(.*)": the answer is (.*)$', line)
+            if m:
+                ans = m.group(2).strip().rstrip(".")
+                lines.append(_ANSWERS.get(ans.lower(), _sentence(f"The answer: {ans}")))
+        elif re.match(r"- .+ acts: ", line):
+            who, act = line[2:].split(" acts: ", 1)
+            head, _, tail = re.sub(r"\bthe PC\b", "you", act).partition(": ")
+            first = tail.split(", ")[0].strip() if tail else ""
+            lines.append(_sentence(f"{who} {head}" + (f", and {first}" if first else "")))
+        elif line.startswith("- note: the character "):
+            note = line.removeprefix("- note: the character ")
+            lines.append(_sentence("you " + re.sub(r"\b(\w+?)s\b(?= and | rested|$| [a-z])", r"\1", note, count=2)))
+        elif line.startswith("- an omen"):
+            lines.append(_sentence(line.split(":", 1)[1]))
+        elif line.startswith("- part [FICTION_QUESTION]"):
+            q = line.split("]", 1)[1].split('"')[1] if '"' in line else ""
+            if q and q.rstrip("?") not in asked:
+                lines += _wh_answer(q, packet.view, npcs)
+        elif line.startswith("- part [SPEECH]"):
+            said = line.split("]", 1)[1]
+            who = named_entity(said, {k: [v.lower(), *v.lower().split()[:1]] for k, v in npcs.items()})
+            name = npcs[who[0]] if who else next(iter(npcs.values()), None)
+            if name and not any(ln.startswith(name) for ln in replies):
+                replies.append(f"{name} hears you out, and answers in kind.")
+        elif line.startswith("- the turn stops at a pause"):
+            paused = True
+        elif "STATE SUMMARY" in msg and re.match(r"- .+ is (?:at .+, )?in the \w+$", line):  # a recap (12.5.3)
+            lines.append(_sentence("You are " + line.split(" is ", 1)[1]))
+        elif "STATE SUMMARY" in msg and line.startswith("- earlier: "):
+            lines.append(_sentence(line.removeprefix("- earlier: ")))
+        elif "STATE SUMMARY" in msg and line.startswith("- an open thread: ") and not any(
+                ln.startswith("Still open") for ln in lines):
+            lines.append(_sentence("Still open: " + re.split(r"(?<=[.!?])\s", line.split(": ", 1)[1])[0]))
+    lines += list(dict.fromkeys(r for r in replies if not any(ln.startswith(r.split(" hears")[0]) for ln in lines)))
+    if "A REDRAFT." in msg:  # keep the previous draft minus the sentences the verdicts failed (12.3.3)
+        prev = re.findall(r"(?m)^\[(\d+)\] (.*)$", msg.split("A REDRAFT.", 1)[1])
+        bad = {int(n) for n in re.findall(r"(?m)^- sentence (\d+) ", msg)}
+        kept = [t for n, t in prev if int(n) not in bad]
+        if kept:
+            return {"fiction": " ".join(kept), "mentions": []}
+    if not lines:
+        lines.append("The moment holds.")
+    if not paused:
+        lines.append("What do you do?")
+    return {"fiction": " ".join(x for x in lines if x), "mentions": []}
 
 
 _CLASS_WORDS = [
@@ -518,6 +758,7 @@ def _checker(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:
     if numbered:
         draft = "\n".join(text for _, text in numbered)
     subjects = entity_aliases(enum_at(schema, "claims", "[]", "subject"), packet.render())
+    said = packet.message.split("THE PLAYER'S MESSAGE", 1)[1] if "THE PLAYER'S MESSAGE" in packet.message else ""
     claims = []
     for i, sent in enumerate(sentences(draft)):
         hit = named_entity(sent, subjects)
@@ -527,6 +768,8 @@ def _checker(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:
         after = sent[low.find(hit[1].lower()) + len(hit[1]):].strip(" ,.;!?")
         words = after.split()
         cls = next((c for c, ws in _CLASS_WORDS if any(re.search(rf"\b{re.escape(w)}", low) for w in ws)), "action")
+        if str(hit[0]).startswith("pc.") and low.startswith("you ") and _overlap(sent, said) >= 0.6:
+            cls = "action"  # the player's own declaration, restated (12.14.3): judged as the PC's act
         claims.append({
             "sentence": i, "subject": hit[0], "class": cls,
             "predicate": words[0] if words else "is present",
