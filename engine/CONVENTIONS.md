@@ -456,3 +456,48 @@ readers take a `WorldState`. Errors: `engine.world.common.WorldError`. The PC is
   identity → `walk_on` with the implied fields fixed (name, gender ⇄ pronouns), position, cast list. Unsettled
   properties: `settle(entity, prop)` if given, else table `tbl.<kind>_<prop>` / `tbl.<prop>`, else the Oracle
   (Even), each written as a fact.
+
+## engine/dm turn API (T030, T038–T042: the adjudication pass T1–T6 and the PR-01-1 driver)
+- **Context** (`engine.dm.context.TurnContext`): `TurnContext.for_store(store, model=, rules=None, rng=None,
+  config={}, recorder=None)`; fields `store, rules, rng, model, recorder (default store.record_model_call), config
+  (GameConfig dict: oracle_free_cap_per_scene, auto_commit), milestone, tx (open only during a turn), dispute
+  (12.3.6 hook), call_ids`. `ctx.state` (working state in a turn), `ctx.mint`, `ctx.time_ctx()`,
+  `ctx.record_call` (pass as every role call's `recorder`), `ctx.auto_commit()` (meta `auto_commit`, else config).
+- **Turn** (`engine.dm.turn`): `run_turn(ctx, message) -> AdjudicationResult`; `answer_pause(ctx, choice_id)` (a
+  pick from the API; no Reader call; ValueError for a choice not on the open pause). `AdjudicationResult(turn_id,
+  record: AdjudicationRecord, pause: PauseRecord|None, offer: OfferView dict|None, writes: [seq], oof: [{kind,
+  text}] (OFFER/WARNING/REDIRECT/NEAR_MISS/LAST_CHANCE/NOTE blocks owed, rendered by 12.15), view (narrator view
+  re-read after T6), turn_record: TurnRecord (saved: parts, beats, oracle_calls, pause, writes, model_calls),
+  reader: ReaderResult|None)`. T1 saves the turn row (input verbatim) before the transaction; T2–T6 are one store
+  transaction, so any exception before T6 writes nothing (the row stays: retry). The narration pass (T7–T12)
+  completes the same TurnRecord with `store.save_turn`. A pause skips T5 (12.2.6: no time passes). Order in T4:
+  SAFETY (stops the rest) → SESSION → DISPUTE → PENDING_ANSWER (resume) → OOF → FICTION_QUESTION (state, else
+  `ask_oracle`; key = `ids.slug(predicate)` on the subject, so a settled key is read, never re-drawn) →
+  DECLARATION (an open pause is first closed by 12.2.6's defaults). At the PC's turn end `dying_check` runs while
+  Dying; a harm that opened the Threshold opens the `last_chance` pause (`open_threshold`).
+- **Pipeline** (`engine.resolve.pipeline`): `PipelineEnv(tx, rules, rng, store, framer, pc, auto_commit, harm_hook,
+  lethal=None, milestone)`; `run_beats(env, [BeatPlan(beat, intent_verbs)]) -> PipelineResult(outcomes
+  [BeatOutcome(status resolved|no_roll|redirected|refused|paused|withdrawn|question, entry: BeatEntry, frame_id,
+  oof)], pause, queued)` (≤3 beats, stops at the first pause); `resume(env, pause, choice)`;
+  `close_by_default(env, pause)`; `harm_hook_for(env)` (apply_harm + HarmEntry; `env.threshold_due`);
+  `harm_lethal_warning` (default `LethalCheck`); `evidence_event`, `challenge_band(dc)` (03.4.3); `offer_text`.
+  `FramerFn(beat, candidates, *, gate, note=None) -> ProposedFrame`. Pause detail (`PauseRecord.detail`) holds
+  `stage` (offer|warning|near_miss|redirect|clarify), `plan`, `queued`, `proposed`, `frame`, `roll`, `offer`
+  (OfferView), `candidates`, `warned`; choice ids: offer `commit, change, withdraw, go_big, play_safe`; warning
+  (kind `offer`) `continue, withdraw`; near_miss `failure, success_at_cost:<menu>`; redirect `accept:<licence>,
+  other`; clarify none (free words). A lethal frame (or a Dire one against a 07.3.3 source) is preceded by the
+  warning pause; after a warning the beat never auto-commits.
+- **Roles** (`engine.dm.roles`): `reader.read_message(ctx, message, exchanges=) -> ReaderResult(parts,
+  pending_answer, fact_questions, beats, clarifying_question, restatement, player_quantity, defaulted)`,
+  `.plans(actor=, declared_seq=, mint=)`; `framer.framer_for(ctx) -> FramerFn` (its `check=` runs `frame_check`,
+  so a refusal is re-asked once naming the step, then the default frame: first fitting cost by 01.13.1's order;
+  the schema gains `source_fact` on costs and an `attribute` enum from the verbs when the knobs give none);
+  `world.npc_responses(ctx, happened) -> [WorldResponse(npc, want_engaged, refusal_engaged, tags)]`,
+  `world.world_view(state)` (narrator view + present NPCs' standing, wants and refusals), `npc_motives`.
+- **World step** (`engine.dm.world_step.world_step(ctx, record, beats=)`): NPCs (talk outcome → refusal → want →
+  `tbl.npc_action` with standing as `standing_modifier`, first meeting rolls the reaction), clock omens from this
+  turn's `clock_ticked`, fired triggers (a pending `trg.lethal_warning` is delivered: block in `record.notes`),
+  time per resolved beat by `beat_cost(scene mode)`.
+- **Fixture** (`tests.fixtures.scene_dock.build_dock(tmp_path) -> DockScene(store, rules, rng, pc, ferryman, watch,
+  place, clock, scene, facts)`): the dock at night (site mode), two NPCs with sealed wants/refusals, one public
+  clock listening to exposure and time, Wren with two licences and `ab.soft_step`.
