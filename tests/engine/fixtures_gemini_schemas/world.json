@@ -1,0 +1,83 @@
+{
+ "type": "object",
+ "properties": {
+  "responses": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "properties": {
+     "npc": {
+      "type": "string",
+      "enum": [
+       "npc.makgar_who_came_back",
+       "npc.kazak_stonehammer",
+       "npc.lugash_the_quiet",
+       "npc.grgar_ash_walker",
+       "npc.ranmund_blacksmith",
+       "npc.romella_varault"
+      ]
+     },
+     "want_engaged": {
+      "type": "string",
+      "enum": [
+       "none",
+       "npc.makgar_who_came_back/want.1",
+       "npc.kazak_stonehammer/want.1",
+       "npc.lugash_the_quiet/want.1",
+       "npc.grgar_ash_walker/want.1",
+       "npc.ranmund_blacksmith/want.1",
+       "npc.romella_varault/want.1"
+      ]
+     },
+     "refusal_engaged": {
+      "type": "string",
+      "enum": [
+       "none",
+       "npc.makgar_who_came_back/refusal.1",
+       "npc.makgar_who_came_back/refusal.2",
+       "npc.kazak_stonehammer/refusal.1",
+       "npc.kazak_stonehammer/refusal.2",
+       "npc.lugash_the_quiet/refusal.1",
+       "npc.lugash_the_quiet/refusal.2",
+       "npc.grgar_ash_walker/refusal.1",
+       "npc.grgar_ash_walker/refusal.2",
+       "npc.ranmund_blacksmith/refusal.1",
+       "npc.ranmund_blacksmith/refusal.2",
+       "npc.romella_varault/refusal.1",
+       "npc.romella_varault/refusal.2"
+      ]
+     },
+     "table_context": {
+      "type": "object",
+      "properties": {
+       "tags": {
+        "type": "array",
+        "items": {
+         "type": "string",
+         "enum": [
+          "threat"
+         ]
+        }
+       }
+      },
+      "required": [
+       "tags"
+      ],
+      "additionalProperties": false
+     }
+    },
+    "required": [
+     "npc",
+     "want_engaged",
+     "refusal_engaged",
+     "table_context"
+    ],
+    "additionalProperties": false
+   }
+  }
+ },
+ "required": [
+  "responses"
+ ],
+ "additionalProperties": false
+}

@@ -1,0 +1,106 @@
+{
+ "type": "object",
+ "properties": {
+  "claims": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "properties": {
+     "sentence": {
+      "type": "string",
+      "enum": [
+       "0",
+       "1",
+       "2"
+      ]
+     },
+     "subject": {
+      "type": "string",
+      "enum": [
+       "pc.wren",
+       "loc.tangled_hundred_mossmere.shrine",
+       "unknown"
+      ]
+     },
+     "class": {
+      "type": "string",
+      "enum": [
+       "existence",
+       "identity",
+       "quantity",
+       "harm_condition",
+       "position",
+       "possession",
+       "location_time",
+       "knowledge",
+       "capability",
+       "clock",
+       "attitude",
+       "outcome",
+       "action",
+       "sealed"
+      ]
+     },
+     "predicate": {
+      "type": "string"
+     },
+     "value": {
+      "type": "string"
+     },
+     "asserts_change": {
+      "type": "boolean"
+     },
+     "pc_words_or_feelings": {
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "sentence",
+     "subject",
+     "class",
+     "predicate",
+     "value",
+     "asserts_change",
+     "pc_words_or_feelings"
+    ],
+    "additionalProperties": false
+   }
+  },
+  "screen": {
+   "type": "object",
+   "properties": {
+    "intent_acknowledged": {
+     "type": "boolean"
+    },
+    "intent_substituted": {
+     "type": "boolean"
+    },
+    "next_step_exists": {
+     "type": "boolean"
+    },
+    "mechanics_in_fiction": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "ends_on_prompt_or_one_pause": {
+     "type": "boolean"
+    }
+   },
+   "required": [
+    "intent_acknowledged",
+    "intent_substituted",
+    "next_step_exists",
+    "mechanics_in_fiction",
+    "ends_on_prompt_or_one_pause"
+   ],
+   "additionalProperties": false
+  }
+ },
+ "required": [
+  "claims",
+  "screen"
+ ],
+ "additionalProperties": false
+}

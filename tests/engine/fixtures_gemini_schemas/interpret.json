@@ -1,0 +1,45 @@
+{
+ "type": "object",
+ "properties": {
+  "choice": {
+   "type": "string",
+   "enum": [
+    "temperate",
+    "northern",
+    "highland",
+    "arid",
+    "coastal",
+    "own_words",
+    "move_on",
+    "details",
+    "suggest"
+   ]
+  },
+  "own_words_class": {
+   "type": [
+    "string",
+    "null"
+   ],
+   "enum": [
+    "temperate",
+    "northern",
+    "highland",
+    "arid",
+    "coastal",
+    null
+   ]
+  },
+  "own_words_text": {
+   "type": [
+    "string",
+    "null"
+   ]
+  }
+ },
+ "required": [
+  "choice",
+  "own_words_class",
+  "own_words_text"
+ ],
+ "additionalProperties": false
+}

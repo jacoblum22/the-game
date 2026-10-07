@@ -1,0 +1,231 @@
+{
+ "type": "object",
+ "properties": {
+  "parts": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "properties": {
+     "text": {
+      "type": "string"
+     },
+     "class": {
+      "type": "string",
+      "enum": [
+       "SAFETY",
+       "SESSION",
+       "DISPUTE",
+       "PENDING_ANSWER",
+       "OOF_QUESTION",
+       "FICTION_QUESTION",
+       "DECLARATION",
+       "SPEECH"
+      ]
+     }
+    },
+    "required": [
+     "text",
+     "class"
+    ],
+    "additionalProperties": false
+   }
+  },
+  "fact_questions": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "properties": {
+     "subject": {
+      "type": "string",
+      "enum": [
+       "pc.wren",
+       "loc.tangled_hundred_mossmere.shrine"
+      ]
+     },
+     "predicate": {
+      "type": "string"
+     },
+     "odds_rung": {
+      "type": "string",
+      "enum": [
+       "certain",
+       "likely",
+       "even",
+       "unlikely",
+       "remote",
+       "impossible"
+      ]
+     }
+    },
+    "required": [
+     "subject",
+     "predicate",
+     "odds_rung"
+    ],
+    "additionalProperties": false
+   }
+  },
+  "beats": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "properties": {
+     "intent": {
+      "type": "string"
+     },
+     "method": {
+      "type": "string"
+     },
+     "assertion": {
+      "type": [
+       "string",
+       "null"
+      ]
+     },
+     "shape": {
+      "type": "string",
+      "enum": [
+       "single",
+       "sequential",
+       "repeated",
+       "bundled",
+       "conditional",
+       "extended"
+      ]
+     },
+     "target": {
+      "type": "string",
+      "enum": [
+       "none",
+       "pc.wren",
+       "loc.tangled_hundred_mossmere.shrine"
+      ]
+     },
+     "verb": {
+      "type": "string",
+      "enum": [
+       "verb.move",
+       "verb.observe",
+       "verb.recall",
+       "verb.talk",
+       "verb.strike",
+       "verb.grapple",
+       "verb.force",
+       "verb.exert",
+       "verb.evade",
+       "verb.sneak",
+       "verb.handle",
+       "verb.endure",
+       "verb.setup",
+       "verb.help",
+       "verb.ready"
+      ]
+     },
+     "license": {
+      "type": "string",
+      "enum": [
+       "none",
+       "lic.focus.push",
+       "lic.training.wilds_navigation",
+       "lic.training.martial_blade",
+       "lic.training.martial_shield",
+       "lic.training.martial_polearm",
+       "lic.lang.common",
+       "lic.lang.dwarvish"
+      ]
+     },
+     "gate": {
+      "type": "string",
+      "enum": [
+       "G0",
+       "G1",
+       "G2",
+       "G3",
+       "G4"
+      ]
+     },
+     "g4_fact": {
+      "type": [
+       "string",
+       "null"
+      ],
+      "enum": [
+       "fact.90",
+       "fact.89",
+       "fact.86",
+       "fact.85",
+       "fact.81",
+       "fact.80",
+       "fact.79",
+       "fact.78",
+       "fact.77",
+       "fact.76",
+       "fact.75",
+       "fact.74",
+       "fact.73",
+       "fact.72",
+       null
+      ]
+     },
+     "necessity": {
+      "type": "string",
+      "enum": [
+       "uncertain_and_costly",
+       "riding",
+       "trivial",
+       "good_idea",
+       "impossible",
+       "take_the_time",
+       "certain_with_cost"
+      ]
+     },
+     "intent_verbs": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      }
+     }
+    },
+    "required": [
+     "intent",
+     "method",
+     "assertion",
+     "shape",
+     "target",
+     "verb",
+     "license",
+     "gate",
+     "g4_fact",
+     "necessity",
+     "intent_verbs"
+    ],
+    "additionalProperties": false
+   },
+   "maxItems": 3
+  },
+  "clarifying_question": {
+   "type": [
+    "string",
+    "null"
+   ]
+  },
+  "restatement": {
+   "type": "string"
+  },
+  "player_quantity": {
+   "type": [
+    "integer",
+    "null"
+   ]
+  }
+ },
+ "required": [
+  "parts",
+  "fact_questions",
+  "beats",
+  "clarifying_question",
+  "restatement",
+  "player_quantity"
+ ],
+ "additionalProperties": false
+}

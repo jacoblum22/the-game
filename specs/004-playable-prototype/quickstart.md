@@ -4,7 +4,8 @@
 
 1. `pip install -r requirements.txt`
 2. Put your key in a file named `.env` at the repo root: `GEMINI_API_KEY=...` (it is git-ignored).
-3. Check the key and the request format once, for well under a cent: `python evals/gemini_smoke.py`.
+3. Check the key and the request format once (about 1–2 cents; `--dry-run` sends nothing):
+   `python evals/gemini_smoke.py`.
 4. `python -m play new "My World"` starts a game: fourteen world questions, then your character, then
    play. Answer in your own words or pick a number; press Enter or type `skip` to let the dice decide.
 5. Type what your character does in plain English. `/sheet`, `/journal`, `/turn`, `/spend` and `/quit`

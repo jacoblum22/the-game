@@ -147,6 +147,16 @@ Contract: `specs/004-playable-prototype/contracts/model-calls.md`. Nothing in `e
   `.add(rec)`, `.totals(turn_id=None) -> SpendTotals(turn_usd, session_usd, game_usd, budget_usd)`
   (= `game.spend()`), `.over_budget(budget_usd=None)`, `.warning() -> str | None`, `.new_session()`.
   `GeminiModel` fills `record.cost_usd`; never raises over budget.
+- `engine.llm.gemini_schema`: `to_gemini(schema, *, level=0) -> dict`, `convert(...) -> Converted(schema,
+  level, relaxed)`, `problems(schema) -> list[str]`. Converts our schemas to the subset Gemini's
+  `response_json_schema` accepts (no `const`/`allOf`/`null` in enums; type unions → anyOf; oversized enums →
+  described strings). Level 1 = no enums, level 2 = JSON mode with the schema in the instructions. Only the
+  request uses the converted schema; `call_role` validates against the original.
+- `engine.llm.gemini` also exposes `build_config`, `max_output_tokens(role, thinking)`, `extract_json`,
+  `OUTPUT_TOKENS`, `THINKING_ALLOWANCE`. `max_output_tokens` includes thinking tokens. A 400 schema rejection
+  relaxes the level for that role for the rest of the session; MAX_TOKENS truncation retries once at double
+  the cap. The record's `request` carries `schema_level`, `schema_relaxed`, `schema_rejected`.
+  `evals/gemini_smoke.py` is the owner-run live check (`--dry-run` sends nothing).
 ## engine/build (cards and coverage)
 - `from engine.build.compile_cards import load_cards` → `CardIndex`: `get(id) -> RuleCard` (KeyError if missing), `by_tag(tag)` (also returns cards tagged with a parent tag or `any`), `core()` (00.15.4 strict: T-12-1, T-00-1, 00.12.3, 00.3.9, 00.3.14, 00.3.15), iteration, `in`.
 - `RuleCard` (frozen): 00.15.2 fields + kind, chapter, section, file, lines, tokens (~len/4), body, `tags_derived`, `.model_judged`.
