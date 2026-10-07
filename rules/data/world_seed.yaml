@@ -203,6 +203,7 @@ questions:
 tables:
   - id: tbl.12.seed.wound
     name: "What went wrong here (12.16.4)"
+    note: "[revision: I-069] era_years is the wound's age: step 1 rolls the opening year of the era in that range (uniform), and {years} / {Years} in the pitch is that number in words, so the pitch and the opening date agree"
     die: d12
     results:
       - range: "1"
@@ -218,12 +219,13 @@ tables:
         themes: [site.theme.ancient, site.theme.ravaged, site.theme.fortified]
         keeper_bias: [kf.saint, kf.ancestors]
         era: "years since the Fall"
+        era_years: [40, 60]   # [revision: I-069] the wound's age: the opening year is rolled in it (12.16.4)
       - range: "2"
         option: plague
         threat_goal: {text: "spread the sickness to the haven before the summer ends", kind: change, rating: cunning}
         threat_temperament: secretive
         text: "a plague: a sickness of land or folk that comes back each hot season"
-        pitch: "A wasting sickness took one in three in {region} a generation ago, and every summer someone coughs and the whole valley holds its breath."
+        pitch: "A wasting sickness took one in three in {region} {years} years ago, and every summer someone coughs and the whole valley holds its breath."
         truths: ["The sickness comes back in the hot months, and no healer knows why.", "The dead of the plague years lie in pits outside every village, unblessed.", "A cure was found once and lost again."]
         gates: [creature.undead, creature.beast.vermin, creature.horror.fungal]
         situation: sit_t.sickness
@@ -231,12 +233,13 @@ tables:
         themes: [site.theme.haunted, site.theme.infested, site.theme.hallowed]
         keeper_bias: [kf.healer, kf.death]
         era: "years since the Wasting"
+        era_years: [20, 30]   # [revision: I-069] the wound's age: the opening year is rolled in it (12.16.4)
       - range: "3"
         option: invasion
         threat_goal: {text: "break the watch on the passes and burn the lowlands again", kind: dominate, rating: force}
         threat_temperament: aggressive
         text: "an invasion: a horde came over the mountains, was driven back, and is coming again"
-        pitch: "The horde came down from the passes thirty winters ago and burned {region} to the river. It was driven back. The watchfires on the passes were lit again this spring."
+        pitch: "The horde came down from the passes {years} winters ago and burned {region} to the river. It was driven back. The watchfires on the passes were lit again this spring."
         truths: ["The horde is gathering again beyond the passes.", "Some who fought it are still alive, and some of them took its gold.", "The old forts on the passes are held by too few, or by no one."]
         gates: [creature.folk.orc, creature.folk.goblin, creature.folk.giant]
         situation: sit_t.war_comes
@@ -244,6 +247,7 @@ tables:
         themes: [site.theme.fortified, site.theme.ravaged]
         keeper_bias: [kf.war, kf.hearth]
         era: "years since the Burning"
+        era_years: [20, 30]   # [revision: I-069] the wound's age: the opening year is rolled in it (12.16.4)
       - range: "4"
         option: curse
         threat_goal: {text: "keep the curse from being lifted, and profit by it", kind: grow, rating: cunning}
@@ -257,6 +261,7 @@ tables:
         themes: [site.theme.corrupted, site.theme.haunted, site.theme.wild]
         keeper_bias: [kf.land, kf.healer]
         era: "years since the Wrong"
+        era_years: [11, 30]   # [revision: I-069] the wound's age: the opening year is rolled in it (12.16.4)
       - range: "5"
         option: sundering
         threat_goal: {text: "recover the scattered pieces of the working and finish it", kind: change, rating: cunning}
@@ -270,12 +275,13 @@ tables:
         themes: [site.theme.ancient, site.theme.corrupted, site.theme.ravaged]
         keeper_bias: [kf.sky, kf.knowledge]
         era: "years since the Sundering"
+        era_years: [11, 30]   # [revision: I-069] the wound's age: the opening year is rolled in it (12.16.4)
       - range: "6"
         option: silent_god
         threat_goal: {text: "complete the rite that will put a new power in the silent one's place", kind: change, rating: sway}
         threat_temperament: zealous
         text: "a silent power: the land's great keeper stopped answering"
-        pitch: "For a thousand years the keeper of {region} answered every true prayer. Twelve years ago it stopped. Its temple still stands, and its priests still pray, and nothing answers."
+        pitch: "For a thousand years the keeper of {region} answered every true prayer. {Years} years ago it stopped. Its temple still stands, and its priests still pray, and nothing answers."
         truths: ["The silent keeper is not dead; something keeps it from answering.", "Other powers, and worse things, are moving into the silence.", "A relic of the silent keeper could wake it, and someone else wants it first."]
         gates: [creature.fiend, creature.spirit, creature.undead.spectral]
         situation: sit_t.the_rite
@@ -283,12 +289,13 @@ tables:
         themes: [site.theme.hallowed, site.theme.corrupted]
         keeper_bias: [kf.sky, kf.saint]
         era: "years since the Silence"
+        era_years: [8, 15]   # [revision: I-069] the wound's age: the opening year is rolled in it (12.16.4)
       - range: "7"
         option: long_winter
         threat_goal: {text: "buy up every granary before the next winter", kind: grow, rating: wealth}
         threat_temperament: mercantile
         text: "a long winter: the seasons broke and have not mended"
-        pitch: "Winter came early to {region} eleven years ago and stayed a month too long, and every year since, it has stayed a little longer."
+        pitch: "Winter came early to {region} {years} years ago and stayed a month too long, and every year since, it has stayed a little longer."
         truths: ["Each winter is longer than the last, and the old folk can name the day it began.", "The cold has a heart somewhere in the high country.", "Granaries are emptying, and someone is hoarding grain."]
         gates: [creature.elemental.frost, creature.beast.predator, creature.folk.giant]
         situation: sit_t.hunger
@@ -296,6 +303,7 @@ tables:
         themes: [site.theme.wild, site.theme.ancient]
         keeper_bias: [kf.hearth, kf.land]
         era: "years since the Long Winter"
+        era_years: [8, 15]   # [revision: I-069] the wound's age: the opening year is rolled in it (12.16.4)
       - range: "8"
         option: restless_dead
         threat_goal: {text: "raise an army from the unburied battlefield", kind: grow, rating: force}
@@ -309,12 +317,13 @@ tables:
         themes: [site.theme.haunted, site.theme.corrupted]
         keeper_bias: [kf.death, kf.saint]
         era: "years since the Rising"
+        era_years: [11, 30]   # [revision: I-069] the wound's age: the opening year is rolled in it (12.16.4)
       - range: "9"
         option: frontier
         threat_goal: {text: "drive the settlers back across the river", kind: dominate, rating: force}
         threat_temperament: zealous
         text: "a frontier: settlers pushing into a wild land that was never theirs"
-        pitch: "{region} was wild country until a charter opened it to settlers ten years ago. The farms are new, the roads are mud, and the wild has not agreed to any of it."
+        pitch: "{region} was wild country until a charter opened it to settlers {years} years ago. The farms are new, the roads are mud, and the wild has not agreed to any of it."
         truths: ["The charter's borders cross land older peoples call theirs.", "The settlers' sponsors in the capital want results, and soon.", "Something in the deep wild has started to notice the axes."]
         gates: [creature.beast, creature.spirit.fey, creature.spirit.place]
         situation: sit_t.hunting_ground
@@ -322,12 +331,13 @@ tables:
         themes: [site.theme.wild, site.theme.ancient, site.theme.infested]
         keeper_bias: [kf.land, kf.hearth]
         era: "years of the Charter"
+        era_years: [5, 12]   # [revision: I-069] the wound's age: the opening year is rolled in it (12.16.4)
       - range: "10"
         option: schism
         threat_goal: {text: "take the great temple and declare the other order heretic", kind: dominate, rating: sway}
         threat_temperament: zealous
         text: "a schism: one faith split in two, and both halves claim the temples"
-        pitch: "The faithful of {region} split over a prophecy twenty years ago. Two orders now claim the same temples, the same relics and the same dead."
+        pitch: "The faithful of {region} split over a prophecy {years} years ago. Two orders now claim the same temples, the same relics and the same dead."
         truths: ["The prophecy at the heart of the schism was forged, and the forger is alive.", "Both orders are recruiting swords.", "The keeper itself has given a sign, and only a few have seen it."]
         gates: [creature.folk.human, creature.spirit.celestial, creature.undead.spectral]
         situation: sit_t.feud
@@ -335,6 +345,7 @@ tables:
         themes: [site.theme.hallowed, site.theme.fortified, site.theme.ravaged]
         keeper_bias: [kf.saint, kf.sky]
         era: "years since the Sundered Creed"
+        era_years: [15, 25]   # [revision: I-069] the wound's age: the opening year is rolled in it (12.16.4)
       - range: "11"
         option: tyrant
         threat_goal: {text: "bring the free haven under the Iron Peace", kind: dominate, rating: force}
@@ -348,6 +359,7 @@ tables:
         themes: [site.theme.fortified, site.theme.ravaged, site.theme.corrupted]
         keeper_bias: [kf.war, kf.saint]
         era: "years of the Iron Peace"
+        era_years: [11, 30]   # [revision: I-069] the wound's age: the opening year is rolled in it (12.16.4)
       - range: "12"
         option: waking
         threat_goal: {text: "wake what sleeps under the hills", kind: change, rating: cunning}
@@ -361,6 +373,7 @@ tables:
         themes: [site.theme.ancient, site.theme.corrupted, site.theme.wild]
         keeper_bias: [kf.land, kf.knowledge]
         era: "years since the First Tremor"
+        era_years: [2, 5]   # [revision: I-069] the wound's age: the opening year is rolled in it (12.16.4)
 
   - id: tbl.12.seed.extra_impossible
     name: "One more thing no magic does here (12.16.5)"
@@ -716,13 +729,14 @@ requirements:
   - {id: ws.req.09_subset, from: "09", need: "a regional subset of the bestiary", rules: ["09.11.2"], key: "bestiary/archetypes", check: bestiary}
   - {id: ws.req.10_places, from: "10", need: "places with every 10.1.2 field (or terrain defaults)", rules: ["10.1.2"], key: "places", check: places}
   - {id: ws.req.10_links, from: "10", need: "route links with lengths in watches", rules: ["10.1.3"], key: "places[]/links", check: links}
-  - {id: ws.req.10_rings, from: "10", need: "danger rings per T-10-2", rules: ["10.2.4", "T-10-2"], key: "region/rings", check: rings}
+  - {id: ws.req.10_rings, from: "10", need: "danger rings per T-10-2, at least one ring-5 area at home band 5 [revision: I-084]", rules: ["10.2.4", "T-10-2", "12.16.8"], key: "region/rings", check: rings}
   - {id: ws.req.10_encounters, from: "10", need: "regional encounter tables in the two-sub-table shape, passing PR-10-8", rules: ["10.10.1", "10.10.2", "PR-10-8"], key: "encounter_tables", check: encounter_tables}
   - {id: ws.req.10_signs_events, from: "10", need: "archetype signs (travel.yaml's) and local events", rules: ["10.9.4", "10.9.6"], key: "tables (events)", check: generic_or_table, generic: "travel.yaml#archetype_signs; world_turn.yaml#tbl.11.local_events"}
   - {id: ws.req.10_sites, from: "10", need: "site placements: theme, domain, band, size, objective", rules: ["10.13.2", "PR-10-6"], key: "places[]/site", check: sites}
   - {id: ws.req.10_rest, from: "10", need: "havens and rest sites", rules: ["10.2.3", "07.8.4"], key: "places[]/rest_site", check: rest_sites}
   - {id: ws.req.10_climate, from: "10", need: "climate per region (weather regimes)", rules: ["10.11.2"], key: "region/climate", check: climate}
   - {id: ws.req.11_factions, from: "11", need: "factions conforming to 11.3.1, linchpin fates sealed, at least three full with running goal clocks", rules: ["11.3.1", "11.3.10", "PR-11-8"], key: "factions/instances", check: factions}
+  - {id: ws.req.11_petty, from: "11", need: "petty factions (the minor keepers' faiths) with a petty_goals goal: local, on the 6-segment clock, its target bound [revision: I-070]", rules: ["11.3.16", "PR-11-8", "12.16.10"], key: "factions/instances", check: petty_factions}
   - {id: ws.req.11_calendar, from: "11", need: "month, weekday, quarter-day, festival and era names (or the counted defaults)", rules: ["11.10.1", "11.10.4"], key: "calendar", check: calendar}
   - {id: ws.req.11_tables, from: "11", need: "tbl.11.season_events.<region>, tbl.11.hook.<region>, tbl.<region>.events (or the generic ones)", rules: ["11.5.10", "11.11.3"], key: "tables (hooks, season events)", check: generic_or_table, generic: "world_turn.yaml#tbl.11.hook, tbl.11.season_events.*, tbl.11.local_events"}
   - {id: ws.req.11_values, from: "11", need: "regional values for region scopes", rules: ["11.7.6"], key: "values", check: values}

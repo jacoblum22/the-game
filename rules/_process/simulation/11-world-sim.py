@@ -1,7 +1,8 @@
 """world11.py -- simulation of chapter 11's World Turn / Season Turn for 2 in-game years.
 
 Rules as written in rules/11-living-world.md (11.2-11.11) and data/world_turn.yaml, data/factions.yaml:
-- faction check: d20 + rating + 2*tier + stage_mod vs DC; degrees by 00.3.10 (crit +-10, nat20/1 step);
+- faction check: d20 + rating + 2*tier + stage_mod vs DC (entrenched -1 on goal and expand only, +1 to the DC of
+  strike, scheme and court against it, 0 elsewhere including the weight of size [revision: I-068]); degrees by 00.3.10 (crit +-10, nat20/1 step);
   near miss = failure with margin >= -3.
 - goal clock ticks (11.3.6): crit +2 / success +1 / failure 0 / crit-fail 0 + slip (trace, next action recover).
 - agenda (11.3.7, exactly; revision I-032): overrides first (a) slip -> recover, (b) at war (relation -3; every faction
@@ -45,7 +46,12 @@ def degree(d20, total, dc):
     near = (deg == 1 and m >= -3)
     return deg, near  # 3 crit success, 2 success, 1 failure, 0 crit failure
 
-STAGE_MOD = {'rising': 1, 'flourishing': 0, 'entrenched': -1, 'declining': -1, 'collapsed': -9}
+STAGE_MOD = {'rising': 1, 'flourishing': 0, 'entrenched': 0, 'declining': -1, 'collapsed': -9}
+# [revision: I-068] 11.3.5: entrenched is -1 on `goal` and `expand` only (complacency) and +1 to its own defense (the DC
+# of strike, scheme and court against it); on every other check, and on 11.3.9's weight of size, it reads 0.
+def stage_mod(f, action=None):
+    if f.stage == 'entrenched' and action in ('goal', 'expand'): return -1
+    return STAGE_MOD[f.stage]
 GOAL_SCOPE = {'local': 3, 'regional': 5, 'realm': 7}
 GOAL_SIZE = {'local': 8, 'regional': 12, 'realm': 24}
 
@@ -69,9 +75,9 @@ class Faction:
             return max(s.r.values())  # the goal's governing rating is the faction's best fit (data names it)
         return s.r[kind]
 
-def check(rng, f, rating, dc):
+def check(rng, f, rating, dc, action=None):
     d = rng.randint(1, 20)
-    total = d + rating + 2 * f.tier + STAGE_MOD[f.stage]
+    total = d + rating + 2 * f.tier + stage_mod(f, action)   # [revision: I-068]
     total = max(-8, min(16, total - d)) + d  # modifier clamp -8..+16
     return degree(d, total, dc)
 
@@ -247,7 +253,7 @@ def run(seed, scenario='engaged'):
             stats['acts'][act] += 1
             if act == 'goal':
                 scope, kind = f.goal
-                dg, near = check(rng, f, f.rating_for('goal'), 10 + 2 * f.tier + GOAL_SCOPE[scope])
+                dg, near = check(rng, f, f.rating_for('goal'), 10 + 2 * f.tier + GOAL_SCOPE[scope], 'goal')
                 ticks = {3: 2, 2: 1, 1: 0, 0: 0}[dg]
                 if dg == 0: f.slip = True; stats['slips'] += 1; stats['rumors'] += 1
                 f.filled += ticks
@@ -275,14 +281,14 @@ def run(seed, scenario='engaged'):
                 elif dg == 0:
                     lose_hold(f, stats); stats['rumors'] += 1
             elif act == 'expand':
-                dg, near = check(rng, f, f.r['wealth'], 15 + 2 * f.tier)
+                dg, near = check(rng, f, f.r['wealth'], 15 + 2 * f.tier, 'expand')
                 if dg >= 2: gain_hold(f, stats); stats['rumors'] += 1
             elif act == 'recover':                        # 11.3.6: DC 10 + 2 x tier + 3; success clears the slip
                 dg, near = check(rng, f, max(f.r['wealth'], f.r['sway']), 13 + 2 * f.tier)
                 if dg >= 2: f.hold = 1; f.slip = False
                 if dg == 3: f.filled += 1
             elif act == 'scheme':
-                dg, near = check(rng, f, f.r['cunning'], 10 + tgt.r['cunning'] + 2 * tgt.tier)
+                dg, near = check(rng, f, f.r['cunning'], 10 + tgt.r['cunning'] + 2 * tgt.tier + (1 if tgt.stage == 'entrenched' else 0))   # [revision: I-068] 11.3.5's +1
                 if dg >= 2: f.filled += 1; stats['rumors'] += 1   # the inside lever, spent toward its goal
                 elif dg == 0: tgt.rel[f.id] = max(-3, tgt.rel.get(f.id, 0) - 1)   # discovered
             elif act == 'move_pc':
@@ -348,7 +354,8 @@ def run(seed, scenario='engaged'):
                 f.seasons_in_stage += 1
                 if f.tier >= 3:
                     d = rng.randint(1, 20)
-                    if d + max(f.r.values()) + STAGE_MOD[f.stage] < 10 + 2 * f.tier: lose_hold(f, stats); stats['strain_losses'] = stats.get('strain_losses', 0) + 1
+                    if d + max(f.r.values()) + stage_mod(f) < 10 + 2 * f.tier:   # [revision: I-068] entrenched reads 0
+                        lose_hold(f, stats); stats['strain_losses'] = stats.get('strain_losses', 0) + 1
                 if not f.alive: continue
                 if f.stage == 'rising' and (f.completions >= 1 or f.seasons_in_stage >= 4):
                     f.stage = 'flourishing'; f.seasons_in_stage = 0

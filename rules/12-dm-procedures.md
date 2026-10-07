@@ -1777,7 +1777,11 @@ raised there would know.
 **12.16.4 Premise: what went wrong here.** `[D]` One wound (`tbl.12.seed.wound`, d12: a fallen realm, a
 plague, an invasion, a curse, a sundering, a silent keeper, a long winter, the restless dead, a frontier, a
 schism, a tyrant, an awakening) and a climate (one of 10.11.2's five). The wound writes the region's
-`pitch` and three `truths` (Ironsworn's "truths"), and is read by later steps: the creature tags its
+`pitch` and three `truths` (Ironsworn's "truths") and fixes the **age of the wound**: one roll in its row's
+`era_years` (a fallen realm 40–60 years; a plague or an invasion 20–30; a schism 15–25; a silent keeper or a long
+winter 8–15; a frontier 5–12; a waking 2–5; any other wound 11–30). That number is the opening year of the era
+(12.16.15), and the pitch says it in words ("twenty-three winters ago"), so the premise and the calendar are one
+fact [revision: I-069]. The wound is read by later steps: the creature tags its
 encounter pools weight × 3 (12.16.13), the situation template of its trouble and the org kind, goal and
 temperament of the faction behind it (12.16.10, 12.16.12), the site themes it favours, the keeper forms it
 favours, and the calendar's era. The region's name is drawn from `tbl.12.seed.place_names`.
@@ -1823,7 +1827,8 @@ non-human people, or the Old Tongue as the speech of what went before. Absent pe
 **12.16.8 The land: rings, areas and routes.** `[D]` The region is laid out as T-10-2's rings (10.2.4):
 ring 0 the haven; rings 1–5 with three, three, three, two and two **areas** (10.1.1), each with a terrain
 (ring 1 from the climate's farm country; rings 2–5 from `tbl.12.seed.terrain_by_climate`, d12), a home band
-in its ring's range (T-10-2: 1 · 1–2 · 2–3 · 3–4 · 4–5) and a danger rating (settled · wild · wild or perilous
+in its ring's range (T-10-2: 1 · 1–2 · 2–3 · 3–4 · 4–5; if both ring-5 areas would roll 4, the second is 5, so
+every region has a home-5 table and lair for a party at band 5 [revision: I-084]) and a danger rating (settled · wild · wild or perilous
 · perilous · deadly), a name (`tbl.12.seed.place_names`) and every 10.1.2 field (nav tier and openness from
 `travel.yaml#terrain_defaults`, 10.1.8). Routes (10.1.3): the haven to every ring-1 area by road (1–2
 watches); each area to the next in its ring (2–3 watches) and to one area of the ring inside it (3–4 watches);
@@ -1845,7 +1850,9 @@ its template (11.3.18): the haven's **rulers** (`tbl.12.seed.rulers` by haven ti
 village); the **main keeper's faith** (the same tier); the **threat** behind the wound (its org kind, goal and
 temperament from the wound; tier 2 or 3; seated at a ring-3 site, 12.16.12); and a **fourth** from
 `tbl.11.faction_seed` (any kind not already present; tier by `tbl.11.faction_tier`), plus the minor keepers'
-faiths as petty factions. Each goal clock is **running**: it starts with d(segments ÷ 3) ticks filled, so the
+faiths as petty factions (tier 0; their goal a `factions.yaml#petty_goals` kind, local, on its 6-segment clock,
+by PR-11-8's petty branch, so the World Turn's petty d6 runs them as written, 11.3.16) [revision: I-070]. Each
+goal clock is **running**: it starts with d(segments ÷ 3) ticks filled, so the
 world is already moving when the PC arrives; each linchpin's four fates are written and sealed (11.3.10).
 Relations: the threat stands at −2 to the rulers and the faith, −1 or 0 to the rest; other pairs d6 (1: −1,
 6: +1, else 0). The seed also writes the **org-tie map** chapter 02's faction ties read (02.9.5: every org
@@ -1871,7 +1878,9 @@ from the record, never guessed. The seed check (12.16.17) fails a teacher whose 
 target.
 **The powers of the far rings** [revision: I-083]: one principal NPC in each ring-4 area at **band 4** and in each
 ring-5 area at **band 5** (`tbl.12.seed.powers`, d8, a used row stepping down; the people by presence), at
-its area, with no faction. Each **keeps a truth** (`keeps`, sealed: the keeper of a lore contest, 15.9.20)
+its area, with no faction (until an outgrown faction wins a band-5 one to its cause as its patron, 11.3.3: the
+seed's threat, tier 2 or 3, fields a champion of band 3 or 4 at most, so this is how the campaign's wound keeps
+pace with a band-5 party [revision: I-084]). Each **keeps a truth** (`keeps`, sealed: the keeper of a lore contest, 15.9.20)
 and holds a position a social contest can move (its want and refusal, 15.3.11). These are the band-4 and
 band-5 opposition that tiers 4 and 5 of a social or lore calling need (04.3.4: six great deeds at band ≥ 4,
 four at band 5, at most two from one opposition): without them a seeded region's parties top out at band 4
@@ -1912,7 +1921,7 @@ sealed and its `points_to` is a real record (11.6.4).
 `tbl.12.seed.calendar_names` (three per season, no repeats) or the counted defaults; seven day names; the
 era named by the wound ("years since the Burning"); the four quarter-day festivals named for the main keeper
 (spring), a fair (summer), the harvest (autumn) and a remembrance of the wound (winter); the opening date,
-the spring quarter day of a year 11–30 of the era. Lifespans are `calendar.yaml#lifespans`.
+the spring quarter day of the era's year that 12.16.4 rolled (the wound's age) [revision: I-069]. Lifespans are `calendar.yaml#lifespans`.
 
 **12.16.16 The opening and the pregens.** `[D]` The inciting incident (`tbl.12.seed.inciting`, d8) is framed in
 the haven at a moment of decision (12.5.2 step 5; 12.4.3) and pairs with the PC's long vow (02.9.1). The
@@ -1927,26 +1936,30 @@ school, with the livelihood's suggested technique of that school [revision: I-05
 place of acceptance when the main keeper is a pact-power); each with a drive, an aspiration and an anchor bond to a cast NPC; birth drawn live when picked.
 
 **12.16.17 The seed check.** `[D]` A seed is complete when every requirement of **T-12-16**
-(`world_seed.yaml#requirements`) holds: 63 checks, one for everything the other chapters read from a region
+(`world_seed.yaml#requirements`) holds: 64 checks, one for everything the other chapters read from a region
 (built from every chapter's requests of chapter 13 and every rule that names region data). A requirement a
 seed leaves to a generic table or an on-demand rule names it (`seed.uses_generic`: local events, hooks,
 season events, NPC tables, omens, chase ground, hire quirks, cases by PR-15-6, storied items, regional
 afflictions, setting origins). A failed check re-runs the step that writes the key; the seed is not used
 until every check holds. *Evidence:* `_process/simulation/12-world-seed.py` runs PR-12-9 from data and the
-check: seed 1 (oracle) and a guided run pass 63 of 63; 200 further oracle seeds pass every check, with 2,600
-regional tables built by PR-10-10, every one passing PR-10-8 (word mix trivial 33.0 / easy 25.2 / fair 37.7 /
-hard 4.1 / lethal 0 %). Seed 1 is committed as `_process/simulation/12-world-seed-example.yaml`.
+check: seed 1 (oracle) and a guided run pass 64 of 64; 200 further oracle seeds pass every check, with 2,600
+regional tables built by PR-10-10, every one passing PR-10-8, whose home-1 tables are audited against both
+reference PCs (PR-10-8 step 2; `travel.yaml#encounter_audit_reference`) (word mix trivial 35.4 / easy 26.4 /
+fair 34.7 / hard 3.5 / lethal 0 %) [revision: I-096]. Seed 1 is committed as `_process/simulation/12-world-seed-example.yaml`.
 
 **12.16.18 After the seed.** `[D]` The seed writes the world at the depth play starts with; everything
 deeper is written on demand by its owner's rule and never invented in narration: a place on mention (10.1.4),
 a person (12.11.1), a faction (11.3.18), a site's areas (PR-10-7), a case (PR-15-6), a storied item (08.4.8). A
 **new region** (the PC travels past ring 5, or 11's World Turn opens one) runs steps 5, 9, 10 and 11 again
-for it, with its rings' home bands starting where the old region's ring 5 ended, its own factions by
+for it, with home bands that start where the old region's ring 5 ended: its ring 1 at home band 4 and rings 2–5
+at 4–5 (rolled as 12.16.8, a ring-5 area at 5), because the ladder has no band above 5 [revision: I-084]; its own
+factions by
 11.3.18's new-region rule, and its own powers by 12.16.11, every one at band 5 [revision: I-083]. A **pre-made seed** (chapter 13's Thallen Vale, or any `region_*.yaml`) replaces
 PR-12-9 entirely and must pass the same seed check; a key it lacks is written by the step that owns it, with
-the seed's other content as input. Chapter 13's region, run through the same script, holds 54 of the 63
+the seed's other content as input. Chapter 13's region, run through the same script, holds 54 of the 64
 requirements; its gaps (among them unlinked areas, encounter tables that fail PR-10-8, situations without
-`trace`, a rumor that points at prose, and no powers of the far rings) are listed in `12-world-seed-output.txt`
+`trace`, a rumor that points at prose, no powers of the far rings, and petty factions without petty goals
+[revision: I-070]) are listed in `12-world-seed-output.txt`
 and left as they are, because chapter 13 is no longer maintained (I-035) [revision: I-083].
 
 ---
@@ -2227,13 +2240,14 @@ key to it.
 | `ws.req.09_subset` | 09 | a regional subset of the bestiary | 09.11.2 | `bestiary/archetypes` | bestiary |
 | `ws.req.10_places` | 10 | places with every 10.1.2 field (or terrain defaults) | 10.1.2 | `places` | places |
 | `ws.req.10_links` | 10 | route links with lengths in watches | 10.1.3 | `places[]/links` | links |
-| `ws.req.10_rings` | 10 | danger rings per T-10-2 | 10.2.4, T-10-2 | `region/rings` | rings |
+| `ws.req.10_rings` | 10 | danger rings per T-10-2, at least one ring-5 area at home band 5 [revision: I-084] | 10.2.4, T-10-2, 12.16.8 | `region/rings` | rings |
 | `ws.req.10_encounters` | 10 | regional encounter tables in the two-sub-table shape, passing PR-10-8 | 10.10.1, 10.10.2, PR-10-8 | `encounter_tables` | encounter_tables |
 | `ws.req.10_signs_events` | 10 | archetype signs (travel.yaml's) and local events | 10.9.4, 10.9.6 | `tables (events)` | generic_or_table: travel.yaml#archetype_signs; world_turn.yaml#tbl.11.local_events |
 | `ws.req.10_sites` | 10 | site placements: theme, domain, band, size, objective | 10.13.2, PR-10-6 | `places[]/site` | sites |
 | `ws.req.10_rest` | 10 | havens and rest sites | 10.2.3, 07.8.4 | `places[]/rest_site` | rest_sites |
 | `ws.req.10_climate` | 10 | climate per region (weather regimes) | 10.11.2 | `region/climate` | climate |
 | `ws.req.11_factions` | 11 | factions conforming to 11.3.1, linchpin fates sealed, at least three full with running goal clocks | 11.3.1, 11.3.10, PR-11-8 | `factions/instances` | factions |
+| `ws.req.11_petty` | 11 | petty factions (the minor keepers' faiths) with a `petty_goals` goal: local, on the 6-segment clock, its target bound [revision: I-070] | 11.3.16, PR-11-8, 12.16.10 | `factions/instances` | petty_factions |
 | `ws.req.11_calendar` | 11 | month, weekday, quarter-day, festival and era names (or the counted defaults) | 11.10.1, 11.10.4 | `calendar` | calendar |
 | `ws.req.11_tables` | 11 | tbl.11.season_events.<region>, tbl.11.hook.<region>, tbl.<region>.events (or the generic ones) | 11.5.10, 11.11.3 | `tables (hooks, season events)` | generic_or_table: world_turn.yaml#tbl.11.hook, tbl.11.season_events.*, tbl.11.local_events |
 | `ws.req.11_values` | 11 | regional values for region scopes | 11.7.6 | `values` | values |
@@ -2630,25 +2644,25 @@ the mode, and the player says "surprise me": oracle mode (12.16.2). Every number
 
 | Step | Rolled (oracle) | What it wrote |
 |---|---|---|
-| 1 Premise | wound **invasion**; climate **highland** | the High Fells: *"The horde came down from the passes thirty winters ago and burned the High Fells to the river. It was driven back. The watchfires on the passes were lit again this spring."* Three truths (the horde gathers again; some veterans took its gold; the pass forts are under-held). |
+| 1 Premise | wound **invasion**; climate **highland** | the High Fells: *"The horde came down from the passes twenty-three winters ago and burned the High Fells to the river. It was driven back. The watchfires on the passes were lit again this spring."* Three truths (the horde gathers again; some veterans took its gold; the pass forts are under-held). The wound's age: 23, rolled in the invasion's 20–30 [revision: I-069]. |
 | 2 Canon | magic **rare**; open magic **feared**; spirits rare; arcane: anyone literate; one extra impossibility; no regrowth; no school closed | `canon_impossible`: the six defaults plus "No working makes gold, silver or gems". A visible working in Merestead's market is a method consequence (01.11.2). |
 | 3 Faith | three keepers: war, knowledge, sky; bargainer: a tempter | **Oswen, Lord of the Line** (smiting, oaths, warding; courage +, loyalty +) is the main keeper; Halda, the Keeper of Keys, and Ala, the High One, have petty faiths. `canon.default_bargainer = arch.tempter`. |
 | 4 Peoples | halflings common; humans, orc-kin and beastfolk uncommon; dwarves, goblin-kin and giant-kin rare; elves absent | seven name tables (humans uncommon: one style; the orc-kin's also serves the horde); second tongue: the Old Tongue, "the speech of the time before the Burning". |
-| 5 Land | ring 1 farmland and hills; rings 2–5 mostly mountains and hills, a ruin, a moor, a wood | 13 areas (3, 3, 3, 2, 2) with T-10-2's bands and ratings, 35 places in all, every one reachable from the haven. |
+| 5 Land | ring 1 farmland and hills; rings 2–5 mostly mountains and hills, a ruin, a moor, a wood | 13 areas (3, 3, 3, 2, 2) with T-10-2's bands and ratings (both ring-5 areas rolled 4, so the Tangled Ridge is home 5 [revision: I-084]), 35 places in all, every one reachable from the haven. |
 | 6 Haven | a **town** at a **harbour** | **Merestead**: temple of Oswen (consecrated, resonance divine), the Golden Hound inn, smithy, hall, quay, market square, healer's house, graveyard; market depth 150; hire up to band 2. Place of acceptance: Shepwell Spring and its lady (weather, growth, elements). |
-| 7 Factions | rulers **a noble house**; fourth **a town council** | the lords of Hawkgate (tier 2, goal 4/12: *humble the rival house*); the faithful of Oswen (tier 2, 3/12); **the Horde of the Millwick** (tier 3, aggressive, 4/12: *break the watch on the passes and burn the lowlands again*; −2 to both); the council of Merestead (tier 0, 1/8); two petty faiths. Every linchpin's four fates sealed. |
+| 7 Factions | rulers **a noble house**; fourth **a town council** | the lords of Hawkgate (tier 2, goal 4/12: *humble the rival house*); the faithful of Oswen (tier 2, 3/12); **the Horde of the Millwick** (tier 3, aggressive, 4/12: *break the watch on the passes and burn the lowlands again*; −2 to both); the council of Merestead (tier 0, 1/8); two petty faiths on 6-segment `petty_goals` clocks (1/6 each): Halda's would *win more of Merestead to it, and a hold of its own*, Ala's would *settle its quarrel with the faithful of Oswen* (a feud) [revision: I-070]. Every linchpin's four fates sealed. |
 | 8 Cast | 12.11.1's tables | 17 NPCs: heads and officers (Tible of the Wet Warren, the goblin-kin lord; Milby Greenfoot, Oswen's halfling priest; Brugnak Three-Scar of the horde), the smith, innkeeper, gate captain Loran Millbrook and the sellsword Zzirik Swift (both recruitable), Shepwell's wise-woman, a scribe, a healer. 12 teachings (`12-world-seed-output.txt`, `ws.req.15_teachers`) [verification: V2b-020]. The powers of the far rings (4 more, 21 in all) [revision: I-083]: Magwen Thistlefoot, a hermit-judge whom the old lands still obey (the Still Heath, band 4), and Selda Thornwell, an archmage in a tower that should have fallen (the Lonely Ridge, band 4); Sketaa of the Reed Clan, an exiled heir and her court (the Broken Greenwood, band 5), and Ymmulf of the Long Winter, master of a lost guild's last hall (the Tangled Ridge, band 5); each keeps a sealed truth. |
 | 9 Sites | 9 sites and 2 lairs | e.g. Whitfield's Temple (haunted temple, band 1: *the dead rising tonight*, sealed); **Wolfcrag's Delving** (fortified mine, band 3: the horde's seat); lairs Whitmouth's Undercroft (band 5) and the Delving of Ashhollow (band 5). Situations: *War comes* in the Hungry Pikes (step 1 done: the levy called) and *The hunting ground* in the Sunken Fells (a savaged ewe). |
 | 10 Tables | PR-10-10 at each area's band | 13 regional tables, all passing PR-10-8. The Drowned Ridge (home 2): 4–6 raptor minions and two orcs at band 1; a dwarf holdguard elite, a monstrous beast elite (complication), two frost elementals, two ancestor spirits at band 2; a bear minion and a wyvern minion at band 3. Words: 6 trivial, 3 easy, 11 fair. |
 | 11 Rumors | `tbl.11.rumor_truth` per site | 20 rumors (8 true, 7 partial, 5 false) [verification: V2b-020]: "Word is that the Horde of the Millwick will try to break the watch on the passes…" (true); "Whitfield's Temple is empty now" (false). |
 | 12 Calendar | months **named** | the Month of Thaw, Plough, Lambing-month…; Oswen's Day (spring), the Midsummer Fair, Harvest Home, the Night of Remembrance; the era "years since the Burning". |
-| 13 Opening | incident **missing** | the spring quarter day, 12 years since the Burning, dawn, Merestead's market square: a child is missing since last night and the trail leads out of the haven. Leads: Shephollow's Undercroft (ring 1), the war situation, the council's goal. Pregens: Fenbert Woodmore (Soldier), Magett Applefoot (halfling Thief), Osbert Elderley (Scholar), Evella Elderward (Acolyte of Oswen). |
-| 14 Check | T-12-16 | 63 of 63 requirements hold. |
+| 13 Opening | incident **alarm** | the spring quarter day, 23 years since the Burning (the pitch's twenty-three winters) [revision: I-069], dawn, Merestead's gate: the haven's alarm sounds, and something from the wound is at the gate. Leads: the war situation (the incident), *The hunting ground* ("a savaged ewe; folk say it is only the beginning"), the council's goal (it is hiring). Pregens: Tamred Stoneby (Soldier), Magly Mughill (halfling Thief), Tamric Ashsmith (Courtier), Evo Elderward (Acolyte of Oswen). |
+| 14 Check | T-12-16 | 64 of 64 requirements hold. |
 
 *Boundary pair — guided.* A second player answers fourteen questions themselves (a long winter, northern,
 rare magic, two keepers of hearth and death, the death keeper bargains, a hill village ruled by a family, a
 refugee opening, named months, no teleporting, the Old Tongue, and who may learn arcane magic) and leaves the
-rest to the oracle (`12-world-seed.py`'s guided run): the result also passes 63 of 63. Their custom answer "magic is something only the old families do" is not
+rest to the oracle (`12-world-seed.py`'s guided run): the result also passes 64 of 64. Their custom answer "magic is something only the old families do" is not
 an option of `ws.q.arcane_source`; 12.16.2 classifies it as `order_only` (an admitting order: the old
 families) and keeps their words as the canon fact's text — shown in `[SEED 2/14]`, where the player could
 have corrected it.
@@ -2880,4 +2894,4 @@ destination in the project record (proposed: `rules/_process/issue-ledger.md` at
 | OEQ-12-8 | Is the eventful-answer tag reliable? | 12.6.4 `[J:enum]` | **T-12-EVENTFUL**: 60 DM questions × 3 independent runs; target ≥ 85% agreement on the tag |
 | OEQ-12-9 | Is five active memories per NPC enough for consistent recurring NPCs? | 5 | **T-12-MEM**: replay 10 recurring-NPC scenes with caps 3 / 5 / 8; count "the NPC forgot something it should remember" judgments |
 | OEQ-12-10 | Do random events from Oracle doubles add life without noise? | T% per question | **T-12-EVENT**: log events per session and the player's "that mattered later" tag at session end; target ≥ 40% of events referenced again within 3 sessions |
-| OEQ-12-11 | Does a world seed give a first session as playable as a hand-made setting? | 12.16 (14 steps, T-12-16's 63 checks) | **T-12-SEED**: Verification's three paper playtests run in `12-world-seed-example.yaml`; count first-session dead ends (12.8), questions the seed could not answer from state (an Oracle roll where a setting would have had a fact), and the player's "this place feels like somewhere" rating; target no dead ends, at most 3 setting gaps a session, rating ≥ 4/5 [revision: I-028] |
+| OEQ-12-11 | Does a world seed give a first session as playable as a hand-made setting? | 12.16 (14 steps, T-12-16's 64 checks) | **T-12-SEED**: Verification's three paper playtests run in `12-world-seed-example.yaml`; count first-session dead ends (12.8), questions the seed could not answer from state (an Oracle roll where a setting would have had a fact), and the player's "this place feels like somewhere" rating; target no dead ends, at most 3 setting gaps a session, rating ≥ 4/5 [revision: I-028] |

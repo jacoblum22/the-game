@@ -58,6 +58,13 @@ War became decisive: the Wardens–Cult war ends with the Cult's collapse at a m
 column now shows a median 0 entanglements; the Thallen re-run, whose hostile faction stands, gives 8 (p10 5, p90
 11). `11-world-sim-output.txt` and `13-world-sim-output*.txt` reproduce byte for byte.
 
+**Re-run for I-068** [revision: I-068]: `stage_mod()` makes the stage modifier action-aware, as 11.3.5 states it
+(entrenched −1 on `goal` and `expand` only, 0 elsewhere including the weight of size; `scheme` gains the +1
+entrenched defense). Mean final tier 2.35–2.39; the Cult falls at a median week 10–11.5 (p90 30–37, was 35–44);
+nothing else moved by more than one step. `13-world-sim-output*.txt` are unchanged (byte for byte).
+`11-escalation-check.py` (I-084) loads this script's `check()` and `choose_action()` to time an outgrown faction's
+patron goal.
+
 **Exhaustive odds used in the chapter** (d20, 00.3.10 step rule): goal check at rating 3 — local 55% success-or-
 better (5% critical failure), regional 45% (10%), realm 35% (20%); equal strike 55%; steward +3 vs 15 45% (10%
 critical failure), +5 55% (5%); aging Endure +1 vs Easy/Moderate/Hard/Very hard failure-or-worse 40/65/90/95%;

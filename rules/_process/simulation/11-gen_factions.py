@@ -199,9 +199,10 @@ doc = {
     'agenda': {
         'overrides': [
             {'order': 1, 'when': 'slip last turn', 'action': 'recover'},
-            {'order': 2, 'when': 'relation -3 with a faction whose seat or a hold is in the same region, and d6 <= 3', 'action': 'strike', 'target': 'that faction'},
+            {'order': 2, 'when': 'relation -3 with a faction whose seat or a hold is in the same region, and d6 <= 3', 'action': 'strike', 'target': 'that faction'},  # [revision: I-061]
             {'order': 3, 'when': 'status toward the PC >= +2 and (a ransom due, a threat bang naming the PC holding, or a reward owed; or d6 = 1: the opportunity bang)', 'action': 'aid_pc'},
         ],
+        'dice': 'each override that names a d6 rolls its own, only when its condition holds; the temperament row is a fresh d6 (11.3.7) [revision: I-061]',
         'rows': {
             'aggressive': ['strike if a rival at <= -2', 'strike if a rival at <= -2', 'move_on_pc if status <= -2 and the PC in its region', 'expand', 'goal', 'goal'],
             'cautious': ['recover if hold weak', 'scheme if a rival at <= -1', 'court', 'goal', 'goal', 'goal'],
@@ -220,7 +221,8 @@ doc = {
     },
     'check': {
         'formula': 'd20 + rating + 2 x tier + stage modifier (+2 scheme lever, at most one); modifier clamped -8..+16',
-        'stage_modifier': {'rising': 1, 'flourishing': 0, 'entrenched': {'goal_expand': -1, 'defense': 1}, 'declining': -1},
+        'rating': 'the one the action names (actions[].check); for goal, the goal record\'s goal.rating (11.3.5) [revision: I-061]',
+        'stage_modifier': {'rising': 1, 'flourishing': 0, 'entrenched': {'goal_expand': -1, 'other': 0, 'defense': 1}, 'declining': -1},   # [revision: I-068] 'other' made explicit
         'dc': {'goal': '10 + 2 x tier + scope term', 'scope_term': {'local': 3, 'regional': 5, 'realm': 7},
                'against_faction': '10 + defender rating + 2 x defender tier (+1 entrenched, +2 at its seat)',
                'expand': '10 + 2 x tier + 5', 'recover_court': '10 + 2 x tier + 3'},
@@ -251,7 +253,7 @@ doc = {
             {'from': 'declining', 'to': 'collapsed', 'when': 'loses a weak hold at tier 0 (at once); or 4 Season Turns declining at tier 0'},
             {'from': 'any', 'to': 'collapsed', 'when': 'a linchpin fate names collapse (at once)'},
         ],
-        'weight_of_size': {'applies': 'tier >= 3, at each Season Turn', 'check': 'd20 + highest rating + stage modifier vs 10 + 2 x tier', 'failure': 'lose hold'},
+        'weight_of_size': {'applies': 'tier >= 3, at each Season Turn', 'check': 'd20 + highest rating + stage modifier (entrenched 0: its -1 is on goal and expand only) vs 10 + 2 x tier', 'failure': 'lose hold'},  # [revision: I-068]
         'basis': ['11.3.9', 'R6 B-05', 'DL-11-06'],
     },
     'rank_ladders': [
@@ -324,9 +326,20 @@ doc = {
         {'range': '7', 'org': 'org.cult'}, {'range': '8', 'org': 'org.company.trading'}, {'range': '9', 'org': 'org.crown.noble'},
         {'range': '10', 'org': 'org.order.druidic (wild terrain) or org.guild.craft (settled)'}, {'range': '11', 'org': 'org.outlaw.thieves (town or city) or org.outlaw.bandits'},
         {'range': '12', 'org': 'org.order.arcane or org.order.knightly (d6: 1-3 / 4-6)'}]},
+    # [revision: I-070] a petty faction's goal is drawn here, not from its template's goal list (PR-11-8 step 5): a d6 on
+    # the kinds, scope local, the 6-segment clock, its text from the kind's pattern and its target by the kind's rule.
     'petty_goals': {'clock': {'segments': 6, 'visibility': 'hidden'}, 'die': 'd6 per World Turn: 1-3 nothing, 4-5 +1, 6 +2; +1 rising, -1 declining',
-                    'kinds': [{'kind': 'grow', 'writes': 'hold; then tier; at tier 2 it becomes full'}, {'kind': 'take', 'writes': 'a place passes to it'},
-                              {'kind': 'stir', 'writes': 'a situation from its template list'}, {'kind': 'feud', 'writes': 'relation -2 with a named neighbor'}],
+                    'draw': 'd6 on kinds by range (PR-11-8 step 5, a faction created petty); scope local; rating: its highest (ties force, cunning, wealth, sway)',
+                    'kinds': [{'range': '1-2', 'kind': 'grow', 'text': 'win more of {seat} to it, and a hold of its own', 'target': None,
+                               'writes': 'hold; then tier; at tier 2 it becomes full'},
+                              {'range': '3', 'kind': 'take', 'text': 'take {place} for its own',
+                               'target': 'the nearest place of its seat\'s region that no faction holds (ring, then id)', 'writes': 'a place passes to it'},
+                              {'range': '4', 'kind': 'stir', 'text': 'stir up trouble at {seat}\'s next festival', 'target': None,
+                               'writes': 'a situation of template sit_t.festival_trouble at its seat, itself the troublemaker'},
+                              {'range': '5-6', 'kind': 'feud', 'text': 'settle its quarrel with {neighbor}',
+                               'target': 'the faction with the lowest relation toward it (then the highest tier, then the lowest id)',
+                               'writes': 'relation -2 with the target'}],
+                    'becomes_full': 'it keeps its petty goal until the goal completes (worked by goal actions at the local DC), then draws from its template (11.3.2)',
                     'on_complete': 'its goal writes and one seeded hook'},
     'templates': templates,
     'factions': [],

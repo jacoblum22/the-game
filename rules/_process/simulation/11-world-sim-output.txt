@@ -1,7 +1,7 @@
 === scenario: engaged ===
 World simulation, 300 seeds x 104 weeks (2 years); p10 / median / p90 per 2 years
 goal_done            (13, 15.0, 18)
-tier_up              (3, 5.0, 7)
+tier_up              (3, 5.0, 8)
 tier_down            (3, 5.0, 7)
 collapses            (1, 2.0, 2)
 new_factions         (1, 2.0, 2)
@@ -9,44 +9,44 @@ strikes              (10, 17.0, 27)
 strike_hits          (6, 9.0, 15)
 slips                (14, 19.0, 25)
 entanglements        (0, 0.0, 0)
-moves_on_pc          (0, 0.0, 1)
+moves_on_pc          (0, 0.0, 0)
 hooks_seeded         (54, 59.0, 65)
-threads_activated    (28, 33.0, 36)
+threads_activated    (28, 32.0, 36)
 threads_completed    (16, 19.0, 23)
 threads_failed       (8, 11.0, 15)
 hooks_expired        (18, 23.0, 28)
-rumors               (234, 249.0, 267)
+rumors               (234, 249.5, 267)
 situations           (8, 12.0, 16)
 max_known_hooks      (8, 9.0, 10)
 weeks_known_lt3      (3, 4.0, 5)
 bangs_max            (1, 1.0, 2)
-open_active_end      (1, 2.0, 2)
+open_active_end      (2, 2.0, 2)
 open_seeded_end      (2, 4.0, 6)
 strain_losses        (5, 9.0, 12)
 goal completions per faction per 2y: p10/med/p90 (2, 4.0, 5)
-final tier distribution (start 2,1,3,1): [(0, 24), (1, 148), (2, 386), (3, 642)]
+final tier distribution (start 2,1,3,1): [(0, 20), (1, 147), (2, 380), (3, 653)]
 max tier reached anywhere:  3
-faction actions (11.3.7 agenda), share of all turns: goal 67.6%, strike 4.4%, scheme 3.9%, expand 5.4%, recover 9.4%, court 6.0%, move_pc 0.0%, aid_pc 3.2%, lie_low 0.0%
+faction actions (11.3.7 agenda), share of all turns: goal 67.7%, strike 4.4%, scheme 3.8%, expand 5.3%, recover 9.6%, court 5.9%, move_pc 0.0%, aid_pc 3.1%, lie_low 0.0%
 courts won per 2y p10/med/p90 (10, 13.0, 17)
-the Wardens-Cult war (relation -3): week the Cult collapsed p10/med/p90 (5, 10.5, 35) (104 = stood); the Wardens (7, 33.5, 104)
+the Wardens-Cult war (relation -3): week the Cult collapsed p10/med/p90 (5, 10.0, 30) (104 = stood); the Wardens (7, 38.0, 104)
 === scenario: war ===
 World simulation, 300 seeds x 104 weeks (2 years); p10 / median / p90 per 2 years
 goal_done            (13, 15.0, 18)
-tier_up              (3, 6.0, 8)
+tier_up              (3, 5.0, 8)
 tier_down            (3, 5.0, 8)
 collapses            (1, 2.0, 2)
 new_factions         (1, 2.0, 2)
-strikes              (10, 16.0, 27)
+strikes              (10, 16.0, 28)
 strike_hits          (6, 9.0, 15)
-slips                (13, 19.0, 26)
-entanglements        (0, 0.0, 4)
+slips                (13, 20.0, 25)
+entanglements        (0, 0.0, 3)
 moves_on_pc          (0, 0.0, 2)
 hooks_seeded         (54, 59.0, 65)
 threads_activated    (28, 32.0, 36)
-threads_completed    (16, 19.0, 22)
-threads_failed       (7, 11.0, 15)
-hooks_expired        (18, 23.0, 28)
-rumors               (233, 250.0, 268)
+threads_completed    (16, 19.0, 23)
+threads_failed       (8, 11.0, 15)
+hooks_expired        (18, 22.0, 28)
+rumors               (233, 250.0, 266)
 situations           (8, 12.0, 16)
 max_known_hooks      (8, 9.0, 10)
 weeks_known_lt3      (3, 4.0, 5)
@@ -55,49 +55,49 @@ open_active_end      (2, 2.0, 2)
 open_seeded_end      (2, 4.0, 6)
 strain_losses        (5, 9.0, 13)
 goal completions per faction per 2y: p10/med/p90 (2, 4.0, 5)
-final tier distribution (start 2,1,3,1): [(0, 22), (1, 139), (2, 406), (3, 633)]
+final tier distribution (start 2,1,3,1): [(0, 29), (1, 146), (2, 399), (3, 626)]
 max tier reached anywhere:  3
-faction actions (11.3.7 agenda), share of all turns: goal 67.3%, strike 4.4%, scheme 4.0%, expand 5.4%, recover 9.7%, court 6.0%, move_pc 0.2%, aid_pc 3.0%, lie_low 0.1%
+faction actions (11.3.7 agenda), share of all turns: goal 67.5%, strike 4.4%, scheme 3.8%, expand 5.4%, recover 9.7%, court 5.9%, move_pc 0.1%, aid_pc 3.1%, lie_low 0.1%
 courts won per 2y p10/med/p90 (10, 13.0, 17)
-the Wardens-Cult war (relation -3): week the Cult collapsed p10/med/p90 (5, 12.0, 44) (104 = stood); the Wardens (7, 24.0, 104)
+the Wardens-Cult war (relation -3): week the Cult collapsed p10/med/p90 (5, 11.5, 37) (104 = stood); the Wardens (7, 24.5, 104)
 === scenario: absent ===
 World simulation, 300 seeds x 104 weeks (2 years); p10 / median / p90 per 2 years
-goal_done            (13, 16.0, 19)
+goal_done            (14, 16.0, 19)
 tier_up              (3, 5.0, 8)
-tier_down            (3, 5.0, 7)
+tier_down            (2, 4.0, 7)
 collapses            (1, 2.0, 2)
 new_factions         (1, 2.0, 2)
-strikes              (11, 16.0, 26)
-strike_hits          (6, 8.5, 15)
-slips                (14, 20.0, 26)
+strikes              (11, 17.0, 27)
+strike_hits          (6, 8.0, 15)
+slips                (15, 20.0, 26)
 entanglements        (0, 0.0, 0)
 moves_on_pc          (0, 0.0, 0)
-hooks_seeded         (51, 55.0, 58)
+hooks_seeded         (52, 55.0, 58)
 threads_activated    (0, 0.0, 0)
 threads_completed    (0, 0.0, 0)
 threads_failed       (0, 0.0, 0)
 hooks_expired        (47, 50.0, 54)
-rumors               (241, 257.0, 273)
-situations           (9, 13.0, 16)
+rumors               (242, 257.0, 273)
+situations           (9, 13.0, 17)
 max_known_hooks      (6, 7.0, 8)
-weeks_known_lt3      (8, 10.0, 12)
+weeks_known_lt3      (7, 10.0, 12)
 bangs_max            (0, 0.0, 0)
 open_active_end      (0, 0.0, 0)
 open_seeded_end      (3, 4.0, 6)
 strain_losses        (5, 9.0, 13)
 goal completions per faction per 2y: p10/med/p90 (2, 4.0, 5)
-final tier distribution (start 2,1,3,1): [(0, 19), (1, 132), (2, 389), (3, 660)]
+final tier distribution (start 2,1,3,1): [(0, 19), (1, 148), (2, 384), (3, 649)]
 max tier reached anywhere:  3
-faction actions (11.3.7 agenda), share of all turns: goal 70.0%, strike 4.3%, scheme 4.0%, expand 5.3%, recover 10.1%, court 6.1%, move_pc 0.0%, aid_pc 0.0%, lie_low 0.0%
+faction actions (11.3.7 agenda), share of all turns: goal 70.4%, strike 4.5%, scheme 3.9%, expand 5.2%, recover 10.0%, court 6.0%, move_pc 0.0%, aid_pc 0.0%, lie_low 0.0%
 courts won per 2y p10/med/p90 (10, 13.0, 17)
-the Wardens-Cult war (relation -3): week the Cult collapsed p10/med/p90 (6, 10.0, 38) (104 = stood); the Wardens (7, 28.0, 104)
+the Wardens-Cult war (relation -3): week the Cult collapsed p10/med/p90 (6, 10.0, 36) (104 = stood); the Wardens (7, 29.0, 104)
 === scenario: liar_old (one planted rumor a week about the margrave / salt guild pair, relation 0 at start) ===
-runs at war (-3, margrave toward the guild) within 1 season / 1 year / 2 years: 276 / 300 / 300 of 300
+runs at war (-3, margrave toward the guild) within 1 season / 1 year / 2 years: 275 / 300 / 300 of 300
 week war began, among runs that reached it: p10/med/p90 (4, 7.0, 13)
-relation moves by belief per 2y p10/med/p90 (11, 16.0, 26); lowest relation reached: [(-3, 300)]
+relation moves by belief per 2y p10/med/p90 (10, 16.0, 26); lowest relation reached: [(-3, 300)]
 runs whose war followed at least one successful strike between the pair: 68 of 300
 === scenario: liar_new (one planted rumor a week about the margrave / salt guild pair, relation 0 at start) ===
-runs at war (-3, margrave toward the guild) within 1 season / 1 year / 2 years: 0 / 87 / 195 of 300
-week war began, among runs that reached it: p10/med/p90 (24, 55, 95)
-relation moves by belief per 2y p10/med/p90 (3, 4.0, 11); lowest relation reached: [(-3, 195), (-2, 79), (-1, 11), (0, 15)]
-runs whose war followed at least one successful strike between the pair: 102 of 195
+runs at war (-3, margrave toward the guild) within 1 season / 1 year / 2 years: 0 / 110 / 204 of 300
+week war began, among runs that reached it: p10/med/p90 (24, 50.5, 92)
+relation moves by belief per 2y p10/med/p90 (3, 4.0, 13); lowest relation reached: [(-3, 204), (-2, 72), (-1, 7), (0, 17)]
+runs whose war followed at least one successful strike between the pair: 105 of 204

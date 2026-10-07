@@ -84,6 +84,19 @@ class Dice:
                 return k
         return items[-1][0]
 
+_ONES = "zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen".split()
+_TENS = "_ _ twenty thirty forty fifty sixty seventy eighty ninety".split()
+def num_words(n):
+    # [revision: I-069] the wound's age in words for the pitch's {years}
+    if n < 20:
+        return _ONES[n]
+    t, o = divmod(n, 10)
+    return _TENS[t] + ("" if o == 0 else "-" + _ONES[o])
+
+def fill_pitch(pitch, region, years):
+    w = num_words(years)
+    return pitch.replace("{region}", region).replace("{years}", w).replace("{Years}", w[0].upper() + w[1:])
+
 def in_range(rng_s, v):
     a, _, b = str(rng_s).partition("-")
     return int(a) <= v <= int(b or a)
@@ -338,6 +351,11 @@ def build_seed(seed, given=None):
     region_name = names.region()
     rs = slug(region_name.replace("the ", ""))
     S["_rs"] = rs
+    # [revision: I-069] 12.16.4: the wound's age (its row's era_years) is the opening year of the era (12.16.15), and the
+    # pitch says it. Drawn on its own seed-derived stream, like I-083's powers, so no other roll of the seed moves.
+    lo, hi = wound["era_years"]
+    era_age = Dice(seed * 1013 + 69).rng.randint(lo, hi)
+    ctx["era_age"] = era_age
     ctx.update({"ws.q.wound": wound_opt, "ws.q.climate": climate})
 
     # ---------------------------------------------------------------- 2. canon (12.16.5)
@@ -478,6 +496,8 @@ def build_seed(seed, given=None):
             if ring == 1 and hsite["terrain"][0].startswith("terrain.water") and i == 0:
                 terr.append(hsite["terrain"][0])
             band = rdef["home_band"][0] if len(rdef["home_band"]) == 1 else (rdef["home_band"][0] if dice.d(6) <= 3 else rdef["home_band"][1])
+            if ring == 5 and i == DEF["areas_per_ring"][5] - 1 and all(P[x]["band"] < 5 for x in areas_by_ring[5]):
+                band = 5      # [revision: I-084] 12.16.8: at least one ring-5 area is home band 5 (a home-5 table exists)
             danger = {1: "settled", 2: "wild", 3: ("wild" if dice.d(6) <= 3 else "perilous"), 4: "perilous", 5: "deadly"}[ring]
             nm = names.area(primary)
             aid = "loc.%s_%s" % (rs, slug(nm.replace("the ", "")))
@@ -589,6 +609,14 @@ def build_seed(seed, given=None):
             g = dict(wound["threat_goal"])
         scope = "local" if ftier <= 1 else "regional"
         segs = FAC["goal_clocks"][scope]["segments"]
+        if role == "faith_minor":
+            # [revision: I-070] a petty faction (11.3.16): its goal is a petty_goals kind (the same d6), local, on the
+            # 6-segment clock; text and target are bound after relations (below); rating its highest
+            pk = by_range(FAC["petty_goals"]["kinds"], g["d6"])
+            hi = max(ratings.values())
+            g = {"text": pk["text"], "kind": pk["kind"], "rating": next(k for k in ("force", "cunning", "wealth", "sway") if ratings[k] == hi),
+                 "petty": True}
+            segs = FAC["petty_goals"]["clock"]["segments"]
         filled = dice.d(max(1, segs // 3))
         clk = {"id": "clk.%s.%s.goal" % (rs, fid.split(".")[-1]), "name": "%s: %s" % (nm, g["text"]), "kind": "faction_goal", "owner": fid,
                "segments": segs, "filled": filled, "visibility": "hidden", "direction": "fill",
@@ -598,7 +626,8 @@ def build_seed(seed, given=None):
                            ("tier", ftier), ("hold", "strong"), ("ratings", ratings), ("temperament", wound["threat_temperament"] if role == "threat" else t["temperament"]),
                            ("lifecycle_stage", "rising" if role == "threat" else "flourishing"), ("full", role in ("rulers", "faith", "threat", "fourth")),
                            ("full_reason", "tier %d >= 2 (11.3.2)" % ftier if ftier >= 2 else ("an opening lead names it: a thread (11.3.2)" if role in ("rulers", "faith", "threat", "fourth") else None)),
-                           ("goal", {"text": g["text"], "kind": g["kind"], "scope": scope, "rating": g["rating"], "clock": clk["id"], "effects": [], "target": None}),
+                           ("goal", OrderedDict([("text", g["text"]), ("kind", g["kind"]), ("scope", scope), ("rating", g["rating"]), ("clock", clk["id"]), ("effects", []), ("target", None)]
+                                             + ([("petty", True)] if g.get("petty") else []))),
                            ("seat", seat), ("holds", [seat] if seat else []), ("linchpins", []), ("officers", []), ("duties", t["duties"]),
                            ("relations", {}), ("status_to_pc", 0), ("attention", None), ("pursuit", 0), ("ranks", t["rank_ladder"]),
                            ("sittings", t["sittings"]), ("fields", t["fields"]), ("values", t["values"]), ("patron_deeds", t["patron_deeds"]),
@@ -613,6 +642,25 @@ def build_seed(seed, given=None):
             v = {1: -1, 6: 1}.get(dice.d(6), 0)
         if v:
             a["relations"][b["id"]] = v; b["relations"][a["id"]] = v
+    # [revision: I-070] bind the petty goals' texts and targets (factions.yaml#petty_goals), no dice
+    held = {h for f in factions for h in f["holds"]}
+    for f in factions:
+        gl = f["goal"]
+        if not gl.get("petty"):
+            continue
+        tgt, txt = None, gl["text"].replace("{seat}", hname)
+        if gl["kind"] == "take":
+            tgt = next(a for r in (1, 2, 3, 4, 5) for a in sorted(areas_by_ring[r]) if a not in held)
+            held.add(tgt)
+            txt = txt.replace("{place}", P[tgt]["name"])
+        elif gl["kind"] == "feud":
+            others = [o for o in factions if o is not f]
+            nb = min(others, key=lambda o: (f["relations"].get(o["id"], 0), -o["tier"], o["id"]))
+            tgt = nb["id"]
+            txt = txt.replace("{neighbor}", nb["name"][0].lower() + nb["name"][1:] if nb["name"].startswith("The ") else nb["name"])
+        gl["text"], gl["target"] = txt, tgt
+        clk = next(c for c in S["clocks"] if c["id"] == gl["clock"])
+        clk["name"] = "%s: %s" % (clk["name"].split(": ")[0], txt)
 
     # ---------------------------------------------------------------- 8. the cast (12.16.11)
     PW = {"common": 6, "uncommon": 3, "rare": 1}
@@ -786,7 +834,7 @@ def build_seed(seed, given=None):
                             ("visibility", "sealed (the timeline; its traces are shown as they fire)"),
                             ("lifecycle", "provisional"), ("basis", ["11.4.1", "11.4.2", "12.16.12"])])
     big_roles = {r: (F["threat"]["id"] if i == 0 else (F["rulers"]["id"] if i == 1 else F["faith"]["id"])) for i, r in enumerate(SITT[wound["situation"]]["roles"])}
-    situations.append(instantiate(wound["situation"], dice.pick(areas_by_ring[2]), big_roles, wound["pitch"].replace("{region}", region_name), "wound"))
+    situations.append(instantiate(wound["situation"], dice.pick(areas_by_ring[2]), big_roles, fill_pitch(wound["pitch"], region_name, ctx["era_age"]), "wound"))
     hook = by_range(WT["tbl.11.hook"]["results"], dice.d(20))
     tries = 0
     while "template" not in hook and tries < 20:
@@ -883,7 +931,7 @@ def build_seed(seed, given=None):
     else:
         months = [m["name"] for m in CAL["months"]]
     fest = {k: v.replace("{keeper}", main_keeper["name"].split(",")[0]) for k, v in ct["festival_patterns"].items()}
-    year = 10 + dice.d(20)
+    year = ctx["era_age"]          # [revision: I-069] the wound's age, rolled at step 1 (12.16.4), not a free d20
     calendar = {"months": months, "day_names": ct["weekdays"] if mn == "named" else CAL["day_names"],
                 "era": {"name": wound["era"], "year_one": "the year %s" % re.sub(r"^years (since|of) ", "", wound["era"]).replace("the ", "of the ", 1)},
                 "festivals": [{"quarter_day": q, "name": fest[q]} for q in ["spring", "summer", "autumn", "winter"]],
@@ -898,8 +946,11 @@ def build_seed(seed, given=None):
     start_place = {"gate": blds["gate"], "market": blds.get("market", blds["gate"]), "square": blds.get("market", hid), "hall": blds["hall"],
                    "temple": holy, "walls": blds["gate"], "inn": blds["inn"]}
     scene_key = next(k for k in start_place if k in inc["scene"])
+    _si = 0 if first_target != situations[0]["id"] else 1
     leads = [{"lead": "the incident itself: %s" % inc["text"], "points_to": first_target},
-             {"lead": rum[len([f for f in factions if f['full']])]["text"], "points_to": situations[0]["id"] if first_target != situations[0]["id"] else situations[1]["id"]},
+             # [revision: I-069 sweep] the lead's words are the first-trace rumor of the situation it points to (12.16.14 order:
+             # the full factions' goals, then each situation's first trace); before, it always quoted the wound's
+             {"lead": rum[len([f for f in factions if f['full']]) + _si]["text"], "points_to": situations[_si]["id"]},
              {"lead": "%s is hiring, and asks no questions" % F["fourth"]["name"], "points_to": F["fourth"]["goal"]["clock"]}]
     regime = "%s spring" % climate
     opening = {"start": {"date": calendar["opening_date"], "watch": "dawn", "place": start_place[scene_key],
@@ -973,7 +1024,7 @@ def build_seed(seed, given=None):
                                 ("rings", [{"ring": 0, "words": rings_t[0]["words"], "home_band": None, "areas": [], "places": [hid]}] +
                                           [{"ring": r, "words": rings_t[r]["words"], "home_band": rings_t[r]["home_band"], "areas": areas_by_ring[r],
                                             "places": [s for s in sites if P[s]["ring"] == r]} for r in range(1, 6)]),
-                                ("pitch", wound["pitch"].replace("{region}", P[region_id]["name"])),
+                                ("pitch", fill_pitch(wound["pitch"], P[region_id]["name"], ctx["era_age"])),
                                 ("truths", wound["truths"]), ("lifecycle", "provisional"), ("basis", ["12.16.4", "12.16.8"])])),
         ("canon_impossible", [c["text"] for c in ci]),
         ("canon", OrderedDict([
@@ -1258,7 +1309,8 @@ def _check_one(rq, reg, ok, P, npcs, facs, clocks, keepers, sits, ids, hav, sett
             ok(rid, not bad and not unreach, "%d routes; unreachable %d" % (len({l["route"] for p in reg["places"] for l in p["links"]}), len(unreach)))
         elif c == "rings":
             rr = reg["region"]["rings"]
-            ok(rid, [r["ring"] for r in rr] == [0, 1, 2, 3, 4, 5] and all(P[a]["band"] in TRAVEL["rings"][r["ring"]]["home_band"] for r in rr[1:] for a in r["areas"]))
+            ok(rid, [r["ring"] for r in rr] == [0, 1, 2, 3, 4, 5] and all(P[a]["band"] in TRAVEL["rings"][r["ring"]]["home_band"] for r in rr[1:] for a in r["areas"])
+               and any(P[a]["band"] == 5 for a in rr[5]["areas"]))   # [revision: I-084] 12.16.8: a home-5 area in ring 5
         elif c == "encounter_tables":
             au = reg["encounter_table_audit"]
             # re-audit every regional table here (PR-10-8), whatever audit the region stored
@@ -1279,9 +1331,17 @@ def _check_one(rq, reg, ok, P, npcs, facs, clocks, keepers, sits, ids, hav, sett
         elif c == "factions":
             full = [f for f in facs.values() if f["full"]]
             shape = all(sum(f["ratings"].values()) == 4 + 2 * f["tier"] and f["goal"]["clock"] in clocks and f["linchpins"]
-                        and all(set(l["fates"]) == {"dies", "captured", "turned", "exposed"} and l["sealed"] for l in f["linchpins"]) for f in facs.values())
+                        and all({"dies", "captured", "turned", "exposed"} <= set(l["fates"]) <= {"dies", "captured", "turned", "exposed", "deposed"} and l["sealed"] for l in f["linchpins"]) for f in facs.values())   # [revision: I-081] deposed optional
             running = sum(1 for f in full if clocks[f["goal"]["clock"]]["filled"] > 0)
             ok(rid, len(full) >= 3 and shape and running >= 3, "%d factions, %d full, %d running" % (len(facs), len(full), running))
+        elif c == "petty_factions":
+            # [revision: I-070] 11.3.16: a petty faction's goal is a petty_goals kind, local, on the 6-segment clock
+            kinds = {k["kind"] for k in FAC["petty_goals"]["kinds"]}
+            pet = [f for f in facs.values() if not f["full"]]
+            bad = [f["id"] for f in pet if not (f["goal"]["kind"] in kinds and f["goal"]["scope"] == "local"
+                   and clocks[f["goal"]["clock"]]["segments"] == FAC["petty_goals"]["clock"]["segments"]
+                   and ("{" not in f["goal"]["text"]) and (f["goal"]["kind"] not in ("take", "feud") or f["goal"]["target"] in ids))]
+            ok(rid, not bad, "%d petty%s" % (len(pet), (", bad " + ", ".join(bad)) if bad else ""))
         elif c == "calendar":
             cal = reg["calendar"]
             ok(rid, len(cal["months"]) == 12 and len(cal["day_names"]) == 7 and cal["era"]["name"] and len(cal["festivals"]) == 4)
