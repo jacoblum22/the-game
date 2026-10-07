@@ -75,29 +75,30 @@ power_band:                        # 04.5.6: power_band(pc) = max over held, uns
 # measured SINCE the calling's last crystallization (detail(tag, since)).
 # ---------------------------------------------------------------------------------------------------------------
 requirements:
+  # [revision: I-089] tiers 2-5 weighted retuned to 04.3.5's targets under advisory-offset conflicts (DL-04-32)
   counted_rule: "counted = weighted threshold / 10, rounded down; cnt.training units count for at most half of it (03.5.5)"
   req.fine.1:   {primary: {weighted: 60,   quality_events: 6, distinct_scenes: 5}, secondary: {counted: 6}}
-  req.fine.2:   {primary: {weighted: 150,  since: {quality_events: 10, distinct_scenes: 8,  great_deeds: 5, crises: 0, contexts: 0}}, secondary: {counted: 15}}
-  req.fine.3:   {primary: {weighted: 330,  since: {quality_events: 14, distinct_scenes: 10, great_deeds: 6, crises: 2, contexts: 0}}, secondary: {counted: 33}}
-  req.fine.4:   {primary: {weighted: 600,  since: {quality_events: 18, distinct_scenes: 12, great_deeds: 6, crises: 3, contexts: 5}}, secondary: {counted: 60}}
-  req.fine.5:   {primary: {weighted: 975,  since: {quality_events: 22, distinct_scenes: 14, great_deeds: 4, crises: 4, contexts: 5}}, secondary: {counted: 97}}
+  req.fine.2:   {primary: {weighted: 120,  since: {quality_events: 10, distinct_scenes: 8,  great_deeds: 5, crises: 0, contexts: 0}}, secondary: {counted: 12}}
+  req.fine.3:   {primary: {weighted: 255,  since: {quality_events: 14, distinct_scenes: 10, great_deeds: 6, crises: 2, contexts: 0}}, secondary: {counted: 25}}
+  req.fine.4:   {primary: {weighted: 480,  since: {quality_events: 18, distinct_scenes: 12, great_deeds: 6, crises: 3, contexts: 5}}, secondary: {counted: 48}}
+  req.fine.5:   {primary: {weighted: 900,  since: {quality_events: 22, distinct_scenes: 14, great_deeds: 4, crises: 4, contexts: 5}}, secondary: {counted: 90}}
   req.narrow.1: {primary: {weighted: 80,   quality_events: 6, distinct_scenes: 5}, secondary: {counted: 8}}
-  req.narrow.2: {primary: {weighted: 200,  since: {quality_events: 10, distinct_scenes: 8,  great_deeds: 5, crises: 0, contexts: 0}}, secondary: {counted: 20}}
-  req.narrow.3: {primary: {weighted: 440,  since: {quality_events: 14, distinct_scenes: 10, great_deeds: 6, crises: 2, contexts: 0}}, secondary: {counted: 44}}
-  req.narrow.4: {primary: {weighted: 800,  since: {quality_events: 18, distinct_scenes: 12, great_deeds: 6, crises: 3, contexts: 5}}, secondary: {counted: 80}}
-  req.narrow.5: {primary: {weighted: 1300, since: {quality_events: 22, distinct_scenes: 14, great_deeds: 4, crises: 4, contexts: 5}}, secondary: {counted: 130}}
+  req.narrow.2: {primary: {weighted: 160,  since: {quality_events: 10, distinct_scenes: 8,  great_deeds: 5, crises: 0, contexts: 0}}, secondary: {counted: 16}}
+  req.narrow.3: {primary: {weighted: 340,  since: {quality_events: 14, distinct_scenes: 10, great_deeds: 6, crises: 2, contexts: 0}}, secondary: {counted: 34}}
+  req.narrow.4: {primary: {weighted: 640,  since: {quality_events: 18, distinct_scenes: 12, great_deeds: 6, crises: 3, contexts: 5}}, secondary: {counted: 64}}
+  req.narrow.5: {primary: {weighted: 1200, since: {quality_events: 22, distinct_scenes: 14, great_deeds: 4, crises: 4, contexts: 5}}, secondary: {counted: 120}}
   req.broad.1:  {primary: {weighted: 120,  quality_events: 6, distinct_scenes: 5, children: {count: 3, each_weighted: 30}, top_child_share_max: {num: 2, den: 3}}, secondary: {counted: 12}}
-  req.broad.2:  {primary: {weighted: 300,  since: {quality_events: 10, distinct_scenes: 8,  great_deeds: 5, crises: 0, contexts: 0}}, secondary: {counted: 30}}
-  req.broad.3:  {primary: {weighted: 660,  since: {quality_events: 14, distinct_scenes: 10, great_deeds: 6, crises: 2, contexts: 0}}, secondary: {counted: 66}}
-  req.broad.4:  {primary: {weighted: 1200, since: {quality_events: 18, distinct_scenes: 12, great_deeds: 6, crises: 3, contexts: 5}}, secondary: {counted: 120}}
-  req.broad.5:  {primary: {weighted: 1950, since: {quality_events: 22, distinct_scenes: 14, great_deeds: 4, crises: 4, contexts: 5}}, secondary: {counted: 195}}
+  req.broad.2:  {primary: {weighted: 240,  since: {quality_events: 10, distinct_scenes: 8,  great_deeds: 5, crises: 0, contexts: 0}}, secondary: {counted: 24}}
+  req.broad.3:  {primary: {weighted: 510,  since: {quality_events: 14, distinct_scenes: 10, great_deeds: 6, crises: 2, contexts: 0}}, secondary: {counted: 51}}
+  req.broad.4:  {primary: {weighted: 960,  since: {quality_events: 18, distinct_scenes: 12, great_deeds: 6, crises: 3, contexts: 5}}, secondary: {counted: 96}}
+  req.broad.5:  {primary: {weighted: 1800, since: {quality_events: 22, distinct_scenes: 14, great_deeds: 4, crises: 4, contexts: 5}}, secondary: {counted: 180}}
   # hybrids: `min` is cooccurrence(a, b).min over the two branches; counted is required on EACH branch;
   # tiers 2-5 sum the since-fields over both branches and need at least one great deed on each.
   req.hybrid.1: {primary: {min: 60,  balance_min: {num: 2, den: 5}, joint_scenes: 5, recent_min: 15, per_branch: {quality_events: 4, distinct_scenes: 4}}, secondary: {counted_each: 6}}
-  req.hybrid.2: {primary: {min: 150, balance_min: {num: 2, den: 5}, since: {quality_events: 10, distinct_scenes_each: 4, great_deeds: 5, great_deeds_each: 1, crises: 0, contexts: 0}}, secondary: {counted_each: 15}}
-  req.hybrid.3: {primary: {min: 330, balance_min: {num: 2, den: 5}, since: {quality_events: 14, distinct_scenes_each: 5, great_deeds: 6, great_deeds_each: 1, crises: 2, contexts: 0}}, secondary: {counted_each: 33}}
-  req.hybrid.4: {primary: {min: 600, balance_min: {num: 2, den: 5}, since: {quality_events: 18, distinct_scenes_each: 6, great_deeds: 6, great_deeds_each: 1, crises: 3, contexts: 5}}, secondary: {counted_each: 60}}
-  req.hybrid.5: {primary: {min: 975, balance_min: {num: 2, den: 5}, since: {quality_events: 22, distinct_scenes_each: 7, great_deeds: 4, great_deeds_each: 1, crises: 4, contexts: 5}}, secondary: {counted_each: 97}}
+  req.hybrid.2: {primary: {min: 120, balance_min: {num: 2, den: 5}, since: {quality_events: 10, distinct_scenes_each: 4, great_deeds: 5, great_deeds_each: 1, crises: 0, contexts: 0}}, secondary: {counted_each: 12}}
+  req.hybrid.3: {primary: {min: 255, balance_min: {num: 2, den: 5}, since: {quality_events: 14, distinct_scenes_each: 5, great_deeds: 6, great_deeds_each: 1, crises: 2, contexts: 0}}, secondary: {counted_each: 25}}
+  req.hybrid.4: {primary: {min: 480, balance_min: {num: 2, den: 5}, since: {quality_events: 18, distinct_scenes_each: 6, great_deeds: 6, great_deeds_each: 1, crises: 3, contexts: 5}}, secondary: {counted_each: 48}}
+  req.hybrid.5: {primary: {min: 900, balance_min: {num: 2, den: 5}, since: {quality_events: 22, distinct_scenes_each: 7, great_deeds: 4, great_deeds_each: 1, crises: 4, contexts: 5}}, secondary: {counted_each: 90}}
   # vows: conduct(axis). net_share = net / pos compared as a rational pair.
   req.vow.1: {primary: {pos: 16,  net_share_min: {num: 3, den: 4}, recent_net: 6, strain: 0, forbidden: 0}}
   req.vow.2: {primary: {pos: 40,  net_share_min: {num: 3, den: 4}, recent_net: 6, strain: 0, forbidden: 0}}

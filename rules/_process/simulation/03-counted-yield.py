@@ -151,9 +151,9 @@ if __name__ == '__main__':
     print()
     print('Range %.2f-%.2f. 04.3.3 requires counted >= weighted threshold / 10 (a ratio of 0.10).' % (lo, hi))
     # The direct test: how many extra fights does the counted requirement cost, beyond what the weighted
-    # threshold already needs, for a narrow calling's tier-t step fought at band t (04.3.3: 80/200/440/800/1300
+    # threshold already needs, for a narrow calling's tier-t step fought at band t (04.3.3: 80/160/340/640/1200
     # weighted; counted = that / 10)? Worst shape, with and without Focus.
-    W = {1: 80, 2: 200, 3: 440, 4: 800, 5: 1300}
+    W = {1: 80, 2: 160, 3: 340, 4: 640, 5: 1200}   # [revision: I-089] (was 80/200/440/800/1300)
     print()
     print('Extra fights the counted requirement costs for the step into tier t at band t (narrow calling; worst shape):')
     worst = 0

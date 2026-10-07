@@ -157,8 +157,10 @@ class Engine:
                 'contexts': len({r[5] for r in rows})}
 
 # ---------------------------------------------------------------- ch.04 data (mirrors data/callings.yaml#ladders)
-W   = {'narrow': [80, 200, 440, 800, 1300], 'fine': [60, 150, 330, 600, 975],
-       'broad': [120, 300, 660, 1200, 1950], 'hybrid': [60, 150, 330, 600, 975]}   # hybrid: min of the two branches
+# [revision: I-089] tiers 2-5 retuned to 04.3.5's targets under the advisory-offset conflict model (DL-04-32);
+# before: narrow 80/200/440/800/1300, fine 60/150/330/600/975, broad 120/300/660/1200/1950
+W   = {'narrow': [80, 160, 340, 640, 1200], 'fine': [60, 120, 255, 480, 900],
+       'broad': [120, 240, 510, 960, 1800], 'hybrid': [60, 120, 255, 480, 900]}   # hybrid: min of the two branches
 C   = {k: [v // 10 for v in vs] for k, vs in W.items()}
 COMP = {'narrow': [3, 4, 5, 5, 6], 'fine': [3, 4, 5, 5, 6], 'broad': [2, 3, 4, 4, 5], 'hybrid': [2, 3, 4, 4, 5]}
 BAND = {'narrow': [1, 2, 3, 4, 5], 'fine': [1, 2, 3, 4, 5], 'broad': [1, 2, 3, 4, 4], 'hybrid': [1, 2, 3, 4, 4]}
