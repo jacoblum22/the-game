@@ -1,0 +1,17 @@
+# data/contrib/effects.09.yaml -- chapter 09's effect owner-block (merged into data/effects.yaml#blocks by the
+#   orchestrator).
+# Owner: 09-adversaries. Schema: data/SCHEMAS.md#effects.yaml.
+# Chapter 09 adds NO new effect definition: every adversary power (data/archetypes.yaml#powers, 68 entries) and
+#   every resisted-effect degree table (#degree_tables, 9 entries) is built from core effects (data/effects.yaml)
+#   and the contrib blocks of chapters 05, 06 and 07, with parameters, per PR-00-8 ("expand before you add").
+#   The generator 09-gen_data09.py validates every effect id it uses against those files.
+# Effects used: eff.movement_mode, eff.condition_immunity, eff.check_edge, eff.force_check, eff.apply_condition,
+#   eff.restore, eff.write_fact, eff.harm_severity_step, eff.deal_harm, eff.reposition, eff.drain, eff.summon,
+#   eff.tick_clock, eff.grant_lever, eff.aura, eff.status_modifier, eff.cleanse, eff.harm_edge, eff.defense_status,
+#   eff.defense_edge, eff.harm_resistance, eff.harm_vulnerability.
+# Basis: [00.10.1] [PR-00-8] [DL-09-17]
+
+schema_version: 1
+blocks:
+  - owner: "09"
+    entries: []

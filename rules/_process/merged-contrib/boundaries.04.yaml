@@ -1,0 +1,50 @@
+# data/contrib/boundaries.04.yaml
+# Purpose: ch.04's additional boundary handlers, for merge into data/boundaries.yaml owner-block "04", and the
+#   proposed effect wording for the three rows 00 reserved (ids unchanged).
+# Owner: 04-recognition-and-growth. Schema: data/SCHEMAS.md#boundariesyaml (Handler).
+# Phase 8 is growth (00.7.5). Within a phase handlers run by owner chapter, then by id, so h.03.recency_update
+#   (the reflection digest) always runs before every h.04.* handler at `reflection`.
+# Basis: [00.7.4, 00.7.5, T-00-9] [00.17 Q12] [04.4, 04.7, 04.8] [DL-04-08, DL-04-15]
+
+schema_version: 1
+blocks:
+  - owner: "04"
+    handlers:
+      - id: h.04.crisis_check
+        boundary: beat_end
+        phase: 8
+        interrupting: false
+        effect: "if this beat recorded an evidence event flagged crisis (03.4.5) on a key with a candidate at band on_the_threshold or ready, run evaluate_recognition(crisis) with pending evidence included (03.5.6); raise trg.04.crisis_offer for at most one offer per scene (PR-04-2)"
+        rule_id: "04.4.5; PR-04-2"
+        lifecycle: provisional
+      - id: h.04.provisional_check
+        boundary: reflection
+        phase: 8
+        interrupting: false
+        effect: "for each provisional grant: confirm it when 12 or more evidence-bearing scenes have passed since the grant and it has been lived (callings.yaml#provisional); lapse it when 24 or more have passed without confirmation and a warning was shown earlier; otherwise raise trg.04.lapse_warning when it is 8 or more scenes old and not on course (PR-04-6)"
+        rule_id: "04.8.2; PR-04-6"
+        lifecycle: provisional
+      - id: h.04.fraying_check
+        boundary: scene_start
+        phase: 8
+        interrupting: false
+        effect: "the previous scene's evidence is settled (h.03.antigrind_reset ran at its scene_end, phase 9): recompute the Fraying stage of every oath-bearing calling from conduct().strain and .forbidden (dark callings: recent_net); raise trg.04.fraying on a stage change; tick open atonement clocks; mark a shadow that shows (PR-04-7)"
+        rule_id: "04.9.1; 04.9.2; PR-04-7"
+        lifecycle: provisional
+reserved_row_wording:              # proposed effect text for the rows 00 seeded (ids unchanged)
+  - id: h.04.recognition_pass
+    boundary: reflection
+    phase: 8
+    effect: "evaluate_recognition(reflection) over the candidates keyed on the digest's dirty nodes and axes (03.6.4): requirement sets, confidence, policy; create at most three offers, apply grants as provisional, queue the rest; voice abstain only through a reading (PR-04-1)"
+    rule_id: "04.4; PR-04-1"
+  - id: h.04.standing_offers
+    boundary: reflection
+    phase: 8
+    effect: "re-present deferred offers whose represent_when condition is met; withdraw offers whose candidate is no longer eligible; expire offers past their expiry; present unspent picks (PR-04-4, PR-04-5)"
+    rule_id: "04.7.3; PR-04-4"
+  - id: h.04.season_consolidation
+    boundary: season
+    phase: 8
+    effect: "run the provisional test of h.04.provisional_check (confirm, warn or lapse); offer consolidations, folds and forks; allow one re-pick per calling; lapse a calling held at Fraying stage 3 since the season boundary before last (PR-04-6, PR-04-8)"
+    rule_id: "04.8; PR-04-6; PR-04-8"
+ordering_note: "The Fraying is checked at scene_start because settlement runs in phase 9 of scene_end (PR-03-2): a stage change caused by a scene is voiced as the next scene opens, never mid-scene and never before the deed is settled. It is also re-read inside h.04.recognition_pass at every reflection."

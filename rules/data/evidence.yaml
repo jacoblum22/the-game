@@ -1,0 +1,472 @@
+# data/evidence.yaml
+# Purpose: every number, enum and table of the evidence mechanism (tag_event): the EvidenceEvent field
+#   extensions, significance predicates, points, quality rungs, challenge bands, novelty, saturation
+#   (diminishing returns, routine cap, same-target cap), recency, counted-evidence counters, conduct act
+#   tests and magnitudes, witness/carrier/scope rules, grounding maps, the sealed tally functions, and the
+#   calibration figures chapter 04 sets thresholds against.
+# Owner: 03-tags-and-evidence. Rules: 03.2-03.11. No owner-blocks (T-00-19).
+# Schema: data/SCHEMAS.md#evidenceyaml. Required keys: weights {challenge_band, stakes, witnessed,
+#   lethal_context}, antigrind {repeat_factor, reset_boundary}, recency {window, weight}, counted,
+#   significance_criteria, exclusions, tag_event_fields. All other keys are optional additions by 03,
+#   documented in 03's Tables section (T-03-2 ... T-03-11).
+# Conventions: integers only (SG-23); the only division is "halve, round down". Ratios are {num, den} pairs.
+# Basis: [C:P5] [C:III] [R2 #5, #6] [R3 03.4, 03.9, #4] [R6 A-04, A-06, A-15, R-A1..R-A6] [R1 #11]
+#   [R4 W2-W3, s9 03]; simulation rules/_process/simulation/03-evidence-sim.md; DL-03-01..DL-03-23.
+
+schema_version: 1
+lifecycle: provisional
+
+# --------------------------------------------------------------------------------------------------
+# weights (03.4)  -- required key
+# --------------------------------------------------------------------------------------------------
+weights:
+  # challenge_band is recorded on every event (00.6.8) and read by 04 through detail().by_band and
+  # peak_band. It does NOT add points: relative quality does (DL-03-02, DL-03-23).
+  challenge_band:
+    - {band: 1, dc_max: 12, points: 0}
+    - {band: 2, dc_min: 13, dc_max: 17, points: 0}
+    - {band: 3, dc_min: 18, dc_max: 22, points: 0}
+    - {band: 4, dc_min: 23, dc_max: 27, points: 0}
+    - {band: 5, dc_min: 28, points: 0}
+  challenge_band_source: "the frame's final DC; no-roll bases use the obstacle's stored DC or tier; conduct-only events use the highest threat band among aware opposing entities present, else 1 (03.4.3). In a conflict: power_band shifted by the advisory word (trivial -2, easy -1, fair 0, hard +1, lethal +2), clamped 1-5 (03.4.3; DL-00-05). In a contest (social, craft or lore; revision I-003): max(DC band, contest band), the contest band being the opposing party's own band (threat band, else its record's band), raised to its faction's tier (0-1 -> 1 ... 5 -> 5) only when it can bind the faction (head or officer; revision I-039), or the work's type-tier; never above power_band + 2 (revision I-039); the beat records the contest's opposition, and a tier counts at most two great deeds from one opposition (04.3.4; revision I-083) (03.4.3; 15.3.11; 15.9.20; 08.6.4). Social contest methods (closed; revision I-071): smethod.request, smethod.bargain, smethod.deceive, smethod.intimidate, smethod.interrogate, and every beat of a campaign (15.8.1) or debate (15.8.3); win over, provoke, perform, command and read take the DC band"
+  quality:                      # 03.4.1: base odds = success-or-better % with circumstance = 0
+    - {id: routine, base_odds_min: 70, points: 2}
+    - {id: difficult, base_odds_min: 40, base_odds_max: 65, points: 4}
+    - {id: challenging, base_odds_max: 35, points: 6}
+  quality_by_basis:             # 03.3.1
+    roll: base_odds
+    success_at_cost: base_odds
+    good_idea: {from: base_odds, cap: difficult}
+    take_the_time: routine
+    certain_with_cost: routine
+    training: none
+    origin: {fixed_points: 24, recorded_as: difficult}
+  stakes: {safe: 0, risky: 2, dire: 4}
+  lethal_context: 2             # added when frame.stakes.lethal = true, or when the event is ruinous (03.4.5; revision I-003)
+  critical_success: 2
+  novelty: 2                    # 03.4.4
+  witnessed: 0                  # witnesses never weight capability (03.4.6, DL-03-09); they feed public()
+  failure: {operation: halve_round_down, applies_to: [failure, critical_failure], safe_failure: not_significant}
+  success_at_cost: {treated_as: success, critical_bonus: false}
+  secondary_tag: {operation: halve_round_down, max_per_event: 2, requires_ground: true}   # 03.1.6
+  range: {min: 2, max: 16}
+  context_class:                # 03.4.4, first match
+    - "the opposing entity's most specific creature tag, truncated to level 2"
+    - "the obstacle entity's most specific tag in any facet, truncated to level 2"
+    - "the scene's situation tag at level 2"
+  novelty_test: "context_class not present among the actor's settled events on the same level-2 deed node within the recency window"
+  flags:                        # 03.4.5; flags never add points
+    crisis: "lethal_context = true OR actor harm_state in [staggered, dying] at declaration OR (stakes = dire AND quality = challenging) OR ruinous OR (contest AND contest.one_from_full) (revision I-003; renamed from brink, revision I-046)"
+    ruinous: "outside conflict: stakes = dire AND the threatened cost at its critical-failure severity is irreversible: cost.closed_door S4-S5 against a principal or faction; cost.gear on a unique item or irreplaceable material; a necessary clue node's last placement or the case lost; a project's spoilage on an irreplaceable material (03.4.5; revision I-003)"
+    one_from_full: "(revision I-046: was 'brink', which is 07's word) a contest beat declared while the contest's opposing clock stands one segment from full: a campaign's or council's patience (15.8), a case's opposition clock (15.9.13), a project's spoilage clock (08.6.4) (03.4.5; revision I-003)"
+    peak: "degree in [success, critical_success] AND challenge_band >= power_band(actor) + 1"
+
+# --------------------------------------------------------------------------------------------------
+# antigrind (03.5)  -- required key
+# --------------------------------------------------------------------------------------------------
+antigrind:
+  repeat_factor:                # per node, per scene, contributions sorted highest first (03.5.2)
+    - {rank: 1, divisor: 1}
+    - {rank: 2, divisor: 2}
+    - {rank: 3, divisor: 4}
+    - {rank: 4, counts: false}  # 4th and later settle as 0
+  applies_at: every_node        # primary, each ancestor, each secondary and its ancestors
+  applies_to: [judged_deed, conduct_per_axis_per_sign, counted_per_counter_per_node]
+  reset_boundary: scene_end     # handler h.03.antigrind_reset (PR-03-2); also h.03.day_settle for open scenes
+  scene_node_max: 28            # 16 + 8 + 4
+  routine_cap: {per: day, per_node: 1, keeps: highest}                      # 03.5.3
+  same_target_cap: {per: day, key: [target, level2_deed_node], later_scenes_settle_as: 0,   # 03.5.4
+                    non_enemy_window: {per: days_7, when: "target standing toward actor >= -1 (Wary), or in party/hire/company, or a spar by agreement"}}   # [revision: I-041]
+  practice: "Safe, unopposed, unclocked, routine beats fail D2 and are never judged evidence (03.5.5)"
+  provisional_read: {function: "tally(include_pending: true)", allowed_callers: ["04 crisis check (V5)"]}
+
+# --------------------------------------------------------------------------------------------------
+# recency (03.6)  -- required key
+# --------------------------------------------------------------------------------------------------
+recency:
+  clock: evidence_bearing_scenes   # scene-days with >= 1 settled judged deed contribution > 0 (03.6.1)
+  window: 24
+  weight:
+    - {scenes: "1-12 (newest)", divisor: 1}
+    - {scenes: "13-24", divisor: 2}      # the block's sum is halved, rounded down
+    - {scenes: "25+", counts: false}
+  cumulative_decay: none            # weighted and raw never decay (03.6.3)
+  removal: [void, supersede_by_atonement]
+  update_boundary: reflection       # handler h.03.recency_update (PR-03-3)
+  digest_for_04: [dirty_nodes, new_crisis_events, new_peak_events, new_conduct_entries, strain_changes, forbidden_citations]
+
+# --------------------------------------------------------------------------------------------------
+# significance (03.3)  -- required keys significance_criteria, exclusions
+# --------------------------------------------------------------------------------------------------
+significance_criteria:
+  - "A (eligibility, [D]): the event's basis is one of roll, success_at_cost, good_idea, take_the_time, certain_with_cost, choice, hook, training, atonement, each checked against state (03.3.1)."
+  - "D1 consequential ([D]): the beat delivered reach >= 1, OR it failed and apply_costs applied the declared cost, OR it was a no-roll success."
+  - "D2 pressured ([D]): stakes >= risky, OR an aware opposing entity, OR a danger or countdown clock active in the scene, OR the beat ticks a progress or project clock, OR quality >= difficult."
+  - "D3 own act ([D]): frame.beat.actor is the event's actor, the beat was declared by that actor (not a resisted-effect check, 00.3.3), and the gate cites the actor's own verb or license."
+  - "D4 tag fit ([J:enum]): the primary deed tag is classified level by level from the method (03.1.5); uncertain -> stop at the last sure level."
+  - "S secondary ([J:flag] + [D]): each secondary tag cites a ground that carries it (03.1.6)."
+  - "C1 alternative ([J:flag]): a different course was plainly open, cited by fact, entity or frame option; uncertain -> false."
+  - "C2 axis and pole ([J:enum]): by the act tests in conduct_tests; at most two axes; neither test met word for word -> no entry."
+  - "C3 ground ([J:flag] + [D]): a write made this scene shows the price (positive pole) or the harm (negative pole); no write -> no entry."
+exclusions:
+  - "An outcome narrated or asserted but not resolved (no frame degree and no no-roll basis)."
+  - "A G0 question, an untaken G3 redirect, a G4 impossibility, a free activity, a trivial no-roll beat, a riding beat (01.4.2)."
+  - "An inconclusive beat (01.11.4)."
+  - "A resisted-effect check the actor did not declare (an Endure or Evade forced by an effect, 00.3.3)."
+  - "Practice: a Safe, unopposed, unclocked, routine beat."
+  - "Conduct while under cond.charmed or any effect that dictates the actor's choices (deed evidence still records)."
+  - "An act by a companion, ally, summoned being, item or effect acting on its own (evidence for that actor only if tracked)."
+  - "A player's description of the character's virtues, skills or feelings (assertion, INV-9)."
+  - "The scene's situation tag or the target's creature tag used as a deed tag."
+  - "Mere politeness, small talk or a purchase recorded as influence evidence without a resolved frame."
+  - "A conduct entry with no ground_ref, or whose ground is below the S1 floor for the actor's means."
+  - "A second judged deed event for the same beat."
+  - "A deed done through a license or bound power with feeds_evidence: false (a relic's borrowed capability; 00.11.5, 00.12.1, 08.4.4). Integration: IR ch.04 #11, IR ch.08."
+  - "A discovery written with frame_id: null (mere arrival, 10.1.5). Integration: IR ch.10."
+blast_radius:
+  max_single_event_points: 16
+  max_scene_node_points: 28
+  max_scene_conduct_points_per_axis_sign: 7
+  class: "iii (self-correcting as evidence accumulates) plus ii (04 offers on conduct) and iv (void by dispute)"
+reflection_sweep: {boundary: reflection, restores: "frames that passed D1-D3 with no judged event", never: "moments without a frame; conduct"}
+
+# --------------------------------------------------------------------------------------------------
+# tag_event_fields: extensions to 00.6.8 (03.2.1)  -- required key
+# --------------------------------------------------------------------------------------------------
+tag_event_fields:
+  - {name: basis, type: "enum(roll|success_at_cost|good_idea|take_the_time|certain_with_cost|choice|hook|training|atonement|origin)", supplied_by: dm_or_engine}
+  - {name: beat_id, type: "str|null", supplied_by: engine}
+  - {name: scene_id, type: str, supplied_by: engine}
+  - {name: day, type: int, supplied_by: engine}
+  - {name: primary_tag, type: "tag|null", supplied_by: frame, note: "must equal frame.deed_tag"}
+  - {name: secondary, type: "[{tag, ground: {kind: ability|license|item|setup_beat|companion|mount|position, ref: id}}]", max: 2, supplied_by: dm}
+  - {name: conduct, type: "[{axis, sign, magnitude: 2|4, ground_ref, alternative_ref, forbidden_ref}]", max: 2, supplied_by: "dm (axis, sign, refs); engine (magnitude)"}
+  - {name: target, type: "id|null", supplied_by: frame}
+  - {name: context_class, type: tag, supplied_by: engine}
+  - {name: base_odds, type: "int|null", supplied_by: engine}
+  - {name: quality, type: "enum(routine|difficult|challenging)|null", supplied_by: engine}
+  - {name: significance, type: "{consequential, pressured, own_act, cites}", supplied_by: engine}
+  - {name: justification, type: str, supplied_by: dm}
+  - {name: novel, type: bool, supplied_by: engine}
+  - {name: contest, type: "{kind: social|craft|lore, band: int 1-5, one_from_full: bool, opposition: id}|null", supplied_by: engine, note: "03.4.3; revision I-003; opposition (the party, case, research project or work): revision I-083, read by 04.3.4; a work counts per scene worked on it (revision I-089)"}
+  - {name: ruinous, type: bool, supplied_by: engine, note: "03.4.5; revision I-003"}
+  - {name: crisis, type: bool, supplied_by: engine}
+  - {name: peak, type: bool, supplied_by: engine}
+  - {name: points, type: int, supplied_by: engine, sealed: true}
+  - {name: counter, type: "str|null", supplied_by: engine}
+  - {name: units, type: "int|null", supplied_by: engine}
+  - {name: witness_detail, type: "[{entity, how: present|aftermath|bonded, carrier: bool}]", supplied_by: "dm (present, aftermath); engine (carrier, bonded)"}
+  - {name: scopes, type: "[str]", supplied_by: engine}
+  - {name: as_identity, type: "id|null", supplied_by: dm, note: "the persona witnesses took the actor for; 11 credits public deeds to that identity"}
+  - {name: status, type: "enum(pending|settled|void|superseded)", supplied_by: engine}
+  - {name: settled, type: "{at, points_by_node}", supplied_by: engine, sealed: true}
+  - {name: supersedes, type: "[event_id]", supplied_by: "04 (atonement only)"}
+  - {name: void_reason, type: "str|null", supplied_by: engine}
+deed_line:
+  must: ["one sentence", "the observable act and its resolved result", "neutral words"]
+  must_not: ["adjectives of merit", "inner states", "player framing", "numbers", "rules terms"]
+backstory: {written_by: "02 at creation", basis: origin, max_tags: 3, tag_levels: [2, 3], points_each: 24, quality: difficult, band: 1, counts_toward: [weighted, raw], never_counts_toward: [recent, distinct_scenes, crises, peaks]}
+tracked_actors: {pc: always, companion: "only when its template sets tracks_evidence: true (16)", npc: never, adversary: never}
+
+# --------------------------------------------------------------------------------------------------
+# counted evidence (03.7)  -- required key
+# --------------------------------------------------------------------------------------------------
+counted:
+  - id: cnt.defeat
+    name: Foes defeated
+    tags: []
+    hook: on_defeat
+    filter: "the actor's beat or ability defeated the foe (Staggered, Dying, dead, yields or flees)"
+    tag_source: "the defeating frame's primary deed tag, or the ability's first deed tag"
+    weight: "units = the foe's threat band (1-5); a mob or swarm entity counts once at its band"
+    lifecycle: provisional
+    basis: ["03.7.2", "R3 03.4 Delve secondary requirement", "DL-03-12"]
+  - id: cnt.focus
+    name: Focus spent through an ability
+    tags: []
+    hook: on_focus_spent
+    filter: "the actor spends Focus on an ability, or on a push (05.6.7)"
+    tag_source: "the ability's first deed tag; for a push, the frame's primary deed tag"
+    weight: "units = Focus spent"
+    lifecycle: provisional
+    basis: ["03.7.2", "03.7.4", "R3 03.12", "C:P9"]
+  - id: cnt.ward
+    name: Harm warded
+    tags: []
+    hook: on_harm_taken
+    filter: "harm of 1 or more to the actor or to a being in the actor's scene was reduced or prevented by the actor's ability, item, shield.cover beat or Help beat"
+    tag_source: "the source's deed tag (items through item_grounding)"
+    weight: "units = 1; 2 when the protected being is not the actor"
+    lifecycle: provisional
+    basis: ["03.7.2", "R3 03.4 (damage mitigated)"]
+  - id: cnt.control
+    name: Conditions inflicted
+    tags: []
+    hook: on_condition_applied
+    filter: "by the actor, to a foe; condition category in [physical, sensory, mental, positional]; from the actor's beat or ability"
+    tag_source: "the beat's primary deed tag or the ability's first deed tag"
+    weight: "units = 1"
+    lifecycle: provisional
+    basis: ["03.7.2"]
+  - id: cnt.progress
+    name: Clock progress
+    tags: []
+    hook: on_clock_tick
+    filter: "a progress, project or tug clock ticks in the actor's favour from the actor's frame"
+    tag_source: "the frame's primary deed tag"
+    weight: "units = ticks"
+    lifecycle: provisional
+    basis: ["03.7.2", "00.8.2"]
+  - id: cnt.made
+    name: Things made
+    tags: []
+    hook: on_item_acquired
+    filter: "the item's provenance domain is gen.craft and its maker is the actor"
+    tag_source: "the crafting frame's primary deed tag"
+    weight: "units = the quality rung's index in ch.08's ladder (lowest = 1)"
+    lifecycle: provisional
+    basis: ["03.7.2"]
+  - id: cnt.discovery
+    name: Places discovered
+    tags: []
+    hook: on_fact_set
+    filter: "pattern loc.*.discovered = true, written as the delivered result of the actor's frame; frame_id null (mere arrival, 10.1.5) never counts"
+    tag_source: "the frame's primary deed tag"
+    weight: "units = 1"
+    lifecycle: provisional
+    basis: ["03.7.2"]
+  - id: cnt.clue
+    name: Clues found
+    tags: []
+    hook: on_fact_set
+    filter: "pattern clu.*.found (ch.15), written as the delivered result of the actor's frame"
+    tag_source: "the frame's primary deed tag"
+    weight: "units = 1"
+    lifecycle: provisional
+    basis: ["03.7.2"]
+  - id: cnt.lifesave
+    name: Lives saved
+    tags: []
+    hook: on_stabilize
+    filter: "another being leaves Dying because of the actor's frame or ability"
+    tag_source: "that frame's primary deed tag or the ability's first deed tag"
+    weight: "units = 3"
+    lifecycle: provisional
+    basis: ["03.7.2"]
+  - id: cnt.journey
+    name: Journey roles held
+    tags: []
+    hook: on_boundary
+    filter: "boundary = watch; time mode travel; the actor held a journey role for the whole watch"
+    tag_source: "journey_roles map"
+    weight: "units = 1; at most 2 per day"
+    lifecycle: provisional
+    basis: ["03.7.2"]
+  - id: cnt.training
+    name: Weeks of training
+    tags: []
+    hook: on_boundary
+    filter: "boundary = week; written by ch.15's downtime training activity on completion of a training week"
+    tag_source: "the trained tag"
+    weight: "units = 1; at most 1 per tag per week"
+    lifecycle: provisional
+    basis: ["03.5.5", "C:P15", "R6 A-27"]
+counted_rules:
+  separate_tally: true            # never summed with judged points (03.7.1)
+  significance_test: none
+  depth: any                      # counters are engine listeners, not effect subscribers (03.7.2)
+  never_listens_to: on_tag_event
+  saturation: "repeat_factor per counter per node per scene; same_target_cap; no routine cap"
+journey_roles:                    # 10 and 16 may extend
+  navigator: deed.wilds.navigation.wayfinding
+  scout: deed.wilds.tracking.sign
+  forager: deed.wilds.foraging.food
+  lookout: deed.wilds.survival.weathersense
+  quartermaster: deed.wilds.survival.provisioning    # added at integration (16.8.3; tag adopted from 16's proposal)
+
+# --------------------------------------------------------------------------------------------------
+# conduct (03.3.3, 03.8)
+# --------------------------------------------------------------------------------------------------
+conduct:
+  max_axes_per_beat: 2
+  magnitude:
+    positive: {2: "a cost or risk at S1-S2 or Risky stakes, or a forgone gain", 4: "a cost at S3 or more, Dire stakes, lethal context, or a forgone gain flagged irreplaceable"}
+    negative: {2: "harm or loss to another at S1-S2 equivalent", 4: "S3 or more, death, maiming, ruin, or a helpless or trusting victim"}
+  ground_floor: "S1 by the actor's means: at least one Unit (00.3.11) of harm, supply, standing or clock, or coin worth one week of the actor's lifestyle cost (08)"
+  ground_kinds:
+    positive: [cost_applied_to_actor, resource_given, forgone_gain_fact, risk_accepted_frame, commitment_kept_at_cost]
+    negative: [harm_to_other, loss_to_other, relationship_step_down, falsehood_for_gain_in_npc_knowledge, commitment_broken]
+  strain: {on_negative: "+ settled negative points", on_positive: "- floor(settled positive points / 2)", floor: 0, time_decay: none}
+  atonement: {written_by: "04", basis: atonement, effect: ["superseded negative points move from neg to atoned", "strain on the axis = 0", "superseded forbidden citations cleared unless the oath marks the act unatonable"], unchanged: [ledger_history, witnessed_neg, "11 reputation"]}
+  proposed_fraying_stages_for_04: {warn: 4, speak: 8, offer_atone_or_turn: 12, forbidden_citation: offer_atone_or_turn}
+conduct_tests:
+  - axis: conduct.mercy
+    positive: "Spares, heals, frees or eases a defeated, helpless or surrendering being that was in the actor's power, at a cost or risk to the actor (a threat left alive, a gain forgone, time or supply spent)."
+    negative: "Kills, maims, torments or leaves to die a being that was helpless, surrendering or no longer a threat, when sparing it was plainly open."
+    not_evidence: ["sparing because ordered or forced", "killing a foe who is still fighting", "letting a foe go who had already escaped (no power over them)"]
+    sibling_test: "vs protection: the being was in YOUR power -> mercy; in danger from OTHERS -> protection. vs restraint: mastering your own rage -> restraint (both may apply)."
+  - axis: conduct.honesty
+    positive: "Tells a truth, admits a fault, or refuses a useful lie when the falsehood would plainly have served the actor, and it costs them standing, coin, position or safety."
+    negative: "Deceives a being who trusted or relied on the actor's word, for the actor's own gain or to escape a deserved consequence."
+    not_evidence: ["lying to an enemy during a fight, infiltration or con (a guile deed; no trust was given)", "tact, silence or keeping a secret without a falsehood", "deceiving to protect an innocent, with no gain to the actor"]
+    sibling_test: "vs loyalty: honesty is about truth told; loyalty about faith kept."
+  - axis: conduct.courage
+    positive: "Takes on a declared Dire or lethal danger, or stands when flight was plainly open, for a purpose beyond the actor's own gain or survival."
+    negative: "Abandons a charge, companion or sworn post to danger out of fear when standing was plainly possible."
+    not_evidence: ["recklessness with no purpose", "a prudent retreat that takes one's charges along", "fighting when cornered (no alternative)"]
+    sibling_test: "vs protection: facing the danger -> courage; doing it for the vulnerable's sake -> protection (both may apply)."
+  - axis: conduct.loyalty
+    positive: "Keeps faith with a person, bond, oath or cause when breaking it would plainly have profited or protected the actor."
+    negative: "Betrays a person, bond, oath or cause that trusted the actor: breaks a promise, changes sides, sells them out."
+    not_evidence: ["declining to make a promise", "leaving after a bond was openly and lawfully ended", "obeying under immediate threat (compelled)"]
+    sibling_test: "vs honesty (above). vs piety: a bond with people or a cause -> loyalty; with the sacred -> piety."
+  - axis: conduct.generosity
+    positive: "Gives away wealth, supply, a reward or a benefit that matters to the giver (at or above the ground floor), with nothing asked in return."
+    negative: "Takes, withholds or hoards at clear expense to those in need or those owed: robbing the poor, refusing owed wages, profiteering on distress."
+    not_evidence: ["buying, tipping or paying a debt", "a gift made to purchase influence (an intrigue or trade deed)", "a gift below the ground floor for the giver's means"]
+    sibling_test: "vs protection: giving goods -> generosity; giving safety -> protection."
+  - axis: conduct.justice
+    positive: "Upholds a fair outcome or rights a wrong at cost or risk: returns what was stolen, testifies, refuses a bribe, brings the guilty to answer by fair means."
+    negative: "Punishes one known or likely innocent, frames someone, or lets the guilty escape for the actor's own gain."
+    not_evidence: ["private vengeance without process (test restraint instead)", "sparing the guilty out of pity (mercy +, and justice - only if the guilty thereby escapes answer)"]
+    sibling_test: "vs mercy: justice weighs deserts; mercy tempers them. One act may score both, with opposite signs."
+  - axis: conduct.humility
+    positive: "Yields credit, rank, precedence or pride to another's good when it was the actor's to claim."
+    negative: "Demands deference, takes credit owed to another, or humiliates someone of lower station to assert rank."
+    not_evidence: ["self-deprecating talk", "modest manners (an etiquette deed)"]
+    sibling_test: "vs generosity: giving up goods -> generosity; giving up standing or credit -> humility."
+  - axis: conduct.restraint
+    positive: "Holds back anger, appetite or vengeance at a moment of real provocation or temptation, when giving way was plainly open and would have harmed another or the actor's charge."
+    negative: "Gives way to rage, excess or vengeance so that others are harmed or a duty is broken: a beating in fury, a drunken dereliction, slaughter past need."
+    not_evidence: ["calm when nothing provoked", "abstaining where there was no temptation on record"]
+    sibling_test: "vs mercy: restraint masters one's own impulse; mercy is how one treats a being in one's power (both may apply)."
+  - axis: conduct.piety
+    positive: "Honors the sacred, the dead or a power's rites at cost or risk: buries the dead where it is dangerous, keeps a fast, makes a real offering, defends a holy place."
+    negative: "Desecrates: robs a consecrated grave or temple, defiles a holy place, mocks a rite to a believer's harm, breaks a sacred taboo."
+    not_evidence: ["prayer or observance that costs nothing", "knowledge about religion (a lore deed)", "looting a ruin with no fact marking it consecrated or tended"]
+    sibling_test: "vs loyalty (above)."
+  - axis: conduct.protection
+    positive: "Shields a vulnerable being from harm by others, at cost or risk to the actor: takes the blow, stays behind, escorts, gives up safety."
+    negative: "Abandons a helpless being to a harm the actor could plainly have prevented at acceptable risk, or uses the vulnerable as a shield."
+    not_evidence: ["defending oneself", "protecting a capable ally in an ordinary fight (a shield.cover deed)"]
+    sibling_test: "vs mercy and courage (above)."
+
+# --------------------------------------------------------------------------------------------------
+# witness and scope (03.10)
+# --------------------------------------------------------------------------------------------------
+witness:
+  perceived_default_true: "entity in the scene, conscious, alertness not unaware, and the beat carries trait.sense.visible within line of sight or trait.sense.audible / trait.sense.loud within hearing"
+  flip_requires: fact_id
+  carrier: {requires_all: ["can tell others: creature.folk | creature.spirit | creature.fiend | creature.undead.sovereign | speaks: true | companion", "exists in [exists, departed] at settlement", "no commitment of silence about this act"]}
+  aftermath: {tool: add_witness, requires: fact_id, effect: "enters the entity's scopes at the next settlement"}
+  bonded: {named_by: "04 oath or bond record", witnesses: "every event on the bond's axes and tags", carries_to: "its own scope only"}
+  scope: {union_of: ["each carrier's home settlement", "each carrier's faction memberships", "the scene's settlement, if a carrier was present inside it"], primary: most_local}
+  public_deed_packet: {to: "11", fields: [event_id, actor, deed, primary_tag, branch, conduct, noteworthy, scopes, carriers], noteworthy: "settled contribution at the primary node >= 6, or any conduct magnitude 4"}
+
+# --------------------------------------------------------------------------------------------------
+# classification aids (03.1)
+# --------------------------------------------------------------------------------------------------
+verb_default_tag:                 # T-03-2: the tag when the branch is uncertain
+  verb.move: deed.martial.athletics
+  verb.observe: deed
+  verb.recall: deed.lore
+  verb.talk: deed.influence
+  verb.strike: deed.martial
+  verb.grapple: deed.martial.unarmed.wrestling
+  verb.force: deed.martial.athletics.lifting
+  verb.exert: deed.martial.athletics
+  verb.evade: deed.martial
+  verb.sneak: deed.guile.stealth
+  verb.handle: deed
+  verb.endure: deed
+  verb.setup: by_method
+  verb.help: by_method
+  verb.ready: none
+item_grounding:                   # T-03-3: item tag -> deed tag it grounds as a secondary (03.1.6)
+  item.weapon.blade: deed.martial.blade
+  item.weapon.blade.sword: deed.martial.blade.sword
+  item.weapon.blade.greatsword: deed.martial.blade.greatsword
+  item.weapon.blade.rapier: deed.martial.blade.fencing
+  item.weapon.blade.dagger: deed.martial.blade.dagger
+  item.weapon.axe: deed.martial.axe
+  item.weapon.axe.hand: deed.martial.axe.hand
+  item.weapon.axe.great: deed.martial.axe.great
+  item.weapon.bludgeon: deed.martial.bludgeon
+  item.weapon.bludgeon.club: deed.martial.bludgeon.club
+  item.weapon.bludgeon.mace: deed.martial.bludgeon.mace
+  item.weapon.bludgeon.hammer: deed.martial.bludgeon.hammer
+  item.weapon.bludgeon.flail: deed.martial.bludgeon.flail
+  item.weapon.polearm: deed.martial.polearm
+  item.weapon.polearm.spear: deed.martial.polearm.spear
+  item.weapon.polearm.halberd: deed.martial.polearm.halberd
+  item.weapon.polearm.staff: deed.martial.polearm.staff
+  item.weapon.polearm.lance: deed.martial.mounted.charge
+  item.weapon.bow: deed.martial.archery.bow
+  item.weapon.bow.shortbow: deed.martial.archery.bow
+  item.weapon.bow.longbow: deed.martial.archery.bow
+  item.weapon.bow.sling: deed.martial.archery.sling
+  item.weapon.crossbow: deed.martial.archery.crossbow
+  item.weapon.thrown: deed.martial.thrown
+  item.weapon.thrown.javelin: deed.martial.thrown.javelin
+  item.weapon.thrown.knife: deed.martial.thrown.blades
+  item.weapon.thrown.net: deed.martial.thrown.entangling
+  item.shield: deed.martial.shield
+  item.armor.medium: deed.martial.armor
+  item.armor.heavy: deed.martial.armor
+  item.tool.kit.thieves: deed.guile.thievery
+  item.tool.kit.healer: deed.lore.medicine
+  item.tool.kit.climbing: deed.martial.athletics.climbing
+  item.tool.kit.disguise: deed.guile.disguise.costume
+  item.tool.kit.forgery: deed.guile.disguise.forgery
+  item.tool.instrument: deed.influence.performance.music
+  item.tool.trade: deed.craft
+  item.consumable.potion.toxin: deed.guile.poisoncraft
+  item.conveyance.mount: deed.wilds.animals.riding
+  item.conveyance.vessel: deed.wilds.seafaring
+  item.tool.implement: none       # implements ground nothing; the ability or license grounds the magic branch
+grounding_kinds: [ability, license, item, setup_beat, companion, mount, position]
+position_grounding: {requires_any: ["actor has flag.hidden toward the target", "target alertness = unaware"], grounds_only: deed.guile.ambush, cite: "the flag or fact id"}
+ambush_primary_rule: "frame rolls against the target's awareness -> primary deed.guile.ambush.*, weapon grounded by item; frame rolls against Guard or the shot's difficulty -> primary is the weapon or spell tag, deed.guile.ambush.* grounded by position (03.1.7 rule 2, DL-03-24)"
+mount_grounding: {requires: flag.mounted, beat_trait: trait.action.attack, tag: deed.martial.mounted.skirmish}
+
+# --------------------------------------------------------------------------------------------------
+# the sealed functions (03.9) and their access
+# --------------------------------------------------------------------------------------------------
+functions:
+  - {id: tally, args: [actor, tag, include_pending], returns: [raw, weighted, recent], access: ["04"], visibility: sealed}
+  - {id: detail, args: [actor, tag, since], returns: [raw, weighted, recent, secondary_weighted, successes, failures, by_quality, by_band, success_by_band, peak_band, crises, peaks, distinct, first_at, last_at, scenes_since_last], since: "a time or a scene index", notes: "peak_band = highest band among successes; distinct adds opponent_kinds_nonfolk (integration: IR ch.04)", access: ["04"], visibility: sealed}
+  - {id: share, args: [actor, tag], returns: [num, den], access: ["04"], visibility: sealed}
+  - {id: dominance, args: [actor, tag], returns: [lead, rival, num, den], access: ["04"], visibility: sealed}
+  - {id: profile, args: [actor, facet, level], returns: ["[{tag, weighted, recent, raw}]"], access: ["04"], visibility: sealed}
+  - {id: cooccurrence, args: [actor, a, b], returns: [weighted_a, weighted_b, min, balance, joint_events, joint_scenes, recent_min], access: ["04"], visibility: sealed}
+  - {id: diversity, args: [actor, tag], returns: [scenes, days, contexts, opponent_kinds, places, children], access: ["04"], visibility: sealed}
+  - {id: conduct, args: [actor, axis], returns: [pos, neg, atoned, net, recent_net, strain, forbidden, last_negative_at, scenes_since_negative, witnessed_pos, witnessed_neg, pos_events, pos_events_m4], access: ["04"], visibility: sealed}
+  - {id: counted, args: [actor, tag], returns: [units, recent_units, by_counter], access: ["04"], visibility: sealed}
+  - {id: public, args: [actor, tag, scope], returns: [weighted, events, last_at], access: ["04", "11"], visibility: background}
+  - {id: last_exercised, args: [actor, tag], returns: [scenes_since, time_since], access: ["04", "12"], visibility: background}
+  - {id: evidence_for_frame, args: [frame_id], returns: ["[{event_id, tags}]"], access: ["04", "07", "11"], visibility: background}
+ledger_view:                      # 03.11.1: what the codex may show (visibility: available)
+  shows: [deed, primary_tag, secondary_tags, conduct_axis_and_sign, scene, time, known_witnesses, status]
+  never_shows: [points, magnitude, tallies, recent, thresholds, nearness]
+
+# --------------------------------------------------------------------------------------------------
+# calibration for 04 (03.9.4, T-03-10). Simulation: scratchpad evidence03.py / reach03.py, 200 seeds,
+# 5 scenes per session; focused archer who scouts by stealth. Not rules: reference figures.
+# --------------------------------------------------------------------------------------------------
+calibration:
+  model: "20-30 sessions x 5 scenes; 45% conflict, 25% stealth/site, 15% social, 15% travel; opposition at the PC's band to band + 2"
+  per_session_yield_median: {focus_level2_node: 24, focus_branch: 30, second_pillar_branch: 10, incidental_branch: "4-7", deed_root: 45}
+  steady_recent_median: {focus_level2_node: "78-95", focus_branch: "100-116"}
+  sessions_to_reach:              # p10 / median / p90; "-" = not within 30 sessions
+    focus_level2_node: {40: "1/2/3", 60: "2/3/4", 80: "3/4/5", 120: "4/5/7", 160: "6/7/8", 200: "7/8/10", 300: "10/12/15", 450: "16/19/22"}
+    focus_branch: {40: "1/2/3", 60: "2/2/3", 80: "2/3/4", 120: "3/4/6", 160: "5/6/7", 200: "6/7/8", 300: "9/10/12", 450: "13/15/18"}
+    second_pillar_branch: {40: "3/5/7", 60: "5/6/9", 80: "6/8/11", 120: "10/12/15", 160: "13/16/20", 200: "16/20/24", 300: "25/30/-"}
+    secondary_level2_node: {40: "4/6/9", 60: "6/8/11", 80: "8/10/15", 120: "12/15/20", 160: "15/20/26", 200: "20/25/-"}
+    incidental_branch: {40: "4/6/9", 60: "6/9/13", 80: "9/12/16", 120: "14/18/23", 160: "18/23/29", 200: "24/29/-"}
+    deed_root: {40: "1/1/2", 60: "1/2/2", 80: "2/2/3", 120: "3/3/3", 160: "3/4/5", 200: "4/5/5", 300: "6/7/8", 450: "9/10/11"}
+    hybrid_min_of_two_level2_nodes: {40: "2/2/4", 60: "2/3/5", 80: "3/4/6", 120: "5/6/8", 160: "7/8/11", 200: "8/10/13", 300: "13/16/20", 450: "21/24/30"}
+  branch_balance_vs_main: {used_in_15pct_of_scenes_a: {num: 12, den: 100}, used_in_15pct_of_scenes_b: {num: 23, den: 100}, second_pillar_25pct_of_scenes: {num: 34, den: 100}, deliberate_hybrid: {num: 1, den: 1}}
+  grinder: {weighted_at_session_20: 340, focused_same_scene_count: 1033, focused_mixed_play: 493, quality_mix: "100% routine"}
+  lenient_dm: {ungrounded_tactics_share_of_archery: {num: 49, den: 100}, grounded: {num: 15, den: 100}, mercy_ungrounded_vs_honest: "46 vs 18", mercy_grounded_vs_honest: "22 vs 18"}
+  pivot: {recent_new_exceeds_recent_old_after_sessions: 2, recent_old_reaches_zero_after_sessions: 5}
+  mercy: {honest_net_median_at_session_20: 12, positive_points_per_session: 1}

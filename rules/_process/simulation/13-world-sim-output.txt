@@ -1,0 +1,80 @@
+rule cap (11.3.4): native in 11-world-sim.py (integration, I-026)
+Thallen March factions in the sim: full ['vantry', 'bellwardens', 'pell_company', 'hushed_choir']; petty 15
+=== scenario: engaged (300 seeds x 104 weeks) ===
+  goal_done          p10/med/p90 (15, 17.0, 20)
+  tier_up            p10/med/p90 (3, 5.5, 8)
+  tier_down          p10/med/p90 (3, 5.0, 8)
+  collapses          p10/med/p90 (0, 1.0, 2)
+  strikes            p10/med/p90 (0, 12.0, 23)
+  strike_hits        p10/med/p90 (0, 8.0, 13)
+  slips              p10/med/p90 (12, 17.0, 22)
+  hooks_seeded       p10/med/p90 (181, 189.0, 197)
+  threads_completed  p10/med/p90 (16, 19.0, 22)
+  threads_failed     p10/med/p90 (7, 11.0, 15)
+  situations         p10/med/p90 (9, 12.0, 16)
+  max_known_hooks    p10/med/p90 (10, 10.0, 10)
+  weeks_known_lt3    p10/med/p90 (2, 2.0, 3)
+  entanglements      p10/med/p90 (0, 0.0, 2)
+  goal completions per faction per YEAR: p10/med/p90 (0.5, 2.0, 3.0) mean 1.89 (target 1.5-3.5)
+     fac.thallen.vantry               per year mean 1.42 median 1.5
+     fac.thallen.bellwardens          per year mean 2.29 median 2.0
+     fac.thallen.pell_company         per year mean 1.58 median 1.5
+     fac.thallen.hushed_choir         per year mean 2.27 median 2.5
+  final tiers after 2 years: [(0, 8), (1, 170), (2, 505), (3, 517)]; at tier 5: 0.0% (target <= 10%)
+  Choir (Last Bell silent): week of first completion p10/med/p90 (8, 12.0, 18); done by week 4: 0%, by week 13: 67%, by week 26: 99%
+     week 4: fac.thallen.vantry           goal fill median 4.0 (p10 3, p90 6); completed by then 0%
+     week 4: fac.thallen.bellwardens      goal fill median 5.0 (p10 3, p90 6); completed by then 2%
+     week 4: fac.thallen.pell_company     goal fill median 6.0 (p10 4, p90 7); completed by then 0%
+     week 4: fac.thallen.hushed_choir     goal fill median 4.0 (p10 2, p90 5); completed by then 0%
+=== scenario: war (300 seeds x 104 weeks) ===
+  goal_done          p10/med/p90 (14, 17.0, 19)
+  tier_up            p10/med/p90 (4, 5.0, 8)
+  tier_down          p10/med/p90 (3, 6.0, 8)
+  collapses          p10/med/p90 (0, 1.0, 2)
+  strikes            p10/med/p90 (0, 12.0, 24)
+  strike_hits        p10/med/p90 (0, 8.0, 13)
+  slips              p10/med/p90 (12, 17.0, 22)
+  hooks_seeded       p10/med/p90 (181, 189.0, 197)
+  threads_completed  p10/med/p90 (16, 19.0, 23)
+  threads_failed     p10/med/p90 (7, 11.0, 15)
+  situations         p10/med/p90 (9, 12.0, 15)
+  max_known_hooks    p10/med/p90 (10, 10.0, 10)
+  weeks_known_lt3    p10/med/p90 (2, 2.0, 3)
+  entanglements      p10/med/p90 (5, 8.0, 11)
+  goal completions per faction per YEAR: p10/med/p90 (0.5, 2.0, 3.0) mean 1.81 (target 1.5-3.5)
+     fac.thallen.vantry               per year mean 1.41 median 1.5
+     fac.thallen.bellwardens          per year mean 2.22 median 2.0
+     fac.thallen.pell_company         per year mean 1.48 median 1.5
+     fac.thallen.hushed_choir         per year mean 2.14 median 2.5
+  final tiers after 2 years: [(0, 23), (1, 168), (2, 541), (3, 468)]; at tier 5: 0.0% (target <= 10%)
+  Choir (Last Bell silent): week of first completion p10/med/p90 (8, 12.0, 18); done by week 4: 0%, by week 13: 66%, by week 26: 100%
+     week 4: fac.thallen.vantry           goal fill median 5.0 (p10 3, p90 6); completed by then 0%
+     week 4: fac.thallen.bellwardens      goal fill median 5.0 (p10 3, p90 6); completed by then 2%
+     week 4: fac.thallen.pell_company     goal fill median 6.0 (p10 4, p90 7); completed by then 0%
+     week 4: fac.thallen.hushed_choir     goal fill median 4.0 (p10 2, p90 5); completed by then 0%
+=== scenario: absent (300 seeds x 104 weeks) ===
+  goal_done          p10/med/p90 (16, 18.0, 21)
+  tier_up            p10/med/p90 (4, 6.0, 8)
+  tier_down          p10/med/p90 (3, 6.0, 9)
+  collapses          p10/med/p90 (0, 1.0, 2)
+  strikes            p10/med/p90 (2, 13.0, 24)
+  strike_hits        p10/med/p90 (1, 8.0, 13)
+  slips              p10/med/p90 (13, 19.0, 24)
+  hooks_seeded       p10/med/p90 (173, 179.0, 186)
+  threads_completed  p10/med/p90 (0, 0.0, 0)
+  threads_failed     p10/med/p90 (0, 0.0, 0)
+  situations         p10/med/p90 (10, 13.0, 17)
+  max_known_hooks    p10/med/p90 (8, 8.0, 8)
+  weeks_known_lt3    p10/med/p90 (2, 2.0, 3)
+  entanglements      p10/med/p90 (0, 0.0, 0)
+  goal completions per faction per YEAR: p10/med/p90 (0.5, 2.0, 3.0) mean 2.05 (target 1.5-3.5)
+     fac.thallen.vantry               per year mean 1.54 median 1.5
+     fac.thallen.bellwardens          per year mean 2.77 median 2.8
+     fac.thallen.pell_company         per year mean 1.53 median 1.5
+     fac.thallen.hushed_choir         per year mean 2.35 median 2.5
+  final tiers after 2 years: [(0, 21), (1, 175), (2, 480), (3, 524)]; at tier 5: 0.0% (target <= 10%)
+  Choir (Last Bell silent): week of first completion p10/med/p90 (8, 11.0, 17); done by week 4: 0%, by week 13: 76%, by week 26: 100%
+     week 4: fac.thallen.vantry           goal fill median 4.5 (p10 3, p90 6); completed by then 0%
+     week 4: fac.thallen.bellwardens      goal fill median 5.0 (p10 3, p90 6); completed by then 1%
+     week 4: fac.thallen.pell_company     goal fill median 6.0 (p10 4, p90 7); completed by then 0%
+     week 4: fac.thallen.hushed_choir     goal fill median 4.0 (p10 2, p90 5); completed by then 0%

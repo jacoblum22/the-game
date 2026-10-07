@@ -1,0 +1,102 @@
+# data/weather.yaml
+# Purpose: the closed list of weather states with every mechanical effect, the climate zones, the
+#   per-season regime tables (d12), the daily roll with persistence, the shift table, and the standing
+#   weather facts. Weather is a rolled record; narration may describe only the recorded state (10.11.1).
+# Owner: 10-exploration-travel-sites (owner-block 13 may add regional climates or override a regime).
+# Schema: data/SCHEMAS.md#weatheryaml (keys regimes, tables) plus this chapter's optional keys
+#   states, climates, daily_roll, shift, standing_facts, forecast (documented in ch.10 Tables, T-10-13).
+# Rules: 10.11 (weather), 10.3.2 (pace), 10.4.2 (way-finding snags), 10.7.2 (light), 10.10.3 (distance),
+#   10.12 (exposure hazards), 05.7.3 (source present reads weather.today), 07.8.4 (rest quality).
+# Basis: [R4 §9 10 item 1]; [R5 EX-04, P-36 (Cairn d6/day weather)];
+#   [DL-10-12]
+
+schema_version: 1
+
+states:
+  # temp: mild | cool | warm | hot | very_hot | freezing | bitter
+  # pace_steps: steps slower OFF roads (10.3.2); way_snag: Precision snag on way-finding (10.4.2)
+  # day_light: scene light outdoors in the morning/afternoon watches (10.7.2)
+  # openness_as: how encounter distance reads (10.10.3); exposure: hazard per watch for the exposed (10.12.3)
+  # fire_tier: tier to light a fire in the open (Trivial = no roll); sources: what 05.7.3 counts as present
+  - {id: clear, name: Clear, temp: mild, pace_steps: 0, way_snag: false, day_light: bright, openness_as: as_is, exposure: [], fire_tier: trivial, night_sky: stars, sources: [], worse: overcast, better: clear, tags: [], lifecycle: provisional}
+  - {id: fair, name: Fair, temp: mild, pace_steps: 0, way_snag: false, day_light: bright, openness_as: as_is, exposure: [], fire_tier: trivial, night_sky: stars, sources: [], worse: overcast, better: clear, tags: [], lifecycle: provisional}
+  - {id: overcast, name: Overcast, temp: mild, pace_steps: 0, way_snag: false, day_light: bright, openness_as: as_is, exposure: [], fire_tier: trivial, night_sky: dark, sources: [], worse: rain, worse_when_freezing: snow, better: fair, tags: [], lifecycle: provisional}
+  - {id: wind, name: Wind, temp: mild, pace_steps: 0, way_snag: false, day_light: bright, openness_as: as_is, exposure: [], fire_tier: easy, night_sky: stars, sources: [moving_air], effects_note: "unshielded flames lose 1 extra interval each watch", worse: storm, better: fair, tags: [harm.storm], lifecycle: provisional}
+  - {id: fog, name: Fog, temp: cool, pace_steps: 0, way_snag: true, day_light: dim, openness_as: closed, exposure: [], fire_tier: easy, night_sky: dark, sources: [water], effects_note: "distant landmarks hidden (10.4.4); sounds carry", worse: rain, better: overcast, tags: [], lifecycle: provisional}
+  - {id: rain, name: Rain, temp: cool, pace_steps: 0, way_snag: false, day_light: bright, openness_as: as_is, exposure: [], fire_tier: easy, tinderbox: "hours:1", night_sky: dark, sources: [water], effects_note: "trails one tier harder to follow; two rain days set high_water", worse: storm, worse_when_freezing: snow, better: overcast, tags: [], lifecycle: provisional}
+  - {id: storm, name: Storm, temp: cool, pace_steps: 1, way_snag: true, day_light: dim, openness_as: closed, exposure: [haz.storm_exposure], fire_tier: moderate, night_sky: dark, sources: [water, moving_air], effects_note: "sets high_water", worse: thunderstorm, worse_when_freezing: blizzard, better: rain, tags: [harm.storm], lifecycle: provisional}
+  - {id: thunderstorm, name: Thunderstorm, temp: warm, pace_steps: 1, way_snag: true, day_light: dim, openness_as: closed, exposure: [haz.storm_exposure, haz.lightning], fire_tier: moderate, night_sky: dark, sources: [water, moving_air, lightning], effects_note: "haz.lightning only on heights or open ground; sets high_water", worse: thunderstorm, better: rain, tags: [harm.storm.lightning], lifecycle: provisional}
+  - {id: heat, name: Heat, temp: hot, pace_steps: 0, way_snag: false, day_light: bright, openness_as: as_is, exposure: [haz.heat], fire_tier: trivial, night_sky: stars, sources: [], effects_note: "+1 water need per consumer (10.6.2)", worse: scorching, better: fair, tags: [harm.fire.heat], lifecycle: provisional}
+  - {id: scorching, name: Scorching heat, temp: very_hot, pace_steps: 1, way_snag: false, day_light: bright, openness_as: as_is, exposure: [haz.scorching_heat], fire_tier: trivial, night_sky: stars, sources: [], effects_note: "+1 water need; five heat or scorching days set drought", worse: scorching, better: heat, tags: [harm.fire.heat], lifecycle: provisional}
+  - {id: frost, name: Frost, temp: freezing, pace_steps: 0, way_snag: false, day_light: bright, openness_as: as_is, exposure: [haz.cold], exposure_when: "night watches without fire or shelter", fire_tier: easy, night_sky: stars, sources: [], effects_note: "waterskins freeze overnight unless kept warm", worse: snow, better: clear, tags: [harm.frost.cold], lifecycle: provisional}
+  - {id: snow, name: Snow, temp: freezing, pace_steps: 1, way_snag: true, day_light: dim, openness_as: broken, exposure: [haz.cold], fire_tier: moderate, night_sky: dark, sources: [water], effects_note: "sets snow_lying; the day's trails are plain (Easy)", worse: blizzard, better: frost, tags: [harm.frost.cold], lifecycle: provisional}
+  - {id: blizzard, name: Blizzard, temp: bitter, pace_steps: 2, way_snag: true, day_light: dim, openness_as: closed, exposure: [haz.blizzard], fire_tier: hard, night_sky: dark, sources: [water, moving_air], effects_note: "off-road travel at crawl; sets snow_lying; only shelter negates exposure", worse: blizzard, better: snow, tags: [harm.frost.cold], lifecycle: provisional}
+  - {id: bitter, name: Bitter cold, temp: bitter, pace_steps: 0, way_snag: false, day_light: bright, openness_as: as_is, exposure: [haz.bitter_cold], fire_tier: moderate, night_sky: stars, sources: [], effects_note: "waterskins freeze; fire or shelter negates exposure", worse: blizzard, better: frost, tags: [harm.frost.cold], lifecycle: provisional}
+
+freezing_states: [frost, snow, blizzard, bitter]
+
+climates:
+  - {id: temperate, name: Temperate, terrain_hint: [terrain.plains, terrain.forest.woodland, terrain.highland.hills], lifecycle: provisional}
+  - {id: northern, name: Northern, terrain_hint: [terrain.frozen, terrain.forest.deepwood], lifecycle: provisional}
+  - {id: highland, name: Highland, terrain_hint: [terrain.highland.mountains, terrain.highland.cliffs, terrain.plains.moor], lifecycle: provisional}
+  - {id: arid, name: Arid, terrain_hint: [terrain.arid], lifecycle: provisional}
+  - {id: coastal, name: Coastal, terrain_hint: [terrain.water.coast, terrain.water.sea, terrain.wetland], lifecycle: provisional}
+
+regimes:
+  # One d12 table per climate x season (10.11.2). Index 0 = face 1. Seasons are ch.11's calendar seasons.
+  temperate:
+    spring: [clear, clear, fair, fair, overcast, overcast, wind, fog, rain, rain, storm, frost]
+    summer: [clear, clear, clear, fair, fair, overcast, wind, heat, heat, rain, thunderstorm, storm]
+    autumn: [clear, fair, overcast, overcast, wind, fog, fog, rain, rain, storm, frost, storm]
+    winter: [frost, frost, overcast, overcast, fog, wind, rain, snow, snow, bitter, storm, blizzard]
+  northern:
+    spring: [frost, clear, fair, overcast, overcast, wind, fog, rain, rain, snow, storm, frost]
+    summer: [clear, clear, fair, fair, overcast, wind, fog, rain, rain, storm, thunderstorm, frost]
+    autumn: [frost, frost, overcast, overcast, wind, fog, rain, rain, snow, storm, snow, bitter]
+    winter: [frost, bitter, bitter, overcast, wind, snow, snow, snow, blizzard, blizzard, frost, bitter]
+  highland:
+    spring: [clear, fair, overcast, wind, wind, fog, fog, rain, snow, storm, frost, blizzard]
+    summer: [clear, clear, fair, overcast, wind, wind, fog, rain, thunderstorm, thunderstorm, storm, frost]
+    autumn: [clear, overcast, wind, wind, fog, fog, rain, snow, storm, frost, snow, blizzard]
+    winter: [frost, bitter, wind, snow, snow, snow, fog, blizzard, blizzard, bitter, bitter, storm]
+  arid:
+    spring: [clear, clear, clear, fair, fair, wind, wind, heat, heat, overcast, storm, frost]
+    summer: [clear, heat, heat, heat, scorching, scorching, scorching, wind, wind, fair, thunderstorm, clear]
+    autumn: [clear, clear, fair, fair, heat, heat, wind, wind, overcast, rain, storm, frost]
+    winter: [clear, clear, fair, frost, frost, wind, wind, overcast, rain, storm, frost, bitter]
+  coastal:
+    spring: [clear, fair, fair, overcast, wind, wind, fog, fog, rain, rain, storm, storm]
+    summer: [clear, clear, fair, fair, overcast, wind, wind, fog, heat, rain, thunderstorm, storm]
+    autumn: [fair, overcast, wind, wind, fog, fog, rain, rain, storm, storm, storm, frost]
+    winter: [overcast, wind, wind, fog, rain, rain, storm, storm, frost, snow, frost, storm]
+
+daily_roll:
+  handler: h.10.weather
+  boundary: day
+  phase: 7
+  steps:
+    - "weather.today <- weather.tomorrow"
+    - "roll d6 for weather.tomorrow: 1-2 = same as today if today's state appears in the season's regime table; otherwise and on 3-6 roll the regime d12"
+    - "write both facts on the region (source: generation); weather.tomorrow sealed until a forecast"
+    - "apply standing_facts; return the day's weather for narration"
+  persistence_note: "P(same as yesterday) = 1/3 + (2/3 x the share of today's state in the regime); a clear temperate summer repeats about 0.5 of days"
+
+tables:
+  - id: tbl.10.weather_shift
+    name: Weather shift (time-tick face W, 10.9.4)
+    die: d6
+    results:
+      - {range: "1-3", result: worse, effects: [{effect_id: eff.write_fact, params: {subject: region, predicate: weather.today, value: "state.worse (state.worse_when_freezing if the season's regime holds a freezing state and today is freezing or overcast/rain/storm in winter)"}}]}
+      - {range: "4-6", result: better, effects: [{effect_id: eff.write_fact, params: {subject: region, predicate: weather.today, value: state.better}}]}
+    recency: false
+    lifecycle: provisional
+
+standing_facts:
+  - {id: snow_lying, set_when: "a snow or blizzard day", clear_when: "two consecutive days in states warmer than frost", effects: ["off-road pace one more step slower", "trailing Easy (tracks plain)", "forage one tier harder"]}
+  - {id: high_water, set_when: "a storm or thunderstorm day, or two consecutive rain days", applies_to: "every river link and ford of the region", clear_when: "two consecutive days without rain or storm", effects: ["fords one rung more severe (haz.ford S3, Hard)", "river travel downstream +2 points a watch, upstream -2"]}
+  - {id: drought, set_when: "five consecutive heat or scorching days", clear_when: "a rain, storm or thunderstorm day", effects: ["water_source false on streams and springs not marked perennial", "forage one tier harder"]}
+
+forecast:
+  beat: {verb: verb.observe, attribute: wits, deed_tag: deed.wilds.survival.weathersense, license: lic.training.wilds_survival, dc_tier: easy, stakes: safe, time: "intervals:1", at: "dusk or dawn, outdoors"}
+  reach: {1: "weather.tomorrow unsealed for the PC", 2: "and the next day's standing facts", 3: "and the day after tomorrow, at a tier harder"}
+  unlicensed: "G3; redirect: ask a local (verb.talk), 02's weather-ache, or wait"

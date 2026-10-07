@@ -1,0 +1,52 @@
+=== I-004: counted / weighted at the weapon node, measured on 06's conflict engine (4000 fights a row) ===
+
+| Band | Shape | Focus | weighted / fight | counted / fight (defeat + focus) | counted / weighted | won% |
+|---|---|---|---|---|---|---|
+| P1 | 1xT1 | none | 8.5 | 1.0 (1.0 + 0.0) | 0.12 | 100.0 |
+| P1 | 2xT1 | none | 8.6 | 1.0 (1.0 + 0.0) | 0.12 | 99.8 |
+| P1 | T1 mob of 4 | none | 11.3 | 1.0 (1.0 + 0.0) | 0.09 | 98.7 |
+| P1 | 1xT1 | push | 6.4 | 2.0 (1.0 + 1.0) | 0.31 | 100.0 |
+| P1 | 2xT1 | push | 6.4 | 2.0 (1.0 + 1.0) | 0.31 | 99.8 |
+| P1 | T1 mob of 4 | push | 9.9 | 2.0 (1.0 + 1.0) | 0.20 | 99.5 |
+| P2 | 1xT2 | none | 12.7 | 2.0 (2.0 + 0.0) | 0.16 | 100.0 |
+| P2 | 2xT1 | none | 5.8 | 1.0 (1.0 + 0.0) | 0.17 | 100.0 |
+| P2 | T1 mob of 6 | none | 9.0 | 1.0 (1.0 + 0.0) | 0.11 | 99.3 |
+| P2 | 1xT2 | push | 12.3 | 3.0 (2.0 + 1.0) | 0.24 | 100.0 |
+| P2 | 2xT1 | push | 5.6 | 2.0 (1.0 + 1.0) | 0.36 | 100.0 |
+| P2 | T1 mob of 6 | push | 7.7 | 2.0 (1.0 + 1.0) | 0.26 | 99.8 |
+| P3 | 1xT3 | none | 12.9 | 3.0 (3.0 + 0.0) | 0.23 | 99.7 |
+| P3 | 2xT2 | none | 11.7 | 3.0 (3.0 + 0.0) | 0.26 | 100.0 |
+| P3 | T2 mob of 4 | none | 12.4 | 2.0 (2.0 + 0.0) | 0.16 | 99.9 |
+| P3 | 1xT3 | push | 12.3 | 4.0 (3.0 + 1.0) | 0.32 | 99.9 |
+| P3 | 2xT2 | push | 9.7 | 4.0 (3.0 + 1.0) | 0.41 | 100.0 |
+| P3 | T2 mob of 4 | push | 11.2 | 3.0 (2.0 + 1.0) | 0.27 | 99.9 |
+| P4 | 1xT4 | none | 13.3 | 3.5 (3.5 + 0.0) | 0.26 | 87.6 |
+| P4 | 2xT3 | none | 12.5 | 3.9 (3.9 + 0.0) | 0.31 | 92.5 |
+| P4 | T3 mob of 4 | none | 13.2 | 1.7 (1.7 + 0.0) | 0.13 | 57.6 |
+| P4 | 1xT4 | push | 12.9 | 4.8 (3.8 + 1.0) | 0.38 | 95.8 |
+| P4 | 2xT3 | push | 12.0 | 5.0 (4.0 + 1.0) | 0.41 | 97.9 |
+| P4 | T3 mob of 4 | push | 12.8 | 3.4 (2.4 + 1.0) | 0.27 | 80.1 |
+| P5 | 1xT5 | none | 14.4 | 4.0 (4.0 + 0.0) | 0.28 | 79.7 |
+| P5 | 2xT4 | none | 13.5 | 5.7 (5.7 + 0.0) | 0.42 | 89.2 |
+| P5 | T3 mob of 6 | none | 10.7 | 2.8 (2.8 + 0.0) | 0.27 | 94.9 |
+| P5 | 1xT5 | push | 14.0 | 5.5 (4.5 + 1.0) | 0.39 | 89.6 |
+| P5 | 2xT4 | push | 13.1 | 6.9 (5.9 + 1.0) | 0.53 | 96.9 |
+| P5 | T3 mob of 6 | push | 9.8 | 4.0 (3.0 + 1.0) | 0.40 | 98.8 |
+
+Counted / weighted over the three shapes, by band (no Focus / pushing):
+  P1: 0.11 / 0.26
+  P2: 0.15 / 0.27
+  P3: 0.22 / 0.33
+  P4: 0.23 / 0.35
+  P5: 0.33 / 0.44
+
+Range 0.11-0.44. 04.3.3 requires counted >= weighted threshold / 10 (a ratio of 0.10).
+
+Extra fights the counted requirement costs for the step into tier t at band t (narrow calling; worst shape):
+  tier 1: no Focus: 1 extra of 8 (T1 mob of 4); push: 0 extra of 9 (T1 mob of 4)
+  tier 2: no Focus: 0 extra of 9 (T1 mob of 6); push: 0 extra of 11 (T1 mob of 6)
+  tier 3: no Focus: 0 extra of 15 (T2 mob of 4); push: 0 extra of 17 (T2 mob of 4)
+  tier 4: no Focus: 0 extra of 23 (T3 mob of 4); push: 0 extra of 24 (T3 mob of 4)
+  tier 5: no Focus: 0 extra of 53 (T3 mob of 6); push: 0 extra of 57 (T3 mob of 6)
+
+Verdict: the divisor 10 binds only the case shown (worst case 1 extra fight, at the step named above).

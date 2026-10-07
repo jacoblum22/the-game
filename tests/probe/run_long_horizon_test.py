@@ -15,22 +15,43 @@ achievement-commitment status, but the auditor (auditor.check_turn) only ever de
 VIOLATIONS, not satisfactions -- so in practice `succeeded` behaves as roughly synonymous with
 `survived` unless a scenario happens to have zero achievement commitments. Both are honest,
 scoped-down starting points, not claimed as fully solved.
+
+Parallelized (added after the transcript-based fast-forward work): scenario generation and
+session-running are both independent across (scenario, persona) pairs -- no shared mutable
+state between them, each gets its own client and its own WorldState copy -- so both phases now
+run concurrently via a thread pool (--workers, default 4) instead of sequentially. This is a
+real change to the error-handling model, not just a speed change: previously, any single run's
+exception aborted the WHOLE remaining batch (the "stopped_early" behavior). With concurrent
+runs in flight at once, that no longer makes sense -- each run's failure is now caught and
+reported individually (this run failed, here's why), and the batch keeps going regardless of
+whether other runs succeeded or failed. All progress logging goes through log() below, which
+timestamps and flushes every line -- Python fully buffers stdout by default when it isn't
+attached to a real terminal (e.g. redirected to a file), which otherwise delays visibility into
+progress until the buffer fills or the process exits entirely.
 """
 
 from __future__ import annotations
 
 import argparse
+import concurrent.futures
 import json
 import sys
+import time
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent / "src"))
+
+from google.genai import types  # noqa: E402
 
 from auditor import check_turn  # noqa: E402
 from campaign_outlines import OUTLINES  # noqa: E402
 from dm_agent import SYSTEM_PROMPT, build_client, run_turn  # noqa: E402
 from player_agent import next_action  # noqa: E402
-from scenario_pipeline import IsolationViolationError, generate_scenario  # noqa: E402
+from scenario_pipeline import (  # noqa: E402
+    IsolationViolationError,
+    generate_fast_forward_scenario,
+    generate_scenario,
+)
 from tools import TOOL_SCHEMAS  # noqa: E402
 from world_state import (  # noqa: E402
     EXTRA_TOOL_SCHEMAS,
@@ -42,6 +63,26 @@ from world_state import (  # noqa: E402
 )
 
 COMBINED_TOOL_SCHEMAS = TOOL_SCHEMAS + EXTRA_TOOL_SCHEMAS
+
+# Found live during T021's first attempt: dm_agent.run_turn's default max_tool_iterations (5)
+# was sized for Feature 001's 3-tool surface. Feature 002's 5 tools plus the system prompt's
+# "call get_state liberally" instruction mean a single turn can legitimately need more
+# round-trips (e.g. get_state, roll_check, update_resource, set_fact, THEN narration -- already
+# 5 iterations before the final text reply). Scoped to this harness only, not Feature 001's
+# shared default, per this project's additive-extension pattern.
+MAX_TOOL_ITERATIONS = 10
+
+
+def log(run_id: str, message: str) -> None:
+    """Timestamped, immediately-flushed progress line. Safe to call from multiple threads --
+    each call is a single print(), and CPython serializes individual print() calls (the GIL
+    guards the underlying write), so concurrent runs' lines interleave whole, never mid-line.
+    flush=True matters here specifically because stdout is fully buffered (not line-buffered)
+    whenever it isn't attached to a real terminal -- e.g. redirected to a log file, as this
+    harness always is per quickstart.md -- so without it, nothing would be visible until the
+    buffer filled or the process exited, defeating the entire point of progress logging.
+    """
+    print(f"[{time.strftime('%H:%M:%S')}] [{run_id}] {message}", flush=True)
 
 
 def run_scenario_checks() -> bool:
@@ -76,7 +117,15 @@ def run_scenario_checks() -> bool:
 def build_dm_system_prompt(trajectory: list[TrajectoryNode], commitments: list[Commitment]) -> str:
     """Extends Feature 001's base SYSTEM_PROMPT with this session's prep notes -- the DM (like
     a real GM) knows the planned trajectory and commitments; the player persona does not
-    (contract #5's "plays as the character, doesn't see the answer key")."""
+    (contract #5's "plays as the character, doesn't see the answer key").
+
+    A fast-forwarded session (scenario_pipeline.generate_fast_forward_scenario) needs no special
+    handling here -- its synthetic transcript is spliced directly into the real conversation
+    history by run_session, so the DM sees it as ordinary prior turns, the same as it would see
+    real prior turns in a non-fast-forwarded session. An earlier version of this function took
+    a `recap` parameter injected as a system-prompt block instead; replaced because a short
+    summary in the system prompt isn't the same thing as actual prior-turn volume in context.
+    """
     trajectory_json = json.dumps([n.to_dict() for n in trajectory], indent=2)
     commitments_json = json.dumps([c.to_dict() for c in commitments], indent=2)
     return f"""{SYSTEM_PROMPT}
@@ -118,48 +167,86 @@ def run_session(
     turn_cap: int,
     run_id: str,
     checkpoint_interval: int = 5,
+    transcript: list[tuple[str, str]] | None = None,
 ) -> SessionOutcome:
     """T013/T014: drives real turns via Feature 001's unmodified run_turn(), checking each via
-    the auditor, until a conflict is found or the turn cap is reached."""
+    the auditor, until a conflict is found or the turn cap is reached.
+
+    `transcript`: optional -- when set (a fast-forwarded session, see scenario_pipeline.
+    generate_fast_forward_scenario), a list of (player_action, dm_narration) pairs spliced
+    directly into `conversation` as real prior turns before any live turn runs, so the DM (and
+    the player persona, via render_visible_history) see genuine accumulated context, not a
+    summary of it. Defaults to None so the original from-scratch behavior is unchanged.
+    """
     handlers = WorldStateToolHandlers(world_state)
     system_prompt = build_dm_system_prompt(trajectory, commitments)
     client = build_client()
 
     conversation: list = []
     visible_turns: list[tuple[str, str]] = []
+    if transcript:
+        for action, narration in transcript:
+            conversation.append(types.Content(role="user", parts=[types.Part.from_text(text=action)]))
+            conversation.append(types.Content(role="model", parts=[types.Part.from_text(text=narration)]))
+            visible_turns.append((action, narration))
     conflicts = []
     checkpoints = []
     termination_reason = "turn_cap_reached"
     turn_of_first_conflict = None
     turns_completed = 0
 
+    opening_instruction = (
+        "Continue the session from where the transcript above leaves off: ground the player in "
+        "the current moment with a brief scene (do not re-narrate anything already covered "
+        "there), and invite their next action."
+        if transcript
+        else "Begin the session: narrate a brief opening scene consistent with the seeded "
+        "world state and invite the player's first action."
+    )
     opening = run_turn(
         client,
         handlers,
         conversation,
-        "Begin the session: narrate a brief opening scene consistent with the seeded world "
-        "state and invite the player's first action.",
+        opening_instruction,
+        max_tool_iterations=MAX_TOOL_ITERATIONS,
         tool_schemas=COMBINED_TOOL_SCHEMAS,
         system_prompt=system_prompt,
     )
     visible_turns.append(("(session start)", opening.narration))
-    print(f"[{run_id}] Opening: {opening.narration[:150]}...")
+    log(run_id, f"Opening: {opening.narration[:150]}...")
+    for call in opening.tool_calls:
+        log(run_id, f"    tool_call: {call['name']}({call['input']}) -> {call['result']}")
 
     for turn_number in range(1, turn_cap + 1):
         history_text = render_visible_history(visible_turns)
         action = next_action(history_text, persona_mode)
+        # Captured BEFORE run_turn's tool calls mutate world_state, so the auditor can tell
+        # "already true before this action" apart from "became true because of it" -- see
+        # auditor.check_turn's docstring for why this matters.
+        state_before = world_state.to_dict()
         result = run_turn(
             client, handlers, conversation, action,
+            max_tool_iterations=MAX_TOOL_ITERATIONS,
             tool_schemas=COMBINED_TOOL_SCHEMAS, system_prompt=system_prompt,
         )
         visible_turns.append((action, result.narration))
         turns_completed = turn_number
 
-        conflict = check_turn(turn_number, result.narration, action, world_state, commitments)
-        print(
-            f"[{run_id}] Turn {turn_number}: {action[:60]!r} -> "
-            f"{'CONFLICT: ' + conflict.description[:80] if conflict else 'ok'}"
+        conflict = check_turn(
+            turn_number, result.narration, action, world_state, commitments,
+            state_before=state_before,
         )
+        log(
+            run_id,
+            f"Turn {turn_number}: {action[:60]!r} -> "
+            f"{'CONFLICT: ' + conflict.description[:80] if conflict else 'ok'}",
+        )
+        # Diagnostic (added to verify the "narration lags its own tool call" hypothesis before
+        # trusting it): print exactly what tools were called this turn, with what arguments and
+        # what they returned, so a conflict can be checked against ground truth instead of only
+        # the auditor's own English description of it.
+        for call in result.tool_calls:
+            log(run_id, f"    tool_call: {call['name']}({call['input']}) -> {call['result']}")
 
         if conflict:
             conflicts.append(conflict)
@@ -292,6 +379,7 @@ def run_category_coverage_check(
     run_turn(
         client, handlers, conversation,
         "Begin the session: narrate a brief opening scene consistent with the seeded world state.",
+        max_tool_iterations=MAX_TOOL_ITERATIONS,
         tool_schemas=COMBINED_TOOL_SCHEMAS, system_prompt=system_prompt,
     )
 
@@ -309,11 +397,16 @@ def run_category_coverage_check(
 
     results: dict[str, dict] = {}
     for turn_number, (category, action) in enumerate(targets, start=1):
+        state_before = world_state.to_dict()
         result = run_turn(
             client, handlers, conversation, action,
+            max_tool_iterations=MAX_TOOL_ITERATIONS,
             tool_schemas=COMBINED_TOOL_SCHEMAS, system_prompt=system_prompt,
         )
-        conflict = check_turn(turn_number, result.narration, action, world_state, commitments)
+        conflict = check_turn(
+            turn_number, result.narration, action, world_state, commitments,
+            state_before=state_before,
+        )
         results[category] = {
             "action": action,
             "conflict_found": conflict is not None,
@@ -351,7 +444,84 @@ def parse_args() -> argparse.Namespace:
         "--category-coverage", action="store_true",
         help="Also run T018's SC-004 category-coverage check on the first generated scenario",
     )
+    parser.add_argument(
+        "--fast-forward", type=float, default=None, metavar="FRACTION",
+        help="Fraction (0.0-1.0) of each scenario's trajectory to synthetically fast-forward "
+        "through (a generated multi-turn transcript + a state seeded past that point) instead "
+        "of playing every turn live from the start -- cuts API cost roughly in proportion to "
+        "the fraction skipped, since only the REMAINING turns run for real, while still giving "
+        "the DM a genuinely large volume of prior context. Omit to run each session from "
+        "scratch (the original behavior).",
+    )
+    parser.add_argument(
+        "--fast-forward-turns", type=int, default=30, metavar="N",
+        help="Number of synthetic turns to generate for --fast-forward's transcript "
+        "(default: 30). Ignored if --fast-forward is omitted.",
+    )
+    parser.add_argument(
+        "--workers", type=int, default=4, metavar="N",
+        help="Max concurrent threads for scenario generation and session-running (default: 4). "
+        "Each (scenario, persona) run is fully independent -- its own client, its own "
+        "WorldState copy -- so this is safe to raise; keep it modest relative to your API "
+        "tier's rate limits rather than maximally high.",
+    )
     return parser.parse_args()
+
+
+def _generate_one_scenario(
+    name: str, outline: str, args: argparse.Namespace
+) -> tuple[list[TrajectoryNode], list[Commitment], WorldState, list[tuple[str, str]] | None]:
+    """One scenario-generation unit of work, run inside the Phase 1 thread pool."""
+    log(name, "Generating scenario...")
+    if args.fast_forward is not None:
+        trajectory, commitments, world_state, transcript, cutoff_index = generate_fast_forward_scenario(
+            outline, args.fast_forward, args.fast_forward_turns
+        )
+        log(
+            name,
+            f"Scenario ready -- fast-forwarded past node {cutoff_index} of "
+            f"{len(trajectory) - 1}, {len(transcript)}-turn synthetic transcript",
+        )
+        return trajectory, commitments, world_state, transcript
+    trajectory, commitments, world_state = generate_scenario(outline)
+    log(name, f"Scenario ready -- {len(trajectory)} nodes, {len(commitments)} commitments")
+    return trajectory, commitments, world_state, None
+
+
+def _run_one_session(
+    name: str,
+    persona: str,
+    trajectory: list[TrajectoryNode],
+    commitments: list[Commitment],
+    world_state: WorldState,
+    transcript: list[tuple[str, str]] | None,
+    args: argparse.Namespace,
+) -> SessionOutcome:
+    """One session-running unit of work, run inside the Phase 2 thread pool.
+
+    Found live (during fast-forward development, but a pre-existing bug): passing the SAME
+    world_state object to run_session for each persona let the second persona's session
+    silently inherit whatever mutations the first persona's session left behind, instead of
+    starting from the actual seeded state -- WorldState.from_dict(world_state.to_dict()) is
+    now a genuine deep copy (since to_dict()'s own live-reference bug was fixed), so each
+    persona gets its own independent, correctly-seeded copy. This matters even more now that
+    generation and running are both concurrent: multiple personas may genuinely run AT THE
+    SAME TIME against copies seeded from the same original world_state.
+    """
+    run_id = f"{name}-{persona}"
+    run_world_state = WorldState.from_dict(world_state.to_dict())
+    log(run_id, "Starting session...")
+    outcome = run_session(
+        trajectory, commitments, run_world_state, persona, args.turns, run_id,
+        transcript=transcript,
+    )
+    outcome.save(Path(f"{run_id}.scenario.json"))
+    log(
+        run_id,
+        f"Finished -- survived={outcome.survived} succeeded={outcome.succeeded} "
+        f"turns={outcome.turns_completed} conflicts={len(outcome.conflicts)}",
+    )
+    return outcome
 
 
 if __name__ == "__main__":
@@ -367,45 +537,88 @@ if __name__ == "__main__":
     personas = [p.strip() for p in args.personas.split(",") if p.strip()]
     outline_items = list(OUTLINES.items())[: args.runs]
 
-    outcomes: list[SessionOutcome] = []
-    first_scenario = None
-    stopped_early = False
-    stop_reason = None
+    # Phase 1: generate all scenarios concurrently -- independent per outline, no shared state.
+    scenarios: dict[str, tuple] = {}
+    generation_errors: dict[str, str] = {}
+    interrupted = False
 
-    try:
-        for name, outline in outline_items:
+    print(f"=== Phase 1: generating {len(outline_items)} scenario(s), up to {args.workers} at a time ===")
+    with concurrent.futures.ThreadPoolExecutor(max_workers=args.workers) as executor:
+        futures = {
+            executor.submit(_generate_one_scenario, name, outline, args): name
+            for name, outline in outline_items
+        }
+        try:
+            for future in concurrent.futures.as_completed(futures):
+                name = futures[future]
+                try:
+                    scenarios[name] = future.result()
+                except IsolationViolationError as exc:
+                    log(name, f"Skipped -- isolation check failed: {exc}")
+                    generation_errors[name] = f"isolation check failed: {exc}"
+                except (ValueError, TypeError) as exc:
+                    # Found live (T021): a malformed generation (bad structural shape, or the
+                    # kind of stray-key issue world_state.py's from_dict now filters
+                    # defensively) should cost this one scenario, not the whole batch.
+                    log(name, f"Skipped -- generation failed: {exc}")
+                    generation_errors[name] = f"generation failed: {exc}"
+                except Exception as exc:  # noqa: BLE001 -- quota/rate-limit/network errors
+                    log(name, f"Skipped -- unexpected error: {exc!r}")
+                    generation_errors[name] = f"unexpected error: {exc!r}"
+        except KeyboardInterrupt:
+            interrupted = True
+            log("main", "Interrupted (Ctrl+C) -- cancelling not-yet-started generations.")
+            # Known limitation: Python cannot forcibly kill an ALREADY-RUNNING thread, only
+            # prevent not-yet-started ones from starting. Any generation already mid-flight
+            # keeps running in the background; we just stop waiting on it here.
+            executor.shutdown(wait=False, cancel_futures=True)
+
+    first_scenario = next(iter(scenarios.values()), None)
+
+    # Phase 2: run every (scenario, persona) session concurrently -- independent of each other.
+    outcomes: list[SessionOutcome] = []
+    run_errors: dict[str, str] = {}
+
+    if not interrupted and scenarios:
+        run_tasks = [
+            (name, persona, *scenarios[name])
+            for name in scenarios
+            for persona in personas
+        ]
+        print(f"=== Phase 2: running {len(run_tasks)} session(s), up to {args.workers} at a time ===")
+        with concurrent.futures.ThreadPoolExecutor(max_workers=args.workers) as executor:
+            futures = {
+                executor.submit(_run_one_session, name, persona, trajectory, commitments, world_state, transcript, args): f"{name}-{persona}"
+                for name, persona, trajectory, commitments, world_state, transcript in run_tasks
+            }
             try:
-                trajectory, commitments, world_state = generate_scenario(outline)
-            except IsolationViolationError as exc:
-                print(f"Skipping scenario {name!r} for session-running -- isolation check failed: {exc}")
-                continue
-            if first_scenario is None:
-                first_scenario = (trajectory, commitments, world_state)
-            for persona in personas:
-                run_id = f"{name}-{persona}"
-                # Each run is only added to `outcomes` and saved to disk once it fully
-                # completes -- a failure or interrupt DURING a run's turns still loses that
-                # run's own progress (not resumable mid-session), but every already-completed
-                # run before it is safe either way.
-                outcome = run_session(trajectory, commitments, world_state, persona, args.turns, run_id)
-                outcomes.append(outcome)
-                outcome.save(Path(f"{run_id}.scenario.json"))
-    except KeyboardInterrupt:
-        stopped_early = True
-        stop_reason = "Interrupted by user (Ctrl+C)."
-    except Exception as exc:  # noqa: BLE001 -- deliberately broad: quota/rate-limit/network
-        # errors from the API surface as various exception types depending on cause; the
-        # point here is "don't crash with a raw traceback and lose everything completed so
-        # far," not to distinguish every possible failure mode.
-        stopped_early = True
-        stop_reason = f"Stopped early due to an error: {exc!r}"
+                for future in concurrent.futures.as_completed(futures):
+                    run_id = futures[future]
+                    try:
+                        outcomes.append(future.result())
+                    except Exception as exc:  # noqa: BLE001 -- see _run_one_session's callers
+                        log(run_id, f"FAILED: {exc!r}")
+                        run_errors[run_id] = repr(exc)
+            except KeyboardInterrupt:
+                interrupted = True
+                log("main", "Interrupted (Ctrl+C) -- cancelling not-yet-started runs.")
+                executor.shutdown(wait=False, cancel_futures=True)
 
     print("=" * 60)
-    if stopped_early:
-        print(f"{stop_reason}")
-        print(f"{len(outcomes)} run(s) completed before the stop -- reporting on those now (nothing lost from them).\n")
-    else:
-        print(f"Completed {len(outcomes)} run(s) (no interruption).\n")
+    if interrupted:
+        print("Interrupted by user (Ctrl+C).")
+    print(
+        f"{len(outcomes)} run(s) completed, {len(run_errors)} run(s) failed, "
+        f"{len(generation_errors)} scenario(s) failed to generate.\n"
+    )
+    if generation_errors:
+        print("Scenario generation failures:")
+        for name, reason in generation_errors.items():
+            print(f"  {name}: {reason}")
+    if run_errors:
+        print("Session run failures:")
+        for run_id, reason in run_errors.items():
+            print(f"  {run_id}: {reason}")
 
     if outcomes:
         report = build_report(outcomes)
@@ -413,9 +626,9 @@ if __name__ == "__main__":
     else:
         print("No runs completed -- nothing to report.")
 
-    if args.category_coverage and first_scenario is not None and not stopped_early:
-        run_category_coverage_check(*first_scenario)
-    elif args.category_coverage and stopped_early:
-        print("\nSkipping the category-coverage check since the run was stopped early.")
+    if args.category_coverage and first_scenario is not None and not interrupted:
+        run_category_coverage_check(*first_scenario[:3])
+    elif args.category_coverage and interrupted:
+        print("\nSkipping the category-coverage check since the run was interrupted.")
 
-    sys.exit(1 if stopped_early else 0)
+    sys.exit(1 if (interrupted or run_errors or generation_errors) else 0)

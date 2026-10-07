@@ -1,6 +1,161 @@
 <!--
 Sync Impact Report
-Version change: 1.4.0 → 1.5.0 (MINOR: resolves Principle III's long-open TODO)
+Version change: 1.7.0 → 1.8.0 (MINOR: the ruleset in `rules/` (v1.0) resolves every item this
+  document deferred to "a future /speckit-plan", and records three owner-approved pattern
+  amendments it made along the way. No Core Principle is changed.)
+Modified patterns:
+  - P3: the player-facing comprehension wall is no longer a design budget. Owner direction
+    (2026-09-29, DL-00-01): rules are judged only by player freedom and AI correctness. The
+    classification requirement (background vs player-facing) stands and is refined into four
+    visibility classes (rules 00.6.4); the codex (P7, rules ch.14) carries player-facing load.
+  - P5: (a) the evidence-significance gate is computed from the frame's pre-committed fields
+    (consequential AND pressured AND own act), not judged after the fact; fresh judgment remains
+    only for tags and conduct (DL-03-01). (b) The "calibrated classifier" is realized as a
+    deterministic five-confirmation scorer with the same three-valued policy (DL-04-10); it
+    shares no model family with the narrator, so P13's independence requirement is met.
+  - P14: the cadence parameter is not varied by action count. P9's fixed pool takes precedence;
+    cadence differences live in what one action contains (weapon weight), tempo, and reactions
+    (DL-06-02).
+Resolved deferrals (each resolved in `rules/`; cited rule ids):
+  - Ability scores: seven attributes and a closed list of derived values (00.4.1, 00.4.4, 02.3).
+  - P2's baseline competence floor (00.3.6, 02.5.1).
+  - The hierarchical tag vocabulary (00.5, 03.1, data/tags.yaml).
+  - The tag_event capture mechanism (00.6.8, 03.1, 03.7.2).
+  - P5's class list and the curated hybrid table (04.2, data/callings.yaml, data/hybrids.yaml).
+  - P5's numeric thresholds, confidence cutoffs and synergy bonuses (04.3, 04.4, 04.8).
+  - P9's action-economy numbers; Focus pool size, costs and recovery (06.1.1, 05.6).
+  - What dropped items grant (08.3, 08.4, 00.11.5).
+  - VI's consolidation, retirement and provisional mechanics (04.8, 05.12, 00.16.3).
+  - Slot counts, pool sizes and the hard slot ceiling (05.2).
+  - Ruleset versioning for live saves (00.16.6).
+Deferred / TODO items carried forward unchanged:
+  - TODO(TECH_STACK): still open (Technology Constraints).
+Research basis: the ruleset's decision log (`rules/appendix/decision-log.md`) and traceability
+  matrix (`rules/appendix/traceability.md`), which map every principle and pattern to rule ids.
+
+Prior report (1.6.0 → 1.7.0):
+Version change: 1.6.0 → 1.7.0 (MINOR: sixth pass — an extended design conversation plus several
+  targeted research checks conducted during it — resolves P5's default application and sharpens
+  its class-emergence mechanism, revises P2's leveling model, adds a new Core Principle bounding
+  what the AI DM may treat as a possible action, gives P9 a shared active-ability resource
+  companion mechanism, revises P10's numeric-vs-narrative test, and sharpens P3 with the
+  rationale for why background-resolved richness specifically aids an AI DM's improvisation)
+Modified patterns (continued):
+  - P3 (Granular State Is Not the Risk — Ambiguity Is) — added the rationale for *why*
+    background-resolved complexity should be maximized, not merely permitted: it is the raw
+    material an AI DM draws on to adjudicate a genuinely novel player action by reaching for and
+    adapting an existing sub-rule, rather than inventing a ruling from nothing — the traditional
+    reason crunchy systems aid human-GM improvisation, now framed as an AI-specific strength
+    (no fear-of-novelty response) rather than a cost to be minimized. Explicitly corrects a
+    within-session misstep: open-endedness and player-facing simplicity are independent axes,
+    not the same thing, and reducing background richness in the name of simplicity risks
+    reducing the system's ability to handle surprising player actions gracefully.
+  - P9 (Fixed Action-Economy Pool) — gained a companion mechanism: one shared, generic resource
+    pool (tentatively "Focus") governs the cost of every active ability across every class,
+    separate from the character's primary Vitality-like resource, rather than each class
+    authoring its own bespoke resource type.
+  - P10 (Move/Verb Templates Reserved for Flavor Abilities) — revised: the deciding factor for
+    whether a mechanism may carry a character's core power is no longer numeric-vs-narrative
+    representation, but how deterministic its trigger-to-outcome mapping is. A precisely-scoped
+    narrative permission is exactly as safe as a numeric formula; a vague, open-ended judgment
+    call is exactly as risky in either format.
+Modified patterns:
+  - P2 (Hybrid Progression) — retitled from "Hybrid Progression: XP Plus Milestone-Gated Earned
+    Tiers" to "History-Gated Power Tiers (No Separate Level)". REVISED, not merely extended:
+    conventional XP/leveling is removed as the default progression mechanism. Power growth now
+    routes entirely through Pattern P5's class/archetype-emergence mechanism, via deepening,
+    narratively-crystallized tiers within a recognized identity — Stormlight's Ideals
+    generalized from "reserved for rare major transitions" into the project's sole progression
+    mechanism, not a supplement to XP.
+  - P5 (Emergent-by-History Power Acquisition) — both flavors sharpened with resolved detail:
+    (1) the specific-ability-from-source-and-method mechanism is generalized from its
+    combat-specific naming (source archetype / acquisition method) to a domain-independent
+    shape (a pool-gating circumstance / an orthogonal fill-quality circumstance), and its
+    default application is redirected to loot/item generation rather than direct personal
+    ability-granting — direct monster-power absorption from a kill is rescoped as a class-gated
+    special capability ("Blue Mage"-style), not the default player experience; (2) the
+    class/archetype-emergence mechanism's category axes are sharpened into a bounded,
+    hierarchical tag vocabulary (a narrow event counts as evidence at every level of its
+    hierarchy at once), with two resolved class shapes — specialist (single dominant tag at any
+    hierarchy level) and hybrid (co-occurrence of tags from unrelated branches, defined via an
+    explicitly curated sparse table, never a full cross-product); (3) the significance/
+    eligibility gate deciding whether a moment counts as evidence at all is resolved as
+    base-model judgment (Principle III's existing default), not a separate bounded taxonomy,
+    since a fixed taxonomy was found to relocate that judgment call rather than remove it; (4)
+    granted abilities/bonuses may be passive (narration-consistency-checked, no tracked usage)
+    or active (player-invoked, each with its own explicit recharge condition that MUST be
+    mechanically tracked and enforced, not left as descriptive prose).
+Added principles:
+  - VII. Default-Deny Capability Gate — before resolving how well an attempted action goes
+    (Pattern P8), the AI DM MUST first resolve whether the action is even a legal attempt; only
+    a small, fixed tier of basic actions is available by default, and anything beyond it needs
+    an explicit license (a granted ability, an unlocked class capability, an established
+    narrative fact).
+Added patterns: n/a
+Removed sections: n/a
+Deferred / TODO items carried forward unchanged:
+  - TODO(TECH_STACK): still open (Technology Constraints).
+  - P5's exact class list, numeric thresholds, confidence cutoffs, and synergy-bonus values:
+    still deferred to a future /speckit-plan.
+Newly deferred by this amendment:
+  - The shared "does this moment count as evidence" capture mechanism (tentatively
+    `tag_event`), which both of P5's flavors depend on, is not yet designed in implementation
+    detail or built — identified as the next concrete dependency to resolve, not designed here.
+  - The exact hierarchical tag vocabulary, and the curated table of valid hybrid-class pairs,
+    remain unauthored — this amendment resolves their shape, not their content.
+  - P2's baseline competence floor for a character not yet recognized as any class is left
+    unresolved — deferred to a future /speckit-plan.
+  - Ability scores (P4/P11 already assume a stat-allocation system exists, but never specified
+    how many scores or what they modify) remain undecided in count and shape. Resolved framing
+    only: they answer "how good are you at broad categories of action" (roll modifiers, mostly
+    fixed at creation per P4), a different question from the class/tag system's "what can you
+    even attempt, and who have you become" — and their count should be set by how much raw,
+    mostly background-resolved texture the AI DM needs to adjudicate novel actions well, not by
+    a target for minimizing player-facing numbers. The actual number and their exact modifiers
+    are deferred to a future /speckit-plan.
+Research basis: this amendment is sourced from an extended real-time design conversation plus
+  several targeted Haiku-tier research checks conducted during it (Multiple Instance Learning
+  and chunk-level retrieval for classification, ultimately ruled out in favor of a non-ML
+  tag-tally approach; real game-AI player-modeling precedent; TTRPG values-tracking precedent,
+  e.g. D&D's Paladin oaths and Fallout/Fable/Baldur's Gate 3's karma-and-reputation systems;
+  hierarchical tag taxonomies and domain-x-method class design, e.g. Path of Exile's tag
+  cascades and D&D 5e's Wizard/Warlock/Sorcerer split; and mainstream-vs-narrative TTRPG
+  advancement models, e.g. Pathfinder 2e's feat structure and Blades in the Dark's
+  playstyle-triggered XP) — not a single dedicated research-round report the way the fourth and
+  fifth amendments were.
+Version change (prior): 1.5.0 → 1.6.0 (MINOR: fifth research pass resolves Pattern P5's direction)
+Modified patterns:
+  - P5 (Emergent-by-History Power Acquisition) — retitled from "(Open Design Priority)" to
+    "(Direction Resolved, Specifics Deferred)". Architecture resolved for both flavors: (1)
+    specific-ability-from-source+method uses a source-gated bounded sub-pool plus a
+    method-selected fill mechanism (Diablo/PoE/Borderlands' item-generation pattern), with
+    slot-claiming conflicts resolved via P6's priority-rank companion mechanism; (2)
+    class/archetype emergence is a narrative label DERIVED from an underlying, hard-capped
+    combinatorial ability-slot system (never an independent ability-dispensing system of its
+    own), eligibility gated by deterministic dual-tier thresholds (Delve's Primary/Secondary
+    Requirement model) keyed to a small fixed set of category axes, resolved by a calibrated,
+    model-family-independent classifier (per Pattern P13) that scores a bounded candidate set
+    and returns a confidence value per candidate rather than a forced pick, decided via a
+    three-valued grant/offer-to-player/abstain policy, with mixed histories resolved by
+    presenting a named hybrid option for the player to choose rather than a computed
+    tie-break formula. The exact class list, thresholds, confidence cutoffs, and bonus values
+    remain deferred to a future /speckit-plan — this amendment resolves architecture, not
+    numbers.
+  - P6 (Named Composite Bonuses) — added a cross-reference noting Pattern P5's class-synergy
+    bonus is an instance of this mechanism, not a separate one.
+Added patterns: n/a
+Removed sections: n/a
+Deferred / TODO items carried forward unchanged:
+  - TODO(TECH_STACK): still open (Technology Constraints).
+Newly deferred by this amendment:
+  - P5's exact class list, numeric thresholds, confidence cutoffs, and synergy-bonus values —
+    architecture is resolved; numbers are not, and are left for a future /speckit-plan.
+Research basis: this amendment is sourced from a fifth dedicated research pass (ARPG procedural
+  affix/effect generation, roguelike/roguelite build-synergy architecture, and LitRPG
+  class-from-aggregate-playstyle precedent) commissioned specifically to resolve Pattern P5,
+  the project's longest-standing open design priority. Full report:
+  reports/Emergent power acquisition mechanisms.md.
+Version change (prior): 1.4.0 → 1.5.0 (MINOR: resolves Principle III's long-open TODO)
 Modified principles:
   - III. Rule Flexibility Within Bounds — retitled from "(Deferred Mechanism)" to "(Base-Model
     Judgment by Default)". RESOLVED: default is the narrating AI's own judgment constrained by
@@ -145,6 +300,22 @@ claim that pure numeric rescaling (a "squish," which preserves relative power bu
 nothing) satisfies this principle's retirement requirement; only structural retirement —
 removing, replacing, or folding a mechanic — counts.
 
+### VII. Default-Deny Capability Gate
+Before resolving *how well* an attempted action goes (Pattern P8's degree-of-success), the AI
+DM MUST first resolve *whether the action is even a legal attempt*. A small, fixed tier of
+basic actions — move, observe, talk, a basic unskilled attack, and similarly mundane actions any
+character could plausibly attempt — is always available to every character by default. Anything
+beyond that tier MUST be explicitly licensed by a granted ability, an unlocked class capability,
+or an established narrative fact before the DM narrates an attempt at it as possible; an attempt
+with no such license MUST be declined or redirected (narrated as failing outright, or reframed
+as the nearest basic action actually available), never narrated into existence merely because
+the player described it. Rationale: an AI narrator's generosity is a documented risk in both
+directions — Pattern P16 already guards against an AI DM being too withholding (silent dead
+ends), and this principle is its counterpart, guarding against an AI DM being too permissive
+(treating any described action as possible by default). This principle governs *capability*,
+not *outcome quality* — it answers "can you even try this," a question logically prior to and
+separate from P8's "how well did the attempt go."
+
 ## Technology Constraints
 
 TODO(TECH_STACK): language, platform, and engine are not yet chosen. This MUST be resolved
@@ -171,10 +342,26 @@ defer it and gamble on a later reroll instead of being forced to accept the firs
 is a deliberate departure from every source researched; none of them give the player this
 choice.
 
-**P2. Hybrid Progression: XP Plus Milestone-Gated Earned Tiers.** Ordinary, routine progression
-uses conventional XP/leveling. A small, limited number of *major* milestone gates instead use
-narrative-truth gating (Stormlight's Ideals: power is earned by demonstrated readiness, not
-grinding) — reserved for big transitions, not every tier-up.
+**P2. History-Gated Power Tiers (No Separate Level).** REVISED (sixth pass): power growth MUST
+NOT rely on a separate, flavor-independent level number tracked apart from what a character
+actually did — this project's emergent-by-history premise (Pattern P5) extends to progression
+itself, not only to which specific abilities a character has. Power growth is routed entirely
+through Pattern P5's class/archetype-emergence mechanism: a recognized class/identity MAY
+deepen, through further sustained or intensified tag evidence, into successive tiers, each
+unlocking additional potency (a stronger version of its synergy bonus, or a new bounded
+ability). This generalizes Stormlight's Ideals from a mechanic reserved for rare, major
+transitions into the project's sole progression mechanism, rather than a supplement to
+conventional XP/leveling.
+
+A tier SHOULD be crystallized by a specific, narratively-significant moment — mirroring how an
+Ideal is sworn at a moment of crisis or realization, not silently granted the instant a counter
+crosses a line — presented to the player as an affirmed choice via Pattern P5's existing
+three-valued grant/offer/abstain policy's "offer" tier, not auto-applied. Where a character has
+not yet been recognized as any class, or a recognized class's first tier has not yet triggered,
+the system MUST still provide some baseline floor of competence rather than leaving early
+characters fragile-by-default; the exact shape of that floor (a flat starting competence, a
+small class-independent pool, or something else) is deferred to a future /speckit-plan, not
+resolved here.
 
 **P3. Granular State Is Not the Risk — Ambiguity Is.** The system SHOULD default toward rich,
 granular tracked state rather than artificially coarse abstractions chosen for human
@@ -204,6 +391,27 @@ for reducing what a player had to track — so any deliberate simplification MUS
 a hypothesis to verify against real play, not a one-time design decision, the same
 reconciliation discipline this principle already demands for over-granular state.
 
+Sixth-pass addition — why background-resolved richness should be maximized, not merely
+permitted: open-endedness and player-facing simplicity are independent axes, not the same
+thing, and a spec MUST NOT reduce background-resolved complexity in the name of simplicity
+without checking which axis it's actually affecting. The traditional reason a crunchy tabletop
+system helps a human GM improvise is that a rich mechanical vocabulary gives them something
+concrete to reach for and adapt when a player does something no rule explicitly covers ("this
+isn't quite written down, but it's basically a grapple check with a penalty"), whereas a
+stripped-down system leaves them to invent a ruling from nothing, which is exactly where an
+inexperienced or anxious human GM freezes up. An AI DM does not carry that fear-of-novelty cost,
+so it can make that same reach-and-adapt move fluidly — which means background-resolved richness
+should be treated as raw material for graceful improvisation, not bookkeeping overhead to be
+minimized. This does not relax the player-facing comprehension wall above; it means the wall
+applies only to what a player must actively track, never to the density of the substrate the AI
+DM privately reasons with.
+
+AMENDED (v1.8.0, owner direction, DL-00-01): the comprehension wall above is retained as
+research context but is **not** a design budget for this project. No rule is cut or coarsened to
+reduce what the player must track; rules are judged only by player freedom and AI correctness. The
+MUST to classify every piece of tracked state stands (rules 00.6.3, 00.6.4), and the player-facing
+load is carried by the codex (P7; rules ch.14).
+
 **P4. Character-Creation Trade-offs Locked at Creation.** Race/origin (and similar foundational
 choices) set a stat-quantity-vs-freedom trade-off (more points but less placement freedom, or
 vice versa) once, at character creation, not something that changes later. Separately, access
@@ -212,17 +420,134 @@ vice versa) once, at character creation, not something that changes later. Separ
 Game's tested fix for "how do you let someone play the hybrid superclass without everyone else
 sucking" — breadth of access is not itself a source of day-one power.
 
-**P5. Emergent-by-History Power Acquisition (Open Design Priority).** Abilities/effects derived
-from what a character actually did — what they fought, killed, or otherwise experienced —
-rather than picked from a menu, are considered one of the most important goals of this project
-and warrant dedicated design work, not a quick decision. This is explicitly NOT settled.
-Whatever mechanism is eventually designed MUST derive the acquired effect from a combination of
-what the source actually was (the monster/entity's own nature or abilities) and how it was
-defeated or acquired — not from an arbitrary lookup table (unmanageable at scale) and not from
-a fully open, uncapped pool (Underworld's unbounded "copy any ability," which every source
-agrees became untrackable). Hemalurgy's location-plus-method encoding is a useful structural
-reference for *how* to build a compact generative rule, even though its specific inputs
-(body location, cause of death) are not themselves what we want to copy.
+**P5. Emergent-by-History Power Acquisition (Direction Resolved, Specifics Deferred).**
+Abilities/effects derived from what a character actually did — what they fought, killed, or
+otherwise experienced — rather than picked from a menu, remain one of the most important goals
+of this project. A fifth research pass (ARPG procedural affix/effect generation, roguelike
+build-synergy architecture, and LitRPG class-from-playstyle precedent; full report:
+`reports/Emergent power acquisition mechanisms.md`) resolves the *architecture* for this
+pattern, across both of its flavors below — the exact class list, thresholds, confidence
+cutoffs, and bonus values remain deferred to a future `/speckit-plan`, not settled here.
+
+*Specific-ability-from-source-and-method.* Whatever mechanism is built MUST derive an acquired
+effect from a combination of what the source actually was (a monster/entity's own nature, or a
+category of action performed) and how it was defeated, acquired, or performed — never an
+arbitrary lookup table (unmanageable at scale) and never a fully open, uncapped pool
+(Underworld's unbounded "copy any ability," which every source agrees became untrackable). The
+resolved shape, confirmed convergently across Diablo/PoE/Borderlands' item-generation systems
+and Hades/Delve's curated-table designs: the **source categorically gates a small, bounded
+sub-pool of eligible effects** (the way a monster's nature gates which effect-templates are
+even possible, mirroring how Borderlands' manufacturer identity gates its parts pool), and the
+**acquisition method then selects how one is filled from that gated pool** — a guaranteed pick,
+a weighted/biased roll, or a deterministic addition, mirroring Path of Exile's Essence/Fossil/
+Crafting-Bench split. For acquired effects that claim an exclusive behavioral slot (override a
+basic action) rather than stacking additively, resolve conflicts with a priority-rank field per
+effect (Pattern P6's companion mechanism, independently reinvented by Binding of Isaac's
+designers for the identical problem), not a bespoke pairwise rule.
+
+REVISED (sixth pass): this mechanism's two circumstance-axes are domain-independent, not
+combat-specific. The *pool-gating circumstance* is whatever fundamentally characterizes the
+thing being engaged with (a monster's nature, a crafting material, or a future domain's own
+equivalent); the *fill-quality circumstance* is the manner or quality of how the character
+engaged with it (decisive vs. costly vs. merciful, or a future domain's own equivalent) —
+"source archetype" and "acquisition method" were Feature 003's combat-specific instantiation of
+this shape, not its definition, so a future feature in a different domain (e.g. crafting) MUST
+NOT be assumed to need its own bespoke two-axis design when this general shape already fits it.
+
+This mechanism's default application to combat outcomes MUST be loot/item generation (a
+defeated source drops an item generated from its gated pool), not a direct, personal ability
+granted to the character. Feature 003's original framing — a kill directly granting the
+character a personal ability — does not reflect how most player characters should experience
+combat rewards; that framing is instead reserved as a class-gated special capability (a "Blue
+Mage"-style monster-power-absorption trait, itself something a character must be recognized for
+via the class/archetype-emergence mechanism below), not the default. Whether a dropped item
+itself grants an ability, a passive bonus, or nothing beyond mundane value is a further
+application of the same pool-gate/fill-quality shape, deferred to a future /speckit-plan.
+
+*Class/archetype emergence.* The underlying combinatorial ability-slot system (small, fixed
+slots times bounded option pools, recombined — HWFWM's and Stormlight's model, already this
+project's general build-diversity approach) is what generates real mechanical diversity, and it
+MUST carry a hard total-slot ceiling (mirroring HWFWM's fixed 20-ability cap) rather than
+growing without bound. A "class" or title is a **derived narrative label computed over that
+combinatorial state** (e.g., which fraction of filled slots are blade-tagged vs. arcane-tagged)
+— it MUST NOT become an independent system that hands out an ability list of its own; doing so
+would reintroduce the menu-driven, non-emergent model this pattern exists to avoid. Eligibility
+for a class-consideration moment MUST be gated by deterministic, engine-tracked counters, not
+narration — a dual-tier threshold (a rank/ratio across a small, fixed set of category axes,
+plus a cumulative action counter, per Delve's Primary/Secondary Requirement structure) keyed to
+a small, author-fixed set of axes, never to the full, ever-growing ability or monster list (the
+same low-cardinality-keying trick Hades uses for its Duo Boon table). Once eligible, a
+calibrated classifier — which MUST NOT share a model family with the narrating AI, per Pattern
+P13's existing independence requirement — scores the bounded, eligible candidate set (not the
+full class list) using the character's actual combinatorial state, returning a confidence value
+per candidate rather than a forced single answer. Resolve those scores with a three-valued
+policy: high confidence grants directly; mid confidence presents the candidate(s) as real,
+player-chosen options rather than an auto-applied result (consistent with Pattern P1's existing
+"player may defer or gamble" value); all-low-confidence abstains and re-checks later rather than
+forcing a decision the evidence doesn't support. Mixed/hybrid histories — for which no source in
+the fifth research pass supplied an explicit numeric tie-break formula — are resolved by
+surfacing a named hybrid candidate (The Wandering Inn's "consolidation" precedent) alongside the
+single-track options and letting the player choose, rather than requiring the system to compute
+a winner. A recognized class MAY unlock a small, bounded, audited synergy bonus requiring the
+class's specific combination to trigger (Pattern P6's named composite bonus, or Pattern P14's
+cadence differentiation) — never a new ability list of its own.
+
+REVISED/SHARPENED (sixth pass): the "small, author-fixed set of axes" this eligibility gate is
+keyed to MUST be a bounded but hierarchical tag vocabulary — a narrow, specific tag (e.g. a
+specific school of magic) counts as evidence simultaneously for its broader parent tags (that
+school's element, and magic generally), so a single narrated event contributes to every level of
+specificity it actually belongs to at once, rather than requiring a separate judgment per level
+(Path of Exile's own tag-cascade system, applied to behavioral tags rather than item affixes, is
+the confirmed precedent for this shape). Two resolved class shapes fall out of this hierarchy: a
+**specialist** class is defined by dominance of one tag at any level of the hierarchy (a broad
+tag like general spellcasting, or a narrow one like a specific mundane trade), evaluated against
+its own threshold independent of every other class's threshold — this is what prevents broad/
+common classes from structurally starving niche/narrow ones, since a narrow class never competes
+against a broad class for the same evidence pool. A **hybrid** class is defined by co-occurrence
+of tags from otherwise-unrelated branches of the hierarchy (e.g. requiring both meaningful
+arcane evidence and meaningful martial evidence); hybrid classes MUST be defined via an
+explicitly-authored, curated sparse table of valid tag-combination pairs, never a full Cartesian
+cross-product of every possible pairing, per the same combinatorial-explosion caution Principle
+V already applies to ability primitives (Hades' Duo Boon table and Delve's curated requirement
+pairs are the confirmed precedent for keeping this bounded).
+
+The judgment call deciding whether a given narrated moment counts as evidence toward any tag at
+all — including moments with no dice resolution behind them, such as a values-expressive choice
+with no combat outcome — MUST be the narrating AI's own base-model judgment (Principle III's
+existing default), not a separate bounded taxonomy of "trigger types": both real-world precedent
+(D&D's Paladin oaths, judged case-by-case by the DM; Fable's later reputation-based redesign,
+which abandoned an "objective" trigger taxonomy) and this project's own design review found that
+bounding the trigger taxonomy does not remove this judgment call, it only relocates it one step
+earlier, adding complexity without adding safety. The actual safety net is the three-valued
+grant/offer/abstain policy already adopted above: no single judged moment locks in a result, so
+an inconsistent or over-eager judgment call self-corrects as more evidence accumulates — this
+project's own analogue to a Paladin's ability to atone rather than instantly and irreversibly
+losing power over one questionable call.
+
+A granted or recognized ability/bonus, whether from this mechanism or the specific-ability
+mechanism above, MUST be classified as either **passive** (always applies when narratively
+relevant; no usage state to track, verified only by the existing narration-consistency check) or
+**active** (the player must deliberately invoke it, resolved through the existing roll_check/
+Pattern P8 machinery where real stakes exist). Every active ability MUST carry an explicit,
+individually-specified recharge condition (e.g. once per encounter, once per rest/day,
+single-use-ever) — abilities are not assumed to share one uniform recharge rule — and that
+condition MUST be mechanically tracked and enforced by the tool-calling layer, not left as
+descriptive prose the narrating AI is merely trusted to honor (Feature 003 recorded "once per
+encounter" as flavor text only, with no enforcement — a known, named gap this amendment closes
+going forward).
+
+Sixth-pass note: both of this pattern's flavors depend on a shared capture mechanism — recording
+that a significant moment happened and what it is evidence of — that is not yet designed in
+implementation detail or built. This is recognized as the actual next dependency to resolve via
+a future /speckit-specify, not something this amendment resolves.
+
+AMENDED (v1.8.0): (a) the significance gate is computed from fields the frame fixes before
+the roll (consequential AND pressured AND own act); fresh model judgment is kept only for which
+tags and conduct a deed carries (rules DL-03-01, 03.2). (b) The "calibrated classifier" is
+realized as a deterministic scorer counting five confirmations (Current, Rising, Central,
+Leading, Margin), with the same three-valued policy: grant at 4+, offer at 1+, abstain at 0
+(rules DL-04-10, 04.4). It shares no model family with the narrator, so P13's independence
+requirement is met by construction.
 
 **P6. Named Composite Bonuses for Aligned Combinations.** Combining two specific, aligned
 primitives SHOULD yield a distinct, named emergent bonus (Stormlight's "Three Lashings" from
@@ -239,6 +564,11 @@ Fork beats Chain beats Return, so "a piercing, forking, chaining projectile will
 its maximum, then fork, then chain," with no authored name for that specific combination).
 Reserve P6's bespoke named effects for the smaller set of combinations distinctive enough to
 deserve one; use the priority-ordered tag mechanism for everything else.
+
+Fifth-research-pass note: Pattern P5's class-emergence mechanism uses this pattern directly — a
+recognized class's bounded synergy bonus (e.g. a hybrid-only technique requiring both a magic
+slot and a weapon slot to trigger) is an instance of this named-composite-bonus mechanism, not
+a separate one.
 
 **P7. Player-Facing Reference Layer.** The system MUST provide an opt-in, queryable reference
 ("codex") of a character's own rules/state/abilities, separate from in-scene narration —
@@ -259,10 +589,36 @@ base action budget regardless of build (Pathfinder 2e's 3-actions-plus-reaction 
 build diversity comes from *what* fills the actions rather than *how many* actions a build gets
 — closing off action-economy-stacking exploits. Exact numbers are deferred to /speckit-plan.
 
-**P10. Move/Verb Templates Reserved for Flavor Abilities.** Fully pre-specified, narrow "move"
-verbs (PbtA-style: fixed trigger, fixed resolution) MAY be used for flavor- or
-narrative-driven abilities that don't need full numeric modeling, but MUST NOT be the primary
-vehicle for a character's core numeric power — reserve full mechanical modeling for that.
+Companion mechanism (sixth pass): one shared, generic resource pool (tentatively "Focus") MUST
+govern the cost of every active ability across every class, separate from the character's
+primary Vitality-like resource, rather than each class authoring its own bespoke resource type
+(Mana, Rage, and similar per-class currencies). This is a deliberate departure from the industry
+default (most systems researched — D&D, Pathfinder, WoW — use per-class bespoke resources), made
+specifically because this project's classes are hybrid-capable and derived rather than chosen: a
+character recognized as belonging to two thematically different classes at once would otherwise
+need to learn and track two separate resource systems simultaneously, disproportionately more
+than either specialist ever would, echoing 5e's own reason for unifying multiclass spell slots
+into one pool (Divinity: Original Sin 2's single Action-Point economy across every build is the
+confirmed precedent that a fully unified pool works, though it remains an uncommon choice, not
+the researched norm). This unification addresses the bookkeeping cost of hybrids specifically;
+it does NOT by itself solve whether a hybrid's kit feels coherent and powerful together — that
+remains a content-authoring concern for each hybrid's synergy bonus (Patterns P5/P6), not
+something the resource model can resolve on its own.
+
+**P10. Move/Verb Templates Reserved for Flavor Abilities (Revised).** REVISED (sixth pass): the
+deciding factor for whether a mechanism may carry a character's core power is NOT
+numeric-vs-narrative representation — it is how deterministic its trigger-to-outcome mapping is.
+A precisely-scoped narrative permission (fixed trigger, fixed or tightly bounded outcome — e.g.
+this project's own existing effect templates, such as "reduce incoming damage from a single hit
+per encounter, but only against attacks you can see coming") is exactly as safe a vehicle for
+core power as a numeric formula, because both are equally deterministic once their trigger
+fires. What MUST be avoided for core power is a vague, open-ended judgment call with no fixed
+mapping from trigger to outcome, regardless of whether that judgment is dressed in numbers or in
+prose — no consensus research supports numeric formulas being inherently safer for an AI
+adjudicator than a tightly-scoped narrative permission, or vice versa. Fully pre-specified,
+narrow "move" verbs (PbtA-style: fixed trigger, fixed resolution) MAY therefore be used for a
+character's core power, not only flavor abilities, provided the trigger and outcome are scoped
+precisely enough to leave no real judgment call at the point of use.
 
 **P11. No Naive Shared Point-Buy Without Audited Guardrails.** A shared point-buy
 character-creation model (spend points from one pool on anything) is prohibited unless every
@@ -308,6 +664,10 @@ without a unique ability list — WoW's agility-melee classes run a faster base 
 other classes, with haste explicitly excluded from affecting the faster group, at essentially
 zero added balance-audit surface. Cheap to adopt; useful as a complement to, not a replacement
 for, Principle V's combinatorial primitives.
+
+AMENDED (v1.8.0, rules DL-06-02): P9 takes precedence. No build changes anyone's number of
+actions. Cadence differences live in what one action contains (weapon weight, riders), in tempo
+(who acts first), and in reactions.
 
 **P15. Time-Gated Specialization as an Alternative to Point-Buy Auditing.** Where Pattern P11's
 audited point-buy guardrails are judged too costly to author for a given system, specialization
@@ -362,4 +722,4 @@ bumps follow semantic versioning: MAJOR for backward-incompatible principle remo
 redefinitions, MINOR for new principles/patterns or materially expanded guidance, PATCH for
 wording or clarification only.
 
-**Version**: 1.5.0 | **Ratified**: 2026-09-27 | **Last Amended**: 2026-09-28
+**Version**: 1.8.0 | **Ratified**: 2026-09-27 | **Last Amended**: 2026-10-07

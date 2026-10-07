@@ -1,0 +1,674 @@
+# data/traps.yaml
+# Purpose: traps (10.14): trigger, telltale (the no-gotcha rule, 10.14.3), detection and disarm tiers by
+#   site band, the victim's resisted check, harm by band, effects and afflictions, alarm ticks on the site's
+#   danger clock, reset, ways round (bypass rows), lethal context, aftermath; plus the eight ways of dealing
+#   with a perceived trap (T-10-19), the springing rule, and PC-made traps.
+# Owner: 10-exploration-travel-sites (owner-block 13 for regional traps).
+# Schema: data/SCHEMAS.md#trapsyaml (id, detect {verb, dc_tier}, disarm {license, dc_tier}, trigger, harm
+#   {severity, harm_tags}, effects) with ch.10's band-indexed forms dc_tier_by_band and severity_by_band
+#   (index 0 = band 1) and optional keys kind, telltale, telltale_kind_by_band (subtle only where the band's harm is S1-S2), resist, affliction, alarm_ticks,
+#   reset, bypass, lethal_context, aftermath, notes; top-level ways, springing, telltale_rule, pc_made.
+# Basis: [10.14] [07.3.3, 07.10] [R5 AV-08] [R1 §07 traps that always counter the players] [DL-10-17]
+
+schema_version: 1
+traps:
+- id: trap.pit
+  name: Covered pit
+  kind: mechanical
+  tags: [deed.guile.thievery.traps]
+  trigger: weight on the false floor
+  telltale: a stretch of floor cleaner than the dust around it, and a faint seam
+  telltale_kind_by_band: [subtle, subtle, plain, plain, plain]
+  detect:
+    verb: verb.observe
+    attribute: wits
+    dc_tier_by_band: [easy, moderate, hard, very_hard, legendary]
+  disarm:
+    license: lic.training.guile_thievery
+    verb: verb.handle
+    dc_tier_by_band: [moderate, hard, very_hard, legendary, legendary]
+  resist: {verb: verb.evade, attribute: agility}
+  harm:
+    severity_by_band: [S2, S2, S3, S3, S4]
+    harm_tags: [harm.physical.crush]
+  effects:
+  - effect_id: eff.apply_condition
+    params: {condition: cond.prone, severity: S1, duration: scene, target: victim}
+  affliction: null
+  alarm_ticks: 0
+  reset: manual
+  bypass:
+  - {method: jump the seam, verb: verb.exert, tier: 'by width: 5 ft easy, 10 ft moderate'}
+  - {method: spike the lid shut, verb: verb.handle, tier_delta: -1}
+  - {method: walk the edge, verb: verb.exert, tier: moderate}
+  lethal_context: false
+  aftermath: at the bottom of the pit (10 ft at band 1-2, 20 ft at 3-4, 40 ft at 5); climbing out is act.climb
+  lifecycle: provisional
+  basis: &id001 ['10.14', 07.3.3, '07.10', R5 AV-08]
+- id: trap.spiked_pit
+  name: Spiked pit
+  kind: mechanical
+  tags: [deed.guile.thievery.traps]
+  trigger: weight on the false floor
+  telltale: bones at the bottom of a hole someone left uncovered nearby, and a matching seam here
+  telltale_kind_by_band: [plain, plain, plain, plain, plain]
+  detect:
+    verb: verb.observe
+    attribute: wits
+    dc_tier_by_band: [moderate, hard, very_hard, legendary, legendary]
+  disarm:
+    license: lic.training.guile_thievery
+    verb: verb.handle
+    dc_tier_by_band: [moderate, hard, very_hard, legendary, legendary]
+  resist: {verb: verb.evade, attribute: agility}
+  harm:
+    severity_by_band: [S2, S3, S3, S4, S4]
+    harm_tags: [harm.physical.pierce]
+  effects:
+  - effect_id: eff.apply_condition
+    params: {condition: cond.bleeding, severity: S1, duration: scene, target: victim}
+  affliction: aff.wound_rot
+  alarm_ticks: 0
+  reset: manual
+  bypass:
+  - {method: jump it, verb: verb.exert, tier: moderate}
+  - {method: bridge it with a plank or door, verb: verb.handle, tier: easy}
+  lethal_context: true
+  aftermath: impaled at the bottom; Down until hauled out
+  lifecycle: provisional
+  basis: *id001
+- id: trap.snare
+  name: Snare
+  kind: natural_snare
+  tags: [deed.wilds.survival]
+  trigger: a foot in the noose
+  telltale: a bent sapling and a loop of cord half-hidden in the leaves
+  telltale_kind_by_band: [subtle, subtle, subtle, subtle, subtle]
+  detect:
+    verb: verb.observe
+    attribute: wits
+    dc_tier_by_band: [easy, moderate, hard, very_hard, legendary]
+  disarm:
+    license: lic.training.wilds_survival
+    verb: verb.handle
+    dc_tier_by_band: [easy, moderate, hard, very_hard, legendary]
+  resist: {verb: verb.evade, attribute: agility}
+  harm:
+    severity_by_band: [S1, S1, S1, S2, S2]
+    harm_tags: [harm.physical.crush]
+  effects:
+  - effect_id: eff.apply_condition
+    params: {condition: cond.restrained, severity: S1, duration: 'while:until cut free (a Handle beat, no roll with a blade)',
+      target: victim}
+  affliction: null
+  alarm_ticks: 0
+  reset: manual
+  bypass:
+  - {method: cut it from beside, verb: verb.handle, tier: easy}
+  lethal_context: false
+  aftermath: hanging by one ankle until cut down
+  lifecycle: provisional
+  basis: *id001
+  notes: hunters' and goblins' snares; cutting free with a blade is Trivial
+- id: trap.deadfall
+  name: Deadfall
+  kind: natural_snare
+  tags: [deed.wilds.survival]
+  trigger: a tripline across the path
+  telltale: a heavy log or stone propped above the path on a stick
+  telltale_kind_by_band: [plain, plain, plain, plain, plain]
+  detect:
+    verb: verb.observe
+    attribute: wits
+    dc_tier_by_band: [easy, moderate, hard, very_hard, legendary]
+  disarm:
+    license: lic.training.wilds_survival
+    verb: verb.handle
+    dc_tier_by_band: [easy, moderate, hard, very_hard, legendary]
+  resist: {verb: verb.evade, attribute: agility}
+  harm:
+    severity_by_band: [S2, S2, S3, S3, S3]
+    harm_tags: [harm.physical.crush]
+  effects:
+  - effect_id: eff.apply_condition
+    params: {condition: cond.pinned, severity: S2, duration: 'while:until lifted (Force, Moderate)', target: victim}
+  affliction: null
+  alarm_ticks: 0
+  reset: manual
+  bypass:
+  - {method: spring it with a pole, verb: verb.handle, tier: easy}
+  - {method: step over the line, verb: verb.exert, tier: easy}
+  lethal_context: false
+  aftermath: pinned under the weight until lifted
+  lifecycle: provisional
+  basis: *id001
+- id: trap.needle_lock
+  name: Needle lock
+  kind: mechanical
+  tags: [deed.guile.thievery.lockpicking]
+  trigger: picking or forcing the lock without the key
+  telltale: a tiny hole beside the keyhole, rimmed with dark crust
+  telltale_kind_by_band: [subtle, subtle, subtle, subtle, subtle]
+  detect:
+    verb: verb.observe
+    attribute: wits
+    dc_tier_by_band: [moderate, hard, very_hard, legendary, legendary]
+  disarm:
+    license: lic.training.guile_thievery
+    verb: verb.handle
+    dc_tier_by_band: [moderate, hard, very_hard, legendary, legendary]
+  resist: {verb: verb.endure, attribute: endurance}
+  harm:
+    severity_by_band: [S1, S1, S1, S1, S1]
+    harm_tags: [harm.venom.poison]
+  effects: []
+  affliction: aff.widow_venom
+  alarm_ticks: 0
+  reset: automatic
+  bypass:
+  - {method: wear thick gloves, verb: verb.handle, tier_delta: -1}
+  - {method: use the key, verb: verb.handle, tier: trivial}
+  lethal_context: false
+  aftermath: the poison runs its stages (07.9)
+  lifecycle: provisional
+  basis: *id001
+  notes: harm is Light; what matters is the affliction (07.10.2 non-example). band 4-5 use aff.wyvern_venom
+- id: trap.dart_wall
+  name: Dart wall
+  kind: mechanical
+  tags: [deed.guile.thievery.traps]
+  trigger: a pressure plate in the corridor
+  telltale: rows of small holes in both walls at waist height
+  telltale_kind_by_band: [plain, plain, plain, plain, plain]
+  detect:
+    verb: verb.observe
+    attribute: wits
+    dc_tier_by_band: [moderate, hard, very_hard, legendary, legendary]
+  disarm:
+    license: lic.training.guile_thievery
+    verb: verb.handle
+    dc_tier_by_band: [moderate, hard, very_hard, legendary, legendary]
+  resist: {verb: verb.evade, attribute: agility}
+  harm:
+    severity_by_band: [S1, S2, S2, S3, S3]
+    harm_tags: [harm.physical.pierce]
+  effects: []
+  affliction: aff.adder_venom
+  alarm_ticks: 0
+  reset: automatic
+  bypass:
+  - {method: crawl below the holes, verb: verb.exert, tier: easy}
+  - {method: plug the holes, verb: verb.handle, tier: moderate}
+  - {method: trigger it with a thrown weight, verb: verb.handle, tier: easy}
+  lethal_context: false
+  aftermath: lies stuck with darts in the corridor
+  lifecycle: provisional
+  basis: *id001
+  notes: affliction only at band 3+ (poisoned darts)
+- id: trap.falling_slab
+  name: Falling slab
+  kind: mechanical
+  tags: [deed.guile.thievery.traps]
+  trigger: lifting a lid, crossing a threshold
+  telltale: a seam in the ceiling and a crushed skeleton under it
+  telltale_kind_by_band: [plain, plain, plain, plain, plain]
+  detect:
+    verb: verb.observe
+    attribute: wits
+    dc_tier_by_band: [moderate, hard, very_hard, legendary, legendary]
+  disarm:
+    license: lic.training.guile_thievery
+    verb: verb.handle
+    dc_tier_by_band: [hard, very_hard, legendary, legendary, legendary]
+  resist: {verb: verb.evade, attribute: agility}
+  harm:
+    severity_by_band: [S2, S3, S3, S4, S5]
+    harm_tags: [harm.physical.crush]
+  effects:
+  - effect_id: eff.apply_condition
+    params: {condition: cond.pinned, severity: S2, duration: 'while:until lifted (Force, Hard)', target: victim}
+  affliction: null
+  alarm_ticks: 0
+  reset: once
+  bypass:
+  - {method: wedge the slab, verb: verb.handle, tier_delta: -1}
+  - {method: trip it from outside its fall, verb: verb.handle, tier: easy}
+  lethal_context: true
+  aftermath: pinned under the slab; Down until lifted by others or a Force beat (Hard)
+  lifecycle: provisional
+  basis: *id001
+- id: trap.collapsing_stair
+  name: Collapsing stair
+  kind: mechanical
+  tags: [deed.lore.engineering.structures]
+  trigger: weight on the middle steps
+  telltale: steps worn hollow and cracked, with fresh grit below
+  telltale_kind_by_band: [subtle, subtle, plain, plain, plain]
+  detect:
+    verb: verb.observe
+    attribute: wits
+    dc_tier_by_band: [easy, moderate, hard, very_hard, legendary]
+  disarm:
+    license: lic.training.lore_engineering
+    verb: verb.handle
+    dc_tier_by_band: [moderate, hard, very_hard, legendary, legendary]
+  resist: {verb: verb.evade, attribute: agility}
+  harm:
+    severity_by_band: [S2, S2, S3, S3, S4]
+    harm_tags: [harm.physical.crush]
+  effects:
+  - effect_id: eff.apply_condition
+    params: {condition: cond.prone, severity: S1, duration: scene, target: victim}
+  affliction: null
+  alarm_ticks: 0
+  reset: once
+  bypass:
+  - {method: climb the outside, verb: verb.exert, tier: moderate}
+  - {method: 'cross one at a time, light', verb: verb.evade, tier_delta: -1}
+  lethal_context: false
+  aftermath: falls with the stair to the floor below (the height recorded)
+  lifecycle: provisional
+  basis: *id001
+- id: trap.scything_blade
+  name: Scything blade
+  kind: mechanical
+  tags: [deed.guile.thievery.traps]
+  trigger: a tripwire at shin height
+  telltale: a curved groove cut in both walls and a dark stain on the floor
+  telltale_kind_by_band: [plain, plain, plain, plain, plain]
+  detect:
+    verb: verb.observe
+    attribute: wits
+    dc_tier_by_band: [moderate, hard, very_hard, legendary, legendary]
+  disarm:
+    license: lic.training.guile_thievery
+    verb: verb.handle
+    dc_tier_by_band: [hard, very_hard, legendary, legendary, legendary]
+  resist: {verb: verb.evade, attribute: agility}
+  harm:
+    severity_by_band: [S2, S3, S3, S4, S4]
+    harm_tags: [harm.physical.cut]
+  effects:
+  - effect_id: eff.apply_condition
+    params: {condition: cond.bleeding, severity: S1, duration: scene, target: victim}
+  affliction: null
+  alarm_ticks: 0
+  reset: automatic
+  bypass:
+  - {method: step over the wire, verb: verb.exert, tier: easy}
+  - {method: jam the blade in its groove, verb: verb.force, tier_delta: -1}
+  lethal_context: true
+  aftermath: lies bleeding in the corridor
+  lifecycle: provisional
+  basis: *id001
+- id: trap.falling_portcullis
+  name: Falling portcullis
+  kind: mechanical
+  tags: [deed.lore.engineering.mechanisms]
+  trigger: passing the gate's plate
+  telltale: grooves in the door jambs and spikes in the arch above
+  telltale_kind_by_band: [plain, plain, plain, plain, plain]
+  detect:
+    verb: verb.observe
+    attribute: wits
+    dc_tier_by_band: [easy, moderate, hard, very_hard, legendary]
+  disarm:
+    license: lic.training.guile_thievery
+    verb: verb.handle
+    dc_tier_by_band: [hard, very_hard, legendary, legendary, legendary]
+  resist: {verb: verb.evade, attribute: agility}
+  harm:
+    severity_by_band: [S3, S3, S4, S4, S4]
+    harm_tags: [harm.physical.pierce]
+  effects: []
+  affliction: null
+  alarm_ticks: 2
+  reset: manual
+  bypass:
+  - {method: wedge the grooves, verb: verb.handle, tier_delta: -1}
+  - {method: dash through, verb: verb.move, tier: moderate}
+  lethal_context: true
+  aftermath: on the far side of the bars or beneath them; the way is barred (a barrier, Force Very hard; the winch elsewhere)
+  lifecycle: provisional
+  basis: *id001
+  notes: splits a party; alarm 2
+- id: trap.murder_hole
+  name: Murder hole
+  kind: mechanical
+  tags: [deed.martial.tactics]
+  trigger: defenders above see intruders below
+  telltale: holes in the vault above a gate passage, blackened
+  telltale_kind_by_band: [plain, plain, plain, plain, plain]
+  detect:
+    verb: verb.observe
+    attribute: wits
+    dc_tier_by_band: [easy, moderate, hard, very_hard, legendary]
+  disarm:
+    license: 'none (it is manned: deal with the defenders)'
+    verb: verb.handle
+    dc_tier_by_band: [easy, moderate, hard, very_hard, legendary]
+  resist: {verb: verb.evade, attribute: agility}
+  harm:
+    severity_by_band: [S2, S2, S3, S3, S4]
+    harm_tags: [harm.fire.heat]
+  effects:
+  - effect_id: eff.apply_condition
+    params: {condition: cond.burning, severity: S1, duration: 'rounds:2', target: victim}
+  affliction: null
+  alarm_ticks: 2
+  reset: automatic
+  bypass:
+  - {method: shields overhead, verb: verb.evade, tier_delta: -1}
+  - {method: climb to the room above, verb: verb.exert, tier: hard}
+  lethal_context: false
+  aftermath: scalded in the passage
+  lifecycle: provisional
+  basis: *id001
+  notes: fires only while a defender is above; each defender beat is one firing
+- id: trap.alarm_line
+  name: Alarm line
+  kind: alarm
+  tags: [deed.guile.stealth]
+  trigger: a cord across the way
+  telltale: a thin line at ankle height running to a cluster of bells or pans
+  telltale_kind_by_band: [subtle, subtle, subtle, subtle, subtle]
+  detect:
+    verb: verb.observe
+    attribute: wits
+    dc_tier_by_band: [easy, moderate, hard, very_hard, legendary]
+  disarm:
+    license: lic.training.guile_thievery
+    verb: verb.handle
+    dc_tier_by_band: [easy, moderate, hard, very_hard, legendary]
+  resist: {verb: none, attribute: null}
+  harm:
+    severity_by_band: [S1, S1, S1, S1, S1]
+    harm_tags: []
+  effects: []
+  affliction: null
+  alarm_ticks: 2
+  reset: manual
+  bypass:
+  - {method: step over it, verb: verb.exert, tier: easy}
+  - {method: muffle the bells, verb: verb.handle, tier: easy}
+  lethal_context: false
+  aftermath: null
+  lifecycle: provisional
+  basis: *id001
+  notes: 'harms no one: the danger clock +2; in a fortified site the next E face is an arrival'
+- id: trap.alarm_ward
+  name: Alarm ward
+  kind: magical
+  tags: [deed.arcane.warding]
+  trigger: a living thing crossing the line
+  telltale: a faint chalk or salt line across the threshold
+  telltale_kind_by_band: [subtle, subtle, subtle, subtle, subtle]
+  detect:
+    verb: verb.observe
+    attribute: wits
+    dc_tier_by_band: [moderate, hard, very_hard, legendary, legendary]
+  disarm:
+    license: lic.training.arcane_warding
+    verb: verb.handle
+    dc_tier_by_band: [moderate, hard, very_hard, legendary, legendary]
+  resist: {verb: none, attribute: null}
+  harm:
+    severity_by_band: [S1, S1, S1, S1, S1]
+    harm_tags: []
+  effects: []
+  affliction: null
+  alarm_ticks: 3
+  reset: automatic
+  bypass:
+  - {method: unweave it, verb: verb.handle, tier: by license (05.7.7)}
+  - {method: 'cross without touching the ground (climb, jump the line)', verb: verb.exert, tier: moderate}
+  lethal_context: false
+  aftermath: null
+  lifecycle: provisional
+  basis: *id001
+  notes: 'harms no one: the danger clock +3; the warder knows'
+- id: trap.curse_glyph
+  name: Curse glyph
+  kind: magical
+  tags: [deed.arcane.warding]
+  trigger: reading it, touching it, or crossing it
+  telltale: a rune in the floor or on a lid, half-hidden under soot
+  telltale_kind_by_band: [subtle, subtle, subtle, plain, plain]
+  detect:
+    verb: verb.observe
+    attribute: wits
+    dc_tier_by_band: [moderate, hard, very_hard, legendary, legendary]
+  disarm:
+    license: lic.training.arcane_warding
+    verb: verb.handle
+    dc_tier_by_band: [hard, very_hard, legendary, legendary, legendary]
+  resist: {verb: verb.endure, attribute: resolve}
+  harm:
+    severity_by_band: [S1, S2, S2, S3, S3]
+    harm_tags: [harm.arcane.force]
+  effects: []
+  affliction: aff.evil_eye
+  alarm_ticks: 1
+  reset: automatic
+  bypass:
+  - {method: do not read it aloud; cover it, verb: verb.handle, tier: easy}
+  - {method: deface it, verb: verb.force, tier_delta: 0}
+  lethal_context: false
+  aftermath: the curse runs its course (07.9.7)
+  lifecycle: provisional
+  basis: *id001
+- id: trap.flame_jet
+  name: Flame jet
+  kind: magical
+  tags: [deed.arcane.fire]
+  trigger: a pressure plate or a word
+  telltale: scorch marks fanning across floor and ceiling
+  telltale_kind_by_band: [plain, plain, plain, plain, plain]
+  detect:
+    verb: verb.observe
+    attribute: wits
+    dc_tier_by_band: [moderate, hard, very_hard, legendary, legendary]
+  disarm:
+    license: lic.training.arcane_warding
+    verb: verb.handle
+    dc_tier_by_band: [hard, very_hard, legendary, legendary, legendary]
+  resist: {verb: verb.evade, attribute: agility}
+  harm:
+    severity_by_band: [S2, S3, S3, S4, S5]
+    harm_tags: [harm.fire.flame]
+  effects:
+  - effect_id: eff.apply_condition
+    params: {condition: cond.burning, severity: S1, duration: 'rounds:3', target: victim}
+  affliction: null
+  alarm_ticks: 1
+  reset: automatic
+  bypass:
+  - {method: soak cloaks and run it, verb: verb.move, tier_delta: -1}
+  - {method: trigger it from afar, verb: verb.handle, tier: easy}
+  lethal_context: true
+  aftermath: lies burned in the passage
+  lifecycle: provisional
+  basis: *id001
+- id: trap.flooding_room
+  name: Flooding room
+  kind: mechanical
+  tags: [deed.lore.engineering.waterworks]
+  trigger: the door closing behind, or a lever pulled
+  telltale: a high-water stain on all four walls and a grate in the ceiling
+  telltale_kind_by_band: [plain, plain, plain, plain, plain]
+  detect:
+    verb: verb.observe
+    attribute: wits
+    dc_tier_by_band: [moderate, hard, very_hard, legendary, legendary]
+  disarm:
+    license: lic.training.lore_engineering
+    verb: verb.handle
+    dc_tier_by_band: [hard, very_hard, legendary, legendary, legendary]
+  resist: {verb: verb.exert, attribute: might}
+  harm:
+    severity_by_band: [S2, S2, S3, S3, S4]
+    harm_tags: [harm.physical.asphyxia]
+  effects: []
+  affliction: null
+  alarm_ticks: 1
+  reset: manual
+  bypass:
+  - {method: wedge the door open, verb: verb.handle, tier: easy}
+  - {method: swim up to the grate, verb: verb.exert, tier: hard}
+  lethal_context: true
+  aftermath: the water fills over 3 rounds; then breath (07.10.4); a progress clock of 4 to force the door from inside
+  lifecycle: provisional
+  basis: *id001
+- id: trap.gas_vent
+  name: Gas vent
+  kind: mechanical
+  tags: [deed.guile.poisoncraft]
+  trigger: opening a chest or a door
+  telltale: a greenish crust around small vents near the hinges
+  telltale_kind_by_band: [subtle, subtle, subtle, subtle, plain]
+  detect:
+    verb: verb.observe
+    attribute: wits
+    dc_tier_by_band: [moderate, hard, very_hard, legendary, legendary]
+  disarm:
+    license: lic.training.guile_thievery
+    verb: verb.handle
+    dc_tier_by_band: [moderate, hard, very_hard, legendary, legendary]
+  resist: {verb: verb.endure, attribute: endurance}
+  harm:
+    severity_by_band: [S1, S1, S2, S2, S3]
+    harm_tags: [harm.venom.gas]
+  effects:
+  - effect_id: eff.apply_condition
+    params: {condition: cond.choking, severity: S1, duration: 'rounds:2', target: victim}
+  affliction: aff.drowse
+  alarm_ticks: 0
+  reset: once
+  bypass:
+  - {method: hold your breath and open it from arm's length, verb: verb.endure, tier_delta: -1}
+  - {method: block the vents, verb: verb.handle, tier: easy}
+  lethal_context: false
+  aftermath: wakes groggy where they fell
+  lifecycle: provisional
+  basis: *id001
+- id: trap.net
+  name: Weighted net
+  kind: mechanical
+  tags: [deed.guile.ambush]
+  trigger: a tripline, often with watchers
+  telltale: a bulge in the ceiling cloth or branches, and a line to it
+  telltale_kind_by_band: [subtle, subtle, subtle, subtle, subtle]
+  detect:
+    verb: verb.observe
+    attribute: wits
+    dc_tier_by_band: [easy, moderate, hard, very_hard, legendary]
+  disarm:
+    license: lic.training.guile_thievery
+    verb: verb.handle
+    dc_tier_by_band: [easy, moderate, hard, very_hard, legendary]
+  resist: {verb: verb.evade, attribute: agility}
+  harm:
+    severity_by_band: [S1, S1, S1, S1, S1]
+    harm_tags: []
+  effects:
+  - effect_id: eff.apply_condition
+    params: {condition: cond.restrained, severity: S2, duration: 'while:until cut free (Handle, Easy with a blade)', target: victim}
+  affliction: null
+  alarm_ticks: 1
+  reset: manual
+  bypass:
+  - {method: cut the line, verb: verb.handle, tier: easy}
+  lethal_context: false
+  aftermath: netted until cut free or until the setters come
+  lifecycle: provisional
+  basis: *id001
+  notes: 'often a capture trap: its setters are a pending threat (an ambush row)'
+- id: trap.rolling_stone
+  name: Rolling stone
+  kind: mechanical
+  tags: [deed.lore.engineering.mechanisms]
+  trigger: taking the thing from the altar
+  telltale: a sloped corridor with a groove worn down its center
+  telltale_kind_by_band: [plain, plain, plain, plain, plain]
+  detect:
+    verb: verb.observe
+    attribute: wits
+    dc_tier_by_band: [hard, very_hard, legendary, legendary, legendary]
+  disarm:
+    license: lic.training.guile_thievery
+    verb: verb.handle
+    dc_tier_by_band: [very_hard, legendary, legendary, legendary, legendary]
+  resist: {verb: verb.evade, attribute: agility}
+  harm:
+    severity_by_band: [S3, S3, S4, S4, S5]
+    harm_tags: [harm.physical.crush]
+  effects:
+  - effect_id: eff.apply_condition
+    params: {condition: cond.prone, severity: S1, duration: scene, target: victim}
+  affliction: null
+  alarm_ticks: 2
+  reset: once
+  bypass:
+  - {method: replace the weight (a sack of sand), verb: verb.handle, tier: hard}
+  - {method: run for the side passage, verb: verb.move, tier: moderate}
+  lethal_context: true
+  aftermath: crushed against the far wall; Down
+  lifecycle: provisional
+  basis: *id001
+  notes: 'a chase: the stone is a pursuit clock of 4 that the fleer races to a side passage'
+- id: trap.crushing_ceiling
+  name: Crushing ceiling
+  kind: mechanical
+  tags: [deed.lore.engineering.mechanisms]
+  trigger: the door closing and a plate in the center
+  telltale: a ceiling of one great block, and walls scored by its edges
+  telltale_kind_by_band: [plain, plain, plain, plain, plain]
+  detect:
+    verb: verb.observe
+    attribute: wits
+    dc_tier_by_band: [hard, very_hard, legendary, legendary, legendary]
+  disarm:
+    license: lic.training.guile_thievery
+    verb: verb.handle
+    dc_tier_by_band: [very_hard, legendary, legendary, legendary, legendary]
+  resist: {verb: verb.exert, attribute: might}
+  harm:
+    severity_by_band: [S3, S4, S4, S5, S5]
+    harm_tags: [harm.physical.crush]
+  effects: []
+  affliction: null
+  alarm_ticks: 2
+  reset: automatic
+  bypass:
+  - {method: brace it with a beam or the iron bar, verb: verb.force, tier_delta: -1}
+  - {method: force the door, verb: verb.force, tier: hard}
+  lethal_context: true
+  aftermath: 'a progress clock of 4 (getting out) races the ceiling''s countdown of 4; caught: Down in the gap, pinned'
+  lifecycle: provisional
+  basis: *id001
+  notes: band 5 entry is the 10.14.6 reference (S5, Legendary disarm)
+ways:
+- {id: disarm, verb: verb.handle, license: the trap's disarm.license, dc: disarm tier, success: disarmed; salvage possible
+    (08.6.8), failure: 'cost (time or footing); critical failure: it fires on the disarmer'}
+- {id: jam, verb: verb.handle | verb.force, license: null, dc: disarm tier - 1 rung (min easy), success: jammed for the scene,
+  failure: as disarm; a forced jam is trait.sense.loud}
+- {id: spring_from_afar, verb: verb.handle | verb.strike, license: null, dc: easy (moderate for a plate needing heavy weight),
+  success: fires harmlessly; spent or reset per entry, failure: does not fire}
+- {id: bypass, verb: verb.exert | verb.sneak, license: null, dc: the obstacle's own tier (the entry's bypass rows), success: passed;
+    the trap remains, failure: fires on the bypasser with a Protective lever (stakes -1)}
+- {id: break, verb: verb.force, license: null, dc: disarm tier, success: destroyed (trait.sense.loud), failure: 'loud; critical
+    failure: it fires'}
+- {id: understand, verb: verb.observe (Intellect) | verb.recall, license: null, dc: detect tier, success: 'trigger, effect
+    and reset known: a Precision lever on any other way', failure: nothing learned}
+- {id: use, verb: verb.setup, license: null, dc: the setup's own tier, success: a lever or fact for a later beat, failure: as
+    setup}
+- {id: avoid, verb: null, license: null, dc: null, success: 'another route, or wait for its reset', failure: null}
+springing: {effect_dc: 'the trap''s detect tier for its band, one rung up (cap legendary)', read: 01.18.3 resisted-effect
+    table, alarm: alarm_ticks tick the site danger clock whatever the result}
+telltale_rule: every trap's telltale is narrated as a feature of its area when the area is first perceived; S3+ traps have
+  plain telltales; an unperceived trap's harm is never lethal (07.3.5); a perceived S4+ trap raises the severity warning (07.3.3)
+pc_made:
+  detect_tier_by_reach: {1: easy, 2: moderate, 3: hard, 4: very_hard}
+  time: {snare_or_alarm: 'intervals:1', deadfall_or_pit: 'hours:1'}
+  license: 'crude: basic verb.handle; refined: lic.training.guile_thievery or lic.training.wilds_survival (snares, deadfalls)'
+blocks: []

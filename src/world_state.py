@@ -9,17 +9,21 @@ Field names and validation rules follow specs/002-long-horizon-consistency-test/
 from __future__ import annotations
 
 import json
-from dataclasses import asdict, dataclass, field
+import copy
+from dataclasses import asdict, dataclass, field, fields
 from pathlib import Path
 from typing import Literal, Optional, Union
 
+from ability_pool import AbilityGrant, resolve_ability_grant
 from resolution import resolve
 from state import ActionAttempt, CharacterState  # noqa: F401  (ActionAttempt re-exported for reuse)
 
 CommitmentType = Literal["invariant", "ordering", "achievement"]
 CommitmentStatus = Literal["pending", "satisfied", "violated"]
 ConflictType = Literal["fact", "commitment", "player_input"]
-StateCategory = Literal["character_resource", "resources", "possessions", "position", "status_flags"]
+StateCategory = Literal[
+    "character_resource", "resources", "possessions", "position", "status_flags", "abilities"
+]
 TerminationReason = Literal["conflict", "natural_ending", "turn_cap_reached"]
 PersonaCondition = Literal["adversarial", "natural"]
 
@@ -44,7 +48,13 @@ class TrajectoryNode:
 
     @classmethod
     def from_dict(cls, data: dict) -> "TrajectoryNode":
-        return cls(**data)
+        # Found live (T021): the extraction call runs in plain JSON mode, not a schema-bound
+        # mode, so the model can emit a stray top-level key (observed: a literal
+        # "possessions.keeper_logbook" field sitting beside "references" instead of being an
+        # item inside it). Filtering to known fields turns that into a silently-dropped key
+        # instead of a raw TypeError crashing the whole pipeline before validation ever runs.
+        known = {f.name for f in fields(cls)}
+        return cls(**{k: v for k, v in data.items() if k in known})
 
 
 @dataclass
@@ -67,7 +77,9 @@ class Commitment:
 
     @classmethod
     def from_dict(cls, data: dict) -> "Commitment":
-        return cls(**data)
+        # Same defensive filtering as TrajectoryNode.from_dict -- see its comment.
+        known = {f.name for f in fields(cls)}
+        return cls(**{k: v for k, v in data.items() if k in known})
 
 
 @dataclass
@@ -79,14 +91,32 @@ class WorldState:
     possessions: dict[str, bool] = field(default_factory=dict)
     position: str = ""
     status_flags: dict[str, Union[bool, str]] = field(default_factory=dict)
+    ability_grants: list["AbilityGrant"] = field(default_factory=list)
+    """New in feature 003 (T003): additive field, append-only -- see data-model.md. Every other
+    field above stays byte-for-byte unmodified, same discipline as every prior extension to
+    this dataclass."""
 
     def to_dict(self) -> dict:
+        # Found live (T021 verification): the old version returned these three dicts by
+        # LIVE REFERENCE, not as a snapshot. Confirmed end-to-end (including through the
+        # google-genai SDK's own Part construction, which also holds a live reference rather
+        # than copying) that an EARLIER get_state() result silently changes if a LATER tool
+        # call in the same turn mutates world_state -- meaning the model (and our own auditor)
+        # could receive an already-mutated "snapshot" disguised as an earlier one. resources
+        # needs a deep copy since update_resource mutates its inner per-resource dicts in
+        # place; possessions/status_flags only ever hold scalar values, so a shallow copy of
+        # the outer dict is enough to stop them aliasing the live object.
         return {
             "character": self.character.to_dict(),
-            "resources": self.resources,
-            "possessions": self.possessions,
+            "resources": copy.deepcopy(self.resources),
+            "possessions": dict(self.possessions),
             "position": self.position,
-            "status_flags": self.status_flags,
+            "status_flags": dict(self.status_flags),
+            # ability_grants (T003): each AbilityGrant is append-only/never mutated in place
+            # once created, so a plain list of fresh dicts (not a live reference to the
+            # AbilityGrant objects themselves) is enough to keep this snapshot-safe -- same
+            # concern as the three fields above, satisfied more simply here.
+            "ability_grants": [g.to_dict() for g in self.ability_grants],
         }
 
     @classmethod
@@ -97,6 +127,7 @@ class WorldState:
             possessions=data.get("possessions", {}),
             position=data.get("position", ""),
             status_flags=data.get("status_flags", {}),
+            ability_grants=[AbilityGrant.from_dict(g) for g in data.get("ability_grants", [])],
         )
 
     def save(self, path: str | Path) -> None:
@@ -277,6 +308,20 @@ def validate_world_state_references(
     """
     errors: list[str] = []
 
+    # Found live (fast-forward batch): a generation pass seeded the SAME resource name as both
+    # `character.resource_name` (the one primary resource, written via update_state) and a key
+    # in `resources` (an additional resource, written via update_resource) -- two independently
+    # tracked state slots sharing a name, with no way for the DM to know only one is "real."
+    # The DM correctly called update_state; the auditor correctly checked resources[name], which
+    # nothing had touched, and (correctly, given what it was shown) flagged a conflict. The seed
+    # itself was the bug, not the DM or the auditor.
+    if world_state.character.resource_name in world_state.resources:
+        errors.append(
+            f"Resource name {world_state.character.resource_name!r} is used for both "
+            f"character.resource_name and a key in resources -- these are two separately "
+            f"tracked state slots and must not share a name"
+        )
+
     for node in trajectory:
         for ref in node.references:
             if not _reference_exists(world_state, ref):
@@ -350,6 +395,35 @@ EXTRA_TOOL_SCHEMAS: list[dict] = [
             "required": ["category", "key", "value", "reason"],
         },
     },
+    {
+        "name": "grant_ability",
+        "description": (
+            "Grant the character a new ability derived from a source they just defeated, "
+            "survived, or otherwise acquired something from (feature 003, Pattern P5's "
+            "specific-ability-from-source-and-method mechanism). Call this whenever a turn's "
+            "narration describes such an event. You choose which source_archetype and "
+            "acquisition_method the narrated event maps to; you do NOT choose which specific "
+            "ability results -- that is computed deterministically and returned to you, and "
+            "your narration of the grant must match it."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "source_archetype": {
+                    "type": "string",
+                    "enum": ["beast", "elemental_fire", "undead", "construct"],
+                    "description": "Which fixed category the defeated/encountered source belongs to.",
+                },
+                "acquisition_method": {
+                    "type": "string",
+                    "enum": ["decisive_kill", "narrow_survival", "non_lethal_subdual"],
+                    "description": "How the source was defeated or acquired, per the narration.",
+                },
+                "reason": {"type": "string", "description": "Short reason for the grant, for the audit log."},
+            },
+            "required": ["source_archetype", "acquisition_method", "reason"],
+        },
+    },
 ]
 
 
@@ -371,6 +445,11 @@ class WorldStateToolHandlers:
     def __init__(self, world_state: WorldState, default_modifier: int = 2) -> None:
         self.world_state = world_state
         self.default_modifier = default_modifier
+        self.current_turn: int = 0
+        """Feature 003 (T010): the calling harness updates this before each turn's dispatch,
+        so grant_ability can record which turn a grant happened on without the model needing
+        to track or supply a turn number itself -- that stays harness-owned bookkeeping, the
+        same way turn numbering already works everywhere else in this codebase."""
 
     def roll_check(self, dc: int, modifier: Optional[int] = None) -> dict:
         result = resolve(dc=dc, modifier=modifier if modifier is not None else self.default_modifier)
@@ -411,6 +490,27 @@ class WorldStateToolHandlers:
             return {"category": "status_flags", "key": key, "value": self.world_state.status_flags[key]}
         raise ValueError(f"Unknown fact category: {category!r}")
 
+    def grant_ability(self, source_archetype: str, acquisition_method: str, reason: str) -> dict:
+        """Feature 003 (T010): the model supplies source_archetype/acquisition_method (its one
+        judgment call here, per Principle III's base-model-judgment default); which specific
+        EffectTemplate results is computed entirely by resolve_ability_grant, never chosen or
+        narrated into existence by the model."""
+        template = resolve_ability_grant(source_archetype, acquisition_method)
+        grant = AbilityGrant(
+            turn_number=self.current_turn,
+            source_archetype=source_archetype,
+            acquisition_method=acquisition_method,
+            template_id=template.template_id,
+            reason=reason,
+        )
+        self.world_state.ability_grants.append(grant)
+        return {
+            "template_id": template.template_id,
+            "name": template.name,
+            "description": template.description,
+            "flavor_bias": template.flavor_bias,
+        }
+
     def dispatch(self, tool_name: str, tool_input: dict) -> dict:
         if tool_name == "roll_check":
             return self.roll_check(**tool_input)
@@ -422,4 +522,6 @@ class WorldStateToolHandlers:
             return self.update_resource(**tool_input)
         if tool_name == "set_fact":
             return self.set_fact(**tool_input)
+        if tool_name == "grant_ability":
+            return self.grant_ability(**tool_input)
         raise ValueError(f"Unknown tool: {tool_name}")

@@ -1,0 +1,23 @@
+# data/contrib/effects.10.yaml -- chapter 10's effect owner-block (merged into data/effects.yaml#blocks).
+# Owner: 10-exploration-travel-sites. Schema: data/SCHEMAS.md#effects.yaml.
+# Chapter 10 builds hazards, traps, weather and site results from core effects (eff.apply_condition,
+#   eff.hazard_step, eff.grant_lever, eff.restore, eff.drain, eff.write_fact, eff.tick_clock, eff.force_check,
+#   eff.summon) and from 06/07/08's blocks (eff.06.grant_snag, eff.07.dread, eff.08.adjust for supply_use).
+# It adds ONE definition, which needs 00 to add the quantity `travel_points` to T-00-13 (Interface request
+#   10 -> 00 item 3). Until that amendment it is unused by any data entry (no item or ability changes journey
+#   speed), and pace changes come only from 10.3.2's engine-cited steps.
+# Basis: [00.10.1] [PR-00-8] [10.3.2] [DL-10-03]
+
+schema_version: 1
+blocks:
+  - owner: "10"
+    entries:
+      - id: eff.10.travel_points
+        op: modify
+        quantity: travel_points          # PENDING 00 amendment (T-00-13)
+        family: adjust
+        regime: additive
+        params: {amount: "-4..4", applies_when: expr}
+        text: "{amount} progress points on each travel watch {applies_when} (a watch earns at least 2 and at most 12)."
+        lifecycle: provisional
+        basis: ['10.3.2', 'DL-10-03']

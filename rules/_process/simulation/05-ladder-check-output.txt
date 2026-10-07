@@ -1,0 +1,243 @@
+# Pick-ladder check (05-ladder-check.py; revision I-007)
+
+Each cell is eligible abilities / cumulative picks at that tier (04.8.4 pool gate applied to abilities.yaml).
+
+## vow callings (10)
+
+| Calling | pole | T1 | T2 | T3 | T4 | T5 |
+|---|---|---|---|---|---|---|
+| call.hospitaller | positive | 1/1 | 1/1 | 2/2 | 2/2 | 3/3 |
+| call.truthsworn | positive | 1/1 | 1/1 | 2/2 | 2/2 | 3/3 |
+| call.dauntless | positive | 1/1 | 1/1 | 2/2 | 2/2 | 3/3 |
+| call.liegesworn | positive | 1/1 | 1/1 | 2/2 | 2/2 | 3/3 |
+| call.almsgiver | positive | 1/1 | 1/1 | 2/2 | 2/2 | 3/3 |
+| call.justiciar | positive | 1/1 | 1/1 | 2/2 | 2/2 | 3/3 |
+| call.penitent | positive | 1/1 | 1/1 | 2/2 | 2/2 | 3/3 |
+| call.ascetic | positive | 1/1 | 1/1 | 2/2 | 2/2 | 3/3 |
+| call.devout | positive | 1/1 | 1/1 | 2/2 | 2/2 | 3/3 |
+| call.shieldsworn | positive | 1/1 | 1/1 | 2/2 | 2/2 | 3/3 |
+
+## dark callings (9)
+
+| Calling | pole | T1 | T2 | T3 | T4 | T5 |
+|---|---|---|---|---|---|---|
+| call.dark_cruelty | negative | 1/1 | 1/1 | 2/2 | 2/2 | 3/3 |
+| call.dark_deceit | negative | 1/1 | 1/1 | 2/2 | 2/2 | 3/3 |
+| call.dark_betrayal | negative | 1/1 | 1/1 | 2/2 | 2/2 | 3/3 |
+| call.dark_greed | negative | 1/1 | 1/1 | 2/2 | 2/2 | 3/3 |
+| call.dark_tyranny | negative | 1/1 | 1/1 | 2/2 | 2/2 | 3/3 |
+| call.dark_pride | negative | 1/1 | 1/1 | 2/2 | 2/2 | 3/3 |
+| call.dark_wrath | negative | 1/1 | 1/1 | 2/2 | 2/2 | 3/3 |
+| call.dark_profane | negative | 1/1 | 1/1 | 2/2 | 2/2 | 3/3 |
+| call.dark_cold | negative | 1/1 | 1/1 | 2/2 | 2/2 | 3/3 |
+
+## fine callings (40)
+
+| Calling | pole | T1 | T2 | T3 | T4 | T5 |
+|---|---|---|---|---|---|---|
+| call.duelist | - | 12/2 | 18/3 | 22/4 | 34/5 | 46/6 |
+| call.wrestler | - | 12/2 | 18/3 | 22/4 | 34/5 | 46/6 |
+| call.lancer | - | 12/2 | 18/3 | 22/4 | 34/5 | 46/6 |
+| call.acrobat | - | 12/2 | 18/3 | 22/4 | 34/5 | 46/6 |
+| call.champion | - | 12/2 | 18/3 | 22/4 | 34/5 | 46/6 |
+| call.siegemaster | - | 12/2 | 18/3 | 22/4 | 34/5 | 46/6 |
+| call.assassin | - | 8/2 | 11/3 | 13/4 | 21/5 | 29/6 |
+| call.lockbreaker | - | 8/2 | 11/3 | 13/4 | 21/5 | 29/6 |
+| call.cutpurse | - | 8/2 | 11/3 | 13/4 | 21/5 | 29/6 |
+| call.trapspringer | - | 8/2 | 11/3 | 13/4 | 21/5 | 29/6 |
+| call.forger | - | 8/2 | 11/3 | 13/4 | 21/5 | 29/6 |
+| call.swindler | - | 8/2 | 11/3 | 13/4 | 21/5 | 29/6 |
+| call.smuggler | - | 8/2 | 11/3 | 13/4 | 21/5 | 29/6 |
+| call.infiltrator | - | 8/2 | 11/3 | 13/4 | 21/5 | 29/6 |
+| call.herbalist | - | 6/2 | 8/3 | 10/4 | 16/5 | 22/6 |
+| call.falconer | - | 6/2 | 8/3 | 10/4 | 16/5 | 22/6 |
+| call.rider | - | 6/2 | 8/3 | 10/4 | 16/5 | 22/6 |
+| call.hunter | - | 6/2 | 8/3 | 10/4 | 16/5 | 22/6 |
+| call.delver | - | 6/2 | 8/3 | 10/4 | 16/5 | 22/6 |
+| call.pilot | - | 6/2 | 8/3 | 10/4 | 16/5 | 22/6 |
+| call.surgeon | - | 9/2 | 12/3 | 14/4 | 23/5 | 32/6 |
+| call.cryptographer | - | 9/2 | 12/3 | 14/4 | 23/5 | 32/6 |
+| call.barrow_reader | - | 9/2 | 12/3 | 14/4 | 23/5 | 32/6 |
+| call.spellbreaker | - | 11/2 | 16/3 | 20/4 | 31/5 | 42/6 |
+| call.bonecaller | - | 11/2 | 16/3 | 20/4 | 31/5 | 42/6 |
+| call.gravekeeper | - | 8/2 | 10/3 | 13/4 | 21/5 | 29/6 |
+| call.cursebreaker | - | 10/2 | 13/3 | 16/4 | 23/5 | 30/6 |
+| call.minstrel | - | 9/2 | 12/3 | 14/4 | 23/5 | 32/6 |
+| call.skald | - | 9/2 | 12/3 | 14/4 | 23/5 | 32/6 |
+| call.questioner | - | 9/2 | 12/3 | 14/4 | 23/5 | 32/6 |
+| call.venturer | - | 9/2 | 12/3 | 14/4 | 23/5 | 32/6 |
+| call.bowyer | - | 11/2 | 15/3 | 18/4 | 29/5 | 40/6 |
+| call.weaponsmith | - | 11/2 | 15/3 | 18/4 | 29/5 | 40/6 |
+| call.armorer | - | 11/2 | 15/3 | 18/4 | 29/5 | 40/6 |
+| call.brewer | - | 11/2 | 15/3 | 18/4 | 29/5 | 40/6 |
+| call.apothecary | - | 11/2 | 15/3 | 18/4 | 29/5 | 40/6 |
+| call.cartographer | - | 11/2 | 15/3 | 18/4 | 29/5 | 40/6 |
+| call.clockmaker | - | 11/2 | 15/3 | 18/4 | 29/5 | 40/6 |
+| call.trapwright | - | 11/2 | 15/3 | 18/4 | 29/5 | 40/6 |
+| call.runescribe | - | 11/2 | 15/3 | 18/4 | 29/5 | 40/6 |
+
+## narrow callings (83)
+
+| Calling | pole | T1 | T2 | T3 | T4 | T5 |
+|---|---|---|---|---|---|---|
+| call.blade | - | 12/2 | 18/3 | 22/4 | 34/5 | 46/6 |
+| call.hewer | - | 12/2 | 18/3 | 22/4 | 34/5 | 46/6 |
+| call.mauler | - | 12/2 | 18/3 | 22/4 | 34/5 | 46/6 |
+| call.spearhand | - | 12/2 | 18/3 | 22/4 | 34/5 | 46/6 |
+| call.archer | - | 12/2 | 18/3 | 22/4 | 34/5 | 46/6 |
+| call.hurler | - | 12/2 | 18/3 | 22/4 | 34/5 | 46/6 |
+| call.brawler | - | 12/2 | 18/3 | 22/4 | 34/5 | 46/6 |
+| call.shieldbearer | - | 12/2 | 18/3 | 22/4 | 34/5 | 46/6 |
+| call.ironclad | - | 12/2 | 18/3 | 22/4 | 34/5 | 46/6 |
+| call.tactician | - | 12/2 | 18/3 | 22/4 | 34/5 | 46/6 |
+| call.cavalier | - | 12/2 | 18/3 | 22/4 | 34/5 | 46/6 |
+| call.athlete | - | 12/2 | 18/3 | 22/4 | 34/5 | 46/6 |
+| call.shadow | - | 8/2 | 11/3 | 13/4 | 21/5 | 29/6 |
+| call.thief | - | 8/2 | 11/3 | 13/4 | 21/5 | 29/6 |
+| call.trickster | - | 8/2 | 11/3 | 13/4 | 21/5 | 29/6 |
+| call.masquer | - | 8/2 | 11/3 | 13/4 | 21/5 | 29/6 |
+| call.ambusher | - | 8/2 | 11/3 | 13/4 | 21/5 | 29/6 |
+| call.poisoner | - | 8/2 | 11/3 | 13/4 | 21/5 | 29/6 |
+| call.escapist | - | 8/2 | 11/3 | 13/4 | 21/5 | 29/6 |
+| call.fixer | - | 8/2 | 11/3 | 13/4 | 21/5 | 29/6 |
+| call.survivor | - | 6/2 | 8/3 | 10/4 | 16/5 | 22/6 |
+| call.tracker | - | 6/2 | 8/3 | 10/4 | 16/5 | 22/6 |
+| call.pathfinder | - | 6/2 | 8/3 | 10/4 | 16/5 | 22/6 |
+| call.beast_handler | - | 6/2 | 8/3 | 10/4 | 16/5 | 22/6 |
+| call.forager | - | 6/2 | 8/3 | 10/4 | 16/5 | 22/6 |
+| call.mariner | - | 6/2 | 8/3 | 10/4 | 16/5 | 22/6 |
+| call.antiquarian | - | 9/2 | 12/3 | 14/4 | 23/5 | 32/6 |
+| call.linguist | - | 9/2 | 12/3 | 14/4 | 23/5 | 32/6 |
+| call.bestiarist | - | 9/2 | 12/3 | 14/4 | 23/5 | 32/6 |
+| call.physician | - | 9/2 | 12/3 | 14/4 | 23/5 | 32/6 |
+| call.engineer | - | 9/2 | 12/3 | 14/4 | 23/5 | 32/6 |
+| call.jurist | - | 9/2 | 12/3 | 14/4 | 23/5 | 32/6 |
+| call.loremaster | - | 9/2 | 12/3 | 14/4 | 23/5 | 32/6 |
+| call.theologian | - | 9/2 | 12/3 | 14/4 | 23/5 | 32/6 |
+| call.investigator | - | 9/2 | 12/3 | 14/4 | 23/5 | 32/6 |
+| call.pyromancer | - | 11/2 | 16/3 | 20/4 | 31/5 | 42/6 |
+| call.frostbinder | - | 11/2 | 16/3 | 20/4 | 31/5 | 42/6 |
+| call.stormcaller | - | 11/2 | 16/3 | 20/4 | 31/5 | 42/6 |
+| call.geomancer | - | 11/2 | 16/3 | 20/4 | 31/5 | 42/6 |
+| call.illusionist | - | 11/2 | 16/3 | 20/4 | 31/5 | 42/6 |
+| call.diviner | - | 11/2 | 16/3 | 20/4 | 31/5 | 42/6 |
+| call.abjurer | - | 11/2 | 16/3 | 20/4 | 31/5 | 42/6 |
+| call.mesmerist | - | 11/2 | 16/3 | 20/4 | 31/5 | 42/6 |
+| call.summoner | - | 11/2 | 16/3 | 20/4 | 31/5 | 42/6 |
+| call.necromancer | - | 11/2 | 16/3 | 20/4 | 31/5 | 42/6 |
+| call.transmuter | - | 11/2 | 16/3 | 20/4 | 31/5 | 42/6 |
+| call.healer | - | 8/2 | 10/3 | 13/4 | 21/5 | 29/6 |
+| call.sanctifier | - | 8/2 | 10/3 | 13/4 | 21/5 | 29/6 |
+| call.templar | - | 8/2 | 10/3 | 13/4 | 21/5 | 29/6 |
+| call.celebrant | - | 8/2 | 10/3 | 13/4 | 21/5 | 29/6 |
+| call.oathkeeper | - | 8/2 | 10/3 | 13/4 | 21/5 | 29/6 |
+| call.oracle | - | 8/2 | 10/3 | 13/4 | 21/5 | 29/6 |
+| call.exorcist | - | 8/2 | 10/3 | 13/4 | 21/5 | 29/6 |
+| call.pactbound | - | 8/2 | 10/3 | 13/4 | 21/5 | 29/6 |
+| call.greenwarden | - | 10/2 | 13/3 | 16/4 | 23/5 | 30/6 |
+| call.beast_speaker | - | 10/2 | 13/3 | 16/4 | 23/5 | 30/6 |
+| call.weather_worker | - | 10/2 | 13/3 | 16/4 | 23/5 | 30/6 |
+| call.skinchanger | - | 10/2 | 13/3 | 16/4 | 23/5 | 30/6 |
+| call.spirit_talker | - | 10/2 | 13/3 | 16/4 | 23/5 | 30/6 |
+| call.elementalist | - | 10/2 | 13/3 | 16/4 | 23/5 | 30/6 |
+| call.hexer | - | 10/2 | 13/3 | 16/4 | 23/5 | 30/6 |
+| call.advocate | - | 9/2 | 12/3 | 14/4 | 23/5 | 32/6 |
+| call.captain | - | 9/2 | 12/3 | 14/4 | 23/5 | 32/6 |
+| call.bard | - | 9/2 | 12/3 | 14/4 | 23/5 | 32/6 |
+| call.menace | - | 9/2 | 12/3 | 14/4 | 23/5 | 32/6 |
+| call.schemer | - | 9/2 | 12/3 | 14/4 | 23/5 | 32/6 |
+| call.merchant | - | 9/2 | 12/3 | 14/4 | 23/5 | 32/6 |
+| call.courtier | - | 9/2 | 12/3 | 14/4 | 23/5 | 32/6 |
+| call.confidant | - | 9/2 | 12/3 | 14/4 | 23/5 | 32/6 |
+| call.mentor | - | 9/2 | 12/3 | 14/4 | 23/5 | 32/6 |
+| call.smith | - | 11/2 | 15/3 | 18/4 | 29/5 | 40/6 |
+| call.wright | - | 11/2 | 15/3 | 18/4 | 29/5 | 40/6 |
+| call.tanner | - | 11/2 | 15/3 | 18/4 | 29/5 | 40/6 |
+| call.weaver | - | 11/2 | 15/3 | 18/4 | 29/5 | 40/6 |
+| call.alchemist | - | 11/2 | 15/3 | 18/4 | 29/5 | 40/6 |
+| call.victualler | - | 11/2 | 15/3 | 18/4 | 29/5 | 40/6 |
+| call.builder | - | 11/2 | 15/3 | 18/4 | 29/5 | 40/6 |
+| call.tinker | - | 11/2 | 15/3 | 18/4 | 29/5 | 40/6 |
+| call.jeweler | - | 11/2 | 15/3 | 18/4 | 29/5 | 40/6 |
+| call.enchanter | - | 11/2 | 15/3 | 18/4 | 29/5 | 40/6 |
+| call.scribe | - | 11/2 | 15/3 | 18/4 | 29/5 | 40/6 |
+| call.monk | positive | 13/2 | 19/3 | 24/4 | 36/5 | 49/6 |
+| call.devourer | - | 9/2 | 12/3 | 14/4 | 23/5 | 32/6 |
+
+## broad callings (9)
+
+| Calling | pole | T1 | T2 | T3 | T4 | T5 |
+|---|---|---|---|---|---|---|
+| call.warrior | - | 12/2 | 18/3 | 22/4 | 34/5 | 46/6 |
+| call.rogue | - | 8/2 | 11/3 | 13/4 | 21/5 | 29/6 |
+| call.wayfarer | - | 6/2 | 8/3 | 10/4 | 16/5 | 22/6 |
+| call.scholar | - | 9/2 | 12/3 | 14/4 | 23/5 | 32/6 |
+| call.wizard | - | 11/2 | 16/3 | 20/4 | 31/5 | 42/6 |
+| call.priest | - | 8/2 | 10/3 | 13/4 | 21/5 | 29/6 |
+| call.druid | - | 10/2 | 13/3 | 16/4 | 23/5 | 30/6 |
+| call.envoy | - | 9/2 | 12/3 | 14/4 | 23/5 | 32/6 |
+| call.artisan | - | 11/2 | 15/3 | 18/4 | 29/5 | 40/6 |
+
+## hybrid callings (32)
+
+| Calling | pole | T1 | T2 | T3 | T4 | T5 |
+|---|---|---|---|---|---|---|
+| call.swashbuckler | - | 20/2 | 29/3 | 35/4 | 55/5 | 75/6 |
+| call.ranger | - | 18/2 | 26/3 | 32/4 | 50/5 | 68/6 |
+| call.slayer | - | 21/2 | 30/3 | 36/4 | 57/5 | 78/6 |
+| call.spellblade | - | 23/2 | 34/3 | 42/4 | 65/5 | 88/6 |
+| call.paladin | - | 20/2 | 28/3 | 35/4 | 55/5 | 75/6 |
+| call.berserker | - | 22/2 | 31/3 | 38/4 | 57/5 | 76/6 |
+| call.marshal | - | 21/2 | 30/3 | 36/4 | 57/5 | 78/6 |
+| call.battlesmith | - | 23/2 | 33/3 | 40/4 | 63/5 | 86/6 |
+| call.stalker | - | 14/2 | 19/3 | 23/4 | 37/5 | 51/6 |
+| call.spy | - | 17/2 | 23/3 | 27/4 | 44/5 | 61/6 |
+| call.shadowmage | - | 19/2 | 27/3 | 33/4 | 52/5 | 71/6 |
+| call.veiled_hand | - | 16/2 | 21/3 | 26/4 | 42/5 | 58/6 |
+| call.changeling | - | 18/2 | 24/3 | 29/4 | 44/5 | 59/6 |
+| call.charlatan | - | 17/2 | 23/3 | 27/4 | 44/5 | 61/6 |
+| call.saboteur | - | 19/2 | 26/3 | 31/4 | 50/5 | 69/6 |
+| call.naturalist | - | 15/2 | 20/3 | 24/4 | 39/5 | 54/6 |
+| call.pilgrim | - | 14/2 | 18/3 | 23/4 | 37/5 | 51/6 |
+| call.wildwarden | - | 16/2 | 21/3 | 26/4 | 39/5 | 52/6 |
+| call.caravaneer | - | 15/2 | 20/3 | 24/4 | 39/5 | 54/6 |
+| call.trapper | - | 17/2 | 23/3 | 28/4 | 45/5 | 62/6 |
+| call.magister | - | 20/2 | 28/3 | 34/4 | 54/5 | 74/6 |
+| call.inquisitor | - | 17/2 | 22/3 | 27/4 | 44/5 | 61/6 |
+| call.cunning_folk | - | 19/2 | 25/3 | 30/4 | 46/5 | 62/6 |
+| call.counselor | - | 18/2 | 24/3 | 28/4 | 46/5 | 64/6 |
+| call.inventor | - | 20/2 | 27/3 | 32/4 | 52/5 | 72/6 |
+| call.theurge | - | 19/2 | 26/3 | 33/4 | 52/5 | 71/6 |
+| call.spellsinger | - | 20/2 | 28/3 | 34/4 | 54/5 | 74/6 |
+| call.artificer | - | 22/2 | 31/3 | 38/4 | 60/5 | 82/6 |
+| call.preacher | - | 17/2 | 22/3 | 27/4 | 44/5 | 61/6 |
+| call.reliquarist | - | 19/2 | 25/3 | 31/4 | 50/5 | 69/6 |
+| call.hedgewitch | - | 21/2 | 28/3 | 34/4 | 52/5 | 70/6 |
+| call.magnate | - | 20/2 | 27/3 | 32/4 | 52/5 | 72/6 |
+
+## Conduct axes: abilities by min_tier 1..5 at the calling's pole, and at the opposite pole
+
+| Calling | axis | pole | this pole (T1..T5) | opposite pole (T1..T5) |
+|---|---|---|---|---|
+| call.monk | conduct.restraint | positive | [1, 0, 1, 0, 1] | [1, 0, 1, 0, 1] |
+| call.hospitaller | conduct.mercy | positive | [1, 0, 1, 0, 1] | [1, 0, 1, 0, 1] |
+| call.truthsworn | conduct.honesty | positive | [1, 0, 1, 0, 1] | [1, 0, 1, 0, 1] |
+| call.dauntless | conduct.courage | positive | [1, 0, 1, 0, 1] | [0, 0, 0, 0, 0] |
+| call.liegesworn | conduct.loyalty | positive | [1, 0, 1, 0, 1] | [1, 0, 1, 0, 1] |
+| call.almsgiver | conduct.generosity | positive | [1, 0, 1, 0, 1] | [1, 0, 1, 0, 1] |
+| call.justiciar | conduct.justice | positive | [1, 0, 1, 0, 1] | [1, 0, 1, 0, 1] |
+| call.penitent | conduct.humility | positive | [1, 0, 1, 0, 1] | [1, 0, 1, 0, 1] |
+| call.ascetic | conduct.restraint | positive | [1, 0, 1, 0, 1] | [1, 0, 1, 0, 1] |
+| call.devout | conduct.piety | positive | [1, 0, 1, 0, 1] | [1, 0, 1, 0, 1] |
+| call.shieldsworn | conduct.protection | positive | [1, 0, 1, 0, 1] | [1, 0, 1, 0, 1] |
+| call.dark_cruelty | conduct.mercy | negative | [1, 0, 1, 0, 1] | [1, 0, 1, 0, 1] |
+| call.dark_deceit | conduct.honesty | negative | [1, 0, 1, 0, 1] | [1, 0, 1, 0, 1] |
+| call.dark_betrayal | conduct.loyalty | negative | [1, 0, 1, 0, 1] | [1, 0, 1, 0, 1] |
+| call.dark_greed | conduct.generosity | negative | [1, 0, 1, 0, 1] | [1, 0, 1, 0, 1] |
+| call.dark_tyranny | conduct.justice | negative | [1, 0, 1, 0, 1] | [1, 0, 1, 0, 1] |
+| call.dark_pride | conduct.humility | negative | [1, 0, 1, 0, 1] | [1, 0, 1, 0, 1] |
+| call.dark_wrath | conduct.restraint | negative | [1, 0, 1, 0, 1] | [1, 0, 1, 0, 1] |
+| call.dark_profane | conduct.piety | negative | [1, 0, 1, 0, 1] | [1, 0, 1, 0, 1] |
+| call.dark_cold | conduct.protection | negative | [1, 0, 1, 0, 1] | [1, 0, 1, 0, 1] |
+
+callings checked: 183; conduct calling x axis rows: 20; failures: 0

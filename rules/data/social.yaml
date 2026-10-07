@@ -1,0 +1,339 @@
+# data/social.yaml
+# Purpose: the numbers and closed lists of social play: the standing contract, request sizes, social
+#   methods, terms, levers, refusal kinds, claim plausibility, alertness, memory-to-standing steps,
+#   delivery, negotiation, persuasion campaigns, debate, interrogation, audiences, NPC lifestyles,
+#   truth-out clocks and their omens.
+# Owner: 15-social-investigation-downtime (15.1-15.8). Canonical for numbers and ids (00.1.4 item 5).
+# Schema: data/SCHEMAS.md#socialyaml. Required keys: standing_effects, claim_plausibility, refusal_rules,
+#   negotiation. Optional keys added by ch.15 (documented in 15's Tables section): methods, request_sizes,
+#   terms, levers, never_levers, refusal_kinds, memory_steps, small_step_caps, delivery, patience,
+#   alertness, campaign, debate, interrogation, audience_tiers, performance_coin, npc_lifestyle,
+#   truth_out, clock_templates, ransom.
+# Basis: [15.1-15.8] [R4 W2, W4, W7] [R7 §4.2] [R6 B-02] [R: https://2e.aonprd.com/Rules.aspx?ID=1201]
+#   [R: https://arxiv.org/abs/2607.02802] [DL-15-01..DL-15-23]
+
+schema_version: 1
+
+standing_effects:          # T-15-1 (15.1.2)
+  - {id: standing.hostile, name: Hostile, tags: [], standing: -3, dc_mod: 5, ceiling: R1, ceiling_requires_term: true, patience: 0,
+     price_shift: no_trade, behavior: "acts against the PC when it costs little: reports, obstructs, attacks if able and its behavior list allows; refuses dealings; shares nothing; lies when it suits",
+     voiced_as: "open enmity, refuses dealings", lifecycle: provisional, basis: ["15.1.2", "R6 B-02", "12.14.7"]}
+  - {id: standing.unfriendly, name: Unfriendly, tags: [], standing: -2, dc_mod: 3, ceiling: R1, patience: 1,
+     price_shift: {asking_notches: 1}, behavior: "hinders quietly when safe; never helps; shares only what costs nothing and hurts the PC",
+     voiced_as: "curt, suspicious, unhelpful", lifecycle: provisional, basis: ["15.1.2"]}
+  - {id: standing.wary, name: Wary, tags: [], standing: -1, dc_mod: 1, ceiling: R1, patience: 2,
+     price_shift: {asking_notches: 0}, behavior: "carries on with own business; shares public knowledge only",
+     voiced_as: "guarded, measured, gives little", lifecycle: provisional, basis: ["15.1.2"]}
+  - {id: standing.neutral, name: Neutral, tags: [], standing: 0, dc_mod: 0, ceiling: R2, patience: 3,
+     price_shift: {asking_notches: 0}, behavior: "carries on; answers civil questions; shares what anyone in their role would say (R1 information)",
+     voiced_as: "businesslike", lifecycle: provisional, basis: ["15.1.2"]}
+  - {id: standing.warm, name: Warm, tags: [], standing: 1, dc_mod: -1, ceiling: R3, patience: 3,
+     price_shift: {asking_notches: 0}, behavior: "small courtesies; warns of an obvious danger; shares private but harmless things (R2 information)",
+     voiced_as: "friendly tone, small courtesies", lifecycle: provisional, basis: ["15.1.2"]}
+  - {id: standing.friendly, name: Friendly, tags: [], standing: 2, dc_mod: -3, ceiling: R4, patience: 4,
+     price_shift: {asking_notches: -1}, behavior: "goes out of their way: passes on news touching the PC, shelters them a night; shares confidences that betray no one (R3 information)",
+     voiced_as: "goes out of their way", lifecycle: provisional, basis: ["15.1.2"]}
+  - {id: standing.devoted, name: Devoted, tags: [], standing: 3, dc_mod: -5, ceiling: R5, patience: unlimited,
+     price_shift: {at_cost: true, floor: "08.8.7"}, behavior: "takes risks for the PC; seeks them out with anything that matters to them; shares anything their refusals allow",
+     voiced_as: "would take risks for the PC", lifecycle: provisional, basis: ["15.1.2"]}
+
+faction_members:           # 15.1.3
+  offset_rule: "offset = standing - status; recomputed on every personal step"
+  recompute_on_status_change: "standing = clamp(status + offset, -3, 3); if offset > 0, capped at max(status, highest source cap among the member's positive personal steps)"
+  handler: h.15.member_standing
+
+request_sizes:             # T-15-7 (15.3.2)
+  - {id: request.r1, name: trifle, tags: [], rung: R1, dc_mod: 0, price_units: 1, severity_equivalent: S1, information: "what anyone in their role would say",
+     typical: "directions; when the watch changes", boundary: "sit by their fire an hour", lifecycle: provisional, basis: ["15.3.2"]}
+  - {id: request.r2, name: favor, tags: [], rung: R2, dc_mod: 2, price_units: 1, severity_equivalent: S2, information: "private and harmless",
+     typical: "an introduction; look away by day", boundary: "lend a mule for a day", lifecycle: provisional, basis: ["15.3.2"]}
+  - {id: request.r3, name: real cost, tags: [], rung: R3, dc_mod: 5, price_units: 2, severity_equivalent: S3, information: "a confidence that betrays no one",
+     typical: "let you into the archive after hours; lend a horse for a week", boundary: "carry a sealed letter through a checkpoint", lifecycle: provisional, basis: ["15.3.2"]}
+  - {id: request.r4, name: serious risk, tags: [], rung: R4, dc_mod: 8, price_units: 3, severity_equivalent: S4, information: "a secret that exposes someone",
+     typical: "smuggle you past the gate; testify against a powerful man", boundary: "hide you from the watch one night", lifecycle: provisional, basis: ["15.3.2"]}
+  - {id: request.r5, name: grave, tags: [], rung: R5, dc_mod: 10, price_units: 4, severity_equivalent: S5, information: "a secret that endangers the teller; a confession",
+     typical: "betray their lord; kill for you", boundary: "hide you a week while the town is searched", lifecycle: provisional, basis: ["15.3.2"]}
+request_rules:
+  effective_size: "size - number of terms (max 2), never below R1"
+  tie_break: higher
+  stakes: {R1: safe, R2_plus: risky, dire_when: "01.6.9 HEAVY"}
+  certain_when: "certainty size R1 and standing >= neutral, or certainty size <= ceiling - 2; no refusal; no cited hesitation reason (watcher, superior, fear, a recorded want the request defeats) (15.3.10)"
+  certainty_size: "size - at most one term; an Obligation term counts only while the PC owes this NPC no undelivered commitment (15.3.10) [revision: I-048]"
+  certain_yields_evidence: false   # necessity reason trivial (03.2.6); RESULT says so (12.15.3) [revision: I-054]
+  defeats_want: {rung_shift: 1, max: R5, never_certain: true, basis: ["15.3.2"]}   # [revision: I-074]
+
+methods:                   # T-15-4 (15.3.1)
+  - {id: smethod.request, name: request, tags: [deed.influence.persuasion], attribute: presence, alt_attributes: [{attribute: intellect, when: "a reasoned case"}],
+     against: resolve, defender_competence: [deed.influence], primary_tags: [deed.influence.persuasion.appeal, deed.influence.persuasion.argument, deed.influence.persuasion.rapport],
+     standing_in_dc: true, ceiling: standing, lifecycle: provisional, basis: ["15.3.1", "01.18.7"]}
+  - {id: smethod.win_over, name: win over, tags: [deed.influence.persuasion.rapport], attribute: presence, against: resolve, defender_competence: [deed.influence],
+     primary_tags: [deed.influence.persuasion.rapport], standing_in_dc: true, fixed_size: R2, max_standing: 1, lifecycle: provisional, basis: ["15.4.2"]}
+  - {id: smethod.deceive, name: deceive, tags: [deed.guile.deception], attribute: presence, alt_attributes: [{attribute: intellect, when: "a constructed account"}],
+     against: wits, defender_competence: [deed.influence.insight, deed.guile.deception], primary_tags: [deed.guile.deception.lying, deed.guile.deception.con],
+     standing_in_dc: true, ceiling: "standing, on the perceived size", lifecycle: provisional, basis: ["15.5.1"]}
+  - {id: smethod.intimidate, name: intimidate, tags: [deed.influence.intimidation], attribute: presence, alt_attributes: [{attribute: might, when: "physical menace"}],
+     against: resolve, defender_competence: [deed.influence.intimidation, deed.martial], primary_tags: [deed.influence.intimidation.threat, deed.influence.intimidation.display],
+     standing_in_dc: false, ceiling: R2, requires: "a credible threat (a Leverage term) or the beat is a bluff (deceive)", r5_only_when: "threat to life or kin", lifecycle: provisional, basis: ["15.4.3"]}
+  - {id: smethod.interrogate, name: interrogate, tags: [deed.influence.intimidation.interrogation], attribute: by_method, against: resolve, primary_tags: [deed.influence.intimidation.interrogation],
+     standing_in_dc: by_method, ceiling: none_per_beat, lifecycle: provisional, basis: ["15.8.4"]}
+  - {id: smethod.provoke, name: provoke, tags: [deed.influence.intimidation.display], attribute: presence, against: resolve, defender_competence: [deed.influence, deed.martial.tactics],
+     primary_tags: [deed.influence.intimidation.display], standing_in_dc: false, ceiling: "none; the act must be tempting (15.4.4)", always_writes: [memory_insulted, patience_minus_1], lifecycle: provisional, basis: ["15.4.4"]}
+  - {id: smethod.perform, name: perform, tags: [deed.influence.performance], attribute: presence, against: audience_tier, primary_tags: [deed.influence.performance.music, deed.influence.performance.storytelling, deed.influence.performance.oratory, deed.influence.performance.spectacle],
+     standing_in_dc: false, lifecycle: provisional, basis: ["15.4.5"]}
+  - {id: smethod.bargain, name: bargain, tags: [deed.influence.trade], attribute: presence, alt_attributes: [{attribute: intellect, when: "appraisal-based argument"}],
+     against: "wits or presence, higher", defender_competence: [deed.influence.trade], primary_tags: [deed.influence.trade.haggling, deed.influence.trade.venture],
+     standing_in_dc: true, request_mod: none, lifecycle: provisional, basis: ["15.7.2", "08.8.7"]}
+  - {id: smethod.command, name: command, tags: [deed.influence.command], attribute: presence, against: resolve, defender_competence: [deed.influence.command], primary_tags: [deed.influence.command.directing],
+     standing_in_dc: true, within_duty_size: R1, lifecycle: provisional, basis: ["15.4.6"]}
+  - {id: smethod.read, name: read, tags: [deed.influence.insight], verb: verb.observe, attribute: wits, against: "mask (concealed items) or easy",
+     mask_formula: "10 + presence + competence(deed.guile.deception) + edge + status", primary_tags: [deed.influence.insight.lies, deed.influence.insight.motives, deed.influence.insight.empathy],
+     standing_in_dc: false, items: [lying, feeling, want, fear, refusal, hiding, regard], max_items: 5, lifecycle: provisional, basis: ["15.6.1"]}
+social_dc:                 # 15.3.3
+  formula: "10 + defender attribute + competence + edge + status + standing mod + request mod (effective) + mode price"
+  several_listeners: "highest defense among those who must all agree; the decider otherwise"
+  stored: false
+  language_fallback_price: 5
+
+terms:                     # 15.3.5
+  max_per_request: 2
+  one_fact_one_use: true
+  rung_reduction_each: 1
+  tie_break: false
+  kinds:
+    - {id: term.want, name: Want, tags: [], true_only_when: "the request or the PC's offer serves a recorded want (id), or protects the NPC's life, kin, livelihood or property from an established threat (both fact ids)", lifecycle: provisional, basis: ["15.3.5", "15.2.2"]}
+    - {id: term.payment, name: Payment, tags: [], true_only_when: "value >= U(severity of requested rung) Units of the NPC's weekly lifestyle changes hands at the beat", blocked_by: "refusal kind bribe when the request breaches a duty or rule",
+       refund_on_failure: "only if the NPC is Warm or better", lifecycle: provisional, basis: ["15.3.5"]}
+    - {id: term.leverage, name: Leverage, tags: [], true_only_when: "a debt they owe the PC (cleared by use); a secret of theirs the PC holds; a credible threat the PC can carry out",
+       writes: "memory threatened (-1 at scene_end) and npc.<id>.coerced_by, except for a debt", lifecycle: provisional, basis: ["15.3.5"]}
+    - {id: term.obligation, name: Obligation, tags: [], true_only_when: "a commitment (debt or promise) with content and due condition is written before the roll and the NPC is Wary or better (or it is secured by a pledge)",
+       kept: "+1 (promised kept)", broken: "-3 (betrayed) and reputation", lifecycle: provisional, basis: ["15.3.5", "15.7.6"]}
+
+levers:                    # T-15-8 (15.3.6) - typical qualifying facts; 00.3.9 governs
+  precision:
+    lever: [evidence_in_hand, voucher_warm_or_better, right_standing_for_venue, "listener_state (drunk, rushed, grieving; for deceive and bargain)", setup_fact]
+    snag: [shabby_lifestyle, bloodied_or_armed_for_violence_in_peace, fear_walked_into, "recorded_scar_or_maim (deceive, disguise)", "language_broken (requests above R1)", "language_accented (deceive)", "listener_busy (request, win over)", superior_present_opposed]
+  protective:
+    lever: [prepared_cover_story, voucher_placed_for_after, exit, crowd_to_vanish_into]
+    snag: [no_way_out]
+  amplifying:
+    lever: [audience_favorable, superior_present_favorable, precedent_fact]
+    snag: [audience_against, public_shame_if_granted]
+  memories_act_through_standing_only: true
+  exception: "caught_lying worsens claim plausibility (15.5.2)"
+
+never_levers:              # 15.3.7 (closed list)
+  - eloquence (length, vividness, rhetoric, prose quality)
+  - flattery by itself (a successful Setup that creates a fact is the honest channel)
+  - assertion of an unestablished fact (a claim, or an Oracle question)
+  - appeals to reason, duty, kindness that cite no fact
+  - the player's model of the NPC's mind
+  - promises of goodwill not written as an Obligation
+  - repetition
+  - out-of-fiction argument
+  - reputation the NPC has not heard
+  - the DM's impression of the speech
+
+refusal_rules:             # 15.2.3-15.2.4
+  gate: "covered and not lifted -> G4 for the intent; no roll, lever, term, standing or eloquence passes it; patience -1; redirect names the lift, a smaller request outside the kind, or another person"
+  covers_tie_break: true
+  lifted_tie_break: false
+  sources: [generated, closed_door, oath, archetype, duty]
+  places_rules_are_not_refusals: true
+refusal_kinds:             # T-15-6; rows 1-12 map one-to-one to tbl.npc_refusal; reads: conduct|outcome (15.2.3 COVERS) [revision: I-054]
+  - {id: refusal.family, name: "will not betray their family", tags: [], reads: outcome, table_row: 1, strength: lifts, covers: "acts that harm, expose, endanger or work against a recorded kin member", excludes: "acts merely without kin's approval", lifts_when: "a fact that the kin betrayed, disowned or endangered them", lifecycle: provisional, basis: ["15.2.4"]}
+  - {id: refusal.open_law, name: "will not break the law openly", tags: [], reads: conduct, table_row: 2, strength: lifts, covers: "breaking a law where they could be seen or known", excludes: "quiet rule-bending no one checks; acts sanctioned by an authority they recognize", lifts_when: "the law's authority is gone, or an authority they recognize sanctions it", lifecycle: provisional, basis: ["15.2.4"]}
+  - {id: refusal.wilds, name: "will not go into the wilds or the dark", tags: [], reads: conduct, table_row: 3, strength: lifts, covers: "leaving road and settlement for wilds, ruins or underground", excludes: "roads; their own cellar", lifts_when: "their kin or their want is there and in danger", lifecycle: provisional, basis: ["15.2.4"]}
+  - {id: refusal.bribe, name: "will not take a bribe", tags: [], reads: conduct, table_row: 4, strength: absolute, covers: "accepting payment to breach a duty or rule they keep", excludes: "honest pay for honest service; a gift with nothing asked", lifts_when: null, lifecycle: provisional, basis: ["15.2.4"]}
+  - {id: refusal.past, name: "will not speak of their past", tags: [], reads: conduct, table_row: 5, strength: lifts, covers: "telling what happened to them before this place; their old name", excludes: "the present; others' pasts", lifts_when: "standing Devoted, or the PC already knows the secret", lifts_at_standing: 3, lifecycle: provisional, basis: ["15.2.4"]}
+  - {id: refusal.innocent, name: "will not harm a child or an innocent", tags: [], reads: outcome, table_row: 6, strength: absolute, covers: "any act that harms someone the NPC regards as innocent", excludes: "harm to proven wrongdoers or armed foes", lifts_when: null, lifecycle: provisional, basis: ["15.2.4"]}
+  - {id: refusal.master, name: "will not cross their master or their people", tags: [], reads: outcome, table_row: 7, strength: lifts, covers: "acts against their master's or faction's recorded interest", excludes: "acts the master would not mind", lifts_when: "the master harmed or betrayed them, or they were expelled", lifecycle: provisional, basis: ["15.2.4"]}
+  - {id: refusal.place, name: "will not leave this place", tags: [], reads: conduct, table_row: 8, strength: lifts, covers: "travelling away from their home place overnight", excludes: "errands within a day", lifts_when: "the place is destroyed, overrun, or what binds them is gone", lifecycle: provisional, basis: ["15.2.4"]}
+  - {id: refusal.magic, name: "will not deal with magic", tags: [], reads: conduct, table_row: 9, strength: lifts, covers: "taking part in, receiving, or handling magic", excludes: "witnessing it; talking about it", lifts_when: "magic saved them or their kin (a helped memory whose frame used a magic deed tag)", lifecycle: provisional, basis: ["15.2.4"]}
+  - {id: refusal.lend, name: "will not lend money", tags: [], reads: conduct, table_row: 10, strength: lifts, covers: "coin, goods or gear on credit or loan", excludes: "selling, gifting, paying for work", lifts_when: "standing Devoted", lifts_at_standing: 3, lifecycle: provisional, basis: ["15.2.4"]}
+  - {id: refusal.oath, name: "will not lie under oath", tags: [], reads: conduct, table_row: 11, strength: absolute, covers: "false testimony, false sworn statements", excludes: "silence; ordinary lies", lifts_when: null, lifecycle: provisional, basis: ["15.2.4"]}
+  - {id: refusal.fight, name: "will not fight", tags: [], reads: conduct, table_row: 12, strength: lifts, covers: "taking up arms, striking anyone, standing in a battle line", excludes: "fleeing; hiding; helping the wounded", lifts_when: "their own life or kin is attacked in their presence", lifecycle: provisional, basis: ["15.2.4"]}
+  - {id: refusal.pc_requests, name: "will not deal with the PC", tags: [], reads: outcome, source: closed_door, strength: lifts, covers: "any request from the PC (or, from a failed campaign, this request)", excludes: "parley; Yield; the lift itself", lifts_when: "the closed-door cost's named condition", lifecycle: provisional, basis: ["15.2.4", "01.13.9"]}
+  - {id: refusal.parley, name: "will not stop fighting", tags: [], reads: outcome, source: archetype, strength: lifts, covers: "a truce or parley", excludes: [], lifts_when: "09.7.6 parley_when", lifecycle: provisional, basis: ["15.2.4", "09.7.6"]}
+  - {id: refusal.yield, name: "will not yield", tags: [], reads: outcome, source: archetype, strength: lifts, covers: "surrender", excludes: [], lifts_when: "09.7.6 yield_when", lifecycle: provisional, basis: ["15.2.4", "06.11.7"]}
+  - {id: refusal.oath_bound, name: "the oath's prohibition", tags: [], reads: outcome, source: oath, strength: absolute, covers: "whatever the recorded oath forbids", excludes: [], lifts_when: null, lifecycle: provisional, basis: ["15.2.4"]}
+  - {id: refusal.duty, name: "the officer's duty", tags: [], reads: outcome, source: duty, strength: absolute, covers: "the act the officer's recorded duty forbids, as its text states (its own exception, such as 'without the reeve's seal', is part of the text)", excludes: "acts the duty's text does not name; the same act with the exception met", lifts_when: null, lifecycle: provisional, basis: ["15.2.4", "11.3.17"], note: "[verification: V2c-007]"}
+
+claim_plausibility:        # T-15-9 (15.5.2)
+  rungs:
+    - {id: plaus.known_false, name: known false, effect: "G4 for the belief intent", true_only_when: "the NPC knows a fact the claim contradicts (12.10.6 a-d), or a check on the spot cannot be produced"}
+    - {id: plaus.outrageous, name: outrageous, effect: "reach capped Limited", true_only_when: "nothing they know contradicts it, but someone of their role would think it almost never happens"}
+    - {id: plaus.doubtful, name: doubtful, effect: "one engine-applied Precision snag (-2), outside the two-snag count, inside the +-4 cap", true_only_when: "consistent but unlikely or unverified; a stranger at a convenient moment; asks them to act at once"}
+    - {id: plaus.plausible, name: plausible, effect: none, true_only_when: "consistent with what they know and ordinary in their experience"}
+  tie_break: worse_for_the_liar
+  shifts:
+    - {when: "alertness suspicious or alert", rungs: -1}
+    - {when: "alertness alarmed", rungs: -2}
+    - {when: "the NPC holds a caught_lying memory of the PC", rungs: -1}
+    - {when: "evidence produced (a document, token, costume, confederate; a fact)", rungs: 1, note: "that fact is then not also a lever"}
+
+memory_steps:              # T-15-2 (15.1.6)
+  rows:
+    - {valence: helped, step: 1, condition: "the help was worth at least an R2 favor to them", cap: friendly, cap_devoted_when: "the help was R4+"}
+    - {valence: helped_rescue, step: 2, condition: "saved them or kin from S4+ harm, death, captivity or ruin", cap: devoted}
+    - {valence: harmed, step_by_severity: {S1: -1, S2: -1, S3: -2, S4: -3, S5: -3, killed_kin: -3}, cap: none}
+    - {valence: lied_to, step: 0}
+    - {valence: confessed, step: -1, note: "a lie confessed before exposure (15.5.5)"}
+    - {valence: caught_lying, step: -2, also: "claims one plausibility rung worse while active"}
+    - {valence: impressed, step: 1, condition: "witnessed a resolved deed serving a recorded want or matching their role's values", per: "once per NPC per season", cap: friendly}
+    - {valence: insulted, step: -1, per: "once per NPC per scene"}
+    - {valence: owed, step: 0, note: "repaid on time -> helped +1"}
+    - {valence: owes, step: 0, note: "a Leverage term; cleared by use without a step"}
+    - {valence: promised, step: 0, kept: 1, kept_cap: friendly, kept_r4_cap: devoted, broken: betrayed}
+    - {valence: betrayed, step: -3}
+    - {valence: spared, step: 2, cap: devoted}
+    - {valence: threatened, step: -1, applies_at: scene_end}
+  heard_of_only: "at most +-1, and only when the deed touched their kin, allies, faction or wants"
+  magnitude_tie_break: smaller_step
+
+small_step_caps:           # 15.1.7
+  sources: [win_over, gift, cultivate, impressed, helped_plain]
+  per_npc_per_week: 1
+  counter: npc.<id>.small_steps_week
+  reset: h.15.standing_week
+  ceilings: {win_over: warm, gift: friendly, cultivate: friendly, impressed: friendly, devoted_only_from: [helped_rescue, spared, helped_r4, promised_kept_r4, ally_thread_complete]}   # revision I-072: a creation bond is a starting standing (02.9.2), not a source; an ally's thread completion is 16.12.3's
+  gift_minimum: "1 Unit of the NPC's weekly lifestyle"
+
+delivery:                  # T-15-5 (15.3.9)
+  request_deceive_intimidate_bargain:
+    - {reach: 0, degree: failure, result: "no; the threatened cost; patience -1"}
+    - {reach: 0, degree: critical_failure, result: "no; cost one rung heavier; patience -2"}
+    - {reach: 1, result: "a lesser yes: a version one rung smaller (min R1), chosen from the NPC's record"}
+    - {reach: 2, result: "yes, as asked"}
+    - {reach: 3, result: "yes, and one extra: a want, fear or refusal revealed; information one rung smaller volunteered; or a small help"}
+    - {reach: 4, result: "as 3, plus a follow-up Precision lever (a fact)"}
+  perform:
+    - {reach: 0, degree: failure, result: "unmoved; the threatened cost"}
+    - {reach: 0, degree: critical_failure, result: "heckled, pelted or thrown out"}
+    - {reach: 1, result: "pleased: coin per performance_coin"}
+    - {reach: 2, result: "won: coin; the crowd's mood favorable for the scene (an Amplifying lever)"}
+    - {reach: 3, result: "as 2, and a patron or contact (a recurring NPC at Warm)"}
+    - {reach: 4, result: "as 3, and a reputation entry in this settlement (11)"}
+  win_over:
+    - {reach: 0, result: "no step; the threatened cost (critical: +1 rung)"}
+    - {reach: 1, result: "+1 step, max Warm"}
+    - {reach: 2, result: "+1 step, max Warm"}
+    - {reach: 3, result: "+1 step and one want revealed"}
+    - {reach: 4, result: "as 3"}
+  agreement_write: "npc.<id>.agreed: <act> with its due time"
+
+patience:                  # 15.2.6
+  by_standing: {-3: 0, -2: 1, -1: 2, 0: 3, 1: 3, 2: 4, 3: unlimited}
+  minus_one_on: [talk_failure, talk_critical_failure (-2), near_miss_taken_as_failure, refusal_or_ceiling_g4, insulted_memory]
+  at_zero: "closed.<npc>.talk = until scene_end (no standing loss)"
+  hostile_hears_only: [parley, yield, request_with_term]
+  reset: h.15.patience_reset
+
+alertness:                 # T-15-12 (15.5.7)
+  ladder: [unaware, suspicious, alert, alarmed]
+  effects:
+    - {rung: unaware, surprise: can_be_surprised, deception_shift: 0, talk: normal, sneak_snag: false}
+    - {rung: suspicious, surprise: "not by the source noticed", deception_shift: -1, talk: normal, sneak_snag: false}
+    - {rung: alert, surprise: never, deception_shift: -1, perceived_r3_plus_needs_evidence: true, talk: "patience -1", sneak_snag: -2}
+    - {rung: alarmed, surprise: never, deception_shift: -2, talk: "only parley, Yield, or evidence-backed claims; else G4", sneak_snag: -2, calls_others: true}
+  raised_by: ["cost.exposure (S1 +1 step; S2 at least alert; S3 alarmed)", "a trait.sense.loud beat heard (unaware -> suspicious)", "told someone is about (at least suspicious)", "site roused (10.13.9: alarmed)", "alarm raised in hearing (alarmed)", "a failed deception's exposure cost"]
+  defaults: {at_mention: unaware, sentry_on_duty_night: suspicious, in_roused_site: alert}
+  decay: {handler: h.15.alertness_decay, boundary: hour, step: -1, condition: "not raised in the past hour", floors: {sentry_night: suspicious, sentry_day: unaware, reached_alarmed_today: suspicious}}
+
+negotiation:               # 15.7
+  counter_order: [top_open_want_servable, payment_at_price, obligation_if_wary_or_better]
+  payment_floor: "half the price"
+  bargain:
+    dc: "10 + max(wits, presence) + trade competence + edge + status + standing mod (no request mod)"
+    asking: "price + 1 notch (08.8.2 notch of the payment's band)"
+    reach_to_price: {0: asking, 1: price, 2: "-1 notch", 3: "-2 notches", 4: "-3 notches"}
+    conditions: "each delivered reach rung from 2 up removes one named condition or shortens an obligation's due"
+    stakes: {failure: "cost.closed_door S2 (holds firm for the day)", critical_failure: "S3 (will not deal this week)"}
+    per_deal_per_day: 1
+  haggle_goods: "08.8.7 with standing in the DC and T-15-1 price shift on asking"
+  keeping_deals:
+    handler: h.15.commitments_due
+    npc_performs_unless: ["coerced (retaliation question)", "standing fell to Hostile since (reneges; the PC gains owes)", "a fact makes it impossible"]
+    pc_breaks: "betrayed -3; reputation 'breaks their word'; oath consequences (04/11)"
+
+ransom:                    # 15.7.5
+  price: "10 x the PC's weekly lifestyle cost x power band, minimum 20 coins"
+  deadline_clock: clk.15.ransom_due
+  bargain_floor: "half"
+
+campaign:                  # 15.8.1-15.8.2
+  trigger: "effective size = ceiling + 1; >= 1 term; standing >= wary; no refusal"
+  progress_segments: {R2: 4, R3: 4, R4: 6, R5: 8}
+  patience_segments: {wary: 4, neutral: 6, warm: 6, friendly: 8}
+  beat_dc: "10 + defense terms + standing mod + request mod of (target rung - 1), fixed at the campaign's start"
+  per_npc_per_day: 1
+  requires_varied_approach: true
+  cultivate_ticks: 2
+  progress_decay: {boundary: week, ticks: -1, only_if: "no tick since last week"}
+  failure_ticks_patience: {failure: 1, critical_failure: 2, success_at_cost: 1}
+  compromise: {below_half: 0, half_or_more: 1, imminent: 2, source: "top-ranked open wants, else payment at the target's price"}
+  patience_full: "refusal pc_requests scoped to this request, lifting on a new fact; no standing loss"
+  calibration: "scratchpad/social15.py; win/compromise/beats in 15.8.1"
+
+debate:                    # 15.8.3
+  clock: {kind: tug, segments: {ordinary: 6, grave_r4_plus: 8}, start: half}
+  pc_beat: "vs the presiding decider's defense with their standing toward the PC and the motion's request size"
+  opponent_beat: "engine fortune check (01.6.7): opponent presence + influence competence vs the same decider's defense with their standing toward the opponent"
+  exchanges_limit: 6
+  limit_result: "above half wins narrowly (a PC narrow win carries one compromise); exactly half keeps the status quo"
+
+interrogation:             # 15.8.4
+  progress_segments: {R3: 4, R4: 6, R5: 8}
+  terms_shrink_clock: "each term lowers one size (8 -> 6 -> 4), max two"
+  hardens_segments: 6
+  beat_dc: "method's social DC with the request mod of R2"
+  beat_time: interval
+  harm_rule: "any beat that inflicts cost.harm on the subject: misleadable at every degree below critical success; at success the lowest-ranked delivered item is a plausible falsehood; harmed step; conduct.mercy negative evidence (03)"
+
+audience_tiers:            # T-15-10 (15.4.5)
+  rows:
+    - {tier: easy, when: "glad to be entertained: a festival, a friendly tavern"}
+    - {tier: moderate, when: "indifferent: a market, a busy common room"}
+    - {tier: hard, when: "bored or discerning: a court, a guild feast"}
+    - {tier: very_hard, when: "hostile: a rival's hall, a crowd come to jeer"}
+    - {tier: legendary, when: "a crowd in riot"}
+  stakes: {easy: safe, moderate: safe, hard_plus: risky}
+
+performance_coin:          # T-15-11 (coins per evening by delivered reach)
+  village_or_camp: {1: 1, 2: 2, 3: 3, 4: 4}
+  town: {1: 2, 2: 4, 3: 6, 4: 8}
+  city: {1: 4, 2: 8, 3: 12, 4: 16}
+  weekly_cap: "settlement market depth (08.8.5) and the labor cap (08.8.9 AI-2)"
+
+npc_lifestyle:             # T-15-19 (Units for payments and gifts)
+  - {lifestyle: destitute, unit_coins: 1, roles: [beggar, outcast]}
+  - {lifestyle: poor, unit_coins: 4, roles: [laborer, servant, common soldier, ferryman, porter]}
+  - {lifestyle: modest, unit_coins: 7, roles: [craftsman, sergeant, small trader, village priest, clerk]}
+  - {lifestyle: comfortable, unit_coins: 14, roles: [merchant, master crafter, officer, reeve, physician]}
+  - {lifestyle: wealthy, unit_coins: 35, roles: [guildmaster, rich merchant, knight, abbot, abbess]}
+  - {lifestyle: noble, unit_coins: 100, roles: [lord, lady, great prelate]}
+
+truth_out:                 # 15.5.4
+  segments_by_plausibility: {plausible: 8, doubtful: 6, outrageous: 4}
+  persona_segments: 8
+  tick_sources:
+    - {'on': "boundary week, while any truth-holder shares a place or faction with any believer", ticks: 1, auto: true}
+    - {'on': "the PC extends the lie (new believer or load-bearing detail)", ticks: 1}
+    - {'on': "the PC acts before a believer in a way the lie contradicts", ticks: 2}
+    - {'on': "a believer takes cost.exposure S2+ on a beat involving the PC", ticks: "U(severity)"}
+    - {'on': "a believer investigates (NPC fortune check)", ticks: delivered_reach}
+  omens:
+    stirring: ["someone asks an odd question about the story", "a detail of the story is repeated back slightly wrong", "a believer mentions writing to someone who would remember"]
+    building: ["the believer goes quiet when the subject comes up", "a letter arrives for the believer from someone who knew the truth", "the believer watches the PC a moment too long"]
+    imminent: ["the believer asks to speak with the PC alone", "a stranger who knew the subject is asking after the PC", "the believer will not meet the PC's eye"]
+  on_complete: "expose to every believer (PR-15-3); rumor if 3+ believers or a public believer (11)"
+
+clock_templates:
+  - {id: clk.15.truth_out, name: "The truth about <subject>", kind: danger, owner: "15", segments: "8|6|4", visibility: hidden, direction: fill,
+     tick_sources: "truth_out.tick_sources", omens: "truth_out.omens", on_complete: {effects: [{effect_id: eff.15.expose_lie, params: {lie: self}}], interrupting: false, then: close}, lifecycle: provisional, basis: ["15.5.4"]}
+  - {id: clk.15.persuasion, name: "<NPC>'s resistance to <request>", kind: progress, owner: "15", segments: "4|6|8", visibility: public, direction: fill,
+     races_with: clk.15.patience, decay: [{boundary: week, ticks: -1, only_if: "no tick since last week"}], lifecycle: provisional, basis: ["15.8.1"]}
+  - {id: clk.15.patience, name: "<NPC>'s patience", kind: danger, owner: "15", segments: "4|6|8", visibility: public, direction: fill, races_with: clk.15.persuasion, lifecycle: provisional, basis: ["15.8.1"]}
+  - {id: clk.15.debate, name: "<the body>'s verdict on <motion>", kind: tug, owner: "15", segments: "6|8", visibility: public, direction: tug, start: half, lifecycle: provisional, basis: ["15.8.3"]}
+  - {id: clk.15.silence, name: "<NPC>'s silence on <subject>", kind: progress, owner: "15", segments: "4|6|8", visibility: public, direction: fill, races_with: clk.15.hardens, lifecycle: provisional, basis: ["15.8.4"]}
+  - {id: clk.15.hardens, name: "<NPC> hardens", kind: danger, owner: "15", segments: 6, visibility: public, direction: fill, races_with: clk.15.silence, lifecycle: provisional, basis: ["15.8.4"]}
+  - {id: clk.15.ransom_due, name: "The ransom's deadline", kind: countdown, owner: "15", segments: 4, visibility: public, direction: fill, auto_ticks: [{boundary: week, ticks: 1}], lifecycle: provisional, basis: ["15.7.5"]}

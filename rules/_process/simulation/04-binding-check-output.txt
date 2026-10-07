@@ -1,0 +1,12 @@
+=== ladder: before I-089 (narrow W 80/200/440/800/1300) -- focused archer, 200 seeds: requirement met last, by tier entered
+  tier 1: W 175, quality 25
+  tier 2: W 168, quality 31, scenes 1
+  tier 3: W 186, crises 11, great 3
+  tier 4: W 200
+  tier 5: W 103
+=== ladder: current (04-recog04.py's W) -- focused archer, 200 seeds: requirement met last, by tier entered
+  tier 1: W 175, quality 25
+  tier 2: quality 128, W 58, scenes 14
+  tier 3: W 145, crises 37, great 10, scenes 7, quality 1
+  tier 4: W 194, scenes 2, crises 2, great 2
+  tier 5: W 183

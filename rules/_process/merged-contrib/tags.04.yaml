@@ -1,0 +1,24 @@
+# data/contrib/tags.04.yaml
+# Purpose: ch.04's proposed tag below level 2, for ch.03 to reconcile by PR-03-6 (00.5.5; 03.1.9).
+# Owner of the proposal: 04-recognition-and-growth. Schema: data/SCHEMAS.md#tagsyaml (Tag).
+# One proposal. It is needed by a data entry: call.falconer (data/callings.yaml), the narrow calling the
+#   brief names as the example of a niche identity that a broad calling must not starve.
+# PR-03-6 step 1 (search): deed.wilds.animals.training covers "teaching an animal a task or keeping it to a
+#   task"; deed.wilds.tracking.hunting covers "pursuing game". Neither covers WORKING a trained bird of prey
+#   as the method of a deed (flying it at quarry, to carry, to scout, to distract). The kind is distinct, has
+#   its own tools (item: hood, jesses, lure) and its own grounding. Sibling budget: deed.wilds.animals has four
+#   children (riding, training, calming, husbandry); this is the fifth of eight.
+# If ch.03 instead rules it an alias of deed.wilds.animals.training, call.falconer is re-keyed to that tag and
+#   becomes "Beast-trainer" (04 Interface requests record the fallback).
+# Basis: [00.5.5] [03.1.9, PR-03-6] [DL-04-03]
+
+schema_version: 1
+tags:
+  - id: deed.wilds.animals.falconry
+    name: Falconry
+    parent: deed.wilds.animals
+    level: 3
+    lifecycle: provisional
+    definition: "True only when the method is working a trained bird of prey: flying it at quarry, sending it to carry, scout, flush or distract, or calling it back to the fist. False for teaching the bird in the first place (deed.wilds.animals.training), for calming a wild bird (deed.wilds.animals.calming), and for seeing through a bird's eyes by magic (deed.primal.beastkin.senses)."
+    distinguish: "vs animals.training: is the bird being taught, or being worked at a task it already knows? Worked -> falconry. vs tracking.hunting: is the PC pursuing the game, or the bird? The bird -> falconry."
+    aliases: ["hawking", "falconer", "fly the hawk", "cast off the falcon", "austringer"]

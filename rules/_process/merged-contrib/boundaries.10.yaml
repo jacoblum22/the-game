@@ -1,0 +1,28 @@
+# data/contrib/boundaries.10.yaml
+# Purpose: ch.10's owner-block for data/boundaries.yaml. The nine handlers 00 reserved for ch.10 are DEFINED
+#   in chapter 10 (rule ids below) and restated here with their rule ids; seven handlers are added (T-10-23).
+# Owner: 10-exploration-travel-sites. Schema: data/SCHEMAS.md#boundariesyaml. Phases per 00.7.5; within a
+#   phase, owner then id (so h.10.travel_progress runs before h.10.wayfinding at the watch boundary, and
+#   ch.07's h.07.fatigue before both).
+# Basis: [00.7.4-00.7.8] [10.2.5] [DL-10-20]
+
+schema_version: 1
+blocks:
+- owner: '10'
+  handlers:
+  - {id: h.10.site_time, boundary: beat_end, phase: 9, interrupting: false, effect: "in site mode, a significant beat advances 1 interval; a listed activity its duration (care: 2)", rule_id: 10.13.5, status: "reserved by 00; defined"}
+  - {id: h.10.light, boundary: interval, phase: 4, interrupting: false, effect: "every lit source loses 1 interval; at 1 remaining raise the gutters obligation; at 0 spent; recompute scene.light", rule_id: "10.7.1; 10.7.2", status: "reserved by 00; defined"}
+  - {id: h.10.site_exposure, boundary: interval, phase: 2, interrupting: "after the first exposure of a recurring hazard", effect: "exposures of interval-cadence hazards for those in them (10.12.2)", rule_id: 10.12.2, status: added}
+  - {id: h.10.site_check, boundary: interval, phase: 7, interrupting: "per result (10.9.8)", effect: "count intervals; at the cadence roll the site time-tick die (PR-10-4)", rule_id: "10.9; 10.9.3", status: "reserved by 00; defined"}
+  - {id: h.10.watch_exposure, boundary: watch, phase: 2, interrupting: "after the first exposure of a recurring hazard", effect: "weather and place exposures for exposed travelers (10.12.2; T-10-13)", rule_id: 10.12.2, status: added}
+  - {id: h.10.travel_progress, boundary: watch, phase: 4, interrupting: false, effect: "way-finding beat if due (a pause point); progress points by effective pace; arrival; march units and forced-march stacks", rule_id: "10.3.2-10.3.5; 10.4.1", status: "reserved by 00; defined"}
+  - {id: h.10.wayfinding, boundary: watch, phase: 4, interrupting: "when the nav.lost seal opens", effect: "veer accrual while nav.lost; the expected-arrival seal test", rule_id: "10.4.6; 10.4.7", status: added}
+  - {id: h.10.watch_check, boundary: watch, phase: 7, interrupting: "per result (10.9.8)", effect: "the travel time-tick die at the place danger rating (night +1 rung); not in a haven or a site (PR-10-4)", rule_id: 10.9, status: "reserved by 00; defined"}
+  - {id: h.10.supply, boundary: day, phase: 4, interrupting: "when the deprivation warning fires", effect: "snares yield; consume supply per consumer (+1 hot or dry without water); half rations; want: cond.exhausted per unfed consumer", rule_id: "10.6.2; 10.6.5", status: "reserved by 00; defined"}
+  - {id: h.10.site_recovery, boundary: day, phase: 6, interrupting: false, effect: "clear roused on sites whose danger clock is at or below half; keep last_left", rule_id: "10.13.9; 10.13.11", status: added}
+  - {id: h.10.weather, boundary: day, phase: 7, interrupting: false, effect: "weather.today <- weather.tomorrow; roll tomorrow with persistence; standing facts (snow_lying, high_water, drought)", rule_id: "10.11.3; 10.11.4", status: "reserved by 00; defined"}
+  - {id: h.10.day_reset, boundary: day, phase: 9, interrupting: false, effect: "reset march units; clear the way-finding ride and picked-over facts", rule_id: "10.3.5; 10.4.1; 10.6.4", status: added}
+  - {id: h.10.site_regrowth, boundary: week, phase: 6, interrupting: false, effect: "regrowing themes: each cleared path area rolls d6 against the theme range; on a hit a pending denizen is written there", rule_id: 10.13.11, status: added}
+  - {id: h.10.weather_regime, boundary: season, phase: 6, interrupting: false, effect: "set each region's current regime from its climate and the new season (weather.yaml#regimes)", rule_id: 10.11.2, status: "reserved by 00; defined"}
+  - {id: h.10.scene_frame, boundary: [scene_start, mode_change], phase: 7, interrupting: false, effect: "compute scene.light; load the place (rest site, danger, site record); on entering a site run 10.13.4", rule_id: "10.7.2; 10.13.4", status: added}
+  - {id: h.10.venture, boundary: [venture_start, venture_end], phase: 9, interrupting: false, effect: "open or close the venture record; pc.on_venture", rule_id: 10.2.2, status: "reserved by 00; defined"}

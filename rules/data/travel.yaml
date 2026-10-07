@@ -1,0 +1,5936 @@
+# data/travel.yaml
+# Purpose: travel and exploration data for ch.10: danger rings, the pace ladder and its steps, vessel
+#   paces, the march allowance, watch activities, journey roles, the overloaded time-tick check for travel
+#   (watch_check) and sites (site_check), the pending-threat record, the face result tables (depletion,
+#   find, opportunity, veer, encounter distance), terrain defaults (nav, forage, game, openness, grazing,
+#   water), the generic encounter tables by terrain branch and home band (used where a region provides none;
+#   a world seed's regional tables are built by PR-10-10, 12.16.13), archetype omen
+#   signs, the exploration activity catalog (T-10-20), navigation and supply summaries.
+# Owner: 10-exploration-travel-sites (owner-block 13 for regional encounter tables, events and signs).
+# Schema: data/SCHEMAS.md#travelyaml (pace, activities, watch_check {die, results}, navigation, supply,
+#   exploration_activities) plus ch.10's optional keys listed above (the exploration activity catalog is
+#   the key `activities`; the per-watch activity list is `activities_by_watch`).
+# Encounter tables: one threat sub-table per home band (`threat_by_home`, d20, rows at home-1 / home / home+1 =
+#   6/11/3 faces = 30/55/15, 09.8.2; bands checked by gen10_travel.py, words by 10-word-audit.py, PR-10-8) and one
+#   non-threat sub-table d6; the danger rating's threat_share_d12 picks the sub-table (10.9.4-10.9.5) [revision: I-029].
+# Basis: [10.3-10.10, 10.15] [R5 P-30..P-36] [R6 B-14, B-15, B-R5] [09.8] [DL-10-02..10]
+
+schema_version: 1
+rings:
+- {ring: 0, distance: the haven and its fields, home_band: null, danger: safe, words: safe under the walls}
+- ring: 1
+  distance: up to 1 day
+  home_band: [1]
+  danger: settled
+  words: farm country; trouble is rare and small
+- ring: 2
+  distance: 1-3 days
+  home_band: [1, 2]
+  danger: wild
+  words: 'the borderland: wild, but folk pass through'
+- ring: 3
+  distance: 3-6 days
+  home_band: [2, 3]
+  danger: wild or perilous
+  words: 'the deep wilds: dangerous things live here'
+- ring: 4
+  distance: 6-10 days
+  home_band: [3, 4]
+  danger: perilous
+  words: 'the old lands: only the strong travel here'
+- ring: 5
+  distance: beyond
+  home_band: [4, 5]
+  danger: deadly
+  words: 'the far reaches: legends live here, and so do the things that killed them'
+pace:
+  points_per_leg_watch: 6
+  ladder:
+  - {id: crawl, points: 2}
+  - {id: slow, points: 4}
+  - {id: normal, points: 6}
+  - {id: fast, points: 8}
+  - {id: ride, points: 9}
+  - {id: hard_ride, points: 12}
+  chosen:
+    walkers: {slow: slow, normal: normal, fast: fast}
+    riders: {slow: normal, normal: ride, fast: hard_ride}
+  base_by_travel_pace: {walk: normal (max normal for walk-pace mounts and carts), ride: ride ladder for an all-mounted party,
+    river: vessel_pace, sea: vessel_pace}
+  steps:
+  - {cause: burdened (08.9.2), steps: 1}
+  - {cause: overloaded (08.9.2), steps: no travel}
+  - {cause: weather off roads, steps: 'weather.yaml#states[].pace_steps'}
+  - {cause: snow_lying off roads, steps: 1}
+  - {cause: 'night (evening, night watches) without road, light or clear sky', steps: 1}
+  - {cause: a slowing hazard on the leg, steps: hazards.yaml pace_steps}
+  - {cause: darkness without light or night-sight, steps: crawl}
+  effects:
+  - pace: slow
+    march_units: 1
+    roles: [navigator, lookout, scout, forager]
+    way_lever: true
+    stealth: a party Sneak may be made
+  - pace: normal
+    march_units: 1
+    roles: [navigator, lookout, scout]
+  - pace: fast
+    march_units: 2
+    roles: [navigator]
+    way_snag: true
+  - pace: ride
+    march_units: 1
+    roles: [navigator, lookout, scout]
+    mount_units: 1
+  - pace: hard_ride
+    march_units: 1
+    roles: [navigator]
+    way_snag: true
+    mount_units: 2
+vessel_pace:
+- {vessel: bi.raft, calm: null, downstream: 8, upstream: null, sea: null, watches_per_day: 2}
+- {vessel: bi.rowboat, calm: 6, downstream: 8, upstream: 4, sea: 'coast only, 4 in calm weather', watches_per_day: 2}
+- {vessel: bi.keelboat, calm: 6, downstream: 9, upstream: 6, sea: null, watches_per_day: 3}
+- {vessel: bi.river_barge, calm: 6, downstream: 8, upstream: 4, sea: null, watches_per_day: 3}
+- {vessel: bi.cog, calm: null, downstream: null, upstream: null, sea: 16, watches_per_day: 4}
+march:
+  walker_allowance: 2
+  mount_allowance: 2
+  reset: day boundary (dawn)
+  unit_cost: {slow: 1, normal: 1, fast: 2, ride: 1, hard_ride: 2}
+  mount_loaded_over_half: +1 per watch
+  over_allowance: one stack of cond.exhausted per unit over, at the watch end (h.10.travel_progress); 07.8.10 push-on may
+    defer it
+  mount_at_three_stacks: cannot be ridden or loaded until a long rest
+activities_by_watch:
+- {range: '1', id: travel, result: 'move along the journey: earn pace points (h.10.travel_progress)', rest: false}
+- {range: '2', id: camp, result: 'make and keep camp: eat, tend gear, mounts graze; a lookout may watch; the rest site is
+    set (07.8.2)', rest: rest_short possible inside it}
+- {range: '3', id: sleep, result: 'a long rest (07.8.1: a watch, at least 4 hours asleep, once a day)', rest: rest_long}
+- {range: '4', id: forage, result: act.forage (10.6.4), rest: false}
+- {range: '5', id: hunt, result: act.hunt / act.fish (10.6.5), rest: false}
+- {range: '6', id: scout, result: act.scout an adjacent area (10.15), rest: false}
+- {range: '7', id: map, result: act.map the area (a way-finding lever), rest: false}
+- {range: '8', id: rest, result: 'rest without sleeping (short rests, 07.8.1)', rest: rest_short}
+- {range: '9', id: keep_watch, result: the lookout role over a resting camp, rest: false}
+- {range: '10', id: other, result: 'any listed activity with a duration of a watch or less, or a free-mode scene', rest: false}
+roles:
+- id: navigator
+  allowed_at: [slow, normal, fast, ride, hard_ride]
+  effect: makes the day's way-finding beat (10.4.2)
+  evidence_tag: deed.wilds.navigation.wayfinding
+- id: lookout
+  allowed_at: [slow, normal, ride, camp]
+  effect: arrivals never surprise the party; distance +1 band in open and broken country; omens carry the archetype family;
+    sleepers woken in time
+  evidence_tag: deed.wilds.survival.weathersense
+- id: scout
+  allowed_at: [slow, normal, ride]
+  effect: perceives arrivals first (other side unaware unless its notice beats the scout's stored Sneak); may slip away; on
+    a discovery face finds the nearest undiscovered site or landmark; starts encounters at band.far from the party
+  evidence_tag: deed.wilds.tracking.sign
+- id: forager
+  allowed_at: [slow]
+  effect: a forage beat at the watch end with an engine-cited Precision snag "on the move", yield delivered reach - 1
+  evidence_tag: deed.wilds.foraging.food
+- id: quartermaster             # ch.16's fifth role (16.8.3), added at integration
+  allowed_at: [slow, normal, fast, ride, hard_ride, camp]
+  held_by: an ally with kn.quartermaster, or a holder of lic.training.wilds_survival
+  effect: once per day, one depletion face (tbl.10.depletion rows 1-4) is prevented and counts as a lull without its progress point
+  evidence_tag: deed.wilds.survival.provisioning
+watch_check:
+  die: d12
+  handler: h.10.watch_check
+  boundary: watch
+  phase: 7
+  night_watch_rung: +1 (cap deadly)
+  faces:
+    settled: {E: '1', O: '2', V: '3', D: '4', W: '5', F: '6', P: '7', L: 8-12}
+    wild: {E: '1', O: 2-3, V: '4', D: '5', W: '6', F: '7', P: '8', L: 9-12}
+    perilous: {E: 1-2, O: 3-4, V: '5', D: '6', W: '7', F: '8', P: '9', L: 10-12}
+    deadly: {E: 1-3, O: 4-5, V: '6', D: '7', W: '8', F: '9', P: '10', L: 11-12}
+  meanings: {E: encounter (10.9.4), O: omen, V: 'local event: tbl.<region>.events else tbl.event_focus (12.6.5 d)', D: 'depletion:
+      tbl.10.depletion', W: 'weather shift: tbl.10.weather_shift', F: 'discovery: nearest undiscovered place, else tbl.10.find',
+    P: 'opportunity: tbl.10.opportunity', L: 'lull: +1 point if travelling; pending timer does not advance'}
+  threat_share_d12: {settled: 1-3, wild: 1-7, perilous: 1-9, deadly: 1-10, rule: 'an E or O face with nothing pending first
+      rolls d12 against the rating: on the range, the threat sub-table; else the non-threat sub-table'}
+  interrupting_results: [arrival, omen, local event perceivable now, weather shift into an exposure for the exposed, a recurring
+      hazard exposure]
+site_check:
+  die: d12
+  handler: h.10.site_check
+  boundary: interval
+  phase: 7
+  cadence_intervals: {settled: 3, wild: 2, perilous: 2, deadly: 1, dark_without_light: one step faster, roused: 'every interval,
+      rating +1'}
+  faces:
+    settled: {E: '1', O: '2', S: '3', D: '4', H: '5', F: '6', P: '7', L: 8-12}
+    wild: {E: '1', O: 2-3, S: '4', D: '5', H: '6', F: '7', P: '8', L: 9-12}
+    perilous: {E: 1-2, O: 3-4, S: 5-6, D: '7', H: '8', F: '9', P: '10', L: 11-12}
+    deadly: {E: 1-2, O: 3-5, S: 6-7, D: '8', H: '9', F: '10', P: '11', L: '12'}
+  meanings: {E: denizen encounter (site table), O: omen, S: 'stir: the danger clock +1', D: depletion (site rows), H: 'shift:
+      the domain''s shift table', F: 'discovery: theme/domain discoveries', P: tbl.10.site_opportunity, L: lull}
+pending_threat:
+  record: '{id, row, adversary_refs, count, sign_stage, checks_since, created_at, place}'
+  arrives: [the next E face, 'the next O face (second sign, then arrival)', the 4th check after creation (lulls do not count)]
+  relax_opt_in: during 12's RELAX or a recovery window the 4th-check timer does not run (10.9.7)
+  one_at_a_time: true
+  answers: [avoid, investigate, prepare, seek, ignore]
+tables:
+- id: tbl.10.depletion
+  name: Depletion (face D, travel)
+  die: d6
+  results:
+  - {range: '1', result: 'one supply spoils or is spilled (-1); if none carried, a waterskin leaks: no water source this day
+      in arid country'}
+  - {range: '2', result: 'one supply spoils or is spilled (-1); if none carried, a waterskin leaks: no water source this day
+      in arid country'}
+  - {range: '3', result: 'a burning light gutters (-2 intervals); if none is lit, one stored source is found damp and loses
+      half its remaining intervals, rounded down'}
+  - {range: '4', result: 'a strap, string or boot gives: one carried item (engine draw among non-relic, non-cost_immune gear)
+      is damaged (08.1.9)'}
+  - {range: '5', result: 'a mount goes lame for the day (pace one step slower); if no mount, ammunition -2; with neither,
+      one more supply spoils (as 1-2) [revision: I-056]'}
+  - {range: '6', result: 'a hard stretch: the next travel watch earns 2 fewer points'}
+- id: tbl.10.depletion_site
+  name: Depletion (face D, site)
+  die: d6
+  results:
+  - {range: '1', result: a burning light gutters (-2 intervals)}
+  - {range: '2', result: a burning light gutters (-2 intervals)}
+  - {range: '3', result: one supply spoils in the damp (-1)}
+  - {range: '4', result: 'a strap or string gives: one carried item damaged'}
+  - {range: '5', result: a rope or pole frays (one damaged)}
+  - {range: '6', result: 'the air turns bad for a moment: a burning light -2 intervals'}
+- id: tbl.10.find
+  name: A find (face F with nothing undiscovered)
+  die: d12
+  results:
+  - {range: '1', result: a spring, writes: landmark; water_source for the area}
+  - {range: '2', result: a waymark cairn, writes: landmark; a way-finding lever in this area}
+  - {range: '3', result: an old campsite, writes: a camp rest site with a fire ring}
+  - {range: '4', result: a roadside shrine, writes: landmark; resonance per the region's seed or an Oracle question}
+  - {range: '5', result: a cache, writes: '08.3.12 hoard at band - 1, coin and goods only'}
+  - {range: '6', result: a fallen statue, writes: landmark; lore (act.study)}
+  - {range: '7', result: a carcass worth harvesting, writes: a fresh body of a beast of the area's table (08.3.10)}
+  - {range: '8', result: a wreck or abandoned cart, writes: 'act.scavenge: 08.3.11 gear and coin by band'}
+  - {range: '9', result: a signpost, writes: 'a known link: a route name and direction (a known route link)'}
+  - {range: '10', result: fresh sign of passage, writes: a track link; act.track Easy to follow}
+  - {range: '11', result: a viewpoint, writes: 'a vantage: adjacent areas'' danger words; recognition if lost'}
+  - {range: '12', result: a lone grave, writes: landmark; a name (a rumor seed for 11)}
+- id: tbl.10.opportunity
+  name: Opportunity (face P, travel)
+  die: d8
+  results:
+  - {range: '1', result: 'windfall: +1 supply'}
+  - {range: '2', result: 'game sighted: a Precision lever for a hunt in this area today'}
+  - {range: '3', result: 'a better line: +2 points to the next travel watch'}
+  - {range: '4', result: 'shelter found: the next camp in this area is camp, not rough, and keeps out S2 weather'}
+  - {range: '5', result: 'a vantage: adjacent areas'' danger words, the nearest undiscovered landmark, recognition if lost'}
+  - {range: '6', result: 'others'' trail marks: a Precision lever on way-finding today'}
+  - {range: '7', result: 'water: a water_source for the day'}
+  - {range: '8', result: 'a quiet hour: a breather boundary at the watch end'}
+- id: tbl.10.veer
+  name: Veer when off course (10.4.6)
+  die: d6
+  results:
+  - {range: '1', result: the link nearest the intended bearing on its left}
+  - {range: '2', result: the link nearest the intended bearing on its left}
+  - {range: '3', result: the link nearest the intended bearing on its right}
+  - {range: '4', result: the link nearest the intended bearing on its right}
+  - {range: '5', result: a link back the way the party came}
+  - {range: '6', result: 'circling: no link; the watch''s points go nowhere'}
+- id: tbl.10.encounter_distance
+  name: Encounter distance (T-10-15)
+  die: d6
+  by_openness:
+    open: [band.near, band.near, band.far, band.far, band.distant, band.distant]
+    broken: [band.close, band.near, band.near, band.far, band.far, band.distant]
+    closed: [band.close, band.close, band.close, band.near, band.near, band.far]
+  modifiers: ['lookout: +1 band farther (open, broken)', 'scout: +1 band farther', 'fog or night without light: read as closed',
+    'ambush rows: the ambush ground''s distance (usually band.close)']
+terrain_defaults:
+  terrain.settlement:
+    nav_tier: easy
+    forage_tier: {spring: none, summer: none, autumn: none, winter: none}
+    game_tier: none
+    openness: broken
+    grazing: false
+    water_source: true
+  terrain.road:
+    nav_tier: easy
+    forage_tier: {spring: moderate, summer: easy, autumn: easy, winter: hard}
+    game_tier: moderate
+    openness: broken
+    grazing: true
+    water_source: oracle_likely
+  terrain.forest.woodland:
+    nav_tier: easy
+    forage_tier: {spring: moderate, summer: easy, autumn: easy, winter: hard}
+    game_tier: easy
+    openness: broken
+    grazing: true
+    water_source: true
+  terrain.forest.deepwood:
+    nav_tier: moderate
+    forage_tier: {spring: moderate, summer: easy, autumn: easy, winter: hard}
+    game_tier: easy
+    openness: closed
+    grazing: false
+    water_source: true
+  terrain.forest.jungle:
+    nav_tier: hard
+    forage_tier: {spring: easy, summer: easy, autumn: easy, winter: moderate}
+    game_tier: moderate
+    openness: closed
+    grazing: false
+    water_source: true
+  terrain.highland.hills:
+    nav_tier: easy
+    forage_tier: {spring: moderate, summer: moderate, autumn: easy, winter: hard}
+    game_tier: moderate
+    openness: broken
+    grazing: true
+    water_source: true
+  terrain.highland.mountains:
+    nav_tier: hard
+    forage_tier: {spring: hard, summer: hard, autumn: hard, winter: very_hard}
+    game_tier: hard
+    openness: broken
+    grazing: false
+    water_source: true
+  terrain.highland.cliffs:
+    nav_tier: moderate
+    forage_tier: {spring: hard, summer: hard, autumn: hard, winter: very_hard}
+    game_tier: hard
+    openness: open
+    grazing: false
+    water_source: oracle_even
+  terrain.plains.grassland:
+    nav_tier: easy
+    forage_tier: {spring: moderate, summer: easy, autumn: easy, winter: hard}
+    game_tier: easy
+    openness: open
+    grazing: true
+    water_source: oracle_likely
+  terrain.plains.farmland:
+    nav_tier: easy
+    forage_tier: {spring: easy, summer: easy, autumn: easy, winter: moderate}
+    game_tier: moderate
+    openness: broken
+    grazing: true
+    water_source: true
+  terrain.plains.moor:
+    nav_tier: easy
+    forage_tier: {spring: moderate, summer: moderate, autumn: moderate, winter: hard}
+    game_tier: moderate
+    openness: open
+    grazing: true
+    water_source: true
+  terrain.wetland.marsh:
+    nav_tier: moderate
+    forage_tier: {spring: moderate, summer: easy, autumn: easy, winter: hard}
+    game_tier: moderate
+    openness: open
+    grazing: true
+    water_source: true
+  terrain.wetland.swamp:
+    nav_tier: hard
+    forage_tier: {spring: moderate, summer: moderate, autumn: moderate, winter: hard}
+    game_tier: moderate
+    openness: closed
+    grazing: false
+    water_source: true
+  terrain.wetland.fen:
+    nav_tier: moderate
+    forage_tier: {spring: moderate, summer: moderate, autumn: moderate, winter: hard}
+    game_tier: moderate
+    openness: open
+    grazing: false
+    water_source: true
+  terrain.arid.desert:
+    nav_tier: hard
+    forage_tier: {spring: very_hard, summer: very_hard, autumn: very_hard, winter: very_hard}
+    game_tier: hard
+    openness: open
+    grazing: false
+    water_source: false
+  terrain.arid.badlands:
+    nav_tier: moderate
+    forage_tier: {spring: hard, summer: hard, autumn: hard, winter: hard}
+    game_tier: hard
+    openness: broken
+    grazing: false
+    water_source: false
+  terrain.frozen.tundra:
+    nav_tier: moderate
+    forage_tier: {spring: hard, summer: moderate, autumn: hard, winter: very_hard}
+    game_tier: moderate
+    openness: open
+    grazing: true
+    water_source: with_fire
+  terrain.frozen.glacier:
+    nav_tier: very_hard
+    forage_tier: {spring: none, summer: none, autumn: none, winter: none}
+    game_tier: very_hard
+    openness: open
+    grazing: false
+    water_source: with_fire
+  terrain.frozen.snowfield:
+    nav_tier: hard
+    forage_tier: {spring: very_hard, summer: very_hard, autumn: very_hard, winter: very_hard}
+    game_tier: hard
+    openness: open
+    grazing: false
+    water_source: with_fire
+  terrain.water.river:
+    nav_tier: easy
+    forage_tier: {spring: easy, summer: easy, autumn: easy, winter: easy}
+    game_tier: easy
+    openness: open
+    grazing: false
+    water_source: true
+  terrain.water.lake:
+    nav_tier: easy
+    forage_tier: {spring: easy, summer: easy, autumn: easy, winter: easy}
+    game_tier: moderate
+    openness: open
+    grazing: false
+    water_source: true
+  terrain.water.coast:
+    nav_tier: moderate
+    forage_tier: {spring: easy, summer: easy, autumn: easy, winter: moderate}
+    game_tier: moderate
+    openness: open
+    grazing: false
+    water_source: false
+  terrain.water.sea:
+    nav_tier: very_hard
+    forage_tier: {spring: none, summer: none, autumn: none, winter: none}
+    game_tier: hard
+    openness: open
+    grazing: false
+    water_source: false
+  terrain.underground.cave:
+    nav_tier: hard
+    forage_tier: {spring: hard, summer: hard, autumn: hard, winter: hard}
+    game_tier: very_hard
+    openness: closed
+    grazing: false
+    water_source: oracle_even
+  terrain.underground.mine:
+    nav_tier: moderate
+    forage_tier: {spring: very_hard, summer: very_hard, autumn: very_hard, winter: very_hard}
+    game_tier: none
+    openness: closed
+    grazing: false
+    water_source: oracle_unlikely
+  terrain.underground.tunnel:
+    nav_tier: hard
+    forage_tier: {spring: very_hard, summer: very_hard, autumn: very_hard, winter: very_hard}
+    game_tier: none
+    openness: closed
+    grazing: false
+    water_source: oracle_unlikely
+  terrain.underground.sewer:
+    nav_tier: moderate
+    forage_tier: {spring: hard, summer: hard, autumn: hard, winter: hard}
+    game_tier: none
+    openness: closed
+    grazing: false
+    water_source: foul
+  terrain.ruin:
+    nav_tier: moderate
+    forage_tier: {spring: hard, summer: hard, autumn: hard, winter: hard}
+    game_tier: hard
+    openness: broken
+    grazing: false
+    water_source: oracle_even
+terrain_defaults_rule: 'a place takes the entry of its primary terrain tag, else its nearest ancestor with an entry (00.5.4b
+  most-specific-wins). forage_tier "none" = G4 for foraging (nothing grows); game_tier "none" = G4 for hunting. water_source:
+  true / false / foul (haz.foul_water) / with_fire (melting snow at a fire) / oracle_<rung> (ask once per area, 00.12.7).
+  grazing applies spring to autumn only.'
+encounter_tables:
+- id: tbl.10.enc.road
+  terrain: terrain.road
+  threat_die: d20
+  threat_by_home:
+    1:
+    - range: 1-3
+      kind: adversary
+      ref: [arch.brigand]
+      band: home-1
+      count: 1-2
+      threat: true
+      ambush: true
+      complication: false
+      when: any
+      note: a pair of footpads at a narrows
+    - range: 4-6
+      kind: adversary
+      ref: [arch.wolf]
+      band: home-1
+      count: 1-2
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a hungry wolf shadowing the carts
+    - range: 7-9
+      kind: adversary
+      ref: [arch.goblin]
+      band: home
+      count: 5-7
+      variant: minion
+      threat: true
+      ambush: true
+      complication: false
+      when: any
+      note: goblins rolling a log across the road
+    - range: 10-12
+      kind: adversary
+      ref: [arch.brigand]
+      band: home
+      count: 5-7
+      variant: minion
+      threat: true
+      ambush: false
+      complication: true
+      when: any
+      note: a mob of hungry men at a toll they invented
+    - range: 13-15
+      kind: adversary
+      ref: [arch.orc]
+      band: home
+      count: 5-7
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: an orc raiding party on the road
+    - range: 16-17
+      kind: adversary
+      ref: [arch.ghost]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: night
+      note: a hanged man at the crossroads gibbet
+    - range: 18-19
+      kind: adversary
+      ref: [arch.ogre]
+      band: home+1
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: an ogre demanding a toll at a ford
+    - range: '20'
+      kind: adversary
+      ref: [arch.orc]
+      band: home+1
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: an orc outrider ahead of a raid
+    2:
+    - range: 1-3
+      kind: adversary
+      ref: [arch.brigand]
+      band: home-1
+      count: 4-6
+      variant: minion
+      threat: true
+      ambush: true
+      complication: false
+      when: any
+      note: a ragged gang of footpads
+    - range: 4-6
+      kind: adversary
+      ref: [arch.goblin]
+      band: home-1
+      count: 4-6
+      variant: minion
+      threat: true
+      ambush: true
+      complication: false
+      when: any
+      note: goblins in the ditches
+    - range: 7-9
+      kind: adversary
+      ref: [arch.brigand]
+      band: home
+      count: '2'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: highwaymen on good horses
+    - range: 10-12
+      kind: adversary
+      ref: [arch.soldier]
+      band: home
+      count: '2'
+      threat: true
+      ambush: false
+      complication: true
+      when: any
+      note: corrupt toll-men with a writ
+    - range: 13-15
+      kind: adversary
+      ref: [arch.ogre]
+      band: home
+      count: '1'
+      variant: elite
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: an ogre sitting in the road eating a horse
+    - range: 16-17
+      kind: adversary
+      ref: [arch.tempter]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a well-dressed stranger with an offer
+    - range: 18-19
+      kind: adversary
+      ref: [arch.orc]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: an orc scout who has seen too much
+    - range: '20'
+      kind: adversary
+      ref: [arch.troll]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a young troll under a bridge
+    3:
+    - range: 1-3
+      kind: adversary
+      ref: [arch.brigand]
+      band: home-1
+      count: 6-8
+      variant: minion
+      threat: true
+      ambush: true
+      complication: false
+      when: any
+      note: a robber band at an ambush cut
+    - range: 4-6
+      kind: adversary
+      ref: [arch.orc]
+      band: home-1
+      count: 6-8
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: orc raiders on the road
+    - range: 7-9
+      kind: adversary
+      ref: [arch.soldier]
+      band: home
+      count: '1'
+      variant: elite
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a lord's sergeant collecting a tax that is not owed
+    - range: 10-12
+      kind: adversary
+      ref: [arch.troll]
+      band: home
+      count: '2'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: two young trolls under a bridge
+    - range: 13-15
+      kind: adversary
+      ref: [arch.knight]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: true
+      when: any
+      note: a hedge knight who holds the bridge against all comers
+    - range: 16-17
+      kind: adversary
+      ref: [arch.vampire]
+      band: home
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: night
+      note: a pale coachman who offers a ride
+    - range: 18-19
+      kind: adversary
+      ref: [arch.ogre]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: an ogre's whelp foraging along the verge
+    - range: '20'
+      kind: adversary
+      ref: [arch.fey_noble]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: night
+      note: a rider of the Wild Hunt, lost from it
+    4:
+    - range: 1-3
+      kind: adversary
+      ref: [arch.brigand]
+      band: home-1
+      count: '1'
+      leader: true
+      threat: true
+      ambush: true
+      complication: false
+      when: any
+      note: a robber-baron's tax-collector, armed and mounted
+    - range: 4-6
+      kind: adversary
+      ref: [arch.troll]
+      band: home-1
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a bridge troll grown fat on tolls
+    - range: 7-9
+      kind: adversary
+      ref: [arch.knight]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a champion holding the road for a pretender
+    - range: 10-12
+      kind: adversary
+      ref: [arch.tempter]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a crossroads devil with a contract
+    - range: 13-15
+      kind: adversary
+      ref: [arch.soldier]
+      band: home
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: true
+      when: any
+      note: 'a press-gang''s recruiter: the war needs bodies'
+    - range: 16-17
+      kind: adversary
+      ref: [arch.ogre]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: an ogre chieftain's toll-gate
+    - range: 18-19
+      kind: adversary
+      ref: [arch.vampire]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: night
+      note: a coach with no driver, and a passenger who wants company
+    - range: '20'
+      kind: adversary
+      ref: [arch.fey_noble]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: night
+      note: 'the Wild Hunt passing: one rider turns aside'
+    5:
+    - range: 1-3
+      kind: adversary
+      ref: [arch.knight]
+      band: home-1
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a renegade champion and his oath
+    - range: 4-6
+      kind: adversary
+      ref: [arch.troll]
+      band: home-1
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: an old troll who has eaten three bridge-wardens
+    - range: 7-9
+      kind: adversary
+      ref: [arch.tempter]
+      band: home
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a devil's factor on its master's business
+    - range: 10-12
+      kind: adversary
+      ref: [arch.folk_mage]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: an archmage on the road, in a temper
+    - range: 13-15
+      kind: adversary
+      ref: [arch.vampire]
+      band: home
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: night
+      note: a vampire's herald, hunting for its lord
+    - range: 16-17
+      kind: adversary
+      ref: [arch.fey_noble]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a lord of the Wild Hunt
+    - range: 18-19
+      kind: adversary
+      ref: [arch.fey_noble]
+      band: home+1
+      count: '1'
+      variant: solo
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: the Erl-King's ride crossing the road
+    - range: '20'
+      kind: adversary
+      ref: [arch.vampire]
+      band: home+1
+      count: '1'
+      variant: solo
+      threat: true
+      ambush: false
+      complication: false
+      when: night
+      note: a vampire lord abroad in its coach
+  non_threat_die: d6
+  non_threat:
+  - {range: '1', kind: people, result: merchants with hired guards (12.11 reaction roll; trade), threat: false}
+  - {range: '2', kind: people, result: pilgrims bound for a shrine (news; a rumor), threat: false}
+  - range: '3'
+    kind: people
+    result: a patrol of the road wardens (reaction roll; questions)
+    threat: false
+    ref: [arch.soldier]
+  - {range: '4', kind: people, result: 'a messenger riding hard (news: a rumor from 11)', threat: false}
+  - {range: '5', kind: people, result: a tinker with a cart (trade; repair), threat: false}
+  - {range: '6', kind: people, result: refugees from somewhere worse (a thread seed), threat: false}
+  lifecycle: provisional
+  basis: [10.10.1, 09.8.2, T-09-10, PR-10-8]
+- id: tbl.10.enc.settlement
+  terrain: terrain.settlement
+  threat_die: d20
+  threat_by_home:
+    1:
+    - range: 1-3
+      kind: adversary
+      ref: [arch.brigand]
+      band: home-1
+      count: 1-2
+      threat: true
+      ambush: true
+      complication: false
+      when: night
+      note: footpads in an alley
+    - range: 4-6
+      kind: adversary
+      ref: [arch.vermin_swarm]
+      band: home-1
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: rats boiling out of a granary
+    - range: 7-9
+      kind: adversary
+      ref: [arch.brigand]
+      band: home
+      count: 5-7
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a gang's thugs collecting
+    - range: 10-12
+      kind: adversary
+      ref: [arch.cultist]
+      band: home
+      count: 5-7
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: night
+      note: cultists at a cellar rite
+    - range: 13-15
+      kind: adversary
+      ref: [arch.zombie]
+      band: home
+      count: 5-7
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: night
+      note: the dead walk out of the old graveyard
+    - range: 16-17
+      kind: adversary
+      ref: [arch.homunculus]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a wizard's escaped familiar, stealing
+    - range: 18-19
+      kind: adversary
+      ref: [arch.ghost]
+      band: home+1
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: night
+      note: a ghost in the well-house
+    - range: '20'
+      kind: adversary
+      ref: [arch.possessor]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a child speaking in a stranger's voice
+    2:
+    - range: 1-3
+      kind: adversary
+      ref: [arch.brigand]
+      band: home-1
+      count: 4-6
+      variant: minion
+      threat: true
+      ambush: true
+      complication: false
+      when: night
+      note: a street gang
+    - range: 4-6
+      kind: adversary
+      ref: [arch.animated]
+      band: home-1
+      count: '2'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a dead alchemist's shop-guardians
+    - range: 7-9
+      kind: adversary
+      ref: [arch.soldier]
+      band: home
+      count: '2'
+      threat: true
+      ambush: false
+      complication: true
+      when: any
+      note: the watch, bribed to make you vanish
+    - range: 10-12
+      kind: adversary
+      ref: [arch.cultist]
+      band: home
+      count: '2'
+      threat: true
+      ambush: false
+      complication: false
+      when: night
+      note: a cult cell's enforcers
+    - range: 13-15
+      kind: adversary
+      ref: [arch.ghost]
+      band: home
+      count: '1'
+      variant: elite
+      threat: true
+      ambush: false
+      complication: false
+      when: night
+      note: a murdered servant who wants a name spoken
+    - range: 16-17
+      kind: adversary
+      ref: [arch.folk_mage]
+      band: home
+      count: '1'
+      variant: elite
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a hedge-wizard selling curses
+    - range: 18-19
+      kind: adversary
+      ref: [arch.vampire]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: night
+      note: a vampire's thrall feeding in the stews
+    - range: '20'
+      kind: adversary
+      ref: [arch.enforcer]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a debt-collector from below
+    3:
+    - range: 1-3
+      kind: adversary
+      ref: [arch.cultist]
+      band: home-1
+      count: 6-8
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: night
+      note: a mob whipped up by a preacher
+    - range: 4-6
+      kind: adversary
+      ref: [arch.soldier]
+      band: home-1
+      count: '2'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a guild's hired swords
+    - range: 7-9
+      kind: adversary
+      ref: [arch.possessor]
+      band: home
+      count: '1'
+      variant: elite
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a respected burgher, possessed
+    - range: 10-12
+      kind: adversary
+      ref: [arch.ghost]
+      band: home
+      count: '2'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: night
+      note: the ghosts of a fire in a counting-house
+    - range: 13-15
+      kind: adversary
+      ref: [arch.cultist]
+      band: home
+      count: '1'
+      variant: elite
+      threat: true
+      ambush: false
+      complication: true
+      when: any
+      note: a cult's inquisitor, hunting heretics
+    - range: 16-17
+      kind: adversary
+      ref: [arch.animated]
+      band: home
+      count: '1'
+      variant: elite
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a guildhall's bronze guardian woken
+    - range: 18-19
+      kind: adversary
+      ref: [arch.vampire]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: night
+      note: a vampire's get, newly made and starving
+    - range: '20'
+      kind: adversary
+      ref: [arch.tempter]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a smiling broker of souls
+    4:
+    - range: 1-3
+      kind: adversary
+      ref: [arch.soldier]
+      band: home-1
+      count: '2'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a magistrate's bravos
+    - range: 4-6
+      kind: adversary
+      ref: [arch.cultist]
+      band: home-1
+      count: '1'
+      variant: elite
+      threat: true
+      ambush: false
+      complication: false
+      when: night
+      note: the high priest of a cult in the temple cellars
+    - range: 7-9
+      kind: adversary
+      ref: [arch.enforcer]
+      band: home
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: true
+      when: any
+      note: an imp-bailiff come to collect on an old contract
+    - range: 10-12
+      kind: adversary
+      ref: [arch.possessor]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a councillor ridden by a demon
+    - range: 13-15
+      kind: adversary
+      ref: [arch.folk_mage]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a court sorcerer with a grudge
+    - range: 16-17
+      kind: adversary
+      ref: [arch.ghost]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: night
+      note: a plague-pit's ghost
+    - range: 18-19
+      kind: adversary
+      ref: [arch.vampire]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: night
+      note: the vampire's favoured child
+    - range: '20'
+      kind: adversary
+      ref: [arch.tempter]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a devil in the guise of a banker
+    5:
+    - range: 1-3
+      kind: adversary
+      ref: [arch.knight]
+      band: home-1
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a lord's champion sent to arrest you
+    - range: 4-6
+      kind: adversary
+      ref: [arch.possessor]
+      band: home-1
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a bishop who is no longer himself
+    - range: 7-9
+      kind: adversary
+      ref: [arch.folk_mage]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: the city's archmage, displeased
+    - range: 10-12
+      kind: adversary
+      ref: [arch.tempter]
+      band: home
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a devil's emissary with an offer for the city
+    - range: 13-15
+      kind: adversary
+      ref: [arch.enforcer]
+      band: home
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: an infernal bailiff serving a writ
+    - range: 16-17
+      kind: adversary
+      ref: [arch.vampire]
+      band: home
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: night
+      note: a vampire's herald in the masked ball
+    - range: 18-19
+      kind: adversary
+      ref: [arch.vampire]
+      band: home+1
+      count: '1'
+      variant: solo
+      threat: true
+      ambush: false
+      complication: false
+      when: night
+      note: the vampire who owns the city's nights
+    - range: '20'
+      kind: adversary
+      ref: [arch.enforcer]
+      band: home+1
+      count: '1'
+      variant: solo
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a duke of hell's magistrate
+  non_threat_die: d6
+  non_threat:
+  - {range: '1', kind: people, result: townsfolk at their business (a rumor), threat: false}
+  - {range: '2', kind: people, result: a beggar with news for a coin, threat: false}
+  - {range: '3', kind: people, result: the watch on its round, threat: false}
+  - {range: '4', kind: people, result: a merchant with something unusual to sell, threat: false}
+  - {range: '5', kind: people, result: 'a drunk spoiling for an argument (talk, not a fight)', threat: false}
+  - {range: '6', kind: people, result: a funeral or a wedding procession, threat: false}
+  lifecycle: provisional
+  basis: [10.10.1, 09.8.2, T-09-10, PR-10-8]
+- id: tbl.10.enc.forest
+  terrain: terrain.forest
+  threat_die: d20
+  threat_by_home:
+    1:
+    - range: 1-3
+      kind: adversary
+      ref: [arch.wolf]
+      band: home-1
+      count: 1-2
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a wolf at the edge of the firelight
+    - range: 4-6
+      kind: adversary
+      ref: [arch.giant_vermin]
+      band: home-1
+      count: '1'
+      threat: true
+      ambush: true
+      complication: false
+      when: any
+      note: a spider dropping from the canopy
+    - range: 7-9
+      kind: adversary
+      ref: [arch.wolf]
+      band: home
+      count: 5-7
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a wolf pack on a cold trail
+    - range: 10-12
+      kind: adversary
+      ref: [arch.goblin]
+      band: home
+      count: 5-7
+      variant: minion
+      threat: true
+      ambush: true
+      complication: false
+      when: any
+      note: goblins with nets
+    - range: 13-15
+      kind: adversary
+      ref: [arch.wild_fey]
+      band: home
+      count: 5-7
+      variant: minion
+      threat: true
+      ambush: false
+      complication: true
+      when: any
+      note: a swarm of sprites who steal what you set down
+    - range: 16-17
+      kind: adversary
+      ref: [arch.brigand]
+      band: home
+      count: '2'
+      threat: true
+      ambush: true
+      complication: false
+      when: any
+      note: outlaws of the greenwood
+    - range: 18-19
+      kind: adversary
+      ref: [arch.bear]
+      band: home+1
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a bear with cubs
+    - range: '20'
+      kind: adversary
+      ref: [arch.monstrous_plant]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a strangling creeper across the path
+    2:
+    - range: 1-3
+      kind: adversary
+      ref: [arch.wolf]
+      band: home-1
+      count: 4-6
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: wolves circling
+    - range: 4-6
+      kind: adversary
+      ref: [arch.giant_vermin]
+      band: home-1
+      count: '2'
+      threat: true
+      ambush: true
+      complication: false
+      when: any
+      note: spiders in the canopy
+    - range: 7-9
+      kind: adversary
+      ref: [arch.bear]
+      band: home
+      count: '1'
+      variant: elite
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a great bear defending a kill
+    - range: 10-12
+      kind: adversary
+      ref: [arch.brigand]
+      band: home
+      count: '2'
+      threat: true
+      ambush: true
+      complication: false
+      when: any
+      note: outlaws of the greenwood
+    - range: 13-15
+      kind: adversary
+      ref: [arch.elf_warden]
+      band: home
+      count: '2'
+      threat: true
+      ambush: false
+      complication: true
+      when: any
+      note: wardens who want you gone from the wood
+    - range: 16-17
+      kind: adversary
+      ref: [arch.hag]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: an old woman by a cauldron, too kind
+    - range: 18-19
+      kind: adversary
+      ref: [arch.troll]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a troll-kit, hungry
+    - range: '20'
+      kind: adversary
+      ref: [arch.monstrous_beast]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: an owlbear yearling
+    3:
+    - range: 1-3
+      kind: adversary
+      ref: [arch.great_cat]
+      band: home-1
+      count: '2'
+      threat: true
+      ambush: true
+      complication: false
+      when: any
+      note: a pair of hunting cats
+    - range: 4-6
+      kind: adversary
+      ref: [arch.wolf]
+      band: home-1
+      count: 6-8
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a wolf pack in winter
+    - range: 7-9
+      kind: adversary
+      ref: [arch.monstrous_beast]
+      band: home
+      count: '1'
+      variant: elite
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: an owlbear
+    - range: 10-12
+      kind: adversary
+      ref: [arch.troll]
+      band: home
+      count: '1'
+      variant: elite
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a troll in a deadfall den
+    - range: 13-15
+      kind: adversary
+      ref: [arch.fey_noble]
+      band: home
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: true
+      when: any
+      note: a fey knight errant who wants a contest
+    - range: 16-17
+      kind: adversary
+      ref: [arch.place_spirit]
+      band: home
+      count: '1'
+      variant: elite
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: the wood's anger made flesh
+    - range: 18-19
+      kind: adversary
+      ref: [arch.hag]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a hag's apprentice
+    - range: '20'
+      kind: adversary
+      ref: [arch.monstrous_plant]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a treant's sapling that walks
+    4:
+    - range: 1-3
+      kind: adversary
+      ref: [arch.bear]
+      band: home-1
+      count: '2'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: two great bears fighting over a carcass
+    - range: 4-6
+      kind: adversary
+      ref: [arch.elf_warden]
+      band: home-1
+      count: '1'
+      leader: true
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a warden captain and her sworn
+    - range: 7-9
+      kind: adversary
+      ref: [arch.troll]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: an old troll who knows the paths
+    - range: 10-12
+      kind: adversary
+      ref: [arch.hag]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: true
+      when: any
+      note: a hag who wants a bargain
+    - range: 13-15
+      kind: adversary
+      ref: [arch.monstrous_plant]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a walking tree, angry
+    - range: 16-17
+      kind: adversary
+      ref: [arch.monstrous_beast]
+      band: home
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a chimera's brood, hunting
+    - range: 18-19
+      kind: adversary
+      ref: [arch.fey_noble]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a fey lord's huntsman
+    - range: '20'
+      kind: adversary
+      ref: [arch.place_spirit]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: the grove-spirit's outrider
+    5:
+    - range: 1-3
+      kind: adversary
+      ref: [arch.hag]
+      band: home-1
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a hag-grandmother
+    - range: 4-6
+      kind: adversary
+      ref: [arch.troll]
+      band: home-1
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a troll king's gamekeeper
+    - range: 7-9
+      kind: adversary
+      ref: [arch.monstrous_plant]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a treant older than the kingdom
+    - range: 10-12
+      kind: adversary
+      ref: [arch.fey_noble]
+      band: home
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a fey courtier with a wager
+    - range: 13-15
+      kind: adversary
+      ref: [arch.place_spirit]
+      band: home
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: the wood's guardian, half-awake
+    - range: 16-17
+      kind: adversary
+      ref: [arch.folk_mage]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a druid of the old circle
+    - range: 18-19
+      kind: adversary
+      ref: [arch.fey_noble]
+      band: home+1
+      count: '1'
+      variant: solo
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: the Erl-King riding
+    - range: '20'
+      kind: adversary
+      ref: [arch.monstrous_beast]
+      band: home+1
+      count: '1'
+      variant: solo
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: the Questing Beast
+  non_threat_die: d6
+  non_threat:
+  - {range: '1', kind: people, result: woodcutters at work, threat: false}
+  - {range: '2', kind: people, result: a hunter tracking game (news of the wood), threat: false}
+  - range: '3'
+    kind: beasts
+    result: a herd of deer (game sighted)
+    threat: false
+    ref: [arch.herd_beast]
+  - {range: '4', kind: people, result: charcoal-burners and their mound, threat: false}
+  - {range: '5', kind: people, result: a hermit in a hollow tree, threat: false}
+  - range: '6'
+    kind: people
+    result: a druid or a warden of the wood (reaction roll)
+    threat: false
+    ref: [arch.elf_warden]
+  lifecycle: provisional
+  basis: [10.10.1, 09.8.2, T-09-10, PR-10-8]
+- id: tbl.10.enc.highland
+  terrain: terrain.highland
+  threat_die: d20
+  threat_by_home:
+    1:
+    - range: 1-3
+      kind: adversary
+      ref: [arch.wolf]
+      band: home-1
+      count: 1-2
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a wolf on a ridge
+    - range: 4-6
+      kind: adversary
+      ref: [arch.goblin]
+      band: home-1
+      count: '2'
+      threat: true
+      ambush: true
+      complication: false
+      when: any
+      note: goblin slingers among the rocks
+    - range: 7-9
+      kind: adversary
+      ref: [arch.orc]
+      band: home
+      count: 5-7
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: an orc war-band's foragers
+    - range: 10-12
+      kind: adversary
+      ref: [arch.raptor]
+      band: home
+      count: 1-2
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: great eagles that want your mule
+    - range: 13-15
+      kind: adversary
+      ref: [arch.goblin]
+      band: home
+      count: 5-7
+      variant: minion
+      threat: true
+      ambush: true
+      complication: true
+      when: any
+      note: goblins on a scree slope
+    - range: 16-17
+      kind: adversary
+      ref: [arch.brigand]
+      band: home
+      count: '2'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: hill bandits
+    - range: 18-19
+      kind: adversary
+      ref: [arch.bear]
+      band: home+1
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a cave bear woken early
+    - range: '20'
+      kind: adversary
+      ref: [arch.ogre]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a young ogre throwing rocks
+    2:
+    - range: 1-3
+      kind: adversary
+      ref: [arch.orc]
+      band: home-1
+      count: 4-6
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: an orc war-band's stragglers
+    - range: 4-6
+      kind: adversary
+      ref: [arch.wolf]
+      band: home-1
+      count: 4-6
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: wolves on the high pasture
+    - range: 7-9
+      kind: adversary
+      ref: [arch.ogre]
+      band: home
+      count: '1'
+      variant: elite
+      threat: true
+      ambush: false
+      complication: true
+      when: any
+      note: an ogre in a pass
+    - range: 10-12
+      kind: adversary
+      ref: [arch.bear]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a bear in the berry-scrub
+    - range: 13-15
+      kind: adversary
+      ref: [arch.dwarf_holdguard]
+      band: home
+      count: '2'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: holdguards who think you are thieves
+    - range: 16-17
+      kind: adversary
+      ref: [arch.drake]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a rock drake sunning itself
+    - range: 18-19
+      kind: adversary
+      ref: [arch.wyvern]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a young wyvern
+    - range: '20'
+      kind: adversary
+      ref: [arch.troll]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a troll-kit in a cave
+    3:
+    - range: 1-3
+      kind: adversary
+      ref: [arch.orc]
+      band: home-1
+      count: 6-8
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: orc raiders
+    - range: 4-6
+      kind: adversary
+      ref: [arch.ogre]
+      band: home-1
+      count: '2'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a pair of ogre shepherds
+    - range: 7-9
+      kind: adversary
+      ref: [arch.wyvern]
+      band: home
+      count: '1'
+      variant: elite
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a wyvern on the hunt
+    - range: 10-12
+      kind: adversary
+      ref: [arch.troll]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a hill troll
+    - range: 13-15
+      kind: adversary
+      ref: [arch.orc]
+      band: home
+      count: '1'
+      variant: elite
+      threat: true
+      ambush: false
+      complication: true
+      when: any
+      note: an orc war-chief out for a name
+    - range: 16-17
+      kind: adversary
+      ref: [arch.earth_elemental]
+      band: home
+      count: '1'
+      variant: elite
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a rockslide that stands up
+    - range: 18-19
+      kind: adversary
+      ref: [arch.giant]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a giant's child
+    - range: '20'
+      kind: adversary
+      ref: [arch.drake]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a drake's brood
+    4:
+    - range: 1-3
+      kind: adversary
+      ref: [arch.wyvern]
+      band: home-1
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a wyvern
+    - range: 4-6
+      kind: adversary
+      ref: [arch.orc]
+      band: home-1
+      count: '1'
+      leader: true
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: an orc war-band's champion, scouting ahead
+    - range: 7-9
+      kind: adversary
+      ref: [arch.giant]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a hill giant
+    - range: 10-12
+      kind: adversary
+      ref: [arch.troll]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: true
+      when: any
+      note: a troll that has learned to set ambushes
+    - range: 13-15
+      kind: adversary
+      ref: [arch.air_elemental]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a storm that will not pass
+    - range: 16-17
+      kind: adversary
+      ref: [arch.drake]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a mountain drake
+    - range: 18-19
+      kind: adversary
+      ref: [arch.great_dragon]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a dragon's wyrmling
+    - range: '20'
+      kind: adversary
+      ref: [arch.celestial]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a sky-herald on the peak
+    5:
+    - range: 1-3
+      kind: adversary
+      ref: [arch.wyvern]
+      band: home-1
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a wyvern
+    - range: 4-6
+      kind: adversary
+      ref: [arch.drake]
+      band: home-1
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a war-drake
+    - range: 7-9
+      kind: adversary
+      ref: [arch.great_dragon]
+      band: home
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a dragon's young, hunting
+    - range: 10-12
+      kind: adversary
+      ref: [arch.giant]
+      band: home
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a giant jarl's outrider
+    - range: 13-15
+      kind: adversary
+      ref: [arch.air_elemental]
+      band: home
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a gale off the peaks with a will
+    - range: 16-17
+      kind: adversary
+      ref: [arch.celestial]
+      band: home
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a guardian of the high places
+    - range: 18-19
+      kind: adversary
+      ref: [arch.giant]
+      band: home+1
+      count: '1'
+      variant: solo
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a storm giant
+    - range: '20'
+      kind: adversary
+      ref: [arch.earth_elemental]
+      band: home+1
+      count: '1'
+      variant: solo
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: the mountain itself, awake
+  non_threat_die: d6
+  non_threat:
+  - {range: '1', kind: people, result: shepherds and their flock, threat: false}
+  - range: '2'
+    kind: beasts
+    result: wild goats on a ledge (game sighted)
+    threat: false
+    ref: [arch.herd_beast]
+  - range: '3'
+    kind: people
+    result: dwarf traders with mules (reaction roll; trade)
+    threat: false
+    ref: [arch.dwarf_holdguard]
+  - {range: '4', kind: people, result: prospectors at a stream, threat: false}
+  - {range: '5', kind: sign_only, result: 'an eagle circling: a sign of something dead ahead', threat: false}
+  - {range: '6', kind: people, result: a cairn-builder or a pilgrim to the heights, threat: false}
+  lifecycle: provisional
+  basis: [10.10.1, 09.8.2, T-09-10, PR-10-8]
+- id: tbl.10.enc.plains
+  terrain: terrain.plains
+  threat_die: d20
+  threat_by_home:
+    1:
+    - range: 1-3
+      kind: adversary
+      ref: [arch.wolf]
+      band: home-1
+      count: 1-2
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a wolf in the long grass
+    - range: 4-6
+      kind: adversary
+      ref: [arch.gnoll]
+      band: home-1
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a gnoll scavenger
+    - range: 7-9
+      kind: adversary
+      ref: [arch.gnoll]
+      band: home
+      count: 5-7
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a gnoll pack
+    - range: 10-12
+      kind: adversary
+      ref: [arch.orc]
+      band: home
+      count: 5-7
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: orc horse-thieves
+    - range: 13-15
+      kind: adversary
+      ref: [arch.herd_beast]
+      band: home
+      count: 5-7
+      variant: minion
+      threat: true
+      ambush: false
+      complication: true
+      when: any
+      note: a stampede
+    - range: 16-17
+      kind: adversary
+      ref: [arch.raptor]
+      band: home
+      count: 1-2
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: giant hawks
+    - range: 18-19
+      kind: adversary
+      ref: [arch.great_cat]
+      band: home+1
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a lion
+    - range: '20'
+      kind: adversary
+      ref: [arch.orc]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: an orc rider far ahead of its band
+    2:
+    - range: 1-3
+      kind: adversary
+      ref: [arch.gnoll]
+      band: home-1
+      count: 4-6
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: gnolls on a trail
+    - range: 4-6
+      kind: adversary
+      ref: [arch.wolf]
+      band: home-1
+      count: 4-6
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: wolves following a herd
+    - range: 7-9
+      kind: adversary
+      ref: [arch.orc]
+      band: home
+      count: '2'
+      threat: true
+      ambush: false
+      complication: true
+      when: any
+      note: orc riders
+    - range: 10-12
+      kind: adversary
+      ref: [arch.great_cat]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a lioness
+    - range: 13-15
+      kind: adversary
+      ref: [arch.herd_beast]
+      band: home
+      count: '1'
+      variant: elite
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a stampede led by a great bull
+    - range: 16-17
+      kind: adversary
+      ref: [arch.gnoll]
+      band: home
+      count: '1'
+      leader: true
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a gnoll pack-mother
+    - range: 18-19
+      kind: adversary
+      ref: [arch.monstrous_beast]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a manticore's cub
+    - range: '20'
+      kind: adversary
+      ref: [arch.wyvern]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a young wyvern
+    3:
+    - range: 1-3
+      kind: adversary
+      ref: [arch.gnoll]
+      band: home-1
+      count: 6-8
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: gnoll raiders
+    - range: 4-6
+      kind: adversary
+      ref: [arch.orc]
+      band: home-1
+      count: 6-8
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: orc foot
+    - range: 7-9
+      kind: adversary
+      ref: [arch.knight]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: true
+      when: any
+      note: a knight on quest who mistakes you for his quarry
+    - range: 10-12
+      kind: adversary
+      ref: [arch.monstrous_beast]
+      band: home
+      count: '1'
+      variant: elite
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a manticore
+    - range: 13-15
+      kind: adversary
+      ref: [arch.orc]
+      band: home
+      count: '1'
+      variant: elite
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: an orc war-chief riding alone
+    - range: 16-17
+      kind: adversary
+      ref: [arch.wyvern]
+      band: home
+      count: '1'
+      variant: elite
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a wyvern hunting the herds
+    - range: 18-19
+      kind: adversary
+      ref: [arch.giant]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a giant's child herding aurochs
+    - range: '20'
+      kind: adversary
+      ref: [arch.air_elemental]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a dust devil that follows
+    4:
+    - range: 1-3
+      kind: adversary
+      ref: [arch.wyvern]
+      band: home-1
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a wyvern
+    - range: 4-6
+      kind: adversary
+      ref: [arch.orc]
+      band: home-1
+      count: '2'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: orc champions
+    - range: 7-9
+      kind: adversary
+      ref: [arch.giant]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a hill giant on the move
+    - range: 10-12
+      kind: adversary
+      ref: [arch.knight]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a champion and his oath
+    - range: 13-15
+      kind: adversary
+      ref: [arch.air_elemental]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: true
+      when: any
+      note: a whirlwind with a mind
+    - range: 16-17
+      kind: adversary
+      ref: [arch.place_spirit]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: the spirit of a battlefield
+    - range: 18-19
+      kind: adversary
+      ref: [arch.monstrous_beast]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a sphinx's get
+    - range: '20'
+      kind: adversary
+      ref: [arch.place_spirit]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: the herald-wind of a storm
+    5:
+    - range: 1-3
+      kind: adversary
+      ref: [arch.giant]
+      band: home-1
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a giant warband's scout
+    - range: 4-6
+      kind: adversary
+      ref: [arch.wyvern]
+      band: home-1
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a wyvern hunting the herds
+    - range: 7-9
+      kind: adversary
+      ref: [arch.knight]
+      band: home
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a dread lord's outrider
+    - range: 10-12
+      kind: adversary
+      ref: [arch.air_elemental]
+      band: home
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a storm-front with a will
+    - range: 13-15
+      kind: adversary
+      ref: [arch.monstrous_beast]
+      band: home
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a sphinx's errand-beast
+    - range: 16-17
+      kind: adversary
+      ref: [arch.place_spirit]
+      band: home
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: the wind of the steppe
+    - range: 18-19
+      kind: adversary
+      ref: [arch.monstrous_beast]
+      band: home+1
+      count: '1'
+      variant: solo
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a sphinx with a riddle and a hunger
+    - range: '20'
+      kind: adversary
+      ref: [arch.air_elemental]
+      band: home+1
+      count: '1'
+      variant: solo
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: the great storm of the age
+  non_threat_die: d6
+  non_threat:
+  - {range: '1', kind: people, result: drovers moving cattle, threat: false}
+  - {range: '2', kind: people, result: a caravan (trade; news), threat: false}
+  - range: '3'
+    kind: beasts
+    result: 'wild horses (a mount to be caught: Handle, Hard)'
+    threat: false
+    ref: [arch.herd_beast]
+  - {range: '4', kind: people, result: a hunting party of the local lord, threat: false}
+  - {range: '5', kind: people, result: a farmer at a boundary stone (directions), threat: false}
+  - {range: '6', kind: people, result: travelers going the other way (news of the road behind them), threat: false}
+  lifecycle: provisional
+  basis: [10.10.1, 09.8.2, T-09-10, PR-10-8]
+- id: tbl.10.enc.wetland
+  terrain: terrain.wetland
+  threat_die: d20
+  threat_by_home:
+    1:
+    - range: 1-3
+      kind: adversary
+      ref: [arch.giant_vermin]
+      band: home-1
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a giant leech
+    - range: 4-6
+      kind: adversary
+      ref: [arch.reptile]
+      band: home-1
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a marsh viper
+    - range: 7-9
+      kind: adversary
+      ref: [arch.lizardfolk]
+      band: home
+      count: 5-7
+      variant: minion
+      threat: true
+      ambush: true
+      complication: false
+      when: any
+      note: lizardfolk hunters
+    - range: 10-12
+      kind: adversary
+      ref: [arch.zombie]
+      band: home
+      count: 5-7
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: the bog-dead
+    - range: 13-15
+      kind: adversary
+      ref: [arch.vermin_swarm]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: true
+      when: any
+      note: a cloud of biting flies
+    - range: 16-17
+      kind: adversary
+      ref: [arch.wild_fey]
+      band: home
+      count: 1-2
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: will-o'-the-wisps that lead astray
+    - range: 18-19
+      kind: adversary
+      ref: [arch.hag]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a bog-hag's daughter
+    - range: '20'
+      kind: adversary
+      ref: [arch.reptile]
+      band: home+1
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a great crocodile
+    2:
+    - range: 1-3
+      kind: adversary
+      ref: [arch.lizardfolk]
+      band: home-1
+      count: 4-6
+      variant: minion
+      threat: true
+      ambush: true
+      complication: false
+      when: any
+      note: lizardfolk raiders
+    - range: 4-6
+      kind: adversary
+      ref: [arch.zombie]
+      band: home-1
+      count: 4-6
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: drowned dead
+    - range: 7-9
+      kind: adversary
+      ref: [arch.hag]
+      band: home
+      count: '1'
+      variant: elite
+      threat: true
+      ambush: false
+      complication: true
+      when: any
+      note: a hag who trades in names
+    - range: 10-12
+      kind: adversary
+      ref: [arch.reptile]
+      band: home
+      count: '2'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: crocodiles under the causeway
+    - range: 13-15
+      kind: adversary
+      ref: [arch.water_elemental]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a pool that rises
+    - range: 16-17
+      kind: adversary
+      ref: [arch.goblin]
+      band: home
+      count: '2'
+      threat: true
+      ambush: true
+      complication: false
+      when: any
+      note: bog-goblins
+    - range: 18-19
+      kind: adversary
+      ref: [arch.troll]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a fen-troll's whelp
+    - range: '20'
+      kind: adversary
+      ref: [arch.wraith]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a wraith out of a sunken barrow
+    3:
+    - range: 1-3
+      kind: adversary
+      ref: [arch.lizardfolk]
+      band: home-1
+      count: 6-8
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a lizardfolk war-party
+    - range: 4-6
+      kind: adversary
+      ref: [arch.hag]
+      band: home-1
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a hag
+    - range: 7-9
+      kind: adversary
+      ref: [arch.troll]
+      band: home
+      count: '1'
+      variant: elite
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a fen-troll
+    - range: 10-12
+      kind: adversary
+      ref: [arch.wraith]
+      band: home
+      count: '1'
+      variant: elite
+      threat: true
+      ambush: false
+      complication: false
+      when: night
+      note: a wraith that rises from the sedge
+    - range: 13-15
+      kind: adversary
+      ref: [arch.wyrm]
+      band: home
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: true
+      when: any
+      note: a marsh-wyrm's young
+    - range: 16-17
+      kind: adversary
+      ref: [arch.monstrous_plant]
+      band: home
+      count: '1'
+      variant: elite
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a strangling mangrove
+    - range: 18-19
+      kind: adversary
+      ref: [arch.reptile]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a crocodile the size of a barge
+    - range: '20'
+      kind: adversary
+      ref: [arch.water_elemental]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a flood-spirit
+    4:
+    - range: 1-3
+      kind: adversary
+      ref: [arch.troll]
+      band: home-1
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a fen-troll
+    - range: 4-6
+      kind: adversary
+      ref: [arch.wraith]
+      band: home-1
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a barrow-wraith
+    - range: 7-9
+      kind: adversary
+      ref: [arch.hag]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a coven-mother
+    - range: 10-12
+      kind: adversary
+      ref: [arch.wyrm]
+      band: home
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: true
+      when: any
+      note: a marsh-wyrm grown fat
+    - range: 13-15
+      kind: adversary
+      ref: [arch.monstrous_plant]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a bog-tree that walks
+    - range: 16-17
+      kind: adversary
+      ref: [arch.water_elemental]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: the tide of the fen
+    - range: 18-19
+      kind: adversary
+      ref: [arch.wraith]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a drowned king's herald
+    - range: '20'
+      kind: adversary
+      ref: [arch.wyrm]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a black wyrm's spawn
+    5:
+    - range: 1-3
+      kind: adversary
+      ref: [arch.hag]
+      band: home-1
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a hag-queen's daughter
+    - range: 4-6
+      kind: adversary
+      ref: [arch.reptile]
+      band: home-1
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: the great crocodile of the delta
+    - range: 7-9
+      kind: adversary
+      ref: [arch.monstrous_plant]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a swamp-god's idol of root and mire
+    - range: 10-12
+      kind: adversary
+      ref: [arch.wyrm]
+      band: home
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a black wyrm hunting
+    - range: 13-15
+      kind: adversary
+      ref: [arch.wraith]
+      band: home
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a drowned king's champion
+    - range: 16-17
+      kind: adversary
+      ref: [arch.water_elemental]
+      band: home
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a flood with a will
+    - range: 18-19
+      kind: adversary
+      ref: [arch.wyrm]
+      band: home+1
+      count: '1'
+      variant: solo
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: the Black Wyrm of the fen
+    - range: '20'
+      kind: adversary
+      ref: [arch.wraith]
+      band: home+1
+      count: '1'
+      variant: solo
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: the drowned king himself
+  non_threat_die: d6
+  non_threat:
+  - {range: '1', kind: people, result: eel-fishers in a punt, threat: false}
+  - {range: '2', kind: people, result: a punt-man who ferries for coin, threat: false}
+  - {range: '3', kind: sign_only, result: 'herons rising: a sign of something moving in the reeds', threat: false}
+  - {range: '4', kind: people, result: a hermit on a stilt-hut, threat: false}
+  - range: '5'
+    kind: people
+    result: lizardfolk traders (reaction roll)
+    threat: false
+    ref: [arch.lizardfolk]
+  - {range: '6', kind: sign_only, result: a will-o'-the-wisp leading off the path, threat: false}
+  lifecycle: provisional
+  basis: [10.10.1, 09.8.2, T-09-10, PR-10-8]
+- id: tbl.10.enc.arid
+  terrain: terrain.arid
+  threat_die: d20
+  threat_by_home:
+    1:
+    - range: 1-3
+      kind: adversary
+      ref: [arch.giant_vermin]
+      band: home-1
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a giant scorpion
+    - range: 4-6
+      kind: adversary
+      ref: [arch.reptile]
+      band: home-1
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a sand viper
+    - range: 7-9
+      kind: adversary
+      ref: [arch.gnoll]
+      band: home
+      count: 5-7
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: gnolls following the caravan
+    - range: 10-12
+      kind: adversary
+      ref: [arch.brigand]
+      band: home
+      count: 5-7
+      variant: minion
+      threat: true
+      ambush: true
+      complication: false
+      when: any
+      note: desert raiders at a well
+    - range: 13-15
+      kind: adversary
+      ref: [arch.orc]
+      band: home
+      count: 5-7
+      variant: minion
+      threat: true
+      ambush: false
+      complication: true
+      when: any
+      note: orc water-thieves
+    - range: 16-17
+      kind: adversary
+      ref: [arch.giant_vermin]
+      band: home
+      count: '2'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: scorpions under the stones
+    - range: 18-19
+      kind: adversary
+      ref: [arch.hellbeast]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a hell-hound in the heat-shimmer
+    - range: '20'
+      kind: adversary
+      ref: [arch.great_cat]
+      band: home+1
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a desert lion
+    2:
+    - range: 1-3
+      kind: adversary
+      ref: [arch.gnoll]
+      band: home-1
+      count: 4-6
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a gnoll pack
+    - range: 4-6
+      kind: adversary
+      ref: [arch.brigand]
+      band: home-1
+      count: 4-6
+      variant: minion
+      threat: true
+      ambush: true
+      complication: false
+      when: any
+      note: raiders on camels
+    - range: 7-9
+      kind: adversary
+      ref: [arch.drake]
+      band: home
+      count: '1'
+      variant: elite
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a dune drake
+    - range: 10-12
+      kind: adversary
+      ref: [arch.fire_elemental]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a flame that walks
+    - range: 13-15
+      kind: adversary
+      ref: [arch.great_cat]
+      band: home
+      count: '2'
+      threat: true
+      ambush: false
+      complication: true
+      when: any
+      note: a lion pride's hunters
+    - range: 16-17
+      kind: adversary
+      ref: [arch.gnoll]
+      band: home
+      count: '1'
+      leader: true
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a gnoll pack-mother
+    - range: 18-19
+      kind: adversary
+      ref: [arch.monstrous_beast]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a manticore's cub
+    - range: '20'
+      kind: adversary
+      ref: [arch.hellbeast]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a hell-hound off its leash
+    3:
+    - range: 1-3
+      kind: adversary
+      ref: [arch.gnoll]
+      band: home-1
+      count: 6-8
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a gnoll war-pack
+    - range: 4-6
+      kind: adversary
+      ref: [arch.orc]
+      band: home-1
+      count: 6-8
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: orc raiders
+    - range: 7-9
+      kind: adversary
+      ref: [arch.hellbeast]
+      band: home
+      count: '1'
+      variant: elite
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a hell-hound
+    - range: 10-12
+      kind: adversary
+      ref: [arch.drake]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: true
+      when: any
+      note: a drake at the only water
+    - range: 13-15
+      kind: adversary
+      ref: [arch.monstrous_beast]
+      band: home
+      count: '1'
+      variant: elite
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a manticore
+    - range: 16-17
+      kind: adversary
+      ref: [arch.place_spirit]
+      band: home
+      count: '1'
+      variant: elite
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a djinn of the dunes
+    - range: 18-19
+      kind: adversary
+      ref: [arch.fire_elemental]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a fire elemental's spark
+    - range: '20'
+      kind: adversary
+      ref: [arch.earth_elemental]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a sandstorm with a shape
+    4:
+    - range: 1-3
+      kind: adversary
+      ref: [arch.hellbeast]
+      band: home-1
+      count: '2'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a pair of hell-hounds
+    - range: 4-6
+      kind: adversary
+      ref: [arch.drake]
+      band: home-1
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a dune drake
+    - range: 7-9
+      kind: adversary
+      ref: [arch.fire_elemental]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a fire elemental
+    - range: 10-12
+      kind: adversary
+      ref: [arch.orc]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: true
+      when: any
+      note: an orc warlord of the waste
+    - range: 13-15
+      kind: adversary
+      ref: [arch.air_elemental]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a sandstorm with a mind
+    - range: 16-17
+      kind: adversary
+      ref: [arch.monstrous_beast]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a sphinx, hungry
+    - range: 18-19
+      kind: adversary
+      ref: [arch.great_dragon]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a desert dragon's wyrmling
+    - range: '20'
+      kind: adversary
+      ref: [arch.place_spirit]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a djinn's servant
+    5:
+    - range: 1-3
+      kind: adversary
+      ref: [arch.drake]
+      band: home-1
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a war-drake
+    - range: 4-6
+      kind: adversary
+      ref: [arch.hellbeast]
+      band: home-1
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: the hound of a burning god
+    - range: 7-9
+      kind: adversary
+      ref: [arch.great_dragon]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a desert dragon on the wing
+    - range: 10-12
+      kind: adversary
+      ref: [arch.fire_elemental]
+      band: home
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: an efreet's herald
+    - range: 13-15
+      kind: adversary
+      ref: [arch.place_spirit]
+      band: home
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a djinn bound to a ruin
+    - range: 16-17
+      kind: adversary
+      ref: [arch.air_elemental]
+      band: home
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: the wind of the deep desert
+    - range: 18-19
+      kind: adversary
+      ref: [arch.fire_elemental]
+      band: home+1
+      count: '1'
+      variant: solo
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: an efreet lord
+    - range: '20'
+      kind: adversary
+      ref: [arch.monstrous_beast]
+      band: home+1
+      count: '1'
+      variant: solo
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: the great sphinx
+  non_threat_die: d6
+  non_threat:
+  - {range: '1', kind: people, result: a caravan of camels (water for coin), threat: false}
+  - {range: '2', kind: people, result: nomads at a well (reaction roll), threat: false}
+  - {range: '3', kind: people, result: a well-keeper, threat: false}
+  - {range: '4', kind: sign_only, result: 'a mirage of water: a sign only', threat: false}
+  - {range: '5', kind: people, result: pilgrims to a desert shrine, threat: false}
+  - {range: '6', kind: people, result: 'a lone wanderer, half-dead of thirst (a rescue)', threat: false}
+  lifecycle: provisional
+  basis: [10.10.1, 09.8.2, T-09-10, PR-10-8]
+- id: tbl.10.enc.frozen
+  terrain: terrain.frozen
+  threat_die: d20
+  threat_by_home:
+    1:
+    - range: 1-3
+      kind: adversary
+      ref: [arch.wolf]
+      band: home-1
+      count: 1-2
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a white wolf
+    - range: 4-6
+      kind: adversary
+      ref: [arch.goblin]
+      band: home-1
+      count: '2'
+      threat: true
+      ambush: true
+      complication: false
+      when: any
+      note: snow goblins under white hides
+    - range: 7-9
+      kind: adversary
+      ref: [arch.skeleton]
+      band: home
+      count: 4-6
+      variant: minion
+      threat: true
+      ambush: false
+      complication: true
+      when: any
+      note: an old army under the ice
+    - range: 10-12
+      kind: adversary
+      ref: [arch.orc]
+      band: home
+      count: 5-7
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: orc reavers
+    - range: 13-15
+      kind: adversary
+      ref: [arch.ghost]
+      band: home
+      count: '1'
+      variant: elite
+      threat: true
+      ambush: false
+      complication: false
+      when: night
+      note: the ghost of a frozen army's captain
+    - range: 16-17
+      kind: adversary
+      ref: [arch.wolf]
+      band: home
+      count: '2'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a pair of white wolves
+    - range: 18-19
+      kind: adversary
+      ref: [arch.bear]
+      band: home+1
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: an ice bear
+    - range: '20'
+      kind: adversary
+      ref: [arch.great_cat]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a snow cat
+    2:
+    - range: 1-3
+      kind: adversary
+      ref: [arch.wolf]
+      band: home-1
+      count: 4-6
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: wolves
+    - range: 4-6
+      kind: adversary
+      ref: [arch.orc]
+      band: home-1
+      count: 4-6
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: orc reavers
+    - range: 7-9
+      kind: adversary
+      ref: [arch.bear]
+      band: home
+      count: '1'
+      variant: elite
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: an ice bear
+    - range: 10-12
+      kind: adversary
+      ref: [arch.frost_elemental]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: true
+      when: any
+      note: a blizzard that walks
+    - range: 13-15
+      kind: adversary
+      ref: [arch.great_cat]
+      band: home
+      count: '2'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: snow leopards
+    - range: 16-17
+      kind: adversary
+      ref: [arch.wight]
+      band: home
+      count: '1'
+      variant: elite
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a barrow-wight of the ice
+    - range: 18-19
+      kind: adversary
+      ref: [arch.troll]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: an ice-troll's whelp
+    - range: '20'
+      kind: adversary
+      ref: [arch.wraith]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a wraith in the white-out
+    3:
+    - range: 1-3
+      kind: adversary
+      ref: [arch.bear]
+      band: home-1
+      count: '2'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: two ice bears
+    - range: 4-6
+      kind: adversary
+      ref: [arch.wolf]
+      band: home-1
+      count: 6-8
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a winter pack
+    - range: 7-9
+      kind: adversary
+      ref: [arch.troll]
+      band: home
+      count: '1'
+      variant: elite
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: an ice troll
+    - range: 10-12
+      kind: adversary
+      ref: [arch.frost_elemental]
+      band: home
+      count: '1'
+      variant: elite
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a frost elemental
+    - range: 13-15
+      kind: adversary
+      ref: [arch.wight]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: true
+      when: any
+      note: a wight leading the frozen dead
+    - range: 16-17
+      kind: adversary
+      ref: [arch.wyrm]
+      band: home
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: an ice-wyrm's young
+    - range: 18-19
+      kind: adversary
+      ref: [arch.giant]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a frost giant's thrall
+    - range: '20'
+      kind: adversary
+      ref: [arch.celestial]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a herald of the aurora
+    4:
+    - range: 1-3
+      kind: adversary
+      ref: [arch.troll]
+      band: home-1
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: an ice troll
+    - range: 4-6
+      kind: adversary
+      ref: [arch.wight]
+      band: home-1
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a barrow-king's wight
+    - range: 7-9
+      kind: adversary
+      ref: [arch.giant]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a frost giant
+    - range: 10-12
+      kind: adversary
+      ref: [arch.frost_elemental]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: true
+      when: any
+      note: the blizzard's heart
+    - range: 13-15
+      kind: adversary
+      ref: [arch.wyrm]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: an ice-wyrm
+    - range: 16-17
+      kind: adversary
+      ref: [arch.golem]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: an ice-golem from a drowned age
+    - range: 18-19
+      kind: adversary
+      ref: [arch.giant]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a frost-jarl's herald
+    - range: '20'
+      kind: adversary
+      ref: [arch.wraith]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a wraith of the long night
+    5:
+    - range: 1-3
+      kind: adversary
+      ref: [arch.troll]
+      band: home-1
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: an ice-troll chieftain
+    - range: 4-6
+      kind: adversary
+      ref: [arch.wyrm]
+      band: home-1
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: an ice-wyrm
+    - range: 7-9
+      kind: adversary
+      ref: [arch.giant]
+      band: home
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a frost jarl's huscarl
+    - range: 10-12
+      kind: adversary
+      ref: [arch.frost_elemental]
+      band: home
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: the cold that walks
+    - range: 13-15
+      kind: adversary
+      ref: [arch.wraith]
+      band: home
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a lord of the long night's herald
+    - range: 16-17
+      kind: adversary
+      ref: [arch.golem]
+      band: home
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a sentinel of the old ice
+    - range: 18-19
+      kind: adversary
+      ref: [arch.giant]
+      band: home+1
+      count: '1'
+      variant: solo
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: the frost jarl
+    - range: '20'
+      kind: adversary
+      ref: [arch.frost_elemental]
+      band: home+1
+      count: '1'
+      variant: solo
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: the white death
+  non_threat_die: d6
+  non_threat:
+  - {range: '1', kind: people, result: trappers with a sled, threat: false}
+  - range: '2'
+    kind: beasts
+    result: a reindeer herd (game sighted)
+    threat: false
+    ref: [arch.herd_beast]
+  - {range: '3', kind: people, result: a sled party of traders, threat: false}
+  - {range: '4', kind: people, result: an ice-fisher at a hole, threat: false}
+  - {range: '5', kind: sign_only, result: a cairn with a message, threat: false}
+  - {range: '6', kind: sign_only, result: 'an abandoned camp, recently left', threat: false}
+  lifecycle: provisional
+  basis: [10.10.1, 09.8.2, T-09-10, PR-10-8]
+- id: tbl.10.enc.water
+  terrain: terrain.water
+  threat_die: d20
+  threat_by_home:
+    1:
+    - range: 1-3
+      kind: adversary
+      ref: [arch.reptile]
+      band: home-1
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a water snake
+    - range: 4-6
+      kind: adversary
+      ref: [arch.raptor]
+      band: home-1
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a fish-eagle that wants your catch
+    - range: 7-9
+      kind: adversary
+      ref: [arch.brigand]
+      band: home
+      count: 5-7
+      variant: minion
+      threat: true
+      ambush: true
+      complication: false
+      when: any
+      note: river pirates
+    - range: 10-12
+      kind: adversary
+      ref: [arch.lizardfolk]
+      band: home
+      count: 5-7
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: lizardfolk in dugouts
+    - range: 13-15
+      kind: adversary
+      ref: [arch.wild_fey]
+      band: home
+      count: 5-7
+      variant: minion
+      threat: true
+      ambush: false
+      complication: true
+      when: any
+      note: nixies who want a song
+    - range: 16-17
+      kind: adversary
+      ref: [arch.ghost]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: night
+      note: a drowned ferryman
+    - range: 18-19
+      kind: adversary
+      ref: [arch.water_beast]
+      band: home+1
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a pike as long as the boat
+    - range: '20'
+      kind: adversary
+      ref: [arch.reptile]
+      band: home+1
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a river crocodile
+    2:
+    - range: 1-3
+      kind: adversary
+      ref: [arch.brigand]
+      band: home-1
+      count: 4-6
+      variant: minion
+      threat: true
+      ambush: true
+      complication: false
+      when: any
+      note: river pirates
+    - range: 4-6
+      kind: adversary
+      ref: [arch.lizardfolk]
+      band: home-1
+      count: 4-6
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: lizardfolk raiders
+    - range: 7-9
+      kind: adversary
+      ref: [arch.water_beast]
+      band: home
+      count: '1'
+      variant: elite
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a river-shark
+    - range: 10-12
+      kind: adversary
+      ref: [arch.water_elemental]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: true
+      when: any
+      note: a current with a will
+    - range: 13-15
+      kind: adversary
+      ref: [arch.brigand]
+      band: home
+      count: '2'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a pirate captain and her mate
+    - range: 16-17
+      kind: adversary
+      ref: [arch.place_spirit]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: the river's spirit, offended
+    - range: 18-19
+      kind: adversary
+      ref: [arch.wyrm]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a water-wyrm's young
+    - range: '20'
+      kind: adversary
+      ref: [arch.reptile]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a crocodile grown old
+    3:
+    - range: 1-3
+      kind: adversary
+      ref: [arch.lizardfolk]
+      band: home-1
+      count: '2'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: lizardfolk raiders
+    - range: 4-6
+      kind: adversary
+      ref: [arch.brigand]
+      band: home-1
+      count: 6-8
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a pirate crew
+    - range: 7-9
+      kind: adversary
+      ref: [arch.water_beast]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: true
+      when: any
+      note: a giant octopus under the hull
+    - range: 10-12
+      kind: adversary
+      ref: [arch.water_elemental]
+      band: home
+      count: '1'
+      variant: elite
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a water elemental
+    - range: 13-15
+      kind: adversary
+      ref: [arch.reptile]
+      band: home
+      count: '1'
+      variant: elite
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a great crocodile
+    - range: 16-17
+      kind: adversary
+      ref: [arch.place_spirit]
+      band: home
+      count: '1'
+      variant: elite
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: the lake's lady, displeased
+    - range: 18-19
+      kind: adversary
+      ref: [arch.wyrm]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a sea-serpent's young
+    - range: '20'
+      kind: adversary
+      ref: [arch.aberration]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: something from the deep, testing the hull
+    4:
+    - range: 1-3
+      kind: adversary
+      ref: [arch.reptile]
+      band: home-1
+      count: '2'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: crocodiles in the shallows
+    - range: 4-6
+      kind: adversary
+      ref: [arch.water_elemental]
+      band: home-1
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a whirlpool
+    - range: 7-9
+      kind: adversary
+      ref: [arch.wyrm]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a sea-serpent
+    - range: 10-12
+      kind: adversary
+      ref: [arch.water_beast]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: true
+      when: any
+      note: a giant octopus
+    - range: 13-15
+      kind: adversary
+      ref: [arch.place_spirit]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: the river-god's anger
+    - range: 16-17
+      kind: adversary
+      ref: [arch.aberration]
+      band: home
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a tentacled thing under the jetty
+    - range: 18-19
+      kind: adversary
+      ref: [arch.wyrm]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a dragon-turtle's get
+    - range: '20'
+      kind: adversary
+      ref: [arch.great_dragon]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a sea dragon's young
+    5:
+    - range: 1-3
+      kind: adversary
+      ref: [arch.wyrm]
+      band: home-1
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a sea-serpent
+    - range: 4-6
+      kind: adversary
+      ref: [arch.water_beast]
+      band: home-1
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a kraken's young
+    - range: 7-9
+      kind: adversary
+      ref: [arch.aberration]
+      band: home
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a tendril of the thing in the abyss
+    - range: 10-12
+      kind: adversary
+      ref: [arch.water_elemental]
+      band: home
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a wave with a will
+    - range: 13-15
+      kind: adversary
+      ref: [arch.place_spirit]
+      band: home
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a river-god's messenger
+    - range: 16-17
+      kind: adversary
+      ref: [arch.great_dragon]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a sea dragon
+    - range: 18-19
+      kind: adversary
+      ref: [arch.wyrm]
+      band: home+1
+      count: '1'
+      variant: solo
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: the leviathan
+    - range: '20'
+      kind: adversary
+      ref: [arch.water_elemental]
+      band: home+1
+      count: '1'
+      variant: solo
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: the flood of the age
+  non_threat_die: d6
+  non_threat:
+  - {range: '1', kind: people, result: fisherfolk, threat: false}
+  - {range: '2', kind: people, result: a ferry, threat: false}
+  - {range: '3', kind: people, result: a barge going downstream (passage), threat: false}
+  - {range: '4', kind: people, result: merchants under sail, threat: false}
+  - {range: '5', kind: sign_only, result: 'a drowned body: a sign', threat: false}
+  - range: '6'
+    kind: beasts
+    result: seals or otters at play
+    threat: false
+    ref: [arch.water_beast]
+  lifecycle: provisional
+  basis: [10.10.1, 09.8.2, T-09-10, PR-10-8]
+- id: tbl.10.enc.underground
+  terrain: terrain.underground
+  threat_die: d20
+  threat_by_home:
+    1:
+    - range: 1-3
+      kind: adversary
+      ref: [arch.giant_vermin]
+      band: home-1
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a cave spider
+    - range: 4-6
+      kind: adversary
+      ref: [arch.vermin_swarm]
+      band: home-1
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a stream of rats
+    - range: 7-9
+      kind: adversary
+      ref: [arch.goblin]
+      band: home
+      count: 5-7
+      variant: minion
+      threat: true
+      ambush: true
+      complication: false
+      when: any
+      note: goblins in the dark
+    - range: 10-12
+      kind: adversary
+      ref: [arch.skeleton]
+      band: home
+      count: 5-7
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: skeletons on an old watch
+    - range: 13-15
+      kind: adversary
+      ref: [arch.ooze]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: true
+      when: any
+      note: a slime on the ceiling
+    - range: 16-17
+      kind: adversary
+      ref: [arch.fungal]
+      band: home
+      count: 1-2
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: walking fungus
+    - range: 18-19
+      kind: adversary
+      ref: [arch.clockwork]
+      band: home+1
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a dwarf-made sentry still on duty
+    - range: '20'
+      kind: adversary
+      ref: [arch.lesser_demon]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: an imp from a crack
+    2:
+    - range: 1-3
+      kind: adversary
+      ref: [arch.goblin]
+      band: home-1
+      count: 4-6
+      variant: minion
+      threat: true
+      ambush: true
+      complication: false
+      when: any
+      note: a goblin war-party
+    - range: 4-6
+      kind: adversary
+      ref: [arch.skeleton]
+      band: home-1
+      count: 4-6
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a skeleton patrol
+    - range: 7-9
+      kind: adversary
+      ref: [arch.ghoul]
+      band: home
+      count: '2'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: ghouls
+    - range: 10-12
+      kind: adversary
+      ref: [arch.dwarf_holdguard]
+      band: home
+      count: '2'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: holdguards defending a seam
+    - range: 13-15
+      kind: adversary
+      ref: [arch.clockwork]
+      band: home
+      count: '1'
+      variant: elite
+      threat: true
+      ambush: false
+      complication: true
+      when: any
+      note: a clockwork guardian on a broken errand
+    - range: 16-17
+      kind: adversary
+      ref: [arch.ooze]
+      band: home
+      count: '1'
+      variant: elite
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: an ooze
+    - range: 18-19
+      kind: adversary
+      ref: [arch.troll]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a cave-troll's whelp
+    - range: '20'
+      kind: adversary
+      ref: [arch.aberration]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a thing from the deep dark
+    3:
+    - range: 1-3
+      kind: adversary
+      ref: [arch.ghoul]
+      band: home-1
+      count: 6-8
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a ghoul pack
+    - range: 4-6
+      kind: adversary
+      ref: [arch.cultist]
+      band: home-1
+      count: 6-8
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: cultists of the deep
+    - range: 7-9
+      kind: adversary
+      ref: [arch.troll]
+      band: home
+      count: '1'
+      variant: elite
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a cave troll
+    - range: 10-12
+      kind: adversary
+      ref: [arch.aberration]
+      band: home
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: true
+      when: any
+      note: a mind-thing's servant
+    - range: 13-15
+      kind: adversary
+      ref: [arch.drake]
+      band: home
+      count: '1'
+      variant: elite
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a cave drake
+    - range: 16-17
+      kind: adversary
+      ref: [arch.golem]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a golem guarding nothing
+    - range: 18-19
+      kind: adversary
+      ref: [arch.wraith]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a wraith from a sealed vault
+    - range: '20'
+      kind: adversary
+      ref: [arch.earth_elemental]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a rock that moves
+    4:
+    - range: 1-3
+      kind: adversary
+      ref: [arch.troll]
+      band: home-1
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a cave troll
+    - range: 4-6
+      kind: adversary
+      ref: [arch.golem]
+      band: home-1
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a golem
+    - range: 7-9
+      kind: adversary
+      ref: [arch.aberration]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a mind-thing
+    - range: 10-12
+      kind: adversary
+      ref: [arch.wyrm]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: true
+      when: any
+      note: a purple worm in its tunnel
+    - range: 13-15
+      kind: adversary
+      ref: [arch.earth_elemental]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: an earth elemental
+    - range: 16-17
+      kind: adversary
+      ref: [arch.abomination]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: an abomination loose from a lab
+    - range: 18-19
+      kind: adversary
+      ref: [arch.lich]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a lich's apprentice
+    - range: '20'
+      kind: adversary
+      ref: [arch.greater_demon]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a demon prince's hound
+    5:
+    - range: 1-3
+      kind: adversary
+      ref: [arch.aberration]
+      band: home-1
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a mind-thing
+    - range: 4-6
+      kind: adversary
+      ref: [arch.wyrm]
+      band: home-1
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a purple worm
+    - range: 7-9
+      kind: adversary
+      ref: [arch.lich]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a lich at its studies
+    - range: 10-12
+      kind: adversary
+      ref: [arch.greater_demon]
+      band: home
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a demon prince's champion
+    - range: 13-15
+      kind: adversary
+      ref: [arch.golem]
+      band: home
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: an iron sentinel
+    - range: 16-17
+      kind: adversary
+      ref: [arch.abomination]
+      band: home
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a flesh-horror
+    - range: 18-19
+      kind: adversary
+      ref: [arch.aberration]
+      band: home+1
+      count: '1'
+      variant: solo
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: the elder brain
+    - range: '20'
+      kind: adversary
+      ref: [arch.fire_elemental]
+      band: home+1
+      count: '1'
+      variant: solo
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: the fire at the root of the world
+  non_threat_die: d6
+  non_threat:
+  - range: '1'
+    kind: people
+    result: dwarf miners (reaction roll)
+    threat: false
+    ref: [arch.dwarf_holdguard]
+  - {range: '2', kind: people, result: a lost delver, threat: false}
+  - {range: '3', kind: sign_only, result: blind cave fish in a pool (1 supply), threat: false}
+  - range: '4'
+    kind: people
+    result: myconid traders (reaction roll)
+    threat: false
+    ref: [arch.fungal]
+  - {range: '5', kind: sign_only, result: 'old tool marks: a sign of a way on', threat: false}
+  - {range: '6', kind: sign_only, result: bats streaming toward an exit, threat: false}
+  lifecycle: provisional
+  basis: [10.10.1, 09.8.2, T-09-10, PR-10-8]
+- id: tbl.10.enc.ruin
+  terrain: terrain.ruin
+  threat_die: d20
+  threat_by_home:
+    1:
+    - range: 1-3
+      kind: adversary
+      ref: [arch.giant_vermin]
+      band: home-1
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a giant centipede
+    - range: 4-6
+      kind: adversary
+      ref: [arch.skeleton]
+      band: home-1
+      count: 1-2
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: skeletons
+    - range: 7-9
+      kind: adversary
+      ref: [arch.ghoul]
+      band: home
+      count: 5-7
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a ghoul pack
+    - range: 10-12
+      kind: adversary
+      ref: [arch.brigand]
+      band: home
+      count: 5-7
+      variant: minion
+      threat: true
+      ambush: false
+      complication: true
+      when: any
+      note: looters who were here first
+    - range: 13-15
+      kind: adversary
+      ref: [arch.cultist]
+      band: home
+      count: 5-7
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: cultists at an old altar
+    - range: 16-17
+      kind: adversary
+      ref: [arch.animated]
+      band: home
+      count: '2'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: armour that stands up
+    - range: 18-19
+      kind: adversary
+      ref: [arch.ghost]
+      band: home+1
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a ghost
+    - range: '20'
+      kind: adversary
+      ref: [arch.wight]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a wight's sworn
+    2:
+    - range: 1-3
+      kind: adversary
+      ref: [arch.skeleton]
+      band: home-1
+      count: 4-6
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: skeletons
+    - range: 4-6
+      kind: adversary
+      ref: [arch.zombie]
+      band: home-1
+      count: 4-6
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: the dead of the ruin
+    - range: 7-9
+      kind: adversary
+      ref: [arch.ghoul]
+      band: home
+      count: '2'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a ghoul pair
+    - range: 10-12
+      kind: adversary
+      ref: [arch.wight]
+      band: home
+      count: '1'
+      variant: elite
+      threat: true
+      ambush: false
+      complication: true
+      when: any
+      note: a wight lord of a fallen hall
+    - range: 13-15
+      kind: adversary
+      ref: [arch.cultist]
+      band: home
+      count: '2'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a cult's priests
+    - range: 16-17
+      kind: adversary
+      ref: [arch.golem]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a stone guardian
+    - range: 18-19
+      kind: adversary
+      ref: [arch.vampire]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a vampire spawn
+    - range: '20'
+      kind: adversary
+      ref: [arch.wraith]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a wraith
+    3:
+    - range: 1-3
+      kind: adversary
+      ref: [arch.ghoul]
+      band: home-1
+      count: 6-8
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a ghoul pack
+    - range: 4-6
+      kind: adversary
+      ref: [arch.wight]
+      band: home-1
+      count: '2'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a pair of wights
+    - range: 7-9
+      kind: adversary
+      ref: [arch.wraith]
+      band: home
+      count: '1'
+      variant: elite
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a wraith
+    - range: 10-12
+      kind: adversary
+      ref: [arch.vampire]
+      band: home
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: true
+      when: any
+      note: a vampire's get
+    - range: 13-15
+      kind: adversary
+      ref: [arch.golem]
+      band: home
+      count: '1'
+      variant: elite
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a golem
+    - range: 16-17
+      kind: adversary
+      ref: [arch.enforcer]
+      band: home
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a devil's debt-collector
+    - range: 18-19
+      kind: adversary
+      ref: [arch.lich]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a lich's apprentice
+    - range: '20'
+      kind: adversary
+      ref: [arch.deathlord]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a deathlord's herald
+    4:
+    - range: 1-3
+      kind: adversary
+      ref: [arch.wraith]
+      band: home-1
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a wraith
+    - range: 4-6
+      kind: adversary
+      ref: [arch.golem]
+      band: home-1
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a golem
+    - range: 7-9
+      kind: adversary
+      ref: [arch.vampire]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a vampire
+    - range: 10-12
+      kind: adversary
+      ref: [arch.lich]
+      band: home
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: true
+      when: any
+      note: a lich's apprentice
+    - range: 13-15
+      kind: adversary
+      ref: [arch.deathlord]
+      band: home
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a deathlord's champion
+    - range: 16-17
+      kind: adversary
+      ref: [arch.celestial]
+      band: home
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a fallen guardian
+    - range: 18-19
+      kind: adversary
+      ref: [arch.great_dragon]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a dragon's wyrmling
+    - range: '20'
+      kind: adversary
+      ref: [arch.greater_demon]
+      band: home+1
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a demon's herald
+    5:
+    - range: 1-3
+      kind: adversary
+      ref: [arch.vampire]
+      band: home-1
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a vampire
+    - range: 4-6
+      kind: adversary
+      ref: [arch.wraith]
+      band: home-1
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a wraith-lord
+    - range: 7-9
+      kind: adversary
+      ref: [arch.lich]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a lich
+    - range: 10-12
+      kind: adversary
+      ref: [arch.deathlord]
+      band: home
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a deathlord's champion
+    - range: 13-15
+      kind: adversary
+      ref: [arch.greater_demon]
+      band: home
+      count: '1'
+      variant: minion
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a demon's herald
+    - range: 16-17
+      kind: adversary
+      ref: [arch.great_dragon]
+      band: home
+      count: '1'
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: a dragon on its hoard
+    - range: 18-19
+      kind: adversary
+      ref: [arch.deathlord]
+      band: home+1
+      count: '1'
+      variant: solo
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: the deathlord
+    - range: '20'
+      kind: adversary
+      ref: [arch.lich]
+      band: home+1
+      count: '1'
+      variant: solo
+      threat: true
+      ambush: false
+      complication: false
+      when: any
+      note: the lich-king
+  non_threat_die: d6
+  non_threat:
+  - {range: '1', kind: people, result: scavengers picking over the stones, threat: false}
+  - {range: '2', kind: people, result: a scholar copying inscriptions, threat: false}
+  - {range: '3', kind: people, result: a pilgrim to an old altar, threat: false}
+  - {range: '4', kind: sign_only, result: 'crows on a fresh kill: a sign', threat: false}
+  - {range: '5', kind: people, result: a lone dog that follows, threat: false}
+  - {range: '6', kind: people, result: treasure-hunters with a map (rivals), threat: false}
+  lifecycle: provisional
+  basis: [10.10.1, 09.8.2, T-09-10, PR-10-8]
+encounter_table_audit:
+  tbl.10.enc.road:
+    bands_each_home: {home-1: 6, home: 11, home+1: 3}
+    words: 'PR-10-8 word step: _process/simulation/10-word-audit.py (every home band 1-5)'
+  tbl.10.enc.settlement:
+    bands_each_home: {home-1: 6, home: 11, home+1: 3}
+    words: 'PR-10-8 word step: _process/simulation/10-word-audit.py (every home band 1-5)'
+  tbl.10.enc.forest:
+    bands_each_home: {home-1: 6, home: 11, home+1: 3}
+    words: 'PR-10-8 word step: _process/simulation/10-word-audit.py (every home band 1-5)'
+  tbl.10.enc.highland:
+    bands_each_home: {home-1: 6, home: 11, home+1: 3}
+    words: 'PR-10-8 word step: _process/simulation/10-word-audit.py (every home band 1-5)'
+  tbl.10.enc.plains:
+    bands_each_home: {home-1: 6, home: 11, home+1: 3}
+    words: 'PR-10-8 word step: _process/simulation/10-word-audit.py (every home band 1-5)'
+  tbl.10.enc.wetland:
+    bands_each_home: {home-1: 6, home: 11, home+1: 3}
+    words: 'PR-10-8 word step: _process/simulation/10-word-audit.py (every home band 1-5)'
+  tbl.10.enc.arid:
+    bands_each_home: {home-1: 6, home: 11, home+1: 3}
+    words: 'PR-10-8 word step: _process/simulation/10-word-audit.py (every home band 1-5)'
+  tbl.10.enc.frozen:
+    bands_each_home: {home-1: 6, home: 11, home+1: 3}
+    words: 'PR-10-8 word step: _process/simulation/10-word-audit.py (every home band 1-5)'
+  tbl.10.enc.water:
+    bands_each_home: {home-1: 6, home: 11, home+1: 3}
+    words: 'PR-10-8 word step: _process/simulation/10-word-audit.py (every home band 1-5)'
+  tbl.10.enc.underground:
+    bands_each_home: {home-1: 6, home: 11, home+1: 3}
+    words: 'PR-10-8 word step: _process/simulation/10-word-audit.py (every home band 1-5)'
+  tbl.10.enc.ruin:
+    bands_each_home: {home-1: 6, home: 11, home+1: 3}
+    words: 'PR-10-8 word step: _process/simulation/10-word-audit.py (every home band 1-5)'
+encounter_audit_reference:
+  standard: the band's reference PC of T-06-12 (09.4.4)
+  light:
+    1: {atk: 5, guard: 10, vit: 12, armor: 0, sev: 2, tempo: 2, who: 'the weakest ready-made character (02.2.5): a healer,
+        talker or sneak with Guard 10, no armor, fighting with the branch working at +5 (05.7.11) or a weapon at the same
+        line'}
+  bands_note: 'home band 1 only: above it the audit''s no-Focus estimator does not price a non-martial PC (05.7.11, T-06-12
+    J); every band is covered at play time by 10.10.4 item 4'
+  basis: [PR-10-8, 10.10.2, 10.10.4, 09.8.1]
+archetype_signs:
+  arch.wolf: [wolf scat full of hair on the trail, a howl answered from two directions]
+  arch.great_cat: [claw-scores high on a tree, a deer carcass dragged up into a fork]
+  arch.bear: [a stump torn open for grubs, a smell of musk and the crack of a branch]
+  arch.herd_beast: [hoofprints by the hundred, a rumble felt through the ground]
+  arch.giant_vermin: ['webs across the path, thick as rope', husks of things sucked dry]
+  arch.vermin_swarm: ['droppings everywhere, fresh', a squeaking in the walls that keeps pace]
+  arch.reptile: [a smooth wide track through mud, a hiss from the reeds]
+  arch.raptor: [a shadow crossing the sun twice, a carcass picked clean on a high rock]
+  arch.water_beast: [something large rolling under the surface, the water birds all lifting at once]
+  arch.monstrous_beast: [tracks of no animal you know, 'a scream like a woman''s, then silence']
+  arch.brigand: [a cold fire with too many bootprints, a glint from the ridge where no one should be]
+  arch.soldier: [the tramp of marching feet, a discarded ration tin with a regiment's mark]
+  arch.knight: ['hoofprints of a heavy horse, shod', a pennon seen over a rise]
+  arch.cultist: [a symbol daubed in blood on a stone, chanting carried on the wind at dusk]
+  arch.folk_mage: [a ring of scorched grass, lights moving where there is no fire]
+  arch.elf_warden: ['an arrow in a tree, a warning', birdcalls that are not birds]
+  arch.dwarf_holdguard: [a stone marker in an old script, the sound of iron-shod boots in a gully]
+  arch.orc: [a stake with a skull on it, 'drums at dusk, then smoke']
+  arch.goblin: [crude snares by the dozen, giggling in the dark that stops when you stop]
+  arch.gnoll: [bones cracked for marrow, 'a hyena laugh, many voices']
+  arch.lizardfolk: ['a fish-trap of woven reed, newly set', eyes at water level watching]
+  arch.ogre: [a footprint as long as your arm, a tree pulled up by its roots for a club]
+  arch.troll: [a stench of rot from under the bridge, 'gnawed bones of a cow, and a man']
+  arch.giant: [a boulder thrown into a field, the ground shaking in a slow rhythm]
+  arch.skeleton: [old bones scattered and then gathered, 'a clatter in the dark, rhythmic']
+  arch.zombie: [a smell of the grave on the wind, a figure standing very still in a field]
+  arch.ghoul: [graves dug up from beneath, a smell of old meat and wet earth]
+  arch.wight: [frost on the grass in summer, a barrow door standing open]
+  arch.vampire: [livestock found bloodless, a pale figure watching from a window that should be empty]
+  arch.ghost: [a cold spot that moves, a voice calling a name over and over]
+  arch.wraith: [the warmth going out of the air, shadows that move against the light]
+  arch.lich: ['a land of grey, dead things', the dead walking in ordered ranks]
+  arch.deathlord: [a banner of bone on the horizon, every bird in the sky flying away]
+  arch.fey_noble: [music from under a hill, a feast laid in a glade with no one there]
+  arch.wild_fey: [knots in your gear you did not tie, laughter in the leaves]
+  arch.hag: [charms of bone and hair hung from branches, a cottage that was not there yesterday]
+  arch.place_spirit: [the land holding its breath, stones arranged where no hand placed them]
+  arch.ancestor: [a grave-gift left fresh on an old mound, a voice in an old tongue]
+  arch.celestial: [a light with no source, a feeling of being judged]
+  arch.lesser_demon: [a smell of sulphur, scorched hoofprints that end in the air]
+  arch.greater_demon: [the sky darkening at noon, animals fleeing in a flood]
+  arch.tempter: [a stranger who knows your name, a gift on the path that you wanted]
+  arch.enforcer: [chains dragged over stone, a seal burned into a door]
+  arch.possessor: [a villager acting wrong, eyes that are not the person's own]
+  arch.hellbeast: [paw-prints burned into the ground, a baying with a crackle of fire in it]
+  arch.golem: ['heavy, perfectly regular footprints', a grinding of stone on stone]
+  arch.animated: [things not quite where you left them, a rattle of armor in an empty hall]
+  arch.clockwork: [a ticking in the walls, a brass gear dropped on the path]
+  arch.homunculus: [tiny footprints in the dust, something small watching from a shelf]
+  arch.fire_elemental: [grass burning in a line with no fire behind it, heat-shimmer moving against the wind]
+  arch.earth_elemental: [the ground cracking in a line, rocks rolling uphill]
+  arch.water_elemental: [a wave on a still pool, water standing in a shape]
+  arch.air_elemental: [a whirlwind with no weather, a howl in a still sky]
+  arch.frost_elemental: [frost spreading in a line, ice forming on running water]
+  arch.great_dragon: [a shadow the size of a field, a burned village on the skyline]
+  arch.drake: [scorched stones and a reek of brimstone, a roar from a crag]
+  arch.wyvern: [a sheep carried off whole, a shriek from above]
+  arch.wyrm: [a furrow through the land as wide as a road, a hiss like a forge]
+  arch.aberration: [tracks that do not make sense, a headache that comes with a smell of copper]
+  arch.ooze: [a slick trail that has eaten the stone, bones polished clean]
+  arch.fungal: [puffballs bursting as you pass, a soft grey carpet where there was rock]
+  arch.monstrous_plant: [vines across the path that were not there, a sweet smell and a drowsiness]
+  arch.abomination: [things stitched together and left to rot, a lowing that is almost words]
+activities:
+- id: act.explore_onward
+  intent_verbs: [delve, press on, go deeper]
+  verb: verb.observe | verb.sneak | verb.move
+  license: null
+  attribute: wits | agility
+  primary_tag: deed.lore.investigation.search
+  tier: site explore_tier
+  duration: {site: 'intervals:1 (care 2)', free: null, travel: null}
+  reach: progress ticks
+  knobs: [dc, attribute, time_cost, reach_unit, stakes]
+  anchor: true
+  lifecycle: provisional
+  basis: ['10.15']
+- id: act.search
+  intent_verbs: [search, look for, examine, check]
+  verb: verb.observe
+  license: null
+  attribute: wits
+  primary_tag: deed.lore.investigation.search
+  tier: the hidden thing's detect tier
+  duration: {site: 'intervals:1 per area', free: '10 min per room; hours:1 per building', travel: null}
+  reach: items found (P17)
+  knobs: [dc, time_cost, targets]
+  anchor: true
+  lifecycle: provisional
+  basis: ['10.15']
+- id: act.listen
+  intent_verbs: [listen, eavesdrop, hear]
+  verb: verb.observe
+  license: null
+  attribute: wits
+  primary_tag: deed.lore.investigation.search
+  tier: easy; moderate through a thick door
+  duration: {site: 'intervals:0-1', free: 1 min, travel: null}
+  reach: items heard
+  knobs: [dc, targets]
+  anchor: true
+  lifecycle: provisional
+  basis: ['10.15']
+- id: act.map
+  intent_verbs: [map, chart, sketch the way]
+  verb: verb.handle
+  license: lic.training.wilds_navigation (charts); a sketch is G1
+  attribute: intellect
+  primary_tag: deed.wilds.navigation.mapping
+  tier: easy (site); area nav tier (travel)
+  duration: {site: +1 per area, free: 'hours:1', travel: 'watches:1'}
+  reach: a map fact
+  knobs: [time_cost, dc]
+  anchor: true
+  lifecycle: provisional
+  basis: ['10.15']
+- id: act.scout
+  intent_verbs: [scout, range ahead, reconnoiter]
+  verb: verb.sneak | verb.observe
+  license: null
+  attribute: agility | wits
+  primary_tag: deed.wilds.tracking.sign
+  tier: denizens' notice / area nav tier
+  duration: {site: 'intervals:1', free: 'hours:1', travel: 'watches:1'}
+  reach: what lies ahead
+  knobs: [dc, time_cost, targets]
+  anchor: true
+  lifecycle: provisional
+  basis: ['10.15']
+- id: act.track
+  intent_verbs: [track, trail, follow sign]
+  verb: verb.observe
+  license: lic.training.wilds_tracking (old or hard trails); fallback +5 for fresh plain tracks
+  attribute: wits
+  primary_tag: deed.wilds.tracking.trailing
+  tier: 'trail tier: fresh soft easy; a day old or hard ground moderate; rain or rock hard; covered very_hard'
+  duration: {site: 'intervals:1', free: 'hours:1', travel: per watch at slow pace}
+  reach: run-down ticks or still on it
+  knobs: [dc, time_cost, reach_unit]
+  anchor: true
+  lifecycle: provisional
+  basis: ['10.15']
+- id: act.cover_tracks
+  intent_verbs: [cover tracks, lose them, hide the trail]
+  verb: verb.sneak
+  license: null
+  attribute: wits
+  primary_tag: deed.guile.stealth
+  tier: pursuers' best Wits defense
+  duration: {site: 'intervals:1', free: 'hours:1', travel: 'watches:1 at slow pace'}
+  reach: trail tier +1 rung per reach
+  knobs: [dc, time_cost]
+  anchor: true
+  lifecycle: provisional
+  basis: ['10.15']
+- id: act.climb
+  intent_verbs: [climb, scale, descend]
+  verb: verb.exert
+  license: null
+  attribute: might | agility
+  primary_tag: deed.martial.athletics.climbing
+  tier: rough wall easy; cliff moderate; sheer or wet hard; overhang very_hard
+  duration: {site: 'intervals:1 per 60 ft', free: 10 min per 60 ft, travel: null}
+  reach: 1 halfway, 2 the top, 3 time saved, 4 + lever
+  knobs: [dc, time_cost, stakes]
+  anchor: true
+  lifecycle: provisional
+  basis: ['10.15']
+- id: act.swim
+  intent_verbs: [swim, cross the water, dive]
+  verb: verb.exert
+  license: null
+  attribute: might | endurance
+  primary_tag: deed.martial.athletics.swimming
+  tier: calm easy; current moderate; spate or swell hard; whirlpool very_hard
+  duration: {site: 'intervals:1 per crossing', free: 10 min, travel: null}
+  reach: 1 partway, 2 across
+  knobs: [dc, stakes, attribute]
+  anchor: true
+  lifecycle: provisional
+  basis: ['10.15']
+- id: act.jump
+  intent_verbs: [leap, vault, jump across]
+  verb: verb.exert
+  license: null
+  attribute: might | agility
+  primary_tag: deed.martial.athletics.jumping
+  tier: 5 ft easy; 10 ft moderate; 12 ft hard (running); 15 ft very_hard; 30 ft beyond
+  duration: {site: 'intervals:0-1', free: null, travel: null}
+  reach: across
+  knobs: [dc, stakes]
+  anchor: true
+  lifecycle: provisional
+  basis: ['10.15']
+- id: act.squeeze
+  intent_verbs: [crawl through, squeeze, wriggle]
+  verb: verb.exert
+  license: null
+  attribute: agility
+  primary_tag: deed.martial.athletics.acrobatics
+  tier: crawl easy; tight moderate; medium armor +1 rung; heavy armor G4
+  duration: {site: 'intervals:1', free: 10 min, travel: null}
+  reach: through
+  knobs: [dc, attribute]
+  anchor: true
+  lifecycle: provisional
+  basis: ['10.15']
+- id: act.force_way
+  intent_verbs: [break down, force open, clear]
+  verb: verb.force
+  license: null
+  attribute: might
+  primary_tag: deed.martial.athletics.lifting
+  tier: the barrier's tier
+  duration: {site: 'intervals:1', free: 1 min, travel: null}
+  reach: open
+  knobs: [dc, targets]
+  anchor: true
+  lifecycle: provisional
+  basis: ['10.15']
+- id: act.pick_lock
+  intent_verbs: [pick, open the lock]
+  verb: verb.handle
+  license: 'lic.training.guile_thievery (fallback: force)'
+  attribute: agility
+  primary_tag: deed.guile.thievery.lockpicking
+  tier: the lock's tier
+  duration: {site: 'intervals:1', free: 10 min, travel: null}
+  reach: open
+  knobs: [dc]
+  anchor: true
+  lifecycle: provisional
+  basis: ['10.15']
+- id: act.disarm
+  intent_verbs: [disarm, jam, spring the trap]
+  verb: traps.yaml#ways
+  license: per way
+  attribute: by way
+  primary_tag: deed.guile.thievery.traps
+  tier: the trap's tiers
+  duration: {site: 'intervals:1', free: 10 min, travel: null}
+  reach: per way
+  knobs: [dc, verb]
+  anchor: true
+  lifecycle: provisional
+  basis: ['10.15']
+- id: act.dig
+  intent_verbs: [dig, clear rubble, tunnel]
+  verb: verb.force | verb.exert
+  license: null
+  attribute: might | endurance
+  primary_tag: deed.martial.athletics.lifting
+  tier: 'a progress clock: rubble 4, collapse 6, tunnel 8+'
+  duration: {site: 'intervals:1 per roll', free: 'hours:1 per roll', travel: null}
+  reach: clock ticks
+  knobs: [dc, time_cost, reach_unit]
+  anchor: true
+  lifecycle: provisional
+  basis: ['10.15']
+- id: act.secure
+  intent_verbs: [barricade, bar the door, make safe]
+  verb: verb.handle | verb.force
+  license: null
+  attribute: might
+  primary_tag: deed.craft.building
+  tier: site explore tier
+  duration: {site: 'intervals:1', free: 10 min, travel: null}
+  reach: secured area (rest site camp)
+  knobs: [dc]
+  anchor: true
+  lifecycle: provisional
+  basis: ['10.15']
+- id: act.light_fire
+  intent_verbs: [make fire, light a torch, kindle]
+  verb: verb.handle
+  license: lic.training.wilds_survival in hard conditions (fallback +5)
+  attribute: agility
+  primary_tag: deed.wilds.survival.firecraft
+  tier: weather fire tier
+  duration: {site: 'intervals:1', free: 10 min, travel: part of camp}
+  reach: 'fire; reach 2: no smoke'
+  knobs: [dc, time_cost]
+  anchor: true
+  lifecycle: provisional
+  basis: ['10.15']
+- id: act.make_camp
+  intent_verbs: [make camp, pitch, settle]
+  verb: free activity; verb.handle for shelter
+  license: 'lic.training.wilds_survival for lasting shelter (fallback: a crude lean-to)'
+  attribute: agility
+  primary_tag: deed.wilds.survival.shelter
+  tier: trivial fair; storm moderate; snow hole moderate
+  duration: {site: null, free: 'hours:1', travel: part of the camp watch}
+  reach: camp rest site; shelter and fire facts
+  knobs: [time_cost]
+  anchor: true
+  lifecycle: provisional
+  basis: ['10.15']
+- id: act.keep_watch
+  intent_verbs: [keep watch, stand guard]
+  verb: free (lookout role)
+  license: null
+  attribute: null
+  primary_tag: deed.wilds.survival.weathersense
+  tier: null
+  duration: {site: while resting, free: per hour, travel: per watch}
+  reach: the camp is aware
+  knobs: [duration]
+  anchor: true
+  lifecycle: provisional
+  basis: ['10.15']
+- id: act.forage
+  intent_verbs: [forage, gather, scrounge]
+  verb: verb.observe
+  license: lic.training.wilds_foraging (fallback +5, Limited)
+  attribute: wits
+  primary_tag: deed.wilds.foraging.food
+  tier: forage tier
+  duration: {site: null, free: 'hours:1 (reach - 1)', travel: 'watches:1'}
+  reach: supply
+  knobs: [dc, time_cost, reach_unit]
+  anchor: true
+  lifecycle: provisional
+  basis: ['10.15']
+- id: act.hunt
+  intent_verbs: [hunt, stalk game]
+  verb: verb.observe
+  license: lic.training.wilds_tracking (fallback +5, Limited)
+  attribute: wits
+  primary_tag: deed.wilds.tracking.hunting
+  tier: game tier
+  duration: {site: null, free: null, travel: 'watches:1'}
+  reach: supply = 2 x reach; a carcass
+  knobs: [dc, reach_unit]
+  anchor: true
+  lifecycle: provisional
+  basis: ['10.15']
+- id: act.fish
+  intent_verbs: [fish, net, spear fish]
+  verb: verb.handle
+  license: null
+  attribute: wits
+  primary_tag: deed.wilds.foraging.food
+  tier: river or lake easy; coast moderate
+  duration: {site: null, free: null, travel: 'watches:1'}
+  reach: supply = reach (Limited without tackle)
+  knobs: [dc, reach_unit]
+  anchor: true
+  lifecycle: provisional
+  basis: ['10.15']
+- id: act.snare
+  intent_verbs: [set snares]
+  verb: verb.handle
+  license: null
+  attribute: agility
+  primary_tag: deed.wilds.tracking.hunting
+  tier: d6 at dawn vs game tier (easy 3+, moderate 4+, hard 5+, very_hard 6; license +1)
+  duration: {site: null, free: null, travel: during camp}
+  reach: 1 supply
+  knobs: [dc]
+  anchor: true
+  lifecycle: provisional
+  basis: ['10.15']
+- id: act.find_water
+  intent_verbs: [find water]
+  verb: verb.observe
+  license: lic.training.wilds_foraging (fallback +5)
+  attribute: wits
+  primary_tag: deed.wilds.foraging.water
+  tier: forage tier (+1 rung arid)
+  duration: {site: null, free: 'hours:1', travel: 'watches:1'}
+  reach: water source; reach 2 also tomorrow
+  knobs: [dc]
+  anchor: true
+  lifecycle: provisional
+  basis: ['10.15']
+- id: act.read_weather
+  intent_verbs: [read the sky, forecast]
+  verb: verb.observe
+  license: lic.training.wilds_survival
+  attribute: wits
+  primary_tag: deed.wilds.survival.weathersense
+  tier: easy
+  duration: {site: null, free: 'intervals:1', travel: null}
+  reach: forecast
+  knobs: [dc, targets]
+  anchor: true
+  lifecycle: provisional
+  basis: ['10.15']
+- id: act.find_way
+  intent_verbs: [navigate, reorient, find the way]
+  verb: verb.observe
+  license: lic.training.wilds_navigation (fallback +5, Limited, landmark needed)
+  attribute: wits | intellect
+  primary_tag: deed.wilds.navigation.wayfinding
+  tier: nav tier
+  duration: {site: null, free: null, travel: per day}
+  reach: course
+  knobs: [dc, attribute, time_cost, reach_unit]
+  anchor: true
+  lifecycle: provisional
+  basis: ['10.15']
+- id: act.ford
+  intent_verbs: [ford, wade across]
+  verb: verb.exert
+  license: null
+  attribute: might
+  primary_tag: deed.martial.athletics.swimming
+  tier: haz.ford tier
+  duration: {site: 'intervals:1', free: 10 min, travel: part of the watch}
+  reach: across
+  knobs: [dc, stakes]
+  anchor: true
+  lifecycle: provisional
+  basis: ['10.15']
+- id: act.rope
+  intent_verbs: [rig a rope, lower, belay]
+  verb: verb.handle
+  license: null
+  attribute: agility
+  primary_tag: deed.martial.athletics.climbing
+  tier: easy with an anchor point; moderate improvised
+  duration: {site: 'intervals:1', free: 10 min, travel: null}
+  reach: a rope fact (Protective lever)
+  knobs: [dc]
+  anchor: true
+  lifecycle: provisional
+  basis: ['10.15']
+- id: act.harvest
+  intent_verbs: [skin, butcher, carve, harvest]
+  verb: 08.3.10
+  license: per 08.3.10
+  attribute: wits
+  primary_tag: deed.wilds.foraging.harvest
+  tier: by the rarest part
+  duration: {site: 'intervals:1', free: 'hours:1 (a large body)', travel: null}
+  reach: parts
+  knobs: [dc, time_cost, reach_unit]
+  anchor: true
+  lifecycle: provisional
+  basis: ['10.15']
+- id: act.scavenge
+  intent_verbs: [loot the room, strip the dead]
+  verb: verb.observe
+  license: null
+  attribute: wits
+  primary_tag: deed.lore.investigation.search
+  tier: easy
+  duration: {site: 'intervals:1', free: 10 min, travel: null}
+  reach: gear and coin (08.3.11)
+  knobs: [time_cost]
+  anchor: true
+  lifecycle: provisional
+  basis: ['10.15']
+- id: act.study
+  intent_verbs: [read the inscription, study the mural]
+  verb: verb.observe
+  license: a language license for scripts
+  attribute: intellect
+  primary_tag: deed.lore.history
+  tier: the text's tier
+  duration: {site: 'intervals:1', free: 'hours:1', travel: null}
+  reach: items (P17)
+  knobs: [dc, attribute]
+  anchor: true
+  lifecycle: provisional
+  basis: ['10.15']
+- id: act.signal
+  intent_verbs: [signal, call out, light a beacon]
+  verb: verb.handle | verb.talk
+  license: null
+  attribute: presence
+  primary_tag: deed.influence.command
+  tier: easy
+  duration: {site: 'intervals:1', free: 1 min, travel: null}
+  reach: heard by whom it reaches (loud)
+  knobs: [targets]
+  anchor: true
+  lifecycle: provisional
+  basis: ['10.15']
+- id: act.haul
+  intent_verbs: [drag, carry out, haul up]
+  verb: verb.exert
+  license: null
+  attribute: might | endurance
+  primary_tag: deed.martial.athletics.lifting
+  tier: within capacity easy; burdened moderate; overloaded G4
+  duration: {site: per area walked, free: per hour, travel: at crawl}
+  reach: moved
+  knobs: [dc, time_cost]
+  anchor: true
+  lifecycle: provisional
+  basis: ['10.15']
+- id: act.rest
+  intent_verbs: [breather, short rest, long rest]
+  verb: '07.8'
+  license: null
+  attribute: null
+  primary_tag: null
+  tier: null
+  duration: {site: breather 1; short 6; long a watch, free: 'breather 10 min; short hours:1', travel: rest / sleep watch}
+  reach: 07 recovery
+  knobs: []
+  anchor: true
+  lifecycle: provisional
+  basis: ['10.15']
+navigation:
+  beat: act.find_way (10.4.2)
+  tiers: [easy, moderate, hard, very_hard]
+  reach: {0: 'off course: sealed nav.lost, veer by tbl.10.veer', 1: 'on course, the day''s pace one step slower', 2: on course,
+    3: 'on course, +2 points per travel watch of the leg today', 4: 'as 3, and one undiscovered place in the area discovered'}
+  levers: [map of the area, area mapped by the PC, slow pace, stars at night, a guide's Help]
+  snags: [night without stars, 'fog, storm, snow, blizzard', fast pace]
+  take_the_time: 'easy, moderate, hard: no roll, reach standard, each travel watch of the day earns half points'
+  lost_reveal: [expected arrival + 1 travel watch, a way-finding beat while lost, recognition, 'a license or ability (stonesense:
+      Certain underground)']
+supply:
+  unit: 1 supply = one person-day of food and water (08.9.4)
+  load: 2 supply per load unit
+  need: 1 per consumer per day; +1 in heat, scorching or arid without water_source
+  half_rations: half need, rounded up per two consumers; long rest at best partial; a second consecutive day counts as without
+    food
+  want: one cond.exhausted stack per unfed consumer per day; 07.8.10 deprivation warning at three stacks; then S3 harm, no
+    reduction
+  order: [pc, companions, hirelings, mounts]
+blocks: []

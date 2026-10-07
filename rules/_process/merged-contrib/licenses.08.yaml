@@ -1,0 +1,46 @@
+# data/contrib/licenses.08.yaml
+# Purpose: ch.08's owner-block for data/licenses.yaml (T-00-19 allows owner-block 08).
+# Owner: 08-items-loot-crafting. Schema: data/SCHEMAS.md#licensesyaml (License, 00.12.1).
+
+schema_version: 1
+blocks:
+- owner: 08
+  entries:
+  - id: lic.08.relic_grant
+    name: A relic's granted license (the item-property license kind)
+    kind: item_property
+    tags: []
+    principle: An item lets its bearer attempt what a named license permits, as a borrowed capability.
+    scope: 'While the item is equipped and attuned, the bearer holds the license its property names (prop.lic_* or prop.bound_power) at the grade the property names, with these fixed differences from holding
+      it by training: grants_competence is empty (00.3.6: items never grant competence); feeds_evidence: false (00.11.5); abilities used through it cost +1 Focus when the bearer has no training license
+      at or above their first tag (05.6.3).'
+    excludes:
+    - {what: competence on the license's tag, needs: 'the license by an origin, mentor, text or calling (05.9)'}
+    - {what: evidence toward a calling from deeds done under it, needs: deeds done under one's own licenses}
+    attribute: by_method
+    crude_fallback: none
+    stretch: null
+    emulate: null
+    acquisition_paths:
+    - {type: item, detail: 'loot, craft or gift with prop.lic_* or prop.bound_power (08.4)', clock: null, requires: null}
+    feeds_evidence: false
+    source: the item's id
+    lifecycle: provisional
+    basis: [00.11.5, 'R2 #9 (Honorblades)', 04 Interface request 11, DL-08-11]
+  - id: lic.08.attunement
+    name: Attunement
+    kind: universal
+    tags: []
+    principle: Bind a magical item to yourself so its passive properties and powers answer you.
+    scope: At a breather outside a conflict, attune one equipped item that carries a passive, license or item-ability property; at most five attuned items at a time. Attuning unseals the item's properties
+      to you (08.5.2). Ending attunement is a free activity unless a flaw forbids it.
+    excludes:
+    - {what: a sixth attuned item, needs: end another attunement first}
+    attribute: none
+    crude_fallback: none
+    stretch: null
+    emulate: null
+    acquisition_paths:
+    - {type: origin, detail: every character holds it, clock: null, requires: null}
+    lifecycle: provisional
+    basis: [08.5.1, R2 08 Iron Man Principle, DL-08-14]

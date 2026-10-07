@@ -1,0 +1,76 @@
+# data/attributes.yaml
+# Purpose: the seven attributes, their use tests, ranges and permitted derivations.
+# Owner: 00-architecture (00.4). Schema: data/SCHEMAS.md#attributesyaml.
+# Basis: [C: Sync Impact Report, ability scores]; [C:P4]; [R4 §4.6, §9 02 #1]; [R7 §4.1]; [R2 §00]; [DL-00A-07..09]
+
+schema_version: 1
+
+ranges:
+  pc_creation: {min: -1, max: 3, sum_min: 5, sum_max: 7, reference_array: [3, 2, 1, 1, 0, 0, -1]}
+  pc_lifetime: {min: -2, max: 4}
+  lifetime_increase: {max_total: 1, source: "calling tier (04)"}
+  lifetime_decrease: {max_per_attribute: 1, source: "permanent mark or maim (07)"}
+  non_pc: {min: -5, max: 10}
+  changed_by_items_conditions_abilities: false
+
+tie_break: "When a method fits two allowed attributes equally, the frame uses the lower; the OFFER names the method that would use the higher (00.4.5)."
+
+attributes:
+  - id: might
+    name: Might
+    lifecycle: provisional
+    governs: "applying bodily force: lifting, breaking, shoving, heavy blows, grappling, climbing by strength"
+    distinguish:
+      - {vs: agility, test: "Does success come from how much force, or from how exact and fast the motion is? Force -> might."}
+      - {vs: endurance, test: "Acting on the world in a burst, or holding out against it? Burst -> might."}
+    derived: {value: carrying_capacity, owner: "08"}
+  - id: agility
+    name: Agility
+    lifecycle: provisional
+    governs: "moving body and hands quickly and exactly: dodging, balance, quiet movement, fine manipulation, aimed and thrown attacks, finesse blows"
+    distinguish:
+      - {vs: might, test: "Exactness and speed -> agility."}
+      - {vs: wits, test: "Is it the body executing, or the mind noticing? Executing -> agility."}
+    derived: {value: null, owner: "06", note: "its defense is the usual defense against aimed physical attacks"}
+  - id: endurance
+    name: Endurance
+    lifecycle: provisional
+    governs: "withstanding bodily strain: poison, disease, cold, exhaustion, holding breath, running or swimming far"
+    distinguish:
+      - {vs: might, test: "Holding out -> endurance."}
+      - {vs: resolve, test: "Is the body or the mind under strain? Body -> endurance."}
+    derived: {value: vitality_max, owner: "02/07"}
+  - id: wits
+    name: Wits
+    lifecycle: provisional
+    governs: "noticing and reacting in the moment: perception, awareness, reading a situation or a person, quick practical improvisation"
+    distinguish:
+      - {vs: intellect, test: "Is the answer in front of you now, or in your head? In front -> wits."}
+      - {vs: presence, test: "Reading a mind -> wits; changing it -> presence."}
+    derived: {value: tempo, owner: "06"}
+  - id: intellect
+    name: Intellect
+    lifecycle: provisional
+    governs: "knowing and reasoning: recall, deduction, study, analysis, planning, reasoned argument, knowledge-driven work"
+    distinguish:
+      - {vs: wits, test: "In your head -> intellect."}
+    derived: {value: creation_languages_or_lore, owner: "02"}
+  - id: presence
+    name: Presence
+    lifecycle: provisional
+    governs: "moving other minds: persuading, deceiving, commanding, performing, intimidating by force of personality, handling animals by manner"
+    distinguish:
+      - {vs: wits, test: "Changing someone's mind -> presence."}
+      - {vs: resolve, test: "Will pushed outward -> presence; held inward -> resolve."}
+    derived: {value: retinue_max, owner: "16"}
+  - id: resolve
+    name: Resolve
+    lifecycle: provisional
+    governs: "withstanding mental and spiritual strain: fear, pain, temptation, domination, despair; keeping concentration"
+    distinguish:
+      - {vs: endurance, test: "Mind under strain -> resolve."}
+      - {vs: presence, test: "Held inward -> resolve."}
+    derived: {value: strain_threshold, owner: "07"}
+
+defense_formula: "10 + attribute + competence(tag) + edge + status"
+effect_dc_formula: "10 + source attribute + competence(tag) + edge"

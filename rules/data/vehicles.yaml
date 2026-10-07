@@ -1,0 +1,390 @@
+# data/vehicles.yaml
+# Purpose: the fourteen recognition vehicles V1-V14 (the fictional stagings of a recognition), the rule that
+#   selects among them, the closed list of prices, the Seer's Reading phrasing ladder, and the out-of-fiction
+#   marker and CHOICE texts. A vehicle VOICES a recognition the engine has already decided from sealed tallies;
+#   it never causes one, and it never speaks a rules term (12.14.5).
+# Owner: 04-recognition-and-growth (T-00-19). Rules: 04.6 (vehicles and selection), 04.7 (offer protocol).
+# Schema: data/SCHEMAS.md#vehiclesyaml. Required fields are present on every entry. Optional fields added by
+#   ch.04 (documented in 04 Tables, T-04-5): when, requires, families, specificity, price_kinds, decline_cost,
+#   represent_when, expires, cooldown, may_not_say, seeds.
+#   `seeds` are narration prompts only ([N]): they carry no mechanics and the narrator rewrites them.
+# Basis: [R6 A.4 V1-V14, A.5 offer protocol, A.6 R-A1..R-A7] [R2 #1] [R3 #6] [BRIEF §4] [12.14.5, 12.15.6]
+#   [DL-04-12, DL-04-13, DL-04-14]
+
+schema_version: 1
+lifecycle: provisional
+
+# ---------------------------------------------------------------------------------------------------------------
+# Selection (04.6.2, PR-04-3). The engine filters and orders; the DM picks among at most three [J:enum].
+# ---------------------------------------------------------------------------------------------------------------
+selection:
+  inputs: [policy_outcome, calling_family, trigger_class, witnesses_and_public_tally, present_and_reachable_npcs, institutions_matching, place_resonance, recent_vehicles]
+  trigger_classes:
+    - {id: crisis, true_only_when: "this pass was raised in a scene by an evidence event flagged crisis (03.4.5) on the candidate's key"}
+    - {id: reflection, true_only_when: "this pass runs in h.04.recognition_pass, h.04.standing_offers or h.04.season_consolidation"}
+    - {id: arrival, true_only_when: "the PC has entered a place, or met a person or institution, named in a standing offer or carrying a matching resonance"}
+    - {id: request, true_only_when: "the player asked a reader for a reading, or asked out of fiction to take up a standing offer"}
+  steps:
+    - "1. Start from the calling tier's crystallization.vehicles (first recognition by grant: the family's grant list)."
+    - "2. Keep vehicles whose maps_to includes the policy outcome and whose `when` includes the trigger class."
+    - "3. Keep vehicles whose `requires` all hold in state (engine-checked)."
+    - "4. Drop any vehicle used for this character's last two recognitions, unless that would leave none."
+    - "5. Order by specificity, highest first; ties in list order of step 1."
+    - "6. Return the first three. veh.V7 (offer or grant at a reflection) and veh.V6 (abstain) need nobody and nothing, so step 3 never empties the list at a reflection; in a crisis veh.V5 or veh.V4 is always available."
+  dm_choice: "[J:enum] among the returned vehicles: the one whose staging the scene's established facts support word for word. Default when unsure: the first returned."
+  worst_case: "a staging that fits less well than another; nothing mechanical differs between vehicles except the price, and the price is shown in the CHOICE block before the player answers (class ii)"
+
+prices:                             # closed list (04.7.5). Every offer names exactly one; a grant carries none beyond the shadow.
+  - {id: price.shadow, text: "The calling's shadow is recorded and may one day show (04.9.1). Every calling carries this.", commits: null}
+  - {id: price.oath, text: "A commitment of kind oath: the axes, the forbidden acts (listed in full before you answer) and a bonded witness that sees every deed on those axes.", commits: "commitment(kind: oath)"}
+  - {id: price.obligation, text: "Membership or service to an institution: its duties are ch.11's (a rank's obligations); leaving costs standing, never capability.", commits: "recognition_event.institution -> ch.11"}
+  - {id: price.bond, text: "A debt to a teacher: a commitment of kind bond (a named service or a season's work) recorded for ch.11.", commits: "commitment(kind: bond)"}
+  - {id: price.bane, text: "A standing weakness named in full before you answer, applied while the calling or power is held.", commits: "effect_instance (the bane)"}
+  - {id: price.seat, text: "The calling takes one of your three seats (or your oath seat); when none is free, accepting replaces or consolidates what you name (04.8).", commits: null}
+
+vehicles:
+  - id: veh.V1
+    name: The Witnessed Epithet
+    tags: [org.clan, org.crown.civic]
+    maps_to: [grant]
+    recognizer: "the community that witnessed the deeds"
+    staging: "Someone who was not there uses a name for the character that names WHAT THEY DID, never the calling; others take it up."
+    offer_form: {accept: "none needed: an epithet is conferred", decline: "the player may renounce the provisional grant at any reflection (04.8.2); the epithet itself is ch.11's and stays", defer: "not applicable"}
+    witness_required: true
+    scope: "the scopes of the witnessed evidence (03.10.5)"
+    when: [reflection, arrival]
+    requires: ["public(pc, key, scope).events >= 2 in at least one scope the PC is now in or entering", "at least one of those events noteworthy (03.10.5)"]
+    families: [martial, guile, wilds, lore, arcane, divine, primal, influence, craft]
+    specificity: 6
+    price_kinds: [price.shadow, price.seat]
+    rules: ["Only witnessed evidence feeds an epithet (03.10).", "The epithet's wording, score and spread are ch.11's (recognition_event carries epithet_seed = the deed line of the crystallizing event).", "The same epithet may be praise in one scope and an insult in another."]
+    may_not_say: ["the calling's name as a title bestowed", "any tier word", "that anything was gained"]
+    seeds: ["A carter you have never met asks if you are the one who <deed line>.", "The gate-sergeant says the name before you give your own."]
+    lifecycle: provisional
+    basis: ["R6 V1, A-15, A-18, A-19", "04.6.3"]
+  - id: veh.V2
+    name: The Mentor's Acknowledgement
+    tags: [org.guild, org.order]
+    maps_to: [offer]
+    recognizer: "a master of the calling's key or branch: an NPC of depth recurring or principal"
+    staging: "The mentor has watched, and asks a question that names the path without naming the mechanic."
+    offer_form: {accept: "begin the lesson or the rite; price.bond", decline: "the mentor accepts it; no cost", defer: "'come back when you know'; the offer stands while the mentor exists"}
+    witness_required: false
+    scope: "private"
+    when: [reflection, arrival, request]
+    requires: ["an NPC with role_tags at or under the calling's key or branch, depth recurring or principal, standing_to_pc >= 1, present or reachable within one watch", "or: 12's lead engine has placed such an NPC in the scene (PR-04-3 step 3)"]
+    families: [martial, guile, wilds, lore, arcane, primal, influence, craft]
+    specificity: 5
+    price_kinds: [price.bond, price.shadow, price.seat]
+    represent_when: [return_to_person, reflection]
+    expires: "the mentor's death or departure converts the offer to veh.V7 at the next reflection (a recognizer is never the only door)"
+    rules: ["A mentor unlocks only what the tallies already make eligible; a mentor never substitutes for evidence (training counts for at most half of the counted requirement, 04.3.3)."]
+    may_not_say: ["the calling's name as a rank", "numbers", "that the character has 'reached' anything"]
+    seeds: ["'You fight like someone who has stopped expecting to come home. Do you want to learn to do it on purpose?'", "'Your hands already know it. Shall I teach the rest of you?'"]
+    lifecycle: provisional
+    basis: ["R6 V2, A-21, A-24, A-27", "04.6.3"]
+  - id: veh.V3
+    name: The Order Seeks You Out
+    tags: [org.order, org.guild, org.faith, org.company, org.crown, org.outlaw]
+    maps_to: [offer]
+    recognizer: "an institution whose domain matches the evidence"
+    staging: "A letter, an emissary, a summons or a token left where the character will find it."
+    offer_form: {accept: "go, or send word; price.obligation (ch.11 writes membership)", decline: "ignore it at no cost; an outright refusal to the emissary's face costs one standing step with that institution (stated in the CHOICE block)", defer: "the token may be presented later, within the stated window"}
+    witness_required: true
+    scope: "the institution's faction id"
+    when: [reflection, arrival]
+    requires: ["institutions_matching(calling branch, region) returns a faction with status_to_pc >= 0", "public(pc, key, that faction's scope or the region's settlement scope).events >= 1"]
+    families: [martial, guile, lore, arcane, divine, influence, craft, wilds]
+    specificity: 7
+    price_kinds: [price.obligation, price.shadow, price.seat]
+    decline_cost: {kind: standing_step, amount: -1, applies_when: "the answer is decline and it was given to the emissary in the scene", owner: "11"}
+    represent_when: [arrival_at_institution, reflection_in_its_region]
+    expires: "the season boundary after next, or when the PC's status with the institution falls below 0"
+    rules: ["The institution may add a RANK to the offer; rank is ch.11's, seat-limited, and never capability (04.11).", "Accepting writes recognition_event.institution; ch.11 writes membership and obligations."]
+    may_not_say: ["tier words", "that the institution 'grants' the character's skill"]
+    seeds: ["A sealed letter waits at the inn, three days old.", "A rider in the order's colors has asked for you by description in two villages."]
+    lifecycle: provisional
+    basis: ["R6 V3, A-17, A-23", "00.17 Q4", "04.6.3"]
+  - id: veh.V4
+    name: The Oath Spoken
+    tags: [org.faith, org.order]
+    maps_to: [offer]
+    recognizer: "the bonded witness: a power, an order's rule, a sworn person, or the ideal itself"
+    staging: "At a moment where the calling's principle is at stake, the words are there to be said. The player speaks them in the character's own words."
+    offer_form: {accept: "speak the words (the player's text is recorded as the commitment's wording); price.oath", decline: "let them go unsaid; recorded; no cost", defer: "the moment passes; readiness persists to the next qualifying moment or reflection"}
+    witness_required: false
+    scope: "the keeper's scope (bonded witness, 03.10.4)"
+    when: [crisis, reflection, arrival]
+    requires: ["the calling carries an `oath` block", "the forbidden acts are shown in full in the CHOICE block before the answer"]
+    families: [divine, sacred, martial]
+    specificity: 8
+    price_kinds: [price.oath, price.shadow, price.seat]
+    represent_when: [next_crisis_on_key, reflection, arrival_at_keeper_place]
+    rules: ["The words become a commitment of kind oath (state: commitments), naming the keeper as bonded witness (03.10.4), the axes and the forbidden acts.", "The DM checks the player's words against the oath's axes only [J:flag, 04.7.4]; there is no script.", "`words: fixed` callings show their oath text; `words: personal` callings let the player write the truth they swear to."]
+    may_not_say: ["that the oath 'unlocks' anything", "numbers"]
+    seeds: ["The words you have been circling for weeks are suddenly plain.", "The shrine is quiet. Whatever listens here is listening now."]
+    lifecycle: provisional
+    basis: ["R6 V4, A-01, A-02", "R2 #2", "04.6.3"]
+  - id: veh.V5
+    name: The Awakening in Crisis
+    tags: []
+    maps_to: [offer]
+    recognizer: "the body, the blood, the art itself answering"
+    staging: "At the peak of the scene something answers. One out-of-fiction line marks the offer; then the fiction."
+    offer_form: {accept: "seize it: the calling or tier takes effect now, and the first pick offered includes an ability matching the crisis deed's tag (PR-04-5)", decline: "refuse it: recorded; the same calling is not offered again by crisis until the decline cooldown ends", defer: "let it pass: it returns at the next crisis on the key or the next reflection"}
+    witness_required: false
+    scope: "private (witnesses present make it public by 03.10 as usual)"
+    when: [crisis]
+    requires: ["trigger class crisis", "no other crisis offer has been made in this scene", "the candidate is eligible counting pending evidence (tally include_pending, 03.5.6)"]
+    families: [martial, guile, wilds, arcane, divine, primal, lore, influence, craft]
+    specificity: 9
+    price_kinds: [price.shadow, price.seat]
+    represent_when: [next_crisis_on_key, reflection]
+    rules: ["Never manufactured: the crisis flag is the engine's (03.4.5), not the narrator's sense of drama.", "At most one per scene.", "The offer pauses the turn (12.2.6 pause point 7); no time passes while the player decides."]
+    may_not_say: ["a voice announcing a change", "that power was 'granted'"]
+    seeds: ["Your hands are steady. They have never been this steady.", "The old words come back whole, and the dead go quiet to hear them."]
+    lifecycle: provisional
+    basis: ["R6 V5, A-21 (spontaneous initiation)", "R2 4a crisis awakening", "04.6.3"]
+  - id: veh.V6
+    name: The Seer's Reading
+    tags: []
+    maps_to: [abstain]
+    recognizer: "anyone who reads people: a fortune-teller, an old soldier, a priest, a rival's cold appraisal, the character's own dreams"
+    staging: "On request, or once at a reflection when a readiness band has changed, the reader describes the character's trajectory in graded vagueness."
+    offer_form: {accept: "none", decline: "none", defer: "none"}
+    witness_required: false
+    scope: "private"
+    when: [request, reflection]
+    requires: ["request: an NPC with role_tags under deed.influence.insight, deed.divine.revelation, deed.arcane.divination or deed.lore.religion is asked, or any NPC of standing >= 2 who has witnessed the PC's deeds", "reflection: a band of the Leanings view changed since the last reflection (at most one reading per reflection)"]
+    families: [martial, guile, wilds, lore, arcane, divine, primal, influence, craft, sacred, dark]
+    specificity: 1
+    price_kinds: []
+    rules: ["The reader speaks only the band wording of `readings` below and may quote deed lines from the ledger (03.2.4).", "A reading on the threshold names the KIND of deed still missing, never a number.", "This is the only vehicle that voices abstain."]
+    may_not_say: ["the calling's name", "any count, threshold or nearness figure", "a promise that anything will come"]
+    seeds: ["She turns your palm to the light and is quiet a while.", "You dream of the same door, a little nearer than before."]
+    lifecycle: provisional
+    basis: ["R6 V6, A-03 (Ultima IV's Hawkwind)", "04.6.4"]
+  - id: veh.V7
+    name: The Reflection at Rest
+    tags: []
+    maps_to: [grant, offer]
+    recognizer: "the self; companions by a fire; a winter spent"
+    staging: "At a long rest, a week of downtime or a season's turn: a quiet realization the next morning, a dream, a companion's question."
+    offer_form: {accept: "say so, in or out of character", decline: "recorded; no cost", defer: "it returns at the next reflection"}
+    witness_required: false
+    scope: "private"
+    when: [reflection, request]
+    requires: []
+    families: [martial, guile, wilds, lore, arcane, divine, primal, influence, craft, sacred]
+    specificity: 2
+    price_kinds: [price.shadow, price.seat]
+    represent_when: [reflection]
+    rules: ["The default vehicle: it needs no one and nothing, so a recognition is never withheld for want of a recognizer.", "Several offers may be presented at one reflection, at most three, highest confidence first."]
+    may_not_say: ["a list of gains", "numbers"]
+    seeds: ["You wake knowing something you did not know you knew.", "'You've changed,' she says, banking the fire. 'Or you've stopped pretending you haven't.'"]
+    lifecycle: provisional
+    basis: ["R6 V7, A-04, A-07, A-26", "04.6.3"]
+  - id: veh.V8
+    name: The Rival Names You
+    tags: [org.outlaw, org.cult]
+    maps_to: [grant, offer]
+    recognizer: "a recurring adversary, or the foes who survived"
+    staging: "The enemy uses a name for you, fears your signature, or has changed their ways because of it."
+    offer_form: {accept: "none needed for a grant; for a dark calling's offer see veh.V13", decline: "renounce at a reflection", defer: "not applicable"}
+    witness_required: true
+    scope: "the hostile faction's scope"
+    when: [reflection, arrival]
+    requires: ["public(pc, key, scope).events >= 2 in the scope of a faction with status_to_pc <= -1, or a surviving adversary carrier among the witnesses of two settled events on the key"]
+    families: [martial, guile, arcane, influence, dark]
+    specificity: 6
+    price_kinds: [price.shadow, price.seat]
+    rules: ["Adversaries recognize from the evidence they suffered; their recognition may precede any ally's.", "Also the vehicle by which a shadow that shows is first voiced (04.9.1)."]
+    may_not_say: ["the calling's name as a title", "numbers"]
+    seeds: ["The bandits post a watch on the treeline now. They did not before you.", "'Him. The one with the bow. Not that one. Run.'"]
+    lifecycle: provisional
+    basis: ["R6 V8, A-20 (Nemesis)", "04.6.3"]
+  - id: veh.V9
+    name: The Rite or Trial
+    tags: [org.guild, org.order, org.faith]
+    maps_to: [offer]
+    recognizer: "an order's or guild's examiners"
+    staging: "An examination, a masterwork judged by peers, a circle's test."
+    offer_form: {accept: "stand the trial; price.obligation", decline: "no cost", defer: "the trial may be stood at the next sitting (ch.11 schedules it)"}
+    witness_required: true
+    scope: "the institution's faction id"
+    when: [reflection, arrival]
+    requires: ["the PC is a member of, or has an open veh.V3 offer from, an institution with ranks (ch.11) whose domain matches the calling", "the calling tier is already eligible by the tallies"]
+    families: [craft, lore, martial, arcane, divine, influence]
+    specificity: 7
+    price_kinds: [price.obligation, price.shadow]
+    represent_when: [next_sitting]
+    rules: ["A trial tests for RANK, never for capability: the tier is the tallies' and is granted on acceptance whatever the trial's result (04.11.2).", "A failed trial delays the rank and nothing else."]
+    may_not_say: ["that the examiners 'confer' the character's skill", "tier words"]
+    seeds: ["Three masters turn your work over in their hands and say nothing for a long time.", "'Say what you are,' the warden says, 'and then show us.'"]
+    lifecycle: provisional
+    basis: ["R6 V9, A-22", "R2 4a Profession Trial", "04.11"]
+  - id: veh.V10
+    name: The Body Remembers
+    tags: []
+    maps_to: [grant]
+    recognizer: "the character's own body and habits"
+    staging: "The character notices they now do something without thinking."
+    offer_form: {accept: "none", decline: "none", defer: "none"}
+    witness_required: false
+    scope: "private"
+    when: [reflection]
+    requires: ["the change being voiced is small: a provisional grant confirmed, an ability's rank restated, a training grade raised, a competence value raised by a tier already accepted"]
+    families: [martial, guile, wilds, lore, arcane, divine, primal, influence, craft]
+    specificity: 3
+    price_kinds: []
+    rules: ["Never voices a first recognition, a hybrid, a consolidation or a revocation.", "One line of fiction; the change itself appears in a RESULT block."]
+    may_not_say: ["numbers", "'you have improved'"]
+    seeds: ["Your eyes found the exits before you had finished sitting down.", "The name no longer sounds like someone else's."]
+    lifecycle: provisional
+    basis: ["R6 V10", "04.8.2"]
+  - id: veh.V11
+    name: The Place Answers
+    tags: [org.faith.shrine, org.order.druidic]
+    maps_to: [offer, grant]
+    recognizer: "a shrine, a standing stone, an old battlefield, a relic"
+    staging: "Arriving at a place resonant with the key triggers a sign; keeping vigil, praying or working there is the acceptance."
+    offer_form: {accept: "kneel, keep the vigil, do the work of the place", decline: "walk on; no cost", defer: "do not kneel yet; the place remains"}
+    witness_required: false
+    scope: "the place"
+    when: [arrival, reflection]
+    requires: ["the PC's location, or an ancestor place, carries a `resonance` list (the region's seed, 12.16 / ch.11 data) containing the calling's key, branch or conduct axis"]
+    families: [divine, primal, arcane, wilds, sacred]
+    specificity: 8
+    price_kinds: [price.shadow, price.seat, price.oath]
+    represent_when: [return_to_place]
+    rules: ["Places are standing affordances: returning later is always possible.", "For an oath-bearing calling the vigil includes veh.V4's words."]
+    may_not_say: ["that the place 'gives' power as a transaction", "numbers"]
+    seeds: ["The stones are warm on the north side, where no sun reaches.", "Something in the barrow has been waiting for the right kind of silence."]
+    lifecycle: provisional
+    basis: ["R6 V11, A-03 (shrines)", "R2 4a place vehicle", "04.6.3"]
+  - id: veh.V12
+    name: The Master of the Fusion
+    tags: []
+    maps_to: [offer]
+    recognizer: "a figure who embodies both branches of the hybrid"
+    staging: "Ch.12's lead engine introduces them near the character; they name the two roads as one."
+    offer_form: {accept: "take the hybrid; price.bond", decline: "keep the single roads; no cost", defer: "'you could keep walking both roads, as I have'; the master stays in the region for a season"}
+    witness_required: false
+    scope: "private"
+    when: [reflection, arrival]
+    requires: ["the candidate is a hybrid", "an NPC with role_tags under both branches exists or is generated as a principal by 12.11 with a tie to the region"]
+    families: [martial, guile, wilds, lore, arcane, divine, primal, influence, craft]
+    specificity: 9
+    price_kinds: [price.bond, price.shadow, price.seat]
+    represent_when: [return_to_person, reflection]
+    expires: "one season after presentation; then the offer continues as veh.V7"
+    rules: ["The hybrid is presented BESIDE the single-track candidates of the same pass, in one CHOICE block (04.7.6)."]
+    may_not_say: ["the hybrid calling's name as a title", "numbers"]
+    seeds: ["A charcoal-burner who hides in her own smoke asks whether you want to learn to carry the fire quietly.", "He fights with a prayer in his mouth, and has seen that you do too."]
+    lifecycle: provisional
+    basis: ["R6 V12, A-24", "C:P5 named hybrid beside the single tracks", "04.6.3"]
+  - id: veh.V13
+    name: The Interested Power
+    tags: [org.cult]
+    maps_to: [offer]
+    recognizer: "a demon, a dying god, a thing in the dark, the slain beast's lingering hunger"
+    staging: "A bargain, stated plainly, with its price."
+    offer_form: {accept: "take the bargain; price.bane and, for a pact, price.oath", decline: "refuse; the power remembers (fact written; ch.11/12 may use it as a bang)", defer: "it will return at the next crisis, or the next reflection in a place it can reach"}
+    witness_required: false
+    scope: "the power's scope"
+    when: [crisis, reflection, arrival]
+    requires: ["the candidate is a dark calling, call.pactbound, call.devourer, or the 'turn' answer of the Fraying", "the bane and any forbidden acts are shown in full in the CHOICE block"]
+    families: [dark, divine, lore, arcane]
+    specificity: 9
+    price_kinds: [price.bane, price.oath, price.seat]
+    decline_cost: {kind: fact, writes: "power.<id>.remembers_refusal = true", owner: "04 (fact); 11/12 (use)"}
+    represent_when: [next_crisis_any, reflection]
+    rules: ["The price is real and stated before the answer; nothing is hidden in the bargain (00.3.14's spirit: stakes before commitment).", "The power is an entity with an id from first mention; its identity may be sealed, its terms may not."]
+    may_not_say: ["hidden terms", "numbers in the power's voice"]
+    seeds: ["The thing you killed is not finished with you. It is asking, in its way, to be carried.", "'You have already done what I would ask. I only offer to make it easier.'"]
+    lifecycle: provisional
+    basis: ["R6 V13, A-25, A-28, A-29", "04.10"]
+  - id: veh.V14
+    name: The Fraying
+    tags: [org.faith, org.order]
+    maps_to: [revocation]
+    recognizer: "the bonded witness, or the community"
+    staging: "Graded: first the witness withdraws; then it speaks; then it offers the choice."
+    offer_form: {accept: "atone: one of the three forms (04.9.4)", decline: "turn: take the shadow calling in this one's place, or release the calling", defer: "the calling stays suspended; the choice stands until the lapse date shown"}
+    witness_required: false
+    scope: "the keeper's scope"
+    when: [reflection, crisis, arrival]
+    requires: ["a calling with an `oath` block has entered a new Fraying stage (04.9.2)"]
+    families: [divine, sacred, dark, martial]
+    specificity: 10
+    price_kinds: []
+    rules: ["A single contrary act only warns (stage 1 needs strain 4: one grave act, 03.8.5).", "Every stage is voiced in the turn it is entered and shown in a RESULT block; revocation is never silent and never a surprise.", "The recognizer is persistent (a power, an order, an ideal): never a single mortal who can die and strand the choice."]
+    may_not_say: ["that the character 'is' cruel, faithless or any pole", "numbers"]
+    seeds: ["The prayer comes out as only words.", "'I am still here,' it says. 'I wanted you to know that I noticed.'"]
+    lifecycle: provisional
+    basis: ["R6 V14, A-01, A-02", "R2 #6", "03.8", "04.9"]
+
+# ---------------------------------------------------------------------------------------------------------------
+# The Seer's Reading (veh.V6): band wording. The reader says the band line and, on the threshold, ONE lacking
+# line: the first requirement kind in this order that is unmet. [N] wording; the band and the kind are [D].
+# ---------------------------------------------------------------------------------------------------------------
+readings:
+  bands:
+    - {id: unformed, line: "There is nothing of that in you yet that the world would know you by."}
+    - {id: leaning, line: "You lean that way. A habit, not yet a road."}
+    - {id: becoming, line: "You are becoming it. Others would see it before you do."}
+    - {id: on_the_threshold, line: "You stand at the door of it. Something is still owed."}
+    - {id: ready, line: "It is already yours to take up. You know where, and from whom."}
+  lacking:                          # for on_the_threshold: the kind still missing, in fiction's terms
+    - {kind: quality_events, line: "You have done it often, and seldom when it was hard."}
+    - {kind: distinct_scenes, line: "One good day does not make a life of it."}
+    - {kind: counted, line: "You have the manner of it. The world has not yet been changed by it."}
+    - {kind: great_deeds, line: "You have not yet done it against something greater than yourself."}
+    - {kind: crises, line: "It has not yet been all that stood between you and the dark."}
+    - {kind: contexts, line: "You have done it in one country. It is wider than that."}
+    - {kind: breadth, line: "You know one tool of it well. It has many."}
+    - {kind: balance, line: "You walk one road and glance at the other."}
+    - {kind: currency, line: "That was who you were. I am asked who you are."}
+    - {kind: conduct, line: "Your hands are willing. Your record is not yet clean."}
+    - {kind: none_unmet, line: "Nothing is owed. It has only not been asked yet."}
+
+# ---------------------------------------------------------------------------------------------------------------
+# Out-of-fiction texts (04.7.2). Ch.12 owns the block formats (12.15.6 CHOICE, 12.15.3 RESULT); ch.14 renders.
+# <...> are filled by the engine from state; nothing in them is sealed.
+# ---------------------------------------------------------------------------------------------------------------
+markers:
+  crisis_marker: "[RECOGNITION] An offer is open (see below). Nothing is lost by waiting; play continues when you answer or move on."
+  offer_choice: |
+    [CHOICE] Recognition — <vehicle name>: <calling name>, tier <n> (<tier name>)
+      (a) Accept — you gain: <competence line> · <training grade line> · <capability name> · <k> pick(s) · <composite / boon / focus trigger line>
+                   price: <price text> · provisional until <confirmation rule>
+      (b) Decline — nothing changes; not raised again until <re-offer condition> (you may ask for it at any reflection)
+      (c) Defer — the offer stands; it returns <represent_when><; expires <expiry>>
+      If you move on without choosing: (c) defer
+  multi_choice: |
+    [CHOICE] Recognition — more than one road is open (choose any, all, or none; seats free: <s>)
+      (1) <vehicle name>: <calling name>, tier <n> — <one-line gains> · price: <price>
+      (2) ...
+      Accept by number · decline by number · anything unanswered is deferred
+  replace_choice: |
+    [CHOICE] Recognition — <calling name>, tier 1, and no seat is free. Accepting it means one of:
+      (a) Consolidate <calling A> + <calling B> into <target calling> (you keep every pick and specialty; 04.8.5), then accept
+      (b) Narrow / broaden <held calling> into <candidate> (a fork: one replaces the other at tier <n>)
+      (c) Release <held calling> (its picks return to the pool; its training stays), then accept
+      (d) Decline · (e) Defer
+      If you move on without choosing: (e) defer
+  grant_result: "[RESULT] Changed: calling — <calling name>, tier 1 (Called), provisional · <gains> · you may set it aside at any rest (say 'renounce <calling name>')"
+  pick_choice: |
+    [CHOICE] A pick for <calling name> — (a) <ability name>: <literal text> · (b) ... · (c) ... · (d) keep the pick for later
+             If you move on without choosing: (d)
+  confirm_result: "[RESULT] Changed: <calling name> tier <n> — confirmed (no longer provisional)"
+  lapse_warning: "[RESULT] Notice: <calling name> tier <n> is provisional and is not being lived; it will lapse at <boundary> unless that changes. Nothing else is at risk."
+  lapse_result: "[RESULT] Changed: <calling name> tier <n> — lapsed (never confirmed). Returned: <what>. Your deeds stand; it may be recognized again."
+  fraying_result: "[RESULT] Changed: <calling name> — <stage name> (stage <k> of 3). Now inactive: <list>. Clears by: <atonement options>. Next stage if: <plain condition>."
+  fraying_choice: |
+    [CHOICE] <calling name> — The Choice (stage 3). The calling is suspended until you answer.
+      (a) Atone — <form 1> · <form 2> · <form 3> (a <4|6>-segment clock; the calling returns at stage 2 while it runs)
+      (b) Turn — take <shadow calling name> in its place at tier <n> · price: <bane / oath>
+      (c) Release — let the calling go; its picks return to the pool; your training stays
+      (d) Defer — it stays suspended; it lapses at <season boundary name> if nothing is done
+      If you move on without choosing: (d) defer

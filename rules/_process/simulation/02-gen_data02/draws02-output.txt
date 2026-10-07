@@ -1,0 +1,31 @@
+
+Wren | source tags ['creature.folk.human', 'deed.wilds', 'deed.martial', 'terrain.forest', 'terrain.highland'] | circumstance unremarked (bias None)
+  knack pool 18 entries, total weight  36, roll   2 in band (1, 2) -> birth.knack.martial_archery (+1 edge on checks whose primary deed tag is at or under deed.martial.archery.)
+  quirk pool 22 entries, total weight  40, roll  24 in band (23, 24) -> birth.quirk.steady_hands (A Precision lever on small, exact work with the fingers.)
+
+Bram | source tags ['creature.folk.human', 'deed.wilds', 'deed.influence', 'terrain.road', 'terrain.settlement.camp', 'deed.martial'] | circumstance unremarked (bias None)
+  knack pool 27 entries, total weight  54, roll  47 in band (47, 48) -> birth.knack.wilds_navigation (+1 edge on checks whose primary deed tag is at or under deed.wilds.navigation.)
+  quirk pool 22 entries, total weight  40, roll   1 in band (1, 2) -> birth.quirk.iron_stomach (Spoiled food, bad water and swallowed poisons trouble you less.)
+
+Thessaly | source tags ['creature.folk.goblin', 'deed.guile', 'deed.lore', 'deed.craft', 'terrain.settlement.hold', 'terrain.ruin.temple', 'deed.divine'] | circumstance hard (bias deed.wilds.survival)
+  knack pool 36 entries, total weight  72, roll  15 in band (15, 16) -> birth.knack.craft_scribing (+1 edge on checks whose primary deed tag is at or under deed.craft.scribing.)
+  quirk pool 21 entries, total weight  59, roll  46 in band (46, 47) -> birth.quirk.honest_face (Strangers believe you when you are telling the truth: a Precision lever on a truthful Talk to someone who has never met you.)
+
+Odo (boundary: same choices as Wren) | source tags ['creature.folk.human', 'deed.wilds', 'deed.martial', 'terrain.forest', 'terrain.highland'] | circumstance unremarked (bias None)
+  knack pool 18 entries, total weight  36, roll  34 in band (33, 34) -> birth.knack.wilds_survival (+1 edge on checks whose primary deed tag is at or under deed.wilds.survival.)
+  quirk pool 22 entries, total weight  40, roll   1 in band (1, 2) -> birth.quirk.iron_stomach (Spoiled food, bad water and swallowed poisons trouble you less.)
+
+A Touched child, school named (elements) | source tags ['creature.folk.human', 'deed.craft', 'deed.wilds', 'deed.primal', 'deed.guile', 'deed.primal.elements'] | circumstance gifted (bias None)
+  gift  pool  1 entries, total weight   1, roll   1 in band (1, 1) -> birth.gift.elements (Fire, water, stone or air has known your name since you were small. You hold lic.training.primal_elements as an innate training (+2) and Cinder Stride at rank 1.)
+  knack pool 32 entries, total weight  64, roll   2 in band (1, 2) -> birth.knack.craft_alchemy (+1 edge on checks whose primary deed tag is at or under deed.craft.alchemy.)
+  quirk pool 22 entries, total weight  40, roll   5 in band (5, 6) -> birth.quirk.heat_hardy (Heat and thirst count one rung lighter for you.)
+
+A Touched child, school left to birth | source tags ['creature.folk.human', 'deed.craft', 'deed.wilds', 'deed.primal', 'deed.guile', 'deed.primal.growth', 'deed.primal.beastkin', 'deed.primal.weather', 'deed.primal.shapeshifting', 'deed.primal.spirits', 'deed.primal.elements', 'deed.primal.hexcraft'] | circumstance gifted (bias None)
+  gift  pool  7 entries, total weight   7, roll   5 in band (5, 5) -> birth.gift.spirits (You see and hear what stands just outside the world. You hold lic.training.primal_spirits as an innate training (+2) and Spirit Tongue at rank 1.)
+  knack pool 32 entries, total weight  64, roll  51 in band (51, 52) -> birth.knack.primal_weather (+1 edge on checks whose primary deed tag is at or under deed.primal.weather.)
+  quirk pool 22 entries, total weight  40, roll   5 in band (5, 6) -> birth.quirk.heat_hardy (Heat and thirst count one rung lighter for you.)
+
+Wren's Bent, source tags [deed.martial, deed.wilds], Agility +3 excluded
+  draw 1: pool 3 (might, endurance, wits), roll 2 of 3 -> endurance
+  draw 2: pool 2 (might, wits), roll 2 of 2 -> wits
+  draw 3: pool 1 (might), roll 1 of 1 -> might

@@ -1,0 +1,112 @@
+validation ok: 8 peoples, 9 upbringings, 21 trades, 30 kits, 22 traits, 81 knacks
+level-2 deed tags on no trade list and no upbringing (reachable only by the off-list pick or in play): 0 []
+
+== A1. legal attribute placements ==
+Human       {'peaked': 840, 'even': 630, 'broad': 210} total 1680
+Elf         {'peaked': 54, 'even': 6, 'broad': 24} total 84
+Dwarf       {'peaked': 54, 'even': 6, 'broad': 24} total 84
+Halfling    {'peaked': 54, 'even': 6, 'broad': 24} total 84
+Orc-kin     {'peaked': 54, 'even': 6, 'broad': 24} total 84
+Goblin-kin  {'peaked': 54, 'even': 6, 'broad': 24} total 84
+Giant-kin   {'peaked': 54, 'even': 6, 'broad': 24} total 84
+Beastfolk   {'peaked': 54, 'even': 6, 'broad': 24} total 84
+free rule (anyone, uncommon of kind): {'peaked': 840, 'even': 630, 'broad': 210}
+
+== A2. default placements (peaked shape) for each trade x people ==
+Soldier       +3+1+2+0-1+0+0  +3+2-1+2+0+0+1  +3-1+2+2+0+0+1  -1+2+3+2+0+0+1  +3+2+2+0-1+0+1  +3+1+2+2+0-1+0  +3+2+2-1+0+0+1  +3+1+2+2+0+0-1
+Hunter        +1+3+0+2+0+0-1  +2+3-1+2+1+0+0  +2-1+2+3+0+0+1  -1+3+2+2+0+0+1  +2+3+0+2-1+0+1  +2+3+1+2+0-1+0  +2+3+2-1+1+0+0  +2+3+1+2+0+0-1
+Rider         +3+2+0+0-1+1+0  +3+2-1+1+0+2+0  +3-1+2+0+0+2+1  -1+3+2+0+0+2+1  +3+2+0+0-1+2+1  +3+2+1+2+0-1+0  +3+2+1-1+0+2+0  +3+2+0+2+0+1-1
+Laborer       +3+0+2+0-1+0+1  +3+2-1+1+0+0+2  +3-1+2+1+0+0+2  -1+2+3+1+0+0+2  +3+1+2+0-1+0+2  +3+1+2+2+0-1+0  +3+1+2-1+0+0+2  +3+1+2+2+0+0-1
+Thief         -1+3+0+2+0+1+0  +0+3-1+2+1+2+0  +0-1+2+3+0+2+1  -1+3+0+2+0+2+1  +2+3+0+2-1+0+1  +0+3+1+2+2-1+0  +2+3+1-1+0+2+0  +0+3+0+2+1+2-1
+Charlatan     -1+1+0+2+0+3+0  +0+2-1+2+1+3+0  +0-1+2+2+0+3+1  -1+2+0+2+0+3+1  +2+0+0+2-1+3+1  +0+2+0+3+2-1+1  +2+2+1-1+0+3+0  +0+2+0+2+1+3-1
+Sailor        +1+3+2+0-1+0+0  +2+3-1+2+0+1+0  +2-1+3+2+0+0+1  -1+3+2+2+0+0+1  +2+3+2+0-1+0+1  +1+3+2+2+0-1+0  +2+3+2-1+0+1+0  +1+3+2+2+0+0-1
+Herder        +0+0+3+2-1+0+1  +1+2-1+3+0+0+2  +1-1+3+2+0+0+2  -1+2+3+2+0+0+1  +2+0+3+2-1+0+1  +0+1+3+2+0-1+2  +2+1+3-1+0+0+2  +1+2+3+2+0+0-1
+Scholar       -1+0+0+2+3+1+0  +0+2-1+2+3+1+0  +0-1+2+2+3+0+1  -1+2+0+2+3+0+1  +2+0+0+3-1+2+1  +0+1+0+2+3-1+2  +2+0+1-1+3+2+0  +0+1+0+2+3+2-1
+Healer        -1+0+0+2+3+1+0  +0+2-1+2+3+1+0  +0-1+2+2+3+0+1  -1+2+0+2+3+0+1  +2+0+0+3-1+2+1  +0+1+0+2+3-1+2  +2+0+1-1+3+2+0  +0+1+0+2+3+2-1
+Apprentice    -1+0+0+2+3+0+1  +0+2-1+2+3+0+1  +0-1+2+2+3+0+1  -1+2+0+2+3+0+1  -1+0+0+2+3+0+1  +0+1+0+2+3-1+2  +2+0+1-1+3+0+2  +0+2+0+2+3+1-1
+Acolyte       +0-1+0+1+0+3+2  +0+2-1+1+0+3+2  +0-1+2+1+0+3+2  -1+2+0+1+0+3+2  +2+0+0+1-1+3+2  +0-1+0+1+0+3+2  +2+0+1-1+0+3+2  +0+1+2+2+0+3-1
+Hedge-taught  -1+0+1+2+0+0+3  +0+2-1+2+0+1+3  +0-1+2+2+0+1+3  -1+2+1+2+0+0+3  +2+0+1+2-1+0+3  +0+1+2+2+0-1+3  +2+1+2-1+0+0+3  -1+0+1+2+0+0+3
+Touched       +0+2+0+1-1+0+3  +0+2-1+2+0+1+3  +0-1+2+2+0+1+3  -1+2+1+2+0+0+3  +2+2+0+1-1+0+3  +0+2+1+2+0-1+3  +2+2+1-1+0+0+3  +0+2+0+1-1+0+3
+Merchant      -1+0+0+2+1+3+0  +0+2-1+2+1+3+0  +0-1+2+2+0+3+1  -1+2+0+2+0+3+1  +2+0+0+2-1+3+1  +0+1+0+3+2-1+2  +2+0+1-1+2+3+0  +0+1+0+2+2+3-1
+Performer     -1+2+0+1+0+3+0  +0+2-1+2+1+3+0  +0-1+2+2+0+3+1  -1+2+0+2+0+3+1  +2+2+0+0-1+3+1  +0+3+0+2+2-1+1  +2+2+1-1+0+3+0  +0+2+0+2+1+3-1
+Courtier      -1+0+0+2+1+3+0  +0+2-1+2+1+3+0  +0-1+2+2+0+3+1  -1+2+0+2+0+3+1  +2+0+0+2-1+3+1  +0+1+0+3+2-1+2  +2+0+1-1+2+3+0  +0+1+0+2+2+3-1
+Artisan       +3+1+0+0+2-1+0  +3+2-1+1+2+0+0  +3-1+2+0+2+0+1  -1+2+2+0+3+0+1  +3+2+2+0-1+0+1  +3+1+0+2+2-1+0  +3+2+1-1+2+0+0  +3+1+0+2+2+0-1
+Watchman      +2-1+0+3+0+0+1  +2+2-1+3+0+0+1  +2-1+2+3+0+0+1  -1+2+0+3+0+1+2  +2+0+0+3-1+1+2  +2+1+0+3+0-1+2  +3+0+1-1+0+2+2  +2+1+0+3+0+2-1
+Tinker        -1+2+0+1+3+0+0  +0+2-1+2+3+0+1  +0-1+2+2+3+0+1  -1+2+0+2+3+0+1  +2+3+0+2-1+0+1  +0+2+1+2+3-1+0  +2+2+1-1+3+0+0  +0+2+1+2+3+0-1
+Wanderer      -1+0+2+3+0+0+1  +0+2-1+3+0+1+2  +0-1+2+3+0+1+2  -1+2+2+3+0+0+1  +2+0+2+3-1+0+1  +0+1+2+3+0-1+2  +2+1+3-1+0+0+2  +0+2+2+3+0+1-1
+order of attributes: ['might', 'agility', 'endurance', 'wits', 'intellect', 'presence', 'resolve'] | peoples: ['Human', 'Elf', 'Dwarf', 'Halfling', 'Orc-kin', 'Goblin-kin', 'Giant-kin', 'Beastfolk']
+
+== A3. concept fit: best attainable weighted score, free (5) vs each typical people (6) ==
+concept   free Elf   Dwarf Halfl Orc-k Gobli Giant Beast
+warrior    28  24    27    24    34    32    33    31   
+archer     31  29    22    37    31    37    25    35   
+rogue      30  34    21    35    31    31    23    34   
+scholar    27  30    29    30    20    28    20    31   
+wizard     28  31    31    32    22    34    22    27   
+priest     28  31    31    32    30    24    25    24   
+druid      31  29    35    35    33    37    25    22   
+bard       28  33    24    34    28    24    25    33   
+envoy      27  30    29    30    26    22    20    31   
+smith      26  25    31    21    25    28    31    27   
+scout      31  29    26    37    31    37    21    35   
+brawler    28  24    33    24    34    30    33    27   
+knight     26  25    31    21    32    25    31    27   
+shaman     29  32    32    33    31    28    26    20   
+thief      30  34    21    35    29    35    23    34   
+captain    26  29    27    25    32    21    25    31   
+concepts (of 16) where the typical rule is best-or-tied among peoples: {'Orc-kin': 4, 'Halfling': 7, 'Goblin-kin': 5, 'Beastfolk': 2, 'Dwarf': 1, 'Giant-kin': 1}
+concepts (of 16) where the typical rule scores WORSE than the free rule: {'Elf': 7, 'Dwarf': 6, 'Halfling': 5, 'Giant-kin': 12, 'Orc-kin': 5, 'Beastfolk': 5, 'Goblin-kin': 6}
+mean (typical - free), min, max per people: {'Elf': ('0.9', -4, 5), 'Dwarf': ('-0.2', -9, 5), 'Halfling': ('1.9', -5, 6), 'Orc-kin': ('0.9', -7, 6), 'Goblin-kin': ('1.2', -5, 6), 'Giant-kin': ('-2.9', -10, 5), 'Beastfolk': ('0.9', -9, 5)}
+
+== A4. knack pool by origin (size; chance the knack lands on a default deep training) ==
+Soldier       + Road-raised            branches 3 pool 27  P(on a deep training) 2/27 = 7%
+Hunter        + Wilds-raised           branches 2 pool 18  P(on a deep training) 2/18 = 11%
+Rider         + Court-raised           branches 4 pool 36  P(on a deep training) 2/36 = 6%
+Laborer       + Village-raised         branches 3 pool 29  P(on a deep training) 1/29 = 3%
+Thief         + Street-raised          branches 3 pool 29  P(on a deep training) 2/29 = 7%
+Charlatan     + Street-raised          branches 2 pool 17  P(on a deep training) 2/17 = 12%
+Sailor        + Water-raised           branches 2 pool 18  P(on a deep training) 1/18 = 6%
+Herder        + Village-raised         branches 3 pool 26  P(on a deep training) 2/26 = 8%
+Scholar       + Cloister-raised        branches 2 pool 20  P(on a deep training) 1/20 = 5%
+Healer        + Village-raised         branches 3 pool 26  P(on a deep training) 2/26 = 8%
+Apprentice    + Cloister-raised        branches 3 pool 31  P(on a deep training) 1/31 = 3%
+Acolyte       + Cloister-raised        branches 3 pool 28  P(on a deep training) 1/28 = 4%
+Hedge-taught  + Wilds-raised           branches 3 pool 25  P(on a deep training) 1/25 = 4%
+Touched       + Village-raised         branches 4 pool 32  P(on a deep training) 1/32 = 3%
+Merchant      + Guild-quarter raised   branches 3 pool 26  P(on a deep training) 2/26 = 8%
+Performer     + Road-raised            branches 3 pool 24  P(on a deep training) 2/24 = 8%
+Courtier      + Court-raised           branches 2 pool 18  P(on a deep training) 2/18 = 11%
+Artisan       + Guild-quarter raised   branches 2 pool 20  P(on a deep training) 2/20 = 10%
+Watchman      + Guild-quarter raised   branches 4 pool 41  P(on a deep training) 1/41 = 2%
+Tinker        + Guild-quarter raised   branches 3 pool 29  P(on a deep training) 2/29 = 7%
+Wanderer      + Road-raised            branches 2 pool 15  P(on a deep training) 0/15 = 0%
+over all 1512 people x upbringing x trade combinations: knack pool min 15, median 35, max 52
+trait pool: 22 entries, total weight 40 (universal gate); uncanny weight 4 -> unremarked 10.0%, omened (x3) 25.0%
+hardy traits (carry deed.wilds.survival): unremarked 27.5%, hard (x3) 53.2%
+
+== A5. the Bent: chance of ending with the attribute you want (n eligible, uniform, declined entries struck) ==
+n=2  want 1 specific: accept-first  50.0%  defer-until-it-comes 100.0% (else forgo   0.0%) | want either of 2: 100.0%
+n=3  want 1 specific: accept-first  33.3%  defer-until-it-comes 100.0% (else forgo   0.0%) | want either of 2: 100.0%
+n=4  want 1 specific: accept-first  25.0%  defer-until-it-comes  75.0% (else forgo  25.0%) | want either of 2: 100.0%
+n=5  want 1 specific: accept-first  20.0%  defer-until-it-comes  60.0% (else forgo  40.0%) | want either of 2:  90.0%
+n=6  want 1 specific: accept-first  16.7%  defer-until-it-comes  50.0% (else forgo  50.0%) | want either of 2:  80.0%
+  pure martial       eligible: might, agility, endurance
+  martial + wilds    eligible: might, agility, endurance, wits
+  guile + influence  eligible: agility, wits, presence, resolve
+  arcane + lore      eligible: wits, intellect, resolve
+  divine + influence eligible: wits, presence, resolve
+  craft only         eligible: might, agility, intellect
+
+== A6. starting numbers: ranges ==
+Vitality base = 12 + Endurance: creation range 11 to 15 | lifetime (-2..+4): 10 to 16
+Focus base by upbringing: {'Wilds-raised': 4, 'Village-raised': 4, 'Street-raised': 4, 'Guild-quarter raised': 3, 'Court-raised': 3, 'Cloister-raised': 5, 'Road-raised': 4, 'Water-raised': 4, 'Bound service': 5}
+dread threshold 8 + Resolve: creation 7 to 11
+untrained, attribute 0 (floor)       mod +1: DC10  60%  DC15  35%  DC20  10%  DC25   5%
+access training, attribute +2        mod +3: DC10  70%  DC15  45%  DC20  20%  DC25   5%
+deep training, attribute +2          mod +4: DC10  75%  DC15  50%  DC20  25%  DC25   5%
+deep, attribute +3 (P1 specialist)   mod +5: DC10  80%  DC15  55%  DC20  30%  DC25   5%
+deep, +3, knack on the tag           mod +6: DC10  85%  DC15  60%  DC20  35%  DC25  10%
+forced low -1 (floor)                mod +0: DC10  55%  DC15  30%  DC20   5%  DC25   5%
+
+== A7. totals a character can hold at creation ==
+training licenses: min 3 (focused + cloister... ) see chapter; max = broad 5 + upbringing 2 + human 1 + Intellect 3 = 11

@@ -1,0 +1,171 @@
+# data/boundaries.yaml
+# Purpose: the boundary registry: every handler that runs when a time or event boundary fires
+#   (00.7.4). advance_time runs every handler for every boundary crossed (INV-15).
+# Owner: 00-architecture (structure, phases, the reserved handlers below). Each chapter defines the
+#   behavior of its handlers in its own chapter and may add handlers ONLY in its own owner-block;
+#   no chapter edits another owner's rows.
+# Schema: data/SCHEMAS.md#boundariesyaml.
+# Order: phases 1-9 (00.7.5); within a phase by owner chapter number, then handler id.
+#   Simultaneous boundaries: conflict_end, scene_end, rest completions, reflection, venture_end, then
+#   round < interval < hour < watch < day < week < season < year (00.7.6).
+#   A handler may declare `before: [ids]` to run ahead of named handlers of its own phase (00.7.5, amended).
+#   Registry order is deliberate at `interval` phase 2: h.07.affliction_onset runs before h.10.site_exposure, so an
+#   affliction contracted this interval advances first at the next one (issue I-023, resolved at integration).
+# Rest boundaries carry the payload {quality, site, treated} computed by ch.07 (00.7.2, amended; 07.8.1).
+# Integration: every chapter's owner-block from data/contrib/boundaries.NN.yaml is merged below (the reserved rows
+#   restated by their owners with rule ids; 03's and 04's reserved_row_wording applied; the fragments are kept in
+#   _process/merged-contrib/). T-00-9 in 00-architecture.md is generated from this file.
+# Basis: [R5 §3.2-3.3]; [R6 §B.3]; [DL-00A-12]
+
+schema_version: 1
+
+phases:
+  - {n: 1, id: expire}
+  - {n: 2, id: periodic}
+  - {n: 3, id: recover}
+  - {n: 4, id: consume}
+  - {n: 5, id: clocks}
+  - {n: 6, id: world}
+  - {n: 7, id: checks}
+  - {n: 8, id: growth}
+  - {n: 9, id: record}
+
+boundaries:
+  time: [round, interval, hour, watch, day, week, season, year]
+  event: [beat_end, turn_start, turn_end, conflict_start, conflict_end, scene_start, scene_end, breather, rest_short, rest_long, reflection, venture_start, venture_end, session_start, session_end, mode_change]
+
+blocks:
+  - owner: "00"
+    handlers:
+      - {id: h.00.durations, boundary: "*", phase: 1, interrupting: false, effect: "expire effect instances and condition instances whose duration unit is this boundary"}
+      - {id: h.00.clock_auto, boundary: "*", phase: 5, interrupting: "per clock on_complete", effect: "run every active clock's auto_ticks and decay rows for this boundary (PR-00-3)"}
+      - {id: h.00.reflection, boundary: [rest_long, season], phase: 8, interrupting: false, effect: "fire the reflection event boundary (at most once per day)"}
+      - {id: h.00.reflection_if_downtime, boundary: week, phase: 8, interrupting: false, effect: "fire reflection if the week was spent in downtime mode"}
+  - owner: "01"
+    handlers:
+      - {id: h.01.ruling_log, boundary: beat_end, phase: 9, interrupting: false, effect: "finalize the frame; log any ruling (00.15.5)"}
+      - {id: h.01.scene_cleanup, boundary: scene_end, phase: 1, interrupting: false, effect: "expire ride records whose until is scene_end, unused Setup and momentum lever facts, scene-scoped closed approaches (cost.closed_door S1), and reset the hard-luck-this-scene fate flag", rule_id: "01.4.2; 01.9.1; 01.13.9; 01.14.9; 01.16.2", lifecycle: provisional}
+  - owner: "02"
+    handlers:
+      - {id: h.02.creation_lock, boundary: reflection, phase: 9, interrupting: false, effect: "at the first reflection after creation, close the creation window: creation choices become permanent (P4) and the fact pc.creation.locked is written; a no-op afterwards", rule_id: "02.2.6"}
+      - {id: h.02.bent_offer, boundary: reflection, phase: 8, interrupting: false, effect: "if the creation window is closed and the Bent is neither accepted nor forgone: when no Bent offer is open and the spacing rule is met, draw one (generate gen.birth, circumstance bent_first or bent_again) and present it as an offer; a deferred or unanswered offer is never applied", rule_id: "02.6.5"}
+      - {id: h.02.open_slots, boundary: reflection, phase: 9, interrupting: false, effect: "if any creation slot is still open (second bond, the true thing, a faction tie, an aspiration), queue ONE out-of-fiction reminder for the next session start; never more than one per session, and never after the player has said to stop asking", rule_id: "02.9.8"}
+  - owner: "03"
+    handlers:
+      - {id: h.03.antigrind_reset, boundary: scene_end, phase: 9, interrupting: false, effect: "settle the scene's pending evidence (PR-03-2): carriers and scopes; same-target cap; cascade; routine cap; diminishing returns per node (1, 1/2, 1/4, 0); conduct and counted tallies; public_deed packets to ch.11; fire on_tag_event per settled event", rule_id: "03.5.1-03.5.4; PR-03-2", status: "reserved by 00; defined"}
+      - {id: h.03.recency_update, boundary: reflection, phase: 8, interrupting: false, effect: "reflection sweep (03.3.5); recompute recent values over the evidence-bearing scene window; build the sealed reflection digest for h.04.recognition_pass (PR-03-3)", rule_id: "03.6.2; 03.6.4; PR-03-3", status: "reserved by 00; defined"}
+      - {id: h.03.day_settle, boundary: day, phase: 9, interrupting: false, effect: "settle the pending evidence of any scene still open at the day boundary, exactly as h.03.antigrind_reset does at scene_end (PR-03-2), so that a scene spanning several days settles once per day", rule_id: "03.5.1; PR-03-2", lifecycle: provisional}
+  - owner: "04"
+    # ordering note (ch.04): The Fraying is checked at scene_start because settlement runs in phase 9 of scene_end (PR-03-2): a stage change caused by a scene is voiced as the next scene opens, never mid-scene and never before the deed is settled. It is also re-read inside h.04.recognition_pass at every reflection.
+    handlers:
+      - {id: h.04.recognition_pass, boundary: reflection, phase: 8, interrupting: false, effect: "evaluate_recognition(reflection) over the candidates keyed on the digest's dirty nodes and axes (03.6.4): requirement sets, confidence, policy; create at most three offers, apply grants as provisional, queue the rest; voice abstain only through a reading (PR-04-1)", rule_id: "04.4; PR-04-1", status: "reserved by 00; defined"}
+      - {id: h.04.standing_offers, boundary: reflection, phase: 8, interrupting: false, effect: "re-present deferred offers whose represent_when condition is met; withdraw offers whose candidate is no longer eligible; expire offers past their expiry; present unspent picks (PR-04-4, PR-04-5)", rule_id: "04.7.3; PR-04-4", status: "reserved by 00; defined"}
+      - {id: h.04.season_consolidation, boundary: season, phase: 8, interrupting: false, effect: "run the provisional test of h.04.provisional_check (confirm, warn or lapse); offer consolidations, folds and forks; allow one re-pick per calling; lapse a calling held at Fraying stage 3 since the season boundary before last (PR-04-6, PR-04-8)", rule_id: "04.8; PR-04-6; PR-04-8", status: "reserved by 00; defined"}
+      - {id: h.04.crisis_check, boundary: beat_end, phase: 8, interrupting: false, effect: "if this beat recorded an evidence event flagged crisis (03.4.5) on a key with a candidate at band on_the_threshold or ready, run evaluate_recognition(crisis) with pending evidence included (03.5.6); raise trg.04.crisis_offer for at most one offer per scene (PR-04-2)", rule_id: "04.4.5; PR-04-2", lifecycle: provisional}
+      - {id: h.04.provisional_check, boundary: reflection, phase: 8, interrupting: false, effect: "for each provisional grant: confirm it when 12 or more evidence-bearing scenes have passed since the grant and it has been lived (callings.yaml#provisional); lapse it when 24 or more have passed without confirmation and a warning was shown earlier; otherwise raise trg.04.lapse_warning when it is 8 or more scenes old and not on course (PR-04-6)", rule_id: "04.8.2; PR-04-6", lifecycle: provisional}
+      - {id: h.04.fraying_check, boundary: scene_start, phase: 8, interrupting: false, effect: "the previous scene's evidence is settled (h.03.antigrind_reset ran at its scene_end, phase 9): recompute the Fraying stage of every oath-bearing calling from conduct().strain and .forbidden (dark callings: recent_net); raise trg.04.fraying on a stage change; tick open atonement clocks; mark a shadow that shows (PR-04-7)", rule_id: "04.9.1; 04.9.2; PR-04-7", lifecycle: provisional}
+  - owner: "05"
+    handlers:
+      - {id: h.05.round_recharge, boundary: round, phase: 3, interrupting: false, effect: "refresh uses with per: round", rule_id: "05.4.6", status: "reserved by 00; defined"}
+      - {id: h.05.conflict_recharge, boundary: conflict_end, phase: 3, interrupting: false, effect: "refresh uses with per: conflict_end and below on the refresh ladder", rule_id: "05.4.6", status: "reserved by 00; defined"}
+      - {id: h.05.scene_recharge, boundary: scene_end, phase: 3, interrupting: false, effect: "refresh uses with per: scene_end and below; reset focus.generated_this_scene; end scene-duration ability effects not already expired", rule_id: "05.4.6; 05.6.10", status: "reserved by 00; defined"}
+      - {id: h.05.day_recharge, boundary: day, phase: 3, interrupting: false, effect: "refresh uses with per: day; reset focus.short_rests_today", rule_id: "05.4.6; 05.6.9", status: "reserved by 00; defined"}
+      - {id: h.05.focus_recover, boundary: [breather, rest_short, rest_long], phase: 3, interrupting: false, effect: "restore Focus by rest type and quality (T-05-5); apply the resonant-place +1; runs after h.07.rest_recovery", rule_id: "05.6.9", status: "reserved by 00; defined"}
+      - {id: h.05.rest_recharge, boundary: [rest_short, rest_long], phase: 3, interrupting: false, effect: "refresh uses with per: rest_short (both rests) and per: rest_long (long rest only) and everything below on the refresh ladder; on rest_long reset healings_since_long_rest, overdraws_since_long_rest, restored_by_consumables_since_long_rest; on rest_short reset breathers_since_short_rest", rule_id: "05.4.6; 05.6.6; 05.6.11; 05.7.8", status: added}
+      - {id: h.05.reslot, boundary: rest_long, phase: 3, interrupting: false, effect: "offer the exchange between acquired slots and the shelf or library (quality full or partial only)", rule_id: "05.2.7", status: added}
+      - {id: h.05.reserve, boundary: rest_long, phase: 3, interrupting: false, effect: "resolve reserve charging: bank the charged points if the holder was never Spent since declaring them, else lose the charge; restore focus.max; accept a new declaration", rule_id: "05.6.12", status: added}
+      - {id: h.05.provisional_abilities, boundary: [reflection, season], phase: 8, interrupting: false, effect: "confirm non-pick abilities used in 3 different scenes; at the second season boundary shelve the unconfirmed, with a warning one season earlier", rule_id: "05.2.10", status: added}
+  - owner: "06"
+    handlers:
+      - {id: h.06.turn_effects, boundary: [turn_start, turn_end], phase: 2, interrupting: false, effect: "turn_start: refresh the owner's reaction, lapse an unfired readied beat, expire defending and fend facts, apply turn_start periodics; turn_end: apply turn_end periodics (bleeding, burning, choking), count down durations in the owner's turns, decay cond.frightened one rung", rule_id: "06.1.8", status: "reserved by 00; defined"}
+      - {id: h.06.ongoing_harm, boundary: round, phase: 2, interrupting: false, effect: "apply periodic effects of the place (hazard features: a burning room, rising water) to those in them", rule_id: "06.2.3", status: "reserved by 00; defined"}
+      - {id: h.06.diminishing_window, boundary: round, phase: 9, interrupting: false, effect: "lower each target's control counter by one if it carried no control condition this round", rule_id: "06.7.4", status: "reserved by 00; defined"}
+      - {id: h.06.tempo_setup, boundary: conflict_start, phase: 9, interrupting: false, effect: "list participants, sides and objectives; set bands, groups and flags; apply cond.surprised; create the morale clock; roll the PC's tempo check and fix the order", rule_id: "06.2.1; 06.2.2; PR-06-1", status: "reserved by 00; defined"}
+      - {id: h.06.clear_conflict_state, boundary: conflict_end, phase: 1, interrupting: false, effect: "clear bands, links, groups and conflict-only flags; end conflict-duration conditions and effects; end stances; end defending, fend, aim, windup, tempo and momentum facts; reset control counters; close morale and chase clocks", rule_id: "06.13.4; PR-06-10", status: "reserved by 00; defined"}
+      - {id: h.06.chase_round, boundary: round, phase: 5, interrupting: false, effect: "while a chase runs: the other side's fortune check against the round's ground; tick its clock; completion effects", rule_id: "06.12.4; PR-06-8", status: added}
+      - {id: h.06.objective_check, boundary: round, phase: 9, interrupting: false, effect: "test the end conditions of 06.13.1 (also run after any defeat, break, yield, truce or clock completion); mark conflict_end when one holds", rule_id: "06.13.1", status: added}
+  - owner: "07"
+    handlers:
+      - {id: h.07.after_conflict, boundary: conflict_end, phase: 3, interrupting: false, effect: "run the defeat disposition if the PC is Down, yielded or captured (PR-07-7); if anyone is Dying keep time in rounds until the ladder resolves; write setback facts", rule_id: "07.6.1; PR-07-7", status: "reserved by 00; defined"}
+      - {id: h.07.affliction_onset, boundary: interval, phase: 2, interrupting: false, effect: "end onsets that have run out (stage 1 begins); run stage checks of afflictions on the interval cadence (PR-07-9)", rule_id: "07.9.3; PR-07-9", status: "reserved by 00; defined"}
+      - {id: h.07.fatigue, boundary: watch, phase: 4, interrupting: false, effect: "advance watches_awake; apply cond.exhausted at 4, 6, 8; S2 harm each watch beyond 8 (lethal: false)", rule_id: "07.8.10", status: "reserved by 00; defined"}
+      - {id: h.07.natural_recovery, boundary: day, phase: 3, interrupting: false, effect: "tick every recovery clock from rested_today / treated_today / bed_rest_today (T-07-15); heal completed wounds; write scars; turn an unoperated Catastrophic wound into a maim at day 7; clear the three flags", rule_id: "07.8.7; PR-07-10", status: "reserved by 00; defined"}
+      - {id: h.07.rest_recovery, boundary: [breather, rest_short, rest_long], phase: 3, interrupting: false, effect: "restore Vitality by rest type and quality (T-07-14); clear wound load; heal Light and Moderate wounds; remove exhausted stacks; ease dread; set rested_today. Reads quality from the boundary payload; requested to run before h.05.focus_recover and h.05.rest_recharge", rule_id: "07.8.5; PR-07-8", before: [h.05.focus_recover, h.05.rest_recharge], status: "reserved by 00; defined"}
+      - {id: h.07.dying_check, boundary: [turn_end, round], phase: 2, interrupting: false, effect: "turn_end: the dying check of a Dying character whose turn it is (07.2.7); round: the same for a Dying character outside a conflict, and +1 on every clk.bleeding_out", rule_id: "07.2.7; 07.12.1; PR-07-3", status: added}
+      - {id: h.07.lethal_scan, boundary: [scene_start, conflict_start], phase: 7, interrupting: false, effect: "evaluate the lethal-warning rows (07.3.3) and the danger notice (07.3.8) against the framed scene; raise trg.lethal_warning / trg.danger_notice. The same rows are also evaluated whenever their state changes", rule_id: "07.3.3; 07.3.8; PR-07-4", status: added}
+      - {id: h.07.load_clear, boundary: scene_end, phase: 1, interrupting: false, effect: "clear wound_load; end lethal contexts whose `ends` is scene_end; heal Light wounds", rule_id: "07.2.6; 07.3.5", status: added}
+      - {id: h.07.affliction_day, boundary: day, phase: 2, interrupting: false, effect: "stage checks of afflictions on the day cadence; stage harm; contagion exposures; the 7-day wound_rot exposure of an unticked Grievous wound", rule_id: "07.9.3; 07.9.8; PR-07-9", status: added}
+      - {id: h.07.curse_cycle, boundary: week, phase: 2, interrupting: false, effect: "stage checks of curses on the week cadence; haunt effects keyed to the week; the weekly captivity dread check", rule_id: "07.9.7; 07.11.2", status: added}
+      - {id: h.07.vitality_max, boundary: [reflection, season], phase: 9, interrupting: false, effect: "recompute maximum Vitality from base, power_band, effects and wound penalties (07.1.2); raise current by the same amount when power_band rose", rule_id: "07.1.2; DL-00-04", status: added}
+      - {id: h.07.career_end, boundary: scene_end, phase: 8, interrupting: false, effect: "if career_end is written (the fourth break, 07.11.6) hand the character to ch.11's retirement procedure", rule_id: "07.11.6", status: added}
+  - owner: "08"
+    handlers:
+      - {id: h.08.upkeep, boundary: week, phase: 4, interrupting: false, effect: "charge the lifestyle (if any day of the week was spent in a settlement), mount stabling, holdings' upkeep and hirelings' coin wages not paid by 16's handler; shortfall drops the lifestyle one rung (08.8.6)", rule_id: "08.8.6"}
+      - {id: h.08.markets, boundary: week, phase: 6, interrupting: false, effect: "recover one notch of glut per good per settlement; reset market depth; restock curio dealers (d4 property items in cities); tick each clk.find_buyer by its settlement's weekly ticks", rule_id: "08.8.5"}
+      - {id: h.08.durations, boundary: "*", phase: 1, interrupting: false, effect: "expire item effect instances with uses: or duration forms (oils, elixirs, imbued properties at season), mark spent light sources", rule_id: "08.1.9"}
+      - {id: h.08.craft_decay, boundary: week, phase: 5, interrupting: false, effect: "covered by h.00.clock_auto (crafting project clocks carry decay rows); listed for traceability only", rule_id: "08.6.4"}
+  - owner: "10"
+    handlers:
+      - {id: h.10.site_time, boundary: beat_end, phase: 9, interrupting: false, effect: "in site mode, a significant beat advances 1 interval; a listed activity its duration (care: 2)", rule_id: "10.13.5", status: "reserved by 00; defined"}
+      - {id: h.10.light, boundary: interval, phase: 4, interrupting: false, effect: "every lit source loses 1 interval; at 1 remaining raise the gutters obligation; at 0 spent; recompute scene.light", rule_id: "10.7.1; 10.7.2", status: "reserved by 00; defined"}
+      - {id: h.10.site_check, boundary: interval, phase: 7, interrupting: "per result (10.9.8)", effect: "count intervals; at the cadence roll the site time-tick die (PR-10-4)", rule_id: "10.9; 10.9.3", status: "reserved by 00; defined"}
+      - {id: h.10.travel_progress, boundary: watch, phase: 4, interrupting: false, effect: "way-finding beat if due (a pause point); progress points by effective pace; arrival; march units and forced-march stacks", rule_id: "10.3.2-10.3.5; 10.4.1", status: "reserved by 00; defined"}
+      - {id: h.10.watch_check, boundary: watch, phase: 7, interrupting: "per result (10.9.8)", effect: "the travel time-tick die at the place danger rating (night +1 rung); not in a haven or a site (PR-10-4)", rule_id: "10.9", status: "reserved by 00; defined"}
+      - {id: h.10.supply, boundary: day, phase: 4, interrupting: "when the deprivation warning fires", effect: "snares yield; consume supply per consumer (+1 hot or dry without water); half rations; want: cond.exhausted per unfed consumer", rule_id: "10.6.2; 10.6.5", status: "reserved by 00; defined"}
+      - {id: h.10.weather, boundary: day, phase: 7, interrupting: false, effect: "weather.today <- weather.tomorrow; roll tomorrow with persistence; standing facts (snow_lying, high_water, drought)", rule_id: "10.11.3; 10.11.4", status: "reserved by 00; defined"}
+      - {id: h.10.weather_regime, boundary: season, phase: 6, interrupting: false, effect: "set each region's current regime from its climate and the new season (weather.yaml#regimes)", rule_id: "10.11.2", status: "reserved by 00; defined"}
+      - {id: h.10.venture, boundary: [venture_start, venture_end], phase: 9, interrupting: false, effect: "open or close the venture record; pc.on_venture", rule_id: "10.2.2", status: "reserved by 00; defined"}
+      - {id: h.10.site_exposure, boundary: interval, phase: 2, interrupting: "after the first exposure of a recurring hazard", effect: "exposures of interval-cadence hazards for those in them (10.12.2)", rule_id: "10.12.2", status: added}
+      - {id: h.10.watch_exposure, boundary: watch, phase: 2, interrupting: "after the first exposure of a recurring hazard", effect: "weather and place exposures for exposed travelers (10.12.2; T-10-13)", rule_id: "10.12.2", status: added}
+      - {id: h.10.wayfinding, boundary: watch, phase: 4, interrupting: "when the nav.lost seal opens", effect: "veer accrual while nav.lost; the expected-arrival seal test", rule_id: "10.4.6; 10.4.7", status: added}
+      - {id: h.10.site_recovery, boundary: day, phase: 6, interrupting: false, effect: "clear roused on sites whose danger clock is at or below half; keep last_left", rule_id: "10.13.9; 10.13.11", status: added}
+      - {id: h.10.day_reset, boundary: day, phase: 9, interrupting: false, effect: "reset march units; clear the way-finding ride and picked-over facts", rule_id: "10.3.5; 10.4.1; 10.6.4", status: added}
+      - {id: h.10.site_regrowth, boundary: week, phase: 6, interrupting: false, effect: "regrowing themes: each cleared path area rolls d6 against the theme range; on a hit a pending denizen is written there", rule_id: "10.13.11", status: added}
+      - {id: h.10.scene_frame, boundary: [scene_start, mode_change], phase: 7, interrupting: false, effect: "compute scene.light; load the place (rest site, danger, site record); on entering a site run 10.13.4", rule_id: "10.7.2; 10.13.4", status: added}
+  - owner: "11"
+    handlers:
+      - {id: h.11.fallback_counters, boundary: scene_end, phase: 6, interrupting: false, effect: "count pursued threads' scenes without progress; at 3 queue the fallback (fires next scene_start); fire 15's case fallbacks and 16's personal-thread fallbacks from their data", rule_id: "11.5.7", status: "reserved by 00; defined"}
+      - {id: h.11.situation_timelines, boundary: day, phase: 6, interrupting: "when a step's place is the PC's place", effect: "fire due steps of day-cadence situations (11.4.2)", rule_id: "11.4.2", status: "reserved by 00; defined"}
+      - {id: h.11.world_turn, boundary: week, phase: 6, interrupting: "when a write puts an event at the PC's location now (11.2.5)", effect: "the World Turn: elapse, maintain, timelines, faction actions, consequences, attention, news and rumors, queue (PR-11-1)", rule_id: "11.2; PR-11-1", status: "reserved by 00; defined"}
+      - {id: h.11.season_turn, boundary: season, phase: 6, interrupting: "when a seasonal event or stage change puts an event at the PC's location now", effect: "the Season Turn: calendar, factions, situations, seasonal events and phenomena, threads, reputation, holdings, seams, record (PR-11-3)", rule_id: "11.11; PR-11-3", status: "reserved by 00; defined"}
+      - {id: h.11.year_turn, boundary: year, phase: 6, interrupting: false, effect: "aging, annual festival, year digest, legend review, retired characters age", rule_id: "11.11.5", status: "reserved by 00; defined"}
+      - {id: h.11.reckoning, boundary: venture_end, phase: 6, interrupting: false, effect: "read the venture record: loudness per faction, attention ticks, status steps, cleared sites pacified for a season, occupants into the change log, accept 12's venture chronicle line, mark threads touched", rule_id: "11.3.13", status: "reserved by 00; defined"}
+      - {id: h.11.world_record, boundary: week, phase: 9, interrupting: false, effect: "append at most five chronicle lines for the turn (11.12.2 order)", rule_id: "11.12.2", status: added}
+      - {id: h.11.moon, boundary: day, phase: 9, interrupting: false, effect: "write moon.phase (28-day cycle)", rule_id: "11.10.3", status: added}
+      - {id: h.11.festival, boundary: day, phase: 6, interrupting: false, effect: "apply the day's festival effects (closed list)", rule_id: "11.10.4", status: added}
+  - owner: "12"
+    handlers:
+      - {id: h.12.inconclusive_streak, boundary: beat_end, phase: 9, interrupting: false, effect: "P16 counter; at threshold raise the lead-injection trigger"}
+      - {id: h.12.intensity, boundary: [conflict_start, conflict_end], phase: 9, interrupting: false, effect: "pacing director intensity"}
+      - {id: h.12.scene_test, boundary: scene_start, phase: 7, interrupting: false, effect: "scene test (expected / altered / interrupted)"}
+      - {id: h.12.tension_update, boundary: scene_end, phase: 9, interrupting: false, effect: "tension dial"}
+      - {id: h.12.bookkeeping, boundary: scene_end, phase: 9, interrupting: false, effect: "session-end bookkeeping mirrored at every scene end"}
+      - {id: h.12.venture_bookkeeping, boundary: venture_end, phase: 9, interrupting: false, effect: "venture recap"}
+      - {id: h.12.session_open, boundary: session_start, phase: 9, interrupting: false, effect: "recap, flags"}
+      - {id: h.12.session_close, boundary: session_end, phase: 9, interrupting: false, effect: "session close"}
+      - {id: h.12.mode_change, boundary: mode_change, phase: 9, interrupting: false, effect: "load the new mode's cards; set time-per-beat"}
+      - {id: h.12.pacing_push, boundary: scene_start, phase: 7, interrupting: false, effect: "if trg.pacing_push is raised (flatline guard or end of a recovery window), choose one push for the scene being framed: eligible ch.11 bangs, a tbl.vignette row, or the most overdue rotation opportunity, filtered by the phase target and ranked by specificity (12.7.4)", rule_id: "12.7.4; 12.7.5", lifecycle: provisional}
+      - {id: h.12.lead_audit, boundary: scene_end, phase: 7, interrupting: false, effect: "check every active thread for at least one live lead; mark a thread with none 'stalled' and queue its proactive fallback (ch.11); flag threads with fewer than three clue placements as a content defect (12.8.4)", rule_id: "12.8.4", lifecycle: provisional}
+      - {id: h.12.intensity_scene, boundary: scene_end, phase: 9, interrupting: false, effect: "intensity = min(10, max(scene points, previous - 3)); move the pacing phase (build/peak/relax); count recovery and flat-run scenes; raise trg.pacing_push when due (12.7.1-12.7.2, 12.7.5)", rule_id: "12.7.1; 12.7.2; 12.7.5", lifecycle: provisional}
+      - {id: h.12.rotation_update, boundary: scene_end, phase: 9, interrupting: false, effect: "increment scenes-since for every pillar, challenge type and facet not foregrounded; reset those foregrounded (from frames and the scene record); recompute overdue axes (12.9.1-12.9.2)", rule_id: "12.9.1; 12.9.2", lifecycle: provisional}
+      - {id: h.12.npc_memory, boundary: scene_end, phase: 9, interrupting: false, effect: "commit the scene's NPC memories (valence, salience); keep at most five active per NPC by salience then recency; archive the rest (12.11.7)", rule_id: "12.11.7", lifecycle: provisional}
+  - owner: "15"
+    handlers:
+      - {id: h.15.downtime_day, boundary: day, phase: 6, interrupting: false, effect: "resolve the day activity completed this day (rolls, writes, costs) per the week plan", rule_id: "15.10.2; PR-15-9", status: "reserved by 00; defined"}
+      - {id: h.15.downtime_week, boundary: week, phase: 6, interrupting: false, effect: "if five days of the week activity were spent: resolve it (Train/Retrain ticks and cnt.training; project roll and delegated ticks; research roll; Work wage; Penance); project-influence decay; campaign progress decay", rule_id: "15.10.2; 15.11; 15.12; PR-15-9", status: "reserved by 00; defined"}
+      - {id: h.15.member_standing, boundary: week, phase: 6, interrupting: false, effect: "recompute faction members' standing from status + personal offset (capped by source caps); also run at once on any status write by 11", rule_id: "15.1.3", status: added}
+      - {id: h.15.commitments_due, boundary: day, phase: 6, interrupting: "when a due agreed act is reneged or an obligation falls due unmet", effect: "check due conditions of NPC agreed acts and PC obligations; perform, renege (coerced / now Hostile / impossible) or mark broken", rule_id: "15.7.6", status: added}
+      - {id: h.15.alertness_decay, boundary: hour, phase: 5, interrupting: false, effect: "each observer not raised in the past hour steps down one alertness rung, never below its floor", rule_id: "15.5.7", status: added}
+      - {id: h.15.placement_audit, boundary: scene_end, phase: 6, interrupting: false, effect: "for each unfound necessary clue node, count live placements; below 2, place a reserve placement or generate one (PR-15-7)", rule_id: "15.9.4; PR-15-7", status: added}
+      - {id: h.15.patience_reset, boundary: scene_end, phase: 9, interrupting: false, effect: "reset every NPC's per-scene patience; clear closed.<npc>.talk entries scoped to the scene", rule_id: "15.2.6", status: added}
+      - {id: h.15.standing_week, boundary: week, phase: 9, interrupting: false, effect: "reset npc.<id>.small_steps_week for every NPC", rule_id: "15.1.7", status: added}
+  - owner: "16"
+    handlers:
+      - {id: h.16.retinue_upkeep, boundary: week, phase: 4, interrupting: false, effect: "for each ally in the retinue or posted: charge wage or keep (venture weeks accrue wages); write paid or unpaid; tick G4 (grace weeks by standing); a hireling unpaid two consecutive weeks departs (cause unpaid); weekly sources G8, G9, R4; posted tasks (tbl.16.posted_task); overflow over the retinue cap", rule_id: "16.14.3; 16.2.1; 16.2.3; PR-16-9", status: "reserved by 00; defined"}
+      - {id: h.16.contract_term, boundary: day, phase: 6, interrupting: false, effect: "mark hireling contracts whose term ends today (venture terms at venture_end); at the next haven pay off, renew, make the Friendly-after-four-weeks offer to stay as a companion, or depart (cause contract_end)", rule_id: "16.14.4", status: added}
+      - {id: h.16.conflict_orders, boundary: conflict_start, phase: 9, interrupting: false, effect: "give each ally present its template default order, adjusted by loyalty (its fallback order when its rung refuses the default); no action spent", rule_id: "16.7.3", status: added}
+      - {id: h.16.follower_offers, boundary: reflection, phase: 8, interrupting: false, effect: "at most one follower offer a season: a confirmed calling tier of 2 or more with a carrier witness in the last season, or a rank granting followers; generate the follower (T-16-20) and offer_create; defer automatically when the retinue is full", rule_id: "16.3.6", status: added}
+      - {id: h.16.season_growth, boundary: season, phase: 8, interrupting: false, effect: "raise an ally's own band by one when below its template max, it served the whole season, and it fought two conflicts defeating a foe of its band or one hard or lethal conflict; apply protege tiers; rebuild lines; reset per-season caps", rule_id: "16.10.1; 16.10.4; PR-16-10", status: added}
+      - {id: h.16.venture_end, boundary: venture_end, phase: 9, interrupting: false, effect: "pay contract shares of coin found (or tick G5); tick R5 (the road together) for allies who completed the venture", rule_id: "16.14.6; T-16-8 R5", status: added}
+      - {id: h.16.held_line, boundary: round, phase: 7, interrupting: "when a held line reaches 0 (the held foes enter the PC's fight next round)", effect: "for each active clk.16.held_line: one fortune check by the holders (base attack, +2 per numbers step) against the held foes' highest Guard (+2 per numbers step): critical success +2, success +1, failure -1, critical failure -2", rule_id: "16.7.12; PR-16-11", status: added}
+      - {id: h.16.loyalty_record, boundary: scene_end, phase: 9, interrupting: false, effect: "test the scene-end loyalty sources (G3 danger beyond the bargain; G7 left to fall; R3 shared danger, once per scene); queue confrontations for completed grievance clocks; fire departures pending at a scene_end not in danger", rule_id: "16.5.4; 16.5.9; 16.6.2; 16.6.3", status: added}

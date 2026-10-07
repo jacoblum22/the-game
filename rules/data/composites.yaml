@@ -1,0 +1,868 @@
+# data/composites.yaml
+# Purpose: named composites (constitution P6): hand-authored combinations keyed to EXACTLY TWO low-cardinality
+#   keys, and the companion mechanism for everything else: the priority-rank bands of the behavioral slots and
+#   the ordered spread tags. Chapter 05 authors three key kinds: harm_branch (8), conduct_axis (5) and
+#   composite_key_license (9: pairs of abilities flagged composite_key in abilities.yaml). The 32 deed_branch
+#   composites (one per named hybrid calling) are ch.04's owner-block, data/composites.yaml owner-block 04.
+# Owner: 05-abilities-focus-magic (T-00-19; owner-block 04). Rules: 05.10. Schema: data/SCHEMAS.md#compositesyaml.
+#   Optional fields added by ch.05: name, text, limits, budget. Every composite is at most 4 effect units
+#   (05.11.4) and is built from effects of effects.yaml or the 05 owner-block.
+# Basis: [C:P6] [C:P5] [00.10.7] [R3 05.4, 05.5, B-1, B-5, E-3] [R2 4c Three Lashings, Compounding] [DL-05-17]
+
+schema_version: 1
+lifecycle: provisional
+presence_rules: {harm_branch: a depth-0 harm event of one key's branch lands on a target carrying a condition tagged with the other key's branch (cascade applies), conduct_axis: 'the actor holds, unsuspended, at least one oath-gated ability on each axis at the positive pole', composite_key_license: the actor holds both abilities and the entry's stated circumstance holds, deed_branch: 'ch.04: the actor holds the named hybrid calling (data/composites.yaml owner-block 04)', suppressed: a suppressed priority-exclusive claimant never counts as present (WE-00-6)}
+priority_rank_bands:
+- {band: 10-12, source: 'an ability: 10 at rank 1, 11 at rank 2, 12 at rank 3'}
+- {band: '12', source: an absorbed power (gen_absorb.yaml uses 12)}
+- {band: 15-19, source: an item's intrinsic property (ch.08 assigns within the band)}
+- {band: 20-24, source: 'an applied consumable: an oil, a draught, a poultice (ch.08)'}
+- {band: 30-34, source: a named composite or a rite}
+- {band: 40-49, source: a claim imposed by another being (a curse that forces a shape; a foe's hold on how you move)}
+priority_rules: [the highest rank owns the slot; lower claimants are fully suppressed unless cosmetic_merge, ties go to the earlier-acquired effect, the holder may drop a running claim of their own as a free activity, a suppressed claim keeps counting down its duration and resumes if the owner ends first]
+spread_tags:
+- {id: pierce, order: 1, selection: 'the primary target and each further being carrying flag.lined_up with it, nearest first', cap: 4, harm: full to each}
+- {id: burst, order: 2, selection: 'the primary target and each being within band.engaged of it (or of the named point), friend and foe', cap: 6, harm: full to each}
+- {id: cone, order: 3, selection: 'each being at band.engaged with the source, then each at band.close in the primary target''s group; friend and foe', cap: 4, harm: full to each, note: 'ch.06 T-06-15 (inserted at integration so both files carry one order; spell-delivery form cone)'}
+- {id: fork, order: 4, selection: the primary target and one more eligible being within band.close of it per extra target the text grants, cap: 5, harm: full to each}
+- {id: chain, order: 5, selection: 'after the primary resolves, the nearest other being within band.close of the last target, friend or foe', cap: 3, harm: one severity rung lighter at each leap}
+- {id: linger, order: 6, selection: 'the place itself: a being that enters it or ends its turn there, until the duration ends', cap: 5, harm: as the ability states for the lingering effect}
+spread_form_map: {line: pierce, burst: burst, cone: cone, chain: chain, zone: linger, bolt: null, touch: null}   # eff.05.spell_delivery forms as shapes (06's request, integration)
+spread_total_cap: 6
+spread_rule: a working carries at most one spread tag natively; when flares, items or composites add others they resolve in `order`, each applied to the targets the previous produced, never above spread_total_cap in total
+
+composites:
+- id: comp.thermal_shock
+  name: Thermal Shock
+  tags: [harm.fire, harm.frost]
+  keys: [harm.fire, harm.frost]
+  key_kind: harm_branch
+  active_when: a depth-0 harm event deals harm.fire to a target carrying cond.chilled or cond.frozen, or deals harm.frost to a target carrying cond.burning; neither key suppressed (00.10.7)
+  effects:
+  - {effect_id: eff.harm_severity_step, params: {ladder: severity, steps: 1, applies_when: that harm event}}
+  - {effect_id: eff.cleanse, params: {condition_or_category: 'cond.chilled, cond.frozen and cond.burning', target: the target}}
+  suppresses: []
+  text: 'Fire on the frozen, or frost on the burning: that harm is one severity rung heavier, and the target''s chill, freezing and burning all end.'
+  budget: {value: 4, cap: 4}
+  lifecycle: provisional
+  basis: [05.10.6, 'C:P6', DL-05-17]
+- id: comp.shatter
+  name: Shatter
+  tags: [harm.frost, harm.physical]
+  keys: [harm.frost, harm.physical]
+  key_kind: harm_branch
+  active_when: a depth-0 harm event deals harm.physical.crush to a target carrying cond.frozen; neither key suppressed (00.10.7)
+  effects:
+  - {effect_id: eff.harm_severity_step, params: {ladder: severity, steps: 1, applies_when: that harm event}}
+  - {effect_id: eff.cleanse, params: {condition_or_category: cond.frozen, target: the target}}
+  - {effect_id: eff.apply_condition, params: {condition: cond.prone, severity: S1, duration: 'rounds:1', target: the target}}
+  suppresses: []
+  text: A crushing blow on a frozen target is one severity rung heavier, ends the freezing and knocks it prone.
+  budget: {value: 4, cap: 4}
+  lifecycle: provisional
+  basis: [05.10.6, 'C:P6', DL-05-17]
+- id: comp.cauterize
+  name: Cauterize
+  tags: [harm.fire, harm.physical]
+  keys: [harm.fire, harm.physical]
+  key_kind: harm_branch
+  active_when: harm.fire of any severity is applied to a target carrying cond.bleeding; neither key suppressed (00.10.7)
+  effects:
+  - {effect_id: eff.cleanse, params: {condition_or_category: cond.bleeding (every stack), target: the target}}
+  suppresses: []
+  text: Fire applied to a bleeding body ends its bleeding. The fire's own harm still lands.
+  budget: {value: 2, cap: 4}
+  lifecycle: provisional
+  basis: [05.10.6, 'C:P6', DL-05-17]
+- id: comp.flashfire
+  name: Flashfire
+  tags: [harm.fire, harm.venom]
+  keys: [harm.fire, harm.venom]
+  key_kind: harm_branch
+  active_when: a depth-0 event deals harm.fire to a target or in a place carrying an effect or condition tagged harm.venom.gas; neither key suppressed (00.10.7)
+  effects:
+  - {effect_id: eff.deal_harm, params: {severity: S2, harm_tags: [harm.fire.flame], target: each being within band.engaged of the gas}}
+  - {effect_id: eff.cleanse, params: {condition_or_category: the gas effect and cond.choking it caused, target: the place}}
+  suppresses: []
+  text: 'Fire in a gas: each being engaged with it takes Moderate fire harm, and the gas and the choking it caused are gone.'
+  budget: {value: 4, cap: 4}
+  lifecycle: provisional
+  basis: [05.10.6, 'C:P6', DL-05-17]
+- id: comp.searing_purge
+  name: Searing Purge
+  tags: [harm.radiance, harm.blight]
+  keys: [harm.radiance, harm.blight]
+  key_kind: harm_branch
+  active_when: a depth-0 harm event deals harm.radiance to a target carrying a condition tagged harm.blight; neither key suppressed (00.10.7)
+  effects:
+  - {effect_id: eff.cleanse, params: {condition_or_category: one condition tagged harm.blight, target: the target}}
+  - {effect_id: eff.harm_severity_step, params: {ladder: severity, steps: 1, applies_when: that harm event and the target is creature.undead}}
+  suppresses: []
+  text: Radiance on a blighted target ends one blight condition on it; against undead the harm is one severity rung heavier.
+  budget: {value: 4, cap: 4}
+  lifecycle: provisional
+  basis: [05.10.6, 'C:P6', DL-05-17]
+- id: comp.dread_rot
+  name: Dread Rot
+  tags: [harm.mind, harm.blight]
+  keys: [harm.mind, harm.blight]
+  key_kind: harm_branch
+  active_when: a depth-0 harm event deals harm.blight to a target carrying cond.frightened; neither key suppressed (00.10.7)
+  effects:
+  - {effect_id: eff.apply_condition, params: {condition: cond.weakened, severity: S1, duration: scene, target: the target}}
+  suppresses: []
+  text: 'Blight on the frightened: the target is weakened until the scene ends.'
+  budget: {value: 3, cap: 4}
+  lifecycle: provisional
+  basis: [05.10.6, 'C:P6', DL-05-17]
+- id: comp.stormfrost
+  name: Stormfrost
+  tags: [harm.storm, harm.frost]
+  keys: [harm.storm, harm.frost]
+  key_kind: harm_branch
+  active_when: a depth-0 harm event deals harm.storm.lightning to a target carrying cond.chilled or cond.frozen; neither key suppressed (00.10.7)
+  effects:
+  - {effect_id: eff.apply_condition, params: {condition: cond.dazed, severity: S1, duration: 'rounds:1', target: the target}}
+  suppresses: []
+  text: 'Lightning through ice and wet: the target is dazed until the end of its next turn.'
+  budget: {value: 2, cap: 4}
+  lifecycle: provisional
+  basis: [05.10.6, 'C:P6', DL-05-17]
+- id: comp.swift_venom
+  name: Swift Venom
+  tags: [harm.venom, harm.physical]
+  keys: [harm.venom, harm.physical]
+  key_kind: harm_branch
+  active_when: cond.poisoned is applied to a target carrying cond.bleeding, or cond.bleeding to a target carrying cond.poisoned; neither key suppressed (00.10.7)
+  effects:
+  - {effect_id: eff.harm_severity_step, params: {ladder: severity, steps: 1, applies_when: 'the poisoned condition''s own severity, once'}}
+  suppresses: []
+  text: 'Poison in an open wound: the poisoning is one severity rung heavier (once per target per scene).'
+  budget: {value: 2, cap: 4}
+  lifecycle: provisional
+  basis: [05.10.6, 'C:P6', DL-05-17]
+- id: comp.tempered_judgment
+  name: Tempered Judgment
+  tags: [conduct.mercy, conduct.justice]
+  keys: [conduct.mercy, conduct.justice]
+  key_kind: conduct_axis
+  active_when: actor holds, unsuspended, an oath-gated ability on each axis (positive pole), and spares (ab.open_hand) a being it judged (ab.mark_of_judgment) in the same scene; neither key suppressed (00.10.7)
+  effects:
+  - {effect_id: eff.restore, params: {quantity: focus, units: 1, target: self}}
+  - {effect_id: eff.write_fact, params: {subject: the spared being, predicate: owes_restitution_to, value: those it wronged}}
+  suppresses: []
+  text: 'Sparing one you judged: regain 1 Focus, and the spared being is recorded as owing restitution to those it wronged.'
+  budget: {value: 3, cap: 4}
+  lifecycle: provisional
+  basis: [05.10.6, 'C:P6', DL-05-17]
+- id: comp.stand_between
+  name: Stand Between
+  tags: [conduct.courage, conduct.protection]
+  keys: [conduct.courage, conduct.protection]
+  key_kind: conduct_axis
+  active_when: actor holds, unsuspended, an oath-gated ability on each axis (positive pole), and takes a hit in another's place; neither key suppressed (00.10.7)
+  effects:
+  - {effect_id: eff.harm_severity_step, params: {ladder: severity, steps: -1, applies_when: the hit taken in another's place}}
+  - {effect_id: eff.condition_immunity, params: {forbid: {conditions: [cond.frightened]}, target: self}}
+  suppresses: []
+  text: A hit you take in another's place is one severity rung lighter, and you cannot be frightened until the end of your next turn.
+  budget: {value: 4, cap: 4}
+  lifecycle: provisional
+  basis: [05.10.6, 'C:P6', DL-05-17]
+- id: comp.true_and_faithful
+  name: True and Faithful
+  tags: [conduct.honesty, conduct.loyalty]
+  keys: [conduct.honesty, conduct.loyalty]
+  key_kind: conduct_axis
+  active_when: actor holds, unsuspended, an oath-gated ability on each axis (positive pole), and Helps or Talks with a being it holds a bond with; neither key suppressed (00.10.7)
+  effects:
+  - {effect_id: eff.grant_lever, params: {type: precision, applies_when: Help and Talk beats with a being you hold a bond with, duration: scene}}
+  - {effect_id: eff.stakes_step, params: {ladder: stakes, steps: -1, applies_when: Talk beats that tell a bonded being a hard truth}}
+  suppresses: []
+  text: With one you are bound to, your Help and Talk hold a Precision lever, and telling them a hard truth is framed one stakes rung lower.
+  budget: {value: 4, cap: 4}
+  lifecycle: provisional
+  basis: [05.10.6, 'C:P6', DL-05-17]
+- id: comp.servant_of_all
+  name: Servant of All
+  tags: [conduct.humility, conduct.generosity]
+  keys: [conduct.humility, conduct.generosity]
+  key_kind: conduct_axis
+  active_when: actor holds, unsuspended, an oath-gated ability on each axis (positive pole), and gives Focus, Help or a possession to another; neither key suppressed (00.10.7)
+  effects:
+  - {effect_id: eff.restore, params: {quantity: focus, units: 1, target: the receiver}}
+  suppresses: []
+  text: Once per scene, when you give Focus, Help or a possession to another, the receiver regains 1 Focus (inside its generation cap).
+  limits: {per: scene_end, uses: 1}
+  budget: {value: 2, cap: 4}
+  lifecycle: provisional
+  basis: [05.10.6, 'C:P6', DL-05-17]
+- id: comp.quiet_flame
+  name: The Quiet Flame
+  tags: [conduct.piety, conduct.restraint]
+  keys: [conduct.piety, conduct.restraint]
+  key_kind: conduct_axis
+  active_when: actor holds, unsuspended, an oath-gated ability on each axis (positive pole), and kept the dawn observance (ab.daily_office) today; neither key suppressed (00.10.7)
+  effects:
+  - {effect_id: eff.condition_immunity, params: {forbid: {conditions: [cond.charmed]}, target: self}}
+  - {effect_id: eff.grant_lever, params: {type: protective, applies_when: beats with trait.action.concentrate, duration: scene}}
+  suppresses: []
+  text: On a day you kept the observance you cannot be charmed, and your concentration beats hold a Protective lever.
+  budget: {value: 4, cap: 4}
+  lifecycle: provisional
+  basis: [05.10.6, 'C:P6', DL-05-17]
+- id: comp.phalanx
+  name: Phalanx
+  tags: []
+  keys: [ab.set_spear, ab.shield_wall]
+  key_kind: composite_key_license
+  active_when: actor holds both abilities and the shield wall stance is running; neither key suppressed (00.10.7)
+  effects:
+  - {effect_id: eff.harm_severity_step, params: {ladder: severity, steps: 1, applies_when: harm dealt by ab.set_spear}}
+  - {effect_id: eff.defense_edge, params: {amount: 1, attribute: agility, applies_when: the ally your shield wall covers is attacked in melee}}
+  suppresses: []
+  text: Behind your own shield wall, Set the Spear deals harm one severity rung heavier, and the ally your wall covers has +1 to Agility defense against melee attacks.
+  budget: {value: 4, cap: 4}
+  lifecycle: provisional
+  basis: [05.10.6, 'C:P6', DL-05-17]
+- id: comp.marked_for_death
+  name: Marked for Death
+  tags: []
+  keys: [ab.quarrys_mark, ab.backstab]
+  key_kind: composite_key_license
+  active_when: actor holds both abilities and Strikes, with ab.backstab, a creature carrying its own mark; neither key suppressed (00.10.7)
+  effects:
+  - {effect_id: eff.grant_lever, params: {type: amplifying, applies_when: a Backstab against a creature you marked, duration: scene}}
+  - {effect_id: eff.apply_condition, params: {condition: cond.bleeding, severity: S1, duration: scene, target: the marked creature harmed}}
+  suppresses: []
+  text: A Backstab against a creature you marked holds an Amplifying lever and leaves it bleeding until the scene ends.
+  budget: {value: 4, cap: 4}
+  lifecycle: provisional
+  basis: [05.10.6, 'C:P6', DL-05-17]
+- id: comp.holy_fire
+  name: Holy Fire
+  tags: []
+  keys: [ab.smite, ab.cinder_stride]
+  key_kind: composite_key_license
+  active_when: actor holds both abilities and both claim slot.strike_delivery on the same Strike; neither key suppressed (00.10.7)
+  effects:
+  - {effect_id: eff.strike_delivery, params: {priority_rank: 30, harm_tags: [harm.fire, harm.radiance.holy], harm_edge: 1, duration: 'uses:1', cosmetic_merge: false}}
+  - {effect_id: eff.apply_condition, params: {condition: cond.burning, severity: S1, duration: 'rounds:1', target: an undead or fiend the Strike harms}}
+  suppresses: ['eff.strike_delivery (the two component claims, for that Strike)']
+  text: 'When Smite and Cinder Stride meet on one Strike, neither is suppressed: the Strike deals fire and radiant harm together (the target''s weaker protection applies), +1, and an undead or fiend it harms is burning.'
+  budget: {value: 4, cap: 4}
+  lifecycle: provisional
+  basis: [05.10.6, 'C:P6', DL-05-17]
+- id: comp.warded_shield
+  name: Warded Shield
+  tags: []
+  keys: [ab.shield_block, ab.spell_ward]
+  key_kind: composite_key_license
+  active_when: actor holds both abilities and uses either as its defense reaction while holding a shield; neither key suppressed (00.10.7)
+  effects:
+  - {effect_id: eff.05.defense_reaction, params: {priority_rank: 30, form: warded shield, effects: [{effect_id: eff.harm_severity_step, params: {ladder: severity, steps: -2, applies_when: 'the hit being answered, of any harm type'}}]}}
+  suppresses: [eff.05.defense_reaction (the two component claims)]
+  text: 'Your shield carries your ward: the one defense reaction makes a hit of any harm type two severity rungs lighter, at Shield Block''s cost when the harm is physical and Spell Ward''s otherwise.'
+  budget: {value: 4, cap: 4}
+  lifecycle: provisional
+  basis: [05.10.6, 'C:P6', DL-05-17]
+- id: comp.wildfire_wind
+  name: Wildfire Wind
+  tags: []
+  keys: [ab.gust, ab.flame_lance]
+  key_kind: composite_key_license
+  active_when: actor holds both abilities and casts ab.flame_lance on the turn after its own ab.gust, along the same line; neither key suppressed (00.10.7)
+  effects:
+  - {effect_id: eff.05.spell_delivery, params: {priority_rank: 30, form: line, duration: instant, cosmetic_merge: false}}
+  suppresses: []
+  text: 'Flame Lance cast down the line of your own Gust takes the pierce spread: it strikes each target in that line, up to three, at the same roll.'
+  budget: {value: 3, cap: 4}
+  lifecycle: provisional
+  basis: [05.10.6, 'C:P6', DL-05-17]
+- id: comp.storm_in_the_mist
+  name: Storm in the Mist
+  tags: []
+  keys: [ab.fog_bank, ab.arc_bolt]
+  key_kind: composite_key_license
+  active_when: actor holds both abilities and casts ab.arc_bolt at a target inside its own sustained ab.fog_bank; neither key suppressed (00.10.7)
+  effects:
+  - {effect_id: eff.grant_lever, params: {type: amplifying, applies_when: Arc Bolt cast into your own fog, duration: scene}}
+  - {effect_id: eff.apply_condition, params: {condition: cond.deafened, severity: S1, duration: 'rounds:1', target: each being the bolt harms}}
+  suppresses: []
+  text: Arc Bolt cast into your own fog holds an Amplifying lever, its chain may leap one more time (inside the spread cap), and each being it harms is deafened until the end of its next turn.
+  budget: {value: 4, cap: 4}
+  lifecycle: provisional
+  basis: [05.10.6, 'C:P6', DL-05-17]
+- id: comp.battle_hymn
+  name: Battle Hymn
+  tags: []
+  keys: [ab.rally, ab.stirring_song]
+  key_kind: composite_key_license
+  active_when: actor holds both abilities and uses ab.rally while sustaining ab.stirring_song; neither key suppressed (00.10.7)
+  effects:
+  - {effect_id: eff.restore, params: {quantity: focus, units: 1, target: one rallied ally of your choice}}
+  suppresses: []
+  text: Once per scene, a Rally given while your Stirring Song is sustained also restores 1 Focus to one rallied ally (inside its generation cap).
+  limits: {per: scene_end, uses: 1}
+  budget: {value: 2, cap: 4}
+  lifecycle: provisional
+  basis: [05.10.6, 'C:P6', DL-05-17]
+- id: comp.briar_cage
+  name: Briar Cage
+  tags: []
+  keys: [ab.root_snare, ab.thorn_coat]
+  key_kind: composite_key_license
+  active_when: actor holds both abilities and a target is held by its own ab.root_snare; neither key suppressed (00.10.7)
+  effects:
+  - {effect_id: eff.deal_harm, params: {severity: S1, harm_tags: [harm.physical.pierce], target: 'a being held by your Root Snare, at the end of each of its turns'}}
+  - {effect_id: eff.apply_condition, params: {condition: cond.bleeding, severity: S1, duration: 'rounds:1', target: a being that breaks free of the snare}}
+  suppresses: []
+  text: 'Your Root Snare grows thorns: a being it holds takes Light piercing harm at the end of each of its turns, and bleeds when it breaks free.'
+  budget: {value: 3, cap: 4}
+  lifecycle: provisional
+  basis: [05.10.6, 'C:P6', DL-05-17]
+- id: comp.ill_omen
+  name: Ill Omen
+  tags: []
+  keys: [ab.evil_eye, ab.patrons_brand]
+  key_kind: composite_key_license
+  active_when: actor holds both abilities and casts ab.patrons_brand at a target carrying its own ab.evil_eye; neither key suppressed (00.10.7)
+  effects:
+  - {effect_id: eff.harm_severity_step, params: {ladder: severity, steps: 1, applies_when: Patron's Brand cast at a target under your Evil Eye}}
+  - {effect_id: eff.grant_lever, params: {type: precision, applies_when: Patron's Brand cast at a target under your Evil Eye, duration: scene}}
+  suppresses: []
+  text: Patron's Brand cast at a target under your own Evil Eye holds a Precision lever and is one severity rung heavier.
+  budget: {value: 3, cap: 4}
+  lifecycle: provisional
+  basis: [05.10.6, 'C:P6', DL-05-17]
+blocks:   # owner-blocks merged at integration from _process/merged-contrib/composites.NN.yaml (integration-merge.py)
+  # ---- merged from composites.04.yaml ----
+  # data/contrib/composites.04.yaml
+  # Purpose: ch.04's owner-block for data/composites.yaml (owner 05; owner-block 04 per T-00-19): the named
+  #   synergy composite of every hybrid calling (constitution P6 as used by P5: "a hybrid-only technique requiring
+  #   both ... to trigger"). One composite per named hybrid: 32 entries. Specialists, vows and dark callings carry
+  #   no composite (their tier rewards are in callings.yaml: focus_generation and boon).
+  # Owner: 04-recognition-and-growth. Schema: data/SCHEMAS.md#compositesyaml (keys: exactly two; key_kind
+  #   deed_branch). Optional fields added by ch.04: name, calling, ranks [{rank, at_tier, effects, text}], rank_rule.
+  #   `effects` (the required field) holds rank 1; a higher rank REPLACES the lower one (04.5.5: restated, never
+  #   appended).
+  # Every effect is a core effect of data/effects.yaml with parameters; none is new. The expression key
+  #   `secondary_tags` is requested of 00 (04 Interface requests); until it exists the edge applies when the frame
+  #   records a grounded secondary (03.1.6) under the other branch.
+  # Bounds (audit): a lever counts toward the two-lever limit and the +/-4 circumstance cap (00.3.9); edge is capped
+  #   at +2 in total (00.3.5); a reach step is capped by the step family (00.10.6). No composite adds an action.
+  # Basis: [C:P6] [C:P5] [R2 4c Twinborn / Three Lashings; bounded] [R3 04.19] [DL-04-11]
+  - owner: "04"
+    entries:
+      - id: comp.04.feint_and_thrust
+        name: "Feint and Thrust"
+        tags: [deed.martial, deed.guile]
+        keys: [deed.martial, deed.guile]
+        key_kind: deed_branch
+        active_when: "actor holds call.swashbuckler (not suspended by the Fraying, 04.9.3) at the rank's tier or higher"
+        calling: call.swashbuckler
+        effects: [{effect_id: eff.grant_lever, params: {type: precision, for_tags: [deed.martial], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.guile", limits: {per: scene_end, uses: 1}}]
+        suppresses: []
+        rank_rule: "the highest rank whose at_tier <= the calling tier replaces the lower ranks (restated, never added)"
+        lifecycle: provisional
+        basis: ["04.5.4", "C:P6", "C:P5", DL-04-11]
+        ranks:
+          - {rank: 1, at_tier: 1, effects: [{effect_id: eff.grant_lever, params: {type: precision, for_tags: [deed.martial], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.guile", limits: {per: scene_end, uses: 1}}], text: "When a deed of guile succeeds, you gain a precision lever you may cite on one later beat of martial this scene. Once per scene."}
+          - {rank: 2, at_tier: 3, effects: [{effect_id: eff.grant_lever, params: {type: precision, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.martial or deed.guile", limits: {per: scene_end, uses: 2}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.martial and secondary_tags under deed.guile) or (deed_tag under deed.guile and secondary_tags under deed.martial)"}}], text: "When a deed of either branch (martial or guile) succeeds, you gain a precision lever you may cite on one later beat of the other branch this scene. Twice per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge."}
+          - {rank: 3, at_tier: 5, effects: [{effect_id: eff.grant_lever, params: {type: precision_or_player_choice_of_type, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.martial or deed.guile", limits: {per: scene_end, uses: 3}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.martial and secondary_tags under deed.guile) or (deed_tag under deed.guile and secondary_tags under deed.martial)"}}, {effect_id: eff.reach_step, params: {ladder: reach, steps: 1, applies_when: "a fused deed as above"}, limits: {per: scene_end, uses: 1}}], text: "When a deed of either branch (martial or guile) succeeds, you gain a precision lever you may cite on one later beat of the other branch this scene. Three times per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge, and once per scene its reach is one rung higher. You may choose the lever's type each time."}
+      - id: comp.04.hunters_quarry
+        name: "Hunter's Quarry"
+        tags: [deed.martial, deed.wilds]
+        keys: [deed.martial, deed.wilds]
+        key_kind: deed_branch
+        active_when: "actor holds call.ranger (not suspended by the Fraying, 04.9.3) at the rank's tier or higher"
+        calling: call.ranger
+        effects: [{effect_id: eff.grant_lever, params: {type: amplifying, for_tags: [deed.martial], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.wilds", limits: {per: scene_end, uses: 1}}]
+        suppresses: []
+        rank_rule: "the highest rank whose at_tier <= the calling tier replaces the lower ranks (restated, never added)"
+        lifecycle: provisional
+        basis: ["04.5.4", "C:P6", "C:P5", DL-04-11]
+        ranks:
+          - {rank: 1, at_tier: 1, effects: [{effect_id: eff.grant_lever, params: {type: amplifying, for_tags: [deed.martial], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.wilds", limits: {per: scene_end, uses: 1}}], text: "When a deed of wilds succeeds, you gain a amplifying lever you may cite on one later beat of martial this scene. Once per scene."}
+          - {rank: 2, at_tier: 3, effects: [{effect_id: eff.grant_lever, params: {type: amplifying, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.martial or deed.wilds", limits: {per: scene_end, uses: 2}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.martial and secondary_tags under deed.wilds) or (deed_tag under deed.wilds and secondary_tags under deed.martial)"}}], text: "When a deed of either branch (martial or wilds) succeeds, you gain a amplifying lever you may cite on one later beat of the other branch this scene. Twice per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge."}
+          - {rank: 3, at_tier: 5, effects: [{effect_id: eff.grant_lever, params: {type: amplifying_or_player_choice_of_type, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.martial or deed.wilds", limits: {per: scene_end, uses: 3}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.martial and secondary_tags under deed.wilds) or (deed_tag under deed.wilds and secondary_tags under deed.martial)"}}, {effect_id: eff.reach_step, params: {ladder: reach, steps: 1, applies_when: "a fused deed as above"}, limits: {per: scene_end, uses: 1}}], text: "When a deed of either branch (martial or wilds) succeeds, you gain a amplifying lever you may cite on one later beat of the other branch this scene. Three times per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge, and once per scene its reach is one rung higher. You may choose the lever's type each time."}
+      - id: comp.04.know_the_beast
+        name: "Know the Beast"
+        tags: [deed.martial, deed.lore]
+        keys: [deed.martial, deed.lore]
+        key_kind: deed_branch
+        active_when: "actor holds call.slayer (not suspended by the Fraying, 04.9.3) at the rank's tier or higher"
+        calling: call.slayer
+        effects: [{effect_id: eff.grant_lever, params: {type: precision, for_tags: [deed.martial], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.lore", limits: {per: scene_end, uses: 1}}]
+        suppresses: []
+        rank_rule: "the highest rank whose at_tier <= the calling tier replaces the lower ranks (restated, never added)"
+        lifecycle: provisional
+        basis: ["04.5.4", "C:P6", "C:P5", DL-04-11]
+        ranks:
+          - {rank: 1, at_tier: 1, effects: [{effect_id: eff.grant_lever, params: {type: precision, for_tags: [deed.martial], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.lore", limits: {per: scene_end, uses: 1}}], text: "When a deed of lore succeeds, you gain a precision lever you may cite on one later beat of martial this scene. Once per scene."}
+          - {rank: 2, at_tier: 3, effects: [{effect_id: eff.grant_lever, params: {type: precision, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.martial or deed.lore", limits: {per: scene_end, uses: 2}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.martial and secondary_tags under deed.lore) or (deed_tag under deed.lore and secondary_tags under deed.martial)"}}], text: "When a deed of either branch (martial or lore) succeeds, you gain a precision lever you may cite on one later beat of the other branch this scene. Twice per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge."}
+          - {rank: 3, at_tier: 5, effects: [{effect_id: eff.grant_lever, params: {type: precision_or_player_choice_of_type, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.martial or deed.lore", limits: {per: scene_end, uses: 3}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.martial and secondary_tags under deed.lore) or (deed_tag under deed.lore and secondary_tags under deed.martial)"}}, {effect_id: eff.reach_step, params: {ladder: reach, steps: 1, applies_when: "a fused deed as above"}, limits: {per: scene_end, uses: 1}}], text: "When a deed of either branch (martial or lore) succeeds, you gain a precision lever you may cite on one later beat of the other branch this scene. Three times per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge, and once per scene its reach is one rung higher. You may choose the lever's type each time."}
+      - id: comp.04.spellstrike
+        name: Spellstrike
+        tags: [deed.martial, deed.arcane]
+        keys: [deed.martial, deed.arcane]
+        key_kind: deed_branch
+        active_when: "actor holds call.spellblade (not suspended by the Fraying, 04.9.3) at the rank's tier or higher"
+        calling: call.spellblade
+        effects: [{effect_id: eff.grant_lever, params: {type: amplifying, for_tags: [deed.martial], duration: scene}, hook: on_focus_spent, when: "ability first tag under deed.arcane", limits: {per: scene_end, uses: 1}}]
+        suppresses: []
+        rank_rule: "the highest rank whose at_tier <= the calling tier replaces the lower ranks (restated, never added)"
+        lifecycle: provisional
+        basis: ["04.5.4", "C:P6", "C:P5", DL-04-11]
+        ranks:
+          - {rank: 1, at_tier: 1, effects: [{effect_id: eff.grant_lever, params: {type: amplifying, for_tags: [deed.martial], duration: scene}, hook: on_focus_spent, when: "ability first tag under deed.arcane", limits: {per: scene_end, uses: 1}}], text: "When you spend Focus through an ability of arcane, you gain a amplifying lever you may cite on one later beat of martial this scene. Once per scene."}
+          - {rank: 2, at_tier: 3, effects: [{effect_id: eff.grant_lever, params: {type: amplifying, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_focus_spent, when: "ability first tag under deed.martial or deed.arcane", limits: {per: scene_end, uses: 2}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.martial and secondary_tags under deed.arcane) or (deed_tag under deed.arcane and secondary_tags under deed.martial)"}}], text: "When a deed of either branch (martial or arcane) spends Focus through an ability, you gain a amplifying lever you may cite on one later beat of the other branch this scene. Twice per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge."}
+          - {rank: 3, at_tier: 5, effects: [{effect_id: eff.grant_lever, params: {type: amplifying_or_player_choice_of_type, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_focus_spent, when: "ability first tag under deed.martial or deed.arcane", limits: {per: scene_end, uses: 3}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.martial and secondary_tags under deed.arcane) or (deed_tag under deed.arcane and secondary_tags under deed.martial)"}}, {effect_id: eff.reach_step, params: {ladder: reach, steps: 1, applies_when: "a fused deed as above"}, limits: {per: scene_end, uses: 1}}], text: "When a deed of either branch (martial or arcane) spends Focus through an ability, you gain a amplifying lever you may cite on one later beat of the other branch this scene. Three times per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge, and once per scene its reach is one rung higher. You may choose the lever's type each time."}
+      - id: comp.04.sworn_strike
+        name: "Sworn Strike"
+        tags: [deed.martial, deed.divine]
+        keys: [deed.martial, deed.divine]
+        key_kind: deed_branch
+        active_when: "actor holds call.paladin (not suspended by the Fraying, 04.9.3) at the rank's tier or higher"
+        calling: call.paladin
+        effects: [{effect_id: eff.grant_lever, params: {type: protective, for_tags: [deed.martial], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.divine", limits: {per: scene_end, uses: 1}}]
+        suppresses: []
+        rank_rule: "the highest rank whose at_tier <= the calling tier replaces the lower ranks (restated, never added)"
+        lifecycle: provisional
+        basis: ["04.5.4", "C:P6", "C:P5", DL-04-11]
+        ranks:
+          - {rank: 1, at_tier: 1, effects: [{effect_id: eff.grant_lever, params: {type: protective, for_tags: [deed.martial], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.divine", limits: {per: scene_end, uses: 1}}], text: "When a deed of divine succeeds, you gain a protective lever you may cite on one later beat of martial this scene. Once per scene."}
+          - {rank: 2, at_tier: 3, effects: [{effect_id: eff.grant_lever, params: {type: protective, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.martial or deed.divine", limits: {per: scene_end, uses: 2}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.martial and secondary_tags under deed.divine) or (deed_tag under deed.divine and secondary_tags under deed.martial)"}}], text: "When a deed of either branch (martial or divine) succeeds, you gain a protective lever you may cite on one later beat of the other branch this scene. Twice per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge."}
+          - {rank: 3, at_tier: 5, effects: [{effect_id: eff.grant_lever, params: {type: protective_or_player_choice_of_type, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.martial or deed.divine", limits: {per: scene_end, uses: 3}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.martial and secondary_tags under deed.divine) or (deed_tag under deed.divine and secondary_tags under deed.martial)"}}, {effect_id: eff.reach_step, params: {ladder: reach, steps: 1, applies_when: "a fused deed as above"}, limits: {per: scene_end, uses: 1}}], text: "When a deed of either branch (martial or divine) succeeds, you gain a protective lever you may cite on one later beat of the other branch this scene. Three times per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge, and once per scene its reach is one rung higher. You may choose the lever's type each time."}
+      - id: comp.04.red_mist
+        name: "Red Mist"
+        tags: [deed.martial, deed.primal]
+        keys: [deed.martial, deed.primal]
+        key_kind: deed_branch
+        active_when: "actor holds call.berserker (not suspended by the Fraying, 04.9.3) at the rank's tier or higher"
+        calling: call.berserker
+        effects: [{effect_id: eff.grant_lever, params: {type: amplifying, for_tags: [deed.martial], duration: scene}, hook: on_vitality_threshold, when: "threshold = half (your own Vitality)", limits: {per: scene_end, uses: 1}}]
+        suppresses: []
+        rank_rule: "the highest rank whose at_tier <= the calling tier replaces the lower ranks (restated, never added)"
+        lifecycle: provisional
+        basis: ["04.5.4", "C:P6", "C:P5", DL-04-11]
+        ranks:
+          - {rank: 1, at_tier: 1, effects: [{effect_id: eff.grant_lever, params: {type: amplifying, for_tags: [deed.martial], duration: scene}, hook: on_vitality_threshold, when: "threshold = half (your own Vitality)", limits: {per: scene_end, uses: 1}}], text: "When your own Vitality first falls to half or below in a conflict, you gain a amplifying lever you may cite on one later beat of martial this scene. Once per scene."}
+          - {rank: 2, at_tier: 3, effects: [{effect_id: eff.grant_lever, params: {type: amplifying, for_tags: [deed.martial], duration: scene}, hook: on_vitality_threshold, when: "threshold = half (your own Vitality)", limits: {per: scene_end, uses: 2}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.martial and secondary_tags under deed.primal) or (deed_tag under deed.primal and secondary_tags under deed.martial)"}}], text: "When your own Vitality first falls to half or below in a conflict, and whenever a deed of primal succeeds, you gain a amplifying lever you may cite on one later beat of martial this scene. Twice per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge."}
+          - {rank: 3, at_tier: 5, effects: [{effect_id: eff.grant_lever, params: {type: amplifying_or_player_choice_of_type, for_tags: [deed.martial], duration: scene}, hook: on_vitality_threshold, when: "threshold = half (your own Vitality)", limits: {per: scene_end, uses: 3}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.martial and secondary_tags under deed.primal) or (deed_tag under deed.primal and secondary_tags under deed.martial)"}}, {effect_id: eff.reach_step, params: {ladder: reach, steps: 1, applies_when: "a fused deed as above"}, limits: {per: scene_end, uses: 1}}], text: "When your own Vitality first falls to half or below in a conflict, and whenever a deed of primal succeeds, you gain a amplifying lever you may cite on one later beat of martial this scene. Three times per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge, and once per scene its reach is one rung higher. You may choose the lever's type each time."}
+      - id: comp.04.lead_from_the_front
+        name: "Lead from the Front"
+        tags: [deed.martial, deed.influence]
+        keys: [deed.martial, deed.influence]
+        key_kind: deed_branch
+        active_when: "actor holds call.marshal (not suspended by the Fraying, 04.9.3) at the rank's tier or higher"
+        calling: call.marshal
+        effects: [{effect_id: eff.grant_lever, params: {type: precision, for_tags: [deed.influence], duration: scene}, hook: on_defeat, when: "the defeating beat's deed_tag under deed.martial", limits: {per: scene_end, uses: 1}}]
+        suppresses: []
+        rank_rule: "the highest rank whose at_tier <= the calling tier replaces the lower ranks (restated, never added)"
+        lifecycle: provisional
+        basis: ["04.5.4", "C:P6", "C:P5", DL-04-11]
+        ranks:
+          - {rank: 1, at_tier: 1, effects: [{effect_id: eff.grant_lever, params: {type: precision, for_tags: [deed.influence], duration: scene}, hook: on_defeat, when: "the defeating beat's deed_tag under deed.martial", limits: {per: scene_end, uses: 1}}], text: "When a deed of martial defeats a foe, you gain a precision lever you may cite on one later beat of influence this scene. Once per scene."}
+          - {rank: 2, at_tier: 3, effects: [{effect_id: eff.grant_lever, params: {type: precision, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_defeat, when: "the defeating beat's deed_tag under deed.martial or deed.influence", limits: {per: scene_end, uses: 2}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.martial and secondary_tags under deed.influence) or (deed_tag under deed.influence and secondary_tags under deed.martial)"}}], text: "When a deed of either branch (martial or influence) defeats a foe, you gain a precision lever you may cite on one later beat of the other branch this scene. Twice per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge."}
+          - {rank: 3, at_tier: 5, effects: [{effect_id: eff.grant_lever, params: {type: precision_or_player_choice_of_type, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_defeat, when: "the defeating beat's deed_tag under deed.martial or deed.influence", limits: {per: scene_end, uses: 3}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.martial and secondary_tags under deed.influence) or (deed_tag under deed.influence and secondary_tags under deed.martial)"}}, {effect_id: eff.reach_step, params: {ladder: reach, steps: 1, applies_when: "a fused deed as above"}, limits: {per: scene_end, uses: 1}}], text: "When a deed of either branch (martial or influence) defeats a foe, you gain a precision lever you may cite on one later beat of the other branch this scene. Three times per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge, and once per scene its reach is one rung higher. You may choose the lever's type each time."}
+      - id: comp.04.makers_edge
+        name: "Maker's Edge"
+        tags: [deed.martial, deed.craft]
+        keys: [deed.martial, deed.craft]
+        key_kind: deed_branch
+        active_when: "actor holds call.battlesmith (not suspended by the Fraying, 04.9.3) at the rank's tier or higher"
+        calling: call.battlesmith
+        effects: [{effect_id: eff.grant_lever, params: {type: protective, for_tags: [deed.martial], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.craft", limits: {per: scene_end, uses: 1}}]
+        suppresses: []
+        rank_rule: "the highest rank whose at_tier <= the calling tier replaces the lower ranks (restated, never added)"
+        lifecycle: provisional
+        basis: ["04.5.4", "C:P6", "C:P5", DL-04-11]
+        ranks:
+          - {rank: 1, at_tier: 1, effects: [{effect_id: eff.grant_lever, params: {type: protective, for_tags: [deed.martial], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.craft", limits: {per: scene_end, uses: 1}}], text: "When a deed of craft succeeds, you gain a protective lever you may cite on one later beat of martial this scene. Once per scene."}
+          - {rank: 2, at_tier: 3, effects: [{effect_id: eff.grant_lever, params: {type: protective, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.martial or deed.craft", limits: {per: scene_end, uses: 2}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.martial and secondary_tags under deed.craft) or (deed_tag under deed.craft and secondary_tags under deed.martial)"}}], text: "When a deed of either branch (martial or craft) succeeds, you gain a protective lever you may cite on one later beat of the other branch this scene. Twice per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge."}
+          - {rank: 3, at_tier: 5, effects: [{effect_id: eff.grant_lever, params: {type: protective_or_player_choice_of_type, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.martial or deed.craft", limits: {per: scene_end, uses: 3}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.martial and secondary_tags under deed.craft) or (deed_tag under deed.craft and secondary_tags under deed.martial)"}}, {effect_id: eff.reach_step, params: {ladder: reach, steps: 1, applies_when: "a fused deed as above"}, limits: {per: scene_end, uses: 1}}], text: "When a deed of either branch (martial or craft) succeeds, you gain a protective lever you may cite on one later beat of the other branch this scene. Three times per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge, and once per scene its reach is one rung higher. You may choose the lever's type each time."}
+      - id: comp.04.patient_hunter
+        name: "Patient Hunter"
+        tags: [deed.guile, deed.wilds]
+        keys: [deed.guile, deed.wilds]
+        key_kind: deed_branch
+        active_when: "actor holds call.stalker (not suspended by the Fraying, 04.9.3) at the rank's tier or higher"
+        calling: call.stalker
+        effects: [{effect_id: eff.grant_lever, params: {type: precision, for_tags: [deed.guile], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.wilds", limits: {per: scene_end, uses: 1}}]
+        suppresses: []
+        rank_rule: "the highest rank whose at_tier <= the calling tier replaces the lower ranks (restated, never added)"
+        lifecycle: provisional
+        basis: ["04.5.4", "C:P6", "C:P5", DL-04-11]
+        ranks:
+          - {rank: 1, at_tier: 1, effects: [{effect_id: eff.grant_lever, params: {type: precision, for_tags: [deed.guile], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.wilds", limits: {per: scene_end, uses: 1}}], text: "When a deed of wilds succeeds, you gain a precision lever you may cite on one later beat of guile this scene. Once per scene."}
+          - {rank: 2, at_tier: 3, effects: [{effect_id: eff.grant_lever, params: {type: precision, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.guile or deed.wilds", limits: {per: scene_end, uses: 2}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.guile and secondary_tags under deed.wilds) or (deed_tag under deed.wilds and secondary_tags under deed.guile)"}}], text: "When a deed of either branch (guile or wilds) succeeds, you gain a precision lever you may cite on one later beat of the other branch this scene. Twice per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge."}
+          - {rank: 3, at_tier: 5, effects: [{effect_id: eff.grant_lever, params: {type: precision_or_player_choice_of_type, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.guile or deed.wilds", limits: {per: scene_end, uses: 3}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.guile and secondary_tags under deed.wilds) or (deed_tag under deed.wilds and secondary_tags under deed.guile)"}}, {effect_id: eff.reach_step, params: {ladder: reach, steps: 1, applies_when: "a fused deed as above"}, limits: {per: scene_end, uses: 1}}], text: "When a deed of either branch (guile or wilds) succeeds, you gain a precision lever you may cite on one later beat of the other branch this scene. Three times per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge, and once per scene its reach is one rung higher. You may choose the lever's type each time."}
+      - id: comp.04.the_dossier
+        name: "The Dossier"
+        tags: [deed.guile, deed.lore]
+        keys: [deed.guile, deed.lore]
+        key_kind: deed_branch
+        active_when: "actor holds call.spy (not suspended by the Fraying, 04.9.3) at the rank's tier or higher"
+        calling: call.spy
+        effects: [{effect_id: eff.grant_lever, params: {type: precision, for_tags: [deed.guile], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.lore", limits: {per: scene_end, uses: 1}}]
+        suppresses: []
+        rank_rule: "the highest rank whose at_tier <= the calling tier replaces the lower ranks (restated, never added)"
+        lifecycle: provisional
+        basis: ["04.5.4", "C:P6", "C:P5", DL-04-11]
+        ranks:
+          - {rank: 1, at_tier: 1, effects: [{effect_id: eff.grant_lever, params: {type: precision, for_tags: [deed.guile], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.lore", limits: {per: scene_end, uses: 1}}], text: "When a deed of lore succeeds, you gain a precision lever you may cite on one later beat of guile this scene. Once per scene."}
+          - {rank: 2, at_tier: 3, effects: [{effect_id: eff.grant_lever, params: {type: precision, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.guile or deed.lore", limits: {per: scene_end, uses: 2}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.guile and secondary_tags under deed.lore) or (deed_tag under deed.lore and secondary_tags under deed.guile)"}}], text: "When a deed of either branch (guile or lore) succeeds, you gain a precision lever you may cite on one later beat of the other branch this scene. Twice per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge."}
+          - {rank: 3, at_tier: 5, effects: [{effect_id: eff.grant_lever, params: {type: precision_or_player_choice_of_type, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.guile or deed.lore", limits: {per: scene_end, uses: 3}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.guile and secondary_tags under deed.lore) or (deed_tag under deed.lore and secondary_tags under deed.guile)"}}, {effect_id: eff.reach_step, params: {ladder: reach, steps: 1, applies_when: "a fused deed as above"}, limits: {per: scene_end, uses: 1}}], text: "When a deed of either branch (guile or lore) succeeds, you gain a precision lever you may cite on one later beat of the other branch this scene. Three times per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge, and once per scene its reach is one rung higher. You may choose the lever's type each time."}
+      - id: comp.04.smoke_and_glamour
+        name: "Smoke and Glamour"
+        tags: [deed.guile, deed.arcane]
+        keys: [deed.guile, deed.arcane]
+        key_kind: deed_branch
+        active_when: "actor holds call.shadowmage (not suspended by the Fraying, 04.9.3) at the rank's tier or higher"
+        calling: call.shadowmage
+        effects: [{effect_id: eff.grant_lever, params: {type: protective, for_tags: [deed.guile], duration: scene}, hook: on_focus_spent, when: "ability first tag under deed.arcane", limits: {per: scene_end, uses: 1}}]
+        suppresses: []
+        rank_rule: "the highest rank whose at_tier <= the calling tier replaces the lower ranks (restated, never added)"
+        lifecycle: provisional
+        basis: ["04.5.4", "C:P6", "C:P5", DL-04-11]
+        ranks:
+          - {rank: 1, at_tier: 1, effects: [{effect_id: eff.grant_lever, params: {type: protective, for_tags: [deed.guile], duration: scene}, hook: on_focus_spent, when: "ability first tag under deed.arcane", limits: {per: scene_end, uses: 1}}], text: "When you spend Focus through an ability of arcane, you gain a protective lever you may cite on one later beat of guile this scene. Once per scene."}
+          - {rank: 2, at_tier: 3, effects: [{effect_id: eff.grant_lever, params: {type: protective, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_focus_spent, when: "ability first tag under deed.guile or deed.arcane", limits: {per: scene_end, uses: 2}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.guile and secondary_tags under deed.arcane) or (deed_tag under deed.arcane and secondary_tags under deed.guile)"}}], text: "When a deed of either branch (guile or arcane) spends Focus through an ability, you gain a protective lever you may cite on one later beat of the other branch this scene. Twice per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge."}
+          - {rank: 3, at_tier: 5, effects: [{effect_id: eff.grant_lever, params: {type: protective_or_player_choice_of_type, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_focus_spent, when: "ability first tag under deed.guile or deed.arcane", limits: {per: scene_end, uses: 3}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.guile and secondary_tags under deed.arcane) or (deed_tag under deed.arcane and secondary_tags under deed.guile)"}}, {effect_id: eff.reach_step, params: {ladder: reach, steps: 1, applies_when: "a fused deed as above"}, limits: {per: scene_end, uses: 1}}], text: "When a deed of either branch (guile or arcane) spends Focus through an ability, you gain a protective lever you may cite on one later beat of the other branch this scene. Three times per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge, and once per scene its reach is one rung higher. You may choose the lever's type each time."}
+      - id: comp.04.sanctioned_silence
+        name: "Sanctioned Silence"
+        tags: [deed.guile, deed.divine]
+        keys: [deed.guile, deed.divine]
+        key_kind: deed_branch
+        active_when: "actor holds call.veiled_hand (not suspended by the Fraying, 04.9.3) at the rank's tier or higher"
+        calling: call.veiled_hand
+        effects: [{effect_id: eff.grant_lever, params: {type: precision, for_tags: [deed.guile], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.divine", limits: {per: scene_end, uses: 1}}]
+        suppresses: []
+        rank_rule: "the highest rank whose at_tier <= the calling tier replaces the lower ranks (restated, never added)"
+        lifecycle: provisional
+        basis: ["04.5.4", "C:P6", "C:P5", DL-04-11]
+        ranks:
+          - {rank: 1, at_tier: 1, effects: [{effect_id: eff.grant_lever, params: {type: precision, for_tags: [deed.guile], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.divine", limits: {per: scene_end, uses: 1}}], text: "When a deed of divine succeeds, you gain a precision lever you may cite on one later beat of guile this scene. Once per scene."}
+          - {rank: 2, at_tier: 3, effects: [{effect_id: eff.grant_lever, params: {type: precision, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.guile or deed.divine", limits: {per: scene_end, uses: 2}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.guile and secondary_tags under deed.divine) or (deed_tag under deed.divine and secondary_tags under deed.guile)"}}], text: "When a deed of either branch (guile or divine) succeeds, you gain a precision lever you may cite on one later beat of the other branch this scene. Twice per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge."}
+          - {rank: 3, at_tier: 5, effects: [{effect_id: eff.grant_lever, params: {type: precision_or_player_choice_of_type, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.guile or deed.divine", limits: {per: scene_end, uses: 3}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.guile and secondary_tags under deed.divine) or (deed_tag under deed.divine and secondary_tags under deed.guile)"}}, {effect_id: eff.reach_step, params: {ladder: reach, steps: 1, applies_when: "a fused deed as above"}, limits: {per: scene_end, uses: 1}}], text: "When a deed of either branch (guile or divine) succeeds, you gain a precision lever you may cite on one later beat of the other branch this scene. Three times per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge, and once per scene its reach is one rung higher. You may choose the lever's type each time."}
+      - id: comp.04.borrowed_face
+        name: "Borrowed Face"
+        tags: [deed.guile, deed.primal]
+        keys: [deed.guile, deed.primal]
+        key_kind: deed_branch
+        active_when: "actor holds call.changeling (not suspended by the Fraying, 04.9.3) at the rank's tier or higher"
+        calling: call.changeling
+        effects: [{effect_id: eff.grant_lever, params: {type: precision, for_tags: [deed.guile], duration: scene}, hook: on_focus_spent, when: "ability first tag under deed.primal", limits: {per: scene_end, uses: 1}}]
+        suppresses: []
+        rank_rule: "the highest rank whose at_tier <= the calling tier replaces the lower ranks (restated, never added)"
+        lifecycle: provisional
+        basis: ["04.5.4", "C:P6", "C:P5", DL-04-11]
+        ranks:
+          - {rank: 1, at_tier: 1, effects: [{effect_id: eff.grant_lever, params: {type: precision, for_tags: [deed.guile], duration: scene}, hook: on_focus_spent, when: "ability first tag under deed.primal", limits: {per: scene_end, uses: 1}}], text: "When you spend Focus through an ability of primal, you gain a precision lever you may cite on one later beat of guile this scene. Once per scene."}
+          - {rank: 2, at_tier: 3, effects: [{effect_id: eff.grant_lever, params: {type: precision, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_focus_spent, when: "ability first tag under deed.guile or deed.primal", limits: {per: scene_end, uses: 2}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.guile and secondary_tags under deed.primal) or (deed_tag under deed.primal and secondary_tags under deed.guile)"}}], text: "When a deed of either branch (guile or primal) spends Focus through an ability, you gain a precision lever you may cite on one later beat of the other branch this scene. Twice per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge."}
+          - {rank: 3, at_tier: 5, effects: [{effect_id: eff.grant_lever, params: {type: precision_or_player_choice_of_type, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_focus_spent, when: "ability first tag under deed.guile or deed.primal", limits: {per: scene_end, uses: 3}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.guile and secondary_tags under deed.primal) or (deed_tag under deed.primal and secondary_tags under deed.guile)"}}, {effect_id: eff.reach_step, params: {ladder: reach, steps: 1, applies_when: "a fused deed as above"}, limits: {per: scene_end, uses: 1}}], text: "When a deed of either branch (guile or primal) spends Focus through an ability, you gain a precision lever you may cite on one later beat of the other branch this scene. Three times per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge, and once per scene its reach is one rung higher. You may choose the lever's type each time."}
+      - id: comp.04.the_long_con
+        name: "The Long Con"
+        tags: [deed.guile, deed.influence]
+        keys: [deed.guile, deed.influence]
+        key_kind: deed_branch
+        active_when: "actor holds call.charlatan (not suspended by the Fraying, 04.9.3) at the rank's tier or higher"
+        calling: call.charlatan
+        effects: [{effect_id: eff.grant_lever, params: {type: amplifying, for_tags: [deed.guile], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.influence", limits: {per: scene_end, uses: 1}}]
+        suppresses: []
+        rank_rule: "the highest rank whose at_tier <= the calling tier replaces the lower ranks (restated, never added)"
+        lifecycle: provisional
+        basis: ["04.5.4", "C:P6", "C:P5", DL-04-11]
+        ranks:
+          - {rank: 1, at_tier: 1, effects: [{effect_id: eff.grant_lever, params: {type: amplifying, for_tags: [deed.guile], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.influence", limits: {per: scene_end, uses: 1}}], text: "When a deed of influence succeeds, you gain a amplifying lever you may cite on one later beat of guile this scene. Once per scene."}
+          - {rank: 2, at_tier: 3, effects: [{effect_id: eff.grant_lever, params: {type: amplifying, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.guile or deed.influence", limits: {per: scene_end, uses: 2}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.guile and secondary_tags under deed.influence) or (deed_tag under deed.influence and secondary_tags under deed.guile)"}}], text: "When a deed of either branch (guile or influence) succeeds, you gain a amplifying lever you may cite on one later beat of the other branch this scene. Twice per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge."}
+          - {rank: 3, at_tier: 5, effects: [{effect_id: eff.grant_lever, params: {type: amplifying_or_player_choice_of_type, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.guile or deed.influence", limits: {per: scene_end, uses: 3}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.guile and secondary_tags under deed.influence) or (deed_tag under deed.influence and secondary_tags under deed.guile)"}}, {effect_id: eff.reach_step, params: {ladder: reach, steps: 1, applies_when: "a fused deed as above"}, limits: {per: scene_end, uses: 1}}], text: "When a deed of either branch (guile or influence) succeeds, you gain a amplifying lever you may cite on one later beat of the other branch this scene. Three times per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge, and once per scene its reach is one rung higher. You may choose the lever's type each time."}
+      - id: comp.04.rigged
+        name: Rigged
+        tags: [deed.guile, deed.craft]
+        keys: [deed.guile, deed.craft]
+        key_kind: deed_branch
+        active_when: "actor holds call.saboteur (not suspended by the Fraying, 04.9.3) at the rank's tier or higher"
+        calling: call.saboteur
+        effects: [{effect_id: eff.grant_lever, params: {type: amplifying, for_tags: [deed.guile], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.craft", limits: {per: scene_end, uses: 1}}]
+        suppresses: []
+        rank_rule: "the highest rank whose at_tier <= the calling tier replaces the lower ranks (restated, never added)"
+        lifecycle: provisional
+        basis: ["04.5.4", "C:P6", "C:P5", DL-04-11]
+        ranks:
+          - {rank: 1, at_tier: 1, effects: [{effect_id: eff.grant_lever, params: {type: amplifying, for_tags: [deed.guile], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.craft", limits: {per: scene_end, uses: 1}}], text: "When a deed of craft succeeds, you gain a amplifying lever you may cite on one later beat of guile this scene. Once per scene."}
+          - {rank: 2, at_tier: 3, effects: [{effect_id: eff.grant_lever, params: {type: amplifying, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.guile or deed.craft", limits: {per: scene_end, uses: 2}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.guile and secondary_tags under deed.craft) or (deed_tag under deed.craft and secondary_tags under deed.guile)"}}], text: "When a deed of either branch (guile or craft) succeeds, you gain a amplifying lever you may cite on one later beat of the other branch this scene. Twice per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge."}
+          - {rank: 3, at_tier: 5, effects: [{effect_id: eff.grant_lever, params: {type: amplifying_or_player_choice_of_type, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.guile or deed.craft", limits: {per: scene_end, uses: 3}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.guile and secondary_tags under deed.craft) or (deed_tag under deed.craft and secondary_tags under deed.guile)"}}, {effect_id: eff.reach_step, params: {ladder: reach, steps: 1, applies_when: "a fused deed as above"}, limits: {per: scene_end, uses: 1}}], text: "When a deed of either branch (guile or craft) succeeds, you gain a amplifying lever you may cite on one later beat of the other branch this scene. Three times per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge, and once per scene its reach is one rung higher. You may choose the lever's type each time."}
+      - id: comp.04.field_notes
+        name: "Field Notes"
+        tags: [deed.wilds, deed.lore]
+        keys: [deed.wilds, deed.lore]
+        key_kind: deed_branch
+        active_when: "actor holds call.naturalist (not suspended by the Fraying, 04.9.3) at the rank's tier or higher"
+        calling: call.naturalist
+        effects: [{effect_id: eff.grant_lever, params: {type: precision, for_tags: [deed.lore], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.wilds", limits: {per: scene_end, uses: 1}}]
+        suppresses: []
+        rank_rule: "the highest rank whose at_tier <= the calling tier replaces the lower ranks (restated, never added)"
+        lifecycle: provisional
+        basis: ["04.5.4", "C:P6", "C:P5", DL-04-11]
+        ranks:
+          - {rank: 1, at_tier: 1, effects: [{effect_id: eff.grant_lever, params: {type: precision, for_tags: [deed.lore], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.wilds", limits: {per: scene_end, uses: 1}}], text: "When a deed of wilds succeeds, you gain a precision lever you may cite on one later beat of lore this scene. Once per scene."}
+          - {rank: 2, at_tier: 3, effects: [{effect_id: eff.grant_lever, params: {type: precision, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.wilds or deed.lore", limits: {per: scene_end, uses: 2}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.wilds and secondary_tags under deed.lore) or (deed_tag under deed.lore and secondary_tags under deed.wilds)"}}], text: "When a deed of either branch (wilds or lore) succeeds, you gain a precision lever you may cite on one later beat of the other branch this scene. Twice per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge."}
+          - {rank: 3, at_tier: 5, effects: [{effect_id: eff.grant_lever, params: {type: precision_or_player_choice_of_type, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.wilds or deed.lore", limits: {per: scene_end, uses: 3}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.wilds and secondary_tags under deed.lore) or (deed_tag under deed.lore and secondary_tags under deed.wilds)"}}, {effect_id: eff.reach_step, params: {ladder: reach, steps: 1, applies_when: "a fused deed as above"}, limits: {per: scene_end, uses: 1}}], text: "When a deed of either branch (wilds or lore) succeeds, you gain a precision lever you may cite on one later beat of the other branch this scene. Three times per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge, and once per scene its reach is one rung higher. You may choose the lever's type each time."}
+      - id: comp.04.road_blessing
+        name: "Road Blessing"
+        tags: [deed.wilds, deed.divine]
+        keys: [deed.wilds, deed.divine]
+        key_kind: deed_branch
+        active_when: "actor holds call.pilgrim (not suspended by the Fraying, 04.9.3) at the rank's tier or higher"
+        calling: call.pilgrim
+        effects: [{effect_id: eff.grant_lever, params: {type: protective, for_tags: [deed.wilds], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.divine", limits: {per: scene_end, uses: 1}}]
+        suppresses: []
+        rank_rule: "the highest rank whose at_tier <= the calling tier replaces the lower ranks (restated, never added)"
+        lifecycle: provisional
+        basis: ["04.5.4", "C:P6", "C:P5", DL-04-11]
+        ranks:
+          - {rank: 1, at_tier: 1, effects: [{effect_id: eff.grant_lever, params: {type: protective, for_tags: [deed.wilds], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.divine", limits: {per: scene_end, uses: 1}}], text: "When a deed of divine succeeds, you gain a protective lever you may cite on one later beat of wilds this scene. Once per scene."}
+          - {rank: 2, at_tier: 3, effects: [{effect_id: eff.grant_lever, params: {type: protective, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.wilds or deed.divine", limits: {per: scene_end, uses: 2}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.wilds and secondary_tags under deed.divine) or (deed_tag under deed.divine and secondary_tags under deed.wilds)"}}], text: "When a deed of either branch (wilds or divine) succeeds, you gain a protective lever you may cite on one later beat of the other branch this scene. Twice per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge."}
+          - {rank: 3, at_tier: 5, effects: [{effect_id: eff.grant_lever, params: {type: protective_or_player_choice_of_type, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.wilds or deed.divine", limits: {per: scene_end, uses: 3}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.wilds and secondary_tags under deed.divine) or (deed_tag under deed.divine and secondary_tags under deed.wilds)"}}, {effect_id: eff.reach_step, params: {ladder: reach, steps: 1, applies_when: "a fused deed as above"}, limits: {per: scene_end, uses: 1}}], text: "When a deed of either branch (wilds or divine) succeeds, you gain a protective lever you may cite on one later beat of the other branch this scene. Three times per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge, and once per scene its reach is one rung higher. You may choose the lever's type each time."}
+      - id: comp.04.the_land_answers
+        name: "The Land Answers"
+        tags: [deed.wilds, deed.primal]
+        keys: [deed.wilds, deed.primal]
+        key_kind: deed_branch
+        active_when: "actor holds call.wildwarden (not suspended by the Fraying, 04.9.3) at the rank's tier or higher"
+        calling: call.wildwarden
+        effects: [{effect_id: eff.grant_lever, params: {type: amplifying, for_tags: [deed.primal], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.wilds", limits: {per: scene_end, uses: 1}}]
+        suppresses: []
+        rank_rule: "the highest rank whose at_tier <= the calling tier replaces the lower ranks (restated, never added)"
+        lifecycle: provisional
+        basis: ["04.5.4", "C:P6", "C:P5", DL-04-11]
+        ranks:
+          - {rank: 1, at_tier: 1, effects: [{effect_id: eff.grant_lever, params: {type: amplifying, for_tags: [deed.primal], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.wilds", limits: {per: scene_end, uses: 1}}], text: "When a deed of wilds succeeds, you gain a amplifying lever you may cite on one later beat of primal this scene. Once per scene."}
+          - {rank: 2, at_tier: 3, effects: [{effect_id: eff.grant_lever, params: {type: amplifying, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.wilds or deed.primal", limits: {per: scene_end, uses: 2}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.wilds and secondary_tags under deed.primal) or (deed_tag under deed.primal and secondary_tags under deed.wilds)"}}], text: "When a deed of either branch (wilds or primal) succeeds, you gain a amplifying lever you may cite on one later beat of the other branch this scene. Twice per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge."}
+          - {rank: 3, at_tier: 5, effects: [{effect_id: eff.grant_lever, params: {type: amplifying_or_player_choice_of_type, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.wilds or deed.primal", limits: {per: scene_end, uses: 3}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.wilds and secondary_tags under deed.primal) or (deed_tag under deed.primal and secondary_tags under deed.wilds)"}}, {effect_id: eff.reach_step, params: {ladder: reach, steps: 1, applies_when: "a fused deed as above"}, limits: {per: scene_end, uses: 1}}], text: "When a deed of either branch (wilds or primal) succeeds, you gain a amplifying lever you may cite on one later beat of the other branch this scene. Three times per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge, and once per scene its reach is one rung higher. You may choose the lever's type each time."}
+      - id: comp.04.trail_law
+        name: "Trail Law"
+        tags: [deed.wilds, deed.influence]
+        keys: [deed.wilds, deed.influence]
+        key_kind: deed_branch
+        active_when: "actor holds call.caravaneer (not suspended by the Fraying, 04.9.3) at the rank's tier or higher"
+        calling: call.caravaneer
+        effects: [{effect_id: eff.grant_lever, params: {type: precision, for_tags: [deed.influence], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.wilds", limits: {per: scene_end, uses: 1}}]
+        suppresses: []
+        rank_rule: "the highest rank whose at_tier <= the calling tier replaces the lower ranks (restated, never added)"
+        lifecycle: provisional
+        basis: ["04.5.4", "C:P6", "C:P5", DL-04-11]
+        ranks:
+          - {rank: 1, at_tier: 1, effects: [{effect_id: eff.grant_lever, params: {type: precision, for_tags: [deed.influence], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.wilds", limits: {per: scene_end, uses: 1}}], text: "When a deed of wilds succeeds, you gain a precision lever you may cite on one later beat of influence this scene. Once per scene."}
+          - {rank: 2, at_tier: 3, effects: [{effect_id: eff.grant_lever, params: {type: precision, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.wilds or deed.influence", limits: {per: scene_end, uses: 2}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.wilds and secondary_tags under deed.influence) or (deed_tag under deed.influence and secondary_tags under deed.wilds)"}}], text: "When a deed of either branch (wilds or influence) succeeds, you gain a precision lever you may cite on one later beat of the other branch this scene. Twice per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge."}
+          - {rank: 3, at_tier: 5, effects: [{effect_id: eff.grant_lever, params: {type: precision_or_player_choice_of_type, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.wilds or deed.influence", limits: {per: scene_end, uses: 3}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.wilds and secondary_tags under deed.influence) or (deed_tag under deed.influence and secondary_tags under deed.wilds)"}}, {effect_id: eff.reach_step, params: {ladder: reach, steps: 1, applies_when: "a fused deed as above"}, limits: {per: scene_end, uses: 1}}], text: "When a deed of either branch (wilds or influence) succeeds, you gain a precision lever you may cite on one later beat of the other branch this scene. Three times per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge, and once per scene its reach is one rung higher. You may choose the lever's type each time."}
+      - id: comp.04.field_made
+        name: Field-Made
+        tags: [deed.wilds, deed.craft]
+        keys: [deed.wilds, deed.craft]
+        key_kind: deed_branch
+        active_when: "actor holds call.trapper (not suspended by the Fraying, 04.9.3) at the rank's tier or higher"
+        calling: call.trapper
+        effects: [{effect_id: eff.grant_lever, params: {type: precision, for_tags: [deed.craft], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.wilds", limits: {per: scene_end, uses: 1}}]
+        suppresses: []
+        rank_rule: "the highest rank whose at_tier <= the calling tier replaces the lower ranks (restated, never added)"
+        lifecycle: provisional
+        basis: ["04.5.4", "C:P6", "C:P5", DL-04-11]
+        ranks:
+          - {rank: 1, at_tier: 1, effects: [{effect_id: eff.grant_lever, params: {type: precision, for_tags: [deed.craft], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.wilds", limits: {per: scene_end, uses: 1}}], text: "When a deed of wilds succeeds, you gain a precision lever you may cite on one later beat of craft this scene. Once per scene."}
+          - {rank: 2, at_tier: 3, effects: [{effect_id: eff.grant_lever, params: {type: precision, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.wilds or deed.craft", limits: {per: scene_end, uses: 2}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.wilds and secondary_tags under deed.craft) or (deed_tag under deed.craft and secondary_tags under deed.wilds)"}}], text: "When a deed of either branch (wilds or craft) succeeds, you gain a precision lever you may cite on one later beat of the other branch this scene. Twice per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge."}
+          - {rank: 3, at_tier: 5, effects: [{effect_id: eff.grant_lever, params: {type: precision_or_player_choice_of_type, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.wilds or deed.craft", limits: {per: scene_end, uses: 3}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.wilds and secondary_tags under deed.craft) or (deed_tag under deed.craft and secondary_tags under deed.wilds)"}}, {effect_id: eff.reach_step, params: {ladder: reach, steps: 1, applies_when: "a fused deed as above"}, limits: {per: scene_end, uses: 1}}], text: "When a deed of either branch (wilds or craft) succeeds, you gain a precision lever you may cite on one later beat of the other branch this scene. Three times per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge, and once per scene its reach is one rung higher. You may choose the lever's type each time."}
+      - id: comp.04.theory_into_practice
+        name: "Theory into Practice"
+        tags: [deed.lore, deed.arcane]
+        keys: [deed.lore, deed.arcane]
+        key_kind: deed_branch
+        active_when: "actor holds call.magister (not suspended by the Fraying, 04.9.3) at the rank's tier or higher"
+        calling: call.magister
+        effects: [{effect_id: eff.grant_lever, params: {type: precision, for_tags: [deed.arcane], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.lore", limits: {per: scene_end, uses: 1}}]
+        suppresses: []
+        rank_rule: "the highest rank whose at_tier <= the calling tier replaces the lower ranks (restated, never added)"
+        lifecycle: provisional
+        basis: ["04.5.4", "C:P6", "C:P5", DL-04-11]
+        ranks:
+          - {rank: 1, at_tier: 1, effects: [{effect_id: eff.grant_lever, params: {type: precision, for_tags: [deed.arcane], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.lore", limits: {per: scene_end, uses: 1}}], text: "When a deed of lore succeeds, you gain a precision lever you may cite on one later beat of arcane this scene. Once per scene."}
+          - {rank: 2, at_tier: 3, effects: [{effect_id: eff.grant_lever, params: {type: precision, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.lore or deed.arcane", limits: {per: scene_end, uses: 2}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.lore and secondary_tags under deed.arcane) or (deed_tag under deed.arcane and secondary_tags under deed.lore)"}}], text: "When a deed of either branch (lore or arcane) succeeds, you gain a precision lever you may cite on one later beat of the other branch this scene. Twice per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge."}
+          - {rank: 3, at_tier: 5, effects: [{effect_id: eff.grant_lever, params: {type: precision_or_player_choice_of_type, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.lore or deed.arcane", limits: {per: scene_end, uses: 3}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.lore and secondary_tags under deed.arcane) or (deed_tag under deed.arcane and secondary_tags under deed.lore)"}}, {effect_id: eff.reach_step, params: {ladder: reach, steps: 1, applies_when: "a fused deed as above"}, limits: {per: scene_end, uses: 1}}], text: "When a deed of either branch (lore or arcane) succeeds, you gain a precision lever you may cite on one later beat of the other branch this scene. Three times per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge, and once per scene its reach is one rung higher. You may choose the lever's type each time."}
+      - id: comp.04.cited_scripture
+        name: "Cited Scripture"
+        tags: [deed.lore, deed.divine]
+        keys: [deed.lore, deed.divine]
+        key_kind: deed_branch
+        active_when: "actor holds call.inquisitor (not suspended by the Fraying, 04.9.3) at the rank's tier or higher"
+        calling: call.inquisitor
+        effects: [{effect_id: eff.grant_lever, params: {type: precision, for_tags: [deed.divine], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.lore", limits: {per: scene_end, uses: 1}}]
+        suppresses: []
+        rank_rule: "the highest rank whose at_tier <= the calling tier replaces the lower ranks (restated, never added)"
+        lifecycle: provisional
+        basis: ["04.5.4", "C:P6", "C:P5", DL-04-11]
+        ranks:
+          - {rank: 1, at_tier: 1, effects: [{effect_id: eff.grant_lever, params: {type: precision, for_tags: [deed.divine], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.lore", limits: {per: scene_end, uses: 1}}], text: "When a deed of lore succeeds, you gain a precision lever you may cite on one later beat of divine this scene. Once per scene."}
+          - {rank: 2, at_tier: 3, effects: [{effect_id: eff.grant_lever, params: {type: precision, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.lore or deed.divine", limits: {per: scene_end, uses: 2}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.lore and secondary_tags under deed.divine) or (deed_tag under deed.divine and secondary_tags under deed.lore)"}}], text: "When a deed of either branch (lore or divine) succeeds, you gain a precision lever you may cite on one later beat of the other branch this scene. Twice per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge."}
+          - {rank: 3, at_tier: 5, effects: [{effect_id: eff.grant_lever, params: {type: precision_or_player_choice_of_type, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.lore or deed.divine", limits: {per: scene_end, uses: 3}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.lore and secondary_tags under deed.divine) or (deed_tag under deed.divine and secondary_tags under deed.lore)"}}, {effect_id: eff.reach_step, params: {ladder: reach, steps: 1, applies_when: "a fused deed as above"}, limits: {per: scene_end, uses: 1}}], text: "When a deed of either branch (lore or divine) succeeds, you gain a precision lever you may cite on one later beat of the other branch this scene. Three times per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge, and once per scene its reach is one rung higher. You may choose the lever's type each time."}
+      - id: comp.04.old_knowing
+        name: "Old Knowing"
+        tags: [deed.lore, deed.primal]
+        keys: [deed.lore, deed.primal]
+        key_kind: deed_branch
+        active_when: "actor holds call.cunning_folk (not suspended by the Fraying, 04.9.3) at the rank's tier or higher"
+        calling: call.cunning_folk
+        effects: [{effect_id: eff.grant_lever, params: {type: precision, for_tags: [deed.primal], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.lore", limits: {per: scene_end, uses: 1}}]
+        suppresses: []
+        rank_rule: "the highest rank whose at_tier <= the calling tier replaces the lower ranks (restated, never added)"
+        lifecycle: provisional
+        basis: ["04.5.4", "C:P6", "C:P5", DL-04-11]
+        ranks:
+          - {rank: 1, at_tier: 1, effects: [{effect_id: eff.grant_lever, params: {type: precision, for_tags: [deed.primal], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.lore", limits: {per: scene_end, uses: 1}}], text: "When a deed of lore succeeds, you gain a precision lever you may cite on one later beat of primal this scene. Once per scene."}
+          - {rank: 2, at_tier: 3, effects: [{effect_id: eff.grant_lever, params: {type: precision, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.lore or deed.primal", limits: {per: scene_end, uses: 2}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.lore and secondary_tags under deed.primal) or (deed_tag under deed.primal and secondary_tags under deed.lore)"}}], text: "When a deed of either branch (lore or primal) succeeds, you gain a precision lever you may cite on one later beat of the other branch this scene. Twice per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge."}
+          - {rank: 3, at_tier: 5, effects: [{effect_id: eff.grant_lever, params: {type: precision_or_player_choice_of_type, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.lore or deed.primal", limits: {per: scene_end, uses: 3}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.lore and secondary_tags under deed.primal) or (deed_tag under deed.primal and secondary_tags under deed.lore)"}}, {effect_id: eff.reach_step, params: {ladder: reach, steps: 1, applies_when: "a fused deed as above"}, limits: {per: scene_end, uses: 1}}], text: "When a deed of either branch (lore or primal) succeeds, you gain a precision lever you may cite on one later beat of the other branch this scene. Three times per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge, and once per scene its reach is one rung higher. You may choose the lever's type each time."}
+      - id: comp.04.precedent
+        name: Precedent
+        tags: [deed.lore, deed.influence]
+        keys: [deed.lore, deed.influence]
+        key_kind: deed_branch
+        active_when: "actor holds call.counselor (not suspended by the Fraying, 04.9.3) at the rank's tier or higher"
+        calling: call.counselor
+        effects: [{effect_id: eff.grant_lever, params: {type: amplifying, for_tags: [deed.influence], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.lore", limits: {per: scene_end, uses: 1}}]
+        suppresses: []
+        rank_rule: "the highest rank whose at_tier <= the calling tier replaces the lower ranks (restated, never added)"
+        lifecycle: provisional
+        basis: ["04.5.4", "C:P6", "C:P5", DL-04-11]
+        ranks:
+          - {rank: 1, at_tier: 1, effects: [{effect_id: eff.grant_lever, params: {type: amplifying, for_tags: [deed.influence], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.lore", limits: {per: scene_end, uses: 1}}], text: "When a deed of lore succeeds, you gain a amplifying lever you may cite on one later beat of influence this scene. Once per scene."}
+          - {rank: 2, at_tier: 3, effects: [{effect_id: eff.grant_lever, params: {type: amplifying, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.lore or deed.influence", limits: {per: scene_end, uses: 2}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.lore and secondary_tags under deed.influence) or (deed_tag under deed.influence and secondary_tags under deed.lore)"}}], text: "When a deed of either branch (lore or influence) succeeds, you gain a amplifying lever you may cite on one later beat of the other branch this scene. Twice per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge."}
+          - {rank: 3, at_tier: 5, effects: [{effect_id: eff.grant_lever, params: {type: amplifying_or_player_choice_of_type, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.lore or deed.influence", limits: {per: scene_end, uses: 3}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.lore and secondary_tags under deed.influence) or (deed_tag under deed.influence and secondary_tags under deed.lore)"}}, {effect_id: eff.reach_step, params: {ladder: reach, steps: 1, applies_when: "a fused deed as above"}, limits: {per: scene_end, uses: 1}}], text: "When a deed of either branch (lore or influence) succeeds, you gain a amplifying lever you may cite on one later beat of the other branch this scene. Three times per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge, and once per scene its reach is one rung higher. You may choose the lever's type each time."}
+      - id: comp.04.worked_out_on_paper
+        name: "Worked Out on Paper"
+        tags: [deed.lore, deed.craft]
+        keys: [deed.lore, deed.craft]
+        key_kind: deed_branch
+        active_when: "actor holds call.inventor (not suspended by the Fraying, 04.9.3) at the rank's tier or higher"
+        calling: call.inventor
+        effects: [{effect_id: eff.grant_lever, params: {type: protective, for_tags: [deed.craft], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.lore", limits: {per: scene_end, uses: 1}}]
+        suppresses: []
+        rank_rule: "the highest rank whose at_tier <= the calling tier replaces the lower ranks (restated, never added)"
+        lifecycle: provisional
+        basis: ["04.5.4", "C:P6", "C:P5", DL-04-11]
+        ranks:
+          - {rank: 1, at_tier: 1, effects: [{effect_id: eff.grant_lever, params: {type: protective, for_tags: [deed.craft], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.lore", limits: {per: scene_end, uses: 1}}], text: "When a deed of lore succeeds, you gain a protective lever you may cite on one later beat of craft this scene. Once per scene."}
+          - {rank: 2, at_tier: 3, effects: [{effect_id: eff.grant_lever, params: {type: protective, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.lore or deed.craft", limits: {per: scene_end, uses: 2}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.lore and secondary_tags under deed.craft) or (deed_tag under deed.craft and secondary_tags under deed.lore)"}}], text: "When a deed of either branch (lore or craft) succeeds, you gain a protective lever you may cite on one later beat of the other branch this scene. Twice per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge."}
+          - {rank: 3, at_tier: 5, effects: [{effect_id: eff.grant_lever, params: {type: protective_or_player_choice_of_type, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.lore or deed.craft", limits: {per: scene_end, uses: 3}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.lore and secondary_tags under deed.craft) or (deed_tag under deed.craft and secondary_tags under deed.lore)"}}, {effect_id: eff.reach_step, params: {ladder: reach, steps: 1, applies_when: "a fused deed as above"}, limits: {per: scene_end, uses: 1}}], text: "When a deed of either branch (lore or craft) succeeds, you gain a protective lever you may cite on one later beat of the other branch this scene. Three times per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge, and once per scene its reach is one rung higher. You may choose the lever's type each time."}
+      - id: comp.04.twin_invocation
+        name: "Twin Invocation"
+        tags: [deed.arcane, deed.divine]
+        keys: [deed.arcane, deed.divine]
+        key_kind: deed_branch
+        active_when: "actor holds call.theurge (not suspended by the Fraying, 04.9.3) at the rank's tier or higher"
+        calling: call.theurge
+        effects: [{effect_id: eff.grant_lever, params: {type: precision, for_tags: [deed.divine], duration: scene}, hook: on_focus_spent, when: "ability first tag under deed.arcane", limits: {per: scene_end, uses: 1}}]
+        suppresses: []
+        rank_rule: "the highest rank whose at_tier <= the calling tier replaces the lower ranks (restated, never added)"
+        lifecycle: provisional
+        basis: ["04.5.4", "C:P6", "C:P5", DL-04-11]
+        ranks:
+          - {rank: 1, at_tier: 1, effects: [{effect_id: eff.grant_lever, params: {type: precision, for_tags: [deed.divine], duration: scene}, hook: on_focus_spent, when: "ability first tag under deed.arcane", limits: {per: scene_end, uses: 1}}], text: "When you spend Focus through an ability of arcane, you gain a precision lever you may cite on one later beat of divine this scene. Once per scene."}
+          - {rank: 2, at_tier: 3, effects: [{effect_id: eff.grant_lever, params: {type: precision, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_focus_spent, when: "ability first tag under deed.arcane or deed.divine", limits: {per: scene_end, uses: 2}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.arcane and secondary_tags under deed.divine) or (deed_tag under deed.divine and secondary_tags under deed.arcane)"}}], text: "When a deed of either branch (arcane or divine) spends Focus through an ability, you gain a precision lever you may cite on one later beat of the other branch this scene. Twice per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge."}
+          - {rank: 3, at_tier: 5, effects: [{effect_id: eff.grant_lever, params: {type: precision_or_player_choice_of_type, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_focus_spent, when: "ability first tag under deed.arcane or deed.divine", limits: {per: scene_end, uses: 3}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.arcane and secondary_tags under deed.divine) or (deed_tag under deed.divine and secondary_tags under deed.arcane)"}}, {effect_id: eff.reach_step, params: {ladder: reach, steps: 1, applies_when: "a fused deed as above"}, limits: {per: scene_end, uses: 1}}], text: "When a deed of either branch (arcane or divine) spends Focus through an ability, you gain a precision lever you may cite on one later beat of the other branch this scene. Three times per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge, and once per scene its reach is one rung higher. You may choose the lever's type each time."}
+      - id: comp.04.voice_and_weave
+        name: "Voice and Weave"
+        tags: [deed.arcane, deed.influence]
+        keys: [deed.arcane, deed.influence]
+        key_kind: deed_branch
+        active_when: "actor holds call.spellsinger (not suspended by the Fraying, 04.9.3) at the rank's tier or higher"
+        calling: call.spellsinger
+        effects: [{effect_id: eff.grant_lever, params: {type: amplifying, for_tags: [deed.arcane], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.influence", limits: {per: scene_end, uses: 1}}]
+        suppresses: []
+        rank_rule: "the highest rank whose at_tier <= the calling tier replaces the lower ranks (restated, never added)"
+        lifecycle: provisional
+        basis: ["04.5.4", "C:P6", "C:P5", DL-04-11]
+        ranks:
+          - {rank: 1, at_tier: 1, effects: [{effect_id: eff.grant_lever, params: {type: amplifying, for_tags: [deed.arcane], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.influence", limits: {per: scene_end, uses: 1}}], text: "When a deed of influence succeeds, you gain a amplifying lever you may cite on one later beat of arcane this scene. Once per scene."}
+          - {rank: 2, at_tier: 3, effects: [{effect_id: eff.grant_lever, params: {type: amplifying, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.arcane or deed.influence", limits: {per: scene_end, uses: 2}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.arcane and secondary_tags under deed.influence) or (deed_tag under deed.influence and secondary_tags under deed.arcane)"}}], text: "When a deed of either branch (arcane or influence) succeeds, you gain a amplifying lever you may cite on one later beat of the other branch this scene. Twice per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge."}
+          - {rank: 3, at_tier: 5, effects: [{effect_id: eff.grant_lever, params: {type: amplifying_or_player_choice_of_type, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.arcane or deed.influence", limits: {per: scene_end, uses: 3}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.arcane and secondary_tags under deed.influence) or (deed_tag under deed.influence and secondary_tags under deed.arcane)"}}, {effect_id: eff.reach_step, params: {ladder: reach, steps: 1, applies_when: "a fused deed as above"}, limits: {per: scene_end, uses: 1}}], text: "When a deed of either branch (arcane or influence) succeeds, you gain a amplifying lever you may cite on one later beat of the other branch this scene. Three times per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge, and once per scene its reach is one rung higher. You may choose the lever's type each time."}
+      - id: comp.04.bound_in_the_making
+        name: "Bound in the Making"
+        tags: [deed.arcane, deed.craft]
+        keys: [deed.arcane, deed.craft]
+        key_kind: deed_branch
+        active_when: "actor holds call.artificer (not suspended by the Fraying, 04.9.3) at the rank's tier or higher"
+        calling: call.artificer
+        effects: [{effect_id: eff.grant_lever, params: {type: amplifying, for_tags: [deed.arcane], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.craft", limits: {per: scene_end, uses: 1}}]
+        suppresses: []
+        rank_rule: "the highest rank whose at_tier <= the calling tier replaces the lower ranks (restated, never added)"
+        lifecycle: provisional
+        basis: ["04.5.4", "C:P6", "C:P5", DL-04-11]
+        ranks:
+          - {rank: 1, at_tier: 1, effects: [{effect_id: eff.grant_lever, params: {type: amplifying, for_tags: [deed.arcane], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.craft", limits: {per: scene_end, uses: 1}}], text: "When a deed of craft succeeds, you gain a amplifying lever you may cite on one later beat of arcane this scene. Once per scene."}
+          - {rank: 2, at_tier: 3, effects: [{effect_id: eff.grant_lever, params: {type: amplifying, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.arcane or deed.craft", limits: {per: scene_end, uses: 2}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.arcane and secondary_tags under deed.craft) or (deed_tag under deed.craft and secondary_tags under deed.arcane)"}}], text: "When a deed of either branch (arcane or craft) succeeds, you gain a amplifying lever you may cite on one later beat of the other branch this scene. Twice per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge."}
+          - {rank: 3, at_tier: 5, effects: [{effect_id: eff.grant_lever, params: {type: amplifying_or_player_choice_of_type, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.arcane or deed.craft", limits: {per: scene_end, uses: 3}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.arcane and secondary_tags under deed.craft) or (deed_tag under deed.craft and secondary_tags under deed.arcane)"}}, {effect_id: eff.reach_step, params: {ladder: reach, steps: 1, applies_when: "a fused deed as above"}, limits: {per: scene_end, uses: 1}}], text: "When a deed of either branch (arcane or craft) succeeds, you gain a amplifying lever you may cite on one later beat of the other branch this scene. Three times per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge, and once per scene its reach is one rung higher. You may choose the lever's type each time."}
+      - id: comp.04.word_and_witness
+        name: "Word and Witness"
+        tags: [deed.divine, deed.influence]
+        keys: [deed.divine, deed.influence]
+        key_kind: deed_branch
+        active_when: "actor holds call.preacher (not suspended by the Fraying, 04.9.3) at the rank's tier or higher"
+        calling: call.preacher
+        effects: [{effect_id: eff.grant_lever, params: {type: amplifying, for_tags: [deed.divine], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.influence", limits: {per: scene_end, uses: 1}}]
+        suppresses: []
+        rank_rule: "the highest rank whose at_tier <= the calling tier replaces the lower ranks (restated, never added)"
+        lifecycle: provisional
+        basis: ["04.5.4", "C:P6", "C:P5", DL-04-11]
+        ranks:
+          - {rank: 1, at_tier: 1, effects: [{effect_id: eff.grant_lever, params: {type: amplifying, for_tags: [deed.divine], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.influence", limits: {per: scene_end, uses: 1}}], text: "When a deed of influence succeeds, you gain a amplifying lever you may cite on one later beat of divine this scene. Once per scene."}
+          - {rank: 2, at_tier: 3, effects: [{effect_id: eff.grant_lever, params: {type: amplifying, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.divine or deed.influence", limits: {per: scene_end, uses: 2}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.divine and secondary_tags under deed.influence) or (deed_tag under deed.influence and secondary_tags under deed.divine)"}}], text: "When a deed of either branch (divine or influence) succeeds, you gain a amplifying lever you may cite on one later beat of the other branch this scene. Twice per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge."}
+          - {rank: 3, at_tier: 5, effects: [{effect_id: eff.grant_lever, params: {type: amplifying_or_player_choice_of_type, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.divine or deed.influence", limits: {per: scene_end, uses: 3}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.divine and secondary_tags under deed.influence) or (deed_tag under deed.influence and secondary_tags under deed.divine)"}}, {effect_id: eff.reach_step, params: {ladder: reach, steps: 1, applies_when: "a fused deed as above"}, limits: {per: scene_end, uses: 1}}], text: "When a deed of either branch (divine or influence) succeeds, you gain a amplifying lever you may cite on one later beat of the other branch this scene. Three times per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge, and once per scene its reach is one rung higher. You may choose the lever's type each time."}
+      - id: comp.04.hallowed_work
+        name: "Hallowed Work"
+        tags: [deed.divine, deed.craft]
+        keys: [deed.divine, deed.craft]
+        key_kind: deed_branch
+        active_when: "actor holds call.reliquarist (not suspended by the Fraying, 04.9.3) at the rank's tier or higher"
+        calling: call.reliquarist
+        effects: [{effect_id: eff.grant_lever, params: {type: precision, for_tags: [deed.divine], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.craft", limits: {per: scene_end, uses: 1}}]
+        suppresses: []
+        rank_rule: "the highest rank whose at_tier <= the calling tier replaces the lower ranks (restated, never added)"
+        lifecycle: provisional
+        basis: ["04.5.4", "C:P6", "C:P5", DL-04-11]
+        ranks:
+          - {rank: 1, at_tier: 1, effects: [{effect_id: eff.grant_lever, params: {type: precision, for_tags: [deed.divine], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.craft", limits: {per: scene_end, uses: 1}}], text: "When a deed of craft succeeds, you gain a precision lever you may cite on one later beat of divine this scene. Once per scene."}
+          - {rank: 2, at_tier: 3, effects: [{effect_id: eff.grant_lever, params: {type: precision, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.divine or deed.craft", limits: {per: scene_end, uses: 2}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.divine and secondary_tags under deed.craft) or (deed_tag under deed.craft and secondary_tags under deed.divine)"}}], text: "When a deed of either branch (divine or craft) succeeds, you gain a precision lever you may cite on one later beat of the other branch this scene. Twice per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge."}
+          - {rank: 3, at_tier: 5, effects: [{effect_id: eff.grant_lever, params: {type: precision_or_player_choice_of_type, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.divine or deed.craft", limits: {per: scene_end, uses: 3}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.divine and secondary_tags under deed.craft) or (deed_tag under deed.craft and secondary_tags under deed.divine)"}}, {effect_id: eff.reach_step, params: {ladder: reach, steps: 1, applies_when: "a fused deed as above"}, limits: {per: scene_end, uses: 1}}], text: "When a deed of either branch (divine or craft) succeeds, you gain a precision lever you may cite on one later beat of the other branch this scene. Three times per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge, and once per scene its reach is one rung higher. You may choose the lever's type each time."}
+      - id: comp.04.cauldron_and_charm
+        name: "Cauldron and Charm"
+        tags: [deed.primal, deed.craft]
+        keys: [deed.primal, deed.craft]
+        key_kind: deed_branch
+        active_when: "actor holds call.hedgewitch (not suspended by the Fraying, 04.9.3) at the rank's tier or higher"
+        calling: call.hedgewitch
+        effects: [{effect_id: eff.grant_lever, params: {type: amplifying, for_tags: [deed.primal], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.craft", limits: {per: scene_end, uses: 1}}]
+        suppresses: []
+        rank_rule: "the highest rank whose at_tier <= the calling tier replaces the lower ranks (restated, never added)"
+        lifecycle: provisional
+        basis: ["04.5.4", "C:P6", "C:P5", DL-04-11]
+        ranks:
+          - {rank: 1, at_tier: 1, effects: [{effect_id: eff.grant_lever, params: {type: amplifying, for_tags: [deed.primal], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.craft", limits: {per: scene_end, uses: 1}}], text: "When a deed of craft succeeds, you gain a amplifying lever you may cite on one later beat of primal this scene. Once per scene."}
+          - {rank: 2, at_tier: 3, effects: [{effect_id: eff.grant_lever, params: {type: amplifying, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.primal or deed.craft", limits: {per: scene_end, uses: 2}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.primal and secondary_tags under deed.craft) or (deed_tag under deed.craft and secondary_tags under deed.primal)"}}], text: "When a deed of either branch (primal or craft) succeeds, you gain a amplifying lever you may cite on one later beat of the other branch this scene. Twice per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge."}
+          - {rank: 3, at_tier: 5, effects: [{effect_id: eff.grant_lever, params: {type: amplifying_or_player_choice_of_type, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.primal or deed.craft", limits: {per: scene_end, uses: 3}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.primal and secondary_tags under deed.craft) or (deed_tag under deed.craft and secondary_tags under deed.primal)"}}, {effect_id: eff.reach_step, params: {ladder: reach, steps: 1, applies_when: "a fused deed as above"}, limits: {per: scene_end, uses: 1}}], text: "When a deed of either branch (primal or craft) succeeds, you gain a amplifying lever you may cite on one later beat of the other branch this scene. Three times per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge, and once per scene its reach is one rung higher. You may choose the lever's type each time."}
+      - id: comp.04.name_on_the_work
+        name: "Name on the Work"
+        tags: [deed.influence, deed.craft]
+        keys: [deed.influence, deed.craft]
+        key_kind: deed_branch
+        active_when: "actor holds call.magnate (not suspended by the Fraying, 04.9.3) at the rank's tier or higher"
+        calling: call.magnate
+        effects: [{effect_id: eff.grant_lever, params: {type: amplifying, for_tags: [deed.influence], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.craft", limits: {per: scene_end, uses: 1}}]
+        suppresses: []
+        rank_rule: "the highest rank whose at_tier <= the calling tier replaces the lower ranks (restated, never added)"
+        lifecycle: provisional
+        basis: ["04.5.4", "C:P6", "C:P5", DL-04-11]
+        ranks:
+          - {rank: 1, at_tier: 1, effects: [{effect_id: eff.grant_lever, params: {type: amplifying, for_tags: [deed.influence], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.craft", limits: {per: scene_end, uses: 1}}], text: "When a deed of craft succeeds, you gain a amplifying lever you may cite on one later beat of influence this scene. Once per scene."}
+          - {rank: 2, at_tier: 3, effects: [{effect_id: eff.grant_lever, params: {type: amplifying, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.influence or deed.craft", limits: {per: scene_end, uses: 2}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.influence and secondary_tags under deed.craft) or (deed_tag under deed.craft and secondary_tags under deed.influence)"}}], text: "When a deed of either branch (influence or craft) succeeds, you gain a amplifying lever you may cite on one later beat of the other branch this scene. Twice per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge."}
+          - {rank: 3, at_tier: 5, effects: [{effect_id: eff.grant_lever, params: {type: amplifying_or_player_choice_of_type, for_tags: ["the other branch of the pair"], duration: scene}, hook: on_degree, when: "degree >= success and deed_tag under deed.influence or deed.craft", limits: {per: scene_end, uses: 3}}, {effect_id: eff.check_edge, params: {amount: 1, applies_when: "(deed_tag under deed.influence and secondary_tags under deed.craft) or (deed_tag under deed.craft and secondary_tags under deed.influence)"}}, {effect_id: eff.reach_step, params: {ladder: reach, steps: 1, applies_when: "a fused deed as above"}, limits: {per: scene_end, uses: 1}}], text: "When a deed of either branch (influence or craft) succeeds, you gain a amplifying lever you may cite on one later beat of the other branch this scene. Three times per scene. A fused deed (primary tag under one branch with a grounded secondary under the other) gains +1 edge, and once per scene its reach is one rung higher. You may choose the lever's type each time."}

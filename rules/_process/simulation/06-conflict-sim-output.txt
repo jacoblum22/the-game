@@ -1,0 +1,440 @@
+runs per row: 20000
+
+### A. Baseline martial PC, band kit, no Focus, three Strikes a turn: one foe
+
+| Matchup                                                    | win%  | clean | stag% | dying | rnds | lost | broke |
+|------------------------------------------------------------|-------|-------|-------|-------|------|------|-------|
+| P1 vs 1xT1 (equal band)                                    | 100.0 | 100.0 |   0.0 |   0.0 |  1.5 |  1.0 |   0.0 |
+| P2 vs 1xT2 (equal band)                                    | 100.0 |  99.5 |   0.5 |   0.0 |  2.9 |  3.7 |   0.0 |
+| P3 vs 1xT3 (equal band)                                    |  99.7 |  97.0 |   3.0 |   0.3 |  3.2 |  6.3 |   0.0 |
+| P4 vs 1xT4 (equal band)                                    |  87.3 |  54.8 |  45.2 |  12.7 |  5.7 | 13.9 |   0.0 |
+| P5 vs 1xT5 (equal band)                                    |  79.6 |  40.5 |  59.5 |  20.4 |  5.0 | 17.3 |   0.2 |
+| P1 vs 1xT2 (one band up)                                   |  98.7 |  91.5 |   8.5 |   1.3 |  3.4 |  5.6 |   0.0 |
+| P2 vs 1xT3 (one band up)                                   |  44.5 |  13.9 |  86.1 |  55.5 |  5.4 | 13.4 |   0.0 |
+| P3 vs 1xT4 (one band up)                                   |  62.3 |  27.6 |  72.4 |  37.7 |  6.4 | 14.7 |   0.0 |
+| P4 vs 1xT5 (one band up)                                   |   3.7 |   0.2 |  99.8 |  96.3 |  5.6 | 18.0 |   0.0 |
+| P1 vs 1xT3 (two bands up)                                  |   8.0 |   1.0 |  99.0 |  92.0 |  4.5 | 12.0 |   0.0 |
+| P2 vs 1xT4 (two bands up)                                  |   0.0 |   0.0 | 100.0 | 100.0 |  5.3 | 14.0 |   0.0 |
+| P3 vs 1xT5 (two bands up)                                  |   0.4 |   0.0 | 100.0 |  99.6 |  4.8 | 16.0 |   0.0 |
+| P2 vs 1xT1 (one band down)                                 | 100.0 | 100.0 |   0.0 |   0.0 |  1.3 |  0.5 |   0.0 |
+| P3 vs 1xT2 (one band down)                                 | 100.0 | 100.0 |   0.0 |   0.0 |  1.8 |  0.8 |   0.0 |
+| P4 vs 1xT3 (one band down)                                 | 100.0 |  99.4 |   0.6 |   0.0 |  2.7 |  4.3 |   0.0 |
+| P5 vs 1xT4 (one band down)                                 | 100.0 |  99.6 |   0.4 |   0.0 |  3.2 |  5.3 |   0.0 |
+
+### B. Body count: the solo curve (baseline martial PC, no Focus)
+
+| Matchup                                                    | win%  | clean | stag% | dying | rnds | lost | broke |
+|------------------------------------------------------------|-------|-------|-------|-------|------|------|-------|
+| P1 vs 2xT1                                                 |  99.9 |  98.8 |   1.2 |   0.1 |  1.5 |  2.0 |  98.3 |
+| P1 vs 3xT1                                                 |  97.5 |  92.5 |   7.5 |   2.5 |  2.1 |  4.4 |  97.5 |
+| P2 vs 2xT2                                                 |  90.1 |  78.4 |  21.6 |   9.9 |  4.1 |  8.8 |  83.6 |
+| P2 vs 3xT2                                                 |  32.4 |  15.7 |  84.3 |  67.6 |  4.5 | 13.3 |  32.4 |
+| P3 vs 2xT3                                                 |  73.0 |  51.9 |  48.1 |  27.0 |  4.6 | 13.2 |  60.8 |
+| P3 vs 3xT3                                                 |  12.8 |   4.5 |  95.5 |  87.2 |  4.1 | 15.8 |  12.8 |
+| P4 vs 2xT4                                                 |   3.3 |   0.5 |  99.5 |  96.7 |  4.9 | 18.0 |   0.0 |
+| P4 vs 3xT4                                                 |   0.0 |   0.0 | 100.0 | 100.0 |  3.4 | 18.0 |   0.0 |
+| P5 vs 2xT5                                                 |   3.1 |   0.6 |  99.4 |  96.9 |  4.0 | 20.0 |   1.8 |
+| P5 vs 3xT5                                                 |   0.0 |   0.0 | 100.0 | 100.0 |  2.8 | 20.0 |   0.0 |
+| P2 vs 2xT1                                                 | 100.0 | 100.0 |   0.1 |   0.0 |  1.3 |  1.0 |  99.7 |
+| P2 vs 3xT1                                                 |  99.9 |  99.4 |   0.6 |   0.1 |  1.9 |  2.8 |  99.9 |
+| P2 vs 4xT1                                                 |  98.8 |  94.8 |   5.2 |   1.2 |  2.2 |  4.9 |  98.8 |
+| P3 vs 2xT2                                                 | 100.0 | 100.0 |   0.0 |   0.0 |  2.7 |  2.1 |  84.0 |
+| P3 vs 3xT2                                                 |  99.9 |  99.7 |   0.3 |   0.1 |  2.9 |  3.8 |  99.9 |
+| P3 vs 4xT2                                                 |  98.5 |  97.2 |   2.8 |   1.5 |  3.2 |  6.2 |  98.5 |
+| P4 vs 2xT3                                                 |  92.8 |  78.8 |  21.2 |   7.2 |  4.0 | 10.8 |  83.8 |
+| P4 vs 3xT3                                                 |  43.0 |  19.8 |  80.2 |  57.0 |  4.5 | 16.8 |  43.0 |
+| P4 vs 4xT3                                                 |   6.5 |   3.2 |  96.8 |  93.5 |  3.5 | 17.8 |   6.5 |
+| P5 vs 2xT4                                                 |  88.8 |  70.2 |  29.8 |  11.2 |  5.3 | 13.9 |  42.2 |
+| P5 vs 3xT4                                                 |  32.1 |  16.5 |  83.5 |  67.9 |  5.2 | 19.0 |  29.1 |
+| P5 vs 4xT4                                                 |   4.3 |   2.6 |  97.4 |  95.7 |  4.0 | 19.9 |   4.3 |
+| P3 vs 4xT1                                                 | 100.0 | 100.0 |   0.0 |   0.0 |  1.8 |  1.3 | 100.0 |
+| P3 vs 6xT1                                                 | 100.0 | 100.0 |   0.0 |   0.0 |  1.8 |  2.0 | 100.0 |
+| P4 vs 4xT2                                                 |  99.9 |  99.9 |   0.1 |   0.1 |  2.7 |  4.0 |  99.9 |
+| P4 vs 6xT2                                                 |  97.4 |  94.7 |   5.3 |   2.6 |  3.1 |  7.6 |  97.4 |
+| P5 vs 4xT3                                                 |  95.2 |  90.9 |   9.1 |   4.8 |  3.0 |  9.5 |  95.2 |
+| P5 vs 6xT3                                                 |  61.9 |  48.9 |  51.1 |  38.1 |  3.2 | 15.5 |  61.9 |
+| P1 vs 2xT2 (two foes a band up)                            |  48.9 |  31.4 |  68.7 |  51.1 |  4.2 | 10.6 |  41.5 |
+
+### B2. Mobs as single entities, and mixed groups (no Focus)
+
+| Matchup                                                    | win%  | clean | stag% | dying | rnds | lost | broke |
+|------------------------------------------------------------|-------|-------|-------|-------|------|------|-------|
+| P1 vs T1 mob of 4                                          |  98.5 |  87.5 |  12.6 |   1.5 |  2.6 |  4.9 |  98.5 |
+| P1 vs T1 mob of 6                                          |  94.6 |  72.8 |  27.2 |   5.4 |  3.2 |  7.1 |  94.6 |
+| P2 vs T1 mob of 6                                          |  99.4 |  91.8 |   8.2 |   0.6 |  2.7 |  4.7 |  99.4 |
+| P2 vs T1 mob of 8                                          |  97.2 |  71.9 |  28.1 |   2.8 |  3.4 |  7.4 |  97.2 |
+| P2 vs T2 mob of 4                                          |  43.4 |  25.6 |  74.4 |  56.6 |  6.5 | 12.8 |  38.0 |
+| P3 vs T2 mob of 4                                          |  99.7 |  98.5 |   1.5 |   0.3 |  3.7 |  4.9 |  99.5 |
+| P3 vs T2 mob of 6                                          |  95.2 |  85.3 |  14.7 |   4.8 |  4.2 |  8.1 |  95.2 |
+| P4 vs T3 mob of 4                                          |  57.2 |  31.7 |  68.3 |  42.8 |  6.1 | 15.8 |  50.7 |
+| P4 vs T2 mob of 8                                          |  97.4 |  83.0 |  17.0 |   2.6 |  4.1 |  9.0 |  97.4 |
+| P1 vs 1xT2 leader + 2xT1                                   |  78.1 |  61.3 |  38.7 |  21.9 |  3.6 |  8.2 |  78.1 |
+| P2 vs 1xT2 leader + T1 mob of 4                            |  90.3 |  63.5 |  36.5 |   9.7 |  4.0 |  9.4 |  90.3 |
+| P2 vs 1xT3 leader + 2xT1                                   |  49.1 |  30.9 |  69.1 |  50.9 |  4.4 | 11.5 |  49.1 |
+| P3 vs 1xT3 leader + 2xT2                                   |  94.3 |  88.0 |  12.1 |   5.7 |  3.2 |  7.5 |  94.3 |
+| P3 vs 1xT4 leader + T2 mob of 4                            |   9.1 |   2.5 |  97.5 |  90.9 |  5.2 | 15.9 |   9.0 |
+| P4 vs 1xT4 leader + 2xT3                                   |   7.9 |   4.1 |  95.9 |  92.1 |  4.8 | 17.8 |   4.3 |
+
+### C. Kit and tactics on the same fights (no Focus)
+
+| Matchup                                                    | win%  | clean | stag% | dying | rnds | lost | broke |
+|------------------------------------------------------------|-------|-------|-------|-------|------|------|-------|
+| P1 vs T2: three Strikes                                    |  98.7 |  91.5 |   8.5 |   1.3 |  3.4 |  5.6 |   0.0 |
+| P1 vs T2: two Strikes + Defend                             |  97.0 |  85.7 |  14.3 |   3.0 |  4.5 |  6.4 |   0.0 |
+| P1 vs T2: shield (+1 Guard), two Strikes + Defend          |  98.2 |  89.5 |  10.5 |   1.8 |  4.5 |  5.8 |   0.0 |
+| P1 vs T2: heavy weapon (2-action Strike + Defend)          |  90.9 |  75.1 |  24.9 |   9.1 |  5.0 |  7.3 |   0.0 |
+| P1 vs T2: reckless first Strike (go big)                   |  93.6 |  75.7 |  24.3 |   6.4 |  2.9 |  6.8 |   5.1 |
+| P1 vs T2: called shots at gaps (-2, ignore armor)          |  98.7 |  91.5 |   8.5 |   1.3 |  3.4 |  5.6 |   0.0 |
+| P1 vs T2: no armor                                         |  94.7 |  74.1 |  25.9 |   5.3 |  3.4 |  7.5 |   0.0 |
+| P1 vs T2: no Fend reaction                                 |  97.5 |  86.9 |  13.1 |   2.5 |  3.4 |  6.3 |   0.0 |
+| P2 vs T3: three Strikes                                    |  44.5 |  13.9 |  86.1 |  55.5 |  5.4 | 13.4 |   0.0 |
+| P2 vs T3: two Strikes + Defend                             |  33.3 |   9.8 |  90.2 |  66.7 |  6.7 | 13.6 |   0.0 |
+| P2 vs T3: shield (+1 Guard), two Strikes + Defend          |  45.0 |  15.3 |  84.7 |  55.0 |  7.2 | 13.3 |   0.0 |
+| P2 vs T3: heavy weapon (2-action Strike + Defend)          |  39.6 |  13.4 |  86.6 |  60.4 |  6.4 | 13.4 |   0.0 |
+| P2 vs T3: reckless first Strike (go big)                   |  57.1 |  20.5 |  79.5 |  42.9 |  4.3 | 12.9 |   0.0 |
+| P2 vs T3: called shots at gaps (-2, ignore armor)          |  44.5 |  13.9 |  86.1 |  55.5 |  5.4 | 13.4 |   0.0 |
+| P2 vs T3: no armor                                         |  32.0 |   6.5 |  93.5 |  68.0 |  5.0 | 13.7 |   0.0 |
+| P2 vs T3: no Fend reaction                                 |  33.7 |   8.3 |  91.7 |  66.3 |  5.1 | 13.7 |   0.0 |
+| P3 vs T3: three Strikes                                    |  99.7 |  97.0 |   3.0 |   0.3 |  3.2 |  6.3 |   0.0 |
+| P3 vs T3: two Strikes + Defend                             |  99.4 |  94.8 |   5.2 |   0.6 |  4.2 |  7.0 |   0.0 |
+| P3 vs T3: shield (+1 Guard), two Strikes + Defend          |  99.7 |  96.7 |   3.3 |   0.3 |  4.2 |  6.1 |   0.0 |
+| P3 vs T3: heavy weapon (2-action Strike + Defend)          |  98.8 |  93.6 |   6.4 |   1.2 |  4.0 |  6.8 |   0.0 |
+| P3 vs T3: reckless first Strike (go big)                   |  99.6 |  95.8 |   4.2 |   0.4 |  2.4 |  5.3 |  14.6 |
+| P3 vs T3: called shots at gaps (-2, ignore armor)          |  99.7 |  97.0 |   3.0 |   0.3 |  3.2 |  6.3 |   0.0 |
+| P3 vs T3: no armor                                         |  98.0 |  82.7 |  17.3 |   1.9 |  3.2 |  9.2 |   0.0 |
+| P3 vs T3: no Fend reaction                                 |  99.5 |  95.8 |   4.2 |   0.5 |  3.2 |  7.0 |   0.0 |
+| P3 vs T4: three Strikes                                    |  62.3 |  27.6 |  72.4 |  37.7 |  6.4 | 14.7 |   0.0 |
+| P3 vs T4: two Strikes + Defend                             |  50.4 |  20.0 |  80.0 |  49.6 |  8.1 | 15.1 |   0.0 |
+| P3 vs T4: shield (+1 Guard), two Strikes + Defend          |  60.6 |  27.6 |  72.4 |  39.4 |  8.5 | 14.6 |   0.0 |
+| P3 vs T4: heavy weapon (2-action Strike + Defend)          |  55.1 |  25.3 |  74.7 |  44.9 |  7.7 | 14.7 |   0.0 |
+| P3 vs T4: reckless first Strike (go big)                   |  73.7 |  36.7 |  63.3 |  26.3 |  5.0 | 13.8 |   0.0 |
+| P3 vs T4: called shots at gaps (-2, ignore armor)          |  73.1 |  42.1 |  57.9 |  26.9 |  5.7 | 13.6 |   0.1 |
+| P3 vs T4: no armor                                         |  39.2 |   9.4 |  90.6 |  60.8 |  5.7 | 15.5 |   0.0 |
+| P3 vs T4: no Fend reaction                                 |  45.6 |  14.7 |  85.3 |  54.4 |  6.0 | 15.4 |   0.0 |
+| P4 vs T4: three Strikes                                    |  87.3 |  54.8 |  45.2 |  12.7 |  5.7 | 13.9 |   0.0 |
+| P4 vs T4: two Strikes + Defend                             |  78.9 |  44.6 |  55.4 |  21.1 |  7.4 | 14.7 |   0.0 |
+| P4 vs T4: shield (+1 Guard), two Strikes + Defend          |  85.6 |  54.1 |  45.9 |  14.4 |  7.5 | 13.7 |   0.0 |
+| P4 vs T4: heavy weapon (2-action Strike + Defend)          |  81.0 |  50.4 |  49.6 |  19.0 |  6.9 | 14.0 |   0.0 |
+| P4 vs T4: reckless first Strike (go big)                   |  93.8 |  70.1 |  29.9 |   6.2 |  4.4 | 12.4 |   0.0 |
+| P4 vs T4: called shots at gaps (-2, ignore armor)          |  92.5 |  68.9 |  31.1 |   7.5 |  4.9 | 12.0 |   0.2 |
+| P4 vs T4: no armor                                         |  71.6 |  28.2 |  71.8 |  28.4 |  5.4 | 16.0 |   0.0 |
+| P4 vs T4: no Fend reaction                                 |  78.5 |  40.1 |  59.9 |  21.5 |  5.5 | 15.3 |   0.0 |
+| P4 vs T5: three Strikes                                    |   3.7 |   0.2 |  99.8 |  96.3 |  5.6 | 18.0 |   0.0 |
+| P4 vs T5: two Strikes + Defend                             |   2.0 |   0.1 |  99.8 |  98.0 |  6.7 | 18.0 |   0.0 |
+| P4 vs T5: shield (+1 Guard), two Strikes + Defend          |   3.9 |   0.3 |  99.7 |  96.1 |  7.4 | 18.0 |   0.0 |
+| P4 vs T5: heavy weapon (2-action Strike + Defend)          |   5.9 |   0.7 |  99.3 |  94.1 |  6.5 | 18.0 |   0.0 |
+| P4 vs T5: reckless first Strike (go big)                   |  16.6 |   2.0 |  98.0 |  83.4 |  5.2 | 17.9 |   0.0 |
+| P4 vs T5: called shots at gaps (-2, ignore armor)          |  14.1 |   2.0 |  98.0 |  85.9 |  5.5 | 17.9 |   0.4 |
+| P4 vs T5: no armor                                         |   2.1 |   0.1 |  99.9 |  97.9 |  5.1 | 18.0 |   0.0 |
+| P4 vs T5: no Fend reaction                                 |   1.5 |   0.1 |  99.9 |  98.5 |  5.0 | 18.0 |   0.0 |
+
+### D. Focus (a push on the first Strike each turn while Focus lasts) -- issue I-006
+
+| Matchup                                                    | win%  | clean | stag% | dying | rnds | lost | broke |
+|------------------------------------------------------------|-------|-------|-------|-------|------|------|-------|
+| P1 vs T1: no Focus                                         | 100.0 | 100.0 |   0.0 |   0.0 |  1.5 |  1.0 |   0.0 |
+| P1 vs T1: Focus push                                       | 100.0 | 100.0 |   0.0 |   0.0 |  1.3 |  0.7 |   0.0 |
+| P1 vs T1: heavy weapon, no Focus                           | 100.0 |  99.9 |   0.1 |   0.0 |  1.4 |  0.9 |   0.0 |
+| P1 vs T1: heavy weapon, Focus push                         | 100.0 |  99.9 |   0.1 |   0.0 |  1.4 |  0.9 |   0.0 |
+| P1 vs T2: no Focus                                         |  98.7 |  91.5 |   8.5 |   1.3 |  3.4 |  5.6 |   0.0 |
+| P1 vs T2: Focus push                                       |  99.2 |  94.5 |   5.5 |   0.8 |  3.0 |  4.7 |   5.5 |
+| P1 vs T2: heavy weapon, no Focus                           |  90.9 |  75.1 |  24.9 |   9.1 |  5.0 |  7.3 |   0.0 |
+| P1 vs T2: heavy weapon, Focus push                         |  97.3 |  90.8 |   9.2 |   2.7 |  3.4 |  4.9 |   0.0 |
+| P2 vs T2: no Focus                                         | 100.0 |  99.5 |   0.5 |   0.0 |  2.9 |  3.7 |   0.0 |
+| P2 vs T2: Focus push                                       | 100.0 |  99.7 |   0.3 |   0.0 |  2.4 |  2.9 |  14.7 |
+| P2 vs T2: heavy weapon, no Focus                           |  99.5 |  96.9 |   3.1 |   0.5 |  4.0 |  4.7 |   0.0 |
+| P2 vs T2: heavy weapon, Focus push                         |  99.9 |  99.2 |   0.8 |   0.1 |  2.7 |  2.9 |   0.0 |
+| P2 vs T3: no Focus                                         |  44.5 |  13.9 |  86.1 |  55.5 |  5.4 | 13.4 |   0.0 |
+| P2 vs T3: Focus push                                       |  72.0 |  34.7 |  65.3 |  28.0 |  4.6 | 12.3 |   0.0 |
+| P2 vs T3: heavy weapon, no Focus                           |  39.6 |  13.4 |  86.6 |  60.4 |  6.4 | 13.4 |   0.0 |
+| P2 vs T3: heavy weapon, Focus push                         |  77.7 |  48.0 |  52.0 |  22.3 |  4.7 | 11.0 |   0.1 |
+| P3 vs T3: no Focus                                         |  99.7 |  97.0 |   3.0 |   0.3 |  3.2 |  6.3 |   0.0 |
+| P3 vs T3: Focus push                                       |  99.9 |  99.0 |   1.0 |   0.1 |  2.5 |  4.3 |  14.5 |
+| P3 vs T3: heavy weapon, no Focus                           |  98.8 |  93.6 |   6.4 |   1.2 |  4.0 |  6.8 |   0.0 |
+| P3 vs T3: heavy weapon, Focus push                         |  99.8 |  97.7 |   2.3 |   0.2 |  3.1 |  5.1 |   0.0 |
+| P3 vs T4: no Focus                                         |  62.3 |  27.6 |  72.4 |  37.7 |  6.4 | 14.7 |   0.0 |
+| P3 vs T4: Focus push                                       |  84.0 |  53.3 |  46.7 |  16.1 |  5.2 | 12.9 |   0.0 |
+| P3 vs T4: heavy weapon, no Focus                           |  55.1 |  25.3 |  74.7 |  44.9 |  7.7 | 14.7 |   0.0 |
+| P3 vs T4: heavy weapon, Focus push                         |  83.6 |  58.5 |  41.5 |  16.4 |  5.7 | 12.1 |   0.0 |
+| P4 vs T4: no Focus                                         |  87.3 |  54.8 |  45.2 |  12.7 |  5.7 | 13.9 |   0.0 |
+| P4 vs T4: Focus push                                       |  96.4 |  77.4 |  22.6 |   3.6 |  4.5 | 11.0 |   0.0 |
+| P4 vs T4: heavy weapon, no Focus                           |  81.0 |  50.4 |  49.6 |  19.0 |  6.9 | 14.0 |   0.0 |
+| P4 vs T4: heavy weapon, Focus push                         |  94.9 |  78.0 |  22.0 |   5.1 |  4.9 | 10.5 |   0.0 |
+| P4 vs T5: no Focus                                         |   3.7 |   0.2 |  99.8 |  96.3 |  5.6 | 18.0 |   0.0 |
+| P4 vs T5: Focus push                                       |  18.9 |   2.7 |  97.3 |  81.1 |  5.4 | 17.8 |   0.0 |
+| P4 vs T5: heavy weapon, no Focus                           |   5.9 |   0.7 |  99.3 |  94.1 |  6.5 | 18.0 |   0.0 |
+| P4 vs T5: heavy weapon, Focus push                         |  36.7 |  12.4 |  87.6 |  63.3 |  5.7 | 16.9 |   9.8 |
+| P5 vs T5: no Focus                                         |  79.6 |  40.5 |  59.5 |  20.4 |  5.0 | 17.3 |   0.2 |
+| P5 vs T5: Focus push                                       |  88.7 |  55.3 |  44.7 |  11.3 |  4.3 | 15.4 |  11.8 |
+| P5 vs T5: heavy weapon, no Focus                           |  67.1 |  34.4 |  65.6 |  32.9 |  6.0 | 16.8 |  21.9 |
+| P5 vs T5: heavy weapon, Focus push                         |  67.1 |  34.4 |  65.6 |  32.9 |  6.0 | 16.8 |  21.9 |
+| P2 vs 2xT2: no Focus                                       |  90.1 |  78.4 |  21.6 |   9.9 |  4.1 |  8.8 |  83.6 |
+| P2 vs 2xT2: Focus push                                     |  94.7 |  85.5 |  14.5 |   5.3 |  3.6 |  7.6 |  88.8 |
+| P3 vs 2xT3: no Focus                                       |  73.0 |  51.9 |  48.1 |  27.0 |  4.6 | 13.2 |  60.8 |
+| P3 vs 2xT3: Focus push                                     |  89.6 |  73.7 |  26.3 |  10.4 |  3.8 | 10.9 |  77.5 |
+| P4 vs 2xT4: no Focus                                       |   3.3 |   0.5 |  99.5 |  96.7 |  4.9 | 18.0 |   0.0 |
+| P4 vs 2xT4: Focus push                                     |  18.8 |   6.1 |  93.9 |  81.2 |  5.2 | 17.6 |   4.8 |
+
+### E. Who is NOT a specialist: broad martial calling (no mastery rung until tier 4), and I-006's caster
+
+| Matchup                                                    | win%  | clean | stag% | dying | rnds | lost | broke |
+|------------------------------------------------------------|-------|-------|-------|-------|------|------|-------|
+| broad P3 vs T3: no Focus                                   |  87.4 |  61.7 |  38.3 |  12.6 |  5.7 | 12.7 |   0.0 |
+| broad P3 vs T3: Focus push                                 |  96.4 |  82.7 |  17.3 |   3.6 |  4.5 | 10.1 |   0.0 |
+| broad P4 vs T4: no Focus                                   |  73.1 |  36.4 |  63.6 |  26.9 |  6.1 | 15.6 |   0.0 |
+| broad P4 vs T4: Focus push                                 |  90.8 |  63.3 |  36.7 |   9.2 |  4.9 | 12.9 |   0.0 |
+| Ash (tier-3 caster, Spent, staff +2 S2): three Strikes     |   0.4 |   0.0 | 100.0 |  99.6 |  3.6 | 12.0 |   0.0 |
+| Ash, Spent: two Strikes + Defend                           |   0.3 |   0.0 | 100.0 |  99.7 |  4.3 | 12.0 |   0.0 |
+| Ash, Spent, vs one T2                                      |  65.0 |  33.3 |  66.7 |  35.0 |  4.2 | 10.4 |   0.0 |
+
+### F. Sensitivity: PC Vitality flat at 12 in every band (if 02/07 give no growth)
+
+| Matchup                                                    | win%  | clean | stag% | dying | rnds | lost | broke |
+|------------------------------------------------------------|-------|-------|-------|-------|------|------|-------|
+| P2 (Vitality 12) vs 1xT2                                   |  99.9 |  98.5 |   1.5 |   0.1 |  2.9 |  3.7 |   0.0 |
+| P2 (Vitality 12) vs 2xT2                                   |  83.6 |  65.6 |  34.4 |  16.4 |  4.1 |  8.4 |  74.5 |
+| P3 (Vitality 12) vs 1xT3                                   |  98.0 |  82.7 |  17.3 |   1.9 |  3.2 |  6.0 |   0.0 |
+| P3 (Vitality 12) vs 2xT3                                   |  48.7 |  22.4 |  77.5 |  51.3 |  4.1 | 10.8 |  36.5 |
+| P4 (Vitality 12) vs 1xT4                                   |  67.8 |  24.5 |  75.5 |  32.2 |  5.3 | 10.7 |   0.0 |
+| P4 (Vitality 12) vs 2xT4                                   |   0.9 |   0.1 |  99.9 |  99.0 |  3.9 | 12.0 |   0.0 |
+| P5 (Vitality 12) vs 1xT5                                   |  57.1 |  14.7 |  85.3 |  42.9 |  4.6 | 11.3 |   0.2 |
+| P5 (Vitality 12) vs 2xT5                                   |   1.0 |   0.1 |  99.9 |  99.0 |  3.2 | 12.0 |   0.7 |
+
+### G. Fearless foes (no morale clock): mindless undead, constructs
+
+| Matchup                                                    | win%  | clean | stag% | dying | rnds | lost | broke |
+|------------------------------------------------------------|-------|-------|-------|-------|------|------|-------|
+| P1 vs 2xT1 fearless                                        |  99.7 |  97.4 |   2.6 |   0.3 |  2.5 |  3.5 |   0.0 |
+| P1 vs T1 mob of 6 fearless                                 |  73.6 |  42.6 |  57.4 |  26.4 |  5.2 |  9.8 |   0.0 |
+| P2 vs 2xT2 fearless                                        |  86.5 |  63.8 |  36.2 |  13.5 |  5.1 | 10.4 |   0.0 |
+| P2 vs T1 mob of 6 fearless                                 |  95.9 |  82.5 |  17.5 |   4.1 |  4.6 |  7.3 |   0.0 |
+| P3 vs 2xT3 fearless                                        |  68.3 |  38.3 |  61.7 |  31.6 |  5.2 | 14.2 |   0.0 |
+| P3 vs T2 mob of 6 fearless                                 |  85.1 |  69.7 |  30.3 |  14.9 |  6.9 | 10.9 |   0.0 |
+| P4 vs 2xT4 fearless                                        |   3.3 |   0.5 |  99.5 |  96.7 |  4.9 | 18.0 |   0.0 |
+| P4 vs T3 mob of 6 fearless                                 |   7.0 |   1.6 |  98.4 |  93.0 |  6.9 | 17.9 |   0.0 |
+
+### H. Advisory matrix: class win%/Staggered% (baseline martial PC, no Focus)
+
+
+Foe band = PC band -2
+
+| PC band | 1 foe | 2 foes | 3 foes | 4 foes | 6 foes | mob of 4 | mob of 6 | mob of 8 |
+|---|---|---|---|---|---|---|---|---|
+| P3 (foes T1) | trivial 100/0 | trivial 100/0 | trivial 100/0 | trivial 100/0 | trivial 100/0 | trivial 100/0 | trivial 100/0 | trivial 100/2 |
+| P4 (foes T2) | trivial 100/0 | trivial 100/0 | trivial 100/0 | trivial 100/0 | easy 97/5 | trivial 100/0 | easy 99/4 | fair 97/17 |
+| P5 (foes T3) | trivial 100/0 | trivial 100/0 | trivial 99/2 | easy 95/9 | hard 62/51 | easy 99/5 | fair 95/18 | fair 89/41 |
+
+Foe band = PC band -1
+
+| PC band | 1 foe | 2 foes | 3 foes | 4 foes | 6 foes | mob of 4 | mob of 6 | mob of 8 |
+|---|---|---|---|---|---|---|---|---|
+| P2 (foes T1) | trivial 100/0 | trivial 100/0 | trivial 100/1 | easy 99/5 | fair 84/26 | trivial 100/2 | easy 99/8 | fair 97/28 |
+| P3 (foes T2) | trivial 100/0 | trivial 100/0 | trivial 100/0 | easy 99/3 | hard 77/33 | trivial 100/2 | easy 95/15 | fair 83/43 |
+| P4 (foes T3) | trivial 100/1 | fair 93/21 | hard 43/80 | lethal 6/97 | lethal 0/100 | hard 57/68 | lethal 20/94 | lethal 7/98 |
+| P5 (foes T4) | trivial 100/0 | fair 89/30 | lethal 32/83 | lethal 4/97 | lethal 0/100 | hard 46/74 | lethal 17/94 | lethal 9/97 |
+
+Foe band = PC band +0
+
+| PC band | 1 foe | 2 foes | 3 foes | 4 foes | 6 foes | mob of 4 | mob of 6 | mob of 8 |
+|---|---|---|---|---|---|---|---|---|
+| P1 (foes T1) | trivial 100/0 | trivial 100/1 | easy 97/7 | fair 86/31 | hard 42/68 | easy 99/13 | fair 95/27 | hard 83/57 |
+| P2 (foes T2) | trivial 100/0 | fair 90/22 | lethal 32/84 | lethal 3/98 | lethal 0/100 | hard 43/74 | lethal 8/98 | lethal 2/99 |
+| P3 (foes T3) | trivial 100/3 | hard 73/48 | lethal 13/96 | lethal 1/100 | lethal 0/100 | lethal 24/89 | lethal 2/100 | lethal 1/100 |
+| P4 (foes T4) | fair 87/45 | lethal 3/99 | lethal 0/100 | lethal 0/100 | lethal 0/100 | lethal 0/100 | lethal 0/100 | lethal 0/100 |
+| P5 (foes T5) | hard 80/59 | lethal 3/99 | lethal 0/100 | lethal 0/100 | lethal 0/100 | lethal 0/100 | lethal 0/100 | lethal 0/100 |
+
+Foe band = PC band +1
+
+| PC band | 1 foe | 2 foes | 3 foes | 4 foes | 6 foes | mob of 4 | mob of 6 | mob of 8 |
+|---|---|---|---|---|---|---|---|---|
+| P1 (foes T2) | easy 99/9 | hard 49/69 | lethal 3/99 | lethal 0/100 | lethal 0/100 | lethal 6/98 | lethal 0/100 | lethal 0/100 |
+| P2 (foes T3) | hard 45/86 | lethal 0/100 | lethal 0/100 | lethal 0/100 | lethal 0/100 | lethal 0/100 | lethal 0/100 | lethal 0/100 |
+| P3 (foes T4) | hard 62/72 | lethal 0/100 | lethal 0/100 | lethal 0/100 | lethal 0/100 | lethal 0/100 | lethal 0/100 | lethal 0/100 |
+| P4 (foes T5) | lethal 4/100 | lethal 0/100 | lethal 0/100 | lethal 0/100 | lethal 0/100 | lethal 0/100 | lethal 0/100 | lethal 0/100 |
+
+Foe band = PC band +2
+
+| PC band | 1 foe | 2 foes | 3 foes | 4 foes | 6 foes | mob of 4 | mob of 6 | mob of 8 |
+|---|---|---|---|---|---|---|---|---|
+| P1 (foes T3) | lethal 8/99 | lethal 0/100 | lethal 0/100 | lethal 0/100 | lethal 0/100 | lethal 0/100 | lethal 0/100 | lethal 0/100 |
+| P2 (foes T4) | lethal 0/100 | lethal 0/100 | lethal 0/100 | lethal 0/100 | lethal 0/100 | lethal 0/100 | lethal 0/100 | lethal 0/100 |
+| P3 (foes T5) | lethal 0/100 | lethal 0/100 | lethal 0/100 | lethal 0/100 | lethal 0/100 | lethal 0/100 | lethal 0/100 | lethal 0/100 |
+
+### I. Chases: the PC flees (escape clock 6 vs pursuit clock 8; obstacle tiers drawn per round)
+
+| Case                                                             | esc%  | rnds |
+|------------------------------------------------------------------|-------|------|
+| P1 (+5) from T2 pursuers (+4), start near (pursuit 1/8)          |  70.2 |  3.4 |
+|   the same, start close (pursuit 2/8)                            |  60.1 |  3.2 |
+|   the same, start far (pursuit 0/8)                              |  78.6 |  3.6 |
+|   start near, a cited lever every round                          |  81.2 |  3.3 |
+|   start near, slower pursuers (reach Limited)                    |  86.9 |  3.8 |
+|   start near, mounted pursuers (reach Great)                     |  51.4 |  3.1 |
+| P1 untrained runner (+2) from T2 (+4), start near                |  45.1 |  3.5 |
+| P3 (+9) from T3 pursuers (+7), start near                        |  86.2 |  3.0 |
+| P3 (+9) from T4 pursuers (+10), start near                       |  80.1 |  3.0 |
+| P1 (+5) from T1 rabble (+2), start close                         |  68.0 |  3.4 |
+| Sensitivity: clocks 4 and 4, P1 from T2, start near              |  49.7 |  1.8 |
+| Sensitivity: clocks 6 and 6, P1 from T2, start near              |  47.0 |  2.9 |
+
+### J1. New casters (ch.02, no calling) using only their branch working (S2, no Focus) -- I-009 acceptance >= 75% vs one T2
+
+| Matchup                                                    | win%  | clean | stag% | dying | rnds | lost | broke |
+|------------------------------------------------------------|-------|-------|-------|-------|------|------|-------|
+| new caster +5 G12 V12, arcane Force Bolt vs 1xT1           | 100.0 |  99.8 |   0.2 |   0.0 |  1.3 |  1.2 |   0.0 |
+| new caster +5 G12 V12, arcane Force Bolt vs 2xT1           |  98.9 |  94.4 |   5.6 |   1.1 |  1.4 |  2.5 |  96.9 |
+| new caster +5 G12 V12, arcane Force Bolt vs 1xT2           |  93.6 |  73.8 |  26.2 |   6.4 |  3.2 |  7.2 |   0.0 |
+| new caster +5 G12 V12, divine Rebuke vs 1xT1               | 100.0 |  99.8 |   0.2 |   0.0 |  1.3 |  1.2 |   0.0 |
+| new caster +5 G12 V12, divine Rebuke vs 2xT1               |  98.9 |  94.4 |   5.6 |   1.1 |  1.4 |  2.5 |  96.9 |
+| new caster +5 G12 V12, divine Rebuke vs 1xT2               |  92.8 |  71.8 |  28.2 |   7.2 |  3.2 |  7.4 |   0.0 |
+| new caster +5 G12 V12, primal Wild Lash vs 1xT1            | 100.0 |  99.8 |   0.2 |   0.0 |  1.3 |  1.2 |   0.0 |
+| new caster +5 G12 V12, primal Wild Lash vs 2xT1            |  98.9 |  94.4 |   5.6 |   1.1 |  1.4 |  2.5 |  96.9 |
+| new caster +5 G12 V12, primal Wild Lash vs 1xT2            |  92.8 |  71.8 |  28.2 |   7.2 |  3.2 |  7.4 |   0.0 |
+| weakest legal caster (+1, G10, V11), arcane Force Bolt vs 1xT2 |  42.0 |  18.2 |  81.8 |  58.0 |  4.1 | 10.1 |   0.0 |
+| weakest legal caster (+1, G10, V11), arcane Force Bolt vs 1xT1 |  98.9 |  93.3 |   6.7 |   1.1 |  1.9 |  3.1 |   0.0 |
+| weakest legal caster (+1, G10, V11), divine Rebuke vs 1xT2 |  39.3 |  15.7 |  84.3 |  60.7 |  4.1 | 10.3 |   0.0 |
+| weakest legal caster (+1, G10, V11), divine Rebuke vs 1xT1 |  98.9 |  93.3 |   6.7 |   1.1 |  1.9 |  3.1 |   0.0 |
+| weakest legal caster (+1, G10, V11), primal Wild Lash vs 1xT2 |  39.3 |  15.7 |  84.3 |  60.7 |  4.1 | 10.3 |   0.0 |
+| weakest legal caster (+1, G10, V11), primal Wild Lash vs 1xT1 |  98.9 |  93.3 |   6.7 |   1.1 |  1.9 |  3.1 |   0.0 |
+| reference: the same new caster with a staff, no working (+1 S2) |  51.3 |  23.8 |  76.2 |  48.7 |  4.5 | 10.9 |   0.0 |
+| reference: martial P1 line, no Focus                       |  98.7 |  91.5 |   8.5 |   1.3 |  3.4 |  5.6 |   0.0 |
+
+### J2. A Spent tier-3 caster (rank 2, S3) -- I-009 acceptance >= 40% vs one T3; martial baseline beside it
+
+| Matchup                                                    | win%  | clean | stag% | dying | rnds | lost | broke |
+|------------------------------------------------------------|-------|-------|-------|-------|------|------|-------|
+| Spent P3 caster, arcane Force Bolt vs 1xT3                 |  91.0 |  66.2 |  33.8 |   9.0 |  2.7 | 10.3 |   1.9 |
+|   the same, T3 Fends (09's final rule)                     |  86.8 |  59.0 |  41.0 |  13.2 |  2.9 | 11.1 |   1.0 |
+|   the same, Vitality 12 (WE-05 Ash's sheet)                |  84.6 |  50.6 |  49.4 |  15.4 |  2.6 |  8.6 |   1.7 |
+| Spent P3 caster, divine Rebuke vs 1xT3                     |  90.3 |  64.3 |  35.7 |   9.7 |  2.7 | 10.5 |   1.9 |
+|   the same, T3 Fends (09's final rule)                     |  86.2 |  57.0 |  43.0 |  13.8 |  2.9 | 11.3 |   1.1 |
+|   the same, Vitality 12 (WE-05 Ash's sheet)                |  83.6 |  48.6 |  51.4 |  16.4 |  2.6 |  8.7 |   1.8 |
+| Spent P3 caster, primal Wild Lash vs 1xT3                  |  80.7 |  47.1 |  52.9 |  19.3 |  3.2 | 12.6 |   0.0 |
+|   the same, T3 Fends (09's final rule)                     |  74.5 |  40.2 |  59.8 |  25.5 |  3.4 | 13.3 |   0.0 |
+|   the same, Vitality 12 (WE-05 Ash's sheet)                |  70.6 |  31.4 |  68.6 |  29.4 |  3.1 | 10.2 |   0.0 |
+| Ash before I-009: Spent, staff +2 S2 (section E)           |   0.4 |   0.0 | 100.0 |  99.6 |  3.6 | 12.0 |   0.0 |
+| martial specialist P3, no Focus (I-006 baseline)           |  99.7 |  97.0 |   3.0 |   0.3 |  3.2 |  6.3 |   0.0 |
+| martial specialist P3, no Focus, T3 Fends                  |  99.5 |  95.2 |   4.8 |   0.5 |  3.5 |  7.1 |   0.0 |
+| broad martial P3, no Focus                                 |  87.4 |  61.7 |  38.3 |  12.6 |  5.7 | 12.7 |   0.0 |
+
+### J3. The branch working at every band, Spent, against one foe of the caster's band; martial no-Focus baseline beside it
+
+| Matchup                                                    | win%  | clean | stag% | dying | rnds | lost | broke |
+|------------------------------------------------------------|-------|-------|-------|-------|------|------|-------|
+| Spent P1 caster (S2), arcane Force Bolt vs 1xT1            | 100.0 |  99.9 |   0.1 |   0.0 |  1.2 |  1.0 |   0.0 |
+| Spent P1 caster (S2), divine Rebuke vs 1xT1                | 100.0 |  99.9 |   0.1 |   0.0 |  1.2 |  1.0 |   0.0 |
+| Spent P1 caster (S2), primal Wild Lash vs 1xT1             | 100.0 |  99.9 |   0.1 |   0.0 |  1.2 |  1.0 |   0.0 |
+| martial specialist P1, no Focus                            | 100.0 | 100.0 |   0.0 |   0.0 |  1.5 |  1.0 |   0.0 |
+| Spent P2 caster (S2), arcane Force Bolt vs 1xT2            |  99.0 |  91.8 |   8.2 |   1.0 |  2.7 |  5.9 |   0.0 |
+| Spent P2 caster (S2), divine Rebuke vs 1xT2                |  98.6 |  90.3 |   9.7 |   1.4 |  2.7 |  6.2 |   0.0 |
+| Spent P2 caster (S2), primal Wild Lash vs 1xT2             |  98.6 |  90.3 |   9.7 |   1.4 |  2.7 |  6.2 |   0.0 |
+| martial specialist P2, no Focus                            | 100.0 |  99.5 |   0.5 |   0.0 |  2.9 |  3.7 |   0.0 |
+| Spent P3 caster (S3), arcane Force Bolt vs 1xT3            |  91.0 |  66.2 |  33.8 |   9.0 |  2.7 | 10.3 |   1.9 |
+| Spent P3 caster (S3), divine Rebuke vs 1xT3                |  90.3 |  64.3 |  35.7 |   9.7 |  2.7 | 10.5 |   1.9 |
+| Spent P3 caster (S3), primal Wild Lash vs 1xT3             |  80.7 |  47.1 |  52.9 |  19.3 |  3.2 | 12.6 |   0.0 |
+| martial specialist P3, no Focus                            |  99.7 |  97.0 |   3.0 |   0.3 |  3.2 |  6.3 |   0.0 |
+| Spent P4 caster (S3), arcane Force Bolt vs 1xT4            |  48.4 |  16.0 |  84.0 |  51.6 |  4.0 | 17.0 |   0.1 |
+| Spent P4 caster (S3), divine Rebuke vs 1xT4                |  44.9 |  13.2 |  86.8 |  55.1 |  3.9 | 17.2 |   0.1 |
+| Spent P4 caster (S3), primal Wild Lash vs 1xT4             |  11.0 |   1.2 |  98.8 |  89.0 |  4.4 | 17.9 |   0.0 |
+| martial specialist P4, no Focus                            |  87.3 |  54.8 |  45.2 |  12.7 |  5.7 | 13.9 |   0.0 |
+| Spent P5 caster (S4), arcane Force Bolt vs 1xT5            |  30.1 |   9.6 |  90.5 |  69.9 |  3.3 | 19.1 |  15.0 |
+| Spent P5 caster (S4), divine Rebuke vs 1xT5                |  26.9 |   8.4 |  91.6 |  73.1 |  3.2 | 19.1 |  13.4 |
+| Spent P5 caster (S4), primal Wild Lash vs 1xT5             |   6.7 |   0.4 |  99.6 |  93.3 |  3.4 | 20.0 |   0.1 |
+| martial specialist P5, no Focus                            |  79.6 |  40.5 |  59.5 |  20.4 |  5.0 | 17.3 |   0.2 |
+
+### J4. Focus still pays: the same P3 caster Spent, pushing the working, or casting a 1-Focus spell first each turn
+
+| Matchup                                                    | win%  | clean | stag% | dying | rnds | lost | broke |
+|------------------------------------------------------------|-------|-------|-------|-------|------|------|-------|
+| P3 caster vs 1xT3: Spent (Force Bolt only)                 |  91.0 |  66.2 |  33.8 |   9.0 |  2.7 | 10.3 |   1.9 |
+| P3 caster vs 1xT3: Focus 7, push the first bolt each turn  |  95.9 |  79.4 |  20.6 |   4.1 |  2.2 |  7.9 |  26.0 |
+| P3 caster vs 1xT3: Focus 7, Flame Lance first each turn    |  92.1 |  67.5 |  32.5 |   7.9 |  2.6 | 10.1 |  12.0 |
+| martial specialist P3 vs 1xT3: no Focus                    |  99.7 |  97.0 |   3.0 |   0.3 |  3.2 |  6.3 |   0.0 |
+| martial specialist P3 vs 1xT3: Focus push                  |  99.9 |  99.0 |   1.0 |   0.1 |  2.5 |  4.3 |  14.5 |
+| P3 caster vs 1xT4: Spent (Force Bolt only)                 |  33.6 |   9.0 |  91.0 |  66.4 |  4.0 | 15.5 |   0.1 |
+| P3 caster vs 1xT4: Focus 7, push the first bolt each turn  |  54.9 |  20.5 |  79.5 |  45.1 |  3.6 | 14.6 |   1.7 |
+| P3 caster vs 1xT4: Focus 7, Flame Lance first each turn    |  44.3 |  12.3 |  87.7 |  55.7 |  3.8 | 15.3 |   0.1 |
+| martial specialist P3 vs 1xT4: no Focus                    |  62.3 |  27.6 |  72.4 |  37.7 |  6.4 | 14.7 |   0.0 |
+| martial specialist P3 vs 1xT4: Focus push                  |  84.0 |  53.3 |  46.7 |  16.1 |  5.2 | 12.9 |   0.0 |
+| P3 caster vs 2xT3: Spent (Force Bolt only)                 |  26.4 |  12.8 |  87.2 |  73.6 |  2.8 | 15.2 |  22.7 |
+| P3 caster vs 2xT3: Focus 7, push the first bolt each turn  |  47.4 |  26.3 |  73.7 |  52.6 |  2.6 | 13.8 |  46.8 |
+| P3 caster vs 2xT3: Focus 7, Flame Lance first each turn    |  27.3 |  13.0 |  87.0 |  72.7 |  2.8 | 15.2 |  23.5 |
+| martial specialist P3 vs 2xT3: no Focus                    |  73.0 |  51.9 |  48.1 |  27.0 |  4.6 | 13.2 |  60.8 |
+| martial specialist P3 vs 2xT3: Focus push                  |  89.6 |  73.7 |  26.3 |  10.4 |  3.8 | 10.9 |  77.5 |
+| P3 caster vs 2xT2: Spent (Force Bolt only)                 |  91.4 |  78.8 |  21.2 |   8.6 |  2.7 |  8.8 |  73.4 |
+| P3 caster vs 2xT2: Focus 7, push the first bolt each turn  |  96.5 |  88.6 |  11.4 |   3.5 |  2.2 |  6.4 |  59.1 |
+| P3 caster vs 2xT2: Focus 7, Flame Lance first each turn    |  92.0 |  79.2 |  20.8 |   8.1 |  2.7 |  8.7 |  74.1 |
+| martial specialist P3 vs 2xT2: no Focus                    | 100.0 | 100.0 |   0.0 |   0.0 |  2.7 |  2.1 |  84.0 |
+| martial specialist P3 vs 2xT2: Focus push                  | 100.0 | 100.0 |   0.0 |   0.0 |  2.2 |  1.4 |  69.1 |
+
+### J5. Sensitivity: the working one rung lighter at tier 3 (S2), the alternative DL-05-31 rejected
+
+| Matchup                                                    | win%  | clean | stag% | dying | rnds | lost | broke |
+|------------------------------------------------------------|-------|-------|-------|-------|------|------|-------|
+| Spent P3 caster, arcane Force Bolt at S2 vs 1xT3           |  66.0 |  29.4 |  70.6 |  34.0 |  3.8 | 14.3 |   0.0 |
+| Spent P3 caster, divine Rebuke at S2 vs 1xT3               |  60.6 |  24.6 |  75.4 |  39.4 |  3.8 | 14.7 |   0.0 |
+| Spent P3 caster, primal Wild Lash at S2 vs 1xT3            |  27.9 |   6.4 |  93.6 |  72.1 |  4.3 | 15.7 |   0.0 |
+
+### K1. Lingering harm next to a severity rung (1-Focus spell first each turn; arcane delivery, unreduced)
+
+| Band | Matchup | S_w spell | +1 rung | burning x1, scene | burning x1, one round | burning x2, scene | bleeding x1, scene | bleeding x1, one round |
+|---|---|---|---|---|---|---|---|---|
+| P1 | 1xT3 | 31.2 | 51.0 | 44.0 (never) | 37.4 (never) | 50.8 (never) | 44.0 (never) | 37.4 (never) |
+| P1 | 2xT2 | 37.3 | 51.3 | 42.7 (never) | 42.2 (never) | 45.0 (never) | 42.7 (never) | 42.2 (never) |
+| P3 | 1xT4 | 33.6 | 54.9 | 44.3 (never) | 41.0 (never) | 48.9 (always) | 44.3 (never) | 41.0 (never) |
+| P3 | 2xT3 | 26.4 | 47.4 | 27.3 (never) | 26.4 (never) | 28.1 (never) | 27.3 (never) | 26.4 (never) |
+| P5 | 1xT5 | 30.1 | 40.2 | 30.8 (never) | 30.0 (never) | 34.2 (never) | 30.8 (never) | 30.0 (never) |
+| P5 | 2xT4 | 25.7 | 37.7 | 28.1 (never) | 26.9 (never) | 33.4 (always) | 28.1 (never) | 26.9 (never) |
+
+Pooled rung gain 98.3 win points (= 2 EU). EU equivalent, the bearer answering at its best:
+- burning x1, scene: 0.67 EU (bearer's best answer: never)
+- burning x1, one round: 0.40 EU (bearer's best answer: never)
+- burning x2, scene: 1.14 EU (bearer's best answer: always, never)
+- bleeding x1, scene: 0.67 EU (bearer's best answer: never)
+- bleeding x1, one round: 0.40 EU (bearer's best answer: never)
+
+### K2. I-033 acceptance: a 1-Focus damage spell against the free working plus a push (P3 caster, Focus 7)
+
+| Matchup                                                    | win%  | clean | stag% | dying | rnds | lost | broke |
+|------------------------------------------------------------|-------|-------|-------|-------|------|------|-------|
+| P3 caster vs 1xT3: Spent (Force Bolt only)                 |  91.0 |  66.2 |  33.8 |   9.0 |  2.7 | 10.3 |   1.9 |
+| P3 caster vs 1xT3: push the first bolt each turn           |  95.9 |  79.4 |  20.6 |   4.1 |  2.2 |  7.9 |  26.0 |
+|   old Flame Lance r2 (S3 + burning), bearer never          |  92.1 |  67.5 |  32.5 |   7.9 |  2.6 | 10.1 |  12.0 |
+|   old Flame Lance r2 (S3 + burning), bearer always         |  94.9 |  77.8 |  22.2 |   5.1 |  2.7 |  7.9 |   1.8 |
+|   old Flame Lance r2 (S3 + burning), bearer smart          |  94.9 |  77.8 |  22.2 |   5.1 |  2.7 |  7.9 |   1.8 |
+|   new Flame Lance r2 (S4 +2 + burning), bearer never       |  97.3 |  86.6 |  13.4 |   2.7 |  1.8 |  5.7 |  61.0 |
+|   new Flame Lance r2 (S4 +2 + burning), bearer always      |  97.8 |  88.5 |  11.5 |   2.2 |  1.8 |  5.1 |  61.9 |
+|   new Flame Lance r2 (S4 +2 + burning), bearer smart       |  97.8 |  88.5 |  11.5 |   2.2 |  1.8 |  5.1 |  61.9 |
+| P3 caster vs 1xT4: Spent (Force Bolt only)                 |  33.6 |   9.0 |  91.0 |  66.4 |  4.0 | 15.5 |   0.1 |
+| P3 caster vs 1xT4: push the first bolt each turn           |  54.9 |  20.5 |  79.5 |  45.1 |  3.6 | 14.6 |   1.7 |
+|   old Flame Lance r2 (S3 + burning), bearer never          |  44.3 |  12.3 |  87.7 |  55.7 |  3.8 | 15.3 |   0.1 |
+|   old Flame Lance r2 (S3 + burning), bearer always         |  48.9 |  20.0 |  80.0 |  51.1 |  4.3 | 14.5 |   0.1 |
+|   old Flame Lance r2 (S3 + burning), bearer smart          |  48.9 |  20.0 |  80.0 |  51.1 |  4.3 | 14.5 |   0.1 |
+|   new Flame Lance r2 (S4 +2 + burning), bearer never       |  65.9 |  28.7 |  71.3 |  34.1 |  3.3 | 13.9 |   0.0 |
+|   new Flame Lance r2 (S4 +2 + burning), bearer always      |  67.8 |  36.0 |  64.0 |  32.2 |  3.6 | 12.9 |   0.0 |
+|   new Flame Lance r2 (S4 +2 + burning), bearer smart       |  67.8 |  36.0 |  64.0 |  32.2 |  3.6 | 12.9 |   0.0 |
+| P3 caster vs 2xT3: Spent (Force Bolt only)                 |  26.4 |  12.8 |  87.2 |  73.6 |  2.8 | 15.2 |  22.7 |
+| P3 caster vs 2xT3: push the first bolt each turn           |  47.4 |  26.3 |  73.7 |  52.6 |  2.6 | 13.8 |  46.8 |
+|   old Flame Lance r2 (S3 + burning), bearer never          |  27.3 |  13.0 |  87.0 |  72.7 |  2.8 | 15.2 |  23.5 |
+|   old Flame Lance r2 (S3 + burning), bearer always         |  37.6 |  20.1 |  79.9 |  62.4 |  3.1 | 14.7 |  31.4 |
+|   old Flame Lance r2 (S3 + burning), bearer smart          |  37.6 |  20.1 |  79.9 |  62.4 |  3.1 | 14.7 |  31.4 |
+|   new Flame Lance r2 (S4 +2 + burning), bearer never       |  54.6 |  32.2 |  67.8 |  45.4 |  2.5 | 13.2 |  52.0 |
+|   new Flame Lance r2 (S4 +2 + burning), bearer always      |  59.9 |  39.2 |  60.8 |  40.1 |  2.6 | 12.2 |  57.5 |
+|   new Flame Lance r2 (S4 +2 + burning), bearer smart       |  59.9 |  39.2 |  60.8 |  40.1 |  2.6 | 12.2 |  57.5 |
+
+### L. I-075: one established object dropped on the foes as the PC's first beat (rope Moderate 15)
+
+Old: the drop is a burst (cap 6) and its harm lands k times on the pool, carrying over. New: it selects at
+most its rung's count (body 2, heavy 3, massive 4) and a share never exceeds one member's Vitality.
+Cells: advisory class win%/Staggered% (H's thresholds); wipe% = the drop alone fells every member.
+
+| Matchup | none | old heavy S3 | old massive S4 | new body S2 | new heavy S3 | new massive S4 |
+|---|---|---|---|---|---|---|
+| P1 vs T1 mob of 4 | easy 99/13 | easy 99/8 w55 | easy 99/8 w55 | easy 99/11 w0 | easy 99/8 w0 | easy 99/8 w55 |
+| P1 vs T1 mob of 6 | fair 95/27 | fair 96/17 w55 | fair 96/17 w55 | fair 95/23 w0 | fair 96/17 w0 | fair 96/17 w0 |
+| P2 vs T1 mob of 8 | fair 97/28 | easy 98/13 w15 | easy 98/13 w65 | fair 98/24 w0 | easy 98/13 w0 | easy 98/13 w0 |
+| P2 vs T2 mob of 4 | hard 43/74 | hard 74/35 w0 | hard 79/28 w15 | hard 48/68 w0 | hard 68/43 w0 | hard 79/28 w15 |
+| P2 vs T2 mob of 6 | lethal 8/98 | hard 50/62 w0 | hard 67/34 w15 | lethal 11/97 w0 | lethal 24/90 w0 | hard 53/59 w0 |
+| P3 vs T2 mob of 6 | easy 95/15 | easy 98/6 w0 | easy 98/5 w25 | fair 95/15 w0 | easy 98/7 w0 | easy 98/6 w0 |
+| P3 vs T3 mob of 4 | lethal 24/89 | hard 42/72 w0 | hard 59/50 w0 | lethal 24/89 w0 | lethal 35/80 w0 | hard 59/50 w0 |
+| P2 vs 4xT2 (separate) | lethal 3/98 | lethal 29/79 w0 | hard 65/35 w15 | lethal 6/96 w0 | lethal 20/84 w0 | hard 65/35 w15 |

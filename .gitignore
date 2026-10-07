@@ -17,3 +17,5 @@ venv/
 *.session.json
 *.scenario.json
 
+rules/_process/index.tsv
+.claude/worktrees/

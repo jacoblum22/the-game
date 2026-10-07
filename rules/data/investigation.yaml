@@ -1,0 +1,1466 @@
+# data/investigation.yaml
+# Purpose: the clue-graph schema and validity rules, investigative method kinds, graduated delivery of
+#   findings, deduction, the journal, case-generation tables, and the starter case template used by
+#   WE-15-3 (case.mill_fire).
+# Owner: 15-social-investigation-downtime (15.9). Canonical for numbers and ids (00.1.4 item 5).
+# Schema: data/SCHEMAS.md#investigationyaml. Required keys: clue_graph_template, delivery. Optional keys
+#   added by ch.15: validity, methods, core_clues, leads, deduction, confirmation, fallbacks,
+#   opposition_omens, research, surveillance, journal, knowledge, tables, cases.
+# Ids: clue nodes clu.<case>.<node>; placements clu.<case>.<node>.p<n>; found facts clu.<...>.found
+#   (read by 03's cnt.clue); case templates case.* (prefix requested of 00, 15 Interface requests).
+# Basis: [15.9] [R4 §5.1-5.2] [R1 #12, G-6] [R5 P-41] [R6 B-13, B-R4]
+#   [R: https://thealexandrian.net/wordpress/1118/roleplaying-games/three-clue-rule]
+#   [R: https://pelgranepress.com/gumshoe/files/GUMSHOE%20SRD%20CC%20version.pdf] [DL-15-24..DL-15-26]
+
+schema_version: 1
+
+clue_graph_template:       # T-15-14 (15.9.2)
+  solution: {facts: "[fact ids]", visibility: sealed, truth: true, written_at: creation}
+  nodes:
+    - id: "clu.<case>.<node>"
+      fields:
+        fact: "the solution fact the node asserts"
+        necessary: bool
+        deducible_from: "[[clue content fact ids | lore keys]]  # alternative sets, each 2-3 items; >= 1 set needs no lore"
+        points_to: "[node ids]"
+        prerequisites: "[fact ids that must be in PC knowledge before any placement can deliver]"
+        sealed_fact: "= fact (SCHEMAS required field name)"
+        placements: "[placement ids] (>= 3 when necessary)"
+  placements:
+    - id: "clu.<case>.<node>.p<n>"
+      fields:
+        holder: "entity id"
+        holder_kind: "person | place | object | document | event | rumor"
+        method: "method kind (methods below)"
+        access: "core | rolled"
+        detect_tier: "obstacle tier (rolled)"
+        request_size: "R1..R5 (person holders)"
+        content: "the clue fact learned"
+        direct: "bool: the content IS the node's fact"
+        reveals_lead: "[placement ids]"
+        invites: "[lore keys]"
+        status: "unfound | found | lost"
+        nodes: "[node ids this placement points to]"
+  reserve_per_necessary_node: 2
+  fallbacks: "[{trigger: stalled | clock_reaches:<n> | scenes_without_clue:<n>, form, delivers: core placement of an unfound necessary node}]"
+  opposition_clock: "optional; hidden, with omens; each omen stage names a placement"
+
+validity:                  # 15.9.4 (validated by PR-15-6; audited by h.15.placement_audit)
+  per_necessary_node:
+    min_placements: 3
+    min_holder_kinds: 2
+    min_method_kinds: 2
+    min_core: 1
+    min_places: 2
+    reserve: 2
+  per_case:
+    entry_core_reachable_from_start: true
+    min_fallbacks: 1
+  audit:
+    handler: h.15.placement_audit
+    live_placement: "holder exists, not destroyed, dead or departed beyond reach; status not lost"
+    min_live: 2
+    on_short: "place one reserve placement; when the reserve is spent, PR-15-7 generates one (core, seeded by a rumor)"
+
+methods:                   # T-15-13 (15.9.6)
+  - {id: imethod.search, name: search, tags: [deed.lore.investigation.search], anchor: act.search, verb: verb.observe, attribute: wits, alt_attribute: {intellect: papers},
+     dc_source: detect_tier, time: {free: "10 min a room, 1 hour a building", site: "1 interval an area"}, holder_kinds: [place, object, document], lifecycle: provisional, basis: ["15.9.6", "10 T-10-20"]}
+  - {id: imethod.inquiry, name: inquiry, tags: [deed.lore.investigation.inquiry], anchor: "15.4.1", verb: verb.talk, attribute: presence,
+     dc_source: "social DC at the placement's request_size", time: {free: "minutes per person", downtime: "1 day asking around"}, holder_kinds: [person, rumor], lifecycle: provisional, basis: ["15.9.6"]}
+  - {id: imethod.read, name: read, tags: [deed.influence.insight], anchor: "15.6.1", verb: verb.observe, attribute: wits, dc_source: mask,
+     time: {free: "within the conversation"}, holder_kinds: [person], lifecycle: provisional, basis: ["15.6.1"]}
+  - {id: imethod.study, name: study, tags: [deed.lore.investigation.search], anchor: act.study, verb: verb.observe, attribute: intellect,
+     tag_by_object: {wound: deed.lore.medicine, mechanism: deed.lore.engineering, inscription: deed.lore.history}, dc_source: "the object's tier", time: {free: "1 interval", site: "1 interval"},
+     holder_kinds: [object, place], lifecycle: provisional, basis: ["15.9.6", "10 T-10-20"]}
+  - {id: imethod.research, name: research, tags: [deed.lore.investigation.records], anchor: "15.9.14", verb: verb.observe, attribute: intellect,
+     dc_source: archive_tier, time: {free: "1 hour a beat", downtime: "a week (dt.research)"}, holder_kinds: [document], lifecycle: provisional, basis: ["15.9.14"]}
+  - {id: imethod.surveillance, name: surveillance, tags: [deed.lore.investigation.search, deed.guile.stealth], anchor: "15.9.15", verb: "verb.observe | verb.sneak",
+     attribute: "wits (watch) | agility (follow)", dc_source: "the target's Wits defense", time: {free: "1 watch a beat"}, holder_kinds: [person, place, event], lifecycle: provisional, basis: ["15.9.15"]}
+  - {id: imethod.recall, name: recall, tags: [deed.lore], anchor: "09.10.2 / verb.recall", verb: verb.recall, attribute: intellect, dc_source: "the lore's tier",
+     time: {free: instant}, holder_kinds: [lore_key], lifecycle: provisional, basis: ["15.9.6", "09.10.2"]}
+  - {id: imethod.interrogation, name: interrogation, tags: [deed.influence.intimidation.interrogation], anchor: "15.8.4", verb: verb.talk, attribute: by_method,
+     dc_source: "social DC at R2", time: {free: "1 interval a beat"}, holder_kinds: [person], lifecycle: provisional, basis: ["15.8.4"]}
+  - {id: imethod.deduce, name: deduce, tags: [deed.lore.investigation.deduction], anchor: "15.9.9", verb: none, roll: false,
+     time: {site: "1 interval", free: none}, holder_kinds: [conclusion], lifecycle: provisional, basis: ["15.9.9"]}
+methods_default_when_uncertain: "the kind whose anchor is a basic verb the beat already uses"
+
+core_clues:                # 15.9.5
+  necessity: certain
+  reached_tie_break: true
+  person_condition: "request_size within the person's ceiling and no refusal covers telling"
+  writes: [found_fact_with_frame_id, record_knowledge, unseal_content, leads, journal]
+
+delivery:                  # 15.9.7 (P17 via 01.10 and 12.10.4)
+  eligible_set: "unfound placements at the holder whose method kind matches and whose prerequisites are met"
+  undirected_items: "the eligible rolled placements, ordered by 12.10.4 preference; count never shown"
+  count: "deliver_count(N, delivered reach) (01.10.4)"
+  preference: [most_directly_answers, leads_onward, node_with_most_remaining_placements]
+  failure: "one vague impression of the top item: true, hedged, recorded believed; it is a lead and a citable Precision lever"
+  critical_failure: "nothing reliable; a plausible falsehood only if the holder is misleadable (forged document, lying witness, staged scene)"
+  re_ask: "01.10.6: new method, new lever, a passed interval, or the re-attempt cost"
+  clock_visibility: {reach_2_or_3: "+1 step (hidden -> sensed -> public)", reach_4: "+2 steps"}
+
+leads:                     # 15.9.8
+  sources: [reveals_lead, rumor_points_to, lead_injection, npc_sharing, vague_impression]
+  fields: [placement, holder, place, method_hint, live]
+
+deduction:                 # 15.9.9
+  roll: false
+  node_tie_break: none
+  answers: {supported: "Your clues support it.", unsettled: "The clues you hold don't settle it."}
+  supported_write: "record_knowledge(pc, node.fact, how: inferred, certainty: believed); theory status supported"
+  never_say: ["you're on the right track", "not quite", "close"]
+  lore_keys_shown_per_clue_only: true
+
+confirmation:              # 15.9.10
+  established_only_by: [direct_placement_found, confession_by_resolved_frame, test_resolved_from_sealed_state, accusation_response]
+  refuted_only_by: "a found clue directly contradicting the theory"
+  wrong_accusation: "insulted or harmed memory by consequence; reputation (11)"
+  solution_immutable: true
+
+fallbacks:                 # 15.9.12
+  default_scenes_without_clue: 3
+  fired_by: h.11.fallback_counters
+  forms_table: tbl.15.fallback_form
+
+research:                  # 15.9.14
+  archive_tiers:
+    - {tier: easy, when: "a parish register; tax rolls for a name"}
+    - {tier: moderate, when: "a guild's private books; a library on a common subject"}
+    - {tier: hard, when: "an ancient library on a half-forgotten matter"}
+    - {tier: very_hard, when: "a lost topic in a great collection"}
+    - {tier: legendary, when: "a subject deliberately expunged"}
+  clock_segments: {easy: 4, moderate: 4, hard: 6, very_hard: 8, legendary: 8}
+  beats: "one per day, or per downtime week"
+  sage: "fortune check: sage intellect + lore competence vs the question's tier; one item; 10 coins (08.8.8)"
+
+surveillance:              # 15.9.15
+  routine_segments: {habits: 4, hidden: 6}
+  notice_segments: 4
+  beat: watch
+  failure_ticks_notice: {failure: 1, critical_failure: 2}
+  notice_complete: "target alert toward the PC; routine changes; routine placements lost (audit replaces)"
+
+journal:                   # T-15-15 (15.9.16)
+  visibility: shown
+  sections:
+    - {id: journal.cases, shows: [clues_found_with_content_and_invites, live_leads_with_method_hints, theories_with_status, open_questions]}
+    - {id: journal.people, shows: [names_learned, standing_rung, known_wants, known_fears, known_refusals, what_the_pc_told_them]}
+    - {id: journal.places, shows: [discovered_places, notes]}
+    - {id: journal.rumors, shows: [rumor_text, source]}
+    - {id: journal.lies, shows: [claim, believers_known_to_pc]}
+    - {id: journal.commitments, shows: [debts, promises, agreements, due_conditions]}
+  never_shows: [sealed_facts, truth_values, clocks_hidden, patience, alertness, offsets]
+
+knowledge:                 # 15.9.17
+  how: [witnessed, told, read, overheard, recalled, inferred, rumor, confided]
+  certainty_by_how: {witnessed: established, read: established, confided: established, told: believed, inferred: believed, overheard: believed, recalled: established, rumor: rumored}
+  append_only: true
+
+tables:
+  - id: tbl.15.placement_holders
+    name: Placement holder kinds (PR-15-6, PR-15-7)
+    tags: []
+    die: d6
+    recency: true
+    context_filters: []
+    results:
+      - {range: '1', result: "person: a witness who saw part of it (inquiry; R1-R2)"}
+      - {range: '2', result: "person: someone who dealt with the culprit (inquiry; R2-R3)"}
+      - {range: '3', result: "place: a trace where it happened or was prepared (search)"}
+      - {range: '4', result: "object: something used, left or carried (search or study)"}
+      - {range: '5', result: "document: a record, letter, ledger or copy (research or search)"}
+      - {range: '6', result: "event: the culprit's next move, observable (surveillance)"}
+    lifecycle: provisional
+    basis: ["15.9.4", "R6 B-13"]
+  - id: tbl.15.fallback_form
+    name: Proactive fallback forms (15.9.12)
+    tags: []
+    die: d6
+    recency: true
+    context_filters: []
+    results:
+      - {range: '1', result: "the opposition acts again where it can be seen"}
+      - {range: '2', result: "a witness seeks the PC out, frightened or angry"}
+      - {range: '3', result: "a new victim or a new loss is discovered"}
+      - {range: '4', result: "evidence surfaces: something is found and brought to someone the PC knows"}
+      - {range: '5', result: "the culprit makes a mistake: a careless purchase, a boast, a sighting"}
+      - {range: '6', result: "a rival investigator or authority shares (or sells) what they found"}
+    lifecycle: provisional
+    basis: ["15.9.12", "R6 B-13 proactive nodes"]
+  - id: tbl.15.carousing_contact
+    name: Carousing contacts (15.13.8)
+    tags: []
+    die: d8
+    recency: true
+    context_filters: []
+    results:
+      - {range: '1', result: "a carter who knows the roads"}
+      - {range: '2', result: "a guard off duty"}
+      - {range: '3', result: "a fence or a smuggler"}
+      - {range: '4', result: "a clerk or scribe"}
+      - {range: '5', result: "a minstrel who hears everything"}
+      - {range: '6', result: "a crafter of a useful trade"}
+      - {range: '7', result: "a servant of a great house"}
+      - {range: '8', result: "a traveller from far away"}
+    lifecycle: provisional
+    basis: ["15.13.8"]
+  - id: tbl.15.carousing_trouble
+    name: Carousing trouble (15.13.8, critical failure)
+    tags: []
+    die: d6
+    recency: true
+    context_filters: []
+    results:
+      - {range: '1', result: "a brawl: S1 harm and a local now Unfriendly"}
+      - {range: '2', result: "a debt: a commitment of 1 Unit owed to someone"}
+      - {range: '3', result: "a lost item (cost.gear S2)"}
+      - {range: '4', result: "an offended local of standing: now Hostile"}
+      - {range: '5', result: "a night in the lockup (the next day is lost)"}
+      - {range: '6', result: "a rival's attention: an enemy learns where the PC sleeps"}
+    lifecycle: provisional
+    basis: ["15.13.8", "R5 P-45 (Blades overindulgence)"]
+
+cases:
+  - id: case.mill_fire
+    name: The mill fire at Ashford
+    tags: [situation.investigation, org.guild.merchant]
+    atmosphere: "theme: a neighbor paid to ruin a neighbor"
+    solution:
+      - {fact: sol.mill_fire.arsonist, value: "Odo the cooper set the fire"}
+      - {fact: sol.mill_fire.payer, value: "the salt factor's man paid Odo 30 in salt-guild coin"}
+      - {fact: sol.mill_fire.motive, value: "the mill's new grain contract undercut the salt factor"}
+      - {fact: sol.mill_fire.next, value: "the factor means to burn the tithe granary next"}
+    clues:                 # clue content facts (unsealed when found)
+      c1: "lamp-oil smell and burn trails at three separate spots in the mill"
+      c2: "an oil-soaked rag under Odo's workbench"
+      c3: "the millwright swept the grain dust that morning: dust did not start it"
+      c4: "the ferryman saw Odo on the mill road at dusk, before the smoke"
+      c5: "Odo paid his slate at the Drowned Lamb in new salt-guild coin"
+      c6: "the factor's ledger line: 'to O., the mill, 30'"
+      c7: "Odo met a man in the salt factor's livery behind the tannery"
+    nodes:
+      - {id: clu.mill_fire.n1, name: "the fire was set", sealed_fact: sol.mill_fire.arsonist_act, fact: "the mill fire was set deliberately", necessary: true,
+         deducible_from: [[c1, c2], [c1, c3]], points_to: [clu.mill_fire.n2], prerequisites: [],
+         placements: [clu.mill_fire.n1.p1, clu.mill_fire.n1.p2, clu.mill_fire.n1.p3], lifecycle: provisional}
+      - {id: clu.mill_fire.n2, name: "Odo set it", sealed_fact: sol.mill_fire.arsonist, fact: "Odo the cooper set the fire", necessary: true,
+         deducible_from: [[c2, c4], [c5, c4]], points_to: [clu.mill_fire.n3], prerequisites: [],
+         placements: [clu.mill_fire.n2.p1, clu.mill_fire.n1.p3, clu.mill_fire.n2.p3, clu.mill_fire.n2.p4, clu.mill_fire.n2.p5], lifecycle: provisional}
+      - {id: clu.mill_fire.n3, name: "the salt factor paid him", sealed_fact: sol.mill_fire.payer, fact: "the salt factor's man paid Odo", necessary: true,
+         deducible_from: [[c5, c7], [c6]], points_to: [], prerequisites: [],
+         placements: [clu.mill_fire.n3.p1, clu.mill_fire.n3.p2, clu.mill_fire.n2.p4, clu.mill_fire.n2.p5], lifecycle: provisional}
+    placements:
+      - {id: clu.mill_fire.n1.p1, holder: loc.ashford.mill, holder_kind: place, method: imethod.search, access: core, content: c1, direct: false, nodes: [clu.mill_fire.n1], reveals_lead: [], invites: [lore.craft.fire_oils], status: unfound}
+      - {id: clu.mill_fire.n1.p2, holder: npc.hobb_millwright, holder_kind: person, method: imethod.inquiry, access: core, request_size: R1, content: c3, direct: false, nodes: [clu.mill_fire.n1], reveals_lead: [], status: unfound}
+      - {id: clu.mill_fire.n1.p3, holder: obj.odo_workbench, holder_kind: object, method: imethod.search, access: rolled, detect_tier: moderate, content: c2, direct: false, nodes: [clu.mill_fire.n1, clu.mill_fire.n2], reveals_lead: [], status: unfound}
+      - {id: clu.mill_fire.n2.p1, holder: npc.sel_ferryman, holder_kind: person, method: imethod.inquiry, access: core, request_size: R2, content: c4, direct: false, nodes: [clu.mill_fire.n2], reveals_lead: [], status: unfound}
+      - {id: clu.mill_fire.n2.p3, holder: npc.bett_alewife, holder_kind: person, method: imethod.inquiry, access: core, request_size: R1, content: c5, direct: false, nodes: [clu.mill_fire.n2, clu.mill_fire.n3], reveals_lead: [clu.mill_fire.n2.p4], status: unfound}
+      - {id: clu.mill_fire.n2.p4, holder: npc.odo_cooper, holder_kind: person, method: imethod.surveillance, access: rolled, routine: habits, content: c7, direct: false, nodes: [clu.mill_fire.n2, clu.mill_fire.n3], reveals_lead: [clu.mill_fire.n3.p1], status: unfound}
+      - {id: clu.mill_fire.n2.p5, holder: npc.odo_cooper, holder_kind: person, method: imethod.interrogation, access: rolled, request_size: R5, content: "Odo's confession", direct: true, nodes: [clu.mill_fire.n2, clu.mill_fire.n3], status: unfound}
+      - {id: clu.mill_fire.n3.p1, holder: obj.factor_strongroom_ledger, holder_kind: document, method: imethod.search, access: rolled, detect_tier: hard, content: c6, direct: true, prerequisites: ["pc inside the factor's strongroom"], nodes: [clu.mill_fire.n3], status: unfound}
+      - {id: clu.mill_fire.n3.p2, holder: npc.factor_clerk, holder_kind: person, method: imethod.inquiry, access: rolled, request_size: R4, content: c6, direct: true, nodes: [clu.mill_fire.n3], status: unfound}
+    reserve:
+      - {id: clu.mill_fire.r1, holder_kind: person, holder: "a tanner's boy who saw the meeting", method: imethod.inquiry, access: core, request_size: R1, content: c7, nodes: [clu.mill_fire.n2, clu.mill_fire.n3]}
+      - {id: clu.mill_fire.r2, holder_kind: document, holder: "a copy of the ledger line in the guild hall's tithe-book", method: imethod.research, access: rolled, detect_tier: moderate, content: c6, nodes: [clu.mill_fire.n3]}
+      - {id: clu.mill_fire.r3, holder_kind: object, holder: "the empty oil flasks Odo bought, in the midden behind his shop", method: imethod.search, access: core, content: "two lamp-oil flasks bought the day of the fire", nodes: [clu.mill_fire.n1, clu.mill_fire.n2]}
+      - {id: clu.mill_fire.r4, holder_kind: event, holder: "Odo pays another debt in salt-guild coin", method: imethod.surveillance, access: rolled, content: c5, nodes: [clu.mill_fire.n2]}
+      - {id: clu.mill_fire.r5, holder_kind: person, holder: "the factor's dismissed porter, who carried the purse", method: imethod.inquiry, access: core, request_size: R2, content: "the factor's man sent a purse to the cooper", nodes: [clu.mill_fire.n3]}
+      - {id: clu.mill_fire.r6, holder_kind: rumor, holder: "talk at the market of the factor's grudge against the mill", method: imethod.inquiry, access: core, request_size: R1, content: "the factor swore the new mill contract would cost the miller dear", nodes: [clu.mill_fire.n3]}
+    fallbacks:
+      - {trigger: "clock_reaches:4 clk.mill_fire.granary", form: "the culprit makes a mistake", delivers: "event placement: Odo seen buying lamp oil (core, n2)"}
+      - {trigger: stalled, form: "a witness seeks the PC out", delivers: clu.mill_fire.r1}
+    opposition_clock:
+      id: clk.mill_fire.granary
+      name: The granary fire
+      kind: danger
+      segments: 6
+      visibility: hidden
+      auto_ticks: [{boundary: week, ticks: 1}]
+      omens:
+        stirring: ["a smell of lamp oil by the tithe granary's door (lead: n2.p4)", "the granary dog barks at night for no reason the watchman can find"]
+        building: ["a stranger in the factor's livery asks the watchman when he takes his supper (lead: n2.p4)", "Odo's shop is shut at odd hours (lead: n2.p4)"]
+        imminent: ["Odo buys two more flasks of lamp oil (lead: fallback event)", "the granary's back shutter is found unbarred"]
+      on_complete: {effects: [{effect_id: eff.write_fact, params: {subject: loc.ashford.granary, predicate: burned, value: true}}], interrupting: true, then: close}
+    validity_check: {n1: {placements: 3, kinds: [place, person, object], methods: [search, inquiry], core: 2, places: 3}, n2: {placements: 5, kinds: [person, object], methods: [inquiry, search, surveillance, interrogation], core: 2, places: 4}, n3: {placements: 5, kinds: [document, person], methods: [search, inquiry, surveillance, interrogation], core: 1, places: 3}}
+    lifecycle: provisional
+    basis: ["WE-15-3", "15.9.4"]
+  # ---- moved here at integration from data/region_thallen.yaml#cases (13 -> 15; IR ch.13 to 15) ----
+  - id: case.silent_bells
+    name: The silent bells
+    tags:
+    - situation.investigation
+    - org.cult.doomsday
+    atmosphere: 'theme: a gentle hand that wants everyone asleep'
+    begins_at: loc.tolling
+    thread_kind: situation
+    solution:
+    - fact: sol.silent_bells.thief
+      value: Dunstan Fell, a Woken drover of the Hushed Choir, stole Harrowby's clapper before midnight on Ringing-eve and hid it in the bell-pit under the green
+    - fact: sol.silent_bells.pin
+      value: Sister Ysmay, sacristan of the Last Bell, has filed its clapper-pin night by night; the dawn stroke missed when the pin bound
+    - fact: sol.silent_bells.choir
+      value: both serve the Hushed Choir, which means to silence the Last Bell so the Quiet may take Tolling into its peace
+    - fact: sol.silent_bells.cantor
+      value: Sister Ysmay Tollard is the Cantor of the Hushed Choir
+    - fact: sol.silent_bells.next
+      value: the Choir gathers at the Standing Folk of Copple Field at each new moon; its goal clock (clk.thallen.choir_goal) is the Last Bell's countdown
+    clues:
+      c1: 'Harrowby''s clapper was lifted off its pin, not torn away: the work of someone who knew bells'
+      c2: the print of a crook's iron butt and fresh moss scrapings on the bell-pit stair
+      c3: Tobin saw a tall Woken drover with a bell-tongue lashed to his crook lift the clapper before midnight, cursing it in Orrowan with a Caddow accent
+      c4: Jessamy saw 'the quiet man' carry a sack down behind the bell-frame and come up without it
+      c5: the clapper itself, in the bell-pit's casting-hole, with a hand-over-mouth sign drawn in moss beside it and a line of an Orrowan lullaby chalked above
+      c6: Dunstan Fell drives Pell's salvage carts from Bellhollow, carries a crook with a bell-tongue lashed to it, and was away on Ringing-eve
+      c7: the Cellar Kin sold a bell-wright's fine file and two Orrowan clapper-pins this winter to Dunstan Fell
+      c8: 'the Last Bell''s clapper-pin is filed bright along one side: a filed pin binds'
+      c9: the pin bound at the dawn stroke; in all his years on the rope the ringer never felt it stick
+      c10: a pin that binds like that has been filed; Hrolla has seen it done to sabotage a foundry bell
+      c11: only the sacristan handles the Last Bell's clapper and pin; Sister Ysmay oils them every night
+      c12: 'Quillon copied an Orrowan fragment for Sister Ysmay last winter: a rite ''to lay a bell to sleep'''
+      c13: the hand-over-mouth is the sign of those who serve the silence; the Mossmothers have found it cut into trees at the Hem
+      c14: at the new moon a choir gathers among the Standing Folk of Copple Field; its Cantor sings in Orrowan behind a veil of moss
+      c15: 'Dunstan Fell''s confession: he took the clapper on the Cantor''s order; the Cantor is Sister Ysmay'
+      c16: 'in Ysmay''s cell: a bell-wright''s fine file in her sewing box and a hand-mirror wrapped in moss'
+    nodes:
+    - id: clu.silent_bells.n1
+      name: Harrowby's bell was silenced on purpose
+      fact: Harrowby's bell was silenced deliberately, by someone who knew bells
+      sealed_fact: sol.silent_bells.thief
+      necessary: true
+      deducible_from:
+      - - c1
+        - c2
+      - - c5
+      - - c3
+        - c4
+      points_to:
+      - clu.silent_bells.n2
+      - clu.silent_bells.n3
+      prerequisites: []
+    - id: clu.silent_bells.n2
+      name: Dunstan Fell is the thief
+      fact: the thief is Dunstan Fell, a Woken drover
+      sealed_fact: sol.silent_bells.thief
+      necessary: true
+      deducible_from:
+      - - c3
+        - c6
+      - - c2
+        - c6
+      - - c7
+        - c3
+      - - c15
+      points_to:
+      - clu.silent_bells.n3
+      prerequisites: []
+    - id: clu.silent_bells.n3
+      name: the Hushed Choir means to silence the Last Bell
+      fact: the thieves are the Hushed Choir, servants of the Quiet, who mean to silence the Last Bell
+      sealed_fact: sol.silent_bells.choir
+      necessary: true
+      deducible_from:
+      - - c5
+        - c13
+      - - c12
+        - c13
+      - - c14
+      - - c15
+      points_to:
+      - clu.silent_bells.n5
+      prerequisites: []
+    - id: clu.silent_bells.n4
+      name: the Last Bell's pin was filed
+      fact: 'the Last Bell''s missed stroke was sabotage: its clapper-pin has been filed'
+      sealed_fact: sol.silent_bells.pin
+      necessary: true
+      deducible_from:
+      - - c8
+      - - c9
+        - c10
+      - - c9
+        - c7
+      points_to:
+      - clu.silent_bells.n5
+      prerequisites: []
+    - id: clu.silent_bells.n5
+      name: Sister Ysmay is the Cantor
+      fact: Sister Ysmay Tollard is the Cantor of the Hushed Choir
+      sealed_fact: sol.silent_bells.cantor
+      necessary: true
+      deducible_from:
+      - - c11
+        - c8
+      - - c11
+        - c12
+      - - c14
+        - c11
+      - - c16
+        - c11
+      - - c15
+      points_to: []
+      prerequisites: []
+    placements:
+    - id: clu.silent_bells.n1.p1
+      holder: obj.thallen.harrowby_bellframe
+      holder_kind: object
+      method: imethod.search
+      access: core
+      content: c1
+      direct: false
+      nodes:
+      - clu.silent_bells.n1
+      reveals_lead: []
+      invites:
+      - lore.craft.bell_hanging
+      status: unfound
+    - id: clu.silent_bells.n1.p2
+      holder: obj.harrowby_clapper
+      holder_kind: object
+      method: imethod.search
+      access: core
+      content: c5
+      direct: true
+      nodes:
+      - clu.silent_bells.n1
+      - clu.silent_bells.n3
+      reveals_lead: []
+      invites: []
+      status: unfound
+      prerequisites:
+      - pc inside loc.harrowby_bellpit's heart
+    - id: clu.silent_bells.n1.p3
+      holder: npc.tobin_reave
+      holder_kind: person
+      method: imethod.inquiry
+      access: core
+      content: c3
+      direct: false
+      nodes:
+      - clu.silent_bells.n1
+      - clu.silent_bells.n2
+      reveals_lead: []
+      invites: []
+      status: unfound
+      request_size: R2
+      prerequisites:
+      - 'Tobin''s refusal lifted: no Cask is accusing him in the scene'
+    - id: clu.silent_bells.n1.p4
+      holder: npc.jessamy_cask
+      holder_kind: person
+      method: imethod.inquiry
+      access: core
+      content: c4
+      direct: false
+      nodes:
+      - clu.silent_bells.n1
+      - clu.silent_bells.n2
+      reveals_lead:
+      - clu.silent_bells.n2.p1
+      invites: []
+      status: unfound
+      request_size: R1
+      prerequisites:
+      - 'Jessamy''s refusal lifted: her mother is not present'
+    - id: clu.silent_bells.n2.p1
+      holder: obj.thallen.bellpit_stair
+      holder_kind: object
+      method: imethod.search
+      access: core
+      content: c2
+      direct: false
+      nodes:
+      - clu.silent_bells.n1
+      - clu.silent_bells.n2
+      reveals_lead: []
+      invites: []
+      status: unfound
+    - id: clu.silent_bells.n2.p2
+      holder: npc.wick_pell
+      holder_kind: person
+      method: imethod.inquiry
+      access: core
+      content: c6
+      direct: false
+      nodes:
+      - clu.silent_bells.n2
+      reveals_lead: []
+      invites: []
+      status: unfound
+      request_size: R1
+    - id: clu.silent_bells.n2.p3
+      holder: npc.lark_mossbank
+      holder_kind: person
+      method: imethod.inquiry
+      access: rolled
+      content: c7
+      direct: false
+      nodes:
+      - clu.silent_bells.n2
+      - clu.silent_bells.n4
+      reveals_lead: []
+      invites: []
+      status: unfound
+      request_size: R3
+    - id: clu.silent_bells.n2.p4
+      holder: npc.dunstan_fell
+      holder_kind: person
+      method: imethod.interrogation
+      access: rolled
+      content: c15
+      direct: true
+      nodes:
+      - clu.silent_bells.n2
+      - clu.silent_bells.n3
+      - clu.silent_bells.n5
+      reveals_lead: []
+      invites: []
+      status: unfound
+      request_size: R5
+    - id: clu.silent_bells.n3.p1
+      holder: npc.ilsabet_grey
+      holder_kind: person
+      method: imethod.inquiry
+      access: core
+      content: c13
+      direct: false
+      nodes:
+      - clu.silent_bells.n3
+      reveals_lead: []
+      invites: []
+      status: unfound
+      request_size: R1
+      prerequisites:
+      - the PC has seen the sign (c5 or a reserve)
+    - id: clu.silent_bells.n3.p2
+      holder: npc.ansel_quillon
+      holder_kind: person
+      method: imethod.inquiry
+      access: rolled
+      content: c12
+      direct: false
+      nodes:
+      - clu.silent_bells.n3
+      - clu.silent_bells.n5
+      reveals_lead: []
+      invites: []
+      status: unfound
+      request_size: R2
+    - id: clu.silent_bells.n3.p3
+      holder: loc.standing_folk
+      holder_kind: place
+      method: imethod.surveillance
+      access: rolled
+      content: c14
+      direct: false
+      nodes:
+      - clu.silent_bells.n3
+      - clu.silent_bells.n5
+      reveals_lead: []
+      invites: []
+      status: unfound
+      detect_tier: moderate
+      prerequisites:
+      - the new moon
+    - id: clu.silent_bells.n4.p1
+      holder: obj.thallen.last_bell_pin
+      holder_kind: object
+      method: imethod.study
+      access: rolled
+      content: c8
+      direct: false
+      nodes:
+      - clu.silent_bells.n4
+      - clu.silent_bells.n5
+      reveals_lead: []
+      invites: []
+      status: unfound
+      detect_tier: hard
+      prerequisites:
+      - pc in the ringing-loft (the Prior's leave, 15.4.1 R3, or by stealth)
+    - id: clu.silent_bells.n4.p2
+      holder: npc.jory_halloway
+      holder_kind: person
+      method: imethod.inquiry
+      access: core
+      content: c9
+      direct: false
+      nodes:
+      - clu.silent_bells.n4
+      reveals_lead: []
+      invites: []
+      status: unfound
+      request_size: R1
+    - id: clu.silent_bells.n4.p3
+      holder: npc.hrolla_gorrund
+      holder_kind: person
+      method: imethod.inquiry
+      access: core
+      content: c10
+      direct: false
+      nodes:
+      - clu.silent_bells.n4
+      reveals_lead: []
+      invites: []
+      status: unfound
+      request_size: R2
+      prerequisites:
+      - the PC knows c9 or c8
+    - id: clu.silent_bells.n5.p1
+      holder: npc.bram_ottery
+      holder_kind: person
+      method: imethod.inquiry
+      access: core
+      content: c11
+      direct: false
+      nodes:
+      - clu.silent_bells.n5
+      reveals_lead: []
+      invites: []
+      status: unfound
+      request_size: R1
+    - id: clu.silent_bells.n5.p2
+      holder: npc.hollis_brede
+      holder_kind: person
+      method: imethod.inquiry
+      access: core
+      content: c11
+      direct: false
+      nodes:
+      - clu.silent_bells.n5
+      reveals_lead: []
+      invites: []
+      status: unfound
+      request_size: R1
+    - id: clu.silent_bells.n5.p3
+      holder: obj.thallen.ysmay_cell
+      holder_kind: object
+      method: imethod.search
+      access: rolled
+      content: c16
+      direct: false
+      nodes:
+      - clu.silent_bells.n5
+      - clu.silent_bells.n4
+      reveals_lead: []
+      invites: []
+      status: unfound
+      detect_tier: hard
+      prerequisites:
+      - pc in the chapter-house cells
+    reserve:
+    - id: clu.silent_bells.r1
+      holder: a miller's wife of Harrowby who heard the clapper-chain at midnight
+      holder_kind: person
+      method: imethod.inquiry
+      access: core
+      content: c1
+      nodes:
+      - clu.silent_bells.n1
+      place: loc.harrowby
+      request_size: R1
+    - id: clu.silent_bells.r2
+      holder: the bell's own pin, bright from careful work
+      holder_kind: object
+      method: imethod.search
+      access: core
+      content: c1
+      nodes:
+      - clu.silent_bells.n1
+      place: loc.harrowby.green
+    - id: clu.silent_bells.r3
+      holder: a Copsey eel-catcher who sold Dunstan a sack on Ringing-eve
+      holder_kind: person
+      method: imethod.inquiry
+      access: core
+      content: c6
+      nodes:
+      - clu.silent_bells.n2
+      place: loc.copsey
+      request_size: R1
+    - id: clu.silent_bells.r4
+      holder: 'Pell''s Bellhollow tally-book: ''D. Fell, away, Ringing-eve'''
+      holder_kind: document
+      method: imethod.research
+      access: core
+      content: c6
+      nodes:
+      - clu.silent_bells.n2
+      place: loc.bellhollow
+    - id: clu.silent_bells.r5
+      holder: a moss thong with a tiny cracked bell on a dead hush-hound
+      holder_kind: object
+      method: imethod.search
+      access: core
+      content: c13
+      nodes:
+      - clu.silent_bells.n3
+      place: loc.brightfields
+    - id: clu.silent_bells.r6
+      holder: a Woken of the Waking House who was asked to join 'the quiet singers'
+      holder_kind: person
+      method: imethod.inquiry
+      access: core
+      content: c14
+      nodes:
+      - clu.silent_bells.n3
+      place: loc.tolling.hearth_shrine
+      request_size: R2
+    - id: clu.silent_bells.r7
+      holder: Sister Mab, the other dawn ringer, who felt the pin bind a week ago too
+      holder_kind: person
+      method: imethod.inquiry
+      access: core
+      content: c9
+      nodes:
+      - clu.silent_bells.n4
+      place: loc.tolling.belltower
+      request_size: R1
+    - id: clu.silent_bells.r8
+      holder: bright filings on the loft floor under the Last Bell
+      holder_kind: object
+      method: imethod.search
+      access: rolled
+      content: c8
+      nodes:
+      - clu.silent_bells.n4
+      place: loc.tolling.belltower
+      detect_tier: moderate
+    - id: clu.silent_bells.r9
+      holder: a Bellwarden novice who saw Ysmay leave the tower at the new moon
+      holder_kind: person
+      method: imethod.inquiry
+      access: core
+      content: c11
+      nodes:
+      - clu.silent_bells.n5
+      place: loc.tolling.belltower
+      request_size: R2
+    - id: clu.silent_bells.r10
+      holder: Ysmay buying moss-candles from Perrin Rushlight in Copsey
+      holder_kind: event
+      method: imethod.surveillance
+      access: rolled
+      content: c16
+      nodes:
+      - clu.silent_bells.n5
+      place: loc.copsey
+      detect_tier: moderate
+    fallbacks:
+    - trigger: clock_reaches:4 clk.thallen.choir_goal
+      form: the culprit makes a mistake
+      delivers: 'event: Ysmay seen in the Undercroft with Lark Mossbank, buying a second file (core, n5 via c11 + a new content)'
+    - trigger: stalled
+      form: a witness seeks the PC out
+      delivers: 'clu.silent_bells.r6 (or, if the Harrowby three were woken, Hester Tenney remembers a voice humming in Orrowan as the quiet came: core, n3)'
+    - trigger: scenes_without_clue:3
+      form: the threat returns
+      delivers: 'clu.silent_bells.r5: the hush-hounds come to Harrowby again; one wears a Choir thong'
+    opposition_clock:
+      id: clk.thallen.choir_goal
+      is_faction_goal_of: fac.thallen.hushed_choir
+      name: The Last Bell falls silent
+      kind: danger
+      segments: 8
+      start: 1
+      visibility: hidden
+      ticks: the Choir's World Turn goal action (11.3.6) and 11.3.6's random_event; the linchpin fates of 13.7 move it
+      omens:
+        stirring:
+        - 'the Last Bell misses a stroke (lead: n4.p2)'
+        - 'Harrowby''s bell found silent (lead: n1.p1)'
+        building:
+        - 'Copsey''s mill-bell is found silent, its clapper gone (lead: r3)'
+        - 'the Last Bell sounds thin, as if from far away (lead: n4.p1)'
+        imminent:
+        - 'the clapper-rope found cut through and spliced (lead: n5.p1)'
+        - 'a hush-pool lies over Tolling''s north ward for an hour at dawn, then lifts (lead: n3.p3)'
+      on_complete: 'fac.thallen.hushed_choir goal effects (13.7.4): the Last Bell is silent; Tolling''s north ward becomes a hush-pool; the Quiet''s clock +3'
+    lifecycle: provisional
+    basis:
+    - '15.9'
+    - WE-15-3
+    - 13.12.1
+    - DL-13-10
+    validity_check:
+      clu.silent_bells.n1:
+        placements: 5
+        kinds:
+        - object
+        - person
+        methods:
+        - inquiry
+        - search
+        core: 5
+        places: 4
+        reserve: 2
+      clu.silent_bells.n2:
+        placements: 6
+        kinds:
+        - object
+        - person
+        methods:
+        - inquiry
+        - interrogation
+        - search
+        core: 4
+        places: 5
+        reserve: 2
+      clu.silent_bells.n3:
+        placements: 5
+        kinds:
+        - object
+        - person
+        - place
+        methods:
+        - inquiry
+        - interrogation
+        - search
+        - surveillance
+        core: 2
+        places: 5
+        reserve: 2
+      clu.silent_bells.n4:
+        placements: 5
+        kinds:
+        - object
+        - person
+        methods:
+        - inquiry
+        - search
+        - study
+        core: 2
+        places: 3
+        reserve: 2
+      clu.silent_bells.n5:
+        placements: 7
+        kinds:
+        - object
+        - person
+        - place
+        methods:
+        - inquiry
+        - interrogation
+        - search
+        - study
+        - surveillance
+        core: 2
+        places: 4
+        reserve: 2
+  - id: case.orsolin_signet
+    name: Whose ring is it?
+    tags:
+    - situation.investigation
+    - org.crown.royal
+    atmosphere: 'theme: a servant wearing her mistress''s name for her mistress''s people'
+    begins_at: loc.tolling
+    thread_kind: quest
+    solution:
+    - fact: sol.signet.maid
+      value: the Wakeful's 'Lady Orsolin Vey' is Lisbet Mereling, maid to the true Orsolin
+    - fact: sol.signet.true
+      value: the true Orsolin Vey stands stilled in Orsolin Manor's solar
+    - fact: sol.signet.took
+      value: Lisbet woke beside her stilled mistress four springs ago and took the signet from her hand
+    clues:
+      c1: 'an Orrowan court-roll: Orsolin Vey, the king''s cousin, dark-haired, a harper, left-handed; the claimant is fair and right-handed'
+      c2: 'Tobin served the Veys once: ''that is how the lady''s maid walked, not the lady'''
+      c3: 'Abel Marrow: in her first weeks at the Waking House she woke every night calling for ''my lady'''
+      c4: 'read: her grief and her pride are for someone else'
+      c5: a young woman in court-dress stilled in the manor solar beside an empty chair, the Vey signet-box open and empty at her side
+      c6: Wick Pell's crews saw 'a lady in the solar' and would not go near the cellars
+      c7: 'the gatehouse household roll: ''Lisbet Mereling, maid to the lady Orsolin'''
+      c8: Lisbet's confession
+    nodes:
+    - id: clu.orsolin_signet.n1
+      name: the claimant is not Orsolin Vey
+      fact: the Wakeful's leader is not Orsolin Vey
+      sealed_fact: sol.signet.maid
+      necessary: true
+      deducible_from:
+      - - c1
+        - c4
+      - - c2
+        - c3
+      - - c7
+        - c3
+      - - c8
+      points_to:
+      - clu.orsolin_signet.n2
+      prerequisites: []
+    - id: clu.orsolin_signet.n2
+      name: the true Orsolin is stilled at the manor
+      fact: the true Orsolin Vey is stilled in Orsolin Manor
+      sealed_fact: sol.signet.true
+      necessary: true
+      deducible_from:
+      - - c5
+      - - c6
+        - c7
+      - - c8
+      points_to: []
+      prerequisites: []
+    - id: clu.orsolin_signet.n3
+      name: Lisbet took the signet
+      fact: Lisbet took the signet from her stilled mistress
+      sealed_fact: sol.signet.took
+      necessary: false
+      deducible_from:
+      - - c5
+        - c7
+      - - c8
+      points_to: []
+      prerequisites: []
+    placements:
+    - id: clu.orsolin_signet.n1.p1
+      holder: obj.thallen.court_roll
+      holder_kind: document
+      method: imethod.research
+      access: rolled
+      content: c1
+      direct: false
+      nodes:
+      - clu.orsolin_signet.n1
+      reveals_lead: []
+      invites: []
+      status: unfound
+      detect_tier: moderate
+    - id: clu.orsolin_signet.n1.p2
+      holder: npc.tobin_reave
+      holder_kind: person
+      method: imethod.inquiry
+      access: rolled
+      content: c2
+      direct: false
+      nodes:
+      - clu.orsolin_signet.n1
+      reveals_lead: []
+      invites: []
+      status: unfound
+      request_size: R3
+    - id: clu.orsolin_signet.n1.p3
+      holder: npc.abel_marrow
+      holder_kind: person
+      method: imethod.inquiry
+      access: core
+      content: c3
+      direct: false
+      nodes:
+      - clu.orsolin_signet.n1
+      reveals_lead: []
+      invites: []
+      status: unfound
+      request_size: R1
+    - id: clu.orsolin_signet.n1.p4
+      holder: npc.orsolin_vey
+      holder_kind: person
+      method: imethod.read
+      access: rolled
+      content: c4
+      direct: false
+      nodes:
+      - clu.orsolin_signet.n1
+      reveals_lead: []
+      invites: []
+      status: unfound
+    - id: clu.orsolin_signet.n2.p1
+      holder: loc.orsolin_manor
+      holder_kind: place
+      method: imethod.search
+      access: core
+      content: c5
+      direct: true
+      nodes:
+      - clu.orsolin_signet.n2
+      - clu.orsolin_signet.n3
+      reveals_lead: []
+      invites: []
+      status: unfound
+      prerequisites:
+      - pc in the manor's solar (the site's objective)
+    - id: clu.orsolin_signet.n2.p2
+      holder: npc.wick_pell
+      holder_kind: person
+      method: imethod.inquiry
+      access: core
+      content: c6
+      direct: false
+      nodes:
+      - clu.orsolin_signet.n2
+      reveals_lead: []
+      invites: []
+      status: unfound
+      request_size: R2
+    - id: clu.orsolin_signet.n2.p3
+      holder: obj.thallen.gatehouse_roll
+      holder_kind: document
+      method: imethod.research
+      access: core
+      content: c7
+      direct: false
+      nodes:
+      - clu.orsolin_signet.n1
+      - clu.orsolin_signet.n2
+      - clu.orsolin_signet.n3
+      reveals_lead: []
+      invites: []
+      status: unfound
+    - id: clu.orsolin_signet.n2.p4
+      holder: npc.orsolin_vey
+      holder_kind: person
+      method: imethod.interrogation
+      access: rolled
+      content: c8
+      direct: true
+      nodes:
+      - clu.orsolin_signet.n1
+      - clu.orsolin_signet.n2
+      - clu.orsolin_signet.n3
+      reveals_lead: []
+      invites: []
+      status: unfound
+      request_size: R5
+    reserve:
+    - id: clu.orsolin_signet.r1
+      holder: an old Woken of Harrowby who was a groom at the manor
+      holder_kind: person
+      method: imethod.inquiry
+      access: core
+      content: c2
+      nodes:
+      - clu.orsolin_signet.n1
+      place: loc.harrowby
+      request_size: R2
+    - id: clu.orsolin_signet.r2
+      holder: a salvaged portrait of the Vey cousins in Pell's yard
+      holder_kind: object
+      method: imethod.search
+      access: core
+      content: c1
+      nodes:
+      - clu.orsolin_signet.n1
+      place: loc.tolling.pell_yard
+    - id: clu.orsolin_signet.r3
+      holder: a Hem-guide who sheltered a night in the manor gatehouse
+      holder_kind: person
+      method: imethod.inquiry
+      access: core
+      content: c6
+      nodes:
+      - clu.orsolin_signet.n2
+      place: loc.bellhollow
+      request_size: R2
+    - id: clu.orsolin_signet.r4
+      holder: 'the Library''s Hem-map marked ''Vey manor: the household stands'''
+      holder_kind: document
+      method: imethod.research
+      access: rolled
+      content: c6
+      nodes:
+      - clu.orsolin_signet.n2
+      place: loc.tolling.library
+      detect_tier: moderate
+    fallbacks:
+    - trigger: stalled
+      form: the world tests her
+      delivers: 'event (core, n1): at Vantry Keep''s quarter-day hearing the Margravine''s magus asks the claimant to play the harp of Orrow, and she cannot'
+    opposition_clock:
+      id: clk.thallen.vantry_digs
+      name: The Margravine's clerks find the maid
+      kind: danger
+      segments: 8
+      start: 0
+      visibility: hidden
+      auto_ticks:
+      - boundary: week
+        ticks: 1
+        every: 2
+      omens:
+        stirring:
+        - 'a charter-clerk at the Waking House asking about the Veys (lead: n1.p3)'
+        building:
+        - 'Vantry outriders seen at Orsolin Manor''s gate (lead: n2.p1)'
+        imminent:
+        - 'the Margravine summons the claimant to the quarter-day hearing (lead: the fallback)'
+      on_complete: 'the Margravine exposes the claimant in her court: the Wakeful''s linchpin fate ''exposed'' fires (npc.orsolin_vey); Vantry''s goal clock +2'
+    lifecycle: provisional
+    basis:
+    - '15.9'
+    - 13.12.2
+    validity_check:
+      clu.orsolin_signet.n1:
+        placements: 6
+        kinds:
+        - document
+        - person
+        methods:
+        - inquiry
+        - interrogation
+        - read
+        - research
+        core: 2
+        places: 4
+        reserve: 2
+      clu.orsolin_signet.n2:
+        placements: 4
+        kinds:
+        - document
+        - person
+        - place
+        methods:
+        - inquiry
+        - interrogation
+        - research
+        - search
+        core: 3
+        places: 3
+        reserve: 2
+  - id: case.treaty_of_the_ford
+    name: The Treaty of the Ford
+    tags:
+    - situation.investigation
+    - org.crown.noble
+    atmosphere: 'theme: a promise a lord would rather nobody remembered'
+    begins_at: loc.tolling
+    thread_kind: quest
+    truth_condition: written only under 13.1.5 truth T4 option A (default)
+    solution:
+    - fact: sol.treaty.exists
+      value: the Treaty of the Ford, sealed at the Treaty Stone a hundred and sixty years ago, binds Esterlow's lords to honor the holdings of Orrow's folk under any crown
+    - fact: sol.treaty.removed
+      value: the Margravine had Tolling's copy taken from the Weigh-house archive two winters ago; it is in the iron chest of her muniment room
+    - fact: sol.treaty.copy
+      value: a sealed copy lies in Orsolin Manor's muniment chest
+    clues:
+      c1: 'the Treaty Stone''s inscription, half chiselled away: ''...the holdings of Orrow''s folk to stand under any crown...'''
+      c2: 'the Library''s salvaged register: ''Treaty of the Ford: copies to the Tolling archive and to the Vey muniments'''
+      c3: 'Justiciar Ferrant: shelf seven of the land-law press stands empty; it held the Ford treaty'
+      c4: 'Lady Orsolin: every Orrowan child learned that Orrow''s law was guaranteed at the Ford'
+      c5: 'Reeve Hask: the Margravine''s clerk took a sealed packet from the archive two winters ago'
+      c6: the archive's removal docket for shelf seven, in Hask's hand, under the Margravine's seal
+      c7: the Treaty itself, in the Margravine's iron chest
+      c8: 'a charter-clerk: the Margravine keeps ''the Orrowan paper'' in the iron chest and reads it when she is angry'
+      c9: the Vey copy of the Treaty, under the Vey seal, in the manor's muniment chest
+      c10: 'Lisbet (Lady Orsolin): her mistress kept the family''s copy of the Ford treaty in the iron-bound chest in the manor''s strongroom'
+      c11: 'Wick Pell: a strongroom chest with the Vey arms her crews could not open'
+    nodes:
+    - id: clu.treaty.n1
+      name: a treaty upholds Orrowan claims
+      fact: a treaty binding Esterlow's lords to honor Orrowan holdings exists
+      sealed_fact: sol.treaty.exists
+      necessary: true
+      deducible_from:
+      - - c1
+        - c2
+      - - c3
+        - c4
+      - - c7
+      - - c9
+      points_to:
+      - clu.treaty.n2
+      - clu.treaty.n3
+      prerequisites: []
+    - id: clu.treaty.n2
+      name: the Margravine removed Tolling's copy
+      fact: the Margravine had Tolling's copy of the treaty removed
+      sealed_fact: sol.treaty.removed
+      necessary: true
+      deducible_from:
+      - - c3
+        - c5
+      - - c6
+      - - c7
+      - - c8
+        - c3
+      points_to: []
+      prerequisites: []
+    - id: clu.treaty.n3
+      name: a copy survives at Orsolin Manor
+      fact: a sealed copy of the treaty is in Orsolin Manor's muniment chest
+      sealed_fact: sol.treaty.copy
+      necessary: true
+      deducible_from:
+      - - c2
+        - c11
+      - - c10
+      - - c9
+      points_to: []
+      prerequisites: []
+    placements:
+    - id: clu.treaty.n1.p1
+      holder: obj.thallen.treaty_stone_text
+      holder_kind: object
+      method: imethod.study
+      access: rolled
+      content: c1
+      direct: false
+      nodes:
+      - clu.treaty.n1
+      reveals_lead: []
+      invites:
+      - lore.history.orrow
+      status: unfound
+      detect_tier: moderate
+    - id: clu.treaty.n1.p2
+      holder: obj.thallen.library_register
+      holder_kind: document
+      method: imethod.research
+      access: rolled
+      content: c2
+      direct: false
+      nodes:
+      - clu.treaty.n1
+      - clu.treaty.n3
+      reveals_lead: []
+      invites: []
+      status: unfound
+      detect_tier: moderate
+    - id: clu.treaty.n1.p3
+      holder: npc.oda_ferrant
+      holder_kind: person
+      method: imethod.inquiry
+      access: core
+      content: c3
+      direct: false
+      nodes:
+      - clu.treaty.n1
+      - clu.treaty.n2
+      reveals_lead: []
+      invites: []
+      status: unfound
+      request_size: R2
+    - id: clu.treaty.n1.p4
+      holder: npc.orsolin_vey
+      holder_kind: person
+      method: imethod.inquiry
+      access: core
+      content: c4
+      direct: false
+      nodes:
+      - clu.treaty.n1
+      reveals_lead: []
+      invites: []
+      status: unfound
+      request_size: R1
+    - id: clu.treaty.n2.p1
+      holder: npc.corbin_hask
+      holder_kind: person
+      method: imethod.inquiry
+      access: rolled
+      content: c5
+      direct: false
+      nodes:
+      - clu.treaty.n2
+      reveals_lead: []
+      invites: []
+      status: unfound
+      request_size: R4
+    - id: clu.treaty.n2.p2
+      holder: obj.thallen.removal_docket
+      holder_kind: document
+      method: imethod.search
+      access: core
+      content: c6
+      direct: false
+      nodes:
+      - clu.treaty.n2
+      reveals_lead: []
+      invites: []
+      status: unfound
+      prerequisites:
+      - pc in the Weigh-house archive (Ferrant's leave at Warm, or R2)
+    - id: clu.treaty.n2.p3
+      holder: obj.thallen.vantry_treaty
+      holder_kind: document
+      method: imethod.search
+      access: rolled
+      content: c7
+      direct: true
+      nodes:
+      - clu.treaty.n1
+      - clu.treaty.n2
+      reveals_lead: []
+      invites: []
+      status: unfound
+      detect_tier: hard
+      prerequisites:
+      - pc in the muniment room of Vantry Keep
+    - id: clu.treaty.n2.p4
+      holder: npc.aldis_vantry
+      holder_kind: person
+      method: imethod.interrogation
+      access: rolled
+      content: c7
+      direct: false
+      nodes:
+      - clu.treaty.n2
+      reveals_lead: []
+      invites: []
+      status: unfound
+      request_size: R5
+    - id: clu.treaty.n3.p1
+      holder: obj.thallen.vey_treaty
+      holder_kind: document
+      method: imethod.search
+      access: core
+      content: c9
+      direct: true
+      nodes:
+      - clu.treaty.n1
+      - clu.treaty.n3
+      reveals_lead: []
+      invites: []
+      status: unfound
+      prerequisites:
+      - pc in Orsolin Manor's strongroom (a side area of the site)
+    - id: clu.treaty.n3.p2
+      holder: npc.orsolin_vey
+      holder_kind: person
+      method: imethod.inquiry
+      access: core
+      content: c10
+      direct: false
+      nodes:
+      - clu.treaty.n3
+      reveals_lead: []
+      invites: []
+      status: unfound
+      request_size: R2
+    - id: clu.treaty.n3.p3
+      holder: npc.wick_pell
+      holder_kind: person
+      method: imethod.inquiry
+      access: rolled
+      content: c11
+      direct: false
+      nodes:
+      - clu.treaty.n3
+      reveals_lead: []
+      invites: []
+      status: unfound
+      request_size: R2
+    reserve:
+    - id: clu.treaty.r1
+      holder: an old lowland farmer who saw the Stone's text before it was chiselled
+      holder_kind: person
+      method: imethod.inquiry
+      access: core
+      content: c1
+      nodes:
+      - clu.treaty.n1
+      place: loc.harrowby
+      request_size: R1
+    - id: clu.treaty.r2
+      holder: an Orrowan law-primer in the Bellwardens' library citing 'the Ford'
+      holder_kind: document
+      method: imethod.research
+      access: rolled
+      content: c4
+      nodes:
+      - clu.treaty.n1
+      place: loc.tolling.belltower
+      detect_tier: moderate
+    - id: clu.treaty.r3
+      holder: a dismissed archive-boy who carried the packet to the Margravine's clerk
+      holder_kind: person
+      method: imethod.inquiry
+      access: core
+      content: c5
+      nodes:
+      - clu.treaty.n2
+      place: loc.tolling
+      request_size: R2
+    - id: clu.treaty.r4
+      holder: the Keep's charter-clerk's day-book
+      holder_kind: document
+      method: imethod.research
+      access: rolled
+      content: c8
+      nodes:
+      - clu.treaty.n2
+      place: loc.vantry_keep
+      detect_tier: hard
+    - id: clu.treaty.r5
+      holder: a Vey seal-matrix sold in Pell's yard, its owner's chest described in the sale-note
+      holder_kind: object
+      method: imethod.search
+      access: core
+      content: c11
+      nodes:
+      - clu.treaty.n3
+      place: loc.tolling.pell_yard
+    - id: clu.treaty.r6
+      holder: a Woken steward of the Veys at the Waking House
+      holder_kind: person
+      method: imethod.inquiry
+      access: core
+      content: c10
+      nodes:
+      - clu.treaty.n3
+      place: loc.tolling.hearth_shrine
+      request_size: R2
+    fallbacks:
+    - trigger: stalled
+      form: a witness seeks the PC out
+      delivers: Justiciar Ferrant comes to the PC with her suspicion (clu.treaty.n1.p3, core)
+    opposition_clock:
+      id: clk.thallen.treaty_burned
+      name: The Margravine's men burn the Vey copy
+      kind: danger
+      segments: 6
+      start: 0
+      visibility: hidden
+      auto_ticks:
+      - boundary: week
+        ticks: 1
+        when: the fact vantry.alerted_treaty is set (the PC asked Hask, a clerk or the Margravine about the treaty, or the Wakeful petitioned with it)
+      omens:
+        stirring:
+        - 'Vantry outriders asking Pell''s crews the way to Orsolin Manor (lead: n3.p3)'
+        building:
+        - 'Captain Stane rides north with lamp oil in his packs (lead: n3.p1)'
+        imminent:
+        - 'smoke over the Hem toward the manor (lead: n3.p1)'
+      on_complete: clu.treaty.n3.p1 becomes lost (the Vey copy burned); the Keep's copy and the Stone remain
+    lifecycle: provisional
+    basis:
+    - '15.9'
+    - 13.12.3
+    validity_check:
+      clu.treaty.n1:
+        placements: 6
+        kinds:
+        - document
+        - object
+        - person
+        methods:
+        - inquiry
+        - research
+        - search
+        - study
+        core: 3
+        places: 6
+        reserve: 2
+      clu.treaty.n2:
+        placements: 5
+        kinds:
+        - document
+        - person
+        methods:
+        - inquiry
+        - interrogation
+        - search
+        core: 2
+        places: 2
+        reserve: 2
+      clu.treaty.n3:
+        placements: 4
+        kinds:
+        - document
+        - person
+        methods:
+        - inquiry
+        - research
+        - search
+        core: 2
+        places: 4
+        reserve: 2

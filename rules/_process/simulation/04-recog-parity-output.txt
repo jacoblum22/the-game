@@ -1,0 +1,62 @@
+=== I-003 parity: session at which the focus calling reaches each tier (p10/median/p90; 99 = not within 90 sessions; 200 seeds) ===
+archer (combat calling, 03 scenario A tags)  current  T1: 3/4/6  T2: 7/9/12  T3: 13/15/20  T4: 24/27/30  T5: 43/47/51 | T5 within 90: 200 of 200
+envoy (social contests)                      current  T1: 2/3/4  T2: 5/6/8  T3: 10/13/17  T4: 19/22/25  T5: 38/41/47 | T5 within 90: 200 of 200
+envoy (social contests)                      revised  T1: 3/4/5  T2: 6/8/11  T3: 12/14/18  T4: 22/25/28  T5: 39/42/46 | T5 within 90: 200 of 200
+smith (craft contests: works)                current  T1: 3/4/5  T2: 6/7/9  T3: 99/99/99  T4: 99/99/99  T5: 99/99/99 | T5 within 90: 0 of 200
+smith (craft contests: works)                revised  T1: 3/4/5  T2: 6/8/11  T3: 12/14/18  T4: 22/24/28  T5: 37/40/44 | T5 within 90: 200 of 200
+scholar (lore contests: sealed truths)       current  T1: 2/3/4  T2: 5/6/7  T3: 10/12/21  T4: 19/22/26  T5: 38/41/46 | T5 within 90: 200 of 200
+scholar (lore contests: sealed truths)       revised  T1: 3/4/5  T2: 6/8/11  T3: 12/14/18  T4: 22/25/28  T5: 39/42/46 | T5 within 90: 200 of 200
+envoy, 04's original social shape (2-4 beats, 15% Dire) current  T1: 2/3/5  T2: 5/6/8  T3: 12/15/32  T4: 22/26/40  T5: 44/51/64 | T5 within 90: 199 of 200
+envoy, 04's original social shape (2-4 beats, 15% Dire) revised  T1: 3/4/6  T2: 7/9/12  T3: 14/17/23  T4: 26/29/34  T5: 45/49/54 | T5 within 90: 200 of 200
+
+| Calling | rules | median T3 | vs archer | median T5 | vs archer | within +-20%% at both |
+|---|---|---|---|---|---|---|
+| archer (combat calling, 03 scenario A tags) | (combat) | 15 | - | 47 | - | - |
+| envoy (social contests) | current | 13 | -13% | 41 | -13% | yes |
+| envoy (social contests) | revised | 14 | -7% | 42 | -11% | yes |
+| smith (craft contests: works) | current | 99 | +560% | never | - | no |
+| smith (craft contests: works) | revised | 14 | -7% | 40 | -15% | yes |
+| scholar (lore contests: sealed truths) | current | 12 | -20% | 41 | -13% | yes |
+| scholar (lore contests: sealed truths) | revised | 14 | -7% | 42 | -11% | yes |
+| envoy, 04's original social shape (2-4 beats, 15% Dire) | current | 15 | +0% | 51 | +9% | yes |
+| envoy, 04's original social shape (2-4 beats, 15% Dire) | revised | 17 | +13% | 49 | +4% | yes |
+
+=== I-083 / I-039 / I-037 (revision C2a): contest opposition from 20 seeded worlds; power band from confirmed tiers ===
+  highest party band in any world: old seed 4; revised seed 5 (median per world: 3.0 at band 4, 2.0 at band 5)
+archer (combat calling, 03 scenario A tags)  w-new           T1: 3/4/6  T2: 7/9/12  T3: 14/16/20  T4: 25/28/32  T5: 44/48/52 | T5 within 90: 200 of 200
+envoy (social contests)                      w-old           T1: 3/4/5  T2: 6/8/11  T3: 13/15/19  T4: 24/27/99  T5: 99/99/99 | T5 within 90: 0 of 200
+envoy (social contests)                      w-new-nopowers  T1: 3/4/5  T2: 6/8/11  T3: 13/16/21  T4: 99/99/99  T5: 99/99/99 | T5 within 90: 0 of 200
+envoy (social contests)                      w-new           T1: 3/4/5  T2: 6/8/11  T3: 13/16/21  T4: 24/27/33  T5: 42/45/49 | T5 within 90: 200 of 200
+smith (craft contests: works)                w-old           T1: 3/4/6  T2: 6/9/14  T3: 12/16/25  T4: 23/27/33  T5: 39/44/48 | T5 within 90: 200 of 200
+smith (craft contests: works)                w-new-nopowers  T1: 3/4/6  T2: 6/9/14  T3: 13/17/25  T4: 23/27/33  T5: 39/43/49 | T5 within 90: 200 of 200
+smith (craft contests: works)                w-new           T1: 3/4/6  T2: 6/9/14  T3: 13/17/25  T4: 23/27/34  T5: 39/44/49 | T5 within 90: 200 of 200
+scholar (lore contests: sealed truths)       w-old           T1: 3/4/5  T2: 6/8/12  T3: 12/15/19  T4: 24/28/99  T5: 99/99/99 | T5 within 90: 0 of 200
+scholar (lore contests: sealed truths)       w-new-nopowers  T1: 3/4/5  T2: 6/8/12  T3: 13/16/21  T4: 99/99/99  T5: 99/99/99 | T5 within 90: 0 of 200
+scholar (lore contests: sealed truths)       w-new           T1: 3/4/5  T2: 6/8/12  T3: 13/16/20  T4: 24/27/32  T5: 41/45/49 | T5 within 90: 200 of 200
+
+| Calling | rules | median T3 | vs archer | median T4 | median T5 | vs archer | within +-20%% at both |
+|---|---|---|---|---|---|---|---|
+| archer (combat calling, 03 scenario A tags) | (combat, confirmed band) | 16 | - | 28 | 48 | - | - |
+| envoy (social contests) | w-old | 15 | -6% | 27 | never | - | no |
+| envoy (social contests) | w-new-nopowers | 16 | +0% | never | never | - | no |
+| envoy (social contests) | w-new | 16 | +0% | 27 | 45 | -6% | yes |
+| smith (craft contests: works) | w-old | 16 | +0% | 27 | 44 | -8% | yes |
+| smith (craft contests: works) | w-new-nopowers | 17 | +6% | 27 | 43 | -10% | yes |
+| smith (craft contests: works) | w-new | 17 | +6% | 27 | 44 | -8% | yes |
+| scholar (lore contests: sealed truths) | w-old | 15 | -6% | 28 | never | - | no |
+| scholar (lore contests: sealed truths) | w-new-nopowers | 16 | +0% | never | never | - | no |
+| scholar (lore contests: sealed truths) | w-new | 16 | +0% | 27 | 45 | -6% | yes |
+
+I-039 exploit: a farming envoy (the envoy above, but one contest scene in three goes to the highest band the rules grant, at
+a DC of power band + 1) in worlds with an added tier-5 faction (head band 5, binding; door-warden band 1, not binding)
+  w-old           T1: 3/3/4  T2: 5/7/9  T3: 11/13/16  T4: 22/24/27  T5: 40/44/48 | T5 within 90: 200 of 200 | band-4/5 deeds in sessions 1-10: median 24
+  w-new           T1: 3/3/4  T2: 6/7/10  T3: 12/14/19  T4: 22/24/27  T5: 39/43/47 | T5 within 90: 200 of 200 | band-4/5 deeds in sessions 1-10: median 0
+
+=== R9 (I-004): counted / weighted at the focus key after 10 sessions (p10/median/p90 of the ratio; 200 seeds) ===
+  archer (combat calling, 03 scenario A tags)  current  0.20 / 0.23 / 0.26
+  envoy (social contests)                      current  0.15 / 0.19 / 0.21
+  envoy (social contests)                      revised  0.24 / 0.30 / 0.39
+  smith (craft contests: works)                current  0.63 / 0.71 / 0.80
+  smith (craft contests: works)                revised  0.61 / 0.73 / 0.88
+  scholar (lore contests: sealed truths)       current  0.15 / 0.18 / 0.22
+  scholar (lore contests: sealed truths)       revised  0.24 / 0.29 / 0.39

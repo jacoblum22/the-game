@@ -1,0 +1,36 @@
+# data/contrib/boundaries.05.yaml
+# Purpose: ch.05's owner-block for data/boundaries.yaml. The five handlers 00 reserved for ch.05 are DEFINED in
+#   05 (rule ids below) and restated here with their rule ids; four handlers are added.
+# Owner: 05-abilities-focus-magic. Schema: data/SCHEMAS.md#boundariesyaml. Phase 3 = recover (00.7.5).
+
+schema_version: 1
+blocks:
+- owner: '05'
+  handlers:
+  - {id: h.05.round_recharge, boundary: round, phase: 3, interrupting: false, effect: 'refresh uses with per: round', rule_id: 05.4.6, status: reserved by 00; defined}
+  - {id: h.05.conflict_recharge, boundary: conflict_end, phase: 3, interrupting: false, effect: 'refresh uses with per: conflict_end and below on the refresh ladder', rule_id: 05.4.6, status: reserved by 00; defined}
+  - {id: h.05.scene_recharge, boundary: scene_end, phase: 3, interrupting: false, effect: 'refresh uses with per: scene_end and below; reset focus.generated_this_scene; end scene-duration ability effects not already expired', rule_id: 05.4.6; 05.6.10, status: reserved by 00; defined}
+  - {id: h.05.day_recharge, boundary: day, phase: 3, interrupting: false, effect: 'refresh uses with per: day; reset focus.short_rests_today', rule_id: 05.4.6; 05.6.9, status: reserved by 00; defined}
+  - id: h.05.focus_recover
+    boundary: [breather, rest_short, rest_long]
+    phase: 3
+    interrupting: false
+    effect: restore Focus by rest type and quality (T-05-5); apply the resonant-place +1; runs after h.07.rest_recovery
+    rule_id: 05.6.9
+    status: reserved by 00; defined
+  - id: h.05.rest_recharge
+    boundary: [rest_short, rest_long]
+    phase: 3
+    interrupting: false
+    effect: 'refresh uses with per: rest_short (both rests) and per: rest_long (long rest only) and everything below on the refresh ladder; on rest_long reset healings_since_long_rest, overdraws_since_long_rest, restored_by_consumables_since_long_rest; on rest_short reset breathers_since_short_rest'
+    rule_id: 05.4.6; 05.6.6; 05.6.11; 05.7.8
+    status: added
+  - {id: h.05.reslot, boundary: rest_long, phase: 3, interrupting: false, effect: offer the exchange between acquired slots and the shelf or library (quality full or partial only), rule_id: 05.2.7, status: added}
+  - {id: h.05.reserve, boundary: rest_long, phase: 3, interrupting: false, effect: 'resolve reserve charging: bank the charged points if the holder was never Spent since declaring them, else lose the charge; restore focus.max; accept a new declaration', rule_id: 05.6.12, status: added}
+  - id: h.05.provisional_abilities
+    boundary: [reflection, season]
+    phase: 8
+    interrupting: false
+    effect: confirm non-pick abilities used in 3 different scenes; at the second season boundary shelve the unconfirmed, with a warning one season earlier
+    rule_id: 05.2.10
+    status: added
