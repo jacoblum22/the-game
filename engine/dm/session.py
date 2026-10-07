@@ -12,6 +12,7 @@ calls have unique ids and the exchange is in the turn log. No time passes at a s
 
 from __future__ import annotations
 
+import re
 from typing import Any
 
 from engine.audit.safety import safety_prefs
@@ -232,8 +233,8 @@ def opening(ctx: TurnContext) -> Response:  # rule: 12.16.16
             if inciting:
                 rec.notes.append(f"the inciting incident: {inciting}")
             for lead in op.get("leads") or []:
-                text = lead.get("text") if isinstance(lead, dict) else lead
-                if text:
+                text = (lead.get("text") or lead.get("lead")) if isinstance(lead, dict) else lead
+                if text and not str(text).startswith("the incident itself"):  # the incident is noted above
                     rec.notes.append(f"a lead to make noticeable: {text}")
             narr = narrate_checked(ctx, rec, purpose="opening")
             tx.add(Event.of("meta_set", source="engine", rule_id="12.16.16", key="game.opened", value=turn_id))
@@ -258,7 +259,10 @@ def where_line(state: WorldState) -> str:  # rule: 12.5.4
     where = _name(state, location(state, pc))
     watch = WATCHES[state.time.now.watch] if 0 <= state.time.now.watch < len(WATCHES) else ""
     open_pause = state.open_pause()
-    tail = f"; waiting on: {open_pause.prompt}" if open_pause is not None and open_pause.prompt else ""
+    # the open choice by what it is about, in words (its prompt can carry the frame's mechanics: those are in the
+    # OFFER block that is shown again on return)
+    about = re.split(r"[:;(]", open_pause.prompt)[0].strip().rstrip(".") if open_pause and open_pause.prompt else ""
+    tail = f"; your choice is still open: {about}" if about else ""
     return f"{state.entities[pc].name}: " + (f"at {where}, " if where else "") + f"{watch}{tail}."
 
 

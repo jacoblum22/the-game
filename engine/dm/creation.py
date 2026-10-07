@@ -281,7 +281,8 @@ def block_spec(bid: str, d: Draft, state: WorldState, rules: Any, *, show_all: b
                      cards=("PR-02-7", "02.6.4"))
     if bid == "c7":
         kit = _kits(rules)[life["kit_id"]]
-        opts = [Choice(id=f"kit:{i:d}", label=" + ".join(_item_name(it["item_tag"]) for it in opt))
+        opts = [Choice(id=f"kit:{i:d}", label=" + ".join(_item_name(it["item_tag"], it.get("note"), rules)
+                                                         for it in opt))
                 for i, opt in enumerate(kit["choices"][0]["options"])]
         return Block(id=bid, title="What you carry.", lines=[f"{kit['name']}: which do you carry?"], options=opts,
                      default="kit:0", default_line="the first.")
@@ -445,8 +446,21 @@ def _attr_line(a: dict[str, int]) -> str:
     return ", ".join(f"{k.capitalize()} {a[k]:+d}" for k in ATTRS)
 
 
-def _item_name(tag: str, note: str | None = None) -> str:
-    return note or tag.rsplit(".", 1)[-1].replace("_", " ")
+def _item_name(tag: str, note: str | None = None, rules: Any = None) -> str:  # rule: 08.1.11
+    """A kit item's name: the kit's own note ("pack and bedroll"), else the base item the tag resolves to
+    (`base_items.yaml#kit_resolution`: item.shield.light -> "round shield", item.tool.light -> "torches"), else
+    the tag's last segment in words."""
+    if note:
+        return note
+    base = None
+    if rules is not None:
+        doc = rules.doc("base_items")
+        bid = (doc.get("kit_resolution") or {}).get(tag)
+        base = next((b.get("name") for b in doc.get("base_items") or [] if b.get("id") == bid), None) if bid else None
+    if base:
+        name = re.sub(r"\s*\([^()]*\)$", "", str(base)).strip()  # "Torches (5)": the count is a quantity
+        return name[:1].lower() + name[1:]
+    return tag.rsplit(".", 1)[-1].replace("_", " ")
 
 
 def _bond_text(seed: str) -> str:
@@ -518,6 +532,8 @@ def build_record(d: Draft, state: WorldState, rules: Any) -> dict[str, Any]:  # 
         for ch in kit.get("choices") or []:
             opt = ch["options"][min(kit_pick, len(ch["options"]) - 1) if kid == life.get("kit_id") else 0]
             items += [{**it, "kit": kid} for it in opt]
+    for it in items:
+        it["name"] = _item_name(it["item_tag"], it.get("note"), rules)
         coin += int(kit.get("coin") or 0)
     abilities = [tech] if tech else []
     return {
@@ -600,7 +616,7 @@ def sheet(rec: dict[str, Any], rules: Any) -> str:  # rule: PR-02-6
     letters = "reads" if "lic.lang.letters" in rec["licenses"] else "cannot read"
     tongue = ", ".join(f"{lic.split('.')[-1].replace('_', ' ').capitalize()} ({g})" for lic, g in rec["tongues"].items())
     lines.append(f"  Speaks: {tongue} · {letters}")
-    items = ", ".join(_item_name(it["item_tag"], it.get("note")) for it in rec["items"])
+    items = ", ".join(it.get("name") or _item_name(it["item_tag"], it.get("note"), rules) for it in rec["items"])
     lines.append(f"  Carries: {items} · {rec['coin']:d} coin")
     asp = rec["aspiration"]["text"] if isinstance(rec.get("aspiration"), dict) else (rec.get("aspiration") or OPEN)
     lines.append(f"  Wants: \"{rec['drive']}\"   Hopes to become: {asp}   Matters: {_anchor_text(rec['anchor'])}")
@@ -639,10 +655,11 @@ def write_character(tx: Transaction, rec: dict[str, Any], d: Draft) -> str:  # r
     tx.add(define_focus(pc, base=rec["focus_base"]))  # rule: 02.7.2
     carried: list[str] = []
     for it in rec["items"]:
-        iid = ids.entity_id("item", _item_name(it["item_tag"]), tx.state.entities)
+        name = it.get("name") or _item_name(it["item_tag"], it.get("note"))
+        iid = ids.entity_id("item", name, tx.state.entities)
         tx.add(Event.of("entity_created", source="creation", rule_id="02.8.1", entity=EntityRecord(
-            id=iid, kind="item", name=_item_name(it["item_tag"]), tags=[it["item_tag"]],
-            data={k: v for k, v in it.items()} | {"owner": pc})))
+            id=iid, kind="item", name=name, tags=[it["item_tag"]],
+            data={k: v for k, v in it.items() if k != "name"} | {"owner": pc})))
         carried.append(iid)
     facts: list[tuple[str, Any, str, str]] = [
         ("origin.people", rec["people"], "02.4.7", "fact"), ("origin.upbringing", rec["upbringing"], "02.4.7", "fact"),

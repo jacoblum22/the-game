@@ -38,7 +38,7 @@ from engine.harm.state import (
     on_ladder,
     wound_load,
 )
-from engine.store.conditions import apply_condition
+from engine.store.conditions import apply_condition, remove_condition
 from engine.store.events import Event
 
 SEVERITIES = ("S1", "S2", "S3", "S4", "S5")
@@ -142,6 +142,22 @@ def go_down(ctx: Any, w: Writes, eid: str, *, cause: str, source: dict[str, Any]
     w.fact(eid, "setback.defeated", {"cause": cause}, rule_id="07.2.9")
     _cond(ctx, w, eid, "cond.unconscious", source, "07.2.9")
     _cond(ctx, w, eid, "cond.prone", source, "07.2.9")
+
+
+def wake(ctx: Any, eid: str, *, writes: Writes | None = None) -> list[Event]:  # rule: 07.2.9
+    """A Down character wakes, Staggered, with its wounds (07.2.9: when the victor's disposition says, or after one
+    interval when nothing took it): `down` false and `cond.unconscious` removed; it stays prone where it fell, and
+    its Vitality and wound load are unchanged (rest heals them). [] when it is not Down."""
+    w = writes or Writes.of(ctx, source="07.2.9")
+    start = len(w.events)
+    if not is_down(w, eid):
+        return []
+    w.fact(eid, "down", False, rule_id="07.2.9")
+    for inst in ctx.state.conditions_on(eid):
+        if inst.condition_id == "cond.unconscious":
+            w.extend(remove_condition(ctx.state, ctx.rules, inst.instance_id, "wakes (07.2.9)",
+                                      rule_id="07.2.9").events)
+    return w.events[start:]
 
 
 def _enter_dying(ctx: Any, w: Writes, eid: str, res: HarmResult, source: dict[str, Any], key1: str | None) -> None:

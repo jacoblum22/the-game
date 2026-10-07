@@ -709,3 +709,24 @@ readers take a `WorldState`. Errors: `engine.world.common.WorldError`. The PC is
 - CLI (`play/render.py`): `reflow` joins hard wraps; `strip_listing` drops a block's own copy of the choices;
   `choice_lines` prints `  N) label` once. A single in-range letter picks a choice; a bare number with no choices
   open is not sent.
+
+## End-to-end and recorded games (T076, T077; second smoke fixes)
+- **Scripted player** (`tests/e2e/driver.py`): `Driver.start(path, seed=, model=None, name=)` (mixed seed partly in
+  words, quick start), `.play(n)`, `.settle(resp)`, `.travel()`, `.retire_and_continue()`, `.call(kind, arg)`;
+  every pause kind first reached is closed and reopened (`Game.open`) and must come back equal (`.seen`,
+  `.resumed`); `.packet_sizes()` + `trend()` measure rendered packets from `model_calls`.
+  `tests/e2e/test_offline_game.py`: 60 turns in the default run, 500 turns with `--runslow` (or `RUN_SLOW=1`;
+  the `slow` marker is registered in tests/conftest.py), and the lethal path (warning, last chance, death, new
+  character) with a ScriptedModel.
+- **Recorded games**: `Game.export_record(path) -> dict` (inputs, each call's response + `packet_digest`, an event
+  digest each), `Game.replay_record(record, check_packets=True) -> ReplayResult`; `ReplayModel(records,
+  check_packets=)` diverges when a packet's text changed (naming the `[SECTION]`s). Fixed games live in
+  `tests/replay/games/*.json`; re-record with `python -m tests.replay.record_games` when a change is intended.
+- Offline stand-in: the Framer names a stakes source when the act plainly risks one (attack someone present,
+  a height, water, sneaking: `_stakes`), Moderate tier, cost forms in words; the World answers only the present NPCs
+  an act engages; tbl.npc_action rows are worded differently when they repeat; the Director's agenda comes from
+  the incident, the place headed for or an open thread.
+- Turn loop: only NPCs present in the new scene act after a player's cut; a Down PC wakes after one interval
+  (`engine.harm.apply.wake`, 07.2.9); "what are my options?" gets `turn.stuck_answer` ([LEADS], 12.8.5); claims
+  that restate a record note the engine gives (`claims.GIVEN_NOTES`: the inciting incident, leads) are supported;
+  cost.exposure's observer defaults to someone present. Kit items are named from `base_items.yaml`.

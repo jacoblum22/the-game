@@ -13,6 +13,7 @@ from typing import Any
 
 from pydantic import BaseModel, Field
 
+from engine.dm.player_text import second_person
 from engine.store.projection import WorldState
 from engine.store.views import codex_view
 
@@ -224,7 +225,8 @@ def journal(state: WorldState, rules: Any = None, limit: int = 30) -> CodexView:
     lines += [f"  {e['time']}: {e['text']}" for e in entries[-limit:]]
     if known:
         lines.append("  Known:")
-        lines += [f"    {k['about']}: {k['what']} — {_value_words(k['value'])} ({k['how']})" for k in known[-limit:]]
+        lines += [second_person(f"    {k['about']}: {k['what']} — {_value_words(k['value'])} ({k['how']})")
+              for k in known[-limit:]]
     if len(lines) == 1:
         lines.append("  nothing yet")
     return CodexView(section="journal", text="\n".join(lines), data={"chronicle": entries, "known": known})
@@ -242,7 +244,7 @@ def threads(state: WorldState, rules: Any = None) -> CodexView:  # rule: 12.6.6
     for t in rows:
         flag = " (stalled)" if t["stalled"] else ""
         text = f" — {t['text']}" if t["text"] and t["text"] != t["name"] else ""
-        lines.append(f"  {t['name']} [{t['status']}]{flag}{text}")
+        lines.append(second_person(f"  {t['name']} [{t['status']}]{flag}{text}"))
     if not rows:
         lines.append("  none")
     data = [{k: t[k] for k in ("id", "name", "text", "status", "stalled")} for t in rows]

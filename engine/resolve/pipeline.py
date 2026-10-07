@@ -513,9 +513,14 @@ def _cost_params(env: PipelineEnv, frame: Frame, menu: str) -> dict[str, Any]:
     target = frame.beat.target if frame.beat.target and frame.beat.target != "none" else None
     p: dict[str, Any] = {}
     other = frame.defender or target
-    if menu == "cost.exposure" and other and st.entities.get(other) and st.entities[other].kind in (
-            "npc", "adversary", "companion"):
-        p["observer"] = other
+    people = ("npc", "adversary", "companion")
+    if menu == "cost.exposure":  # rule: 01.13.6
+        # the observer: the one acted against, else someone present to notice (01.13.6 "false for a scene with no
+        # one to notice": the frame check accepted the cost through the scene's people)
+        cast = [i for i in (st.scene.cast_present if st.scene else []) if i != actor]
+        seen = [i for i in [other, *cast] if i and st.entities.get(i) and st.entities[i].kind in people]
+        if seen:
+            p["observer"] = seen[0]
     if menu == "cost.gear":
         held = [f.value for f in st.facts.values() if f.subject == actor and f.predicate in ("holds", "carries",
                                                                                               "wields")]

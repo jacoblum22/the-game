@@ -210,9 +210,14 @@ def test_framer_defaults() -> None:
     assert out["alternate_cost"]["menu_id"] == "cost.gear"
 
 
-def test_world_answers_each_npc() -> None:
-    out = fill(Role.WORLD)
-    assert [r["npc"] for r in out["responses"]] == ["npc.mara_voss", "npc.gate_guard"]
+def test_world_answers_only_the_npcs_engaged() -> None:
+    # 12.2.9: an NPC responds to what this turn's acts engage; a look around engages no one
+    assert fill(Role.WORLD, "player: I look around. (DECLARATION)\nbeat: You look around -> no roll")["responses"] == []
+    named = fill(Role.WORLD, "player: I wave at Old Tam. (DECLARATION)\nbeat: You wave at Old Tam -> no roll")
+    assert [r["npc"] for r in named["responses"]] == ["npc.gate_guard"]
+    spoke = fill(Role.WORLD, 'player: "Evening." (SPEECH)')
+    assert [r["npc"] for r in spoke["responses"]] == ["npc.mara_voss"]
+    assert all(r["table_context"]["tags"] == [] for r in spoke["responses"])  # no 'threat' tag unless earned
 
 
 def test_director_cuts_after_quiet_turns() -> None:

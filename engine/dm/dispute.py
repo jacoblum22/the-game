@@ -99,8 +99,9 @@ def _delivered_in(store: Any, claim: DisputedClaim, current: str | None) -> Any:
 
 
 def _relevant_exchange(store: Any, words: list[str], current: str | None) -> Any:
-    """The latest turn whose exchange mentions any of `words` (else the latest turn)."""
-    turns = _turns(store, current)
+    """The latest play turn whose exchange mentions any of `words` (else the latest play turn). Engine turns (the
+    opening, a session's open or close, an epilogue: input "(...)") hold where-you-stand lines, not exchanges."""
+    turns = [tr for tr in _turns(store, current) if not tr.input_verbatim.startswith("(")]
     for tr in turns:
         hay = (tr.input_verbatim + " " + tr.delivered_verbatim).lower()
         if any(w and w.lower() in hay for w in words):

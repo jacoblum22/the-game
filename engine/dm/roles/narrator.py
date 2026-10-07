@@ -12,6 +12,7 @@ redraft the failing verdicts with the store's values (lead decision). The view i
 
 from __future__ import annotations
 
+import re
 from collections.abc import Sequence
 from typing import Any, Literal
 
@@ -20,6 +21,7 @@ from pydantic import BaseModel, Field
 from engine.dm.adjudication import AdjudicationRecord, BeatEntry
 from engine.dm.context import TurnContext
 from engine.dm.packet import build_packet
+from engine.dm.player_text import clean
 from engine.dm.roles.prompts import load_prompt
 from engine.dm.schemas import build_schema, schema_context
 from engine.llm.base import Role, call_role
@@ -73,7 +75,8 @@ def name_of(state: WorldState, eid: str | None, pc: str | None = None) -> str:
     return e.name
 
 
-def _beat_line(state: WorldState, b: BeatEntry, pc: str | None, paused: bool = False) -> str:  # rule: 12.14.12
+def _beat_line(state: WorldState, b: BeatEntry, pc: str | None, paused: bool = False,
+               rules: Any = None) -> str:  # rule: 12.14.12
     bits = [f"beat: {b.restatement.rstrip('.')}"]
     if b.approach_words:
         bits.append(f"approach: {b.approach_words}")
@@ -90,8 +93,9 @@ def _beat_line(state: WorldState, b: BeatEntry, pc: str | None, paused: bool = F
         bits.append(f"no roll: {b.gate_words}")
     elif paused:
         bits.append("not resolved yet: the turn waits at the pause before it")
-    if b.reach_words:
-        bits.append("delivered: " + "; ".join(b.reach_words))
+    words = [w for w in (clean(x, rules) for x in b.reach_words) if not re.search(r"\d", w)]  # 12.14.4
+    if words:  # the reach rung, then the anchor's ladder line for it in words (the rung alone says nothing new)
+        bits.append(f"delivered: {b.reach or 'as far as it goes'}: " + "; ".join(words))
     for c in b.costs:
         bits.append(f"cost paid: {c.form or c.menu_id.removeprefix('cost.').replace('_', ' ')}")
     for h in b.harm:
@@ -124,7 +128,7 @@ def record_text(state: WorldState, record: AdjudicationRecord, *, player_message
     if record.scene.started:
         lines.append(f"- a new scene opens: {record.scene.header or 'framed now'}; frame it first (12.4.3)")
     last = len(record.beats) - 1
-    lines += [_beat_line(state, b, pc, paused=record.pause is not None and i == last and not b.degree)
+    lines += [_beat_line(state, b, pc, paused=record.pause is not None and i == last and not b.degree, rules=rules)
               for i, b in enumerate(record.beats)]
     for o in record.oracle:
         lines.append(f"- question \"{o.question}\": the answer is {o.answer}")

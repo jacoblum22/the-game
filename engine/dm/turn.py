@@ -388,14 +388,46 @@ CODEX_WORDS = {"sheet": ("sheet", "my stats", "my character"), "abilities": ("ab
                "threads": ("threads", "leads", "quests")}
 
 
+STUCK_WORDS = ("what are my options", "what can i do", "what now", "what should i do", "i'm stuck", "i am stuck",
+               "im stuck", "don't know what to do", "dont know what to do")
+
+
+def stuck_answer(state: Any) -> str:  # rule: 12.8.5
+    # coarse: 12.8.5 (leads from active threads, the people here and the places within reach; no lead injection when
+    # state holds none)
+    """[LEADS] two or three concrete ways forward drawn from state, closed with "or anything else" (12.15.10)."""
+    from engine.dm.oof import short_text
+    from engine.dm.player_text import entity_names, second_person
+    from engine.world.places import location, reachable
+    from engine.world.social import thread_list
+
+    shown = entity_names(state)
+    threads = sorted((t for t in thread_list(state) if t["status"] == "active" and t["id"] in shown),
+                     key=lambda t: -int(t["weight"]))
+    people = [shown[i] for i in (state.scene.cast_present if state.scene else [])
+              if i in shown and state.entities[i].kind in ("npc", "companion")]
+    here = location(state)
+    places = [shown[x.to] for x in (reachable(state, here) if here else []) if x.to != here and x.to in shown]
+    leads = [*(f"{short_text(second_person(t['text'] or t['name']))} (an open thread)" for t in threads[:1]),
+             *(f"{p}, here with you" for p in people[:1]),
+             *(f"{p}, within reach" for p in places[:1]),
+             *(f"{short_text(second_person(t['text'] or t['name']))} (an open thread)" for t in threads[1:2])][:3]
+    if not leads:
+        return "[LEADS] Nothing pressing is on record yet: look around, or anything else you have in mind."
+    return "[LEADS] Some ways forward — or anything else you have in mind:\n" + "\n".join(f"  • {x}" for x in leads)
+
+
 def oof_answer(ctx: TurnContext, text: str) -> str:  # rule: 12.5.10
-    """12.5.10: a rule id → its card (engine.dm.codex); a codex section by name; odds → the OFFER shows them."""
+    """12.5.10: a rule id → its card (engine.dm.codex); a codex section by name; odds → the OFFER shows them;
+    "what can I do?" → the stuck answer (12.8.5)."""
     from engine.dm.codex import codex
 
     m = RULE_ID.search(text)
     if m:
         return codex(ctx.state, f"rules {m.group(1)}", ctx.rules).text
-    low = text.lower()
+    low = text.lower().replace("’", "'")
+    if any(w in low for w in STUCK_WORDS):
+        return stuck_answer(ctx.state)
     for section, words in CODEX_WORDS.items():
         if any(w in low for w in words):
             return codex(ctx.state, section, ctx.rules).text
@@ -569,10 +601,13 @@ def _turn_end(ctx: TurnContext, rec: AdjudicationRecord, oof: list[dict[str, str
     """At the PC's turn end: the dying check while Dying (h.07.dying_check is M2; the M1 loop calls it)."""
     from engine.harm.apply import dying_check
     from engine.harm.ctx import HarmCtx
-    from engine.harm.state import DYING, harm_state
+    from engine.harm.state import DYING, harm_state, is_down
 
     pc = rec.pc
     if pc and _finish_last_stand(ctx, rec, pc):
+        return
+    if pc and is_down(ctx.state, pc):
+        _wake(ctx, rec, pc)
         return
     if not pc or harm_state(ctx.state, pc) != DYING:
         return
@@ -583,6 +618,19 @@ def _turn_end(ctx: TurnContext, rec: AdjudicationRecord, oof: list[dict[str, str
         env = _env(ctx)
         env.threshold_due.append(pc)
         _harm_followups(ctx, env, rec, oof)
+
+
+def _wake(ctx: TurnContext, rec: AdjudicationRecord, pc: str) -> None:  # rule: 07.2.9
+    # coarse: 07.6 (no victor in Milestone 1 takes a Down PC: nothing runs a disposition, so it wakes after an interval)
+    """The PC went Down (a non-lethal fall, 07.2.9): out cold for one interval, then it wakes where it fell,
+    Staggered, with its wounds. Without this the ladder stays frozen and every later harm is discarded."""
+    from engine.harm.apply import wake
+    from engine.harm.ctx import HarmCtx
+    from engine.time.scheduler import advance_time
+
+    advance_time(ctx.time_ctx(), 1, "interval", "down: out cold for an interval (07.2.9)")
+    ctx.need_tx().add_all(wake(HarmCtx(state=ctx.state, mint=ctx.mint, rules=ctx.rules, rng=ctx.rng), pc))
+    rec.notes.append("the character blacks out, and comes to a while later where they fell, staggered and hurt")
 
 
 def _finish_last_stand(ctx: TurnContext, rec: AdjudicationRecord, pc: str) -> bool:  # rule: 07.5.9
@@ -695,6 +743,10 @@ def _director_step(ctx: TurnContext, rec: AdjudicationRecord, message: str) -> N
         note_cut(tctx, "player_cut")
         start = director_role.frame_scene(ctx, d, reason="player_cut", purpose_declared=True)
         _scene_entry(ctx, rec, start, ended=old)
+        if ctx.state.scene is not None and ctx.state.scene.scene_id != old:  # rule: 12.2.9
+            # the record narrates the new scene first: only the people present in it act in it
+            here = set(ctx.state.scene.cast_present)
+            rec.npc_actions = [a for a in rec.npc_actions if a.npc in here]
     elif settled:
         mark_agenda_answered(tctx, "answered")
 

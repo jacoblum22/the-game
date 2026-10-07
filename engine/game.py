@@ -242,11 +242,85 @@ class Game:
             created = next(src.events(types=["game_created"]))
         finally:
             src.close()
+        gc: Any = created.payload
+        made = {"seed": gc.seed, "milestone": gc.milestone, "config": gc.config, "rules_hash": gc.rules_hash,
+                "engine_version": gc.engine_version}
+        replayed = cls._redrive(inputs, made, ReplayModel.from_rows(calls), until_seq=until_seq)
+        if isinstance(replayed, ReplayResult):
+            return replayed
+        events, done = replayed
+        for a, b in zip(original, events, strict=False):
+            if a != b:
+                diff = sorted(k for k in a if a.get(k) != b.get(k))
+                return ReplayResult(identical=False, inputs=done, events=a["seq"], divergence=(
+                    f"seq {a['seq']} ({a['type']}) differs in {', '.join(diff)}: recorded {_short(a)}, "
+                    f"replay {_short(b)}"))
+        if len(original) != len(events):
+            return ReplayResult(identical=False, inputs=done, events=min(len(original), len(events)), divergence=(
+                f"recorded {len(original)} events, replay {len(events)}"))
+        return ReplayResult(identical=True, inputs=done, events=len(original))
+
+    @classmethod
+    def export_record(cls, path: Path | str) -> dict[str, Any]:
+        """A compact, file-free record of a game for regression tests (T077): how it was created, every API input,
+        every model call's response with a digest of the packet it was asked (`packet_digest`, not the text), and
+        a digest per event. `Game.replay_record` re-drives it."""
+        from engine.llm.replay import packet_digest
+
+        src = Store.open(path)
+        try:
+            src.conn.execute(INPUTS_SQL)
+            created: Any = next(src.events(types=["game_created"])).payload
+            inputs = [dict(r) for r in src.conn.execute("SELECT n, kind, arg, outcome FROM game_inputs ORDER BY n")]
+            calls = []
+            for row in src.model_calls():
+                req = row.get("request") or {}
+                packet = str(req.get("packet") or "")
+                keep = {k: row.get(k) for k in ("call_id", "turn_id", "role", "attempt", "provider", "model_id",
+                                                "schema_hash", "response", "outcome")}
+                keep["extra"] = row.get("extra") or {}
+                keep["request"] = {"attempt": req.get("attempt"), **packet_digest(packet)}
+                calls.append(keep)
+            events = [{"seq": e.seq, "type": e.type, "turn_id": e.turn_id, "digest": _digest(e.model_dump(mode="json"))}
+                      for e in src.events()]
+        finally:
+            src.close()
+        return {"format": 1, "created": {"seed": created.seed, "milestone": created.milestone,
+                                         "config": created.config, "rules_hash": created.rules_hash,
+                                         "engine_version": created.engine_version},
+                "inputs": inputs, "calls": calls, "events": events}
+
+    @classmethod
+    def replay_record(cls, record: dict[str, Any], *, check_packets: bool = True) -> ReplayResult:
+        """Re-drive an `export_record` record with its recorded model responses; with `check_packets` a call whose
+        packet now differs from the recorded digest diverges (the engine would ask the model something else).
+        Then every event's digest is compared."""
+        from engine.llm.replay import ReplayModel, record_from_row
+
+        model = ReplayModel((record_from_row(c) for c in record["calls"]), check_packets=check_packets)
+        replayed = cls._redrive(record["inputs"], record["created"], model)
+        if isinstance(replayed, ReplayResult):
+            return replayed
+        events, done = replayed
+        want = record["events"]
+        for a, b in zip(want, events, strict=False):
+            if a["digest"] != _digest(b):
+                return ReplayResult(identical=False, inputs=done, events=a["seq"], divergence=(
+                    f"seq {a['seq']} (recorded {a['type']} in {a['turn_id']}) differs: replay {_short(b)}"))
+        if len(want) != len(events):
+            return ReplayResult(identical=False, inputs=done, events=min(len(want), len(events)), divergence=(
+                f"recorded {len(want)} events, replay {len(events)}"))
+        return ReplayResult(identical=True, inputs=done, events=len(want))
+
+    @classmethod
+    def _redrive(cls, inputs: list[dict[str, Any]], made: dict[str, Any], model: StructuredModel, *,
+                 until_seq: int | None = None) -> tuple[list[dict[str, Any]], int] | ReplayResult:
+        """Re-run recorded inputs in a temporary game file: (its events as JSON, inputs run), or the first input
+        whose outcome differs from the recorded one."""
         if not inputs or inputs[0]["kind"] != "new":
             return ReplayResult(identical=False, divergence="no recorded inputs: this game cannot be replayed")
-        gc: Any = created.payload
-        cfg = GameConfig.model_validate({k: v for k, v in (gc.config or {}).items() if k in GameConfig.model_fields})
-        model = ReplayModel.from_rows(calls)
+        cfg = GameConfig.model_validate({k: v for k, v in (made["config"] or {}).items()
+                                         if k in GameConfig.model_fields})
         rules = load_rules()
         done = 0
         with tempfile.TemporaryDirectory(prefix="replay-") as tmp:
@@ -259,8 +333,9 @@ class Game:
                         break
                     try:
                         if kind == "new":
-                            store = Store.create(dest, seed=gc.seed, milestone=gc.milestone, config=gc.config,
-                                                 rules_hash=gc.rules_hash, engine_version=gc.engine_version)
+                            store = Store.create(dest, seed=made["seed"], milestone=made["milestone"],
+                                                 config=made["config"], rules_hash=made["rules_hash"],
+                                                 engine_version=made["engine_version"])
                             game = cls(store, cfg, model, rules=rules, log_inputs=False)
                             game._start()
                         else:
@@ -281,20 +356,10 @@ class Game:
                         return ReplayResult(identical=False, inputs=done, divergence=(
                             f"input {inp['n']} ({kind} {arg!r}): recorded {want}, replay {failed or 'ok'}"))
                 assert game is not None
-                replayed = [e.model_dump(mode="json") for e in game.store.events(until=until_seq)]
+                return [e.model_dump(mode="json") for e in game.store.events(until=until_seq)], done
             finally:
                 if game is not None and not game.closed:
                     game.store.close()
-        for a, b in zip(original, replayed, strict=False):
-            if a != b:
-                diff = sorted(k for k in a if a.get(k) != b.get(k))
-                return ReplayResult(identical=False, inputs=done, events=a["seq"], divergence=(
-                    f"seq {a['seq']} ({a['type']}) differs in {', '.join(diff)}: recorded {_short(a)}, "
-                    f"replay {_short(b)}"))
-        if len(original) != len(replayed):
-            return ReplayResult(identical=False, inputs=done, events=min(len(original), len(replayed)), divergence=(
-                f"recorded {len(original)} events, replay {len(replayed)}"))
-        return ReplayResult(identical=True, inputs=done, events=len(original))
 
     def _replay_input(self, kind: str, arg: Any) -> None:
         if kind == "open":
@@ -598,6 +663,13 @@ class Game:
                       review_flag=first.flags.review_flag or then.flags.review_flag)
         return then.model_copy(update={"fiction": fiction, "oof_blocks": oof.ordered([*blocks, *then.oof_blocks]),
                                        "flags": flags, "scene_ended": first.scene_ended or then.scene_ended})
+
+
+def _digest(ev: dict[str, Any]) -> str:
+    """A short, stable hash of one event's JSON (sorted keys)."""
+    import hashlib
+
+    return hashlib.sha256(json.dumps(ev, sort_keys=True, separators=(",", ":")).encode("utf-8")).hexdigest()[:20]
 
 
 def _short(ev: dict[str, Any]) -> str:

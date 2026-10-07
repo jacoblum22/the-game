@@ -347,7 +347,9 @@ RISKY_WORDS = [
     "deceive", "threaten", "intimidate", "break", "smash", "force", "flee", "dodge", "grab", "tackle",
     "pick the lock", "hide", "chase", "dive", "vault", "punch", "slash", "run past", "bluff", "snatch",
 ]
-OOF_WORDS = ["rule", "rules", "roll", "dice", "dc", "modifier", "stat", "mechanic", "bonus", "hit points"]
+OOF_WORDS = ["rule", "rules", "roll", "dice", "dc", "modifier", "stat", "mechanic", "bonus", "hit points",
+             "my options", "what can i do", "what do i know", "what now", "what should i do", "stuck", "my sheet",
+             "my journal"]
 
 
 def _restate(text: str) -> str:
@@ -502,10 +504,54 @@ def _pending_pick(low: str, pending: list[Any]) -> Any:
     return next((p for p in pending if low in (_norm(p), str(p).lower())), None)
 
 
+_HEIGHT = re.compile(r"\b(climb\w*|clamber\w*|scal(?:e|es|ing)|jump\w*|leap\w*|vault\w*|roof\w*|wall\w*|cliff\w*|"
+                     r"ledge\w*|tree\w*|tower\w*|rope\w*|heights?)\b", re.IGNORECASE)
+_WATER = re.compile(r"\b(swim\w*|wade|wading|current|river|ford)\b", re.IGNORECASE)
+_PEOPLE = ("npc.", "foe.", "ally.", "pc.")
+
+
+def _stakes(verb_word: str | None, message: str, view: str, sources: list[Any],
+            menus: list[Any]) -> tuple[str | None, list[str]]:
+    # rule: 01.6.9 (an established source that would impose a cost if this beat failed; none -> Safe)
+    """(stakes source, threatened-cost menus in preference order) for what the act plainly risks: attacking or
+    sneaking past someone present (they are aware, or may notice), a fall from a height, the water. A source the
+    schema does not offer, or no fitting menu, keeps the beat Safe."""
+    target = (re.search(r"(?m)^target: (\S+)", message) or [None, "none"])[1]
+    act = " ".join(re.findall(r"(?m)^(?:beat|intent|method): (.*)$", message)) or message
+    someone = str(target).startswith(_PEOPLE) or bool(re.search(r"(?m)^(?:npc|foe)\.[\w.]+: ", view))
+    pick: tuple[str, list[str]] | None = None
+    if verb_word in ("strike", "grapple") and someone:
+        pick = ("aware_opponent_or_observer", ["cost.harm", "cost.footing"])
+    elif verb_word == "force" and str(target).startswith(_PEOPLE):
+        pick = ("aware_opponent_or_observer", ["cost.footing", "cost.harm"])
+    elif verb_word in ("exert", "move", "evade") and _HEIGHT.search(act):
+        pick = ("height_or_depth", ["cost.harm", "cost.footing"])
+    elif verb_word in ("exert", "move") and _WATER.search(act):
+        pick = ("hazard", ["cost.footing", "cost.harm"])
+    elif verb_word == "sneak":
+        pick = ("aware_opponent_or_observer", ["cost.exposure"])
+    if pick is None or pick[0] not in sources:
+        return None, []
+    fitting = [m for m in pick[1] if m in menus]
+    return (pick[0], fitting) if fitting else (None, [])
+
+
+# the cost's form in words per stakes source and menu ("" = the engine's own words for the menu entry)
+_FORMS: dict[str, dict[str, str]] = {
+    "height_or_depth": {"cost.harm": "a fall, and a hard landing", "cost.footing": "you slip and lose your hold",
+                        "cost.shortfall": "you get less far than you meant"},
+    "aware_opponent_or_observer": {"cost.harm": "a blow taken in return", "cost.footing": "you are knocked off balance",
+                                   "cost.exposure": "you are seen", "cost.shortfall": "less comes of it than you meant"},
+    "hazard": {"cost.footing": "the current takes your footing", "cost.harm": "the water batters you",
+               "cost.shortfall": "you get less far than you meant"},
+}
+
+
 def _framer(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:
     text = packet.render()
     anchors = enum_at(schema, "anchor")
-    mentioned = re.findall(r"verb\.(\w+)", text)
+    gate_verb = re.search(r"(?m)^gate: .*\bverb: verb\.(\w+)", packet.message)  # the beat's own verb first
+    mentioned = [gate_verb.group(1)] if gate_verb else re.findall(r"verb\.(\w+)", text)
     verb_word = mentioned[0] if mentioned else None
     if verb_word is None:
         hit = match_verb(packet.message)
@@ -518,28 +564,53 @@ def _framer(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:
     tiers = enum_at(schema, "obstacle", "tier")
     menus = enum_at(schema, "threatened_cost", "menu_id")
     alt_menus = enum_at(schema, "alternate_cost", "menu_id") or menus
+    source, fitting = _stakes(verb_word, packet.message, packet.view, enum_at(schema, "stakes_source"), menus)
+    threatened = fitting[0] if fitting else (menus[0] if menus else None)
+    if source:  # an alternate that fits through the same source (cost.shortfall always does)
+        alts = [m for m in ("cost.shortfall", "cost.footing", "cost.harm", "cost.time") if m in alt_menus]
+        alternate = next((m for m in alts if m != threatened), None)
+    else:
+        alternate = alt_menus[1] if len(alt_menus) > 1 else (alt_menus[0] if alt_menus else None)
+    forms = _FORMS.get(source or "", {})
+    attribute = verb_attr if verb_attr in attrs else (attrs[0] if attrs else None)
+    if "chose CHANGE" in packet.message:  # 01.7.1: another approach for the same intent
+        attribute = next((a for a in attrs if a != attribute), attribute)
     return {
         "anchor": anchor, "deltas": [],
-        "attribute": verb_attr if verb_attr in attrs else (attrs[0] if attrs else None),
+        "attribute": attribute,
         "deed_tag": None, "traits": [],
-        "obstacle": {"kind": "tier", "tier": tiers[len(tiers) // 2] if tiers else None, "entity": None},
-        "levers": [], "snags": [], "stakes_source": None,
+        "obstacle": {"kind": "tier", "entity": None,  # the rule's default tier (Moderate), else the middle one
+                     "tier": "moderate" if "moderate" in tiers else (tiers[len(tiers) // 2] if tiers else None)},
+        "levers": [], "snags": [], "stakes_source": source,
         "stakes_heavy": False, "lethal": False, "reach_whole": False, "reach_one_factor": False,
-        "threatened_cost": {"menu_id": menus[0] if menus else None, "form_intent": "a setback that fits the moment"},
-        "alternate_cost": {
-            "menu_id": alt_menus[1] if len(alt_menus) > 1 else (alt_menus[0] if alt_menus else None),
-            "form_intent": "a different price that fits the moment",
-        },
+        "threatened_cost": {"menu_id": threatened, "form_intent": forms.get(str(threatened), "")},
+        "alternate_cost": {"menu_id": alternate, "form_intent": forms.get(str(alternate), "")},
         "method_consequences": [], "secret": False,
     }
 
 
+def _engaged(npcs: list[Any], happened: str, view: str) -> list[Any]:
+    """The present NPCs this turn's acts engage (12.2.9: an NPC responds to what it could respond to): named or
+    targeted, or the first present one when the player speaks or talks to no one in particular."""
+    names = {str(n): [str(n).lower()] for n in npcs}
+    for n in npcs:  # the World view's `  npc.x: Name; standing ...` lines
+        m = re.search(rf"(?m)^[\s-]*{re.escape(str(n))}: (?:name: )?([^;,\n]+)", view)
+        if m and m.group(1).strip():
+            names[str(n)] += [m.group(1).strip().lower(), m.group(1).strip().split()[0].lower()]
+    hit = [n for n in npcs if any(_has_word(happened, a) for a in names[str(n)]
+                                  if len(a) > 2 and a not in _STOP and a not in _FILLER)]
+    if hit:
+        return hit
+    spoke = re.search(r"\((?:SPEECH)\)$", happened, re.MULTILINE) or re.search(
+        r"(?m)^beat: .*\b(ask|asks|tell|tells|talk|talks|greet|greets|say|says|speak|speaks|call|calls)\b", happened)
+    return list(npcs[:1]) if spoke else []
+
+
 def _world(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:
     npcs = enum_at(schema, "responses", "[]", "npc")
-    tags = enum_at(schema, "responses", "[]", "table_context", "tags", "[]")
     return {"responses": [
-        {"npc": n, "want_engaged": None, "refusal_engaged": None, "table_context": {"tags": tags[:1]}}
-        for n in npcs
+        {"npc": n, "want_engaged": None, "refusal_engaged": None, "table_context": {"tags": []}}
+        for n in _engaged(npcs, packet.message, packet.view)
     ]}
 
 
@@ -576,11 +647,27 @@ def _director(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:
     return {
         "cut_now": cut,
         "next_scene": {
-            "mode": "free", "place": place, "agenda": "follow the most pressing open thread",
+            "mode": "free", "place": place, "agenda": _agenda(packet, place),
             "hoped_answer": "you get what you came for", "pillar": None, "challenge_type": None, "cast": cast,
         },
         "push": "none", "lead": None,
     }
+
+
+def _agenda(packet: Packet, place: Any) -> str:
+    """The scene's question in neutral words (12.4.2), from what the packet holds: the opening's incident, the
+    place the player heads for, else the first open thread the view lists; "" when there is nothing to ask."""
+    raised = re.search(r"(?m)^RAISED: .*inciting incident[^:]*: (.+)$", packet.message)
+    if raised:
+        return f"What comes of it: {raised.group(1).strip().rstrip('.')}?"
+    names = dict(re.findall(r"(?m)^- ([\w.]+): (.+)$", packet.message))
+    if place and names.get(str(place)):
+        return f"What is to be found at {names[str(place)].strip()}?"
+    threads = re.search(r"(?m)^open threads: (?:thr\.\S+) ([^;\n]+)", packet.render())
+    if threads:
+        text = re.split(r"(?<=[.!?])\s|;", threads.group(1).strip())[0].rstrip(" .")
+        return f"Where does it lead: {text}?" if text else ""
+    return ""
 
 
 _RESULTS = [  # result words of the record's beat lines (engine/dm/roles/narrator.py DEGREE_WORDS), most specific first
@@ -599,6 +686,59 @@ _ANSWERS = {"yes": "Yes, that is so.", "no": "No, it is not so.", "yes, and": "Y
 def _sentence(text: str) -> str:
     t = re.sub(r"\b(?:the character|the PC)\b", "you", text.strip().strip('"').rstrip(" .;"))
     return (t[:1].upper() + t[1:] + ".") if t else ""
+
+
+def _reach_sentence(delivered: str) -> str:
+    """The record's `delivered: <reach>: <ladder words>` as a sentence of fiction, or "" (12.14.4: no ids or
+    numbers; Standard reach is what was intended, already said by the result line)."""
+    reach, _, words = delivered.partition(": ")
+    words = words.strip()
+    if not words or reach == "standard" or re.search(r"\d|\b[a-z]+\.[a-z_]+\b", words):
+        return ""
+    head, _, detail = words.partition(" (")
+    detail = detail.rstrip(")").strip()
+    if reach == "limited":
+        if head.startswith("partway"):
+            return _sentence("You get partway" + (f": {detail}" if detail else ""))
+        return _sentence(f"Only in part: {head}" + (f", {detail}" if detail else ""))
+    return _sentence(f"Better than that: {head}" + (f", {detail}" if detail else ""))
+
+
+# tbl.npc_action rows (12.11.5: the DM chooses the words): phrasings that keep the row's own words, so a row that
+# comes up again for the same person is not told the same way twice running
+_NPC_ROW_WORDS: list[tuple[str, list[str]]] = [
+    ("escalates", ["{n} escalates, and threatens you.", "{n} turns threatening.", "{n} threatens to call for others."]),
+    ("ends the exchange", ["{n} ends the exchange and withdraws.", "{n} withdraws without another word.",
+                           "{n} ends the exchange there."]),
+    ("hinders quietly", ["{n} hinders you quietly, and delays.", "{n} quietly misdirects you.",
+                         "{n} delays, hindering you quietly."]),
+    ("wants something first", ["{n} wants something first, and names a price.", "{n} names a price first.",
+                               "{n} wants a favor first."]),
+    ("carries on", ["{n} carries on with their own business.", "{n} goes on with their own business.",
+                    "{n} carries on as before."]),
+    ("acts on one of their own wants", ["{n} acts on one of their own wants.", "{n} acts on something they want.",
+                                        "{n} turns to their own wants."]),
+    ("asks the pc something", ["{n} asks you something.", "{n} asks you something in turn.",
+                               "{n} has something to ask you."]),
+    ("offers partial help", ["{n} offers partial help.", "{n} offers some help, though not all of it.",
+                             "{n} offers to help, partly."]),
+    ("helps as asked", ["{n} helps as asked.", "{n} helps, as you asked.", "{n} does as asked, and helps."]),
+    ("helps beyond", ["{n} helps beyond what was asked.", "{n} helps, beyond what you asked.",
+                      "{n} helps more than was asked."]),
+]
+
+
+def _npc_act(who: str, act: str, recent: str) -> str:
+    """One NPC act from the record in words; a table row said the same way in a recent exchange is said
+    another way."""
+    low = act.lower()
+    options = next((ws for key, ws in _NPC_ROW_WORDS if low.startswith(key)), None)
+    if options is None:
+        head, _, tail = re.sub(r"\bthe PC\b", "you", act).partition(": ")
+        first = tail.split(", ")[0].strip() if tail else ""
+        return _sentence(f"{who} {head}" + (f", and {first}" if first else ""))
+    said = [o.format(n=who) for o in options]
+    return next((s for s in said if s not in recent), said[0])
 
 
 def _npcs(view: str) -> dict[str, str]:
@@ -685,9 +825,10 @@ def _narrator(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:
                 lines.append(next((t for k, t in _RESULTS if k in res), "It is done."))
             elif "not resolved yet" in line:
                 paused = True
-            for key in ("cost paid", "delivered"):
-                if bits.get(key):
-                    lines.append(_sentence(bits[key]))
+            if bits.get("cost paid"):
+                lines.append(_sentence(bits["cost paid"]))
+            if bits.get("delivered") and res and "success" in res:
+                lines.append(_reach_sentence(bits["delivered"]))
         elif line.startswith("- question "):
             m = re.match(r'- question "(.*)": the answer is (.*)$', line)
             if m:
@@ -695,9 +836,9 @@ def _narrator(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:
                 lines.append(_ANSWERS.get(ans.lower(), _sentence(f"The answer: {ans}")))
         elif re.match(r"- .+ acts: ", line):
             who, act = line[2:].split(" acts: ", 1)
-            head, _, tail = re.sub(r"\bthe PC\b", "you", act).partition(": ")
-            first = tail.split(", ")[0].strip() if tail else ""
-            lines.append(_sentence(f"{who} {head}" + (f", and {first}" if first else "")))
+            lines.append(_npc_act(who, act, "\n".join(packet.exchanges)))
+        elif re.match(r"- note: an? [\w ]*rest is not possible now", line):
+            lines.append("There is no rest to be had yet.")
         elif line.startswith("- note: the character "):
             note = line.removeprefix("- note: the character ")
             lines.append(_sentence("you " + re.sub(r"\b(\w+?)s\b(?= and | rested|$| [a-z])", r"\1", note, count=2)))

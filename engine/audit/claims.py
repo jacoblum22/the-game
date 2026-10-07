@@ -314,6 +314,8 @@ def _check(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: PR-12-2
     if leak is not None:
         return _v(c, i, "leak", leak or None, fix="replace_with_slice" if leak else "cut",
                   reason="matches sealed content")
+    if _restates_given(ctx, c):
+        return _v(c, i, "supported")
     subject = c.subject
     if subject != UNKNOWN and subject not in ctx.state.entities:
         subject = UNKNOWN  # an id the store does not hold is no better than unknown
@@ -325,6 +327,19 @@ def _check(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: PR-12-2
         return _v(c, i, "new_element", fix="cut", reason="subject unknown: never creates an entity; cut")
     c = c.model_copy(update={"subject": subject})
     return _CLASS_CHECKS[c.cls](ctx, c, i)
+
+
+# record notes that hand the narration an event as given (the opening's inciting incident, a lead, the scene's
+# impetus): the engine wrote them from the seed or a table, so the record is their source this turn
+GIVEN_NOTES = ("the inciting incident:", "a lead to make noticeable:", "a lead arrives", "the scene's impetus")
+
+
+def _restates_given(ctx: _Ctx, c: Claim) -> bool:  # rule: 12.3.1
+    """The claim restates an event the adjudication record itself gives (most of its content words are in it)."""
+    for note in ctx.record.notes:
+        if note.startswith(GIVEN_NOTES) and tx.covers(c.text, note.split(":", 1)[-1], ratio=0.75):
+            return True
+    return False
 
 
 def _resolve_new(ctx: _Ctx, c: Claim) -> str | None:

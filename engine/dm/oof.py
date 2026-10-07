@@ -395,7 +395,9 @@ def recap_block(state: WorldState, *, since_seq: int = 0, pc: str | None = None,
     rest = []
     if clocks:
         rest.append("Pressing: " + " · ".join(clocks[:4]))
-    threads = [short_text(t["text"] or t["name"]) for t in thread_list(state)
+    from engine.dm.player_text import second_person
+
+    threads = [short_text(second_person(t["text"] or t["name"])) for t in thread_list(state)
                if t["status"] == "active" and _ent_name(state, t["id"])]
     if threads:
         rest += ["Open threads:", *(f"- {t}" for t in threads[:4])]

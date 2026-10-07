@@ -130,11 +130,28 @@ def name_ids(text: str, rules: Any = None, names: Mapping[str, str] | None = Non
     return _SNAKE.sub(lambda m: m.group(0).replace("_", " "), out)
 
 
+_SECOND = [(r"(?:PC|character)'s\b", "your"), (r"(?:PC|character) is\b", "you are"),
+           (r"(?:PC|character) has\b", "you have"), (r"(?:PC|character) was\b", "you were"),
+           (r"(?:PC|character)\b(?! sheet| creation| record)", "you")]
+
+
+def second_person(text: str, *, character: bool = True) -> str:  # rule: 12.14.1
+    """Rules and seed data speak of "the PC" / "the character"; the player is "you" ("a stranger asks after the PC
+    by name" -> "a stranger asks after you by name"). `character=False` leaves "the character" alone."""
+    out = text
+    for pat, rep in _SECOND:
+        if not character:
+            pat = pat.replace("(?:PC|character)", "PC")
+        out = re.sub(r"\bthe " + pat, rep, out)
+        out = re.sub(r"\bThe " + pat, rep[:1].upper() + rep[1:], out)
+    return out
+
+
 def clean(text: str, rules: Any = None, names: Mapping[str, str] | None = None) -> str:  # rule: 12.14.4
-    """Player-facing text without rule citations or internal ids (idempotent)."""
+    """Player-facing text without rule citations or internal ids (idempotent); "the PC" is "you"."""
     if not text:
         return text
-    return name_ids(strip_citations(text), rules, names)
+    return second_person(name_ids(strip_citations(text), rules, names), character=False)
 
 
 def entity_names(state: Any) -> dict[str, str]:
@@ -169,4 +186,5 @@ def clean_response(resp: Response, rules: Any = None, state: Any = None) -> Resp
     return resp.model_copy(update=upd)
 
 
-__all__ = ["clean", "clean_response", "display_name", "entity_names", "humanize", "name_ids", "strip_citations"]
+__all__ = ["clean", "clean_response", "display_name", "entity_names", "humanize", "name_ids", "second_person",
+           "strip_citations"]
