@@ -51,7 +51,7 @@ class OracleResult(BaseModel):
     odds: str | None = None
     d100: int | None = None
     shape: Shape | None = None
-    answer: bool | None = None
+    answer: Any = None  # a rolled answer is a bool; a "read" is whatever the store holds (a list, a str, ...)
     extreme: bool = False
     twist: bool = False  # a "but" answer
     qualifier: str | None = None

@@ -18,6 +18,7 @@ import importlib
 import re
 import sqlite3
 import sys
+import traceback
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass, field
 from datetime import date
@@ -37,6 +38,7 @@ KEY_HELP = ("No Gemini API key was found. Put it in a file named .env at the rep
 UNAVAILABLE = "The model is unavailable right now. Your message is kept; try again."
 REFUSED = ("The model refused to answer that (a provider safety refusal; it is logged). Your message is kept; "
            "try again, or put it another way.")
+BROKE = "Sorry, something went wrong on our side. Your input is kept; try again."
 # Pauses that sit inside a turn: the budget prompt waits until the turn is over (cli.md "never mid-turn").
 MID_TURN = frozenset({"offer", "clarify", "redirect", "near_miss", "last_chance", "yield_terms"})
 CODEX_SECTIONS = ("sheet", "abilities", "conditions", "journal", "threads")
@@ -60,6 +62,16 @@ NAME_HINT = "Type a name for your character."
 
 class Quit(Exception):
     """The player is done: leave the play loop (the store is already durable)."""
+
+
+def _api_refusal(e: BaseException) -> bool:
+    """A plain ValueError raised by the game API itself (engine/game.py's guards), not one from deeper in the engine.
+
+    The class stays ValueError: its name is recorded in game_inputs.outcome and compared on replay."""
+    tb = e.__traceback__
+    while tb is not None and tb.tb_next is not None:
+        tb = tb.tb_next
+    return type(e) is ValueError and tb is not None and tb.tb_frame.f_globals.get("__name__") == "engine.game"
 
 
 @dataclass
@@ -352,8 +364,12 @@ class Session:
         except ModelRefused:
             self.app.say(REFUSED)
             return
-        except ValueError as e:  # e.g. a choice the open pause does not have
-            self.app.say(str(e))
+        except Exception as e:  # noqa: BLE001 - the input is on record (game_inputs.outcome); never shown raw
+            if _api_refusal(e):  # e.g. a choice the open pause does not have: words meant for the player
+                self.app.say(str(e))
+            else:
+                traceback.print_exc(file=sys.stderr)
+                self.app.say(BROKE)
             return
         self.show(resp)
 

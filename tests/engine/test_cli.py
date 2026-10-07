@@ -179,6 +179,24 @@ def test_model_unavailable_keeps_the_loop(tmp_path: Path) -> None:
     assert "unavailable" in out and "message is kept" in out and "It works now." in out
 
 
+def test_engine_errors_never_reach_the_player(tmp_path: Path) -> None:
+    """Playtest 20261007-155118: a pydantic ValidationError (a ValueError) was printed as game text."""
+    from pydantic import BaseModel
+
+    class M(BaseModel):
+        answer: bool
+
+    try:
+        M(answer=["item.spear"])  # type: ignore[arg-type]
+        raise AssertionError("expected a ValidationError")
+    except ValueError as e:
+        broke = e
+    FakeGame.script = [broke, KeyError("x"), play_resp("It works now.", "turn.1")]
+    _, out = run(["new", "g"], "go\ngo\ngo\n/quit\n", tmp_path)
+    assert "validation" not in out.lower() and "KeyError" not in out
+    assert out.count("Your input is kept; try again.") == 2 and "It works now." in out
+
+
 def test_slash_commands_never_submit(tmp_path: Path) -> None:
     FakeGame.script = [play_resp("Fixed.", "turn.2")]
     stdin = ("/budget 3.5\n/budget off\n/autocommit on\n/spend\n/turn 1\n/rules 01.7.1\n/branch dock\n/help\n"

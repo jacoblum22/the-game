@@ -40,6 +40,20 @@ def test_never_reask_reads_the_fact(tmp_path: Path) -> None:
     assert free_count(s.state) == 0  # the DM's own questions are not free facts
 
 
+def test_reading_a_list_valued_fact_returns_it(tmp_path: Path) -> None:
+    """Playtest 20261007-155118: the PC's `carries` fact is a list; reading it crashed OracleResult(answer: bool)."""
+    from engine.store.events import Event
+
+    s = Scene.new(tmp_path)
+    kit = ["item.plain_clothes", "item.cloak", "item.skinning_knife", "item.spear"]
+    with s.store.transaction() as tx:
+        tx.add_all([Event.of("fact_set", {"source": "player_accepted"}, source=s.pc, rule_id="test",
+                             fact_id=tx.mint("fact"), subject=s.pc, predicate="carries", value=kit,
+                             visibility="shown", supersedes=None, gate=None)])
+    res = _ask(s, OracleQuestion(subject=s.pc, predicate="carries", odds="even"), [])
+    assert (res.status, res.answer) == ("read", kit)
+
+
 def test_but_qualifier_and_extreme_and(tmp_path: Path) -> None:
     s = Scene.new(tmp_path)
     but = _ask(s, OracleQuestion(subject="world", predicate="rope", odds="even", qualifier="elsewhere"), [52])
