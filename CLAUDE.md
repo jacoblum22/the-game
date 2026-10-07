@@ -28,3 +28,8 @@ re-reads it.
   step.
 - **Do not edit ch.13** (an optional, unmaintained example setting). Never commit; the orchestrator
   commits.
+
+## Code checks (`src/`, `tests/`, `rules/tools/`)
+Cloud sessions install `requirements-dev.txt` automatically (`.claude/hooks/session-start.sh`). Before
+pushing code, run `ruff check .`, `pyright` and `python -m pytest -q tests/unit`, and report new failures
+rather than the whole output.
