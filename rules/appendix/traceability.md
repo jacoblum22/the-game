@@ -102,6 +102,7 @@ themselves change the status). Rule ids are grouped by chapter; the full text of
 | 09 | BRIEF §4 | Death real but telegraphed; defeat changes the situation | 09.6.5–6, 09.9.1–2, 09.5.6 (no kill-outright effect), 09.3.5 (windups), 09.9.5 (menu rates by word) | satisfied |
 | 09 | 00.17.2 (09 row) | archetypes as manufacturers; T1–T5 templates; threat_advisory; solo budgets; behavior lists and morale; lethal_context and defeat_disposition; tells; bestiary | 09.2, 09.3–09.4, 09.6, 09.8, 09.7, 09.9, 09.10, 09.12 | satisfied |
 | 09 | 00.17.1 Q5 | `threat_advisory(encounter, pc)` from bands, count and power band; lethal feeds 07 | 09.6.1–09.6.5, PR-09-4 | satisfied |
+| 09 | BRIEF §6 | Every rule cites its basis (`[C:]`, `[R]` or `[DL-]`) at card level | every rule card of 09 (76); 50 tagged at revision C6c; validator BASIS (DL-INT-13) | satisfied |
 | 10 | BRIEF §4 | Death telegraphed | 10.9.5 (omens before threats; out-of-band signs), 10.12.4 (hazards speak first), 10.14.3 (telltales), 10.13.9 (imminent clock warning), 10.3.4 (regional warning line) | satisfied |
 | 10 | BRIEF A2 #10 | The engine owns randomness | 10.9.1, 10.10.1, 10.11.3, 10.4.6 (veer), 10.13.7 (areas) | satisfied |
 | 10 | BRIEF A2 #11 | Every clock has omens; hooks never dead-end | 10.13.8 (theme omens for the danger clock), 10.9.5 (encounter signs) | satisfied |
@@ -112,6 +113,7 @@ themselves change the status). Rule ids are grouped by chapter; the full text of
 | 10 | R5 EQ-09, EQ-10 | Supply and light; mounts and vehicles | 10.6, 10.7, 10.8 | satisfied |
 | 10 | R5 TM-01, TM-02 | Time ladder use; tick table | 10.2, T-10-23 | satisfied |
 | 10 | R5 X-05 | Real-time light excluded | 10.7.1 (light by interval) | satisfied (deliberate exclusion) |
+| 10 | BRIEF §6 | Every rule cites its basis (`[C:]`, `[R]` or `[DL-]`) at card level | every rule card of 10 (104); 83 tagged at revision C6c, 10.1.6 by the new DL-10-31; validator BASIS (DL-INT-13) | satisfied |
 | 11 | INV-2 | Narration restates state | 11.2.7 (narrate the returned list only); 11.1.5 | satisfied |
 | 11 | INV-4 | Engine randomness | every roll in this chapter is a tool roll | satisfied |
 | 11 | INV-6 | No death without two keys | 11.10.5 (age never kills a PC); 11.2.4 | satisfied |

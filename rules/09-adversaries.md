@@ -170,7 +170,7 @@ restatement, by four consumers [R3 §6 #14; C:P5]:
 with it was *about* when 03 records secondary context. They are never evidence for the PC by themselves:
 evidence comes from the PC's own method (00.5.6).
 
-**09.2.2 The archetype record.** `[D]` Every archetype carries the fields of T-09-1, all data, none prose-only
+**09.2.2 The archetype record.** `[D]` [DL-09-01; C:P12; revision: I-065] Every archetype carries the fields of T-09-1, all data, none prose-only
 (00.16.4): identity (`creature_tags` most specific first, `harm_tags`, `evidence_tags`, `org_tags`, `mind`,
 `speaks` and `tongue`, `size`, `bands` (the lowest and highest band it is fielded at), `roles`); its body
 (seven `attribute_rungs`, `trained_defenses`, `armor`, natural `attacks` with severity offsets, `powers`,
@@ -181,7 +181,7 @@ its outputs (`loot`, `gear`, `purse`, `harvest`, `absorbable`); its knowledge (`
 its place in the world (`encounter {terrain, group, objective_default}`). T-09-2's band tables turn the rungs
 into numbers (09.3).
 
-**09.2.3 The library covers every creature branch.** `[D]` Sixty-three archetypes span all nine branches of
+**09.2.3 The library covers every creature branch.** `[D]` [DL-09-01; C:VI; R3 §09.6; revision: I-065] Sixty-three archetypes span all nine branches of
 the creature facet (00.5.1) and every level-2 tag under them except where one archetype honestly covers two
 (T-09-12): beasts 10, folk 14 (human brigands, soldiers, knights, cultists and mages; elves; dwarves; orcs;
 goblins; gnolls; lizardfolk; ogres; trolls; true giants), undead 9, spirits 6, fiends 6, constructs 4,
@@ -256,7 +256,7 @@ by every adversary entry [R3 §09.3 (Risk of Rain 2's AIBlacklist and CannotCopy
 - `cannot_absorb` — named per archetype in `absorbable.cannot_absorb`: the pool entries a Devourer may not
   take from it even though the gate matches (a celestial's sight is its god's, not its own).
 
-**09.2.7 Mind.** `[D]` Every archetype has one `mind` from a closed list; it decides which social and mental
+**09.2.7 Mind.** `[D]` [DL-09-18; revision: I-065] Every archetype has one `mind` from a closed list; it decides which social and mental
 rules apply, with no further judgment:
 
 | Mind | Means | Effects bearing `trait.nature.mental` | Talk (parley, intimidate, demand) | Yields when broken (06.11.5) | Reaction roll (12.11.2) |
@@ -314,7 +314,7 @@ Basis:              [00.3.7] [R4 §6.3 (Story-Engine: "never use boss from title
                     dramatic importance alone")] [R2 #11] [DL-09-03]
 ```
 
-**09.3.2 Band competence and attribute rungs.** `[D]` An adversary's numbers are top-down: its band fixes a
+**09.3.2 Band competence and attribute rungs.** `[D]` [DL-09-07; revision: I-065] An adversary's numbers are top-down: its band fixes a
 **band competence** `c_b` and the value of five **attribute rungs**; its archetype names a rung for each of
 the seven attributes (`attribute_rungs`) and which defenses it is trained in (`trained_defenses`).
 
@@ -339,7 +339,7 @@ attack/defense modifiers (+0…+2, +3…+5, +6…+8, +9…+11, +12…+14). With 
 and an elf at T3 differ only in *which* attributes are high, never in the scale
 [R: https://2e.aonprd.com/Rules.aspx?ID=2874 (benchmarks by tier: extreme, high, moderate, low)].
 
-**09.3.3 The standard line.** `[D]` The **standard** of a band is the line an average adversary of that band
+**09.3.3 The standard line.** `[D]` [DL-09-04; revision: I-065] The **standard** of a band is the line an average adversary of that band
 fights with. It is chapter 06's reference line with the two changes the full rules require (DL-09-04):
 
 **T-09-3 The standard line by band** (`data/archetypes.yaml#band_tables.standard`).
@@ -369,7 +369,7 @@ output):
 Both values are inside 00.3.7's envelope (T4 20–32, T5 32–60). Harm severity values are 00.3.11's
 (1 / 3 / 5 / 8 / 12) and are never changed by this chapter.
 
-**09.3.4 Defenses.** `[D]` Every adversary stores Guard and all seven attribute defenses (06.4.1; 01's
+**09.3.4 Defenses.** `[D]` [DL-09-07; DL-09-04; DL-06-08; revision: I-065] Every adversary stores Guard and all seven attribute defenses (06.4.1; 01's
 request):
 - `Guard = 10 + Agility + c_b + edge` (edge +1 for a carried shield; 06.4.1's guard tag is its natural
   weapons or its weapon, at `c_b`);
@@ -379,7 +379,7 @@ request):
 Defenses are stored numbers (`defenses` in T-09-14), read sealed by `frame_check`; status from conditions
 applies on top (00.3.5).
 
-**09.3.5 Attacks and severity.** `[D]` Each archetype lists its natural attacks; each attack has a verb
+**09.3.5 Attacks and severity.** `[D]` [DL-00A-29; DL-09-21; DL-06-17; revision: I-065] Each archetype lists its natural attacks; each attack has a verb
 (Strike, Grapple or Force), the attribute it uses, the bands it reaches (06.3.2), harm tags, a **severity
 offset** in rungs from the band's standard harm, and optionally `heavy`, a `shape` (06.8), a wound `site`
 (07.2.4) and riders (powers that apply on a hit, 09.5). An attack's:
@@ -392,7 +392,7 @@ offset** in rungs from the band's standard harm, and optionally `heavy`, a `shap
 - **site**: where its wounds land (07.2.4) when the attack always lands in one place (a lance in the body,
   a hamstringing glaive in the leg); otherwise 07's site roll.
 
-**09.3.6 Reduction.** `[D]` From the archetype's `armor` (T-09-5b), capped at 4 (07.2.2):
+**09.3.6 Reduction.** `[D]` [DL-09-04; DL-07-14; DL-06-10; revision: I-065] From the archetype's `armor` (T-09-5b), capped at 4 (07.2.2):
 
 | Armor | T1 | T2 | T3 | T4 | T5 | `no_gaps` |
 |---|---|---|---|---|---|---|
@@ -404,19 +404,19 @@ offset** in rungs from the band's standard harm, and optionally `heavy`, a `shap
 Natural armor is `no_gaps`: 06.4.10's called shot at the gap does not bypass it. Worn armor has gaps.
 Reduction applies to `harm.physical` only (06's T-06-11); elemental harm goes around it.
 
-**09.3.7 Size and pace.** `[D]` Size is from the archetype or the entry (06.3.10's six rungs: tiny, small,
+**09.3.7 Size and pace.** `[D]` [DL-06-30; DL-06-07; revision: I-065] Size is from the archetype or the entry (06.3.10's six rungs: tiny, small,
 medium, large, huge, colossal); it sets reach, engagement capacity and grapple scale (06's table). Pace is
 06.3.3's `speed`: 1 by default; 2 for runners and fliers (wolves, cats, raptors, fire elementals, hellbeasts);
 0 for things that cannot move (a rooted creeper: Move is G4 for it); a creature with `pow.flight`,
 `pow.swimmer`, `pow.climber` or `pow.burrower` moves in that mode (`slot.movement_mode`).
 
-**09.3.8 Focus and effect DCs.** `[D]` An adversary's **Focus** is its special budget, spent only on its
+**09.3.8 Focus and effect DCs.** `[D]` [DL-09-17; DL-09-07; DL-00A-09; revision: I-065] An adversary's **Focus** is its special budget, spent only on its
 powers and pool abilities (09.5.3): base by band 0 / 1 / 2 / 3 / 4, +1 elite, +2 solo, +1 for the `caster`
 role, 0 for minions. Focus does not recover during a conflict; an adversary met again in a later scene has
 its full Focus. Its **effect DC** for each attribute its powers name (`effect_dc_source`) is
 `10 + attribute + c_b` (00.3.8), stored per attribute in `effect_dc` (05's request d).
 
-**09.3.9 Reactions.** `[D]` By the adversary's **effective band** (its band, +1 for an elite), following
+**09.3.9 Reactions.** `[D]` [DL-09-04; DL-09-08; DL-06-01; revision: I-065] By the adversary's **effective band** (its band, +1 for an elite), following
 06.6.5: T1 none; T2 one reaction, Opportunity Strike only; T3 and above one reaction, Opportunity Strike or
 Fend (Fend spent on the first attack against it each round from the attacker with the highest modifier it
 has seen, 06.6.5). A **solo** has Opportunity Strike and Fend at any band; a **minion** and every **mob**
@@ -425,7 +425,7 @@ have none (06.10.2). An archetype may set `reaction: false`. Reaction *abilities
 
 ### 09.4 Building a stat block
 
-**09.4.1 Archetype + band + role + variant → stat block.** `[D]` PR-09-1 is the only way an adversary's
+**09.4.1 Archetype + band + role + variant → stat block.** `[D]` [DL-09-06; C:I; revision: I-065] PR-09-1 is the only way an adversary's
 numbers come to exist, for the bestiary and for every creature improvised in play (PR-09-2). The DM supplies
 four classifications and the engine does the rest. The data generator runs the same procedure, so every
 bestiary entry is reproducible from its four inputs plus its listed overrides.
@@ -455,7 +455,7 @@ fiction; tie-break: the archetype's first listed role. *Worst case (J):* a neigh
 attack and default list; the numbers are re-solved to the same band budget, so the fight is no harder or
 easier than the band says, only different in shape (class i).
 
-**09.4.3 Powers and the power premium.** `[D]` An adversary's **powers** are its archetype's plus any its
+**09.4.3 Powers and the power premium.** `[D]` [DL-09-05; revision: I-065] An adversary's **powers** are its archetype's plus any its
 entry adds (09.5). A power that adds threat beyond the attack line carries a **premium** (T-09-6): 0.06 for
 each rider, offensive action or aura; 0.03 for each lesser power (pack tactics, shield wall, frenzy, ambush,
 blink, glamour, mend, rally, call, drag, Shrug, second wind); 0.10 for a summoning; 0.04 for each pool ability
@@ -475,7 +475,7 @@ as if the PC holds the **counter** (silver, a magical property, fire, acid, a bl
 (09.6.4) reports how much harder the creature is when the PC does not. Resistances are puzzles with a named
 answer, not weight [R2 #12; DL-09-05].
 
-**09.4.5 Severity compensation.** `[D]` If the solve lands at the envelope's floor and the creature is still
+**09.4.5 Severity compensation.** `[D]` [DL-09-20; revision: I-065] If the solve lands at the envelope's floor and the creature is still
 stronger than the band by more than half again (fidelity > 1.5; at T1 > 2.0), its primary attack and its
 non-shaped heavy attack drop one severity rung and the solve runs again; if it lands at the ceiling and is
 weaker by more than a third (fidelity < 0.67; at T1 < 0.5), they rise one rung. At most two steps. The
@@ -527,7 +527,7 @@ creature's two are decisive. A T1 "boss" is a leader with a mob, 09.8.1.) The 00
 applies to `standard` (and to `minion` from below); elite, solo and mob pools exceed it the way a mob's
 pooled Vitality already does (06.10.2). This is filed as an amendment to 00.3.7 (Interface requests).
 
-**09.4.7 Mobs and swarms.** `[D]` Chapter 06 owns mobs and swarms (06.10). This chapter's part: a mob entry
+**09.4.7 Mobs and swarms.** `[D]` [DL-06-20; revision: I-065] Chapter 06 owns mobs and swarms (06.10). This chapter's part: a mob entry
 is a `minion` (or `standard`) template with `members` 3 or more; its Vitality is pooled (`members ×
 per_member`), it has two actions, no reaction, one Guard and one morale clock; its numbers step is 06.10.3's.
 A swarm entry carries `swarm: true` and a tiny size; 06.10.5's three differences apply (it engages everyone
@@ -572,7 +572,7 @@ Basis:              [PR-09-1] [00.15.6] [R3 §09.1] [DL-09-06]
 
 ### 09.5 Powers
 
-**09.5.1 The power record.** `[D]` A **power** (`pow.*`, `data/archetypes.yaml#powers`, 68 entries) is an
+**09.5.1 The power record.** `[D]` [DL-09-17; DL-09-21; revision: I-065] A **power** (`pow.*`, `data/archetypes.yaml#powers`, 68 entries) is an
 adversary-only mechanic beyond its attacks. Every power has: `kind` (`rider` on a hit; `action` costing
 `action_cost` actions; `passive`; `trigger` on one hook of 00.10.2; `reaction`); `effects` (effect references
 into `data/effects.yaml` and contrib blocks, never prose); `cost` (adversary Focus) or `limits {per, uses}`;
@@ -584,19 +584,19 @@ same sense as the substrate: a new creature reuses a power with parameters befor
 (`aff.*`, 07.9.2) or one of this chapter's nine (`tbl.09.knockdown`, `.fear`, `.blast`, `.charm`, `.hold`,
 `.daze`, `.drain`, `.push`, `.choke`; T-09-7), each a four-degree table of effect references.
 
-**09.5.2 Pool abilities.** `[D]` An adversary may hold abilities of chapter 05's pool by id (`abilities` in its
+**09.5.2 Pool abilities.** `[D]` [DL-09-17; revision: I-065] An adversary may hold abilities of chapter 05's pool by id (`abilities` in its
 record): a sorcerer holds `ab.flame_lance`, `ab.spell_ward` and `ab.counterspell`; a cult priest `ab.wither`
 and `ab.drain_life`. It uses them exactly as their entries say, paying their Focus cost from its own Focus,
 with its effect DC from 09.3.8 where the ability is resisted and its attack modifier where it is aimed.
 `adversary_only` entries of chapter 05 do not exist; `pow.*` powers are this chapter's adversary-only
 mechanics and never enter 05's pool, a pick, a learning clock or a loot pool [05 Interface requests (a)].
 
-**09.5.3 Adversary Focus.** `[D]` Focus (09.3.8) is the adversary's special-action budget. A power or ability
+**09.5.3 Adversary Focus.** `[D]` [DL-09-17; DL-09-11; C:P9; revision: I-065] Focus (09.3.8) is the adversary's special-action budget. A power or ability
 with a `cost` spends it; one with `limits` counts uses instead. When an adversary cannot pay, the behavior
 predicate `can_pay` is false and its list falls through to the next row (09.7.1). Adversary Focus never buys
 an action, a reroll or a bonus (05.6.14).
 
-**09.5.4 Witnessing.** `[D]` When an adversary uses a power, an ability or a movement mode where the PC
+**09.5.4 Witnessing.** `[D]` [DL-05-08; C:P13; revision: I-065] When an adversary uses a power, an ability or a movement mode where the PC
 perceives it (the PC is a participant in the scene and is not `cond.blinded` toward it, or the power is
 audible and the PC could hear it), the engine writes the fact `witnessed.<pc>.<power or ability id>.<adversary
 id>` with the scene and the frame id. Three chapters read it: 04's Taking (the PC must have seen the creature
@@ -609,7 +609,7 @@ that would **empty** the pool (`pow.null_field`) is legal only at threat band 5 
 after its tell has been rendered (its Windup, 06.9.5); `pow.focus_leech` (a drain rider) only from band 4.
 The generator refuses an entry that breaks either rule [05.6.13; R2 §05].
 
-**09.5.6 What no power does.** `[D]` No power: adds an action (INV-11); kills, petrifies, disintegrates or
+**09.5.6 What no power does.** `[D]` [DL-07-01; DL-06-01; DL-00A-17; revision: I-065] No power: adds an action (INV-11); kills, petrifies, disintegrates or
 removes a PC from play outright (07.3.1: anything that kills goes through Dying and the two keys; text of that
 kind is read as S5 harm, 07's Edge cases); prevents the last-chance menu or the exits; changes a PC's
 attributes (00.4.3); grants a license to the PC; or acts at depth 2 (a rider is depth 1 and fires no further
@@ -617,14 +617,14 @@ hooks, INV-12). A power's harm is a severity on 00.3.11's scale: `BAND` means th
 `BAND+1` its heavy-blow severity (T-09-3), so a dragon's breath is S4 at T4 and S5 at T5, always wound up and
 always resisted by Evade for less (`tbl.09.blast`).
 
-**09.5.7 Recharge.** `[D]` Every power's recharge is data (`limits {per, uses}` or a Focus cost), refreshed
+**09.5.7 Recharge.** `[D]` [DL-09-17; DL-09-21; DL-00A-12; revision: I-065] Every power's recharge is data (`limits {per, uses}` or a Focus cost), refreshed
 on the named boundary's recover phase (00.10.9). "Once per fight" is `per: conflict_end`. A breath weapon
 recharges by Windup: it can be used whenever the creature has spent a Windup for it on an earlier turn and
 holds the Focus or uses it lists.
 
 ### 09.6 `threat_advisory`: how hard is this fight?
 
-**09.6.1 The contract.** `[D]` `threat_advisory(encounter, pc) → trivial | easy | fair | hard | lethal`
+**09.6.1 The contract.** `[D]` [DL-09-09; revision: I-065] `threat_advisory(encounter, pc) → trivial | easy | fair | hard | lethal`
 (00.17.1 Q5). **Inputs:** every participant of the opposing side with its line (attack modifier, Guard,
 current Vitality per member and members, primary severity, heavy severity, reduction, Fend, nerve, tempo DC,
 resistance to the PC's harm, regeneration, swarm, leader), all read from state; and the PC's **actual line**
@@ -637,7 +637,7 @@ warning (cause `advisory`: the word is lethal) and danger notice (the word is ha
 chapter 12's pacing (the push filter of 12.7.4 and the recovery cap of 12.7.5: "fair or easier"); a region's
 encounter tables (09.8.3; the world seed's, 12.16.13, or a pre-made setting's); chapter 04's evidence pacing (I-005, 09.8.9).
 
-**09.6.2 The estimator.** `[D]` The word is computed by **PR-09-4**, a closed-form estimate of the fight
+**09.6.2 The estimator.** `[D]` [DL-09-09; C:II; revision: I-065] The word is computed by **PR-09-4**, a closed-form estimate of the fight
 chapter 06 simulates, not a lookup of a summed rating. In outline:
 1. **Rates.** For each adversary, the PC's expected harm per round against it (three Strikes at 0 / −2 / −4,
    its Fend on the first, its reduction, a swarm's −1 rung, its resistance floor-rounded per outcome) and
@@ -663,7 +663,7 @@ Every input is state; every step is arithmetic; the same encounter always gets t
 models no Focus, no levers, no terrain and no tactics beyond Fend, which is why it is a **floor**: "this is how
 the fight goes for a fighter who just swings" (09.6.7).
 
-**09.6.3 Adjustments.** `[D]` After the estimate, in this order:
+**09.6.3 Adjustments.** `[D]` [DL-09-09; DL-16-13; revision: I-065] After the estimate, in this order:
 - **Companion.** A companion fighting at the PC's side makes the word **one gentler** (06's contract,
   T-06-13 note); never gentler than easy for an encounter estimated hard or worse. It applies only when at
   least one **able** ally is in the fight: conscious; Warm or better, or its contract's hazard covers the
@@ -686,7 +686,7 @@ resistance or regeneration, `advisory_without_counter` and the named `counter`. 
 learns the counter; a player told "hard" who then learns "unless you bring fire" has been given a plan, not a
 number [R2 #12 (every build has a structural weakness)].
 
-**09.6.5 When it is computed, and what the player sees.** `[T]` + `[D]` The engine computes the advisory:
+**09.6.5 When it is computed, and what the player sees.** `[T]` + `[D]` [DL-09-09; DL-07-02; revision: I-065] The engine computes the advisory:
 (a) when an encounter is framed (`scene_start` with hostiles present, or a hostile creature first perceived);
 (b) when the opposition's make-up changes (reinforcements arrive, a member flees or yields, a companion
 falls); (c) when the PC asks (G0, out of fiction, free). It is shown out of fiction as one word with the
@@ -708,7 +708,7 @@ This is a `[T]` on the perception fact, not a DM judgment, and it holds even whe
 noticed the PC: the warning is how the player learns that the right move is to leave, hide or parley
 [R2 §09 (Underworld); BRIEF §4].
 
-**09.6.7 What the advisory is not.** `[N]` It is not a promise (a fair fight is lost about one time in
+**09.6.7 What the advisory is not.** `[N]` [DL-09-09; DL-09-13; revision: I-065] It is not a promise (a fair fight is lost about one time in
 twelve); not a difficulty knob (nothing tunes it); not a measure of the PC's whole power (Focus, abilities,
 levers, terrain, allies and tactics all make real fights better than the floor: a Focus push on the first
 Strike each turn lifts a hard solo's win by 15–27 points, to 83 / 70 / 66 at T3 / T4 / T5, though by the word it
@@ -716,7 +716,7 @@ stays hard, 09.4.6 [verification: V2b-001]); and not a scene-builder's target.
 Encounters are drawn from places, not built to the PC (09.8.2); the advisory tells the truth about what was
 drawn.
 
-**09.6.8 How well the estimator matches the simulation.** `[D]` `09-adversary-sim.py` section D compares the
+**09.6.8 How well the estimator matches the simulation.** `[D]` [DL-09-09; revision: I-065] `09-adversary-sim.py` section D compares the
 estimator's word with the Monte-Carlo word (3,000 fights a row, the extended model) on 586 encounters: every
 T-06-13 shape; every bestiary adversary alone against the PC bands at, below and above its own; every
 resistant adversary without the counter; 38 mixed encounters built from the bestiary (leaders with mobs,
@@ -725,7 +725,7 @@ archers behind soldiers, casters with escorts, bosses with retinues); and five d
 one) against six band-1 and band-2 encounters each (02's request). Results are reported in 09.6.9; the
 contract with chapter 07 (menu rates by word) is checked in 09.9.5.
 
-**09.6.9 Results.** `[D]` (section D of the output; 3,000 fights per row; constants as tuned by
+**09.6.9 Results.** `[D]` [DL-09-09; revision: I-065] (section D of the output; 3,000 fights per row; constants as tuned by
 `09-estimator-tune.py`.)
 
 | Encounters | Rows | Exact word | Within one word |
@@ -785,14 +785,14 @@ Every list also states the creature's **instinct** (Dungeon World's one line of 
 problems for others) and three data fields read by other rules: `parley_when`, `yield_when`, `retreat_when`
 (09.7.6). The generator rejects any list that uses a predicate or macro outside the vocabularies.
 
-**09.7.2 Which list.** `[D]` First match: (1) the adversary record's `behaviors` (its archetype's list; a
+**09.7.2 Which list.** `[D]` [DL-09-11; DL-06-16; revision: I-065] First match: (1) the adversary record's `behaviors` (its archetype's list; a
 mob's is `beh.09.mob` or `beh.09.swarm`); (2) a solo prepends `beh.09.solo_overlay` (its phase-2 rows and its
 Shrug); (3) a side with a `leader` gives every member the leader's rally row if the member's own list has none
 (the leader rallies; members do not); (4) chapter 06's default family by `default_behavior_role` (06.9.4)
 when an improvised creature has no list. An adversary whose `defeat_disposition` toward the PC is `kill`
 (09.9.2) runs the same list; disposition changes what it does to a *defeated* PC (07.6.1), not how it fights.
 
-**09.7.3 Targets.** `[D]` The target is chapter 06's attention order (06.9.3: its objective's named target;
+**09.7.3 Targets.** `[D]` [DL-06-16; revision: I-065] The target is chapter 06's attention order (06.9.3: its objective's named target;
 an engaged enemy who harmed it most; the enemy who harmed it most; the nearest, the PC before a companion;
 a roll) unless the row names one ("its captive", "the one holding the lantern", "a helpless enemy"). A
 behavior row never targets by the narrator's sense of drama.
@@ -810,7 +810,7 @@ have no `flank`, `withdraw` or `talk` rows; animal lists flee when wounded and a
 prey on the helpless; sapient lists rally, parley, protect their leader and take prisoners; alien lists pursue
 their nature.
 
-**09.7.5 Morale.** `[D]` Chapter 06 owns the morale clock (06.11). This chapter supplies, per adversary:
+**09.7.5 Morale.** `[D]` [DL-09-12; DL-06-18; revision: I-065] Chapter 06 owns the morale clock (06.11). This chapter supplies, per adversary:
 `morale.nerve` (skittish 4 / steady 6 / resolute 8 / fearless — no clock), read from the side's leader, else
 its most numerous template (06.11.2); and `morale.break_then`, one of `flee`, `yield`, `cower`, `frenzy`,
 `fighting_withdrawal` (06's closed list), which is what each member does on its turn once the side breaks
@@ -819,7 +819,7 @@ are (zealots, abominations, lesser demons): broken, they stop defending and spen
 nearest enemy until defeated; their clock still closes, so their side stops rallying. A side containing a
 fearless member that is not broken fights on with that member alone (06.11.5).
 
-**09.7.6 Parley, yield and retreat.** `[D]` + `[J:flag]` Three fields on every list, read by other rules:
+**09.7.6 Parley, yield and retreat.** `[D]` + `[J:flag]` [DL-09-11; C:VII; C:P16; revision: I-065] Three fields on every list, read by other rules:
 - `parley_when`: the state in which a parley Talk (06.11.7) is **not** G4 for this side; elsewhere the
   redirect names the condition ("they would hear you if you showed them the debt is paid"). Robbers, the
   law, bargainers and fey always parley; mindless things and frenzied fiends never.
@@ -845,7 +845,7 @@ yield, a parley row.
 
 ### 09.8 Encounters for one character
 
-**09.8.1 The body-count curve and the encounter budget.** `[D]` For a lone PC, the number of foes matters more
+**09.8.1 The body-count curve and the encounter budget.** `[D]` [DL-09-13; revision: I-065] For a lone PC, the number of foes matters more
 than their band: a second foe of the PC's own band is about as dangerous as one foe a band higher, and a third
 is lethal from P2 up (T-06-13; T-09-9). **T-09-10** turns the curve into a budget: for each PC band, the
 largest group of each shape that stays at each word, simulated with the standard lines (section F; extended
@@ -875,7 +875,7 @@ Three consequences are rules:
    armor, the branch working: the healer, talker or sneak, PR-10-8 step 2); and a rolled fight that is lethal
    for the PC at the table is seen by that PC first (10.10.4 item 4) [revision: I-040].
 
-**09.8.2 Encounters belong to places.** `[D]` + `[N]` In a sandbox the world does not scale to the PC: a
+**09.8.2 Encounters belong to places.** `[D]` + `[N]` [DL-09-13; revision: I-065] In a sandbox the world does not scale to the PC: a
 region, a site and a lair have bands of their own (10, 13), and their encounter tables field what lives
 there. The advisory tells the truth about what was rolled. What keeps that fair is structure, not tuning:
 - **Danger rings.** A region's encounter table is written for a **home band** (its area's ring, 12.16.8, 10.2.4): most rows at the home
@@ -896,7 +896,7 @@ there. The advisory tells the truth about what was rolled. What keeps that fair 
   **minions** alone there (hard at P4), and a home-5 table fills its home + 1 faces with band-5 solos
   (13.10.3; DL-13-11) [integration: IR ch.13 to 09].
 
-**09.8.3 From a table row to a scene.** `[D]` An encounter row names an archetype's group (or an adversary
+**09.8.3 From a table row to a scene.** `[D]` [DL-09-13; DL-06-20; revision: I-065] An encounter row names an archetype's group (or an adversary
 id) and a count (`encounter.group` in the archetype: "mob 4–8, leader elite"). The engine: rolls the count
 (`tbl.09.group_shape`: d6 1–2 low end, 3–4 middle, 5–6 high end); folds four or more of one template into one
 mob (06.10.2) unless the row names them; adds the leader as a separate participant (an elite of the same
@@ -905,7 +905,7 @@ scene with the band tells (09.10.1) and, if the advisory is hard or lethal, chap
 before the first beat. The DM's part is the fiction of who they are and what they are doing, from the
 archetype's tells and instinct.
 
-**09.8.4 Reinforcements.** `[D]` + `[T]` Reinforcements enter only on a clock whose omens were rendered, or by a
+**09.8.4 Reinforcements.** `[D]` + `[T]` [DL-00A-20; DL-06-18; revision: I-065] Reinforcements enter only on a clock whose omens were rendered, or by a
 behavior row that calls for help (06.2.5). This chapter's template is `clk.09.reinforcements` (countdown, 4,
 sensed; +1 each round; `pow.call_kin` ticks it 2; omens mandatory; on completion the group's reinforcements
 enter at `band.far` and the side's morale clock falls 2, 06.11.3). Who arrives is the encounter row's group,
@@ -933,7 +933,7 @@ in progress (a parley open with either); captor and captive (a rescue, a ransom 
 states the sides; the advisory is computed per hostile side, and for "allies" over both
 [R1 §09 (encounter mixing: "roll twice and combine")].
 
-**09.8.7 Meeting creatures outside a fight.** `[D]` + `[J:flag]` Whether a met creature fights at once is
+**09.8.7 Meeting creatures outside a fight.** `[D]` + `[J:flag]` [DL-09-18; DL-09-19; DL-12-10; revision: I-065] Whether a met creature fights at once is
 never the DM's choice:
 - **Sapient and cunning creatures** whose archetype has `reaction_roll: true` take chapter 12's reaction roll
   (12.11.2) when the PC first interacts; their behavior list begins when a conflict starts (06.2.1).
@@ -946,19 +946,19 @@ never the DM's choice:
   ground; a horde moves toward the living.
 - **Adversaries on a mission** (an objective recorded by 11 or a clock) act on the objective (06.13.2).
 
-**09.8.8 Objectives.** `[D]` The opposing side's objective at `conflict_start` (06.13.2) defaults from its
+**09.8.8 Objectives.** `[D]` [DL-09-16; revision: I-065] The opposing side's objective at `conflict_start` (06.13.2) defaults from its
 `defeat_disposition` (kill → `kill`, capture and ransom and drag_to_lair → `capture`, rob → `rob`, drive_off →
 `drive_off`, leave → `defeat`) unless the archetype's `encounter.objective_default`, a complication or chapter
 11's situation names another (a soldier patrol holds a gate: `hold`; a homunculus spies: `escape`).
 
-**09.8.9 Issue I-005: what 04's pacing should assume.** `[D]` Chapter 04's pacing simulation drew conflicts at
+**09.8.9 Issue I-005: what 04's pacing should assume.** `[D]` [DL-09-22; DL-00-05; revision: I-065] Chapter 04's pacing simulation drew conflicts at
 the PC's band to band+2 (tiers b, b+1, b+1, b+2; mean +1). This chapter's budget fields Δ −1 / 0 / +1 at
 30 / 55 / 15 % and Δ +2 only by choice. `09-i005-check.py` re-runs 04's R1 pacing rows with both
 distributions (09.12 reports the result and the recommendation to 04).
 
 ### 09.9 Defeat: lethality, dispositions, and the victor who remembers
 
-**09.9.1 `lethal_context`.** `[D]` Every archetype carries `lethal_context: true | false` and every adversary
+**09.9.1 `lethal_context`.** `[D]` [DL-09-01; DL-07-02; revision: I-065] Every archetype carries `lethal_context: true | false` and every adversary
 record carries the value and its causes (`lethal_causes`): `archetype` when the archetype's flag is true (it
 kills: trolls, wraiths, demons, dragons, the ravenous dead, horrors) or its disposition is `kill`;
 `severity` when any of its attacks or powers is S4 or more. These are inputs to chapter 07's lethal-warning
@@ -1009,7 +1009,7 @@ also chapter 04's recognizer V8 ("the Rival Names You"): its epithet for the PC 
 04 may stage [R6 §A V8]. Nemesis results are capped by the band: a promotion never raises the threat band
 (it changes the variant), so loot and evidence stay honest.
 
-**09.9.4 Captive fate, bargains and dread.** `[D]` Three more stakes fields, all chapter 07's inputs:
+**09.9.4 Captive fate, bargains and dread.** `[D]` [DL-07-19; DL-07-06; DL-07-15; revision: I-065] Three more stakes fields, all chapter 07's inputs:
 - `captive_fate` — one of 07's closed list (trial, sale, sacrifice, interrogation, ransom, labor, the larder),
   naming the captors' clock when the disposition takes the PC (07.6.3). Default by org tag when absent
   (`harm.yaml#captivity.fates`). Sacrifice and the larder are lethal on completion, so 07's warning fires at
@@ -1022,7 +1022,7 @@ also chapter 04's recognizer V8 ("the Rival Names You"): its epithet for the PC 
   ghouls and wights S2, wraiths, vampires, aberrations and abominations S3, liches, death-kings and great
   demons S4. Absent for creatures that are only dangerous (25 archetypes carry a dread rung).
 
-**09.9.5 The contract with chapter 07's ladder.** `[D]` Chapter 07 set targets for how often a PC who fights on
+**09.9.5 The contract with chapter 07's ladder.** `[D]` [DL-09-09; DL-07-04; revision: I-065] Chapter 07 set targets for how often a PC who fights on
 to the end in a lethal context reaches the last-chance menu, by advisory word: trivial 0, easy 1, fair 5,
 hard 26, lethal 80 per 100 fights. Section E of `09-adversary-sim.py` runs 07's own ladder (`07-harm-sim.py`'s
 `fight07`: wound load 3, Dying 3 steps, dying checks, foes that kill) on 481 encounters built from this
@@ -1045,7 +1045,7 @@ This closes issue I-013's check on 07's side; 09.12.3 summarizes all three issue
 
 ### 09.10 Knowledge: tells, lore, and the graduated reveal
 
-**09.10.1 Tells.** `[N]` + `[S]` A **tell** is what the narrator may say instead of a number (06.9.6; 12.10.7).
+**09.10.1 Tells.** `[N]` + `[S]` [DL-09-24; DL-06-17; C:IV; revision: I-065] A **tell** is what the narrator may say instead of a number (06.9.6; 12.10.7).
 Every archetype has five, all data (`tells`): **presence** (the sign of it before it is seen: "a ring of eyes
 at the edge of the firelight"), **wounded** (its `bloodied` descriptor in fiction), **breaking** (its morale
 omens' last stage), **weak_hint** (a clue to its weak spot, perceivable to an attentive character), and a
@@ -1112,20 +1112,20 @@ Basis:              [C:P17] [R7 §5 Ex.8 (the probe's bundled monster question, 
                     [06.9.6] [DL-09-10]
 ```
 
-**09.10.3 Observing in a fight.** `[D]` 06.9.6's Observe of a foe (one action; against its Wits defense; reach
+**09.10.3 Observing in a fight.** `[D]` [DL-09-10; C:P17; revision: I-065] 06.9.6's Observe of a foe (one action; against its Wits defense; reach
 in information items) uses the same ranked list with these differences: it learns about **this** creature (its
 Guard as a number is item 0 and comes first if the player ranks it), not its kind; it needs no license; and a
 power the PC has already witnessed (09.5.4) is delivered free. `ab.read_the_field` and `ab.know_the_beast`
 (05) unseal from the same list.
 
-**09.10.4 What becomes known stays known.** `[D]` A delivered item is a knowledge record on the PC with its
+**09.10.4 What becomes known stays known.** `[D]` [DL-09-10; C:P13; revision: I-065] A delivered item is a knowledge record on the PC with its
 source; it is `available` in the codex under the creature or kind (14), citable as a fact for levers and called
 shots from the next beat (00.3.9a), and never re-sealed. A later encounter with the same kind shows the known
 items in the codex without a roll.
 
 ### 09.11 What a defeat produces
 
-**09.11.1 Loot (08's contract).** `[D]` Every archetype satisfies `gen_loot.yaml#contract_09`: `creature_tags`
+**09.11.1 Loot (08's contract).** `[D]` [DL-09-01; DL-09-23; revision: I-065] Every archetype satisfies `gen_loot.yaml#contract_09`: `creature_tags`
 most specific first, `harm_tags`, `evidence_tags` (its deed tags), `org_tags` for folk, the threat band as tier
 cap; `loot.yield` (`trophy` by default; `none` for vermin swarms, the walking dead's hordes, spirits of place,
 possessors and oozes, which yield materials only; `hoard` for dragons, giants, liches, wyrms and greater
@@ -1138,7 +1138,7 @@ archetype can drop: **all 58** archetypes that drop items hold 3 or more pool en
 smallest is the orc's round shield, 3); the water elemental's amulet, 2 entries before 08's thematic gates and
 `prop.tidesense` (I-017, I-019), now holds 9 [verification: V2b-003].
 
-**09.11.2 Evidence (03).** `[D]` An adversary's threat band reaches the **challenge band** of an evidence event
+**09.11.2 Evidence (03).** `[D]` [DL-09-01; DL-00-05; DL-09-22; revision: I-065] An adversary's threat band reaches the **challenge band** of an evidence event
 through 03.4.3: in a conflict, the challenge band is the PC's power band shifted by the advisory word computed at
 framing (DL-00-05), which this chapter's estimator derives from the foes' lines; for a conduct-only event, the
 highest threat band among aware opposing entities present [verification: V2b-002]. Its
@@ -1146,7 +1146,7 @@ highest threat band among aware opposing entities present [verification: V2b-002
 feeds the event's `lethal_context`. A mob is one source (06.10.2). The deed tags of evidence are always the
 PC's own method's.
 
-**09.11.3 Absorption (04).** `[D]` Every archetype carries `absorbable {pool_gate_tags, eligible, cannot_absorb,
+**09.11.3 Absorption (04).** `[D]` [DL-09-01; DL-09-23; DL-04-26; revision: I-065] Every archetype carries `absorbable {pool_gate_tags, eligible, cannot_absorb,
 signature}`: the gate is its creature tags; `eligible` lists the `gen_absorb.yaml` entries the gate admits
 (computed by the generator); `cannot_absorb` names the exclusions; `signature` names the one entry
 `gen.item_ability` and the Taking's decisive fill use (which 04 records as `signature_of` on that entry:
@@ -1159,7 +1159,7 @@ needs the PC to have witnessed the creature act (09.5.4).
 
 ### 09.12 The bestiary
 
-**09.12.1 What ships.** `[D]` `data/adversaries.yaml` holds **123 fully statted adversaries** built by PR-09-1
+**09.12.1 What ships.** `[D]` [DL-09-01; DL-09-05; C:VI; revision: I-065] `data/adversaries.yaml` holds **123 fully statted adversaries** built by PR-09-1
 from the 63 archetypes: 25 at T1, 33 at T2, 33 at T3, 21 at T4, 11 at T5; 77 standard, 15 minion (all of them
 mobs or swarms), 16 elite, 15 solo; every creature branch at several bands (beasts 24, folk 34, undead 16,
 spirits 8, fiends 8, constructs 7, elementals 6, dragons 9, horrors 11). Every entry carries every field of
@@ -1170,7 +1170,7 @@ setting (chapter 13) may add its own
 in the file's owner-block (`blocks: [{owner: "13", entries: [...]}]`), built by the same procedure (PR-09-1;
 the generator accepts 13's roster lines in the same five-field form).
 
-**09.12.2 Using an entry.** `[D]` A bestiary entry is a **template**. `create_entity(kind: adversary,
+**09.12.2 Using an entry.** `[D]` [DL-00A-22; DL-09-01; revision: I-065] A bestiary entry is a **template**. `create_entity(kind: adversary,
 template_id: adv.*)` makes an instance with its own id, Vitality, Focus, conditions and position; the
 template is never written to in play. A named instance (a principal NPC built on `adv.bandit_captain`)
 keeps the template's numbers and adds its own facts (name, wants, knowledge, 15; Nemesis results, 09.9.3).

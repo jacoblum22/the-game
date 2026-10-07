@@ -21,3 +21,4 @@
 | BRIEF §4 | Death real but telegraphed; defeat changes the situation | 09.6.5–6, 09.9.1–2, 09.5.6 (no kill-outright effect), 09.3.5 (windups), 09.9.5 (menu rates by word) | satisfied |
 | 00.17.2 (09 row) | archetypes as manufacturers; T1–T5 templates; threat_advisory; solo budgets; behavior lists and morale; lethal_context and defeat_disposition; tells; bestiary | 09.2, 09.3–09.4, 09.6, 09.8, 09.7, 09.9, 09.10, 09.12 | satisfied |
 | 00.17.1 Q5 | `threat_advisory(encounter, pc)` from bands, count and power band; lethal feeds 07 | 09.6.1–09.6.5, PR-09-4 | satisfied |
+| BRIEF §6 | Every rule cites its basis (`[C:]`, `[R]` or `[DL-]`) at card level | every rule card of 09 (76); 50 tagged at revision C6c; validator BASIS (DL-INT-13) | satisfied |

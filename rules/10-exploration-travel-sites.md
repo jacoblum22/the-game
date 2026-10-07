@@ -97,7 +97,7 @@ Rule IDs are `10.S.R`. Kinds per 00.2.2. Rules that carry a `[J:*]` decision use
 
 ### 10.1 The place graph
 
-**10.1.1 The world is a graph of places.** `[D]` Every location the character can be in is a **place**
+**10.1.1 The world is a graph of places.** `[D]` [DL-10-01; C:IV; R5 EX-07; revision: I-065] Every location the character can be in is a **place**
 (entity kind `place`, 00.6.2) and every way between two places is a **route link** on the place it
 leaves from. The graph is canonical; descriptions follow it. A place's **place kind** (`place_kind`,
 closed list, T-10-1) fixes what rules load there:
@@ -116,7 +116,7 @@ closed list, T-10-1) fixes what rules load there:
 belongs to exactly one parent; an area's region gives it its home band and danger rating unless the area
 overrides them.
 
-**10.1.2 The place record.** `[D]` Chapter 10 extends 00.6.2's `Place` with these fields (all data; the world seed
+**10.1.2 The place record.** `[D]` [DL-10-01; DL-00A-22; C:P3; revision: I-065] Chapter 10 extends 00.6.2's `Place` with these fields (all data; the world seed
 writes them for the starting region, 12.16.8, and a pre-made setting such as 13 authors its own; generated
 places get them from the generator that made them) [revision: I-028]:
 
@@ -153,7 +153,7 @@ site, 10.13.9), and a pre-made setting's own facts (chapter 13's Thallen Vale ad
 through that region's hazards and the Waking rule) [integration: IR ch.13; revision: I-028]. Each is written with `set_fact` and never
 implied by narration alone.
 
-**10.1.3 The route link.** `[D]` A link (00.6.2: `{to, route, travel_watches}`) carries:
+**10.1.3 The route link.** `[D]` [DL-10-01; DL-10-02; revision: I-065] A link (00.6.2: `{to, route, travel_watches}`) carries:
 
 ```yaml
 RouteLink:
@@ -210,7 +210,7 @@ Anchor:             no
 Basis:              [00.6.6] [R1 §10 (geography is long-gap state)] [R4 SG-13] [DL-10-01]
 ```
 
-**10.1.5 Known, discovered, and the discovery fact.** `[D]` A place is **known** when the PC has a fact
+**10.1.5 Known, discovered, and the discovery fact.** `[D]` [DL-10-01; C:P3; R5 EX-13; revision: I-065] A place is **known** when the PC has a fact
 about it (a rumor, a map, a story, an NPC's directions) and **discovered** when the PC has been there or
 perceived it directly. Discovery is written `set_fact(loc.<id>, discovered, true)` with:
 - `frame_id` = the frame whose delivered result found it (a navigation reach 4, a scout's beat, a search,
@@ -222,20 +222,20 @@ An undiscovered place is sealed (00.6.4) with the gate "the PC arrives, or perce
 places (`known: true, discovered: false`) appear in the codex's map view by name only, with the truth of
 the rumor still sealed (11).
 
-**10.1.6 The settlement scope.** `[D]` Every area and site carries `settlement_scope`: the place id of the
+**10.1.6 The settlement scope.** `[D]` [DL-10-31; DL-03-09; DL-11-15; revision: I-065] Every area and site carries `settlement_scope`: the place id of the
 settlement whose people would hear of what is done there (the nearest settlement by route watches, or the
 one the region's seed or setting names as the area's market). Chapter 03's witness scopes (03.10) and chapter 11's reputation read
 it. A settlement's own scope is itself. Areas with no settlement within 8 travel watches carry `null`:
 deeds done there carry only to witnesses' own scopes.
 
-**10.1.7 Places of power.** `[D]` `resonance: [tag]` on a place names the deed keys, branches or conduct
+**10.1.7 Places of power.** `[D]` [DL-05-14; C:P13; revision: I-065] `resonance: [tag]` on a place names the deed keys, branches or conduct
 axes it answers (04's V11 *The Place Answers*; 05.6.9's resonant rest: +1 Focus on a breather or short
 rest when a held calling or ability matches). Resonance is data (the region's seed, 12.16.9, 12.16.12) or a written result of a rite
 (`rit.consecrate_ground`, 05). `consecrated`, `desecrated` and `dead_ground` are facts with sources;
 T-10-24 (`data/hazards.yaml#zones`) lists the magical-zone hazards that go with them (a desecrated
 place's dread, dead ground's silence of primal workings).
 
-**10.1.8 Generated places.** `[D]` When play reaches a place no data holds (the player strikes out across
+**10.1.8 Generated places.** `[D]` [DL-10-01; DL-12-23; C:I; revision: I-065] When play reaches a place no data holds (the player strikes out across
 country the region's seed did not author [verification: V2b-006]; a site's new area), the place is generated, never imagined: an area takes its
 region's band, danger and climate, a terrain from the region's terrain list by `roll_table`, and its
 `nav_tier`, `forage_tier`, `openness` from that terrain's defaults (T-10-12); a site takes a theme and a
@@ -245,7 +245,7 @@ and words, never fields.
 
 ### 10.2 Time, modes, ventures and safety
 
-**10.2.1 The modes of this chapter.** `[D]` Three of 00.7.3's time modes are this chapter's to run:
+**10.2.1 The modes of this chapter.** `[D]` [DL-00A-12; R5 TM-01; revision: I-065] Three of 00.7.3's time modes are this chapter's to run:
 - **`travel`**: each **travel activity is one watch** (00.7.3). The PC spends every watch of a journey day
   on one activity (T-10-6: travel, camp, sleep, forage, hunt, scout, rest, keep watch, map, other).
 - **`site`**: each **significant beat is one interval** (00.7.3; `h.10.site_time`, 10.13.5); a beat is
@@ -257,7 +257,7 @@ Transitions follow 12's T-12-3: departing along a route link → `travel`; enter
 `place_kind` is `site` or `site_area`, or beginning a room-by-room search of a building → `site`;
 arriving at a settlement → `free`; `conflict_start` → `conflict` and back at `conflict_end`.
 
-**10.2.2 Venture start and end.** `[T]` + `[D]` A **venture** (00.18) runs from leaving safety to returning.
+**10.2.2 Venture start and end.** `[T]` + `[D]` [DL-10-24; revision: I-065] A **venture** (00.18) runs from leaving safety to returning.
 - `venture_start` is marked when the PC moves from a place with `safe: true` onto a route link whose
   destination is not safe, or begins a travel watch outside any safe place.
 - `venture_end` is marked when the PC enters a place with `safe: true`, or when chapter 07 records the PC
@@ -271,7 +271,7 @@ arriving at a settlement → `free`; `conflict_start` → `conflict` and back at
 - While a venture is open, the fact `pc.on_venture = true` holds: 08's lifestyle charge is replaced by
   supply (`economy.yaml#lifestyle_rules`), and 07's rest site is never `haven` unless the place is one.
 
-**10.2.3 Safety.** `[D]` A place with `safe: true` is a **haven** for this chapter: no time-tick check
+**10.2.3 Safety.** `[D]` [DL-10-24; DL-07-11; revision: I-065] A place with `safe: true` is a **haven** for this chapter: no time-tick check
 runs there (07's request: "no encounter check in a haven"), its `rest_site` is `haven`, and ventures end
 there. Safety is a property of the place, written by data (the region's seed, 12.16.9, or a pre-made setting: the base
 town, a friendly hold, a guarded shrine) [verification: V2b-006] or by play (11: a holding the PC owns and garrisons; a village that grants the PC
@@ -280,7 +280,7 @@ a written world change (a faction takes it; a situation's default timeline burns
 narration. Danger may still enter a haven through chapter 11 (a World Turn event, a bang), chapter 12's
 pushes, or a clock — never through this chapter's die.
 
-**10.2.4 The West Marches shape.** `[N]` A starting region (the world seed's, 12.16.8, or a pre-made one) is laid
+**10.2.4 The West Marches shape.** `[N]` [R6 B-15; C:P2; DL-10-07; revision: I-065] A starting region (the world seed's, 12.16.8, or a pre-made one) is laid
 out as a haven at the center and
 **concentric danger rings** (R6 B-15, B-R7): the farther from the base, the higher an area's home band and
 danger rating, so distance is the difficulty dial in a game with no character levels (C:P2). This chapter
@@ -299,7 +299,7 @@ never numbers. T-10-2 is the reference ring layout a region starts from (12.16.8
 | 4 | 6–10 days | 3–4 | perilous | "the old lands: only the strong travel here" |
 | 5 | beyond | 4–5 | deadly | "the far reaches: legends live here, and so do the things that killed them" |
 
-**10.2.5 What runs while time passes here.** `[D]` This chapter's handlers (T-10-23) run on these
+**10.2.5 What runs while time passes here.** `[D]` [DL-10-20; DL-00A-12; C:I; revision: I-065] This chapter's handlers (T-10-23) run on these
 boundaries and never anywhere else (00.7.4): `h.10.site_time` (`beat_end`, 9), `h.10.light`
 (`interval`, 4), `h.10.site_exposure` (`interval`, 2), `h.10.site_check` (`interval`, 7),
 `h.10.travel_progress` (`watch`, 4), `h.10.wayfinding` (`watch`, 4, after travel progress by id order),
@@ -310,7 +310,7 @@ boundaries and never anywhere else (00.7.4): `h.10.site_time` (`beat_end`, 9), `
 (00.7.7): a three-day journey "skipped" is twelve watch checks, three supply days and three weather rolls,
 and its narration comes only from the returned list (12.4.6).
 
-**10.2.6 Leaving a haven into its own area.** `[D]` A settlement's `parent` is usually the area it stands in,
+**10.2.6 Leaving a haven into its own area.** `[D]` [DL-10-29; revision: I-065] A settlement's `parent` is usually the area it stands in,
 and its route link to that area (a road of a watch or two, 12.16.9) is the walk from its gate out into the
 land. That leg is the **area's first leg**: the haven stops being a haven when the PC passes its gate (the
 venture starts, 10.2.2), every watch of the leg ends outside a haven and is checked at the area's danger
@@ -345,14 +345,14 @@ or a clock, never the narrator's mood [R5 EX-12; revision: I-051]:
 
 ### 10.3 Journeys: routes, pace, and the travel watch
 
-**10.3.1 A journey is a plan over the graph.** `[D]` A **journey** is an ordered list of **legs**, each one
+**10.3.1 A journey is a plan over the graph.** `[D]` [DL-10-02; R5 EX-01; revision: I-065] A **journey** is an ordered list of **legs**, each one
 route link from one place to the next, ending at a destination the player names (a place id, or "the
 standing stones the hermit spoke of" — a known place). The engine finds the legs (the path through
 known links with the fewest watches; the player may name a different path); a destination with no known
 path is reached by a **trackless** leg across the area toward it (10.4). The plan is a record
 `{journey_id, legs, pace, schedule, roles, started_at, progress_points}` written at departure.
 
-**10.3.2 Length and pace.** `[D]` A route's length is its `travel_watches` (W): watches at **normal**
+**10.3.2 Length and pace.** `[D]` [DL-10-02; DL-10-03; revision: I-065] A route's length is its `travel_watches` (W): watches at **normal**
 walking pace in fair weather, unburdened, with terrain already folded in by the author (a region writes "3" for
 a day and a half over the moor). The engine converts it to **progress points**: a leg needs **6 × W**
 points, and each travel watch earns points by the party's **effective pace** on the pace ladder
@@ -379,7 +379,7 @@ normal, ride and hard_ride. **Steps** then move the rung down (never up), clampe
 Each step is engine-cited from a fact; none is chosen. Example: Wren (walker, normal) in a storm across
 the moor → normal → slow (storm, off-road) → 4 points a watch.
 
-**10.3.3 The travel watch.** `[D]` Each watch of a journey day is given **one activity** (T-10-6) for the PC
+**10.3.3 The travel watch.** `[D]` [DL-10-02; R5 EX-01; revision: I-065] Each watch of a journey day is given **one activity** (T-10-6) for the PC
 and one for each companion (16). The **default day** is: morning *travel*, afternoon *travel*, evening
 *camp*, night *sleep* (a `rest_long`, 07.8.1). The player may change any watch's activity before it
 starts. A *travel* watch earns its points at `h.10.travel_progress` (`watch`, phase 4); arrival happens
@@ -407,7 +407,7 @@ you: what lives there can kill you.`" at two or more. It writes no lethal contex
 a creature there is first perceived, 09.6.6); it is the earlier, regional notice, the West Marches
 promise that distance is danger and that the player is told so [R6 B-15; R5 P-32].
 
-**10.3.5 The march allowance and forced marches.** `[D]` + `[T]` A body can march so much a day.
+**10.3.5 The march allowance and forced marches.** `[D]` + `[T]` [DL-10-18; R5 HR-07; revision: I-065] A body can march so much a day.
 - **Walkers**: an allowance of **2 march units** a day (reset at the `day` boundary, dawn). A travel watch
   at slow or normal pace costs 1 unit; at fast, 2.
 - **Mounts**: each mount has its own allowance of **2 units** (ride pace, or normal for walk-pace
@@ -424,13 +424,13 @@ promise that distance is danger and that the player is told so [R6 B-15; R5 P-32
   first evening, one the next morning and three on the second evening, without pushing on: every army story's
   forced march, priced in the same condition 07 uses for sleeplessness and want [verification: V2b-007].
 
-**10.3.6 Changing the plan, turning back, and stopping.** `[D]` The player may change destination, pace,
+**10.3.6 Changing the plan, turning back, and stopping.** `[D]` [DL-10-02; R5 EX-01; revision: I-065] The player may change destination, pace,
 schedule or roles at any watch boundary, or after any interrupt; the journey record keeps the points
 earned on the current leg. Turning back on a leg reverses it: the points already earned are the points
 needed to return. Stopping in the open turns the next watches into *camp* or *rest*; an interrupted
 journey is resumed with its remainder (00.7.8).
 
-**10.3.7 Travel by water.** `[D]` A water leg (`route_kind: river | water`) is travelled by vessel (08.10.4)
+**10.3.7 Travel by water.** `[D]` [DL-10-03; R5 EQ-10; revision: I-065] A water leg (`route_kind: river | water`) is travelled by vessel (08.10.4)
 or by passage (08.8.8). Paces (`travel.yaml#vessel_pace`, points per watch):
 
 | Vessel | Calm water | Downstream | Upstream | Sea | Watches a day |
@@ -448,7 +448,7 @@ A crewed vessel travelling through the night does not tire its passengers: they 
 beats. A water route's hazards (rapids, a weir, reefs) are fixed on its link and met in order; a storm
 at sea is the weather's `haz.storm_at_sea`.
 
-**10.3.8 Travel underground.** `[D]` An underground leg (`route_kind: underway`, or trackless through
+**10.3.8 Travel underground.** `[D]` [DL-10-23; DL-10-04; R5 EX-01; revision: I-065] An underground leg (`route_kind: underway`, or trackless through
 `terrain.underground`) is travelled as overland, with three differences: it is always dark (10.7.2: a
 light is needed, or the party moves at crawl with sight-reliant beats under `cond.blinded`); its
 way-finding uses `deed.wilds.navigation.underways`; and weather does not apply (only the place's own
@@ -559,12 +559,12 @@ critical failure): a trained navigator at +4 is off course 10% at Easy, 35% at M
 fallback (+3 against DC +5) is off course 40% at Easy and 65% at Moderate — which is why taking the time
 (half points, no roll) and the long way by road exist: patience and the beaten way are open to everyone.
 
-**10.4.3 The area's navigation tier is stored.** `[D]` Every area carries `nav_tier` (the region's seed writes it, 12.16.8; a
+**10.4.3 The area's navigation tier is stored.** `[D]` [DL-10-05; DL-00A-10; revision: I-065] Every area carries `nav_tier` (the region's seed writes it, 12.16.8; a
 generated area takes T-10-12's default for its primary terrain). It is the obstacle's stored DC for every
 way-finding beat in that area (00.3.8 source 1) and is never re-rated in play; weather, night and pace
 are snags and levers on the roll, never tier changes (DL-00A-10).
 
-**10.4.4 Landmarks and the crude fallback.** `[J:flag]` The fallback method — "follow a road, a river or a
+**10.4.4 Landmarks and the crude fallback.** `[J:flag]` [DL-10-05; C:VII; revision: I-065] The fallback method — "follow a road, a river or a
 visible landmark" — is usable on a trackless leg only when `[J:flag]` *"Is a recorded landmark of this
 area (or a river or road in it) visible now?"* True only when the area's `landmarks` or links hold one
 AND visibility allows it: daylight and no fog, blizzard or storm for a distant landmark (a peak, a tower);
@@ -585,7 +585,7 @@ way-finding beat is made, and each such day is **off course** (10.4.6) — excep
 with the destination area's own landmark in sight (the engine checks it at each watch end) puts the
 party on course from there. The licensed never face (d)–(e) unless they choose to [C:VII; C:P16].
 
-**10.4.6 Off course: the veer.** `[S]` + `[D]` When a way-finding beat delivers reach 0 (or a blind day
+**10.4.6 Off course: the veer.** `[S]` + `[D]` [DL-10-25; C:P3; revision: I-065] When a way-finding beat delivers reach 0 (or a blind day
 begins), the engine writes the **sealed** fact `nav.lost {journey, intended_leg, veer_to, since,
 watches_lost}`:
 - `veer_to` is drawn with `roll_table(tbl.10.veer)` (d6): 1–2 the link of the current area nearest the
@@ -617,7 +617,7 @@ lost, and it is the right size — measured in time, which every clock in the wo
 
 ### 10.5 Journey roles
 
-**10.5.1 The four roles.** `[D]` During a travel or camp watch each traveler may hold **one role** for the
+**10.5.1 The four roles.** `[D]` [DL-10-19; R5 EX-03; revision: I-065] During a travel or camp watch each traveler may hold **one role** for the
 whole watch, written as the fact `journey_role {actor, watch, role}` at the watch's start; 03's
 `cnt.journey` reads it at the watch boundary (navigator → `deed.wilds.navigation.wayfinding`; scout →
 `deed.wilds.tracking.sign`; forager → `deed.wilds.foraging.food`; lookout →
@@ -633,7 +633,7 @@ four plus chapter 16's fifth, **quartermaster**, and 16's companions take them b
 | **forager** | slow travel only | gathers while walking: at the watch's end a forage beat (10.6.4) with an engine-cited Precision snag "on the move", yielding delivered reach − 1 supply (minimum 0) |
 | **quartermaster** | any pace; any camp watch; an ally with `kn.quartermaster` or a holder of `lic.training.wilds_survival` | **once per day**, prevents one depletion face (`tbl.10.depletion` rows 1–4: spoiled supply, a guttering light, a damaged item): the face counts as a lull without its progress point (16.8.3) [integration: IR ch.16 to 10] |
 
-**10.5.2 Defaults for one traveler.** `[D]` A PC alone holds **navigator** on a leg that needs way-finding,
+**10.5.2 Defaults for one traveler.** `[D]` [DL-10-19; C:IV; revision: I-065] A PC alone holds **navigator** on a leg that needs way-finding,
 otherwise **lookout**; the player may name another. A lone sleeper is no lookout: in a night watch spent
 asleep the PC is `unaware` at an encounter's arrival unless a companion keeps watch, a trained animal
 (16) guards, a ward (05) stands, or the PC rigged an alarm (verb.setup with cord and pans: the fact
@@ -642,18 +642,18 @@ a deed only while the actor holds it for the whole watch; a watch broken by an i
 role was being performed when it came. An ally keeps at most two watches a day in a role (the night rota,
 16.8.3); a third falls under 07.8.10's `watches_awake` [integration: IR ch.16 to 10 (b)].
 
-**10.5.3 Roles from licenses.** `[D]` A license whose scope covers a journey task gives the role at the pace
+**10.5.3 Roles from licenses.** `[D]` [DL-10-19; DL-00A-19; revision: I-065] A license whose scope covers a journey task gives the role at the pace
 it names (none in the core pool do; 05 or a pre-made setting may add one, such as a ranger's "forage at normal pace").
 Roles never add actions, and no one holds two roles in one watch (one watch, one activity).
 
 ### 10.6 Supply, want, foraging and hunting
 
-**10.6.1 Supply.** `[D]` **Supply** is a quantity on the carrier (08.9.4): **1 supply = one person's food and
+**10.6.1 Supply.** `[D]` [DL-10-06; R5 EQ-09; revision: I-065] **Supply** is a quantity on the carrier (08.9.4): **1 supply = one person's food and
 water for one day**. Every 2 supply (or part) weighs 1 load unit; trail rations sell 2 supply per coin (08).
 This chapter owns its consumption and want. A **consumer** is the PC, each companion and hireling (16),
 and each mount that is not grazing (10.8.2). Supply is shown in the codex (00.6.3).
 
-**10.6.2 The daily consumption.** `[D]` Handler `h.10.supply` (`day`, phase 4) runs at each dawn while
+**10.6.2 The daily consumption.** `[D]` [DL-10-06; DL-07-21; R5 HR-07; revision: I-065] Handler `h.10.supply` (`day`, phase 4) runs at each dawn while
 `pc.on_venture` is true, or while the PC is anywhere not a haven and not paying a lifestyle (08.8.6):
 1. **Need** = 1 per consumer; **+1** per consumer on a day whose weather was `heat` or `scorching`, or that
    was spent in `terrain.arid` (a dry country drinks double), **unless** a `water_source` fact held for the
@@ -672,7 +672,7 @@ and each mount that is not grazing (10.8.2). Supply is shown in the codex (00.6.
 5. **Spoilage** (the depletion face, 10.9.4) and **water foraged** (10.6.4) are applied at their own moments.
 The OFFER of every journey shows supply against need (10.3.4) so want is never a surprise.
 
-**10.6.3 Finding water.** `[D]` In arid country, or in `heat`/`scorching` weather, water is the binding
+**10.6.3 Finding water.** `[D]` [DL-10-06; C:VII; revision: I-065] In arid country, or in `heat`/`scorching` weather, water is the binding
 need. A route link or area with `water_source: true` waives the extra need for a day spent along it. A
 **find water** beat (T-10-20) — verb.observe, `deed.wilds.foraging.water`, under
 `lic.training.wilds_foraging` (crude fallback: "gather what is plainly edible", dc_shift +5, Limited) —
@@ -722,7 +722,7 @@ Anchor:             yes. Intent verbs: forage, gather, scrounge, find food, coll
 Basis:              [R5 EX-06, P-31 (forage, hunt, fish)] [lic.training.wilds_foraging] [08.9.4] [DL-10-06]
 ```
 
-**10.6.5 Hunt and fish.** `[D]` *Anchor: yes.* **Hunt** (one watch): track and take game — a single beat
+**10.6.5 Hunt and fish.** `[D]` [DL-10-06; C:VII; R5 EX-06; revision: I-065] *Anchor: yes.* **Hunt** (one watch): track and take game — a single beat
 whose method includes the kill (a shot, a thrown spear, a snare sprung; it requires a missile weapon, a
 spear, or snares carried). License `lic.training.wilds_tracking` ("hunt game"); crude fallback
 verb.observe "follow fresh, plain tracks", dc_shift +5, Limited. Frame: verb.observe, Wits,
@@ -747,7 +747,7 @@ both identified as the heart of overland play [R5 P-30, P-31].
 
 ### 10.7 Light and darkness
 
-**10.7.1 Light sources burn by the interval.** `[D]` Light sources are 08's goods (08.9.5): a **torch**
+**10.7.1 Light sources burn by the interval.** `[D]` [DL-10-23; R5 X-05; R5 EQ-09; revision: I-065] Light sources are 08's goods (08.9.5): a **torch**
 burns **6 intervals** (bright to `band.close`, dim to `band.near`); a **lantern** burns a flask of oil in
 **24 intervals** (same light; hooded, it can be shut to darkness as a free activity); a **candle** burns 6
 intervals (dim to `band.close`); a **tinderbox** lights a fire or torch in 1 interval (1 hour in rain);
@@ -757,7 +757,7 @@ night watch of travel burns 36 intervals: six torches). When a source reaches **
 the engine raises a narration obligation — *it gutters* — so its end is never a surprise; at 0 it is
 spent (08's `h.08.durations` marks the item). Lighting, shuttering and dousing are free activities.
 
-**10.7.2 The light of a scene.** `[D]` `scene.light` (06.3.7: `bright | dim | dark`) is computed by
+**10.7.2 The light of a scene.** `[D]` [DL-10-23; revision: I-065] `scene.light` (06.3.7: `bright | dim | dark`) is computed by
 `h.10.scene_frame` at every `scene_start`, and recomputed at every `watch` boundary and whenever a light is
 lit, spent, doused or carried away (T-10-9; first match):
 1. **Underground, or indoors without windows, or inside a site whose domain is `dark`**: dark, except within
@@ -771,7 +771,7 @@ The value is written as the fact `scene.light` (06 reads it for `flag.obscured` 
 and 10.9.3 read it). Night-sight (an origin's or ability's license) treats dark as dim and dim as bright
 for its holder's own sight-reliant beats only.
 
-**10.7.3 What darkness does.** `[D]` In `dark`, without light or night-sight: sight-reliant beats are under
+**10.7.3 What darkness does.** `[D]` [DL-10-23; C:VII; revision: I-065] In `dark`, without light or night-sight: sight-reliant beats are under
 `cond.blinded` (06.3.7); travel moves at **crawl**; in a site, **Explore onward** by sight is G4 and is
 re-anchored to Explore by touch (10.13.5: Observe by touch, an engine-cited Precision snag, reach capped
 Limited); the site check's cadence is one step faster (10.9.3); and a hazard whose `perceived_on_sight` is
@@ -787,7 +787,7 @@ asynchronous text (R5 X-05), so here the intervals burn by resolved beats [R5 P-
 
 ### 10.8 Mounts, vehicles and vessels
 
-**10.8.1 Paces of conveyances.** `[D]` Each mount and vehicle carries `travel_pace` (08's base items:
+**10.8.1 Paces of conveyances.** `[D]` [DL-10-03; R5 EQ-10; C:VII; revision: I-065] Each mount and vehicle carries `travel_pace` (08's base items:
 `walk` → the walker ladder, `ride` → ride, `river`/`sea` → 10.3.7); T-10-5 lists them. A party moving with
 a vehicle moves at the vehicle's pace and only where its `vehicle_ok` allows (08.10.3): a **wagon** or
 **carriage** needs a road (elsewhere G4, with the redirect "unload to pack animals or porters"); a **cart**
@@ -795,20 +795,20 @@ or **handcart** goes on roads and tracks, and across `terrain.plains` at slow pa
 snow lying or frozen terrain (normal pace there; G4 elsewhere). Barding and war tack make a mount's pace
 one step slower (08.10.1).
 
-**10.8.2 Feeding mounts.** `[D]` A mount eats **1 supply a day** (10.6.2) unless it **grazes**: the camp
+**10.8.2 Feeding mounts.** `[D]` [DL-10-06; DL-07-21; R5 EQ-10; revision: I-065] A mount eats **1 supply a day** (10.6.2) unless it **grazes**: the camp
 watch (default evening) was spent where `grazing` holds — the area's fact (its region's data), defaulting to true in
 `terrain.plains.*`, `terrain.highland.hills` and `terrain.forest.woodland` from spring to autumn, false
 otherwise and always in winter. A mount left unfed takes the want rule (one `cond.exhausted` stack; 16/07).
 Mounts drink where people drink; in arid country they need the extra water too.
 
-**10.8.3 Riding.** `[D]` Riding is basic (verb.handle, "ride", 00.12.5): ordinary riding on a journey
+**10.8.3 Riding.** `[D]` [DL-00A-19; R5 EQ-10; revision: I-065] Riding is basic (verb.handle, "ride", 00.12.5): ordinary riding on a journey
 never rolls. A beat is needed only when something makes it uncertain and costly: a hard ride over
 broken ground at night (verb.handle, Presence or Agility, Moderate, threatened cost `cost.footing`: the
 mount stumbles), a ford in spate (10.12), a mount frightened by a creature with dread (16's check,
 16.15.4).
 Mounted conflict is 06.15's.
 
-**10.8.4 Porters and pack animals.** `[D]` A pack animal or porter adds its carry capacity to the party's
+**10.8.4 Porters and pack animals.** `[D]` [DL-10-03; R5 EQ-10; revision: I-065] A pack animal or porter adds its carry capacity to the party's
 load budget (08.10.1; porters carry 10 load units, 08.8.8) and is a consumer (10.6.1). The party's pace is
 the slowest member's (10.3.2), so a donkey train walks.
 
@@ -875,7 +875,7 @@ and **every interval** at deadly; in `dark` (10.7.2) without light the cadence i
 time (01.4.4), resting, searching and fighting all spend intervals, so all of them feed the check — the
 Torchbearer insight that time in a dungeon is measured in what you do [R5 P-13, P-34].
 
-**10.9.4 The faces.** `[D]` T-10-10 maps the d12 by danger rating (`travel.yaml#watch_check` and
+**10.9.4 The faces.** `[D]` [DL-10-08; DL-10-29; C:P16; revision: I-065] T-10-10 maps the d12 by danger rating (`travel.yaml#watch_check` and
 `#site_check`). Each face names its result handler; every result is written to state before narration.
 
 *Travel faces.*
@@ -980,7 +980,7 @@ This makes the hidden-mechanics lock and the telegraphed-lethality lock one rule
 B-R5]: the world always shows its hand, and the player always has at least one decision between the sign
 and the blow.
 
-**10.9.6 Answering an omen.** `[D]` + `[J:enum]` While a threat is pending, the player may act on it
+**10.9.6 Answering an omen.** `[D]` + `[J:enum]` [DL-10-09; C:P17; revision: I-065] While a threat is pending, the player may act on it
 (each is an ordinary beat or plan change; the pending record is updated by its result):
 
 | Answer | How | Result |
@@ -995,7 +995,7 @@ and the blow.
 (the safest reading: it changes nothing until the player commits). *Worst case (J):* an avoidance read as
 preparation leaves the threat on schedule — the player sees the result line and may still act (class ii).
 
-**10.9.7 Reading the pacing phase (opt-in).** `[D]` Chapter 10 opts in to 12's pacing director (12's
+**10.9.7 Reading the pacing phase (opt-in).** `[D]` [DL-10-22; revision: I-065] Chapter 10 opts in to 12's pacing director (12's
 request) in exactly one way: while the director is in **RELAX** or a **recovery** window (12.7.2, 12.7.5),
 a pending threat's fourth-check timer does not run (it arrives only on an E or O face), and an E face with
 nothing pending that draws a threat row produces the omen only (as it always does). Nothing already
@@ -1003,21 +1003,21 @@ arrived is softened, no face is re-rolled, no table is changed, and the record s
 (12.7.6: declared, logged, diegetic). Everything else in this chapter runs exactly as written in every
 phase.
 
-**10.9.8 Which results stop time.** `[D]` The time-tick handlers are `interrupting` (00.7.8) only for these
+**10.9.8 Which results stop time.** `[D]` [DL-10-08; DL-00A-12; revision: I-065] The time-tick handlers are `interrupting` (00.7.8) only for these
 results: an encounter **arrives**; an **omen** shows (the player decides what to do about it); a **local
 event** that is perceivable now and asks for a response (12.6.5 step 5); a **weather shift** into a state
 whose hazard applies to the party as exposed (T-10-14); a **hazard** exposure that will recur (10.12.3).
 Depletion, discovery, opportunity and lull never interrupt; they are returned in the list and narrated in
 the skip's summary (12.4.6), and the player may turn aside for a discovery at the next watch.
 
-**10.9.9 Narration of the check.** `[N]` One sentence per returned result, in order, from its record:
+**10.9.9 Narration of the check.** `[N]` [DL-10-08; DL-10-09; C:P3; revision: I-065] One sentence per returned result, in order, from its record:
 the omen's sign words, the event's written fact, the find's entity, the weather's new state. *Narration may
 not imply:* a face that was not rolled; a threat's identity before it is perceived; a number (a rating,
 a face, a clock fill); that nothing will come of an omen.
 
 ### 10.10 Encounters: tables, distance, awareness, reaction
 
-**10.10.1 The encounter table format.** `[D]` Encounters belong to places (09.8.2). Every area, route link
+**10.10.1 The encounter table format.** `[D]` [DL-10-10; DL-10-26; DL-10-27; R5 AV-06; revision: I-065] Encounters belong to places (09.8.2). Every area, route link
 and site points at an **encounter table** (`encounter_table`): its region's tables (written by the world seed,
 12.16, with PR-10-10, or supplied by an optional pre-made setting such as chapter 13), a site's own table
 (10.13.13), or this chapter's **generic terrain tables** (`travel.yaml#encounter_tables`, one per terrain
@@ -1061,7 +1061,7 @@ a leader when the row or the group lists one. A row of one to three `minion`s fi
 weakened single creatures, narrated as 09.4.6 requires (a spent, wounded, young or straggling one of its kind)
 [revision: I-066].
 
-**10.10.2 The table budget (09's contract).** `[D]` Every encounter table, generic, regional or a site's,
+**10.10.2 The table budget (09's contract).** `[D]` [DL-10-10; DL-10-26; DL-10-28; DL-09-13; revision: I-065] Every encounter table, generic, regional or a site's,
 must pass the audit PR-10-8 before use. A table built by PR-10-10 (a world seed's regional tables, a site's
 denizen table) passes it by construction; a hand-written table (the generic ones, a pre-made setting's) is
 audited. The generic tables are audited at every home band 1–5 by `_process/simulation/10-word-audit.py`:
@@ -1092,7 +1092,7 @@ the first draft's mean 0.176) [integration: I-027; revision: I-029]:
 5. **Out-of-band rows** are allowed only at home + 1 and always telegraph by 10.9.5 item 4.
 The budget is the distribution chapter 04's pacing assumes (09.8.2, I-005).
 
-**10.10.3 Arrival: distance.** `[D]` When an encounter arrives, the engine rolls its starting distance on
+**10.10.3 Arrival: distance.** `[D]` [C:IV; R5 EX-14; DL-10-19; revision: I-065] When an encounter arrives, the engine rolls its starting distance on
 T-10-15 by the place's `openness` and the light (`scene.light`), then applies: lookout +1 band farther (open
 and broken only), scout +1 band farther (any), fog or night without light → read the place as `closed`,
 `ambush` rows start at the ambush ground's distance (usually `band.close`). The result is each
@@ -1106,7 +1106,7 @@ participant's starting band to the PC for 06.3.9 if a conflict starts.
 | broken | close | near | near | far | far | distant | hills, woodland, farmland with hedges, badlands, ruins above ground |
 | closed | close | close | close | near | near | far | deepwood, jungle, swamp, caves, site areas, streets, fog, night without light |
 
-**10.10.4 Arrival: who notices whom.** `[D]` Awareness is state, never the DM's call (06.2.4 reads it):
+**10.10.4 Arrival: who notices whom.** `[D]` [DL-10-28; DL-06-05; DL-10-19; revision: I-065] Awareness is state, never the DM's call (06.2.4 reads it):
 1. **The PC side** is aware of an arriving encounter if any of: a lookout or scout holds its role (10.5.1);
    the encounter was investigated or prepared for (10.9.6); its creatures are not hiding (a non-ambush row,
    in light the PC can see by); or the PC's passive notice (01.4.6) beats the creatures' stored Sneak total
@@ -1126,7 +1126,7 @@ participant's starting band to the PC for 06.3.9 if a conflict starts.
    them, or stays in the place through the next interval or watch, item 2 is rolled as usual
    [revision: I-040].
 
-**10.10.5 Arrival: what they want.** `[D]` First match (09.8.7): sapient and cunning creatures whose
+**10.10.5 Arrival: what they want.** `[D]` [DL-09-18; DL-09-19; DL-12-10; revision: I-065] First match (09.8.7): sapient and cunning creatures whose
 archetype has `reaction_roll: true` take 12's reaction roll (12.11.2) at the first interaction; animals and
 `reaction_roll: false` creatures that are not mindless roll `tbl.09.beast_mood` (2d6, with its cited
 modifiers); mindless creatures follow their behavior list; creatures on a mission act on it. The advisory is
@@ -1135,13 +1135,13 @@ if `lethal` 07's lethal warning are delivered **before** the first beat (07.3.3�
 chooses — fight, flee, talk, hide, trade, bargain — and the scene runs in the mode that choice brings
 (06 for a fight, 15 for talk, 06.12 for a chase).
 
-**10.10.6 An encounter's aftermath on the journey.** `[D]` After the encounter scene ends (`scene_end`), the
+**10.10.6 An encounter's aftermath on the journey.** `[D]` [DL-09-13; C:P13; revision: I-065] After the encounter scene ends (`scene_end`), the
 journey resumes with its remainder (00.7.8). The encounter is added to the venture record. A row whose
 creatures were not defeated and not evaded remains **in the place** as a fact for that area (a band of
 brigands camped at the ford: `area.occupants`), so a return trip meets the same band, wiser — unless 11's
 World Turn moves it. A fled PC is **tracked** by pursuers who can (06.12.6's mirror, below).
 
-**10.10.7 Pursuit across country.** `[D]` *Anchor: yes.* When a chase (06.12) ends with the fleer at
+**10.10.7 Pursuit across country.** `[D]` [DL-06-21; DL-10-09; revision: I-065] *Anchor: yes.* When a chase (06.12) ends with the fleer at
 `band.distant` and the pursuers' behavior says they keep hunting (`kill`, `capture` and `rob` objectives
 while not broken; hungry beasts), the pursuit continues at the **travel scale**: the pursuers become a
 pending threat for the fleeing party with **sign_stage 2** (it arrives at the next E or O face, or the
@@ -1183,7 +1183,7 @@ hazard an exposed traveler meets each watch (10.12.3); *Fire* = tier to light a 
 | blizzard | bitter | 2 | snag | dim | closed | `haz.blizzard` | Hard | travel off roads at crawl; writes `snow_lying` |
 | bitter | bitter | 0 | — | bright | as is | `haz.bitter_cold` | Moderate | breath-ice; waterskins freeze |
 
-**10.11.2 Climate zones and the season's regime.** `[D]` Every region (and any area that overrides it)
+**10.11.2 Climate zones and the season's regime.** `[D]` [DL-10-12; R5 EX-04; revision: I-065] Every region (and any area that overrides it)
 has a `climate`: **temperate** (the default; downs, farmland, woods), **northern** (pine, tundra, long
 winters), **highland** (mountains and high moor: colder, windier, sudden), **arid** (badlands and desert),
 **coastal** (shores and islands: wind, fog, mild winters). Underground places have no weather. Each
@@ -1192,7 +1192,7 @@ over the states). Handler `h.10.weather_regime` (`season`, phase 6) sets each re
 the season boundary (season ids from chapter 11's calendar). The seasons are 00's 13-week seasons
 (spring, summer, autumn, winter, in the order 11's calendar gives them).
 
-**10.11.3 The daily roll, with persistence.** `[D]` Handler `h.10.weather` (`day`, phase 7) runs at each
+**10.11.3 The daily roll, with persistence.** `[D]` [DL-10-12; C:I; revision: I-065] Handler `h.10.weather` (`day`, phase 7) runs at each
 dawn for every region the PC is in or adjacent to (and for any region a pending forecast concerns):
 1. `weather.today` ← `weather.tomorrow` (rolled yesterday).
 2. Roll `weather.tomorrow`: d6 — on **1–2** it is the same as today (weather holds), provided today's state
@@ -1205,7 +1205,7 @@ rest of the day. Chapter 02's *weather-ache* reveals the day's rolled weather at
 this handler (02's request): it reads `weather.today` at step 4, and if the holder's knack covers
 foresight, `weather.tomorrow`.
 
-**10.11.4 Lying snow, high water, drought.** `[D]` Three standing facts carry weather across days: **`snow_lying`**
+**10.11.4 Lying snow, high water, drought.** `[D]` [DL-10-12; revision: I-065] Three standing facts carry weather across days: **`snow_lying`**
 (set by a snow or blizzard day at freezing or colder; cleared after two consecutive days of states warmer
 than `frost`): off-road pace one more step slower, tracks plain (trailing Easy), forage one tier harder;
 **`high_water`** (set by a storm or thunderstorm day, or two consecutive rain days, on every river link
@@ -1213,7 +1213,7 @@ of the region; cleared after two dry days): fords one rung more severe (10.12), 
 +2 points, upstream −2; **`drought`** (set by five consecutive heat or scorching days; cleared by a rain
 day): `water_source` false on streams and springs not marked perennial, forage one tier harder.
 
-**10.11.5 Reading the weather ahead.** `[D]` *Anchor: yes.* **Read the weather** (one interval at dusk or
+**10.11.5 Reading the weather ahead.** `[D]` [DL-10-12; C:VII; revision: I-065] *Anchor: yes.* **Read the weather** (one interval at dusk or
 dawn, outdoors): verb.observe, Wits, `deed.wilds.survival.weathersense`, licensed by
 `lic.training.wilds_survival` ("read weather a day ahead"); Easy, Safe; reach ≥ 1 unseals
 `weather.tomorrow` for the PC. Without the license it is G3; the redirect names asking a local (verb.talk:
@@ -1230,7 +1230,7 @@ no fact records [R4 §9 10 item 1].
 
 ### 10.12 Hazards
 
-**10.12.1 The hazard entry.** `[D]` A **hazard** is a source of harm in the environment that no one aims:
+**10.12.1 The hazard entry.** `[D]` [DL-10-11; R5 EX-05; revision: I-065] A **hazard** is a source of harm in the environment that no one aims:
 weather, falls, water, fire, bad air, collapse, deprivation, sickness in the land, and places where magic
 is wrong. Chapter 10 owns every hazard entry (`data/hazards.yaml`; 00.17.1 Q18); chapter 07 owns what the
 harm does (07.10). Each entry is data (SCHEMAS `hazards.yaml`, with this chapter's optional fields):
@@ -1257,7 +1257,7 @@ Hazard:
   avoid: [str]                 # verbs that get round it (the anchor's knobs)
 ```
 
-**10.12.2 Exposure.** `[D]` An **exposure** happens when a character enters a hazard, or at each boundary
+**10.12.2 Exposure.** `[D]` [DL-10-11; DL-07-14; revision: I-065] An **exposure** happens when a character enters a hazard, or at each boundary
 of its cadence while the character remains in it (`h.10.watch_exposure`, `watch`, phase 2;
 `h.10.site_exposure`, `interval`, phase 2; conflict rounds by 06's `h.06.ongoing_harm` for a hazard
 feature). Each exposure is chapter 07.10.1's procedure: the exposed character makes the entry's resisted
@@ -1269,7 +1269,7 @@ rung or negates the exposure (`eff.hazard_step` from items and abilities counts 
 two steps in all, 00.10.4 E2). Stakes follow the severity (S1–S2 Risky, S3+ Dire); a lethal frame needs
 the entry's `lethal_context` and the warning taken effect (07.3.5–07.3.6).
 
-**10.12.3 Continuing hazards and the choice to leave.** `[D]` + `[T]` A hazard with a cadence of `round`,
+**10.12.3 Continuing hazards and the choice to leave.** `[D]` + `[T]` [DL-10-11; C:P16; revision: I-065] A hazard with a cadence of `round`,
 `interval` or `watch` keeps exposing until the character leaves it; its handler `interrupts` time after the
 first exposure (10.9.8) so the player can choose to get out. Leaving a hazard is a Move (Evade if it is
 rushing at you; Exert if it holds you: a mire, a current) at the entry's tier. *Certain with cost* (01.4.5)
@@ -1287,7 +1287,7 @@ under snow, a quicksand crust) are found by passive notice (01.4.6) against thei
 Observe, and until perceived cannot be lethal (07.3.5): they can put a character Down, never kill
 [BRIEF §4; DL-10-11].
 
-**10.12.5 Falls.** `[D]` Falls are 07.10.3's and 06.5.8's: **10 ft S2, 20 ft S3, 40 ft S4, 80 ft or more S5**,
+**10.12.5 Falls.** `[D]` [DL-07-14; DL-10-11; revision: I-065] Falls are 07.10.3's and 06.5.8's: **10 ft S2, 20 ft S3, 40 ft S4, 80 ft or more S5**,
 `harm.physical.crush`, no reduction, the faller `cond.prone`. This chapter adds the heights' places in
 exploration: every `height` feature, cliff, shaft and drop records its height in feet when mentioned
 (10.1.4); a height of **20 ft or more** is a **Heavy (S3) source** for 01.6.9's stakes test (Dire) — 01's
@@ -1298,7 +1298,7 @@ pitch × the fraction climbed (a reach-1 delivery means half), rounded down to t
 rope tied off (a fact) is a Protective lever (stakes −1) and limits a fall to the rope's slack (10 ft, S2).
 `haz.fall_10`, `haz.fall_20`, `haz.fall_40`, `haz.fall_80` are the data entries.
 
-**10.12.6 Water and breath.** `[D]` Swimming is verb.exert (Might, or Endurance for distance), against the
+**10.12.6 Water and breath.** `[D]` [DL-07-14; DL-10-11; revision: I-065] Swimming is verb.exert (Might, or Endurance for distance), against the
 water's tier: calm Easy, a current Moderate, a river in spate Hard, a sea swell Hard, a whirlpool or weir
 Very hard. A failure in moving water is `haz.swift_water` (S3, `harm.physical.crush`, swept one link
 downstream: its `aftermath`), in deep still water a failure is going under (07.10.4: breath for 6 rounds +
@@ -1307,7 +1307,7 @@ Precision snag, heavy armor G4 for swimming (the redirect: shed it, 1 round per 
 cross another way). Cold water adds `haz.cold_water` (S2, per interval immersed). Drowning and smoke use
 07.10.4 exactly (07's request).
 
-**10.12.7 Sickness in the land.** `[D]` Some places carry **disease vectors** as hazards whose effect is an
+**10.12.7 Sickness in the land.** `[D]` [DL-10-11; DL-07-17; revision: I-065] Some places carry **disease vectors** as hazards whose effect is an
 affliction exposure (07.9.2) rather than harm: `haz.marsh_miasma` (a day in fen or swamp in the warm
 seasons without precautions: exposure to `aff.marsh_fever`), `haz.foul_water` (drinking from water marked
 foul: `aff.red_flux`), `haz.barrow_air` (a night spent inside a barrow or crypt: `aff.grave_chill`),
@@ -1317,7 +1317,7 @@ insects; boiling water; sleeping outside the barrow) are listed in each entry's 
 negates its exposure. The vector is written on the place (`place.hazards`) and shown on entry by its signs
 (the whine of midges, the green scum, the cold that lingers in the stones).
 
-**10.12.8 Places where magic is wrong.** `[D]` Magical zones are hazards with harm, dread or rule effects:
+**10.12.8 Places where magic is wrong.** `[D]` [DL-10-11; DL-07-15; revision: I-065] Magical zones are hazards with harm, dread or rule effects:
 `haz.desecrated_ground` (a dread exposure S1 per day spent there, 07.11.2; divine workings take 05's snag),
 `haz.dead_ground` (no harm; the fact `dead_ground` makes primal workings G4, 05.7.2; Focus does not return
 at a breather there), `haz.wild_magic` (each arcane or primal working cast there rolls d20: on 1–3 an
@@ -1329,7 +1329,7 @@ run), `haz.haunting` (a dread exposure S2 at each night watch, 07.11.2; `harm.mi
 Each carries signs (the grass grey in a ring, the silence of birds, a cold that has no source) and is
 written on its place.
 
-**10.12.9 A hazard no one listed.** `[J:rung]` A source of harm with no entry is rated with chapter 07's
+**10.12.9 A hazard no one listed.** `[J:rung]` [DL-07-14; C:III; revision: I-065] A source of harm with no entry is rated with chapter 07's
 anchor **07.10.2** (hazard severity by what it would do to an unprotected adult; harm tags by what it is;
 effect DC by the rung; the rating stored on the source). This chapter adds only the **cadence** knob's
 choice: `[J:enum]` *exposure* (it harms once, on contact: a falling beam), *round* (it keeps harming in a
@@ -1338,7 +1338,7 @@ fight: a burning floor), *interval* (it harms while one stays in it in a site: s
 player can leave sooner). *Worst case (J):* one cadence step too long — one extra exposure before the player
 can act, never lethal without a warning on record (class i).
 
-**10.12.10 Aftermath.** `[D]` When a hazard puts a PC **Down** (07.2.9), the entry's `aftermath` says where
+**10.12.10 Aftermath.** `[D]` [DL-10-11; C:P16; revision: I-065] When a hazard puts a PC **Down** (07.2.9), the entry's `aftermath` says where
 and how the character comes to: `haz.swift_water` "washed ashore at the next link downstream, gear wet,
 one carried item lost (engine's draw)"; `haz.avalanche` and `haz.cave_in` "buried: Down until dug out —
 a companion's three Force beats (Moderate) or the PC's own Endure each hour (Hard) from beneath"; `haz.blizzard`
@@ -1406,7 +1406,7 @@ this ruleset's frame and clocks: a site is a **theme × domain** pair; areas are
 the approach chosen sets the risk; dangers and discoveries come from the two cards; the heart is located
 when progress completes [R5 P-28; R: https://tomkinpress.com/pages/ironsworn-delve].
 
-**10.13.2 Themes and domains.** `[D]` A **theme** says what *happened* to the place and what it has become;
+**10.13.2 Themes and domains.** `[D]` [DL-10-13; C:V; revision: I-065] A **theme** says what *happened* to the place and what it has become;
 a **domain** says what *kind* of place it physically is. Each is a card in `data/sites.yaml`; the pair
 gates everything found inside, so 8 themes × 14 domains give 112 kinds of site from 22 cards (C:V).
 
@@ -1447,7 +1447,7 @@ sites with their theme, domain, band and size (the world seed by PR-10-6, 12.16.
 hand, and it may add regional cards in the owner-block); a site generated in play takes them from the region's site tables (`tbl.<region>.sites`, else
 `sites.yaml#site_generation`).
 
-**10.13.3 The site record.** `[D]`
+**10.13.3 The site record.** `[D]` [DL-10-13; DL-10-16; revision: I-065]
 
 ```yaml
 SiteRecord:
@@ -1477,7 +1477,7 @@ Sizes fix the clocks (`sites.yaml#sizes`): **small** progress 6 / danger 8; **me
 12; **vast** two progress clocks of 12 in sequence ("the halls", then "the deep", linked: the first's
 completion creates the second) with a danger clock of 12.
 
-**10.13.4 Entering a site.** `[D]` When the PC enters a site (by its entrance link or a found way in):
+**10.13.4 Entering a site.** `[D]` [DL-10-13; DL-10-16; R5 EX-08; revision: I-065] When the PC enters a site (by its entrance link or a found way in):
 1. `h.10.scene_frame` marks `mode_change` to `site`; the site record is created if new (PR-10-6: theme,
    domain, band, size, clocks, objective; the denizen table is built), else loaded.
 2. The **entrance area** is generated (10.13.6) or loaded; its feature and the theme's first sign are
@@ -1488,7 +1488,7 @@ completion creates the second) with a danger clock of 12.
    fill is not shown).
 4. Site checks begin counting intervals (10.9.3); `h.10.light` burns lights by the interval (10.7.1).
 
-**10.13.5 Site time.** `[D]` Handler `h.10.site_time` (`beat_end`, phase 9): in `site` mode, each
+**10.13.5 Site time.** `[D]` [DL-00A-12; DL-10-14; R5 EX-08; revision: I-065] Handler `h.10.site_time` (`beat_end`, phase 9): in `site` mode, each
 **significant** beat advances **1 interval** (00.7.3), and activities with a listed duration (T-10-20)
 advance theirs instead (a careful Explore onward is 2; a short rest 6; a long rest a watch). A beat is
 significant when it resolved a check (a frame was rolled or taken with time) or performed a listed
@@ -1567,7 +1567,7 @@ first in **25%** of careful delves, 21% of stealthy ones and 36% of hasty ones, 
 place turning on the intruder, which a strong or lucky delver still survives — so about one careful delve in
 four ends with the place awake and the heart still ahead, the tension Delve's menace track gives.
 
-**10.13.7 New areas.** `[D]` When Explore onward delivers reach ≥ 1, or the PC enters an unexplored side
+**10.13.7 New areas.** `[D]` [DL-10-14; DL-10-13; DL-10-01; revision: I-065] When Explore onward delivers reach ≥ 1, or the PC enters an unexplored side
 passage, the engine generates the area (PR-10-7) and writes it before narration:
 1. **Feature**: `roll_table` on the domain's `features` (d12): what the area looks like and what is in it
    that could be used (each written as a feature with 06.3.8's `feature_kind` where it has one: a gallery is
@@ -1587,7 +1587,7 @@ passage, the engine generates the area (PR-10-7) and writes it before narration:
 The area is `discovered` with the Explore beat's frame id (10.1.5). Every element named is written
 (10.1.4). The DM chooses words; the tables chose things.
 
-**10.13.8 The two clocks.** `[D]` Created at the site's first entry from `sites.yaml#clock_templates`:
+**10.13.8 The two clocks.** `[D]` [DL-10-15; DL-10-16; DL-00A-20; revision: I-065] Created at the site's first entry from `sites.yaml#clock_templates`:
 - **The progress clock** "The heart of <site>" — kind `progress`, **public** (the player sees how far in
   they are), segments by size (10.13.3); tick sources: Explore onward's delivered reach; the opportunity
   rows "a clue toward the heart" and "a short way" (+1 each); a map of the site found or bought (+2 once,
@@ -1605,7 +1605,7 @@ The area is `discovered` with the Explore beat's frame id (10.1.5). Every elemen
 The clocks race (00.8.5) only in this sense: completing the progress clock first does not void the danger
 clock — the heart is found, and the place is still waking on the way out (`races_with: null`; DL-10-15).
 
-**10.13.9 Roused.** `[T]` + `[D]` When the danger clock completes: `site.roused = true`; the site's danger
+**10.13.9 Roused.** `[T]` + `[D]` [DL-10-15; C:P16; revision: I-065] When the danger clock completes: `site.roused = true`; the site's danger
 rating counts one rung higher (cap deadly) and its cadence becomes every interval (10.9.3); every
 unaware denizen becomes alarmed (alertness, 15); the theme's **climax** guardian (or the objective's own
 keeper, 10.13.10), if not met, becomes a **pending threat** with `sign_stage: 2` — the PC hears it coming
@@ -1616,7 +1616,7 @@ guardian's archetype carries `lethal_context` (09) the lethal warning is due at 
 danger clock (PR-00-3 step 3; 07.3.3 `clock` row) — the place's waking can kill, and the player is told
 before it does.
 
-**10.13.10 The heart.** `[D]` When the progress clock completes, the next area generated is **the heart**:
+**10.13.10 The heart.** `[D]` [DL-10-30; DL-10-13; revision: I-065] When the progress clock completes, the next area generated is **the heart**:
 the objective the site holds. It is set by the region for placed sites (12.16.12), or rolled once at the site's creation
 from the theme's `climax` (d6) and sealed until reached. Objective kinds (closed): **hoard** (08.3.12's hoard
 at the site band, the place as its source: its domain terrain tags and its theme's loot tags gate the pool,
@@ -1638,7 +1638,7 @@ it; a cleansing or consecration may be done here); **a way through** (the site w
 a route link). A site may hold several objectives (a region may give them); the progress clock leads to the first, and a further
 objective is a new progress clock of the site's size − 2 (minimum 4), linked from the first.
 
-**10.13.11 Retreat, rest and return.** `[D]` *Anchor: yes (retreat).*
+**10.13.11 Retreat, rest and return.** `[D]` [DL-10-16; R5 EX-08; revision: I-065] *Anchor: yes (retreat).*
 - **Walking known ground**: moving along the site's `path` between known areas takes **1 interval per 2
   areas** (rounded up), with no Explore beat; site checks run. Leaving from the frontier therefore takes
   half the areas' count in intervals; a map of the site (made by the Map activity, T-10-20, or found)
@@ -1660,7 +1660,7 @@ objective is a new progress clock of the site's size − 2 (minimum 4), linked f
   show on arrival). Defeated denizens stay defeated; disarmed traps stay disarmed unless the theme resets
   them (fortified: the garrison re-arms one trap a week).
 
-**10.13.12 What persists.** `[D]` Everything written in a site stays written: areas, features, exits, the
+**10.13.12 What persists.** `[D]` [DL-10-16; C:P13; revision: I-065] Everything written in a site stays written: areas, features, exits, the
 path, opened and broken doors, triggered and disarmed traps, the dead and the fled, the hoard taken, the
 heart's state. `state_log` keeps each change with its time. A site cleared of its denizens and its objective
 is written `cleared` (11 may give it to a faction, a squatter or a new occupant at a World Turn — never by
@@ -1679,14 +1679,14 @@ live: the theme × domain pair is what fundamentally characterizes the place, so
 is found and what can be harvested — the same pair gates the place-gated loot (08.3.4 item 4) and the
 hoard (08.3.12) [C:P5; R2 #13; R5 P-28].
 
-**10.13.14 Many sites, one procedure.** `[N]` A lair in the wild (a wyvern crag), a building in a town (a
+**10.13.14 Many sites, one procedure.** `[N]` [DL-10-13; R5 EX-08; revision: I-065] A lair in the wild (a wyvern crag), a building in a town (a
 merchant's house broken into at night), a ship's hold, a besieged keep — each is a site with a theme and a
 domain, small, its clocks sized by 10.13.3. A settlement building searched room by room uses the site
 procedure with `fortified` or `ravaged` and the stronghold or tower domain (T-12-3's "room-by-room search").
 
 ### 10.14 Traps
 
-**10.14.1 The trap entry.** `[D]` A **trap** is a made thing that harms or holds whoever trips it (`data/
+**10.14.1 The trap entry.** `[D]` [DL-10-17; R5 AV-08; revision: I-065] A **trap** is a made thing that harms or holds whoever trips it (`data/
 traps.yaml`; SCHEMAS `traps.yaml` plus this chapter's optional keys):
 
 ```yaml
@@ -1707,7 +1707,7 @@ Trap:
   aftermath: str|null
 ```
 
-**10.14.2 Where traps are.** `[D]` Traps are placed by a pre-made setting in authored sites, by the area-contents roll
+**10.14.2 Where traps are.** `[D]` [DL-10-17; C:P3; revision: I-065] Traps are placed by a pre-made setting in authored sites, by the area-contents roll
 (10.13.7 result 7), by a theme danger, or by a denizen's behavior list (a goblin warren's snares). A trap's
 exact position and nature are **sealed** (00.6.5) until perceived; its **telltale** is not (10.14.3).
 
@@ -1725,7 +1725,7 @@ raises the `severity` warning; an unperceived trap's harm is never lethal (07.3.
 character whose player was not shown its sign and warned [BRIEF §4; R1 §07 ("traps that always counter the
 players" as a DM mistake); DL-10-17].
 
-**10.14.4 Springing a trap.** `[D]` When a beat's method passes a trap's trigger (walking the plate, opening
+**10.14.4 Springing a trap.** `[D]` [DL-10-17; C:P8; revision: I-065] When a beat's method passes a trap's trigger (walking the plate, opening
 the lid, crossing the wire, reading the word aloud) and the trap is neither disarmed nor bypassed, it
 fires: its victim makes the trap's resisted check against the **effect DC = the trap's detect tier for its
 band, one rung up** (the maker's craft against the victim's reflexes), read by 01.18.3's table: critical
@@ -1734,7 +1734,7 @@ success — no effect and a Precision lever; success — no effect; near miss �
 one rung heavier. `alarm_ticks` tick the site's danger clock whatever the result. A **perceived** trap fired
 on purpose (to spring it safely) is 10.14.5's "spring it from afar". Reset per the entry.
 
-**10.14.5 Dealing with a perceived trap.** `[J:enum]` + `[D]` *Anchor: yes.* Once perceived, a trap is an
+**10.14.5 Dealing with a perceived trap.** `[J:enum]` + `[D]` [DL-10-17; C:VII; C:P16; revision: I-065] *Anchor: yes.* Once perceived, a trap is an
 obstacle with stored tiers (`detect` and `disarm` by band; 00.3.8). Every way of dealing with it is an
 existing verb (T-10-19, `traps.yaml#ways`):
 
@@ -1754,17 +1754,17 @@ with the lower stakes (Understand before Disarm). *Worst case (J):* the neighbor
 for one beat (class i), shown in the OFFER. The unlicensed are never stuck: jam, spring, bypass, break,
 understand, use and avoid are basic verbs (C:VII redirect: "a thief could teach you to disarm it").
 
-**10.14.6 Trap tiers by band.** `[D]` A trap's detect and disarm tiers and its harm rise with the band of the
+**10.14.6 Trap tiers by band.** `[D]` [DL-10-17; revision: I-065] A trap's detect and disarm tiers and its harm rise with the band of the
 site that holds it (`traps.yaml#entries[].detect.dc_tier_by_band`, `harm.severity_by_band`). Reference: a band-1
 needle trap is detect Easy / disarm Moderate / S1 + poison; a band-5 crushing ceiling is detect Very hard /
 disarm Legendary / S5, `lethal_context: true`, plain telltale. Magical traps (glyphs, wards) use the arcane
 or divine warding license for disarm and Recall (`deed.lore.arcana`) for Understand.
 
-**10.14.7 Alarms.** `[D]` An **alarm** trap harms no one: it ticks the site's danger clock by its
+**10.14.7 Alarms.** `[D]` [DL-10-17; DL-00A-20; revision: I-065] An **alarm** trap harms no one: it ticks the site's danger clock by its
 `alarm_ticks` (bells and gongs 2; a howling ward 3), and in a fortified site makes the next E face an
 arrival (a guard comes to look). It follows every rule above (telltale, ways).
 
-**10.14.8 Traps the PC makes.** `[D]` A snare, a deadfall, a tripwire with bells: a Setup or Handle beat
+**10.14.8 Traps the PC makes.** `[D]` [DL-10-17; DL-00A-19; revision: I-065] A snare, a deadfall, a tripwire with bells: a Setup or Handle beat
 (1 interval for a snare or alarm line; 1 hour for a deadfall or pit) under the basic verbs for crude traps
 (Handle: "crude making") or a license for refined ones (`lic.training.guile_thievery`; `wilds_survival` for
 snares and deadfalls). The made trap is a trap entity with `detect` tier = the maker's delivered reach rung
@@ -1773,18 +1773,18 @@ foe's notice may find it). It fires on a foe by 10.14.4 with the roles reversed.
 
 ### 10.15 Exploration activities
 
-**10.15.1 The catalog.** `[D]` Every exploration activity is an anchor (00.2.6): a named intent with its basic
+**10.15.1 The catalog.** `[D]` [DL-00A-24; DL-00A-19; R5 EX-10; revision: I-065] Every exploration activity is an anchor (00.2.6): a named intent with its basic
 verb or license, attribute, DC source, duration by mode, reach meaning and knobs, so that any method a
 player invents finds its nearest card (12.13). T-10-20 (`travel.yaml#activities`) is canonical; the rules
 above hold the fuller cards for Explore onward (10.13.6), Find the way (10.4.2), Forage (10.6.4), Hunt and
 fish (10.6.5), Read the weather (10.11.5), Pursuit (10.10.7), and dealing with traps (10.14.5).
 
-**10.15.2 Durations by mode.** `[D]` An activity's duration is the column of its time mode: **site**
+**10.15.2 Durations by mode.** `[D]` [DL-00A-12; revision: I-065] An activity's duration is the column of its time mode: **site**
 (intervals), **free** (minutes and hours, in the wild outside travel), **travel** (watches, when it is the
 watch's activity). Time passes through `advance_time`, so every boundary in it runs (INV-15). Taking the
 time (01.4.4) doubles the duration and removes the roll where it is allowed.
 
-**10.15.3 One area, one search.** `[D]` Search and listen ride (01.4.2) for an area until something in it
+**10.15.3 One area, one search.** `[D]` [DL-06-03; R5 EX-10; revision: I-065] Search and listen ride (01.4.2) for an area until something in it
 changes (a new sound, a moved object, a trap sprung): searching the same unchanged room again with the
 same method delivers nothing new and spends its interval. A different method (sounding the walls instead of
 looking) is a new beat at its own repetition (01.14.3).

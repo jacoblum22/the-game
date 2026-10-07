@@ -26,3 +26,4 @@
 | R5 EQ-09, EQ-10 | Supply and light; mounts and vehicles | 10.6, 10.7, 10.8 | satisfied |
 | R5 TM-01, TM-02 | Time ladder use; tick table | 10.2, T-10-23 | satisfied |
 | R5 X-05 | Real-time light excluded | 10.7.1 (light by interval) | satisfied (deliberate exclusion) |
+| BRIEF §6 | Every rule cites its basis (`[C:]`, `[R]` or `[DL-]`) at card level | every rule card of 10 (104); 83 tagged at revision C6c, 10.1.6 by the new DL-10-31; validator BASIS (DL-INT-13) | satisfied |
