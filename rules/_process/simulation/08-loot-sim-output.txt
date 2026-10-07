@@ -1,18 +1,18 @@
 === ch.08 loot simulation (seeded) ===
-drop check: events by band {1: 436, 2: 1251, 3: 1158, 4: 618, 5: 275} drops {1: 32, 2: 200, 3: 376, 4: 240, 5: 152} rates {1: 7.3, 2: 16.0, 3: 32.5, 4: 38.8, 5: 55.3}
-rungs: {'fine': 127, 'masterwork': 770, 'common': 103}
-property count per item: {0: 103, 1: 145, 2: 752}
+drop check: events by band {1: 476, 2: 1358, 3: 1261, 4: 650, 5: 283} drops {1: 34, 2: 218, 3: 336, 4: 251, 5: 161} rates {1: 7.1, 2: 16.1, 3: 26.6, 4: 38.6, 5: 56.9}
+rungs: {'fine': 127, 'masterwork': 764, 'common': 109}
+property count per item: {0: 109, 1: 146, 2: 745}
    fine {1: 127}
-   masterwork {1: 18, 2: 752}
-   common {0: 103}
-property kinds: {'passive': 1280, 'item_ability': 118, 'mundane': 234, 'license': 17}
-items with a bound power (relic, item-bound active): 118 = 11.8 %
-relics (bound power or license): 135 = 13.5 %
-empty slots (pool exhausted after mod groups): 1
-cap violations caught and refilled: 10
-base redraws (pool smaller than the rung's slots): 0 ; signature-driven base overrides: 45
+   masterwork {1: 19, 2: 745}
+   common {0: 109}
+property kinds: {'passive': 1259, 'item_ability': 122, 'mundane': 233, 'license': 22}
+items with a bound power (relic, item-bound active): 122 = 12.2 %
+relics (bound power or license): 144 = 14.4 %
+empty slots (pool exhausted after mod groups): 2
+cap violations caught and refilled: 18
+base redraws (pool smaller than the rung's slots): 0 ; signature-driven base overrides: 47
 post-generation item-share compliance: 1000 / 1000
-gated pool size per item: min 3 median 11.0 max 20
+gated pool size per item: min 3 median 11.0 max 18
 --- 09 contract check: gated pool at tier_cap 1 and at the archetype's band, per archetype (smallest base) ---
   wolf                 T2 pool@1 min   4  pool@band min   4 max   8  signature prop.sig_hunters_sense
   dire_bear            T3 pool@1 min   9  pool@band min  10 max  11  signature prop.sig_hunters_sense
@@ -41,7 +41,7 @@ gated pool size per item: min 3 median 11.0 max 20
   elder_dragon         T5 pool@1 min   8  pool@band min  13 max  15  signature prop.sig_dragonscale
   mind_flayer          T4 pool@1 min   2  pool@band min   3 max   9  signature prop.sig_alien_ward
 archetypes below 3 at tier 1 on some base: ['mind_flayer']
-signature tiers: {1: 16, 2: 121, 3: 261, 4: 186, 5: 133, 6: 36}
+signature tiers: {1: 14, 2: 136, 3: 232, 4: 182, 5: 143, 6: 40}
 --- repeat rates (200 consecutive drops per archetype, decisive success, no place) ---
   same magnitude property as the previous drop: mean 9.6 % max 14.6 % (target <= 15%, OEQ-00-5)
   identical whole item to the previous drop: mean 2.6 % max 8.5 %
@@ -55,9 +55,6 @@ signature tiers: {1: 16, 2: 121, 3: 261, 4: 186, 5: 133, 6: 36}
   worst repeats: [('arch.bear@T2', 14.6), ('arch.dwarf_holdguard@T3', 14.6), ('arch.wight@T2', 13.6), ('arch.wild_fey@T2', 13.6), ('arch.wyvern@T4', 13.6), ('arch.wolf@T3', 13.1)]
   arch.clockwork and arch.water_elemental by band (repeat %, tier-1 pool): [('clockwork@T1', 12.1, 8), ('clockwork@T2', 9.5, 8), ('clockwork@T3', 8.0, 8), ('clockwork@T4', 11.6, 8), ('water_elemental@T2', 9.0, 8), ('water_elemental@T3', 10.6, 8), ('water_elemental@T4', 6.5, 8), ('water_elemental@T5', 4.5, 8)]
 --- character level: 500 PCs each attune 5 of 20 random drops (bands 2-4) ---
-  share of characters whose 5 attuned items would exceed an item share without the E4 clamp: {'reduction': '30.6%', 'edge (same quantity and scope)': '20.2%', 'harm_edge': '11.2%'}
+  share of characters whose 5 attuned items would exceed an item share without the E4 clamp: {'reduction': '28.0%', 'edge (same quantity and scope)': '19.2%', 'harm_edge': '8.8%'}
 --- crafting check: a troll-hide coat (mat.hide from the troll) commissioned at masterwork, bias ward, trained crafter (tier cap 2) ---
   craft pool size 12 top magnitude picks [('prop.guarding', 40), ('prop.reinforced', 30), ('prop.sturdy', 28), ('prop.resist_crush', 26), ('prop.knitting', 19), ('prop.sig_giants_grip', 17)]
-bound power by circumstance: {('scavenged', False): 230, ('decisive', False): 446, ('merciful', True): 51, ('costly', False): 143, ('costly', True): 66, ('merciful', False): 63, ('decisive', True): 1}
-decisive signatures (top 12): [(('decisive', 'prop.sig_dragonscale'), 66), (('decisive', 'prop.sig_crown_of_dread'), 37), (('decisive', 'prop.sig_alien_ward'), 32), (('decisive', 'prop.sig_hunters_sense'), 31), (('decisive', 'prop.sig_unyielding'), 28), (('decisive', 'prop.sig_wyvern_sting'), 28), (('decisive', 'prop.sig_silver_tongue'), 25), (('decisive', 'prop.sig_grave_sight'), 23), (('decisive', 'prop.sig_monster_hide'), 22), (('decisive', 'prop.sig_fire_heart'), 18), (('decisive', 'prop.sig_well_made'), 17), (('decisive', 'prop.sig_precise'), 17)]
-decisive items without a signature (arch, base): []

@@ -75,7 +75,8 @@ antigrind:
   reset_boundary: scene_end     # handler h.03.antigrind_reset (PR-03-2); also h.03.day_settle for open scenes
   scene_node_max: 28            # 16 + 8 + 4
   routine_cap: {per: day, per_node: 1, keeps: highest}                      # 03.5.3
-  same_target_cap: {per: day, key: [target, level2_deed_node], later_scenes_settle_as: 0}   # 03.5.4
+  same_target_cap: {per: day, key: [target, level2_deed_node], later_scenes_settle_as: 0,   # 03.5.4
+                    non_enemy_window: {per: days_7, when: "target standing toward actor >= -1 (Wary), or in party/hire/company, or a spar by agreement"}}   # [revision: I-041]
   practice: "Safe, unopposed, unclocked, routine beats fail D2 and are never judged evidence (03.5.5)"
   provisional_read: {function: "tally(include_pending: true)", allowed_callers: ["04 crisis check (V5)"]}
 

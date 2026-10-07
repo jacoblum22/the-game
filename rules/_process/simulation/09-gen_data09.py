@@ -85,7 +85,9 @@ FOCUS_BASE = {1: 0, 2: 1, 3: 2, 4: 3, 5: 4}
 LORE_BASE = {1: "easy", 2: "easy", 3: "moderate", 4: "hard", 5: "very_hard"}
 TIER_LADDER = ["easy", "moderate", "hard", "very_hard", "legendary"]
 RARITY_SHIFT = {"common": 0, "uncommon": 1, "rare": 2, "legendary": 3}
-PREMIUM = {"rider": 0.06, "action": 0.06, "aura": 0.06, "lesser": 0.03, "summon": 0.10, "ability": 0.04}
+PREMIUM = {"rider": 0.06, "lingering_rider": 0.15, "action": 0.06, "aura": 0.06, "lesser": 0.03, "summon": 0.10, "ability": 0.04}
+# [revision: I-090] a burning or bleeding rider is priced by measurement: 09-lingering-rider.py, mean premium 0.15
+LINGERING_RIDERS = {"pow.bleed", "pow.burning_touch"}
 LESSER = {"pow.frenzy", "pow.shield_wall", "pow.pack_tactics", "pow.ambush_strike", "pow.mend_kin", "pow.blink",
          "pow.glamour", "pow.spell_turning", "pow.rally_cry", "pow.call_kin", "pow.drag_off", "pow.second_wind", "pow.shrug"}
 FREE = {"pow.flight", "pow.swimmer", "pow.climber", "pow.burrower", "pow.night_eyes", "pow.keen_scent", "pow.tremorsense",
@@ -256,7 +258,7 @@ def power_premium(powers, riders, abilities):
         if x in FREE:
             continue
         if x in riders:
-            p += PREMIUM["rider"]
+            p += PREMIUM["lingering_rider" if x in LINGERING_RIDERS else "rider"]
         elif x in LESSER:
             p += PREMIUM["lesser"]
         elif x == "pow.summon_dead":
@@ -376,10 +378,10 @@ def build(v):
     target = r_std / (1.0 + prem)
     line = dict(atk=prim["modifier"], guard=defenses["guard"], sev=int(prim["harm"]["severity"][1]),
                 heavy=heavy_sev, red=red, fend=fend, morale=NERVES[nerve], tempo=tempo, taken=taken, regen=regen,
-                swarm=v["swarm"])
+                swarm=v["swarm"], ling=bool(LINGERING_RIDERS & set(riders)))     # [revision: I-090] the estimator reads it
     lo, hi = C.ENVELOPE_VIT[b]
     tol = (0.5, 2.0) if b == 1 else (0.67, 1.5)
-    solve_line = dict(line, taken=1.0, regen=0)       # 09.4.4: solved as if the PC holds the counter
+    solve_line = dict(line, taken=1.0, regen=0, ling=False)   # 09.4.4: solved as if the PC holds the counter; the rider is in the premium
 
     def solve():
         best = None

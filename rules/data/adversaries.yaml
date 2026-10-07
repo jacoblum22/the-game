@@ -376,7 +376,7 @@ adversaries:
   - {tag: deed.martial.unarmed, value: 2}
   defenses: {guard: 17, might: 13, agility: 17, endurance: 11, wits: 15, intellect: 9, presence: 9, resolve: 11}
   tempo: 13
-  vitality: 11
+  vitality: 10
   reduction:
     amount: 0
     harm_tags: [harm.physical]
@@ -452,9 +452,9 @@ adversaries:
   advisory_without_counter: null
   counter: null
   calibration:
-    premium: 0.09
-    solved_vitality: 11
-    fidelity: 0.98
+    premium: 0.18
+    solved_vitality: 10
+    fidelity: 0.96
     severity_compensation: 0
     line: {atk: 5, guard: 17, sev: 2, heavy: null, red: 0, fend: false, morale: 4, tempo: 13, taken: 1.0, regen: 0}
   lifecycle: provisional
@@ -556,9 +556,9 @@ adversaries:
   advisory_without_counter: null
   counter: null
   calibration:
-    premium: 0.09
+    premium: 0.18
     solved_vitality: 20
-    fidelity: 0.92
+    fidelity: 0.99
     severity_compensation: 0
     line: {atk: 7, guard: 19, sev: 3, heavy: 4, red: 0, fend: true, morale: 4, tempo: 14, taken: 1.0, regen: 0}
   lifecycle: provisional
@@ -5498,7 +5498,7 @@ adversaries:
   - {tag: deed.martial.unarmed, value: 4}
   defenses: {guard: 17, might: 22, agility: 13, endurance: 22, wits: 13, intellect: 8, presence: 11, resolve: 16}
   tempo: 13
-  vitality: 26
+  vitality: 24
   reduction:
     amount: 2
     harm_tags: [harm.physical]
@@ -5574,12 +5574,12 @@ adversaries:
     flaw: null
     gear: []
     purse: none
-  advisory_alone: {P1: lethal, P2: lethal, P3: hard, P4: fair, P5: trivial}
+  advisory_alone: {P1: lethal, P2: lethal, P3: lethal, P4: fair, P5: trivial}
   advisory_without_counter: {P1: lethal, P2: lethal, P3: lethal, P4: lethal, P5: trivial}
   counter: fire or acid (stops regeneration)
   calibration:
-    premium: 0.06
-    solved_vitality: 26
+    premium: 0.15
+    solved_vitality: 24
     fidelity: 1.01
     severity_compensation: 0
     line: {atk: 12, guard: 17, sev: 3, heavy: 4, red: 2, fend: true, morale: 8, tempo: 13, taken: 1.0, regen: 3}
@@ -8280,7 +8280,7 @@ adversaries:
   - {tag: deed.martial.unarmed, value: 1}
   defenses: {guard: 12, might: 12, agility: 11, endurance: 12, wits: 10, intellect: 9, presence: 9, resolve: 10}
   tempo: 10
-  vitality: 4
+  vitality: 3
   reduction:
     amount: 0
     harm_tags: [harm.physical]
@@ -8364,9 +8364,9 @@ adversaries:
   advisory_without_counter: null
   counter: null
   calibration:
-    premium: 0.09
-    solved_vitality: 4
-    fidelity: 1.19
+    premium: 0.18
+    solved_vitality: 3
+    fidelity: 0.87
     severity_compensation: 0
     line: {atk: 2, guard: 12, sev: 2, heavy: null, red: 0, fend: false, morale: 6, tempo: 10, taken: 1.0, regen: 0}
   lifecycle: provisional
@@ -8451,9 +8451,9 @@ adversaries:
   advisory_without_counter: null
   counter: null
   calibration:
-    premium: 0.09
-    solved_vitality: 5
-    fidelity: 1.09
+    premium: 0.18
+    solved_vitality: 4
+    fidelity: 0.87
     severity_compensation: 0
     line: {atk: 2, guard: 12, sev: 2, heavy: null, red: 0, fend: false, morale: 4, tempo: 10, taken: 1.0, regen: 0}
   lifecycle: provisional
@@ -8478,7 +8478,7 @@ adversaries:
   - {tag: deed.martial.unarmed, value: 3}
   defenses: {guard: 17, might: 17, agility: 14, endurance: 17, wits: 12, intellect: 10, presence: 10, resolve: 12}
   tempo: 12
-  vitality: 19
+  vitality: 18
   reduction:
     amount: 0
     harm_tags: [harm.physical]
@@ -8550,13 +8550,13 @@ adversaries:
     flaw: null
     gear: *id279
     purse: none
-  advisory_alone: {P1: lethal, P2: hard, P3: trivial, P4: trivial, P5: trivial}
+  advisory_alone: {P1: lethal, P2: hard, P3: easy, P4: trivial, P5: trivial}
   advisory_without_counter: null
   counter: null
   calibration:
-    premium: 0.15
-    solved_vitality: 19
-    fidelity: 0.97
+    premium: 0.24
+    solved_vitality: 18
+    fidelity: 0.99
     severity_compensation: 0
     line: {atk: 7, guard: 17, sev: 3, heavy: null, red: 0, fend: true, morale: 6, tempo: 12, taken: 1.0, regen: 0}
   lifecycle: provisional
@@ -8891,13 +8891,13 @@ adversaries:
     flaw: null
     gear: []
     purse: none
-  advisory_alone: {P1: lethal, P2: lethal, P3: hard, P4: hard, P5: trivial}
+  advisory_alone: {P1: lethal, P2: lethal, P3: lethal, P4: hard, P5: trivial}
   advisory_without_counter: null
   counter: null
   calibration:
-    premium: 0.15
+    premium: 0.24
     solved_vitality: 20
-    fidelity: 1.2
+    fidelity: 1.3
     severity_compensation: 0
     line: {atk: 12, guard: 20, sev: 3, heavy: 4, red: 2, fend: true, morale: 8, tempo: 13, taken: 1.0, regen: 0}
   lifecycle: provisional
@@ -9015,7 +9015,7 @@ adversaries:
   - {tag: deed.martial.unarmed, value: 2}
   defenses: {guard: 15, might: 13, agility: 15, endurance: 15, wits: 15, intellect: 9, presence: 9, resolve: 11}
   tempo: 13
-  vitality: 10
+  vitality: 9
   reduction:
     amount: 0
     harm_tags: [harm.physical]
@@ -9083,9 +9083,9 @@ adversaries:
   advisory_without_counter: null
   counter: null
   calibration:
-    premium: 0.15
-    solved_vitality: 10
-    fidelity: 1.0
+    premium: 0.24
+    solved_vitality: 9
+    fidelity: 0.97
     severity_compensation: 0
     line: {atk: 5, guard: 15, sev: 2, heavy: null, red: 0, fend: false, morale: 6, tempo: 13, taken: 1.0, regen: 0}
   lifecycle: provisional
@@ -9862,12 +9862,12 @@ adversaries:
     gear: &id307 []
     purse: none
   advisory_alone: {P1: easy, P2: trivial, P3: trivial, P4: trivial, P5: trivial}
-  advisory_without_counter: {P1: hard, P2: fair, P3: trivial, P4: trivial, P5: trivial}
+  advisory_without_counter: {P1: lethal, P2: fair, P3: trivial, P4: trivial, P5: trivial}
   counter: the harm or weapon its resistance does not cover (harm.physical)
   calibration:
-    premium: 0.12
+    premium: 0.21
     solved_vitality: 7
-    fidelity: 0.97
+    fidelity: 1.05
     severity_compensation: 0
     line: {atk: 7, guard: 17, sev: 2, heavy: null, red: 0, fend: false, morale: null, tempo: 11, taken: 0.5, regen: 0}
   lifecycle: provisional
@@ -9892,7 +9892,7 @@ adversaries:
   - {tag: deed.martial.unarmed, value: 3}
   defenses: {guard: 19, might: 12, agility: 19, endurance: 17, wits: 12, intellect: 10, presence: 12, resolve: 12}
   tempo: 12
-  vitality: 14
+  vitality: 13
   reduction:
     amount: 0
     harm_tags: [harm.physical]
@@ -9948,12 +9948,12 @@ adversaries:
     flaw: null
     gear: *id307
     purse: none
-  advisory_alone: {P1: lethal, P2: hard, P3: easy, P4: trivial, P5: trivial}
+  advisory_alone: {P1: lethal, P2: lethal, P3: easy, P4: trivial, P5: trivial}
   advisory_without_counter: {P1: lethal, P2: lethal, P3: hard, P4: fair, P5: trivial}
   counter: the harm or weapon its resistance does not cover (harm.physical)
   calibration:
-    premium: 0.12
-    solved_vitality: 14
+    premium: 0.21
+    solved_vitality: 13
     fidelity: 1.04
     severity_compensation: 0
     line: {atk: 9, guard: 19, sev: 3, heavy: null, red: 0, fend: true, morale: null, tempo: 12, taken: 0.5, regen: 0}
@@ -10398,7 +10398,7 @@ adversaries:
   - {tag: deed.martial.unarmed, value: 2}
   defenses: {guard: 15, might: 15, agility: 13, endurance: 15, wits: 11, intellect: 9, presence: 9, resolve: 11}
   tempo: 11
-  vitality: 8
+  vitality: 7
   reduction:
     amount: 1
     harm_tags: [harm.physical]
@@ -10478,9 +10478,9 @@ adversaries:
   advisory_without_counter: null
   counter: null
   calibration:
-    premium: 0.12
-    solved_vitality: 8
-    fidelity: 1.07
+    premium: 0.21
+    solved_vitality: 7
+    fidelity: 1.0
     severity_compensation: 0
     line: {atk: 5, guard: 15, sev: 2, heavy: null, red: 1, fend: false, morale: 6, tempo: 11, taken: 1.0, regen: 0}
   lifecycle: provisional
@@ -10504,7 +10504,7 @@ adversaries:
   - {tag: deed.martial.unarmed, value: 3}
   defenses: {guard: 17, might: 17, agility: 14, endurance: 17, wits: 12, intellect: 10, presence: 10, resolve: 12}
   tempo: 12
-  vitality: 32
+  vitality: 30
   reduction:
     amount: 1
     harm_tags: [harm.physical]
@@ -10580,9 +10580,9 @@ adversaries:
   advisory_without_counter: null
   counter: null
   calibration:
-    premium: 0.12
-    solved_vitality: 16
-    fidelity: 0.99
+    premium: 0.21
+    solved_vitality: 15
+    fidelity: 1.0
     severity_compensation: 0
     line: {atk: 7, guard: 17, sev: 3, heavy: null, red: 1, fend: true, morale: 8, tempo: 12, taken: 1.0, regen: 0}
   lifecycle: provisional
@@ -12296,7 +12296,7 @@ adversaries:
   - {tag: deed.martial.unarmed, value: 3}
   defenses: {guard: 15, might: 19, agility: 12, endurance: 19, wits: 12, intellect: 8, presence: 10, resolve: 12}
   tempo: 12
-  vitality: 18
+  vitality: 16
   reduction:
     amount: 1
     harm_tags: [harm.physical]
@@ -12391,12 +12391,12 @@ adversaries:
     gear: &id405 []
     purse: none
   advisory_alone: {P1: lethal, P2: lethal, P3: easy, P4: trivial, P5: trivial}
-  advisory_without_counter: {P1: lethal, P2: lethal, P3: fair, P4: trivial, P5: trivial}
+  advisory_without_counter: {P1: lethal, P2: lethal, P3: fair, P4: easy, P5: trivial}
   counter: fire or acid (stops regeneration)
   calibration:
-    premium: 0.09
-    solved_vitality: 18
-    fidelity: 1.02
+    premium: 0.18
+    solved_vitality: 16
+    fidelity: 0.97
     severity_compensation: 0
     line: {atk: 9, guard: 15, sev: 3, heavy: 4, red: 1, fend: true, morale: 8, tempo: 12, taken: 1.0, regen: 3}
   lifecycle: provisional
@@ -12420,7 +12420,7 @@ adversaries:
   - {tag: deed.martial.unarmed, value: 5}
   defenses: {guard: 19, might: 24, agility: 14, endurance: 24, wits: 14, intellect: 8, presence: 11, resolve: 14}
   tempo: 14
-  vitality: 52
+  vitality: 50
   reduction:
     amount: 2
     harm_tags: [harm.physical]
@@ -12509,13 +12509,13 @@ adversaries:
     flaw: null
     gear: *id405
     purse: none
-  advisory_alone: {P1: lethal, P2: lethal, P3: lethal, P4: lethal, P5: hard}
+  advisory_alone: {P1: lethal, P2: lethal, P3: lethal, P4: lethal, P5: lethal}
   advisory_without_counter: {P1: lethal, P2: lethal, P3: lethal, P4: lethal, P5: lethal}
   counter: fire or acid (stops regeneration)
   calibration:
-    premium: 0.15
-    solved_vitality: 35
-    fidelity: 0.99
+    premium: 0.24
+    solved_vitality: 33
+    fidelity: 1.01
     severity_compensation: 0
     line: {atk: 14, guard: 19, sev: 4, heavy: 5, red: 2, fend: true, morale: 8, tempo: 14, taken: 1.0, regen: 3}
   lifecycle: provisional

@@ -457,7 +457,10 @@ easier than the band says, only different in shape (class i).
 
 **09.4.3 Powers and the power premium.** `[D]` [DL-09-05; revision: I-065] An adversary's **powers** are its archetype's plus any its
 entry adds (09.5). A power that adds threat beyond the attack line carries a **premium** (T-09-6): 0.06 for
-each rider, offensive action or aura; 0.03 for each lesser power (pack tactics, shield wall, frenzy, ambush,
+each rider, offensive action or aura, except a **lingering-harm rider** (burning or bleeding: `pow.bleed`,
+`pow.burning_touch`), 0.15, its measured worth (`09-lingering-rider.py`: the band's standard line with the
+rider raises the PC's harm ratio by 0.09–0.19, mean 0.15, the PC ending it at once) [revision: I-090]
+[DL-09-28]; 0.03 for each lesser power (pack tactics, shield wall, frenzy, ambush,
 blink, glamour, mend, rally, call, drag, Shrug, second wind); 0.10 for a summoning; 0.04 for each pool ability
 held; total capped at 0.40. Movement modes, senses and bodily immunities carry none: their worth is
 situational and they are the creature's identity, not its weight. Resistances and regeneration carry none
@@ -1278,10 +1281,13 @@ reproduce `09-adversary-sim.py` section D within one word on its rows.)
 2. **Read each opposing participant's line**: attack modifier, Guard, Vitality per member and members,
    primary severity, heavy severity (if any heavy attack), reduction, Fend (reaction kinds), nerve, tempo DC,
    leader flag, swarm flag; **resistance factor** 0.5 if a resistance covers the PC's attack and its "unless"
-   does not, else 1; **regeneration** if it regenerates and the PC's attack is neither fire nor acid.
+   does not, else 1; **regeneration** if it regenerates and the PC's attack is neither fire nor acid;
+   **lingering rider** if an attack of it applies burning or bleeding [revision: I-090].
 3. **Rates** by exact enumeration of the d20 (00.3.10 degrees, critical one rung heavier): the PC's harm per
    round against each (Strikes at 0, −2, −4; −2 more on the first if it Fends; minus reduction; a swarm one rung
-   lighter; × resistance, floored per outcome; minus regeneration, never below a tenth); each foe's harm per
+   lighter; × resistance, floored per outcome; minus regeneration, never below a tenth; the third Strike × (1 −
+   0.6 q), where q is the chance a foe with a lingering rider lands at least one of its two attacks in a round,
+   since the PC's best answer is to spend an action ending the condition [revision: I-090]); each foe's harm per
    round against the PC (attacks at 0 and −2; the PC's Fend −2 on the first attack of the foe with the highest
    rate; a heavy blow on alternate turns; a mob's numbers step at its current members); and their variances.
 4. **Timeline**: order foes by total Vitality, lowest first; each member falls after its Vitality ÷ the PC's
@@ -1377,7 +1383,8 @@ fields first, then this chapter's optional fields).
 | `lore` | {deed_tag, rarity} | | 09.10.2 |
 | `encounter` | {terrain, group, objective_default} | for 10, 13 | 09.8.3 |
 
-**T-09-6 Power premium** (`band_tables.power_premium`). Rider 0.06 · offensive or control action 0.06 · aura
+**T-09-6 Power premium** (`band_tables.power_premium`). Rider 0.06 · lingering-harm rider (burning,
+bleeding) 0.15 [revision: I-090] · offensive or control action 0.06 · aura
 0.06 · lesser (pack tactics, shield wall, frenzy, ambush, mend, blink, glamour, rally, call, drag, Shrug, second
 wind, spell turning) 0.03 · summoning 0.10 · pool ability held 0.04 · movement, senses and bodily immunities 0
 · total cap 0.40. Resistances and regeneration are counters (09.4.4), not premium.
@@ -1530,7 +1537,7 @@ call_help, talk, drag_off, retreat_lair, feed, hold_ground. Each is defined over
 | `adv.wolf_pack` Wolf pack | wolf | T1 | minion | skirmisher | +1 S2 | 12 | 5 × 2 | 0 | 0 | trivial |
 | `adv.dire_wolf` Dire wolf | wolf | T2 | standard | soldier | +3 S3 | 15 | 9 | 0 | 1 | trivial |
 | `adv.warg_alpha` Warg alpha | wolf | T3 | elite | soldier | +5 S3 | 17 | 40 | 0 | 3 | fair |
-| `adv.panther` Panther | great_cat | T2 | standard | lurker | +5 S2 | 17 | 11 | 0 | 1 | trivial |
+| `adv.panther` Panther | great_cat | T2 | standard | lurker | +5 S2 | 17 | 10 | 0 | 1 | trivial |
 | `adv.sabre_cat` Sabre-tooth | great_cat | T3 | standard | lurker | +7 S3 | 19 | 20 | 0 | 2 | easy |
 | `adv.black_bear` Black bear | bear | T2 | standard | brute | +7 S2 | 13 | 11 | 1 | 1 | trivial |
 | `adv.cave_bear` Cave bear | bear | T3 | elite | brute | +9 S3 | 15 | 36 | 1 | 3 | fair |
@@ -1581,7 +1588,7 @@ call_help, talk, drag_off, retreat_lair, feed, hold_ground. Each is defined over
 | `adv.lizardfolk_hunter` Lizardfolk hunter | lizardfolk | T2 | standard | soldier | +5 S2 | 13 | 11 | 1 | 1 | trivial |
 | `adv.ogre` Ogre | ogre | T3 | standard | brute | +9 S3 | 11 | 20 | 1 | 2 | trivial |
 | `adv.ogre_chief` Ogre chief | ogre | T3 | solo | brute | +9 S3 | 11 | 60 | 1 | 4 | fair |
-| `adv.troll` Troll | troll | T4 | standard | brute | +12 S3 | 17 | 26 | 2 | 3 | fair († lethal) |
+| `adv.troll` Troll | troll | T4 | standard | brute | +12 S3 | 17 | 24 | 2 | 3 | fair († lethal) |
 | `adv.hill_giant` Hill giant | giant | T4 | standard | brute | +12 S3 | 12 | 32 | 2 | 3 | fair |
 | `adv.frost_giant_jarl` Frost giant jarl | giant | T5 | solo | leader | +14 S5 | 13 | 69 | 2 | 6 | hard |
 | `adv.skeleton_rabble` Skeleton rabble | skeleton | T1 | minion | soldier | +1 S2 | 11 | 3 × 2 | 1 | 0 | trivial |
@@ -1608,14 +1615,14 @@ call_help, talk, drag_off, retreat_lair, feed, hold_ground. Each is defined over
 | `adv.river_spirit` Spirit of the river | place_spirit | T3 | standard | controller | +9 S3 | 15 | 20 | 0 | 2 | trivial |
 | `adv.cairn_guardian` Cairn guardian | ancestor | T2 | standard | soldier | +3 S3 | 13 | 10 | 0 | 1 | trivial († fair) |
 | `adv.temple_warden` Temple warden | celestial | T4 | standard | soldier | +10 S3 | 22 | 29 | 0 | 3 | fair |
-| `adv.imp` Imp | lesser_demon | T1 | standard | skirmisher | +2 S2 | 12 | 4 | 0 | 0 | trivial |
+| `adv.imp` Imp | lesser_demon | T1 | standard | skirmisher | +2 S2 | 12 | 3 | 0 | 0 | trivial |
 | `adv.dretch_mob` Dretch swarm | lesser_demon | T1 | minion | brute | +2 S2 | 12 | 4 × 2 | 0 | 0 | trivial |
-| `adv.vrock` Vulture demon | lesser_demon | T3 | standard | brute | +7 S3 | 17 | 19 | 0 | 2 | trivial |
+| `adv.vrock` Vulture demon | lesser_demon | T3 | standard | brute | +7 S3 | 17 | 18 | 0 | 2 | easy |
 | `adv.pit_lord` Pit lord | greater_demon | T5 | solo | brute | +14 S5 | 22 | 48 | 0 | 6 | lethal |
 | `adv.smiling_stranger` The smiling stranger | tempter | T3 | standard | caster | +9 S3 | 15 | 20 | 0 | 3 | trivial |
 | `adv.chain_devil` Chain devil | enforcer | T4 | standard | controller | +12 S3 | 20 | 20 | 2 | 3 | hard |
 | `adv.whisperer` Whisperer in the walls | possessor | T3 | standard | controller | +9 S3 | 15 | 20 | 0 | 2 | trivial († fair) |
-| `adv.hell_hound` Hell hound | hellbeast | T2 | standard | skirmisher | +5 S2 | 15 | 10 | 0 | 1 | trivial |
+| `adv.hell_hound` Hell hound | hellbeast | T2 | standard | skirmisher | +5 S2 | 15 | 9 | 0 | 1 | trivial |
 | `adv.animated_armor` Animated armor | animated | T1 | standard | soldier | +2 S2 | 11 | 5 | 0 | 0 | trivial |
 | `adv.flying_blades` Flying blades | animated | T2 | minion | swarm | +5 S1 | 13 | 4 × 6 | 1 | 0 | lethal |
 | `adv.brass_sentinel` Brass sentinel | clockwork | T2 | standard | soldier | +5 S2 | 15 | 6 | 2 | 1 | trivial |
@@ -1624,13 +1631,13 @@ call_help, talk, drag_off, retreat_lair, feed, hold_ground. Each is defined over
 | `adv.iron_golem` Iron golem | golem | T4 | solo | soldier | +12 S3 | 12 | 54 | 3 | 5 | hard († lethal) |
 | `adv.homunculus` Homunculus | homunculus | T1 | standard | skirmisher | +4 S2 | 14 | 3 | 0 | 0 | trivial |
 | `adv.salamander` Salamander | fire_elemental | T2 | standard | skirmisher | +7 S2 | 17 | 7 | 0 | 1 | trivial († fair) |
-| `adv.fire_elemental` Fire elemental | fire_elemental | T3 | standard | brute | +9 S3 | 19 | 14 | 0 | 2 | easy († hard) |
+| `adv.fire_elemental` Fire elemental | fire_elemental | T3 | standard | brute | +9 S3 | 19 | 13 | 0 | 2 | easy († hard) |
 | `adv.earth_elemental` Earth elemental | earth_elemental | T4 | standard | brute | +12 S3 | 12 | 32 | 3 | 3 | fair († lethal) |
 | `adv.water_elemental` Water elemental | water_elemental | T3 | standard | controller | +9 S3 | 17 | 16 | 0 | 2 | trivial († hard) |
 | `adv.air_elemental` Air elemental | air_elemental | T3 | standard | skirmisher | +5 S3 | 19 | 20 | 0 | 2 | easy († fair) |
 | `adv.ice_colossus` Ice colossus | frost_elemental | T5 | solo | brute | +14 S4 | 19 | 60 | 2 | 6 | hard |
-| `adv.fire_drake` Fire drake | drake | T2 | standard | brute | +5 S2 | 15 | 8 | 1 | 1 | trivial |
-| `adv.rock_drake` Rock drake | drake | T3 | elite | brute | +7 S3 | 17 | 32 | 1 | 3 | fair |
+| `adv.fire_drake` Fire drake | drake | T2 | standard | brute | +5 S2 | 15 | 7 | 1 | 1 | trivial |
+| `adv.rock_drake` Rock drake | drake | T3 | elite | brute | +7 S3 | 17 | 30 | 1 | 3 | fair |
 | `adv.wyvern` Wyvern | wyvern | T3 | standard | skirmisher | +9 S3 | 17 | 14 | 1 | 2 | easy |
 | `adv.wyvern_matriarch` Wyvern matriarch | wyvern | T4 | elite | skirmisher | +12 S3 | 20 | 25 | 2 | 4 | hard |
 | `adv.red_wyrmling` Red wyrmling | great_dragon | T4 | standard | brute | +12 S3 | 17 | 20 | 2 | 3 | fair |
@@ -1647,8 +1654,8 @@ call_help, talk, drag_off, retreat_lair, feed, hold_ground. Each is defined over
 | `adv.spore_shambler` Spore shambler | fungal | T2 | standard | controller | +3 S3 | 11 | 12 | 0 | 1 | trivial |
 | `adv.strangling_creeper` Strangling creeper | monstrous_plant | T2 | standard | controller | +7 S2 | 9 | 12 | 1 | 1 | trivial |
 | `adv.blighted_treant` Blighted treant | monstrous_plant | T4 | standard | brute | +12 S3 | 12 | 32 | 2 | 3 | easy († hard) |
-| `adv.stitched_horror` Stitched horror | abomination | T3 | standard | brute | +9 S3 | 15 | 18 | 1 | 2 | easy († fair) |
-| `adv.vat_titan` Vat titan | abomination | T5 | solo | brute | +14 S4 | 19 | 52 | 2 | 6 | hard († lethal) |
+| `adv.stitched_horror` Stitched horror | abomination | T3 | standard | brute | +9 S3 | 15 | 16 | 1 | 2 | easy († fair) |
+| `adv.vat_titan` Vat titan | abomination | T5 | solo | brute | +14 S4 | 19 | 50 | 2 | 6 | lethal |
 
 **T-09-13 Band tells** (`behaviors.yaml#band_tells`; four per band; the engine draws without repeats in a scene).
 

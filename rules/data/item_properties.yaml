@@ -1206,9 +1206,13 @@ properties:
     effects:
     - effect_id: eff.apply_condition
       params: {condition: cond.burning, severity: S1, duration: scene, target: the creature hit}
+    - effect_id: eff.apply_condition
+      params: {condition: cond.burning, severity: S1, duration: scene, target: the creature hit}
   - tier: 2
     trigger: {hook: on_attack_hit, chance: natural 19-20}
     effects:
+    - effect_id: eff.apply_condition
+      params: {condition: cond.burning, severity: S1, duration: scene, target: the creature hit}
     - effect_id: eff.apply_condition
       params: {condition: cond.burning, severity: S1, duration: scene, target: the creature hit}
   - tier: 3
@@ -1216,17 +1220,27 @@ properties:
     effects:
     - effect_id: eff.apply_condition
       params: {condition: cond.burning, severity: S1, duration: scene, target: the creature hit}
+    - effect_id: eff.apply_condition
+      params: {condition: cond.burning, severity: S1, duration: scene, target: the creature hit}
   - tier: 4
     trigger: {hook: on_attack_hit, chance: natural 17-20}
     effects:
     - effect_id: eff.apply_condition
-      params: {condition: cond.burning, severity: S2, duration: scene, target: the creature hit}
+      params: {condition: cond.burning, severity: S1, duration: scene, target: the creature hit}
+    - effect_id: eff.apply_condition
+      params: {condition: cond.burning, severity: S1, duration: scene, target: the creature hit}
+    - effect_id: eff.apply_condition
+      params: {condition: cond.burning, severity: S1, duration: scene, target: the creature hit}
   - tier: 5
     trigger: {hook: on_attack_hit, chance: natural 16-20}
     effects:
     - effect_id: eff.apply_condition
-      params: {condition: cond.burning, severity: S2, duration: scene, target: the creature hit}
-  text: On a hit whose d20 shows the tier's natural range (20 at tier 1 widening to 16-20 at tier 5), apply cond.burning to the creature hit.
+      params: {condition: cond.burning, severity: S1, duration: scene, target: the creature hit}
+    - effect_id: eff.apply_condition
+      params: {condition: cond.burning, severity: S1, duration: scene, target: the creature hit}
+    - effect_id: eff.apply_condition
+      params: {condition: cond.burning, severity: S1, duration: scene, target: the creature hit}
+  text: On a hit whose d20 shows the tier's natural range (20 at tier 1 widening to 16-20 at tier 5), apply 2 stacks of cond.burning to the creature hit (3 at tiers 4-5).
   tags: []
   lifecycle: provisional
   basis: ['08.3', '08.4', T-08-9]
@@ -3660,9 +3674,13 @@ properties:
     effects:
     - effect_id: eff.apply_condition
       params: {condition: cond.bleeding, severity: S1, duration: until_cleansed, target: the creature hit}
+    - effect_id: eff.apply_condition
+      params: {condition: cond.bleeding, severity: S1, duration: until_cleansed, target: the creature hit}
   - tier: 2
     trigger: {hook: on_attack_hit, chance: natural 19-20}
     effects:
+    - effect_id: eff.apply_condition
+      params: {condition: cond.bleeding, severity: S1, duration: until_cleansed, target: the creature hit}
     - effect_id: eff.apply_condition
       params: {condition: cond.bleeding, severity: S1, duration: until_cleansed, target: the creature hit}
   - tier: 3
@@ -3670,17 +3688,27 @@ properties:
     effects:
     - effect_id: eff.apply_condition
       params: {condition: cond.bleeding, severity: S1, duration: until_cleansed, target: the creature hit}
+    - effect_id: eff.apply_condition
+      params: {condition: cond.bleeding, severity: S1, duration: until_cleansed, target: the creature hit}
   - tier: 4
     trigger: {hook: on_attack_hit, chance: natural 17-20}
     effects:
     - effect_id: eff.apply_condition
-      params: {condition: cond.bleeding, severity: S2, duration: until_cleansed, target: the creature hit}
+      params: {condition: cond.bleeding, severity: S1, duration: until_cleansed, target: the creature hit}
+    - effect_id: eff.apply_condition
+      params: {condition: cond.bleeding, severity: S1, duration: until_cleansed, target: the creature hit}
+    - effect_id: eff.apply_condition
+      params: {condition: cond.bleeding, severity: S1, duration: until_cleansed, target: the creature hit}
   - tier: 5
     trigger: {hook: on_attack_hit, chance: natural 16-20}
     effects:
     - effect_id: eff.apply_condition
-      params: {condition: cond.bleeding, severity: S2, duration: until_cleansed, target: the creature hit}
-  text: On a hit whose d20 shows the tier's natural range, apply cond.bleeding to the creature hit.
+      params: {condition: cond.bleeding, severity: S1, duration: until_cleansed, target: the creature hit}
+    - effect_id: eff.apply_condition
+      params: {condition: cond.bleeding, severity: S1, duration: until_cleansed, target: the creature hit}
+    - effect_id: eff.apply_condition
+      params: {condition: cond.bleeding, severity: S1, duration: until_cleansed, target: the creature hit}
+  text: On a hit whose d20 shows the tier's natural range, apply 2 stacks of cond.bleeding to the creature hit (3 at tiers 4-5).
   tags: []
   lifecycle: provisional
   basis: ['08.3', '08.4', T-08-9]

@@ -420,3 +420,8 @@ Resolved all 12 rows: I-038 (Oracle lever cap; sim shows +3.7 down to +0.8 per r
 - Added `_process/merge_ledger.py`, which resolves ledger merge conflicts row by row.
 
 ## Revision C6c merged: ch.09–10 basis tags (133 cards, plus DL-10-31). BASIS covers 879 cards. Remaining: 08, 11, 12, 15, 16.
+
+## Revision C4 merged (conflicts in the ledger, DL-09, the decision log and anchors resolved; C4's DL-09-26 renumbered to DL-09-28): `revision-C4-report.md`
+- Resolved I-041 (non-enemies count weekly; no repeat loot for a season), I-036 (wealth sim with real coin sinks; T3 drop 25%), I-086 (patron job fees by band), I-079 and I-090 (on-hit stacks and estimator riders).
+- New rows I-091 (ch.11/15 should cite job fees) and I-092 (crude-repair limit text).
+- Ch.09 data regenerated, then the integration merge, appendix and anchors rebuilt. Validator 0/0.
