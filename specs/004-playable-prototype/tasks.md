@@ -68,8 +68,8 @@ pytest), at the repository root, as in plan.md "Project Structure". `src/` (the 
 
 ### Retrieval
 
-- [ ] T019 Implement `engine/retrieve/anchors.py` (≤8 candidates from `anchors.yaml` by verb, intent verbs and tags), `engine/retrieve/cards.py` (≤12 cards per call plus the always-loaded core, 00.15.4), `engine/retrieve/triggers.py` (`get_active_triggers`); deterministic ordering
-- [ ] T020 [P] Tests for retrieval caps and determinism in `tests/engine/test_retrieve.py`
+- [x] T019 Implement `engine/retrieve/anchors.py` (≤8 candidates from `anchors.yaml` by verb, intent verbs and tags), `engine/retrieve/cards.py` (≤12 cards per call plus the always-loaded core, 00.15.4), `engine/retrieve/triggers.py` (`get_active_triggers`); deterministic ordering
+- [x] T020 [P] Tests for retrieval caps and determinism in `tests/engine/test_retrieve.py`
 
 ### Model layer
 
@@ -78,9 +78,9 @@ pytest), at the repository root, as in plan.md "Project Structure". `src/` (the 
 - [x] T023 [P] Implement `engine/llm/replay.py`: serve the stored response for the same `(turn_id, role, attempt)` and verify `schema_hash`; `ReplayDivergence` on mismatch
 - [x] T024 [P] Implement `engine/llm/offline.py` exactly as contracts/model-calls.md "Offline stand-in" (per-role heuristics, heuristic claim extractor) plus `ScriptedModel` (a per-role response queue for tests). Used by tests, the persona harness and `python -m play --offline`; never presented as the real game
 - [x] T025 [P] Implement `engine/llm/budget.py`: price table per model id (research.md §4), per-turn / session / game totals, the between-turns warning (FR-039); never interrupts a turn
-- [ ] T106 Implement `engine/dm/packet.py`: the one packet builder every role uses, in the order of contracts/model-calls.md (role instructions → core → ≤12 cards → narrator view → last 4 exchanges → this message); a test that packet size does not grow with turn count (FR-029, SC-002) in `tests/engine/test_packet.py`
-- [ ] T026 Implement the per-role schema builders in `engine/dm/schemas.py` exactly as contracts/model-calls.md (Interpret, Reader, Framer, World, Director, Narrator, Checker): enums built from the rules and the state; "an empty list means the field is dropped from the schema"; "No schema contains a numeric field except `player_quantity`"
-- [ ] T027 [P] Contract tests: every builder's schema is valid JSON Schema, contains no numeric field (INV-3), and the offline model's output validates against it, in `tests/contract/test_schemas.py`
+- [x] T106 Implement `engine/dm/packet.py`: the one packet builder every role uses, in the order of contracts/model-calls.md (role instructions → core → ≤12 cards → narrator view → last 4 exchanges → this message); a test that packet size does not grow with turn count (FR-029, SC-002) in `tests/engine/test_packet.py`
+- [x] T026 Implement the per-role schema builders in `engine/dm/schemas.py` exactly as contracts/model-calls.md (Interpret, Reader, Framer, World, Director, Narrator, Checker): enums built from the rules and the state; "an empty list means the field is dropped from the schema"; "No schema contains a numeric field except `player_quantity`"
+- [x] T027 [P] Contract tests: every builder's schema is valid JSON Schema, contains no numeric field (INV-3), and the offline model's output validates against it, in `tests/contract/test_schemas.py`
 
 **Checkpoint**: data, store, time, retrieval and models work on their own; `ruff`, `pyright`, `pytest` clean.
 

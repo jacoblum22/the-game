@@ -176,3 +176,53 @@ Contract: `specs/004-playable-prototype/contracts/model-calls.md`. Nothing in `e
 - `engine.gen.npc`: `walk_on(rng, role=, home=, people=, name_tables=, given_used=, existing_ids=, member_of=, role_tags=) -> NPC`; `promote_recurring`, `promote_principal`, `reaction_roll(rng, modifiers=0, faction_status=None) -> Reaction`; `NPC.from_record(seed_npc)`.
 - `engine.gen.adversary`: `improvise(archetype, band, role, variant="standard", name=, adv_id=) -> ImprovisedAdversary` (PR-09-2; single creatures only in M1).
 - Precomputed M2 numbers in `engine/gen/data/*.json` (rebuild: `python -m engine.gen.build_tables`).
+
+## engine/retrieve API (T019)
+- `engine.retrieve.anchors`: `anchor_candidates(beat, state, rules) -> list[anchor_id]` (≤8; `beat` = a Reader
+  beat dict/object: verb, intent_verbs, intent, method, license). Scores per `anchors.yaml#compile.retrieval`
+  (intent verb 3 each, deed tag equal/ancestor 2, situation 1); the basic verb's anchor is always first; an
+  anchor needs an intent-verb or deed match (situation alone never qualifies). Ties: specificity order, rule id.
+  `anchor_menu(ids, rules) -> list[str]` (one line per anchor; pass as `notes=` to the Framer's packet),
+  `verb_anchor(verb, rules)`, `mode_tags(mode, rules)` (pacing.yaml#modes), `natural_key(id)`.
+- `engine.retrieve.cards`: `load_cards_for(role, situation_tags, mode, triggers, extra_ids, *, rules=None,
+  index=None, cap=None) -> list[RuleCard]` (≤12 = `pacing.yaml#packet.max_loaded_cards`). Order: role cards
+  (`ROLE_CARDS`) → active triggers' cards → `extra_ids` (anchor cards via `anchor_card_ids(anchors, rules)`,
+  rulings, ability/licence data ids become cards) → situation cards (deeper tag first, explicit `Loads in`
+  first, rule-id order; only `[J*]`/`[N]` rules and procedures). Checker and Interpret get no trigger or
+  situation cards. `core_cards()` = 00.15.4 exactly (`CardIndex.core()`).
+  **Decision:** the ch.01 cards tagged `Loads in: core` are NOT core: 00.15.4 says "only these travel with
+  every turn". They are the Reader's/Framer's role cards and count toward the 12. Role cards whose marks are
+  all `[D]` (01.2.3, 01.2.6, 01.6.4, 01.6.7) are dropped (code runs them; research R5); 01.6.6/01.6.7 are not
+  Framer fields. So the Framer has 11 role cards + 1 slot; it sees its anchors through `anchor_menu`.
+- `engine.retrieve.triggers`: `get_active_triggers(state, rules=None, *, raised=()) -> list[ActiveTrigger]`
+  (id, group, rule_id, cards, subject, fact_id, params; `.line()`), ordered per 12.2.3 groups.
+  **To raise a trigger:** write a current fact whose predicate is the trigger id, `kind="flag"`, value `True`
+  or a params dict, on `world` or the entity it concerns; lower it by superseding with `False`. Or pass ids
+  raised only for this turn in `raised`. `TRIGGERS` registry (every `trg.*` the rules name, plus engine ids
+  `trg.safety_flag` 12.5.6, `trg.interrupt` 00.7.8, `trg.clock_stage` 00.8.4 for 12.2.3 groups 1, 2, 4);
+  `trigger_cards(active)`.
+- `engine.retrieve.scene`: `scene_scope(state)` ([pc, cast_present..., place]), `scene_facts(state, scope=None,
+  limit=40)` (narrator-visible, newest first, no `trg.*` flags), `pc_id(state)`, `entity_names(state, ids)`.
+  Packets and schema enums both use these, so fact ids offered in an enum are the ones the view shows.
+
+## engine/dm packet + schemas API (T106, T026)
+- `engine.dm.packet.build_packet(role, *, instructions, cards, view, exchanges, message, triggers=(),
+  quiet_turns=None, notes=(), rules=None, index=None) -> Packet`. `view`: a `WorldState` (→ `scene_view` +
+  `render_view`), a view dict, or a string. Core = the 00.15.4 cards + "Active triggers:" list. >12 cards
+  raises `PacketError`; only the last 4 (`pacing.yaml#packet.verbatim_exchanges`) exchanges are kept;
+  exchanges are strings or `(player, dm)` tuples. `notes` and `quiet_turns: N` lines follow the view.
+- The view (`scene_view(state)`) is scene-scoped and capped: scope entities, ≤40 scene facts, ≤8 active
+  clocks, ≤8 other threads, ≤12 other cast, ≤12 data keys per entity, values ≤160 chars. Entities render as
+  `<id>: <name>` then `  name: <name>`; facts as `<fact id> about <subject>: <predicate> = <value>`.
+- `engine.dm.schemas`: `ctx = schema_context(state, rules, *, message="", options=(), own_words_classes=(),
+  lines_and_veils=False, anchors=(), beat=None, lever_fact_ids=None, cost_menu_ids=None, places=None,
+  push_raised=False, lead_fires=False, draft_sentences=())` → `SchemaContext` (plain lists; tests may build it
+  directly). `build_schema(role, ctx)` / `interpret_schema` … `checker_schema`; `defaults(role, ctx)` (valid
+  against the schema; None for Narrator and Checker: no rule default); `numeric_fields(schema)` (INV-3 check);
+  `fitting_cost_menus(rules, fact_ids)`.
+- Schema shape: every object closed, all properties required, optional values nullable; empty enum → field
+  dropped; `none` is the first option where allowed. Only numeric field: Reader `player_quantity` (top level).
+  Deviations: Checker `Claim.sentence` is a string enum "0".."n-1" (convert with `int()`); World want/refusal
+  ids are `<npc>/want.<n>` and `<npc>/refusal.<n>` (1-based, index into the NPC's `data.wants`/`refusals`),
+  one enum across NPCs (check ownership in a `check=`). `push` exists only when `push_raised`, `lead` only
+  when `lead_fires`. Cost menus: with no scene fact only `cost.twist` fits; `cost.shortfall` is alternate-only.
