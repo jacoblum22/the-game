@@ -1926,6 +1926,21 @@ retirement [C:VI; BRIEF A3 VI scope].
 (`blocks: [{owner: "07", entries: [...]}]`) where T-00-19 says so; otherwise additions go through
 Interface requests.
 
+**00.16.6 Ruleset versions and live saves.** `[D]` [DL-00A-34; R5 FN-11; revision: I-049] The ruleset
+carries one version string, `ruleset_version` (`rules/README.md`; semantic: major.minor.patch). Every save
+holds a `ruleset_version` fact on the subject `campaign`, written at session start. When a save is loaded
+under a newer version:
+1. Derived values are recomputed from the record. They are never stored (02.7.4), so they migrate free.
+2. Every decision-log entry added or changed since the save's version that carries a **Migration:** line
+   is applied in DL order, as that line says, and logged as a correction (12.3.7). An entry without one
+   needs no migration.
+3. Nothing already resolved is re-resolved: rolls, degrees, accepted recognitions and deaths stand
+   (`pacing.yaml` `never_corrected`).
+4. A change that would invalidate a held ability or license grants the nearest valid replacement at the
+   next rest, as an offer (04.7) the player may decline.
+A major version bump is reserved for changes no Migration line can express. Such a save stays on its old
+version unless the player chooses to start over.
+
 ### 00.17 Chapter contracts
 
 Each chapter **provides** named interfaces (functions of state, data files, handlers, reserved ids) and

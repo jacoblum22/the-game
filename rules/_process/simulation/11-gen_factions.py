@@ -237,7 +237,7 @@ doc = {
         {'id': 'recover', 'check': 'higher of wealth and sway vs 10 + 2 x tier + 3', 'critical_success': 'hold strong; slip cleared; goal clock +1', 'success': 'hold strong; slip cleared', 'failure': 'nothing', 'critical_failure': 'nothing; the slip stays'},
         {'id': 'court', 'check': 'sway vs 10 + 2 x tier + 3 (or a faction: its sway)', 'critical_success': 'as success, two targets', 'success': 'an ally of the PC is courted (courted_by, sealed, omen); or a faction relation +1', 'failure': 'nothing', 'critical_failure': 'the target learns: relation -1 or the ally\'s standing toward the faction -1'},
         {'id': 'move_on_pc', 'check': 'none', 'success': 'queue an entanglement (tbl.11.entanglement) at its pursuit column'},
-        {'id': 'aid_pc', 'check': 'none', 'success': 'first eligible: pay a due ransom; send help to a threatened holding; gift_due if a reward is owed; an opportunity bang'},
+        {'id': 'aid_pc', 'check': 'none', 'success': 'first eligible: pay a due ransom; send help to a threatened holding; gift_due if a reward is owed; an opportunity bang (a job pays the job fee of its band, economy.yaml#job_fees) [revision: I-091]'},
         {'id': 'lie_low', 'check': 'none', 'success': 'its attention clock on the PC decays 1 extra; no trace'},
     ],
     'goal_clocks': {'local': {'segments': 8}, 'regional': {'segments': 12}, 'realm': {'segments': 12, 'linked_second': 12},

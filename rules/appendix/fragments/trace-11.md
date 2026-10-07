@@ -27,3 +27,4 @@
 | INV-15 | Every boundary runs | 11.2.1, 11.13.8 (timeskips run every boundary) | satisfied |
 | BRIEF §4 | Open-ended sandbox; finish = retirement/legacy | 11.2–11.12 (indefinite engine); 11.13 | satisfied |
 | R5 LW-01…LW-14, TM-07, TM-08, AD-06, AD-07, HR-10, HR-11, EQ-12, SO-05, SO-06, SO-07 | living-world checklist rows owned by 11 | 11.3; 11.3.12; 11.5; 11.6; 11.4; 11.3.18; 11.4.3; 11.9.7; 11.9.8; 11.13; 11.5 register; 11.3.12; 11.10; 11.11; 11.5.11; 11.7; 11.10.5; 11.13; 11.9; 11.3.12; 11.6; 11.4.9 | satisfied |
+| BRIEF §6 | Every rule cites its basis (`[C:]`, `[R]` or `[DL-]`) at card level | every rule card of 11 (113); 38 tagged at revision C7, 11.9.5 and 11.9.6 by the new DL-11-35, 11.10.4 by the new DL-11-36; validator BASIS (DL-INT-13) | satisfied |

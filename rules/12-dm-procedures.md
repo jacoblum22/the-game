@@ -140,7 +140,7 @@ checkable; a principle with no rule behind it would be advice the DM forgets by 
 
 [R: https://www.dungeonworldsrd.com/gamemastering/; R5 DM-01, DM-10; R1 12.C; R4 §9 ch.12]
 
-**12.1.3 What the DM never does.** `[D]` A closed list; each is a breach logged with `review_flag` when
+**12.1.3 What the DM never does.** `[D]` [DL-12-01; C:I; R5 DM-01; revision: I-065] A closed list; each is a breach logged with `review_flag` when
 detected (12.12.4): (a) choose a number (INV-3); (b) "pick at random" (INV-4); (c) narrate a state change
 no tool wrote (INV-1, INV-2); (d) change a committed frame (01.7.2); (e) add a complication outside
 01.11.3's list; (f) put a sealed fact in narration (INV-10); (g) speak or decide for the PC beyond the
@@ -149,7 +149,7 @@ as fact (INV-9); (j) silently skip a registered handler or a fired trigger (INV-
 
 ### 12.2 The turn loop
 
-**12.2.1 What a turn is.** `[D]` A **turn** (in this chapter: a *DM turn*, distinct from ch.06's combat
+**12.2.1 What a turn is.** `[D]` [DL-12-01; R5 DM-02; revision: I-065] A **turn** (in this chapter: a *DM turn*, distinct from ch.06's combat
 turn) is one player message and the one DM response it produces. The loop of PR-12-1 runs once per
 player message. A DM turn may resolve up to three beats (01.2.3), may run world responses (adversary and
 NPC actions, triggered events, boundaries), and ends either with narration and an open prompt, or at a
@@ -248,7 +248,7 @@ was just said, the pronoun just used, the offer just made) while everything olde
 typed state that cannot drift. The window is a `pacing.yaml` number (`packet.verbatim_exchanges: 4`);
 OEQ-12-1 tests 2/4/8. *Runtime capabilities:* RC-RETRIEVE, RC-STORE, RC-SEAL.
 
-**12.2.5 Verbatim in, verbatim logged.** `[D]` The player's message is stored verbatim in the turn log
+**12.2.5 Verbatim in, verbatim logged.** `[D]` [DL-12-02; DL-12-01; C:P13; revision: I-065] The player's message is stored verbatim in the turn log
 before anything else happens, and the DM's delivered response is stored verbatim after delivery. The turn
 log is the evidence for disputes (12.3.6) and corrections (12.3.4), and the source of "what exactly did I
 say?" answers. Nothing in the turn log is ever a fact: facts come only from the six sources of 00.6.7.
@@ -325,7 +325,7 @@ store [R1 12.D].
 
 ### 12.3 The claim check and error correction
 
-**12.3.1 Claims.** `[D]` + `[J:enum]` A **claim** is any assertion in a draft narration that the store
+**12.3.1 Claims.** `[D]` + `[J:enum]` [DL-12-25; DL-12-03; C:P13; R5 DM-08; revision: I-065] A **claim** is any assertion in a draft narration that the store
 could confirm or contradict, extracted as `{subject id, claim class, predicate, value}`. The claim classes
 (closed list) and what each is checked against:
 
@@ -425,12 +425,12 @@ fact (`unsourced_change` or `new_element` verdicts are illegal in a reconciliati
 flag wrongly false — the player raises it as a DISPUTE and the procedure reruns, class iv
 [R1 G-3, #2; R4 §3.3 W9; C:III; C:P13].
 
-**12.3.5 What is never corrected away.** `[D]` A correction never: re-rolls a die whose frame was valid;
+**12.3.5 What is never corrected away.** `[D]` [DL-12-04; C:P8; revision: I-065] A correction never: re-rolls a die whose frame was valid;
 changes a degree, a delivered reach or a cost that was correctly resolved; removes a consequence the
 player's own declared method caused; or rewinds past a lethal frame's resolution, a recognition grant
 the player accepted, or a session boundary. Those are outcomes, not errors (01.8.5).
 
-**12.3.6 Disputes.** `[D]` + `[J:enum]` When the player says the DM erred, the DM answers from the turn log
+**12.3.6 Disputes.** `[D]` + `[J:enum]` [DL-12-04; C:P13; R5 DM-08; revision: I-065] When the player says the DM erred, the DM answers from the turn log
 and the store, never from memory:
 - **The narration said it and the store does not hold it** → an error; run 12.3.4.
 - **The store holds it and the narration never said it** → no error; answer OOF with the store's value
@@ -533,7 +533,7 @@ seasoning, not the engine: 20% at the default tension, rising to 60% when the PC
 [DL-12-06]. *Worst case (J):* a less likely version of the altered scene chosen — one person or object
 different, written as fact, never harmful by itself (class i). [R5 P-05; R6 B-16]
 
-**12.4.5 Time modes and transitions.** `[D]` + `[J:enum]` At every `scene_start` the DM classifies the mode
+**12.4.5 Time modes and transitions.** `[D]` + `[J:enum]` [DL-12-01; R5 TM-03; revision: I-065] At every `scene_start` the DM classifies the mode
 (00.7.3; default the previous scene's; uncertain → `free`). Within a scene, the mode changes only on the
 transitions of T-12-3, each of which calls `mark_boundary(mode_change)`; handler `h.12.mode_change`
 loads the new mode's cards (by the `situation.*` tags listed in T-12-3) and sets time-per-beat.
@@ -633,7 +633,7 @@ answer is stored as a `next_time` note (shown at the next session's start; it ne
 (4) ends with one line naming where the PC stands. Nothing ticks: a session boundary is not time
 [R5 P-10 "End a Session"; 00.7.9].
 
-**12.5.5 Take a break.** `[D]` The player may pause at any point ("brb", "pause"). The DM confirms in one OOF
+**12.5.5 Take a break.** `[D]` [DL-12-14; R5 TM-10; revision: I-065] The player may pause at any point ("brb", "pause"). The DM confirms in one OOF
 line and stops; the next message resumes exactly where play stopped, with any pause point still open.
 No handler runs; no time passes.
 
@@ -712,7 +712,7 @@ player-driven uses of it. This part owns the DM's use of it for its *own* uncert
 that may shift its odds by one rung, the random events it can trigger, and the meaning tables that give
 content to its "and"s (00.17.1 Q6).
 
-**12.6.1 The DM never chooses what is true.** `[J:flag]` + `[D]` Whenever the DM needs something about the
+**12.6.1 The DM never chooses what is true.** `[J:flag]` + `[D]` [DL-12-07; C:I; R5 RS-14; revision: I-065] Whenever the DM needs something about the
 world it does not have — for an NPC's behavior, a description, a scene's contents, a consequence's
 form — it asks `[J:flag]` *"Would I be choosing what is true?"* True when the needed thing is a fact, a
 property, a presence, a choice among possibilities, or an NPC's decision that is not already settled by a
@@ -737,7 +737,7 @@ ferryman is home *because the scene needs him*" — that is the DM choosing what
 | what something means, what form it takes, what "and" comes with a yes-and | `roll_table(tbl.meaning)` (12.6.7) | what the strange event is about |
 | a person who must exist now | NPC generation (12.11.1) | the clerk behind the counter |
 
-**12.6.2 The DM asks before it narrates, and asks only once.** `[D]` The Oracle answer or table result is
+**12.6.2 The DM asks before it narrates, and asks only once.** `[D]` [DL-12-07; DL-12-01; revision: I-065] The Oracle answer or table result is
 written (`set_fact`, `create_entity`) before the narration that uses it is drafted (PR-00-7), so the claim
 check sees it as `supported`. The DM never asks the same question twice (01.15.7) and never asks a
 question it intends to ignore. The DM may ask several questions in one turn, but each is a separate
@@ -849,7 +849,7 @@ R: https://rimworldwiki.com/wiki/AI_Storytellers]. It governs only the pushes th
 pacing push (12.7.4), random-event foci (12.6.5) and scene-test interruptions (12.4.4) — and never
 suppresses another chapter's handler (encounter checks, the World Turn, clocks run exactly as written).
 
-**12.7.1 Intensity.** `[D]` **Intensity** is a background integer **0–10**. Each scene accrues
+**12.7.1 Intensity.** `[D]` [DL-12-09; R5 TM-09; revision: I-065] **Intensity** is a background integer **0–10**. Each scene accrues
 **intensity points** `[D]` from its log (each item counted as listed; scene total capped at 10;
 `pacing.yaml#intensity.points`):
 
@@ -867,7 +867,7 @@ At `scene_end` (`h.12.intensity_scene`): **intensity = min(10, max(scene points,
 it jumps to a hard scene's score and drains three per calmer scene. Handler `h.12.intensity` on
 `conflict_start` / `conflict_end` (reserved, T-00-9) marks conflict boundaries for the count.
 
-**12.7.2 Phases.** `[D]` The director is always in one phase (`pacing.yaml#intensity.phases`):
+**12.7.2 Phases.** `[D]` [DL-12-09; R5 TM-09; revision: I-065] The director is always in one phase (`pacing.yaml#intensity.phases`):
 - **BUILD** (default): pushes allowed. Enters PEAK when intensity ≥ the profile's **peak threshold**.
 - **PEAK**: the world is already pressing hard. No pacing push fires, threat-tagged random-event foci read
   as *omen*, and a scene test's *interrupted* reads as *altered*. PEAK lasts while intensity stays at or
@@ -931,7 +931,7 @@ pre-declared, logged forms: reinforcement or alarm clocks, morale breaks and ret
 lists, environmental events from tables, and the PC's own choices. Every such event is written to state
 with its source, so the player could audit it [R1 #9, T-5; R4 W3].
 
-**12.7.7 World time against play time.** `[D]` [revision: I-085] Sessions are not time (00.7.9): the world
+**12.7.7 World time against play time.** `[D]` [DL-12-30; DL-12-09; revision: I-065] [revision: I-085] Sessions are not time (00.7.9): the world
 moves only by the time the fiction spends. But growth is paced in sessions (04.3.5) and the world in weeks
 (faction clocks, situations, 11.10's Season and Year Turns, aging 11.10.5, ally growth 16.10.1, the season
 boundary 04.8.7), so the rules are calibrated against a **reference rate** (`pacing.yaml#world_time`): an
@@ -989,7 +989,7 @@ next); **connected** (it points to a thread, clock or node in state). A lead mus
 less naturally (class i); a source judged ineligible that was eligible — a less specific lead arrives,
 still concrete and real (class i) [C:P16; R5 P-08, P-41; R6 B-R4; R4 R-12].
 
-**12.8.3 The DM checks for a next step every beat.** `[J:flag]` Independently of the counter, after every
+**12.8.3 The DM checks for a next step every beat.** `[J:flag]` [DL-12-11; C:P16; revision: I-065] Independently of the counter, after every
 beat's CONSEQUENCE the DM runs 01.11.4's check — "does the player now have at least one concrete,
 actionable option?" — and names one from state in the narration if the answer is not obvious. The counter
 is the backstop for when this check passes on paper but play is going in circles. *Worst case (J):* the check
@@ -1030,7 +1030,7 @@ player, the spotlight rotates instead across the **pillars** of play, the **kind
 R2 ch.12, #12; R5 X-01]. It must be engineered as a ledger, because "no source anywhere … shows a system
 that gets these for free" [R1 12.B].
 
-**12.9.1 The rotation ledger.** `[D]` + `[J:enum]` A background record of **scenes since each axis value was
+**12.9.1 The rotation ledger.** `[D]` + `[J:enum]` [DL-12-12; C:II; C:IV; revision: I-065] A background record of **scenes since each axis value was
 foregrounded**, updated by `h.12.rotation_update` (`scene_end`, phase 9). Three axes:
 - **Pillar** (closed: `conflict`, `exploration`, `social`, `investigation`, `travel`, `downtime` — the
   `situation` branches other than `rest`). At `scene_start` the DM classifies the scene's pillar `[J:enum]`
@@ -1086,7 +1086,7 @@ The ledger is used in exactly three ways, never more:
 The ledger never overrides the player's declared purpose, never creates content outside the closed
 complication sources (01.11.3), and never changes any number.
 
-**12.9.3 The player's weights.** `[D]` The check-in (12.5.9) answers scale the pillar thresholds: **more** →
+**12.9.3 The player's weights.** `[D]` [DL-12-12; DL-12-14; revision: I-065] The check-in (12.5.9) answers scale the pillar thresholds: **more** →
 half the threshold (3 scenes); **less** → double (12 scenes); **same** → unchanged. A pillar the player
 marked *less* is still never removed: the sandbox does not hide whole pillars.
 
@@ -1107,7 +1107,7 @@ PC's point of view: second person, limited to the PC's senses and knowledge (12.
 not perceived or learned is not narrated, even if the DM's packet shows it as background (an off-screen
 NPC's movement, a faction's plan). [R1 #12; R4 §5]
 
-**12.10.2 Names and identities are knowledge.** `[D]` + `[J:flag]` An NPC's name, title, allegiance or
+**12.10.2 Names and identities are knowledge.** `[D]` + `[J:flag]` [DL-12-03; C:P17; C:P13; revision: I-065] An NPC's name, title, allegiance or
 relationship appears in narration only after the PC has learned it (a `record_knowledge` entry: told,
 overheard, read, recognized). Until then the narration uses a descriptor from what the PC can see ("the
 grey-bearded ferryman"), chosen from the NPC's recorded appearance detail. *"Has the PC learned this?"* is
@@ -1150,7 +1150,7 @@ returns the count:
 *Worst case (J):* a less useful but true item chosen — the player still receives the delivered count of
 true answers (class i) [C:P17; R4 §5.2 item 3; R1 #12].
 
-**12.10.5 What the PC learns is written.** `[D]` `record_knowledge(pc, fact, how)` is written at RECORD for:
+**12.10.5 What the PC learns is written.** `[D]` [DL-12-01; C:P13; C:P17; revision: I-065] `record_knowledge(pc, fact, how)` is written at RECORD for:
 every delivered item; every fact narrated as perceived that the PC could later cite (write-on-mention
 covers the entity; knowledge covers the PC's awareness of it); every name learned; every rumor heard
 (`rumor` id; its truth stays sealed). The journal (ch.15, `available`) is the render of these records,
@@ -1282,7 +1282,7 @@ expresses. A row never overrides a recorded refusal and never resolves something
 it knows within T-15-1's *share* row [revision: I-030]. *Worst case (J):* the row expressed
 through a less fitting want — the same weight of response (class i) [R5 P-06].
 
-**12.11.6 Standing moves only in steps from sources.** `[D]` Standing changes only through: a Talk frame's
+**12.11.6 Standing moves only in steps from sources.** `[D]` [DL-12-10; DL-12-25; revision: I-065] Standing changes only through: a Talk frame's
 delivered reach (ch.15); a cost (`cost.closed_door`, 01.13.9); a deed the NPC witnessed or heard of whose
 memory valence ch.15 maps to a step (T-15-2) [revision: I-030]; ch.11's faction status changes for members. Never because the DM
 feels the NPC "would warm up" (00.3.16; SG-02).
@@ -1307,27 +1307,27 @@ Valve's "characters remember your specific history" [R6 B-19]):
 *Worst case (J):* a relevant memory not voiced — a flatter greeting, no state effect (class i); a memory
 voiced that the NPC should not have (told vs witnessed) is caught as a `knowledge` claim (class iv).
 
-**12.11.8 NPCs off-screen.** `[D]` What NPCs do while the PC is elsewhere is ch.11's World Turn and
+**12.11.8 NPCs off-screen.** `[D]` [DL-11-01; DL-11-02; R5 DM-07; revision: I-065] What NPCs do while the PC is elsewhere is ch.11's World Turn and
 situation timelines. When the PC returns, the NPC's record reflects those results and nothing else; if the
 DM needs to know something the World Turn did not settle ("is she still at the mill?"), it asks the Oracle
 with a time scope (01.15.7) — it never invents an off-screen life.
 
 ### 12.12 The ruling ledger in use
 
-**12.12.1 When the DM consults precedent.** `[D]` `find_rulings(anchor_id, deltas, tags)` is called
+**12.12.1 When the DM consults precedent.** `[D]` [DL-12-19; C:III; R5 DM-05; revision: I-065] `find_rulings(anchor_id, deltas, tags)` is called
 (INV-19; 01.5.2) before: any anchor adaptation with deltas; any Oracle question (the DM's or the
 player's) — so the same kind of question in the same kind of place gets the same odds; any Good Idea; any
 G3 or G4 decision; and, added here, any **scene-logic answer** (Certain or Impossible by scene type) to a
 player's G0 question, because "a smithy has a quench trough" is a ruling the next smithy should share.
 
-**12.12.2 Reuse and departure.** `[D]` + `[J:flag]` A matching precedent's numbers are reused (01.5.2). The DM
+**12.12.2 Reuse and departure.** `[D]` + `[J:flag]` [DL-12-19; C:III; R5 DM-05; revision: I-065] A matching precedent's numbers are reused (01.5.2). The DM
 departs only when an established fact present now and absent then (or the reverse) changes the tier, the
 stakes, the reach, or the odds rung, and it names that fact's id in `precedent.differing_fact`. "This time
 feels different" is not a fact. A difference that is a lever or snag is applied as a lever or snag on the
 reused frame, not as a departure (WE-00-9). *Worst case (J):* a reuse where a fact differed — the player can
 cite the fact and a new ruling supersedes (class iv).
 
-**12.12.3 Two precedents disagree.** `[D]` The later record wins (00.1.4: latest write), unless the later one
+**12.12.3 Two precedents disagree.** `[D]` [DL-12-19; R5 DM-05; revision: I-065] The later record wins (00.1.4: latest write), unless the later one
 departed citing a fact that is absent now — then the earlier one applies. Either way the conflict is
 logged with `review_flag: true`.
 
@@ -1364,7 +1364,7 @@ the hook, then formalize into the grid" [R2 ch.12; C:P3]. *Worst case (J):* a ne
 the two-change limit bounds the adaptation, and the logged signature lets a later beat depart from it by
 naming the differing fact (00.15.3, 00.15.6; class iv). [integration: 00.2.3 audit]
 
-**12.13.2 Retrieval from the anchor index.** `[D]` `load_cards(anchors for verb, deed tags, situation)`
+**12.13.2 Retrieval from the anchor index.** `[D]` [DL-12-16; R5 DM-04; revision: I-065] `load_cards(anchors for verb, deed tags, situation)`
 queries `data/anchors.yaml` and returns at most **eight** candidates (00.15.3), scored: **+3** per intent
 verb matching the beat's restated method or intended change; **+2** when an anchor's deed tag equals the
 beat's primary deed tag or is its ancestor; **+1** per matching situation tag; the gated basic verb's own
@@ -1393,7 +1393,7 @@ to cost no action (`action_cost`): three knobs, so re-anchor or split.
 *Worst case (J):* a split that could have been one adapted beat — two rolls instead of one, each shown at
 OFFER (class ii) [R7 §3.4; 01.5.3].
 
-**12.13.4 Improvised content uses existing primitives only.** `[D]` + `[J:enum]` A new hazard, an NPC's
+**12.13.4 Improvised content uses existing primitives only.** `[D]` + `[J:enum]` [DL-12-16; C:V; C:III; R5 DM-04; revision: I-065] A new hazard, an NPC's
 unusual ability, a location's strange property, a trap, an improvised item's effect: each is built from
 the substrate — effect ids from `data/effects.yaml` with parameters, conditions from `data/conditions.yaml`,
 a clock, a license, a hazard or trap entry, a generator output — never as a prose-only mechanic
@@ -1403,11 +1403,11 @@ unchanged, logs a `rule_conflict` ruling with `review_flag`, and the review list
 proposal (PR-00-8). *Worst case (J):* a less apt primitive — its stated numbers apply, inside the
 substrate's caps (class i/iv).
 
-**12.13.5 Every improvisation is logged.** `[D]` A beat or content improvisation writes a `RulingRecord`
+**12.13.5 Every improvisation is logged.** `[D]` [DL-12-19; R5 DM-05; revision: I-065] A beat or content improvisation writes a `RulingRecord`
 (00.15.5) with its signature, cited facts and result; the ledger is what makes the next identical case
 come out the same (12.12).
 
-**12.13.6 The anchor index: compilation spec for `data/anchors.yaml`.** `[D]` Ch.12 compiles the index
+**12.13.6 The anchor index: compilation spec for `data/anchors.yaml`.** `[D]` [DL-12-16; DL-12-26; revision: I-065] Ch.12 compiles the index
 from every chapter's anchor cards; no chapter edits it by hand.
 1. **Sources**: (a) the `anchor:` fields of `data/basic_verbs.yaml` (the fifteen verb cards, 01.18); (b)
    every rule in chapters 01–16 whose template says `Anchor: yes` (00.2.6), from the chapter's rule card
@@ -1433,12 +1433,12 @@ ch.01 wrote them.
 
 ### 12.14 The narration standard
 
-**12.14.1 Voice and point of view.** `[N]` Narration is **second person, present tense**, addressed to the
+**12.14.1 Voice and point of view.** `[N]` [DL-12-17; C:IV; R5 DM-06; revision: I-065] Narration is **second person, present tense**, addressed to the
 character ("You step onto the landing"), limited to what the character perceives and knows (12.10.1).
 The player is addressed only in OOF blocks (12.15). Classic-fantasy register: concrete nouns, physical
 detail, no modern idiom, no meta-commentary ("in this scene", "your turn") inside the fiction.
 
-**12.14.2 No unestablished details.** `[J:flag]` + `[D]` Every detail in narration is either **established**
+**12.14.2 No unestablished details.** `[J:flag]` + `[D]` [DL-12-05; DL-12-03; R5 DM-06; revision: I-065] Every detail in narration is either **established**
 (in the store, or written this turn by a legitimate source) or **generic atmosphere** — not addressable,
 not citable later (the smell of rain, the color of the dusk sky, the general murmur of a market). The test
 for each concrete detail: *"Could the player cite this later as a fact — a lever, an obstacle, a target, a
@@ -1470,7 +1470,7 @@ verdict `pc_agency`). Quoted PC speech is only the player's own words, lightly t
 never extended. *Worst case (J):* one sentence of imposed interiority — cut by the claim check, or disputed
 and corrected (class iv) [R1 #3 (input fidelity); R4 §7.3 (locus of control)].
 
-**12.14.4 No mechanics in the fiction.** `[D]` No number from the rules (Vitality, Focus, fate, DCs, totals,
+**12.14.4 No mechanics in the fiction.** `[D]` [DL-12-01; C:P7; R5 DM-06; revision: I-065] No number from the rules (Vitality, Focus, fate, DCs, totals,
 degrees, standing values, ticks, bands, tiers, odds) and no rules term (T-00-22) appears in narration or in
 any in-world voice. **Physical counts** of things the character can see or count — "your last two arrows",
 "three riders" — are fiction, not mechanics, and are allowed when they match the store. Every mechanical
@@ -1486,7 +1486,7 @@ using, an oath sworn, an order that seeks the PC out, a power that wakes in a cr
 accept / decline / defer choice is put to the player in an OOF CHOICE block (12.15.6) [R6 §A.4–A.5;
 R2 #14 ("narrate milestones; the codex holds the crunch")].
 
-**12.14.6 Describing positions in text.** `[D]` + `[N]` Text has no map, so position must be said (R5 EX-14):
+**12.14.6 Describing positions in text.** `[D]` + `[N]` [DL-12-17; R5 EX-14; revision: I-065] Text has no map, so position must be said (R5 EX-14):
 1. **Scene openings** name what the PC can see that matters for movement and danger: exits, cover,
    elevation, hazards, and anything within reach (each written on mention).
 2. **In conflict**, at `conflict_start` and in every narration in which any range band or positional flag
@@ -1496,7 +1496,7 @@ R2 #14 ("narrate milestones; the codex holds the crunch")].
    wall).
 *Narration may not imply:* a band or flag the store does not hold (claim class `position`).
 
-**12.14.7 Tells, omens and moods.** `[N]` + `[D]`
+**12.14.7 Tells, omens and moods.** `[N]` + `[D]` [DL-12-17; DL-11-10; R5 DM-06; revision: I-065]
 - **Omens** (INV-14): each tick of a sensed or hidden clock renders, in that turn's narration, the omen
   entry the engine selected — as a perceivable trace the PC could notice (a sound, a sign, a changed
   behavior, a rumor) — in the DM's words, never explained ("a dog barks twice somewhere below", not "the
@@ -1514,7 +1514,7 @@ form is named plainly (01.12.2). A success is narrated as the character's doing.
 sharpened beyond the frame: the degree, the delivered reach and the cost are exactly as resolved (01.7.2)
 [R5 P-16; R2 ch.12 ("failure moves the plot forward")].
 
-**12.14.9 The open prompt.** `[D]` Every DM response that is not a pause point ends by handing the moment
+**12.14.9 The open prompt.** `[D]` [DL-12-20; C:P16; revision: I-065] Every DM response that is not a pause point ends by handing the moment
 back to the player: a direct question to the character ("What do you do?" or a situation-specific one:
 "The ferryman holds out his hand. Do you pay?") or an unresolved image that plainly awaits a response.
 Never a numbered list of options; examples only under 12.8.6. Pause points end with their own OOF block
@@ -1534,12 +1534,12 @@ same entity within ten turns, except a deliberate callback (an NPC's recorded ha
 the player's own phrase). *Worst case (J):* a repeated phrase — harmless (class i) [R4 W10; R1 12.A
 (RPGBench's interestingness decay from repetitive narration)].
 
-**12.14.12 What every narration must name.** `[D]` (from 01.12.2, restated so this card stands alone)
+**12.14.12 What every narration must name.** `[D]` [DL-12-17; DL-12-01; R5 DM-06; revision: I-065] (from 01.12.2, restated so this card stands alone)
 Every visible condition applied this turn; one omen per sensed or hidden clock tick; every changed range
 band or positional flag involving the PC; the form of every cost paid; every NPC response produced by
 12.2.9; and every lead injected. Missing any of these is a claim-check failure of the sweep (12.4.8).
 
-**12.14.13 What narration may create.** `[J:flag]` + `[D]` Write-on-mention lets narration bring **ordinary
+**12.14.13 What narration may create.** `[J:flag]` + `[D]` [DL-12-05; C:VII; revision: I-065] Write-on-mention lets narration bring **ordinary
 scene furniture** into being: the things any such place has, with ordinary properties (a rope by a
 door, benches in a hall, a fishwife at the market, a puddle, a woodpile). Narration may **not** create, by
 mention alone, anything that functions as: a **clue** toward a sealed fact or an open thread (clues come
@@ -1566,12 +1566,12 @@ text form. Order within one DM response: (1) SAFETY and SESSION acknowledgements
 (3) the fiction; (4) RESULT blocks in beat order; (5) REDIRECT blocks; (6) one pause block last (OFFER,
 NEAR MISS, CHOICE, CLARIFY, FLAG, CUT?) because it awaits the player.
 
-**12.15.1 General rules.** `[D]` OOF blocks are terse, use ids and canonical names, show only `shown` and
+**12.15.1 General rules.** `[D]` [DL-12-18; C:P7; R5 DM-09; revision: I-065] OOF blocks are terse, use ids and canonical names, show only `shown` and
 `available` state (never background or sealed values: a hidden clock appears as nothing, a sensed clock
 by name only), and never contradict the store. A block's fields appear in the order given below; empty
 fields are omitted.
 
-**12.15.2 OFFER** (renders 01.7.1 items 1–7, exactly). One line of fiction first ("The hasp is old iron in
+**12.15.2 OFFER** [DL-12-18; R5 OB-05; revision: I-065] (renders 01.7.1 items 1–7, exactly). One line of fiction first ("The hasp is old iron in
 older oak; the bar in your hands would do it — loudly."), then:
 
 ```
@@ -1598,7 +1598,7 @@ never automatic); a power used **through a relic** adds its own line under Costs
 (no training license)` (08.4.4) [revision: I-030]. A frame resolved under **auto-commit** shows the same
 block, labelled `[OFFER — auto]`, immediately above its RESULT.
 
-**12.15.3 RESULT.**
+**12.15.3 RESULT.** [DL-12-18; C:P7; revision: I-065]
 ```
 [RESULT] d20 9 → 13 vs 15 · failure (near miss)
 ```
@@ -1619,13 +1619,13 @@ properties and price are in the codex [revision: I-030]. A secret frame: `[RESUL
 never appears (the oracle log is background, 00.6.3); a delivered bundled count appears as `Answered 2
 of 4: <items>`.
 
-**12.15.4 NEAR MISS** (pause point 4).
+**12.15.4 NEAR MISS** [DL-12-18; DL-12-20; revision: I-065] (pause point 4).
 ```
 [NEAR MISS] 13 vs 15. Succeed and pay one — (a) Exposure (S2): <its form> · (b) Time (S2): <its form>
             — or (c) let it fail (Exposure S2 applies).
 ```
 
-**12.15.5 REDIRECT** (G3 and G4; under the fiction's four-part redirect, 01.3.6).
+**12.15.5 REDIRECT** [DL-12-18; C:VII; revision: I-065] (G3 and G4; under the fiction's four-part redirect, 01.3.6).
 ```
 [REDIRECT] G3 — checked lic.training.lockwork (not held).
   Possible now: break it (verb.force; ask for odds) · find another way in
@@ -1636,7 +1636,7 @@ of 4: <items>`.
   Possible now: play it as a drunk's joke · tell him the truth · something else
 ```
 
-**12.15.6 CHOICE** (pause points 6–9: last-chance menu, yield terms, recognition and institutional offers,
+**12.15.6 CHOICE** [DL-12-18; DL-12-20; revision: I-065] (pause points 6–9: last-chance menu, yield terms, recognition and institutional offers,
 `chosen` fills, rewind and correction choices).
 ```
 [CHOICE] <what is being chosen> — (a) … · (b) … · (c) …
@@ -1645,20 +1645,20 @@ of 4: <items>`.
 Two CHOICE blocks carry **no default line** and wait for an answer: the last-chance menu (07.5; T-07-7) and the
 Bent's offer (02.6.6) [integration: IR ch.07 to 12, IR ch.02].
 
-**12.15.7 CLARIFY and ASSUMING** (01.2.4).
+**12.15.7 CLARIFY and ASSUMING** [DL-12-18; DL-12-20; revision: I-065] (01.2.4).
 ```
 [CLARIFY] One question: do you mean to climb the rope, or cut it?
 [ASSUMING] You mean the merchant, not his guard. (Say so if not — you can change it at the offer.)
 ```
 
-**12.15.8 RULING** (a precedent shown on request, or when one was reused in a way the player may want to
+**12.15.8 RULING** [DL-12-18; DL-12-19; R5 DM-05; revision: I-065] (a precedent shown on request, or when one was reused in a way the player may want to
 see).
 ```
 [RULING] r.0412 (Spring wk 4, day 1): verb.exert + dc:tier_rederived + stakes — Hard, Dire.
          Reused here; difference: the rope is wet (fact f.2231) → snag −2.
 ```
 
-**12.15.9 CORRECTION** (12.3.4).
+**12.15.9 CORRECTION** [DL-12-18; DL-12-04; revision: I-065] (12.3.4).
 ```
 [CORRECTION] Earlier I said the purse held twenty coins; it holds 12 (your record is right).
              You spent nothing because of it. Logged.
@@ -1666,7 +1666,7 @@ see).
 With reliance: `You climbed the wall believing the gate was barred; it was open. Keep that, accept it as it
 stands, or rewind to before the climb?` (a CHOICE follows).
 
-**12.15.10 LEADS** (the stuck answer, 12.8.5).
+**12.15.10 LEADS** [DL-12-18; DL-12-11; C:P16; revision: I-065] (the stuck answer, 12.8.5).
 ```
 [LEADS] Some ways forward — or anything else you have in mind:
         • the ferryman's daughter said he drinks at the Drowned Lantern
@@ -1674,7 +1674,7 @@ stands, or rewind to before the climb?` (a CHOICE follows).
         • the toll-keeper at the bridge, who saw riders at dawn
 ```
 
-**12.15.11 SITUATION** (session start, 12.5.2).
+**12.15.11 SITUATION** [DL-12-18; DL-12-14; revision: I-065] (session start, 12.5.2).
 ```
 [SITUATION] Where: Ashford, the Drowned Lantern, evening · Pressing: the riders' search (sensed)
             Threads: The missing ferryman · Corner the Salt Road · Open offers: the Caravaners' contract
@@ -1683,19 +1683,19 @@ stands, or rewind to before the climb?` (a CHOICE follows).
 Open offers include recognition offers awaiting an answer (04.7) and an open Bent offer; at most one
 open-slot reminder (02.9.8) follows [integration: IR ch.04, IR ch.02 to 12].
 
-**12.15.12 CHECK-IN** (12.5.9).
+**12.15.12 CHECK-IN** [DL-12-18; DL-12-14; revision: I-065] (12.5.9).
 ```
 [CHECK-IN] Optional. More, same, or less of: fights · exploring · talking · investigating · travel · downtime?
            Pace: faster, same, slower? Anything to add to lines, veils or flags?
 ```
 
-**12.15.13 SAFETY and FLAG** (12.5.6–12.5.7).
+**12.15.13 SAFETY and FLAG** [DL-12-18; DL-12-14; revision: I-065] (12.5.6–12.5.7).
 ```
 [OK] Adjusting. (Say how, or I'll reframe it.)
 [FLAG] This touches <flagged topic>. Continue, veil it, or steer away?
 ```
 
-**12.15.14 RULES, UNKNOWN, SESSION, CUT?**
+**12.15.14 RULES, UNKNOWN, SESSION, CUT?** [DL-12-18; C:P7; R5 DM-09; revision: I-065]
 ```
 [RULES] 01.4.2 — one resolved beat settles one obstacle for one approach; try a new approach or accept a cost.
 [UNKNOWN] Your character doesn't know that. (The codex shows: <whatever is shown>.)
@@ -1703,7 +1703,7 @@ open-slot reminder (02.9.8) follows [integration: IR ch.04, IR ch.02 to 12].
 [CUT?] Move on to the morning, or stay a while?
 ```
 
-**12.15.15 Labels added by other chapters** [integration: IR ch.02, 04, 07, 10, 11 to 12]. Each follows
+**12.15.15 Labels added by other chapters** [DL-12-18; DL-12-25; revision: I-065] [integration: IR ch.02, 04, 07, 10, 11 to 12]. Each follows
 12.15.1 and the order rule above; its contents are its owner's format.
 
 | Label | Owner and format | Where it goes |
@@ -1730,7 +1730,7 @@ setting. Chapter 13's Thallen Vale is one optional pre-made seed; nothing in the
 creation, the Alexandrian's hexcrawl and West Marches); R: https://www.ironswornrpg.com/ (setting truths);
 R6 B-12, B-20; DL-12-21].
 
-**12.16.1 What a seed is and when it is made.** `[D]` A **world seed** is a region record of the shape of
+**12.16.1 What a seed is and when it is made.** `[D]` [DL-12-21; DL-12-22; DL-12-23; DL-12-24; revision: I-065] A **world seed** is a region record of the shape of
 `region_*.yaml` (SCHEMAS.md#region_yaml): the region, its canon, keepers, peoples, tongues, names, places,
 cast, factions, clocks, situations, encounter and rumor tables, calendar, opening and pregens. It is made
 once, at session zero (12.5.1), after chapter 14's preferences and before character creation (chapter 02
@@ -1768,13 +1768,13 @@ The player may also supply content the tables would roll — a keeper's name, a 
 written as given and then completed by the step's rules (a supplied faction still takes a template, a tier,
 a goal clock and sealed linchpins, PR-11-8).
 
-**12.16.3 The steps.** `[D]` PR-12-9 runs fourteen steps in order (T-12-15); each step reads only what
+**12.16.3 The steps.** `[D]` [DL-12-21; DL-12-22; revision: I-065] PR-12-9 runs fourteen steps in order (T-12-15); each step reads only what
 earlier steps wrote, so a step re-run (a veto) re-runs every later step that read it. A step's summary is
 shown to the player out of fiction (12.15.1 `[SEED n/14]`) before the next step, except what is sealed
 (faction goals, linchpin fates, rumor truths, site objectives, secrets): the player sees what a character
 raised there would know.
 
-**12.16.4 Premise: what went wrong here.** `[D]` One wound (`tbl.12.seed.wound`, d12: a fallen realm, a
+**12.16.4 Premise: what went wrong here.** `[D]` [DL-12-33; DL-12-22; DL-12-21; revision: I-065] One wound (`tbl.12.seed.wound`, d12: a fallen realm, a
 plague, an invasion, a curse, a sundering, a silent keeper, a long winter, the restless dead, a frontier, a
 schism, a tyrant, an awakening) and a climate (one of 10.11.2's five). The wound writes the region's
 `pitch` and three `truths` (Ironsworn's "truths") and fixes the **age of the wound**: one roll in its row's
@@ -1786,7 +1786,7 @@ encounter pools weight × 3 (12.16.13), the situation template of its trouble an
 temperament of the faction behind it (12.16.10, 12.16.12), the site themes it favours, the keeper forms it
 favours, and the calendar's era. The region's name is drawn from `tbl.12.seed.place_names`.
 
-**12.16.5 Canon: what is impossible, and how magic works.** `[D]` The seed writes `canon_impossible` and
+**12.16.5 Canon: what is impossible, and how magic works.** `[D]` [DL-12-22; DL-12-24; DL-12-21; revision: I-065] The seed writes `canon_impossible` and
 `canon` (read by 01.3.7's G4 test 2, 05.7.10 and every chapter that defers to canon):
 1. **Impossible for anyone** (`canon`'s `impossible` list, ids `ci.*`): always 05.7.10 item 1's five (true
    resurrection, time travel, making a soul, reading an absent mind, destroying a keeper) and 08's
@@ -1803,7 +1803,7 @@ favours, and the calendar's era. The region's name is drawn from `tbl.12.seed.pl
 4. Whether relics count as magic to those who refuse it (15's `magic` refusal), and whether chapter 04's
    four empty hybrid pairs stay empty (they do; a seed never authors a hybrid, 04.4's audit does).
 
-**12.16.6 Faith: the keepers.** `[D]` Two to four keepers (05.7.4), each from a form of
+**12.16.6 Faith: the keepers.** `[D]` [DL-12-22; DL-05-35; DL-12-21; revision: I-065] Two to four keepers (05.7.4), each from a form of
 `tbl.12.seed.keeper_form` (d12, the wound's favoured forms weighted × 3, no form twice): its kind, its
 **nature** (`sacred`, or `profane` for a pact-power; what Rebuke and every "sacred or profane keeper" effect
 reads, 05.7.4) [revision: I-052], what it keeps, three divine schools (the only schools its priests and
@@ -1813,7 +1813,7 @@ org kind; its name from the name tables and a title. The first keeper whose natu
 petty faction (11.3.16). Who bargains at the door of death (07.5.5) is answered here: the keeper of death and
 crossing if there is one, a fey lord (`arch.fey_noble`), a tempter (`arch.tempter`), or no one.
 
-**12.16.7 Peoples and tongues.** `[D]` Each of chapter 02's eight peoples is `common`, `uncommon`, `rare` or
+**12.16.7 Peoples and tongues.** `[D]` [DL-12-22; DL-12-21; revision: I-065] Each of chapter 02's eight peoples is `common`, `uncommon`, `rare` or
 `absent` (`tbl.12.seed.presence`, d6 each; a people the wound's creature gates name moves one step more
 present). Humans are at least uncommon and at least one non-human people is present. Each present people
 gets a name table (d20 given names, d12 family names or epithets, built from `tbl.12.seed.names` without
@@ -1824,7 +1824,7 @@ the Cant; and a **second tongue** (02.2.2's creation default): the native tongue
 non-human people, or the Old Tongue as the speech of what went before. Absent peoples are listed
 (`absent_origins`); C2 (PR-02-1) offers only present ones.
 
-**12.16.8 The land: rings, areas and routes.** `[D]` The region is laid out as T-10-2's rings (10.2.4):
+**12.16.8 The land: rings, areas and routes.** `[D]` [DL-12-35; DL-12-32; DL-12-21; R5 LW-06; revision: I-065] The region is laid out as T-10-2's rings (10.2.4):
 ring 0 the haven; rings 1–5 with three, three, three, two and two **areas** (10.1.1), each with a terrain
 (ring 1 from the climate's farm country; rings 2–5 from `tbl.12.seed.terrain_by_climate`, d12), a home band
 in its ring's range (T-10-2: 1 · 1–2 · 2–3 · 3–4 · 4–5; if both ring-5 areas would roll 4, the second is 5, so
@@ -1834,7 +1834,7 @@ every region has a home-5 table and lair for a party at band 5 [revision: I-084]
 watches); each area to the next in its ring (2–3 watches) and to one area of the ring inside it (3–4 watches);
 roads and tracks in rings 1–2, trackless beyond. Rings 1–3 are `known`; rings 4–5 are rumor.
 
-**12.16.9 The haven.** `[D]` One settlement in ring 0 (10.2.3: `safe: true`, `rest_site: haven`), a village
+**12.16.9 The haven.** `[D]` [DL-12-22; DL-12-21; revision: I-065] One settlement in ring 0 (10.2.3: `safe: true`, `rest_site: haven`), a village
 or a town, standing where `tbl.12.seed.haven_site` says (a ford, a bridge, a harbour, an old fort…), with its
 buildings (a temple or shrine of the main keeper, consecrated and with `resonance`; an inn; a smithy; the
 rulers' hall; its gate; in a town a market and a healer) and a graveyard tended by the main keeper's faith.
@@ -1845,7 +1845,7 @@ A **place of acceptance** for primal workers (02.5.5; `tbl.12.seed.acceptance`) 
 ring 1 or 2 with a spirit, three primal schools, what it asks, and a contact. The haven's fight locations
 (06.3.8) come from its site; the region's rare metal and rite components from `world_seed.yaml#defaults`.
 
-**12.16.10 Factions with running clocks.** `[D]` At least three full factions (11.3.2), each by PR-11-8 from
+**12.16.10 Factions with running clocks.** `[D]` [DL-12-34; DL-11-05; DL-12-21; R5 LW-01; revision: I-065] At least three full factions (11.3.2), each by PR-11-8 from
 its template (11.3.18): the haven's **rulers** (`tbl.12.seed.rulers` by haven tier; tier 2 in a town, 1 in a
 village); the **main keeper's faith** (the same tier); the **threat** behind the wound (its org kind, goal and
 temperament from the wound; tier 2 or 3; seated at a ring-3 site, 12.16.12); and a **fourth** from
@@ -1860,7 +1860,7 @@ kind the origins name maps to the faction of that kind, else to one of its branc
 else to `none`), the **institutions** by deed branch (11.8.1; V3, V9), and the region's **values** (the
 rulers', 11.7.6). Faction names come from `tbl.12.seed.faction_names`.
 
-**12.16.11 The cast.** `[D]` By 12.11.1 (role, gender, age, detail, demeanor, want, fear, refusal, secret,
+**12.16.11 The cast.** `[D]` [DL-12-29; DL-12-32; DL-12-13; DL-12-21; revision: I-065] By 12.11.1 (role, gender, age, detail, demeanor, want, fear, refusal, secret,
 voice; the name from the seed's tables; the people weighted by presence, common 6 · uncommon 3 · rare 1,
 the threat's people for the threat's members): each faction's head (its linchpin) and, for a full faction,
 an officer, each with one of the faction's duties; and the haven's smith, innkeeper, gate captain, healer
@@ -1892,7 +1892,7 @@ at most (03.4.3).
 the fourth faction, a creditor in the market, an enemy in the threat's seat, a lost one at a ring-2 site —
 always as a new NPC when the bond is filled (02.9.8), never one already in the cast.
 
-**12.16.12 Sites, lairs and threats.** `[D]` One site per area in rings 1–3 and one **lair** in each of rings
+**12.16.12 Sites, lairs and threats.** `[D]` [DL-12-23; DL-12-21; R5 LW-07; revision: I-065] One site per area in rings 1–3 and one **lair** in each of rings
 4 and 5, each by PR-10-6 (theme d8 with the wound's themes × 3; a domain whose terrain fits the area; band the
 area's, −1 on a d6 of 1; lairs one band above their area, telegraphed by rumor, 09.8.2), named from the
 domain, its objective sealed from the theme's climax, and its denizen table built by PR-10-10. The first
@@ -1902,7 +1902,7 @@ bound to the threat, the rulers and the faith) in a ring-2 area, and one from `t
 with a template) in a ring-1 area. The region's **bestiary** is every archetype its tables and sites name
 and its factions field (09.11.2; PR-09-1 builds any entry the bestiary lacks).
 
-**12.16.13 Encounter tables.** `[D]` Every area gets a regional table in 10.10.1's two-sub-table shape: its
+**12.16.13 Encounter tables.** `[D]` [DL-12-35; DL-12-21; revision: I-065] Every area gets a regional table in 10.10.1's two-sub-table shape: its
 threat sub-table built by **PR-10-10** at the area's home band from a pool of every archetype whose
 `encounter.terrain` fits the area's terrain (× 3 for the wound's creature gates, × 2 for archetypes a seed
 faction fields; elf wardens and dwarf holdguards only where their people are present), with the terrain
@@ -1911,19 +1911,19 @@ branch's archetypes as the fallback pool; its non-threat sub-table is the generi
 fails is rebuilt with the next RNG draw, and the generic table stands in only if three builds fail (none
 has: 12.16.17).
 
-**12.16.14 Rumors.** `[D]` One rumor table (11.6.1; d12, or d20 when there are more than twelve): each full
+**12.16.14 Rumors.** `[D]` [DL-11-11; DL-12-21; R5 SO-06; revision: I-065] One rumor table (11.6.1; d12, or d20 when there are more than twelve): each full
 faction's goal (true; points to its goal clock), each situation's first trace (true), each site (truth by
 `tbl.11.rumor_truth`: hearsay in rings 1–2, legend beyond; a false site rumor says it is empty), and one
 about a keeper; faces beyond the list repeat a rumor as hearsay, one step less true. Every rumor's truth is
 sealed and its `points_to` is a real record (11.6.4).
 
-**12.16.15 The calendar.** `[D]` 11.10's calendar with the seed's names: twelve month names from
+**12.16.15 The calendar.** `[D]` [DL-12-33; DL-11-21; DL-12-21; revision: I-065] 11.10's calendar with the seed's names: twelve month names from
 `tbl.12.seed.calendar_names` (three per season, no repeats) or the counted defaults; seven day names; the
 era named by the wound ("years since the Burning"); the four quarter-day festivals named for the main keeper
 (spring), a fair (summer), the harvest (autumn) and a remembrance of the wound (winter); the opening date,
 the spring quarter day of the era's year that 12.16.4 rolled (the wound's age) [revision: I-069]. Lifespans are `calendar.yaml#lifespans`.
 
-**12.16.16 The opening and the pregens.** `[D]` The inciting incident (`tbl.12.seed.inciting`, d8) is framed in
+**12.16.16 The opening and the pregens.** `[D]` [DL-12-22; DL-12-21; revision: I-065] The inciting incident (`tbl.12.seed.inciting`, d8) is framed in
 the haven at a moment of decision (12.5.2 step 5; 12.4.3) and pairs with the PC's long vow (02.9.1). The
 opening writes the start (date, dawn, the incident's place, the first day's weather rolled by
 `h.10.weather`, the new moon, the spring festival) and **three leads** to three different records — the
@@ -1935,7 +1935,7 @@ the Peaked shape, the Typical rule unless 02.3.5's exception applies), covering 
 school, with the livelihood's suggested technique of that school [revision: I-052]; or a Hedge-taught of the
 place of acceptance when the main keeper is a pact-power); each with a drive, an aspiration and an anchor bond to a cast NPC; birth drawn live when picked.
 
-**12.16.17 The seed check.** `[D]` A seed is complete when every requirement of **T-12-16**
+**12.16.17 The seed check.** `[D]` [DL-12-24; DL-12-36; revision: I-065] A seed is complete when every requirement of **T-12-16**
 (`world_seed.yaml#requirements`) holds: 64 checks, one for everything the other chapters read from a region
 (built from every chapter's requests of chapter 13 and every rule that names region data). A requirement a
 seed leaves to a generic table or an on-demand rule names it (`seed.uses_generic`: local events, hooks,
@@ -1947,7 +1947,7 @@ regional tables built by PR-10-10, every one passing PR-10-8, whose home-1 table
 reference PCs (PR-10-8 step 2; `travel.yaml#encounter_audit_reference`) (word mix trivial 35.4 / easy 26.4 /
 fair 34.7 / hard 3.5 / lethal 0 %) [revision: I-096]. Seed 1 is committed as `_process/simulation/12-world-seed-example.yaml`.
 
-**12.16.18 After the seed.** `[D]` The seed writes the world at the depth play starts with; everything
+**12.16.18 After the seed.** `[D]` [DL-12-23; DL-12-31; DL-12-35; revision: I-065] The seed writes the world at the depth play starts with; everything
 deeper is written on demand by its owner's rule and never invented in narration: a place on mention (10.1.4),
 a person (12.11.1), a faction (11.3.18), a site's areas (PR-10-7), a case (PR-15-6), a storied item (08.4.8). A
 **new region** (the PC travels past ring 5, or 11's World Turn opens one) runs steps 5, 9, 10 and 11 again

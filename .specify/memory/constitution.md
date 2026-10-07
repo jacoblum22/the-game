@@ -1,5 +1,39 @@
 <!--
 Sync Impact Report
+Version change: 1.7.0 → 1.8.0 (MINOR: the ruleset in `rules/` (v1.0) resolves every item this
+  document deferred to "a future /speckit-plan", and records three owner-approved pattern
+  amendments it made along the way. No Core Principle is changed.)
+Modified patterns:
+  - P3: the player-facing comprehension wall is no longer a design budget. Owner direction
+    (2026-09-29, DL-00-01): rules are judged only by player freedom and AI correctness. The
+    classification requirement (background vs player-facing) stands and is refined into four
+    visibility classes (rules 00.6.4); the codex (P7, rules ch.14) carries player-facing load.
+  - P5: (a) the evidence-significance gate is computed from the frame's pre-committed fields
+    (consequential AND pressured AND own act), not judged after the fact; fresh judgment remains
+    only for tags and conduct (DL-03-01). (b) The "calibrated classifier" is realized as a
+    deterministic five-confirmation scorer with the same three-valued policy (DL-04-10); it
+    shares no model family with the narrator, so P13's independence requirement is met.
+  - P14: the cadence parameter is not varied by action count. P9's fixed pool takes precedence;
+    cadence differences live in what one action contains (weapon weight), tempo, and reactions
+    (DL-06-02).
+Resolved deferrals (each resolved in `rules/`; cited rule ids):
+  - Ability scores: seven attributes and a closed list of derived values (00.4.1, 00.4.4, 02.3).
+  - P2's baseline competence floor (00.3.6, 02.5.1).
+  - The hierarchical tag vocabulary (00.5, 03.1, data/tags.yaml).
+  - The tag_event capture mechanism (00.6.8, 03.1, 03.7.2).
+  - P5's class list and the curated hybrid table (04.2, data/callings.yaml, data/hybrids.yaml).
+  - P5's numeric thresholds, confidence cutoffs and synergy bonuses (04.3, 04.4, 04.8).
+  - P9's action-economy numbers; Focus pool size, costs and recovery (06.1.1, 05.6).
+  - What dropped items grant (08.3, 08.4, 00.11.5).
+  - VI's consolidation, retirement and provisional mechanics (04.8, 05.12, 00.16.3).
+  - Slot counts, pool sizes and the hard slot ceiling (05.2).
+  - Ruleset versioning for live saves (00.16.6).
+Deferred / TODO items carried forward unchanged:
+  - TODO(TECH_STACK): still open (Technology Constraints).
+Research basis: the ruleset's decision log (`rules/appendix/decision-log.md`) and traceability
+  matrix (`rules/appendix/traceability.md`), which map every principle and pattern to rule ids.
+
+Prior report (1.6.0 → 1.7.0):
 Version change: 1.6.0 → 1.7.0 (MINOR: sixth pass — an extended design conversation plus several
   targeted research checks conducted during it — resolves P5's default application and sharpens
   its class-emergence mechanism, revises P2's leveling model, adds a new Core Principle bounding
@@ -372,6 +406,12 @@ minimized. This does not relax the player-facing comprehension wall above; it me
 applies only to what a player must actively track, never to the density of the substrate the AI
 DM privately reasons with.
 
+AMENDED (v1.8.0, owner direction, DL-00-01): the comprehension wall above is retained as
+research context but is **not** a design budget for this project. No rule is cut or coarsened to
+reduce what the player must track; rules are judged only by player freedom and AI correctness. The
+MUST to classify every piece of tracked state stands (rules 00.6.3, 00.6.4), and the player-facing
+load is carried by the codex (P7; rules ch.14).
+
 **P4. Character-Creation Trade-offs Locked at Creation.** Race/origin (and similar foundational
 choices) set a stat-quantity-vs-freedom trade-off (more points but less placement freedom, or
 vice versa) once, at character creation, not something that changes later. Separately, access
@@ -501,6 +541,14 @@ that a significant moment happened and what it is evidence of — that is not ye
 implementation detail or built. This is recognized as the actual next dependency to resolve via
 a future /speckit-specify, not something this amendment resolves.
 
+AMENDED (v1.8.0): (a) the significance gate is computed from fields the frame fixes before
+the roll (consequential AND pressured AND own act); fresh model judgment is kept only for which
+tags and conduct a deed carries (rules DL-03-01, 03.2). (b) The "calibrated classifier" is
+realized as a deterministic scorer counting five confirmations (Current, Rising, Central,
+Leading, Margin), with the same three-valued policy: grant at 4+, offer at 1+, abstain at 0
+(rules DL-04-10, 04.4). It shares no model family with the narrator, so P13's independence
+requirement is met by construction.
+
 **P6. Named Composite Bonuses for Aligned Combinations.** Combining two specific, aligned
 primitives SHOULD yield a distinct, named emergent bonus (Stormlight's "Three Lashings" from
 Adhesion+Gravitation; Mistborn's Compounding from a matched Allomantic/Feruchemical pair) —
@@ -617,6 +665,10 @@ other classes, with haste explicitly excluded from affecting the faster group, a
 zero added balance-audit surface. Cheap to adopt; useful as a complement to, not a replacement
 for, Principle V's combinatorial primitives.
 
+AMENDED (v1.8.0, rules DL-06-02): P9 takes precedence. No build changes anyone's number of
+actions. Cadence differences live in what one action contains (weapon weight, riders), in tempo
+(who acts first), and in reactions.
+
 **P15. Time-Gated Specialization as an Alternative to Point-Buy Auditing.** Where Pattern P11's
 audited point-buy guardrails are judged too costly to author for a given system, specialization
 MAY instead be enforced by making broad access take proportionally longer to acquire (EVE
@@ -670,4 +722,4 @@ bumps follow semantic versioning: MAJOR for backward-incompatible principle remo
 redefinitions, MINOR for new principles/patterns or materially expanded guidance, PATCH for
 wording or clarification only.
 
-**Version**: 1.7.0 | **Ratified**: 2026-09-27 | **Last Amended**: 2026-09-29
+**Version**: 1.8.0 | **Ratified**: 2026-09-27 | **Last Amended**: 2026-10-07

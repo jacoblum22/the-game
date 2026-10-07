@@ -171,7 +171,7 @@ NPC might otherwise be thought to know it ("the reeve does not yet know the well
 [R1 #10 (T=0 isolation); SG-27; 00.6.5]. So the narrator's view at any moment contains nothing that
 has not happened, and nothing it may not say.
 
-**11.1.5 What the narrator receives from the living world.** `[D]` From this chapter's records the
+**11.1.5 What the narrator receives from the living world.** `[D]` [DL-11-02; DL-11-10; C:P3; revision: I-065] From this chapter's records the
 narrator view (`get_state(view: narrator)`) receives only: faction names, public facts and their
 status rung *as behavior* (11.3.8), never the number; omens selected by the engine for hidden clocks
 that ticked (INV-14); rumor and news texts that reached the PC's scope; the fired bang's content; the
@@ -230,7 +230,7 @@ halts after the week boundary finishes its phases, and chapter 12 frames the sce
 waits in the bang queue for the pacing director (12.7.4), so the world's pushes arrive when the pacing
 allows, not when the clock happens to strike [R6 B-11; 12.7].
 
-**11.2.6 Suspended play.** `[D]` While no PC is in play (a retirement timeskip, 11.13.8 [verification: V2b-013]), steps 1–8 run
+**11.2.6 Suspended play.** `[D]` [DL-11-01; DL-11-20; revision: I-065] While no PC is in play (a retirement timeskip, 11.13.8 [verification: V2b-013]), steps 1–8 run
 unchanged except that: step 4's `move_on_pc` rows read as `goal`; step 6 runs decay only; step 7's
 "what reached the PC" list is written to the legacy record instead of narration; and step 8 neither
 fires the hook supply rule nor queues bangs (the queue is cleared at the timeskip's start and refilled
@@ -389,7 +389,7 @@ Turn. Every action's results are fixed by this table; the DM chooses nothing in 
 | `recover`: lick wounds, purge, rebuild | higher of wealth and sway vs its DC | hold strong; slip cleared; goal clock +1 | hold strong; slip cleared | nothing | nothing; the slip stays |
 | `court`: win someone over | sway vs its DC | as success, for two targets | the target (11.3.7): an ally of the PC is **courted** (16.12.5: `courted_by`, sealed, with an omen); a faction's relation toward it +1 | nothing | the courted party learns it was being worked on: relation −1, or the ally's standing toward the faction −1 |
 | `move_on_pc`: act against the PC | none (certain) | — | an **entanglement** bang is queued from `tbl.11.entanglement` at the faction's pursuit column (11.3.12) | — | — |
-| `aid_pc`: act for the PC | none (certain) | — | the first eligible of: pay the PC's ransom (15.7.5) if the PC is a captive with a ransom due; send help (an ally mob of its rank and file, 16) to the PC's holding under a threat bang; write `gift_due.<faction>` if a reward is owed (08.7.2); queue an **opportunity** bang (a job, a tip, a safe house) | — | — |
+| `aid_pc`: act for the PC | none (certain) | — | the first eligible of: pay the PC's ransom (15.7.5) if the PC is a captive with a ransom due; send help (an ally mob of its rank and file, 16) to the PC's holding under a threat bang; write `gift_due.<faction>` if a reward is owed (08.7.2); queue an **opportunity** bang (a job, which pays 08.8.8's job fee for its band; a tip; a safe house) [revision: I-091] | — | — |
 | `lie_low`: do nothing visible | none | — | its attention clock on the PC decays 1 extra; no trace | — | — |
 
 Every success or critical success of `goal`, `strike`, `scheme` (critical only), `expand` and `court` is
@@ -439,7 +439,7 @@ status [R6 B-02; R5 P-22; 00.17.1 Q13].
 | Status | Rung | The faction… | World Turn rows it enables | What the PC can see |
 |---|---|---|---|---|
 | +3 | Devoted | helps even at a cost to itself; shares what it knows when asked; its holds are havens for the PC (`safe: true` for the PC); offers a rank at its next sitting if it has ranks and the PC holds none there | `aid_pc` (override c; steadfast row 2) | members greet the PC by name; doors open |
-| +2 | Friendly | helps when the cost is not serious; brings the PC work (opportunity bangs); gives when a reward is owed; its holds take the PC in for the night | `aid_pc` | jobs offered; credit extended |
+| +2 | Friendly | helps when the cost is not serious; brings the PC work (opportunity bangs); gives when a reward is owed; its holds take the PC in for the night | `aid_pc` | jobs offered (at 08.8.8's job fee) [revision: I-091]; credit extended |
 | +1 | Warm | helps when it is cheap; trades fairly; passes on news (what it tells the PC is never a rumor it knows to be false) | — | a fair price; a tip |
 | 0 | Neutral | deals on ordinary terms; neither helps nor hinders | — | business as usual |
 | −1 | Wary | makes trouble when it is cheap; watches the PC (an attention clock exists, 11.3.12); refuses its hospitality | secretive `move_on_pc` | doors shut; questions asked |
@@ -700,7 +700,7 @@ it completes (worked by `goal` actions at the local DC, its rating its highest),
 (11.3.2) [revision: I-070]. Petty factions never take `move_on_pc`; one whose
 status toward the PC leaves 0 becomes full at once (11.3.2) [R5 P-25; DL-11-05].
 
-**11.3.17 Officers, members and what a faction sends.** `[D]`
+**11.3.17 Officers, members and what a faction sends.** `[D]` [DL-11-32; DL-12-13; R5 LW-01; revision: I-065]
 - **Officers** are principal NPCs (12.11.1): a full faction keeps one to four. Each holds one **duty**
   from the faction's `duties`, written as that officer's refusal of kind `refusal.duty`, `absolute` (15.2.4 item 5; `social.yaml#refusal_kinds`) [verification: V2c-007]:
   the Watch-captain's "never opens the gate after curfew", the Guild factor's "never sells below the
@@ -723,7 +723,7 @@ status toward the PC leaves 0 becomes full at once (11.3.2) [R5 P-25; DL-11-05].
   `boast`, truth by T-11-11); `nem.hunts` creates its hunt clock as a danger clock owned by this chapter
   (6, hidden, +1 a week, omens), which on completion queues a threat bang with specificity `pc_deed`.
 
-**11.3.18 Where factions come from.** `[D]` + `[J:enum]`
+**11.3.18 Where factions come from.** `[D]` + `[J:enum]` [DL-12-21; DL-12-24; R5 LW-06; revision: I-065]
 - **Data:** the region's seed writes its factions (12.16.10: at least three full, goal clocks running), and a
   pre-made setting writes them in its owner-block of `factions.yaml` (chapter 13); either way they conform
   to 11.3.1 and to a template (`factions.yaml#templates`) [revision: I-028].
@@ -791,7 +791,7 @@ written, and its thread (if any) is completed or failed (11.5.5). So an ignored 
 own conclusion on schedule, and a PC who acts changes which steps happen — never by the DM deciding
 that the PC "probably stopped it", but by the facts their deeds wrote [R6 B-12; R1 #10; DL-11-07].
 
-**11.4.3 Where situations come from.** `[D]` Only these create a situation (closed list): a faction's
+**11.4.3 Where situations come from.** `[D]` [DL-11-07; C:V; R5 LW-05; revision: I-065] Only these create a situation (closed list): a faction's
 `change` goal completing (its `effects` name the template); a linchpin fate; a collapse (11.3.9, vacuum
 row 5); a seasonal event (11.11.4); a world reaction (11.4.6) whose candidate names a template; chapter
 12's random event handing over a situation seed (12.6.5 item iv); `tbl.twist_s5` row 8 (the land
@@ -930,7 +930,7 @@ breaks an invariant without a recorded cause is a claim-check error (12.3). The 
 obligations are commitments too; `h.15.commitments_due` checks their dates; `tbl.twist_s5` row 7
 ("a debt is called in, now") reads `commitments_owed(pc)` (11.4.10).
 
-**11.4.10 The world's answers to chapter 12's twists.** `[D]` Chapter 12's S5 twist rows need world facts
+**11.4.10 The world's answers to chapter 12's twists.** `[D]` [DL-12-15; DL-11-07; revision: I-065] Chapter 12's S5 twist rows need world facts
 (12's request g). This chapter provides three queries: `havens(pc)` — every place with `safe: true` the
 PC has used as a rest site in the last season, the PC's holdings first (row 2 "a haven falls" writes
 `safe: false` on the first, with an occupying faction or a cause from the region's active situations);
@@ -963,7 +963,7 @@ Thread (entity kind thread):
   case: case.* | null            # chapter 15's clue graph (sealed nodes, placements, reserves)
   clue_placements: [ref]         # >= 3, of at least two holder kinds (11.5.6)
   fallback: [{trigger, form, delivers}]   # >= 1 (11.5.7)
-  reward: fact_id | null         # what is owed on completion (a gift_due, coin, a rank)
+  reward: fact_id | null         # what is owed on completion (a gift_due; coin, at 08.8.8's job fee for the thread's band, economy.yaml#job_fees; a rank) [revision: I-091]
   status: seeded | active | stalled | completed | failed | expired | abandoned | retired | bequeathed
   weight: 1..3                   # 12.6.6's list weight
   protected_until: scene index   # 12.6.5: progressed in the last 12 scenes, or a vow
@@ -971,7 +971,7 @@ Thread (entity kind thread):
   lifecycle: provisional
 ```
 
-**11.5.2 Kinds.** `[D]` + `[J:enum]`
+**11.5.2 Kinds.** `[D]` + `[J:enum]` [DL-11-16; DL-11-12; C:V; R5 LW-13; revision: I-065]
 - **vow** — the PC has sworn it (a commitment of kind vow written first): creation's long vow (02.9.1),
   the Bargain's debt (07.5.5), a vow offered at an ally's death (16.9.5), any solemn promise recorded by
   04.7.4's free-promise path. Vows never expire; they end completed, failed (made impossible by a fact)
@@ -1094,7 +1094,7 @@ no unfound necessary node remains, its fallback form is a confrontation with its
 opposition acts and leaves evidence; a new victim; a messenger with a demand; the patron's impatience;
 an object turns up; a rival claims the prize; a rumor sharpens) [DL-11-17].
 
-**11.5.8 Register upkeep.** `[D]` World Turn step 8, for every thread: expire what 11.5.5 expires; mark
+**11.5.8 Register upkeep.** `[D]` [DL-11-12; DL-11-17; DL-11-01; R5 LW-13; revision: I-065] World Turn step 8, for every thread: expire what 11.5.5 expires; mark
 stalled and queue the fallback for any active thread with no live lead (repeating 12.8.4's scene-end audit
 at the week, for weeks spent off-screen); check opposing clocks that phase 5 ticked; update
 `protected_until`; and reduce by one the weight of every thread not featured in six scenes (12.6.6).
@@ -1122,13 +1122,13 @@ than ten (T-11-24): a steady stream with no flood [R6 B-R4; R5 P-07; DL-11-17].
 
 **11.5.11 What finishing earns.** `[D]` A completed thread earns, and only earns: fate +1 (01.16.2;
 +1 more if it was a vow); the status steps of T-11-3; the reward its patron promised (`gift_due`, coin
-from the patron's means at 08's wage scale, a rank at the next sitting); the reputation that its deeds
+at 08.8.8's job fee for the thread's challenge band (`economy.yaml#job_fees`) [revision: I-091], a rank at the next sitting); the reputation that its deeds
 earned on the way (11.7, through witnesses, not through the completion itself); a chronicle line; a
 Deeds-ledger entry for legacy (11.13.5). It never grants a license, a tier or an ability (INV-7):
 chapter 04 may treat the completing beat as a crisis or the next reflection as its moment, as 04
 rules [R5 AD-06; 04.6].
 
-**11.5.12 Other chapters' threads.** `[D]` Threads created by other chapters use this register with these
+**11.5.12 Other chapters' threads.** `[D]` [DL-11-16; DL-11-17; R5 LW-13; revision: I-065] Threads created by other chapters use this register with these
 defaults (data: `world_turn.yaml#thread_sources`):
 
 | Source | Kind | Rank default | Opposing clock | Fallback |
@@ -1141,7 +1141,7 @@ defaults (data: `world_turn.yaml#thread_sources`):
 | a vow at an ally's death (16.9.5) | vow | dangerous | none | the dead ally's kin or killer |
 | a rite's condition, a spirit's bargain (05) | quest | troublesome or dangerous | the rite's window if it has one | the spirit's reminder |
 | a case (15.9) | quest | by the case | the case's opposition clock (15.9.13) | the case's fallbacks (15.9.12) |
-| a faction's commission | quest | by the job | the rival faction's goal clock when it races | the patron's impatience |
+| a faction's commission (paid at 08.8.8's job fee for its band, `economy.yaml#job_fees`) [revision: I-091] | quest | by the job | the rival faction's goal clock when it races | the patron's impatience |
 | a cache to recover (07.6.4) | quest | troublesome | `clk.cache` (6, +1 a week) | a cache rumor sharpens (11.6) |
 | a bequest (11.13.4) | as the original | as the original | as the original, advanced by the timeskip | as the original |
 
@@ -1228,7 +1228,7 @@ place where the change can be seen. If no target exists, one is written (a place
 by 12.11.1) before the rumor is created; a rumor with nowhere to lead is never made. So every rumor is a
 lead (15.9.8; P16), and the player who follows a lie learns something true [R5 P-41; 12's request e].
 
-**11.6.5 How information travels.** `[D]` News and rumors spread at World Turn step 7 by scope steps
+**11.6.5 How information travels.** `[D]` [DL-11-11; DL-11-01; R5 SO-06; revision: I-065] News and rumors spread at World Turn step 7 by scope steps
 (11.1.3), along route links that are open (a closed road or a quarantined town stops spread along it):
 
 **T-11-12 Spread** (canonical: `world_turn.yaml#spread`).
@@ -1245,13 +1245,13 @@ This is how far news travels in a world of roads and carts: a town knows by next
 end of the month, the realm in a season, and a tale told three towns away is someone else's tale
 [R6 A-15 (scopes by social distance); DL-11-11].
 
-**11.6.6 News.** `[D]` **News** is a true public change, spread like a rumor but always true, written as a
+**11.6.6 News.** `[D]` [DL-11-10; DL-11-11; R5 SO-06; revision: I-065] **News** is a true public change, spread like a rumor but always true, written as a
 fact with `certainty: established` in each scope it reaches. The PC hears news on **arriving** in a
 settlement scope it has reached — at most three items, most recent first, in the arrival narration, the
 rest available by asking — and by every means that hears rumors. An NPC knows the news of its home scope
 (12.10.6 c).
 
-**11.6.7 Hearing rumors.** `[D]` The PC hears rumors by: Ask around (15.13.9: those about the named
+**11.6.7 Hearing rumors.** `[D]` [DL-11-11; R5 SO-06; revision: I-065] The PC hears rumors by: Ask around (15.13.9: those about the named
 subject in the settlement); Carouse (15.13.8); a tavern the PC owns (one per week, the newest in its
 scope, 08.8.8); an NPC at Warm or better who knows one and is asked (12.10.6); a rumor table roll that
 another rule calls for (`roll_table(tbl.11.rumors, {scope})` draws among the rumors circulating in the
@@ -1260,7 +1260,7 @@ hearing writes `record_knowledge(pc, rumor, how: heard)` and the journal shows i
 (15.9.18). NPCs in a scope know its circulating rumors when their role hears talk (innkeepers, guards,
 merchants, priests, carters: always; anyone else: the Oracle, Even) (12.10.6 c).
 
-**11.6.8 Rumors about the PC, and the PC thought dead.** `[D]` Every noteworthy deed the PC does before
+**11.6.8 Rumors about the PC, and the PC thought dead.** `[D]` [DL-11-11; DL-11-15; R5 SO-06; revision: I-065] Every noteworthy deed the PC does before
 carriers seeds a rumor (T-11-10) whose `about` is the PC (or the persona, 03's `as_identity`); this is the
 "word on the street" that reputation (11.7) scores. The belief **`pc.dead`** (07.5.6) is a rumor, truth
 `false`, born in the victor's faction scope. While it circulates in a faction's seat, that faction's
@@ -1269,7 +1269,7 @@ that faction perceives the PC alive (an aftermath link, 03.10.3), news "alive" i
 its attention clock ticks **+2** (they were wrong, and now they are paying attention). Being thought
 dead is a situation with uses of its own, exactly as 07 intends [07.5.6].
 
-**11.6.9 Rumors the PC starts.** `[D]` A PC may plant a rumor with a Talk beat (deceive or inform) in a
+**11.6.9 Rumors the PC starts.** `[D]` [DL-11-29; DL-11-11; R5 SO-06; revision: I-065] A PC may plant a rumor with a Talk beat (deceive or inform) in a
 settlement (15.5), or Carouse to spread one. Success writes a rumor with source `planted` (truth from
 the facts: `false` if what it says is not so, `true` if it is) and the PC's beat's delivered reach as the
 number of settlements it starts in (1–4, the scene's settlement first, then its neighbors). It then spreads
@@ -1341,7 +1341,7 @@ branch and who does one or two noteworthy deeds per session before carriers of o
 there in four to six sessions and 5 in ten to fifteen (03's calibration: noteworthy events are the
 difficult, risky successes, about one in four evidence events).
 
-**11.7.4 How far a name travels.** `[D]` At each Season Turn (11.11.3 step 6 [verification: V2b-013]): every settlement entry of
+**11.7.4 How far a name travels.** `[D]` [DL-11-15; DL-11-23; R5 AD-07; revision: I-065] At each Season Turn (11.11.3 step 6 [verification: V2b-013]): every settlement entry of
 score 3 or more gives its **region** an entry of the same key at `score − 2` (if higher than the region's
 own); every region entry of score 4 or more gives the **realm** one at `score − 2`; faction-scope entries
 do not spread (they are what members say among themselves). Spreading is by points: the derived entry
@@ -1390,7 +1390,7 @@ heard", 2 "known here", 3 "talked of", 4 "famous here", 5 "a legend here" — an
 7. **Legacy** reads it: renown, breadth and legend rank (11.7.10; 11.13.3).
 Reputation never changes a DC, a defense, a tally, a tier or a license [00.17.1 Q22].
 
-**11.7.8 Personas.** `[D]` Deeds done under a persona (03's `as_identity`) build the persona's entries,
+**11.7.8 Personas.** `[D]` [DL-11-15; R5 AD-07; revision: I-065] Deeds done under a persona (03's `as_identity`) build the persona's entries,
 not the PC's. An **unmasking** (an aftermath link, 03.10.3, tying the persona to the PC in a scope) moves
 the persona's entries in that scope onto the PC, adding points key by key; elsewhere the persona keeps
 its name until unmasked there too.
@@ -1402,7 +1402,7 @@ it **folds** into the entry of that scope with the same valence and the lowest s
 higher-challenge content kept). Nothing is deleted; the sources list keeps every packet. Reputation grows
 by consolidating, as Principle VI requires of every growing record [C:VI; DL-11-15].
 
-**11.7.10 Renown.** `[D]` `renown(pc)` = the highest score of any of the PC's entries; `breadth(pc)` = the
+**11.7.10 Renown.** `[D]` [DL-11-15; DL-11-26; R5 AD-07; revision: I-065] `renown(pc)` = the highest score of any of the PC's entries; `breadth(pc)` = the
 number of scopes in which the PC has an entry of score 2 or more. Legend rank (11.13.3), inheritance
 (11.13.5), great projects and the hook supply read them.
 
@@ -1427,7 +1427,7 @@ of every non-collapsed faction with its seat or a hold in the region whose `patr
 Chapter 04 applies its own filters (V3: status ≥ 0 and `heard`). This chapter never grants capability;
 it seats, obliges and rewards [04.11; DL-11-18].
 
-**11.8.2 Rank ladders.** `[D]` A rank is a **seat** in an institution: social standing, resources and
+**11.8.2 Rank ladders.** `[D]` [DL-11-18; C:VII; R5 AD-07; revision: I-065] A rank is a **seat** in an institution: social standing, resources and
 obligations, never capability (04.11.1). Each template with ranks carries a ladder of five rungs
 (`factions.yaml#rank_ladders`; names per template — a guild's apprentice, journeyman, master, warden,
 guildmaster; an order's novice, brother, knight, commander, grand master):
@@ -1440,14 +1440,14 @@ guildmaster; an order's novice, brother, knight, commander, grand master):
 | 4 high officer | `1 + tier ÷ 2` (round down) | status ≥ +2; score ≥ 3; a seat free or won; a sitting |
 | 5 head | 1 | status +3; score ≥ 4; the head's seat empty (a linchpin fate, a retirement, a death) or won |
 
-**11.8.3 Sittings and offers.** `[D]` Ranks are conferred at the faction's **sittings** (its `sittings`;
+**11.8.3 Sittings and offers.** `[D]` [DL-11-18; DL-11-21; revision: I-065] Ranks are conferred at the faction's **sittings** (its `sittings`;
 default the first week of each season; the region's seed names festivals, 12.16.15). `next_sitting` is the first sitting
 after now. Rung 1 may be given at any time by an accepted offer. A rank is offered through chapter 04's
 protocol (V3 the order seeks you out; V9 the rite or trial; 04.7), or, for rungs 2–5, at a sitting when its
 requirements hold (a sitting offer, institutional, with the price `obligation`). A trial decides only when
 the rank is given (04.11.2). An offer not answered expires at the next sitting after next.
 
-**11.8.4 What a rank gives (closed list).** `[D]`
+**11.8.4 What a rank gives (closed list).** `[D]` [DL-11-18; C:V; C:VII; revision: I-065]
 1. **A title** the fiction uses (the rung's name in the template).
 2. **Access:** from rung 2 its holds are havens to the PC (`safe: true` for the PC) and its stores sell at
    list price with no haggling needed; from rung 1 its mentors teach (15.11) and from rung 2 without fee.
@@ -1463,7 +1463,7 @@ the rank is given (04.11.2). An offer not answered expires at the next sitting a
 7. **Standing:** the first rank is +1 status (T-11-3).
 Nothing else: no license, no competence, no tier (04.11.3).
 
-**11.8.5 Obligations.** `[D]` Every rank carries its template's **obligations**, written as commitments of
+**11.8.5 Obligations.** `[D]` [DL-11-18; revision: I-065] Every rank carries its template's **obligations**, written as commitments of
 kind obligation when the rank is accepted (the price `obligation`, 04.7.5): (a) its **duty**, as an
 officer's (11.3.17), held as a refusal the PC has promised to keep; (b) **service**, from rung 2: one week
 per season of downtime in its cause (15.13.12's service, or the template's), and answering a **muster** when
@@ -1506,7 +1506,7 @@ Holding (record on a place entity):
   lifecycle: provisional
 ```
 
-**11.9.2 Getting one.** `[D]` A holding is acquired by: **buying** (08's price and a charter, `bi.charter`,
+**11.9.2 Getting one.** `[D]` [DL-11-19; R5 EQ-12; revision: I-065] A holding is acquired by: **buying** (08's price and a charter, `bi.charter`,
 from the faction that holds the settlement's seat, which sells it at status ≥ 0; whether one is for sale
 is an Oracle question, Likely in a town or city, Unlikely in a village); **building** (chapter 15's
 project, 15.12, on 08's build weeks, the price paid as materials over the build); **grant** (a rank's
@@ -1515,7 +1515,7 @@ which is a `strike` the PC makes in play: status −2 with that faction and the 
 The holding is a **haven** for the PC (`safe: true`, 10.2.3) while it is held, staffed as 08 requires and not
 ruined; while the PC lives there, 08's lifestyle line applies.
 
-**11.9.3 Holdings in the World Turn.** `[D]` In step 2 (Maintain), for each holding: (1) 08's upkeep has
+**11.9.3 Holdings in the World Turn.** `[D]` [DL-11-19; DL-11-01; R5 EQ-12; revision: I-065] In step 2 (Maintain), for each holding: (1) 08's upkeep has
 already run in phase 4; if it went unpaid, the damage clock ticks +1 and, after two unpaid weeks, the staff
 leave (as hirelings do, 16); (2) the **yield** is rolled (11.9.4); (3) threats against it resolve (11.9.5);
 (4) a steward with no master's visit for a season (no `managed_this_week` in 13 weeks) rolls the yield with
@@ -1542,7 +1542,7 @@ each week (11.6.7); a farmstead gives supply in season (08). *Arithmetic:* a hir
 45% and fails critically 10%; with the PC's day of oversight (+5) 55%, critically failing 5% [08.8.8;
 15.13.11; DL-11-19].
 
-**11.9.5 Threats to holdings.** `[D]` A holding can be struck: by a Hostile faction (11.3.8 lets its
+**11.9.5 Threats to holdings.** `[D]` [DL-11-35; DL-11-19; R5 EQ-12; revision: I-065] A holding can be struck: by a Hostile faction (11.3.8 lets its
 `strike` target the PC's holdings), by a situation step that names its place, by an entanglement's
 reprisal, by `tbl.twist_s5` row 2 (a haven falls). A faction's strike on a holding is a faction check
 against `10 + 2 × garrison + 2 × the PC's domain tier (11.9.8; 0 if none)`, +2 with walls: success ticks the
@@ -1552,7 +1552,7 @@ false`; repair is a project of half its build weeks) or, for a manor or keep str
 `aid_pc` of a friendly faction sends help when a threat bang names the holding (11.3.6). A week of repair
 (15.13.11) ticks the damage clock down 2.
 
-**11.9.6 Improvements.** `[D]` A holding may carry improvements from this closed list
+**11.9.6 Improvements.** `[D]` [DL-11-35; DL-11-19; C:V; R5 EQ-12; revision: I-065] A holding may carry improvements from this closed list
 (`world_turn.yaml#improvements`; price, build weeks, effect, minimum holding): **walls** (400, 8 weeks;
 garrison +1, +2 against strikes; townhouse or larger); **garrison** (4 guards at 08's soldier wage; garrison
 +1; watchtower or larger); **shrine** (300, 6 weeks; a keeper's place: rites kept there, Solace as at a
@@ -1641,7 +1641,7 @@ The PC's own threads may tick the domain's goal clock as milestones (+2) when th
 not a second character: it never acts in a scene except through the people it fields, and it loses hold,
 falls and collapses like any faction [R5 LW-10 (WWN rulership; ACKS domains); R6 D-14; DL-11-19].
 
-**11.9.9 Gifts.** `[D]` Whether anyone gives is this chapter's (08.7.1); what is given is chapter 08's. The
+**11.9.9 Gifts.** `[D]` [DL-08-18; C:P5; revision: I-065] Whether anyone gives is this chapter's (08.7.1); what is given is chapter 08's. The
 fact `gift_due.<giver>` (which makes 08's `gen.gift` run) is written only by: (a) a completed thread whose
 patron promised a reward (`earned`); (b) a promotion to rung 3, 4 or 5 (`earned`); (c) a faction at +3 at a
 Season Turn, at most once a year (`favored`); (d) `aid_pc` when a reward is owed (`earned`); (e) a bargain
@@ -1662,17 +1662,17 @@ months, weekdays, quarter days, festivals and the era (`calendar`, 12.16.15; a p
 its owner-block of `calendar.yaml`); until one does,
 the engine's neutral names stand ("the second month of spring") [R5 TM-07; DL-11-21].
 
-**11.10.2 Dates.** `[D]` `date(timestamp)` renders `{quarter day of <season> | <day> of <month>}, <weekday>,
+**11.10.2 Dates.** `[D]` [DL-11-21; R5 TM-07; revision: I-065] `date(timestamp)` renders `{quarter day of <season> | <day> of <month>}, <weekday>,
 year <n> <era>` and the watch; the codex shows it (shown, 00.6.3). Campaign year 1 begins on spring's quarter
 day unless the region's seed sets an opening date (12.16.15). All of this chapter's durations ("8 weeks", "a season") are
 counted in the ladder's units, so the calendar's names never change a duration.
 
-**11.10.3 The moon.** `[D]` The moon runs a 28-day cycle, thirteen to the year, starting new on the year's
+**11.10.3 The moon.** `[D]` [DL-11-21; R5 TM-07; revision: I-065] The moon runs a 28-day cycle, thirteen to the year, starting new on the year's
 first day: day 1 of each cycle **new**, day 8 **waxing half**, day 15 **full**, day 22 **waning half**.
 The fact `moon.phase` is written at each `day` boundary for rites, tides, beasts and situations that key on
 it (05's rites, a werewolf's nature, "the cult completes the rite at the new moon").
 
-**11.10.4 Festivals.** `[D]` A festival is `{id, name, season, week, day, effects}` in `calendar.yaml`, with
+**11.10.4 Festivals.** `[D]` [DL-11-36; DL-11-21; C:V; R5 TM-07; revision: I-065] A festival is `{id, name, season, week, day, effects}` in `calendar.yaml`, with
 effects from this closed list: **market** (that week, find-buyer clocks tick +1 and one price notch is
 waived in haggling, 08/15); **sitting** (factions whose sittings name it confer ranks, 11.8.3); **rumor
 surge** (all rumors circulating in the scope are drawn at weight 3; Carouse yields one more); **truce** (in
@@ -1727,7 +1727,7 @@ fair, the long days — never as an announcement. The player has a week to act o
 obligation, take up a thread, visit a mentor), which is what "telegraphed" means here [C:VI; R3 11.7
 (publish the why); DL-11-23].
 
-**11.11.3 The Season Turn's steps.** `[D]` In this order (`world_turn.yaml#season_steps`):
+**11.11.3 The Season Turn's steps.** `[D]` [DL-11-23; DL-11-12; C:VI; R5 TM-08; revision: I-065] In this order (`world_turn.yaml#season_steps`):
 1. **Calendar.** Write the season; the quarter day's festival (11.10.4).
 2. **Factions.** Stage transitions and the weight of size (11.3.9); cooling (11.3.14); pursuit decay
    (11.3.12); obligations tallied and provisional ranks confirmed or lapsed (11.8.5–11.8.6); sittings
@@ -1756,7 +1756,7 @@ end, a news item says so) or **confirmed** — made a permanent regional fact �
 `confirm_when` holds (a sickness no one cured becomes endemic: its situation concluded with no PC
 intervention). A phenomenon never extends itself by narration.
 
-**11.11.5 The Year Turn.** `[D]` Handler `h.11.year_turn` (`year`, phase 6) runs after the spring Season
+**11.11.5 The Year Turn.** `[D]` [DL-11-22; DL-11-24; DL-11-21; R5 TM-08; revision: I-065] Handler `h.11.year_turn` (`year`, phase 6) runs after the spring Season
 Turn of the same instant (00.7.6: `season` before `year`): (1) **aging** for the PC and named NPCs
 (11.10.5); (2) the **annual festival** of the region's calendar, if any (12.16.15); (3) the **year's digest** line,
 built from the year's raw chronicle entries, never from the season digests (00.6.9 d); (4) **legend
@@ -1801,11 +1801,11 @@ ChronicleEntry (extends 00.6.2):
 - **retirement**: the period and its events (11.13.3).
 The DM never appends a line freely; wording is `[N]` within these occasions [R4 W8, W9].
 
-**11.12.3 Append-only.** `[D]` No entry is edited or deleted. A line found to be wrong (12's claim check
+**11.12.3 Append-only.** `[D]` [DL-11-24; C:P13; revision: I-065] No entry is edited or deleted. A line found to be wrong (12's claim check
 finds a chronicle line that contradicts state) is answered by a **correction** entry that `supersedes` it;
 both remain. Summaries are never summarized again (00.6.9 d).
 
-**11.12.4 How the chronicle is used.** `[D]`
+**11.12.4 How the chronicle is used.** `[D]` [DL-11-24; C:P13; revision: I-065]
 1. **Recaps** (12.5.2) are generated from the entries since the last recap, and from nothing else.
 2. **Continuity:** before any generator or rule writes content about the past of a place, person or faction
    (a rumor's text, an NPC's memory of an event, a legend), it queries the chronicle by entity id; content
@@ -1819,7 +1819,7 @@ both remain. Summaries are never summarized again (00.6.9 d).
 The player may read the chronicle (visibility available) as far as their character knows it: lines whose
 scope reaches the PC, or that the PC witnessed.
 
-**11.12.5 Digests.** `[D]` A season digest is one entry of at most 60 words listing the season's three to
+**11.12.5 Digests.** `[D]` [DL-11-24; revision: I-065] A season digest is one entry of at most 60 words listing the season's three to
 five weightiest raw entries (weight: retirement, death of a linchpin, collapse, war, world change, thread
 completion of rank extreme or epic, recognition tier 4+, then everything else by time); a year digest is
 built the same way from the year's raw entries. Neither is ever an input to another digest.
@@ -1849,7 +1849,7 @@ wholesale, and only bounded channels carry value forward [C:VI; R6 D-R2 step 5; 
 The offer is an out-of-fiction `[RETIRE]` block (12.15; 14 renders) listing the endings available and
 what each would write, then a CHOICE [R6 D-R1; 07's request].
 
-**11.13.2 The endings (closed list).** `[D]` (`legacy.yaml#endings`)
+**11.13.2 The endings (closed list).** `[D]` [DL-11-20; C:V; R5 LW-11; revision: I-065] (`legacy.yaml#endings`)
 
 | Ending | Available | The character afterward | Writes |
 |---|---|---|---|
@@ -1922,13 +1922,13 @@ For each ledger the engine rolls `d20 + ledger`: **20 or more, a strong inherita
 At ledger 0 that is 5% / 40% / 55%; at ledger 5, 30% / 40% / 30%; at ledger 10, 55% / 40% / 5%: a rich life
 leaves a rich legacy, and even a short one leaves something to do.
 
-**11.13.6 Bequests.** `[D]` A **bequeathed** thread passes to the successor as a new thread of the same kind
+**11.13.6 Bequests.** `[D]` [DL-11-26; DL-11-25; R5 LW-11; revision: I-065] A **bequeathed** thread passes to the successor as a new thread of the same kind
 and rank with **half** its progress (rounded down; Ironsworn's weak hit), its clue graph, its opposing clock
 (which kept running through the timeskip) and its fallback; a strong Deeds result keeps its full progress for
 one thread. A vow is bequeathed only if the successor swears it at creation (it is offered then as a hook; a
 successor who declines leaves it to the world). At most **three** threads may be bequeathed.
 
-**11.13.7 What retires, and what the character becomes.** `[D]`
+**11.13.7 What retires, and what the character becomes.** `[D]` [DL-11-20; C:P2; R5 HR-11; revision: I-065]
 - **Retired wholesale:** every calling, tier, pick and library entry (04.11.4); every ability, slot, shelf
   entry and the Focus pool (05); every license, competence entry, attribute, Vitality, wound, mark, haunt,
   dread and fate point (they belong to the person, who is no longer played); every rank seat (freed at once,
@@ -2014,7 +2014,7 @@ clock then closes [revision: I-087]. So one tag is at most one 24-point event, a
 banked tags need three taught; teaching one tag twelve weeks banks it once. The banked tags are written to the candidate's record and used only if the candidate becomes the
 successor (The One Ring's Raise an Heir [R6 D-03]).
 
-**11.13.11 After the hand-off.** `[D]` The bang queue, cleared at the timeskip's start, is refilled for the
+**11.13.11 After the hand-off.** `[D]` [DL-11-26; DL-11-10; R5 HR-11; revision: I-065] The bang queue, cleared at the timeskip's start, is refilled for the
 successor: each ledger result that is a hook becomes a kicker (11.4.5), a bequeathed thread's fallback is
 queued, and a living predecessor arrives in the successor's first or second scene. The hook supply rule
 (11.5.10) runs at once. Chapter 16 decides which allies stay (16.16.2). The world the successor walks into is

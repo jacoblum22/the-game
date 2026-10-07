@@ -31,3 +31,4 @@
 | 00.17.1 Q6 | 12 owns the DM's Oracle use, tension (≤ 1 rung), meaning tables | 12.6.1–12.6.7, tbl.meaning | satisfied |
 | 00.15.3–00.15.6 | Anchor index compiled by 12; always-loaded core; precedent rule | 12.13.6 + anchors.yaml; 12.2.4 + T-12-1; 12.12 | satisfied |
 | INTERFACE-REQUESTS (from 01) | tbl.twist S1–S5 and tbl.meaning; 15 anchor cards compiled; 01.11.4's definition; tension ≤ 1 rung; OFFER renders 01.7.1 | oracles.yaml; anchors.yaml; 12.8.1; 12.6.4; 12.15.2 | satisfied |
+| BRIEF §6 | Every rule cites its basis (`[C:]`, `[R]` or `[DL-]`) at card level | every rule card of 12 (136); 67 tagged at revision C7; validator BASIS (DL-INT-13) | satisfied |
