@@ -20,7 +20,7 @@ compiled_from:
 - file: 02-character.md
   sha256_16: 5123001e8f9de4d4
 - file: 03-tags-and-evidence.md
-  sha256_16: 580852b8f136abb5
+  sha256_16: ad47a4edbb51160b
 - file: 04-recognition-and-growth.md
   sha256_16: 5c0698b3d10bd4a2
 - file: 05-abilities-focus-magic.md
@@ -30,9 +30,9 @@ compiled_from:
 - file: 07-harm-recovery-death.md
   sha256_16: b1f2ef97d4ba853e
 - file: 08-items-loot-crafting.md
-  sha256_16: 067f967e68b6574b
+  sha256_16: 8b09a148ca5f52cc
 - file: 09-adversaries.md
-  sha256_16: 463f076dbd94819d
+  sha256_16: 2efcf36fd4b6fc63
 - file: 10-exploration-travel-sites.md
   sha256_16: 84e8d1d2275d58d8
 - file: 11-living-world.md

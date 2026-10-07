@@ -113,16 +113,18 @@ def foe_rate(f, pc, pc_fends, members_now):
     return a[0] + b[0], a[1] + b[1]
 
 
-def pc_rate(pc, f):
+def pc_rate(pc, f, lose_third=0.0):
     """Per-round (mean, variance) of harm the PC deals one adversary: three Strikes at 0/-2/-4, the
     adversary's Fend on the first if it has Fend, its reduction; a swarm takes unshaped harm one rung
-    lighter (06.10.5)."""
+    lighter (06.10.5). lose_third [revision: I-090]: the share of rounds the PC spends its third action
+    ending a lingering-harm condition (its best answer, 09-lingering-rider.py)."""
     m = v = 0.0
     for k in range(3):
         mod = pc['atk'] + REP[k] - (2 if (k == 0 and f.get('fend')) else 0)
         x = moments(mod, f['guard'], pc['sev'], f['red'], -1 if f.get('swarm') else 0, f.get('taken', 1.0))
-        m += x[0]
-        v += x[1]
+        w = (1.0 - lose_third) if k == 2 else 1.0
+        m += x[0] * w
+        v += x[1] * w
     if f.get('regen'):                       # regeneration offsets harm each round, never below a tenth
         m = max(m * 0.1, m - f['regen'])
     return m, v
@@ -138,12 +140,25 @@ def Phi(x):
     return 0.5 * (1.0 + math.erf(x / math.sqrt(2.0)))
 
 
+# [revision: I-090] the lost action is worth 0.6 of the third Strike (actions are partly spent on moving to a new target
+# anyway); 0.6 matches 09-lingering-rider.py's simulated win shift (P4 -12.0 vs -12.3, P5 -13.5 vs -14.2) and its premium
+LING_K = 0.6
+
+
 def estimate(pc, foes, buffer_hits=1.75, stagger_margin=0.5):
     """PR-09-4: the advisory estimator. Returns (win%, Staggered%, harm ratio). Deterministic.
     pc: dict(atk, guard, vit (CURRENT), armor, sev, tempo, fend)
     foes: list of dicts with atk, guard, vit (per member), sev, red, heavy, fend, morale (None =
     fearless), tempo, members, leader, swarm."""
     n = len(foes)
+    # (0) [revision: I-090] a lingering-harm rider (burning, bleeding: f['ling']) costs the PC one action in
+    #     each round one of its attacks landed: the PC's best answer is to end it at once (09-lingering-rider.py)
+    miss = 1.0
+    for f in foes:
+        if f.get('ling'):
+            for k in (0, 1):
+                miss *= 1.0 - moments(f['atk'] + REP[k], pc['guard'], f['sev'], pc['armor'])[2]
+    lose = LING_K * (1.0 - miss)
     # (1) the PC's Fend goes to the adversary with the highest per-round harm
     raw = [foe_rate(f, pc, False, f.get('members', 1))[0] for f in foes]
     fend_i = max(range(n), key=lambda i: raw[i]) if pc.get('fend', True) else -1
@@ -159,7 +174,7 @@ def estimate(pc, foes, buffer_hits=1.75, stagger_margin=0.5):
     for i in order:
         f = foes[i]
         m = f.get('members', 1)
-        o, ov = pc_rate(pc, f)
+        o, ov = pc_rate(pc, f, lose)
         per = f['vit'] / o if o > 0 else 1e9
         for j in range(m, 0, -1):
             s0 = t

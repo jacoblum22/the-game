@@ -34,7 +34,7 @@ drop_check:
   rule: before rung lookup, the engine rolls d100 against the source's yield; a miss means NO property item (materials, coin and the source's own gear only)
   yield:
     none: 0
-    trophy: {T1: 10, T2: 15, T3: 30, T4: 40, T5: 55}
+    trophy: {T1: 10, T2: 15, T3: 25, T4: 40, T5: 55}
     hoard: 100
     always: 100
   principal: 'a principal NPC (12.11.1) or an archetype marked loot.yield: always drops on every defeat'

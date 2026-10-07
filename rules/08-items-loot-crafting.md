@@ -237,7 +237,7 @@ property never generates on a shield or alongside a parrying weapon (08.2.4).
 | Condition | Written by | What still works | What stops | Mended by |
 |---|---|---|---|---|
 | **intact** | default | everything | — | — |
-| **damaged** | `cost.gear` S3; `ab.sunder` rank 1; a failed crafting step on the item | the base item's weight, severity, bands and Strike; its signature, passive, license and bound ability | its **edge, harm-edge and reduction** — the mundane magnitude properties, the T-06-7 edge and harm-edge properties (versatile, parrying, shield), and **one point** of a worn armor's base reduction (heavy 3 → 2 …) | a crude repair (`verb.handle`, Easy, 1 interval: *serviceable until the next* `rest_long`, then damaged again) or a lasting repair (08.6.7) |
+| **damaged** | `cost.gear` S3; `ab.sunder` rank 1; a failed crafting step on the item | the base item's weight, severity, bands and Strike; its signature, passive, license and bound ability | its **edge, harm-edge and reduction** — the mundane magnitude properties, the T-06-7 edge and harm-edge properties (versatile, parrying, shield), and **one point** of a worn armor's base reduction (heavy 3 → 2 …) | a crude repair (`verb.handle`, Easy, 1 interval: *serviceable until the next* `rest_long`, then damaged again; worn, common or fine items only [revision: I-079]) or a lasting repair (08.6.7) |
 | **broken** | `cost.gear` S4; `ab.sunder` rank 2 | nothing but its value as salvage | the item does not function at all; a bound ability unbinds; a relic's license and passives are dormant | a licensed repair only (08.6.7); never by Handle |
 | **destroyed** | `cost.gear` S5 | — | it is gone (`exists = destroyed`) | — |
 
@@ -377,8 +377,8 @@ compliant** after generation (T-08-16).
 Mundane properties need no attunement; passive, license and item-ability properties do. Five sits between
 D&D 5e's three attuned items and Pathfinder 2e's ten invested items, and it is the number at which the item
 shares bind for about one character in five (T-08-16: with five attuned items drawn from a realistic haul,
-20.2% would exceed an edge share, 11.2% the harm-edge share and 30.6% a reduction share without the
-clamp; `08-loot-sim-output.txt`) [verification: V2a-013] — so the choice of *which* five is a real choice, which is the point of a budget [R2 08 Iron Man
+19.2% would exceed an edge share, 8.8% the harm-edge share and 28.0% a reduction share without the
+clamp; `08-loot-sim-output.txt`) [verification: V2a-013] [revision: I-036, re-run] — so the choice of *which* five is a real choice, which is the point of a budget [R2 08 Iron Man
 Principle; DL-08-14].
 
 **08.2.6 The math: gear never out-scales callings.** `[N]` The numbers below use 00.3.7's envelope, 06.4.5's
@@ -403,7 +403,7 @@ never filled by gear alone, which is 00.17.1 Q2's demand ("passive and mundane p
 **08.2.7 Item density by band.** `[N]` + `[D]` Encounter tuning (09) and pacing (12) may rely on this
 assumption, which follows from the drop check (08.3.3), two fights per session, one site treasure about every
 four sessions, principals who always drop, and 04's tier pacing (tiers at sessions ~4/9/19/34/56); the
-campaign simulation holds it (T-08-17) [revision: I-018]:
+campaign simulation holds it at every band (T-08-17) [revision: I-018; I-036]:
 
 | Power band | Sessions in band (focused) | Property items won (typical) | Attuned (of 5) | Bound abilities (of 4 equipped slots) | Highest signature tier usual |
 |---|---|---|---|---|---|
@@ -437,6 +437,16 @@ Only resolved outcomes generate (00.11.2): a defeat must carry the frame id of t
 any property item, every **body** may be harvested (08.3.10) and every carrier of coin or gear yields its
 purse and gear (08.3.11) — so every resolved defeat yields *something*, which is constitution P5's "a
 defeated source drops an item generated from its gated pool" [C:P5 sixth pass; R3 #8; 06.13.3].
+
+**Once a season per creature.** `[D]` When a creature gives the party loot (it was a loot call's source, or
+its purse was taken), the engine writes `loot.given_on = <date>` on it. For one season (11.11) after that date
+the creature is **spent**: a later defeat or search of it calls no drop check and gives no purse; it yields
+only the gear it now carries (gear the party already took is gone) and its body (08.3.10). A side whose
+highest-band defeated member is spent takes its highest-band unspent defeated member as source; a side whose
+defeated members are all spent calls no `gen.loot`. After a season the creature has re-armed and earned
+again, and yields normally. A spar by agreement is not a defeat for loot at all (03.5.5). This closes the
+daily rematch: a hired sellsword, a friendly duelist or a yielder let go and fought again gives its purse and
+its chance at a drop once a season, not once a day [revision: I-041] [DL-08-34].
 
 **08.3.2 The loot circumstance.**
 
@@ -502,7 +512,7 @@ expressive"; 03 conduct.mercy; DL-08-09].
 | Yield | Property item drops on d100 ≤ | Use for |
 |---|---|---|
 | `none` | never | vermin, swarms, mindless things with nothing worth keeping (they still yield materials) |
-| `trophy` (default for anything with a body) | T1 **10** · T2 **15** · T3 **30** · T4 **40** · T5 **55** [revision: I-018] | ordinary foes |
+| `trophy` (default for anything with a body) | T1 **10** · T2 **15** · T3 **25** · T4 **40** · T5 **55** [revision: I-018; I-036: T3 was 30; DL-08-35] | ordinary foes |
 | `hoard` | always, by the hoard table (08.3.12), **where the hoard is kept**; a hoard-keeper defeated away from its lair or vault rolls as `trophy`, and its hoard waits there [revision: I-018] | lairs, treasuries, sites |
 | `always` | always, by the circumstance | principal NPCs (12.11.1), named foes, an archetype 09 marks |
 
@@ -511,7 +521,7 @@ source's band and never reads the PC (no smart loot, 00.11.4): rabble rarely car
 identity, and grinding them at P5 yields tier-1 trinkets one fight in ten. *Why a chance at all:* with one
 generation per side and two fights a session, an unconditional drop would put 50–110 property items into a
 campaign by P4 — the shape of HWFWM's retired over-generating loot system (R2 08). The check holds the haul
-near 08.2.7's density (simulated rates 7 / 16 / 33 / 39 / 55%, T-08-16; whole campaigns with hoards and principals,
+near 08.2.7's density (simulated rates 7 / 16 / 27 / 39 / 57%, T-08-16 [revision: I-036]; whole campaigns with hoards and principals,
 T-08-17) [revision: I-018] [R3 A-1 (Diablo II's treasure-table
 "NoDrop" weight); DL-08-08].
 
@@ -657,7 +667,8 @@ Basis:              [04.10.1 "the Taking's crude fallback is to harvest the body
                     [R: https://en.wikipedia.org/wiki/Monster_Hunter_Wilds (carving)] [R2 #13] [DL-08-12]
 ```
 
-**08.3.11 Coin, gear and goods.** `[D]` A defeated, yielded or robbed carrier gives: (a) its **purse**, one
+**08.3.11 Coin, gear and goods.** `[D]` A defeated, yielded or robbed carrier that is not spent (08.3.1,
+once a season) [revision: I-041] gives: (a) its **purse**, one
 roll on `economy.yaml#purses` by band (T1 1d4−1 coins; T2 2d6; T3 4d6+5; T4 6d10+20; T5 10d10+80), only for
 carriers of coin (09 marks beasts `purse: none`); (b) its **gear**: every base item it carried, at `worn`
 (T1–T2) or `common` (T3+) unless 09 says otherwise, with no properties; (c) goods 09 lists. Gear and coin
@@ -1029,11 +1040,14 @@ rung, below); `time_cost` (an interval, an hour, or a project clock). Examples: 
 
 | State | Who may mend it | Frame | Result |
 |---|---|---|---|
-| damaged, crude | anyone (`verb.handle` "crude making and repair", G1) | Easy, 1 interval, stakes Safe | `serviceable_until_rest_long`: works fully until the next `rest_long`, then damaged again |
+| damaged (crude repair) | anyone (`verb.handle` "crude making and repair", G1), on a **worn, common or fine** item only [revision: I-079] | Easy, 1 interval, stakes Safe | `serviceable_until_rest_long`: works fully until the next `rest_long`, then damaged again; the item's quality is unchanged |
 | damaged, lasting | the base's make.license (any grade) with tools | Moderate (masterwork Hard; wondrous Very hard; storied Legendary), 1 hour, materials worth 1 notch of the item's band | intact |
 | broken | the base's make.license at a grade whose cap reaches the DC, with tools and a workplace | a project clock of **4**, DC by rung as above, the base's make time per tick, materials worth 2 notches | intact; a relic's license and bound ability wake again |
 
-`ab.field_patch` and similar abilities are faster crude repairs (05). A commissioned repair costs
+A **masterwork, wondrous or storied** item cannot be crude-repaired: a patch on a master's work holds nothing of
+the work, so its edge, harm-edge and reduction return only with a lasting repair (Hard, Very hard, Legendary)
+[revision: I-079] [DL-08-37]. `ab.field_patch` and similar abilities are faster crude repairs (05), under the
+same quality limit. A commissioned repair costs
 `svc.repair` (1 notch damaged, 2 notches broken). An item repaired from broken keeps every property; nothing
 in a repair adds one.
 
@@ -1217,7 +1231,11 @@ band above the settlement's limit) or **Remote** (two), asked before the scene's
   `deed.influence.trade` per week); a village or camp never buys them. A curio dealer buys at the clock's
   completion.
 - **Market depth:** a settlement pays the PC at most camp 10 / village 30 / town 150 / city 750 coins per
-  week for anything but trade goods; past it, buyers are gone until `h.08.markets` resets them.
+  week for anything but trade goods and materials; past it, buyers are gone until `h.08.markets` resets them.
+  **Trade goods and materials** have a depth of their own, the same figures a week: the settlement's crafters'
+  and merchants' week of demand. A sale counts against it unless the buyer is a crafter who works that
+  material in a commission or project the PC can name, up to what that work needs (then it is that work's stock, not the market's);
+  past it, no one buys more this week. Glut still applies [revision: I-079] [DL-08-37].
 - **Glut:** each sale of the same base item or trade good in one settlement in one week lowers its sale
   price there by one notch, recovering one notch per week.
 - **The labor cap** (08.8.9): what the seller made sells for at most its materials' price + the maker's
@@ -1299,6 +1317,14 @@ Basis:              [15 negotiation (owner of the social frame)] [00.3.9 levers]
   locksmith, hedge-witch (T2) 21 / 3; veteran (T3) 50 / 8 plus a half share of coin found; champion (T4)
   150 / 25 plus a full share, and only for a thread they believe in; legend (T5) never for coin. Crafters'
   weekly wages: trained 10, expert 25, master 60.
+- **Job fees** (11 and 15 consume; `economy.yaml#job_fees`) [revision: I-086]: a job the PC takes from a
+  patron (11's quest thread — "a faction's commission" — or an NPC's request with a Payment term, 15.3) pays
+  on completion a fee by the job's challenge band (03.4.3: the opposition's threat band, the faction's tier, or
+  the work's type-tier): band 1 **40**, 2 **85**, 3 **200**, 4 **600**, 5 **2,000** (four weeks of the band's
+  hire wage above; band 5 fixed, since a legend is never hired). Half is paid up front when the patron's
+  standing is below Warm; a failed or abandoned job keeps only what was paid up front. 15's bargaining may
+  move the fee one notch (08.8.2); it is never chosen by the DM (08.8.9 rule 6). This is a lore, social or
+  craft character's income at band, as purses and hoards are a fighter's (08.8.10) [DL-08-36].
 - **Holdings** (11 consumes; buy / build weeks / upkeep per week / staff): cottage 150 / 6 / 1 / 0; townhouse
   600 / 12 / 3 / 1; workshop 400 / 8 / 2 / 1; shop 800 / 10 / 3 / 2; tavern 1,500 / 16 / 8 / 3; farmstead
   1,000 / 12 / 4 / 4; watchtower 3,000 / 26 / 10 / 4; manor 8,000 / 52 / 30 / 10; keep 25,000 / 104 / 80 /
@@ -1316,7 +1342,8 @@ enforced by a tool, not by the DM's restraint:
 3. **Property items** sell for half of list, and only through `clk.find_buyer` in towns and cities.
 4. **Market depth** caps the coin a settlement pays the PC per week.
 5. **Glut** lowers the price of repeated sales.
-6. **Coin enters only through tables:** purses, hoards, wages, rewards (11), sales and holdings' yields —
+6. **Coin enters only through tables:** purses, hoards, wages, job fees (08.8.8) and rewards (11), sales and
+   holdings' yields [revision: I-086] —
    never a DM's choice (INV-3).
 7. **Item shares cap economic properties:** supply use −1 a day, carrying capacity +4.
 8. **Holdings yield** labor and rents, rolled by 11, never chosen.
@@ -1325,22 +1352,28 @@ enforced by a tool, not by the DM's restraint:
 **08.8.10 Wealth tiers and the treasure curve.** `[D]` + `[N]` Wealth tiers name what a character holds in
 coin and liquid valuables: **W1** scraping 0–50, **W2** solvent 51–300, **W3** prosperous 301–1,500, **W4**
 rich 1,501–8,000, **W5** magnate 8,001+ (`economy.yaml#wealth_tiers`). The tables are calibrated so that a
-character fighting at their own band and living comfortably drifts up about one tier per power band:
+character fighting at their own band and living comfortably drifts up about one tier per power band. The
+typical tier is the tier held **during** the band; a PC reaches the next row's tier about as it enters the next
+band [revision: I-036]. A lore, social or craft PC who does not fight earns by job fees and work instead, and
+tracks the same tiers (T-08-17) [revision: I-086]:
 
-| Band | Coin in per session (2 fights; purses, a share of sales, 1 hoard per ~4 sessions) | Comfortable lifestyle per week | Typical tier |
-|---|---|---|---|
-| P1 (vs T1–T2) | ~10–25 | 14 | W1–W2 |
-| P2 (vs T2) | ~25–60 | 14 | W2 |
-| P3 (vs T3) | ~100–200 | 14–35 | W3 |
-| P4 (vs T4) | ~400–800 | 35 | W4 |
-| P5 (vs T5) | ~1,500–3,000 | 35–100 | W5 |
+| Band | Coin in per session, fighting (2 fights; purses, a share of sales, 1 hoard per ~4 sessions, a job fee per ~5) | Coin in per session, not fighting (half the site treasure, a job fee per ~5, work weeks) | Job fee (`economy.yaml#job_fees`) | Comfortable lifestyle per week | Typical tier (during the band) |
+|---|---|---|---|---|---|
+| P1 (vs T1–T2) | ~10–25 | ~15–20 | 40 | 14 | W1–W2 |
+| P2 (vs T2) | ~25–60 | ~35–40 | 85 | 14 | W2 |
+| P3 (vs T3) | ~150–200 | ~100–120 | 200 | 14–35 | W3 |
+| P4 (vs T4) | ~500–800 | ~400–450 | 600 | 35 | W4 |
+| P5 (vs T5) | ~1,500–3,000 | ~1,400–1,500 | 2,000 | 35–100 | W5 |
 
 (Derivation: purse means T1 1.5, T2 7, T3 19, T4 53, T5 135 per carrier, about two carriers of coin per fight
 from T2 up; hoard means T1 31, T2 110, T3 495, T4 2,200, T5 8,250, one hoard per about four sessions;
-property-item sales at half list are capped by market depth.) The sinks that keep the
+property-item sales at half list are capped by market depth; a job fee is four weeks of the band's hire wage
+(08.8.8); work weeks are `dt.work` at the PC's grade.) The sinks that keep the
 curve from running away are lifestyle, training fees, commissions and materials, holdings and wages — every
 one of them a thing the player chooses, which is the point: money is how a character turns success into
-time, help and a home. *Revisit if* a campaign's PC sits two tiers above this table (OEQ-08-4).
+time, help and a home. Spent as the rules price them they take about two coins in five at P4, holdings the
+most (T-08-17) [revision: I-036]. *Revisit if* a campaign's PC sits two tiers above this table during a band
+(OEQ-08-4).
 
 ### 08.9 Carrying, supply, light and ammunition
 
@@ -1416,10 +1449,12 @@ broken; a full hull clock is foundering (10). Most travelers buy **passage** (08
 **PR-08-1 Generating loot.** `[D]` (`generate(gen.loot, …)`; 00.11.3 and PR-00-4 instantiated.)
 1. **Trigger and source.** On a side's defeat (06.13.3), a body searched, or a found thing searched
    (08.3.1), take the source: the side's highest-band defeated member, the creature, the hoard's keeper, or
-   the place. Refuse if no resolved frame id is attached.
+   the place. Refuse if no resolved frame id is attached. Skip spent creatures (`loot.given_on` less than a
+   season old, 08.3.1); if none is left, go to step 12 with no purse from spent carriers. Write
+   `loot.given_on` on the source and on each carrier whose purse is taken [revision: I-041].
 2. **Circumstance** `[J:enum]` per 08.3.2, citing the frame and fact ids; default `scavenged`.
 3. **Yield and drop check.** Read the archetype's `loot.yield` (default `trophy`); `hoard` → step 11; `none`
-   → step 12; `trophy` (and a hoard-keeper away from its hoard) → d100 against T1 10 / T2 15 / T3 30 / T4 40 / T5 55; a miss → step 12. `always`
+   → step 12; `trophy` (and a hoard-keeper away from its hoard) → d100 against T1 10 / T2 15 / T3 25 / T4 40 / T5 55 [revision: I-036]; a miss → step 12. `always`
    (principal NPCs) → continue.
 4. **Rung and slots** from (circumstance, degree): masterwork for decisive, costly and merciful wins; fine
    or common for scavenged finds by the search's degree. Read the fill method (signature / biased ward /
@@ -1517,7 +1552,8 @@ a gift's favored signature is the giver's boon signature. Recency windows are pe
    sage's service, or a property's observable firing.
 
 **PR-08-9 Repairing and salvaging.** `[D]` (08.6.7–08.6.8.)
-1. Repair: crude (Handle, Easy, 1 interval → serviceable until `rest_long`), lasting (license, by rung, 1
+1. Repair: crude (Handle, Easy, 1 interval → serviceable until `rest_long`; worn, common or fine items only
+   [revision: I-079]), lasting (license, by rung, 1
    hour, 1 notch of materials), broken (license, clock 4, 2 notches).
 2. Salvage: the bearer's own non-storied item; license or improvised; Moderate, 1 hour; yields stock by
    load, a residuum of the signature, and on reach 3+ with the property's craft license the recipe.
@@ -1563,7 +1599,7 @@ keys listed in 08.8 and 08.9.
 | Skill edges (16 deed tags: stealth, thievery, tracking, navigation, survival, athletics, arcana, history, bestiary, persuasion, intimidation, insight, performance, trade, investigation, medicine) | 16 | passive | gloves, boots, cloaks, circlets, rings, amulets, instruments, kits | creature natures matching the deed (feline → stealth, canine → tracking, devil → persuasion…) |
 | Craft edges (11 crafts) | 11 | passive | trade tools, gloves | dwarves, metals, essences, gems |
 | Elemental (9 harm branches × resist, strike, on-hit, hazard, retort) + condition wards (6) | 51 | passive | worn / weapons | elementals, dragons, fiends, undead, horrors, essences, schools of magic |
-| Physical resistance (cut, pierce, crush), banes (8 creature kinds), physical on-hits (bleed, stagger, dread, hobble, expose) | 16 | passive | worn / weapons | beasts, giants, constructs, silver, cold iron, faiths |
+| Physical resistance (cut, pierce, crush), banes (8 creature kinds), physical on-hits (bleed, stagger, dread, hobble, expose; Rending's bleeding and Ember-touched's burning come 2 stacks a proc, 3 at tiers 4–5, 08-onhit-value.py [revision: I-090] [DL-08-38]) | 16 | passive | worn / weapons | beasts, giants, constructs, silver, cold iron, faiths |
 | Senses, movement, wards, sustain, light, carry, supply, pace, command, lore (with Tidesense, revision I-019) | 24 | passive | by entry | beasts, spirits, undead, constructs, places |
 | Implements (three branches × edge and thrift) | 6 | passive | implements | schools, faiths, druidic orders, witchwood |
 | Relic licenses | 18 | license | jewelry, headwear, tools | the people or nature whose capability it is |
@@ -1612,43 +1648,66 @@ circumstances decisive 45% / costly 20% / merciful 10% / scavenged 25%, kill deg
 
 | Measure | Result | Target / reading |
 |---|---|---|
-| Drop rate by source band (d100 check) | T1 7.3 · T2 16.0 · T3 32.5 · T4 38.8 · T5 55.3% (3,738 events to 1,000 drops) | matches 10/15/30/40/55 within sampling [revision: I-018] |
-| Rungs of 1,000 property drops | masterwork 770 · fine 127 · common 103 | wondrous only from hoards, gifts, crafts |
-| Properties per item | 0: 103 · 1: 145 · 2: 752 | masterwork with an empty slot 18 of 770 (2.3%) |
-| Property kinds | passive 1,280 · mundane 234 · item ability 118 · license 17 | |
-| Relics | bound power 11.8%, any relic 13.5% of drops (about 1 masterwork in 5.7) | rare enough to matter; common enough to find |
-| Gated pool size per drop | min 3 · median 11 · max 20 | every drop had a choice |
+| Drop rate by source band (d100 check) | T1 7.1 · T2 16.1 · T3 26.6 · T4 38.6 · T5 56.9% (4,028 events to 1,000 drops) | matches 10/15/25/40/55 within sampling [revision: I-018; I-036] |
+| Rungs of 1,000 property drops | masterwork 764 · fine 127 · common 109 | wondrous only from hoards, gifts, crafts |
+| Properties per item | 0: 109 · 1: 146 · 2: 745 | masterwork with an empty slot 19 of 764 (2.5%) |
+| Property kinds | passive 1,259 · mundane 233 · item ability 122 · license 22 | |
+| Relics | bound power 12.2%, any relic 14.4% of drops (about 1 masterwork in 5.3) | rare enough to matter; common enough to find |
+| Gated pool size per drop | min 3 · median 11 · max 18 | every drop had a choice |
 | 09 contract (pool ≥ 3 at tier 1 on every base) | 25 of 26 archetypes pass; the exception is a T4 aberration's charm at tier 1 (moot) | 09 re-runs on its bestiary |
 | Same magnitude property as the previous drop (200 decisive drops per archetype) | reference set: mean 9.6%, worst 14.6% (clockwork sentinel 5.5%, slime 11.6%; were 31.7% and 25.6%); every archetype of `archetypes.yaml` that yields loot, at each of its bands (186 cases, its own `trophy_base` and gear): mean 8.0%, worst 14.6%, none above 15% (were 75 cases above 15%, four at 100%) [revision: I-017] | OEQ-00-5 target ≤ 15% met in every case |
 | 09 contract on the real bestiary (pool ≥ 3 at tier 1) | 186 of 186 cases (was 171: the water elemental's amulet held one entry, the raptor's two) [revision: I-017, I-019] | |
 | Identical whole item to the previous drop | mean 2.6%, max 8.5% | |
-| Item-share breaches caught and refilled at generation | 10 in 1,000 | compliance after generation 1,000 / 1,000 |
-| Five attuned items of a realistic haul exceeding a share without the E4 clamp | harm edge 11.2% · edge 20.2% · reduction 30.6% of characters | the clamp binds for about one character in five: the choice of five is real |
+| Item-share breaches caught and refilled at generation | 18 in 1,000 | compliance after generation 1,000 / 1,000 |
+| Five attuned items of a realistic haul exceeding a share without the E4 clamp | harm edge 8.8% · edge 19.2% · reduction 28.0% of characters [revision: I-036, re-run] | the clamp binds for about one character in five: the choice of five is real |
 | Crafting check: troll-hide coat, commissioned, bias ward, trained (cap 2) | pool 12; magnitude picks Guarding 20%, Reinforced 15%, Sturdy 14%, Crush-proof 13%, Knitting flesh 10% | the bias steers; it does not dictate |
 
 **T-08-17 Campaign simulation** (`rules/_process/simulation/08-campaign-sim.py`, seeded; output in
 `08-campaign-sim-output.txt`; 300 campaigns × 70 sessions; P1 sessions 1–9, P2 10–19, P3 20–34, P4 35–56,
 P5 57–70; two fights a session rolled on the generic encounter tables at home band = the PC's band; a site
 treasure about one session in four; purses, hoard coin, half-list sales through `clk.find_buyer` one per three
-sessions; lifestyle the only sink) [revision: I-018]. p10 / median / p90 per campaign.
+sessions) [revision: I-018; I-036]. p10 / median / p90 per campaign. Items and the baseline coin column are the
+`baseline` profile (one week of lifestyle a session, no other sink).
 
-| Band | Property items won in the band (08.2.7 typical) | Per session | Bound-power items won | Bound attuned at band end (08.2.7) | Top signature tier (08.2.7) | Coin at band end → tier (08.8.10) |
+| Band | Property items won in the band (08.2.7 typical) | Per session | Bound-power items won | Bound attuned at band end (08.2.7) | Top signature tier (08.2.7) | Coin at band end → tier (baseline) |
 |---|---|---|---|---|---|---|
-| P1 | 2 / 4 / 6 (2–4) | 0.43 | 0 | 0 (0) | 1 (2) | 8 → W1 (W1–W2) |
-| P2 | 4 / 6 / 9 (4–6) | 0.63 | 0 / 0 / 1 | 0 (0–1) | 3 (3) | 248 → W2 (W2) |
-| P3 | 9 / 13 / 17 (8–12) | 0.86 | 1 / 3 / 5 | 1 (1–2) | 4 (3–4) | 2,374 → W4 (W3) |
-| P4 | 19 / 24 / 29 (15–25) | 1.09 | 3 / 5 / 8 | 2 (2–3) | 4 (4–5) | 15,641 → W5 (W4) |
-| P5 | 17 / 21 / 28 in 14 sessions (25+) | 1.56 | 3 / 5 / 8 | 2 (2–4) | 5 (5–6) | 45,490 → W5 (W5) |
+| P1 | 2 / 4 / 6 (2–4) | 0.43 | 0 | 0 (0) | 1 (2) | 8 → W1 |
+| P2 | 4 / 6 / 9 (4–6) | 0.63 | 0 / 0 / 1 | 0 (0–1) | 3 (3) | 248 → W2 |
+| P3 | 8 / 12 / 17 (8–12) | 0.82 | 1 / 2 / 4 | 1 (1–2) | 4 (3–4) | 2,337 → W4 |
+| P4 | 18 / 23 / 29 (15–25) | 1.06 | 3 / 5 / 8 | 2 (2–3) | 4 (4–5) | 15,728 → W5 |
+| P5 | 16 / 21 / 27 in 14 sessions (25+) | 1.53 | 2 / 5 / 8 | 2 (2–4) | 5 (5–6) | 43,961 → W5 |
+
+**Coin by spending profile** [revision: I-036, I-086] (same seeds; time at 12.7.7's two world weeks a session,
+1.5 of them in a settlement and 1.2 in downtime). *Frugal*: 08.8.10's lifestyles and half the downtime weeks
+trained at 15's fee for the band. *Spender*: frugal plus one hireling a band below the PC (a veteran's half
+share at P5), a holding bought per band from P2 (cottage, townhouse, watchtower, manor) with its upkeep and
+staff, one commissioned masterwork per band from P3, and a patron's job fee one session in five
+(`economy.yaml#job_fees`). *Non-combat*: a lore, social or craft PC with no fights of its own, half the site
+treasure, the same job fees, the downtime weeks it does not train worked at `dt.work`'s wage, and the
+spender's sinks. Tier held **during** the band (session-weighted median) / **at its end**:
+
+| Band (08.8.10 typical) | Baseline | Frugal | Spender | Non-combat | Non-combat income per session (sites, fees, work) |
+|---|---|---|---|---|---|
+| P1 (W1–W2) | W1 / W1 | W1 / W1 | W1 / W1 | W1 / W1 | 18 (4, 8, 6) |
+| P2 (W2) | W2 / W2 | W2 / W2 | W2 / W2 | W1 / W2 | 38 (14, 18, 6) |
+| P3 (W3) | W3 / W4 | W3 / W4 | W3 / W3 | W3 / W3 | 117 (62, 40, 15) |
+| P4 (W4) | W5 / W5 | W4 / W5 | W4 / W5 | W4 / W4 | 435 (278, 121, 36) |
+| P5 (W5) | W5 / W5 | W5 / W5 | W5 / W5 | W5 / W5 | 1,463 (1,024, 403, 36) |
 
 *Reading.* As first shipped (drop check 10/20/35/50/70, hoards T3–T5 one item richer, a hoard-keeper's hoard
 generated wherever it fell) a 60-campaign run won a median 22 property items in P3 and 45.5 in P4, a full row
 ahead of 08.2.7 at both bands (1.5 and 2.1 items a session): magic items were routine. 08.2.7 had counted the drop
 check and two fights only; hoards (sites and wandering solos at home+1) and principals who always drop came on
-top. The retune (08.3.3, 08.3.12) puts every band within its row or just above it (P3 13 against 8–12) and keeps
-the masterwork share at 73% of property items (wondrous 13%, fine 14%): what is won is still worth having, there
-is simply less of it. Attunement caps what is used, so attuned power matched the table before and after. Coin runs
-one tier ahead at P3–P4 because the simulation spends nothing but lifestyle; training fees, commissions, materials,
-holdings and wages are the sinks 08.8.10 relies on (OEQ-08-4).
+top. The I-018 retune (08.3.3, 08.3.12) left P3 at 13 against 8–12; the T3 trophy chance of 25 (was 30)
+[revision: I-036] puts every band within its row (P3 median 12, mean 12.3; P2 and P4 move by less than one
+item) and keeps the masterwork share at 73% of property items (wondrous 13%, fine 14%). P5's 21 items are 14
+sessions of an open-ended band; at 1.53 a session it reaches 25 near session 73. Attunement caps what is used,
+so attuned power matches the table. **Coin**: the "one tier ahead at P3–P4" of the I-018 run was the tier at
+each band's *end*, which a PC who drifts up a tier a band reaches as it enters the next band; the tier held
+*during* the band matches 08.8.10 for every profile that spends what the rules price, and even the
+lifestyle-only baseline is never more than one tier ahead (P4). The sinks are real but modest (the spender's
+P4 sessions spend about 320 of the 770 coins coming in); holdings are the largest. A non-combat PC, with job fees and
+work, tracks the same curve, with half its coin from the sites it explores (OEQ-08-4 answered).
 
 ---
 
@@ -1938,6 +1997,8 @@ reach_unit = notches). Reach for them before inventing:
   (feeds_evidence false); the mentor path is the way to own it (05.9). Say so in one sentence (P16).
 - **"I fight with a shield in each hand."** Two shields give one +1 edge: the same family from items is
   capped at the item share (08.2.2).
+- **The same foe again.** A creature that gave loot this season gives only its present gear and its body
+  (08.3.1, once a season); a spar gives nothing (03.5.5) [revision: I-041].
 - **A mob defeated.** One loot call for the side (08.3.1); harvest per body only if the player spends the
   time (a mob of eight rats is not eight harvest beats unless the player wants rat hides).
 - **Looting a sleeping or unconscious creature.** A Sneak or Handle beat to take a held or worn item; it is
@@ -2079,9 +2140,9 @@ porters carry 10 load units; a companion's loot share.
 | Id | Question | Default shipped | Named test |
 |---|---|---|---|
 | OEQ-08-1 | Do narrow natures (clockwork, ooze) repeat magnitude properties too often? | pools widened (revision I-017): every bestiary archetype at every band ≤ 15% (worst 14.6%), T-08-16 | **T-08-REPEAT**: after 09 tags its bestiary, re-run `08-loot-sim.py`'s repeat test on every archetype; any archetype above 20% gets a broader trophy base list or two more gated entries |
-| OEQ-08-2 | Is the drop check's rate right for play (density 08.2.7)? | T1 10 · T2 15 · T3 30 · T4 40 · T5 55, set by the 300-campaign simulation (T-08-17) | **T-08-DENSITY**: count attuned property items per power band across 3 long playtests (or a 60-session simulated campaign with 09/11 tables); if density runs more than one row ahead of 08.2.7, lower each chance by 5 points; if behind, raise |
+| OEQ-08-2 | Is the drop check's rate right for play (density 08.2.7)? | T1 10 · T2 15 · T3 25 · T4 40 · T5 55, set by the 300-campaign simulation (T-08-17; T3 lowered by 5 under this row's own rule, I-036) | **T-08-DENSITY**: count attuned property items per power band across 3 long playtests (or a 60-session simulated campaign with 09/11 tables); if density runs more than one row ahead of 08.2.7, lower each chance by 5 points; if behind, raise |
 | OEQ-08-3 | Does the item share bind often enough to make the choice of five matter, without making loot feel pointless? | shares +1 / +1 / 3 | **T-08-SHARE**: playtest survey after 10 sessions — share of loot the player kept for its *effect* vs sold/salvaged; target 30–60% kept; plus the sim's clamp rate 15–30% |
-| OEQ-08-4 | Does the wealth curve hold (08.8.10)? | purses, hoards, sinks as shipped; simulated coin runs one tier ahead at P3–P4 with no sink but lifestyle (T-08-17) | **T-08-WEALTH**: track coin per session in playtests; target the tier table ±1 tier; adjust hoard multipliers first |
+| OEQ-08-4 | Does the wealth curve hold (08.8.10)? | answered in simulation [revision: I-036, I-086]: with the sinks the rules price (training, wages, holdings, commissions; T-08-17's frugal and spender profiles) and with a non-combat PC's job fees and work, the tier held during each band is the table's at every band; the lifestyle-only upper bound is one tier ahead at P4 only | **T-08-WEALTH**: track coin per session in playtests; target the tier table ±1 tier; adjust hoard multipliers first |
 | OEQ-08-5 | Are crafting odds at masterwork too harsh for a trained crafter (48% at +7)? | as T-08-14 | **T-08-CRAFT**: 3 crafter-focused playtest arcs; if fewer than half of masterwork attempts by trained crafters with a workshop complete, lower spoilage ticks on failure to 1 for any failure (crit failure included) |
 | OEQ-08-6 | Do players understand relics as borrowed power (no growth)? | the OFFER shows the surcharge line | **T-08-RELIC**: in playtests, count player statements that assume relic use grows a calling; target 0 after the first session's explanation |
 

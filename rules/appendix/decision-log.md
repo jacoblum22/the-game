@@ -826,6 +826,13 @@ Decisions made in `00-architecture.md` (Wave 2). Digest shorthand `[R1 §x]`…`
 - Evidence: verification-1 (two meanings of one word in an AI-read ruleset).
 - Serves: goal 2 (one term, one meaning).
 
+### DL-03-30: Non-enemies lend a deed node once a week, and a spar is not a loot defeat (revision I-041)
+- Decision: [revision: I-041] 03.5.4's same-target window is the last 7 days, not the day, when the target is not an enemy: standing toward the actor Wary or better, in the actor's party, hire or company, or a spar by agreement. 03.5.5 defines a spar (agreed, stopped at first defeat, no lethal harm mode): its deed may be judged evidence under the week window, and it calls no loot. PR-03-2 step 3, the tempting-case table, WE-03-5 and `evidence.yaml#same_target_cap.non_enemy_window` follow.
+- Alternatives considered: treating every consenting spar as downtime training only (the ledger's default; rejected: a sparring bout for a wager in front of a crowd has real stakes and is a deed, and WE-03-5 already rules it so; what was broken was the daily cadence and the loot, not the evidence); a week window for every target (rejected: an enemy who ambushes the party twice in two days means it, and a nemesis must count).
+- Evidence: verification-redteam.md exploit 3 (a hired sellsword or friendly duelist defeated once a day). With the week window a single non-enemy partner gives at most 1 event per deed node per 7 days, against 7 before; 03.5.2 and 03.5.3 are unchanged.
+- Serves: goal 1 (deeds, not grind); P5 (evidence from what was done).
+- Revisit if: play logs show a party cycling seven friendly partners to restore the daily cadence (the cap would then need a per-actor count of spar events per week).
+
 ## DL-04 — Recognition and Growth
 
 Fragment for `appendix/decision-log.md`. Format: BRIEF §11. Simulation references are to
@@ -1886,6 +1893,41 @@ chapter 06's fight model and T-06-12 lines), output `07-harm-sim-output.txt`, wr
 - Serves: goal 3 (loot that matters because it is not routine); the brief's item-density assumption (08.2.7) that 09 and 12 rely on.
 - Revisit if: playtests (T-08-DENSITY) count more than one row ahead, or coin runs two tiers ahead once real sinks are spent (OEQ-08-4).
 
+### DL-08-34: A creature gives loot once a season (revision I-041)
+- Decision: [revision: I-041] 08.3.1: a creature that gave the party loot (a loot call's source, or its purse taken) carries `loot.given_on`; for one season it is spent: no drop check, no purse, only the gear it now carries and its body. A side falls back to its highest-band unspent defeated member; all spent, no loot call. A spar by agreement is never a loot defeat (03.5.5). PR-08-1 step 1, 08.3.11 and the edge cases follow.
+- Alternatives considered: a lock until the creature's gear is replaced, judged by the DM (rejected: a [J] call where a date does the job); a permanent lock (rejected: a rival who comes back next year re-armed should be worth beating).
+- Evidence: verification-redteam.md exploit 3: before, a yielder released and defeated daily gave 365 purses and drop checks a year (a T3 purse 4d6+5 and a 30% drop each); now at most 4 a year, the rate of a recurring rival.
+- Serves: goal 3 (loot that matters); P5 (every defeat still yields its gear and body).
+- Revisit if: a playtest finds a party farming many distinct friendly NPCs (11's standing costs of robbing allies should then be checked).
+
+### DL-08-35: T3's trophy chance is 25, and the wealth table is read during the band (revision I-036)
+- Decision: [revision: I-036] The drop check's T3 trophy chance becomes 25 (was 30; 10 / 15 / 25 / 40 / 55), by OEQ-08-2's own rule (lower a chance by 5 points). 08.8.10's typical tier is the tier held during the band. `08-campaign-sim.py` models the rules' coin sinks in three profiles (frugal: lifestyle and training; spender: plus a hireling, a holding a band, a commission a band, job fees; non-combat, DL-08-36) at 12.7.7's two world weeks a session.
+- Alternatives considered: restating 08.2.7's P3 row as 9–13 (rejected: the table is the design target 09 and 12 rely on, and the lever that put P3 over is the drop check, which the table's revisit rule names); lowering T4 too (rejected: P4 already sits in its row at 23); retuning hoard coin for the wealth drift (rejected: the drift was a reading of the tier at the band's end, not a surplus; the tier held during each band matches once sinks are spent).
+- Evidence: `08-campaign-sim-output.txt` (300 campaigns × 70 sessions, seeded): items per band P1 4 / P2 6 / P3 12 (mean 12.3, was 13) / P4 23 / P5 21 in 14 sessions, every band within 08.2.7's row; tier during the band W1 / W2 / W3 / W4 / W5 for the frugal and spender profiles (baseline W5 at P4, +1); at band end P3 W4 and P4 W5, the next row's tier. Spender P4 spends about 320 of 770 coins in a session. `08-loot-sim-output.txt` re-run: T3 drop rate 26.6%. OEQ-08-4 answered.
+- Serves: goal 3 (loot that matters); the brief's item-density and treasure-curve assumptions (08.2.7, 08.8.10).
+- Revisit if: a playtest's PC sits two tiers above the table during a band (T-08-WEALTH), or 09 changes the encounter tables' mix of principals.
+
+### DL-08-36: Job fees by band, so a non-combat PC has an income curve (revision I-086)
+- Decision: [revision: I-086] 08.8.8 and `economy.yaml#job_fees`: a patron's job pays on completion a fee by its challenge band (03.4.3): 40 / 85 / 200 / 600 / 2,000 (four weeks of that band's hire wage; band 5 fixed). Half up front below Warm; a failed job keeps only the deposit; bargaining moves it a notch. 08.8.9 rule 6 and AI-6 list it. 08.8.10 gains the non-combat income and job-fee columns.
+- Alternatives considered: `dt.work` wages alone (rejected: they are keyed by license grade, at most 60 a week, so a band-5 sage earned a craftsman's living, the W1–W2 plateau the playtest saw); fees as a fraction of hoard coin (rejected: ties a lore PC's pay to a table about lairs); a per-calling income table (rejected: the job's band is already the measure of difficulty 03.4.3 uses for evidence, so it prices the work by the same yardstick).
+- Evidence: `08-campaign-sim.py` non-combat profile (no fights, half the site treasure, a job fee one session in five, work weeks): tier during the band W1 / W1–W2 / W3 / W4 / W5 (P2 50% W1, 49% W2), at band end W1 / W2 / W3 / W4 / W5; income per session 18 / 38 / 117 / 435 / 1,463, against a fighter's 19 / 56 / 197 / 773 / 2,530.
+- Serves: goal 1 (parity: every calling a real path, R1 #13); P5 (rewards by tables, INV-3).
+- Revisit if: 11's thread throughput changes (the fee rate assumes one paid job in five sessions), or playtests show patrons offering jobs far above the PC's band.
+
+### DL-08-37: Materials have a market depth, and crude repair is for ordinary work (revision I-079)
+- Decision: [revision: I-079] 08.8.5: trade goods and materials get a market depth of their own, the same figures (camp 10 / village 30 / town 150 / city 750 a week), except materials sold to a crafter for a commission or project the PC can name, up to what that work needs; glut still applies (`economy.yaml#materials_depth_per_week`, AI-4). 08.6.7: a crude repair (Handle, and `ab.field_patch`-like abilities) works only on worn, common or fine items; a masterwork, wondrous or storied item's edge and reduction return only with its lasting repair. The table row reads "damaged (crude repair)" and says the item's quality is unchanged.
+- Alternatives considered: one shared depth for everything (rejected: selling a hide would crowd out selling a sword, and a fen town's chitin trade is a separate market); crude repair at a raised DC for fine work (rejected: an Easy+5 patch is still trivially cheap against a Very hard lasting repair, so the lasting repair would still never be done).
+- Evidence: verification-2c adversarial playtest S6 (the cheap-material source faced only the glut notch; the crude patch made a wondrous item's Very hard repair optional). With the depth a town buys at most 150 coins of materials a week, the cap property items already had.
+- Serves: goal 2 (no loophole a careful player finds in a sitting); 08.8.9 (magic never mints wealth; crafting earns a living).
+- Revisit if: playtests show a craft PC unable to sell a week's honest output in a town (the depth would then be per crafter).
+
+### DL-08-38: Lingering-harm on-hit properties apply stacks (revision I-090)
+- Decision: [revision: I-090] `08-gen_data08.py`: Rending (`cond.bleeding`) and Ember-touched (`cond.burning`) apply 2 stacks a proc at tiers 1–3 and 3 (the conditions' maximum) at tiers 4–5; chance and slot unchanged. Every other on-hit property is unchanged.
+- Alternatives considered: a wider chance band (rejected: one stack is still ~0.7 EU, so doubling the chance leaves each proc the weakest event of the family while making it the most frequent; and the family shares one natural-range ladder that the codex states once); pricing the family by T-05-9 alone (rejected: K1 measured lingering harm well below its listed unit).
+- Evidence: `08-onhit-value.py` (06-conflict-sim's engine, 20,000 fights a cell, seed 606; x1 reproduces K1's 0.67 EU): a proc is worth 1.14–1.17 EU at 2 stacks and 1.41–1.58 at 3, inside the family's 1–3 EU (Staggering 1, light-group 2, middle-group 3); one stack was 0.67, below every member.
+- Serves: goal 3 (every property worth its slot); T-05-9's pricing carried into items.
+- Revisit if: the family's spread (1–3 EU at one chance ladder) is retuned as a whole.
+
 ## DL-09 — Adversaries
 
 ### DL-09-01: Archetypes are manufacturers; 63 of them over the nine creature branches
@@ -2062,6 +2104,13 @@ chapter 06's fight model and T-06-12 lines), output `07-harm-sim-output.txt`, wr
 - Evidence: before, 20 of 112 site pairs gated fewer than three archetypes and frozen held 3 archetypes, arid 5 (`10-gen10_sites.py`); after, 0 pairs below three, and the generic tables draw 12–22 archetypes per terrain. `09-gen_data09.py` output is unchanged apart from the terrain lists.
 - Serves: goal 2 (data says where things live; tables and gates agree), goal 1 (varied encounters).
 - Revisit if: a pre-made setting or world seed wants a creature excluded from a terrain (it overrides with its own regional table).
+
+### DL-09-26: Burning and bleeding riders are priced and estimated by measurement (revision I-090)
+- Decision: [revision: I-090] T-09-6: a lingering-harm rider (`pow.bleed`, `pow.burning_touch`) carries a premium of 0.15 (other riders 0.06). PR-09-4 step 3 (`09_core.estimate`): a foe with such a rider costs the PC its third Strike × 0.6 in the share q of rounds the foe lands an attack, the PC's best answer being to end the condition at once. The premium solve (09.4.4) leaves the rider to the premium; the advisory reads it. `09-gen_data09.py` regenerated: 14 adversaries' calibration change, 10 lose 1–2 Vitality; T-09-12b follows (vrock trivial → easy, vat titan hard → lethal against their own band).
+- Alternatives considered: K1's on-foe value (0.67 EU a stack) as the rider's worth (rejected: on the PC the stacks build over a longer fight and the PC's answer costs one of three actions; measured directly, the rider is worth 2.5 generic riders); the estimator charging a whole Strike (rejected: it over-read the rider twice, P4 −22 win points against the simulation's −12).
+- Evidence: `09-lingering-rider.py` (09_core's fight with stacks on the PC; 6,000 fights a cell, seed 909): harm-ratio premium 0.09 / 0.17 / 0.19 / 0.16 / 0.14 at bands 1–5 (mean 0.15), the PC's best answer "end it at once" at every band; the estimator with factor 0.6 shifts win% by −12.0 / −13.5 at P4 / P5 against the simulation's −12.7 / −14.5, and gives the simulated word at all five bands. Lines without the rider estimate as before (09-adversary-sim section D unchanged).
+- Serves: goal 2 (a threat word that reads what the foe does); 09.6's floor.
+- Revisit if: 09 adds a lingering rider with more than one stack, or 06 changes how the bearer ends burning or bleeding.
 
 ## DL-10 — Exploration, Travel, and Sites
 

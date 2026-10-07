@@ -499,6 +499,11 @@ WORN = ["item.armor", "item.shield", "item.garment", "item.jewelry"]
 JEWEL = ["item.jewelry"]
 ANY = ["item.weapon", "item.armor", "item.shield", "item.garment", "item.jewelry", "item.tool"]
 CHANCE = {1: "20", 2: "19-20", 3: "18-20", 4: "17-20", 5: "16-20"}
+# [revision: I-090] lingering harm (T-05-9: burning, bleeding) is applied in stacks: 2 a proc at tiers 1-3, 3 (the
+# conditions' max_stacks) at tiers 4-5, so a proc is worth 1.1-1.5 EU (08-onhit-value.py), inside the on-hit family's
+# 1-3 EU (Staggering's one-round off_balance to Dreadful's middle-group frightened); one stack was ~0.7 EU
+LINGERING = ("cond.bleeding", "cond.burning")
+LING_STACKS = {1: 2, 2: 2, 3: 2, 4: 3, 5: 3}
 
 def prop(id, name, kind, family, gate, mod_group, weight, tiers, base_kinds, bias, text, min_tier=1, sig=False,
          excluded=None, place=False, domains=("loot", "craft", "gift"), share=None, **kw):
@@ -624,10 +629,15 @@ for h, (gate, word, cond) in ELEM.items():
          share={"harm_edge": 1}, saturated_by_rule="its tier-3 harm edge adds nothing beside another item harm edge (08.2.2)")
     if cond not in CONDS:
         DEFECTS.append(cond)
-    prop(f"onhit_{h}", f"{word}-touched", "passive", "on_hit", gate, "on_hit", 2,
-         [{"tier": t, "trigger": {"hook": "on_attack_hit", "chance": "natural " + CHANCE[t]},
-           "effects": [eff("eff.apply_condition", condition=cond, severity=("S2" if t >= 4 else "S1"), duration=("rounds:2" if cond in ("cond.dazed", "cond.blinded") else "scene"), target="the creature hit")]} for t in range(1, 6)],
-         WEAP, "strike", f"On a hit whose d20 shows the tier's natural range (20 at tier 1 widening to 16-20 at tier 5), apply {cond} to the creature hit.")
+    if cond in LINGERING:   # [revision: I-090] a lingering-harm stack is worth ~0.7 EU, so it comes 2 at a time (3 at tiers 4-5)
+        _oh = [{"tier": t, "trigger": {"hook": "on_attack_hit", "chance": "natural " + CHANCE[t]},
+                "effects": [eff("eff.apply_condition", condition=cond, severity="S1", duration="scene", target="the creature hit") for _ in range(LING_STACKS[t])]} for t in range(1, 6)]
+        _txt = f"On a hit whose d20 shows the tier's natural range (20 at tier 1 widening to 16-20 at tier 5), apply 2 stacks of {cond} to the creature hit (3 at tiers 4-5)."
+    else:
+        _oh = [{"tier": t, "trigger": {"hook": "on_attack_hit", "chance": "natural " + CHANCE[t]},
+                "effects": [eff("eff.apply_condition", condition=cond, severity=("S2" if t >= 4 else "S1"), duration=("rounds:2" if cond in ("cond.dazed", "cond.blinded") else "scene"), target="the creature hit")]} for t in range(1, 6)]
+        _txt = f"On a hit whose d20 shows the tier's natural range (20 at tier 1 widening to 16-20 at tier 5), apply {cond} to the creature hit."
+    prop(f"onhit_{h}", f"{word}-touched", "passive", "on_hit", gate, "on_hit", 2, _oh, WEAP, "strike", _txt)
 # hazard wards, retorts and condition wards per harm branch (pool depth for elemental and spirit sources)
 HAZ = {"fire": "harm.fire.heat", "frost": "harm.frost.cold", "storm": "harm.storm.lightning", "corrosion": "harm.corrosion.acid",
        "venom": "harm.venom.gas", "blight": "harm.blight.disease", "radiance": "harm.radiance.light", "mind": "harm.mind.strain", "arcane": "harm.arcane.raw"}
@@ -657,10 +667,12 @@ for pid, nm, gate, cond, dur in [("onhit_bleed", "Rending", ["creature.beast.pre
                                   ("onhit_dread", "Dreadful", ["creature.undead.sovereign", "creature.fiend", "creature.horror.abomination", "creature.dragon.great"], "cond.frightened", "rounds:2"),
                                   ("onhit_hobble", "Hobbling", ["creature.horror.plant", "creature.horror.ooze", "creature.spirit.fey.wild", "creature.beast.vermin.arachnid"], "cond.slowed", "rounds:2"),
                                   ("onhit_expose", "Hunter's", ["creature.beast.predator", "creature.folk.beastfolk", "org.order.hunters"], "cond.exposed", "rounds:2")]:
+    _n = LING_STACKS if cond in LINGERING else {t: 1 for t in range(1, 6)}   # [revision: I-090]
     prop(pid, nm, "passive", "on_hit", gate, "on_hit", 2,
          [{"tier": t, "trigger": {"hook": "on_attack_hit", "chance": "natural " + CHANCE[t]},
-           "effects": [eff("eff.apply_condition", condition=cond, severity=("S2" if t >= 4 else "S1"), duration=dur, target="the creature hit")]} for t in range(1, 6)],
-         WEAP, "strike", f"On a hit whose d20 shows the tier's natural range, apply {cond} to the creature hit.")
+           "effects": [eff("eff.apply_condition", condition=cond, severity=("S1" if cond in LINGERING else ("S2" if t >= 4 else "S1")), duration=dur, target="the creature hit") for _ in range(_n[t])]} for t in range(1, 6)],
+         WEAP, "strike", (f"On a hit whose d20 shows the tier's natural range, apply 2 stacks of {cond} to the creature hit (3 at tiers 4-5)."
+                          if cond in LINGERING else f"On a hit whose d20 shows the tier's natural range, apply {cond} to the creature hit."))
 # banes: harm edge vs a creature kind (shares the harm_edge mod group with keen)
 for bid, nm, gate, vs in [("bane_undead", "Undeath-bane", ["material.metal.silver.pure", "org.faith", "creature.spirit.celestial", "deed.divine.exorcism"], "creature.undead"),
                            ("bane_fey", "Fey-bane", ["material.metal.iron.cold", "creature.folk.dwarf", "org.order.hunters"], "creature.spirit.fey"),

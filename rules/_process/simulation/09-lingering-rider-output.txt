@@ -1,0 +1,10 @@
+=== I-090: a lingering-harm rider on the band's standard adversary (09_core fight + rider; 6000 fights a cell, seed 909) ===
+band | no rider: win%, harm ratio | rider, PC never / always / smart: win%, ratio | PC's best answer | premium | PR-09-4 win% no rider -> rider (word)
+P1 vs standard T1 | 100.0, 0.086 | 100.0, 0.131 / 100.0, 0.094 / 100.0, 0.117 | always | 0.093 | 100.0 -> 100.0 (trivial -> trivial; simulated trivial -> trivial)
+P2 vs standard T2 | 99.9, 0.262 | 97.9, 0.452 / 99.8, 0.306 / 99.7, 0.354 | always | 0.167 | 100.0 -> 100.0 (trivial -> trivial; simulated trivial -> trivial)
+P3 vs standard T3 | 99.4, 0.453 | 89.7, 0.685 / 98.0, 0.540 / 94.6, 0.575 | always | 0.192 | 99.9 -> 99.5 (easy -> easy; simulated easy -> easy)
+P4 vs standard T4 | 87.7, 0.869 | 48.7, 1.182 / 75.0, 1.005 / 65.8, 1.022 | always | 0.156 | 81.6 -> 69.6 (fair -> hard; simulated fair -> hard)
+P5 vs standard T5 | 80.1, 1.154 | 42.2, 1.289 / 65.6, 1.312 / 48.9, 1.208 | always | 0.137 | 71.1 -> 57.6 (hard -> hard; simulated hard -> hard)
+
+mean premium of a lingering rider over bands 1-5: 0.149 (T-09-6 rider premium 0.06)
+rounded to T-09-6's grain (0.01): 0.15

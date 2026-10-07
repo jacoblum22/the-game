@@ -701,7 +701,12 @@ settled **in an earlier scene of the same day** settles as 0 at every node. With
 against one target are already handled by 03.5.2. This closes the farm-one-target loop: the healed horse, the
 sparring dummy that is "risky" because it hits back, the guard who is persuaded again and again. A rematch on
 a later day counts normally [R: https://en.uesp.net/wiki/Skyrim:Sneak; Ultima IV's step-counter cooldown]
-[DL-03-07].
+[DL-03-07], with one exception. **The window is the week (the last 7 days) instead of the day** when the target
+is not an enemy: its standing toward the actor is Wary or better (00.3.16), it is in the actor's party, hire or
+company (ch.16), or the beat was a spar by agreement (03.5.5). A friendly duelist, a hired sellsword or a
+patient guard can lend a deed node one event a week, not one a day; an enemy who keeps coming back counts
+each day, because it means it. The window is read from the target's standing at the time of the later event
+[revision: I-041] [DL-03-30].
 
 **03.5.5 Practice and training.** `[D]` Practice (Safe, unopposed, unclocked, routine) fails D2 and is never
 judged evidence. Deliberate training is a downtime activity owned by 15. Each completed **week** of training
@@ -709,6 +714,11 @@ on a tag writes one counted event, `cnt.training` (1 unit, on the trained tag), 
 may let training count toward a tier's counted requirement (Kingdom Come's trainers: a mentor can speed
 recognition up but never substitute for it [R6 A-27]). This keeps EVE-style time-gated learning available to
 04 and 05 [C:P15] without letting a montage stand in for deeds.
+A **spar** is a bout both sides agreed to, stopped at first defeat, with no lethal harm mode (06.4.8). It is
+played as a conflict or contest, and its deed may be judged evidence if it meets 03.3.2 (a real wager or a
+watching crowd makes it Risky), under the week window of 03.5.4; its `on_defeat` writes `cnt.defeat` under the
+same window. It is not a defeat for loot: it calls no `gen.loot` (08.3.1), and the loser keeps its purse and
+gear. Sparring as practice, week after week, is 15's downtime training [revision: I-041].
 
 **03.5.6 Provisional reading mid-scene.** `[D]` `tally(actor, tag, include_pending: true)` returns the values as
 if the scene settled now. Only 04's crisis check (V5 awakening, which must fire inside a scene) may call it. The
@@ -1029,7 +1039,8 @@ at `day`, phase 9, for scenes still open)
 2. **Witnesses and carriers:** for each event, mark carriers (03.10.2) using the entities' state now, add
    bonded witnesses, and compute `scopes` (03.10.5).
 3. **Same-target cap:** set to 0 the points of any judged or counted event whose (target, level-2 deed node)
-   was settled in an earlier scene of the same day (03.5.4).
+   was settled in an earlier scene of the same day, or of the last 7 days when the target is not an enemy
+   (standing Wary or better, party, hire or company, or a spar) (03.5.4) [revision: I-041].
 4. **Contributions:** for each judged deed event, the primary tag contributes `points` to its node and every
    ancestor. Each secondary tag contributes `floor(points / 2)` to its node and every ancestor. An event
    contributes to a node once, at the larger value.
@@ -1246,6 +1257,7 @@ that excludes it:
 | Shooting at a stump for an afternoon | practice: Safe, unopposed, routine | 03.3.2 D2 |
 | The tenth arrow of the same fight | settles at 0 (4th and later at a node) | 03.5.2 |
 | A second scene of sparring the same partner today | same target, same day | 03.5.4 |
+| Sparring the same friendly partner again three days later | same non-enemy target, same week | 03.5.4 [revision: I-041] |
 | A fifth easy lock today | routine cap: one per node per day | 03.5.3 |
 | The hound brings the fugitive down | the hound's act; the command is the PC's deed | 03.3.2 D3 |
 | Surviving a poison | a resisted-effect check, not a declared method | 03.3.2 D3 |
@@ -1495,7 +1507,9 @@ first deed tag *(illustrative; 05 owns the ability's tags)*.
 - **Same target.** In the morning Wren spars with the caravan's guard-sergeant for a wager (Risky, opposed):
   `martial.polearm.spear`, 6 points, settled. In the afternoon, in a new scene, they spar again. The (target,
   `deed.martial.polearm`) pair was already settled today → the second event settles as **0**. *Other side:*
-  the next day's rematch counts, and so does a bout against a different guard that same afternoon.
+  a bout against a different guard that same afternoon counts. The sergeant is a friendly spar partner, so
+  the window is the week: a rematch counts again seven days later, not the next day. A bandit captain who
+  escapes and ambushes her the next day counts, because he is an enemy (03.5.4) [revision: I-041].
 - **Routine cap.** A locksmith's apprentice (+9 on locks) opens five Easy desk locks in one searched house
   under a ticking alarm clock (pressured by the clock). Each is routine: 2 + 2 = 4. It is one day, however the DM cuts the scenes: at
   `guile.thievery.lockpicking` the first counts 4 and the other four count **0**. *Other side:* one Hard

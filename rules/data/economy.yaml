@@ -102,6 +102,8 @@ selling:
   property_items: 'half of list, and ONLY through clk.find_buyer (6 segments, project, public; ticks per week: town 1, city 2, plus delivered reach of one Talk (trade) beat per week); a village or camp
     never buys them'
   own_make: an item the seller made sells for at most its materials' price + the maker's craft wage for the days worked (the labor cap, 08.8.9)
+  materials_depth_per_week: {camp: 10, village: 30, town: 150, city: 750, rule: '[revision: I-079] trade goods and materials have their own depth of the same size: the most coin a settlement pays the PC
+      per week for them, except a sale to a crafter who works the material in a named commission or project, up to what that work needs; glut still applies'}
   market_depth_per_week: {camp: 10, village: 30, town: 150, city: 750, rule: 'the most coin a settlement pays the PC per week for non-trade goods; past it, buyers are gone until next week'}
   glut: each sale of the same base item or trade good in one settlement in one week lowers that good's sale price there by one notch, recovering one notch per week (h.08.markets)
 haggling:
@@ -183,6 +185,15 @@ wages:
 - {id: wage.champion, band: 4, weekly: 150, daily: 25, role: a renowned fighter or master of an art, share: plus a full share; hires only for a thread they believe in (16)}
 - {id: wage.legend, band: 5, weekly: null, daily: null, role: 'never for coin: only for a cause, a debt or a bond (16)'}
 craft_wages: {trained: 10, expert: 25, master: 60, unit: coins per week of work; the labor cap of 08.8.9 and the commission price of 08.6.5}
+job_fees:
+- {band: 1, fee: 40}
+- {band: 2, fee: 85}
+- {band: 3, fee: 200}
+- {band: 4, fee: 600}
+- {band: 5, fee: 2000}
+job_fee_rules: 'paid by the patron when a job taken from it completes (11''s quest thread, ''a faction''s commission'' or an NPC''s request with a Payment term, 15.3); keyed by the job''s challenge band
+  (03.4.3: the opposition''s threat band, the faction''s tier, or the work''s type-tier); half up front if the patron''s standing is below Warm; 15''s bargaining may move it one notch (08.8.2); a failed
+  or abandoned job pays only what was paid up front (08.8.8) [revision: I-086]'
 holdings:
 - {id: hold.cottage, buy: 150, build_weeks: 6, upkeep_week: 1, staff: 0, yield_week: 0, what: 'a home: a haven rest site; modest lifestyle at 4 coins/week while living there'}
 - {id: hold.townhouse, buy: 600, build_weeks: 12, upkeep_week: 3, staff: 1, yield_week: 0, what: a town home; comfortable lifestyle at 9/week while living there}
@@ -213,8 +224,8 @@ anti_inflation:
     canon (12.16.5) allows it, and then the result is conjured'}
 - {id: AI-2, rule: 'The labor cap: an item the seller made sells for at most its materials'' price + the maker''s craft wage for the days worked'}
 - {id: AI-3, rule: Property items sell for half of list and only through clk.find_buyer; villages and camps never buy them}
-- {id: AI-4, rule: Market depth per settlement per week caps coin paid to the PC for non-trade goods}
+- {id: AI-4, rule: 'Market depth per settlement per week caps coin paid to the PC: one depth for trade goods and materials, one for everything else (08.8.5) [revision: I-079]'}
 - {id: AI-5, rule: 'Glut: repeated sales of the same good in one place lower its price one notch per sale per week'}
-- {id: AI-6, rule: 'Coin enters only from purses, hoards, wages, rewards (11), sales and holdings'' yields, each from a table here or in 11 -- never from a DM''s choice (INV-3)'}
+- {id: AI-6, rule: 'Coin enters only from purses, hoards, wages, job fees and rewards (11; job_fees here), sales and holdings'' yields, each from a table here or in 11 -- never from a DM''s choice (INV-3)'}
 - {id: AI-7, rule: 'Supply-saving and carry-raising items are capped by the item share (08.2.2): -1 supply/day, +4 capacity'}
 - {id: AI-8, rule: 'Holdings yield at most the labor of their staff and their land''s rents; a yield table is 11''s and is rolled, never chosen'}

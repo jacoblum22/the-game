@@ -1,31 +1,87 @@
-=== ch.08 campaign wealth and power simulation (I-018; 300 campaigns x 70 sessions; seeded) ===
+=== ch.08 campaign wealth and power simulation (I-018; I-036, I-086; 300 campaigns x 70 sessions; seeded) ===
+drop check (gen_loot.yaml): T1 10 / T2 15 / T3 25 / T4 40 / T5 55
 p10 / median / p90 per campaign, per band (P1 s1-9, P2 s10-19, P3 s20-34, P4 s35-56, P5 s57-70)
 band | property items won in band (08.2.7 typical) | per session | masterwork / wondrous / fine | bound-power items won | attuned at band end | bound attuned | top signature tier | coin at band end -> tier (08.8.10 typical)
 P1 | 2 / 4.0 / 6 (2-4) | 0.43 | 1.4 / 0.0 / 2.4 | 0 / 0.0 / 0 | 2 / 4.0 / 5 | 0 / 0.0 / 0 | 0 / 1.0 / 2 | 0 / 8.5 / 54 -> W1 (W1-W2)
      property items by source (mean): fight (always) 0.2, fight (trophy) 1.4, site treasure 2.2
      fights by yield (mean): always 0.2, none 1.5, trophy 16.3
      wealth tiers at band end: W1 89%, W2 11%, W3 0%, W4 0%, W5 0%
-P2 | 4 / 6.0 / 9 (4-6) | 0.63 | 5.7 / 0.0 / 0.6 | 0 / 0.0 / 1 | 5 / 5.0 / 5 | 0 / 0.0 / 1 | 2 / 3.0 / 4 | 42 / 247.5 / 494 -> W2 (W2)
-     property items by source (mean): fight (always) 1.4, fight (hoard) 0.1, fight (trophy) 2.4, site treasure 2.5
+P2 | 4 / 6.0 / 9 (4-6) | 0.63 | 5.7 / 0.0 / 0.6 | 0 / 0.0 / 1 | 5 / 5.0 / 5 | 0 / 0.0 / 1 | 2 / 3.0 / 4 | 65 / 248.0 / 494 -> W2 (W2)
+     property items by source (mean): fight (always) 1.4, fight (hoard) 0.0, fight (trophy) 2.3, site treasure 2.5
      fights by yield (mean): always 1.6, hoard 0.2, none 0.9, trophy 17.3
-     wealth tiers at band end: W1 11%, W2 53%, W3 36%, W4 0%, W5 0%
-P3 | 9 / 13.0 / 17 (8-12) | 0.86 | 11.5 / 0.0 / 1.4 | 1 / 3.0 / 5 | 5 / 5.0 / 5 | 0 / 1.0 / 3 | 4 / 4.0 / 5 | 1293 / 2374.0 / 3640 -> W4 (W3)
-     property items by source (mean): fight (always) 3.7, fight (hoard) 0.6, fight (trophy) 4.9, site treasure 3.7
-     fights by yield (mean): always 4.2, hoard 2.0, none 1.3, trophy 22.5
-     wealth tiers at band end: W1 0%, W2 0%, W3 15%, W4 85%, W5 0%
-P4 | 19 / 24.0 / 29 (15-25) | 1.09 | 15.7 / 5.4 / 2.8 | 3 / 5.0 / 8 | 5 / 5.0 / 5 | 1 / 2.0 / 3 | 4 / 4.0 / 6 | 9663 / 15641.0 / 22787 -> W5 (W4)
-     property items by source (mean): fight (always) 6.8, fight (hoard) 3.4, fight (trophy) 8.4, site treasure 5.4
-     fights by yield (mean): always 7.6, hoard 8.1, none 2.0, trophy 26.4
+     wealth tiers at band end: W1 9%, W2 55%, W3 37%, W4 0%, W5 0%
+P3 | 8 / 12.0 / 17 (8-12) | 0.82 | 11.0 / 0.0 / 1.4 | 1 / 2.0 / 4 | 5 / 5.0 / 5 | 0 / 1.0 / 3 | 4 / 4.0 / 5 | 1325 / 2337.0 / 3554 -> W4 (W3)
+     property items by source (mean): fight (always) 3.7, fight (hoard) 0.6, fight (trophy) 4.3, site treasure 3.6
+     fights by yield (mean): always 4.2, hoard 2.0, none 1.2, trophy 22.5
+     wealth tiers at band end: W1 0%, W2 0%, W3 17%, W4 83%, W5 0%
+P4 | 18 / 23.0 / 29 (15-25) | 1.06 | 15.1 / 5.5 / 2.7 | 3 / 5.0 / 8 | 5 / 5.0 / 5 | 1 / 2.0 / 4 | 4 / 4.0 / 6 | 9534 / 15727.5 / 22957 -> W5 (W4)
+     property items by source (mean): fight (always) 6.6, fight (hoard) 3.3, fight (trophy) 7.8, site treasure 5.5
+     fights by yield (mean): always 7.5, hoard 8.1, none 2.0, trophy 26.4
      wealth tiers at band end: W1 0%, W2 0%, W3 0%, W4 4%, W5 96%
-P5 | 17 / 21.0 / 28 (25-+) | 1.56 | 16.1 / 3.4 / 2.3 | 3 / 5.0 / 8 | 5 / 5.0 / 5 | 1 / 2.0 / 3 | 5 / 5.0 / 5 | 27037 / 45490.0 / 63709 -> W5 (W5)
-     property items by source (mean): fight (always) 6.2, fight (hoard) 3.0, fight (trophy) 5.7, site treasure 6.9
-     fights by yield (mean): always 7.0, hoard 6.7, none 1.9, trophy 12.5
+P5 | 16 / 21.0 / 27 (25-+) | 1.53 | 15.8 / 3.4 / 2.2 | 2 / 5.0 / 8 | 5 / 5.0 / 5 | 1 / 2.0 / 3 | 5 / 5.0 / 5 | 27123 / 43961.0 / 63157 -> W5 (W5)
+     property items by source (mean): fight (always) 6.2, fight (hoard) 2.9, fight (trophy) 5.7, site treasure 6.7
+     fights by yield (mean): always 6.9, hoard 6.6, none 1.8, trophy 12.6
      wealth tiers at band end: W1 0%, W2 0%, W3 0%, W4 0%, W5 100%
 
 08.2.7 check (VI revisit trigger: density more than one row ahead of the table):
-  P1 median 4.0 items vs typical 2-4: within its row
-  P2 median 6.0 items vs typical 4-6: within its row
-  P3 median 13.0 items vs typical 8-12: above its row, short of the next
-  P4 median 24.0 items vs typical 15-25: within its row
-  P5 median 21.0 items vs typical 25-+: below its row
+  P1 median 4.0 items (mean 3.84) vs typical 2-4: within its row
+  P2 median 6.0 items (mean 6.26) vs typical 4-6: within its row
+  P3 median 12.0 items (mean 12.34) vs typical 8-12: within its row
+  P4 median 23.0 items (mean 23.26) vs typical 15-25: within its row
+  P5 median 21.0 items (mean 21.44) vs typical 25-+: below its row (P5 is open-ended; the run stops 14 sessions in; at 1.53 a session 25 items are reached by about session 73)
 rungs of property items over the campaign: masterwork 73%, wondrous 13%, fine 14%
+
+=== coin by spending profile [revision: I-036, I-086] (see the docstring; same seeds) ===
+profile | band | coin at band end p10 / median / p90 -> tier (08.8.10 typical) | W-tier spread | mean per session: found, sales, fees, work | spent: lifestyle, training, wages+share, holdings bought, upkeep, commissions
+baseline  P1 | during the band (session-weighted): median W1; W1 94% W2 6% W3 0% W4 0% W5 0%
+baseline  P1 | 0 / 8.5 / 54 -> W1 (W1-W2) | W1 89% W2 11% W3 0% W4 0% W5 0% | in 11, 0, 0, 0 | out 0, 0, 0, 0, 0, 0
+baseline  P2 | during the band (session-weighted): median W2; W1 30% W2 55% W3 15% W4 0% W5 0%
+baseline  P2 | 65 / 248.0 / 494 -> W2 (W2) | W1 9% W2 55% W3 37% W4 0% W5 0% | in 35, 3, 0, 0 | out 0, 0, 0, 0, 0, 0
+baseline  P3 | during the band (session-weighted): median W3; W1 1% W2 11% W3 49% W4 40% W5 0%
+baseline  P3 | 1325 / 2337.0 / 3554 -> W4 (W3) | W1 0% W2 0% W3 17% W4 83% W5 0% | in 134, 22, 0, 0 | out 0, 0, 0, 0, 0, 0
+baseline  P4 | during the band (session-weighted): median W5; W1 0% W2 0% W3 2% W4 44% W5 53%
+baseline  P4 | 9534 / 15727.5 / 22957 -> W5 (W4) | W1 0% W2 0% W3 0% W4 4% W5 96% | in 567, 85, 0, 0 | out 0, 0, 0, 0, 0, 0
+baseline  P5 | during the band (session-weighted): median W5; W1 0% W2 0% W3 0% W4 0% W5 100%
+baseline  P5 | 27123 / 43961.0 / 63157 -> W5 (W5) | W1 0% W2 0% W3 0% W4 0% W5 100% | in 1997, 141, 0, 0 | out 0, 0, 0, 0, 0, 0
+frugal    P1 | during the band (session-weighted): median W1; W1 100% W2 0% W3 0% W4 0% W5 0%
+frugal    P1 | 0 / 0.0 / 13 -> W1 (W1-W2) | W1 100% W2 0% W3 0% W4 0% W5 0% | in 11, 0, 0, 0 | out 21, 4, 0, 0, 0, 0
+frugal    P2 | during the band (session-weighted): median W2; W1 43% W2 51% W3 6% W4 0% W5 0%
+frugal    P2 | 0 / 146.5 / 373 -> W2 (W2) | W1 23% W2 60% W3 18% W4 0% W5 0% | in 35, 3, 0, 0 | out 21, 4, 0, 0, 0, 0
+frugal    P3 | during the band (session-weighted): median W3; W1 8% W2 12% W3 52% W4 29% W5 0%
+frugal    P3 | 930 / 1926.0 / 3131 -> W4 (W3) | W1 0% W2 0% W3 30% W4 69% W5 0% | in 134, 22, 0, 0 | out 21, 15, 0, 0, 0, 0
+frugal    P4 | during the band (session-weighted): median W4; W1 0% W2 0% W3 6% W4 47% W5 47%
+frugal    P4 | 8488 / 14634.5 / 21853 -> W5 (W4) | W1 0% W2 0% W3 0% W4 8% W5 92% | in 567, 85, 0, 0 | out 52, 15, 0, 0, 0, 0
+frugal    P5 | during the band (session-weighted): median W5; W1 0% W2 0% W3 0% W4 3% W5 97%
+frugal    P5 | 23980 / 40800.0 / 59937 -> W5 (W5) | W1 0% W2 0% W3 0% W4 0% W5 100% | in 1997, 141, 0, 0 | out 150, 60, 0, 0, 0, 0
+spender   P1 | during the band (session-weighted): median W1; W1 90% W2 10% W3 0% W4 0% W5 0%
+spender   P1 | 0 / 10.0 / 67 -> W1 (W1-W2) | W1 84% W2 16% W3 0% W4 0% W5 0% | in 11, 0, 8, 0 | out 21, 4, 0, 0, 0, 0
+spender   P2 | during the band (session-weighted): median W2; W1 33% W2 61% W3 5% W4 0% W5 0%
+spender   P2 | 6 / 165.0 / 386 -> W2 (W2) | W1 19% W2 63% W3 18% W4 0% W5 0% | in 35, 3, 18, 0 | out 18, 4, 14, 7, 0, 0
+spender   P3 | during the band (session-weighted): median W3; W1 5% W2 10% W3 73% W4 11% W5 0%
+spender   P3 | 644 / 1251.5 / 2508 -> W3 (W3) | W1 0% W2 0% W3 62% W4 38% W5 0% | in 134, 23, 40, 0 | out 14, 15, 28, 34, 9, 16
+spender   P4 | during the band (session-weighted): median W4; W1 0% W2 0% W3 9% W4 63% W5 27%
+spender   P4 | 5571 / 11105.5 / 17625 -> W5 (W4) | W1 0% W2 0% W3 0% W4 30% W5 70% | in 567, 87, 119, 0 | out 39, 15, 42, 135, 64, 24
+spender   P5 | during the band (session-weighted): median W5; W1 0% W2 0% W3 0% W4 11% W5 89%
+spender   P5 | 11936 / 23175.0 / 36837 -> W5 (W5) | W1 0% W2 0% W3 0% W4 2% W5 98% | in 1997, 142, 391, 0 | out 52, 60, 766, 541, 132, 86
+noncombat P1 | during the band (session-weighted): median W1; W1 92% W2 8% W3 0% W4 0% W5 0%
+noncombat P1 | 0 / 0.0 / 59 -> W1 (W1-W2) | W1 88% W2 12% W3 0% W4 0% W5 0% | in 4, 0, 8, 6 | out 21, 4, 0, 0, 0, 0
+noncombat P2 | during the band (session-weighted): median W1; W1 50% W2 49% W3 1% W4 0% W5 0%
+noncombat P2 | 0 / 70.0 / 192 -> W2 (W2) | W1 36% W2 61% W3 2% W4 0% W5 0% | in 14, 0, 18, 6 | out 20, 4, 14, 2, 0, 0
+noncombat P3 | during the band (session-weighted): median W3; W1 17% W2 22% W3 60% W4 1% W5 0%
+noncombat P3 | 174 / 587.0 / 1028 -> W3 (W3) | W1 4% W2 14% W3 79% W4 3% W5 0% | in 62, 0, 40, 15 | out 19, 15, 28, 11, 2, 11
+noncombat P4 | during the band (session-weighted): median W4; W1 2% W2 2% W3 23% W4 70% W5 2%
+noncombat P4 | 2395 / 4646.0 / 8012 -> W4 (W4) | W1 0% W2 0% W3 3% W4 86% W5 10% | in 278, 2, 121, 36 | out 43, 15, 42, 93, 25, 23
+noncombat P5 | during the band (session-weighted): median W5; W1 1% W2 0% W3 5% W4 35% W5 59%
+noncombat P5 | 4452 / 12856.5 / 29037 -> W5 (W5) | W1 1% W2 0% W3 2% W4 17% W5 80% | in 1024, 27, 403, 36 | out 98, 60, 100, 343, 76, 83
+
+08.8.10 check (OEQ-08-4 trigger: two tiers from the typical tier; target +-1). 'during' = the tier held over the
+band's sessions, which is what the typical-tier column describes; 'end' = the tier at the band's last session,
+which a PC drifting up a tier a band reaches as it enters the next band:
+  during baseline  P1 W1 (+0), P2 W2 (+0), P3 W3 (+0), P4 W5 (+1), P5 W5 (+0)
+  during frugal    P1 W1 (+0), P2 W2 (+0), P3 W3 (+0), P4 W4 (+0), P5 W5 (+0)
+  during spender   P1 W1 (+0), P2 W2 (+0), P3 W3 (+0), P4 W4 (+0), P5 W5 (+0)
+  during noncombat P1 W1 (+0), P2 W1 (-1), P3 W3 (+0), P4 W4 (+0), P5 W5 (+0)
+  end    baseline  P1 W1 (+0), P2 W2 (+0), P3 W4 (+1), P4 W5 (+1), P5 W5 (+0)
+  end    frugal    P1 W1 (+0), P2 W2 (+0), P3 W4 (+1), P4 W5 (+1), P5 W5 (+0)
+  end    spender   P1 W1 (+0), P2 W2 (+0), P3 W3 (+0), P4 W5 (+1), P5 W5 (+0)
+  end    noncombat P1 W1 (+0), P2 W2 (+0), P3 W3 (+0), P4 W4 (+0), P5 W5 (+0)

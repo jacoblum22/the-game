@@ -37,7 +37,7 @@ band_tables:
     solo: {1: 4.0, 2: 3.0, 3: 3.0, 4: 1.75, 5: 1.5}
   focus_base: {1: 0, 2: 1, 3: 2, 4: 3, 5: 4}
   lore_base_tier: {1: easy, 2: easy, 3: moderate, 4: hard, 5: very_hard}
-  power_premium: {rider: 0.06, action: 0.06, aura: 0.06, lesser: 0.03, summon: 0.1, ability: 0.04}
+  power_premium: {rider: 0.06, lingering_rider: 0.15, action: 0.06, aura: 0.06, lesser: 0.03, summon: 0.1, ability: 0.04}
 archetypes:
 - id: arch.wolf
   name: Wolf and hound
