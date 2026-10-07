@@ -270,7 +270,8 @@ def _spec(bid: str, d: Draft, state: WorldState, rules: Any, *, show_all: bool =
         lives = _of_kind(rules, "livelihood")
         first = list(_odoc(rules)["creation_defaults"]["first_seven"])
         shown = lives if show_all else first
-        opts = [Choice(id=x, label=f"{OR[x]['name']} — {OR[x].get('gloss', '')}".rstrip(" —")) for x in shown]
+        opts = [Choice(id=x, label=f"{OR[x]['name']} ({OR[x]['gloss']})" if OR[x].get('gloss')
+                       else str(OR[x]['name'])) for x in shown]
         if not show_all:
             opts.append(Choice(id="more", label=_text(bid, "more", "{n} other lives", n=len(lives) - len(first))))
         return Block(id=bid, title=title, prompt=prompt, options=opts, default=SOLDIER, default_line="Soldier.",
@@ -627,16 +628,22 @@ def sheet(rec: dict[str, Any], rules: Any, state: WorldState | None = None) -> s
         return str(W.get(key, key)).format(**fmt)
 
     a = rec["attributes"]
-    attrs = " · ".join(f"{k.capitalize()} {a[k]:+d}" if a[k] else f"{k.capitalize()} 0" for k in ATTRS)
+    attrs = ", ".join(f"{k.capitalize()} {a[k]:+d}" if a[k] else f"{k.capitalize()} 0" for k in ATTRS)
     tags = {it["item_tag"] for it in rec["items"]}
     shield = any(t.startswith("item.shield") for t in tags)
     weapons = {t.split(".")[2] for t in tags if t.startswith("item.weapon.") and len(t.split(".")) > 2}
     comp = 2 if any(t.split(".")[-1] in weapons | ({"shield"} if shield else set()) for t in rec["competence"]) else 1
     guard = 10 + a["agility"] + comp + (1 if shield else 0)  # 06.4.1, coarse: the readied weapon or shield
-    deep = ", ".join(t.split(".")[-1].replace("_", " ") for t in rec["deep"]) or "nothing yet"
-    also = ", ".join(t.split(".")[-1].replace("_", " ") for t in rec["access"]) or "nothing else"
+    def _and(xs: list[str]) -> str:
+        return xs[0] if len(xs) == 1 else ", ".join(xs[:-1]) + " and " + xs[-1] if xs else ""
+
+    deep = _and([t.split(".")[-1].replace("_", " ") for t in rec["deep"]]) or "nothing yet"
+    also = _and([t.split(".")[-1].replace("_", " ") for t in rec["access"]]) or "nothing else"
+    grew = dict(W.get("grew_up") or {})
     lines = [w("head", name=rec["name"], pronouns=rec["pronouns"], people=OR[rec["people"]]["name"],
-               upbringing=OR[rec["upbringing"]]["name"], life=OR[rec["livelihood"]]["name"]),
+               a_people=_a(str(OR[rec["people"]]["name"]).lower()), life=str(OR[rec["livelihood"]]["name"]).lower(),
+               upbringing=OR[rec["upbringing"]]["name"],
+               grew_up=grew.get(rec["upbringing"], str(OR[rec["upbringing"]]["name"]).lower())),
              "  " + attrs,
              "  " + w("body", vitality=rec["vitality"], focus=rec["focus_base"], fate=rec["fate"]),
              "  " + w("guard", guard=guard, dread=rec["dread_threshold"]),
@@ -936,7 +943,8 @@ class CreationFlow:
             if people:
                 tx.add(_ev("c2.people", people, "player_words", message, rule="PR-02-2"))
             life = _origins(self.ctx.rules)[value]
-            notes.append(OofBlock(kind="NOTE", text=f"{life['name']}, then: {life.get('gloss', '')}."))
+            notes.append(OofBlock(kind="NOTE", text=f"So your character was {_a(life['name'].lower())}"
+                                                       + (f" ({life['gloss']})." if life.get("gloss") else ".")))
             absent = None if people else self._people_named(message or words or "", among=_of_kind(self.ctx.rules,
                                                                                                      "people"))
             if absent:  # named, but the seed left that people out of this land (12.16.7)

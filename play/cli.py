@@ -319,7 +319,9 @@ class Session:
             return
         if p.default_choice in ids:
             label = p.choices[ids.index(p.default_choice)].label
-            choice, echo = p.default_choice, label.split(": ")[0].split(" — ")[0].strip()
+            for sep in (": ", " — ", ", ", " (", ". "):  # the option's name, not its whole description
+                label = label.split(sep)[0]
+            choice, echo = p.default_choice, label.strip().rstrip(".")
         elif p.kind in FLOW_PAUSES:  # the step's default is not one of its options: "move on" means it
             choice, echo = "move_on", "the dice decide" if p.kind == "seed_step" else "moving on"
         else:

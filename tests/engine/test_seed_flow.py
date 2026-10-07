@@ -61,11 +61,11 @@ def test_mixed_seed_answers_rolls_and_one_veto(tmp_path: Path):
     wound = [a for a in store.state.seed_answers if a["step"] == "ws.q.wound"]
     assert [(a["choice"], a["source"]) for a in wound] == [(wounds[1], "player_option")]
     # step 1 ran: the climate was rolled, so a veto is offered
-    assert pz(r).prompt == "Keep this?" and r.oof_blocks[-1].text.startswith("World 1 of 14 · ")
+    assert pz(r).prompt == "Would you like to keep this?" and r.oof_blocks[-1].text.startswith("Building the world, step 1 of 14: ")
     assert [c.id for c in pz(r).choices] == ["keep", "veto:ws.q.climate"]
     first = store.state.seed_answers[-1]["choice"]  # ws.ran.1: what step 1 rolled
     r = flow.answer("veto:ws.q.climate")
-    assert any("(Re-rolled. This one stands.)" in b.text for b in r.oof_blocks)
+    assert any("That was re-rolled, so this result is final." in b.text for b in r.oof_blocks)
     # step 2: magic level in the player's own words, classified to the nearest option (12.16.2)
     assert pz(r).prompt == "How common is magic?"
     model.push(Role.INTERPRET, {"choice": "own_words", "own_words_class": "common",
@@ -75,7 +75,7 @@ def test_mixed_seed_answers_rolls_and_one_veto(tmp_path: Path):
     assert (ans["choice"], ans["source"], ans["words"]) == ("common", "player_words", "every village has its witch")
     r = _drain(flow, r)
     assert r.phase == "creation" and r.pause and pz(r).kind == "create_step"
-    assert any(b.text.startswith("World 14 of 14 · All set") for b in r.oof_blocks)
+    assert any(b.text.startswith("Building the world, step 14 of 14: Finished") for b in r.oof_blocks)
     st = store.state
     vetoes = [a for a in st.seed_answers if a["step"].startswith("ws.veto.")]
     assert [(a["step"], a["choice"]) for a in vetoes] == [("ws.veto.1", "ws.q.climate")]

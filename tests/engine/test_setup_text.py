@@ -93,8 +93,8 @@ def test_seed_screens_read_plainly_and_one_option_questions_are_not_asked(tmp_pa
     store = new_store(tmp_path)
     flow = SeedFlow(TurnContext.for_store(store, model=OfflineModel()))
     r = flow.start()
-    assert r.oof_blocks[-1].text.splitlines()[0] == "Before your character: the world"
-    assert r.pause is not None and r.pause.prompt == "Who decides what the world is like?"
+    assert r.oof_blocks[-1].text.splitlines()[0] == "First, let's build the world your character will live in."
+    assert r.pause is not None and r.pause.prompt == "Would you like to decide what the world is like, or let the dice decide?"
     shown: list[str] = []
     r = flow.answer("guided")
     asked: list[str] = []
@@ -111,5 +111,5 @@ def test_seed_screens_read_plainly_and_one_option_questions_are_not_asked(tmp_pa
     hits = [t for t in shown if JARGON.search(t)]
     assert not hits, hits[:3]
     # every question block says how to answer in one line, the same way
-    assert all("press Enter" in t.splitlines()[-1] for t in shown if t.startswith("World ") and "  1)" not in t
+    assert all("press Enter" in t.splitlines()[-1] for t in shown if t.startswith("Building the world") and "  1)" not in t
                and "(a)" in t)

@@ -124,8 +124,11 @@ def creation_header(n: int | None, total: int | None, title: str) -> str:
 
 
 def name_of(label: str) -> str:
-    """An option's name: its label before ": " or " — " ("Quick start: five questions" -> "Quick start")."""
-    return label.split(": ")[0].split(" — ")[0].strip()
+    """An option's name: its label before the first ": ", " — ", ", ", " (" or ". "
+    ("Quick start, which takes five questions" -> "Quick start")."""
+    for sep in (": ", " — ", ", ", " (", ". "):
+        label = label.split(sep)[0]
+    return label.strip().rstrip(".")
 
 
 # ------------------------------------------------------------------------------------------- blocks

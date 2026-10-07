@@ -62,22 +62,23 @@ def _terrain(tag: str) -> str:
 
 
 def _s1(st: dict[str, Any], step: SeedStep, words: dict[str, str]) -> list[str]:
-    return [f"{_cap(st['region_name'])} — {_low(_said('ws.q.wound', st, step, words))}.",
-            f"Weather — {_said('ws.q.climate', st, step, words)}.",
+    return [f"This land is called {_cap(st['region_name'])}. Its trouble is "
+            f"{_low(_said('ws.q.wound', st, step, words))}.",
+            f"The weather here is {_low(_said('ws.q.climate', st, step, words))}.",
             f"The trouble began {int(st['ctx']['era_age']):d} years ago."]
 
 
 def _s2(st: dict[str, Any], step: SeedStep, words: dict[str, str]) -> list[str]:
     def short(q: str) -> str:
         if words.get(q):
-            return f'{_cap(T.question_what(q))}: "{words[q]}".'
+            return f'For {T.question_what(q)}, you said: "{words[q]}".'
         return T.option_short(q, str(_answer(step, q))) or ""
 
     extra = [e for e in (_answer(step, "ws.q.extra_impossible") or []) if e != "none"]
     lines = [" ".join(x for x in (short("ws.q.magic_level"), short("ws.q.magic_law")) if x),
              " ".join(x for x in (short("ws.q.arcane_source"), short("ws.q.spirits")) if x)]
     if extra:
-        lines.append("Also impossible here: " + _and([_low(_label("ws.q.extra_impossible", e, st))
+        lines.append("Here, also, " + _and([_low(_label("ws.q.extra_impossible", e, st))
                                                        for e in extra]) + ".")
     lines.append(" ".join(x for x in (short("ws.q.regrowth"), short("ws.q.closed_school")) if x))
     return [x for x in lines if x]
@@ -97,7 +98,8 @@ def _s3(st: dict[str, Any], step: SeedStep, words: dict[str, str]) -> list[str]:
         death = "A tempter may offer the dying a deal, and always collects."
     else:
         k = next((k for k in keepers if k.get("id") == who), None)
-        death = f"{k['name'] if k else 'The god of death'} meets the dying, and may bargain."
+        death = f"{k['name'] + ',' if k and ',' in k['name'] else k['name'] if k else 'The god of death'} " \
+                "meets the dying, and may bargain."
     return [f"{count} gods (keepers) answer prayers: {_and(named)}.", death]
 
 
@@ -110,13 +112,15 @@ def _s4(st: dict[str, Any], step: SeedStep, words: dict[str, str]) -> list[str]:
                if p["present"] == lvl]
         if who:
             groups.append(f"{levels.get(lvl, lvl)} {_and(who)}")
+    lives = (_cap(groups[0]) + " live here" + (", along with " + _and(groups[1:]) if len(groups) > 1 else "") + "."
+             if groups else "")
     names = T.seed("tongues") or {}
     tongues = []
     for t in st["tongues"]["list"]:
         lic = str(t["license"])
         name = str(names.get(lic) or lic.rsplit(".", 1)[-1].replace("_", " ").capitalize())
         tongues.append(f"{name} (here called {t['region_name']})" if t.get("region_name") else name)
-    return [f"Who lives here: {'; '.join(groups)}.", f"Languages: {_and(tongues)}."]
+    return [x for x in (lives, f"The languages spoken here are {_and(tongues)}.") if x]
 
 
 def _s5(st: dict[str, Any], step: SeedStep, words: dict[str, str]) -> list[str]:
@@ -130,10 +134,11 @@ def _s5(st: dict[str, Any], step: SeedStep, words: dict[str, str]) -> list[str]:
             if P[a]["known"] and t not in far:
                 far.append(t)
     site = _said("ws.q.haven_site", st, step, words)
-    out = [f"Your home town stands {_low(site)}." if not words.get("ws.q.haven_site") else f"Your home town: {site}."]
+    out = [f"Your home town stands {_low(site)}." if not words.get("ws.q.haven_site") else f"Your home town stands where you said: {site}."]
     if near:
-        out.append(f"Close by: {_and(near)}.")
-    out.append(f"Further out: {_and(far)}; beyond that, unknown country." if far else "Beyond that, unknown country.")
+        out.append(f"Close by are {_and(near)}.")
+    out.append(f"Further out there are {_and(far)}, and beyond that lies unknown country." if far
+               else "Beyond that lies unknown country.")
     return out
 
 
@@ -147,7 +152,8 @@ def _s6(st: dict[str, Any], step: SeedStep, words: dict[str, str]) -> list[str]:
             continue
         name = str(P[b]["name"])
         inside.append(name if kind in name.lower() or kind in ("hall", "market") else f"{name} ({kind})")
-    return [f"{hav['name']}: {desc}. This is your home base (the haven).", f"In town: {_and(inside)}."]
+    return [f"Your home town is {hav['name']}, {desc}. It is your home base (the haven).",
+            f"In town there are {_and(inside)}."]
 
 
 def _s7(st: dict[str, Any], step: SeedStep, words: dict[str, str]) -> list[str]:
@@ -155,7 +161,7 @@ def _s7(st: dict[str, Any], step: SeedStep, words: dict[str, str]) -> list[str]:
     names = [f"{f['name']} ({_ROLE[f['role']]} the {seat})" if f.get("role") in _ROLE else str(f["name"])
              for f in st["factions"]]
     more = len(names) - 4
-    return [f"Who holds power here: {_and(names[:4] + ([f'{more:d} more'] if more > 0 else []))}."]
+    return [f"The powers here are {_and(names[:4] + ([f'{more:d} more'] if more > 0 else []))}."]
 
 
 def _s8(st: dict[str, Any], step: SeedStep, words: dict[str, str]) -> list[str]:
@@ -165,7 +171,7 @@ def _s8(st: dict[str, Any], step: SeedStep, words: dict[str, str]) -> list[str]:
     picked += [n for n in npcs if n["role"] in ("innkeeper", "smith", "captain of the gate", "healer")]
     shown = [f"{n['name']} ({n['role'].replace(' of The ', ' of the ')})" for n in picked[:4]]
     home = _places(st)[st["hid"]]["name"]
-    return [f"{len(npcs):d} people you may meet in and beyond {home}, among them {_and(shown)}."]
+    return [f"There are {len(npcs):d} people you may meet in and around {home}, including {_and(shown)}."]
 
 
 def _s9(st: dict[str, Any], step: SeedStep, words: dict[str, str]) -> list[str]:
@@ -173,7 +179,7 @@ def _s9(st: dict[str, Any], step: SeedStep, words: dict[str, str]) -> list[str]:
     known = [P[s]["name"] for s in st["sites"] if P[s]["known"]]
     head = _and(known[:3] + ([f"{len(known) - 3:d} more"] if len(known) > 3 else []))
     trouble = _and([_low(str(s["title"])) for s in st["situations"]])
-    return [f"Dangerous places people talk about: {head}.", f"Trouble brewing: {trouble}."]
+    return [f"People talk about dangerous places such as {head}.", f"Trouble is brewing over {trouble}."]
 
 
 def _s10(st: dict[str, Any], step: SeedStep, words: dict[str, str]) -> list[str]:
@@ -182,7 +188,7 @@ def _s10(st: dict[str, Any], step: SeedStep, words: dict[str, str]) -> list[str]
 
 def _s11(st: dict[str, Any], step: SeedStep, words: dict[str, str]) -> list[str]:
     n = len(st["rumor_tables"][0]["results"])
-    return [f"{n:d} rumors are going round town. Some of them are true."]
+    return [f"There are {n:d} rumors going around town, and some of them are true."]
 
 
 def _s12(st: dict[str, Any], step: SeedStep, words: dict[str, str]) -> list[str]:
@@ -193,7 +199,7 @@ def _s12(st: dict[str, Any], step: SeedStep, words: dict[str, str]) -> list[str]
     else:
         first = f"The months have names, from {months[0]} to {months[-1]}."
     fest = _and([f["name"] for f in c.get("festivals", [])])
-    return [first, f"Years are counted as {c['era']['name']}." + (f" Festivals: {fest}." if fest else "")]
+    return [first, f"Years are counted as {c['era']['name']}." + (f" The festivals are {fest}." if fest else "")]
 
 
 def _s13(st: dict[str, Any], step: SeedStep, words: dict[str, str]) -> list[str]:

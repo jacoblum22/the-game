@@ -78,7 +78,7 @@ def test_new_game_to_play_thirty_turns_quit_mid_offer_and_resume(tmp_path: Path)
     assert r.phase == "seed" and r.pause is not None and r.pause.kind == "seed_step"
     assert [c.id for c in r.pause.choices] == ["guided", "oracle", "mixed"] and r.turn_id is None
     r = game.submit("3")  # mixed, by number
-    assert r.pause is not None and r.pause.prompt.startswith("Which questions do you want to answer")
+    assert r.pause is not None and r.pause.prompt.startswith("Which of these questions would you like to answer")
     r = game.submit("1, 2")  # two questions answered by the player, the oracle rolls the rest
     assert r.pause is not None and r.pause.kind == "seed_step"
     r = game.submit("1")  # by number
@@ -371,8 +371,8 @@ def test_cli_plays_the_real_game_offline(tmp_path: Path) -> None:
                     saves=tmp_path)
     text = out.getvalue()
     assert code == 0, text[-2000:]
-    assert "Before your character: the world" in text and "Your character 1 of 5" in text
-    assert "[SHEET]" in text and "Your character: Wren" in text
+    assert "First, let's build the world your character will live in." in text and "Making your character, step 1 of 5" in text
+    assert "[SHEET]" in text and "Wren (" in text and "is a human" in text
     assert "This turn $" in text and "[TURN] turn." in text and "Saved. Until next time." in text
     out2 = io.StringIO()
     code = cli.main(["continue", "t1", "--offline"], stdin=io.StringIO("/quit\n"), stdout=out2, saves=tmp_path)
