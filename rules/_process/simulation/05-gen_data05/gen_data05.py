@@ -21,7 +21,7 @@ import dsl05
 from dsl05 import ABILITIES, EU_TABLE
 
 MODULES = ['ab_martial', 'ab_guile', 'ab_wilds', 'ab_lore', 'ab_arcane', 'ab_divine', 'ab_primal', 'ab_influence',
-           'ab_craft', 'ab_conduct']
+           'ab_craft', 'ab_conduct', 'ab_deep']  # ab_deep: tier-4/5 depth [revision: I-087]
 for m in MODULES:
     if os.path.exists(os.path.join(HERE, m + '.py')):
         importlib.import_module(m)
@@ -459,6 +459,8 @@ def coverage(abilities):
         ms = per_l2.get(t, [])
         if len(ms) < 2 or 1 not in ms:
             err('COVERAGE %s: %s' % (t, ms))
+        if not {4, 5} <= set(ms):  # [revision: I-087] tier-4 and tier-5 depth under every level-2 tag
+            err('COVERAGE %s: no min_tier 4 or 5 ability (%s)' % (t, ms))
     for b in sorted(per_branch):
         c = per_branch[b]
         tot = sum(c.values())

@@ -391,3 +391,6 @@ Resolved all 12 rows: I-038 (Oracle lever cap; sim shows +3.7 down to +0.8 per r
 - Resolved I-089: thresholds retuned to 160/340/640/1200 and targets kept; archer tiers at sessions 5/10/18/32/54; parity within ±20%, keeping crafted works at one opposition per scene.
 - Resolved I-034 (pacing tables refreshed) and I-047 (training competence cap).
 - I-087 partial: 43 level-2 nodes lack tier-4/5 abilities. Authoring them goes to C2c.
+
+## Revision C2c returned: `revision-C2c-report.md`
+- Resolved I-087: 123 new tier-4/5 abilities written through the generator. All 81 level-2 nodes now have both tiers, and the generator enforces it. Ladder check passes for all 183 callings.

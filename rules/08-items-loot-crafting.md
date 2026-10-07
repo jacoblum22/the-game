@@ -713,7 +713,8 @@ circumstance, degree)` with the parent call's source and circumstance:
 - **The pool is not authored anew.** It is ch.04's **absorbed natural powers** (the active entries of
   `gen_absorb.yaml`, gated on creature tags: a beast's trophy holds a beast's power) and ch.05's **calling
   techniques** (every active `calling` ability without a conduct requirement, gated on its first deed tag);
-  162 entries in `gen_item_ability.yaml#pool` (159 before revision A added three primal element workings). A source with no deed tags of its own reaches techniques
+  279 entries in `gen_item_ability.yaml#pool` (159 before revision A added three primal element workings; 162 before
+  revision C2c added the 117 active tier-4 and tier-5 techniques of I-087). A source with no deed tags of its own reaches techniques
   through `source_to_deed` (a fire elemental → `deed.arcane.fire`, `deed.primal.elements`; an order of
   hunters → `deed.wilds`, `deed.martial.archery`). Never in the pool: oath-gated or conduct-gated
   abilities, `adversary_only` entries, passive abilities (an item passive is a property), and any ability

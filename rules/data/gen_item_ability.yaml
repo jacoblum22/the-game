@@ -2014,3 +2014,1407 @@ pool:
   rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
   lifecycle: provisional
   basis: [05.2.8, 08.4.3]
+- id: ab.call_the_flaw
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.lore.arcana]
+  excluded_tags: []
+  mod_group: flaw_call
+  weight: 1
+  min_tier: 4
+  signature_eligible: false
+  bias: sense
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.whole_weave
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.lore.arcana]
+  excluded_tags: []
+  mod_group: weave_reading
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: sense
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.bane_known
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.lore.bestiary]
+  excluded_tags: []
+  mod_group: bane_lore
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: sense
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.siege_reckoner
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.lore.engineering]
+  excluded_tags: []
+  mod_group: siege_reckoning
+  weight: 1
+  min_tier: 4
+  signature_eligible: false
+  bias: sense
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.great_works
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.lore.engineering]
+  excluded_tags: []
+  mod_group: great_plan
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: sense
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.long_memory
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.lore.history]
+  excluded_tags: []
+  mod_group: long_memory
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: sense
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.paper_trail
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.lore.investigation]
+  excluded_tags: []
+  mod_group: record_search
+  weight: 1
+  min_tier: 4
+  signature_eligible: false
+  bias: sense
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.dead_tongues
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.lore.languages]
+  excluded_tags: []
+  mod_group: dead_tongue
+  weight: 1
+  min_tier: 4
+  signature_eligible: false
+  bias: sense
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.tongue_of_all
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.lore.languages]
+  excluded_tags: []
+  mod_group: all_tongues
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: sense
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.lawful_claim
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.lore.law]
+  excluded_tags: []
+  mod_group: lawful_claim
+  weight: 1
+  min_tier: 4
+  signature_eligible: false
+  bias: sense
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.snatched_back
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.lore.medicine]
+  excluded_tags: []
+  mod_group: save_the_dying
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: sense
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.guest_of_altars
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.lore.religion]
+  excluded_tags: []
+  mod_group: altar_guest
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: sense
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.through_the_gap
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.martial.archery]
+  excluded_tags: []
+  mod_group: gap_shot
+  weight: 1
+  min_tier: 4
+  signature_eligible: false
+  bias: strike
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.long_shot
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.martial.archery]
+  excluded_tags: []
+  mod_group: long_shot
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: strike
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.iron_mountain
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.martial.armor]
+  excluded_tags: []
+  mod_group: iron_mountain
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: strike
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.strength_of_legend
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.martial.athletics]
+  excluded_tags: []
+  mod_group: legend_feat
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: strike
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.bearded_hook
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.martial.axe]
+  excluded_tags: []
+  mod_group: axe_hook
+  weight: 1
+  min_tier: 4
+  signature_eligible: false
+  bias: strike
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.red_harvest
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.martial.axe]
+  excluded_tags: []
+  mod_group: harvest_swing
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: strike
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.inside_the_guard
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.martial.blade]
+  excluded_tags: []
+  mod_group: inside_guard
+  weight: 1
+  min_tier: 4
+  signature_eligible: false
+  bias: strike
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.ring_the_bell
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.martial.bludgeon]
+  excluded_tags: []
+  mod_group: bell_ringer
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: strike
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.ride_and_wheel
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.martial.mounted]
+  excluded_tags: []
+  mod_group: ride_wheel
+  weight: 1
+  min_tier: 4
+  signature_eligible: false
+  bias: strike
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.ride_them_down
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.martial.mounted]
+  excluded_tags: []
+  mod_group: trample
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: strike
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.hook_and_haul
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.martial.polearm]
+  excluded_tags: []
+  mod_group: halberd_hook
+  weight: 1
+  min_tier: 4
+  signature_eligible: false
+  bias: strike
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.hedge_of_points
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.martial.polearm]
+  excluded_tags: []
+  mod_group: stance_points
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: strike
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.boss_and_rim
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.martial.shield]
+  excluded_tags: []
+  mod_group: shield_rush
+  weight: 1
+  min_tier: 4
+  signature_eligible: false
+  bias: strike
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.roof_of_shields
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.martial.shield]
+  excluded_tags: []
+  mod_group: shield_roof
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: strike
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.hammer_and_anvil
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.martial.tactics]
+  excluded_tags: []
+  mod_group: flank_call
+  weight: 1
+  min_tier: 4
+  signature_eligible: false
+  bias: strike
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.shield_breaker_throw
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.martial.thrown]
+  excluded_tags: []
+  mod_group: javelin_bite
+  weight: 1
+  min_tier: 4
+  signature_eligible: false
+  bias: strike
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.rain_of_knives
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.martial.thrown]
+  excluded_tags: []
+  mod_group: knife_rain
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: strike
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.nerve_strike
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.martial.unarmed]
+  excluded_tags: []
+  mod_group: nerve_strike
+  weight: 1
+  min_tier: 4
+  signature_eligible: false
+  bias: strike
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.breaking_hold
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.martial.unarmed]
+  excluded_tags: []
+  mod_group: breaking_hold
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: strike
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.shot_from_nowhere
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.guile.ambush]
+  excluded_tags: []
+  mod_group: unseen_shot
+  weight: 1
+  min_tier: 4
+  signature_eligible: false
+  bias: move
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.long_con
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.guile.deception]
+  excluded_tags: []
+  mod_group: long_con
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: move
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.perfect_papers
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.guile.disguise]
+  excluded_tags: []
+  mod_group: forgery
+  weight: 1
+  min_tier: 4
+  signature_eligible: false
+  bias: move
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.no_cell_holds
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.guile.escape]
+  excluded_tags: []
+  mod_group: breakout
+  weight: 1
+  min_tier: 4
+  signature_eligible: false
+  bias: move
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.like_smoke
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.guile.escape]
+  excluded_tags: []
+  mod_group: smoke_slip
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: move
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.heartsbane
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.guile.poisoncraft]
+  excluded_tags: []
+  mod_group: heartsbane
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: move
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.second_shadow
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.guile.stealth]
+  excluded_tags: []
+  mod_group: shadowing
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: move
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.ways_under_the_wall
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.guile.streetwise]
+  excluded_tags: []
+  mod_group: smuggle
+  weight: 1
+  min_tier: 4
+  signature_eligible: false
+  bias: move
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.word_below
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.guile.streetwise]
+  excluded_tags: []
+  mod_group: underworld_call
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: move
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.turn_the_trap
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.guile.thievery]
+  excluded_tags: []
+  mod_group: trap_turn
+  weight: 1
+  min_tier: 4
+  signature_eligible: false
+  bias: move
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.gone_from_the_hand
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.guile.thievery]
+  excluded_tags: []
+  mod_group: impossible_theft
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: move
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.eyes_aloft
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.wilds.animals]
+  excluded_tags: []
+  mod_group: hawk_scout
+  weight: 1
+  min_tier: 4
+  signature_eligible: false
+  bias: sense
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.stampede
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.wilds.animals]
+  excluded_tags: []
+  mod_group: stampede
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: sense
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.lands_larder
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.wilds.foraging]
+  excluded_tags: []
+  mod_group: great_harvest
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: sense
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.unfailing_road
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.wilds.navigation]
+  excluded_tags: []
+  mod_group: unfailing_road
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: sense
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.keep_her_afloat
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.wilds.seafaring]
+  excluded_tags: []
+  mod_group: hull_patch
+  weight: 1
+  min_tier: 4
+  signature_eligible: false
+  bias: sense
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.weather_wise
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.wilds.survival]
+  excluded_tags: []
+  mod_group: weather_wise
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: sense
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.biting_water
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.craft.alchemy]
+  excluded_tags: []
+  mod_group: acid_flask
+  weight: 1
+  min_tier: 4
+  signature_eligible: false
+  bias: craft
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.engine_of_war
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.craft.artifice]
+  excluded_tags: []
+  mod_group: siege_engine
+  weight: 1
+  min_tier: 4
+  signature_eligible: false
+  bias: craft
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.days_fortress
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.craft.building]
+  excluded_tags: []
+  mod_group: raise_fortress
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: craft
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.hearth_ale
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.craft.cookery]
+  excluded_tags: []
+  mod_group: hearth_ale
+  weight: 1
+  min_tier: 4
+  signature_eligible: false
+  bias: craft
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.feast_of_accord
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.craft.cookery]
+  excluded_tags: []
+  mod_group: great_feast
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: craft
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.lasting_word
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.craft.enchanting]
+  excluded_tags: []
+  mod_group: lasting_rune
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: craft
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.heart_of_the_stone
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.craft.jewelcraft]
+  excluded_tags: []
+  mod_group: focus_stone
+  weight: 1
+  min_tier: 4
+  signature_eligible: false
+  bias: craft
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.regalia
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.craft.jewelcraft]
+  excluded_tags: []
+  mod_group: regalia
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: craft
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.second_skin
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.craft.leathercraft]
+  excluded_tags: []
+  mod_group: fitted_leather
+  weight: 1
+  min_tier: 4
+  signature_eligible: false
+  bias: craft
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.hide_of_the_slain
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.craft.leathercraft]
+  excluded_tags: []
+  mod_group: trophy_hide
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: craft
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.palimpsest
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.craft.scribing]
+  excluded_tags: []
+  mod_group: recover_text
+  weight: 1
+  min_tier: 4
+  signature_eligible: false
+  bias: craft
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.master_chart
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.craft.scribing]
+  excluded_tags: []
+  mod_group: master_chart
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: craft
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.named_blade
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.craft.smithing]
+  excluded_tags: []
+  mod_group: named_blade
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: craft
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.company_banner
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.craft.textiles]
+  excluded_tags: []
+  mod_group: banner
+  weight: 1
+  min_tier: 4
+  signature_eligible: false
+  bias: craft
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.spiders_rigging
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.craft.textiles]
+  excluded_tags: []
+  mod_group: rope_web
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: craft
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.heartwood_bow
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.craft.woodcraft]
+  excluded_tags: []
+  mod_group: heartwood_bow
+  weight: 1
+  min_tier: 4
+  signature_eligible: false
+  bias: craft
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.lay_the_keel
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.craft.woodcraft]
+  excluded_tags: []
+  mod_group: great_carpentry
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: craft
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.rally_to_the_standard
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.influence.command]
+  excluded_tags: []
+  mod_group: great_rally
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: social
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.order_of_precedence
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.influence.etiquette]
+  excluded_tags: []
+  mod_group: precedence
+  weight: 1
+  min_tier: 4
+  signature_eligible: false
+  bias: social
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.guest_right
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.influence.etiquette]
+  excluded_tags: []
+  mod_group: guest_right
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: social
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.hidden_wound
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.influence.insight]
+  excluded_tags: []
+  mod_group: hidden_wound
+  weight: 1
+  min_tier: 4
+  signature_eligible: false
+  bias: social
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.open_room
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.influence.insight]
+  excluded_tags: []
+  mod_group: open_room
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: social
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.promise_made
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.influence.intimidation]
+  excluded_tags: []
+  mod_group: dread_promise
+  weight: 1
+  min_tier: 4
+  signature_eligible: false
+  bias: social
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.kingmakers_table
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.influence.intrigue]
+  excluded_tags: []
+  mod_group: kingmaker
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: social
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.words_before_the_charge
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.influence.performance]
+  excluded_tags: []
+  mod_group: battle_speech
+  weight: 1
+  min_tier: 4
+  signature_eligible: false
+  bias: social
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.tale_that_travels
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.influence.performance]
+  excluded_tags: []
+  mod_group: travelling_tale
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: social
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.point_by_point
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.influence.persuasion]
+  excluded_tags: []
+  mod_group: argument
+  weight: 1
+  min_tier: 4
+  signature_eligible: false
+  bias: social
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.change_of_heart
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.influence.persuasion]
+  excluded_tags: []
+  mod_group: change_heart
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: social
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.drill_yard
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.influence.teaching]
+  excluded_tags: []
+  mod_group: drill
+  weight: 1
+  min_tier: 4
+  signature_eligible: false
+  bias: social
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.sound_venture
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.influence.trade]
+  excluded_tags: []
+  mod_group: venture
+  weight: 1
+  min_tier: 4
+  signature_eligible: false
+  bias: social
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.corner_the_market
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.influence.trade]
+  excluded_tags: []
+  mod_group: corner_market
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: social
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.word_of_banishment
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.divine.exorcism]
+  excluded_tags: []
+  mod_group: banish_word
+  weight: 1
+  min_tier: 4
+  signature_eligible: false
+  bias: ward
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.grave_emptied
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.divine.exorcism]
+  excluded_tags: []
+  mod_group: mass_turning
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: ward
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.circle_of_mending
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.divine.healing]
+  excluded_tags: []
+  mod_group: mass_mend
+  weight: 1
+  min_tier: 4
+  signature_eligible: false
+  bias: ward
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.sworn_company
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.divine.oaths]
+  excluded_tags: []
+  mod_group: company_oath
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: ward
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.patrons_gaze
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.divine.pact]
+  excluded_tags: []
+  mod_group: patron_gaze
+  weight: 1
+  min_tier: 4
+  signature_eligible: false
+  bias: ward
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.weal_or_woe
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.divine.revelation]
+  excluded_tags: []
+  mod_group: omen
+  weight: 1
+  min_tier: 4
+  signature_eligible: false
+  bias: ward
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.far_seeing_trance
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.divine.revelation]
+  excluded_tags: []
+  mod_group: trance
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: ward
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.bond_of_hearth
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.divine.rites]
+  excluded_tags: []
+  mod_group: kin_bond
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: ward
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.sentence_passed
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.divine.smiting]
+  excluded_tags: []
+  mod_group: judgment
+  weight: 1
+  min_tier: 4
+  signature_eligible: false
+  bias: ward
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.dawnbreak
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.divine.smiting]
+  excluded_tags: []
+  mod_group: dawnbreak
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: ward
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.hallowed_ground
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.divine.warding]
+  excluded_tags: []
+  mod_group: hallow
+  weight: 1
+  min_tier: 4
+  signature_eligible: false
+  bias: ward
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.keepers_shield
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.divine.warding]
+  excluded_tags: []
+  mod_group: keeper_shield
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: ward
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.giants_sinew
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.arcane.alteration]
+  excluded_tags: []
+  mod_group: giant_sinew
+  weight: 1
+  min_tier: 4
+  signature_eligible: false
+  bias: arcane
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.stone_flesh
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.arcane.alteration]
+  excluded_tags: []
+  mod_group: petrify
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: arcane
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.groundswell
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.arcane.earth]
+  excluded_tags: []
+  mod_group: tremor
+  weight: 1
+  min_tier: 4
+  signature_eligible: false
+  bias: arcane
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.iron_obeys
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.arcane.earth]
+  excluded_tags: []
+  mod_group: metal_command
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: arcane
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.wall_of_flame
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.arcane.fire]
+  excluded_tags: []
+  mod_group: fire_wall
+  weight: 1
+  min_tier: 4
+  signature_eligible: false
+  bias: arcane
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.winters_breath
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.arcane.frost]
+  excluded_tags: []
+  mod_group: frost_cone
+  weight: 1
+  min_tier: 4
+  signature_eligible: false
+  bias: arcane
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.ice_coffin
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.arcane.frost]
+  excluded_tags: []
+  mod_group: ice_coffin
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: arcane
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.dread_phantasm
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.arcane.illusion]
+  excluded_tags: []
+  mod_group: fear_phantasm
+  weight: 1
+  min_tier: 4
+  signature_eligible: false
+  bias: arcane
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.unremembering
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.arcane.mind]
+  excluded_tags: []
+  mod_group: memory_theft
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: arcane
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.corpse_speech
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.arcane.necromancy]
+  excluded_tags: []
+  mod_group: corpse_speech
+  weight: 1
+  min_tier: 4
+  signature_eligible: false
+  bias: arcane
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.skein_of_lightning
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.arcane.storm]
+  excluded_tags: []
+  mod_group: great_chain
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: arcane
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.bound_servitor
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.arcane.summoning]
+  excluded_tags: []
+  mod_group: servitor
+  weight: 1
+  min_tier: 4
+  signature_eligible: false
+  bias: arcane
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.deep_calling
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.arcane.summoning]
+  excluded_tags: []
+  mod_group: great_summon
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: arcane
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.seal_of_closing
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.arcane.warding]
+  excluded_tags: []
+  mod_group: seal
+  weight: 1
+  min_tier: 4
+  signature_eligible: false
+  bias: arcane
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.dome_of_force
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.arcane.warding]
+  excluded_tags: []
+  mod_group: force_dome
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: arcane
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.far_glass
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.arcane.divination]
+  excluded_tags: []
+  mod_group: scrying
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: arcane
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.call_the_pack
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.primal.beastkin]
+  excluded_tags: []
+  mod_group: call_pack
+  weight: 1
+  min_tier: 4
+  signature_eligible: false
+  bias: arcane
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.herd_lord
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.primal.beastkin]
+  excluded_tags: []
+  mod_group: herd_lord
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: arcane
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.tidecall
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.primal.elements]
+  excluded_tags: []
+  mod_group: tidecall
+  weight: 1
+  min_tier: 4
+  signature_eligible: false
+  bias: arcane
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.whirlwind
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.primal.elements]
+  excluded_tags: []
+  mod_group: whirlwind
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: arcane
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.greenwood_rising
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.primal.growth]
+  excluded_tags: []
+  mod_group: grove
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: arcane
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.hag_stone_charm
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.primal.hexcraft]
+  excluded_tags: []
+  mod_group: luck_charm
+  weight: 1
+  min_tier: 4
+  signature_eligible: false
+  bias: arcane
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.blackthorn_curse
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.primal.hexcraft]
+  excluded_tags: []
+  mod_group: long_curse
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: arcane
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.hawks_wings
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.primal.shapeshifting]
+  excluded_tags: []
+  mod_group: grow_wings
+  weight: 1
+  min_tier: 4
+  signature_eligible: false
+  bias: arcane
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.ancestors_answer
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.primal.spirits]
+  excluded_tags: []
+  mod_group: ancestor_host
+  weight: 1
+  min_tier: 5
+  signature_eligible: false
+  bias: arcane
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]
+- id: ab.the_stilling
+  source: abilities.yaml (a calling technique)
+  gate_tags: [deed.primal.weather]
+  excluded_tags: []
+  mod_group: still_weather
+  weight: 1
+  min_tier: 4
+  signature_eligible: false
+  bias: arcane
+  rank_rule: item tier 3 -> rank 1; 4 -> rank 2; 5+ -> rank 3; never above the ability's authored ranks
+  lifecycle: provisional
+  basis: [05.2.8, 08.4.3]

@@ -20,7 +20,7 @@ Checks (each finding is ERROR, WARN or INFO; the summary counts them):
   8. JRULES    every rule with a [J:*] decision has a Worst case line; counts inline-form vs template-form (I-001).
   9. HANDLERS  every handler's boundary and phase are legal, `before` targets exist in the same phase.
  10. BLOCKS    every owner-block owner is allowed by T-00-19.
- 11. POOLS     (INFO) long-horizon pick depth: own-pool size and tier-4/5 coverage per calling and level-2 node (I-087).
+ 11. POOLS     (INFO) long-horizon pick depth: own-pool size per calling; a min_tier-4 and a min_tier-5 ability per level-2 node (I-087).
 """
 import glob, json, os, re, sys
 from collections import Counter, defaultdict, OrderedDict
@@ -464,7 +464,7 @@ for fname, d in DOCS.items():
 # ====================================================================== 11. POOLS (INFO; revision I-087)
 # Long-horizon pick depth: for each calling, the pool abilities it can draw as OWN picks (04.8.4: first tag at or
 # under pool_gate.own, non-oath; for a conduct calling, oath abilities on its axis and pole) and the highest
-# min_tier among them; for each level-2 deed node, whether any pool ability at tier 4+ starts under it. INFO only:
+# min_tier among them; for each level-2 deed node, whether pool abilities at min_tier 4 and at min_tier 5 start under it. INFO only:
 # kin picks are legal, so a thin own pool is a depth gap to author into (ch.05), never an error.
 try:
     _AB = [a for a in (DOCS.get("abilities.yaml") or {}).get("abilities", [])
@@ -486,8 +486,10 @@ try:
     add("INFO", "POOLS", "callings.yaml", "%d of %d deed-keyed specialist callings have fewer than six own-pool abilities; %d have no own-pool tier-5 ability; %d vow/dark callings have no tier-5 oath ability on their axis"
         % (thin, sum(1 for c in _CL if c.get("kind") == "specialist" and c.get("breadth") not in ("vow", "dark")), no5, none5_conduct))
     _L2 = sorted({".".join(a["tags"][0].split(".")[:3]) for a in _AB if a["tags"][0].startswith("deed.")})
-    _gap = [n for n in _L2 if not any(_under(a["tags"][0], n) and a.get("min_tier", 1) >= 4 for a in _AB if not a.get("conduct_pole"))]
-    add("INFO", "POOLS", "abilities.yaml", "%d of %d level-2 deed nodes have no pool ability at min_tier 4+: %s" % (len(_gap), len(_L2), ", ".join(_gap)))
+    # [revision: I-087] each level-2 node needs one pool ability at min_tier 4 AND one at min_tier 5 (C2c).
+    _has = lambda n, t: any(_under(a["tags"][0], n) and a.get("min_tier", 1) == t for a in _AB if not a.get("conduct_pole"))
+    _gap = ["%s (no min_tier %s)" % (n, "/".join(str(t) for t in (4, 5) if not _has(n, t))) for n in _L2 if not (_has(n, 4) and _has(n, 5))]
+    add("INFO", "POOLS", "abilities.yaml", "%d of %d level-2 deed nodes lack a pool ability at min_tier 4 or at min_tier 5%s" % (len(_gap), len(_L2), (": " + ", ".join(_gap)) if _gap else ""))
 except Exception as e:  # an audit must never break validation
     add("WARN", "POOLS", "abilities.yaml", "pool audit failed: %s" % e)
 

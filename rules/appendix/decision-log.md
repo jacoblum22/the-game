@@ -1277,6 +1277,13 @@ Format per BRIEF §11. Citations per 00.1.6. Numbers consumed by other chapters 
 - Serves: C:P4 (breadth against competence); goal 1 (depth comes from deeds).
 - Revisit if: T-05 playtests show a high-Intellect character holding more +2 entries than a focused calling of the same tier grants competence (then drop learning picks from the cap).
 
+### DL-05-38: Every level-2 deed tag has a min_tier-4 and a min_tier-5 ability (revision I-087)
+- Decision: 05.11.6 adds a coverage floor: each of the 81 level-2 deed tags holds at least one tag-gated ability at `min_tier` 4 and one at `min_tier` 5, so that a narrow calling's own pool (its level-2 parent's subtree, 04.8.4) can fill its tier-4 and tier-5 picks from its own art. 123 abilities were authored to meet it (`05-gen_data05/ab_deep.py`; 61 at `min_tier` 4, 62 at `min_tier` 5), one rank each, each with its own name, `mod_group`, principle and exclusions, each priced by 05.11 (T-05-9) and passed by `gen_data05.py`'s budget, grammar, id and lint checks. `gen_data05.py`'s coverage check now fails on a gap, and the validator's `POOLS` INFO reports nodes lacking either tier. The pool is 389 entries (302 tag-gated); `gen_item_ability.yaml#pool` gains the 117 active ones (279).
+- Alternatives considered: one tier-4-or-5 ability per node, as C2b's audit counted (rejected: a narrow calling has picks at both tiers 4 and 5, and 62 nodes would still send their tier-5 pick to kin); leaving depth to kin picks (rejected: legal under 04.8.4, but the tier-5 pick of most narrow callings then did not deepen their art, the I-087 finding); widening the own pool to the branch (rejected: it erases what makes a narrow calling narrow).
+- Evidence: verification-2c long-arc playtest (I-087); `validate_ruleset.py -v` POOLS before: 43 of 81 nodes with no min_tier 4+, 92 of 132 specialists with no own-pool tier-5; after: 0 of 81 nodes lacking min_tier 4 or 5, 0 specialists with no own-pool tier-5; `05-ladder-check-output.txt` (183 callings, 0 failures).
+- Serves: goal 1 (depth comes from deeds); C:P5 (the shared pool serves every calling); C:V (coverage, not taste, sets the count).
+- Revisit if: OEQ-05-6's pick-rate logs show tier-4/5 entries of one node never picked (fold them) or always picked (re-price them).
+
 ## DL-06 — Conflict
 
 Format per BRIEF §11. Citations per 00.1.6. Numbers consumed by other chapters are marked **[consumed]**.

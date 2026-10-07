@@ -24,13 +24,13 @@ compiled_from:
 - file: 04-recognition-and-growth.md
   sha256_16: 5c0698b3d10bd4a2
 - file: 05-abilities-focus-magic.md
-  sha256_16: 73bc1d61e7018aa2
+  sha256_16: b21907b8a6e5f5ed
 - file: 06-conflict.md
   sha256_16: 0b01ff1ea628421b
 - file: 07-harm-recovery-death.md
   sha256_16: b1f2ef97d4ba853e
 - file: 08-items-loot-crafting.md
-  sha256_16: f6509590fe3caf14
+  sha256_16: 067f967e68b6574b
 - file: 09-adversaries.md
   sha256_16: 463f076dbd94819d
 - file: 10-exploration-travel-sites.md

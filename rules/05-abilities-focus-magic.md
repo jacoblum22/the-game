@@ -15,7 +15,7 @@
 > fold) wherever something new arrives.
 
 **Reading this chapter.** Rules are 05.1–05.12. The data is canonical for numbers and ids:
-`data/abilities.yaml` (the pool: 266 abilities), `data/licenses.yaml` (81 training licenses and the Focus
+`data/abilities.yaml` (the pool: 389 abilities), `data/licenses.yaml` (81 training licenses and the Focus
 licenses), `data/rituals.yaml` (24 rites and the rite-design tables), `data/composites.yaml` (named
 composites and the priority tables), with additions to shared files in `data/effects.yaml owner-block 05` and
 `data/boundaries.yaml owner-block 05`. The data files are generated and validated by
@@ -38,8 +38,8 @@ present), and tools compute cost, legality, uses, composition and effect [BRIEF 
 
 **The bets this chapter makes.**
 
-1. **One pool, tag-gated, tier-floored.** 179 calling-partition abilities cover all 81 level-2 deed tags
-   (at least two each, one usable at tier 1) and all nine branches at every minimum tier; 57 more are
+1. **One pool, tag-gated, tier-floored.** 302 calling-partition abilities cover all 81 level-2 deed tags
+   (at least four each: one usable at tier 1, one at `min_tier` 4 and one at `min_tier` 5 [revision: I-087]) and all nine branches at every minimum tier; 57 more are
    gated by conduct axes for vows and dark callings, three at each pole a calling uses (tiers 1, 3 and 5);
    27 mirror ch.04's absorbable powers; and three **branch workings** are held through magic training
    itself, so that a caster is never weaponless (05.7.11) [revision: I-007, I-009, I-015]. A calling's
@@ -1482,8 +1482,8 @@ one unit under, 171 are two under, and none is over (`abilities.yaml#census.budg
 I-007, I-009, I-015]. The 27
 absorbed powers are ch.04's and are costed by 04.10.4's three separate costs, not by this table.
 
-**05.11.6 How many abilities, and why.** `[D]` The pool holds **266** entries: 179 tag-gated, 57
-oath-gated, 3 branch workings, 27 absorbed [revision: I-007, I-009, I-015]. The count is set by coverage, not by taste [C:V; DL-05-02]:
+**05.11.6 How many abilities, and why.** `[D]` The pool holds **389** entries: 302 tag-gated, 57
+oath-gated, 3 branch workings, 27 absorbed [revision: I-007, I-009, I-015, I-087]. The count is set by coverage, not by taste [C:V; DL-05-02]:
 - **Every level-2 deed tag has at least two** (one usable at tier 1), because ch.04 has a calling for
   every level-2 tag and that calling's *own* pool is its tag (04.8.4): 81 tags × 2 = 162 is the floor.
 - **Every branch has at least two at each minimum tier 1–5**, so a branch calling and a narrow calling's
@@ -1495,8 +1495,13 @@ oath-gated, 3 branch workings, 27 absorbed [revision: I-007, I-009, I-015]. The 
 - **Every primal element has a `min_tier` 1 working** (fire, water, earth, air), because the Touched's
   spark names one of the four and must start with its own (02.6.3): this adds 3 [revision: I-015].
 - **One branch working per magic branch** (05.7.11), outside the pick pool: this adds 3 [revision: I-009].
-- **Above that floor the pool is deliberately not grown.** A narrow calling sees its own two or three and
-  the rest of its branch (14 to 26); three candidates are shown per pick (04.8.4); and the eight forms,
+- **Every level-2 deed tag has one at `min_tier` 4 and one at `min_tier` 5**, so that a narrow calling's
+  own pool deepens its own art at its tier-4 and tier-5 picks instead of sending them to kin arts (04.8.4).
+  Before this, 61 of the 81 tags had no `min_tier`-4 entry and 62 no `min_tier`-5 entry: this adds 123
+  (`05-gen_data05/ab_deep.py`, each priced by 05.11 like the rest; `gen_data05.py` now fails on a gap, and
+  the validator's `POOLS` audit reports it) [revision: I-087].
+- **Above that floor the pool is deliberately not grown.** A narrow calling sees its own three to five and
+  the rest of its branch (22 to 46) [revision: I-087]; three candidates are shown per pick (04.8.4); and the eight forms,
   six flares, three ranks and one stretch per ability multiply what each entry can do. The research is
   consistent that depth comes from interactions among few primitives and bloat from their number
   [R3 05.16; C:V]. New abilities enter only as provisional content at a boundary (05.12.3).
@@ -1736,106 +1741,106 @@ one DC step, one Focus, one condition; shown before any time is spent (class i).
 
 | Group | Total | min_tier 1 | 2 | 3 | 4 | 5 | Level-2 tags covered (each with at least 2, one at tier 1) |
 |---|---|---|---|---|---|---|---|
-| `deed.martial` | 26 | 12 | 6 | 4 | 2 | 2 | 12 of 12 |
-| `deed.guile` | 17 | 8 | 3 | 2 | 2 | 2 | 8 of 8 |
-| `deed.wilds` | 14 | 6 | 2 | 2 | 2 | 2 | 6 of 6 |
-| `deed.lore` | 18 | 9 | 3 | 2 | 2 | 2 | 9 of 9 |
-| `deed.arcane` | 26 | 11 | 5 | 4 | 3 | 3 | 11 of 11 |
-| `deed.divine` | 17 | 8 | 2 | 3 | 2 | 2 | 8 of 8 |
-| `deed.primal` | 20 | 10 | 3 | 3 | 2 | 2 | 7 of 7 |
-| `deed.influence` | 18 | 9 | 3 | 2 | 2 | 2 | 9 of 9 |
-| `deed.craft` | 23 | 11 | 4 | 3 | 3 | 2 | 11 of 11 |
+| `deed.martial` | 46 | 12 | 6 | 4 | 12 | 12 | 12 of 12 |
+| `deed.guile` | 29 | 8 | 3 | 2 | 8 | 8 | 8 of 8 |
+| `deed.wilds` | 22 | 6 | 2 | 2 | 6 | 6 | 6 of 6 |
+| `deed.lore` | 32 | 9 | 3 | 2 | 9 | 9 | 9 of 9 |
+| `deed.arcane` | 42 | 11 | 5 | 4 | 11 | 11 | 11 of 11 |
+| `deed.divine` | 29 | 8 | 2 | 3 | 8 | 8 | 8 of 8 |
+| `deed.primal` | 30 | 10 | 3 | 3 | 7 | 7 | 7 of 7 |
+| `deed.influence` | 32 | 9 | 3 | 2 | 9 | 9 | 9 of 9 |
+| `deed.craft` | 40 | 11 | 4 | 3 | 11 | 11 | 11 of 11 |
 | branch workings (05.7.11; held through training, no slot) | 3 | 3 | 0 | 0 | 0 | 0 | one per magic branch |
 | oath-gated, positive pole | 30 | 10 | 0 | 10 | 0 | 10 | 10 axes x 3 |
 | oath-gated, negative pole | 27 | 9 | 0 | 9 | 0 | 9 | 9 axes x 3 |
 | absorbed powers (ch.04) | 27 | 16 | 9 | 2 | 0 | 0 | gated by creature tags |
-| **all** | **266** | 122 | 40 | 46 | 20 | 38 | 81 of 81 |
+| **all** | **389** | 122 | 40 | 46 | 81 | 100 | 81 of 81 |
 
 **T-05-14 Index of the pool.** `[D]` One row per level-2 deed tag, then per conduct axis. Each ability is shown as *Name* (minimum tier · Focus at rank 1 · timing). The data file is canonical.
 
 | Tag | Abilities |
 |---|---|
-| `martial.blade` | *Riposte* (1 · 1F · reaction); *Cleaving Arc* (2 · 1F · rider); *Finishing Stroke* (5 · 3F · beat, /scene) |
-| `martial.axe` | *Hew* (1 · 1F · rider); *Sunder* (3 · 2F · beat) |
-| `martial.bludgeon` | *Staggering Blow* (1 · 1F · rider); *Shatter Guard* (4 · 2F · rider) |
-| `martial.polearm` | *Set the Spear* (1 · 0F · reaction, 1/round); *Long Guard* (2 · 1F · rider) |
-| `martial.archery` | *Aimed Shot* (1 · 1F · rider); *Volley* (3 · 1F · beat) |
-| `martial.thrown` | *Thrower's Eye* (1 · — · passive); *Pinning Cast* (2 · 1F · rider) |
-| `martial.unarmed` | *Iron Palm* (1 · — · passive); *Clinch and Throw* (2 · 1F · rider) |
-| `martial.shield` | *Shield Block* (1 · 0F · reaction, 1/round); *Shield Wall* (3 · 1F · rider) |
-| `martial.armor` | *Armored Ease* (1 · — · passive); *Bulwark* (4 · 2F · reaction, /scene) |
-| `martial.tactics` | *Pressing Advantage* (1 · 0F · trigger, /scene); *Read the Field* (2 · 0F · beat); *Commanding Ground* (5 · 3F · beat, /scene) |
-| `martial.mounted` | *Lance Charge* (1 · 1F · rider); *Saddle-Born* (3 · — · passive) |
-| `martial.athletics` | *Surefoot* (1 · — · passive); *Mighty Heave* (2 · 1F · beat) |
-| `guile.stealth` | *Soft Step* (1 · — · passive); *Vanish* (3 · 1F · beat) |
-| `guile.thievery` | *Light Fingers* (1 · — · passive); *Ghost at the Lock* (2 · 1F · rider) |
-| `guile.deception` | *Plausible Lie* (1 · — · passive); *Misdirection* (4 · 1F · reaction, /scene) |
-| `guile.disguise` | *Quick Change* (1 · 0F · beat); *The Living Mask* (5 · 2F · beat, /long rest) |
-| `guile.ambush` | *Backstab* (1 · 1F · rider); *Spring the Trap* (2 · 0F · rider, /conflict); *Throat of Night* (5 · 3F · beat, /scene) |
-| `guile.poisoncraft` | *Envenom* (1 · 0F · rider); *Slow Draught* (4 · 2F · beat) |
-| `guile.escape` | *Slip Free* (1 · 0F · beat); *Gone Like Smoke* (2 · 1F · rider) |
-| `guile.streetwise` | *Word on the Street* (1 · 0F · beat, /scene); *A Door in Every Town* (3 · 0F · beat, /scene) |
-| `wilds.survival` | *Hard Country* (1 · — · passive); *Shelter Anywhere* (3 · 0F · beat) |
+| `martial.blade` | *Riposte* (1 · 1F · reaction); *Cleaving Arc* (2 · 1F · rider); *Inside the Guard* (4 · 2F · rider); *Finishing Stroke* (5 · 3F · beat, /scene) |
+| `martial.axe` | *Hew* (1 · 1F · rider); *Sunder* (3 · 2F · beat); *Bearded Hook* (4 · 1F · rider); *Red Harvest* (5 · 3F · beat, /scene) |
+| `martial.bludgeon` | *Staggering Blow* (1 · 1F · rider); *Shatter Guard* (4 · 2F · rider); *Ring the Bell* (5 · 2F · rider, /scene) |
+| `martial.polearm` | *Set the Spear* (1 · 0F · reaction, 1/round); *Long Guard* (2 · 1F · rider); *Hook and Haul* (4 · 2F · rider); *Hedge of Points* (5 · 2F · rider) |
+| `martial.archery` | *Aimed Shot* (1 · 1F · rider); *Volley* (3 · 1F · beat); *Through the Gap* (4 · 2F · rider); *The Long Shot* (5 · 3F · beat, /scene) |
+| `martial.thrown` | *Thrower's Eye* (1 · — · passive); *Pinning Cast* (2 · 1F · rider); *Shield-Breaker Throw* (4 · 2F · rider); *Rain of Knives* (5 · 3F · beat, /scene) |
+| `martial.unarmed` | *Iron Palm* (1 · — · passive); *Clinch and Throw* (2 · 1F · rider); *Nerve Strike* (4 · 2F · rider); *The Breaking Hold* (5 · 3F · beat, /scene) |
+| `martial.shield` | *Shield Block* (1 · 0F · reaction, 1/round); *Shield Wall* (3 · 1F · rider); *Boss and Rim* (4 · 1F · rider); *Roof of Shields* (5 · 2F · reaction, /scene) |
+| `martial.armor` | *Armored Ease* (1 · — · passive); *Bulwark* (4 · 2F · reaction, /scene); *Iron Mountain* (5 · 2F · rider) |
+| `martial.tactics` | *Pressing Advantage* (1 · 0F · trigger, /scene); *Read the Field* (2 · 0F · beat); *Hammer and Anvil* (4 · 2F · beat); *Commanding Ground* (5 · 3F · beat, /scene) |
+| `martial.mounted` | *Lance Charge* (1 · 1F · rider); *Saddle-Born* (3 · — · passive); *Ride and Wheel* (4 · 1F · rider); *Ride Them Down* (5 · 2F · rider, /scene) |
+| `martial.athletics` | *Surefoot* (1 · — · passive); *Mighty Heave* (2 · 1F · beat); *Tumbler's Grace* (4 · — · passive); *Strength of Legend* (5 · 2F · beat, /long rest) |
+| `guile.stealth` | *Soft Step* (1 · — · passive); *Vanish* (3 · 1F · beat); *Ghost in the House* (4 · — · passive); *Second Shadow* (5 · 3F · beat, /scene) |
+| `guile.thievery` | *Light Fingers* (1 · — · passive); *Ghost at the Lock* (2 · 1F · rider); *Turn the Trap* (4 · 2F · beat, /scene); *Gone From the Hand* (5 · 3F · beat, /scene) |
+| `guile.deception` | *Plausible Lie* (1 · — · passive); *Misdirection* (4 · 1F · reaction, /scene); *The Long Con* (5 · 3F · beat, /scene) |
+| `guile.disguise` | *Quick Change* (1 · 0F · beat); *Perfect Papers* (4 · 1F · beat); *The Living Mask* (5 · 2F · beat, /long rest) |
+| `guile.ambush` | *Backstab* (1 · 1F · rider); *Spring the Trap* (2 · 0F · rider, /conflict); *Shot From Nowhere* (4 · 2F · rider); *Throat of Night* (5 · 3F · beat, /scene) |
+| `guile.poisoncraft` | *Envenom* (1 · 0F · rider); *Slow Draught* (4 · 2F · beat); *Heartsbane* (5 · 2F · rider, /scene) |
+| `guile.escape` | *Slip Free* (1 · 0F · beat); *Gone Like Smoke* (2 · 1F · rider); *No Cell Holds* (4 · 2F · beat, /scene); *Like Smoke* (5 · 2F · reaction, /scene) |
+| `guile.streetwise` | *Word on the Street* (1 · 0F · beat, /scene); *A Door in Every Town* (3 · 0F · beat, /scene); *Ways Under the Wall* (4 · 2F · beat, /scene); *Word Below* (5 · 3F · beat, /scene) |
+| `wilds.survival` | *Hard Country* (1 · — · passive); *Shelter Anywhere* (3 · 0F · beat); *Fire in Any Weather* (4 · — · passive); *Weather-Wise* (5 · 2F · beat, /long rest) |
 | `wilds.tracking` | *Quarry's Mark* (1 · 1F · trigger, /scene); *Read Sign* (2 · 0F · beat); *Relentless Pursuit* (4 · — · passive); *Apex Hunter* (5 · 2F · rider) |
-| `wilds.navigation` | *Pathfinder* (1 · — · passive); *Hidden Ways* (3 · 1F · beat, /scene) |
-| `wilds.animals` | *Gentle Hand* (1 · 0F · beat); *Beast at Heel* (2 · 0F · rider) |
-| `wilds.foraging` | *Green Larder* (1 · — · passive); *Wild Physic* (4 · 1F · beat, /short rest) |
-| `wilds.seafaring` | *Sea Legs* (1 · — · passive); *Storm Helm* (5 · 3F · beat, /scene) |
-| `lore.history` | *Old Tales* (1 · — · passive); *Herald's Eye* (2 · 0F · beat) |
-| `lore.languages` | *Gift of Tongues* (1 · 0F · beat, /scene); *Cipher-Breaker* (3 · — · passive) |
-| `lore.bestiary` | *Know the Beast* (1 · 0F · beat); *Weak Point* (2 · 1F · rider) |
-| `lore.medicine` | *Field Surgeon* (1 · 0F · beat); *Master's Remedy* (4 · 2F · beat) |
-| `lore.engineering` | *Find the Flaw* (1 · 0F · beat); *Clockwork Sense* (3 · 0F · beat) |
-| `lore.law` | *Letter of the Law* (1 · — · passive); *The Unanswerable Case* (5 · 3F · beat, /scene) |
-| `lore.arcana` | *Spell-Sight* (1 · 0F · beat); *Theory of the Weave* (2 · — · passive) |
-| `lore.religion` | *Name the Power* (1 · 0F · beat); *Know the Unclean* (4 · — · passive) |
-| `lore.investigation` | *Keen Search* (1 · — · passive); *Reconstruct the Scene* (5 · 3F · beat, /scene) |
-| `arcane.fire` | *Flame Lance* (1 · 1F · beat); *Fire Shroud* (2 · 2F · rider); *Firestorm* (5 · 3F · beat, /long rest) |
-| `arcane.frost` | *Rime Spear* (1 · 1F · beat); *Glaze* (3 · 2F · beat) |
-| `arcane.storm` | *Arc Bolt* (1 · 1F · beat); *Thunderclap* (4 · 2F · beat) |
-| `arcane.earth` | *Clutching Earth* (1 · 1F · beat); *Stoneskin* (3 · 2F · beat) |
-| `arcane.illusion` | *Phantom* (1 · 1F · beat); *Veil* (2 · 2F · beat); *Mirror Host* (5 · 3F · beat, /scene) |
-| `arcane.divination` | *Trace the Thread* (1 · 1F · beat); *Foresee* (4 · 2F · reaction, /scene) |
-| `arcane.warding` | *Spell Ward* (1 · 1F · reaction); *Counterspell* (2 · 2F · reaction); *Unbinding* (3 · 2F · beat) |
-| `arcane.mind` | *Honeyed Thought* (1 · 1F · beat); *Compel* (4 · 3F · beat) |
-| `arcane.summoning` | *Call Servant* (1 · 1F · beat, /scene); *Banish* (3 · 2F · beat) |
-| `arcane.necromancy` | *Wither* (1 · 1F · beat); *Drain Life* (2 · 2F · beat); *Raise the Fallen* (5 · 3F · beat, /long rest) |
-| `arcane.alteration` | *Feather Fall* (1 · 1F · reaction); *Long Step* (2 · 2F · beat) |
-| `divine.healing` | *Mend Flesh* (1 · 1F · beat); *Purge* (2 · 1F · beat); *Breath of Life* (5 · 3F · beat, /long rest) |
-| `divine.warding` | *Sanctuary* (1 · 1F · beat); *Blessing* (2 · 1F · beat) |
-| `divine.smiting` | *Smite* (1 · 1F · rider); *Searing Light* (3 · 2F · beat) |
-| `divine.rites` | *Last Rites* (1 · 0F · beat); *Cleansing Rite* (4 · 2F · beat) |
-| `divine.oaths` | *Sworn Purpose* (1 · 0F · beat, /long rest); *Binding Vow* (4 · 2F · beat) |
-| `divine.revelation` | *Discern* (1 · 1F · beat, /scene); *Prophetic Dream* (3 · 0F · trigger, /long rest) |
-| `divine.exorcism` | *Turn the Dead* (1 · 1F · beat); *Cast Out* (3 · 2F · beat) |
-| `divine.pact` | *Patron's Brand* (1 · 1F · beat); *Blood Price* (5 · 1F · rider) |
-| `primal.growth` | *Root Snare* (1 · 1F · beat); *Thorn Coat* (2 · 1F · rider); *Renewal* (4 · 2F · beat) |
-| `primal.beastkin` | *Beast Speech* (1 · 0F · beat); *Borrowed Senses* (3 · 2F · beat) |
-| `primal.weather` | *Gust* (1 · 1F · beat); *Fog Bank* (2 · 2F · beat); *Call Lightning* (5 · 3F · beat, /scene) |
-| `primal.shapeshifting` | *Claws* (1 · 1F · rider); *Beast Form* (3 · 2F · beat); *Elemental Form* (5 · 3F · beat, /short rest) |
-| `primal.spirits` | *Spirit Tongue* (1 · 0F · beat); *Spirit Bargain* (4 · 2F · beat, /scene) |
-| `primal.elements` | *Cinder Stride* (1 · 1F · rider); *Undertow* (1 · 1F · beat); *Stolen Breath* (1 · 1F · beat); *Heave* (1 · 1F · beat); *Stone Shape* (3 · 2F · beat) |
-| `primal.hexcraft` | *Evil Eye* (1 · 1F · beat); *Lift the Hex* (2 · 2F · beat) |
-| `influence.persuasion` | *Silver Tongue* (1 · — · passive); *Turn the Room* (3 · 1F · beat) |
-| `influence.command` | *Rally* (1 · 1F · beat); *Hold the Line* (4 · 2F · rider) |
-| `influence.performance` | *Stirring Song* (1 · 1F · beat); *Captivate* (2 · 1F · beat) |
-| `influence.intimidation` | *Cow* (1 · 1F · rider); *Break the Will* (5 · 3F · beat, /scene) |
-| `influence.intrigue` | *Web of Whispers* (1 · 0F · beat, /scene); *Leverage* (4 · 1F · rider) |
-| `influence.trade` | *Sharp Bargain* (1 · — · passive); *Appraiser's Eye* (2 · 0F · beat) |
-| `influence.etiquette` | *Courtly Grace* (1 · — · passive); *Foreign Manner* (3 · — · passive) |
-| `influence.insight` | *Read the Heart* (1 · 0F · beat); *Ear for a Lie* (2 · — · passive) |
-| `craft.smithing` | *Keen Edge* (1 · 0F · beat); *Masterwork* (4 · — · passive) |
-| `craft.woodcraft` | *Fletch True* (1 · 0F · beat); *Sound Timber* (2 · 0F · beat) |
-| `craft.leathercraft` | *Field Patch* (1 · 0F · beat); *Cure Hide* (3 · — · passive) |
-| `craft.textiles` | *Knot Lore* (1 · — · passive); *Dressed for It* (2 · 0F · beat) |
-| `craft.alchemy` | *Quick Tincture* (1 · 0F · beat, /long rest); *Firepot* (2 · 0F · beat); *Grand Elixir* (5 · 2F · beat, /long rest) |
-| `craft.cookery` | *Hearty Fare* (1 · 0F · trigger, /short rest); *A Table Laid* (3 · 1F · beat, /scene) |
-| `craft.building` | *Dig In* (1 · 0F · beat); *Breach* (4 · 1F · beat) |
-| `craft.artifice` | *Rig a Trap* (1 · 0F · beat); *Clockwork Servant* (5 · 2F · beat, /long rest) |
-| `craft.jewelcraft` | *True Cut* (1 · — · passive); *Fine Setting* (3 · — · passive) |
-| `craft.enchanting` | *Rune of Keenness* (1 · 1F · beat); *Bind Power* (4 · — · passive) |
-| `influence.teaching` | *Patient Teacher* (1 · — · passive); *Lend the Art* (5 · 2F · beat, /scene) |
-| `craft.scribing` | *Fair Copy* (1 · 0F · beat); *Field Map* (2 · 0F · beat) |
+| `wilds.navigation` | *Pathfinder* (1 · — · passive); *Hidden Ways* (3 · 1F · beat, /scene); *Star Road* (4 · — · passive); *The Unfailing Road* (5 · 3F · beat, /scene) |
+| `wilds.animals` | *Gentle Hand* (1 · 0F · beat); *Beast at Heel* (2 · 0F · rider); *Eyes Aloft* (4 · 2F · beat, /scene); *Stampede* (5 · 3F · beat, /scene) |
+| `wilds.foraging` | *Green Larder* (1 · — · passive); *Wild Physic* (4 · 1F · beat, /short rest); *The Land's Larder* (5 · 2F · beat, /long rest) |
+| `wilds.seafaring` | *Sea Legs* (1 · — · passive); *Keep Her Afloat* (4 · 2F · beat, /scene); *Storm Helm* (5 · 3F · beat, /scene) |
+| `lore.history` | *Old Tales* (1 · — · passive); *Herald's Eye* (2 · 0F · beat); *Ruin-Reader* (4 · — · passive); *The Long Memory* (5 · 2F · beat, /long rest) |
+| `lore.languages` | *Gift of Tongues* (1 · 0F · beat, /scene); *Cipher-Breaker* (3 · — · passive); *Dead Tongues* (4 · 1F · beat); *Tongue of All Peoples* (5 · 2F · beat, /long rest) |
+| `lore.bestiary` | *Know the Beast* (1 · 0F · beat); *Weak Point* (2 · 1F · rider); *Old Enemy* (4 · — · passive); *The Bane Known* (5 · 3F · beat, /scene) |
+| `lore.medicine` | *Field Surgeon* (1 · 0F · beat); *Master's Remedy* (4 · 2F · beat); *Snatched Back* (5 · 3F · beat, /scene) |
+| `lore.engineering` | *Find the Flaw* (1 · 0F · beat); *Clockwork Sense* (3 · 0F · beat); *Siege Reckoner* (4 · 2F · beat, /scene); *Great Works* (5 · 3F · beat, /scene) |
+| `lore.law` | *Letter of the Law* (1 · — · passive); *Lawful Claim* (4 · 1F · rider, /scene); *The Unanswerable Case* (5 · 3F · beat, /scene) |
+| `lore.arcana` | *Spell-Sight* (1 · 0F · beat); *Theory of the Weave* (2 · — · passive); *Call the Flaw* (4 · 1F · reaction, /scene); *The Whole Weave* (5 · 3F · beat, /scene) |
+| `lore.religion` | *Name the Power* (1 · 0F · beat); *Know the Unclean* (4 · — · passive); *Guest of Every Altar* (5 · 3F · beat, /scene) |
+| `lore.investigation` | *Keen Search* (1 · — · passive); *Paper Trail* (4 · 2F · beat, /scene); *Reconstruct the Scene* (5 · 3F · beat, /scene) |
+| `arcane.fire` | *Flame Lance* (1 · 1F · beat); *Fire Shroud* (2 · 2F · rider); *Wall of Flame* (4 · 2F · beat, /scene); *Firestorm* (5 · 3F · beat, /long rest) |
+| `arcane.frost` | *Rime Spear* (1 · 1F · beat); *Glaze* (3 · 2F · beat); *Winter's Breath* (4 · 2F · beat); *Ice Coffin* (5 · 3F · beat, /scene) |
+| `arcane.storm` | *Arc Bolt* (1 · 1F · beat); *Thunderclap* (4 · 2F · beat); *Skein of Lightning* (5 · 3F · beat, /long rest) |
+| `arcane.earth` | *Clutching Earth* (1 · 1F · beat); *Stoneskin* (3 · 2F · beat); *Groundswell* (4 · 2F · beat); *Iron Obeys* (5 · 3F · beat, /scene) |
+| `arcane.illusion` | *Phantom* (1 · 1F · beat); *Veil* (2 · 2F · beat); *Dread Phantasm* (4 · 2F · beat, /scene); *Mirror Host* (5 · 3F · beat, /scene) |
+| `arcane.divination` | *Trace the Thread* (1 · 1F · beat); *Foresee* (4 · 2F · reaction, /scene); *The Far Glass* (5 · 3F · beat, /long rest) |
+| `arcane.warding` | *Spell Ward* (1 · 1F · reaction); *Counterspell* (2 · 2F · reaction); *Unbinding* (3 · 2F · beat); *Seal of Closing* (4 · 2F · beat, /scene); *Dome of Force* (5 · 3F · beat, /scene) |
+| `arcane.mind` | *Honeyed Thought* (1 · 1F · beat); *Compel* (4 · 3F · beat); *Unremembering* (5 · 3F · beat, /scene) |
+| `arcane.summoning` | *Call Servant* (1 · 1F · beat, /scene); *Banish* (3 · 2F · beat); *Bound Servitor* (4 · 2F · beat, /long rest); *Call of the Deep Places* (5 · 4F · beat, /long rest) |
+| `arcane.necromancy` | *Wither* (1 · 1F · beat); *Drain Life* (2 · 2F · beat); *Corpse-Speech* (4 · 2F · beat, /scene); *Raise the Fallen* (5 · 3F · beat, /long rest) |
+| `arcane.alteration` | *Feather Fall* (1 · 1F · reaction); *Long Step* (2 · 2F · beat); *Giant's Sinew* (4 · 2F · beat); *Stone Flesh* (5 · 2F · beat) |
+| `divine.healing` | *Mend Flesh* (1 · 1F · beat); *Purge* (2 · 1F · beat); *Circle of Mending* (4 · 2F · beat); *Breath of Life* (5 · 3F · beat, /long rest) |
+| `divine.warding` | *Sanctuary* (1 · 1F · beat); *Blessing* (2 · 1F · beat); *Hallowed Ground* (4 · 2F · beat, /long rest); *The Keeper's Shield* (5 · 3F · reaction, /scene) |
+| `divine.smiting` | *Smite* (1 · 1F · rider); *Searing Light* (3 · 2F · beat); *Sentence Passed* (4 · 2F · beat, /scene); *Dawnbreak* (5 · 3F · beat, /long rest) |
+| `divine.rites` | *Last Rites* (1 · 0F · beat); *Cleansing Rite* (4 · 2F · beat); *Bond of Hearth and Blood* (5 · 2F · beat, /long rest) |
+| `divine.oaths` | *Sworn Purpose* (1 · 0F · beat, /long rest); *Binding Vow* (4 · 2F · beat); *The Sworn Company* (5 · 2F · beat, /long rest) |
+| `divine.revelation` | *Discern* (1 · 1F · beat, /scene); *Prophetic Dream* (3 · 0F · trigger, /long rest); *Weal or Woe* (4 · 2F · beat, /scene); *Far-Seeing Trance* (5 · 3F · beat, /long rest) |
+| `divine.exorcism` | *Turn the Dead* (1 · 1F · beat); *Cast Out* (3 · 2F · beat); *Word of Banishment* (4 · 2F · beat, /scene); *The Grave Emptied* (5 · 3F · beat, /scene) |
+| `divine.pact` | *Patron's Brand* (1 · 1F · beat); *The Patron's Gaze* (4 · 1F · beat, /scene); *Blood Price* (5 · 1F · rider) |
+| `primal.growth` | *Root Snare* (1 · 1F · beat); *Thorn Coat* (2 · 1F · rider); *Renewal* (4 · 2F · beat); *Greenwood Rising* (5 · 3F · beat, /long rest) |
+| `primal.beastkin` | *Beast Speech* (1 · 0F · beat); *Borrowed Senses* (3 · 2F · beat); *Call the Pack* (4 · 2F · beat, /scene); *Herd-Lord* (5 · 3F · beat, /scene) |
+| `primal.weather` | *Gust* (1 · 1F · beat); *Fog Bank* (2 · 2F · beat); *The Stilling* (4 · 2F · beat, /long rest); *Call Lightning* (5 · 3F · beat, /scene) |
+| `primal.shapeshifting` | *Claws* (1 · 1F · rider); *Beast Form* (3 · 2F · beat); *Hawk's Wings* (4 · 2F · beat); *Elemental Form* (5 · 3F · beat, /short rest) |
+| `primal.spirits` | *Spirit Tongue* (1 · 0F · beat); *Spirit Bargain* (4 · 2F · beat, /scene); *The Ancestors Answer* (5 · 3F · beat, /long rest) |
+| `primal.elements` | *Cinder Stride* (1 · 1F · rider); *Undertow* (1 · 1F · beat); *Stolen Breath* (1 · 1F · beat); *Heave* (1 · 1F · beat); *Stone Shape* (3 · 2F · beat); *Tidecall* (4 · 2F · beat); *Whirlwind* (5 · 3F · beat, /scene) |
+| `primal.hexcraft` | *Evil Eye* (1 · 1F · beat); *Lift the Hex* (2 · 2F · beat); *Hag-Stone Charm* (4 · 2F · beat, /long rest); *Blackthorn Curse* (5 · 3F · beat, /long rest) |
+| `influence.persuasion` | *Silver Tongue* (1 · — · passive); *Turn the Room* (3 · 1F · beat); *Point by Point* (4 · 1F · rider, /scene); *Change of Heart* (5 · 3F · beat, /long rest) |
+| `influence.command` | *Rally* (1 · 1F · beat); *Hold the Line* (4 · 2F · rider); *Rally to the Standard* (5 · 3F · beat, /scene) |
+| `influence.performance` | *Stirring Song* (1 · 1F · beat); *Captivate* (2 · 1F · beat); *Words Before the Charge* (4 · 2F · beat, /scene); *The Tale That Travels* (5 · 3F · beat, /long rest) |
+| `influence.intimidation` | *Cow* (1 · 1F · rider); *A Promise Made* (4 · 2F · beat, /scene); *Break the Will* (5 · 3F · beat, /scene) |
+| `influence.intrigue` | *Web of Whispers* (1 · 0F · beat, /scene); *Leverage* (4 · 1F · rider); *The Kingmaker's Table* (5 · 3F · beat, /long rest) |
+| `influence.trade` | *Sharp Bargain* (1 · — · passive); *Appraiser's Eye* (2 · 0F · beat); *Sound Venture* (4 · 2F · beat, /long rest); *Corner the Market* (5 · 3F · beat, /long rest) |
+| `influence.etiquette` | *Courtly Grace* (1 · — · passive); *Foreign Manner* (3 · — · passive); *Order of Precedence* (4 · 2F · beat, /scene); *Guest-Right* (5 · 2F · beat, /long rest) |
+| `influence.insight` | *Read the Heart* (1 · 0F · beat); *Ear for a Lie* (2 · — · passive); *The Hidden Wound* (4 · 2F · beat, /scene); *The Open Room* (5 · 3F · beat, /scene) |
+| `craft.smithing` | *Keen Edge* (1 · 0F · beat); *Masterwork* (4 · — · passive); *The Named Blade* (5 · 2F · beat, /long rest) |
+| `craft.woodcraft` | *Fletch True* (1 · 0F · beat); *Sound Timber* (2 · 0F · beat); *Heartwood Bow* (4 · 1F · beat); *Lay the Keel* (5 · 2F · beat, /long rest) |
+| `craft.leathercraft` | *Field Patch* (1 · 0F · beat); *Cure Hide* (3 · — · passive); *Second Skin* (4 · 1F · beat); *Hide of the Slain* (5 · 2F · beat, /long rest) |
+| `craft.textiles` | *Knot Lore* (1 · — · passive); *Dressed for It* (2 · 0F · beat); *Company Banner* (4 · 2F · beat); *Spider's Rigging* (5 · 3F · beat, /scene) |
+| `craft.alchemy` | *Quick Tincture* (1 · 0F · beat, /long rest); *Firepot* (2 · 0F · beat); *Biting Water* (4 · 2F · beat); *Grand Elixir* (5 · 2F · beat, /long rest) |
+| `craft.cookery` | *Hearty Fare* (1 · 0F · trigger, /short rest); *A Table Laid* (3 · 1F · beat, /scene); *Hearth Ale* (4 · 1F · beat, /long rest); *Feast of Accord* (5 · 3F · beat, /long rest) |
+| `craft.building` | *Dig In* (1 · 0F · beat); *Breach* (4 · 1F · beat); *The Day's Fortress* (5 · 2F · beat, /long rest) |
+| `craft.artifice` | *Rig a Trap* (1 · 0F · beat); *Engine of War* (4 · 2F · beat, /scene); *Clockwork Servant* (5 · 2F · beat, /long rest) |
+| `craft.jewelcraft` | *True Cut* (1 · — · passive); *Fine Setting* (3 · — · passive); *Heart of the Stone* (4 · 0F · beat, /long rest); *Regalia* (5 · 2F · beat, /long rest) |
+| `craft.enchanting` | *Rune of Keenness* (1 · 1F · beat); *Bind Power* (4 · — · passive); *The Lasting Word* (5 · 2F · beat, /long rest) |
+| `influence.teaching` | *Patient Teacher* (1 · — · passive); *Drill Yard* (4 · 1F · beat, /long rest); *Lend the Art* (5 · 2F · beat, /scene) |
+| `craft.scribing` | *Fair Copy* (1 · 0F · beat); *Field Map* (2 · 0F · beat); *Palimpsest* (4 · 2F · beat, /scene); *Master Chart* (5 · 2F · beat, /long rest) |
 | `conduct.courage` (positive) | *Stand Fast* (1 · 0F · reaction, /scene); *Into the Breach* (3 · 1F · rider); *Undaunted* (5 · — · passive) |
 | `conduct.generosity` (positive) | *Open Purse* (1 · 0F · trigger, /scene); *Shared Strength* (3 · 0F · rider); *The Widow's Mite* (5 · 0F · trigger, /long rest) |
 | `conduct.honesty` (positive) | *The Plain Word* (1 · — · passive); *Unclouded* (3 · — · passive); *Word as Bond* (5 · 2F · beat, /scene) |
@@ -2507,7 +2512,8 @@ evidence (00.11.5; 04's item 11).
    `mod_group`, and 1–3 `ranks` as complete restatements; `requires_conduct` and `conduct_pole` on the
    57 oath-gated ones; `replaces` is supported and unused, by decision (DL-05-34): growth inside an
    ability is its ranks, and `replaces` is the content-lifecycle link 05.12.3 now enforces by script.
-3. Coverage: every one of the 81 level-2 deed tags has at least two abilities, one at `min_tier` 1;
+3. Coverage: every one of the 81 level-2 deed tags has at least two abilities, one at `min_tier` 1, and
+   one at `min_tier` 4 and one at `min_tier` 5 [revision: I-087];
    every branch has at least 14 with two or more at each `min_tier` (T-05-12); every conduct axis has
    three at each pole a calling uses (`min_tier` 1, 3, 5) [revision: I-007].
 4. Rank rule kept, with one addition **requested of 04**: for a pick carried through a consolidation or
@@ -2609,7 +2615,7 @@ Each ships a concrete default and names the test that would settle it.
 | OEQ-05-3 | Does the AI apply the SAME OPERATION flag for stretches consistently? | 05.5.2, tie-break false, precedent ledger | **T-05-STRETCH**: 40 proposed stretches (20 designed inside, 20 outside) × 3 independent DM runs; target ≥ 85% agreement with the designed answer, and no outside case allowed in more than 1 of 3 runs |
 | OEQ-05-4 | Do the three miscast shapes feel different in play, and is S4 Backlash (8 harm) too swingy for a 12-Vitality caster? | 05.7.5 | **T-05-MISCAST**: simulate 1,000 castings per branch at each stakes rung; measure how often a miscast changes a fight's outcome; target ≤ 5% of fights decided by a miscast at Risky stakes |
 | OEQ-05-5 | Is the generation cap of 3 per scene ever binding, and do the nine family triggers fire at comparable rates? | 05.6.10 | **T-05-TRIGGER**: per-family trigger counts over 10 sessions of play; target each family 0.3–0.8 fires per scene at tier 2–3; retune the outliers' conditions (04 owns the data) |
-| OEQ-05-6 | Is a pool of 266 enough variety across a long campaign, and are any abilities never picked (dead) or always picked (mandatory)? | 05.11.6; 05.12.3 | **T-05-PICKRATE**: pick logs across 30 characters; an ability shown ≥ 10 times and picked in < 5% or > 60% of showings is flagged for re-pricing, folding or retirement |
+| OEQ-05-6 | Is a pool of 389 enough variety across a long campaign, and are any abilities never picked (dead) or always picked (mandatory)? | 05.11.6; 05.12.3 | **T-05-PICKRATE**: pick logs across 30 characters; an ability shown ≥ 10 times and picked in < 5% or > 60% of showings is flagged for re-pricing, folding or retirement |
 | OEQ-05-7 | Does the narrator keep to the literal rank text (no invented weaknesses or extra effects)? | 05.3.6, 05.3.7; verbatim text in the packet | **T-05-LITERAL**: 100 activations audited with `check_claims`; target ≤ 2% narrated effects not in the packet (the probe's baseline was 1 in 6) |
 | OEQ-05-8 | Is one-link composition enough for the designed synergies of this pool? | 05.10.5 | **T-00-DEPTH** (00's test) run on this data: of the 22 composites and every rider-plus-trigger pair, count intended synergies that need a second link; target < 5% |
 | OEQ-05-9 | Are learning times right (two weeks with a teacher for a tier-1 technique; six emulations without)? | 05.8.5 | **T-05-LEARN**: over 10 sessions, count learning clocks started, completed and abandoned; target ≥ 50% of started clocks completed within a season of play |
