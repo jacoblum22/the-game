@@ -98,19 +98,19 @@ redirected with an alternative and spend nothing.
 
 ### Tests for User Story 2
 
-- [ ] T028 [P] [US2] Golden tests from WE-00-* and WE-01-* with fixed dice in `tests/golden/test_worked_examples_01.py` (list the examples with `rq.py --toc 01` and `--find WE-01`)
-- [ ] T029 [P] [US2] Odds table parity with T-01-3 and Oracle thresholds with T-01-10 in `tests/golden/test_odds_oracle.py` (the cited `odds01.py` and `oracle01.py` sims are missing from the repo; test against the tables themselves)
+- [x] T028 [P] [US2] Golden tests from WE-00-* and WE-01-* with fixed dice in `tests/golden/test_worked_examples_01.py` (list the examples with `rq.py --toc 01` and `--find WE-01`)
+- [x] T029 [P] [US2] Odds table parity with T-01-3 and Oracle thresholds with T-01-10 in `tests/golden/test_odds_oracle.py` (the cited `odds01.py` and `oracle01.py` sims are missing from the repo; test against the tables themselves)
 - [ ] T030 [P] [US2] Fixture scene and character in `tests/fixtures/scene_dock.py`: a dock at night, two NPCs with wants and refusals, one scene clock, a PC with two licences and one starting ability
 
 ### Implementation for User Story 2
 
-- [ ] T031 [P] [US2] Implement the degree rule (01.8.1), `roll_check`, near miss (01.9.3) and reach in `engine/resolve/roll.py`
-- [ ] T032 [P] [US2] Implement odds (T-01-3) in `engine/resolve/odds.py`
-- [ ] T033 [P] [US2] Implement the Oracle (PR-01-4, T-01-10) with extremes and twists, the engine-side free-question cap per scene (`oracle_free_cap_per_scene`, I-038 stopgap, logged) in `engine/resolve/oracle.py`; `roll_table` with recency in `engine/resolve/tables.py`
-- [ ] T034 [US2] Implement GATE G0–G4 checks against holdings and `covers`/`excludes` (01.3, PR-01-5 redirect) in `engine/resolve/gate.py`
-- [ ] T035 [US2] Implement `frame_check` (PR-00-1, PR-01-2): DC from tier or opposition, modifier, odds, cost previews, lever and snag validity (≤2 each, must exist, not too recent), deltas ≤2 citing facts; refuse naming the failure, in `engine/resolve/frame.py`
-- [ ] T036 [US2] Implement the cost menu, threatened and alternate costs and their application (PR-01-3) in `engine/resolve/costs.py`
-- [ ] T037 [US2] Implement rulings: `find_rulings` by signature before any adaptation, Oracle call, Good Idea or G3/G4 decision (FR-022; wired into T033 and T034) and `log_ruling` (00.15.5–00.15.6) in `engine/resolve/rulings.py`
+- [x] T031 [P] [US2] Implement the degree rule (01.8.1), `roll_check`, near miss (01.9.3) and reach in `engine/resolve/roll.py`
+- [x] T032 [P] [US2] Implement odds (T-01-3) in `engine/resolve/odds.py`
+- [x] T033 [P] [US2] Implement the Oracle (PR-01-4, T-01-10) with extremes and twists, the engine-side free-question cap per scene (`oracle_free_cap_per_scene`, I-038 stopgap, logged) in `engine/resolve/oracle.py`; `roll_table` with recency in `engine/resolve/tables.py`
+- [x] T034 [US2] Implement GATE G0–G4 checks against holdings and `covers`/`excludes` (01.3, PR-01-5 redirect) in `engine/resolve/gate.py`
+- [x] T035 [US2] Implement `frame_check` (PR-00-1, PR-01-2): DC from tier or opposition, modifier, odds, cost previews, lever and snag validity (≤2 each, must exist, not too recent), deltas ≤2 citing facts; refuse naming the failure, in `engine/resolve/frame.py`
+- [x] T036 [US2] Implement the cost menu, threatened and alternate costs and their application (PR-01-3) in `engine/resolve/costs.py`
+- [x] T037 [US2] Implement rulings: `find_rulings` by signature before any adaptation, Oracle call, Good Idea or G3/G4 decision (FR-022; wired into T033 and T034) and `log_ruling` (00.15.5–00.15.6) in `engine/resolve/rulings.py`
 - [ ] T065 [US2] Implement harm (PR-07-1 `apply_harm`, harm states 07.1–07.2), the lethal scan and warning (PR-07-4: a lethal frame is never auto-committed and follows the warning), yield and retreat (PR-07-6), the Threshold (PR-07-5) and last chance (`last_chance.yaml`), death and career end, in `engine/harm/` (built in Phase 3 because the pipeline's CONSEQUENCE step and auto-commit need it)
 - [ ] T038 [US2] Implement the pipeline driver PR-01-1 (PARSE → GATE → NECESSITY → ANCHOR → FRAME → OFFER → ROLL → READ → DELIVER → CONSEQUENCE → RECORD) per beat, ≤3 beats, stopping at the first pause, with the offer choices commit / change / withdraw / go big / play safe (01.7) and auto-commit (01.7.4; a lethal frame is never auto-committed and always follows the warning), in `engine/resolve/pipeline.py`
 - [ ] T039 [US2] Implement the Reader (A1) and Framer (A2) roles: prompts and packet assembly per contracts/model-calls.md in `engine/dm/roles/reader.py`, `engine/dm/roles/framer.py`, prompts in `engine/dm/roles/prompts/`

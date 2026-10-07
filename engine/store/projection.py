@@ -444,9 +444,8 @@ for _t in NOT_BUILT:
 
 
 def _bump_counters(s: WorldState, ev: Event) -> None:
-    for f in type(ev.payload).creates:
-        v = getattr(ev.payload, f, None)
-        parsed = ids.parse_counter_id(v) if isinstance(v, str) else None
+    for v in ev.payload.created_ids():
+        parsed = ids.parse_counter_id(v)
         if parsed:
             prefix, n = parsed
             if n > s.counters.get(prefix, 0):

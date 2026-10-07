@@ -226,3 +226,53 @@ Contract: `specs/004-playable-prototype/contracts/model-calls.md`. Nothing in `e
   ids are `<npc>/want.<n>` and `<npc>/refusal.<n>` (1-based, index into the NPC's `data.wants`/`refusals`),
   one enum across NPCs (check ownership in a `check=`). `push` exists only when `push_raised`, `lead` only
   when `lead_fires`. Cost menus: with no scene fact only `cost.twist` fits; `cost.shortfall` is alternate-only.
+
+## engine/resolve API (T028–T037; the `[D]` steps of PR-01-1)
+Records in `engine.resolve.types`: `Beat` (Reader beat + gate proposal: gate, verb, license, mode, method_class,
+g4_fact/g4_test, would_be_license, fallback_license, traits, deed_tag, `declared_seq` = last seq before the
+declaration; levers/snags/delta facts must be no newer), `ProposedFrame` (= FramerOutput + `trade`,
+`attribute_tie`, `repetition_instance`; levers/snags are `LeverCite` or a bare fact id = Precision; `Obstacle`
+adds `id` (stored-DC key), `defense` (attribute, or a named defense in `entity.data.defenses`, e.g. guard),
+`defense_tag`, `entities`, `severity` (hazard); `CostDecl.source_fact` optional), `Frame`, `FrameRefusal(step,
+field, reason; .message)`, `Odds`, `OfferPreview` (= OfferView), `RollResult`, `ReadResult`.
+Entity data read: `data.attributes {attr: int}`, `data.competence {tag: int}` (or `[{tag, value}]`; PCs get the
+`deed` floor from scales.yaml), `data.edge` (int), `data.defenses {name: int}`. Lethal context = a current fact
+with predicate `lethal_context` (truthy), on any subject, recorded before the declaration (harm module writes it).
+- `gate.check_gate(beat, *, state, rules, store=None, staged=(), mint=None, canon_impossible=(),
+  alternatives=[RedirectOption]) -> GateDecision(gate, verb, license, mode, reason, fact_cited, redirect,
+  precedent, events, .rolls_possible)`. Calls `find_rulings` first for G3/G4; with `mint` the `ruling_logged`
+  (g3_redirect / g4; plus rule_conflict when no license covers it) is in `events`. Redirect: `missing` (id
+  checked), `options` (≥1; crude fallback first), `acquisition_paths`. G4 test 4 (condition restricts) is
+  answered from state whatever was proposed. An accepted fallback: `Beat(gate="G3", mode="fallback",
+  fallback_license=<lic>, verb=<its fallback verb>)`.
+- `frame.frame_check(proposed, beat, *, state, rules, gate=None, candidates=None, store=None, staged=()) ->
+  Frame | FrameRefusal` (PR-01-2; pure, writes nothing; re-run with `trade` set for go big / play it safe).
+  `offer_preview(frame)`, `legal_trades(frame)`, `auto_commit_allowed(frame)` (01.7.4),
+  `commit_events(frame, "commit"|"auto", *, mint, state)` -> [stored-DC fact_set, frame_committed] (sets
+  `frame.id`, `frame.offer_choice`). Stored DCs: fact on `world`, predicate `stored_dc_key(obstacle, anchor,
+  dc_delta)`. Costs without `source_fact` must fit through state (`costs.structural_fit`: stakes source,
+  listening clocks with `on: cost.time|cost.exposure`, carried items, quantities, target kind).
+- `roll.roll_check(frame | frame_committed dict, rng, on_roll=None) -> RollResult` (refuses an uncommitted or
+  illegal frame: `RollRefused`; `on_roll(res) -> True` rerolls once, e.g. fate). `read_result(frame, roll,
+  take_success_at_cost=None|bool) -> ReadResult(delivered_reach, cost_severity, cost_choices)` (a near miss
+  needs the choice). `degree`, `is_near_miss`, `delivered_reach`. `odds.odds(modifier, dc) -> Odds`.
+- `costs.apply_cost(frame, read, menu_id, *, state, rules, mint, form=None, params={}, harm_hook=None, rng=None,
+  mode="site") -> CostApplication(events, reach_delta, deferred, refused)`. `harm_hook(target, severity, *,
+  lethal, harm_tags, frame_id) -> list[Event]` is engine/harm's; params: item (gear), observer/clock
+  (exposure), clock (time; none -> `deferred={"advance_time": row}`), quantity (drain), target/obstacle/
+  method_class (closed_door). `refused` = cannot land in full: pick the next candidate (01.13.1).
+  `cost_severity(stakes, degree, success_at_cost=)`, `severity_previews(stakes)`.
+- `oracle.ask_oracle(OracleQuestion(subject, predicate, odds, asker="dm"|<pc id>, qualifier, sealed, ...), *,
+  state, rules, rng, mint, store=None, staged=(), free_cap=None) -> OracleResult(status answered|read|refused,
+  shape, answer, d100, extreme, twist (= a but), qualifier, meaning, fact_id, precedent, events)`. Order of
+  events: meaning `table_rolled`, `fact_set`s (answer, `<pred>.and`, `<pred>.but`), `oracle_answered` (event
+  `source` = asker), `meta_set` `oracle.free_questions.<scene>` and `oracle.free_facts` (player questions only;
+  frame_check enforces 01.15.8's free-fact lever caps from it). Over `free_cap` -> refused +
+  `meta_set oracle.free_cap_hit.<scene>`. `shape_for(rules, rung, d100)`.
+- `tables.roll_table(table_id, context, *, rules, state, rng, purpose=None) -> TableResult(entry, words, roll,
+  sub, redrawn, events)`: dispatch rows by context (`meaning_kind`, `severity`), `*modifier` ints shift the
+  roll, recency re-draws once (window `recency_window`, default 5). Stage `events` before rolling the same
+  table again.
+- `rulings.signature(anchor_id, deltas)`, `gate_signature`, `oracle_signature`, `find_rulings(store, sig,
+  staged=())`, `precedent_for(found, differing_fact=None)`, `log_ruling(RulingRecord, mint, store=, staged=)
+  -> Event` (skips an id already used: `ruling_logged` does not advance the `rul` counter).

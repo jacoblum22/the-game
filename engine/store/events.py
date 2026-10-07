@@ -157,6 +157,10 @@ class Payload(BaseModel):
     # fields that hold entity ids that must already exist (or be created earlier in the same transaction)
     entity_refs: ClassVar[tuple[str, ...]] = ()
 
+    def created_ids(self) -> list[str]:
+        """Ids this event creates; they advance the projection's id counters."""
+        return [v for f in self.creates if isinstance(v := getattr(self, f, None), str)]
+
     def check(self, state: Any) -> None:
         """Reference checks against the working projection (data-model.md §5). Raise `Rejected`."""
         for f in self.entity_refs:
@@ -404,6 +408,9 @@ class RulingLogged(Payload):
     """00.15.5 RulingRecord in `ruling`; `signature` and `id` are required for the precedent index."""
 
     ruling: dict[str, Any]
+
+    def created_ids(self) -> list[str]:
+        return [self.ruling["id"]]
 
     @model_validator(mode="after")
     def _keys(self) -> RulingLogged:
