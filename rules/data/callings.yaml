@@ -56,7 +56,7 @@ tier_ladder:
   boon_rank: {tier_1: 1, tier_3: 2, tier_5: 3}           # vows and dark callings; restated, never added
   permanence_at: 5                 # a Paragon calling cannot lapse and cannot be revoked (04.9.6)
 
-power_band:                        # 04.5.6: power_band(pc) = max over held, unsuspended callings (provisional included), minimum 1
+power_band:                        # 04.5.6: power_band(pc) = max over held, unsuspended callings at their confirmed tier (revision I-037), minimum 1
   by_tier:
     fine:   [1, 2, 3, 4, 5]
     narrow: [1, 2, 3, 4, 5]

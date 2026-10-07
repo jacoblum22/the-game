@@ -30,6 +30,25 @@ Counted evidence in both: social and lore contests tick a progress clock on half
 or 3 on a critical); craft steps tick the project on every success and a finished work counts cnt.made = its
 rung index (3 fine, 4 masterwork, 5 wondrous); fights count cnt.defeat and cnt.focus as 04's model.
 Deterministic (04's seeds). Usage: python 04-recog-parity.py [seeds] [sessions]
+
+Section "I-083 / I-039 / I-037" (revision C2a) replaces the drawn contest band with opposition drawn from seeded
+worlds (`12-world-seed.py`, oracle seeds 1001-1020; seed s plays world 1001 + s mod 20). Every party a contest can
+face is a world NPC: its band is its own band, or its faction's tier band (03.4.3: tier 0-1 -> 1 ... 5 -> 5) when
+it may lend it. A contest scene draws a target band like a fight's (power band + the DL-00-05 offset) and faces a
+party of the highest band at or below it that the world holds (ties at random): the player seeks opposition at
+his level as a fighter does, and the world limits what he finds. Rule sets:
+  W-OLD   -- the seed before revision C (no powers) and I-003's contest rules: any faction member lends its tier,
+             no cap, no per-opposition limit (the I-083 playtest's world).
+  W-NEW   -- revision C: the seed's powers of the far rings (12.16.11: band 4 per ring-4 area, band 5 per ring-5
+             area); only a binding party (a faction's head or officer) lends the tier (I-039); contest band
+             <= power band + 2 (I-039); a great deed counts at most twice toward one tier from one opposition
+             (one party, case, research project or work; 04.3.4, I-083).
+  W-NEW-NOPOWERS -- W-NEW's contest rules in the old seed: the powers are what lifts the stall.
+In this section every style, the archer included, reads power band from CONFIRMED tiers (I-037: a tier counts
+12 evidence-bearing scenes after its grant). A craft project persists for 2-4 craft scenes and is one opposition.
+A "farming" envoy (one contest scene in three at the highest band the rules grant, at a DC of power band + 1) in a world
+with an added tier-5 faction whose door-warden
+(own band 1, not binding) is on offer measures the I-039 exploit under W-OLD and W-NEW.
 """
 import os
 import random
@@ -65,8 +84,50 @@ def points_with_ruin(self, e):
 
 Engine.points = points_with_ruin       # identical to 04's when no event is ruinous (the CURRENT rule set)
 
+# ---- revision C2a switches (all off in the I-003 sections, so their output is unchanged)
+MODE = {'cap_opp': False, 'confirmed': False}
+_orig_detail, _orig_great, _orig_pb = Engine.detail, R["great"], Char.power_band
 
-def beat(rng, eng, ch, tag, dc, stakes, lethal, target, ctx, scene, cband=None, ruinous=False, brink=False, staggered=False):
+
+def detail_rows(self, node, since=0):
+    d = _orig_detail(self, node, since)
+    d['rows'] = [r for r in self.log[node] if r[0] > since]
+    return d
+
+
+def great_capped(d, tier, n):
+    """04.3.4 as revised (I-083): a great deed counts at most twice toward one tier from one opposition."""
+    if not MODE['cap_opp']:
+        return _orig_great(d, tier, n)
+    per, won = {}, set()
+    for i, r in enumerate(d['rows']):
+        if r[1] < tier:
+            continue
+        k = r[7] if r[7] is not None else ('u', i)
+        per[k] = per.get(k, 0) + 1
+        if r[2]:
+            won.add(k)                    # the two that count from an opposition may include its success
+    return sum(min(2, v) for v in per.values()) >= n and bool(won)
+
+
+def power_band_confirmed(self):
+    """04.5.6 as revised (I-037): each calling at its confirmed tier (12 evidence-bearing scenes after the grant)."""
+    if not MODE['confirmed'] or not hasattr(self, '_eng'):
+        return _orig_pb(self)
+    b = 1
+    for k, c in self.callings.items():
+        t = c['tier'] if self._eng.ev_since(c.get('at_scene', 0)) >= 12 else c['tier'] - 1
+        if t >= 1:
+            b = max(b, R["BAND"][c['kind']][t - 1])
+    return b
+
+
+Engine.detail = detail_rows
+R["great"] = great_capped
+Char.power_band = power_band_confirmed
+
+
+def beat(rng, eng, ch, tag, dc, stakes, lethal, target, ctx, scene, cband=None, ruinous=False, brink=False, staggered=False, opp=None):
     attr = ATTR[R["branch"](tag)]
     m = ch.mod(tag, attr)
     q = quality(odds(m, dc))
@@ -78,7 +139,7 @@ def beat(rng, eng, ch, tag, dc, stakes, lethal, target, ctx, scene, cband=None, 
     crisis = lethal or staggered or ruinous or brink or (stakes == 'dire' and q == 'challenging')
     peak = d >= 2 and b >= ch.power_band() + 1
     e = {'tag': tag, 'secondary': [], 'quality': q, 'stakes': stakes, 'lethal': lethal, 'ruinous': ruinous, 'degree': d,
-         'target': target, 'ctx': ctx, 'band': b, 'crisis': crisis, 'peak': peak}
+         'target': target, 'ctx': ctx, 'band': b, 'crisis': crisis, 'peak': peak, 'opp': opp}
     eng.record(e, scene)
     return e
 
@@ -117,6 +178,9 @@ def run(style, rules, seed, sessions, eng_out=None):
     if eng_out is not None:
         eng_out['eng'] = eng
     ch = style.mk()
+    ch._eng = eng
+    world = WORLDS[seed % len(WORLDS)] if rules.startswith('w-') else None
+    project = None
     scene = day = tid = 0
     pick = R["pick"]
     for s in range(1, sessions + 1):
@@ -174,15 +238,34 @@ def run(style, rules, seed, sessions, eng_out=None):
                         cband = None
                         dc = DC[min(5, rng.choice([band, band + 1, band + 1, band + 2]))]
                         worst = brink = False                          # no ruinous, no brink crisis
-                else:
+                elif rules == 'revised':
                     cband = max(1, min(5, band + rng.choice(OFFSET)))
                     dc = DC[min(4, cband)] if kind == 'craft' else DC[cband]
+                else:   # a world rule set (revision C2a)
+                    tb = max(1, min(5, band + rng.choice(OFFSET)))
+                    if kind == 'craft':
+                        if project is None or project[1] <= 0:
+                            tid += 1
+                            project = ['work%d' % tid, rng.randint(2, 4), tb]
+                        project[1] -= 1
+                        opp, cband = project[0], project[2]
+                    else:
+                        tb_cap[0] = band + 2
+                        opp, cband, dcband = face(rng, world, rules, tb, style)
+                    if rules != 'w-old':
+                        cband = min(cband, band + 2)                  # I-039: never above power band + 2
+                    dc = DC[min(4, cband)] if kind == 'craft' else DC[min(5, max(1, dcband if kind != 'craft' else cband))]
                 won = 0
                 for i in range(n):
                     tid += 1
                     t = pick(rng, tags)
-                    e = beat(rng, eng, ch, t, dc, stakes, False, ('npc%d' if kind != 'craft' else 'work%d') % tid,
-                             ctx, scene, cband=cband, ruinous=worst, brink=brink)
+                    if rules.startswith('w-'):
+                        tgt = opp if kind != 'craft' else 'step%d' % tid
+                        e = beat(rng, eng, ch, t, dc, stakes, False, tgt, ctx, scene, cband=cband, ruinous=worst, brink=brink,
+                                 opp=opp if MODE['cap_opp'] else None)
+                    else:
+                        e = beat(rng, eng, ch, t, dc, stakes, False, ('npc%d' if kind != 'craft' else 'work%d') % tid,
+                                 ctx, scene, cband=cband, ruinous=worst, brink=brink)
                     if e['degree'] >= 2:
                         won += 1
                         if kind == 'craft':
@@ -195,6 +278,69 @@ def run(style, rules, seed, sessions, eng_out=None):
             eng.settle(scene, day)
             reflect(eng, ch, s, scene, style, sc)
     return ch
+
+
+# ---- seeded worlds (revision C2a; 12-world-seed.py, oracle seeds 1001-1020)
+WORLDS = []
+tb_cap = [5]
+
+
+def tier_band(t):
+    return max(1, min(5, t))            # 03.4.3: faction tier 0-1 -> 1, 2 -> 2 ... 5 -> 5
+
+
+def build_worlds(n=20):
+    import importlib.util
+    spec = importlib.util.spec_from_file_location('ws12', os.path.join(HERE, '12-world-seed.py'))
+    ws = importlib.util.module_from_spec(spec)
+    argv, sys.argv = sys.argv, ['12-world-seed.py']
+    spec.loader.exec_module(ws)
+    sys.argv = argv
+    out = []
+    for s in range(1001, 1001 + n):
+        reg = ws.build_seed(s)
+        facs = reg['factions']['instances']
+        out.append({'npcs': [(x['id'], x['band'], list(x['member_of']), bool(x.get('power'))) for x in reg['npcs']],
+                    'facs': {f['id']: (f['tier'], set(f['officers'])) for f in facs}})
+    return out
+
+
+def parties(w, binder_only, powers, extra_t5=False):
+    out = []                             # (id, contest band, own band)
+    for nid, own, mem, pw in w['npcs']:
+        if pw and not powers:
+            continue
+        b = own
+        for f in mem:
+            tier, officers = w['facs'][f]
+            if not binder_only or nid in officers:
+                b = max(b, tier_band(tier))
+        out.append((nid, b, own))
+    if extra_t5:                         # an added tier-5 faction: its head (band 5, binding) and a door-warden (band 1)
+        out.append(('npc.t5_head', 5, 5))
+        out.append(('npc.t5_warden', 1 if binder_only else 5, 1))
+    return out
+
+
+def face(rng, world, rules, tb, style):
+    key = (rules, getattr(style, 'greedy', False))
+    if key not in world['_cache']:
+        world['_cache'][key] = parties(world, rules != 'w-old', rules == 'w-new', getattr(style, 'greedy', False))
+    ps = world['_cache'][key]
+    if getattr(style, 'greedy', False) and rng.random() < 1 / 3:
+        # the exploit: the highest band the rules will grant, then the lowest own band among those parties; the
+        # frame's DC is sized to the PC (a large request of a door-warden), not to the party's band
+        cap = (lambda b: b) if rules == 'w-old' else (lambda b: min(b, tb_cap[0]))
+        top = max(cap(p[1]) for p in ps)
+        cand = [p for p in ps if cap(p[1]) == top]
+        low = min(p[2] for p in cand)
+        nid, b, own = [p for p in cand if p[2] == low][0]
+        return nid, b, min(5, tb_cap[0] - 1)   # the request is sized to be hard for him: DC of power band + 1
+    below = [p for p in ps if p[1] <= tb]
+    top = max(p[1] for p in below)
+    pick_ = [p for p in below if p[1] == top]
+    nid, b, own = pick_[rng.randrange(len(pick_))]
+    return nid, b, b
 
 
 def reflect(eng, ch, s, scene, style, sc):
@@ -271,6 +417,54 @@ if __name__ == '__main__':
             ok = abs(r3 - a3) <= 0.2 * a3 and abs(r5 - a5) <= 0.2 * a5
             print('| %s | %s | %d | %+.0f%% | %s | %s | %s |' % (style.name, rules, r3, 100.0 * (r3 - a3) / a3,
                   r5 if r5 < 99 else 'never', ('%+.0f%%' % (100.0 * (r5 - a5) / a5)) if r5 < 99 else '-', 'yes' if ok else 'no'))
+    # ---- revision C2a: I-083 / I-039 / I-037 in seeded worlds
+    print()
+    WORLDS.extend(build_worlds())
+    for w in WORLDS:
+        w['_cache'] = {}
+    mx_old = max(b for w in WORLDS for _, b, _o in parties(w, False, False))
+    mx_new = max(b for w in WORLDS for _, b, _o in parties(w, True, True))
+    n5 = statistics.median([sum(1 for _, b, _o in parties(w, True, True) if b == 5) for w in WORLDS])
+    n4 = statistics.median([sum(1 for _, b, _o in parties(w, True, True) if b == 4) for w in WORLDS])
+    print('=== I-083 / I-039 / I-037 (revision C2a): contest opposition from %d seeded worlds; power band from confirmed tiers ===' % len(WORLDS))
+    print('  highest party band in any world: old seed %d; revised seed %d (median per world: %s at band 4, %s at band 5)' % (mx_old, mx_new, n4, n5))
+    MODE['confirmed'] = True
+    wrows = {}
+    for style in (ARCHER, ENVOY, SMITH, SCHOLAR):
+        for rules in (('w-new',) if style is ARCHER else ('w-old', 'w-new-nopowers', 'w-new')):
+            MODE['cap_opp'] = rules != 'w-old'
+            res = tiers(style, rules)
+            wrows[(style.name, rules)] = res
+            print('%-44s %-15s %s | T5 within %d: %d of %d' % (style.name, rules, R["line"](res), SESSIONS,
+                                                                sum(1 for x in res[5] if x < 99), SEEDS))
+    a3, a5 = med(wrows[(ARCHER.name, 'w-new')][3]), med(wrows[(ARCHER.name, 'w-new')][5])
+    print()
+    print('| Calling | rules | median T3 | vs archer | median T4 | median T5 | vs archer | within +-20%% at both |')
+    print('|---|---|---|---|---|---|---|---|')
+    print('| %s | (combat, confirmed band) | %d | - | %d | %d | - | - |' % (ARCHER.name, a3, med(wrows[(ARCHER.name, 'w-new')][4]), a5))
+    for style in (ENVOY, SMITH, SCHOLAR):
+        for rules in ('w-old', 'w-new-nopowers', 'w-new'):
+            r = wrows[(style.name, rules)]
+            r3, r4, r5 = med(r[3]), med(r[4]), med(r[5])
+            ok = abs(r3 - a3) <= 0.2 * a3 and r5 < 99 and abs(r5 - a5) <= 0.2 * a5
+            print('| %s | %s | %s | %s | %s | %s | %s | %s |' % (style.name, rules, r3 if r3 < 99 else 'never', ('%+.0f%%' % (100.0 * (r3 - a3) / a3)) if r3 < 99 else '-',
+                  r4 if r4 < 99 else 'never', r5 if r5 < 99 else 'never', ('%+.0f%%' % (100.0 * (r5 - a5) / a5)) if r5 < 99 else '-', 'yes' if ok else 'no'))
+    print()
+    print('I-039 exploit: a farming envoy (the envoy above, but one contest scene in three goes to the highest band the rules grant, at')
+    print('a DC of power band + 1) in worlds with an added tier-5 faction (head band 5, binding; door-warden band 1, not binding)')
+    GREEDY = Style('farming envoy (tier-5 door-warden on offer)', 'social', ENVOY.tags, ENVOY.ctxs, 'presence')
+    GREEDY.key, GREEDY.mk, GREEDY.greedy = ENVOY.key, ENVOY.mk, True
+    for rules in ('w-old', 'w-new'):
+        MODE['cap_opp'] = rules != 'w-old'
+        res = tiers(GREEDY, rules)
+        early = []
+        for sd in range(1, SEEDS + 1):          # band-4/5 deeds banked in sessions 1-10 (power band 1-2 throughout)
+            h = {}
+            run(GREEDY, rules, sd, 10, eng_out=h)
+            early.append(sum(1 for r in h['eng'].log[GREEDY.key] if r[1] >= 4))
+        print('  %-15s %s | T5 within %d: %d of %d | band-4/5 deeds in sessions 1-10: median %d' % (
+            rules, R["line"](res), SESSIONS, sum(1 for x in res[5] if x < 99), SEEDS, statistics.median(early)))
+    MODE['confirmed'] = MODE['cap_opp'] = False
     # ---- R9 (issue I-004): counted / weighted at the key after 10 sessions, by pillar and rule set
     print()
     print('=== R9 (I-004): counted / weighted at the focus key after 10 sessions (p10/median/p90 of the ratio; %d seeds) ===' % SEEDS)

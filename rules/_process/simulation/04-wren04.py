@@ -1,7 +1,7 @@
 """wren04.py -- one continuous character (Wren) traced through 04's rules, for the chapter's long worked example.
 Uses recog04's engine and rules; prints every recognition-relevant moment with the tally values 04 reads."""
 import importlib.util, random
-spec = importlib.util.spec_from_file_location('r', 'recog04.py'); r = importlib.util.module_from_spec(spec); spec.loader.exec_module(r)
+import os; spec = importlib.util.spec_from_file_location('r', os.path.join(os.path.dirname(os.path.abspath(__file__)), '04-recog04.py')); r = importlib.util.module_from_spec(spec); spec.loader.exec_module(r)
 
 WREN = r.Style('Wren: archer, tracker, scout', (0.40, 0.35, 0.10, 0.15),
                [('deed.martial.archery.bow', 70), ('deed.martial.polearm.spear', 15), ('deed.martial.athletics.acrobatics', 15)],

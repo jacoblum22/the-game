@@ -1,7 +1,7 @@
 """feat04.py -- which confirmations predict that a provisional grant would be confirmed? (design aid for 04.4.2)"""
 import importlib.util, statistics
 from collections import defaultdict
-spec = importlib.util.spec_from_file_location('r', 'recog04.py'); r = importlib.util.module_from_spec(spec); spec.loader.exec_module(r)
+import os; spec = importlib.util.spec_from_file_location('r', os.path.join(os.path.dirname(os.path.abspath(__file__)), '04-recog04.py')); r = importlib.util.module_from_spec(spec); spec.loader.exec_module(r)
 
 rows = []
 styles = ((r.ARCHER, None), (r.PURE, r.CH_SWORD), (r.THIEF, r.CH_THIEF), (r.TALKER, r.CH_TALK), (r.THREEWAY, r.CH_H),

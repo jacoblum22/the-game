@@ -942,6 +942,24 @@ def build_seed(seed, given=None):
                            ("sentry_floors", [dict(post=P[blds[b]]["name"], **DEF["sentry_floors"][b]) for b in ("gate", "hall", "temple", "shrine") if b in blds]),
                            ("lifestyle_overrides", [])])
     P[hid]["settlement"] = hsettle
+    # [revision: I-083] 12.16.11: the powers of the far rings -- one principal per ring-4 area (band 4) and per
+    # ring-5 area (band 5), each keeping a sealed truth. Drawn on its own stream (seed-derived) so that every
+    # earlier roll of the seed, and the committed example, is unchanged.
+    pdice = Dice(seed * 1009 + 83)
+    prow = TAB["tbl.12.seed.powers"]["results"]
+    used = set()
+    for ring in (4, 5):
+        for a in areas_by_ring[ring]:
+            row = step_to(prow, by_range(prow, pdice.d(8)), lambda r: r["range"] not in used)
+            used.add(row["range"])
+            people = pdice.weighted(local_weights)
+            pw = make_npc(pdice, S, role=row["role"], people=people, home=a, depth="principal",
+                          band=ring, role_tags=row["role_tags"])
+            pw["power"] = True
+            pw["keeps"] = {"fact": "truth.%s" % pw["id"].split(".", 1)[1], "text": row["keeps"], "sealed": True,
+                           "gate": "a lore contest kept by this power (15.9.20), or standing Devoted"}
+            pw["sealed_fields"].append("keeps")
+            pw["basis"] = ["12.11.1", "12.16.11"]
     for f in factions:
         f.pop("role", None)
     for k in keepers:
@@ -1325,6 +1343,13 @@ def _check_one(rq, reg, ok, P, npcs, facs, clocks, keepers, sits, ids, hav, sett
             ok(rid, h["roles"] and all(r in COMP for r in h["roles"]) and h["max_band"] in (1, 2, 3))
         elif c == "recruits":
             ok(rid, any(n["recruit"] for n in npcs.values()))
+        elif c == "powers":
+            # [revision: I-083] one power per ring-4 area at band 4 and per ring-5 area at band 5, each keeping a truth
+            rings = {r["ring"]: r["areas"] for r in reg["region"]["rings"]}
+            pw = [n for n in npcs.values() if n.get("power")]
+            want = {a: r for r in (4, 5) for a in rings.get(r, [])}
+            okk = (sorted(n["home"] for n in pw) == sorted(want) and all(n["band"] == want[n["home"]] and (n.get("keeps") or {}).get("text") for n in pw))
+            ok(rid, okk, "%d powers, bands %s" % (len(pw), sorted(n["band"] for n in pw)))
         else:
             ok(rid, False, "unknown check " + c)
 

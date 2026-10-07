@@ -57,9 +57,7 @@ None of these blocks building. Each is a rules-text or tuning change that can la
 is built. The ledger has the evidence and a proposed fix for every row.
 
 **MAJOR**
-- **I-037:** `power_band` is defined inconsistently. Ch.04 and 05 count provisional tiers; ch.07 counts only confirmed tiers. Pick one definition in 00.
 - **I-038:** the free Oracle can be fished for +4 levers on every roll. It needs a per-scene cap or cost.
-- **I-039:** contest band from faction tier lets a band-1 talker earn band-5 evidence from a minor functionary. Rate the deed by the individual's own band.
 - **I-040:** the encounter danger audit assumes Guard 14, but a Guard 10 healer drops to 0 Vitality in roughly 21% of encounters. Audit against the actual party, or the weakest member.
 - **I-041:** rematching the same foe daily farms evidence and loot. Add a per-creature or per-site diminishing lock.
 

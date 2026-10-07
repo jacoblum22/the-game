@@ -21,6 +21,37 @@ envoy, 04's original social shape (2-4 beats, 15% Dire) revised  T1: 3/4/6  T2: 
 | envoy, 04's original social shape (2-4 beats, 15% Dire) | current | 18 | -5% | 53 | +4% | yes |
 | envoy, 04's original social shape (2-4 beats, 15% Dire) | revised | 20 | +5% | 54 | +6% | yes |
 
+=== I-083 / I-039 / I-037 (revision C2a): contest opposition from 20 seeded worlds; power band from confirmed tiers ===
+  highest party band in any world: old seed 4; revised seed 5 (median per world: 3.0 at band 4, 2.0 at band 5)
+archer (combat calling, 03 scenario A tags)  w-new           T1: 3/4/6  T2: 8/10/13  T3: 17/20/23  T4: 31/34/38  T5: 48/52/57 | T5 within 90: 200 of 200
+envoy (social contests)                      w-old           T1: 3/4/5  T2: 8/9/12  T3: 16/19/21  T4: 30/33/99  T5: 99/99/99 | T5 within 90: 0 of 200
+envoy (social contests)                      w-new-nopowers  T1: 3/4/5  T2: 8/9/12  T3: 16/19/22  T4: 99/99/99  T5: 99/99/99 | T5 within 90: 0 of 200
+envoy (social contests)                      w-new           T1: 3/4/5  T2: 8/9/12  T3: 16/19/22  T4: 30/32/36  T5: 46/49/53 | T5 within 90: 200 of 200
+smith (craft contests: works)                w-old           T1: 3/4/6  T2: 7/10/14  T3: 16/19/25  T4: 29/32/37  T5: 43/47/52 | T5 within 90: 200 of 200
+smith (craft contests: works)                w-new-nopowers  T1: 3/4/6  T2: 8/11/18  T3: 17/23/33  T4: 30/35/45  T5: 44/49/56 | T5 within 90: 200 of 200
+smith (craft contests: works)                w-new           T1: 3/4/6  T2: 8/11/18  T3: 17/23/32  T4: 29/35/43  T5: 43/48/56 | T5 within 90: 200 of 200
+scholar (lore contests: sealed truths)       w-old           T1: 3/4/5  T2: 7/9/12  T3: 16/18/22  T4: 29/34/99  T5: 99/99/99 | T5 within 90: 0 of 200
+scholar (lore contests: sealed truths)       w-new-nopowers  T1: 3/4/5  T2: 7/9/12  T3: 16/19/22  T4: 99/99/99  T5: 99/99/99 | T5 within 90: 0 of 200
+scholar (lore contests: sealed truths)       w-new           T1: 3/4/5  T2: 7/9/12  T3: 16/19/22  T4: 29/32/36  T5: 45/49/53 | T5 within 90: 200 of 200
+
+| Calling | rules | median T3 | vs archer | median T4 | median T5 | vs archer | within +-20%% at both |
+|---|---|---|---|---|---|---|---|
+| archer (combat calling, 03 scenario A tags) | (combat, confirmed band) | 20 | - | 34 | 52 | - | - |
+| envoy (social contests) | w-old | 19 | -5% | 33 | never | - | no |
+| envoy (social contests) | w-new-nopowers | 19 | -5% | never | never | - | no |
+| envoy (social contests) | w-new | 19 | -5% | 32 | 49 | -6% | yes |
+| smith (craft contests: works) | w-old | 19 | -5% | 32 | 47 | -10% | yes |
+| smith (craft contests: works) | w-new-nopowers | 23 | +15% | 35 | 49 | -6% | yes |
+| smith (craft contests: works) | w-new | 23 | +15% | 35 | 48 | -8% | yes |
+| scholar (lore contests: sealed truths) | w-old | 18 | -10% | 34 | never | - | no |
+| scholar (lore contests: sealed truths) | w-new-nopowers | 19 | -5% | never | never | - | no |
+| scholar (lore contests: sealed truths) | w-new | 19 | -5% | 32 | 49 | -6% | yes |
+
+I-039 exploit: a farming envoy (the envoy above, but one contest scene in three goes to the highest band the rules grant, at
+a DC of power band + 1) in worlds with an added tier-5 faction (head band 5, binding; door-warden band 1, not binding)
+  w-old           T1: 3/3/4  T2: 6/8/10  T3: 15/17/20  T4: 27/30/33  T5: 44/48/52 | T5 within 90: 200 of 200 | band-4/5 deeds in sessions 1-10: median 24
+  w-new           T1: 3/3/4  T2: 7/8/10  T3: 15/17/20  T4: 26/30/33  T5: 43/47/51 | T5 within 90: 200 of 200 | band-4/5 deeds in sessions 1-10: median 0
+
 === R9 (I-004): counted / weighted at the focus key after 10 sessions (p10/median/p90 of the ratio; 200 seeds) ===
   archer (combat calling, 03 scenario A tags)  current  0.20 / 0.23 / 0.27
   envoy (social contests)                      current  0.15 / 0.19 / 0.23

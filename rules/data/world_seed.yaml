@@ -438,6 +438,20 @@ tables:
     by: {village: [{range: "1-2", org: org.clan.family, text: "an old family whose head is the headman"}, {range: "3-4", org: org.crown.noble, text: "a lord in a manor above the village"}, {range: "5", org: org.faith.shrine, text: "the shrine's priests"}, {range: "6", org: org.crown.civic, text: "a council of elders"}],
          town: [{range: "1-2", org: org.crown.civic, text: "a town council and its watch"}, {range: "3-4", org: org.crown.noble, text: "a noble house in the castle"}, {range: "5", org: org.guild.merchant, text: "the merchants' guild"}, {range: "6", org: org.faith.temple, text: "the temple"}]}
 
+  - id: tbl.12.seed.powers
+    name: "The powers of the far rings (12.16.11) [revision: I-083]"
+    die: d8
+    note: "one per ring-4 area (band 4) and per ring-5 area (band 5); a row already used steps down the table, wrapping, so no two powers share a row; each keeps a truth (sealed; a lore contest's keeper, 15.9.20) and holds a position a social contest can move (15.3.11)"
+    results:
+      - {range: "1", role: "warlord who holds the old pass", role_tags: [deed.martial.tactics, deed.influence.command], keeps: "where the old army's dead lie, and why they fell"}
+      - {range: "2", role: "archmage in a tower that should have fallen", role_tags: [deed.arcane, deed.lore.arcana], keeps: "the working that made the wound, and the one that could close it"}
+      - {range: "3", role: "elder of a hidden people", role_tags: [deed.lore.history, deed.influence.persuasion], keeps: "the region's first name and the oath sworn under it"}
+      - {range: "4", role: "abbot of a far monastery", role_tags: [deed.divine, deed.lore.religion], keeps: "what the keepers were before they were worshipped"}
+      - {range: "5", role: "exiled heir and the court that followed", role_tags: [deed.influence.intrigue, deed.influence.etiquette], keeps: "the true line of the haven's rulers"}
+      - {range: "6", role: "oracle of a drowned shrine", role_tags: [deed.primal, deed.lore.history], keeps: "the price the wound's makers paid"}
+      - {range: "7", role: "master of a lost guild's last hall", role_tags: [deed.craft.smithing, deed.influence.trade], keeps: "the recipe of a wondrous work and where its metal lies"}
+      - {range: "8", role: "hermit-judge whom the old lands still obey", role_tags: [deed.lore.law, deed.influence.insight], keeps: "a crime the region's powers buried"}
+
   - id: tbl.12.seed.inciting
     name: "How the story begins (12.16.16)"
     die: d8
@@ -681,6 +695,7 @@ requirements:
   - {id: ws.req.03_homes, from: "03", need: "NPC homes (witness scopes)", rules: ["03.10"], key: "npcs[]/home", check: npc_homes}
   - {id: ws.req.04_keeper_axes, from: "04", need: "keepers with the conduct axes each cares for", rules: ["04.9.2"], key: "keepers[]/axes", check: keepers}
   - {id: ws.req.04_institutions, from: "04", need: "institutions per deed branch (V3, V9; institutions_matching)", rules: ["04.6 V3, V9", "11.8.1"], key: "factions/institutions", check: institutions}
+  - {id: ws.req.04_powers, from: "04/15", need: "the far rings' powers: one principal per ring-4 area at band 4 and per ring-5 area at band 5, each keeping a sealed truth (the opposition the higher tiers' social and lore contests read; revision I-083)", rules: ["12.16.11", "03.4.3", "15.3.11", "15.9.20"], key: "npcs[]/power", check: powers}
   - {id: ws.req.04_hybrid_none, from: "04", need: "whether the four none hybrid pairs hold", rules: ["04.4"], key: "canon/hybrid_none_pairs", check: nonempty}
   - {id: ws.req.05_resonance, from: "04/05/10", need: "place resonance (places of power)", rules: ["05.6.9", "05.7.10 item 4"], key: "places[]/resonance", check: resonance}
   - {id: ws.req.05_magic_canon, from: "05", need: "05.7.10 items 1-8", rules: ["05.7.10"], key: "canon/magic", check: magic_canon}

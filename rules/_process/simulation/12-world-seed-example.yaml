@@ -4383,6 +4383,203 @@ npcs:
   knowledge: []
   lifecycle: provisional
   basis: [12.11.1, 12.16.11]
+- id: npc.magwen_thistlefoot
+  name: Magwen Thistlefoot
+  role: hermit-judge whom the old lands still obey
+  people: creature.folk.halfling
+  gender: woman
+  pronouns: she/her
+  age: middle-aged
+  depth: principal
+  home: loc.high_fells_still_heath
+  member_of: []
+  wants:
+  - text: find the truth about the past
+    tags: [deed.lore.law]
+    rank: 1
+  fears:
+  - text: the watch and the law
+    tags: []
+  refusals:
+  - {kind: refusal.past, text: will not speak of their past}
+  secrets:
+  - {fact: sec.magwen_thistlefoot.1, text: is not who they claim to be, gate: 'standing Devoted, or a clue found by play (15.9)'}
+  voice: {register: jovial, habit: speaks of themselves by name}
+  detail: silver-streaked hair though young
+  demeanor: cheerful
+  lifestyle: comfortable
+  speaks: [lic.lang.common]
+  band: 4
+  standing_to_pc: 0
+  exists: exists
+  officer_duty: null
+  recruit: null
+  kind: npc
+  tags: [creature.folk.halfling]
+  role_tags: [deed.lore.law, deed.influence.insight]
+  competence:
+  - {tag: deed.lore.law, value: 4}
+  - {tag: deed.influence.insight, value: 4}
+  licenses:
+  - {id: lic.training.lore_law, grade: trained}
+  - {id: lic.training.influence_insight, grade: trained}
+  visibility: background
+  sealed_fields: [wants, fears, refusals, secrets, knowledge, keeps]
+  mind: sapient
+  knowledge: []
+  lifecycle: provisional
+  basis: [12.11.1, 12.16.11]
+  power: true
+  keeps: {fact: truth.magwen_thistlefoot, text: a crime the region's powers buried, sealed: true, gate: 'a lore contest kept by this
+      power (15.9.20), or standing Devoted'}
+- id: npc.selda_thornwell
+  name: Selda Thornwell
+  role: archmage in a tower that should have fallen
+  people: creature.folk.human
+  gender: woman
+  pronouns: she/her
+  age: adult
+  depth: principal
+  home: loc.high_fells_lonely_ridge
+  member_of: []
+  wants:
+  - text: protect their good name
+    tags: [deed.arcane]
+    rank: 1
+  fears:
+  - text: violence
+    tags: []
+  refusals:
+  - {kind: refusal.past, text: will not speak of their past}
+  secrets:
+  - {fact: sec.selda_thornwell.1, text: is not who they claim to be, gate: 'standing Devoted, or a clue found by play (15.9)'}
+  voice: {register: nervous, habit: uses old-fashioned courtesies}
+  detail: paint on their hands
+  demeanor: sly
+  lifestyle: comfortable
+  speaks: [lic.lang.common]
+  band: 4
+  standing_to_pc: 0
+  exists: exists
+  officer_duty: null
+  recruit: null
+  kind: npc
+  tags: [creature.folk.human]
+  role_tags: [deed.arcane, deed.lore.arcana]
+  competence:
+  - {tag: deed.arcane, value: 4}
+  - {tag: deed.lore.arcana, value: 4}
+  licenses:
+  - {id: lic.training.lore_arcana, grade: trained}
+  visibility: background
+  sealed_fields: [wants, fears, refusals, secrets, knowledge, keeps]
+  mind: sapient
+  knowledge: []
+  lifecycle: provisional
+  basis: [12.11.1, 12.16.11]
+  power: true
+  keeps: {fact: truth.selda_thornwell, text: 'the working that made the wound, and the one that could close it', sealed: true, gate: 'a
+      lore contest kept by this power (15.9.20), or standing Devoted'}
+- id: npc.sketaa_of_the_reed_clan
+  name: Sketaa of the Reed Clan
+  role: exiled heir and the court that followed
+  people: creature.folk.beastfolk
+  gender: woman
+  pronouns: she/her
+  age: adult
+  depth: principal
+  home: loc.high_fells_broken_greenwood
+  member_of: []
+  wants:
+  - text: win their master's favor
+    tags: [deed.influence.intrigue]
+    rank: 1
+  fears:
+  - text: being found out
+    tags: []
+  refusals:
+  - {kind: refusal.lend, text: will not lend money}
+  secrets:
+  - {fact: sec.sketaa_of_the_reed_clan.1, text: committed a crime that is still sought, gate: 'standing Devoted, or a clue found by
+      play (15.9)'}
+  voice: {register: rough, habit: never says no outright}
+  detail: a strange perfume
+  demeanor: sly
+  lifestyle: comfortable
+  speaks: [lic.lang.common, lic.lang.kinspeech]
+  band: 5
+  standing_to_pc: 0
+  exists: exists
+  officer_duty: null
+  recruit: null
+  kind: npc
+  tags: [creature.folk.beastfolk]
+  role_tags: [deed.influence.intrigue, deed.influence.etiquette]
+  competence:
+  - {tag: deed.influence.intrigue, value: 5}
+  - {tag: deed.influence.etiquette, value: 5}
+  licenses:
+  - {id: lic.training.influence_intrigue, grade: trained}
+  - {id: lic.training.influence_etiquette, grade: trained}
+  visibility: background
+  sealed_fields: [wants, fears, refusals, secrets, knowledge, keeps]
+  mind: sapient
+  knowledge: []
+  lifecycle: provisional
+  basis: [12.11.1, 12.16.11]
+  power: true
+  keeps: {fact: truth.sketaa_of_the_reed_clan, text: the true line of the haven's rulers, sealed: true, gate: 'a lore contest kept by
+      this power (15.9.20), or standing Devoted'}
+- id: npc.ymmulf_of_the_long_winter
+  name: Ymmulf of the Long Winter
+  role: master of a lost guild's last hall
+  people: creature.folk.giant
+  gender: woman
+  pronouns: she/her
+  age: old
+  depth: principal
+  home: loc.high_fells_tangled_ridge
+  member_of: []
+  wants:
+  - text: heal their faith
+    tags: [deed.craft.smithing]
+    rank: 1
+  fears:
+  - text: a particular person
+    tags: []
+  refusals:
+  - {kind: refusal.fight, text: will not fight}
+  secrets:
+  - {fact: sec.ymmulf_of_the_long_winter.1, text: committed a crime that is still sought, gate: 'standing Devoted, or a clue found by
+      play (15.9)'}
+  voice: {register: flowery, habit: apologizes constantly}
+  detail: a strange perfume
+  demeanor: bored
+  lifestyle: comfortable
+  speaks: [lic.lang.common, lic.lang.giantish]
+  band: 5
+  standing_to_pc: 0
+  exists: exists
+  officer_duty: null
+  recruit: null
+  kind: npc
+  tags: [creature.folk.giant]
+  role_tags: [deed.craft.smithing, deed.influence.trade]
+  competence:
+  - {tag: deed.craft.smithing, value: 5}
+  - {tag: deed.influence.trade, value: 5}
+  licenses:
+  - {id: lic.training.craft_smithing, grade: trained}
+  - {id: lic.training.influence_trade, grade: trained}
+  visibility: background
+  sealed_fields: [wants, fears, refusals, secrets, knowledge, keeps]
+  mind: sapient
+  knowledge: []
+  lifecycle: provisional
+  basis: [12.11.1, 12.16.11]
+  power: true
+  keeps: {fact: truth.ymmulf_of_the_long_winter, text: the recipe of a wondrous work and where its metal lies, sealed: true, gate: 'a
+      lore contest kept by this power (15.9.20), or standing Devoted'}
 bond_placement:
 - {slot: anchor, kind: kin, where: loc.high_fells_merestead, default_npc: null, note: 'a new NPC in Merestead (02.9.8: never one already
     in the cast)'}

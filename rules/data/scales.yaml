@@ -95,8 +95,8 @@ bands:
   - {band: 1, pc: novice, threat: rabble, pc_best_base: [4, 6], threat_mod: [0, 2], threat_vitality: [2, 5], tier_cap: 1}
   - {band: 2, pc: seasoned, threat: trained, pc_best_base: [6, 8], threat_mod: [3, 5], threat_vitality: [6, 12], tier_cap: 2}
   - {band: 3, pc: elite, threat: elite, pc_best_base: [8, 10], threat_mod: [6, 8], threat_vitality: [12, 20], tier_cap: 3}
-  - {band: 4, pc: champion, threat: champion, pc_best_base: [10, 11], threat_mod: [9, 11], threat_vitality: [20, 32], tier_cap: 4}
-  - {band: 5, pc: legend, threat: legend, pc_best_base: [12, 12], threat_mod: [12, 14], threat_vitality: [32, 60], tier_cap: 5}
+  - {band: 4, pc: champion, threat: champion, pc_best_base: [9, 11], threat_mod: [9, 11], threat_vitality: [20, 32], tier_cap: 4}
+  - {band: 5, pc: legend, threat: legend, pc_best_base: [10, 12], threat_mod: [12, 14], threat_vitality: [32, 60], tier_cap: 5}
   threat_vitality_reference: {1: 5, 2: 12, 3: 18, 4: 24, 5: 36}   # owner_of_values: "09" - the standard line, T-09-3 (DL-09-04; T4/T5 lowered from 26/40 for adversary Fend)
   threat_vitality_scope: "the threat_vitality envelope binds the standard line and, from below, minions; elite, solo and mob pools exceed it by 09's variant multipliers (00.3.7, amended at integration)"
   advisory_by_difference:          # RETIRED at integration (00.3.7; IR ch.06 #7, IR ch.09 #3): superseded by 09's T-09-9 matrix and PR-09-4 estimator

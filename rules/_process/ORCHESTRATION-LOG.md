@@ -382,3 +382,7 @@ Cost: 149 tools; see the usage line below.
 
 ## Revision C1 returned: `revision-C1-report.md`
 Resolved all 12 rows: I-038 (Oracle lever cap; sim shows +3.7 down to +0.8 per roll), I-046, I-048, I-052, I-053, I-054, I-059, I-062, I-071, I-073, I-074 and I-085. I-088 wontfix (ch.13).
+
+## Revision C2a returned: `revision-C2a-report.md`
+- Resolved I-037 (power_band counts confirmed tiers only), I-039 (faction tier lent only through someone with authority; contest band capped at power_band + 2), I-083 (the seed places band-4/5 NPCs; parity sim tier 5 at session 48–49 vs the archer's 52), I-063 and I-064.
+- I-034 handed off. New row I-089 (pacing targets missed after the fixes; NPCs generated on demand have no band). Both go to C2b.

@@ -368,8 +368,15 @@ directly.
 | 1 | P1 **novice** (unrecognized or tier 1) | T1 **rabble** (untrained folk, vermin) | +4…+6 | +0…+2 | PC 10–16 at creation / T1 2–5 |
 | 2 | P2 **seasoned** | T2 **trained** (soldiers, wolves) | +6…+8 | +3…+5 | T2 6–12 |
 | 3 | P3 **elite** | T3 **elite** (knights, ogres) | +8…+10 | +6…+8 | T3 12–20 |
-| 4 | P4 **champion** | T4 **champion** (heroes, trolls, young dragons) | +10…+11 | +9…+11 | T4 20–32 |
-| 5 | P5 **legend** | T5 **legend** (ancient dragons, demon lords) | +12 | +12…+14 | PC cap 24 / T5 32–60 |
+| 4 | P4 **champion** | T4 **champion** (heroes, trolls, young dragons) | +9…+11 | +9…+11 | T4 20–32 |
+| 5 | P5 **legend** | T5 **legend** (ancient dragons, demon lords) | +10…+12 | +12…+14 | PC cap 24 / T5 32–60 |
+
+**The PC column** `[revision: I-063]` is the range a band's specialists actually hold (04.5.1: competence +5 / +6
+at tiers 4 / 5, the best attribute +4 after the tier-4 increase, edge 0–2); the lower ends of P4 and P5 were +10
+and +12 until revision C, which only a specialist with edge +1 or +2 reached. The **reference PC** of each band
+(T-06-12's lines; 09.4.4's audits) sits at the top of the range (+11 at P4, +12 at P5): the envelope's adversary
+numbers are tuned against it, and PR-09-4 rates every real encounter from the PC's own line, so a specialist
+with edge 0 sees a fight rated for the modifier it has.
 
 **Envelope scope.** The adversary Vitality column binds the `standard` line of each band and, from
 below, `minion`s; `elite`, `solo` and mob pools are multiplied past it by ch.09's variants (×2 / ×1.25
@@ -1910,7 +1917,7 @@ Addendum A and the digests' interface requests is decided here.
 | Q2 | Slot ceiling: 05 or 08? | **05** owns the single hard ceiling on held abilities and its **three partitions**: `calling` (from recognition, 04), `acquired` (absorbed, taught, learned, emergent), `equipped` (item-bound actives, only while equipped). The partitions sum to the ceiling; envelope 12–24 total (reference 20 = 12 + 4 + 4). **08** must keep every item to at most one item-bound active ability and may never add slots; passive and mundane properties use no ability slot and count against 08's item-layer budget instead [R3 §4 T-12]. |
 | Q3 | Condition list: 00 or 06? | **00** owns the schema, the stacking vocabulary and the reserved ids (00.9); **06** owns `data/conditions.yaml` and every definition; **07** owns afflictions and injuries in its own files, built from conditions; 05, 08, 09, 10, 16 reference conditions by id only. |
 | Q4 | Recognition vehicles vs faction reactions (04↔11)? | **04** owns the vehicle table V1–V14 and the offer protocol; on every grant, offer, decline or revocation it emits `recognition_event {actor, calling, tier, policy, vehicle, witnesses, scope, answer}`. **11** consumes it to update reputation, faction status and rumors, and provides `institutions_matching(deed_branch, region) → [faction_id]` for V3/V9 staging. 04 never writes faction state; 11 never grants capability [R6 §A.6 R-A5]. |
-| Q5 | PC power band (04→09)? | **04** provides `power_band(pc) → 1..5` computed `[D]` from recognized tiers only (never from narration); **09** provides `threat_advisory(encounter, pc) → trivial / easy / fair / hard / lethal` from threat bands, count and `power_band`; **07** consumes `lethal` advisories into the lethal warning. |
+| Q5 | PC power band (04→09)? | **04** provides `power_band(pc) → 1..5` computed `[D]` from confirmed tiers only (04.5.6: a provisional tier counts once confirmed; never from narration) [revision: I-037]; **09** provides `threat_advisory(encounter, pc) → trivial / easy / fair / hard / lethal` from threat bands, count and `power_band`; **07** consumes `lethal` advisories into the lethal warning. |
 | Q6 | The Oracle: 01 or 12? | **01** owns the one Oracle mechanism (odds rungs, thresholds, doubles, when a player-driven beat needs it). **12** owns the DM's use of it for its own questions, the tension dial (which may shift a rung by at most one), and the meaning/inspiration tables (`data/oracles.yaml`). There is one odds ladder. |
 | Q7 | Clocks: who owns them? | **00** owns the primitive; the chapter that creates a clock owns that instance and its template (faction goals 11, alarms and site dangers 10, chases 06, projects 15, rituals 05, dying and afflictions 07, recognition readiness 04). |
 | Q8 | Companions (16↔06)? | **16** owns companion templates (within the envelope at the band of the companion), loyalty (on the standing scale), journey roles, and what companions may do. **06** owns the action economy: a companion has **no separate turn**; it acts only when the PC spends an action to command it, or through its own reactions and hooks; 06 defines the command action's cost. **07** owns companion harm: companions are protected by Key 1 (declared lethality) but have no last-chance menu. Presence sets retinue size (00.4.4). |

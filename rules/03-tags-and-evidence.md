@@ -278,7 +278,7 @@ EvidenceEvent:
   significance: {consequential: bool, pressured: bool, own_act: bool, cites: [id]}   # (engine) 03.3.2
   justification: str         # one line: why these tags fit, naming the observable facts (NCP)
   novel: bool                # (engine) 03.4.4
-  contest: {kind: social|craft|lore, band: 1-5, one_from_full: bool}|null   # (engine) 03.4.3; null outside a contest; I-046
+  contest: {kind: social|craft|lore, band: 1-5, one_from_full: bool, opposition: id}|null   # (engine) 03.4.3; null outside a contest; I-046; opposition: I-083
   ruinous: bool              # (engine) 03.4.5: Dire stakes with an irreversible threatened cost, outside conflict
   crisis: bool               # (engine) 03.4.5
   peak: bool                 # (engine) 03.4.5
@@ -592,9 +592,17 @@ both. A tier-4 crystallization should be able to require a band-4 deed whatever 
   not a party's position, and so earn the DC's band only), a craft contest (a step of a crafting project, 08.6.4) or a lore contest (a beat on
   a case or on research whose truth a principal or a faction keeps; 15.9.20). A beat in a contest takes
   `challenge_band = max(the DC's band, the contest band)`. The **contest band** is the opposition's, rated as
-  a fight's is: for social and lore, the higher of the opposing party's threat band (09) and the tier of the
-  faction it acts for (11.3; tier 0–1 → 1, 2 → 2 … 5 → 5); for craft, the work's **type-tier** (08.6.1). It
-  is engine-read from those records, never chosen. *Why:* a deed's band is how great it is in the world, and a
+  a fight's is. For social and lore it is the opposing party's **own band** (its threat band where it has an
+  adversary line, 09, else the `band` its NPC record holds, 12.11.1, 12.16.11; a principal with neither, 1),
+  raised to the tier of the faction it acts for (11.3; tier 0–1 → 1, 2 → 2 … 5 → 5) **only when the party can
+  bind that faction on the matter**: the faction's head or an officer (its `officers`, 11.3.17, 12.16.11), or
+  a faction that keeps a truth itself (15.9.20). Anyone else who speaks for a faction (a door-warden, a clerk,
+  a sworn member petitioned at the gate) counts its own band [revision: I-039]. For craft it is the work's
+  **type-tier** (08.6.1). In every contest the contest band is **at most the actor's `power_band` + 2**, the
+  most a fight lends (lethal +2) [revision: I-039]: a novice who bargains with a duke does a band-3 deed, not a band-5
+  one, as a novice who survives a dragon does. It is engine-read from those records, never chosen. The
+  record of the beat carries the contest's **opposition** (the party, case, research project or work), which
+  04.3.4's great-deed count reads [revision: I-083]. *Why:* a deed's band is how great it is in the world, and a
   bargain struck with a duke or a blade made from dragon steel is a band-5 deed even when one exchange's DC
   is moderate; with the DC alone a smith's work could never rise above band 4 (wondrous work is Very hard)
   and the tier-5 great-deed requirement was closed to every crafter (`04-recog-parity.py`: tier 3 never

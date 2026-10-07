@@ -770,11 +770,17 @@ below the ceiling (class i); a cited hesitation reason always restores the roll.
 **15.3.11 Social contests and their band.** `[D]` `[revision: I-003]` A Talk frame of one of 03.4.3's closed
 contest methods (request, bargain, deceive, intimidate, interrogate, or any beat of a campaign or a debate;
 not win over, provoke, perform, command or read) [revision: I-071] is a **social contest** (03.4.3) when it is aimed at a **principal** NPC (12.11.1) or at anyone who
-speaks for a faction on the faction's business. Its **contest band** is engine-read: the higher of the
-opposing party's threat band where it has an adversary line (09) and the tier of the faction it acts for
-(11.3; tier 0–1 → 1 … 5 → 5); a principal with neither counts band 1. Every beat of the contest takes
-`challenge_band = max(DC band, contest band)` (03.4.3), so a bargain struck with a guild master of a tier-4
-guild is a band-4 deed even when the exchange that sealed it was moderate. A beat declared while the
+speaks for a faction on the faction's business. Its **contest band** is engine-read (03.4.3): the opposing
+party's own band (its threat band where it has an adversary line, 09, else its record's `band`, 12.11.1;
+a principal with neither counts band 1), raised to the tier of the faction it acts for (11.3; tier 0–1 → 1
+… 5 → 5) only when the party **can bind the faction**: its head or an officer (11.3.17); a door-warden, clerk
+or member who speaks for the faction without that authority counts its own band; and never above the
+speaker's `power_band` + 2 [revision: I-039]. Every beat of the contest takes
+`challenge_band = max(DC band, contest band)` (03.4.3), so a bargain struck with the master of a tier-4
+guild is a band-4 deed for a PC of power band 2 or more even when the exchange that sealed it was moderate,
+while a band-1 talker at the same guild's gate does a band-1 deed. The opposition that higher tiers need is
+in the world: every region holds band-4 and band-5 **powers** in its far rings (12.16.11), and a great deed
+counts at most twice toward one tier from one opposing party (04.3.4) [revision: I-083]. A beat declared while the
 contest's opposing clock stands one segment from full (a campaign's patience, 15.8.1; a council's, 15.8.3)
 is **one from full** and a crisis (03.4.5) [revision: I-046]. *Why:* a fight's deeds are rated by the fight (03.4.3's advisory
 offset), and a negotiator's must be rated by what they faced, or the higher tiers' great deeds and crises
@@ -1728,7 +1734,11 @@ one core, one fallback) [02 Interface requests; 07 Interface requests].
 
 **15.9.20 Cases and research as lore contests.** `[D]` `[revision: I-003]` A beat on a case (15.9.1) or on research (15.9.14) is a **lore contest** (03.4.3) when
 a principal NPC or a faction keeps the truth: the culprit of a case, the order that seals an archive, the
-cult that guards a name. Its contest band is that keeper's, read as in 15.3.11. A Dire beat whose threatened
+cult that guards a name. Its contest band is that keeper's, read as in 15.3.11: an NPC keeper's own band
+(its faction's tier only when it is that faction's head or officer), a faction that keeps the truth itself its
+tier, a power of the far rings its band (12.16.11, each keeps a sealed truth); never above the actor's
+`power_band` + 2 [revision: I-039]. A case or a research project is **one opposition** for 04.3.4: at most two of a
+tier's great deeds come from it, however many days its beats take [revision: I-083]. A Dire beat whose threatened
 cost destroys a necessary node's last unfound placement or ends the case (the witness silenced, the ledger
 burned, the culprit fled for good) is **ruinous** (03.4.5); a beat declared while the case's opposition clock
 (15.9.13) stands one segment from full is **one from full** (03.4.5) [revision: I-046]. Research with no keeper uses its DC's band, as

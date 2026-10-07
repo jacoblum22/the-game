@@ -986,7 +986,8 @@ master's workshop (+9) 74%; an expert (+10 to +12) 85–90%. A wondrous work at 
 is "Hard: challenges a practiced professional" (T-00-5) and the numbers say so [R4 §9 08 #5 "crafting as an extended task (clock)"; 05.8.2; DL-08-16].
 6. **A project is a craft contest** `[revision: I-003]` (03.4.3). Each step's `challenge_band` is at least
    the work's **type-tier** (08.6.1), so a wondrous blade of dragon steel is a band-5 deed though its steps are
-   Very hard, the highest DC a work sets. A step on a work whose material set includes an **irreplaceable
+   Very hard, the highest DC a work sets; never above the maker's `power_band` + 2 (03.4.3) [revision: I-039]. A work is
+   **one opposition** for 04.3.4: at most two of a tier's great deeds come from one project [revision: I-083]. A step on a work whose material set includes an **irreplaceable
    material** (rarity band 4, or a harvested part that carries a named source's provenance) is framed
    **Dire**, and its `cost.gear` on that material is **ruinous** (03.4.5): the steel cannot be bought again.
    A step taken while the spoilage clock stands one segment from full is **one from full** (a crisis, 03.4.5) [revision: I-046].

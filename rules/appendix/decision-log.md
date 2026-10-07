@@ -988,6 +988,27 @@ Fragment for `appendix/decision-log.md`. Format: BRIEF §11. Simulation referenc
 - Serves: goal 1 (R1 #13: every calling needs a real path).
 - Revisit if: T-04-CRISIS fails in live logs.
 
+### DL-04-29: `power_band` reads confirmed tiers only (revision I-037)
+- Decision: 04.5.6 computes `power_band(pc)` from each unsuspended calling's `confirmed_tier` (the highest tier whose grant is permanent; a new `Character.callings` field, 04.1.2), with `inherited_band` read the same way (04.8.5 item 5). A provisional tier's grants (competence step, training, capability, family-mechanic rank, pick) work at once; the numbers that size the character wait for confirmation: power band, and through it maximum Vitality (07.1.2), 09's advisory, 03's `peak` flag and 16's band cap, plus 05.6.1's `T_high` and `breadth`. 00.17.1 Q5, 05.6.1, 07.1.2, 04's edge case, WE-04-1 and `callings.yaml` (and its generator header) say the same.
+- Alternatives considered: count provisional tiers everywhere (rejected: a lapse would lower Vitality, Focus and the advisory and rebuild every ally's line for a grant the player never kept, the "rise and fall" that 04.8.2 already forbids for the tier-4 attribute); split the two (Vitality confirmed, Focus provisional; rejected: the inconsistency I-037 reports).
+- Evidence: verification-1 ch.04 read (V1-006). Pacing: a confirmation lands 12 evidence-bearing scenes after the grant (04.8.2); `04-recog-parity.py`'s I-083 section models the lag (confirmed band) for every style, archer included.
+- Serves: goal 2 (one definition), Principle VI (provisional means trial, never a temporary stat bump).
+- Revisit if: live logs show the two-to-three-session lag in Vitality after a grant reading as a broken promise.
+
+### DL-04-30: 00.3.7's P4 and P5 PC column widened to what the ladder gives (revision I-063)
+- Decision: 00.3.7's PC best-domain base modifier reads P4 **+9…+11** and P5 **+10…+12** (was +10…+11 and +12; `scales.yaml#bands.pc_best_base` the same). 04.5.1's sentence now says the ranges assume the tier-4 increase on that attribute (one lower without it), and that the band's reference PC (T-06-12: +11 at P4, +12 at P5) is the specialist with edge +1 or +2 at the top of the range.
+- Alternatives considered: restate 04.5.1 only, leaving a tier-4 specialist at edge 0 "below its band" (rejected: then the PC column of 00.3.7 is not what a band means, and every P4 or P5 character without gear edge would be off-envelope by definition); raise tier-4 competence to +6 (rejected: the base-modifier cap +12 and DL-04-23's ladder, and T-06-12's reference lines would all move).
+- Evidence: 04.5.1's arithmetic (competence +5 / +6, attribute +4, edge 0–2); T-06-12's reference lines (+11, +12) lie inside the new ranges, so `06-conflict-sim.py`, 09's audits and PR-09-4 are unchanged (PR-09-4 reads the PC's own line, never the band's range).
+- Serves: goal 2 (00 and 04 agree).
+- Revisit if: ch.09's second reference PC (I-040) wants a low-edge P4/P5 line for its audits.
+
+### DL-04-31: The world supplies band-4/5 opposition; a tier counts at most two great deeds per opposition (revision I-083)
+- Decision: (a) 12.16.11 seeds the **powers of the far rings**: a principal in each ring-4 area at band 4 and each ring-5 area at band 5 (`tbl.12.seed.powers`), each keeping a sealed truth and holding a position; a new region's powers are band 5 (12.16.18); T-12-16 gains `ws.req.04_powers` (63 checks). (b) 04.3.4: at most two of a tier's great deeds come from one opposition (a contest's party, a case or research project, a work; recorded as `contest.opposition`, 03.2.1, `evidence.yaml`).
+- Alternatives considered: make a contest's band relative, `max(absolute, power_band + an advisory offset)` (rejected: a contest has no danger estimate to read the offset from, so the offset would be chosen, and a P4 envoy would do band-5 deeds against a village headman; the world should hold the champions a tier-5 deed is done against, as T-10-2's ring 5 already says); guarantee tier-4/5 factions in the seed (rejected: 11.3.4 makes a tier above 3 a realm-scale achievement, and with I-039's binding rule a faction lends only through its head anyway); no per-opposition limit (rejected: the playtest's four band-5 deeds in four days in one archive).
+- Evidence: `04-recog-parity.py` I-083 section (200 seeds, 20 seeded worlds, confirmed band): old seed: envoy and scholar never reach tier 5 in 90 sessions; revised seed without powers: never tier 4 (the per-opposition limit needs supply); revised: envoy 19 / 32 / 49, smith 23 / 35 / 48, scholar 19 / 32 / 49 against the archer's 20 / 34 / 52 (tiers 3 / 4 / 5), all within 20%. `12-world-seed.py`: 63 of 63 on seed 1, the guided run and 200 oracle seeds; the powers are drawn on a seed-derived stream of their own, so the committed example changed only by the four powers.
+- Serves: goal 1 (R1 #13: every calling has a real path in a generated world, not only in a modelled one).
+- Revisit if: T-04-CRISIS logs show a social or lore PC at tier 4 who cannot find a second band-5 party (more powers per region, or a new region earlier).
+
 ## DL-05 — Abilities, Focus, and Magic
 
 Format per BRIEF §11. Citations per 00.1.6. Numbers consumed by other chapters are marked **[consumed]**.
@@ -1234,6 +1255,13 @@ Format per BRIEF §11. Citations per 00.1.6. Numbers consumed by other chapters 
 - Decision: 05.7.4: a divine license's school must be one of its keeper's schools (PC, pregen or NPC priest); every keeper record states `nature: sacred | profane` (12.16.6), which Rebuke and every "sacred/profane keeper" effect reads. The seed generator picks the Acolyte pregen's school from the main keeper and filters NPC priests' licenses; the seed check enforces both.
 - Evidence: verification-1 playtest (Evella trained in healing under a war god; `dark: false` undefined); `12-world-seed.py` PASS (62/62, 200 oracle seeds 0 fails).
 - Serves: goal 2 (no undefined field, no illegal pregen).
+
+### DL-05-36: The keeper's regard fails at Fraying stage 3, not 2 (revision I-064)
+- Decision: 05.7.4: an oath-bearing divine calling keeps its keeper's regard through stages 0–2; at stage 2 its spells work one tier down with the calling (04.9.3), at stage 3 regard fails, and while an atonement clock runs from stage 3 the calling is read at stage 2 (04.9.4), so the spells return one tier down. The edge case "acts against the keeper's axes" and WE-04-6's atonement say the same.
+- Alternatives considered: keep stage 2 as the cut-off and have 04.9.3 / 04.9.4 say divine spells fall silent from stage 2 (rejected: stage 2 would then be a near-total loss for a Paladin and almost nothing for a Ranger, and an atoning Paladin could do no divine deed toward the atonement; 04's three stages are graduated by design, and stage 1 already removes the oath-gated abilities).
+- Evidence: verification-2a ch.05 read; 04.9.3's stage table; 04.9.4's atonement state.
+- Serves: goal 2 (04 and 05 agree); C:P5 ("a Paladin's ability to atone").
+- Revisit if: live play shows a stage-2 caster's spells undercut the warning that stage 2 is meant to be.
 
 ## DL-06 — Conflict
 
@@ -2577,6 +2605,13 @@ chapter 06's fight model and T-06-12 lines), output `07-harm-sim-output.txt`, wr
 - Serves: goal 2 (the season- and week-paced rules are calibrated against something stated).
 - Revisit if: owner playtests log sessions per season outside 3–10.
 
+### DL-12-31: The world seed writes the powers of the far rings (revision I-083)
+- Decision: 12.16.11 step (the cast) writes one principal per ring-4 area at band 4 and per ring-5 area at band 5 from `tbl.12.seed.powers` (d8, a used row stepping down), each with a sealed `keeps` truth; `ws.req.04_powers` checks it; 12.16.18's new region writes its own powers at band 5. 12.16.18's chapter-13 sentence now gives the script's real count (54 of 63) instead of the stale "58 of 62".
+- Alternatives considered: put the powers in the lairs (rejected: a lair's master is a fight, and a power must be a party a contest can face); one power per region (rejected: tier 5 needs two band-5 oppositions under DL-04-31).
+- Evidence: `12-world-seed-output.txt` (PASS, 63/63; seed 1's powers listed in WE-12-11 step 8); `04-recog-parity-output.txt` (I-083 section).
+- Serves: goal 1; 12.16's promise that a seed is as playable as a hand-made setting at every tier.
+- Revisit if: a pre-made region is maintained again (it must add its own powers).
+
 ## DL-13 — The Starter Setting: the Thallen March
 
 ### DL-13-01: One fictional engine — "true sound holds back the Quiet" — expressed only through existing mechanics
@@ -2940,6 +2975,13 @@ chapter 06's fight model and T-06-12 lines), output `07-harm-sim-output.txt`, wr
 - Alternatives considered: the ledger's conduct-only reading for all kinds (rejected: would let "tell the killer where the child sleeps" past `innocent`).
 - Evidence: verification-1 playtest (refusal.wilds and the nephew); 03.2.6.
 - Serves: goal 2.
+
+### DL-15-36: Only a binding party lends its faction's tier, and a contest's band is capped at power band + 2 (revision I-039)
+- Decision: 03.4.3 / 15.3.11 / 15.9.20 / 08.6.4: a contest's band is the opposing party's own band (threat band, else its record's `band`), raised to its faction's tier only when the party can bind the faction (its head or an officer, 11.3.17; a faction that keeps a truth itself lends its tier to a lore contest); a door-warden, clerk or member speaking for it counts its own band. Every contest band (social, lore, craft) is at most the actor's `power_band` + 2, the most a fight lends (lethal +2).
+- Alternatives considered: rate every deed by the individual's own band only (rejected: a bargain with a duke who binds a realm is a greater deed than one with a band-2 duke without it; the faction's weight is real when the party can commit it); no cap (rejected: a P1 who reaches a binding head of a tier-5 faction would still bank band-5 deeds without the danger a fight at that band carries); cap at power band + 1 (rejected: contests would then never reach a fight's lethal +2, and parity in `04-recog-parity.py` holds at + 2).
+- Evidence: verification-redteam.md exploit 2; `04-recog-parity.py` I-083 section: a P1–P2 envoy farming a tier-5 faction's door-warden banks a median 24 band-4/5 deeds in ten sessions under the old rule and 0 under this one; tier pacing of honest play unchanged (envoy tier 3 at 19, tier 5 at 49). The craft analog (08.6.1 type-tier) takes the same cap; a project is one opposition (DL-04-31).
+- Serves: goal 1 (non-combat parity without a cheap exploit); goal 2 (a deed's band means what the world says).
+- Revisit if: live logs show a social calling's tier-4/5 great deeds coming mostly from capped contests (the cap binding often).
 
 ## DL-16 — Companions and Allies
 

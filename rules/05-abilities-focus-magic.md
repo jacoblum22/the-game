@@ -642,8 +642,8 @@ the pass (quantity `focus_max`, family `adjust`):
 | Term | Value | Source |
 |---|---|---|
 | `base` | 3–5, reference **4** | set at creation by ch.02 inside 00.3.13's envelope; never changes |
-| `T_high` | 0–5 | the highest tier among held callings that are not suspended (provisional tiers count, as they do for `power_band`), counting a consolidated calling's specialties at their `tier_reached` (04.8.5), so a consolidation never lowers the pool |
-| `breadth` | 0–3 | +1 for each **other** held calling (deed-keyed or oath) at tier 3 or higher |
+| `T_high` | 0–5 | the highest **confirmed** tier among held callings that are not suspended (04.5.6's `confirmed_tier`, as for `power_band`; a provisional tier raises the pool when it is confirmed) [revision: I-037], counting a consolidated calling's specialties at their `tier_reached` (04.8.5), so a consolidation never lowers the pool |
+| `breadth` | 0–3 | +1 for each **other** held calling (deed-keyed or oath) at confirmed tier 3 or higher [revision: I-037] |
 
 | Character | focus.max (base 4) |
 |---|---|
@@ -937,8 +937,12 @@ the region keeps has no divine path to it (G3: the redirect names the keepers th
 Each keeper's record also states its **nature**, `sacred` or `profane` (12.16.6), which every effect that
 reads "a sacred keeper" or "a profane one" reads (Rebuke, the divine branch working, 05.7.11). Divine workings are usable while the keeper's
 regard holds:
-- for a character whose divine calling carries an oath: while the calling is below Fraying stage 2
-  (04.9.3 suspends the tier's grants at stage 2 and the calling at stage 3);
+- for a character whose divine calling carries an oath: while the calling is below Fraying stage **3**
+  [revision: I-064]. At stage 1 the abilities carrying `requires_conduct` on the strained axis are already unusable
+  (04.9.3); at stage 2 the school's spells still work, read one tier down with the calling (04.9.3: its
+  highest tier is suspended, so a spell's rank steps down with it); at stage 3 the calling is suspended and
+  regard fails. While an atonement clock runs from stage 3 the calling is read at stage 2 (04.9.4), so regard
+  holds again and the spells work one tier down: atonement is done with the keeper's power, not without it;
 - for a character with divine training and no divine calling: while their standing with the keeper's
   faith (11) is Neutral or better.
 When regard fails, `use_ability` refuses the school's spells with the reason, and the redirect names
@@ -2348,7 +2352,7 @@ Basis:              [05.6.7] [01.7.3] [R3 #9]
 - **A resisted spell meets a mindless target.** `trait.nature.mental` effects are G4 against it for that
   target only; other targets resolve.
 - **A divine caster acts against the keeper's axes with a working.** The working resolves; 03 records
-  the conduct evidence; 04's strain rises; regard fails only when the Fraying reaches stage 2 (05.7.4).
+  the conduct evidence; 04's strain rises; regard fails only when the Fraying reaches stage 3, and returns while an atonement runs (05.7.4) [revision: I-064].
   No rule punishes the cast itself.
 - **Two casters try to dispel each other's dispel, or to counter a counter.** A dispel is instant: there
   is nothing lasting left to oppose. A counter cannot itself be countered: it is a reaction, so its

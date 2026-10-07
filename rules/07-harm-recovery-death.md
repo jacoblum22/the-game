@@ -127,7 +127,7 @@ to **at least half of (base + band growth), rounded up**.
 - `base` is chapter 02's creation formula evaluated on the character's **current** attributes (envelope
   10–16, reference 12), so the one lifetime +1 to Endurance or a maim to it moves the base as 02's
   formula says (00.4.4).
-- `power_band` is 04's `power_band(pc)`, from **confirmed** tiers only (00.17.1 Q5). The growth is +2 per
+- `power_band` is 04's `power_band(pc)`, from **confirmed** tiers only (04.5.6; 00.17.1 Q5). The growth is +2 per
   band above the first: 12 / 14 / 16 / 18 / 20 at the reference base. This is the orchestrator's binding
   decision DL-00-04, taken because with flat Vitality a P4 specialist beat one T4 foe 68% of the time
   and a P5 one T5 foe 57% (against 87% and 80% with growth; `06-conflict-sim.md` section F). It answers

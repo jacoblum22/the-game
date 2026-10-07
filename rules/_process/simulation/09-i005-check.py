@@ -8,7 +8,7 @@ import os, sys, re
 HERE = os.path.dirname(os.path.abspath(__file__))
 src = open(os.path.join(HERE, "04-recog04.py"), encoding="utf-8").read()
 src = src[:src.index("if __name__ == '__main__':")]
-old = "tier = min(5, rng.choice([band, band + 1, band + 1, band + 2]))\n                stakes"
+old = "tier = conflict_tier(rng, band)\n                stakes"   # 04-recog04.py's default since revision I-034
 assert old in src
 new = ("tier = max(1, min(5, rng.choice(DIST) if DIST else rng.choice([band, band + 1, band + 1, band + 2]) - 0))\n"
        "                if DIST: tier = max(1, min(5, band + rng.choice(DIST)))\n                stakes")

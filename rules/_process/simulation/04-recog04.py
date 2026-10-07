@@ -115,7 +115,7 @@ class Engine:
                 if v > 0:
                     tot += v; self.raw[node] += 1
                     self.q[node][e['quality']] += 1
-                    self.log[node].append((scene, e['band'], e['degree'] >= 2, e['crisis'], e['peak'], e['ctx'], e['quality']))
+                    self.log[node].append((scene, e['band'], e['degree'] >= 2, e['crisis'], e['peak'], e['ctx'], e['quality'], e.get('opp')))  # opp: revision I-083
             if tot > 0:
                 had = True
                 self.weighted[node] += tot; self.node_scene_pts[node][scene] += tot
@@ -177,6 +177,14 @@ SEATS = 3
 
 def kind_of(key):
     return 'broad' if lvl(key) == 1 else 'narrow' if lvl(key) == 2 else 'fine'
+
+# [revision: I-034] a conflict's challenge band is power band + the advisory offset at framing (03.4.3; DL-00-05):
+# easy -1 25% / fair 0 40% / hard +1 30% / lethal +2 5%, the distribution 09-i005-check.py adopted. (04's original
+# model drew conflicts from band to band + 2: rng.choice([band, band + 1, band + 1, band + 2]).)
+CONFLICT_OFFSET = [-1] * 5 + [0] * 8 + [1] * 6 + [2] * 1
+
+def conflict_tier(rng, band):
+    return max(1, min(5, band + rng.choice(CONFLICT_OFFSET)))
 
 class Char:
     def __init__(self, comp, attr):
@@ -362,7 +370,7 @@ def run(style, sessions=60, seed=1, scenes_per_session=5, accept=True, keys=None
                     e = beat(rng, eng, ch, 'deed.martial.archery.bow', 1, 'risky', False, f'rat{tid}', 'creature.beast.vermin', scene)
                     if e['degree'] >= 2: eng.count('cnt.defeat', e['tag'], 1, scene)
             elif r < mix[0]:        # conflict
-                tier = min(5, rng.choice([band, band + 1, band + 1, band + 2]))
+                tier = conflict_tier(rng, band)
                 stakes = 'dire' if rng.random() < 0.25 else 'risky'
                 lethal = stakes == 'dire' and rng.random() < 0.4
                 ctx = rng.choice(CTX_FIGHT[:5 + min(5, band + 1)])

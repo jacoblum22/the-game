@@ -117,7 +117,7 @@ source that the calling's tags only **gate** [C:P5; DL-04-01]:
 | a **composite**, **Focus trigger** or **boon** | one bounded entry per hybrid / deed family / conduct calling | the calling's kind |
 
 **04.1.2 Callings in state.** `[D]` `Character.callings` (00.6.2) holds, per calling:
-`{calling_id, tier, lifecycle (provisional | permanent | retired), granted_at {time, scene, evidence_scene_index},
+`{calling_id, tier, confirmed_tier (04.5.6) [revision: I-037], lifecycle (provisional | permanent | retired), granted_at {time, scene, evidence_scene_index},
 crystallized_by (event id), vehicle, roads {branch: tag} (hybrids), seat (deed | oath), fraying_stage 0..3,
 suspended bool, legacy_picks int, specialties [{tag, value}], inherited_band int, declined_until}`. The owning
 family is "Callings, tiers, provisional status" (00.6.3): **shown once recognized**. Tallies stay sealed.
@@ -276,7 +276,7 @@ play can inflate the second [03.7.1; R3 #4]. Every field is read through one sea
 | `counted` | `counted(pc, key).units` | cumulative counted units at the node |
 | `quality_events` | `detail(pc, key).by_quality.difficult + .challenging` | events at the edge of ability or beyond |
 | `distinct_scenes` | `detail(pc, key).distinct.scenes` | separate scenes in which the key was shown |
-| `great_deeds` | `detail(pc, key, since).by_band[t..5]` summed, with `success_by_band[t..5]` summed ≥ 1 (equivalently `peak_band ≥ t`, the highest band among successes) | settled deeds whose challenge band is at least the tier being entered, at least one a success (exact since 03 added `success_by_band` at integration) |
+| `great_deeds` | `detail(pc, key, since).by_band[t..5]` summed, at most 2 from any one `contest.opposition` (04.3.4) [revision: I-083], with `success_by_band[t..5]` summed ≥ 1 (equivalently `peak_band ≥ t`, the highest band among successes) | settled deeds whose challenge band is at least the tier being entered, at least one a success (exact since 03 added `success_by_band` at integration) |
 | `crises` | `detail(pc, key, since).crises` | deeds done in lethal context, while Staggered or Dying, or at Dire stakes and challenging odds (03.4.5) |
 | `contexts` | `detail(pc, key, since).distinct.contexts` | distinct kinds of opposition or obstacle |
 | `children`, top child share | `profile(pc, deed, 2)` within the branch; `share` | breadth of a branch |
@@ -328,8 +328,12 @@ crystallization**. Each tier asks for a kind of evidence that repetition cannot 
 
 A **great deed** is a settled deed at the key whose `challenge_band` (03.4.3: the obstacle's absolute rung,
 DC 13–17 is band 2 … DC ≥ 28 is band 5; in a conflict the fight's advisory band; in a social, craft or lore
-**contest** the opposing party's or the work's band) is at least the number of the tier being entered; at least one of the
-required deeds must be a success. The band is tied to **this calling's** tier and not to `power_band`, so a
+**contest** the opposing party's or the work's band, at most `power_band` + 2) is at least the number of the tier being entered; at least one of the
+required deeds must be a success. At most **two** of the great deeds a tier counts may come from **one
+opposition**: one contest's opposing party, one case or research project, or one work (03.2.1's
+`contest.opposition`), so tier 5's four band-5 deeds are done against at least two of the world's powers,
+never four times in one archive; a fight's deeds are bounded by its encounter and 03.5.4's same-target rule
+`[revision: I-083]`. The band is tied to **this calling's** tier and not to `power_band`, so a
 second calling deepens on its own merits (a Paragon archer's new Tracker calling needs band-2 deeds for tier
 2, not band-5 ones). For a hybrid the since-fields are summed over both branches, with at least one great
 deed and half the scenes on each. For a vow or dark calling the ladder is `pos` (or `neg`) ≥ 16, 40, 80, 140,
@@ -372,6 +376,22 @@ advisory offsets of DL-00-05; 200 seeds, 90 sessions) and compares (median sessi
 
 All three are within ±20% of the combat calling at both tiers. With 04's thinner social shape (2–4 beats,
 15% Dire) the envoy reaches tier 3 at 20 and tier 5 at 54 [DL-03-26; DL-04-28].
+
+**Parity in a seeded world** `[revision: I-083; I-039; I-037]`. The rows above draw a contest's band like a
+fight's; in play it is read from the world's parties (03.4.3). `04-recog-parity.py`'s I-083 section draws every
+contest from 20 seeded worlds (`12-world-seed.py`), with power band from confirmed tiers for every style:
+
+| Calling | Old seed, I-003 rules (T3 / T4 / T5) | Revised seed, no powers | Revised (C): powers, binding party, cap, two per opposition |
+|---|---|---|---|
+| Archer (combat) | — | — | 20 / 34 / 52 |
+| Envoy | 19 / 33 / **never** | 19 / never / never | 19 / 32 / **49** (−6%) |
+| Smith | 19 / 32 / 47 | 23 / 35 / 49 | 23 / 35 / **48** (−8%) |
+| Scholar | 18 / 34 / **never** | 19 / never / never | 19 / 32 / **49** (−6%) |
+
+The old seed's parties top out at band 4 and its factions at tier 3, so social and lore callings stalled at
+tier 4 (I-083); the far rings' powers (12.16.11) supply the band-4 and band-5 opposition, and with the
+two-per-opposition limit they are what makes tier 5 reachable at all. Against a door-warden of a tier-5 faction,
+a P1–P2 envoy who farms it banks a median 24 band-4/5 deeds in ten sessions under the old rule and 0 now (I-039).
 
 ### 04.4 Confidence and the three-valued policy
 
@@ -468,7 +488,9 @@ seats) or the character's ending (04.11.4) [R2 #3: HWFWM's bolted-on top tiers].
 Every tier grants a capability or a behaviour change; none is a bare number [R3 04.6]. The competence column
 keeps the game inside 00.3.7's envelope: with the best attribute (+3, or +4 after tier 4) and edge 0–2, a
 narrow specialist's best-domain base modifier is +6 at tier 1, +7 to +8 at tier 2, +8 to +10 at tier 3, +9
-to +11 at tier 4 and +10 to +12 at tier 5, which are the bands P1–P5 [00.3.7; DL-00A-04; DL-04-23].
+to +11 at tier 4 and +10 to +12 at tier 5 (the tier-4 increase on that attribute assumed; one lower without
+it), which are the bands P1–P5 [00.3.7; DL-00A-04; DL-04-23]. The reference PC of P4 and P5 (+11, +12; T-06-12)
+is the specialist with edge +1 or +2 at the top of those ranges `[revision: I-063]`.
 
 **04.5.2 Competence.** `[D]` On crystallization the engine writes a competence entry `{tag, value, source:
 calling id}` (00.3.6): at the key for a specialist; for a hybrid, at each **road** (the level-2 child of
@@ -517,15 +539,22 @@ shows only the active rank's literal text. A Fraying suspension (04.9.3) lowers 
 read.
 
 **04.5.6 `power_band(pc)`.** `[D]` The contract function for ch.09 and for 03's `peak` flag (00.17 Q5). It is
-computed from recognized tiers only:
+computed from **confirmed** tiers only [revision: I-037]:
 
-`power_band(pc) = max(1, max over held callings that are not suspended, provisional included, of
-band_by_tier[ladder][tier], and each calling's inherited_band)`.
+`power_band(pc) = max(1, max over held callings that are not suspended of
+band_by_tier[ladder][confirmed_tier], and each calling's inherited_band)`,
+
+where a calling's `confirmed_tier` is the highest of its tiers whose grant is permanent (04.8.2: confirmed by
+PR-04-6, or never provisional), 0 when none is (a calling at 0 adds nothing). A provisional tier works in full
+(its competence step, training grade, capability, family-mechanic rank and pick apply from the grant), but the
+numbers that size the character wait for its confirmation: this band, and through it maximum Vitality (07.1.2),
+the Focus maximum's `T_high` (05.6.1), 09's advisory, 03's `peak` flag and 16's band cap; the tier-4 attribute
+increase waits likewise (04.8.2). *Why:* a lapse would otherwise lower Vitality, Focus and the advisory, and
+withdraw allies' lines, for a grant the player never kept, and 07 and 00.17.1 Q5 already read confirmed tiers.
 
 The band also sets the PC's maximum Vitality: **+2 per band above the first** (creation value + 2 ×
 (power_band − 1), cap 24), applied by ch.07's `h.07.vitality_max`; current Vitality rises by the same amount when
-the band rises (07.1.2) [integration: DL-00-04]. (07.1.2 reads the band "from confirmed tiers only", while this
-rule counts provisional tiers: see issue I-037 [verification: V1-006].)
+the band rises (07.1.2) [integration: DL-00-04].
 
 | Ladder | Tier 1 | 2 | 3 | 4 | 5 |
 |---|---|---|---|---|---|
@@ -966,7 +995,7 @@ Offered at each `season` boundary, and at once when a recognition needs a seat. 
    tier's new pick first cancels one legacy pick instead of adding a slot. Nothing is lost on the day;
    future growth is partly pre-paid. This is the re-allocation of the calling partition the contract asks
    for: the partition never grows, and consolidation converts two callings' separate allowances into one.
-5. **Kept: band.** `inherited_band` = the highest band among the constituents (04.5.6).
+5. **Kept: band.** `inherited_band` = the highest band among the constituents, each read at its confirmed tier (04.5.6) [revision: I-037].
 6. **Oaths carry.** A constituent's oath continues, restated in the new calling's oath block (every target
    that can absorb a divine-keyed calling carries one). A calling at Fraying stage 1 or higher cannot be
    consolidated, forked or folded: the Fraying is answered first (04.9).
@@ -1474,6 +1503,7 @@ copied with full output to `rules/_process/simulation/`. 200 seeds unless noted;
 | R8 | A tier-2 grant, then a turn to fire sorcery | tier 2 lapsed in 181 of 199 runs when the archer stopped at once; 65 of 199 after one more session of archery; 9 of 199 after two; 0 of 199 when she never stopped. The new calling was first recognized 2 / 3 / 5 sessions after the turn |
 | R9 | Counted against weighted at a focus node, session 10 | archery 50 vs 237 (0.21) · thievery 42 vs 220 (0.19) · persuasion 27 vs 176 (0.15) |
 | R11 | Non-combat parity (`04-recog-parity.py`, revision I-003) | medians to tier 3 / 5: archer 19 / 51; envoy 18 / 46; smith 18 / 45; scholar 17 / 46 (earlier rules: smith never past tier 2) |
+| R12 | Parity in seeded worlds (`04-recog-parity.py`, I-083 section; revision C) | medians to tier 3 / 5, confirmed band: archer 20 / 52; envoy 19 / 49; smith 23 / 48; scholar 19 / 49; old seed: envoy and scholar never reach tier 5 |
 | R12 | Counted share measured (`03-counted-yield.py` on 06's engine; parity R9; revision I-004) | fighter bands 1–5: 0.11 / 0.15 / 0.22 / 0.23 / 0.33 without Focus, 0.26–0.44 pushing; contests: social 0.31, craft 0.76, lore 0.31 (medians) |
 | R10 | Sessions for one conduct axis to reach 16 / 40 / 80 / 140 / 220 positive points | costly choice taken in 60% of fights: 5 / 12 / 24 / 42 / 65 (medians) · in 30%: 10 / 24 / 47 / 83 / — · in 15%: 18 / 48 / — / — / — |
 | Wren | One continuous character, seed 7 | the long example WE-04-1 |
@@ -1641,8 +1671,9 @@ the Caravaners' Compact at status +1, which has heard of her (public events 5): 
 
 She accepts. The **rank** of outrider and its obligations are ch.11's (`recognition_event.institution`); had
 she declined the post, the tier would still be hers at the next rest by V7, at no price beyond the seat
-(04.11.1). `power_band` is now 2. Twelve evidence-bearing scenes after each grant, a reflection confirms it: her archery
-since tier 1 passed 24 within a session, and her tracking since its grant by session 10.
+(04.11.1). Twelve evidence-bearing scenes after each grant, a reflection confirms it: her archery
+since tier 1 passed 24 within a session, and her tracking since its grant by session 10; with Archer 2 confirmed,
+`power_band` is 2 [revision: I-037].
 
 **Session 15, the ford again: a tier seized in a crisis.** In scene 74 she looses at a drake under a lethal
 frame while Staggered. The shot's evidence event is flagged `crisis`. `h.04.crisis_check` runs at
@@ -1823,7 +1854,7 @@ no composite, no oath abilities, and `power_band` falls from 2 to 1.
 > `  (d) Defer — it stays suspended; it lapses at Midwinter (the second season's turn) if nothing is done`
 
 He chooses service. `clk.atonement.paladin` (6, public) opens; the calling is read at stage 2 (tier 1's
-values). Over three sessions: a +4 mercy entry (2 ticks), a +2 (1), a +4 (2), a +2 (1) → 6 of 6.
+values), so the keeper's regard holds again and his divine spells work at tier 1's ranks (05.7.4) [revision: I-064]. Over three sessions: a +4 mercy entry (2 ticks), a +2 (1), a +4 (2), a +2 (1) → 6 of 6.
 `record_evidence(op: atonement, axis: conduct.mercy, supersedes: [the killing])`: `neg` 0, `atoned` 4,
 `strain` 0, the citation cleared → stage 0, tier 2 restored in full. The ledger still shows the killing,
 marked superseded; the cult still calls him a murderer (ch.11).
@@ -1956,8 +1987,9 @@ so the count does not advance and nothing lapses (03.6.1).
   Master's Eye, the pick and the rank step.
 - **Suspension and picks.** A suspended tier's pick is inactive (its slot stays reserved); it is not offered
   to another calling.
-- **Power band during suspension or provisional grants.** Provisional tiers count; suspended callings do not
-  (04.5.6). Ch.09's advisories therefore follow what the character can actually do today.
+- **Power band during suspension or provisional grants.** Only confirmed tiers count, and suspended callings do
+  not (04.5.6) [revision: I-037]. A provisional tier's abilities work at once; the band, Vitality, `T_high` and ch.09's
+  advisory follow it when it is confirmed, so nothing that sizes the character rises and then falls with a lapse.
 
 **Oaths and the Fraying**
 - **Two oath-bearing callings** (a Healer who is also Shieldsworn). Each is staged separately by its own

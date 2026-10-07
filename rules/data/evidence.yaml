@@ -28,7 +28,7 @@ weights:
     - {band: 3, dc_min: 18, dc_max: 22, points: 0}
     - {band: 4, dc_min: 23, dc_max: 27, points: 0}
     - {band: 5, dc_min: 28, points: 0}
-  challenge_band_source: "the frame's final DC; no-roll bases use the obstacle's stored DC or tier; conduct-only events use the highest threat band among aware opposing entities present, else 1 (03.4.3). In a conflict: power_band shifted by the advisory word (trivial -2, easy -1, fair 0, hard +1, lethal +2), clamped 1-5 (03.4.3; DL-00-05). In a contest (social, craft or lore; revision I-003): max(DC band, contest band), the contest band being the opposing party's threat band or its faction's tier (0-1 -> 1 ... 5 -> 5), or the work's type-tier (03.4.3; 15.3.11; 15.9.20; 08.6.4). Social contest methods (closed; revision I-071): smethod.request, smethod.bargain, smethod.deceive, smethod.intimidate, smethod.interrogate, and every beat of a campaign (15.8.1) or debate (15.8.3); win over, provoke, perform, command and read take the DC band"
+  challenge_band_source: "the frame's final DC; no-roll bases use the obstacle's stored DC or tier; conduct-only events use the highest threat band among aware opposing entities present, else 1 (03.4.3). In a conflict: power_band shifted by the advisory word (trivial -2, easy -1, fair 0, hard +1, lethal +2), clamped 1-5 (03.4.3; DL-00-05). In a contest (social, craft or lore; revision I-003): max(DC band, contest band), the contest band being the opposing party's own band (threat band, else its record's band), raised to its faction's tier (0-1 -> 1 ... 5 -> 5) only when it can bind the faction (head or officer; revision I-039), or the work's type-tier; never above power_band + 2 (revision I-039); the beat records the contest's opposition, and a tier counts at most two great deeds from one opposition (04.3.4; revision I-083) (03.4.3; 15.3.11; 15.9.20; 08.6.4). Social contest methods (closed; revision I-071): smethod.request, smethod.bargain, smethod.deceive, smethod.intimidate, smethod.interrogate, and every beat of a campaign (15.8.1) or debate (15.8.3); win over, provoke, perform, command and read take the DC band"
   quality:                      # 03.4.1: base odds = success-or-better % with circumstance = 0
     - {id: routine, base_odds_min: 70, points: 2}
     - {id: difficult, base_odds_min: 40, base_odds_max: 65, points: 4}
@@ -147,7 +147,7 @@ tag_event_fields:
   - {name: significance, type: "{consequential, pressured, own_act, cites}", supplied_by: engine}
   - {name: justification, type: str, supplied_by: dm}
   - {name: novel, type: bool, supplied_by: engine}
-  - {name: contest, type: "{kind: social|craft|lore, band: int 1-5, one_from_full: bool}|null", supplied_by: engine, note: "03.4.3; revision I-003"}
+  - {name: contest, type: "{kind: social|craft|lore, band: int 1-5, one_from_full: bool, opposition: id}|null", supplied_by: engine, note: "03.4.3; revision I-003; opposition (the party, case, research project or work): revision I-083, read by 04.3.4"}
   - {name: ruinous, type: bool, supplied_by: engine, note: "03.4.5; revision I-003"}
   - {name: crisis, type: bool, supplied_by: engine}
   - {name: peak, type: bool, supplied_by: engine}
