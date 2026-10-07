@@ -366,7 +366,7 @@ Decisions (J):      1. CONTRADICTS A FACT [J:flag]: "Does success require an est
                        outnumbers the method by a whole category (one voice against a rioting square).
                        An offset is an established fact or license that cancels one factor (a crowd on
                        your side offsets scale). Exactly one uncancelled factor → not G4: reach is capped
-                       at Limited instead (01.6.9).
+                       at Limited instead (01.6.10 test 2) [verification: V2c-001].
                     4. FORBIDDEN BY CONDITION [D]: an active condition or `restrict` effect forbids the
                        verb, method, sense or license (00.9.3b). The engine answers from state.
                     Default when uncertain on 1–3: false — fall through to G1/G2/G3 and roll. This is

@@ -1038,7 +1038,7 @@ for parts". Knobs: `dc` (Moderate; improvised +5); `time_cost` (1 hour); `reach_
 cases) [revision: I-031]. Breaking an item down for what it is made of: one beat, 1 hour,
 verb.handle under the base's make.license (or improvised: +5 DC, half yield), DC Moderate, stakes Safe. On a
 success the item is destroyed (it must be the bearer's, intact or damaged, not storied) and yields:
-(a) its primary stock material, one unit per 2 load of the base (minimum 1); (b) for an item with a
+(a) its primary stock material, one unit per 2 load of the base, rounded down (an item of load 0 or 1 yields no stock unit: a signet holds a trace of gold, not a unit of it) [verification: V2c-004]; (b) for an item with a
 signature, one unit of **residuum** (`mat.residuum`: an essence whose gates are the signature property's
 gate tags and whose rarity band is the item's signature tier − 1, minimum 1) — the item's identity, kept for
 a new making; (c) on delivered reach 3+ with the property's craft license, the fact `knows_recipe: <the
@@ -1862,7 +1862,7 @@ saving the miller" when no thread or bargain recorded a reward → no gift is du
 ### WE-08-9 Salvage and a recipe
 
 Wren has three wolf charms with Hunter's sense. She asks Tamsin (leathercraft, trained) to salvage two:
-Handle under the license, DC Moderate, 1 hour each. Successes yield each charm's stock (a fang: 1 unit) and
+Handle under the license, DC Moderate, 1 hour each. Successes yield no stock (a charm is load 0, 08.6.8 (a)) [verification: V2c-004] and
 one **residuum** (gates = Hunter's sense's gate, `creature.beast.predator`; band tier − 1 = 1). On the
 second, delivered reach 3 → Tamsin writes `knows_recipe: prop.sig_hunters_sense`. From now on, any project
 of hers whose gated pool contains Hunter's sense (any predator part, or the residuum) may *name* it for the

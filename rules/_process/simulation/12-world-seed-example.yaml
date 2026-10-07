@@ -3627,6 +3627,7 @@ npcs:
     tags: []
   refusals:
   - {kind: refusal.master, text: will not cross their master or their people}
+  - {kind: refusal.duty, text: never yields the house's land without the lord's word, strength: absolute}
   secrets:
   - {fact: sec.tible_of_the_wet_warren.1, text: knows where something valuable lies, gate: 'standing Devoted, or a clue found by play
       (15.9)'}
@@ -3668,6 +3669,7 @@ npcs:
     tags: []
   refusals:
   - {kind: refusal.fight, text: will not fight}
+  - {kind: refusal.duty, text: never hears a commoner's suit at table, strength: absolute}
   secrets:
   - {fact: sec.kazek_graniteborn.1, text: loves someone they must not, gate: 'standing Devoted, or a clue found by play (15.9)'}
   voice: {register: flowery, habit: brings up an old deed of theirs}
@@ -3708,6 +3710,7 @@ npcs:
     tags: []
   refusals:
   - {kind: refusal.oath, text: will not lie under oath}
+  - {kind: refusal.duty, text: never refuses a challenge to single combat, strength: absolute}
   secrets:
   - {fact: sec.milby_greenfoot.1, text: knows where something valuable lies, gate: 'standing Devoted, or a clue found by play (15.9)'}
   voice: {register: jovial, habit: mutters to a pet or a charm}
@@ -3748,6 +3751,7 @@ npcs:
     tags: []
   refusals:
   - {kind: refusal.fight, text: will not fight}
+  - {kind: refusal.duty, text: never leaves the weak undefended when asked, strength: absolute}
   secrets:
   - {fact: sec.milie_thistlefoot.1, text: loves someone they must not, gate: 'standing Devoted, or a clue found by play (15.9)'}
   voice: {register: rough, habit: never says no outright}
@@ -3788,6 +3792,7 @@ npcs:
     tags: []
   refusals:
   - {kind: refusal.past, text: will not speak of their past}
+  - {kind: refusal.duty, text: never sells the family land, strength: absolute}
   secrets:
   - {fact: sec.brugnak_three_scar.1, text: is hiding a person, gate: 'standing Devoted, or a clue found by play (15.9)'}
   voice: {register: cold, habit: speaks of themselves by name}
@@ -3828,6 +3833,7 @@ npcs:
     tags: []
   refusals:
   - {kind: refusal.oath, text: will not lie under oath}
+  - {kind: refusal.duty, text: never shuts the door on kin, strength: absolute}
   secrets:
   - {fact: sec.murznak_red_hand.1, text: is not who they claim to be, gate: 'standing Devoted, or a clue found by play (15.9)'}
   voice: {register: cold, habit: calls everyone by a nickname}
@@ -3868,6 +3874,7 @@ npcs:
     tags: []
   refusals:
   - {kind: refusal.bribe, text: will not take a bribe}
+  - {kind: refusal.duty, text: never opens the gate after curfew without the reeve's seal, strength: absolute}
   secrets:
   - {fact: sec.yagum_iron_tusk.1, text: is hiding a person, gate: 'standing Devoted, or a clue found by play (15.9)'}
   voice: {register: flowery, habit: repeats your last word back}
@@ -3908,6 +3915,7 @@ npcs:
     tags: []
   refusals:
   - {kind: refusal.fight, text: will not fight}
+  - {kind: refusal.duty, text: never lets a prisoner go without a hearing, strength: absolute}
   secrets:
   - {fact: sec.ranella_whitefield.1, text: secretly serves a faction, gate: 'standing Devoted, or a clue found by play (15.9)'}
   voice: {register: terse, habit: counts on their fingers while thinking}
@@ -3948,6 +3956,7 @@ npcs:
     tags: []
   refusals:
   - {kind: refusal.past, text: will not speak of their past}
+  - {kind: refusal.duty, text: never refuses a challenge to single combat, strength: absolute}
   secrets:
   - {fact: sec.samo_applefoot.1, text: knows where something valuable lies, gate: 'standing Devoted, or a clue found by play (15.9)'}
   voice: {register: flowery, habit: calls everyone by a nickname}
@@ -3988,6 +3997,7 @@ npcs:
     tags: []
   refusals:
   - {kind: refusal.fight, text: will not fight}
+  - {kind: refusal.duty, text: never refuses sanctuary to one who asks it, strength: absolute}
   secrets:
   - {fact: sec.mila_greenhill.1, text: is being blackmailed, gate: 'standing Devoted, or a clue found by play (15.9)'}
   voice: {register: rough, habit: clicks their tongue when displeased}
@@ -4108,6 +4118,7 @@ npcs:
     tags: []
   refusals:
   - {kind: refusal.wilds, text: will not go into the wilds or the dark}
+  - {kind: refusal.duty, text: never opens the gate after the night watch, strength: absolute}
   secrets:
   - {fact: sec.loran_millbrook.1, text: keeps a forbidden faith or practice, gate: 'standing Devoted, or a clue found by play (15.9)'}
   voice: {register: flowery, habit: laughs before bad news}

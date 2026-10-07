@@ -153,6 +153,7 @@ refusal_kinds:             # T-15-6; rows 1-12 map one-to-one to tbl.npc_refusal
   - {id: refusal.parley, name: "will not stop fighting", tags: [], source: archetype, strength: lifts, covers: "a truce or parley", excludes: [], lifts_when: "09.7.6 parley_when", lifecycle: provisional, basis: ["15.2.4", "09.7.6"]}
   - {id: refusal.yield, name: "will not yield", tags: [], source: archetype, strength: lifts, covers: "surrender", excludes: [], lifts_when: "09.7.6 yield_when", lifecycle: provisional, basis: ["15.2.4", "06.11.7"]}
   - {id: refusal.oath_bound, name: "the oath's prohibition", tags: [], source: oath, strength: absolute, covers: "whatever the recorded oath forbids", excludes: [], lifts_when: null, lifecycle: provisional, basis: ["15.2.4"]}
+  - {id: refusal.duty, name: "the officer's duty", tags: [], source: duty, strength: absolute, covers: "the act the officer's recorded duty forbids, as its text states (its own exception, such as 'without the reeve's seal', is part of the text)", excludes: "acts the duty's text does not name; the same act with the exception met", lifts_when: null, lifecycle: provisional, basis: ["15.2.4", "11.3.17"], note: "[verification: V2c-007]"}
 
 claim_plausibility:        # T-15-9 (15.5.2)
   rungs:

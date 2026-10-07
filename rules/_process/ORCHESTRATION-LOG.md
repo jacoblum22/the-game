@@ -364,3 +364,9 @@ Cost: 149 tools; see the usage line below.
 - Added `.claude/agents/rules-worker.md` (tools limited to Bash, Read, Edit, Write, Grep and Glob). It is not picked up mid-session; it becomes available in the next session.
 - Measured starting context: general-purpose 49k, Explore (restricted tools) 37k. Tool definitions are about 12k of the base; the rest is the system prompt. Expected saving is about 25% of the per-turn floor.
 - Rule adopted: each agent is scoped to about 100 turns, where per-agent startup cost balances quadratic context growth.
+
+## V2c1 returned (adversarial playtest, 8 scenes): appended to `verification-playtest.md`
+- 8 fixes (V2c-001 to V2c-008).
+- New rows I-073 to I-081. Two are MAJOR: I-075 (one dropped object wipes a mob) and I-080 (planted rumors start wars without limit).
+- I-082 opened by the orchestrator: the harm generator is broken. It goes into Revision C, not a separate task.
+- Usage: within its ~100-turn scope.

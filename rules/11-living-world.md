@@ -664,7 +664,7 @@ status toward the PC leaves 0 becomes full at once (11.3.2) [R5 P-25; DL-11-05].
 
 **11.3.17 Officers, members and what a faction sends.** `[D]`
 - **Officers** are principal NPCs (12.11.1): a full faction keeps one to four. Each holds one **duty**
-  from the faction's `duties`, written as that officer's refusal of kind duty, `absolute` (15.2.4 item 5):
+  from the faction's `duties`, written as that officer's refusal of kind `refusal.duty`, `absolute` (15.2.4 item 5; `social.yaml#refusal_kinds`) [verification: V2c-007]:
   the Watch-captain's "never opens the gate after curfew", the Guild factor's "never sells below the
   tally price". A new officer created by any chapter takes the next duty in the list (cycling).
 - **Members** are NPCs with `member_of: [fac.*]`. Their standing toward the PC defaults to the status

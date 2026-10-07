@@ -241,7 +241,8 @@ def make_npc(dice, S, *, role, people, home, member_of=(), depth="principal", ba
         ("member_of", list(member_of)),
         ("wants", [{"text": want, "tags": list(role_tags[:1]) or ["conduct.loyalty"], "rank": 1}]),
         ("fears", [{"text": roll_oracle_table(dice, "tbl.npc_fear")["result"], "tags": []}]),
-        ("refusals", [{"kind": r.get("kind", "refusal.self"), "text": r["result"]} for r in [roll_oracle_table(dice, "tbl.npc_refusal")]]),
+        ("refusals", [{"kind": r.get("kind", "refusal.self"), "text": r["result"]} for r in [roll_oracle_table(dice, "tbl.npc_refusal")]]
+                     + ([{"kind": "refusal.duty", "text": duty, "strength": "absolute"}] if duty else [])),  # [verification: V2c-007] 11.3.17, 15.2.4 item 5
         ("secrets", [{"fact": "sec.%s.1" % nid.split(".", 1)[1], "text": sec, "gate": "standing Devoted, or a clue found by play (15.9)"}]),
         ("voice", {"register": roll_oracle_table(dice, "tbl.npc_voice_register")["result"], "habit": roll_oracle_table(dice, "tbl.npc_voice_habit")["result"]}),
         ("detail", roll_oracle_table(dice, "tbl.npc_detail")["result"]),

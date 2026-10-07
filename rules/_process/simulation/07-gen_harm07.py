@@ -116,7 +116,7 @@ HARM = {
             {'cause': 'advisory', 'when': 'threat_advisory(encounter, pc) == lethal at framing, or when it becomes lethal', 'from': '09'},
             {'cause': 'archetype', 'when': 'a hostile adversary with lethal_context: true is perceived or turns hostile', 'from': '09'},
             {'cause': 'disposition', 'when': "a side's defeat_disposition is or becomes kill toward the PC", 'from': '09, 06.13.2'},
-            {'cause': 'severity', 'when': 'a source able to deliver S4 or S5 harm to the PC comes within reach (a hazard or trap perceived, a height of 40 ft or more, an attack listed at S4+)', 'from': '10, 06.5.8, 09'},
+            {'cause': 'severity', 'when': 'a source able to deliver S4 or S5 harm to the PC comes within reach (a hazard or trap perceived, a height of 40 ft or more, an attack listed at S4+, or raised to S4+ by a mob or cohort numbers step, 06.10.3) [verification: V2c-006]', 'from': '10, 06.5.8, 09'},
             {'cause': 'windup', 'when': 'an adversary begins a Windup for a heavy blow (06.9.5)', 'from': '06'},
             {'cause': 'clock', 'when': 'a sensed or hidden clock reaches imminent and its on_complete would expose the PC to lethal harm', 'from': '00.8.4, PR-00-3'},
             {'cause': 'hazard', 'when': 'the PC is about to enter or is in a hazard with lethal_context: true', 'from': '10'},

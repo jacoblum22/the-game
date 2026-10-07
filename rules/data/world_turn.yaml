@@ -326,9 +326,9 @@ deed_families:
   lifecycle: provisional
   basis:
   - 11 (world_turn.deed_families)
-reactions:
+reactions:  # key `on` quoted: unquoted it parses as the boolean true under YAML 1.1 [verification: V2c-008]
 - id: wr.great_beast_slain
-  'true': npc.*.exists=dead (creature.beast|creature.dragon|creature.horror; band >= PC band or principal)
+  'on': npc.*.exists=dead (creature.beast|creature.dragon|creature.horror; band >= PC band or principal)
   family: fam.great_beast
   candidates:
   - id: kin_vengeance
@@ -357,7 +357,7 @@ reactions:
   basis:
   - 11 (world_turn.reactions)
 - id: wr.rescue
-  'true': public_deed
+  'on': public_deed
   family: fam.rescue
   candidates:
   - id: kin_owe
@@ -376,7 +376,7 @@ reactions:
   basis:
   - 11 (world_turn.reactions)
 - id: wr.mercy_shown
-  'true': public_deed
+  'on': public_deed
   family: fam.mercy
   candidates:
   - id: spared_returns
@@ -396,7 +396,7 @@ reactions:
   basis:
   - 11 (world_turn.reactions)
 - id: wr.violence_folk
-  'true': public_deed
+  'on': public_deed
   family: fam.violence_folk
   candidates:
   - id: kin_feud
@@ -416,7 +416,7 @@ reactions:
   basis:
   - 11 (world_turn.reactions)
 - id: wr.theft_known
-  'true': public_deed
+  'on': public_deed
   family: fam.theft_fraud
   candidates:
   - id: victim_hires
@@ -435,7 +435,7 @@ reactions:
   basis:
   - 11 (world_turn.reactions)
 - id: wr.sacrilege
-  'true': public_deed
+  'on': public_deed
   family: fam.sacrilege_piety
   candidates:
   - id: faith_wrath
@@ -455,7 +455,7 @@ reactions:
   basis:
   - 11 (world_turn.reactions)
 - id: wr.place_opened
-  'true': loc.*.cleared
+  'on': loc.*.cleared
   family: fam.place_opened
   candidates:
   - id: settlers_come
@@ -479,7 +479,7 @@ reactions:
   basis:
   - 11 (world_turn.reactions)
 - id: wr.betrayal
-  'true': commitment.*.violated
+  'on': commitment.*.violated
   family: fam.betrayal
   candidates:
   - id: wronged_tells
@@ -493,7 +493,7 @@ reactions:
   basis:
   - 11 (world_turn.reactions)
 - id: wr.victory_over_pc
-  'true': victory_over_pc
+  'on': victory_over_pc
   candidates:
   - id: victor_boasts
     specificity: pc_deed
@@ -511,7 +511,7 @@ reactions:
   basis:
   - 11 (world_turn.reactions)
 - id: wr.faction_lost_hold
-  'true': fac.*.hold
+  'on': fac.*.hold
   candidates:
   - id: rival_presses
     specificity: faction
@@ -529,7 +529,7 @@ reactions:
   basis:
   - 11 (world_turn.reactions)
 - id: wr.linchpin_dead
-  'true': npc.*.exists=dead (a linchpin)
+  'on': npc.*.exists=dead (a linchpin)
   candidates:
   - id: succession_bang
     specificity: npc
@@ -543,7 +543,7 @@ reactions:
   basis:
   - 11 (world_turn.reactions)
 - id: wr.reputation_score3
-  'true': pc.reputation.*.score>=3
+  'on': pc.reputation.*.score>=3
   candidates:
   - id: petitioner
     specificity: pc_deed
@@ -562,7 +562,7 @@ reactions:
   basis:
   - 11 (world_turn.reactions)
 - id: wr.rumor_believed
-  'true': rumor_reached_seat.* (a rumor about a faction's rival reaches its seat)
+  'on': rumor_reached_seat.* (a rumor about a faction's rival reaches its seat)
   candidates:
   - id: acts_on_it
     specificity: faction
@@ -574,7 +574,7 @@ reactions:
   basis:
   - 11 (world_turn.reactions)
 - id: wr.holding_acquired
-  'true': loc.*.owner=pc
+  'on': loc.*.owner=pc
   candidates:
   - id: neighbors_call
     specificity: npc
@@ -591,7 +591,7 @@ reactions:
   basis:
   - 11 (world_turn.reactions)
 - id: wr.situation_concluded
-  'true': sit.*.status=concluded
+  'on': sit.*.status=concluded
   candidates:
   - id: aftermath_hook
     specificity: region
@@ -603,7 +603,7 @@ reactions:
   basis:
   - 11 (world_turn.reactions)
 - id: wr.cache_sighting
-  'true': clk.cache.*.ticked
+  'on': clk.cache.*.ticked
   candidates:
   - id: cache_rumor
     specificity: pc_deed
@@ -1480,14 +1480,14 @@ thread_ranks:
   linked_second: 12
   deeds_points: 5
 thread_progress:
-  tick_sources:
-  - 'true': serving_beat
+  tick_sources:  # `on` quoted, as in reactions [verification: V2c-008]
+  - 'on': serving_beat
     ticks: delivered_reach
-  - 'true': core_clue_found
+  - 'on': core_clue_found
     ticks: 1
-  - 'true': milestone
+  - 'on': milestone
     ticks: 2
-  - 'true': random_event
+  - 'on': random_event
     ticks: 1
     condition: never the last segment
   flashpoints:

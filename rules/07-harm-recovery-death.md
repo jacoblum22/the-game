@@ -304,7 +304,7 @@ ones; at 3, 5 and 26, which meets the targets of T-07-18 [DL-07-04].
 - **First aid.** Another character engaged with the Dying one may spend one action on `verb.handle`
   (first aid: stabilize only, 01.18.14) against the same stabilize DC; a healer's kit is a Precision
   lever, and `lic.training.lore_medicine` supplies competence. Success or better: stabilized. Failure:
-  nothing changes. A Dying character cannot give itself first aid: its own fight is the dying check.
+  nothing changes. A Dying character cannot give itself first aid: its own fight is the dying check (a healer's kit or bandage used on itself is first aid, not the "item on itself" of the first bullet; a draught or an ability that restores Vitality is) [verification: V2c-005].
 - **Any effect that restores Vitality** to a Dying character stabilizes it at once and then restores
   the amount (05.7.8's cap applies to the restoring, not to the stabilizing).
 - **Time.** While any PC or companion is Dying, time runs in rounds even if no enemy remains; the scene
@@ -415,7 +415,7 @@ in the scene. The DM does not decide whether to warn; the DM delivers the warnin
 | `advisory` | `threat_advisory(encounter, pc)` is **lethal** when the encounter is framed, or becomes lethal when its make-up changes (reinforcements, a companion falls) | 09 (T-06-13) |
 | `archetype` | a hostile adversary whose archetype or template carries `lethal_context: true` is perceived by the PC, or turns hostile | 09 |
 | `disposition` | a side's `defeat_disposition` is or becomes `kill` toward the PC | 09 behaviors, 06.13.2 |
-| `severity` | a source that can deliver **S4 or S5** harm to the PC comes within reach: a hazard or trap of that severity once perceived, a height of 40 ft or more beside or beneath the PC, an attack listed at S4+ | 10, 06.5.8, 09 |
+| `severity` | a source that can deliver **S4 or S5** harm to the PC comes within reach: a hazard or trap of that severity once perceived, a height of 40 ft or more beside or beneath the PC, an attack listed at S4+, or raised to S4+ by a mob's or cohort's numbers step (06.10.3) [verification: V2c-006] | 10, 06.5.8, 09 |
 | `windup` | an adversary begins a Windup for a heavy blow (06.9.5) | 06 |
 | `clock` | a sensed or hidden clock reaches **imminent** and its `on_complete` would expose the PC to lethal harm (PR-00-3 step 3) | 00.8.4 |
 | `hazard` | the PC is about to enter, or is in, a hazard whose entry carries `lethal_context: true` | 10 |
