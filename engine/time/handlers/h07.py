@@ -21,3 +21,6 @@ HANDLERS = (
     "h.07.vitality_max",  # M3
     "h.07.career_end",  # M1
 )
+
+# Implementations live in engine/harm/handlers.py and register on import.
+from engine.harm import handlers as _h07  # noqa: E402, F401

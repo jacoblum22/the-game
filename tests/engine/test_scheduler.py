@@ -43,11 +43,14 @@ def store(tmp_path: Path) -> Store:
 
 @pytest.fixture
 def temp_handlers() -> Iterator[list[str]]:
-    """Handler ids registered by a test; unregistered afterwards."""
+    """Handler ids registered by a test; unregistered afterwards (owner registrations are restored)."""
     added: list[str] = []
+    before = {h: fn for h in reg.implemented() if (fn := reg.get(h)) is not None}
     yield added
     for h in added:
         reg.unregister(h)
+    for h, fn in before.items():
+        reg.register(h, fn, replace=True)
 
 
 def _set_time(store: Store, ts: Timestamp) -> None:
@@ -190,7 +193,8 @@ def test_milestone_gating(store: Store, rules: Rules, temp_handlers: list[str]) 
     dc = [p for p in skipped if p.handler_id == "h.07.dying_check"]  # type: ignore[attr-defined]
     assert len(dc) == 1 and dc[0].milestone == 2  # type: ignore[attr-defined]
     assert [o for o in res[0].handlers if o.handler_id == "h.07.dying_check"][0].ran
-    # live at M1 but not built: logged with milestone 1
+    # live at M1 but not built: logged with milestone 1 (unregistered here if its owner built it)
+    reg.unregister("h.07.rest_recovery")
     with store.transaction() as tx:
         out = mark_boundary(TimeContext(tx, rules), "rest_short")
     rr = [o for o in out[0].handlers if o.handler_id == "h.07.rest_recovery"][0]
@@ -238,7 +242,7 @@ def test_interrupt_halts_and_returns_remainder(store: Store, rules: Rules) -> No
 
 def test_interrupt_from_non_interrupting_handler_is_an_error(store: Store, rules: Rules,
                                                              temp_handlers: list[str]) -> None:
-    reg.register("h.07.career_end", lambda ctx: HandlerResult(interrupt="boom"))
+    reg.register("h.07.career_end", lambda ctx: HandlerResult(interrupt="boom"), replace=True)
     temp_handlers.append("h.07.career_end")
     before = store.last_seq
     with pytest.raises(SchedulerError):

@@ -18,3 +18,6 @@ HANDLERS = (
     "h.05.reserve",  # M3
     "h.05.provisional_abilities",  # M3
 )
+
+# Implementations live in engine/abilities/handlers.py and register on import.
+from engine.abilities import handlers as _h05  # noqa: E402, F401

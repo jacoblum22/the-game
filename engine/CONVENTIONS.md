@@ -276,3 +276,128 @@ with predicate `lethal_context` (truthy), on any subject, recorded before the de
 - `rulings.signature(anchor_id, deltas)`, `gate_signature`, `oracle_signature`, `find_rulings(store, sig,
   staged=())`, `precedent_for(found, differing_fact=None)`, `log_ruling(RulingRecord, mint, store=, staged=)
   -> Event` (skips an id already used: `ruling_logged` does not advance the `rul` counter).
+
+## engine/harm API (T054, T065, T066)
+Functions take `ctx` (anything with `state`, `mint`, `rules`; optional `rng`, `boundary`, `payload`):
+`HarmCtx.of(tx, rules, rng)` (`engine/harm/ctx.py`). They return events (or a result with `.events`); the caller
+stages them. Pass `writes=Writes(...)` to compose several calls in one overlay (stage `writes.events` once).
+- **State** (`engine/harm/state.py`): facts on the character: `harm_state` (`harm_state.active|staggered|dying|
+  dead`), `wound_load`, `dying_step`, `brink`, `down`, `defeated {manner}`, `lethal_key` (Key 1 of the fall),
+  `career.ending` (`death|retirement|career_end`); quantities `vitality`, `fate`, `dread` (M2, optional).
+  Readers: `harm_state`, `descriptor` (fresh/worn/bloodied/staggered/dying/down/dead), `wound_load`,
+  `dying_step`, `brink`, `is_down`, `defeated_manner`, `endure_modifier` (data.attributes.endurance +
+  data.endure_bonus), `attribute` (+ maim deltas `attribute_delta.<attr>`). Entity data read: `reduction`
+  (int vs harm.physical, or {tag: n}), `resist`/`vulnerable` tags, `depth` (NPC), `defeat_disposition`,
+  `objective`, `pace`, `attacks [{name, severity}]`/`max_severity`, `threat_advisory`, `lethal_context`,
+  `hazard {severity, lethal_context}`, `can_bargain`, `want(s)`, `leader_want`.
+- `apply.apply_harm(ctx, target, *, severity=|dealt=, harm_tags, source, frame_id, lethal=False, mode="lethal",
+  no_reduction, periodic) -> HarmResult(events, amount, breakdown, wound, load, transition, obligations, lethal,
+  lethal_refused, threshold, triggers, hooks)`. PR-07-1; `lethal` is re-tested (07.3.6) and refused/logged
+  (`meta log.lethal_refused`). M1: wound load and Dying run in full; wound records are coarse (`log.coarse`).
+  `res.threshold` -> call `threshold.open_threshold`. Also `restore_vitality(ctx, t, amount=|to=, reason,
+  rule_id)` (stabilizes the Dying), `stabilize`, `heal` (2 per long rest, 07.8.9), `dying_check(ctx, t,
+  natural=None)` (07.2.7; h.07.dying_check is M2, the M1 loop calls it at the PC's turn end), `status_block`,
+  `harm_hook(ctx, source)` (resolve's `apply_cost(harm_hook=...)`).
+- `lethal.py`: context fact `<source>.lethal_context` (non-entity source: `world.lethal_context:<source>`),
+  value `{id: lc.<scene>.<source>, source, pc, cause, sign, effective_from, active, ...}`, None once ended.
+  `warning_needed(state, pc)` -> `[LethalTrigger(pc, source, cause, detail)]`; `warning_block(rules, trig,
+  source_name=, fate=, yield_text=, retreat_text=)` (the `[WARNING]` block); `record_warning(ctx, trig, sign=)`
+  once delivered (effective from the next beat); `lethal_scan(state, frame) -> LethalVerdict(lethal, missing,
+  context_id, offer_line)` with frame `{kind: pc|adversary|hazard|affliction, source, target, stakes, lethal,
+  mode}`; `may_auto_commit(state, frame)` (False for a lethal frame); `danger_notice`, `active_triggers`.
+- `exits.py`: `yield_answer(rules, state, pc, victor) -> YieldAnswer(accepted, terms, words, ...)`,
+  `yield_pause(mint, ans)` (pause kind `yield_terms`), `commit_yield(ctx, pc, ans, term)`; `retreat_offer(state,
+  rules, pc, route=, engaged=, hostiles=, barred=, left_behind=) -> RetreatOffer(legal, refusal, kind, choices,
+  parting_blow, words)`, `commit_retreat(ctx, pc, off, choice)`; `run_disposition` (PR-07-7, coarse in M1).
+- `threshold.py`: `open_threshold(ctx, pc, Situation(victor, bargainer, route, rout_clock, strikes, ...)) ->
+  ThresholdOpen(events, menu, pause_id, text)` (pause kind `last_chance`, no default); `choose(ctx, pc, menu,
+  option_id, pause_id=) -> Choice(events, gamble_offer, last_stand, advance_time, ending)`; `resolve_gamble(ctx,
+  pc, menu, natural=None)`; `finish_last_stand`; `confirm_voluntary_last_stand`; `write_death` (refuses with
+  `DeathRefused` unless both keys hold; `meta pref.death.mode = retire` -> retirement); `ending_state(state,
+  pc=None) -> None|"death"|"retirement"|"career_end"` (pc: `meta pc.active`, else the newest PC).
+- `rest.py`: `rest_refusal(state, rules, pc, kind)`, `rest_duration(rules, kind)`, `best_quality`,
+  `rest_quality(kind, site=, interruptions=, lost_intervals=, sleep_hours=, caps=)`, `rest_payload(kind,
+  quality, site, treated=False, resters=None)` for `mark_boundary`; `rest_site`/`record_rest_site`; `treat(ctx,
+  patient, reach=, what=, success=)`. Handlers (ctx -> events): `h_07_rest_recovery`, `h_07_natural_recovery`,
+  `h_07_load_clear`, `h_07_lethal_scan` (raises `meta trg.lethal_warning` / `trg.danger_notice`),
+  `threshold.h_07_career_end`. Registration: importing `engine.harm.handlers` registers them (adapting
+  `TimeContext`); `engine/time/handlers/h07.py` should import it.
+- Counters in meta: `<pc>.breathers_since_short_rest`, `<pc>.short_rests_today`, `<pc>.rest_long.last`,
+  `<pc>.overdraws_since_long_rest`, `<pc>.healings_since_long_rest`, ... (`ctx.counter_key`).
+
+## engine/abilities API (T067)
+- Held abilities: `entity.data["abilities"]` (ids from abilities.yaml; rank 1 in M1). Focus: quantity `focus`
+  (`focus.define_focus(eid, base=4, t_high=0, breadth=0)` at creation); Spent: fact `focus.spent`. Uses: quantity
+  `uses.<ability id>` (defined at first use if absent).
+- `use.check_use(state, rules, eid, ab_id, *, timing=None, flares=(), rider_used=False) -> UseCheck(ok, refusal,
+  cost, uses_left, overdraw)` (05.4.1 order; nothing spent on refusal); `offer_view(...)` (PR-05-1 step 5);
+  `commit_use(ctx, eid, ab_id, *, frame_id, flares=(), accept_overdraw=False) -> UseResult(events, cost,
+  uses_left, spent, overdraw, hooks)`; `ability_cost(ab, flares=, relic=, adjust=, free=)`. During a Last
+  Stand abilities cost 0.
+- `focus.spend_focus`, `restore_focus`, `overdraw_price(state, rules, eid, shortfall)`, `apply_overdraw`,
+  `push(ctx, eid, choice=reach|stakes|grit)`, `restore_focus_consumable` (4 per long rest).
+- `recharge.py`: `refreshed_by(boundary)`, `focus_gain(...)`; handlers `h_05_scene_recharge`,
+  `h_05_day_recharge`, `h_05_focus_recover`, `h_05_rest_recharge`; importing `engine.abilities.handlers`
+  registers them (`engine/time/handlers/h05.py` should import it).
+
+## engine/world API (T059, T060 deterministic half, T061, T062)
+All writers take `ctx = TimeContext(tx, rules, rng)` and stage events (inside a running handler via `ctx.emit`);
+readers take a `WorldState`. Errors: `engine.world.common.WorldError`. The PC is `common.active_pc(state)`
+(`meta['pc.active']`, else the last PC). Rolls need `ctx.rng`.
+- **Places** (`engine.world.places`): `seed_world_into_store(tx, world) -> {seed thread id: entity id}` at game
+  creation: places (entity data = the 10.1.2 record; undiscovered ones sealed, gate `UNDISCOVERED_GATE`, slice =
+  name when known), route links as facts `link.<route id>` on both ends (value {to, route, route_kind,
+  travel_watches, terrain, known}; unknown ones sealed), factions, `faction_relation` relationships, the seed's
+  clocks, threads as `thr.*` entities (data {seed_id, thread_kind, text, points_to, status}), the cast at their
+  homes (wants/fears/refusals/secrets sealed); meta `world.region`, `world.names`, `world.peoples`,
+  `world.threads`, `thread_list`. `put(tx, entity, place)`; `location(state, entity=None)`;
+  `links(state, place)`, `reachable(state, from_place=None) -> [RouteLink(to, route, route_kind, length, unit,
+  terrain, known, implicit)]` (implicit passages: building <-> settlement/siblings 1 interval, landmark <-> area
+  1 hour); `is_discovered`, `cast_at(state, place)`, `entry_mode`. `move(ctx, to_place, end_scene=True) ->
+  Arrival(place, name, place_kind, from_place, route, arrived, mode, discovered_now, cast_here, interrupt,
+  remainder_rounds, narration, boundaries)`: ends the scene (`place_change`), `travel` mode for a route,
+  `advance_time` by the length, then position + discovery (10.1.5) + entry mode. Interrupted: `arrived` False,
+  finish with `continue_move(ctx, arrival)`.
+- **Scenes** (`engine.world.scenes`): `start_scene(ctx, *, place, mode, agenda, hoped_answer="", pillar=None,
+  challenge_type=None, cast=(), situation_tags=(), expected=None, purpose_declared=False, interrupt=False,
+  thread=None) -> SceneStart(scene_id, record, test, push, narration)` (writes `scene_started`, marks
+  `scene_start`: `h.12.scene_test`, `h.12.pacing_push`); `end_scene(ctx, reason, *, answered=None |
+  "as_hoped" | "against_hope" | "answered", opposition_overcome=False) -> SceneEnd(scene_id, reason, tension,
+  narration, chronicle_offer)` (marks `scene_end` while the scene is current, then `scene_ended`);
+  `reopen_scene(ctx)`; `mark_agenda_answered(ctx, answered)`; `note_cut(ctx, "interrupt" | "player_cut")`;
+  `note_turn(ctx, quiet=bool) -> dead air count`; `turn_is_quiet(input_classes, events)`;
+  `cut_due(state, rules) -> str | None` (a `pacing.yaml#scenes.cut_triggers` id; `dead_air` = offer the cut);
+  `current_scene`, `scene_info`, `cast_present`, `situation_tags`, `add_situation_tags`, `scene_test_result`,
+  `agenda_answer`. `director_enums(state, rules)` -> dict keyed like `SchemaContext`'s Director fields plus
+  `push_raised`, `lead_fires`; pass `places=`, `push_raised=`, `lead_fires=` to `schema_context`.
+  Meta: `scene` {scene_id, expected, purpose_declared, interrupt, thread, untested, tags}, `scene_test`
+  {scene_id, result expected|altered|interrupted|untested, roll, tension, adjustments | event}, `scene_agenda`,
+  `scene_outcome`, `scene_cut`, `scene_push`, `dead_air`.
+- **Social** (`engine.world.social`): `meet_npc(ctx, role, place, *, people=None, reuse=True) -> npc id`
+  (roster match by role and place, else a walk-on with fixed name/pronouns/descriptors; on the cast list);
+  `first_interaction(ctx, npc, modifiers=0) -> standing` (reaction roll, once); `standing(state, npc)`,
+  `standing_effects(rules, value)`, `step_standing(ctx, npc, steps, reason, cap=None)`;
+  `record_memory(ctx, npc, deed, valence, how="did", ..., apply_step=False, severity=None)` (committed at
+  scene_end by `h.12.npc_memory`; at once outside a scene), `memories(state, npc, active_only=True)`,
+  `memory_step(rules, valence, severity)`; `record_knowledge(ctx, knower, fact_id, how)`, `knows`;
+  `promote_npc(ctx, npc, "recurring" | "principal")` writes later-depth fields as **facts** on the NPC (wants,
+  fears, refusals, secrets sealed) — read NPC fields with `npc_field(state, npc, key)` (fact, else data);
+  `patience`, `spend_patience`, `talk_closed`; `record_commitment(ctx, npc, by="npc"|"pc", act, due_day, ...)
+  -> fact id`, `keep_commitment`, `commitments(state, status="open")`; lists: `cast_list(state)`,
+  `thread_list(state)` (dicts with id, status, weight, points_to, ...), `set_thread_status`, `mark_progress`,
+  `feature(ctx, ids)`, `protected_threads`. `LoggedSeedRng(rng, purpose)` adapts the game RNG to engine.gen.
+- **Chronicle** (`engine.world.chronicle`): `chronicle_append(ctx, text, *, kind, entities=(), tags=(),
+  scope="public", source="12.4.8", supersedes=None) -> "chr.<n>"` (<= 30 words; 11.12.1 kinds; 11.12.2
+  occasions); `chronicle(state, include_superseded=False, entity=None, since_seq=0) -> [ChronicleEntry]`.
+  Entries are facts on `world`, predicate `chronicle.<id>`. Scene-end offer: meta `chronicle_offer`.
+- **Pacing** (`engine.world.pacing`): `tension(state, rules)`, `phase(state)` (meta `pacing.phase`, default
+  build; the M2 intensity handler moves it), `tension_points(tx, rules)`, `random_event(ctx, source=) ->
+  RandomEvent(focus, target, target_list, meaning, substituted)` (PR-12-6 steps 1-3; the World role interprets),
+  `inject_lead(ctx, form_misfit=False) -> LeadInjection(rung, source_rung, source_id, thread, form, facts)`
+  (PR-12-3: writes the lead fact + PC knowledge, resets the counter, lowers `trg.lead_injection`),
+  `clock_trace(state, clock_id)`, `raise_push(ctx, reason)`, `rotation`, `overdue`, `mark_tried(ctx, thread,
+  node)`. Triggers raised: `trg.lead_injection` (h.12.inconclusive_streak at 3 inconclusive beats),
+  `trg.pacing_push` (consumed by h.12.pacing_push in BUILD).
+- **Handlers** registered by `engine/world/handlers.py` (imported from h12.py/h15.py): h.12.scene_test,
+  pacing_push, tension_update, inconclusive_streak, lead_audit, rotation_update, npc_memory, bookkeeping
+  (12.4.8 steps 3 and 8); h.15.patience_reset, commitments_due (interrupts when a deal falls due unkept).

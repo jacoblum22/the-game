@@ -1,4 +1,5 @@
-"""Owner 12 handlers: pacing and the DM loop (engine/dm). None built yet; each logs handler_skipped until registered here.
+"""Owner 12 handlers: pacing and the DM loop (engine/dm). The Milestone 1 ones engine/world owns are registered by
+engine/world/handlers.py (imported at the end); the rest log handler_skipped until registered here.
 
 Register an implementation in this file with `@handler("<id>")` (see engine/time/handlers/__init__.py),
 calling into the owning module; tag it `# rule: <rule id>`. The milestone that switches each one on is
@@ -23,3 +24,6 @@ HANDLERS = (
     "h.12.rotation_update",  # M1
     "h.12.npc_memory",  # M1
 )
+
+# Registers the engine/world handlers listed in engine.world.handlers.H12.
+from engine.world import handlers as _world  # noqa: E402,F401

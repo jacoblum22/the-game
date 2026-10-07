@@ -111,7 +111,7 @@ redirected with an alternative and spend nothing.
 - [x] T035 [US2] Implement `frame_check` (PR-00-1, PR-01-2): DC from tier or opposition, modifier, odds, cost previews, lever and snag validity (≤2 each, must exist, not too recent), deltas ≤2 citing facts; refuse naming the failure, in `engine/resolve/frame.py`
 - [x] T036 [US2] Implement the cost menu, threatened and alternate costs and their application (PR-01-3) in `engine/resolve/costs.py`
 - [x] T037 [US2] Implement rulings: `find_rulings` by signature before any adaptation, Oracle call, Good Idea or G3/G4 decision (FR-022; wired into T033 and T034) and `log_ruling` (00.15.5–00.15.6) in `engine/resolve/rulings.py`
-- [ ] T065 [US2] Implement harm (PR-07-1 `apply_harm`, harm states 07.1–07.2), the lethal scan and warning (PR-07-4: a lethal frame is never auto-committed and follows the warning), yield and retreat (PR-07-6), the Threshold (PR-07-5) and last chance (`last_chance.yaml`), death and career end, in `engine/harm/` (built in Phase 3 because the pipeline's CONSEQUENCE step and auto-commit need it)
+- [x] T065 [US2] Implement harm (PR-07-1 `apply_harm`, harm states 07.1–07.2), the lethal scan and warning (PR-07-4: a lethal frame is never auto-committed and follows the warning), yield and retreat (PR-07-6), the Threshold (PR-07-5) and last chance (`last_chance.yaml`), death and career end, in `engine/harm/` (built in Phase 3 because the pipeline's CONSEQUENCE step and auto-commit need it)
 - [ ] T038 [US2] Implement the pipeline driver PR-01-1 (PARSE → GATE → NECESSITY → ANCHOR → FRAME → OFFER → ROLL → READ → DELIVER → CONSEQUENCE → RECORD) per beat, ≤3 beats, stopping at the first pause, with the offer choices commit / change / withdraw / go big / play safe (01.7) and auto-commit (01.7.4; a lethal frame is never auto-committed and always follows the warning), in `engine/resolve/pipeline.py`
 - [ ] T039 [US2] Implement the Reader (A1) and Framer (A2) roles: prompts and packet assembly per contracts/model-calls.md in `engine/dm/roles/reader.py`, `engine/dm/roles/framer.py`, prompts in `engine/dm/roles/prompts/`
 - [ ] T040 [US2] Implement T1–T6 of PR-12-1 in `engine/dm/turn.py`: log verbatim, classify (SAFETY first), load, adjudicate (SESSION, DISPUTE, OOF answered; FICTION_QUESTION via state → canon → Oracle; DECLARATION via the pipeline; PENDING_ANSWER resumes), world (T5, see T041), write (evidence by PR-03-1 recorded, tallies deferred to M3)
@@ -161,7 +161,7 @@ no delivered contradiction of stored state.
 
 - [x] T052 [P] [US1] World-seed parity: the port reproduces `rules/_process/simulation/12-world-seed.py` exactly on the same seed, in `tests/golden/test_world_seed_parity.py`
 - [x] T053 [P] [US1] Birth-draw parity with `gen_birth` reference output, in `tests/golden/test_birth_parity.py`
-- [ ] T054 [P] [US1] ch.07 worked examples (harm, warning, Threshold, rests) with fixed dice, in `tests/golden/test_worked_examples_07.py`
+- [x] T054 [P] [US1] ch.07 worked examples (harm, warning, Threshold, rests) with fixed dice, in `tests/golden/test_worked_examples_07.py`
 
 ### Generators
 
@@ -181,8 +181,8 @@ no delivered contradiction of stored state.
 
 - [ ] T063 [US1] Implement creation (PR-02-7 conversation with `[CREATE n/N]` blocks; PR-02-1 workshop, PR-02-2 fast path, PR-02-3 ready-made; PR-02-6 finish: validate, write, show) with the Interpret role, in `engine/dm/creation.py` and `engine/dm/roles/interpret.py`; skipped steps take the stated default; a name is required
 - [ ] T064 [US1] Implement the seed flow with the Interpret role in `engine/dm/seed_flow.py`
-- [ ] T066 [P] [US1] Implement rests (PR-07-8), natural and rest recovery and the daily pass (PR-07-10, M1 parts) in `engine/harm/rest.py`
-- [ ] T067 [P] [US1] Implement ability use (PR-05-1), Focus and recharge at scene, day and rest (PR-05-4) in `engine/abilities/`
+- [x] T066 [P] [US1] Implement rests (PR-07-8), natural and rest recovery and the daily pass (PR-07-10, M1 parts) in `engine/harm/rest.py`
+- [x] T067 [P] [US1] Implement ability use (PR-05-1), Focus and recharge at scene, day and rest (PR-05-4) in `engine/abilities/`
 - [ ] T068 [US1] Implement the M1 boundary handlers (plan.md milestone table, about 36) in `engine/time/handlers/h00.py` … `h15.py` (`h.12.intensity_scene` waits for M2), each tagged with its handler id and rule id
 
 ### The game around the loop
