@@ -187,11 +187,11 @@ no delivered contradiction of stored state.
 
 ### The game around the loop
 
-- [ ] T069 [US1] Implement the opening (12.16.16, PR-12-8 session open): a scene framed at the incident with an open prompt, in `engine/dm/opening.py`
-- [ ] T070 [US1] Implement endings: death after the warning, retirement, career end → the epilogue (PR-11-6, simple) from the record → new character in this world or a new world, in `engine/dm/ending.py`
-- [ ] T109 [US1] Persist every pause as `pause_opened`/`pause_closed` and every seed and creation answer as `seed_answered`/`creation_answered` (data-model.md §2) so resume re-presents exactly what was open
-- [ ] T071 [US1] Implement resume (12.5 recap from the record, then whatever was open: a seed step, a creation step, an offer) and session close (PR-12-8) in `engine/dm/session.py`
-- [ ] T072 [US1] Implement the game API exactly as contracts/engine-api.md (`Game.new`, `Game.open`, `submit`, `answer`, `codex`, `new_character`, `turn_record`, `branch`, `spend`, `Game.replay`; `Response`, `Pause`, `OfferView`; errors) in `engine/game.py`; "There is no turn limit, scene limit or session limit anywhere in the API (FR-012)"
+- [x] T069 [US1] Implement the opening (12.16.16, PR-12-8 session open): a scene framed at the incident with an open prompt, in `engine/dm/opening.py`
+- [x] T070 [US1] Implement endings: death after the warning, retirement, career end → the epilogue (PR-11-6, simple) from the record → new character in this world or a new world, in `engine/dm/ending.py`
+- [x] T109 [US1] Persist every pause as `pause_opened`/`pause_closed` and every seed and creation answer as `seed_answered`/`creation_answered` (data-model.md §2) so resume re-presents exactly what was open
+- [x] T071 [US1] Implement resume (12.5 recap from the record, then whatever was open: a seed step, a creation step, an offer) and session close (PR-12-8) in `engine/dm/session.py`
+- [x] T072 [US1] Implement the game API exactly as contracts/engine-api.md (`Game.new`, `Game.open`, `submit`, `answer`, `codex`, `new_character`, `turn_record`, `branch`, `spend`, `Game.replay`; `Response`, `Pause`, `OfferView`; errors) in `engine/game.py`; "There is no turn limit, scene limit or session limit anywhere in the API (FR-012)"
 - [x] T073 [US1] Implement codex lookups (shown and available state only, 00.6.4; `rules <id>` prints the card; `journal` and `threads` from the chronicle and recorded knowledge) in `engine/dm/codex.py`
 - [x] T108 [US1] Implement disputes and corrections (12.3.6, PR-12-4): `revert_writes` scoped to the current scene (DL-12-04) and a recorded correction, in `engine/dm/dispute.py`
 

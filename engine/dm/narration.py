@@ -10,7 +10,8 @@ opening, the first opening; 12.5.3, 12.16.16).
 
 T7–T12 run in one store transaction under the turn's id (T8's write-on-mention, the fallback's ruling, T12's
 counters and scene cut); a model failure there writes nothing after T6 and raises, and the turn row keeps the
-input (TODO(retry): re-run T7–T12 from the written state on the next call, contracts/engine-api.md Errors).
+input; `engine.dm.turn.play_turn` / `play_answer` then keep the turn's record as meta `narration_pending` and
+`engine.dm.turn.resume_narration` re-runs T7–T12 from the written state on the next call (engine-api.md Errors).
 """
 
 from __future__ import annotations
@@ -446,6 +447,17 @@ def skip_drafting(record: AdjudicationRecord, pause: PauseRecord | None) -> bool
             and not record.scene.started and not any(p.cls == "SPEECH" for p in record.parts))
 
 
+OOF_CLASSES = frozenset({"SAFETY", "SESSION", "DISPUTE", "OOF_QUESTION"})
+
+
+def pure_oof(record: AdjudicationRecord) -> bool:  # rule: 12.15
+    """Only out-of-fiction parts and nothing happened in the fiction: the response is its blocks alone (fiction
+    empty, engine-api.md `Response.fiction`)."""
+    return (bool(record.parts) and all(p.cls in OOF_CLASSES for p in record.parts) and not record.beats
+            and not record.oracle and not record.npc_actions and not record.omens and not record.scene.started
+            and not record.scene.ended)
+
+
 def _restatement(record: AdjudicationRecord) -> str:
     b = record.beats[-1] if record.beats else None
     text = (b.restatement if b else "") or (record.parts[0].text if record.parts else "")
@@ -466,7 +478,9 @@ def narrate_turn(ctx: TurnContext, adj: Any, message: str) -> TurnOutcome:  # ru
     with store.transaction(adj.turn_id) as tx:
         ctx.tx = tx
         try:
-            if skip_drafting(rec, pause):
+            if pure_oof(rec):
+                narr = NarrationResult(fiction="", skipped=True)
+            elif skip_drafting(rec, pause):
                 narr = NarrationResult(fiction=_restatement(rec), skipped=True)
             else:
                 narr = narrate_checked(ctx, rec, player_message=message, exchanges=exchanges,
@@ -498,4 +512,4 @@ def narrate_turn(ctx: TurnContext, adj: Any, message: str) -> TurnOutcome:  # ru
 
 
 __all__ = ["FRAME_NEXT", "NarrationResult", "TurnOutcome", "moves_on", "narrate_checked", "narrate_turn", "owed",
-           "pause_blocks", "record_turn_end", "skip_drafting", "stays", "turn_blocks"]
+           "pause_blocks", "pure_oof", "record_turn_end", "skip_drafting", "stays", "turn_blocks"]

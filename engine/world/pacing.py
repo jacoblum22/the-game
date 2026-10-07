@@ -184,6 +184,16 @@ def tension_update(ctx: TimeContext) -> HandlerResult:  # rule: 12.6.3
 # ------------------------------------------------------------------------------- inconclusive streak (P16)
 
 
+def _reach_value(reach: Any) -> int:
+    """A delivered reach as stored by the pipeline (its 00.3.15 name, e.g. "limited") or a number."""
+    from engine.resolve.types import REACH_VALUE
+
+    if isinstance(reach, int):
+        return reach
+    text = str(reach or "0")
+    return REACH_VALUE.get(text, int(text) if text.isdigit() else 0)
+
+
 def beat_conclusive(events: Sequence[Event], pc: str | None) -> bool:  # rule: 12.8.1
     """01.11.4: a beat is conclusive when it wrote a fact the PC learned, a clock change, a position change or a
     delivered reach >= 1."""
@@ -195,7 +205,7 @@ def beat_conclusive(events: Sequence[Event], pc: str | None) -> bool:  # rule: 1
             return True
         if e.type == "position_set" and p.entity == pc:
             return True
-        if e.type == "frame_resolved" and int((p.delivered or {}).get("reach") or 0) >= 1:
+        if e.type == "frame_resolved" and _reach_value((p.delivered or {}).get("reach")) >= 1:
             return True
     return False
 

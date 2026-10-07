@@ -83,12 +83,55 @@ def run_turn(ctx: TurnContext, message: str) -> AdjudicationResult:  # rule: PR-
 
 def play_turn(ctx: TurnContext, message: str) -> TurnOutcome:  # rule: PR-12-1
     """The whole turn loop for one player message: T1–T6 (`run_turn`) then T7–T12 (`narrate_turn`)."""
-    return narrate_turn(ctx, run_turn(ctx, message), message)
+    return _narrate(ctx, run_turn(ctx, message), message)
 
 
 def play_answer(ctx: TurnContext, choice_id: str) -> TurnOutcome:  # rule: 12.2.6
     """`game.answer(choice_id)`: the pick (`answer_pause`) then the narration pass."""
-    return narrate_turn(ctx, answer_pause(ctx, choice_id), choice_id)
+    return _narrate(ctx, answer_pause(ctx, choice_id), choice_id)
+
+
+def play_dispute(ctx: TurnContext, text: str) -> TurnOutcome:  # rule: 12.3.6
+    """`game.dispute(text)` (the /fix command): a DISPUTE part with no Reader call (PR-12-4), then T7–T12. A
+    reliance CHOICE (keep the result or rewind) opens a `clarify` pause answered by `play_answer`."""
+    return _narrate(ctx, _turn(ctx, text, choice=None, dispute=True), text)
+
+
+NARRATION_PENDING = "narration_pending"  # meta: T6 committed, T7–T12 failed; the next call re-runs them
+
+
+def _narrate(ctx: TurnContext, adj: AdjudicationResult, message: str) -> TurnOutcome:  # rule: PR-12-1
+    """T7–T12; when they fail after T6 committed (a model error), the turn's record is kept as meta
+    `narration_pending` so the next call re-runs T7–T11 from the written state (contracts/engine-api.md Errors):
+    the player never sees prose the store does not back."""
+    try:
+        return narrate_turn(ctx, adj, message)
+    except Exception:
+        pending = {"turn_id": adj.turn_id, "message": message, "record": adj.record.dump(),
+                   "oof": list(adj.oof)}
+        ctx.store.append([Event.of("meta_set", source="engine", rule_id="PR-12-1", key=NARRATION_PENDING,
+                                   value=pending)], turn_id=adj.turn_id)
+        raise
+
+
+def resume_narration(ctx: TurnContext) -> TurnOutcome | None:  # rule: PR-12-1
+    """Re-run T7–T12 for a turn whose narration failed after T6 (meta `narration_pending`); None when nothing is
+    pending. Raises again (the meta stays) if the model fails again."""
+    store = ctx.store
+    pending = store.state.meta.get(NARRATION_PENDING)
+    if not isinstance(pending, dict):
+        return None
+    turn_id = str(pending["turn_id"])
+    rec = AdjudicationRecord.model_validate(pending["record"])
+    pause = store.state.open_pause()
+    tr = store.turn(turn_id) or TurnRecord(turn_id=turn_id, input_verbatim=str(pending.get("message") or ""))
+    adj = AdjudicationResult(turn_id=turn_id, record=rec, pause=pause, writes=rec.write_seqs,
+                             offer=pause.detail.get("offer") if pause is not None and pause.kind == "offer" else None,
+                             oof=list(pending.get("oof") or []), view=narrator_view(store.state), turn_record=tr)
+    out = narrate_turn(ctx, adj, str(pending.get("message") or ""))
+    store.append([Event.of("meta_set", source="engine", rule_id="PR-12-1", key=NARRATION_PENDING, value=None)],
+                 turn_id=turn_id)
+    return out
 
 
 def answer_pause(ctx: TurnContext, choice_id: str) -> AdjudicationResult:  # rule: 12.2.6
@@ -99,7 +142,7 @@ def answer_pause(ctx: TurnContext, choice_id: str) -> AdjudicationResult:  # rul
     return _turn(ctx, choice_id, choice=choice_id)
 
 
-def _turn(ctx: TurnContext, message: str, *, choice: str | None) -> AdjudicationResult:
+def _turn(ctx: TurnContext, message: str, *, choice: str | None, dispute: bool = False) -> AdjudicationResult:
     store = ctx.store
     turn_id = store.new_turn_id()
     store.save_turn(TurnRecord(turn_id=turn_id, input_verbatim=message))  # T1 (rule: 12.2.5)
@@ -115,6 +158,10 @@ def _turn(ctx: TurnContext, message: str, *, choice: str | None) -> Adjudication
             if choice is not None:
                 rec.parts = [PartEntry.model_validate({"text": choice, "class": "PENDING_ANSWER"})]
                 beats = _adjudicate_answer(ctx, rec, choice, oof)
+            elif dispute:
+                rec.parts = [PartEntry.model_validate({"text": message, "class": "DISPUTE", "handled": "answered"})]
+                _dispute(ctx, message, oof)
+                beats = []
             else:
                 _scene_open_step(ctx, rec, message)  # PR-12-7: frame a pending (or missing) scene first
                 reader = read_message(ctx, message, exchanges=exchanges)  # T2
@@ -122,7 +169,7 @@ def _turn(ctx: TurnContext, message: str, *, choice: str | None) -> Adjudication
                 rec.triggers = [t.id for t in get_active_triggers(tx.state, ctx.rules)]  # T3 (cards: per role)
                 beats = _adjudicate(ctx, rec, reader, message, oof)  # T4
             pause = tx.state.open_pause()
-            if pause is None:
+            if pause is None and not dispute:  # a dispute is out of fiction: no world step, no time
                 world_step(ctx, rec, beats=beats)  # T5 (a pause jumps to T7: no world, no time)
                 _turn_end(ctx, rec, oof)
                 if choice is None:
@@ -217,6 +264,13 @@ def _adjudicate(ctx: TurnContext, rec: AdjudicationRecord, reader: ReaderResult,
             part.handled = "answered"
         elif part.cls == "SPEECH":
             part.handled = "answered"  # a free activity; whether an NPC answers is the NPC's (12.2.9)
+    kind = rest_kind(message) if "DECLARATION" in classes and rec.pc else None
+    if kind is not None and tx.state.open_pause() is None:
+        _rest(ctx, rec, kind, oof)
+        for p in rec.parts:
+            if p.cls == "DECLARATION":
+                p.handled = "resolved"
+        return outcomes
     plans = reader.plans(actor=rec.pc or "", declared_seq=tx.state.last_seq, mint=tx.mint) if rec.pc else []
     if reader.clarifying_question and not plans:  # 01.2.4: at most one, and only when no reading can be assumed
         _clarify(ctx, reader.clarifying_question)
@@ -399,6 +453,61 @@ def _safety(ctx: TurnContext, rec: AdjudicationRecord, part: PartEntry, oof: lis
     tx.add(Event.of("meta_set", source="player", rule_id="12.3.7", key="safety.ledger", value=[*ledger, resp.ledger]))
 
 
+# ------------------------------------------------------------------------------------------- rests
+
+_REST = re.compile(r"\b(?:i|we|let'?s)\s+(?:\w+\s+){0,3}?(?:rest|sleep|make\s+camp|camp|bed\s+down|"
+                   r"take\s+a\s+(?:breather|short\s+rest|long\s+rest|break)|catch\s+(?:my|our)\s+breath)\b"
+                   r"(?!\s+of\b)", re.IGNORECASE)
+_LONG = re.compile(r"\b(?:night|sleep|camp|bed\s+down|until\s+(?:dawn|morning)|long\s+rest|for\s+the\s+day)\b",
+                   re.IGNORECASE)
+_BREATHER = re.compile(r"\b(?:breather|catch\s+(?:my|our)\s+breath|a\s+moment|a\s+minute)\b", re.IGNORECASE)
+REST_WORDS = {"breather": "a breather", "rest_short": "a short rest", "rest_long": "a long rest"}
+
+
+def rest_kind(message: str) -> str | None:  # rule: 07.8.1
+    """A declared rest and its kind (07.8.1: breather, short rest, long rest), or None."""
+    if not _REST.search(message or ""):
+        return None
+    if _BREATHER.search(message):
+        return "breather"
+    return "rest_long" if _LONG.search(message) else "rest_short"
+
+
+def _rest(ctx: TurnContext, rec: AdjudicationRecord, kind: str, oof: list[dict[str, str]]) -> None:  # rule: PR-07-8
+    # coarse: 07.8.2 (the site from the place's kind when no rest_site is recorded: a settlement or building is a
+    # haven, anywhere else a camp)
+    """PR-07-8: refused when the rules forbid it now (07.8.1); else the rest's whole duration is advanced
+    (00.7.2), its boundary marked at the end (handlers recover vitality, focus, uses); an interruption leaves the
+    rest unfinished (the mark does not fire)."""
+    from engine.harm.rest import best_quality, rest_duration, rest_payload, rest_refusal, rest_site
+    from engine.time.scheduler import Mark, advance_time
+    from engine.world.places import location, place_kind
+
+    tx = ctx.need_tx()
+    st = tx.state
+    pc = rec.pc or ""
+    why = rest_refusal(st, ctx.rules, pc, kind)
+    words = REST_WORDS[kind]
+    if why:
+        rec.notes.append(f"{words} is not possible now: {why}")
+        oof.append({"kind": "NOTE", "text": f"No rest yet: {why}."})
+        return
+    place = location(st, pc)
+    site = rest_site(st, place) or ("haven" if place and place_kind(st, place) in ("settlement", "building")
+                                    else "camp")
+    quality = best_quality(st, pc, kind, site=site)
+    amount, unit = rest_duration(ctx.rules, kind)
+    unit = {"watches": "watch", "intervals": "interval", "hours": "hour", "rounds": "round"}.get(unit, unit)
+    res = advance_time(ctx.time_ctx(), amount, unit, f"{kind} (07.8)",
+                       marks=[Mark(kind, rest_payload(kind, quality, site))])
+    if res.interrupt or res.unfired:
+        rec.notes.append(f"{words} begins but is broken off before it is done")
+        rec.notes.extend(n for n in res.narration if n)
+        return
+    rec.notes.append(f"the character takes {words}" + (" and wakes rested" if kind == "rest_long" else "")
+                     + ("" if quality == "full" else " (a poor rest)"))
+
+
 # ------------------------------------------------------------------------------------------- harm, end of turn
 
 
@@ -407,6 +516,8 @@ def _harm_followups(ctx: TurnContext, env: PipelineEnv, rec: AdjudicationRecord,
     """A harm that opened the Threshold pauses on the last-chance menu (engine/harm/threshold.py)."""
     if not env.threshold_due or ctx.state.open_pause() is not None:
         return
+    if ctx.state.fact_value(env.threshold_due[0], "last_stand"):
+        return  # rule: 07.5.9 -- in a Last Stand no new Threshold opens: the stand ends in death at turn end
     from engine.harm.ctx import HarmCtx
     from engine.harm.threshold import Situation, open_threshold
 
@@ -429,6 +540,23 @@ def _last_chance(ctx: TurnContext, pause: PauseRecord, choice: str, oof: list[di
     ch = choose(hctx, pc, pause, choice)
     ctx.need_tx().add_all(ch.events)
     oof.append({"kind": "LAST_CHANCE", "text": f"chosen: {choice}"})
+    if ch.gamble_offer:
+        _gamble(ctx, pc, pause, oof)
+
+
+def _gamble(ctx: TurnContext, pc: str, pause: PauseRecord, oof: list[dict[str, str]]) -> None:  # rule: 07.5.10
+    # coarse: 07.5.10 (the last-chance menu already shows the Gamble's odds; picking it is its confirmation, so no
+    # second OFFER is opened before the roll)
+    """The Gamble, rolled once it is chosen: free, alive, a price to choose (the near-fail pause), or death."""
+    from engine.harm.ctx import HarmCtx
+    from engine.harm.threshold import menu_from_detail, resolve_gamble
+
+    hctx = HarmCtx(state=ctx.state, mint=ctx.mint, rules=ctx.rules, rng=ctx.rng)
+    g = resolve_gamble(hctx, pc, menu_from_detail(pause))
+    ctx.need_tx().add_all(g.events)
+    words = {"free": "you walk away free", "live": "you live, overlooked", "choose": "it nearly fails: choose a price",
+             "death": "it fails"}
+    oof.append({"kind": "LAST_CHANCE", "text": f"The Gamble: {words.get(g.result, g.result)}."})
 
 
 def _turn_end(ctx: TurnContext, rec: AdjudicationRecord, oof: list[dict[str, str]]) -> None:  # rule: 07.2.7
@@ -438,6 +566,8 @@ def _turn_end(ctx: TurnContext, rec: AdjudicationRecord, oof: list[dict[str, str
     from engine.harm.state import DYING, harm_state
 
     pc = rec.pc
+    if pc and _finish_last_stand(ctx, rec, pc):
+        return
     if not pc or harm_state(ctx.state, pc) != DYING:
         return
     res = dying_check(HarmCtx(state=ctx.state, mint=ctx.mint, rules=ctx.rules, rng=ctx.rng), pc)
@@ -447,6 +577,27 @@ def _turn_end(ctx: TurnContext, rec: AdjudicationRecord, oof: list[dict[str, str
         env = _env(ctx)
         env.threshold_due.append(pc)
         _harm_followups(ctx, env, rec, oof)
+
+
+def _finish_last_stand(ctx: TurnContext, rec: AdjudicationRecord, pc: str) -> bool:  # rule: 07.5.9
+    # coarse: 07.5.9 (the Last Stand is the PC's next whole turn after choosing it, not three counted actions)
+    """The Last Stand chosen on an earlier turn ends when this turn of the PC's ends: death (both keys)."""
+    from engine.harm.ctx import HarmCtx
+    from engine.harm.state import DEAD, harm_state
+    from engine.harm.threshold import DeathRefused, finish_last_stand
+
+    tx = ctx.need_tx()
+    if not ctx.state.fact_value(pc, "last_stand") or harm_state(ctx.state, pc) == DEAD:
+        return False
+    if any(e.type == "fact_set" and getattr(e.payload, "predicate", None) == "last_stand" for e in tx.events):
+        return False  # chosen this turn: the stand is the next turn
+    try:
+        tx.add_all(finish_last_stand(HarmCtx(state=ctx.state, mint=ctx.mint, rules=ctx.rules, rng=ctx.rng), pc))
+    except DeathRefused as exc:
+        rec.notes.append(f"the last stand ends, and yet the record refuses a death: {exc}")
+        return True
+    rec.notes.append("the last stand is over: the character falls, and does not rise again")
+    return True
 
 
 # ------------------------------------------------------------------------------------------- scenes
@@ -560,7 +711,7 @@ def recent_exchanges(store: Any, turn_id: str, n: int = 4) -> list[tuple[str, st
     return list(reversed(out))
 
 
-__all__ = ["AdjudicationResult", "BeatEntry", "answer_pause", "play_answer", "play_turn", "recent_exchanges",
-           "run_turn"]
+__all__ = ["NARRATION_PENDING", "AdjudicationResult", "BeatEntry", "answer_pause", "play_answer", "play_dispute",
+           "play_turn", "recent_exchanges", "resume_narration", "run_turn"]
 
 from engine.dm import session as _session  # noqa: E402,F401  (registers h.12.session_open/close, mode_change)

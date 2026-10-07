@@ -626,6 +626,21 @@ def harm_lethal_warning(env: PipelineEnv, beat: Beat, frame: Frame | None) -> Le
     return LethalWarning(source=trig.source, block=block, events=events)
 
 
+def _harm_source(env: PipelineEnv, frame_id: str | None, target: str) -> str | None:  # rule: 07.3.2
+    """Who deals a cost's harm: the frame's opposing entity (its obstacle's entity, else its first target other than
+    the one hurt), so the lethal re-test (07.3.6) finds that source's lethal context; else the frame itself."""
+    fs = env.state.frames.get(frame_id or "")
+    frame: dict[str, Any] = dict(fs.frame) if fs is not None else {}
+    obstacle = frame.get("obstacle") or {}
+    beat = frame.get("beat") or {}
+    candidates = [obstacle.get("entity"), *list(obstacle.get("entities") or []), *list(beat.get("targets") or []),
+                  beat.get("target")]
+    for c in candidates:
+        if isinstance(c, str) and c != target and c in env.state.entities:
+            return c
+    return frame_id
+
+
 def harm_hook_for(env: PipelineEnv, rng: Any = None) -> HarmHook:
     """The CONSEQUENCE harm hook over engine/harm/apply.py's `apply_harm` (PR-07-1; as `apply.harm_hook`, plus a
     HarmEntry for the record). A fall to the Threshold is flagged in `env.threshold_due` for the turn loop."""
@@ -635,7 +650,7 @@ def harm_hook_for(env: PipelineEnv, rng: Any = None) -> HarmHook:
     def hook(target: str, severity: str, *, lethal: bool, harm_tags: list[str], frame_id: str | None) -> list[Event]:
         ctx = HarmCtx(state=env.state, mint=env.tx.mint, rules=env.rules, rng=rng or env.rng)
         res = apply_harm(ctx, target, severity=severity, harm_tags=harm_tags, frame_id=frame_id, lethal=lethal,
-                         source=frame_id)
+                         source=_harm_source(env, frame_id, target))
         words = res.transition or ("hurt" if res.amount else "shaken but unhurt")
         env.harm_log.append(HarmEntry(target=target, words=words))
         if res.threshold:

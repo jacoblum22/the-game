@@ -30,6 +30,8 @@ SESSION = "session"  # meta {n, opened_seq, prefs, closed_seq}
 NEXT_TIME = "session.next_time"  # 12.5.4 (3): shown at the next session's start; never a fact
 REVIEW = "session.review"  # 12.12.4: ruling ids flagged for review this session
 RECAP_SEQ = "recap.last_seq"
+OPENED_PC = "opening.pc"  # the character whose opening has been told (a later PC gets its own)
+SLOTS_REMINDER = "creation.open_slots.reminder"  # engine/time/handlers/h02.py (02.9.8)
 
 
 # ------------------------------------------------------------------------------------------- handlers
@@ -144,6 +146,17 @@ def _pause_blocks(ctx: TurnContext) -> tuple[list[OofBlock], Pause | None]:
     return pause_blocks(ctx, p), Pause.of(p)
 
 
+def needs_opening(state: WorldState) -> bool:  # rule: 12.16.16
+    """The active character has not had its opening yet (the first character: no scene ever; a later one: the
+    opening was told for someone else)."""
+    pc = active_pc(state)
+    if pc is None:
+        return False
+    if state.meta.get(OPENED_PC) is not None:
+        return state.meta.get(OPENED_PC) != pc
+    return not state.meta.get("game.opened") and state.scene is None and state.last_scene is None
+
+
 def open_session(ctx: TurnContext) -> Response:  # rule: PR-12-8
     # rule: 12.5.2
     """PR-12-8 open: `mark_boundary(session_start)` → recap from state through the Narrator and the checker
@@ -152,12 +165,13 @@ def open_session(ctx: TurnContext) -> Response:  # rule: PR-12-8
     from engine.dm.narration import narrate_checked
 
     st = ctx.store.state
-    if st.scene is None and st.last_scene is None and active_pc(st) is not None:
+    if needs_opening(st):
         return opening(ctx)
     store = ctx.store
     turn_id = store.new_turn_id()
     ctx.call_ids = []
     since = int(st.meta.get(RECAP_SEQ) or 0)
+    reminder: Any = None
     with store.transaction(turn_id) as tx:
         ctx.tx = tx
         try:
@@ -166,10 +180,17 @@ def open_session(ctx: TurnContext) -> Response:  # rule: PR-12-8
             narr = narrate_checked(ctx, rec, purpose="recap", extra=recap_summary(tx.state, since_seq=since),
                                    fallback_text="")
             tx.add(Event.of("meta_set", source="engine", rule_id="12.5.3", key=RECAP_SEQ, value=tx.state.last_seq))
+            reminder = tx.state.meta.get(SLOTS_REMINDER)
+            if reminder:  # h.02.open_slots queued it (02.9.8): shown once, at this session start
+                tx.add(Event.of("meta_set", source="engine", rule_id="02.9.8", key=SLOTS_REMINDER, value=None))
         finally:
             ctx.tx = None
     st = store.state
     blocks = [oof.recap_block(st, since_seq=since)]
+    if isinstance(reminder, dict) and reminder.get("slots"):
+        slots = ", ".join(str(x).replace("_", " ") for x in reminder["slots"])
+        blocks.append(oof.note_block(f"Still open from your character's creation: {slots}. Tell me whenever you "
+                                     "like, or say so if you'd rather I stopped asking.", "SESSION"))
     note = st.meta.get(NEXT_TIME)
     if note:
         blocks.append(oof.note_block(f"Last time you wanted to focus on: {note}", "SESSION"))
@@ -196,9 +217,15 @@ def opening(ctx: TurnContext) -> Response:  # rule: 12.16.16
         try:
             mark_boundary(ctx.time_ctx(), "session_start", {})
             rec = AdjudicationRecord(turn_id=turn_id, pc=active_pc(tx.state))
+            later = tx.state.meta.get(OPENED_PC) not in (None, rec.pc)  # a new character in the same world
+            if later and tx.state.scene is not None:
+                from engine.world.scenes import end_scene
+
+                end_scene(ctx.time_ctx(), "new_character")  # the last character's scene closes first
             if tx.state.scene is None:
-                d = direct(ctx, situation="the first opening (12.16.16): frame the inciting incident in the haven"
-                           + (f": {inciting}" if inciting else ""))
+                d = direct(ctx, situation=("a new character enters the story (12.16.16): frame their first scene"
+                                           if later else "the first opening (12.16.16): frame the inciting "
+                                           "incident in the haven") + (f": {inciting}" if inciting else ""))
                 start = frame_scene(ctx, d, reason="opening")
                 rec.scene = SceneEntry(started=start.scene_id, header=scene_header(ctx.state))
             if inciting:
@@ -209,6 +236,7 @@ def opening(ctx: TurnContext) -> Response:  # rule: 12.16.16
                     rec.notes.append(f"a lead to make noticeable: {text}")
             narr = narrate_checked(ctx, rec, purpose="opening")
             tx.add(Event.of("meta_set", source="engine", rule_id="12.16.16", key="game.opened", value=turn_id))
+            tx.add(Event.of("meta_set", source="engine", rule_id="12.16.16", key=OPENED_PC, value=rec.pc))
         finally:
             ctx.tx = None
     pblocks, pause = _pause_blocks(ctx)
@@ -258,5 +286,5 @@ def close_session(ctx: TurnContext, next_time: str | None = None) -> Response:  
     return resp
 
 
-__all__ = ["close_session", "h_mode_change", "h_session_close", "h_session_open", "open_session", "opening",
-           "recap_summary", "where_line"]
+__all__ = ["OPENED_PC", "close_session", "h_mode_change", "h_session_close", "h_session_open", "needs_opening",
+           "open_session", "opening", "recap_summary", "where_line"]

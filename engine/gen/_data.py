@@ -10,6 +10,9 @@ from __future__ import annotations
 
 import copy
 import functools
+import hashlib
+import os
+import pickle
 from pathlib import Path
 from typing import Any
 
@@ -39,9 +42,45 @@ def parse(name: str, text: str) -> Any:
         return yaml.safe_load(text)
 
 
+CACHE_DIR = Path(os.environ.get("THE_GAME_GEN_CACHE", Path(__file__).resolve().parent / "_cache"))
+CACHE_FORMAT = 1
+
+
+def _cache_path(name: str, digest: str) -> Path:
+    return CACHE_DIR / f"{Path(name).stem}-{CACHE_FORMAT}-{digest[:24]}.pickle"
+
+
 @functools.cache
 def _load_raw(name: str) -> Any:
-    return parse(name, (RULES_DATA / name).read_text(encoding="utf-8"))
+    """Parsed once per file version: the pure-Python YAML parse (~10 s for the seed's files) is pickled under
+    engine/gen/_cache keyed by the sha256 of the file's text and its patches, like engine/data/loader's cache."""
+    text = (RULES_DATA / name).read_text(encoding="utf-8")
+    digest = hashlib.sha256((repr(_PATCHES.get(name, ())) + text).encode("utf-8")).hexdigest()
+    cache = _cache_path(name, digest)
+    if cache.exists():
+        try:
+            with cache.open("rb") as f:
+                stored = pickle.load(f)
+            if stored.get("hash") == digest:
+                return stored["data"]
+        except Exception:  # noqa: BLE001 - a bad cache is rebuilt, never trusted
+            pass
+    data = parse(name, text)
+    try:
+        CACHE_DIR.mkdir(parents=True, exist_ok=True)
+        gi = CACHE_DIR / ".gitignore"
+        if not gi.exists():
+            gi.write_text("*\n", encoding="utf-8")
+        tmp = cache.with_suffix(f".{os.getpid()}.tmp")
+        with tmp.open("wb") as f:
+            pickle.dump({"hash": digest, "data": data}, f, protocol=5)
+        tmp.replace(cache)
+        for stale in CACHE_DIR.glob(f"{Path(name).stem}-{CACHE_FORMAT}-*.pickle"):
+            if stale != cache:
+                stale.unlink(missing_ok=True)
+    except OSError:
+        pass  # a read-only tree: parse every time
+    return data
 
 
 def load(name: str) -> Any:

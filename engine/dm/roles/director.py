@@ -112,7 +112,11 @@ def frame_scene(ctx: TurnContext, d: DirectorDecision, *, reason: str, interrupt
     place = location(st) or ns.place or (st.last_scene.place_id if st.last_scene else None)
     previous = st.last_scene.mode if st.last_scene else None
     mode = ns.mode or previous or "free"
-    cast = [c for c in ns.cast if c != "new_npc" and c in st.entities]  # TODO(new_npc): PR-12-5 generation
+    cast = [c for c in ns.cast if c != "new_npc" and c in st.entities]
+    if "new_npc" in ns.cast and place:  # PR-12-5: someone new in the scene (roster first, else a walk-on)
+        from engine.world.social import meet_npc
+
+        cast.append(meet_npc(tctx, None, place, reuse=False))
     try:
         return start_scene(tctx, place=place, mode=mode, agenda=ns.agenda, hoped_answer=ns.hoped_answer,
                            pillar=ns.pillar, challenge_type=ns.challenge_type, cast=cast, interrupt=interrupt,

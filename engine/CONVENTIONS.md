@@ -647,3 +647,36 @@ readers take a `WorldState`. Errors: `engine.world.common.WorldError`. The PC is
   where-you-stand line). Each saves a TurnRecord `(session open)` / `(opening)` / `(session close)`. Handlers:
   `h.12.session_open` (meta `session` {n, opened_seq, prefs}), `h.12.session_close` (meta `session.review` = flagged
   ruling ids, `closed_seq`), `h.12.mode_change` (meta `mode.loaded` {mode, tags, beat_cost}).
+
+## engine/game.py, endings, opening (T069–T072, T109)
+- **Game API** (`engine.game`, contracts/engine-api.md): `GameConfig(models={role: RoleModel}, offline=False,
+  budget_usd_per_session=2.0, oracle_free_cap_per_scene=6, milestone=1)`, `.model()` (OfflineModel / GeminiModel;
+  MissingKey before any file is written). `Game.new(path, config, seed=None, *, model=None) -> (Game, Response)`,
+  `Game.open(path, config, *, model=None) -> (Game, Response)`, `submit(text)`, `answer(choice_id)`,
+  `new_character()`, `dispute(text)`, `codex(section)`, `turn_record(id)`, `branch(label) -> "br.<slug>"` (a
+  `branches` row + a file copy `<name> @ <label>.db`), `spend() -> SpendTotals`, `set_pref("budget_usd" | "autocommit",
+  v)` (meta `pref.budget_usd` {usd} / `auto_commit`), `close()` (session close), `Game.replay(path, until_seq=None)
+  -> ReplayResult(identical, divergence, events, inputs)`. `model=` injects a model (tests: ScriptedModel).
+- Routing by `flow_of(state)`: seed / creation / `ending` (the ending menu) / `retire` (the retirement question);
+  None → play (`play_turn` / `play_answer`). After creation writes the PC: `engine.dm.opening.begin_play`
+  (= `session.opening`; meta `opening.pc` names who had one; `session.needs_opening(state)`). After every play step:
+  `engine.dm.ending.ending_due(state)` → `run_epilogue`. Owed work runs before new input (`Game._settle_pending`):
+  meta `narration_pending` (T7–T12 failed after T6: `engine.dm.turn.resume_narration`), a missing opening, an
+  epilogue. Budget notice: once per session, never with a mid-turn pause open.
+- **Inputs log**: every API call is a row of the game file's `game_inputs` table (kind, JSON arg, outcome), written
+  before it runs; `Game.replay` re-drives a temporary copy from them (`open` rows close and reopen the copy) with
+  `ReplayModel` over the stored `model_calls` and compares every event. On open, each (turn, role) call numbering
+  continues from the file (`_prime_call_seq`), so call ids never repeat across sittings.
+- **Endings** (`engine.dm.ending`): `ending_due`, `run_epilogue(ctx)` (PR-11-6 simple: `exists` fact, chronicle
+  `death`/`retirement` entry, meta `legacy.<pc>`, `ending.done`, epilogue through `narrate_checked(purpose=
+  "epilogue")`, pause kind `ending` with `new_character, new_world, quit`, detail flow `ending`), `answer_ending`,
+  `present_ending`; retiring: `is_retire(text)` ("I retire"), `ask_retire` (pause kind clarify, flow `retire`,
+  choices `retire, keep_playing`), `answer_retire` (fact `career.ending = retirement`).
+- **Turn loop additions** (`engine.dm.turn`): `play_dispute(ctx, text)` (DISPUTE part, no Reader, no world step);
+  declared rests (`rest_kind(message)`: breather / rest_short / rest_long) advance the rest's duration with its
+  boundary mark (PR-07-8); the Gamble is rolled when chosen; a Last Stand ends in death at the end of the PC's next
+  turn, and opens no new Threshold. `narration.pure_oof(record)`: only OOF parts and nothing in the fiction → empty
+  fiction, no model call.
+- `engine/gen/_data.py` pickles each parsed data file under `engine/gen/_cache/` keyed by the file's sha256.
+  `h.02.creation_lock` and `h.02.open_slots` are built (`engine/time/handlers/h02.py`; the reminder is shown by
+  `open_session`); `h.02.bent_offer` is not (logged as skipped).
