@@ -19,6 +19,7 @@ complexity is deliberately not a constraint, because the AI carries the rules.
   - an R5 completeness check;
   - a red team;
   - three paper playtests (newcomer, adversarial, long arc) in a generated world.
+  - a fresh-reader editor pass on the most-revised chapters (04, 05, 10, 12, 14).
 - **Issues:** every ledger issue is closed: 102 resolved, 4 accepted, 4 wontfix (setting-only). See
   "Issue status" below.
 
