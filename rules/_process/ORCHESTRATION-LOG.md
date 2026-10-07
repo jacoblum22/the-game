@@ -348,3 +348,4 @@ Next: tech stack and build planning.
 - Constitution: Principles I–VII compliant; P5 and P14 deviate with DL justifications.
 - New rows: I-063, I-064, I-065 (all MINOR).
 Cost: 149 tools; see the usage line below.
+- V2a usage: 273 turns, average context 298k (peak 516k), 81M cache-read tokens. Lesson: full reads still accumulate, so V2b is split into two agents of three chapters each.
