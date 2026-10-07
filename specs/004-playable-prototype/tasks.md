@@ -51,8 +51,8 @@ pytest), at the repository root, as in plan.md "Project Structure". `src/` (the 
 
 - [ ] T006 Implement `engine/data/loader.py`: load every `rules/data/*.yaml` once into typed, read-only structures keyed by id; follow `rules/data/SCHEMAS.md`; fail loudly on unknown ids and enums; expose `Rules` with accessors (`anchor(id)`, `table(id)`, `boundary_handlers()`, `resolution`, `oracles`, `harm`, `world_seed`, `gen_birth`, `origins`, `kits`, `licenses`, `abilities`, `conditions`, `pacing`, `social`, `last_chance`, `basic_verbs`, `attributes`, `archetypes`, `adversaries`)
 - [ ] T007 [P] Test that every data file loads and every cross-reference resolves in `tests/engine/test_data_loader.py`
-- [ ] T008 Implement the card compiler `engine/build/compile_cards.py`: split the chapter files into rule cards per 00.15.2 (id, title, tags, [D]/[J] marks, "Loads in:" lines, body), write `engine/build/cards.json`, and record the rules tree hash so a rules change forces a rebuild; use `rules/tools/rq.py`'s parser rather than a new one where possible
-- [ ] T009 [P] Implement `engine/build/coverage.py --milestone N`: list every rule id as implemented / coarse / deferred / model-judged from `# rule: <id>` tags in `engine/` and the milestone table in plan.md; print a summary, not a dump
+- [x] T008 Implement the card compiler `engine/build/compile_cards.py`: split the chapter files into rule cards per 00.15.2 (id, title, tags, [D]/[J] marks, "Loads in:" lines, body), write `engine/build/cards.json`, and record the rules tree hash so a rules change forces a rebuild; use `rules/tools/rq.py`'s parser rather than a new one where possible
+- [x] T009 [P] Implement `engine/build/coverage.py --milestone N`: list every rule id as implemented / coarse / deferred / model-judged from `# rule: <id>` tags in `engine/` and the milestone table in plan.md; print a summary, not a dump
 
 ### Store, RNG and time
 
