@@ -501,3 +501,34 @@ readers take a `WorldState`. Errors: `engine.world.common.WorldError`. The PC is
 - **Fixture** (`tests.fixtures.scene_dock.build_dock(tmp_path) -> DockScene(store, rules, rng, pc, ferryman, watch,
   place, clock, scene, facts)`): the dock at night (site mode), two NPCs with sealed wants/refusals, one public
   clock listening to exposure and time, Wren with two licences and `ab.soft_step`.
+
+## engine/dm oof + codex + dispute API (T049, T073, T108)
+- **OOF blocks** (`engine.dm.oof`, 12.15): every builder returns `engine.dm.response.OofBlock(kind, text)`, rendered
+  from computed records only (OOF blocks carry the numbers; fiction never does, 12.14.4). `offer_block(frame |
+  OfferPreview, *, rules=, fate=None, lethal_line=None, auto=False, costs_line=None)` (cli.md layout: approach and
+  difficulty in words, `Success or better N% · critical failure N% · near miss N% (need N+ on the die).`, stakes with
+  threatened/alternate cost in words, the lethal line directly under Stakes, reach, fate, numbered choices; secret,
+  natural-20-only, mode-price and `OFFER — auto` variants); `offer_view(src, rules) -> OfferView` (exactly the
+  engine-api fields); `offer_choices(src)` (commit, change, withdraw, go_big, play_safe); `near_miss_block(frame,
+  roll, rules=)` + `near_miss_choices(frame)`; `redirect_block(GateDecision, state=, rules=)` (G3/G4, 12.15.5);
+  `warning_block(rules, LethalTrigger, source_name=, fate=, yield_text=, retreat_text=)` and `status_block(rules,
+  state, eid, exits=)` wrap engine/harm; `last_chance_block(Menu)` (threshold.menu_text); `clarify_block(q,
+  assuming=False)`; `recap_block(state, since_seq=0, pc=None)` (12.5.3, state only); `note_block(text, label="NOTE",
+  rest=())` (labels NOTE, CORRECTION, RULES, UNKNOWN, RULING, CHOICE, ...; kind NOTE); `seed_block(step)`,
+  `create_block(text, n=, total=)`; `ordered(blocks)` (12.15 order, the pause block last); `name_of(rules, id)`.
+- **Codex** (`engine.dm.codex`, 00.6.4): `codex(state, section=None, rules=None, *, cards=None) -> CodexView(section,
+  text, data)`; sections `sheet` (default), `abilities`, `conditions`, `journal`, `threads`, `rules <id>` (a leading
+  `/` is accepted). Reads `engine.store.views.codex_view` only (plus `descriptor` for the harm word); conditions whose
+  data has `visible: false` are hidden; inventory = items/objects whose data or `holder`-type fact names the PC.
+- **Disputes** (`engine.dm.dispute`, 12.3.6 / PR-12-4): `dispute(ctx, text, *, identify=None, choice=None) -> str`
+  matches `TurnContext.dispute` (the turn loop should set `ctx.dispute = dispute`, or wrap it with a model-backed
+  `identify`); `settle_dispute(...) -> DisputeResult(kind, blocks, events, reverted, choices, claim, correction)`.
+  `identify(ctx, text) -> DisputedClaim(kind fact|quantity|ruling, subject, key, said, quote, turn_id, source,
+  frame_id, missed_fact) | None` is the model's part; `default_identify` reads explicit ids and shown quantities.
+  Kinds: unclear, hidden (not player-facing: `[UNKNOWN]`, never revealed, objection logged), not_said (store value +
+  quoted exchange; no fact, INV-9), stands, record_error (corrective `fact_set`/`quantity_changed`, Event `source=
+  "correction"`), narration_error (store stands; relying frames of this scene → `choices` accept_forward/rewind;
+  call again with `choice="rewind"` to `writes_reverted` from the first relying beat, never before the scene start),
+  ruling_stands, ruling_error. Every correction appends meta `corrections` (12.3.4 step 4 record) and logs a
+  `ruling_logged` (`kind rule_conflict`, `review_flag: true`); a rewind also appends meta `rolls_voided`. Writes go
+  to `ctx.tx` when open, else a one-shot transaction.

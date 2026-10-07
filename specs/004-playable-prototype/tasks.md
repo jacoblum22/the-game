@@ -143,7 +143,7 @@ no delivered contradiction of stored state.
 - [x] T107 [US3] Implement the separate safety screen (FR-036): the SAFETY part class handled first at T2 (12.5), and a code check of every draft against the player's lines and veils (12.5.6), in `engine/audit/safety.py`; not part of the Checker call
 - [x] T047 [US3] Implement write-on-mention (PR-00-7, 00.6.6): record each mention with only what the draft implies, settle unsettled properties via Oracle or tables, NPCs via PR-12-5, in `engine/dm/mentions.py`
 - [ ] T048 [US3] Implement the Narrator (B/D) and Checker (C) roles in `engine/dm/roles/narrator.py` and `engine/dm/roles/checker.py`; the Checker never sees the narrator's prompt or reasoning (FR-034)
-- [ ] T049 [US3] Implement OOF block rendering from state (12.15: OFFER, STATUS, WARNING, REDIRECT, CLARIFY, NEAR_MISS, LAST_CHANCE, RECAP, NOTE) in `engine/dm/oof.py`; fiction carries no numbers or rules words (12.14.4)
+- [x] T049 [US3] Implement OOF block rendering from state (12.15: OFFER, STATUS, WARNING, REDIRECT, CLARIFY, NEAR_MISS, LAST_CHANCE, RECAP, NOTE) in `engine/dm/oof.py`; fiction carries no numbers or rules words (12.14.4)
 - [ ] T050 [US3] Implement T7–T12 in `engine/dm/turn.py` (an OFFER pause with nothing resolved before it skips drafting and checking and delivers the restatement plus the OFFER block): draft, mention, check, ≤2 redrafts, fallback with `review_flag`, screen, deliver, record the `TurnRecord` (data-model.md §4), counters, scene cut marking
 - [ ] T051 [US3] Narration-pass tests with the offline model and injected bad drafts: contradiction → redraft to store, unsourced change → cut, two failures → fallback, in `tests/engine/test_turn_narration.py`
 
@@ -192,8 +192,8 @@ no delivered contradiction of stored state.
 - [ ] T109 [US1] Persist every pause as `pause_opened`/`pause_closed` and every seed and creation answer as `seed_answered`/`creation_answered` (data-model.md §2) so resume re-presents exactly what was open
 - [ ] T071 [US1] Implement resume (12.5 recap from the record, then whatever was open: a seed step, a creation step, an offer) and session close (PR-12-8) in `engine/dm/session.py`
 - [ ] T072 [US1] Implement the game API exactly as contracts/engine-api.md (`Game.new`, `Game.open`, `submit`, `answer`, `codex`, `new_character`, `turn_record`, `branch`, `spend`, `Game.replay`; `Response`, `Pause`, `OfferView`; errors) in `engine/game.py`; "There is no turn limit, scene limit or session limit anywhere in the API (FR-012)"
-- [ ] T073 [US1] Implement codex lookups (shown and available state only, 00.6.4; `rules <id>` prints the card; `journal` and `threads` from the chronicle and recorded knowledge) in `engine/dm/codex.py`
-- [ ] T108 [US1] Implement disputes and corrections (12.3.6, PR-12-4): `revert_writes` scoped to the current scene (DL-12-04) and a recorded correction, in `engine/dm/dispute.py`
+- [x] T073 [US1] Implement codex lookups (shown and available state only, 00.6.4; `rules <id>` prints the card; `journal` and `threads` from the chronicle and recorded knowledge) in `engine/dm/codex.py`
+- [x] T108 [US1] Implement disputes and corrections (12.3.6, PR-12-4): `revert_writes` scoped to the current scene (DL-12-04) and a recorded correction, in `engine/dm/dispute.py`
 
 ### Terminal front end
 
