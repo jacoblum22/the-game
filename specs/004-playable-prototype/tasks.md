@@ -39,7 +39,7 @@ pytest), at the repository root, as in plan.md "Project Structure". `src/` (the 
 - [x] T002 Add `pydantic>=2` and `PyYAML` to `requirements.txt` (keep `google-genai==2.25.0`); add `python-dotenv`-free `.env` loading (a 10-line reader in `engine/llm/env.py`, no new dependency)
 - [x] T003 [P] Create the package skeleton with `__init__.py` files per plan.md: `engine/{data,build,store,time,time/handlers,resolve,harm,abilities,gen,world,retrieve,audit,dm,dm/roles,llm}`, `play/`, `tests/{engine,golden,contract,replay,seeded_errors,fixtures}`, `evals/`
 - [x] T004 [P] Add `saves/` and `*.db` to `.gitignore`
-- [ ] T005 [P] Add `engine/ids.py`: typed id helpers (entity, fact, frame, scene, turn, event ids), monotone id generation from the event store's counter (no uuid randomness, so replays are identical)
+- [x] T005 [P] Add `engine/ids.py`: typed id helpers (entity, fact, frame, scene, turn, event ids), monotone id generation from the event store's counter (no uuid randomness, so replays are identical)
 
 ---
 
@@ -49,21 +49,21 @@ pytest), at the repository root, as in plan.md "Project Structure". `src/` (the 
 
 ### Rules data
 
-- [ ] T006 Implement `engine/data/loader.py`: load every `rules/data/*.yaml` once into typed, read-only structures keyed by id; follow `rules/data/SCHEMAS.md`; fail loudly on unknown ids and enums; expose `Rules` with accessors (`anchor(id)`, `table(id)`, `boundary_handlers()`, `resolution`, `oracles`, `harm`, `world_seed`, `gen_birth`, `origins`, `kits`, `licenses`, `abilities`, `conditions`, `pacing`, `social`, `last_chance`, `basic_verbs`, `attributes`, `archetypes`, `adversaries`)
-- [ ] T007 [P] Test that every data file loads and every cross-reference resolves in `tests/engine/test_data_loader.py`
+- [x] T006 Implement `engine/data/loader.py`: load every `rules/data/*.yaml` once into typed, read-only structures keyed by id; follow `rules/data/SCHEMAS.md`; fail loudly on unknown ids and enums; expose `Rules` with accessors (`anchor(id)`, `table(id)`, `boundary_handlers()`, `resolution`, `oracles`, `harm`, `world_seed`, `gen_birth`, `origins`, `kits`, `licenses`, `abilities`, `conditions`, `pacing`, `social`, `last_chance`, `basic_verbs`, `attributes`, `archetypes`, `adversaries`)
+- [x] T007 [P] Test that every data file loads and every cross-reference resolves in `tests/engine/test_data_loader.py`
 - [x] T008 Implement the card compiler `engine/build/compile_cards.py`: split the chapter files into rule cards per 00.15.2 (id, title, tags, [D]/[J] marks, "Loads in:" lines, body), write `engine/build/cards.json`, and record the rules tree hash so a rules change forces a rebuild; use `rules/tools/rq.py`'s parser rather than a new one where possible
 - [x] T009 [P] Implement `engine/build/coverage.py --milestone N`: list every rule id as implemented / coarse / deferred / model-judged from `# rule: <id>` tags in `engine/` and the milestone table in plan.md; print a summary, not a dump
 
 ### Store, RNG and time
 
-- [ ] T010 Implement `engine/store/db.py`: SQLite (WAL) schema exactly as data-model.md §1 (`events`, `rng_draws`, `turns`, `model_calls`, `snapshots`, `facts_idx`, `rulings_idx`, `branches`); `events` is append-only ("never updated or deleted"); a turn's events commit in one transaction; a `game_created` event stamps engine version, rules hash and milestone (FR-040)
-- [ ] T011 Implement `engine/store/events.py`: a Pydantic payload model for every event type in data-model.md §2; "an event that fails validation is never appended"
-- [ ] T012 Implement `engine/store/projection.py`: `WorldState` (data-model.md §3) built by pure reducers per event type; families not in M1 (tally, effect_instance, offer) are stubs that raise; snapshots at `scene_end` and on save; rebuild from events must equal the live projection
-- [ ] T013 Implement `engine/store/views.py`: `narrator`, `codex` and `audit` views (00.6.4, 00.6.5); sealed fields replaced by permitted slices in the narrator view (INV-10); `facts_idx` queries are bi-temporal (`valid_from_seq`/`valid_to_seq`)
-- [ ] T014 [P] Implement `engine/rng.py`: named `random.Random` streams seeded from the game seed; every draw logged to `rng_draws` with its purpose; `d(sides)`, `d100()`, `pick(table)` helpers
+- [x] T010 Implement `engine/store/db.py`: SQLite (WAL) schema exactly as data-model.md §1 (`events`, `rng_draws`, `turns`, `model_calls`, `snapshots`, `facts_idx`, `rulings_idx`, `branches`); `events` is append-only ("never updated or deleted"); a turn's events commit in one transaction; a `game_created` event stamps engine version, rules hash and milestone (FR-040)
+- [x] T011 Implement `engine/store/events.py`: a Pydantic payload model for every event type in data-model.md §2; "an event that fails validation is never appended"
+- [x] T012 Implement `engine/store/projection.py`: `WorldState` (data-model.md §3) built by pure reducers per event type; families not in M1 (tally, effect_instance, offer) are stubs that raise; snapshots at `scene_end` and on save; rebuild from events must equal the live projection
+- [x] T013 Implement `engine/store/views.py`: `narrator`, `codex` and `audit` views (00.6.4, 00.6.5); sealed fields replaced by permitted slices in the narrator view (INV-10); `facts_idx` queries are bi-temporal (`valid_from_seq`/`valid_to_seq`)
+- [x] T014 [P] Implement `engine/rng.py`: named `random.Random` streams seeded from the game seed; every draw logged to `rng_draws` with its purpose; `d(sides)`, `d100()`, `pick(table)` helpers
 - [ ] T015 Implement the time ladder and modes in `engine/time/clock.py` (00.7.1 timestamp, 00.7.3 modes) and `advance_time` / `mark_boundary` (PR-00-2) in `engine/time/scheduler.py`: phases and ordering from `rules/data/boundaries.yaml` (00.7.6), skipping time runs every crossed boundary (00.7.7), interrupts
 - [ ] T016 Implement the handler registry `engine/time/handlers/__init__.py`: handlers register by id; every id in `boundaries.yaml` that is not live for the current milestone logs `handler_skipped` with "not yet built" and the milestone that builds it (FR-026)
-- [ ] T017 [P] Implement clocks (PR-00-3) and conditions (PR-00-5, 00.9 stacking) in `engine/store/clocks.py` and `engine/store/conditions.py`
+- [x] T017 [P] Implement clocks (PR-00-3) and conditions (PR-00-5, 00.9 stacking) in `engine/store/clocks.py` and `engine/store/conditions.py`
 - [ ] T018 [P] Tests for the store, projection rebuild, views (no sealed field in the narrator view), RNG logging and scheduler ordering in `tests/engine/test_store.py`, `tests/engine/test_rng.py`, `tests/engine/test_scheduler.py`
 
 ### Retrieval
