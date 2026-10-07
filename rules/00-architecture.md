@@ -76,7 +76,7 @@ Rule IDs are `00.S.R`. Kinds follow 00.2.2. Every rule cites its basis. Digest s
 
 ### 00.1 Reading the ruleset
 
-**00.1.1 Audience map.** `[N]` The ruleset has three audiences, and every chapter marks which parts
+**00.1.1 Audience map.** `[N]` [DL-00A-24; DL-00A-22; C:P7; revision: I-065] The ruleset has three audiences, and every chapter marks which parts
 serve which.
 
 | Audience | Reads | Needs from the text | Never receives |
@@ -85,7 +85,7 @@ serve which.
 | **AI DM** (runtime) | The always-loaded core (00.15.4), rule cards retrieved per situation, data entries, active triggers, the ruling ledger | Closed choices with "true only when" definitions; examples on both sides of each boundary | Whole chapters at once; sealed state until unsealed |
 | **Implementer** (engine builder) | 00 (all), `data/SCHEMAS.md`, every chapter's *State touched* and *Tables* | Types, schemas, tool contracts, runtime capabilities | — |
 
-**00.1.2 How the chapters relate.** `[N]` 00 fixes form and interfaces. 01 is the adjudication
+**00.1.2 How the chapters relate.** `[N]` [R: rules/_process/BRIEF.md §A1; revision: I-065] 00 fixes form and interfaces. 01 is the adjudication
 pipeline every action passes through. 02–05 build the character (creation, evidence, recognition,
 abilities). 06–07 are conflict and harm. 08–09 are things and foes. 10, 15, 16 are the other pillars
 (exploration and travel; social, investigation and downtime; companions). 11 is the world that moves.
@@ -93,7 +93,7 @@ abilities). 06–07 are conflict and harm. 08–09 are things and foes. 10, 15, 
 14 is what the player sees. Dependencies run downward only through the contracts in 00.17; no chapter
 reaches into another chapter's state except through a named interface.
 
-**00.1.3 Reading order.** `[N]` Implementers and chapter authors: 00 → 01 → 12 → 03 → 04 → 05 → 06 →
+**00.1.3 Reading order.** `[N]` [DL-00A-33; revision: I-065] Implementers and chapter authors: 00 → 01 → 12 → 03 → 04 → 05 → 06 →
 07 → 02 → 08 → 09 → 10 → 15 → 16 → 11 → 13 → 14. Players: 14 → 13 (opening only) → the codex. The AI
 DM at runtime reads nothing in order; it receives the core (00.15.4) plus retrieved cards.
 
@@ -173,7 +173,7 @@ shown in the OFFER (03.1.5's worst case), while regrouping them would rename see
 They are an admitted exception to the ≤ ~8 guideline, tested by OEQ-00-1's level-2 stratum; no further
 level-2 child is added to them (PR-03-6 step 6) [revision: I-044; DL-00A-32].
 
-**00.2.3 The worst-case-cost requirement.** `[D]` A `[J:*]` rule without a written "Worst case:" line
+**00.2.3 The worst-case-cost requirement.** `[D]` [DL-00A-01; C:III; revision: I-065] A `[J:*]` rule without a written "Worst case:" line
 is incomplete and fails the Wave-4 audit. The line names the decision, the largest wrong outcome, and
 which P-B class (i–iv) bounds it. Example: *"Worst case: the DM picks Hard for a Moderate lock; the
 DC is 5 higher (one rung, class i); the OFFER shows the odds, so the player may change method."*
@@ -249,7 +249,7 @@ this ruleset's names; SG-21…SG-28 are added by this chapter.
 - **SG-28 Name the time.** Any duration, delay, or recurrence is expressed in a unit of the time
   ladder (00.7) or as a named boundary event; "a while", "soon", "later" are not durations.
 
-**00.2.5 The rule template.** `[N]` Every numbered rule in chapters 01–16 that contains a `[J:*]`
+**00.2.5 The rule template.** `[N]` [DL-00A-01; DL-INT-12; revision: I-065] Every numbered rule in chapters 01–16 that contains a `[J:*]`
 decision supplies the template's (J) fields; `[D]`, `[T]`, `[S]` and `[N]`-only rules may omit them. Fields map
 one-to-one to the rule-card record (00.15.2). **Two forms comply** [revision: I-001]: the **block** below, used
 where a rule is mainly a judgment (several decisions, examples worth a boundary pair); and the **inline form**,
@@ -335,7 +335,7 @@ that is acting; the other side contributes a static number.
 - Adversaries' attacks are therefore rolled by the engine for the adversary against the PC's defense.
   "The player rolls" is never a rule: the player *decides*; the engine rolls [resolves R3 §4 T-16].
 
-**00.3.4 Integers and rounding.** `[D]` All stored values are integers. The only fractional operation
+**00.3.4 Integers and rounding.** `[D]` [DL-00A-01; DL-00A-16; revision: I-065] All stored values are integers. The only fractional operation
 is the ×½ multiplier (00.10.4), rounded **down** at pass step E7. Clamps are applied at every write:
 a value never leaves its declared min/max. No percentage modifiers exist (SG-23).
 
@@ -451,7 +451,7 @@ includes a roll that met the DC but was stepped down by a natural 1 [BRIEF A2 #1
 C:P8; amended per DL-01-03]. The four degree ids are fixed by this chapter; everything that reads a degree
 (clocks, generators, costs, delivery) reads these ids.
 
-**00.3.11 The severity scale (S1–S5).** `[D]` + `[J:rung]` One five-rung scale measures every magnitude
+**00.3.11 The severity scale (S1–S5).** `[D]` + `[J:rung]` [DL-00A-11; DL-00A-29; revision: I-065] One five-rung scale measures every magnitude
 of *badness* in the game: harm, costs, stakes consequences, hazards, conditions, wounds, damage to
 factions. Its values are fixed here (T-00-3):
 
@@ -485,7 +485,7 @@ before modifiers and **never more than 6** after them. Focus is **not** derived 
 no attribute becomes a caster's god-stat) [DL-00A-09]. Chapter 05 owns pool growth, costs and every
 recovery channel (contract 05↔07, 00.17).
 
-**00.3.14 Stakes.** `[J:rung]` + `[J:flag]` Stakes answer "how bad can failure be?" and are declared in
+**00.3.14 Stakes.** `[J:rung]` + `[J:flag]` [DL-00A-11; DL-01-04; revision: I-065] Stakes answer "how bad can failure be?" and are declared in
 the frame before the roll [BRIEF A2 #2].
 
 | Rung | Anchor | Cost on failure | Examples (typical / boundary) |
@@ -583,7 +583,7 @@ conditions and abilities never change attributes**; they act through edge, statu
 This keeps P4's "mostly fixed at creation" and closes attribute arbitrage [C:P4; R1 §00.C; R2 §00].
 Non-PC entities range −5…+10.
 
-**00.4.4 Derived values (closed list).** `[D]` Each attribute feeds its own defense (00.3.8) and at
+**00.4.4 Derived values (closed list).** `[D]` [DL-00A-07; revision: I-065] Each attribute feeds its own defense (00.3.8) and at
 most the one derived value below. No other derivation from attributes is permitted.
 
 | Attribute | The one derived value it may feed | Owner |
@@ -659,7 +659,7 @@ every ancestor of X (evidence toward `deed.martial.archery.bow` counts toward `d
 depth go to the tag listed first in the entry [R3 §03.1]. (c) **Match semantics:** a pool entry or rule
 gated on tag G matches a source tagged S when G equals S or G is an ancestor of S.
 
-**00.5.5 Rules for adding tags.** `[D]` Changes to facets (level 0) and branches (level 1) require an
+**00.5.5 Rules for adding tags.** `[D]` [DL-00A-13; DL-00A-32; revision: I-065] Changes to facets (level 0) and branches (level 1) require an
 amendment to this chapter (DL-00A entry and orchestrator approval). Level-2 children listed in
 `data/tags.yaml` are append-only: 03 may add level-2 children with a DL-03 entry, may retire one only by
 `lifecycle: retired` plus `superseded_by`, and may never rename one. Level 3 and deeper are added by 03
@@ -714,7 +714,7 @@ value has a defined initial value and update rule [R2 §00].
 
 **Sealing** is not a separate type: any instance or field of any type may be sealed (00.6.5).
 
-**00.6.2 Canonical object shapes.** `[D]` The shapes below are the minimum fields every implementation
+**00.6.2 Canonical object shapes.** `[D]` [DL-00A-22; revision: I-065] The shapes below are the minimum fields every implementation
 and chapter uses; owning chapters add fields (never rename or remove these). Types: `id` strings are
 prefixed per 00.16.2; `tag[]` are `data/tags.yaml` ids; `time` is a timestamp (00.7.1).
 
@@ -925,7 +925,7 @@ now; properties it does not imply stay **undetermined** and are settled by the O
 *Worst case (J):* an atmospheric detail is recorded needlessly (harmless), or a relevant one is not (the
 claim-vs-state check in ch.12 catches the narrated-but-unrecorded element, class iv).
 
-**00.6.7 Assertion is not fact.** `[D]` A player's statement about the world is stored only as the
+**00.6.7 Assertion is not fact.** `[D]` [DL-00A-22; DL-00A-01; revision: I-065] A player's statement about the world is stored only as the
 beat's `assertion` context in the frame, never as a fact (SG-06). Facts come from exactly six sources:
 narration by the DM (recorded under 00.6.6), the Oracle, a generator, a ruling, data, or a player
 proposal the DM *accepts* as an Oracle "Certain" (the scene type implies it). *Invariant INV-9.*
@@ -1001,7 +1001,7 @@ Rest durations are fixed here because the time math depends on them; what rests 
 when it marks the boundary (07.8.1), so no handler depends on another's order to read it
 [amended: DL-07-11].
 
-**00.7.3 Time modes.** `[D]` + `[J:enum]` At every moment the game is in exactly one **time mode**,
+**00.7.3 Time modes.** `[D]` + `[J:enum]` [DL-00A-12; revision: I-065] At every moment the game is in exactly one **time mode**,
 which fixes how much time a beat consumes:
 
 | Mode | Time per beat | Typical situations |
@@ -1017,14 +1017,14 @@ uncertain → `free`). *Worst case (J):* a scene run in `free` that should have 
 intervals; the omission is bounded by the scene, and the site's own danger clock still ticks from
 costs (class i).
 
-**00.7.4 The boundary registry.** `[D]` Every chapter that needs something to happen at a boundary
+**00.7.4 The boundary registry.** `[D]` [DL-00A-12; DL-INT-08; revision: I-065] Every chapter that needs something to happen at a boundary
 registers a **handler** in `data/boundaries.yaml`: `{handler_id, boundary, phase, owner, effect,
 interrupting}`. No rule may say "at the end of each day, remember to…" without a registered handler
 (SG-11, SG-19). The registry's reserved handlers are listed in T-00-9 and seeded in the data file;
 owners define each handler's behavior in their own chapter, may add handlers in their own owner-block,
 and may not edit another owner's rows.
 
-**00.7.5 Phases within a boundary.** `[D]` When a boundary fires, its handlers run in this fixed phase
+**00.7.5 Phases within a boundary.** `[D]` [DL-00A-12; DL-INT-05; revision: I-065] When a boundary fires, its handlers run in this fixed phase
 order; within a phase, in registry order (by owner chapter number, then handler id), except that a
 handler may declare `before: [handler ids]` to run ahead of named handlers of the same phase
 (`h.07.rest_recovery` before `h.05.focus_recover` and `h.05.rest_recharge`) [amended: IR ch.07 #3].
@@ -1044,7 +1044,7 @@ one, never twice in its first interval [integration: I-023].
 | 8 | **growth** | evidence consolidation, recognition passes, provisional confirmations |
 | 9 | **record** | ledgers, chronicle, counters reset |
 
-**00.7.6 Order across simultaneous boundaries.** `[D]` When several boundaries fall at the same instant,
+**00.7.6 Order across simultaneous boundaries.** `[D]` [DL-00A-12; revision: I-065] When several boundaries fall at the same instant,
 event boundaries run first in this order: `conflict_end` → `scene_end` → rest completions →
 `reflection` → `venture_end`; then time boundaries from the smallest unit to the largest: `round` →
 `interval` → `hour` → `watch` → `day` → `week` → `season` → `year`. Each boundary runs all nine
@@ -1056,7 +1056,7 @@ if the time had been played [R5 §3.2 #4]. Skipping three weeks runs twenty-one 
 `week` boundaries (three World Turns), and everything else crossed. No handler may declare a shortcut
 unless its result is provably identical (it may then run in closed form). *Invariant INV-15.*
 
-**00.7.8 Interrupts.** `[D]` + `[T]` A handler marked `interrupting` (an encounter check that hits, a
+**00.7.8 Interrupts.** `[D]` + `[T]` [DL-00A-12; revision: I-065] A handler marked `interrupting` (an encounter check that hits, a
 clock completion that puts a threat on the scene, a random event that demands a response) raises an
 **interrupt**. The current boundary finishes its remaining phases, so bookkeeping stays consistent;
 then `advance_time` halts at that instant, returns the unconsumed remainder, and the DM frames a scene
@@ -1110,7 +1110,7 @@ the number the clock's source row states. The DM decides only *whether* a listed
 (`[J:flag]`, citing the frame or fact). *Worst case:* one source wrongly judged to fire = its listed
 ticks, logged with the frame id (class i or iv) [R4 §4.3 "clock" row].
 
-**00.8.3 Sizing.** `[J:rung]` When a rule creates a clock without a template size, the DM picks the
+**00.8.3 Sizing.** `[J:rung]` [DL-00A-20; revision: I-065] When a rule creates a clock without a template size, the DM picks the
 size from the ladder: **4** a simple obstacle or a scene's worth of effort; **6** complicated, several
 distinct steps; **8** daunting, needs sustained effort across scenes; **12** a long project across
 downtime. *Worst case (J):* one rung = 2–4 segments (class i). Templates in data fix sizes wherever
@@ -1134,13 +1134,13 @@ both, the clock ticked by the acting side's delivered reach completes first and 
 (success is delivered before its costs, R7 §4.3) [R: https://bladesinthedark.com/progress-clocks
 "racing clocks"; R3 §06.10].
 
-**00.8.6 Linked clocks and tug clocks.** `[D]` `links` fire in list order when their condition is met
+**00.8.6 Linked clocks and tug clocks.** `[D]` [DL-00A-20; revision: I-065] `links` fire in list order when their condition is met
 (`complete` or `reaches:n`) and may tick, create, void, or unlock. A `tug` clock may tick down as well as
 up; a tug clock that reaches 0 from above triggers any link declared `reaches:0`. Completion effects
 are a new causal root (depth 0, 00.10.8), so a clock completion may fire hooks, but a completion cannot
 recur without the clock being reset.
 
-**00.8.7 Clock procedure.** `[D]` See PR-00-3.
+**00.8.7 Clock procedure.** `[D]` [DL-00A-20; revision: I-065] See PR-00-3.
 
 ### 00.9 The condition schema
 
@@ -1185,7 +1185,7 @@ ConditionInstance:
   applied_at: time
 ```
 
-**00.9.2 The stacking vocabulary (closed).** `[D]` When a condition is applied to a target that already
+**00.9.2 The stacking vocabulary (closed).** `[D]` [DL-00A-21; revision: I-065] When a condition is applied to a target that already
 has it, exactly one of these rules applies, as declared by the condition:
 
 | Stacking | On reapplication | Example use |
@@ -1209,7 +1209,7 @@ fails after `immune_after`; conditions sharing a `diminishing.group` share one c
 [R3 §06.7; amended: DL-06-14]. (f) Every condition's mechanical effects are effect references in
 the substrate; a condition never carries prose-only mechanics (BRIEF §12).
 
-**00.9.4 Reserved condition ids.** `[D]` Ch.06 owns every condition's definition, but because
+**00.9.4 Reserved condition ids.** `[D]` [DL-00A-21; DL-06-12; revision: I-065] Ch.06 owns every condition's definition, but because
 chapters 05, 07, 08, 09, 10 and 16 reference conditions while being written in parallel, these ids are
 reserved now with their intent; ch.06 must define each (it may add more, and may not rename or drop
 these): `cond.off_balance`, `cond.prone`, `cond.grabbed`, `cond.restrained`, `cond.pinned`,
@@ -1349,7 +1349,7 @@ pairwise reasoning [R3 §00.6; Isaac's cache evaluation, R3 §2B]:
 
 The result and its full breakdown are stored in the frame (00.13) and shown in the OFFER.
 
-**00.10.5 Harm uses the pass twice.** `[D]` Harm is evaluated on the dealer's side (base severity →
+**00.10.5 Harm uses the pass twice.** `[D]` [DL-00A-16; DL-00A-29; revision: I-065] Harm is evaluated on the dealer's side (base severity →
 steps from delivered reach and effects → convert → harm_edge) and then on the receiver's side
 (reduction → multipliers for resistance and vulnerability by harm tag → clamp at 0 → round down),
 before ch.07 applies it to Vitality or wounds. A resistance or vulnerability always keys on a `harm.*`
@@ -1566,7 +1566,7 @@ ids, coverage, exclusions and attributes (T-00-11 summarizes).
 **Yield** (a Talk that surrenders on terms) and **Retreat** (a Move that withdraws from a conflict) are
 named uses of basic verbs that are always legal; ch.07 owns their outcomes [R6 §C.3 C-R4].
 
-**00.12.6 Free activities.** `[D]` These never roll and never need a license; they still consume time
+**00.12.6 Free activities.** `[D]` [DL-00A-19; revision: I-065] These never roll and never need a license; they still consume time
 per the time mode: wait; rest; eat and drink; sleep; speak a few words (not an attempt to persuade);
 draw, stow, drop, pick up or hand over an unattended item; look around casually (noticing without a
 check is ch.01's passive rule); recall your own memories and the character's established facts; ask the
@@ -1631,7 +1631,7 @@ Frame:
   ruling: ruling_id|null
 ```
 
-**00.13.2 Frame invariants.** `[D]` `roll_check` refuses a frame unless: the gate class is G1, G2 (or a
+**00.13.2 Frame invariants.** `[D]` [DL-00A-02; DL-00A-10; DL-00A-11; revision: I-065] `roll_check` refuses a frame unless: the gate class is G1, G2 (or a
 G3 fallback the player accepted) with the license or verb id present; every lever and snag cites an
 existing established fact; the stakes rung is set; `lethal` is legal (00.3.14); the offer choice is
 `commit`, or `auto` under the player's auto-commit preference (ch.14; never for a lethal frame). The
@@ -1647,7 +1647,7 @@ R: src/tools.py; R: src/world_state.py]: `roll_check`'s free `dc` and `modifier`
 (the frame computes them); `update_state`/`update_resource` become `update_quantity`; `set_fact` is
 typed; `grant_ability` becomes `generate` + `grant`.
 
-**00.14.1 Runtime capabilities.** `[D]` Each tool names the capabilities it implies:
+**00.14.1 Runtime capabilities.** `[D]` [DL-00A-23; revision: I-065] Each tool names the capabilities it implies:
 
 | Id | Capability |
 |---|---|
@@ -1662,7 +1662,7 @@ typed; `grant_ability` becomes `generate` + `grant`.
 | RC-RETRIEVE | rule-card retrieval by situation tags, anchors, and active triggers |
 | RC-AUDIT | claim-versus-state comparison over the store |
 
-**00.14.2 The tools.** `[D]` Inputs → outputs; the owner chapter defines semantics beyond the shape.
+**00.14.2 The tools.** `[D]` [DL-00A-23; revision: I-065] Inputs → outputs; the owner chapter defines semantics beyond the shape.
 
 | # | Tool | Inputs | Outputs | Owner | RC |
 |---|---|---|---|---|---|
@@ -1703,7 +1703,7 @@ typed; `grant_ability` becomes `generate` + `grant`.
 | 35 | `log_turn` | turn record {input verbatim, frames, writes, claim-check verdicts, narration} | turn id | 12 | LOG |
 | 36 | `revert_writes` | write ids, reason (only within the current scene; ch.12 error correction, DL-12-04) | reverted values, compensating log entries | 12 | STORE, LOG |
 
-**00.14.3 What the DM supplies to tools.** `[D]` Only: ids (of entities, facts, licenses, rules,
+**00.14.3 What the DM supplies to tools.** `[D]` [DL-00A-02; C:I; revision: I-065] Only: ids (of entities, facts, licenses, rules,
 clocks, tables), enum values from `data/`, rungs, flags, the player's stated quantities, and short
 text (intent, method, reasons, forms). Never a DC, modifier, harm amount, tick count, odds number,
 price or duration (SG-01). *Invariant INV-3.*
@@ -1715,7 +1715,7 @@ numbered rules packaged as **rule cards**, plus data entries, plus an **anchor i
 **ruling ledger**. It is never loaded wholesale: irrelevant-but-plausible rules degrade accuracy far
 more than neutral filler [BRIEF A3; R4 §3.3 W13; R: https://arxiv.org/abs/2412.08972].
 
-**00.15.2 Rule-card record.** `[D]` Each numbered rule compiles to one card (the markdown template of
+**00.15.2 Rule-card record.** `[D]` [DL-00A-24; revision: I-065] Each numbered rule compiles to one card (the markdown template of
 00.2.5 is its source):
 
 ```yaml
@@ -1738,7 +1738,7 @@ RuleCard:
   basis: [str]
 ```
 
-**00.15.3 The anchor index.** `[D]` Every card with an `anchor` block is entered into
+**00.15.3 The anchor index.** `[D]` [DL-00A-24; DL-12-16; revision: I-065] Every card with an `anchor` block is entered into
 `data/anchors.yaml` (compiled by ch.12 from the chapters' cards), keyed by intent verbs, deed tags and
 situation tags. At the ANCHOR step the DM chooses `[J:enum]` among the anchors the index returns for
 the beat's verb and tags (at most eight candidates; default: the anchor of the beat's basic verb).
@@ -1751,7 +1751,7 @@ trigger [R4 §9 00 #5; R4 §3.3 W12]. The packet is capped at the core plus **at
 cards, with the player's message verbatim and the **last four exchanges** verbatim; ch.12 owns these
 numbers (`pacing.yaml#packet`) [amended: DL-12-02].
 
-**00.15.5 Ruling ledger record.** `[D]`
+**00.15.5 Ruling ledger record.** `[D]` [DL-00A-24; C:III; revision: I-065]
 
 ```yaml
 RulingRecord:
@@ -1778,13 +1778,13 @@ failure case" that constitution III's revisit trigger requires [C:III].
 
 ### 00.16 Data-file conventions
 
-**00.16.1 Format.** `[D]` YAML, UTF-8, 2-space indentation. Every file opens with a comment block
+**00.16.1 Format.** `[D]` [R: rules/_process/BRIEF.md §12; revision: I-065] YAML, UTF-8, 2-space indentation. Every file opens with a comment block
 stating purpose, owning chapter, and the schema it follows (`data/SCHEMAS.md` section). Every file has
 a top-level `schema_version` and a list under a named key. Every entry has a stable snake_case `id`
 with its file's prefix, a human `name`, `tags` from `data/tags.yaml`, a `lifecycle`, and a `basis`
 citation [BRIEF §12].
 
-**00.16.2 Id prefixes.** `[D]` Ids are globally unique, and the prefix tells any reader which file
+**00.16.2 Id prefixes.** `[D]` [DL-INT-11; R: rules/_process/BRIEF.md §12; revision: I-065] Ids are globally unique, and the prefix tells any reader which file
 defines them: `attr` (attributes, bare ids), `verb.` basic verbs, `eff.` effects, `cond.` conditions,
 `aff.` afflictions, `inj.` injuries, `ab.` abilities, `rit.` rituals, `lic.` other licenses, `call.`
 callings, `hyb.` hybrids, `comp.` composites, `veh.` recognition vehicles, `orig.` origins, `bi.` base
@@ -1918,10 +1918,10 @@ retirement [C:VI; BRIEF A3 VI scope].
   never demoted: a fault found later is fixed by retirement and a successor, which starts provisional
   [revision: I-043; DL-00A-31].
 
-**00.16.4 Mechanics are data.** `[D]` Every entry with mechanics has them fully specified in data
+**00.16.4 Mechanics are data.** `[D]` [R: rules/_process/BRIEF.md §12; revision: I-065] Every entry with mechanics has them fully specified in data
 (numbers, triggers, recharge, effect references). Prose-only mechanics are a defect [BRIEF §12].
 
-**00.16.5 The files.** `[D]` T-00-19 lists every data file, its owner and its schema section in
+**00.16.5 The files.** `[D]` [DL-INT-01; R: rules/_process/BRIEF.md §12; revision: I-065] T-00-19 lists every data file, its owner and its schema section in
 `data/SCHEMAS.md`. A file owned by one chapter may be extended by another only through an owner-block
 (`blocks: [{owner: "07", entries: [...]}]`) where T-00-19 says so; otherwise additions go through
 Interface requests.
@@ -1961,7 +1961,7 @@ Addendum A and the digests' interface requests is decided here.
 | Q21 | P9 vs P14 | **06** resolves in its DL; the architecture constraint is INV-11: no build, calling or effect gains actions; cadence differences may live only in tempo, reactions, or what one action contains. |
 | Q22 | Reputation vs recognition | Recognition (capability) is 04's; reputation (what the world says) is 11's; ranks (seats in institutions) are 11's; losing a rank never removes capability [R6 §A.6 R-A5]. |
 
-**00.17.2 Contract table.** `[D]` "Provides" lists interfaces other chapters may call or read;
+**00.17.2 Contract table.** `[D]` [R: rules/_process/BRIEF.md §9, §A1; revision: I-065] "Provides" lists interfaces other chapters may call or read;
 "Consumes" lists what the chapter may rely on.
 
 | Ch. | Provides | Consumes |
@@ -2247,7 +2247,7 @@ chapter's rule is canonical) [amended: IR ch.02, 03, 04, 05, 06, 07, 08, 10, 11,
   group holding foes off as a tug clock (16.7.12). **protégé**: an ally who grows a calling, to tier 3
   (16.10.4). **knack** (companion): one of fifteen closed capabilities (16.4.7).
 
-**00.18.1 Banned words.** `[D]` T-00-22 lists terms that may not appear in rules text or data (they
+**00.18.1 Banned words.** `[D]` [DL-00A-01; revision: I-065] T-00-22 lists terms that may not appear in rules text or data (they
 imply mechanics this game does not have, or collide with a canonical term): *level* (of a character),
 *class* (use calling), *XP*, *HP / hit points* (Vitality), *mana, stamina* (Focus), *saving throw*
 (Endure/Evade check), *skill check* (check), *advantage / disadvantage* (lever / snag), *injury /

@@ -16,11 +16,11 @@ compiled_from:
 - file: data/basic_verbs.yaml
   sha256_16: 3188c5a7ebcfa419
 - file: 01-resolution.md
-  sha256_16: bcc543db5e3ec16f
+  sha256_16: 8429d7a56a2202a0
 - file: 02-character.md
-  sha256_16: e949e2f8de1453ee
+  sha256_16: bcdef683a413cc98
 - file: 03-tags-and-evidence.md
-  sha256_16: 580852b8f136abb5
+  sha256_16: 3ed3a48fd75615c6
 - file: 04-recognition-and-growth.md
   sha256_16: 16f08abb11de538e
 - file: 05-abilities-focus-magic.md

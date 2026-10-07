@@ -43,6 +43,7 @@ themselves change the status). Rule ids are grouped by chapter; the full text of
 
 | Chapter | Obligation | Requirement (short) | Satisfied by | Status |
 |---|---|---|---|---|
+| 00 | BRIEF §6 | Every rule cites its basis (`[C:]`, `[R]` or `[DL-]`) at card level | every rule card of 00 (113); 37 tagged at revision C6b, 00.1.3 by the new DL-00A-33; validator BASIS (DL-INT-13) | Satisfied |
 | 01 | BRIEF §4 lethality | Death telegraphed; no single unlucky roll kills | 01.6.9 (lethal flag), 01.7.1 item 5, 01.8.3, 01.13.2 (non-lethal harm), 01.16 | satisfied (with 07) |
 | 01 | BRIEF A2 #1 | AI chooses categories, never numbers | 01.1.4, 01.6.5, 01.15.2 | satisfied |
 | 01 | BRIEF A2 #2 | Stakes declared before the roll; OFFER | 01.6.9, 01.6.11, 01.7 | satisfied |
@@ -56,8 +57,11 @@ themselves change the status). Rule ids are grouped by chapter; the full text of
 | 01 | 00.17.1 Q6 | One Oracle mechanism (01) | 01.15 | satisfied |
 | 01 | 00.17.1 Q9 | fate 0–3; earn, spend, cap; 07 `spend_fate` | 01.16 | satisfied |
 | 01 | R5 RS-01…RS-19 (01 rows) | gate, when to roll, DCs, modifiers, degrees, costs, advantage-type (levers), opposed, extended, help, retry, secret rolls, fortune rolls, P17, compound, meta-currency, knowledge | 01.3, 01.4, 01.6, 01.8, 01.9, 01.13, 01.6.8, 01.14.5, 01.14.6, 01.14.8, 01.4.2, 01.4.7, 01.6.7, 01.10, 01.14, 01.16, 01.18.6 | satisfied (RS-14/15 shared with 12) |
+| 01 | BRIEF §6 | Every rule cites its basis (`[C:]`, `[R]` or `[DL-]`) at card level | every rule card of 01 (121); 61 tagged at revision C6b, 01.7.4 by the new DL-01-28; validator BASIS (DL-INT-13) | satisfied |
+| 02 | BRIEF §6 | Every rule cites its basis (`[C:]`, `[R]` or `[DL-]`) at card level | every rule card of 02 (60); 21 tagged at revision C6b; validator BASIS (DL-INT-13) | satisfied |
 | 03 | BRIEF §8 | Tag vocabulary content; `tag_event` capture mechanism | 03.1 + `data/tags.yaml`; 03.2–03.6 + `data/evidence.yaml` | resolved |
 | 03 | 00.17.2 (03 contract) | tags below level 2; `record_evidence` and full schema; significance; weighting; saturation; recency; counted hooks; `tally` | 03.1; 03.2; 03.3; 03.4; 03.5; 03.6; 03.7; 03.9.2 | satisfied |
+| 03 | BRIEF §6 | Every rule cites its basis (`[C:]`, `[R]` or `[DL-]`) at card level | every rule card of 03 (63); 22 tagged at revision C6b; validator BASIS (DL-INT-13) | satisfied |
 | 04 | BRIEF §4 | No diegetic System; recognition voiced by the fiction | 04.6 (V1–V14); 04.7.2 (one OOF marker); `vehicles.yaml#may_not_say` | satisfied |
 | 04 | BRIEF A2 #4 | Recognition = tally × witness × vehicle; accept / decline / defer | 04.3–04.4, 04.6.2, 04.7.1 | satisfied |
 | 04 | BRIEF A3 | Define confidence; VI at both scales | 04.4.2; 04.8.2 and data lifecycle | satisfied |

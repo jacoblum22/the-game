@@ -413,3 +413,8 @@ Resolved all 12 rows: I-038 (Oracle lever cap; sim shows +3.7 down to +0.8 per r
 - I-045 measured; its text fix moves to I-095 (ch.04/02).
 - New rows: I-095, I-096 (stale numbers in ch.12), I-097 (ch.13, wontfix candidate).
 - Appendix and anchors rebuilt after the merge; validator 0/0.
+
+## Revision C6b merged: `revision-C6b-report.md`
+- I-065, ch.00–03: 141 cards tagged, plus DL-00A-33 and DL-01-28. BASIS now covers 00–07 (699 cards, 0 untagged).
+- Remaining: ch.08–12 and 15–16, about 416 cards.
+- Added `_process/merge_ledger.py`, which resolves ledger merge conflicts row by row.

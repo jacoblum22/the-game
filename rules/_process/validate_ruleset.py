@@ -497,8 +497,8 @@ except Exception as e:  # an audit must never break validation
 # ====================================================================== 12. BASIS (revision I-065)
 # BRIEF §6 / 00.1.6: every rule card cites its basis at card level, `[C:…]`, `[R…]` or `[DL-…]` (basis_audit.py
 # defines a card and a tag). WARN per untagged card, in the chapters whose cards have been tagged so far.
-# EXTEND THIS LIST as later revisions tag more chapters (I-065 handoff: 00-03 and 08-16 remain; ch.13 is not edited).
-BASIS_CHAPTERS = ["04", "05", "06", "07"]
+# EXTEND THIS LIST as later revisions tag more chapters (I-065 handoff: 08-12 and 15-16 remain; ch.13 is not edited).
+BASIS_CHAPTERS = ["00", "01", "02", "03", "04", "05", "06", "07"]  # [revision: I-065] C6a 04-07, C6b 00-03
 try:
     sys.path.insert(0, HERE)
     import basis_audit
