@@ -92,6 +92,18 @@ def test_roll_table_recency_redraws_once(tmp_path: Path) -> None:
     assert s.state.table_recency["tbl.meaning_verb"] == [a.entry, b.entry]
 
 
+def test_roll_table_clamps_the_modified_total_to_a_row(tmp_path: Path) -> None:
+    """12.11.5: d10 + standing (-3..+3), clamped 1-10 (`modifier.clamp`), always lands on a row."""
+    s = Scene.new(tmp_path)
+
+    def roll(face: int, standing: int) -> int | None:
+        return roll_table("tbl.npc_action", {"standing_modifier": standing}, rules=s.rules, state=s.state,
+                          rng=FixedRng([face])).roll
+
+    assert roll(1, -3) == 1 and roll(2, -1) == 1 and roll(10, 3) == 10 and roll(9, 3) == 10 and roll(5, 2) == 7
+    assert roll(4, -3) == 1 and roll(8, 0) == 8
+
+
 def test_roll_table_dispatchers(tmp_path: Path) -> None:
     s = Scene.new(tmp_path)
     desc = roll_table("tbl.meaning", {"meaning_kind": "description"}, rules=s.rules, state=s.state,

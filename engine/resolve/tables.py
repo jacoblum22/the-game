@@ -3,6 +3,9 @@
     res = roll_table("tbl.meaning", {"meaning_kind": "action"}, rules=rules, state=tx.state, rng=rng)
     tx.add_all(res.events)          # table_rolled per table actually used (dispatcher and sub-tables)
 
+Modifiers (12.11.2): int context values whose key ends in `modifier` shift the roll (bounded by the table's
+`modifier.total_clamp`); the shifted total is clamped to `modifier.clamp` (e.g. tbl.npc_action's [1, 10]).
+
 Recency (12.6.7): a row drawn within the table's last `recency_window` draws (default 5) is re-drawn once; the
 second draw stands. Stage a result's events before rolling the same table again (recency is read from state).
 """
@@ -86,9 +89,19 @@ def _modifier(table: Mapping[str, Any], context: Mapping[str, Any]) -> int:  # r
     return mod
 
 
+def _clamp_total(table: Mapping[str, Any], total: int) -> int:  # rule: 12.11.5
+    """The modified total clamped to the table's `modifier.clamp` (tbl.npc_action: standing ±3 on a d10 lands in
+    [1, 10]), so it always lands on a row. `total_clamp` (the modifier's own bound) is applied in `_modifier`."""
+    mod = table.get("modifier")
+    clamp = mod.get("clamp") if isinstance(mod, Mapping) else None
+    if clamp:
+        total = max(int(clamp[0]), min(int(clamp[1]), total))
+    return total
+
+
 def _draw(table: Mapping[str, Any], context: Mapping[str, Any], rng: Rng, purpose: str) -> tuple[int, dict[str, Any]]:
-    roll = rng.roll_die(str(table["die"]), purpose, stream="tables", table_id=table.get("id")) + _modifier(table,
-                                                                                                            context)
+    face = rng.roll_die(str(table["die"]), purpose, stream="tables", table_id=table.get("id"))
+    roll = _clamp_total(table, face + _modifier(table, context))
     for row in table["results"]:
         lo, hi = _bounds(row["range"])
         if lo <= roll <= hi:

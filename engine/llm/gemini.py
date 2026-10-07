@@ -93,12 +93,13 @@ class GeminiModel:
         return self.models.get(role, DEFAULT_MODEL)
 
     def fill(
-        self, role: Role, schema: dict[str, Any], packet: Packet, *, turn_id: str | None, attempt: int
+        self, role: Role, schema: dict[str, Any], packet: Packet, *, turn_id: str | None, attempt: int,
+        seq: int = 0,
     ) -> CallResult:
         cfg = self.role_model(role)
         contents = packet.render(include_instructions=False)
         record = new_record(
-            role, schema, provider=self.provider, model_id=cfg.model, turn_id=turn_id, attempt=attempt,
+            role, schema, provider=self.provider, model_id=cfg.model, turn_id=turn_id, attempt=attempt, seq=seq,
             request={
                 "model": cfg.model, "thinking": cfg.thinking, "attempt": attempt,
                 "system_instruction": packet.instructions, "contents": contents, "schema": schema,

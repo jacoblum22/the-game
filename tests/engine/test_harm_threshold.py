@@ -18,10 +18,13 @@ from engine.harm.threshold import (
     ending_state,
     finish_last_stand,
     h_07_career_end,
+    menu_detail,
+    menu_from_detail,
     open_threshold,
     resolve_gamble,
     write_death,
 )
+from engine.store.db import Store
 from engine.store.events import Event
 from tests.engine.test_harm_support import FixedDice, ctx, make_game, next_beat, run, vit
 
@@ -117,6 +120,38 @@ def test_gamble(tmp_path, natural, result, ending):
         assert [c["id"] for c in g.choices] == ["lc.maimed", "lc.bargain"]
         run(store, choose, "pc.wren", op.menu, "lc.maimed", pause_id=g.pause_id, via_gamble=True)
         assert vit(store) == 4 and store.state.open_pause() is None
+
+
+def test_the_pause_stores_the_menu_and_choose_resolves_from_it(tmp_path):
+    """The menu shown (maim drawn, bargain, prices, Situation) is in the pause; a resumed game resolves from it."""
+    store = at_threshold(tmp_path)
+    op = run(store, open_threshold, "pc.wren", Situation(victor="foe.wight", maim_entry="inj.maim.lost_hand",
+                                                          rout_clock="clk.grudge"))
+    store.close()
+    store = Store.open(store.path)
+    pause = store.state.open_pause()
+    assert pause is not None and pause.detail["via_gamble"] is False
+    stored = menu_from_detail(pause)
+    assert stored == op.menu and menu_detail(stored) == pause.detail["menu"]
+    assert pause.detail["menu"]["situation"]["rout_clock"] == "clk.grudge"
+    ch = run(store, choose, "pc.wren", pause, "lc.maimed")  # pause id and menu from the pause
+    assert ch.option == "lc.maimed" and store.state.open_pause() is None
+    assert store.state.fact_value("pc.wren", "maims")[0]["entry"] == "inj.maim.lost_hand"
+    with pytest.raises(ValueError, match="no last-chance menu"):
+        menu_from_detail({"pc": "pc.wren"})
+
+
+def test_the_gamble_price_pause_resolves_from_its_stored_menu(tmp_path):
+    store = at_threshold(tmp_path)
+    op = run(store, open_threshold, "pc.wren", Situation(victor="foe.wight", maim_entry="inj.maim.lost_hand"))
+    run(store, choose, "pc.wren", op.menu, "lc.gamble", pause_id=op.pause_id)
+    g = run(store, resolve_gamble, "pc.wren", op.menu, rng=FixedDice(10))
+    pause = store.state.open_pause()
+    assert g.result == "choose" and pause is not None and pause.detail["via_gamble"] is True
+    with store.transaction() as tx, pytest.raises(ValueError, match="options 1-5"):
+        choose(ctx(tx), "pc.wren", pause, "lc.reprieve")
+    run(store, choose, "pc.wren", pause, "lc.bargain")
+    assert store.state.open_pause() is None and store.state.fact_value("pc.wren", "deaths_debt")
 
 
 def test_retire_mode_turns_death_into_the_road_ends(tmp_path):

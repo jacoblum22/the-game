@@ -1,4 +1,4 @@
-"""engine/llm/replay.py: recorded responses are served by (turn_id, role, attempt) with a schema-hash check."""
+"""engine/llm/replay.py: recorded responses are served by (turn_id, role, seq, attempt) with a schema-hash check."""
 
 from __future__ import annotations
 
@@ -16,9 +16,10 @@ from engine.llm.base import (
     Role,
     call_role,
     new_record,
+    schema_hash,
 )
 from engine.llm.offline import ScriptedModel
-from engine.llm.replay import ReplayAdapter, ReplayModel
+from engine.llm.replay import ReplayAdapter, ReplayModel, record_from_row
 
 SCHEMA: dict[str, Any] = {"type": "object", "properties": {"x": {"enum": ["a", "b"]}}, "required": ["x"]}
 
@@ -79,3 +80,30 @@ def test_latest_row_wins_for_a_retried_turn() -> None:
                                                                           "error": None}})
     replay = ReplayModel([first, second])
     assert replay.fill(Role.READER, SCHEMA, Packet(), turn_id="t1", attempt=0).data == {"x": "b"}
+
+
+def test_two_calls_of_a_role_in_one_turn_replay_apart(tmp_path: Any) -> None:
+    """Several Framer calls in one turn (beats, a "change") are told apart by seq, also through the store."""
+    from engine.dm.context import TurnContext
+    from tests.fixtures.game import new_store
+
+    store = new_store(tmp_path)
+    ctx = TurnContext.for_store(store, model=ScriptedModel(), rules=object())  # type: ignore[arg-type]
+    live = ScriptedModel({Role.FRAMER: [{"x": "a"}, {"x": "b"}, {"x": "a"}]}, fallback=False)
+    for _ in range(3):
+        call_role(live, Role.FRAMER, SCHEMA, Packet(), turn_id="turn.1", recorder=ctx.record_call)
+    assert ctx.call_ids == ["call.turn.1.framer.0.0", "call.turn.1.framer.1.0", "call.turn.1.framer.2.0"]
+    replay = ReplayModel.from_rows(store.model_calls())
+    again = TurnContext.for_store(store, model=replay, rules=object())  # type: ignore[arg-type]
+    got = [call_role(replay, Role.FRAMER, SCHEMA, Packet(), turn_id="turn.1", recorder=again.record_call).data["x"]
+           for _ in range(3)]
+    assert got == ["a", "b", "a"]
+
+
+def test_rows_without_seq_read_as_seq_zero() -> None:
+    old = {"row_id": 1, "call_id": "call.t1.reader.0", "turn_id": "t1", "role": "reader", "attempt": 0,
+           "provider": "gemini", "model_id": "m", "schema_hash": schema_hash(SCHEMA), "request": {},
+           "response": {"data": {"x": "a"}, "text": None, "error": None}, "outcome": "ok", "extra": None}
+    rec = record_from_row(old)
+    assert rec.seq == 0
+    assert ReplayModel([rec]).fill(Role.READER, SCHEMA, Packet(), turn_id="t1", attempt=0).data == {"x": "a"}

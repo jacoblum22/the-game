@@ -561,8 +561,8 @@ ROLE_HEURISTICS: dict[Role, Callable[[dict[str, Any], Packet], dict[str, Any]]] 
 
 
 def _result(provider: str, role: Role, schema: dict[str, Any], packet: Packet, data: Any,
-            turn_id: str | None, attempt: int, watch: Stopwatch) -> CallResult:
-    rec = new_record(role, schema, provider=provider, model_id=provider, turn_id=turn_id, attempt=attempt,
+            turn_id: str | None, attempt: int, watch: Stopwatch, seq: int = 0) -> CallResult:
+    rec = new_record(role, schema, provider=provider, model_id=provider, turn_id=turn_id, attempt=attempt, seq=seq,
                      request={"attempt": attempt, "packet": packet.render()})
     rec = rec.model_copy(update={"response": {"data": data, "text": None, "error": None}, "latency_ms": watch.ms()})
     return CallResult(data=data, record=rec)
@@ -577,11 +577,12 @@ class OfflineModel:
         return ROLE_HEURISTICS[role](schema, packet)
 
     def fill(
-        self, role: Role, schema: dict[str, Any], packet: Packet, *, turn_id: str | None, attempt: int
+        self, role: Role, schema: dict[str, Any], packet: Packet, *, turn_id: str | None, attempt: int,
+        seq: int = 0,
     ) -> CallResult:
         watch = Stopwatch()
         data = conform(self.propose(role, schema, packet), schema, schema)
-        return _result(self.provider, role, schema, packet, data, turn_id, attempt, watch)
+        return _result(self.provider, role, schema, packet, data, turn_id, attempt, watch, seq)
 
 
 class ScriptExhausted(ModelError):
@@ -605,7 +606,8 @@ class ScriptedModel:
         self.queues.setdefault(role, deque()).extend(responses)
 
     def fill(
-        self, role: Role, schema: dict[str, Any], packet: Packet, *, turn_id: str | None, attempt: int
+        self, role: Role, schema: dict[str, Any], packet: Packet, *, turn_id: str | None, attempt: int,
+        seq: int = 0,
     ) -> CallResult:
         self.calls.append((role, packet))
         watch = Stopwatch()
@@ -619,4 +621,4 @@ class ScriptedModel:
             if isinstance(item, BaseException):
                 raise item
             data = item(schema, packet) if callable(item) else item
-        return _result(self.provider, role, schema, packet, data, turn_id, attempt, watch)
+        return _result(self.provider, role, schema, packet, data, turn_id, attempt, watch, seq)

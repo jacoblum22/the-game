@@ -224,6 +224,40 @@ def test_empty_enum_drops_the_field(store: Store) -> None:
         assert d is None or validate(d, build_schema(role, ctx)) == []
 
 
+def test_framer_attribute_enum_follows_01_6_1_without_a_knob(store: Store) -> None:
+    """Most anchors have no attribute knob: the enum comes from the verb (01.6.1), the licence, or opens up."""
+    s = store.state
+
+    def attrs(anchor: str, **beat: Any) -> tuple[list[str], str | None]:
+        ctx = schema_context(s, RULES, anchors=[anchor], beat={"verb": None, "license": None, **beat})
+        node = build_schema(Role.FRAMER, ctx)["properties"]["attribute"]
+        d = defaults(Role.FRAMER, ctx)
+        assert d is not None and validate(d, build_schema(Role.FRAMER, ctx)) == []
+        return node["enum"], d["attribute"]
+
+    assert attrs("anc.01_18_8") == (["might", "agility"], "might")  # Strike: verb attribute + alt, no knob
+    assert attrs("anc.01_18_10") == (["might"], "might")  # Force: no alternative
+    assert attrs("anc.01_18_4")[0] == ["agility", "might", "endurance"]  # Move: the knob default first
+    assert set(attrs("anc.01_18_16")[0]) == set(RULES.attributes)  # Set up: by method
+    assert set(attrs("anc.02_9_4")[0]) == set(RULES.attributes)  # no verb, no knob: the method decides
+    assert attrs("anc.02_9_4", verb="verb.force") == (["might"], "might")  # ... else the beat's verb
+    assert attrs("anc.02_9_4", license="lic.training.lore_history") == (["intellect"], "intellect")
+
+
+def test_framer_costs_may_cite_a_scene_fact(store: Store) -> None:
+    s = store.state
+    framer = build_schema(Role.FRAMER, ctx_for(s, Role.FRAMER))["properties"]
+    src = framer["threatened_cost"]["properties"]["source_fact"]
+    assert src["type"] == ["string", "null"] and set(src["enum"]) == {"fact.1", "fact.2", None}
+    assert framer["alternate_cost"]["anyOf"][0]["properties"]["source_fact"] == src
+    assert "source_fact" in framer["threatened_cost"]["required"]
+    d = defaults(Role.FRAMER, ctx_for(s, Role.FRAMER))
+    assert d is not None and d["threatened_cost"]["source_fact"] is None
+    bare = schema_context(s, RULES, anchors=["anc.01_18_7"], cost_menu_ids=["cost.twist"])
+    bare.fact_ids = []
+    assert "source_fact" not in build_schema(Role.FRAMER, bare)["properties"]["threatened_cost"]["properties"]
+
+
 def test_defaults_follow_the_contract(store: Store) -> None:
     s = store.state
     reader = defaults(Role.READER, ctx_for(s, Role.READER))

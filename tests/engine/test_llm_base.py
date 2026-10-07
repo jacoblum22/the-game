@@ -8,6 +8,7 @@ import pytest
 
 from engine.llm.base import (
     CallResult,
+    CallSequence,
     ModelCallRecord,
     ModelInvalid,
     ModelRefused,
@@ -16,6 +17,7 @@ from engine.llm.base import (
     Role,
     call_role,
     new_record,
+    next_seq,
     schema_hash,
     validate,
 )
@@ -97,7 +99,10 @@ def test_record_has_model_calls_columns() -> None:
     assert cols <= set(ModelCallRecord.model_fields)
     rec = new_record(Role.READER, SCHEMA, provider="p", model_id="m", turn_id="t1", attempt=1)
     assert rec.schema_hash == schema_hash(SCHEMA) and rec.attempt == 1 and rec.outcome == Outcome.OK
-    assert rec.call_id == "call.t1.reader.1"  # deterministic: replays list the same call ids
+    assert rec.call_id == "call.t1.reader.0.1"  # deterministic: replays list the same call ids
+    assert rec.seq == 0 and new_record(Role.READER, SCHEMA, provider="p", model_id="m", turn_id=None, attempt=0,
+                                       seq=2).call_id == "call.pre.reader.2.0"
+    assert ModelCallRecord(role=Role.READER, provider="p", model_id="m", schema_hash="h").seq == 0  # old rows
 
 
 def _run(model: ScriptedModel, **kw: Any) -> tuple[CallResult, list[ModelCallRecord]]:
@@ -151,3 +156,31 @@ def test_refusal_is_recorded_and_raised() -> None:
     with pytest.raises(ModelRefused):
         call_role(model, Role.FRAMER, SCHEMA, Packet(), recorder=seen.append)
     assert [r.outcome for r in seen] == [Outcome.REFUSED]
+
+
+def test_call_role_numbers_calls_per_turn_and_role() -> None:
+    """Two calls of one role in a turn get seq 0 and 1 (distinct call ids); another role or turn starts at 0."""
+    seq = CallSequence()
+    seen: list[ModelCallRecord] = []
+
+    class Rec:
+        next_call_seq = seq.next_call_seq
+
+        def __call__(self, rec: ModelCallRecord) -> None:
+            seen.append(rec)
+
+    model = ScriptedModel({Role.FRAMER: [GOOD, {}, GOOD, GOOD], Role.READER: [GOOD]}, fallback=False)
+    rec = Rec()
+    call_role(model, Role.FRAMER, SCHEMA, Packet(), turn_id="t1", recorder=rec)
+    call_role(model, Role.FRAMER, SCHEMA, Packet(), turn_id="t1", recorder=rec)  # re-asked once
+    call_role(model, Role.READER, SCHEMA, Packet(), turn_id="t1", recorder=rec)
+    call_role(model, Role.FRAMER, SCHEMA, Packet(), turn_id="t2", recorder=rec)
+    assert [(r.turn_id, r.role.value, r.seq, r.attempt) for r in seen] == [
+        ("t1", "framer", 0, 0), ("t1", "framer", 1, 0), ("t1", "framer", 1, 1), ("t1", "reader", 0, 0),
+        ("t2", "framer", 0, 0)]
+    assert seen[1].call_id == "call.t1.framer.1.0" and len({r.call_id for r in seen}) == 5
+    # a bound-method recorder finds the sequence on its owner (TurnContext.record_call)
+    assert next_seq(Rec().__call__, "t1", Role.FRAMER) == 2 and next_seq(seen.append, "t1", Role.FRAMER) == 0
+    model.push(Role.READER, GOOD)
+    res = call_role(model, Role.READER, SCHEMA, Packet(), turn_id="t9", recorder=seen.append, seq=4)
+    assert res.record.seq == 4 and res.record.call_id == "call.t9.reader.4.0"

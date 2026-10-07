@@ -183,8 +183,10 @@ def reader_schema(ctx: SchemaContext) -> Schema:  # rule: 12.2.2
     })
 
 
-def _cost(menu: list[str]) -> Schema:
-    return obj({"menu_id": enum(menu), "form_intent": STR})
+def _cost(menu: list[str], facts: list[str]) -> Schema:
+    # 01.13.1 / lead decision (a): a cost may cite the scene fact that is its source (frame_check needs either
+    # the citation or a structural fit through state); dropped when the scene has no fact
+    return obj({"menu_id": enum(menu), "form_intent": STR, "source_fact": enum(facts, nullable=True)})
 
 
 def framer_schema(ctx: SchemaContext) -> Schema:  # rule: 01.5.1
@@ -208,8 +210,8 @@ def framer_schema(ctx: SchemaContext) -> Schema:  # rule: 01.5.1
         "lethal": BOOL,
         "reach_whole": BOOL,  # 01.6.10
         "reach_one_factor": BOOL,
-        "threatened_cost": _cost(ctx.cost_menu_ids),  # 01.6.11, 01.13.1
-        "alternate_cost": nullable(_cost(ctx.alternate_cost_menu_ids or ctx.cost_menu_ids)),
+        "threatened_cost": _cost(ctx.cost_menu_ids, facts),  # 01.6.11, 01.13.1
+        "alternate_cost": nullable(_cost(ctx.alternate_cost_menu_ids or ctx.cost_menu_ids, facts)),
         "method_consequences": STRS,
         "secret": BOOL,
     })
@@ -358,7 +360,7 @@ def _framer_default(ctx: SchemaContext) -> dict[str, Any]:
         "levers": [], "snags": [],
         "stakes_source": NONE, "stakes_heavy": False, "lethal": False,
         "reach_whole": ctx.reach_tie_whole, "reach_one_factor": ctx.reach_tie_one_factor,
-        "threatened_cost": {"menu_id": menu, "form_intent": ""},
+        "threatened_cost": {"menu_id": menu, "form_intent": "", "source_fact": None},
         "alternate_cost": None,
         "method_consequences": [], "secret": False,
     }
@@ -430,6 +432,54 @@ def _verb_attribute(anchor_id: str | None, rules: Any) -> str | None:
     return None
 
 
+def _attr_word(x: Any, known: Iterable[str]) -> str | None:
+    word = str(x or "").strip().lower().split(" (")[0].split(" ")[0]
+    return word if word in known else None
+
+
+def _attribute_options(anchor_ids: list[str], verb: str | None, licence: str | None, knob_attrs: list[str],
+                       rules: Any) -> tuple[list[str], str | None]:  # rule: 01.6.1
+    """(options, default) for the Framer's `attribute` enum, as frame_check (step 4) allows them: each candidate
+    anchor's attribute knob (default and deltas), its verb's `attribute` + `alt_attributes` (the anchor's verb,
+    else the beat's), and the licence's `attribute`. `by_method`/`by_license`, a licence with no fixed attribute,
+    or an anchor with no verb and no attribute knob open the list to every attribute (the method decides).
+    The default is the default anchor's knob default, else its verb's (or the beat's verb's) attribute."""
+    known = list(rules.attributes)
+    allowed: list[str] = []
+    open_ = bare = False
+    defaults: list[str | None] = []
+    for aid in anchor_ids or [None]:
+        a = rules.anchors.get(aid, {}) if aid else {}
+        v = a.get("verb") or verb
+        entry = rules.basic_verbs.get(v) if v else None
+        knob = next((k for k in a.get("knobs", []) if k.get("knob") == "attribute"), None)
+        if knob is not None:
+            defaults.append(_attr_word(knob.get("default"), known))
+        if entry is None:
+            bare = bare or knob is None
+            continue
+        words = [entry.get("attribute"), *[x.get("attribute") for x in entry.get("alt_attributes") or ()]]
+        for w in words:
+            if w in ("by_method", "by_license"):
+                open_ = True
+            elif (aw := _attr_word(w, known)) is not None:
+                allowed.append(aw)
+        defaults.append(_attr_word(words[0], known))
+    fixed = None
+    if licence:
+        la = (rules.licenses.get(licence) or {}).get("attribute")
+        if la in (None, "by_method"):
+            open_ = True
+        elif (fixed := _attr_word(la, known)) is not None:
+            allowed.append(fixed)
+            defaults.append(fixed)
+    open_ = open_ or (bare and fixed is None)
+    default = next((d for d in defaults if d), None)
+    options: list[str] = list(dict.fromkeys([*([default] if default else []), *knob_attrs, *allowed,
+                                             *(known if open_ else [])]))
+    return options or [str(a) for a in known], default
+
+
 def fitting_cost_menus(rules: Any, fact_ids: list[str]) -> tuple[list[str], list[str]]:  # rule: 01.13.1
     """(threatened, alternate) cost menu ids. Every entry but the twist needs an established source to cite
     (cost_selection: "each citing a fact id of its source"), so with no scene facts only the twist fits;
@@ -485,10 +535,14 @@ def schema_context(  # rule: 12.2.4
     pause = state.open_pause()
     anchor_ids = list(dict.fromkeys(anchors))
     verb = (beat.get("verb") if isinstance(beat, Mapping) else getattr(beat, "verb", None)) if beat else None
+    licence = (beat.get("license") if isinstance(beat, Mapping) else getattr(beat, "license", None)) if beat else None
     default_anchor = verb_anchor(verb, rules) if verb else None
     if default_anchor not in anchor_ids:
         default_anchor = anchor_ids[0] if anchor_ids else None
     ae = _anchor_enums(anchor_ids, rules)
+    ordered = [default_anchor, *[a for a in anchor_ids if a != default_anchor]] if default_anchor else anchor_ids
+    attributes, default_attribute = (_attribute_options(ordered, verb, licence, ae["attributes"], rules)
+                                     if anchor_ids else (ae["attributes"], None))
     threatened, alternate = fitting_cost_menus(rules, facts)
     if cost_menu_ids is not None:
         threatened = list(cost_menu_ids)
@@ -527,8 +581,8 @@ def schema_context(  # rule: 12.2.4
         default_anchor=default_anchor,
         knobs=ae["knobs"],
         deltas=ae["deltas"],
-        attributes=ae["attributes"],
-        default_attribute=_verb_attribute(default_anchor, rules),
+        attributes=attributes,
+        default_attribute=_verb_attribute(default_anchor, rules) or default_attribute,
         deed_tags=ae["deed_tags"],
         traits=list(res.get("traits", {})),
         dc_tiers=[t["id"] for t in res.get("dc_tiers", [])],

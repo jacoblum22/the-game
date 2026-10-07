@@ -29,21 +29,6 @@ NPC_TABLE = "tbl.npc_action"
 RESOLVED = ("resolved", "no_roll")
 
 
-class _ClampedDie:
-    """`tbl.npc_action`'s total is clamped to the die (`modifier.clamp` [1, 10]); `roll_table` reads only
-    `total_clamp`, so the draw is shifted here. TODO(engine/resolve/tables.py): honour `modifier.clamp`."""
-
-    def __init__(self, rng: Any, mod: int, lo: int, hi: int) -> None:
-        self.rng, self.mod, self.lo, self.hi = rng, mod, lo, hi
-
-    def roll_die(self, die: str, purpose: str, *, stream: str = "tables", table_id: str | None = None) -> int:
-        face = self.rng.roll_die(die, purpose, stream=stream, table_id=table_id)
-        return max(self.lo, min(self.hi, face + self.mod)) - self.mod
-
-    def __getattr__(self, name: str) -> Any:
-        return getattr(self.rng, name)
-
-
 def happened_text(record: AdjudicationRecord) -> str:
     """THIS MESSAGE for the World role: what just happened this turn, in words."""
     lines = [f"player: {p.text} ({p.cls})" for p in record.parts]
@@ -87,11 +72,8 @@ def npcs_respond(ctx: TurnContext, record: AdjudicationRecord, beats: Sequence[B
             st_value = standing(ctx.state, r.npc)
             if st_value is None:  # PR-12-5 step 3: the first interaction's reaction roll
                 st_value = first_interaction(tctx, r.npc)
-            table = ctx.rules.table(NPC_TABLE)
-            lo, hi = (table.get("modifier") or {}).get("clamp") or (1, 10)
             res = roll_table(NPC_TABLE, {"standing_modifier": int(st_value), "tags": r.tags}, rules=ctx.rules,
-                             state=ctx.state, rng=_ClampedDie(ctx.rng, int(st_value), int(lo), int(hi)),  # type: ignore[arg-type]
-                             purpose=f"npc action {r.npc} (12.11.5)")
+                             state=ctx.state, rng=ctx.rng, purpose=f"npc action {r.npc} (12.11.5)")
             tx.add_all(res.events)
             record.npc_actions.append(NpcActionEntry(npc=r.npc, action=str(res.entry), source="table_row",
                                                      source_ref=f"{NPC_TABLE}:{res.roll}", tags=r.tags))

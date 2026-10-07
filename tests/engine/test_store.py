@@ -214,6 +214,24 @@ def test_counter_ids_are_deterministic_and_never_reused_after_revert(cast: Store
         assert tx.mint("fact") == "fact.2"
 
 
+def test_beat_ids_are_unique_across_turns_and_survive_reopen(store: Store) -> None:
+    with store.transaction("turn.1") as tx:  # a beat that writes nothing (a refused or redirected beat)
+        assert tx.mint("beat") == "beat.1"
+    with store.transaction("turn.2") as tx:  # a beat whose events carry its id
+        b = tx.mint("beat")
+        tx.add(Event.of("meta_set", key="note", value=1, beat_id=b))
+    assert b == "beat.2" and store.state.counters["beat"] == 2 and store.rebuild() == store.state
+    reopened = Store.open(store.path)
+    with reopened.transaction("turn.3") as tx:
+        assert tx.mint("beat") == "beat.3"
+    with pytest.raises(RuntimeError), reopened.transaction("turn.4") as tx:  # a failed turn mints nothing
+        tx.mint("beat")
+        raise RuntimeError
+    with reopened.transaction("turn.5") as tx:
+        assert tx.mint("beat") == "beat.4"
+    reopened.close()
+
+
 def test_revert_outside_current_scene_is_rejected(cast: Store) -> None:
     with pytest.raises(Rejected, match="DL-12-04"):
         cast.append([Event.of("writes_reverted", reverted=[2], reason="too old")])

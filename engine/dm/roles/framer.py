@@ -8,13 +8,13 @@ step, then the rule's default frame applies (the basic verb's anchor, its defaul
 safe stakes, the first fitting cost by 01.13.1's order). A lethal claim refused only for want of a recorded lethal
 context passes the check: the pipeline then gives the lethal warning first (07.3.4).
 
-Schema seam (lead decision (a)): the cost objects get a nullable `source_fact` enum of the scene's fact ids, so a
-cost can cite its source; without one, `frame_check` needs the state to fit it structurally.
+Schema seam (lead decision (a)): `engine.dm.schemas.framer_schema` gives the cost objects a nullable `source_fact`
+enum of the scene's fact ids, so a cost can cite its source (without one, `frame_check` needs the state to fit it
+structurally), and builds the `attribute` enum per 01.6.1 (knobs, the verb's attributes, the licence's).
 """
 
 from __future__ import annotations
 
-import copy
 from typing import Any
 
 from engine import ids
@@ -34,50 +34,6 @@ from engine.store.projection import WorldState
 
 NONE = "none"
 Schema = dict[str, Any]
-
-
-def framer_schema_with_sources(schema: Schema, fact_ids: list[str]) -> Schema:  # rule: 01.13.1
-    """Add `source_fact` (nullable fact-id enum) to both cost objects; unchanged when there are no facts."""
-    if not fact_ids:
-        return schema
-    out = copy.deepcopy(schema)
-    node = {"type": ["string", "null"], "enum": [*dict.fromkeys(fact_ids), None]}
-    for key in ("threatened_cost", "alternate_cost"):
-        cost = out["properties"].get(key)
-        if cost is None:
-            continue
-        obj = next((o for o in cost.get("anyOf", []) if o.get("type") == "object"), cost)
-        obj["properties"]["source_fact"] = node
-        obj["required"] = [*obj["required"], "source_fact"]
-    return out
-
-
-def attribute_options(rules: Any, candidates: list[str], beat: Beat) -> list[str]:  # rule: 01.6.1
-    """Attributes the gated verb (and each candidate anchor's verb) allows, the beat's verb first; every attribute
-    when one of them is decided by the method. Most anchors carry no attribute knob, so the schema's enum, built
-    from knobs only, is empty for them (TODO(engine/dm/schemas.py): fall back to the verb's attribute there)."""
-    known = list(rules.attributes)
-    verbs = [beat.verb, *[rules.anchors.get(a, {}).get("verb") for a in candidates]]
-    out: list[str] = []
-    for v in dict.fromkeys(x for x in verbs if x):
-        entry = rules.basic_verbs.get(v) or {}
-        for a in [entry.get("attribute"), *[x.get("attribute") for x in entry.get("alt_attributes") or ()]]:
-            if a in ("by_method", "by_license"):
-                return list(dict.fromkeys([*out, *known]))
-            word = str(a or "").strip().lower().split(" (")[0]
-            if word in known:
-                out.append(word)
-    return list(dict.fromkeys(out)) or known
-
-
-def with_attributes(schema: Schema, options: list[str]) -> Schema:
-    """Make sure the schema offers `attribute` (an enum of `options` when the knob-built enum is empty)."""
-    if "attribute" in schema["properties"]:
-        return schema
-    out = copy.deepcopy(schema)
-    out["properties"]["attribute"] = {"type": "string", "enum": options}
-    out["required"] = [*out["required"], "attribute"]
-    return out
 
 
 def obstacle_id(beat: Beat) -> str:
@@ -149,8 +105,7 @@ def framer_for(ctx: TurnContext) -> Any:
         # rule: 01.5.1
         st = ctx.state
         sctx = schema_context(st, ctx.rules, anchors=candidates, beat=beat, message=beat.intent)
-        schema = framer_schema_with_sources(build_schema(Role.FRAMER, sctx), sctx.fact_ids)
-        schema = with_attributes(schema, attribute_options(ctx.rules, candidates, beat))
+        schema = build_schema(Role.FRAMER, sctx)  # cost `source_fact` and the 01.6.1 `attribute` enum included
         triggers = get_active_triggers(st, ctx.rules)
         mode = st.scene.mode if st.scene else None
         cards = load_cards_for(Role.FRAMER, scene_situation_tags(st, ctx.rules), mode, triggers,

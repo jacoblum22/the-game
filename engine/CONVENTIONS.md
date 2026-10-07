@@ -23,6 +23,9 @@ foundation worker; other workers append a short section with their module's publ
   `RULING` rul, `PAUSE` pause, `BEAT` beat. Counters live in `WorldState.counters` and are advanced by the
   reducers from the ids an event *creates* (`Payload.creates`), so a replay mints the same ids and a reverted
   event's ids are never minted again. Turn ids: `store.new_turn_id()`. Event ids are the event `seq` (int).
+  Beat ids (minted by the Reader, created by no payload): the event column `beat_id` advances the `beat`
+  counter, and the store keeps the high-water mark of mint-only prefixes (`db.MINT_ONLY` = beat; table `minted`,
+  committed with the transaction), so a beat that writes nothing still never repeats, also after a reopen.
 
 ## Rules data (`engine/data/loader.py`)
 - `rules = load_rules()` -> `Rules` (once per process; YAML parsed once per rules version and pickled to
@@ -105,12 +108,17 @@ Contract: `specs/004-playable-prototype/contracts/model-calls.md`. Nothing in `e
   (ok, invalid_reasked, defaulted, refused, error); `RoleModel(provider, model, thinking)` = one
   `GameConfig.models` entry; `Packet(instructions, core, cards: list[str], view, exchanges: list[str], message)`
   with `.render()` (stable sections first; the player's message is always `packet.message`);
-  `ModelCallRecord` = a `model_calls` row (columns of data-model.md §1 **plus `attempt: int`**, the replay key).
+  `ModelCallRecord` = a `model_calls` row (columns of data-model.md §1 **plus `seq: int` and `attempt: int`**;
+  the replay key is (turn_id, role, seq, attempt); `seq` is stored in `extra`, absent = 0).
   `request`/`response` are JSON dicts; `response = {"data": parsed|None, "text": raw|None, "error": str|None}`.
   `tokens_in` is UNCACHED input; `tokens_in_cached` separate; thinking billed as output. `call_id` is
-  deterministic `call.<turn_id|pre>.<role>.<attempt>` (not unique across a retried turn: latest row wins).
+  deterministic `call.<turn_id|pre>.<role>.<seq>.<attempt>`; `seq` = this role's call number in the turn (0, 1,
+  2 …: several Framer beats, a "change", a redraft). `call_role` takes it from the recorder's `next_call_seq(
+  turn_id, role)` (the recorder or, for a bound method, its owner: `TurnContext.record_call` → the context's
+  `CallSequence`), else 0; pass `seq=` to force one. Always pass `recorder=ctx.record_call` in a turn.
 - The one entry point for a role call:
-  `call_role(model, role, schema, packet, *, turn_id=None, recorder=None, default=None, check=None) -> CallResult`
+  `call_role(model, role, schema, packet, *, turn_id=None, recorder=None, default=None, check=None, seq=None)
+  -> CallResult`
   → `CallResult(data: dict, record, attempts, defaulted)`. Validates against `schema`, re-asks once naming
   the failure, then `default` (dict or zero-arg callable) else raises `ModelInvalid`. `check(data) -> list[str]`
   adds caller-side failures (counted like schema failures). `recorder(rec)` gets EVERY call (also refused/
@@ -124,7 +132,8 @@ Contract: `specs/004-playable-prototype/contracts/model-calls.md`. Nothing in `e
 - Models (all implement `StructuredModel.fill(role, schema, packet, *, turn_id, attempt) -> CallResult`,
   unvalidated): `engine.llm.gemini.GeminiModel(models: dict[Role, RoleModel] | None, *, client=None, ...)`
   (raises `MissingKey` at construction with no key; tests inject a fake `client`);
-  `engine.llm.replay.ReplayModel(records)` (alias `ReplayAdapter`);
+  `engine.llm.replay.ReplayModel(records)` (alias `ReplayAdapter`; `ReplayModel.from_rows(store.model_calls())`,
+  `record_from_row(row)`); `fill(..., turn_id, attempt, seq=0)` on every model;
   `engine.llm.offline.OfflineModel()`; `engine.llm.offline.ScriptedModel({Role: [data | Exception |
   callable(schema, packet)]}, fallback=True)` with `.push(role, *items)` and `.calls`.
 - Offline hints the DM layer can put in the packet: Director cuts when the packet contains
@@ -226,6 +235,12 @@ Contract: `specs/004-playable-prototype/contracts/model-calls.md`. Nothing in `e
   ids are `<npc>/want.<n>` and `<npc>/refusal.<n>` (1-based, index into the NPC's `data.wants`/`refusals`),
   one enum across NPCs (check ownership in a `check=`). `push` exists only when `push_raised`, `lead` only
   when `lead_fires`. Cost menus: with no scene fact only `cost.twist` fits; `cost.shortfall` is alternate-only.
+  Framer: both cost objects carry `source_fact` (nullable enum of the scene fact ids; dropped with no fact).
+  `attribute` (01.6.1, as frame_check step 4 allows): the default first (the default anchor's attribute knob,
+  else its verb's / the beat's verb's `attribute`, else the beat licence's), then knob deltas, the verbs'
+  `alt_attributes`, the licence's attribute; every attribute when a verb is `by_method`/`by_license`, the
+  licence has none fixed, or an anchor has neither verb nor knob. `schema_context` reads `beat.verb` and
+  `beat.license`.
 
 ## engine/resolve API (T028–T037; the `[D]` steps of PR-01-1)
 Records in `engine.resolve.types`: `Beat` (Reader beat + gate proposal: gate, verb, license, mode, method_class,
@@ -271,8 +286,9 @@ with predicate `lethal_context` (truthy), on any subject, recorded before the de
   `meta_set oracle.free_cap_hit.<scene>`. `shape_for(rules, rung, d100)`.
 - `tables.roll_table(table_id, context, *, rules, state, rng, purpose=None) -> TableResult(entry, words, roll,
   sub, redrawn, events)`: dispatch rows by context (`meaning_kind`, `severity`), `*modifier` ints shift the
-  roll, recency re-draws once (window `recency_window`, default 5). Stage `events` before rolling the same
-  table again.
+  roll (bounded by `modifier.total_clamp`), the total is clamped to `modifier.clamp` (tbl.npc_action: [1, 10],
+  so `roll` is the clamped total), recency re-draws once (window `recency_window`, default 5). Stage `events`
+  before rolling the same table again.
 - `rulings.signature(anchor_id, deltas)`, `gate_signature`, `oracle_signature`, `find_rulings(store, sig,
   staged=())`, `precedent_for(found, differing_fact=None)`, `log_ruling(RulingRecord, mint, store=, staged=)
   -> Event` (skips an id already used: `ruling_logged` does not advance the `rul` counter).
@@ -311,10 +327,20 @@ stages them. Pass `writes=Writes(...)` to compose several calls in one overlay (
   parting_blow, words)`, `commit_retreat(ctx, pc, off, choice)`; `run_disposition` (PR-07-7, coarse in M1).
 - `threshold.py`: `open_threshold(ctx, pc, Situation(victor, bargainer, route, rout_clock, strikes, ...)) ->
   ThresholdOpen(events, menu, pause_id, text)` (pause kind `last_chance`, no default); `choose(ctx, pc, menu,
-  option_id, pause_id=) -> Choice(events, gamble_offer, last_stand, advance_time, ending)`; `resolve_gamble(ctx,
-  pc, menu, natural=None)`; `finish_last_stand`; `confirm_voluntary_last_stand`; `write_death` (refuses with
+  option_id, pause_id=, via_gamble=None) -> Choice(events, gamble_offer, last_stand, advance_time, ending)`;
+  `menu` may be the `Menu`, the open `last_chance` PauseRecord, or its detail: the stored menu is used, and the
+  pause id / `via_gamble` come from the pause (resolve a pick with `choose(hctx, pc, pause, choice_id)`; never
+  rebuild the menu from state). `resolve_gamble(ctx, pc, menu, natural=None)`; `finish_last_stand`; `confirm_voluntary_last_stand`; `write_death` (refuses with
   `DeathRefused` unless both keys hold; `meta pref.death.mode = retire` -> retirement); `ending_state(state,
   pc=None) -> None|"death"|"retirement"|"career_end"` (pc: `meta pc.active`, else the newest PC).
+- **`last_chance` pause detail** (both pauses: the Threshold's and the Gamble's near-fail "choose a price"):
+  `{"pc", "via_gamble": bool, "menu": {"pc", "situation": {victor, source_kind, bargainer, bargain_ask, route,
+  companion_can_carry, rout_clock, maim_entry, strikes {option id: fact id}}, "options": [{id, name, order,
+  available, reason, price, death, struck_by}] (every option in the rules' order, offered or not), "fate_cost",
+  "maim": {entry, name, attribute, text}|null, "bargain": {bargainer, ask}|null, "gamble": {free, live, choose,
+  death} (percent), "refused_strikes": [option id]}}`. The Threshold's pause also keeps the flat keys `fate_cost,
+  maim, bargain, gamble, victor, struck`. The choices (`{id, label}`) are the offered options (the Gamble's:
+  options 1-5). `menu_detail(menu)` / `menu_from_detail(pause | detail)` convert.
 - `rest.py`: `rest_refusal(state, rules, pc, kind)`, `rest_duration(rules, kind)`, `best_quality`,
   `rest_quality(kind, site=, interruptions=, lost_intervals=, sleep_hours=, caps=)`, `rest_payload(kind,
   quality, site, treated=False, resters=None)` for `mark_boundary`; `rest_site`/`record_rest_site`; `treat(ctx,
@@ -461,7 +487,7 @@ readers take a `WorldState`. Errors: `engine.world.common.WorldError`. The PC is
 - **Context** (`engine.dm.context.TurnContext`): `TurnContext.for_store(store, model=, rules=None, rng=None,
   config={}, recorder=None)`; fields `store, rules, rng, model, recorder (default store.record_model_call), config
   (GameConfig dict: oracle_free_cap_per_scene, auto_commit), milestone, tx (open only during a turn), dispute
-  (12.3.6 hook), call_ids`. `ctx.state` (working state in a turn), `ctx.mint`, `ctx.time_ctx()`,
+  (12.3.6 hook), call_ids, call_seq (CallSequence; `ctx.next_call_seq(turn_id, role)`)`. `ctx.state` (working state in a turn), `ctx.mint`, `ctx.time_ctx()`,
   `ctx.record_call` (pass as every role call's `recorder`), `ctx.auto_commit()` (meta `auto_commit`, else config).
 - **Turn** (`engine.dm.turn`): `run_turn(ctx, message) -> AdjudicationResult`; `answer_pause(ctx, choice_id)` (a
   pick from the API; no Reader call; ValueError for a choice not on the open pause). `AdjudicationResult(turn_id,
@@ -491,7 +517,7 @@ readers take a `WorldState`. Errors: `engine.world.common.WorldError`. The PC is
   pending_answer, fact_questions, beats, clarifying_question, restatement, player_quantity, defaulted)`,
   `.plans(actor=, declared_seq=, mint=)`; `framer.framer_for(ctx) -> FramerFn` (its `check=` runs `frame_check`,
   so a refusal is re-asked once naming the step, then the default frame: first fitting cost by 01.13.1's order;
-  the schema gains `source_fact` on costs and an `attribute` enum from the verbs when the knobs give none);
+  `engine.dm.schemas` builds the cost `source_fact` and the 01.6.1 `attribute` enum);
   `world.npc_responses(ctx, happened) -> [WorldResponse(npc, want_engaged, refusal_engaged, tags)]`,
   `world.world_view(state)` (narrator view + present NPCs' standing, wants and refusals), `npc_motives`.
 - **World step** (`engine.dm.world_step.world_step(ctx, record, beats=)`): NPCs (talk outcome → refusal → want →
@@ -532,3 +558,44 @@ readers take a `WorldState`. Errors: `engine.world.common.WorldError`. The PC is
   ruling_stands, ruling_error. Every correction appends meta `corrections` (12.3.4 step 4 record) and logs a
   `ruling_logged` (`kind rule_conflict`, `review_flag: true`); a rewind also appends meta `rolls_voided`. Writes go
   to `ctx.tx` when open, else a one-shot transaction.
+
+## engine/dm seed + creation API (T063, T064, T109)
+- **Responses** (`engine.dm.response`): `Response(turn_id, phase seed|creation|play|ending, fiction, oof_blocks
+  [OofBlock(kind, text)], pause: Pause | None, scene_ended, budget_notice, flags)`, `Pause(kind, prompt, choices
+  [Choice(id, label)], default_choice, frame_summary, pause_id)`, `Pause.of(PauseRecord)`, `resp.text()`. OofKind adds
+  SHEET and RULES (PR-02-6/PR-02-7). Contract-compatible with engine-api.md.
+- **Interpret** (`engine.dm.roles.interpret`): `interpret(ctx, message, *, choices, block, classes=(),
+  lines_and_veils=False, cards=("12.16.2",), exchanges=(), multi=False) -> InterpretResult(choice, own_words_class,
+  own_words_text, lines_and_veils, picks, direct, defaulted)`. `direct_choice(message, choices, multi=)` maps a
+  number, lone letter, option id or exact label (and "skip"/"" → `move_on`) without a model call.
+- **Pauses for any flow** (`engine.dm.seed_flow`): `flow_tx(ctx)` (one transaction per answer; sets `ctx.tx`),
+  `open_pause(tx, kind, prompt, choices, default, detail, rule) -> PauseRecord` (`pause_opened`; `detail["blocks"]`
+  = the blocks shown with it, `detail["flow"]` = seed|creation), `close_pause(tx, rec, choice, by, words)`,
+  `present_pause(rec, phase, extra=None) -> Response` (resume re-presents exactly the stored blocks + pause),
+  `flow_of(state) -> "seed" | "creation" | None` (which flow owns the open pause: route `submit`/`answer` by it).
+- **Seed** (`SeedFlow(ctx)`): `.start()` (mode question; or re-presents), `.present()`, `.submit(text)`,
+  `.answer(choice_id)` (also `move_on`, `details`, `suggest`), `.seed() -> WorldSeed`. Mixed mode asks which
+  questions (multi-pick by numbers), then each picked question; every step's `[SEED n/14]` summary is a pause
+  `keep` / `veto:<question>` (or `veto` for a step without questions) when it rolled something, else shown and
+  passed. `rebuild_seed(state)` replays `seed_answered` ops (`ws.mode`, `ws.pick`, `ws.q.*` with choice None =
+  handed to the oracle, `ws.step.<n>`, `ws.veto.<n>`, `ws.check`; `ws.ran.<n>` records what a step rolled). After
+  the check: `write_world(tx, world)` = `engine.world.places.seed_world_into_store` + meta `world.seed`,
+  `world.tongues`, `world.pregens`, `world.opening`, `world.canon_impossible`, `world.keepers`; then creation
+  opens in the same transaction. Meta `game.phase`: seed → creation → play.
+- **Creation** (`engine.dm.creation`): `CreationFlow(ctx)`: `.begin(new=False)`, `.present()`, `.submit(text)`,
+  `.answer(choice_id)`, `.draft() -> Draft`; `open_creation(ctx, blocks)` (inside an open tx); `new_character(ctx)`
+  (closes an open non-creation pause, e.g. the ending menu, with `new_character`). Blocks (`creation_answered.block`):
+  `c0` (+ `c0.taste`, `c0.limits`), `c1`, `c2.people`, `c2.rule`, `c3`..`c7`, `c8.drive|anchor|aspiration|true_thing`,
+  `c9.name` ({name, pronouns}), `c9.pronouns`, `rm.pick`, `rm.name`; markers `start`, `birth`, `names`, `change`,
+  `ready`. Pure helpers: `fold(state) -> Draft`, `sequence`, `build_record(draft, state, rules)`, `apply_birth`,
+  `validate`, `sheet`, `default_placement`, `parse_name`, `parse_limits`, `parse_taste`, `suggest_names`.
+- **The written PC** (on "begin"): entity `pc.<name>` data {attributes (7, incl. endurance), abilities, competence
+  {tag: 2}, pronouns, people, upbringing, livelihood, rule, profile, deep, access}; quantities vitality (12 +
+  Endurance), fate 1/3, dread 0/(8 + Resolve), coin, focus (`define_focus`, base = upbringing's focus_base);
+  licences (lic.focus.push, trainings, tongues with grades); kit items as `item.*` entities + fact `carries` [ids];
+  facts origin.people|upbringing|livelihood|rule, drive (commitment), bond.anchor, aspiration, true_thing,
+  birth.knack|quirk|gift, birth.account, hooks; relationship to a pregen's anchor NPC; position at
+  `world.opening.start.place`; meta `pc.active`, `pc.creation` and `<pc>.creation` {path, choices{block: {value,
+  default}}, birth, open_slots, window "open", bent (BentState), manner}. Lines/veils: `pref.safety.lines|veils`
+  facts (subject `player` if that entity exists, else `world`) via `engine.audit.safety.safety_fact`; plus
+  `pref.lethality.acknowledged` on `world` when creation's opening (which states it) is answered.

@@ -16,7 +16,7 @@ from dataclasses import dataclass, field
 from typing import Any, Protocol
 
 from engine.data.loader import Rules, load_rules
-from engine.llm.base import ModelCallRecord, StructuredModel
+from engine.llm.base import CallSequence, ModelCallRecord, Role, StructuredModel
 from engine.rng import Rng
 from engine.store.db import Store, Transaction
 from engine.store.projection import WorldState
@@ -43,6 +43,7 @@ class TurnContext:
     tx: Transaction | None = None
     dispute: DisputeHandler | None = None  # TODO(engine/audit dispute handling, 12.3.6): default in turn.py
     call_ids: list[str] = field(default_factory=list)  # model calls made this turn (TurnRecord.model_calls)
+    call_seq: CallSequence = field(default_factory=CallSequence)  # per (turn, role) call numbers (replay key)
 
     @classmethod
     def for_store(cls, store: Store, *, model: StructuredModel, rules: Rules | None = None, rng: Rng | None = None,
@@ -68,6 +69,10 @@ class TurnContext:
 
     def time_ctx(self) -> TimeContext:
         return TimeContext(self.need_tx(), self.rules, self.rng, milestone=self.milestone)
+
+    def next_call_seq(self, turn_id: str | None, role: Role | str) -> int:
+        """call_role finds this through `recorder=ctx.record_call`: the role's call number in the turn."""
+        return self.call_seq.next_call_seq(turn_id, role)
 
     def record_call(self, rec: ModelCallRecord) -> None:
         """The recorder every role call uses: logs the call and keeps its id for the turn record."""

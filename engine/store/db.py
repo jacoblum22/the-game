@@ -70,12 +70,18 @@ CREATE INDEX IF NOT EXISTS facts_id ON facts_idx(fact_id);
 CREATE TABLE IF NOT EXISTS rulings_idx (signature TEXT NOT NULL, ruling_id TEXT NOT NULL, event_seq INTEGER NOT NULL);
 CREATE INDEX IF NOT EXISTS rulings_sig ON rulings_idx(signature);
 CREATE TABLE IF NOT EXISTS branches (branch_id TEXT PRIMARY KEY, parent_id TEXT, fork_seq INTEGER);
+CREATE TABLE IF NOT EXISTS minted (prefix TEXT PRIMARY KEY, n INTEGER NOT NULL);
 """
 
 MODEL_CALL_COLUMNS = ("call_id", "turn_id", "role", "attempt", "provider", "model_id", "schema_hash", "request",
                       "response", "tokens_in_cached", "tokens_in", "tokens_out", "tokens_thinking", "cost_usd",
                       "latency_ms", "outcome")
 _JSON_COLUMNS = ("request", "response")
+
+# Counter prefixes no event creates (a beat id is minted by the Reader and only stamped on events as their
+# `beat_id`; a beat that writes nothing leaves no trace). The store keeps their high-water mark in `minted`,
+# committed with the transaction, so they are unique across turns and survive a reopen.
+MINT_ONLY = (ids.BEAT,)
 
 # Events a writes_reverted may target (DL-12-04: writes, within the current scene).
 REVERTIBLE = frozenset({
@@ -121,7 +127,8 @@ class Transaction:
 
     def mint(self, prefix: str) -> str:
         """A fresh counter id ('fact.7'); see engine/ids.py."""
-        n = max(self.state.counters.get(prefix, 0), self._minted.get(prefix, 0)) + 1
+        n = max(self.state.counters.get(prefix, 0), self.store.minted_hw.get(prefix, 0),
+                self._minted.get(prefix, 0)) + 1
         self._minted[prefix] = n
         return ids.counter_id(prefix, n)
 
@@ -177,10 +184,15 @@ class Transaction:
         except Exception as e:  # a later event depended on a reverted one
             raise Rejected(f"writes_reverted: the remaining events no longer apply ({e}); revert those too") from e
 
+    def new_mints(self) -> dict[str, int]:
+        """MINT_ONLY counters this transaction raised above the store's high-water mark."""
+        hw = self.store.minted_hw
+        return {p: n for p, n in self._minted.items() if p in MINT_ONLY and n > hw.get(p, 0)}
+
     def _commit(self) -> None:
         if self._broken:
             raise StoreError("transaction is broken")
-        if not self.events and not self.draws:
+        if not self.events and not self.draws and not self.new_mints():
             return
         self.store._write(self)  # noqa: SLF001
 
@@ -196,6 +208,7 @@ class Store:
         self._tx: Transaction | None = None
         self._participants: list[TxParticipant] = []
         self._turn_n = 0
+        self.minted_hw: dict[str, int] = {}  # MINT_ONLY high-water marks (table `minted`)
 
     # ---------------------------------------------------------------- open / create
     @staticmethod
@@ -242,6 +255,7 @@ class Store:
         store.last_seq = int(row[0] or 0)
         store.state = store._replay()
         store._turn_n = store._max_turn_n()
+        store.minted_hw = {r["prefix"]: int(r["n"]) for r in conn.execute("SELECT prefix, n FROM minted")}
         return store
 
     def close(self) -> None:
@@ -306,10 +320,15 @@ class Store:
             for d in tx.draws:
                 c.execute("INSERT INTO rng_draws(stream, purpose, sides, table_id, result, event_seq)"
                           " VALUES (:stream,:purpose,:sides,:table_id,:result,:event_seq)", d)
+            mints = tx.new_mints()
+            for prefix, n in mints.items():
+                c.execute("INSERT INTO minted(prefix, n) VALUES (?, ?) ON CONFLICT(prefix) DO UPDATE SET n=excluded.n",
+                          (prefix, n))
             c.execute("COMMIT")
         except BaseException:
             c.execute("ROLLBACK")
             raise
+        self.minted_hw.update(mints)
         if tx.events:
             self.last_seq = tx.events[-1].seq or self.last_seq
             self.state = tx.state

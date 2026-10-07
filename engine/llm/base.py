@@ -44,13 +44,19 @@ class RoleModel(BaseModel):
 
 
 class ModelCallRecord(BaseModel):
-    """One row of `model_calls` (data-model.md §1), plus `attempt` (the replay key's third part)."""
+    """One row of `model_calls` (data-model.md §1), plus `seq` and `attempt` (the replay key is
+    (turn_id, role, seq, attempt)).
 
-    # Deterministic (engine/ids.py: no uuid), so a replayed turn record lists the same call ids. A turn retried
-    # after ModelUnavailable reuses its turn id, so call_id is not unique across rows: latest row wins.
+    `seq` numbers the calls of one role within one turn (0, 1, 2 … in call order: several Framer beats, a
+    "change", a Narrator redraft), so two calls of a role in a turn never share a key. Rows written before
+    `seq` existed read as seq 0. `call_id` is deterministic (engine/ids.py: no uuid),
+    `call.<turn_id|pre>.<role>.<seq>.<attempt>`, so a replayed turn record lists the same call ids.
+    """
+
     call_id: str = ""
     turn_id: str | None = None
     role: Role
+    seq: int = 0
     attempt: int = 0
     provider: str
     model_id: str
@@ -156,7 +162,8 @@ class StructuredModel(Protocol):
     provider: str
 
     def fill(
-        self, role: Role, schema: dict[str, Any], packet: Packet, *, turn_id: str | None, attempt: int
+        self, role: Role, schema: dict[str, Any], packet: Packet, *, turn_id: str | None, attempt: int,
+        seq: int = 0,
     ) -> CallResult:
         """One request. Returns the parsed response unvalidated; raises ModelUnavailable / ModelRefused."""
         ...
@@ -165,24 +172,59 @@ class StructuredModel(Protocol):
 Recorder = Callable[[ModelCallRecord], None]
 
 
+class CallSequence:
+    """Hands out `seq` per (turn_id, role): 0, 1, 2 … in call order.
+
+    Deterministic: a replay makes the same role calls in the same order, so it asks for the same keys.
+    `call_role` finds one through its recorder: the recorder itself, or the object a bound-method recorder
+    belongs to (`TurnContext.record_call` -> the TurnContext), when it has `next_call_seq(turn_id, role)`.
+    """
+
+    def __init__(self) -> None:
+        self._next: dict[tuple[str | None, str], int] = {}
+
+    def next_call_seq(self, turn_id: str | None, role: Role | str) -> int:
+        key = (turn_id, Role(role).value)
+        n = self._next.get(key, 0)
+        self._next[key] = n + 1
+        return n
+
+
+def next_seq(recorder: Any, turn_id: str | None, role: Role) -> int:
+    """The next `seq` from the recorder's sequence (see CallSequence); 0 when it has none."""
+    for owner in (recorder, getattr(recorder, "__self__", None)):
+        fn: Callable[[str | None, Role], int] | None = getattr(owner, "next_call_seq", None)
+        if callable(fn):
+            return int(fn(turn_id, role))
+    return 0
+
+
 def schema_hash(schema: Mapping[str, Any]) -> str:
     """sha256 of the schema's canonical JSON (sorted keys, no whitespace)."""
     canon = json.dumps(schema, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
     return hashlib.sha256(canon.encode("utf-8")).hexdigest()
 
 
-def call_id(turn_id: str | None, role: Role, attempt: int) -> str:
-    return f"call.{turn_id or 'pre'}.{role.value}.{attempt}"
+def call_id(turn_id: str | None, role: Role, attempt: int, seq: int = 0) -> str:
+    return f"call.{turn_id or 'pre'}.{role.value}.{seq}.{attempt}"
 
 
 def new_record(
     role: Role, schema: Mapping[str, Any], *, provider: str, model_id: str, turn_id: str | None, attempt: int,
-    request: dict[str, Any] | None = None,
+    request: dict[str, Any] | None = None, seq: int = 0,
 ) -> ModelCallRecord:
     return ModelCallRecord(
-        call_id=call_id(turn_id, role, attempt), turn_id=turn_id, role=role, attempt=attempt, provider=provider, model_id=model_id,
-        schema_hash=schema_hash(schema), request=request or {},
+        call_id=call_id(turn_id, role, attempt, seq), turn_id=turn_id, role=role, seq=seq, attempt=attempt,
+        provider=provider, model_id=model_id, schema_hash=schema_hash(schema), request=request or {},
     )
+
+
+def _stamp(rec: ModelCallRecord, seq: int) -> ModelCallRecord:
+    """Make sure a model's record carries the call's `seq` (and the matching call_id)."""
+    want = call_id(rec.turn_id, Role(rec.role), rec.attempt, seq)
+    if rec.seq == seq and rec.call_id == want:
+        return rec
+    return rec.model_copy(update={"seq": seq, "call_id": want})
 
 
 class Stopwatch:
@@ -317,13 +359,17 @@ def call_role(
     recorder: Recorder | None = None,
     default: Mapping[str, Any] | Callable[[], Mapping[str, Any]] | None = None,
     check: Callable[[Any], list[str]] | None = None,
+    seq: int | None = None,
 ) -> CallResult:
     """Ask, validate, re-ask once naming the failure, then the default, else ModelInvalid.
 
     rule: PR-01-2 (one re-ask naming the failure); contracts/model-calls.md (then the rule's default).
     `check` adds caller-side failures (e.g. an id that must exist) to the schema validation.
-    Every call, including refused and failed ones, goes to `recorder`.
+    Every call, including refused and failed ones, goes to `recorder`. `seq` (this role's call number in the
+    turn) defaults to the recorder's `next_call_seq` (CallSequence), else 0.
     """
+    if seq is None:
+        seq = next_seq(recorder, turn_id, role)
 
     def emit(rec: ModelCallRecord) -> None:
         if recorder is not None:
@@ -332,11 +378,13 @@ def call_role(
     current = packet
     for attempt in (0, 1):
         try:
-            res = model.fill(role, schema, current, turn_id=turn_id, attempt=attempt)
+            res = model.fill(role, schema, current, turn_id=turn_id, attempt=attempt, seq=seq)
         except ModelError as exc:
             if exc.record is not None:
+                exc.record = _stamp(exc.record, seq)
                 emit(exc.record)
             raise
+        res = res.model_copy(update={"record": _stamp(res.record, seq)})
         errs = ["the response was not valid JSON"] if res.data is None else validate(res.data, schema)
         if not errs and check is not None:
             errs = check(res.data)

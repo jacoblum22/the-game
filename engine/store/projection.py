@@ -444,7 +444,8 @@ for _t in NOT_BUILT:
 
 
 def _bump_counters(s: WorldState, ev: Event) -> None:
-    for v in ev.payload.created_ids():
+    # A beat id is created by no payload; the events of a beat carry it in the `beat_id` column.
+    for v in [*ev.payload.created_ids(), *([ev.beat_id] if ev.beat_id else [])]:
         parsed = ids.parse_counter_id(v)
         if parsed:
             prefix, n = parsed

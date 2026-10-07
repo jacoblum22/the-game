@@ -6,6 +6,7 @@ of a character's story (death, retirement, career end).
         tx.add_all(op.events)                                 # dread +2, setback.threshold, the last_chance pause
     ...the player picks...
     ch = choose(ctx, "pc.wren", op.menu, "lc.bargain", pause_id=op.pause_id)
+    # or, from the stored pause (a resumed game): choose(ctx, "pc.wren", state.open_pause(), "lc.bargain")
     tx.add_all(ch.events)
     ending_state(state)                                       # None | "death" | "retirement" | "career_end"
 
@@ -18,7 +19,8 @@ death) and Key 2 (Last Stand, a failed Gamble, a confirmed voluntary last stand)
 from __future__ import annotations
 
 import math
-from dataclasses import dataclass, field
+from collections.abc import Mapping
+from dataclasses import asdict, dataclass, field
 from typing import Any
 
 from engine import ids
@@ -88,6 +90,33 @@ class Menu:
 
     def choices(self) -> list[dict[str, str]]:
         return [{"id": o.id, "label": f"({o.order}) {o.name} — {o.price}"} for o in self.offered()]
+
+
+def menu_detail(menu: Menu) -> dict[str, Any]:
+    """The menu as the `last_chance` pause stores it (`detail["menu"]`, JSON-safe): every option (offered or not,
+    with its price and why not), the Situation and the computed parts (maim drawn, bargain, fate cost, Gamble
+    odds), so `choose` resolves exactly the menu shown, also after a resume."""
+    return {"pc": menu.pc, "situation": asdict(menu.situation), "options": [asdict(o) for o in menu.options],
+            "fate_cost": menu.fate_cost, "maim": menu.maim, "bargain": menu.bargain, "gamble": dict(menu.gamble),
+            "refused_strikes": list(menu.refused_strikes)}
+
+
+def menu_from_detail(detail: Mapping[str, Any] | PauseRecord) -> Menu:
+    """The Menu back from a `last_chance` pause (a PauseRecord, its `detail`, or `detail["menu"]`)."""
+    d: Any = detail.detail if isinstance(detail, PauseRecord) else detail
+    d = d.get("menu", d)
+    if "options" not in d or "situation" not in d:
+        raise ValueError("this pause stores no last-chance menu")
+    sit = dict(d["situation"])
+    sit["strikes"] = dict(sit.get("strikes") or {})
+    return Menu(pc=str(d["pc"]), options=[MenuOption(**dict(o)) for o in d["options"]], situation=Situation(**sit),
+                fate_cost=int(d["fate_cost"]), maim=_plain(d.get("maim")), bargain=_plain(d.get("bargain")),
+                gamble={str(k): int(v) for k, v in (d.get("gamble") or {}).items()},
+                refused_strikes=list(d.get("refused_strikes") or ()))
+
+
+def _plain(x: Any) -> dict[str, Any] | None:
+    return dict(x) if x is not None else None
 
 
 def _option_data(rules: Any) -> list[dict[str, Any]]:
@@ -285,7 +314,8 @@ def open_threshold(ctx: Any, pc: str, sit: Situation, *, writes: Writes | None =
     pause = PauseRecord(pause_id=pid, kind="last_chance", prompt=text, choices=menu.choices(), default_choice=None,
                         detail={"pc": pc, "fate_cost": menu.fate_cost, "maim": menu.maim, "bargain": menu.bargain,
                                 "gamble": menu.gamble, "victor": sit.victor,
-                                "struck": {o.id: o.struck_by for o in menu.options if o.struck_by}})
+                                "struck": {o.id: o.struck_by for o in menu.options if o.struck_by},
+                                "via_gamble": False, "menu": menu_detail(menu)})
     w.extend([Event.of("pause_opened", source="PR-07-5", rule_id="PR-07-5", pause=pause)])
     return ThresholdOpen(w.events[start:], menu, pid, text)
 
@@ -319,9 +349,19 @@ def _after(w: Writes, pc: str, option: dict[str, Any], line: str) -> None:  # ru
         w.coarse("07.7.3", "brink mark owed (marks are M2)", entity=pc, option=option["id"])
 
 
-def choose(ctx: Any, pc: str, menu: Menu, option_id: str, *, pause_id: str | None = None,
-           via_gamble: bool = False, writes: Writes | None = None) -> Choice:  # rule: PR-07-5
-    """PR-07-5 steps 6-7: apply the chosen option's outcome and world writes."""
+def choose(ctx: Any, pc: str, menu: Menu | PauseRecord | Mapping[str, Any], option_id: str, *,
+           pause_id: str | None = None, via_gamble: bool | None = None,
+           writes: Writes | None = None) -> Choice:  # rule: PR-07-5
+    """PR-07-5 steps 6-7: apply the chosen option's outcome and world writes. `menu` is the Menu, or the open
+    `last_chance` pause (or its detail): then the stored menu is used, and the pause id and `via_gamble` come from
+    it unless given."""
+    if isinstance(menu, PauseRecord):
+        pause_id = pause_id or menu.pause_id
+    if not isinstance(menu, Menu):
+        detail = menu.detail if isinstance(menu, PauseRecord) else menu
+        via_gamble = bool(detail.get("via_gamble")) if via_gamble is None else via_gamble
+        menu = menu_from_detail(detail)
+    via_gamble = bool(via_gamble)
     st: WorldState = ctx.state
     o = next((x for x in menu.options if x.id == option_id), None)
     if o is None or not o.available:
@@ -439,7 +479,8 @@ def resolve_gamble(ctx: Any, pc: str, menu: Menu, *, natural: int | None = None,
         out.pause_id = pid
         w.extend([Event.of("pause_opened", source="07.5.10", rule_id="07.5.10", pause=PauseRecord(
             pause_id=pid, kind="last_chance", prompt="The Gamble nearly failed: choose a price and pay it in full.",
-            choices=out.choices, default_choice=None, detail={"pc": pc, "via_gamble": True}))])
+            choices=out.choices, default_choice=None, detail={"pc": pc, "via_gamble": True,
+                                                              "menu": menu_detail(menu)}))])
     else:
         w.fact(pc, "gamble_failed", True, rule_id="07.5.10")
         write_death(ctx, pc, key2="b", writes=w)
