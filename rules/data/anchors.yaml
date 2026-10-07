@@ -22,15 +22,15 @@ compiled_from:
 - file: 03-tags-and-evidence.md
   sha256_16: 5799f2a8df3e0dbd
 - file: 04-recognition-and-growth.md
-  sha256_16: 54a4aa30a020fcb5
+  sha256_16: d2c5a975974bede1
 - file: 05-abilities-focus-magic.md
-  sha256_16: 0fdcbcaf8f7b6125
+  sha256_16: 1836526777035d2b
 - file: 06-conflict.md
-  sha256_16: f5d6035d7760cea8
+  sha256_16: 0b01ff1ea628421b
 - file: 07-harm-recovery-death.md
-  sha256_16: bc800871e3dc6ef9
+  sha256_16: 1b2ca03a4ca9a4e3
 - file: 08-items-loot-crafting.md
-  sha256_16: c84f014a0ee9bcb7
+  sha256_16: 5b61b1bb410f5035
 - file: 09-adversaries.md
   sha256_16: 243e63089d322270
 - file: 10-exploration-travel-sites.md

@@ -20,7 +20,7 @@
 **Reading this chapter.** Standard format (00.19). *Rules* has eleven parts (04.1–04.11). The machine-readable
 companions are `data/callings.yaml` (183 callings and every number), `data/hybrids.yaml` (the 36-pair table),
 `data/vehicles.yaml` (V1–V14, prices, readings, marker texts), `data/gen_absorb.yaml` (the absorption
-domain), and four contrib fragments (`composites.04`, `licenses.04`, `boundaries.04`, `tags.04`). Data is
+domain), and its owner-blocks `04` in `data/composites.yaml`, `licenses.yaml`, `boundaries.yaml` and `tags.yaml` (merged from the former contrib fragments at integration) [verification: V2a-006]. Data is
 canonical for every number and id (00.1.4 line 5). The calibration is in
 `rules/_process/simulation/04-recognition-sim.md`. Worked examples follow **Wren** (00's continuous
 character) across fifty sessions, then boundary cases with other characters.
@@ -1713,11 +1713,11 @@ re-presented; now `martial` 770, `wilds` 403, `min` 403 ≥ 330 → **Ranger, ti
 | Competence | archery +5, tracking +4 | roads archery +4, tracking +4; **specialties** archery +5 (expert), tracking +4 (trained): highest-only, so every roll is as before |
 | Picks | 4 + 3 = 7 held | 7 held; `picks_total[3]` = 4, so `legacy_picks` = 3 |
 | Capabilities | Mark, Proven, Sure Hand | the same (held once; the specialties keep their scope) |
-| Family mechanic | martial Focus trigger, rank 1 | **Hunter's Quarry**, rank 2: a success on either road gives an Amplifying lever on the other, twice per scene; fused deeds +1 edge |
+| Family mechanic | martial and wilds Focus triggers, rank 1 [verification: V2a-005] | **Hunter's Quarry**, rank 2: a success on either road gives an Amplifying lever on the other, twice per scene; fused deeds +1 edge |
 | `power_band` | 3 | 3 (`inherited_band` 3; a hybrid's tier 3 is also 3) |
 
 `recognition_event {kind: consolidation, calling: call.ranger, tier: 3, vehicle: veh.V12, …}`. Two labels,
-two ladders and a Focus trigger are retired; nothing she could do yesterday is gone today; her next three
+two ladders and two Focus triggers are retired; nothing she could do yesterday is gone today; her next three
 Ranger picks are pre-paid; and two seats are free for whatever she becomes next (VI: structural retirement,
 written as a transformation).
 
@@ -2049,7 +2049,7 @@ in `data/boundaries.yaml owner-block 04`: `h.04.crisis_check` (`beat_end`, 8; PR
 created: readiness is a derived band, so that no second copy of a sealed tally exists to drift (DL-04-13).
 
 **Data files.** `data/callings.yaml`, `data/hybrids.yaml`, `data/vehicles.yaml`, `data/gen_absorb.yaml`;
-contrib: `composites.04.yaml`, `licenses.04.yaml`, `boundaries.04.yaml`, `tags.04.yaml`.
+owner-block 04 of `data/composites.yaml`, `data/licenses.yaml`, `data/boundaries.yaml`, `data/tags.yaml` [verification: V2a-006].
 
 **Runtime capabilities assumed** (00.14.1). RC-SEAL and RC-QUERY (sealed tallies, tag ancestry, 03.9);
 RC-STORE (callings, offers, commitments, library); RC-SCHED (handlers at `reflection`, `season`,
@@ -2100,7 +2100,7 @@ compatible: it cannot satisfy any floor.
 would make the great-deed rule exact (the simulation used one). (b) `detail(tag, since)` should accept a
 scene index or time, and the evidence-bearing scene count since a time should be readable. (c) For the
 Devourer: a count of distinct opponent kinds outside `creature.folk` at the root; until it exists the rule
-reads `detail(pc, deed).distinct.opponent_kinds ≥ 6`. (d) Optional: `conduct().pos_events` and a count of
+reads `detail(pc, deed).distinct.opponent_kinds ≥ 5` (as `callings.yaml` `req.variant.devourer` and 04.2.6) [verification: V2a-007]. (d) Optional: `conduct().pos_events` and a count of
 magnitude-4 positive entries, to allow a qualitative requirement for higher vow tiers. (e) Reconcile
 `data/tags.yaml`, adopted at integration (`deed.wilds.animals.falconry`); if it is ruled an alias of
 `deed.wilds.animals.training`, re-key `call.falconer` to that tag. (f) Satisfied here: judged and counted

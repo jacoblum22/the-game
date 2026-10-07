@@ -342,3 +342,9 @@ The owner set a $20 budget and asked to get the system verified and ready for bu
 - The 29 open ledger rows (5 MAJOR) stay open as known issues. They are summarised in `rules/README.md` and none blocks building.
 - `rules/README.md` written: layout, tooling, known issues and build notes.
 Next: tech stack and build planning.
+
+## V2a returned: report `_process/reports/verification-2a-report.md`, plus `verification-constitution.md`
+- Read ch.04–08 in full, by section, using rq.py: 14 fixes, plus an rq.py bug where fenced headings broke section ends.
+- Constitution: Principles I–VII compliant; P5 and P14 deviate with DL justifications.
+- New rows: I-063, I-064, I-065 (all MINOR).
+Cost: 149 tools; see the usage line below.

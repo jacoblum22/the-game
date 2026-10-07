@@ -704,7 +704,7 @@ leaves the user deflated]. While Spent:
   [revision: I-009].
 Spent ends the moment `focus.current ≥ 1`, by any channel. It is not a condition and nothing cleanses
 it but Focus. *Narration may not imply* collapse, unconsciousness, harm, or any lasting mark: Spent is
-being out of reserves, and the two effects above are all it does.
+being out of reserves, and the effects above are all it does [verification: V2a-008].
 
 **05.6.6 Overdraw.** `[D]` + `[T]` A character who lacks the Focus for an activation may pay the
 **shortfall** from the body. This is the price of power the fiction always promised and the reason a
@@ -2043,8 +2043,8 @@ wilds and offers **Ranger** (04.8.5, hybrid consolidation). She accepts.
    Tracker's three have `T` = 2 (rank 1, as before). Nothing got weaker.
 4. **What changed structurally.** Two seats became one. Two ladders were retired. The Archer's and
    Tracker's separate allowances (which would have reached 6 + 6 = 12 at tier 5 each) became one
-   allowance that reaches 6: the next four tier-ups of the Ranger each **cancel a legacy pick** and add
-   no ability. The partition has not grown and will not; what she gained is a free seat.
+   allowance that reaches 6: each of the Ranger's three remaining tier-ups (to tier 5) **cancels a legacy pick** and adds
+   no ability, and one legacy pick is still outstanding at tier 5 [verification: V2a-009]. The partition has not grown and will not; what she gained is a free seat.
 5. **The season re-pick** (04.8.7), same boundary: one swap, with the Ranger's pool gate (own: both
    branches). She swaps Pathfinder for **Beast at Heel** (`deed.wilds.animals.training`, `min_tier` 2:
    eligible at tier 2). Pathfinder returns to the pool. Slots used: still 7.

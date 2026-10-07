@@ -38,7 +38,7 @@ property is an effect reference that composes through 00.10's substrate at zero 
 - **Identity separated from magnitude** (Diablo III's reserved Legendary slot, Borderlands' manufacturer
   pools): every item rung has a fixed number of **signature** and **magnitude** slots; the signature is
   what makes a drop recognizably "troll-work" [R3 08.2, 08.7, A-4, A-24].
-- **Bound the count, not the table**: 210 properties in `data/item_properties.yaml`, but never more than
+- **Bound the count, not the table**: 211 properties [verification: V2a-014] in `data/item_properties.yaml`, but never more than
   three on one item, and fixed counts per rung (PoE2's fixed four) [R3 08.9, 08.13, A-21].
 - **The source's band plays item level** (Diablo II's affix-level gate): a T2 wolf cannot drop a tier-4
   property [R3 08.4, A-2].
@@ -81,7 +81,7 @@ property is an effect reference that composes through 00.10's substrate at zero 
 Rule ids are `08.S.R`. Kinds per 00.2.2. Data files are canonical for every id and number (00.1.4 item 5):
 `data/base_items.yaml`, `data/item_properties.yaml`, `data/materials.yaml`, `data/economy.yaml`,
 `data/gen_loot.yaml`, `data/gen_craft.yaml`, `data/gen_gift.yaml`, `data/gen_item_ability.yaml`, and the
-fragments `data/contrib/{effects,licenses,boundaries,tags}.08.yaml`. All are generated and validated by
+owner-blocks 08 of `data/{effects,licenses,boundaries,tags}.yaml` (merged from the former contrib fragments) [verification: V2a-006]. All are generated and validated by
 `rules/_process/simulation/08-gen_data08.py`.
 
 ### 08.1 Items: the schema, base items and quality
@@ -129,7 +129,7 @@ that does not come from its quality or properties: its `item_tags` (the most spe
 per 03's request, so 03.1.6 can ground evidence in it), its `material_tags`, its kind, its **price** in
 coins at quality `common`, its **load** (`weight` in the schema) in load units, its `slot_cap` (the most
 properties it can hold), its body slot, its `make` (the training license, deed tag and time per tick that
-crafting it uses), and the kind-specific fields of 08.1.5–08.1.8. There are **185** base items covering
+crafting it uses), and the kind-specific fields of 08.1.5–08.1.8. There are **191** base items (185 plus the six prostheses of revision I-016) [verification: V2a-011] covering
 every level-2 branch of `item.*`. Base items are content; adding one is a data entry with a DL line, never
 a rule change [R3 00.1; 00.16.4].
 
@@ -370,15 +370,15 @@ one line of the codex.
 entry whose family the **base item already fills to the item share**: harm-edge properties on a versatile
 weapon; Guarding on a shield or beside a parrying weapon; Reinforced on heavy armor (3 of 3). At step 9 it
 checks the item's whole contribution against the item share and, on a breach, drops that pick and refills
-once (00.11.3 step 9). The simulation counts 16 such refills in 1,000 drops and **1,000 of 1,000 items
+once (00.11.3 step 9). The simulation counts 10 such refills in 1,000 drops [verification: V2a-013] and **1,000 of 1,000 items
 compliant** after generation (T-08-16).
 
 **08.2.5 Attunement limit.** `[D]` A character may have at most **five** items attuned at once (08.5.2).
 Mundane properties need no attunement; passive, license and item-ability properties do. Five sits between
 D&D 5e's three attuned items and Pathfinder 2e's ten invested items, and it is the number at which the item
 shares bind for about one character in five (T-08-16: with five attuned items drawn from a realistic haul,
-18.4% would exceed an edge share, 19.4% the harm-edge share and 26.6% a reduction share without the
-clamp) — so the choice of *which* five is a real choice, which is the point of a budget [R2 08 Iron Man
+20.2% would exceed an edge share, 11.2% the harm-edge share and 30.6% a reduction share without the
+clamp; `08-loot-sim-output.txt`) [verification: V2a-013] — so the choice of *which* five is a real choice, which is the point of a budget [R2 08 Iron Man
 Principle; DL-08-14].
 
 **08.2.6 The math: gear never out-scales callings.** `[N]` The numbers below use 00.3.7's envelope, 06.4.5's
@@ -394,7 +394,7 @@ mastery and 07.2.2's armor; "items" means the item share at its maximum.
 | Growth from P1 to P5 owed to callings | — | — | check +6 of +6; harm +5 of +6; Vitality +8 of +8 |
 
 Against a Guard-13 foe the P1's item edge moves success from 65% to 70% (T-00-6); at P5 the same +1 is the
-difference between 40% and 45% against a Very hard target. Items never stop mattering — they are the
+difference between 35% and 40% against a Very hard target (25) [verification: V2a-012]. Items never stop mattering — they are the
 specialization a character *chooses* — but at every band the calling owns at least 75% of the check
 modifier's growth and all of the maxima. The two edge caps of 00.3.5 (+2 edge, +2 harm edge) are therefore
 never filled by gear alone, which is 00.17.1 Q2's demand ("passive and mundane properties … count against
@@ -1550,7 +1550,7 @@ craft), `project_clock`, `step_frame`, `materials_consumed`, `who_decides_to_giv
 `chosen_display`, `base_rule`, `anti_minting`, `called_by`, `source_to_deed`, `binding`. *economy.yaml:* the
 keys listed in 08.8 and 08.9.
 
-**T-08-3 The property pool at a glance** (`item_properties.yaml`: 210 entries; 76 signature-eligible).
+**T-08-3 The property pool at a glance** (`item_properties.yaml`: 211 entries; 76 signature-eligible) [verification: V2a-014].
 
 | Family | Entries | Kind | Base kinds | Typical gates |
 |---|---|---|---|---|
@@ -1560,7 +1560,7 @@ keys listed in 08.8 and 08.9.
 | Craft edges (11 crafts) | 11 | passive | trade tools, gloves | dwarves, metals, essences, gems |
 | Elemental (9 harm branches × resist, strike, on-hit, hazard, retort) + condition wards (6) | 51 | passive | worn / weapons | elementals, dragons, fiends, undead, horrors, essences, schools of magic |
 | Physical resistance (cut, pierce, crush), banes (8 creature kinds), physical on-hits (bleed, stagger, dread, hobble, expose) | 16 | passive | worn / weapons | beasts, giants, constructs, silver, cold iron, faiths |
-| Senses, movement, wards, sustain, light, carry, supply, pace, command, lore | 23 | passive | by entry | beasts, spirits, undead, constructs, places |
+| Senses, movement, wards, sustain, light, carry, supply, pace, command, lore (with Tidesense, revision I-019) | 24 | passive | by entry | beasts, spirits, undead, constructs, places |
 | Implements (three branches × edge and thrift) | 6 | passive | implements | schools, faiths, druidic orders, witchwood |
 | Relic licenses | 18 | license | jewelry, headwear, tools | the people or nature whose capability it is |
 | Bound power | 1 | item_ability | any equippable | any creature, deed, org or essence (tier 3+) |
@@ -1764,7 +1764,7 @@ against her companion's advice, lets it go back to the pit (fact `mercy.ash_imp`
    **Dread Gaze**, **Flame Lance**, **Cow**; Wren picks **Flame Lance** at tier 3 → **rank 1**.
 4. **Magnitude** (chosen, tier 2): she picks **Ember-warded** (reduce fire harm 2).
 5. **Output:** a masterwork ring, relic: bound [`ab.flame_lance` rank 1], magnitude [Ember-warded T2];
-   `feeds_evidence: false`; list 5 × 10 + 250 (a tier-3 bound power ×2) + 50 = **300** (band 4).
+   `feeds_evidence: false`; list 5 × 10 + 250 (a tier-3 bound power ×2) + 50 = **350** (band 4) [verification: V2a-015].
 6. **Attunement** at the next breather: attuned 1 of 5; Flame Lance binds to equipped slot 1 of 4;
    `cost_immune` while attuned; everything unsealed.
 7. **Use, two days later**, against a bandit at `band.near`: G2 (held through the equipped partition). Cost:

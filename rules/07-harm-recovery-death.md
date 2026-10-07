@@ -20,7 +20,7 @@ Tables are T-07-1…20. Worked examples WE-07-1…7 continue 00's character **Wr
 companions are `data/harm.yaml` (ladder, keys, warning, rests, dispositions, dread, fatigue, templates),
 `data/injuries.yaml` (wounds, scars, brink marks, maims, haunts), `data/afflictions.yaml` (poisons,
 diseases, curses) and `data/last_chance.yaml` (the nine options), with contributions to shared files in
-`data/conditions.yaml owner-block 07`, `effects.07.yaml` and `boundaries.07.yaml`. The simulation is
+`data/conditions.yaml owner-block 07` and the 07 owner-blocks of `data/effects.yaml` and `data/boundaries.yaml` [verification: V2a-006]. The simulation is
 `rules/_process/simulation/07-harm-sim.py`, written up in `07-harm-sim.md`.
 
 ---

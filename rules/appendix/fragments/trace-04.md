@@ -10,7 +10,7 @@ Fragment for `appendix/traceability.md`.
 | C:IV | Single-player, text-only | 04.8.1 (seats for one PC); OOF text blocks (04.7.2); companions bounded (Edge cases) | satisfied |
 | C:V | Closed primitives; fixed slots × bounded pools | 04.1.1 (no calling owns abilities); 04.8.1 (3 + 1 seats); 04.8.4 (picks under ch.05's partition; at the cap a pick replaces); 04.5.1 (five tiers, no sixth); 04.10.3 (library and slot caps) | satisfied |
 | C:VI | Mandatory, telegraphed consolidation; provisional by default; structural retirement, not a squish | 04.8.2 (provisional, confirm or lapse, warning first); 04.8.5 (consolidation); 04.8.6 (fork, fold); 04.8.7 (season boundary as the bundled point); 04.5.5 (restate, never append); 04.9.6 (revocation only after two warned boundaries); 04.11.4 (retirement retires everything); data `lifecycle: provisional` on every entry | satisfied (character-scale provisional status is an extrapolation: DL-04-15) |
-| C:VII | Default-deny capability gate | 04.5.3 (capabilities are licenses with literal scope and fallbacks, `licenses.04.yaml`); 04.10.1 (the Taking is G3 without its license); 04.11.3 (no conferral); 04.2.7 (magic callings need a first license) | satisfied |
+| C:VII | Default-deny capability gate | 04.5.3 (capabilities are licenses with literal scope and fallbacks, `data/licenses.yaml` owner-block 04 [verification: V2a-016]); 04.10.1 (the Taking is G3 without its license); 04.11.3 (no conferral); 04.2.7 (magic callings need a first license) | satisfied |
 | C:P1 | Post-creation variance is deferrable | 04.7.1 (defer is the default answer); 04.8.4 (a pick may be kept and its candidates recomputed) | satisfied |
 | C:P2 | Power only through deepening recognized identity; tiers crystallized at a significant moment, offered; a baseline floor | 04.5 (five tiers; no other source of competence growth); 04.5.8 (crystallization moment; always an offer); 04.3.4 (qualitatively distinct evidence); floor: 00.3.6 / ch.02 (04.5.6: unrecognized = band 1) | satisfied |
 | C:P3 | Classify state as background or player-facing | 04.1.4; State touched table (visibility column); 04.6.5 (Leanings: `available`) | satisfied |
@@ -20,14 +20,14 @@ Fragment for `appendix/traceability.md`.
 | C:P5 (confidence per candidate; three-valued policy) | grant / offer / abstain | 04.4.2 (confidence defined and calibrated); 04.4.3 (policy); T-04-8 R7 | satisfied; wording deviation recorded (deterministic scorer, DL-04-10; PATCH requested) |
 | C:P5 (specialists at any depth, independent thresholds) | Broad never starves narrow | 04.2.1, 04.2.3; 04.8.3 (lineage resolves overlap by offer) | satisfied |
 | C:P5 (hybrids from a curated sparse table; player chooses) | Named hybrid beside single tracks | 04.2.4; `hybrids.yaml` (36 rows); 04.7.6 | satisfied |
-| C:P5 (bounded synergy) | Small, audited bonus requiring the combination | 04.5.4; `composites.04.yaml` (32, core effects, under 00's caps) | satisfied |
+| C:P5 (bounded synergy) | Small, audited bonus requiring the combination | 04.5.4; `data/composites.yaml` owner-block 04 [verification: V2a-016] (32, core effects, under 00's caps) | satisfied |
 | C:P5 (absorption as a calling-gated capability; pool gate × fill) | Blue Mage trait | 04.10; `gen_absorb.yaml` | satisfied |
 | C:P5 (passive / active with tracked recharge) | Enforced limits | every trigger, boon and absorbed power carries `limits {per, uses}` or a Focus cost in data | satisfied (ability recharge itself is ch.05's) |
 | C:P6 | Named composites for aligned combinations | 04.5.4 (hybrid composites; three restated ranks) | satisfied |
 | C:P7 | Codex | 04.7.2 (CHOICE and RESULT contents); 04.6.5 (Leanings); Interface requests to 14 | satisfied (rendering is ch.14's) |
 | C:P8 | Deterministic degrees | 04.10.2 (the Taking reads the four degrees) | satisfied |
 | C:P9 | One Focus pool; no extra actions | 04.5.4 (family triggers refill the one pool); no effect in 04's data grants an action | satisfied |
-| C:P10 | Precisely scoped permissions | `licenses.04.yaml`; absorbed powers' literal text | satisfied |
+| C:P10 | Precisely scoped permissions | `data/licenses.yaml` owner-block 04 [verification: V2a-016]; absorbed powers' literal text | satisfied |
 | C:P12 | Limitation / weakness / cost as separate levers | 04.10.4 (Focus, slot, bane kept separate); prices (04.7.5) | satisfied |
 | C:P13 | Tools own mechanics; store owns state; independent gate | 04.4.1 (a deterministic scorer shares no model family); sealed inputs (04.1.4) | satisfied |
 | C:P14 | Cadence differentiation MAY be used | not used by 04 (Focus triggers instead; cadence is ch.06's) | not applicable (DL-04-11) |

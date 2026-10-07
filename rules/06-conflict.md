@@ -1844,7 +1844,7 @@ allies (the Focus column of 06.10.6, and T-06-14's tactics rows).
 
 Readings: against one strong foe, **offense is the better defense** (Defend in a duel loses a few
 points; the reckless trade and the called shot each gain ten against armored foes); armor is worth
-7–23 points and Fend 1–17, more the harder the foe hits; a heavy weapon is close to even with a
+2–23 points and Fend 0–17 [verification: V2a-010], more the harder the foe hits; a heavy weapon is close to even with a
 one-handed one unaided, and pulls ahead with Focus (P2 vs T3: 78% against 72%) and against armor.
 None of these is dominant in every row, which is the test of 06.1's economy [R3 §06.6: "does the
 restriction create a decision?"].
