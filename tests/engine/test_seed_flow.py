@@ -69,7 +69,7 @@ def test_mixed_seed_answers_rolls_and_one_veto(tmp_path: Path):
     # step 2: magic level in the player's own words, classified to the nearest option (12.16.2)
     assert pz(r).prompt == "How common is magic?"
     model.push(Role.INTERPRET, {"choice": "own_words", "own_words_class": "common",
-                                "own_words_text": "every village has its witch"})
+                                "own_words_text": "every village has its witch", "answer": None})
     r = flow.submit("every village has its witch")
     ans = [a for a in store.state.seed_answers if a["step"] == "ws.q.magic_level"][0]
     assert (ans["choice"], ans["source"], ans["words"]) == ("common", "player_words", "every village has its witch")

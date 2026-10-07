@@ -42,6 +42,7 @@ class InterpretResult(BaseModel):
     picks: list[str] = Field(default_factory=list)  # several options named by number (multi-pick blocks)
     direct: bool = False  # mapped by the engine without a model call
     defaulted: bool = False  # the model failed twice: the block's default was taken (contracts/model-calls.md)
+    answer: str | None = None  # with `details`: the model's short reply to the player's question
 
 
 def _index(token: str, choices: Sequence[Choice]) -> str | None:
@@ -101,4 +102,5 @@ def interpret(ctx: TurnContext, message: str, *, choices: Sequence[Choice], bloc
     return InterpretResult(choice=choice, own_words_class=data.get("own_words_class"),
                            own_words_text=data.get("own_words_text"),
                            lines_and_veils=[str(x) for x in data.get("lines_and_veils") or []],
-                           picks=[choice] if choice in options else [], defaulted=res.defaulted)
+                           picks=[choice] if choice in options else [], defaulted=res.defaulted,
+                           answer=(str(data["answer"]).strip() or None) if data.get("answer") else None)

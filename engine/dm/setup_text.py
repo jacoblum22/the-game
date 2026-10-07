@@ -153,6 +153,44 @@ def originals(plain: Sequence[Choice], rules_labels: dict[str, str]) -> dict[str
     return {k: v for k, v in rules_labels.items() if k in by_id and v and v != by_id[k]}
 
 
+# ------------------------------------------------------------------------------------------- questions
+
+
+_PLAIN = frozenset({"re-roll", "keep", "this", "that", "your", "with", "what", "which", "they", "them", "from",
+                    "other", "step", "character", "more", "each"})
+
+
+def glossary(message: str) -> list[str]:
+    """Plain glosses of the setup words a question names (setup.yaml `glossary`, and the peoples)."""
+    low = message.lower()
+    entries = [([str(w) for w in e["words"]], str(e["text"])) for e in (_get("glossary") or {}).values()]
+    plural = seed("peoples") or {}
+    for pid, label in (block("c2.people").get("options") or {}).items():
+        entries.append(([name_of(str(label)).lower(), str(plural.get(pid) or "")], f"{label}."))
+    return [t for ws, t in entries if any(w and re.search(r"\b" + re.escape(w.lower()), low) for w in ws)]
+
+
+def named(message: str, choices: Sequence[Choice]) -> list[Choice]:
+    """The choices a question names by any telling word of the choice's name ("ready-made", "Thief")."""
+    low = message.lower()
+    out = []
+    for c in choices:
+        words = [w for w in re.findall(r"[\w'-]+", name_of(c.label).lower()) if len(w) > 3 and w not in _PLAIN]
+        if any(re.search(r"\b" + re.escape(w), low) for w in words):
+            out.append(c)
+    return out
+
+
+def explain(message: str, choices: Sequence[Choice], about: dict[str, str], *, answer: str | None = None,
+            more: Sequence[str] = (), note: str | None = None) -> str:
+    """A question at a setup step, answered: the model's reply, the words asked about, what the options named
+    do (every option when the question names none and asks about no word), then any list the step shortened."""
+    gloss = glossary(message)
+    picked = named(message, choices) or ([] if gloss else list(choices))
+    lines = [x for x in (answer, *gloss, *(about.get(c.id) for c in picked), *more, note) if x]
+    return "\n".join(lines or [str(seed("details_none"))])
+
+
 # ------------------------------------------------------------------------------------------- reading answers
 
 
@@ -175,6 +213,6 @@ def read_answer(ctx: TurnContext, message: str, rec: PauseRecord, *, tag: str, c
                      lines_and_veils=lines_and_veils)
 
 
-__all__ = ["block", "block_option", "creation", "creation_header", "dice", "footer", "letter", "name_of", "option_label",
-           "option_short", "originals", "pause_block", "question", "question_pick", "question_prompt",
+__all__ = ["block", "block_option", "creation", "creation_header", "dice", "explain", "footer", "glossary", "letter",
+           "name_of", "named", "option_label", "option_short", "originals", "pause_block", "question", "question_pick", "question_prompt",
            "question_what", "read_answer", "seed", "seed_header", "step_title", "table"]

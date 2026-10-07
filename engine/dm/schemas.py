@@ -151,6 +151,7 @@ def interpret_schema(ctx: SchemaContext) -> Schema:  # rule: 12.16.2
         "own_words_class": enum(ctx.own_words_classes, nullable=True),
         "own_words_text": STR_OR_NULL,
         "lines_and_veils": STRS if ctx.lines_and_veils else None,
+        "answer": STR_OR_NULL,  # with `details`: a short reply to the player's question
     })
 
 
@@ -334,7 +335,8 @@ def defaults(role: Role, ctx: SchemaContext) -> dict[str, Any] | None:  # rule: 
 
 def _interpret_default(ctx: SchemaContext) -> dict[str, Any]:
     # move_on: the block's default answer applies (12.16.2, PR-02-7)
-    return {"choice": "move_on", "own_words_class": None, "own_words_text": None, "lines_and_veils": []}
+    return {"choice": "move_on", "own_words_class": None, "own_words_text": None, "lines_and_veils": [],
+            "answer": None}
 
 
 def _reader_default(ctx: SchemaContext) -> dict[str, Any]:

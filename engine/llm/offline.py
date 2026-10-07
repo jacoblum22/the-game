@@ -370,12 +370,14 @@ def _interpret(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:
     low = msg.lower()
     choices = enum_at(schema, "choice")
     options = [c for c in choices if c not in _SPECIAL_CHOICES]
-    out: dict[str, Any] = {"own_words_class": None, "own_words_text": None, "lines_and_veils": []}
+    out: dict[str, Any] = {"own_words_class": None, "own_words_text": None, "lines_and_veils": [], "answer": None}
     m = re.fullmatch(r"\s*(?:option\s*)?#?(\d+)[.)]?\s*", low)
     if not msg or low in ("skip", "move on", "pass", "next", "default"):
         return {**out, "choice": "move_on"}
     if m and 1 <= int(m.group(1)) <= len(options):
         return {**out, "choice": options[int(m.group(1)) - 1]}
+    if low.rstrip().endswith("?") or _has_word(low, "show all"):  # a question about the step, not an answer
+        return {**out, "choice": "details"}
     for opt in options:
         label = _norm(str(opt).rsplit(".", 1)[-1])
         if low == str(opt).lower() or (len(label) >= 3 and _has_word(low, label)):

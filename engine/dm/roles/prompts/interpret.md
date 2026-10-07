@@ -18,7 +18,10 @@ classification options for this step.
 - `move_on` when the player skips, defers or leaves it to you: "skip", "you pick", "whatever", "doesn't
   matter", "next", "surprise me", an empty reply. The engine then applies the block's default line.
 - `details` when the player asks for more about the options or the question before answering ("what does
-  licensed mean?", "more", "show me the others", "peoples").
+  licensed mean?", "more", "show me the others", "peoples"). Then fill `answer`: one to three plain
+  sentences answering their question from the block and the cards only. If those do not say, answer that
+  they will find out in play. Never reveal what the block leaves out, or whether a rumor is true. For any
+  other choice, `answer` is null.
 - `suggest` when the player asks you to propose answers ("suggest", "give me some names").
 - A reply that both picks and comments: the pick wins. Several picks where one is allowed: the first. If the
   player names an option and adds their own detail, choose the option and keep their words in

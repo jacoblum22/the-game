@@ -26,6 +26,7 @@ from engine.dm.context import TurnContext
 from engine.dm.response import Choice, OofBlock, Pause, Response
 from engine.dm.roles.interpret import DETAILS, MOVE_ON, OWN_WORDS, SUGGEST, InterpretResult
 from engine.dm.seed_recap import AUTO, recap, rolled
+from engine.dm.seed_recap import more as more_lists
 from engine.gen import _seed_steps as steps
 from engine.gen._seed_lib import data as seed_data
 from engine.gen.world_seed import (
@@ -198,6 +199,16 @@ def present_pause(rec: PauseRecord, phase: str, extra: list[OofBlock] | None = N
     return Response(phase=phase, oof_blocks=[*(extra or []), *blocks], pause=Pause.of(rec))  # type: ignore[arg-type]
 
 
+def answer_pause(rec: PauseRecord, phase: str, text: str) -> Response:
+    """A question at a setup pause: the answer, then the question once (the pause's own block; at a seed summary
+    only its prompt and choices, not the recap again; never the welcome before creation's first block)."""
+    own = [OofBlock.model_validate(b) for b in rec.detail.get("blocks", [])][-1:]
+    if rec.detail.get("stage") == "summary":
+        own = []
+    return Response(phase=phase, oof_blocks=[OofBlock(kind="NOTE", text=text), *own],  # type: ignore[arg-type]
+                    pause=Pause.of(rec))
+
+
 def flow_of(state: WorldState) -> str | None:
     """Which conversation the open pause belongs to: "seed", "creation", or None (play)."""
     p = state.open_pause()
@@ -281,7 +292,7 @@ class SeedFlow:
             res = T.read_answer(self.ctx, message or "", rec, tag="[SEED]", classes=classes, cards=CARDS,
                                 multi=stage == "pick" or qid in MULTI)
         if res.choice == DETAILS:
-            return present_pause(rec, "seed", [OofBlock(kind="NOTE", text=_details(rec))])
+            return answer_pause(rec, "seed", self._explain(rec, message or "", res.answer))
         words = res.own_words_text or (message if res.choice == OWN_WORDS else None)
 
         def handle(tx: Transaction) -> list[OofBlock]:
@@ -371,6 +382,41 @@ class SeedFlow:
             left = {f: (3 if f in bias else 1) for f in forms if f not in chosen}
             chosen.append(str(self.ctx.rng.weighted(left, "seed.keepers.complete")))
         return chosen
+
+    def _explain(self, rec: PauseRecord, message: str, answer: str | None) -> str:
+        """A question at a seed pause, answered: what the words asked about mean, what each choice would do, and
+        the whole of any list the step's recap shortened."""
+        stage, qid = rec.detail.get("stage"), rec.detail.get("question")
+        choices = [Choice(id=c["id"], label=c.get("label", c["id"])) for c in rec.choices]
+        about: dict[str, str] = {}
+        more: list[str] = []
+        if stage == "mode":
+            about = {str(k): str(v) for k, v in (T.seed("mode", "explain") or {}).items()}
+        elif stage == "pick":
+            about = {c.id: f"{c.label}: {T.question_prompt(c.id, str(seed_data().QS[c.id]['ask']))}"
+                     for c in choices if c.id != ALL}
+        elif stage == "summary":
+            ws = self._ws
+            assert ws is not None
+            for c in choices:
+                if c.id == KEEP:
+                    about[c.id] = str(T.seed("summary", "explain_keep"))
+                elif ":" not in c.id:
+                    about[c.id] = str(T.seed("summary", "explain_reroll_step")).format(label=c.label)
+                else:
+                    q = c.id.split(":", 1)[1]
+                    line = str(T.seed("summary", "explain_reroll")).format(label=c.label, what=T.question_what(q))
+                    opts = plain_options(q, ws) if q in seed_data().QS else []
+                    if 1 < len(opts) <= 12:
+                        line += " " + str(T.seed("summary", "could_be")).format(
+                            options="; ".join(o.label.rstrip(".") for o in opts))
+                    about[c.id] = line
+            more = more_lists(int(rec.detail["step"]), ws.st)
+        else:
+            orig = dict(rec.detail.get("orig") or {})
+            about = {c.id: f"{c.label}: {orig[c.id]}" for c in choices if orig.get(c.id)}
+        note = seed_data().QS[qid].get("note") if qid else None
+        return T.explain(message, choices, about, answer=answer, more=more, note=f"Note: {note}" if note else None)
 
     def _op_run_record(self, tx: Transaction, step: SeedStep) -> None:
         """A step ran (or re-ran after a veto): its answers go on the record (not replayed: re-derived)."""
@@ -520,22 +566,3 @@ def write_world(tx: Transaction, world: SeededWorld) -> None:  # rule: 12.16.1
         _meta(PHASE_KEY, "creation", "PR-12-9"),
     ])
 
-
-# ------------------------------------------------------------------------------------------- rendering
-
-
-def _details(rec: PauseRecord) -> str:
-    """'details': each option with the rules' fuller wording beside it, and the question's note when the rules give
-    one."""
-    qid = rec.detail.get("question")
-    orig = dict(rec.detail.get("orig") or {})
-    lines = [str(T.seed("details_head"))]
-    lines += [f"{i + 1}. {c['label']}" + (f" ({orig[c['id']]})" if orig.get(c["id"]) else "")
-              for i, c in enumerate(rec.choices)]
-    if qid:
-        note = seed_data().QS[qid].get("note")
-        if note:
-            lines.append(f"Note: {note}")
-    if rec.detail.get("stage") == "mode":
-        lines.append("When the dice decide, you may re-roll one result per step, once.")
-    return "\n".join(lines)

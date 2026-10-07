@@ -119,7 +119,7 @@ def test_lines_and_veils_are_kept_verbatim(tmp_path: Path):
     store, ctx, flow = seeded(tmp_path, model)
     model.push(Role.INTERPRET, {"choice": "fast", "own_words_class": "mysteries",
                                 "own_words_text": "Mysteries and journeys. No spiders; torture only off-stage.",
-                                "lines_and_veils": ["spiders", "torture only off-stage"]})
+                                "lines_and_veils": ["spiders", "torture only off-stage"], "answer": None})
     r = flow.submit("Quick start, please. Mysteries and journeys. No spiders; torture only off-stage.")
     assert "Making your character, step 2 of 5" in r.oof_blocks[-1].text
     prefs = {(e.kind, e.topic) for e in safety_prefs(store.state)}
