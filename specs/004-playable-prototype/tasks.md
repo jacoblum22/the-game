@@ -172,10 +172,10 @@ no delivered contradiction of stored state.
 
 ### World
 
-- [ ] T059 [US1] Implement the place graph (10.1: places, routes, lengths) built from the world seed, and moves that advance time by route length and frame a scene on arrival, in `engine/world/places.py`
+- [x] T059 [US1] Implement the place graph (10.1: places, routes, lengths) built from the world seed, and moves that advance time by route length and frame a scene on arrival, in `engine/world/places.py`
 - [ ] T060 [US1] Implement scenes (PR-12-7 start and end, the scene record in data-model.md §4, scene tests and counters `h.12.*`) and the Director role (S) in `engine/world/scenes.py` and `engine/dm/roles/director.py`
-- [ ] T061 [P] [US1] Implement NPC social records (standing, memories, `h.12.npc_memory`) and the chronicle (11.12) in `engine/world/social.py` and `engine/world/chronicle.py`
-- [ ] T062 [P] [US1] Implement pacing (12.6–12.8): tension, dead air, push, lead injection (PR-12-3), random events (PR-12-6), in `engine/world/pacing.py`
+- [x] T061 [P] [US1] Implement NPC social records (standing, memories, `h.12.npc_memory`) and the chronicle (11.12) in `engine/world/social.py` and `engine/world/chronicle.py`
+- [x] T062 [P] [US1] Implement pacing (12.6–12.8): tension, dead air, push, lead injection (PR-12-3), random events (PR-12-6), in `engine/world/pacing.py`
 
 ### Character, harm and abilities
 
