@@ -29,9 +29,9 @@ it does not repeat. Section 1 says where this pass agrees with that one and wher
 | Topic | Earlier plan (happy-franklin) | This pass | Why |
 |---|---|---|---|
 | Language, store, loop shape | Python; SQLite event log; code drives PR-12-1, the model fills typed forms | **Same** | Nothing found against it; this pass adds detail |
-| LLM wrapper | Pydantic AI, pinned | **Two thin adapters of our own** (Gemini SDK, OpenAI-compatible SDK), Pydantic only for schemas | Only four call shapes; we need explicit thinking level, cache control and per-turn schemas on every call; fewer fast-moving dependencies (the same report flagged supply-chain risk) |
+| LLM wrapper | Pydantic AI, pinned | **A thin adapter of our own** (Gemini SDK now; a second-family adapter when the checker moves), Pydantic only for schemas | Only four call shapes; we need explicit thinking level, cache control and per-turn schemas on every call; fewer fast-moving dependencies (the same report flagged supply-chain risk) |
 | "Call A" | One adjudication call per turn | **Two calls, A1 (read) and A2 (frame)** | The anchor candidates depend on the parsed verb, so the anchor enum can't be built before parsing. Splitting also keeps each call's packet under the 12-card cap |
-| Claim checker | Claude Haiku 4.5 | **gpt-oss-120b on an OpenAI-compatible host** (Groq by default), Haiku as the fallback | The prototype moved off paid Anthropic API use (`src/dm_agent.py` docstring); gpt-oss is about 7× cheaper per check and still a different family from Gemini (P13) |
+| Claim checker | Claude Haiku 4.5 | **Gemini 3.8 Flash for now** (owner decision 2026-10-07: one provider, one key). Cross-family checker deferred as `TODO(CROSS_FAMILY_CHECKER)`; when it comes back, gpt-oss-120b on Groq is the cheapest option, Haiku the alternative | Keeps setup to one key; the prototype had moved off paid Anthropic use. Breaks P13's different-family rule for now, so the slice measures the cost (R2) |
 | UI | Textual TUI, then web | **Plain terminal REPL, then a FastAPI web app** | Hosting for remote players needs the web app anyway; a TUI would be thrown away. The slice's UI need is tiny |
 | RNG | `numpy.random.Generator` | **`random.Random` streams from the standard library** | All 28 seeded sims that use randomness use `random.Random`, so ported generators can reproduce them exactly; no numpy dependency |
 | Retrieval | Tag/anchor/trigger filter, then FTS5 + embeddings + reranker | **Deterministic only in the slice**; fuzzy search deferred | 00.15 specifies deterministic retrieval; the slice has no case that needs fuzzy search |
@@ -42,7 +42,7 @@ it does not repeat. Section 1 says where this pass agrees with that one and wher
 ## 2. Three options for the engine
 
 Each option has to deliver the same rules: INV-3 (the model never supplies a number), writes before
-prose (12.2.8), the claim check by another model family (P13), the boundary registry (00.7), the
+prose (12.2.8), an independent claim check (P13), the boundary registry (00.7), the
 12-card packet (00.15.4) and replayability.
 
 ### Option A: Python engine, code-driven turn loop, the model fills typed forms (recommended)
@@ -124,28 +124,35 @@ does today with three tools.
 | **Framer** (A2) | ANCHOR choice and deltas; FRAME fields (attribute, deed tag, obstacle, levers, snags, stakes, lethal, reach, threatened and alternate cost, method consequences, secret) | Gemini 3.8 Flash, thinking `low` | thinking `medium` if evals show it pays | The hardest judgments; still all closed lists |
 | **World** (W, only when needed) | T5 NPC want/refusal flags and the action-table context | Gemini 3.8 Flash, thinking `low` | — | Skipped when nobody present needs to respond |
 | **Narrator** (B, D) | T7 draft and T8 mention list; redrafts | Gemini 3.8 Flash, thinking `low` | Claude Sonnet 5.5 if prose quality needs it (then the checker must move to a non-Claude family) | Cheapest capable model; the prototype already uses it |
-| **Checker** (C) | T9 claim extraction; T10 screen flags | **gpt-oss-120b** via an OpenAI-compatible host (Groq by default) | Claude Haiku 4.5 | Must not be Gemini-family (P13). Extraction recall is the ceiling on correctness, so the slice measures recall and picks the cheapest checker that meets the target |
+| **Checker** (C) | T9 claim extraction; T10 screen flags | **Gemini 3.8 Flash**, thinking `low`, as a separate persona-free call (`TODO(CROSS_FAMILY_CHECKER)`) | gpt-oss-120b on Groq, or Claude Haiku 4.5, when the cross-family rule is restored | P13 says the checker must not share the narrator's family. Owner chose one provider for the slice. Extraction recall is the ceiling on correctness, so the slice measures it on seeded errors either way |
 
+- **Same-family checker, for now.** Feature 001 showed a model's self-review missing an invented pronoun,
+  and the literature finds judges favour their own family. Three things limit the risk in the slice: the
+  checker never sees the narrator's prompt, draft history or reasoning; it only *extracts* claims, and the
+  verdicts are computed by code against the store (12.3.2 is `[D]`), so there is no "is this good?"
+  judgment to be biased; and its recall and false-positive rate are measured on the seeded-error set
+  (SC-003). If recall misses the target, or before anyone other than Jake playtests, the checker moves to
+  another family. That is a config change plus one adapter, because the interface is provider-neutral.
 - **Rationale:** Jake already has a Gemini key and moved the prototype off paid Anthropic usage. The
   rules make the model's job closed-list classification plus prose, which Flash does well. Persona-free
   prompts for the Reader and Framer (CoC-Seduce, cited in the earlier report: agreeable personas raise
   sycophancy); only the Narrator has a voice.
-- **Alternatives:** all-Claude (Sonnet narrator, Haiku framer, then a Gemini or gpt-oss checker; about
-  2–3× the cost); all open-weight (cheapest, weaker prose, more hosting work); a single model for every
-  role (violates P13 for the checker).
+- **Alternatives:** Gemini plus a gpt-oss or Haiku checker (P13-compliant; the deferred target; a second
+  key); all-Claude (Sonnet narrator, Haiku framer, then a Gemini or gpt-oss checker; about 2–3× the cost);
+  all open-weight (cheapest, weaker prose, more hosting work).
 - **Price watch:** Gemini 3.8 Flash doubles on 2027-01-01. Model ids are pinned in config and every
   swap goes through the eval set first.
 
 ### R3. How the models are called
 
-- **Adapters.** One small interface, `StructuredModel.call(role, packet, schema) -> (object, usage)`,
-  with two implementations: `GeminiAdapter` (`google-genai`, already pinned at 2.25.0) and
-  `OpenAICompatAdapter` (the `openai` SDK pointed at Groq, OpenRouter, or a local Ollama/vLLM server).
-  A third, `ReplayAdapter`, returns recorded outputs so tests and replays never call a paid model.
+- **Adapters.** One small, provider-neutral interface, `StructuredModel.call(role, packet, schema) ->
+  (object, usage)`. The slice implements `GeminiAdapter` (`google-genai`, already pinned at 2.25.0) and
+  `ReplayAdapter`, which returns recorded outputs so tests and replays never call a paid model. When the
+  checker moves to another family, an `OpenAICompatAdapter` (the `openai` SDK pointed at Groq, OpenRouter
+  or a local Ollama/vLLM server) is the planned second implementation.
 - **Structured output.** Every call returns JSON constrained by a JSON Schema the engine builds per
   turn (Pydantic `create_model` → `model_json_schema()`), with enums for every id, rung and option.
-  Gemini enforces the schema server-side (`response_json_schema`); the OpenAI-compatible path uses
-  `response_format={"type": "json_schema", "strict": true}`. The engine re-validates every response
+  Gemini enforces the schema server-side (`response_json_schema`). The engine re-validates every response
   with Pydantic regardless.
 - **Big closed lists.** The tag tree (`tags.yaml`, 232 KB) is far too big for one enum. Deed tags are
   chosen in two stages: the anchor's own `deed_tags` and their ancestors first (usually under 20), and
@@ -290,12 +297,12 @@ does today with three tools.
   stack (owner decision).
 - **Technology Constraints** still says `TODO(TECH_STACK)` and requires it to be resolved in the first
   feature's plan. Once Jake agrees with this plan, record the stack there through `/speckit-constitution`,
-  including the narrator/checker family pairing as a standing constraint.
+  noting the deferred cross-family checker (`TODO(CROSS_FAMILY_CHECKER)`) as an open item against P13.
 
 ## 4. Cost and latency estimate for the slice
 
 Token counts are assumptions until the slice measures them. Prices are Gemini 3.8 Flash promotional
-rates and gpt-oss-120b on Groq.
+rates for every call (one provider).
 
 | Call | Input (cached / new) | Output incl. thinking | Cost now | From 2027-01-01 |
 |---|---|---|---|---|
@@ -303,13 +310,16 @@ rates and gpt-oss-120b on Groq.
 | A2 Frame (rolled beats) | 3k / 7k | 0.9k | 0.89¢ | 1.77¢ |
 | W World (when needed) | 3k / 3k | 0.3k | 0.36¢ | 0.72¢ |
 | B Draft | 3k / 5k | 0.7k | 0.66¢ | 1.32¢ |
-| C Check (gpt-oss-120b) | 5k | 1k | 0.14¢ | 0.14¢ |
-| D Redraft + re-check (≈30% of turns) | — | — | 0.24¢ | 0.44¢ |
-| **Rolled turn** (without W) | | | **≈2.3¢** | **≈4.5¢** |
-| **Talk or question turn** (A1, B, C, D share) | | | **≈1.4¢** | **≈2.7¢** |
+| C Check (Gemini Flash) | 3k / 2k | 1k | 0.55¢ | 1.10¢ |
+| D Redraft + re-check (≈30% of turns) | — | — | 0.36¢ | 0.73¢ |
+| **Rolled turn** (without W) | | | **≈2.9¢** | **≈5.7¢** |
+| **Talk or question turn** (A1, B, C, D share) | | | **≈2.0¢** | **≈4.0¢** |
 
-- The slice's ceiling (SC-008) is a 3¢ median, which holds at current prices. After the 2027 price change a
-  rolled turn would exceed it unless the tuning below lands, so the ceiling is re-checked then. Getting to the earlier
+- Checking on Flash costs about 0.5¢ more per turn (redrafts included) than gpt-oss on Groq would; that is the price of one
+  key. The slice's ceiling (SC-008) is a 3¢ median, which holds at current prices (a mix of talk and
+  rolled turns lands around 2.3–2.5¢). After the 2027 price change it would not hold unless the tuning
+  below lands, so the ceiling is re-checked then. Flash-Lite for the checker and the Reader is the first
+  lever to try (its price is unverified). Getting to the earlier
   report's 1¢ target needs measured caching, Flash-Lite for A1, skipping A1 on obvious turns, and
   span-level redrafts. That's tuning work after the slice.
 - **Latency:** A1 ≈ 1.5 s + A2 ≈ 2.5 s → the offer shows in about 4 s. After commit: W ≈ 1 s (if run)
@@ -318,9 +328,9 @@ rates and gpt-oss-120b on Groq.
 ## 5. Open questions for Jake
 
 1. **Stack:** Option A as described (Python, SQLite event log, code-driven loop, Gemini Flash for every
-   role but checking, gpt-oss-120b on Groq as the checker). Agree?
-2. **Checker provider:** gpt-oss-120b on Groq needs a Groq account and key (pay-as-you-go, cents per
-   session). The alternative is Claude Haiku 4.5 on an Anthropic key at about 7× the checking cost.
+   role). Agree?
+2. **Checker provider:** decided 2026-10-07: Gemini for now, one key; cross-family checker deferred
+   (`TODO(CROSS_FAMILY_CHECKER)`).
 3. **Constitution:** OK to amend Principle I's wording and fill in Technology Constraints once you agree?
 4. **Rules questions** (for the rules thread, not changed here): per-call packets under the 12-card cap
    (R5); the missing `odds01.py` and `oracle01.py` (R6).

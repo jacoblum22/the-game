@@ -11,13 +11,15 @@
 Build the first slice of the real engine: one prepared scene in which a player's freeform messages go
 through the full turn loop (PR-12-1, T1–T12) and resolution pipeline (PR-01-1), with an OFFER pause
 before every roll, all state in an append-only event store, narration drafted only from the stored
-record, and every draft checked claim by claim by a model from a different family before delivery.
+record, and every draft checked claim by claim by a separate checker call before delivery.
 
 The technical approach (research.md, Option A) is a Python engine in which **code drives the loop and
 the model fills typed forms**. At each `[J]` step the engine builds a JSON Schema whose enums come from
 the rules and the current state, and asks one of four model roles to fill it. Every `[D]` step (frame
 computation, the roll, read, costs, writes, time, boundaries, claim verdicts) is code tagged with its
-rule id. Gemini 3.8 Flash reads, frames and narrates; gpt-oss-120b on an OpenAI-compatible host checks.
+rule id. Gemini 3.8 Flash fills every role, on one API key (owner decision, 2026-10-07). The checker is
+a separate, persona-free call that can move to another model family by configuration alone; the
+cross-family requirement of P13 is deferred as `TODO(CROSS_FAMILY_CHECKER)`.
 State is a SQLite event log per campaign. The interface is a terminal REPL over a session API that a
 web app will later wrap.
 
@@ -26,8 +28,7 @@ web app will later wrap.
 **Language/Version**: Python 3.11+ (matches `pyproject.toml` on `claude/project-thread-9ivqgo`)
 
 **Primary Dependencies**: `pydantic` v2 (state objects, per-turn schemas), `PyYAML` (rules data),
-`google-genai` 2.25.0 (already pinned; Reader/Framer/World/Narrator), `openai` (OpenAI-compatible client
-for the checker on Groq, OpenRouter or a local server), `pytest`. Nothing else in the engine. All pinned
+`google-genai` 2.25.0 (already pinned; every model role), `pytest`. Nothing else in the engine. All pinned
 with hashes (research.md, supply-chain note).
 
 **Storage**: SQLite (standard library `sqlite3`, WAL), one file per campaign: append-only `events` table
@@ -46,8 +47,8 @@ playtesting); a Linux VPS later through the web app (research.md R10).
 **Performance Goals**: offer shown within 5 s of a rolled declaration; a non-pausing turn delivered within
 10 s (median, SC-007). Deterministic engine work under 50 ms per turn.
 
-**Constraints**: no number from the model (INV-3); writes before prose (12.2.8); checker from another
-family (P13); ≤12 cards plus core per call (00.15.4); median ≤3¢ per turn and a hard per-session cap
+**Constraints**: no number from the model (INV-3); writes before prose (12.2.8); checker as a separate,
+swappable call (P13, cross-family deferred); one API key (`GEMINI_API_KEY`); ≤12 cards plus core per call (00.15.4); median ≤3¢ per turn and a hard per-session cap
 (SC-008, FR-027); `rules/` is read-only.
 
 **Scale/Scope**: one scene, one PC, 1–3 NPCs, 15 basic verbs, the 129 anchors available for retrieval,
@@ -69,11 +70,12 @@ family (P13); ≤12 cards plus core per call (00.15.4); median ≤3¢ per turn a
 | P3 ambiguity, not granularity | All judgments are closed-list fields with stated defaults | Pass |
 | P7 codex | Out of scope for the slice; the session API returns the codex view so the web app can render it | Deferred |
 | P8 deterministic degrees | `roll_check` and the degree rule (01.8.1) in code | Pass |
-| P13 three-layer split | Code owns mechanics; the event store owns state; the claim checker is gpt-oss (not Gemini) with abstain via `unknown` subjects; moderation separate from consistency | Pass |
+| P13 three-layer split | Code owns mechanics; the event store owns state; the claim checker is a separate call with abstain via `unknown` subjects and code-computed verdicts; moderation separate from consistency. **The checker shares the narrator's family (Gemini)**, by owner decision for this slice | Deviation, recorded below as `TODO(CROSS_FAMILY_CHECKER)` |
 | P16 no dead ends / P17 graduated reveal | T10 "next step exists" screen; G3/G4 redirects; compound questions resolved per 01.10 with declaration-order default | Pass |
 | Technology Constraints: `TODO(TECH_STACK)` | Resolved by this plan; to be recorded in the constitution once Jake agrees | Pending owner approval |
 
-No violations need justifying. Re-checked after Phase 1 design: unchanged.
+One recorded deviation (P13's different-family checker), justified under Complexity Tracking. Re-checked
+after Phase 1 design: unchanged.
 
 ## Turn flow
 
@@ -92,7 +94,7 @@ player message
   │      clocks, triggers, advance_time / mark_boundary                         [code]
   │ T6  all writes committed as events; re-read narrator view                   [code]
   │ T7–8 B DRAFT ── prose + mention list → write on mention / settle unsettled  [Gemini]
-  │ T9–10 C CHECK ── claims (subject ids constrained to the scene) + screen flags   [gpt-oss]
+  │ T9–10 C CHECK ── claims (subject ids constrained to the scene) + screen flags   [Gemini; TODO cross-family]
   │      check_claims verdicts; D REDRAFT ≤2 → else plain fallback              [code / Gemini]
   │ T11 deliver   T12 log verbatim, counters, scene cut if the question is answered   [code]
 ```
@@ -133,7 +135,7 @@ engine/                        # new package; src/ (the probes) stays as-is for 
 ├── audit/                     # RC-AUDIT: check_claims verdicts, plain fallback, T10 screen
 ├── dm/                        # PR-12-1 orchestrator; packets; per-turn schema builders
 │   └── roles/                 # reader.py, framer.py, world.py, narrator.py, checker.py (+ prompts)
-├── llm/                       # StructuredModel adapters: gemini.py, openai_compat.py, replay.py; budget
+├── llm/                       # StructuredModel adapters: gemini.py, replay.py; budget (a second-family adapter later)
 ├── session.py                 # the session API (contracts/engine-api.md)
 └── fixtures/                  # toll_bridge_scene.yaml, pc_prepared.yaml (validated against rules/data)
 
@@ -166,7 +168,7 @@ which depend on `engine.session` only. `engine/` mirrors the 00.14.1 runtime cap
    cost menu application, Oracle, `roll_table`, rulings ledger; golden tests from WE-01-* and T-01-3/10.
 3. **Time and boundaries.** Time ladder and modes, scheduler with phases, ordering and interrupts, the
    nine slice handlers, deferred-handler logging; WE-00-1 and WE-00-5 as golden tests.
-4. **Model layer.** Adapters (Gemini, OpenAI-compatible, replay), schema builders per role, budget cap,
+4. **Model layer.** Adapters (Gemini, replay), schema builders per role, budget cap,
    refusal handling; contract tests.
 5. **Turn loop.** PR-12-1 orchestrator with pause points (OFFER, clarifying question, redirect, near
    miss), T5 world responses, T8 write-on-mention, T9 claim check with redraft cycle and plain fallback,
@@ -180,9 +182,7 @@ should not), the rules validator runs first.
 
 ## Complexity Tracking
 
-No constitution violations. Two choices add moving parts and are justified here:
-
-| Choice | Why needed | Simpler alternative rejected because |
+| Violation or added complexity | Why | Simpler or compliant alternative, and why not now |
 |---|---|---|
-| Two model families (Gemini and gpt-oss) | P13 requires the checker to be a different family | One family would self-judge, which Feature 001 showed misses errors |
+| **P13 deviation:** the checker is Gemini, the narrator's family (`TODO(CROSS_FAMILY_CHECKER)`) | Owner decision (2026-10-07): one provider and one key while the slice is built | A second-family checker (gpt-oss on Groq, or Claude Haiku) is the compliant design and stays the target. Limits on the risk now: the checker is a separate call that never sees the narrator's prompt or reasoning; it only extracts claims, and the verdicts are code; its recall is measured on seeded errors (SC-003). **Revisit** before any playtest outside the developer, or sooner if recall misses the target. Switching is a config change plus one adapter |
 | Event log plus projection instead of plain tables | Replay (FR-026), resume mid-offer (FR-025), `revert_writes` | Mutable tables lose the history replay and revert need |

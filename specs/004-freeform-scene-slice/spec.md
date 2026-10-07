@@ -258,8 +258,10 @@ replay the recorded session with recorded model outputs and confirm byte-identic
 - **FR-020**: Every draft MUST be checked claim by claim against the store before delivery, using the
   ruleset's claim classes and verdicts (12.3.1–12.3.2), fixed per verdict, re-checked, and replaced by
   the plain fallback after two failed redrafts (12.3.3).
-- **FR-021**: Claim extraction MUST be done by a model from a different model family than the one that
-  narrates (Pattern P13).
+- **FR-021**: Claim extraction MUST be a separate model call from narration, with no access to the
+  narrator's prompt or reasoning, and MUST be swappable to a different model family by configuration
+  alone. Pattern P13 requires a different family; for this slice the owner chose a single provider, so
+  that requirement is deferred and tracked as `TODO(CROSS_FAMILY_CHECKER)` (see Assumptions).
 - **FR-022**: Each delivered response MUST pass the ruleset's screen (T10): the player's intent is
   acknowledged, a next step exists, no line or veil is crossed, the character is not given words or
   feelings, no numbers or rules words appear in the fiction, and it ends on an open prompt or exactly
@@ -346,3 +348,8 @@ graphical interface or hosting.
 - One prepared player character, built by hand to the ch.02 rules and validated against `data/`.
 - The player plays alone (Principle IV). A text interface in a terminal is sufficient for this slice.
 - Live sessions are played or scripted by the developer; automated tests never call a paid model.
+- One model provider (Google Gemini, one API key) for every role in this slice, by owner decision
+  (2026-10-07), to keep setup simple. The checker therefore shares the narrator's family, which Pattern
+  P13 forbids. This is a recorded, temporary deviation, `TODO(CROSS_FAMILY_CHECKER)`: the slice measures
+  the checker's recall on seeded errors (SC-003) so the cost of the deviation is known, and moving the
+  checker to another family must be a configuration change only.

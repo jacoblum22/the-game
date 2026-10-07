@@ -26,7 +26,7 @@ SessionConfig:
     framer:   {provider: gemini, model: gemini-3.8-flash, thinking: low}
     world:    {provider: gemini, model: gemini-3.8-flash, thinking: low}
     narrator: {provider: gemini, model: gemini-3.8-flash, thinking: low}
-    checker:  {provider: openai_compat, base_url: https://api.groq.com/openai/v1, model: openai/gpt-oss-120b}
+    checker:  {provider: gemini, model: gemini-3.8-flash, thinking: low}   # TODO(CROSS_FAMILY_CHECKER): move to another family (P13)
   spend_cap_usd: 1.00            # per session (FR-027)
   oracle_free_cap_per_scene: 6   # engine-side stopgap for I-038; logged
   auto_commit: false             # 01.7.4 preference

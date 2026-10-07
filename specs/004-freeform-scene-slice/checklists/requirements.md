@@ -33,8 +33,9 @@
 
 - The spec cites rule ids (PR-12-1, 12.3.2, INV-3 and so on) throughout. These are references to the
   game's rules, not implementation details, and they are what make each requirement testable.
-- FR-021 (a different model family checks the narration) names a property of the solution. It stays
-  because constitution Pattern P13 makes it a requirement, not a design choice.
+- FR-021 (a separate, swappable checker) names a property of the solution. It stays because Pattern P13
+  makes the checker's independence a requirement. The different-family part of P13 is deferred for this
+  slice by owner decision (2026-10-07) and tracked as `TODO(CROSS_FAMILY_CHECKER)`.
 - "A text interface in a terminal" appears only as a scope assumption, not as a requirement.
 - No clarifications were needed. Defaults chosen: a prepared scene and character, an engine-side cap
   on free Oracle questions until I-038 is fixed in the rules, a 3¢ median per-turn cost ceiling.

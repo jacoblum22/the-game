@@ -6,8 +6,9 @@ the interfaces in [contracts/](contracts/).
 ## Prerequisites
 
 - Python 3.11+, `pip install -r requirements.txt -r requirements-dev.txt` (hash-pinned).
-- For live runs only: `GEMINI_API_KEY` and `GROQ_API_KEY` in `.env` (the prototype's loader already reads
-  `.env`). Offline validation needs no keys.
+- For live runs only: `GEMINI_API_KEY` in `.env` at the repo root (the prototype's loader already reads
+  it; `.env` is git-ignored, so it lives on the machine that runs live sessions). Offline validation needs
+  no keys.
 - `rules/` from `integration-wave-swxsot`, unmodified.
 
 ## 1. Offline checks (free, run on every change)

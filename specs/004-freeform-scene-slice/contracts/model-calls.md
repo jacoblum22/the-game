@@ -104,7 +104,11 @@ NarratorOutput:
 
 OOF blocks (OFFER, STATUS, WARNING, …) are rendered by the engine from state (12.15), not by the model.
 
-## C Checker (gpt-oss-120b, different family) — T9 claims and T10 flags
+## C Checker (Gemini for now; `TODO(CROSS_FAMILY_CHECKER)`) — T9 claims and T10 flags
+
+A separate call: it gets the draft, the scene's entity ids with names and aliases, and its own
+instructions. It never sees the narrator's prompt, earlier drafts or reasoning, so moving it to another
+model family later changes only its config.
 
 ```yaml
 CheckerOutput:
