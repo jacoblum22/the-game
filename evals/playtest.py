@@ -20,6 +20,7 @@ import glob
 import io
 import json
 import os
+import random
 import subprocess
 import sys
 import tempfile
@@ -51,8 +52,9 @@ def claude_bin() -> str:
 
 def ask_claude(system: str, prompt: str, schema: dict[str, Any], model: str) -> tuple[Any, dict[str, Any]]:
     """One headless Claude call returning JSON for `schema`. Runs in a temp dir so no project CLAUDE.md loads."""
+    # no MCP servers, plugins, hooks or settings: halves the CLI's start-up (about 8 s to 4 s per call)
     cmd = [claude_bin(), "-p", "--output-format", "json", "--tools", "", "--no-session-persistence",
-           "--model", model]
+           "--strict-mcp-config", "--setting-sources", "project", "--model", model]
     schema_text = json.dumps(schema)
     if len(schema_text) <= MAX_INLINE_SCHEMA:
         cmd += ["--json-schema", schema_text]
@@ -113,7 +115,8 @@ sometimes empty to accept the default. Over the session try varied things: set-u
 scene, looking around, talking to someone, asking "what are my options?", a risky action, travel, rest, and
 asking what you know. Stay in character as a player, never as a tester. In `note`, say briefly and honestly
 anything that confused, bored or annoyed you about the last output (thin description, a dead end, a broken
-menu, repeated text, an error, rules jargon), or "" if it was fine."""
+menu, repeated text, an error, rules jargon), or "" if it was fine. The note is about the newest output only
+(after your last line); do not repeat complaints about earlier screens."""
 PERSONAS = {
     "explorer": "This session you love exploring: ask to set the scene, look closely at places, travel to new ones, "
                 "rest, and ask what you know about the land.",
@@ -139,19 +142,38 @@ SCRIPT = ["2", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "
 class Player(io.TextIOBase):
     """stdin for the CLI: each readline() shows the player everything printed since, and returns their line."""
 
-    def __init__(self, out: io.StringIO, kind: str, model: str, limit: int, persona: str = "explorer"):
+    def __init__(self, out: io.StringIO, kind: str, model: str, limit: int, persona: str = "explorer",
+                 quick_setup: bool = False, seed: int = 0):
         self.out, self.kind, self.model, self.limit = out, kind, model, limit
         self.persona = PERSONA + "\n\n" + PERSONAS[persona]
+        self.quick_setup = quick_setup
+        self.pick = random.Random(seed)
         self.seen = 0
         self.lines: list[tuple[str, str, str]] = []  # (game output since last input, player line, note)
+        self.play_inputs = 0  # inputs after "The story begins": the limit counts these
+
+    def _setup_answer(self, new: str) -> str:
+        """Quick setup: the dice build the world, then a random ready-made character, all defaults kept."""
+        if "decide what the world is like" in new:
+            return "2"
+        if "How do you want to make your character" in new:
+            return "3"
+        if "A ready-made character" in new and "Pick one" in new:
+            return str(self.pick.randint(1, 4))
+        return ""  # Enter: keep the default
 
     def readline(self, size: int = -1) -> str:  # noqa: ARG002
         text = self.out.getvalue()
         new, self.seen = text[self.seen:], len(text)
-        if len(self.lines) >= self.limit:
+        in_play = "The story begins." in text
+        if in_play:
+            self.play_inputs += 1
+        if self.play_inputs > self.limit or len(self.lines) > self.limit + 60:
             self.lines.append((new, "(end of playtest)", ""))
             return ""
-        if self.kind == "script":
+        if self.quick_setup and not in_play:
+            say, note = self._setup_answer(new), ""
+        elif self.kind == "script":
             say, note = SCRIPT[len(self.lines) % len(SCRIPT)], ""
         else:
             recent = text[-9000:]
@@ -163,6 +185,8 @@ class Player(io.TextIOBase):
                 self.lines.append((new, "(player failed)", repr(e)))
                 return ""
         self.lines.append((new, say, note))
+        self.out.write(say + "\n")  # echo, as a terminal would, so the player sees what it typed
+        self.seen = len(self.out.getvalue())
         print(f"[{len(self.lines)}] > {say}" + (f"   ({note})" if note else ""), flush=True)
         return say + "\n"
 
@@ -229,10 +253,13 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--engine", choices=("offline", "claude"), default="offline")
     ap.add_argument("--player", choices=("script", "claude"), default="script")
-    ap.add_argument("--inputs", type=int, default=40)
-    ap.add_argument("--engine-model", default="sonnet")
+    ap.add_argument("--turns", type=int, default=15, help="player inputs after the story begins")
+    ap.add_argument("--quick-setup", action="store_true", help="script world-building and a ready-made character")
+    ap.add_argument("--engine-model", default="haiku")
     ap.add_argument("--player-model", default="sonnet")
     ap.add_argument("--persona", choices=sorted(PERSONAS), default="explorer")
+    ap.add_argument("--out", type=Path, default=OUT, help="where transcripts and findings go")
+    ap.add_argument("--saves", type=Path, default=ROOT / "saves")
     args = ap.parse_args()
 
     stamp = time.strftime("%Y%m%d-%H%M%S")
@@ -244,17 +271,19 @@ def main() -> int:
             return engine if engine is not None else super().model()
 
     out = io.StringIO()
-    player = Player(out, args.player, args.player_model, args.inputs, args.persona)
+    player = Player(out, args.player, args.player_model, args.turns, args.persona, args.quick_setup,
+                    seed=int(stamp.replace("-", "")))
     start = time.time()
-    code = play_main(["new", name], stdin=player, stdout=out,
+    args.saves.mkdir(parents=True, exist_ok=True)
+    code = play_main(["new", name], stdin=player, stdout=out, saves=args.saves,
                      config=lambda _offline: Config(offline=args.engine == "offline"))
     player.lines.append((out.getvalue()[player.seen:], f"(exit {code})", ""))
-    OUT.mkdir(parents=True, exist_ok=True)
-    path = OUT / f"{stamp}-{args.engine}-{args.persona}.md"
-    save = ROOT / "saves" / f"{name}.db"
+    args.out.mkdir(parents=True, exist_ok=True)
+    path = args.out / f"{stamp}-{args.engine}-{args.persona}.md"
+    save = args.saves / f"{name}.db"
     report(path, args, player, engine, save, time.time() - start)
     n = write_findings(path.with_suffix(".findings.jsonl"), player, save, code)
-    print(f"report: {path.relative_to(ROOT)}  (exit {code}, {len(player.lines)} inputs, {n} findings)")
+    print(f"report: {path}  (exit {code}, {len(player.lines)} inputs, {n} findings)")
     return code
 
 
