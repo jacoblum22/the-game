@@ -427,3 +427,5 @@ Resolved all 12 rows: I-038 (Oracle lever cap; sim shows +3.7 down to +0.8 per r
 - Ch.09 data regenerated, then the integration merge, appendix and anchors rebuilt. Validator 0/0.
 
 ## Revision C6d merged: ch.15–16 basis tags (130 cards; DL-16-25, DL-16-26). BASIS covers 1084 cards. New row I-105 (renumbered from I-098): tamed beasts may leave before reaching Neutral.
+
+## Revision C6e merged: ch.08 basis tags (46 cards; DL-08-39..41); I-092 resolved; I-091 done for ch.15, with ch.11 still open. BASIS covers every chapter except 11, 12 and 13.

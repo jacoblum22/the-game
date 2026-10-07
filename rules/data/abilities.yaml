@@ -10061,7 +10061,7 @@ abilities:
     - {effect_id: eff.grant_lever, params: {type: amplifying, duration: beat, applies_when: a honed weapon's first Strike in a scene}}
     cost: {focus: 0}
     limits: null
-  crude_fallback: {verb: verb.handle, method: 'crude repair: straighten, bind, patch', dc_shift: 5, reach_cap: limited, consequence: the item is serviceable until the next rest_long only}
+  crude_fallback: {verb: verb.handle, method: 'crude repair: straighten, bind, patch', dc_shift: 5, reach_cap: limited, consequence: 'the item is serviceable until the next rest_long only; worn, common or fine items only (08.6.7)'}
   stretch: {dc_shift: 5, cost_add: 1, reach_cap: limited, within: principle}
   emulate: null
   acquisition_paths:
@@ -10111,7 +10111,7 @@ abilities:
     - {effect_id: eff.tick_clock, params: {clock: the work's project clock, ticks: 1}}
     cost: {focus: 0}
     limits: null
-  crude_fallback: {verb: verb.handle, method: 'crude repair: straighten, bind, patch', dc_shift: 5, reach_cap: limited, consequence: the item is serviceable until the next rest_long only}
+  crude_fallback: {verb: verb.handle, method: 'crude repair: straighten, bind, patch', dc_shift: 5, reach_cap: limited, consequence: 'the item is serviceable until the next rest_long only; worn, common or fine items only (08.6.7)'}
   stretch: null
   emulate: null
   acquisition_paths:
@@ -10257,7 +10257,7 @@ abilities:
   regime: additive
   principle: Make damaged gear serve a while longer.
   scope: At a breather, with a kit, mend one damaged item to working order until your next long rest.
-  limitation: Applies to one damaged item of leather, cloth, wood or mail, at a breather, with a kit.
+  limitation: Applies to one damaged item of leather, cloth, wood or mail, of worn, common or fine quality (08.6.7), at a breather, with a kit.
   excludes:
   - {what: a lasting repair, needs: a crafting beat (08)}
   - {what: blades and plate, needs: lic.training.craft_smithing}
@@ -18298,7 +18298,7 @@ abilities:
     - {effect_id: eff.write_fact, params: {subject: the weapon, predicate: named, value: the name the pc gives}}
     cost: {focus: 2}
     limits: {per: rest_long, uses: 1}
-  crude_fallback: {verb: verb.handle, method: 'crude repair: straighten, bind, patch', dc_shift: 5, reach_cap: limited, consequence: the item is serviceable until the next rest_long only}
+  crude_fallback: {verb: verb.handle, method: 'crude repair: straighten, bind, patch', dc_shift: 5, reach_cap: limited, consequence: 'the item is serviceable until the next rest_long only; worn, common or fine items only (08.6.7)'}
   stretch: {dc_shift: 5, cost_add: 1, reach_cap: limited, within: principle}
   emulate: null
   acquisition_paths:

@@ -47,7 +47,7 @@ ab('ab.sound_timber', 'Sound Timber', C + 'woodcraft.carpentry', 2, 'barricade',
 # ---------------- leathercraft ----------------
 ab('ab.field_patch', 'Field Patch', C + 'leathercraft.goods', 1, 'mend_gear', 'Permission', 'beat',
    'Make damaged gear serve a while longer.',
-   'Applies to one damaged item of leather, cloth, wood or mail, at a breather, with a kit.',
+   'Applies to one damaged item of leather, cloth, wood or mail, of worn, common or fine quality (08.6.7), at a breather, with a kit.',  # [revision: I-092]
    [rk("At a breather, with a kit, mend one damaged item to working order until your next long rest.",
        [perm(2), fact('the item', 'condition', 'serviceable until the next rest_long')]),
     rk("At a breather, with a kit, mend up to three damaged items to working order until your next long rest.",
