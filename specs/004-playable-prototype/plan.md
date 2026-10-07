@@ -63,7 +63,7 @@ Milestone 7; 105 boundary handlers (about 36 in Milestone 1); 129 anchors; 56 da
 
 | Principle / pattern | How this plan meets it | Status |
 |---|---|---|
-| I. AI-driven mechanical resolution | The model makes every judgment that sets something in motion; code runs only `[D]` steps, in the order PR-12-1 fixes. This matches 00-architecture's "Principle I, stated precisely". The constitution's own wording is stricter; research.md R12 recommends aligning it | Pass, wording amendment proposed |
+| I. AI-driven mechanical resolution | The model makes every judgment that sets something in motion; code runs only `[D]` steps, in the order PR-12-1 fixes. This matches 00-architecture's "Principle I, stated precisely". The constitution's wording now matches it | Pass (amended v2.0.0) |
 | II. Custom ruleset | The engine implements `rules/` directly | Pass |
 | III. Flexibility within bounds | Anchors with at most two knob deltas; precedent before any adaptation; ruling ledger with `review_flag` | Pass |
 | IV. MVP scope | One player per game, text only | Pass |
@@ -76,7 +76,7 @@ Milestone 7; 105 boundary handlers (about 36 in Milestone 1); 129 anchors; 56 da
 | P8 deterministic degrees | `roll_check` and the degree rule (01.8.1) in code | Pass |
 | P13 three-layer split | Code owns mechanics; the event store owns state; the checker is a separate call with `unknown` abstention and code-computed verdicts; moderation separate from consistency. **The checker shares the narrator's family (Gemini)**, by owner decision | Deviation, recorded below |
 | P16 / P17 | T10 "next step exists"; G3/G4 redirects; lead injection; compound questions per 01.10 | Pass |
-| Technology Constraints: `TODO(TECH_STACK)` | Resolved by this plan; to be recorded in the constitution once the owner agrees | Pending owner approval |
+| Technology Constraints: `TODO(TECH_STACK)` | Resolved by this plan; the stack is recorded in the constitution, with `TODO(CROSS_FAMILY_CHECKER)` open against P13 | Pass (amended v2.0.0) |
 
 One recorded deviation (P13's different-family checker), justified under Complexity Tracking. Re-checked
 after Phase 1 design: unchanged.

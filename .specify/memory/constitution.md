@@ -1,5 +1,39 @@
 <!--
 Sync Impact Report
+Version change: 1.8.0 → 2.0.0 (MAJOR: Principle I is redefined. The owner approved the first
+  feature's tech stack on 2026-10-07; recording it here also brings Principle I's wording in line
+  with the reading the ruleset already uses.)
+Modified principles:
+  - I. AI-Driven Mechanical Resolution (title unchanged). Removed: the AI "directly executes all
+    mechanical resolution — dice rolls, number generation" and "there is no separate deterministic
+    rules engine sitting outside the AI's control". Replaced with 00-architecture's "Principle I,
+    stated precisely": the AI DM makes every judgment that sets something in motion; deterministic
+    instruments do the arithmetic, dice and bookkeeping the rules mark `[D]`, in the order PR-12-1
+    fixes; nothing bypasses the instruments. Kept: the AI is the engine, not a narrator on top of one.
+Bump rationale: this is a backward-incompatible redefinition, so MAJOR. It removes a normative
+  prohibition and puts a requirement in its place. A design that complied with 1.8.0 (the model
+  producing its own dice and numbers in context) now violates I, because it bypasses the
+  instruments. A design that 1.8.0's wording arguably forbade (code running the `[D]` steps, as in
+  specs/004) now complies. The intent is unchanged. `rules/` (00-architecture) has used this reading
+  since v1.0, and the principle now agrees with P13 ("deterministic tool-calls own hard mechanics").
+  Resolving TODO(TECH_STACK) on its own would have been MINOR.
+Expanded sections:
+  - Technology Constraints: TODO(TECH_STACK) resolved (engine, schemas, storage, models, front end,
+    hosting), with plan.md and research.md cited for detail.
+Added sections: n/a
+Removed sections: n/a
+Resolved deferrals:
+  - TODO(TECH_STACK): resolved (Technology Constraints). The "still open" lines in the prior reports
+    below are kept as history.
+Newly deferred by this amendment:
+  - TODO(CROSS_FAMILY_CHECKER): the claim checker shares the narrator's model family (Gemini). This
+    is a recorded deviation from Pattern P13 and stays open until a second-family checker is restored.
+Dependent artifacts: specs/004-playable-prototype/plan.md Constitution Check rows for Principle I
+  and Technology Constraints now cite v2.0.0.
+Research basis: specs/004-playable-prototype/research.md (R1–R4, R6, R9, R10, R12) and plan.md
+  (Technical Context, Complexity Tracking); rules/00-architecture.md "Principle I, stated precisely".
+
+Prior report (1.7.0 → 1.8.0):
 Version change: 1.7.0 → 1.8.0 (MINOR: the ruleset in `rules/` (v1.0) resolves every item this
   document deferred to "a future /speckit-plan", and records three owner-approved pattern
   amendments it made along the way. No Core Principle is changed.)
@@ -218,10 +252,14 @@ Research basis: this amendment is sourced from a fourth dedicated research pass 
 ## Core Principles
 
 ### I. AI-Driven Mechanical Resolution
-The AI Dungeon Master directly executes all mechanical resolution — dice rolls, number
-generation, and rule application. There is no separate deterministic rules engine sitting
-outside the AI's control; the AI *is* the engine that runs the mechanics, not merely a
-narrator layered on top of one.
+The AI Dungeon Master *is* the engine that runs the mechanics, not merely a narrator layered on
+top of one. Stated precisely (rules/00-architecture.md, "Principle I, stated precisely"), "the
+engine" and "the tool" mean the deterministic instruments the AI DM operates. The AI DM MUST make
+every judgment that sets something in motion: *when* to call an instrument, *what* to classify,
+and *how* to narrate the result. The instruments do the arithmetic, the dice, and the
+bookkeeping. Code runs only the steps the rules mark `[D]`, in the order PR-12-1 (the turn loop)
+fixes, and MUST NOT make a judgment the rules mark `[J]`. Nothing happens that the AI DM did not
+set in motion, and nothing the AI DM sets in motion bypasses the instruments.
 
 ### II. Custom Ruleset by Design
 The project builds a custom tabletop-style ruleset rather than adapting an existing system
@@ -318,9 +356,24 @@ separate from P8's "how well did the attempt go."
 
 ## Technology Constraints
 
-TODO(TECH_STACK): language, platform, and engine are not yet chosen. This MUST be resolved
-during /speckit-plan for the first feature rather than assumed implicitly; do not let an
-implementation default become a de facto decision without recording it here.
+The owner approved this stack on 2026-10-07 with the first feature's plan. Detail, alternatives and
+costs are in `specs/004-playable-prototype/plan.md` (Technical Context, Complexity Tracking) and
+`specs/004-playable-prototype/research.md`. Changing any item below is an amendment to this
+document, not a plan-level default.
+
+- **Engine:** Python 3.11+, one engine package, `engine/`. Code drives the PR-12-1 turn loop and the
+  PR-01-1 resolution pipeline. Model roles fill per-turn JSON-Schema forms whose enums come from the
+  rules and the current game state, so every judgment is a closed choice (Principle I).
+- **Schemas and state objects:** Pydantic v2.
+- **Storage:** one SQLite event log per game: append-only events as the source of truth, a typed
+  projection, and snapshots. This is the external store Pattern P13 requires.
+- **Models:** Gemini 3.8 Flash for every model role, on one key (`GEMINI_API_KEY`). The claim
+  checker is a separate call that can be swapped out on its own.
+  `TODO(CROSS_FAMILY_CHECKER)`: the checker shares the narrator's model family. This is a recorded
+  deviation from Pattern P13, made by owner decision (one provider, one key). It stays open until a
+  second-family checker is restored. The target is gpt-oss-120b on Groq or Claude Haiku.
+- **Front end:** a terminal front end first, then a FastAPI + htmx web front end.
+- **Hosting:** one SQLite file per game.
 
 ## Adopted Design Patterns (Provisional)
 
@@ -722,4 +775,4 @@ bumps follow semantic versioning: MAJOR for backward-incompatible principle remo
 redefinitions, MINOR for new principles/patterns or materially expanded guidance, PATCH for
 wording or clarification only.
 
-**Version**: 1.8.0 | **Ratified**: 2026-09-27 | **Last Amended**: 2026-10-07
+**Version**: 2.0.0 | **Ratified**: 2026-09-27 | **Last Amended**: 2026-10-07
