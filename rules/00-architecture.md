@@ -418,7 +418,8 @@ currency [BRIEF A2 #12; R7 §4.2].
 | **Amplifying** | makes success *go further* (a weak spot, numbers, a resonance, a crowd on your side) | reach +1 rung | reach −1 rung |
 
 Rules: (a) each lever or snag **cites a fact id** that was established in state (or created by an
-earlier beat, such as a Setup) *before* the declaration; "cool" is not a fact; (b) **at most two
+earlier beat, such as a Setup) *before* the declaration; "cool" is not a fact; a fact a player's own
+Oracle question established (a free fact) is further capped by 01.15.8 [revision: I-038]; (b) **at most two
 levers and two snags** per roll; (c) the net roll modifier from levers and snags is capped at ±4, and
 the resulting stakes and reach are clamped to their ladders; (d) one fact yields at most one lever;
 (e) the type follows from what the fact does, and if a fact honestly fits two types the player picks;

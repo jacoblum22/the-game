@@ -1674,8 +1674,9 @@ the qualifier's kind is fixed by the roll, only its form is chosen (class i). [R
 shape); R: https://ironsworn-rpg.fandom.com/wiki/Ask_the_Oracle]
 
 **01.15.5 Recording and "no" never ends at a wall.** `[D]` The answer is written as a fact (`set_fact`,
-`source: oracle`) before it is narrated; the question, its odds rung, the d100 and the shape go to the
-oracle log. A "no" is always followed by what *is* there, drawn from state or from the no-but qualifier.
+`source: oracle`) before it is narrated; the question, its asker (a player's character, or the DM), its odds
+rung, the d100 and the shape go to the oracle log, so a **free fact** (01.15.8) can be told from the rest
+[revision: I-038]. A "no" is always followed by what *is* there, drawn from state or from the no-but qualifier.
 
 **01.15.6 The sealed Oracle.** `[D]` When the answer is something the character must *discover* (does
 this study hide a compartment?), the engine writes the answer as a **sealed** fact whose gate is
@@ -1700,6 +1701,23 @@ something else), or a rephrased re-ask is rolled while the engine still refuses 
 is an established fact and may be a lever for that declaration. An answer to a question *embedded in* a
 declaration may make the method possible (the rope exists, so the swing has something to swing on) but
 is not a lever for that same beat; it may be one from the next beat on (00.3.9a).
+A **free fact** is one written by an Oracle answer to a question a *player* asked (G0, 01.3.8; the oracle
+log names the asker, 01.15.5). A question costs nothing, so a free fact's use as a lever is capped:
+(a) at most **one** lever per roll may cite a free fact; (b) a character may cite free facts as levers on
+at most **two rolls per scene** (counted from the ride records; a roll that cites none does not count);
+(c) a free fact is never the Protective lever that takes a lethal frame below Dire (01.6.9): a fact that
+makes a deadly gamble survivable is earned. Past a cap the free fact is still true and still makes methods
+possible; to be a lever it must be **worked**: a Setup on it (01.14.9: "I kick the grit into his eyes"),
+which spends the action and risks the roll, makes the Setup's fact the lever, and that fact is not free.
+Facts from narration (write-on-mention, 12.10.3), generation, an Observe or Recall beat, a Setup, or a
+question the DM asked for its own narration (12.6.2) are not free facts; only 00.3.9 limits them. The odds
+are never shifted to curb fishing: 01.15.2 sets them from the world alone, and the caps do the curbing.
+The OFFER names a free-fact lever as such and the count used this scene ("the grit is your second free
+fact this scene"). Basis: `01-oracle-fishing.py` (seed 38): with no cap a player who asks three Likely
+questions a roll gains +3.7 a roll; with these caps the free-fact bonus is at most +4 a scene and does not
+grow with the number of questions (+0.8 a roll over a five-roll scene). *Worst case (J):* a fact's source
+misread (a narrated fact counted as free, or the reverse): one lever (+2, one rung) wrongly refused or
+allowed, auditable from the cited fact's source and the oracle log (class i). [revision: I-038]
 
 ### 01.16 Fate
 
@@ -2083,7 +2101,8 @@ uncertain.
 6. `oracle(question, rung, fact_key, sealed?)` → d100 → shape (T-01-10).
 7. For yes-and / no-and: `roll_table(tbl.meaning)` for the "and". For yes-but / no-but: choose the
    qualifier from its closed list.
-8. `set_fact` (sealed if a discovery question); then narrate; a "no" is followed by what is there.
+8. `set_fact` (sealed if a discovery question), logging the asker (a player's question → a free fact,
+   01.15.8) [revision: I-038]; then narrate; a "no" is followed by what is there.
 
 **PR-01-5 A G3 redirect.** `[D]` + `[N]`
 1. Identify the license that would cover the method (data lookup by deed tags and scope); if none
@@ -2550,7 +2569,7 @@ action into beats or pick a closer card; (5) log the ruling. Every card below is
 **Edge cases.**
 - **The player argues for a lever.** The test is *name the fact*. If it exists in state, it stands; if
   the player proposes a new one ("surely there's a rope"), it is an Oracle question first and a lever from
-  the next beat (01.15.8).
+  the next beat (01.15.8), a free fact under 01.15.8's caps [revision: I-038].
 - **Splitting one fact into several levers** ("the torch is bright *and* hot *and* frightening"): one fact,
   one lever (00.3.9d).
 - **A license almost fits.** Split by literal scope (01.3.4); never deny the part it covers, never
@@ -2560,7 +2579,9 @@ action into beats or pick a closer card; (5) log the ruling. Every card below is
 - **The same idea again after failing:** it rides (01.4.2) until the approach, a lever, the circumstances
   or the interval changes, or the re-attempt cost is paid.
 - **Fishing with the Oracle** ("a ballista? a dragon egg?"): odds come from the scene, so absurd questions
-  land on Remote or Impossible; every yes is a kept fact; nothing is re-asked (01.15.7).
+  land on Remote or Impossible; every yes is a kept fact; nothing is re-asked (01.15.7). Plausible fishing
+  ("loose grit? a ledge? a crate?" before every roll) is capped where it pays: one free-fact lever a roll,
+  two such rolls a scene, never the lever that sheds a lethal frame (01.15.8) [revision: I-038].
 - **The DM wants a complication no roll produced:** only the closed list of 01.11.3.
 - **An action whose target is ambiguous** ("I kick him"): resolve the target first (01.2.5); never
   narrate self-harm without a resolved result.
