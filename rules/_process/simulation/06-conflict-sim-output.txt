@@ -358,12 +358,12 @@ Foe band = PC band +2
 | martial specialist P3 vs 1xT4: Focus push                  |  84.0 |  53.3 |  46.7 |  16.1 |  5.2 | 12.9 |   0.0 |
 | P3 caster vs 2xT3: Spent (Force Bolt only)                 |  26.4 |  12.8 |  87.2 |  73.6 |  2.8 | 15.2 |  22.7 |
 | P3 caster vs 2xT3: Focus 7, push the first bolt each turn  |  47.4 |  26.3 |  73.7 |  52.6 |  2.6 | 13.8 |  46.8 |
-| P3 caster vs 2xT3: Focus 7, Flame Lance first each turn    |  26.8 |  12.8 |  87.2 |  73.2 |  2.8 | 15.2 |  22.6 |
+| P3 caster vs 2xT3: Focus 7, Flame Lance first each turn    |  27.3 |  13.0 |  87.0 |  72.7 |  2.8 | 15.2 |  23.5 |
 | martial specialist P3 vs 2xT3: no Focus                    |  73.0 |  51.9 |  48.1 |  27.0 |  4.6 | 13.2 |  60.8 |
 | martial specialist P3 vs 2xT3: Focus push                  |  89.6 |  73.7 |  26.3 |  10.4 |  3.8 | 10.9 |  77.5 |
 | P3 caster vs 2xT2: Spent (Force Bolt only)                 |  91.4 |  78.8 |  21.2 |   8.6 |  2.7 |  8.8 |  73.4 |
 | P3 caster vs 2xT2: Focus 7, push the first bolt each turn  |  96.5 |  88.6 |  11.4 |   3.5 |  2.2 |  6.4 |  59.1 |
-| P3 caster vs 2xT2: Focus 7, Flame Lance first each turn    |  91.8 |  79.0 |  21.0 |   8.2 |  2.7 |  8.7 |  73.3 |
+| P3 caster vs 2xT2: Focus 7, Flame Lance first each turn    |  92.0 |  79.2 |  20.8 |   8.1 |  2.7 |  8.7 |  74.1 |
 | martial specialist P3 vs 2xT2: no Focus                    | 100.0 | 100.0 |   0.0 |   0.0 |  2.7 |  2.1 |  84.0 |
 | martial specialist P3 vs 2xT2: Focus push                  | 100.0 | 100.0 |   0.0 |   0.0 |  2.2 |  1.4 |  69.1 |
 
@@ -374,3 +374,50 @@ Foe band = PC band +2
 | Spent P3 caster, arcane Force Bolt at S2 vs 1xT3           |  66.0 |  29.4 |  70.6 |  34.0 |  3.8 | 14.3 |   0.0 |
 | Spent P3 caster, divine Rebuke at S2 vs 1xT3               |  60.6 |  24.6 |  75.4 |  39.4 |  3.8 | 14.7 |   0.0 |
 | Spent P3 caster, primal Wild Lash at S2 vs 1xT3            |  27.9 |   6.4 |  93.6 |  72.1 |  4.3 | 15.7 |   0.0 |
+
+### K1. Lingering harm next to a severity rung (1-Focus spell first each turn; arcane delivery, unreduced)
+
+| Band | Matchup | S_w spell | +1 rung | burning x1, scene | burning x1, one round | burning x2, scene | bleeding x1, scene | bleeding x1, one round |
+|---|---|---|---|---|---|---|---|---|
+| P1 | 1xT3 | 31.2 | 51.0 | 44.0 (never) | 37.4 (never) | 50.8 (never) | 44.0 (never) | 37.4 (never) |
+| P1 | 2xT2 | 37.3 | 51.3 | 42.7 (never) | 42.2 (never) | 45.0 (never) | 42.7 (never) | 42.2 (never) |
+| P3 | 1xT4 | 33.6 | 54.9 | 44.3 (never) | 41.0 (never) | 48.9 (always) | 44.3 (never) | 41.0 (never) |
+| P3 | 2xT3 | 26.4 | 47.4 | 27.3 (never) | 26.4 (never) | 28.1 (never) | 27.3 (never) | 26.4 (never) |
+| P5 | 1xT5 | 30.1 | 40.2 | 30.8 (never) | 30.0 (never) | 34.2 (never) | 30.8 (never) | 30.0 (never) |
+| P5 | 2xT4 | 25.7 | 37.7 | 28.1 (never) | 26.9 (never) | 33.4 (always) | 28.1 (never) | 26.9 (never) |
+
+Pooled rung gain 98.3 win points (= 2 EU). EU equivalent, the bearer answering at its best:
+- burning x1, scene: 0.67 EU (bearer's best answer: never)
+- burning x1, one round: 0.40 EU (bearer's best answer: never)
+- burning x2, scene: 1.14 EU (bearer's best answer: always, never)
+- bleeding x1, scene: 0.67 EU (bearer's best answer: never)
+- bleeding x1, one round: 0.40 EU (bearer's best answer: never)
+
+### K2. I-033 acceptance: a 1-Focus damage spell against the free working plus a push (P3 caster, Focus 7)
+
+| Matchup                                                    | win%  | clean | stag% | dying | rnds | lost | broke |
+|------------------------------------------------------------|-------|-------|-------|-------|------|------|-------|
+| P3 caster vs 1xT3: Spent (Force Bolt only)                 |  91.0 |  66.2 |  33.8 |   9.0 |  2.7 | 10.3 |   1.9 |
+| P3 caster vs 1xT3: push the first bolt each turn           |  95.9 |  79.4 |  20.6 |   4.1 |  2.2 |  7.9 |  26.0 |
+|   old Flame Lance r2 (S3 + burning), bearer never          |  92.1 |  67.5 |  32.5 |   7.9 |  2.6 | 10.1 |  12.0 |
+|   old Flame Lance r2 (S3 + burning), bearer always         |  94.9 |  77.8 |  22.2 |   5.1 |  2.7 |  7.9 |   1.8 |
+|   old Flame Lance r2 (S3 + burning), bearer smart          |  94.9 |  77.8 |  22.2 |   5.1 |  2.7 |  7.9 |   1.8 |
+|   new Flame Lance r2 (S4 +2 + burning), bearer never       |  97.3 |  86.6 |  13.4 |   2.7 |  1.8 |  5.7 |  61.0 |
+|   new Flame Lance r2 (S4 +2 + burning), bearer always      |  97.8 |  88.5 |  11.5 |   2.2 |  1.8 |  5.1 |  61.9 |
+|   new Flame Lance r2 (S4 +2 + burning), bearer smart       |  97.8 |  88.5 |  11.5 |   2.2 |  1.8 |  5.1 |  61.9 |
+| P3 caster vs 1xT4: Spent (Force Bolt only)                 |  33.6 |   9.0 |  91.0 |  66.4 |  4.0 | 15.5 |   0.1 |
+| P3 caster vs 1xT4: push the first bolt each turn           |  54.9 |  20.5 |  79.5 |  45.1 |  3.6 | 14.6 |   1.7 |
+|   old Flame Lance r2 (S3 + burning), bearer never          |  44.3 |  12.3 |  87.7 |  55.7 |  3.8 | 15.3 |   0.1 |
+|   old Flame Lance r2 (S3 + burning), bearer always         |  48.9 |  20.0 |  80.0 |  51.1 |  4.3 | 14.5 |   0.1 |
+|   old Flame Lance r2 (S3 + burning), bearer smart          |  48.9 |  20.0 |  80.0 |  51.1 |  4.3 | 14.5 |   0.1 |
+|   new Flame Lance r2 (S4 +2 + burning), bearer never       |  65.9 |  28.7 |  71.3 |  34.1 |  3.3 | 13.9 |   0.0 |
+|   new Flame Lance r2 (S4 +2 + burning), bearer always      |  67.8 |  36.0 |  64.0 |  32.2 |  3.6 | 12.9 |   0.0 |
+|   new Flame Lance r2 (S4 +2 + burning), bearer smart       |  67.8 |  36.0 |  64.0 |  32.2 |  3.6 | 12.9 |   0.0 |
+| P3 caster vs 2xT3: Spent (Force Bolt only)                 |  26.4 |  12.8 |  87.2 |  73.6 |  2.8 | 15.2 |  22.7 |
+| P3 caster vs 2xT3: push the first bolt each turn           |  47.4 |  26.3 |  73.7 |  52.6 |  2.6 | 13.8 |  46.8 |
+|   old Flame Lance r2 (S3 + burning), bearer never          |  27.3 |  13.0 |  87.0 |  72.7 |  2.8 | 15.2 |  23.5 |
+|   old Flame Lance r2 (S3 + burning), bearer always         |  37.6 |  20.1 |  79.9 |  62.4 |  3.1 | 14.7 |  31.4 |
+|   old Flame Lance r2 (S3 + burning), bearer smart          |  37.6 |  20.1 |  79.9 |  62.4 |  3.1 | 14.7 |  31.4 |
+|   new Flame Lance r2 (S4 +2 + burning), bearer never       |  54.6 |  32.2 |  67.8 |  45.4 |  2.5 | 13.2 |  52.0 |
+|   new Flame Lance r2 (S4 +2 + burning), bearer always      |  59.9 |  39.2 |  60.8 |  40.1 |  2.6 | 12.2 |  57.5 |
+|   new Flame Lance r2 (S4 +2 + burning), bearer smart       |  59.9 |  39.2 |  60.8 |  40.1 |  2.6 | 12.2 |  57.5 |

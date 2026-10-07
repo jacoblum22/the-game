@@ -228,7 +228,8 @@ budget:
   - {effect: 'Strike or spell delivery changed (harm type, form)', units: 1 (+ its harm edge), ids: 'eff.strike_delivery, eff.05.spell_delivery'}
   - {effect: Each target beyond the first (through a spread tag), units: '1', ids: spread}
   - {effect: 'Condition, light group (off_balance, distracted, exposed, slowed, deafened, chilled)', units: 1 (+1 if it lasts beyond a round), ids: eff.apply_condition}
-  - {effect: 'Condition, middle group (prone, weakened, frightened, blinded, grabbed, burning, bleeding, dazed, choking, poisoned, exhausted)', units: 2 (+1 beyond a round), ids: eff.apply_condition}
+  - {effect: 'Condition, middle group (prone, weakened, frightened, blinded, grabbed, dazed, choking, poisoned, exhausted)', units: 2 (+1 beyond a round), ids: eff.apply_condition}
+  - {effect: 'Condition, lingering harm (burning, bleeding: harm at the bearer''s turn end, which one action of the bearer ends), per stack applied', units: '1, whatever its duration', ids: eff.apply_condition}
   - {effect: 'Condition, hard-control group (stunned, restrained, charmed, unconscious, pinned, frozen)', units: 4 (+1 beyond a round), ids: eff.apply_condition}
   - {effect: Harm reduction 1 for one harm branch / for all physical harm or several branches, units: 1 / 2 per point, ids: eff.harm_reduction}
   - {effect: Resistance (halve) one harm branch, units: '3', ids: eff.harm_resistance}
@@ -257,7 +258,7 @@ census:
   by_form: {edge: 27, exception: 15, form: 20, lever: 15, permission: 20, reaction: 29, reserve: 5, working: 231}
   by_timing: {beat: 223, passive: 48, reaction: 22, rider: 58, trigger: 11}
   by_min_tier: {1: 106, 2: 31, 3: 44, 4: 81, 5: 100}
-  budget_slack: {on_allowance: 191, one_under: 220, two_under: 238}
+  budget_slack: {on_allowance: 185, one_under: 222, two_under: 242}
 
 abilities:
 - id: ab.riposte
@@ -3166,7 +3167,7 @@ abilities:
   hook: on_degree
   rides: [verb.strike]
   principle: Bring down the creature you have hunted.
-  scope: Your Strike against a creature you marked or tracked here deals harm two severity rungs heavier, +2, the target bleeds until the scene ends, and the Strike holds a Precision lever.
+  scope: Your Strike against a creature you marked or tracked here deals harm two severity rungs heavier, +2, the target bleeds until the scene ends and is exposed until the end of its next turn, and the Strike holds a Precision lever.
   limitation: Applies to a Strike against a creature you have marked or have tracked to this place.
   excludes:
   - {what: a creature you met by chance, needs: 'ab.quarrys_mark first, or track it'}
@@ -3178,15 +3179,17 @@ abilities:
   - {effect_id: eff.harm_severity_step, params: {ladder: severity, steps: 2, applies_when: this Strike}}
   - {effect_id: eff.harm_edge, params: {amount: 2, applies_when: this Strike}}
   - {effect_id: eff.apply_condition, params: {condition: cond.bleeding, severity: S1, duration: scene, target: the target of the Strike}}
+  - {effect_id: eff.apply_condition, params: {condition: cond.exposed, severity: S1, duration: 'rounds:1', target: the target of the Strike}}
   - {effect_id: eff.grant_lever, params: {type: precision, duration: beat, applies_when: this Strike}}
   ranks:
   - rank: 1
     at_tier: 5
-    text: Your Strike against a creature you marked or tracked here deals harm two severity rungs heavier, +2, the target bleeds until the scene ends, and the Strike holds a Precision lever.
+    text: Your Strike against a creature you marked or tracked here deals harm two severity rungs heavier, +2, the target bleeds until the scene ends and is exposed until the end of its next turn, and the Strike holds a Precision lever.
     effects:
     - {effect_id: eff.harm_severity_step, params: {ladder: severity, steps: 2, applies_when: this Strike}}
     - {effect_id: eff.harm_edge, params: {amount: 2, applies_when: this Strike}}
     - {effect_id: eff.apply_condition, params: {condition: cond.bleeding, severity: S1, duration: scene, target: the target of the Strike}}
+    - {effect_id: eff.apply_condition, params: {condition: cond.exposed, severity: S1, duration: 'rounds:1', target: the target of the Strike}}
     - {effect_id: eff.grant_lever, params: {type: precision, duration: beat, applies_when: this Strike}}
     cost: {focus: 2}
     limits: null
@@ -3200,7 +3203,7 @@ abilities:
   flares: [hard, lasting]
   narration_may_not_imply: ['a harm type, target, band or duration other than the text''s', a weakness this record does not hold, an effect on anything outside the stated targets]
   budget:
-  - {rank: 1, value: 10, allowance: 11, terms: {tier: 6, focus: 4, recharge: 0, timing: 0, limitation: 1, weakness: 0, other_cost: 0}}
+  - {rank: 1, value: 9, allowance: 11, terms: {tier: 6, focus: 4, recharge: 0, timing: 0, limitation: 1, weakness: 0, other_cost: 0}}
   source: the shared pool (05.1.1)
   lifecycle: provisional
   basis: ['05.3', '05.11']
@@ -4789,7 +4792,7 @@ abilities:
   regime: independent_trigger
   hook: on_declare
   principle: Throw a line of fire at one target.
-  scope: Throw fire at one target within band.near. On a success it takes Moderate fire harm (shifted by delivered reach) and is burning.
+  scope: Throw fire at one target within band.near. On a success it takes Heavy fire harm +1 (shifted by delivered reach) and is burning.
   limitation: Applies to one target you can see within band.near.
   excludes:
   - {what: lighting a candle or a pipe, needs: a small working (05.7.6)}
@@ -4799,31 +4802,36 @@ abilities:
   cost: {focus: 1}
   limits: null
   effects:
-  - {effect_id: eff.deal_harm, params: {severity: S2, harm_tags: [harm.fire.flame], target: the target}}
+  - {effect_id: eff.deal_harm, params: {severity: S3, harm_tags: [harm.fire.flame], target: the target}}
+  - {effect_id: eff.harm_edge, params: {amount: 1, applies_when: this working}}
   - {effect_id: eff.apply_condition, params: {condition: cond.burning, severity: S1, duration: scene, target: the target}}
   ranks:
   - rank: 1
     at_tier: 1
-    text: Throw fire at one target within band.near. On a success it takes Moderate fire harm (shifted by delivered reach) and is burning.
+    text: Throw fire at one target within band.near. On a success it takes Heavy fire harm +1 (shifted by delivered reach) and is burning.
     effects:
-    - {effect_id: eff.deal_harm, params: {severity: S2, harm_tags: [harm.fire.flame], target: the target}}
+    - {effect_id: eff.deal_harm, params: {severity: S3, harm_tags: [harm.fire.flame], target: the target}}
+    - {effect_id: eff.harm_edge, params: {amount: 1, applies_when: this working}}
     - {effect_id: eff.apply_condition, params: {condition: cond.burning, severity: S1, duration: scene, target: the target}}
     cost: {focus: 1}
     limits: null
   - rank: 2
     at_tier: 3
-    text: Throw fire at one target within band.near. On a success it takes Heavy fire harm (shifted by delivered reach) and is burning.
+    text: Throw fire at one target within band.near. On a success it takes Grievous fire harm +2 (shifted by delivered reach) and is burning.
     effects:
-    - {effect_id: eff.deal_harm, params: {severity: S3, harm_tags: [harm.fire.flame], target: the target}}
+    - {effect_id: eff.deal_harm, params: {severity: S4, harm_tags: [harm.fire.flame], target: the target}}
+    - {effect_id: eff.harm_edge, params: {amount: 2, applies_when: this working}}
     - {effect_id: eff.apply_condition, params: {condition: cond.burning, severity: S1, duration: scene, target: the target}}
     cost: {focus: 1}
     limits: null
   - rank: 3
     at_tier: 5
-    text: Throw fire at one target within band.far. On a success it takes Grievous fire harm (shifted by delivered reach) and is burning.
+    text: Throw fire at one target within band.far. On a success it takes Grievous fire harm +2 (shifted by delivered reach), is burning, and is exposed until the end of its next turn.
     effects:
     - {effect_id: eff.deal_harm, params: {severity: S4, harm_tags: [harm.fire.flame], target: the target}}
+    - {effect_id: eff.harm_edge, params: {amount: 2, applies_when: this working}}
     - {effect_id: eff.apply_condition, params: {condition: cond.burning, severity: S1, duration: scene, target: the target}}
+    - {effect_id: eff.apply_condition, params: {condition: cond.exposed, severity: S1, duration: 'rounds:1', target: the target}}
     cost: {focus: 1}
     limits: null
   crude_fallback: none
@@ -4837,8 +4845,8 @@ abilities:
   narration_may_not_imply: ['a harm type, target, band or duration other than the text''s', a weakness this record does not hold, an effect on anything outside the stated targets]
   budget:
   - {rank: 1, value: 5, allowance: 6, terms: {tier: 2, focus: 2, recharge: 0, timing: 2, limitation: 0, weakness: 0, other_cost: 0}}
-  - {rank: 2, value: 6, allowance: 8, terms: {tier: 4, focus: 2, recharge: 0, timing: 2, limitation: 0, weakness: 0, other_cost: 0}}
-  - {rank: 3, value: 8, allowance: 10, terms: {tier: 6, focus: 2, recharge: 0, timing: 2, limitation: 0, weakness: 0, other_cost: 0}}
+  - {rank: 2, value: 8, allowance: 8, terms: {tier: 4, focus: 2, recharge: 0, timing: 2, limitation: 0, weakness: 0, other_cost: 0}}
+  - {rank: 3, value: 9, allowance: 10, terms: {tier: 6, focus: 2, recharge: 0, timing: 2, limitation: 0, weakness: 0, other_cost: 0}}
   source: the shared pool (05.1.1)
   lifecycle: provisional
   basis: ['05.3', '05.11']
@@ -4893,7 +4901,7 @@ abilities:
   narration_may_not_imply: ['a harm type, target, band or duration other than the text''s', a weakness this record does not hold, an effect on anything outside the stated targets]
   budget:
   - {rank: 1, value: 5, allowance: 7, terms: {tier: 3, focus: 4, recharge: 0, timing: 0, limitation: 0, weakness: 0, other_cost: 0}}
-  - {rank: 2, value: 9, allowance: 9, terms: {tier: 5, focus: 4, recharge: 0, timing: 0, limitation: 0, weakness: 0, other_cost: 0}}
+  - {rank: 2, value: 7, allowance: 9, terms: {tier: 5, focus: 4, recharge: 0, timing: 0, limitation: 0, weakness: 0, other_cost: 0}}
   source: the shared pool (05.1.1)
   lifecycle: provisional
   basis: ['05.3', '05.11']
@@ -4910,7 +4918,7 @@ abilities:
   regime: independent_trigger
   hook: on_declare
   principle: Fill a space with fire.
-  scope: 'Fire fills the ground around a point within band.far. Up to six beings within band.close of it roll Evade against your effect DC: on a failure each takes Grievous fire harm and is burning; on a success, half. Until the end of your next turn, a being that enters or ends its turn there takes Moderate fire harm.'
+  scope: 'Fire fills the ground around a point within band.far. Up to six beings within band.close of it roll Evade against your effect DC: on a failure each takes Grievous fire harm +2 and is burning; on a success, half. Until the end of your next turn, a being that enters or ends its turn there takes Moderate fire harm.'
   limitation: Applies to a point you can see within band.far and up to six beings within band.close of it.
   excludes:
   - {what: sparing allies inside the area, needs: the fire takes every being in it}
@@ -4921,15 +4929,17 @@ abilities:
   effects:
   - {effect_id: eff.force_check, params: {verb: evade, effect_dc_source: your effect DC, degree_table: 01.18.3}}
   - {effect_id: eff.deal_harm, params: {severity: S4, harm_tags: [harm.fire.flame], target: each being within band.close of the point}}
+  - {effect_id: eff.harm_edge, params: {amount: 2, applies_when: this working}}
   - {effect_id: eff.apply_condition, params: {condition: cond.burning, severity: S1, duration: scene, target: each being that fails}}
   - {effect_id: eff.deal_harm, params: {severity: S2, harm_tags: [harm.fire.flame], target: a being that enters or ends its turn in the burning ground}}
   ranks:
   - rank: 1
     at_tier: 5
-    text: 'Fire fills the ground around a point within band.far. Up to six beings within band.close of it roll Evade against your effect DC: on a failure each takes Grievous fire harm and is burning; on a success, half. Until the end of your next turn, a being that enters or ends its turn there takes Moderate fire harm.'
+    text: 'Fire fills the ground around a point within band.far. Up to six beings within band.close of it roll Evade against your effect DC: on a failure each takes Grievous fire harm +2 and is burning; on a success, half. Until the end of your next turn, a being that enters or ends its turn there takes Moderate fire harm.'
     effects:
     - {effect_id: eff.force_check, params: {verb: evade, effect_dc_source: your effect DC, degree_table: 01.18.3}}
     - {effect_id: eff.deal_harm, params: {severity: S4, harm_tags: [harm.fire.flame], target: each being within band.close of the point}}
+    - {effect_id: eff.harm_edge, params: {amount: 2, applies_when: this working}}
     - {effect_id: eff.apply_condition, params: {condition: cond.burning, severity: S1, duration: scene, target: each being that fails}}
     - {effect_id: eff.deal_harm, params: {severity: S2, harm_tags: [harm.fire.flame], target: a being that enters or ends its turn in the burning ground}}
     cost: {focus: 3}
@@ -6443,7 +6453,7 @@ abilities:
   hook: on_declare
   principle: Close a wound in living flesh.
   scope: One living being you touch regains 3 Vitality and its bleeding ends.
-  limitation: Applies to one living being you touch.
+  limitation: Applies to one living being you touch, yourself included.
   excludes:
   - {what: 'wounds, marks and afflictions', needs: ch.07; rit.vigil_of_healing; ab.purge}
   - {what: 'undead, constructs, objects', needs: 'G4: not living flesh'}
@@ -6512,7 +6522,7 @@ abilities:
   hook: on_declare
   principle: Drive a foulness out of a living body.
   scope: One living being you touch is freed of poisoning and of one other bodily or mental condition, and its checks against what afflicted it are framed one stakes rung lower this scene.
-  limitation: Applies to one living being you touch.
+  limitation: Applies to one living being you touch, yourself included.
   excludes:
   - {what: a curse or a possession, needs: ab.lift_the_hex; ab.cast_out}
   - {what: a staged affliction past its first stage, needs: ab.masters_remedy; rit.purification}
@@ -7697,7 +7707,7 @@ abilities:
   narration_may_not_imply: ['a harm type, target, band or duration other than the text''s', a weakness this record does not hold, an effect on anything outside the stated targets]
   budget:
   - {rank: 1, value: 4, allowance: 5, terms: {tier: 3, focus: 2, recharge: 0, timing: 0, limitation: 0, weakness: 0, other_cost: 0}}
-  - {rank: 2, value: 7, allowance: 7, terms: {tier: 5, focus: 2, recharge: 0, timing: 0, limitation: 0, weakness: 0, other_cost: 0}}
+  - {rank: 2, value: 6, allowance: 7, terms: {tier: 5, focus: 2, recharge: 0, timing: 0, limitation: 0, weakness: 0, other_cost: 0}}
   source: the shared pool (05.1.1)
   lifecycle: provisional
   basis: ['05.3', '05.11']
@@ -7716,7 +7726,7 @@ abilities:
   hook: on_declare
   principle: Quicken a living body's own mending.
   scope: One living being you touch regains 5 Vitality now and 5 more at the start of its next turn, and its bleeding and its poisoning end. This counts as one healing effect.
-  limitation: Applies to one living being you touch.
+  limitation: Applies to one living being you touch, yourself included.
   excludes:
   - {what: wounds and marks, needs: ch.07; rit.vigil_of_healing}
   - {what: a being already healed twice since its long rest, needs: the healing cap (05.7.8)}
@@ -8135,7 +8145,7 @@ abilities:
   budget:
   - {rank: 1, value: 4, allowance: 4, terms: {tier: 2, focus: 2, recharge: 0, timing: 0, limitation: 0, weakness: 0, other_cost: 0}}
   - {rank: 2, value: 6, allowance: 6, terms: {tier: 4, focus: 2, recharge: 0, timing: 0, limitation: 0, weakness: 0, other_cost: 0}}
-  - {rank: 3, value: 8, allowance: 8, terms: {tier: 6, focus: 2, recharge: 0, timing: 0, limitation: 0, weakness: 0, other_cost: 0}}
+  - {rank: 3, value: 7, allowance: 8, terms: {tier: 6, focus: 2, recharge: 0, timing: 0, limitation: 0, weakness: 0, other_cost: 0}}
   source: the shared pool (05.1.1)
   lifecycle: provisional
   basis: ['05.3', '05.11']
@@ -8407,18 +8417,19 @@ abilities:
     limits: null
   - rank: 2
     at_tier: 3
-    text: For 3 rounds your Strikes deal fire harm in place of their own type, +1, and a target they harm is burning.
+    text: For 3 rounds your Strikes deal fire harm in place of their own type, +2, and a target they harm is burning.
     effects:
-    - {effect_id: eff.strike_delivery, params: {priority_rank: 10, harm_tags: [harm.fire], harm_edge: 1, duration: 'rounds:3', cosmetic_merge: false}}
+    - {effect_id: eff.strike_delivery, params: {priority_rank: 10, harm_tags: [harm.fire], harm_edge: 2, duration: 'rounds:3', cosmetic_merge: false}}
     - {effect_id: eff.apply_condition, params: {condition: cond.burning, severity: S1, duration: 'rounds:1', target: a target your Strike harms}}
     cost: {focus: 1}
     limits: null
   - rank: 3
     at_tier: 5
-    text: For the scene your Strikes deal fire harm in place of their own type, +2, and a target they harm is burning.
+    text: For the scene your Strikes deal fire harm in place of their own type, +2, a target they harm is burning, and a target already burning takes their harm one severity rung heavier.
     effects:
     - {effect_id: eff.strike_delivery, params: {priority_rank: 10, harm_tags: [harm.fire], harm_edge: 2, duration: scene, cosmetic_merge: false}}
     - {effect_id: eff.apply_condition, params: {condition: cond.burning, severity: S1, duration: scene, target: a target your Strike harms}}
+    - {effect_id: eff.harm_severity_step, params: {ladder: severity, steps: 1, applies_when: a Strike against a burning target}}
     cost: {focus: 1}
     limits: null
   crude_fallback: none
@@ -10594,8 +10605,8 @@ abilities:
   spread: burst
   narration_may_not_imply: ['a harm type, target, band or duration other than the text''s', a weakness this record does not hold, an effect on anything outside the stated targets]
   budget:
-  - {rank: 1, value: 6, allowance: 6, terms: {tier: 3, focus: 0, recharge: 0, timing: 2, limitation: 0, weakness: 0, other_cost: 1}}
-  - {rank: 2, value: 8, allowance: 8, terms: {tier: 5, focus: 0, recharge: 0, timing: 2, limitation: 0, weakness: 0, other_cost: 1}}
+  - {rank: 1, value: 4, allowance: 6, terms: {tier: 3, focus: 0, recharge: 0, timing: 2, limitation: 0, weakness: 0, other_cost: 1}}
+  - {rank: 2, value: 6, allowance: 8, terms: {tier: 5, focus: 0, recharge: 0, timing: 2, limitation: 0, weakness: 0, other_cost: 1}}
   source: the shared pool (05.1.1)
   lifecycle: provisional
   basis: ['05.3', '05.11']
@@ -13213,7 +13224,7 @@ abilities:
   budget:
   - {rank: 1, value: 2, allowance: 2, terms: {tier: 2, focus: 0, recharge: 0, timing: 0, limitation: 0, weakness: 0, other_cost: 0}}
   - {rank: 2, value: 3, allowance: 4, terms: {tier: 4, focus: 0, recharge: 0, timing: 0, limitation: 0, weakness: 0, other_cost: 0}}
-  - {rank: 3, value: 6, allowance: 6, terms: {tier: 6, focus: 0, recharge: 0, timing: 0, limitation: 0, weakness: 0, other_cost: 0}}
+  - {rank: 3, value: 5, allowance: 6, terms: {tier: 6, focus: 0, recharge: 0, timing: 0, limitation: 0, weakness: 0, other_cost: 0}}
   source: the shared pool (05.1.1)
   lifecycle: provisional
   basis: ['05.3', '05.11']
@@ -15503,7 +15514,7 @@ abilities:
   hook: on_degree
   rides: [verb.strike]
   principle: Find the narrow way past a shield or a wall.
-  scope: 'Your shot ignores the target''s cover: it loses flag.in_cover for this Strike, takes harm one severity rung heavier, +2, and is bleeding until the scene ends.'
+  scope: 'Your shot ignores the target''s cover: it loses flag.in_cover for this Strike, takes harm two severity rungs heavier, +2, and is bleeding until the scene ends.'
   limitation: Applies to a ranged Strike with a bow against a target within band.far that you can see.
   excludes:
   - {what: total cover, needs: it cannot be seen; ab.volley at an area}
@@ -15514,16 +15525,16 @@ abilities:
   limits: null
   effects:
   - {effect_id: eff.reposition, params: {target: the target, band_change: 0, flags_add: [], flags_remove: [flag.in_cover]}}
-  - {effect_id: eff.harm_severity_step, params: {ladder: severity, steps: 1, applies_when: this Strike}}
+  - {effect_id: eff.harm_severity_step, params: {ladder: severity, steps: 2, applies_when: this Strike}}
   - {effect_id: eff.harm_edge, params: {amount: 2, applies_when: this Strike}}
   - {effect_id: eff.apply_condition, params: {condition: cond.bleeding, severity: S1, duration: scene, target: the target of the Strike}}
   ranks:
   - rank: 1
     at_tier: 4
-    text: 'Your shot ignores the target''s cover: it loses flag.in_cover for this Strike, takes harm one severity rung heavier, +2, and is bleeding until the scene ends.'
+    text: 'Your shot ignores the target''s cover: it loses flag.in_cover for this Strike, takes harm two severity rungs heavier, +2, and is bleeding until the scene ends.'
     effects:
     - {effect_id: eff.reposition, params: {target: the target, band_change: 0, flags_add: [], flags_remove: [flag.in_cover]}}
-    - {effect_id: eff.harm_severity_step, params: {ladder: severity, steps: 1, applies_when: this Strike}}
+    - {effect_id: eff.harm_severity_step, params: {ladder: severity, steps: 2, applies_when: this Strike}}
     - {effect_id: eff.harm_edge, params: {amount: 2, applies_when: this Strike}}
     - {effect_id: eff.apply_condition, params: {condition: cond.bleeding, severity: S1, duration: scene, target: the target of the Strike}}
     cost: {focus: 2}
@@ -15809,7 +15820,7 @@ abilities:
   hook: on_declare
   rides: [verb.strike]
   principle: Swing a great axe through every foe that stands near you.
-  scope: Swing through every foe engaged with you, up to four (Strike, Might, against each one's attack defense). Each one hit takes your axe's harm one rung heavier, is bleeding until the scene ends and is knocked prone; each foe that sees it is frightened until the scene ends.
+  scope: Swing through every foe engaged with you, up to four (Strike, Might, against each one's attack defense). Each one hit takes your axe's harm one rung heavier, +2, is bleeding until the scene ends and is knocked prone; each foe that sees it is frightened until the scene ends.
   limitation: Applies to up to four foes engaged with you, with a two-handed axe.
   excludes:
   - {what: sparing a foe within reach, needs: every foe engaged with you is struck}
@@ -15820,15 +15831,17 @@ abilities:
   limits: {per: scene_end, uses: 1}
   effects:
   - {effect_id: eff.deal_harm, params: {severity: weapon base +1 rung, harm_tags: [the weapon's harm tags], target: each foe hit}}
+  - {effect_id: eff.harm_edge, params: {amount: 2, applies_when: this beat}}
   - {effect_id: eff.apply_condition, params: {condition: cond.bleeding, severity: S1, duration: scene, target: each foe hit}}
   - {effect_id: eff.apply_condition, params: {condition: cond.prone, severity: S1, duration: 'rounds:1', target: each foe hit}}
   - {effect_id: eff.apply_condition, params: {condition: cond.frightened, severity: S1, duration: scene, target: each foe that sees the swing}}
   ranks:
   - rank: 1
     at_tier: 5
-    text: Swing through every foe engaged with you, up to four (Strike, Might, against each one's attack defense). Each one hit takes your axe's harm one rung heavier, is bleeding until the scene ends and is knocked prone; each foe that sees it is frightened until the scene ends.
+    text: Swing through every foe engaged with you, up to four (Strike, Might, against each one's attack defense). Each one hit takes your axe's harm one rung heavier, +2, is bleeding until the scene ends and is knocked prone; each foe that sees it is frightened until the scene ends.
     effects:
     - {effect_id: eff.deal_harm, params: {severity: weapon base +1 rung, harm_tags: [the weapon's harm tags], target: each foe hit}}
+    - {effect_id: eff.harm_edge, params: {amount: 2, applies_when: this beat}}
     - {effect_id: eff.apply_condition, params: {condition: cond.bleeding, severity: S1, duration: scene, target: each foe hit}}
     - {effect_id: eff.apply_condition, params: {condition: cond.prone, severity: S1, duration: 'rounds:1', target: each foe hit}}
     - {effect_id: eff.apply_condition, params: {condition: cond.frightened, severity: S1, duration: scene, target: each foe that sees the swing}}
@@ -15896,7 +15909,7 @@ abilities:
   flares: [hard, lasting]
   narration_may_not_imply: ['a harm type, target, band or duration other than the text''s', a weakness this record does not hold, an effect on anything outside the stated targets]
   budget:
-  - {rank: 1, value: 9, allowance: 9, terms: {tier: 5, focus: 4, recharge: 0, timing: 0, limitation: 0, weakness: 0, other_cost: 0}}
+  - {rank: 1, value: 7, allowance: 9, terms: {tier: 5, focus: 4, recharge: 0, timing: 0, limitation: 0, weakness: 0, other_cost: 0}}
   source: the shared pool (05.1.1)
   lifecycle: provisional
   basis: ['05.3', '05.11']
@@ -16389,7 +16402,7 @@ abilities:
   hook: on_declare
   rides: [verb.strike]
   principle: Empty a bandolier of knives into every foe near you.
-  scope: Throw at up to four foes within band.near, even while engaged and without provoking (Strike, Agility, against each one's attack defense). Each one hit takes your blade's harm, +2, is bleeding until the scene ends and distracted until the end of its next turn.
+  scope: Throw at up to four foes within band.near, even while engaged and without provoking (Strike, Agility, against each one's attack defense). Each one hit takes your blade's harm one rung heavier, +2, is bleeding until the scene ends and distracted until the scene ends.
   limitation: Applies to up to four foes within band.near, while you carry at least four throwing blades.
   excludes:
   - {what: foes beyond band.near, needs: ab.throwers_eye}
@@ -16399,20 +16412,20 @@ abilities:
   cost: {focus: 3}
   limits: {per: scene_end, uses: 1}
   effects:
-  - {effect_id: eff.deal_harm, params: {severity: weapon base, harm_tags: [the weapon's harm tags], target: each foe hit}}
+  - {effect_id: eff.deal_harm, params: {severity: weapon base +1 rung, harm_tags: [the weapon's harm tags], target: each foe hit}}
   - {effect_id: eff.harm_edge, params: {amount: 2, applies_when: this beat}}
   - {effect_id: eff.apply_condition, params: {condition: cond.bleeding, severity: S1, duration: scene, target: each foe hit}}
-  - {effect_id: eff.apply_condition, params: {condition: cond.distracted, severity: S1, duration: 'rounds:1', target: each foe hit}}
+  - {effect_id: eff.apply_condition, params: {condition: cond.distracted, severity: S1, duration: scene, target: each foe hit}}
   - {effect_id: eff.05.waive, params: {event_kind: the reaction a ranged attack provokes while engaged, applies_when: this beat}}
   ranks:
   - rank: 1
     at_tier: 5
-    text: Throw at up to four foes within band.near, even while engaged and without provoking (Strike, Agility, against each one's attack defense). Each one hit takes your blade's harm, +2, is bleeding until the scene ends and distracted until the end of its next turn.
+    text: Throw at up to four foes within band.near, even while engaged and without provoking (Strike, Agility, against each one's attack defense). Each one hit takes your blade's harm one rung heavier, +2, is bleeding until the scene ends and distracted until the scene ends.
     effects:
-    - {effect_id: eff.deal_harm, params: {severity: weapon base, harm_tags: [the weapon's harm tags], target: each foe hit}}
+    - {effect_id: eff.deal_harm, params: {severity: weapon base +1 rung, harm_tags: [the weapon's harm tags], target: each foe hit}}
     - {effect_id: eff.harm_edge, params: {amount: 2, applies_when: this beat}}
     - {effect_id: eff.apply_condition, params: {condition: cond.bleeding, severity: S1, duration: scene, target: each foe hit}}
-    - {effect_id: eff.apply_condition, params: {condition: cond.distracted, severity: S1, duration: 'rounds:1', target: each foe hit}}
+    - {effect_id: eff.apply_condition, params: {condition: cond.distracted, severity: S1, duration: scene, target: each foe hit}}
     - {effect_id: eff.05.waive, params: {event_kind: the reaction a ranged attack provokes while engaged, applies_when: this beat}}
     cost: {focus: 3}
     limits: {per: scene_end, uses: 1}
@@ -19775,7 +19788,7 @@ abilities:
   regime: independent_trigger
   hook: on_declare
   principle: Break a sudden dawn on a place full of foes.
-  scope: 'Light breaks at a point within band.far. Up to six beings within band.close of it roll Evade against your effect DC: on a failure each takes Grievous radiant harm and is blinded until the end of its next turn; an undead or fiend that fails is also burning until the scene ends.'
+  scope: 'Light breaks at a point within band.far. Up to six beings within band.close of it roll Evade against your effect DC: on a failure each takes Grievous radiant harm +2 and is blinded until the end of its next turn; an undead or fiend that fails is also burning until the scene ends.'
   limitation: Applies to a point within band.far and up to six beings within band.close of it.
   excludes:
   - {what: sparing allies inside the light, needs: it takes every being in it}
@@ -19787,15 +19800,17 @@ abilities:
   effects:
   - {effect_id: eff.force_check, params: {verb: evade, effect_dc_source: your effect DC, degree_table: 01.18.3}}
   - {effect_id: eff.deal_harm, params: {severity: S4, harm_tags: [harm.radiance.holy], target: each being that fails}}
+  - {effect_id: eff.harm_edge, params: {amount: 2, applies_when: this working}}
   - {effect_id: eff.apply_condition, params: {condition: cond.blinded, severity: S1, duration: 'rounds:1', target: each being that fails}}
   - {effect_id: eff.apply_condition, params: {condition: cond.burning, severity: S1, duration: scene, target: each undead or fiend that fails}}
   ranks:
   - rank: 1
     at_tier: 5
-    text: 'Light breaks at a point within band.far. Up to six beings within band.close of it roll Evade against your effect DC: on a failure each takes Grievous radiant harm and is blinded until the end of its next turn; an undead or fiend that fails is also burning until the scene ends.'
+    text: 'Light breaks at a point within band.far. Up to six beings within band.close of it roll Evade against your effect DC: on a failure each takes Grievous radiant harm +2 and is blinded until the end of its next turn; an undead or fiend that fails is also burning until the scene ends.'
     effects:
     - {effect_id: eff.force_check, params: {verb: evade, effect_dc_source: your effect DC, degree_table: 01.18.3}}
     - {effect_id: eff.deal_harm, params: {severity: S4, harm_tags: [harm.radiance.holy], target: each being that fails}}
+    - {effect_id: eff.harm_edge, params: {amount: 2, applies_when: this working}}
     - {effect_id: eff.apply_condition, params: {condition: cond.blinded, severity: S1, duration: 'rounds:1', target: each being that fails}}
     - {effect_id: eff.apply_condition, params: {condition: cond.burning, severity: S1, duration: scene, target: each undead or fiend that fails}}
     cost: {focus: 3}
@@ -20141,7 +20156,7 @@ abilities:
   regime: independent_trigger
   hook: on_declare
   principle: Raise a standing wall of fire across a space.
-  scope: Raise a wall of fire until the scene ends. A being that crosses it takes Heavy fire harm and is burning until the scene ends, up to two at a time; beings behind it hold flag.obscured against those beyond, and your allies behind it hold a Protective lever.
+  scope: Raise a wall of fire until the scene ends. A being that crosses it takes Heavy fire harm +1 and is burning until the scene ends, up to two at a time; beings behind it hold flag.obscured against those beyond, and your allies behind it hold a Protective lever.
   limitation: Applies to a line within band.near of you, as long as band.near; it lasts until the scene ends.
   excludes:
   - {what: a wall that harms nothing that stays still, needs: only crossing burns}
@@ -20152,15 +20167,17 @@ abilities:
   limits: {per: scene_end, uses: 1}
   effects:
   - {effect_id: eff.deal_harm, params: {severity: S3, harm_tags: [harm.fire.flame], target: a being that crosses the wall}}
+  - {effect_id: eff.harm_edge, params: {amount: 1, applies_when: this working}}
   - {effect_id: eff.apply_condition, params: {condition: cond.burning, severity: S1, duration: scene, target: a being that crosses the wall}}
   - {effect_id: eff.reposition, params: {target: beings behind the wall, band_change: 0, flags_add: [flag.obscured], flags_remove: []}}
   - {effect_id: eff.grant_lever, params: {type: protective, duration: scene, applies_when: beats by allies behind the wall}}
   ranks:
   - rank: 1
     at_tier: 4
-    text: Raise a wall of fire until the scene ends. A being that crosses it takes Heavy fire harm and is burning until the scene ends, up to two at a time; beings behind it hold flag.obscured against those beyond, and your allies behind it hold a Protective lever.
+    text: Raise a wall of fire until the scene ends. A being that crosses it takes Heavy fire harm +1 and is burning until the scene ends, up to two at a time; beings behind it hold flag.obscured against those beyond, and your allies behind it hold a Protective lever.
     effects:
     - {effect_id: eff.deal_harm, params: {severity: S3, harm_tags: [harm.fire.flame], target: a being that crosses the wall}}
+    - {effect_id: eff.harm_edge, params: {amount: 1, applies_when: this working}}
     - {effect_id: eff.apply_condition, params: {condition: cond.burning, severity: S1, duration: scene, target: a being that crosses the wall}}
     - {effect_id: eff.reposition, params: {target: beings behind the wall, band_change: 0, flags_add: [flag.obscured], flags_remove: []}}
     - {effect_id: eff.grant_lever, params: {type: protective, duration: scene, applies_when: beats by allies behind the wall}}
@@ -20177,7 +20194,7 @@ abilities:
   spread: linger
   narration_may_not_imply: ['a harm type, target, band or duration other than the text''s', a weakness this record does not hold, an effect on anything outside the stated targets]
   budget:
-  - {rank: 1, value: 11, allowance: 12, terms: {tier: 5, focus: 4, recharge: 1, timing: 2, limitation: 0, weakness: 0, other_cost: 0}}
+  - {rank: 1, value: 10, allowance: 12, terms: {tier: 5, focus: 4, recharge: 1, timing: 2, limitation: 0, weakness: 0, other_cost: 0}}
   source: the shared pool (05.1.1)
   lifecycle: provisional
   basis: ['05.3', '05.11']

@@ -123,6 +123,9 @@ DL entry. Neither renames or retires a seeded tag.
 - `deed.craft.scribing`: making written works (fair copies, illumination, maps, bound books). Without it,
   cartography and copying fall between `lore` (which knows) and `enchanting` (which needs magic).
 [DL-03-16]
+These additions leave `deed.influence` at 9 and `deed.craft` at 11 level-2 children, inside 00.2.2's
+admitted oversized sets (tested by OEQ-00-1's level-2 stratum); no further level-2 child is added to an
+oversized branch [revision: I-044].
 
 **03.1.4 Reading a tag entry.** `[N]` Every entry in `data/tags.yaml` carries `id`, `name`, `parent`,
 `level`, `lifecycle` and a `definition` of the form "True only when … False for … (sibling id)". Entries
@@ -1089,7 +1092,9 @@ and sends 11 a `public_deed` packet for the new scopes only.
    against every sibling whose scope it could overlap; positive scope only (SG-15); at least two `aliases`;
    `lifecycle: provisional`.
 6. **Sibling budget.** A parent keeps at most **8** children (the `[J:enum]` limit of 00.2.2). A ninth
-   requires first regrouping the siblings under the parent, with a DL entry.
+   requires first regrouping the siblings under the parent, with a DL entry. The five level-2 sets that
+   00.2.2 admits as oversized (martial, arcane, craft, lore, influence) take no further child at level 2, and
+   their level-3 children keep this budget [revision: I-044].
 7. **Never rename.** A wrong name is fixed by a new tag plus `lifecycle: retired` and `superseded_by` on the
    old one. Evidence already recorded on a retired tag is carried to its successor by the engine (the
    successor's node includes the retired tag's settled contributions).

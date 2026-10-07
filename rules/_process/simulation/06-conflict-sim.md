@@ -75,9 +75,29 @@ adversary Fend. Every earlier row reproduces byte for byte.
   98.6 / 80.7 / 11.0 / 6.7.
 - Focus at P3 (Focus 7): pushing the first bolt each turn, vs one T3 91.0→95.9, vs one T4 33.6→54.9, vs
   two T3 26.4→47.4, vs two T2 91.4→96.5 (the fighter's push: 99.7→99.9, 62.3→84.0, 73.0→89.6, 100→100);
-  casting Flame Lance first each turn instead: 92.1 / 44.3 / 26.8 / 91.8.
+  casting Flame Lance first each turn instead (rank 2 as it stood before I-033): 92.1 / 44.3 / 27.3 / 92.0.
+
+**Lingering harm (sections K1, K2; revision I-033).** Foes now carry condition instances: burning and bleeding
+(1 Vitality a stack at the bearer's turn end, unreduced by worn armor), stacking `intensify` (max 3, a new
+stack refreshes the duration), lasting the applying effect's duration (one round, or the scene), and ended by
+one of the bearer's two actions (burning: no check; bleeding: Handle against DC 10). The bearer's policy is a
+parameter (`never` / `always` / `smart`); every row of K is played under all three and keeps the least, the
+bearer's best answer. Before I-033 burning never ended and no bearer action existed; only J4's Flame Lance rows
+moved (now `never`; two cells by 0.2–0.5 because a foe dropped or bloodied by burning now ticks morale).
+- K1: a 1-Focus spell at the working's severity, plus one rung (= the push) or plus a condition, P1/P3/P5
+  against one foe a band up and two foes at band (P1: one T3, two T2). Pooled rung gain 98.3 points. One stack
+  of burning or bleeding for the scene: 0.67 EU; for one round: 0.40 EU; two stacks: 1.14 EU. The bearer's best
+  answer is almost always `never`: an action spent beating out 1 Vitality a turn costs it half an attack.
+- K2 (acceptance): P3 caster, Focus 7, against 1xT3 / 1xT4 / 2xT3. Spent 91.0 / 33.6 / 26.4; push 95.9 / 54.9 /
+  47.4; old Flame Lance r2 (S3 + burning) 92.1 / 44.3 / 27.3; new Flame Lance r2 (S4 +2 + burning, priced 8 =
+  its allowance) 97.3 / 65.9 / 54.6, i.e. +1.4 / +11.0 / +7.2 over the push where the old one was −3.8 /
+  −10.6 / −20.1.
 
 ## 4. What the numbers were used to decide
+- **Lingering harm** (DL-05-40; revision I-033): T-05-9 prices burning and bleeding at 1 EU a stack whatever
+  the duration (K1: 0.67 / 0.40), out of the middle group's 2–3; the ten abilities that fell below their
+  allowance were re-budgeted, Flame Lance r2 to S4 +2, which K2 shows beats the push by 11.0 and 7.2 points
+  in the two matchups not already above 95%.
 
 - **3 actions against 2** (DL-06-01): gives a lone PC the edge against one foe and makes the second
   foe the real threat, which is the solo curve the encounter advice needs.

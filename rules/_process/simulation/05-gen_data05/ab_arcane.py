@@ -12,12 +12,12 @@ END = ('resisted', 'endure', 'endurance')
 ab('ab.flame_lance', 'Flame Lance', A + 'fire.blast', 1, 'fire_bolt', 'Working', 'beat',
    'Throw a line of fire at one target.',
    'Applies to one target you can see within band.near.',
-   [rk("Throw fire at one target within band.near. On a success it takes Moderate fire harm (shifted by delivered reach) and is burning.",
-       [harm(2, ['harm.fire.flame'], T), cond('cond.burning', 1, 'scene', T)], f=1),
-    rk("Throw fire at one target within band.near. On a success it takes Heavy fire harm (shifted by delivered reach) and is burning.",
-       [harm(3, ['harm.fire.flame'], T), cond('cond.burning', 1, 'scene', T)], f=1),
-    rk("Throw fire at one target within band.far. On a success it takes Grievous fire harm (shifted by delivered reach) and is burning.",
-       [harm(4, ['harm.fire.flame'], T), cond('cond.burning', 1, 'scene', T)], f=1)],
+   [rk("Throw fire at one target within band.near. On a success it takes Heavy fire harm +1 (shifted by delivered reach) and is burning.",
+       [harm(3, ['harm.fire.flame'], T), hedge(1, 'this working'), cond('cond.burning', 1, 'scene', T)], f=1),  # [revision: I-033]
+    rk("Throw fire at one target within band.near. On a success it takes Grievous fire harm +2 (shifted by delivered reach) and is burning.",
+       [harm(4, ['harm.fire.flame'], T), hedge(2, 'this working'), cond('cond.burning', 1, 'scene', T)], f=1),  # [revision: I-033]
+    rk("Throw fire at one target within band.far. On a success it takes Grievous fire harm +2 (shifted by delivered reach), is burning, and is exposed until the end of its next turn.",
+       [harm(4, ['harm.fire.flame'], T), hedge(2, 'this working'), cond('cond.burning', 1, 'scene', T), cond('cond.exposed', 1, 'rounds:1', T)], f=1)],  # [revision: I-033]
    check=ATK, harm_tags=['harm.fire.flame'], traits=['trait.action.attack', 'trait.delivery.ranged', 'trait.sense.visible'],
    x=[('lighting a candle or a pipe', 'a small working (05.7.6)'), ('heating an object without flame', 'a stretch (05.5.2)')])
 
@@ -34,8 +34,8 @@ ab('ab.fire_shroud', 'Fire Shroud', A + 'fire.shaping', 2, 'fire_aura', 'Form', 
 ab('ab.firestorm', 'Firestorm', A + 'fire.blast', 5, 'fire_burst', 'Working', 'beat',
    'Fill a space with fire.',
    'Applies to a point you can see within band.far and up to six beings within band.close of it.',
-   [rk("Fire fills the ground around a point within band.far. Up to six beings within band.close of it roll Evade against your effect DC: on a failure each takes Grievous fire harm and is burning; on a success, half. Until the end of your next turn, a being that enters or ends its turn there takes Moderate fire harm.",
-       [fchk('evade'), harm(4, ['harm.fire.flame'], 'each being within band.close of the point'), tgt(5), cond('cond.burning', 1, 'scene', 'each being that fails'), harm(2, ['harm.fire.flame'], 'a being that enters or ends its turn in the burning ground')], f=3, per='rest_long')],
+   [rk("Fire fills the ground around a point within band.far. Up to six beings within band.close of it roll Evade against your effect DC: on a failure each takes Grievous fire harm +2 and is burning; on a success, half. Until the end of your next turn, a being that enters or ends its turn there takes Moderate fire harm.",
+       [fchk('evade'), harm(4, ['harm.fire.flame'], 'each being within band.close of the point'), hedge(2, 'this working'), tgt(5), cond('cond.burning', 1, 'scene', 'each being that fails'), harm(2, ['harm.fire.flame'], 'a being that enters or ends its turn in the burning ground')], f=3, per='rest_long')],  # [revision: I-033]
    check=EVA, spread='burst', harm_tags=['harm.fire.flame'], traits=['trait.action.attack', 'trait.delivery.area', 'trait.sense.loud', 'trait.sense.visible'],
    x=[('sparing allies inside the area', 'the fire takes every being in it')])
 

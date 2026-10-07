@@ -166,6 +166,13 @@ contains (a rule with two decisions carries two kinds). These replace BRIEF §5'
 | `[S]` | Sealed state: exists and is used by the engine, but is withheld from the narrator's context until a gate opens. | An NPC's secret; an adversary's stat block; a tally. | Secrets in narrator context leak (up to 79%); private committed state restores consistency (2–12% → 76–100%) [R4 §5.1]. | The gate that unseals it; what the narrator receives instead (tells, omens, qualitative bands). |
 | `[N]` | Narration with no mechanical weight. | "Describe the hall's smell and light." | High for prose; the risk is *implied* mechanics [R4 §4.2]. | What the narration may *not* imply (a closed list of state it must not change). |
 
+*Oversized level-2 sets* `[D]`. The seeded deed tree classifies level by level (03.1.5), and five branches hold
+more than eight level-2 children: `deed.martial` 12, `deed.arcane` 11, `deed.craft` 11, `deed.lore` 9,
+`deed.influence` 9. They are kept, because a wrong child there costs at most a sibling under the right branch,
+shown in the OFFER (03.1.5's worst case), while regrouping them would rename seeded tags (00.5.5 forbids it).
+They are an admitted exception to the ≤ ~8 guideline, tested by OEQ-00-1's level-2 stratum; no further
+level-2 child is added to them (PR-03-6 step 6) [revision: I-044; DL-00A-32].
+
 **00.2.3 The worst-case-cost requirement.** `[D]` A `[J:*]` rule without a written "Worst case:" line
 is incomplete and fails the Wave-4 audit. The line names the decision, the largest wrong outcome, and
 which P-B class (i–iv) bounds it. Example: *"Worst case: the DM picks Hard for a Moderate lock; the
@@ -1889,10 +1896,27 @@ objects (a region's: the world seed, 12.16, or a pre-made setting such as 13 [re
 | `wr.` | `world_turn.yaml` | 11 | |
 | `ws.` | `world_seed.yaml` | 12 | |
 
-**00.16.3 Lifecycle (VI at content scale).** `[D]` Every entry carries `lifecycle: provisional` until the
-verification wave promotes it to `permanent`; retirement is `lifecycle: retired` with `superseded_by`
+**00.16.3 Lifecycle (VI at content scale).** `[D]` Every entry carries `lifecycle: provisional` until it is
+promoted to `permanent` by the test below; retirement is `lifecycle: retired` with `superseded_by`
 and never deletion, so old saves and ledgers still resolve. A squish (rescaling numbers) is not
 retirement [C:VI; BRIEF A3 VI scope].
+- **Promotion test** `[D]` (04.8.2's confirmation test applied to content; `pacing.yaml#review.promotion`).
+  An entry is a **promotion candidate** when all three hold: (a) the ruling ledger shows it applied (cited
+  by a ruling, or used by a tool call) in at least **20 evidence-bearing scenes** (03.6.1) over at least
+  **2 sessions**; (b) no ruling that cites it was overturned (a correction, 12.3.4; an upheld dispute,
+  12.3.6; a ruling-error correction) since its count began; (c) no open Principle III candidate or rule
+  candidate of the review list names it (12.12.4, 12.12.6). An overturned ruling restarts its count at 0.
+  20 sits between 04.8.2's 12-scene confirmation and 24-scene lapse windows: long enough that an entry has
+  met more than one situation, short enough that a used entry promotes within a campaign's first seasons.
+- **Who promotes.** `h.12.session_close` lists the session's new promotion candidates in the review list
+  (12.12.4). An entry the campaign wrote itself (a world-seed entity, 12.16; improvised content, 12.13.4;
+  the card of an adopted rule candidate, 12.12.6) is promoted by the engine when listed: no judgment is
+  involved. A shipped entry (`rules/data/`) is promoted only by the project's maintainers in a verification
+  wave, entry by entry, with play's review lists as the evidence (05.12.3); a campaign's listing of it is a
+  report, and changes nothing in that campaign.
+- **What promotion changes.** The codex drops the entry's "(provisional)" mark. A permanent entry is
+  never demoted: a fault found later is fixed by retirement and a successor, which starts provisional
+  [revision: I-043; DL-00A-31].
 
 **00.16.4 Mechanics are data.** `[D]` Every entry with mechanics has them fully specified in data
 (numbers, triggers, recharge, effect references). Prose-only mechanics are a defect [BRIEF §12].
@@ -2925,7 +2949,7 @@ Each has a concrete default already in the rules and a named test that would set
 
 | Id | Question | Default shipped | Named test |
 |---|---|---|---|
-| OEQ-00-1 | Are seven attributes separable enough for reliable selection? | 7 (00.4) | **T-00-ATTR**: 60 novel actions × 3 independent DM runs; target ≥ 90% agreement on attribute, ≥ 85% on deed branch, ≥ 70% on level-2 tag; disagreements become distinguishing-test revisions |
+| OEQ-00-1 | Are seven attributes separable enough for reliable selection? | 7 (00.4) | **T-00-ATTR**: 60 novel actions × 3 independent DM runs; target ≥ 90% agreement on attribute, ≥ 85% on deed branch, ≥ 70% on level-2 tag; disagreements become distinguishing-test revisions. **Level-2 stratum** (00.2.2's oversized sets): 12 more actions for each of martial, arcane, craft, lore and influence (60), 3 runs each; target ≥ 70% agreement on the child *within each of the five* (not pooled) and no sibling pair confused in more than 10% of its branch's actions; a miss rewrites the confused pair's distinguishing tests and retests; a second miss sets that branch's CHILD step to stop at the branch (03.1.5 step 2) until a 00 amendment regroups it [revision: I-044] |
 | OEQ-00-2 | Do the harm magnitudes and Vitality envelope give the intended fight lengths? | 1/3/5/8/12; PC 10–16 | **T-00-PACE**: simulate 1,000 fights per band pairing with 06/09 numbers; target equal band ≈ 4–7 rounds with the PC Staggered in ≤ 30% of fights |
 | OEQ-00-3 | Do omens make hidden clocks perceivable? | one omen per tick | **T-00-OMEN**: 3 playtest sessions; share of imminent-stage omens that draw a player response; target ≥ 50% |
 | OEQ-00-4 | Is a one-link trigger chain enough for designed synergies? | depth rule 00.10.8 | **T-00-DEPTH**: enumerate every ability/item pair in 05/08 data; if > 5% of *intended* synergies need a second link, allow a `chain_ok` flag at depth ≤ 2 |

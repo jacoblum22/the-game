@@ -7,8 +7,11 @@
 HARM_EU = {1: 1, 2: 2, 3: 3, 4: 5, 5: 7}
 HEAL_EU = {1: 1, 3: 2, 5: 3, 8: 5}
 COND_LIGHT = {'cond.off_balance', 'cond.distracted', 'cond.exposed', 'cond.slowed', 'cond.deafened', 'cond.chilled'}
-COND_MID = {'cond.prone', 'cond.weakened', 'cond.frightened', 'cond.blinded', 'cond.grabbed', 'cond.burning',
-            'cond.bleeding', 'cond.dazed', 'cond.choking', 'cond.poisoned', 'cond.exhausted'}
+COND_MID = {'cond.prone', 'cond.weakened', 'cond.frightened', 'cond.blinded', 'cond.grabbed',
+            'cond.dazed', 'cond.choking', 'cond.poisoned', 'cond.exhausted'}
+# Lingering harm: conditions whose whole effect is 1 Vitality per stack at the bearer's turn end, ended by one action
+# of the bearer. Priced by 06-conflict-sim.py K1 (the bearer answering at its best) [revision: I-033].
+COND_DOT = {'cond.burning', 'cond.bleeding'}
 COND_HARD = {'cond.stunned', 'cond.restrained', 'cond.charmed', 'cond.unconscious', 'cond.pinned', 'cond.frozen'}
 SHORT = ('beat', 'rounds:1', 'uses:1')
 
@@ -23,7 +26,8 @@ EU_TABLE = [
     ("Strike or spell delivery changed (harm type, form)", "1 (+ its harm edge)", "eff.strike_delivery, eff.05.spell_delivery"),
     ("Each target beyond the first (through a spread tag)", "1", "spread"),
     ("Condition, light group (off_balance, distracted, exposed, slowed, deafened, chilled)", "1 (+1 if it lasts beyond a round)", "eff.apply_condition"),
-    ("Condition, middle group (prone, weakened, frightened, blinded, grabbed, burning, bleeding, dazed, choking, poisoned, exhausted)", "2 (+1 beyond a round)", "eff.apply_condition"),
+    ("Condition, middle group (prone, weakened, frightened, blinded, grabbed, dazed, choking, poisoned, exhausted)", "2 (+1 beyond a round)", "eff.apply_condition"),
+    ("Condition, lingering harm (burning, bleeding: harm at the bearer's turn end, which one action of the bearer ends), per stack applied", "1, whatever its duration", "eff.apply_condition"),
     ("Condition, hard-control group (stunned, restrained, charmed, unconscious, pinned, frozen)", "4 (+1 beyond a round)", "eff.apply_condition"),
     ("Harm reduction 1 for one harm branch / for all physical harm or several branches", "1 / 2 per point", "eff.harm_reduction"),
     ("Resistance (halve) one harm branch", "3", "eff.harm_resistance"),
@@ -123,6 +127,8 @@ def intercept(when='an ally engaged with you is hit'):
 
 
 def cond(c, S, dur, target):
+    if c in COND_DOT:                                   # lingering harm: 1 per stack, any duration [revision: I-033]
+        return _e('eff.apply_condition', 1, condition=c, severity='S%d' % S, duration=dur, target=target)
     base = 1 if c in COND_LIGHT else 2 if c in COND_MID else 4
     return _e('eff.apply_condition', base + (0 if dur in SHORT else 1), condition=c, severity='S%d' % S,
               duration=dur, target=target)

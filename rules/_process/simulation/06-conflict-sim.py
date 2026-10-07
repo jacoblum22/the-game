@@ -18,6 +18,9 @@ Models, as written in rules/06-conflict.md:
   * heavy blows (base S4+) need a windup action on the turn before (06.9.5)
   * reckless attack = 01.7.3's "go big" trade: reach +1, stakes Risky; a failure costs S2 harm (3), a
     critical failure S3 (5), reduced by armor
+  * lingering-harm conditions on foes (revision I-033): burning and bleeding tracked as instances with stacks
+    (intensify, max 3), the applying effect's duration, periodic harm at the bearer's turn end, and the
+    bearer's one action to end them under a stated policy (sections K1, K2)
 Assumed where the owning chapter is not yet written (listed in the chapter's Interface requests):
   * PC Vitality by band 12/14/16/18/20 (02/07); armor reduction light 1 / medium 2 / heavy 3 (07/08)
   * adversary stat lines per band as in T-06-12 (09 owns the final templates)
@@ -134,8 +137,33 @@ class Morale:
         return s.size is not None and s.fill >= s.size
 
 
+# ---------------------------------------------------------------- lingering-harm conditions (revision I-033)
+# Conditions whose whole effect is periodic harm (06.7 table; data/conditions.yaml): at the bearer's turn_end it loses
+# `per_stack` Vitality per stack; stacking `intensify` (max 3; a new application adds its stacks and refreshes the
+# duration, 00.9.2); the instance lasts the applying effect's duration (`left` rounds, or None = the scene); and the
+# bearer may end it with one action (burning: beat it out, no check; bleeding: staunch it, Handle Easy = DC 10, rolled
+# on the bearer's attack modifier as a proxy). Fire and bleeding are not reduced by worn armor (07.2.2; no_reduction).
+DOT = {
+    'cond.burning': dict(per_stack=1, end_dc=None, max=3),
+    'cond.bleeding': dict(per_stack=1, end_dc=10, max=3),
+}
+SCENE_TICKS = 3       # what a bearer expects a scene-long instance to keep ticking (fights here run 2-4 rounds)
+
+
+def bearer_ends(policy, c):
+    """Does the bearer spend an action to end this instance? never / always / smart (when the harm still to come,
+    stacks x ticks left, is at least an S2 hit's 3 Vitality: about what one of its own attacks is worth)."""
+    if policy == 'never':
+        return False
+    if policy == 'always':
+        return True
+    left = SCENE_TICKS if c['left'] is None else c['left']
+    return c['stacks'] * left >= 3
+
+
 def fight(rng, pband, foes, policy='steady', weapon='one', armor=None, shield=False, use_focus=False,
-          fearless=False, pc_over=None, fend=True, called=False, caster=None, foe_fend=False, log=None):
+          fearless=False, pc_over=None, fend=True, called=False, caster=None, foe_fend=False, log=None,
+          bearer='smart'):
     """caster (revision I-009): None for a weapon fighter, else a dict describing a caster's beats:
          sev    -- base severity of the branch working (05.7.11: rank 1/2/3 = S2/S3/S4); its aimed check
                    uses p['atk'] as casting attribute + competence; it costs 1 action like a Strike (06.1.3)
@@ -144,8 +172,11 @@ def fight(rng, pband, foes, policy='steady', weapon='one', armor=None, shield=Fa
                    apply (09.3.6; 07.2.2); spell burning (harm.fire) is likewise unreduced
          profane_step -- divine Rebuke: one rung heavier against a profane foe (the foe here is not)
          push_on_crit -- arcane Force Bolt: a critical success pushes the foe one band (it must Move back)
-         spell  -- None, or dict(cost, sev, burning): a Focus spell cast as the first beat of a turn while
-                   Focus lasts (e.g. Flame Lance rank 2: cost 1, S3, one stack of cond.burning)
+         spell  -- None, or dict(cost, sev, edge, conds): a Focus spell cast as the first beat of a turn while
+                   Focus lasts; conds is a list of (condition, stacks, rounds or None for the scene) applied on a
+                   hit (e.g. Flame Lance rank 2 before I-033: cost 1, S3, [('cond.burning', 1, None)])
+       bearer (revision I-033): how a foe answers a lingering-harm condition on itself: 'never', 'always' or
+                   'smart' (bearer_ends); the condition then costs it one of its two actions
          With use_focus and no spell, Focus pushes the first working of each turn (05.6.7).
        foe_fend (ch.09 09_core): adversaries of T3+ Fend the PC's first attack each round (-2).
        log (revision I-004): a list that receives ('beat', modifier, defense, degree, steps) for every PC attack
@@ -163,7 +194,7 @@ def fight(rng, pband, foes, policy='steady', weapon='one', armor=None, shield=Fa
         weapon = 'one'
         sev_w = caster['sev']
     for f in foes:
-        f.burning = 0
+        f.conds = {}                                   # lingering-harm conditions (I-033)
         f.fended = False
     sev = p['sev'] + (1 if weapon == 'heavy' else 0)
     mor = Morale(None if fearless else max(f.morale for f in foes), foes)
@@ -209,7 +240,8 @@ def fight(rng, pband, foes, policy='steady', weapon='one', armor=None, shield=Fa
             steps = 0
             reckless = (policy == 'reckless' and k == 0)
             bsev = sev
-            burn = 0
+            apply = ()
+            bedge = 0
             if caster is not None:
                 bsev = sev_w
                 spell = caster.get('spell')
@@ -217,7 +249,8 @@ def fight(rng, pband, foes, policy='steady', weapon='one', armor=None, shield=Fa
                     st['focus'] -= spell['cost']
                     st['focus_spent'] += spell['cost']
                     bsev = spell['sev']
-                    burn = spell.get('burning', 0)
+                    apply = spell.get('conds', ())
+                    bedge = spell.get('edge', 0)        # harm edge (T-05-9), I-033
                 elif not spell and st['focus'] > 0 and k == 0:
                     st['focus'] -= 1
                     st['focus_spent'] += 1
@@ -242,9 +275,11 @@ def fight(rng, pband, foes, policy='steady', weapon='one', armor=None, shield=Fa
             if log is not None:
                 log.append(('beat', mod, tgt.guard, deg, steps))
             if deg >= 2:
-                h = harm(bsev, steps + (1 if deg == 3 else 0), 0, red)
-                if burn:
-                    tgt.burning = min(3, tgt.burning + burn)
+                h = harm(bsev, steps + (1 if deg == 3 else 0), bedge, red)
+                for cid, n, dur in apply:                 # intensify: stacks add, duration refreshes (00.9.2)
+                    c = tgt.conds.setdefault(cid, dict(stacks=0, left=dur))
+                    c['stacks'] = min(DOT[cid]['max'], c['stacks'] + n)
+                    c['left'] = dur
                 if caster is not None and caster.get('push_on_crit') and deg == 3:
                     tgt.engaged = False                 # Force Bolt: pushed one band; it must Move back
                 before_m = tgt.cur_members()
@@ -276,7 +311,13 @@ def fight(rng, pband, foes, policy='steady', weapon='one', armor=None, shield=Fa
         f.fended = False
         acts = 2
         k = 0
-        if not f.engaged:
+        for cid in list(f.conds):                       # the bearer's action to end it (I-033)
+            if acts > 0 and bearer_ends(bearer, f.conds[cid]):
+                acts -= 1
+                dc = DOT[cid]['end_dc']
+                if dc is None or degree(rng, f.atk, dc) >= 2:
+                    del f.conds[cid]
+        if acts > 0 and not f.engaged:
             f.engaged = True
             acts -= 1                                   # Move in
         while acts > 0:
@@ -308,8 +349,21 @@ def fight(rng, pband, foes, policy='steady', weapon='one', armor=None, shield=Fa
                     mor.tick(-1)
             acts -= 1
             k += 1
-        if f.burning and f.alive:                       # cond.burning: S1 per stack at turn end, reduced
-            f.vit -= max(0, HARM[1] - (0 if caster is not None and caster.get('elemental') else f.red)) * f.burning
+        if f.conds and f.alive:                         # lingering harm at the bearer's turn_end (I-033)
+            before_m = f.cur_members()
+            for cid in list(f.conds):
+                c = f.conds[cid]
+                f.vit -= DOT[cid]['per_stack'] * c['stacks']
+                if c['left'] is not None:
+                    c['left'] -= 1
+                    if c['left'] <= 0:
+                        del f.conds[cid]
+            fallen = before_m - f.cur_members()
+            if fallen > 0:
+                mor.tick(fallen + (1 if f.leader and not f.alive else 0))
+            if f.members == 1 and not f.bloodied and f.alive and f.vit * 2 <= f.maxvit:
+                f.bloodied = True
+                mor.tick(1)
             mor.strength()
 
     rounds = 0
@@ -599,15 +653,81 @@ if __name__ == '__main__':
         run("martial specialist P%d, no Focus" % b, b, lambda b=b: [Foe(b)])
 
     table("J4. Focus still pays: the same P3 caster Spent, pushing the working, or casting a 1-Focus spell first each turn")
-    lance = dict(cost=1, sev=3, burning=1)        # ab.flame_lance rank 2: S3 fire and one stack of cond.burning
+    # ab.flame_lance rank 2 as it stood before I-033 (S3 fire and one stack of cond.burning for the scene); since I-033
+    # burning is a tracked instance the bearer may beat out (it used to burn for ever); the foe here never spends the
+    # action, which section K1 finds is the bearer's best answer
+    lance = dict(cost=1, sev=3, conds=[('cond.burning', 1, None)])
     for lab, mk in (("1xT3", lambda: [Foe(3)]), ("1xT4", lambda: [Foe(4)]), ("2xT3", lambda: [Foe(3), Foe(3)]),
                     ("2xT2", lambda: [Foe(2), Foe(2)])):
         bw = BRANCH['arcane Force Bolt']
         run("P3 caster vs %s: Spent (Force Bolt only)" % lab, 3, mk, pc_over=CASTER[3], caster=dict(sev=3, **bw))
         run("P3 caster vs %s: Focus 7, push the first bolt each turn" % lab, 3, mk, pc_over=CASTER[3], caster=dict(sev=3, **bw), use_focus=True)
-        run("P3 caster vs %s: Focus 7, Flame Lance first each turn" % lab, 3, mk, pc_over=CASTER[3], caster=dict(sev=3, spell=lance, **bw), use_focus=True)
+        run("P3 caster vs %s: Focus 7, Flame Lance first each turn" % lab, 3, mk, pc_over=CASTER[3], caster=dict(sev=3, spell=lance, **bw), use_focus=True, bearer='never')
         run("martial specialist P3 vs %s: no Focus" % lab, 3, mk)
         run("martial specialist P3 vs %s: Focus push" % lab, 3, mk, use_focus=True)
     table("J5. Sensitivity: the working one rung lighter at tier 3 (S2), the alternative DL-05-31 rejected")
     for name, bw in BRANCH.items():
         run("Spent P3 caster, %s at S2 vs 1xT3" % name, 3, lambda: [Foe(3)], pc_over=CASTER[3], caster=dict(sev=2, **bw))
+
+    # ---------------------------------------------------------------- K. lingering harm priced (revision I-033)
+    # What is a lingering-harm condition worth next to a severity rung (2 EU in T-05-9)? A 1-Focus spell of the
+    # working's own severity S_w, cast first each turn while Focus lasts, is compared with the same spell one rung
+    # heavier (= the free working plus a push) and with S_w plus each condition. Each condition row is played three
+    # times, once per bearer policy (never / always / smart, bearer_ends), and the value kept is the LEAST of the
+    # three: the bearer's best answer. EU = 2 x (sum of the condition's win-point gains) / (sum of the rung's gains),
+    # pooled over two matchups per band at bands 1, 3 and 5.
+    KM = {1: (("1xT3", lambda: [Foe(3)]), ("2xT2", lambda: [Foe(2), Foe(2)])),
+          3: (("1xT4", lambda: [Foe(4)]), ("2xT3", lambda: [Foe(3), Foe(3)])),
+          5: (("1xT5", lambda: [Foe(5)]), ("2xT4", lambda: [Foe(4), Foe(4)]))}
+    KC = (("burning x1, scene", [('cond.burning', 1, None)]), ("burning x1, one round", [('cond.burning', 1, 1)]),
+          ("burning x2, scene", [('cond.burning', 2, None)]), ("bleeding x1, scene", [('cond.bleeding', 1, None)]),
+          ("bleeding x1, one round", [('cond.bleeding', 1, 1)]))
+
+    def winp(pband, mk, **kw):
+        rng = random.Random(606)
+        res = [fight(rng, pband, mk(), **kw) for _ in range(RUNS)]
+        return 100.0 * sum(r['won'] for r in res) / len(res)
+
+    print()
+    print("### K1. Lingering harm next to a severity rung (1-Focus spell first each turn; arcane delivery, unreduced)")
+    print()
+    print("| Band | Matchup | S_w spell | +1 rung | " + " | ".join(n for n, _ in KC) + " |")
+    print("|---|---|---|---|" + "---|" * len(KC))
+    rung_gain = 0.0
+    cond_gain = {n: 0.0 for n, _ in KC}
+    pol_best = {n: [] for n, _ in KC}
+    bw = BRANCH['arcane Force Bolt']
+    for b, ms in KM.items():
+        sw = WORK_SEV[b]
+        for lab, mk in ms:
+            kw = dict(pc_over=CASTER[b], use_focus=True)
+            base = winp(b, mk, caster=dict(sev=sw, spell=dict(cost=1, sev=sw), **bw), **kw)
+            rung = winp(b, mk, caster=dict(sev=sw, spell=dict(cost=1, sev=min(5, sw + 1)), **bw), **kw)
+            rung_gain += rung - base
+            cells = []
+            for n, cs in KC:
+                by = {pol: winp(b, mk, caster=dict(sev=sw, spell=dict(cost=1, sev=sw, conds=cs), **bw), bearer=pol, **kw)
+                      for pol in ('never', 'always', 'smart')}
+                pol = min(by, key=by.get)
+                pol_best[n].append(pol)
+                cond_gain[n] += by[pol] - base
+                cells.append("%.1f (%s)" % (by[pol], pol))
+            print("| P%d | %s | %.1f | %.1f | %s |" % (b, lab, base, rung, " | ".join(cells)))
+    print()
+    print("Pooled rung gain %.1f win points (= 2 EU). EU equivalent, the bearer answering at its best:" % rung_gain)
+    for n, _ in KC:
+        print("- %s: %.2f EU (bearer's best answer: %s)" % (n, 2 * cond_gain[n] / rung_gain,
+                                                          ", ".join(sorted(set(pol_best[n])))))
+
+    table("K2. I-033 acceptance: a 1-Focus damage spell against the free working plus a push (P3 caster, Focus 7)")
+    old = dict(cost=1, sev=3, conds=[('cond.burning', 1, None)])               # Flame Lance r2 before I-033: 6 EU
+    new = dict(cost=1, sev=4, edge=2, conds=[('cond.burning', 1, None)])       # Flame Lance r2 since I-033: 8 EU
+    for lab, mk in (("1xT3", lambda: [Foe(3)]), ("1xT4", lambda: [Foe(4)]), ("2xT3", lambda: [Foe(3), Foe(3)])):
+        run("P3 caster vs %s: Spent (Force Bolt only)" % lab, 3, mk, pc_over=CASTER[3], caster=dict(sev=3, **bw))
+        run("P3 caster vs %s: push the first bolt each turn" % lab, 3, mk, pc_over=CASTER[3], caster=dict(sev=3, **bw), use_focus=True)
+        for pol in ('never', 'always', 'smart'):
+            run("  old Flame Lance r2 (S3 + burning), bearer %s" % pol, 3, mk, pc_over=CASTER[3],
+                caster=dict(sev=3, spell=old, **bw), use_focus=True, bearer=pol)
+        for pol in ('never', 'always', 'smart'):
+            run("  new Flame Lance r2 (S4 +2 + burning), bearer %s" % pol, 3, mk, pc_over=CASTER[3],
+                caster=dict(sev=3, spell=new, **bw), use_focus=True, bearer=pol)

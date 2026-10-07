@@ -1341,6 +1341,8 @@ error class — the same anchor id, the same claim class, or the same 12.1.3 bre
 sessions** (`pacing.yaml#review.iii_candidate`), the class is reported as a **Principle III candidate**:
 the "recorded, concrete failure case" the constitution requires before an exception-gating mechanism may
 be considered [C:III]. The report is evidence for the project's maintainers; it changes nothing in play.
+The review list also carries the session's new **promotion candidates** (00.16.3's test, read from the ruling
+ledger): the campaign's own entries are promoted at once; shipped entries are reported [revision: I-043].
 
 **12.12.5 The player may see the ledger.** `[D]` Rulings are `available` (00.6.3). "How was this ruled
 before?" is answered with the matching record in format 12.15.8. Seeing that the same case gets the same

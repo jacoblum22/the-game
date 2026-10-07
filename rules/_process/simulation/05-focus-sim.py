@@ -38,7 +38,8 @@ def fight_wren(use_focus, focus, fmax=5, foe=dict(vit=10, atk=4, guard=13, sev=2
 
 def fight_ash(use_focus, focus, fmax=7, foe=dict(vit=16, atk=7, guard=16, sev=3)):
     """Ash, tier-3 Pyromancer: casting +8 (Intellect 3 + competence 5), Guard 12, Vitality 12.
-    Flame Lance rank 2 (1 Focus): S3 fire and burning (1 harm at each of the foe's turn ends, per stack, max 3).
+    Flame Lance rank 2 (1 Focus): S4 fire +2 and burning (1 harm at each of the foe's turn ends, per stack, max 3;
+    the foe never spends an action to beat it out, its best answer by 06-conflict-sim.py K1) [revision: I-033].
     Spell Ward rank 2 (reaction, 1 Focus): a hit is two severity rungs lighter. Arcane family trigger: a critical
     success restores 1 Focus, once per scene. Without Focus: a staff Strike at +2, S2."""
     vit, fvit, rounds, spent, burn, trig, gen = 12, foe['vit'], 0, 0, 0, False, 0
@@ -48,7 +49,7 @@ def fight_ash(use_focus, focus, fmax=7, foe=dict(vit=16, atk=7, guard=16, sev=3)
             focus -= 1; spent += 1
             deg = degree(8, foe['guard'])
             if deg >= 2:
-                fvit -= HARM[3 + (1 if deg == 3 else 0)]; burn = min(3, burn + 1)
+                fvit -= HARM[min(5, 4 + (1 if deg == 3 else 0))] + 2; burn = min(3, burn + 1)   # [revision: I-033]
                 if deg == 3 and not trig:
                     trig = True; focus = min(fmax, focus + 1); gen += 1
         else:

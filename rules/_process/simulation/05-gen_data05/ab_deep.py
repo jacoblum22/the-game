@@ -129,8 +129,8 @@ M = 'deed.martial.'
 ab('ab.through_the_gap', 'Through the Gap', M + 'archery.bow', 4, 'gap_shot', 'Working', 'rider',
    'Find the narrow way past a shield or a wall.',
    'Applies to a ranged Strike with a bow against a target within band.far that you can see.',
-   [rk("Your shot ignores the target's cover: it loses flag.in_cover for this Strike, takes harm one severity rung heavier, +2, and is bleeding until the scene ends.",
-       [move(T, 0, rem=['flag.in_cover']), sev(1, 'this Strike'), hedge(2, 'this Strike'), cond('cond.bleeding', 1, 'scene', FOE)], f=2)],
+   [rk("Your shot ignores the target's cover: it loses flag.in_cover for this Strike, takes harm two severity rungs heavier, +2, and is bleeding until the scene ends.",
+       [move(T, 0, rem=['flag.in_cover']), sev(2, 'this Strike'), hedge(2, 'this Strike'), cond('cond.bleeding', 1, 'scene', FOE)], f=2)],  # [revision: I-033]
    x=[('total cover', 'it cannot be seen; ab.volley at an area'), ('a thrown weapon', 'deed.martial.thrown')], **SHOT)
 
 ab('ab.long_shot', 'The Long Shot', M + 'archery.crossbow', 5, 'long_shot', 'Working', 'beat',
@@ -172,8 +172,8 @@ ab('ab.bearded_hook', 'Bearded Hook', M + 'axe.hand', 4, 'axe_hook', 'Working', 
 ab('ab.red_harvest', 'Red Harvest', M + 'axe.great', 5, 'harvest_swing', 'Working', 'beat',
    'Swing a great axe through every foe that stands near you.',
    'Applies to up to four foes engaged with you, with a two-handed axe.',
-   [rk("Swing through every foe engaged with you, up to four (Strike, Might, against each one's attack defense). Each one hit takes your axe's harm one rung heavier, is bleeding until the scene ends and is knocked prone; each foe that sees it is frightened until the scene ends.",
-       [harmw(1, 'each foe hit'), tgt(3), cond('cond.bleeding', 1, 'scene', 'each foe hit'), cond('cond.prone', 1, 'rounds:1', 'each foe hit'), cond('cond.frightened', 1, 'scene', 'each foe that sees the swing')], f=3, per='scene_end')],
+   [rk("Swing through every foe engaged with you, up to four (Strike, Might, against each one's attack defense). Each one hit takes your axe's harm one rung heavier, +2, is bleeding until the scene ends and is knocked prone; each foe that sees it is frightened until the scene ends.",
+       [harmw(1, 'each foe hit'), hedge(2, 'this beat'), tgt(3), cond('cond.bleeding', 1, 'scene', 'each foe hit'), cond('cond.prone', 1, 'rounds:1', 'each foe hit'), cond('cond.frightened', 1, 'scene', 'each foe that sees the swing')], f=3, per='scene_end')],  # [revision: I-033]
    attr='might', check=ATK, spread='burst',
    x=[('sparing a foe within reach', 'every foe engaged with you is struck'), ('a hand axe', 'ab.bearded_hook')], **STRIKE)
 
@@ -251,8 +251,8 @@ ab('ab.shield_breaker_throw', 'Shield-Breaker Throw', M + 'thrown.javelin', 4, '
 ab('ab.rain_of_knives', 'Rain of Knives', M + 'thrown.blades', 5, 'knife_rain', 'Working', 'beat',
    'Empty a bandolier of knives into every foe near you.',
    'Applies to up to four foes within band.near, while you carry at least four throwing blades.',
-   [rk("Throw at up to four foes within band.near, even while engaged and without provoking (Strike, Agility, against each one's attack defense). Each one hit takes your blade's harm, +2, is bleeding until the scene ends and distracted until the end of its next turn.",
-       [harmw(0, 'each foe hit'), tgt(3), hedge(2, 'this beat'), cond('cond.bleeding', 1, 'scene', 'each foe hit'), cond('cond.distracted', 1, 'rounds:1', 'each foe hit'), waive('the reaction a ranged attack provokes while engaged', 'this beat')], f=3, per='scene_end')],
+   [rk("Throw at up to four foes within band.near, even while engaged and without provoking (Strike, Agility, against each one's attack defense). Each one hit takes your blade's harm one rung heavier, +2, is bleeding until the scene ends and distracted until the scene ends.",
+       [harmw(1, 'each foe hit'), tgt(3), hedge(2, 'this beat'), cond('cond.bleeding', 1, 'scene', 'each foe hit'), cond('cond.distracted', 1, 'scene', 'each foe hit'), waive('the reaction a ranged attack provokes while engaged', 'this beat')], f=3, per='scene_end')],  # [revision: I-033]
    attr='agility', check=ATK, spread='fork',
    x=[('foes beyond band.near', 'ab.throwers_eye'), ('a javelin', 'ab.shield_breaker_throw')], **SHOT)
 
@@ -752,8 +752,8 @@ ab('ab.sentence_passed', 'Sentence Passed', D + 'smiting.judgment', 4, 'judgment
 ab('ab.dawnbreak', 'Dawnbreak', D + 'smiting.radiance', 5, 'dawnbreak', 'Working', 'beat',
    'Break a sudden dawn on a place full of foes.',
    'Applies to a point within band.far and up to six beings within band.close of it.',
-   [rk("Light breaks at a point within band.far. Up to six beings within band.close of it roll Evade against your effect DC: on a failure each takes Grievous radiant harm and is blinded until the end of its next turn; an undead or fiend that fails is also burning until the scene ends.",
-       [fchk('evade'), harm(4, ['harm.radiance.holy'], 'each being that fails'), tgt(5), cond('cond.blinded', 1, 'rounds:1', 'each being that fails'), cond('cond.burning', 1, 'scene', 'each undead or fiend that fails')], f=3, per='rest_long')],
+   [rk("Light breaks at a point within band.far. Up to six beings within band.close of it roll Evade against your effect DC: on a failure each takes Grievous radiant harm +2 and is blinded until the end of its next turn; an undead or fiend that fails is also burning until the scene ends.",
+       [fchk('evade'), harm(4, ['harm.radiance.holy'], 'each being that fails'), hedge(2, 'this working'), tgt(5), cond('cond.blinded', 1, 'rounds:1', 'each being that fails'), cond('cond.burning', 1, 'scene', 'each undead or fiend that fails')], f=3, per='rest_long')],  # [revision: I-033]
    check=EVA, spread='burst', harm_tags=['harm.radiance.holy'], traits=['trait.action.attack', 'trait.delivery.area', 'trait.sense.visible'],
    x=[('sparing allies inside the light', 'it takes every being in it'), ('one foe', 'ab.searing_light')])
 
@@ -808,8 +808,8 @@ ab('ab.iron_obeys', 'Iron Obeys', A + 'earth.metal', 5, 'metal_command', 'Workin
 ab('ab.wall_of_flame', 'Wall of Flame', A + 'fire.shaping', 4, 'fire_wall', 'Working', 'beat',
    'Raise a standing wall of fire across a space.',
    'Applies to a line within band.near of you, as long as band.near; it lasts until the scene ends.',
-   [rk("Raise a wall of fire until the scene ends. A being that crosses it takes Heavy fire harm and is burning until the scene ends, up to two at a time; beings behind it hold flag.obscured against those beyond, and your allies behind it hold a Protective lever.",
-       [harm(3, ['harm.fire.flame'], 'a being that crosses the wall'), cond('cond.burning', 1, 'scene', 'a being that crosses the wall'), tgt(2), move('beings behind the wall', 0, add=['flag.obscured']), lev('protective', 'beats by allies behind the wall', 'scene')], f=2, per='scene_end')],
+   [rk("Raise a wall of fire until the scene ends. A being that crosses it takes Heavy fire harm +1 and is burning until the scene ends, up to two at a time; beings behind it hold flag.obscured against those beyond, and your allies behind it hold a Protective lever.",
+       [harm(3, ['harm.fire.flame'], 'a being that crosses the wall'), hedge(1, 'this working'), cond('cond.burning', 1, 'scene', 'a being that crosses the wall'), tgt(2), move('beings behind the wall', 0, add=['flag.obscured']), lev('protective', 'beats by allies behind the wall', 'scene')], f=2, per='scene_end')],  # [revision: I-033]
    spread='linger', harm_tags=['harm.fire.flame'], traits=['trait.delivery.line', 'trait.sense.visible', 'trait.duration.sustained'],
    x=[('a wall that harms nothing that stays still', 'only crossing burns'), ('a burst', 'ab.firestorm')])
 

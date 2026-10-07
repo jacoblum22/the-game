@@ -19,7 +19,8 @@ so the numbers can be re-run when those chapters land:
   target is exposed, modelled as a second Precision lever (+2) on her later attacks (ch.06 owns the
   condition's exact effect). Foe: T2, Vitality 10, Guard 13, attack +4, S2 harm;
 - **Ash**, tier-3 Pyromancer: casting +8, Guard 12, Vitality 12, Focus 7. Flame Lance rank 2 (1 Focus):
-  S3 fire and one stack of burning (1 harm per stack at each of the foe's turn ends, at most 3). Spell
+  S4 fire +2 and one stack of burning (1 harm per stack at each of the foe's turn ends, at most 3; re-priced
+  and re-run in revision I-033, which also moved one venture-day cell, 6.3% to 6.2%). Spell
   Ward rank 2 (reaction, 1 Focus): a hit two severity rungs lighter; used while he would keep 1 Focus
   for the next lance. The arcane family trigger: +1 Focus on a critical success, once per scene.
   Without Focus he fights with a staff: +2, S2. Foe: T3, Vitality 16, Guard 16, attack +7, S3 harm.
@@ -34,8 +35,8 @@ so the numbers can be re-run when those chapters land:
 | Wren (tier 1, Focus 5) vs T2, spends freely | 99.6% | 2.36 | 3.34 | 1.66 | 6.2% | 9.7 |
 | Wren (tier 1, Focus 2 at start) vs T2 | 96.9% | 3.04 | 2.00 | 0.00 | 100.0% | 8.6 |
 | Ash (tier 3, Focus 7) vs T3, spends none | 0.1% | 3.00 | 0.00 | 7.00 | 0.0% | 3.4 |
-| Ash (tier 3, Focus 7) vs T3, spends freely | 81.3% | 3.60 | 5.64 | 1.84 | 30.5% | 7.9 |
-| Ash (tier 3, Focus 3 at start) vs T3 | 40.7% | 3.31 | 3.09 | 0.21 | 80.5% | 5.8 |
+| Ash (tier 3, Focus 7) vs T3, spends freely | 93.1% | 2.87 | 4.31 | 3.09 | 13.7% | 9.4 |
+| Ash (tier 3, Focus 3 at start) vs T3 | 65.9% | 2.79 | 2.97 | 0.32 | 71.2% | 8.7 |
 
 ### Rests (05.6.9)
 
@@ -56,7 +57,7 @@ and 4.
 |---|---|---|---|---|---|
 | Focus at start (mean) | 5.00 | 2.66 | 3.00 | 1.00 | 3.00 |
 | starts at 0 Focus | 0.0% | 0.0% | 0.0% | 0.0% | 0.0% |
-| starts at 1 Focus | 0.0% | 6.3% | 0.0% | 100.0% | 0.0% |
+| starts at 1 Focus | 0.0% | 6.2% | 0.0% | 100.0% | 0.0% |
 | Focus spent (mean) | 3.34 | 2.66 | 3.00 | 1.00 | 3.00 |
 
 Mean Focus spent over the day: 13.00 (pool 5; rests restored 8).

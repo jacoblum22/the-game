@@ -267,6 +267,7 @@ review:                                   # 12.12.4, 12.12.6
   flag_sources: [ch01_conditions, correction, plain_fallback, upheld_dispute, breach_12_1_3]
   iii_candidate: {min_overturned_records: 3, same_error_class: true, min_sessions: 2}
   rule_candidate_min_reuses: 3
+  promotion: {min_evidence_scenes_of_use: 20, min_sessions: 2, overturned_rulings: 0, not_in_open_candidate: true, overturn_resets: true}   # 00.16.3 [revision: I-043]
 
 modes:                                    # 12.4.5; T-12-3
   - {to: conflict, when: [adversary_behavior_attacks, pc_harmful_beat_vs_resisting_creature, npc_action_attacks, clock_completion_creates_attacking_encounter], cards: [situation.conflict]}

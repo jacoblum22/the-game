@@ -1053,7 +1053,10 @@ whether anything does, 12.16.5). Each being accepts at most **2 healing effects 
 long rests** (`healings_since_long_rest`, a counter on the recipient, reset by `h.05.rest_recharge`);
 a third restores 0 and the tool says so before Focus is spent. The cap is what stops Focus from being
 converted into unbounded Vitality across a day, and it is the recipient's limit, so two healers do not
-double it [R5 HR-09: Worlds Without Number's System Strain; DL-05-23].
+double it [R5 HR-09: Worlds Without Number's System Strain; DL-05-23]. A healing that applies to a being
+the caster touches, or to a being within a band, may target **the caster herself** unless the ability says
+otherwise; she is then its recipient and counts against her own cap like anyone else, so a lone healer who
+heals herself twice has no third healing from her own hands either [revision: I-058; DL-05-39].
 
 **05.7.9 Magic and the gate.** `[D]` Magic changes what is G4 for its holder and for no one else. A
 30-foot chasm is Beyond for a jump and Standard reach for `ab.long_step`. The pipeline is unchanged: the
@@ -1115,7 +1118,10 @@ beats one T3 foe 80.7–91.0% (74.5–86.8% when the T3 Fends, as 09's templates
 before; at every band the working stays below the martial specialist with no Focus (P3 81–91% against
 99.7%; P4 11–48% against 87%; P5 7–30% against 80%). Focus still pays as much as it pays a fighter:
 pushing the working raises a P3 caster's odds against one T4 from 34% to 55% (a fighter's push: 62% to
-84%) and against two T3 from 26% to 47% (73% to 90%) [DL-05-31].
+84%) and against two T3 from 26% to 47% (73% to 90%) [DL-05-31]. A 1-Focus spell pays more than the push:
+Flame Lance rank 2 (S4 +2 and burning, 8 EU) cast first each turn takes the same caster to 66% against one
+T4 and 55% against two T3 (the push: 55%, 47%), with the foe answering the burning at its best
+(`06-conflict-sim.py` K2) [revision: I-033; DL-05-40].
 
 ### 05.8 Rites, research and learning
 
@@ -1473,13 +1479,17 @@ them (every entry's `budget` field in the data shows the same arithmetic):
 |---|---|---|---|---|
 | `ab.throwers_eye` r1 | Edge · passive | tier 2 = **2** | +1 to thrown Strikes within close (2) | **2** |
 | `ab.aimed_shot` r1 | Working · rider · 1 Focus · one narrowing clause (did not move) | 2 + 2 + 0 + 0 + 1 = **5** | Precision lever on the shot (1) + one severity rung (2) | **3** |
-| `ab.flame_lance` r1 | Working · beat · 1 Focus | 2 + 2 + 2 = **6** | S2 fire harm (2) + burning beyond a round (3) | **5** |
-| `ab.flame_lance` r3 | same, rank 3 | 6 + 2 + 2 = **10** | S4 fire harm (5) + burning (3) | **8** |
-| `ab.firestorm` r1 | Working · beat · 3 Focus · per long rest | 6 + 6 + 3 + 2 = **17** | S4 harm (5) + five more targets (5) + burning (3) + lingering S2 (2) | **15** |
+| `ab.flame_lance` r1 | Working · beat · 1 Focus | 2 + 2 + 2 = **6** | S3 fire harm (3) + harm edge +1 (1) + burning (1) | **5** |
+| `ab.flame_lance` r3 | same, rank 3 | 6 + 2 + 2 = **10** | S4 fire harm (5) + harm edge +2 (2) + burning (1) + exposed for a round (1) | **9** |
+| `ab.firestorm` r1 | Working · beat · 3 Focus · per long rest | 6 + 6 + 3 + 2 = **17** | S4 harm (5) + harm edge +2 (2) + five more targets (5) + burning (1) + lingering S2 (2) | **15** |
 
-Across the 239 budgeted abilities and their 526 ranks: 175 ranks sit exactly on their allowance, 180 are
-one unit under, 171 are two under, and none is over (`abilities.yaml#census.budget_slack`) [revision:
-I-007, I-009, I-015]. The 27
+Burning and bleeding are priced as **lingering harm** (1 EU a stack, T-05-9) since revision I-033; the ten
+abilities (12 ranks) that fell below their allowance by it were re-budgeted inside their own themes, mostly
+with a harm edge [revision: I-033; DL-05-40].
+
+Across the 362 budgeted abilities and their 649 ranks: 185 ranks sit exactly on their allowance, 222 are
+one unit under, 242 are two under, and none is over (`abilities.yaml#census.budget_slack`) [revision:
+I-007, I-009, I-015, I-087, I-033]. The 27
 absorbed powers are ch.04's and are costed by 04.10.4's three separate costs, not by this table.
 
 **05.11.6 How many abilities, and why.** `[D]` The pool holds **389** entries: 302 tag-gated, 57
@@ -1535,7 +1545,9 @@ by rank or by 05.12.3 [R3 #10: the cost of unbudgeted reworks].
 
 **05.12.3 At content scale.** `[D]` Every entry of this chapter's data files ships `lifecycle:
 provisional` (00.16.3). Content changes follow these rules:
-- **Promotion** to `permanent` is the verification wave's, entry by entry, on the evidence of play.
+- **Promotion** to `permanent` is the verification wave's, entry by entry, on the evidence of play: the
+  review lists' promotion candidates under 00.16.3's test (20 evidence-bearing scenes of use over 2 sessions,
+  no overturned ruling) [revision: I-043].
 - **Retirement** is `lifecycle: retired` with `superseded_by`; ids are never reused or deleted. A
   character holding a retired ability keeps it until the next `season` boundary, when the engine offers
   the successor in the same slot (a fork: the old one is replaced, never joined).
@@ -1714,7 +1726,8 @@ one DC step, one Focus, one condition; shown before any time is spent (class i).
 | Strike or spell delivery changed (harm type, form) | 1 (+ its harm edge) | `eff.strike_delivery`, `eff.05.spell_delivery` |
 | Each target beyond the first (through a spread tag) | 1 | `spread` |
 | Condition, light group (off_balance, distracted, exposed, slowed, deafened, chilled) | 1 (+1 if it lasts beyond a round) | `eff.apply_condition` |
-| Condition, middle group (prone, weakened, frightened, blinded, grabbed, burning, bleeding, dazed, choking, poisoned, exhausted) | 2 (+1 beyond a round) | `eff.apply_condition` |
+| Condition, middle group (prone, weakened, frightened, blinded, grabbed, dazed, choking, poisoned, exhausted) | 2 (+1 beyond a round) | `eff.apply_condition` |
+| Condition, lingering harm (burning, bleeding: harm at the bearer's turn end, which one action of the bearer ends), per stack applied | 1, whatever its duration | `eff.apply_condition` |
 | Condition, hard-control group (stunned, restrained, charmed, unconscious, pinned, frozen) | 4 (+1 beyond a round) | `eff.apply_condition` |
 | Harm reduction 1 for one harm branch / for all physical harm or several branches | 1 / 2 per point | `eff.harm_reduction` |
 | Resistance (halve) one harm branch | 3 | `eff.harm_resistance` |
@@ -1736,6 +1749,13 @@ one DC step, one Focus, one condition; shown before any time is spent (class i).
 | Bring a helper or object into being (threat band B) | 2 x B | `eff.summon` |
 | Establish a fact (a mark, a sign, a bond) | 1 | `eff.write_fact` |
 | A temporary license for another, or a method beyond the basic verbs (ordinary / world-bending) | 2 / 4 | `eff.grant_license`, `Permission scope` |
+
+*Lingering harm* [revision: I-033; DL-05-40]. Burning and bleeding do nothing but harm at the bearer's turn end, and
+one action of the bearer ends either. `06-conflict-sim.py` K1 (condition durations tracked, the bearer playing
+its best answer of never / always / sometimes spending the action) measures one stack at **0.67 EU** for the
+scene and **0.40 EU** for one round, against a severity rung's 2, pooled over bands 1, 3 and 5; two stacks at
+once, 1.14. The row rounds up to 1 a stack. They were priced as middle-group conditions (3 EU for the scene)
+until then, which let a 1-Focus spell carry a lingering harm in place of a rung and lose to the free push.
 
 **T-05-12 The pool by branch and minimum tier.** `[D]` (`abilities.yaml#census`; checked against ch.04's coverage requests by the generator.)
 
@@ -1907,14 +1927,15 @@ own mechanics (costs, uses, ranks, budgets, miscasts, clocks, composition) are e
 
 ### WE-05-1 A spell cast end to end
 
-*Situation.* A crypt stair. A ghoul (`creature.undead.ravenous`, T2: Vitality 10, Guard 13
+*Situation.* A crypt stair. A ghast (`creature.undead.ravenous`, T3: Vitality 18, Guard 13
 *(illustrative; 09)*) stands at `band.near`, outlined against the torch Wren dropped on the landing
 (fact `obj.torch_02.lit_at = loc.crypt.landing`, recorded two beats ago). Player: "Flame Lance, and I
 put everything into it."
 
 1. **Held and rank.** `ab.flame_lance`, calling partition, picked through the Pyromancer at tier 3:
    rank = min(3, 1 + floor((3 − 1) ÷ 2)) = **2**. Rank 2's literal text: *"Throw fire at one target
-   within band.near. On a success it takes Heavy fire harm (shifted by delivered reach) and is burning."*
+   within band.near. On a success it takes Grievous fire harm +2 (shifted by delivered reach) and is burning."*
+   [revision: I-033]
 2. **Validation** (PR-05-1 step 2). Timing: his beat. Limitation: one target he can see within
    `band.near`: yes. Arcane signature: `trait.action.speech` and `trait.action.manipulate`: he is not
    choking and his off hand is free: yes. Uses: none tracked (Focus only).
@@ -1923,36 +1944,37 @@ put everything into it."
 4. **Cost** (05.6.3): base 1 + flare 1 = **2**. Focus 7 → would be 5.
 5. **Frame.** Aimed; anchor `verb.strike`; attribute Intellect **+3**; deed tag
    `deed.arcane.fire.blast`, competence **+5** from the calling at `deed.arcane.fire`; edge 0. One lever:
-   the torch's light behind the ghoul, typed **Precision** (+2). Total **+10** against Guard **13**: he
+   the torch's light behind the ghast, typed **Precision** (+2). Total **+10** against Guard **13**: he
    needs a 3. Odds: success or better 90%, critical success 40% (13+), critical failure 5% (a natural 1:
-   total 11 is a failure by 2, stepped down). Stakes **Risky** (on a failure the ghoul closes:
+   total 11 is a failure by 2, stepped down). Stakes **Risky** (on a failure the ghast closes:
    `cost.footing`, S2). Reach **Standard**.
 6. **OFFER.** "Flame Lance, flared hard: 2 Focus, you need a 3 (90%). It will be seen and heard on the
-   stair below. If it fails the ghoul is on you; if it goes badly wrong the fire turns on you." Commit.
+   stair below. If it fails the ghast is on you; if it goes badly wrong the fire turns on you." Commit.
 7. **Commit.** `update_quantity(focus, −2)` → 5/7. `on_focus_spent` → ch.03 counts `cnt.focus`, 2 units,
    at `deed.arcane.fire.blast`.
 8. **Roll.** d20 = **9** → total 19, margin +6: **success**; delivered reach 2.
-9. **Harm, dealer side** (00.10.5): base S3; reach step (2 − 2) = 0; Hard flare +1 (an effect step,
-   inside the ±2 cap) → **S4**; convert → **8**; harm edge 0. **Receiver side:** no reduction, no fire
-   resistance → **8**. The ghoul is at 2 (bloodied: shown).
-10. **Condition.** `apply_condition(cond.burning)`, one stack. At the ghoul's turn end its periodic
-    S1 fire harm *(illustrative; 06)* brings it to 1.
+9. **Harm, dealer side** (00.10.5): base S4; reach step (2 − 2) = 0; Hard flare +1 (an effect step,
+   inside the ±2 cap) → **S5**; convert → **12**; harm edge +2 → **14**. **Receiver side:** no reduction,
+   no fire resistance → **14**. The ghast is at 4 (bloodied: shown).
+10. **Condition.** `apply_condition(cond.burning)`, one stack. At the ghast's turn end its periodic
+    S1 fire harm brings it to 3, unless it spends one of its actions beating the flames out (06.7).
 11. **Hooks.** The lance is a beat: its events are depth 0. Ash's arcane Focus trigger needs a critical
     success: it does not fire. The flare's tell and `trait.sense.visible`/`audible` are method
     consequences: the site's listening clock ticks if it lists them (10).
-12. **Narration packet:** the rank's text verbatim, "8 fire harm, bloodied, burning (visible)", the
-    flare's tell. The narrator may say the stair lights white and the ghoul's rags catch. It may not say
-    the ghoul is blinded, or that the stair is now on fire (no fact says the stair burns).
+12. **Narration packet:** the rank's text verbatim, "14 fire harm, bloodied, burning (visible)", the
+    flare's tell. The narrator may say the stair lights white and the ghast's rags catch. It may not say
+    the ghast is blinded, or that the stair is now on fire (no fact says the stair burns).
 
 *Boundary: the same cast, a critical success.* d20 = 14 → 24, margin +11. Delivered reach 3: reach step
-+1, flare +1 → S5 = **12** harm; the ghoul is destroyed. The arcane trigger fires (`on_degree`, critical
++1, flare +1 → S6, clamped to S5 = 12, +2 = **14** harm: at a base of S4 the ladder's top absorbs one of
+the two steps, so the critical adds nothing to the harm here (it still fires the trigger). The ghast is at 4. The arcane trigger fires (`on_degree`, critical
 success, an ability under the calling key): +1 Focus → 6/7, `generated_this_scene` = 1 of 3.
 
 *Boundary: the same cast, a natural 1.* Critical failure → **miscast** in place of the heavier menu cost
 (05.7.5). Risky stakes → S3, one rung heavier for the flare → **S4 Backlash**: 8 raw harm to Ash
 (Vitality 12 → 4), `cond.dazed` for a round, and his sustained workings end. The OFFER said so.
 
-*Non-example.* "The lance also sets the ghoul's nest alight so the others can't come up." The ability's
+*Non-example.* "The lance also sets the ghast's nest alight so the others can't come up." The ability's
 target is one being. Setting the nest alight is a second beat (a stretch of the same ability at a thing,
 05.5.2, or a thrown torch), with its own frame.
 
@@ -2023,13 +2045,13 @@ field, visible on both records.
 **(c) A named composite.** Ash faces Captain Hesk's squire, who was chilled a moment ago by the
 hedge-witch's frost bolt: `cond.chilled` (tag `harm.frost`), one stack. Ash casts Flame Lance (rank 2,
 no flare; +8 against Guard 12 *(illustrative)*): d20 = 11 → 19, success, reach 2.
-- Dealer side: base S3, no steps → the harm event deals `harm.fire.flame`.
+- Dealer side: base S4, no steps, harm edge +2 → the harm event deals `harm.fire.flame` [revision: I-033].
 - The engine finds `comp.thermal_shock` (keys `harm.fire`, `harm.frost`; present because a depth-0 fire
   harm event lands on a target carrying a frost-tagged condition): the harm is **one severity rung
-  heavier** → S4 = **8**, and `cond.chilled` ends. Because the composite ended the chill first,
+  heavier** → S5 = 12, +2 = **14**, and `cond.chilled` ends. Because the composite ended the chill first,
   Flame Lance's own `cond.burning` then applies with nothing to neutralize it (how chill and burning
   cancel each other when both would stand is 06's, WE-00-7).
-- Receiver side: the squire's leather reduces `harm.physical` only → 8 fire harm.
+- Receiver side: the squire's leather reduces `harm.physical` only → 14 fire harm.
 - Budget check on the composite: one severity step (2) + one cleanse (2) = 4 EU, the cap.
 
 *Non-example.* "My Flame Lance and Wren's Rime Oil together should shatter his sword." No composite is
@@ -2106,16 +2128,18 @@ stated there and are 00.3.7's):
 | Wren, tier 1, Focus 5, spends freely | 99.6% | 2.36 | 3.34 | 1.66 | 6.2% | 9.7 |
 | Wren, tier 1, **starting at 2** | 96.9% | 3.04 | 2.00 | 0.00 | 100% | 8.6 |
 | Ash, tier 3, Focus 7, **spends none** (a staff, no branch working: the model before 05.7.11) vs T3 | 0.1% | 3.00 | 0 | 7.00 | 0% | 3.4 |
-| Ash, tier 3, Focus 7, spends freely vs T3 | 81.3% | 3.60 | 5.64 | 1.84 | 30.5% | 7.9 |
-| Ash, tier 3, **starting at 3** vs T3 | 40.7% | 3.31 | 3.09 | 0.21 | 80.5% | 5.8 |
+| Ash, tier 3, Focus 7, spends freely vs T3 | 93.1% | 2.87 | 4.31 | 3.09 | 13.7% | 9.4 |
+| Ash, tier 3, **starting at 3** vs T3 | 65.9% | 2.79 | 2.97 | 0.32 | 71.2% | 8.7 |
+
+(Ash's rows since revision I-033: Flame Lance rank 2 is S4 +2 and burning.)
 
 What the numbers say: (1) a full pool roughly **halves** a fair fight (4.4 rounds to 2.4) and turns the
 remaining risk into spent Focus; (2) a fight at one band costs a tier-1 character about **two thirds of
-the pool** and a tier-3 caster about **four fifths**, so every fight leaves a real decision about the
+the pool** and a tier-3 caster about **three fifths**, so every fight leaves a real decision about the
 next one; (3) a martial character without Focus is weakened, a caster without Focus but with a branch working
 (05.7.11) is weakened, not helpless: a Spent tier-3 caster beats one T3 80.7–91.0% of the time (06-conflict-sim J2;
 the 0.1% row is the pre-05.7.11 staff model), so Focus is a lever, not a gate, and matters to casters as it does to
-fighters [verification: V1-004]; (4) a caster who starts a fight at 3 of 7 is at 41%: the codex shows the pool, and the
+fighters [verification: V1-004]; (4) a caster who starts a fight at 3 of 7 is at 66% instead of 93%: the codex shows the pool, and the
 threat advisory (09) plus this number is the telegraph.
 
 *A venture day* (Wren, five fights against T2 foes; a breather after every fight, of which only two
@@ -2152,8 +2176,8 @@ later, cornered by the adept's hounds, the player says: "I do what she did. The 
    beat's reach is capped at Limited; no flare.
 4. **OFFER.** "Emulating Fire Shroud on a Flame Lance: 5 Focus, you need a 10 (55%). The lance will be
    weak. You will have 2 Focus left." Commit. Focus 7 → 2.
-5. **Roll.** d20 = 12 → 20: success. The lance lands at Limited reach (S3 − 1 rung = S2 = 3 harm, and
-   burning). The shroud runs at **rank 1** for the scene: he halves fire harm, and each foe that ends
+5. **Roll.** d20 = 12 → 20: success. The lance lands at Limited reach (S4 − 1 rung = S3 = 5, +2 = 7 harm,
+   and burning) [revision: I-033]. The shroud runs at **rank 1** for the scene: he halves fire harm, and each foe that ends
    its turn engaged with him takes Light fire harm.
 6. **Learning.** `clk.learn.ab.fire_shroud` is created (6 segments for `min_tier` 2) and ticks by
    delivered reach: **1 of 6**. Nothing else is granted (INV-7).

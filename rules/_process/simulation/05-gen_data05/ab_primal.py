@@ -31,7 +31,7 @@ ab('ab.thorn_coat', 'Thorn Coat', P + 'growth.thorns', 2, 'thorn_aura', 'Form', 
 
 ab('ab.renewal', 'Renewal', P + 'growth.renewal', 4, 'regrowth', 'Working', 'beat',
    'Quicken a living body\'s own mending.',
-   'Applies to one living being you touch.',
+   'Applies to one living being you touch, yourself included.',  # [revision: I-058]
    [rk("One living being you touch regains 5 Vitality now and 5 more at the start of its next turn, and its bleeding and its poisoning end. This counts as one healing effect.",
        [heal(5, T), heal(5, T), cleanse('cond.bleeding', T), cleanse('cond.poisoned', T)], f=2)],
    traits=['trait.delivery.touch'], x=[('wounds and marks', 'ch.07; rit.vigil_of_healing'), ('a being already healed twice since its long rest', 'the healing cap (05.7.8)')])
@@ -150,10 +150,10 @@ ab('ab.cinder_stride', 'Cinder Stride', P + 'elements.fire', 1, 'fire_weapon', '
    'Applies to your own Strikes, with open flame or embers within band.close or carried.',
    [rk("For 3 rounds your Strikes deal fire harm in place of their own type, +1.",
        [sdel(['harm.fire'], 1, 'rounds:3')], f=1),
-    rk("For 3 rounds your Strikes deal fire harm in place of their own type, +1, and a target they harm is burning.",
-       [sdel(['harm.fire'], 1, 'rounds:3'), cond('cond.burning', 1, 'rounds:1', 'a target your Strike harms')], f=1),
-    rk("For the scene your Strikes deal fire harm in place of their own type, +2, and a target they harm is burning.",
-       [sdel(['harm.fire'], 2, 'scene'), cond('cond.burning', 1, 'scene', 'a target your Strike harms')], f=1)],
+    rk("For 3 rounds your Strikes deal fire harm in place of their own type, +2, and a target they harm is burning.",
+       [sdel(['harm.fire'], 2, 'rounds:3'), cond('cond.burning', 1, 'rounds:1', 'a target your Strike harms')], f=1),  # [revision: I-033]
+    rk("For the scene your Strikes deal fire harm in place of their own type, +2, a target they harm is burning, and a target already burning takes their harm one severity rung heavier.",
+       [sdel(['harm.fire'], 2, 'scene'), cond('cond.burning', 1, 'scene', 'a target your Strike harms'), sev(1, 'a Strike against a burning target')], f=1)],  # [revision: I-033]
    slot='slot.strike_delivery', verbs=['any'], harm_tags=['harm.fire'], traits=['trait.sense.visible'], ckey=True,
    x=[('throwing the fire', 'ab.flame_lance'), ('a second coating on the same weapon', 'the higher priority rank owns slot.strike_delivery (05.10.3)')],
    basis=['WE-00-6 (00 names this ability; defined here)'])

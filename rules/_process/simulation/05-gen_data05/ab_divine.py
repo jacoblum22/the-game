@@ -9,7 +9,7 @@ RES = ('resisted', 'endure', 'resolve')
 # ---------------- healing ----------------
 ab('ab.mend_flesh', 'Mend Flesh', D + 'healing.mending', 1, 'heal_touch', 'Working', 'beat',
    'Close a wound in living flesh.',
-   'Applies to one living being you touch.',
+   'Applies to one living being you touch, yourself included.',  # [revision: I-058]
    [rk("One living being you touch regains 3 Vitality and its bleeding ends.",
        [heal(3, T), cleanse('cond.bleeding', T)], f=1),
     rk("One living being you touch regains 5 Vitality, and its bleeding and its weakness end.",
@@ -21,7 +21,7 @@ ab('ab.mend_flesh', 'Mend Flesh', D + 'healing.mending', 1, 'heal_touch', 'Worki
 
 ab('ab.purge', 'Purge', D + 'healing.purging', 2, 'cleansing', 'Working', 'beat',
    'Drive a foulness out of a living body.',
-   'Applies to one living being you touch.',
+   'Applies to one living being you touch, yourself included.',  # [revision: I-058]
    [rk("One living being you touch is freed of poisoning and of one other bodily or mental condition, and its checks against what afflicted it are framed one stakes rung lower this scene.",
        [cleanse('cond.poisoned', T), cleanse('one condition of category physical or mental', T), lev('protective', "the target's checks against that affliction", 'scene')], f=1),
     rk("One living being you touch is freed of poisoning and of one other bodily or mental condition, regains 3 Vitality, and its checks against what afflicted it are framed one stakes rung lower this scene.",

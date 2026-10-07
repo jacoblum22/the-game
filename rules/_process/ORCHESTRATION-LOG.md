@@ -394,3 +394,8 @@ Resolved all 12 rows: I-038 (Oracle lever cap; sim shows +3.7 down to +0.8 per r
 
 ## Revision C2c returned: `revision-C2c-report.md`
 - Resolved I-087: 123 new tier-4/5 abilities written through the generator. All 81 level-2 nodes now have both tiers, and the generator enforces it. Ladder check passes for all 183 callings.
+
+## Revision C2d returned: `revision-C2d-report.md`
+- Resolved I-033: the sim now tracks burning and bleeding, now priced at 1 EU per stack. Flame Lance rank 2 now beats the free working plus a push.
+- Resolved I-043, I-044 and I-058.
+- New row I-090 (pricing of item-property conditions in ch.08 and ch.09's estimator) goes to C4.

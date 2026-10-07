@@ -58,8 +58,8 @@ ab('ab.relentless_pursuit', 'Relentless Pursuit', W + 'tracking.trailing', 4, 'p
 ab('ab.apex_hunter', 'Apex Hunter', W + 'tracking.hunting', 5, 'kill_shot', 'Working', 'rider',
    'Bring down the creature you have hunted.',
    'Applies to a Strike against a creature you have marked or have tracked to this place.',
-   [rk("Your Strike against a creature you marked or tracked here deals harm two severity rungs heavier, +2, the target bleeds until the scene ends, and the Strike holds a Precision lever.",
-       [sev(2, 'this Strike'), hedge(2, 'this Strike'), cond('cond.bleeding', 1, 'scene', FOE), lev('precision', 'this Strike')], f=2)],
+   [rk("Your Strike against a creature you marked or tracked here deals harm two severity rungs heavier, +2, the target bleeds until the scene ends and is exposed until the end of its next turn, and the Strike holds a Precision lever.",
+       [sev(2, 'this Strike'), hedge(2, 'this Strike'), cond('cond.bleeding', 1, 'scene', FOE), cond('cond.exposed', 1, 'rounds:1', FOE), lev('precision', 'this Strike')], f=2)],  # [revision: I-033]
    verbs=['verb.strike'], lim=1, traits=['trait.action.attack'],
    x=[('a creature you met by chance', "ab.quarrys_mark first, or track it")])
 

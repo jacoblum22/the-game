@@ -253,6 +253,20 @@ Decisions made in `00-architecture.md` (Wave 2). Digest shorthand `[R1 §x]`…`
 - Serves: goal 2.
 - Revisit if: the ruling ledger accumulates `rule_conflict` records between two chapters (fix the chapters, then this list if needed).
 
+### DL-00A-31: Content entries promote on a counted test, not by fiat (revision I-043)
+- Decision: 00.16.3 states the promotion test: an entry is a promotion candidate after it is applied in 20 evidence-bearing scenes over at least 2 sessions with no overturned ruling citing it and no open review-list candidate naming it (an overturn restarts the count; `pacing.yaml#review.promotion`). `h.12.session_close` lists candidates in the review list (12.12.4); the campaign's own entries (world seed, improvised content, adopted rule candidates) promote at once, by the engine; shipped entries promote only by the maintainers' verification wave, on play's review lists (05.12.3). A permanent entry is never demoted: a later fault is fixed by retirement and a successor.
+- Alternatives considered: leaving promotion to the verification wave's judgment (the I-043 finding: no criteria and no owner at content scale); letting a campaign promote shipped entries (rejected: one table's luck would bind every table); 12 scenes, 04.8.2's confirmation window (rejected: content meets more varied situations than one character's calling, and 12 can fall inside one long session).
+- Evidence: verification-1 ch.00 read (I-043); 04.8.2's 12/24-scene windows; 12.12.4's overturned-ruling classes, reused as the failure signal.
+- Serves: C:VI (provisional by default, with a way out); goal 2 (a rule's status is state, not the DM's word).
+- Revisit if: review lists show shipped entries reaching 20 scenes with an overturn rate above 1 in 20 (raise the count), or campaign entries that never reach it (lower it).
+
+### DL-00A-32: The oversized level-2 deed sets are kept and tested (revision I-044)
+- Decision: 00.2.2 admits five level-2 sets above the ≤ ~8 `[J:enum]` guideline (martial 12, arcane 11, craft 11, lore 9, influence 9) as a named exception; they take no further level-2 child (PR-03-6 step 6; 03.1.3), and OEQ-00-1 gains a level-2 stratum: 12 actions per oversized branch, 3 runs, ≥ 70% child agreement within each branch and no sibling pair confused in over 10% of its actions; a miss rewrites the pair's tests, a second miss stops that branch's CHILD step at the branch until 00 regroups it.
+- Alternatives considered: regrouping now under intermediate parents (rejected: 00.5.5 makes seeded level-2 tags append-only and never renamed, and every calling key, pool gate and competence entry under them would move); trimming children (same objection, and it removes evidence axes); no test (the I-044 finding).
+- Evidence: verification-1 ch.03 read (I-044); counts from `data/tags.yaml` (the ledger named three sets; lore and influence at 9 were also over); 03.1.5's worst case bounds a wrong child to a sibling under the right branch, shown in the OFFER.
+- Serves: C:III (judgments on closed sets with a measured failure path); goal 2.
+- Revisit if: the stratum fails for a branch twice (00 amendment to regroup).
+
 <!-- ===== assembled at integration from appendix/fragments/ (do not edit below; edit the fragments) ===== -->
 
 ## DL-01 — Resolution
@@ -1283,6 +1297,20 @@ Format per BRIEF §11. Citations per 00.1.6. Numbers consumed by other chapters 
 - Evidence: verification-2c long-arc playtest (I-087); `validate_ruleset.py -v` POOLS before: 43 of 81 nodes with no min_tier 4+, 92 of 132 specialists with no own-pool tier-5; after: 0 of 81 nodes lacking min_tier 4 or 5, 0 specialists with no own-pool tier-5; `05-ladder-check-output.txt` (183 callings, 0 failures).
 - Serves: goal 1 (depth comes from deeds); C:P5 (the shared pool serves every calling); C:V (coverage, not taste, sets the count).
 - Revisit if: OEQ-05-6's pick-rate logs show tier-4/5 entries of one node never picked (fold them) or always picked (re-price them).
+
+### DL-05-39: A touch healer may heal herself, against her own cap (revision I-058)
+- Decision: 05.7.8: a healing that applies to a being the caster touches, or to a being within a band, may target the caster herself unless the ability says otherwise; she is then the recipient and counts against her own 2-healing cap. *Mend Flesh*, *Purge* and *Renewal* say "yourself included" in their limitation (`05-gen_data05/ab_divine.py`, `ab_primal.py`).
+- Alternatives considered: the word in Mend Flesh only (rejected: Purge, Renewal and every within-band healing had the same silence); forbidding self-healing (rejected: no rule intended it, and a lone healer would have no recovery from her own art).
+- Evidence: verification-1 playtest (I-058).
+- Serves: goal 2 (one reading for every healer); C:P4 (the cap, not the target, bounds Focus into Vitality).
+- Revisit if: play shows self-healing used to dodge the cap (it cannot: the cap is the recipient's).
+
+### DL-05-40: Lingering harm is priced by a condition-aware fight model (revision I-033)
+- Decision: T-05-9 takes burning and bleeding out of the middle condition group into a **lingering harm** row at 1 EU a stack applied, whatever the duration (`05-gen_data05/dsl05.py` `COND_DOT`). The ten abilities that fell more than 2 EU under their allowance were re-budgeted inside their themes (12 ranks): *Flame Lance* r1 S3 +1, r2 S4 +2, r3 S4 +2 and exposed for a round (all keep burning); *Firestorm*, *Dawnbreak* +2 harm edge; *Wall of Flame* +1; *Red Harvest* +2; *Rain of Knives* one rung heavier and distracted for the scene; *Through the Gap* two rungs; *Apex Hunter* adds exposed for a round; *Cinder Stride* r2 +2, r3 one rung heavier against a burning target. Pool census: 185 ranks on their allowance, 222 one under, 242 two under, none over. WE-05 (the crypt stair, now a T3 ghast), the composite and emulation examples and WE-05-5's Ash rows (`05-focus-sim.py` re-run) follow the new rank text.
+- Alternatives considered: keeping the price and raising only Flame Lance (rejected: every spell carrying burning or bleeding was overpriced the same way); pricing by duration (rejected: K1 puts one round at 0.40 and the scene at 0.67, both rounding to 1, the table's smallest unit); S5 for Flame Lance r2 (rejected: at a base of S5 every reach step, flare and critical is clamped away); pricing at 0 for one round (rejected: no effect is free in T-05-9).
+- Evidence: `06-conflict-sim.py` now tracks condition instances (stacks, duration, periodic harm, the bearer's action to end them under a never / always / smart policy, the least of the three kept). K1, pooled over P1/P3/P5 against one foe a band up and two at band: one stack 0.67 EU (scene), 0.40 (one round), two stacks 1.14, against a rung's 2; the bearer's best answer is to ignore it. K2 acceptance, P3 caster: the free working plus a push wins 95.9 / 54.9 / 47.4% against one T3 / one T4 / two T3; old Flame Lance r2 92.1 / 44.3 / 27.3; new 97.3 / 65.9 / 54.6 (+1.4 / +11.0 / +7.2 over the push, the first already above 95%).
+- Serves: C:P4 (a Focus spell is worth its pick over the free push); goal 2 (prices measured, not asserted).
+- Revisit if: 09's adversaries or 08's items (I-090) turn out to price lingering harm on another scale, or play logs show foes spending actions on burning often enough that the `always` value (higher for the caster) is the right one.
 
 ## DL-06 — Conflict
 
