@@ -109,7 +109,7 @@ tools the DM operates (00, Principle I).
 
 ### 05.1 Foundations
 
-**05.1.1 What an ability is.** `[D]` An **ability** is a license (00.12.1) with mechanics: an entry of
+**05.1.1 What an ability is.** `[D]` [C:VII; C:P5; DL-05-02; revision: I-065] An **ability** is a license (00.12.1) with mechanics: an entry of
 `data/abilities.yaml` (id `ab.*`) that a character **holds** in a slot. A **spell** is an ability whose
 first tag is under `deed.arcane`, `deed.divine` or `deed.primal`; it is the same record with `kind:
 spell` and the trait `trait.nature.magical`. Everything else a character may be licensed to do
@@ -119,7 +119,7 @@ license`, held by every holder of a magic training license of their branch and o
 [revision: I-009]. An ability is read literally at its active rank (INV-8): it does what its `scope` and `effects`
 say and nothing else, and narration may never describe it doing more [00.12.2; 01.3.3].
 
-**05.1.2 Abilities in state.** `[D]` `Character.slots` (00.6.2) holds three lists of held abilities.
+**05.1.2 Abilities in state.** `[D]` [DL-05-01; DL-05-03; DL-05-22; revision: I-065] `Character.slots` (00.6.2) holds three lists of held abilities.
 Each entry is:
 
 ```yaml
@@ -143,7 +143,7 @@ but not slotted (05.2.6). `Character.witnessed: [ability_id]` and learning clock
 slots, ranks, uses, Focus and the shelf are **shown**; `witnessed` and learning clocks are **available**
 (00.6.4).
 
-**05.1.3 The words.** `[N]` **Hold**: have an ability in a slot. **Pick**: a calling tier's right to
+**05.1.3 The words.** `[N]` [DL-05-04; DL-05-07; DL-05-08; revision: I-065] **Hold**: have an ability in a slot. **Pick**: a calling tier's right to
 fill a calling slot from the pool (04.8.4). **Activation**: one use of an active ability. **Working**: an
 activation that is itself the character's beat. **Rider**: an activation that attaches to the
 character's own beat. **Stretch**, **emulate**, **crude fallback**: the three priced ways past a
@@ -176,7 +176,7 @@ a slot between partitions. `grant` (tool #28) refuses a write that would exceed 
 source fiction lets rare gifts break a cap, this ruleset does not: a cap that can be raised is a menu
 that grows [C:V; C:P5 "hard total-slot ceiling"; INV-13].
 
-**05.2.3 What does not take a slot.** `[D]` Only `ab.*` entries are held in slots. These are licenses
+**05.2.3 What does not take a slot.** `[D]` [DL-05-01; DL-05-31; revision: I-065] Only `ab.*` entries are held in slots. These are licenses
 and take none: training licenses (`lic.training.*`, 05.9), languages, the calling capabilities
 (`lic.call.*`, 04.5.3), the Focus licenses (`lic.focus.*`, 05.6), fact licenses (01.3.2), known rites
 (`rit.*`, 05.8.1), the branch working a magic training license carries (05.7.11) [revision: I-009], the passive and mundane properties of items (08's item-layer budget), a calling's
@@ -210,14 +210,14 @@ acquired ability (4 slotted + 4 shelved + 1) requires the player to **forget** o
 **library** in place of the shelf (size 4–12 by the Devourer's tier, 04.10.3); the two stores are
 separate and neither can hold the other's contents [C:V; R3 04.18; DL-05-03].
 
-**05.2.7 Re-slotting at a long rest.** `[D]` On every completed `rest_long` of quality `full` or
+**05.2.7 Re-slotting at a long rest.** `[D]` [DL-05-03; revision: I-065] On every completed `rest_long` of quality `full` or
 `partial` (07), handler `h.05.reslot` (phase 3) lets the player exchange any number of abilities between
 the acquired slots and the shelf or library. No check, no Focus, no time beyond the rest. An
 `interrupted` rest allows no exchange. Uses do not refresh by re-slotting: an ability returns with the
 `uses.remaining` it had when it left, and then the rest's own recharge applies (05.4.6) [04 Interface
 request 8].
 
-**05.2.8 Binding equipped abilities.** `[D]` Equipping an item with an item-bound active ability
+**05.2.8 Binding equipped abilities.** `[D]` [DL-05-01; DL-00A-25; revision: I-065] Equipping an item with an item-bound active ability
 **binds** that ability to a free equipped slot. With all four in use, the new item's ability is
 **dormant**: the item's passive and mundane properties work, its active ability does not, and the codex
 says which. The player may choose which four are bound at any `breather` outside conflict. In conflict,
@@ -319,7 +319,7 @@ capability (04), or out of scope. Adding a form is an amendment to this chapter.
 - Passives are budgeted lower than actives by construction (05.11.2), and a passive may never contain
   `prevent`, a condition of the hard-control group, or harm of S3 or more (T-05-9).
 
-**05.3.4 Timing.** `[D]` An active ability has exactly one timing:
+**05.3.4 Timing.** `[D]` [DL-05-04; C:P5; revision: I-065] An active ability has exactly one timing:
 
 | Timing | When it is used | Action cost | Limit |
 |---|---|---|---|
@@ -332,7 +332,7 @@ A `trigger` ability with a Focus cost fires only on the player's yes. The engine
 hook fires and shows the cost; the player may set a standing answer per ability (`always`, `ask`,
 `never`) in the codex. A `trigger` with no Focus cost fires automatically and may be set to `never`.
 
-**05.3.5 How an ability is resolved.** `[D]` The `check` field decides who rolls, per 00.3.3:
+**05.3.5 How an ability is resolved.** `[D]` [DL-05-04; C:P8; revision: I-065] The `check` field decides who rolls, per 00.3.3:
 - `none`: no roll. The effects apply when the activation is validated (most riders, Forms, Reserves,
   Edges and Levers).
 - `aimed`: the holder rolls **one d20**. Attribute: the ability's `attribute`. Competence: the highest
@@ -354,13 +354,13 @@ never from memory [R4 §9 05 #4]. Authoring rules, enforced by the generator scr
 00 scale; (e) a "Does not:" line appears only in `excludes`, and each exclusion names the license or verb
 that *would* cover the thing; (f) no behavioural hints ("may tempt you to…").
 
-**05.3.7 Narration may not imply.** `[N]` Every ability carries a closed list. The defaults, which each
+**05.3.7 Narration may not imply.** `[N]` [C:P13; revision: I-065] Every ability carries a closed list. The defaults, which each
 entry extends, are: a harm type, target, range band or duration other than the text's; a weakness the
 record does not hold; an effect on a being or object outside the stated targets; that the ability can do
 again what its uses or Focus no longer allow; any of the seven sensitive upgrades (perception, memory,
 mobility, control, access, awareness, freedom; 01.3.3) beyond the scope's words.
 
-**05.3.8 Tags an ability carries.** `[D]` The first tag fixes four things at once: which callings may
+**05.3.8 Tags an ability carries.** `[D]` [DL-05-02; DL-05-06; revision: I-065] The first tag fixes four things at once: which callings may
 pick it (04.8.4), which competence its check uses (05.3.5), where `cnt.focus` evidence lands when Focus
 is spent on it (03.7.4), and which training license's grade governs its stretch and flares (05.9.2).
 `trait.*` tags pull in 01.17's general rules (a `trait.action.speech` working is forbidden while
@@ -381,7 +381,7 @@ in the **acquired** partition is always rank 1. One held through an **item** has
 states. The codex shows only the active rank's text. When a rank changes, the old text is gone; nothing
 accumulates [R2 #3; 04 Interface request 4].
 
-**05.3.10 Oath-gated abilities.** `[D]` An ability with a `conduct.*` tag is eligible only for a calling
+**05.3.10 Oath-gated abilities.** `[D]` [DL-05-28; DL-05-36; revision: I-065] An ability with a `conduct.*` tag is eligible only for a calling
 whose `pool_gate.conduct` lists that axis **and** whose `pole` equals the ability's `conduct_pole`
 (positive: vows and oath-bearing callings; negative: dark callings). While the calling that holds it is
 suspended by the Fraying (04.9.3), the ability is suspended with it: it stays in its slot, and
@@ -390,7 +390,7 @@ copied by watching) and their `acquisition_paths` list recognition only.
 
 ### 05.4 Using an ability
 
-**05.4.1 `use_ability`.** `[D]` Tool #19. Every activation, stretch and emulation runs PR-05-1. The tool
+**05.4.1 `use_ability`.** `[D]` [C:I; C:P16; revision: I-065] Tool #19. Every activation, stretch and emulation runs PR-05-1. The tool
 validates, in this order and with the first failure returned as a refusal that names its reason:
 (1) **held**: the ability is in a slot (or the mode is `emulate` and 05.5.4 holds), bound if equipped,
 not suspended; (2) **timing**: a beat, a rider on a beat of an allowed verb or tag, the holder's unused
@@ -420,7 +420,7 @@ engine checks bands, flags and conditions at commitment. Multi-target abilities 
 (it moved; it is not what it seemed) is dropped; if none remain the activation is refused under 05.4.1
 and spends nothing [R3 #7; 00.17.1 Q14].
 
-**05.4.5 Durations.** `[D]` Durations use `substrate.yaml#duration_forms` only (SG-28): `rounds:N`,
+**05.4.5 Durations.** `[D]` [DL-00A-12; R5 §3.3; revision: I-065] Durations use `substrate.yaml#duration_forms` only (SG-28): `rounds:N`,
 `intervals:N`, `hours:N`, `watches:N`, `days:N`, `scene`, `conflict`, `until_rest:<type>`, `uses:N`,
 `while:<state expr>`, `permanent`. An ability's running effect is an `effect_instance` with a source and
 a remaining duration, expired by `h.00.durations`. A `while:` duration ends the instant its expression
@@ -447,7 +447,7 @@ use (never above the maximum) when its hook fires; the return is an independent 
 A rest of quality `interrupted` refreshes nothing; `partial` refreshes as `full` for uses (Focus differs,
 05.6.9).
 
-**05.4.7 Sustained workings.** `[D]` + `[T]` An effect with `trait.duration.sustained` lasts while the
+**05.4.7 Sustained workings.** `[D]` + `[T]` [DL-05-26; revision: I-065] An effect with `trait.duration.sustained` lasts while the
 holder concentrates (01.17). A character sustains **one** working at a time; beginning a second ends the
 first (the player is warned). Sustaining costs no Focus per round. It ends when the holder chooses (a
 free activity), becomes `cond.stunned` or `cond.unconscious`, becomes **Spent** (05.6.5), or fails the
@@ -455,7 +455,7 @@ concentration check that harm forces (01.17: Endure with Resolve against Easy fo
 S3, Hard S4, Very hard S5). The aura and stance slots are separate limits and may run beside one
 sustained working.
 
-**05.4.8 Evidence from abilities.** `[D]` An activation is the holder's declared deed: its frame's
+**05.4.8 Evidence from abilities.** `[D]` [DL-03-12; revision: I-065] An activation is the holder's declared deed: its frame's
 primary deed tag is the ability's first tag, and judged evidence is ch.03's to compute. Counted evidence
 fires from this chapter's events: `on_focus_spent` carries the ability's first tag and the Focus spent
 (`cnt.focus`); a condition applied by an ability feeds `cnt.control`; harm prevented or reduced by one
@@ -540,7 +540,7 @@ Basis:              [00.12.4] [01.3.5] [R2 #4] [R: http://www.redcap.org/page/Sp
                     [R7 §4.4] [DL-05-07]
 ```
 
-**05.5.3 The cannot list.** `[D]` A stretch, an emulation, a flare or a ruling can never make an ability
+**05.5.3 The cannot list.** `[D]` [DL-05-07; C:III; C:P9; revision: I-065] A stretch, an emulation, a flare or a ruling can never make an ability
 do any of the following. Each line is a refusal by lookup, voiced with 01.3.6's redirect:
 1. **Change its operation or its object category** (05.5.2 decision 1).
 2. **Change the harm family it deals** (a `harm.fire` working stays fire) or add a harm type.
@@ -613,7 +613,7 @@ Basis:              [00.12.4] [01.3.5] [R7 §4.4, §5 Ex.7] [R: https://www.d20s
                     [04.5.3] [DL-05-08]
 ```
 
-**05.5.5 Crude fallback.** `[D]` Every license in `data/licenses.yaml` and every ability declares a
+**05.5.5 Crude fallback.** `[D]` [C:VII; C:P16; revision: I-065] Every license in `data/licenses.yaml` and every ability declares a
 `crude_fallback`: either `none` (an untrained person cannot do this at all, which is the case for every
 spell) or a basic verb, a method, a DC shift of 0, 5 or 10, a reach cap and a consequence. An ability's
 fallback is usually its training license's. The fallback is what a G3 redirect offers (01.3.6); this
@@ -686,7 +686,7 @@ breakdown in the OFFER:
 7. clamp: a result above **6** is not payable (00.3.13): the tool refuses and names the largest
    component the player could drop.
 
-**05.6.4 Paying.** `[D]` + `[T]` Focus is paid by `update_quantity(focus, −n)` inside `use_ability` at
+**05.6.4 Paying.** `[D]` + `[T]` [C:P9; DL-03-12; revision: I-065] Focus is paid by `update_quantity(focus, −n)` inside `use_ability` at
 commitment (05.4.2). The write fires `on_focus_spent` with the ability's first tag, which is what ch.03's `cnt.focus` counter and any subscribed effect read.
 Focus is never negative. Costs from 01's menu (`cost.drain`) take Focus only when the beat used an
 ability, concentration or a push (01.13.3).
@@ -818,7 +818,7 @@ Bounds, all engine-counted:
   system for a character with three callings; only the refill rule differs, and it is one line per
   family [R3 05.7, #13; C:P9; C:P14 "cheap, structural feel difference"; DL-05-10].
 
-**05.6.11 Consumables and other sources.** `[D]` An item or effect restores Focus only through
+**05.6.11 Consumables and other sources.** `[D]` [DL-05-41; revision: I-065] An item or effect restores Focus only through
 `eff.restore {quantity: focus}` (08 owns the items). Bound: at most **4 Focus between long rests** from
 consumables (`restored_by_consumables_since_long_rest`); past it a draught restores nothing and the
 codex says so before it is drunk. A being's effect that restores another's Focus (a blessing, a song)
@@ -851,7 +851,7 @@ loses at most **4 Focus per scene** to drains. A power that would empty the pool
 "aluminum" case) is legal only for an adversary of threat band 4 or 5, and only when the adversary's
 tells name it before it is used (09) [R2 §05: a zeroing effect is a rare, telegraphed weakness-exploit].
 
-**05.6.14 What Focus is not for.** `[D]` Focus never buys an action (INV-11), a reroll (that is `fate`,
+**05.6.14 What Focus is not for.** `[D]` [C:P9; DL-05-12; DL-05-26; revision: I-065] Focus never buys an action (INV-11), a reroll (that is `fate`,
 01.16), a bonus to a roll (05.6.7), a license (INV-7), or Vitality except through an ability whose
 effect restores it. No effect converts Vitality into Focus except overdraw's fixed, bounded price.
 
@@ -873,7 +873,7 @@ game unifies everything]. To cast any spell of a school (a level-2 magic tag) a 
 school's **training license** (05.9); an ability held without it (a relic, a gift) works at the relic
 surcharge (05.6.3).
 
-**05.7.2 The three sources.** `[D]` Each magic branch is one source, and each source has a fixed
+**05.7.2 The three sources.** `[D]` [DL-05-18; revision: I-065] Each magic branch is one source, and each source has a fixed
 signature. The signature is applied by the engine to every spell of the branch, so a new spell inherits
 it at no authoring cost, and a hybrid caster carries two signatures over one Focus pool.
 
@@ -1058,14 +1058,14 @@ the caster touches, or to a being within a band, may target **the caster herself
 otherwise; she is then its recipient and counts against her own cap like anyone else, so a lone healer who
 heals herself twice has no third healing from her own hands either [revision: I-058; DL-05-39].
 
-**05.7.9 Magic and the gate.** `[D]` Magic changes what is G4 for its holder and for no one else. A
+**05.7.9 Magic and the gate.** `[D]` [C:VII; revision: I-065] Magic changes what is G4 for its holder and for no one else. A
 30-foot chasm is Beyond for a jump and Standard reach for `ab.long_step`. The pipeline is unchanged: the
 spell is the license (G2), the frame is computed, the OFFER shows the DC, the Focus and the stakes, and
 the sensitive-upgrade test (01.3.3) is answered by the spell's scope text. "It's magic" is never a
 reason: a spell does its literal text, a stretch keeps its principle, and a wish the pool does not hold
 is a rite to be designed (05.8.4) or a G3 with paths.
 
-**05.7.10 What setting canon must supply.** `[D]` The region's seed writes these (12.16.5–12.16.6; a pre-made
+**05.7.10 What setting canon must supply.** `[D]` [DL-12-21; DL-12-24; revision: I-065] The region's seed writes these (12.16.5–12.16.6; a pre-made
 setting such as chapter 13 supplies its own); where a seed leaves one open the defaults in brackets apply [revision: I-028], and each is a fact the Oracle treats as settled:
 1. `canon_impossible` for magic: what no working can do for anyone [true resurrection; travel through
    time; creating a soul; reading a mind that is not present; destroying a keeper].
@@ -1132,7 +1132,7 @@ taught it, **and** hold the training license of its first tag at the rite's `gra
 is closed at 24 authored rites plus rites designed in play (05.8.4) [C:V; R5 MG-04;
 R: https://ironsworn-rpg.fandom.com/wiki/Assets (rituals as a fixed set of assets)].
 
-**05.8.2 Performing a rite.** `[D]` PR-05-5. In summary:
+**05.8.2 Performing a rite.** `[D]` [DL-05-24; revision: I-065] PR-05-5. In summary:
 - **Begin.** Requirements are checked: knowledge and grade, every listed **component** in hand (08 prices
   them by the band named), the place (if the rite names one), the number of trained participants, and
   the rite's Focus (paid once, at the start, by the leader). The engine creates two racing clocks from
@@ -1247,20 +1247,19 @@ two weeks; picked up in the field by emulation alone it is six successful attemp
 gap is the price of having no teacher, and it is what makes a teacher worth seeking (P15: breadth is
 paid for in time) [C:P15; R7 §2.14; DL-05-08].
 
-**05.8.6 Promotion.** `[D]` When a pick's candidates (04.8.4) include an ability the character already
+**05.8.6 Promotion.** `[D]` [DL-04-18; DL-05-27; revision: I-065] When a pick's candidates (04.8.4) include an ability the character already
 holds in the acquired partition or on the shelf, picking it **moves** it to the calling partition, frees
-the acquired slot, and gives it the calling's rank from then on. (This asks ch.04 to treat
-acquired-held abilities as eligible and to rank them first; see Interface requests. Until then the
-player may forget the ability at a long rest and pick it in the ordinary way.)
+the acquired slot, and gives it the calling's rank from then on. Ch.04 treats acquired-held and
+shelved abilities as eligible for a pick and ranks them first (04.8.4) [revision: I-065].
 
-**05.8.7 Learning a rite; gifts.** `[D]` A rite is learned from its text or its teacher with a 6-segment
+**05.8.7 Learning a rite; gifts.** `[D]` [DL-05-24; DL-05-22; revision: I-065] A rite is learned from its text or its teacher with a 6-segment
 project clock (the same tick table without the emulation row: rites are not emulated). A **gift** from a
 patron or power (08's `gen.gift` with `output_kind: ability`) is granted straight into the acquired
 partition as `provisional` and may name a condition of the giver's (a commitment fact, 11).
 
 ### 05.9 Training licenses and grades
 
-**05.9.1 One training license per level-2 deed tag.** `[D]` `data/licenses.yaml` holds 81 entries
+**05.9.1 One training license per level-2 deed tag.** `[D]` [DL-05-06; revision: I-065] `data/licenses.yaml` holds 81 entries
 `lic.training.<branch>_<child>`, one for every level-2 deed tag, each conforming to 00.12.1 with all of
 `principle`, `scope`, `excludes`, `grades`, `attribute`, `crude_fallback`, `stretch`, `emulate` and
 `acquisition_paths` present. A training license is the **domain license** of its tag: it licenses the
@@ -1269,7 +1268,7 @@ casting a school's spells), and it is what makes emulation, stretch grades, lear
 available for abilities under the tag. Where the tag's ordinary methods are already basic verbs (a
 sword is swung with Strike), the license covers the tag's *techniques* and adds nothing to the verb.
 
-**05.9.2 Grades.** `[D]` Every training license has three ordered grades. Ch.04 sets the grade from a
+**05.9.2 Grades.** `[D]` [DL-05-06; revision: I-065] Every training license has three ordered grades. Ch.04 sets the grade from a
 calling's tier (04.5.1: narrow and fine callings reach `expert` at tier 3 and `master` at tier 5; broad
 and hybrid callings reach `expert` at tier 4); every other path grants `trained`. This chapter owns what
 each grade means (T-05-6):
@@ -1285,7 +1284,7 @@ lock is at reach Zero for picking it (G4 for that method; the redirect names the
 an expert could do). This keeps a +2 from a mentor from opening every door in the world while leaving
 the dice to decide everything inside the grade [WE-00-3].
 
-**05.9.3 Competence from training.** `[D]` A training license acquired by the mentor or text path
+**05.9.3 Competence from training.** `[D]` [DL-05-06; DL-05-37; revision: I-065] A training license acquired by the mentor or text path
 carries `grants_competence: [{tag: <its tag>, value: 2}]` (00.3.6). An origin's value is ch.02's (at most
 +2). A calling's competence is ch.04's and is higher; competence is highest-only, so they never add.
 Higher grades grant no competence of their own. **The cap** `[revision: I-047]`: a character holds at most
@@ -1333,7 +1332,7 @@ and the engine how the ability combines with anything [R3 05.5, #3]:
   rank owns it and the rest are suppressed, numbers included.
 - **named_composite**: an entry of `data/composites.yaml`, active while both of its keys are present.
 
-**05.10.2 The same thing twice.** `[D]` Two instances of one effect id never stack (INV-13); one ability id
+**05.10.2 The same thing twice.** `[D]` [DL-00A-16; DL-00A-10; revision: I-065] Two instances of one effect id never stack (INV-13); one ability id
 is held once (05.2.9); one `mod_group` is held once. A lever is one fact, and one fact yields one lever
 (00.3.9 d), so two abilities that each "grant a Precision lever" give two levers only when they cite
 different facts, and at most two levers apply to a roll. These four rules are the whole of
@@ -1384,7 +1383,7 @@ target of a resisted working rolls for itself. The **Wide** flare adds `fork` wi
 ability with no spread tag, or raises the cap of the tag it has by one. A spread selects by
 relationship-state at commitment and is indifferent to side unless the ability's text says "foes".
 
-**05.10.5 Designing inside the one-link limit.** `[D]` Hook subscribers fire only on depth-0 events
+**05.10.5 Designing inside the one-link limit.** `[D]` [DL-00A-17; revision: I-065] Hook subscribers fire only on depth-0 events
 (INV-12). For abilities this divides cleanly:
 - What a **beat** or a **rider** does is caused directly by the declared beat: depth 0. Conditions it
   applies, harm it deals and Focus it spends can fire other abilities' triggers.
@@ -1437,7 +1436,7 @@ one tier comparable (none is a trap); the upper bound is what keeps them inside 
 [R2 §05: an explicit, checkable budget scales where curated benchmarking does not; R1 M-22; C:P11's
 audit discipline, applied to a pool that is picked from and never bought with points; DL-05-16].
 
-**05.11.2 The allowance.** `[D]`
+**05.11.2 The allowance.** `[D]` [DL-05-16; revision: I-065]
 
 `allowance = tier + 2 × Focus + recharge + timing + limitation + weakness + other cost`
 
@@ -1462,12 +1461,12 @@ Three consequences follow from the formula, by construction:
   every ability, and a rank-3 ability of `min_tier` 1 has the tier term of a rank-1 ability of
   `min_tier` 5.
 
-**05.11.3 Bounds the budget does not replace.** `[D]` The budget compares abilities with each other; 00's
+**05.11.3 Bounds the budget does not replace.** `[D]` [DL-05-16; DL-05-11; revision: I-065] The budget compares abilities with each other; 00's
 caps bound them absolutely, and the script checks both: edge at most +2, harm edge at most +2, severity
 steps from effects at most ±2, reduction inside ch.07's cap, a Focus cost inside its band for the
 `min_tier` (05.6.2), and no effect that adds an action.
 
-**05.11.4 Composites, flares and rites.** `[D]` A named composite is at most **4 EU** (two ranks' worth: a
+**05.11.4 Composites, flares and rites.** `[D]` [DL-05-16; DL-05-13; DL-05-24; revision: I-065] A named composite is at most **4 EU** (two ranks' worth: a
 reward for holding a pair, never a third ability). A flare is worth 2 EU for its 1 Focus, the same rate
 as the allowance pays, so flaring is never better than the ability's own cost-to-value and never worse.
 Rites are priced by scale (T-05-8), not by EU, because their price is time and material.

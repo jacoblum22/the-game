@@ -113,7 +113,7 @@ An adversary's budget of two is its base, fixed by this rule for every threat ba
 raise it for any template (a lone ogre is dangerous through what its two actions contain, 06.9.5).
 [C:P9; R1 §06 "extra bodies are the failure point"; DL-06-01]
 
-**06.1.3 What an action buys.** `[D]` One action buys **one beat of one basic verb**, or one beat of
+**06.1.3 What an action buys.** `[D]` [DL-06-01; C:P9; revision: I-065] One action buys **one beat of one basic verb**, or one beat of
 an ability whose timing is `beat` (05.3.4), unless T-06-1 lists a different cost. Costs are atomic: an
 activity that costs two actions must be paid within one turn. The DM never sets a cost; the anchor
 card's `action_cost` knob may be moved only to a value T-06-1 lists for that verb (00.2.7).
@@ -144,7 +144,7 @@ card's `action_cost` knob may be moved only to a value T-06-1 lists for that ver
 | **Break free** of a hold | 1 | Grapple, 06.5.2 |
 | Recover footing (end `cond.off_balance`), beat out flames (end `cond.burning`), staunch a wound (end `cond.bleeding`) | 1 each | Handle; no roll unless something opposes it |
 
-**06.1.4 Free activities in a conflict.** `[D]` These cost no action and never roll (00.12.6 applied to
+**06.1.4 Free activities in a conflict.** `[D]` [DL-00A-19; DL-06-01; revision: I-065] These cost no action and never roll (00.12.6 applied to
 rounds): speaking a sentence; dropping what is held; releasing a hold; ending a stance, an aura or a
 sustained working of one's own; **one free handling per turn** (draw, stow, pick up or pass one
 unattended item; a second in the same turn costs an action); looking around (passive noticing, 01.4.6);
@@ -152,7 +152,7 @@ asking the DM an out-of-fiction question, including "what would it take?" (01.7.
 GATE→FRAME→OFFER and spends nothing; **Yield** (06.11.7), which may be declared at any moment,
 including in answer to an attack's announcement.
 
-**06.1.5 Defend.** `[D]` *Anchor: yes (below).* **Defend** is a named use of `verb.evade` that costs one
+**06.1.5 Defend.** `[D]` [DL-06-22; DL-12-26; revision: I-065] *Anchor: yes (below).* **Defend** is a named use of `verb.evade` that costs one
 action and does not roll: the actor gives its attention to not being hit. It writes the fact
 `defending.<actor>` until the start of the actor's next turn. While the fact stands, **every aimed attack
 against the actor carries one engine-applied Precision snag (−2)** citing it. The snag is outside the
@@ -169,7 +169,7 @@ stack with Fend (06.6.3), to the cap.
   fight slightly more often (T-06-14: 99.4% against 99.7% at P3 against T3); against three or more
   attackers it prevents more harm than the third Strike deals. It is a real choice, not a default.
 
-**06.1.6 Repeated attacks.** `[D]` This chapter adopts chapter 01's repetition shape unchanged
+**06.1.6 Repeated attacks.** `[D]` [DL-06-03; C:P9; revision: I-065] This chapter adopts chapter 01's repetition shape unchanged
 (01.14.3; DL-06-03). Within one **turn**, an actor's k-th beat bearing `trait.action.attack` carries
 engine-applied Precision snags:
 
@@ -187,7 +187,7 @@ is throttled to the actions available (three, or two and a Move) and each shot r
 Guard. *Arithmetic:* Wren (+5) at Guard 15 hits on 10, 12, 14: 55%, 45%, 35%; at least one hit 84%
 (WE-06-2).
 
-**06.1.7 P9 and P14 together: where cadence lives.** `[D]` A calling group may feel faster or heavier
+**06.1.7 P9 and P14 together: where cadence lives.** `[D]` [DL-06-02; C:P14; revision: I-065] A calling group may feel faster or heavier
 than another only through these three channels, each of which leaves the budget untouched (INV-11;
 00.17.1 Q21; DL-06-02):
 
@@ -200,7 +200,7 @@ than another only through these three channels, each of which leaves the budget 
 No fourth channel exists. A proposed ability that would "act twice", "attack as a free action" or "take
 an extra turn" is not an ability of this game (05.3.2's closed forms have no place for it).
 
-**06.1.8 The turn.** `[D]` + `[T]` Each turn has three parts, run by handler `h.06.turn_effects`:
+**06.1.8 The turn.** `[D]` + `[T]` [DL-06-01; R5 CF-02; revision: I-065] Each turn has three parts, run by handler `h.06.turn_effects`:
 1. **Start** (`turn_start`): the owner's reaction refreshes; `on_turn_start` subscribers fire; a
    readied beat that has not fired lapses (01.14.10); conditions whose `periodic` names `turn_start`
    apply; `defending.<actor>` and Fend facts of the owner expire.
@@ -213,7 +213,7 @@ an extra turn" is not an ability of this game (05.3.2's closed forms have no pla
 
 ### 06.2 Starting a conflict, tempo, and surprise
 
-**06.2.1 When a conflict starts.** `[T]` + `[D]` `conflict_start` is marked, and the time mode becomes
+**06.2.1 When a conflict starts.** `[T]` + `[D]` [DL-00A-12; R5 CF-01; revision: I-065] `conflict_start` is marked, and the time mode becomes
 `conflict` (12's T-12-3), at the first of: an adversary's behavior list yields an attack; the PC
 declares a beat with `trait.action.attack` against a creature that will resist; a hostile NPC action
 result says "attacks"; a clock completion creates an attacking encounter. At that instant the engine
@@ -247,7 +247,7 @@ bookkeeping before anyone acts, and side-based order would make Wits matter only
 total against several static DCs interleaves the PC among foes at the cost of one die
 [R: https://2e.aonprd.com/Rules.aspx?ID=2423 (initiative from Perception); R: https://troikasrd.ttrpg.tools/the-rules/05-initiative/ (considered and rejected: a token bag is randomness the player cannot plan around); R3 §06.5; DL-06-04].
 
-**06.2.3 Rounds.** `[D]` When the last participant in the order has finished its turn, the `round`
+**06.2.3 Rounds.** `[D]` [DL-00A-12; R5 CF-01; revision: I-065] When the last participant in the order has finished its turn, the `round`
 boundary fires (00.7.5): `h.00.durations` (1), `h.06.ongoing_harm` (2: periodic effects of the *place*,
 not of a bearer: a burning room, rising water), `h.05.round_recharge` (3), `h.00.clock_auto` (5: morale
 clocks' and chase clocks' automatic rows, reinforcement countdowns), `h.06.chase_round` (5),
@@ -291,7 +291,7 @@ survivable by construction: a P1 character ambushed by two T2 foes faces at most
 acting, expected harm about 5 to 8 of 12 Vitality by her armor *(reference lines, T-06-12)*: bloodied,
 not down.
 
-**06.2.5 Leaving and joining.** `[D]` A participant leaves the conflict when it is defeated (06.13.3),
+**06.2.5 Leaving and joining.** `[D]` [DL-00A-20; R5 CF-01; revision: I-065] A participant leaves the conflict when it is defeated (06.13.3),
 when its band to every enemy is `band.distant` and no chase clock involves it, or when it yields and
 the yield is accepted. Reinforcements enter only through a clock whose omens were rendered (INV-14) or
 a behavior row "call for help" that names who can hear; they enter at the band the clock's template
@@ -299,7 +299,7 @@ states (default `band.far`).
 
 ### 06.3 Position: bands, engagement, and flags
 
-**06.3.1 Position is relationship-state.** `[D]` In a conflict, position is exactly this state and
+**06.3.1 Position is relationship-state.** `[D]` [DL-06-07; C:IV; C:P3; C:P13; revision: I-065] In a conflict, position is exactly this state and
 nothing else (00.6.1 `position`; 00.17.1 Q14):
 - for every participant other than the PC, one **range band to the PC** (`band.*`, five rungs);
 - a set of **engagement links** between pairs of participants;
@@ -315,7 +315,7 @@ in that turn's narration in the fixed words of T-12-11** (12.14.6; INV-2), and a
 named when the PC could perceive it. The claim-versus-state check treats an unnamed change, or a named
 one the store does not hold, as an error of class `position`.
 
-**06.3.2 The five range bands.** `[D]` (`data/conflict.yaml#range_bands`.) Bands are relations, not
+**06.3.2 The five range bands.** `[D]` [DL-06-07; revision: I-065] (`data/conflict.yaml#range_bands`.) Bands are relations, not
 distances; the measures are for the narrator's sense of scale only (12.14.6 item 3).
 
 | Band | In words (T-12-11) | True only when | What it allows between the two | Rough scale |
@@ -329,7 +329,7 @@ distances; the measures are for the narrator's sense of scale only (12.14.6 item
 *Worst case of a one-band error at scene framing* (`[J:rung]`, 06.3.9): one action's worth of movement,
 or one range snag (class i), visible in the first OFFER.
 
-**06.3.3 Moving.** `[D]` A Move beat (01.18.4) names a **destination**: *toward* a participant or
+**06.3.3 Moving.** `[D]` [DL-06-07; revision: I-065] A Move beat (01.18.4) names a **destination**: *toward* a participant or
 feature, *away from* one, or *to* a named feature. Its delivered reach of 2 or more changes the mover's
 band to the destination's holder **by the one transition paid for** (T-06-1), symmetric for both
 parties.
@@ -351,7 +351,7 @@ parties.
 - **Narration.** "You close with the reeve: you are at blade's reach. The archer on the gallery is
   still across the room, above you."
 
-**06.3.4 Bands between two participants who are not the PC.** `[D]` Needed for area effects,
+**06.3.4 Bands between two participants who are not the PC.** `[D]` [DL-06-07; revision: I-065] Needed for area effects,
 companions and adversaries who target companions. First match:
 1. an engagement link joins them → `band.engaged`;
 2. they share a group → `band.close`;
@@ -359,7 +359,7 @@ companions and adversaries who target companions. First match:
 A companion standing with the PC (the default) is in the PC's own group: its band to any adversary is
 the PC's band to that adversary, except that an engagement link is always per pair.
 
-**06.3.5 Engagement.** `[D]`
+**06.3.5 Engagement.** `[D]` [DL-06-07; revision: I-065]
 - A link forms when a Move, a Grapple, a charge or an effect brings two enemies to `band.engaged`, and
   breaks when either leaves, is moved, or is defeated.
 - **Capacity.** At most **four** enemies of the target's own size may be engaged with one target at
@@ -372,7 +372,7 @@ the PC's band to that adversary, except that an engagement link is always per pa
   screener instead.
 - Being engaged with an enemy is the fact `engaged.<a>.<b>`; abilities and behaviors read it.
 
-**06.3.6 The positional flags.** `[D]` (`data/conflict.yaml#positional_flags`.) Seven are reserved by
+**06.3.6 The positional flags.** `[D]` [DL-06-07; revision: I-065] (`data/conflict.yaml#positional_flags`.) Seven are reserved by
 00; this chapter adds three (`flag.obscured`, `flag.in_chokepoint`, `flag.aloft`; DL-06-07). Each flag
 is carried by one participant, is set and cleared only as listed, and does only what is listed. Lever
 and snag effects are **engine-cited**: they count toward the two-lever or two-snag limit of the roll
@@ -397,7 +397,7 @@ Two general rules: **(a)** one fact, one lever (00.3.9 d): a flag gives its effe
 many enemies share it; **(b)** when two flags apply to one roll in opposite directions (the attacker is
 elevated, the target in cover), both are cited and they sum inside the cap.
 
-**06.3.7 Cover, concealment and hiding.** `[D]` + `[J:flag]`
+**06.3.7 Cover, concealment and hiding.** `[D]` + `[J:flag]` [DL-06-07; R5 CF-11; C:VII; revision: I-065]
 - **Cover** is a solid thing that could stop the blow: it is a *feature* (06.3.8), and `flag.in_cover`
   is the state of using it. **Total cover** (no line at all: around the corner, behind a shut door) is
   the fact `no_line.<a>.<b>`: aimed beats between the two are G4 until someone moves.
@@ -412,7 +412,7 @@ elevated, the target in cover), both are cited and they sum inside the cap.
   beyond `band.close` is `flag.obscured` to observers without night-sight. Dark: everyone not in a
   light is; an observer with no light and no night-sight is `cond.blinded` for sight-reliant beats.
 
-**06.3.8 Features: the ground is part of the fight.** `[J:enum]` + `[D]` Anything in the scene a
+**06.3.8 Features: the ground is part of the fight.** `[J:enum]` + `[D]` [DL-06-11; C:III; revision: I-065] Anything in the scene a
 participant could use, hide behind, fall off, set alight or drop on someone is a **feature**: an entity
 (kind `object` or `place`) written on mention (00.6.6) with a `feature_kind` from this closed list. The
 kind fixes what the feature does, so an improvised use is a lookup (06.5.10, T-06-9).
@@ -436,14 +436,14 @@ the classification is a stored fact the player can question. A feature the scene
 but narration has not established ("surely there's a chandelier") is a G0 question for the Oracle
 (00.12.7), asked **before** the frame, never granted by the asking (SG-06).
 
-**06.3.9 Framing positions at the start.** `[J:rung]` + `[D]` At `conflict_start` the DM sets each
+**06.3.9 Framing positions at the start.** `[J:rung]` + `[D]` [DL-06-07; R5 CF-03; revision: I-065] At `conflict_start` the DM sets each
 participant's band to the PC from what the scene has established: a participant the PC was speaking
 with at arm's length is `band.engaged` only if a weapon was already at a throat, else `band.close`;
 someone across a room is `near`; someone across a field or on a far wall is `far`. Default when
 unestablished: `band.near`. Flags are set only from recorded facts (a participant on a gallery feature
 gets `flag.elevated`). *Worst case (J):* one band (class i).
 
-**06.3.10 Size.** `[D]` Every creature has a **size** from a six-rung ladder stored in its template
+**06.3.10 Size.** `[D]` [DL-06-30; C:VII; revision: I-065] Every creature has a **size** from a six-rung ladder stored in its template
 (09; a PC is `medium`): `tiny` · `small` · `medium` · `large` · `huge` · `colossal`. The DM never picks
 a size in play. A **size step** is one rung. Size does five things (`data/conflict.yaml#sizes`):
 
@@ -457,7 +457,7 @@ a size in play. A **size step** is one rung. Size does five things (`data/confli
 
 ### 06.4 Attacks, defenses and harm
 
-**06.4.1 Guard and the other defenses.** `[D]` Every creature has one defense per attribute
+**06.4.1 Guard and the other defenses.** `[D]` [DL-06-08; R5 CF-05; revision: I-065] Every creature has one defense per attribute
 (00.3.8): `10 + attribute + competence + edge + status`. Chapter 09 stores all seven for adversaries.
 One of them has a name because every Strike uses it:
 
@@ -558,7 +558,7 @@ Anchor:             yes. Intent verbs: hit, cut, stab, shoot, throw at, punch, k
 Basis:              [01.18.8] [00.3.3] [00.3.15] [R7 §5 Ex.7, Ex.9] [R: https://2e.aonprd.com/Rules.aspx?ID=220]
 ```
 
-**06.4.4 Weapon weights: base severity, cost and cadence.** `[D]` Chapter 08 builds every weapon item
+**06.4.4 Weapon weights: base severity, cost and cadence.** `[D]` [DL-06-06; DL-06-02; revision: I-065] Chapter 08 builds every weapon item
 on this table (00.17.2 "weapon harm base severities (with 08)"; `data/conflict.yaml#weapon_weights`).
 A weapon has exactly one **weight**, which fixes its base severity, its Strike's action cost, the hands
 it needs and the bands it reaches. Weight is the cadence channel of 06.1.7.
@@ -625,7 +625,7 @@ gives a weapon die for each step of a character's advancement, Pathfinder adds w
 and striking runes, D&D adds
 attacks [R: https://www.13thagesrd.com/combat-rules/; R1 §06; DL-06-09; issue I-006].
 
-**06.4.6 Harm through the evaluation pass.** `[D]` (00.10.5; PR-06-3.)
+**06.4.6 Harm through the evaluation pass.** `[D]` [DL-00A-16; DL-00A-29; C:P8; revision: I-065] (00.10.5; PR-06-3.)
 *Dealer's side:* E1 base severity (06.4.4–06.4.5; a `slot.strike_delivery` owner replaces the harm
 type and may set the form) → E2 steps: delivered reach − 2 first (uncapped: Limited −1, Standard 0,
 Great +1, Exceptional +2), then effect steps (riders, flares, `cond.weakened`, a mob's numbers; summed,
@@ -645,7 +645,7 @@ blows (3 becomes 1 through mail) and modest against Grievous ones (8 becomes 6):
 character survives a crowd, and why a crowd needs a hammer, a gap (06.4.10) or a Heavy blow against a
 knight. Chapter 08 sets armor's price in the other pillars (weight, noise, swimming, sleep).
 
-**06.4.7 Range, crowding, cover and sight snags on attacks.** `[D]` Engine-cited Precision snags
+**06.4.7 Range, crowding, cover and sight snags on attacks.** `[D]` [DL-00A-10; R5 CF-11; revision: I-065] Engine-cited Precision snags
 (−2 each, at most two cited per roll, ±4 cap), each naming its fact:
 
 | Snag | Applies when |
@@ -678,7 +678,7 @@ counts toward the ±4 cap [integration: IR ch.08 to 06].
 line ("to kill" / "to drop him alive"), so it is seen before commitment (class ii). Chapter 03 reads
 the mode for `conduct.mercy`. [R4 §9 06 item 2; R5 CF-10]
 
-**06.4.9 Ammunition and loading are state.** `[D]` Each shot or throw writes `ammunition −1`
+**06.4.9 Ammunition and loading are state.** `[D]` [DL-06-06; DL-08-04; revision: I-065] Each shot or throw writes `ammunition −1`
 (`update_quantity`, 08's quantity) or the thrown item's new location. A `loading` weapon carries the
 fact `<weapon>.loaded` (true after a Reload, false after its Strike), and a creature spanning or
 loading carries `<entity>.loaded = false`. Both are ordinary facts, so they can be cited: a foe caught
@@ -708,7 +708,7 @@ he's blind for the fight" → the call's own result is the list's: dazed until t
 lasting blindness is chapter 07's wound table, reached only by harm.
 [R: https://samhaine.wordpress.com/2020/04/06/savage-worlds-rules-summary/ (Savage Worlds: a called shot is a fixed penalty for a fixed effect: limb −2, head −4); DL-06-10]
 
-**06.4.11 Resisted effects in a conflict.** `[D]` When an effect lands unless withstood (00.3.3), its
+**06.4.11 Resisted effects in a conflict.** `[D]` [DL-00A-03; R5 CF-04; revision: I-065] When an effect lands unless withstood (00.3.3), its
 target rolls Endure or Evade against the effect DC as chapter 01 frames it (01.18.3): free of action,
 not a declared beat, never pushed. Against an **area** effect each target rolls for itself (a mob rolls
 once, 06.10.4). An adversary's resisted roll is an engine fortune check (01.6.7). The effect's
@@ -720,14 +720,14 @@ Everything in this part is a basic verb used in a fight. Each rule restates its 
 conflict-specific numbers and is **Anchor: yes**, so an action no rule names is ruled by picking the
 nearest of these and turning at most two knobs (00.2.7). T-06-9 lists forty such rulings ready-made.
 
-**06.5.1 The general shape of a maneuver.** `[D]` A maneuver is one action, one roll by the actor
+**06.5.1 The general shape of a maneuver.** `[D]` [DL-00A-19; DL-00A-24; C:P8; revision: I-065] A maneuver is one action, one roll by the actor
 against a defense from T-06-5, stakes **Safe** by default, reach **Standard**, and it carries
 `trait.action.attack` when it hinders a creature against its will (so it counts for repetition). Its
 result is a **condition, a band change, a flag or an object's state**, never harm; harm is a Strike's.
 An effect *beyond* the verb's own ladder is not a free rider: it is a second beat, or the reach ladder's
 next rung, or an ability (01.18.8 "distinguish").
 
-**06.5.2 Grapple: seize and hold.** `[D]` + `[J:enum]` *Anchor: yes.* Card 01.18.9.
+**06.5.2 Grapple: seize and hold.** `[D]` + `[J:enum]` [DL-00A-19; C:P8; revision: I-065] *Anchor: yes.* Card 01.18.9.
 - **Needs** a free hand (or an `entangling` weapon, or jaws) and `band.engaged`. Against a larger
   target: 06.3.10.
 - **Ladder** (delivered reach): 1 → `cond.grabbed` S1; 2 → `cond.grabbed` S2; 3 → `cond.restrained`;
@@ -756,7 +756,7 @@ next rung, or an ability (01.18.8 "distinguish").
   down → Force. Default: Grapple when the declaration says "hold", "grab", "pin", "wrestle". *Worst
   case (J):* the other verb's ladder, same defense, same cost (class i).
 
-**06.5.3 Shove, trip and throw (Force).** `[D]` *Anchor: yes.* Card 01.18.10, against the higher of
+**06.5.3 Shove, trip and throw (Force).** `[D]` [DL-00A-19; C:P8; revision: I-065] *Anchor: yes.* Card 01.18.10, against the higher of
 Might or Agility defense. Ladder: 1 → `cond.off_balance`; 2 → pushed **one band** away (the engagement
 link breaks) **or** `cond.prone`, the actor's choice declared in the beat; 3 → pushed two bands, or
 prone and off-balance; 4 → as 3 and a follow-up lever. **Into or off something:** when a recorded
@@ -767,7 +767,7 @@ push of one band delivers the target to it: the hazard then acts by its own entr
 with the `reach_unit` knob at "position into a feature"; the OFFER states the hazard's severity before
 commitment, and the frame's stakes do not change, because the danger is the target's. Size: 06.3.10.
 
-**06.5.4 Disarm.** `[D]` *Anchor: yes* (Intent verbs: "disarm", "knock it from his hand", "make her drop it",
+**06.5.4 Disarm.** `[D]` [DL-00A-19; DL-12-26; revision: I-065] *Anchor: yes* (Intent verbs: "disarm", "knock it from his hand", "make her drop it",
 "take his sword". Knobs: `targets` (the held object, or the arm); `reach_unit` (2+: in the actor's hand or fallen
 at the holder's position; 1: it falls); `condition` (the arm route: cond.weakened). Examples: T-06-9 row 24)
 [revision: I-031]. Three routes, each already a rule; the player's method picks:
@@ -778,7 +778,7 @@ critical success the hand opens). A dropped weapon is picked up with the turn's 
 action; an adversary that loses its weapon uses its template's fallback attack (09) or its fists (S1).
 A weapon bound to its wielder (08's `cost_immune`) cannot be disarmed.
 
-**06.5.5 Feint, distract, blind (Setup).** `[D]` *Anchor: yes.* Card 01.18.16 and 01.14.9. One action,
+**06.5.5 Feint, distract, blind (Setup).** `[D]` [DL-00A-19; DL-00A-10; revision: I-065] *Anchor: yes.* Card 01.18.16 and 01.14.9. One action,
 against the Wits defense for a trick, Guard for a throw. It creates **one lever fact** (two uses on a
 critical success) for the actor or an ally, lasting until used or the end of the actor's next turn; the
 DM classifies the lever's type by what the fact does (01.6.8), and the player picks when it honestly
@@ -790,7 +790,7 @@ Strike adds about 0.9 expected harm for its action, against 1.45 for a third Str
 blinds an elite foe removes about a third of that foe's expected harm for a round. Setups win when the
 foe hits hard or the next blow is big.
 
-**06.5.6 Getting past (Move through).** `[D]` *Anchor: yes.* Card 01.18.4 with the `dc` knob at
+**06.5.6 Getting past (Move through).** `[D]` [DL-00A-19; DL-06-07; revision: I-065] *Anchor: yes.* Card 01.18.4 with the `dc` knob at
 "opposed": to pass a blocker, slide under an ogre, or break out of a ring, Move against the higher of
 the blocker's Might or Agility defense. Reach 2+ → the mover ends on the far side (`band.close` beyond,
 or engaged with whoever was screened) and the blocker has no Opportunity Strike; 1 → partway: the mover
@@ -798,13 +798,13 @@ stays engaged and has provoked; failure → no movement, and on a critical failu
 size step in either direction of two or more makes it unopposed (between the giant's legs; over the
 goblins' heads by Exert).
 
-**06.5.7 The charge.** `[D]` A Move of one transition that ends at `band.engaged`, followed in the
+**06.5.7 The charge.** `[D]` [DL-00A-10; DL-06-07; revision: I-065] A Move of one transition that ends at `band.engaged`, followed in the
 same turn by a melee Strike at the one just reached, lets that Strike cite the fact
 `charged.<actor>.<target>` as a **Precision lever** (a running start, 00.3.9). It needs a clear line
 (no `difficult_ground`, no screener) and the Move must not have been a Withdraw. Abilities (`ab.lance_charge`)
 and the lance from the saddle do more.
 
-**06.5.8 Falls, drops and thrown things.** `[D]` + `[J:rung]` A body that falls, or an object dropped
+**06.5.8 Falls, drops and thrown things.** `[D]` + `[J:rung]` [DL-06-11; DL-06-27; R5 CF-12; revision: I-065] A body that falls, or an object dropped
 or toppled onto a body, deals harm as a **hazard** with these severities *(falls: reference; ch.10
 owns)*: a fall of 10 ft S2, 20 ft S3, 40 ft S4, 80 ft or more S5, `harm.physical.crush`; the faller
 lands `cond.prone`. A falling creature rolls nothing. Who rolls for a falling *object* follows 00.3.3:
@@ -830,7 +830,7 @@ member takes one share, and a share never exceeds one member's Vitality (06.10.4
 its count. Once it has fallen the object is the fact `<feature>.fallen` and is not dropped again; another drop
 needs another feature established (06.3.8). (Basis: `06-conflict-sim.py` section L.)
 
-**06.5.9 Aim.** `[D]` One action, no roll, only while engaged with nobody and not `cond.off_balance`:
+**06.5.9 Aim.** `[D]` [DL-00A-10; DL-06-03; revision: I-065] One action, no roll, only while engaged with nobody and not `cond.off_balance`:
 the actor steadies and picks its moment. It writes `aimed.<actor>.<target>`, a **Precision lever** for
 the actor's next shot or throw at that target, lost if the actor Moves or is harmed first. Aim exactly
 cancels the second shot's repetition snag (Strike, Aim, Strike rolls at 0 and 0); it never exceeds the
@@ -898,7 +898,7 @@ Basis:              [R7 §3.4, §5 Ex.1, Ex.9] [01.5.3] [R1 §06 "the environmen
 
 ### 06.6 Reactions
 
-**06.6.1 What a reaction is.** `[D]` A reaction is one act taken **outside** the owner's turn, in answer
+**06.6.1 What a reaction is.** `[D]` [DL-06-01; DL-00A-17; R5 CF-07; revision: I-065] A reaction is one act taken **outside** the owner's turn, in answer
 to a listed trigger. One per round (06.1.1); at most one per trigger event; refreshed at the start of
 the owner's turn. A reaction is caused by a hook, so what it does is **depth 1** (00.10.8): it fires no
 further subscribers, and it can be prevented only by the target's own `prevent`. It carries no
@@ -916,7 +916,7 @@ reaction). It resolves before the triggering act completes; it does not stop the
 does (a rider that prevents movement; the target defeated). Withdraw, a successful Move-through at
 reach 2+, and `ab.saddle_born` avoid it. [R: https://2e.aonprd.com/Actions.aspx?ID=2256; R5 CF-07]
 
-**06.6.3 Fend.** `[D]` *Trigger:* an aimed attack is declared against you by an attacker you can
+**06.6.3 Fend.** `[D]` [DL-06-22; C:P10; revision: I-065] *Trigger:* an aimed attack is declared against you by an attacker you can
 perceive (`on_check_against`), before its roll. *Effect:* that one attack takes an engine-applied
 **Precision snag (−2)** citing `fend.<you>`: a dodge, a parry, a shield turned. Fend is the default
 occupant of `slot.defense_reaction` at priority rank 0. It cannot be used while `cond.surprised`,
@@ -924,7 +924,7 @@ occupant of `slot.defense_reaction` at priority rank 0. It cannot be used while 
 *Simulated worth:* without Fend, a P3 fighter's chance against one T4 foe falls from 62% to 46%
 (T-06-14).
 
-**06.6.4 The defense-reaction slot.** `[D]` `slot.defense_reaction` (T-00-14) holds **one** way of
+**06.6.4 The defense-reaction slot.** `[D]` [DL-06-22; C:P6; revision: I-065] `slot.defense_reaction` (T-00-14) holds **one** way of
 answering an attack. Fend claims it at rank 0. An ability that claims it (`eff.05.defense_reaction`:
 a shield block that lightens the harm, a spell ward, a parry-and-riposte) at rank 10 or more **replaces**
 Fend while it is available (highest rank owns the slot; the holder may drop its claim as a free activity
@@ -933,13 +933,13 @@ differs by build: this is the reaction channel of cadence (06.1.7). Reaction abi
 defenses (`ab.riposte` on a failed attack, `ab.set_spear` on a charge) do not claim the slot; they
 compete only for the one reaction.
 
-**06.6.5 Adversaries' reactions.** `[D]` By default a T1 adversary has none; a T2 adversary has one
+**06.6.5 Adversaries' reactions.** `[D]` [DL-06-01; DL-09-04; revision: I-065] By default a T1 adversary has none; a T2 adversary has one
 reaction and may use only Opportunity Strike; a T3 or higher adversary has one and may also Fend, which
 its behavior list spends on **the first attack against it each round whose attacker's modifier is the
 highest it has seen this conflict** (in practice: the PC's first Strike). Chapter 09 may set
 `reaction: false`, or list reaction abilities, per archetype (12's request). A mob has none.
 
-**06.6.6 Ready.** `[D]` + `[J:flag]` Card 01.18.18 and 01.14.10. For **one action** the actor frames a
+**06.6.6 Ready.** `[D]` + `[J:flag]` [DL-06-01; R5 CF-07; revision: I-065] Card 01.18.18 and 01.14.10. For **one action** the actor frames a
 one-action beat and a trigger; the OFFER is shown and committed then. When the trigger occurs before
 the start of the actor's next turn, the beat resolves **as the actor's reaction** (so it needs the
 reaction to be unspent, and it uses it). A readied attack is outside any repetition window. If the
@@ -949,7 +949,7 @@ readied on an unobservable trigger simply never fires, class iv). A readied beat
 depth 0 (hooks fire on it). Adversaries Ready only when a behavior row names the trigger ("hold the
 shot until someone shows at the door").
 
-**06.6.7 Interception by companions.** `[D]` A companion under the standing order *guard me* (06.14.4)
+**06.6.7 Interception by companions.** `[D]` [DL-06-19; R5 CF-13; revision: I-065] A companion under the standing order *guard me* (06.14.4)
 may spend its reaction as `eff.intercept`: it takes a hit meant for the PC while engaged with or in
 the PC's group. This is the only basic reaction that redirects harm; the PC's own interceptions are
 abilities (`ab.interpose`, `ab.take_the_blow`). An ally whose loyalty is **Devoted** may Intercept for the PC
@@ -958,13 +958,13 @@ bloodied (16.4.7) [integration: IR ch.16 to 06 (c)].
 
 ### 06.7 Conditions
 
-**06.7.1 The list.** `[D]` `data/conditions.yaml` defines **27** conditions in 00.9's schema: the 23
+**06.7.1 The list.** `[D]` [DL-06-12; R5 CF-06; revision: I-065] `data/conditions.yaml` defines **27** conditions in 00.9's schema: the 23
 ids 00 reserved (T-00-15) and four added by this chapter (`cond.surprised`, `cond.silenced`,
 `cond.broken`, `cond.heartened`; DL-06-12). Chapter 07 adds affliction stages and wound carriers in its
 own owner-block. T-06-10 summarizes; the data file is canonical. Every effect below is an effect
 reference in data (00.9.3 f).
 
-**06.7.2 The three voices of a condition.** `[D]` A condition changes play only through these three
+**06.7.2 The three voices of a condition.** `[D]` [DL-06-13; revision: I-065] A condition changes play only through these three
 channels, so that conditions compose without pairwise rules (00.9.3; DL-06-13):
 1. **Status**: modifiers on the *bearer's own* checks and defenses (family `status`: only the worst
    penalty and the best bonus apply to any one roll, −4 to +2). Stacking three conditions never stacks
@@ -1034,13 +1034,13 @@ one full turn and a half in a row by conditions alone [R3 §06.7; BRIEF §4 "a s
 ends a character"; DL-06-14]. The OFFER for a beat that would apply a control condition shows which row
 applies.
 
-**06.7.5 Opposites and exclusion.** `[D]` `cond.burning` and `cond.chilled`/`cond.frozen` neutralize
+**06.7.5 Opposites and exclusion.** `[D]` [DL-00A-21; revision: I-065] `cond.burning` and `cond.chilled`/`cond.frozen` neutralize
 each other (PR-00-5 step 1; WE-00-7). `cond.heartened` and `cond.frightened` S1 neutralize each other.
 The `hold` exclusion group keeps one of `grabbed`, `restrained`, `pinned` active per holder-and-target
 pair. A stance (`slot.stance`) is not a condition; a stance ends at `conflict_end` unless its text says
 `scene` (05's request), and the stance and aura slots are separate.
 
-**06.7.6 State expressions other chapters may read.** `[D]` (`data/conflict.yaml#expressions`; each is
+**06.7.6 State expressions other chapters may read.** `[D]` [DL-00A-16; DL-06-07; revision: I-065] (`data/conflict.yaml#expressions`; each is
 computed by the engine and usable in any `applies_when`.)
 
 | Expression | True when |
@@ -1060,7 +1060,7 @@ what it says about the striker.
 
 ### 06.8 Effects on more than one target
 
-**06.8.1 Shapes select over relationship-state.** `[D]` No effect asks "who is inside the circle". An
+**06.8.1 Shapes select over relationship-state.** `[D]` [DL-06-15; C:P6; revision: I-065] No effect asks "who is inside the circle". An
 effect that touches several targets carries one **shape**, and a shape is a selection rule over bands,
 links, groups and flags, with a cap (`data/conflict.yaml#multi_target`). Five are chapter 05's spread
 tags, adopted here with 05's caps and order unchanged (05.10.4); the sixth, `cone`, is added for
@@ -1078,7 +1078,7 @@ targets the previous one produced, **never above six targets in total**.
 | 5 | `chain` | after the primary resolves, the nearest other participant within `band.close` of the last target (06.3.4), friend or foe | 3 | one rung lighter at each leap |
 | 6 | `linger` | the place: any participant that enters the named group or feature, or ends its turn there, for the duration | 5 | as the effect states |
 
-**06.8.2 Resolving a shaped effect.** `[D]` (PR-06-5.)
+**06.8.2 Resolving a shaped effect.** `[D]` [DL-06-15; revision: I-065] (PR-06-5.)
 - **Selection is the engine's.** Ties within a priority step: the participant nearer the source by
   band; then lower current Vitality; then id. The player or behavior list chooses only the *primary*
   target or point. An effect whose text says "foes" drops allies from the selection; otherwise a shape
@@ -1103,7 +1103,7 @@ classification flags this part names. Where a real choice between equal options 
 rolls (INV-4). This is the counter to the two measured failures of AI referees in fights: picking
 targets that make no sense, and declining to press [R4 §9 06 item 4, §6.2 item 3; R: https://arxiv.org/abs/2502.19519; R3 §06.8].
 
-**06.9.2 An adversary's beat.** `[D]` Each adversary action is a frame built by the engine with
+**06.9.2 An adversary's beat.** `[D]` [DL-06-16; C:I; revision: I-065] Each adversary action is a frame built by the engine with
 `offer.choice: auto` (a fortune check, 01.6.7): verb and attribute from the template's attack entry;
 target by 06.9.3; levers and snags **cited by the engine** in this fixed order until two of each are
 cited: (1) conditions on the target that grant levers (T-06-10), (2) flags (T-06-4), (3) a lever fact
@@ -1127,7 +1127,7 @@ An ability that says it "draws attention" (a taunt, a challenge) adds to the att
 successful Talk taunt adds harm-equivalent equal to twice the delivered reach, so position 2 and 3
 can be bought [R3 §06.8; DL-06-16]. *Narration may not imply* an intention the list did not produce.
 
-**06.9.4 Default behavior lists.** `[D]` Until chapter 09's lists exist, and whenever an adversary has
+**06.9.4 Default behavior lists.** `[D]` [DL-06-16; revision: I-065] Until chapter 09's lists exist, and whenever an adversary has
 none, the engine uses one of four defaults by the template's `role`
 (`data/conflict.yaml#default_behaviors`; each `do` is a macro of T-06-1 actions):
 
@@ -1157,7 +1157,7 @@ Staggered (00.3.12). This is the conflict half of telegraphed lethality; the let
 two keys are chapter 07's [BRIEF §4; R6 §C.2.1; R4 §6.2 item 4; DL-06-17]. It also sets a solo
 adversary's rhythm: a heavy blow at most every other turn, with ordinary Strikes between.
 
-**06.9.6 Tells instead of numbers.** `[S]` + `[N]` An adversary's stat block is sealed (00.6.3). The
+**06.9.6 Tells instead of numbers.** `[S]` + `[N]` [DL-06-16; C:P3; C:P17; revision: I-065] An adversary's stat block is sealed (00.6.3). The
 narrator receives: its tells (09); `bloodied` and `down` (shown); its visible conditions; its windup;
 its side's morale omens (06.11.4); and, in the PC's OFFERs, the number needed on the die. `ab.read_the_field`
 and a resolved Observe of a foe (one action; against its Wits defense; reach in information items)
@@ -1179,7 +1179,7 @@ and one Vitality pool: a crowd the hero can wade into. Mobs are how this game fi
 [R1 §06, #7; R: https://pelgranepress.com/2016/07/11/13th-age-mooks-destined-to-die/;
 R: https://2e.aonprd.com/Rules.aspx?ID=3365 (troops); R: https://cairnrpg.com/first-edition/cairn-srd/ (detachments)].
 
-**06.10.2 A mob is one entity.** `[D]` + `[J:flag]` A **mob** is three or more creatures of one
+**06.10.2 A mob is one entity.** `[D]` + `[J:flag]` [DL-06-20; revision: I-065] A **mob** is three or more creatures of one
 template acting together, written as a single adversary entity with a `members` count. `[J:flag]`
 *"Are these creatures of one kind, in one group, with one purpose?"* True → one mob. False → separate
 participants; a leader, a champion or anything with its own name is **never** folded into a mob.
@@ -1194,7 +1194,7 @@ reverse; the advisory (T-06-13) is computed for the form chosen and shown before
   engagement capacity by `members_now` (06.3.5); members beyond the capacity wait their turn and add
   nothing but numbers.
 
-**06.10.3 Numbers.** `[D]` A mob's attacks use the template's attack and modifier, and their severity
+**06.10.3 Numbers.** `[D]` [DL-06-20; revision: I-065] A mob's attacks use the template's attack and modifier, and their severity
 steps up by its **current** size (an effect step, inside the ±2 cap):
 
 | `members_now` | 1–2 | 3–5 | 6 or more |
@@ -1204,7 +1204,7 @@ steps up by its **current** size (an effect step, inside the ±2 cap):
 A mob never Flanks and its target is never `flag.flanked` on its account: the numbers step is that
 benefit, counted once. As members fall the step falls with them, so a mob weakens as it is cut down.
 
-**06.10.4 Fighting a mob.** `[D]`
+**06.10.4 Fighting a mob.** `[D]` [DL-06-20; DL-06-27; revision: I-065]
 - A single-target attack harms the pool once.
 - A **shaped** effect (06.8) that would have selected *k* members (by its cap, limited to
   `members_now`) applies its harm *k* times to the pool, and a resisted effect is rolled **once** for
@@ -1219,7 +1219,7 @@ benefit, counted once. As members fall the step falls with them, so a mob weaken
 - Morale: each member that falls ticks the clock (06.11.3), which is why mobs usually break rather
   than die to the last.
 
-**06.10.5 Swarms.** `[D]` A **swarm** is a mob of `tiny` creatures (rats, bats, wasps, crawling
+**06.10.5 Swarms.** `[D]` [DL-06-20; revision: I-065] A **swarm** is a mob of `tiny` creatures (rats, bats, wasps, crawling
 hands): it has the template flag `swarm: true`, and three differences. (a) It occupies its target's
 own space: it is engaged with everyone in a group at once, to its cap of four targets, and makes one
 attack roll compared to each Guard. (b) Attacks **without a shape** deal harm to it one severity rung
@@ -1227,7 +1227,7 @@ lighter (`eff.harm_severity_step −1`, a weapon can only kill so many rats); sh
 one rung heavier. (c) It cannot be grappled, shoved, flanked or made prone; fire, smoke, water and wind
 are what the fiction says they are, through 06.5.10.
 
-**06.10.6 The solo curve: what the simulation found.** `[D]` `06-conflict-sim.py` plays this chapter's
+**06.10.6 The solo curve: what the simulation found.** `[D]` [DL-06-25; revision: I-065] `06-conflict-sim.py` plays this chapter's
 economy, repetition, Fend, Defend, mastery, morale, mobs and windups, 20,000 fights per row, seeded.
 The PC is a **baseline martial character**: a narrow martial calling's competence, band-appropriate
 plain gear, no abilities, **no Focus**, three Strikes a turn. Lines and assumptions: T-06-12.
@@ -1299,7 +1299,7 @@ first death and at half strength: the two moments kept as tick sources);
 R: https://billhook.bearblog.dev/saves-and-morale-in-shadowdark/; R1 §4 T-5; `ab.commanding_ground`
 already ticks "the enemy's morale clock"; DL-06-18].
 
-**06.11.2 Size: nerve.** `[D]` The clock's size is the side's **nerve**, a field of the archetype (09:
+**06.11.2 Size: nerve.** `[D]` [DL-06-18; revision: I-065] The clock's size is the side's **nerve**, a field of the archetype (09:
 `morale`), read from the side's leader if it has one, else from its most numerous template:
 
 | Nerve | Segments | Anchor | Examples |
@@ -1309,7 +1309,7 @@ already ticks "the enemy's morale clock"; DL-06-18].
 | `resolute` | 8 | sworn, cornered in its home, or proud | knights, a mother defending young, an ogre in its den, zealots |
 | `fearless` | no clock | cannot or will not break | mindless undead, constructs, the enthralled; anything immune to `trait.nature.mental` |
 
-**06.11.3 Tick sources (closed).** `[D]` (`data/conflict.yaml#morale.tick_sources`.) The DM adds none.
+**06.11.3 Tick sources (closed).** `[D]` [DL-06-18; revision: I-065] (`data/conflict.yaml#morale.tick_sources`.) The DM adds none.
 
 | Event | Ticks |
 |---|---|
@@ -1327,13 +1327,13 @@ already ticks "the enemy's morale clock"; DL-06-18].
 | reinforcements for the side arrive | −2 |
 | the side's leader spends an action to rally (a behavior row; a fortune check against Moderate) | − delivered reach |
 
-**06.11.4 Omens.** `[N]` + `[D]` Every tick renders one omen of the clock's stage (00.8.4), chosen by
+**06.11.4 Omens.** `[N]` + `[D]` [DL-06-18; DL-00A-20; revision: I-065] Every tick renders one omen of the clock's stage (00.8.4), chosen by
 the engine from the template or these defaults: *stirring* — "one of them glances back at the door";
 "their shouting has gone quiet"; *building* — "they give ground a step at a time"; "the big one looks
 to the others and none of them meet his eye"; *imminent* — "one has already lowered his blade";
 "they are calling to each other, and it is not orders". The fill is never stated.
 
-**06.11.5 Breaking.** `[D]` + `[T]` When the clock completes, the side **breaks**: every member gains
+**06.11.5 Breaking.** `[D]` + `[T]` [DL-06-18; revision: I-065] When the clock completes, the side **breaks**: every member gains
 `cond.broken`, and on its turn each follows its archetype's `morale_break.then` (09), or this default
 by its state:
 
@@ -1349,11 +1349,11 @@ martial Focus trigger only for members actually **defeated** before it; those wh
 recorded as `drive_off` and `yielded`. `on_defeat` fires for each with the frame id that caused the
 completing tick.
 
-**06.11.6 A break is final for the fight.** `[D]` A completed morale clock closes. If reinforcements
+**06.11.6 A break is final for the fight.** `[D]` [DL-06-18; revision: I-065] A completed morale clock closes. If reinforcements
 arrive afterward, they form a new side with a new clock; broken members who have not left may rejoin it
 only if its leader rallies them (one action, fortune check against Hard).
 
-**06.11.7 Yielding: theirs and yours.** `[D]` + `[J:flag]`
+**06.11.7 Yielding: theirs and yours.** `[D]` + `[J:flag]` [DL-06-18; C:VII; C:P16; R5 CF-10; revision: I-065]
 - **A foe yields** by its break row or by a successful demand (a Talk whose ticks complete the clock).
   A yielded foe is `defeated(x)` with disposition `yielded`: it takes no hostile action while its
   terms hold. The PC decides what to do with it; chapter 15 runs the talk and chapter 07 the keeping
@@ -1376,7 +1376,7 @@ only if its leader rallies them (one action, fortune check against Hard).
 
 ### 06.12 Getting away, and running down
 
-**06.12.1 Three ways out.** `[D]` A participant leaves a fight it has not won by one of:
+**06.12.1 Three ways out.** `[D]` [DL-06-21; C:P16; R5 CF-09; revision: I-065] A participant leaves a fight it has not won by one of:
 1. **Yield** (06.11.7).
 2. **Retreat** (00.12.5; chapter 07): the always-legal withdrawal whose outcome and price chapter 07
    states before the player commits. It needs only that the PC is not `flag.cornered`, `cond.restrained`
@@ -1384,7 +1384,7 @@ only if its leader rallies them (one action, fortune check against Hard).
    a clean escape with no stated price, it is resolved as a **chase**.
 3. **Flight and pursuit**: the chase, below.
 
-**06.12.2 When a chase begins.** `[T]` + `[D]` A chase begins when the PC, engaged with no enemy,
+**06.12.2 When a chase begins.** `[T]` + `[D]` [DL-06-21; revision: I-065] A chase begins when the PC, engaged with no enemy,
 declares flight and at least one enemy's behavior says it pursues (default: yes for objectives `kill`,
 `capture` and `rob` unless the side is broken; beasts pursue while hungry; guards pursue to the edge of
 their post). If none pursues, the PC simply leaves (06.2.5). The situation tag becomes
@@ -1396,7 +1396,7 @@ The engine creates two racing clocks (00.8.5; templates in `data/conflict.yaml#c
 | `clk.escape` "The way clear" | progress · public | **6** | 0 | the fleer's flight beat: delivered reach |
 | `clk.pursuit` "They close in" | danger · public | **8** | by the nearest pursuer's band: close 2, near 1, far 0 | the pursuers' beat: delivered reach; and `cost.time` paid on the fleer's beats: U(severity) |
 
-**06.12.3 The flight beat.** `[J:enum]` + `[D]` *Anchor: yes.* Each chase round the fleer declares one
+**06.12.3 The flight beat.** `[J:enum]` + `[D]` [DL-06-21; C:P8; revision: I-065] *Anchor: yes.* Each chase round the fleer declares one
 beat by any method that could gain ground: run (Move), climb, leap or swim (Exert), lose them (Sneak:
 needs a `cover` or `veil` feature or a crowd), burst through (Force), bar the way behind (Handle or
 Force on a `barrier` or `loose_object`), throw them off (Setup), call on bystanders (Talk). The
@@ -1415,7 +1415,7 @@ different ideas. Knobs: `dc` (ground tier → opposed by the lead pursuer); `rea
 *Decision* `[J:enum]`: the anchor verb for the declared method, as 06.5.10 decision 1. *Worst case (J):* a
 neighboring verb, same DC, same ticks (class i).
 
-**06.12.4 The pursuit beat and the finish.** `[D]` Handler `h.06.chase_round`: after the fleer's beat
+**06.12.4 The pursuit beat and the finish.** `[D]` [DL-06-21; revision: I-065] Handler `h.06.chase_round`: after the fleer's beat
 the engine makes one fortune check for the pursuing side: the lead pursuer's best of Might or Agility
 modifier with its competence, against the round's ground. Its reach is Standard (2 ticks), **Limited**
 if the pursuers' pace is lower than the fleer's, **Great** if higher (a rider after a runner). A
@@ -1433,12 +1433,12 @@ close, 79% from far), in about 3.4 chase rounds; 81% with a cited lever each rou
 45% for a character with no competence in running or climbing (06-conflict-sim, section I). Escape is
 likelier than not, and never free.
 
-**06.12.5 Hiding instead of running.** `[D]` A fleer who reaches a `cover` or `veil` feature with the
+**06.12.5 Hiding instead of running.** `[D]` [DL-06-21; revision: I-065] A fleer who reaches a `cover` or `veil` feature with the
 pursuit clock under half may Sneak against the pursuers' highest notice: reach 3 or more completes the
 escape clock at once (they lose the trail); reach 2 ticks 2; failure is `cost.exposure` and ticks the
 pursuit clock by U(severity).
 
-**06.12.6 The PC as pursuer.** `[D]` The mirror: the quarry's flight is `clk.quarry_away` (danger,
+**06.12.6 The PC as pursuer.** `[D]` [DL-06-21; revision: I-065] The mirror: the quarry's flight is `clk.quarry_away` (danger,
 public, 6, ticked by the engine's fortune check for the quarry: 2 a round on a success), and the PC's
 beats tick `clk.run_down` (progress, public, 8, starting at close 2 / near 1 / far 0) by delivered
 reach, with the same ground, the same varied-approach rule and stakes **Safe** unless the ground
@@ -1447,7 +1447,7 @@ itself is dangerous. Completion of `clk.run_down`: the PC is engaged with the qu
 
 ### 06.13 Ending a conflict
 
-**06.13.1 When it ends.** `[T]` + `[D]` `h.06.objective_check` runs at every `round` boundary and after
+**06.13.1 When it ends.** `[T]` + `[D]` [R1 §06; DL-00A-12; revision: I-065] `h.06.objective_check` runs at every `round` boundary and after
 any defeat, break, yield, truce or clock completion. `conflict_end` is marked at the first of:
 (a) no hostile participant is both able and willing to act (all defeated, fled, yielded or broken and
 cowering) [12's T-12-3]; (b) a side's **objective** is achieved and its behavior list says it then
@@ -1466,14 +1466,14 @@ and acceptance of a Yield. *Worst case (J) of a wrong classification:* the oppos
 or late, or accepts a Yield it should not (class iv: the next behavior row corrects it)
 [R1 §06 "victory conditions should be a field of the encounter"].
 
-**06.13.3 Defeat.** `[D]` An adversary at 0 Vitality is **defeated** and out of the fight. Whether it
+**06.13.3 Defeat.** `[D]` [DL-06-23; revision: I-065] An adversary at 0 Vitality is **defeated** and out of the fight. Whether it
 is dead, Dying, unconscious or maimed is chapter 07's, read from the defeating frame's harm mode
 (06.4.8) and the NPC's depth. The engine fires **`on_defeat`** for the entity that defeated it, carrying
 `{defeated: id, frame_id, ability_id | null, harm_mode, manner: defeated | drive_off | yielded}`
 (03's request), which chapters 03 (evidence), 05 (the martial Focus trigger), 08 (the generator's
 circumstance) and 04 (the Taking) read. A mob's defeat fires it once.
 
-**06.13.4 What `conflict_end` clears.** `[D]` Handler `h.06.clear_conflict_state` (phase 1): range
+**06.13.4 What `conflict_end` clears.** `[D]` [C:VI; C:P16; revision: I-065] Handler `h.06.clear_conflict_state` (phase 1): range
 bands, engagement links, groups and conflict-only flags (`flanked`, `lined_up`, `in_chokepoint`) are
 cleared and each participant's place returns to the place graph (10); `flag.hidden`, `flag.mounted`,
 `flag.elevated`, `flag.in_cover`, `flag.obscured`, `flag.aloft` and `flag.cornered` persist as scene
@@ -1539,14 +1539,14 @@ Anchor:             yes. Intent verbs: order, send, sic, tell (an ally) to, have
 Basis:              [00.17.1 Q8] [INV-11] [R: https://2e.aonprd.com/Traits.aspx?ID=653] [DL-06-19]
 ```
 
-**06.14.3 What a companion is worth.** `[N]` A command trades one PC action for one companion beat, so
+**06.14.3 What a companion is worth.** `[N]` [DL-06-19; revision: I-065] A command trades one PC action for one companion beat, so
 a companion never adds a beat to the round. It adds what one body cannot be: a second position (a
 flank, a screen, a held door), a held foe, a second set of defenses for the opposition to spend
 attacks on (06.9.3), a reaction, and capabilities the PC lacks. Commanded Strikes escape the PC's own
 repetition snags, which is a real but bounded gain: one action each, the companion's modifier, and
 never more than the retinue Presence allows (00.4.4).
 
-**06.14.4 Standing orders and companion reactions.** `[D]` A command may instead set one **standing
+**06.14.4 Standing orders and companion reactions.** `[D]` [DL-06-19; C:V; revision: I-065] A command may instead set one **standing
 order** (closed list; `data/conflict.yaml#companion_command.standing_orders`), which lasts until
 changed, the companion is defeated, or `conflict_end`. An order may also be set by a chapter-16 rule, at no
 PC action: the default orders at `conflict_start` (`h.16.conflict_orders`, 16.7.3), *stay back* when an ally
@@ -1564,20 +1564,20 @@ action; the order says what it *keeps* and what its **one reaction** is for:
 With no order a companion's reaction is Fend. An order's movement is free because it is bounded (one
 band a round, toward a state named in advance) and adds no beat.
 
-**06.14.5 Companions as targets, and as casualties.** `[D]` Adversaries choose among the PC and
+**06.14.5 Companions as targets, and as casualties.** `[D]` [DL-06-19; revision: I-065] Adversaries choose among the PC and
 companions by 06.9.3. A companion at 0 Vitality is defeated under chapter 07's companion rules
 (protected by Key 1; no last-chance menu). A companion's defeat ticks the opposing morale clock down
 by one (06.11.3).
 
 ### 06.15 Mounted conflict
 
-**06.15.1 Mount and rider are one participant.** `[D]` A rider with `flag.mounted` and its mount share
+**06.15.1 Mount and rider are one participant.** `[D]` [DL-16-24; R5 CF-14; revision: I-065] A rider with `flag.mounted` and its mount share
 one position and one turn: **the rider's**. The mount is a companion (06.14) that needs no Command to
 *carry*: its movement is the rider's Move, at the mount's pace (a horse: 2, so transitions cost 1, 1,
 1, 2). The mount takes no other action unless commanded (a kick, a bite: one action, the mount's own
 attack). Each has its own Vitality and conditions; attacks name which is aimed at.
 
-**06.15.2 Riding is basic; fighting from the saddle is licensed.** `[D]` Moving a mount over passable
+**06.15.2 Riding is basic; fighting from the saddle is licensed.** `[D]` [C:VII; R5 CF-14; revision: I-065] Moving a mount over passable
 ground is `verb.handle` (ride) and usually Trivial. Making attack-trait beats while mounted, or
 controlling a mount amid a melee, is the scope of **`lic.training.martial_mounted`**. Without it the
 gate is G3 and the license's own crude fallback applies (`data/licenses.yaml`): a Handle check at DC
@@ -1590,7 +1590,7 @@ gate is G3 and the license's own crude fallback applies (`data/licenses.yaml`): 
   band in the same turn;
 - shooting from a moving mount takes the *crowded* snag unless an ability removes it.
 
-**06.15.3 Unhorsing and a mount's fall.** `[D]` A Force or Grapple against the rider that delivers
+**06.15.3 Unhorsing and a mount's fall.** `[D]` [R5 CF-14; revision: I-065] A Force or Grapple against the rider that delivers
 reach 2 or more unhorses: the rider lands `cond.prone` at `band.engaged` beside the mount and takes a
 10-ft fall's harm (S2) only if the mount was moving this round. If the mount is defeated the rider
 makes a resisted Evade against Moderate: failure is `cond.prone` and S2 harm; success lands standing.
@@ -1598,11 +1598,11 @@ A panicked mount (`cond.frightened` S3, or `cond.broken`) carries its rider one 
 source each round unless the rider spends an action and succeeds at Handle (Presence or Agility)
 against Moderate.
 
-**06.15.4 Fighting a mounted foe.** `[D]` From the ground, melee Strikes at the rider take the *from
+**06.15.4 Fighting a mounted foe.** `[D]` [R5 CF-14; revision: I-065] From the ground, melee Strikes at the rider take the *from
 below* snag without a `reach` weapon; the mount may be attacked instead with none. A `reach` weapon set
 against a charge is the Opportunity Strike of 06.6.2 (d) (and `ab.set_spear` improves it).
 
-**06.15.5 On a creature's back.** `[D]` A character who has climbed onto a larger creature (06.5.2)
+**06.15.5 On a creature's back.** `[D]` [R5 CF-14; DL-06-07; revision: I-065] A character who has climbed onto a larger creature (06.5.2)
 has `flag.mounted` on it without controlling it: it is engaged with it whatever the creature does,
 goes where it goes, its melee Strikes at the creature hold a Precision lever, and the creature's own
 attacks against it take two snags unless the template lists a way to reach its own back. The creature

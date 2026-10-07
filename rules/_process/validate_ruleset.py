@@ -21,6 +21,7 @@ Checks (each finding is ERROR, WARN or INFO; the summary counts them):
   9. HANDLERS  every handler's boundary and phase are legal, `before` targets exist in the same phase.
  10. BLOCKS    every owner-block owner is allowed by T-00-19.
  11. POOLS     (INFO) long-horizon pick depth: own-pool size per calling; a min_tier-4 and a min_tier-5 ability per level-2 node (I-087).
+ 12. BASIS     (WARN) every rule card in BASIS_CHAPTERS cites its basis at card level (00.1.6; I-065; basis_audit.py).
 """
 import glob, json, os, re, sys
 from collections import Counter, defaultdict, OrderedDict
@@ -492,6 +493,22 @@ try:
     add("INFO", "POOLS", "abilities.yaml", "%d of %d level-2 deed nodes lack a pool ability at min_tier 4 or at min_tier 5%s" % (len(_gap), len(_L2), (": " + ", ".join(_gap)) if _gap else ""))
 except Exception as e:  # an audit must never break validation
     add("WARN", "POOLS", "abilities.yaml", "pool audit failed: %s" % e)
+
+# ====================================================================== 12. BASIS (revision I-065)
+# BRIEF §6 / 00.1.6: every rule card cites its basis at card level, `[C:…]`, `[R…]` or `[DL-…]` (basis_audit.py
+# defines a card and a tag). WARN per untagged card, in the chapters whose cards have been tagged so far.
+# EXTEND THIS LIST as later revisions tag more chapters (I-065 handoff: 00-03 and 08-16 remain; ch.13 is not edited).
+BASIS_CHAPTERS = ["04", "05", "06", "07"]
+try:
+    sys.path.insert(0, HERE)
+    import basis_audit
+    _bu, _bt = basis_audit.untagged(BASIS_CHAPTERS)
+    for _c in BASIS_CHAPTERS:
+        for _id, _ln, _t in _bu[_c]:
+            add("WARN", "BASIS", _id, "rule card cites no basis ([C:], [R] or [DL-]; 00.1.6) at %s:%d" % (os.path.basename(CH_FILES[_c]), _ln))
+    add("INFO", "BASIS", "chapters " + ",".join(BASIS_CHAPTERS), "%d rule cards, %d untagged" % (sum(_bt.values()), sum(len(v) for v in _bu.values())))
+except Exception as e:  # an audit must never break validation
+    add("WARN", "BASIS", "basis_audit.py", "basis audit failed: %s" % e)
 
 # ====================================================================== report
 def summary():

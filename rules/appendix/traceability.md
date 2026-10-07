@@ -68,12 +68,14 @@ themselves change the status). Rule ids are grouped by chapter; the full text of
 | 04 | 00.17.2 row 04 | callings, hybrids, scoring, confidence, thresholds, `evaluate_recognition`, vehicles, offers, tier ladder, crystallization, shadows and the Fraying, provisional status, `power_band`, `gen.absorb`, `recognition_event`, composites | 04.2–04.11; the four data files; four contrib fragments | satisfied |
 | 04 | R5 AD-01, AD-03, AD-04, AD-05, AD-06 | Growth engine; crystallization; consolidation; retraining; goal completion as a moment | 04.3–04.5; 04.5.8; 04.8; 04.8.7 (re-pick, Retrain); 04.9.4 (a restitution thread completes an atonement) | satisfied (AD-06's thread register is ch.11's) |
 | 04 | R4 §9 04 #1–#4 | Eligibility `[D]`; forms from a table; timers `[D]`; absorption as a literal license | 04.3–04.4; 04.6.2; 04.8; `lic.call.taking` | satisfied |
+| 04 | BRIEF §6 | Every rule cites its basis (`[C:]`, `[R]` or `[DL-]`) at card level | every rule card of 04 (65); 21 tagged at revision C6a; validator BASIS (DL-INT-13) | satisfied |
 | 05 | 00.17.1 Q1 | 05 owns Focus entirely; 07 owns rest and passes quality | 05.6.9, PR-05-4, `h.05.focus_recover` | satisfied |
 | 05 | 00.17.1 Q2 | 05 owns the ceiling and three partitions (12–24) | 05.2.1–05.2.9 | satisfied |
 | 05 | 00.17.1 Q20 | 05 owns magic as a subsystem; 13 owns canon | 05.7, 05.8; 05.7.10 lists what canon must supply | satisfied |
 | 05 | 00.17.2 row 05 | slot system; template grammar; `abilities.yaml`, `rituals.yaml`, `composites.yaml`; `use_ability`; Focus; recharge types; magic; ability modifiers | 05.2; 05.3; the four data files; 05.4.1; 05.6; 05.4.6; 05.7–05.8; 05.6.8 flares and 05.10.4 spread tags (the modifier family) | satisfied |
 | 05 | BRIEF A2 #6, #12, #13 | shared substrate; creativity in bounded currency; refusals are lookups | 05.10; 05.5.2, 05.6.7; 05.5.5, 05.9.4 | satisfied |
 | 05 | R4 SG-15 | positive-scoped, literal effect text | 05.3.6; generator lint on every rank text | satisfied |
+| 05 | BRIEF §6 | Every rule cites its basis (`[C:]`, `[R]` or `[DL-]`) at card level | every rule card of 05 (89); 34 tagged at revision C6a, 05.6.11 by the new DL-05-41; validator BASIS (DL-INT-13) | satisfied |
 | 06 | BRIEF §4 | Death real but telegraphed; no single unlucky roll | 06.9.5 (heavy blows announced), 06.2.4 (surprise survivable), 06.7.4 (no lock-down), 06.11.7 / 06.12 (Yield, Retreat, chase); death itself: 07 (INV-6) | satisfied (conflict half) |
 | 06 | A2 #1 | The AI chooses categories, never numbers | every `[J]` here is a flag, an enum or a rung; DCs, harm, ticks and costs are computed | satisfied |
 | 06 | A2 #7 | Positioning is discrete relationship-state | 06.3 | satisfied |
@@ -83,8 +85,10 @@ themselves change the status). Rule ids are grouped by chapter; the full text of
 | 06 | INV-14 | Every tick of a sensed clock renders an omen | 06.11.4 | satisfied |
 | 06 | 00.17.2 (06 row) | action economy; turn order and tempo; bands and flags; attack and defense; weapon base severities; `conditions.yaml`; reactions; multi-target; morale; surrender; escape and chases; mobs and swarms; repetition; command | 06.1; 06.2; 06.3; 06.4; T-06-6; 06.7 + data; 06.6; 06.8; 06.11; 06.11.7; 06.12; 06.10; 06.1.6; 06.14 | satisfied |
 | 06 | R5 CF-01…CF-16 | completeness rows owned by 06 | CF-01 06.2 · CF-02 06.1 · CF-03 06.3 · CF-04 06.4 · CF-05 06.4.1, T-06-11 · CF-06 06.7 · CF-07 06.6 · CF-08 06.11 · CF-09 06.12 · CF-10 06.4.8, 06.11.7 · CF-11 06.3.7 · CF-12 06.5.8–06.5.10, T-06-9 · CF-13 06.14 · CF-14 06.15 · CF-16 Edge cases (duel) | satisfied (CF-15 mass battle: anchor only; 11 owns) |
+| 06 | BRIEF §6 | Every rule cites its basis (`[C:]`, `[R]` or `[DL-]`) at card level | every rule card of 06 (99); 77 tagged at revision C6a, 06.3.10 by the new DL-06-30; validator BASIS (DL-INT-13) | satisfied |
 | 07 | BRIEF §4 lock | Death is real but telegraphed: warnings, a dying state, a last-chance choice; defeat is usually capture, loss or a changed situation; never one unlucky roll | 07.3.1–07.3.7 (two keys, the warning, its delay, the exits card); 07.2.3 (the Stagger rule); 07.2.7 (Dying); 07.5 (the menu); 07.6 (dispositions); T-07-18 (the rates) | satisfied |
 | 07 | INV-6 | No death without a lethal frame and Key 2 | 07.3.1, 07.3.6, 07.2.11 | satisfied |
+| 07 | BRIEF §6 | Every rule cites its basis (`[C:]`, `[R]` or `[DL-]`) at card level | every rule card of 07 (89); 56 tagged at revision C6a; validator BASIS (DL-INT-13) | satisfied |
 | 08 | BRIEF §8 | "What dropped items grant" resolved | 08.4.1 | met |
 | 08 | BRIEF A1 (08 row) | loot, properties, relics, crafting, economy, encumbrance, supply, mounts, slot ceiling | 08.1–08.10 | met |
 | 08 | 00.17.2 (08 row) | item schema; four domain configs; quality rungs; relics; crafting clocks; prices, wealth, encumbrance, supply, mounts, vehicles; item-layer budget | 08.1.1, gen_*.yaml, 08.1.4, 08.4.4, 08.6.4, 08.8, 08.9, 08.10, 08.2 | met |

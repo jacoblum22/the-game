@@ -22,13 +22,13 @@ compiled_from:
 - file: 03-tags-and-evidence.md
   sha256_16: 580852b8f136abb5
 - file: 04-recognition-and-growth.md
-  sha256_16: 5c0698b3d10bd4a2
+  sha256_16: 16f08abb11de538e
 - file: 05-abilities-focus-magic.md
-  sha256_16: 5bd93c8587345120
+  sha256_16: bbd67cd1d6e79bc4
 - file: 06-conflict.md
-  sha256_16: 4e5991f0264c5fb7
+  sha256_16: 9be4c49bb046634a
 - file: 07-harm-recovery-death.md
-  sha256_16: db13f1c3ba72c801
+  sha256_16: 341928c0c1e03599
 - file: 08-items-loot-crafting.md
   sha256_16: 067f967e68b6574b
 - file: 09-adversaries.md

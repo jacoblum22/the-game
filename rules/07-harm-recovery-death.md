@@ -102,7 +102,7 @@ in the glossary additions (Interface requests): **Staggered**, **wound**, **woun
 
 ### 07.1 Vitality and the harm states
 
-**07.1.1 What Vitality is.** `[D]` + `[N]` Vitality is the primary harm resource (00.3.12): a character's
+**07.1.1 What Vitality is.** `[D]` + `[N]` [C:P13; DL-00A-09; revision: I-065] Vitality is the primary harm resource (00.3.12): a character's
 wind, luck and guard, the margin by which a blow fails to be telling. Loss of Vitality is being pressed,
 bruised, nicked, winded and driven back. While Vitality is above 0 the character has **no wound**: no
 bone is broken and nothing needs a healer. Four descriptors are shown to the player and are the only
@@ -119,7 +119,7 @@ words narration may use for the PC's state (they refine T-12-10):
 character whose state does not hold a wound record, the Down flag, or `harm_state.dead`; a Vitality
 number in fiction; a state better than the store holds ("you shrug it off" at bloodied).
 
-**07.1.2 Maximum Vitality.** `[D]` A PC's maximum Vitality is computed, never set by hand:
+**07.1.2 Maximum Vitality.** `[D]` [DL-07-18; DL-00-04; revision: I-065] A PC's maximum Vitality is computed, never set by hand:
 
 `vitality.max = base + 2 × (power_band − 1) + effects − wound penalties`, clamped to **at most 24** and
 to **at least half of (base + band growth), rounded up**.
@@ -144,7 +144,7 @@ to **at least half of (base + band growth), rounded up**.
 - Adversaries' Vitality is their template's (09, within 00.3.7); companions' is 16's. Neither grows by
   this rule.
 
-**07.1.3 The harm-state ladder.** `[D]` + `[T]` Every character holds exactly one harm state (00.17.1 Q15;
+**07.1.3 The harm-state ladder.** `[D]` + `[T]` [DL-07-03; DL-07-04; C:V; C:P10; revision: I-065] Every character holds exactly one harm state (00.17.1 Q15;
 ids reserved by 00). Harm states are not conditions (00.9.4): nothing cleanses them, and each changes
 only by the transitions in this table (`data/harm.yaml#harm_states`).
 
@@ -160,7 +160,7 @@ Two flags sit beside the ladder. **`down`** (07.2.9): out of the scene and alive
 NPCs also `dying` and `driven_off` (06.13.3). A **Dying PC is not yet defeated**: it still has an action
 and a voice, and the conflict continues while any side is willing and able to act against it (06.13.1).
 
-**07.1.4 Bloodied.** `[D]` `bloodied(x)` is 06.7.6's expression: `0 < current` and `current × 2 ≤ max`.
+**07.1.4 Bloodied.** `[D]` [DL-00A-22; R5 HR-01; revision: I-065] `bloodied(x)` is 06.7.6's expression: `0 < current` and `current × 2 ≤ max`.
 It is a shown descriptor and a hook point (`on_vitality_threshold` with `threshold: half`), and it
 carries no penalty of its own. For adversaries it is one of the three things the narrator may know
 about their Vitality (unhurt, bloodied, down; 00.6.3).
@@ -174,7 +174,7 @@ burned or cut with no such event behind it fails the claim check (12.3) [R3 §07
 
 ### 07.2 `apply_harm`, wounds, and falling
 
-**07.2.1 `apply_harm`.** `[D]` The one tool that changes Vitality downward (00.14.2 #17).
+**07.2.1 `apply_harm`.** `[D]` [C:I; DL-07-03; DL-07-14; revision: I-065] The one tool that changes Vitality downward (00.14.2 #17).
 
 ```
 apply_harm(target, severity S1..S5, harm_tags [tag],
@@ -282,7 +282,7 @@ that says so; restoring Vitality in the middle of a scene does not clear it. *Wh
 simulation put a never-yielding character on the menu 9 times in 100 fair fights and 36 in 100 hard
 ones; at 3, 5 and 26, which meets the targets of T-07-18 [DL-07-04].
 
-**07.2.7 Dying.** `[D]` + `[T]` Dying is the state at death's door, and the character still acts.
+**07.2.7 Dying.** `[D]` + `[T]` [DL-07-04; DL-07-23; R5 HR-03; revision: I-065] Dying is the state at death's door, and the character still acts.
 - **While Dying** the character is prone, has **one action** on its turn and no reaction
   (`eff.06.fewer_actions`), may speak, may Yield (free, 07.4.1), may crawl one band with its action, may
   use an item or ability on itself or command a companion (06.14.2), and may strike a last blow (with
@@ -329,7 +329,7 @@ definition 05's `ab.breath_of_life` and every "stabilize" in data refer to.
 - *Check (section F):* the same hard fight entered with brink 0, 1, 2 reaches Dying equally often (19 in
   100) and goes on to the menu 74%, 90% and 98% of those times.
 
-**07.2.9 Down.** `[D]` + `[T]` Down is where a fall ends when death was not on the table.
+**07.2.9 Down.** `[D]` + `[T]` [DL-07-03; DL-06-23; DL-07-21; revision: I-065] Down is where a fall ends when death was not on the table.
 - A character goes Down when its wound load reaches 3 under a non-lethal event (07.2.6), when a
   `mode: nonlethal` attack brings it to 0 Vitality (06.4.8: at once, with no wounds), when it collapses
   from deprivation or lack of sleep (07.8.10), or when a rule says so.
@@ -342,7 +342,7 @@ definition 05's `ab.breath_of_life` and every "stabilize" in data refer to.
   Staggered, with its wounds.
 - An **adversary or NPC** at 0 Vitality follows 07.2.10, not this rule.
 
-**07.2.10 Harm to others.** `[D]` Adversaries and NPCs use a shorter ladder (the asymmetry is deliberate:
+**07.2.10 Harm to others.** `[D]` [R1 §09; DL-06-23; revision: I-065] Adversaries and NPCs use a shorter ladder (the asymmetry is deliberate:
 the opposition's side must stay cheap to run, R1 §09). At 0 Vitality an adversary is **defeated**
 (06.13.3) and its fate is read from the defeating event:
 
@@ -354,7 +354,7 @@ the opposition's side must stay cheap to run, R1 §09). At 0 Vitality an adversa
 A mob loses members as its pool falls (06.10.2); members are walk-ons. No Key is needed for an
 adversary's death: the two keys protect the PC and companions. Companions follow 07.12.
 
-**07.2.11 Lethality is inherited, and non-lethal harm is capped.** `[D]` (a) A harm event that has no
+**07.2.11 Lethality is inherited, and non-lethal harm is capped.** `[D]` [DL-06-23; DL-07-01; revision: I-065] (a) A harm event that has no
 frame of its own (a condition's tick, an affliction's stage harm, a place's ongoing harm) takes its
 `lethal` value from the frame or exposure that started it, re-tested against 07.3.5 at the moment of the
 tick. (b) A harm event with `lethal: false` can lower Vitality, Stagger, wound, and put a character
@@ -387,7 +387,7 @@ if Key 1 holds, and to Down if it does not. A companion dies by 07.12's rule, wh
 Key 1. *Narration may not imply* the PC's death, a mortal wound, or "this is the end" before the write
 exists. [R6 §C.3 C-R1; BRIEF A2 #3; R: https://sites.google.com/view/torchbearerwiki/faq; DL-07-01]
 
-**07.3.2 The lethal-context record.** `[D]` A lethal context is a fact with this shape, one per source
+**07.3.2 The lethal-context record.** `[D]` [DL-07-01; revision: I-065] A lethal context is a fact with this shape, one per source
 per scene (`harm.yaml#lethal_warning.writes`):
 
 ```yaml
@@ -467,7 +467,7 @@ for dead (T-07-11, row `kill`). A context lasts until `scene_end`, or until its 
 lifted; a new scene with the same source raises the trigger afresh. [R6 C-04 "information, choice,
 impact"; DL-07-02]
 
-**07.3.6 The lethal frame.** `[D]` + `[J:flag]` A harm event is `lethal: true` only when **all** hold:
+**07.3.6 The lethal frame.** `[D]` + `[J:flag]` [DL-07-01; revision: I-065] A harm event is `lethal: true` only when **all** hold:
 1. a lethal context for its source exists and is effective (07.3.5);
 2. the frame that produced it is one of: (i) a **PC-actor frame** with stakes Dire and `lethal: true`
    (01.6.9 decision 3: the DM's one `[J:flag]` here, with its worst case stated there: wrongly false
@@ -495,13 +495,13 @@ This is the "resist or yield option offered at the brink" of R6's Key 2: a playe
 here has been told, twice, what it risks. It is a status block, not a pause: the player declares as
 usual. [R6 C-R1, C-R4; R4 §7.3 (locus of control)]
 
-**07.3.8 The danger notice.** `[T]` + `[N]` When `threat_advisory` is **hard** and no lethal-warning row
+**07.3.8 The danger notice.** `[T]` + `[N]` [DL-07-02; revision: I-065] When `threat_advisory` is **hard** and no lethal-warning row
 is true, the engine raises `trg.danger_notice` at framing: the narration carries the adversary's tells
 for its band (12.10.7), and one out-of-fiction line says "`[WARNING] A hard fight — you may well lose
 this. Losing here means <disposition in words>.`" It writes **no** lethal context. Its purpose is the
 same honesty at a lower pitch: the player is told what losing would cost before choosing to fight.
 
-**07.3.9 What the keys never do.** `[D]` They never make a character safe from loss. Without Key 1 the
+**07.3.9 What the keys never do.** `[D]` [DL-07-01; C:III; revision: I-065] They never make a character safe from loss. Without Key 1 the
 PC can still be Staggered, wounded to Grievous, put Down, robbed, captured, cursed, poisoned to its
 non-terminal stages, and marked. Key 1 is cheap to turn (anything that kills carries it) and the
 warning is short. The keys ration one thing only: the word *dead*.
@@ -638,7 +638,7 @@ Anchor:             yes. Intent verbs: withdraw, pull back, flee the field, brea
 Basis:              [00.12.5] [06.12.1] [R6 C-16, C-R4] [01.4.5] [DL-07-09]
 ```
 
-**07.4.4 What is left behind.** `[D]` On any Retreat, rout or defeat, each of these is written as a
+**07.4.4 What is left behind.** `[D]` [DL-07-09; DL-07-19; revision: I-065] On any Retreat, rout or defeat, each of these is written as a
 fact, and none is lost without one: the scene's **objective** (`objective_lost`); every **item** not on
 the PC's person or in hand (its location stays where it was); a **companion** who is Down or Dying and
 not carried (one body may be carried by the PC or by another companion; carrying lowers the carrier's
@@ -647,7 +647,7 @@ the PC. A companion left Down among enemies follows the victor's disposition tow
 
 ### 07.5 The Threshold and the last-chance menu
 
-**07.5.1 The Threshold.** `[T]` + `[D]` The Threshold is reached when a Dying character's step would
+**07.5.1 The Threshold.** `[T]` + `[D]` [DL-07-05; C:P10; revision: I-065] The Threshold is reached when a Dying character's step would
 become 4 or more, by lethal harm or by a dying check (07.2.7). At that instant: the step stays at 3;
 nothing further is applied; the conflict, if any, **pauses** (no participant acts); `dread` rises by 2
 (07.11.2); the fact `setback.threshold` is written; and the engine builds the last-chance menu
@@ -718,10 +718,10 @@ session. There is no default choice.
 | 8 | **Gamble** `lc.gamble` (A) | — | never | a lethal Endure check against Moderate, odds shown (07.5.10): from standing free to **death** | by result |
 | 9 | **The Road Ends** `lc.road_ends` (A) | — | never | the character lives and never adventures again: stabilized, carried from the scene by whoever the fiction provides, and chapter 11's retirement runs at once with the ending *retire to a life* (07.5.11) | no |
 
-**07.5.3 Captured.** `[D]` As T-07-10 row 1. The difference from an accepted Yield is the column of
+**07.5.3 Captured.** `[D]` [DL-07-05; DL-07-19; revision: I-065] As T-07-10 row 1. The difference from an accepted Yield is the column of
 T-07-11 used: a character dragged in from the Threshold holds no term, is bound, and wakes later.
 
-**07.5.4 Maimed.** `[D]` As row 2, with 07.7.4 for what is taken. It is the price of staying on one's
+**07.5.4 Maimed.** `[D]` [DL-07-05; DL-07-10; revision: I-065] As row 2, with 07.7.4 for what is taken. It is the price of staying on one's
 feet: the fight, the fire or the flood is still there, and the character has a quarter of its Vitality
 and its wounds. If the Threshold is reached again in the same scene, this option is gone.
 
@@ -740,11 +740,11 @@ and its wounds. If the Threshold is reached again in the same scene, this option
   to the Threshold at the next `scene_start`, wherever it is: the menu is built again **without** option
   3, under the lethal context `chosen` (the bargain was the warning). [R6 C-14; DL-07-06]
 
-**07.5.6 Left for Dead.** `[D]` As row 4. The victor records the belief `pc.dead` (a fact with `truth:
+**07.5.6 Left for Dead.** `[D]` [DL-07-05; DL-07-19; revision: I-065] As row 4. The victor records the belief `pc.dead` (a fact with `truth:
 false`, sealed from the victor's side), which chapter 11 may let run as a rumor: being thought dead is a
 changed situation with uses of its own.
 
-**07.5.7 Rout.** `[D]` As row 5. A rout from the Threshold costs one rung more than a rout before it
+**07.5.7 Rout.** `[D]` [DL-07-05; DL-07-09; revision: I-065] As row 5. A rout from the Threshold costs one rung more than a rout before it
 (three ticks, not two): leaving late is dearer than leaving early, and both prices are on the exits card
 from the moment the PC is Staggered.
 
@@ -753,7 +753,7 @@ by finished threads and kept vows). The first reprieve of a life costs 1, the se
 3, which only deeds can pay. The codex shows the current cost beside fate. Fate at 0 is itself a
 telegraph (01.16.4) [R6 C-17; R: https://2e.aonprd.com/Rules.aspx?ID=2319; DL-07-07].
 
-**07.5.9 Last Stand.** `[D]` The character takes **one final turn of three actions** at the moment the
+**07.5.9 Last Stand.** `[D]` [DL-07-05; DL-07-01; revision: I-065] The character takes **one final turn of three actions** at the moment the
 conflict paused. Every beat in it that would roll is instead resolved as a **critical success** at its
 framed reach (so delivered reach is one rung higher, to Exceptional at most); its abilities cost no
 Focus (their uses and other limits still apply); no reaction, condition or harm interrupts it; it may
@@ -762,7 +762,7 @@ character is **dead**: `harm_state.dead`, with Key 1 on the record and Key 2 (a)
 written to the chronicle as a legend line with its witnesses (11), and chapter 11's legacy procedure
 begins. *Narration may not imply* survival, a later recovery, or a fourth action.
 
-**07.5.10 The Gamble.** `[D]` The player stakes the character on one roll, and must confirm it at an
+**07.5.10 The Gamble.** `[D]` [DL-07-05; C:P8; revision: I-065] The player stakes the character on one roll, and must confirm it at an
 OFFER that shows the exact odds; `auto_commit` never applies (00.13.2). The check is Endure with
 Endurance: `d20 + Endurance + competence + edge`, no levers, snags or status, against **Moderate (15)**;
 fate may reroll it (01.16.3).
@@ -778,19 +778,19 @@ At an Endure modifier of +2 that is 5% / 35% / 15% / 45% (07-harm-sim section I)
 the menu through which a character can walk away having paid nothing, which is why it is tempting and
 why it kills.
 
-**07.5.11 The Road Ends.** `[D]` The character survives as a person and ends as an adventurer: too
+**07.5.11 The Road Ends.** `[D]` [DL-07-05; C:VI; revision: I-065] The character survives as a person and ends as an adventurer: too
 broken, too frightened or too wise to go on. Chapter 11's retirement procedure runs with this ending,
 the character becomes an NPC of the world, and legacy and succession follow 11. It is on the menu so
 that "at least one option that is not death" holds even for a character with nothing left to pay with,
 and so that a player may choose a life over a limb.
 
-**07.5.12 After the menu.** `[D]` Whatever is chosen: `setback.threshold` and the option's own setback
+**07.5.12 After the menu.** `[D]` [DL-07-05; R5 HR-02; revision: I-065] Whatever is chosen: `setback.threshold` and the option's own setback
 fact are written (12.7.5 gives recovery room afterward); the chronicle gets one line (11); options 1, 3,
 4 and 5 grant a **brink mark** (07.7.3); the conflict resumes for options 2 and 6, ends for the PC
 otherwise; and the wound load is cleared. Chapter 03 may record the beat in which the fall was taken as
 evidence in the ordinary way; surviving the Threshold is not itself a deed (03's request).
 
-**07.5.13 A voluntary last stand.** `[D]` + `[J:flag]` A player may give the character's life on purpose
+**07.5.13 A voluntary last stand.** `[D]` + `[J:flag]` [DL-07-01; C:III; revision: I-065] A player may give the character's life on purpose
 ("I hold the gate so they can get away"). `[J:flag]` *"Does the declared act's stated outcome include
 the character's death?"* True only when the player says so in plain words; uncertain → ask (01.2.4's one
 question). If true, the engine raises the `chosen` warning; the player confirms out of fiction; a lethal
@@ -874,7 +874,7 @@ runs out, and the things a player is attached to are recoverable always, from so
 R6 C-20 (lost things lie somewhere you can go back to)]. Recovering a cache is ordinary play: a site, a
 theft, a purchase, a favor.
 
-**07.6.5 Prisoners the PC takes.** `[D]` A foe that yielded or was dropped alive (06.11.7, 06.4.8) is
+**07.6.5 Prisoners the PC takes.** `[D]` [R5 CF-10; DL-06-23; revision: I-065] A foe that yielded or was dropped alive (06.11.7, 06.4.8) is
 the PC's prisoner while `helpless` or under terms. Keeping one costs what it costs in the fiction, and
 the rules that apply are already written: binding is `cond.restrained` with duration `until_cleansed`
 (a Handle beat; a tier by materials); a bound prisoner counts toward 16's retinue for travel pace and
@@ -885,7 +885,7 @@ for 11.
 
 ### 07.7 Marks: scars, brink marks, maims and haunts
 
-**07.7.1 What a mark is.** `[D]` A mark is a permanent change to the character recorded in
+**07.7.1 What a mark is.** `[D]` [R5 HR-02; DL-07-10; revision: I-065] A mark is a permanent change to the character recorded in
 `Character.marks`, with an entry in `data/injuries.yaml` (`kind: scar | mark | maim | haunt`). Marks
 are never removed by rest, treatment or ordinary healing. Each is a recorded, visible or knowable fact
 others may cite (a scar is a lever for anyone identifying the PC, a snag on a disguise: 15), and each
@@ -903,7 +903,7 @@ kinds:
 to Might, Agility or Endurance for life under 00.4.3 (c), sharing the −1-per-attribute limit with maims
 [integration: IR ch.11 to 07].
 
-**07.7.2 Scars.** `[D]` When a wound of S4 or S5 heals, the engine writes the scar entry for its harm
+**07.7.2 Scars.** `[D]` [R5 HR-02; DL-07-10; revision: I-065] When a wound of S4 or S5 heals, the engine writes the scar entry for its harm
 family (`inj.scar.<family>`), noting the site. A scar has no modifier. It is description the narrator
 must keep consistent (it is state) and a fact for recognition and reputation.
 
@@ -919,7 +919,7 @@ on one narrow check, a reduction of 1 against one harm branch, a hazard step, a 
 Observe; against a −1 status on one narrow family, 1 point of maximum Vitality, a fear that fires once a
 scene). T-07-13 lists them.
 
-**07.7.4 Maims.** `[D]` A maim is drawn by table, never chosen by the DM: the engine takes the site of
+**07.7.4 Maims.** `[D]` [DL-07-10; DL-00A-07; C:P4; revision: I-065] A maim is drawn by table, never chosen by the DM: the engine takes the site of
 the character's worst fresh wound (ties: the latest), rolls between that site's maim entries, and lowers
 **the first attribute in the entry's order that no mark has lowered before (a maim or an aging mark) and stands above −2**
 (00.4.3 c: at most −1 per attribute from marks of every kind together, never below −2) [verification: V2c-009]. If neither listed attribute qualifies,
@@ -935,14 +935,14 @@ resolved frame that produced the felling event, read through 03's `evidence_for_
 embraces a mark (the scarred veteran, the one who came back) is an **offer**, never an imposition
 [R2 §07 "scars a character accepts as self"; R3 §07.2]. Chapter 11 reads marks for epithets.
 
-**07.7.6 Offsetting a maim.** `[D]` A maim's entry lists its `offset` paths, each a real cost elsewhere:
+**07.7.6 Offsetting a maim.** `[D]` [DL-08-32; C:P12; revision: I-065] A maim's entry lists its `offset` paths, each a real cost elsewhere:
 a made replacement (08: a hook, a brace, a glass eye; `base_items.yaml` entries tagged `item.tool.kit.prosthesis`, whose
 `offsets` say what each narrows [revision: I-016]; removes the restriction or narrows it, never restores the attribute); a rite (05, if the region's canon allows regrowth, 12.16.5; default: it does not); a calling
 identity that turns the restriction's ground into its own (04). No path is free and none is automatic.
 
 ### 07.8 Rest and recovery
 
-**07.8.1 The three rests.** `[D]` Rest durations are fixed by 00.7.2; this chapter owns what a rest is,
+**07.8.1 The three rests.** `[D]` [DL-07-11; DL-07-23; R5 HR-05; revision: I-065] Rest durations are fixed by 00.7.2; this chapter owns what a rest is,
 what breaks it, its quality, and what it restores to the body. Focus is chapter 05's (05.6.9), which
 reads the quality this chapter emits (00.17.1 Q1, Q16).
 
@@ -992,7 +992,7 @@ Anchor:             no
 Basis:              [R5 HR-05] [R: https://www.dndbeyond.com/srd (short and long rests)] [R6 B (West Marches: base and wilds)] [DL-07-11]
 ```
 
-**07.8.3 What interrupts a rest.** `[D]` + `[T]` An **interruption** is any of this closed list happening
+**07.8.3 What interrupts a rest.** `[D]` + `[T]` [DL-07-11; revision: I-065] An **interruption** is any of this closed list happening
 to the rester before the duration is served (`harm.yaml#rests[].interrupted_by`):
 1. a `conflict_start` in which the rester is a participant;
 2. the rester takes harm of any amount, or a condition of S2 or heavier is applied to it;
@@ -1010,7 +1010,7 @@ broken, until one of the four happens in the scene that follows. A suspended or 
 | short rest | one interruption lasting at most 1 interval | `interrupted` |
 | long rest | one interruption lasting at most 1 hour, and at least 4 hours of sleep served in all | `interrupted` |
 
-**07.8.4 Quality.** `[D]` Computed at completion, first match (`harm.yaml#rests[].quality_rules`):
+**07.8.4 Quality.** `[D]` [DL-07-11; revision: I-065] Computed at completion, first match (`harm.yaml#rests[].quality_rules`):
 1. **`interrupted`**: the rest was broken beyond its allowance (07.8.3).
 2. **`partial`**: any of: it was interrupted once and resumed; the site is rough; (long rest) the rester
    slept in medium or heavy armor (08); the rester had no food or no water this day (10's supply at 0);
@@ -1021,7 +1021,7 @@ The value is emitted on the boundary event. A rest's quality is shown to the pla
 is begun, as the best it can be given the present facts ("in mail, on a ledge, with no fire: at best a
 partial rest"), so the cost of resting badly is known [R4 §9 07 item 4: rest effects as `[D]`].
 
-**07.8.5 What a rest restores.** `[D]` Handler `h.07.rest_recovery` (phase 3 of each rest boundary).
+**07.8.5 What a rest restores.** `[D]` [DL-07-12; C:I; revision: I-065] Handler `h.07.rest_recovery` (phase 3 of each rest boundary).
 "Maximum" is the present maximum, after wound penalties (07.1.2).
 
 **T-07-14 Vitality by rest.**
@@ -1050,14 +1050,14 @@ A Staggered character whose Vitality a rest raises above 0 is active again; its 
 a broken arm is a broken arm. Attrition across a day lives in wounds, brink, exhaustion, dread, Focus,
 supply, and above all in the time every rest spends [R6 C-08; R: https://cairnrpg.com/second-edition/wardens-guide/combat/].
 
-**07.8.6 How wounds heal.** `[D]` By severity (07.2.5): Light and Moderate wounds heal at rests as
+**07.8.6 How wounds heal.** `[D]` [DL-07-13; revision: I-065] By severity (07.2.5): Light and Moderate wounds heal at rests as
 T-07-14's second table says. Every wound of S3 or heavier, and each brink wound, has a **recovery
 clock** (kind `project`, public, named for the wound; `harm.yaml#clock_templates`): Heavy and brink **4**
 segments, Grievous **6**, Catastrophic **12**. A Catastrophic wound's clock does not exist until it has
 been operated on (07.8.8); unoperated for 7 days it becomes a maim (07.7.4). Brink wounds heal one at a
 time, the oldest first.
 
-**07.8.7 The daily tick.** `[D]` Handler `h.07.natural_recovery` (`day`, phase 3) ticks every recovery
+**07.8.7 The daily tick.** `[D]` [DL-07-13; revision: I-065] Handler `h.07.natural_recovery` (`day`, phase 3) ticks every recovery
 clock from three flags set during the day that just ended:
 
 **T-07-15 Recovery ticks per day.**
@@ -1139,7 +1139,7 @@ Anchor:             yes. Intent verbs: tend, treat, doctor, bandage, set (a bone
 Basis:              [R5 HR-05, HR-09] [R: https://2e.aonprd.com/Rules.aspx?ID=2319 (treat wounds)] [R: https://bladesinthedark.com/consequences-harm (a recovery clock ticked by treatment)] [05 lic.training.lore_medicine] [DL-07-13]
 ```
 
-**07.8.9 Healing magic and its edge with this chapter.** `[D]` Magical healing restores Vitality and
+**07.8.9 Healing magic and its edge with this chapter.** `[D]` [DL-05-23; R5 HR-09; revision: I-065] Magical healing restores Vitality and
 cleanses conditions (05.7.8), under 05's cap of two Vitality-restoring effects per being between its
 long rests. Against this chapter's state: (a) it never removes a wound, a brink wound, a mark or a
 stage of an affliction unless the effect names it by id; (b) it stabilizes the Dying at once (07.2.7);
@@ -1149,7 +1149,7 @@ cap**, as are rest and natural recovery; an ability that restores Vitality by mu
 means **7 ticks** on one wound's recovery clock, and for a Catastrophic wound it also counts as the
 surgery; the rite's long rest counts as full quality and treated.
 
-**07.8.10 Sleep, exertion and want.** `[D]` + `[T]` Handler `h.07.fatigue` (`watch`, phase 4) keeps
+**07.8.10 Sleep, exertion and want.** `[D]` + `[T]` [DL-07-21; R5 HR-07; revision: I-065] Handler `h.07.fatigue` (`watch`, phase 4) keeps
 `watches_awake`: watches ended since the last long rest of partial or full quality (an interrupted long
 rest sets it to 2). It applies to an ally who keeps more than two watches a day in a journey role
 (16.8.3) as to the PC [integration: IR ch.16 to 07 (c)].
@@ -1173,7 +1173,7 @@ rest sets it to 2). It applies to an ally who keeps more than two watches a day 
   Chapter 05's overdraw adds stacks to the same condition (05.6.6), so a caster who overdraws and a
   traveler who does not sleep meet in the same place.
 
-**07.8.11 Downtime.** `[D]` In `downtime` mode chapter 15 owns the activity list; this chapter defines
+**07.8.11 Downtime.** `[D]` [DL-07-13; R5 HR-05; revision: I-065] In `downtime` mode chapter 15 owns the activity list; this chapter defines
 what its recovery activity does. **Convalesce** (one day or more, in a haven): each day sets
 `bed_rest_today`, and `treated_today` if a tender with the license is present (no roll is needed for
 ordinary nursing in downtime: the day counts as a Treat at reach 1); removes one stack of
@@ -1199,7 +1199,7 @@ owner-block) and may add harm at each check and other effect references. An enti
 instance of any affliction id (INV-13). The staged shape is Pathfinder's, described here in this
 ruleset's terms [R: https://2e.aonprd.com/Rules.aspx?ID=2319; R5 HR-08].
 
-**07.9.2 Exposure.** `[D]` An exposure is a resisted check forced by `eff.force_check` with the
+**07.9.2 Exposure.** `[D]` [DL-07-17; R5 HR-08; revision: I-065] An exposure is a resisted check forced by `eff.force_check` with the
 affliction as its degree table (00.3.3: the target rolls; the DC is the virulence tier): Endure with
 Endurance for poisons and diseases, with Resolve for curses.
 
@@ -1216,7 +1216,7 @@ day); a curse laid by a rite, a power or a broken bargain (05, 09, 07.5.5). A **
 affliction already carried adds no instance; it forces one extra stage check at once. An adversary's
 exposure is an engine fortune check (01.6.7); a mob rolls once.
 
-**07.9.3 Stage checks.** `[D]` At each cadence boundary the bearer makes a **stage check**: the same
+**07.9.3 Stage checks.** `[D]` [DL-07-17; C:P8; revision: I-065] At each cadence boundary the bearer makes a **stage check**: the same
 check as the exposure, with no status penalty from the affliction's own carrier or from wounds, and
 with any engine-cited levers earned by treatment (07.8.8), a full-quality long rest (T-07-14) or a
 remedy.
@@ -1238,13 +1238,13 @@ phase 2); `trigger` (a named event in the entry). `advance_time` runs every chec
 crosses (INV-15), which is how "three days later the fever has broken, or has not" is computed rather
 than narrated.
 
-**07.9.4 What a stage does.** `[D]` A stage's effects are data: its carrier condition at the stage's
+**07.9.4 What a stage does.** `[D]` [DL-07-17; revision: I-065] A stage's effects are data: its carrier condition at the stage's
 severity (06 gives `cond.poisoned` −1 / −2 / −3 on all checks at S1 / S2–S3 / S4–S5; the two carriers
 added here use the same numbers); **stage harm** applied at each stage check through `apply_harm`
 (`no_reduction: true`, `periodic: true`, lethality by 07.9.5); and listed effect references (a
 condition such as `cond.slowed`, a cap on rest quality, a lowered maximum Vitality, dread).
 
-**07.9.5 Afflictions that can kill.** `[D]` + `[T]` An entry marked `lethal: true` names a `warn_stage`.
+**07.9.5 Afflictions that can kill.** `[D]` + `[T]` [DL-07-17; revision: I-065] An entry marked `lethal: true` names a `warn_stage`.
 When the bearer reaches it, the `affliction` warning fires (07.3.3) in plain words, with what would stop
 it (its cures). From the moment that warning is effective, the affliction's stage harm is lethal. An
 affliction with `lethal: false`, and any lethal one before its warning, can lower Vitality, Stagger and
@@ -1252,7 +1252,7 @@ put its bearer Down, and no more (07.2.11). So a poison's road to the Threshold 
 stage, harmed to Staggered, loaded by stage harm (which is periodic: load and no wound records) to
 Dying, then dying checks. It takes several checks, and every one is a chance to be treated.
 
-**07.9.6 Cures.** `[D]` Each entry lists its cures; these are the kinds:
+**07.9.6 Cures.** `[D]` [DL-07-17; revision: I-065] Each entry lists its cures; these are the kinds:
 - **Treat** (07.8.8): a lever on the next stage check, or a stage down.
 - **A remedy** (an `item.consumable.remedy`, 08, carrying `eff.07.affliction_shift`): a **specific**
   remedy named for the affliction or its family lowers it two stages; a **general** one (an antidote, a
@@ -1263,7 +1263,7 @@ Dying, then dying checks. It takes several checks, and every one is a chance to 
 - **Running its course** (`max_checks`), for poisons the body burns off.
 - **A lift** (curses, 07.9.7).
 
-**07.9.7 Curses.** `[D]` A curse is an affliction of kind `curse`: its checks use Resolve; its cadence is
+**07.9.7 Curses.** `[D]` [DL-07-17; revision: I-065] A curse is an affliction of kind `curse`: its checks use Resolve; its cadence is
 `week` or a named trigger; medicine does not touch it. Every curse entry carries a **`lift`**: a deed or
 fact that ends it outright (return the thing; be forgiven by the one who laid it; keep the broken vow;
 bathe at a named kind of place), which is sealed until learned and has at least three clue placements
@@ -1272,12 +1272,12 @@ the lift, or stage 0 by checks, ends it. `aff.deaths_debt` is the exception to t
 and moves only when its countdown completes (07.5.5). Curses laid by `rit.lay_curse` and the draught of
 `ab.slow_draught` use entries in this file (05's request).
 
-**07.9.8 Diseases.** `[D]` A disease is an affliction of kind `disease` on a `day` cadence. An entry
+**07.9.8 Diseases.** `[D]` [DL-07-17; revision: I-065] A disease is an affliction of kind `disease` on a `day` cadence. An entry
 marked `contagious` exposes those in close contact once a day. `aff.wound_rot` is the disease of
 neglected wounds (07.8.7): while it holds, the wound's recovery clock does not tick. At stage 2 or
 higher any disease caps rest quality at partial (07.8.4).
 
-**07.9.9 Poison as a tool.** `[D]` A PC who coats a blade or doses a cup uses a license of
+**07.9.9 Poison as a tool.** `[D]` [DL-07-17; C:VII; revision: I-065] A PC who coats a blade or doses a cup uses a license of
 `deed.guile.poisoncraft` (05; crude fallback: Handle, with a risk of self-exposure on a critical
 failure). The poison rides the Strike or the meal as a rider: on a hit that deals harm of 1 or more
 (or on consumption) the target is exposed (07.9.2). What an afflicted adversary suffers is the entry's
@@ -1285,7 +1285,7 @@ stages; chapter 03 records the method.
 
 ### 07.10 Harm from hazards
 
-**07.10.1 Consuming a hazard.** `[D]` Chapter 10 owns hazard entries (`data/hazards.yaml`: severity, harm
+**07.10.1 Consuming a hazard.** `[D]` [DL-07-14; revision: I-065] Chapter 10 owns hazard entries (`data/hazards.yaml`: severity, harm
 tags, resist, cadence, conditions, omens, `lethal_context`; 00.17.1 Q18) and decides when an exposure
 happens. This chapter owns what the exposure does:
 1. The exposed character makes the entry's resisted check (Endure or Evade; the effect DC is the tier
@@ -1340,12 +1340,12 @@ Anchor:             yes. Intent verbs: (a harm source with no entry) burn, crush
 Basis:              [00.3.11] [06.5.8] [01.6.9] [R5 EX (hazards)] [DL-07-14]
 ```
 
-**07.10.3 Falling.** `[D]` Falls use 06.5.8's heights: 10 ft S2, 20 ft S3, 40 ft S4, 80 ft or more S5,
+**07.10.3 Falling.** `[D]` [DL-07-14; revision: I-065] Falls use 06.5.8's heights: 10 ft S2, 20 ft S3, 40 ft S4, 80 ft or more S5,
 `harm.physical.crush`, no reduction. A height of 40 ft or more beside or beneath the PC is a `severity`
 source: the warning is due when it is perceived, which is why a chasm described with its depth is a
 fair lethal risk and one whose depth was never established is not (WE-07-2).
 
-**07.10.4 Breath.** `[D]` A character who cannot breathe (under water, in thick smoke, in a chokehold)
+**07.10.4 Breath.** `[D]` [DL-07-14; revision: I-065] A character who cannot breathe (under water, in thick smoke, in a chokehold)
 holds its breath for **6 rounds plus 2 per point of Endurance** (at least 2; in other time modes, one
 interval is ample warning that it cannot). After that it carries `cond.choking` (06: −2 on all checks, 1
 Vitality at each `turn_end`, no reduction) and at each `turn_end` makes an Endure check against Moderate,
@@ -1364,7 +1364,7 @@ from 0 to the threshold. The **dread threshold** is the one value Resolve derive
 Dread is the canonical name of this ruleset's mental strain. It is not 03's conduct *strain*, and not
 the `harm.mind.strain` Vitality harm of an overdraw: neither of those moves it [DL-07-15].
 
-**07.11.2 What adds dread.** `[T]` + `[D]` Only these (T-07-19; `harm.yaml#dread.sources`):
+**07.11.2 What adds dread.** `[T]` + `[D]` [DL-07-15; R5 HR-06; revision: I-065] Only these (T-07-19; `harm.yaml#dread.sources`):
 
 | Source | How much |
 |---|---|
@@ -1381,7 +1381,7 @@ ends (no further checks from it); success — none; failure — dread + U(severi
 critical failure — dread + U of one rung heavier. Fear in the moment is a separate thing: `cond.frightened`
 is a condition of the scene (06); dread is what stays.
 
-**07.11.3 Shaken.** `[D]` While dread is at or above half the threshold the character is **shaken**, a
+**07.11.3 Shaken.** `[D]` [DL-07-15; revision: I-065] While dread is at or above half the threshold the character is **shaken**, a
 shown descriptor: any `cond.frightened` applied to it is one rung heavier, to S3 at most. Nothing else
 changes; the character acts as its player says.
 
@@ -1395,7 +1395,7 @@ the engine rolls an Endure check with Resolve against Hard (20).
 Breaking never takes the character out of the player's hands and never harms the body
 [R: https://darkestdungeon.wiki.gg/wiki/Stress (a test at the brim that can turn either way); R6 C-12].
 
-**07.11.5 Haunts.** `[D]` A haunt is a permanent mark (07.7.1) with one behavioral trigger written as an
+**07.11.5 Haunts.** `[D]` [DL-07-15; revision: I-065] A haunt is a permanent mark (07.7.1) with one behavioral trigger written as an
 effect, several with a small upside (T-07-13): night terrors (long rests outside a haven are at best
 partial), a dread of one kind of thing (frightened S1 at first sight of it each scene), the shakes
 (−1 status on `trait.action.manipulate` while shaken), cold (immune to frightened S1; −1 status on Talk
@@ -1412,7 +1412,7 @@ NPC of the world from then on). The codex shows haunts as *n of 3*, so the end i
 first. A player may always retire sooner (11). Dread ends careers; it never ends lives
 [R6 C-R7; R: https://bladesinthedark.com/consequences-harm (the fourth trauma retires); R: https://cubicle7games.com/en_US/blog/the-one-ring-the-shadow].
 
-**07.11.7 Easing dread.** `[D]` −1 at each long rest of full quality; −2 from a solace activity (15:
+**07.11.7 Easing dread.** `[D]` [DL-07-15; revision: I-065] −1 at each long rest of full quality; −2 from a solace activity (15:
 carousing, prayer, time with a bond); −2 when a thread is completed or a vow kept; to 0 after a full
 week of downtime in a haven. Nothing else lowers it; marks and haunts are never removed.
 
@@ -1433,14 +1433,14 @@ them, command another to tend them (06.14.2), carry them out, or end what is kil
 (16.2.6) is one bleeder: every member felled by lethal harm shares one `clk.bleeding_out.<cohort>`, and one
 stabilizing beat saves all of its fallen [integration: IR ch.16 to 07 (a)].
 
-**07.12.2 After the fall.** `[D]` A companion that was Down wakes at `scene_end` at Vitality 1 with a
+**07.12.2 After the fall.** `[D]` [DL-07-20; revision: I-065] A companion that was Down wakes at `scene_end` at Vitality 1 with a
 Moderate body wound. One that was stabilized from bleeding out wakes after a long rest with a Heavy
 body wound on a 4-segment recovery clock (ticked as T-07-15) and cannot be commanded to attack-trait
 beats until it heals. Companions regain Vitality by rest as PCs do. They take no marks, hold no dread,
 and carry at most one wound at a time (the worse replaces the other): their bookkeeping stays small.
 Loyalty after a fall is 16's.
 
-**07.12.3 Left behind, and lost.** `[D]` A companion left Down or bleeding among enemies when the PC
+**07.12.3 Left behind, and lost.** `[D]` [DL-07-20; revision: I-065] A companion left Down or bleeding among enemies when the PC
 leaves (07.4.4) follows the victor's disposition: `capture`, `ransom`, `rob` or `drag_to_lair` make it a
 prisoner (a rescue lead is written); `drive_off` and `leave` leave it where it lies; `kill` with an
 effective lethal context kills it, and without one leaves it for dead. When a companion dies the engine
@@ -1448,7 +1448,7 @@ writes `setback.companion_dead` (12.7.5), the PC makes a dread check at S3 (07.1
 morale clock ticks −1 (06.11.3), and the chronicle takes a line. Ch.16 adds what an ally's death leaves
 behind (16.9.5: belongings, kin and debts, the vow offered, the others' grief) [integration: IR ch.16 to 07 (e)].
 
-**07.12.4 Mounts, servants and allies.** `[D]` A mount is a companion for this chapter (06.15.3 says what
+**07.12.4 Mounts, servants and allies.** `[D]` [DL-07-20; revision: I-065] A mount is a companion for this chapter (06.15.3 says what
 its fall does to the rider). A summoned servant, a raised corpse or an automaton (05) has no ladder: at 0
 Vitality it ends, as its working says. An allied NPC who is not a companion follows 07.2.10 by depth.
 

@@ -33,3 +33,4 @@
 | 00.17.2 row 05 | slot system; template grammar; `abilities.yaml`, `rituals.yaml`, `composites.yaml`; `use_ability`; Focus; recharge types; magic; ability modifiers | 05.2; 05.3; the four data files; 05.4.1; 05.6; 05.4.6; 05.7–05.8; 05.6.8 flares and 05.10.4 spread tags (the modifier family) | satisfied |
 | BRIEF A2 #6, #12, #13 | shared substrate; creativity in bounded currency; refusals are lookups | 05.10; 05.5.2, 05.6.7; 05.5.5, 05.9.4 | satisfied |
 | R4 SG-15 | positive-scoped, literal effect text | 05.3.6; generator lint on every rank text | satisfied |
+| BRIEF §6 | Every rule cites its basis (`[C:]`, `[R]` or `[DL-]`) at card level | every rule card of 05 (89); 34 tagged at revision C6a, 05.6.11 by the new DL-05-41; validator BASIS (DL-INT-13) | satisfied |

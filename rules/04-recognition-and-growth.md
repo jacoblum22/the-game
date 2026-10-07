@@ -116,20 +116,20 @@ source that the calling's tags only **gate** [C:P5; DL-04-01]:
 | **picks** | ch.05's one ability pool (`data/abilities.yaml`) | the pool gate of 04.8.4 on the calling's tags |
 | a **composite**, **Focus trigger** or **boon** | one bounded entry per hybrid / deed family / conduct calling | the calling's kind |
 
-**04.1.2 Callings in state.** `[D]` `Character.callings` (00.6.2) holds, per calling:
+**04.1.2 Callings in state.** `[D]` [DL-04-01; DL-04-29; revision: I-065] `Character.callings` (00.6.2) holds, per calling:
 `{calling_id, tier, confirmed_tier (04.5.6) [revision: I-037], lifecycle (provisional | permanent | retired), granted_at {time, scene, evidence_scene_index},
 crystallized_by (event id), vehicle, roads {branch: tag} (hybrids), seat (deed | oath), fraying_stage 0..3,
 suspended bool, legacy_picks int, specialties [{tag, value}], inherited_band int, declined_until}`. The owning
 family is "Callings, tiers, provisional status" (00.6.3): **shown once recognized**. Tallies stay sealed.
 Commitments of kind oath and bond, and standing offers of kind recognition, are also this chapter's.
 
-**04.1.3 The words.** `[N]` **Recognition** is a calling or tier being granted, offered or withheld.
+**04.1.3 The words.** `[N]` [DL-04-01; DL-04-17; DL-04-23; revision: I-065] **Recognition** is a calling or tier being granted, offered or withheld.
 **Crystallization** is the moment a tier takes effect. A **vehicle** is the fictional staging. A **seat** is
 one of the places a held calling occupies (04.8.1). **Rank** is a seat in an institution (ch.11) and is never
 capability (04.11). **Band** is the power band P1–P5 (04.5.6). The tier names (*Called, Proven, Tempered,
 Exalted, Paragon*) are codex words. No one in the world says them (12.14.5).
 
-**04.1.4 Sealed inputs, shown outputs.** `[S]` + `[D]` Everything this chapter *reads* is sealed (03.9.1).
+**04.1.4 Sealed inputs, shown outputs.** `[S]` + `[D]` [C:P3; C:P13; DL-04-13; revision: I-065] Everything this chapter *reads* is sealed (03.9.1).
 Everything it *writes* to the character is shown: callings, tiers, provisional flags, licenses, competence
 entries, picks, oaths with their forbidden acts, Fraying stages, standing offers. The gate between the two is
 the policy of 04.4. The narrator receives packets (04.4.6), never values. The codex adds one `available`
@@ -159,7 +159,7 @@ where the narrower identity is one the fiction recognizes as its own (a duelist 
 fences"); `tags.04` proposed one new level-3 tag, `deed.wilds.animals.falconry`, for the Falconer, adopted into
 `data/tags.yaml` at integration, so `call.falconer` keeps its key [DL-04-03; integration: IR ch.04 to 03].
 
-**04.2.2 Families.** `[D]` Each calling belongs to one **family**: its deed branch for deed-keyed callings
+**04.2.2 Families.** `[D]` [DL-04-11; DL-04-12; DL-04-22; DL-04-23; revision: I-065] Each calling belongs to one **family**: its deed branch for deed-keyed callings
 (`martial`, `guile`, `wilds`, `lore`, `arcane`, `divine`, `primal`, `influence`, `craft`), `sacred` for vows,
 `dark` for dark callings; a hybrid takes the family of its first branch unless it carries an oath, when it is
 `divine` for staging. The family supplies defaults (`callings.yaml#families`): the two attributes eligible
@@ -227,7 +227,7 @@ take the restraint vow's abilities (04.8.4) [revision: I-007; DL-04-25]. **Devou
 non-folk creature); it is offered only by V13 and is the gate of 04.10. A variant and its base share one
 lineage (04.8.3): holding one, the other arrives as a fork [DL-04-06].
 
-**04.2.7 Coverage audit: the iconic archetypes.** `[D]` Each is reachable from the first session by deeds a
+**04.2.7 Coverage audit: the iconic archetypes.** `[D]` [DL-04-02; DL-04-06; revision: I-065] Each is reachable from the first session by deeds a
 new character can attempt. "Start" names what begins the evidence; magic branches need a first license,
 which ch.02's origins, ch.05's mentor and project paths, or an item supply (Interface requests).
 
@@ -424,7 +424,7 @@ model) [R3 T-4]. What remains is to make the score **mean** something. The defin
 measuring, in simulation, which facts about a just-eligible candidate predict that play goes on to confirm it
 (T-04-8 R7; `04-feat04.py`) [DL-04-10].
 
-**04.4.2 Confidence.** `[D]` For an eligible deed-keyed candidate, **confidence** is the number of these five
+**04.4.2 Confidence.** `[D]` [DL-04-10; revision: I-065] For an eligible deed-keyed candidate, **confidence** is the number of these five
 **confirmations** that hold, an integer 0–5:
 
 | Id | Confirmation | Test (integers; `W1` = the ladder's tier-1 weighted threshold) | Why it predicts (candidates confirmed with it true / false, R7's feature study) |
@@ -461,12 +461,12 @@ oath-bearing callings, vows, dark callings, branch callings, forks and consolida
 74, the abstain bucket in 38 (T-04-8 R7). A grant is still the player's to refuse: it is provisional and may
 be renounced at any rest (04.8.2) [R1 §04].
 
-**04.4.4 The largest wrong outcome.** `[D]` No judgment is made in this part, but the inputs include judged
+**04.4.4 The largest wrong outcome.** `[D]` [DL-04-10; DL-04-15; revision: I-065] No judgment is made in this part, but the inputs include judged
 evidence (03.3), so the blast radius is stated: one mistaken evidence event is at most 16 points (20% of a
 narrow tier-1 threshold); K5 exists so that a grant never rests on the last 20 points; a wrong grant is
 provisional, shown, renounceable, and lapses unless lived (class ii, iii and iv of 00.2.1 P-B at once).
 
-**04.4.5 When recognition is evaluated.** `[T]` + `[D]` Four triggers, and no others:
+**04.4.5 When recognition is evaluated.** `[T]` + `[D]` [R6 A-07, A-21, V7; revision: I-065] Four triggers, and no others:
 - **reflection**: `h.04.recognition_pass` at every `reflection` (each completed long rest, each downtime week,
   each season boundary; 00.7.2), after 03's digest (03.6.4). It evaluates only candidates keyed on the
   digest's dirty nodes and axes, so its cost stays bounded as the roster grows.
@@ -484,7 +484,7 @@ Triggers surface through `get_active_triggers` and are handled in the turn they 
 recognition offer is the one trigger 12.2.3 allows to wait: the engine, not the DM, holds it until the
 vehicle's `when` is met.
 
-**04.4.6 `evaluate_recognition(trigger)`.** `[D]` + `[S]` Tool #26 (00.14.2). Input: the trigger. Output: a list
+**04.4.6 `evaluate_recognition(trigger)`.** `[D]` + `[S]` [C:I; DL-04-10; revision: I-065] Tool #26 (00.14.2). Input: the trigger. Output: a list
 of **packets**, each
 `{calling_id, tier, kind (first | tier | hybrid | variant | fork | consolidation | pick | confirm |
 lapse_warning | fraying | shadow), policy (grant | offer | abstain), vehicles [≤ 3 vehicle ids], price_ids,
@@ -514,13 +514,13 @@ to +11 at tier 4 and +10 to +12 at tier 5 (the tier-4 increase on that attribute
 it), which are the bands P1–P5 [00.3.7; DL-00A-04; DL-04-23]. The reference PC of P4 and P5 (+11, +12; T-06-12)
 is the specialist with edge +1 or +2 at the top of those ranges `[revision: I-063]`.
 
-**04.5.2 Competence.** `[D]` On crystallization the engine writes a competence entry `{tag, value, source:
+**04.5.2 Competence.** `[D]` [DL-04-23; revision: I-065] On crystallization the engine writes a competence entry `{tag, value, source:
 calling id}` (00.3.6): at the key for a specialist; for a hybrid, at each **road** (the level-2 child of
 each branch with the largest weighted tally when the hybrid is first recognized; ties by data order). Roads
 are fixed; they change only by a season re-pick (04.8.7). Competence is highest-only, so entries from several
 callings never add. A vow or dark calling writes none.
 
-**04.5.3 Capabilities.** `[D]` The five universal licenses are defined in `data/licenses.yaml owner-block 04`
+**04.5.3 Capabilities.** `[D]` [DL-04-23; C:VII; revision: I-065] The five universal licenses are defined in `data/licenses.yaml owner-block 04`
 with full scope, exclusions and fallbacks (00.12.1). Each is held **once** (INV-13) and its scope reads "the
 key of any calling you hold, unsuspended, at this tier or higher", so a second calling widens it. In brief:
 **Mark** (tier 1) lets the character use every training license under the key at the tier's grade and stand
@@ -588,7 +588,7 @@ An unrecognized character is band 1 (P1 novice, 00.3.7). `inherited_band` is the
 into this one by consolidation (04.8.5), so consolidating never lowers the band. Nothing else enters: not
 items, not fame, not narration.
 
-**04.5.7 The one attribute increase.** `[D]` The first time any calling of a character reaches tier 4, the
+**04.5.7 The one attribute increase.** `[D]` [DL-04-23; revision: I-065] The first time any calling of a character reaches tier 4, the
 player raises **one** attribute by 1, chosen from that calling's `attributes` (two options for a specialist,
 a vow or a dark calling: the family default or the calling's own; for a hybrid, the defaults of both its
 families), to at most +4 (00.4.3 b). It happens once in a lifetime: later tier-4 crystallizations
@@ -779,7 +779,7 @@ Anchor:             yes. Intent verbs: "be offered", "take up", "turn down", "pu
 Basis:              [R6 A.5 items 1-6] [C:P5 offer; C:P1 "the player MAY defer"] [12.2.6, 12.15.6] [DL-04-14]
 ```
 
-**04.7.2 The out-of-fiction marker.** `[D]` The player must always know when an offer is live and what it
+**04.7.2 The out-of-fiction marker.** `[D]` [DL-04-14; DL-12-18; C:VII; revision: I-065] The player must always know when an offer is live and what it
 costs, and the world must never say so (BRIEF §4; C:VII). So: the fiction comes first and stages the vehicle;
 then exactly one OOF block follows, last in the response (12.15 order). A crisis offer is preceded by the
 one-line marker `[RECOGNITION] An offer is open (see below). Nothing is lost by waiting; play continues when
@@ -791,7 +791,7 @@ the re-offer condition; for **defer**: when it returns and whether it expires. A
 `vehicles.yaml#markers`. Ch.14 renders them; ch.12 owns the block formats (Interface requests propose the
 `[RECOGNITION]` label).
 
-**04.7.3 Standing offers.** `[D]` A deferred offer persists in state (`Offer`, 00.6.2) and is listed in the
+**04.7.3 Standing offers.** `[D]` [DL-04-14; revision: I-065] A deferred offer persists in state (`Offer`, 00.6.2) and is listed in the
 codex and in the session-start SITUATION block ("Open offers"). `h.04.standing_offers` runs at every
 reflection:
 - **Re-present** when the vehicle's `represent_when` holds: the next reflection (V7), returning to the
@@ -867,12 +867,12 @@ alternatives (`multi_choice` or `replace_choice`), and the engine computes no wi
 Accepting one withdraws the others that would need the same seat; they return later as fork or consolidation
 offers under 04.8.
 
-**04.7.7 Re-offer after a decline.** `[D]` A declined calling is not raised again until 24 evidence-bearing
+**04.7.7 Re-offer after a decline.** `[D]` [DL-04-14; revision: I-065] A declined calling is not raised again until 24 evidence-bearing
 scenes have passed (03.6.1) and its weighted tally has grown by half its tier-1 threshold since the decline.
 The same vehicle is not used for the re-offer. The player may ask for a declined calling at any reflection
 while it is eligible; asking is never refused and never priced beyond the calling's own price.
 
-**04.7.8 `recognition_event`.** `[D]` On every grant, accepted, declined or deferred offer, confirmation,
+**04.7.8 `recognition_event`.** `[D]` [R6 R-A5; 00.17.1 Q4; revision: I-065] On every grant, accepted, declined or deferred offer, confirmation,
 lapse, consolidation, fork, release, Fraying stage change, atonement, turn and revocation, the engine emits
 to ch.11 (00.17 Q4):
 
@@ -949,7 +949,7 @@ In simulation a tier-2 grant lapsed in 181 of 199 runs when the archer stopped s
 199 when she kept on for one more session, in 9 of 199 after two, and in 0 of 199 when she never stopped
 (T-04-8 R8).
 
-**04.8.3 Lineage: one identity per line.** `[D]` Two callings are in one **lineage** when their keys are
+**04.8.3 Lineage: one identity per line.** `[D]` [DL-04-06; C:P5; revision: I-065] Two callings are in one **lineage** when their keys are
 identical (a variant and its base) or one key is an ancestor of the other (Warrior and Archer; Thief and
 Lockbreaker). A character never holds two callings of one lineage. When a candidate is eligible and a calling
 of its lineage is held, the candidate is a **fork** offer (04.8.6); when both become eligible in one pass they
@@ -1086,7 +1086,7 @@ Skull]. Every stage change raises `trg.04.fraying`, is voiced in the fiction in 
 is shown in `fraying_result` with what is now inactive, what clears it, and what would cause the next stage.
 A stage falls again as strain falls (deeds of the positive pole, at the half rate) or by atonement.
 
-**04.9.3 What each stage does.** `[D]`
+**04.9.3 What each stage does.** `[D]` [DL-04-22; DL-05-36; revision: I-065]
 
 | Stage | Mechanical state of the calling |
 |---|---|
@@ -1157,7 +1157,7 @@ Basis:              [C:P5 "atone rather than instantly and irreversibly losing p
                     [R2 #6] [03.8.4] [DL-04-22]
 ```
 
-**04.9.5 Turn.** `[D]` At stage 3 the player may instead **turn**: the calling is replaced, as a fork
+**04.9.5 Turn.** `[D]` [DL-04-22; revision: I-065] At stage 3 the player may instead **turn**: the calling is replaced, as a fork
 (04.8.6), by its shadow's `turns_to` calling at the same tier if that calling's `neg` threshold for the tier
 is met, else at the highest tier that is (minimum 1). A deed-keyed calling that turns keeps its key
 competence as a frozen specialty and its picks other than those with `requires_conduct`; the dark calling
@@ -1182,7 +1182,7 @@ Constitution P5 reserves the direct taking of a defeated creature's power as a c
 the default reward of combat (which is loot, ch.08). This part authors what no source supplies: trigger, cap,
 cost and failure [R2 4e; R3 04.18; C:P5].
 
-**04.10.1 The gate.** `[D]` Only the **Devourer** (`call.devourer`, a variant of the Bestiarist, offered
+**04.10.1 The gate.** `[D]` [DL-04-19; C:VII; revision: I-065] Only the **Devourer** (`call.devourer`, a variant of the Bestiarist, offered
 only by V13) grants `lic.call.taking`. Anyone else who declares "I absorb its power" is at gate class G3:
 the license's crude fallback is to harvest the body for materials (ch.08), and its acquisition path is the
 Devourer's recognition. A suspended or lapsed Devourer keeps the **library** (04.10.4) but can neither take
@@ -1293,7 +1293,7 @@ institution, owned by ch.11: it may be seat-limited, contested, granted and stri
 standing, resources and obligations. **Losing a rank never removes a tier, and holding a rank never grants
 one** [00.17 Q22; R6 R-A5, A-22].
 
-**04.11.2 Trials.** `[D]` A rite or trial (V9) tests for rank. If the character accepts a tier offer staged
+**04.11.2 Trials.** `[D]` [DL-11-18; R6 R-A5; revision: I-065] A rite or trial (V9) tests for rank. If the character accepts a tier offer staged
 as a trial, the tier is applied on acceptance; the trial's check decides only whether the rank is given now
 or at a later sitting. A failed trial delays the rank and nothing else.
 

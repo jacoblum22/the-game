@@ -24,3 +24,4 @@
 | P17 | Graduated delivery | 07.8.8 (Treat's reach ladder delivers 1–4 graded results); 07.9.3 (stage checks move 0, 1 or 2 stages by degree) | satisfied (by 01's reach) |
 | BRIEF §4 lock | Death is real but telegraphed: warnings, a dying state, a last-chance choice; defeat is usually capture, loss or a changed situation; never one unlucky roll | 07.3.1–07.3.7 (two keys, the warning, its delay, the exits card); 07.2.3 (the Stagger rule); 07.2.7 (Dying); 07.5 (the menu); 07.6 (dispositions); T-07-18 (the rates) | satisfied |
 | INV-6 | No death without a lethal frame and Key 2 | 07.3.1, 07.3.6, 07.2.11 | satisfied |
+| BRIEF §6 | Every rule cites its basis (`[C:]`, `[R]` or `[DL-]`) at card level | every rule card of 07 (89); 56 tagged at revision C6a; validator BASIS (DL-INT-13) | satisfied |

@@ -1319,6 +1319,13 @@ Format per BRIEF §11. Citations per 00.1.6. Numbers consumed by other chapters 
 - Serves: C:P4 (a Focus spell is worth its pick over the free push); goal 2 (prices measured, not asserted).
 - Revisit if: 09's adversaries or 08's items (I-090) turn out to price lingering harm on another scale, or play logs show foes spending actions on burning often enough that the `always` value (higher for the caster) is the right one.
 
+### DL-05-41: Consumables restore at most 4 Focus between long rests (revision I-065)
+- Decision: 05.6.11 as written: items and effects restore Focus only through `eff.restore {quantity: focus}`; consumables restore at most **4 Focus** between long rests (`restored_by_consumables_since_long_rest`), and past the cap a draught restores nothing, with the codex saying so before it is drunk. A being that restores another's Focus does it by a Reserve-form ability counted against the recipient's generation cap (DL-05-10). Recorded at revision C6a: the card shipped with no entry of its own.
+- Alternatives considered: no cap (rejected: coin buys Focus, so wealth becomes a second recovery channel beside DL-05-14's rests and the push and flare economy stops being a decision; the same reasoning as DL-05-23's healing cap); a count cap like healing's two effects (rejected: draughts differ in size, so a count cap would reward the largest draught and make small ones worthless); a cap that scales with the Focus maximum (rejected: a second number to track, and it favours the characters who already have the most Focus).
+- Evidence: [C:P9] (Focus is the one pool, 05.6); DL-05-09 (the cap equals the reference base Focus of 4: at most one starting pool's worth from consumables between long rests, a third of the capped maximum of 12); DL-05-14 (rest recovery); DL-05-23 (the parallel Vitality cap, [R5 HR-09]); `base_items.yaml` (`item.consumable.potion.elixir` clarity draught restores 1 per draught, so the cap is four draughts).
+- Serves: goal 2 (one bound, checked by the tool before the item is used).
+- Revisit if: T-05-DAY logs show consumables are the main recovery between rests, or are never used.
+
 ## DL-06 — Conflict
 
 Format per BRIEF §11. Citations per 00.1.6. Numbers consumed by other chapters are marked **[consumed]**.
@@ -1527,6 +1534,13 @@ row), output `06-conflict-sim-output.txt`, write-up `06-conflict-sim.md`.
 - Evidence: 05.7.11 item 4; 00.1.4.
 - Serves: goal 2.
 - Revisit if: 05 adds another attack working outside verb.strike's attributes.
+
+### DL-06-30: Size is a six-rung ladder stored on the template, read through levers, snags, reach and capacity (revision I-065)
+- Decision: 06.3.10 as written: `tiny` · `small` · `medium` · `large` · `huge` · `colossal`, stored in the creature's template (09; a PC is `medium`), never picked by the DM in play. A size step does five things (`data/conflict.yaml#sizes`): against a larger target, Grapple and Force lose one reach rung per step (an engine-cited Amplifying snag; two steps leave G4 for moving or holding the whole creature, with a redirect); against a smaller target they take one Amplifying lever; large melee reaches `band.close`, huge and colossal `band.near`; engagement capacity rises by 2 per step (06.3.5); a mount is at least one step larger than its rider, and a creature two steps larger is a `cover` feature. Recorded at revision C6a: the card shipped with no entry of its own.
+- Alternatives considered: no size (rejected: a giant and a goblin would grapple alike, and "I lift the dragon" would have no principled refusal); size as a new modifier family on rolls (rejected: DL-00A-10 makes levers and snags the only situational currency, inside the ±4 cap); size on a grid of squares (rejected: there is no grid, positions are bands and links, DL-06-07); size chosen by the DM per scene (rejected: a judgment where a stored field does, and drift between scenes).
+- Evidence: [C:VII] (moving a creature two steps larger is G4 with a redirect, not a harder roll); DL-00A-10; DL-06-07 (bands, links and capacity); DL-06-11 (object size rungs hand / body / heavy / massive, the same discrete shape for objects); [R5 CF-03] (positioning in text without a grid).
+- Serves: goal 2 (the engine reads one field; the DM never sets it).
+- Revisit if: 09's templates need a seventh rung, or play shows two-step grapples are wanted more often than the redirect allows.
 
 ## DL-07 — Harm, Recovery, and Death
 
@@ -3390,3 +3404,10 @@ Full record: `_process/integration-report.md`.
 - Evidence: 239 rules with a `[J:*]` decision: 86 in block form, 152 inline with the canonical label, 1 legacy label in ch.13, 0 missing (validator summary); the normalizer is idempotent (a second run changes nothing).
 - Serves: goal 2 (every judgment's worst case is stated and machine-findable); constitution P-B.
 - Revisit if: a playtest's ruling ledger shows a judgment whose real worst case exceeded the stated one (then that rule moves to the block form with examples).
+
+### DL-INT-13: Every rule card cites its basis at card level; a section-level basis does not suffice (I-065)
+- Decision: [revision: I-065] BRIEF §6 and 00.1.6 are met card by card: every rule card (`**NN.S.R Title.**`) carries a basis tag of 00.1.6's forms, `[C:…]`, `[R…]` or `[DL-…]`, alone or in a compound group. A tag added after authoring is written `[<basis>; revision: I-065]` right after the card's kind tags. The basis is, in order of preference: the DL entry whose Decision names the card or its section; the constitution clause the chapter's traceability fragment maps the card to; the research row (digest entry or R5 completeness row) the chapter or its trace maps the section to. Where none exists, a DL entry is written in the chapter's fragment (Decision / Alternatives / Why) rather than a basis guessed. `basis_audit.py` defines a card and a tag; `validate_ruleset.py` BASIS WARNs on an untagged card in `BASIS_CHAPTERS`, a list extended chapter by chapter.
+- Alternatives considered: accepting a section's intro or first-card DL plus the card's derivation cross-references as meeting §6 (the ledger's first proposal; rejected: an AI reading one card through `rq.py` sees no section intro, so the basis must travel with the card, and a derivation reference such as "(06.3.5)" names a dependency, not the reason); one tag per section heading (rejected: the same retrieval problem, and sections mix decisions); a basis field in a side table (rejected: drifts from the text it describes).
+- Evidence: C6a script audit of ch.04-07 (342 rule cards): 188 carried no tag of their own (ch.04 21, ch.05 34, ch.06 77, ch.07 56; the constitution audit's 216 for ch.04-08 counted with a stricter one-line match). All 188 are tagged by `rules/_process/basis/C6a-04.py` ... `C6a-07.py`; two had no recorded basis and gained one: DL-05-41 (05.6.11's consumable Focus cap) and DL-06-30 (06.3.10's size ladder). 05.8.6's stale "until ch.04 agrees" sentence was corrected (04.8.4 had adopted the request).
+- Serves: goal 2 (every rule's reason is one lookup away from the rule); BRIEF §6.
+- Revisit if: the remaining chapters (00-03, 08-12, 15-16) turn up cards whose only honest basis is a derivation from another rule (then admit `[derived: NN.S.R]` as a fifth form in 00.1.6 rather than tag it with that rule's DL).
