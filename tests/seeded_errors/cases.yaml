@@ -181,7 +181,7 @@ cases:
     claims:
       - {sentence: 0, subject: unknown, class: existence, predicate: guard, value: leans by the stairs}
     expect: [new_element]
-    fix: [cut]
+    fix: [write_on_mention]  # [revision: I-127] a guard with no stated want is ordinary
   - id: new_element.window
     fixture: archive
     draft: A narrow window sits high above the shelves.

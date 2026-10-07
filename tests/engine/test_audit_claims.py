@@ -37,14 +37,15 @@ def test_store_or_state_and_claim_alias(tmp_path: Path, rules: Any) -> None:
         assert v.verdict == "supported" and v.fix is None
 
 
-def test_unknown_subject_never_creates(tmp_path: Path, rules: Any) -> None:
+def test_unknown_subject_is_written_on_mention_not_cut(tmp_path: Path, rules: Any) -> None:
     store = _store(tmp_path)
     before = store.state.model_copy(deep=True)
     claims = [Claim.model_validate({"subject": "unknown", "class": "identity", "predicate": "name", "value": "Bo"}),
               Claim.model_validate({"subject": "npc.nobody", "class": "existence", "predicate": "is", "value": "here"})]
     vs = check_claims(claims, store.state, AdjudicationRecord(), [], rules=rules)
-    assert [(v.verdict, v.fix) for v in vs] == [("new_element", "cut"), ("new_element", "cut")]
-    assert store.state == before
+    # [revision: I-127] an unknown subject is written on mention (by the narration pass), never cut for being new
+    assert [(v.verdict, v.fix) for v in vs] == [("new_element", "write_on_mention")] * 2
+    assert store.state == before  # check_claims itself writes nothing
 
 
 def test_subject_created_on_mention_this_turn(tmp_path: Path, rules: Any) -> None:

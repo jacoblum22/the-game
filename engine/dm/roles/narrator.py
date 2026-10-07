@@ -20,7 +20,7 @@ from pydantic import BaseModel, Field
 
 from engine.dm.adjudication import AdjudicationRecord, BeatEntry
 from engine.dm.context import TurnContext
-from engine.dm.packet import build_packet
+from engine.dm.packet import build_packet, scene_setting
 from engine.dm.player_text import clean
 from engine.dm.roles.prompts import load_prompt
 from engine.dm.schemas import build_schema, schema_context
@@ -154,8 +154,10 @@ def redraft_text(r: Redraft) -> str:  # rule: 12.3.3
     lines = ["A REDRAFT. The previous draft, sentences numbered from 0:"]
     lines += [f"[{i}] {s}" for i, s in enumerate(r.previous)]
     if r.failures:
-        lines.append("FAILING VERDICTS (fix exactly these; change nothing that passed):")
+        lines.append("FAILING VERDICTS (each claim with its fix; repair exactly these):")
         lines += [f"- {f}" for f in r.failures]
+        lines.append("Keep every other sentence exactly as written, atmosphere included. Do not shorten the "
+                     "passage, and do not drop detail that passed.")
     if r.settled:
         lines.append("SETTLED NOW (write to these answers):")
         lines += [f"- {s}" for s in r.settled]
@@ -173,7 +175,10 @@ def draft(ctx: TurnContext, record: AdjudicationRecord, *, player_message: str =
     triggers = get_active_triggers(st, ctx.rules)
     mode = st.scene.mode if st.scene else None
     cards = load_cards_for(Role.NARRATOR, scene_situation_tags(st, ctx.rules), mode, triggers, rules=ctx.rules)
-    msg = [record_text(st, record, player_message=player_message, purpose=purpose, rules=ctx.rules), *extra]
+    msg = [record_text(st, record, player_message=player_message, purpose=purpose, rules=ctx.rules)]
+    if purpose in ("turn", "scene_open", "opening") and (setting := scene_setting(st)):
+        msg.append(setting)
+    msg.extend(extra)
     if redraft is not None:
         msg.append(redraft_text(redraft))
     packet = build_packet(Role.NARRATOR, instructions=load_prompt("narrator"), cards=cards, view=st,

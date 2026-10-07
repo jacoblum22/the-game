@@ -36,6 +36,7 @@ MAX_VIEW_KNOWN = 12  # the cast list beyond the scene: most recently introduced 
 MAX_DATA_KEYS = 12
 MAX_VALUE_CHARS = 160
 WATCHES = ("morning", "afternoon", "evening", "night")
+_DESCRIPTIVE_KEYS = ("desc", "landmarks", "hazards", "openness", "role", "detail", "demeanor")  # first under the cap
 
 
 class PacketError(ValueError):
@@ -69,6 +70,57 @@ def scene_view(state: WorldState) -> dict[str, Any]:  # rule: 12.2.4
         "known": entity_names(state, list(reversed(known))),
         "open_pause": nv["open_pause"],
     }
+
+
+def _bare(tag: Any) -> str:
+    return str(tag).rsplit(".", 1)[-1].replace("_", " ")
+
+
+def scene_setting(state: WorldState) -> str:  # rule: 12.4.3
+    """Material for describing the place, in words (never ids): the place and its desc, landmarks and openness, the
+    town or region around it, the places beside it, who is here, and the hour, season and weather. Seed facts only:
+    nothing here is invented, and the narrator may name ordinary furniture of such a place [revision: I-127]."""
+    sc = state.scene
+    place = state.entities.get(sc.place_id) if sc and sc.place_id else None
+    if place is None or place.id in state.seals:
+        return ""
+    d = place.data
+    lines = ["SCENE SETTING (what the character sees here; describe the place from this, naming ordinary furniture "
+             "of such a place as needed; people here act only as the record says, so show how they look and stand):"]
+    bits = [f"{place.name}" + (f", {d['desc']}" if d.get("desc") and d["desc"] != place.name else "")]
+    for key, label in (("place_kind", "a"), ("openness", "openness")):
+        if d.get(key):
+            bits.append(f"{label} {d[key]}" if label == "a" else f"{d[key]} to the open air")
+    terrain = [_bare(t) for t in (d.get("terrain") or [])]
+    if terrain:
+        bits.append("terrain: " + ", ".join(terrain))
+    if d.get("climate"):
+        bits.append(f"climate: {d['climate']}")
+    for key in ("landmarks", "hazards"):
+        if d.get(key):
+            bits.append(f"{key}: " + ", ".join(str(x) for x in d[key]))
+    lines.append("- place: " + "; ".join(bits))
+    parent = state.entities.get(d.get("parent") or "")
+    while parent is not None and parent.id not in state.seals:
+        pd = parent.data
+        lines.append(f"- within: {parent.name}" + (f", {pd['desc']}" if pd.get("desc") else ""))
+        parent = state.entities.get(pd.get("parent") or "") if pd.get("place_kind") != "settlement" else None
+    near = [e for e in state.entities.values() if e.kind == "place" and e.id != place.id and e.id not in state.seals
+            and e.data.get("parent") == d.get("parent") and e.exists == "exists" and e.data.get("known", True)]
+    if near:
+        lines.append("- nearby: " + "; ".join(e.data.get("desc") or e.name for e in near[:8]))
+    here = [state.entities[i] for i in (sc.cast_present if sc else []) if i in state.entities and i not in state.seals]
+    for e in here:
+        ed = e.data
+        look = ", ".join(str(ed[k]) for k in ("age", "detail", "demeanor") if ed.get(k))
+        lines.append(f"- present: {e.name}" + (f", the {ed['role']}" if ed.get("role") else "") + (f" ({look})" if look else ""))
+    now = (state.time.model_dump(mode="json").get("now") or {})
+    watch = now.get("watch")
+    when = WATCHES[watch] if isinstance(watch, int) and 0 <= watch < len(WATCHES) else None
+    weather = next((f for f in state.facts.values() if f.subject == "world" and f.predicate == "weather"), None)
+    lines.append(f"- time: {when or 'now'}, season {now.get('season')}, day {now.get('day')}"
+                 + ("; weather: " + str(weather.value) if weather is not None else ""))
+    return "\n".join(lines)
 
 
 def _short(v: Any) -> str:
@@ -115,7 +167,9 @@ def render_view(view: Mapping[str, Any]) -> str:
             lines.append(f"  state: {e['exists']}")
         if e.get("tags"):
             lines.append(f"  tags: {_short(e['tags'])}")
-        for k, v in list((e.get("data") or {}).items())[:MAX_DATA_KEYS]:
+        data = e.get("data") or {}
+        keys = [k for k in _DESCRIPTIVE_KEYS if k in data] + [k for k in data if k not in _DESCRIPTIVE_KEYS]
+        for k, v in [(k, data[k]) for k in keys][:MAX_DATA_KEYS]:
             if k != "name":
                 lines.append(f"  {k}: {_short(v)}")
         qs = (view.get("quantities") or {}).get(eid, {})

@@ -148,20 +148,39 @@ def _plan(ctx: TurnContext, record: AdjudicationRecord, claims: Sequence[Claim],
     return plan
 
 
+_GENERIC_PREDICATES = {"present", "presence", "exists", "exist", "is", "are", "has", "have", "there", "stands", "location"}
+
+
+def _mention_name(c: Claim) -> str:
+    """The new element's name: an existence claim's predicate when it is the noun ("woodsmoke" / "rises thin"), else
+    its value ("present" / "a traveler near the post")."""
+    pred, value = c.predicate.strip(), c.value.strip()
+    name = pred if c.cls == "existence" and pred and pred.lower() not in _GENERIC_PREDICATES else (value or pred)
+    return name[:60]
+
+
 def _apply_writes(ctx: TurnContext, record: AdjudicationRecord, claims: Sequence[Claim],
-                  verdicts: Sequence[Verdict]) -> list[str]:  # rule: 00.6.6
-    """`new_element` with fix `write_on_mention` (ordinary furniture of the place): write it now (12.3.2)."""
-    ments = []
-    for v in failing(verdicts):
-        if v.fix == "write_on_mention":
-            c = claims[v.claim]
-            name = (c.value or c.predicate).strip()
-            if name:
-                ments.append({"kind": "object", "name": name, "implied": [], "unsettled": []})
-    if not ments:
-        return []
-    res = _write_mentions(ctx, record, ments)
-    return res.ids
+                  verdicts: Sequence[Verdict]) -> list[Verdict]:  # rule: 00.6.6
+    """`new_element` with fix `write_on_mention` (ordinary furniture, an unknown subject: 12.3.2): write it now, at
+    check time too, and return the verdicts with each written claim `supported` and each refused one a `cut`
+    [revision: I-127; DL-12-37]."""
+    todo = {v.claim: _mention_name(claims[v.claim]) for v in failing(verdicts) if v.fix == "write_on_mention"}
+    todo = {i: name for i, name in todo.items() if name}
+    if not todo:
+        return list(verdicts)
+    res = _write_mentions(ctx, record, [{"kind": "object", "name": n, "implied": [], "unsettled": []}
+                                        for n in dict.fromkeys(todo.values())])
+    refused = set(res.refused)
+    out = []
+    for v in verdicts:
+        name = todo.get(v.claim)
+        if name is None:
+            out.append(v)
+        elif name in refused:
+            out.append(v.model_copy(update={"fix": "cut", "reason": "a kind that is never created by mention; cut"}))
+        else:
+            out.append(Verdict(claim=v.claim, verdict="supported"))
+    return out
 
 
 def _renumber(claims: Sequence[Claim], sents: Sequence[str], cut: set[int]) -> tuple[list[str], list[Claim]]:
@@ -229,8 +248,7 @@ def narrate_checked(ctx: TurnContext, record: AdjudicationRecord, *, player_mess
             reasons = [f"{exc.__class__.__name__}: {exc}"]
             break
         verdicts = check_claims(claims, tx.state, record, scene_ids, rules=rules)
-        if _apply_writes(ctx, record, claims, verdicts):
-            verdicts = check_claims(claims, tx.state, record, scene_ids, rules=rules)
+        verdicts = _apply_writes(ctx, record, claims, verdicts)
         version["claims"], version["verdicts"] = _dump(claims), _dump(verdicts)
         bad = failing(verdicts)
         if bad:

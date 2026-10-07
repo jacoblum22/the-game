@@ -1,0 +1,4 @@
+{"kind": "repeated_output", "input": 20, "text": "Nothing to pick by number here: answer in words (or /help).\n>"}
+{"kind": "repeated_output", "input": 21, "text": "Nothing to pick by number here: answer in words (or /help).\n>"}
+{"kind": "repeated_output", "input": 22, "text": "Nothing to pick by number here: answer in words (or /help).\n>"}
+{"kind": "stats", "turns": 0, "calls": {"interpret": 4}, "narrator_per_turn": null}

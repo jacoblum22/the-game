@@ -3,8 +3,8 @@
     verdicts = check_claims(claims, state, record, scene_ids)          # one Verdict per claim, in order
     missing = owed_blocks(record.triggers, response_text)              # "[WARNING]" / "[STATUS]" owed, absent
 
-Order of tests per claim: PC agency (12.14.3) → leak (sealed partition, audit view) → `subject: unknown` (cut, never
-an entity) → the class's own comparison with the store. A change claim (`asserts_change`) is supported only when a
+Order of tests per claim: PC agency (12.14.3) → leak (sealed partition, audit view) → `subject: unknown` (written on
+mention, or cut only for 12.14.13's forbidden kinds) → the class's own comparison with the store. A change claim (`asserts_change`) is supported only when a
 write this turn (the adjudication record's `writes`) backs it; a change is never written to match prose (INV-1).
 
 Store conventions read here (other modules write them):
@@ -321,10 +321,13 @@ def _check(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: PR-12-2
         subject = UNKNOWN  # an id the store does not hold is no better than unknown
     if subject == UNKNOWN:
         subject = _resolve_new(ctx, c) or UNKNOWN
-    if subject == UNKNOWN and c.cls not in _FREE_SUBJECT:  # rule: 12.3.1
+    if subject == UNKNOWN and c.cls not in _FREE_SUBJECT:  # rule: 12.3.2 [revision: I-127; DL-12-37]
         if c.asserts_change or c.cls == "action":
             return _v(c, i, "unsourced_change", reason="an unidentified subject changed or acted; cut")
-        return _v(c, i, "new_element", fix="cut", reason="subject unknown: never creates an entity; cut")
+        forbidden = _forbidden_new(c)
+        if forbidden:  # 12.14.13: the only new things the narration may not create
+            return _v(c, i, "new_element", fix="cut", reason=f"a new {forbidden} may not be created by mention; cut")
+        return _v(c, i, "new_element", fix="write_on_mention", reason="a new ordinary element: write it on mention")
     c = c.model_copy(update={"subject": subject})
     return _CLASS_CHECKS[c.cls](ctx, c, i)
 
@@ -332,6 +335,31 @@ def _check(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: PR-12-2
 # record notes that hand the narration an event as given (the opening's inciting incident, a lead, the scene's
 # impetus): the engine wrote them from the seed or a table, so the record is their source this turn
 GIVEN_NOTES = ("the inciting incident:", "a lead to make noticeable:", "a lead arrives", "the scene's impetus")
+
+
+# 12.14.13: a new clue, an item beyond common value, a hazard or trap, an adversary, or a person with a want, secret
+# or thread knowledge is never created by mention. ponytail: a keyword proxy on the claim's words (the checker
+# schema carries no element kind); upgrade path: have the checker label the kind and test that instead.
+_FORBIDDEN_NEW: dict[str, tuple[str, ...]] = {
+    "clue": ("clue", "hidden", "secret", "concealed", "cipher", "evidence", "sign of", "trace of the", "lead to"),
+    "item beyond common value": ("treasure", "hoard", "jewel", "gem", "relic", "artifact", "artefact", "heirloom",
+                                 "enchanted", "magic item", "ancient", "priceless", "chest of", "vault"),
+    "hazard or trap": ("trap", "snare", "tripwire", "pitfall", "ambush", "hazard", "poisoned", "booby"),
+    "adversary": ("bandit", "assassin", "monster", "cultist", "raider", "brigand", "foe", "enemy", "wolf pack",
+                  "lurk", "stalks", "stalking"),
+    "person with a want, secret or thread knowledge": ("knows about", "knows of", "knows the", "wants ", "seeks",
+                                                       "plots", "plotting", "spy", "informant", "cult"),
+}
+
+
+def _forbidden_new(c: Claim) -> str | None:  # rule: 12.14.13
+    if c.cls == "knowledge":
+        return "secret or thread knowledge"
+    text = c.text.lower()
+    for kind, words in _FORBIDDEN_NEW.items():
+        if any(w in text for w in words):
+            return kind
+    return None
 
 
 def _restates_given(ctx: _Ctx, c: Claim) -> bool:  # rule: 12.3.1
