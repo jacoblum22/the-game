@@ -277,6 +277,16 @@ def check_gate(beat: Beat, *, state: Any, rules: Any, store: Any = None, staged:
             d.gate, d.mode, d.license = "G1", "normal", None
             d.reason = "; ".join(x for x in (d.reason, f"{beat.verb} covers it") if x)
             return d
+    # G2 before G3 (01.3.1, first match wins): a license the Reader cited as covering the method (would-be,
+    # proposed or the accepted fallback's) is held, so it is G2 whatever class was proposed. Only a cited id
+    # counts (G2: "the DM must cite its id"); the word-match guess in would_be_license is never upgraded.
+    if beat.mode not in ("stretch", "emulate"):
+        for lid in dict.fromkeys((beat.would_be_license, beat.license, beat.fallback_license)):
+            if (lid and lid in rules.licenses and held_license(state, beat.actor, lid) is not None
+                    and not any(lid in (f.get("licenses") or ()) for _, f in _restricts(rules, state, beat.actor))):
+                d.gate, d.mode, d.license = "G2", "normal", lid
+                d.reason = f"held license {lid}"
+                return d
     # G3: an accepted crude fallback rolls; otherwise the redirect
     if beat.mode == "fallback" and beat.fallback_license and beat.fallback_license in rules.licenses:
         fb = _fallback_option(beat.fallback_license, rules.license(beat.fallback_license))

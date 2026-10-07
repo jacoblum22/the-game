@@ -109,3 +109,19 @@ def test_accepted_fallback_rolls(tmp_path: Path) -> None:
     wrong = check_gate(s.beat(gate="G3", mode="fallback", fallback_license="lic.training.guile_thievery",
                               verb="verb.talk"), state=s.state, rules=s.rules)
     assert not wrong.rolls_possible
+
+
+def test_proposed_g3_on_a_held_license_is_g2(tmp_path: Path) -> None:
+    """01.3.1 first match wins: a hunter holding lic.training.wilds_tracking is never redirected to learn it
+    (playtest 20261007-155118), neither on the Reader's G3 proposal nor on an accepted fallback."""
+    s = Scene.new(tmp_path)
+    s.apply([Event.of("license_granted", source="test", entity=s.pc,
+                      license=LicenseInstance(license_id="lic.training.wilds_tracking"))])
+    for b in (s.beat(gate="G3", verb="verb.observe", method="follow fresh, plain tracks",
+                     would_be_license="lic.training.wilds_tracking"),
+              s.beat(gate="G3", mode="fallback", fallback_license="lic.training.wilds_tracking", verb="verb.observe")):
+        d = check_gate(b, state=s.state, rules=s.rules)
+        assert (d.gate, d.mode, d.license, d.redirect) == ("G2", "normal", "lic.training.wilds_tracking", None)
+    stretch = check_gate(s.beat(gate="G3", mode="stretch", would_be_license="lic.training.wilds_tracking"),
+                         state=s.state, rules=s.rules)
+    assert stretch.gate == "G3"  # a stretch the license does not declare is still G3 (01.3.5)
