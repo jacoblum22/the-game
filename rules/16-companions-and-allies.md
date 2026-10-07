@@ -1918,8 +1918,10 @@ Refusal: *will not harm a child* — not covered.
 **Terms `[J:flag]`.** WANT: the journey serves her recorded want "find Tam" (want id cited; the engine checks
 the sealed record) → true. OBLIGATION: "home by midsummer" is written as a commitment (kind promise, due at the
 summer boundary) before the roll, and Oda is Wary or better → true. Effective size R3 − 2 = **R1**.
-**Certainty (15.3.10).** Effective R1 and Neutral, no recorded hesitation reason (no watcher, superior or fear
-bears on it) → **certain**: no roll. She comes.
+**Certainty (15.3.10).** The certainty size counts one term only: R3 − 1 = R2, above Neutral's certain range
+→ **not certain**, a roll at the effective R1 [revision: I-048]: DC = 10 + Oda's Resolve 0 + standing 0 + R1 +0
+= **10**; Wren's Talk +1 needs 9: **60%**. d20 = 13 → 14 vs 10 → **success**: she comes. (With one term less
+the roll would be at DC 12; with neither, G4: the boundary pair.)
 
 *Boundary pair.*
 - With the want term only: effective **R2** = Neutral's ceiling → a roll: DC = 10 + Oda's Resolve 0 + standing

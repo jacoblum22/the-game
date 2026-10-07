@@ -52,6 +52,7 @@ ORAC = {t["id"]: t for t in load("oracles.yaml")["tables"]}
 COMP = {c["id"]: c for c in load("companions.yaml")["companions"]}
 RIT = load("rituals.yaml")["rituals"]
 _lic = load("licenses.yaml")
+ABIL = {a["id"]: a for a in load("abilities.yaml")["abilities"]}
 LICS = {l["id"] for l in _lic["licenses"]} | {e["id"] for b in _lic["blocks"] for e in b["entries"]}
 CAL = load("calendar.yaml")
 CLIMATES = {c["id"] for c in load("weather.yaml")["climates"]}
@@ -224,6 +225,35 @@ def roll_oracle_table(dice, tid, field="results"):
     t = ORAC[tid]
     return by_range(t[field], dice.die(t["die"]))
 
+def step_to(rows, start, fits):
+    """[revision: I-053] 12.11.1: from the rolled row, step down the table (wrapping) to the first row that fits."""
+    i = rows.index(start)
+    for k in range(len(rows)):
+        r = rows[(i + k) % len(rows)]
+        if fits(r):
+            return r
+    return start
+
+def role_license(tag):
+    """the domain training license of a level-2 deed tag (05.9.3: lic.training.<branch>_<child>), if one exists"""
+    p = tag.split(".")
+    if len(p) < 3:
+        return None
+    lid = "lic.training.%s_%s" % (p[1], p[2])
+    return lid if lid in LICS else None
+
+def roll_want(dice):
+    obj = roll_oracle_table(dice, "tbl.npc_want_object")
+    verb = roll_oracle_table(dice, "tbl.npc_want_verb")
+    on = int(obj["range"])
+    verb = step_to(ORAC["tbl.npc_want_verb"]["results"], verb, lambda r: on in r.get("takes", [on]))
+    return "%s %s" % (verb["result"], obj["result"])
+
+def roll_refusal(dice, role_tags):
+    r = roll_oracle_table(dice, "tbl.npc_refusal")
+    return step_to(ORAC["tbl.npc_refusal"]["results"], r,
+                   lambda x: not any(t == n or t.startswith(n + ".") for n in x.get("not_for", []) for t in role_tags))
+
 def make_npc(dice, S, *, role, people, home, member_of=(), depth="principal", band=1, role_tags=(), duty=None, recruit=None, name=None):
     g = roll_oracle_table(dice, "tbl.npc_gender")
     nm = name or person_name(dice, S["names"], people)
@@ -232,7 +262,7 @@ def make_npc(dice, S, *, role, people, home, member_of=(), depth="principal", ba
         nid += "_%d" % dice.d(9)
     S["_npc_ids"].add(nid)
     folk = ORIGD[people]["tags"][0] if ORIGD[people]["tags"][0].startswith("creature.folk") else [t for t in ORIGD[people]["tags"] if t.startswith("creature.folk")][0]
-    want = "%s %s" % (roll_oracle_table(dice, "tbl.npc_want_verb")["result"], roll_oracle_table(dice, "tbl.npc_want_object")["result"])
+    want = roll_want(dice)
     sec = roll_oracle_table(dice, "tbl.npc_secret")["result"]
     native = [l["license"] for l in ORIGD[people].get("languages", []) if l["license"] != "lic.lang.common"]
     npc = OrderedDict([
@@ -241,7 +271,7 @@ def make_npc(dice, S, *, role, people, home, member_of=(), depth="principal", ba
         ("member_of", list(member_of)),
         ("wants", [{"text": want, "tags": list(role_tags[:1]) or ["conduct.loyalty"], "rank": 1}]),
         ("fears", [{"text": roll_oracle_table(dice, "tbl.npc_fear")["result"], "tags": []}]),
-        ("refusals", [{"kind": r.get("kind", "refusal.self"), "text": r["result"]} for r in [roll_oracle_table(dice, "tbl.npc_refusal")]]
+        ("refusals", [{"kind": r.get("kind", "refusal.self"), "text": r["result"]} for r in [roll_refusal(dice, role_tags)]]
                      + ([{"kind": "refusal.duty", "text": duty, "strength": "absolute"}] if duty else [])),  # [verification: V2c-007] 11.3.17, 15.2.4 item 5
         ("secrets", [{"fact": "sec.%s.1" % nid.split(".", 1)[1], "text": sec, "gate": "standing Devoted, or a clue found by play (15.9)"}]),
         ("voice", {"register": roll_oracle_table(dice, "tbl.npc_voice_register")["result"], "habit": roll_oracle_table(dice, "tbl.npc_voice_habit")["result"]}),
@@ -251,6 +281,9 @@ def make_npc(dice, S, *, role, people, home, member_of=(), depth="principal", ba
         ("speaks", ["lic.lang.common"] + native[:1]),
         ("band", band), ("standing_to_pc", 0), ("exists", "exists"),
         ("officer_duty", duty), ("recruit", recruit), ("kind", "npc"), ("tags", [folk]), ("role_tags", list(role_tags)),
+        # [revision: I-059] 12.16.11: role competence (T-09-2's c_b by band) and role licenses (trained) as data
+        ("competence", [{"tag": t, "value": DEF["npc_competence"]["by_band"][band]} for t in role_tags]),
+        ("licenses", [{"id": role_license(t), "grade": "trained"} for t in role_tags if role_license(t)]),
         ("visibility", "background"), ("sealed_fields", ["wants", "fears", "refusals", "secrets", "knowledge"]),
         ("mind", "sapient"), ("knowledge", []), ("lifecycle", "provisional"), ("basis", ["12.11.1", "12.16.11"]),
     ])
@@ -356,9 +389,9 @@ def build_seed(seed, given=None):
         keepers.append(OrderedDict([("id", kid), ("name", "%s, %s" % (nm, title)), ("kind", f["kind"]), ("form", fo), ("what", f["what"]),
                                     ("axes", axes), ("despises", despises), ("sign", f["sign"]),
                                     ("schools", [s for s in f["schools"] if s != closed]), ("faith", None), ("faith_org", f["faith_org"]),
-                                    ("death", bool(f.get("death"))), ("dark", bool(f.get("dark"))),
+                                    ("death", bool(f.get("death"))), ("nature", f.get("nature", "sacred")),  # [revision: I-052] 12.16.6
                                     ("basis", ["05.7.4", "04.9.2", "12.16.6"])]))
-    main_keeper = next((k for k in keepers if not k["dark"]), keepers[0])
+    main_keeper = next((k for k in keepers if k["nature"] != "profane"), keepers[0])
     barg = A.get("ws.q.bargainer", lambda: oracle_simple(dice, QS["ws.q.bargainer"]))
     death_k = next((k for k in keepers if k["death"]), None)
     if barg == "death_keeper":
@@ -386,7 +419,7 @@ def build_seed(seed, given=None):
     presence = A.get("ws.q.presence", _presence)
     peoples = []
     for pid, pres in presence.items():
-        peoples.append(OrderedDict([("origin", pid), ("present", pres), ("who", None), ("where", []), ("name_tables", []), ("faiths", [k["id"] for k in keepers if not k["dark"]])]))
+        peoples.append(OrderedDict([("origin", pid), ("present", pres), ("who", None), ("where", []), ("name_tables", []), ("faiths", [k["id"] for k in keepers if k["nature"] != "profane"])]))
     threat_people = next((o["id"] for o in ORIG["origins"] if o["kind"] == "people" and o["id"] != "orig.people.human"
                           and any(anc(t, g) for t in o["tags"] if t.startswith("creature.folk") for g in wound["gates"])), "orig.people.human")
     name_src = [dict(p) for p in peoples]
@@ -620,6 +653,12 @@ def build_seed(seed, given=None):
         scholar = make_npc(dice, S, role="scribe and teacher of letters", people=people_for(next(npc_i)), home=blds["hall"], depth="minor", band=1, role_tags=["deed.lore", "deed.craft.scribing"])
     healer = make_npc(dice, S, role="healer" if tier == "town" else "herb-wife", people=people_for(next(npc_i)), home=blds.get("healer", holy), depth="minor", band=1, role_tags=["deed.wilds.foraging", "deed.craft.alchemy"])
     P[gy]["facts"]["tended_by"] = F["faith"]["id"]
+    # [revision: I-052] 05.7.4: a cast NPC's divine license must be a school of a keeper whose faith it belongs to
+    kof = {k["faith"]: k for k in keepers if k.get("faith")}
+    for n in S["npcs"]:
+        kept = {s for m in n["member_of"] if m in kof for s in kof[m]["schools"]}
+        n["licenses"] = [l for l in n["licenses"] if not l["id"].startswith("lic.training.divine_")
+                         or "deed.divine.%s" % l["id"].rsplit("_", 1)[-1] in kept]
     # teachers (15.13; downtime.yaml#teacher_odds), from the cast
     teachers = []
     for sch in main_keeper["schools"]:
@@ -642,6 +681,14 @@ def build_seed(seed, given=None):
                              "requires": "letters and the teacher (05.9.4)" + ("; admission to the arcane order" if arcane_src == "order_only" else "")})
     for t in teachers:
         assert t["target"] in LICS, t["target"]
+        # [revision: I-059] 15.11.1 MENTOR: the teacher's record holds the target at expert (a tongue or letters: held)
+        npc = next(n for n in S["npcs"] if n["id"] == t["npc"])
+        grade = "expert" if t["target"].startswith("lic.training.") else None
+        have = next((l for l in npc["licenses"] if l["id"] == t["target"]), None)
+        if have:
+            have["grade"] = grade
+        else:
+            npc["licenses"].append({"id": t["target"], "grade": grade})
     bond_placement = [
         {"slot": "anchor", "kind": "kin", "where": hid, "default_npc": None, "note": "a new NPC in %s (02.9.8: never one already in the cast)" % hname},
         {"slot": "anchor", "kind": "friend", "where": blds["inn"], "default_npc": None, "note": "a regular at %s" % P[blds["inn"]]["name"]},
@@ -971,7 +1018,7 @@ def make_pregens(dice, S, peoples, nonhuman, keepers, main_keeper, acceptance, b
     """Four pregens (02.2.5): fighter, sneak, talker or scholar, worker of magic; one non-human. Attributes by 02.3.5's
     default placement (the livelihood's priority, Peaked shape; Typical rule unless 02.3.5's exception applies)."""
     roles = [("fighter", "orig.life.soldier"), ("sneak", "orig.life.thief"), ("talker", dice.pick(["orig.life.merchant", "orig.life.scholar", "orig.life.courtier"]))]
-    magic = "orig.life.acolyte" if not main_keeper["dark"] else "orig.life.hedge_taught"
+    magic = "orig.life.acolyte" if main_keeper["nature"] != "profane" else "orig.life.hedge_taught"
     roles.append(("magic", magic))
     nh = nonhuman[0]["origin"] if nonhuman else "orig.people.halfling"
     out = []
@@ -1002,7 +1049,13 @@ def make_pregens(dice, S, peoples, nonhuman, keepers, main_keeper, acceptance, b
         name = person_name(dice, S["names"], people) if any(t["people"] == people for t in S["names"]) else person_name(dice, S["names"], "orig.people.human")
         anchor = [n for n in S["npcs"] if n["home"] in (blds["inn"], hid, blds.get("market"), blds["smithy"], blds.get("healer"), blds["gate"]) and n["id"] not in used_anchor][0]
         used_anchor.add(anchor["id"])
-        d = L["defaults"]
+        d = dict(L["defaults"])
+        if life == "orig.life.acolyte":
+            # [revision: I-052] 05.7.4: a divine license must be one of the keeper's schools; healing when it keeps
+            # healing, else its first school, with the livelihood's suggested technique of that school
+            sch = "deed.divine.healing" if "deed.divine.healing" in main_keeper["schools"] else main_keeper["schools"][0]
+            d["deep"] = [sch]
+            d["technique"] = next(a for a in L["technique_suggestions"] if any(t.startswith(sch) for t in ABIL[a]["tags"]))
         rec = OrderedDict([("id", "pregen.%s.%s" % (S["_rs"], slug(name))), ("name", name), ("pronouns", dice.pick(["she/her", "he/him"])), ("role", role),
                            ("sentence", "%s, %s of %s." % (name, L["name"].lower(), S["_places"][hid]["name"])),
                            ("good_at", ", ".join(t.split(".")[-1].replace("_", " ") for t in d["deep"]) or "many things a little"),
@@ -1086,7 +1139,8 @@ def _check_one(rq, reg, ok, P, npcs, facs, clocks, keepers, sits, ids, hav, sett
         elif c == "second_tongue":
             ok(rid, reg["tongues"]["second_tongue"] in LICS, reg["tongues"]["second_tongue"])
         elif c == "keepers":
-            good = all(k["axes"] and k["schools"] and k["sign"] and k["faith"] in facs and all(a["axis"] in TAGS for a in k["axes"]) for k in reg["keepers"])
+            good = all(k["axes"] and k["schools"] and k["sign"] and k["faith"] in facs and all(a["axis"] in TAGS for a in k["axes"])
+                       and k.get("nature") in ("sacred", "profane") for k in reg["keepers"])  # [revision: I-052] nature
             ok(rid, len(reg["keepers"]) >= 2 and good, "%d keepers" % len(reg["keepers"]))
         elif c == "acceptance":
             a = reg["places_of_acceptance"]
@@ -1115,6 +1169,10 @@ def _check_one(rq, reg, ok, P, npcs, facs, clocks, keepers, sits, ids, hav, sett
                 anchor = p.get("anchor_bond") or p.get("anchor") or {}
                 legal &= bool(p["drive"]) and bool(p["aspiration"]) and anchor.get("npc") in npcs and p["profile"] in {x["id"] for x in ORIG["profiles"]}
                 legal &= p["upbringing"] in ORIGD and p["livelihood"] in ORIGD and p["people"] in ORIGD
+                if p.get("keeper"):  # [revision: I-052] 05.7.4: every divine school the pregen holds is one its keeper keeps
+                    kid = p["keeper"] if isinstance(p["keeper"], str) else (p["keeper"].get("id") or p["keeper"].get("keeper"))
+                    kp = next((k for k in reg["keepers"] if k["id"] == kid), None)
+                    legal &= kp is not None and all(t in kp["schools"] for t in p["deep"] + p["access"] if t.startswith("deed.divine"))
             ok(rid, len(pg) >= 4 and {"fighter", "sneak", "talker", "magic"} <= roles and nh and legal, "%d pregens" % len(pg))
         elif c == "inciting":
             inc = reg["opening"]["inciting"]
@@ -1225,7 +1283,25 @@ def _check_one(rq, reg, ok, P, npcs, facs, clocks, keepers, sits, ids, hav, sett
             ok(rid, rows and not bad and all(r["truth"] in ("true", "partial", "false") for r in rows),
                "%d rumors (%s)%s" % (len(rows), dict(Counter(r["truth"] for r in rows)), ("; not a record: %s" % bad) if bad else ""))
         elif c == "npcs":
-            ok(rid, len(npcs) >= 8 and all(all(m in facs for m in n["member_of"]) for n in npcs.values()), "%d npcs" % len(npcs))
+            # [revision: I-053] every want's verb takes its object; no refusal row whose not_for matches a role tag
+            # [revision: I-059] every NPC carries competence and licenses as data, licenses real ids
+            VR = {r["result"]: r for r in ORAC["tbl.npc_want_verb"]["results"]}
+            OR = {r["result"]: int(r["range"]) for r in ORAC["tbl.npc_want_object"]["results"]}
+            RR = {r.get("kind"): r for r in ORAC["tbl.npc_refusal"]["results"]}
+            def want_ok(w):
+                v, _, o = w["text"].partition(" ")
+                return v not in VR or o not in OR or OR[o] in VR[v].get("takes", [OR[o]])
+            def ref_ok(n):
+                return all(not any(t == x or t.startswith(x + ".") for x in RR.get(r["kind"], {}).get("not_for", []) for t in n.get("role_tags", []))
+                           for r in n.get("refusals", []))
+            KOF = {k.get("faith"): k for k in reg["keepers"]}
+            div_ok = all("deed.divine.%s" % l["id"].rsplit("_", 1)[-1] in {s for m in n["member_of"] if m in KOF for s in KOF[m]["schools"]}
+                         for n in npcs.values() for l in n.get("licenses", []) if l["id"].startswith("lic.training.divine_"))  # I-052
+            data_ok = div_ok and all(isinstance(n.get("competence"), list) and isinstance(n.get("licenses"), list) and all(l["id"] in LICS for l in n["licenses"])
+                          for n in npcs.values())
+            bad = [n["id"] for n in npcs.values() if not (all(want_ok(w) for w in n.get("wants", [])) and ref_ok(n))]
+            ok(rid, len(npcs) >= 8 and all(all(m in facs for m in n["member_of"]) for n in npcs.values()) and data_ok and not bad,
+               "%d npcs%s" % (len(npcs), ("; misfit wants/refusals: %s" % bad[:3]) if bad else ("" if data_ok else "; competence/licenses missing")))
         elif c == "opening":
             o = reg["opening"]
             xids = ids | secret_ids(reg) | set(reg.get("cases") or []) | CLUE_IDS
@@ -1236,7 +1312,10 @@ def _check_one(rq, reg, ok, P, npcs, facs, clocks, keepers, sits, ids, hav, sett
             ok(rid, all(s["settlement"]["tier"] in ("camp", "village", "town", "city") for s in settle))
         elif c == "teachers":
             t = hav["settlement"]["teachers"]
-            ok(rid, t and all(x["target"] in LICS and x["npc"] in npcs for x in t), "%d teachings" % len(t))
+            # [revision: I-059] 15.11.1 MENTOR: the teacher's record holds the target (training licenses at expert)
+            held = lambda x: any(l["id"] == x["target"] and (l.get("grade") == "expert" or not x["target"].startswith("lic.training."))
+                                 for l in npcs[x["npc"]].get("licenses", [])) if x["npc"] in npcs else False
+            ok(rid, t and all(x["target"] in LICS and x["npc"] in npcs and held(x) for x in t), "%d teachings" % len(t))
         elif c == "sentries":
             ok(rid, hav["settlement"].get("sentry_floors"))
         elif c == "present":

@@ -930,7 +930,12 @@ Basis:              [R2 §05 Cradle: aura of a matching place] [R7 §5 Ex.11] [0
 
 **05.7.4 The keeper's regard (divine).** `[D]` Every holder of a divine training license has a
 **keeper** recorded as a fact when the license is acquired (`pc.keeper.<school> = <power, order or
-oath>`; the region's seed supplies the powers and their conduct axes, 12.16.6). Divine workings are usable while the keeper's
+oath>`; the region's seed supplies the powers and their conduct axes, 12.16.6). **A keeper grants only
+what it keeps** [revision: I-052]: the license's school must be one of the keeper's schools (its record's
+three, 12.16.6), for a PC, a pregen or an NPC priest alike; a character who wants a school no keeper of
+the region keeps has no divine path to it (G3: the redirect names the keepers that do, or another branch).
+Each keeper's record also states its **nature**, `sacred` or `profane` (12.16.6), which every effect that
+reads "a sacred keeper" or "a profane one" reads (Rebuke, the divine branch working, 05.7.11). Divine workings are usable while the keeper's
 regard holds:
 - for a character whose divine calling carries an oath: while the calling is below Fraying stage 2
   (04.9.3 suspends the tier's grants at stage 2 and the calling at stage 3);
@@ -1078,7 +1083,7 @@ are trained in, so that a caster at 0 Focus is weak and never weaponless [06.10.
 | Branch | Working | Reach and target | Harm | Its own touch |
 |---|---|---|---|---|
 | Arcane | **Force Bolt** (`ab.force_bolt`) | one being or object you can see within `band.near` | force (`harm.arcane.force`) | a critical success also pushes the target one band away |
-| Divine | **Rebuke** (`ab.rebuke`) | one being within `band.close` that can see the keeper's sign or hear the invocation | radiant for a sacred keeper, necrotic for a profane one | one rung heavier against the opposed nature (`creature.undead` or `creature.fiend` for a sacred keeper; `trait.nature.sacred` for a profane one) |
+| Divine | **Rebuke** (`ab.rebuke`) | one being within `band.close` that can see the keeper's sign or hear the invocation | radiant for a sacred keeper, necrotic for a profane one (the keeper record's `nature`, 12.16.6) | one rung heavier against the opposed nature (`creature.undead` or `creature.fiend` for a sacred keeper; `trait.nature.sacred` for a profane one) |
 | Primal | **Wild Lash** (`ab.wild_lash`) | one being within `band.near` of you and of the source present (05.7.3) | the source's: piercing (growing things), crushing (stone, water), cutting (wind) or fire | the target is off-balance until the end of its next turn |
 
 1. **Held through training, in no slot.** A character who holds any training license of the branch with

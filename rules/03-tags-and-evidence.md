@@ -278,7 +278,7 @@ EvidenceEvent:
   significance: {consequential: bool, pressured: bool, own_act: bool, cites: [id]}   # (engine) 03.3.2
   justification: str         # one line: why these tags fit, naming the observable facts (NCP)
   novel: bool                # (engine) 03.4.4
-  contest: {kind: social|craft|lore, band: 1-5, brink: bool}|null   # (engine) 03.4.3; null outside a contest
+  contest: {kind: social|craft|lore, band: 1-5, one_from_full: bool}|null   # (engine) 03.4.3; null outside a contest; I-046
   ruinous: bool              # (engine) 03.4.5: Dire stakes with an irreversible threatened cost, outside conflict
   crisis: bool               # (engine) 03.4.5
   peak: bool                 # (engine) 03.4.5
@@ -585,8 +585,11 @@ both. A tier-4 crystallization should be able to require a band-4 deed whatever 
   closes I-005]. Outside conflict the DC rule above stands, except in a contest.
 - **In a contest** `[revision: I-003]`. A **contest** is a non-conflict undertaking with an opposing party or a
   work at stake, resolved over several beats: a social contest (a Talk frame on a request, bargain,
-  deception, intimidation, interrogation or persuasion campaign aimed at a principal or at someone who speaks
-  for a faction; 15.3.11), a craft contest (a step of a crafting project, 08.6.4) or a lore contest (a beat on
+  deception, intimidation, interrogation, persuasion campaign or debate aimed at a principal or at someone who
+  speaks for a faction; 15.3.11. The methods are closed `[revision: I-071]`: `smethod.request`, `bargain`,
+  `deceive`, `intimidate`, `interrogate`, and every beat of a campaign (15.8.1) or a debate (15.8.3); never
+  win over, provoke, perform, command or read, which move a person's feeling or obey an existing authority,
+  not a party's position, and so earn the DC's band only), a craft contest (a step of a crafting project, 08.6.4) or a lore contest (a beat on
   a case or on research whose truth a principal or a faction keeps; 15.9.20). A beat in a contest takes
   `challenge_band = max(the DC's band, the contest band)`. The **contest band** is the opposition's, rated as
   a fight's is: for social and lore, the higher of the opposing party's threat band (09) and the tier of the
@@ -613,7 +616,7 @@ hyper-specialisation, and novelty is its positive form [R2 §03] [DL-03-08].
 (T-03-11):
 - **crisis** is true when any of: `lethal_context` is true; the actor's harm state was `staggered` or `dying`
   when the beat was declared; stakes are Dire **and** quality is challenging; the frame is **ruinous**; or
-  the beat is declared in a contest **at the brink** `[revision: I-003]`.
+  the beat is declared in a contest **one from full** `[revision: I-003]` `[revision: I-046]`.
 - **ruinous** `[revision: I-003]` is true for a frame outside conflict whose stakes are Dire and whose
   threatened cost at its critical-failure severity is irreversible in the world, read from the frame:
   `cost.closed_door` at S4–S5 against a principal NPC or a faction (a refusal for good, standing or
@@ -622,7 +625,8 @@ hyper-specialisation, and novelty is its positive form [R2 §03] [DL-03-08].
   project's spoilage completing on an irreplaceable material. Ruinous is to a contest what lethal is to a
   fight: it adds the same +2 (03.4.2) and makes a crisis. It is engine-derived from the declared cost, never
   judged after the roll.
-- **at the brink** `[revision: I-003]`: a contest beat declared while the contest's opposing clock stands
+- **one from full** `[revision: I-003]` (named so since [revision: I-046]; "brink" is chapter 07's word only: brink
+  wounds, the brink menu, Dying at 1 + brink): a contest beat declared while the contest's opposing clock stands
   one segment from full (a persuasion campaign's patience, 15.8.1; a case's opposition clock, 15.9.13; a
   project's spoilage clock, 08.6.4). It is the contest's Staggered: the last chance before it is lost.
 - **peak** is true when the degree is success or better **and** `challenge_band ≥ power_band(actor) + 1`

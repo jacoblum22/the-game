@@ -421,6 +421,19 @@ Decisions made in `00-architecture.md` (Wave 2). Digest shorthand `[R1 §x]`…`
 - Serves: goal 2.
 - Revisit if: LV-1 shows snags applied inconsistently (then add a snag checklist to the OFFER).
 
+### DL-01-26: Free Oracle facts are capped as levers, not by bending the odds (revision I-038)
+- Decision: 01.15.8: a free fact (an Oracle answer to a player's question; the oracle log names the asker, 01.15.5) is at most one lever per roll, a lever on at most two rolls per character per scene, and never the Protective lever that takes a lethal frame below Dire; past a cap it must be worked by a Setup (01.14.9). Narrated, generated, observed and DM-asked facts are unaffected.
+- Alternatives considered: the ledger default, dropping the odds one rung per Oracle lever used (rejected: 01.15.2 sets odds from the world only and 12.6.3 keeps the dial off player questions; it would make honest world questions less true because the player asked others); capping questions per scene (rejected: punishes curiosity, not the bonus).
+- Evidence: `01-oracle-fishing.py` (seed 38): no cap +3.66 a roll at three questions a roll, +3.99 at six; cap 2 gives +1.33 / +0.80 / +0.50 a roll over 3 / 5 / 8-roll scenes, flat in the number of questions; cap 1 +0.40 at five rolls (too stingy), cap 3 +2.0 at three rolls.
+- Serves: goal 2 (no free +4 on every roll), goal 1 (the environment still pays when it is worked).
+- Revisit if: playtests show scenes routinely longer than eight rolls with no environment levers (then three rolls a scene).
+
+### DL-01-27: A total potency is two factors of zero reach (revision I-073)
+- Decision: 01.3.7 test 3: POTENCY is total when the target cannot be affected by this kind of method at all (no mind for Talk or Handle, no body for Grapple or Strike) and counts as two factors; one reason supplies one factor; the barred gate shouted open is G4 with a redirect.
+- Alternatives considered: listing "no mind" as a fifth G4 test (rejected: the factor list already holds it; only its weight was unstated).
+- Evidence: verification-2c adversarial playtest S1 (literal DMs split between a roll at Limited and a G4).
+- Serves: goal 2 (one reading for a literal DM).
+
 ## DL-02 — Character
 
 ### DL-02-01: Three paths through one procedure; the fast path is the default offered
@@ -787,6 +800,17 @@ Decisions made in `00-architecture.md` (Wave 2). Digest shorthand `[R1 §x]`…`
 - Evidence: `03-counted-yield-output.txt` (4,000 fights a row); integer halving makes a second band-1 defeat in one scene worth 0, which is why band 1 is lowest.
 - Serves: goal 2 (numbers backed by measurement).
 - Revisit if: live play (T-03-COUNT, T-04-COUNT) yields a counted share under 0.10 at any PC's top node.
+
+### DL-03-28: The social contest's methods are a closed list (revision I-071)
+- Decision: a Talk frame is a social contest only by `smethod.request`, `bargain`, `deceive`, `intimidate`, `interrogate`, or any beat of a campaign or debate, aimed at a principal or a faction's spokesman (03.4.3; 15.3.11 cites it; `evidence.yaml#challenge_band_source`). Win over, provoke, perform, command and read take the DC's band.
+- Alternatives considered: 15.3.11's "any method but read" (rejected: lets a Warm-capped win-over of a guild master mint band-4 deeds); 03.4.3's list without debate (rejected: 15.3.11 already names a council's patience as a contest clock).
+- Evidence: `04-recog-parity.py`'s envoy plays requests only, so its parity medians (18 / 46) stand unchanged.
+- Serves: goal 2, goal 1 (parity kept without a soft path to high-band deeds).
+
+### DL-03-29: "Brink" is chapter 07's word; the contest flag is "one from full" (revision I-046)
+- Decision: 03.4.5's contest crisis flag, 03's frame field (`contest.one_from_full`), 08.6.4, 15.3.11, 15.9.20, 04.3's notes and `evidence.yaml` say "one from full"; "brink" means only brink wounds, the brink menu and Dying at 1 + brink (07).
+- Evidence: verification-1 (two meanings of one word in an AI-read ruleset).
+- Serves: goal 2 (one term, one meaning).
 
 ## DL-04 — Recognition and Growth
 
@@ -1205,6 +1229,11 @@ Format per BRIEF §11. Citations per 00.1.6. Numbers consumed by other chapters 
 - Evidence: audit in revision A (`gen_data05.py` check; 0 shared mod_groups; 35 Quiet-without-sense spells, all magic). [05.2.5; 05.3.9; 05.6.8; 05.12.3]
 - Serves: goal 2.
 - Revisit if: content passes add abilities in an existing `mod_group` (the script will then demand the chain).
+
+### DL-05-35: A keeper grants only the schools it keeps, and has a nature (revision I-052)
+- Decision: 05.7.4: a divine license's school must be one of its keeper's schools (PC, pregen or NPC priest); every keeper record states `nature: sacred | profane` (12.16.6), which Rebuke and every "sacred/profane keeper" effect reads. The seed generator picks the Acolyte pregen's school from the main keeper and filters NPC priests' licenses; the seed check enforces both.
+- Evidence: verification-1 playtest (Evella trained in healing under a war god; `dark: false` undefined); `12-world-seed.py` PASS (62/62, 200 oracle seeds 0 fails).
+- Serves: goal 2 (no undefined field, no illegal pregen).
 
 ## DL-06 — Conflict
 
@@ -2525,6 +2554,29 @@ chapter 06's fight model and T-06-12 lines), output `07-harm-sim-output.txt`, wr
 - Serves: goal 2 (AI correctness: every anchor the DM retrieves has machine-readable knobs and a basic verb).
 - Revisit if: a new anchor card is added without `Intent verbs:` and `Knobs:` (the compiler warns again).
 
+### DL-12-27: A created feature's length and growth are one knob (revision I-062)
+- Decision: T-00-20's `duration` is a feature's whole behavior over time (length, growth, spread, fading); where a feature sits is the beat's target, not a knob (T-00-20, 01.5.3, 12.13.3 with the doorway-fire example).
+- Alternatives considered: a new `behavior` knob (rejected: every anchor card and the compile's closed list would change for no gain).
+- Evidence: verification-1 playtest (the fire barrier split three ways); `anchors.yaml` knob lists read by script (`anc.06_t9_31` lists only `reach_unit`; `anc.10_12_9` carries `duration`).
+- Serves: goal 2.
+
+### DL-12-28: Want and refusal rolls must fit (revision I-053)
+- Decision: `tbl.npc_want_verb` rows carry `takes` (object rows they govern); a misfit verb steps down the table, wrapping; four objects reworded ("a debt", "an old enemy", "a rival", "a child"); `tbl.npc_refusal` row 12 is `not_for: [deed.martial]`, same stepping (12.11.1). Applied at the generic tables, so runtime NPCs and seeds both benefit.
+- Alternatives considered: constraining only `world_seed.yaml` (the ledger default; rejected: 12.11.1 rolls the generic tables in live play); rerolling (rejected: stepping is deterministic and still rolled).
+- Evidence: seed 1's cast reads sensibly; `12-world-seed.py` seed check `npcs` asserts every want fits and no martial NPC holds `refusal.fight`.
+- Serves: goal 1 (a first session's NPCs make sense), goal 2.
+
+### DL-12-29: Seed NPCs carry competence and licenses (revision I-059)
+- Decision: 12.16.11: every cast NPC has `competence` (role tags at its band's c_b, T-09-2) and `licenses` (level-2 role tags' training licenses at trained; teacher targets at expert); the seed check fails a teacher whose record does not hold its target.
+- Evidence: `12-world-seed.py` PASS; ch.13's pre-made region (unmaintained) lacks these fields (I-088, wontfix).
+- Serves: goal 2 (15.11.1's MENTOR test reads a record).
+
+### DL-12-30: A reference rate of world time per session, for calibration (revision I-085)
+- Decision: 12.7.7 and `pacing.yaml#world_time`: adventures of 2–4 sessions at 2–10 days a session, 1–6 weeks of downtime after each, an optional season a year: about two world weeks a session; a calibration and review target, never a constraint; a review flag when a season takes outside 3–10 sessions twice running. Aging is a long-campaign rule by design (11.10.5).
+- Evidence: `12-time-pacing.py` (seed 85, joins `04-recog04.py` and `11-world-sim.py`): 1.94 / 2.37 weeks a session; tier 5 at 2.1 / 2.6 years (archer); 2.3–2.8 sessions a thread against the world sim's thread rate; aging only for PCs who start old (about three checks in 60 sessions).
+- Serves: goal 2 (the season- and week-paced rules are calibrated against something stated).
+- Revisit if: owner playtests log sessions per season outside 3–10.
+
 ## DL-13 — The Starter Setting: the Thallen March
 
 ### DL-13-01: One fictional engine — "true sound holds back the Quiet" — expressed only through existing mechanics
@@ -2871,6 +2923,23 @@ chapter 06's fight model and T-06-12 lines), output `07-harm-sim-output.txt`, wr
 - Evidence: DL-03-26; `04-recog-parity.py` (envoy 18 / 46 against the archer's 19 / 51; scholar 17 / 46).
 - Serves: goal 1, goal 2.
 - Revisit if: as DL-03-26.
+
+### DL-15-33: Terms buy certainty with one term only (revision I-048)
+- Decision: 15.3.10's certainty size is the size minus at most one term (terms still lower the DC and the ceiling, 15.3.4); an Obligation term counts toward certainty only while the PC owes the NPC no undelivered commitment.
+- Alternatives considered: the ledger default "original size R2 or less" (rejected: correct for Neutral, but it would remove the no-term certainty of Friendly R2 and Devoted R3).
+- Evidence: `15-certainty-sim.py` (seed 48): certain beats 37.7% → 32.0% (honest), 53.6% → 38.8% (two terms always); certain R3+ requests 39.6% → 8.2%. WE-16-1 (Oda) now rolls at DC 10.
+- Serves: goal 2 (an R3 real cost always meets the dice).
+
+### DL-15-34: A request that defeats a want is one rung larger and never certain (revision I-074)
+- Decision: 15.3.2 (one rung higher, cap R5, `[J:flag]` with a want id); 15.3.10's hesitation list adds the want; 15.2.5 item 3 does not apply when the request's Leverage term is the same fear.
+- Evidence: verification-2c S2; `15-certainty-sim.py`: want-defeating requests certain 37.8% → 0%.
+- Serves: goal 2 (NPCs act on their own goals).
+
+### DL-15-35: Refusals read conduct or outcome; certain beats print "no evidence" (revision I-054)
+- Decision: each refusal kind carries `reads: conduct | outcome` (T-15-6, `social.yaml`): a conduct refusal covers only the NPC's own doing; an outcome refusal covers any act of theirs that knowingly brings it about, including helping another. 12.15.3's RESULT shows a no-roll beat's reason and "no evidence" or "evidence as a no-roll success".
+- Alternatives considered: the ledger's conduct-only reading for all kinds (rejected: would let "tell the killer where the child sleeps" past `innocent`).
+- Evidence: verification-1 playtest (refusal.wilds and the nephew); 03.2.6.
+- Serves: goal 2.
 
 ## DL-16 — Companions and Allies
 

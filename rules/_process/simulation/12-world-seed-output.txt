@@ -90,10 +90,14 @@ guided run (14 answers from the player, the rest by the oracle):
 robustness: 200 oracle seeds (1001-1200): seeds with any failed check 0; failures by requirement none
   2600 regional encounter tables built and audited; word mix over their threat faces: trivial 33.0% easy 25.2% fair 37.7% hard 4.1% lethal 0.0%
 
-pre-made seed: data/region_thallen.yaml (chapter 13, optional, unmaintained): 58 of 62 requirements hold
+pre-made seed: data/region_thallen.yaml (chapter 13, optional, unmaintained): 54 of 62 requirements hold
+    gap  ws.req.02_keepers                6 keepers
+    gap  ws.req.04_keeper_axes            6 keepers
     gap  ws.req.10_links                  39 routes; unreachable 14
     gap  ws.req.10_encounters             14 tables, 10 pass PR-10-8 (re-audited)
     gap  ws.req.11_situations             2
     gap  ws.req.11_rumors                 20 rumors ({'true': 12, 'false': 4, 'partial': 4}); not a record: ['the Waking House (Abel Marrow can show otherwise)']
+    gap  ws.req.12_cast                   44 npcs; competence/licenses missing
+    gap  ws.req.15_teachers               19 teachings
 
 RESULT: PASS

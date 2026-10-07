@@ -305,7 +305,8 @@ so nothing about the NPC is invented to suit the request [R4 §5.2 item 1 "seal 
 3. is the target of a **Cultivate** day (15.13.6) and of favors that build standing;
 4. is a source for lead injection (12.8.2 source 5: "an NPC with an unfulfilled recorded want who could
    plausibly seek the PC out") and for the NPC's own initiative (`tbl.npc_action` row 6, 12.11.5);
-5. is what a persuasion campaign's compromise asks for (15.8.2).
+5. is what a persuasion campaign's compromise asks for (15.8.2);
+6. makes a request that defeats it one rung larger and never certain (15.3.2, 15.3.10) [revision: I-074].
 *Serving a want* `[J:flag]`: *"Would the offered act or thing, if delivered, advance this want as written?"*
 True only when the want's object and the offer match by id or tag (the want names "their daughter's
 future" and the offer is an apprenticeship for the daughter, a fact); false for a general benefit the
@@ -327,6 +328,16 @@ Decisions (J):      1. COVERS [J:flag] per refusal: "Would granting this request
                        what this refusal's kind names (T-15-6)?" True only when the request's act falls
                        in the kind's inclusion list. False for acts in its exclusion list. Uncertain ->
                        true: the refusal holds (SG-05's grant-side tie-break).
+                       Whose act [D] [revision: I-054]: the test reads the act granting requires OF THE
+                       NPC. A refusal whose kind `reads: conduct` (T-15-6: wilds, place, fight, bribe,
+                       past, oath, magic, lend, open_law) covers only the NPC doing that thing; asking
+                       them to let, send, equip or advise someone else to do it is not covered (it is
+                       sized as any request, 15.3.2: the ferryman who will not enter the marsh may still
+                       lend his punt or name his nephew). A kind that `reads: outcome` (family,
+                       innocent, master, and the oath-, duty- and archetype-sourced kinds) covers any
+                       act of theirs that knowingly brings the outcome about, including helping another
+                       bring it about (telling a killer where the child sleeps is covered by
+                       `innocent`).
                     2. LIFTED [J:flag] (only if strength = lifts): "Is the refusal's lifts_when pattern
                        satisfied by a fact in state, or is standing at or above lifts_at_standing?" True
                        only with a cited fact id or the stored standing. Uncertain -> false.
@@ -377,6 +388,9 @@ request, the person *might* do it, at a price the frame states. *Absolute* refus
 construction: 3 of the 12 generated kinds (T-15-6) [DL-15-06].
 
 **T-15-6 Refusal kinds** (canonical `data/social.yaml#refusal_kinds`; rows 1–12 = `tbl.npc_refusal`).
+Each kind also carries `reads` (15.2.3 COVERS): **conduct** for rows 2, 3, 4, 5, 8, 9, 10, 11, 12 (only the
+NPC's own doing is covered) and **outcome** for rows 1, 6, 7 and the closed-door, archetype, oath and duty
+kinds (any act of theirs that knowingly brings it about, including helping another) [revision: I-054].
 
 | # | Kind (`tbl.npc_refusal` text) | Covers (inclusions) | Does not cover (exclusions) | Strength | Lifts when |
 |---|---|---|---|---|---|
@@ -401,7 +415,9 @@ places: (1) a **credible threat** that invokes a recorded fear is a Leverage ter
 even with no weapon drawn ("the watch would be very interested in what is in your cellar" to an NPC who
 fears the law); (2) a want and a fear in conflict decide `tbl.npc_action` row 6 ("acts on their own want")
 toward the safer course; (3) a fear is a Precision **snag** on any request that would put the NPC in its
-way (asking a man who fears the dark to hold the lantern in the crypt), unless a term offsets it. Fears
+way (asking a man who fears the dark to hold the lantern in the crypt), unless a term offsets it. Item 3
+does not apply to a request whose Leverage term is that same fear: the threat is the term, and one fact is
+one term or one lever, never also a snag (15.3.5) [revision: I-074]. Fears
 are sealed until learned (insight, 15.6.1).
 
 **15.2.6 Patience and walking away.** `[D]` Every NPC has **patience** for the PC in a scene: its maximum
@@ -502,6 +518,12 @@ Decisions (J):      1. SIZE [J:rung] What would granting this cost or risk THIS 
                        say R1; private and harmless R2; a confidence that betrays no one R3; a secret
                        that exposes someone R4; one that endangers the teller's life or freedom R5. A
                        request that implicates the teller in a crime (confess) is R5.
+                       A request whose granting DEFEATS one of the NPC's recorded wants (15.2.2) counts
+                       ONE RUNG HIGHER (never above R5) and is never certain (15.3.10) [revision: I-074]:
+                       [J:flag] "Would granting this make a recorded want unreachable, or spend what the
+                       want is for?" True only with a want id; uncertain with a want id -> true (the
+                       grant-side direction). (A Friendly principal who wants her mill kept is asked to
+                       sell it: R3 by cost, R4 by the want, and a roll.)
                        Between two rungs: the HIGHER. Never adjust for how well the request is phrased.
 Computation [D]:    request mod R1 +0 / R2 +2 / R3 +5 / R4 +8 / R5 +10; payment price U(S1..S5) Units
                     of the NPC's lifestyle (1 / 1 / 2 / 3 / 4); effective size after terms (15.3.4)
@@ -564,7 +586,8 @@ with Resolve +3 and influence competence +3 (defense 16) adds 6: courtiers are h
 easy to move by terms.
 
 **15.3.4 The ceiling.** `[D]` The **effective size** of a request is its size (15.3.2) minus one rung per
-term (15.3.5), at most two terms, never below R1. If the effective size exceeds the NPC's **ceiling**
+term (15.3.5), at most two terms, never below R1 (whether it needs a roll at all counts one term only: the
+certainty size, 15.3.10 [revision: I-048]). If the effective size exceeds the NPC's **ceiling**
 (T-15-1; Hostile: R1, and only when the request carries at least one term), the request is **G4 for this
 intent** (01.3.7 test 1: granting it would contradict the person as recorded): no roll, patience −1, and
 the redirect names, in the NPC's voice, the honest ways forward — a smaller request; what they would want
@@ -584,7 +607,8 @@ Trigger [T]:        FRAME of a request, deceive, intimidate, bargain or command 
 Loads in:           situation.social.*
 License check:      as the beat
 Decisions (J):      Each candidate is tested against exactly one term type; a fact or offer counts as at
-                    most ONE term or ONE lever (never both); at most two terms per request.
+                    most ONE term or ONE lever (never both), and a fear used as a Leverage term is not
+                    also that request's fear snag (15.2.5 item 3); at most two terms per request.
                     1. WANT [J:flag] "Does granting the request, or the PC's offer delivered with it,
                        serve one of the NPC's recorded wants (15.2.2), or protect one of the universal
                        interests every sapient person holds -- their life, their kin, their livelihood,
@@ -628,7 +652,7 @@ Narration may not imply: a term the frame does not list; that the NPC agreed bef
 Worst case (J):     one term wrongly allowed = one request rung: 2-3 DC, or one rung of ceiling (class
                     i), auditable because every term cites an id (INV-20). The ceiling's G4 still
                     holds two rungs above.
-Examples:           inside WANT: the reeve wants "a debt cleared" (sealed); Wren offers to pay his debt to
+Examples:           inside WANT: the reeve wants "to repay a debt" (sealed); Wren offers to pay his debt to
                       the salt factor -> want term (and he learns she knows). outside: Wren offers him
                       coin for his trouble -> Payment, not Want.
                     inside WANT (interest): the miller's grain must cross the failing bridge (both facts)
@@ -724,24 +748,35 @@ written as a fact or a commitment of the NPC's (`npc.<id>.agreed: <act>`, with i
 NPC's later conduct follows it unless a new fact releases them (12.11.4) [01.9; 01.18.7; DL-15-13].
 
 **15.3.10 When talk needs no roll.** `[D]` + `[J:flag]` A social beat is **certain** (01.4.1, no roll) when
-the request's effective size is R1 and the NPC is Neutral or warmer, or the effective size is at least
+the request's **certainty size** is R1 and the NPC is Neutral or warmer, or the certainty size is at least
 **two rungs below** the ceiling (Warm: R1; Friendly: R1–R2; Devoted: R1–R3) — and no refusal covers it,
 and nothing in the scene would make granting it costly to them (`[J:flag]` *"Is there an established
-reason this NPC would hesitate now — a watcher, a superior, a fear?"* True only with a cited fact; true
-→ roll). Plain speech that asks for no decision (telling, greeting, asking a question anyone would
+reason this NPC would hesitate now — a watcher, a superior, a fear, or a recorded want the request
+defeats (15.3.2)?"* True only with a cited fact or want id; true → roll) [revision: I-074]. The
+**certainty size** is the size (15.3.2) minus **at most one** term [revision: I-048]: terms still lower the
+effective size for the DC and the ceiling (15.3.4), but a second term never removes the roll, so terms make
+a favor certain and never a real cost or worse (Neutral: R2 with one term is certain; R3 with two terms
+rolls at R1's +0). An **Obligation** term (a promise) counts toward certainty only while the PC owes this
+NPC no undelivered commitment from an earlier request (11.4.9; 00.6.1): a promise is kept before the next
+one buys another free yes. A certain beat's necessity reason is `trivial`, so it yields **no evidence**
+(03.2.6), and its RESULT line says so (12.15.3) [revision: I-054]. Basis: `15-certainty-sim.py` (seed 48):
+under an assumed request mix, certain beats fall from 37.7% to 32.0% of requests for an honest player and
+from 53.6% to 38.8% for one who always brings two terms; certain R3+ requests fall from 39.6% to 8.2%
+(optimizer); a request that defeats a want is never certain (from 53.8%). Plain speech that asks for no decision (telling, greeting, asking a question anyone would
 answer) is the free activity "speak a few words" (00.12.6) and is never framed. *Worst case (J):* a request
 treated as certain that should have rolled — the cheap end of the leniency failure, bounded at two rungs
 below the ceiling (class i); a cited hesitation reason always restores the roll.
 
-**15.3.11 Social contests and their band.** `[D]` `[revision: I-003]` A Talk frame of any method but
-read is a **social contest** (03.4.3) when it is aimed at a **principal** NPC (12.11.1) or at anyone who
+**15.3.11 Social contests and their band.** `[D]` `[revision: I-003]` A Talk frame of one of 03.4.3's closed
+contest methods (request, bargain, deceive, intimidate, interrogate, or any beat of a campaign or a debate;
+not win over, provoke, perform, command or read) [revision: I-071] is a **social contest** (03.4.3) when it is aimed at a **principal** NPC (12.11.1) or at anyone who
 speaks for a faction on the faction's business. Its **contest band** is engine-read: the higher of the
 opposing party's threat band where it has an adversary line (09) and the tier of the faction it acts for
 (11.3; tier 0–1 → 1 … 5 → 5); a principal with neither counts band 1. Every beat of the contest takes
 `challenge_band = max(DC band, contest band)` (03.4.3), so a bargain struck with a guild master of a tier-4
 guild is a band-4 deed even when the exchange that sealed it was moderate. A beat declared while the
 contest's opposing clock stands one segment from full (a campaign's patience, 15.8.1; a council's, 15.8.3)
-is **at the brink** and a crisis (03.4.5). *Why:* a fight's deeds are rated by the fight (03.4.3's advisory
+is **one from full** and a crisis (03.4.5) [revision: I-046]. *Why:* a fight's deeds are rated by the fight (03.4.3's advisory
 offset), and a negotiator's must be rated by what they faced, or the higher tiers' great deeds and crises
 are open only to fighters (`04-recog-parity.py`: with this rule an envoy reaches tier 3 at session 18 and
 tier 5 at 46, beside the archer's 19 and 51) [03.4.3; 03.4.5; DL-15-32].
@@ -1696,14 +1731,15 @@ a principal NPC or a faction keeps the truth: the culprit of a case, the order t
 cult that guards a name. Its contest band is that keeper's, read as in 15.3.11. A Dire beat whose threatened
 cost destroys a necessary node's last unfound placement or ends the case (the witness silenced, the ledger
 burned, the culprit fled for good) is **ruinous** (03.4.5); a beat declared while the case's opposition clock
-(15.9.13) stands one segment from full is **at the brink**. Research with no keeper uses its DC's band, as
+(15.9.13) stands one segment from full is **one from full** (03.4.5) [revision: I-046]. Research with no keeper uses its DC's band, as
 before [03.4.3; 03.4.5; DL-15-32].
 
 ### 15.10 Downtime: the week planner
 
 **15.10.1 Entering and leaving downtime.** `[D]` + `[J:flag]` The time mode is `downtime` (00.7.3) when the
 PC is in safety — a settlement, a holding, or a haven (07.8's rest site `haven`) — and the player chooses
-to spend days or weeks rather than play scene by scene. `[J:flag]` *"Is the PC in a haven with no pending
+to spend days or weeks rather than play scene by scene (the rules' calibration assumes 1–6 weeks after an
+adventure and an optional season a year, 12.7.7 [revision: I-085]). `[J:flag]` *"Is the PC in a haven with no pending
 threat, active conflict, or clock that would complete within the first day?"* True only with the place's
 rest-site fact and no such clock; false → downtime cannot begin (the DM names what is pressing). Downtime
 ends when the plan runs out, the player stops it, or an **interrupt** (00.7.8) halts `advance_time`: the
@@ -2444,7 +2480,7 @@ methods, ≥1 core, ≥2 places. ✓
    Wren +1 +2 = +3 → needs 11 (50%). d20 = 12 → 15 → success: Odo is held.
 10. *Interrogation* (15.8.4): Odo's silence on the fire is **R5** (it implicates him) → clock 8; terms:
     Leverage (the rag and Sel's account: a secret of his she holds) and Want (his rolled want *escape* ×
-    *a debt cleared*: the reeve, a fact, has offered leniency for the name) → two terms → clock **4**,
+    *a debt* [revision: I-053]: the reeve, a fact, has offered leniency for the name) → two terms → clock **4**,
     racing "Odo hardens" (6). Odo's standing: Wary → `harmed` by his detention (S2) → Unfriendly (+3).
     Beat DC = 10 + Resolve 0 + 0 + 3 + R2 (+2) = **15**; Wren +1 → needs 14 (35%). Beat 1: d20 = 17 → 18,
     success, 2/4. Beat 2: d20 = 6 → failure, hardening 1/6. Beat 3: d20 = 15 → 16, success → 4/4:

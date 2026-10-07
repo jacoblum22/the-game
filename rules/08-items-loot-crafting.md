@@ -989,7 +989,7 @@ is "Hard: challenges a practiced professional" (T-00-5) and the numbers say so [
    Very hard, the highest DC a work sets. A step on a work whose material set includes an **irreplaceable
    material** (rarity band 4, or a harvested part that carries a named source's provenance) is framed
    **Dire**, and its `cost.gear` on that material is **ruinous** (03.4.5): the steel cannot be bought again.
-   A step taken while the spoilage clock stands one segment from full is **at the brink** (a crisis, 03.4.5).
+   A step taken while the spoilage clock stands one segment from full is **one from full** (a crisis, 03.4.5) [revision: I-046].
    Steps run in the week planner are a montage and yield counted evidence only (15.10.6); the player may
    instead have the steps of a fine or better work **played as a scene** (15.10.6's "a scene framed inside
    downtime is play"), and the completing beat of a masterwork or wondrous work is always played: those

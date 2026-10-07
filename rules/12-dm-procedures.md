@@ -931,6 +931,24 @@ pre-declared, logged forms: reinforcement or alarm clocks, morale breaks and ret
 lists, environmental events from tables, and the PC's own choices. Every such event is written to state
 with its source, so the player could audit it [R1 #9, T-5; R4 W3].
 
+**12.7.7 World time against play time.** `[D]` [revision: I-085] Sessions are not time (00.7.9): the world
+moves only by the time the fiction spends. But growth is paced in sessions (04.3.5) and the world in weeks
+(faction clocks, situations, 11.10's Season and Year Turns, aging 11.10.5, ally growth 16.10.1, the season
+boundary 04.8.7), so the rules are calibrated against a **reference rate** (`pacing.yaml#world_time`): an
+adventure is 2–4 sessions, each spending about 2–10 world days; after each adventure the player takes 1–6
+weeks of downtime (15.10); a season-long downtime once a year is the player's option. That is about **two
+world weeks a session** (1.9 without a long downtime, 2.4 with one; `12-time-pacing.py`, seed 85), so a
+career to tier 5 runs about **2–3 world years** (archer median 2.1 / 2.6; swordsman 1.3 / 1.5), one season
+passes every 5–7 sessions (an ally grows at most a band in that span, and a PC's tier takes 1–3 seasons),
+and 11-world-sim's thread throughput (19 completed in 104 weeks) gives 2.3–2.8 sessions a thread, the
+adventure length assumed. **Aging is a long-campaign rule by design**: within 60 sessions it reaches only a
+PC who starts old (about three checks), and otherwise comes through a timeskip (`legacy.yaml#timeskip_
+options`) or a succession (11.13); a grown human, orc or halfling never meets a check in one career. The
+reference is a calibration and a review target, not a constraint: the DM never spends or withholds world
+time to meet it. `h.12.session_close` records the sessions each completed season took; if that runs outside 3–10
+for two seasons in a row, it raises a review flag (12.12.4) (the world's clocks then move much faster or
+slower than growth), and a check-in may offer the player more or less downtime (12.5.9).
+
 ### 12.8 No silent dead ends (P16)
 
 **12.8.1 The inconclusive streak.** `[T]` + `[D]` Handler `h.12.inconclusive_streak` (`beat_end`, phase 9,
@@ -1174,6 +1192,14 @@ exist: the seed's name tables always, 12.16.7) [R5 NP-01, P-04 (UNE), P-06; R4 S
 | **Recurring** | the PC interacts with them in a second scene; a Talk frame targets them; or they are named in a lead or thread | + **want** (`tbl.npc_want_verb` × `tbl.npc_want_object`); **fear** (`tbl.npc_fear`); **voice** — register (`tbl.npc_voice_register`) and habit (`tbl.npc_voice_habit`); **one refusal** (`tbl.npc_refusal`; semantics ch.15); **knowledge scope** (role and origin, 12.10.6) |
 | **Principal** | they become a thread node or linchpin (11), a companion (16), or a faction officer (11) | + **secret** (Oracle Even "does this person keep a secret that matters here?" → if yes `tbl.npc_secret`, written **sealed** with a gate); **three ranked wants** (two more rolls, ranked in roll order — UNE's ranked motivations); **ties** (Oracle per candidate faction or NPC by role: Likely for their own trade's institutions, Unlikely otherwise) |
 
+**Rolls that must fit** `[D]` [revision: I-053]. A want is rolled as an object and a verb; a verb whose
+`takes` list (`tbl.npc_want_verb`: the object rows it can govern) lacks the rolled object steps down the verb
+table, wrapping, to the first row that takes it ("marry" + "a place of their own" becomes "rule a place of
+their own"), so no want reads as nonsense. A refusal row whose `not_for` tags match one of the NPC's role
+tags steps down the same way (row 12, "will not fight", is `not_for: [deed.martial]`: a captain or a
+war-band's officer never rolls it). Stepping is deterministic, so the table still decides and the DM never
+picks.
+
 **Home and membership.** Every generated NPC is written with `home` (the place it lives; its settlement scope)
 and `member_of` (its faction ties: none unless its role or a tie roll names one), which ch.03's scopes and
 ch.11's World Turn read (11.1.2) [integration: IR ch.11 to 12]. When a recognition offer staged by V2 (a mentor)
@@ -1298,7 +1324,8 @@ logged with `review_flag: true`.
 
 **12.12.4 Review flags and Principle III's revisit trigger.** `[D]` `review_flag` is set by 01.5.4's
 conditions and also on: every correction (12.3.4); every plain fallback (12.3.3); every upheld dispute
-(12.3.6); every breach of 12.1.3 detected by a sweep. At `session_end`, `h.12.session_close` compiles the
+(12.3.6); every breach of 12.1.3 detected by a sweep; two seasons in a row outside 12.7.7's sessions-per-season
+band (`pacing.yaml#world_time.review`) [revision: I-085]. At `session_end`, `h.12.session_close` compiles the
 session's flagged records into the **review list**. When **three or more** flagged records in which the
 DM's own judgment was overturned (a correction, an upheld dispute, or a ruling-error correction) share an
 error class — the same anchor id, the same claim class, or the same 12.1.3 breach — across **two or more
@@ -1342,6 +1369,16 @@ moves at most two knobs (00.2.7). When a third change is needed, `[J:enum]`:
   him down), or a **sequence** (one must happen before the other can). Split into sequential beats
   (01.14.1), each anchored separately; their order is the fiction's order.
 - Default when both seem possible: split (each part becomes simpler and is logged on its own).
+Knobs are counted by T-00-20's entries, not by the words that change [revision: I-062]: a created feature's
+length and its growth are one knob (`duration`), and where it sits is the beat's target, not a knob. *Example inside the
+limit:* an improvised fire barrier in a doorway (lamp oil, lit, "nothing follows us"). Retrieval finds
+`anc.06_t9_31` ("set the thatch alight": fire S2 and smoke growing one group a round), but that card lists
+only `reach_unit`, so it cannot carry a stationary burn: re-anchor to `anc.10_12_9` (a hazard no one
+listed; 07.10.2): severity S2 (lamp oil, a campfire's flames) is the default; `duration` (stays put, no
+spread, a lamp's worth of oil: three intervals) is one knob, though it changes both length and growth; the
+doorway is the beat's target, not a knob. One adapted ruling, no split. *Outside:* the same barrier made to
+burn fiercer than lamp oil can (S3, `harm_severity`) **and** to spread along the corridor (`duration`) and
+to cost no action (`action_cost`): three knobs, so re-anchor or split.
 *Worst case (J):* a split that could have been one adapted beat — two rolls instead of one, each shown at
 OFFER (class ii) [R7 §3.4; 01.5.3].
 
@@ -1554,6 +1591,14 @@ block, labelled `[OFFER — auto]`, immediately above its RESULT.
 ```
 [RESULT] d20 9 → 13 vs 15 · failure (near miss)
 ```
+A beat that needed no roll shows its necessity reason (01.4.1) in place of the die, and whether it can
+yield evidence, so the player sees that a free yes earns nothing toward recognition [revision: I-054]:
+```
+[RESULT] no roll (certain: Neutral, R1) · granted · no evidence
+[RESULT] no roll (take the time) · success · evidence as a no-roll success
+```
+`no evidence` is printed for every `trivial` or riding no-roll beat (03.2.6); the no-roll successes of
+03.3.2 D1 (good idea, take the time, certain with cost) print `evidence as a no-roll success`. Either is
 followed, after the player's choice or when no choice exists, by the changes to shown state:
 ```
 [RESULT] Changed: Vitality 12 → 9 · bleeding (S1) · arrows 6 → 5 · Focus 4 → 3 · fate 1 → 2
@@ -1744,9 +1789,11 @@ favours, and the calendar's era. The region's name is drawn from `tbl.12.seed.pl
    four empty hybrid pairs stay empty (they do; a seed never authors a hybrid, 04.4's audit does).
 
 **12.16.6 Faith: the keepers.** `[D]` Two to four keepers (05.7.4), each from a form of
-`tbl.12.seed.keeper_form` (d12, the wound's favoured forms weighted × 3, no form twice): its kind, what it
-keeps, three divine schools, the conduct axes it cares for and despises (04.9.2), its sign, and its faith's
-org kind; its name from the name tables and a title. The first keeper that is not a pact-power is the
+`tbl.12.seed.keeper_form` (d12, the wound's favoured forms weighted × 3, no form twice): its kind, its
+**nature** (`sacred`, or `profane` for a pact-power; what Rebuke and every "sacred or profane keeper" effect
+reads, 05.7.4) [revision: I-052], what it keeps, three divine schools (the only schools its priests and
+acolytes can hold, 05.7.4), the conduct axes it cares for and despises (04.9.2), its sign, and its faith's
+org kind; its name from the name tables and a title. The first keeper whose nature is not profane is the
 **main keeper**: its faith is a full faction seated in the haven (12.16.10); every other keeper's faith is a
 petty faction (11.3.16). Who bargains at the door of death (07.5.5) is answered here: the keeper of death and
 crossing if there is one, a fey lord (`arch.fey_noble`), a tempter (`arch.tempter`), or no one.
@@ -1804,6 +1851,13 @@ magic is common enough to be taught there (`ws.q.magic_level`). The captain and 
 recruited (16.3.4). **Teachers** (15.13; `downtime.yaml#teacher_odds`) are the cast's trades: the main
 keeper's priest its three schools; the captain polearm and shield; the smith smithing; the healer foraging;
 the wise one the place's primal schools; the scribe letters and history; the hedge-mage two arcane schools.
+**Competence and licenses** [revision: I-059]: every cast NPC is written with `competence` (each role tag at
+its band's `c_b`, T-09-2: band 1 +1 … band 5 +5; `world_seed.yaml#defaults.npc_competence`) and `licenses`
+(each level-2 role tag's domain training license at `trained`; a divine one only in a school of a keeper
+whose faith the NPC belongs to, 05.7.4). A teacher's record holds what it teaches: the target license at
+`expert`, a tongue or letters held (15.11.1's MENTOR test), so "can the healer teach foraging?" is read
+from the record, never guessed. The seed check (12.16.17) fails a teacher whose record does not hold its
+target.
 **Bond placement** (02.9.2): where each of the eight bond kinds is placed — anchors in the haven, a rival in
 the fourth faction, a creditor in the market, an enemy in the threat's seat, a lost one at a ring-2 site —
 always as a new NPC when the bond is filled (02.9.8), never one already in the cast.
@@ -1847,8 +1901,9 @@ incident's target, the other situation or the wound's, and the fourth faction's 
 cannot dead-end (12.8.1). **Pregens** (02.2.5): four, by 02's creation defaults (the livelihood's priority and
 the Peaked shape, the Typical rule unless 02.3.5's exception applies), covering a fighter (Soldier), a sneak
 (Thief, of the most present non-human people), a talker (Merchant, Scholar or Courtier) and a worker of magic
-(an Acolyte of the main keeper, or a Hedge-taught of the place of acceptance when the main keeper is a
-pact-power); each with a drive, an aspiration and an anchor bond to a cast NPC; birth drawn live when picked.
+(an Acolyte of the main keeper, trained in one of its schools: healing if it keeps healing, else its first
+school, with the livelihood's suggested technique of that school [revision: I-052]; or a Hedge-taught of the
+place of acceptance when the main keeper is a pact-power); each with a drive, an aspiration and an anchor bond to a cast NPC; birth drawn live when picked.
 
 **12.16.17 The seed check.** `[D]` A seed is complete when every requirement of **T-12-16**
 (`world_seed.yaml#requirements`) holds: 62 checks, one for everything the other chapters read from a region
@@ -2014,7 +2069,7 @@ any paraphrase here (00.1.4 item 5).
 | T-12-11 | Range bands and flags in words | 12.14.6 |
 | T-12-12 | Reaction-roll distributions | 12.11.2; `oracles.yaml#tbl.npc_reaction` |
 | T-12-13 | Twist rows by severity | 01.13.10; `oracles.yaml#tbl.twist_s1…s5` |
-| T-12-14 | Every ch.12 number | `pacing.yaml` |
+| T-12-14 | Every ch.12 number | `pacing.yaml` (including `world_time`, 12.7.7 [revision: I-085]) |
 | T-12-15 | The world seed's steps and questions | 12.16.3; `world_seed.yaml#steps`, `#questions` (below) |
 | T-12-16 | What the rules read from a region, and the seed check | 12.16.17; `world_seed.yaml#requirements` (below) |
 

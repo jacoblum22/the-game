@@ -1654,7 +1654,10 @@ careers; it never ends lives in play** (INV-6 holds: no death without two keys).
 recurring or principal NPC past its people's aging age asks the Oracle once a Year Turn "does this person
 die this year?" (Remote in their first decade of aging, Unlikely in the second, Even in the third, Likely
 after), and a "yes" writes the death within the year at a time the engine rolls — firing a linchpin's
-`dies` fate if they are one [R5 HR-10, P-44 (Pendragon and Ars Magica aging); DL-11-22].
+`dies` fate if they are one [R5 HR-10, P-44 (Pendragon and Ars Magica aging); DL-11-22]. At the reference
+rate of world time (12.7.7: about two weeks a session, a tier-5 career in 2–3 years) aging reaches a PC
+who starts old within one career and otherwise arrives through timeskips and successions: a long-campaign
+rule by design [revision: I-085].
 
 ### 11.11 The Season Turn and the Year Turn
 

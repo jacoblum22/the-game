@@ -275,7 +275,7 @@ action matches no rule ("basically a grapple with a penalty"). It must have all 
 [R7 §3.4]:
 1. **Named by an intent-shaped verb** ("Grapple: seize and hold"), so a new action's intent retrieves it.
 2. **Explicit knobs with defaults** — the parameters an adaptation may change, from the closed knob
-   list T-00-20 (DC source/tier, attribute, action cost, reach unit, stakes rung, duration, condition
+   list T-00-20 (DC source/tier, attribute, action cost, reach unit, stakes rung, duration and growth, condition
    inflicted, harm severity, target set, time cost).
 3. **A complete degree table** (critical success, success, near miss, failure, critical failure).
 4. **A declared scope and exclusions** ("Covers: … Does not cover: …").
@@ -2582,6 +2582,10 @@ attacked); `slot.body_form` (one transformed shape at a time); `slot.stance` (on
 **T-00-20 Anchor knobs (closed list).** `dc` (source or tier) · `attribute` · `action_cost` ·
 `reach_unit` · `stakes` · `duration` · `condition` (inflicted) · `harm_severity` · `harm_tags` ·
 `targets` (count or selection over relationship-state) · `time_cost` · `focus_cost`.
+Counting [revision: I-062]: a change is counted per knob, not per word changed. `duration` is a feature's
+whole **behavior over time**: how long it lasts and how it changes while it lasts (grows, spreads, fades,
+burns out, stays put); changing both its length and its growth is one knob. Where a created feature sits
+(the doorway instead of the thatch) is the beat's target, not a knob.
 
 **T-00-22 Banned words.** In rules text and data: *level* (of a character), *class*, *XP*, *HP / hit
 points*, *mana*, *stamina*, *saving throw*, *skill check*, *advantage / disadvantage*, *injury /

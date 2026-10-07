@@ -1914,44 +1914,64 @@ tables:
   results:
   - range: '1'
     result: protect
+    takes: [1, 2, 6, 7, 12, 14, 15, 16, 18, 19]
   - range: '2'
     result: find
+    takes: [1, 3, 4, 6, 7, 8, 10, 11, 12, 13, 14, 18, 19]
   - range: '3'
     result: escape
+    takes: [1, 5, 8]
   - range: '4'
     result: win
+    takes: [2, 3, 4, 9, 11, 15, 16, 20]
   - range: '5'
     result: keep
+    takes: [1, 2, 4, 6, 7, 9, 12, 14, 15, 16, 18]
   - range: '6'
     result: recover
+    takes: [2, 3, 4, 5, 9, 12, 14, 15, 16, 19]
   - range: '7'
     result: prove
+    takes: [2, 10, 12]
   - range: '8'
     result: avenge
+    takes: [1, 2, 3]
   - range: '9'
     result: earn
+    takes: [2, 4, 7, 9, 11, 13, 15, 16, 18, 20]
   - range: '10'
     result: hide
+    takes: [1, 3, 5, 6, 10, 14, 19]
   - range: '11'
     result: learn
+    takes: [6, 10, 13]
   - range: '12'
     result: reach
+    takes: [1, 3, 7]
   - range: '13'
     result: punish
+    takes: [8, 17]
   - range: '14'
     result: impress
+    takes: [1, 3, 17]
   - range: '15'
     result: repay
+    takes: [1, 5, 9]
   - range: '16'
     result: sell
+    takes: [6, 14]
   - range: '17'
     result: marry
+    takes: [3, 4]
   - range: '18'
     result: rule
+    takes: [1, 7]
   - range: '19'
     result: heal
+    takes: [1, 3, 12, 19]
   - range: '20'
     result: leave
+    takes: [1, 7]
   lifecycle: provisional
   basis: *id003
 - id: tbl.npc_want_object
@@ -1970,13 +1990,13 @@ tables:
   - range: '4'
     result: money
   - range: '5'
-    result: a debt cleared
+    result: a debt
   - range: '6'
     result: a secret
   - range: '7'
     result: a place of their own
   - range: '8'
-    result: an enemy's downfall
+    result: an old enemy
   - range: '9'
     result: their master's favor
   - range: '10'
@@ -1994,17 +2014,18 @@ tables:
   - range: '16'
     result: their freedom
   - range: '17'
-    result: a rival's ruin
+    result: a rival
   - range: '18'
     result: peace and quiet
   - range: '19'
-    result: a child's future
+    result: a child
   - range: '20'
     result: recognition
   lifecycle: provisional
   basis: *id003
-  notes_rule: read verb + object as one want in the NPC's own terms ('avenge' + 'a debt cleared' = 'make whoever ruined them
-    pay what is owed'); ch.15 owns what wants do
+  notes_rule: "roll both; a verb whose takes list (the object rows it can govern) lacks the object steps down the verb table,
+    wrapping, to the first row that takes it (12.11.1; revision I-053); read verb + object as one want in the NPC's own
+    terms ('escape' + 'a debt' = 'get clear of what they owe the salt factor'); ch.15 owns what wants do"
 - id: tbl.npc_fear
   name: Fear
   tags: []
@@ -2166,6 +2187,7 @@ tables:
   - range: '12'
     result: will not fight
     kind: refusal.fight
+    not_for: [deed.martial]   # 12.11.1: a fighting role (a martial role tag) steps down to the next row (revision I-053)
   lifecycle: provisional
   basis:
   - '[R5 NP-01, P-04 (UNE), P-06]'

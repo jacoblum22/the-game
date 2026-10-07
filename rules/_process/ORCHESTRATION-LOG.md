@@ -379,3 +379,6 @@ Cost: 149 tools; see the usage line below.
 - 39 unique URLs on 25 hosts; all unreachable under this environment's network policy (WebFetch blocked).
 - Local cross-check: 38 of 39 sit alongside a research-digest citation; #22 (OSE morale) does not.
 - I-010, I-012, I-014 and I-021 updated with these counts. Finishing needs the hosts allowlisted; the report lists them.
+
+## Revision C1 returned: `revision-C1-report.md`
+Resolved all 12 rows: I-038 (Oracle lever cap; sim shows +3.7 down to +0.8 per roll), I-046, I-048, I-052, I-053, I-054, I-059, I-062, I-071, I-073, I-074 and I-085. I-088 wontfix (ch.13).

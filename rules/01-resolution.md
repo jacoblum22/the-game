@@ -367,6 +367,14 @@ Decisions (J):      1. CONTRADICTS A FACT [J:flag]: "Does success require an est
                        An offset is an established fact or license that cancels one factor (a crowd on
                        your side offsets scale). Exactly one uncancelled factor → not G4: reach is capped
                        at Limited instead (01.6.10 test 2) [verification: V2c-001].
+                       Counting [D] [revision: I-073]: POTENCY is **total** when the target cannot be
+                       affected by this kind of method at all (no mind for Talk or Handle, no body for
+                       Grapple or Strike: a shadow, a voice); a total POTENCY counts as **two** factors, so
+                       alone it is G4 unless an offset cancels one of them (a license that lets words
+                       move a thing, 05). Partial POTENCY (the wolves can be swayed, just not by this)
+                       is one factor. **One reason supplies one factor**: the fact that makes POTENCY
+                       (words; a gate has no mind) cannot be cited again as QUALITY or SCALE. A
+                       listener behind the gate is a different target: re-PARSE with that target.
                     4. FORBIDDEN BY CONDITION [D]: an active condition or `restrict` effect forbids the
                        verb, method, sense or license (00.9.3b). The engine answers from state.
                     Default when uncertain on 1–3: false — fall through to G1/G2/G3 and roll. This is
@@ -385,6 +393,10 @@ Examples:           inside: "I leap the 30-ft chasm" (canon: tier Beyond). outsi
                     gap from a running start" (Hard; roll).
                     inside: calm a river the Oracle said has no spirit (fact). outside: calm the river
                     spirit the Oracle said exists (Talk, G1; reach capped Limited by scale).
+                    inside: "I shout the barred gate open" — words to a thing with no mind: total
+                    POTENCY, two factors → G4; the redirect offers the bar (Exert) or whoever is
+                    behind the gate (Talk) [revision: I-073]. outside: "I shout at the guard to open
+                    the gate" — a mind; G1, roll.
                     non-example: "Nobody could climb that sheer ice, so I anchor my rope-dart and haul
                     myself up" — not a G4 request; a new method (Exert with a tool lever).
 Anchor:             no
@@ -643,7 +655,8 @@ deltas and each justified by a cited fact:
 - `action_cost`, `time_cost` — a method that is faster or slower than the verb's default.
 - `reach_unit` — what success is measured in (a Strike whose success is measured as a rope cut, not harm).
 - `stakes` — the source of the threatened cost differs from the card's default source.
-- `duration`, `condition`, `harm_severity`, `harm_tags`, `targets`, `focus_cost` — as named.
+- `duration`, `condition`, `harm_severity`, `harm_tags`, `targets`, `focus_cost` — as named; `duration` is a
+  feature's whole behavior over time, length and growth together, one knob (T-00-20) [revision: I-062].
 Picking the stakes rung or reach rung in FRAME is not a knob change; changing *where* stakes or reach
 come from is. A third needed change means the anchor is wrong (re-anchor to a closer card) or the beat
 is compound (return to PARSE and split). *Worst case (J):* one wrong knob value — one rung of DC, one
@@ -876,7 +889,8 @@ Decisions (J):      1. WHOLE [J:flag]: "Would this method, done well, achieve th
                        True → STANDARD. False → LIMITED, and the DM restates what the method can reach
                        ("one voice can quiet this corner of the square, not the square").
                     2. ONE FACTOR [J:flag]: "Does exactly one effect factor (potency, quality, scale;
-                       01.3.7) stand against the method, unoffset?" True → LIMITED (two → G4 at GATE).
+                       01.3.7) stand against the method, unoffset?" True → LIMITED (two → G4 at GATE;
+                       a total potency counts two, 01.3.7 test 3 [revision: I-073]).
                     GREAT is never picked: it is reached only by an Amplifying lever, a license or effect
                     step, or the OFFER trade (01.7.3).
                     Tie-break for 1: false (LIMITED); for 2: true (LIMITED).
@@ -1709,7 +1723,7 @@ at most **two rolls per scene** (counted from the ride records; a roll that cite
 makes a deadly gamble survivable is earned. Past a cap the free fact is still true and still makes methods
 possible; to be a lever it must be **worked**: a Setup on it (01.14.9: "I kick the grit into his eyes"),
 which spends the action and risks the roll, makes the Setup's fact the lever, and that fact is not free.
-Facts from narration (write-on-mention, 12.10.3), generation, an Observe or Recall beat, a Setup, or a
+Facts from narration (write-on-mention, 00.6.6; 12.14.13), generation, an Observe or Recall beat, a Setup, or a
 question the DM asked for its own narration (12.6.2) are not free facts; only 00.3.9 limits them. The odds
 are never shifted to curb fishing: 01.15.2 sets them from the world alone, and the caps do the curbing.
 The OFFER names a free-fact lever as such and the count used this scene ("the grit is your second free
