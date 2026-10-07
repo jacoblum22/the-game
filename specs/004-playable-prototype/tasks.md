@@ -197,8 +197,8 @@ no delivered contradiction of stored state.
 
 ### Terminal front end
 
-- [ ] T074 [US1] Implement `python -m play` per contracts/cli.md in `play/cli.py` and `play/__main__.py`: menu (New game, Continue, Replay, Report, Quit), command-line equivalents, pause choices by number, slash commands (including `/budget` and `/autocommit`), the between-turns budget prompt, `--offline` flag for the stand-in model, saves in `saves/<name>.db`
-- [ ] T075 [US1] Implement `python -m play report <name>` and `replay <name>` in `play/report.py`
+- [x] T074 [US1] Implement `python -m play` per contracts/cli.md in `play/cli.py` and `play/__main__.py`: menu (New game, Continue, Replay, Report, Quit), command-line equivalents, pause choices by number, slash commands (including `/budget` and `/autocommit`), the between-turns budget prompt, `--offline` flag for the stand-in model, saves in `saves/<name>.db`
+- [x] T075 [US1] Implement `python -m play report <name>` and `replay <name>` in `play/report.py`
 
 ### Whole-game tests
 
