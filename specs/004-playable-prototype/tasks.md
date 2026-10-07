@@ -179,8 +179,8 @@ no delivered contradiction of stored state.
 
 ### Character, harm and abilities
 
-- [ ] T063 [US1] Implement creation (PR-02-7 conversation with `[CREATE n/N]` blocks; PR-02-1 workshop, PR-02-2 fast path, PR-02-3 ready-made; PR-02-6 finish: validate, write, show) with the Interpret role, in `engine/dm/creation.py` and `engine/dm/roles/interpret.py`; skipped steps take the stated default; a name is required
-- [ ] T064 [US1] Implement the seed flow with the Interpret role in `engine/dm/seed_flow.py`
+- [x] T063 [US1] Implement creation (PR-02-7 conversation with `[CREATE n/N]` blocks; PR-02-1 workshop, PR-02-2 fast path, PR-02-3 ready-made; PR-02-6 finish: validate, write, show) with the Interpret role, in `engine/dm/creation.py` and `engine/dm/roles/interpret.py`; skipped steps take the stated default; a name is required
+- [x] T064 [US1] Implement the seed flow with the Interpret role in `engine/dm/seed_flow.py`
 - [x] T066 [P] [US1] Implement rests (PR-07-8), natural and rest recovery and the daily pass (PR-07-10, M1 parts) in `engine/harm/rest.py`
 - [x] T067 [P] [US1] Implement ability use (PR-05-1), Focus and recharge at scene, day and rest (PR-05-4) in `engine/abilities/`
 - [ ] T068 [US1] Implement the M1 boundary handlers (plan.md milestone table, about 36) in `engine/time/handlers/h00.py` … `h15.py` (`h.12.intensity_scene` waits for M2), each tagged with its handler id and rule id
