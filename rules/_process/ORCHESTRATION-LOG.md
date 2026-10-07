@@ -374,3 +374,8 @@ Cost: 149 tools; see the usage line below.
 ## V2c2 returned (long-arc playtest: scholar, tier 1 to tier 5, retirement and successor)
 - 3 fixes (V2c-009 to V2c-011).
 - New rows I-083 to I-087. One is MAJOR: I-083, no band-4/5 social or lore opposition in a seeded world, so the non-combat path stalls at tier 4.
+
+## V2c3 returned (citations): `verification-citations.md`
+- 39 unique URLs on 25 hosts; all unreachable under this environment's network policy (WebFetch blocked).
+- Local cross-check: 38 of 39 sit alongside a research-digest citation; #22 (OSE morale) does not.
+- I-010, I-012, I-014 and I-021 updated with these counts. Finishing needs the hosts allowlisted; the report lists them.
