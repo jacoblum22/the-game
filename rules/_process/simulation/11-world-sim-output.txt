@@ -91,3 +91,13 @@ max tier reached anywhere:  3
 faction actions (11.3.7 agenda), share of all turns: goal 70.0%, strike 4.3%, scheme 4.0%, expand 5.3%, recover 10.1%, court 6.1%, move_pc 0.0%, aid_pc 0.0%, lie_low 0.0%
 courts won per 2y p10/med/p90 (10, 13.0, 17)
 the Wardens-Cult war (relation -3): week the Cult collapsed p10/med/p90 (6, 10.0, 38) (104 = stood); the Wardens (7, 28.0, 104)
+=== scenario: liar_old (one planted rumor a week about the margrave / salt guild pair, relation 0 at start) ===
+runs at war (-3, margrave toward the guild) within 1 season / 1 year / 2 years: 276 / 300 / 300 of 300
+week war began, among runs that reached it: p10/med/p90 (4, 7.0, 13)
+relation moves by belief per 2y p10/med/p90 (11, 16.0, 26); lowest relation reached: [(-3, 300)]
+runs whose war followed at least one successful strike between the pair: 68 of 300
+=== scenario: liar_new (one planted rumor a week about the margrave / salt guild pair, relation 0 at start) ===
+runs at war (-3, margrave toward the guild) within 1 season / 1 year / 2 years: 0 / 87 / 195 of 300
+week war began, among runs that reached it: p10/med/p90 (24, 55, 95)
+relation moves by belief per 2y p10/med/p90 (3, 4.0, 11); lowest relation reached: [(-3, 195), (-2, 79), (-1, 11), (0, 15)]
+runs whose war followed at least one successful strike between the pair: 102 of 195

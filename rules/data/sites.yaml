@@ -50,9 +50,17 @@ site_themes:
   - {range: '5', result: a still-burning everlamp (a glowing light source)}
   - {range: '6', result: a sealed niche of grave goods (a cache)}
   climax:
-  - {range: '1', kind: guardian, result: a great construct bound to the heart, ref: arch.golem}
+  - range: '1'
+    kind: guardian
+    result: a great construct bound to the heart
+    ref: arch.golem
+    ref_by_band: {1: arch.animated}
   - {range: '2', kind: sealed_way, result: a vault door of the old makers}
-  - {range: '3', kind: guardian, result: 'the ancestor-spirit of the builders, who asks a question first', ref: arch.ancestor}
+  - range: '3'
+    kind: guardian
+    result: the ancestor-spirit of the builders, who asks a question first
+    ref: arch.ancestor
+    ref_by_band: {1: arch.skeleton, 5: arch.golem}
   - {range: '4', kind: place_of_power, result: 'the engine or altar the place was built around (resonance: arcane)'}
   - {range: '5', kind: hoard, result: 'the makers'' treasury, unguarded but trapped'}
   - {range: '6', kind: the_lost, result: the remains of the last expedition and what they carried}
@@ -95,9 +103,21 @@ site_themes:
   - {range: '6', result: a list of sacrifices still to come (a clock to race)}
   climax:
   - {range: '1', kind: rite, result: 'a summoning in progress: a countdown of 4'}
-  - {range: '2', kind: guardian, result: a greater fiend half-manifest, ref: arch.greater_demon}
-  - {range: '3', kind: guardian, result: the cult's priest and their faithful (elite + mob), ref: arch.cultist}
-  - {range: '4', kind: guardian, result: a wight-lord who made the place a court, ref: arch.wight}
+  - range: '2'
+    kind: guardian
+    result: a greater fiend half-manifest
+    ref: arch.greater_demon
+    ref_by_band: {1: arch.lesser_demon, 2: arch.lesser_demon, 3: arch.lesser_demon}
+  - range: '3'
+    kind: guardian
+    result: the cult's priest and their faithful (elite + mob)
+    ref: arch.cultist
+    ref_by_band: {5: arch.tempter}
+  - range: '4'
+    kind: guardian
+    result: a wight-lord who made the place a court
+    ref: arch.wight
+    ref_by_band: {1: arch.ghoul, 5: arch.vampire}
   - {range: '5', kind: the_lost, result: the one taken for the sacrifice}
   - {range: '6', kind: place_of_power, result: 'the profane altar: break it (Force, Hard) to cleanse the site'}
   danger_clock_omens:
@@ -137,11 +157,23 @@ site_themes:
   - {range: '5', result: 'the armory (gear, 08.3.11)'}
   - {range: '6', result: letters from a patron (a thread)}
   climax:
-  - {range: '1', kind: guardian, result: the chieftain and the bodyguard (elite + mob), ref: arch.orc}
-  - {range: '2', kind: guardian, result: the bandit captain and the band, ref: arch.brigand}
+  - range: '1'
+    kind: guardian
+    result: the chieftain and the bodyguard (elite + mob)
+    ref: arch.orc
+    ref_by_band: {5: arch.knight}
+  - range: '2'
+    kind: guardian
+    result: the bandit captain and the band
+    ref: arch.brigand
+    ref_by_band: {4: arch.knight, 5: arch.knight}
   - {range: '3', kind: hoard, result: the warchest}
   - {range: '4', kind: the_lost, result: the hostage the hold was built to keep}
-  - {range: '5', kind: guardian, result: an ogre the garrison keeps chained, ref: arch.ogre}
+  - range: '5'
+    kind: guardian
+    result: an ogre the garrison keeps chained
+    ref: arch.ogre
+    ref_by_band: {1: arch.orc, 5: arch.giant}
   - {range: '6', kind: sealed_way, result: 'the inner keep, barred'}
   danger_clock_omens:
     stirring: ['a shout, then laughter, somewhere above', a dog barking twice and stopping]
@@ -182,9 +214,17 @@ site_themes:
   - {range: '6', result: holy water (a consumable)}
   climax:
   - {range: '1', kind: place_of_power, result: 'the shrine itself (resonance: the keeper''s axes)'}
-  - {range: '2', kind: guardian, result: the celestial warden, ref: arch.celestial}
+  - range: '2'
+    kind: guardian
+    result: the celestial warden
+    ref: arch.celestial
+    ref_by_band: {1: arch.animated, 2: arch.ancestor}
   - {range: '3', kind: the_lost, result: the relic everyone seeks}
-  - {range: '4', kind: guardian, result: the guardian-dead of the order, ref: arch.ancestor}
+  - range: '4'
+    kind: guardian
+    result: the guardian-dead of the order
+    ref: arch.ancestor
+    ref_by_band: {1: arch.animated, 5: arch.celestial}
   - {range: '5', kind: hoard, result: the treasury of offerings}
   - {range: '6', kind: sealed_way, result: 'the sanctum, opened by a rite'}
   danger_clock_omens:
@@ -225,11 +265,23 @@ site_themes:
   - {range: '5', result: bones that still hold a weapon worth taking}
   - {range: '6', result: a funeral inscription (lore)}
   climax:
-  - {range: '1', kind: guardian, result: the barrow-wight on its throne, ref: arch.wight}
-  - {range: '2', kind: guardian, result: a wailing ghost bound to its bones, ref: arch.ghost}
+  - range: '1'
+    kind: guardian
+    result: the barrow-wight on its throne
+    ref: arch.wight
+    ref_by_band: {1: arch.ghoul, 5: arch.vampire}
+  - range: '2'
+    kind: guardian
+    result: a wailing ghost bound to its bones
+    ref: arch.ghost
+    ref_by_band: {5: arch.wraith}
   - {range: '3', kind: the_lost, result: the body someone needs buried}
   - {range: '4', kind: hoard, result: 'the grave-hoard (cursed: flaw.binding possible)'}
-  - {range: '5', kind: guardian, result: a wraith that drinks warmth, ref: arch.wraith}
+  - range: '5'
+    kind: guardian
+    result: a wraith that drinks warmth
+    ref: arch.wraith
+    ref_by_band: {1: arch.ghost, 2: arch.ghost}
   - {range: '6', kind: rite, result: 'the dead rising tonight: a countdown of 4'}
   danger_clock_omens:
     stirring: [your breath smoking in a room that was warm, a whisper that is almost your name]
@@ -270,9 +322,21 @@ site_themes:
   - {range: '5', result: 'an old exit, overgrown (a way out)'}
   - {range: '6', result: a chewed map (progress +1)}
   climax:
-  - {range: '1', kind: guardian, result: the brood-mother, ref: arch.giant_vermin}
-  - {range: '2', kind: guardian, result: the goblin boss and the mob, ref: arch.goblin}
-  - {range: '3', kind: guardian, result: a great ooze, ref: arch.ooze}
+  - range: '1'
+    kind: guardian
+    result: the brood-mother
+    ref: arch.giant_vermin
+    ref_by_band: {4: arch.monstrous_beast, 5: arch.monstrous_beast}
+  - range: '2'
+    kind: guardian
+    result: the goblin boss and the mob
+    ref: arch.goblin
+    ref_by_band: {3: arch.monstrous_beast, 4: arch.monstrous_beast, 5: arch.monstrous_beast}
+  - range: '3'
+    kind: guardian
+    result: a great ooze
+    ref: arch.ooze
+    ref_by_band: {5: arch.monstrous_beast}
   - {range: '4', kind: the_lost, result: the one dragged down here}
   - {range: '5', kind: hoard, result: everything they dragged in}
   - {range: '6', kind: place_of_power, result: the fungal heart (burn it to clear the site)}
@@ -315,9 +379,17 @@ site_themes:
   - {range: '6', result: a mason's plan of the building (progress +2)}
   climax:
   - {range: '1', kind: hoard, result: the strongroom the attackers never found}
-  - {range: '2', kind: guardian, result: the beast that took the ruin, ref: arch.monstrous_beast}
+  - range: '2'
+    kind: guardian
+    result: the beast that took the ruin
+    ref: arch.monstrous_beast
+    ref_by_band: {1: arch.wolf}
   - {range: '3', kind: the_lost, result: 'the survivor, or the remains'}
-  - {range: '4', kind: guardian, result: a looter-captain and their crew, ref: arch.brigand}
+  - range: '4'
+    kind: guardian
+    result: a looter-captain and their crew
+    ref: arch.brigand
+    ref_by_band: {4: arch.knight, 5: arch.knight}
   - {range: '5', kind: a_way_through, result: 'the far gate: a route beyond'}
   - {range: '6', kind: sealed_way, result: the vault under the collapse (a dig clock of 6)}
   danger_clock_omens:
@@ -358,8 +430,16 @@ site_themes:
   - {range: '5', result: a fey token (a thread)}
   - {range: '6', result: 'a sleeping place, sheltered (a secured area)'}
   climax:
-  - {range: '1', kind: guardian, result: the great beast of the place, ref: arch.monstrous_beast}
-  - {range: '2', kind: guardian, result: the fey lord of the ring, ref: arch.fey_noble}
+  - range: '1'
+    kind: guardian
+    result: the great beast of the place
+    ref: arch.monstrous_beast
+    ref_by_band: {1: arch.wolf}
+  - range: '2'
+    kind: guardian
+    result: the fey lord of the ring
+    ref: arch.fey_noble
+    ref_by_band: {1: arch.wild_fey, 2: arch.hag}
   - {range: '3', kind: place_of_power, result: the spirit's pool (resonance primal)}
   - {range: '4', kind: guardian, result: the strangling heart-tree, ref: arch.monstrous_plant}
   - {range: '5', kind: the_lost, result: the child the wood took}

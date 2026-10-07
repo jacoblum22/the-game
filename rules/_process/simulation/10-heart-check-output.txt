@@ -1,0 +1,26 @@
+theme / climax face / archetype (bands) | per site band 1-5: fielded band, variant, word win/stag
+  ancient    d6 1 arch.golem         (2-5) | animated elite+mob fair 96/20 | solo fair 94/28 | elite+mob hard 44/76 | solo hard 45/84 | solo hard 49/88
+  ancient    d6 3 arch.ancestor      (2-4) | skeleton elite+mob hard 76/49 | solo easy 98/14 | elite+mob hard 69/64 | solo hard 72/66 | golem solo hard 49/88
+  corrupted  d6 2 arch.greater_demon (4-5) | lesser_demon elite+mob fair 89/33 | lesser_demon solo fair 90/32 | lesser_demon elite+mob hard 58/64 | solo hard 59/70 | elite hard 55/82
+  corrupted  d6 3 arch.cultist       (1-4) | elite+mob fair 85/39 | solo fair 90/33 | solo hard 63/66 | solo hard 62/68 | tempter solo hard 53/83
+  corrupted  d6 4 arch.wight         (2-4) | ghoul elite+mob fair 92/27 | solo fair 80/45 | solo hard 72/57 | solo hard 54/74 | vampire solo hard 42/83
+  fortified  d6 1 arch.orc           (1-4) | elite+mob hard 78/46 | solo fair 89/33 | elite+mob hard 50/71 | solo hard 50/76 | knight elite hard 47/84
+  fortified  d6 2 arch.brigand       (1-3) | elite+mob easy 98/14 | solo fair 87/37 | solo fair 82/46 | knight elite hard 51/77 | knight elite hard 47/84
+  fortified  d6 5 arch.ogre          (2-4) | orc elite+mob hard 78/46 | solo fair 91/35 | elite+mob hard 69/62 | solo hard 71/66 | giant solo hard 68/85
+  hallowed   d6 2 arch.celestial     (3-5) | animated elite+mob fair 96/20 | ancestor solo easy 98/14 | solo hard 55/70 | elite hard 66/63 | elite hard 52/78
+  hallowed   d6 4 arch.ancestor      (2-4) | animated elite+mob fair 96/20 | solo easy 98/14 | elite+mob hard 69/64 | solo hard 72/66 | celestial elite hard 52/78
+  haunted    d6 1 arch.wight         (2-4) | ghoul elite+mob fair 92/27 | solo fair 80/45 | solo hard 72/57 | solo hard 54/74 | vampire solo hard 42/83
+  haunted    d6 2 arch.ghost         (1-4) | elite+mob fair 92/28 | solo fair 92/29 | solo hard 78/52 | solo hard 78/53 | wraith solo hard 52/81
+  haunted    d6 5 arch.wraith        (3-5) | ghost elite+mob fair 92/28 | ghost solo fair 92/29 | solo hard 63/65 | solo hard 47/78 | solo hard 52/81
+  infested   d6 1 arch.giant_vermin  (1-3) | elite+mob easy 97/15 | solo fair 93/26 | solo hard 64/64 | monstrous_beast solo hard 45/82 | monstrous_beast solo hard 47/85
+  infested   d6 2 arch.goblin        (1-2) | elite+mob fair 97/17 | solo fair 88/35 | monstrous_beast elite+mob hard 46/74 | monstrous_beast solo hard 45/82 | monstrous_beast solo hard 47/85
+  infested   d6 3 arch.ooze          (1-4) | elite+mob fair 92/40 | elite+mob hard 84/53 | elite+mob hard 51/78 | solo hard 86/66 | monstrous_beast solo hard 47/85
+  ravaged    d6 2 arch.monstrous_beast (2-5) | wolf elite+mob fair 97/16 | solo fair 94/27 | elite+mob hard 46/74 | solo hard 45/82 | solo hard 47/85
+  ravaged    d6 4 arch.brigand       (1-3) | elite+mob easy 98/14 | solo fair 87/37 | solo fair 82/46 | knight elite hard 51/77 | knight elite hard 47/84
+  wild       d6 1 arch.monstrous_beast (2-5) | wolf elite+mob fair 97/16 | solo fair 94/27 | elite+mob hard 46/74 | solo hard 45/82 | solo hard 47/85
+  wild       d6 2 arch.fey_noble     (3-5) | wild_fey elite+mob fair 95/21 | hag solo easy 98/14 | solo hard 69/61 | solo hard 50/74 | solo hard 42/83
+  wild       d6 4 arch.monstrous_plant (1-5) | elite+mob fair 94/26 | elite+mob fair 88/41 | elite+mob hard 46/78 | solo hard 71/66 | solo hard 73/76
+
+a named archetype before a cell = the row's ref_by_band for that band (the climax archetype is not fielded there)
+variant/word tally over theme rows x 5 bands: [(('elite', 'hard'), 9), (('elite+mob', 'easy'), 3), (('elite+mob', 'fair'), 16), (('elite+mob', 'hard'), 15), (('solo', 'easy'), 4), (('solo', 'fair'), 17), (('solo', 'hard'), 41)]
+guardians that cannot be fielded at most hard: 0

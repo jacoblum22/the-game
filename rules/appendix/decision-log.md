@@ -2126,6 +2126,20 @@ chapter 06's fight model and T-06-12 lines), output `07-harm-sim-output.txt`, wr
 - Serves: goal 2 (data says where things live; tables and gates agree), goal 1 (varied encounters).
 - Revisit if: a pre-made setting or world seed wants a creature excluded from a terrain (it overrides with its own regional table).
 
+### DL-09-26: 04's fight mix is a campaign mix, not the tables' mix
+- Decision: [revision: I-045] 09.12.3 records that the shipped tables' threat faces are trivial 34 / easy 26 / fair 36 / hard 4 / lethal 0 % (by design, 09.8.1 rule 3), that a PC fighting only rolled encounters stalls on 04's ladder, and that DL-00-05's mix holds when about half of a PC's fights are chosen (a heart, a lair, a quarry). The tables are not made harsher; the pacing text is handed to 04 and 02 (I-095).
+- Alternatives considered: raise the tables' hard share toward 30% (rejected: 09.8.1 rule 3 makes hard the ceiling of an unwarned fight, and I-040 just lowered the home-1 crowds for light PCs); retune 04's ladder to the rolled mix (rejected here: not this chapter's, and it would make chosen fights overpay).
+- Evidence: `09-word-mix-pacing-output.txt` (200 seeds): rolled-only archer 20 / 58 / never / never / never; half chosen 6 / 13 / 21 / 34 / 58 against 04.3.5's 5 / 10 / 18 / 32 / 54; swordsman 3 / 8 / 13 / 21 / 36 against 3 / 7 / 12 / 20 / 34.
+- Serves: goal 2 (the pacing assumption is stated where it is made), goal 1 (growth comes from the fights a PC seeks).
+- Revisit if: T-09-MIX-CAMPAIGN (OEQ-09-5) measures a chosen share far from half.
+
+### DL-09-27: A lone minion is a weakened single foe
+- Decision: [revision: I-066] 09.4.6: one to three minions fielded without a mob are weakened single creatures (spent, wounded, young, starving, a straggler): the minion line exactly, Focus 0 (no Focus-cost power), the weakness shown at first sight. Tables keep their lone-minion rows.
+- Alternatives considered: a `lesser` variant (½ Vitality, Focus by band, its own reaction; rejected: a fifth variant for a few table rows, and powers bought with Focus would put danger outside the estimator that audits the rows); removing lone minions from the tables (rejected: the home-4 top ring needs them, 09.8.2, and they make good fiction).
+- Evidence: T-09-5; 09.8.2's top ring; `10-word-audit-output.txt` (re-run, unchanged by this decision).
+- Serves: goal 2 (the record and the fiction agree), goal 1.
+- Revisit if: play finds lone-minion rows of caster archetypes dull (then give those rows a free power).
+
 ## DL-10 — Exploration, Travel, and Sites
 
 ### DL-10-01: The world is a place graph, written on mention; hexes are an authoring option
@@ -2316,6 +2330,27 @@ chapter 06's fight model and T-06-12 lines), output `07-harm-sim-output.txt`, wr
 - Evidence: `10-site-tables-output.txt` (seed 1022): 560 of 560 pair × band tables pass PR-10-8; 4,456 of 4,480 slots from the pair pool, 24 from the theme gate, 0 by nearest band. `12-world-seed-output.txt` audits a seed's regional tables built the same way.
 - Serves: goal 2 (no judgment in table building; P5's pool gate applied to who lives where), goal 1.
 - Revisit if: played delves report site tables that feel samey (then add per-theme start-shape offsets).
+
+### DL-10-28: Home band 1 is audited against two reference PCs; a rolled fight lethal for the PC at the table is seen first
+- Decision: [revision: I-040] PR-10-8 step 2 and 10.10.2 item 3 field every row at home band 1 against the martial reference of T-06-12 and a **light reference** (Guard 10, Vitality 12, armor 0, +5 at S2: the weakest ready-made character, `travel.yaml#encounter_audit_reference`), with every word test applied to both; PR-10-10's ceilings read both. The eleven home-1 generic tables' home-band crowds go from 6–8 to 5–7 (the frozen skeletons to 4–6). At every band, 10.10.4 item 4: a rolled threat whose advisory for the PC as it stands is lethal arrives with the PC aware and the creatures not (no ambush), with the lethal warning at first sight.
+- Alternatives considered: a light reference at every band (rejected: the no-Focus estimator against a Guard-10/12 caster fails 51/45 of 55 tables, because a non-martial PC above band 1 is defined by its Focus, which the estimator does not price; the tables would have to be emptied to pass); capping `settled` rows (rejected: settled is a frequency, not a strength, 10.2.4; the same terrain table serves every ring); scaling a rolled encounter to the PC (rejected: 09.8.2, the world does not scale; the PC gets the first look instead).
+- Evidence: `10-word-audit-output.txt` (55/55 pass; light mix at home 1 trivial 38.2 / easy 19.5 / fair 32.7 / hard 9.5 / lethal 0); `10-light-reference-check-output.txt` (seed 4040: the playtest's seven reptile-folk minions take the light PC to 0 Vitality 24% of fights, the martial one 8%; crowds of seven 22–57%, of six 11–40%); `10-site-tables-output.txt` (560/560, only band 1 moved); `12-world-seed-output.txt` (PASS). [verification-playtest §3] [T-06-12 J] [09.8.2]
+- Serves: goal 2 (the table's promise holds for every ready-made character), goal 1 (a healer can travel the settled ring).
+- Revisit if: play shows Staggered light PCs at more than a quarter of rolled home-1 fights (T-06-13's `fair` allows half), or a pregen weaker than the light reference ships.
+
+### DL-10-29: Leaving a haven is the area's first leg; a settlement keeps hours, a watch and a law; depletion with no mount and no ammunition
+- Decision: [revision: I-055, I-051, I-056] 10.2.6: a settlement's link to its parent area is the area's first leg (the haven ends at the gate; the leg's watches are the area's). 10.2.7: a settlement's day — gate hours and a curfew in towns and cities (a `curfew` fact overrides), the ruler's watch (`arch.soldier` at home band; leave, a Sneak against its Wits defense, or force), the law as the ruler's attention clock (a seen or reported crime is a despised `public_deed`: 1 / 2 / 3 ticks) with the haven intact. 10.9.4 face 5: with neither mount nor ammunition, one more supply spoils.
+- Alternatives considered: a district map and a law table per settlement (rejected: 15.2.4 already makes a place's rules facts, and 11.3.12's clock already is the world's memory; a new subsystem would duplicate both); re-rolling face 5 (rejected: re-rolls hide a gap, and the spoiled supply is the face's nearest kin).
+- Evidence: [verification-1 completeness EX-12; verification-playtest §3 (graph shape, depletion)] [15.2.4] [11.3.12] [00.3.8]
+- Serves: goal 2 (urban play has a procedure; every face of every table has a result), goal 1 (curfew and the watch are play, not color).
+- Revisit if: OEQ-10 play finds crimes called inconsistently (then a crime table by settlement tier).
+
+### DL-10-30: A guardian heart is fielded at the site band, by a covering archetype when the climax one is out of band, at the most dangerous shape at most hard
+- Decision: [revision: I-067] 10.13.10: the climax archetype at the site band, else the row's `ref_by_band` (all 21 guardian rows cover bands 1–5, checked by `10-gen10_sites.py`); two shapes compared, a solo and an elite leading five minions one band lower, and the more dangerous one whose word is at most hard is fielded, else elite, standard, minion.
+- Alternatives considered: the nearest band of the climax archetype (the ledger's default; rejected: a heart two bands above its site is lethal by 09.6.6 whatever its shape, the greater demon at bands 1–2 had no shape under lethal, and below an archetype's top a band-5 heart would be trivial); a solo always (rejected: a band-1 solo cannot be made harder than trivial, 09.4.6, so band-1 hearts need the leader-and-mob shape).
+- Evidence: `10-heart-check-output.txt`: 105 guardian x band cells, none lethal; solo 62, elite + mob 34, elite 9; WE-10-2's crypt becomes a ghoul elite with five minions, fair (92/27).
+- Serves: goal 2 (no heart is fielded off its band or past hard without the warning), goal 1 (the climax is a fight worth its place).
+- Revisit if: played hearts at bands 4–5 read samey (then add a third shape, a pair of a lower band with an elite).
 
 ## DL-11 — The Living World
 
@@ -2515,6 +2550,13 @@ chapter 06's fight model and T-06-12 lines), output `07-harm-sim-output.txt`, wr
 - Evidence: verification-2c long-arc playtest (I-087 (b)); 03.2.8's 24 points is one median session at a focus node, so one tag is one session's head start, as backstory is meant to be.
 - Serves: goal 1 (identity from play); 02.11.1 (backstory only as a deed done in play).
 - Revisit if: successors in play arrive with no banked tag because teachers rotate tags too slowly (then bank per 4 ticks across the whole clock).
+
+### DL-11-29: Rumors can make rivals, never a war; once a season per pair
+- Decision: [revision: I-080] 11.3.14's closed list gains the rumor row: `wr.rumor_believed`'s `acts_on_it` moves the believer's relation toward the rival −1, never below −2 by rumor, at most once a season per faction toward one rival (`rumor_acted.<rival>`). War (−3) needs a deed: a strike, a discovered scheme, a dominate goal.
+- Alternatives considered: remove the reaction (rejected: a planted lie that starts a feud is good play, 11.6.9); a cap on rumors planted (rejected: the faction's credulity, not the PC's tongue, is the lever).
+- Evidence: `11-world-sim.py` scenarios `liar_old` / `liar_new` (300 seeds, one planted lie a week about a pair at 0): war within a season 276 → 0, within two years 300 → 195 (median week 7 → 55), and every new-rule war came from a deed row; the three base scenarios are byte-identical.
+- Serves: goal 2 (relations move only by listed rows, now including this one), goal 1 (the PC's lies matter without breaking the region).
+- Revisit if: OEQ-11-6's rumor play shows lies with no visible effect (then let a −2 pair's first strike come sooner).
 
 ## DL-12 — DM Procedures
 

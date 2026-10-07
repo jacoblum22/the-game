@@ -407,3 +407,9 @@ Resolved all 12 rows: I-038 (Oracle lever cap; sim shows +3.7 down to +0.8 per r
 ## Revision C6a merged (worktree): `revision-C6a-report.md`
 - I-065, ch.04–07: 188 cards gained card-level basis tags, plus 2 new DL entries; DL-INT-13 rejects a section-level basis.
 - New validator check BASIS covers 04–07. C6b covers ch.00–03 and 08–16, about 557 cards.
+
+## Revision C5a merged (worktree; ledger conflict resolved by row): `revision-C5a-report.md`
+- Resolved I-040 (weak-PC reference at band 1, and a lethal-fight warning in play, 10.10.4), I-080 (rumors floor at −2 and once a season; war in 0/300 runs, down from 276), I-066, I-067, I-055, I-056 and I-051.
+- I-045 measured; its text fix moves to I-095 (ch.04/02).
+- New rows: I-095, I-096 (stale numbers in ch.12), I-097 (ch.13, wontfix candidate).
+- Appendix and anchors rebuilt after the merge; validator 0/0.

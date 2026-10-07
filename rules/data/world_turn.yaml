@@ -568,7 +568,8 @@ reactions:  # key `on` quoted: unquoted it parses as the boolean true under YAML
     specificity: faction
     weight: 2
     writes:
-    - the faction's relation toward the rival -1, as if the rumor were known; its next strike or scheme targets that rival
+    - the faction's relation toward the rival -1, as if the rumor were known, never below -2 by rumor (11.3.14); its next strike or scheme targets that rival
+    cooldown: 'once a season per faction toward one rival (rumor_acted.<rival> on the faction) [revision: I-080]'
   nothing_weight: 3
   lifecycle: provisional
   basis:

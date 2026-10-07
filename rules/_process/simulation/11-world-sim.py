@@ -19,8 +19,17 @@ Rules as written in rules/11-living-world.md (11.2-11.11) and data/world_turn.ya
   situation threads race an opposing clock (6 segments, +1/week default timeline).
 - hook supply: if PC-known open hooks (seeded+active) < 3 at the World Turn, generate one (step 8).
 - season turn: stage transitions; seasonal event (d12: 1-4 a new situation hook).
+- [revision: I-080] the rumor-planting test (scenarios `liar_old`, `liar_new`; printed after the three base scenarios,
+  which are unchanged): the PC plants one false rumor a week (11.6.9), the margrave's rival the salt guild in the
+  margrave's seat and the reverse in the guild's (the pair starts at relation 0); each arrival rolls
+  wr.rumor_believed (acts_on_it 2 : nothing 3). `liar_old` is the rule before I-080 (-1 a belief, no floor, no
+  cooldown); `liar_new` the rule after it (11.3.14: rumors move a relation no lower than -2; acts_on_it at most once
+  a season per faction toward one rival). In both liar scenarios a successful strike also applies 11.3.14's
+  defender row (-1, -2 on a critical success), which the base scenarios leave out, so a war can still come from a
+  real blow.
 """
 import random, statistics, sys
+from collections import Counter
 
 SEEDS = int(sys.argv[1]) if len(sys.argv) > 1 else 300
 WEEKS = 104
@@ -44,6 +53,7 @@ class Faction:
     def __init__(s, fid, tier, ratings, temper, stage='flourishing'):
         s.id = fid; s.tier = tier; s.hold = 1; s.r = dict(ratings); s.temper = temper; s.stage = stage
         s.goal = None; s.filled = 0; s.rel = {}; s.status = 0; s.attention = 0; s.pursuit = 0
+        s.lie_cool = {}   # [revision: I-080] week acts_on_it last fired toward each rival
         s.completions = 0; s.tier_changes = 0; s.seasons_in_stage = 0; s.hold_losses_year = 0
         s.slip = False; s.alive = True
         s.new_goal()
@@ -158,7 +168,8 @@ def run(seed, scenario='engaged'):
                  threads_failed=0, threads_activated=0, threads_retired=0, rumors=0, strain_losses=0, max_known_hooks=0,
                  weeks_known_lt3=0, bangs_max=0, situations=0, new_factions=0, slips=0,
                  acts={k: 0 for k in ('goal', 'strike', 'scheme', 'expand', 'recover', 'court', 'move_pc', 'aid_pc', 'lie_low')},
-                 courts_won=0, cult_weeks=WEEKS, wardens_weeks=WEEKS)
+                 courts_won=0, cult_weeks=WEEKS, wardens_weeks=WEEKS,
+                 lie_war_week=WEEKS + 1, lie_moves=0, lie_strikes_before_war=0, lie_min_rel=0)
     facs = [Faction('salt_guild', 2, {'force': 2, 'cunning': 3, 'wealth': 4, 'sway': 2}, 'mercantile'),
             Faction('ash_wardens', 1, {'force': 3, 'cunning': 2, 'wealth': 1, 'sway': 2}, 'zealous', 'rising'),
             Faction('margrave', 3, {'force': 4, 'cunning': 3, 'wealth': 3, 'sway': 4}, 'cautious', 'entrenched'),
@@ -203,6 +214,23 @@ def run(seed, scenario='engaged'):
             fac = rng.choice(['ash_wardens', 'margrave', None, None])
             against = rng.choice(['ember_cult', 'salt_guild', None])
             active.append({'size': size, 'filled': 0, 'opp': opp, 'opp_filled': 0, 'fac': fac, 'against': against})
+        # --- the PC's planted rumors [revision: I-080] ---
+        if scenario.startswith('liar'):
+            for a, b in (('margrave', 'salt_guild'), ('salt_guild', 'margrave')):
+                fa = [f for f in facs if f.id == a and f.alive]
+                if not fa or not any(g.id == b and g.alive for g in facs):
+                    continue
+                fa = fa[0]
+                if rng.random() < 2.0 / 5.0:                         # acts_on_it 2 : nothing 3
+                    if scenario == 'liar_old':
+                        fa.rel[b] = max(-3, fa.rel.get(b, 0) - 1); stats['lie_moves'] += 1
+                    elif week - fa.lie_cool.get(b, -99) >= 13 and fa.rel.get(b, 0) > -2:
+                        fa.rel[b] = max(-2, fa.rel.get(b, 0) - 1); fa.lie_cool[b] = week; stats['lie_moves'] += 1
+            for f in facs:
+                if f.id == 'margrave' and f.alive:
+                    stats['lie_min_rel'] = min(stats['lie_min_rel'], f.rel.get('salt_guild', 0))
+                    if f.rel.get('salt_guild', 0) <= -3 and stats['lie_war_week'] > WEEKS:
+                        stats['lie_war_week'] = week
         # --- WORLD TURN ---
         # step 2 maintain: nothing numeric here (upkeep is holdings)
         # step 3 timelines: opposing clocks of situation threads
@@ -240,6 +268,10 @@ def run(seed, scenario='engaged'):
                 dg, near = check(rng, f, f.r['force'], dc)
                 if dg >= 2:
                     stats['strike_hits'] += 1; lose_hold(tgt, stats); stats['rumors'] += 1
+                    if scenario.startswith('liar'):              # 11.3.14's defender row [revision: I-080]
+                        tgt.rel[f.id] = max(-3, tgt.rel.get(f.id, 0) - (2 if dg == 3 else 1))
+                        if {f.id, tgt.id} == {'margrave', 'salt_guild'} and stats['lie_war_week'] > WEEKS:
+                            stats['lie_strikes_before_war'] += 1
                 elif dg == 0:
                     lose_hold(f, stats); stats['rumors'] += 1
             elif act == 'expand':
@@ -348,7 +380,20 @@ def q(xs):
     return (xs[n // 10], statistics.median(xs), xs[(9 * n) // 10])
 
 if __name__ == '__main__':
-  for scenario in ['engaged', 'war', 'absent']:
+  for scenario in ['engaged', 'war', 'absent', 'liar_old', 'liar_new']:
+    if scenario.startswith('liar'):                                 # [revision: I-080]
+        runs = [run(s, scenario) for s in range(SEEDS)]
+        ww = [r['lie_war_week'] for r in runs]
+        print('=== scenario: %s (one planted rumor a week about the margrave / salt guild pair, relation 0 at start) ===' % scenario)
+        print('runs at war (-3, margrave toward the guild) within 1 season / 1 year / 2 years: %d / %d / %d of %d' % (
+            sum(1 for w in ww if w <= 13), sum(1 for w in ww if w <= 52), sum(1 for w in ww if w <= WEEKS), SEEDS))
+        warw = [w for w in ww if w <= WEEKS]
+        print('week war began, among runs that reached it: p10/med/p90 %s' % (str(q(warw)) if warw else '-'))
+        print('relation moves by belief per 2y p10/med/p90 %s; lowest relation reached: %s' % (
+            str(q([r['lie_moves'] for r in runs])), sorted(Counter(r['lie_min_rel'] for r in runs).items())))
+        print('runs whose war followed at least one successful strike between the pair: %d of %d' % (
+            sum(1 for r in runs if r['lie_war_week'] <= WEEKS and r['lie_strikes_before_war'] > 0), len(warw)))
+        continue
     runs = [run(s, scenario) for s in range(SEEDS)]
     print('=== scenario: %s ===' % scenario)
     keys = ['goal_done', 'tier_up', 'tier_down', 'collapses', 'new_factions', 'strikes', 'strike_hits', 'slips',

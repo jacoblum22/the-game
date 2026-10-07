@@ -32,11 +32,11 @@ compiled_from:
 - file: 08-items-loot-crafting.md
   sha256_16: 067f967e68b6574b
 - file: 09-adversaries.md
-  sha256_16: 463f076dbd94819d
+  sha256_16: 5ea52f7cd6daaebf
 - file: 10-exploration-travel-sites.md
-  sha256_16: 84e8d1d2275d58d8
+  sha256_16: 0ed875fafbe4f346
 - file: 11-living-world.md
-  sha256_16: d94128a9eabebdb5
+  sha256_16: fcbb1b93b36ec793
 - file: 12-dm-procedures.md
   sha256_16: 16bb951288769787
 - file: 13-starter-setting.md

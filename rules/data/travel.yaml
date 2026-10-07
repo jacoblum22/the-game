@@ -189,7 +189,8 @@ tables:
       half its remaining intervals, rounded down'}
   - {range: '4', result: 'a strap, string or boot gives: one carried item (engine draw among non-relic, non-cost_immune gear)
       is damaged (08.1.9)'}
-  - {range: '5', result: 'a mount goes lame for the day (pace one step slower); if no mount, ammunition -2'}
+  - {range: '5', result: 'a mount goes lame for the day (pace one step slower); if no mount, ammunition -2; with neither,
+      one more supply spoils (as 1-2) [revision: I-056]'}
   - {range: '6', result: 'a hard stretch: the next travel watch earns 2 fewer points'}
 - id: tbl.10.depletion_site
   name: Depletion (face D, site)
@@ -479,7 +480,7 @@ encounter_tables:
       kind: adversary
       ref: [arch.goblin]
       band: home
-      count: 6-8
+      count: 5-7
       variant: minion
       threat: true
       ambush: true
@@ -490,7 +491,7 @@ encounter_tables:
       kind: adversary
       ref: [arch.brigand]
       band: home
-      count: 6-8
+      count: 5-7
       variant: minion
       threat: true
       ambush: false
@@ -501,7 +502,7 @@ encounter_tables:
       kind: adversary
       ref: [arch.orc]
       band: home
-      count: 6-8
+      count: 5-7
       variant: minion
       threat: true
       ambush: false
@@ -925,7 +926,7 @@ encounter_tables:
       kind: adversary
       ref: [arch.brigand]
       band: home
-      count: 6-8
+      count: 5-7
       variant: minion
       threat: true
       ambush: false
@@ -936,7 +937,7 @@ encounter_tables:
       kind: adversary
       ref: [arch.cultist]
       band: home
-      count: 6-8
+      count: 5-7
       variant: minion
       threat: true
       ambush: false
@@ -947,7 +948,7 @@ encounter_tables:
       kind: adversary
       ref: [arch.zombie]
       band: home
-      count: 6-8
+      count: 5-7
       variant: minion
       threat: true
       ambush: false
@@ -1369,7 +1370,7 @@ encounter_tables:
       kind: adversary
       ref: [arch.wolf]
       band: home
-      count: 6-8
+      count: 5-7
       variant: minion
       threat: true
       ambush: false
@@ -1380,7 +1381,7 @@ encounter_tables:
       kind: adversary
       ref: [arch.goblin]
       band: home
-      count: 6-8
+      count: 5-7
       variant: minion
       threat: true
       ambush: true
@@ -1391,7 +1392,7 @@ encounter_tables:
       kind: adversary
       ref: [arch.wild_fey]
       band: home
-      count: 6-8
+      count: 5-7
       variant: minion
       threat: true
       ambush: false
@@ -1819,7 +1820,7 @@ encounter_tables:
       kind: adversary
       ref: [arch.orc]
       band: home
-      count: 6-8
+      count: 5-7
       variant: minion
       threat: true
       ambush: false
@@ -1840,7 +1841,7 @@ encounter_tables:
       kind: adversary
       ref: [arch.goblin]
       band: home
-      count: 6-8
+      count: 5-7
       variant: minion
       threat: true
       ambush: true
@@ -2269,7 +2270,7 @@ encounter_tables:
       kind: adversary
       ref: [arch.gnoll]
       band: home
-      count: 6-8
+      count: 5-7
       variant: minion
       threat: true
       ambush: false
@@ -2280,7 +2281,7 @@ encounter_tables:
       kind: adversary
       ref: [arch.orc]
       band: home
-      count: 6-8
+      count: 5-7
       variant: minion
       threat: true
       ambush: false
@@ -2291,7 +2292,7 @@ encounter_tables:
       kind: adversary
       ref: [arch.herd_beast]
       band: home
-      count: 6-8
+      count: 5-7
       variant: minion
       threat: true
       ambush: false
@@ -2717,7 +2718,7 @@ encounter_tables:
       kind: adversary
       ref: [arch.lizardfolk]
       band: home
-      count: 6-8
+      count: 5-7
       variant: minion
       threat: true
       ambush: true
@@ -2728,7 +2729,7 @@ encounter_tables:
       kind: adversary
       ref: [arch.zombie]
       band: home
-      count: 6-8
+      count: 5-7
       variant: minion
       threat: true
       ambush: false
@@ -3163,7 +3164,7 @@ encounter_tables:
       kind: adversary
       ref: [arch.gnoll]
       band: home
-      count: 6-8
+      count: 5-7
       variant: minion
       threat: true
       ambush: false
@@ -3174,7 +3175,7 @@ encounter_tables:
       kind: adversary
       ref: [arch.brigand]
       band: home
-      count: 6-8
+      count: 5-7
       variant: minion
       threat: true
       ambush: true
@@ -3185,7 +3186,7 @@ encounter_tables:
       kind: adversary
       ref: [arch.orc]
       band: home
-      count: 6-8
+      count: 5-7
       variant: minion
       threat: true
       ambush: false
@@ -3606,7 +3607,7 @@ encounter_tables:
       kind: adversary
       ref: [arch.skeleton]
       band: home
-      count: 6-8
+      count: 4-6
       variant: minion
       threat: true
       ambush: false
@@ -3617,7 +3618,7 @@ encounter_tables:
       kind: adversary
       ref: [arch.orc]
       band: home
-      count: 6-8
+      count: 5-7
       variant: minion
       threat: true
       ambush: false
@@ -4053,7 +4054,7 @@ encounter_tables:
       kind: adversary
       ref: [arch.brigand]
       band: home
-      count: 6-8
+      count: 5-7
       variant: minion
       threat: true
       ambush: true
@@ -4064,7 +4065,7 @@ encounter_tables:
       kind: adversary
       ref: [arch.lizardfolk]
       band: home
-      count: 6-8
+      count: 5-7
       variant: minion
       threat: true
       ambush: false
@@ -4075,7 +4076,7 @@ encounter_tables:
       kind: adversary
       ref: [arch.wild_fey]
       band: home
-      count: 6-8
+      count: 5-7
       variant: minion
       threat: true
       ambush: false
@@ -4498,7 +4499,7 @@ encounter_tables:
       kind: adversary
       ref: [arch.goblin]
       band: home
-      count: 6-8
+      count: 5-7
       variant: minion
       threat: true
       ambush: true
@@ -4509,7 +4510,7 @@ encounter_tables:
       kind: adversary
       ref: [arch.skeleton]
       band: home
-      count: 6-8
+      count: 5-7
       variant: minion
       threat: true
       ambush: false
@@ -4948,7 +4949,7 @@ encounter_tables:
       kind: adversary
       ref: [arch.ghoul]
       band: home
-      count: 6-8
+      count: 5-7
       variant: minion
       threat: true
       ambush: false
@@ -4959,7 +4960,7 @@ encounter_tables:
       kind: adversary
       ref: [arch.brigand]
       band: home
-      count: 6-8
+      count: 5-7
       variant: minion
       threat: true
       ambush: false
@@ -4970,7 +4971,7 @@ encounter_tables:
       kind: adversary
       ref: [arch.cultist]
       band: home
-      count: 6-8
+      count: 5-7
       variant: minion
       threat: true
       ambush: false
@@ -5397,6 +5398,15 @@ encounter_table_audit:
   tbl.10.enc.ruin:
     bands_each_home: {home-1: 6, home: 11, home+1: 3}
     words: 'PR-10-8 word step: _process/simulation/10-word-audit.py (every home band 1-5)'
+encounter_audit_reference:
+  standard: the band's reference PC of T-06-12 (09.4.4)
+  light:
+    1: {atk: 5, guard: 10, vit: 12, armor: 0, sev: 2, tempo: 2, who: 'the weakest ready-made character (02.2.5): a healer,
+        talker or sneak with Guard 10, no armor, fighting with the branch working at +5 (05.7.11) or a weapon at the same
+        line'}
+  bands_note: 'home band 1 only: above it the audit''s no-Focus estimator does not price a non-martial PC (05.7.11, T-06-12
+    J); every band is covered at play time by 10.10.4 item 4'
+  basis: [PR-10-8, 10.10.2, 10.10.4, 09.8.1]
 archetype_signs:
   arch.wolf: [wolf scat full of hair on the trail, a howl answered from two directions]
   arch.great_cat: [claw-scores high on a tree, a deer carcass dragged up into a fork]

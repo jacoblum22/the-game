@@ -492,10 +492,19 @@ R1 §09 (Sly Flourish: double a monster's health and call it an elite)]:
 
 | Variant | Vitality | Reaction | Nerve | Focus | Gains | Use |
 |---|---|---|---|---|---|---|
-| `minion` | ½ of the solved Vitality (min 1) | none | one rung lower (steady → skittish, resolute → steady) | 0 | — | the body of a mob (06.10.2), an escort, a crowd |
+| `minion` | ½ of the solved Vitality (min 1) | none | one rung lower (steady → skittish, resolute → steady) | 0 | — | the body of a mob (06.10.2), an escort, a crowd; fielded alone, a weakened one of its kind (below) |
 | `standard` | the solved Vitality | by band (09.3.9) | the archetype's | by band | — | most foes |
 | `elite` | × 2 at T1–T3, × 1.25 at T4–T5 | as one band higher | one rung higher (skittish → steady → resolute) | +1 | usually one added power; a leader is usually elite | a sergeant, a pack alpha, a chieftain |
 | `solo` | × 4 at T1, × 3 at T2–T3, × 1.75 at T4, × 1.5 at T5 | Opportunity Strike and Fend at any band | one rung higher | +2 | `pow.shrug`, `pow.second_wind`, a heavy blow (its primary at the band's heavy severity, wound up) if it had none; `beh.09.solo_overlay` before its list | a creature built to be fought alone: the troll under the bridge, the dragon in the hill |
+
+**A lone minion.** `[D]` + `[N]` An encounter row may field one to three `minion`s of an archetype without a
+mob (09.8.2's top ring, 10.10.1): each is a **weakened single foe** — spent, wounded, young, starving or a
+straggler of its kind. It is the minion line exactly (half Vitality, no reaction, a nerve one rung lower,
+Focus 0), so it can pay for no power or pool ability that costs Focus: a lone minion lich is a lich whose
+phylactery is cracked and whose spells are gone, fighting with what its body has left; its free powers
+(costing no Focus) and its attacks stand. The narration must show the weakness at first sight (one tell of it
+beside the band tells, 09.10.1) and may not imply the full creature's powers. The advisory (09.6) prices it as
+fielded. The bestiary ships no lone minions (09.12.1); the tables field them [revision: I-066].
 
 *Why the multipliers fall at the top.* At P1–P3 the lone PC's three actions against two dominate (06.1.1);
 at P4–P5 armor and Vitality outgrow unaided output (T-06-13: "the curve steepens at the top"). One multiplier
@@ -537,7 +546,8 @@ Decisions (J):      1. ARCHETYPE [J:enum] (09.2.4).
                     2. BAND [J:rung] (09.3.1), inside the archetype's bands.
                     3. ROLE [J:enum] (T-09-4), among the archetype's roles.
                     4. VARIANT [J:enum] minion | standard | elite | solo (T-09-5): true only when the
-                       fiction establishes it: a crowd of the same kind -> minion members of a mob; one of
+                       fiction establishes it: a crowd of the same kind -> minion members of a mob (alone,
+                       only as a table row fields one: a weakened single foe, 09.4.6); one of
                        many -> standard; the named or leading one of its kind -> elite; a creature that
                        fights alone and is the scene's whole opposition -> solo. Default: standard.
 Computation [D]:    PR-09-1 with the archetype's attacks and powers and no overrides; the result is
@@ -860,7 +870,10 @@ Three consequences are rules:
 3. **A "fair" fight is the default for an encounter the PC is meant to fight; "hard" is the ceiling of a
    fight the place throws at the PC without warning.** Encounter tables are built so that, against a PC of
    the region's band, rolled fights land fair or easier at least two times in three and are never lethal
-   without a telegraphed source (a lair, an omen, a reputation) — see 09.8.2.
+   without a telegraphed source (a lair, an omen, a reputation) — see 09.8.2. "A PC of the region's band" is
+   two reference PCs at home band 1, the martial one of T-06-12 and a light one (Guard 10, Vitality 12, no
+   armor, the branch working: the healer, talker or sneak, PR-10-8 step 2); and a rolled fight that is lethal
+   for the PC at the table is seen by that PC first (10.10.4 item 4) [revision: I-040].
 
 **09.8.2 Encounters belong to places.** `[D]` + `[N]` In a sandbox the world does not scale to the PC: a
 region, a site and a lair have bands of their own (10, 13), and their encounter tables field what lives
@@ -870,7 +883,9 @@ there. The advisory tells the truth about what was rolled. What keeps that fair 
   with a known occupant, reachable only by going there, signposted by rumor and omen (11, 10).
 - **Distance and notice.** A rolled encounter begins at the distance the terrain and the watch allow
   (10's encounter distance; 06.3.9), and creatures that have not noticed the PC are not yet hostile: the PC
-  may avoid, hide, parley or prepare. A lethal advisory at first perception (09.6.6) is a reason to do so.
+  may avoid, hide, parley or prepare. A lethal advisory at first perception (09.6.6) is a reason to do so;
+  a rolled encounter whose advisory is lethal for the PC as it stands always arrives with the PC aware of it
+  first (10.10.4 item 4) [revision: I-040].
 - **The mix.** A complication from `tbl.09.complication` (09.8.5) is rolled on encounters the tables mark
   so, to vary the problem rather than its size.
 - **The weekly picture.** Across a campaign, a PC who adventures where its band says it should meets
@@ -1183,7 +1198,18 @@ keeps the template's numbers and adds its own facts (name, wants, knowledge, 15;
   reaches tier 5 within 60 sessions in 59 of 100 runs against 82). **Adopted** as the orchestrator's decision
   DL-00-05 and written into 03.4.3 at integration; I-005 is closed [integration: DL-00-05]. These figures are on
   04's ladder of the time; 04 then retuned tiers 2–5 to this model (archer 5 / 10 / 18 / 31 / 55, tier 5 within
-  60 in 93 of 100; `09-i005-check.py` prints both ladders) [revision: I-089; DL-04-32].
+  60 in 93 of 100; `09-i005-check.py` prints both ladders) [revision: I-089; DL-04-32]. **What the tables
+  actually give** [revision: I-045]: the threat faces of every shipped or built table (55 generic, 560 site,
+  2,600 world-seed) are trivial 34 / easy 26 / fair 36 / hard 4 / lethal 0 %, gentler than the assumed mix,
+  by design (09.8.1 rule 3: what the road throws at a PC is fair or easier; hard is its ceiling). Run through
+  04's pacing (`09-word-mix-pacing.py`, 200 seeds), a PC who fought only rolled encounters would stall (the
+  archer: tier 2 at a median session 58, tier 3 not within 60). With half its fights chosen — a site's heart,
+  a lair, a quarry, at fair 50 / hard 40 / lethal 10 (10.13.10, 09.8.2) — the archer comes to 6 / 13 / 21 /
+  34 / 58 against 04.3.5's 5 / 10 / 18 / 32 / 54, and the swordsman to 3 / 8 / 13 / 21 / 36 against
+  3 / 7 / 12 / 20 / 34. So 04's assumed mix is a **campaign** mix: it holds when about half of a PC's fights are
+  ones it seeks out, which the West Marches shape (10.2.4) and 12's pacing director (12.7.4) are there to
+  offer, and it does not hold for a PC who only travels. The pacing text (04.3.5, T-04-8, 02.11.1) is chapter
+  04's and 02's; this measurement is handed to them (I-095).
 - **I-006** (Focus-binary equal-band fights) remains resolved for martial characters with the final
   templates: one standard foe of the PC's band is beaten 100 / 99.9 / 99.4 / 87.8 / 80.2 % of the time with no
   Focus (T-09-3); the caster part is I-009 (05).

@@ -1,0 +1,40 @@
+A. the playtest's row: reptile-folk minions, band 1, a mob (members ->  MC win / Staggered %, estimator win / Staggered % word)
+   5 members vs light (Guard 10)               MC  99.9 /   4.5   est 100.0 /   2.1 trivial
+   5 members vs martial reference (Guard 14)   MC 100.0 /   1.0   est 100.0 /   0.1 trivial
+   6 members vs light (Guard 10)               MC  99.3 /  11.1   est  99.5 /  10.4 easy
+   6 members vs martial reference (Guard 14)   MC  99.9 /   2.9   est  99.9 /   1.6 trivial
+   7 members vs light (Guard 10)               MC  97.5 /  24.2   est  96.5 /  23.5 fair
+   7 members vs martial reference (Guard 14)   MC  99.5 /   8.4   est  99.2 /   6.6 easy
+
+B. generic tables, home band 1, home-band crowd rows: old count 6-8 (mid 7) and new 5-7 (mid 6), light PC
+   terrain.road         arch.goblin          old 7: MC  90.1/ 45.1 est hard   | new 6: MC  95.9/ 23.4 est fair  
+   terrain.road         arch.brigand         old 7: MC  94.5/ 32.2 est fair   | new 6: MC  98.2/ 15.6 est fair  
+   terrain.road         arch.orc             old 7: MC  90.0/ 43.9 est hard   | new 6: MC  96.0/ 22.6 est fair  
+   terrain.settlement   arch.brigand         old 7: MC  94.5/ 32.2 est fair   | new 6: MC  98.2/ 15.6 est fair  
+   terrain.settlement   arch.cultist         old 7: MC  84.6/ 43.0 est hard   | new 6: MC  91.5/ 36.9 est fair  
+   terrain.settlement   arch.zombie          old 7: MC  97.5/ 22.4 est fair   | new 6: MC  98.5/ 12.9 est easy  
+   terrain.forest       arch.wolf            old 7: MC  96.7/ 27.3 est fair   | new 6: MC  99.2/ 13.2 est easy  
+   terrain.forest       arch.goblin          old 7: MC  90.1/ 45.1 est hard   | new 6: MC  95.9/ 23.4 est fair  
+   terrain.forest       arch.wild_fey        old 7: MC  82.8/ 57.3 est hard   | new 6: MC  94.0/ 32.7 est fair  
+   terrain.highland     arch.orc             old 7: MC  90.0/ 43.9 est hard   | new 6: MC  96.0/ 22.6 est fair  
+   terrain.highland     arch.goblin          old 7: MC  90.1/ 45.1 est hard   | new 6: MC  95.9/ 23.4 est fair  
+   terrain.plains       arch.gnoll           old 7: MC  93.2/ 36.9 est fair   | new 6: MC  97.8/ 18.7 est fair  
+   terrain.plains       arch.orc             old 7: MC  90.0/ 43.9 est hard   | new 6: MC  96.0/ 22.6 est fair  
+   terrain.plains       arch.herd_beast      old 7: MC  94.1/ 36.7 est fair   | new 6: MC  98.1/ 18.2 est fair  
+   terrain.wetland      arch.lizardfolk      old 7: MC  97.5/ 24.2 est fair   | new 6: MC  99.3/ 11.1 est easy  
+   terrain.wetland      arch.zombie          old 7: MC  97.5/ 22.4 est fair   | new 6: MC  98.5/ 12.9 est easy  
+   terrain.arid         arch.gnoll           old 7: MC  93.2/ 36.9 est fair   | new 6: MC  97.8/ 18.7 est fair  
+   terrain.arid         arch.brigand         old 7: MC  94.5/ 32.2 est fair   | new 6: MC  98.2/ 15.6 est fair  
+   terrain.arid         arch.orc             old 7: MC  90.0/ 43.9 est hard   | new 6: MC  96.0/ 22.6 est fair  
+   terrain.frozen       arch.skeleton        old 7: MC  79.5/ 54.4 est hard   | new 5: MC  97.2/ 21.4 est fair  
+   terrain.frozen       arch.orc             old 7: MC  90.0/ 43.9 est hard   | new 6: MC  96.0/ 22.6 est fair  
+   terrain.water        arch.brigand         old 7: MC  94.5/ 32.2 est fair   | new 6: MC  98.2/ 15.6 est fair  
+   terrain.water        arch.lizardfolk      old 7: MC  97.5/ 24.2 est fair   | new 6: MC  99.3/ 11.1 est easy  
+   terrain.water        arch.wild_fey        old 7: MC  82.8/ 57.3 est hard   | new 6: MC  94.0/ 32.7 est fair  
+   terrain.underground  arch.goblin          old 7: MC  90.1/ 45.1 est hard   | new 6: MC  95.9/ 23.4 est fair  
+   terrain.underground  arch.skeleton        old 7: MC  79.5/ 54.4 est hard   | new 6: MC  89.3/ 39.6 est hard  
+   terrain.ruin         arch.ghoul           old 7: MC  96.7/ 27.3 est fair   | new 6: MC  99.2/ 13.2 est easy  
+   terrain.ruin         arch.brigand         old 7: MC  94.5/ 32.2 est fair   | new 6: MC  98.2/ 15.6 est fair  
+   terrain.ruin         arch.cultist         old 7: MC  84.6/ 43.0 est hard   | new 6: MC  91.5/ 36.9 est fair  
+
+worst chance a light PC is Staggered (reduced to 0 Vitality) by one home-band-1 crowd row: old 57.3%, new 39.6%

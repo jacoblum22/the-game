@@ -63,7 +63,7 @@ Expected supply a watch: licensed forager (+4) 2.05 / 1.35 / 0.85 / 0.30; unlice
 Every generic table at every home band, fielded with 09's PR-09-1 code, the word with the counter held
 (no-counter word printed beside it). Revision B (I-029): 55 of 55 pass (the first draft: 7 of 55, 139
 failures). No lethal face at the middle or high count; at least 14 of 20 faces fair or easier in each table;
-word mix trivial 35.7 / easy 21.5 / fair 34.5 / hard 8.2 / lethal 0 %; repeat chance (two threat faces in a
+word mix trivial 37.6 / easy 24.3 / fair 29.9 / hard 8.2 / lethal 0 % after I-040 (35.7 / 21.5 / 34.5 / 8.2 / 0 before; home band 1 also passes against the light reference, PR-10-8); repeat chance (two threat faces in a
 row naming the same archetype) mean 0.156, max 0.195. Output `10-word-audit-output.txt`; deterministic.
 
 ## 10_table_builder.py and 10-site-tables.py — PR-10-10 (I-022, I-028)

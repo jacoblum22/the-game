@@ -17,9 +17,10 @@ def rows(items):  # list of str or dict -> d6/d12 rows
         out.append(r)
     return out
 
-def D(kind, text, ref=None):
+def D(kind, text, ref=None, by=None):
     r = {'kind': kind, 'result': text}
     if ref: r['ref'] = ref
+    if by: r['ref_by_band'] = {b: 'arch.' + a for b, a in sorted(by.items())}   # [revision: I-067] 10.13.10
     return r
 
 themes = []
@@ -48,7 +49,7 @@ theme('ancient', 'Ancient', 'Forgotten by all; old works, old wards, old guardia
    D('denizen', 'an ooze that has eaten everything else here')],
   ['a wall map of the whole site (progress +2, once)', 'the builders\' script: a language clue (15)', 'an intact mechanism worth salvage (08.6.8)',
    'a dead delver\'s journal (a clue toward the heart: progress +1)', 'a still-burning everlamp (a glowing light source)', 'a sealed niche of grave goods (a cache)'],
-  [D('guardian', 'a great construct bound to the heart', 'arch.golem'), D('sealed_way', 'a vault door of the old makers'), D('guardian', 'the ancestor-spirit of the builders, who asks a question first', 'arch.ancestor'),
+  [D('guardian', 'a great construct bound to the heart', 'arch.golem', by={1: 'animated'}), D('sealed_way', 'a vault door of the old makers'), D('guardian', 'the ancestor-spirit of the builders, who asks a question first', 'arch.ancestor', by={1: 'skeleton', 5: 'golem'}),
    D('place_of_power', 'the engine or altar the place was built around (resonance: arcane)'), D('hoard', 'the makers\' treasury, unguarded but trapped'), D('the_lost', 'the remains of the last expedition and what they carried')],
   {'stirring': ['a click deep in the walls, like a lock turning', 'dust falling in a thin line from a seam'],
    'building': ['a rhythmic grinding far below', 'every carved eye in the hall seems newer than it was'],
@@ -67,8 +68,8 @@ theme('corrupted', 'Corrupted', 'Twisted by dark power: a fiend\'s nest, a cult\
    D('denizen', 'a tempter offers a bargain instead of a fight (talk first)')],
   ['the cult\'s ledger: names of members in the town (a thread, 11)', 'a captive alive in a cell (the lost)', 'a profane implement (loot with a flaw)',
    'a map of the catacombs with the altar marked (progress +2, once)', 'a desecrated relic that could be restored (a thread)', 'a list of sacrifices still to come (a clock to race)'],
-  [D('rite', 'a summoning in progress: a countdown of 4'), D('guardian', 'a greater fiend half-manifest', 'arch.greater_demon'), D('guardian', 'the cult\'s priest and their faithful (elite + mob)', 'arch.cultist'),
-   D('guardian', 'a wight-lord who made the place a court', 'arch.wight'), D('the_lost', 'the one taken for the sacrifice'), D('place_of_power', 'the profane altar: break it (Force, Hard) to cleanse the site')],
+  [D('rite', 'a summoning in progress: a countdown of 4'), D('guardian', 'a greater fiend half-manifest', 'arch.greater_demon', by={1: 'lesser_demon', 2: 'lesser_demon', 3: 'lesser_demon'}), D('guardian', 'the cult\'s priest and their faithful (elite + mob)', 'arch.cultist', by={5: 'tempter'}),
+   D('guardian', 'a wight-lord who made the place a court', 'arch.wight', by={1: 'ghoul', 5: 'vampire'}), D('the_lost', 'the one taken for the sacrifice'), D('place_of_power', 'the profane altar: break it (Force, Hard) to cleanse the site')],
   {'stirring': ['a smell of hot iron and burnt hair', 'a drum somewhere, slow'],
    'building': ['candles lit in a room you passed in the dark', 'the drum quickening; voices with it'],
    'imminent': ['the walls sweating something dark', 'every voice in the place falling silent at once']},
@@ -81,8 +82,8 @@ theme('fortified', 'Fortified', 'Held and defended: a bandit hold, an orc fort, 
    D('clock', 'a horn sounds: the danger clock +2'), D('gatekeeper', 'the sergeant of the watch (a gatekeeper)'), D('hazard', 'burning oil prepared above a stair', 'haz.fire'),
    D('denizen', 'prisoners who might be freed (non-threat; an ally or a complication)'), D('barrier', 'a portcullis down (Force Very hard; the winch is elsewhere)'), D('denizen', 'a deserter who will talk for a price (non-threat)')],
   ['the duty roster (when the guard changes: a lever)', 'a key ring', 'the strongbox (a cache)', 'a captured map of the region (11: a rumor and a route)', 'the armory (gear, 08.3.11)', 'letters from a patron (a thread)'],
-  [D('guardian', 'the chieftain and the bodyguard (elite + mob)', 'arch.orc'), D('guardian', 'the bandit captain and the band', 'arch.brigand'), D('hoard', 'the warchest'),
-   D('the_lost', 'the hostage the hold was built to keep'), D('guardian', 'an ogre the garrison keeps chained', 'arch.ogre'), D('sealed_way', 'the inner keep, barred')],
+  [D('guardian', 'the chieftain and the bodyguard (elite + mob)', 'arch.orc', by={5: 'knight'}), D('guardian', 'the bandit captain and the band', 'arch.brigand', by={4: 'knight', 5: 'knight'}), D('hoard', 'the warchest'),
+   D('the_lost', 'the hostage the hold was built to keep'), D('guardian', 'an ogre the garrison keeps chained', 'arch.ogre', by={1: 'orc', 5: 'giant'}), D('sealed_way', 'the inner keep, barred')],
   {'stirring': ['a shout, then laughter, somewhere above', 'a dog barking twice and stopping'],
    'building': ['boots on the stair, unhurried', 'torches carried along the wall walk'],
    'imminent': ['someone calling a name and getting no answer', 'the horn-bearer running for the tower']},
@@ -95,8 +96,8 @@ theme('hallowed', 'Hallowed', 'Holy, or once holy: a shrine, an abbey, a saint\'
    D('denizen', 'an ancestor spirit restless at the intrusion'), D('clock', 'the bells ring by themselves: the danger clock +1'), D('dread', 'the saint\'s image weeps (dread S1)'),
    D('barrier', 'a reliquary sealed in silver'), D('denizen', 'robbers already here, looting (a mixed encounter)'), D('trap', 'a falling-stone trap set by the old wardens')],
   ['a prayer book of the faith (a text, 05)', 'the saint\'s relic (the lost, or the heart)', 'an offering bowl (a cache, coin)', 'a record of miracles (lore; resonance clue)', 'a hidden stair to the crypt (a branch)', 'holy water (a consumable)'],
-  [D('place_of_power', 'the shrine itself (resonance: the keeper\'s axes)'), D('guardian', 'the celestial warden', 'arch.celestial'), D('the_lost', 'the relic everyone seeks'),
-   D('guardian', 'the guardian-dead of the order', 'arch.ancestor'), D('hoard', 'the treasury of offerings'), D('sealed_way', 'the sanctum, opened by a rite')],
+  [D('place_of_power', 'the shrine itself (resonance: the keeper\'s axes)'), D('guardian', 'the celestial warden', 'arch.celestial', by={1: 'animated', 2: 'ancestor'}), D('the_lost', 'the relic everyone seeks'),
+   D('guardian', 'the guardian-dead of the order', 'arch.ancestor', by={1: 'animated', 5: 'celestial'}), D('hoard', 'the treasury of offerings'), D('sealed_way', 'the sanctum, opened by a rite')],
   {'stirring': ['a bell note with no ringer', 'candles flickering toward you'],
    'building': ['a hum like many voices at prayer', 'the air growing cold and bright'],
    'imminent': ['every flame in the place standing straight up', 'a voice speaking your name, gently']},
@@ -109,8 +110,8 @@ theme('haunted', 'Haunted', 'The dead do not rest: a barrow, a plague-house, a b
    D('clock', 'a wail rises and falls: the danger clock +2'), D('barrier', 'a door that will not open while the light burns'), D('gatekeeper', 'the barrow-guard', 'creature.undead'),
    D('dread', 'you see yourself lying among the dead (dread S1)'), D('denizen', 'a ghoul pack that came for the dead'), D('hazard', 'lights burn blue and low (light −2 intervals)')],
   ['the name of the dead (lets them be laid to rest: a thread)', 'grave goods (a cache)', 'a death mask (a clue)', 'a letter never sent', 'bones that still hold a weapon worth taking', 'a funeral inscription (lore)'],
-  [D('guardian', 'the barrow-wight on its throne', 'arch.wight'), D('guardian', 'a wailing ghost bound to its bones', 'arch.ghost'), D('the_lost', 'the body someone needs buried'),
-   D('hoard', 'the grave-hoard (cursed: flaw.binding possible)'), D('guardian', 'a wraith that drinks warmth', 'arch.wraith'), D('rite', 'the dead rising tonight: a countdown of 4')],
+  [D('guardian', 'the barrow-wight on its throne', 'arch.wight', by={1: 'ghoul', 5: 'vampire'}), D('guardian', 'a wailing ghost bound to its bones', 'arch.ghost', by={5: 'wraith'}), D('the_lost', 'the body someone needs buried'),
+   D('hoard', 'the grave-hoard (cursed: flaw.binding possible)'), D('guardian', 'a wraith that drinks warmth', 'arch.wraith', by={1: 'ghost', 2: 'ghost'}), D('rite', 'the dead rising tonight: a countdown of 4')],
   {'stirring': ['your breath smoking in a room that was warm', 'a whisper that is almost your name'],
    'building': ['footsteps matching yours, a beat behind', 'a lantern guttering though the air is still'],
    'imminent': ['every niche empty that was full', 'a crowd of shapes at the edge of the light']},
@@ -123,7 +124,7 @@ theme('infested', 'Infested', 'Overrun by things that breed: rats, spiders, gobl
    D('barrier', 'webs choking the passage (Force or fire)'), D('trap', 'a goblin snare'), D('clock', 'the scuttling grows: the danger clock +1'), D('hazard', 'foul water', 'haz.foul_water'),
    D('patrol', 'a hunting pack (pending threat)'), D('gatekeeper', 'a giant of its kind at a chokepoint'), D('denizen', 'eggs, and what guards them'), D('hazard', 'the floor is rotten', 'haz.fall_10')],
   ['the bones of the last delver and their pack (a cache)', 'the nest\'s heart: where they come from (progress +1)', 'a vein of glowing fungus (a light source)', 'web-silk worth harvesting', 'an old exit, overgrown (a way out)', 'a chewed map (progress +1)'],
-  [D('guardian', 'the brood-mother', 'arch.giant_vermin'), D('guardian', 'the goblin boss and the mob', 'arch.goblin'), D('guardian', 'a great ooze', 'arch.ooze'),
+  [D('guardian', 'the brood-mother', 'arch.giant_vermin', by={4: 'monstrous_beast', 5: 'monstrous_beast'}), D('guardian', 'the goblin boss and the mob', 'arch.goblin', by={3: 'monstrous_beast', 4: 'monstrous_beast', 5: 'monstrous_beast'}), D('guardian', 'a great ooze', 'arch.ooze', by={5: 'monstrous_beast'}),
    D('the_lost', 'the one dragged down here'), D('hoard', 'everything they dragged in'), D('place_of_power', 'the fungal heart (burn it to clear the site)')],
   {'stirring': ['a rustling in the walls', 'a smell of musk, faint'], 'building': ['the rustling everywhere, and close', 'droppings fresh and warm'],
    'imminent': ['the floor ahead moving', 'a sound like rain that is not rain']},
@@ -135,8 +136,8 @@ theme('ravaged', 'Ravaged', 'Broken by war, fire or disaster: a sacked town, a b
    D('barrier', 'the way choked with rubble (a dig clock of 4)'), D('hazard', 'smouldering timbers', 'haz.smoke'), D('clock', 'something collapses deeper in: the danger clock +1'), D('dread', 'the dead where they fell (dread S1)'),
    D('patrol', 'ghouls drawn by the dead (pending threat)'), D('hazard', 'water flooding the lower rooms', 'haz.cold_water'), D('gatekeeper', 'a beast that has made the ruin its den'), D('trap', 'a defender\'s last trap, still set')],
   ['a survivor in hiding (the lost, or an ally)', 'what the attackers missed (a cache)', 'a broken banner (whose? a thread)', 'a diary of the last days', 'the well, clean (a water source)', 'a mason\'s plan of the building (progress +2)'],
-  [D('hoard', 'the strongroom the attackers never found'), D('guardian', 'the beast that took the ruin', 'arch.monstrous_beast'), D('the_lost', 'the survivor, or the remains'),
-   D('guardian', 'a looter-captain and their crew', 'arch.brigand'), D('a_way_through', 'the far gate: a route beyond'), D('sealed_way', 'the vault under the collapse (a dig clock of 6)')],
+  [D('hoard', 'the strongroom the attackers never found'), D('guardian', 'the beast that took the ruin', 'arch.monstrous_beast', by={1: 'wolf'}), D('the_lost', 'the survivor, or the remains'),
+   D('guardian', 'a looter-captain and their crew', 'arch.brigand', by={4: 'knight', 5: 'knight'}), D('a_way_through', 'the far gate: a route beyond'), D('sealed_way', 'the vault under the collapse (a dig clock of 6)')],
   {'stirring': ['stone ticking as it settles', 'crows lifting from the roofs'], 'building': ['a slow slide of rubble somewhere close', 'the smell of fresh smoke'],
    'imminent': ['the whole ceiling groaning', 'a cloud of dust rolling down the hall toward you']},
   {'range': '6', 'die': 'd6'}, [])
@@ -147,7 +148,7 @@ theme('wild', 'Wild', 'Taken back by the living world: a fey ring, a beast\'s la
    D('denizen', 'a fey creature that wants a game or a gift'), D('trap', 'a hunter\'s old snare'), D('clock', 'the wood itself seems to close behind: the danger clock +1'), D('gatekeeper', 'the guardian of the grove', 'creature.spirit.place'),
    D('dread', 'eyes in every shadow (dread S1)'), D('denizen', 'a strangling vine that moves'), D('patrol', 'a hunting cat on your trail (pending threat)'), D('hazard', 'a hidden drop under the leaves', 'haz.fall_10')],
   ['a spring of clear water (water source; resonance primal)', 'a tree marked with old signs (a way-finding lever)', 'the beast\'s leavings: bones of what it ate', 'herbs worth gathering (forage Easy here)', 'a fey token (a thread)', 'a sleeping place, sheltered (a secured area)'],
-  [D('guardian', 'the great beast of the place', 'arch.monstrous_beast'), D('guardian', 'the fey lord of the ring', 'arch.fey_noble'), D('place_of_power', 'the spirit\'s pool (resonance primal)'),
+  [D('guardian', 'the great beast of the place', 'arch.monstrous_beast', by={1: 'wolf'}), D('guardian', 'the fey lord of the ring', 'arch.fey_noble', by={1: 'wild_fey', 2: 'hag'}), D('place_of_power', 'the spirit\'s pool (resonance primal)'),
    D('guardian', 'the strangling heart-tree', 'arch.monstrous_plant'), D('the_lost', 'the child the wood took'), D('a_way_through', 'the hidden path through to the far side')],
   {'stirring': ['birdsong stopping all at once', 'branches moving without wind'], 'building': ['a musk on the air, strong', 'the path behind you no longer where it was'],
    'imminent': ['every living thing silent', 'something large breathing just beyond the light']},
@@ -321,6 +322,13 @@ archids = {a['id'] for a in arch}
 for th in themes:
     for r in th['climax']:
         if r.get('ref') and r['ref'] not in archids: bad.append(r['ref'])
+        for b, a in (r.get('ref_by_band') or {}).items():   # [revision: I-067] every guardian row covers bands 1-5
+            if a not in archids: bad.append(a)
+        if r.get('kind') == 'guardian':
+            byid = {x['id']: x for x in arch}
+            for b in range(1, 6):
+                a = r['ref'] if byid[r['ref']]['bands'][0] <= b <= byid[r['ref']]['bands'][1] else (r.get('ref_by_band') or {}).get(b)
+                if not a or not byid[a]['bands'][0] <= b <= byid[a]['bands'][1]: bad.append('%s band %d uncovered' % (r['ref'], b))
 print('bad refs:', bad)
 def anc(t, g): return t == g or t.startswith(g + '.')
 def pair_archetypes(th, dm):
