@@ -989,7 +989,7 @@ when the event happens, whatever the clock says:
 | `turn_start` / `turn_end` | an actor's turn within a round begins / ends | 06 |
 | `conflict_start` / `conflict_end` | round-by-round play begins / ends | 06 |
 | `scene_start` / `scene_end` | a continuous situation with one focus is framed / cut | 12 |
-| `breather` / `rest_short` / `rest_long` | a rest of that type completes (1 interval / 1 hour / 1 watch of sleep, at most one `rest_long` per day) | 07 |
+| `breather` / `rest_short` / `rest_long` | a rest of that type completes (1 interval / 1 hour / 1 watch of sleep, at most one `rest_long` per day, and none begins until two watches have ended since the last one completed [revision: I-078]) | 07 |
 | `reflection` | on each completed `rest_long`, on each week spent in downtime, and at each season boundary; at most once per day | 00 (derived) |
 | `venture_start` / `venture_end` | the PC leaves safety / returns to safety | 10 |
 | `session_start` / `session_end` | a real-world sitting begins / ends (not fictional time) | 12 |
@@ -1953,7 +1953,7 @@ Addendum A and the digests' interface requests is decided here.
 | Q13 | Disposition vs faction status | One **standing** scale (−3…+3) for both. **15** owns NPC standing and its social DC effects; **11** owns faction status; a faction member's default standing toward the PC equals the faction's status (15 may shift it by one for individuals). |
 | Q14 | Positioning | **06** owns relationship-state. Reserved range bands (ids fixed now because 05, 08, 09, 10 reference them): `band.engaged`, `band.close`, `band.near`, `band.far`, `band.distant`. Reserved positional flags: `flag.flanked`, `flag.cornered`, `flag.in_cover`, `flag.elevated`, `flag.hidden`, `flag.mounted`, `flag.lined_up`, and (added by 06) `flag.obscured`, `flag.in_chokepoint`, `flag.aloft` [amended: IR ch.06]. 06 defines each; it may add flags. |
 | Q15 | Harm states | **07** owns the ladder; reserved ids: `harm_state.active`, `.staggered`, `.dying` (with steps 1…N, 07 sets N in 2…4), `.dead`; the disposition `defeated` (out of the fight, alive) is a flag written by 07. Death requires the Two-Key rule (INV-6). |
-| Q16 | Rests and their durations | Durations fixed by 00.7.2 (breather 1 interval; short 1 hour; long 1 watch of sleep, once per day); effects and interruption rules 07; Focus 05. |
+| Q16 | Rests and their durations | Durations fixed by 00.7.2 (breather 1 interval; short 1 hour; long 1 watch of sleep, once per day and two watches apart [revision: I-078]); effects and interruption rules 07; Focus 05. |
 | Q17 | Starting kit vs item ids | **02** writes kits as `{item_tag, quality, quantity}` using `item.*` tags; **08** resolves tags to base items. So 02 never needs 08's ids. |
 | Q18 | Hazards: 07 or 10? | **10** owns hazard entries (`data/hazards.yaml`: severity, harm tags, effect DC, exposure cadence); **07** owns what harm does. Hazard harm uses the severity scale. |
 | Q19 | Calendar | **00** fixes the ladder arithmetic (364-day year); **11** owns the calendar engine and the Season Turn; the region's seed (**12.16.15**; a pre-made setting such as **13**) names months, days and festivals [revision: I-028]. |

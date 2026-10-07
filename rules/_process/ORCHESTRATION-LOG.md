@@ -399,3 +399,7 @@ Resolved all 12 rows: I-038 (Oracle lever cap; sim shows +3.7 down to +0.8 per r
 - Resolved I-033: the sim now tracks burning and bleeding, now priced at 1 EU per stack. Flame Lance rank 2 now beats the free working plus a push.
 - Resolved I-043, I-044 and I-058.
 - New row I-090 (pricing of item-property conditions in ch.08 and ch.09's estimator) goes to C4.
+
+## Revision C3 returned: `revision-C3-report.md`
+- Resolved all 9 rows: I-075 (dropped objects capped by size; sim section L), I-076, I-078, I-042, I-057, I-060, I-072, I-077, I-082 (the harm generator is byte-equal again).
+- C4 and C5a are running in parallel worktrees.

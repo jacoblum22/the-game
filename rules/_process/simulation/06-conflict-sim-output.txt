@@ -421,3 +421,20 @@ Pooled rung gain 98.3 win points (= 2 EU). EU equivalent, the bearer answering a
 |   new Flame Lance r2 (S4 +2 + burning), bearer never       |  54.6 |  32.2 |  67.8 |  45.4 |  2.5 | 13.2 |  52.0 |
 |   new Flame Lance r2 (S4 +2 + burning), bearer always      |  59.9 |  39.2 |  60.8 |  40.1 |  2.6 | 12.2 |  57.5 |
 |   new Flame Lance r2 (S4 +2 + burning), bearer smart       |  59.9 |  39.2 |  60.8 |  40.1 |  2.6 | 12.2 |  57.5 |
+
+### L. I-075: one established object dropped on the foes as the PC's first beat (rope Moderate 15)
+
+Old: the drop is a burst (cap 6) and its harm lands k times on the pool, carrying over. New: it selects at
+most its rung's count (body 2, heavy 3, massive 4) and a share never exceeds one member's Vitality.
+Cells: advisory class win%/Staggered% (H's thresholds); wipe% = the drop alone fells every member.
+
+| Matchup | none | old heavy S3 | old massive S4 | new body S2 | new heavy S3 | new massive S4 |
+|---|---|---|---|---|---|---|
+| P1 vs T1 mob of 4 | easy 99/13 | easy 99/8 w55 | easy 99/8 w55 | easy 99/11 w0 | easy 99/8 w0 | easy 99/8 w55 |
+| P1 vs T1 mob of 6 | fair 95/27 | fair 96/17 w55 | fair 96/17 w55 | fair 95/23 w0 | fair 96/17 w0 | fair 96/17 w0 |
+| P2 vs T1 mob of 8 | fair 97/28 | easy 98/13 w15 | easy 98/13 w65 | fair 98/24 w0 | easy 98/13 w0 | easy 98/13 w0 |
+| P2 vs T2 mob of 4 | hard 43/74 | hard 74/35 w0 | hard 79/28 w15 | hard 48/68 w0 | hard 68/43 w0 | hard 79/28 w15 |
+| P2 vs T2 mob of 6 | lethal 8/98 | hard 50/62 w0 | hard 67/34 w15 | lethal 11/97 w0 | lethal 24/90 w0 | hard 53/59 w0 |
+| P3 vs T2 mob of 6 | easy 95/15 | easy 98/6 w0 | easy 98/5 w25 | fair 95/15 w0 | easy 98/7 w0 | easy 98/6 w0 |
+| P3 vs T3 mob of 4 | lethal 24/89 | hard 42/72 w0 | hard 59/50 w0 | lethal 24/89 w0 | lethal 35/80 w0 | hard 59/50 w0 |
+| P2 vs 4xT2 (separate) | lethal 3/98 | lethal 29/79 w0 | hard 65/35 w15 | lethal 6/96 w0 | lethal 20/84 w0 | hard 65/35 w15 |

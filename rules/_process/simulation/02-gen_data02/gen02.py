@@ -409,14 +409,15 @@ recency_window: 5              # matters for successors: a successor's draws hal
 slot_cap: 4                    # gift + knack + quirk + bent
 bias_rule: "an entry carries the bias tag when one of its `tags` equals the bias tag or descends from it; its weight is x3"
 bent:
-  eligible_after: "the creation window has closed (02.2.6) and at least one deed branch has 3 resolved frames with the PC as actor since creation"
+  eligible_after: "the creation window has closed (02.2.6) and at least one deed branch has 3 resolved frames with the PC as actor since creation; the count is never reset (a deferral only spaces the next draw, 02.6.7)"
   source_tags: "every deed branch with >= 3 such frames"
   offered_at: reflection
   answers: [accept, defer]
   deferrals_max: 2             # the third draw is accept-or-forgo
   declined_entries_excluded: true
   never_auto_applied: true
-  cap: 3
+  attribute_cap: 3              # the Bent never raises an attribute above +3 (02.6.5) [revision: I-060]
+  per_life: 1                   # one Bent a life: once accepted or forgone, never offered again; frame counts never reset (02.6.6) [revision: I-060]
 
 pool:
 """

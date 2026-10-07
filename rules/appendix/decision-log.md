@@ -624,6 +624,13 @@ Decisions made in `00-architecture.md` (Wave 2). Digest shorthand `[R1 §x]`…`
 - Serves: goal 1 (a quick-start caster can cast), goal 2 (the default needs no judgment).
 - Revisit if: A3's quantity-versus-freedom audit is rerun and a people's Typical rule is changed.
 
+### DL-02-26: One Bent a life; frame counts never reset [revision: I-060]
+- Decision: 02.6.5 states that a character has one Bent a life: once accepted or forgone nothing re-opens it, so no second Bent is offered on the same frames. `gen_birth.yaml#bent` renames the ambiguous `cap: 3` to `attribute_cap: 3` (the +3 ceiling) and adds `per_life: 1`; `eligible_after` says the count is never reset (a deferral only spaces the next draw, 02.6.7).
+- Alternatives considered: resetting the count at each accepted Bent (implies a second Bent, which 02.6.6 forbids: "finished for this character's life").
+- Evidence: 02.6.5; 02.6.6; the key `cap: 3` was the only text that read as a Bent count.
+- Serves: goal 2 (P1's variance is bounded), goal 1.
+- Revisit if: n/a.
+
 ## DL-03 — Tags and Evidence
 
 ### DL-03-01: Deed significance is computed from the frame's pre-committed fields; fresh judgment is kept only for tags and conduct
@@ -1500,6 +1507,27 @@ row), output `06-conflict-sim-output.txt`, write-up `06-conflict-sim.md`.
 - Serves: goal 2 (one mechanism), goal 1.
 - Revisit if: players never use the trade in fights.
 
+### DL-06-27: A dropped object selects at most its rung's count, and a share never exceeds one member [revision: I-075]
+- Decision: T-06-8 gains a footprint (hand 1, body 2, heavy 3, massive 4) that caps the creatures a dropped, toppled, swung or rolled object selects inside its shape's cap; against a mob each selected member takes one share, capped at one member's Vitality (06.10.4), so the object fells at most its count; a fallen object is a fact and is not dropped again. T-06-9 row 5 drops the portcullis (row 19 is its one anchor: S3 and restrained on one); rows 9 and 29 take the count; 06.5.10's `targets` knob cites it. `conflict.yaml#improvised` carries `selects_at_most`.
+- Alternatives considered: keeping the burst and lowering the object's harm against mobs (a second harm ladder for one case); one member only (makes the chandelier no better than a Strike, against the fiction of a falling mass); a Focus cost for environment use (taxes the cheapest source of variety, R1 §06).
+- Evidence: `06-conflict-sim.py` section L (seed 606, 20,000 fights a cell): the old reading felled a whole T1 mob of up to six on every hit (wipe 55% of fights at P1, the hit rate); under the footprint no mob larger than the count is ever wiped, and one drop moves a mob fight at most one advisory word gentler (T-06-13), only for heavy or massive objects. Sections A–K reproduce byte-equal.
+- Serves: goal 2 (the environment rewards play without replacing the fight), goal 1.
+- Revisit if: playtests show players fish the Oracle for droppable features every fight (then cap established droppables per scene).
+
+### DL-06-28: Wren's worked examples are retraced at Vitality 13 [revision: I-042]
+- Decision: every Wren trace in 06, 07 and 12 uses Vitality 13 (12 + Endurance +1 after her Bent, 02.7.1), the value 00, 01, 02, 05, 10 and 16 already use; downstream numbers moved with it (WE-06's 13 → 10 and 10/13, WE-06-5's 13 → 5, WE-06-8's S5 leaving 1 from full, WE-07-1's 13 → 8 → 3 with 2 excess discarded and a maximum of 7 after the barrow, WE-07-3's 13 … 2, WE-07-5's maxima 7 / 10 / 13 and rests 7 / 6 / 3, WE-12's 13 → 10). No outcome of any example changes.
+- Alternatives considered: a sentence "Wren before her Bent" and keep 12 (each sheet already lists Endurance +1, so the sheet would contradict itself).
+- Evidence: 02.7.1; the sheets in 06, 07 and 12 (Endurance +1); 07.1.2's floor ceil(13 / 2) = 7; `last_chance.yaml` (Maimed and Reprieve stand at ceil(max / 4) = 2 either way).
+- Serves: goal 2 (examples are test vectors).
+- Revisit if: Wren's sheet changes in 00.
+
+### DL-06-29: A branch working names its attribute in the Strike frame [revision: I-057]
+- Decision: 06.4.3 decision 2 states the exception: a branch working (05.7.11) is a Strike with the branch's casting attribute, needs no weapon and reaches as 05.7.11 says.
+- Alternatives considered: leaving it to 00.1.4's precedence alone (correct, but an engine reading 06.4.3 alone picks Might or Agility).
+- Evidence: 05.7.11 item 4; 00.1.4.
+- Serves: goal 2.
+- Revisit if: 05 adds another attack working outside verb.strike's attributes.
+
 ## DL-07 — Harm, Recovery, and Death
 
 Format per BRIEF §11. Citations per 00.1.6. Numbers consumed by other chapters are marked **[consumed]**.
@@ -1652,6 +1680,27 @@ chapter 06's fight model and T-06-12 lines), output `07-harm-sim-output.txt`, wr
 - Evidence: [R5 HR-07] [01.18.15] [06 T-06-10] [05.6.6].
 - Serves: goal 2 (counters, not recollection: SG-19).
 - Revisit if: 10's travel procedure wants a finer grain than the watch.
+
+### DL-07-22: A shut barrier between pursuer and PC makes the retreat clean [revision: I-076]
+- Decision: 07.4.3's ABLE also needs a way to follow: no shut `barrier` or other movement-blocking feature (`no_line` for Moves, 06.3.8) between the pursuer and the PC's route. A breakable barrier still blocks; the OFFER states its Force tier as the pursuers' delay. 06.12.3 notes that a way barred before the Retreat is not a chase beat. PR-07-6, WE-07-7 (a fourth state) and `harm.yaml#retreat.pursuit_test.able` follow.
+- Alternatives considered: the barrier as a chase lever only (a PC who barred the gate still pays a rout's 2 ticks); a barrier that blocks only when the pursuer cannot break it (every door is breakable, so the bar would never count).
+- Evidence: 06.3.8's `barrier` (no_line and blocked Moves when shut); T-06-9 rows 11 and 19; verification-2c probe.
+- Serves: goal 1 (clever play is honored), goal 2.
+- Revisit if: chases want a "they break through later" clock (11's trail rules would own it).
+
+### DL-07-23: Long rests are two watches apart, and a wound takes one Treat a day by anyone [revision: I-078]
+- Decision: (a) besides one a day, no `rest_long` begins until two watches have ended since the last one completed (00.7.2; 07.8.1's table; `scales.yaml` and `harm.yaml` `min_gap_watches: 2`; `last_rest_long_end` in state), closing the night-watch-then-morning-watch double reset around one dawn. (b) 07.8.8: one Treat beat for each wound and each affliction a day, by anyone; a beat frames only wounds neither `treated_today` nor closed, and a failed beat closes every wound it framed for the day (`treat_closed_today`); first aid on the Dying keeps 07.2.7's once-a-round retry.
+- Alternatives considered: (a) a day that ends at midnight (moves 00's calendar for one seam); a 24-hour cooldown (forbids moving sleep earlier by a watch). (b) per-tender limits (a second tender re-rolls, which 01.4.2 forbids in spirit).
+- Evidence: 00.7.1 (the day ends at dawn); 01.4.2 (let it ride); a sleep schedule check: nightly sleep leaves three watches between rests, a shift to the evening watch leaves two, the exploit left none.
+- Serves: goal 2 (no seam an optimizer finds), goal 1.
+- Revisit if: travel (10) wants split sleep across two watches.
+
+### DL-07-24: `07-gen_harm07.py` runs on its own; `harm.yaml` is the generator's output again [revision: I-082]
+- Decision: run directly, the second half hands over to `07-gen_data07.py` (which defines E, L, write and execs it); V2c-006's text was already in the generator, so the regenerated `harm.yaml` differs from V2c1's hand edit only in line wrapping (YAML-equal), and is now byte-equal on every re-run, by either entry point.
+- Alternatives considered: merging the two files (a larger diff for no behavior).
+- Evidence: `cmp` after `07-gen_harm07.py` and after `07-gen_data07.py`: identical; injuries, afflictions, last_chance and merged-contrib outputs unchanged.
+- Serves: goal 2 (generated data stays generated).
+- Revisit if: n/a.
 
 ## DL-08 — Items, Loot, and Crafting
 
@@ -3201,6 +3250,20 @@ chapter 06's fight model and T-06-12 lines), output `07-harm-sim-output.txt`, wr
 - Evidence: the validator caught the band 3–5 Vitality problem (DL-16-04) and a wage-band mismatch (the boatman).
 - Serves: goal 2.
 - Revisit if: n/a (re-run whenever 05/08/09 data changes).
+
+### DL-16-23: A creation bond is a starting standing, never a step to Devoted [revision: I-072]
+- Decision: 15.1.7 and 16.5.10 drop "a bond" from Devoted's sources; Devoted comes only from a deed of weight (rescue, sparing, kept R4+ promise, R4+ help) or, for an ally, its thread's completion (16.12.3). `social.yaml#small_step_caps.ceilings.devoted_only_from` replaces `bond` with `ally_thread_complete`.
+- Alternatives considered: a named bond event that grants Devoted (a kept R4+ promise to an anchor bond is already a deed of weight; a second name for it adds nothing).
+- Evidence: 02.9.2 ("no bond starts at Devoted"; bonds then move only by ch.15's sources); T-16-22 (clocks must not reach Devoted).
+- Serves: goal 2 (one reading).
+- Revisit if: n/a.
+
+### DL-16-24: Posted allies have a cap per place and act at their post only through their task or a Command [revision: I-077]
+- Decision: the allies posted at one place count retinue places against `retinue_cap`, or the holding's staff line (08.8.8) when larger; beyond it a post is refused. In a conflict at the post they are present, not the retinue: each acts through its task, or as a scene ally when the PC Commands it (1 action each, 06.14.2). T-16-1's beast row drops "ridden into conflict" (a ridden mount is part of the rider's participant, 06.15.1; T-16-2). `companions.yaml#retinue.posted_cap`.
+- Alternatives considered: no posting at all beyond the cap (removes the honest "keep them at home" answer); posted allies fighting freely at home (an uncounted garrison).
+- Evidence: 16.2.1 (every command costs one of three actions; T-16-21's advisory shift by followers); 08.8.8's staff lines.
+- Serves: goal 2, goal 1 (a home can be defended).
+- Revisit if: 11's holdings want garrisons as a faction asset.
 
 ## DL-INT — Integration (Wave 3 → 4)
 

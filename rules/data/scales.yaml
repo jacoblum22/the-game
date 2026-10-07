@@ -148,7 +148,7 @@ time:
   rests:
     - {id: breather, duration: {intervals: 1}}
     - {id: rest_short, duration: {hours: 1}}
-    - {id: rest_long, duration: {watches: 1}, max_per_day: 1, requires: sleep}
+    - {id: rest_long, duration: {watches: 1}, max_per_day: 1, min_gap_watches: 2, requires: sleep}   # min_gap_watches: watches that must end after one completes before the next begins (00.7.2; revision I-078)
   rest_payload: {quality: [full, partial, interrupted], site: [haven, camp, rough], treated: bool}   # computed by ch.07 when it marks the rest boundary (00.7.2, amended; 07.8.1)
   modes: [conflict, site, free, travel, downtime]
   real_time_matters: false

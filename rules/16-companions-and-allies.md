@@ -136,7 +136,7 @@ their own reasons) or a follower (drawn by the PC's name).
 | `hireling` | a person serves under a recorded **contract** (duty, wage, term; 16.14.2) | a person who would stay unpaid (companion) | standing (16.5) + contract | wage (08.8.8) | 1 | recurring; principal after 4 weeks' service or when named in a thread |
 | `companion` | a person (or speaking being) travels with the PC for reasons of their own, recorded as a **joining term** (a want, a bond, a debt, a cause; 16.3.4) | someone paid to (hireling); someone sworn to the PC's name (follower) | standing (16.5) | keep only (16.14.3) | 1 | principal |
 | `follower` | a person sworn to the PC through the PC's name, rank or calling (16.3.6), with a recorded **oath of service** | a person recruited by request (companion) | standing (16.5), starts Friendly | keep only | 1 | recurring (principal when named in a thread) |
-| `beast` | an animal trained, bonded or tamed to follow the PC (hound, hawk, bonded wolf, familiar), or a mount that is ridden into conflict or bonded (16.15) | a mount or pack animal used only to carry (it is an item with a companion record but takes no retinue place, T-16-2) [verification: V2c-002] | standing on the beast scale (16.15.3) | upkeep (08.10.2) | 1 (none for an unbonded mount or pack beast) | — (beasts have no NPC depth; they have a temperament) |
+| `beast` | an animal trained, bonded or tamed to follow the PC (hound, hawk, bonded wolf, familiar), or a mount that is bonded (16.15); a mount merely ridden into conflict is part of its rider's participant (06.15.1) [revision: I-077] | a mount or pack animal used only to carry (it is an item with a companion record but takes no retinue place, T-16-2) [verification: V2c-002] | standing on the beast scale (16.15.3) | upkeep (08.10.2) | 1 (none for an unbonded mount or pack beast) | — (beasts have no NPC depth; they have a temperament) |
 | `bound` | a being whose service is a working's effect (05): a summoned servant, a raised dead, an automaton, a familiar bound by `rit.bind_familiar` | an animal that follows by bond (beast) | **none**: obedience is the working's text (16.15.6) | Focus or components (05) | 1 if the working is lasting (`duration: permanent`); 0 for a scene's servant | — |
 | `cohort` | three to six members of **one** template who act as one entity (a warband, a lance of spears, a militia squad), each serving for the same reason (hire, oath or cause) | a group of named individuals (each its own ally) | one standing for the whole cohort (16.2.6) | per member | 1 per member | the cohort is recurring; its leader, if named, is a separate ally |
 | `scene_ally` | a person or group who fights or works beside the PC for one scene without joining (the caravan guard, the village militia, a knight who rides with the PC to the bridge) | anyone who travels on with the PC after `scene_end` (then recruit them by 16.3) | their ordinary standing (15) | — | 0 | as 12 generates them |
@@ -251,6 +251,14 @@ thread hook, 11), 2–5 the task kept, 6 the task kept and one useful thing lear
 ally's regard and grievance clocks do not tick from the PC's deeds (it did not witness them) but do from
 pay and keep. This is the honest answer to "I want more followers than I can lead": keep them where you
 have a home, and take with you the ones the cap allows [R5 NP-05; R6 D-R5].
+- **Posting cap** [revision: I-077]. The allies posted at one place count **places** (16.2.2) against a cap of
+  `retinue_cap`, or the holding's staff line (08.8.8) when that is larger: a cottage keeps as many as the PC
+  could lead, a manor ten, a keep thirty. A post beyond the cap is refused (G4, redirect: another place, or a
+  larger holding). The cap is per place, so a garrison costs a holding for each retinue's worth.
+- **At the post, in a scene.** When the PC is at that place and a conflict starts there, posted allies are
+  present but are not the retinue: each acts through its task (it keeps the door, minds the horses) and
+  otherwise takes no beat, unless the PC **Commands** it, which costs 1 of the PC's actions for each
+  command (06.14.2), as for any companion. They are scene allies for that conflict and stay posted after it.
 
 **16.2.4 The band cap: no ally out-powers the hero.** `[D]` Every ally serves at a band no higher than
 
@@ -899,8 +907,9 @@ scene where the player can answer; a loyalty drop that is only a number teaches 
 
 **16.5.10 Devotion.** `[D]` An ally reaches **Devoted** only by: a deed of weight from 15.1.7 (a rescue, a
 sparing, a kept R4+ promise, an R4+ help — 15's sources; for an ally, being saved from bleeding out or from
-captivity is the commonest, 16.9.4); the completion of its personal thread (16.12.3); or a creation bond
-(02.9.2). Regard clocks alone stop at Friendly. Devotion is what a follower may become, never what one
+captivity is the commonest, 16.9.4); or the completion of its personal thread (16.12.3). A creation bond
+(02.9.2) sets a starting standing of +2 at most and is never itself a step to Devoted; a bonded ally
+reaches it by these same deeds [revision: I-072]. Regard clocks alone stop at Friendly. Devotion is what a follower may become, never what one
 starts as, and the simulation shows why the clocks must not reach it: with them uncapped, an aligned PC's
 companion was Devoted by session 12 in 93% of runs, which makes the top rung a matter of time rather than
 of a deed [T-16-22; DL-16-08].

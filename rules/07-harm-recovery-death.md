@@ -585,7 +585,12 @@ Decisions (J):      1. ROUTE [J:flag]: "Is there an established way out of this 
                        returned.
 Computation [D]:    PURSUIT TEST, from state: a pursuer is WILLING when its side's objective is kill,
                     capture or rob toward the PC and the side is not broken; ABLE when its pace is at
-                    least the PC's (06.3.3) and it is not held or prone.
+                    least the PC's (06.3.3), it is not held or prone, and it has a WAY TO FOLLOW: no
+                    shut `barrier` or other recorded feature that blocks movement (`no_line` for
+                    Moves: 06.3.8; T-06-9 rows 11, 19, 26) stands between it and the PC's route.
+                    A barrier it could break still blocks: breaking it is a Force against the
+                    barrier's tier on its own turn, and the PC is gone by then; the OFFER states
+                    that tier as the pursuers' delay. [revision: I-076]
                     (a) No pursuer both willing and able -> a CLEAN RETREAT, certain.
                         Price: the parting blow, if the PC is engaged when it declares (once: the
                         heaviest engaged enemy's ordinary attack severity, one rung lighter, through
@@ -618,6 +623,10 @@ Examples:           inside (clean): Wren, not engaged, backs out of a cellar fro
                     boundary (rout): the same cellar, but the thing behind her is a cinder hound
                     (faster, objective kill): "Run for it (a chase), or rout: you get out, and the
                     hound follows your trail toward Ashford (Cinder Hunting Ground +2)."
+                    boundary (barred): the hound is on the far side of the cellar door Wren has
+                    just slammed and barred (T-06-9 row 11): no way to follow, so the retreat is
+                    clean ("it will be through that door with a Force against Moderate; you will
+                    be up the stair by then"). [revision: I-076]
                     outside: Wren is flag.cornered in a barrow niche: Retreat is illegal; the card
                     names what would clear the corner (Force past it, 06.5.6).
                     non-example: "I retreat and take the chest with me": the chest was not in hand;
@@ -941,7 +950,7 @@ reads the quality this chapter emits (00.17.1 Q1, Q16).
 |---|---|---|---|
 | **breather** | 1 interval | stops, sits, drinks, binds a scrape | no conflict in progress; not Dying |
 | **short rest** `rest_short` | 1 hour | sits or lies down, eats, tends gear and wounds | a place to stop; no travel, labor or rolled beats beyond the allowance of 07.8.3 |
-| **long rest** `rest_long` | 1 watch, of which at least 4 hours asleep; at most one a day | sleeps | a rest site (07.8.2); not Dying |
+| **long rest** `rest_long` | 1 watch, of which at least 4 hours asleep; at most one a day, and none begins until two watches have ended since the last one completed (00.7.2) [revision: I-078] | sleeps | a rest site (07.8.2); not Dying |
 
 A rest is declared as a free activity (00.12.6): it never rolls. The DM calls `advance_time` for its
 duration in the current time mode, every boundary inside it runs (10's interval and watch checks, clock
@@ -1021,7 +1030,7 @@ partial rest"), so the cost of resting badly is known [R4 §9 07 item 4: rest ef
 |---|---|---|---|---|
 | breather | **+2** | +2 | 0 | the first **2** breathers between short rests restore Vitality; later ones restore 0 |
 | short rest | **+ half of maximum, rounded up** | + a quarter of maximum, rounded up | +2 | the first **2** short rests of a day restore this much; later ones restore as a breather |
-| long rest | **to maximum** | to three quarters of maximum, rounded up (never lowering current) | as a partial short rest | one a day (00.7.2) |
+| long rest | **to maximum** | to three quarters of maximum, rounded up (never lowering current) | as a partial short rest | one a day, two watches apart (00.7.2) [revision: I-078] |
 
 The sizes and limits mirror chapter 05's Focus table (05.6.9) on purpose: the body and the well refill
 in the same three sizes, so the choice of when to stop is one choice [DL-07-12]. Also at completion:
@@ -1088,8 +1097,11 @@ Computation [D]:    attribute Intellect (Agility for first aid in a conflict); c
                     Heavy MODERATE, Grievous HARD, Catastrophic (SURGERY) VERY HARD, which the
                     license admits only at grade expert or better; an affliction: its virulence
                     tier; the Dying: the stabilize DC. Time: 1 interval a patient; surgery 1 hour;
-                    first aid 1 action. One Treat counts for each patient each day (01.4.2: a failed
-                    Treat is not retried that day by the same tender). Treating oneself: an
+                    first aid 1 action. One Treat beat for each wound (and each affliction) a day,
+                    by anyone: a beat may frame only wounds that are neither `treated_today` nor
+                    closed, and a failed Treat closes every wound it framed for the day, whoever
+                    would tend it next (01.4.2) [revision: I-078]. First aid on the Dying is
+                    07.2.7's, retried each round (Edge cases). Treating oneself: an
                     engine-applied Precision snag; never surgery; never while Dying.
                     REACH LADDER, wounds: 1 the worst wound is `treated_today`; 2 every wound at or
                     below the framed tier is `treated_today`, Moderate wounds heal now, bleeding
@@ -1104,7 +1116,7 @@ Stakes:             SAFE for Moderate and Heavy wounds and for afflictions. RISK
                     (S2: 3 Vitality, lethal: false, no reduction); alternate cost.time (the day's
                     treatment is lost and the hour is spent). A critical failure at surgery (S3):
                     cost.closed_door: this tender may not operate on this wound again.
-State writes:       treated_today per wound; healed wounds; clock ticks; the lever fact; kit use;
+State writes:       treated_today per wound; treat_closed_today per wound a failed beat framed; healed wounds; clock ticks; the lever fact; kit use;
                     time; evidence on deed.lore.medicine (03).
 Narration may not imply: a wound healed that the reach did not heal; Vitality restored (Treat
                     restores none); a maim or mark undone.
@@ -1519,7 +1531,8 @@ hazard exposures, affliction stages, 05.6.6)
 
 **PR-07-6 Retreat.** `[D]` + `[J:flag]`
 1. Legal? (07.4.3 license line.) Route? (decision 1; the Oracle if unestablished.)
-2. Pursuit test over every hostile participant. None willing and able → clean. Else → the player picks a
+2. Pursuit test over every hostile participant (ABLE includes a way to follow: no shut `barrier` between,
+   [revision: I-076]). None willing and able → clean. Else → the player picks a
    chase or a rout; for a rout the engine lists clock candidates and the DM picks (decision 2).
 3. Compute the price: parting blow (severity, after armor), left behind, world cost. Show it. On commit:
    apply in that order; move the PC; mark the PC's `conflict_end`; write the setback fact for a rout.
@@ -1563,7 +1576,7 @@ hazard exposures, affliction stages, 05.6.6)
 2. Completed clocks: remove the wound and its carrier; write the scar (S4, S5); recompute the maximum.
 3. Catastrophic and unoperated for 7 days → replace it with the site's maim (07.7.4). Grievous with no
    tick for 7 days → an exposure to `aff.wound_rot`.
-4. Clear `rested_today`, `treated_today`, `bed_rest_today`.
+4. Clear `rested_today`, `treated_today`, `treat_closed_today`, `bed_rest_today`.
 
 **PR-07-11 Dread.** `[D]`
 1. On a source of T-07-19: add the flat amount, or run the dread check and add by its table.
@@ -1747,7 +1760,7 @@ The wound load limit was tuned on these: at 2 the fair row read menu 9 and the h
 ## Worked examples
 
 All examples continue **Wren** (00's sheet): Might +1, Agility +3, Endurance +1, Wits +2, Intellect 0,
-Presence 0, Resolve −1; power band P1; Vitality 12; Focus 4; fate 1; Guard 14. From this chapter: Endure
+Presence 0, Resolve −1; power band P1; Vitality 13 (12 + Endurance +1, 02.7.1) [revision: I-042]; Focus 4; fate 1; Guard 14. From this chapter: Endure
 with Endurance **+2** (attribute +1, the competence floor +1); Endure with Resolve **+0**; dread threshold
 8 − 1 = **7**. She wears a padded jack (light armor: reduction 1 against `harm.physical`; *illustrative, 08
 owns*). Adversary lines are T-06-12's (*illustrative; 09 owns*). Dice are shown as rolled.
@@ -1778,8 +1791,8 @@ her. Rounds in brief (Wren's spear: +4 against Guard 17; her hits deal 3 − 1 =
 
 | Round | What happens | Wren's state |
 |---|---|---|
-| 1 | Wren hits once (wight 16). The wight Moves to the niche's mouth: the feature has one way out and it now stands in it → `flag.cornered` (06.3.6). It Strikes: d20 14 + 7 − 2 (Fend) = 19 against Guard 14: hit; S3 frost = 5; the jack does not reduce frost. | Vitality 12 → **7** (worn) |
-| 2 | Wren hits once (14). The wight: d20 12 → 17, hit, 5 → Vitality 2 (**bloodied**). Second Strike (repetition −2): d20 11 → 16, hit, 5: Vitality would be −3 → **0, Staggered; the excess 3 is discarded** (07.2.3). | Staggered; load 0/3 |
+| 1 | Wren hits once (wight 16). The wight Moves to the niche's mouth: the feature has one way out and it now stands in it → `flag.cornered` (06.3.6). It Strikes: d20 14 + 7 − 2 (Fend) = 19 against Guard 14: hit; S3 frost = 5; the jack does not reduce frost. | Vitality 13 → **8** (worn) |
+| 2 | Wren hits once (14). The wight: d20 12 → 17, hit, 5 → Vitality 3 (**bloodied**). Second Strike (repetition −2): d20 11 → 16, hit, 5: Vitality would be −2 → **0, Staggered; the excess 2 is discarded** (07.2.3). | Staggered; load 0/3 |
 
 `trg.exits` → `[STATUS] STAGGERED — blows now wound you; at wound load 3 you fall to Dying. Load 0/3.
 Exits: Yield — not accepted · Retreat — you are cornered: get past it first (06.5.6) · or fight on.`
@@ -1822,7 +1835,7 @@ brink wound; `aff.deaths_debt` stage 1 (`cond.cursed` S1); a vow thread "Return 
 `clk.deaths_debt` 0/8, +1 a week; the mark *Death's debtor* (a rime-white streak in her hair); the fact
 "the wight lowers its hand and goes back to its slab"; wound load cleared; `setback.threshold`; chronicle:
 "Walked out of the Ninefold Barrow owing the dead a crown." She leaves with three wounds (chest, hand,
-foot), brink 1, a maximum Vitality of 6 (12 − 2 − 3 − 2 − 2 would be 3; the floor is half of 12),
+foot), brink 1, a maximum Vitality of 7 (13 − 2 − 3 − 2 − 2 would be 4; the floor is half of 13, rounded up),
 dread 4/7, and a debt that will come due.
 
 *Boundary: the other cheap door.* Had she taken the **Reprieve**: fate 1 → 0; the last blow is undone;
@@ -1882,22 +1895,22 @@ death. The fall is 8 Vitality through `apply_harm`.
 
 ### WE-07-3 Blackroot: a poison runs its stages
 
-*Situation.* Ashford, a fortnight later; Wren is whole (Vitality 12). A Guild knife-man's blade is coated
+*Situation.* Ashford, a fortnight later; Wren is whole (Vitality 13). A Guild knife-man's blade is coated
 (`aff.blackroot`: Hard; onset and cadence one interval; stage harm from stage 2; `warn_stage: 2`; six
 checks and it runs its course).
 
 | When | Check | Result |
 |---|---|---|
-| the cut | The Strike hits: 3 − 1 = 2 (Vitality 10). A rider: **exposure**, Endure +2 against 20: d20 11 → 13 | failure → afflicted; onset one interval. He runs. |
+| the cut | The Strike hits: 3 − 1 = 2 (Vitality 11). A rider: **exposure**, Endure +2 against 20: d20 11 → 13 | failure → afflicted; onset one interval. He runs. |
 | interval 1 | onset ends (`h.07.affliction_onset`) | **stage 1**: `cond.poisoned` S2 (−2 on all checks). "A numb line creeping from the cut." |
-| interval 2 | stage check (no penalty from its own carrier): d20 9 → 11: a failure by 9 | **stage 2**: poisoned S3; stage harm S2 = 3, no reduction: Vitality **7**. Stage 2 is the warn stage → `[WARNING] THIS CAN KILL YOU — the blackroot in your blood. Untreated, Blackroot will put your life at risk at its next stage. Fate: 1. What stops it: a bitterwort draught; a healer; time (four more checks).` |
-| interval 3 | She has walked to Maren the hedge-healer (an interval). Check: d20 15 → 17: a failure by 3 | **holds** at 2; stage harm 3: Vitality **4** (lethal now, and she is still active: it is only Vitality). |
+| interval 2 | stage check (no penalty from its own carrier): d20 9 → 11: a failure by 9 | **stage 2**: poisoned S3; stage harm S2 = 3, no reduction: Vitality **8**. Stage 2 is the warn stage → `[WARNING] THIS CAN KILL YOU — the blackroot in your blood. Untreated, Blackroot will put your life at risk at its next stage. Fate: 1. What stops it: a bitterwort draught; a healer; time (four more checks).` |
+| interval 3 | She has walked to Maren the hedge-healer (an interval). Check: d20 15 → 17: a failure by 3 | **holds** at 2; stage harm 3: Vitality **5** (lethal now, and she is still active: it is only Vitality). |
 | the same interval | Maren **Treats** the affliction: Intellect +2, medicine +3, kit lever +2 = +7 against 20: d20 16 → 23: success, reach 2 | Wren's next stage check holds a Precision lever. Maren has no bitterwort; her charcoal purge is a **general remedy**: one stage down → **stage 1**. |
-| interval 4 | check with the lever: d20 12 + 2 + 2 = 16: a failure by 4 | **stage 2** again; harm 3: Vitality **1**. (One Treat a day: no second lever. One remedy a period: a second purge → stage 1.) |
+| interval 4 | check with the lever: d20 12 + 2 + 2 = 16: a failure by 4 | **stage 2** again; harm 3: Vitality **2**. (One Treat a day: no second lever. One remedy a period: a second purge → stage 1.) |
 | interval 5 | check: d20 18 + 2 = 20 | success → **stage 0: cured**; the carrier ends. Four checks used of six. |
 
-She ends at Vitality 1 with no wound, owing Maren for two purges and a morning. *What a worse fourth
-check would have begun:* stage 2's harm takes Vitality 1 → 0 (Staggered, excess discarded); the next
+She ends at Vitality 2 with no wound, owing Maren for two purges and a morning. *What a worse fourth
+check would have begun:* stage 2's harm takes Vitality 2 → 0 (Staggered, excess discarded); the next
 stage harm is periodic at 0 Vitality: load, no record; stage 3's 5 points are load 2; one more such
 tick is load 4: Dying 1, lethal because she was warned at stage 2. From the warning to Dying is at least four
 more failed checks: forty minutes of chances, each of them visible.
@@ -1955,7 +1968,7 @@ the DM does not choose mercy. If the fiction is to free her, it does so through 
 
 ### WE-07-5 A broken night, and the days after the barrow
 
-*Situation.* The night after WE-07-1. Wren: Vitality 1 of a maximum 6; wounds: chest (Heavy, 0/4), foot
+*Situation.* The night after WE-07-1. Wren: Vitality 1 of a maximum 7; wounds: chest (Heavy, 0/4), foot
 (Heavy, 0/4), hand (Grievous, 0/6), brink 1 (0/4); dread 4/7; cursed at stage 1. She makes a dry camp in
 a hollow with a fire: **camp**. Before she lies down the DM states the best case: no cap applies (light
 armor, fed, sheltered, the curse is at stage 1), so "a full rest is possible; a watch check will run".
@@ -1965,14 +1978,14 @@ firelight.
 
 - *Branch A: travelers.* They talk, share the fire, move on: no item of 07.8.3 happened. The rest was
   suspended and resumes; quality **full**. `rest_long {quality: full, site: camp, treated: false}`.
-  Vitality 1 → **6**; dread stays 4 (a full rest would ease 1, but the debt's first stage says rests
+  Vitality 1 → **7**; dread stays 4 (a full rest would ease 1, but the debt's first stage says rests
   ease none); `rested_today`. Chapter 05 restores Focus to its maximum.
 - *Branch B: robbers.* `conflict_start` with Wren in it: an interruption. It lasts four rounds (they run
   when she shows steel). She lies down again inside the hour and still gets her four hours: resumed,
-  quality **partial**. Vitality to three quarters of 6, rounded up: **5**; dread unchanged;
+  quality **partial**. Vitality to three quarters of 7, rounded up: **6**; dread unchanged;
   `rested_today` still set. Focus to three quarters.
 - *Branch C: the same, and she chases them for an hour.* Beyond the allowance: **interrupted**: Vitality
-  as a partial short rest: a quarter of 6, rounded up: +2 → 3. No `rested_today`. `watches_awake` is set
+  as a partial short rest: a quarter of 7, rounded up: +2 → 3. No `rested_today`. `watches_awake` is set
   to 2.
 
 **The days after** (T-07-15), two ways:
@@ -1980,9 +1993,9 @@ firelight.
 | Day | On the road, no healer | In Ashford with Maren (haven; bed rest; treated daily) |
 |---|---|---|
 | 1 | chest 1/4, foot 1/4, brink 1/4; hand 0/6 | Maren's Treat for the hand is Hard (20): +7 with her kit, needs 13. Day 1 she fails (the day's treatment is lost; the Heavy wounds still gain bed rest and rest): chest 2/4, foot 2/4, brink 2/4, hand 1/6 |
-| 2 | 2/4, 2/4, 2/4; hand 0/6 | she succeeds, reach 2: everything treated: chest **4/4 healed**, foot **healed**, brink **healed**; hand 3/6. Maximum Vitality 12 − 3 = 9 |
+| 2 | 2/4, 2/4, 2/4; hand 0/6 | she succeeds, reach 2: everything treated: chest **4/4 healed**, foot **healed**, brink **healed**; hand 3/6. Maximum Vitality 13 − 3 = 10 |
 | 3 | 3/4 … | hand 5/6 |
-| 4 | chest, foot and brink **healed**; maximum 12 − 3 = 9; hand 0/6 | hand **healed**: maximum 12; a scar: *a dead-white, numb patch* (`inj.scar.frost`) |
+| 4 | chest, foot and brink **healed**; maximum 13 − 3 = 10; hand 0/6 | hand **healed**: maximum 13; a scar: *a dead-white, numb patch* (`inj.scar.frost`) |
 | 7 | the hand has had no tick for 7 days: an exposure to `aff.wound_rot` (Endure +2 against Hard) | — |
 
 On the road she is fit to fight in four days and carrying a wound that will not heal and may rot. In a
@@ -2016,12 +2029,13 @@ a mistake.
 
 ### WE-07-7 Three ways out of a cellar
 
-Wren, at Vitality 5, wants out of a fight she is losing. The same declaration, three states:
+Wren, at Vitality 5, wants out of a fight she is losing. The same declaration, four states [revision: I-076]:
 
 | The opposition | Pursuit test | What the DM says before she commits |
 |---|---|---|
 | two ghouls, slower than she is; she is engaged with one | willing (kill), not able | "**Clean.** One parting blow as you break away: its claw, a rung lighter: Light, which your jack turns (0). You leave the satchel on the far table." Certain. |
 | a cinder hound, faster, hunting her; not engaged | willing and able | "**Run for it**: a chase, about three chances in five from here. Or **rout**: you get out for certain, and it follows your trail toward Ashford (Cinder Hunting Ground +2)." |
+| the same hound, on the far side of the cellar door she has slammed and barred (T-06-9 row 11) | willing, not able (no way to follow) [revision: I-076] | "**Clean.** It will be through that door with a Force against Moderate; you will be up the stair by then. The satchel stays on the far table." |
 | the same hound, and she is `flag.cornered` | — | "You cannot retreat with your back to the wall. Get past it first (Force or Move through, 06.5.6), or Yield (not accepted)." |
 
 If she routs: the clock ticks 2 with its omen; `objective_lost`; `setback.retreated {severity: S3}`; she
@@ -2127,12 +2141,14 @@ And these `[D]` structures are anchors by shape, for 12's anchor index:
 
 **Owned by this chapter (00.6.3).** `Character.vitality {current, max}` (shown); `harm_state` and
 `dying_step` (shown); `wounds [WoundInstance {entry, severity, site, taken_at, frame_id, source, clock,
-treated_today}]` (shown); `marks [ref]` (shown); and, added by this chapter with their visibility:
+treated_today, treat_closed_today}]` (shown) [revision: I-078: `treat_closed_today`]; `marks [ref]` (shown); and, added by this chapter with their visibility:
 `wound_load` (shown while Staggered), `down` (shown), `defeated {manner}` (shown), `brink` (derived,
 shown), `dread {current, threshold}` (shown), `haunts` (within marks; shown *n of 3*), `afflictions
-[{id, stage, onset_ends, checks_made, source}]` (shown: name, stage *n of m*, next check; an
-unidentified affliction shows its symptoms only), `watches_awake` (background),
-`rested_today / treated_today / bed_rest_today` (background), `reprieves_taken` (available),
+[{id, stage, onset_ends, checks_made, source, treated_today}]` (shown: name, stage *n of m*, next check; an
+unidentified affliction shows its symptoms only; `treated_today`, a Treat beat framed it today whatever its
+result, background [revision: I-078]), `watches_awake` (background),
+`rested_today / treated_today / bed_rest_today` (background), `last_rest_long_end` (background: the
+timestamp 00.7.2's two-watch gap counts from [revision: I-078]), `reprieves_taken` (available),
 `lethal_context` records (shown once warned; the sealed source of a `clock` cause stays sealed),
 `setback.*` facts (background; 12 reads them), `cache.*` records (available: what was taken and from
 whom; the cache's place is known only if learned), `career_end` (shown).

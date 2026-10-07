@@ -1,5 +1,11 @@
 # 07-gen_harm07.py -- second half of 07-gen_data07.py (exec'd by it): data/harm.yaml, file writing, validation.
-# Not run on its own.
+# Run directly, it hands over to 07-gen_data07.py, which defines the helpers (E, L, write, ...) this half needs and
+# then execs it [revision: I-082: running this file on its own used to stop at NameError: E].
+if 'E' not in globals():
+    import os as _os
+    import runpy as _runpy
+    _runpy.run_path(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)), '07-gen_data07.py'), run_name='__main__')
+    raise SystemExit(0)
 
 B = lambda *xs: list(xs)
 
@@ -174,7 +180,7 @@ HARM = {
     'retreat': {
         'verb': 'verb.move', 'illegal_when': ['flag.cornered', 'cond.restrained', 'cond.pinned', 'Dying', 'Down', 'no route (07.4.3 decision 1)'],
         'pursuit_test': {'willing': "the pursuer's side objective is kill, capture or rob toward the PC and the side is not broken",
-                         'able': "the pursuer's pace is at least the PC's and it is not held or prone"},
+                         'able': "the pursuer's pace is at least the PC's, it is not held or prone, and no shut barrier or other movement-blocking feature (no_line for Moves, 06.3.8) stands between it and the PC's route; a breakable barrier still blocks, its Force tier stated as the delay [revision: I-076]"},
         'clean': {'when': 'no pursuer is both willing and able', 'certain': True, 'price': ['parting_blow', 'left_behind']},
         'contested': {'when': 'some pursuer is willing and able', 'player_picks': ['run_for_it', 'rout']},
         'run_for_it': {'resolved_by': '06.12 (clk.escape 6 against clk.pursuit 8)', 'certain': False, 'price': 'none stated'},
@@ -247,7 +253,7 @@ HARM = {
                       'wound_load': 'cleared', 'light_wounds': 'healed', 'moderate_wounds': 'only if treated during it'},
          'interrupted_by': 'as breather', 'resumable': 'one interruption of at most 1 interval',
          'quality_rules': 'as breather; a resumed rest is partial', 'lifecycle': 'provisional', 'basis': B('07.8.1', '07.8.3', '07.8.4', 'T-07-14')},
-        {'id': 'rest_long', 'name': 'Long rest', 'tags': ['situation.rest'], 'duration': 'watches:1', 'max_per_day': 1,
+        {'id': 'rest_long', 'name': 'Long rest', 'tags': ['situation.rest'], 'duration': 'watches:1', 'max_per_day': 1, 'min_gap_watches': 2,
          'needs': ['a rest site (haven, camp or rough)', 'at least 4 hours asleep', 'not Dying'],
          'restores': {'vitality': {'full': 'to max', 'partial': 'to ceil(3 * max / 4), never lowering', 'interrupted': 'as a partial short rest'},
                       'wound_load': 'cleared', 'light_wounds': 'healed', 'moderate_wounds': 'healed (full or partial)',
@@ -280,7 +286,7 @@ HARM = {
         'license': 'lic.training.lore_medicine', 'crude_fallback': 'verb.handle: first aid (stabilize; staunch bleeding), reach capped limited',
         'attribute': 'intellect (agility for first aid in a conflict)', 'deed_tag': 'deed.lore.medicine',
         'dc_tier': {'S2': 'easy', 'S3': 'moderate', 'S4': 'hard', 'S5': 'very_hard (surgery; grade expert or better)', 'affliction': 'its virulence', 'dying': 'the stabilize DC'},
-        'time': {'wounds': 'intervals:1', 'surgery': 'hours:1', 'first_aid': '1 action'}, 'per_patient_per_day': 1,
+        'time': {'wounds': 'intervals:1', 'surgery': 'hours:1', 'first_aid': '1 action'}, 'per_wound_per_day': 1, 'by': 'anyone: a failed Treat closes every wound it framed for the day (treat_closed_today) [revision: I-078]',
         'kit': 'item.tool.kit (healer\'s): a Precision lever; one use', 'self': 'a Precision snag; never surgery; never while Dying',
         'reach_wounds': {1: 'the worst wound is treated_today', 2: 'every wound at or below the framed tier is treated_today; S2 wounds heal now; bleeding ends',
                          3: 'as 2, and each of those recovery clocks gains 1 tick now', 4: 'as 3, and the patient\'s next dying or stage check holds a Precision lever'},

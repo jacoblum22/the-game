@@ -451,11 +451,12 @@ CONFLICT = {
         {'id': 'held_object', 'snag': -2, 'on_success': 'no harm to the creature; the object takes a Force against its tier, or falls from the hand at reach 2+'},
     ],
     'improvised': [
-        {'rung': 'hand', 'anchor': 'one hand lifts and throws it', 'held_or_thrown': 'S1 (or S2 when it resembles a light weapon)', 'dropped_or_toppled': 'S1'},
-        {'rung': 'body', 'anchor': "about a person's weight or bulk", 'held_or_thrown': 'S3, two actions, one Precision snag', 'dropped_or_toppled': 'S2'},
-        {'rung': 'heavy', 'anchor': 'several people or a mechanism move it', 'held_or_thrown': None, 'dropped_or_toppled': 'S3'},
-        {'rung': 'massive', 'anchor': 'part of the building or the land', 'held_or_thrown': None, 'dropped_or_toppled': 'S4'},
+        {'rung': 'hand', 'anchor': 'one hand lifts and throws it', 'held_or_thrown': 'S1 (or S2 when it resembles a light weapon)', 'dropped_or_toppled': 'S1', 'selects_at_most': 1},
+        {'rung': 'body', 'anchor': "about a person's weight or bulk", 'held_or_thrown': 'S3, two actions, one Precision snag', 'dropped_or_toppled': 'S2', 'selects_at_most': 2},
+        {'rung': 'heavy', 'anchor': 'several people or a mechanism move it', 'held_or_thrown': None, 'dropped_or_toppled': 'S3', 'selects_at_most': 3},
+        {'rung': 'massive', 'anchor': 'part of the building or the land', 'held_or_thrown': None, 'dropped_or_toppled': 'S4', 'selects_at_most': 4},
     ],
+    'improvised_footprint': 'a dropped, toppled, swung or rolled object selects at most selects_at_most creatures inside its shape cap; against a mob each share is at most one member Vitality; once fallen it is not dropped again (T-06-8; revision I-075)',
     'falls_reference': {'owner': '10', '10_ft': 'S2', '20_ft': 'S3', '40_ft': 'S4', '80_ft': 'S5', 'harm_tags': ['harm.physical.crush'], 'lands': 'cond.prone'},
     'reactions': {
         'basic': [

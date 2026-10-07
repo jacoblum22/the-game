@@ -195,7 +195,7 @@ small_step_caps:           # 15.1.7
   per_npc_per_week: 1
   counter: npc.<id>.small_steps_week
   reset: h.15.standing_week
-  ceilings: {win_over: warm, gift: friendly, cultivate: friendly, impressed: friendly, devoted_only_from: [helped_rescue, spared, helped_r4, promised_kept_r4, bond]}
+  ceilings: {win_over: warm, gift: friendly, cultivate: friendly, impressed: friendly, devoted_only_from: [helped_rescue, spared, helped_r4, promised_kept_r4, ally_thread_complete]}   # revision I-072: a creation bond is a starting standing (02.9.2), not a source; an ally's thread completion is 16.12.3's
   gift_minimum: "1 Unit of the NPC's weekly lifestyle"
 
 delivery:                  # T-15-5 (15.3.9)

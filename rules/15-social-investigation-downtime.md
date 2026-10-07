@@ -239,7 +239,9 @@ Basis:              [12.11.7] [R6 B-19] [R4 W4] [DL-15-03]
   whose refusals include `will not take a bribe` raises standing only when nothing is asked in the same
   scene; with a request attached it is a bribe, and the refusal applies (15.2.3).
 - **Devotion is earned by deeds of weight:** Devoted is reached only by a step from a rescue, a sparing, a
-  kept R4+ promise, an R4+ help, or a bond.
+  kept R4+ promise or an R4+ help (and, for an ally, its thread's completion, 16.12.3). A creation bond is
+  a starting standing, never a source: it starts at +2 at most (02.9.2), and a bond NPC reaches Devoted by
+  the same deeds as anyone [revision: I-072].
 - **The weekly cap on small sources:** win-overs, gifts, Cultivate days, `impressed` and the plain
   `helped` row together give at most **+1 per NPC per week**; an ally's regard-clock completion counts against
   this cap unless the cycle that filled it held an R3 tick (shared danger) [integration: IR ch.16 to 15 (a)].

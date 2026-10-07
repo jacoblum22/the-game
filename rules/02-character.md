@@ -755,7 +755,9 @@ Basis:              [C:P5 pool gate and fill quality are domain-independent] [00
 it is never applied without the player's yes.
 - **Eligible when:** the creation window is closed (02.2.6), the Bent is neither accepted nor forgone,
   and at least one deed branch has **three resolved frames** with the PC as actor since creation
-  (counted by the engine from the frame log by primary deed tag; no judgment).
+  (counted by the engine from the frame log by primary deed tag; no judgment). A character has **one**
+  Bent a life: once it is accepted or forgone, nothing re-opens it, so the frame count is never reset and
+  no second Bent is offered on the same frames (02.6.6; `gen_birth.yaml#bent.per_life`) [revision: I-060].
 - **Offered at:** a `reflection` boundary, by handler `h.02.bent_offer` (phase 8). The first offer
   comes no earlier than the reflection *after* the one that closed the window.
 - **The draw.** `generate(gen.birth, source: pc, circumstance: bent_first | bent_again, degree: none)`

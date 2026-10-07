@@ -488,6 +488,7 @@ DOC = {
         'serving_band': 'min(own_band, band_cap)',
         'overflow': 'by the next week boundary; else the most recently joined ally below Friendly departs (cause overflow)',
         'posted_task_table': 'tbl.16.posted_task',
+        'posted_cap': "per place, in retinue places: retinue_cap, or the holding's staff line (08.8.8) if larger; at the post they act through their task, or as scene allies when Commanded (1 PC action each, 06.14.2) (16.2.3; revision I-077)",
     },
     'line_by_band': {b: {'attack_high_trained': RUNG['high'][b] + C_B[b], 'guard_mid_agility': 10 + RUNG['mid'][b] + C_B[b],
                          'guard_high_agility': 10 + RUNG['high'][b] + C_B[b], 'vitality_medium': VIT[b],

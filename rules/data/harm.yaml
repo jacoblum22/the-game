@@ -178,7 +178,8 @@ lethal_warning:
   - {cause: archetype, when: 'a hostile adversary with lethal_context: true is perceived or turns hostile', from: 09}
   - {cause: disposition, when: a side's defeat_disposition is or becomes kill toward the PC, from: '09, 06.13.2'}
   - {cause: severity, when: 'a source able to deliver S4 or S5 harm to the PC comes within reach (a hazard or trap perceived,
-      a height of 40 ft or more, an attack listed at S4+, or raised to S4+ by a mob or cohort numbers step, 06.10.3) [verification: V2c-006]', from: '10, 06.5.8, 09'}
+      a height of 40 ft or more, an attack listed at S4+, or raised to S4+ by a mob or cohort numbers step, 06.10.3) [verification:
+      V2c-006]', from: '10, 06.5.8, 09'}
   - {cause: windup, when: an adversary begins a Windup for a heavy blow (06.9.5), from: '06'}
   - {cause: clock, when: a sensed or hidden clock reaches imminent and its on_complete would expose the PC to lethal harm,
     from: '00.8.4, PR-00-3'}
@@ -264,7 +265,9 @@ retreat:
   verb: verb.move
   illegal_when: [flag.cornered, cond.restrained, cond.pinned, Dying, Down, no route (07.4.3 decision 1)]
   pursuit_test: {willing: 'the pursuer''s side objective is kill, capture or rob toward the PC and the side is not broken',
-    able: the pursuer's pace is at least the PC's and it is not held or prone}
+    able: 'the pursuer''s pace is at least the PC''s, it is not held or prone, and no shut barrier or other movement-blocking
+      feature (no_line for Moves, 06.3.8) stands between it and the PC''s route; a breakable barrier still blocks, its
+      Force tier stated as the delay [revision: I-076]'}
   clean:
     when: no pursuer is both willing and able
     certain: true
@@ -422,6 +425,7 @@ rests:
   tags: [situation.rest]
   duration: watches:1
   max_per_day: 1
+  min_gap_watches: 2
   needs: ['a rest site (haven, camp or rough)', at least 4 hours asleep, not Dying]
   restores:
     vitality: {full: to max, partial: 'to ceil(3 * max / 4), never lowering', interrupted: as a partial short rest}
@@ -474,7 +478,8 @@ treatment:
   dc_tier: {S2: easy, S3: moderate, S4: hard, S5: very_hard (surgery; grade expert or better), affliction: its virulence,
     dying: the stabilize DC}
   time: {wounds: 'intervals:1', surgery: 'hours:1', first_aid: 1 action}
-  per_patient_per_day: 1
+  per_wound_per_day: 1
+  by: 'anyone: a failed Treat closes every wound it framed for the day (treat_closed_today) [revision: I-078]'
   kit: 'item.tool.kit (healer''s): a Precision lever; one use'
   self: a Precision snag; never surgery; never while Dying
   reach_wounds: {1: the worst wound is treated_today, 2: every wound at or below the framed tier is treated_today; S2

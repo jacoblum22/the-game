@@ -507,6 +507,9 @@ Decisions (J):      1. IN REACH [D after a J:enum of weapon]: the weapon's bands
                     2. ATTRIBUTE [J:enum] Might | Agility. Agility only when the weapon is `finesse`,
                        thrown or shot (T-06-7), or the method is unarmed and precise. Default Might.
                        When both fit equally the frame uses the lower and names the other (00.4.5).
+                       Exception: a branch working (05.7.11) is a Strike with its branch's casting
+                       attribute, not Might or Agility; it needs no weapon and reaches as 05.7.11
+                       says (05 owns the working; precedence 00.1.4) [revision: I-057].
                     3. HARM MODE [J:enum] lethal | nonlethal | restraint (06.4.8). Default: lethal
                        against a hostile creature unless the player said otherwise.
                     4. LEVERS [J:flag per fact]: the player may cite up to two established facts
@@ -817,9 +820,15 @@ creature shoved toward a drop it could catch itself at gets that Evade too.
 | **hand** | one hand lifts and throws it | unarmed weight, S1; or "resembles a light weapon" → S2 (01.18.8) | S1 | a mug, a stone, a stool leg / a full wine bottle (resembles a club → S2) |
 | **body** | about a person's weight or bulk; two hands or a shove move it | heavy weight, S3, two actions, a Precision snag (unwieldy) | S2 | a bench, a barrel, a sack of grain, a table tipped / a shield-sized door wrenched off |
 | **heavy** | several people or a mechanism move it; it hangs, leans or rolls | cannot be wielded | S3 | an iron chandelier, a statue, a loaded cart, a stack of casks / a ship's boom swinging |
-| **massive** | part of the building or the land | cannot be wielded | S4 | a wall section, a portcullis, a felled tree, a boulder / a collapsing roof (S5 as a ch.10 hazard) |
+| **massive** | part of the building or the land | cannot be wielded | S4 | a wall section, a felled tree, a boulder / a collapsing roof (S5 as a ch.10 hazard) [revision: I-075: a portcullis is a `barrier`, T-06-9 row 19] |
 
 *Worst case (J) of a one-rung error:* 2–4 Vitality (class i), shown in the OFFER as the harm on a hit.
+
+**Footprint.** `[D]` [revision: I-075] A dropped, toppled, swung or rolled object selects at most its rung's
+**count** of creatures, inside its shape's cap: hand 1, body 2, heavy 3, massive 4. Against a mob each selected
+member takes one share, and a share never exceeds one member's Vitality (06.10.4), so the object fells at most
+its count. Once it has fallen the object is the fact `<feature>.fallen` and is not dropped again; another drop
+needs another feature established (06.3.8). (Basis: `06-conflict-sim.py` section L.)
 
 **06.5.9 Aim.** `[D]` One action, no roll, only while engaged with nobody and not `cond.off_balance`:
 the actor steadies and picks its moment. It writes `aimed.<actor>.<target>`, a **Precision lever** for
@@ -854,7 +863,8 @@ Decisions (J):      1. ANCHOR [J:enum]: by the INTENDED CHANGE, first match -
                        is and what would bring it there (a Force, a taunt, a Setup).
 Computation [D]:    the anchor's frame with at most TWO knob changes (00.2.7), from: dc (-> the
                     object's tier, T-06-9), harm_severity and harm_tags (-> the object's or hazard's),
-                    targets (-> the object, or those in its group via a spread, 06.8), condition,
+                    targets (-> the object, or those in its group via a spread, 06.8, at most the
+                    object's footprint count, T-06-8 [revision: I-075]), condition,
                     stakes (-> the height or hazard the actor itself risks), reach_unit.
                     A hit through an object rolls ONE d20 against the higher of the object's DC and
                     the Guard (or the resisting defense) of the creature it must reach.
@@ -1203,6 +1213,9 @@ benefit, counted once. As members fall the step falls with them, so a mob weaken
   least half of `members_now`; otherwise it applies to **one member**, which is tracked as the fact
   `mob.<id>.member_out` for the condition's duration: `members_now` counts one fewer for numbers and
   engagement, and nothing else changes. Grapple against a mob holds one member in the same way.
+- A dropped, toppled, swung or rolled **object** (T-06-8) selects at most its footprint count of members
+  (hand 1, body 2, heavy 3, massive 4), and each share is at most one member's Vitality: it fells at most
+  that many, whatever its rung's harm. [revision: I-075]
 - Morale: each member that falls ticks the clock (06.11.3), which is why mobs usually break rather
   than die to the last.
 
@@ -1218,6 +1231,10 @@ are what the fiction says they are, through 06.5.10.
 economy, repetition, Fend, Defend, mastery, morale, mobs and windups, 20,000 fights per row, seeded.
 The PC is a **baseline martial character**: a narrow martial calling's competence, band-appropriate
 plain gear, no abilities, **no Focus**, three Strikes a turn. Lines and assumptions: T-06-12.
+Section L (revision I-075): one established object dropped as the PC's first beat moves a mob fight at
+most one advisory word gentler (T-06-13), and only for a heavy or massive object; under the footprint rule
+(T-06-8) it never fells more members than its count, where the old burst reading felled a whole band-1 mob
+of up to six on every hit (55% of fights at P1).
 
 **T-06-12 Reference lines used by the simulation** *(PC Vitality and armor: assumed, chapters 02/07/08
 own; adversary lines: inside 00.3.7's envelope, chapter 09 owns the final templates and should re-run
@@ -1385,7 +1402,9 @@ needs a `cover` or `veil` feature or a crowd), burst through (Force), bar the wa
 Force on a `barrier` or `loose_object`), throw them off (Setup), call on bystanders (Talk). The
 obstacle is the round's **ground**: the engine draws it from `tbl.chase_ground` for the terrain
 (T-06-9b: a tier and what it is: "a crowded market lane, Moderate"), writes it as a feature, and it is
-the DC for both sides this round unless the method opposes a pursuer directly. When a recorded
+the DC for both sides this round unless the method opposes a pursuer directly. (A way barred **before** the
+Retreat is declared is not a chase beat: a pursuer with a shut `barrier` between it and the PC is not ABLE,
+and the retreat is clean, 07.4.3 [revision: I-076].) When a recorded
 feature lies on the stated route (the door, the plank, the wall just named), that feature is the round's
 ground in place of a draw. Stakes **Risky**;
 threatened cost `cost.time` (the pursuit clock ticks: 1 at S2, 2 at S3), alternate `cost.footing`.
@@ -1730,11 +1749,11 @@ ruled by 06.5.10 and logged; a logged ruling is reused before this table is cons
 | 2 | fling my cloak over its head | Setup | `condition` → blinded | Guard | as 1; the cloak is on the foe | the foe ends it with 1 action |
 | 3 | kick the table over for cover | Force (object) | `reach_unit` → feature state | the table's tier (Easy) | a `cover` feature in my group; `flag.in_cover` costs a further Evade or Move | loud |
 | 4 | swing on the chandelier or rope across the room | Exert | `dc` → re-derived tier (Hard; Moderate for a short swing); `stakes` → the drop | the tier | I am at the place named, one or two bands crossed in one action | precedent r.0412 (WE-00-9) |
-| 5 | cut the rope and drop the chandelier (sacks, portcullis) on them | Strike | `targets` → the rope; `harm_severity` → the object's rung | the higher of the rope's tier and each Guard | each one under it (06.5.10 decision 3; shape `burst` on that group) takes the object's harm | WE-01-9; pinning needs reach 3+ |
+| 5 | cut the rope and drop the chandelier (sacks, a hoist's load) on them | Strike | `targets` → the rope; `harm_severity` → the object's rung | the higher of the rope's tier and each Guard | up to the object's count under it (T-06-8 footprint: heavy 3, massive 4; 06.5.10 decision 3; shape `burst` on that group) take the object's harm; a mob takes that many shares, each at most one member's Vitality (06.10.4) | WE-01-9; pinning needs reach 3+; the object has fallen and is not dropped again [revision: I-075] |
 | 6 | shove it into the fire, off the ledge, into the millrace | Force | `reach_unit` → position into a feature | higher of Might or Agility defense | pushed one band into the feature: the hazard's entry or the fall applies | the OFFER states the hazard's severity |
 | 7 | kick the brazier (lamp, cauldron) over at them | Strike | `targets` → the object; `harm_severity`/`harm_tags` → the hazard's | higher of the object's tier (Easy) and Guard | S2 `harm.fire.flame`, and `cond.burning` only at reach 3+; a `hazard` feature (fire) remains there | the fire is now a fact for both sides |
 | 8 | pull the rug or tarpaulin from under them | Force | `targets` → those standing on it (`cone`, cap 4) | each one's higher of Might or Agility defense, one roll | `cond.prone` for each beaten | body-size rug: reach −1 against larger creatures |
-| 9 | topple the shelves, barrels or woodpile onto them | Force (object) | `harm_severity` → the object's rung; `targets` → its group | higher of the object's tier (Moderate) and each Guard | body rung S2 to each; `difficult_ground` there afterward | loud |
+| 9 | topple the shelves, barrels or woodpile onto them | Force (object) | `harm_severity` → the object's rung; `targets` → its group | higher of the object's tier (Moderate) and each Guard | body rung S2 to each, at most 2 (T-06-8 footprint) [revision: I-075]; `difficult_ground` there afterward | loud |
 | 10 | hold the doorway (stair, bridge) so they come one at a time | Move | none | unopposed: Trivial | `flag.in_chokepoint`; they gain `flag.lined_up` if they queue | |
 | 11 | slam and bar the door between us | Handle (bar it) or Force (hold it) | `reach_unit` → feature state | Trivial if no one contests; else the pusher's Might defense | `barrier` shut: `no_line`; breaking it is their Force against its tier | Handle needs a bar established |
 | 12 | throw the lantern (oil flask) at it | Strike (thrown) | `harm_severity` → S1; `condition` → burning | Guard | S1 `harm.fire`, and one stack of `cond.burning`; the light source is gone (10) | improvised: hand rung |
@@ -1744,7 +1763,7 @@ ruled by 06.5.10 and logged; a logged ruling is reused before this table is cons
 | 16 | blow out the lamps / douse the fire | Handle | `targets` → the light | Trivial, or Easy under threat | `scene.light` one step darker: `flag.obscured` per 06.3.7 | both sides affected |
 | 17 | throw a net, bolas or weighted rope | Grapple at range (`entangling`) | `dc` unchanged; band → close | higher of Might or Agility defense | `cond.grabbed` (S1 at reach 1, S2 at 2+) by the net; no hold to maintain | break free against the net's tier (Moderate) |
 | 18 | stampede the horses (loose the hounds, the hive) at them | Handle or Talk (animals) | `targets` → the animals; `reach_unit` → a created mob | the animals' Resolve defense or Easy tier | the animals become a **mob** acting on its own default list toward the nearest creatures away from the actor, for 2 rounds | the mob is no one's companion |
-| 19 | drop the portcullis / release the counterweight | Handle | `reach_unit` → feature state | the mechanism's tier | `barrier` shut; one under it: Evade vs Hard or S3 and `restrained` | |
+| 19 | drop the portcullis / release the counterweight | Handle | `reach_unit` → feature state | the mechanism's tier | `barrier` shut; one under it: Evade vs Hard or S3 and `restrained` | the portcullis's one anchor: it falls in its slot onto one, so T-06-8's massive drop never applies to it [revision: I-075] |
 | 20 | fight on the ice, in the surf, on the roof ridge | Move (across a `difficult_ground` or `hazard` feature) [revision: I-031] | `action_cost` → +1 per Move | — | Moves cost +1; a critical failure on any physical beat there threatens `cost.footing` | applies to everyone on it |
 | 21 | grab its leg (tail, wing) | Grapple | `targets` → a limb | higher of Might or Agility defense | the creature is `cond.slowed` (leg) or `cond.weakened` (arm) while held; no size snag | 06.5.2; WE-06-3 |
 | 22 | climb onto its back | Grapple (mount clause) | `condition` → `flag.mounted` | higher of Might or Agility defense | `flag.mounted` on it at reach 2+ | 06.15.5 |
@@ -1754,7 +1773,7 @@ ruled by 06.5.10 and logged; a logged ruling is reused before this table is cons
 | 26 | smash the bridge ropes / kick away the ladder | Force (object) | `reach_unit` → feature state | the object's tier (rope Moderate; ladder Easy) | the feature is gone: those on it fall (06.5.8); `no_line` for movement across | stakes rise if I am on it |
 | 27 | shout to startle it, bang my shield, flash the mirror | Setup | `condition` → distracted | Wits defense | `cond.distracted` ENT | loud |
 | 28 | taunt it into charging me (onto the trap, under the hoist) | Talk | `reach_unit` → the listener's next Move | Resolve defense | its next turn's first action is a Move toward me; +attention (06.9.3) | mindless: G4 |
-| 29 | roll the cask (cart, boulder) down at them | Force (object), shape `pierce` | `harm_severity` → the object's rung; `targets` → `flag.lined_up` carriers | higher of the object's tier and each Guard | the object's harm to each in the line, nearest first, cap 4 | needs a slope established |
+| 29 | roll the cask (cart, boulder) down at them | Force (object), shape `pierce` | `harm_severity` → the object's rung; `targets` → `flag.lined_up` carriers | higher of the object's tier and each Guard | the object's harm to each in the line, nearest first, capped at the object's count (T-06-8 footprint: a cask 2, a boulder 4) [revision: I-075] | needs a slope established |
 | 30 | pour the oil (marbles, caltrops) across the floor | Handle | `reach_unit` → feature state | Trivial unless contested | a `difficult_ground` feature; a creature Moving across it fast (2+ bands a turn) Evades vs Moderate or falls prone | lamp oil can then be lit (row 7) |
 | 31 | set the thatch (hay, dry reeds) alight | Handle | `reach_unit` → feature state | Easy with a flame in hand | a `hazard` (fire S2) and a `veil` (smoke) feature growing one group a round (10) | harms both sides; ticks nearby clocks listing loud or fire |
 | 32 | hide under the wagon and stab at their legs | Sneak, then called Strike (the leg) | none beyond the two cards | notice; then Guard | `flag.hidden`, then the leg's result | two beats |
@@ -1854,7 +1873,7 @@ restriction create a decision?"].
 ## Worked examples
 
 **Wren** (00's sheet): Might +1, Agility +3, Endurance +1, Wits +2, Intellect 0, Presence 0, Resolve −1;
-competence `deed` +1, `deed.wilds.tracking` +2, `deed.martial.archery` +2; Vitality 12, Focus 4, fate
+competence `deed` +1, `deed.wilds.tracking` +2, `deed.martial.archery` +2; Vitality 13 (12 + Endurance +1, 02.7.1) [revision: I-042], Focus 4, fate
 1; no armor; spear (one-handed, `reach`, `finesse`; S2 pierce), shortbow (S2 pierce). Power band P1.
 Her Guard with the spear: 10 + 3 + 1 (floor; she has no polearm competence) = **14**.
 **Brack**, her mastiff *(illustrative; ch.16 owns companions)*: bite +4 (Might +2, competence +2), S2;
@@ -1918,7 +1937,7 @@ Wren, Rusk, then the cutthroats, nearer first.
 > Rusk comes at you; your point meets him as he closes and scores his ribs, and then he is inside it,
 > at blade's reach. Odo is at your other shoulder. Both of them stand at the foot of the loft stair.
 
-State: Wren 12/12, engaged with Rusk (9/12) and Odo (5/5); not flanked (no Flank action yet). Brack
+State: Wren 13/13, engaged with Rusk (9/12) and Odo (5/5); not flanked (no Flank action yet). Brack
 8/8 holding Pell (2/5).
 
 **Round 2, Wren.** The player: "Flour in Rusk's face, then I back up the stair."
@@ -1945,7 +1964,7 @@ State: Wren 12/12, engaged with Rusk (9/12) and Odo (5/5); not flanked (no Flank
   +5 − 4 (blinded: status on sight-reliant checks) = +1, with the *from below* snag (−2): −1 against
   Guard 14: needs 15. d20 = 12: **miss**. His turn ends, and `cond.blinded` with it (ENT).
 - *Odo.* Move close → engaged (the stair's capacity is two). Strike: +2, *from below* −2: +0 against
-  14: needs 14. d20 = 16: **hit**. S2, 3 harm, no armor: Wren 12 → **9**.
+  14: needs 14. d20 = 16: **hit**. S2, 3 harm, no armor: Wren 13 → **10**.
 - *Pell.* Break free: d20 = 7 and 9: both fail.
 
 **Round 3, Wren.** The player: "The hoist rope is right here at the post. I cut it and drop the sacks
@@ -2004,7 +2023,7 @@ broken, cannot get away, and is a thinking creature: he **yields** (06.11.5).
 > with his back against the bank, the sword already falling out of his hand. "Enough. Enough."
 
 **End (PR-06-10).** `conflict_end`: no hostile participant is able and willing to act. Dispositions:
-Odo `defeated` (frame f.r3.1), Pell `yielded`, Rusk `yielded` after a chase. Wren 9/12, Focus 4/4,
+Odo `defeated` (frame f.r3.1), Pell `yielded`, Rusk `yielded` after a chase. Wren 10/13, Focus 4/4,
 reaction and stances cleared; bands and links cleared. Evidence is chapter 03's to compute from the
 frames (spear deeds against a band-2 foe, an athletics chase, a companion-grounded deed); what she now
 does with two prisoners is chapter 03's `conduct.mercy` and chapter 15's talk. Next steps on the table (P16): the
@@ -2066,7 +2085,7 @@ the first resolves (01.14.1), with `plunging` as its lever only if the swing suc
 Six marsh goblins *(T1: +2, S2, Guard 12, Vitality 5 each)* as one mob: pool 30, `members_now` 6,
 numbers step +2: its attacks deal **S4**. It is engaged with Wren (capacity four; two wait). Advisory
 (P1, a mob of six of her band): fair, 95 / 27. On its turn it Strikes twice: +2 and +0 against Guard
-14: d20 = 13 → hit: S4, 8 harm: Wren 12 → 4. Second: d20 = 9: miss.
+14: d20 = 13 → hit: S4, 8 harm: Wren 13 → 5. Second: d20 = 9: miss.
 Wren's turn. *Single-target:* spear, d20 = 17 → 21, success: 3 harm: pool 27 → `members_now`
 = ceil(27 ÷ 5) = 6: nobody falls yet. Second Strike (−2): d20 = 16 → 18: success: pool 24 → 5 members
 (one falls: morale +1; the step drops to +1: S3). *Shaped:* her third beat is a thrown flask of lamp oil with the lantern after it *(an 08 item:
@@ -2106,8 +2125,8 @@ An ogre, engaged with Wren, spends its first action on a **Windup** (06.9.5): `w
 Move (out of its reach of `close`: two actions, and it must close again); Defend (−2) and keep Fend
 (−2 more); spoil it (WE-06-3's trip; a Strike that deals S3 or more in one hit; a blinding Setup); or
 gamble on finishing it. *Arithmetic of standing still:* +7 against Guard 14 hits on 7 (70%; 50% with
-Defend and Fend); S4 is 8 of her 12 Vitality; a critical success (total ≥ 24: d20 ≥ 17 without the
-snags, 20%) is S5, 12: Staggered, never worse from one blow. The player cannot say they were not told.
+Defend and Fend); S4 is 8 of her 13 Vitality; a critical success (total ≥ 24: d20 ≥ 17 without the
+snags, 20%) is S5, 12: from full it leaves her 1, and from anything less it Staggers her, never worse from one blow. The player cannot say they were not told.
 
 ### WE-06-9 Wren runs (the chase as fleer, with a near miss)
 

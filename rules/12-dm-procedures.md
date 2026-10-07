@@ -1612,7 +1612,7 @@ yield evidence, so the player sees that a free yes earns nothing toward recognit
 03.3.2 D1 (good idea, take the time, certain with cost) print `evidence as a no-roll success`. Either is
 followed, after the player's choice or when no choice exists, by the changes to shown state:
 ```
-[RESULT] Changed: Vitality 12 → 9 · bleeding (S1) · arrows 6 → 5 · Focus 4 → 3 · fate 1 → 2
+[RESULT] Changed: Vitality 13 → 10 · bleeding (S1) · arrows 6 → 5 · Focus 4 → 3 · fate 1 → 2
 ```
 A drop is one line of fiction (08.3.13); its `Changed:` entry names the item only, and its rung, known
 properties and price are in the codex [revision: I-030]. A secret frame: `[RESULT] hidden check made.` Hidden and sensed clocks never appear; an Oracle answer
@@ -2258,7 +2258,7 @@ key to it.
 
 All examples follow **Wren** (00, 01): Might +1, Agility +3, Endurance +1, Wits +2, Intellect 0, Presence 0,
 Resolve −1; competence `deed` +1 (floor), `deed.wilds.tracking` +2, `deed.martial.archery` +2; Vitality
-12, Focus 4, fate 1; preference `auto_commit: on`; pacing profile `standard`. The situation *(illustrative;
+13 (12 + Endurance +1, 02.7.1) [revision: I-042], Focus 4, fate 1; preference `auto_commit: on`; pacing profile `standard`. The situation *(illustrative;
 ch.11/13 own the content)*: the Ashford ferryman, **Hob Coldwell**, vanished three nights ago, and his
 ferry stands idle. The thread `thr.missing_ferryman` (ch.11) has three sealed clue placements: `clu.scorched_rope`
 (at the landing: the mooring rope was burned through, not cut; stored tier Moderate, DC 15), `clu.toll_ledger`
@@ -2375,7 +2375,7 @@ point 4:
 
 *DM turn 4. Player:* "(b) — I'll take the shoulder." READ: success at a cost, delivered reach Great (3) →
 pushed two bands, or prone and off-balance (01.18.10): over the rail and down. `apply_costs(cost.harm, S2,
-form: "wrenched shoulder")` → Wren Vitality 12 → **9**. Archer: `set_position` (floor, `band.near` from Wren),
+form: "wrenched shoulder")` → Wren Vitality 13 → **10**. Archer: `set_position` (floor, `band.near` from Wren),
 `cond.prone`; the fall is a ch.10 hazard resolved by the engine for him *(illustrative: S2, 3 harm → 8 → 5)*.
 T5: the other foe (the toll-keeper's mate, at `band.far`) acts on his turn from his behavior list (ch.09) —
 he runs for the bell; ch.06 orders it after Wren's turn.
@@ -2399,7 +2399,7 @@ prompt). Delivered:
 > the hall the toll-keeper's mate is running for the bell rope. What do you do?
 >
 > `[RESULT] d20 12 → 14 vs 15 · near miss → success at a cost: Harm (S2), wrenched shoulder · reach Great`
-> `[RESULT] Changed: Vitality 12 → 9`
+> `[RESULT] Changed: Vitality 13 → 10`
 
 *What the trace shows.* The wild idea was never refused and never waved through: it was split into the
 beats it really contained, the novel beat reached for the nearest anchor and the ledger, the precedent's
