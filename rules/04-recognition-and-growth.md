@@ -20,7 +20,7 @@
 **Reading this chapter.** Standard format (00.19). *Rules* has eleven parts (04.1–04.11). The machine-readable
 companions are `data/callings.yaml` (183 callings and every number), `data/hybrids.yaml` (the 36-pair table),
 `data/vehicles.yaml` (V1–V14, prices, readings, marker texts), `data/gen_absorb.yaml` (the absorption
-domain), and its owner-blocks `04` in `data/composites.yaml`, `licenses.yaml`, `boundaries.yaml` and `tags.yaml` (merged from the former contrib fragments at integration) [verification: V2a-006]. Data is
+domain), and this chapter's owner-blocks `04` [editor: E1-001] in `data/composites.yaml`, `licenses.yaml`, `boundaries.yaml` and `tags.yaml` (merged from the former contrib fragments at integration) [verification: V2a-006]. Data is
 canonical for every number and id (00.1.4 line 5). The calibration is in
 `rules/_process/simulation/04-recognition-sim.md`. Worked examples follow **Wren** (00's continuous
 character) across fifty sessions, then boundary cases with other characters.
@@ -54,13 +54,13 @@ narrator never sees [BRIEF §3; C:P5; C:P13; R4 §9 04 #1–#4].
   tracked but the words the player's own, and permanence as the top tier's reward [R2 #2; R6 A-01]. Hence 04.5.
 - *Tier rewards are capabilities, never filler; each step adds something qualitatively new; a tier-up
   restates text and never appends* [R3 #11, 04.6; R1 §04; R2 #3]. Hence 04.5.3–04.5.5.
-- *Higher tiers need a different kind of evidence* (HWFWM's Essence Revelation; Cradle's understanding;
+- *Higher tiers need a different kind of evidence* (*He Who Fights With Monsters*' (HWFWM) Essence Revelation [editor: E1-003]; Cradle's understanding;
   Burning Wheel's difficult and challenging tests) [R2 #5; R6 R-A4]. Hence the since-last-tier requirements
   of 04.3.4: great deeds, crises, new contexts.
 - *Every offer in the corpus is legible, standing and priced; recognizers must not be killable; revocation is
   gradual first* [R6 A.3, A.5, V14, A-02 (the Oathbreaker Knight bug)]. Hence 04.7 and 04.9.
 - *Additive stacking without retirement is the failure every source shares*; the working precedents are the
-  provisional league (PoE), fold-into-base (PoE2), fork-replacement (Dungeon Crawler Carl) and consolidation
+  provisional league (Path of Exile, PoE), fold-into-base (PoE2), fork-replacement (Dungeon Crawler Carl, DCC) [editor: E1-004] and consolidation
   (The Wandering Inn) [C:VI; R3 #10, 04.3, 04.16; R2 4d]. Hence 04.8.
 - *Rework a recognized identity only at telegraphed boundaries, and write retirement as transformation*
   (Survival Hunter; players "dislike losing things they spent points on") [R3 04.14; R1 T-16]. Hence
@@ -178,9 +178,9 @@ competence covers, which is how breadth is paid for [C:P4; R2 #10]:
 | broad (level 1) | 120 | +2 / +5 | a whole branch | **breadth**: at least 3 level-2 children at weighted ≥ 30 each, and the largest child's share of the branch ≤ 2/3 |
 
 The breadth requirement is what makes "Warrior" mean someone who fights with many things. In simulation a
-mixed-weapons fighter was offered Warrior at session 3 (p10–p90: 3–4); a single-track swordsman in 1 of 200
-runs within 30 sessions; a bow-focused archer who also climbs and knife-fights in 34 of 200 (T-04-8 R3)
-[R1 T-13: broad callings need a narrower anchor; DL-04-04].
+mixed-weapons fighter was offered Warrior at a median of session 4 (p10–p90: 3–5); a single-track swordsman in
+4 of 200 runs within 30 sessions; a bow-focused archer who also climbs and knife-fights in 46 of 200 (T-04-8 R3)
+[R1 T-13: broad callings need a narrower anchor; DL-04-04; revision: I-108].
 
 **04.2.4 Hybrids: the curated table.** `[D]` `data/hybrids.yaml` has one row for each of the C(9,2) = **36**
 pairs of deed branches: 32 name a hybrid calling and 4 are explicit `calling: none` with the reason
@@ -229,7 +229,7 @@ lineage (04.8.3): holding one, the other arrives as a fork [DL-04-06].
 
 **04.2.7 Coverage audit: the iconic archetypes.** `[D]` [DL-04-02; DL-04-06; revision: I-065] Each is reachable from the first session by deeds a
 new character can attempt. "Start" names what begins the evidence; magic branches need a first license,
-which ch.02's origins, ch.05's mentor and project paths, or an item supply (Interface requests).
+which ch.02's origins, ch.05's mentor and project paths, or an item can supply (Interface requests) [editor: E1-002].
 
 | Archetype | In this ruleset | Key | Start |
 |---|---|---|---|
@@ -326,6 +326,12 @@ crystallization**. Each tier asks for a kind of evidence that repetition cannot 
 | 4 Exalted | 480 / 640 / 960 / 480 | 18 · 12 | 6 at band ≥ 4 | 3 | 5 | done in many countries, against champions |
 | 5 Paragon | 900 / 1,200 / 1,800 / 900 | 22 · 14 | 4 at band 5 | 4 | 5 | done at the edge of what mortals can do |
 
+The **In fiction** column is staging guidance for narration (how the codex and the recognizer speak of the tier),
+never a requirement: a tier is confirmed by the other columns alone. Tier 4's "many countries" is the Contexts
+column in words (distinct kinds of opposition or obstacle, 04.3.1), not geography; a campaign that never leaves its
+first region reaches Exalted on the same deeds, and the fiction says "many countries" literally only where play has
+crossed into new regions (12.16.18) [revision: I-098].
+
 A **great deed** is a settled deed at the key whose `challenge_band` (03.4.3: the obstacle's absolute rung,
 DC 13–17 is band 2 … DC ≥ 28 is band 5; in a conflict the fight's advisory band; in a social, craft or lore
 **contest** the opposing party's or the work's band, at most `power_band` + 2) is at least the number of the tier being entered; at least one of the
@@ -348,7 +354,7 @@ recognition in sessions 3–5 of focused play; tier 2 near session 9; tier 3 nea
 session 32; tier 5 not before session 50, and not reached by most characters (Stormlight: "many stop at the
 Third") [R2 #2; R1 §04 "excessive investment kills an option"]. Results (`04-recog04.py`: 200 runs, 5 scenes
 per session, conflicts at the PC's power band shifted by the advisory word, DL-00-05 and 03.4.3: easy −1 25%,
-fair 0 40%, hard +1 30%, lethal +2 5%; p10 / median / p90; T-04-8 R1–R4) [revision: I-034; I-089]:
+fair 0 40%, hard +1 30%, lethal +2 5%, a campaign mix in which about half of a PC's fights are ones it seeks out (below) [revision: I-095]; p10 / median / p90; T-04-8 R1–R4) [revision: I-034; I-089]:
 
 | Character | Tier 1 | Tier 2 | Tier 3 | Tier 4 | Tier 5 |
 |---|---|---|---|---|---|
@@ -369,6 +375,28 @@ and the weighted line, not the since-fields, binds tiers 2–5 (`04-binding-chec
 R14). The targets were kept and the thresholds moved: the targets are the design (04's Design intent: the
 numbers are scaled to the game's event rate and never copied), the thresholds its calibration [DL-04-32]. Play
 that fights more is faster (the swordsman, fighting in 70% of scenes, at 34; the mixed-weapons Warrior, 60%, at 46).
+
+**The fight mix is a campaign mix** `[revision: I-095]`. The targets assume that about **half of a PC's fights are
+chosen**: a site's heart, a lair, a quarry, framed at fair 50 / hard 40 / lethal 10 % (10.13.10,
+09.8.2). The rest are the road's rolled encounters, which every shipped and seeded table keeps gentle by design
+(09.8.1 rule 3): trivial 34 / easy 27 / fair 35 / hard 4 / lethal 0 % (09.12.3). `09-word-mix-pacing.py` (200 seeds;
+p10 / median / p90; T-04-8 R15) gives:
+
+| Fights | Archer: tier 1 · 2 · 3 · 4 · 5 | Swordsman (70% of scenes): tier 1 · 2 · 3 · 4 · 5 |
+|---|---|---|
+| DL-00-05's mix (the table above) | 5 · 10 · 18 · 32 · 54 (183 of 200 reach tier 5 within 60) | 3 · 7 · 12 · 20 · 34 (200) |
+| Half chosen, half rolled | 6 · 13 · 21 · 34 · 58 (135 of 200) | 3 · 8 · 13 · 21 · 36 (200) |
+| **Rolled encounters only** | 7 / **20** / 51 · 34 / **58** / — · **not within 60** · — · — (0 of 200) | 5 / **11** / 26 · 20 / **36** / 58 · 31 / **52** / — · — · — (25 of 200) |
+
+The first two rows give each tier's median; the last row gives p10 / **median** / p90 for each tier, separated by `·` [editor: E1-005].
+
+A half-chosen campaign lands within one to four sessions of every target. A PC who only travels and fights what
+the road throws at it stalls: its fights are rarely beyond the ordinary, so they bank few quality events and no
+great deeds. That is intended: growth comes from seeking out danger (C:P2: power from history), and the rules
+never push a PC toward a fight to keep it on pace. What they guarantee is that a chosen fight is always within
+reach: the seed puts a site in every near area and a lair in each far ring (12.16.12), the hook supply keeps at
+least three open matters known (11.5.10), and the stuck answer lists them (12.8.5). 12.7.4's pacing push governs
+intensity, not growth, and is not changed [DL-04-33].
 
 A whole character with every key live and three seats held three callings by session 10 if every offer was
 accepted, with the highest tier at sessions 10 / 20 / 40 / 60 at 2 / 3 / 4 / 5 (archer) (T-04-8 R6).
@@ -403,7 +431,7 @@ contest from 20 seeded worlds (`12-world-seed.py`), with power band from confirm
 | Smith | 16 / 27 / 44 | 17 / 27 / 43 | 17 / 27 / **44** (+6%, −8%) |
 | Scholar | 15 / 28 / **never** | 16 / never / never | 16 / 27 / **45** (+0%, −6%) |
 
-On the current ladder (I-089) [revision: I-089]. A work counts as one opposition **per scene** worked on it
+The table's figures are on the current ladder (I-089) [revision: I-089] [editor: E1-006]. A work counts as one opposition **per scene** worked on it
 (04.3.4): counted once for the whole project, the smith's tier 3 fell to 22 against the archer's 16 (+38%),
 because a work's steps are bounded by its clocks and no farming is possible on it, yet three scenes at a
 masterwork banked what one fight banks. Before I-089 the table read archer 20 / 34 / 52, envoy 19 / 32 / 49,
@@ -427,7 +455,7 @@ measuring, in simulation, which facts about a just-eligible candidate predict th
 **04.4.2 Confidence.** `[D]` [DL-04-10; revision: I-065] For an eligible deed-keyed candidate, **confidence** is the number of these five
 **confirmations** that hold, an integer 0–5:
 
-| Id | Confirmation | Test (integers; `W1` = the ladder's tier-1 weighted threshold) | Why it predicts (candidates confirmed with it true / false, R7's feature study) |
+| Id | Confirmation | Test (integers; `W1` = the ladder's tier-1 weighted threshold; `W(tier)` = the weighted threshold of the tier being evaluated [editor: E1-007]) | Why it predicts (candidates confirmed with it true / false, R7's feature study) |
 |---|---|---|---|
 | K1 | **Current** | `2·recent ≥ W1` | the character is living this now (84 / 51 in 100) |
 | K2 | **Rising** | `2·recent ≥ weighted` | most of the evidence is recent: a pursuit, not a slow accretion (88 / 55) |
@@ -457,8 +485,8 @@ means here.
 containing that branch is eligible. A mixed history is therefore never resolved by the engine: it is
 surfaced as named alternatives for the player to choose among [C:P5]. Tier-ups, hybrids, variants,
 oath-bearing callings, vows, dark callings, branch callings, forks and consolidations are **always offers**
-[C:P2]. In simulation the grant bucket was confirmed by later play in 91 of 100 cases, the offer bucket in
-74, the abstain bucket in 38 (T-04-8 R7). A grant is still the player's to refuse: it is provisional and may
+[C:P2]. In simulation the grant bucket was confirmed by later play in 90 of 100 cases, the offer bucket in
+70, the abstain bucket in 38 (T-04-8 R7) [revision: I-108]. A grant is still the player's to refuse: it is provisional and may
 be renounced at any rest (04.8.2) [R1 §04].
 
 **04.4.4 The largest wrong outcome.** `[D]` [DL-04-10; DL-04-15; revision: I-065] No judgment is made in this part, but the inputs include judged
@@ -539,7 +567,7 @@ without a list of its own [C:P5 "a small, bounded, audited synergy bonus"; R3 04
   deed of the calling defeats a foe at or above the PC's band. Guile: a critical success against one who never
   saw it coming. Wilds: a breather outside any settlement. Lore: a deed that uncovers a clue or a sealed fact.
   Arcane: a working that critically succeeds. Divine: lifting a condition from another, or bringing another
-  back from Dying. Primal: dawn under open sky. Influence: a deed that moves someone's standing upward.
+  back from Dying. Primal: dawn under open sky or in wild country (05.6.10; `callings.yaml#families`) [editor: E1-008]. Influence: a deed that moves someone's standing upward.
   Craft: a deed that completes a project clock. Focus stays one pool [C:P9]; only how it refills differs.
 - **Hybrids: a named composite** (`data/composites.yaml owner-block 04`, 32 entries, `key_kind: deed_branch`):
   rank 1 at tier 1, a success on one road grants a lever of the composite's type on a later beat of the other
@@ -781,7 +809,7 @@ Basis:              [R6 A.5 items 1-6] [C:P5 offer; C:P1 "the player MAY defer"]
 
 **04.7.2 The out-of-fiction marker.** `[D]` [DL-04-14; DL-12-18; C:VII; revision: I-065] The player must always know when an offer is live and what it
 costs, and the world must never say so (BRIEF §4; C:VII). So: the fiction comes first and stages the vehicle;
-then exactly one OOF block follows, last in the response (12.15 order). A crisis offer is preceded by the
+then exactly one out-of-fiction (OOF) block [editor: E1-009] follows, last in the response (12.15 order). A crisis offer is preceded by the
 one-line marker `[RECOGNITION] An offer is open (see below). Nothing is lost by waiting; play continues when
 you answer or move on.` so that a player in the middle of a fight sees it. The CHOICE block lists, for
 **accept**: every competence value, training grade, capability, pick count and family mechanic gained, the
@@ -945,9 +973,9 @@ fork and consolidation is `lifecycle: provisional` when made. It works in full; 
   a lapse with `answer: renounce`). This is what keeps a grant the player's choice [R1 §04].
 - **The tier-4 attribute increase** is applied when tier 4 is **confirmed**, never while provisional, so an
   attribute never rises and falls (00.4.3).
-In simulation a tier-2 grant lapsed in 181 of 199 runs when the archer stopped shooting at once, in 65 of
-199 when she kept on for one more session, in 9 of 199 after two, and in 0 of 199 when she never stopped
-(T-04-8 R8).
+In simulation a tier-2 grant lapsed in 172 of 179 runs when the archer stopped shooting at once, in 67 of
+179 when she kept on for one more session, in 9 of 179 after two, and in 0 of 179 when she never stopped
+(T-04-8 R8) [revision: I-108].
 
 **04.8.3 Lineage: one identity per line.** `[D]` [DL-04-06; C:P5; revision: I-065] Two callings are in one **lineage** when their keys are
 identical (a variant and its base) or one key is an ancestor of the other (Warrior and Archer; Thief and
@@ -1185,7 +1213,7 @@ cost and failure [R2 4e; R3 04.18; C:P5].
 **04.10.1 The gate.** `[D]` [DL-04-19; C:VII; revision: I-065] Only the **Devourer** (`call.devourer`, a variant of the Bestiarist, offered
 only by V13) grants `lic.call.taking`. Anyone else who declares "I absorb its power" is at gate class G3:
 the license's crude fallback is to harvest the body for materials (ch.08), and its acquisition path is the
-Devourer's recognition. A suspended or lapsed Devourer keeps the **library** (04.10.4) but can neither take
+Devourer's recognition. A suspended or lapsed Devourer keeps the **library** (04.10.3) [editor: E1-010] but can neither take
 nor use slotted powers until restored.
 
 **04.10.2 The Taking.**
@@ -1376,7 +1404,7 @@ the offer is made by V7 and gains `represent_when: return_to_person`.
 
 **PR-04-5 A pick.** `[D]` (player choice at pause point 8)
 1. Build the eligible set by the pool gate of 04.8.4 (own, kin, conduct; `min_tier` ≤ the calling's tier).
-2. Rank (04.8.4) and take the first three. If fewer than one is eligible, the pick is **kept** and
+2. Rank (04.8.4) and take the first three. If none is eligible [editor: E1-011], the pick is **kept** and
    re-presented at the next reflection.
 3. Show `pick_choice` with each ability's literal active-rank text (ch.05's data, verbatim).
 4. The player picks one → ch.05's `grant` writes it to `slots.calling` with `source: {calling, tier}`,
@@ -1517,7 +1545,7 @@ outputs. 200 seeds unless noted; p10 / median / p90 [revision: I-034; I-089].
 
 | Id | Question | Result |
 |---|---|---|
-| R1 | Sessions to each tier, four play styles | the table in 04.3.5 |
+| R1 | Sessions to each tier, four play styles | the table in 04.3.5 (on DL-00-05's campaign mix; for rolled encounters only, R15) [revision: I-095] |
 | R2 | A level-3 key (Lockbreaker) | tiers at 3/4/6 · 7/9/12 · 15/19/35 · 27/32/44 · 54/—/— |
 | R3 | Who is offered the branch calling Warrior at tier 1, within 30 sessions | mixed-weapons fighter 200 of 200 (session 3/4/5) · bow-focused archer 46 of 200 · single-track swordsman 4 of 200. Largest child's share of `martial` at session 10 (p10–p90): 0.43–0.59 mixed, 0.67–0.85 archer, 0.77–0.93 swordsman |
 | R4 | Hybrid offered within 20 sessions, by mix of two branches | 100/0: 0 · 95/5: 0 · 90/10: 24 · 80/20: 193 · 70/30: 200 · 60/40: 200 · 50/50: 200 (of 200). Second-pillar archer (stealth in 25% of scenes): 146 of 200. Deliberate hybrid's tiers: 2/3/4 · 5/6/8 · 10/11/13 · 17/19/22 · 33/36/39 |
@@ -1526,11 +1554,12 @@ outputs. 200 seeds unless noted; p10 / median / p90 [revision: I-034; I-089].
 | R7 | Calibration of confidence (1,711 level-2 candidates, nothing accepted) | would be confirmed, by score 0–5: 38, 46, 65, 68, 90, 91 in 100. By policy: grant 90, offer 70, abstain 38 in 100. A designed pillar of the play style: grant 98, offer 81, abstain 25 in 100 |
 | R8 | A tier-2 grant, then a turn to fire sorcery | tier 2 lapsed in 172 of 179 runs when the archer stopped at once; 67 of 179 after one more session of archery; 9 of 179 after two; 0 of 179 when she never stopped. The new calling was first recognized 2 / 4 / 5 sessions after the turn |
 | R9 | Counted against weighted at a focus node, session 10 | archery 40 vs 182 (0.22) · thievery 40 vs 220 (0.18) · persuasion 26 vs 174 (0.15) |
-| R11 | Non-combat parity (`04-recog-parity.py`, revision I-003) | medians to tier 3 / 5: archer 15 / 47; envoy 14 / 42; smith 14 / 40; scholar 14 / 42 (earlier rules: smith never past tier 2) |
-| R13 | Parity in seeded worlds (`04-recog-parity.py`, I-083 section; revision C) | medians to tier 3 / 4 / 5, confirmed band: archer 16 / 28 / 48; envoy 16 / 27 / 45; smith 17 / 27 / 44; scholar 16 / 27 / 45; old seed: envoy and scholar never reach tier 5 |
-| R12 | Counted share measured (`03-counted-yield.py` on 06's engine; parity R9; revision I-004) | fighter bands 1–5: 0.11 / 0.15 / 0.22 / 0.23 / 0.33 without Focus, 0.26–0.44 pushing; contests: social 0.30, craft 0.73, lore 0.29 (medians) |
 | R10 | Sessions for one conduct axis to reach 16 / 40 / 80 / 140 / 220 positive points | costly choice taken in 60% of fights: 5 / 12 / 24 / 42 / 65 (medians) · in 30%: 10 / 24 / 47 / 83 / — · in 15%: 18 / 48 / — / — / — |
+| R11 | Non-combat parity (`04-recog-parity.py`, revision I-003) | medians to tier 3 / 5: archer 15 / 47; envoy 14 / 42; smith 14 / 40; scholar 14 / 42 (earlier rules: smith never past tier 2) |
+| R12 | Counted share measured (`03-counted-yield.py` on 06's engine; parity R9; revision I-004) | fighter bands 1–5: 0.11 / 0.15 / 0.22 / 0.23 / 0.33 without Focus, 0.26–0.44 pushing; contests: social 0.30, craft 0.73, lore 0.29 (medians) |
+| R13 | Parity in seeded worlds (`04-recog-parity.py`, I-083 section; revision C) | medians to tier 3 / 4 / 5, confirmed band: archer 16 / 28 / 48; envoy 16 / 27 / 45; smith 17 / 27 / 44; scholar 16 / 27 / 45; old seed: envoy and scholar never reach tier 5 |
 | R14 | Which requirement is met last as the focused archer enters each tier (`04-binding-check.py`, revision I-089) | ladder before I-089: the weighted total in 175 / 168 / 186 / 200 / 103 of the runs reaching tiers 1–5; current ladder: tier 1 weighted 175, tier 2 the since-floor of quality events 128 (weighted 58), tiers 3–5 weighted 145 / 194 / 183 (crises 37 at tier 3) |
+| R15 | The fight mix (`09-word-mix-pacing.py`, 200 seeds; revision I-095) | archer medians by tier: DL-00-05's mix 5 / 10 / 18 / 32 / 54; half chosen, half rolled 6 / 13 / 21 / 34 / 58; rolled encounters only 20 / 58 / — / — / — (tier 3 not within 60). Swordsman 3 / 7 / 12 / 20 / 34; 3 / 8 / 13 / 21 / 36; 11 / 36 / 52 / — / —. The rolled mix is trivial 34 / easy 27 / fair 35 / hard 4 / lethal 0 % (09.12.3); see 04.3.5 [DL-04-33] |
 | Wren | One continuous character, seed 7 | the long example WE-04-1 |
 
 **T-04-9 `gen_absorb.yaml`.** `[D]` Optional keys added to the gen_* schema: `requires`, `trigger`,
@@ -1789,16 +1818,16 @@ lands near the end of a long campaign or past it. The ladder has a top, and it i
 |---|---|---|---|
 | **Not eligible: the grinder.** Brann shoots cellar rats in every scene for 20 sessions. | archery weighted 340, counted 100, quality events **0** (all routine), scenes 60 | the quality floor (6) is unmet | Leanings: "the bow: on the threshold". A reader: "You have done it often, and seldom when it was hard." |
 | **Stale: the old soldier.** Hesk fought with the sword for years and has kept an inn for the last forty scenes of play. | `martial.blade` weighted 300, recent 12 | eligible, but `4·12 = 48 < 80`: stale | A reader: "That was who you were. I am asked who you are." If he takes up the sword again, recent passes 20 within a session and the offer comes. |
-| **Thin: Wren's stealth at scene 97.** | weighted 99, recent 28, confidence 0 | eligible and current, with nothing confirming it | silence; two scenes later the margin holds and it is offered |
+| **Thin: Wren's tracking at scene 75** (WE-04-1, session 15). | weighted 95, recent 39, confidence 0 | eligible and current (`4·39 = 156 ≥ 80`), with nothing confirming it | silence; two scenes later (scene 77: weighted 101, recent 41) K1 and K5 hold, confidence 2, and it is offered [revision: I-109] |
 
 *Other side of each boundary:* give Brann one real fight a session and his quality events pass 6 by about
-session 4; give Hesk recent 20; give Wren four more points. *Tempting non-example:* the DM feels Brann has
+session 4; give Hesk recent 20; give Wren's tracking one more recent point (K1 `2·40 ≥ 80`) and five more weighted (K5 `4·100 ≥ 400`). *Tempting non-example:* the DM feels Brann has
 "earned it by persistence". There is no such input: the packet for Brann is empty, and the narrator has no
 tally to be moved by.
 
 ### WE-04-3 Grant against offer: the same tallies, two fields
 
-Two archers reach scene 17 with Wren's exact numbers (weighted 85, confidence 4). **A** has done little else:
+Two archers reach scene 10 with Wren's exact numbers at her first grant (WE-04-1: weighted 84, confidence 4) [revision: I-109]. **A** has done little else:
 no other candidate is eligible → clear field → **grant**. **B** has also fought with the spear enough that
 `call.spearhand` is eligible in the same pass (weighted 82) → the field is not clear → **offer**, with both
 named in one block, and the branch calling Warrior beside them if its breadth requirement holds. The engine
@@ -1822,11 +1851,13 @@ Archer tier 1, first pick. Eligible by the pool gate (04.8.4) *(abilities illust
 
 | Ability | First tag | `min_tier` | Pool | Wren's weighted at the tag | Rank |
 |---|---|---|---|---|---|
-| Pinning Shot | `deed.martial.archery.bow` | 1 | own | 85 | 1st |
-| Steady Draw | `deed.martial.archery` | 1 | own | 85 (tie; engine draw) | 2nd |
+| Pinning Shot | `deed.martial.archery.bow` | 1 | own | 84 | 1st |
+| Steady Draw | `deed.martial.archery` | 1 | own | 84 (tie: all her archery is with the bow; engine draw) | 2nd |
 | Volley | `deed.martial.archery.bow` | 2 | own | — | not eligible: `min_tier 2 > 1` |
-| Tumbling Escape | `deed.martial.athletics.acrobatics` | 1 | kin | 21 | 3rd (kin ranks after own) |
-| Read the Field | `deed.martial.tactics.reading` | 1 | kin | 12 | 4th: not shown |
+| Tumbling Escape | `deed.martial.athletics.acrobatics` | 1 | kin | 37 | 3rd (kin ranks after own) |
+| Read the Field | `deed.martial.tactics.reading` | 1 | kin | 0 | 4th: not shown |
+
+The weights are Wren's at her grant in scene 10 (`04-wren04.py` seed 7; WE-04-1) [revision: I-109].
 
 The block shows Pinning Shot, Steady Draw and Tumbling Escape, each with its literal rank-1 text. Her second
 pick shows the remaining two and Read the Field. At tier 2 Volley joins the eligible set; at tier 3 a picked
@@ -1916,10 +1947,10 @@ provisional; `lived` is her archery evidence since that rest.
 - Session 16, the first reflection at 24 since the grant: `lived` 0 → **lapse**: archery +4 → +3, the tier's
   pick returns to the pool, the Proven license and the Focus trigger go (unless another calling grants
   them). Tier 1 was confirmed long before and is untouched: she is still an Archer. Meanwhile
-  `call.pyromancer` has been offered (in the simulation the new calling came a median of 3 sessions after the turn).
+  `call.pyromancer` has been offered (in the simulation the new calling came a median of 4 sessions after the turn, p10–p90 2–5; T-04-8 R8).
 *Other side:* had she fought one more session with the bow before turning, `lived` would have passed 24 and
 the tier would have been confirmed at the first reflection twelve scenes after the grant (it confirmed in
-134 of 199 such runs). *Non-example:* a season spent healing in a monastery adds no evidence-bearing scenes,
+112 of 179 such runs; T-04-8 R8) [revision: I-108]. *Non-example:* a season spent healing in a monastery adds no evidence-bearing scenes,
 so the count does not advance and nothing lapses (03.6.1).
 
 ### WE-04-9 Tempting non-examples, with the refusal each gets
@@ -2113,8 +2144,9 @@ surfacing and card loading).
 **To 00 (proposed amendments; this chapter works within 00 as written meanwhile).**
 1. **`gen.pick`.** Register the pick procedure (04.8.4, PR-04-5) as a generator domain with fill method
    `chosen`, or accept it as "an equivalent tag-gated selection". It uses 00.11.3 steps 1, 2, 4 and 6.
-2. **T-00-19:** allow an owner-block "04" in `licenses.yaml` (the six `lic.call.*` licenses now in
-   `data/licenses.yaml owner-block 04`).
+   *Met at integration: `gen.pick` is registered (00.11.1; 04.8.4)* [editor: E1-013].
+2. **T-00-19:** allow an owner-block "04" in `licenses.yaml` (the six `lic.call.*` licenses, the five universal ones of
+   04.5.3 and `lic.call.taking`, now in `data/licenses.yaml owner-block 04`; met at integration) [editor: E1-014].
 3. **Expression context** for `applies_when` / `when` (effects.yaml header): add `secondary_tags`,
    `gate.mode`, and the resolver "your calling key". Until then composites read the frame's recorded
    grounded secondaries.
@@ -2122,13 +2154,13 @@ surfacing and card loading).
 5. **Tool #28:** `retire` takes `superseded_by` and leaves specialties (04.8.5); `grant` takes
    `provisional: true` and a `source` offer id.
 6. **T-00-9:** add `h.04.crisis_check` (`beat_end`, 8), `h.04.provisional_check` (`reflection`, 8),
-   `h.04.fraying_check` (`scene_start`, 8).
+   `h.04.fraying_check` (`scene_start`, 8). *Met: T-00-9 lists all three* [editor: E1-015].
 7. **00.6.2:** `Character.callings` gains the fields of 04.1.2; `Offer.content` is `{calling, tier,
    alternatives}`.
 8. **00.4.3 (b):** note that the one attribute increase is applied when tier 4 is confirmed.
 9. **Glossary:** seat, pick, pick allowance, lineage, road, specialty, legacy pick, variant, keeper, shadow,
    Fraying (stages Dimmed / Fraying / the Choice), lapse, fold, fork, consolidation, turn, readiness band,
-   Leanings, confirmation (K1–K5), the Taking, library, bane.
+   Leanings, confirmation (K1–K5), the Taking, library, bane. *Met: 00.18 carries these terms* [editor: E1-016].
 10. **Constitution PATCH candidates:** (a) P5's "calibrated classifier … MUST NOT share a model family" →
     "a deterministic scorer whose per-candidate confidence is defined and calibrated in chapter 04" (04.4.1,
     DL-04-10); (b) VI: record that per-character provisional status is an extrapolation from content
@@ -2136,7 +2168,8 @@ surfacing and card loading).
     added requirement) are a Delve-shaped addition (DL-04-06).
 11. **00.11.5** says relics never feed calling tiers. Nothing in 03 or 04 yet excludes deeds done through a
     relic's license. Proposed: ch.08 marks relic-granted licenses `feeds_evidence: false` and 03 drops deed
-    events gated by them. Until then such deeds count.
+    events gated by them. *Met at integration: 08 marks relic licenses `feeds_evidence: false` and 03 drops
+    their deed events (05.2.8), so such deeds do not count* [editor: E1-017].
 
 **To 02 (Character).** Origins grant competence of at most +2 (so tier 1's +3 is a step up). At least one
 origin per magic branch should grant a first license of that branch, and `gen.birth` should be able to grant
@@ -2146,9 +2179,11 @@ compatible: it cannot satisfy any floor.
 
 **To 03 (Tags and evidence).** (a) Confirm `detail().peak_band` is the highest challenge band among
 **successes** at the node, and that `by_band` counts every settled contribution; a `success_by_band` array
-would make the great-deed rule exact (the simulation used one). (b) `detail(tag, since)` should accept a
+would make the great-deed rule exact (the simulation used one); *met: 03 added `success_by_band` at
+integration (04.3.1)* [editor: E1-018]. (b) `detail(tag, since)` should accept a
 scene index or time, and the evidence-bearing scene count since a time should be readable. (c) For the
-Devourer: a count of distinct opponent kinds outside `creature.folk` at the root; until it exists the rule
+Devourer: a count of distinct opponent kinds outside `creature.folk` at the root (03.9's `detail().distinct.opponent_kinds`
+now exists [editor: E1-019]); the rule
 reads `detail(pc, deed).distinct.opponent_kinds ≥ 5` (as `callings.yaml` `req.variant.devourer` and 04.2.6) [verification: V2a-007]. (d) Optional: `conduct().pos_events` and a count of
 magnitude-4 positive entries, to allow a qualitative requirement for higher vow tiers. (e) Reconcile
 `data/tags.yaml`, adopted at integration (`deed.wilds.animals.falconry`); if it is ruled an alias of
@@ -2248,6 +2283,6 @@ Each has a shipped default and a named test.
 | OEQ-04-7 | Are the Fraying stages felt as fair warning? | strain 4 / 8 / 12; forbidden act → stage 3 (04.9.2) | **T-04-FRAY** (with 03's T-03-STRAIN): playtests with one grave act and with one forbidden act; the player can state, before stage 3, what would cause it; time from stage 1 to clear by deeds 2–6 sessions |
 | OEQ-04-8 | Is 12 / 24 evidence-bearing scenes the right trial? | confirm from 12, lapse at 24 (04.8.2) | **T-04-PROV** (R3 G-4): lapse rate of provisional grants in live play; target under 10% for players who did not change style, over 70% for those who abandoned the key at once; ask whether a lapse was expected |
 | OEQ-04-9 | Are three deed seats and one oath seat the right cap? | 3 + 1 (04.8.1) | **T-04-SEATS**: how often a fourth candidate arrives before session 20 and what the player does; if consolidation is declined and a release is chosen more than half the time, test 4 seats with S unchanged |
-| OEQ-04-10 | Can non-combat callings meet the crisis and great-deed requirements of tiers 3–5? | crises 2 / 3 / 4; great deeds by band (04.3.4) | **T-04-CRISIS**: sessions to tier 3 for PCs whose key is in lore, influence or craft; target within 1.5× the combat median. **Answered** (revision I-003): with 03.4.3's contest band and 03.4.5's ruinous and one-from-full crises [revision: I-046], envoy, smith and scholar reach tier 3 at 18 / 18 / 17 and tier 5 at 46 / 45 / 46 against the archer's 19 / 51 (within ±20%; T-04-8 R11). Live-play test kept as stated |
+| OEQ-04-10 | Can non-combat callings meet the crisis and great-deed requirements of tiers 3–5? | crises 2 / 3 / 4; great deeds by band (04.3.4) | **T-04-CRISIS**: sessions to tier 3 for PCs whose key is in lore, influence or craft; target within 1.5× the combat median. **Answered** (revision I-003): with 03.4.3's contest band and 03.4.5's ruinous and one-from-full crises [revision: I-046], envoy, smith and scholar reach tier 3 at 18 / 18 / 17 and tier 5 at 46 / 45 / 46 against the archer's 19 / 51 (within ±20%), on the ladder before I-089; the current medians are 04.3.5's (T-04-8 R11) [editor: E1-020]. Live-play test kept as stated |
 | OEQ-04-11 | Is the Taking worth its seat, and bounded? | 2 Focus; one per long rest; library 4–12; banes (04.10) | **T-04-TAKE**: simulate a Devourer against ch.09's bestiary for 30 sessions; target 4–8 library powers by session 20, never more than the acquired slots in use, and a win rate within 5 points of a same-tier Slayer |
 | OEQ-04-12 | Is the Leanings view the right transparency? | key name and band word only (04.6.5) | **T-04-LEAN** (R3 G-16): two groups, one with the view and one without; compare how often players report pursuing an identity on purpose and whether recognition still surprised them pleasantly |

@@ -15,7 +15,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 APP = os.path.normpath(os.path.join(HERE, "..", "..", "appendix"))
 FR = os.path.join(APP, "fragments")
 RULES = os.path.normpath(os.path.join(APP, ".."))
-ORDER = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "15", "16"]
+ORDER = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16"]
 MARK = "<!-- ===== assembled at integration from appendix/fragments/ (do not edit below; edit the fragments) ===== -->"
 
 def read(p):

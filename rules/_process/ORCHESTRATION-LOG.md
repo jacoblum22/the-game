@@ -433,3 +433,19 @@ Resolved all 12 rows: I-038 (Oracle lever cap; sim shows +3.7 down to +0.8 per r
 ## Revision C5b merged: `revision-C5b-report.md`
 - Resolved I-061, I-068, I-069, I-070 (seed checks now 64/64), I-081, I-084 (outgrown factions seek band-5 patrons; escalation sim) and I-096. I-097 wontfix.
 - New rows: I-098 (04.3.4 'In fiction' column) and I-099 (09.12.3 word mix).
+
+## Revision C7 returned; REVISION C COMPLETE (`revision-C7-report.md`)
+- C7 resolved I-065 (every chapter except 13 basis-tagged), I-091, I-095, I-098, I-099 and I-105, and opened I-106.
+- The orchestrator resolved I-106 (11.9.6 aligned with the data: walls keep a holding safe) and I-049 (00.16.6 versioning, DL-00A-34), I-050 (credits.md) and I-107 (07.5.14 retire mode; C0 lethality gate).
+
+## COMPLETION (orchestrator)
+- **ch.14:** Player's Guide and codex spec (`14-players-guide.md`), DL-14-01..12, trace-14. Registered in the assembler, the validator CHAPTERS list and BASIS.
+- **Constitution 1.7.0 → 1.8.0:** P3, P5 and P14 amendments; all ten deferrals recorded as resolved with rule ids.
+- **Appendix:** `open-empirical-questions.md` (140 questions; `_process/build-oeq-appendix.py`) and `credits.md`.
+- **README:** ruleset_version 1.0.0; status; issue status (100 rows: 92 resolved, 4 accepted, 4 wontfix).
+- Validator 0 ERROR / 0 WARN. Next: editor pass on the most-edited chapters (short agents).
+
+## Editor pass and final closure
+- E1 (ch.04–05): 34 clarity fixes. E2 (ch.10, 12, 14): 46 fixes; T-14-3 now matches 00.6.3.
+- Findings closed: I-108..I-110 by C8 (ch.04 figures and Wren examples re-derived from seed 7; Working riders allowed); I-120..I-124 by the orchestrator (DL-14-13); I-125 and I-126 by the orchestrator (glossary; complete Working operations list, verified by script over the data).
+- Ledger: 110 rows, all closed (102 resolved, 4 accepted, 4 wontfix). Validator 0/0. RULESET 1.0.0 DONE.

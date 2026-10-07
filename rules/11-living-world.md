@@ -1513,7 +1513,7 @@ project, 15.12, on 08's build weeks, the price paid as materials over the build)
 privilege, a thread's reward); **inheritance** (11.13.5); or **seizure** (taking a faction's hold by force,
 which is a `strike` the PC makes in play: status −2 with that faction and the place's ownership written).
 The holding is a **haven** for the PC (`safe: true`, 10.2.3) while it is held, staffed as 08 requires and not
-ruined; while the PC lives there, 08's lifestyle line applies.
+ruined (walls keep it safe even when its settlement is not, 11.9.6 [revision: I-106]); while the PC lives there, 08's lifestyle line applies.
 
 **11.9.3 Holdings in the World Turn.** `[D]` [DL-11-19; DL-11-01; R5 EQ-12; revision: I-065] In step 2 (Maintain), for each holding: (1) 08's upkeep has
 already run in phase 4; if it went unpaid, the damage clock ticks +1 and, after two unpaid weeks, the staff
@@ -1552,16 +1552,17 @@ false`; repair is a project of half its build weeks) or, for a manor or keep str
 `aid_pc` of a friendly faction sends help when a threat bang names the holding (11.3.6). A week of repair
 (15.13.11) ticks the damage clock down 2.
 
-**11.9.6 Improvements.** `[D]` [DL-11-35; DL-11-19; C:V; R5 EQ-12; revision: I-065] A holding may carry improvements from this closed list
+**11.9.6 Improvements.** `[D]` [DL-11-35; DL-11-19; C:V; R5 EQ-12; revision: I-065; revision: I-106] A holding may carry improvements from this closed list
 (`world_turn.yaml#improvements`; price, build weeks, effect, minimum holding): **walls** (400, 8 weeks;
-garrison +1, +2 against strikes; townhouse or larger); **garrison** (4 guards at 08's soldier wage; garrison
+garrison +1, +2 against strikes; the holding stays safe even when its settlement is not; townhouse or
+larger); **garrison** (4 guards at 08's soldier wage; garrison
 +1; watchtower or larger); **shrine** (300, 6 weeks; a keeper's place: rites kept there, Solace as at a
-temple, 15.13.2); **library** (500, 8 weeks; a tier-1 collection for 15's research week); **workshop
-wing** (400, 8 weeks; a workplace for one craft, 08.6); **stables** (150, 4 weeks; the owner's mounts
-stabled without cost); **hall** (800, 10 weeks; may host a faction's sitting: hosting is a week of
-service, +1 status with that faction once a season); **hidden room** (200, 4 weeks; a cache only the PC
-and those told know, which 07's dispositions never find); **market charter** (1,000 and a grant from the
-seat faction at status ≥ +2; a shop's yield dice doubled in a town). A holding below a manor carries at
+temple, 15.13.2; cottage or larger); **library** (500, 8 weeks; a tier-1 collection for 15's research week; townhouse or larger); **workshop
+wing** (400, 8 weeks; a workplace for one craft, 08.6; townhouse or larger); **stables** (150, 4 weeks; the owner's mounts
+stabled without cost; cottage or larger); **hall** (800, 10 weeks; may host a faction's sitting: hosting is a week of
+service, +1 status with that faction once a season; townhouse or larger); **hidden room** (200, 4 weeks; a cache only the PC
+and those told know, which 07's dispositions never find; cottage or larger); **market charter** (1,000 and a grant from the
+seat faction at status ≥ +2; no build time; a shop's yield dice doubled in a town; shop or larger). A holding below a manor carries at
 most three improvements, a manor or keep six.
 
 **11.9.7 Great projects: changing the map.** `[D]` + `[J:enum]` + `[J:rung]` When the PC sets out to change

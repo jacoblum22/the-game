@@ -386,15 +386,15 @@ blocks:   # owner-blocks merged at integration from _process/merged-contrib/effe
   # Chapter 10 builds hazards, traps, weather and site results from core effects (eff.apply_condition,
   #   eff.hazard_step, eff.grant_lever, eff.restore, eff.drain, eff.write_fact, eff.tick_clock, eff.force_check,
   #   eff.summon) and from 06/07/08's blocks (eff.06.grant_snag, eff.07.dread, eff.08.adjust for supply_use).
-  # It adds ONE definition, which needs 00 to add the quantity `travel_points` to T-00-13 (Interface request
-  #   10 -> 00 item 3). Until that amendment it is unused by any data entry (no item or ability changes journey
-  #   speed), and pace changes come only from 10.3.2's engine-cited steps.
+  # It adds ONE definition, on the quantity `travel_points` that T-00-13 now lists [amended: DL-10-03]. No data
+  #   entry uses it yet (no item or ability changes journey speed), so pace changes come only from 10.3.2's
+  #   engine-cited steps [editor: E2-022].
   # Basis: [00.10.1] [PR-00-8] [10.3.2] [DL-10-03]
   - owner: "10"
     entries:
       - id: eff.10.travel_points
         op: modify
-        quantity: travel_points          # PENDING 00 amendment (T-00-13)
+        quantity: travel_points          # T-00-13 [amended: DL-10-03]
         family: adjust
         regime: additive
         params: {amount: "-4..4", applies_when: expr}

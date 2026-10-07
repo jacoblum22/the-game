@@ -30,7 +30,7 @@ import yaml
 HERE = os.path.dirname(os.path.abspath(__file__))
 R = os.path.normpath(os.path.join(HERE, ".."))
 DATA = os.path.join(R, "data")
-CHAPTERS = ["00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "15", "16"]
+CHAPTERS = ["00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16"]
 F = []  # findings: (level, check, where, message)
 def add(level, check, where, msg): F.append((level, check, where, msg))
 
@@ -497,7 +497,7 @@ except Exception as e:  # an audit must never break validation
 # ====================================================================== 12. BASIS (revision I-065)
 # BRIEF §6 / 00.1.6: every rule card cites its basis at card level, `[C:…]`, `[R…]` or `[DL-…]` (basis_audit.py
 # defines a card and a tag). WARN per untagged card, in the chapters whose cards have been tagged so far.
-BASIS_CHAPTERS = ["00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "15", "16"]  # [revision: I-065] C6a 04-07, C6b 00-03, C6c 09-10, C6d 15-16, C6e 08, C7 11-12
+BASIS_CHAPTERS = ["00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "14", "15", "16"]  # [revision: I-065] C6a 04-07, C6b 00-03, C6c 09-10, C6d 15-16, C6e 08, C7 11-12
 try:
     sys.path.insert(0, HERE)
     import basis_audit

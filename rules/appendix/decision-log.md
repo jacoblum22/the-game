@@ -274,6 +274,14 @@ Decisions made in `00-architecture.md` (Wave 2). Digest shorthand `[R1 §x]`…`
 - Serves: goal 2 (authors and implementers meet each term after the rule that defines it).
 - Revisit if: a chapter's "Consumes" row in 00.17.2 names a chapter that comes after it in this order (then reorder).
 
+### DL-00A-34: Ruleset versions; saves migrate by decision-log Migration lines (revision I-049)
+- Decision: one `ruleset_version` (semver) in `rules/README.md` and as a fact on every save. On load under a newer version: derived values are recomputed (they are never stored); each DL entry since the save's version that carries a **Migration:** line is applied in order and logged; resolved outcomes are never re-resolved; an invalidated ability or license is replaced by an offer at the next rest (00.16.6).
+- Alternatives considered: (a) no versioning (rejected: a long campaign outlives rule fixes, R5 FN-11); (b) re-run the campaign under the new rules (rejected: breaks `never_corrected` and the player's trust); (c) freeze saves on their version (kept only for major bumps).
+- Evidence: R5 FN-11 (recommended row); 02.7.4 (derived values are computed, not stored); `pacing.yaml` `never_corrected`.
+- Serves: goal 2 (the record stays authoritative across rule changes).
+- Migration: none (the first versioned release is 1.0.0).
+- Revisit if: a revision needs a migration no Migration line can express (then a major bump).
+
 <!-- ===== assembled at integration from appendix/fragments/ (do not edit below; edit the fragments) ===== -->
 
 ## DL-01 — Resolution
@@ -1058,6 +1066,34 @@ Fragment for `appendix/decision-log.md`. Format: BRIEF §11. Simulation referenc
 - Serves: goal 1 (a focused identity deepens at the intended pace: three recognitions of real capability inside a 32-session campaign, a top far away); C:P5.
 - Revisit if: T-04-PACE logs put tier 3 outside 16–24 or tier 5 before 50 for focused play (then retune W again; the since-fields stay).
 
+### DL-04-33: The pacing targets assume a campaign mix with about half of a PC's fights chosen; nothing pushes the PC to keep pace (revision I-095)
+- Decision: [revision: I-095] 04.3.5 and T-04-8 state that DL-00-05's assumed fight mix (easy 25 / fair 40 / hard 30 / lethal 5 %) is a **campaign** mix: it holds when about half of a PC's fights are chosen (a site's heart, a lair, a quarry: fair 50 / hard 40 / lethal 10, 10.13.10, 09.8.2) and half are the road's rolled encounters (trivial 34 / easy 27 / fair 35 / hard 4 / lethal 0, 09.12.3). 04.3.5 shows the three rows (assumed, half chosen, rolled only) and T-04-8 gains R15. A PC who fights only rolled encounters stalls, and that is intended: growth comes from seeking out danger. 12.7.4's pacing director is **not** given a duty to offer a chosen fight when the share falls; the rules guarantee only that one is always within reach (12.16.12's sites and lairs, 11.5.10's hook supply, 12.8.5's stuck answer). 02.11.1's "median session 4" carries the same caveat.
+- Alternatives considered: make the rolled tables harsher to match the assumed mix (rejected: 09.8.1 rule 3 keeps the road fair or easier by design, DL-09-26, and a harsher road kills travelling PCs, not just slows them); retune 04's ladder to the rolled mix (rejected: a PC who seeks out danger would then race past the targets, tier 5 near session 30); a pacing-director rule that tracks the chosen share and pushes a lair or quarry when it falls (rejected: the director governs intensity, not growth, 12.7; pushing a PC toward fights to keep it on a growth schedule overrides the player's chosen play, which 12.9.2 forbids for every opportunity, and the existing opportunity and stuck-answer channels already put chosen fights in front of the player).
+- Evidence: `rules/_process/simulation/09-word-mix-pacing.py` (200 seeds) and `09-word-mix-pacing-output.txt`: archer medians by tier, assumed mix 5 / 10 / 18 / 32 / 54 (reproduces 04.3.5's table), half chosen 6 / 13 / 21 / 34 / 58 (135 of 200 reach tier 5 within 60), rolled only 20 / 58 / never; swordsman 3 / 7 / 12 / 20 / 34, 3 / 8 / 13 / 21 / 36, 11 / 36 / 52 / never.
+- Serves: goal 1 (a focused identity deepens at the intended pace for a PC who goes looking for trouble); C:P2 (power from what the character did); the sandbox (the player picks the pace).
+- Revisit if: T-04-PACE logs show focused PCs choosing well under half of their fights and players reporting growth as stalled (then make the ratio visible in 14's player guidance first, and only then consider a director rule).
+
+### DL-04-34: 04.3.4's "In fiction" column is staging guidance, not a requirement (revision I-098)
+- Decision: [revision: I-098] 04.3.4: the "In fiction" column says how narration and the codex speak of a tier; a tier is confirmed by the other columns alone. Tier 4's "done in many countries" is the Contexts column (5 distinct kinds of opposition or obstacle, 04.3.1) in words, not a geographic gate; a one-region campaign reaches Exalted on the same deeds, and the fiction says "many countries" literally only where play has crossed into new regions (12.16.18).
+- Alternatives considered: a region-count requirement at tier 4 (rejected: no 03.9 field counts regions, a gate on geography would block a campaign that stays home and is not what the tier measures); delete the column (rejected: the codex and the recognizer need the tier's in-world wording); reword the tier-4 cell (rejected: the phrase is the genre's, and the note removes the gate reading without losing it).
+- Evidence: 04.3.1's field table: `contexts` = `detail(pc, key, since).distinct.contexts`, distinct kinds of opposition or obstacle; no field reads region. Revision C5b (I-084) recorded the FORK reading in a one-region seed.
+- Serves: goal 2 (one reading of the ladder); goal 1 (a campaign that stays in its first region is not capped at tier 3).
+- Revisit if: the codex or recognizer text in play ever cites geography as a missing requirement.
+
+### DL-04-35: Ch.04's prose quotes the current simulation run (revision I-108)
+- Decision: [revision: I-108] 04.2.3, 04.4.3, 04.8.2 and WE-04-8 re-quote `04-recog04-output.txt` (re-run in revision C8, byte-identical to the committed output) and so agree with T-04-8: Warrior offered to the mixed-weapons fighter at a median of session 4 (p10–p90 3–5), to the bow-focused archer in 46 of 200 and the single-track swordsman in 4 of 200 (R3); the grant and offer buckets confirmed in 90 and 70 of 100 (R7); a tier-2 grant lapsed in 172, 67, 9 and 0 of 179 runs, confirmed in 112 of 179 after one more session, and the new calling came 2 / 4 / 5 sessions after the turn (R8). The R3, R7 and R8 tables of `04-recognition-sim.md` are refreshed the same way.
+- Alternatives considered: re-tune the rules so the old figures return (rejected: the figures were stale quotes of a pre-I-089 run, not targets); drop the figures from the prose and cite T-04-8 only (rejected: the prose uses them to explain why a rule is shaped as it is).
+- Evidence: `04-recog04-output.txt` R3, R7, R8; T-04-8.
+- Serves: goal 2 (one set of numbers in the chapter).
+- Revisit if: `04-recog04.py` or the ladder changes; then T-04-8 and these four places are re-quoted together.
+
+### DL-04-36: The worked examples quote Wren's seeded trace (revision I-109)
+- Decision: [revision: I-109] WE-04-1, WE-04-2, WE-04-3 and WE-04-5 all read `04-wren04.py` seed 7 on the current ladder. WE-04-2's thin abstain is Wren's tracking at scene 75 (weighted 95, recent 39, confidence 0; offered two scenes later at confidence 2, as WE-04-1 shows), not her stealth at scene 97: on the current ladder stealth is first eligible at scene 95, already at confidence 1, and is offered then. WE-04-3's twins are at scene 10 with weighted 84 and confidence 4 (Wren's first grant). WE-04-5's pick weights are her tags at that grant: bow 84, archery 84, acrobatics 37, tactics 0; `04-wren04.py` now prints them, and its output is re-committed (one line added, nothing else changed).
+- Alternatives considered: label WE-04-2 and WE-04-3 as hypothetical numbers (rejected: they name Wren, and a reader checks them against WE-04-1); keep stealth for WE-04-2 with invented numbers (rejected: the trace has no stealth abstain).
+- Evidence: `04-wren04-output.txt` (scenes 10, 70–77, 95); the earlier figures came from the pre-I-089 trace that `04-recognition-sim.md` still carried.
+- Serves: goal 2 (the examples agree with each other and with a reproducible run).
+- Revisit if: `04-wren04.py`, its seed or the ladder changes; the four examples are re-traced together.
+
 ## DL-05 — Abilities, Focus, and Magic
 
 Format per BRIEF §11. Citations per 00.1.6. Numbers consumed by other chapters are marked **[consumed]**.
@@ -1346,6 +1382,13 @@ Format per BRIEF §11. Citations per 00.1.6. Numbers consumed by other chapters 
 - Evidence: [C:P9] (Focus is the one pool, 05.6); DL-05-09 (the cap equals the reference base Focus of 4: at most one starting pool's worth from consumables between long rests, a third of the capped maximum of 12); DL-05-14 (rest recovery); DL-05-23 (the parallel Vitality cap, [R5 HR-09]); `base_items.yaml` (`item.consumable.potion.elixir` clarity draught restores 1 per draught, so the cap is four draughts).
 - Serves: goal 2 (one bound, checked by the tool before the item is used).
 - Revisit if: T-05-DAY logs show consumables are the main recovery between rests, or are never used.
+
+### DL-05-42: A Working may be a rider (revision I-110)
+- Decision: [revision: I-110] 05.3.2's Working row allows `beat or rider`. A rider Working adds produced effects (harm, a severity rung, a condition, movement) to the holder's own beat of a named verb; it has `check: none`, `hook: on_degree`, rides that beat's roll (05.3.5), resolves as an independent trigger at depth 0 (05.10.1, 05.10.5), prices its timing at 0 in the allowance (05.11.2) and is bounded by one rider per beat (05.4.3). 05.1.3's word **Working** and 05.3.4's `rider` row say so. The 31 rider Workings in `abilities.yaml` (Aimed Shot, Hew, Cleaving Arc and the rest) are unchanged.
+- Alternatives considered: re-form the 31 as Edge, Lever or Exception (rejected: Edge is passive only, Lever gives only a lever and Exception only an exception, while these deal harm, apply conditions and move targets; re-forming would break the grammar the other way or split each into two abilities); a ninth form for strike riders (rejected: it would duplicate Working's regime and operations, and adding a form is an amendment for no gain).
+- Evidence: the generator's `FORMS` table (`05-gen_data05/gen_data05.py`) and the emitted `abilities.yaml` constants already give Working the timings `{beat, rider}`, and the generator rejects any other pairing; the prose table was the only place that disagreed. T-05-9 and 05.11.2's timing term (rider 0) already price riders, and 05.11.5 prices `ab.aimed_shot` as "Working · rider". `05-ladder-check.py` re-run: 183 callings, 0 failures, output unchanged.
+- Serves: goal 2 (one grammar, stated once, matching the data).
+- Revisit if: a rider Working is found that should be a beat (it takes its own roll), or riders crowd out beat Workings in play.
 
 ## DL-06 — Conflict
 
@@ -2204,7 +2247,7 @@ chapter 06's fight model and T-06-12 lines), output `07-harm-sim-output.txt`, wr
 - Revisit if: a pre-made setting or world seed wants a creature excluded from a terrain (it overrides with its own regional table).
 
 ### DL-09-26: 04's fight mix is a campaign mix, not the tables' mix
-- Decision: [revision: I-045] 09.12.3 records that the shipped tables' threat faces are trivial 34 / easy 26 / fair 36 / hard 4 / lethal 0 % (by design, 09.8.1 rule 3), that a PC fighting only rolled encounters stalls on 04's ladder, and that DL-00-05's mix holds when about half of a PC's fights are chosen (a heart, a lair, a quarry). The tables are not made harsher; the pacing text is handed to 04 and 02 (I-095).
+- Decision: [revision: I-045] 09.12.3 records that the shipped tables' threat faces are trivial 34 / easy 27 / fair 35 / hard 4 / lethal 0 % (34 / 26 / 36 / 4 before the world seed's C5b re-run; revision I-099) (by design, 09.8.1 rule 3), that a PC fighting only rolled encounters stalls on 04's ladder, and that DL-00-05's mix holds when about half of a PC's fights are chosen (a heart, a lair, a quarry). The tables are not made harsher; the pacing text is handed to 04 and 02 (I-095; done by DL-04-33).
 - Alternatives considered: raise the tables' hard share toward 30% (rejected: 09.8.1 rule 3 makes hard the ceiling of an unwarned fight, and I-040 just lowered the home-1 crowds for light PCs); retune 04's ladder to the rolled mix (rejected here: not this chapter's, and it would make chosen fights overpay).
 - Evidence: `09-word-mix-pacing-output.txt` (200 seeds): rolled-only archer 20 / 58 / never / never / never; half chosen 6 / 13 / 21 / 34 / 58 against 04.3.5's 5 / 10 / 18 / 32 / 54; swordsman 3 / 8 / 13 / 21 / 36 against 3 / 7 / 12 / 20 / 34.
 - Serves: goal 2 (the pacing assumption is stated where it is made), goal 1 (growth comes from the fights a PC seeks).
@@ -2684,6 +2727,27 @@ chapter 06's fight model and T-06-12 lines), output `07-harm-sim-output.txt`, wr
 - Serves: goal 2 (the record matches the rule that runs it).
 - Revisit if: petty factions want template-flavoured texts (then a petty list per template).
 
+### DL-11-35: A strike on a holding is an opposed faction check; improvements are a closed priced list (revision I-065)
+- Decision: [revision: I-065] 11.9.5: a faction's strike on a PC's holding is 11.3.5's faction check against `10 + 2 × garrison + 2 × the PC's domain tier` (0 if none), +2 with walls; success ticks the holding's 6-segment damage clock +2, critical success +4; a full clock ruins the holding (repair: a project of half its build weeks) or, for a manor or keep and a faction whose `fields` could hold it, seizes it; a week of repair ticks the clock down 2. 11.9.6: improvements come from a closed list of nine (`world_turn.yaml#improvements`), each with a price, build weeks, an effect and a minimum holding; a holding below a manor carries at most three, a manor or keep six.
+- Alternatives considered: holdings outside the faction economy, harmed only by situations (rejected: 11.3.8 already lets a Hostile faction `strike` the PC, and its holdings are where a strike lands); free-form improvements priced by the DM (rejected: C:V, and a DM figure is a number the DM chose, INV-3); an improvement per building kind with no cap (rejected: a cottage would end up a fortress).
+- Evidence: the DC is DL-11-03's opposed DC (`10 + defender rating + 2 × defender tier`) with the holding's garrison (0–3) as the defender's rating and the PC's domain tier as its tier, so a walled, garrisoned holding of a ruling PC defends like a faction of that size; the 6-segment damage clock is a 00 clock size (DL-00A-20). The improvement prices (150 to 1,000) and build weeks (4 to 10) sit inside 08's holding prices (`economy.yaml#holdings`: cottage 150 … keep 25,000), so an improvement never costs more than a mid-sized holding. The tick sizes (+2 / +4, repair −2), the prices, the build weeks and the 3 / 6 caps are defaults, not measured values; no simulation set them. The cards carried no basis of their own until revision C7's audit (I-065).
+- Serves: goal 1 (what the PC builds can be struck and defended); goal 2 (one check and one closed list); C:V.
+- Revisit if: `11-world-sim.py` or play shows Hostile factions ruining a defended holding more often than once a year, or the market charter's doubled yield outrunning 08's anti-inflation targets.
+
+### DL-11-36: Festivals carry effects from a closed list of six (revision I-065)
+- Decision: [revision: I-065] 11.10.4: a festival is `{id, name, season, week, day, effects}` in `calendar.yaml`, its effects from a closed list: market (find-buyer clocks +1, one haggling notch waived that week), sitting (ranks conferred, 11.8.3), rumor surge (circulating rumors drawn at weight 3; Carouse yields one more), truce (faction strikes in its scope read as `goal`), rite day (a named school's rituals one scale lower in cost) and hiring fair (one more recruiting candidate). The four quarter days are festivals with market and sitting unless the region's seed says otherwise.
+- Alternatives considered: festivals as flavor only (rejected: a calendar that changes nothing is not read, and R5 TM-07 names festivals as a timekeeping duty); festival effects written per setting (rejected: C:V; each chapter that reads a festival would need to parse free text).
+- Evidence: each effect is a one-notch shift on a rule another chapter already owns (08/15 haggling and find-buyer clocks, 11.8.3 sittings, 11.6 rumor draws, 11.3.6 strikes, 05's ritual cost scale, 16's recruiting), so a festival adds no new mechanic. The quarter-day pair follows DL-11-21 (a quarter day opens each season) and DL-11-18 (ranks at sittings, default the season's first week). The sizes (+1 tick, one notch, weight 3, one more) are defaults, not measured values; no simulation set them. The card carried no basis of its own until revision C7's audit (I-065).
+- Serves: goal 2 (dates are computable and do something); C:V.
+- Revisit if: a festival effect proves to be the cheapest way to an outcome (players plan every sale or recruitment around one).
+
+### DL-11-37: A patron's coin reward for a thread is 08.8.8's job fee for its band (revision I-091)
+- Decision: [revision: I-091] 11.5.11: a completed thread's promised coin is 08.8.8's job fee for the thread's challenge band (`economy.yaml#job_fees`: 40 / 85 / 200 / 600 / 2,000), no longer "the patron's means at 08's wage scale". 11.5.12's (and `world_turn.yaml#thread_sources`') row "a faction's commission" cites the fee; T-11-4's `aid_pc` opportunity bang says a job pays the job fee of its band (mirrored in `factions.yaml` by `11-gen_factions.py`); the Friendly row's "jobs offered" cites it; the thread schema's `reward` comment names `job_fees` for coin.
+- Alternatives considered: keep "the patron's means at 08's wage scale" (rejected: it names no table, so the DM would choose a number, INV-3, and 08.8.8 now prices exactly this); a fee per thread rank (troublesome … epic) instead of band (rejected: 08.8.8 keys fees by challenge band, 03.4.3, and two tables for one payment would disagree).
+- Evidence: 08.8.8 and DL-08-36 (job fees by band, four weeks of that band's hire wage); 15.7.1 item 4 (a patron's job is offered at the fee, revision C6e). The `factions.yaml` diff is the one `aid_pc` line.
+- Serves: goal 2 (one table prices a job wherever it comes from); C:I (no DM-chosen figure).
+- Revisit if: DL-08-36's fees are retuned (this entry follows them).
+
 ## DL-12 — DM Procedures
 
 ### DL-12-01: The turn loop is two passes — adjudicate (state) then narrate — with a claim-by-claim check before delivery, as a rule of play
@@ -3054,6 +3118,101 @@ chapter 06's fight model and T-06-12 lines), output `07-harm-sim-output.txt`, wr
 - Evidence: the owner's direction (classic fantasy, original setting).
 - Serves: the brief.
 - Revisit if: a collision with a published name is found (rename in data; regenerate).
+
+## DL-14 — The Player's Guide and the Codex
+
+### DL-14-01: The premise and the promises are read aloud, not discovered
+- Decision: session zero opens with a fixed premise (14.1.1), a plain-language explanation of roleplaying for new players (14.1.2), and three binding promises (14.1.3): you see the odds first, death is telegraphed, and safety settings come first.
+- Alternatives considered: (a) let the player learn by playing (rejected: the first-time playtester is a newcomer, R5 OB-01, and hidden mechanics make the contract invisible unless it is stated); (b) a long rules primer (rejected: mechanics are hidden by design, and a primer front-loads what 14.4 teaches when needed).
+- Evidence: R5 OB-01 and FN-01 (essential rows); R6's telegraphed-death synthesis (warning before lethal harm); 07.3.3 and 07.3.6, which make promise 2 mechanically true.
+- Serves: goal 1 (the player knows anything may be tried), goal 2 (the promises are checkable against OFFERs and warnings).
+- Revisit if: T-14-NOTES shows newcomers still ask what the game is after session zero.
+
+### DL-14-02: Player advice is about intent, method and the OFFER
+- Decision: the how-to-play section (14.2) teaches five habits: say what you do and how; anything can be tried; read the OFFER and choose; offers of recognition can always be declined; and the three recovery moves (dispute, adjust, "I'm stuck").
+- Alternatives considered: teach the dice, DCs and modifiers (rejected: those are shown in each OFFER when relevant, and teaching them up front invites the player to play the numbers instead of the fiction).
+- Evidence: R5 OB-06; R7 (freeform adjudication: intent and method drive the frame); 12.5.7, 12.3.6 and 12.8.5 already define the recovery moves.
+- Serves: goal 1.
+- Revisit if: the playtests show players never change approach after an OFFER (then teach levers explicitly).
+
+### DL-14-03: The codex renders 00.6.3 exactly, in named views
+- Decision: the codex has no visibility rules of its own. It renders each 00.6.3 family at its class (shown by default, available on request, never background or sealed) through twelve views (T-14-3), plain-text OOF blocks labelled `CODEX: <view>`, with computed values taken from 02.7.4 through `evaluate`.
+- Alternatives considered: (a) one flat sheet (rejected: a tier-5 character's state is too large to read at once, which is P7's own motivating problem); (b) a codex that hints at sealed state (rejected: it breaks 00.6.4 and invites leaks the claim check must then catch).
+- Evidence: C:P7 (the Ars Arcanum model); 00.6.3 and 00.6.4; 03.11.1 and 04.6.5 already define the Deeds and Leanings contents.
+- Serves: goal 2 (the player audits the DM against the record), goal 1 (the player can find what they can do).
+- Revisit if: T-14-VIEWS shows views co-requested in more than 50% of asks.
+
+### DL-14-04: Session zero is one short procedure with defaults for every answer
+- Decision: PR-14-1 asks premise, promises, safety, pacing, auto-commit and pillar interest, in under ten exchanges. Every answer except the lethality acknowledgement has a default (T-14-1), and "just start" takes all the defaults.
+- Alternatives considered: a long questionnaire (rejected: solo players want to play, R5 SC-03); no session zero (rejected: lines must be recorded before content is generated, 12.5.1).
+- Evidence: R5 SC-01 to SC-04; 12.5.1; 02.10.1.
+- Serves: goal 1, plus the safety precedence of 00.1.5.
+- Revisit if: newcomer playtests show session zero over ten exchanges.
+
+### DL-14-05: Lethality must be acknowledged; `death.mode: retire` is the one opt-out
+- Decision: creation cannot start until the player acknowledges that death is real but telegraphed. A player who wants no permanent death may set `death.mode: retire`. A death result then becomes a forced retirement: the character leaves play alive, and legacy rules apply. Danger, warnings and odds are unchanged.
+- Alternatives considered: (a) no opt-out (rejected: a hard stop for some players, with nothing gained, since the fiction stays lethal and every rule still runs); (b) an "easy mode" that lowers danger (rejected: preferences never change numbers, 12.5.9, and it would break 09's advisory contract).
+- Evidence: the owner's locked decision ("death is real but telegraphed", BRIEF §4); 07's legacy rules; R5 safety rows.
+- Serves: goal 1 (more players can play), goal 2 (no number changes, so all audits still hold).
+- Migration: none (new key; the absent value reads as `die`).
+- Revisit if: retire-mode players report that danger no longer matters to them (then add an in-fiction cost to retirement).
+
+### DL-14-06: Progressive disclosure through first-use notes and a teaching arc
+- Decision: new players (`player.new_to_this` yes or skipped) get one OOF note the first time each of eight mechanics appears (T-14-2, once per campaign), and the opening scene is run to touch a free action, a declinable Risky OFFER, a non-combat path and the codex.
+- Alternatives considered: tutorial encounters (rejected: invented content outside the seed, against 12's sourcing rules); notes for everyone (rejected: experienced readers find them noise).
+- Evidence: R5 OB-02 and OB-05; 12.16.16 (the opening scene and pregens exist to carry it).
+- Serves: goal 1.
+- Revisit if: T-14-NOTES (a note topic drawing two or more questions).
+
+### DL-14-07: Preferences are `pref.*` facts on `player`; no new tool
+- Decision: the preference record is the set of `pref.<key>` facts written with `set_fact` (visibility shown) and read by `get_state` or the owning handler. The keys are a closed list (T-14-1). A later value supersedes the earlier one, so history is kept in the log.
+- Alternatives considered: a dedicated preference tool (rejected: 00.14.2's surface already stores, supersedes and logs facts; one more tool is one more thing for the DM to call wrongly).
+- Evidence: 00.14.2 #10 (`set_fact` supersedes, with source and visibility); 00.6.3 lists preferences as shown state owned by 14 and 12.
+- Serves: goal 2 (one store, one audit trail).
+- Revisit if: preference reads become a measurable share of tool calls (then cache them in the scene header).
+
+### DL-14-08: Safety entries are topics with confirmed tag mappings
+- Decision: each line, veil or flag is recorded as the player's own topic text plus the tags the DM maps it to, and the mapping is read back for confirmation. 12.5.6 screens content against both.
+- Alternatives considered: free text only (rejected: generators screen by tags, 12.5.6); tags only (rejected: the player's words are the authority, and a tag list loses nuance).
+- Evidence: 12.5.6; R5 P-10 (lines and veils, X-card); the 12.5.6 worst case (a too-narrow mapping) is caught by the T10 screen and adjust.
+- Serves: 00.1.5's first concern, safety.
+- Revisit if: a playtest records a screened-through miss that the mapping should have caught.
+
+### DL-14-09: The codex answers natural-language asks, including rules
+- Decision: the DM maps a codex request to a view and a subject. The Rules view answers "how does X work?" with the rule card's text or a faithful paraphrase plus its id, whether or not the PC has met the rule. Sealed questions get "Your character doesn't know that", and no hint.
+- Alternatives considered: rules only for rules the PC has met (rejected: rules are not world state, and hiding them makes freeform planning harder, against goal 1).
+- Evidence: 12.5.10 (OOF questions); 00.15 (rule cards as the unit of retrieval).
+- Serves: goals 1 and 2.
+- Revisit if: T-14-VIEWS.
+
+### DL-14-10: A one-page player quick sheet
+- Decision: T-14-4 maps twelve player wants to what to say and what happens. It is reachable as "help".
+- Alternatives considered: none needed; R5 FN-10 marks it essential.
+- Evidence: R5 FN-10.
+- Serves: goal 1.
+- Revisit if: a newcomer playtest shows a want missing from the sheet.
+
+### DL-14-11: Original text; designs credited, none reproduced
+- Decision: no third-party rules text is reproduced verbatim. Designs the ruleset learned from are cited at the rule and listed in `appendix/credits.md`, so no licence notice is needed.
+- Alternatives considered: adopt SRD or CC text verbatim (not done anywhere in the corpus, so the question does not arise).
+- Evidence: R5 FN-12; the corpus's `[R: url]` citations (verification-citations.md lists the external sources).
+- Serves: project hygiene.
+- Revisit if: any text is ever copied verbatim (then add its licence notice to credits.md).
+
+### DL-14-12: The example of play is short; the long form is the playtests
+- Decision: 14.9.1 gives one compact exchange showing fiction, freeform action, OFFER, improved approach and commit. The three verification playtests serve as the long-form example (R5 OB-04).
+- Alternatives considered: a new long-form example (rejected: duplicates the playtests, which follow the procedures literally and cite rule ids at every step).
+- Evidence: `_process/reports/verification-playtest.md`.
+- Serves: goal 1.
+- Revisit if: the owner wants a polished long-form example for new players.
+
+### DL-14-13: Session zero asks once; no tone key; skipped answers write nothing (revision I-120..I-124)
+- Decision: session zero (PR-14-1) runs once, before the world seed and creation, and owns the pacing profile, pillar check-in, auto-commit, safety records and `player.new_to_this`. Creation's C0 asks only `creation.path` (and `player.new_to_this` if missing). There is no `tone` preference: the register is fixed classic fantasy (BRIEF §4, 12.14.1). A skipped question writes no fact; an absent key reads as its T-14-1 default. Creation's closing `[RULES]` notes mark `fn.offer` and `fn.lethal` as shown. The codex Rulings view also holds the turn log, the corrections ledger and the `next_time` notes, which are now 00.6.3 rows.
+- Alternatives considered: (a) a tone preference read by 12.14.1 (rejected: the owner locked classic fantasy, and a register switch is one more thing narration could get wrong); (b) writing defaults as facts (rejected: it creates noise facts and hides which answers the player actually gave).
+- Evidence: editor pass E2 findings I-120 to I-124; 12.5.1's order; 12.14.1.
+- Serves: goal 2 (one question, one record; the codex shows what ch.12 already makes available).
+- Migration: none.
+- Revisit if: players ask for a darker or lighter register (then add `tone` with a 12.14.1 reader).
 
 ## DL-15 — Social, Investigation, and Downtime
 
@@ -3480,7 +3639,7 @@ chapter 06's fight model and T-06-12 lines), output `07-harm-sim-output.txt`, wr
 - Alternatives considered: beasts joining by a Talk request like people (rejected: an `animal` mind cannot be asked, 15.2.7 and DL-09-18); one starting standing for every road (rejected: a beast raised by the rite and one caught in the wild would trust the PC alike); temperament as narration only (rejected: the narrator would decide, at the moment of the fight, whether the hound runs); a familiar as a bound being with no loyalty (rejected: 05's rite makes a living creature that understands the PC, not a working's servant).
 - Evidence: the three standings are read from their sources: a bought animal has no history with the PC (Neutral, the scale's zero, 00.3.16), `rit.beast_bond`'s scope says Friendly, and a wild beast brought to hand only tolerates its keeper (Wary). PR-16-1 step 6 writes the same three values. The taming clock's 6 segments match DL-16-08's six-segment loyalty clocks; the taming test reuses DL-16-01's band rule. The 6 and the d4 temperament roll are defaults, not measured values: no simulation or playtest set them. The cards carried no basis of their own until revision C6d's audit (I-065).
 - Serves: goal 2 (the beast's trust and its nerve are state, not mood); goal 1 (a hound, a hawk or a tamed wolf are all reachable, each at a visible price).
-- Revisit if: tamings in play routinely take more than two weeks, or never fail (then size the clock by the beast's band), or players report temperament as the only thing that decides whether a beast is useful. Open: ledger I-105 (whether 16.6.2's departure clock starts for a tamed beast that joins at Wary); until it is settled, the Wary start is recorded as written.
+- Revisit if: tamings in play routinely take more than two weeks, or never fail (then size the clock by the beast's band), or players report temperament as the only thing that decides whether a beast is useful. [revision: I-105] Settled: 16.6.2's departure clock starts only when standing **steps down** to Wary from Neutral or warmer, never on joining at Wary. A tamed beast (or a hire whose reaction roll left it Wary) holds at Wary until regard lifts it to Neutral (a well-kept beast: B1 + B2, +2 a week on a 6-segment regard clock, so three weeks) or grievance drops it to Unfriendly (16.6.3). Rejected: starting tamed beasts at Neutral (a wild animal brought to hand would trust its keeper as a kennel-trained hound does, and the taming road would match buying); a longer departure clock for beasts (still wastes the project for a PC who cares for the beast, since regard cannot climb a rung in under three weeks). Revisit if: Wary allies that joined that way are reported as dead weight (then give them a regard bonus for the first week).
 
 ### DL-16-26: An ally whose joining want is fulfilled stays at Friendly or warmer and leaves content at Warm or below (revision I-065)
 - Decision: [revision: I-065] 16.6.5: when the want an ally joined for is fulfilled (its thread completed, or the want's fact written true), its standing decides: Warm or below, it leaves content at the next haven (departure cause `want_fulfilled`, a `helped` memory, a chronicle line; often a contact afterwards); Friendly or Devoted, it stays, its joining becomes `{kind: bond}`, and a new want is rolled on 12's tables.
@@ -3618,6 +3777,6 @@ Full record: `_process/integration-report.md`.
 ### DL-INT-13: Every rule card cites its basis at card level; a section-level basis does not suffice (I-065)
 - Decision: [revision: I-065] BRIEF §6 and 00.1.6 are met card by card: every rule card (`**NN.S.R Title.**`) carries a basis tag of 00.1.6's forms, `[C:…]`, `[R…]` or `[DL-…]`, alone or in a compound group. A tag added after authoring is written `[<basis>; revision: I-065]` right after the card's kind tags. The basis is, in order of preference: the DL entry whose Decision names the card or its section; the constitution clause the chapter's traceability fragment maps the card to; the research row (digest entry or R5 completeness row) the chapter or its trace maps the section to. Where none exists, a DL entry is written in the chapter's fragment (Decision / Alternatives / Why) rather than a basis guessed. `basis_audit.py` defines a card and a tag; `validate_ruleset.py` BASIS WARNs on an untagged card in `BASIS_CHAPTERS`, a list extended chapter by chapter.
 - Alternatives considered: accepting a section's intro or first-card DL plus the card's derivation cross-references as meeting §6 (the ledger's first proposal; rejected: an AI reading one card through `rq.py` sees no section intro, so the basis must travel with the card, and a derivation reference such as "(06.3.5)" names a dependency, not the reason); one tag per section heading (rejected: the same retrieval problem, and sections mix decisions); a basis field in a side table (rejected: drifts from the text it describes).
-- Evidence: C6a script audit of ch.04-07 (342 rule cards): 188 carried no tag of their own (ch.04 21, ch.05 34, ch.06 77, ch.07 56; the constitution audit's 216 for ch.04-08 counted with a stricter one-line match). All 188 are tagged by `rules/_process/basis/C6a-04.py` ... `C6a-07.py`; two had no recorded basis and gained one: DL-05-41 (05.6.11's consumable Focus cap) and DL-06-30 (06.3.10's size ladder). 05.8.6's stale "until ch.04 agrees" sentence was corrected (04.8.4 had adopted the request). Revision C6b audited ch.00-03 (357 rule cards): 141 carried no tag of their own (ch.00 37, ch.01 61, ch.02 21, ch.03 22); all 141 are tagged by `rules/_process/basis/C6b-00.py` ... `C6b-03.py`. Six ch.00 cards restating the orchestration brief cite it as a repo artifact (`[R: rules/_process/BRIEF.md §N]`); two cards had no recorded basis and gained one: DL-00A-33 (00.1.3's reading order) and DL-01-28 (01.7.4's auto-commit). Revision C6c audited ch.09-10 (180 rule cards): 133 carried no tag of their own (ch.09 50, ch.10 83); all 133 are tagged by `rules/_process/basis/C6c-09.py` and `C6c-10.py`. One card had no recorded basis and gained one: DL-10-31 (10.1.6's settlement scope). Again no card's only honest basis was a derivation. No card's only honest basis was a derivation, so the revisit clause's fifth form was not needed.
+- Evidence: C6a script audit of ch.04-07 (342 rule cards): 188 carried no tag of their own (ch.04 21, ch.05 34, ch.06 77, ch.07 56; the constitution audit's 216 for ch.04-08 counted with a stricter one-line match). All 188 are tagged by `rules/_process/basis/C6a-04.py` ... `C6a-07.py`; two had no recorded basis and gained one: DL-05-41 (05.6.11's consumable Focus cap) and DL-06-30 (06.3.10's size ladder). 05.8.6's stale "until ch.04 agrees" sentence was corrected (04.8.4 had adopted the request). Revision C6b audited ch.00-03 (357 rule cards): 141 carried no tag of their own (ch.00 37, ch.01 61, ch.02 21, ch.03 22); all 141 are tagged by `rules/_process/basis/C6b-00.py` ... `C6b-03.py`. Six ch.00 cards restating the orchestration brief cite it as a repo artifact (`[R: rules/_process/BRIEF.md §N]`); two cards had no recorded basis and gained one: DL-00A-33 (00.1.3's reading order) and DL-01-28 (01.7.4's auto-commit). Revision C6c audited ch.09-10 (180 rule cards): 133 carried no tag of their own (ch.09 50, ch.10 83); all 133 are tagged by `rules/_process/basis/C6c-09.py` and `C6c-10.py`. One card had no recorded basis and gained one: DL-10-31 (10.1.6's settlement scope). Revision C6d audited ch.15-16 (205 rule cards): 130 carried no tag of their own (ch.15 57, ch.16 73); all are tagged by `rules/_process/basis/C6d-15.py` and `C6d-16.py`, and DL-16-25 and DL-16-26 were written for cards with no recorded basis. Revision C6e audited ch.08 (82 rule cards): 46 untagged, all tagged by `C6e-08.py`; DL-08-39..41 written. Revision C7 audited ch.11-12 (249 rule cards): 105 untagged (ch.11 38, ch.12 67), all tagged by `C7-11.py` and `C7-12.py`; DL-11-35 (11.9.5 strikes on holdings, 11.9.6 improvements) and DL-11-36 (11.10.4 festivals) written. With that, `BASIS_CHAPTERS` holds 00-12 and 15-16, every chapter the audit covered (ch.13 is an unmaintained optional setting and stays out; ch.14, the player's guide, was outside the audit) and the validator reports 0 untagged cards. No card's only honest basis was a derivation, so the revisit clause's fifth form was not needed. [revision: I-065, C7]
 - Serves: goal 2 (every rule's reason is one lookup away from the rule); BRIEF §6.
-- Revisit if: the remaining chapters (00-03, 08-12, 15-16) turn up cards whose only honest basis is a derivation from another rule (then admit `[derived: NN.S.R]` as a fifth form in 00.1.6 rather than tag it with that rule's DL).
+- Revisit if: a new rule card's only honest basis is a derivation from another rule (then admit `[derived: NN.S.R]` as a fifth form in 00.1.6 rather than tag it with that rule's DL); or ch.13 returns to maintenance, or ch.14 gains rule cards (then audit the chapter with `basis_audit.py NN` and add it to `BASIS_CHAPTERS`). New cards in any listed chapter are held to the rule by the validator. [revision: I-065, C7]

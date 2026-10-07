@@ -33,8 +33,8 @@ traces — a simple action (WE-12-1), a wild creative action needing an anchor a
 a soft-lock broken by lead injection (WE-12-3) — and an error-correction case (WE-12-4), then NPC
 generation, scene tests, random events, pacing adaptation, rotation and the session moves. Numbers owned
 by other chapters are marked *(illustrative; ch.NN owns)*; every number this chapter owns is exact and
-lives in `data/pacing.yaml`. Odds quoted here were computed by exhaustive enumeration (scratchpad
-`pace12.py`; results in T-12-9 and T-12-12).
+lives in `data/pacing.yaml`. Odds quoted here were computed by exhaustive enumeration (an authoring
+script, `pace12.py`, not kept in the repository; its results are T-12-9 and T-12-12) [editor: E2-030].
 
 ---
 
@@ -197,7 +197,7 @@ Worst case (J):     a SPEECH part classified DECLARATION → a roll test that an
                     classified SPEECH → the persuasion attempt is not resolved; the NPC's response
                     comes from its reaction/action table (12.11.5) and the player may declare the
                     attempt next turn (class iv). A SAFETY part missed → caught at T10's safety
-                    screen of the draft (12.5.7), which is [D] against the lines list.
+                    screen of the draft (12.5.6) [editor: E2-032], which is [D] against the lines list.
 Examples:           inside SPEECH: "'Evening. Is this the ferry?'" (a question asked aloud; also a
                     FICTION_QUESTION if the answer is unestablished). outside (DECLARATION): "'You'll
                     take me across tonight — I'll make it worth your while,'" (tries to change the
@@ -253,7 +253,7 @@ before anything else happens, and the DM's delivered response is stored verbatim
 log is the evidence for disputes (12.3.6) and corrections (12.3.4), and the source of "what exactly did I
 say?" answers. Nothing in the turn log is ever a fact: facts come only from the six sources of 00.6.7.
 The turn log is `available` (the player may ask to see any past exchange). *Runtime capability:* RC-LOG
-(Interface request: a `log_turn` tool, 12 Interface requests item 1).
+(the `log_turn` tool, 00.14.2 #35) [editor: E2-033].
 
 **12.2.6 Pause points (closed list).** `[D]` The loop stops mid-turn and returns to the player, delivering
 everything resolved so far plus one pause message (format 12.15), only at these points:
@@ -409,7 +409,7 @@ check, or by the player (12.3.6) — the DM runs PR-12-4:
      or premise rested on it); the result stands untouched; **accept forward** — the beat's resolved
      result stands and the false element is corrected around it (for a player who prefers that to
      re-rolling); or **rewind** — the store is restored from the write history to just before that beat
-     (Interface request: `revert_writes`), the beat's rolls are logged as voided, and the player
+     (`revert_writes`, 00.14.2 #36) [editor: E2-034], the beat's rolls are logged as voided, and the player
      re-declares. A committed roll is never recomputed with different numbers (01.8.5). Rewinds go back at
      most to the turn of the error and never past the current scene's start.
    - **Before the current scene**: no rewind. The correction runs forward, and the player is **made
@@ -598,11 +598,11 @@ into rules of play [R5 P-10, SC-01, SC-02, SC-06; R1 G-22]. Ch.14 owns the playe
 the preference records (lines, veils, flags, pacing profile, auto-commit); this chapter owns what the DM
 does. No session move advances fictional time (00.7.9).
 
-**12.5.1 Session zero.** `[D]` The first session begins with ch.14's session zero (tone, lethality
+**12.5.1 Session zero.** `[D]` The first session begins with ch.14's session zero (lethality
 consent, lines and veils, flags, pacing profile 12.7.3, auto-commit, the preference check-in 12.5.9), then
 the world seed (12.16, PR-12-9; or a pre-made seed such as ch.13's, checked by 12.16.17), then character
 creation (02), then the seed's opening (12.16.16) [revision: I-028]. The DM records each answer through
-ch.14's preference tools before the first scene is framed; nothing in the seed or the first scene may touch
+ch.14's preference record (`pref.*` facts, 14.5.1) [editor: E2-035] before the first scene is framed; nothing in the seed or the first scene may touch
 an unrecorded line [R5 SC-03, SC-04].
 
 **12.5.2 Begin a session.** `[D]` Handler `h.12.session_open` (`session_start`, phase 9), then the DM:
@@ -803,8 +803,8 @@ table row (e.g. a ch.10 watch-check result "event": the V face, 10.9.4 [revision
    in their most natural sense for this place and these people, (iii) contradicts no established fact, and
    (iv) is expressed only through these writes: `create_entity` (an NPC via 12.11.1, an object, a rumor via
    ch.11's tables), `set_fact` (`source: generation`), an NPC action applied to the target (12.11.5), one
-   tick on a thread or faction clock that lists `random_event` among its tick sources (Interface request to
-   11), or a new situation seed handed to ch.11.
+   tick on a thread or faction clock that lists `random_event` among its tick sources (ch.11's goal clocks
+   list it) [editor: E2-036], or a new situation seed handed to ch.11.
 5. **Write**, then narrate; the event is perceivable now (in this scene) or arrives as news at the next
    plausible moment (a remote event).
 **Bounds** (P-B): a random event never harms the PC directly, never applies a cost, never kills, never
@@ -870,9 +870,10 @@ it jumps to a hard scene's score and drains three per calmer scene. Handler `h.1
 **12.7.2 Phases.** `[D]` [DL-12-09; R5 TM-09; revision: I-065] The director is always in one phase (`pacing.yaml#intensity.phases`):
 - **BUILD** (default): pushes allowed. Enters PEAK when intensity ≥ the profile's **peak threshold**.
 - **PEAK**: the world is already pressing hard. No pacing push fires, threat-tagged random-event foci read
-  as *omen*, and a scene test's *interrupted* reads as *altered*. PEAK lasts while intensity stays at or
-  above the threshold; the first `scene_end` at which the scene's points fall below the threshold moves the
-  director to RELAX.
+  as *omen*, and a scene test's *interrupted* reads as *altered*. PEAK lasts while each scene's own points
+  stay at or above the threshold (intensity, which drains only 3 a scene, may still read above it): the first
+  `scene_end` at which the scene's points fall below the threshold moves the director to RELAX
+  (`pacing.yaml#intensity.phases`) [editor: E2-037].
 - **RELAX**: as PEAK, for the profile's **relax length** in scenes; then BUILD. Lead injection (12.8) still
   fires in RELAX (a lead is not a threat), using only forms not tagged `threat`.
 - **Flatline guard** (in BUILD): when the profile's **flat run** of consecutive scenes each scored ≤ 1
@@ -1414,7 +1415,7 @@ from every chapter's anchor cards; no chapter edits it by hand.
    (00.15.2 `anchor` block); (c) data entries that declare an `anchor` block (a hazard, an activity, a
    ritual) in their own files.
 2. **Entry** (SCHEMAS `anchors.yaml` plus the common envelope): `id` (`anc.` + the rule id with dots as
-   underscores, e.g. `anc.01_18_4`; Interface request to 00 for the `anc.` prefix), `name`, `rule_id`,
+   underscores, e.g. `anc.01_18_4`; the `anc.` prefix is 00.16.2's [editor: E2-038]), `name`, `rule_id`,
    `source` (file and key), `intent_verbs`, `deed_tags`, `situation_tags`, `knobs` (from T-00-20 only, each
    with `default` and `allowed_deltas`), `degree_table` (a reference, never a copy), `specificity`
    (`verb_card` | `license_rule` | `chapter_rule`), `tags`, `lifecycle` (the source's), `basis`.
@@ -1428,8 +1429,9 @@ from every chapter's anchor cards; no chapter edits it by hand.
    with each source file's revision) so old ruling records still resolve their `rule_id`.
 6. **Lifecycle**: an anchor whose source is retired is kept with `lifecycle: retired` and `superseded_by`
    (00.16.3); retrieval skips retired entries.
-This chapter ships the index seeded with the fifteen verb cards, compiled from `basic_verbs.yaml` as
-ch.01 wrote them.
+The shipped index is compiled by `_process/simulation/12-compile_anchors.py` from the fifteen verb cards,
+every chapter rule its template marks as an anchor (00.2.6), ch.06's T-06-9 ready rulings and ch.07's shape anchors (counts under
+`anchors.yaml#compile.counts`) [editor: E2-039].
 
 ### 12.14 The narration standard
 
@@ -1561,7 +1563,7 @@ generator.
 
 Every number, odds, choice and rules matter goes in an **OOF block**: a line or short block that begins
 with a bracketed label, set apart from the fiction, never written in a character's voice. Ch.14 owns how
-blocks are rendered for the player (`codex.yaml#offer_marker`); these are the contents and the default
+blocks are rendered for the player (14.6.5) [editor: E2-040]; these are the contents and the default
 text form. Order within one DM response: (1) SAFETY and SESSION acknowledgements; (2) CORRECTION blocks;
 (3) the fiction; (4) RESULT blocks in beat order; (5) REDIRECT blocks; (6) one pause block last (OFFER,
 NEAR MISS, CHOICE, CLARIFY, FLAG, CUT?) because it awaits the player.
@@ -1972,7 +1974,7 @@ record. A pause point (12.2.6) jumps to T7 with what has been resolved so far, t
 
 | Step | Name | What the DM does | Tools | Rules |
 |---|---|---|---|---|
-| **T1** | RECEIVE | Store the player's message verbatim in the turn log. Read it in full; never paraphrase it into state. | `log_turn` (requested) | 12.2.5 |
+| **T1** | RECEIVE | Store the player's message verbatim in the turn log. Read it in full; never paraphrase it into state. | `log_turn` (35) [editor: E2-041] | 12.2.5 |
 | **T2** | CLASSIFY | Split the message into parts; classify each (SAFETY, SESSION, DISPUTE, PENDING_ANSWER, OOF_QUESTION, FICTION_QUESTION, DECLARATION, SPEECH); order them. SAFETY first: act on it before anything else. | — | 12.2.2, 12.5 |
 | **T3** | LOAD | `get_active_triggers()`; `get_state(scene, narrator)`; `load_cards(situation tags, mode, triggers)` within the packet cap. The core checklist is always present. | 30, 8, 31 | 12.2.3, 12.2.4 |
 | **T4** | ADJUDICATE | For each SESSION / DISPUTE / OOF part: answer it (12.5, 12.3.6). For each PENDING_ANSWER: resume the paused pipeline. For each FICTION_QUESTION: 01.3.8 (state → canon → Oracle, PR-01-4). For each DECLARATION: PR-01-1 (PARSE … CONSEQUENCE) per beat, up to three, `find_rulings` before any adaptation. Stop at the first pause point reached. | 1–6, 29 | 01.1–01.15 |
@@ -1983,7 +1985,7 @@ record. A pause point (12.2.6) jumps to T7 with what has been resolved so far, t
 | **T9** | CHECK | Extract claims (12.3.1); `check_claims`; fix each non-`supported` verdict by its rule (12.3.2); re-check; at most two redrafts, then the plain fallback (12.3.3). | 32 | 12.3 |
 | **T10** | SCREEN | Input fidelity ×3 (12.2.7); next step exists (01.11.4); safety screen against lines, veils and flags (12.5.6); PC agency (12.14.3); no mechanics in fiction (12.14.4); open prompt or one pause block last (12.14.9). Any failure → back to T7. | — | 12.2.7, 12.5.6, 12.14 |
 | **T11** | DELIVER | Send the response. | — | 12.15 |
-| **T12** | RECORD | Store the delivered response verbatim; update turn counters (dead air, 12.4.2); if a scene cut was reached, `mark_boundary(scene_end)` then frame the next scene (PR-12-7) in the *next* response unless the cut was the player's own request in this message. | `log_turn`, 22 | 12.2.5, 12.4 |
+| **T12** | RECORD | Store the delivered response verbatim; update turn counters (dead air, 12.4.2); if a scene cut was reached, `mark_boundary(scene_end)` then frame the next scene (PR-12-7) in the *next* response unless the cut was the player's own request in this message. | 35, 22 | 12.2.5, 12.4 |
 
 **PR-12-2 The claim check.** `[D]` + `[J:enum]` (inside T9)
 1. Split the draft into sentences; for each, list every assertion and classify it (12.3.1). Include the
@@ -2167,7 +2169,8 @@ defaults).
 | Faction member: individual step | −1: 16.7 | 0: 66.7 | +1: 16.7 | | | | |
 
 **T-12-9 Scene-test deviation by tension** (d10; deviation when roll ≤ T − 3; odd altered, even
-interrupted). Also the random-event chance per Oracle question (doubles with digit ≤ T).
+interrupted). Also the random-event chance per Oracle question (doubles with digit ≤ T). Every number
+in the first three rows is a percentage [editor: E2-042].
 
 | Tension | 1–3 | 4 | 5 | 6 | 7 | 8 | 9 |
 |---|---|---|---|---|---|---|---|
@@ -2581,7 +2584,7 @@ question: "Is the barkeeper at the bar?" Odds **Likely** (an inn at evening); ev
   Ash Wardens 1) roll → **Salt Guild**; meaning: verb d100 = **88** "seize" + subject d100 = **52** "a tax"
   → "Guild men are nailing up a notice: from today the Guild collects the ferry toll." Writes: `set_fact`
   (the notice; the Guild's claim on the toll); one tick on `clk.corner_the_salt_road` *(illustrative; it
-  lists `random_event` as a tick source — Interface request to 11)*.
+  lists `random_event` as a tick source, as ch.11's goal clocks do)* [editor: E2-043].
 - Bounds checked: no harm, no cost, no license, no sealed fact, no thread resolved.
 > Behind the bar, the keeper is pouring, his jaw tight; a boy in a Guild-blue cap is just slipping out past
 > you. Through the window, two men are hammering a notice to the ferry-post across the lane.
@@ -2719,8 +2722,8 @@ The question is a FICTION_QUESTION (T4): the next valley is a new region past ri
 - **The player stays silent about what they hope from a scene.** Hope null; the agenda rows of the tension
   table do not score (12.6.3).
 - **The pacing director and a chapter's handler disagree** (a ch.10 watch check rolls an encounter in
-  RELAX). The handler runs as written; the director never suppresses another chapter's handler. (Ch.10 may
-  opt in to read the phase — Interface request.)
+  RELAX). The handler runs as written; the director never suppresses another chapter's handler. (Ch.10 opts in
+  to read the phase in one declared way, 10.9.7 [editor: E2-044].)
 - **Anchoring the DM's procedures themselves.** When play produces a DM situation this chapter does not
   name, reach for: the claim check (anything the narration asserts), the Oracle or a table (anything the
   DM would otherwise decide), a trigger (anything that must happen "when"), the rotation ledger (any "what
@@ -2760,8 +2763,8 @@ the safety ledger, NPC memories, ruling records (with ch.01).
 pipeline); `oracle`; `roll_table`; `get_state`; `create_entity`; `set_fact`; `update_quantity` (refunds,
 12.3.4); `set_relationship`; `set_position` (through resolutions); `record_knowledge`; `unseal`; `advance_time`;
 `mark_boundary`; `create_clock`, `tick_clock`; `log_ruling`, `find_rulings`; `get_active_triggers`;
-`load_cards`; `check_claims`; `chronicle_append`; `codex`. **Requested** (Interface requests): `log_turn`,
-`revert_writes`.
+`load_cards`; `check_claims`; `chronicle_append`; `codex`; `log_turn` and `revert_writes` (00.14.2 #35–#36,
+added at this chapter's request) [editor: E2-045].
 
 **Hooks subscribed:** none (this chapter acts through boundary handlers and triggers, not effect hooks).
 
@@ -2797,7 +2800,9 @@ scoring, list draws), RC-RETRIEVE (the packet), RC-AUDIT (`check_claims`).
 
 ## Interface requests
 
-**To 00 (amendments proposed; the chapter works within 00 meanwhile):**
+**To 00 (all five applied [editor: E2-046]: `log_turn` and `revert_writes` are 00.14.2 #35–#36, the prefixes
+are in 00.16.2, SCHEMAS documents the optional keys and `clock_templates`, and 00.15.4 states the packet
+numbers [amended: DL-12-02]; the "meanwhile" fallbacks below no longer apply):**
 1. **Tool `log_turn(turn, player_text, response_text, parts)`** (RC-LOG) — the verbatim turn log (12.2.5) is
    the evidence base for disputes and corrections; no existing tool stores free text verbatim. Meanwhile:
    a `ledger` of kind `turn_log` written by the runtime.

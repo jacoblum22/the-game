@@ -23,9 +23,9 @@
 which are canonical for every number and id (00.1.4 line 5). Worked examples WE-10-1…WE-10-6 follow
 **Wren** (00's example character: Might +1, Agility +3, Endurance +1, Wits +2, Intellect 0, Presence 0,
 Resolve −1; competence `deed` +1, `deed.wilds.tracking` +2, `deed.martial.archery` +2; Vitality 13
-after 02's Bent; Focus 4; fate 1; capacity 12). Simulation scripts are in the scratchpad
-(`sim10_travel.py`, `sim10_site2.py`, `sim10_nav.py`; copies and results in `_process/simulation/10-exploration-sim.md`) and their results are
-reported where they fix a number.
+after 02's Bent; Focus 4; fate 1; capacity 12). Simulation scripts (`sim10_travel.py`, `sim10_site2.py`,
+`sim10_nav.py`) are kept in `_process/simulation/` as `10-sim10_*.py` with their outputs, summarized in
+`10-exploration-sim.md` [editor: E2-001]; their results are reported where they fix a number.
 
 ---
 
@@ -219,7 +219,7 @@ perceived it directly. Discovery is written `set_fact(loc.<id>, discovered, true
 - `frame_id: null` when the PC simply arrived by a known route or by a table result (the discovery face,
   10.9.4), which records the place but is not evidence: wandering into a place is not finding it.
 An undiscovered place is sealed (00.6.4) with the gate "the PC arrives, or perceives it". Rumored
-places (`known: true, discovered: false`) appear in the codex's map view by name only, with the truth of
+places (`known: true, discovered: false`) appear in the codex's Journal view (T-14-3), on request, by name only [editor: E2-002], with the truth of
 the rumor still sealed (11).
 
 **10.1.6 The settlement scope.** `[D]` [DL-10-31; DL-03-09; DL-11-15; revision: I-065] Every area and site carries `settlement_scope`: the place id of the
@@ -617,7 +617,7 @@ lost, and it is the right size — measured in time, which every clock in the wo
 
 ### 10.5 Journey roles
 
-**10.5.1 The four roles.** `[D]` [DL-10-19; R5 EX-03; revision: I-065] During a travel or camp watch each traveler may hold **one role** for the
+**10.5.1 The journey roles.** `[D]` [DL-10-19; R5 EX-03; revision: I-065] [editor: E2-003] During a travel or camp watch each traveler may hold **one role** for the
 whole watch, written as the fact `journey_role {actor, watch, role}` at the watch's start; 03's
 `cnt.journey` reads it at the watch boundary (navigator → `deed.wilds.navigation.wayfinding`; scout →
 `deed.wilds.tracking.sign`; forager → `deed.wilds.foraging.food`; lookout →
@@ -893,7 +893,7 @@ Torchbearer insight that time in a dungeon is measured in what you do [R5 P-13, 
   intervals; if none is lit, a torch or the oil in store is found damp: one source loses half its
   remaining intervals, rounded down); 4 a strap, string or boot gives (one carried item `damaged`, 08.1.9, engine's draw among
   non-relic gear); 5 a mount goes lame for the day (pace one step slower; if no mount, ammunition −2; with neither, one more
-  supply spoils, as face 1–2) [revision: I-056]; 6
+  supply spoils, as rows 1–2) [revision: I-056] [editor: E2-004]; 6
   a hard stretch: the next travel watch earns 2 fewer points. Depletion never harms and never reaches an
   item that is `cost_immune` (08.1.10).
 - **W · Weather shift.** `roll_table(tbl.10.weather_shift)` (d6): 1–3 the weather moves one step along its
@@ -997,8 +997,9 @@ preparation leaves the threat on schedule — the player sees the result line an
 
 **10.9.7 Reading the pacing phase (opt-in).** `[D]` [DL-10-22; revision: I-065] Chapter 10 opts in to 12's pacing director (12's
 request) in exactly one way: while the director is in **RELAX** or a **recovery** window (12.7.2, 12.7.5),
-a pending threat's fourth-check timer does not run (it arrives only on an E or O face), and an E face with
-nothing pending that draws a threat row produces the omen only (as it always does). Nothing already
+a pending threat's fourth-check timer does not run (it arrives only on an E or O face). That is the whole
+opt-in: an E face with nothing pending that draws a threat row still produces only the omen, as it does in
+every phase (10.9.4) [editor: E2-005]. Nothing already
 arrived is softened, no face is re-rolled, no table is changed, and the record shows the rule that applied
 (12.7.6: declared, logged, diegetic). Everything else in this chapter runs exactly as written in every
 phase.
@@ -1121,7 +1122,7 @@ participant's starting band to the PC for 06.3.9 if a conflict starts.
    not a lair the PC entered, a pursuit or a bang) arrives, the engine computes its advisory for the PC as it
    stands (09.6.5) before items 1–2; if it is **lethal**, the PC side is aware and the creatures are not, and
    an `ambush` row loses its ambush: items 1–2 are not rolled. The lethal warning (07.3.3, cause `advisory`)
-   and the band tells come with the first sight of them, and 3's avoid is open. The creatures are not made
+   and the band tells come with the first sight of them, and item 3's avoid is open [editor: E2-006]. The creatures are not made
    weaker: the world does not scale to the PC (09.8.2); the PC is given the first look. If the PC acts on
    them, or stays in the place through the next interval or watch, item 2 is rolled as usual
    [revision: I-040].
@@ -1329,7 +1330,7 @@ run), `haz.haunting` (a dread exposure S2 at each night watch, 07.11.2; `harm.mi
 Each carries signs (the grass grey in a ring, the silence of birds, a cold that has no source) and is
 written on its place.
 
-**10.12.9 A hazard no one listed.** `[J:rung]` [DL-07-14; C:III; revision: I-065] A source of harm with no entry is rated with chapter 07's
+**10.12.9 A hazard no one listed.** `[J:rung]` + `[J:enum]` [DL-07-14; C:III; revision: I-065] [editor: E2-007] A source of harm with no entry is rated with chapter 07's
 anchor **07.10.2** (hazard severity by what it would do to an unprotected adult; harm tags by what it is;
 effect DC by the rung; the rating stored on the source). This chapter adds only the **cadence** knob's
 choice: `[J:enum]` *exposure* (it harms once, on contact: a falling beam), *round* (it keeps harming in a
@@ -1350,7 +1351,7 @@ aftermath are there).
 
 | Id | Severity | Resist | Cadence | Lethal ctx | Perceived on sight | Notes |
 |---|---|---|---|---|---|---|
-| haz.cold | S1 | Endure (End.) Easy | watch | no | yes | freezing nights without fire or shelter; warm gear −1 rung |
+| haz.cold | S1 | Endure (Endurance) Easy | watch | no | yes | freezing nights without fire or shelter; warm gear −1 rung [editor: E2-008] |
 | haz.bitter_cold | S3 | Endure Hard | watch | yes | yes | + `cond.exhausted` on a failure; fire or shelter negates |
 | haz.blizzard | S3 | Endure Hard | watch | yes | yes | only shelter negates; way-finding Very hard snags |
 | haz.heat | S1 | Endure Easy | watch (day) | no | yes | travel or labor by day; shade negates |
@@ -1441,10 +1442,10 @@ gates everything found inside, so 8 themes × 14 domains give 112 kinds of site 
 Each card holds (`sites.yaml`): `terrain_tags`, `creature_gate_tags` and `creature_weights` (which
 denizens live there), `loot_gate_tags` (08.3.4 item 4: the place axis of the loot pool gate), `features`
 (d12, the look of an area), `dangers` (d12, what a danger result becomes), `discoveries` (d6),
-`shift` (d6, the H face), `hazards` and `traps` (weighted lists), `climax` (d6, what guards the heart; a guardian row's `ref_by_band` names the archetype for each band its own lacks, 10.13.10 [revision: I-067];
-themes), the danger clock's `omens` (themes), `regrowth` (themes), and the place facts above. A region places
+`shift` (d6, the H face), `hazards` and `traps` (weighted lists), `climax` (themes; d6, what guards the heart; a guardian row's `ref_by_band` names the archetype for each band its own lacks, 10.13.10 [revision: I-067]) [editor: E2-009],
+the danger clock's `omens` (themes), `regrowth` (themes), and the place facts above. A region places
 sites with their theme, domain, band and size (the world seed by PR-10-6, 12.16.12; a pre-made setting by
-hand, and it may add regional cards in the owner-block); a site generated in play takes them from the region's site tables (`tbl.<region>.sites`, else
+hand, and it may add regional cards in its own owner-block of `sites.yaml` [editor: E2-010]); a site generated in play takes them from the region's site tables (`tbl.<region>.sites`, else
 `sites.yaml#site_generation`).
 
 **10.13.3 The site record.** `[D]` [DL-10-13; DL-10-16; revision: I-065]
@@ -1463,7 +1464,7 @@ SiteRecord:
   areas: [place_id]          # every area generated, in order
   frontier: place_id         # the deepest area reached on the main way
   path: [place_id]           # the known way from the entrance to the frontier
-  side_areas: [place_id]     # branches off the main way (10.13.6 contents 10)
+  side_areas: [place_id]     # branches off the main way (10.13.7 contents 10) [editor: E2-011]
   secured: [place_id]        # areas made safe to rest in (10.13.11)
   denizens: [{id, area, status: unaware|aware|alarmed|fled|defeated|gone}]
   traps: [{id, area, state: hidden|perceived|disarmed|spent|reset}]
@@ -1530,7 +1531,8 @@ Computation [D]:    CARE: verb.observe, Wits, primary tag deed.lore.investigatio
                     perceived S3+ hazard on the way. Reach STANDARD (GREAT for haste).
                     Delivered reach -> progress clock ticks (00.8.2). Reach >= 1 enters a NEW AREA on
                     the main way (PR-10-7): it becomes the frontier. Reach 0 (failure): no new area
-                    (a wrong turn, a dead end), and the READ cost. Critical success: also roll
+                    (a wrong turn, a dead end), and the approach's threatened cost applies at READ
+                    [editor: E2-012]. Critical success: also roll
                     tbl.10.site_opportunity.
                     In darkness without light or night-sight: CARE by touch only (an engine-cited
                     Precision snag, reach capped Limited); STEALTH and HASTE are G4 (redirect: light,
@@ -1820,12 +1822,12 @@ looking) is a new beat at its own repetition (01.14.3).
 | act.find_way | navigate, reorient | 10.4.2 | nav tier | — / — / per day | course | dc, attribute |
 | act.ford | ford, wade across | exert · Might · martial.athletics.swimming | haz.ford's tier | 1 / 10 min / part of the watch | across | dc, stakes |
 | act.rope | rig a rope, lower, belay | handle · Agility · martial.athletics.climbing | Easy (anchor point present); Moderate (improvised) | 1 / 10 min / — | a rope fact: Protective lever on climbs and falls | dc |
-| act.harvest | skin, butcher, carve | 08.3.10 | by the rarest part | 1 or 1 hour | parts | dc, time_cost, reach_unit |
+| act.harvest | skin, butcher, carve | 08.3.10 | by the rarest part | 1 / 1 hour / — [editor: E2-013] | parts | dc, time_cost, reach_unit |
 | act.scavenge | loot the room, strip the dead | observe · Wits · lore.investigation.search | Easy (a room's plain contents) | 1 / 10 min / — | 08.3.11 gear and coin; a hidden cache needs Search | time_cost |
 | act.study | read the inscription, study the mural | observe · Intellect (a language license for scripts) · lore.history | the text's tier | 1 / 1 hour / — | items (P17) | dc, attribute |
 | act.signal | signal, call out, light a beacon | handle or talk · Presence | Easy | 1 / 1 min / — | heard by whom it reaches; `trait.sense.loud` | targets |
 | act.haul | drag, carry out, haul up | exert · Might (Endurance over distance) · martial.athletics.lifting | load vs capacity: within Easy, burdened Moderate, overloaded G4 | per area walked / per hour / at crawl | moved | dc, time_cost |
-| act.rest | breather, short rest, long rest | 07.8 | — | 1 / 6 / one watch | 07's recovery | — |
+| act.rest | breather, short rest, long rest | 07.8 | — | by rest, not by mode: breather 1, short rest 6, long rest one watch (intervals, 10.13.5) [editor: E2-014] | 07's recovery | — |
 
 ---
 
@@ -1966,7 +1968,18 @@ row it writes)
 5. A failing table is not used; the generic table of its terrain branch at the place's home band stands in
    (it passes, 10.10.2), and an issue is logged.
 
-**PR-10-10 Building an encounter table from a gate.** `[D]` (10.10.2, 10.13.13, 12.16; revision: I-022, I-028.
+**PR-10-9 Leaving and returning to a site.** `[D]` (10.13.11)
+1. Leaving: the PC walks the path back (1 interval per 2 areas, halved with a map); site checks run; if the
+   site is roused with a pending threat or an encounter on the PC, leaving is a chase (06.12) sized by
+   10.13.11. On exit, write `last_left`; `mode_change` to `travel`.
+2. While away: `h.00.clock_auto` decays the danger clock 2 a day it did not tick; `h.10.site_recovery`
+   clears `roused` at half or below; `h.10.site_regrowth` rolls weekly for regrowing themes.
+3. Returning: compute progress drift (1 segment per full week away, at most half the filled segments, never
+   below the secured areas on the path); load the record; re-enter at the entrance; the known path is
+   walked at 1 interval per 2 areas to the frontier; regrown denizens show their signs on arrival.
+
+**PR-10-10 Building an encounter table from a gate.** `[D]` (10.10.2, 10.13.13, 12.16; revision: I-022, I-028;
+placed after PR-10-9 [editor: E2-015].
 Reference code `_process/simulation/10_table_builder.py`.) Input: a **pool** (archetype ids with weights: a
 site's theme × domain pool, `sites.yaml#denizen_pools`; a region's pool from the world seed, 12.16.13 [verification: V2b-010]), a
 **fallback pool** (a site's theme gate alone; a region's terrain branch), the home band, and the engine RNG.
@@ -1987,16 +2000,6 @@ site's theme × domain pool, `sites.yaml#denizen_pools`; a region's pool from th
 *Proof:* `10-site-tables.py` builds the table of every site theme × domain pair at every band (560 tables,
 seed 1022): all 560 pass PR-10-8; of 4,480 slots, 4,456 filled from the pair pool, 24 from the theme gate,
 0 by the nearest band. `12-world-seed.py` builds a world seed's regional tables the same way.
-
-**PR-10-9 Leaving and returning to a site.** `[D]` (10.13.11)
-1. Leaving: the PC walks the path back (1 interval per 2 areas, halved with a map); site checks run; if the
-   site is roused with a pending threat or an encounter on the PC, leaving is a chase (06.12) sized by
-   10.13.11. On exit, write `last_left`; `mode_change` to `travel`.
-2. While away: `h.00.clock_auto` decays the danger clock 2 a day it did not tick; `h.10.site_recovery`
-   clears `roused` at half or below; `h.10.site_regrowth` rolls weekly for regrowing themes.
-3. Returning: compute progress drift (1 segment per full week away, at most half the filled segments, never
-   below the secured areas on the path); load the record; re-enter at the entrance; the known path is
-   walked at 1 interval per 2 areas to the frontier; regrown denizens show their signs on arrival.
 
 ---
 
@@ -2056,7 +2059,7 @@ outdoors by night → dim under clear or fair sky in open or broken country, els
 bright band, dim to its dim band · night-sight: one step brighter for its holder only.
 
 **T-10-12 Terrain defaults** (`travel.yaml#terrain_defaults`; forage by season: spring / summer / autumn /
-winter; "none" = G4: nothing to gather or hunt; water: true, false, foul, with fire, or an Oracle rung).
+winter; "none" = G4: nothing to gather or hunt; water: yes, no, foul, with fire, or an Oracle rung [editor: E2-018]).
 
 | Terrain | Nav | Forage | Game | Open | Graze | Water |
 |---|---|---|---|---|---|---|
@@ -2151,7 +2154,6 @@ winter; "none" = G4: nothing to gather or hunt; water: true, false, foul, with f
 
 | Terrain | Non-threat rows (d6) |
 |---|---|
-| --- | --- |
 | road | merchants · pilgrims · road wardens · a messenger · a tinker · refugees |
 | settlement | townsfolk · a beggar with news · the watch · a merchant · a drunk · a procession |
 | forest | woodcutters · a hunter · deer · charcoal-burners · a hermit · a warden of the wood |
@@ -2164,23 +2166,24 @@ winter; "none" = G4: nothing to gather or hunt; water: true, false, foul, with f
 | underground | dwarf miners · a lost delver · blind fish (sign) · myconid traders · tool marks (sign) · bats (sign) |
 | ruin | scavengers · a scholar · a pilgrim · crows (sign) · a lone dog · rival treasure-hunters |
 
-**T-10-22 Traps** (`traps.yaml`; tiers and severities by site band 1→5; telltale plain from S3).
+**T-10-22 Traps** (`traps.yaml`; tiers and severities by site band 1→5; telltale plain from S3; *Kind* is
+the entry's `kind`, 10.14.1 [editor: E2-017]).
 
 | Trap | Kind | Detect | Disarm | Harm by band | Notes |
 |---|---|---|---|---|---|
 | trap.pit | mechanical | easy→legendary | moderate→legendary | S2 S2 S3 S3 S4 | drop 10/20/40 ft by band |
 | trap.spiked_pit | mechanical | moderate→ | moderate→ | S2 S3 S3 S4 S4 | bleeding; wound rot |
-| trap.snare | snare | easy→ | easy→ | S1 S1 S1 S2 S2 | restrained; cut free |
-| trap.deadfall | snare | easy→ | easy→ | S2 S2 S3 S3 S3 | pinned |
+| trap.snare | natural_snare | easy→ | easy→ | S1 S1 S1 S2 S2 | restrained; cut free |
+| trap.deadfall | natural_snare | easy→ | easy→ | S2 S2 S3 S3 S3 | pinned |
 | trap.needle_lock | mechanical | moderate→ | moderate→ | S1 (all) | widow venom (wyvern venom at 4–5) |
 | trap.dart_wall | mechanical | moderate→ | moderate→ | S1 S2 S2 S3 S3 | adder venom at band 3+ |
 | trap.falling_slab | mechanical | moderate→ | hard→ | S2 S3 S3 S4 S5 | pinned; once |
 | trap.collapsing_stair | mechanical | easy→ | moderate→ | S2 S2 S3 S3 S4 | engineering license |
 | trap.scything_blade | mechanical | moderate→ | hard→ | S2 S3 S3 S4 S4 | bleeding |
 | trap.falling_portcullis | mechanical | easy→ | hard→ | S3 S3 S4 S4 S4 | splits a party; alarm 2 |
-| trap.murder_hole | manned | easy→ | — | S2 S2 S3 S3 S4 | burning; fires per defender beat |
+| trap.murder_hole | mechanical (manned) | easy→ | — | S2 S2 S3 S3 S4 | burning; fires per defender beat |
 | trap.alarm_line | alarm | easy→ | easy→ | — | danger clock +2 |
-| trap.alarm_ward | magical alarm | moderate→ | moderate→ | — | danger clock +3 |
+| trap.alarm_ward | magical (an alarm) | moderate→ | moderate→ | — | danger clock +3 |
 | trap.curse_glyph | magical | moderate→ | hard→ | S1 S2 S2 S3 S3 | evil eye curse |
 | trap.flame_jet | magical | moderate→ | hard→ | S2 S3 S3 S4 S5 | burning |
 | trap.flooding_room | mechanical | moderate→ | hard→ | S2 S2 S3 S3 S4 | breath; a clock of 4 |
@@ -2698,7 +2701,9 @@ knobs move (00.2.7). Typical reaches:
 
 ### What this chapter needs from, or offers to, other chapters
 
-- **To 00 (amendments proposed; orchestrator decision):**
+- **To 00 (amendments; status [editor: E2-019]: items 2–5 are applied: T-00-9 lists the handlers, T-00-13
+  lists `travel_points` [amended: DL-10-03], SCHEMAS lists the optional keys, and 00.18 holds the terms;
+  item 1 stays recorded here, since owners may add fields):**
   1. **Place extension.** 00.6.2's `Place` gains the fields of 10.1.2 (`place_kind`, `band`, `danger`, `safe`,
      `rest_site`, `climate`, `nav_tier`, `forage_tier`, `game_tier`, `openness`, `landmarks`,
      `water_source`, `grazing`, `encounter_table`, `hazards`, `resonance`, `settlement_scope`, `known`,
@@ -2711,8 +2716,8 @@ knobs move (00.2.7). Typical reaches:
   3. **A quantity for travel.** T-00-13 has no quantity for travel progress; `speed` is 06's bands per move
      action. Proposed: add **`travel_points`** (points per travel watch, family `adjust`, cap: the pace ladder's
      envelope 2…12) so items and abilities can change journey speed through the substrate
-     (`eff.10.travel_points` in `data/effects.yaml owner-block 10`). Until amended, no item or ability in the data
-     touches journey speed; pace changes come only from 10.3.2's steps.
+     (`eff.10.travel_points` in `data/effects.yaml owner-block 10`). No item or ability in the data uses it yet,
+     so pace changes come only from 10.3.2's steps.
   4. **SCHEMAS.** `hazards.yaml`, `travel.yaml`, `sites.yaml`, `traps.yaml`, `weather.yaml` use the optional keys
      documented in each file's header (band-indexed tiers `dc_tier_by_band`, `severity_by_band`; sub-tables;
      `archetype_signs`; `terrain_defaults`; `states`; `climates`). The SCHEMAS sections should list them.
@@ -2742,7 +2747,8 @@ knobs move (00.2.7). Typical reaches:
   audit), regional `archetype_signs` and events, site placements with theme, domain, band, size and objective,
   havens (`safe: true`) and rest sites, `resonance` places, climate per region, weather regimes if the region's
   climate differs from the five.
-- **To 14:** codex views — **Journey** (the plan, points, supply against need, light), **Map** (discovered
+- **To 14:** (answered by T-14-3, which carries these contents in its Sheet, Gear and Journal views rather
+  than as views of their own [editor: E2-020]) codex views — **Journey** (the plan, points, supply against need, light), **Map** (discovered
   places and links; known-by-rumor names), **Site** (progress clock, danger "sensed", areas and path, secured
   areas), **Weather** (today; tomorrow if forecast). The player's guide should say: the world shows its hand
   before it strikes (omens); the farther from home, the more dangerous; light and food are the delver's first
@@ -2758,7 +2764,7 @@ Each ships with the concrete default already in the rules and a named test.
 
 | Id | Question | Default shipped | Named test |
 |---|---|---|---|
-| OEQ-10-1 | Is the encounter density right — enough to make travel matter, few enough that it is not a grind? | T-10-10 faces; threat share 25/58/75/83%; arrivals 0.38 / 0.57 / 0.77 / 0.89 a day | **T-10-DENSITY**: 30 simulated and 10 played travel days per rating; count encounters that produced a lead, a choice or a cost vs "filler"; target filler ≤ 1 in 3 and a player rating of "travel mattered" ≥ 4/5 |
+| OEQ-10-1 | Is the encounter density right — enough to make travel matter, few enough that it is not a grind? | T-10-10 faces; threat share 25/58/75/83%; arrivals 0.38 / 0.57 / 0.77 / 0.90 a day (10.9.4) [editor: E2-021] | **T-10-DENSITY**: 30 simulated and 10 played travel days per rating; count encounters that produced a lead, a choice or a cost vs "filler"; target filler ≤ 1 in 3 and a player rating of "travel mattered" ≥ 4/5 |
 | OEQ-10-2 | Do omens get answered? (the omen-first rule works only if players read signs) | one sign at creation, a second at arrival | **T-10-OMEN** (with 00's T-00-OMEN): share of first signs that draw an avoid / investigate / prepare / seek answer; target ≥ 50%; if lower, the lookout's extra fact becomes default for every omen |
 | OEQ-10-3 | Is the site race calibrated (rousing a quarter of careful at-band delves)? | sizes 6/8, 8/8, 12/12; cadence 3/2/2/1 | **T-10-DELVE**: re-run `sim10_site2.py` with real beat logs from 5 played delves (other-beats-per-area and their success rate measured, not assumed at 1 and 0.6) and compare to 25% ± 10 at medium |
 | OEQ-10-4 | Is getting lost too frequent for the unlicensed? | fallback +5 / Limited; take the time allowed to Hard | **T-10-LOST**: 20 trackless days by unlicensed PCs in play: how often did players choose take-the-time vs roll, and did being lost ever produce a dead end (P16)? target: no dead ends; ≥ 1 in 3 lost days led to a discovery |

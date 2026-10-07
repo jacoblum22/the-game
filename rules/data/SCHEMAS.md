@@ -348,7 +348,9 @@ key (a path, `/`-separated), check, generic?}] [revision: I-028].
 
 ## codex.yaml
 Owner 14. Keys: `views` [{id, shows [state family], class_filter [visibility class], layout}],
-`offer_marker` {text}, `preferences` {auto_commit, lines, veils}.
+`offer_marker` {text}, `preferences` {the closed `pref.*` keys of T-14-1: tone, lethality.acknowledged, death.mode,
+safety.lines, safety.veils, safety.flags, pacing.profile, auto_commit, pillars, player.new_to_this, creation.path,
+shown_notes} [editor: E2-057].
 
 ## social.yaml
 Owner 15. Keys: `standing_effects` [{standing, dc_mod, behavior}], `claim_plausibility` [..],

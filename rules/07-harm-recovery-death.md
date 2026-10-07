@@ -790,6 +790,14 @@ fact are written (12.7.5 gives recovery room afterward); the chronicle gets one 
 otherwise; and the wound load is cleared. Chapter 03 may record the beat in which the fall was taken as
 evidence in the ordinary way; surviving the Threshold is not itself a deed (03's request).
 
+**07.5.14 Retire mode.** `[D]` [DL-14-05; revision: I-107] When the player's preference
+`pref.death.mode` is `retire` (14.5, T-14-1), any result that would write the PC dead (an option or
+disposition whose outcome is death, a lethal harm event, the fourth break) instead resolves as **The Road
+Ends** (07.5.11): the character survives, leaves play as an NPC of the world, and 11's retirement,
+legacy and succession run unchanged. Nothing before that point changes. The lethal warning (07.3.3), the
+lethal frame (07.3.6), the Threshold menu and every odds and cost are computed and shown exactly as under
+`die`. Companions and allies are unaffected; the mode covers the PC only.
+
 **07.5.13 A voluntary last stand.** `[D]` + `[J:flag]` [DL-07-01; C:III; revision: I-065] A player may give the character's life on purpose
 ("I hold the gate so they can get away"). `[J:flag]` *"Does the declared act's stated outcome include
 the character's death?"* True only when the player says so in plain words; uncertain → ask (01.2.4's one

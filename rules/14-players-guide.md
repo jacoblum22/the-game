@@ -1,5 +1,11 @@
 # 14 — The Player's Guide and the Codex
 
+> This chapter is the player's side of the game: what the game is and how to play it, the promises it makes,
+> session zero, and the two things every other chapter reads from the player, the preference record and the
+> codex. It is shaped by two constraints. Mechanics are hidden until they matter, so the guide teaches by
+> play rather than by tutorial. And the codex may show only what 00.6.3's visibility table allows, so it
+> renders that table and invents nothing [editor: E2-050].
+
 **Reading this chapter.** This chapter has two jobs.
 - **For the player** (14.1–14.4, 14.9): what this game is, how to play it, and what the game owes you.
 - **For the engine and the DM** (14.5–14.8): the session-zero procedure, the preference record that every
@@ -14,7 +20,7 @@ here is out of fiction (00.1.7): no character in the world ever speaks it.
 Constitution P7 requires an opt-in, queryable reference to a character's own rules, state and abilities,
 kept separate from narration. Without one, narration turns into an info-dump, or the player loses track of
 their own accumulated complexity. 00.6.4 has already classified every piece of state as shown, available,
-background or sealed, and 00.6.3 assigns each state family a class. The codex therefore invents no
+background or sealed, and 00.6.3 assigns each state family its visibility. The codex therefore invents no
 visibility rules. It **renders exactly what 00.6.3 says, and nothing else**, and this chapter fixes how.
 
 Session zero and the preference record are the other half. Every chapter that respects a player choice
@@ -90,8 +96,8 @@ committing (12.5.10).
 
 **14.2.4 Offers of recognition.** `[N]` [04.7.1; 04.7.2; DL-14-02] Sometimes the game offers your character
 a calling, a tier or an oath, in an OUT-OF-FICTION block marked `[RECOGNITION]`. You can always accept,
-decline or defer. Declining costs nothing and the offer can return (04.7.7). An accepted grant can be set
-aside at any rest.
+decline or defer. Declining costs nothing and the offer can return (04.7.7). An accepted grant that is still provisional
+can be set aside at any rest, at no cost (04.8.2) [editor: E2-051].
 
 **14.2.5 When things go wrong for you.** `[N]` [12.3.6; 12.5.7; DL-14-02]
 - **The DM made a mistake.** Say so. The DM answers from the record, not from memory, and corrects real
@@ -114,9 +120,9 @@ default (T-14-1). The whole of session zero is designed to take under ten exchan
 "just start" receives the defaults and the premise, and play begins.
 
 **14.3.2 What session zero records.** `[D]` [12.5.6; 12.7.3; 01.7.4; 12.5.9; DL-14-04] Session zero
-records, in this order:
-- tone (T-14-1);
-- consent to the lethality promise (14.1.3);
+records, in PR-14-1's order [editor: E2-052]:
+- whether the player is new to this (`player.new_to_this`), if not yet known;
+- consent to the lethality promise (14.1.3), and `death.mode`;
 - lines, veils and flags;
 - the pacing profile;
 - auto-commit;
@@ -128,8 +134,8 @@ by the seed or the opening may touch an unrecorded line (12.5.1).
 **14.3.3 Lethality consent is not optional.** `[D]` [C:VII; 07.3; DL-14-05] The player must acknowledge
 the lethality promise (14.1.3 item 2) before character creation. This is the only answer session zero
 requires. A player who wants no permanent death is offered the `death.mode: retire` preference (T-14-1).
-Under it, a death result becomes a forced retirement: the character leaves play alive, and the legacy rules
-of 07 still apply. Nothing about danger, warnings or odds changes. The fiction remains lethal in every
+Under it, a death result becomes The Road Ends (07.5.11, 07.5.14): the character leaves play alive, and
+retirement, legacy and succession (11.13) still apply. Nothing about danger, warnings or odds changes. The fiction remains lethal in every
 other respect.
 
 ### 14.4 Progressive disclosure
@@ -155,7 +161,7 @@ pregens' hooks). It never invents a tutorial encounter. Combat is not forced int
 
 **14.5.1 Shape and storage.** `[D]` [00.6.3; 00.14.2; DL-14-07] Preferences are facts on the subject
 `player`, written with `set_fact(subject: player, predicate: pref.<key>, value, source: session_zero |
-checkin | request, visibility: shown)` and read with `get_state(scope: codex)` or by the owning chapter's
+checkin | request, visibility: shown)` and read with `get_state(scope: codex, view: codex)` (00.14.2 #8) [editor: E2-053] or by the owning chapter's
 handler. No separate preference tool exists: the preference record is the set of `pref.*` facts. A later
 value supersedes the earlier one (00.14.2 #10), so the history is kept in the log. T-14-1 is the closed
 list of keys, with their defaults and readers.
@@ -171,13 +177,13 @@ Each entry is recorded as a short topic in the player's own words, plus the tags
 (`safety.topic`, `tags: [...]`). The mapping is shown back to the player for confirmation ("I'll treat
 'spiders' as spider creatures and webs as a threat; right?"). 12.5.6 screens content against the tags and
 the topic text.
-*Worst case (J):* a mapping that is too narrow lets adjacent content through. The T10 safety screen
-(12.5.6) and adjust (12.5.7) catch it, and the corrected mapping is recorded at the player's word.
+*Worst case (J):* a mapping that is too narrow lets adjacent content through. The safety screen at
+PR-12-1 step T10 (12.5.6) [editor: E2-054] and adjust (12.5.7) catch it, and the corrected mapping is recorded at the player's word.
 
 ### 14.6 The codex
 
 **14.6.1 What the codex is.** `[D]` [C:P7; 00.6.4; 00.14.2; DL-14-03] The codex is the `codex` tool's
-render (00.14.2 #34) of the PC's state through `get_state(view: codex)`. It shows every `shown` item by
+render (00.14.2 #34) of the PC's state through `get_state(scope: codex, view: codex)`. It shows every `shown` item by
 default and every `available` item on request. It **never** shows `background` or `sealed` state, in any
 form: no number, no band, no "you sense…". Nothing the codex shows may be contradicted by narration
 (00.6.4). If they disagree, it is a claim-check error (12.3), and the store wins.
@@ -245,11 +251,13 @@ example of play is in `_process/reports/verification-playtest.md` (three playtes
    this before?"
 2. State the three promises (14.1.3). Ask for the lethality acknowledgement (14.3.3), and offer
    `death.mode` (T-14-1).
-3. Ask for tone (T-14-1) and lines, veils and flags (14.5.3). Confirm each mapping.
+3. Ask for lines, veils and flags (14.5.3). Confirm each mapping. (There is no tone question: the register
+   is fixed classic fantasy, BRIEF §4 and 12.14.1 [revision: I-121].)
 4. Ask for the pacing profile (12.7.3) and auto-commit (01.7.4), in one question each, with defaults
    stated.
 5. Run the first preference check-in (12.5.9 (a) only: the pillar interest).
-6. Write every answer as a `pref.*` fact (14.5.1), and skipped questions as their defaults. Then hand off
+6. Write every answer given as a `pref.*` fact (14.5.1). A skipped question writes nothing; an absent key
+   reads as its T-14-1 default [revision: I-124]. Then hand off
    to PR-12-9 (world seed).
 
 **PR-14-2 Render the codex.** `[D]` [14.6; DL-14-03]
@@ -261,7 +269,8 @@ example of play is in `_process/reports/verification-playtest.md` (three playtes
 
 **PR-14-3 First-use notes.** `[D]` [14.4.1; DL-14-06] On each turn where `player.new_to_this` is not `no`:
 for each T-14-2 item first appearing this turn and not in the record `pref.shown_notes`, append its note
-line and add its id to `pref.shown_notes`.
+line and add its id to `pref.shown_notes`. Creation's closing `[RULES]` notes (PR-02-7) count as shown: when
+PR-02-7 delivers them, `fn.offer` and `fn.lethal` are added to `pref.shown_notes` [revision: I-123].
 
 ## Tables
 
@@ -269,9 +278,8 @@ line and add its id to `pref.shown_notes`.
 
 | Key | Asked at | Values | Default | Read by |
 |---|---|---|---|---|
-| `tone` | session zero | grim, adventurous, light | adventurous | 12 (narration register) |
 | `lethality.acknowledged` | session zero (required) | true | — | 02 (creation may not start without it) |
-| `death.mode` | session zero; between sessions | die, retire | die | 07 (a death result under `retire` becomes forced retirement; 07's legacy rules apply) |
+| `death.mode` | session zero; between sessions | die, retire | die | 07.5.14 (a death result under `retire` becomes The Road Ends, 07.5.11) |
 | `safety.lines` | session zero; any time | topics and mapped tags (14.5.3) | none | 12.5.6 |
 | `safety.veils` | session zero; any time | topics and mapped tags | none | 12.5.6 |
 | `safety.flags` | session zero; any time | topics and mapped tags | none | 12.5.6 |
@@ -296,22 +304,23 @@ line and add its id to `pref.shown_notes`.
 | `fn.oracle` | the first Oracle answer | "When the story needs a fact nobody decided yet, the game asks the dice and tells you the answer." |
 
 **T-14-3 Codex views.** Each family's visibility comes from 00.6.3; the view shows a family only at that
-visibility.
+visibility. Every 00.6.3 family that is `shown` or `available` appears in exactly one view; a view holding
+`shown` families is a default view, and `available` contents appear on request (14.6.1) [editor: E2-055].
 
 | View | Contents (00.6.3 families) | Default or on request |
 |---|---|---|
-| **Sheet** | attributes; computed values (02.7.4); Vitality, harm state, wounds, marks; Focus; Fate; conditions on the PC; callings and tiers once recognized | default |
-| **Abilities** | licenses, slots and abilities held, with each rule card's text; standing offers; oaths and commitments | default |
-| **Gear** | possessions, coin, known item properties (unidentified ones show "unidentified"); supply, light | default |
-| **Journal** | threads; clues found and PC knowledge; rumors heard (text only); world facts known; NPCs met (identity, appearance, standing rung name) | default |
+| **Sheet** | attributes; computed values (02.7.4); Vitality, harm state, dying step, wounds, marks; Focus; Fate; conditions on the PC; callings, tiers and provisional status once recognized; time, calendar position and time mode; the PC's location. In a scene, also: the current frame or OFFER; relationship-state in conflict (bands, flags); conditions on others marked `visible`; adversaries' "bloodied" and "down"; clocks at their own visibility (a sensed clock by name only, 12.15.1) | default |
+| **Abilities** | licenses held, slots and abilities, with each rule card's text; standing offers; commitments, oaths and vows | default |
+| **Gear** | possessions, coin, item properties (an unidentified property is sealed and shows only as "unidentified"); supply, light | default |
+| **Journal** | threads; clues found and PC knowledge; rumors heard (text only; truth sealed); world facts known to the PC; NPCs met (identity, appearance); places discovered and their route links, with places known only by rumor listed by name on request (10.1.5) | default |
 | **Leanings** | 04.6.5's up to three rows (tag plain name and band word); never a calling name or number | on request |
 | **Competence** | the competence map, each entry with its source | on request |
 | **Deeds** | the evidence ledger per 03.11.1 (deed text, tags and signs, no weights) | on request |
-| **Reputation and factions** | reputation content and scope; known factions and their status to the PC | on request |
-| **Allies** | companions and allies per 16.1.3's classification | default when any exist |
-| **Rulings** | the ruling ledger (12.12.5), the chronicle (11) | on request |
+| **Reputation and factions** | reputation content and scope (never the score); known factions and their status to the PC; NPC standing toward the PC (rung name only) | on request |
+| **Allies** | companions and allies per 16.1.3's classification: its `shown` fields by default, its `available` fields on request | default when any exist |
+| **Rulings** | the ruling ledger (12.12.5), the chronicle (11), the turn log (12.2.5), the corrections ledger (12.3.4), and the session's `next_time` notes (12.5.4) [revision: I-122] | on request |
 | **Rules** | rule cards on request (14.6.4); T-14-4 | on request |
-| **Settings** | the preference record (T-14-1) | on request |
+| **Settings** | the preference record (T-14-1): safety settings, preferences, auto-commit | default |
 
 **T-14-4 The player's quick sheet.**
 
@@ -332,11 +341,11 @@ visibility.
 
 ## Worked examples
 
-**WE-14-1 Session zero, defaults and one line.** The player answers "no" to "played before?" and "just
-dark, not grim" to tone (which maps to `adventurous`; the DM confirms it). They give one line, "harm to
+**WE-14-1 Session zero, defaults and one line.** The player answers "no" to "played before?". They give one line, "harm to
 children", mapped to a `safety.lines` entry (topic "harm to children", mapped to the tags for child victims and any harm) and
 confirmed. They skip pacing and auto-commit, so the defaults apply (`standard`, `off`). They say "yes, I
-understand" to the lethality promise, and choose `death.mode: die`. Seven `pref.*` facts are written, then
+understand" to the lethality promise, and choose `death.mode: die`. Four `pref.*` facts are written (`player.new_to_this: yes`, `safety.lines`, `lethality.acknowledged`,
+`death.mode: die`); the skipped questions write nothing and read as their defaults [revision: I-124]. Then
 PR-12-9 runs. Later, the seed's rumor table rolls "the miller's boy is missing". The 12.5.6 screen matches
 the mapped tags, re-rolls once, and logs the substitution.
 
@@ -361,7 +370,7 @@ find out: a read, 15.
 
 ## State touched
 
-- **Reads:** all 00.6.3 families through `get_state(view: codex)`; `evaluate` for 02.7.4's values; the
+- **Reads:** all 00.6.3 families through `get_state(scope: codex, view: codex)`; `evaluate` for 02.7.4's values; the
   ruling ledger; the chronicle.
 - **Writes:** `pref.*` facts on subject `player` (T-14-1), through `set_fact`; `pref.shown_notes`.
 - **Tools:** `codex` (00.14.2 #34), `get_state`, `set_fact`, `evaluate`, `log_turn`.
@@ -369,10 +378,11 @@ find out: a read, 15.
 
 ## Interface requests
 
-- **To 07:** honour `death.mode: retire` as a forced retirement at the death result (07's legacy and
-  successor rules unchanged). Recorded as I-106.
-- **To 02:** creation C0 checks `pref.lethality.acknowledged` before step C1. Recorded as I-106.
-- **To 12:** `tone` sets the narration register within 12's voice rules; no other effect.
+- **To 07:** honour `death.mode: retire` as The Road Ends (07.5.11) wherever the PC would die. Applied
+  as 07.5.14 (I-107).
+- **To 02:** creation C0 checks `pref.lethality.acknowledged` before step C1. Applied in PR-02-1 step 0
+  (I-107).
+- **To 12:** none. There is no tone preference; 12.14.1's single register stands [revision: I-121].
 
 ## Open empirical questions
 
