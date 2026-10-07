@@ -785,7 +785,8 @@ contest's opposing clock stands one segment from full (a campaign's patience, 15
 is **one from full** and a crisis (03.4.5) [revision: I-046]. *Why:* a fight's deeds are rated by the fight (03.4.3's advisory
 offset), and a negotiator's must be rated by what they faced, or the higher tiers' great deeds and crises
 are open only to fighters (`04-recog-parity.py`: with this rule an envoy reaches tier 3 at session 18 and
-tier 5 at 46, beside the archer's 19 and 51) [03.4.3; 03.4.5; DL-15-32].
+tier 5 at 46, beside the archer's 19 and 51; on 04's current ladder 14 and 42 beside 15 and 47, 04.3.5
+[revision: I-089]) [03.4.3; 03.4.5; DL-15-32].
 
 ### 15.4 Asking, winning over, threatening, provoking, performing
 

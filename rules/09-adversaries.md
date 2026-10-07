@@ -1181,7 +1181,9 @@ keeps the template's numbers and adds its own facts (name, wants, knowledge, 15;
   weak ones. With a realistic word mix (easy 25 / fair 40 / hard 30 / lethal 5 %), 04's pacing comes back to
   within 2–5 sessions of its targets (archer 5 / 11 / 22 / 39 / 60, swordsman 3 / 8 / 15 / 25 / 38; the archer
   reaches tier 5 within 60 sessions in 59 of 100 runs against 82). **Adopted** as the orchestrator's decision
-  DL-00-05 and written into 03.4.3 at integration; I-005 is closed [integration: DL-00-05].
+  DL-00-05 and written into 03.4.3 at integration; I-005 is closed [integration: DL-00-05]. These figures are on
+  04's ladder of the time; 04 then retuned tiers 2–5 to this model (archer 5 / 10 / 18 / 31 / 55, tier 5 within
+  60 in 93 of 100; `09-i005-check.py` prints both ladders) [revision: I-089; DL-04-32].
 - **I-006** (Focus-binary equal-band fights) remains resolved for martial characters with the final
   templates: one standard foe of the PC's band is beaten 100 / 99.9 / 99.4 / 87.8 / 80.2 % of the time with no
   Focus (T-09-3); the caster part is I-009 (05).
@@ -1984,7 +1986,9 @@ a recorded fact), 06.11.7 Yield and parley (a list's `parley_when`), 07.4.1 Yiel
   fair 0, hard +1, lethal +2; clamped 1–5), instead of the opposing threat band. Evidence (09.8.9, 09.12.3):
   with 09's encounter budget and the foe's band as challenge band, 04's archer reaches tier 2/3/4 at median
   sessions 20/31/46 and never tier 5; with the advisory offset, 11/22/39 and tier 5 at 60 (59 of 100 runs),
-  within 2–5 sessions of 04's targets. This is what closes I-005.
+  within 2–5 sessions of 04's targets. This is what closes I-005. (04 then retuned its tiers-2–5 weighted
+  thresholds to that model: 10/18/31 and tier 5 at 55, 93 of 100; `09-i005-check-output.txt`, DL-04-32
+  [revision: I-089].)
 - `creature_tags` are listed most specific first on every archetype and adversary; `speaks` and `mind` per
   archetype; threat band on every adversary (03's requests): done.
 - Proposed level-3 creature tags (`data/tags.yaml`, adopted at integration): `creature.spirit.place.water`,

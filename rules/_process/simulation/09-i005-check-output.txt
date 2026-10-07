@@ -1,3 +1,4 @@
+##### ladder: before I-089 (narrow W 80/200/440/800/1300; the numbers 09.12.3 quotes)
 === 04 original: conflicts at b, b+1, b+1, b+2
   focused archer who scouts by stealth (03 scenario A) T1: 3/4/5  T2: 7/9/11  T3: 16/19/22  T4: 31/34/38  T5: 52/56/99 | T4 / T5 within 60: 100 / 82 of 100
   single-track swordsman (fights 70% of scenes)        T1: 2/2/3  T2: 5/6/7  T3: 10/12/14  T4: 20/21/24  T5: 33/35/38 | T4 / T5 within 60: 100 / 100 of 100
@@ -7,3 +8,13 @@
 === 09 proposal, challenge = power band + advisory offset (easy -1 25% / fair 0 40% / hard +1 30% / lethal +2 5%)
   focused archer who scouts by stealth (03 scenario A) T1: 3/5/7  T2: 9/11/14  T3: 20/22/27  T4: 35/39/45  T5: 55/60/99 | T4 / T5 within 60: 100 / 59 of 100
   single-track swordsman (fights 70% of scenes)        T1: 2/3/4  T2: 7/8/9  T3: 13/15/17  T4: 23/25/28  T5: 35/38/41 | T4 / T5 within 60: 100 / 100 of 100
+##### ladder: current (04-recog04.py's W)
+=== 04 original: conflicts at b, b+1, b+1, b+2
+  focused archer who scouts by stealth (03 scenario A) T1: 3/4/5  T2: 6/7/9  T3: 12/15/17  T4: 24/27/30  T5: 48/52/57 | T4 / T5 within 60: 100 / 97 of 100
+  single-track swordsman (fights 70% of scenes)        T1: 2/2/3  T2: 4/5/6  T3: 8/9/11  T4: 15/17/19  T5: 31/33/35 | T4 / T5 within 60: 100 / 100 of 100
+=== 09 budget, challenge = the foe's threat band: b-1 30% / b 55% / b+1 15%
+  focused archer who scouts by stealth (03 scenario A) T1: 4/7/17  T2: 12/20/31  T3: 20/31/43  T4: 32/41/56  T5: 53/79/99 | T4 / T5 within 60: 96 / 50 of 100
+  single-track swordsman (fights 70% of scenes)        T1: 3/5/9  T2: 9/14/19  T3: 14/20/28  T4: 22/25/34  T5: 34/39/44 | T4 / T5 within 60: 100 / 100 of 100
+=== 09 proposal, challenge = power band + advisory offset (easy -1 25% / fair 0 40% / hard +1 30% / lethal +2 5%)
+  focused archer who scouts by stealth (03 scenario A) T1: 3/5/7  T2: 8/10/14  T3: 15/18/24  T4: 28/31/36  T5: 49/55/59 | T4 / T5 within 60: 100 / 93 of 100
+  single-track swordsman (fights 70% of scenes)        T1: 2/3/4  T2: 5/7/9  T3: 10/11/14  T4: 18/20/22  T5: 32/34/37 | T4 / T5 within 60: 100 / 100 of 100

@@ -391,7 +391,7 @@ world_time:                               # 12.7.7 [revision: I-085]; a calibrat
   downtime_weeks_after_adventure: [1, 6]
   long_downtime: {weeks: 13, per_year: 1, optional: true}
   reference_weeks_per_session: {without_long_downtime: 1.9, with_long_downtime: 2.4}
-  results: "tier 5 at 2-3 world years (archer median 2.1/2.6, swordsman 1.3/1.5); a season every 5-7 sessions; 2.3-2.8 sessions a thread against 11-world-sim's 19 threads per 104 weeks; aging within 60 sessions only for a PC who starts old (about 3 checks)"
+  results: "tier 5 at 2-3 world years (archer median 2.0/2.5, swordsman 1.3/1.5; revision I-089); a season every 5-7 sessions; 2.3-2.8 sessions a thread against 11-world-sim's 19 threads per 104 weeks; aging within 60 sessions only for a PC who starts old (about 3 checks)"
   review: {log: sessions_per_season, band: [3, 10], flag_after_seasons: 2}
   basis: ["12.7.7", "_process/simulation/12-time-pacing.py (seed 85)", "04.3.5", "11.10.5", "16.10.1"]
   lifecycle: provisional

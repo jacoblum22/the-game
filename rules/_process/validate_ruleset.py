@@ -20,6 +20,7 @@ Checks (each finding is ERROR, WARN or INFO; the summary counts them):
   8. JRULES    every rule with a [J:*] decision has a Worst case line; counts inline-form vs template-form (I-001).
   9. HANDLERS  every handler's boundary and phase are legal, `before` targets exist in the same phase.
  10. BLOCKS    every owner-block owner is allowed by T-00-19.
+ 11. POOLS     (INFO) long-horizon pick depth: own-pool size and tier-4/5 coverage per calling and level-2 node (I-087).
 """
 import glob, json, os, re, sys
 from collections import Counter, defaultdict, OrderedDict
@@ -459,6 +460,36 @@ for fname, d in DOCS.items():
             add("ERROR", "BLOCKS", fname, "owner-block %s not allowed by T-00-19" % o)
         elif fname not in ALLOWED:
             add("ERROR", "BLOCKS", fname, "has owner-blocks but T-00-19 allows none")
+
+# ====================================================================== 11. POOLS (INFO; revision I-087)
+# Long-horizon pick depth: for each calling, the pool abilities it can draw as OWN picks (04.8.4: first tag at or
+# under pool_gate.own, non-oath; for a conduct calling, oath abilities on its axis and pole) and the highest
+# min_tier among them; for each level-2 deed node, whether any pool ability at tier 4+ starts under it. INFO only:
+# kin picks are legal, so a thin own pool is a depth gap to author into (ch.05), never an error.
+try:
+    _AB = [a for a in (DOCS.get("abilities.yaml") or {}).get("abilities", [])
+           if a.get("slot_class") == "calling" and not a.get("retired") and not a.get("adversary_only")]
+    _CL = (DOCS.get("callings.yaml") or {}).get("callings", [])
+    _under = lambda t, g: t == g or t.startswith(g + ".")
+    thin = no5 = none5_conduct = 0
+    for c in _CL:
+        g = c.get("pool_gate") or {}
+        if c.get("breadth") in ("vow", "dark"):
+            pole = "positive" if c.get("breadth") == "vow" else "negative"
+            el = [a for a in _AB if a.get("conduct_pole") == pole and set(a.get("requires_conduct") or []) & set(g.get("conduct") or [])]
+            if not any(a.get("min_tier", 1) >= 5 for a in el): none5_conduct += 1
+        else:
+            el = [a for a in _AB if not a.get("conduct_pole") and any(_under(a["tags"][0], x) for x in g.get("own") or [])]
+        if c.get("kind") == "specialist" and c.get("breadth") not in ("vow", "dark"):
+            if len(el) < 6: thin += 1
+            if not any(a.get("min_tier", 1) >= 5 for a in el): no5 += 1
+    add("INFO", "POOLS", "callings.yaml", "%d of %d deed-keyed specialist callings have fewer than six own-pool abilities; %d have no own-pool tier-5 ability; %d vow/dark callings have no tier-5 oath ability on their axis"
+        % (thin, sum(1 for c in _CL if c.get("kind") == "specialist" and c.get("breadth") not in ("vow", "dark")), no5, none5_conduct))
+    _L2 = sorted({".".join(a["tags"][0].split(".")[:3]) for a in _AB if a["tags"][0].startswith("deed.")})
+    _gap = [n for n in _L2 if not any(_under(a["tags"][0], n) and a.get("min_tier", 1) >= 4 for a in _AB if not a.get("conduct_pole"))]
+    add("INFO", "POOLS", "abilities.yaml", "%d of %d level-2 deed nodes have no pool ability at min_tier 4+: %s" % (len(_gap), len(_L2), ", ".join(_gap)))
+except Exception as e:  # an audit must never break validation
+    add("WARN", "POOLS", "abilities.yaml", "pool audit failed: %s" % e)
 
 # ====================================================================== report
 def summary():

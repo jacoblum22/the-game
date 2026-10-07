@@ -342,7 +342,7 @@ with these differences and no others:
    standing +1).
 4. **Trained successors.** If the predecessor completed chapter 11's Train-a-Successor activity in
    play, the successor's creation writes chapter 03's backstory events (03.2.8) for the tags that
-   activity names: at most three tags, 24 points each. This is the only use of backstory evidence in
+   activity names: at most three tags, each a different tag, 24 points each [revision: I-087]. This is the only use of backstory evidence in
    the game, and it is allowed because that training was a deed done in play (02.11.1).
 5. **A fresh birth draw**, with the generator's recency rule halving the predecessor's knack and quirk
    (`recency_window: 5`), so heirs differ from those they follow.

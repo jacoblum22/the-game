@@ -987,7 +987,8 @@ is "Hard: challenges a practiced professional" (T-00-5) and the numbers say so [
 6. **A project is a craft contest** `[revision: I-003]` (03.4.3). Each step's `challenge_band` is at least
    the work's **type-tier** (08.6.1), so a wondrous blade of dragon steel is a band-5 deed though its steps are
    Very hard, the highest DC a work sets; never above the maker's `power_band` + 2 (03.4.3) [revision: I-039]. A work is
-   **one opposition** for 04.3.4: at most two of a tier's great deeds come from one project [revision: I-083]. A step on a work whose material set includes an **irreplaceable
+   **one opposition per scene** for 04.3.4: at most two of a tier's great deeds come from one project in one scene;
+   its clocks bound the rest, as an encounter bounds a fight [revision: I-083; I-089]. A step on a work whose material set includes an **irreplaceable
    material** (rarity band 4, or a harvested part that carries a named source's provenance) is framed
    **Dire**, and its `cost.gear` on that material is **ruinous** (03.4.5): the steel cannot be bought again.
    A step taken while the spoilage clock stands one segment from full is **one from full** (a crisis, 03.4.5) [revision: I-046].
@@ -997,7 +998,8 @@ is "Hard: challenges a practiced professional" (T-00-5) and the numbers say so [
    beats are judged deeds like any other. *Why:* before this, every step was Risky and no work rose above
    band 4, so a smith's calling could not meet tier 3's crises or tier 5's great deeds at all
    (`04-recog-parity.py`: tier 3 never reached in 90 sessions; with this rule tier 3 at session 18 and
-   tier 5 at 45, beside the archer's 19 and 51) [DL-08-30].
+   tier 5 at 45, beside the archer's 19 and 51; on 04's current ladder 14 and 40 beside 15 and 47, 04.3.5
+   [revision: I-089]) [DL-08-30].
 
 **08.6.5 Commissioning.** `[D]` An NPC crafter's availability follows the settlement (`economy.yaml#buying`):
 a village has trained crafters (common and fine), a town trained and expert (masterwork), a city expert

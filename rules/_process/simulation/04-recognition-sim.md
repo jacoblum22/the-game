@@ -159,6 +159,10 @@ tier 4 at session 37 (martial 998, wilds 605). Wilds 907 at session 60: no tier 
 
 1. The ladder W = 80 / 200 / 440 / 800 / 1,300 (narrow) gives the intended slowing curve with no separate
    character number: the session count roughly doubles from each tier to the next (4, 9, 19, 34, 56).
+   [revision: I-089] With conflicts at power band + the advisory offset (DL-00-05) the same ladder gave
+   5 / 12 / 23 / 40 / 60, the weighted total binding tiers 2–5; tiers 2–5 were retuned to 160 / 340 / 640 /
+   1,200 (fine and hybrid ×¾, broad ×1½), giving 5 / 10 / 18 / 32 / 54 (`04-recog04-output.txt`; DL-04-32).
+   The trace above is the pre-revision run; `04-wren04-output.txt` holds the current one.
 2. The since-last-tier requirements rarely bind a focused adventurer (the weighted total binds); they bind
    play that avoids danger, which is their purpose. For social play they slow tiers 3–5.
 3. Confidence as defined is monotone in two independent measures of "was this recognition right", which is

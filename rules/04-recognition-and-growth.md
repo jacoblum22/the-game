@@ -46,7 +46,7 @@ narrator never sees [BRIEF §3; C:P5; C:P13; R4 §9 04 #1–#4].
   game's event rate by simulation and never copied [R3 G-2]. Hence 04.3 and T-04-8.
 - *A tally has no confidence unless one is defined* [R2 T-1; R3 T-4; BRIEF A3]. Hence 04.4.2, a definition
   chosen because it is **calibrated**: in simulation a higher score predicts a higher chance that the
-  recognition is confirmed by later play (37, 59, 64, 73, 91, 97 in 100 for scores 0–5).
+  recognition is confirmed by later play (38, 46, 65, 68, 90, 91 in 100 for scores 0–5; T-04-8 R7).
 - *Hybrids are named consolidations keyed to branch pairs, reachable below full specialist depth, with an
   original merge trigger that must be simulated* [R3 #5, 04.3, 04.4, 04.9, G-1; Hades' duo table]. Hence
   04.2.4, `hybrids.yaml`, and R4 of the simulation.
@@ -199,9 +199,9 @@ hybrid:
 - carries the one **named composite** of its row (04.5.4) and no Focus trigger;
 - may carry an **oath** (Paladin, Veiled Hand, Pilgrim, Inquisitor, Theurge, Preacher, Reliquarist).
 The numeric trigger is original work [R3 G-1]. Acceptance test, simulated over 200 runs per mix: play that is
-95/5 between two branches was never offered the hybrid; 90/10 in 9 of 200 runs; 80/20 in 173; 70/30 and more
-balanced in all 200 by session 3 (median). A character with a second pillar in a quarter of scenes sat on
-the line (65 of 200), which is where an offer rather than a grant is the right policy (T-04-8 R4) [DL-04-05].
+95/5 between two branches was never offered the hybrid; 90/10 in 24 of 200 runs; 80/20 in 193; 70/30 and more
+balanced in all 200, first by session 3–4 (median). A character with a second pillar in a quarter of scenes was
+offered it in 146 of 200, which is why it is an offer and never a grant (T-04-8 R4) [DL-04-05; revision: I-034].
 
 **04.2.5 Vows and dark callings (conduct-keyed).** `[D]` A specialist may key on a `conduct` axis [C:P5].
 The ten **vows** key on positive poles and are sworn (vehicle V4); the nine **dark callings** key on negative
@@ -276,7 +276,7 @@ play can inflate the second [03.7.1; R3 #4]. Every field is read through one sea
 | `counted` | `counted(pc, key).units` | cumulative counted units at the node |
 | `quality_events` | `detail(pc, key).by_quality.difficult + .challenging` | events at the edge of ability or beyond |
 | `distinct_scenes` | `detail(pc, key).distinct.scenes` | separate scenes in which the key was shown |
-| `great_deeds` | `detail(pc, key, since).by_band[t..5]` summed, at most 2 from any one `contest.opposition` (04.3.4) [revision: I-083], with `success_by_band[t..5]` summed ≥ 1 (equivalently `peak_band ≥ t`, the highest band among successes) | settled deeds whose challenge band is at least the tier being entered, at least one a success (exact since 03 added `success_by_band` at integration) |
+| `great_deeds` | `detail(pc, key, since).by_band[t..5]` summed, at most 2 from any one `contest.opposition` (for a work, per scene; 04.3.4) [revision: I-083; I-089], with `success_by_band[t..5]` summed ≥ 1 (equivalently `peak_band ≥ t`, the highest band among successes) | settled deeds whose challenge band is at least the tier being entered, at least one a success (exact since 03 added `success_by_band` at integration) |
 | `crises` | `detail(pc, key, since).crises` | deeds done in lethal context, while Staggered or Dying, or at Dire stakes and challenging odds (03.4.5) |
 | `contexts` | `detail(pc, key, since).distinct.contexts` | distinct kinds of opposition or obstacle |
 | `children`, top child share | `profile(pc, deed, 2)` within the branch; `share` | breadth of a branch |
@@ -305,12 +305,12 @@ points at a node (03.5.2), so 80 already needs three scenes; five makes it a pat
 (a); DL-04-08].
 
 **04.3.3 The counted requirement.** `[D]` Counted = the weighted threshold ÷ 10, rounded down, at every tier
-(8, 20, 44, 80, 130 for a narrow calling). Any counter of 03.7.2 credited at the key's node counts.
+(8, 16, 34, 64, 120 for a narrow calling [revision: I-089]). Any counter of 03.7.2 credited at the key's node counts.
 `cnt.training` units (a completed week of downtime training, 03.5.5) count toward **at most half** of it: a
 mentor speeds recognition up and never substitutes for deeds [R6 A-27]. **Measured** `[revision: I-004]`:
 on chapter 06's conflict engine with 03's rules applied to every beat, defeat and push (`03-counted-yield.py`)
 a fighter's counted share at the weapon node is 0.11 / 0.15 / 0.22 / 0.23 / 0.33 at bands 1–5 without Focus
-and 0.26–0.44 when pushing; the social, craft and lore contests run 0.31 / 0.76 / 0.31 (T-04-8 R12). A tenth
+and 0.26–0.44 when pushing; the social, craft and lore contests run 0.30 / 0.73 / 0.29 (T-04-8 R12). A tenth
 therefore binds only judged evidence with nothing behind it, and one corner of honest play: a band-1 fighter
 who meets nothing but mobs and never spends Focus needs one fight more than the weighted line already asks
 (9 instead of 8). The divisor stays at 10 (OEQ-04-2) [DL-04-09; DL-04-27].
@@ -321,40 +321,54 @@ crystallization**. Each tier asks for a kind of evidence that repetition cannot 
 
 | Tier | Weighted (fine / narrow / broad / hybrid min) | Since the last tier: quality events · scenes | Great deeds (band ≥ tier) | Crises | Contexts | In fiction |
 |---|---|---|---|---|---|---|
-| 2 Proven | 150 / 200 / 300 / 150 | 10 · 8 | 5 at band ≥ 2 | — | — | proven against what is beyond the ordinary |
-| 3 Tempered | 330 / 440 / 660 / 330 | 14 · 10 | 6 at band ≥ 3 | 2 | — | tempered where it could have ended |
-| 4 Exalted | 600 / 800 / 1,200 / 600 | 18 · 12 | 6 at band ≥ 4 | 3 | 5 | done in many countries, against champions |
-| 5 Paragon | 975 / 1,300 / 1,950 / 975 | 22 · 14 | 4 at band 5 | 4 | 5 | done at the edge of what mortals can do |
+| 2 Proven | 120 / 160 / 240 / 120 | 10 · 8 | 5 at band ≥ 2 | — | — | proven against what is beyond the ordinary |
+| 3 Tempered | 255 / 340 / 510 / 255 | 14 · 10 | 6 at band ≥ 3 | 2 | — | tempered where it could have ended |
+| 4 Exalted | 480 / 640 / 960 / 480 | 18 · 12 | 6 at band ≥ 4 | 3 | 5 | done in many countries, against champions |
+| 5 Paragon | 900 / 1,200 / 1,800 / 900 | 22 · 14 | 4 at band 5 | 4 | 5 | done at the edge of what mortals can do |
 
 A **great deed** is a settled deed at the key whose `challenge_band` (03.4.3: the obstacle's absolute rung,
 DC 13–17 is band 2 … DC ≥ 28 is band 5; in a conflict the fight's advisory band; in a social, craft or lore
 **contest** the opposing party's or the work's band, at most `power_band` + 2) is at least the number of the tier being entered; at least one of the
 required deeds must be a success. At most **two** of the great deeds a tier counts may come from **one
-opposition**: one contest's opposing party, one case or research project, or one work (03.2.1's
-`contest.opposition`), so tier 5's four band-5 deeds are done against at least two of the world's powers,
+opposition**: one contest's opposing party, one case or research project, or one work **in one scene** (03.2.1's
+`contest.opposition`; a work's steps are bounded by its progress and spoilage clocks, 08.6.4, as a fight's by its
+encounter, so a work is one opposition per scene worked on it [revision: I-089]), so tier 5's four band-5 deeds are done against at least two of the world's powers,
 never four times in one archive; a fight's deeds are bounded by its encounter and 03.5.4's same-target rule
 `[revision: I-083]`. The band is tied to **this calling's** tier and not to `power_band`, so a
 second calling deepens on its own merits (a Paragon archer's new Tracker calling needs band-2 deeds for tier
 2, not band-5 ones). For a hybrid the since-fields are summed over both branches, with at least one great
 deed and half the scenes on each. For a vow or dark calling the ladder is `pos` (or `neg`) ≥ 16, 40, 80, 140,
 220 with the tier-1 conditions, and from tier 3 `scenes_since_negative ≥ 24` (48 at tier 5): a full window of
-faithfulness [DL-04-08].
+faithfulness [DL-04-08]. The weighted column of tiers 2–5 was retuned to 04.3.5's targets when conflicts moved to
+the advisory offsets (narrow 200 / 440 / 800 / 1,300 before; the since-fields are unchanged) [revision: I-089;
+DL-04-32].
 
 **04.3.5 Pacing targets and what the simulation gives.** `[D]` Targets, chosen before calibration: first
 recognition in sessions 3–5 of focused play; tier 2 near session 9; tier 3 near session 18; tier 4 near
 session 32; tier 5 not before session 50, and not reached by most characters (Stormlight: "many stop at the
-Third") [R2 #2; R1 §04 "excessive investment kills an option"]. Results (200 runs, 5 scenes per session,
-p10 / median / p90; T-04-8 R1–R4):
+Third") [R2 #2; R1 §04 "excessive investment kills an option"]. Results (`04-recog04.py`: 200 runs, 5 scenes
+per session, conflicts at the PC's power band shifted by the advisory word, DL-00-05 and 03.4.3: easy −1 25%,
+fair 0 40%, hard +1 30%, lethal +2 5%; p10 / median / p90; T-04-8 R1–R4) [revision: I-034; I-089]:
 
 | Character | Tier 1 | Tier 2 | Tier 3 | Tier 4 | Tier 5 |
 |---|---|---|---|---|---|
-| Archer who scouts (03's scenario A), key `martial.archery` | 3 / **4** / 5 | 7 / **9** / 11 | 16 / **19** / 22 | 31 / **34** / 38 | 52 / **56** / — (165 of 200 within 60) |
-| Swordsman who fights in 70% of scenes | 2 / 2 / 3 | 5 / 6 / 7 | 11 / 12 / 13 | 19 / 21 / 23 | 32 / 35 / 37 |
-| Burglar, key `guile.thievery` | 3 / 4 / 5 | 8 / 10 / 11 | 18 / 21 / 29 | 32 / 35 / 40 | 53 / 59 / — |
-| Envoy, key `influence.persuasion` (before revision A; see below) | 4 / 5 / 7 | 9 / 12 / 14 | 23 / 28 / 48 | 44 / 49 / — | not within 60 |
-| Mixed-weapons Warrior (broad) | 3 / 3 / 4 | 7 / 8 / 9 | 14 / 15 / 17 | 26 / 29 / 31 | 46 / 49 / 52 |
-| Deliberate 50/50 hybrid | 2 / 3 / 4 | 5 / 6 / 8 | 11 / 13 / 14 | 21 / 23 / 25 | 36 / 39 / 42 |
-| Lockbreaker (fine key) under the burglar | 3 / 4 / 6 | 8 / 10 / 12 | 18 / 22 / 37 | 34 / 38 / 46 | 58 / — / — |
+| Archer who scouts (03's scenario A), key `martial.archery` | 3 / **5** / 7 | 8 / **10** / 15 | 15 / **18** / 24 | 29 / **32** / 36 | 50 / **54** / 60 (183 of 200 within 60) |
+| Swordsman who fights in 70% of scenes | 2 / 3 / 4 | 5 / 7 / 9 | 10 / 12 / 14 | 18 / 20 / 22 | 32 / 34 / 37 |
+| Burglar, key `guile.thievery` | 3 / 4 / 5 | 6 / 8 / 9 | 14 / 17 / 25 | 26 / 29 / 33 | 51 / 55 / — (162 of 200) |
+| Envoy, key `influence.persuasion` (before revision A; see below) | 4 / 5 / 7 | 8 / 10 / 12 | 18 / 22 / 44 | 35 / 40 / 54 | not within 60 |
+| Mixed-weapons Warrior (broad) | 3 / 4 / 5 | 7 / 8 / 10 | 13 / 15 / 16 | 23 / 25 / 27 | 43 / 46 / 49 |
+| Deliberate 50/50 hybrid | 2 / 3 / 4 | 5 / 6 / 8 | 10 / 11 / 13 | 17 / 19 / 22 | 33 / 36 / 39 |
+| Lockbreaker (fine key) under the burglar | 3 / 4 / 6 | 7 / 9 / 12 | 15 / 19 / 35 | 27 / 32 / 44 | 54 / — / — |
+
+The focused archer meets every target: tier 1 at the edge of its window (a fight below the PC's band, a quarter
+of them, is rarely difficult, so the first 80 points come a session later than under 04's first model), tier 2 one
+session past 9 (the since-floor of ten quality events binds there, not the weight), tiers 3 and 4 on 18 and 32,
+and tier 5 from session 50 at the earliest in nine runs of ten. Before the retune of 04.3.4's weighted column the
+same play gave 5 / 12 / 23 / 40 / 60, because on the advisory offsets a quarter of fights are below the PC's band
+and the weighted line, not the since-fields, binds tiers 2–5 (`04-binding-check.py`: the requirement met last; T-04-8
+R14). The targets were kept and the thresholds moved: the targets are the design (04's Design intent: the
+numbers are scaled to the game's event rate and never copied), the thresholds its calibration [DL-04-32]. Play
+that fights more is faster (the swordsman, fighting in 70% of scenes, at 34; the mixed-weapons Warrior, 60%, at 46).
 
 A whole character with every key live and three seats held three callings by session 10 if every offer was
 accepted, with the highest tier at sessions 10 / 20 / 40 / 60 at 2 / 3 / 4 / 5 (archer) (T-04-8 R6).
@@ -368,14 +382,15 @@ advisory offsets of DL-00-05; 200 seeds, 90 sessions) and compares (median sessi
 
 | Calling (key) | Tier 3 | vs archer | Tier 5 | vs archer |
 |---|---|---|---|---|
-| Archer `martial.archery` (combat) | 19 | — | 51 | — |
-| Envoy `influence.persuasion` | 18 | −5% | 46 | −10% |
-| Smith `craft.smithing` | 18 | −5% | 45 | −12% |
-| Scholar `lore.history` | 17 | −11% | 46 | −10% |
+| Archer `martial.archery` (combat) | 15 | — | 47 | — |
+| Envoy `influence.persuasion` | 14 | −7% | 42 | −11% |
+| Smith `craft.smithing` | 14 | −7% | 40 | −15% |
+| Scholar `lore.history` | 14 | −7% | 42 | −11% |
 | *the smith under the earlier rules* | *never* | | *never* | |
 
-All three are within ±20% of the combat calling at both tiers. With 04's thinner social shape (2–4 beats,
-15% Dire) the envoy reaches tier 3 at 20 and tier 5 at 54 [DL-03-26; DL-04-28].
+All three are within ±20% of the combat calling at both tiers (on the ladder before I-089: archer 19 / 51,
+envoy 18 / 46, smith 18 / 45, scholar 17 / 46). With 04's thinner social shape (2–4 beats, 15% Dire) the envoy
+reaches tier 3 at 17 and tier 5 at 49 [DL-03-26; DL-04-28; revision: I-089].
 
 **Parity in a seeded world** `[revision: I-083; I-039; I-037]`. The rows above draw a contest's band like a
 fight's; in play it is read from the world's parties (03.4.3). `04-recog-parity.py`'s I-083 section draws every
@@ -383,10 +398,16 @@ contest from 20 seeded worlds (`12-world-seed.py`), with power band from confirm
 
 | Calling | Old seed, I-003 rules (T3 / T4 / T5) | Revised seed, no powers | Revised (C): powers, binding party, cap, two per opposition |
 |---|---|---|---|
-| Archer (combat) | — | — | 20 / 34 / 52 |
-| Envoy | 19 / 33 / **never** | 19 / never / never | 19 / 32 / **49** (−6%) |
-| Smith | 19 / 32 / 47 | 23 / 35 / 49 | 23 / 35 / **48** (−8%) |
-| Scholar | 18 / 34 / **never** | 19 / never / never | 19 / 32 / **49** (−6%) |
+| Archer (combat) | — | — | 16 / 28 / 48 |
+| Envoy | 15 / 27 / **never** | 16 / never / never | 16 / 27 / **45** (T3 +0%, T5 −6%) |
+| Smith | 16 / 27 / 44 | 17 / 27 / 43 | 17 / 27 / **44** (+6%, −8%) |
+| Scholar | 15 / 28 / **never** | 16 / never / never | 16 / 27 / **45** (+0%, −6%) |
+
+On the current ladder (I-089) [revision: I-089]. A work counts as one opposition **per scene** worked on it
+(04.3.4): counted once for the whole project, the smith's tier 3 fell to 22 against the archer's 16 (+38%),
+because a work's steps are bounded by its clocks and no farming is possible on it, yet three scenes at a
+masterwork banked what one fight banks. Before I-089 the table read archer 20 / 34 / 52, envoy 19 / 32 / 49,
+smith 23 / 35 / 48, scholar 19 / 32 / 49.
 
 The old seed's parties top out at band 4 and its factions at tier 3, so social and lore callings stalled at
 tier 4 (I-083); the far rings' powers (12.16.11) supply the band-4 and band-5 opposition, and with the
@@ -408,19 +429,20 @@ measuring, in simulation, which facts about a just-eligible candidate predict th
 
 | Id | Confirmation | Test (integers; `W1` = the ladder's tier-1 weighted threshold) | Why it predicts (candidates confirmed with it true / false, R7's feature study) |
 |---|---|---|---|
-| K1 | **Current** | `2·recent ≥ W1` | the character is living this now (85 / 51 in 100) |
-| K2 | **Rising** | `2·recent ≥ weighted` | most of the evidence is recent: a pursuit, not a slow accretion (89 / 55) |
-| K3 | **Central** | `5·weighted(key) ≥ weighted(deed)` | the key holds a fifth of everything the character has done (87 / 47) |
-| K4 | **Leading** | the key is among the three largest of `profile(pc, deed, level of key)` | one of the character's three strongest nodes at its level (84 / 47) |
-| K5 | **Margin** | `4·weighted ≥ 5·W(tier)` | a quarter past the line; the largest possible single event is 16 (03.4.2), so no one event, and no one mistaken call, put it there (80 / 67) |
+| K1 | **Current** | `2·recent ≥ W1` | the character is living this now (84 / 51 in 100) |
+| K2 | **Rising** | `2·recent ≥ weighted` | most of the evidence is recent: a pursuit, not a slow accretion (88 / 55) |
+| K3 | **Central** | `5·weighted(key) ≥ weighted(deed)` | the key holds a fifth of everything the character has done (84 / 43) |
+| K4 | **Leading** | the key is among the three largest of `profile(pc, deed, level of key)` | one of the character's three strongest nodes at its level (80 / 45) |
+| K5 | **Margin** | `4·weighted ≥ 5·W(tier)` | a quarter past the line; the largest possible single event is 16 (03.4.2), so no one event, and no one mistaken call, put it there (75 / 66) |
 
 Separately, the **currency floor** `4·recent ≥ W1` must hold or the candidate is **stale** (confirmed in 34 of
 100 when false). Counted margins and quality margins were tested and predicted nothing beyond their floors, so
-they are requirements and not confirmations. **Calibration** (1,723 level-2 candidates across six play
-styles, scored at the pass where each first became eligible): the share that play went on to confirm (recent
-≥ 24 after 24 further evidence-bearing scenes) was **37, 59, 64, 73, 91 and 97 in 100** for scores 0–5; the
-share that were a designed pillar of the play style was 21, 41, 76, 72, 98 and 100 in 100. The score is
-monotone in both, which is what "calibrated" means here.
+they are requirements and not confirmations. **Calibration** (1,711 level-2 candidates across six play
+styles, scored at the pass where each first became eligible; conflicts on the advisory offsets
+[revision: I-034]): the share that play went on to confirm (recent ≥ 24 after 24 further evidence-bearing
+scenes) was **38, 46, 65, 68, 90 and 91 in 100** for scores 0–5; the share that were a designed pillar of the
+play style was 23, 45, 83, 89, 98 and 98 in 100. The score is monotone in both, which is what "calibrated"
+means here.
 
 **04.4.3 The policy.** `[D]` First match wins (SG-10):
 
@@ -1487,25 +1509,28 @@ on the second.)
 | V13 The Interested Power | offer (dark, pact, Devourer, turn) | crisis, reflection, arrival | the candidate is of those kinds | bane (oath for a pact) | no |
 | V14 The Fraying | revocation | scene start, reflection | a Fraying stage was entered | — | no |
 
-**T-04-8 Simulation results.** `[D]` Scratchpad `recog04.py` (rules as written; 03's evidence model and its
-play assumptions: 5 scenes per session, opposition from the PC's band to band + 2), `feat04.py`, `wren04.py`;
-copied with full output to `rules/_process/simulation/`. 200 seeds unless noted; p10 / median / p90.
+**T-04-8 Simulation results.** `[D]` `04-recog04.py` (rules as written; 03's evidence model and its play
+assumptions: 5 scenes per session; conflicts at the PC's power band shifted by the advisory word, DL-00-05:
+easy −1 25%, fair 0 40%, hard +1 30%, lethal +2 5%; site scenes at band to band + 1, social scenes at band to
+band + 2), `04-feat04.py`, `04-wren04.py`, `04-recog-parity.py`; all in `rules/_process/simulation/` with their
+outputs. 200 seeds unless noted; p10 / median / p90 [revision: I-034; I-089].
 
 | Id | Question | Result |
 |---|---|---|
 | R1 | Sessions to each tier, four play styles | the table in 04.3.5 |
-| R2 | A level-3 key (Lockbreaker) | tiers at 3/4/6 · 8/10/12 · 18/22/37 · 34/38/46 · 58/—/— |
-| R3 | Who is offered the branch calling Warrior at tier 1, within 30 sessions | mixed-weapons fighter 200 of 200 (session 3/3/4) · bow-focused archer 34 of 200 · single-track swordsman 1 of 200. Largest child's share of `martial` at session 10: 0.41–0.55 mixed, 0.71–0.85 archer, 0.81–0.91 swordsman |
-| R4 | Hybrid offered within 20 sessions, by mix of two branches | 100/0: 0 · 95/5: 0 · 90/10: 9 · 80/20: 173 · 70/30: 200 · 60/40: 200 · 50/50: 200 (of 200). Second-pillar archer (stealth in 25% of scenes): 65 of 200. Deliberate hybrid's tiers: 2/3/4 · 5/6/8 · 11/13/14 · 21/23/25 · 36/39/42 |
+| R2 | A level-3 key (Lockbreaker) | tiers at 3/4/6 · 7/9/12 · 15/19/35 · 27/32/44 · 54/—/— |
+| R3 | Who is offered the branch calling Warrior at tier 1, within 30 sessions | mixed-weapons fighter 200 of 200 (session 3/4/5) · bow-focused archer 46 of 200 · single-track swordsman 4 of 200. Largest child's share of `martial` at session 10 (p10–p90): 0.43–0.59 mixed, 0.67–0.85 archer, 0.77–0.93 swordsman |
+| R4 | Hybrid offered within 20 sessions, by mix of two branches | 100/0: 0 · 95/5: 0 · 90/10: 24 · 80/20: 193 · 70/30: 200 · 60/40: 200 · 50/50: 200 (of 200). Second-pillar archer (stealth in 25% of scenes): 146 of 200. Deliberate hybrid's tiers: 2/3/4 · 5/6/8 · 10/11/13 · 17/19/22 · 33/36/39 |
 | R5 | The rat grinder, 20 sessions | recognized in 0 of 200 (weighted 340, counted 100, quality events 0) |
-| R6 | A whole character accepting everything (100 seeds) | archer: first recognition at session 3/4/5 (Archer in 91 of 100); callings held at sessions 5 / 10 / 20 / 40: 1 / 3 / 3 / 3; highest tier at 10 / 20 / 40 / 60: 2 / 3 / 4 / 5. Three-branch generalist: first recognition at 3/5/7; highest tier 1 / 2 / 3 / 4 |
-| R7 | Calibration of confidence (1,723 level-2 candidates, nothing accepted) | would be confirmed, by score 0–5: 37, 59, 64, 73, 91, 97 in 100. By policy: grant 91, offer 74, abstain 38 in 100. A designed pillar of the play style: grant 98, offer 74, abstain 22 in 100 |
-| R8 | A tier-2 grant, then a turn to fire sorcery | tier 2 lapsed in 181 of 199 runs when the archer stopped at once; 65 of 199 after one more session of archery; 9 of 199 after two; 0 of 199 when she never stopped. The new calling was first recognized 2 / 3 / 5 sessions after the turn |
-| R9 | Counted against weighted at a focus node, session 10 | archery 50 vs 237 (0.21) · thievery 42 vs 220 (0.19) · persuasion 27 vs 176 (0.15) |
-| R11 | Non-combat parity (`04-recog-parity.py`, revision I-003) | medians to tier 3 / 5: archer 19 / 51; envoy 18 / 46; smith 18 / 45; scholar 17 / 46 (earlier rules: smith never past tier 2) |
-| R12 | Parity in seeded worlds (`04-recog-parity.py`, I-083 section; revision C) | medians to tier 3 / 5, confirmed band: archer 20 / 52; envoy 19 / 49; smith 23 / 48; scholar 19 / 49; old seed: envoy and scholar never reach tier 5 |
-| R12 | Counted share measured (`03-counted-yield.py` on 06's engine; parity R9; revision I-004) | fighter bands 1–5: 0.11 / 0.15 / 0.22 / 0.23 / 0.33 without Focus, 0.26–0.44 pushing; contests: social 0.31, craft 0.76, lore 0.31 (medians) |
+| R6 | A whole character accepting everything (100 seeds) | archer: first recognition at session 3/5/7 (Archer in 89 of 100); callings held at sessions 5 / 10 / 20 / 40: 1 / 3 / 3 / 3; highest tier at 10 / 20 / 40 / 60: 2 / 3 / 4 / 5. Swordsman: 2 / 4 / 5 / 5. Three-branch generalist: first recognition at 4/6/8; highest tier 1 / 2 / 3 / 4 |
+| R7 | Calibration of confidence (1,711 level-2 candidates, nothing accepted) | would be confirmed, by score 0–5: 38, 46, 65, 68, 90, 91 in 100. By policy: grant 90, offer 70, abstain 38 in 100. A designed pillar of the play style: grant 98, offer 81, abstain 25 in 100 |
+| R8 | A tier-2 grant, then a turn to fire sorcery | tier 2 lapsed in 172 of 179 runs when the archer stopped at once; 67 of 179 after one more session of archery; 9 of 179 after two; 0 of 179 when she never stopped. The new calling was first recognized 2 / 4 / 5 sessions after the turn |
+| R9 | Counted against weighted at a focus node, session 10 | archery 40 vs 182 (0.22) · thievery 40 vs 220 (0.18) · persuasion 26 vs 174 (0.15) |
+| R11 | Non-combat parity (`04-recog-parity.py`, revision I-003) | medians to tier 3 / 5: archer 15 / 47; envoy 14 / 42; smith 14 / 40; scholar 14 / 42 (earlier rules: smith never past tier 2) |
+| R13 | Parity in seeded worlds (`04-recog-parity.py`, I-083 section; revision C) | medians to tier 3 / 4 / 5, confirmed band: archer 16 / 28 / 48; envoy 16 / 27 / 45; smith 17 / 27 / 44; scholar 16 / 27 / 45; old seed: envoy and scholar never reach tier 5 |
+| R12 | Counted share measured (`03-counted-yield.py` on 06's engine; parity R9; revision I-004) | fighter bands 1–5: 0.11 / 0.15 / 0.22 / 0.23 / 0.33 without Focus, 0.26–0.44 pushing; contests: social 0.30, craft 0.73, lore 0.29 (medians) |
 | R10 | Sessions for one conduct axis to reach 16 / 40 / 80 / 140 / 220 positive points | costly choice taken in 60% of fights: 5 / 12 / 24 / 42 / 65 (medians) · in 30%: 10 / 24 / 47 / 83 / — · in 15%: 18 / 48 / — / — / — |
+| R14 | Which requirement is met last as the focused archer enters each tier (`04-binding-check.py`, revision I-089) | ladder before I-089: the weighted total in 175 / 168 / 186 / 200 / 103 of the runs reaching tiers 1–5; current ladder: tier 1 weighted 175, tier 2 the since-floor of quality events 128 (weighted 58), tiers 3–5 weighted 145 / 194 / 183 (crises 37 at tier 3) |
 | Wren | One continuous character, seed 7 | the long example WE-04-1 |
 
 **T-04-9 `gen_absorb.yaml`.** `[D]` Optional keys added to the gen_* schema: `requires`, `trigger`,
@@ -1567,30 +1592,31 @@ of Souls*; Ambusher: *The Murderer*; Merchant: *The Profiteer*).
 
 **Wren** is 00's continuous character: Agility +3, Might +1, Wits +2; competence `deed` +1 (floor),
 `deed.martial.archery` +2 and `deed.wilds.tracking` +2 from a forester's origin; unrecognized, so
-`power_band` 1. WE-04-1 follows her through one simulated campaign (`wren04.py`, seed 7: an archer who
-tracks and scouts). **Every tally below is that run's value, read through 03.9's functions**; the fiction
+`power_band` 1. WE-04-1 follows her through one simulated campaign (`04-wren04.py`, seed 7: an archer who
+tracks and scouts; re-traced on the current ladder and the advisory-offset conflicts [revision: I-034; I-089]). **Every tally below is that run's value, read through 03.9's functions**; the fiction
 around the numbers, and every ability, NPC and faction named, is illustrative *(ch.05, 11, 12, 13 own them)*.
 The player never sees a number in this example except in the `[CHOICE]` and `[RESULT]` blocks, which show
 only shown state.
 
 ### WE-04-1 One character from the first name to a consolidation and beyond
 
-**Session 4, a long rest at the Ashwood waystation (reflection). The first recognition: a grant.**
+**Session 2, a long rest at the Ashwood waystation (reflection). The first recognition: a grant.**
 03's digest marks `deed.martial.archery` dirty. PR-04-1 step 4 evaluates `call.archer` (`req.narrow.1`):
 
 | Requirement | Needs | Wren | |
 |---|---|---|---|
-| weighted | ≥ 80 | 85 | ✓ |
-| counted | ≥ 8 | 18 (`cnt.defeat` and `cnt.focus`) | ✓ |
-| quality events | ≥ 6 | 15 (3 challenging, 12 difficult; 3 routine do not count) | ✓ |
-| distinct scenes | ≥ 5 | 9 | ✓ |
+| weighted | ≥ 80 | 84 | ✓ |
+| counted | ≥ 8 | 12 (`cnt.defeat` and `cnt.focus`) | ✓ |
+| quality events | ≥ 6 | 11 (2 challenging, 9 difficult; 4 routine do not count) | ✓ |
+| distinct scenes | ≥ 5 | 8 | ✓ |
 
-Eligible. Confidence (her `recent` at the key is 64; `weighted(deed)` is 177):
-K1 Current `2·64 = 128 ≥ 80` ✓ · K2 Rising `128 ≥ 85` ✓ · K3 Central `5·85 = 425 ≥ 177` ✓ · K4 Leading
-(archery is her largest level-2 node) ✓ · K5 Margin `4·85 = 340 ≥ 400` ✗. **Confidence 4.** Currency floor
-`4·64 ≥ 80` ✓. Policy (04.4.3): tier 1, narrow, no oath, a free seat, no lineage held, never declined, and the
+Eligible. Confidence (her `recent` at the key is 84, all of it; `weighted(deed)` is 104):
+K1 Current `2·84 = 168 ≥ 80` ✓ · K2 Rising `168 ≥ 84` ✓ · K3 Central `5·84 = 420 ≥ 104` ✓ · K4 Leading
+(archery is her largest level-2 node) ✓ · K5 Margin `4·84 = 336 ≥ 400` ✗. **Confidence 4.** Currency floor
+`4·84 ≥ 80` ✓. Policy (04.4.3): tier 1, narrow, no oath, a free seat, no lineage held, never declined, and the
 field is clear (no other `martial` candidate is eligible; the martial × wilds hybrid is far from it) →
-**grant**.
+**grant**. Session 2 is early for the targets of 04.3.5 (3–5); one seed's luck, two fights at the edge of her
+reach in her first ten scenes.
 
 Vehicle (PR-04-3): the family's grant list is V8, V1, V7. Two of her shots at the ford were seen by caravan
 guards who lived (`public(wren, deed.martial.archery, fac.caravaners_compact).events = 3`, one noteworthy):
@@ -1607,56 +1633,19 @@ picks V1.
 > `[CHOICE] A pick for Archer — (a) Pinning Shot: <literal text> · (b) Steady Draw: <literal text> ·
 > (c) Quarry's Mark: <literal text> · (d) keep the pick for later`
 
-State: `callings: [{call.archer, tier 1, provisional, crystallized_by: ev.000188 (the wyvern shot), vehicle:
+State: `callings: [{call.archer, tier 1, provisional, crystallized_by: ev.000052 (the wyvern shot), vehicle:
 veh.V1}]`; competence `deed.martial.archery` +3 (her origin's +2 is now the lower entry); `lic.call.mark`;
 `recognition_event {kind: first, policy: grant, vehicle: veh.V1, witnesses: [the cook], scope:
 [fac.caravaners_compact, loc.ashwood_waystation], epithet_seed: "Shot a wyvern through the eye at the ford
 while the wagons crossed"}`. Ch.11 owns what becomes of "Ford-arrow". The three pick candidates are the
 eligible abilities whose first tags she has the most evidence on (04.8.4); she takes two over two prompts.
 
-**Session 7, a camp in the deepwood. A broad offer, deferred; then a narrow one beside it.** At a
-reflection after scene 32, `call.wayfarer` (key `deed.wilds`, broad) becomes eligible: weighted 123 ≥ 120,
-counted 19 ≥ 12, quality events 16, scenes 15, three level-2 children at 30 or more, the largest (tracking)
-under two-thirds of the branch. Confidence 4. A branch calling is never granted (04.4.3) → **offer**. No one
-is within a watch of her camp, so V2 and V3 fail their requirements and the engine returns [V7].
-
-> You wake before the fire has died, knowing which way the wind will turn by noon. You did not always know
-> such things.
->
-> `[CHOICE] Recognition — The Reflection at Rest: Wayfarer, tier 1 (Called)`
-> `  (a) Accept — you gain: competence across the wilds +2 · training in every craft of the wilds: trained ·
->      The Mark of the Calling · 2 picks · price: a seat (2 of 3 deed seats used) and the calling's shadow ·
->      provisional until a season's turn or 24 scenes of deeds`
-> `  (b) Decline — nothing changes; not raised again until you have lived more of it (you may ask at any rest)`
-> `  (c) Defer — the offer stands; it returns at each rest`
-> `  If you move on without choosing: (c) defer`
-
-The player says "not yet". The offer becomes a standing offer. Three scenes later, at the session's last
-rest, `call.tracker` (key `deed.wilds.tracking`) is eligible: weighted 80, counted 14, quality events 6
-(exactly the floor), scenes 9; confidence 4 (K5 fails: `4·80 = 320 < 400`). It would be a grant, except the
-field is **not clear**: another candidate keyed in `deed.wilds` is open. So it is an **offer**, and because
-Wayfarer and Tracker share a lineage (04.8.3) they are put in one block (04.7.6). She is back at the
-waystation, where the old trapper Odo Kettle (`npc.odo_kettle`, depth recurring, role
-`deed.wilds.tracking.trailing`, standing +1) has watched her read sign for a week: V2's requirements hold.
-
-> Odo turns the snare over in his hands. "You found the doe's bed from one bent stem. I've men who've trapped
-> twenty winters who'd have walked past it. I could show you the rest. It'd cost you a winter pelt, and your
-> patience."
->
-> `[CHOICE] Recognition — more than one road is open in the wilds (they share a seat: choose one, or neither)`
-> `  (1) The Mentor's Acknowledgement: Tracker, tier 1 — tracking +3 · training in tracking: trained ·
->      2 picks · price: a bond to Odo Kettle (one winter pelt by the season's end)`
-> `  (2) The Reflection at Rest: Wayfarer, tier 1 — the wilds +2 (all of it) · 2 picks · price: none beyond the seat`
-> `  Accept by number · decline by number · anything unanswered is deferred`
-
-She accepts (1). Tracker, tier 1, provisional; a commitment of kind bond is written. The Wayfarer offer is
-**withdrawn** (one seat per lineage); it can return later only as a *broaden* fork. Seats: 2 of 3.
-
 **Session 9. Tier 2 of Archer, voiced by an order's letter.** At a reflection after scene 42 the Archer's
-next tier is ready (`req.narrow.2`): weighted 212 ≥ 200; counted 49 ≥ 20; **since** tier 1: quality events
-25 ≥ 10, scenes 12 ≥ 8, great deeds at band 2 or higher 25 ≥ 5 (15 of them successes). No crisis completed
-it, so 04.5.8 (c) applies: the next reflection. `institutions_matching(deed.martial, region.ashwood)` returns
-the Caravaners' Compact at status +1, which has heard of her (public events 5): V3's requirements hold.
+next tier is ready (`req.narrow.2`): weighted 181 ≥ 160; counted 43 ≥ 16; **since** tier 1: quality events
+11 ≥ 10, scenes 14 ≥ 8, great deeds at band 2 or higher 11 ≥ 5 (8 of them successes). The since-floor of
+quality events is what came last: her weight passed 160 a session earlier. No crisis completed it, so 04.5.8
+(c) applies: the next reflection. `institutions_matching(deed.martial, region.ashwood)` returns the
+Caravaners' Compact at status +1, which has heard of her (public events 5): V3's requirements hold.
 
 > A letter has been waiting at the waystation three days, sealed with a wheel in blue wax. The Compact
 > wants an outrider for the Salt Road before the autumn caravans; it names a wage, and it names you.
@@ -1671,15 +1660,40 @@ the Caravaners' Compact at status +1, which has heard of her (public events 5): 
 
 She accepts. The **rank** of outrider and its obligations are ch.11's (`recognition_event.institution`); had
 she declined the post, the tier would still be hers at the next rest by V7, at no price beyond the seat
-(04.11.1). Twelve evidence-bearing scenes after each grant, a reflection confirms it: her archery
-since tier 1 passed 24 within a session, and her tracking since its grant by session 10; with Archer 2 confirmed,
-`power_band` is 2 [revision: I-037].
+(04.11.1). Twelve evidence-bearing scenes after a grant, a reflection confirms it (04.8.2); with Archer 2
+confirmed, `power_band` is 2 [revision: I-037].
 
-**Session 15, the ford again: a tier seized in a crisis.** In scene 74 she looses at a drake under a lethal
-frame while Staggered. The shot's evidence event is flagged `crisis`. `h.04.crisis_check` runs at
-`beat_end`: the Archer's tier 3 was `on_the_threshold` at the last reflection; with pending evidence
-included, weighted is 450 ≥ 440, counted 101 ≥ 44, and since tier 2: quality events 52, scenes 21, great
-deeds at band 3 or higher 41 (23 successes), crises 13 ≥ 2. Eligible → `trg.04.crisis_offer` → V5.
+**Session 14. Tracker: eligible, and an abstain.** After scene 70, `call.tracker` (key `deed.wilds.tracking`)
+is eligible: weighted 84 ≥ 80, counted 11 ≥ 8, quality events 12 (5 challenging), scenes 13. Its confidence is
+**0**: recent 30 (K1 `2·30 = 60 < 80`; K2 `60 < 84`), K3 `5·84 = 420 < 618` (her deeds are mostly archery), K4
+not among her three strongest level-2 nodes, K5 `4·84 = 336 < 400`. The currency floor holds (`4·30 = 120 ≥
+80`), so it is not stale, only thin → **abstain** (04.4.3 row 2). Nothing is voiced; her Leanings view shows
+"tracking: on the threshold". Four reflections abstain the same way.
+
+**Session 16. An offer by a mentor, then a tier seized in a crisis.** After scene 77 tracking weighs 101
+(recent 41, quality events 16, scenes 15): K1 `82 ≥ 80` ✓ and K5 `404 ≥ 400` ✓, the rest still fail →
+**confidence 2**, under the grant line → **offer**. She is back at the waystation, where the old trapper Odo
+Kettle (`npc.odo_kettle`, depth recurring, role `deed.wilds.tracking.trailing`, standing +1) has watched her
+read sign for a week: V2's requirements hold.
+
+> Odo turns the snare over in his hands. "You found the doe's bed from one bent stem. I've men who've trapped
+> twenty winters who'd have walked past it. I could show you the rest. It'd cost you a winter pelt, and your
+> patience."
+>
+> `[CHOICE] Recognition — The Mentor's Acknowledgement: Tracker, tier 1 (Called)`
+> `  (a) Accept — tracking +3 · training in tracking: trained · The Mark of the Calling · 2 picks ·
+>      price: a seat (2 of 3 deed seats used), the calling's shadow and a bond to Odo Kettle (one winter pelt
+>      by the season's end) · provisional`
+> `  (b) Decline · (c) Defer`
+
+She accepts. Tracker, tier 1, provisional; a commitment of kind bond is written. Seats: 2 of 3.
+
+Three scenes later, in scene 80, she looses at raiders on the Salt Road under a lethal frame. The scene's
+shots are flagged `crisis`. `h.04.crisis_check` runs at `beat_end`: the Archer's tier 3 was
+`on_the_threshold` at the last reflection, its weight already past the line; with the pending evidence
+included the set is complete (at the scene's close: weighted 384 ≥ 340, counted 91 ≥ 34, and since tier 2:
+quality events 35, scenes 21, great deeds at band 3 or higher 10 with 6 successes, crises 4 ≥ 2). This
+scene's crisis is what completed it → `trg.04.crisis_offer` → V5.
 
 > The string is against your cheek and the world has gone very quiet. Your hands are steady. They have
 > never been this steady.
@@ -1691,14 +1705,28 @@ deeds at band 3 or higher 41 (23 successes), crises 13 ≥ 2. Eligible → `trg.
 > `  (b) Refuse it · (c) Let it pass — it returns at your next rest or your next such moment`
 
 She seizes it. The pick's candidates rank first the abilities whose first tag matches the crisis deed
-(`deed.martial.archery.bow`). `power_band` 3; picks held: Archer 4, Tracker 2.
+(`deed.martial.archery.bow`). `power_band` 3 once confirmed; picks held: Archer 4, Tracker 2.
 
-**Session 17. The hybrid surfaces as a consolidation, and she waits.** After scene 85,
-`cooccurrence(wren, deed.martial, deed.wilds)` gives weighted 591 and 240, `min` 240 ≥ 60, `balance`
-240/591 (`5·240 = 1,200 ≥ 2·591 = 1,182` ✓, by eighteen points), `joint_scenes` 5 ≥ 5, `recent_min` 53 ≥ 15,
-counted 120 and 37. `call.ranger` is eligible, and she holds a calling under each of its branches: a
-**consolidation** offer (04.8.5). The tier would be the highest not above 3 that `min` supports: 240 meets
-tier 2's 150 and not tier 3's 330 → **Ranger, tier 2**. Ch.12's lead engine places a principal who embodies
+**Sessions 18–19. A broaden fork, and a decline.** After scene 89 `call.wayfarer` (key `deed.wilds`, broad)
+is eligible: weighted 203 ≥ 120, counted 28 ≥ 12, quality events 39, scenes 33, three level-2 children at 30
+or more, the largest under two-thirds of the branch; confidence 3. She holds Tracker, in its lineage, so it
+comes as a **broaden fork** (04.8.3, 04.8.6: Wayfarer in place of Tracker), offered by V7; she declines it.
+After scene 95, `call.shadow` (key `deed.guile.stealth`; she scouts by stealth in about a quarter of her
+scenes) is eligible: weighted 115, counted 8, quality events 20, scenes 16. Only K5 holds (`4·115 = 460 ≥
+400`; recent 31, `5·115 = 575 < 841`): confidence 1 → **offer**, by V7.
+
+> `[CHOICE] Recognition — The Reflection at Rest: Shadow, tier 1 (Called) … (b) Decline …`
+
+"I hide when I must. It is not what I am." **Decline**: recorded with `weighted_at_decline: 115`. The engine
+will not raise it again until 24 more evidence-bearing scenes have passed **and** weighted reaches 155; she
+may ask for it at any rest. No cost, and her stealth competence is unaffected (it has none beyond the floor).
+
+**Session 20. The hybrid surfaces as a consolidation, and she waits.** After scene 97,
+`cooccurrence(wren, deed.martial, deed.wilds)` gives weighted 565 and 227, `min` 227 ≥ 60, `balance`
+227/565 (`5·227 = 1,135 ≥ 2·565 = 1,130` ✓, by five points), `joint_scenes` 11 ≥ 5, `recent_min` 54 ≥ 15,
+counted 119 and 29. `call.ranger` is eligible, and she holds a calling under each of its branches: a
+**consolidation** offer (04.8.5). The tier would be the highest not above 3 that `min` supports: 227 meets
+tier 2's 120 and not tier 3's 255 → **Ranger, tier 2**. Ch.12's lead engine places a principal who embodies
 both roads; V12.
 
 > The warden who has shadowed the caravan since the hills steps out where you can see her, an unstrung
@@ -1717,26 +1745,13 @@ The player reads that the label would be tier 2 and defers: the wilds half is th
 *This is the engine declining to compute a winner for a mixed history* [C:P5]: Archer and Tracker stand, the
 named hybrid stands beside them, and the player chooses when.
 
-**Session 20. Abstain, then an offer one scene later, and a decline.** Wren scouts by stealth in about a
-quarter of her scenes. After scene 97, `call.shadow` (key `deed.guile.stealth`) is eligible: weighted 99,
-counted 9, quality events 14, scenes 14. Its confidence is **0**: recent 28 (`2·28 = 56 < 80`; `56 < 99`),
-`5·99 = 495 < 966`, not among her three strongest level-2 nodes, `4·99 = 396 < 400`. The currency floor holds
-(`4·28 = 112 ≥ 80`), so it is not stale, only thin → **abstain** (04.4.3 row 2). Nothing is voiced; her
-Leanings view shows "stealth: on the threshold". Two scenes later weighted is 103: K5 holds (`412 ≥ 400`),
-confidence 1 → **offer**, by V7.
+**Session 23.** Tracker's tier 2 is ready after scene 112 (weighted 162 ≥ 160; counted 17 ≥ 16; since tier 1:
+quality events 14, all challenging, scenes 11, great deeds at band 2 or higher 14 with 1 success: she tracks
+what hunts at band 3 and 4 now) and Odo voices it (V2, `return_to_person`). Accepted.
 
-> `[CHOICE] Recognition — The Reflection at Rest: Shadow, tier 1 (Called) … (b) Decline …`
-
-"I hide when I must. It is not what I am." **Decline**: recorded with `weighted_at_decline: 103`. The engine
-will not raise it again until 24 more evidence-bearing scenes have passed **and** weighted reaches 143; she
-may ask for it at any rest. No cost, and her stealth competence is unaffected (it has none beyond the floor).
-
-**Session 25.** Tracker's tier 2 is ready (weighted 201; counted 22; since tier 1: quality events 24, scenes
-18, great deeds at band 2 or higher 24 with 5 successes) and Odo voices it (V2, `return_to_person`). Accepted.
-
-**The season turns after session 26 (`h.04.season_consolidation`).** PR-04-8: (1) the Tracker's tier 2 has
-only 5 evidence-bearing scenes behind it, so it is not yet tested. (3) The standing Ranger offer is
-re-presented; now `martial` 770, `wilds` 403, `min` 403 ≥ 330 → **Ranger, tier 3**. She accepts.
+**The season turns after session 26 (`h.04.season_consolidation`).** PR-04-8: (1) the provisional tests run as
+at any reflection (Tracker's tier 2 has 18 evidence-bearing scenes behind it). (3) The standing Ranger offer is
+re-presented; now `martial` 695, `wilds` 336, `min` 336 ≥ 255 → **Ranger, tier 3**. She accepts.
 
 | | Before | After |
 |---|---|---|
@@ -1752,19 +1767,21 @@ two ladders and two Focus triggers are retired; nothing she could do yesterday i
 Ranger picks are pre-paid; and two seats are free for whatever she becomes next (VI: structural retirement,
 written as a transformation).
 
-**Session 37. Tier 4, and the one attribute increase.** After scene 182: `min` = 605 ≥ 600 (martial 998,
-wilds 605); counted 194 and 74 ≥ 60 each; since the consolidation: quality events 57 + 49, scenes 21 and 30,
-great deeds at band 4 or higher 47 + 38 (18 successes), crises 14 + 2 ≥ 3, contexts 10 + 7 ≥ 5. Offered at a
+**Session 34. Tier 4, and the one attribute increase.** After scene 170: `min` = 486 ≥ 480 (martial 894,
+wilds 486); counted 193 and 60 ≥ 48 each; since the consolidation: quality events 38 + 36, scenes 16 and 23,
+great deeds at band 4 or higher 16 + 26 (9 successes), crises 7 + 6 ≥ 3, contexts 9 + 7 ≥ 5. Offered at a
 rest by V11 (the old wardens' cairn, a place with `resonance: [deed.wilds, deed.martial.archery]`) and
 accepted: Master's Eye; training on her roads at expert; the tier's pick cancels one legacy pick (2 remain).
 The attribute increase waits for confirmation (04.8.2); twelve evidence-bearing scenes later the tier is
 confirmed and she raises **Agility +3 → +4**, the one increase of her life. `power_band` 4: ch.09's advisory
 now rates a T4 champion as a fair fight.
 
-**Sessions 38–60.** Tier 5 needs `min` 975; her wilds reach 907 by session 60. She does not become a Paragon
-in this campaign. Most characters do not (in the simulation, 165 of 200 focused archers reached tier 5 of a
-single narrow calling by session 60; a hybrid's median is session 39 only for evenly split play). The ladder
-has a top, and it is far away on purpose.
+**Sessions 35–60.** Tier 5 needs `min` 900 and 90 counted on **each** branch. By session 60 every
+since-field is long met (band-5 deeds 56 + 86, 14 of them successes; crises 27 + 23) and her wilds weigh 933,
+but their counted units are 87: three short, because a tracker's deeds tick few clocks. She does not become a Paragon in
+this campaign. Many characters never do: in the simulation 183 of 200 focused archers reach tier 5 of a single
+narrow calling by session 60, a deliberate 50/50 hybrid at a median 36, and a two-road life like hers
+lands near the end of a long campaign or past it. The ladder has a top, and it is far away on purpose.
 
 ### WE-04-2 Abstain, three ways
 
@@ -2222,7 +2239,7 @@ Each has a shipped default and a named test.
 
 | Id | Question | Default shipped | Named test |
 |---|---|---|---|
-| OEQ-04-1 | Do the thresholds give the intended pacing in real play, where scene mix and opposition differ from the model? | W 80 / 200 / 440 / 800 / 1,300 (narrow) and the other ladders; 04.3 | **T-04-PACE**: log the session of each recognition over three campaigns of 20+ sessions; target tier 1 at sessions 3–6, tier 2 at 8–12, tier 3 at 16–24; if outside, scale every W by one common factor (the since-requirements stay) |
+| OEQ-04-1 | Do the thresholds give the intended pacing in real play, where scene mix and opposition differ from the model? | W 80 / 160 / 340 / 640 / 1,200 (narrow; retuned for tiers 2–5 by revision I-089, DL-04-32) and the other ladders; 04.3 | **T-04-PACE**: log the session of each recognition over three campaigns of 20+ sessions; target tier 1 at sessions 3–6, tier 2 at 8–12, tier 3 at 16–24; if outside, scale every W by one common factor (the since-requirements stay) |
 | OEQ-04-2 | What do the counters actually yield, by pillar? | counted = W ÷ 10 (04.3.3) | **T-04-COUNT** (with 03's T-03-COUNT): counted ÷ weighted at each PC's top three nodes after 10 sessions; target 0.10 never binding for honest play in any pillar. **Measured** (revision I-004; T-04-8 R12): binds only a band-1, mob-only, no-Focus fighter, by one fight in eight; ÷ 10 kept (DL-04-27). Live-play test kept: lower the divisor if it delays any pillar's tier by more than one session |
 | OEQ-04-3 | Is confidence calibrated in live play as it is in simulation? | K1–K5; grant at 4+ (04.4.2–04.4.3) | **T-04-CALIB**: for every first-eligible candidate, record its score and whether the grant or accepted offer was later confirmed; target confirmation ≥ 85% at scores 4–5 and a rate that rises with the score; if grants confirm under 80%, raise the grant cutoff to 5 |
 | OEQ-04-4 | Does the hybrid trigger separate deliberate mixing from incidental use? | min 60, balance 2/5, joint scenes 5 (04.2.4) | **T-04-HYB** (R3 G-1): in the same logs, classify each PC's play by hand as single-track, second-pillar or mixed; target no hybrid offer for single-track, an offer for every mixed PC by session 6 |

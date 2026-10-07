@@ -44,9 +44,9 @@ Range 0.11-0.44. 04.3.3 requires counted >= weighted threshold / 10 (a ratio of 
 
 Extra fights the counted requirement costs for the step into tier t at band t (narrow calling; worst shape):
   tier 1: no Focus: 1 extra of 8 (T1 mob of 4); push: 0 extra of 9 (T1 mob of 4)
-  tier 2: no Focus: 0 extra of 14 (T1 mob of 6); push: 0 extra of 16 (T1 mob of 6)
-  tier 3: no Focus: 0 extra of 20 (T2 mob of 4); push: 0 extra of 22 (T2 mob of 4)
-  tier 4: no Focus: 0 extra of 28 (T3 mob of 4); push: 0 extra of 29 (T3 mob of 4)
-  tier 5: no Focus: 0 extra of 47 (T3 mob of 6); push: 0 extra of 51 (T3 mob of 6)
+  tier 2: no Focus: 0 extra of 9 (T1 mob of 6); push: 0 extra of 11 (T1 mob of 6)
+  tier 3: no Focus: 0 extra of 15 (T2 mob of 4); push: 0 extra of 17 (T2 mob of 4)
+  tier 4: no Focus: 0 extra of 23 (T3 mob of 4); push: 0 extra of 24 (T3 mob of 4)
+  tier 5: no Focus: 0 extra of 53 (T3 mob of 6); push: 0 extra of 57 (T3 mob of 6)
 
 Verdict: the divisor 10 binds only the case shown (worst case 1 extra fight, at the step named above).

@@ -938,7 +938,7 @@ boundary 04.8.7), so the rules are calibrated against a **reference rate** (`pac
 adventure is 2–4 sessions, each spending about 2–10 world days; after each adventure the player takes 1–6
 weeks of downtime (15.10); a season-long downtime once a year is the player's option. That is about **two
 world weeks a session** (1.9 without a long downtime, 2.4 with one; `12-time-pacing.py`, seed 85), so a
-career to tier 5 runs about **2–3 world years** (archer median 2.1 / 2.6; swordsman 1.3 / 1.5), one season
+career to tier 5 runs about **2–3 world years** (archer median 2.0 / 2.5; swordsman 1.3 / 1.5 [revision: I-089]), one season
 passes every 5–7 sessions (an ally grows at most a band in that span, and a PC's tier takes 1–3 seasons),
 and 11-world-sim's thread throughput (19 completed in 104 weeks) gives 2.3–2.8 sessions a thread, the
 adventure length assumed. **Aging is a long-campaign rule by design**: within 60 sessions it reaches only a
@@ -1205,6 +1205,15 @@ and `member_of` (its faction ties: none unless its role or a tie roll names one)
 ch.11's World Turn read (11.1.2) [integration: IR ch.11 to 12]. When a recognition offer staged by V2 (a mentor)
 or V12 needs a person the cast does not hold, the lead engine places one with the role tags the vehicle names
 (04.7) [integration: IR ch.04 to 12].
+
+**Band** `[D]` [revision: I-089]. Every generated NPC is also written with `band` (1–5), the own band a
+contest reads (03.4.3). At walk-on and recurring depth it is **1**. On promotion to **principal** it becomes
+the `band` of its home's area (the area record, 12.16.8: a haven's area is band 1, a ring-4 area band 4), and
+it never drops on a later promotion or move. A record that already carries a band keeps the higher of the
+two: an adversary line's threat band (09), an ally's `own_band` (16.1.2), a seeded record's band (12.16.11).
+A faction's tier is never written into the field: a head or officer lends it only in a contest on the
+faction's matter (03.4.3). So a principal met in the far rings is opposition of the far rings, and a clerk
+there is not; no band is chosen.
 
 **The pronoun rule.** Gender and pronouns are rolled at walk-on because narration needs them immediately —
 the project's own probe introduced an unearned pronoun that its self-assessment missed [C:P13]. A

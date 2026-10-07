@@ -45,7 +45,8 @@ his level as a fighter does, and the world limits what he finds. Rule sets:
              (one party, case, research project or work; 04.3.4, I-083).
   W-NEW-NOPOWERS -- W-NEW's contest rules in the old seed: the powers are what lifts the stall.
 In this section every style, the archer included, reads power band from CONFIRMED tiers (I-037: a tier counts
-12 evidence-bearing scenes after its grant). A craft project persists for 2-4 craft scenes and is one opposition.
+12 evidence-bearing scenes after its grant). A craft project persists for 2-4 craft scenes and is one opposition
+in each scene worked on it (revision I-089: was one opposition for the whole project).
 A "farming" envoy (one contest scene in three at the highest band the rules grant, at a DC of power band + 1) in a world
 with an added tier-5 faction whose door-warden
 (own band 1, not binding) is on offer measures the I-039 exploit under W-OLD and W-NEW.
@@ -248,7 +249,9 @@ def run(style, rules, seed, sessions, eng_out=None):
                             tid += 1
                             project = ['work%d' % tid, rng.randint(2, 4), tb]
                         project[1] -= 1
-                        opp, cband = project[0], project[2]
+                        # [revision: I-089] a work is one opposition per scene worked on it (04.3.4, 08.6.4): its
+                        # clocks bound its steps as an encounter bounds a fight's; was one opposition for the whole project
+                        opp, cband = '%s@%d' % (project[0], scene), project[2]
                     else:
                         tb_cap[0] = band + 2
                         opp, cband, dcband = face(rng, world, rules, tb, style)

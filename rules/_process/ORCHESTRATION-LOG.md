@@ -386,3 +386,8 @@ Resolved all 12 rows: I-038 (Oracle lever cap; sim shows +3.7 down to +0.8 per r
 ## Revision C2a returned: `revision-C2a-report.md`
 - Resolved I-037 (power_band counts confirmed tiers only), I-039 (faction tier lent only through someone with authority; contest band capped at power_band + 2), I-083 (the seed places band-4/5 NPCs; parity sim tier 5 at session 48–49 vs the archer's 52), I-063 and I-064.
 - I-034 handed off. New row I-089 (pacing targets missed after the fixes; NPCs generated on demand have no band). Both go to C2b.
+
+## Revision C2b returned: `revision-C2b-report.md`
+- Resolved I-089: thresholds retuned to 160/340/640/1200 and targets kept; archer tiers at sessions 5/10/18/32/54; parity within ±20%, keeping crafted works at one opposition per scene.
+- Resolved I-034 (pacing tables refreshed) and I-047 (training competence cap).
+- I-087 partial: 43 level-2 nodes lack tier-4/5 abilities. Authoring them goes to C2c.

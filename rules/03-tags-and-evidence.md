@@ -360,7 +360,8 @@ no one else. NPC and adversary deeds are never evidence. Their reputations are 1
 authored [DL-03-20].
 
 **03.2.8 Backstory evidence.** `[D]` A character has a past before play. An origin (02) may declare
-`backstory: [tag]` with at most **three** deed tags at level 2 or 3. At creation the engine writes one settled
+`backstory: [tag]` with at most **three** deed tags at level 2 or 3, each a different tag (one event per tag; so
+11.13.10's banked tags) [revision: I-087]. At creation the engine writes one settled
 event per tag with `basis: origin`, **24 points** (one median session's yield at a focus node, T-03-10),
 quality recorded as difficult, band 1, no witnesses, and a deed line taken from the origin's text ("Grew up
 hunting the Ashwood with her mother's bow"). These events sit **before** the evidence-bearing list, so they
@@ -601,12 +602,13 @@ both. A tier-4 crystallization should be able to require a band-4 deed whatever 
   **type-tier** (08.6.1). In every contest the contest band is **at most the actor's `power_band` + 2**, the
   most a fight lends (lethal +2) [revision: I-039]: a novice who bargains with a duke does a band-3 deed, not a band-5
   one, as a novice who survives a dragon does. It is engine-read from those records, never chosen. The
-  record of the beat carries the contest's **opposition** (the party, case, research project or work), which
+  record of the beat carries the contest's **opposition** (the party, case, research project or work; a work's per scene, 04.3.4 [revision: I-089]), which
   04.3.4's great-deed count reads [revision: I-083]. *Why:* a deed's band is how great it is in the world, and a
   bargain struck with a duke or a blade made from dragon steel is a band-5 deed even when one exchange's DC
   is moderate; with the DC alone a smith's work could never rise above band 4 (wondrous work is Very hard)
   and the tier-5 great-deed requirement was closed to every crafter (`04-recog-parity.py`: tier 3 never
-  reached in 90 sessions; with this rule 18 and tier 5 at 45, beside the archer's 19 and 51).
+  reached in 90 sessions; with this rule 18 and tier 5 at 45, beside the archer's 19 and 51; on 04's current
+  ladder 14 and 40 beside 15 and 47, 04.3.5 [revision: I-089]).
 
 **03.4.4 Novelty and the context class.** `[D]` Each event's `context_class` is the first of:
 (a) the opposing entity's most specific `creature` tag, truncated to level 2 (`creature.undead.ravenous`);
@@ -785,12 +787,15 @@ settles.
 **03.7.3 Counted saturation.** `[D]` At settlement, counted units are capped per counter and per node exactly
 as in 03.5.2 (1st full, 2nd half, 3rd a quarter, rest 0, sorted by units). The same-target day cap of 03.5.4
 also applies (one counted defeat of one foe per day; a foe "defeated" twice by a yield and a re-escape counts
-once). The routine cap does not apply, because counted events carry no quality. *Measured yield* `[revision:
+once). The routine cap does not apply, because counted events carry no quality. Units written **outside a
+scene** (a downtime week's step, 15.10; a long project, 15.12; a Safe project included) settle by **day**: each
+day of the week they are written in is one settlement for this cap, so `cnt.progress` and `cnt.made` from one
+node are capped per counter, node and day exactly as a scene's are [revision: I-047]. *Measured yield* `[revision:
 I-004]` (`03-counted-yield.py`: chapter 06's conflict engine, 4,000 fights a row, this chapter's points and
 saturation applied to every beat, defeat, flight and push): per fight at the weapon node a fighter of band
 1–5 earns **1–4 counted units without Focus and 2–7 with pushes**, against 6–15 weighted points, a counted
 share of **0.11 / 0.15 / 0.22 / 0.23 / 0.33** at bands 1–5 without Focus and **0.26–0.44** when pushing. The
-social, craft and lore contests of 03.4.3 yield 0.31, 0.76 and 0.31 at the median (never below 0.24 at the
+social, craft and lore contests of 03.4.3 yield 0.30, 0.73 and 0.29 at the median (never below 0.24 at the
 tenth percentile; `04-recog-parity.py` R9). Integer halving makes a
 second band-1 defeat in one scene worth 0, which is why band 1 sits lowest; 04.3.3's divisor of 10 binds only
 a band-1 fighter who meets nothing but mobs and never spends Focus, and costs that one fighter one extra fight
@@ -1295,7 +1300,9 @@ an incidental branch **≈4–7**; root **≈45**. Branch balance against the ma
 hybrid. Counted units at the focus node: an estimated 6–9 per session (03.7.3; not simulated). *What this
 means for 04* (suggestions only; 04 owns the thresholds): a first specialist recognition at a level-2 key set
 near **weighted 80** lands at session 3–5 for focused play. Rising tiers near 200 and 450 land at about
-sessions 8 and 19, which gives the slowing curve the precedents show without any separate level number. A
+sessions 8 and 19, which gives the slowing curve the precedents show without any separate level number. (04
+adopted 80 / 200 / 440 and, once conflicts moved to the advisory offsets, retuned tiers 2–5 to 160 / 340 / 640 /
+1,200, 04.3.4 [revision: I-089].) A
 hybrid floor of `min ≥ 60` with `balance ≥ 1/3` admits the deliberate hybrid by session 2–5, rejects incidental
 play, and leaves the two-pillar character at the line for an offer.
 
@@ -1938,7 +1945,7 @@ Each has a shipped default and a named test.
 | OEQ-03-1 | Do the judged calls (conduct, secondaries, witnesses) still skew lenient under the citation rules? | 03.3.3, 03.1.6, 03.3.4 | **T-03-CALIB** (R4's T-R4-05): 60 narrated moments, half built as non-evidence, on the production model; target ≤ 10% false-positive conduct entries, 0 ungrounded secondaries accepted, and no change when tallies are hidden vs shown (they are always hidden in play) |
 | OEQ-03-2 | Can the DM classify level-3 deed tags reliably? | 270 level-3 tags; stop when unsure | **T-03-TAG**: 100 novel methods × 3 independent runs; target ≥ 90% same branch, ≥ 85% same level-2 tag, ≥ 70% same level-3 tag; sibling pairs confused more than 20% of the time get a sharper test or are merged |
 | OEQ-03-3 | Do the point steps give the intended yields in real play? | quality 2/4/6; stakes 0/2/4; +2 lethal, crit, novelty | **T-03-YIELD**: log settled points per session over 10 real sessions; target 15–35 per session at the player's focus level-2 node; if outside, 04 moves thresholds (the points stay) |
-| OEQ-03-4 | What do the counters actually yield? | units per T-03-7; measured (revision I-004): 1–4 counted units a fight without Focus, 2–7 pushing; counted share 0.11–0.33 / 0.26–0.44 by band; contests 0.31 / 0.76 / 0.31 (03.7.3) | **T-03-COUNT**: the same 10 sessions of live play; report units per counter per session; 04 re-checks its divisor against it |
+| OEQ-03-4 | What do the counters actually yield? | units per T-03-7; measured (revision I-004): 1–4 counted units a fight without Focus, 2–7 pushing; counted share 0.11–0.33 / 0.26–0.44 by band; contests 0.30 / 0.73 / 0.29 (03.7.3) | **T-03-COUNT**: the same 10 sessions of live play; report units per counter per session; 04 re-checks its divisor against it |
 | OEQ-03-5 | Is a 24-scene window (12 full, 12 half) the right recency? | 03.6.2 | **T-03-PIVOT**: three playtests with a deliberate change of style; target the new style's recent passing the old within 2–4 sessions, and no loss of recent across a downtime skip |
 | OEQ-03-6 | Does one routine event per node per day starve honestly routine trades (crafters, healers treating many patients)? | 03.5.3 | **T-03-ROUTINE**: in the same logs, the share of a crafter's or healer's eligible events removed by the cap; if above 60%, raise the cap to 2 per day for `deed.craft` and `deed.lore.medicine` |
 | OEQ-03-7 | Is working strain off at half rate felt as fair? | 03.8.3 | **T-03-STRAIN**: playtests with one grave act; sessions until strain 0 without atonement; target 4–8 sessions; ask the player whether the road back felt earned |

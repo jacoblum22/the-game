@@ -139,7 +139,7 @@ train_successor:
   requires: "a named candidate NPC present and willing (Warm or better); a deed tag at level 2 or 3 where the PC's competence is +3 or more"
   check: "d20 + the PC's base modifier on the tag vs Moderate (15), Safe"
   clock: {kind: progress, segments: 12, visibility: public, ticks: delivered_reach}
-  banks: "one tag per 4 ticks (the one taught most in that stretch), at most 3; the clock then closes"
+  banks: "one tag per 4 ticks (the one taught most in that stretch among tags not yet banked; none if only banked tags were taught), at most 3, each a different tag; the clock then closes (revision I-087)"
   used_only_if: "the candidate becomes the successor"
   lifecycle: provisional
   basis: ["11.13.10", "R6 D-03 (The One Ring's Raise an Heir)", "02.2.7 item 4", "03.2.8"]

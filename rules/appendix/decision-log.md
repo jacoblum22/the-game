@@ -1009,6 +1009,13 @@ Fragment for `appendix/decision-log.md`. Format: BRIEF §11. Simulation referenc
 - Serves: goal 1 (R1 #13: every calling has a real path in a generated world, not only in a modelled one).
 - Revisit if: T-04-CRISIS logs show a social or lore PC at tier 4 who cannot find a second band-5 party (more powers per region, or a new region earlier).
 
+### DL-04-32: Tiers 2–5 retuned to the pacing targets on the advisory-offset model; a work is one opposition per scene (revision I-034, I-089)
+- Decision: keep 04.3.5's targets (tier 1 at 3–5, tier 2 ≈ 9, tier 3 ≈ 18, tier 4 ≈ 32, tier 5 not before 50) and move the weighted thresholds of tiers 2–5: narrow 80 / **160 / 340 / 640 / 1,200** (was 200 / 440 / 800 / 1,300), fine and hybrid ×¾ (60 / 120 / 255 / 480 / 900), broad ×1½ (120 / 240 / 510 / 960 / 1,800); counted stays W ÷ 10 (8 / 16 / 34 / 64 / 120). Tier 1 and every since-field are unchanged. 04.3.4: a **work** counts as one opposition **per scene** worked on it (08.6.4); parties, cases and research projects stay one opposition each. 04.3.5, T-04-8 (R1–R14) and WE-04-1 re-traced from the seeded re-runs; `04-recog04.py`, `04-gen_data04.py`, `04-callings_header.yaml`, `callings.yaml`, `03-counted-yield.py`, `04-recog-parity.py` changed; `09-i005-check.py` prints both ladders.
+- Alternatives considered: restate the targets (rejected: 04's Design intent makes the targets the design, chosen before calibration from the precedents, R2 #2, and the thresholds the calibration, "scaled to this game's event rate by simulation and never copied", R3 G-2; the event rate is what DL-00-05 changed); scale every W by one factor, as OEQ-04-1's test proposes (rejected: the targets need ×0.77 at tier 3 and ×0.80 at tier 4 but only ×0.92 at tier 5, whose "not before 50" a common ×0.8 would breach); retune the since-fields (rejected: `04-binding-check.py` shows the weighted total met last at tiers 3–5 in 145–194 of 200 runs, so they do not bind; at tier 2 the quality floor binds but lowering it 10 → 8 moved the median by nothing); lower tier 1 to 70 (rejected: median 5 is inside the 3–5 window, and 80 is quoted by 03, 05, 11 and the examples); keep a work as one opposition for the whole project (rejected: with the faster ladder the smith's tier 3 in seeded worlds fell to 22 against the archer's 16, +38%, outside ±20%; a work's steps are bounded by its progress and spoilage clocks as a fight's by its encounter, so it cannot be farmed as an archive or a door-warden can).
+- Evidence: `04-recog04-output.txt` (200 seeds): archer 5 / 10 / 18 / 32 / 54, tier 5 within 60 in 183 of 200, p10 of tier 5 at 50 (was 5 / 12 / 23 / 40 / 60, 103 of 200); swordsman 3 / 7 / 12 / 20 / 34. `04-binding-check-output.txt`: requirement met last per tier, both ladders. `04-recog-parity-output.txt`: I-003 shape archer 15 / 47, envoy 14 / 42, smith 14 / 40, scholar 14 / 42 (all within 15%); seeded worlds (T3 / T4 / T5) archer 16 / 28 / 48, envoy 16 / 27 / 45, smith 17 / 27 / 44, scholar 16 / 27 / 45 (within 8%); the I-039 farming envoy still banks 0 band-4/5 deeds in ten sessions. `09-i005-check-output.txt`, `12-time-pacing-output.txt` (tier 5 at 2.0 / 2.5 world years), `03-counted-yield-output.txt` (the divisor still costs 0 extra fights at tiers 2–5), `04-wren04-output.txt` (WE-04-1).
+- Serves: goal 1 (a focused identity deepens at the intended pace: three recognitions of real capability inside a 32-session campaign, a top far away); C:P5.
+- Revisit if: T-04-PACE logs put tier 3 outside 16–24 or tier 5 before 50 for focused play (then retune W again; the since-fields stay).
+
 ## DL-05 — Abilities, Focus, and Magic
 
 Format per BRIEF §11. Citations per 00.1.6. Numbers consumed by other chapters are marked **[consumed]**.
@@ -1262,6 +1269,13 @@ Format per BRIEF §11. Citations per 00.1.6. Numbers consumed by other chapters 
 - Evidence: verification-2a ch.05 read; 04.9.3's stage table; 04.9.4's atonement state.
 - Serves: goal 2 (04 and 05 agree); C:P5 ("a Paladin's ability to atone").
 - Revisit if: live play shows a stage-2 caster's spells undercut the warning that stage 2 is meant to be.
+
+### DL-05-37: The training path's +2 entries are capped; counted units outside a scene settle by day (revision I-047)
+- Decision: 05.9.3: competence entries of source `taught` are capped at learning picks (02.5.6) + the highest confirmed tier among held callings, minimum 1; a license past the cap is held as access (02.5.2) unless the player sets aside a taught entry at a long rest; training an access-held license is deepening (same clock, writes +2, within the cap). `licenses.yaml#training_competence_cap` (via `emit05.py`). 03.7.3: counted units written outside a scene (downtime weeks, long and Safe projects) settle per day, so `cnt.progress` and `cnt.made` saturate per counter, node and day.
+- Alternatives considered: cap the licenses themselves (rejected: breadth of permission is the Broad profile's point, 02.5.2, and 05.9.4's "breadth is available and is not power"); no cap (the red-team's +2 everywhere for a PC with spare weeks); a flat cap of 2 (rejected: gives the tier-5 sage the novice's breadth of depth; Intellect is the attribute whose one derived value is learning, 00.4.4).
+- Evidence: verification-1 red team (I-047); 02.5.2's audit values a deep license at 2 units and access at 1, so each uncapped month of mentoring added a deep unit no profile could buy at creation.
+- Serves: C:P4 (breadth against competence); goal 1 (depth comes from deeds).
+- Revisit if: T-05 playtests show a high-Intellect character holding more +2 entries than a focused calling of the same tier grants competence (then drop learning picks from the cap).
 
 ## DL-06 — Conflict
 
@@ -2397,6 +2411,13 @@ chapter 06's fight model and T-06-12 lines), output `07-harm-sim-output.txt`, wr
 - Serves: P-world (a world that moves by rule, not by the DM's inclination); goal 2.
 - Revisit if: playtests show wars between small factions ending before the PC can take a side (then cap override (b) at d6 1–2 or make a faction's first hold loss in a season absorb the second).
 
+### DL-11-28: Train-a-Successor banks three different tags (revision I-087 (b))
+- Decision: 11.13.10: each 4-tick stretch banks the tag taught most among those not yet banked (none if only banked tags were taught); at most three, each different. 02.2.7 item 4, 03.2.8 and `legacy.yaml#train_successor` say the same.
+- Alternatives considered: cap one tag at 24 points (the same result stated as a cap; "distinct" is one word in three places and needs no arithmetic); allow repeats (rejected: three events at one node is 72 points, nearly tier 1's 80, a recognition bought in downtime).
+- Evidence: verification-2c long-arc playtest (I-087 (b)); 03.2.8's 24 points is one median session at a focus node, so one tag is one session's head start, as backstory is meant to be.
+- Serves: goal 1 (identity from play); 02.11.1 (backstory only as a deed done in play).
+- Revisit if: successors in play arrive with no banked tag because teachers rotate tags too slowly (then bank per 4 ticks across the whole clock).
+
 ## DL-12 — DM Procedures
 
 ### DL-12-01: The turn loop is two passes — adjudicate (state) then narrate — with a claim-by-claim check before delivery, as a rule of play
@@ -2611,6 +2632,13 @@ chapter 06's fight model and T-06-12 lines), output `07-harm-sim-output.txt`, wr
 - Evidence: `12-world-seed-output.txt` (PASS, 63/63; seed 1's powers listed in WE-12-11 step 8); `04-recog-parity-output.txt` (I-083 section).
 - Serves: goal 1; 12.16's promise that a seed is as playable as a hand-made setting at every tier.
 - Revisit if: a pre-made region is maintained again (it must add its own powers).
+
+### DL-12-32: A generated NPC carries a band: 1, or its home area's band as a principal (revision I-089)
+- Decision: 12.11.1 writes `band` on every generated NPC: 1 at walk-on and recurring depth; on promotion to principal, the `band` of its home's area (12.16.8), never lowered; a record that already carries a band (an adversary line's threat band, an ally's own band, a seeded record) keeps the higher. A faction's tier is never written into it (03.4.3 lends it only to a binding party on the faction's matter). 00's NPC schema gains `band`.
+- Alternatives considered: band 1 for every on-demand NPC (the gap I-089 logged: a principal met in the far rings would be band 1 in a contest, and 12.16.11's seeded powers would be the only high-band social opposition); band from the role or the faction's tier (rejected: role bands are not authored, and the faction tier is I-039's binding-party question, already answered); the DM's judgement (rejected: 03.4.3 requires the band be engine-read, never chosen).
+- Evidence: 03.4.3 reads "the `band` its NPC record holds"; 12.16.8's areas carry `band` by ring; `12-world-seed.py` writes cast bands 1–2 for haven trades and 4/5 for the far rings' powers, which the rule reproduces for an on-demand principal in those areas.
+- Serves: goal 2 (no band is chosen); goal 1 (a social calling's opposition grows with the world it travels in).
+- Revisit if: live play shows principals in far-ring areas making band-4/5 contests too common (then require principal depth and a thread role, or count them as one opposition per area).
 
 ## DL-13 — The Starter Setting: the Thallen March
 

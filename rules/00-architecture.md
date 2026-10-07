@@ -774,6 +774,7 @@ NPC (extends Entity):
   knowledge: [fact_id]        # sealed unless shared
   secrets: [fact_id]          # sealed
   depth: enum                 # walk-on | recurring | principal (12.11.1)
+  band: int                   # 1..5, own band for a contest (03.4.3); written by 12.11.1 [revision: I-089]
   home: place_id              # 11.1.2; 03.10 scope
   member_of: [faction_id]     # 11.1.2; 11.3.17
   # social fields (15.2.1) [amended: IR ch.15 #2]: faction_offset, fears, patience {max, left},

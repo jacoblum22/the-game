@@ -147,7 +147,7 @@ tag_event_fields:
   - {name: significance, type: "{consequential, pressured, own_act, cites}", supplied_by: engine}
   - {name: justification, type: str, supplied_by: dm}
   - {name: novel, type: bool, supplied_by: engine}
-  - {name: contest, type: "{kind: social|craft|lore, band: int 1-5, one_from_full: bool, opposition: id}|null", supplied_by: engine, note: "03.4.3; revision I-003; opposition (the party, case, research project or work): revision I-083, read by 04.3.4"}
+  - {name: contest, type: "{kind: social|craft|lore, band: int 1-5, one_from_full: bool, opposition: id}|null", supplied_by: engine, note: "03.4.3; revision I-003; opposition (the party, case, research project or work): revision I-083, read by 04.3.4; a work counts per scene worked on it (revision I-089)"}
   - {name: ruinous, type: bool, supplied_by: engine, note: "03.4.5; revision I-003"}
   - {name: crisis, type: bool, supplied_by: engine}
   - {name: peak, type: bool, supplied_by: engine}

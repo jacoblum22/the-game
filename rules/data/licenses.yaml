@@ -46,6 +46,7 @@ training_clock:
     - {effect_id: eff.grant_license, params: {license: the training license, grade: trained, duration: permanent}}
     interrupting: false
     then: close
+training_competence_cap: {counts: 'competence entries with source taught (mentor or text path, 05.9.4)', cap: 'learning picks (02.5.6) + the highest confirmed tier among held callings, minimum 1', past_cap: 'the license is acquired and held as access (no competence entry, 02.5.2), unless the player sets aside one taught entry at a long rest (its license stays, as access)', deepening: 'training a license already held as access writes its +2 entry, within the cap', not_counted: origin and calling entries}
 emulate_defaults: {dc_shift: 5, cost_mult: 2, reach_cap: limited}
 
 licenses:

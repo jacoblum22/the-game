@@ -1282,7 +1282,15 @@ the dice to decide everything inside the grade [WE-00-3].
 **05.9.3 Competence from training.** `[D]` A training license acquired by the mentor or text path
 carries `grants_competence: [{tag: <its tag>, value: 2}]` (00.3.6). An origin's value is ch.02's (at most
 +2). A calling's competence is ch.04's and is higher; competence is highest-only, so they never add.
-Higher grades grant no competence of their own.
+Higher grades grant no competence of their own. **The cap** `[revision: I-047]`: a character holds at most
+**learning picks (02.5.6) + the highest confirmed tier among their held callings** (minimum 1) competence
+entries of source `taught` (`licenses.yaml#training_competence_cap`); origin and calling entries do not count.
+A license acquired past the cap is held **as access** (02.5.2: its permissions, no competence entry, no push),
+unless the player sets aside one taught entry at a long rest (that license stays, as access). Training a
+license the character already holds as access (an origin's, 02.5.2) is **deepening**: the same clock, and it
+writes the +2 entry, within the cap. So a Broad character can deepen what they were born holding, and a PC with
+spare weeks gains breadth of permission without limit but +2 in only a handful of tags; the depth beyond that
+is deeds' (ch.04).
 
 **05.9.4 Acquiring a training license.** `[D]` Paths, each a lookup for the G3 redirect:
 - **origin** (02) at creation;
@@ -1297,9 +1305,9 @@ Higher grades grant no competence of their own.
   the Oracle at a place of resonance). The region's seed may tighten these (12.16.5: an arcane order's
 admission, or a birth gift).
 There is no cap on how many training licenses a character holds. The bound is time: each costs a month
-with a teacher or two alone, grants +2 and the lowest grade, and opens four acquired slots' worth of
-techniques at rank 1. Breadth is available and is not power [C:P4; C:P15; C:P11: nothing is bought with
-points].
+with a teacher or two alone, grants the lowest grade (and +2 within 05.9.3's cap), and opens four acquired
+slots' worth of techniques at rank 1. Breadth is available and is not power [C:P4; C:P15; C:P11: nothing is
+bought with points; revision: I-047].
 
 ### 05.10 Composition: how abilities combine
 

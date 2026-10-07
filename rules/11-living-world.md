@@ -1941,7 +1941,8 @@ else (02.2.7 forbids the rest) [R6 D-R5]:
    item keeps its `gifted_by` (its giver may remember).
 3. **The ledgers' results** (11.13.5; T-11-21): each as hooks, bonds, places known or trouble owed.
 4. **Training.** Each tag banked by Train-a-Successor (below) becomes one of 03's backstory events at
-   creation (03.2.8: 24 points each, at most three tags), the only backstory evidence in the game.
+   creation (03.2.8: 24 points each, at most three tags, each a different tag [revision: I-087]), the only backstory
+   evidence in the game.
 5. **The predecessor itself** (living endings): an NPC with a fixed standing (11.13.7), who may be the
    successor's anchor bond (02.2.7 item 3) and mentor.
 6. **Standing that transfers:** a kin, ward, protégé or ally successor starts with each faction's status
@@ -1960,8 +1961,10 @@ else (02.2.7 forbids the rest) [R6 D-R5]:
 with a named candidate NPC who is present and willing (standing Warm or better), the PC spends a week teaching
 one deed tag at level 2 or 3 in which the PC holds competence +3 or more: a check `d20 + the PC's base modifier
 on that tag` against Moderate (15), Safe stakes; delivered reach ticks the candidate's **training clock**
-(public, 12 segments). Every 4 ticks bank one tag (the one taught most that stretch), at most three; the clock
-then closes. The banked tags are written to the candidate's record and used only if the candidate becomes the
+(public, 12 segments). Every 4 ticks bank one tag (the one taught most that stretch among the tags not yet
+banked; a stretch that taught only banked tags banks nothing), at most three, **each a different tag**; the
+clock then closes [revision: I-087]. So one tag is at most one 24-point event, a session's head start, and three
+banked tags need three taught; teaching one tag twelve weeks banks it once. The banked tags are written to the candidate's record and used only if the candidate becomes the
 successor (The One Ring's Raise an Heir [R6 D-03]).
 
 **11.13.11 After the hand-off.** `[D]` The bang queue, cleared at the timeskip's start, is refilled for the
