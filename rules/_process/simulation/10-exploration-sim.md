@@ -5,17 +5,17 @@ and PyYAML; generators take `<output file> <data dir>` arguments.
 
 ## 10-sim10_travel.py — the travel time-tick die (10.9, T-10-10)
 20,000 days per danger rating, four checks a day, the night watch one rung higher, the threat share of the
-encounter table 25 / 60 / 75 / 85% (the shipped d12 shares are 25 / 58 / 75 / 83%), a pending threat arriving on
+encounter table at the shipped d12 shares 25 / 58 / 75 / 83% (re-run with them; the first run used 60 and 85) [verification: V2b-008], a pending threat arriving on
 the next E or O face or the fourth check. Per day (no avoidance):
 
 | Rating | Non-threat arrivals | Hostile arrivals | Omens | Event / discovery / opportunity / depletion / weather shift (each) | Lulls |
 |---|---|---|---|---|---|
 | settled | 0.22 | 0.16 | 0.44 | ≈ 0.33 | 1.57 |
-| wild | 0.12 | 0.45 | 0.64 | ≈ 0.33 | 1.24 |
+| wild | 0.13 | 0.45 | 0.64 | ≈ 0.33 | 1.24 |
 | perilous | 0.11 | 0.66 | 0.77 | ≈ 0.33 | 0.90 |
-| deadly | 0.09 | 0.81 | 0.86 | ≈ 0.33 | 0.66 |
+| deadly | 0.10 | 0.80 | 0.86 | ≈ 0.33 | 0.66 |
 
-With half of omened threats avoided: hostile arrivals 0.09 / 0.27 / 0.41 / 0.52 a day (about 40% fewer).
+With half of omened threats avoided: hostile arrivals 0.09 / 0.26 / 0.41 / 0.51 a day (about 40% fewer).
 
 ## 10-sim10_site2.py — the site race (10.13.6–10.13.8)
 One Explore onward and one other significant beat per area (the other beat succeeding 3 in 5 and, on failure,

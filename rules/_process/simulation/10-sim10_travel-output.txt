@@ -1,9 +1,9 @@
 settled {'enc_nonthreat': 0.215, 'threats': 0.164, 'omens': 0.437, 'events': 0.339, 'disc': 0.334, 'opp': 0.335, 'depl': 0.341, 'weather': 0.337, 'lull': 1.568, 'avoided': 0.0}
-wild {'enc_nonthreat': 0.117, 'threats': 0.454, 'omens': 0.642, 'events': 0.342, 'disc': 0.331, 'opp': 0.334, 'depl': 0.334, 'weather': 0.331, 'lull': 1.243, 'avoided': 0.0}
+wild {'enc_nonthreat': 0.125, 'threats': 0.445, 'omens': 0.642, 'events': 0.342, 'disc': 0.334, 'opp': 0.332, 'depl': 0.336, 'weather': 0.328, 'lull': 1.243, 'avoided': 0.0}
 perilous {'enc_nonthreat': 0.112, 'threats': 0.657, 'omens': 0.766, 'events': 0.335, 'disc': 0.337, 'opp': 0.334, 'depl': 0.328, 'weather': 0.34, 'lull': 0.904, 'avoided': 0.0}
-deadly {'enc_nonthreat': 0.086, 'threats': 0.808, 'omens': 0.862, 'events': 0.337, 'disc': 0.335, 'opp': 0.336, 'depl': 0.331, 'weather': 0.335, 'lull': 0.664, 'avoided': 0.0}
+deadly {'enc_nonthreat': 0.097, 'threats': 0.8, 'omens': 0.861, 'events': 0.336, 'disc': 0.334, 'opp': 0.335, 'depl': 0.33, 'weather': 0.335, 'lull': 0.664, 'avoided': 0.0}
 --- with 50% avoidance of omened threats
 settled {'enc_nonthreat': 0.231, 'threats': 0.088, 'omens': 0.465, 'events': 0.326, 'disc': 0.336, 'opp': 0.327, 'depl': 0.329, 'weather': 0.339, 'lull': 1.599, 'avoided': 0.087}
-wild {'enc_nonthreat': 0.138, 'threats': 0.269, 'omens': 0.755, 'events': 0.327, 'disc': 0.334, 'opp': 0.329, 'depl': 0.327, 'weather': 0.336, 'lull': 1.26, 'avoided': 0.265}
-perilous {'enc_nonthreat': 0.141, 'threats': 0.407, 'omens': 0.93, 'events': 0.331, 'disc': 0.33, 'opp': 0.339, 'depl': 0.33, 'weather': 0.343, 'lull': 0.922, 'avoided': 0.393}
-deadly {'enc_nonthreat': 0.108, 'threats': 0.515, 'omens': 1.101, 'events': 0.326, 'disc': 0.336, 'opp': 0.334, 'depl': 0.33, 'weather': 0.34, 'lull': 0.669, 'avoided': 0.516}
+wild {'enc_nonthreat': 0.145, 'threats': 0.261, 'omens': 0.75, 'events': 0.327, 'disc': 0.335, 'opp': 0.329, 'depl': 0.331, 'weather': 0.335, 'lull': 1.26, 'avoided': 0.258}
+perilous {'enc_nonthreat': 0.141, 'threats': 0.407, 'omens': 0.929, 'events': 0.33, 'disc': 0.331, 'opp': 0.339, 'depl': 0.329, 'weather': 0.344, 'lull': 0.921, 'avoided': 0.393}
+deadly {'enc_nonthreat': 0.12, 'threats': 0.508, 'omens': 1.095, 'events': 0.327, 'disc': 0.336, 'opp': 0.335, 'depl': 0.331, 'weather': 0.339, 'lull': 0.669, 'avoided': 0.509}

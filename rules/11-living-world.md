@@ -183,7 +183,7 @@ queue are sealed. Narration may not imply any of them (INV-10).
 
 **11.2.1 When it runs.** `[D]` + `[T]` Handler `h.11.world_turn` runs at every `week` boundary, phase 6
 (world), whatever the time mode and wherever the PC is: in a dungeon, on the road, in downtime, in
-captivity, or during a retirement timeskip (11.13.6). `advance_time` never skips it (00.7.7, INV-15):
+captivity, or during a retirement timeskip (11.13.8 [verification: V2b-013]). `advance_time` never skips it (00.7.7, INV-15):
 three weeks of travel are three World Turns. It runs after the phase-4 upkeep handlers (`h.08.upkeep`,
 `h.16.retinue_upkeep`) and after phase 5's automatic clock ticks (`h.00.clock_auto`), and before the
 other phase-6 handlers of higher chapter numbers (`h.15.downtime_week`, `h.15.member_standing`), which
@@ -230,7 +230,7 @@ halts after the week boundary finishes its phases, and chapter 12 frames the sce
 waits in the bang queue for the pacing director (12.7.4), so the world's pushes arrive when the pacing
 allows, not when the clock happens to strike [R6 B-11; 12.7].
 
-**11.2.6 Suspended play.** `[D]` While no PC is in play (a retirement timeskip, 11.13.6), steps 1–8 run
+**11.2.6 Suspended play.** `[D]` While no PC is in play (a retirement timeskip, 11.13.8 [verification: V2b-013]), steps 1–8 run
 unchanged except that: step 4's `move_on_pc` rows read as `goal`; step 6 runs decay only; step 7's
 "what reached the PC" list is written to the legacy record instead of narration; and step 8 neither
 fires the hook supply rule nor queues bangs (the queue is cleared at the timeskip's start and refilled
@@ -275,9 +275,9 @@ Faction (extends Entity, kind faction):
   holds: [place_id]              # places it controls (07.6.3's holding places are drawn from here)
   linchpins: [{npc: npc.* | role slot, consequence: str, fates: {dies, captured, turned, exposed: [effect_ref]}}]
                                  # sealed (11.3.10); `consequence` is SCHEMAS' one-line summary
-  officers: [npc.*]              # principal NPCs; each carries one duty (11.3.15)
+  officers: [npc.*]              # principal NPCs; each carries one duty (11.3.17) [verification: V2b-013]
   duties: [str]                  # its officers' inviolable duties (15.2.4 item 5)
-  relations: {fac.*: -3..+3}     # toward other factions (11.3.13)
+  relations: {fac.*: -3..+3}     # toward other factions (11.3.14) [verification: V2b-013]
   status_to_pc: -3..+3           # 11.3.8 (00.17.1 Q13: members default to it)
   attention: clk.* | null        # 11.3.12
   pursuit: 0..3                  # 11.3.12
@@ -430,7 +430,7 @@ a Hostile faction who helps the PC does so through a personal offset that is wri
 
 **11.3.9 The faction's life: stages.** `[D]` Every faction is in one **stage**, the institutional lifecycle
 of Ars Magica's covenant seasons [R6 B-05]. The stage modifies its checks (11.3.5) and changes only by
-these rules, which the Season Turn applies (11.11.2 step 2) except where "at once" is stated:
+these rules, which the Season Turn applies (11.11.3 step 2 [verification: V2b-013]) except where "at once" is stated:
 
 | From | To | When |
 |---|---|---|
@@ -452,7 +452,7 @@ writes a chronicle line and a news item; and the Season Turn (or at once, if mid
 `tbl.11.vacuum` (d6) for who fills the gap: 1–2 its strongest rival takes its seat (a gain of hold); 3–4
 a new faction rises from its remnants (a template of the same `org_tags`, tier 1, rising, one former
 officer as its head); 5 the region is lawless for a season (a situation, 11.4.1); 6 nobody yet, and a
-seeded hook says so (the PC could fill it: a great project, 11.9.6). No faction is ever deleted (00.16.3);
+seeded hook says so (the PC could fill it: a great project, 11.9.7 [verification: V2b-013]). No faction is ever deleted (00.16.3);
 it stays in state as `collapsed` so the chronicle and old rumors still resolve.
 
 **11.3.10 Linchpins.** `[S]` + `[T]` + `[D]` Each full faction names one to three **linchpins**: NPCs
@@ -657,7 +657,7 @@ Basis:              [R6 B-01 (SWN opposed rating rolls)] [R5 P-21 (a progress tr
 
 **11.3.16 Petty factions.** `[D]` A petty faction rolls one **d6** per World Turn for its goal (a local
 goal on a 6-segment clock, hidden with omens): 1–3 nothing, 4–5 +1 tick, 6 +2 ticks; +1 to the die while
-rising, −1 while declining. Its completion writes its goal's effects (`factions.yaml#minor_goals`: it
+rising, −1 while declining. Its completion writes its goal's effects (`factions.yaml#petty_goals` [verification: V2b-013]: it
 grows — hold, then tier, and at tier 2 it becomes full; it takes a place; it starts a situation; it
 feuds — relation −2 with a named neighbor) and seeds one hook. Petty factions never take `move_on_pc`; one whose
 status toward the PC leaves 0 becomes full at once (11.3.2) [R5 P-25; DL-11-05].
@@ -843,8 +843,8 @@ Worst case (J):     FAMILY wrong: a reaction of a neighboring family fires (an a
 Examples:           inside: Wren kills the cinder drake that hunted the Ashwood (the change
                       great_beast_slain, family "a great beast slain"); reactions: "hunters flood the
                       wood" (region, 3), "the drake's mate comes for its killer" (pc_deed, 2), nothing
-                      (2). Only pc_deed candidates are kept: the mate (2) vs nothing (2): d4 -> 3: the
-                      mate. A hunt clock and a threat bang (pc_deed).
+                      (2). Only pc_deed candidates are kept: the mate (2) vs nothing (2): d4 (1-2 the mate, 3-4
+                      nothing) -> 2: the mate [verification: V2b-014]. A hunt clock and a threat bang (pc_deed).
                     outside: the same kill unwitnessed and unknown: the key fires (the drake is dead,
                       a fact), but the pc_deed candidate requires a carrier; only "hunters flood the
                       wood" and nothing remain eligible.
@@ -1072,7 +1072,8 @@ engine makes one hook from the first source of this ladder that yields one, and 
 3. a faction whose status toward the PC is not 0 (its next goal step, a job at +1 or better, a threat
    at −1 or worse);
 4. an active situation of the region the PC does not yet know of (its next step's trace);
-5. `tbl.11.hook` for the region (a d20 of generic seeds by terrain and settlement tier; 13 overrides).
+5. `tbl.11.hook` for the region (a d20 of generic seeds by terrain and settlement tier; a region's seed or a
+   pre-made setting may override it [verification: V2b-013]).
 In the simulation the PC knew of at least three open matters in 100 of 104 weeks and never of more
 than ten (T-11-24): a steady stream with no flood [R6 B-R4; R5 P-07; DL-11-17].
 
@@ -1150,7 +1151,7 @@ DL-11-10].
 | the belief `pc.dead` (07.5.6) | a rumor, truth `false`, `official`, in the victor's faction scope and seat |
 | a cache's clock ticks or disperses (07.6.4) | a rumor (`hearsay`, true) pointing to the cache's place, or to its named holder |
 | a seasonal phenomenon begins (11.11.4) | news in the region |
-| a world change of a great project (11.9.6) | news in its scope; a visible change |
+| a world change of a great project (11.9.7) [verification: V2b-013] | news in its scope; a visible change |
 
 **11.6.3 How truth is fixed.** `[D]` + `[N]` At birth the engine rolls `tbl.11.rumor_truth` (d10 by
 source; `world_turn.yaml`), then, for a `partial` or `false` result, `tbl.11.distortion` (d6) for what is
@@ -1293,7 +1294,7 @@ branch and who does one or two noteworthy deeds per session before carriers of o
 there in four to six sessions and 5 in ten to fifteen (03's calibration: noteworthy events are the
 difficult, risky successes, about one in four evidence events).
 
-**11.7.4 How far a name travels.** `[D]` At each Season Turn (11.11.2 step 6): every settlement entry of
+**11.7.4 How far a name travels.** `[D]` At each Season Turn (11.11.3 step 6 [verification: V2b-013]): every settlement entry of
 score 3 or more gives its **region** an entry of the same key at `score − 2` (if higher than the region's
 own); every region entry of score 4 or more gives the **realm** one at `score − 2`; faction-scope entries
 do not spread (they are what members say among themselves). Spreading is by points: the derived entry
@@ -1338,7 +1339,7 @@ heard", 2 "known here", 3 "talked of", 4 "famous here", 5 "a legend here" — an
    it (11.8.2).
 5. **Status** reads it: deeds a faction's values admire or despise move status (T-11-3).
 6. **Great projects** read it: an entry of score 3 or more in the project's scope is an Amplifying lever on
-   its weekly beat (11.9.6).
+   its weekly beat (11.9.7 [verification: V2b-013]).
 7. **Legacy** reads it: renown, breadth and legend rank (11.7.10; 11.13.3).
 Reputation never changes a DC, a defense, a tally, a tier or a license [00.17.1 Q22].
 
@@ -2296,8 +2297,8 @@ that refutes it).
    the last drake egg in the Tangle"). The false rumor stays false and keeps circulating until it fades; anyone
    who repeats it is simply wrong.
 
-*Boundary pair.* Had Wren spent week 12 in Ashford, "The Egg Hatches" would have completed first (8/8) and voided
-the thread: **failed**; its `on_complete`: a young drake (T2) and the situation **The Hunting Ground** in the
+*Boundary pair.* Had Wren stayed in Ashford from week 12, "The Egg Hatches" would have completed first (8/8 at the
+World Turn of week 15) and voided the thread [verification: V2b-014]: **failed**; its `on_complete`: a young drake (T2) and the situation **The Hunting Ground** in the
 Tangle; news in Harl's Crossing; the Wardens' status unchanged (Wren had not accepted a commission from them, only
 told them her plan). *Non-example.* Narrating "you find the egg; it's dead already" to wrap the thread up: the
 clock decides completion, and a sealed fact (the egg is alive) cannot be contradicted.
@@ -2390,8 +2391,8 @@ vow kept; a formidable thread completed at a seam): the `[RETIRE]` offer. The pl
 5. **Wren becomes an NPC:** principal, at her cottage, *wealthy*, a patron; band 4 (above any successor's: never
    retinue).
 6. **Timeskip:** the player chooses **one year**. 52 World Turns, 4 Season Turns and a Year Turn run. In digest:
-   the Salt Guild, entrenched, fails its weight-of-size roll once and drops to tier 1 when the Wardens strike its
-   weak hold in the winter; the Cult wakes the Ember in the Hill (its goal completes: a situation, *the rite*);
+   the Salt Guild, by now tier 3 and entrenched, fails its weight-of-size roll once (a weak hold) and drops to tier 2
+   when the Wardens strike that weak hold in the winter (11.3.4; the roll applies only from tier 3) [verification: V2b-014]; the Cult wakes the Ember in the Hill (its goal completes: a situation, *the rite*);
    "The Guild's Hand"'s opposing clock ("the Guild buys the ferry landing", 8) reaches **7/8 and stops** — the
    bequest is a crisis waiting; Wren, 35, makes no aging check.
 7. **Successors** (sources in order): (1) **Tamsin**, the freed carter's daughter Wren trained for 8 weeks
@@ -2539,7 +2540,7 @@ chapter's "To 11" section).
 | 01 / 12 | S5 twist rows need haven, commitment and situation facts | 11.4.10 (`havens`, `commitments_owed`, `new_situation`, row 4's withdrawal) |
 | 02 | consume `CreationHook`s and own their lifecycle | 11.5.6 (by kind), 11.5.5 |
 | 02 | the long vow as a vow thread; closed as abandoned if the drive is rewritten | 11.5.2, 11.5.5 (abandoned), 11.5.12 |
-| 02 | map each faction tie's `org` kind to a faction and write its status (+1; or +2 and −2) | PR-11-4 (13 maps the kind; this chapter writes) |
+| 02 | map each faction tie's `org` kind to a faction and write its status (+1; or +2 and −2) | PR-11-4 (the region's seed maps the kind, 12.16.10; this chapter writes) [verification: V2b-013] |
 | 02 | prologue lines | 11.12.2 |
 | 02 | keep a lost bond's sealed fate for a later clue | 11.5.6 |
 | 02 | successors: candidates with recorded origins, one heirloom, the renown share, legacy results as hooks and bonds, Train-a-Successor whose output is ≤ 3 tags for 03.2.8; emit `vow_kept` | 11.13.9, 11.13.10, Train-a-Successor; 11.5.5 |

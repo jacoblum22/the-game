@@ -1119,10 +1119,9 @@ the pool; `loot.flaw` for sources whose nature curses what they leave (a lich's 
 `flaw.binding`; a hag's and a greater demon's `flaw.thirsty`); `gear` (folk, base item ids, mundane);
 `purse` (`band` = 08.3.11's purse by band, `hoard`, or `none`); `harvest` (default: 08's materials by source
 tags). **Validation** (08.3.4), run by the generator with 08's own pool code at tier cap 1 on every base each
-archetype can drop: **57 of 58** archetypes that drop items hold 3 or more pool entries on every base (the
-smallest are 3); the exception is the water elemental's amulet and ring, 2 entries, filed with 08 (the water
-branch has the fewest loot properties; 08's own reference set had the same shape of exception for one
-aberration).
+archetype can drop: **all 58** archetypes that drop items hold 3 or more pool entries on every base (the
+smallest is the orc's round shield, 3); the water elemental's amulet, 2 entries before 08's thematic gates and
+`prop.tidesense` (I-017, I-019), now holds 9 [verification: V2b-003].
 
 **09.11.2 Evidence (03).** `[D]` An adversary's threat band reaches the **challenge band** of an evidence event
 through 03.4.3: in a conflict, the challenge band is the PC's power band shifted by the advisory word computed at
@@ -1731,8 +1730,9 @@ of five T2 minions; axe +5, S2; Guard 14; reduction 1; 6 Vitality each, pool 30;
 7. **What the player sees.** Chapter 07's danger notice: "`[WARNING] A hard fight — you may well lose this.
    Losing here means they take you for labor.`" (the orcs capture; captive fate labor). In fiction: drums, a
    burned farmstead, the band tell "the others give it room".
-*Boundary pair.* The same encounter for a P4 character is **fair** (90 / 28); with the PC's hireling at its
-side, **fair** (one word gentler, 09.6.3); if the orcs ambush a P3 character who did not notice them
+*Boundary pair.* The same encounter for a P4 character is **fair** (90 / 28). With an able hireling at the P3
+character's side it **stays hard**, shown as "hard, with your companions beside you": its no-ally win, 54, is below
+75 (09.6.3's hard exception) [verification: V2b-004]. If the orcs ambush a P3 character who did not notice them
 (`cond.surprised`), **lethal** (one word harsher), and chapter 07's lethal warning fires — but takes effect only
 after the player's first declaration (07.3.5), so the ambush's opening blows can at worst put the character
 Down.
@@ -1815,7 +1815,7 @@ blow, no one is dead: the flag is false and the brigands still only rob.
 *Situation.* A P3 forester sees a troll (`adv.troll`: T4; advisory alone vs P3 **hard**; without the counter
 **lethal**; counter "fire or acid"). The player asks what the character knows about trolls.
 - **Gate.** `lore` is `deed.lore.bestiary`, rarity common; the troll's terrain (highland, deepwood,
-  underground) touches the forester's origin (forest): **common knowledge true** → G1 Recall (Intellect).
+  underground, road, wetland, frozen [verification: V2b-005]) touches the forester's origin (forest): **common knowledge true** → G1 Recall (Intellect).
 - **DC.** Common at T4 → **Hard (20)**. The forester's Intellect 0 + floor 1 = +1: success on 19+ (10%),
   natural 20 a critical. The player ranks: (1) kind and threat, (3) resistance and counter, (5) weak spot.
 - **Roll** 19 → success; delivered items by 01's `deliver_count(3 ranked, Standard)`: about half → the
@@ -2039,10 +2039,9 @@ a recorded fact), 06.11.7 Yield and parley (a list's `parley_when`), 07.4.1 Yiel
 
 ### To 08 (Items, Loot, Crafting)
 
-- Every archetype satisfies `contract_09` (09.11.1). **Pool exception:** `arch.water_elemental` holds 2 tier-1
-  entries on its amulet and ring bases (every other dropping archetype ≥ 3). Request: one more loot property
-  gated on `creature.elemental.water` (e.g. a water-breathing or current-reading charm property) — or 08 marks
-  the elemental's trophy base `item.armor.medium` acceptable (4 entries).
+- Every archetype satisfies `contract_09` (09.11.1). The former pool exception (`arch.water_elemental`, 2 tier-1
+  entries on its amulet and ring) is **met**: 08's thematic gates and `prop.tidesense` give it 9; all 58 dropping
+  archetypes now hold 3 or more (I-017, I-019) [verification: V2b-003].
 - `loot.flaw` uses `flaw.binding` (lich, tempter) and `flaw.thirsty` (hag, greater demon).
 
 ### To 10 (Exploration, Travel, Sites) and 13 (Starter setting; now the region's seed, 12.16, T-12-16 `ws.req.06_bestiary`, `ws.req.09_subset`, `ws.req.07_bargainer`) [revision: I-028]

@@ -349,3 +349,7 @@ Next: tech stack and build planning.
 - New rows: I-063, I-064, I-065 (all MINOR).
 Cost: 149 tools; see the usage line below.
 - V2a usage: 273 turns, average context 298k (peak 516k), 81M cache-read tokens. Lesson: full reads still accumulate, so V2b is split into two agents of three chapters each.
+
+## V2b1 returned (ch.09–11 consistency read): report `_process/reports/verification-2b-report.md`
+- 14 fixes (V2b-001 to V2b-014), including stale ch.13 dependencies in ch.10 and worked examples re-rolled on the new tables.
+- New rows: I-066 (lone minions on the generic tables), I-067 (guardian not available at the site's band), I-068 (sim models the entrenched penalty too broadly).

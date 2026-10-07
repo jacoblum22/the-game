@@ -5,29 +5,29 @@ by variant: {'standard': 77, 'minion': 15, 'elite': 16, 'solo': 15}
 errors: 0
 warnings: 0
 loot pools (min over bases, tier cap 1):
-  arch.wolf                5 bi.cloak ok
-  arch.great_cat           5 bi.cloak ok
+  arch.wolf                7 bi.cloak ok
+  arch.great_cat           7 bi.cloak ok
   arch.bear                7 bi.cloak ok
-  arch.herd_beast          3 bi.leather ok
+  arch.herd_beast          9 bi.hide ok
   arch.giant_vermin        5 bi.charm ok
   arch.vermin_swarm        None None yield none (materials only)
-  arch.reptile             5 bi.padded ok
-  arch.raptor              3 bi.amulet ok
-  arch.water_beast         3 bi.cloak ok
-  arch.monstrous_beast     3 bi.charm ok
-  arch.brigand             5 bi.sword ok
-  arch.soldier             8 bi.round_shield ok
-  arch.knight              4 bi.kite_shield ok
+  arch.reptile             8 bi.leather ok
+  arch.raptor              9 bi.amulet ok
+  arch.water_beast         8 bi.cloak ok
+  arch.monstrous_beast     9 bi.charm ok
+  arch.brigand             6 bi.sword ok
+  arch.soldier             9 bi.round_shield ok
+  arch.knight              5 bi.kite_shield ok
   arch.cultist             8 bi.dagger ok
   arch.folk_mage           9 bi.staff ok
   arch.elf_warden          7 bi.dagger ok
-  arch.dwarf_holdguard     4 bi.round_shield ok
+  arch.dwarf_holdguard     5 bi.battle_axe ok
   arch.orc                 3 bi.round_shield ok
   arch.goblin              5 bi.padded ok
   arch.gnoll               7 bi.flail ok
-  arch.lizardfolk          7 bi.javelin ok
+  arch.lizardfolk          9 bi.javelin ok
   arch.ogre                7 bi.maul ok
-  arch.troll               5 bi.charm ok
+  arch.troll               8 bi.charm ok
   arch.giant               7 bi.maul ok
   arch.skeleton            6 bi.sword ok
   arch.zombie              None None yield none (materials only)
@@ -46,28 +46,28 @@ loot pools (min over bases, tier cap 1):
   arch.celestial           9 bi.charm ok
   arch.lesser_demon        5 bi.ring ok
   arch.greater_demon       5 bi.ring ok
-  arch.tempter             5 bi.bolas ok
-  arch.enforcer            3 bi.bolas ok
+  arch.tempter             6 bi.bolas ok
+  arch.enforcer            4 bi.bolas ok
   arch.possessor           None None yield none (materials only)
-  arch.hellbeast           5 bi.bolas ok
+  arch.hellbeast           6 bi.bolas ok
   arch.golem               7 bi.amulet ok
   arch.animated            6 bi.padded ok
-  arch.clockwork           5 bi.round_shield ok
-  arch.homunculus          4 bi.charm ok
-  arch.fire_elemental      5 bi.charm ok
-  arch.earth_elemental     3 bi.amulet ok
-  arch.water_elemental     2 bi.amulet BELOW 3
-  arch.air_elemental       4 bi.charm ok
-  arch.frost_elemental     4 bi.charm ok
-  arch.great_dragon        7 bi.round_shield ok
-  arch.drake               7 bi.charm ok
-  arch.wyvern              7 bi.charm ok
-  arch.wyrm                7 bi.round_shield ok
+  arch.clockwork           8 bi.buckler ok
+  arch.homunculus          8 bi.charm ok
+  arch.fire_elemental      8 bi.charm ok
+  arch.earth_elemental     9 bi.amulet ok
+  arch.water_elemental     9 bi.amulet ok
+  arch.air_elemental       7 bi.charm ok
+  arch.frost_elemental     7 bi.charm ok
+  arch.great_dragon        8 bi.round_shield ok
+  arch.drake               8 bi.charm ok
+  arch.wyvern              8 bi.charm ok
+  arch.wyrm                8 bi.round_shield ok
   arch.aberration          4 bi.staff ok
   arch.ooze                None None yield none (materials only)
-  arch.fungal              4 bi.charm ok
-  arch.monstrous_plant     4 bi.gauntlets ok
-  arch.abomination         3 bi.charm ok
+  arch.fungal              8 bi.charm ok
+  arch.monstrous_plant     10 bi.gauntlets ok
+  arch.abomination         9 bi.charm ok
 adversary lines:
   adv.wolf               T1 standard skirmisher atk  +1 S2  Guard 12 red 0 vit 5      focus 0 prem 0.09 fid 1.06 | P1:triv P2:triv P3:triv P4:triv P5:triv
   adv.wolf_pack          T1 minion   skirmisher atk  +1 S2  Guard 12 red 0 vit 5x2    focus 0 prem 0.09 fid 1.06 | P1:triv P2:triv P3:triv P4:triv P5:triv

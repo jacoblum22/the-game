@@ -4,7 +4,7 @@ R = random.Random(10)
 # faces on d12: counts of E (encounter) and O (omen); then V,D,W,F,P one each; rest L
 RATINGS = {'settled':(1,1),'wild':(1,2),'perilous':(2,2),'deadly':(3,2)}
 ORDER = ['settled','wild','perilous','deadly']
-THREAT_SHARE = {'settled':0.25,'wild':0.60,'perilous':0.75,'deadly':0.85}
+THREAT_SHARE = {'settled':3/12,'wild':7/12,'perilous':9/12,'deadly':10/12}  # travel.yaml#watch_check.threat_share_d12 [verification: V2b-008]
 def faces(r):
     e,o = RATINGS[r]
     f = ['E']*e+['O']*o+['V','D','W','F','P']

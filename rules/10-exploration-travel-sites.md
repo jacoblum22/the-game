@@ -236,7 +236,7 @@ T-10-24 (`data/hazards.yaml#zones`) lists the magical-zone hazards that go with 
 place's dread, dead ground's silence of primal workings).
 
 **10.1.8 Generated places.** `[D]` When play reaches a place no data holds (the player strikes out across
-country 13 did not author; a site's new area), the place is generated, never imagined: an area takes its
+country the region's seed did not author [verification: V2b-006]; a site's new area), the place is generated, never imagined: an area takes its
 region's band, danger and climate, a terrain from the region's terrain list by `roll_table`, and its
 `nav_tier`, `forage_tier`, `openness` from that terrain's defaults (T-10-12); a site takes a theme and a
 domain from the region's site tables (10.13.2); a site area takes its feature from the domain table
@@ -273,8 +273,8 @@ arriving at a settlement → `free`; `conflict_start` → `conflict` and back at
 
 **10.2.3 Safety.** `[D]` A place with `safe: true` is a **haven** for this chapter: no time-tick check
 runs there (07's request: "no encounter check in a haven"), its `rest_site` is `haven`, and ventures end
-there. Safety is a property of the place, written by data (13: the base town, a friendly hold, a
-guarded shrine) or by play (11: a holding the PC owns and garrisons; a village that grants the PC
+there. Safety is a property of the place, written by data (the region's seed, 12.16.9, or a pre-made setting: the base
+town, a friendly hold, a guarded shrine) [verification: V2b-006] or by play (11: a holding the PC owns and garrisons; a village that grants the PC
 hospitality writes `safe: true` while standing is Friendly or better). A safe place loses safety only by
 a written world change (a faction takes it; a situation's default timeline burns it, 11), never by
 narration. Danger may still enter a haven through chapter 11 (a World Turn event, a bang), chapter 12's
@@ -286,7 +286,7 @@ out as a haven at the center and
 danger rating, so distance is the difficulty dial in a game with no character levels (C:P2). This chapter
 gives the dial its meaning: band (how strong what lives there is, 09.8.2) and danger rating (how often it
 comes, 10.9.2) are separate fields, and both are shown to the player before a journey (10.3.4) as words,
-never numbers. T-10-2 is the reference ring layout 13 should start from.
+never numbers. T-10-2 is the reference ring layout a region starts from (12.16.8) [verification: V2b-006].
 
 **T-10-2 Reference danger rings** (`data/travel.yaml#rings`; the world seed uses them as given, 12.16.8; a pre-made setting may alter a ring with a DL entry).
 
@@ -385,10 +385,11 @@ promise that distance is danger and that the player is told so [R6 B-15; R5 P-32
   against Moderate; Hard with one stack held; Very hard with two) to defer the stack by as many watches
   as the delivered reach. A mount's stacks are its own (16/07): at three stacks it cannot be ridden or
   loaded until it has had a long rest.
-- So a third travel watch at normal pace in a day is one forced unit, a fourth two, and a walker who
-  marches three watches a day for three days without pushing on holds three stacks on the third evening:
-  every army story's forced march, priced in the same condition 07 uses for sleeplessness and want.
-  `cond.exhausted` is removed by long rests per T-07-14.
+- So a third travel watch at normal pace in a day is one forced unit, a fourth two. `cond.exhausted` is
+  removed by long rests per T-07-14 (−1 stack a night), so a walker who marches a third watch at normal pace
+  each day wakes clear each morning; one who makes that third watch fast (2 units over) holds two stacks on the
+  first evening, one the next morning and three on the second evening, without pushing on: every army story's
+  forced march, priced in the same condition 07 uses for sleeplessness and want [verification: V2b-007].
 
 **10.3.6 Changing the plan, turning back, and stopping.** `[D]` The player may change destination, pace,
 schedule or roles at any watch boundary, or after any interrupt; the journey record keeps the points
@@ -909,11 +910,11 @@ Torchbearer insight that time in a dungeon is measured in what you do [R5 P-13, 
 | deadly | 1–3 E · 4–5 O · 6 V · 7 D · 8 W · 9 F · 10 P · 11–12 L | 1–2 E · 3–5 O · 6–7 S · 8 D · 9 H · 10 F · 11 P · 12 L |
 
 *What it produces* (`sim10_travel.py`, 20,000 days per row, four checks a day, the night watch one rung
-higher, threat share of the encounter table 25 / 60 / 75 / 85%, no avoidance): arrivals per day —
-settled 0.38 (0.16 hostile), wild 0.57 (0.45 hostile), perilous 0.77 (0.66 hostile), deadly 0.89 (0.81
+higher, threat share of the encounter table 25 / 58 / 75 / 83% (`threat_share_d12`), no avoidance [verification: V2b-008]): arrivals per day —
+settled 0.38 (0.16 hostile), wild 0.57 (0.45 hostile), perilous 0.77 (0.66 hostile), deadly 0.90 (0.80
 hostile); omens per day 0.44 / 0.64 / 0.77 / 0.86; local events, discoveries, opportunities, depletions and
 weather shifts about one each per three days at every rating; lulls 1.6 / 1.2 / 0.9 / 0.7 a day. A party
-that answers half its omens by avoiding the threat meets about 40% fewer hostile encounters (wild: 0.27 a
+that answers half its omens by avoiding the threat meets about 40% fewer hostile encounters (wild: 0.26 a
 day). So a three-day crossing of wild country brings about two hostile meetings, each announced, and a
 discovery, an opportunity and a local event — nothing like the empty road of a game whose dice only
 mean "monster or nothing" [R5 §3.2 #1; R5 §6 "encounter density"].
@@ -922,7 +923,7 @@ mean "monster or nothing" [R5 §3.2 #1; R5 §6 "encounter density"].
 without an omen first.** Concretely:
 1. Every encounter table row carries `threat: true | false` (10.10.1). A **threat** is any row whose
    creatures would attack, ambush, rob or capture the PC on meeting (an archetype with a hostile
-   `reaction_roll: false` mind, or any row 13 marks so); travelers, traders, pilgrims, grazing herds and
+   `reaction_roll: false` mind, or any row its table marks so [verification: V2b-006]); travelers, traders, pilgrims, grazing herds and
    wary animals are non-threats until the reaction roll says otherwise (10.10.5), and a reaction roll is
    itself a telegraph (12.11.2).
 2. A threat row drawn by any face becomes a **pending threat** (`enc.pending`, sealed; one at a time per
@@ -938,7 +939,7 @@ without an omen first.** Concretely:
    one band tell (09.6.6); at + 2 or more its arrival will raise the lethal warning at first perception
    (07.3.3, 09.6.6) — and the first sign already says, in fiction, that this is something the character
    should not meet ("the tracks are the width of a cartwheel").
-5. A threat 13 marks `ambush: true` (brigands at a narrows, a lurker in a pool) is still announced: its
+5. A threat its table marks `ambush: true` [verification: V2b-006] (brigands at a narrows, a lurker in a pool) is still announced: its
    first sign is the ambush ground itself ("the track narrows between two banks of gorse, and the birds
    are quiet") written as a feature, so a wary player can refuse the ground.
 This makes the hidden-mechanics lock and the telegraphed-lethality lock one rule [BRIEF §4; R5 P-36; R6
@@ -1056,7 +1057,7 @@ and broken only), scout +1 band farther (any), fog or night without light → re
 `ambush` rows start at the ambush ground's distance (usually `band.close`). The result is each
 participant's starting band to the PC for 06.3.9 if a conflict starts.
 
-**T-10-15 Encounter distance** (`travel.yaml#encounter_distance`; d6).
+**T-10-15 Encounter distance** (`travel.yaml#tables.tbl.10.encounter_distance` [verification: V2b-010]; d6).
 
 | Openness | 1 | 2 | 3 | 4 | 5 | 6 | Examples |
 |---|---|---|---|---|---|---|---|
@@ -1361,7 +1362,7 @@ gates everything found inside, so 8 themes × 14 domains give 112 kinds of site 
 
 | Theme (`site.theme.*`) | What it means | Default danger | Gates (denizens) | Place facts |
 |---|---|---|---|---|
-| ancient | forgotten by all; old works and old guardians | wild | construct, spirit.ancestor, undead.mindless, beast.vermin | — |
+| ancient | forgotten by all; old works and old guardians | wild | construct, spirit.ancestor, undead.mindless, beast.vermin, horror.ooze [verification: V2b-009] | — |
 | corrupted | twisted by dark power | perilous | fiend, undead, horror, folk (cultists) | `desecrated` |
 | fortified | held and defended by those within | wild | folk (soldiers, brigands, orcs, goblins), beast (war-hounds) | — |
 | hallowed | holy, or once holy, guarded by its faith | settled | spirit.celestial, spirit.ancestor, construct, folk (wardens) | `consecrated`; `resonance` the keeper's axes |
@@ -1829,7 +1830,8 @@ looking) is a new beat at its own repetition (01.14.3).
 6. Return every result for narration; raise an interrupt for the results listed in 10.9.8.
 
 **PR-10-5 An encounter arrives.** `[D]` (10.10)
-1. Field the row (if not already fielded): band against home band clamped to the archetype's bands; the
+1. Field the row (if not already fielded) as 10.10.1: band against home band (a row outside the archetype's
+   fielded bands re-rolls once, then takes the nearest band it has [verification: V2b-010]); the
    bestiary entry or PR-09-1's build; count by `tbl.09.group_shape`; four or more of one template → a mob;
    shape rules for home bands 4–5 (10.10.2 item 2); a leader if the group lists one; complication if the row
    says so (09.8.5).
@@ -1900,7 +1902,7 @@ row it writes)
 
 **PR-10-10 Building an encounter table from a gate.** `[D]` (10.10.2, 10.13.13, 12.16; revision: I-022, I-028.
 Reference code `_process/simulation/10_table_builder.py`.) Input: a **pool** (archetype ids with weights: a
-site's theme × domain pool, `sites.yaml#denizen_pools`; a region's pool from the world seed, 12.16.6), a
+site's theme × domain pool, `sites.yaml#denizen_pools`; a region's pool from the world seed, 12.16.13 [verification: V2b-010]), a
 **fallback pool** (a site's theme gate alone; a region's terrain branch), the home band, and the engine RNG.
 1. Lay out eight slots: faces 3 + 3 at home − 1, 3 + 3 + 3 + 2 at home, 2 + 1 at home + 1 (30/55/15). A slot's
    band is home + its offset, at least 1 and at most 5.
@@ -2196,8 +2198,8 @@ No warning line (home band 1 = Wren's band). She commits; `venture_start` fires 
 
 Wren stops at the ford for the day rather than start the fen in the last hour of light (the leftover point
 is dropped: 10.3.6). The omen: nothing is pending, so the engine rolls the threat share for wild — d12 = 5
-(≤ 7: threat) — then the road threat sub-table: d20 = 9 → **highwaymen with a captain** (`arch.brigand`,
-`home` → band 1, `group`, complication). A pending threat is written (sealed: what, how many); its first sign
+(≤ 7: threat) — then the road threat sub-table at home band 1: d20 = 11 → **a mob of hungry men at a toll they invented**
+(`arch.brigand`, `home` → band 1, 6–8 minions, complication) [verification: V2b-011]. A pending threat is written (sealed: what, how many); its first sign
 from `archetype_signs` is rendered: *a cold fire by the ford with far too many bootprints around it, the ash
 still warm underneath.* `advance_time` halts (10.9.8).
 
@@ -2205,8 +2207,8 @@ still warm underneath.* `advance_time` halts (10.9.8).
 **+4**; DC: the row's tier by band, T1 → Easy (10); stakes Risky (an observer may be watching the ford:
 `cost.exposure` threatened); reach Standard. She ranks the bundle: how many, how near, what kind. d20 = 13 →
 17, success → `deliver_count(3, 2)` = 2 items (01.10.4): the engine fields the row now — `tbl.09.group_shape`
-d6 = 4 → five: a mob of four (`adv.brigand_band`) and a leader (an elite of the archetype) — and reports how
-near: *they watch the ford; a lone camp will see them tonight* (the pending timer can run at most to the
+d6 = 4 → the middle of 6–8, seven: one mob of seven brigand minions (`adv.brigand_band`'s template, 2
+Vitality each) — and reports how near: *they watch the ford; a lone camp will see them tonight* (the pending timer can run at most to the
 fourth check). *Answer: prepare.* She camps in an alder hollow off the road (07.8.2: camp) and strings a cord
 with her cook-pot on it across the path (verb.setup, Trivial in the circumstances: the fact `camp.alarm`).
 
@@ -2216,12 +2218,13 @@ with her cook-pot on it across the path (verb.setup, Trivial in the circumstance
 
 *Arrival (PR-10-5).* Distance: Brackwater is `broken`, but it is night without light → read as `closed`: d6
 = 5 → `band.near`. Awareness: Wren holds lookout in a camp watch and the alarm line jangles → not surprised.
-Advisory (09.6.5): P1 against a T1 mob of four and an elite → **fair** (shown only on request; the band tells
-are rendered). The brigands' objective is `rob` (their disposition); they are on a mission (10.10.5), so
-they come on. The conflict (06; summarized): Wren drops the captain with an arrow in round 1 (a critical
+The row's complication (09.8.5): `tbl.09.complication` d12 = 3 → *dark* (already so: night; beyond `band.close`
+the men are `flag.obscured` to her). Advisory (09.6.5): P1 against a T1 mob of seven → **easy** (97 / 13; shown
+only on request; the band tells are rendered). The brigands' objective is `rob` (their disposition); they are on a mission (10.10.5), so
+they come on. The conflict (06; summarized): Wren's arrows drop two of them in round 1 (one a critical
 hit); the mob's morale clock breaks in round 3 and they scatter into the reeds. `conflict_end`; the venture
 record gains the encounter; the survivors are written on the area (`area.occupants: brigands, scattered`,
-10.10.6). Wren searches the captain: 08.3.11's purse (T1: 1d4 − 1 = 2 coins) and his gear.
+10.10.6). Wren searches the fallen: 08.3.11's purse for the side (T1: 1d4 − 1 = 2 coins) and their gear.
 
 | Watch | Activity | Check | Result |
 |---|---|---|---|
@@ -2258,8 +2261,10 @@ clear it).
 The forced unit would apply one `cond.exhausted` stack at the evening watch's end; Wren declares
 **push-on** (07.8.10): Endure, Endurance +1, floor +1 = +2 vs Moderate 15: d20 = 15 → 17, success,
 delivered reach 2 → the stack is deferred two watches. She camps at the causeway head (a fire; camp). At the
-next dawn the `rest_long` event runs first (it removes no stack: she holds none yet), then the deferred stack
-lands at the `watch` boundary: she starts the delve with **one stack** (−1 on every check) — the honest
+next dawn the `rest_long` event runs first (it removes no stack: she holds none yet); she spends the morning
+watch crossing the causeway to the chapel and searching its flooded nave (check d12 = 9 → L), and the deferred
+stack lands at that watch's end, two watches after the evening [verification: V2b-011]: she starts the delve at
+midday with **one stack** (−1 on every check) — the honest
 price of the extra watch. *Boundary pair:* had she camped at the afternoon's end (22/24) instead, she would
 arrive mid-morning of day 4 with no stack and one more supply spent; had she failed the push-on, the stack
 would have landed that evening.
@@ -2396,11 +2401,12 @@ after that **plus one travel watch** (10.4.7 item 1): not yet. She camps, sleeps
 |---|---|---|
 | day 2 morning | 18/18: arrives at the Thornway crossing | the seal test fires at this same boundary: *the tower should have been here a day ago*; and she arrives at a place she can name (a road crossing she has never seen): discovered (`frame_id: null`); her position is known (10.4.7 item 3) |
 
-**Recovery.** From the crossing, the engine re-plans: the tower is two links away by the Thornway road and a
-short trackless leg (W = 1). Wren chooses to **take the time** on the trackless leg (01.4.4; the fallback is
-legal here, Moderate allows it): no roll, Standard reach, each travel watch earns half its points — W = 1 → 6
-points at 3 a watch = 2 watches. She arrives at the tower on day 2's evening. Cost of being lost: about a day
-and one supply; nothing else, because the time-tick checks of those watches all came up lulls and a
+**Recovery.** From the crossing, the engine re-plans: the tower is one short trackless leg away (W = 1). Wren
+chooses to **take the time** (01.4.4; the fallback is legal here, Moderate allows it): no roll, Standard reach,
+each travel watch earns half its points — W = 1 → 6 points at 3 a watch = 2 watches: day 2's afternoon, and,
+since a third travel watch that day would be a forced march (10.3.5), day 3's morning; supply 1 → 0 at that
+dawn. She arrives at the tower at the end of day 3's morning [verification: V2b-012]. Cost of being lost: about a
+day and a half and two supply; nothing else, because the time-tick checks of those watches all came up lulls and a
 discovery (the Thornway crossing itself is now on her map).
 
 *Boundary pairs.* Had she taken the time from the start: 12 points at 3 a watch = 4 travel watches, arriving
@@ -2416,7 +2422,7 @@ character does.
 
 *Situation.* Wren's journey OFFER into the Crag Moors (home band 2, perilous) showed: "`[WARNING] Things there
 are stronger than you.`" On the second afternoon the check (perilous) rolls d12 = 3 → **O**; the threat share
-d12 = 4 (≤ 9) → threat; the highland threat sub-table d20 = 20 → **wyvern** (`home+1` → band 3). Band 3 is two
+d12 = 4 (≤ 9) → threat; the highland threat sub-table at home band 2: d20 = 19 → **wyvern** (`home+1` → band 3, one minion) [verification: V2b-011]. Band 3 is two
 above Wren's band 1, so 10.9.5 item 4 applies: the first sign says what the warning will say — *a sheep
 carried off whole; the drag-marks end in the middle of the heather, as if it was lifted* — and a band tell is
 rendered with it; when the wyvern is first perceived, 07's lethal warning will fire at once (09.6.6).
