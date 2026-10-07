@@ -17,10 +17,14 @@ $ python -m play
 ```
 
 - **New game** asks for a name for the save, then hands over to the world seed and creation, exactly as the
-  rules script them (`[SEED n/14]`, `[CREATE n/5]` blocks).
+  rules script them (`[SEED n/14]`, `[CREATE n/N]` blocks).
 - **Continue** opens the most recent game; the first thing shown is the recap and whatever was open.
 - Games live in `saves/<name>.db` (git-ignored). The key is read from `GEMINI_API_KEY` in the environment or
   `.env` at the repo root.
+
+`--offline` (any command) swaps every model role for the free stand-in model (contracts/model-calls.md,
+"Offline stand-in"): the whole game runs with no key and no cost, with plain template prose. It exists for
+tests and for checking the engine; it is not the real game.
 
 Command-line equivalents: `python -m play new "The Salt Road"`, `python -m play continue [name]`,
 `python -m play replay <name>`, `python -m play report <name>`.
@@ -40,6 +44,9 @@ Command-line equivalents: `python -m play new "The Salt Road"`, `python -m play 
 | `/turn [n]` | the turn record: classes, frames, rolls, writes, verdicts |
 | `/spend` | turn, session and game cost against the budget |
 | `/branch <label>` | a save point to return to |
+| `/budget <usd>` | sets the session budget for warnings (`off` for none) |
+| `/autocommit on\|off` | auto-commit safe offers (01.7.4); a lethal frame is never auto-committed |
+| `/fix <what>` | a dispute: the DM checks the record and corrects a seen error (PR-12-4) |
 | `/quit` | saves and exits; nothing is lost at any point |
 
 ## Output layout

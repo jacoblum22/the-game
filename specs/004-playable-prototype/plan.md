@@ -205,14 +205,17 @@ engine/                        # new package; src/ (the probes) stays as-is for 
 ├── gen/                       # generators: world_seed, birth, npc, adversary (loot, gift, craft in M5)
 ├── world/                     # place graph, scenes, NPC social records, chronicle, threads (grows in M4/M6)
 ├── retrieve/                  # RC-RETRIEVE: anchors (≤8), cards (≤12), triggers
-├── audit/                     # RC-AUDIT: check_claims verdicts, plain fallback, T10 screen
-├── dm/                        # PR-12-1 orchestrator, seed and creation flows, packets, schema builders
+├── audit/                     # RC-AUDIT: check_claims verdicts, plain fallback, T10 screen; safety.py (separate)
+├── dm/                        # PR-12-1 orchestrator (turn.py), packet.py, schemas.py, seed/creation/opening/ending/session
 │   └── roles/                 # interpret, reader, framer, world, director, narrator, checker (+ prompts)
-├── llm/                       # StructuredModel adapters: gemini.py, replay.py; budget (second family later)
+├── llm/                       # StructuredModel adapters: gemini.py, replay.py, offline.py (free stand-in); budget; env
+├── ids.py                     # deterministic ids from the event counter
 └── game.py                    # the game API (contracts/engine-api.md)
 
 play/
-└── cli.py                     # terminal front end (contracts/cli.md); play/web/ later
+├── __main__.py                # python -m play
+├── cli.py                     # terminal front end (contracts/cli.md); play/web/ later
+└── report.py                  # report and replay commands
 
 tests/
 ├── engine/                    # unit tests per module

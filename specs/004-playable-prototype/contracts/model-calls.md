@@ -159,11 +159,33 @@ CheckerOutput:
     next_step_exists: bool
     mechanics_in_fiction: [str]             # offending spans
     ends_on_prompt_or_one_pause: bool
-    safety_spans: [str]                     # against the player's lines and veils list (12.5.6)
 ```
 
 Verdicts are computed by code (`check_claims`, 12.3.2 is `[D]`). Extraction instructions: every
 sentence, every assertion; when unsure whether a phrase asserts something, extract it (12.3.1).
+
+Content safety is **not** the checker's job (FR-036). The safety screen is separate: code matches the draft
+against the player's lines and veils (12.5.6) and the SAFETY message class is handled at T2 before anything
+else (`engine/audit/safety.py`).
+
+## Offline stand-in (`engine/llm/offline.py`)
+
+A free, deterministic implementation of the same `StructuredModel` interface, for tests, the persona
+harness's dry runs and `python -m play --offline`. It never calls a network.
+
+- **Interpret:** maps a number or an option's words onto the choice; empty or "skip" → `move_on`.
+- **Reader:** splits on sentences; `?` → FICTION_QUESTION (or OOF_QUESTION when it names a rule or `/`);
+  quoted text → SPEECH; otherwise DECLARATION. Verb by keyword table over the 15 basic verbs; gate from the
+  verb and the holdings the schema offers; necessity by keyword (risky words → `uncertain_and_costly`).
+- **Framer:** the default anchor, its default attribute, a middle tier, `stakes_source` from the first
+  matching enum, the first fitting cost menu ids.
+- **World / Director:** first enum options; cut a scene after a fixed number of quiet turns.
+- **Narrator:** template prose built only from the adjudication record and the narrator view's names.
+- **Checker:** a heuristic extractor: one claim per sentence that names a known entity, compared
+  against the store; screen flags computed by simple string tests.
+
+Tests that need a specific response (a bad draft, a given classification) use `ScriptedModel`, a queue of
+responses per role in the same file.
 
 ## Recording and replay
 

@@ -8,13 +8,13 @@ condition (00.9), the frame (00.13), the rule card (00.15.2) and the ruling reco
 document does not restate them. It says how they are stored, which ones Milestone 1 uses, and the
 records the engine adds (events, world seed, scene, turn record, model call).
 
-## 1. Storage: one SQLite file per campaign
+## 1. Storage: one SQLite file per game
 
 | Table | Purpose | Key columns |
 |---|---|---|
 | `events` | **Source of truth.** Append-only; never updated or deleted | `seq` (PK, monotone), `branch_id`, `turn_id`, `beat_id` null, `game_time` (00.7.1 timestamp as JSON), `type`, `payload` (JSON), `source` (frame id, handler id, oracle id, mention, player), `rule_id` (the rule that caused it), `schema_ver` |
-| `rng_draws` | Every draw (FR-015) | `seq`, `stream`, `purpose`, `sides` or `table_id`, `result`, `event_seq` |
-| `turns` | One row per player message (FR-024) | `turn_id`, `input_verbatim`, `parts` (JSON), `delivered_verbatim`, `pause` (JSON) null, `verdicts` (JSON), `fallback_used`, `cost_usd`, `latency_ms` |
+| `rng_draws` | Every draw (FR-027) | `seq`, `stream`, `purpose`, `sides` or `table_id`, `result`, `event_seq` |
+| `turns` | One row per player message (FR-014, FR-037) | `turn_id`, `input_verbatim`, `parts` (JSON), `delivered_verbatim`, `pause` (JSON) null, `verdicts` (JSON), `fallback_used`, `cost_usd`, `latency_ms` |
 | `model_calls` | Every model call, input and output, for replay | `call_id`, `turn_id`, `role`, `provider`, `model_id`, `schema_hash`, `request` (JSON), `response` (JSON), `tokens_in_cached`, `tokens_in`, `tokens_out`, `tokens_thinking`, `cost_usd`, `latency_ms`, `outcome` (ok, invalid_reasked, defaulted, refused, error) |
 | `snapshots` | Projection checkpoints at each `scene_end` and on save | `seq`, `blob` (JSON), `hash` |
 | `facts_idx` | Query index over fact events | `subject`, `predicate`, `value`, `valid_from_seq`, `valid_to_seq`, `source`, `certainty`, `visibility` |
@@ -51,7 +51,15 @@ Each 00.14.2 write tool produces one or more events. Names follow the tool.
 | `handler_ran` / `handler_skipped` | scheduler | handler id, phase, result summary / reason "not yet built" and the milestone that builds it |
 | `writes_reverted` | `revert_writes` | reverted event seqs, compensating values, reason |
 | `scene_started` / `scene_ended` | PR-12-7 | scene record / cut reason |
-| `meta_set` | counters and preferences | key (tension, inconclusive streak, dead air, auto_commit…), value |
+| `meta_set` | counters and preferences | key (tension, inconclusive streak, dead air, auto_commit, budget…), value |
+| `pause_opened` / `pause_closed` | any pause (every `Pause.kind`) | pause record (kind, frame id, choices, default) / the choice taken and by what (option, own words, default) |
+| `seed_answered` | each world-seed step | step, choice, source (player option, player words, oracle roll), the step's `[D]` writes follow as their own events |
+| `creation_answered` | each creation block | block, choice, source, verbatim words when the player's own |
+| `game_created` | `Game.new` | game seed, engine version, rules tree hash, milestone, config |
+
+Resume (FR-010) reads the last unclosed `pause_opened`: whatever was open (a seed step, a creation block, an
+offer, a last-chance menu) is re-presented exactly. Saves carry the engine version and rules hash from
+`game_created`; a later milestone's engine must load them (FR-040).
 
 ## 3. Projection: `WorldState` (state families in Milestone 1)
 
@@ -84,7 +92,7 @@ Filled in later milestones: tally (M3), effect_instance (M2/M3), offer (04/11 of
 `scene_id`, `place_id`, `mode` (00.7.3), `agenda`, `hoped_answer`, `pillar`, `challenge_type`,
 `cast_present` [entity ids], `situation_tags` [tag], `question_answered` (bool), `started_at`, `ended_at`.
 
-### Turn record (FR-024)
+### Turn record (FR-037)
 
 ```yaml
 TurnRecord:
@@ -93,12 +101,13 @@ TurnRecord:
   parts: [{text: str, class: SAFETY|SESSION|DISPUTE|PENDING_ANSWER|OOF_QUESTION|FICTION_QUESTION|DECLARATION|SPEECH}]
   beats: [frame_id]
   oracle_calls: [event_seq]
-  pause: {kind: offer|clarify|redirect|near_miss, frame_id: str|null, options: [str]} | null
+  pause: {kind: <Pause.kind from contracts/engine-api.md>, frame_id: str|null, options: [str]} | null
   writes: [event_seq]
   draft_versions: [{text: str, mentions: [..], claims: [Claim], verdicts: [Verdict]}]
   fallback_used: bool
-  screen: {intent_acknowledged: bool, next_step: bool, safety_ok: bool, pc_agency_ok: bool,
-           no_mechanics_in_fiction: bool, ends_correctly: bool}
+  screen: {intent_acknowledged: bool, intent_substituted: bool, next_step_exists: bool,
+           mechanics_in_fiction: [str], ends_on_prompt_or_one_pause: bool,
+           pc_agency_ok: bool, safety_ok: bool}     # CheckerOutput.screen + code checks + the safety screen
   delivered_verbatim: str
   model_calls: [call_id]
   cost_usd: float

@@ -19,3 +19,9 @@ venv/
 
 rules/_process/index.tsv
 .claude/worktrees/
+
+# Feature 004: game saves
+saves/
+*.db
+*.db-wal
+*.db-shm

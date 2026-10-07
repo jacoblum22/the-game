@@ -172,7 +172,7 @@ does today with three tools.
 
 ### R4. State storage
 
-- **Decision:** One SQLite file per campaign (WAL mode, standard library `sqlite3`). An append-only
+- **Decision:** One SQLite file per game (WAL mode, standard library `sqlite3`). An append-only
   `events` table is the source of truth. The current state is a projection: typed Pydantic objects for
   the 00.6 state families, rebuilt by replaying events and snapshotted at every `scene_end`. A small
   number of index tables (facts by subject and predicate, rulings by signature) are maintained
@@ -265,7 +265,7 @@ does today with three tools.
   co-op in v1.
 - **Path:** (1) the terminal on Jake's machine (Milestone 1); (2) the FastAPI app on Jake's machine via Remote Control for
   playtesting; (3) one small VPS (Hetzner or a Fly.io machine, a few dollars a month) running the app
-  behind Caddy for TLS, one SQLite file per campaign on a persistent volume, continuous backup to object
+  behind Caddy for TLS, one SQLite file per game on a persistent volume, continuous backup to object
   storage (Litestream, status to verify, or a nightly snapshot), invite-only sign-in (magic link or
   Cloudflare Access), API keys server-side only, per-player daily spending caps; (4) only at dozens of
   concurrent players, Postgres and more than one app server, with the same event schema.
@@ -325,7 +325,8 @@ rates for every call (one provider).
   span-level redrafts. That's tuning work after Milestone 1. Because older history reaches the model only through stored
   state, the per-turn cost does not grow with the length of the game (SC-002).
 - **Latency:** A1 ≈ 1.5 s + A2 ≈ 2.5 s → the offer shows in about 4 s. After commit: W ≈ 1 s (if run)
-  + B ≈ 2 s + C ≈ 1 s → about 3–4 s, 6–8 s with a redraft. Within SC-007.
+  + B ≈ 2 s + C ≈ 1 s → about 3–4 s, 6–8 s with a redraft. Within SC-009. An OFFER pause with nothing resolved before it skips drafting and checking: the
+  engine renders the restatement and the OFFER block, so offers come in about 2 s.
 
 ## 5. Open questions for Jake
 
