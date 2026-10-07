@@ -163,8 +163,13 @@ def bearer_ends(policy, c):
 
 def fight(rng, pband, foes, policy='steady', weapon='one', armor=None, shield=False, use_focus=False,
           fearless=False, pc_over=None, fend=True, called=False, caster=None, foe_fend=False, log=None,
-          bearer='smart'):
-    """caster (revision I-009): None for a weapon fighter, else a dict describing a caster's beats:
+          bearer='smart', env=None):
+    """env (revision I-075): None, or dict(sev, count, dc, share_cap): one established object dropped on the foes as
+         the first beat of the PC's first turn (T-06-9 row 5: a Strike, one d20 against the higher of the rope's DC
+         and the Guard). On a hit each of up to `count` members of the first mob (or up to `count` separate foes)
+         takes the object's harm (one rung heavier on a critical); with share_cap a share never exceeds one
+         member's Vitality. The object has then fallen and is not used again.
+       caster (revision I-009): None for a weapon fighter, else a dict describing a caster's beats:
          sev    -- base severity of the branch working (05.7.11: rank 1/2/3 = S2/S3/S4); its aimed check
                    uses p['atk'] as casting attribute + competence; it costs 1 action like a Strike (06.1.3)
                    and needs no Move to engage (band.near or band.close)
@@ -217,6 +222,33 @@ def fight(rng, pband, foes, policy='steady', weapon='one', armor=None, shield=Fa
             live = [f for f in foes if f.alive]
             if not live or mor.broken:
                 return
+            if env is not None and not st.get('env_used'):
+                st['env_used'] = True                   # I-075: the drop, one action, a Strike beat
+                mobs = [f for f in live if f.members > 1]
+                sel = mobs[:1] if mobs else sorted(live, key=lambda f: f.vit)[:env['count']]
+                dc = max(env['dc'], max(f.guard for f in sel))
+                deg = degree(rng, p['atk'] + REP[min(k, 2)], dc)
+                if deg >= 2:
+                    for f in sel:
+                        per = max(0, HARM[min(5, env['sev'] + (1 if deg == 3 else 0))] - f.red)
+                        if f.members > 1:
+                            share = min(per, f.per) if env['share_cap'] else per
+                            h = share * min(env['count'], f.cur_members())
+                        else:
+                            h = per
+                        before_m = f.cur_members()
+                        f.vit -= h
+                        if f.members == 1 and not f.bloodied and f.vit * 2 <= f.maxvit:
+                            f.bloodied = True
+                            mor.tick(1)
+                        fallen = before_m - f.cur_members()
+                        if fallen > 0:
+                            mor.tick(fallen)
+                            st['env_fell'] = st.get('env_fell', 0) + fallen
+                    mor.strength()
+                acts -= 1
+                k += 1
+                continue
             if not tgt.alive:
                 eng = [f for f in live if f.engaged]
                 if eng:
@@ -390,7 +422,7 @@ def fight(rng, pband, foes, policy='steady', weapon='one', armor=None, shield=Fa
     return dict(won=won, clean=won and not st['staggered'], staggered=st['staggered'],
                 dying=st['extra'] >= 2, rounds=rounds, lost=min(st['lost'], p['vit']),
                 broke=mor.broken and any(f.alive for f in foes), focus_left=st['focus'],
-                focus_spent=st['focus_spent'])
+                focus_spent=st['focus_spent'], env_fell=st.get('env_fell', 0))
 
 
 def run(label, pband, mk, **kw):
@@ -731,3 +763,35 @@ if __name__ == '__main__':
         for pol in ('never', 'always', 'smart'):
             run("  new Flame Lance r2 (S4 +2 + burning), bearer %s" % pol, 3, mk, pc_over=CASTER[3],
                 caster=dict(sev=3, spell=new, **bw), use_focus=True, bearer=pol)
+
+    # ---- L. revision I-075: one dropped object a fight (T-06-9 row 5), the old rule against the rung-count rule
+    print()
+    print("### L. I-075: one established object dropped on the foes as the PC's first beat (rope Moderate 15)")
+    print()
+    print("Old: the drop is a burst (cap 6) and its harm lands k times on the pool, carrying over. New: it selects at")
+    print("most its rung's count (body 2, heavy 3, massive 4) and a share never exceeds one member's Vitality.")
+    print("Cells: advisory class win%/Staggered% (H's thresholds); wipe% = the drop alone fells every member.")
+    print()
+    ENV = (("none", None),
+           ("old heavy S3", dict(sev=3, count=6, dc=15, share_cap=False)),
+           ("old massive S4", dict(sev=4, count=6, dc=15, share_cap=False)),
+           ("new body S2", dict(sev=2, count=2, dc=15, share_cap=True)),
+           ("new heavy S3", dict(sev=3, count=3, dc=15, share_cap=True)),
+           ("new massive S4", dict(sev=4, count=4, dc=15, share_cap=True)))
+    LM = (("P1 vs T1 mob of 4", 1, 1, 4, 1), ("P1 vs T1 mob of 6", 1, 1, 6, 1), ("P2 vs T1 mob of 8", 2, 1, 8, 1),
+          ("P2 vs T2 mob of 4", 2, 2, 4, 1), ("P2 vs T2 mob of 6", 2, 2, 6, 1), ("P3 vs T2 mob of 6", 3, 2, 6, 1),
+          ("P3 vs T3 mob of 4", 3, 3, 4, 1), ("P2 vs 4xT2 (separate)", 2, 2, 1, 4))
+    print("| Matchup | " + " | ".join(n for n, _ in ENV) + " |")
+    print("|---|" + "---|" * len(ENV))
+    for lab, pb, fb, m, n in LM:
+        cells = []
+        for en, ev in ENV:
+            rng = random.Random(606)
+            res = [fight(rng, pb, [Foe(fb, members=m) for _ in range(n)], env=ev) for _ in range(RUNS)]
+            w = 100.0 * sum(r['won'] for r in res) / len(res)
+            st_ = 100.0 * sum(r['staggered'] for r in res) / len(res)
+            wipe = 100.0 * sum(1 for r in res if r['env_fell'] >= m * n) / len(res)
+            c = ('trivial' if w >= 99 and st_ <= 3 else 'easy' if w >= 95 and st_ <= 15 else
+                 'fair' if w >= 80 and st_ <= 50 else 'hard' if w >= 40 else 'lethal')
+            cells.append("%s %d/%d" % (c, round(w), round(st_)) + ("" if ev is None else " w%d" % round(wipe)))
+        print("| %s | %s |" % (lab, " | ".join(cells)))
