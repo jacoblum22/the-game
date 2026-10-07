@@ -27,6 +27,7 @@ DEGREE_WORDS = {  # 12.14.4: the degree in plain words, never "success"/"failure
 _ID = re.compile(r"\(?\b[a-z]+(?:\.[a-z0-9_]+)+\b\)?|\b\w+_\w+\b|\d+")
 _AUX = {"is", "are", "was", "were", "can", "could", "will", "would", "has", "have", "had", "should", "may", "might",
         "must", "does", "do", "did"}
+_WH = {"what", "who", "whom", "whose", "which", "where", "when", "why", "how"}
 _KEEP = {"the", "a", "an", "his", "her", "their", "my", "your", "its", "this", "that", "these", "those", "someone"}
 _SOMEONE = re.compile(r"^(?:someone|somebody|anyone|anybody)\b", re.IGNORECASE)
 
@@ -117,7 +118,7 @@ def _oracle_line(question: str, answer: str) -> str:
     head, tail = head.strip().lower(), tail.strip()
     if head not in ("yes", "no"):
         return _sentence(f"{q}: {answer.strip()}")
-    if q.split(" ", 1)[0].lower() in _AUX:
+    if q.split(" ", 1)[0].lower() in _AUX | _WH:
         return ""  # ponytail: an interrogative ('Is anyone ...?') is not turned round; the store keeps the fact
     s = q if head == "yes" else _negate(q)
     return _sentence(f"{s}, {tail}" if s and tail else s)

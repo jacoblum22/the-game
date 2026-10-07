@@ -294,12 +294,25 @@ def narrate_checked(ctx: TurnContext, record: AdjudicationRecord, *, player_mess
         if bad:
             reasons = [f"{v.verdict}: {v.reason}" for v in bad]
             plan = _plan(claims, verdicts, sents)
+            if redrafts >= max_r:
+                # past the budget every failing sentence is cut, not redrafted: what is left was checked against the
+                # store, so it is delivered (closed by the open prompt, 12.14.9) instead of the plain fallback when
+                # a sentence of fiction is left [playtest 2026-10-07: a scene asked for came back "What do you do?"]
+                cut = (plan.cut | {claims[v.claim].sentence for v in bad}) & set(range(len(sents)))
+                body = range(len(sents) - (0 if record.pause else 1))  # without a pause the last is the prompt
+                if not cut or not any(i not in cut for i in body):
+                    break
+                redrafts += 1
+                sents, claims = _renumber(claims, sents, cut)
+                if record.pause is None and not sents[-1].rstrip().endswith("?"):
+                    sents.append("What do you do?")
+                text = " ".join(sents)
+                version = {"kind": "cut", "text": text, "mentions": [], "claims": [], "verdicts": [],
+                           "fixes": plan.lines}
+                out.draft_versions.append(version)
+                continue
             keep_prompt = record.pause is not None or (len(sents) - 1) not in plan.cut
             pure_cut = not plan.needs_narrator and plan.cut and len(plan.cut) < len(sents) and keep_prompt
-            # past the budget a pure cut is still the table's own fix: delivered when a sentence is left besides
-            # the closing prompt, instead of the plain fallback
-            if redrafts >= max_r and not (pure_cut and len(sents) - len(plan.cut) >= (1 if record.pause else 2)):
-                break
             redrafts += 1
             if pure_cut:
                 sents, claims = _renumber(claims, sents, plan.cut)  # a pure cut: code removes the sentences
@@ -563,7 +576,9 @@ def narrate_turn(ctx: TurnContext, adj: Any, message: str) -> TurnOutcome:  # ru
                 narr = NarrationResult(fiction="", skipped=True)
             elif skip_drafting(rec, pause):  # the OFFER block restates the beat (01.7.1): not said twice
                 narr = NarrationResult(fiction="", skipped=True)
-            else:
+            else:  # the OOF parts are answered by their blocks: the fiction answers (and is screened on) the rest
+                if any(p.cls in OOF_CLASSES for p in rec.parts):
+                    message = " ".join(p.text for p in rec.parts if p.cls not in OOF_CLASSES) or message
                 narr = narrate_checked(ctx, rec, player_message=message, exchanges=exchanges,
                                        pause_blocks=owned if pause is not None else ())
             blocks += record_turn_end(ctx, rec, adj.writes)  # T12

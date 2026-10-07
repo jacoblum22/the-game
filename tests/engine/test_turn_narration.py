@@ -93,6 +93,32 @@ def test_two_failed_redrafts_fall_back_with_review_flag(tmp_path: Path) -> None:
     assert any(x["kind"] == "rule_conflict" and x["review_flag"] for x in rulings)
 
 
+def test_new_player_asking_for_options_and_the_scene_gets_both(tmp_path: Path) -> None:
+    """Playtest 2026-10-07 (newcomer): "I'm new to this. What are my options? Can you describe what I see?" got
+    "What do you do?" plus canned notes. Each part is answered: the help and the leads by their blocks, the scene
+    by the fiction; past the redraft budget the checked sentences are kept and only the failing one is cut."""
+    msg = "I'm new to this. What are my options? Can you describe what I see around me?"
+    parts = [("OOF_QUESTION", "I'm new to this."), ("OOF_QUESTION", "What are my options?"),
+             ("FICTION_QUESTION", "Can you describe what I see around me?")]
+    data = {"parts": [{"text": t, "class": c} for c, t in parts], "pending_answer": None, "fact_questions": [],
+            "beats": [], "clarifying_question": None, "restatement": msg, "player_quantity": None}
+    bad = "Fog lies low on the quay. Tam Harlan, a woman, mends a net. Do you go to the water or the town?"
+    model = ScriptedModel({Role.READER: [lambda schema, packet: prune(data, schema)], Role.WORLD: [QUIET_WORLD],
+                           Role.NARRATOR: [narr(bad)] * 3})
+    dock, ctx = setup(tmp_path, model)
+    model.push(Role.CHECKER, *[chk(claim(1, dock.ferryman, "identity", "gender", "woman"))] * 3)
+    out = play_turn(ctx, msg)
+    r = out.response
+    assert r.fiction == "Fog lies low on the quay. Do you go to the water or the town?", r.fiction
+    assert not r.flags.fallback_used
+    notes = [b.text for b in r.oof_blocks]
+    assert any("[LEADS]" in t for t in notes) and any("You play by saying" in t for t in notes), notes
+    assert not any("noted" in t for t in r.text().split("\n")), r.text()
+    # the Checker screens the fiction against the in-fiction part only: the leads are not the narration's job
+    checker = calls(model, Role.CHECKER)[0].message
+    assert "describe what I see" in checker and "my options" not in checker
+
+
 def test_offer_with_nothing_resolved_skips_the_narrator(tmp_path: Path) -> None:
     model = ScriptedModel({Role.READER: [reader("DECLARATION", "I slip past the watch.", SNEAK)],
                            Role.FRAMER: [framer(**RISKY)], Role.WORLD: [QUIET_WORLD]})

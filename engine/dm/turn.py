@@ -233,7 +233,9 @@ def _adjudicate(ctx: TurnContext, rec: AdjudicationRecord, reader: ReaderResult,
         if part.cls == "SESSION":
             part.handled = "answered"
             rec.notes.append(f"session move: {part.text} (12.5)")
-            oof.append({"kind": "NOTE", "text": session_answer(ctx, part.text)})
+            note = {"kind": "NOTE", "text": session_answer(ctx, part.text)}
+            if note not in oof:  # two parts asking the same thing get one answer
+                oof.append(note)
         elif part.cls == "DISPUTE":
             part.handled = "answered"
             _dispute(ctx, part.text, oof)
@@ -257,7 +259,9 @@ def _adjudicate(ctx: TurnContext, rec: AdjudicationRecord, reader: ReaderResult,
     for part in rec.parts:
         if part.cls == "OOF_QUESTION":
             part.handled = "answered"
-            oof.append({"kind": "NOTE", "text": oof_answer(ctx, part.text)})
+            note = {"kind": "NOTE", "text": oof_answer(ctx, part.text)}
+            if note not in oof:
+                oof.append(note)
     _fiction_questions(ctx, rec, reader.fact_questions)
     for part in rec.parts:
         if part.cls == "FICTION_QUESTION":
@@ -388,8 +392,16 @@ CODEX_WORDS = {"sheet": ("sheet", "my stats", "my character"), "abilities": ("ab
                "threads": ("threads", "leads", "quests")}
 
 
-STUCK_WORDS = ("what are my options", "what can i do", "what now", "what should i do", "i'm stuck", "i am stuck",
-               "im stuck", "don't know what to do", "dont know what to do")
+STUCK_WORDS = ("what are my options", "my options", "what can i do", "what now", "what should i do", "i'm stuck",
+               "i am stuck", "im stuck", "don't know what to do", "dont know what to do", "not sure what to do",
+               "how do i start", "where do i start")
+NEW_WORDS = ("new to this", "new here", "first time", "never played", "how do i play", "how does this work",
+             "how does this game work")
+HOW_TO_PLAY = ('You play by saying what your character does or says, in plain words: "I look around", "I ask the '
+               'smith about the road", "I head for the heath". Ask what you see or who is here and the story '
+               'answers. Type "what are my options?" for ideas, or "sheet" or "journal" to see your character.')
+OOF_HELP = ('You can ask about a rule by its number, type "sheet", "abilities", "conditions" or "journal", ask '
+            '"what are my options?", or just say what your character does.')
 
 
 def stuck_answer(state: Any) -> str:  # rule: 12.8.5
@@ -428,13 +440,15 @@ def oof_answer(ctx: TurnContext, text: str) -> str:  # rule: 12.5.10
     low = text.lower().replace("’", "'")
     if any(w in low for w in STUCK_WORDS):
         return stuck_answer(ctx.state)
+    if any(w in low for w in NEW_WORDS):
+        return HOW_TO_PLAY
     for section, words in CODEX_WORDS.items():
         if any(w in low for w in words):
             return codex(ctx.state, section, ctx.rules).text
     if any(w in low for w in ("odds", "chance", "what would it take", "dc", "roll")):
         return ("Declare what you try: the OFFER shows the odds, stakes and costs before anything is rolled, and "
                 "withdrawing spends nothing (01.7.1).")
-    return "Out-of-fiction question noted: the codex shows your sheet, abilities, conditions and journal (12.5.10)."
+    return OOF_HELP
 
 
 def session_answer(ctx: TurnContext, text: str) -> str:  # rule: 12.5.3
@@ -445,7 +459,10 @@ def session_answer(ctx: TurnContext, text: str) -> str:  # rule: 12.5.3
         return recap_block(ctx.state).text
     if any(w in low for w in ("break", "pause", "stop for now", "end")):
         return "The game is saved at this point; pick up whenever you like (12.5.4)."
-    return "Session move noted (12.5)."
+    if any(w in low for w in NEW_WORDS):
+        return HOW_TO_PLAY
+    return ('Say "recap" to hear where things stand, or "break" to stop for now (the game is saved); otherwise '
+            "just say what your character does.")
 
 
 def _dispute(ctx: TurnContext, text: str, oof: list[dict[str, str]]) -> None:  # rule: 12.3.6
