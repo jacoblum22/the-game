@@ -359,3 +359,8 @@ Cost: 149 tools; see the usage line below.
 - 13 fixes (V2b-015 to V2b-027). The world seed is consistent with its data and example.
 - New rows: I-069 (seed year vs wound age), I-070 (petty-faith clocks), I-071 (social-contest scope), I-072 (Devoted through a bond).
 - Usage: 292 turns, average context 247k, 72M cache-read tokens.
+
+## Lean agent experiment (2026-10-07)
+- Added `.claude/agents/rules-worker.md` (tools limited to Bash, Read, Edit, Write, Grep and Glob). It is not picked up mid-session; it becomes available in the next session.
+- Measured starting context: general-purpose 49k, Explore (restricted tools) 37k. Tool definitions are about 12k of the base; the rest is the system prompt. Expected saving is about 25% of the per-turn floor.
+- Rule adopted: each agent is scoped to about 100 turns, where per-agent startup cost balances quadratic context growth.
