@@ -1,12 +1,12 @@
-# Data Model: Freeform Scene Slice
+# Data Model: Playable Prototype
 
 **Feature**: [spec.md](spec.md) | **Plan**: [plan.md](plan.md)
 
 The rules already define the canonical shapes: state types (00.6.1), object shapes (00.6.2), visibility
 (00.6.4), sealing (00.6.5), the evidence event (00.6.8), the timestamp (00.7.1), the clock (00.8), the
 condition (00.9), the frame (00.13), the rule card (00.15.2) and the ruling record (00.15.5). This
-document does not restate them. It says how they are stored, which ones the slice uses, and the few
-records the engine adds (events, turn record, model call).
+document does not restate them. It says how they are stored, which ones Milestone 1 uses, and the
+records the engine adds (events, world seed, scene, turn record, model call).
 
 ## 1. Storage: one SQLite file per campaign
 
@@ -24,7 +24,7 @@ records the engine adds (events, turn record, model call).
 The current state is a **projection**: replaying `events` in order through pure reducer functions yields
 the `WorldState` object below. Index tables are rebuilt from events and can be dropped at any time.
 
-## 2. Event types in the slice
+## 2. Event types (Milestone 1)
 
 Each 00.14.2 write tool produces one or more events. Names follow the tool.
 
@@ -42,20 +42,20 @@ Each 00.14.2 write tool produces one or more events. Names follow the tool.
 | `frame_committed` | `frame_check` passed and the OFFER answered | the frame up to OFFER (immutable afterwards) |
 | `frame_resolved` | roll → read → consequence | roll, degree, near miss, delivered reach, costs applied |
 | `offer_logged` | OFFER shown or auto-committed | shown_at, choice (commit, change, withdraw, trade, auto) |
-| `evidence_recorded` | `record_evidence` (00.6.8) | the evidence event; tallies are not touched in the slice |
+| `evidence_recorded` | `record_evidence` (00.6.8) | the evidence event; tallies are settled from Milestone 3 |
 | `ruling_logged` | `log_ruling` | the ruling record (00.15.5) |
 | `oracle_answered` | `oracle` | question, odds rung, d100, answer, extreme, twist, fact id |
 | `table_rolled` | `roll_table` | table id, context, entry, recency |
 | `time_advanced` | `advance_time` | from, to, boundaries crossed, interrupt, remainder |
 | `boundary_marked` | `mark_boundary` and each crossed boundary | boundary, payload (rest payload where relevant) |
-| `handler_ran` / `handler_skipped` | scheduler | handler id, phase, result summary / reason "deferred in slice" |
+| `handler_ran` / `handler_skipped` | scheduler | handler id, phase, result summary / reason "not yet built" and the milestone that builds it |
 | `writes_reverted` | `revert_writes` | reverted event seqs, compensating values, reason |
 | `scene_started` / `scene_ended` | PR-12-7 | scene record / cut reason |
 | `meta_set` | counters and preferences | key (tension, inconclusive streak, dead air, auto_commit…), value |
 
-## 3. Projection: `WorldState` (state families the slice uses)
+## 3. Projection: `WorldState` (state families in Milestone 1)
 
-| Family (00.6.1) | Slice contents | Notes |
+| Family (00.6.1) | Milestone 1 contents | Notes |
 |---|---|---|
 | entity | PC, 1–3 NPCs, the place, notable items, entities created on mention | NPCs carry name, pronouns and descriptors from creation (PR-12-5), so identity claims are checkable |
 | quantity | PC Vitality, coin, a consumable or two | clamps from `data/` |
@@ -72,8 +72,7 @@ Each 00.14.2 write tool produces one or more events. Names follow the tool.
 | frame | in-flight frames for the current turn | persisted on commit and resolution |
 | meta | tension, inconclusive streak, dead-air count, table recency, preferences, Oracle calls this scene (I-038 cap) | |
 
-Not used in the slice: tally (evidence is recorded but not consolidated), effect_instance, offer
-(04/11 offers). Their reducers exist only as stubs that raise if an event of that type appears.
+Filled in later milestones: tally (M3), effect_instance (M2/M3), offer (04/11 offers, M3/M6). Their reducers exist only as stubs that raise if an event of that type appears.
 
 **Views** (`get_state`, 00.14.2 #8): `narrator` (sealed fields replaced by permitted slices, INV-10),
 `codex` (shown and available only), `audit` (everything). The packet builders read only the narrator view.

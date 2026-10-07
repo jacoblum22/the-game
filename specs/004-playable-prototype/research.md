@@ -1,9 +1,9 @@
-# Research: Tech stack and the freeform scene slice
+# Research: Tech stack and the playable prototype
 
 **Feature**: [spec.md](spec.md) | **Plan**: [plan.md](plan.md) | **Date**: 2026-10-07
 
 This is Phase 0 of `/speckit-plan`. It answers the tech-stack questions for the whole engine, then
-narrows each one to what the first slice needs. It builds on the earlier research pass on branch
+narrows each one to what Milestone 1 (the whole game, start to finish, at first depth) needs. It builds on the earlier research pass on branch
 `claude/happy-franklin-ypo2wq` (`reports/Tech stack and Phase 0 build plan.md` and its notes), which
 it does not repeat. Section 1 says where this pass agrees with that one and where it changes course.
 
@@ -31,13 +31,13 @@ it does not repeat. Section 1 says where this pass agrees with that one and wher
 | Language, store, loop shape | Python; SQLite event log; code drives PR-12-1, the model fills typed forms | **Same** | Nothing found against it; this pass adds detail |
 | LLM wrapper | Pydantic AI, pinned | **A thin adapter of our own** (Gemini SDK now; a second-family adapter when the checker moves), Pydantic only for schemas | Only four call shapes; we need explicit thinking level, cache control and per-turn schemas on every call; fewer fast-moving dependencies (the same report flagged supply-chain risk) |
 | "Call A" | One adjudication call per turn | **Two calls, A1 (read) and A2 (frame)** | The anchor candidates depend on the parsed verb, so the anchor enum can't be built before parsing. Splitting also keeps each call's packet under the 12-card cap |
-| Claim checker | Claude Haiku 4.5 | **Gemini 3.8 Flash for now** (owner decision 2026-10-07: one provider, one key). Cross-family checker deferred as `TODO(CROSS_FAMILY_CHECKER)`; when it comes back, gpt-oss-120b on Groq is the cheapest option, Haiku the alternative | Keeps setup to one key; the prototype had moved off paid Anthropic use. Breaks P13's different-family rule for now, so the slice measures the cost (R2) |
-| UI | Textual TUI, then web | **Plain terminal REPL, then a FastAPI web app** | Hosting for remote players needs the web app anyway; a TUI would be thrown away. The slice's UI need is tiny |
+| Claim checker | Claude Haiku 4.5 | **Gemini 3.8 Flash for now** (owner decision 2026-10-07: one provider, one key). Cross-family checker deferred as `TODO(CROSS_FAMILY_CHECKER)`; when it comes back, gpt-oss-120b on Groq is the cheapest option, Haiku the alternative | Keeps setup to one key; the prototype had moved off paid Anthropic use. Breaks P13's different-family rule for now, so Milestone 1 measures the cost (R2) |
+| UI | Textual TUI, then web | **Plain terminal REPL, then a FastAPI web app** | Hosting for remote players needs the web app anyway; a TUI would be thrown away. A terminal is enough to play Milestone 1 |
 | RNG | `numpy.random.Generator` | **`random.Random` streams from the standard library** | All 28 seeded sims that use randomness use `random.Random`, so ported generators can reproduce them exactly; no numpy dependency |
-| Retrieval | Tag/anchor/trigger filter, then FTS5 + embeddings + reranker | **Deterministic only in the slice**; fuzzy search deferred | 00.15 specifies deterministic retrieval; the slice has no case that needs fuzzy search |
+| Retrieval | Tag/anchor/trigger filter, then FTS5 + embeddings + reranker | **Deterministic first**; fuzzy search only if a case needs it | 00.15 specifies deterministic retrieval; Milestone 1 has no case that needs fuzzy search |
 | Tracing | Logfire | **The turn record in the store is the trace**; OpenTelemetry later if needed | One less service and account; the turn record already holds every call, token count and cost |
-| Laya spike, fine-tuning | Phase 0 spike | **After the slice** | Needs logged, labelled turns, which the slice produces |
-| Phase 0 scope | World seed, walking, NPC, G3, OFFER, save/resume | **One scene, every turn step** | Matches the ask; narrow and deep first |
+| Laya spike, fine-tuning | Phase 0 spike | **After Milestone 1** | Needs logged, labelled turns, which playtests produce |
+| First build | World seed, walking, NPC, G3, OFFER, save/resume | **The whole game start to finish (Milestone 1), then six milestones of depth** | Owner wants to play the actual game, not a test harness; every action already has a path through the one pipeline |
 
 ## 2. Three options for the engine
 
@@ -124,10 +124,10 @@ does today with three tools.
 | **Framer** (A2) | ANCHOR choice and deltas; FRAME fields (attribute, deed tag, obstacle, levers, snags, stakes, lethal, reach, threatened and alternate cost, method consequences, secret) | Gemini 3.8 Flash, thinking `low` | thinking `medium` if evals show it pays | The hardest judgments; still all closed lists |
 | **World** (W, only when needed) | T5 NPC want/refusal flags and the action-table context | Gemini 3.8 Flash, thinking `low` | — | Skipped when nobody present needs to respond |
 | **Narrator** (B, D) | T7 draft and T8 mention list; redrafts | Gemini 3.8 Flash, thinking `low` | Claude Sonnet 5.5 if prose quality needs it (then the checker must move to a non-Claude family) | Cheapest capable model; the prototype already uses it |
-| **Checker** (C) | T9 claim extraction; T10 screen flags | **Gemini 3.8 Flash**, thinking `low`, as a separate persona-free call (`TODO(CROSS_FAMILY_CHECKER)`) | gpt-oss-120b on Groq, or Claude Haiku 4.5, when the cross-family rule is restored | P13 says the checker must not share the narrator's family. Owner chose one provider for the slice. Extraction recall is the ceiling on correctness, so the slice measures it on seeded errors either way |
+| **Checker** (C) | T9 claim extraction; T10 screen flags | **Gemini 3.8 Flash**, thinking `low`, as a separate persona-free call (`TODO(CROSS_FAMILY_CHECKER)`) | gpt-oss-120b on Groq, or Claude Haiku 4.5, when the cross-family rule is restored | P13 says the checker must not share the narrator's family. Owner chose one provider for now. Extraction recall is the ceiling on correctness, so Milestone 1 measures it on seeded errors either way |
 
 - **Same-family checker, for now.** Feature 001 showed a model's self-review missing an invented pronoun,
-  and the literature finds judges favour their own family. Three things limit the risk in the slice: the
+  and the literature finds judges favour their own family. Three things limit the risk for now: the
   checker never sees the narrator's prompt, draft history or reasoning; it only *extracts* claims, and the
   verdicts are computed by code against the store (12.3.2 is `[D]`), so there is no "is this good?"
   judgment to be biased; and its recall and false-positive rate are measured on the seeded-error set
@@ -146,7 +146,7 @@ does today with three tools.
 ### R3. How the models are called
 
 - **Adapters.** One small, provider-neutral interface, `StructuredModel.call(role, packet, schema) ->
-  (object, usage)`. The slice implements `GeminiAdapter` (`google-genai`, already pinned at 2.25.0) and
+  (object, usage)`. Milestone 1 implements `GeminiAdapter` (`google-genai`, already pinned at 2.25.0) and
   `ReplayAdapter`, which returns recorded outputs so tests and replays never call a paid model. When the
   checker moves to another family, an `OpenAICompatAdapter` (the `openai` SDK pointed at Groq, OpenRouter
   or a local Ollama/vLLM server) is the planned second implementation.
@@ -163,12 +163,12 @@ does today with three tools.
   to first token.
 - **Caching.** Prompts are ordered stable-first: role instructions → always-loaded core → loaded cards →
   narrator view → last four exchanges → this message. The core plus role instructions is about 3–4k
-  tokens; implicit caching needs a prefix of at least 4,096 tokens, so the slice measures hit rates and
+  tokens; implicit caching needs a prefix of at least 4,096 tokens, so Milestone 1 measures hit rates and
   tries explicit cached content if implicit caching misses.
 - **Refusals and safety.** A safety block or refusal from any provider is a recoverable turn error,
   logged under moderation, never under consistency (P13 keeps the two apart).
-- **Budget.** Every call's tokens and cost go into the turn record; a per-session cap (default $1)
-  stops play cleanly.
+- **Budget.** Every call's tokens and cost go into the turn record. A player-set budget (default $2 per
+  session) triggers a between-turns "keep playing?" prompt; there is no hard cap and no turn limit.
 
 ### R4. State storage
 
@@ -204,17 +204,17 @@ does today with three tools.
 ### R6. Deterministic engine for `[D]` versus model judgment for `[J]`
 
 - **Decision:**
-  - Every `[D]` rule the slice touches is code with a `# rule: <id>` comment and, where a worked example
+  - Every `[D]` rule a milestone touches is code with a `# rule: <id>` comment and, where a worked example
     exists, a golden test (WE-00-1, WE-00-3, WE-00-4, WE-00-5, WE-01-1 to WE-01-20 as they apply).
   - Every `[J]` decision is a field in one model call's schema, carrying its rule id, its closed option
     list and its default-when-uncertain, so the engine can apply the default when the model abstains.
   - The model's output is a proposal; code validates it (`frame_check`, PR-01-2) and commits it as events.
-  - A coverage report (`engine/build/coverage.py`) lists each rule id the slice implements, defers or
+  - A coverage report (`engine/build/coverage.py`) lists each rule id each milestone implements, handles coarsely, defers or
     leaves to the model, so a rules change shows which code is stale.
 - **Rationale:** This is the split 00.14.3 and 01.1.4 already specify; the coverage report makes it
   auditable as the rules keep changing (5 MAJOR issues open).
 - **Finding:** T-01-3 and T-01-10 name `odds01.py` and `oracle01.py` as their canonical sources, but
-  neither script is in the repository. The slice tests the engine against the tables themselves and
+  neither script is in the repository. The engine is tested against the tables themselves and
   against `data/resolution.yaml`. Worth a ledger row in the rules (not changed here).
 
 ### R7. The event loop from `data/boundaries.yaml`
@@ -223,14 +223,14 @@ does today with three tools.
   `scene_end` has 15 handlers, `beat_end` 4, `scene_start` 5, plus 3 wildcard handlers.
 - **Decision:** A `Scheduler` loads the registry and dispatches to Python functions registered by
   handler id (`@handler("h.01.ruling_log")`). On load it checks that every id in the YAML is either
-  implemented or on the slice's deferred list; a deferred handler logs a `handler_skipped` event each
+  live for the current milestone or deferred; a deferred handler logs a `handler_skipped` event each
   time it would run, so gaps are visible, never silent. `advance_time` computes every boundary crossed,
   orders them per 00.7.6 (event boundaries first, then time boundaries smallest to largest), runs all
   nine phases for each, and halts on an interrupting handler with the remainder returned (00.7.8).
   Handlers return events; they never write state directly.
-- **Slice handlers:** `h.00.durations`, `h.00.clock_auto`, `h.01.ruling_log`, `h.01.scene_cleanup`,
-  `h.12.inconclusive_streak`, `h.12.scene_test`, `h.12.npc_memory`, `h.12.bookkeeping` (the steps that
-  touch slice state), `h.15.patience_reset`. Everything else is deferred and logged.
+- **Per milestone:** about 36 handlers are live in Milestone 1 (scene, beat, rest, recovery, recharge,
+  creation-window and pacing handlers); the plan's milestone table lists which handlers each later
+  milestone switches on. A save from an earlier milestone keeps working because handlers only add events.
 
 ### R8. Porting the generators from the Python sims
 
@@ -239,15 +239,16 @@ does today with three tools.
   (same seed, same draw order, same output) where the sim's draw order can be mirrored, and
   distributional (the same summary statistics as the sim's committed output, within tolerance) where it
   can't. The shared gate→fill algorithm (00.11) is ported once and configured per domain.
-- **Order:** Oracle and `roll_table` (in the slice) → NPC generation (PR-12-5) → world seed (12.16) →
-  loot, gifts, birth variance, crafting, item abilities.
+- **Order:** Milestone 1: Oracle and `roll_table`, world seed (12.16, exact parity with
+  `12-world-seed.py`), birth draw (`gen_birth`), NPC generation (PR-12-5), improvised adversaries
+  (PR-09-2). Milestone 2: adversary build (PR-09-1). Milestone 5: loot, gifts, crafting, item abilities.
 - **Rationale:** Matches the rules' own claim that generators are table-driven; using `random.Random`
   (section 1) is what makes exact parity possible.
 
 ### R9. Player interface
 
-- **Decision:** The engine exposes one session API (`start`, `submit`, `answer`, `save`, `resume`; see
-  [contracts/engine-api.md](contracts/engine-api.md)). The slice's interface is a plain terminal REPL over
+- **Decision:** The engine exposes one game API (`new`, `open`, `submit`, `answer`, `codex`; see
+  [contracts/engine-api.md](contracts/engine-api.md)). Milestone 1's interface is a plain terminal front end over
   it: fiction text, then out-of-fiction blocks, and numbered choices at pause points
   ([contracts/cli.md](contracts/cli.md)). The next interface is a FastAPI app serving HTML with htmx and
   server-sent events: a "thinking" indicator while the turn runs, then a typewriter reveal of the checked
@@ -262,14 +263,14 @@ does today with three tools.
 
 - **Principle IV holds:** remote players each play their own single-player campaign. No shared worlds or
   co-op in v1.
-- **Path:** (1) local CLI (this slice); (2) the FastAPI app on Jake's machine via Remote Control for
+- **Path:** (1) the terminal on Jake's machine (Milestone 1); (2) the FastAPI app on Jake's machine via Remote Control for
   playtesting; (3) one small VPS (Hetzner or a Fly.io machine, a few dollars a month) running the app
   behind Caddy for TLS, one SQLite file per campaign on a persistent volume, continuous backup to object
   storage (Litestream, status to verify, or a nightly snapshot), invite-only sign-in (magic link or
   Cloudflare Access), API keys server-side only, per-player daily spending caps; (4) only at dozens of
   concurrent players, Postgres and more than one app server, with the same event schema.
-- **Rationale:** Cheapest thing that works for a private alpha; nothing in the slice has to change to get
-  there because the session API is the boundary.
+- **Rationale:** Cheapest thing that works for a private alpha; nothing in the engine has to change to get
+  there because the game API is the boundary.
 
 ### R11. Testing, evaluation and observability
 
@@ -283,7 +284,7 @@ does today with three tools.
   checker's recall and false-positive rate (SC-003).
 - **Live sessions:** scripted personas (honest, curious, adversarial: Feature 002's harness ported), each
   capped by budget. Every live run writes a report: verdict rates, fallback rate, recall, cost, latency.
-- **Observability:** the turn record (FR-024) is the trace. A `report` command summarises a session.
+- **Observability:** the turn record (FR-037) is the trace. A `report` command summarises a game.
 
 ### R12. Constitution alignment
 
@@ -299,9 +300,9 @@ does today with three tools.
   feature's plan. Once Jake agrees with this plan, record the stack there through `/speckit-constitution`,
   noting the deferred cross-family checker (`TODO(CROSS_FAMILY_CHECKER)`) as an open item against P13.
 
-## 4. Cost and latency estimate for the slice
+## 4. Cost and latency estimate per turn
 
-Token counts are assumptions until the slice measures them. Prices are Gemini 3.8 Flash promotional
+Token counts are assumptions until playtests measure them. Prices are Gemini 3.8 Flash promotional
 rates for every call (one provider).
 
 | Call | Input (cached / new) | Output incl. thinking | Cost now | From 2027-01-01 |
@@ -316,12 +317,13 @@ rates for every call (one provider).
 | **Talk or question turn** (A1, B, C, D share) | | | **≈2.0¢** | **≈4.0¢** |
 
 - Checking on Flash costs about 0.5¢ more per turn (redrafts included) than gpt-oss on Groq would; that is the price of one
-  key. The slice's ceiling (SC-008) is a 3¢ median, which holds at current prices (a mix of talk and
+  key. The ceiling (SC-010) is a 3¢ median, which holds at current prices (a mix of talk and
   rolled turns lands around 2.3–2.5¢). After the 2027 price change it would not hold unless the tuning
   below lands, so the ceiling is re-checked then. Flash-Lite for the checker and the Reader is the first
   lever to try (its price is unverified). Getting to the earlier
   report's 1¢ target needs measured caching, Flash-Lite for A1, skipping A1 on obvious turns, and
-  span-level redrafts. That's tuning work after the slice.
+  span-level redrafts. That's tuning work after Milestone 1. Because older history reaches the model only through stored
+  state, the per-turn cost does not grow with the length of the game (SC-002).
 - **Latency:** A1 ≈ 1.5 s + A2 ≈ 2.5 s → the offer shows in about 4 s. After commit: W ≈ 1 s (if run)
   + B ≈ 2 s + C ≈ 1 s → about 3–4 s, 6–8 s with a redraft. Within SC-007.
 

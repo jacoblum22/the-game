@@ -1,17 +1,33 @@
 # Contract: Model calls
 
-Five roles. Each call is one structured-output request whose JSON Schema the engine builds for this
-turn. Every enum below is filled from the rules and the current state; an empty list means the field is
-dropped from the schema. No schema contains a numeric field except `player_quantity` (the player's own
-stated number, 01.1.4). The engine re-validates every response; an invalid one is re-asked once with
-the failure named, then the rule's default applies (listed per field), else the turn errors with nothing
-written.
+Seven roles, all Gemini 3.8 Flash for now. Each call is one structured-output request whose JSON Schema
+the engine builds for this turn. Every enum below is filled from the rules and the current state; an empty
+list means the field is dropped from the schema. No schema contains a numeric field except
+`player_quantity` (the player's own stated number, 01.1.4). The engine re-validates every response; an
+invalid one is re-asked once with the failure named, then the rule's default applies (listed per field),
+else the turn errors with nothing written.
 
 ## Packet order (all roles)
 
 `role instructions → always-loaded core (00.15.4) → loaded cards (≤12, this call's) → narrator view →
 last 4 exchanges verbatim → this message verbatim`. Stable first, for prompt caching. The Reader and
 Framer instructions are persona-free; only the Narrator has a voice.
+
+## I Interpret (Gemini, thinking low) — world seed and creation answers
+
+Used for each `[SEED n/14]` question (12.16.2) and each `[CREATE n/N]` block (PR-02-7). The block text and
+its options are fixed by the rules and rendered by the engine; the model only maps the player's words.
+
+```yaml
+InterpretOutput:
+  choice: enum[<the block's option ids>, own_words, move_on, details, suggest]   # move_on → the block's default
+  own_words_class: enum[<12.16.2 / 02 classification options for this step>] | null
+  own_words_text: str | null          # kept verbatim as the player's answer when it is their own words
+  lines_and_veils: [str]              # creation 1(b) only: the player's limits, verbatim
+```
+
+The engine writes each answer with its source (player option, player words, oracle roll) and runs the
+step's `[D]` writes; generators (world seed, birth draw) do all rolling.
 
 ## A1 Reader (Gemini, thinking low) — T2 and PARSE/GATE/NECESSITY
 
@@ -87,10 +103,34 @@ WorldOutput:
 
 The engine rolls `tbl.npc_action` with that context; the NPC acts only from that row or a resolved frame.
 
+## S Director (Gemini, thinking low) — scene framing, cuts and pacing (12.4, PR-12-7, 12.6–12.8)
+
+Runs at scene start, when a cut may be due, and when the pacing director raises a push.
+
+```yaml
+DirectorOutput:
+  cut_now: bool                                     # is the scene's question answered or the player moving on (12.4)
+  next_scene:
+    mode: enum[conflict, site, free, travel, downtime]     # default: previous scene's mode; unsure → free
+    place: enum[<place-graph ids reachable or current>]
+    agenda: str
+    hoped_answer: str                               # the PC's hoped answer (12.6.3)
+    pillar: enum[<12.9.1 pillars>]
+    challenge_type: enum[<T-12-7 challenge types>]
+    cast: [enum[<known entity ids>, new_npc]]
+  push: enum[<12.7 push options>, none]             # only when trg.pacing_push is raised
+  lead: {thread: enum[<thread ids>], via: enum[<12.8 lead routes>]} | null   # only when lead injection fires
+```
+
+Scene-test rolls, tension, intensity and rotation counters are computed by code (`h.12.*`).
+
 ## B Narrator (Gemini, thinking low) — T7 draft and T8 mentions; D redraft
 
 Input adds the adjudication record (frames with degrees, costs applied, oracle answers, NPC action rows,
 omens) and, for a redraft, the failing verdicts with the store's values.
+
+The Narrator also writes the opening (12.16.16), scene framings, the resume recap (12.5) and the
+epilogue (11.13), always from the record and always through the checker.
 
 ```yaml
 NarratorOutput:
