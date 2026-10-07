@@ -1540,7 +1540,7 @@ thread_sources:
   rank: by the case
   opposing: the case's opposition clock
   fallback: the case's fallbacks
-- source: a faction's commission (paid at 08.8.8's job fee for its band, economy.yaml#job_fees) [revision: I-091]
+- source: "a faction's commission (paid at 08.8.8's job fee for its band, economy.yaml#job_fees) [revision: I-091]"
   kind: quest
   rank: by the job
   opposing: the rival's goal clock when it races

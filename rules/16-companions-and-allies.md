@@ -493,7 +493,8 @@ leaving a follower behind a calling the PC no longer holds [04.1; 03.10; R6 A-R1
    **project** (15.12) on a 6-segment clock "the <beast> will not come to hand", ticked by one Handle beat
    a day (`deed.wilds.animals.training`, Presence, against the beast's Resolve defense; licensed by
    `lic.training.wilds_animals`, whose crude fallback is a Handle at +5 with Limited reach). Completion: a
-   beast ally at standing **Wary** (it tolerates the PC), rising by care (16.15.3). `[J:flag]` *"Is this
+   beast ally at standing **Wary** (it tolerates the PC), rising by care (16.15.3); joining at Wary starts no
+   departure clock (16.6.2), so the beast stays while care lifts it to Neutral [revision: I-105]. `[J:flag]` *"Is this
    beast one that can be tamed at all?"* True only for `creature.beast` whose archetype is not
    `creature.beast.monstrous` and whose own band ≤ the PC's power band; false for any other creature (a
    monstrous beast can be bound only by a rite that says so). Uncertain → false. *Worst case (J):* a beast
@@ -946,11 +947,14 @@ Captivity and being lost (07.12.3) are **not** departures: the ally is missing, 
 (the PC may free the place only by dismissing it in absence, which is `dismissed` with 15's `betrayed` if
 it is later rescued and learns of it), and a rescue lead is written.
 
-**16.6.2 The departure clock.** `[D]` + `[T]` When an ally's standing becomes **Wary**, the engine creates
+**16.6.2 The departure clock.** `[D]` + `[T]` When an ally's standing **steps down** to **Wary** (from Neutral or warmer), the engine creates
 `clk.16.departure.<id>` "<Name> means to leave": kind countdown, **4** segments, **public** (the player sees
 it, and the ally says it plainly: "When we reach a town, I'm done"), `auto_ticks` +1 at each `day`
 boundary, tick source +1 for each grievance tick. It is **voided** the moment the ally's standing returns
-to Neutral or warmer. On completion the ally departs (cause `loyalty_wary`) at the next `scene_end` that is
+to Neutral or warmer. An ally that **joins at Wary** (a tamed beast, 16.3.7; a hire or invitation whose standing was
+Wary when it signed) starts no clock: it holds at Wary, serving as T-16-7's Wary row allows, until regard lifts it to
+Neutral or grievance drops it to Unfriendly (16.6.3); if it later falls back to Wary from Neutral, the clock starts
+then [revision: I-105; DL-16-25]. On completion the ally departs (cause `loyalty_wary`) at the next `scene_end` that is
 not in danger (no hostile participant present; not in a site's active area; or at once if the PC is in a
 haven). *Why four days:* enough time to make amends in play (a gift, an honest word, a want served, a
 debt paid: four days is four chances at 15's small sources and any number at its deeds of weight), short
@@ -1731,7 +1735,7 @@ NPCs and mentors" inside the band cap [R6 D-04, D-10, D-R4; DL-16-20].
 4. Any promise made is written as a commitment with the ally (kept +1, broken → `betrayed` −3).
 
 **PR-16-7 Breaking points.** `[D]` + `[T]` (16.6)
-1. Standing becomes Wary → `create_clock(clk.16.departure.<id>)` (public, 4, +1 a day, +1 per grievance tick);
+1. Standing steps down to Wary (from Neutral or warmer; never on joining at Wary, 16.6.2) [revision: I-105] → `create_clock(clk.16.departure.<id>)` (public, 4, +1 a day, +1 per grievance tick);
    it voids when standing returns to Neutral or warmer; on completion the ally departs at the next
    `scene_end` not in danger (`loyalty_wary`).
 2. Standing becomes Unfriendly → the ally announces; departs at the next `scene_end` not in danger

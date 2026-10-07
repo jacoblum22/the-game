@@ -326,6 +326,12 @@ crystallization**. Each tier asks for a kind of evidence that repetition cannot 
 | 4 Exalted | 480 / 640 / 960 / 480 | 18 · 12 | 6 at band ≥ 4 | 3 | 5 | done in many countries, against champions |
 | 5 Paragon | 900 / 1,200 / 1,800 / 900 | 22 · 14 | 4 at band 5 | 4 | 5 | done at the edge of what mortals can do |
 
+The **In fiction** column is staging guidance for narration (how the codex and the recognizer speak of the tier),
+never a requirement: a tier is confirmed by the other columns alone. Tier 4's "many countries" is the Contexts
+column in words (distinct kinds of opposition or obstacle, 04.3.1), not geography; a campaign that never leaves its
+first region reaches Exalted on the same deeds, and the fiction says "many countries" literally only where play has
+crossed into new regions (12.16.18) [revision: I-098].
+
 A **great deed** is a settled deed at the key whose `challenge_band` (03.4.3: the obstacle's absolute rung,
 DC 13–17 is band 2 … DC ≥ 28 is band 5; in a conflict the fight's advisory band; in a social, craft or lore
 **contest** the opposing party's or the work's band, at most `power_band` + 2) is at least the number of the tier being entered; at least one of the
@@ -348,7 +354,7 @@ recognition in sessions 3–5 of focused play; tier 2 near session 9; tier 3 nea
 session 32; tier 5 not before session 50, and not reached by most characters (Stormlight: "many stop at the
 Third") [R2 #2; R1 §04 "excessive investment kills an option"]. Results (`04-recog04.py`: 200 runs, 5 scenes
 per session, conflicts at the PC's power band shifted by the advisory word, DL-00-05 and 03.4.3: easy −1 25%,
-fair 0 40%, hard +1 30%, lethal +2 5%; p10 / median / p90; T-04-8 R1–R4) [revision: I-034; I-089]:
+fair 0 40%, hard +1 30%, lethal +2 5%, a campaign mix in which about half of a PC's fights are ones it seeks out (below) [revision: I-095]; p10 / median / p90; T-04-8 R1–R4) [revision: I-034; I-089]:
 
 | Character | Tier 1 | Tier 2 | Tier 3 | Tier 4 | Tier 5 |
 |---|---|---|---|---|---|
@@ -369,6 +375,26 @@ and the weighted line, not the since-fields, binds tiers 2–5 (`04-binding-chec
 R14). The targets were kept and the thresholds moved: the targets are the design (04's Design intent: the
 numbers are scaled to the game's event rate and never copied), the thresholds its calibration [DL-04-32]. Play
 that fights more is faster (the swordsman, fighting in 70% of scenes, at 34; the mixed-weapons Warrior, 60%, at 46).
+
+**The fight mix is a campaign mix** `[revision: I-095]`. The targets assume that about **half of a PC's fights are
+chosen**: a site's heart, a lair, a quarry, framed at fair 50 / hard 40 / lethal 10 % (10.13.10,
+09.8.2). The rest are the road's rolled encounters, which every shipped and seeded table keeps gentle by design
+(09.8.1 rule 3): trivial 34 / easy 27 / fair 35 / hard 4 / lethal 0 % (09.12.3). `09-word-mix-pacing.py` (200 seeds;
+p10 / median / p90; T-04-8 R15) gives:
+
+| Fights | Archer: tier 1 · 2 · 3 · 4 · 5 | Swordsman (70% of scenes): tier 1 · 2 · 3 · 4 · 5 |
+|---|---|---|
+| DL-00-05's mix (the table above) | 5 · 10 · 18 · 32 · 54 (183 of 200 reach tier 5 within 60) | 3 · 7 · 12 · 20 · 34 (200) |
+| Half chosen, half rolled | 6 · 13 · 21 · 34 · 58 (135 of 200) | 3 · 8 · 13 · 21 · 36 (200) |
+| **Rolled encounters only** | 7 / **20** / 51 · 34 / **58** / — · **not within 60** · — · — (0 of 200) | 5 / **11** / 26 · 20 / **36** / 58 · 31 / **52** / — · — · — (25 of 200) |
+
+A half-chosen campaign lands within one to four sessions of every target. A PC who only travels and fights what
+the road throws at it stalls: its fights are rarely beyond the ordinary, so they bank few quality events and no
+great deeds. That is intended: growth comes from seeking out danger (C:P2: power from history), and the rules
+never push a PC toward a fight to keep it on pace. What they guarantee is that a chosen fight is always within
+reach: the seed puts a site in every near area and a lair in each far ring (12.16.12), the hook supply keeps at
+least three open matters known (11.5.10), and the stuck answer lists them (12.8.5). 12.7.4's pacing push governs
+intensity, not growth, and is not changed [DL-04-33].
 
 A whole character with every key live and three seats held three callings by session 10 if every offer was
 accepted, with the highest tier at sessions 10 / 20 / 40 / 60 at 2 / 3 / 4 / 5 (archer) (T-04-8 R6).
@@ -1517,7 +1543,7 @@ outputs. 200 seeds unless noted; p10 / median / p90 [revision: I-034; I-089].
 
 | Id | Question | Result |
 |---|---|---|
-| R1 | Sessions to each tier, four play styles | the table in 04.3.5 |
+| R1 | Sessions to each tier, four play styles | the table in 04.3.5 (on DL-00-05's campaign mix; for rolled encounters only, R15) [revision: I-095] |
 | R2 | A level-3 key (Lockbreaker) | tiers at 3/4/6 · 7/9/12 · 15/19/35 · 27/32/44 · 54/—/— |
 | R3 | Who is offered the branch calling Warrior at tier 1, within 30 sessions | mixed-weapons fighter 200 of 200 (session 3/4/5) · bow-focused archer 46 of 200 · single-track swordsman 4 of 200. Largest child's share of `martial` at session 10 (p10–p90): 0.43–0.59 mixed, 0.67–0.85 archer, 0.77–0.93 swordsman |
 | R4 | Hybrid offered within 20 sessions, by mix of two branches | 100/0: 0 · 95/5: 0 · 90/10: 24 · 80/20: 193 · 70/30: 200 · 60/40: 200 · 50/50: 200 (of 200). Second-pillar archer (stealth in 25% of scenes): 146 of 200. Deliberate hybrid's tiers: 2/3/4 · 5/6/8 · 10/11/13 · 17/19/22 · 33/36/39 |
@@ -1531,6 +1557,7 @@ outputs. 200 seeds unless noted; p10 / median / p90 [revision: I-034; I-089].
 | R12 | Counted share measured (`03-counted-yield.py` on 06's engine; parity R9; revision I-004) | fighter bands 1–5: 0.11 / 0.15 / 0.22 / 0.23 / 0.33 without Focus, 0.26–0.44 pushing; contests: social 0.30, craft 0.73, lore 0.29 (medians) |
 | R10 | Sessions for one conduct axis to reach 16 / 40 / 80 / 140 / 220 positive points | costly choice taken in 60% of fights: 5 / 12 / 24 / 42 / 65 (medians) · in 30%: 10 / 24 / 47 / 83 / — · in 15%: 18 / 48 / — / — / — |
 | R14 | Which requirement is met last as the focused archer enters each tier (`04-binding-check.py`, revision I-089) | ladder before I-089: the weighted total in 175 / 168 / 186 / 200 / 103 of the runs reaching tiers 1–5; current ladder: tier 1 weighted 175, tier 2 the since-floor of quality events 128 (weighted 58), tiers 3–5 weighted 145 / 194 / 183 (crises 37 at tier 3) |
+| R15 | The fight mix (`09-word-mix-pacing.py`, 200 seeds; revision I-095) | archer medians by tier: DL-00-05's mix 5 / 10 / 18 / 32 / 54; half chosen, half rolled 6 / 13 / 21 / 34 / 58; rolled encounters only 20 / 58 / — / — / — (tier 3 not within 60). Swordsman 3 / 7 / 12 / 20 / 34; 3 / 8 / 13 / 21 / 36; 11 / 36 / 52 / — / —. The rolled mix is trivial 34 / easy 27 / fair 35 / hard 4 / lethal 0 % (09.12.3); see 04.3.5 [DL-04-33] |
 | Wren | One continuous character, seed 7 | the long example WE-04-1 |
 
 **T-04-9 `gen_absorb.yaml`.** `[D]` Optional keys added to the gen_* schema: `requires`, `trigger`,

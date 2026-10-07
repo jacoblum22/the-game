@@ -1163,7 +1163,8 @@ outcomes (00.6.8; 00.11.2). (2) A seed of 24 points on tags the player picked fr
 menu choice of calling: exactly the shape P5 exists to avoid. (3) It is not needed: the past already
 pays, as +2 and a license from the first roll; the aspiration already puts the player's intended
 direction in the Leanings view; and a focused character reaches a first recognition at about the fourth
-session without it (04's pacing: median session 4), which is where a newcomer's first earned title
+session without it (04.3.5: median session 3 to 5 by play style, when about half its fights are ones it seeks
+out; a PC who fights only the road's rolled encounters is slower) [revision: I-095], which is where a newcomer's first earned title
 should fall. (4) The one case where a past *was* played is the trained successor, and there the
 mechanism is used (02.2.7 item 4). [C:P5; C:P2; R3 02.3 considered seeding tallies; DL-02-14]
 
@@ -1189,7 +1190,7 @@ Every procedure is run by the DM with the engine's tools. Creation happens out o
 `session_start`'s first scene; it advances no fictional time.
 
 **PR-02-1 The full path.** `[D]` (with the `[J:*]` decisions of the rules cited)
-0. **C0 Preferences.** Run chapter 14's session zero; ask 02.10.1's questions; record.
+0. **C0 Preferences.** Run chapter 14's session zero; ask 02.10.1's questions; record. Creation does not proceed to C1 until `pref.lethality.acknowledged` is true (14.3.3) [revision: I-107].
 1. **C1 Livelihood.** Show the first seven livelihoods and "more"; or classify the player's sentence
    (02.2.4). The player confirms one. Keep everything else in their sentence for C8.
 2. **C2 People.** Show the peoples present in the region (the seed's `peoples`, 12.16.7), each with its one-line
@@ -2362,7 +2363,7 @@ Each has a shipped default in the rules above and a named test.
 | OEQ-02-4 | Are the four profiles all taken? | Focused 2 / Gifted 1+1 / Rounded 1+2 / Broad 0+5 (02.5.2) | **T-02-BREADTH**: over 100 creations no profile below 10% or above 50%; and at session 3 Broad characters report "I could try things" at least as often as Focused ones report "I was good at my thing" |
 | OEQ-02-5 | Is the Bent a gamble players enjoy? | three draws, two deferrals, struck entries (02.6.6) | **T-02-BENT**: deferral rate between 15% and 50% of first offers; forgone Bents under 10%; the first offer falls in session 1 or 2 for at least 80% of characters |
 | OEQ-02-6 | Does the knack change what players try? | +1 edge on one level-2 tag near the character's life (02.6.2) | **T-02-KNACK**: by session 5, the share of characters with at least five resolved frames under their knack's tag, against the base rate for that tag among characters without it; target at least 1.5 times |
-| OEQ-02-7 | Is first recognition timely with no backstory evidence? | tallies start at zero (02.11.1) | **T-02-FIRST**: median session of the first calling offer for focused play; target ≤ 5 (04's simulation: 4). If later, adopt 03.2.8 for deep trainings only and re-test |
+| OEQ-02-7 | Is first recognition timely with no backstory evidence? | tallies start at zero (02.11.1) | **T-02-FIRST**: median session of the first calling offer for focused play; target ≤ 5 (04.3.5: 3 to 5 by play style on the campaign mix, about half of a PC's fights chosen; 11 to 20 on rolled encounters only, T-04-8 R15) [revision: I-095]. If later, adopt 03.2.8 for deep trainings only and re-test |
 | OEQ-02-8 | Is base Focus priced right against knowledge? | Focus 5 = 2 units, 4 = 1, 3 = 0 (02.4.4) | **T-02-FOCUS**: share of Gifted characters choosing a Focus-5 upbringing; if above 70%, price Focus 5 at 3 units (it then buys nothing else) |
 | OEQ-02-9 | Is one second look enough, and is it abused? | once, before the first reflection (02.2.6) | **T-02-WINDOW**: share of characters using it (expected 10–30%) and what they change; any use that follows a failed roll by under one scene is logged as a candidate for review |
 | OEQ-02-10 | Do the weakest legal characters survive a first fight? | Vitality 11–15, Guard 10–16 (T-02-1) | **T-02-FIRSTFIGHT**: chapter 06's simulation run on this chapter's lines (`_process/simulation/02-character-sim.md`; 20,000 fights a row, no Focus spent). Result now (revision I-009): every martial line beats one T1 foe 100%, two T1 99.8–100%, one T2 98–99.8%; every default-path new caster **using its branch working (05.7.11), no Focus** beats one T1 100%, two T1 98.4–99.3%, one T2 90.5–94.8% (in melee with a staff or mace it was 31–55%); a caster who keeps a Typical rule with the casting attribute at −1 (a choice against the grain, 02.3.5) 62–73% against one T2; the weakest legal line (+1, Guard 10, Vitality 11) 98.9% / 83.5% / 39.3%. Target: no default-path new character meets a fight rated "fair" that it loses more than 15% of the time: **met** (worst 9.5% lost). The against-the-grain lines remain 09's advisory to warn of (it reads the real line, 09.6) |

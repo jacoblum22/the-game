@@ -14,7 +14,7 @@ here is out of fiction (00.1.7): no character in the world ever speaks it.
 Constitution P7 requires an opt-in, queryable reference to a character's own rules, state and abilities,
 kept separate from narration. Without one, narration turns into an info-dump, or the player loses track of
 their own accumulated complexity. 00.6.4 has already classified every piece of state as shown, available,
-background or sealed, and 00.6.3 assigns each state family a class. The codex therefore invents no
+background or sealed, and 00.6.3 assigns each state family its visibility. The codex therefore invents no
 visibility rules. It **renders exactly what 00.6.3 says, and nothing else**, and this chapter fixes how.
 
 Session zero and the preference record are the other half. Every chapter that respects a player choice
@@ -128,8 +128,8 @@ by the seed or the opening may touch an unrecorded line (12.5.1).
 **14.3.3 Lethality consent is not optional.** `[D]` [C:VII; 07.3; DL-14-05] The player must acknowledge
 the lethality promise (14.1.3 item 2) before character creation. This is the only answer session zero
 requires. A player who wants no permanent death is offered the `death.mode: retire` preference (T-14-1).
-Under it, a death result becomes a forced retirement: the character leaves play alive, and the legacy rules
-of 07 still apply. Nothing about danger, warnings or odds changes. The fiction remains lethal in every
+Under it, a death result becomes The Road Ends (07.5.11, 07.5.14): the character leaves play alive, and
+retirement, legacy and succession (11.13) still apply. Nothing about danger, warnings or odds changes. The fiction remains lethal in every
 other respect.
 
 ### 14.4 Progressive disclosure
@@ -271,7 +271,7 @@ line and add its id to `pref.shown_notes`.
 |---|---|---|---|---|
 | `tone` | session zero | grim, adventurous, light | adventurous | 12 (narration register) |
 | `lethality.acknowledged` | session zero (required) | true | — | 02 (creation may not start without it) |
-| `death.mode` | session zero; between sessions | die, retire | die | 07 (a death result under `retire` becomes forced retirement; 07's legacy rules apply) |
+| `death.mode` | session zero; between sessions | die, retire | die | 07.5.14 (a death result under `retire` becomes The Road Ends, 07.5.11) |
 | `safety.lines` | session zero; any time | topics and mapped tags (14.5.3) | none | 12.5.6 |
 | `safety.veils` | session zero; any time | topics and mapped tags | none | 12.5.6 |
 | `safety.flags` | session zero; any time | topics and mapped tags | none | 12.5.6 |
@@ -369,9 +369,10 @@ find out: a read, 15.
 
 ## Interface requests
 
-- **To 07:** honour `death.mode: retire` as a forced retirement at the death result (07's legacy and
-  successor rules unchanged). Recorded as I-106.
-- **To 02:** creation C0 checks `pref.lethality.acknowledged` before step C1. Recorded as I-106.
+- **To 07:** honour `death.mode: retire` as The Road Ends (07.5.11) wherever the PC would die. Applied
+  as 07.5.14 (I-107).
+- **To 02:** creation C0 checks `pref.lethality.acknowledged` before step C1. Applied in PR-02-1 step 0
+  (I-107).
 - **To 12:** `tone` sets the narration register within 12's voice rules; no other effect.
 
 ## Open empirical questions

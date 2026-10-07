@@ -1203,7 +1203,8 @@ keeps the template's numbers and adds its own facts (name, wants, knowledge, 15;
   04's ladder of the time; 04 then retuned tiers 2–5 to this model (archer 5 / 10 / 18 / 31 / 55, tier 5 within
   60 in 93 of 100; `09-i005-check.py` prints both ladders) [revision: I-089; DL-04-32]. **What the tables
   actually give** [revision: I-045]: the threat faces of every shipped or built table (55 generic, 560 site,
-  2,600 world-seed) are trivial 34 / easy 26 / fair 36 / hard 4 / lethal 0 %, gentler than the assumed mix,
+  2,600 world-seed) are trivial 34 / easy 27 / fair 35 / hard 4 / lethal 0 % (after the world seed's C5b re-run;
+  34 / 26 / 36 / 4 before) [revision: I-099], gentler than the assumed mix,
   by design (09.8.1 rule 3: what the road throws at a PC is fair or easier; hard is its ceiling). Run through
   04's pacing (`09-word-mix-pacing.py`, 200 seeds), a PC who fought only rolled encounters would stall (the
   archer: tier 2 at a median session 58, tier 3 not within 60). With half its fights chosen — a site's heart,
@@ -1211,8 +1212,8 @@ keeps the template's numbers and adds its own facts (name, wants, knowledge, 15;
   34 / 58 against 04.3.5's 5 / 10 / 18 / 32 / 54, and the swordsman to 3 / 8 / 13 / 21 / 36 against
   3 / 7 / 12 / 20 / 34. So 04's assumed mix is a **campaign** mix: it holds when about half of a PC's fights are
   ones it seeks out, which the West Marches shape (10.2.4) and 12's pacing director (12.7.4) are there to
-  offer, and it does not hold for a PC who only travels. The pacing text (04.3.5, T-04-8, 02.11.1) is chapter
-  04's and 02's; this measurement is handed to them (I-095).
+  offer, and it does not hold for a PC who only travels. The pacing text is chapter 04's and 02's: 04.3.5 now states
+  the assumption and shows the rolled-only row (T-04-8 R15), and 02.11.1 carries the caveat [revision: I-095].
 - **I-006** (Focus-binary equal-band fights) remains resolved for martial characters with the final
   templates: one standard foe of the PC's band is beaten 100 / 99.9 / 99.4 / 87.8 / 80.2 % of the time with no
   Focus (T-09-3); the caster part is I-009 (05).
