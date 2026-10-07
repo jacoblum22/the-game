@@ -1080,6 +1080,20 @@ Fragment for `appendix/decision-log.md`. Format: BRIEF §11. Simulation referenc
 - Serves: goal 2 (one reading of the ladder); goal 1 (a campaign that stays in its first region is not capped at tier 3).
 - Revisit if: the codex or recognizer text in play ever cites geography as a missing requirement.
 
+### DL-04-35: Ch.04's prose quotes the current simulation run (revision I-108)
+- Decision: [revision: I-108] 04.2.3, 04.4.3, 04.8.2 and WE-04-8 re-quote `04-recog04-output.txt` (re-run in revision C8, byte-identical to the committed output) and so agree with T-04-8: Warrior offered to the mixed-weapons fighter at a median of session 4 (p10–p90 3–5), to the bow-focused archer in 46 of 200 and the single-track swordsman in 4 of 200 (R3); the grant and offer buckets confirmed in 90 and 70 of 100 (R7); a tier-2 grant lapsed in 172, 67, 9 and 0 of 179 runs, confirmed in 112 of 179 after one more session, and the new calling came 2 / 4 / 5 sessions after the turn (R8). The R3, R7 and R8 tables of `04-recognition-sim.md` are refreshed the same way.
+- Alternatives considered: re-tune the rules so the old figures return (rejected: the figures were stale quotes of a pre-I-089 run, not targets); drop the figures from the prose and cite T-04-8 only (rejected: the prose uses them to explain why a rule is shaped as it is).
+- Evidence: `04-recog04-output.txt` R3, R7, R8; T-04-8.
+- Serves: goal 2 (one set of numbers in the chapter).
+- Revisit if: `04-recog04.py` or the ladder changes; then T-04-8 and these four places are re-quoted together.
+
+### DL-04-36: The worked examples quote Wren's seeded trace (revision I-109)
+- Decision: [revision: I-109] WE-04-1, WE-04-2, WE-04-3 and WE-04-5 all read `04-wren04.py` seed 7 on the current ladder. WE-04-2's thin abstain is Wren's tracking at scene 75 (weighted 95, recent 39, confidence 0; offered two scenes later at confidence 2, as WE-04-1 shows), not her stealth at scene 97: on the current ladder stealth is first eligible at scene 95, already at confidence 1, and is offered then. WE-04-3's twins are at scene 10 with weighted 84 and confidence 4 (Wren's first grant). WE-04-5's pick weights are her tags at that grant: bow 84, archery 84, acrobatics 37, tactics 0; `04-wren04.py` now prints them, and its output is re-committed (one line added, nothing else changed).
+- Alternatives considered: label WE-04-2 and WE-04-3 as hypothetical numbers (rejected: they name Wren, and a reader checks them against WE-04-1); keep stealth for WE-04-2 with invented numbers (rejected: the trace has no stealth abstain).
+- Evidence: `04-wren04-output.txt` (scenes 10, 70–77, 95); the earlier figures came from the pre-I-089 trace that `04-recognition-sim.md` still carried.
+- Serves: goal 2 (the examples agree with each other and with a reproducible run).
+- Revisit if: `04-wren04.py`, its seed or the ladder changes; the four examples are re-traced together.
+
 ## DL-05 — Abilities, Focus, and Magic
 
 Format per BRIEF §11. Citations per 00.1.6. Numbers consumed by other chapters are marked **[consumed]**.
@@ -1368,6 +1382,13 @@ Format per BRIEF §11. Citations per 00.1.6. Numbers consumed by other chapters 
 - Evidence: [C:P9] (Focus is the one pool, 05.6); DL-05-09 (the cap equals the reference base Focus of 4: at most one starting pool's worth from consumables between long rests, a third of the capped maximum of 12); DL-05-14 (rest recovery); DL-05-23 (the parallel Vitality cap, [R5 HR-09]); `base_items.yaml` (`item.consumable.potion.elixir` clarity draught restores 1 per draught, so the cap is four draughts).
 - Serves: goal 2 (one bound, checked by the tool before the item is used).
 - Revisit if: T-05-DAY logs show consumables are the main recovery between rests, or are never used.
+
+### DL-05-42: A Working may be a rider (revision I-110)
+- Decision: [revision: I-110] 05.3.2's Working row allows `beat or rider`. A rider Working adds produced effects (harm, a severity rung, a condition, movement) to the holder's own beat of a named verb; it has `check: none`, `hook: on_degree`, rides that beat's roll (05.3.5), resolves as an independent trigger at depth 0 (05.10.1, 05.10.5), prices its timing at 0 in the allowance (05.11.2) and is bounded by one rider per beat (05.4.3). 05.1.3's word **Working** and 05.3.4's `rider` row say so. The 31 rider Workings in `abilities.yaml` (Aimed Shot, Hew, Cleaving Arc and the rest) are unchanged.
+- Alternatives considered: re-form the 31 as Edge, Lever or Exception (rejected: Edge is passive only, Lever gives only a lever and Exception only an exception, while these deal harm, apply conditions and move targets; re-forming would break the grammar the other way or split each into two abilities); a ninth form for strike riders (rejected: it would duplicate Working's regime and operations, and adding a form is an amendment for no gain).
+- Evidence: the generator's `FORMS` table (`05-gen_data05/gen_data05.py`) and the emitted `abilities.yaml` constants already give Working the timings `{beat, rider}`, and the generator rejects any other pairing; the prose table was the only place that disagreed. T-05-9 and 05.11.2's timing term (rider 0) already price riders, and 05.11.5 prices `ab.aimed_shot` as "Working · rider". `05-ladder-check.py` re-run: 183 callings, 0 failures, output unchanged.
+- Serves: goal 2 (one grammar, stated once, matching the data).
+- Revisit if: a rider Working is found that should be a beat (it takes its own roll), or riders crowd out beat Workings in play.
 
 ## DL-06 — Conflict
 

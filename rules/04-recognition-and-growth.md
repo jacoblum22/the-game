@@ -178,9 +178,9 @@ competence covers, which is how breadth is paid for [C:P4; R2 #10]:
 | broad (level 1) | 120 | +2 / +5 | a whole branch | **breadth**: at least 3 level-2 children at weighted ≥ 30 each, and the largest child's share of the branch ≤ 2/3 |
 
 The breadth requirement is what makes "Warrior" mean someone who fights with many things. In simulation a
-mixed-weapons fighter was offered Warrior at session 3 (p10–p90: 3–4); a single-track swordsman in 1 of 200
-runs within 30 sessions; a bow-focused archer who also climbs and knife-fights in 34 of 200 (T-04-8 R3)
-[R1 T-13: broad callings need a narrower anchor; DL-04-04].
+mixed-weapons fighter was offered Warrior at a median of session 4 (p10–p90: 3–5); a single-track swordsman in
+4 of 200 runs within 30 sessions; a bow-focused archer who also climbs and knife-fights in 46 of 200 (T-04-8 R3)
+[R1 T-13: broad callings need a narrower anchor; DL-04-04; revision: I-108].
 
 **04.2.4 Hybrids: the curated table.** `[D]` `data/hybrids.yaml` has one row for each of the C(9,2) = **36**
 pairs of deed branches: 32 name a hybrid calling and 4 are explicit `calling: none` with the reason
@@ -485,8 +485,8 @@ means here.
 containing that branch is eligible. A mixed history is therefore never resolved by the engine: it is
 surfaced as named alternatives for the player to choose among [C:P5]. Tier-ups, hybrids, variants,
 oath-bearing callings, vows, dark callings, branch callings, forks and consolidations are **always offers**
-[C:P2]. In simulation the grant bucket was confirmed by later play in 91 of 100 cases, the offer bucket in
-74, the abstain bucket in 38 (T-04-8 R7). A grant is still the player's to refuse: it is provisional and may
+[C:P2]. In simulation the grant bucket was confirmed by later play in 90 of 100 cases, the offer bucket in
+70, the abstain bucket in 38 (T-04-8 R7) [revision: I-108]. A grant is still the player's to refuse: it is provisional and may
 be renounced at any rest (04.8.2) [R1 §04].
 
 **04.4.4 The largest wrong outcome.** `[D]` [DL-04-10; DL-04-15; revision: I-065] No judgment is made in this part, but the inputs include judged
@@ -973,9 +973,9 @@ fork and consolidation is `lifecycle: provisional` when made. It works in full; 
   a lapse with `answer: renounce`). This is what keeps a grant the player's choice [R1 §04].
 - **The tier-4 attribute increase** is applied when tier 4 is **confirmed**, never while provisional, so an
   attribute never rises and falls (00.4.3).
-In simulation a tier-2 grant lapsed in 181 of 199 runs when the archer stopped shooting at once, in 65 of
-199 when she kept on for one more session, in 9 of 199 after two, and in 0 of 199 when she never stopped
-(T-04-8 R8).
+In simulation a tier-2 grant lapsed in 172 of 179 runs when the archer stopped shooting at once, in 67 of
+179 when she kept on for one more session, in 9 of 179 after two, and in 0 of 179 when she never stopped
+(T-04-8 R8) [revision: I-108].
 
 **04.8.3 Lineage: one identity per line.** `[D]` [DL-04-06; C:P5; revision: I-065] Two callings are in one **lineage** when their keys are
 identical (a variant and its base) or one key is an ancestor of the other (Warrior and Archer; Thief and
@@ -1818,16 +1818,16 @@ lands near the end of a long campaign or past it. The ladder has a top, and it i
 |---|---|---|---|
 | **Not eligible: the grinder.** Brann shoots cellar rats in every scene for 20 sessions. | archery weighted 340, counted 100, quality events **0** (all routine), scenes 60 | the quality floor (6) is unmet | Leanings: "the bow: on the threshold". A reader: "You have done it often, and seldom when it was hard." |
 | **Stale: the old soldier.** Hesk fought with the sword for years and has kept an inn for the last forty scenes of play. | `martial.blade` weighted 300, recent 12 | eligible, but `4·12 = 48 < 80`: stale | A reader: "That was who you were. I am asked who you are." If he takes up the sword again, recent passes 20 within a session and the offer comes. |
-| **Thin: Wren's stealth at scene 97.** | weighted 99, recent 28, confidence 0 | eligible and current, with nothing confirming it | silence; two scenes later the margin holds and it is offered |
+| **Thin: Wren's tracking at scene 75** (WE-04-1, session 15). | weighted 95, recent 39, confidence 0 | eligible and current (`4·39 = 156 ≥ 80`), with nothing confirming it | silence; two scenes later (scene 77: weighted 101, recent 41) K1 and K5 hold, confidence 2, and it is offered [revision: I-109] |
 
 *Other side of each boundary:* give Brann one real fight a session and his quality events pass 6 by about
-session 4; give Hesk recent 20; give Wren four more points. *Tempting non-example:* the DM feels Brann has
+session 4; give Hesk recent 20; give Wren's tracking one more recent point (K1 `2·40 ≥ 80`) and five more weighted (K5 `4·100 ≥ 400`). *Tempting non-example:* the DM feels Brann has
 "earned it by persistence". There is no such input: the packet for Brann is empty, and the narrator has no
 tally to be moved by.
 
 ### WE-04-3 Grant against offer: the same tallies, two fields
 
-Two archers reach scene 17 with Wren's exact numbers (weighted 85, confidence 4). **A** has done little else:
+Two archers reach scene 10 with Wren's exact numbers at her first grant (WE-04-1: weighted 84, confidence 4) [revision: I-109]. **A** has done little else:
 no other candidate is eligible → clear field → **grant**. **B** has also fought with the spear enough that
 `call.spearhand` is eligible in the same pass (weighted 82) → the field is not clear → **offer**, with both
 named in one block, and the branch calling Warrior beside them if its breadth requirement holds. The engine
@@ -1851,11 +1851,13 @@ Archer tier 1, first pick. Eligible by the pool gate (04.8.4) *(abilities illust
 
 | Ability | First tag | `min_tier` | Pool | Wren's weighted at the tag | Rank |
 |---|---|---|---|---|---|
-| Pinning Shot | `deed.martial.archery.bow` | 1 | own | 85 | 1st |
-| Steady Draw | `deed.martial.archery` | 1 | own | 85 (tie; engine draw) | 2nd |
+| Pinning Shot | `deed.martial.archery.bow` | 1 | own | 84 | 1st |
+| Steady Draw | `deed.martial.archery` | 1 | own | 84 (tie: all her archery is with the bow; engine draw) | 2nd |
 | Volley | `deed.martial.archery.bow` | 2 | own | — | not eligible: `min_tier 2 > 1` |
-| Tumbling Escape | `deed.martial.athletics.acrobatics` | 1 | kin | 21 | 3rd (kin ranks after own) |
-| Read the Field | `deed.martial.tactics.reading` | 1 | kin | 12 | 4th: not shown |
+| Tumbling Escape | `deed.martial.athletics.acrobatics` | 1 | kin | 37 | 3rd (kin ranks after own) |
+| Read the Field | `deed.martial.tactics.reading` | 1 | kin | 0 | 4th: not shown |
+
+The weights are Wren's at her grant in scene 10 (`04-wren04.py` seed 7; WE-04-1) [revision: I-109].
 
 The block shows Pinning Shot, Steady Draw and Tumbling Escape, each with its literal rank-1 text. Her second
 pick shows the remaining two and Read the Field. At tier 2 Volley joins the eligible set; at tier 3 a picked
@@ -1945,10 +1947,10 @@ provisional; `lived` is her archery evidence since that rest.
 - Session 16, the first reflection at 24 since the grant: `lived` 0 → **lapse**: archery +4 → +3, the tier's
   pick returns to the pool, the Proven license and the Focus trigger go (unless another calling grants
   them). Tier 1 was confirmed long before and is untouched: she is still an Archer. Meanwhile
-  `call.pyromancer` has been offered (in the simulation the new calling came a median of 3 sessions after the turn).
+  `call.pyromancer` has been offered (in the simulation the new calling came a median of 4 sessions after the turn, p10–p90 2–5; T-04-8 R8).
 *Other side:* had she fought one more session with the bow before turning, `lived` would have passed 24 and
 the tier would have been confirmed at the first reflection twelve scenes after the grant (it confirmed in
-134 of 199 such runs). *Non-example:* a season spent healing in a monastery adds no evidence-bearing scenes,
+112 of 179 such runs; T-04-8 R8) [revision: I-108]. *Non-example:* a season spent healing in a monastery adds no evidence-bearing scenes,
 so the count does not advance and nothing lapses (03.6.1).
 
 ### WE-04-9 Tempting non-examples, with the refusal each gets
