@@ -4194,7 +4194,7 @@ companions:
     role: caster
     band_range:
     - 1
-    - 3
+    - 4
     lines_by_band:
       1:
         attributes:
@@ -4301,6 +4301,41 @@ companions:
           harm_tags: *id042
           bands: *id043
         focus: 3
+      4:
+        attributes:
+          might: 1
+          agility: 3
+          endurance: 3
+          wits: 3
+          intellect: 3
+          presence: 6
+          resolve: 6
+        competence:
+        - tag: deed.divine.healing
+          value: 4
+        - tag: deed.divine.rites
+          value: 4
+        - tag: deed.lore.religion
+          value: 4
+        guard: 17
+        defenses:
+          might: 11
+          agility: 13
+          endurance: 13
+          wits: 13
+          intellect: 13
+          presence: 16
+          resolve: 20
+        vitality: 18
+        reduction: 1
+        attacks:
+        - name: mace
+          verb: verb.strike
+          modifier: 5
+          severity: S2
+          harm_tags: *id042
+          bands: *id043
+        focus: 4
   knacks:
   - kn.trained
   licenses:

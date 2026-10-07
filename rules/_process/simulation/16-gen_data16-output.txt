@@ -15,7 +15,7 @@ wrote data/companions.yaml: 40 templates, 15 knacks, 17 loyalty sources; 0 error
   cmp.champion               band 3-5  atk +9  Guard 17  Vit 16  red 3
   cmp.sworn_sword            band 2-4  atk +5  Guard 14  Vit 12  red 2
   cmp.thief                  band 1-4  atk +4  Guard 14  Vit 6  red 1
-  cmp.acolyte                band 1-3  atk +0  Guard 11  Vit 6  red 1
+  cmp.acolyte                band 1-4  atk +0  Guard 11  Vit 6  red 1
   cmp.minstrel               band 1-3  atk +2  Guard 12  Vit 6  red 0
   cmp.sage                   band 1-3  atk -2  Guard 10  Vit 6  red 0
   cmp.squire                 band 1-4  atk +2  Guard 11  Vit 6  red 1

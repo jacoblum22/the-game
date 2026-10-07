@@ -912,8 +912,8 @@ scene). T-07-13 lists them.
 
 **07.7.4 Maims.** `[D]` A maim is drawn by table, never chosen by the DM: the engine takes the site of
 the character's worst fresh wound (ties: the latest), rolls between that site's maim entries, and lowers
-**the first attribute in the entry's order that has not been maimed before and stands above −2**
-(00.4.3 c: at most −1 per attribute from maims, never below −2). If neither listed attribute qualifies,
+**the first attribute in the entry's order that no mark has lowered before (a maim or an aging mark) and stands above −2**
+(00.4.3 c: at most −1 per attribute from marks of every kind together, never below −2) [verification: V2c-009]. If neither listed attribute qualifies,
 the entry's restriction applies alone and the option still counts. The maim's restriction is an effect
 that never expires (a lost hand: no method needing two hands; a ruined knee: pace −1; a lost eye: a
 Precision snag on ranged attacks beyond `band.near`). A calling's lifetime +1 (04, applied when tier 4

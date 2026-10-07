@@ -92,7 +92,7 @@ aging:
   results:
     critical_success: "nothing; no aging check next year"
     success: "nothing"
-    failure: "an aging mark: -1 to Might, Agility or Endurance (player's choice among those not yet lowered by age), within 00.4.3 (c); once all three are lowered, counted only"
+    failure: "an aging mark: -1 to Might, Agility or Endurance (player's choice among those not yet lowered by age or by a maim), within 00.4.3 (c): at most -1 per attribute from all marks together; once all three are lowered, counted only"  # [verification: V2c-009]
     critical_failure: "an aging mark and the retirement offer at the next reflection"
   thresholds: {offer_every_year_turn_from_marks: 3, career_end_at_marks: 5}
   never_kills: "age ends careers, never lives in play (INV-6)"

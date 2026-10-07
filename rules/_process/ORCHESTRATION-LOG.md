@@ -370,3 +370,7 @@ Cost: 149 tools; see the usage line below.
 - New rows I-073 to I-081. Two are MAJOR: I-075 (one dropped object wipes a mob) and I-080 (planted rumors start wars without limit).
 - I-082 opened by the orchestrator: the harm generator is broken. It goes into Revision C, not a separate task.
 - Usage: within its ~100-turn scope.
+
+## V2c2 returned (long-arc playtest: scholar, tier 1 to tier 5, retirement and successor)
+- 3 fixes (V2c-009 to V2c-011).
+- New rows I-083 to I-087. One is MAJOR: I-083, no band-4/5 social or lore opposition in a seeded world, so the non-combat path stalls at tier 4.

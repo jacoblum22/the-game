@@ -187,3 +187,84 @@ Goal of the player: start a war between the rulers and the faith, and take the c
 - Retroactive note on playtest 1: its section 2 granted Evella after-curfew leave from Yagum as certain; with V2c-007 Yagum's duty refusal covers it unless the reeve's seal is shown (G4, redirect: the reeve).
 - Positives: the two-key rule and the warning delay held under a player trying to reach the menu; the dying ladder could not be forced; rest quality is shown before resting; split and re-anchor (12.13.3) worked; cohorts default to separate allies; faction actions stayed the engine's.
 - Tooling: `07-gen_harm07.py` fails at HEAD (`NameError: E`); `harm.yaml` edited by hand for V2c-006. Validator: 0 ERROR / 0 WARN; anchors recompiled (0 errors, 0 warnings).
+
+# Playtest 3: long arc (2026-10-07, agent V2c2)
+
+World: the seed (`_process/simulation/12-world-seed-example.yaml`, the High Fells, haven Merestead; factions: rulers T2, faith T2, the Horde of the Millwick T3, three T0 locals). Character: the seed's talker pregen **Osbert Elderley** (Intellect 3, Wits 2, Presence 1; deep `deed.lore.history`), so the long arc runs on the **non-combat path** (contest band, ruinous stakes). One PC, band 1 to band 5, 12 milestones over about 56 sessions. Scene play is skipped; at each milestone the long-horizon procedures are applied literally. Dice: seeded generator (seed 202610073). Growth is paced by 04.3.5's session medians (narrow lore: tiers at sessions 4 / 9 / 18 / 34 / 56); the calendar by an assumed 2 world-weeks per session plus one downtime season between arcs (no rule sets the rate: see I-085). Markers as before: **SILENT**, **CONFLICT**, **FORK**, **STUCK**, and **DRIFT** (a number outside its stated band). Fixes are tagged `[verification: V2c-NNN]`, continuing after V2c-008; design rows are I-083 to I-087.
+
+## M0. Creation (spring quarter day, year 12 since the Burning; 02.2.5, 11.10.5, 04.5.6, 07.1.2, 08.8.10)
+- Pregen path (02.2.5 a), birth drawn live. The pregen carries no `age_band`; 02 makes it a shown fact, so the player states **old** (55), and 11.10.5 reads it. Human aging begins at 50 (`calendar.yaml#lifespans`): aging checks from the first Year Turn, Easy in the first decade.
+- `power_band` 1 (04.5.6: unrecognized). Vitality = 02's base (reference 12) + 0 (07.1.2). Coin: W1 (08.8.10).
+- Key `deed.lore.history` → `call.antiquarian` (narrow; `pool_gate.own` = `deed.lore.history`, `kin` = `deed.lore`). Its own pool holds **two** calling abilities (`ab.old_tales` t1, `ab.heralds_eye` t2) for six lifetime picks (04.8.4). See M5 and I-087.
+
+## M1. Tier 1, Called (sessions 1–4; spring, year 12; 04.3.2, 04.7, 04.8.4, 16.2.1, 16.10.4)
+- Inciting incident (`opening.inciting`: missing child) → the Shephollows Undercroft (ring 1, band 1). Narrow tier 1 needs 80 weighted, 8 counted, 6 quality events and 5 scenes (04.3.2, 04.3.3). At session 4 the offer comes through V3 (`call.antiquarian` tier 1 vehicles), with three answers (04.7.1). Accepted.
+- Picks: 2 (04.8.4). Candidates, ranked by own pool and then by tally: `ab.old_tales` (own), `ab.keen_search` and `ab.gift_of_tongues` (kin). Took `ab.old_tales` and `ab.gift_of_tongues`. Competence +3, `lic.call.mark` (04.5.1).
+- Companion: an apprentice, Wenna (`cmp.apprentice`, protégé, bands 1–4; trained tags set to the PC's key tags at joining, per its notes). Retinue 1 of `retinue_cap` 3 (16.2.1, Presence +1). She tracks evidence and holds one deed seat and a maximum of tier 3 (16.10.4).
+- Wealth: 08.8.10's curve is "a character **fighting** at their own band" (purses, hoards). Osbert's income at band 1 is sage work and fees, which no curve states. **SILENT** (I-086).
+
+## M2. Summer Season Turn, year 12 (11.11.3, 04.8.7, 16.10.1, 11.4.2)
+- 13 World Turns (11.2), one a week. Situation `sit.high_fells.wound`: step 1 (week 1, the levy, relations −3, a muster) and step 2 (week 4, a battle, 11.3.15) fire. Faction goals: by the world sim's medians (`11-world-sim-output.txt`: about 15 goals done per 2 years across the region), the Horde's clock goes from 4/12 to 6/12, and the rulers' from 4/12 to 5/12.
+- Season Turn steps 1–9 executed in order. `reflection` → 04.8.7: one free re-pick (declined).
+- Wenna's growth by seasoned service (16.10.1) needs two conflicts defeating a foe of her band. A scholar's apprentice has none, so a non-combat protégé grows only by her own tiers (16.10.4). This works as written.
+- **Defect fixed**: 16.10.1 tests "its template's `max_band` (T-16-19)", but no template has that field; the data's field is `band_range` (T-16-19's Bands column). [verification: V2c-011]
+
+## M3. Tier 2, Proven (session 9; autumn, year 12; 04.3.4, 03.4.3, 15.9.20, 03.4.5)
+- Tier 2 requires 200 weighted and, since tier 1, 10 quality events, 8 scenes and 5 great deeds at band ≥ 2. Osbert's case: who sealed the record of the Burning in the hall. The truth's keeper is `fac.high_fells.rulers` (tier 2), so the beats are a lore contest (15.9.20) with contest band max(DC band, faction tier 2) = 2 (03.4.3). A Dire beat in which the ledger could burn is **ruinous** (03.4.5: the necessary node's last placement), so it is a crisis with +2 points. The procedure executed as written; this is the non-combat path working at band 2.
+- Pick 3: `ab.heralds_eye` (own pool t2). Own pool is now exhausted. Power band 2: Vitality +2 (07.1.2).
+
+## M4. Year Turn, year 13 (11.11.5, 11.10.5)
+- Order: the spring Season Turn, then the Year Turn (00.7.6). (1) Aging: Endure with Endurance 0 against Easy 10: d20 **10** → success. (4) Legend review: no entry is at score 5.
+- The Horde's goal is at 8/12, and step 3 of the war situation proceeds. Osbert's rumor of the sealed record spreads (11.6.5).
+
+## M5. Tier 3, Tempered, and a maim (session 19; winter, year 13; 04.3.4, 07.5.4, 07.7.3, 04.8.4)
+- Tier 3 requires 6 great deeds at band ≥ 3 and 2 crises. Lore contests against the Horde (tier 3) and its officer Tible (band 3) give contest band 3 (15.3.11, 15.9.20). This is available, but it is the **top** of what the region's factions can supply (see M7).
+- Injury: at Wolfcrag's Delving (ring 3, band 3) a lethal fight reaches the Threshold. From the last-chance menu, Osbert takes **Maimed** (07.5.4). Site: the worst fresh wound is to the leg, giving a ruined knee: Agility 0 → −1 and pace −1 for good (07.7.4). He also takes a brink mark, his first (07.7.3).
+- Pick 4: the own pool is empty, so the pick comes from kin: `ab.cipher_breaker` (t3).
+- **Audit** (script over `abilities.yaml` × `callings.yaml`): **142 of 151** specialist callings have fewer than six own-pool abilities, **111 of 151** have no own-pool tier-5 ability, and 19 vow or dark callings have no tier-5 ability at all. These are legal, because picks fall through to kin (04.8.4), but a tier-5 pick is usually another art's ability (I-087).
+
+## M6. Year Turn, year 14 (11.11.5, 16.10.4)
+- Aging: d20 **12** vs Easy 10 → success.
+- Wenna (protégé) is confirmed at tier 1 → her own band rises to at least 2 (16.10.4), and she is served at the cap.
+- World: the Horde's goal completes (`dominate` → the rulers lose hold, 11.3.4: strong → weak), and a new goal is drawn. It is still **regional** (11.3.7). Tier 3 is the Horde's ceiling: rising above 3 needs a completed `grow` goal of `realm` scope (11.3.4), and no seeded faction has one. The world sim agrees: "max tier reached anywhere: 3" in 300 seeds × 2 years.
+
+## M7. Tier 4, Exalted (session 34; year 15; 04.3.4, 04.5.7, 03.4.3, 12.16.18)
+- Tier 4 requires 6 great deeds at **band ≥ 4**, 3 crises and 5 contexts. **STUCK on the contest path as the world stands.** Social and lore contest band is the opposing party's absolute band or faction tier (03.4.3, 15.3.11, 15.9.20). The region's highest faction is tier 3, and the highest NPC is band 4, and there is exactly one: `npc.brugnak_three_scar`, the Horde's champion. So band-4 lore deeds come only from three sources: (a) Brugnak; (b) research DCs ≥ 23 (Very hard: "a lost topic in a great collection"), where the collection's tier is a `[J:rung]`; or (c) lore beats taken **inside a conflict**, whose band is relative (`power_band` + advisory: P3 in a hard fight = 4). Osbert gets there by (c): he reads wards and old inscriptions in fights at Whitmouth's Undercroft (ring 4, a band-5 site).
+- The parity claim (04.3.5: envoy tier 5 at session 46, scholar at 46) rests on `04-recog-parity.py`, which draws a contest's band as **power band + the fight offset** (its line 178), with a band-N+1 principal always available. The rules give an absolute band, and the generated world does not supply that opposition. **CONFLICT** (sim vs rule) and **DRIFT** (MAJOR, I-083).
+- 04.3.4's "In fiction" column for tier 4 says "done in many countries". The seed is one region; 12.16.18 opens a new region only when the PC travels past ring 5. **FORK**: a literal DM may read the column as a gate (I-084).
+- Tier 4 is confirmed. The one +1 (04.5.7): Intellect 3 → 4. Pick 5: `ab.masters_remedy` (kin t4). Power band 4.
+
+## M8. Year Turns, years 15 and 16: aging and the stacked mark (11.10.5, 07.7.4, 00.4.3)
+- Year 15: d20 **17** → success. Year 16: d20 **4** vs Easy 10 → **failure**: an aging mark, −1 to Might, Agility or Endurance, at the player's choice "among those not yet lowered **by age**". The player picks Agility, which is already at −1 from the maim (M5), and takes it to −2.
+- 00.4.3 (c) allows "a permanent mark or maim (an aging mark is one), at most −1 per attribute". 07.7.4 counted only "maimed before", and 11.10.5 only "lowered by age", so each rule's own limit allowed −1 from each source: **CONFLICT**. **Defect fixed**: both rules, and `calendar.yaml#aging`, now count marks of every kind together. The aging mark goes to Endurance 0 → −1, and the Vitality base is recomputed (07.1.2). [verification: V2c-009]
+
+## M9. The threat at band 4–5 (09.8.1, 09.8.2, 11.3.3, T-09-10, 12.16.8)
+- The Horde (tier 3) fields T2 / T3 / T4 champion (11.3.3). Against P4, Brugnak alone is **fair**; at P5 one T4 is **trivial** (T-09-10). The campaign's founding threat cannot escalate to band 5: its tier is capped (M6), and 09.8.2 says "the world does not scale to the PC" by design.
+- The band-5 opposition in the seed is two sites (Whitmouth's Undercroft, ring 4; the Delving of Ashhollow, ring 5). **Both** ring-5 areas rolled home band 4 (12.16.8's range is 4–5), so no area table is home-5. A new region (12.16.18) starts its rings' home bands "where the old region's ring 5 ended". That is 4 here; past 5 the bands are undefined. **SILENT** (I-084).
+- The war situation reaches its last steps unaided. The PC is never needed at band 5, so the arc's climax is a trivial fight or a band-5 lair the story never pointed at. The campaign does **not stall**, because hooks keep coming (11.5.10), but the main thread **loses its stakes** from about P4.
+
+## M10. Tier 5, Paragon (session 56; year 17; 04.3.4, 15.9.14, 03.4.3, 04.8.4, 04.11.4)
+- Tier 5 requires 4 great deeds at **band 5**, 4 crises, 22 quality events and 14 scenes. Band 5 on the lore path comes only from a DC ≥ 28: Legendary research, "a subject deliberately expunged" (15.9.14). The rulers' purge of the Burning's account qualifies: max(DC band 5, faction tier 2) = 5.
+- An extended research clock of 8 is ticked one beat a day. Four days in one archive give **four band-5 great deeds**, and ruinous beats (the last copy could burn) give the crises. One library visit thus meets the tier that is "done at the edge of what mortals can do". 04.3.4's "a different kind of evidence each time" is not tested within a tier's great deeds. **FORK** (I-083).
+- Tier 5 is confirmed (`lic.call.open_art`, competence +6, master grade; 04.5.1). Power band **5**: Vitality 12 + 8 = 20, less the Endurance aging change (07.1.2), within the cap of 24. **Tier-5 pick** (6th): own-pool tier 5 is empty, so kin gives `ab.reconstruct` (investigation; ranked first by its tally), over `ab.unanswerable_case` and `ab.intercession`. Taken. `apotheosis_available` → true (04.11.4).
+- Wealth: Osbert's coin stood at W2–W3 until the band-5 sites. One T5 hoard (mean 8,250; 08.8.10) takes him to **W5** in a single find. The wealth sim (`08-campaign-sim-output.txt`) shows fighting PCs one tier above the table at P3 (85% W4) and at P4 (96% W5). Both are inside OEQ-08-4's two-tier revisit trigger, so this is **DRIFT** (soft). Non-combat income has no curve (I-086).
+
+## M11. Year Turn, year 17, and Train-a-Successor (11.11.5, 11.13.10, 16.10.4)
+- Aging: d20 **18** → success (2 marks: the maim and the aging mark; aging marks 1 of 5).
+- Wenna is confirmed at tier 2 → her own band is ≥ 3, served at the cap (16.10.4).
+- Train-a-Successor (`dt.11.train_successor`): Osbert teaches `deed.lore.history` (level 2, competence +6 ≥ +3). d20 + base vs Moderate 15 succeeds each week; the training clock (12) fills in 12 weeks, banking a tag every 4 ticks, the one "taught most that stretch". Taught the same tag every week, it banks **history three times** (3 × 24 = 72 at one node, against tier 1's 80 weighted). 02.2.7 item 4 and 11.13.10 item 4 say "at most three tags" without saying distinct. **FORK** (I-087).
+- **Defect found and fixed in passing**: the acolyte protégé (`cmp.acolyte`) had bands 1–3. 16.10.4 makes a confirmed protégé tier 3 raise her band to at least 4, which had no line, so the step was **STUCK**. Its range is now 1–4 in the generator, data and T-16-19, matching the squire and the apprentice. The generator had also drifted from `companions.yaml` in two hand-edited comments; it now reproduces the file byte for byte. [verification: V2c-010]
+
+## M12. Retirement, legacy and successor (autumn, year 17; 11.13.1–11.13.11, 02.2.7, 16.16.1)
+- The offer: `apotheosis_available` → the `[RETIRE]` block at the next reflection (11.13.1), with three answers (04.7). The player accepts with ending **Apotheosis** (`legacy.yaml#apotheosis_forms`, keyed by the lore branch; 04.11.4).
+- Settlement (11.13.4): estate = coin (~8,600) + half the list price of his items, which comes to more than 10,400, so the settlement lifestyle is **noble**. No holding, so nothing persists or falls.
+- Successor (11.13.9): slot 1 is the protégé Wenna; slot 2, no ally at Friendly or warmer other than her; slot 3, the anchor bond Harin Deepdelve. The newcomer is always offered. Chosen: **Wenna**. Each candidate showed one tie and one thorn.
+- 02.2.7 / 16.16.1: she starts at the floor. Her protégé tier 2 and band 3 are wiped, fate is 1 and the birth draw is fresh (halved recency). Inheritance (11.13.10): (1) a `legacy` renown entry at score 2 in Merestead (she is a protégé and his score there is 5); (2) one heirloom, his annotated chronicle; (3) ledger results as hooks; (4) three banked tags, all history (M11), as 72 points of backstory; (5) no living predecessor (apotheosis); (6) faction status one step toward 0 (rulers −2 → −1); (7) no home; (8) a purse of min(10 × the noble week, 350) = **350**.
+- Timeskip: **a season** (11.13.8). 13 World Turns run suspended (11.2.6); the bang queue is cleared and refilled at the hand-off (11.13.11). Executed without a stall.
+
+## M13. Totals (playtest 3)
+- Milestones run: 12 (M1–M12 plus creation), covering every long-horizon procedure in the brief. There is no aging rule in 07; aging is 11.10.5 and legacy is 11.13. Nothing looped. The campaign **stuck** once on the contest path at tier 4 (M7, resolved only by fighting) and once on the acolyte's line (fixed).
+- **Mechanical defects fixed** (3): V2c-009 (maims and aging marks each allowed −1 on the same attribute, against 00.4.3 c; 07.7.4, 11.10.5, `calendar.yaml`); V2c-010 (`cmp.acolyte` band range 1–3 could not hold a tier-3 protégé's band 4; generator byte-equal drift repaired; T-16-19); V2c-011 (16.10.1 cited a non-existent `max_band` field).
+- **Design rows** (5, all open (Revision C)): I-083 (absolute contest band vs relative sim; band-4/5 opposition never supplied; tier-5 lore deeds farmed in one archive; MAJOR), I-084 (the founding threat cannot pass tier 3; ring-5 home bands; new-region bands past 5; "many countries" read as a gate), I-085 (no world-time-per-session rate: aging and clocks unpaced against growth), I-086 (no non-combat income curve; P3/P4 wealth one tier high), I-087 (thin own pools for six picks; Train-a-Successor banking one tag three times).
+- Count of marked points: SILENT 3, CONFLICT 2, FORK 3, STUCK 2, DRIFT 2.
+- Positives: the Season and Year Turn orders executed literally; the maim table, aging, the retirement offer, settlement, successor slots and the bounded inheritance channels all ran without a ruling; band never exceeded tier; Vitality stayed under 24; the protégé arc stayed under the hero and reset correctly.

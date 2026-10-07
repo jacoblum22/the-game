@@ -1342,7 +1342,7 @@ gives it.
 
 **16.10.1 Seasoned service.** `[D]` + `[T]` Handler `h.16.season_growth` (`season`, phase 8, after 04's
 consolidation) raises an ally's **own band by one** when all hold:
-1. its own band is below its template's `max_band` (T-16-19);
+1. its own band is below the top of its template's band range (`band_range`, T-16-19's Bands column) [verification: V2c-011];
 2. it served the whole season in the retinue or posted (16.2.3);
 3. during the season it took part in at least **two** conflicts in which a foe of threat band ≥ its own
    band was defeated, or in **one** ★ conflict (T-16-8 R3: advised hard or lethal).
@@ -1825,7 +1825,7 @@ there by `16-gen_data16.py`). Line shown at the template's lowest band. Wages ar
 | `cmp.champion` | fighter | hire, comp, foll, cohort | 3–5 | +9 · 17 · 16 · 3 | bodyguard, steadfast (rally) | lookout | 150/wk + share; a thread |
 | `cmp.sworn_sword` | fighter | comp, foll | 2–4 | +5 · 14 · 12 · 2 | shieldbearer, steadfast (bodyguard); value loyalty +1 | lookout | keep |
 | `cmp.thief` | skirmisher | comp, hire, foll | 1–4 | +4 · 14 · 6 · 1 | trained: thievery (loyal) | scout, lookout | 21/wk or keep |
-| `cmp.acolyte` (protégé) | caster | comp, foll | 1–3 | +0 · 11 · 6 · 1; `ab.mend_flesh` | trained: divine healing (healer); value piety +1 | lookout | keep |
+| `cmp.acolyte` (protégé) | caster | comp, foll | 1–4 [verification: V2c-010] | +0 · 11 · 6 · 1; `ab.mend_flesh` | trained: divine healing (healer); value piety +1 | lookout | keep |
 | `cmp.minstrel` | non-combatant | comp, hire, foll | 1–3 | +2 · 12 · 6 · 0; `ab.stirring_song` | trained: performance (rally) | lookout | 10/wk or keep |
 | `cmp.sage` | non-combatant | comp, hire, foll | 1–3 | −2 · 10 · 6 · 0 | trained: history (trained) | navigator | 21/wk or keep |
 | `cmp.squire` (protégé) | fighter | comp, foll | 1–4 | +2 · 11 · 6 · 1 | quartermaster (shieldbearer) | lookout, quartermaster | keep |

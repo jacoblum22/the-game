@@ -1645,7 +1645,7 @@ thereafter; fate may reroll it (01.16.3).
 |---|---|
 | critical success | nothing, and no aging check next year |
 | success | nothing |
-| failure | an **aging mark**: −1 to Might, Agility or Endurance, the player's choice among those not yet lowered by age, under 00.4.3 (c)'s limits (at most −1 per attribute from marks, never below −2); once all three are lowered, the mark is counted and changes nothing more |
+| failure | an **aging mark**: −1 to Might, Agility or Endurance, the player's choice among those not yet lowered by age or by a maim (07.7.4), under 00.4.3 (c)'s limits (at most −1 per attribute from marks of every kind together, never below −2) [verification: V2c-009]; once all three are lowered, the mark is counted and changes nothing more |
 | critical failure | an aging mark, and the retirement offer (11.13.1) at the next reflection |
 
 At **three** aging marks the retirement offer comes at every Year Turn; at **five**, the career ends

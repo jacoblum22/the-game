@@ -28,7 +28,7 @@ compiled_from:
 - file: 06-conflict.md
   sha256_16: 0b01ff1ea628421b
 - file: 07-harm-recovery-death.md
-  sha256_16: 415154f8f2e467c8
+  sha256_16: f9da8166bf8654e7
 - file: 08-items-loot-crafting.md
   sha256_16: 2b4e81feede43ba2
 - file: 09-adversaries.md
@@ -36,7 +36,7 @@ compiled_from:
 - file: 10-exploration-travel-sites.md
   sha256_16: 84e8d1d2275d58d8
 - file: 11-living-world.md
-  sha256_16: 4d6ff04dff5eaf84
+  sha256_16: f955fea5da0e8e53
 - file: 12-dm-procedures.md
   sha256_16: f9f7cfad406324ba
 - file: 13-starter-setting.md
@@ -44,7 +44,7 @@ compiled_from:
 - file: 15-social-investigation-downtime.md
   sha256_16: 5ffc5c131882f911
 - file: 16-companions-and-allies.md
-  sha256_16: aa300bd39ec52440
+  sha256_16: 30e09992cdc472d8
 compiled_at: integration (Wave 3 -> 4)
 compile:
   rule: 12.13.6
