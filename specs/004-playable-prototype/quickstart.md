@@ -1,5 +1,20 @@
 # Quickstart: validating Milestone 1
 
+## How to play (start here)
+
+1. `pip install -r requirements.txt`
+2. Put your key in a file named `.env` at the repo root: `GEMINI_API_KEY=...` (it is git-ignored).
+3. Check the key and the request format once, for well under a cent: `python evals/gemini_smoke.py`.
+4. `python -m play new "My World"` starts a game: fourteen world questions, then your character, then
+   play. Answer in your own words or pick a number; press Enter or type `skip` to let the dice decide.
+5. Type what your character does in plain English. `/sheet`, `/journal`, `/turn`, `/spend` and `/quit`
+   are the useful commands; `/quit` saves, and `python -m play continue` picks up where you stopped.
+
+Add `--offline` to any command to play with the free stand-in model instead of Gemini. It checks that
+the engine works; its prose is template text, not a real DM.
+
+## Validation
+
 How to prove the prototype plays start to finish once Milestone 1 is built. Commands refer to the layout in
 [plan.md](plan.md) and the interfaces in [contracts/](contracts/). Later milestones add their own sections
 here.
@@ -9,7 +24,7 @@ here.
 - Python 3.11+, `pip install -r requirements.txt -r requirements-dev.txt` (hash-pinned).
 - For play: `GEMINI_API_KEY` in `.env` at the repo root (git-ignored, so it lives on the machine you play
   on). Offline validation needs no key.
-- `rules/` from `integration-wave-swxsot`, unmodified.
+- `rules/` from `main` (swxsot was merged there), unmodified.
 
 ## 1. Offline checks (free, run on every change)
 
