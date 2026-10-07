@@ -514,6 +514,9 @@ _MECHANICS = re.compile(r"\d+|\bd\d+\b|\bDC\b|\broll(?:s|ed)?\b|\bmodifier\b|\bh
 def _checker(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:
     # rule: 12.3.1 (one claim per asserting sentence; extract when unsure)
     draft = packet.message
+    numbered = re.findall(r"(?m)^\[(\d+)\] (.*)$", draft)  # the turn loop's `[n] sentence` lines (then the player's words)
+    if numbered:
+        draft = "\n".join(text for _, text in numbered)
     subjects = entity_aliases(enum_at(schema, "claims", "[]", "subject"), packet.render())
     claims = []
     for i, sent in enumerate(sentences(draft)):

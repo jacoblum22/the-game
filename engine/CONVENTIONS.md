@@ -599,3 +599,51 @@ readers take a `WorldState`. Errors: `engine.world.common.WorldError`. The PC is
   default}}, birth, open_slots, window "open", bent (BentState), manner}. Lines/veils: `pref.safety.lines|veils`
   facts (subject `player` if that entity exists, else `world`) via `engine.audit.safety.safety_fact`; plus
   `pref.lethality.acknowledged` on `world` when creation's opening (which states it) is answered.
+
+## engine/dm narration API (T048, T050, T051, T060 Director half, PR-12-8)
+- **Entry points** (`engine.dm.turn`): `play_turn(ctx, message) -> TurnOutcome` and `play_answer(ctx, choice_id) ->
+  TurnOutcome` run T1–T6 (`run_turn` / `answer_pause`, unchanged) then T7–T12 (`engine.dm.narration.narrate_turn(ctx,
+  adj, message)`). `TurnOutcome(response: engine.dm.response.Response, turn_record: TurnRecord (saved, complete per
+  data-model §4), narration: NarrationResult(fiction, fallback_used, review_flag, skipped, draft_versions, verdicts,
+  screen, created), adjudication: AdjudicationResult)`. T7–T12 are one transaction under the turn id (T8 mentions,
+  the fallback's ruling, T12 counters/cut); a model error there raises and writes nothing after T6.
+- **Loop** (`narrate_checked(ctx, record, *, player_message, purpose="turn"|"scene_open"|"opening"|"recap"|"epilogue",
+  exchanges, pause_blocks, extra, fallback_text=None)`, needs `ctx.tx`): draft → `write_mentions` (one extra redraft
+  when T8 settled a property) → Checker → `check_claims` → `write_on_mention` fixes written, Oracle for
+  `undetermined` → a pure cut is done by code (sentences removed, claims renumbered, no model call), anything else is
+  a Narrator redraft with the failing verdicts and store values → T10 `screen_draft` + `screen_safety` (failure =
+  redraft, same budget) → after `pacing.yaml#claim_check.max_redrafts` the plain fallback (`review_flag`, its
+  `rule_conflict` ruling logged via `log_ruling`). `ModelInvalid` from the Narrator/Checker also falls back.
+- An OFFER pause (stage offer) with nothing else in the record skips T7–T10: fiction = the beat's restatement, then
+  the OFFER block (`skip_drafting`). OOF blocks: `turn_blocks(ctx, adj.oof, record, pause)` renders the open pause
+  from its stored detail (`pause_blocks`: `oof.offer_block(Frame)`, `near_miss_block`, `clarify_block`, CHOICE notes)
+  in place of the pipeline's one-line summary, labels the rest, moves `[WARNING` notes into WARNING blocks;
+  `owed(ctx, record, text)` adds a missing `[STATUS]`; `oof.ordered` puts the pause block last.
+- **Roles**: `roles.narrator.draft(ctx, record, *, player_message, exchanges, purpose, redraft: Redraft|None, extra)`
+  (THIS MESSAGE = `record_text(...)` in names, never ids, + `redraft_text`); `roles.checker.check_draft(ctx, fiction,
+  *, player_message, created, exchanges) -> CheckerOutput(sentences, claims, screen, scene_ids)` — its own prompt,
+  the 12.3.1 card only, view = `entity_lines` (`<id>: Name, aliases`, PC `pc.x: Name, you, your`) over
+  `checker_ids` (scene scope + ids created this turn), message = `[n] sentence` lines then `THE PLAYER'S MESSAGE`
+  (the offline Checker reads only the `[n]` lines). `roles.director.direct(ctx, *, situation, player_message,
+  happened, quiet_turns) -> DirectorDecision(cut_now, next_scene: NextScene, push, lead, push_raised, lead_fires)`
+  (enums: `director_context` = `director_enums` folded into `schema_context`); `frame_scene(ctx, d, *, reason,
+  interrupt, purpose_declared) -> SceneStart` (`places.move` to another reachable place, else `end_scene`, then
+  `start_scene`); `scene_header(state)`.
+- **Scenes in the loop**: after T5, `_director_step` asks the Director when the player moves on (`narration.moves_on`),
+  a beat got a degree / a clock completed / an NPC refused, or `trg.lead_injection` is raised (then `inject_lead`
+  runs and the lead goes in `record.notes`). A player's cut is framed in this turn; an answered agenda is marked
+  (`mark_agenda_answered`). T12: `note_turn`, interrupt → `note_cut`, then `cut_due` → `end_scene` and meta
+  `scene.frame_next` {reason, scene_id, turn_id}; the next turn frames the scene before T2 (Director with that
+  message; after a dead-air cut a player who stays (`stays`) re-opens it). `Response.scene_ended` = ended, not yet
+  framed.
+- **Disputes / OOF**: DISPUTE parts go to `engine.dm.dispute.settle_dispute` (or an injected `ctx.dispute`); a
+  reliance choice opens a `clarify` pause with `detail.stage == "dispute"`, answered by `settle_dispute(choice=)`.
+  OOF rules questions and codex words answer from `engine.dm.codex`.
+- **Sessions** (`engine.dm.session`, imported by turn.py so its handlers register; h12.py should import it too):
+  `open_session(ctx) -> Response` (session_start, recap via the Narrator `purpose="recap"` from `recap_summary`
+  through the checker (fallback: empty fiction), the RECAP block, the next-time note, the open pause re-shown; with
+  no scene ever, `opening(ctx)`: the Director frames the first scene, the Narrator writes the opening from
+  `world.opening`); `close_session(ctx, next_time=None)` (session_end, the pause stays, the next-time question, a
+  where-you-stand line). Each saves a TurnRecord `(session open)` / `(opening)` / `(session close)`. Handlers:
+  `h.12.session_open` (meta `session` {n, opened_seq, prefs}), `h.12.session_close` (meta `session.review` = flagged
+  ruling ids, `closed_seq`), `h.12.mode_change` (meta `mode.loaded` {mode, tags, beat_cost}).

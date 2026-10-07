@@ -142,10 +142,10 @@ no delivered contradiction of stored state.
 - [x] T046 [US3] Implement the T10 screen checks (12.2.7, 01.11.4, 12.5.6, 12.14.3, 12.14.4, 12.14.9) combining code checks with the Checker's flags, in `engine/audit/screen.py`
 - [x] T107 [US3] Implement the separate safety screen (FR-036): the SAFETY part class handled first at T2 (12.5), and a code check of every draft against the player's lines and veils (12.5.6), in `engine/audit/safety.py`; not part of the Checker call
 - [x] T047 [US3] Implement write-on-mention (PR-00-7, 00.6.6): record each mention with only what the draft implies, settle unsettled properties via Oracle or tables, NPCs via PR-12-5, in `engine/dm/mentions.py`
-- [ ] T048 [US3] Implement the Narrator (B/D) and Checker (C) roles in `engine/dm/roles/narrator.py` and `engine/dm/roles/checker.py`; the Checker never sees the narrator's prompt or reasoning (FR-034)
+- [x] T048 [US3] Implement the Narrator (B/D) and Checker (C) roles in `engine/dm/roles/narrator.py` and `engine/dm/roles/checker.py`; the Checker never sees the narrator's prompt or reasoning (FR-034)
 - [x] T049 [US3] Implement OOF block rendering from state (12.15: OFFER, STATUS, WARNING, REDIRECT, CLARIFY, NEAR_MISS, LAST_CHANCE, RECAP, NOTE) in `engine/dm/oof.py`; fiction carries no numbers or rules words (12.14.4)
-- [ ] T050 [US3] Implement T7–T12 in `engine/dm/turn.py` (an OFFER pause with nothing resolved before it skips drafting and checking and delivers the restatement plus the OFFER block): draft, mention, check, ≤2 redrafts, fallback with `review_flag`, screen, deliver, record the `TurnRecord` (data-model.md §4), counters, scene cut marking
-- [ ] T051 [US3] Narration-pass tests with the offline model and injected bad drafts: contradiction → redraft to store, unsourced change → cut, two failures → fallback, in `tests/engine/test_turn_narration.py`
+- [x] T050 [US3] Implement T7–T12 in `engine/dm/turn.py` (an OFFER pause with nothing resolved before it skips drafting and checking and delivers the restatement plus the OFFER block): draft, mention, check, ≤2 redrafts, fallback with `review_flag`, screen, deliver, record the `TurnRecord` (data-model.md §4), counters, scene cut marking
+- [x] T051 [US3] Narration-pass tests with the offline model and injected bad drafts: contradiction → redraft to store, unsourced change → cut, two failures → fallback, in `tests/engine/test_turn_narration.py`
 
 **Checkpoint**: a full turn T1–T12 runs in the fixture scene; replay of a recorded fixture game is identical.
 
@@ -173,7 +173,7 @@ no delivered contradiction of stored state.
 ### World
 
 - [x] T059 [US1] Implement the place graph (10.1: places, routes, lengths) built from the world seed, and moves that advance time by route length and frame a scene on arrival, in `engine/world/places.py`
-- [ ] T060 [US1] Implement scenes (PR-12-7 start and end, the scene record in data-model.md §4, scene tests and counters `h.12.*`) and the Director role (S) in `engine/world/scenes.py` and `engine/dm/roles/director.py`
+- [x] T060 [US1] Implement scenes (PR-12-7 start and end, the scene record in data-model.md §4, scene tests and counters `h.12.*`) and the Director role (S) in `engine/world/scenes.py` and `engine/dm/roles/director.py`
 - [x] T061 [P] [US1] Implement NPC social records (standing, memories, `h.12.npc_memory`) and the chronicle (11.12) in `engine/world/social.py` and `engine/world/chronicle.py`
 - [x] T062 [P] [US1] Implement pacing (12.6–12.8): tension, dead air, push, lead injection (PR-12-3), random events (PR-12-6), in `engine/world/pacing.py`
 
