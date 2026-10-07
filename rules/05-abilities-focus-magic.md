@@ -21,8 +21,8 @@ composites and the priority tables), with additions to shared files in `data/eff
 `data/boundaries.yaml owner-block 05`. The data files are generated and validated by
 `rules/_process/simulation/05-gen_data05/gen_data05.py` (ids, tags, effect ids, parameter ranges, coverage, and the
 power budget of every rank of every ability). Worked examples continue 00's character **Wren** and add
-**Ash**, a hedge-taught fire sorcerer. Numbers owned by chapters not yet written (06, 07, 08, 09) are
-marked *(illustrative; ch.NN owns)*.
+**Ash**, a hedge-taught fire sorcerer. Numbers owned by chapters 06–09, which were not yet written when this chapter was drafted, are
+marked *(illustrative; ch.NN owns)*; where such a mark remains, the owning chapter's value governs [editor: E1-021].
 
 ---
 
@@ -39,7 +39,7 @@ present), and tools compute cost, legality, uses, composition and effect [BRIEF 
 **The bets this chapter makes.**
 
 1. **One pool, tag-gated, tier-floored.** 302 calling-partition abilities cover all 81 level-2 deed tags
-   (at least four each: one usable at tier 1, one at `min_tier` 4 and one at `min_tier` 5 [revision: I-087]) and all nine branches at every minimum tier; 57 more are
+   (at least four each, among them one usable at tier 1, one at `min_tier` 4 and one at `min_tier` 5 [revision: I-087] [editor: E1-022]) and all nine branches at every minimum tier; 57 more are
    gated by conduct axes for vows and dark callings, three at each pole a calling uses (tiers 1, 3 and 5);
    27 mirror ch.04's absorbable powers; and three **branch workings** are held through magic training
    itself, so that a caster is never weaponless (05.7.11) [revision: I-007, I-009, I-015]. A calling's
@@ -885,7 +885,7 @@ it at no authoring cost, and a hybrid caster carries two signatures over one Foc
 | **Weakness** (what it is open to) | every arcane working can be **countered and unwoven** by arcane warding (05.7.7), and is audible when cast | profane ground and profane wards oppose it: a Precision snag on divine workings where a fact marks the place `desecrated` | **dead ground**: inert where canon or a fact marks the place lifeless, sealed or iron-bound (G4 there) |
 | **Cost** beyond Focus | none | none | none |
 | **Miscast** (05.7.5) | **Backlash**: raw force turns on the caster | **Silence**: the keeper withholds | **Debt**: the place is owed |
-| Family Focus trigger (04) | a working critically succeeds | lifting a condition; bringing back from Dying | dawn in wild country |
+| Family Focus trigger (04) | a working critically succeeds | lifting a condition; bringing back from Dying | dawn under open sky or in wild country (05.6.10) [editor: E1-024] |
 
 *Why these three attributes:* each lies in ch.04's list for its family's one attribute increase, so a
 caster's growth and casting agree; and no one attribute serves two sources, so a hybrid of two magics
@@ -904,7 +904,7 @@ Decisions (J):      1. PRESENT [J:flag] "Is the thing this working acts through 
                        running water; bare earth or stone underfoot; moving air (any place open to the
                        sky, or a draught recorded as a fact); living plants; the beast addressed; a
                        spirit whose presence the Oracle or a fact has established. False when it rests
-                       on the player's assertion ("surely there is a root somewhere") : that is an
+                       on the player's assertion ("surely there is a root somewhere"): that is an
                        Oracle question first (00.12.7). Uncertain -> ask the Oracle.
 Computation [D]:    present -> the working proceeds. Absent -> G4 for this method (reach Zero), with
                     the redirect naming what would supply the source. A source the caster CARRIES
@@ -1119,7 +1119,7 @@ before; at every band the working stays below the martial specialist with no Foc
 99.7%; P4 11–48% against 87%; P5 7–30% against 80%). Focus still pays as much as it pays a fighter:
 pushing the working raises a P3 caster's odds against one T4 from 34% to 55% (a fighter's push: 62% to
 84%) and against two T3 from 26% to 47% (73% to 90%) [DL-05-31]. A 1-Focus spell pays more than the push:
-Flame Lance rank 2 (S4 +2 and burning, 8 EU) cast first each turn takes the same caster to 66% against one
+Flame Lance rank 2 (S4 +2 and burning, 8 effect units, EU: 05.11.1) [editor: E1-025] cast first each turn takes the same caster to 66% against one
 T4 and 55% against two T3 (the push: 55%, 47%), with the foe answering the burning at its best
 (`06-conflict-sim.py` K2) [revision: I-033; DL-05-40].
 
@@ -1310,7 +1310,7 @@ is deeds' (ch.04).
   the Oracle at a place of resonance). The region's seed may tighten these (12.16.5: an arcane order's
 admission, or a birth gift).
 There is no cap on how many training licenses a character holds. The bound is time: each costs a month
-with a teacher or two alone, grants the lowest grade (and +2 within 05.9.3's cap), and opens four acquired
+with a teacher or two months alone with a text [editor: E1-026], grants the lowest grade (and +2 within 05.9.3's cap), and opens four acquired
 slots' worth of techniques at rank 1. Breadth is available and is not power [C:P4; C:P15; C:P11: nothing is
 bought with points; revision: I-047].
 
@@ -1471,7 +1471,7 @@ reward for holding a pair, never a third ability). A flare is worth 2 EU for its
 as the allowance pays, so flaring is never better than the ability's own cost-to-value and never worse.
 Rites are priced by scale (T-05-8), not by EU, because their price is time and material.
 
-**05.11.5 The method applied.** `[D]` Three abilities at tier 1 and one at tier 5, as the script computed
+**05.11.5 The method applied.** `[D]` Three abilities at tier 1 (one shown again at rank 3) and one at tier 5 [editor: E1-027], as the script computed
 them (every entry's `budget` field in the data shows the same arithmetic):
 
 | Ability | Form · timing · price | Allowance | Effects (EU) | Value |
@@ -1775,6 +1775,35 @@ until then, which let a 1-Focus spell carry a lingering harm in place of a rung 
 | absorbed powers (ch.04) | 27 | 16 | 9 | 2 | 0 | 0 | gated by creature tags |
 | **all** | **389** | 122 | 40 | 46 | 81 | 100 | 81 of 81 |
 
+**T-05-13 The authored rites.** `[D]` (`data/rituals.yaml`; every rite also has a 4-segment strain clock.)
+
+| Rite | First tag | Scale · grade | Progress clock · DC tier · Focus · time per step | What it does (the data's `scope` is binding) |
+|---|---|---|---|---|
+| `rit.ward_threshold` Ward the Threshold | `arcane.divination.detection` | local · trained | 6 · hard · 2 · 1 interval | Set a watch on an opening that tells its maker when it is crossed. |
+| `rit.scrying_pool` The Scrying Pool | `arcane.divination.scrying` | local · expert | 6 · hard · 2 · 1 interval | See and hear a known place or person from afar through a still surface. |
+| `rit.bind_familiar` Bind a Familiar | `arcane.summoning.familiar` | personal · trained | 4 · moderate · 1 · 1 hour | Bind a small creature to yourself as a lasting companion. |
+| `rit.circle_of_binding` Circle of Binding | `arcane.summoning.binding` | local · expert | 6 · hard · 2 · 1 interval | Hold one otherworldly being inside a drawn boundary. |
+| `rit.sending` A Sending | `arcane.mind.telepathy` | personal · trained | 4 · moderate · 1 · 1 interval | Carry a few words to one known mind at a distance. |
+| `rit.raise_shade` Raise a Shade | `arcane.necromancy.communing` | local · expert | 6 · hard · 2 · 1 interval | Call the shade of one dead person to answer. |
+| `rit.seal_the_way` Seal the Way | `arcane.warding.sealing` | local · trained | 6 · hard · 2 · 1 interval | Close a door or lid so that only its word opens it. |
+| `rit.foresight` The Long Look | `arcane.divination.foresight` | local · expert | 6 · hard · 2 · 1 hour | See the shape of what a chosen course will meet. |
+| `rit.consecrate_ground` Consecrate Ground | `divine.warding.consecration` | site · expert | 8 · very hard · 3 · 1 hour | Give a place into your keeper's keeping. |
+| `rit.funeral` The Funeral Rite | `divine.rites.funerary` | personal · trained | 4 · moderate · 1 · 1 interval | Send the dead on with the words of the faith. |
+| `rit.oath_binding` The Oath-Binding | `divine.oaths.binding` | local · trained | 6 · hard · 2 · 1 interval | Bind two or more willing parties to their sworn word. |
+| `rit.purification` Purification | `divine.rites.purification` | local · trained | 6 · hard · 2 · 1 hour | Wash a lasting foulness from one being. |
+| `rit.vigil_of_healing` Vigil of Healing | `divine.healing.sustaining` | local · trained | 6 · hard · 2 · 1 watch | Keep watch over a body through the night so that it mends. |
+| `rit.augury` Augury | `divine.revelation.prophecy` | personal · trained | 4 · moderate · 1 · 1 interval | Ask your keeper whether a course is well or ill. |
+| `rit.great_exorcism` The Great Exorcism | `divine.exorcism.banishing` | site · expert | 8 · very hard · 3 · 1 interval | Drive a haunting or a possessor out for good. |
+| `rit.seasonal_blessing` Blessing of the Season | `divine.rites.seasonal` | site · expert | 8 · very hard · 3 · 1 hour | Ask your keeper's favor on a community's season. |
+| `rit.call_rain` Call the Rain | `primal.weather.rain` | regional · master | 12 · legendary · 4 · 1 hour | Turn the weather of a whole country for a day. |
+| `rit.speak_with_the_land` Speak with the Land | `primal.spirits.speaking` | local · trained | 6 · hard · 2 · 1 interval | Ask a place what it has witnessed. |
+| `rit.beast_bond` The Beast-Bond | `primal.beastkin.bond` | personal · trained | 4 · moderate · 1 · 1 hour | Join yourself to one animal as its companion. |
+| `rit.lift_curse` Lift the Curse | `primal.hexcraft.unhexing` | local · expert | 6 · hard · 2 · 1 hour | Unmake a lasting curse. |
+| `rit.lay_curse` Lay a Curse | `primal.hexcraft.cursing` | local · expert | 6 · hard · 2 · 1 hour | Bind a lasting ill onto one named being. |
+| `rit.harvest_bounty` Bounty of the Field | `primal.growth.bounty` | site · expert | 8 · very hard · 3 · 1 hour | Make one field or orchard bear beyond its measure. |
+| `rit.spirit_walk` The Spirit Walk | `primal.spirits.ancestors` | personal · trained | 4 · moderate · 1 · 1 hour | Go out of yourself to ask those who came before. |
+| `rit.imbue` Imbue | `craft.enchanting.imbuing` | local · trained | 6 · hard · 2 · 1 hour | Seat one magical property in a made thing for a season; made lasting, it is 08.6.10's worked property: one per item, ever [integration: IR ch.08 to 05]. |
+
 **T-05-14 Index of the pool.** `[D]` One row per level-2 deed tag, then per conduct axis. Each ability is shown as *Name* (minimum tier · Focus at rank 1 · timing). The data file is canonical.
 
 | Tag | Abilities |
@@ -1848,6 +1877,7 @@ until then, which let a 1-Focus spell carry a lingering harm in place of a rung 
 | `influence.trade` | *Sharp Bargain* (1 · — · passive); *Appraiser's Eye* (2 · 0F · beat); *Sound Venture* (4 · 2F · beat, /long rest); *Corner the Market* (5 · 3F · beat, /long rest) |
 | `influence.etiquette` | *Courtly Grace* (1 · — · passive); *Foreign Manner* (3 · — · passive); *Order of Precedence* (4 · 2F · beat, /scene); *Guest-Right* (5 · 2F · beat, /long rest) |
 | `influence.insight` | *Read the Heart* (1 · 0F · beat); *Ear for a Lie* (2 · — · passive); *The Hidden Wound* (4 · 2F · beat, /scene); *The Open Room* (5 · 3F · beat, /scene) |
+| `influence.teaching` | *Patient Teacher* (1 · — · passive); *Drill Yard* (4 · 1F · beat, /long rest); *Lend the Art* (5 · 2F · beat, /scene) |
 | `craft.smithing` | *Keen Edge* (1 · 0F · beat); *Masterwork* (4 · — · passive); *The Named Blade* (5 · 2F · beat, /long rest) |
 | `craft.woodcraft` | *Fletch True* (1 · 0F · beat); *Sound Timber* (2 · 0F · beat); *Heartwood Bow* (4 · 1F · beat); *Lay the Keel* (5 · 2F · beat, /long rest) |
 | `craft.leathercraft` | *Field Patch* (1 · 0F · beat); *Cure Hide* (3 · — · passive); *Second Skin* (4 · 1F · beat); *Hide of the Slain* (5 · 2F · beat, /long rest) |
@@ -1858,7 +1888,6 @@ until then, which let a 1-Focus spell carry a lingering harm in place of a rung 
 | `craft.artifice` | *Rig a Trap* (1 · 0F · beat); *Engine of War* (4 · 2F · beat, /scene); *Clockwork Servant* (5 · 2F · beat, /long rest) |
 | `craft.jewelcraft` | *True Cut* (1 · — · passive); *Fine Setting* (3 · — · passive); *Heart of the Stone* (4 · 0F · beat, /long rest); *Regalia* (5 · 2F · beat, /long rest) |
 | `craft.enchanting` | *Rune of Keenness* (1 · 1F · beat); *Bind Power* (4 · — · passive); *The Lasting Word* (5 · 2F · beat, /long rest) |
-| `influence.teaching` | *Patient Teacher* (1 · — · passive); *Drill Yard* (4 · 1F · beat, /long rest); *Lend the Art* (5 · 2F · beat, /scene) |
 | `craft.scribing` | *Fair Copy* (1 · 0F · beat); *Field Map* (2 · 0F · beat); *Palimpsest* (4 · 2F · beat, /scene); *Master Chart* (5 · 2F · beat, /long rest) |
 | `conduct.courage` (positive) | *Stand Fast* (1 · 0F · reaction, /scene); *Into the Breach* (3 · 1F · rider); *Undaunted* (5 · — · passive) |
 | `conduct.generosity` (positive) | *Open Purse* (1 · 0F · trigger, /scene); *Shared Strength* (3 · 0F · rider); *The Widow's Mite* (5 · 0F · trigger, /long rest) |
@@ -1883,34 +1912,6 @@ until then, which let a 1-Focus spell carry a lingering harm in place of a rung 
 | branch working (`deed.divine`) | *Rebuke* (1 · 0F · beat) |
 | branch working (`deed.primal`) | *Wild Lash* (1 · 0F · beat) |
 
-**T-05-13 The authored rites.** `[D]` (`data/rituals.yaml`; every rite also has a 4-segment strain clock.)
-
-| Rite | First tag | Scale · grade | Progress clock · DC tier · Focus · time per step | What it does (the data's `scope` is binding) |
-|---|---|---|---|---|
-| `rit.ward_threshold` Ward the Threshold | `arcane.divination.detection` | local · trained | 6 · hard · 2 · 1 interval | Set a watch on an opening that tells its maker when it is crossed. |
-| `rit.scrying_pool` The Scrying Pool | `arcane.divination.scrying` | local · expert | 6 · hard · 2 · 1 interval | See and hear a known place or person from afar through a still surface. |
-| `rit.bind_familiar` Bind a Familiar | `arcane.summoning.familiar` | personal · trained | 4 · moderate · 1 · 1 hour | Bind a small creature to yourself as a lasting companion. |
-| `rit.circle_of_binding` Circle of Binding | `arcane.summoning.binding` | local · expert | 6 · hard · 2 · 1 interval | Hold one otherworldly being inside a drawn boundary. |
-| `rit.sending` A Sending | `arcane.mind.telepathy` | personal · trained | 4 · moderate · 1 · 1 interval | Carry a few words to one known mind at a distance. |
-| `rit.raise_shade` Raise a Shade | `arcane.necromancy.communing` | local · expert | 6 · hard · 2 · 1 interval | Call the shade of one dead person to answer. |
-| `rit.seal_the_way` Seal the Way | `arcane.warding.sealing` | local · trained | 6 · hard · 2 · 1 interval | Close a door or lid so that only its word opens it. |
-| `rit.foresight` The Long Look | `arcane.divination.foresight` | local · expert | 6 · hard · 2 · 1 hour | See the shape of what a chosen course will meet. |
-| `rit.consecrate_ground` Consecrate Ground | `divine.warding.consecration` | site · expert | 8 · very hard · 3 · 1 hour | Give a place into your keeper's keeping. |
-| `rit.funeral` The Funeral Rite | `divine.rites.funerary` | personal · trained | 4 · moderate · 1 · 1 interval | Send the dead on with the words of the faith. |
-| `rit.oath_binding` The Oath-Binding | `divine.oaths.binding` | local · trained | 6 · hard · 2 · 1 interval | Bind two or more willing parties to their sworn word. |
-| `rit.purification` Purification | `divine.rites.purification` | local · trained | 6 · hard · 2 · 1 hour | Wash a lasting foulness from one being. |
-| `rit.vigil_of_healing` Vigil of Healing | `divine.healing.sustaining` | local · trained | 6 · hard · 2 · 1 watch | Keep watch over a body through the night so that it mends. |
-| `rit.augury` Augury | `divine.revelation.prophecy` | personal · trained | 4 · moderate · 1 · 1 interval | Ask your keeper whether a course is well or ill. |
-| `rit.great_exorcism` The Great Exorcism | `divine.exorcism.banishing` | site · expert | 8 · very hard · 3 · 1 interval | Drive a haunting or a possessor out for good. |
-| `rit.seasonal_blessing` Blessing of the Season | `divine.rites.seasonal` | site · expert | 8 · very hard · 3 · 1 hour | Ask your keeper's favor on a community's season. |
-| `rit.call_rain` Call the Rain | `primal.weather.rain` | regional · master | 12 · legendary · 4 · 1 hour | Turn the weather of a whole country for a day. |
-| `rit.speak_with_the_land` Speak with the Land | `primal.spirits.speaking` | local · trained | 6 · hard · 2 · 1 interval | Ask a place what it has witnessed. |
-| `rit.beast_bond` The Beast-Bond | `primal.beastkin.bond` | personal · trained | 4 · moderate · 1 · 1 hour | Join yourself to one animal as its companion. |
-| `rit.lift_curse` Lift the Curse | `primal.hexcraft.unhexing` | local · expert | 6 · hard · 2 · 1 hour | Unmake a lasting curse. |
-| `rit.lay_curse` Lay a Curse | `primal.hexcraft.cursing` | local · expert | 6 · hard · 2 · 1 hour | Bind a lasting ill onto one named being. |
-| `rit.harvest_bounty` Bounty of the Field | `primal.growth.bounty` | site · expert | 8 · very hard · 3 · 1 hour | Make one field or orchard bear beyond its measure. |
-| `rit.spirit_walk` The Spirit Walk | `primal.spirits.ancestors` | personal · trained | 4 · moderate · 1 · 1 hour | Go out of yourself to ask those who came before. |
-| `rit.imbue` Imbue | `craft.enchanting.imbuing` | local · trained | 6 · hard · 2 · 1 hour | Seat one magical property in a made thing for a season; made lasting, it is 08.6.10's worked property: one per item, ever [integration: IR ch.08 to 05]. |
 ---
 
 ## Worked examples
@@ -1920,8 +1921,8 @@ Two characters carry the examples. **Wren** is 00's forester, here at two points
 5/5). Her attributes are 00's: Might +1, Agility +3, Endurance +1, Wits +2, Intellect 0, Presence 0,
 Resolve −1. **Ash** is a tier-3 **Pyromancer** (key `deed.arcane.fire`; competence +5; training grade
 `expert`; Intellect +3, Resolve +1, Agility +1; Vitality 12; Focus max 4 + 3 = **7**), so his casting
-modifier is +8 and his effect DC is 10 + 3 + 5 = **18**. Numbers that belong to chapters not yet written
-(adversary blocks, armor, what a condition does) are marked *(illustrative; ch.NN owns)*; this chapter's
+modifier is +8 and his effect DC is 10 + 3 + 5 = **18**. Numbers that belong to other chapters
+(adversary blocks, armor, what a condition does; not yet written when these examples were drafted [editor: E1-030]) are marked *(illustrative; ch.NN owns)*; this chapter's
 own mechanics (costs, uses, ranks, budgets, miscasts, clocks, composition) are exact and match the data.
 
 ### WE-05-1 A spell cast end to end
@@ -2044,7 +2045,7 @@ field, visible on both records.
 **(c) A named composite.** Ash faces Captain Hesk's squire, who was chilled a moment ago by the
 hedge-witch's frost bolt: `cond.chilled` (tag `harm.frost`), one stack. Ash casts Flame Lance (rank 2,
 no flare; +8 against Guard 12 *(illustrative)*): d20 = 11 → 19, success, reach 2.
-- Dealer side: base S4, no steps, harm edge +2 → the harm event deals `harm.fire.flame` [revision: I-033].
+- Dealer side: base S4, no steps, harm edge +2; the harm event is tagged `harm.fire.flame` [revision: I-033] [editor: E1-028].
 - The engine finds `comp.thermal_shock` (keys `harm.fire`, `harm.frost`; present because a depth-0 fire
   harm event lands on a target carrying a frost-tagged condition): the harm is **one severity rung
   heavier** → S5 = 12, +2 = **14**, and `cond.chilled` ends. Because the composite ended the chill first,
@@ -2135,8 +2136,8 @@ stated there and are 00.3.7's):
 What the numbers say: (1) a full pool roughly **halves** a fair fight (4.4 rounds to 2.4) and turns the
 remaining risk into spent Focus; (2) a fight at one band costs a tier-1 character about **two thirds of
 the pool** and a tier-3 caster about **three fifths**, so every fight leaves a real decision about the
-next one; (3) a martial character without Focus is weakened, a caster without Focus but with a branch working
-(05.7.11) is weakened, not helpless: a Spent tier-3 caster beats one T3 80.7–91.0% of the time (06-conflict-sim J2;
+next one; (3) without Focus a martial character is weakened, and so is a caster, who still has a branch working
+(05.7.11) and is never helpless [editor: E1-029]: a Spent tier-3 caster beats one T3 80.7–91.0% of the time (06-conflict-sim J2;
 the 0.1% row is the pre-05.7.11 staff model), so Focus is a lever, not a gate, and matters to casters as it does to
 fighters [verification: V1-004]; (4) a caster who starts a fight at 3 of 7 is at 66% instead of 93%: the codex shows the pool, and the
 threat advisory (09) plus this number is the telegraph.
@@ -2504,7 +2505,8 @@ its data entry: retrieved by id when held abilities are in the situation).
 7. **Glossary additions:** hold, pick (04's), partition, shelf, form (of an ability; *distinguish*
    `slot.body_form`), timing, rider, working, flare, push, Spent, overdraw, reserve, vessel, keeper,
    regard, miscast (Backlash / Silence / Debt), small working, rite, strain clock, spread tag, effect
-   unit, allowance, training grade (trained / expert / master), technique cap, promotion.
+   unit, allowance, training grade (trained / expert / master), technique cap, promotion. *Met: 00.18 carries
+   these terms* [editor: E1-031].
 8. **`focus` in rules text.** T-00-22 bans *focus* for an item; this chapter uses *implement*, *sign* and
    *vessel*. No change requested.
 
@@ -2550,7 +2552,7 @@ evidence (00.11.5; 04's item 11).
    read `frame.gate.mode` and the training license's `emulate` block.
 8. The 27 absorbed powers are mirrored by reference with `slot_class: acquired`; re-slotting at
    `rest_long` is 05.2.7; they use ch.04's library and not the shelf.
-9. `composites.04.yaml` merges as owner-block 04; this chapter's 22 composites use the other three key
+9. `composites.04.yaml` merges as owner-block 04 (merged at integration: `data/composites.yaml owner-block 04`) [editor: E1-032]; this chapter's 22 composites use the other three key
    kinds and do not touch deed-branch pairs.
 10. **New requests of 04:** (a) the pick gate should require `conduct_pole` to equal the calling's
     `pole` (vows and dark callings share an axis in `pool_gate.conduct`, and the 30 positive and 27
