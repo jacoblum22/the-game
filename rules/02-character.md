@@ -1132,16 +1132,17 @@ choices deferred until they first matter"; Dungeon World: "draw maps, leave blan
 
 ### 02.10 Preferences
 
-**02.10.1 What creation asks.** `[D]` Session zero is chapter 14's (tone, the lethality promise, lines
-and veils, flags, auto-commit; 12.5.1). Creation's step C0 runs it and records four more answers
-through chapter 14's preference record, because they are best asked while a character is being made:
+**02.10.1 What creation asks.** `[D]` Session zero (PR-14-1) has already run before creation (12.5.1). It
+recorded the lethality acknowledgement, lines, veils and flags, the pacing profile, auto-commit, the first
+pillar check-in and `player.new_to_this`. Creation's step C0 asks only what is best asked while a character
+is being made, through chapter 14's preference record [revision: I-120]:
 
 | Preference | Asked as | Values | Default | Used by |
 |---|---|---|---|---|
 | `creation.path` | "Quick start, the full workshop, or a ready-made character?" | fast, full, ready_made | fast | this chapter |
-| `player.new_to_this` | "Have you played a game like this before?" | yes, no | no → treated as new | 12 (first-use notes), 14 |
-| pillar weights (the first check-in, 12.5.9) | "Which of these sounds most like fun: fights, exploring, talking your way through, working out mysteries, long journeys, building something between adventures? Pick up to two; anything you'd rather have less of?" | more / same / less per pillar | all same | 12.9.3 |
-| `pacing.profile` (full path only) | "Steady, gentle, or relentless?" | standard, gentle, relentless | standard | 12.7.3 |
+| `player.new_to_this` (only if session zero did not record it) | "Have you played a game like this before?" | yes, no | no answer → treated as new | 12 (first-use notes), 14 |
+
+The pillar weights and `pacing.profile` are session zero's (PR-14-1 steps 4–5). Creation does not ask them again [revision: I-120].
 
 No answer changes a number, an odds or a cost anywhere (12.5.9). Every question may be skipped [R1 02 session zero, Robin's Laws; 12.5.9; DL-02-19].
 
@@ -1190,7 +1191,7 @@ Every procedure is run by the DM with the engine's tools. Creation happens out o
 `session_start`'s first scene; it advances no fictional time.
 
 **PR-02-1 The full path.** `[D]` (with the `[J:*]` decisions of the rules cited)
-0. **C0 Preferences.** Run chapter 14's session zero; ask 02.10.1's questions; record. Creation does not proceed to C1 until `pref.lethality.acknowledged` is true (14.3.3) [revision: I-107].
+0. **C0 Preferences.** Session zero (PR-14-1) has already run (12.5.1); ask 02.10.1's questions; record [revision: I-120]. Creation does not proceed to C1 until `pref.lethality.acknowledged` is true (14.3.3) [revision: I-107].
 1. **C1 Livelihood.** Show the first seven livelihoods and "more"; or classify the player's sentence
    (02.2.4). The player confirms one. Keep everything else in their sentence for C8.
 2. **C2 People.** Show the peoples present in the region (the seed's `peoples`, 12.16.7), each with its one-line

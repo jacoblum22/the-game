@@ -889,6 +889,8 @@ through the owner's named interface (00.17) [R1 §00.A]. Visibility class per 00
 | Clocks | the chapter that creates each | per the clock's visibility | |
 | Frames, OFFER | 01 | shown | |
 | Ruling ledger | 12 (use) / 00 (shape) | available | player may ask how something was ruled |
+| Turn log, corrections ledger | 12 | available | codex Rulings view (14) [revision: I-122] |
+| Session notes (`next_time`) | 12 | shown | read back at session start (12.5.4) [revision: I-122] |
 | Chronicle | 11 | available | |
 | Tension dial, intensity, inconclusive streak | 12 | background | |
 | Table recency lists, oracle log | 12 / 01 | background | answers become facts |

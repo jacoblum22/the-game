@@ -3122,7 +3122,7 @@ chapter 06's fight model and T-06-12 lines), output `07-harm-sim-output.txt`, wr
 - Revisit if: T-14-VIEWS shows views co-requested in more than 50% of asks.
 
 ### DL-14-04: Session zero is one short procedure with defaults for every answer
-- Decision: PR-14-1 asks premise, promises, tone, safety, pacing, auto-commit and pillar interest, in under ten exchanges. Every answer except the lethality acknowledgement has a default (T-14-1), and "just start" takes all the defaults.
+- Decision: PR-14-1 asks premise, promises, safety, pacing, auto-commit and pillar interest, in under ten exchanges. Every answer except the lethality acknowledgement has a default (T-14-1), and "just start" takes all the defaults.
 - Alternatives considered: a long questionnaire (rejected: solo players want to play, R5 SC-03); no session zero (rejected: lines must be recorded before content is generated, 12.5.1).
 - Evidence: R5 SC-01 to SC-04; 12.5.1; 02.10.1.
 - Serves: goal 1, plus the safety precedence of 00.1.5.
@@ -3184,6 +3184,14 @@ chapter 06's fight model and T-06-12 lines), output `07-harm-sim-output.txt`, wr
 - Evidence: `_process/reports/verification-playtest.md`.
 - Serves: goal 1.
 - Revisit if: the owner wants a polished long-form example for new players.
+
+### DL-14-13: Session zero asks once; no tone key; skipped answers write nothing (revision I-120..I-124)
+- Decision: session zero (PR-14-1) runs once, before the world seed and creation, and owns the pacing profile, pillar check-in, auto-commit, safety records and `player.new_to_this`. Creation's C0 asks only `creation.path` (and `player.new_to_this` if missing). There is no `tone` preference: the register is fixed classic fantasy (BRIEF §4, 12.14.1). A skipped question writes no fact; an absent key reads as its T-14-1 default. Creation's closing `[RULES]` notes mark `fn.offer` and `fn.lethal` as shown. The codex Rulings view also holds the turn log, the corrections ledger and the `next_time` notes, which are now 00.6.3 rows.
+- Alternatives considered: (a) a tone preference read by 12.14.1 (rejected: the owner locked classic fantasy, and a register switch is one more thing narration could get wrong); (b) writing defaults as facts (rejected: it creates noise facts and hides which answers the player actually gave).
+- Evidence: editor pass E2 findings I-120 to I-124; 12.5.1's order; 12.14.1.
+- Serves: goal 2 (one question, one record; the codex shows what ch.12 already makes available).
+- Migration: none.
+- Revisit if: players ask for a darker or lighter register (then add `tone` with a 12.14.1 reader).
 
 ## DL-15 — Social, Investigation, and Downtime
 

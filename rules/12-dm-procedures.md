@@ -598,7 +598,7 @@ into rules of play [R5 P-10, SC-01, SC-02, SC-06; R1 G-22]. Ch.14 owns the playe
 the preference records (lines, veils, flags, pacing profile, auto-commit); this chapter owns what the DM
 does. No session move advances fictional time (00.7.9).
 
-**12.5.1 Session zero.** `[D]` The first session begins with ch.14's session zero (tone, lethality
+**12.5.1 Session zero.** `[D]` The first session begins with ch.14's session zero (lethality
 consent, lines and veils, flags, pacing profile 12.7.3, auto-commit, the preference check-in 12.5.9), then
 the world seed (12.16, PR-12-9; or a pre-made seed such as ch.13's, checked by 12.16.17), then character
 creation (02), then the seed's opening (12.16.16) [revision: I-028]. The DM records each answer through

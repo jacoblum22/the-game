@@ -123,7 +123,6 @@ default (T-14-1). The whole of session zero is designed to take under ten exchan
 records, in PR-14-1's order [editor: E2-052]:
 - whether the player is new to this (`player.new_to_this`), if not yet known;
 - consent to the lethality promise (14.1.3), and `death.mode`;
-- tone (T-14-1);
 - lines, veils and flags;
 - the pacing profile;
 - auto-commit;
@@ -252,11 +251,13 @@ example of play is in `_process/reports/verification-playtest.md` (three playtes
    this before?"
 2. State the three promises (14.1.3). Ask for the lethality acknowledgement (14.3.3), and offer
    `death.mode` (T-14-1).
-3. Ask for tone (T-14-1) and lines, veils and flags (14.5.3). Confirm each mapping.
+3. Ask for lines, veils and flags (14.5.3). Confirm each mapping. (There is no tone question: the register
+   is fixed classic fantasy, BRIEF §4 and 12.14.1 [revision: I-121].)
 4. Ask for the pacing profile (12.7.3) and auto-commit (01.7.4), in one question each, with defaults
    stated.
 5. Run the first preference check-in (12.5.9 (a) only: the pillar interest).
-6. Write every answer as a `pref.*` fact (14.5.1), and skipped questions as their defaults. Then hand off
+6. Write every answer given as a `pref.*` fact (14.5.1). A skipped question writes nothing; an absent key
+   reads as its T-14-1 default [revision: I-124]. Then hand off
    to PR-12-9 (world seed).
 
 **PR-14-2 Render the codex.** `[D]` [14.6; DL-14-03]
@@ -268,7 +269,8 @@ example of play is in `_process/reports/verification-playtest.md` (three playtes
 
 **PR-14-3 First-use notes.** `[D]` [14.4.1; DL-14-06] On each turn where `player.new_to_this` is not `no`:
 for each T-14-2 item first appearing this turn and not in the record `pref.shown_notes`, append its note
-line and add its id to `pref.shown_notes`.
+line and add its id to `pref.shown_notes`. Creation's closing `[RULES]` notes (PR-02-7) count as shown: when
+PR-02-7 delivers them, `fn.offer` and `fn.lethal` are added to `pref.shown_notes` [revision: I-123].
 
 ## Tables
 
@@ -276,7 +278,6 @@ line and add its id to `pref.shown_notes`.
 
 | Key | Asked at | Values | Default | Read by |
 |---|---|---|---|---|
-| `tone` | session zero | grim, adventurous, light | adventurous | 12 (narration register) |
 | `lethality.acknowledged` | session zero (required) | true | — | 02 (creation may not start without it) |
 | `death.mode` | session zero; between sessions | die, retire | die | 07.5.14 (a death result under `retire` becomes The Road Ends, 07.5.11) |
 | `safety.lines` | session zero; any time | topics and mapped tags (14.5.3) | none | 12.5.6 |
@@ -317,7 +318,7 @@ visibility. Every 00.6.3 family that is `shown` or `available` appears in exactl
 | **Deeds** | the evidence ledger per 03.11.1 (deed text, tags and signs, no weights) | on request |
 | **Reputation and factions** | reputation content and scope (never the score); known factions and their status to the PC; NPC standing toward the PC (rung name only) | on request |
 | **Allies** | companions and allies per 16.1.3's classification: its `shown` fields by default, its `available` fields on request | default when any exist |
-| **Rulings** | the ruling ledger (12.12.5), the chronicle (11) | on request |
+| **Rulings** | the ruling ledger (12.12.5), the chronicle (11), the turn log (12.2.5), the corrections ledger (12.3.4), and the session's `next_time` notes (12.5.4) [revision: I-122] | on request |
 | **Rules** | rule cards on request (14.6.4); T-14-4 | on request |
 | **Settings** | the preference record (T-14-1): safety settings, preferences, auto-commit | default |
 
@@ -340,11 +341,11 @@ visibility. Every 00.6.3 family that is `shown` or `available` appears in exactl
 
 ## Worked examples
 
-**WE-14-1 Session zero, defaults and one line.** The player answers "no" to "played before?" and "just
-dark, not grim" to tone (which maps to `adventurous`; the DM confirms it). They give one line, "harm to
+**WE-14-1 Session zero, defaults and one line.** The player answers "no" to "played before?". They give one line, "harm to
 children", mapped to a `safety.lines` entry (topic "harm to children", mapped to the tags for child victims and any harm) and
 confirmed. They skip pacing and auto-commit, so the defaults apply (`standard`, `off`). They say "yes, I
-understand" to the lethality promise, and choose `death.mode: die`. Seven `pref.*` facts are written, then
+understand" to the lethality promise, and choose `death.mode: die`. Four `pref.*` facts are written (`player.new_to_this: yes`, `safety.lines`, `lethality.acknowledged`,
+`death.mode: die`); the skipped questions write nothing and read as their defaults [revision: I-124]. Then
 PR-12-9 runs. Later, the seed's rumor table rolls "the miller's boy is missing". The 12.5.6 screen matches
 the mapped tags, re-rolls once, and logs the substitution.
 
@@ -381,8 +382,7 @@ find out: a read, 15.
   as 07.5.14 (I-107).
 - **To 02:** creation C0 checks `pref.lethality.acknowledged` before step C1. Applied in PR-02-1 step 0
   (I-107).
-- **To 12:** `tone` sets the narration register within 12's voice rules; no other effect. Not yet applied in
-  12 (open: I-121) [editor: E2-056].
+- **To 12:** none. There is no tone preference; 12.14.1's single register stands [revision: I-121].
 
 ## Open empirical questions
 
