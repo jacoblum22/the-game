@@ -1333,8 +1333,8 @@ opposing morale clock (06.11.3) and a chronicle line (07.12.3). This chapter add
 (12.7.5), the other allies' loyalty movements. The dead ally is never a lever ("for Brack!" is narration;
 its mechanical form is the vow) [00.3.9; DL-16-16].
 
-**16.9.6 Death is final.** `[D]` A dead ally stays dead unless a working whose scope says so (05) and
-setting canon (the region's seed, 12.16.5) allow a return; there is no ally-specific resurrection. A raised dead ally is a **bound**
+**16.9.6 Death is final.** `[D]` A dead ally stays dead: true resurrection is impossible in every region's canon (12.16.5
+item 1; 05.7.10 item 1), and there is no ally-specific resurrection [verification: V2b-026]. A raised dead ally is a **bound**
 being (16.15.6), not the person it was: it has no standing, no drives, and no memories but what its working
 gives it.
 
@@ -2047,7 +2047,7 @@ share. Drives: d10 3 → courage, d6 2 → +1; d10 5 → generosity, d6 6 → **
 **Line at serving band 1** (PR-16-2): sword +2 (Might high +1 + `c_b` +1), S2; Guard 12 (10 + Agility mid 0 +
 `c_b` 1 + shield 1); Vitality 6; reduction 2 (mail); knack `kn.shieldbearer` (Wren's Guard 14 → **15** while he
 guards her). His own band (2) is *available*: "he was a sergeant's man once"; when Wren reaches P3, he serves at
-band 2 (sword +5, Guard 16, Vitality 12).
+band 2 (sword +5, Guard 14, Vitality 12) [verification: V2b-027].
 
 **Four weeks** (regard ticks): Wren holds the bridge against the wolves at night (courage +1, witnessed: R1,
 1/6); the toll fight is advised *hard* and both stand at the end (R3 ★, 2/6); Wren charges the bandit captain

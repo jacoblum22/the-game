@@ -354,3 +354,8 @@ Cost: 149 tools; see the usage line below.
 - 14 fixes (V2b-001 to V2b-014), including stale ch.13 dependencies in ch.10 and worked examples re-rolled on the new tables.
 - New rows: I-066 (lone minions on the generic tables), I-067 (guardian not available at the site's band), I-068 (sim models the entrenched penalty too broadly).
 - V2b1 usage: 310 turns, average context 244k (peak 444k), 76M cache-read tokens.
+
+## V2b2 returned (ch.12, 15 and 16 consistency read): appended to `_process/reports/verification-2b-report.md`
+- 13 fixes (V2b-015 to V2b-027). The world seed is consistent with its data and example.
+- New rows: I-069 (seed year vs wound age), I-070 (petty-faith clocks), I-071 (social-contest scope), I-072 (Devoted through a bond).
+- Usage: 292 turns, average context 247k, 72M cache-read tokens.

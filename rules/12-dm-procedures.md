@@ -520,7 +520,7 @@ haven. Otherwise:
    roll ≤ T − 3: an **odd** roll → **altered**, an **even** roll → **interrupted**; otherwise **expected**.
 3. **Altered**: `roll_table(tbl.scene_adjustment)` → one adjustment (add or remove a person; intensify or
    reduce an activity; add or remove an object; shift the time; change a feature of the place; two
-   adjustments). The DM applies it as the next most likely version of the expected scene `[J:enum]`
+   adjustments; someone already here for the same reason [verification: V2b-015]). The DM applies it as the next most likely version of the expected scene `[J:enum]`
    (which person, which object — from state or a table), and writes it.
 4. **Interrupted**: a random event replaces the expected scene (12.6.5); the expected scene is still
    available afterwards if the player pursues it.
@@ -811,8 +811,8 @@ table row (e.g. a ch.10 watch-check result "event": the V face, 10.9.4 [revision
 grants a license or item beyond what a table or generator produces, never reveals a sealed fact except
 through its gate, and never resolves a thread the PC has sworn a vow to or progressed in the last
 **twelve** scenes (`pacing.yaml#events.offscreen_resolution_protect_scenes`) — that roll reads as *thread
-complicates* instead. During the pacing director's RELAX phase, threat-tagged foci read as *omen*
-(12.7.3). *Worst case (J):* an odd or weak interpretation — a harmless, written fact the world keeps
+complicates* instead. During the pacing director's PEAK and RELAX phases, threat-tagged foci read as *omen*
+(12.7.2; `tbl.event_focus`'s `phase_substitute`) [verification: V2b-016]. *Worst case (J):* an odd or weak interpretation — a harmless, written fact the world keeps
 (class iv: later narration builds on it; it cannot cost the PC anything by itself)
 [R5 P-11; R6 B-16; R4 SG-12].
 
@@ -890,7 +890,7 @@ check-in (12.5.9). Canonical numbers in `pacing.yaml#profiles`:
 *Why these numbers.* A single Dire failure with an S3 cost in a conflict scores 2 + 2 + 2 = 6; adding a
 lethal declaration or a Staggered PC crosses 7 — so the standard PEAK means "a fight that genuinely
 threatened the PC", matching L4D's notion of a survivor at peak stress; three points of drain per scene
-returns a peak of 10 to BUILD territory in three quiet scenes (10 → 7 → 4), roughly RimWorld Cassandra's
+returns a peak of 10 to BUILD territory in two quiet scenes (10 → 7 → 4) [verification: V2b-017], roughly RimWorld Cassandra's
 on/off cycle at scene scale [R6 B-10]. The numbers are tunable data; OEQ-12-3 tests them.
 
 **12.7.4 The pacing push.** `[T]` + `[J:enum]` When `trg.pacing_push` is raised (flatline guard, or the end
@@ -966,8 +966,8 @@ world responses (12.2.9 step 4), deliver **one lead** (PR-12-3):
 **A lead must be** `[J:flag]` ×3, each true only with the named evidence: **concrete** (it names a person,
 place, object or event by id); **actionable now** (the PC can pursue it from where they are, this scene or
 next); **connected** (it points to a thread, clock or node in state). A lead must **not** solve the thread
-(it is a way forward, not the answer), cost the PC anything, or be a threat during RELAX (forms tagged
-`threat` are excluded from the roll then). *Worst case (J):* an awkward form — the same lead arrives
+(it is a way forward, not the answer), cost the PC anything, or be a threat during PEAK or RELAX (forms tagged
+`threat` are excluded from the roll then; `tbl.lead_injection`'s `phase_substitute`) [verification: V2b-016]. *Worst case (J):* an awkward form — the same lead arrives
 less naturally (class i); a source judged ineligible that was eligible — a less specific lead arrives,
 still concrete and real (class i) [C:P16; R5 P-08, P-41; R6 B-R4; R4 R-12].
 
@@ -1915,7 +1915,7 @@ record. A pause point (12.2.6) jumps to T7 with what has been resolved so far, t
 2. `roll_table(tbl.lead_injection, {phase})` for the form (threat-tagged forms excluded in RELAX and
    PEAK). Fit test `[J:flag]`; re-roll once; then the fallback form.
 3. Apply the three lead tests (concrete, actionable now, connected) and the three prohibitions (does not
-   solve the thread, costs nothing, is not a threat during RELAX). A failing lead → the next source.
+   solve the thread, costs nothing, is not a threat during PEAK or RELAX [verification: V2b-016]). A failing lead → the next source.
 4. Write: unseal the clue through its gate, or write the NPC's approach, or the rumor heard;
    `record_knowledge(pc, …)`; set the inconclusive counter to 0.
 5. Narrate it in this turn's world responses (T5 → T7). Log the injection in the scene log
@@ -2063,6 +2063,9 @@ defaults).
 | `band.distant` | at the edge of sight; far beyond reach | `flag.hidden` | unseen |
 | | | `flag.mounted` | in the saddle |
 | | | `flag.lined_up` | strung out in a line |
+| | | `flag.obscured` | half-seen (the smoke, the dark, the mist named) [verification: V2b-018] |
+| | | `flag.in_chokepoint` | holding the gap (the door, the bridge named) [verification: V2b-018] |
+| | | `flag.aloft` | in the air above [verification: V2b-018] |
 
 **T-12-12 Reaction rolls** (exhaustive over 2d6; `pace12.py`).
 
@@ -2517,9 +2520,9 @@ adaptation comes *after* the setback, as a choice of what comes next, never as a
 At session 4's start the check-in (12.5.9) records: fights **less**, investigating **more**, others same.
 Pillar thresholds become: conflict 12, investigation 3, others 6. Ledger after the next scene: investigation
 4 (overdue: 4 ≥ 3), exploration 5, conflict 2, social 0. Facets: `deed.martial.archery` (specialty) 9 scenes
-— **overdue** (8); `ab.quarrys_mark` *(illustrative; 05)* untested, acquired 5 scenes ago — **overdue** (4).
+— **overdue** (8); `ab.quarrys_mark` *(illustrative; 05)* untested, acquired 6 scenes ago — **overdue** (4) [verification: V2b-019].
 Framing the next scene, the impetus list reaches (f): the stalest axis relative to threshold is the untested
-ability (5/4) → an opportunity where marking a quarry would matter is put in front of Wren — drawn from
+ability (6/4 = 1.5, ahead of investigation's 4/3 ≈ 1.33 and archery's 9/8) → an opportunity where marking a quarry would matter is put in front of Wren — drawn from
 state: the Guild woman from WE-12-6 is seen leaving town on the north road at dusk (a quarry to follow and
 mark). Nothing forces Wren to use the ability; the opportunity is simply there.
 
@@ -2558,10 +2561,10 @@ the mode, and the player says "surprise me": oracle mode (12.16.2). Every number
 | 5 Land | ring 1 farmland and hills; rings 2–5 mostly mountains and hills, a ruin, a moor, a wood | 13 areas (3, 3, 3, 2, 2) with T-10-2's bands and ratings, 35 places in all, every one reachable from the haven. |
 | 6 Haven | a **town** at a **harbour** | **Merestead**: temple of Oswen (consecrated, resonance divine), the Golden Hound inn, smithy, hall, quay, market square, healer's house, graveyard; market depth 150; hire up to band 2. Place of acceptance: Shepwell Spring and its lady (weather, growth, elements). |
 | 7 Factions | rulers **a noble house**; fourth **a town council** | the lords of Hawkgate (tier 2, goal 4/12: *humble the rival house*); the faithful of Oswen (tier 2, 3/12); **the Horde of the Millwick** (tier 3, aggressive, 4/12: *break the watch on the passes and burn the lowlands again*; −2 to both); the council of Merestead (tier 0, 1/8); two petty faiths. Every linchpin's four fates sealed. |
-| 8 Cast | 12.11.1's tables | 17 NPCs: heads and officers (Tible of the Wet Warren, the goblin-kin lord; Milby Greenfoot, Oswen's halfling priest; Brugnak Three-Scar of the horde), the smith, innkeeper, gate captain Loran Millbrook and the sellsword Zzirik Swift (both recruitable), Shepwell's wise-woman, a scribe, a healer. 13 teachings. |
+| 8 Cast | 12.11.1's tables | 17 NPCs: heads and officers (Tible of the Wet Warren, the goblin-kin lord; Milby Greenfoot, Oswen's halfling priest; Brugnak Three-Scar of the horde), the smith, innkeeper, gate captain Loran Millbrook and the sellsword Zzirik Swift (both recruitable), Shepwell's wise-woman, a scribe, a healer. 12 teachings (`12-world-seed-output.txt`, `ws.req.15_teachers`) [verification: V2b-020]. |
 | 9 Sites | 9 sites and 2 lairs | e.g. Whitfield's Temple (haunted temple, band 1: *the dead rising tonight*, sealed); **Wolfcrag's Delving** (fortified mine, band 3: the horde's seat); lairs Whitmouth's Undercroft (band 5) and the Delving of Ashhollow (band 5). Situations: *War comes* in the Hungry Pikes (step 1 done: the levy called) and *The hunting ground* in the Sunken Fells (a savaged ewe). |
 | 10 Tables | PR-10-10 at each area's band | 13 regional tables, all passing PR-10-8. The Drowned Ridge (home 2): 4–6 raptor minions and two orcs at band 1; a dwarf holdguard elite, a monstrous beast elite (complication), two frost elementals, two ancestor spirits at band 2; a bear minion and a wyvern minion at band 3. Words: 6 trivial, 3 easy, 11 fair. |
-| 11 Rumors | `tbl.11.rumor_truth` per site | 20 rumors (11 true, 7 partial or distorted, 5 false): "Word is that the Horde of the Millwick will try to break the watch on the passes…" (true); "Whitfield's Temple is empty now" (false). |
+| 11 Rumors | `tbl.11.rumor_truth` per site | 20 rumors (8 true, 7 partial, 5 false) [verification: V2b-020]: "Word is that the Horde of the Millwick will try to break the watch on the passes…" (true); "Whitfield's Temple is empty now" (false). |
 | 12 Calendar | months **named** | the Month of Thaw, Plough, Lambing-month…; Oswen's Day (spring), the Midsummer Fair, Harvest Home, the Night of Remembrance; the era "years since the Burning". |
 | 13 Opening | incident **missing** | the spring quarter day, 12 years since the Burning, dawn, Merestead's market square: a child is missing since last night and the trail leads out of the haven. Leads: Shephollow's Undercroft (ring 1), the war situation, the council's goal. Pregens: Fenbert Woodmore (Soldier), Magett Applefoot (halfling Thief), Osbert Elderley (Scholar), Evella Elderward (Acolyte of Oswen). |
 | 14 Check | T-12-16 | 62 of 62 requirements hold. |

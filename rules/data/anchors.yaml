@@ -38,13 +38,13 @@ compiled_from:
 - file: 11-living-world.md
   sha256_16: d8abad73eb8ac128
 - file: 12-dm-procedures.md
-  sha256_16: 914a2f6b866a38cf
+  sha256_16: f9f7cfad406324ba
 - file: 13-starter-setting.md
   sha256_16: 9dd8a6cbb473d2d5
 - file: 15-social-investigation-downtime.md
-  sha256_16: bb9c40a2d8c3e8fb
+  sha256_16: 5ffc5c131882f911
 - file: 16-companions-and-allies.md
-  sha256_16: 4c714e1ce2a590c9
+  sha256_16: c05bec575c1cd044
 compiled_at: integration (Wave 3 -> 4)
 compile:
   rule: 12.13.6

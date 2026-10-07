@@ -150,7 +150,7 @@ deterministic [R6 B-09; 00.17.1 Q13; DL-15-02]. The recomputation runs in `h.15.
 
 **15.1.4 Starting standing.** `[D]` Standing toward the PC is written once, at the NPC's **first
 interaction** with the PC, and never chosen:
-1. A **bond** NPC (02.9.2): the set value of the bond kind (anchor friend/ward +2, mentor +1; thorn rival
+1. A **bond** NPC (02.9.2): the set value of the bond kind (anchor kin/friend/ward +2, mentor +1 [verification: V2b-021]; thorn rival
    −1, creditor 0, enemy −2), reason `bond` [02.9.2].
 2. A **faction member** (00.17.1 Q13): the faction's status plus the member roll (12.11.2 step 1).
 3. **Anyone else**: the reaction roll, 2d6 plus at most ±2 in cited modifiers (12.11.2 step 2): ≤2 Hostile,
@@ -406,8 +406,8 @@ are sealed until learned (insight, 15.6.1).
 
 **15.2.6 Patience and walking away.** `[D]` Every NPC has **patience** for the PC in a scene: its maximum
 is the standing's (T-15-1: Hostile 0, Unfriendly 1, Wary 2, Neutral 3, Warm 3, Friendly 4, Devoted
-unlimited). It falls by 1 for each of: a Talk beat that ends in failure or critical failure (a near miss
-taken as failure counts; a near miss taken as success-at-cost does not); a request blocked by a refusal or
+unlimited). It falls by 1 for each of: a Talk beat that ends in failure (2 on a critical failure, T-15-5 and
+`social.yaml#patience` [verification: V2b-022]; a near miss taken as failure counts; a near miss taken as success-at-cost does not); a request blocked by a refusal or
 by the ceiling (G4); an `insulted` memory. **At 0 the NPC ends the exchange**: they turn away, call the
 next customer, shut the shutter, leave the room — `closed.<npc>.talk = until scene_end` (the S1 form of
 `cost.closed_door`, with no standing loss). A Hostile NPC starts at 0: the only Talk beats that do not end
@@ -2070,8 +2070,9 @@ attention clock in this region by 2 (ch.11 owns the clock; Interface request).
    request and its terms.
 3. Each beat (at most one per NPC per day): check VARIED; frame at the ceiling rung's DC; tick progress by
    delivered reach or patience by the fixed cost; a want-serving Cultivate day ticks progress 2 with no
-   roll; a newly found term is added (it may drop the effective size to the ceiling: the campaign then
-   ends, and one ordinary request frame resolves it).
+   roll; a newly found term is added (if it brings the effective size within the ceiling, the campaign
+   continues, or the player may drop it, losing the progress, for one ordinary request: 15.8.1)
+   [verification: V2b-023].
 4. Weekly: decay progress 1 if no tick this week.
 5. Progress full → grant + compromise (15.8.2). Patience full → the scoped refusal. Either way, close
    both clocks and write memories.
@@ -2135,7 +2136,8 @@ give it `access: core`; write it sealed; it becomes reachable by a rumor seeded 
 4. At the `week` boundary (phase 4 lifestyle, 08; phase 6 World Turn, 11, then `h.15.downtime_week`):
    resolve the week activity if five of its days were spent (Train ticks; a project roll; a research roll;
    Work's wage; Retrain; Penance), write `cnt.training` / `cnt.progress`; delegated project ticks; then
-   `h.15.member_standing` (15.1.3) and `h.15.standing_week` (reset small steps); phase 8: reflection.
+   `h.15.member_standing` (15.1.3); phase 8: reflection; phase 9: `h.15.standing_week` (reset small steps)
+   [verification: V2b-023].
 5. Narrate the week from the returned list only (PR-00-2 step 5): what was done, what was heard, what the
    world did.
 
@@ -2145,7 +2147,7 @@ give it `access: core`; write it sealed; it becomes reachable by a rumor seeded 
 
 Tables embedded in Rules are canonical and indexed here: **T-15-1** standing contract (15.1.2); **T-15-2**
 memory valence → step (15.1.6); **T-15-3** social DCs (15.3.3); **T-15-4** social methods (15.3.1);
-**T-15-5** social delivery (15.3.9); **T-15-6** refusal kindes (15.2.4); **T-15-8** social levers and snags
+**T-15-5** social delivery (15.3.9); **T-15-6** refusal kinds (15.2.4); **T-15-8** social levers and snags
 (15.3.6); **T-15-12** alertness (15.5.7); **T-15-13** investigative methods (15.9.6). The rest are below.
 Every table is mirrored in `data/social.yaml`, `data/investigation.yaml` or `data/downtime.yaml`, which are
 canonical for numbers and ids (00.1.4 item 5).
@@ -2389,7 +2391,7 @@ cheaper than exposure.
 
 *Non-example.* At day 17 the player says: "Maud liked me; surely she'd cover for me with the reeve." The
 belief is gone, her standing is Unfriendly by the table, and covering for a liar against her master is an
-R4 request two rungs above her new ceiling (R1) → G4. Nothing in the narration may have Maud soften without
+R4 request three rungs above her new ceiling (R1) [verification: V2b-024] → G4. Nothing in the narration may have Maud soften without
 a step in the log.
 
 ### WE-15-3 A three-clue mystery resolved through different paths
@@ -2589,7 +2591,7 @@ the plague-house: **R4** (risking the abbey's most precious thing outside its wa
 10 + Presence 1 + 0 = 11; Wren's Read +3 → needs 8 (65%): d20 = 12 → success, N = 1 → **"protect their
 faith"** revealed (known_to_pc). The loan serves it — the relic is to show the faith's power over the
 plague (Want, citing the want id and the plague-house fact) → effective **R3** = ceiling + 1. Neutral (≥
-Wary), one term, no refusal (the relic is not magic by canon, 13) → **campaign** (15.8.1).
+Wary), one term, no refusal (the region's canon exempts holy relics from the `magic` refusal: 12.16.5 item 4, `ws.q.relics_magic` = `holy_exempt`) [verification: V2b-025] → **campaign** (15.8.1).
 
 *Clocks.* Progress "The abbess's resistance to lending the reliquary" **4** (target R3); patience
 "Abbess Ysolde's patience" **6** (Neutral). Beat DC = 10 + 2 + 2 + 0 + request mod of **R2** (+2) = **16**.
@@ -2607,8 +2609,9 @@ compromise** (15.8.2) from her top-ranked open want, *protect their faith*: "Swe
 return it before the feast of Saint Orrin, and keep a night's vigil before it in the plague-house."
 Written as an **Obligation** on Wren (commitment, due: the feast; 11's calendar). Kept → `promised` kept
 (+1, Warm → Friendly); broken → `betrayed` (−3) and a reputation entry for oath-breaking in the abbey's
-scope. Without the Cultivate day the campaign would likely have failed: at 30% a beat, patience 6 runs out
-in about four exchanges — the abbess was won by doing something for what she wanted, and the dice only
+scope. Without the Cultivate day the campaign was still about a three-in-four chance (an exhaustive race of the
+two clocks at +1 vs DC 16: 72–74%, near misses taken as success at a cost), but slower, and about half its
+wins carry a compromise [verification: V2b-025] — the abbess was won by doing something for what she wanted, and the dice only
 finished the work.
 
 *Non-example.* Day 5: "Now that she's agreed, I ask her to bless my bow too." A new request (R2, a favor,
