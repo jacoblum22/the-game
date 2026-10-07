@@ -183,7 +183,7 @@ no delivered contradiction of stored state.
 - [x] T064 [US1] Implement the seed flow with the Interpret role in `engine/dm/seed_flow.py`
 - [x] T066 [P] [US1] Implement rests (PR-07-8), natural and rest recovery and the daily pass (PR-07-10, M1 parts) in `engine/harm/rest.py`
 - [x] T067 [P] [US1] Implement ability use (PR-05-1), Focus and recharge at scene, day and rest (PR-05-4) in `engine/abilities/`
-- [ ] T068 [US1] Implement the M1 boundary handlers (plan.md milestone table, about 36) in `engine/time/handlers/h00.py` … `h15.py` (`h.12.intensity_scene` waits for M2), each tagged with its handler id and rule id
+- [x] T068 [US1] Implement the M1 boundary handlers (plan.md milestone table, about 36) in `engine/time/handlers/h00.py` … `h15.py` (`h.12.intensity_scene` waits for M2), each tagged with its handler id and rule id (34 live in M1; the rest log `handler_skipped`)
 
 ### The game around the loop
 
@@ -202,8 +202,8 @@ no delivered contradiction of stored state.
 
 ### Whole-game tests
 
-- [ ] T076 [US1] Offline end-to-end test: new game (mixed seed) → quick-start creation → 500 turns across scenes and places with a scripted player (talk, risky acts, a fight, a rest, a move, a quit/resume mid-offer) → an ending → epilogue → new character, asserting no exceptions, no turn limit, flat packet size, exact resume at every pause kind and identical replay, in `tests/replay/test_full_game_offline.py`
-- [ ] T077 [US1] Record a fixed offline game under `tests/replay/games/` and test it replays identically
+- [x] T076 [US1] Offline end-to-end test: new game (mixed seed) → quick-start creation → 500 turns across scenes and places with a scripted player (talk, risky acts, a fight, a rest, a move, a quit/resume mid-offer) → an ending → epilogue → new character, asserting no exceptions, no turn limit, flat packet size, exact resume at every pause kind and identical replay, in `tests/replay/test_full_game_offline.py` (built as `tests/e2e/test_offline_game.py`: 60 turns by default, 500 with `--runslow`)
+- [x] T077 [US1] Record a fixed offline game under `tests/replay/games/` and test it replays identically
 
 **Checkpoint**: Milestone 1 is playable start to finish with `--offline`; ready for the owner's Gemini playtest.
 
@@ -213,9 +213,9 @@ no delivered contradiction of stored state.
 
 - [ ] T078 [P] Port Feature 002's persona harness to `evals/personas.py` and `evals/run_persona.py` (honest, curious, adversarial); budgeted, Gemini only when run by the owner; offline by default
 - [ ] T079 [P] Gemini checker recall run over the seeded-error drafts (paid, owner-run) in `evals/checker_recall.py`; pass gate ≥90% recall, <10% false positives (SC-003)
-- [ ] T080 Run `engine/build/coverage.py --milestone 1` and commit its summary to `specs/004-playable-prototype/coverage-m1.md`
-- [ ] T081 Write the owner's how-to-play note at the top of `specs/004-playable-prototype/quickstart.md` (key in `.env`, `python -m play`, `--offline`)
-- [ ] T082 Write `specs/004-playable-prototype/implementation-results.md`: what works, what is coarse, known issues, offline test numbers; owner playtest results are added after SC-004 games
+- [x] T080 Run `engine/build/coverage.py --milestone 1` and commit its summary to `specs/004-playable-prototype/coverage-m1.md`
+- [x] T081 Write the owner's how-to-play note at the top of `specs/004-playable-prototype/quickstart.md` (key in `.env`, `python -m play`, `--offline`)
+- [x] T082 Write `specs/004-playable-prototype/implementation-results.md`: what works, what is coarse, known issues, offline test numbers; owner playtest results are added after SC-004 games
 
 ---
 
