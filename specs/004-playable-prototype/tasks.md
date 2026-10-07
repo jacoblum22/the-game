@@ -159,16 +159,16 @@ no delivered contradiction of stored state.
 
 ### Tests for User Story 1
 
-- [ ] T052 [P] [US1] World-seed parity: the port reproduces `rules/_process/simulation/12-world-seed.py` exactly on the same seed, in `tests/golden/test_world_seed_parity.py`
-- [ ] T053 [P] [US1] Birth-draw parity with `gen_birth` reference output, in `tests/golden/test_birth_parity.py`
+- [x] T052 [P] [US1] World-seed parity: the port reproduces `rules/_process/simulation/12-world-seed.py` exactly on the same seed, in `tests/golden/test_world_seed_parity.py`
+- [x] T053 [P] [US1] Birth-draw parity with `gen_birth` reference output, in `tests/golden/test_birth_parity.py`
 - [ ] T054 [P] [US1] ch.07 worked examples (harm, warning, Threshold, rests) with fixed dice, in `tests/golden/test_worked_examples_07.py`
 
 ### Generators
 
-- [ ] T055 [P] [US1] Port the world seed (PR-12-9, 12.16) to `engine/gen/world_seed.py`: modes guided / oracle / mixed, steps 1–13, `[SEED n/14]` summaries, one veto per step, the seed check; output the region, place graph, factions-in-brief, threads and the incident
-- [ ] T056 [P] [US1] Port the birth draw (PR-02-4, `data/gen_birth.yaml`) and the Bent (PR-02-5) to `engine/gen/birth.py`
-- [ ] T057 [P] [US1] Implement NPC generation and first meeting (PR-12-5): name, pronouns and descriptors fixed at creation, wants and refusals, in `engine/gen/npc.py`
-- [ ] T058 [P] [US1] Implement improvised adversaries (PR-09-2) in `engine/gen/adversary.py`
+- [x] T055 [P] [US1] Port the world seed (PR-12-9, 12.16) to `engine/gen/world_seed.py`: modes guided / oracle / mixed, steps 1–13, `[SEED n/14]` summaries, one veto per step, the seed check; output the region, place graph, factions-in-brief, threads and the incident
+- [x] T056 [P] [US1] Port the birth draw (PR-02-4, `data/gen_birth.yaml`) and the Bent (PR-02-5) to `engine/gen/birth.py`
+- [x] T057 [P] [US1] Implement NPC generation and first meeting (PR-12-5): name, pronouns and descriptors fixed at creation, wants and refusals, in `engine/gen/npc.py`
+- [x] T058 [P] [US1] Implement improvised adversaries (PR-09-2) in `engine/gen/adversary.py`
 
 ### World
 

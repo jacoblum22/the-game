@@ -168,3 +168,11 @@ Contract: `specs/004-playable-prototype/contracts/model-calls.md`. Nothing in `e
   rows whose `interrupting` is not false may interrupt. `MILESTONE_HANDLERS` / `live_handlers(m)` /
   `milestone_of(id)`; a handler not live or not registered logs `handler_skipped` each time it would run.
   Built: `h.00.durations` (conditions: numeric, scene, conflict, until_rest), `h.00.clock_auto`, `h.00.reflection`.
+
+## engine/gen API (T055–T058)
+- Generators take `rng: SeedRng` (`engine/gen/_rng.py`; `random.Random(seed)` reproduces the reference sims). Data via `engine/gen/_data.load(name)` (plain dicts).
+- `engine.gen.world_seed`: `WorldSeed.from_seed(seed, mode)`; `.answer(qid, value, words=None)` (`ORACLE` hands a question to the oracle), `.missing()`, `.run_step() -> SeedStep(n, name, rule, answers, summary "[SEED n/14] …", vetoed)`, `.veto(question=None)` (once per step), `.run_check()`, `.world() -> SeededWorld`, `.run_all()`, `.next_step`; `questions(n)`. `SeededWorld`: seed, mode, answers, region, places, routes (id, a, b, kind, watches, terrain, known), factions (brief, sealed parts out), cast [NPC], threads, incident (with leads), check, record.
+- `engine.gen.birth`: `source_tags(...)`, `circumstance_for(...)`, `birth_draw(rng, src, circumstance, recent=(), element=None) -> BirthDraw` (caller applies effects); `bent_offer(...)`, `answer_bent(state, "accept"|"defer"|"forgo", ...)`.
+- `engine.gen.npc`: `walk_on(rng, role=, home=, people=, name_tables=, given_used=, existing_ids=, member_of=, role_tags=) -> NPC`; `promote_recurring`, `promote_principal`, `reaction_roll(rng, modifiers=0, faction_status=None) -> Reaction`; `NPC.from_record(seed_npc)`.
+- `engine.gen.adversary`: `improvise(archetype, band, role, variant="standard", name=, adv_id=) -> ImprovisedAdversary` (PR-09-2; single creatures only in M1).
+- Precomputed M2 numbers in `engine/gen/data/*.json` (rebuild: `python -m engine.gen.build_tables`).
