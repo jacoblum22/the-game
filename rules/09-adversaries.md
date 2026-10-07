@@ -159,7 +159,7 @@ restatement, by four consumers [R3 §6 #14; C:P5]:
 
 | Consumer | Reads | Rule |
 |---|---|---|
-| Evidence (03) | `creature_tags` (opponent kind), the adversary's threat band (challenge band), its `lethal_context` | 09.11.2 |
+| Evidence (03) | `creature_tags` (opponent kind), the adversary's threat band (through the advisory word and for conduct-only events, 03.4.3), its `lethal_context` [verification: V2b-002] | 09.11.2 |
 | Loot (08) | `creature_tags` (most specific first), `harm_tags`, `evidence_tags`, `org_tags`, `loot.*`, `gear`, `purse` | 08.3.4; 09.11.1 |
 | Absorption (04) | `absorbable.pool_gate_tags`, `absorbable.cannot_absorb`, `absorbable.signature` | 04.10; 09.11.3 |
 | Behavior (this chapter, 06) | `behaviors`, `morale`, `default_behavior_role`, `mind` | 09.7 |
@@ -701,7 +701,8 @@ noticed the PC: the warning is how the player learns that the right move is to l
 **09.6.7 What the advisory is not.** `[N]` It is not a promise (a fair fight is lost about one time in
 twelve); not a difficulty knob (nothing tunes it); not a measure of the PC's whole power (Focus, abilities,
 levers, terrain, allies and tactics all make real fights better than the floor: a Focus push on the first
-Strike each turn turns a hard solo into a fair one at most bands, 09.4.6); and not a scene-builder's target.
+Strike each turn lifts a hard solo's win by 15–27 points, to 83 / 70 / 66 at T3 / T4 / T5, though by the word it
+stays hard, 09.4.6 [verification: V2b-001]); and not a scene-builder's target.
 Encounters are drawn from places, not built to the PC (09.8.2); the advisory tells the truth about what was
 drawn.
 
@@ -1123,8 +1124,10 @@ smallest are 3); the exception is the water elemental's amulet and ring, 2 entri
 branch has the fewest loot properties; 08's own reference set had the same shape of exception for one
 aberration).
 
-**09.11.2 Evidence (03).** `[D]` An adversary's threat band is the **challenge band** of every evidence event
-whose obstacle is that adversary (00.6.8; for a group, the band of the highest-band member engaged); its
+**09.11.2 Evidence (03).** `[D]` An adversary's threat band reaches the **challenge band** of an evidence event
+through 03.4.3: in a conflict, the challenge band is the PC's power band shifted by the advisory word computed at
+framing (DL-00-05), which this chapter's estimator derives from the foes' lines; for a conduct-only event, the
+highest threat band among aware opposing entities present [verification: V2b-002]. Its
 `creature_tags` are the opponent kind 03 counts (03's non-folk opponent-kind counters); its `lethal_context`
 feeds the event's `lethal_context`. A mob is one source (06.10.2). The deed tags of evidence are always the
 PC's own method's.
