@@ -273,7 +273,7 @@ Faction (extends Entity, kind faction):
          clock: clk.*, rating: force | cunning | wealth | sway, effects: [effect_ref], target: id | null}
   seat: place_id                 # its headquarters; a scope for reputation and rumor
   holds: [place_id]              # places it controls (07.6.3's holding places are drawn from here)
-  linchpins: [{npc: npc.* | role slot, consequence: str, fates: {dies, captured, turned, exposed: [effect_ref]}}]
+  linchpins: [{npc: npc.* | role slot, consequence: str, fates: {dies, captured, turned, exposed, deposed?: [effect_ref]}}]   # deposed optional [revision: I-081]
                                  # sealed (11.3.10); `consequence` is SCHEMAS' one-line summary
   officers: [npc.*]              # principal NPCs; each carries one duty (11.3.17) [verification: V2b-013]
   duties: [str]                  # its officers' inviolable duties (15.2.4 item 5)
@@ -318,6 +318,23 @@ added (a pool-gate widening only, 09's request). *Worst case (J):* a generated f
 its rolls shift by 2 and what it fields by one band; recorded at creation and shown to the player as
 words once the PC learns of it (class i).
 
+**Outgrown factions.** `[D]` [revision: I-084] A full faction is **outgrown** while its champion's band (the
+column above for its tier, or its patron's) is below the PC's `power_band` (04.5.6) and the faction is set against
+the PC: Unfriendly or worse toward the PC, or a role of a live situation or thread the PC is on. Its next new goal
+(when its current goal completes or is voided) is not drawn from its template: it is *win {power} to its cause*,
+kind `change`, scope regional at any tier (the one exception to the Goal scopes column), rating its highest. The
+target is the band-5 power of the far rings (12.16.11) nearest its seat that no faction holds (ring, then id; if
+its region has none, the nearest of the next region's, 12.16.18). On completion the power becomes a member and an
+officer of the faction and its **patron**: wherever a rule fields the faction's champion (11.3.17), it fields the
+patron, at band 5. If, at completion, the target is dead, held captive, the PC's ally (16) or Warm or better toward
+the PC, the goal is foiled instead, and the next goal is drawn by this rule again. A faction with a patron is not
+outgrown again. This is the world moving, not the world scaling (09.8.2): it fires from the faction's record, runs
+on a hidden clock with omens and rumors like any goal, and the PC can foil it by winning the power first.
+*Arithmetic* (`11-escalation-check.py`, 2,000 seeds): a tier-3 aggressive threat with two rivals at −2 fills the
+12-segment clock in a median 35 weeks (p10 24, p90 50) with a highest rating of 5 while rising, and 45 weeks
+(31–63) with 4 while flourishing: about three seasons, so the founding threat of a campaign whose PC reaches band
+5 meets that PC with a band-5 champion at its side within a year, unless the PC acts first.
+
 **11.3.4 Hold and ratings.** `[D]` **Hold** says how securely the faction keeps its tier: `strong` or
 `weak`. A faction that **loses hold** goes strong → weak; if it was already weak, it drops one tier and
 its hold becomes strong (it consolidates what it has left); a tier-0 faction that loses a weak hold
@@ -338,10 +355,13 @@ DL-11-06].
 **11.3.5 The faction check.** `[D]` Every faction action that can fail is one engine-rolled check with
 00.3.10's degrees, logged like any roll (INV-4). The faction is the acting side:
 
-`total = d20 + rating + 2 × tier + stage modifier`, the modifier clamped to −8…+16 (00.3.5).
+`total = d20 + rating + 2 × tier + stage modifier`, the modifier clamped to −8…+16 (00.3.5). `rating` is the one
+11.3.6's Check column names for the action; for `goal` it is the goal's own `goal.rating` (11.3.1), written with the
+goal from its template's goal list [revision: I-061].
 
-Stage modifier: rising +1; flourishing 0; entrenched −1 on `goal` and `expand` (complacency) and +1 to
-its own defense; declining −1 on everything. A scheme's lever (11.3.6) adds +2, at most one per check.
+Stage modifier: rising +1; flourishing 0; entrenched −1 on `goal` and `expand` (complacency), 0 on every other
+check, and +1 to its own defense (the DC of a `strike`, `scheme` or `court` against it); declining −1 on everything
+[revision: I-068]. A scheme's lever (11.3.6) adds +2, at most one per check.
 
 | DC source | DC |
 |---|---|
@@ -379,7 +399,9 @@ can fight, `{on: rout, ticks: U(S3)}` among their tick sources, so that chapter 
 chapter 07's rout may move them (12.6.5; 07.4.3) [R6 B-01, B-02; R5 P-23; DL-11-04].
 
 **11.3.7 Which action: the agenda table.** `[D]` The DM never chooses what a faction does. Before
-rolling, the first of these that holds is the action: (a) a **slip** last turn → `recover`; (b) the
+rolling, the first of these that holds is the action (each override that names a d6 rolls its own d6, and only
+when its condition before the die holds; the temperament row below is a fresh d6, so a faction at war that does not
+strike reads its whole row [revision: I-061]): (a) a **slip** last turn → `recover`; (b) the
 faction is **at war** (relation −3) with a faction that has its seat or a hold in the same region, and a
 d6 shows 1–3 → `strike` against it; (c) its status toward the PC is +2 or more and either one of
 `aid_pc`'s first three results is due (a ransom due, a threat bang naming the PC's holding, a reward owed) or a
@@ -442,7 +464,9 @@ these rules, which the Season Turn applies (11.11.3 step 2 [verification: V2b-01
 | any | collapsed | a linchpin fate names `collapse` (at once) |
 
 **The weight of size.** At each Season Turn a faction of tier 3 or more rolls `d20 + its highest rating +
-stage modifier` against `10 + 2 × tier`; on a failure it loses hold. Great institutions bleed without
+stage modifier` against `10 + 2 × tier`; on a failure it loses hold. The stage modifier here is the
+general one: rising +1, flourishing 0, entrenched 0 (its −1 is on `goal` and `expand` only), declining −1
+[revision: I-068]. Great institutions bleed without
 anyone attacking them, which is what keeps the map from filling with tier-5 powers (T-11-24: across 300
 two-year runs the mean tier rose about 0.6 and no faction passed tier 3) [revision: I-032] [R6 B-05; DL-11-06] [integration: I-026].
 
@@ -458,7 +482,7 @@ it stays in state as `collapsed` so the chronicle and old rumors still resolve.
 **11.3.10 Linchpins.** `[S]` + `[T]` + `[D]` Each full faction names one to three **linchpins**: NPCs
 whose fate deterministically rewires the world (Kenshi's world states [R6 B-08]). Each linchpin carries,
 **sealed and written when the faction is created**, four fates — `dies`, `captured`, `turned`,
-`exposed` — each a list of effect references (state writes: a hold lost, a stage change, a goal
+`exposed` — and optionally a fifth, `deposed` [revision: I-081], each a list of effect references (state writes: a hold lost, a stage change, a goal
 replaced, a new situation from a template, a relation changed, a successor named). They fire by
 `on_fact_set` hooks on these facts, never by narration:
 - **dies**: `npc.<id>.exists` becomes `dead`;
@@ -466,7 +490,13 @@ replaced, a new situation from a template, a relation changed, a successor named
 - **turned**: the NPC's `member_of` gains a different faction, or the NPC accepts the PC's cause by a
   recorded agreement (15.7.6) that its faction would forbid;
 - **exposed**: one of the NPC's sealed secrets is made public in the faction's scope (a `public` news
-  item, 11.6.6, or `cost.exposure` at S5 against it, 01.13.6).
+  item, 11.6.6, or `cost.exposure` at S5 against it, 01.13.6);
+- **deposed** [revision: I-081]: the NPC leaves the faction's `officers` (or its head's seat) while it lives and is
+  free: a resignation, a dismissal, a recorded agreement (15.7.6) to step down, a court's or a ruler's sentence. A
+  linchpin with no `deposed` list fires its `captured` list (the faction has lost it, though no one holds it; a
+  write aimed at a captor reads as `recover`). Asking an officer to give up its office risks its position (15.3.2:
+  R4); asking a faction's head, or a linchpin whose office is its identity, is R5 (its deepest loyalty). The seat it
+  leaves is filled by 11.3.17's open-seat rule.
 A fate fires **once**; its writes are depth 1 (INV-12), and what they write the next World Turn reads
 as input (11.4.7). The narrator is told nothing until the writes surface as traces. A fate is never
 "decided when it happens": a world that will lose its toll-bridge if the bridge-warden dies has known so
@@ -535,7 +565,7 @@ Basis:              [R6 B-02 (an operation shifts status -1/-2 with those it hur
 | killed or maimed its rank and file | −1 (once per scene) | small |
 | killed, took or turned an officer; struck one of its holds | −2 | weight |
 | foiled its goal (its goal clock voided by a racing clock the PC filled, or a thread completed against it) | −2 | weight |
-| a linchpin's fate fired by the PC's hand | −3 if `dies` or `captured`; −2 if `turned` or `exposed` | weight (the per-turn cap does not apply) |
+| a linchpin's fate fired by the PC's hand | −3 if `dies` or `captured`; −2 if `turned`, `exposed` or `deposed` [revision: I-081] | weight (the per-turn cap does not apply) |
 
 **11.3.12 Attention and pursuit: the world notices.** `[D]` + `[T]` A faction that is Wary or worse toward
 the PC, or against which the PC has done a loud deed, keeps a hidden **attention clock**
@@ -661,10 +691,13 @@ Basis:              [R6 B-01 (SWN opposed rating rolls)] [R5 P-21 (a progress tr
 ```
 
 **11.3.16 Petty factions.** `[D]` A petty faction rolls one **d6** per World Turn for its goal (a local
-goal on a 6-segment clock, hidden with omens): 1–3 nothing, 4–5 +1 tick, 6 +2 ticks; +1 to the die while
+goal on a 6-segment clock, hidden with omens, written by PR-11-8's petty branch [revision: I-070]): 1–3 nothing, 4–5 +1 tick, 6 +2 ticks; +1 to the die while
 rising, −1 while declining. Its completion writes its goal's effects (`factions.yaml#petty_goals` [verification: V2b-013]: it
-grows — hold, then tier, and at tier 2 it becomes full; it takes a place; it starts a situation; it
-feuds — relation −2 with a named neighbor) and seeds one hook. Petty factions never take `move_on_pc`; one whose
+grows — hold, then tier, and at tier 2 it becomes full; it takes a place; it stirs a situation — `sit_t.festival_trouble` at its seat, itself the troublemaker
+[revision: I-070]; it feuds — relation −2 with a named neighbor) and seeds one hook. A full faction that turns
+petty keeps the goal it has, and the d6 ticks that clock; a petty faction that turns full keeps its petty goal until
+it completes (worked by `goal` actions at the local DC, its rating its highest), then draws from its template
+(11.3.2) [revision: I-070]. Petty factions never take `move_on_pc`; one whose
 status toward the PC leaves 0 becomes full at once (11.3.2) [R5 P-25; DL-11-05].
 
 **11.3.17 Officers, members and what a faction sends.** `[D]`
@@ -672,6 +705,11 @@ status toward the PC leaves 0 becomes full at once (11.3.2) [R5 P-25; DL-11-05].
   from the faction's `duties`, written as that officer's refusal of kind `refusal.duty`, `absolute` (15.2.4 item 5; `social.yaml#refusal_kinds`) [verification: V2c-007]:
   the Watch-captain's "never opens the gate after curfew", the Guild factor's "never sells below the
   tally price". A new officer created by any chapter takes the next duty in the list (cycling).
+- **Open seats** `[D]` [revision: I-081]: an officer's seat left open (a death, a capture, a turning, a deposition,
+  a promotion) is filled at the next World Turn's Maintain step (PR-11-1 step 2): by the successor a fate named, else
+  by a new officer (12.11.1) from its `fields` at the officer role, who takes the next duty. A faction left with no
+  linchpin makes its first officer one, its four fates written and sealed at once from its template's fate list
+  (11.3.10), so every full faction keeps one to three.
 - **Members** are NPCs with `member_of: [fac.*]`. Their standing toward the PC defaults to the status
   (15.1.3); this chapter writes membership for every NPC a faction fields or names.
 - **What it sends** `[D]`: when any rule has a faction field people (an entanglement, a strike resolved
@@ -1239,7 +1277,7 @@ by 11.6.5. A world reaction (`wr.rumor_believed`) lets a faction act on a rumor 
 reaches its seat, as if it were known (a planted lie can start a feud, never a war on its own: 11.3.14's
 rumor row stops at −2 and fires at most once a season per faction toward one rival; `11-world-sim.py`
 scenario `liar_new`: a PC planting a lie a week about a pair at 0 brought them to war within a season in 0 of
-300 runs, against 276 of 300 before, and the wars that came, median week 55, followed a strike, a discovered
+300 runs, against 275 of 300 before, and the wars that came, median week 50.5 (re-run for I-068), followed a strike, a discovered
 scheme or a failed court) [revision: I-080]. Lies so planted are recorded lies
 (15.5), with their truth-out clocks.
 
@@ -1992,7 +2030,7 @@ the same world, a little older, with a statue in the square.
 2. **Maintain.** For each holding: unpaid upkeep → damage +1; yield check (11.9.4); threats due (11.9.5). For
    each rank: obligations falling due this week are passed to `h.15.commitments_due`'s record. For each
    linchpin whose fate fact was set this week and has not fired (an off-screen death): fire it (11.3.10). For
-   each faction: clear spent scheme levers older than a season.
+   each faction: clear spent scheme levers older than a season; fill open officer seats (11.3.17) [revision: I-081].
 3. **Timelines.** For each active situation of cadence `week` (region order, then id): fire due steps
    (11.4.2). For each clock that completed in phase 5: run what its owner's rule says (a thread's opposing
    clock → the thread fails; a hunt clock → a threat bang).
@@ -2015,7 +2053,8 @@ the same world, a little older, with a statue in the square.
 1. If the faction is collapsed: skip. If petty: d6 (11.3.16); stop.
 2. Overrides, first match: slip → `recover`; at war in region and d6 ≤ 3 → `strike` at the war enemy;
    status ≥ +2 and (a ransom, a threatened holding or a reward is due, or d6 = 1) → `aid_pc` [revision: I-032].
-3. Else roll d6 on its temperament row; if the row's condition fails, `goal`.
+   Each override's d6 is its own, rolled only when its condition holds [revision: I-061].
+3. Else roll a fresh d6 on its temperament row; if the row's condition fails, `goal`.
 4. Target by 11.3.7's ladder; if no target, `goal`.
 5. Compute the DC (11.3.5); roll `d20 + rating + 2 × tier + stage + lever`; read the degree (00.3.10).
 6. Apply the action's row (11.3.6). Goal clock completion → its `effects`; a new goal from the template's
@@ -2081,6 +2120,11 @@ state; the DM words only the period line, the legend rumors' texts and the apoth
    fates written and **sealed now** from the template's fate list (11.3.10).
 5. Goal: d6 on the template's goal list (kind and text), scope by tier, clock by scope (local 8, regional 12,
    realm two linked 12s), hidden with the template's omens, tick sources including `random_event` and `rout`.
+   **Petty branch** [revision: I-070]: a faction created petty (none of 11.3.2's tests holds) instead rolls the d6 on
+   `factions.yaml#petty_goals` (1–2 grow, 3 take, 4 stir, 5–6 feud): scope local, the 6-segment clock, its text
+   from the kind's pattern, its target by the kind's rule (take: the nearest place no faction holds; feud: the
+   faction with the lowest relation toward it), its rating its highest. An outgrown faction's next goal is 11.3.3's
+   [revision: I-084].
 6. Relations: 0 to all, then data's; status toward the PC 0 (or by a creation tie).
 
 ---
@@ -2135,27 +2179,30 @@ first version let `expand` raise tier-3+ factions and reported tier 5 in 7–8% 
 **Re-run for I-032** [revision: I-032]: the script's agenda is now 11.3.7 cell for cell — the three overrides first
 (slip, war on a d6 of 1–3, `aid_pc`), each row's own condition (a failed one reads as `goal`), the target ladders,
 and `court`, `aid_pc` and `lie_low` with their 11.3.6 effects — where the first version read several rows as `goal`
-and let steadfast strike at −2. `recover` uses its 11.3.6 DC. The figures below are this re-run's.
+and let steadfast strike at −2. `recover` uses its 11.3.6 DC. **Re-run for I-068** [revision: I-068]: the stage
+modifier is now action-aware (entrenched −1 on `goal` and `expand` only, 0 on the weight of size and every other
+check, +1 to the DC of a `scheme` against it as well as a `strike` or `court`); the figures below are this re-run's
+(the war's p90 moved most, 35–44 → 30–37 weeks; no other measure moved by more than one step).
 
 | Measure | Engaged PC | PC at war with one faction | No PC (a timeskip) |
 |---|---|---|---|
-| faction goals completed (region) | 13 / 15 / 18 | 13 / 15 / 18 | 13 / 16 / 19 |
+| faction goals completed (region) | 13 / 15 / 18 | 13 / 15 / 18 | 14 / 16 / 19 |
 | goals completed per faction | 2 / 4 / 5 | 2 / 4 / 5 | 2 / 4 / 5 |
-| tier rises / tier falls | 5 / 5 (medians) | 6 / 5 | 5 / 5 |
+| tier rises / tier falls | 5 / 5 (medians) | 5 / 5 | 5 / 4 |
 | collapses (a vacuum filled) | 1 / 2 / 2 | 1 / 2 / 2 | 1 / 2 / 2 |
-| strikes / strikes that landed | 17 / 9 (medians) | 16 / 9 | 16 / 8.5 |
-| entanglements + moves on the PC | 0 + 0 (p90 0 + 1) | 0 + 0 (p90 4 + 2) | 0 |
-| hooks seeded | 54 / 59 / 65 | 54 / 59 / 65 | 51 / 55 / 58 |
-| threads taken up / completed / failed | 33 / 19 / 11 (medians) | 32 / 19 / 11 | — |
-| hooks expired untaken | 18 / 23 / 28 | 18 / 23 / 28 | 47 / 50 / 54 |
-| situations created | 8 / 12 / 16 | 8 / 12 / 16 | 9 / 13 / 16 |
-| traces emitted (rumors, news, omens) | 234 / 249 / 267 | 233 / 250 / 268 | 241 / 257 / 273 |
+| strikes / strikes that landed | 17 / 9 (medians) | 16 / 9 | 17 / 8 |
+| entanglements + moves on the PC | 0 + 0 (p90 0 + 0) | 0 + 0 (p90 3 + 2) | 0 |
+| hooks seeded | 54 / 59 / 65 | 54 / 59 / 65 | 52 / 55 / 58 |
+| threads taken up / completed / failed | 32 / 19 / 11 (medians) | 32 / 19 / 11 | — |
+| hooks expired untaken | 18 / 23 / 28 | 18 / 22 / 28 | 47 / 50 / 54 |
+| situations created | 8 / 12 / 16 | 8 / 12 / 16 | 9 / 13 / 17 |
+| traces emitted (rumors, news, omens) | 234 / 249.5 / 267 | 233 / 250 / 266 | 242 / 257 / 273 |
 | most open matters known at once | 8 / 9 / 10 | 8 / 9 / 10 | 6 / 7 / 8 |
 | weeks the PC knew fewer than three | 3 / 4 / 5 (of 104) | 3 / 4 / 5 | — |
 | bang queue at its fullest | 1 / 1 / 2 | 1 / 1 / 2 | 0 |
-| faction turns by action (11.3.7) | goal 67.6%, recover 9.4%, court 6.0%, expand 5.4%, strike 4.4%, scheme 3.9%, aid_pc 3.2% | goal 67.3%, recover 9.7%, court 6.0%, expand 5.4%, strike 4.4%, scheme 4.0%, aid_pc 3.0%, move_on_pc 0.2%, lie_low 0.1% | goal 70.0%, recover 10.1%, court 6.1%, expand 5.3%, strike 4.3%, scheme 4.0% |
-| the Wardens–Cult war (relation −3): week the Cult collapsed | 5 / 10.5 / 35 (104 = still standing) | 5 / 12 / 44 | 6 / 10 / 38 |
-| final tiers (start mean 1.75) | mean 2.37; highest tier reached 3; tier 5 in 0% of faction-runs | mean 2.38; 0% | mean 2.41; 0% |
+| faction turns by action (11.3.7) | goal 67.7%, recover 9.6%, court 5.9%, expand 5.3%, strike 4.4%, scheme 3.8%, aid_pc 3.1% | goal 67.5%, recover 9.7%, court 5.9%, expand 5.4%, strike 4.4%, scheme 3.8%, aid_pc 3.1%, move_on_pc 0.1%, lie_low 0.1% | goal 70.4%, recover 10.0%, court 6.0%, expand 5.2%, strike 4.5%, scheme 3.9% |
+| the Wardens–Cult war (relation −3): week the Cult collapsed | 5 / 10 / 30 (104 = still standing) | 5 / 11.5 / 37 | 6 / 10 / 36 |
+| final tiers (start mean 1.75) | mean 2.39; highest tier reached 3; tier 5 in 0% of faction-runs | mean 2.35; 0% | mean 2.39; 0% |
 
 *Reading.* The world produces a steady stream: about one faction goal every seven weeks in a region, about
 two and a half traces a week, a new hook every twelve or thirteen days, and a new situation every eight or nine
@@ -2165,9 +2212,9 @@ of 104, each then refilled by the supply rule) and never floods (at most ten). E
 drift up by about 0.6 over two years while the weight of size, strikes and collapses pull them down, and no
 faction passes tier 3 in two years, because rising above it needs a completed realm-scope grow goal (11.3.4).
 **War is decisive:** override (b) has two tier-1 neighbours at relation −3 strike each other on half their turns,
-so the Ember Cult falls at a median week 10–12 (p90 35–44) and the Ash Wardens in about half the runs; each
+so the Ember Cult falls at a median week 10–11.5 (p90 30–37) and the Ash Wardens in about half the runs; each
 vacuum is refilled by a rising faction (11.3.9). Because this model's hostile faction is the Cult, its "PC at war"
-column mostly measures a war that ends early (entanglements p90 4); the Thallen re-run, whose hostile faction
+column mostly measures a war that ends early (entanglements p90 3); the Thallen re-run, whose hostile faction
 stands, gives 8 entanglements in two years (p10 5, p90 11), about one every thirteen weeks and never a pile-up
 (the queue held two at most) (`13-world-sim-output.txt`) [revision: I-032]. An earlier draft with goal ticks of 3/2/1 completed goals every eight weeks per faction and
 drove 47% of factions to tier 5 in two years; the halved ticks, scope terms and the weight of size are what
@@ -2348,8 +2395,8 @@ serving at the Wardens' hall (15.13.12): her rank obligation is kept.
      defense). The Wardens completed "Burn the Cinder Shrine" in week 11 → rising → **flourishing**. The Cult lost
      hold twice this season (the strike of WE-11-1, then the Wardens' completed goal, a `dominate`) and fell to
      **tier 0**, hold strong; being **rising**, it does not decline (that row reads flourishing or entrenched), but
-     one more lost weak hold at tier 0 collapses it (11.3.4). The margrave (tier 3) rolls the weight of size: d20 13 + 4 − 1 (entrenched) =
-     16 vs `10 + 6` = 16 → holds. Cooling: the Wardens and the Cult exchanged a strike → stay at war. The Cult's
+     one more lost weak hold at tier 0 collapses it (11.3.4). The margrave (tier 3) rolls the weight of size: d20 13 + 4 + 0 (entrenched reads 0
+     here, 11.3.9) = 17 vs `10 + 6` = 16 → holds [revision: I-068]. Cooling: the Wardens and the Cult exchanged a strike → stay at war. The Cult's
      pursuit was 0. **Ranks:** Wren's rung 2 (provisional) — every obligation kept → **confirmed**. The Wardens'
      **sitting**: rung 3 (officer; seats tier + 1 = 2, one held by Captain Odo, one free) — status +3 ✓, her
      mercy entry in Harl's Crossing has score 3 ✓ → an **offer** of rung 3, *Warden-sergeant*, at the sitting, by

@@ -20,8 +20,8 @@ steps:
 - n: 2
   name: Maintain
   handler: h.11.world_turn
-  rule_id: 11.9.3; 11.3.10; PR-11-1 step 2
-  does: holdings' yields and threats; obligations due; off-screen linchpin fates; spent levers
+  rule_id: 11.9.3; 11.3.10; 11.3.17; PR-11-1 step 2
+  does: "holdings' yields and threats; obligations due; off-screen linchpin fates; spent levers; open officer seats filled (11.3.17) [revision: I-081]"
 - n: 3
   name: Timelines
   handler: h.11.world_turn

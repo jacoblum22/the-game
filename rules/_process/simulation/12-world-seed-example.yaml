@@ -45,7 +45,7 @@ seed:
   - {question: ws.q.rulers, answer: org.crown.noble, source: oracle}
   - {question: ws.q.fourth_faction, answer: org.crown.civic, source: oracle}
   - {question: ws.q.month_names, answer: named, source: oracle}
-  - {question: ws.q.inciting, answer: missing, source: oracle}
+  - {question: ws.q.inciting, answer: alarm, source: oracle}
   generated_by: _process/simulation/12-world-seed.py
   uses_generic:
   - {key: tables (events), generic: world_turn.yaml#tbl.11.local_events, note: a seed may write tbl.<region>.events to replace it (10.9.4
@@ -103,8 +103,8 @@ region:
     home_band: [4, 5]
     areas: [loc.high_fells_broken_greenwood, loc.high_fells_tangled_ridge]
     places: [loc.high_fells_delving_of_ashhollow]
-  pitch: The horde came down from the passes thirty winters ago and burned The High Fells to the river. It was driven back. The watchfires
-    on the passes were lit again this spring.
+  pitch: The horde came down from the passes twenty-three winters ago and burned The High Fells to the river. It was driven back. The
+    watchfires on the passes were lit again this spring.
   truths: [The horde is gathering again beyond the passes., 'Some who fought it are still alive, and some of them took its gold.', 'The
       old forts on the passes are held by too few, or by no one.']
   lifecycle: provisional
@@ -1577,7 +1577,7 @@ places:
   place_kind: area
   parent: loc.high_fells
   ring: 5
-  band: 4
+  band: 5
   danger: deadly
   safe: false
   rest_site: rough
@@ -4921,13 +4921,14 @@ factions:
     full: false
     full_reason: null
     goal:
-      text: destroy the monster in the fen
-      kind: dominate
+      text: win more of Merestead to it, and a hold of its own
+      kind: grow
       scope: local
       rating: force
       clock: clk.high_fells.faith_halda.goal
       effects: []
       target: null
+      petty: true
     seat: loc.high_fells_merestead
     holds: [loc.high_fells_merestead]
     linchpins:
@@ -4999,13 +5000,14 @@ factions:
     full: false
     full_reason: null
     goal:
-      text: recover the stolen relic
-      kind: change
+      text: settle its quarrel with the faithful of Oswen
+      kind: feud
       scope: local
-      rating: cunning
+      rating: force
       clock: clk.high_fells.faith_ala.goal
       effects: []
-      target: null
+      target: fac.high_fells.faith
+      petty: true
     seat: loc.high_fells_merestead
     holds: [loc.high_fells_merestead]
     linchpins:
@@ -5190,10 +5192,10 @@ clocks:
     imminent: ['its leaders seen together, late, with the lamps lit', a hush in its houses; everyone waiting]
   basis: [11.3.1, PR-11-8, 12.16.10]
 - id: clk.high_fells.faith_halda.goal
-  name: 'the faithful of Halda: destroy the monster in the fen'
+  name: 'the faithful of Halda: win more of Merestead to it, and a hold of its own'
   kind: faction_goal
   owner: fac.high_fells.faith_halda
-  segments: 8
+  segments: 6
   filled: 1
   visibility: hidden
   direction: fill
@@ -5208,10 +5210,10 @@ clocks:
     imminent: ['its leaders seen together, late, with the lamps lit', a hush in its houses; everyone waiting]
   basis: [11.3.1, PR-11-8, 12.16.10]
 - id: clk.high_fells.faith_ala.goal
-  name: 'the faithful of Ala: recover the stolen relic'
+  name: 'the faithful of Ala: settle its quarrel with the faithful of Oswen'
   kind: faction_goal
   owner: fac.high_fells.faith_ala
-  segments: 8
+  segments: 6
   filled: 1
   visibility: hidden
   direction: fill
@@ -5232,8 +5234,8 @@ situations:
   region: loc.high_fells_hungry_pikes
   actors: [fac.high_fells.rulers, fac.high_fells.threat]
   roles: {attacker: fac.high_fells.threat, defender: fac.high_fells.rulers}
-  what: The horde came down from the passes thirty winters ago and burned the High Fells to the river. It was driven back. The watchfires
-    on the passes were lit again this spring.
+  what: The horde came down from the passes twenty-three winters ago and burned the High Fells to the river. It was driven back. The
+    watchfires on the passes were lit again this spring.
   premise: []
   cadence: week
   timeline:
@@ -6523,33 +6525,32 @@ encounter_tables:
   basis: [10.10.1, PR-10-10, PR-10-8, 12.16.13]
 - id: tbl.high_fells.enc.tangled_ridge
   name: 'Encounters: The Tangled Ridge'
-  home_band: 4
+  home_band: 5
   danger: deadly
   terrain: terrain.highland.mountains
   threat_die: d20
   threat:
   - range: 1-3
     kind: adversary
-    ref: [arch.great_cat]
+    ref: [arch.giant]
     band: home-1
     count: '2'
     threat: true
-    ambush: true
+    ambush: false
     complication: false
     when: any
   - range: 4-6
     kind: adversary
-    ref: [arch.place_spirit]
+    ref: [arch.orc]
     band: home-1
     count: '1'
-    variant: elite
     threat: true
     ambush: false
     complication: false
     when: any
   - range: 7-9
     kind: adversary
-    ref: [arch.giant]
+    ref: [arch.great_dragon]
     band: home
     count: '1'
     threat: true
@@ -6561,34 +6562,37 @@ encounter_tables:
     ref: [arch.frost_elemental]
     band: home
     count: '1'
+    variant: minion
     threat: true
     ambush: false
     complication: true
     when: any
   - range: 13-15
     kind: adversary
-    ref: [arch.orc]
+    ref: [arch.place_spirit]
     band: home
     count: '1'
+    variant: minion
     threat: true
     ambush: false
     complication: false
     when: any
   - range: 16-17
     kind: adversary
-    ref: [arch.earth_elemental]
+    ref: [arch.monstrous_beast]
     band: home
     count: '1'
+    variant: minion
     threat: true
     ambush: false
     complication: false
     when: any
   - range: 18-19
     kind: adversary
-    ref: [arch.celestial]
+    ref: [arch.air_elemental]
     band: home+1
     count: '1'
-    variant: minion
+    variant: solo
     threat: true
     ambush: false
     complication: false
@@ -6598,7 +6602,7 @@ encounter_tables:
     ref: [arch.troll]
     band: home+1
     count: '1'
-    variant: minion
+    variant: solo
     threat: true
     ambush: false
     complication: false
@@ -6722,7 +6726,7 @@ encounter_table_audit:
   tbl.high_fells.enc.tangled_ridge:
     pass: true
     bands: {home-1: 6, home: 11, home+1: 3}
-    words: {fair: 14, easy: 3, hard: 3}
+    words: {easy: 11, trivial: 3, fair: 3, hard: 3}
     fair_or_easier: 17
     failures: []
     pool_size: 20
@@ -6782,25 +6786,27 @@ cases: []
 bestiary:
   archetypes: [arch.abomination, arch.air_elemental, arch.ancestor, arch.animated, arch.bear, arch.brigand, arch.celestial, arch.clockwork,
     arch.cultist, arch.drake, arch.dwarf_holdguard, arch.earth_elemental, arch.fey_noble, arch.folk_mage, arch.frost_elemental, arch.fungal,
-    arch.ghost, arch.ghoul, arch.giant, arch.giant_vermin, arch.gnoll, arch.goblin, arch.golem, arch.great_cat, arch.hellbeast, arch.herd_beast,
-    arch.homunculus, arch.knight, arch.lesser_demon, arch.monstrous_beast, arch.monstrous_plant, arch.ogre, arch.ooze, arch.orc, arch.place_spirit,
-    arch.raptor, arch.reptile, arch.skeleton, arch.soldier, arch.troll, arch.vampire, arch.vermin_swarm, arch.wolf, arch.wyvern, arch.zombie]
+    arch.ghost, arch.ghoul, arch.giant, arch.giant_vermin, arch.gnoll, arch.goblin, arch.golem, arch.great_cat, arch.great_dragon, arch.hellbeast,
+    arch.herd_beast, arch.homunculus, arch.knight, arch.lesser_demon, arch.monstrous_beast, arch.monstrous_plant, arch.ogre, arch.ooze,
+    arch.orc, arch.place_spirit, arch.raptor, arch.reptile, arch.skeleton, arch.soldier, arch.troll, arch.vampire, arch.vermin_swarm,
+    arch.wolf, arch.wyvern, arch.zombie]
   adversaries: [adv.air_elemental, adv.animated_armor, adv.aurochs, adv.bandit_captain, adv.bat_swarm, adv.black_bear, adv.black_pudding,
     adv.blighted_treant, adv.brass_sentinel, adv.brigand_archer, adv.brigand_band, adv.cairn_guardian, adv.cave_bear, adv.champion,
     adv.chimera, adv.clay_golem, adv.court_magus, adv.crossbowman, adv.cult_fanatic, adv.cult_initiate, adv.cult_priest, adv.dire_wolf,
-    adv.dretch_mob, adv.dwarf_holdguard, adv.earth_elemental, adv.fey_queen, adv.fire_drake, adv.flesh_golem, adv.flying_blades, adv.footpad,
-    adv.frost_giant_jarl, adv.ghast, adv.ghoul, adv.giant_centipede, adv.giant_constrictor, adv.giant_eagle, adv.giant_spider, adv.gnoll_pack,
-    adv.gnoll_reaver, adv.goblin_boss, adv.goblin_mob, adv.goblin_skulk, adv.great_crocodile, adv.green_slime, adv.griffon, adv.hedge_witch,
-    adv.hell_hound, adv.highwayman, adv.hill_giant, adv.homunculus, adv.ice_colossus, adv.imp, adv.iron_golem, adv.knight_errant, adv.levy_mob,
-    adv.man_at_arms, adv.manticore, adv.myconid_mob, adv.ochre_jelly, adv.ogre, adv.ogre_chief, adv.orc_raider, adv.orc_warband, adv.orc_warchief,
-    adv.owlbear, adv.panther, adv.plague_zombie, adv.rat_swarm, adv.river_spirit, adv.roc, adv.rock_drake, adv.sabre_cat, adv.sergeant,
-    adv.sidhe_knight, adv.skeleton_archer, adv.skeleton_rabble, adv.skeleton_warrior, adv.sorcerer, adv.spore_shambler, adv.stitched_horror,
-    adv.strangling_creeper, adv.temple_warden, adv.thallen.ash_drake, adv.thallen.ashgorge_witch, adv.thallen.bell_colossus, adv.thallen.bell_warden,
-    adv.thallen.choir_singer, adv.thallen.cinder_giant, adv.thallen.deep_warden, adv.thallen.dunstan, adv.thallen.ember_creeper, adv.thallen.giant_outcast,
-    adv.thallen.hollow, adv.thallen.hollow_throng, adv.thallen.hush_hound, adv.thallen.hush_hound_alpha, adv.thallen.hush_pack, adv.thallen.mere_weed,
-    adv.thallen.rookwood_tusker, adv.thallen.sael_bellmage, adv.thallen.thorn_walker, adv.thallen.vantry_outrider, adv.thallen.ysmay,
-    adv.town_watch, adv.troll, adv.vampire_count, adv.vampire_spawn, adv.vat_titan, adv.vrock, adv.wailing_ghost, adv.warg_alpha, adv.wild_boar,
-    adv.wolf, adv.wolf_pack, adv.wyvern, adv.wyvern_matriarch, adv.zombie_horde]
+    adv.dretch_mob, adv.dwarf_holdguard, adv.earth_elemental, adv.elder_dragon, adv.fey_queen, adv.fire_drake, adv.flesh_golem, adv.flying_blades,
+    adv.footpad, adv.frost_giant_jarl, adv.ghast, adv.ghoul, adv.giant_centipede, adv.giant_constrictor, adv.giant_eagle, adv.giant_spider,
+    adv.gnoll_pack, adv.gnoll_reaver, adv.goblin_boss, adv.goblin_mob, adv.goblin_skulk, adv.great_crocodile, adv.green_slime, adv.griffon,
+    adv.hedge_witch, adv.hell_hound, adv.highwayman, adv.hill_giant, adv.homunculus, adv.ice_colossus, adv.imp, adv.iron_golem, adv.knight_errant,
+    adv.levy_mob, adv.man_at_arms, adv.manticore, adv.myconid_mob, adv.ochre_jelly, adv.ogre, adv.ogre_chief, adv.orc_raider, adv.orc_warband,
+    adv.orc_warchief, adv.owlbear, adv.panther, adv.plague_zombie, adv.rat_swarm, adv.red_wyrmling, adv.river_spirit, adv.roc, adv.rock_drake,
+    adv.sabre_cat, adv.sergeant, adv.sidhe_knight, adv.skeleton_archer, adv.skeleton_rabble, adv.skeleton_warrior, adv.sorcerer, adv.spore_shambler,
+    adv.stitched_horror, adv.strangling_creeper, adv.temple_warden, adv.thallen.ash_drake, adv.thallen.ashgorge, adv.thallen.ashgorge_witch,
+    adv.thallen.bell_colossus, adv.thallen.bell_warden, adv.thallen.choir_singer, adv.thallen.cinder_giant, adv.thallen.deep_warden,
+    adv.thallen.dunstan, adv.thallen.ember_creeper, adv.thallen.giant_outcast, adv.thallen.hollow, adv.thallen.hollow_throng, adv.thallen.hush_hound,
+    adv.thallen.hush_hound_alpha, adv.thallen.hush_pack, adv.thallen.mere_weed, adv.thallen.rookwood_tusker, adv.thallen.sael_bellmage,
+    adv.thallen.thorn_walker, adv.thallen.vantry_outrider, adv.thallen.ysmay, adv.town_watch, adv.troll, adv.vampire_count, adv.vampire_spawn,
+    adv.vat_titan, adv.vrock, adv.wailing_ghost, adv.warg_alpha, adv.wild_boar, adv.wolf, adv.wolf_pack, adv.wyvern, adv.wyvern_matriarch,
+    adv.young_dragon, adv.zombie_horde]
   note: PR-09-1 builds any archetype x band x role x variant the bestiary does not list
 storied_items: []
 stock:
@@ -6813,11 +6819,11 @@ stock:
   - {band: 4, name: 'a part of a creature of band 4, or a gem of the first water', price: 600}
   - {band: 5, name: 'something unique: a keeper''s tear, a dragon''s heart', price: null}
 pregens:
-- id: pregen.high_fells.fenbert_woodmore
-  name: Fenbert Woodmore
+- id: pregen.high_fells.tamred_stoneby
+  name: Tamred Stoneby
   pronouns: he/him
   role: fighter
-  sentence: Fenbert Woodmore, soldier of Merestead.
+  sentence: Tamred Stoneby, soldier of Merestead.
   good_at: blade, shield
   people: orig.people.human
   rule: free
@@ -6840,11 +6846,11 @@ pregens:
   birth: drawn live when the pregen is picked (02.2.5 a)
   lifecycle: provisional
   basis: [02.2.5, PR-02-9, 12.16.16]
-- id: pregen.high_fells.magett_applefoot
-  name: Magett Applefoot
-  pronouns: she/her
+- id: pregen.high_fells.magly_mughill
+  name: Magly Mughill
+  pronouns: he/him
   role: sneak
-  sentence: Magett Applefoot, thief of Merestead.
+  sentence: Magly Mughill, thief of Merestead.
   good_at: thievery, stealth
   people: orig.people.halfling
   rule: typical
@@ -6867,26 +6873,26 @@ pregens:
   birth: drawn live when the pregen is picked (02.2.5 a)
   lifecycle: provisional
   basis: [02.2.5, PR-02-9, 12.16.16]
-- id: pregen.high_fells.osbert_elderley
-  name: Osbert Elderley
-  pronouns: she/her
+- id: pregen.high_fells.tamric_ashsmith
+  name: Tamric Ashsmith
+  pronouns: he/him
   role: talker
-  sentence: Osbert Elderley, scholar of Merestead.
-  good_at: history
+  sentence: Tamric Ashsmith, courtier of Merestead.
+  good_at: etiquette, intrigue
   people: orig.people.human
   rule: free
   shape: peaked
-  upbringing: orig.up.cloister
-  livelihood: orig.life.scholar
-  attributes: {might: -1, agility: 0, endurance: 0, wits: 2, intellect: 3, presence: 1, resolve: 0}
-  profile: rounded
-  deep: [deed.lore.history]
-  access: [deed.lore.languages, deed.lore.investigation]
+  upbringing: orig.up.court
+  livelihood: orig.life.courtier
+  attributes: {might: -1, agility: 0, endurance: 0, wits: 2, intellect: 1, presence: 3, resolve: 0}
+  profile: focused
+  deep: [deed.influence.etiquette, deed.influence.intrigue]
+  access: []
   technique: null
-  drive: A thing is not true because it is written; I will see for myself.
+  drive: I know what was really agreed in that room, and it matters.
   aspiration:
-    text: to read a tongue no living person reads
-    tags: [deed.lore.languages]
+    text: to make a peace that holds
+    tags: [deed.influence.persuasion, deed.influence.intrigue]
   anchor_bond: {kind: friend, npc: npc.harin_deepdelve}
   thorn_bond: open (02.9.8)
   keeper: null
@@ -6894,11 +6900,11 @@ pregens:
   birth: drawn live when the pregen is picked (02.2.5 a)
   lifecycle: provisional
   basis: [02.2.5, PR-02-9, 12.16.16]
-- id: pregen.high_fells.evella_elderward
-  name: Evella Elderward
+- id: pregen.high_fells.evo_elderward
+  name: Evo Elderward
   pronouns: she/her
   role: magic
-  sentence: Evella Elderward, acolyte of Merestead.
+  sentence: Evo Elderward, acolyte of Merestead.
   good_at: smiting
   people: orig.people.human
   rule: free
@@ -6923,19 +6929,18 @@ pregens:
   basis: [02.2.5, PR-02-9, 12.16.16]
 opening:
   start:
-    date: the spring quarter day, 12 years since the Burning
+    date: the spring quarter day, 23 years since the Burning
     watch: dawn
-    place: loc.high_fells_merestead.market
+    place: loc.high_fells_merestead.gate
     weather: {fact: weather.today, value: rolled at the first dawn by h.10.weather in the highland spring regime (10.11.3), source: engine}
     moon: 'new (day 1 of the year: 11.10.3)'
     festival: Oswen's Day (market, sitting, hiring fair)
-  inciting: {option: missing, text: 'a child (or an elder, or a priest) is missing since last night, and the trail leads out of the
-      haven', scene: 'the square, the search being organised', frame: 'in medias res (12.4.3: the session''s strong start)', pairs_with: 'the
-      PC''s long vow (02.9.1): the incident is the first step of the vow or a threat to the anchor bond'}
+  inciting: {option: alarm, text: 'the haven''s alarm sounds: something from the wound is at the gate', scene: 'the gate, at the moment
+      the bar comes down', frame: 'in medias res (12.4.3: the session''s strong start)', pairs_with: 'the PC''s long vow (02.9.1): the
+      incident is the first step of the vow or a threat to the anchor bond'}
   leads:
-  - {lead: 'the incident itself: a child (or an elder, or a priest) is missing since last night, and the trail leads out of the haven',
-    points_to: loc.high_fells_shephollows_undercroft}
-  - {lead: The levy called; folk say it is only the beginning., points_to: sit.high_fells.wound}
+  - {lead: 'the incident itself: the haven''s alarm sounds: something from the wound is at the gate', points_to: sit.high_fells.wound}
+  - {lead: A savaged ewe; folk say it is only the beginning., points_to: sit.high_fells.local}
   - {lead: 'The council of Merestead is hiring, and asks no questions', points_to: clk.high_fells.fourth.goal}
   starting_state: {known_places: ring 0-3 areas and their known sites (rumor), status: 0 with every faction unless a creation tie sets
       it (02.9.5)}
@@ -6950,5 +6955,5 @@ calendar:
   - {quarter_day: autumn, name: Harvest Home}
   - {quarter_day: winter, name: the Night of Remembrance}
   lifespans: calendar.yaml#lifespans (generic)
-  opening_date: the spring quarter day, 12 years since the Burning
+  opening_date: the spring quarter day, 23 years since the Burning
   basis: [11.10.1, 11.10.4, 12.16.15]
