@@ -310,6 +310,39 @@ boundaries and never anywhere else (00.7.4): `h.10.site_time` (`beat_end`, 9), `
 (00.7.7): a three-day journey "skipped" is twelve watch checks, three supply days and three weather rolls,
 and its narration comes only from the returned list (12.4.6).
 
+**10.2.6 Leaving a haven into its own area.** `[D]` A settlement's `parent` is usually the area it stands in,
+and its route link to that area (a road of a watch or two, 12.16.9) is the walk from its gate out into the
+land. That leg is the **area's first leg**: the haven stops being a haven when the PC passes its gate (the
+venture starts, 10.2.2), every watch of the leg ends outside a haven and is checked at the area's danger
+rating with the area's tables (10.9.1), and "arriving in the area" means standing in it at the leg's end,
+from where its trackless legs and its other links start (10.3.1, 10.4). The way back is the same leg; the
+venture ends at the gate (10.2.2) [revision: I-055].
+
+**10.2.7 A settlement's day.** `[D]` + `[J:flag]` A settlement keeps hours, a watch and a law; each is a fact
+or a clock, never the narrator's mood [R5 EX-12; revision: I-051]:
+1. **Hours.** Its gate stands open in the morning and afternoon watches and shuts at the evening watch's
+   start. A town or a city (`settlement.tier`, 15.13.8) also keeps a **curfew**: from the evening watch to
+   dawn its streets belong to the watch. A hamlet or a village shuts its doors and keeps no curfew. The place's
+   `curfew` fact (`none | gate | streets`) overrides the default when the region's seed or play writes it.
+   These are ordinary rules of a place, facts and not refusals (15.2.4).
+2. **The watch.** The settlement's ruler (the faction whose seat or hold it is, 11.3; the region's seed names
+   one for the haven, 12.16.9) keeps a watch of its own folk: `arch.soldier` at the settlement's home band,
+   fielded by 09.8.3 when it comes to blows. Passing the shut gate or walking the streets under curfew is
+   done with leave (a Talk beat with the watch's officer, an ordinary request, 15.3), unseen (a Sneak against
+   the watch's Wits defense, 00.3.8 (2), stored for the night on the place), or by force (a conflict with
+   the watch, 06).
+3. **The law.** `[J:flag]` Is the act a crime here? Yes for theft, violence, killing, breaking a curfew or a
+   shut gate, and trespass in a hold, and for any act the ruler's faction despises by its values (11.3.1).
+   A crime the watch sees, or a witness in the settlement's scope reports (10.1.6, 03.10), is a
+   `public_deed` the ruler despises: its attention clock ticks 1 (violence 2, a killing 3; 11.3.12), and a
+   watch that catches the PC in the act demands an answer then and there — the PC talks (15.3, at the PC's
+   standing with the ruler), pays, flees (06.12) or fights. The law's long memory is that clock: its
+   completion is the ruler's entanglement (11.3.12), and status moves only by 11.3.11's rows.
+4. **The haven holds.** None of this is a time-tick check: a settlement stays a haven (10.2.3), and trouble
+   reaches the PC inside its walls only through these facts, chapter 11's clocks and chapter 12's pushes.
+*Worst case (J):* a crime called where it was not (or missed) moves one clock by 1–3 ticks of 8, which decay
+1 a week; the call cites the act and the value.
+
 ### 10.3 Journeys: routes, pace, and the travel watch
 
 **10.3.1 A journey is a plan over the graph.** `[D]` A **journey** is an ordered list of **legs**, each one
@@ -859,7 +892,8 @@ Torchbearer insight that time in a dungeon is measured in what you do [R5 P-13, 
   carried, a waterskin leaks: no water source this day in arid country); 3 a burning light gutters (−2
   intervals; if none is lit, a torch or the oil in store is found damp: one source loses half its
   remaining intervals, rounded down); 4 a strap, string or boot gives (one carried item `damaged`, 08.1.9, engine's draw among
-  non-relic gear); 5 a mount goes lame for the day (pace one step slower; if no mount, ammunition −2); 6
+  non-relic gear); 5 a mount goes lame for the day (pace one step slower; if no mount, ammunition −2; with neither, one more
+  supply spoils, as face 1–2) [revision: I-056]; 6
   a hard stretch: the next travel watch earns 2 fewer points. Depletion never harms and never reaches an
   item that is `cost_immune` (08.1.10).
 - **W · Weather shift.** `roll_table(tbl.10.weather_shift)` (d6): 1–3 the weather moves one step along its
@@ -1023,15 +1057,21 @@ passed PR-10-8 never names an archetype outside its fielded bands, `archetypes.y
 unaudited table do so, the row re-rolls once, then takes the nearest band the archetype has), picks the
 bestiary entry of that archetype, band and variant (`adversaries.yaml`; else builds it by PR-09-1), rolls the
 count (`tbl.09.group_shape`), folds four or more of one template into a **mob** of minions (06.10.2), and adds
-a leader when the row or the group lists one.
+a leader when the row or the group lists one. A row of one to three `minion`s fields **lone minions**:
+weakened single creatures, narrated as 09.4.6 requires (a spent, wounded, young or straggling one of its kind)
+[revision: I-066].
 
 **10.10.2 The table budget (09's contract).** `[D]` Every encounter table, generic, regional or a site's,
 must pass the audit PR-10-8 before use. A table built by PR-10-10 (a world seed's regional tables, a site's
 denizen table) passes it by construction; a hand-written table (the generic ones, a pre-made setting's) is
 audited. The generic tables are audited at every home band 1–5 by `_process/simulation/10-word-audit.py`:
 all 55 terrain-and-home-band tables pass every item, with no lethal face (mid or high), at least 14 of 20
-threat faces fair or easier in each, and a word mix over all of them of trivial 35.7 / easy 21.5 / fair
-34.5 / hard 8.2 / lethal 0 %. (The first, band-relative draft failed item 3 in 48 of 55 cases: one row such
+threat faces fair or easier in each, and a word mix over all of them of trivial 37.6 / easy 24.3 / fair
+29.9 / hard 8.2 / lethal 0 %; at home band 1 they also pass against the light reference (at least 15 of 20
+fair or easier in each; trivial 38.2 / easy 19.5 / fair 32.7 / hard 9.5 / lethal 0 %), after the home-band
+crowds of the eleven home-1 tables went from 6–8 to 5–7 (the frozen skeletons to 4–6): a crowd of seven
+took the light PC to 0 Vitality in 22–57% of fights, a crowd of six in 11–40%
+(`10-light-reference-check-output.txt`, seed 4040) [revision: I-040]. (The first, band-relative draft failed item 3 in 48 of 55 cases: one row such
 as "orcs, home band, their usual group" was fair at one home band and lethal at another, and archetypes
 clamped to their fielded bands overshot; I-029 replaced it with one sub-table per home band.) The repeat
 chance — two threat faces in a row naming the same archetype — is at most 0.195 per table (mean 0.156;
@@ -1044,7 +1084,8 @@ the first draft's mean 0.176) [integration: I-027; revision: I-029]:
    solo (09.8.1 rule 2).
 3. **Words**: against a reference PC of the home band, at least two thirds of threat rows (by weight) are
    `fair` or easier and none is `lethal` (09.8.1 rule 3); a `hard` row carries `complication: false` (a
-   complication is a different problem, not a bigger one).
+   complication is a different problem, not a bigger one). At home band 1 the same holds against the light
+   reference too (PR-10-8 step 2) [revision: I-040].
 4. **Mixture**: at least one row in four (by weight) is a non-threat (`people`, `beasts` that are not
    predators, `sign_only`) at settled and wild ratings; one in six at perilous; deadly tables may be all
    threats.
@@ -1075,6 +1116,15 @@ participant's starting band to the PC for 06.3.9 if a conflict starts.
    (if any) is shuttered; or the PC is in a `veil` feature or hidden (`flag.hidden`, 06.3.7).
 3. A side that is aware of the other while the other is not may **avoid** (leave without a beat while it
    stays unaware), **parley** first, **prepare**, or **strike** (06.2.4 surprise then applies).
+4. **A rolled fight the PC cannot survive is seen first.** The tables are audited against reference PCs
+   (PR-10-8), and the PC at the table may be weaker. When a **rolled** threat (a table row, a site denizen,
+   not a lair the PC entered, a pursuit or a bang) arrives, the engine computes its advisory for the PC as it
+   stands (09.6.5) before items 1–2; if it is **lethal**, the PC side is aware and the creatures are not, and
+   an `ambush` row loses its ambush: items 1–2 are not rolled. The lethal warning (07.3.3, cause `advisory`)
+   and the band tells come with the first sight of them, and 3's avoid is open. The creatures are not made
+   weaker: the world does not scale to the PC (09.8.2); the PC is given the first look. If the PC acts on
+   them, or stays in the place through the next interval or watch, item 2 is rolled as usual
+   [revision: I-040].
 
 **10.10.5 Arrival: what they want.** `[D]` First match (09.8.7): sapient and cunning creatures whose
 archetype has `reaction_roll: true` take 12's reaction roll (12.11.2) at the first interaction; animals and
@@ -1391,7 +1441,7 @@ gates everything found inside, so 8 themes × 14 domains give 112 kinds of site 
 Each card holds (`sites.yaml`): `terrain_tags`, `creature_gate_tags` and `creature_weights` (which
 denizens live there), `loot_gate_tags` (08.3.4 item 4: the place axis of the loot pool gate), `features`
 (d12, the look of an area), `dangers` (d12, what a danger result becomes), `discoveries` (d6),
-`shift` (d6, the H face), `hazards` and `traps` (weighted lists), `climax` (d6, what guards the heart;
+`shift` (d6, the H face), `hazards` and `traps` (weighted lists), `climax` (d6, what guards the heart; a guardian row's `ref_by_band` names the archetype for each band its own lacks, 10.13.10 [revision: I-067];
 themes), the danger clock's `omens` (themes), `regrowth` (themes), and the place facts above. A region places
 sites with their theme, domain, band and size (the world seed by PR-10-6, 12.16.12; a pre-made setting by
 hand, and it may add regional cards in the owner-block); a site generated in play takes them from the region's site tables (`tbl.<region>.sites`, else
@@ -1571,9 +1621,16 @@ the objective the site holds. It is set by the region for placed sites (12.16.12
 from the theme's `climax` (d6) and sealed until reached. Objective kinds (closed): **hoard** (08.3.12's hoard
 at the site band, the place as its source: its domain terrain tags and its theme's loot tags gate the pool,
 08.3.4 item 4; circumstance `decisive` if its keeper was defeated by the PC, else `scavenged` with the search
-beat's degree); **guardian** (a solo, or an elite with a lower-band mob, of the theme's climax archetype at
-site band — never two equal individuals at bands 4–5, 09.8.1 — and the advisory is computed and shown
-before the first beat); **sealed way** (a barrier at the site's explore tier + 1 rung, with the hoard or the
+beat's degree); **guardian** (the theme's climax archetype at the site band, or, where its `bands` do not
+include the site band, the archetype the row's `ref_by_band` names for it (`sites.yaml`, every guardian row
+covers bands 1–5); the engine compares two shapes — one **solo**, and one **elite leading a mob of five
+minions** one band lower (the same band if the archetype has none lower) — and fields the more dangerous one
+whose PR-09-4 word against the reference PC of the site band (counter held, PR-10-8 step 2) is at most
+**hard** (equal words: the one with the lower win chance, then the solo); if neither is, it steps down elite,
+standard, minion. Never two equal individuals at bands 4–5 (09.8.1). A heart may be hard, never lethal
+without the warning: the advisory is computed and shown before the first beat (09.6.5), and hard raises
+07's danger notice. `10-heart-check.py` fields every guardian row at every band: none lethal; solo 62, elite
++ mob 34, elite 9 of 105 [revision: I-067]); **sealed way** (a barrier at the site's explore tier + 1 rung, with the hoard or the
 objective behind it); **rite in progress** (a cultist rite or a waking: a countdown clock of 4 racing the PC,
 05's rite as its content); **the lost** (a captive, a body, a relic someone wants, a thread's object, 11);
 **a place of power** (a spring, an altar, a tree: `resonance` written; 04's V11 and 05's resonant rest read
@@ -1893,7 +1950,16 @@ row it writes)
    thirds of the threat weight must be `fair` or easier, none `lethal` (both tests read the counter-held
    word); the high face of a ranged count (a third of rolls) must not be `lethal` either (09.8.1 rule 3); a
    row naming an archetype outside its fielded bands fails. A generic table is audited at every home band 1–5
-   (`_process/simulation/10-word-audit.py`) [integration: I-027; DL-INT-04; revision: I-029].
+   (`_process/simulation/10-word-audit.py`) [integration: I-027; DL-INT-04; revision: I-029]. **Two reference
+   PCs at home band 1.** At home band 1 every row is also fielded against the **light reference**
+   (`travel.yaml#encounter_audit_reference.light`): Guard 10, Vitality 12, no armor, attack +5 at S2 — the
+   weakest ready-made character (02.2.5), a healer, talker or sneak fighting with the branch working (05.7.11)
+   or a weapon at the same line — and every test of this step applies to it as well (two thirds fair or
+   easier, nothing lethal at the middle or high face, a hard row never a complication). Above home band 1 the
+   audit keeps the martial reference alone: its estimator is a no-Focus floor, and a non-martial PC there is
+   defined by its Focus (T-06-12 J: a Spent tier-3 caster wins 81–91% against one T3), so a light reference
+   would fail every table without measuring anything; a PC weaker than the table's reference is covered at
+   play time by 10.10.4 item 4 [revision: I-040].
 3. The non-threat sub-table must exist (d6, six rows) unless the table is marked deadly-only.
 4. Every row cites archetype or adversary ids that exist, and every threat archetype has `signs`
    (`travel.yaml#archetype_signs` or a regional override).
@@ -1910,7 +1976,7 @@ site's theme × domain pool, `sites.yaml#denizen_pools`; a region's pool from th
    skipping archetypes already on the table while another is available.
 3. Give the slot its start shape from **T-10-25** and step down the shape ladder — 6–8 minions (a mob), 4–6
    minions, 2, 1 elite, 1–2, 1, 2 minions, 1 minion (a solo slot: solo, elite, standard, minion) — until the
-   row's PR-10-8 word (step 2, counter held) is at most **fair** (home − 1 and home slots) or **hard** (home + 1
+   row's PR-10-8 word (step 2, counter held; at home band 1 against both reference PCs, [revision: I-040]) is at most **fair** (home − 1 and home slots) or **hard** (home + 1
    slots), its high face is not lethal and its shape is legal. An archetype that fails at the bottom rung is
    set aside and step 2 draws again.
 4. A slot no pool archetype can fill draws from the fallback pool by steps 2–3; only if that fails too does it
@@ -2282,8 +2348,9 @@ were the five the redirect named. The DM does not let the tower show "just enoug
 *The site.* Under the drowned chapel: theme **haunted**, domain **crypt**, band 1, size **small** (progress 6,
 danger 8; 10.13.3). Haunted → danger **perilous** (band 1: no step) → site cadence **2 intervals**; crypt →
 explore tier **moderate** (15), dark. Place facts: `haunted`. The objective, rolled at creation from the
-haunted `climax` (d6 = 1) and sealed: **guardian — the barrow-wight on its throne** (`arch.wight`, whose bands
-are 2–4: built at band 2 by PR-09-1, one band above Wren). The denizen table is haunted × crypt (a terrain
+haunted `climax` (d6 = 1) and sealed: **guardian — the barrow-wight on its throne**. The wight's bands are
+2–4 and the site is band 1, so the row's `ref_by_band` fields a band-1 ghoul in the wight's place (10.13.10):
+a barrow-ghoul in a dead lord's mail [revision: I-067]. The denizen table is haunted × crypt (a terrain
 match; no fallback). Wren lights the lantern (12 intervals left); she carries one `cond.exhausted` stack.
 
 **Entering (10.13.4).** The entrance area A1: domain feature *iron gates rusted half-open*; the theme's first
@@ -2319,12 +2386,14 @@ heart is one tick away and she knows it.
 | 4 | Explore onward, care (+2 vs 15) | d20 11 → 13: **near miss** (margin −2); she takes **success at a cost**: reach 2, one S2 cost — the threatened `cost.time` | **6/6 — complete** | **7/8** (U 1; imminent omen: *a crowd of shapes at the edge of the light*) | 8 | d12 = 12 → L |
 
 **The heart (10.13.10).** The progress clock is complete; the next area is the heart: *a burial hall, a throne
-of stacked stone, and on it a thing in rusted mail whose eyes are two cold sparks.* The wight (T2, built at
-band 2) is perceived: it is one band above Wren → its band tell is rendered (09.6.6); its archetype carries
-`lethal_context` → a second lethal warning, now for this source (07.3.3 `archetype`: one context per source
-per scene), with its tell as the sign. The advisory: P1 against one T2 → **easy** by T-09-10 — an honest
-word: the wight is beatable, and it can kill. Wren fights; she spends Focus on a push in the second round,
-takes a Moderate wound when Staggered, and destroys it in round five (06/07; summarized). The hoard behind the
+of stacked stone, and on it a thing in rusted mail whose eyes are two cold sparks; five more crouch at its
+feet.* 10.13.10's shapes at band 1: a ghoul solo is **trivial** for P1 (a band-1 solo cannot be made harder,
+09.4.6), an elite ghoul leading a mob of five band-1 ghoul minions is **fair** (92 / 27, `10-heart-check-output.txt`):
+the more dangerous one at most hard is fielded, the elite and its mob. Its archetype carries `lethal_context`
+→ a second lethal warning, now for this source (07.3.3 `archetype`: one context per source per scene), with
+its tell as the sign. The advisory: **fair** — an honest word: the ghouls are beatable, and they can kill
+[revision: I-067]. Wren fights; she spends Focus on a push in the second round,
+takes a Moderate wound when Staggered, and in round five cuts down the elite; the mob breaks (06.11; 06/07, summarized). The hoard behind the
 throne: 08.3.12 at band 1 (one fine item and 3d6 × 3 coins), the source the defeated keeper → `decisive`.
 
 **Out (10.13.11).** The path is A1–A2–A3–heart: 4 areas → **2 intervals** (no map). The interval counter

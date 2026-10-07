@@ -7,7 +7,8 @@ d20 threat sub-table that passes PR-10-8 by construction:
     (archetypes.yaml#bands), without repeating one already on the table while another is available;
   - each slot starts at the shape T-10-25 gives for its home band and position (a crowd, a pair, an elite, one, a
     minion, a solo) and steps down the shape ladder until PR-09-4's word for that shape, against a reference PC
-    of the home band with the counter held (PR-10-8 step 2), is at most the slot's ceiling: fair for home-1 and
+    of the home band with the counter held (PR-10-8 step 2; at home band 1 against the light reference as well,
+    [revision: I-040]), is at most the slot's ceiling: fair for home-1 and
     home rows, hard for home+1 rows (09.8.1 rule 3: a rolled fight is never lethal; hard is its ceiling). The high
     face of a ranged count must not be lethal either. A slot whose archetype fails at the bottom rung redraws.
   - a slot that no pool archetype can fill at its band widens the pool to its fallback (the caller's: a site's
@@ -68,7 +69,10 @@ def try_slot(arch, home, off, start):
         r = WA.audit_row(row, home)
         if r["problems"] or "mid" not in r:
             continue
-        if WORDS.index(r["mid"][0]) <= WORDS.index(CEILING[off]) and r["high"][0] != "lethal":
+        ok = WORDS.index(r["mid"][0]) <= WORDS.index(CEILING[off]) and r["high"][0] != "lethal"
+        if ok and "light_mid" in r:   # [revision: I-040] the light reference at its bands, same ceiling
+            ok = WORDS.index(r["light_mid"][0]) <= WORDS.index(CEILING[off]) and r["light_high"][0] != "lethal"
+        if ok:
             return row, r["mid"][0]
     return None, None
 
@@ -103,7 +107,8 @@ def build_threat_table(pool, home, rng, fallback_pool=None, notes=None):
                 nb = max(ARCH[a]["bands"][0], min(ARCH[a]["bands"][1], b))
                 row = {"range": "1", "band": nb, "ref": [a], "count": "1", "variant": "standard", "leader": False}
                 r = WA.audit_row(row, home)
-                if "mid" in r and WORDS.index(r["mid"][0]) <= WORDS.index(CEILING[off]):
+                if "mid" in r and WORDS.index(r["mid"][0]) <= WORDS.index(CEILING[off]) and \
+                        ("light_mid" not in r or WORDS.index(r["light_mid"][0]) <= WORDS.index(CEILING[off])):
                     chosen = (row, r["mid"][0], "nearest band")
                     break
         if not chosen:

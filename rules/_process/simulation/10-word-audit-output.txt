@@ -1,12 +1,13 @@
-tbl.10.enc.road        home 1  trivial:8 easy:6 fair:6  fair-or-easier 20/20  PASS
-    1-3    arch.brigand             home-1  b1 1-2            trivial win 100.0 stag   0.0
-    4-6    arch.wolf                home-1  b1 1-2            trivial win 100.0 stag   0.0
-    7-9    arch.goblin              home    b1 6-8 minion     fair    win  92.0 stag  24.0
-    10-12  arch.brigand             home    b1 6-8 minion     easy    win  97.1 stag  13.4 [high face: fair]
-    13-15  arch.orc                 home    b1 6-8 minion     fair    win  92.8 stag  22.5
-    16-17  arch.ghost               home    b1 1              trivial win 100.0 stag   0.0
-    18-19  arch.ogre                home+1  b2 1              easy    win  99.9 stag   4.1
-    20     arch.orc                 home+1  b2 1              easy    win  99.8 stag   5.9
+tbl.10.enc.road        home 1  trivial:8 easy:12  fair-or-easier 20/20  PASS
+                       light reference: trivial:8 fair:11 hard:1  fair-or-easier 19/20
+    1-3    arch.brigand             home-1  b1 1-2            trivial win 100.0 stag   0.0 light: trivial 100.0/0.0 [high face: easy]
+    4-6    arch.wolf                home-1  b1 1-2            trivial win 100.0 stag   0.0 light: trivial 100.0/0.0 [high face: easy]
+    7-9    arch.goblin              home    b1 5-7 minion     easy    win  98.0 stag  11.4 [high face: fair] light: fair 90.5/36.9 [high face: hard]
+    10-12  arch.brigand             home    b1 5-7 minion     easy    win  99.6 stag   4.9 light: fair 96.3/23.4
+    13-15  arch.orc                 home    b1 5-7 minion     easy    win  98.4 stag  10.2 [high face: fair] light: fair 92.0/34.1 [high face: hard]
+    16-17  arch.ghost               home    b1 1              trivial win 100.0 stag   0.0 light: trivial 100.0/0.0
+    18-19  arch.ogre                home+1  b2 1              easy    win  99.9 stag   4.1 light: fair 95.4/44.5
+    20     arch.orc                 home+1  b2 1              easy    win  99.8 stag   5.9 light: hard 79.8/60.7
 tbl.10.enc.road        home 2  trivial:8 easy:3 fair:9  fair-or-easier 20/20  PASS
     1-3    arch.brigand             home-1  b1 4-6 minion     trivial win 100.0 stag   0.0
     4-6    arch.goblin              home-1  b1 4-6 minion     trivial win 100.0 stag   0.0
@@ -43,15 +44,16 @@ tbl.10.enc.road        home 5  trivial:9 easy:3 fair:3 hard:5  fair-or-easier 15
     16-17  arch.fey_noble           home    b5 1              hard    win  74.1 stag  61.2
     18-19  arch.fey_noble           home+1  b5 1 solo         hard    win  41.6 stag  83.5
     20     arch.vampire             home+1  b5 1 solo         hard    win  41.6 stag  83.5 (without counter: lethal)
-tbl.10.enc.settlement  home 1  trivial:11 easy:6 fair:3  fair-or-easier 20/20  PASS
-    1-3    arch.brigand             home-1  b1 1-2            trivial win 100.0 stag   0.0
-    4-6    arch.vermin_swarm        home-1  b1 1              trivial win 100.0 stag   0.0
-    7-9    arch.brigand             home    b1 6-8 minion     easy    win  97.1 stag  13.4 [high face: fair]
-    10-12  arch.cultist             home    b1 6-8 minion     fair    win  93.7 stag  21.3
-    13-15  arch.zombie              home    b1 6-8 minion     easy    win  99.3 stag   6.5
-    16-17  arch.homunculus          home    b1 1              trivial win 100.0 stag   0.0
-    18-19  arch.ghost               home+1  b2 1              trivial win 100.0 stag   2.1 (without counter: hard)
-    20     arch.possessor           home+1  b2 1 minion       trivial win 100.0 stag   0.0 (without counter: easy)
+tbl.10.enc.settlement  home 1  trivial:14 easy:6  fair-or-easier 20/20  PASS
+                       light reference: trivial:8 easy:4 fair:6 hard:2  fair-or-easier 18/20
+    1-3    arch.brigand             home-1  b1 1-2            trivial win 100.0 stag   0.0 light: trivial 100.0/0.0 [high face: easy]
+    4-6    arch.vermin_swarm        home-1  b1 1              trivial win 100.0 stag   0.0 light: trivial 100.0/0.0
+    7-9    arch.brigand             home    b1 5-7 minion     easy    win  99.6 stag   4.9 light: fair 96.3/23.4
+    10-12  arch.cultist             home    b1 5-7 minion     easy    win  97.3 stag  13.7 [high face: fair] light: fair 87.7/42.4 [high face: hard]
+    13-15  arch.zombie              home    b1 5-7 minion     trivial win  99.9 stag   1.6 [high face: easy] light: easy 99.4/12.9 [high face: fair]
+    16-17  arch.homunculus          home    b1 1              trivial win 100.0 stag   0.0 light: trivial 100.0/0.0
+    18-19  arch.ghost               home+1  b2 1              trivial win 100.0 stag   2.1 (without counter: hard) light: hard 90.0/50.1
+    20     arch.possessor           home+1  b2 1 minion       trivial win 100.0 stag   0.0 (without counter: easy) light: easy 100.0/5.0
 tbl.10.enc.settlement  home 2  trivial:6 easy:5 fair:9  fair-or-easier 20/20  PASS
     1-3    arch.brigand             home-1  b1 4-6 minion     trivial win 100.0 stag   0.0
     4-6    arch.animated            home-1  b1 2              trivial win 100.0 stag   0.0
@@ -88,15 +90,16 @@ tbl.10.enc.settlement  home 5  trivial:9 easy:5 fair:3 hard:3  fair-or-easier 17
     16-17  arch.vampire             home    b5 1 minion       easy    win  99.5 stag  13.7 (without counter: hard)
     18-19  arch.vampire             home+1  b5 1 solo         hard    win  41.6 stag  83.5 (without counter: lethal)
     20     arch.enforcer            home+1  b5 1 solo         hard    win  41.8 stag  85.7
-tbl.10.enc.forest      home 1  trivial:9 easy:5 fair:6  fair-or-easier 20/20  PASS
-    1-3    arch.wolf                home-1  b1 1-2            trivial win 100.0 stag   0.0
-    4-6    arch.giant_vermin        home-1  b1 1              trivial win 100.0 stag   0.0
-    7-9    arch.wolf                home    b1 6-8 minion     easy    win  99.0 stag   7.6
-    10-12  arch.goblin              home    b1 6-8 minion     fair    win  92.0 stag  24.0
-    13-15  arch.wild_fey            home    b1 6-8 minion     fair    win  89.4 stag  27.9 [high face: hard]
-    16-17  arch.brigand             home    b1 2              trivial win 100.0 stag   0.0
-    18-19  arch.bear                home+1  b2 1              easy    win  99.8 stag   6.7
-    20     arch.monstrous_plant     home+1  b2 1 minion       trivial win 100.0 stag   0.0
+tbl.10.enc.forest      home 1  trivial:12 easy:8  fair-or-easier 20/20  PASS
+                       light reference: trivial:6 easy:6 fair:6 hard:2  fair-or-easier 18/20
+    1-3    arch.wolf                home-1  b1 1-2            trivial win 100.0 stag   0.0 light: trivial 100.0/0.0 [high face: easy]
+    4-6    arch.giant_vermin        home-1  b1 1              trivial win 100.0 stag   0.0 light: trivial 100.0/0.0
+    7-9    arch.wolf                home    b1 5-7 minion     trivial win  99.9 stag   2.2 [high face: easy] light: easy 98.7/14.8 [high face: fair]
+    10-12  arch.goblin              home    b1 5-7 minion     easy    win  98.0 stag  11.4 [high face: fair] light: fair 90.5/36.9 [high face: hard]
+    13-15  arch.wild_fey            home    b1 5-7 minion     easy    win  97.2 stag  13.8 [high face: fair] light: fair 86.5/42.7 [high face: hard]
+    16-17  arch.brigand             home    b1 2              trivial win 100.0 stag   0.0 light: easy 99.9/5.2
+    18-19  arch.bear                home+1  b2 1              easy    win  99.8 stag   6.7 light: hard 83.7/59.4
+    20     arch.monstrous_plant     home+1  b2 1 minion       trivial win 100.0 stag   0.0 light: easy 100.0/4.3
 tbl.10.enc.forest      home 2  trivial:8 easy:3 fair:9  fair-or-easier 20/20  PASS
     1-3    arch.wolf                home-1  b1 4-6 minion     trivial win 100.0 stag   0.0
     4-6    arch.giant_vermin        home-1  b1 2              trivial win 100.0 stag   0.0
@@ -133,15 +136,16 @@ tbl.10.enc.forest      home 5  trivial:6 easy:6 fair:5 hard:3  fair-or-easier 17
     16-17  arch.folk_mage           home    b5 1              fair    win  93.3 stag  44.4
     18-19  arch.fey_noble           home+1  b5 1 solo         hard    win  41.6 stag  83.5
     20     arch.monstrous_beast     home+1  b5 1 solo         hard    win  46.5 stag  84.9
-tbl.10.enc.highland    home 1  trivial:12 easy:2 fair:6  fair-or-easier 20/20  PASS
-    1-3    arch.wolf                home-1  b1 1-2            trivial win 100.0 stag   0.0
-    4-6    arch.goblin              home-1  b1 2              trivial win 100.0 stag   0.0
-    7-9    arch.orc                 home    b1 6-8 minion     fair    win  92.8 stag  22.5
-    10-12  arch.raptor              home    b1 1-2            trivial win 100.0 stag   0.0
-    13-15  arch.goblin              home    b1 6-8 minion     fair    win  92.0 stag  24.0
-    16-17  arch.brigand             home    b1 2              trivial win 100.0 stag   0.0
-    18-19  arch.bear                home+1  b2 1              easy    win  99.8 stag   6.7
-    20     arch.ogre                home+1  b2 1 minion       trivial win 100.0 stag   0.4
+tbl.10.enc.highland    home 1  trivial:12 easy:8  fair-or-easier 20/20  PASS
+                       light reference: trivial:6 easy:6 fair:6 hard:2  fair-or-easier 18/20
+    1-3    arch.wolf                home-1  b1 1-2            trivial win 100.0 stag   0.0 light: trivial 100.0/0.0 [high face: easy]
+    4-6    arch.goblin              home-1  b1 2              trivial win 100.0 stag   0.0 light: easy 100.0/5.0
+    7-9    arch.orc                 home    b1 5-7 minion     easy    win  98.4 stag  10.2 [high face: fair] light: fair 92.0/34.1 [high face: hard]
+    10-12  arch.raptor              home    b1 1-2            trivial win 100.0 stag   0.0 light: trivial 100.0/0.0 [high face: easy]
+    13-15  arch.goblin              home    b1 5-7 minion     easy    win  98.0 stag  11.4 [high face: fair] light: fair 90.5/36.9 [high face: hard]
+    16-17  arch.brigand             home    b1 2              trivial win 100.0 stag   0.0 light: easy 99.9/5.2
+    18-19  arch.bear                home+1  b2 1              easy    win  99.8 stag   6.7 light: hard 83.7/59.4
+    20     arch.ogre                home+1  b2 1 minion       trivial win 100.0 stag   0.4 light: easy 100.0/5.1
 tbl.10.enc.highland    home 2  trivial:11 easy:3 fair:3 hard:3  fair-or-easier 17/20  PASS
     1-3    arch.orc                 home-1  b1 4-6 minion     trivial win 100.0 stag   0.0
     4-6    arch.wolf                home-1  b1 4-6 minion     trivial win 100.0 stag   0.0
@@ -178,15 +182,16 @@ tbl.10.enc.highland    home 5  trivial:6 easy:6 fair:5 hard:3  fair-or-easier 17
     16-17  arch.celestial           home    b5 1 minion       fair    win  98.8 stag  18.4
     18-19  arch.giant               home+1  b5 1 solo         hard    win  67.6 stag  85.0
     20     arch.earth_elemental     home+1  b5 1 solo         hard    win  56.6 stag  85.5 (without counter: lethal)
-tbl.10.enc.plains      home 1  trivial:9 easy:5 fair:6  fair-or-easier 20/20  PASS
-    1-3    arch.wolf                home-1  b1 1-2            trivial win 100.0 stag   0.0
-    4-6    arch.gnoll               home-1  b1 1              trivial win 100.0 stag   0.0
-    7-9    arch.gnoll               home    b1 6-8 minion     fair    win  94.9 stag  18.8
-    10-12  arch.orc                 home    b1 6-8 minion     fair    win  92.8 stag  22.5
-    13-15  arch.herd_beast          home    b1 6-8 minion     easy    win  98.5 stag   9.3 [high face: fair]
-    16-17  arch.raptor              home    b1 1-2            trivial win 100.0 stag   0.0
-    18-19  arch.great_cat           home+1  b2 1              easy    win  99.7 stag   6.3
-    20     arch.orc                 home+1  b2 1 minion       trivial win 100.0 stag   0.0
+tbl.10.enc.plains      home 1  trivial:12 easy:8  fair-or-easier 20/20  PASS
+                       light reference: trivial:8 easy:1 fair:9 hard:2  fair-or-easier 18/20
+    1-3    arch.wolf                home-1  b1 1-2            trivial win 100.0 stag   0.0 light: trivial 100.0/0.0 [high face: easy]
+    4-6    arch.gnoll               home-1  b1 1              trivial win 100.0 stag   0.0 light: trivial 100.0/0.0
+    7-9    arch.gnoll               home    b1 5-7 minion     easy    win  99.0 stag   7.9 [high face: fair] light: fair 94.4/29.9
+    10-12  arch.orc                 home    b1 5-7 minion     easy    win  98.4 stag  10.2 [high face: fair] light: fair 92.0/34.1 [high face: hard]
+    13-15  arch.herd_beast          home    b1 5-7 minion     trivial win  99.9 stag   2.4 [high face: easy] light: fair 99.0/15.2
+    16-17  arch.raptor              home    b1 1-2            trivial win 100.0 stag   0.0 light: trivial 100.0/0.0 [high face: easy]
+    18-19  arch.great_cat           home+1  b2 1              easy    win  99.7 stag   6.3 light: hard 79.6/55.2
+    20     arch.orc                 home+1  b2 1 minion       trivial win 100.0 stag   0.0 light: easy 99.7/13.4
 tbl.10.enc.plains      home 2  trivial:9 easy:3 fair:6 hard:2  fair-or-easier 18/20  PASS
     1-3    arch.gnoll               home-1  b1 4-6 minion     trivial win 100.0 stag   0.0
     4-6    arch.wolf                home-1  b1 4-6 minion     trivial win 100.0 stag   0.0
@@ -223,15 +228,16 @@ tbl.10.enc.plains      home 5  trivial:6 easy:8 fair:3 hard:3  fair-or-easier 17
     16-17  arch.place_spirit        home    b5 1 minion       easy    win  99.9 stag  10.9
     18-19  arch.monstrous_beast     home+1  b5 1 solo         hard    win  46.5 stag  84.9
     20     arch.air_elemental       home+1  b5 1 solo         hard    win  43.0 stag  81.5 (without counter: lethal)
-tbl.10.enc.wetland     home 1  trivial:13 easy:7  fair-or-easier 20/20  PASS
-    1-3    arch.giant_vermin        home-1  b1 1              trivial win 100.0 stag   0.0
-    4-6    arch.reptile             home-1  b1 1              trivial win 100.0 stag   0.0
-    7-9    arch.lizardfolk          home    b1 6-8 minion     easy    win  99.2 stag   6.6
-    10-12  arch.zombie              home    b1 6-8 minion     easy    win  99.3 stag   6.5
-    13-15  arch.vermin_swarm        home    b1 1              trivial win 100.0 stag   0.0
-    16-17  arch.wild_fey            home    b1 1-2            trivial win 100.0 stag   0.0
-    18-19  arch.hag                 home+1  b2 1 minion       trivial win 100.0 stag   0.8
-    20     arch.reptile             home+1  b2 1              easy    win  99.9 stag   4.1
+tbl.10.enc.wetland     home 1  trivial:19 easy:1  fair-or-easier 20/20  PASS
+                       light reference: trivial:11 easy:8 hard:1  fair-or-easier 19/20
+    1-3    arch.giant_vermin        home-1  b1 1              trivial win 100.0 stag   0.0 light: trivial 100.0/0.0
+    4-6    arch.reptile             home-1  b1 1              trivial win 100.0 stag   0.0 light: trivial 100.0/0.0
+    7-9    arch.lizardfolk          home    b1 5-7 minion     trivial win  99.9 stag   1.6 [high face: easy] light: easy 99.5/10.4 [high face: fair]
+    10-12  arch.zombie              home    b1 5-7 minion     trivial win  99.9 stag   1.6 [high face: easy] light: easy 99.4/12.9 [high face: fair]
+    13-15  arch.vermin_swarm        home    b1 1              trivial win 100.0 stag   0.0 light: trivial 100.0/0.0
+    16-17  arch.wild_fey            home    b1 1-2            trivial win 100.0 stag   0.0 light: trivial 100.0/0.0 [high face: easy]
+    18-19  arch.hag                 home+1  b2 1 minion       trivial win 100.0 stag   0.8 light: easy 100.0/12.7
+    20     arch.reptile             home+1  b2 1              easy    win  99.9 stag   4.1 light: hard 89.3/51.7
 tbl.10.enc.wetland     home 2  trivial:12 fair:8  fair-or-easier 20/20  PASS
     1-3    arch.lizardfolk          home-1  b1 4-6 minion     trivial win 100.0 stag   0.0
     4-6    arch.zombie              home-1  b1 4-6 minion     trivial win 100.0 stag   0.0
@@ -268,15 +274,16 @@ tbl.10.enc.wetland     home 5  trivial:6 easy:8 fair:3 hard:3  fair-or-easier 17
     16-17  arch.water_elemental     home    b5 1 minion       easy    win  99.9 stag   7.6 (without counter: hard)
     18-19  arch.wyrm                home+1  b5 1 solo         hard    win  47.1 stag  88.7
     20     arch.wraith              home+1  b5 1 solo         hard    win  52.2 stag  80.6 (without counter: lethal)
-tbl.10.enc.arid        home 1  trivial:10 easy:4 fair:6  fair-or-easier 20/20  PASS
-    1-3    arch.giant_vermin        home-1  b1 1              trivial win 100.0 stag   0.0
-    4-6    arch.reptile             home-1  b1 1              trivial win 100.0 stag   0.0
-    7-9    arch.gnoll               home    b1 6-8 minion     fair    win  94.9 stag  18.8
-    10-12  arch.brigand             home    b1 6-8 minion     easy    win  97.1 stag  13.4 [high face: fair]
-    13-15  arch.orc                 home    b1 6-8 minion     fair    win  92.8 stag  22.5
-    16-17  arch.giant_vermin        home    b1 2              trivial win 100.0 stag   0.0
-    18-19  arch.hellbeast           home+1  b2 1 minion       trivial win 100.0 stag   0.0
-    20     arch.great_cat           home+1  b2 1              easy    win  99.7 stag   6.3
+tbl.10.enc.arid        home 1  trivial:10 easy:10  fair-or-easier 20/20  PASS
+                       light reference: trivial:6 easy:4 fair:9 hard:1  fair-or-easier 19/20
+    1-3    arch.giant_vermin        home-1  b1 1              trivial win 100.0 stag   0.0 light: trivial 100.0/0.0
+    4-6    arch.reptile             home-1  b1 1              trivial win 100.0 stag   0.0 light: trivial 100.0/0.0
+    7-9    arch.gnoll               home    b1 5-7 minion     easy    win  99.0 stag   7.9 [high face: fair] light: fair 94.4/29.9
+    10-12  arch.brigand             home    b1 5-7 minion     easy    win  99.6 stag   4.9 light: fair 96.3/23.4
+    13-15  arch.orc                 home    b1 5-7 minion     easy    win  98.4 stag  10.2 [high face: fair] light: fair 92.0/34.1 [high face: hard]
+    16-17  arch.giant_vermin        home    b1 2              trivial win 100.0 stag   0.0 light: easy 99.9/5.0
+    18-19  arch.hellbeast           home+1  b2 1 minion       trivial win 100.0 stag   0.0 light: easy 99.9/8.3
+    20     arch.great_cat           home+1  b2 1              easy    win  99.7 stag   6.3 light: hard 79.6/55.2
 tbl.10.enc.arid        home 2  trivial:9 easy:3 fair:6 hard:2  fair-or-easier 18/20  PASS
     1-3    arch.gnoll               home-1  b1 4-6 minion     trivial win 100.0 stag   0.0
     4-6    arch.brigand             home-1  b1 4-6 minion     trivial win 100.0 stag   0.0
@@ -313,15 +320,16 @@ tbl.10.enc.arid        home 5  trivial:6 easy:6 fair:5 hard:3  fair-or-easier 17
     16-17  arch.air_elemental       home    b5 1 minion       fair    win  98.8 stag  15.6 (without counter: hard)
     18-19  arch.fire_elemental      home+1  b5 1 solo         hard    win  43.7 stag  82.4 (without counter: lethal)
     20     arch.monstrous_beast     home+1  b5 1 solo         hard    win  46.5 stag  84.9
-tbl.10.enc.frozen      home 1  trivial:12 easy:2 fair:6  fair-or-easier 20/20  PASS
-    1-3    arch.wolf                home-1  b1 1-2            trivial win 100.0 stag   0.0
-    4-6    arch.goblin              home-1  b1 2              trivial win 100.0 stag   0.0
-    7-9    arch.skeleton            home    b1 6-8 minion     fair    win  89.7 stag  28.7 (without counter: hard) [high face: hard]
-    10-12  arch.orc                 home    b1 6-8 minion     fair    win  92.8 stag  22.5
-    13-15  arch.ghost               home    b1 1 elite        trivial win 100.0 stag   0.0 (without counter: easy)
-    16-17  arch.wolf                home    b1 2              trivial win 100.0 stag   0.0
-    18-19  arch.bear                home+1  b2 1              easy    win  99.8 stag   6.7
-    20     arch.great_cat           home+1  b2 1 minion       trivial win 100.0 stag   0.2
+tbl.10.enc.frozen      home 1  trivial:12 easy:8  fair-or-easier 20/20  PASS
+                       light reference: trivial:6 easy:5 fair:7 hard:2  fair-or-easier 18/20
+    1-3    arch.wolf                home-1  b1 1-2            trivial win 100.0 stag   0.0 light: trivial 100.0/0.0 [high face: easy]
+    4-6    arch.goblin              home-1  b1 2              trivial win 100.0 stag   0.0 light: easy 100.0/5.0
+    7-9    arch.skeleton            home    b1 4-6 minion     easy    win  99.8 stag   3.8 (without counter: fair) light: fair 95.0/30.8 [high face: hard]
+    10-12  arch.orc                 home    b1 5-7 minion     easy    win  98.4 stag  10.2 [high face: fair] light: fair 92.0/34.1 [high face: hard]
+    13-15  arch.ghost               home    b1 1 elite        trivial win 100.0 stag   0.0 (without counter: easy) light: trivial 100.0/0.8
+    16-17  arch.wolf                home    b1 2              trivial win 100.0 stag   0.0 light: easy 99.9/6.5
+    18-19  arch.bear                home+1  b2 1              easy    win  99.8 stag   6.7 light: hard 83.7/59.4
+    20     arch.great_cat           home+1  b2 1 minion       trivial win 100.0 stag   0.2 light: fair 98.3/20.5
 tbl.10.enc.frozen      home 2  trivial:9 easy:5 fair:6  fair-or-easier 20/20  PASS
     1-3    arch.wolf                home-1  b1 4-6 minion     trivial win 100.0 stag   0.0
     4-6    arch.orc                 home-1  b1 4-6 minion     trivial win 100.0 stag   0.0
@@ -358,15 +366,16 @@ tbl.10.enc.frozen      home 5  trivial:6 easy:11 hard:3  fair-or-easier 17/20  P
     16-17  arch.golem               home    b5 1 minion       easy    win 100.0 stag   7.3 (without counter: hard)
     18-19  arch.giant               home+1  b5 1 solo         hard    win  67.6 stag  85.0
     20     arch.frost_elemental     home+1  b5 1 solo         hard    win  51.8 stag  83.8
-tbl.10.enc.water       home 1  trivial:8 easy:7 fair:5  fair-or-easier 20/20  PASS
-    1-3    arch.reptile             home-1  b1 1              trivial win 100.0 stag   0.0
-    4-6    arch.raptor              home-1  b1 1              trivial win 100.0 stag   0.0
-    7-9    arch.brigand             home    b1 6-8 minion     easy    win  97.1 stag  13.4 [high face: fair]
-    10-12  arch.lizardfolk          home    b1 6-8 minion     easy    win  99.2 stag   6.6
-    13-15  arch.wild_fey            home    b1 6-8 minion     fair    win  89.4 stag  27.9 [high face: hard]
-    16-17  arch.ghost               home    b1 1              trivial win 100.0 stag   0.0
-    18-19  arch.water_beast         home+1  b2 1              fair    win  99.7 stag  16.3
-    20     arch.reptile             home+1  b2 1              easy    win  99.9 stag   4.1
+tbl.10.enc.water       home 1  trivial:11 easy:7 fair:2  fair-or-easier 20/20  PASS
+                       light reference: trivial:8 easy:3 fair:8 hard:1  fair-or-easier 19/20
+    1-3    arch.reptile             home-1  b1 1              trivial win 100.0 stag   0.0 light: trivial 100.0/0.0
+    4-6    arch.raptor              home-1  b1 1              trivial win 100.0 stag   0.0 light: trivial 100.0/0.0
+    7-9    arch.brigand             home    b1 5-7 minion     easy    win  99.6 stag   4.9 light: fair 96.3/23.4
+    10-12  arch.lizardfolk          home    b1 5-7 minion     trivial win  99.9 stag   1.6 [high face: easy] light: easy 99.5/10.4 [high face: fair]
+    13-15  arch.wild_fey            home    b1 5-7 minion     easy    win  97.2 stag  13.8 [high face: fair] light: fair 86.5/42.7 [high face: hard]
+    16-17  arch.ghost               home    b1 1              trivial win 100.0 stag   0.0 light: trivial 100.0/0.0
+    18-19  arch.water_beast         home+1  b2 1              fair    win  99.7 stag  16.3 light: fair 93.5/49.2
+    20     arch.reptile             home+1  b2 1              easy    win  99.9 stag   4.1 light: hard 89.3/51.7
 tbl.10.enc.water       home 2  trivial:11 fair:9  fair-or-easier 20/20  PASS
     1-3    arch.brigand             home-1  b1 4-6 minion     trivial win 100.0 stag   0.0
     4-6    arch.lizardfolk          home-1  b1 4-6 minion     trivial win 100.0 stag   0.0
@@ -403,15 +412,16 @@ tbl.10.enc.water       home 5  trivial:6 easy:9 fair:2 hard:3  fair-or-easier 17
     16-17  arch.great_dragon        home    b5 1              fair    win  91.1 stag  48.3
     18-19  arch.wyrm                home+1  b5 1 solo         hard    win  47.1 stag  88.7
     20     arch.water_elemental     home+1  b5 1 solo         hard    win  56.5 stag  78.1 (without counter: lethal)
-tbl.10.enc.underground home 1  trivial:12 fair:8  fair-or-easier 20/20  PASS
-    1-3    arch.giant_vermin        home-1  b1 1              trivial win 100.0 stag   0.0
-    4-6    arch.vermin_swarm        home-1  b1 1              trivial win 100.0 stag   0.0
-    7-9    arch.goblin              home    b1 6-8 minion     fair    win  92.0 stag  24.0
-    10-12  arch.skeleton            home    b1 6-8 minion     fair    win  89.7 stag  28.7 (without counter: hard) [high face: hard]
-    13-15  arch.ooze                home    b1 1              trivial win 100.0 stag   0.0
-    16-17  arch.fungal              home    b1 1-2            trivial win 100.0 stag   0.0
-    18-19  arch.clockwork           home+1  b2 1              fair    win  95.9 stag  23.6
-    20     arch.lesser_demon        home+1  b2 1 minion       trivial win 100.0 stag   0.0
+tbl.10.enc.underground home 1  trivial:12 easy:6 fair:2  fair-or-easier 20/20  PASS
+                       light reference: trivial:11 easy:1 fair:3 hard:5  fair-or-easier 15/20
+    1-3    arch.giant_vermin        home-1  b1 1              trivial win 100.0 stag   0.0 light: trivial 100.0/0.0
+    4-6    arch.vermin_swarm        home-1  b1 1              trivial win 100.0 stag   0.0 light: trivial 100.0/0.0
+    7-9    arch.goblin              home    b1 5-7 minion     easy    win  98.0 stag  11.4 [high face: fair] light: fair 90.5/36.9 [high face: hard]
+    10-12  arch.skeleton            home    b1 5-7 minion     easy    win  97.1 stag  14.8 (without counter: hard) [high face: fair] light: hard 81.2/50.6
+    13-15  arch.ooze                home    b1 1              trivial win 100.0 stag   0.0 light: trivial 100.0/0.0
+    16-17  arch.fungal              home    b1 1-2            trivial win 100.0 stag   0.0 light: trivial 100.0/0.0 [high face: easy]
+    18-19  arch.clockwork           home+1  b2 1              fair    win  95.9 stag  23.6 light: hard 51.8/78.0
+    20     arch.lesser_demon        home+1  b2 1 minion       trivial win 100.0 stag   0.0 light: easy 100.0/5.5
 tbl.10.enc.underground home 2  trivial:9 easy:5 fair:3 hard:3  fair-or-easier 17/20  PASS
     1-3    arch.goblin              home-1  b1 4-6 minion     trivial win 100.0 stag   0.0
     4-6    arch.skeleton            home-1  b1 4-6 minion     trivial win 100.0 stag   0.0
@@ -448,15 +458,16 @@ tbl.10.enc.underground home 5  trivial:6 easy:5 fair:6 hard:3  fair-or-easier 17
     16-17  arch.abomination         home    b5 1 minion       easy    win  99.9 stag   9.5 (without counter: fair)
     18-19  arch.aberration          home+1  b5 1 solo         hard    win  55.5 stag  82.1
     20     arch.fire_elemental      home+1  b5 1 solo         hard    win  43.7 stag  82.4 (without counter: lethal)
-tbl.10.enc.ruin        home 1  trivial:11 easy:6 fair:3  fair-or-easier 20/20  PASS
-    1-3    arch.giant_vermin        home-1  b1 1              trivial win 100.0 stag   0.0
-    4-6    arch.skeleton            home-1  b1 1-2            trivial win 100.0 stag   0.0
-    7-9    arch.ghoul               home    b1 6-8 minion     easy    win  99.0 stag   7.6
-    10-12  arch.brigand             home    b1 6-8 minion     easy    win  97.1 stag  13.4 [high face: fair]
-    13-15  arch.cultist             home    b1 6-8 minion     fair    win  93.7 stag  21.3
-    16-17  arch.animated            home    b1 2              trivial win 100.0 stag   0.1
-    18-19  arch.ghost               home+1  b2 1              trivial win 100.0 stag   2.1 (without counter: hard)
-    20     arch.wight               home+1  b2 1 minion       trivial win 100.0 stag   0.1
+tbl.10.enc.ruin        home 1  trivial:14 easy:6  fair-or-easier 20/20  PASS
+                       light reference: trivial:6 easy:5 fair:7 hard:2  fair-or-easier 18/20
+    1-3    arch.giant_vermin        home-1  b1 1              trivial win 100.0 stag   0.0 light: trivial 100.0/0.0
+    4-6    arch.skeleton            home-1  b1 1-2            trivial win 100.0 stag   0.0 light: trivial 100.0/0.0 [high face: fair]
+    7-9    arch.ghoul               home    b1 5-7 minion     trivial win  99.9 stag   2.2 [high face: easy] light: easy 98.7/14.8 [high face: fair]
+    10-12  arch.brigand             home    b1 5-7 minion     easy    win  99.6 stag   4.9 light: fair 96.3/23.4
+    13-15  arch.cultist             home    b1 5-7 minion     easy    win  97.3 stag  13.7 [high face: fair] light: fair 87.7/42.4 [high face: hard]
+    16-17  arch.animated            home    b1 2              trivial win 100.0 stag   0.1 light: easy 99.8/9.0
+    18-19  arch.ghost               home+1  b2 1              trivial win 100.0 stag   2.1 (without counter: hard) light: hard 90.0/50.1
+    20     arch.wight               home+1  b2 1 minion       trivial win 100.0 stag   0.1 light: fair 99.3/16.9
 tbl.10.enc.ruin        home 2  trivial:8 easy:6 fair:6  fair-or-easier 20/20  PASS
     1-3    arch.skeleton            home-1  b1 4-6 minion     trivial win 100.0 stag   0.0
     4-6    arch.zombie              home-1  b1 4-6 minion     trivial win 100.0 stag   0.0
@@ -495,7 +506,8 @@ tbl.10.enc.ruin        home 5  trivial:6 fair:11 hard:3  fair-or-easier 17/20  P
     20     arch.lich                home+1  b5 1 solo         hard    win  69.0 stag  73.7
 
 tables x home bands audited: 55 | pass: 55 | fail: 0
-word mix over all threat faces (mid face, counter held): trivial 35.7% easy 21.5% fair 34.5% hard 8.2% lethal 0.0%
+word mix over all threat faces (mid face, counter held): trivial 37.6% easy 24.3% fair 29.9% hard 8.2% lethal 0.0%
+light reference (home bands [1]), word mix over those tables: trivial 38.2% easy 19.5% fair 32.7% hard 9.5% lethal 0.0%
 variety: distinct archetypes per terrain table (over its five home bands) / threat rows:
     tbl.10.enc.road          13 archetypes, 40 rows
     tbl.10.enc.settlement    14 archetypes, 40 rows

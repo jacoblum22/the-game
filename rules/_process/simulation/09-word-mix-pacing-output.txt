@@ -1,0 +1,15 @@
+sources: generic {'trivial': 37.6, 'easy': 24.3, 'fair': 29.9, 'hard': 8.2, 'lethal': 0.0}
+         site    {'trivial': 29.2, 'easy': 28.1, 'fair': 36.5, 'hard': 6.2, 'lethal': 0.0}
+         seed    {'trivial': 35.1, 'easy': 25.9, 'fair': 35.5, 'hard': 3.5, 'lethal': 0.0}
+
+A. DL-00-05 assumed: mix trivial 0.0 / easy 25.0 / fair 40.0 / hard 30.0 / lethal 5.0 -> d20 faces {'trivial': 0, 'easy': 5, 'fair': 8, 'hard': 6, 'lethal': 1}
+    focused archer who scouts by stealth (03 scenario A) T1: 3/5/7  T2: 8/10/15  T3: 15/18/24  T4: 29/32/36  T5: 50/54/60 | T5 within 60: 183 of 200
+    single-track swordsman (fights 70% of scenes)        T1: 2/3/4  T2: 5/7/9  T3: 10/12/14  T4: 18/20/22  T5: 32/34/37 | T5 within 60: 200 of 200
+
+B. rolled encounters (tables): mix trivial 34.1 / easy 26.3 / fair 35.6 / hard 4.1 / lethal 0.0 -> d20 faces {'trivial': 7, 'easy': 5, 'fair': 7, 'hard': 1, 'lethal': 0}
+    focused archer who scouts by stealth (03 scenario A) T1: 7/20/51  T2: 34/58/99  T3: 54/99/99  T4: 99/99/99  T5: 99/99/99 | T5 within 60: 0 of 200
+    single-track swordsman (fights 70% of scenes)        T1: 5/11/26  T2: 20/36/58  T3: 31/52/99  T4: 44/99/99  T5: 58/99/99 | T5 within 60: 25 of 200
+
+C. campaign: half rolled, half chosen: mix trivial 17.1 / easy 13.1 / fair 42.8 / hard 22.0 / lethal 5.0 -> d20 faces {'trivial': 3, 'easy': 3, 'fair': 9, 'hard': 4, 'lethal': 1}
+    focused archer who scouts by stealth (03 scenario A) T1: 4/6/8  T2: 9/13/19  T3: 17/21/27  T4: 30/34/39  T5: 53/58/99 | T5 within 60: 135 of 200
+    single-track swordsman (fights 70% of scenes)        T1: 3/3/6  T2: 6/8/12  T3: 11/13/17  T4: 19/21/25  T5: 33/36/40 | T5 within 60: 200 of 200

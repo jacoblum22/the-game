@@ -597,7 +597,12 @@ by these rows: the defender of a successful `strike` → its relation toward the
 critical success); a `scheme` discovered → −1; a successful `court` → +1 toward the courtier; a completed
 `dominate` goal → the target's relation toward the victor −1; a faction at +3 toward a struck faction →
 its relation toward the striker −1 (allies are dragged in); a thread completed by the PC that ends a
-feud (T-11-17 row `reconcile`) → both set to −1 or the value the thread states. **War** is relation −3
+feud (T-11-17 row `reconcile`) → both set to −1 or the value the thread states; a rumor about a rival
+believed at the seat (`wr.rumor_believed`, `acts_on_it`, 11.6.9) → the believer's relation toward that
+rival −1, **never below −2** by rumor, and **at most once a season** for one faction toward one rival
+(the reaction's cooldown, written on the faction: `rumor_acted.<rival>` = the date). Rumors can make two
+factions rivals; only a deed makes them enemies at war: a strike, a discovered scheme or a dominate goal
+[revision: I-080]. **War** is relation −3
 in either direction: it enables override (b) of 11.3.7, and war between two factions is news in both
 seats. **Cooling:** at a Season Turn, a pair at −3 that exchanged no strike or scheme that season moves
 to −2; nothing else drifts on its own (enmity outlasts its causes). Faction-versus-faction outcomes are
@@ -1231,7 +1236,11 @@ settlement (15.5), or Carouse to spread one. Success writes a rumor with source 
 the facts: `false` if what it says is not so, `true` if it is) and the PC's beat's delivered reach as the
 number of settlements it starts in (1–4, the scene's settlement first, then its neighbors). It then spreads
 by 11.6.5. A world reaction (`wr.rumor_believed`) lets a faction act on a rumor about its rival once it
-reaches its seat, as if it were known (a planted lie can start a feud). Lies so planted are recorded lies
+reaches its seat, as if it were known (a planted lie can start a feud, never a war on its own: 11.3.14's
+rumor row stops at −2 and fires at most once a season per faction toward one rival; `11-world-sim.py`
+scenario `liar_new`: a PC planting a lie a week about a pair at 0 brought them to war within a season in 0 of
+300 runs, against 276 of 300 before, and the wars that came, median week 55, followed a strike, a discovered
+scheme or a failed court) [revision: I-080]. Lies so planted are recorded lies
 (15.5), with their truth-out clocks.
 
 ### 11.7 Reputation: what the world says
@@ -2634,5 +2643,7 @@ chapter's "To 11" section).
 | OEQ-11-5 | Is reputation's growth rate right? | triangular thresholds 1/3/6/10/15 | **T-11-REP**: 3 campaigns; record sessions to score 3 in the home settlement; target 4–8 sessions for a focused PC; epithet coined by session 3–5 |
 | OEQ-11-6 | Are rumor truth rates believable and useful? | T-11-11 | **T-11-RUMOR**: 50 rumors heard in play; the player's estimate of how many were wrong vs actual; target the player investigates ≥ 30% and finds the false ones "fair" (≥ 4/5) |
 | OEQ-11-7 | Do retirement seams feel like culminations, and do successors feel connected? | 11.13.1 seams; three candidates from the story | **T-11-LEGACY**: 3 retirements; the player rates "the ending felt earned" and "my new character belongs to this world" (target ≥ 4/5); count candidates drawn from sources 1–3 (target ≥ 2 of 3) |
+| OEQ-11-9 | Optional module: romance, family and heirs beyond 11.13's legacy (completeness NP-07)? | none: 11.13's successors and 15's bonds cover heirs at retirement; courtship and a household are not modelled | **T-11-KIN**: 2 campaigns with a player who seeks a spouse or children; record each ruling made without a rule; write the module if three or more [revision: I-051] |
+| OEQ-11-10 | Optional module: domain and rulership beyond 11.9.7's great projects (completeness LW-10)? | none: holdings (11.9) and great projects (11.9.7) cover a PC who builds; ruling a domain (taxes, courts, levies) is not modelled | **T-11-DOMAIN**: 2 campaigns past tier 4 with a holding of rank 3; record rulings made without a rule; write the module if three or more [revision: I-051] |
 | OEQ-11-8 | Does attention produce pressure without persecution? | clock 8, decay 1/week, entanglement per completion | **T-11-HEAT**: the war scenario of the sim (one entanglement or move per ≈ 9 weeks) against 3 playtests; the player rates "the enemy felt active" ≥ 4 and "relentless" ≤ 2 |
 
