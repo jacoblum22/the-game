@@ -353,3 +353,4 @@ Cost: 149 tools; see the usage line below.
 ## V2b1 returned (ch.09–11 consistency read): report `_process/reports/verification-2b-report.md`
 - 14 fixes (V2b-001 to V2b-014), including stale ch.13 dependencies in ch.10 and worked examples re-rolled on the new tables.
 - New rows: I-066 (lone minions on the generic tables), I-067 (guardian not available at the site's band), I-068 (sim models the entrenched penalty too broadly).
+- V2b1 usage: 310 turns, average context 244k (peak 444k), 76M cache-read tokens.
