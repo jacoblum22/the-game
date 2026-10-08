@@ -74,6 +74,10 @@ class MentionResult(BaseModel):
     settled: list[Settled] = Field(default_factory=list)
     unsettled: list[tuple[str, str]] = Field(default_factory=list)  # (entity, property) left open
     seqs: list[int] = Field(default_factory=list)
+    # the profile diff on reuse (PR-00-7 step 2, 00.6.6a): detail facts the mention restated or wrote, and
+    # (mention name, slot, stored value) for each stated property that differs with nothing explaining it
+    details_used: list[str] = Field(default_factory=list)
+    contradictions: list[tuple[str, str, str]] = Field(default_factory=list)
 
     @property
     def ids(self) -> list[str]:
@@ -125,17 +129,41 @@ def _place(state: Any) -> str | None:
 
 def write_mentions(mentions: Iterable[Mention | dict[str, Any]], *, tx: Any, rules: Any, rng: Any = None,
                    settle: Settle | None = None, place: str | None = None,
-                   turn_id: str | None = None) -> MentionResult:  # rule: PR-00-7
-    """Stage each mention's writes in `tx` (PR-00-7 step 2) and settle its unsettled properties (step 3)."""
+                   turn_id: str | None = None, because: str | None = None) -> MentionResult:  # rule: PR-00-7
+    """Stage each mention's writes in `tx` (PR-00-7 step 2) and settle its unsettled properties (step 3).
+    `because`: this turn's record entry that explains a changed property of a reused entity (it supersedes)."""
     res = MentionResult()
     for raw in mentions:
         m = raw if isinstance(raw, Mention) else Mention.model_validate(raw)
-        _one(m, tx=tx, rules=rules, rng=rng, settle=settle, place=place or _place(tx.state), res=res)
+        _one(m, tx=tx, rules=rules, rng=rng, settle=settle, place=place or _place(tx.state), res=res,
+             because=because)
     return res
 
 
+def profile_diff(m: Mention, eid: str, *, tx: Any, rules: Any, res: MentionResult,
+                 because: str | None) -> None:  # rule: PR-00-7
+    # rule: 00.6.6a
+    """A reused entity's stated properties against its profile: an empty slot is written (`narrated`), the same
+    value is a no-op, a different one supersedes only with `because`, else it is a contradiction (the caller fails
+    the sentence as an identity claim). A property that fits no slot, or a `scene` slot, is not written here."""
+    from engine.store.details import slot_of, write_detail
+
+    kind = tx.state.entities[eid].kind
+    for imp in m.implied:
+        slot = slot_of(imp.predicate, rules, kind)
+        if slot is None:
+            continue
+        w = write_detail(tx.state, tx.mint, eid, slot, imp.value, because=because, rules=rules)
+        if w.outcome == "contradiction":
+            res.contradictions.append((m.name, slot, str(w.prior)))
+            continue
+        res.seqs += [tx.add(ev) for ev in w.events]
+        if w.fact_id and w.outcome in ("new", "same", "superseded"):
+            res.details_used.append(w.fact_id)
+
+
 def _one(m: Mention, *, tx: Any, rules: Any, rng: Any, settle: Settle | None, place: str | None,
-         res: MentionResult) -> None:  # rule: 00.6.6
+         res: MentionResult, because: str | None = None) -> None:  # rule: 00.6.6
     kind = m.kind if m.kind in MENTIONABLE else None
     if kind is None:
         res.refused.append(m.name)
@@ -149,6 +177,7 @@ def _one(m: Mention, *, tx: Any, rules: Any, rng: Any, settle: Settle | None, pl
                 and found not in tx.state.positions):  # narrated here, placed nowhere yet: here now (P-095)
             res.seqs.append(tx.add(Event.of("position_set", source="mention", rule_id="00.6.6", entity=found,
                                             location=place)))
+        profile_diff(m, found, tx=tx, rules=rules, res=res, because=because)
         return
     if kind == "npc":
         known = set(tx.state.entities)
@@ -165,7 +194,14 @@ def _one(m: Mention, *, tx: Any, rules: Any, rng: Any, settle: Settle | None, pl
                                             location=place)))
         implied = m.implied
     res.created[m.name] = eid
+    from engine.store.details import slot_of, write_detail
+
     for imp in implied:
+        slot = slot_of(imp.predicate, rules, kind)  # a look goes in its detail slot (00.6.6a), the rest as facts
+        w = write_detail(tx.state, tx.mint, eid, slot, imp.value, rules=rules) if slot else None
+        if w is not None and w.outcome == "new":
+            res.seqs += [tx.add(ev) for ev in w.events]
+            continue
         res.seqs.append(tx.add(_fact(tx, eid, _slug(imp.predicate), imp.value, "narration", "00.6.6")))
     holder = _holder(tx.state, implied) if kind in ("item", "object") else None
     if holder is not None:  # "held by Falett Greenbottle": who holds it, as the claim check reads it (P-073)

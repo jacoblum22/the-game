@@ -52,7 +52,8 @@ Each item of `sentences` is one sentence with:
   ordinary furniture, features, walk-on people, common items and documents. Never a clue, hazard, adversary, a
   thing of value or a person with a secret or want, unless a record line you cite delivers it.
 - `atmosphere`: true only for pure atmosphere that names nothing addressable.
-Unsure whether something is addressable: declare it.
+Unsure whether something is addressable: declare it. Fill `new` before `text`: each person or thing the sentence
+will name that the view lacks, then write only those.
 
 ## Voice
 Second person, present tense: "You step onto the landing." Only what the character perceives and knows.

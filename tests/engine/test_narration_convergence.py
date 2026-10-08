@@ -69,7 +69,8 @@ def test_an_incidental_property_is_written_as_narrated(tmp_path: Path) -> None:
     asked: list[Any] = []
     out = play_turn(ctx, "I look over the quay.")
     assert out.response.fiction == text and not asked
-    assert dock.state.fact_value(dock.ferryman, "appearance") == "coat patched at the elbows"
+    ref = dock.state.details[dock.ferryman]["clothing"]  # a look goes in its detail slot (00.6.6a; spec 009 B)
+    assert dock.state.facts[ref.fact_id].value == "coat patched at the elbows"
     assert not any(e.type == "oracle_answered" for e in dock.store.events(types=["oracle_answered"]))
 
 

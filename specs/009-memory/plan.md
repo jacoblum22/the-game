@@ -72,3 +72,24 @@ cards retrieval sits in a new `engine/retrieve/episodes.py` because `retrieve/ca
 |---|---|---|
 | Edit in `engine/dm/turn.py` | The promise question must be answered out of fiction; turn.py routes OOF answers | Editing `roles/reader.py` (spec 007's lane) |
 | New event `details_used` | 00.6.6a item 5: last use is a projection over the log | A fact per use (rule says not a new fact) |
+
+## Part B plan
+
+- `engine/dm/schemas.py`: diff-mode `checker_schema` (+ `checker_refs`); the narrator's `new` before `text`.
+- `engine/dm/roles/checker.py` + `prompts/checker.md`: declarations in words (`declaration_words`, `render.relation`
+  for view facts), scope-tagged entity lines, spotlight ids, `full=` extraction; prompt 698 -> ~530 words
+  (budget 550).
+- `engine/dm/narration.py`: `audit_mode` (diff | skip | sample), `_audit` (unexpressed -> drop/redraft;
+  undeclared -> `_write_new` by tier), no-id claims -> atmosphere, `_mark_used` at RECORD.
+- `engine/audit/claims.py`: identity reads `detail.<slot>`; figurative clock/sealed; gesture-in-place.
+- `engine/audit/declare.py`: shared labels name the one here (the offline scripted action contradictions).
+- `engine/dm/mentions.py`: `profile_diff` on reuse; created looks into detail slots. `engine/store/details.py`:
+  `slot_of` (a word list; ponytail).
+- `engine/dm/roles/narrator.py`: `used_details` from `last_used`; the image scan retired.
+- `engine/dm/roles/world.py`: `view_for(Role.WORLD, …)`.
+- Offline model: the diff schema's lists; Checker view scope words are not aliases.
+
+| Deviation | Why |
+|---|---|
+| Edits in `engine/audit/declare.py`, `engine/store/details.py`, `engine/llm/offline.py` | the root of the scripted contradictions (ambiguous labels) and the offline double of the new schema |
+| Unexpressed refs dropped, not a sentence failure | 12.3.1a coverage already owes a dropped must-name line; a redraft only when the sentence says it otherwise |

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from collections.abc import Callable, Sequence
 from pathlib import Path
 from typing import Any
 
@@ -53,8 +54,14 @@ def claim(n: int, subject: str, cls: str, predicate: str, value: str, change: bo
             "asserts_change": change, "pc_words_or_feelings": False}
 
 
-def chk(*claims: dict[str, Any]) -> dict[str, Any]:
-    return {"claims": list(claims), "screen": dict(GOOD_SCREEN)}
+def chk(*claims: dict[str, Any], undeclared: Sequence[dict[str, Any]] = (),
+        unexpressed: Sequence[dict[str, Any]] = ()) -> Callable[[dict[str, Any], Any], dict[str, Any]]:
+    """A scripted diff-audit answer (12.3.1): the claims beyond the declarations, plus the lists the schema has."""
+    def fill(schema: dict[str, Any], packet: Any) -> dict[str, Any]:
+        props = schema.get("properties", {})
+        extra = {k: list(v) for k, v in (("undeclared", undeclared), ("unexpressed", unexpressed)) if k in props}
+        return {**extra, "claims": list(claims), "screen": dict(GOOD_SCREEN)}
+    return fill
 
 
 def look_model(**script: list[Any]) -> ScriptedModel:
@@ -266,17 +273,17 @@ def test_dispute_and_rules_question_answer_out_of_fiction(tmp_path: Path) -> Non
     assert any("12.2.6" in b.text for b in r2.oof_blocks)
 
 
-def test_freshness_lists_repeated_images_per_entity_and_recent_openings() -> None:  # 12.14.11 (P-030)
+def test_freshness_lists_used_details_and_recent_openings() -> None:  # 12.14.11 (P-030; DL-12-76)
     from engine.dm.roles.narrator import freshness_lines
 
     d = ["Makul keeps his fingers on the ledger, eyes on you. The arrival stands still. What do you do?",
          "You ask again. Makul, fingers on the ledger, eyes on you, says nothing. What do you do?",
          "The lamp hisses. What do you do?"]
-    lines = freshness_lines(d, ["Makul", "the arrival"], openings=2)
+    lines = freshness_lines(d, ["Makul", "the arrival"], openings=2, used=[("Makul", "hands: ink-stained")])
     text = "\n".join(lines)
     assert '"You ask again" / "The lamp hisses"' in text and "Makul keeps" not in lines[0]
-    assert "- Makul: fingers on the ledger eyes on you" in text
-    assert "what do you do" not in text.lower().replace("freshness", "")  # the hand-back is all stopwords
+    assert "- Makul: hands: ink-stained" in text
+    assert "fingers on the ledger" not in text  # the image 3-gram scan is retired: the marks say what was used
     assert freshness_lines(["One turn only. Nothing repeats here."], []) == ['FRESHNESS (12.14.11): do not open '
                                                                              'the way these recent turns opened: '
                                                                              '"One turn only"']
@@ -295,17 +302,26 @@ def test_freshness_lists_an_npcs_repeated_spoken_line() -> None:
 
 
 def test_the_narrator_is_told_what_it_already_used(tmp_path: Path) -> None:
-    same = "Tam Harlan leans on his pole, rain beading on the brim. What do you do?"
-    model = look_model(narrator=[narr(same), narr(same), narr(same)], checker=[chk(), chk(), chk()])
-    model.push(Role.READER, reader("DECLARATION", "I look over the quay.", LOOK),
-               reader("DECLARATION", "I look over the quay.", LOOK))
-    model.push(Role.WORLD, QUIET_WORLD, QUIET_WORLD)
+    """00.6.6a item 5, 12.14.11: a detail a delivered sentence states is marked `last_used` at RECORD (T12), and
+    the next turns' freshness lists it from the mark, not from a scan of the prose."""
+    def scarred(schema: Any, packet: Any) -> dict[str, Any]:
+        tam = {"element_kind": "person", "name": "Tam Harlan", "ordinary": True,
+               "implied": [{"predicate": "hands", "value": "rope-scarred"}]}
+        return {"sentences": [_decl("Tam Harlan works the line with rope-scarred hands.", _must(packet), new=[tam]),
+                              _decl("What do you do?")]}
+    plain = "The quay is quiet. What do you do?"
+    model = look_model(narrator=[scarred, narr(plain)], checker=[chk(), chk()])
+    model.push(Role.READER, reader("DECLARATION", "I look over the quay.", LOOK))
+    model.push(Role.WORLD, QUIET_WORLD)
     dock, ctx = setup(tmp_path, model)
-    for _ in range(3):
+    for _ in range(2):
         play_turn(ctx, "I look over the quay.")
+    st = ctx.store.state
+    ref = st.details[dock.ferryman]["mark"]
+    assert st.facts[ref.fact_id].value == "rope-scarred" and st.facts[ref.fact_id].certainty == "narrated"
     msgs = [p.message for p in calls(model, Role.NARRATOR)]
-    assert "Already used lately" not in msgs[0] and "Already used lately" not in msgs[1]
-    assert "- Tam Harlan: leans on his pole rain beading on the brim" in msgs[2]
+    assert "Details stated lately" not in msgs[0]
+    assert "- Tam Harlan: mark: rope-scarred" in msgs[1]
 
 
 def test_redraft_and_screen_keep_the_bookkeeping_out_of_prose() -> None:  # P-045

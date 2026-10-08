@@ -16,7 +16,7 @@ from engine.llm.base import Role
 
 PROMPT_DIR = Path(__file__).parent
 ROLES: tuple[str, ...] = tuple(r.value for r in Role)
-WORD_BUDGET: dict[str, int] = {r: 700 for r in ROLES} | {"narrator": 1000}
+WORD_BUDGET: dict[str, int] = {r: 700 for r in ROLES} | {"narrator": 1000, "checker": 550}  # checker: the diff audit (009 B)
 
 
 @cache

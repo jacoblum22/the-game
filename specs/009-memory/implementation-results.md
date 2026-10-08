@@ -96,3 +96,76 @@ Replay game re-recorded (`py -3.12 -m tests.replay.record_games`).
 - The Reader's schema still offers scene fact ids for G4 while its view no longer lists facts (spec 007's
   computed gate).
 - The aged ≤ 10% gate (budget split, OEQ-12-22).
+
+---
+
+# Part B: diff-mode Checker and narration hookups
+
+Branch `worktree-agent-a20014039035a96f0`, base e601d22 (milestone-1-playable, after 9c6f17c). Outputs:
+`evals/baselines/live_narration_009b.txt`, `evals/baselines/longhorizon_009b.txt`.
+
+## Gate table
+
+| Gate | Spec 006 live (21 narrated) | Target | 009 B live (26 narrated, Haiku narrator + Checker) | 009 B offline scripted (293 narrated) |
+|---|---|---|---|---|
+| First-draft pass rate | 33.3% | > 50% | **30.8%** (8/26); projected **46.2%** with the post-run lead fix | 92.8% (91.1% before) |
+| Turns cut (cut, rendered line or fallback) | 52.4% | < 15% | **38.5%** (10/26) | 7.2% (8.9% before) |
+| Narrator calls per turn | 1.67 | ≤ 1.2 | **1.54** | 1.14 (1.16 before) |
+| Undeclared assertions per turn | 3.10 (claims on undeclared subjects) | < 0.3 (skip gate) | same measure **0.19**; everything the diff reports: 3.54 beyond-claims + 1.42 undeclared elements | n/a (offline Checker) |
+| Contradictions per 100 narrated | 57.1 | (no worse) | 42.3 | **0.0** (2.0 before, all `action`) |
+| Engine errors | 0 | 0 | 0 | **0** |
+| Full suite | | passes | | **1627 passed**, 4 skipped |
+
+**Live targets not met.** The live run measures the diff Checker and fold-back as built before the post-run fixes.
+The skip stays off: the diff still reports ~5 items per turn, far above 0.3.
+
+**Budget overrun:** the run was asked for 21 scripted lines; the harness closed and reopened sessions (3 recap
+turns), so 26 turns were narrated before I stopped it by hand, plus a 3-turn smoke: **29 narrated Haiku turns
+against a budget of 25.** No API or Gemini spend.
+
+## Dominant remaining failure class
+`contradicted position` (6 of 26 first-draft failures). Five are lead retellings or a place-name ambiguity: the opening
+lead "two banners in the hall" names a separate building (`loc.…hall`). Write-on-mention had positioned the banners
+item at the inn when it was first narrated there, and "the middle of the hall" (the inn's common room) matched that
+building. With the clock/existence/T2-person retellings of the other lead ("a quarrel … the challenger is more than
+they seem"; "it is only the beginning"), **7 of the 26 failures retell an opening lead**. These are 006's "figurative"
+false positives: the phrases are the seed leads' words. The post-run fix (`claims._restates_lead`; `narration._in_lead`
+for audit-typed elements) clears 4 more turns when the recorded verdicts are re-judged. Not re-measured live (budget).
+Other failures: a gear cost "no cost was applied" on `success_at_cost` answer turns (2; looks like an answer-turn
+record gap, spec 007/008's lane), the audit typing "a name you have seen before" / "the word" as clues (T2 cut), and
+genuine narrator errors (a pronoun, PC agency, an invented recognition).
+
+## What landed
+- Diff-mode Checker (12.3.1): numbered sentences with `declares:` lines (`declaration_words`; view facts via
+  `render.relation`), scope-tagged ids (here / not here / new this turn), spotlight ids in `checker_ids`. Output:
+  `claims` (beyond the declarations), `undeclared` (typed elements), `unexpressed` (dropped, or redrafted when said
+  otherwise). Prompt 698 -> 529 words (budget 550).
+- Skip path built, off: `audit_mode` (`skip_enabled: false`), with the 1-in-10 sampler (turn-id crc32) that also runs
+  the full extraction (`full=True`) and counts `sample_full_undeclared` / `sample_diff_undeclared`.
+- Figurative false positives at the root: `clock`/`sealed` with no id and no pressure word are atmosphere; an
+  unknown-subject claim left for furniture is atmosphere (no junk "only the beginning" objects); a gesture in place
+  is manner; "no one did X" needs no source; a claim restating a known lead is supported.
+- I-175 resolved (ledger row): undeclared elements found by the audit are written by tier, like declared ones.
+- Under-declaration: the narrator schema puts `new` before `text`; one prompt line. Measured live: the audit typed
+  1.42 undeclared elements per turn (006: 3.1 per draft).
+- Hookups: `world_view` -> `view_for(Role.WORLD, …)`; `checker_ids` + spotlight; `mentions.profile_diff` on reuse
+  (new / same / contradiction / superseded with `because`), created looks into detail slots (`details.slot_of`);
+  identity claims read `detail.<slot>`; incidental looks written as lasting details; `details_used` at RECORD;
+  freshness reads `last_used` (the opening and speech-opener scans kept as the backstop).
+- Offline scripted action contradictions (2.0 -> 0.0): an activity line "the child is watching strangers" was
+  resolved to an absent NPC who shares the label "the child". A label shared with someone here now names the one
+  here (`SceneIndex`, Checker entity lines).
+
+## Retired
+The image 3-gram freshness heuristic. The full-extraction Checker prompt (now `full=True` on the diff prompt).
+`_apply_writes` for unknown subjects (it only writes a known subject's feature now). The `TODO(009-B)` list in
+packet.py.
+
+## Deferred
+- Live re-measure of the post-run lead fix (needs ~20 Haiku turns).
+- `framer.py` `beat=` (optional; not done).
+- Usage marks for written words and speech openers (details only; the speech-opener scan stays).
+- `evals/narration_plug.py` still sends the old Checker message shape (replay-bench audit only).
+- Write-on-mention positions a lead-described item at the current place (banners): a mentions/lead issue.
+- Answer-turn `success_at_cost` cost read as "no cost applied" (spec 007/008).
+- The diff's recall against the full extraction (OEQ-12-23) is unmeasured: the sampler runs only with the skip on.

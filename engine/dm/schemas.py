@@ -119,6 +119,7 @@ class SchemaContext(BaseModel):
     # Checker
     claim_classes: list[str] = Field(default_factory=list)
     sentence_ids: list[str] = Field(default_factory=list)
+    checker_refs: list[str] = Field(default_factory=list)  # what the draft's sentences declare (refs, about ids)
 
 
 # ---------------------------------------------------------------- schema helpers
@@ -319,7 +320,9 @@ def director_schema(ctx: SchemaContext) -> Schema:  # rule: 12.4.2
 MAX_SENTENCE_INDEX = 30  # the fallback shape's sentence keys "0".."29" (a string enum: INV-3)
 
 
-def _declaration(ctx: SchemaContext) -> dict[str, Schema | None]:  # rule: 12.3.1
+def _declaration(ctx: SchemaContext, text: bool = False) -> dict[str, Schema | None]:  # rule: 12.3.1
+    """The declaration fields; with `text`, the sentence's `text` goes after `new` (spec 009 B: the new elements are
+    listed before the sentence is written, so what it introduces is planned, then said)."""
     return {
         "refs": arr(enum(ctx.narrator_refs)) if ctx.narrator_refs else None,
         "about": arr(enum(ctx.scene_ids)) if ctx.scene_ids else None,
@@ -329,6 +332,7 @@ def _declaration(ctx: SchemaContext) -> dict[str, Schema | None]:  # rule: 12.3.
             "ordinary": BOOL,
             "implied": arr(obj({"predicate": STR, "value": STR})),
         })),
+        **({"text": STR} if text else {}),
         "atmosphere": BOOL,
     }
 
@@ -337,17 +341,20 @@ def narrator_schema(ctx: SchemaContext) -> Schema:  # rule: 12.3.1
     """Declared sentences (12.3.1 source 1); `narrator_mode` "fiction" is the fallback shape: the prose whole, with
     declarations keyed by sentence index. A repair call (`repair_ids`) returns replacements only (12.3.3)."""
     if ctx.repair or ctx.repair_ids:
-        return obj({"repairs": arr(obj({"replaces": enum([*ctx.repair_ids, "add"]), "text": STR,
-                                        **_declaration(ctx)}))})
+        return obj({"repairs": arr(obj({"replaces": enum([*ctx.repair_ids, "add"]), **_declaration(ctx, True)}))})
     if ctx.narrator_mode == "fiction":
         return obj({"fiction": STR, "declarations": arr(obj({
             "sentence": enum([str(i) for i in range(MAX_SENTENCE_INDEX)]), **_declaration(ctx)}))})
-    return obj({"sentences": arr(obj({"text": STR, **_declaration(ctx)}))})
+    return obj({"sentences": arr(obj(_declaration(ctx, True)))})
 
 
 def checker_schema(ctx: SchemaContext) -> Schema:  # rule: 12.3.1
+    """The diff audit (12.3.1 source 2, DL-12-71): `claims` are only assertions beyond a sentence's declarations;
+    `undeclared` the addressable things a sentence introduces that it does not declare, typed by kind (written by
+    their tier, 12.14.13); `unexpressed` the declarations a sentence does not say (or says otherwise)."""
+    sent = enum(ctx.sentence_ids)
     claim = obj({
-        "sentence": enum(ctx.sentence_ids),
+        "sentence": sent,
         "subject": enum([*ctx.scene_ids, "unknown"]),
         "class": enum(ctx.claim_classes),
         "predicate": STR,
@@ -355,8 +362,12 @@ def checker_schema(ctx: SchemaContext) -> Schema:  # rule: 12.3.1
         "asserts_change": BOOL,
         "pc_words_or_feelings": BOOL,
     })
+    refs = enum(ctx.checker_refs)
     return obj({
         "claims": arr(claim),
+        "undeclared": arr(obj({"sentence": sent, "element_kind": enum(ctx.element_kinds), "name": STR,
+                               "ordinary": BOOL})) if ctx.element_kinds else None,
+        "unexpressed": arr(obj({"sentence": sent, "ref": refs, "says_otherwise": BOOL})) if refs else None,
         "screen": obj({  # no safety field: the safety screen is separate (FR-036)
             "intent_acknowledged": BOOL,
             "intent_substituted": BOOL,

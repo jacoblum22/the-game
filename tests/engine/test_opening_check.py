@@ -8,6 +8,7 @@ do you do?" (saves playtest-*-182337-talker, -185715-talker, -191540-breaker, -1
 from __future__ import annotations
 
 from pathlib import Path
+from typing import Any
 
 from engine.audit.claims import check_claims
 from engine.audit.screen import screen_draft
@@ -44,8 +45,12 @@ def test_opening_with_crowd_reactions_passes_first_draft(tmp_path: Path) -> None
                 claim(1, "unknown", "action", "hands stop mid-lift", "stopped", change=True),
                 claim(2, "unknown", "action", "swears", "under their breath", change=True),
                 claim(3, "npc.corra_pike", "action", "looks round", "to see who heard", change=True))
-    check["screen"]["intent_acknowledged"] = False  # what the Checker said, shown "THE PLAYER'S MESSAGE: (none)"
-    model.push(Role.CHECKER, check)
+
+    def checked(schema: Any, packet: Any) -> dict[str, Any]:
+        out = check(schema, packet)
+        out["screen"]["intent_acknowledged"] = False  # what the Checker said, shown "THE PLAYER'S MESSAGE: (none)"
+        return out
+    model.push(Role.CHECKER, checked)
     resp = opening(TurnContext.for_store(store, model=model))
     assert resp.fiction == OPENING and not resp.flags.fallback_used
     assert len(calls(model, Role.NARRATOR)) == 1 and len(calls(model, Role.CHECKER)) == 1

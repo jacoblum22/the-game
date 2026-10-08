@@ -15,7 +15,7 @@ from typing import Any
 from pydantic import BaseModel, Field
 
 from engine.dm.context import TurnContext
-from engine.dm.packet import build_packet, render_view, scene_view
+from engine.dm.packet import build_packet, view_ctx, view_for
 from engine.dm.roles.prompts import load_prompt
 from engine.dm.schemas import _want_ids, build_schema, defaults, schema_context
 from engine.llm.base import Role, call_role
@@ -62,9 +62,11 @@ def present_npcs(state: WorldState) -> list[str]:  # rule: 12.4.1
     return [i for i in cast_present(state) if state.entities[i].kind in ("npc", "companion")]
 
 
-def world_view(state: WorldState) -> str:  # rule: 12.2.9
-    """The narrator view of the scene plus each present NPC's standing toward the PC and recorded motives."""
-    lines = [render_view(scene_view(state))]
+def world_view(state: WorldState, happened: str = "") -> str:  # rule: 12.2.9
+    # rule: 12.2.4
+    """The World row of 12.2.4's per-role views (the full selection plus scene cards; `happened`, this turn's
+    words, picks the spotlight) plus each present NPC's standing toward the PC and recorded motives."""
+    lines = [view_for(Role.WORLD, state, view_ctx(happened))]
     npcs = present_npcs(state)
     pc = next((eid for eid, e in state.entities.items() if e.kind == "pc"), None)
     if npcs:
@@ -114,7 +116,7 @@ def npc_responses(ctx: TurnContext, happened: str,
     triggers = get_active_triggers(st, ctx.rules)
     mode = st.scene.mode if st.scene else None
     cards = load_cards_for(Role.WORLD, scene_situation_tags(st, ctx.rules), mode, triggers, rules=ctx.rules)
-    packet = build_packet(Role.WORLD, instructions=load_prompt("world"), cards=cards, view=world_view(st),
+    packet = build_packet(Role.WORLD, instructions=load_prompt("world"), cards=cards, view=world_view(st, happened),
                           exchanges=[], message=happened, triggers=triggers, rules=ctx.rules)
     res = call_role(ctx.model, Role.WORLD, schema, packet, turn_id=ctx.turn_id, recorder=ctx.record_call,
                     default=lambda: defaults(Role.WORLD, sctx) or {"responses": []}, check=world_check)
