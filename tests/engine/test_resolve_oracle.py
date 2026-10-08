@@ -54,6 +54,22 @@ def test_reading_a_list_valued_fact_returns_it(tmp_path: Path) -> None:
     assert (res.status, res.answer) == ("read", kit)
 
 
+def test_answer_never_shadows_an_npc_list_field(tmp_path: Path) -> None:
+    """Playtest 20261007-193315: an Oracle "wants" = True replaced an NPC's wants list; every later World call
+    crashed iterating it ('bool' object is not iterable)."""
+    from engine.dm.schemas import _want_ids
+    from tests.fixtures.game import entity
+
+    s = Scene.new(tmp_path)
+    with s.store.transaction() as tx:
+        tx.add(entity("npc", "Yipash", tx=tx, data={"wants": [{"text": "safe passage", "rank": 1}]}))
+    npc = next(e for e, r in s.state.entities.items() if r.name == "Yipash")
+    res = _ask(s, OracleQuestion(subject=npc, predicate="wants", odds="even", asker="dm"), [10])
+    assert s.state.facts[res.fact_id].predicate == "asked_wants"  # type: ignore[index]
+    assert s.state.fact_value(npc, "wants") is None  # the record's list is untouched
+    _want_ids(s.state, npc)  # and the reader never iterates a yes/no
+
+
 def test_but_qualifier_and_extreme_and(tmp_path: Path) -> None:
     s = Scene.new(tmp_path)
     but = _ask(s, OracleQuestion(subject="world", predicate="rope", odds="even", qualifier="elsewhere"), [52])

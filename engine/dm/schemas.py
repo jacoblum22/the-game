@@ -543,8 +543,11 @@ def fitting_cost_menus(rules: Any, fact_ids: list[str]) -> tuple[list[str], list
 def _want_ids(state: WorldState, npc: str) -> tuple[list[str], list[str]]:
     data = state.entities[npc].data
     # a promoted NPC's wants/refusals are later facts (engine.world.social.npc_field); else the creation record
-    wants_v = state.fact_value(npc, "wants") or data.get("wants", []) or []
-    refusals_v = state.fact_value(npc, "refusals") or data.get("refusals", []) or []
+    def _list(key: str) -> list[Any]:  # a non-list fact (an old save's Oracle yes/no) falls back to the record
+        v = state.fact_value(npc, key)
+        return v if isinstance(v, list) else (data.get(key) or [])
+
+    wants_v, refusals_v = _list("wants"), _list("refusals")
     wants = [f"{npc}/want.{i + 1}" for i, _ in enumerate(wants_v)]
     refusals = [f"{npc}/refusal.{i + 1}" for i, _ in enumerate(refusals_v)]
     return wants, refusals

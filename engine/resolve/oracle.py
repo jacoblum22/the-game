@@ -105,6 +105,10 @@ def _scene(state: Any) -> str:
     return state.scene.scene_id if state.scene is not None else "none"
 
 
+# NPC record fields that hold lists (engine/gen/npc.py); an Oracle answer stored under one would replace the list
+RECORD_LISTS = frozenset({"wants", "refusals", "fears", "secrets", "knowledge", "ties"})
+
+
 def _fact(state: Any, mint: Callable[[str], str], subject: str, predicate: str, value: Any, q: OracleQuestion,
           rule_id: str) -> Event:
     vis: Visibility = "sealed" if q.sealed else q.visibility
@@ -117,6 +121,8 @@ def ask_oracle(q: OracleQuestion, *, state: Any, rules: Any, rng: Rng, mint: Cal
                store: Any = None, staged: Sequence[Event] = (), free_cap: int | None = None) -> OracleResult:
     # rule: PR-01-4
     """PR-01-4 steps 1, 3-8 (step 2, an actor attempting it, is the caller's: a fortune check instead)."""
+    if q.predicate in RECORD_LISTS:  # a yes/no never shadows an NPC's list field (playtest crash, P-084)
+        q = q.model_copy(update={"predicate": f"asked_{q.predicate}"})
     # 1 / 3. established answer → read it; never re-ask the same key (01.15.7)
     existing = state.current_fact_id(q.subject, q.predicate)
     if existing is not None:

@@ -51,3 +51,7 @@ Ledger: I-131..I-136.
 | talker 185715 | 0a0acdf | 17 | 2.12 | 2 | conversations work: "good NPC reply with some suspense", NPC agrees to meet; roll after consent (P-075); repeated refusals (P-078) |
 | breaker 191540 | 1fd21f9 | 17 | 1.18 | 1 | vivid scenes, distinct NPCs; opening fell back (P-079); OFFER reprinted in full after a question |
 | fighter 191941 | a42ed5e | 17 | 1.0 | 0 | zero redrafts all run; odds clear; tracking loop (P-082); generic cost text (P-083) |
+| explorer 191535 | 1fd21f9 | 17 | 2.35 | 0 | hidden checks give nothing (P-086); name swap (P-085) |
+| breaker 193315 | 9e4bd7f | 17 | 0.59 | 0 | CRASH LOOP from turn 6 (P-084), fixed |
+| newcomer 192159 | a42ed5e | 17 | 2.18 | 2 | setup "fine" throughout; Try-it-anyway dead end (P-087) |
+| talker 192340 | a42ed5e | 17 | 1.88 | 3 | refusals clear and fair; near-miss Enter default (P-089); early [CUT?] (P-088) |
