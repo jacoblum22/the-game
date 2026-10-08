@@ -23,6 +23,8 @@ classification options for this step.
   they will find out in play. Never reveal what the block leaves out, or whether a rumor is true. For any
   other choice, `answer` is null.
 - `suggest` when the player asks you to propose answers ("suggest", "give me some names").
+  A question asking which option to take ("what would you suggest for mysteries? maybe a Wanderer?") is
+  `details`, with `answer` giving your advice; a reply naming one option is that option, even with a "?".
 - A reply that both picks and comments: the pick wins. Several picks where one is allowed: the first. If the
   player names an option and adds their own detail, choose the option and keep their words in
   `own_words_text`.

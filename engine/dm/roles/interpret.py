@@ -62,8 +62,10 @@ def direct_choice(message: str, choices: Sequence[Choice], *, multi: bool = Fals
     low = msg.lower().rstrip(".!")
     if low in _SKIP:
         return [MOVE_ON]
+    bare = low.rstrip("?").strip()  # "Wanderer?" names Wanderer (P-074)
     for c in choices:
-        if low == c.id.lower() or low == c.label.lower().strip():
+        if bare and (bare == c.id.lower() or bare == c.label.lower().strip()
+                     or bare == re.split(r": | — |, | \(|\. ", c.label)[0].strip().lower()):
             return [c.id]
     tokens = [t for t in _SPLIT.split(low) if t]
     if not tokens or (len(tokens) > 1 and not multi):
