@@ -383,18 +383,27 @@ def changed_line(state: WorldState, pc: str, events: Sequence[Any]) -> str:  # r
     when Vitality moved (07.1.1); "" when nothing shown changed."""
     from engine.harm.state import descriptor
 
+    from engine.resolve.conflict import state_words
+
     first: dict[str, int] = {}
     last: dict[str, int] = {}
+    others: list[str] = []  # someone else hurt this beat: their state in words only, never their numbers (06.4.3)
     for e in events:
         p = e.payload
         if e.type == "quantity_changed" and getattr(p, "entity", None) == pc and p.quantity in _SHOWN_QTY:
             first.setdefault(p.quantity, p.new_value - p.delta)
             last[p.quantity] = p.new_value
-    if not last:
-        return ""
+        elif e.type == "quantity_changed" and p.quantity == "vitality" and p.entity not in others:
+            others.append(p.entity)
     parts = [f"{_SHOWN_QTY[q]} {first[q]} → {v}" for q, v in last.items() if first[q] != v]
     if "vitality" in last:
         parts.append(descriptor(state, pc))
+    from engine.store.views import name_known
+
+    for eid in others:
+        name = _ent_name(state, eid) or (state.entities[eid].name if eid in state.entities and name_known(state, eid)
+                                         else "your opponent")
+        parts.append(f"{name} {state_words(state, eid)}")
     return "Changed: " + " · ".join(parts) if parts else ""
 
 

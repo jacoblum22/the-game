@@ -629,3 +629,56 @@ def test_a_shove_that_lands_drives_the_target_back_a_band(tmp_path: Path) -> Non
     assert b.degree == "success" and b.reach == "standard" and b.positions[0].entity == dock.watch
     st = dock.state
     assert st.positions[dock.pc].band_to[dock.watch] == "close" == st.positions[dock.watch].band_to[dock.pc]
+
+
+def test_a_strike_that_lands_hurts_the_target_starts_the_fight_and_the_foe_answers(tmp_path: Path) -> None:
+    """Playtest 20261007-195734 (fighter), I-154 (a)(b): a successful lunge left Taman unhurt and no conflict
+    ever started. 06.2.1: the committed attack starts conflict mode and seeds the band; 06.4.3: a landed dagger
+    Strike deals S2 to the target, shown in words; 06.9.2: the foe answers by its behavior row."""
+    model = ScriptedModel({Role.READER: [reader("DECLARATION", "I stab her.", STAB)],
+                           Role.FRAMER: [framer(**MELEE)], Role.WORLD: [QUIET_WORLD]})
+    dock, ctx = setup(tmp_path, model)
+    run_turn(ctx, "I stab her.")
+    st = dock.state
+    assert str(st.time.mode) != "conflict"  # an OFFER is not yet an attack
+    model.push(Role.WORLD, QUIET_WORLD)
+    ctx.rng.faces = [17]  # type: ignore[attr-defined]
+    res = answer_pause(ctx, "commit")
+    b = res.record.beats[0]
+    assert b.degree == "success" and b.reach == "standard"
+    assert str(st.time.mode) == "conflict" and "conflict_start" in st.time.last_boundary
+    assert st.quantities[dock.watch]["vitality"].current == 2  # T-09-3 band 1: 5, less a light blade's S2 (3)
+    assert b.harm and b.harm[0].target == dock.watch and b.harm[0].words == "bloodied"
+    result = next(o["text"] for o in res.oof if o["kind"] == "RESULT")
+    assert "Sela Vey bloodied" in result and "→ 2" not in result, result
+    assert any(a.npc == dock.watch and a.source == "behavior" for a in res.record.npc_actions)
+    # the second blow drops her: a walk-on struck to 0 is dead (07.2.10), and the fight is over (06.13.1)
+    model.push(Role.READER, reader("DECLARATION", "I stab her again.", STAB))
+    model.push(Role.FRAMER, framer(**MELEE))
+    run_turn(ctx, "I stab her again.")
+    model.push(Role.WORLD, QUIET_WORLD)
+    ctx.rng.faces = [17]  # type: ignore[attr-defined]
+    res2 = answer_pause(ctx, "commit")
+    assert res2.record.beats[0].harm[0].words == "dead"
+    assert st.fact_value(dock.watch, "defeated") == {"manner": "dead"}
+    assert str(st.time.mode) != "conflict" and "conflict_end" in st.time.last_boundary
+    assert not any(a.npc == dock.watch and a.source == "behavior" for a in res2.record.npc_actions)
+
+
+def test_a_fight_seeds_bands_and_a_foe_closes_before_it_strikes(tmp_path: Path) -> None:
+    """PR-06-1 step 2 / 06.3.9: a foe with no established band starts `near`; its default melee row (06.9.4)
+    moves it toward the PC before it can strike."""
+    from engine.resolve.conflict import foe_beat, start
+
+    dock, ctx = setup(tmp_path, ScriptedModel({}))
+    with dock.store.transaction("t.fight") as tx:
+        ctx.tx = tx
+        assert start(ctx.time_ctx(), dock.pc, [dock.watch], "test")
+        st = tx.state
+        assert str(st.time.mode) == "conflict"
+        assert st.positions[dock.pc].band_to[dock.watch] == "near" == st.positions[dock.watch].band_to[dock.pc]
+        assert foe_beat(ctx.time_ctx(), ctx.rng, dock.watch, dock.pc)[0] == "moves toward you"
+        assert st.positions[dock.watch].band_to[dock.pc] == "close"
+        said, _ = foe_beat(ctx.time_ctx(), ctx.rng, dock.watch, dock.pc)
+        assert said.startswith("closes in") and st.positions[dock.pc].band_to[dock.watch] == "engaged"
+        ctx.tx = None

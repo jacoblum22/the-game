@@ -43,18 +43,61 @@ def happened_text(record: AdjudicationRecord) -> str:
     return "\n".join(lines)
 
 
-def world_step(ctx: TurnContext, record: AdjudicationRecord, *, beats: Sequence[BeatOutcome]) -> None:
+def world_step(ctx: TurnContext, record: AdjudicationRecord, *, beats: Sequence[BeatOutcome],
+               oof: list[dict[str, str]] | None = None) -> None:
     # rule: 12.2.9
     # coarse: PR-06-6
     deliver_learning(ctx, record, beats)
-    npcs_respond(ctx, record, beats)
+    acted = foes_act(ctx, record, oof)
+    npcs_respond(ctx, record, beats, skip=acted, oof=oof)
     learn_names(ctx, record, beats)
     clock_omens(ctx, record)
     fired_triggers(ctx, record)
-    beat_time(ctx, record, beats)
+    beat_time(ctx, record, beats, fought=bool(acted))
 
 
-def npcs_respond(ctx: TurnContext, record: AdjudicationRecord, beats: Sequence[BeatOutcome]) -> None:
+def _foe_turn(ctx: TurnContext, record: AdjudicationRecord, foe: str, oof: list[dict[str, str]] | None) -> None:
+    # rule: 06.9.2
+    """One foe's beat (engine/resolve/conflict.py), its act for the narration and its RESULT line for the player."""
+    from engine.dm.oof import changed_line
+    from engine.resolve.conflict import foe_beat
+
+    tx = ctx.need_tx()
+    start = len(tx.events)
+    said, res = foe_beat(ctx.time_ctx(), ctx.rng, foe, record.pc or "")
+    record.npc_actions.append(NpcActionEntry(npc=foe, action=said, source="behavior", source_ref="beh.default_melee"))
+    if res is not None and oof is not None:
+        changed = changed_line(ctx.state, record.pc or "", tx.events[start:])
+        oof.append({"kind": "RESULT", "text": f"[RESULT] {_name(ctx.state, foe)} strikes · hit"
+                                              + (f" · {changed}" if changed else "")})
+    if res is not None and res.threshold and oof is not None:  # rule: PR-07-5
+        from engine.dm.turn import _env, _harm_followups
+
+        env = _env(ctx)
+        env.threshold_due.append(record.pc or "")
+        _harm_followups(ctx, env, record, oof)
+
+
+def foes_act(ctx: TurnContext, record: AdjudicationRecord, oof: list[dict[str, str]] | None = None) -> list[str]:
+    # rule: 06.9.2
+    """Step 1: in conflict mode each foe still able answers by its behavior row (06.9.4), then the end test
+    (06.13.1). Returns the foes that acted (they draw no social table row this turn)."""
+    from engine.resolve.conflict import able, check_end, record as conflict
+
+    rec = conflict(ctx.state)
+    if not rec or not record.pc or ctx.state.open_pause() is not None:
+        return []
+    acted = []
+    for foe in rec.get("foes", []):
+        if able(ctx.state, foe) and conflict(ctx.state):
+            _foe_turn(ctx, record, foe, oof)
+            acted.append(foe)
+    check_end(ctx.time_ctx(), record.pc)
+    return acted
+
+
+def npcs_respond(ctx: TurnContext, record: AdjudicationRecord, beats: Sequence[BeatOutcome], *,
+                 skip: Sequence[str] = (), oof: list[dict[str, str]] | None = None) -> None:
     # rule: 12.2.9
     """Step 2: only when something happened that an NPC present could respond to (a beat or speech)."""
     if not beats and not any(p.cls in ("SPEECH", "DECLARATION") for p in record.parts):
@@ -85,7 +128,7 @@ def npcs_respond(ctx: TurnContext, record: AdjudicationRecord, beats: Sequence[B
         elif r.want_engaged:
             record.npc_actions.append(NpcActionEntry(npc=r.npc, action=f"acts on a want: {motives.get(r.want_engaged)}",
                                                      source="want", source_ref=r.want_engaged, tags=r.tags))
-        elif r.npc in unresolved:
+        elif r.npc in unresolved or r.npc in skip:  # a foe in the fight acted by its behavior row (06.9.2)
             continue
         else:  # (c) the action table, with standing as context (12.11.5)
             tctx = ctx.time_ctx()
@@ -95,6 +138,13 @@ def npcs_respond(ctx: TurnContext, record: AdjudicationRecord, beats: Sequence[B
             res = roll_table(NPC_TABLE, {"standing_modifier": int(st_value), "tags": r.tags}, rules=ctx.rules,
                              state=ctx.state, rng=ctx.rng, purpose=f"npc action {r.npc} (12.11.5)")
             tx.add_all(res.events)
+            if "attacks" in str(res.entry) and int(st_value) <= -3 and record.pc:  # rule: 06.2.1
+                # a hostile NPC's row says "attacks": the fight starts and it strikes now
+                from engine.resolve.conflict import start
+
+                start(tctx, record.pc, [r.npc], "a hostile NPC attacks (06.2.1)")
+                _foe_turn(ctx, record, r.npc, oof)
+                continue
             record.npc_actions.append(NpcActionEntry(npc=r.npc, action=str(res.entry), source="table_row",
                                                      source_ref=f"{NPC_TABLE}:{res.roll}", tags=r.tags))
     # the one spoken to answers as the talk went, always; a Talk aimed at a thing ("coming up the road") has no
@@ -271,10 +321,19 @@ def fired_triggers(ctx: TurnContext, record: AdjudicationRecord) -> None:  # rul
             record.triggers.append(t.id)
 
 
-def beat_time(ctx: TurnContext, record: AdjudicationRecord, beats: Sequence[BeatOutcome]) -> None:
+def beat_time(ctx: TurnContext, record: AdjudicationRecord, beats: Sequence[BeatOutcome], *,
+              fought: bool = False) -> None:
     # rule: 00.7.3
-    """Step 5: each resolved beat costs its mode's time; boundaries crossed run their handlers (INV-15)."""
+    """Step 5: each resolved beat costs its mode's time; boundaries crossed run their handlers (INV-15). In
+    conflict mode a beat costs nothing and the turn (the PC, then each foe) is one round (06.2.3)."""
+    from engine.resolve.pipeline import _mode
+
     st = ctx.state
+    if _mode(st) == "conflict":
+        if fought or any(b.status in RESOLVED for b in beats):
+            # ponytail: one PC turn + the foes' answers = one round; no tempo order (06.2.2) yet
+            advance_time(ctx.time_ctx(), 1, "round", "round end (06.2.3)")
+        return
     mode = st.scene.mode if st.scene else str(st.time.mode)
     for b in beats:
         if b.status not in RESOLVED:
