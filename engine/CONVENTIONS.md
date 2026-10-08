@@ -798,7 +798,12 @@ Supersedes the earlier notes on `Beat.gate` / `would_be_license` / `necessity`, 
   (`now` | `extended` | `queued` | `conditional`; only now/extended run this turn, the rest are restated as
   queued), `g4_fact`; parts carry `question_kind` + `topic` (the answer ladder's keys, spec 008).
   `reader.knowledge_parts(message)` routes "what do I know?" before the call. `Beat.asks`: a Talk beat asking a
-  plain question.
+  plain question. Each beat also carries `purpose` (`own_change` | `serves_another_act` | `free_activity`) and
+  `pressure` (`none` | `request` | `threat` | `offer` | `plea` | `insistence`); `reader.normalise(data)` runs on
+  the raw answer (engine and `evals/reader_live.py`): a bodily act (Move, Handle, Strike, Grapple, Force, not
+  against anyone's will) that serves another act folds into it, a Move closing on the next against-will beat is its
+  reach, 00.12.6's free acts drop (a look only with a casual word: `CASUAL`), and a Talk beat with pressure `none`
+  in a message that asks is SPEECH (01.2.1, 01.2.2, 00.12.6, 15.3.10; policy B4/A4/C1).
 - **Gate** (`engine.resolve.gate`): `compute_gate(verb, *, against_will, uses_power, speech, method, held, rules,
   reading, literacy_known)` is pure; `covering_verb` picks the card from the facets; `check_gate(beat, ...)` adds
   conditions, a cited G4 fact (or `canon_impossible`), accepted fallbacks and engine-set stretch/emulate.

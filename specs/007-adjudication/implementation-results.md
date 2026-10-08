@@ -81,3 +81,46 @@ judgement call" ponytail; the Framer's tier and snag tie-break lines and the Mod
 
 I-159 (the double-error bound, owner decision), I-160 (computed-gate gaps a–d). Renumber at merge if spec 006
 took the same ids.
+
+## Follow-up: Reader beat normalisation (2026-10-08)
+
+Scored against the policy-consistent labels (`evals/reader_golden_POLICY.md`). Every number is one fresh Haiku run
+(Claude CLI, owner's subscription), one sample per line; spread between runs of the same prompt is about ±3 points.
+
+**Held-out set first.** `evals/reader_heldout.jsonl` (37 lines: gestures with words, moves with a destination,
+casual and deliberate looks, plain questions to wary and friendly NPCs, 5 negation pairs) was labelled by the policy
+and committed (f071f69) before any code change. `py -3.12 evals/reader_live.py --set heldout`.
+
+**Change.** Code decides what the model marks (DL-12-50):
+- schema: each beat gets `purpose` (`own_change` | `serves_another_act` | `free_activity`) and `pressure`
+  (`none` | `request` | `threat` | `offer` | `plea` | `insistence`);
+- `reader.normalise` on the raw answer (engine and harness): a bodily act serving another act folds into it
+  (01.2.1, 01.2.2; B4), a Move closing on the next against-will beat is its reach, 00.12.6's free acts drop (a look
+  only with a casual word, A4), a Talk beat with pressure `none` in a message that asks is SPEECH (15.3.10; C1).
+  A beat against someone's will or using a power always stays (B5). Talk, Observe, Recall, Sneak never serve;
+- prompt: the two fields, Grapple covers snatching a held item, Handle no longer "taking a thing gently"; 693 →
+  692 words.
+
+| Set | Run | verb | gate | facets aw / power / speech | question_kind | pairs verb / gate |
+|---|---|---|---|---|---|---|
+| golden (91) | run 4, before (`_run4`) | 83.5% | 91.2% | 92.5 / 100 / 95.5% | 85.7% | 95.5 / 100% |
+| golden | run 5, first fix (`_run5`) | 73.6% | 85.7% | 89.7 / 100 / 91.4% | 89.0% | 81.8 / 86.4% |
+| golden | **run 6, final** (`reader_golden_haiku.*`) | **92.3%** (84) | **97.8%** (89) | 93.9 / 100 / 97.0% | 87.9% | 90.9 / 100% |
+| held-out (37) | before (`_before`) | 86.5% | 86.5% | 100 / 100 / 100% | 81.1% | 90.0 / 90.0% |
+| held-out | first fix (`_run1`) | 94.6% | 94.6% | 100 / 100 / 100% | 89.2% | 90.0 / 90.0% |
+| held-out | **final** (`reader_heldout_haiku.*`) | **91.9%** (34) | **91.9%** (34) | 100 / 100 / 100% | 86.5% | 100 / 100% |
+
+Run 5 showed Haiku marking deliberate looks and pressing Talk beats as free or serving (g001, g016, g035, g011,
+g013, g043); the code guards (only 00.12.6's acts are free, only bodily acts serve, the reach rule) and two prompt
+words were written from the golden misses. They also fix one held-out miss seen in the first held-out run (h034, a
+close watch marked free), so the held-out set was re-run fresh after the change. Nothing was changed after the
+final held-out run.
+
+**Targets missed** (95% verb, 98% gate). Golden misses: beat order on menace lines (g003, g004: the step or the
+threat read first), the gentle face turn (g010) and the turn to the woman (g037) folded where the label wants Talk
+and Observe, and verb picks unrelated to segmentation (g058, g071 knock as Strike, g080 Handle vs Sneak). Held-out
+misses are all casual looks the model marks `own_change` (h015 "glance", h016 "without making a show of it", h019
+"take in the room"): the code drops a look only when the model marks it free. Next step (not done, it would be
+tuned on held-out): let the player's casual words decide A4 in code whatever the mark, then label a fresh held-out
+set. `test_build.py::test_committed_cards_are_current` fails in this worktree only (core.autocrlf checks out
+`rules/data/anchors.yaml` with CRLF, so the tree hash differs); no rules file was touched.

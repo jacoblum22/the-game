@@ -27,7 +27,7 @@ sys.path.insert(0, str(ROOT))
 from engine.data.loader import load_rules  # noqa: E402
 from engine.dm.packet import build_packet  # noqa: E402
 from engine.dm.roles.prompts import load_prompt  # noqa: E402
-from engine.dm.roles.reader import now_beats  # noqa: E402
+from engine.dm.roles.reader import normalise, now_beats  # noqa: E402
 from engine.dm.schemas import SchemaContext, build_schema  # noqa: E402
 from engine.llm.base import Role  # noqa: E402
 from engine.resolve.gate import WRITING, compute_gate, covering_verb  # noqa: E402
@@ -36,6 +36,9 @@ from engine.retrieve.scene import READING  # noqa: E402
 from evals import reader_golden as rg  # noqa: E402
 
 CACHE = ROOT / "evals" / "baselines" / "reader_golden_haiku.jsonl"
+# the held-out set (labelled by the same policy before the beat normalisation was written) is never tuned on
+SETS = {"golden": (rg.GOLDEN, CACHE),
+        "heldout": (ROOT / "evals" / "reader_heldout.jsonl", ROOT / "evals" / "baselines" / "reader_heldout_haiku.jsonl")}
 RULES = load_rules()
 HELD = re.compile(r"(?<!not )\b(?:holds?|holding)\s+(lic\.[a-z_]+\.[a-z_]+)")
 
@@ -69,7 +72,9 @@ def ask(line: str, context: str, model: str) -> dict[str, Any]:
 
 
 def labels_from(data: dict[str, Any], line: str, context: str) -> dict[str, Any]:
-    """The scored fields from one Reader answer: the covering verb and the computed gate of the first beat."""
+    """The scored fields from one Reader answer, after the engine's beat normalisation: the covering verb and the
+    computed gate of the first beat."""
+    data = normalise(data)
     kinds = [p.get("question_kind") for p in data.get("parts", []) if p.get("question_kind") not in (None, "none")]
     out: dict[str, Any] = {"question_kind": kinds[0] if kinds else "none", "verb": None, "gate": None}
     beats = now_beats(data.get("beats", []))
@@ -86,9 +91,8 @@ def labels_from(data: dict[str, Any], line: str, context: str) -> dict[str, Any]
     return out
 
 
-def run(model: str, workers: int = 4) -> dict[str, dict[str, Any]]:
-    lines = rg.load()
-    cached = load_cache()
+def run(model: str, lines: list[dict[str, Any]], cache: Path = CACHE, workers: int = 4) -> dict[str, dict[str, Any]]:
+    cached = load_cache(cache)
     todo = [g for g in lines if g["id"] not in cached]
 
     def one(g: dict[str, Any]) -> tuple[str, dict[str, Any]]:
@@ -97,28 +101,29 @@ def run(model: str, workers: int = 4) -> dict[str, dict[str, Any]]:
     with ThreadPoolExecutor(max_workers=workers) as ex:
         for gid, data in ex.map(one, todo):
             cached[gid] = data
-            with CACHE.open("a", encoding="utf-8") as f:
+            with cache.open("a", encoding="utf-8") as f:
                 f.write(json.dumps({"id": gid, "answer": data}) + "\n")
     return cached
 
 
-def load_cache() -> dict[str, dict[str, Any]]:
-    if not CACHE.exists():
+def load_cache(cache: Path = CACHE) -> dict[str, dict[str, Any]]:
+    if not cache.exists():
         return {}
-    rows = [json.loads(s) for s in CACHE.read_text(encoding="utf-8").splitlines() if s.strip()]
+    rows = [json.loads(s) for s in cache.read_text(encoding="utf-8").splitlines() if s.strip()]
     return {r["id"]: r["answer"] for r in rows}
 
 
-def report(answers: dict[str, dict[str, Any]]) -> str:
-    lines = rg.load()
+def report(answers: dict[str, dict[str, Any]], lines: list[dict[str, Any]] | None = None) -> str:
+    lines = rg.load() if lines is None else lines
     by_id = {g["id"]: labels_from(answers[g["id"]], g["line"], g["context"]) for g in lines if g["id"] in answers}
 
     def reader(line: str, context: str) -> dict[str, Any] | None:
         g = next(x for x in lines if x["line"] == line and x["context"] == context)
         return by_id.get(g["id"])
 
-    out = [rg.score(lines, reader), "", "## Negation pairs (11 pairs, 22 lines)",
-           rg.score([g for g in lines if g.get("pair")], reader)]
+    paired = [g for g in lines if g.get("pair")]
+    out = [rg.score(lines, reader), "", f"## Negation pairs ({len({g['pair'] for g in paired})} pairs, {len(paired)} lines)",
+           rg.score(paired, reader)]
     raw = [g for g in lines if g["id"] in by_id and by_id[g["id"]].get("raw_verb") is not None]
     raw_ok = sum(by_id[g["id"]]["raw_verb"] == g["labels"]["verb"] for g in raw)
     out += ["", f"Reader's own verb before the facets choose the card: {100 * raw_ok / max(1, len(raw)):.1f}% "
@@ -137,9 +142,14 @@ def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=(__doc__ or "").split("\n")[0])
     ap.add_argument("--model", default="haiku")
     ap.add_argument("--cached", action="store_true")
+    ap.add_argument("--set", choices=sorted(SETS), default="golden")
+    ap.add_argument("--cache", type=Path, help="answers file (default: the set's baseline); a new file is a fresh run")
     args = ap.parse_args(argv)
-    answers = load_cache() if args.cached else run(args.model)
-    print(report(answers))
+    path, cache = SETS[args.set]
+    cache = args.cache or cache
+    lines = rg.load(path)
+    answers = load_cache(cache) if args.cached else run(args.model, lines, cache)
+    print(report(answers, lines))
     return 0
 
 

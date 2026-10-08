@@ -37,6 +37,10 @@ Schema = dict[str, Any]
 # Closed lists the rules state in prose (no data file carries them).
 BEAT_SHAPES = ("now", "extended", "queued", "conditional")  # 12.2.2 decision 3 (I-146c); extended: 01.2.2 (P-082)
 QUESTION_KINDS = ("none", "who_is", "where_is", "what_happened", "what_like", "what_want", "who_knows")  # 12.2.2
+# 01.2.1/01.2.2: a step or gesture with no change of its own is part of the act it serves; 00.12.6: free activities
+BEAT_PURPOSES = ("own_change", "serves_another_act", "free_activity")
+# 15.3.10 / 12.2.2: what moves a listener beyond a plain question (none: the words are SPEECH)
+TALK_PRESSURES = ("none", "request", "threat", "offer", "plea", "insistence")
 NUDGES = ("0", "-1", "+1")  # 01.6.5: one rung at most; strings, never a numeric field (INV-3)
 REQUEST_SIZES = ("R1", "R2", "R3", "R4", "R5")  # 15.3.2
 SPECIAL_CHOICES = ("own_words", "move_on", "details", "suggest")  # contracts/model-calls.md I
@@ -172,10 +176,12 @@ def reader_schema(ctx: SchemaContext) -> Schema:  # rule: 12.2.2
     beat = obj({
         "intent": STR,
         "method": STR,
+        "purpose": enum(BEAT_PURPOSES),  # code folds and drops (reader.normalise_beats)
         "assertion": STR_OR_NULL,
         "shape": enum(BEAT_SHAPES),
         "target": enum([*ctx.scene_ids, *ctx.reachable_places], first=NONE),
         "verb": enum(ctx.verbs),
+        "pressure": enum(TALK_PRESSURES),
         "against_will": BOOL,
         "uses_power": BOOL,
         "speech": BOOL,

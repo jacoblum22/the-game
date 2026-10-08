@@ -42,6 +42,15 @@ _QUEUED_TAIL = re.compile(r"(?:(?<=[.!?;])\s+|\n\s*)Then\b")  # rule: 01.2.3 (qu
 RECALL_WORDS = re.compile(r"\b(?:remember|recall|think back|try to|search my memory|rack my)", re.I)
 _SENTENCE = re.compile(r"(?<=[.!?])\s+")
 NOW = "now"
+SERVES, FREE_ACTIVITY = "serves_another_act", "free_activity"  # schemas.BEAT_PURPOSES
+# the verbs a step, posture, gesture or touch is read under (policy B4: menace, manner, attention, reach)
+BODY_VERBS = ("verb.move", "verb.handle", "verb.strike", "verb.grapple", "verb.force")
+# 00.12.6's free activities by verb: draw, stow, pick up or put down (Handle), stay put (Move), rest (Endure),
+# wait (Ready), a casual look (Observe)
+FREE_VERBS = ("verb.handle", "verb.move", "verb.endure", "verb.ready", "verb.observe")
+# a look the player makes explicitly casual (policy A4); any other look, search or study is an Observe beat
+CASUAL = re.compile(r"\b(?:glanc\w*|casual\w*|idly|without (?:staring|making a show|being obvious|seeming to))\b"
+                    r"|\bin passing\b", re.I)
 NOW_SHAPES = (NOW, "extended")  # resolved this turn; `extended` (01.2.2) is a goal of several stretches
 
 
@@ -53,6 +62,62 @@ def now_beats(beats: Sequence[Any]) -> list[Any]:  # rule: 12.2.2
 
     now = [b for b in beats if shape(b) in NOW_SHAPES]
     return now or [b for b in beats if shape(b) == "conditional"][:1]
+
+
+def normalise(data: dict[str, Any]) -> dict[str, Any]:  # rule: 01.2.1, 01.2.2, 00.12.6, 12.2.2, 15.3.10
+    """Code decides what the Reader marks (the model proposes, DL-12-50), on its raw answer:
+    - a beat that only serves another act or the words (a step, turn, posture or touch: no intended change of its
+      own, 01.2.1) is part of the beat it serves (01.2.2): its method joins the next kept beat (else the one
+      before); with only words to serve, it goes;
+      A step that closes on the target of the next now-beat against someone's will is that act's reach (policy B4);
+    - a free activity (00.12.6: drawing a weapon, waiting, resting, staying put, a look the player calls casual) is
+      no beat;
+    - a Talk beat with no request, threat, offer, plea or insistence, in a message that asks something, is a plain
+      question: SPEECH (12.2.2, 15.3.10), so its DECLARATION question parts become SPEECH when no beat is left.
+    The marks are honoured only where the rules allow them: only a bodily act (a step, posture, touch) serves
+    another; only 00.12.6's acts are free, a look only when the player says it is casual; a beat against someone's
+    will or using a power is always its own beat (12.2.2 facets)."""
+    beats = [dict(b) for b in data.get("beats", [])]
+    parts = [dict(p) for p in data.get("parts", [])]
+    asks = any(p.get("question_kind") not in (None, NONE) for p in parts)
+
+    def pinned(b: dict[str, Any]) -> bool:
+        return bool(b.get("against_will") or b.get("uses_power"))
+
+    def plain_talk(b: dict[str, Any]) -> bool:
+        return b.get("verb") == "verb.talk" and b.get("pressure") == NONE and asks
+
+    def free(b: dict[str, Any]) -> bool:
+        v = b.get("verb")
+        return b.get("purpose") == FREE_ACTIVITY and v in FREE_VERBS and (
+            v != "verb.observe" or bool(CASUAL.search(f"{b.get('method')} {b.get('intent')}")))
+
+    def serves(i: int, b: dict[str, Any]) -> bool:
+        if pinned(b) or b.get("verb") not in BODY_VERBS:
+            return False
+        if b.get("purpose") == SERVES:
+            return True
+        nxt = next((c for c in beats[i + 1:] if (c.get("shape") or NOW) in NOW_SHAPES), None)
+        # ponytail: reach read from the order and the target; a run across a yard to tackle someone folds too
+        return (b.get("verb") == "verb.move" and nxt is not None and bool(nxt.get("against_will"))
+                and b.get("target") in (None, NONE, nxt.get("target")))
+
+    gone = [not pinned(b) and (free(b) or plain_talk(b)) for b in beats]
+    words = any(p.get("class") == "SPEECH" for p in parts) or any(plain_talk(b) for b in beats)
+    acts = [i for i, b in enumerate(beats) if not gone[i] and not serves(i, b)]
+    for i, b in enumerate(beats):
+        if gone[i] or i in acts:
+            continue
+        served = next((j for j in acts if j > i), acts[-1] if acts else None)
+        if served is not None:
+            beats[served]["method"] = f"{b.get('method')}, {beats[served].get('method')}"
+        gone[i] = served is not None or words  # a lone step with nothing to serve stays a beat
+    kept = [b for i, b in enumerate(beats) if not gone[i]]
+    if not kept and any(plain_talk(b) for b in beats):
+        for p in parts:
+            if p.get("class") == "DECLARATION" and p.get("question_kind") not in (None, NONE):
+                p["class"] = "SPEECH"
+    return {**data, "beats": kept, "parts": parts}
 
 
 def knowledge_question(text: str) -> bool:
@@ -168,7 +233,7 @@ def read_message(ctx: TurnContext, message: str, *, exchanges: Sequence[Any] = (
                           rules=ctx.rules)
     res = call_role(ctx.model, Role.READER, schema, packet, turn_id=ctx.turn_id, recorder=ctx.record_call,
                     default=lambda: defaults(Role.READER, sctx) or {}, check=reader_check)
-    data = dict(res.data)
+    data = normalise(dict(res.data))
     return ReaderResult(
         parts=[*known, *[Part.model_validate(p) for p in data.get("parts", [])]],
         pending_answer=data.get("pending_answer"),
