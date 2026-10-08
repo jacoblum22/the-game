@@ -497,6 +497,8 @@ def _identity(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: 12.3.1
     e = ctx.state.entities[c.subject]
     key = _identity_key(c.predicate) or _identity_key(c.value)
     pred_slug = "_".join(tx.words(c.predicate))
+    if pred_slug in ("voice", "tone", "speech"):  # how they speak is the narrator's, through their voice (12.11.9)
+        return _v(c, i, "supported", reason="words and manner are the narrator's (12.11.9 step 4)")
     if key == "name":
         names = [e.name, *[a for a in e.data.get("aliases", []) if isinstance(a, str)]]
         if any(tx.same(c.value, n) or tx.covers(c.value, n, ratio=1.0) for n in names):
@@ -654,6 +656,9 @@ def _harm(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: 12.3.1
         return _v(c, i, "contradicted", state_words)
     removal = _has(text, _REMOVED)
     claimed = _claimed_conditions(ctx, text)
+    look = " ".join(str(s.entities[c.subject].data.get(k) or "") for k in ("demeanor", "detail"))
+    if claimed and tx.overlap(c.value or text, look):
+        return _v(c, i, "supported", reason="their recorded demeanor, not a condition")  # "weary" (spec 006)
     if claimed:
         held = [cid for cid in claimed if cid in have]
         names = ", ".join(sorted(str(ctx.conditions()[x].get("name", x)) for x in have)) or "no conditions"
@@ -692,6 +697,14 @@ def _position(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: 12.3.1
         if ctx.backed(c.subject, "position_set", "time_advanced") or (
                 c.subject == ctx.pc and any(b.positions for b in ctx.record.beats)):
             return _v(c, i, "supported")
+        # the resolved beat that moved them ("I shove him back a step"), or the cited response line for a turn or a
+        # step in place (manner, 12.11.9 step 4); a move to another place still needs a write (spec 006)
+        if any(c.subject in b.targets and (b.degree is not None or b.gate_words.startswith("no roll"))
+               and _beat_success(b) and tx.overlap(c.text, b.restatement) for b in ctx.record.beats):
+            return _v(c, i, "supported", reason="the resolved beat moved them")
+        if ctx.entity_named(c.value, kinds=("place",)) is None and any(
+                c.subject in getattr(it, "entities", ()) for it in _cited(ctx, c)):
+            return _v(c, i, "supported", reason="manner in the cited record line (12.11.9)")
         return _v(c, i, "unsourced_change", reason="no position was written this turn")
     pos = s.positions.get(c.subject)
     place = ctx.entity_named(c.value, kinds=("place",))

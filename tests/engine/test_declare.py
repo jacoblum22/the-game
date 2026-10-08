@@ -132,6 +132,21 @@ def test_the_audit_takes_the_declared_subject_not_its_guess(tmp_path: Path) -> N
     assert v["subject"] == dock.ferryman and out.response.fiction.startswith("He mends a net")
 
 
+def test_a_claim_restating_a_cited_fact_is_covered_by_the_declaration(tmp_path: Path) -> None:
+    """12.2.10: a stated value cites the view's id; the audit's claim restating it needs no store comparison."""
+    dock, ctx = setup(tmp_path, look_model())
+    lantern = dock.facts["lantern"]
+
+    def draft(schema: Any, packet: Any) -> dict[str, Any]:
+        return {"sentences": [_decl("One hooded lantern burns at the stair.", [*_must(packet), lantern],
+                                    about=[dock.place]), _decl("What do you do?")]}
+    ctx.model.push(Role.NARRATOR, draft)  # type: ignore[attr-defined]
+    ctx.model.push(Role.CHECKER, chk(claim(0, "unknown", "existence", "hooded lantern", "one at the stair")))  # type: ignore[attr-defined]
+    out = play_turn(ctx, "I look over the quay.")
+    v = out.turn_record.draft_versions[0]["verdicts"][0]
+    assert v["verdict"] == "supported" and "restates" in v["reason"]
+
+
 def test_the_fiction_fallback_shape_plays_a_turn(tmp_path: Path) -> None:
     dock, ctx = setup(tmp_path, OfflineModel(), narrator_schema="fiction")
     out = play_turn(ctx, "I look over the quay.")

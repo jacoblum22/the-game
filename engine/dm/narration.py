@@ -321,7 +321,13 @@ def _judge(ctx: TurnContext, record: AdjudicationRecord, turn: _Turn, sents: lis
     for g in todo:
         sents[g].failures += _polarity(sents[g].decl, record, by_handle)
         sents[g].verdicts = []
-    cited = {g: [by_handle[r] for r in sents[g].decl.refs if r in by_handle] for g in todo}
+    # what each sentence cites: its record lines, and its view facts as lines about their subject (12.2.10: a
+    # stated value cites the view's id; a claim restating what it cites is covered by the declaration)
+    facts = tx.state.facts
+    cited = {g: [by_handle[r] if r in by_handle else
+                 RecordItem(handle=r, kind="note", must_name=False, entities=[facts[r].subject],
+                            text=f"{facts[r].predicate.replace('_', ' ')} {facts[r].value}")
+                 for r in sents[g].decl.refs if r in by_handle or r in facts] for g in todo}
     verdicts = check_claims(claims, tx.state, record, chk.scene_ids, rules=rules, cited=cited)
     verdicts = _apply_writes(ctx, record, claims, verdicts)
     verdicts = _settle(ctx, record, claims, verdicts)
