@@ -41,3 +41,4 @@ Ledger: I-131..I-136.
 | explorer 181732 | eeff286 | 17 | 2.0 | 0 | storyteller never tells the story (P-061); journal labels (P-062) |
 | newcomer 181028 | 5ec5452 | 17 | 2.06 | 0 | NPC's question never printed; notice words withheld (P-061) |
 | talker 182337 | 04a3736 | 17 | 1.88 | 1 | NPCs silent (P-056/P-061); talk framed as force (P-064); child became a man (P-065) |
+| breaker 183202 | 04a3736 | 17 | 1.47 | 0 | Bram never replies (P-061); roll results unclear (P-012); change approach (P-057); garbled OFFER fragment (P-066) |

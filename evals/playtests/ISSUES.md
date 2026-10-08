@@ -71,3 +71,4 @@ Status: open · fixing (round N) · fixed (commit) · logged (ledger id) · wont
 | P-063 | polish | low | Same-turn self-contradiction about an object (rings catch the light / no rings) | 181732-explorer 27–30 | open |
 | P-064 | bug | high | Gentle talk framed as force: greeting a child → "Handle (Agility): turn the child's face" at 35% (recurrence of P-023); a bribe and a question bundled into one roll | 182337-talker inputs 22–30 | fixing |
 | P-065 | bug | med | NPC identity drift: "the child" became Falwen Underwort, a middle-aged man (roster/given-name reuse ignoring implied age) | 182337-talker inputs 23–26 | fixing |
+| P-066 | bug | med | OFFER stakes text garbled and cut mid-word: "citing not no one is watching the cobbles where the folded paper lies w" | 183202-breaker inputs 27–28 | fixing (OFFER/roll fixer) |
