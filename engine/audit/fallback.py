@@ -85,6 +85,8 @@ def _beat_line(b: BeatEntry, pc: str | None, names: Mapping[str, str]) -> str:
     if b.degree is None:  # no roll; the gate's own words (redirects, options) belong to the OOF block, not here
         result = {"G0": "", "G3": "you cannot do it that way", "G4": "you cannot do it that way"}.get(b.gate or "",
                                                                                                "it works")
+        if result == "it works" and b.gate_words and not b.gate_words.startswith("no roll"):
+            result = "it does not happen yet"  # refused or withdrawn before any result: never "it works"
     elif b.near_miss or b.success_at_cost:
         result = "it works, at a cost" if b.success_at_cost else "it falls just short"
     else:
@@ -168,6 +170,7 @@ def plain_fallback(record: AdjudicationRecord, *, names: Mapping[str, str] | Non
         lines += [_sentence(c) for c in b.conditions]
         lines += [_sentence(f"{who(p.entity)} {'are' if p.entity == record.pc else 'is'} {p.words}")
                   for p in b.positions]
+        lines += [_sentence(x.replace(" — ", " ", 1)) for x in b.learned]
     for o in record.oracle:
         lines.append(_oracle_line(o.question, o.answer))
     for a in record.npc_actions:
