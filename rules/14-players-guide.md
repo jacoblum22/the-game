@@ -92,7 +92,8 @@ stakes, you see an OFFER:
 
 You may **commit**, **change the approach** (a lever, a different method, preparation first), or **walk
 away**. Nothing is spent until you commit. You may ask "what are my odds?" about any idea without
-committing (12.5.10).
+committing (12.5.10). Each chance shows as a number and a word ("better than even, 55%"); press `?` to have
+any word explained (14.2.7) [revision: R2-C].
 
 **14.2.4 Offers of recognition.** `[N]` [04.7.1; 04.7.2; DL-14-02] Sometimes the game offers your character
 a calling, a tier or an oath, in an OUT-OF-FICTION block marked `[RECOGNITION]`. You can always accept,
@@ -110,6 +111,30 @@ can be set aside at any rest, at no cost (04.8.2) [editor: E2-051].
 **14.2.6 The codex.** `[N]` [C:P7; DL-14-03] Ask for your codex at any time ("show my codex", "what do I
 know about X", "what are my abilities"). It is your character sheet, journal and rulebook in one. It shows
 only what your character could know (14.6).
+
+**14.2.7 The OFFER's words.** `[N]` [revision: R2-C] [12.15.2; DL-12-51] The glossary `?` explains from. The words are fixed, so the same
+word always means the same odds or the same price.
+
+| Word | Means |
+|---|---|
+| almost certain · likely · better than even · even | 95% · 75–90% · 55–70% · 45–50% to succeed |
+| unlikely · long shot · only by luck | 25–40% · 10–20% · 5% |
+| a long shot (as a label) | failing badly is likelier than succeeding; the OFFER shows a better way first |
+| a nuisance · a setback · serious · grave | how bad a failure's price is, from mildest to worst |
+| THIS CAN KILL YOU | this roll can leave you dying; you were warned before, and may back off |
+| Danger | a failure here costs something serious, even before a bad roll |
+| partly · what you wanted · more than you asked | how much a success gets you |
+| very well · badly | a critical success, a critical failure |
+| close call | you just missed: take what you wanted and pay the price shown, or fail |
+| Go big | if it works you get more; if it fails it costs more; same chance |
+| Play it safe | if it works you get less; if it fails it costs less; same chance |
+| Another way | other approaches the game worked out for you, each with its chance |
+| you can't judge how hard this is | the roll is hidden; you see only what your character perceives |
+| improvising without training | harder, and at best a partial result (you lack the training) |
+| auto | a safe, likely roll made without asking you (you can turn this off) |
+
+At every pause, **Enter** does the labelled default (printed as `[Enter] …`), letters pick the others, and `?`
+explains a word. Enter never backs you out of anything.
 
 ### 14.3 Session zero
 
@@ -284,7 +309,7 @@ PR-02-7 delivers them, `fn.offer` and `fn.lethal` are added to `pref.shown_notes
 | `safety.veils` | session zero; any time | topics and mapped tags | none | 12.5.6 |
 | `safety.flags` | session zero; any time | topics and mapped tags | none | 12.5.6 |
 | `pacing.profile` | session zero; check-in | standard, gentle, relentless | standard | 12.7.3 |
-| `auto_commit` | session zero; any time | on, off | off | 01.7.4 |
+| `auto_commit` | creation; any time | on (Safe frames only), off | on [revision: R2-C] | 01.7.4 |
 | `pillars` | check-in (12.5.9) | more, same or less per pillar | same | 12.9.3 |
 | `player.new_to_this` | session zero / creation C0 | yes, no | no answer → treated as yes | 14.4, 12 |
 | `creation.path` | creation C0 | fast, full, ready_made | fast | 02 |

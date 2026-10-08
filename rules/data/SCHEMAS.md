@@ -114,7 +114,8 @@ Owner 00 (core); owner-blocks 02, 04–11, 15, 16 (02 amended at integration). K
 Owner 00 (listed fields) / 01 (`anchor`). Keys: `verbs`, `free_activities`.
 - **Verb**: `id` verb.*, `name`, `covers` [str], `excludes` [{what, needs}], `attribute`
   (attr|by_method|none), `alt_attributes` [{attribute, when}], `reach_unit`, `traits` [tag], `anchor`
-  (01: {rule_id, knobs [{knob (T-00-20), default, allowed_deltas}], degree_table}), `lifecycle`.
+  (01: {rule_id, knobs [{knob (T-00-20), default, allowed_deltas}], degree_table, obstacle_classes? [{id, base
+  (a tier id or by_hazard), examples}] (01.6.5, at most six) [revision: R2-C]}), `lifecycle`.
 
 ## boundaries.yaml
 Owner 00; owner-blocks for every chapter's own handlers. Keys: `phases`, `boundaries`, `blocks`.
@@ -128,7 +129,8 @@ natural_20, natural_1}, `near_miss` {min, max}, `read_delivery` [{degree, near_m
 reach_delta}], `read_costs` [{stakes, degree, severities [S1..S5]}], `cost_menu` [{id (cost.*),
 standard_form, heavy_form, fits_when, effect_refs}], `delivery_counts` [{reach, formula}],
 `oracle` {rungs [{id, yes_on?, roll}], doubles}, `fate` {max, start, earn [str], spend [{use, cost}]},
-`auto_commit` {allowed_when}.
+`auto_commit` {default, allowed_when, never}; optional `frame_guards` (00.3.9(b), 01.6.13) and `stakes_cost_menus`
+{source: [cost.*]} (01.6.11) [revision: R2-C].
 
 ## origins.yaml
 Owner 02 (owner-block 13; setting origins pass PR-02-9). Key `origins`. **Origin**: `id` orig.*, `name`, `tags`, `attribute_rules`

@@ -406,9 +406,13 @@ ch.09 #3; DL-09-09].
   first-match order: (1) the obstacle's **stored DC** (a fact written the first time it was framed,
   keyed by obstacle id + anchor signature so the same wall climbed and the same wall broken keep
   separate DCs, DL-01-21; numbers are stable, anchor property 6); (2) an **opposed defense**: `10 + the defender's attribute +
-  competence + edge + status` for the attribute and tag the method works against; (3) the **obstacle
-  tier** `[J:rung]` (T-00-5), whose numbers ch.01 owns. The first time (3) is used, the DC is written
-  to the obstacle as a stored DC. *Worst case (J, tier):* one rung = one DC step, shown in the OFFER.
+  competence + edge + status` for the attribute and tag the method works against, mandatory for every
+  beat whose `against` is a defense, and for a social method composed by 15.3.3 (below); (3) the
+  **rubric tier** `[J:enum]` (T-00-5): the base tier of the obstacle class the verb's card lists
+  (`basic_verbs.yaml` `anchor.obstacle_classes`), plus at most one rung of nudge that cites an intrinsic
+  fact (01.6.5); ch.01 owns the numbers [revision: R2-C] [DL-01-29]. The first time (3) is used, the DC is
+  written to the obstacle as a stored DC. *Worst case (J, tier):* one rung = one DC step, tied to a cited
+  fact and shown in the OFFER.
 - An **effect DC** (for resisted effects) uses the same formula as a defense, from the source's side:
   `10 + source attribute + competence + edge`. A hazard's effect DC is the tier matching its severity
   (S1 → Easy … S5 → Legendary) unless ch.10 lists a specific DC.
@@ -434,7 +438,9 @@ currency [BRIEF A2 #12; R7 §4.2].
 Rules: (a) each lever or snag **cites a fact id** that was established in state (or created by an
 earlier beat, such as a Setup) *before* the declaration; "cool" is not a fact; a fact a player's own
 Oracle question established (a free fact) is further capped by 01.15.8 [revision: I-038]; (b) **at most two
-levers and two snags** per roll; (c) the net roll modifier from levers and snags is capped at ±4, and
+levers and two snags** per roll, of which at most **one cited Precision snag**: a
+further fitting hindering fact applies as a Protective snag (stakes +1 rung) instead, and the obligation to
+apply fitting snags stands (01.6.8) [revision: R2-C] [DL-01-29]; (c) the net roll modifier from levers and snags is capped at ±4, and
 the resulting stakes and reach are clamped to their ladders; (d) one fact yields at most one lever;
 (e) the type follows from what the fact does, and if a fact honestly fits two types the player picks;
 (f) an effect that "grants a lever" (00.10.3 op `lever`) creates a citable fact and still counts
@@ -1530,7 +1536,7 @@ embellishment, not a ruling). *Invariant INV-8.* **Rolls never grant licenses**:
 through its `acquisition_paths`, recognition (04), an item, or a recorded fact; a success at an
 unlicensed technique through `emulate` ticks a learning clock and nothing more. *Invariant INV-7.*
 
-**00.12.3 Gate classes.** `[J:enum]` Ch.01 owns the GATE procedure; this chapter fixes the classes every
+**00.12.3 Gate classes.** `[D]` [revision: R2-C] [DL-01-30] Ch.01 owns the GATE procedure; this chapter fixes the classes every
 chapter refers to [R7 §4.0 step 2]:
 
 | Class | True only when | Result |
@@ -1541,7 +1547,14 @@ chapter refers to [R7 §4.0 step 2]:
 | **G3 Unlicensed** | beyond the basic verbs, no held license covers it, but someone *could* | never narrated as possible; redirect to the domain's `crude_fallback` (if not `none`) and name at least one `acquisition_path`; no time or action spent unless the player accepts the alternative |
 | **G4 Impossible** | contradicts an established fact or the setting's canon for anyone, or delivered reach would be Zero, or an active condition forbids the method | no roll; one sentence of fiction saying why; offer the nearest achievable intent or method (P16) |
 
-Default when uncertain between G2 and G3: G3 (SG-05). *Worst case (J):* a licensed attempt is redirected
+**The class is computed, never proposed** [revision: R2-C]. The engine computes it from the beat's verb, its three
+method facets (12.2.2: `against_will`, `uses_power`, `speech`), the actor's held licenses (a license covers
+the beat only when its scope tags match the verb and the facets), the verb's `excludes` (an excluded method
+needs the listed license: G2 if held, else G3), active conditions (a forbidding condition: G4) and any cited
+G4 fact. No role proposes the gate class. A sheet knack ("intimidating", "a way with horses") is an edge, never
+a gate: it never moves a basic-verb beat to G2 or G3. No held license covering an excluded method: G3
+(SG-05). *Worst case (J, upstream):* the judgments left are PARSE's verb and facets (12.2.2); a wrong one
+puts the beat under the wrong card, which the OFFER names, or a licensed attempt is redirected
 (the player sees the license id that was checked and can point out the error; class iv), or an
 unlicensed attempt is allowed as G2 (the frame records the license id cited, which the auditor checks;
 class iv).
@@ -2459,15 +2472,26 @@ defined here.
 **T-00-5 Obstacle tiers.** `[J:rung]` Anchors are stated by who could do it [R7 §4.2; PF2e simple DCs,
 R: https://2e.aonprd.com/Rules.aspx?ID=2628]. Numbers: ch.01 (reference in brackets).
 
-| Tier | Anchor: who could do it | Typical example | Boundary example |
+| Tier | Anchor: who could do it | Typical example | Boundary example | Rubric classes with this base [revision: R2-C] |
+|---|---|---|---|---|
+| Trivial (no roll) | anyone, in these conditions | open an unlocked door | climb a knotted rope with no one watching and nothing at stake | Move / open ground; Observe / in plain view; Recall / own knowledge; Exert / easy holds; Handle / ordinary use |
+| Easy [10] | an untrained adult, taking care, usually succeeds | climb a rough stone wall | calm a nervous but familiar horse | Move / crowd; Move / rough ground; Observe / careless concealment; Recall / widely known; Talk / be heard; Strike / large near object; Force / flimsy; Exert / ordinary effort; Evade / cover near; Handle / awkward; Setup / ready to hand |
+| Moderate [15] | needs competence; the untrained often fail | pick out a trail on hard ground | talk a neutral guard into bending a small rule | Move / obstructed; Observe / deliberate concealment; Observe / clear trail; Recall / trade knowledge; Strike / small or far object; Force / sound fitting; Exert / hard climb; Evade / cover far; Handle / crude work; Setup / prepared |
+| Hard [20] | challenges a practiced professional | pick a guild-made lock | leap a 12-ft gap from a running start | Observe / expert concealment; Recall / edge of common; Strike / tiny and far; Force / reinforced; Exert / gap leap |
+| Very hard [25] | experts often fail | track a ranger through rain over rock | forge a noble's seal well enough for a clerk | Observe / faint trail; Exert / extreme |
+| Legendary [30] | the edge of mortal ability; needs levers or licenses | hold a collapsing gate alone for a minute | talk a sworn enemy into laying down arms mid-battle | Exert / limit |
+| Beyond (G4) | no mortal without a license that changes the category | jump a 30-ft chasm unaided | persuade a river with no spirit in it | — (Move / hazardous: the tier matching the hazard's severity, 00.3.8) |
+
+**Everyday rows** [revision: R2-C] [DL-01-29]. The rubric's fixed answers for the acts play meets most. Each
+is the obstacle class's base tier, and it rolls only when the roll test (01.4.1) says so:
+
+| Everyday act | Rubric class | Tier | Rolls only when |
 |---|---|---|---|
-| Trivial (no roll) | anyone, in these conditions | open an unlocked door | climb a knotted rope with no one watching and nothing at stake |
-| Easy [10] | an untrained adult, taking care, usually succeeds | climb a rough stone wall | calm a nervous but familiar horse |
-| Moderate [15] | needs competence; the untrained often fail | pick out a trail on hard ground | talk a neutral guard into bending a small rule |
-| Hard [20] | challenges a practiced professional | pick a guild-made lock | leap a 12-ft gap from a running start |
-| Very hard [25] | experts often fail | track a ranger through rain over rock | forge a noble's seal well enough for a clerk |
-| Legendary [30] | the edge of mortal ability; needs levers or licenses | hold a collapsing gate alone for a minute | talk a sworn enemy into laying down arms mid-battle |
-| Beyond (G4) | no mortal without a license that changes the category | jump a 30-ft chasm unaided | persuade a river with no spirit in it |
+| slip or push through a crowd | Move / crowd | Easy | failure would cost something: an aware party who would act on it, a running clock |
+| open an unbarred door, gate or wicket | Handle / ordinary use | Trivial | never |
+| carry an ordinary load (a sack of grain; a wounded adult a short way) | Exert / ordinary effort | Easy | a clock or a hazard presses |
+| ask someone an ordinary question | Talk (no tier: 15.3.3) | Neutral or warmer, R1: certain (T-15-3, 15.3.10) | the listener is Wary or worse, or has a cited reason to hesitate |
+
 
 *Worst case of a one-rung error:* DC off by one step (5 at reference), visible in the OFFER.
 
@@ -2487,6 +2511,10 @@ a success down (DL-01-03); recomputed at integration, which changes the +9…+16
 | +12 | 95 (65/30/5/0; 5) | 90 (40/50/5/5; 5) | 65 (15/50/30/5; 15) | 40 (5/35/45/15; 15) | 15 (5/10/45/40; 15) |
 | +14 | 95 (75/20/5/0; 5) | 95 (50/45/5/0; 5) | 75 (25/50/20/5; 15) | 50 (5/45/45/5; 15) | 25 (5/20/45/30; 15) |
 | +16 | 95 (85/10/5/0; 5) | 95 (60/35/5/0; 5) | 85 (35/50/10/5; 10) | 60 (10/50/35/5; 15) | 35 (5/30/45/20; 15) |
+
+The numbers are unchanged. Where critical failure exceeds success on an ordinary frame (not Dire, not
+opposed, not secret), the critical-failure guard (01.6.13) applies; it changes the frame, never this table
+[revision: R2-C].
 
 **T-00-7 Tag tree levels 1–2.** (Definitions, poles and tests in `data/tags.yaml`.)
 
