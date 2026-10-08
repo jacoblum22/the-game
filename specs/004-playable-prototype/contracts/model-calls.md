@@ -78,13 +78,14 @@ FramerOutput:
   obstacle: {kind: enum[tier, opposed, entity_defense], tier: enum[<dc tier ids>] | null, entity: enum[<cast ids>] | null}
   levers: [enum[<scene fact ids>]]                      # ≤2, each must exist and not be too recent
   snags:  [enum[<scene fact ids>]]                      # ≤2
-  stakes_source: enum[<resolution.yaml#stakes_flags.source.sources>, none]   # none → safe
+  stakes:                                               # one choice: anyOf, one branch per group of sources
+    source: enum[<resolution.yaml#stakes_flags.source.sources>, none]   # none → safe
+    threatened_cost: {menu_id: enum[<costs this source backs>], form_intent: str, source_fact: ...}
+    alternate_cost:  {menu_id: enum[...], form_intent: str, source_fact: ...} | null   # required unless none
   stakes_heavy: bool
   lethal: bool
   reach_whole: bool                                     # resolution.yaml#reach_flags
   reach_one_factor: bool
-  threatened_cost: {menu_id: enum[<cost menu ids whose fits_when matches a fact>], form_intent: str}
-  alternate_cost:  {menu_id: enum[...], form_intent: str} | null   # required for risky and dire
   method_consequences: [str]
   secret: bool
 ```

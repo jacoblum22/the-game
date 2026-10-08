@@ -69,6 +69,19 @@ def test_a_ch15_anchor_names_its_defense_in_the_dc_knob(s: Scene) -> None:
     assert _defense_attrs(None, s.rules.anchors[MOVE], s.rules) == ["might", "agility"]  # verb text, unchanged
 
 
+def test_a_ch06_conflict_anchor_is_resisted_like_its_beats_verb(s: Scene) -> None:
+    """Playtest 20261008 fighter, 8 Framer calls: Strike (conflict frame) anc.06_4_3 has no verb and a null `dc`
+    knob, so every attack framed on it was refused "name the defense attribute" (a field the schema does not have)
+    and fell to the default frame. The beat's own verb names the defense."""
+    from engine.resolve.frame import _defense_attrs
+
+    conflict, strike = s.rules.anchors["anc.06_4_3"], s.rules.anchors["anc.01_18_8"]
+    assert _defense_attrs(None, conflict, s.rules, verb="verb.strike") == _defense_attrs(None, strike, s.rules)
+    f = check(s, {"verb": "verb.strike", "target": "npc.guard", "against_will": True}, anchor="anc.06_4_3",
+              attribute="might", obstacle={"kind": "opposed", "entity": "npc.guard"})
+    assert not (isinstance(f, FrameRefusal) and f.field == "obstacle.defense"), f
+
+
 def test_refusals_name_their_step(s: Scene) -> None:
     refused(check(s, {"actor": "pc.nobody"}), 1, "unknown actor")
     refused(check(s, {"target": "npc.nobody"}), 1, "target")
@@ -109,6 +122,36 @@ def test_refusals_name_their_step(s: Scene) -> None:
     refused(check(s, stakes_source="hazard", threatened_cost={"menu_id": "cost.harm"}), 10, "needs an alternate")
     refused(check(s, stakes_source="hazard", threatened_cost={"menu_id": "cost.harm"},
                   alternate_cost={"menu_id": "cost.harm"}), 10, "different entry")
+
+
+def test_a_cost_form_never_undoes_the_beats_own_success(s: Scene) -> None:
+    """Playtest 20261008 fighter 19-22 (01.9.3: a cost never negates a success): a grapple taken as success at a
+    cost paid "she pulls her sleeve free ... as she tears away", so the narration had her both held and gone. A
+    cost form on a person acted on against their will may not undo the act; the Framer is re-asked."""
+    grab = {"verb": "verb.grapple", "target": "npc.guard", "against_will": True}
+    kw: dict[str, Any] = {"anchor": "anc.01_18_9", "attribute": "might",
+                          "obstacle": {"kind": "opposed", "entity": "npc.guard"}}
+    for undo in ("She pulls her sleeve free of your grip and you stumble as she tears away",
+                 "She refuses to be held and walks off", "your grip on her slips and you go down"):
+        refused(check(s, grab, threatened_cost={"menu_id": "cost.drain", "form_intent": undo}, **kw), 10,
+                "never undoes")
+        refused(check(s, grab, stakes_source="consumed_resource", threatened_cost={"menu_id": "cost.drain"},
+                      alternate_cost={"menu_id": "cost.shortfall", "form_intent": undo}, **kw), 10, "never undoes")
+    ok = check(s, grab, threatened_cost={"menu_id": "cost.drain", "form_intent": "the struggle leaves you winded"},
+               **kw)
+    assert isinstance(ok, Frame), ok
+    away = check(s, threatened_cost={"menu_id": "cost.drain", "form_intent": "you slip free of the mud, spent"})
+    assert isinstance(away, Frame)  # no one acted on: nothing to undo
+
+
+def test_stakes_raised_by_a_snag_get_the_rules_alternate(s: Scene) -> None:
+    """Playtest saves: 7 Framer refusals "a risky frame needs an alternate cost" on frames declared Safe (source
+    none, so no alternate offered) that a second, Protective snag raised to Risky (00.3.9(b)). The engine raised
+    the stakes, so it supplies 01.13.1's first fitting alternate, as the critical-failure guard already did."""
+    a, b = s.fact("world", "mud", "deep"), s.fact("world", "wind", "gusting")
+    f = check(s, snags=[a, b])
+    assert isinstance(f, Frame), f
+    assert f.stakes == "risky" and f.alternate_cost is not None
 
 
 def test_levers_must_predate_the_declaration(s: Scene) -> None:

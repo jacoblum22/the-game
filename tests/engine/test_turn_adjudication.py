@@ -73,9 +73,17 @@ def framer(**over: Any) -> Fn:
                                   "source_fact": None},
             "alternate_cost": None, "method_consequences": [], "secret": False}
         d.update(over)
-        return prune(d, schema)
+        return prune(nest_stakes(d), schema)
 
     return fill
+
+
+def nest_stakes(d: dict[str, Any]) -> dict[str, Any]:
+    """A Framer answer written with the flat stakes fields, as the paired `stakes` choice the schema asks for."""
+    out = {k: v for k, v in d.items() if k not in ("stakes_source", "threatened_cost", "alternate_cost")}
+    out["stakes"] = {"source": d.get("stakes_source") or "none", "threatened_cost": d.get("threatened_cost"),
+                     "alternate_cost": d.get("alternate_cost")}
+    return out
 
 
 RISKY = {"stakes_source": "aware_opponent_or_observer",

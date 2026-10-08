@@ -68,7 +68,12 @@ RELATIONS = {  # predicates the engine writes -> verb phrase (first word the lem
     "worn_by": "be worn by", "location": "be at", "position": "be at", "kind": "be",
     **dict.fromkeys(("state", "condition", "desc", "posture", "mood", "demeanor", "look", "appearance"), "be"),
     **dict.fromkeys(("text", "content", "contents", "wording", "inscription", "writing", "words"), "read"),
+    # 00.6.6a details (`detail.<slot>`) and the scene state code writes (12.11.9): the value is a state or a doing
+    **dict.fromkeys(("detail.state", "detail.activity", "detail.manner", "detail.posture", "detail.mood",
+                     "detail.look", "detail.stage", "alertness"), "be"),
+    "detail.held": "hold", "detail.worn": "wear", "detail.clothing": "wear",
 }
+OMITTED = ("detail.", "wound_load", "harm_state", "voice")  # other slots and bookkeeping: no plain sentence ('')
 PREPS = frozenset("by of in on at to from with for under near behind inside".split())
 _LOC_PREPS = PREPS | frozenset((
     "beyond beside pushed set against above below within outside across along among amid between around over "
@@ -173,6 +178,8 @@ def relation(subject: str, predicate: str, value: str | None = None, *, neg: boo
         if verb == "read":
             return f"{clause(subject, verb, neg=neg)}: {value}"  # the words themselves, verbatim
         return clause(subject, verb, value, neg=neg)
+    if predicate.startswith(OMITTED):
+        return ""
     w = slug_words(predicate).split()
     if w[:1] == ["whether"]:
         w = w[1:]

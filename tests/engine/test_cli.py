@@ -163,7 +163,7 @@ def test_budget_prompt_waits_for_the_turn_to_end(tmp_path: Path) -> None:
 
 def test_budget_prompt_yes_keeps_playing(tmp_path: Path) -> None:
     FakeGame.script = [play_resp("A.", "turn.1", budget_notice="Over budget."), play_resp("B.", "turn.2")]
-    _, out = run(["new", "g"], "x\n1\ny\n/quit\n", tmp_path)
+    _, out = run(["new", "g"], "x\n1\nI wait\n/quit\n", tmp_path)  # a lone letter is a menu key, never sent
     assert out.count("Keep playing?") == 1 and "B." in out
 
 
@@ -263,6 +263,17 @@ def test_letter_picks_and_a_number_with_nothing_to_pick(tmp_path: Path) -> None:
     assert FakeGame.last.calls[:3] == [("answer", "mixed"), ("submit", "I climb"), ("answer", "change")]
     assert "Nothing to pick by number here" in out and ("submit", "3") not in FakeGame.last.calls
     assert out.count(MENU) == 1
+
+
+def test_a_menu_letter_with_nothing_open_is_not_sent(tmp_path: Path) -> None:
+    """Playtest 20261008 fighter 27: an auto-committed OFFER had already rolled; "d" (Do it, by the menu
+    convention) went to the Reader, which asked about "commit, change, or withdraw", choices no menu prints.
+    A lone letter with no pause open is a menu key, answered by the front end like Enter."""
+    FakeGame.script = [play_resp("Begun.", "turn.0"), play_resp("You slash.", "turn.1")]
+    _, out = run(["new", "g"], "a\nd\nI slash at her\n/quit\n", tmp_path)
+    assert FakeGame.last.calls[:2] == [("answer", "mixed"), ("submit", "I slash at her")]
+    assert ("submit", "d") not in FakeGame.last.calls
+    assert "Nothing is waiting on a choice" in out
 
 
 def test_enter_takes_the_pause_default_and_asks_for_a_name(tmp_path: Path) -> None:

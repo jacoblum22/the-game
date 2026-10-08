@@ -22,9 +22,9 @@ from engine import ids
 from engine.dm.context import TurnContext
 from engine.dm.packet import build_packet
 from engine.dm.roles.prompts import load_prompt
-from engine.dm.schemas import SchemaContext, build_schema, defaults, schema_context
+from engine.dm.schemas import SchemaContext, build_schema, defaults, prune, schema_context
 from engine.llm.base import Role, call_role
-from engine.resolve.costs import check_cost_decl, uncited_by_stakes
+from engine.resolve.costs import check_cost_decl
 from engine.resolve.frame import frame_check
 from engine.resolve.gate import GateDecision
 from engine.resolve.necessity import trivial_class
@@ -67,16 +67,18 @@ def to_proposed(data: dict[str, Any], beat: Beat, state: WorldState) -> Proposed
             return None
         return CostDecl(menu_id=c["menu_id"], form_intent=c.get("form_intent") or "", source_fact=c.get("source_fact"))
 
+    st = data.get("stakes") or data  # the paired `stakes` object; a record from before it had the three flat fields
+
     return ProposedFrame(
         anchor=data["anchor"], deltas=[Delta(**d) for d in data.get("deltas") or []],
         attribute=data["attribute"], deed_tag=data.get("deed_tag"), traits=list(data.get("traits") or []),
         obstacle=obstacle, levers=[LeverCite(fact_id=f) for f in data.get("levers") or []],
         snags=[LeverCite(fact_id=f) for f in data.get("snags") or []],
-        stakes_source=data.get("stakes_source") or NONE, stakes_heavy=bool(data.get("stakes_heavy")),
+        stakes_source=st.get("source") or st.get("stakes_source") or NONE, stakes_heavy=bool(data.get("stakes_heavy")),
         lethal=bool(data.get("lethal")), reach_whole=bool(data.get("reach_whole")),
         reach_one_factor=bool(data.get("reach_one_factor")), reach_two_factors=bool(data.get("reach_two_factors")),
-        asks=str(data.get("asks") or NONE), threatened_cost=cost(data.get("threatened_cost")),
-        alternate_cost=cost(data.get("alternate_cost")), method_consequences=list(data.get("method_consequences") or []),
+        asks=str(data.get("asks") or NONE), threatened_cost=cost(st.get("threatened_cost")),
+        alternate_cost=cost(st.get("alternate_cost")), method_consequences=list(data.get("method_consequences") or []),
         secret=bool(data.get("secret")))
 
 
@@ -91,22 +93,9 @@ def default_frame(sctx: SchemaContext, schema: Schema, beat: Beat, state: WorldS
         why = check_cost_decl(CostDecl(menu_id=m), role="threatened", state=state, rules=rules, actor=beat.actor,
                               stakes_source=NONE, target=beat.target, declared_seq=beat.declared_seq or None)
         if why is None:
-            d["threatened_cost"] = {"menu_id": m, "form_intent": ""}
+            d["stakes"] = {**(d.get("stakes") or {"source": NONE, "alternate_cost": None}), "threatened_cost": {"menu_id": m, "form_intent": "", "source_fact": None}}
             break
-    if "source_fact" in str(schema["properties"].get("threatened_cost")):
-        d["threatened_cost"] = {**d["threatened_cost"], "source_fact": None}
-    return d
-
-
-def cost_note(beat: Beat, state: WorldState, rules: Any) -> str:  # rule: PR-01-2
-    """Step 10 in words where the schema cannot pair two fields: which stakes sources let a cost go uncited."""
-    tgt = beat.target if beat.target and beat.target != NONE else None
-    by = uncited_by_stakes(state=state, rules=rules, actor=beat.actor, target=tgt, beat=beat)
-    need = {m: [s for s, ms in by.items() if m in ms] for m in dict.fromkeys(m for ms in by.values() for m in ms)
-            if m not in by[NONE] and m != "cost.twist"}
-    lines = [f"{m} needs stakes_source {' or '.join(ss)}" for m, ss in need.items()]
-    lines.append("cost.twist only with stakes_source none" if "cost.twist" in by[NONE] else "cost.twist: never")
-    return "costs without a source_fact: " + "; ".join(lines)
+    return prune(d, schema)
 
 
 def beat_message(beat: Beat, gate: GateDecision, note: str | None = None) -> str:
@@ -135,8 +124,7 @@ def framer_for(ctx: TurnContext) -> Any:
         cards = load_cards_for(Role.FRAMER, scene_situation_tags(st, ctx.rules), mode, triggers,
                                anchor_card_ids(candidates, ctx.rules), rules=ctx.rules)
         packet = build_packet(Role.FRAMER, instructions=load_prompt("framer"), cards=cards, view=st, exchanges=[],
-                              message=beat_message(beat, gate, "\n".join(filter(None, [note, cost_note(
-                                  beat, st, ctx.rules)]))), triggers=triggers,
+                              message=beat_message(beat, gate, note), triggers=triggers,
                               notes=anchor_menu(candidates, ctx.rules), focus=focus, rules=ctx.rules)
 
         def check(data: Any) -> list[str]:  # rule: PR-01-2

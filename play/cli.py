@@ -70,6 +70,8 @@ choice and "suggest" lets the dice pick."""
 # Pauses of the world setup and character creation: Enter there moves on (the step's own default).
 FLOW_PAUSES = frozenset({"seed_step", "create_step"})
 NAME_HINT = "Type a name for your character."
+NOTHING_OPEN = "(Nothing is waiting on a choice: any roll shown is already made. Say what your character does, or " \
+               "type /help.)"
 
 
 class Quit(Exception):
@@ -330,6 +332,9 @@ class Session:
         if not choices and text.isdigit():
             self.app.say("Nothing to pick by number here: answer in words (or /help).")
             return
+        if self.pause is None and self.phase == "play" and len(text) == 1 and text.isalpha():  # 12.15.2: a menu key
+            self.app.say(NOTHING_OPEN)  # never sent: the Reader read "d" as an answer to a closed offer (P 20261008)
+            return
         if choices and text.isdigit():
             n = int(text)
             if not 1 <= n <= len(choices):
@@ -344,7 +349,7 @@ class Session:
         the player is told to type one."""
         p = self.pause
         if p is None:
-            self.app.say("(Say what your character does, or type /help.)")
+            self.app.say(NOTHING_OPEN)
             return
         if self.phase == "play" and p.choices:  # 12.15.2: Enter does the labelled default, or shows it again
             choice = enter_choice(p)

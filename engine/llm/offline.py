@@ -544,7 +544,7 @@ _PEOPLE = ("npc.", "foe.", "ally.", "pc.")
 
 
 def _stakes(verb_word: str | None, message: str, view: str, sources: list[Any],
-            menus: list[Any]) -> tuple[str | None, list[str]]:
+            menus: Mapping[str, list[Any]]) -> tuple[str | None, list[str]]:
     # rule: 01.6.9 (an established source that would impose a cost if this beat failed; none -> Safe)
     """(stakes source, threatened-cost menus in preference order) for what the act plainly risks: attacking or
     sneaking past someone present (they are aware, or may notice), a fall from a height, the water. A source the
@@ -565,8 +565,31 @@ def _stakes(verb_word: str | None, message: str, view: str, sources: list[Any],
         pick = ("aware_opponent_or_observer", ["cost.exposure"])
     if pick is None or pick[0] not in sources:
         return None, []
-    fitting = [m for m in pick[1] if m in menus]
+    fitting = [m for m in pick[1] if m in menus.get(pick[0], [])]
     return (pick[0], fitting) if fitting else (None, [])
+
+
+def _cost_menus(node: Any, schema: Mapping[str, Any]) -> list[Any]:
+    """A cost node's menu ids offered without a cited source fact (a branch whose `source_fact` may be null)."""
+    out: list[Any] = []
+    for b in (resolve(node, schema).get("anyOf") or [node]) if node else []:
+        props = resolve(b, schema).get("properties") or {}
+        fact = resolve(props.get("source_fact") or {}, schema)
+        if "menu_id" in props and (not fact or None in fact.get("enum", [None])):
+            out += _options(props["menu_id"], schema)
+    return out
+
+
+def _stakes_branches(schema: Mapping[str, Any]) -> dict[str, tuple[list[Any], list[Any]]]:
+    """{stakes source: (threatened menus, alternate menus)} from the Framer's paired `stakes` choice."""
+    node = field(schema, schema, "stakes")
+    out: dict[str, tuple[list[Any], list[Any]]] = {}
+    for b in node.get("anyOf") or ([node] if node else []):
+        props = resolve(b, schema).get("properties") or {}
+        for src in _options(props.get("source", {}), schema):
+            out.setdefault(str(src), (_cost_menus(props.get("threatened_cost"), schema),
+                                      _cost_menus(props.get("alternate_cost"), schema)))
+    return out
 
 
 # the cost's form in words per stakes source and menu ("" = the engine's own words for the menu entry)
@@ -599,7 +622,9 @@ def _obstacle(schema: dict[str, Any], quiet: bool) -> dict[str, Any]:
     if quiet and easy:
         return {"kind": "tier", "obstacle_class": easy, "tier": None, "entity": None}
     tier_opts = [t for b in branches if "properties" in b for t in _options(b["properties"].get("tier", {}), schema)]
-    tier = "moderate" if "moderate" in tier_opts else (tier_opts[len(tier_opts) // 2] if tier_opts else None)
+    # nothing at stake: the rule's default frame (class other at Easy), which the old unpaired costs reached by refusal
+    mid = "easy" if quiet and "easy" in tier_opts else "moderate"
+    tier = mid if mid in tier_opts else (tier_opts[len(tier_opts) // 2] if tier_opts else None)
     return {"kind": "tier", "obstacle_class": "other", "tier": tier, "entity": None}
 
 
@@ -617,9 +642,11 @@ def _framer(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:
     verb_attr = None
     if verb_word:
         verb_attr = next((v["attribute"] for v in basic_verbs() if v["id"] == f"verb.{verb_word}"), None)
-    menus = enum_at(schema, "threatened_cost", "menu_id")
-    alt_menus = enum_at(schema, "alternate_cost", "menu_id") or menus
-    source, fitting = _stakes(verb_word, packet.message, packet.view, enum_at(schema, "stakes_source"), menus)
+    branches = _stakes_branches(schema)
+    source, fitting = _stakes(verb_word, packet.message, packet.view, list(branches),
+                              {s: t for s, (t, _) in branches.items()})
+    menus, alt_menus = branches.get(source or "none") or next(iter(branches.values()), ([], []))
+    alt_menus = alt_menus or menus
     threatened = fitting[0] if fitting else (menus[0] if menus else None)
     if source:  # an alternate that fits through the same source (cost.shortfall always does)
         alts = [m for m in ("cost.shortfall", "cost.footing", "cost.harm", "cost.time") if m in alt_menus]
@@ -636,11 +663,14 @@ def _framer(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:
         "deed_tag": None, "traits": [],
         "obstacle": _obstacle(schema, quiet=source is None),
         "nudge_why": None, "nudge": "0", "nudge_fact": None, "request_size": "R2",
-        "levers": [], "snags": [], "stakes_source": source,
+        "levers": [], "snags": [],
+        "stakes": {"source": source or "none",
+                   "threatened_cost": {"menu_id": threatened, "form_intent": forms.get(str(threatened), ""),
+                                       "source_fact": None},
+                   "alternate_cost": {"menu_id": alternate, "form_intent": forms.get(str(alternate), ""),
+                                      "source_fact": None}},
         "stakes_heavy": False, "lethal": False, "reach_whole": False, "reach_one_factor": False,
         "reach_two_factors": False, "asks": "none",
-        "threatened_cost": {"menu_id": threatened, "form_intent": forms.get(str(threatened), "")},
-        "alternate_cost": {"menu_id": alternate, "form_intent": forms.get(str(alternate), "")},
         "method_consequences": [], "secret": False,
     }
 

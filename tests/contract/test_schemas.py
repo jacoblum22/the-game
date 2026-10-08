@@ -184,8 +184,9 @@ def test_enums_come_from_rules_and_state(store: Store) -> None:
     assert framer["anchor"]["enum"][0] == "anc.01_18_7"  # Talk: the basic verb's anchor first
     assert "presence" in framer["attribute"]["enum"]
     assert "deed.influence" in framer["deed_tag"]["enum"] and "deed" in framer["deed_tag"]["enum"]
-    assert framer["stakes_source"]["enum"][0] == "none"
-    assert "cost.shortfall" not in framer["threatened_cost"]["properties"]["menu_id"]["enum"]
+    stakes = framer["stakes"]["properties"]
+    assert stakes["source"]["enum"][0] == "none"
+    assert "cost.shortfall" not in stakes["threatened_cost"]["properties"]["menu_id"]["enum"]
     assert framer["levers"]["maxItems"] == 2 and framer["deltas"]["maxItems"] == 2
 
     world = build_schema(Role.WORLD, ctx_for(s, Role.WORLD))["properties"]["responses"]["items"]["properties"]
@@ -267,15 +268,69 @@ def test_framer_attribute_enum_follows_01_6_1_without_a_knob(store: Store) -> No
 def test_framer_costs_may_cite_a_scene_fact(store: Store) -> None:
     s = store.state
     framer = build_schema(Role.FRAMER, ctx_for(s, Role.FRAMER))["properties"]
-    src = framer["threatened_cost"]["properties"]["source_fact"]
+    stakes = framer["stakes"]["properties"]
+    src = stakes["threatened_cost"]["properties"]["source_fact"]
     assert src["type"] == ["string", "null"] and set(src["enum"]) == {"fact.1", "fact.2", None}
-    assert framer["alternate_cost"]["anyOf"][0]["properties"]["source_fact"] == src
-    assert "source_fact" in framer["threatened_cost"]["required"]
+    assert stakes["alternate_cost"]["anyOf"][0]["properties"]["source_fact"] == src
+    assert "source_fact" in stakes["threatened_cost"]["required"]
     d = defaults(Role.FRAMER, ctx_for(s, Role.FRAMER))
-    assert d is not None and d["threatened_cost"]["source_fact"] is None
+    assert d is not None and d["stakes"]["threatened_cost"]["source_fact"] is None
     bare = schema_context(s, RULES, anchors=["anc.01_18_7"], cost_menu_ids=["cost.twist"])
     bare.fact_ids = bare.lever_fact_ids = []
-    assert "source_fact" not in build_schema(Role.FRAMER, bare)["properties"]["threatened_cost"]["properties"]
+    bare_stakes = build_schema(Role.FRAMER, bare)["properties"]["stakes"]["properties"]
+    assert "source_fact" not in bare_stakes["threatened_cost"]["properties"]
+
+
+def branch(props: dict[str, Any], source: str) -> dict[str, Any]:
+    """The Framer `stakes` branch whose `source` enum offers `source` (its properties)."""
+    node = props["stakes"]
+    return next(b["properties"] for b in node.get("anyOf", [node]) if source in b["properties"]["source"]["enum"])
+
+
+def test_framer_stakes_pair_the_source_with_its_costs(tmp_path: Any) -> None:
+    """Playtest 20261008 talker (and 44 refusals across the saves): the Framer wrote stakes `none` with cost.time,
+    legal only through a listening clock, and an alternate exposure with no source. The source and its costs are
+    one choice now, so an unpaired frame cannot be written."""
+    from engine.resolve.types import Beat
+    from engine.store.events import ClockRecord
+
+    s = new_store(tmp_path)
+    try:
+        with s.transaction() as tx:
+            tx.add(entity("pc", "Wren", tx=tx))
+            tx.add(entity("place", "Salt Harbor", tx=tx))
+            tx.add(Event.of("clock_created", source="test", clock=ClockRecord(
+                id="clk.dusk", name="dusk", kind="danger", segments=4, tick_sources=[])))
+            tx.add(fact(tx, "loc.salt_harbor", "crates", "stacked high on the quay"))
+            sid = tx.mint("scn")
+            tx.add(Event.of("scene_started", scene_id=sid, scene={
+                "scene_id": sid, "place_id": "loc.salt_harbor", "cast_present": [], "mode": "free",
+                "agenda": "find the boat"}))
+        st = s.state
+        pc = next(e for e, x in st.entities.items() if x.kind == "pc")
+        beat = Beat(id="beat.1", actor=pc, intent="recall Fenwin", method="think back", verb="verb.recall",
+                    target="none", declared_seq=st.last_seq)
+        ctx = schema_context(st, RULES, anchors=["anc.01_18_6"], beat=beat)
+        schema = build_schema(Role.FRAMER, ctx)
+        p = schema["properties"]
+        none, clock = branch(p, "none"), branch(p, "listening_clock")
+        def uncited(cost: dict[str, Any]) -> list[str]:  # the menus offered without a source fact
+            return [m for b in cost.get("anyOf", [cost]) if None in b["properties"]["source_fact"]["enum"]
+                    for m in b["properties"]["menu_id"]["enum"]]
+
+        assert "cost.time" not in uncited(none["threatened_cost"]) and "cost.time" in uncited(clock["threatened_cost"])
+        assert clock["alternate_cost"].get("type") == "object" or "anyOf" in clock["alternate_cost"]  # Risky: required
+        d = defaults(Role.FRAMER, ctx)
+        assert d is not None and validate(d, schema) == []
+        time = {"menu_id": "cost.time", "form_intent": "the light goes", "source_fact": None}
+        assert validate({**d, "stakes": {"source": "none", "threatened_cost": time, "alternate_cost": None}}, schema)
+        alt = {"menu_id": "cost.shortfall", "form_intent": "less of it", "source_fact": None}
+        assert validate({**d, "stakes": {"source": "listening_clock", "threatened_cost": time,
+                                         "alternate_cost": alt}}, schema) == []
+        assert validate({**d, "stakes": {"source": "listening_clock", "threatened_cost": time,
+                                         "alternate_cost": None}}, schema)
+    finally:
+        s.close()
 
 
 def test_framer_offers_only_legal_choices(store: Store) -> None:
@@ -300,21 +355,24 @@ def test_framer_offers_only_legal_choices(store: Store) -> None:
     assert keys[at + 1:at + 4] == ["nudge_why", "nudge", "nudge_fact"]  # the why is written before the value
     later = [k for k, f in s.facts.items() if f.valid_from_seq > f1.valid_from_seq]
     assert later and not set(later) & set(p["levers"]["items"]["enum"])
-    free, cited = p["threatened_cost"]["anyOf"]
-    # no clock runs: cost.time fits only with a cited source; Wren holds nothing, so twist is a candidate uncited
+    free, cited = branch(p, "none")["threatened_cost"]["anyOf"]
+    # no clock runs: cost.time fits only with a cited source; Wren holds nothing, so twist is a candidate uncited;
+    # harm follows from a hazard, never from no source (the pairing: 01.6.11)
     assert "cost.time" not in free["properties"]["menu_id"]["enum"] and "cost.twist" in free["properties"]["menu_id"][
-        "enum"] and "cost.harm" in free["properties"]["menu_id"]["enum"]
+        "enum"] and "cost.harm" not in free["properties"]["menu_id"]["enum"]
+    hazard = branch(p, "hazard")["threatened_cost"]["anyOf"][0]["properties"]["menu_id"]["enum"]
+    assert "cost.harm" in hazard and "cost.twist" not in hazard
     assert "cost.time" in cited["properties"]["menu_id"]["enum"] and "cost.twist" not in cited["properties"][
         "menu_id"]["enum"]
-    assert "listening_clock" not in p["stakes_source"]["enum"]
+    assert all("listening_clock" not in b["properties"]["source"]["enum"] for b in p["stakes"]["anyOf"])
     assert None not in cited["properties"]["source_fact"]["enum"]
     d = defaults(Role.FRAMER, schema_context(s, RULES, anchors=anchor_candidates(BEAT, s, RULES), beat=beat))
     assert d is not None and validate(d, schema) == []
     for bad in ({"kind": "opposed", "obstacle_class": None, "tier": None, "entity": None},
                 {"kind": "tier", "obstacle_class": "other", "tier": "trivial", "entity": None}):
         assert validate({**d, "obstacle": bad}, schema)
-    assert validate({**d, "threatened_cost": {"menu_id": "cost.time", "form_intent": "", "source_fact": None}},
-                    schema)
+    time = {"menu_id": "cost.time", "form_intent": "", "source_fact": None}
+    assert validate({**d, "stakes": {**d["stakes"], "threatened_cost": time}}, schema)
 
 
 def test_defaults_follow_the_contract(store: Store) -> None:
@@ -325,7 +383,7 @@ def test_defaults_follow_the_contract(store: Store) -> None:
     framer = defaults(Role.FRAMER, ctx_for(s, Role.FRAMER))
     assert framer and framer["anchor"] == "anc.01_18_7" and framer["attribute"] == "presence"
     # lane D P2: the default is class `other` at Easy (the Moderate default is retired)
-    assert framer["stakes_source"] == "none" and framer["obstacle"] == {"kind": "tier", "obstacle_class": "other",
+    assert framer["stakes"]["source"] == "none" and framer["obstacle"] == {"kind": "tier", "obstacle_class": "other",
                                                                          "tier": "easy", "entity": None}
     director = defaults(Role.DIRECTOR, ctx_for(s, Role.DIRECTOR))
     assert director and director["next_scene"]["mode"] == "free" and director["push"] == "none"

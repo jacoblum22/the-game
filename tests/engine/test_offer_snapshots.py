@@ -98,7 +98,7 @@ def cases(s: Scene) -> dict[str, Callable[[], Frame]]:
 @pytest.fixture(scope="module")
 def rendered(tmp_path_factory: pytest.TempPathFactory) -> dict[str, str]:
     s = Scene.new(tmp_path_factory.mktemp("offers"))
-    return {name: offer_block(make(), rules=s.rules, fate=1).text for name, make in cases(s).items()}
+    return {name: offer_block(make(), rules=s.rules, fate=1, state=s.state).text for name, make in cases(s).items()}
 
 
 def _snapshot(blocks: dict[str, str]) -> str:
@@ -120,10 +120,11 @@ def test_no_rule_text_reaches_the_player(rendered: dict[str, str]) -> None:
 
 
 def test_the_variants_read_as_the_template_says(rendered: dict[str, str]) -> None:
-    assert "Chance: you can't judge how hard this is." in rendered["observe_secret"]
+    assert "Chance: you can't judge how hard this is. (The odds would tell" in rendered["observe_secret"]
     assert "Chance: long shot — " in rendered["other_legendary_long_shot"]
     assert "Another way:" in rendered["other_legendary_long_shot"]
     assert "If it fails: Danger: " in rendered["exert_gap_dire"]
     assert "You're improvising without training: " in rendered["fallback_mode"]
-    assert "a hindrance −2" in rendered["move_crowd_one_snag"]
-    assert rendered["move_crowd_two_snags"].count("a hindrance −2") == 1  # the second hindrance raised the stakes
+    assert "crowd density: packed −2" in rendered["move_crowd_one_snag"]  # each snag by its fact (12.15.2)
+    assert rendered["move_crowd_two_snags"].count("−2") == 1  # the second hindrance raised the stakes
+    assert "rope state: knotted +2" in rendered["exert_climb_lever"]

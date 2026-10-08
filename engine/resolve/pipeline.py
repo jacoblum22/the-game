@@ -457,9 +457,9 @@ def _offer(env: PipelineEnv, plan: BeatPlan, proposed: ProposedFrame, frame: Fra
         env.add(Event.of("offer_logged", source=frame.id or "engine", rule_id="01.7.4", frame_id=frame.id,
                          shown_at=env.state.time.now, choice="auto"))
         out = _roll(env, plan, frame, queued)
-        out.oof.insert(0, {"kind": "OFFER", "text": offer_block(frame, rules=env.rules, auto=True).text})
+        out.oof.insert(0, {"kind": "OFFER", "text": offer_block(frame, rules=env.rules, auto=True, state=env.state).text})
         return out
-    text = offer_block(frame, rules=env.rules).text
+    text = offer_block(frame, rules=env.rules, state=env.state).text
     detail = {"stage": "offer", "plan": plan.model_dump(mode="json"), "queued": _dump(queued),
               "proposed": proposed.model_dump(mode="json"), "frame": frame.record(), "candidates": cands,
               "offer": view.model_dump(mode="json"), "warned": warned}

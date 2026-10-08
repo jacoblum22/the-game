@@ -60,11 +60,48 @@ def test_offer_block_is_the_12_15_2_template(s: Scene) -> None:
     assert lines[2] == "If it works: what you wanted.   Very well (5%): more than you asked."
     assert lines[3] == "If it fails: you tire — a setback.   Badly (5%): you tire — serious."
     assert lines[4] == "Close call (15%): get it anyway and pay (you get less far), or fail."
-    assert lines[5] == "Takes: fate 1"
+    assert lines[5] == "Fate: 1 (you may spend one to reroll the die once you see it)"
     assert lines[6].startswith("Another way: with ")
     assert "Commit" not in blk.text and "Do it" not in blk.text  # the menu follows the block (play/render.py)
     assert [c["id"] for c in offer_choices(f)] == ["commit", "go_big", "play_safe", "change", "withdraw"]
     assert [c["label"] for c in offer_choices(f)] == ["Do it", "Go big", "Play it safe", "Another way", "Back off"]
+
+
+def test_offer_words_playtest_20261008(s: Scene) -> None:
+    """Fighter 18-21, talker 24: "a help +2, a hindrance −2" named no fact; "Takes:" read as a price and listed
+    "fate 1" as if spent; the PC's own name ("Eliius gets up and slashes") read as a typo for the NPC "Eliia"; the
+    hidden Recall odds gave no reason."""
+    held = s.fact("npc.guard", "detail.posture", "held fast by you")
+    wary = s.fact("npc.guard", "detail.manner", "on guard against you")
+    name = s.state.entities[s.pc].name.split()[0]
+    f = _frame(s, levers=[held], snags=[wary], method_consequences=["the knife is out whatever the roll"],
+               beat_kw={"restatement": f"{name} gets up and slashes at the Guard.", "method": "slash at the guard"})
+    text = offer_block(f, rules=s.rules, fate=1, state=s.state).text
+    assert "held fast by you +2" in text and "on guard against you −2" in text and "a help" not in text
+    assert "Takes:" not in text and "fate 1" not in text
+    assert "Whatever the roll: the knife is out whatever the roll" in text
+    assert text.startswith("[OFFER] Slash at the guard.") and name not in text
+    secret = offer_block(check(s, secret=True), rules=s.rules, fate=1).text  # type: ignore[arg-type]
+    assert "Chance: you can't judge how hard this is. (The odds would tell you what your character can't " in secret
+    assert "Fate: 1 (no reroll: you won't see this die)" in secret
+
+
+def test_near_miss_prices_name_their_kind(s: Scene) -> None:
+    """Fighter 19: two prices of the same severity both read "a setback"; each names what it costs, as RESULT does."""
+    labels = [c["label"] for c in near_miss_choices(_frame(s), s.rules)]
+    assert labels == ["Succeed, and pay: you tire (drain, a setback)",
+                      "Succeed, and pay: you get less far (shortfall, a setback)",
+                      "Let it fail, and still pay: you tire (drain, a setback)"]
+
+
+def test_an_auto_offer_sits_above_its_result() -> None:
+    """Fighter 26-31 (01.7.4): `ordered` moved the auto OFFER below its RESULT, so it read as an open offer waiting
+    for "d"; it is no pause, so it stays where the roll is (12.15.2: immediately above its RESULT)."""
+    auto, res = OofBlock(kind="OFFER", text="[OFFER — auto] Slash."), OofBlock(kind="RESULT", text="[RESULT] d20 17")
+    hit = OofBlock(kind="RESULT", text="[RESULT] Eliia strikes")
+    note = OofBlock(kind="NOTE", text="[NOTE] n")
+    assert ordered([auto, res, hit, note]) == [note, auto, res, hit]
+    assert ordered([OofBlock(kind="OFFER", text="[OFFER] Go."), res])[-1].kind == "OFFER"  # a pause: still last
 
 
 def test_offer_view_has_exactly_the_engine_api_fields(s: Scene) -> None:
@@ -108,9 +145,9 @@ def test_near_miss_block(s: Scene) -> None:
     assert [c["id"] for c in picks] == ["success_at_cost:cost.drain", "success_at_cost:cost.shortfall", "failure"]
     # P-076: a success and a failure with the same price still read differently; severities in words (12.15.2)
     assert [c["label"] for c in picks] == [
-        "Succeed: you get what you tried for, at this price: you tire — a setback",
-        "Succeed: you get what you tried for, at this price: you get less far — a setback",
-        "Let it fail: you do not get it, and still pay: you tire — a setback"]
+        "Succeed, and pay: you tire (drain, a setback)",
+        "Succeed, and pay: you get less far (shortfall, a setback)",
+        "Let it fail, and still pay: you tire (drain, a setback)"]
 
 
 def test_result_block_states_the_outcome_once(s: Scene) -> None:

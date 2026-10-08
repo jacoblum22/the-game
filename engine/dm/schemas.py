@@ -24,7 +24,7 @@ from typing import Any, get_args
 from pydantic import BaseModel, Field
 
 from engine.llm.base import Role
-from engine.resolve.costs import OBSERVER, uncited_by_stakes
+from engine.resolve.costs import OBSERVER, source_menus, uncited_by_stakes
 from engine.resolve.frame import fact_usable, opposed_by, rolling_tiers, verb_classes
 from engine.resolve.gate import covering_verb
 from engine.retrieve.anchors import verb_anchor
@@ -89,8 +89,9 @@ class SchemaContext(BaseModel):
     stakes_sources: list[str] = Field(default_factory=list)
     cost_menu_ids: list[str] = Field(default_factory=list)
     alternate_cost_menu_ids: list[str] = Field(default_factory=list)
-    # PR-01-2 step 10: entries legal without a cited source fact (costs.uncited_candidates); None = unrestricted
-    cost_uncited_ids: list[str] | None = None
+    # PR-01-2 steps 8 and 10 paired: per stakes source, the costs legal uncited and the costs legal only citing a
+    # source fact ({source: {"threatened", "threatened_cited", "alternate", "alternate_cited"}}); None = unpaired
+    stakes_menus: dict[str, dict[str, list[str]]] | None = None
     cost_tie_order: list[str] = Field(default_factory=list)
     reach_tie_whole: bool = False
     reach_tie_one_factor: bool = True
@@ -219,19 +220,42 @@ def _one_of(branches: list[Schema]) -> Schema:
     return branches[0] if len(branches) == 1 else {"anyOf": branches}
 
 
-def _cost(menu: list[str], facts: list[str], uncited: list[str] | None = None) -> Schema:
+def _cost(free: list[str], cited: list[str], facts: list[str]) -> Schema | None:
     # 01.13.1 / lead decision (a): a cost may cite the scene fact that is its source (frame_check needs either
-    # the citation or a structural fit through state); dropped when the scene has no fact. With `uncited`
-    # (PR-01-2 step 10, costs.uncited_candidates): an entry outside it must cite a source fact, and cost.twist
-    # is offered only when it is itself a candidate.
-    if uncited is None:
-        return obj({"menu_id": enum(menu), "form_intent": STR, "source_fact": enum(facts, nullable=True)})
-    free = [m for m in menu if m in uncited]
-    cited = [m for m in menu if m not in free and m != "cost.twist"] if facts else []
+    # the citation or a structural fit through state); `source_fact` is dropped when the scene has no fact. An entry
+    # in `cited` only (PR-01-2 step 10: no structural fit) must cite one. None when nothing is legal.
     out = [obj({"menu_id": enum(free), "form_intent": STR, "source_fact": enum(facts, nullable=True)})] if free else []
-    if cited:
+    if cited and facts:
         out.append(obj({"menu_id": enum(cited), "form_intent": STR, "source_fact": enum(facts)}))
-    return _one_of(out or [obj({"menu_id": enum(menu), "form_intent": STR})])
+    return _one_of(out) if out else None
+
+
+def _stakes(ctx: SchemaContext, facts: list[str]) -> Schema:  # rule: 01.6.11
+    # rule: PR-01-2
+    """The stakes source with the costs that follow from it, as one choice (steps 8 and 10 paired): a cost that
+    does not fit the source picked cannot be written (playtest 20261008: `none` with cost.time, an alternate
+    exposure with no source, were refused and re-asked). Sources with the same legal costs share a branch. A
+    source other than `none` makes the frame Risky, so its alternate is required (01.6.11)."""
+    sources = [NONE, *(s for s in ctx.stakes_sources if s != NONE)]
+    groups: dict[str, tuple[list[str], Schema, Schema]] = {}
+    for ss in sources if ctx.stakes_menus is not None else ():
+        m = ctx.stakes_menus.get(ss)  # type: ignore[union-attr]
+        t = _cost(m["threatened"], m["threatened_cited"], facts) if m else None
+        a = _cost(m["alternate"], m["alternate_cited"], facts) if m else None
+        if a is None:
+            alt = NULL  # no legal alternate: only a Safe frame (none) can do without one
+        else:
+            alt = nullable(a) if ss == NONE else a
+        if t is None or (a is None and ss != NONE):
+            continue  # nothing legal to threaten (or no alternate for a Risky frame): the source cannot be framed
+        key = repr((t, alt))
+        groups.setdefault(key, ([], t, alt))[0].append(ss)
+    if not groups:  # no beat (contract checks): every source with every cost, unpaired
+        alt = _cost(ctx.alternate_cost_menu_ids or ctx.cost_menu_ids, [], facts)
+        return obj({"source": enum(sources), "threatened_cost": _cost(ctx.cost_menu_ids, [], facts),
+                    "alternate_cost": nullable(alt) if alt else NULL})
+    return _one_of([obj({"source": enum(g), "threatened_cost": t, "alternate_cost": alt})
+                    for g, t, alt in groups.values()])
 
 
 def _obstacle(ctx: SchemaContext) -> Schema:  # rule: 00.3.8
@@ -277,16 +301,13 @@ def framer_schema(ctx: SchemaContext) -> Schema:  # rule: 01.5.1
         "request_size": enum(REQUEST_SIZES) if ctx.social else None,  # 15.3.2: what the talk asks for
         "levers": arr(enum(facts), max_items=2),  # 01.6.8
         "snags": arr(enum(facts), max_items=2),
-        "stakes_source": enum(ctx.stakes_sources, first=NONE),  # 01.6.9
+        "stakes": _stakes(ctx, facts),  # 01.6.9 source, with the 01.6.11 / 01.13.1 costs that follow from it
         "stakes_heavy": BOOL,
         "lethal": BOOL,
         "reach_whole": BOOL,  # 01.6.10
         "reach_one_factor": BOOL,
         "reach_two_factors": BOOL,  # 01.6.10 decision 2: two unoffset, or a total potency -> G4 (I-160a)
         "asks": enum(ctx.asks_tags, first=NONE) if ctx.social else None,  # 12.11.9 step 3(b): the request's tag
-        "threatened_cost": _cost(ctx.cost_menu_ids, facts, ctx.cost_uncited_ids),  # 01.6.11, 01.13.1
-        "alternate_cost": nullable(_cost(ctx.alternate_cost_menu_ids or ctx.cost_menu_ids, facts,
-                                         ctx.cost_uncited_ids)),
         "method_consequences": STRS,
         "secret": BOOL,
     })
@@ -475,7 +496,8 @@ def _reader_default(ctx: SchemaContext) -> dict[str, Any]:
 def _framer_default(ctx: SchemaContext) -> dict[str, Any]:
     # 00.15.3: the basic verb's anchor; 01.6.1: the anchor's default attribute; stakes none -> safe; the obstacle:
     # the defender's defense for a social or attack beat (01.6.4), else class `other` at Easy (lane D P2)
-    free = [m for m in ctx.cost_menu_ids if ctx.cost_uncited_ids is None or m in ctx.cost_uncited_ids]
+    safe = (ctx.stakes_menus or {}).get(NONE)
+    free = [m for m in ctx.cost_menu_ids if safe is None or m in safe["threatened"]]
     menu = _first(free or ctx.cost_menu_ids, *ctx.cost_tie_order)
     obstacle = ({"kind": "opposed", "obstacle_class": None, "tier": None, "entity": ctx.opposed_ids[0]}
                 if ctx.opposed_ids else
@@ -489,11 +511,11 @@ def _framer_default(ctx: SchemaContext) -> dict[str, Any]:
         "obstacle": obstacle,
         "nudge_why": None, "nudge": "0", "nudge_fact": None, "request_size": "R2",
         "levers": [], "snags": [],
-        "stakes_source": NONE, "stakes_heavy": False, "lethal": False,
+        "stakes": {"source": NONE, "threatened_cost": {"menu_id": menu, "form_intent": "", "source_fact": None},
+                   "alternate_cost": None},
+        "stakes_heavy": False, "lethal": False,
         "reach_whole": ctx.reach_tie_whole, "reach_one_factor": ctx.reach_tie_one_factor,
         "reach_two_factors": False, "asks": NONE,
-        "threatened_cost": {"menu_id": menu, "form_intent": "", "source_fact": None},
-        "alternate_cost": None,
         "method_consequences": [], "secret": False,
     }
 
@@ -695,7 +717,7 @@ def schema_context(  # rule: 12.2.4
     attributes, default_attribute = (_attribute_options(ordered, verb, licence, ae["attributes"], rules)
                                      if anchor_ids else (ae["attributes"], None))
     threatened, alternate = fitting_cost_menus(rules, facts)
-    uncited = None
+    by: dict[str, list[str]] = {}
     usable = facts
     sources = list(rules.resolution.get("stakes_flags", {}).get("source", {}).get("sources", []))
     ob_classes: list[str] = []
@@ -710,12 +732,23 @@ def schema_context(  # rule: 12.2.4
         by = uncited_by_stakes(state=state, rules=rules, actor=beat.actor, target=tgt, beat=beat)  # steps 8, 10
         # an onlooker who would act: present (computed), or named by a cited source fact (frame_check)
         sources = [s for s in sources if s in by or s == OBSERVER]
-        uncited = [m for m in dict.fromkeys(m for ms in by.values() for m in ms) if m != "cost.twist"
-                   or m in by[NONE]]
         usable = [f for f in facts if fact_usable(state, f, beat.declared_seq or state.last_seq)]
     if cost_menu_ids is not None:
         threatened = list(cost_menu_ids)
         alternate = list(dict.fromkeys([*threatened, *alternate]))
+    stakes_menus = None
+    if by:  # the Framer's beat: each source's own costs (check_cost_decl's tests, as enums)
+        stakes_menus = {}
+        for ss in [NONE, *sources]:
+            fits = by.get(ss) or []  # not established (an onlooker named only by a cited fact): cited costs only
+            allowed = source_menus(rules, ss)
+            t = [m for m in threatened if m in fits]
+            a = [m for m in alternate if m in fits]
+            stakes_menus[ss] = {
+                "threatened": t, "alternate": a,
+                "threatened_cited": [m for m in threatened if m not in t and m != "cost.twist"
+                                     and (allowed is None or m in allowed)],
+                "alternate_cited": [m for m in alternate if m not in a and m != "cost.twist"]}
     res = rules.resolution
     pacing = rules.pacing
     cast = [i for i in (state.scene.cast_present if state.scene else []) if i in state.entities]
@@ -770,7 +803,7 @@ def schema_context(  # rule: 12.2.4
         stakes_sources=sources,
         cost_menu_ids=threatened,
         alternate_cost_menu_ids=alternate,
-        cost_uncited_ids=uncited,
+        stakes_menus=stakes_menus,
         cost_tie_order=list(res.get("cost_selection", {}).get("tie_order", [])),
         reach_tie_whole=bool(reach.get("whole", {}).get("tie_break", False)),
         reach_tie_one_factor=bool(reach.get("one_factor", {}).get("tie_break", True)),
