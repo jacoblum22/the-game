@@ -58,3 +58,4 @@ Ledger: I-131..I-136.
 | fighter 193420 | 9e4bd7f | 17 | 1.88 | 1 | kit weapon missing (P-090); possessive grammar (P-091) |
 | newcomer 194948 | eac0c0f | 17 | 1.82 | 1 | setup fine; hidden success unnamed (fixed in 0c15da2); CUT prompt (P-092); month names (P-093) |
 | breaker 195445 | b3adaaa | 17 | 1.35 | 0 | no crashes; cast inconsistency (P-095) |
+| talker 194952 | eac0c0f | 17 | 1.71 | 1 | vivid; success reveals nothing when the store is empty (I-153); garbled journal (P-097) |
