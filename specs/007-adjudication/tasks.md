@@ -83,10 +83,10 @@ forbidden tokens, golden set, odds audit).
 - [X] T025 evals/reader_golden.py: `haiku` and `cached` plugs, computed gate, negation pairs, `--audit` (frames each
   rolled golden beat with `frame_check` in the dock fixture, tests/fixtures/scene_dock.py, over every obstacle class
   of its verb and 0-2 hindering facts)
-- [ ] T026 Run the golden set on Haiku; record the baseline in evals/baselines/
+- [X] T026 Run the golden set on Haiku; record the baseline in evals/baselines/
 - [X] T027 Ledger row for the double-error bound in rules/_process/issue-ledger.md
-- [ ] T028 Re-record replays (`py -3.12 -m tests.replay.record_games`); full suite, ruff, pyright
-- [ ] T029 engine/CONVENTIONS.md API notes; specs/007-adjudication/implementation-results.md with the gate table
+- [X] T028 Re-record replays (`py -3.12 -m tests.replay.record_games`); full suite, ruff, pyright
+- [X] T029 engine/CONVENTIONS.md API notes; specs/007-adjudication/implementation-results.md with the gate table
 
 ## Dependencies
 
