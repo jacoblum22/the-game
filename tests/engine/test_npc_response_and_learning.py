@@ -194,3 +194,59 @@ def test_what_the_store_lacks_is_settled_by_the_oracle_and_learned(tmp_path: Pat
     st = ctx.store.state
     asked = [f for f in st.facts.values() if f.subject == dock.ferryman and f.predicate.startswith("knows_the_night")]
     assert len(asked) == 1 and asked[0].value is True and asked[0].id in st.knowledge[dock.pc]
+
+
+# ------------------------------------------------------------------------------------------- 3. silent NPCs, speech
+
+PRAY = 'I kneel beside the attendant and say, "Brother, who took it?"'
+
+
+def _attendant(dock: Any) -> None:
+    """Met mid-scene: positioned at the scene's place, never framed in its cast (playtest 175928-talker)."""
+    from engine.store.events import EntityRecord
+
+    with dock.store.transaction() as tx:
+        tx.add(Event.of("entity_created", source="test", entity=EntityRecord(
+            id="npc.gilda", kind="npc", name="Gilda Underhill", data={
+                "role": "shrine attendant", "demeanor": "grieving", "pronouns": "he/him",
+                "refusals": ["will not break off his prayer for a stranger"]})))
+        tx.add(Event.of("position_set", source="test", rule_id="10.1.1", entity="npc.gilda", location=dock.place))
+
+
+def test_an_npc_met_mid_scene_answers_and_a_refusal_is_legible(tmp_path: Path) -> None:
+    # P-056: the World role saw only the framed cast, so the attendant never answered and nothing said why
+    world = {"responses": [{"npc": "npc.gilda", "want_engaged": "none", "refusal_engaged": "npc.gilda/refusal.1",
+                            "table_context": {"tags": []}}]}
+    model = ScriptedModel({Role.READER: [reader("SPEECH", PRAY)], Role.WORLD: [world],
+                           Role.NARRATOR: [narr('Gilda keeps praying and lifts a hand: "Not now." What do you do?')],
+                           Role.CHECKER: [chk()]})
+    dock, ctx = setup(tmp_path, model)
+    _attendant(dock)
+    out = play_turn(ctx, PRAY)
+    rows = out.adjudication.record.npc_actions
+    assert [(a.npc, a.source) for a in rows] == [("npc.gilda", "refusal")]
+    msg = calls(model, Role.NARRATOR)[0].message
+    assert "Gilda Underhill acts: refuses: will not break off his prayer" in msg
+    assert "show it plainly" in msg and "manner: grieving" in msg and "- present: Gilda Underhill" in msg
+    fb = plain_fallback(out.adjudication.record, names={"npc.gilda": "Gilda Underhill"})
+    assert "Gilda Underhill refuses" in fb.fiction
+
+
+def test_an_npc_who_asks_is_quoted(tmp_path: Path) -> None:
+    # P-061: "she asks something, pitched low" with no words; the narrator is told to quote, and an NPC's quoted
+    # question passes the check as drafted
+    world = {"responses": [{"npc": "npc.tam_harlan", "want_engaged": "none", "refusal_engaged": "none",
+                            "table_context": {"tags": []}}]}
+    hello = 'I say to Tam Harlan, "Evening."'
+    text = 'Tam Harlan squints at you. "Who sent you down here at this hour?" he asks. What do you say?'
+    model = ScriptedModel({Role.READER: [reader("SPEECH", hello)], Role.WORLD: [world],
+                           Role.NARRATOR: [narr(text)], Role.CHECKER: [chk(
+                               claim(1, "npc.tam_harlan", "action", "asks", "who sent you down here at this hour",
+                                     change=True))]})
+    dock, ctx = setup(tmp_path, model)
+    ctx.rng.faces = [7]  # type: ignore[attr-defined]
+    out = play_turn(ctx, hello)
+    msg = calls(model, Role.NARRATOR)[0].message
+    assert "speaks in quoted words" in msg and "Never write that their words are lost" in msg
+    assert out.response.fiction == text and not out.response.flags.fallback_used
+    assert '"Who sent you down here at this hour?"' in out.response.fiction

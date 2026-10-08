@@ -203,6 +203,7 @@ def _known(state: WorldState, cv: dict[str, Any], pc: str | None) -> list[dict[s
     """What the PC has learned, oldest first: their knowledge records (any `how`, rumours included) and the shown
     facts about the world the player has been told in play (narrated, or answered by the Oracle: `how` "seen").
     Codex view only, so nothing sealed or background; facts about the PC are the sheet's."""
+    from engine.audit.fallback import fact_sentence
     from engine.dm.oof import short_text
     from engine.world.chronicle import PREFIX
 
@@ -223,16 +224,19 @@ def _known(state: WorldState, cv: dict[str, Any], pc: str | None) -> list[dict[s
             subj = short_text(ent.data.get("text") or subj)
         what = "a lead" if f["predicate"].startswith("lead.") else f["predicate"].replace("_", " ").replace(".", " ")
         k = recs.get(fid)
+        line = fact_sentence(state, state.facts[fid], subject=subj if f["subject"] != "world" else "")
+        if not line:  # a settled question that reads as no statement ('coin named none yet: yes') is left out
+            continue
         at[(f["subject"], f["predicate"])] = len(out)  # a later answer to the same thing replaces the earlier one
         out.append({"fact_id": fid, "subject": f["subject"], "about": subj, "what": what.strip(),
-                    "value": f["value"], "how": k.how if k else "seen"})
+                    "value": f["value"], "how": k.how if k else "seen", "sentence": line})
     keep = set(at.values())
     return [k for i, k in enumerate(out) if i in keep]
 
 
 def _known_line(k: dict[str, Any]) -> str:
     how = HOW_SAID.get(k["how"], f" ({k['how']})")
-    return second_person(f"{k['about']}: {k['what']} — {_value_words(k['value'])}{how}")
+    return second_person(k["sentence"].rstrip(".") + how + ".")
 
 
 def _stems(text: str) -> set[str]:
@@ -288,6 +292,11 @@ def what_you_know(state: WorldState, about: str | None = None, rules: Any = None
         hits = hits[:3]
         lines = []
         for e in (ents[i] for i in hits):
+            if e["kind"] == "thread":  # a thread's name is its text cut at 60 characters: show the whole sentence
+                from engine.dm.oof import short_text
+
+                lines.append(second_person(short_text(str(e["data"].get("text") or e["name"]), 160)) + ".")
+                continue
             role, desc = e["data"].get("role"), _value_words(e["data"].get("desc") or "")
             lines.append(e["name"] + (f" ({role})" if isinstance(role, str) and role else "") +
                          (f": {desc}" if desc and desc.lower() != e["name"].lower() else ""))
