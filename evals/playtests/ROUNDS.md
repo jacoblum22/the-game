@@ -36,3 +36,4 @@ Ledger: I-131..I-136.
 | fighter 174829 | a184dff | 17 | 2.47 | 3 | Go big dead end (P-050); odds band oddity (P-051); name collision (P-052) |
 | explorer 174825 | a184dff | 17 | 2.53 | 3 | raw dict in OFFER (P-053); omen/notice not described (P-054); "what do I know" rolled (fixed since) |
 | talker 175928 | 50f21c3 | 17 | 2.0 | 0 | first run with NPC replies: Borin answers well; a silent NPC stalls (P-056); roll results unclear (P-012); Enter=Withdraw trap (P-044) |
+| breaker 181158 | 5ec5452 | 17 | 1.41 | 1 | change approach broken (P-057); learned facts raw (P-058); Fate spend unclear (P-059) |
