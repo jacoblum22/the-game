@@ -69,3 +69,4 @@ Ledger: I-131..I-136.
 | newcomer 203722 | b3a579d | 17 | 1.65 | 0 | no errors; texts never readable (P-110); mist figure never resolves (I-153) |
 | breaker 203717 | b3a579d | 17 | 2.12 | 1 | literacy breaks both ways (P-110/P-111); queue-note leak (P-111) |
 | explorer 204217 | b3a579d | 17 | 1.94 | 0 | "fine overall"; success narrated as failure (P-112); NPC dodges (I-153) |
+| talker 204112 | b3a579d | 17 | 1.71 | 0 | name mix-up (P-113); stonewalling alike (P-114); Recall as Talk (P-115) |

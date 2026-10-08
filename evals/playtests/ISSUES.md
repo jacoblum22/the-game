@@ -115,4 +115,7 @@ Status: open · fixing (round N) · fixed (commit) · logged (ledger id) · wont
 | P-109 | bug | low | Journal: "Who is missing person: Betey Woodhill", fragment "keep close around Nedey Woodhill" (incident-binding predicates) | 201748-explorer 22 | fixing (with P-108) |
 | P-110 | bug | high | Reading a notice/bill/board withholds the words turn after turn even for literate PCs ("the wording stays just beyond what you can carry away"); often the opening lead's own notice | 203722-newcomer 33–39; 201748-explorer 29–31; 201338-breaker 22–25 | fixing |
 | P-111 | bug | med | Reader queue annotation leaked: "Queued: looking at Belia, pending clarification of who is in the room."; illiterate PC told they can't read, then shown the text anyway | 203717-breaker 28–30 | fixing (P-108, P-110 fixers) |
-| P-112 | bug | med | [RESULT] says success but the narration says the attempt failed ("the mark does not hold", failed to copy the symbol); the outcome check let it through | 204217-explorer 29–30 | open |
+| P-112 | bug | med | [RESULT] says success but the narration says the attempt failed ("the mark does not hold", failed to copy the symbol); the outcome check let it through | 204217-explorer 29–30 | fixing |
+| P-113 | bug | med | Name learned for the wrong person: an officer naming the thief ("Lila Fairwick") was treated as giving his own name | 204112-talker 20–24 | fixing |
+| P-114 | polish | med | NPCs stonewall alike: three NPCs brush off with the same "Not now", even after a successful roll (with I-153) | 204112-talker 25, 30 | open |
+| P-115 | bug | low | A Recall about a token was framed as a Talk roll the NPC reacted to | 204112-talker 26–29 | open (queued after Reader work) |
