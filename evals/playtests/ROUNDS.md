@@ -28,3 +28,5 @@ Ledger: I-131..I-136.
 | fighter 170318 | 12f51f2 | 17 | 2.0 (r1 2.67) | 3 (r1 9) | odds screens clear; movement (P-032); success reveals nothing (P-025); note leak (P-034) |
 | talker 170207 | 12f51f2 | 17 | 2.41 (r1 2.67) | 2 (r1 13) | conversations stall: NPCs never speak (P-026); friend bond contradicted (P-036); held until P-026 merges |
 | explorer 170204 | 12f51f2 | 17 | 2.41 (r1 3.06) | 2 (r1 12) | NPC never answers (P-026); lore question → sorcery redirect (P-038); held until P-026/P-031 merge |
+| newcomer 172552 | 790deb1 | 17 | 1.65 | 0 | setup fine; guard never answers (P-026); notice text contradicts itself (P-041) |
+| fighter 172629 | 790deb1 | 17 | 1.65 | 2 | odds screens clear; fallback grammar (P-040); success gives no names (P-025) |
