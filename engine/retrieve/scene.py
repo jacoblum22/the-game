@@ -12,6 +12,7 @@ from __future__ import annotations
 from typing import Any
 
 from engine.store.projection import FactRecord, WorldState
+from engine.store.views import display_name
 
 MAX_SCENE_OBJECTS = 12  # newest things lying at the scene's place kept in scope (12.2.4: bounded)
 MAX_SCENE_FACTS = 40 # newest facts shown per call (the scene's working memory; older ones stay in the store)
@@ -72,5 +73,5 @@ def entity_names(state: WorldState, ids: list[str]) -> dict[str, Any]:
             if seal.slice:
                 out[i] = seal.slice
             continue
-        out[i] = e.name
+        out[i] = display_name(state, i)  # 12.10.2: as the PC knows them
     return out

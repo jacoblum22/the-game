@@ -214,7 +214,8 @@ def _known(state: WorldState, cv: dict[str, Any], pc: str | None) -> list[dict[s
     at: dict[tuple[str, str], int] = {}
     for fid in sorted(set(recs) | seen, key=lambda i: state.facts[i].valid_from_seq if i in state.facts else 0):
         f = facts.get(fid)
-        if f is None or f["predicate"].startswith((*NOT_KNOWLEDGE, PREFIX)) or f["predicate"].endswith(QUALIFIERS):
+        if (f is None or f["predicate"].startswith((*NOT_KNOWLEDGE, PREFIX))
+                or f["predicate"].endswith(QUALIFIERS) or f["predicate"] == "name"):  # learned name: 12.10.2
             continue
         subj = cv["entities"].get(f["subject"], {}).get("name") if f["subject"] != "world" else "the world"
         if subj is None:  # about something the codex does not show
@@ -319,7 +320,8 @@ def what_you_know(state: WorldState, about: str | None = None, rules: Any = None
             lines.append(f"{e['name']}: {_value_words(e['data']['desc'])} (as anyone here knows)")
     lines += [_known_line(k) for k in known if k["how"] != "seen"][-6:]
     met = [e["name"] for i, e in ents.items() if e["kind"] in ("npc", "companion") and e["visibility"] == "shown"
-           and any(k["subject"] == i for k in known)]
+           and not e.get("name_unknown")  # 12.10.2: met means introduced; strangers seen are not listed
+           and (any(k["subject"] == i for k in known) or e["data"].get("name_known") is False)]
     if met:
         lines.append("People you have met: " + ", ".join(met[-8:]))
     lines.append('Ask "what do I know about <someone or something>?" for the details, or type "journal" for '

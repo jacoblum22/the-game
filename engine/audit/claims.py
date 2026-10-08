@@ -27,6 +27,7 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator
 from engine.audit import text as tx
 from engine.dm.adjudication import AdjudicationRecord, BeatEntry
 from engine.store.projection import WorldState
+from engine.store.views import name_known, unnamed_label
 
 ClaimClass = Literal["existence", "identity", "quantity", "harm_condition", "position", "possession",
                      "location_time", "knowledge", "capability", "clock", "attitude", "outcome", "action", "sealed"]
@@ -523,6 +524,9 @@ def _identity(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: 12.3.1
     if key == "name":
         names = [e.name, *[a for a in e.data.get("aliases", []) if isinstance(a, str)]]
         if any(tx.same(c.value, n) or tx.covers(c.value, n, ratio=1.0) for n in names):
+            # 12.10.2: a name the PC has not learned is a slip (one learned this turn is known by now)
+            if not name_known(ctx.state, e.id) and tx.covers(e.name.split()[0], c.value, ratio=1.0):
+                return _v(c, i, "contradicted", unnamed_label(e), reason="the PC has not learned this name")
             return _v(c, i, "supported")
         return _v(c, i, "contradicted", e.name)
     store: Any = None

@@ -27,7 +27,7 @@ from engine.retrieve.cards import core_cards, max_cards
 from engine.retrieve.scene import entity_names, scene_facts, scene_scope
 from engine.retrieve.triggers import ActiveTrigger
 from engine.store.projection import WorldState
-from engine.store.views import narrator_view
+from engine.store.views import display_name, narrator_view
 
 VERBATIM_EXCHANGES = 4  # fallback; the rules value is pacing.yaml#packet.verbatim_exchanges
 MAX_VIEW_CLOCKS = 8
@@ -115,7 +115,10 @@ def scene_setting(state: WorldState) -> str:  # rule: 12.4.3
     for e in here:
         ed = e.data
         look = ", ".join(str(ed[k]) for k in ("age", "detail", "demeanor") if ed.get(k))
-        lines.append(f"- present: {e.name}" + (f", the {ed['role']}" if ed.get("role") else "") + (f" ({look})" if look else ""))
+        who = display_name(state, e.id)
+        role = f", the {ed['role']}" if ed.get("role") and str(ed["role"]) not in who else ""
+        lines.append(f"- present: {who}{role}"
+                     + (f" ({look})" if look else ""))
     from engine.dm.incident import incident_line
 
     matter = incident_line(state)  # the opening incident's person, as the character knows it (P-067)
@@ -170,6 +173,9 @@ def render_view(view: Mapping[str, Any]) -> str:
             continue
         lines.append(f"{eid}: {e.get('name', '')}")
         lines.append(f"  name: {e.get('name', '')}")
+        if e.get("name_unknown"):  # rule: 12.10.2
+            lines.append("  the character does not know their name: call them by how they look or what they "
+                         "do, never by a name (not even one in the id) until the record says they gave it")
         if e.get("exists") not in (None, "exists"):
             lines.append(f"  state: {e['exists']}")
         if e.get("tags"):
@@ -177,7 +183,7 @@ def render_view(view: Mapping[str, Any]) -> str:
         data = e.get("data") or {}
         keys = [k for k in _DESCRIPTIVE_KEYS if k in data] + [k for k in data if k not in _DESCRIPTIVE_KEYS]
         for k, v in [(k, data[k]) for k in keys][:MAX_DATA_KEYS]:
-            if k != "name":
+            if k not in ("name", "name_known"):
                 lines.append(f"  {k}: {_short(v)}")
         qs = (view.get("quantities") or {}).get(eid, {})
         if qs:

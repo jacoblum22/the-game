@@ -72,7 +72,9 @@ def name_of(state: WorldState, eid: str | None, pc: str | None = None) -> str:
     seal = state.seals.get(eid)
     if seal is not None:
         return str(seal.slice) if seal.slice else "someone"
-    return e.name
+    from engine.store.views import display_name
+
+    return display_name(state, eid)  # 12.10.2: the descriptor until the PC learns the name
 
 
 def _beat_line(state: WorldState, b: BeatEntry, pc: str | None, paused: bool = False,

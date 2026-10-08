@@ -238,6 +238,7 @@ def meet_npc(ctx: TimeContext, role: str | None, place: str | None, *, people: s
                         existing_ids=state.entities.keys())
     data = n.model_dump(exclude={"id", "name", "sealed_fields", "wants", "fears", "refusals", "secrets", "voice",
                                  "knowledge_scope", "ties", "licenses"}, by_alias=True)
+    data["name_known"] = False  # 12.10.2: a walk-on's name is learned in play
     stage(ctx, Event.of("entity_created", rule_id="PR-12-5", source="npc_generation",
                         entity=EntityRecord(id=n.id, kind="npc", name=n.name, visibility="shown", data=data)))
     if place is not None and place in state.entities:
@@ -434,6 +435,18 @@ def commit_memories(ctx: TimeContext) -> HandlerResult:  # rule: 12.11.7
 def record_knowledge(ctx: TimeContext, knower: str, fact_id: str, how: str) -> int:  # rule: 12.10.6
     """`record_knowledge` (00.14.2): `knower` learned `fact_id` (witnessed, told, read, overheard, ...)."""
     return stage(ctx, Event.of("knowledge_recorded", rule_id="12.10.6", knower=knower, fact_id=fact_id, how=how))[0]
+
+
+def learn_name(ctx: TimeContext, knower: str, npc: str, how: str = "told") -> None:  # rule: 12.10.2
+    """`knower` learns `npc`'s name (15.9.17 write point "every name learned"): their `name` fact, known."""
+    state = ctx.tx.state
+    fid = state.current_fact_id(npc, "name")
+    if fid is None or state.facts[fid].value != state.entities[npc].name:
+        ev = fact(ctx.tx, npc, "name", state.entities[npc].name, rule_id="12.10.2", source="ruling",
+                  visibility="shown")
+        stage(ctx, ev)
+        fid = ev.payload.fact_id  # type: ignore[attr-defined]
+    record_knowledge(ctx, knower, fid, how)
 
 
 def knows(state: WorldState, knower: str, fact_id: str) -> str | None:

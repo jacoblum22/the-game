@@ -27,6 +27,44 @@ def fact(state: WorldState, subject: str, predicate: str) -> Any:
     return state.fact_value(subject, predicate)
 
 
+def name_known(state: WorldState, eid: str) -> bool:  # rule: 12.10.2
+    """Has the PC learned this person's name? NPCs created unintroduced (the seed's people, walk-ons) carry
+    `data.name_known: False`; their name is learned by a knowledge record of their `name` fact (told,
+    overheard), being told who they are (a `who_is_*` fact naming them), or being the PC's anchor bond
+    (02.9.2)."""
+    # ponytail: scans the PC's knowledge per call; index name knowledge if the journal grows large
+    e = state.entities.get(eid)
+    if e is None or e.data.get("name_known", True) is not False:
+        return True
+    pc = next((i for i, x in state.entities.items() if x.kind == "pc"), None)
+    if pc is None:
+        return True
+    bond = state.fact_value(pc, "bond.anchor")
+    if isinstance(bond, dict) and bond.get("npc") == eid:
+        return True
+    for fid in state.knowledge.get(pc, {}):
+        f = state.facts.get(fid)
+        if f is not None and ((f.subject == eid and f.predicate == "name")
+                              or (f.value == eid and f.predicate.startswith("who_is_"))):
+            return True
+    return False
+
+
+def unnamed_label(e: Any) -> str:  # rule: 12.10.2
+    """How the PC knows someone whose name they have not learned: the narration's own words for them, else
+    their role ("the ferryman"), else "the stranger"."""
+    d = e.data
+    alias = next((a for a in d.get("aliases") or [] if isinstance(a, str) and a.strip()), None)
+    base = str(alias or d.get("role") or "stranger").split(" (")[0].strip()
+    return base if base.lower().startswith(("the ", "a ", "an ")) else f"the {base}"
+
+
+def display_name(state: WorldState, eid: str) -> str:
+    """The entity's name as the PC knows it (12.10.2): its name, or `unnamed_label` until it is learned."""
+    e = state.entities[eid]
+    return e.name if name_known(state, eid) else unnamed_label(e)
+
+
 def view(state: WorldState, name: ViewName, scope: Iterable[str] | None = None) -> dict[str, Any]:
     return {"narrator": narrator_view, "codex": codex_view, "audit": audit_view}[name](state, scope)
 
@@ -54,6 +92,8 @@ def narrator_view(state: WorldState, scope: Iterable[str] | None = None) -> dict
                 continue
             data[k] = v
         d["data"] = data
+        if not name_known(state, eid):  # 12.10.2: the narrator calls them as the PC knows them
+            d["name"], d["name_unknown"] = unnamed_label(e), True
         entities[eid] = d
     visible = set(entities)
     facts = {}
@@ -98,6 +138,8 @@ def codex_view(state: WorldState, scope: Iterable[str] | None = None) -> dict[st
             continue
         d = e.model_dump(mode="json", exclude={"sealed_fields", "data"})
         d["data"] = {k: v for k, v in e.data.items() if f"{eid}#{k}" not in seals and k not in e.sealed_fields}
+        if not name_known(state, eid):  # 12.10.2
+            d["name"], d["name_unknown"] = unnamed_label(e), True
         entities[eid] = d
     visible = set(entities)
     facts = {fid: f.model_dump(mode="json", exclude={"truth"}) for fid, f in state.facts.items()

@@ -154,6 +154,7 @@ def _write_links(tx: Transaction, frm: str, link: dict[str, Any], places: dict[s
 
 def _npc_events(n: dict[str, Any], state: WorldState) -> list[Event]:  # rule: 12.16.11
     data = {k: v for k, v in n.items() if k not in ("id", "name", "exists", "standing_to_pc")}
+    data["name_known"] = False  # 12.10.2: the PC learns it in play (or knows their anchor bond)
     sealed = [k for k in NPC_SEALED if data.get(k)]
     rec = EntityRecord(id=n["id"], kind="npc", name=n["name"], visibility="background",
                        exists=n.get("exists", "exists"), sealed_fields=sealed, data=data)
