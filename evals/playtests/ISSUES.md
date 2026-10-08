@@ -29,3 +29,5 @@ Status: open · fixing (round N) · fixed (commit) · logged (ledger id) · wont
 | P-020 | bug | med | Same [OFFER] shown twice; a typed choice ignored; a persuasion result never shown | 161323-talker inputs 28–38 | fixing (P-022 fixer) |
 | P-021 | bug | med | Raw NPC action-row text in fiction: "Tikka Mud-Walker escalates: threatens, calls for others", "asks the PC something" | 161323-talker inputs 26–28 | fixing (P-022 fixer) |
 | P-022 | bug | med | Framer/Reader responses rejected (invalid_reasked → defaulted) with no reason logged | talker 2+2, explorer 1 | fixing |
+| P-023 | bug | high | Intent substitution: "I shout at the travellers to state their names" became an OFFER to wound the nearest traveller; offers drift Talk(Presence) → Talk(Might) → Strike without the player asking | 161325-fighter inputs 29–40 | open (check against P-022 defaults, then r2) |
+| P-024 | polish | med | Trivial acts get a full odds screen (opening an unbarred wicket "easy obstacle"); a shout at 35% with 20% critical failure; a retry shows worse stakes but better odds | 161325-fighter inputs 29–32 | open |

@@ -10,7 +10,7 @@ Engine model: Claude Haiku 5.5 via the Claude Code CLI; player: Claude Sonnet. N
 | newcomer | 18 | 1.39 | 6 | never got the scene described (P-018) |
 | explorer | 16 | 3.06 | 12 | fallback debug text, "what do I know" loops (P-019) |
 | talker | 18 | 2.67 | 13 | raw NPC-action text (P-021), duplicate OFFER (P-020), rejected model output (P-022) |
-| fighter | — | — | — | (report pending) |
+| fighter | 18 | 2.67 | 9 | intent substitution to violence (P-023), odds on trivial acts (P-024) |
 
 Fixed and merged into integrate-r1 (12f51f2), suite 996 passed, validator 0/0:
 P-001 Oracle crash leak + CLI never prints engine errors · P-002 claim-check convergence · P-003 fallback reads as
