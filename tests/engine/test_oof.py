@@ -169,3 +169,52 @@ def test_recap_from_state_only(s: Scene) -> None:
     assert text.startswith("[RECAP] Where:")
     assert "The missing ferryman" in text and "The secret cult" not in text
     assert "• Wren reached Ashford." in text
+
+
+# ------------------------------------------------------------------ the OFFER's model words, player-facing (I-134)
+
+
+def test_offer_words_drop_ids_internals_and_fix_the_actors_pronouns() -> None:
+    """The breaker playtest's OFFER (turn 18): a raw fact id, the Reader's aside and an OOF tail, "her" for he/him."""
+    from types import SimpleNamespace as NS
+
+    from engine.dm.turn import oof_answer
+    from engine.resolve.frame import plain_offer_words
+
+    ent = {"pc.dilly": NS(data={"pronouns": "he/him"}), "npc.bixok": NS(data={"pronouns": "he/him"})}
+    fact = NS(visibility="shown", predicate="saw_who_started_the_quarrel", value=True)
+    state = NS(entities=ent, facts={"fact.233": fact}, scene=NS(cast_present=["pc.dilly", "npc.bixok"]))
+    frame = NS(beat=NS(actor="pc.dilly", target=None, restatement=(
+        "Dilly scans the common room for the stranger who started the quarrel (target not yet chosen; the scan waits "
+        "on the clarifying answer). Out of fiction: the player asks what options are available; answer from the "
+        "codex with a free OFFER, no fictional time.")),
+        threatened_cost=NS(form_intent="her searching eyes sweeping the room draw the notice of the stranger who "
+                                       "started the quarrel (source: fact.203)"),
+        alternate_cost=NS(form_intent="Bixok tells her nothing, as fact.233 says"))
+    plain_offer_words(frame, state)
+    assert frame.beat.restatement == "Dilly scans the common room for the stranger who started the quarrel."
+    assert frame.threatened_cost.form_intent == ("his searching eyes sweeping the room draw the notice of the "
+                                                 "stranger who started the quarrel")
+    assert frame.alternate_cost.form_intent == "Bixok tells him nothing, as saw who started the quarrel says"
+    # someone else present uses she/her: "her" may be them, so it stays
+    ent["npc.bixok"] = NS(data={"pronouns": "she/her"})
+    frame.alternate_cost.form_intent = "Bixok tells her nothing"
+    assert plain_offer_words(frame, state).alternate_cost.form_intent == "Bixok tells her nothing"
+    # a question about an option's word gets that word's meaning, not the generic help
+    ctx = NS(state=state, rules=None)
+    assert oof_answer(ctx, 'what does "Go big" mean here?').startswith("Go big: raise the stakes one step")
+    assert oof_answer(ctx, 'what does "near miss" mean?').startswith("A near miss is a roll that fails by 3")
+
+
+def test_offer_menu_says_what_enter_does_and_names_the_trades() -> None:
+    from engine.dm.response import Choice, Pause, Response
+    from engine.resolve.pipeline import TRADE_LABELS
+    from play.render import render_response
+
+    pause = Pause(kind="offer", default_choice="withdraw",
+                  choices=[Choice(id="commit", label="Commit"), Choice(id="withdraw", label="Withdraw (nothing is spent)"),
+                           Choice(id="play_safe", label=TRADE_LABELS["play_it_safe"])])
+    out = render_response(Response(phase="play", oof_blocks=[OofBlock(kind="OFFER", text="[OFFER] Climb.")],
+                                   pause=pause), 80)
+    assert out.endswith("  3) Play it safe (less at stake, less if it works)\n\n"
+                        "Type a number, or press Enter for Withdraw.")

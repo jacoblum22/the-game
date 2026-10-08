@@ -154,6 +154,21 @@ def choice_lines(pause: Any, indent: str = "  ") -> str:
     return "\n".join(f"{indent}{i}) {_bare(c.label)}" for i, c in enumerate(pause.choices, 1))
 
 
+def short_label(label: str) -> str:
+    """The option's name, not its whole description ("Withdraw (nothing is spent)" -> "Withdraw")."""
+    for sep in (": ", " — ", ", ", " (", ". "):
+        label = label.split(sep)[0]
+    return label.strip().rstrip(".")
+
+
+def enter_hint(pause: Any) -> str:
+    """`Type a number, or press Enter for Withdraw.` when the pause has a default among its choices."""
+    ids = [c.id for c in pause.choices]
+    if pause.default_choice not in ids:
+        return ""
+    return f"Type a number, or press Enter for {short_label(pause.choices[ids.index(pause.default_choice)].label)}."
+
+
 def render_response(resp: Any, width: int) -> str:
     """Fiction paragraphs, then the OOF blocks in the engine's order, then the pause prompt (when no block shows
     it already) and its choices, numbered, one per line. Any listing of the choices inside a block (lettered
@@ -175,9 +190,12 @@ def render_response(resp: Any, width: int) -> str:
             placed = strip_listing(last, pause, in_place=True)
             if placed != strip_listing(last, pause) and parts and parts[-1] == strip_listing(last, pause).strip():
                 parts[-1] = placed.strip()
-                return "\n\n".join(wrap(p, width) for p in parts)
+                hint = enter_hint(pause) if resp.phase == "play" else ""  # the setup menus carry their own
+                return "\n\n".join(wrap(p, width) for p in [*parts, hint] if p)
         if not asked:
             parts.append(pause.prompt.strip())
         if choices:
             parts.append(choice_lines(pause))
+            if resp.phase == "play" and enter_hint(pause):
+                parts.append(enter_hint(pause))
     return "\n\n".join(wrap(p, width) for p in parts)

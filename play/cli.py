@@ -26,7 +26,7 @@ from pathlib import Path
 from typing import Any, TextIO
 
 from engine.llm.base import MissingKey, ModelRefused, ModelUnavailable
-from play.render import ascii_safe, render_response, terminal_width, wrap
+from play.render import ascii_safe, render_response, short_label, terminal_width, wrap
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 SAVES = REPO_ROOT / "saves"
@@ -323,6 +323,7 @@ class Session:
         the player is told to type one."""
         p = self.pause
         if p is None:
+            self.app.say("(Say what your character does, or type /help.)")
             return
         ids = [c.id for c in p.choices]
         if p.default_choice is None:
@@ -330,10 +331,7 @@ class Session:
                 self.app.say(NAME_HINT)
             return
         if p.default_choice in ids:
-            label = p.choices[ids.index(p.default_choice)].label
-            for sep in (": ", " — ", ", ", " (", ". "):  # the option's name, not its whole description
-                label = label.split(sep)[0]
-            choice, echo = p.default_choice, label.strip().rstrip(".")
+            choice, echo = p.default_choice, short_label(p.choices[ids.index(p.default_choice)].label)
         elif p.kind in FLOW_PAUSES:  # the step's default is not one of its options: "move on" means it
             choice, echo = "move_on", "the dice decide" if p.kind == "seed_step" else "moving on"
         else:

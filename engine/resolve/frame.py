@@ -627,6 +627,83 @@ def offer_preview(frame: Frame, rules: Any = None) -> OfferPreview:  # rule: 01.
         trades=legal_trades(frame))
 
 
+_CITED_FACT = re.compile(r"\s*\((?:source:\s*)?fact\.\d+\)")  # "(source: fact.203)": the words already say it
+_BARE_FACT = re.compile(r"\bfact\.\d+\b")
+_OOF_TAIL = re.compile(r"\s*\b(?:out of fiction|OOF)\s*:.*$", re.IGNORECASE | re.DOTALL)
+_PAREN = re.compile(r"\s*\([^()]*\)")
+_PRONOUNS = {"he": ("he", "him", "his", "himself"), "she": ("she", "her", "hers", "herself")}
+_NOT_A_NOUN = frozenset("a an the to of in on at for from with by and or but as if so that this it is was "
+                        "when while than then nothing anything something everything away back up down off out "
+                        "too again alone here there what how why where who into over".split())
+
+
+def _pron_set(entity: Any) -> str | None:
+    p = str((getattr(entity, "data", None) or {}).get("pronouns") or "").lower()
+    return p.split("/")[0] if p.split("/")[0] in _PRONOUNS else None
+
+
+def _fix_pronouns(text: str, want: str) -> str:
+    """Swap the other set's pronouns for `want`'s ("her" before a noun is possessive)."""
+    wrong = "she" if want == "he" else "he"
+    subj, obj, poss, refl = _PRONOUNS[want]
+    wsubj, wobj, wposs, wrefl = _PRONOUNS[wrong]
+
+    def sub(m: re.Match[str]) -> str:
+        w, nxt = m.group(1), m.group(2) or ""
+        lw = w.lower()
+        if lw == wsubj:
+            out = subj
+        elif lw == wrefl:
+            out = refl
+        elif want == "he" and lw == "her":
+            out = "his" if nxt and nxt.lower() not in _NOT_A_NOUN else "him"
+        elif want == "he" and lw == "hers":
+            out = "his"
+        elif lw == wobj:
+            out = obj
+        else:  # "his" -> "her"
+            out = poss if want == "he" else "her"
+        return (out[:1].upper() + out[1:]) if w[:1].isupper() else out
+
+    words = "|".join(sorted({wsubj, wobj, wposs, wrefl}, key=len, reverse=True))
+    return re.sub(rf"\b({words})\b(?=(?:\s+([A-Za-z']+))?)", sub, text, flags=re.IGNORECASE)
+
+
+def _fact_words(state: Any, fid: str) -> str:
+    f = state.facts.get(fid) if state is not None else None
+    if f is None or f.visibility not in ("shown", "available"):
+        return "what is already settled"
+    pred = f.predicate.replace("_", " ").strip()
+    return pred if f.value is True else f"{pred}: {f.value}" if f.value not in (False, None) else f"not {pred}"
+
+
+def plain_offer_words(frame: Frame, state: Any) -> Frame:  # rule: 12.14.4
+    """The model-written words the OFFER shows (the restated beat, the cost forms) without ids or internals: a
+    cited fact id is dropped (the form already says it in words), a bare one becomes the fact's words; the
+    restatement loses its asides and any "out of fiction" tail; the actor's pronouns are the store's.
+    ponytail: pronouns are fixed only for a he/she actor and only when no one else present uses the other set."""
+    actor = state.entities.get(frame.beat.actor) if state is not None else None
+    want = _pron_set(actor)
+    if want and state.scene is not None:
+        others = [state.entities.get(i) for i in [*state.scene.cast_present, frame.beat.target or ""]
+                  if i and i != frame.beat.actor]
+        if any(_pron_set(e) not in (None, want) for e in others):
+            want = None
+
+    def plain(text: str, beat: bool = False) -> str:
+        t = _CITED_FACT.sub("", text or "")
+        t = _BARE_FACT.sub(lambda m: _fact_words(state, m.group(0)), t)
+        if beat:
+            t = _PAREN.sub("", _OOF_TAIL.sub("", t)).strip()
+        return _fix_pronouns(t, want) if want else t
+
+    frame.beat.restatement = plain(frame.beat.restatement, beat=True)
+    for cost in (frame.threatened_cost, frame.alternate_cost):
+        if cost is not None:
+            cost.form_intent = plain(cost.form_intent)
+    return frame
+
+
 def commit_events(frame: Frame, choice: OfferChoice, *, mint: Callable[[str], str], state: Any,
                   turn_id: str | None = None) -> list[Event]:  # rule: 00.13.2
     """The stored DC write (a tiered obstacle, 01.6.5) and `frame_committed`; sets `frame.id`."""

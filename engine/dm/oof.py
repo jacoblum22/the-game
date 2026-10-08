@@ -113,10 +113,12 @@ def offer_choices(src: Frame | OfferPreview, rules: Any = None) -> list[dict[str
     v = _view(src, rules)
     out = [{"id": "commit", "label": "Commit"}, {"id": "change", "label": "Change approach"},
            {"id": "withdraw", "label": "Withdraw"}]
+    from engine.resolve.pipeline import TRADE_LABELS
+
     if "go_big" in v.trades:
-        out.append({"id": "go_big", "label": "Go big"})
+        out.append({"id": "go_big", "label": TRADE_LABELS["go_big"]})
     if "play_it_safe" in v.trades or "play_safe" in v.trades:
-        out.append({"id": "play_safe", "label": "Play it safe"})
+        out.append({"id": "play_safe", "label": TRADE_LABELS["play_it_safe"]})
     return out
 
 
