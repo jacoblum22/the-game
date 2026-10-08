@@ -363,6 +363,13 @@ def _fiction_questions(ctx: TurnContext, rec: AdjudicationRecord, questions: Seq
             rec.oracle.append(OracleEntry(question=q.predicate, answer=_yes_no(st.facts[fid].value), fact_id=fid,
                                           subject=subject, predicate=pred))
             continue
+        from engine.dm.incident import settle_who
+
+        who = settle_who(ctx, q.predicate)  # "who is X?": an existing person, never a yes/no (P-067)
+        if who is not None:
+            rec.oracle.append(OracleEntry(question=q.predicate, answer=who[0], fact_id=who[1], subject=subject,
+                                          predicate=pred))
+            continue
         odds = q.odds_rung if q.odds_rung and q.odds_rung in rungs else "even"
         res = ask_oracle(OracleQuestion(subject=subject, predicate=pred, question=q.predicate, odds=odds, asker=pc),
                          state=st, rules=ctx.rules, rng=ctx.rng, mint=tx.mint, store=ctx.store, staged=tx.events,

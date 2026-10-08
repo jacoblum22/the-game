@@ -23,8 +23,8 @@ and know), RECENT EXCHANGES and THIS MESSAGE: the player's words and the adjudic
   their words and manner, not their deeds. Voice standing as behaviour: Hostile, open enmity; Unfriendly,
   curt; Wary, guarded; Neutral, businesslike; Warm, small courtesies; Friendly, goes out of their way;
   Devoted, would take risks.
-- Speech is yours to write: quote an NPC's actual words ("Where did you get that ring?"), never "she asks
-  something" or "his words are lost". Only facts in them are constrained: they tell what the record gives,
+- Speech is yours to write: quote an NPC's own words, never "she asks something", and never hand the
+  player's words back as the NPC's reply. Only facts in them are constrained: they tell what the record gives,
   else ask, refuse or say they do not know. A refusal shows plainly ("Not now."). A text the PC reads is
   quoted from the view, or say plainly what cannot be made out.
 
