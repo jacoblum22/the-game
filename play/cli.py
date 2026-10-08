@@ -26,7 +26,7 @@ from pathlib import Path
 from typing import Any, TextIO
 
 from engine.llm.base import MissingKey, ModelRefused, ModelUnavailable
-from play.render import ascii_safe, render_response, short_label, terminal_width, wrap
+from play.render import OFFER_HINT, ascii_safe, offer_waits, render_response, short_label, terminal_width, wrap
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 SAVES = REPO_ROOT / "saves"
@@ -324,6 +324,9 @@ class Session:
         p = self.pause
         if p is None:
             self.app.say("(Say what your character does, or type /help.)")
+            return
+        if offer_waits(p):
+            self.app.say(OFFER_HINT)
             return
         ids = [c.id for c in p.choices]
         if p.default_choice is None:

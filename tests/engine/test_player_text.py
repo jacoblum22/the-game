@@ -100,4 +100,5 @@ def test_choices_once_numbered_one_per_line() -> None:
     offer = Pause(kind="offer", choices=[Choice(id="commit", label="Commit"), Choice(id="withdraw", label="Withdraw")])
     r = render_response(Response(phase="play", oof_blocks=[OofBlock(kind="OFFER", text="[OFFER] Climb.\n  1) Commit"
                                                                     "   2) Withdraw")], pause=offer), 80)
-    assert r.count("1) Commit") == 1 and r.endswith("  1) Commit\n  2) Withdraw")
+    assert r.count("1) Commit") == 1 and r.endswith("  1) Commit\n  2) Withdraw\n\nType 1 to commit, or a number "
+                                                    "from the list.")

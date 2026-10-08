@@ -161,8 +161,19 @@ def short_label(label: str) -> str:
     return label.strip().rstrip(".")
 
 
+OFFER_HINT = "Type 1 to commit, or a number from the list."
+
+
+def offer_waits(pause: Any) -> bool:
+    """An OFFER: an empty line takes nothing (P-044: Enter-for-Withdraw silently dropped the attempt)."""
+    return bool(pause.choices) and pause.choices[0].id == "commit"
+
+
 def enter_hint(pause: Any) -> str:
-    """`Type a number, or press Enter for Withdraw.` when the pause has a default among its choices."""
+    """`Type a number, or press Enter for Let it fail.` when the pause has a default among its choices; an OFFER
+    names no Enter default (OFFER_HINT)."""
+    if offer_waits(pause):
+        return OFFER_HINT
     ids = [c.id for c in pause.choices]
     if pause.default_choice not in ids:
         return ""

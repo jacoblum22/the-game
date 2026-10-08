@@ -291,3 +291,16 @@ def test_enter_takes_the_pause_default_and_asks_for_a_name(tmp_path: Path) -> No
     assert "(Mixed)" in out and "(Keep it)" in out and "(the dice decide)" in out
     assert out.count("Type a name for your character.") == 1
     assert len([c for c in FakeGame.last.calls if c[0] in ("submit", "answer")]) == 4
+
+
+def test_enter_at_an_offer_takes_nothing(tmp_path: Path) -> None:
+    """P-044: an empty line at an OFFER withdrew silently ("a trap"); it now re-prompts, and Withdraw is by number."""
+    from play.render import OFFER_HINT
+
+    o = offer("turn.1")
+    o.pause = Pause(kind="offer", default_choice="withdraw", choices=OFFER_CHOICES)
+    FakeGame.script = [play_resp("Begun.", "turn.0"), o]
+    _, out = run(["new", "g"], "a\nI climb\n\n/quit\n", tmp_path)
+    assert FakeGame.last.calls[:2] == [("answer", "mixed"), ("submit", "I climb")]
+    assert not any(c[0] == "answer" and c[1] == "withdraw" for c in FakeGame.last.calls)
+    assert out.count(OFFER_HINT) >= 2 and "press Enter for Withdraw" not in out

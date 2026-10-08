@@ -16,7 +16,7 @@ from pydantic import BaseModel, Field
 from engine.store.events import PauseRecord
 
 Phase = Literal["seed", "creation", "play", "ending"]
-OofKind = Literal["SEED", "CREATE", "OFFER", "STATUS", "WARNING", "REDIRECT", "CLARIFY", "NEAR_MISS", "LAST_CHANCE",
+OofKind = Literal["SEED", "CREATE", "OFFER", "RESULT", "STATUS", "WARNING", "REDIRECT", "CLARIFY", "NEAR_MISS", "LAST_CHANCE",
                   "RECAP", "NOTE", "EPILOGUE", "SHEET", "RULES"]
 PauseKind = Literal["seed_step", "create_step", "offer", "clarify", "redirect", "near_miss", "last_chance",
                     "yield_terms", "ending", "budget"]

@@ -471,7 +471,8 @@ def turn_blocks(ctx: TurnContext, oof_items: Sequence[dict[str, str]], record: A
             idx = max((i for i, it in enumerate(items) if it["kind"] == kind), default=None)
             if idx is not None:
                 items.pop(idx)
-    blocks = [_item_block(ctx, i) for i in items]
+    # two beats refused for the same reason owe one block, not two copies (12.15: each block once)
+    blocks = list({b.text: b for b in (_item_block(ctx, i) for i in items)}.values())
     texts = {b.text for b in blocks} | {b.text for b in owned}
     for n in record.notes:
         if n.lstrip().startswith("[WARNING") and n.strip() not in texts:
