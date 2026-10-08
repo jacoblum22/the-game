@@ -12,6 +12,7 @@
 
 from __future__ import annotations
 
+import re
 from collections.abc import Sequence
 from typing import Any
 
@@ -26,7 +27,8 @@ from engine.resolve.types import REACH_VALUE
 from engine.retrieve.triggers import get_active_triggers
 from engine.time.clock import beat_cost
 from engine.time.scheduler import advance_time
-from engine.world.social import first_interaction, record_knowledge, standing
+from engine.store.views import name_known
+from engine.world.social import first_interaction, learn_name, record_knowledge, standing
 
 NPC_TABLE = "tbl.npc_action"
 RESOLVED = ("resolved", "no_roll")
@@ -46,6 +48,7 @@ def world_step(ctx: TurnContext, record: AdjudicationRecord, *, beats: Sequence[
     # coarse: PR-06-6
     deliver_learning(ctx, record, beats)
     npcs_respond(ctx, record, beats)
+    learn_names(ctx, record, beats)
     clock_omens(ctx, record)
     fired_triggers(ctx, record)
     beat_time(ctx, record, beats)
@@ -96,6 +99,29 @@ def npcs_respond(ctx: TurnContext, record: AdjudicationRecord, beats: Sequence[B
                                                      source_ref=f"{NPC_TABLE}:{res.roll}", tags=r.tags))
     for npc in [n for n in talk if n in ctx.state.entities]:  # the one spoken to answers as the talk went, always
         talked(npc, [])
+
+
+_ASKS_NAME = re.compile(r"\bnames?\b|\bwho (?:are|is) (?:you|she|he|they)\b"
+                        r"|\bwho (?:you|she|he|they) (?:are|is)\b|\bintroduc", re.IGNORECASE)
+
+
+def learn_names(ctx: TurnContext, record: AdjudicationRecord, beats: Sequence[BeatOutcome]) -> None:
+    # rule: 12.10.2
+    """The PC asked who someone is (or gave their own name) and that NPC answers (a resolved Talk on them,
+    else the one NPC whose response this turn is not a withholding one): they give their name, recorded for
+    the PC (`learn_name`) and named in their act so the narration says it."""
+    from engine.dm.roles.narrator import WITHHOLDING
+
+    st = ctx.state
+    if record.pc is None or not _ASKS_NAME.search(" ".join([p.text for p in record.parts]
+                                                           + [b.entry.restatement for b in beats])):
+        return
+    answering = [a for a in record.npc_actions if a.npc in st.entities
+                 and not a.action.startswith(WITHHOLDING) and not name_known(st, a.npc)]
+    talked = {t for b in beats if "talk" in (b.entry.approach_words or "") for t in b.entry.targets}
+    for a in [a for a in answering if a.npc in talked] or (answering if len(answering) == 1 else []):
+        learn_name(ctx.time_ctx(), record.pc, a.npc, "told")
+        a.action += f"; gives their name, in their own words: {st.entities[a.npc].name}"
 
 
 LEARN_VERBS = {"verb.talk": "told", "verb.observe": "witnessed", "verb.recall": "recalled"}

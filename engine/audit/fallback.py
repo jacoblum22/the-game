@@ -29,6 +29,10 @@ _AUX = {"is", "are", "was", "were", "can", "could", "will", "would", "has", "hav
         "must", "does", "do", "did"}
 _WH = {"what", "who", "whom", "whose", "which", "where", "when", "why", "how"}
 _KEEP = {"the", "a", "an", "his", "her", "their", "my", "your", "its", "this", "that", "these", "those", "someone"}
+# a second verb of the PC's after "and"/"then", read as a verb when a particle, preposition or article follows
+_AND_VERB = re.compile(r"\b(and|then) ([a-z]+(?<!ss)s)\b(?= (?:the|a|an|out|in|into|on|onto|up|down|to|back|"
+                       r"over|through|away|off|his|her|their|its|from|with|toward|towards|across|around|"
+                       r"for|at)\b)")
 _SOMEONE = re.compile(r"^(?:someone|somebody|anyone|anybody)\b", re.IGNORECASE)
 
 
@@ -69,6 +73,7 @@ def _you(restated: str, pc_names: Iterable[str], other_names: Iterable[str]) -> 
     for n in pc_names:
         if n and restated.startswith(n + " "):
             verb, _, tail = restated[len(n) + 1:].partition(" ")
+            tail = _AND_VERB.sub(lambda m: f"{m[1]} {_base(m[2])}", tail)  # "and goes out" -> "and go out"
             return f"you {_base(verb)} {tail}".strip()
     first, _, rest = restated.partition(" ")
     if first.lower() in ("i", "you"):

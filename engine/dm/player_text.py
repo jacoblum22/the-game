@@ -161,7 +161,9 @@ def entity_names(state: Any) -> dict[str, str]:
     out: dict[str, str] = {}
     for eid, e in getattr(state, "entities", {}).items():
         if getattr(e, "visibility", "shown") in ("shown", "available") and eid not in getattr(state, "seals", {}):
-            out[eid] = e.name
+            from engine.store.views import display_name
+
+            out[eid] = display_name(state, eid) if hasattr(state, "knowledge") else e.name  # 12.10.2
     return out
 
 

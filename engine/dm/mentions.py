@@ -207,6 +207,8 @@ def _npc(m: Mention, *, tx: Any, rules: Any, rng: Any, place: str | None,
         data["gender"] = _GENDERS.get(fixed["pronouns"].lower(), data.get("gender"))
     if not _proper(m.name) and bare(m.name).lower() != str(data.get("role", "")).lower():
         data["aliases"] = [bare(m.name)]
+    if not _proper(m.name):
+        data["name_known"] = False  # 12.10.2: described, not named; the rolled name is learned in play
     eid = ids.entity_id("npc", name, tx.state.entities)
     rec = EntityRecord(id=eid, kind="npc", name=name, visibility="shown", data=data)
     res.seqs.append(tx.add(Event.of("entity_created", source="npc_generation", rule_id="PR-12-5", entity=rec)))

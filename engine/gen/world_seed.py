@@ -134,6 +134,19 @@ class Incident(BaseModel):
     leads: list[Thread]
 
 
+HEADLINE_ROLES = ("innkeeper", "smith", "captain of the gate", "healer")
+SHORT_LIST = 8  # a list this long or shorter is shown in full at setup
+
+
+def headline_people(npcs: list[dict[str, Any]], rulers: str | None) -> list[dict[str, Any]]:  # rule: 12.16.3
+    """The people setup step 8 names by default (all of them when the list is short): the PC, a local, knows
+    them by name from the start (12.10.2)."""
+    if len(npcs) <= SHORT_LIST:
+        return list(npcs)
+    picked = [n for n in npcs if rulers and n["role"] == f"head of {rulers}"]
+    return (picked + [n for n in npcs if n["role"] in HEADLINE_ROLES])[:4]
+
+
 class SeededWorld(BaseModel):
     """The world seed's output. `record` is the full region record (SCHEMAS.md#region_yaml), sealed parts included;
     the typed fields are views of it."""

@@ -27,6 +27,7 @@ from engine.llm.offline import sentences as _sentences
 from engine.retrieve.cards import load_cards_for
 from engine.retrieve.scene import pc_id, scene_scope
 from engine.store.projection import WorldState
+from engine.store.views import name_known, unnamed_label
 
 ALIAS_KEYS = ("role", "aliases", "pronouns", "people", "detail")
 
@@ -66,6 +67,8 @@ def entity_lines(state: WorldState, ids: Sequence[str]) -> list[str]:  # rule: 1
             lines.append(f"{eid}: {seal.slice}")
             continue
         names = [e.name]
+        if not name_known(state, eid):  # 12.10.2: as the narration calls them; the name stays to catch slips
+            names = [unnamed_label(e), e.name]
         if eid == pc:
             names += ["you", "your"]
         for k in ALIAS_KEYS:
