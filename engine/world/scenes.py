@@ -27,6 +27,7 @@ from typing import Any, Literal
 from pydantic import BaseModel, Field
 
 from engine.data.loader import Rules
+from engine.store.details import expire_events
 from engine.store.events import Event, SceneRecord
 from engine.store.projection import WorldState
 from engine.time import clock
@@ -177,6 +178,7 @@ def end_scene(ctx: TimeContext, reason: str, *, answered: Answer | None = None,
                     "12.6.3"))
     done = mark_boundary(ctx, "scene_end", {"scene_id": sc.scene_id, "reason": reason})
     offer = tx.state.meta.get("chronicle_offer")
+    stage(ctx, *expire_events(tx.state, tx.mint))  # 12.4.8 step 8; the card (step 9) closes with scene_ended
     stage(ctx, Event.of("scene_ended", rule_id="PR-12-7", scene_id=sc.scene_id, reason=reason),
           meta("dead_air", 0, "12.4.2"))
     from engine.world.pacing import tension
