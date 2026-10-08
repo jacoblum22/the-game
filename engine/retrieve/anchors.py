@@ -121,8 +121,21 @@ def score_anchor(anchor: Mapping[str, Any], beat: Any, deed_tags: Iterable[str],
     return score, bool(intent or deed)
 
 
+def verb_family(verb: str | None, rules: Any) -> set[str] | None:  # rule: 01.5.1
+    """The beat's verb and the basic verbs its card is told apart from (either card's `distinguish`): the
+    anchors a re-anchor may move to. None (no verb): any. A Talk beat never re-anchors to a Strike."""
+    if not verb or verb not in rules.basic_verbs:
+        return None
+
+    def vs(v: str) -> set[str]:
+        return {str(d.get("vs")) for d in (rules.basic_verbs[v].get("anchor") or {}).get("distinguish") or ()}
+
+    return {verb, *(vs(verb) & set(rules.basic_verbs)), *(v for v in rules.basic_verbs if verb in vs(v))}
+
+
 def anchor_candidates(beat: Any, state: WorldState, rules: Any) -> list[str]:  # rule: 00.15.3
-    """At most eight anchor ids for this beat, the basic verb's anchor first, then best score."""
+    """At most eight anchor ids for this beat, the basic verb's anchor first, then best score; an anchor tied to
+    a basic verb outside the beat's verb family is not a candidate (01.5.1: anchors for the beat's verb)."""
     retrieval = _retrieval(rules)
     cap = int(retrieval.get("max_candidates", MAX_CANDIDATES))
     weights = retrieval.get("score", {})
@@ -130,9 +143,10 @@ def anchor_candidates(beat: Any, state: WorldState, rules: Any) -> list[str]:  #
     deed_tags = beat_deed_tags(beat, rules)
     situation = scene_situation_tags(state, rules)
     default = verb_anchor(_get(beat, "verb"), rules)
+    family = verb_family(_get(beat, "verb"), rules)
     scored: list[tuple[int, int, tuple[Any, ...], str]] = []
     for aid, a in rules.anchors.items():
-        if aid == default:
+        if aid == default or (family is not None and a.get("verb") and a.get("verb") not in family):
             continue
         score, keyed = score_anchor(a, beat, deed_tags, situation, weights)
         if not keyed:

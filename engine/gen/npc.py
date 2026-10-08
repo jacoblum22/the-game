@@ -16,6 +16,7 @@ the default rolls d100 against `resolution.yaml#oracle` without extremes.
 
 from __future__ import annotations
 
+import re
 from collections.abc import Callable, Iterable, Sequence
 from typing import Any, Literal
 
@@ -129,6 +130,26 @@ def generic_name(dice: Dice) -> str:
     return "{} {}".format(_roll(dice, "tbl.name_given")["result"], _roll(dice, "tbl.name_family")["result"])
 
 
+_ROLE_AGE = ((r"child|children|kid|urchin|boy|girl|lad|lass|youngster", "a child"),
+             (r"old|elderly|aged|crone|grandmother|grandfather|granny", "old"),
+             (r"youth|teen|teenager|young", "young (in their teens)"))
+_ROLE_GENDER = ((r"girl|lass|woman|women|mother|wife|widow|daughter|sister|crone|grandmother|granny|lady|maid",
+                 ("woman", "she/her")),
+                (r"boy|lad|man|men|father|husband|widower|son|brother|grandfather|lord", ("man", "he/him")))
+_NEGATED = re.compile(r"\bnot an?\s+\w+", re.I)  # "a child who is not a boy" implies no sex
+
+
+def role_implies(role: str | None) -> tuple[str | None, tuple[str, str] | None]:  # rule: PR-12-5
+    """(age, (gender, pronouns)) the role's own words state ("child by the pilings" -> a child), else None each:
+    a walk-on never contradicts the words it was written from."""
+    text = _NEGATED.sub(" ", role or "")
+
+    def hit(table: Any) -> Any:
+        return next((v for pat, v in table if re.search(rf"(?<![\w-])(?:{pat})(?![\w-])", text, re.I)), None)
+
+    return hit(_ROLE_AGE), hit(_ROLE_GENDER)
+
+
 def walk_on(rng: SeedRng, *, role: str | None = None, home: str | None = None, people: str | None = None,
             name_tables: Sequence[dict[str, Any]] = (), given_used: set[str] | None = None,
             existing_ids: Iterable[str] = (), member_of: Sequence[str] = (), role_tags: Sequence[str] = ()) -> NPC:
@@ -146,6 +167,10 @@ def walk_on(rng: SeedRng, *, role: str | None = None, home: str | None = None, p
     name = person_name(dice, list(tabs), people or "", used) if tabs else generic_name(dice)
     g = _roll(dice, "tbl.npc_gender")
     age = _roll(dice, "tbl.npc_age")["result"]
+    implied_age, implied_g = role_implies(role)  # the role's own words win over the rolls (PR-12-5: implied kept)
+    age = implied_age or age
+    if implied_g:
+        g = {"result": implied_g[0], "pronouns": implied_g[1]}
     detail = _roll(dice, "tbl.npc_detail")["result"]
     demeanor = _roll(dice, "tbl.npc_demeanor")["result"]
     taken = set(existing_ids)

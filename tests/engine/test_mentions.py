@@ -107,6 +107,25 @@ def test_npc_by_description_is_a_walk_on(tmp_path: Path, rules: Any) -> None:
     assert store.rebuild() == store.state
 
 
+@pytest.mark.parametrize("name", ["the child by the pilings", "a girl selling eels"])
+def test_a_walk_on_never_contradicts_its_own_words(tmp_path: Path, rules: Any, name: str) -> None:
+    """P-065: "a child by the pilings" became "Falwen Underwort, a middle-aged man" (the age and sex were rolled
+    over the role's words)."""
+    import random
+
+    from engine.gen.npc import role_implies, walk_on
+
+    store, rng = _game(tmp_path)
+    with store.transaction("turn.1") as tx:
+        eid = write_mentions([Mention(kind="npc", name=name)], tx=tx, rules=rules, rng=rng).created[name]
+    assert store.state.entities[eid].data["age"] == "a child"
+    for seed in range(20):  # whatever the tables roll
+        n = walk_on(random.Random(seed), role=name)
+        assert n.age == "a child" and ("girl" not in name or n.pronouns == "she/her")
+    assert role_implies("child at the pilings who is not a boy") == ("a child", None)
+    assert role_implies("middle-aged ferryman") == (None, None)
+
+
 def test_named_npc_keeps_the_drafts_identity(tmp_path: Path, rules: Any) -> None:
     store, rng = _game(tmp_path)
     m = {"kind": "npc", "name": "Bessa Crane", "unsettled": [],
