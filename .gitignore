@@ -25,3 +25,4 @@ saves/
 *.db
 *.db-wal
 *.db-shm
+engine/data/_cache/
