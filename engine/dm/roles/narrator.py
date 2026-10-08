@@ -89,8 +89,10 @@ def _beat_line(state: WorldState, b: BeatEntry, pc: str | None, paused: bool = F
         if b.success_at_cost:
             res = "success at cost (it works, and the cost is paid)"
         bits.append(f"result: {res}")
-    elif b.gate_words:
-        bits.append(f"no roll: {b.gate_words}")
+    elif b.gate_words.startswith("no roll"):
+        bits.append(b.gate_words)
+    elif b.gate_words:  # refused, withdrawn or redirected: it did not happen (never narrate it as done)
+        bits.append(f"not done: {b.gate_words}")
     elif paused:
         bits.append("not resolved yet: the turn waits at the pause before it")
     words = [w for w in (clean(x, rules) for x in b.reach_words) if not re.search(r"\d", w)]  # 12.14.4
@@ -106,6 +108,8 @@ def _beat_line(state: WorldState, b: BeatEntry, pc: str | None, paused: bool = F
         bits.append(f"position: {name_of(state, p.entity, pc)} {p.words}")
     if b.targets:
         bits.append("acting on: " + ", ".join(name_of(state, t, pc) for t in b.targets))
+    if b.learned:  # 12.10.5: what the success delivered; the PC is told or sees it, so the fiction names it
+        bits.append("the PC learns (say it plainly in the fiction): " + "; ".join(b.learned))
     return "- " + "; ".join(x for x in bits if x)
 
 

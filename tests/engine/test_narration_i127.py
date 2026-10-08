@@ -76,7 +76,7 @@ def test_ordinary_unknown_element_is_written_not_cut() -> None:
 
 
 def test_unknown_subject_that_acts_or_changes_is_still_cut() -> None:
-    cs = [{"subject": "unknown", "class": "action", "predicate": "spits", "value": "into the dust"},
+    cs = [{"subject": "unknown", "class": "action", "predicate": "spits", "value": "into the dust", "asserts_change": True},
           {"subject": "unknown", "class": "existence", "predicate": "door", "value": "swings open", "asserts_change": True}]
     vs = check_claims(cs, _empty_state(), AdjudicationRecord(), [], rules=load_rules())
     assert [(v.verdict, v.fix) for v in vs] == [("unsourced_change", "cut")] * 2

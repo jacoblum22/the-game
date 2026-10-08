@@ -84,7 +84,7 @@ def test_cut_only_failures_after_the_budget_deliver_the_cut(tmp_path: Path) -> N
     model = look_model(narrator=[narr(bad), narr(bad), narr(last)])
     dock, ctx = setup(tmp_path, model)
     woman = claim(0, dock.ferryman, "identity", "gender", "woman")
-    model.push(Role.CHECKER, chk(woman), chk(woman), chk(claim(2, "unknown", "action", "spits", "into the dust")))
+    model.push(Role.CHECKER, chk(woman), chk(woman), chk(claim(2, "unknown", "action", "spits", "into the dust", change=True)))
     out = play_turn(ctx, "I look over the quay.")
     assert not out.response.flags.fallback_used
     assert out.response.fiction == f"Tam Harlan watches you. The fog lies low on the water. {PROMPT}"
@@ -96,7 +96,7 @@ def test_after_the_budget_a_cut_leaving_only_the_prompt_falls_back(tmp_path: Pat
     model = look_model(narrator=[narr(bad)] * 3)
     dock, ctx = setup(tmp_path, model)
     woman = claim(0, dock.ferryman, "identity", "gender", "woman")
-    model.push(Role.CHECKER, chk(woman), chk(woman), chk(claim(0, "unknown", "action", "spits", "into the dust")))
+    model.push(Role.CHECKER, chk(woman), chk(woman), chk(claim(0, "unknown", "action", "spits", "into the dust", change=True)))
     assert play_turn(ctx, "I look over the quay.").response.flags.fallback_used
 
 

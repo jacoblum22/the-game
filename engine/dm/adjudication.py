@@ -76,6 +76,7 @@ class BeatEntry(BaseModel):
     conditions: list[str] = Field(default_factory=list)  # visible conditions applied, in words
     positions: list[PositionEntry] = Field(default_factory=list)
     license: str | None = None  # the licence or ability used, if any
+    learned: list[str] = Field(default_factory=list)  # what a successful learning beat delivered, in words (12.10.5)
 
 
 class OracleEntry(BaseModel):

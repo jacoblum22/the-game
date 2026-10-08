@@ -159,6 +159,17 @@ _CLOCK_MOVE = ["spread", "build", "rise", "rising", "closer", "grow", "gather", 
 _POSSESS_PREDICATES = ("carries", "holds", "has", "equipped", "possessions", "inventory", "owns", "possession",
                        "wields", "wears")
 _HOLDER_KEYS = ("holder", "owner", "carried_by", "held_by")
+# acts that change the world (12.2.9: the source decides *what*); everything else an addressed NPC does in answer is
+# words and manner, which are the narrator's. ponytail: a phrase list; upgrade path: a Checker field for "deed".
+_DEEDS = ["give", "hand over", "hand you", "hand it", "pass you", "slide across", "toss you", "pay you", "pay the",
+          "pay for", "sell", "buy", "take the", "take your", "take it", "grab", "seize", "snatch", "steal", "pocket",
+          "draw a blade", "draw a knife", "draw a sword", "draw a dagger", "draw steel", "attack", "strike", "hit",
+          "punch", "stab", "slash", "shoot", "kick", "shove", "push you", "leave", "walk away", "walk off",
+          "walk out", "storm off", "storm out", "depart", "exit", "flee", "run off", "run away", "come with you",
+          "go with you", "lead you", "open the", "unlock", "lock the", "shut the door", "close the door", "call for",
+          "call the", "shout for", "summon", "fetch", "send for", "signal to", "kill", "set free", "let go of",
+          "let you pass", "step aside", "show you the", "write", "sign"]
+_YOU = ["you", "your", "yours", "the pc"]
 _LOSE = ["drop", "lose", "lost", "give", "hand over", "hands over", "sold", "sell", "stolen", "no longer", "toss",
          "throw away", "surrender", "gone"]
 
@@ -325,6 +336,8 @@ def _check(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: PR-12-2
     if subject == UNKNOWN:
         subject = _resolve_new(ctx, c) or UNKNOWN
     if subject == UNKNOWN and c.cls not in _FREE_SUBJECT:  # rule: 12.3.2 [revision: I-127; DL-12-37]
+        if c.cls == "action" and not c.asserts_change and _atmosphere(ctx, c):
+            return _v(c, i, "supported", reason="background activity that changes nothing: atmosphere (12.3.2)")
         if c.asserts_change or c.cls == "action":
             return _v(c, i, "unsourced_change", reason="an unidentified subject changed or acted; cut")
         forbidden = _forbidden_new(c)
@@ -363,6 +376,27 @@ def _forbidden_new(c: Claim) -> str | None:  # rule: 12.14.13
         if any(w in text for w in words):
             return kind
     return None
+
+
+def _deed(text: str) -> bool:  # rule: 12.2.9
+    return _has(text, _DEEDS) and not _negated(text)
+
+
+def _involves_pc(ctx: _Ctx, text: str) -> bool:
+    return _has(text, _YOU) or (ctx.pc is not None and ctx.entity_named(text, among=[ctx.pc]) is not None)
+
+
+def _atmosphere(ctx: _Ctx, c: Claim) -> bool:  # rule: 12.3.2 [revision: I-127]
+    """Unnamed background activity that changes nothing and does not touch the PC: atmosphere, never a claim."""
+    return not (_forbidden_new(c) or _deed(c.text) or _involves_pc(ctx, c.text))
+
+
+def _addressed(ctx: _Ctx, npc: str) -> bool:  # rule: 12.2.9
+    """The PC addressed or acted on this NPC this turn: a beat targets them, a part of the player's message names
+    them, or the record gives them a response row."""
+    r = ctx.record
+    return (any(npc in b.targets for b in r.beats) or any(a.npc == npc for a in r.npc_actions)
+            or any(ctx.entity_named(p.text, among=[npc]) for p in r.parts if p.cls != "OOF_QUESTION"))
 
 
 def _restates_given(ctx: _Ctx, c: Claim) -> bool:  # rule: 12.3.1
@@ -764,15 +798,54 @@ def _knowledge(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: 12.3.1
         if f is not None:
             pool.append(f"{ctx.name(f.subject)} {f.predicate} {_flat(f.value)}")
     match = any(tx.covers(c.value or c.text, p, ratio=0.5) for p in pool)
-    if _has(c.text, _KNOW_NEGATIVE):
+    if any(tx.covers(c.value or c.text, w, ratio=0.5) for b in ctx.record.beats for w in b.learned):
+        return _v(c, i, "supported")  # delivered by this turn's learning beat (12.10.5)
+    # "did not see" / "knows him by name": "no" (a negated value inside a positive claim is not a denial)
+    negative = _has(c.text, _KNOW_NEGATIVE) or _negated(c.predicate) or tx.words(c.value)[:1] in (
+        ["no"], ["not"], ["nothing"], ["never"])
+    settled = _settled_question(ctx, c)
+    if settled is not None:  # a yes/no the Oracle settled about this subject (01.15.7)
+        pred, value = settled
+        if value != negative:
+            return _v(c, i, "supported")
+        return _v(c, i, "contradicted", f"{pred}: {'yes' if value else 'no'}")
+    if negative:
         return _v(c, i, "contradicted", "known") if match else _v(c, i, "supported")
     if match:
         return _v(c, i, "supported")
+    if c.asserts_change and ctx.backed(c.subject, "knowledge_recorded"):
+        return _v(c, i, "supported")
+    if _learning_success(ctx, c.subject) and not any(w in c.text.lower() for w in _FORBIDDEN_NEW["clue"]):
+        # what a successful Talk/Observe was after and the store lacks: settled now (12.3.2 undetermined -> Oracle)
+        return _v(c, i, "undetermined", reason="what the PC asked to learn, not yet settled: the Oracle settles it")
     if c.asserts_change:
-        if ctx.backed(c.subject, "knowledge_recorded"):
-            return _v(c, i, "supported")
         return _v(c, i, "unsourced_change", "not known", reason="no knowledge was recorded this turn")
     return _v(c, i, "contradicted", "not known")
+
+
+_LEARN_VERBS = ("verb.talk", "verb.observe", "verb.recall")
+
+
+def _learning_success(ctx: _Ctx, subject: str) -> bool:  # rule: 12.10.5
+    """A Talk, Observe or Recall succeeded this turn on `subject` (or `subject` is the PC who made it)."""
+    for b in ctx.record.beats:
+        if not any(v in (b.approach_words or "") for v in _LEARN_VERBS) or not _beat_success(b):
+            continue
+        if b.degree is None and not (b.gate_words or "").startswith("no roll"):
+            continue
+        if subject in (ctx.pc, *b.targets) or ("verb.talk" not in b.approach_words and ctx.present(subject)):
+            return True
+    return False
+
+
+def _settled_question(ctx: _Ctx, c: Claim) -> tuple[str, bool] | None:  # rule: 01.15.7
+    """A yes/no fact on the claim's subject whose question the claim states ("saw who started the quarrel")."""
+    for f in ctx.state.facts.values():
+        if f.subject == c.subject and isinstance(f.value, bool) and f.visibility != "sealed":
+            pred = f.predicate.replace("_", " ").replace(".", " ")
+            if len(tx.content(pred)) >= 2 and tx.covers(pred, c.text, ratio=0.75):
+                return pred, f.value
+    return None
 
 
 def _capability(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: 12.3.1
@@ -866,6 +939,8 @@ def _beat_for(ctx: _Ctx, text: str) -> BeatEntry | None:
 
 
 def _beat_success(b: BeatEntry) -> bool:
+    if b.degree is None and b.gate_words and b.gate != "G0" and not b.gate_words.startswith("no roll"):
+        return False  # refused or withdrawn before any result (pipeline `_entry` gate words)
     if b.degree is not None:
         return b.degree in ("success", "critical_success") or b.success_at_cost
     return not (b.gate or "").lower().startswith(("g3", "g4", "redirect", "refus"))
@@ -914,6 +989,10 @@ def _action(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: 12.2.9
     for o in ctx.record.omens:
         if o.omen and tx.overlap(text, o.omen) and tx.covers(ctx.name(c.subject), o.omen, ratio=0.5):
             return _v(c, i, "supported")
+    if not _deed(text) and _addressed(ctx, c.subject) and ctx.present(c.subject):
+        # 12.2.9 (2): the PC's beat, question or words are the source of the response; "the DM chooses the words",
+        # so speech and manner pass; a deed (giving, leaving, attacking, changing a state) still needs its source
+        return _v(c, i, "supported", reason="a response in words and manner to the PC (12.2.9)")
     store = "; ".join(a.action for a in rows) or None
     return _v(c, i, "unsourced_change", store, reason="no source for this act in the adjudication record")
 

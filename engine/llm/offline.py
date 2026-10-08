@@ -814,11 +814,14 @@ def _narrator(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:
         elif line.startswith("- beat:"):
             bits = dict(b.split(": ", 1) for b in line[2:].split("; ") if ": " in b)
             res = bits.get("result")
-            undone = bits.get("no roll") is not None and not bits["no roll"].startswith("no roll")
+            undone = bits.get("not done") is not None
             if undone:  # refused, redirected, withdrawn: the act did not happen (the block says why)
                 lines.append(_sentence("You size up how to " + re.sub(r"^you\s+", "", bits.get("beat", ""), flags=re.I)))
                 continue
             lines.append(_sentence(bits.get("beat", "")))
+            learned = re.search(r"the PC learns \([^)]*\): (.*)$", line)
+            if learned:
+                lines += [_sentence(x.replace(" — ", " ", 1)) for x in learned.group(1).split("; ")]
             verb = (primary_verb(bits.get("beat", "")) or ("", []))[0]
             looks = verb == "verb.observe"
             if verb == "verb.talk" and not res:  # words to someone: they answer, or no one is there to
