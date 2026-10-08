@@ -242,6 +242,15 @@ def _position_set(s: WorldState, ev: Event, p: Any) -> None:
         pos.location = p.location
     pos.flags = sorted((set(pos.flags) | set(p.flags_add)) - set(p.flags_remove))
     pos.band_to.update(p.band_to)
+    sc, e = s.scene, s.entities.get(p.entity)
+    if sc is not None and sc.place_id and e is not None and e.kind in _CAST_KINDS and p.location is not None:
+        if p.location == sc.place_id and p.entity not in sc.cast_present:  # 12.4.1: whoever is here is in the scene
+            sc.cast_present.append(p.entity)
+        elif p.location != sc.place_id and p.entity in sc.cast_present:  # moved away: no longer present
+            sc.cast_present.remove(p.entity)
+
+
+_CAST_KINDS = ("npc", "companion", "adversary")  # as engine.world.places.cast_at
 
 
 @reducer("knowledge_recorded")
@@ -381,6 +390,10 @@ def _scene_started(s: WorldState, ev: Event, p: Any) -> None:  # rule: PR-12-7
     sc.started_seq = _seq(ev)
     if sc.started_at is None:
         sc.started_at = ev.game_time
+    if sc.place_id:  # 12.4.1: the cast is the framed cast plus everyone already positioned at the place (P-095)
+        sc.cast_present += [eid for eid, pos in s.positions.items() if pos.location == sc.place_id
+                            and eid not in sc.cast_present and eid in s.entities
+                            and s.entities[eid].kind in _CAST_KINDS and s.entities[eid].exists == "exists"]
     s.scene = sc
     s.frames = {}
     s.ledger = {}

@@ -218,7 +218,7 @@ def find_npc(state: WorldState, role: str, place: str | None) -> str | None:  # 
 
 
 def meet_npc(ctx: TimeContext, role: str | None, place: str | None, *, people: str | None = None,
-             reuse: bool = True) -> str:  # rule: PR-12-5
+             reuse: bool = True, alias: str | None = None) -> str:  # rule: PR-12-5
     """PR-12-5 steps 1-2: the roster first (`find_npc`), else a walk-on (12.11.1): role (else `tbl.npc_role`),
     name (the region's table for its people, else the generic tables), gender and pronouns, age, detail and
     demeanor, all rolled and written at once (`create_entity`), positioned at `place`, added to the cast list
@@ -239,6 +239,8 @@ def meet_npc(ctx: TimeContext, role: str | None, place: str | None, *, people: s
     data = n.model_dump(exclude={"id", "name", "sealed_fields", "wants", "fears", "refusals", "secrets", "voice",
                                  "knowledge_scope", "ties", "licenses"}, by_alias=True)
     data["name_known"] = False  # 12.10.2: a walk-on's name is learned in play
+    if alias and alias.lower() != str(data.get("role", "")).lower():
+        data["aliases"] = [alias]  # the narration's words for them: the label every screen uses (P-095)
     stage(ctx, Event.of("entity_created", rule_id="PR-12-5", source="npc_generation",
                         entity=EntityRecord(id=n.id, kind="npc", name=n.name, visibility="shown", data=data)))
     if place is not None and place in state.entities:
