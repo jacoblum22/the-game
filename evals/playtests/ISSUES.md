@@ -113,3 +113,4 @@ Status: open · fixing (round N) · fixed (commit) · logged (ledger id) · wont
 | P-107 | rules | med | Social odds harsh: first friendly chat 25% with 30% crit-fail (a sword blow); a calmer approach dropped to 5% and dire | 201412-talker 21–23 | logged I-155 |
 | P-108 | bug | med | Fallback prints internal text: "Spoken to Oggza, not a beat", "You are a few strides from bench"; one turn delivered only "What do you do?" | 201412-talker 26, 31 | fixing |
 | P-109 | bug | low | Journal: "Who is missing person: Betey Woodhill", fragment "keep close around Nedey Woodhill" (incident-binding predicates) | 201748-explorer 22 | fixing (with P-108) |
+| P-110 | bug | high | Reading a notice/bill/board withholds the words turn after turn even for literate PCs ("the wording stays just beyond what you can carry away"); often the opening lead's own notice | 203722-newcomer 33–39; 201748-explorer 29–31; 201338-breaker 22–25 | fixing |
