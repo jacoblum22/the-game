@@ -14,9 +14,9 @@
 schema_version: 1
 compiled_from:
 - file: data/basic_verbs.yaml
-  sha256_16: 3188c5a7ebcfa419
+  sha256_16: 4e9ba3e2e6c806c3
 - file: 01-resolution.md
-  sha256_16: 5af64c22e9ebdb44
+  sha256_16: f6686a592a055fa3
 - file: 02-character.md
   sha256_16: 87f2767c603bb395
 - file: 03-tags-and-evidence.md
@@ -38,7 +38,7 @@ compiled_from:
 - file: 11-living-world.md
   sha256_16: af73eaff3de9196a
 - file: 12-dm-procedures.md
-  sha256_16: 12ac908e69686f75
+  sha256_16: ba9c149d16a05880
 - file: 13-starter-setting.md
   sha256_16: 9dd8a6cbb473d2d5
 - file: 15-social-investigation-downtime.md

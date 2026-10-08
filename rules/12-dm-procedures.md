@@ -186,9 +186,26 @@ Decisions (J):      1. [J:enum] The message's parts, each classified (a message 
                          questions. Whether an NPC answers a plain question is the NPC's decision (12.2.9).
                        Default when uncertain between SPEECH and DECLARATION: DECLARATION (SG-05: the
                        roll test then decides). Uncertain between DISPUTE and OOF_QUESTION: OOF_QUESTION
-                       answered from the turn log, which surfaces any real error.
+                       answered from the turn log, which surfaces any real error. A DECLARATION
+                       whose computed social DC is certain (15.3.10; T-15-3: a Neutral or warmer
+                       listener asked an R1 question) resolves without a roll [revision: R2-C].
                     2. [D] Order of handling: SAFETY → SESSION → DISPUTE → PENDING_ANSWER →
                        OOF_QUESTION → FICTION_QUESTION → DECLARATION / SPEECH (in the player's order).
+                    3. [J:enum] Beat decisions [revision: R2-C] [DL-12-50]. For each DECLARATION or
+                       FICTION_QUESTION part, PARSE (01.2) records only:
+                       verb — one of the 15 basic verbs (data/basic_verbs.yaml);
+                       target — scene entity ids (01.2.5);
+                       three method facets, yes or no: against_will (acts on a person's body or
+                         property against their will); uses_power (needs a supernatural or
+                         licensed technique); speech (mainly words);
+                       question_kind (question parts only), one of six: who is X · where is X ·
+                         what happened · what is X like or for · what do you want or think · who
+                         would know; plus topic (the entity or subject asked about);
+                       shape — now, queued (a Ready beat, 01.14.4: "I attack if they keep
+                         stalling") or conditional on another beat.
+                       Nothing else is proposed. The gate class, the license and the would-be
+                       license (00.12.3, PR-01-5), the roll test (01.4.1) and the DC (01.6.4) are
+                       computed by the engine; the PC's knacks reach PARSE as words, never as gates.
 Computation [D]:    the classification is logged with the verbatim message (12.2.5)
 State writes:       turn log entry {turn, message verbatim, parts, classes}
 Narration may not imply: that SPEECH was a persuasion attempt (no roll was made)
@@ -198,6 +215,9 @@ Worst case (J):     a SPEECH part classified DECLARATION → a roll test that an
                     comes from its reaction/action table (12.11.5) and the player may declare the
                     attempt next turn (class iv). A SAFETY part missed → caught at T10's safety
                     screen of the draft (12.5.6) [editor: E2-032], which is [D] against the lines list.
+                    A wrong verb or facet puts the beat under the wrong card: the OFFER names the
+                    act in plain words and the player changes it for free (class ii); a conditional
+                    read as "now" is shown in the OFFER before anything is spent (class ii).
 Examples:           inside SPEECH: "'Evening. Is this the ferry?'" (a question asked aloud; also a
                     FICTION_QUESTION if the answer is unestablished). outside (DECLARATION): "'You'll
                     take me across tonight — I'll make it worth your while,'" (tries to change the
@@ -1703,32 +1723,68 @@ NEAR MISS, CHOICE, CLARIFY, FLAG, CUT?) because it awaits the player.
 by name only), and never contradict the store. A block's fields appear in the order given below; empty
 fields are omitted.
 
-**12.15.2 OFFER** [DL-12-18; R5 OB-05; revision: I-065] (renders 01.7.1 items 1–7, exactly). One line of fiction first ("The hasp is old iron in
-older oak; the bar in your hands would do it — loudly."), then:
+**12.15.2 OFFER** [DL-12-18; DL-12-51; R5 OB-05; revision: I-065; revision: R2-C] (renders 01.7.1 items 1–7 as a
+template over the frame's typed fields; no rule id, DC code, severity code or mode name appears in the player's
+text, and the log keeps them all). One line of fiction first ("The press thickens toward the gate; a gap opens
+and closes."), then:
 
 ```
-[OFFER] Break the hasp with the iron bar — verb.force (Force), anchor 01.18.10
-  Mode: normal
-  Roll: Might +1 · competence +1 (deed) · edge 0 · lever +2 (obj.iron_bar_03: Precision) · status 0 = +4
-        (no other method here uses a higher attribute)
-  Against: DC 15 — stored on door_archive.hasp (Moderate)
-  Need: 11+ on the die · 50% success or better · crit success 5% · crit failure 5% · near miss 15%
-  Stakes: Risky — failure: Exposure (S2) · crit failure: Exposure (S3)
-          near miss: succeed and pay Exposure or Time (S2), or fail
-  Reach: Standard — success: the hasp breaks · critical: it breaks, and you can follow up at once
-  Costs: 1 action · 1 interval · loud (heard by anything listening) · rides: no · fate 1
-  → commit · change · withdraw   (one trade: go big / play it safe)
+[OFFER] Slip through the crowd toward the gate.
+  Chance: better than even — 55%   (Agility +1, practised +1, packed bodies −2)
+  If it works:  you reach the gate.            Very well (5%): and no one marks you.
+  If it fails:  you're stuck and jostled — a setback.   Badly (5%): something's lost in the press — serious.
+  Close call (15%): get there anyway and be marked, or fail.
+  Takes: a minute · noisy
+  [Enter] Do it   [b] Go big   [s] Play it safe   [c] Another way   [w] Back off   [?] Explain
+  Another way:  shove through (45%) · wait for it to thin (no roll, takes an hour)
 ```
-Variants: a **lethal** frame adds, directly under Stakes, `THIS CAN KILL YOU — <source> (warned <when>)`; a
-**secret** frame shows `Against: hidden` and omits the Need line's numbers ("the roll is hidden; you'll
-see only what you perceive"); a **stretch / emulate / fallback** shows `Mode:` with its price on its own
-line (`Mode: fallback (crude) — DC +5, reach capped at Standard, loud`); "only a natural 20" replaces the
-Need line when it applies ("only a natural 20, and at best a plain success"); a **bundled** beat adds
-`Rank your questions:` with the deduplicated items. An **ability activation** names its prices on the Costs
-line: `Focus 2 (flared hard) · uses 1 of 2 left` and, when the Focus is short, `overdraw: <its price>` (05.6.6;
-never automatic); a power used **through a relic** adds its own line under Costs, `Relic surcharge: +1 Focus
-(no training license)` (08.4.4) [revision: I-030]. A frame resolved under **auto-commit** shows the same
-block, labelled `[OFFER — auto]`, immediately above its RESULT.
+
+**Lines, from frame fields [D].** *Title*: the beat restated (01.2.6). *Chance*: the band word, a dash, the
+success-or-better percentage, then the modifier in words (attribute, competence by its tag's name, each lever
+and snag by its fact's short name; edge and status when not 0). *If it works / Very well*: what the framed
+reach delivers on success and on a critical success (01.6.10, in the anchor's reach unit). *If it fails /
+Badly*: the threatened cost's form as one clause, with its severity word, on a failure and on a critical
+failure (01.6.11, 01.9.2). *Close call*: the near-miss percentage and the alternate cost (01.9.3); omitted when
+0 and on a hidden roll. *Takes*: action, time, every method consequence (loud → noisy), whether it rides on
+an earlier result, and fate. *Another way*: up to three approaches the engine computes with no model call
+(the verb's alternative attributes and sibling anchors whose DC is stored, opposed or the same obstacle class),
+each with its chance or "no roll".
+
+**Fixed word maps (the glossary, 14.2.7).**
+- Chance: 95 *almost certain* · 75–90 *likely* · 55–70 *better than even* · 45–50 *even* · 25–40 *unlikely* ·
+  10–20 *long shot* · 5 *only by luck* · 0 *impossible as framed*. Both the number and the word are shown
+  (D6: assumed, owner to confirm).
+- Severity: S1 *a nuisance* · S2 *a setback* · S3 *serious* · S4 *grave* · S5 *ruinous*; lethal adds, under If
+  it fails, `THIS CAN KILL YOU — <source> (warned <when>)`. A Dire frame's If-it-fails line starts `Danger:`.
+- Reach: Limited *partly* · Standard *what you wanted* · Great *more than you asked*.
+
+**The trades, one line each** (01.7.3; I-138): `Go big: if it works you get more; if it fails it costs more;
+same chance.` · `Play it safe: if it works you get less; if it fails it costs less; same chance.` A trade not
+allowed on this frame (01.7.3) is not printed. When one is taken, a NOTE line says what changed.
+
+**Variants.**
+- **Mode** (stretch, emulate, fallback; I-134): one line in words, never the mode name, e.g. `You're improvising
+  without training: harder (+5), and at best a partial result.` or `You're stretching what you know: harder
+  (+2).`
+- **Secret frame** (01.4.7; I-143): the If lines stay; the Chance line reads `Chance: you can't judge how hard
+  this is.` and there is no Close call line. The OFFER keeps 01.7.1's promise: odds, or the reason they are
+  hidden.
+- **Long shot** (01.6.13): `Chance: long shot — 10% (failing badly is likelier: 35%)`, and the Another way
+  line lists the best computed alternative first.
+- **Only a natural 20**: `Chance: only by luck — 5%, and at best what you wanted`.
+- **Bundled** beat: `Rank your questions:` with the deduplicated items.
+- **Ability activation**: the Takes line names its prices, `Focus 2 (flared hard) · uses 1 of 2 left`, and,
+  when the Focus is short, `overdraw: <its price>` (05.6.6; never automatic); a power used **through a relic**
+  adds `Relic: +1 Focus (no training license)` (08.4.4) [revision: I-030].
+- **Auto-commit** (01.7.4): the same block, labelled `[OFFER — auto]`, immediately above its RESULT.
+
+**One menu convention for every pause point** (12.2.6: OFFER, clarifying question, redirect, near miss,
+ranking, last chance, recognition, generator pick, rewind). **Enter** is the labelled default and is always
+printed as `[Enter] <label>`; alternatives take **letters**; `?` explains any word from the glossary (14.2.7),
+never a rule card. Enter never withdraws or backs off (P-044). On an OFFER, Enter is `Do it`, except on a
+Dire, lethal or long-shot frame, where it is `Show this again` and committing takes the letter `[d] Do it`.
+An unanswered pause still persists as 12.2.6 says. *Worst case:* none (template; a word map error shows a
+wrong word beside the right number).
 
 **12.15.3 RESULT.** [DL-12-18; C:P7; revision: I-065]
 ```
