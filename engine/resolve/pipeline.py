@@ -26,7 +26,7 @@ from pydantic import BaseModel, Field
 
 from engine import ids
 from engine.dm.adjudication import BeatEntry, CostEntry, HarmEntry, PositionEntry
-from engine.resolve.costs import HarmHook, apply_cost
+from engine.resolve.costs import HarmHook, apply_cost, first_fitting_cost
 from engine.resolve.frame import (auto_commit_allowed, commit_events, frame_check, legal_trades, offer_preview,
                                   plain_offer_words)
 from engine.resolve.gate import GateDecision, check_gate, words
@@ -435,8 +435,21 @@ def _answer_offer(env: PipelineEnv, plan: BeatPlan, d: dict[str, Any], choice: s
         trade = "go_big" if choice == "go_big" else "play_it_safe"
         env.add(Event.of("offer_logged", source="player", rule_id="01.7.3", shown_at=now, choice="trade"))
         dec = _gate_again(env, plan.beat)
-        out = _checked(env, plan, dec, proposed.model_copy(update={"trade": trade}), cands, queued, warned=warned)
-        said = ("You go big: the stakes and the reach each rise one step." if trade == "go_big" else
+        traded = proposed.model_copy(update={"trade": trade})
+        if traded.alternate_cost is None:  # Safe -> Risky needs an alternate (01.6.11): the first that fits uncited
+            traded.alternate_cost = first_fitting_cost(
+                env.rules, role="alternate", other=traded.threatened_cost, state=env.state, actor=plan.beat.actor,
+                stakes_source=traded.stakes_source, declared_seq=plan.beat.declared_seq or env.state.last_seq,
+                target=plan.beat.target if plan.beat.target != "none" else None)
+        check = frame_check(traded, plan.beat, state=env.state, rules=env.rules, gate=dec, candidates=cands,
+                            store=env.store, staged=env.tx.events)
+        if isinstance(check, FrameRefusal) and check.field != "lethal":  # the trade is illegal: the OFFER stays
+            out = _offer(env, plan, proposed, frame, cands, queued, warned=warned)
+            out.oof.insert(0, {"kind": "NOTE", "text": "That trade is not possible on this attempt; the offer stands "
+                                                       "as it was."})
+            return out
+        out = _checked(env, plan, dec, traded, cands, queued, warned=warned)
+        said =("You go big: the stakes and the reach each rise one step." if trade == "go_big" else
                 "You play it safe: the stakes and the reach each drop one step.")
         out.oof.insert(0, {"kind": "NOTE", "text": f"{said} The odds stay the same."})
         return out

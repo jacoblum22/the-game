@@ -24,6 +24,8 @@ from typing import Any, get_args
 from pydantic import BaseModel, Field
 
 from engine.llm.base import Role
+from engine.resolve.costs import uncited_by_stakes
+from engine.resolve.frame import fact_usable, rolling_tiers
 from engine.retrieve.anchors import verb_anchor
 from engine.retrieve.scene import pc_id, scene_facts, scene_scope
 from engine.store.events import EntityKind
@@ -73,10 +75,13 @@ class SchemaContext(BaseModel):
     traits: list[str] = Field(default_factory=list)
     dc_tiers: list[str] = Field(default_factory=list)
     cast_ids: list[str] = Field(default_factory=list)
+    defender_ids: list[str] = Field(default_factory=list)  # present entities with a named defense (01.6.4)
     lever_fact_ids: list[str] = Field(default_factory=list)
     stakes_sources: list[str] = Field(default_factory=list)
     cost_menu_ids: list[str] = Field(default_factory=list)
     alternate_cost_menu_ids: list[str] = Field(default_factory=list)
+    # PR-01-2 step 10: entries legal without a cited source fact (costs.uncited_candidates); None = unrestricted
+    cost_uncited_ids: list[str] | None = None
     cost_tie_order: list[str] = Field(default_factory=list)
     reach_tie_whole: bool = False
     reach_tie_one_factor: bool = True
@@ -187,14 +192,41 @@ def reader_schema(ctx: SchemaContext) -> Schema:  # rule: 12.2.2
     })
 
 
-def _cost(menu: list[str], facts: list[str]) -> Schema:
+NULL: Schema = {"type": "null"}
+
+
+def _one_of(branches: list[Schema]) -> Schema:
+    return branches[0] if len(branches) == 1 else {"anyOf": branches}
+
+
+def _cost(menu: list[str], facts: list[str], uncited: list[str] | None = None) -> Schema:
     # 01.13.1 / lead decision (a): a cost may cite the scene fact that is its source (frame_check needs either
-    # the citation or a structural fit through state); dropped when the scene has no fact
-    return obj({"menu_id": enum(menu), "form_intent": STR, "source_fact": enum(facts, nullable=True)})
+    # the citation or a structural fit through state); dropped when the scene has no fact. With `uncited`
+    # (PR-01-2 step 10, costs.uncited_candidates): an entry outside it must cite a source fact, and cost.twist
+    # is offered only when it is itself a candidate.
+    if uncited is None:
+        return obj({"menu_id": enum(menu), "form_intent": STR, "source_fact": enum(facts, nullable=True)})
+    free = [m for m in menu if m in uncited]
+    cited = [m for m in menu if m not in free and m != "cost.twist"] if facts else []
+    out = [obj({"menu_id": enum(free), "form_intent": STR, "source_fact": enum(facts, nullable=True)})] if free else []
+    if cited:
+        out.append(obj({"menu_id": enum(cited), "form_intent": STR, "source_fact": enum(facts)}))
+    return _one_of(out or [obj({"menu_id": enum(menu), "form_intent": STR})])
+
+
+def _obstacle(ctx: SchemaContext) -> Schema:  # rule: 01.6.3
+    """A tier (one that rolls, T-01-2) with no entity, or an opposed / entity-defense obstacle naming its entity."""
+    tier = obj({"kind": enum(["tier"]), "tier": enum(ctx.dc_tiers), "entity": NULL})
+    out = [tier]
+    if ctx.cast_ids:
+        out.append(obj({"kind": enum(["opposed"]), "tier": NULL, "entity": enum(ctx.cast_ids)}))
+    if ctx.defender_ids:
+        out.append(obj({"kind": enum(["entity_defense"]), "tier": NULL, "entity": enum(ctx.defender_ids)}))
+    return _one_of(out)
 
 
 def framer_schema(ctx: SchemaContext) -> Schema:  # rule: 01.5.1
-    facts = ctx.fact_ids
+    facts = ctx.lever_fact_ids  # PR-01-2 steps 3, 7, 10: only facts established before the declaration
     delta = obj({"knob": enum(ctx.knobs), "delta": enum(ctx.deltas), "cites_fact": enum(facts)})
     return obj({
         "anchor": enum(ctx.anchor_ids),
@@ -202,20 +234,17 @@ def framer_schema(ctx: SchemaContext) -> Schema:  # rule: 01.5.1
         "attribute": enum(ctx.attributes),
         "deed_tag": enum(ctx.deed_tags),
         "traits": arr(enum(ctx.traits)),
-        "obstacle": obj({
-            "kind": enum(OBSTACLE_KINDS),
-            "tier": enum(ctx.dc_tiers, nullable=True),
-            "entity": enum(ctx.cast_ids, nullable=True),
-        }),
-        "levers": arr(enum(ctx.lever_fact_ids), max_items=2),  # 01.6.8
+        "obstacle": _obstacle(ctx),
+        "levers": arr(enum(facts), max_items=2),  # 01.6.8
         "snags": arr(enum(facts), max_items=2),
         "stakes_source": enum(ctx.stakes_sources, first=NONE),  # 01.6.9
         "stakes_heavy": BOOL,
         "lethal": BOOL,
         "reach_whole": BOOL,  # 01.6.10
         "reach_one_factor": BOOL,
-        "threatened_cost": _cost(ctx.cost_menu_ids, facts),  # 01.6.11, 01.13.1
-        "alternate_cost": nullable(_cost(ctx.alternate_cost_menu_ids or ctx.cost_menu_ids, facts)),
+        "threatened_cost": _cost(ctx.cost_menu_ids, facts, ctx.cost_uncited_ids),  # 01.6.11, 01.13.1
+        "alternate_cost": nullable(_cost(ctx.alternate_cost_menu_ids or ctx.cost_menu_ids, facts,
+                                         ctx.cost_uncited_ids)),
         "method_consequences": STRS,
         "secret": BOOL,
     })
@@ -354,7 +383,8 @@ def _reader_default(ctx: SchemaContext) -> dict[str, Any]:
 def _framer_default(ctx: SchemaContext) -> dict[str, Any]:
     # 00.15.3: the basic verb's anchor; 01.6.1: the anchor's default attribute; stakes none -> safe
     tier = _first(ctx.dc_tiers, "moderate")
-    menu = _first(ctx.cost_menu_ids, *ctx.cost_tie_order)
+    free = [m for m in ctx.cost_menu_ids if ctx.cost_uncited_ids is None or m in ctx.cost_uncited_ids]
+    menu = _first(free or ctx.cost_menu_ids, *ctx.cost_tie_order)
     return {
         "anchor": _first(ctx.anchor_ids, ctx.default_anchor),
         "deltas": [],
@@ -558,6 +588,16 @@ def schema_context(  # rule: 12.2.4
     attributes, default_attribute = (_attribute_options(ordered, verb, licence, ae["attributes"], rules)
                                      if anchor_ids else (ae["attributes"], None))
     threatened, alternate = fitting_cost_menus(rules, facts)
+    uncited = None
+    usable = facts
+    sources = list(rules.resolution.get("stakes_flags", {}).get("source", {}).get("sources", []))
+    if beat is not None and not isinstance(beat, Mapping) and getattr(beat, "actor", None):  # the Framer's beat
+        tgt = beat.target if beat.target and beat.target != NONE else None
+        by = uncited_by_stakes(state=state, rules=rules, actor=beat.actor, target=tgt)  # PR-01-2 steps 8, 10
+        sources = [s for s in sources if s in by]
+        uncited = [m for m in dict.fromkeys(m for ms in by.values() for m in ms) if m != "cost.twist"
+                   or m in by[NONE]]
+        usable = [f for f in facts if fact_usable(state, f, beat.declared_seq or state.last_seq)]
     if cost_menu_ids is not None:
         threatened = list(cost_menu_ids)
         alternate = list(dict.fromkeys([*threatened, *alternate]))
@@ -604,12 +644,14 @@ def schema_context(  # rule: 12.2.4
         default_attribute=_verb_attribute(default_anchor, rules) or default_attribute,
         deed_tags=ae["deed_tags"],
         traits=list(res.get("traits", {})),
-        dc_tiers=[t["id"] for t in res.get("dc_tiers", [])],
+        dc_tiers=rolling_tiers(rules),
         cast_ids=cast,
-        lever_fact_ids=list(lever_fact_ids) if lever_fact_ids is not None else facts,
-        stakes_sources=list(res.get("stakes_flags", {}).get("source", {}).get("sources", [])),
+        defender_ids=[i for i in cast if (state.entities[i].data.get("defenses") or {})],
+        lever_fact_ids=list(lever_fact_ids) if lever_fact_ids is not None else usable,
+        stakes_sources=sources,
         cost_menu_ids=threatened,
         alternate_cost_menu_ids=alternate,
+        cost_uncited_ids=uncited,
         cost_tie_order=list(res.get("cost_selection", {}).get("tie_order", [])),
         reach_tie_whole=bool(reach.get("whole", {}).get("tie_break", False)),
         reach_tie_one_factor=bool(reach.get("one_factor", {}).get("tie_break", True)),

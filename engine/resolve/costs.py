@@ -94,6 +94,42 @@ def structural_fit(menu_id: str, *, state: Any, actor: str, stakes_source: str,
     return f"{menu_id} fits through {stakes_source}" if checks.get(menu_id) else None
 
 
+def uncited_candidates(*, state: Any, rules: Any, actor: str, stakes_source: str,
+                       target: str | None = None) -> list[str]:  # rule: 01.13.1
+    """The menu ids legal WITHOUT a cited source fact (menu order): the structural fits, with cost.twist only
+    when no other entry fits (01.13.1 (d)). `check_cost_decl` and the Framer schema both read this."""
+    m = menu(rules)
+    fits = [k for k in m if k != "cost.twist" and structural_fit(
+        k, state=state, actor=actor, stakes_source=stakes_source, target=target)]
+    if not any(k != "cost.shortfall" for k in fits):
+        fits.append("cost.twist")
+    return fits
+
+
+def established_stakes_sources(state: Any, rules: Any, actor: str) -> list[str]:  # rule: 01.6.9
+    """The stakes sources the state can back: a listening clock needs an active clock. The rest are the
+    Framer's judgment of the fiction. ponytail: only the clock is checked; an observer is a judgment call."""
+    sources = ["none", *_rules(rules).resolution["stakes_flags"]["source"]["sources"]]
+    clock = any(c.status == "active" for c in state.clocks.values())
+    return [s for s in sources if s != "listening_clock" or clock]
+
+
+def uncited_by_stakes(*, state: Any, rules: Any, actor: str, target: str | None = None) -> dict[str, list[str]]:
+    """`uncited_candidates` for each established stakes source (the Framer schema's union and packet note)."""
+    return {ss: uncited_candidates(state=state, rules=rules, actor=actor, stakes_source=ss, target=target)
+            for ss in established_stakes_sources(state, rules, actor)}
+
+
+def first_fitting_cost(rules: Any, *, role: Literal["threatened", "alternate"], other: CostDecl | None = None,
+                       **kw: Any) -> CostDecl | None:  # rule: 01.13.1
+    """The first entry in 01.13.1's tie order (then menu order) that `check_cost_decl` accepts uncited."""
+    tie = list(_rules(rules).resolution.get("cost_selection", {}).get("tie_order", []))
+    for m in dict.fromkeys([*tie, *menu(rules)]):
+        if m in menu(rules) and check_cost_decl(CostDecl(menu_id=m), role=role, rules=rules, other=other, **kw) is None:
+            return CostDecl(menu_id=m)
+    return None
+
+
 def check_cost_decl(decl: CostDecl | None, *, role: Literal["threatened", "alternate"], state: Any, rules: Any,
                     actor: str, stakes_source: str, target: str | None = None, declared_seq: int | None = None,
                     other: CostDecl | None = None) -> str | None:  # rule: 01.6.11
@@ -107,6 +143,10 @@ def check_cost_decl(decl: CostDecl | None, *, role: Literal["threatened", "alter
         return f"{decl.menu_id} is only ever an alternate (01.13.1)"
     if other is not None and other.menu_id == decl.menu_id:
         return "the alternate must be a different entry from the threatened cost"
+    fits = uncited_candidates(state=state, rules=rules, actor=actor, stakes_source=stakes_source, target=target)
+    if decl.menu_id == "cost.twist" and "cost.twist" not in fits:
+        others = [k for k in fits if k != "cost.shortfall"]
+        return f"cost.twist only when no other entry is a candidate ({', '.join(others)} fit)"
     if decl.source_fact is not None:
         f = state.facts.get(decl.source_fact)
         if f is None:
@@ -114,13 +154,8 @@ def check_cost_decl(decl: CostDecl | None, *, role: Literal["threatened", "alter
         if declared_seq is not None and f.valid_from_seq > declared_seq:
             return f"{decl.menu_id} cites {decl.source_fact}, established after the declaration"
         return None
-    if structural_fit(decl.menu_id, state=state, actor=actor, stakes_source=stakes_source, target=target) is None:
+    if decl.menu_id not in fits:
         return f"{decl.menu_id}: no established source fits ({m[decl.menu_id]['fits_when']})"
-    if decl.menu_id == "cost.twist":
-        others = [k for k in m if k not in ("cost.twist", "cost.shortfall") and structural_fit(
-            k, state=state, actor=actor, stakes_source=stakes_source, target=target)]
-        if others:
-            return f"cost.twist only when no other entry is a candidate ({', '.join(others)} fit)"
     return None
 
 

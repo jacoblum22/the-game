@@ -154,6 +154,16 @@ def test_go_big_reframes_once(tmp_path: Path) -> None:
     assert res2.offer is not None and res2.offer["stakes"] == "dire" and res2.offer["trades"] == []
 
 
+def test_go_big_from_safe_keeps_an_offer(tmp_path: Path) -> None:
+    """Fighter playtest inputs 19/23: Go big from Safe had no alternate cost, frame_check refused, the OFFER was
+    lost ("You cannot do it that way"). The trade now takes the first fitting alternate, or the offer stands."""
+    dock, ctx, model, res = offer_turn(tmp_path)
+    assert res.offer is not None and res.offer["stakes"] == "safe"
+    res2 = answer_pause(ctx, "go_big")
+    assert res2.pause is not None and res2.pause.kind == "offer"
+    assert res2.offer is not None and res2.offer["stakes"] == "risky" and res2.offer["alternate_cost"]
+
+
 def test_near_miss_pauses_then_success_at_a_cost(tmp_path: Path) -> None:
     dock, ctx, model, res = offer_turn(tmp_path, **RISKY)
     assert res.offer is not None
