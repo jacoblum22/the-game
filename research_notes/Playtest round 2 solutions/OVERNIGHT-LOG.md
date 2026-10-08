@@ -178,4 +178,12 @@ everything.
   - 12 scenario tests, one per category and outcome. The live check found a parser bug, now fixed.
   - Deferred: refunds for spends before the current scene, in-fiction reconciliation, and recomputing opposed
     DCs. Suite 1679.
-- **In flight:** spec 011 (check less).
+- **Spec 011, check less: merged (3dc52fd).**
+  - Live, 19 turns on Haiku: first draft passes **42.1 → 94.7%**, cut turns **26.3 → 0%**, narrator calls
+    **1.37 → 1.05** per turn. **All three live targets are now met** (±10 points).
+  - Sampled audit: 0 blocking misses in 4 turns. That sample is too small to rule out about 5 per 100.
+  - Suite 1691 (with 012); ruff clean.
+  - Gaps: the narrator declares a speaker on only 6 of 156 sentences; four event tags lack the data to fire;
+    said records aren't indexed per speaker.
+- **In flight:** 2-persona live playtest on Haiku with a Sonnet player (talker and fighter, 15 turns each,
+  personas told about `/fix`).
