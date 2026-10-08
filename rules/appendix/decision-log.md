@@ -3014,6 +3014,14 @@ chapter 06's fight model and T-06-12 lines), output `07-harm-sim-output.txt`, wr
 - Migration: none (no stored state changes; packets change, and the recorded replay game is re-recorded).
 - Revisit if: the long-horizon harness shows retrieval misses (a claim supported only by an off-view fact) clustering on one section; then retune that section's budget, or add the spotlight (A P2).
 
+### DL-12-39: The people present have a token budget; the rest share one line (revision R2-A2, follows DL-12-38)
+- Decision: [revision: R2-A2] 12.2.4 item 3: the people present beyond the PC get full records within `pacing.yaml#packet.view_budget.cast` (320 tokens), ranked: the beat's target and anyone the message names, then those the PC dealt with most recently (the newest fact about them the PC learned, or a memory of the PC they hold), then the 12.6.6 weight, newest first. Everyone else present is named on one `also here:` line (id, name and role) within `cast_line` (80), then "and N more". The scene setting in the Narrator's message follows the same ranking and budgets. The pinned section is a hard cap too: by kind (written words, commitments, memories), then newest.
+- Alternatives considered: no budget for the people present (rejected: every NPC positioned at the scene's place joins the cast at scene start, 12.4.1, so a home base that gathers residents over hundreds of sessions added about 80 tokens a resident to every packet); drop the unranked people from the view (rejected: the narrator must know who is there, or it invents or forgets them); rank the pins by recency then salience (rejected: a thing's written words would then lose to newer memories; kind order is the salience order).
+- Evidence: engine `engine/retrieve/scene.py` (`cast_order`, `also_here`), `engine/dm/packet.py` (`scene_view`, `scene_setting`); `tests/engine/test_packet.py::test_view_tokens_stay_flat_over_300_scenes_and_pins_stay` now keeps every walk-on at the place (301 present at scene 300): view 1,828 / 1,839 / 1,844 tokens at scenes 50 / 200 / 300. `evals/longhorizon.py --mode aged` (seed 7): Narrator view 1,337 / 1,612 / 1,952 before, 1,190 / 1,261 / 1,357 after; what still grows is the facts section filling to its own 500-token budget and the `also here:` line filling to its cap.
+- Serves: goal 2 (the narrator still sees everyone present, and the people the turn is about in full); SC-002 (the view is bounded however many people live at a place); cost.
+- Migration: none (no stored state changes; packets change, and the recorded replay game is re-recorded).
+- Revisit if: the narrator invents or misdescribes someone who was only on the `also here:` line; then raise `cast`, or give the compact line each person's detail.
+
 ## DL-13 — The Starter Setting: the Thallen March
 
 ### DL-13-01: One fictional engine — "true sound holds back the Quiet" — expressed only through existing mechanics

@@ -29,3 +29,17 @@ after every step.
 - Replay game after: Director 78% median (from 25%), World mean 95% (from 83%); other roles unchanged; median
   view about 1,099 tokens (the trigger line moved into it). Seeded 300-scene store: 1,564 / 1,586 / 1,594 view
   tokens at scenes 50 / 200 / 300, all pins present.
+
+## R2-A2 follow-up: the people present get a budget (2026-10-08)
+- Cause: every NPC positioned at the scene's place joins `cast_present` at scene start (12.4.1), and `scene_view`
+  rendered each as a full, unbudgeted profile (~80 tokens). Aged harness: six more residents at the home inn by
+  scene 300 added ~460 tokens.
+- Engine: `engine/retrieve/scene.py` `cast_order` (focus, then most recent dealings, then 12.6.6 weight) and
+  `also_here`; `engine/dm/packet.py` `scene_view` keeps full profiles within `view_budget.cast` (320) and names the
+  rest on one `also here:` line within `cast_line` (80, then "and N more"); `scene_setting` uses the same ranking
+  and budgets. Pins were already hard-capped by `fit` (kind order, then newest); documented.
+- Rules: 12.2.4 item 3 bullet "People present" `[revision: R2-A2]`; DL-12-39; appendix re-assembled; anchors 0 / 0.
+- Measurement: unit 300-scene store with every walk-on kept at the place: 1,828 / 1,839 / 1,844 view tokens at
+  scenes 50 / 200 / 300. `evals/longhorizon.py --mode aged`: Narrator view 1,337 / 1,612 / 1,952 before, 1,190 /
+  1,261 / 1,357 after (remaining growth: facts filling to 500, the `also here:` line filling to 80; both capped).
+  Replay game re-recorded.
