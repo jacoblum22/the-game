@@ -40,12 +40,13 @@ consequential word (lock, armed, weapon, present, know, hidden, secret, trap, al
 written as narrated (fact, source `narration`); consequential → Oracle (`_settle`, kept for these only).
 Principle I: 12.14.13's question is `[J:flag]`; code applies only 12.3.2's own enumerated consequential properties and its "uncertain → consequential" default (any class other than identity or ordinary possession is consequential), so code never rules a property incidental that the rule did not. ponytail: the word list stands in for the flag until a declaration field carries it.
 
-**R6. Motive match.** Wants and refusals carry no tags. Code pre-filters each engaged NPC's motives by
-content-word overlap with the event (the player's parts and beat restatements). No candidate → the action row;
-one or more → the World call (now given only the candidates) decides when `world_judge` is on (default on),
-else the best overlap. This keeps 12.2.9's `[J:flag]` with the model (Principle I) and makes the call rare
-(walk-ons have no motives). The task wording said "two or more"; one candidate also needs a judgement, so the
-call fires on one too. Recorded as a deviation.
+**R6. Motive match.** Wants and refusals carry no tags, so whether one is engaged stays 12.2.9's `[J:flag]`
+(Principle I). An engaged NPC with no recorded motive (every walk-on) takes the action row with no model call; one
+with any recorded want or refusal goes to the World call, which is offered only that NPC and those motives, when
+`world_judge` is on (default). Off, code takes the motive with the best word overlap, else the row. A word-overlap
+pre-filter was tried first and dropped: "Brother, who took it?" never overlapped "will not break off his prayer".
+The synthesis said "only when two or more motives match"; one candidate is as much a judgement as two, so this is
+recorded as a deviation (ledger I-160).
 
 **R7. Activity storage.** A fact `activity` (string) on the NPC, superseding the last; it is current when
 written after the scene started (`valid_from_seq >= scene.started_seq`). Rolled for each present NPC without a

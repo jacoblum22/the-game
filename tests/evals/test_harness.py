@@ -63,6 +63,19 @@ def test_plugged_pair_and_a_failing_plug(corpus: dict[str, Any]) -> None:
     assert "echo_narrator" in rb.report(corpus, "tests.evals.test_harness:echo_narrator", None, 3)
 
 
+def test_the_spec_006_plug_runs_the_narration_loop(corpus: dict[str, Any]) -> None:
+    """The new-contract plug: recorded packets rebuilt with handles, the offline narrator, the declaration judge
+    and the repair loop's counters (the real-model run uses `evals.narration_plug:haiku`)."""
+    from evals import narration_plug as plug
+
+    items = rb.packet_items(corpus, 6)
+    p = plug.Packet(items[0])
+    assert p.handles and "MUST:" in p.message and "ADJUDICATION RECORD" in p.message
+    m = rb.plugged_measures(items, plug.offline, plug.judge, workers=2)
+    assert m["plug errors"] == 0
+    assert {"turns with cut sentences", "narrator calls per turn", "turns with a rendered line"} <= set(m)
+
+
 def test_instability_counts_only_rechecked_sentences() -> None:
     t = {"versions": [
         {"kind": "draft", "sents": ["a b", "c d"], "claims": [[0, "identity", False], [1, "position", False]]},

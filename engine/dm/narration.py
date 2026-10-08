@@ -28,6 +28,7 @@ from engine.audit.declare import (
     Failure,
     SceneIndex,
     coverage,
+    known_as,
     mention_of,
     scan_sentence,
     t2_delivered,
@@ -215,6 +216,10 @@ def _write_new(ctx: TurnContext, record: AdjudicationRecord, s: _Sent, idx: Scen
     from engine.dm.roles.world import present_npcs
 
     for el in s.decl.new:
+        known = known_as(el, idx)
+        if known is not None:  # one of the scene's own: spoken of, not new
+            s.decl.about = list(dict.fromkeys([*s.decl.about, known]))
+            continue
         tier = tier_of(el, ctx.rules)
         if tier == "T1a":
             m = mention_of(el)

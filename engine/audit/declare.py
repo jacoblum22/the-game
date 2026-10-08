@@ -251,13 +251,14 @@ def unknown_names(text: str, idx: SceneIndex, s: DeclaredSentence) -> list[str]:
     plain = _QUOTED.sub(lambda m: m.group(0)[1:2].lower() + m.group(0)[2:], text)
     declared = {w.lower() for el in s.new for w in re.findall(r"[\w'-]+", el.name)}
     named = {w for names in idx.aliases.values() for n in names for w in n.split()}
+    known = {re.sub(r"['’]s$", "", k) for k in idx.known_words}
     out = []
     for m in _PROPER.finditer(plain):
         w = re.sub(r"['’]s$", "", m.group(1))
         before = plain[:m.start()].rstrip(" \"“”'‘’(—-")
         if not before or before[-1] in ".!?:;":
             continue  # a sentence's (or a quoted sentence's) first word
-        if w in _STOP_CAPS or w in idx.known_words or w.lower() in declared or w.lower() in named:
+        if w in _STOP_CAPS or w in known or w.lower() in declared or w.lower() in named:
             continue
         out.append(w)
     return list(dict.fromkeys(out))
@@ -293,10 +294,12 @@ def scan_sentence(s: DeclaredSentence, idx: SceneIndex, *, rules: Any = None,
             out.failures.append(Failure(why=f"states the count {w!r}, which the view does not hold", fix="redraft",
                                         store_value="drop the count or use the view's"))
             break
-    # pronouns: the one person this sentence is about (the PC aside)
-    people = [e for e in subjects | set(out.added_about) if e in idx.pronouns and e != idx.pc]
-    if len(people) == 1 and not s.new:
-        g = idx.pronouns[people[0]]
+    # pronouns: the one person this sentence names or is declared about (the PC aside; a cited line's people
+    # are not counted), when every one of them has stored pronouns
+    people = {e for e in [*s.about, *_names_in(text, idx)] if e != idx.pc and e in idx.aliases}
+    people = {e for e in people if not e.startswith(("loc.", "obj.", "item.", "fac.", "thr.", "clk."))}
+    if len(people) == 1 and not s.new and all(e in idx.pronouns for e in people):
+        g = idx.pronouns[next(iter(people))]
         said = _QUOTED.sub("", text)
         wrong = (g == "f" and _HE.search(said) and not _SHE.search(said)) or (
             g == "m" and _SHE.search(said) and not _HE.search(said))
@@ -320,12 +323,18 @@ def coverage(sents: Iterable[DeclaredSentence], must: Iterable[str]) -> list[str
     return [h for h in must if h not in cited]
 
 
+def known_as(el: NewElement, idx: SceneIndex) -> str | None:  # rule: 00.6.6
+    """The entity a "new" element already is (its name is one of the scene's names): it is spoken of, not new."""
+    want = re.sub(r"^(?:the|a|an)\s+", "", el.name.strip().lower())
+    return next((eid for eid, names in idx.aliases.items() if want and want in names), None)
+
+
 def t2_delivered(el: NewElement, s: DeclaredSentence, idx: SceneIndex) -> bool:  # rule: 12.14.13
     """A T2 element passes only when a line this sentence cites delivers it (its name's words are in that line)."""
     lines = " ".join(idx.handles.get(r, "") for r in s.refs)
     return bool(lines) and tx.covers(el.name, lines, ratio=0.5)
 
 
-__all__ = ["ELEMENT_TIERS", "DeclaredSentence", "Failure", "NewElement", "SceneIndex", "SentenceScan", "coverage",
+__all__ = ["ELEMENT_TIERS", "DeclaredSentence", "Failure", "NewElement", "SceneIndex", "SentenceScan", "coverage", "known_as",
            "joined", "mention_of", "parse_output", "scan_sentence", "split", "t2_delivered", "tier_of",
            "unknown_names"]

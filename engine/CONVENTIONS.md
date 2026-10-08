@@ -481,8 +481,25 @@ readers take a `WorldState`. Errors: `engine.world.common.WorldError`. The PC is
   `vitality`, `exists`. **Turn loop:** offer the Checker every id a claim may name (scene scope plus ids created
   this turn) and list the PC as `pc.x: Name, you, your` so pronoun claims resolve.
 - `engine.audit.fallback`: `plain_fallback(record, *, names={id: name}, verdicts=()) -> FallbackResult(fiction,
-  review_flag=True, owed_blocks, ruling: RulingRecord(kind="rule_conflict", review_flag=True))` (12.3.3; one
-  sentence per record item; ends "What do you do?" unless `record.pause`); log it with `log_ruling(fb.ruling, ...)`.
+  review_flag=True, owed_blocks, ruling: RulingRecord(kind="rule_conflict", review_flag=True))` (12.3.3: the scene
+  header when this turn opened one, then every must-name item's rendered line from `engine.dm.handles`; ends "What
+  do you do?" unless `record.pause`; the player's own words are never echoed); log it with `log_ruling(...)`.
+- `engine.dm.handles` (spec 006): `items(record, names=) -> [RecordItem(handle "R1".., kind scene|beat|cost|harm|
+  condition|position|learned|oracle|npc|activity|omen|note, must_name, entities, render, beat, index, text)]`, in
+  `record_text` order. Must-name: an owed beat (a result, "no roll", or one that simply happened; not refused or
+  paused), its costs, harm, conditions, positions and delivered items, Oracle answers, NPC responses, omens, and the
+  notes in `MUST_NOTES` (incident, leads, "cannot make out", a rest taken). `render` is a statement built from typed
+  fields (an Oracle answer through `render.relation(..., neg=)`), "" when none can be built.
+- `engine.audit.declare` (spec 006, 12.3.1/12.3.1a/12.14.13): `DeclaredSentence(text, refs, about, new
+  [NewElement(element_kind, name, ordinary, implied)], atmosphere)`; `parse_output(data)` reads either output shape
+  (`sentences`, or `fiction` + `declarations` keyed "0".."29"); `tier_of(el, rules)` (element_tiers; not `ordinary`
+  person/item/document -> T2; unknown kind -> T2); `mention_of(el)` (T1a -> a write_mentions entry);
+  `SceneIndex.of(state, items)` (aliases, pronouns, quantities, facts, handles, known capitalised words, sealed
+  names); `scan_sentence(s, idx, rules=, names=) -> SentenceScan(added_about, failures [Failure(why, fix
+  cut|redraft|oracle, store_value)], undeclared_new)`; `coverage(sents, must) -> uncited handles`;
+  `t2_delivered(el, s, idx)`. `claims.check_claims(..., cited={sentence: [RecordItem]})`: a claim restating a cited
+  line about its subject, or an act of a subject a cited line names (or a present witness of a cited incident), is
+  supported; `Verdict.incidental` marks an `undetermined` 12.3.2 writes as narrated; `beat_polarity(text, beat)`.
   `plain(text)` strips ids, snake_case and digits. Beat lines render from `actor`, `verb`, `targets` and the degree
   (never the restatement); an Oracle answer is its question verbatim, and only a yes to a statement-shaped one.
   `fact_sentence(state, fact, subject=None)` renders through `engine.text.render.relation`.
@@ -551,8 +568,12 @@ readers take a `WorldState`. Errors: `engine.world.common.WorldError`. The PC is
   `engine.dm.schemas` builds the cost `source_fact` and the 01.6.1 `attribute` enum);
   `world.npc_responses(ctx, happened) -> [WorldResponse(npc, want_engaged, refusal_engaged, tags)]`,
   `world.world_view(state)` (narrator view + present NPCs' standing, wants and refusals), `npc_motives`.
-- **World step** (`engine.dm.world_step.world_step(ctx, record, beats=)`): NPCs (talk outcome → refusal → want →
-  `tbl.npc_action` with standing as `standing_modifier`, first meeting rolls the reaction), clock omens from this
+- **World step** (`engine.dm.world_step.world_step(ctx, record, beats=)`): NPCs by the default NPC layer
+  (`engine.dm.npc_layer`, 12.11.9: `ensure_activities` writes each present NPC's `activity` fact once per scene and
+  `record.activities`; `respond` picks each engaged/addressed NPC's response: a resolved Talk → a recorded refusal or
+  want the World role judges (asked only about an NPC with recorded motives; config `world_judge`, default on) →
+  `tbl.npc_action` by standing clamped to `tbl.npc_practice`'s rows; an addressed NPC always answers, a refusing
+  source as "refuses, in their own voice (register, habit): ..."; meta `npc.spoken`), clock omens from this
   turn's `clock_ticked`, fired triggers (a pending `trg.lethal_warning` is delivered: block in `record.notes`),
   time per resolved beat by `beat_cost(scene mode)`.
 - **Fixture** (`tests.fixtures.scene_dock.build_dock(tmp_path) -> DockScene(store, rules, rng, pc, ferryman, watch,
@@ -639,19 +660,25 @@ readers take a `WorldState`. Errors: `engine.world.common.WorldError`. The PC is
   screen, created), adjudication: AdjudicationResult)`. T7–T12 are one transaction under the turn id (T8 mentions,
   the fallback's ruling, T12 counters/cut); a model error there raises and writes nothing after T6.
 - **Loop** (`narrate_checked(ctx, record, *, player_message, purpose="turn"|"scene_open"|"opening"|"recap"|"epilogue",
-  exchanges, pause_blocks, extra, fallback_text=None)`, needs `ctx.tx`): draft → `write_mentions` (one extra redraft
-  when T8 settled a property) → Checker → `check_claims` → `write_on_mention` fixes written, Oracle for
-  `undetermined` → a pure cut is done by code (sentences removed, claims renumbered, no model call), anything else is
-  a Narrator redraft with the failing verdicts and store values → T10 `screen_draft` + `screen_safety` (failure =
-  redraft, same budget) → after `pacing.yaml#claim_check.max_redrafts` the plain fallback (`review_flag`, its
-  `rule_conflict` ruling logged via `log_ruling`). `ModelInvalid` from the Narrator/Checker also falls back.
+  exchanges, pause_blocks, extra, fallback_text=None)`, needs `ctx.tx`; spec 006): declared sentences → per sentence:
+  `scan_sentence`, new elements by tier (T1a written on mention, T1b by the Oracle, T2 cut unless a cited line
+  delivers it), safety and echoed quotes → the Checker on those sentences (an audit: claims take the declared
+  subject) → `check_claims(cited=)` → undeclared new elements written (`_apply_writes` backstop), incidental
+  `undetermined` written as narrated, consequential ones to the Oracle → a cut-type failure is dropped by code; the
+  rest and uncited must-name lines go in one narrow `Repair` call per round (only the failing sentences) → after
+  `max_redrafts` rounds still-failing sentences are cut, uncited must-name items are stated by their rendered line
+  (a `rule_conflict` ruling, `review_flag`), and the open prompt is restored only if repair cut it → the plain
+  fallback when no drafted sentence passed → T10 `screen_draft` (recorded). Config `narrator_schema: "fiction"`
+  selects the fallback output shape. `ModelInvalid` on the first draft falls back.
 - An OFFER pause (stage offer) with nothing else in the record skips T7–T10: fiction = the beat's restatement, then
   the OFFER block (`skip_drafting`). OOF blocks: `turn_blocks(ctx, adj.oof, record, pause)` renders the open pause
   from its stored detail (`pause_blocks`: `oof.offer_block(Frame)`, `near_miss_block`, `clarify_block`, CHOICE notes)
   in place of the pipeline's one-line summary, labels the rest, moves `[WARNING` notes into WARNING blocks;
   `owed(ctx, record, text)` adds a missing `[STATUS]`; `oof.ordered` puts the pause block last.
-- **Roles**: `roles.narrator.draft(ctx, record, *, player_message, exchanges, purpose, redraft: Redraft|None, extra)`
-  (THIS MESSAGE = `record_text(...)` in names, never ids, + `redraft_text`); `roles.checker.check_draft(ctx, fiction,
+- **Roles**: `roles.narrator.draft(ctx, record, *, player_message, exchanges, purpose, repair: Repair|None, extra,
+  items=) -> NarratorDraft(sentences | repairs)` (THIS MESSAGE = `record_text(..., items=)`: one `- R3 MUST: ...`
+  line per record item, in names, never ids; a repair adds `repair_text`; the schema's `refs` = handles + view fact
+  ids, `about` = scene scope); `roles.checker.check_draft(..., sentences=)` numbers the narrator's own sentences; `roles.checker.check_draft(ctx, fiction,
   *, player_message, created, exchanges) -> CheckerOutput(sentences, claims, screen, scene_ids)` — its own prompt,
   the 12.3.1 card only, view = `entity_lines` (`<id>: Name, aliases`, PC `pc.x: Name, you, your`) over
   `checker_ids` (scene scope + ids created this turn), message = `[n] sentence` lines then `THE PLAYER'S MESSAGE`
@@ -749,7 +776,7 @@ readers take a `WorldState`. Errors: `engine.world.common.WorldError`. The PC is
   the incident, the place headed for or an open thread.
 - Turn loop: only NPCs present in the new scene act after a player's cut; a Down PC wakes after one interval
   (`engine.harm.apply.wake`, 07.2.9); "what are my options?" gets `turn.stuck_answer` ([LEADS], 12.8.5); claims
-  that restate a record note the engine gives (`claims.GIVEN_NOTES`: the inciting incident, leads) are supported;
+  that restate a record line their sentence cites (the inciting incident, a lead: spec 006) are supported;
   cost.exposure's observer defaults to someone present. Kit items are named from `base_items.yaml`.
 
 ## Plain setup wording (world seed + creation screens)

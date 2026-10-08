@@ -398,7 +398,7 @@ def run_scripted(seed: int, lines: int, model: str, tmp: Path) -> list[str]:
         if tid:
             out.append(_fmt_views(f"line {mark}", view_tokens(store.model_calls(tid))))
     out.append("- cached-prefix share per role: " + ", ".join(f"{r} {s:.2f}" for r, s in prefix_share(play).items()))
-    out.append(f"- engine errors: {len(errors)}" + "".join(f"\n  - {e}" for e in errors[:5]))
+    out.append(f"- engine errors: {len(errors)}" + "".join(f"\n  - {e}" for e in errors[:20]))
     d.game.close()
     return out
 
