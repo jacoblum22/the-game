@@ -19,6 +19,7 @@ aliases from the text after an id.
 
 from __future__ import annotations
 
+import re
 from collections.abc import Iterable, Mapping, Sequence
 from typing import Any
 
@@ -26,15 +27,19 @@ from engine.build.compile_cards import CardIndex, RuleCard
 from engine.data.loader import load_rules
 from engine.llm.base import Packet, Role
 from engine.retrieve.cards import core_cards, max_cards
+from engine.retrieve.episodes import card_lines, cards_for
 from engine.retrieve.scene import (
     CAST_KINDS,
     also_here,
+    beat_target,
     cast_order,
     entity_names,
     fit,
     pc_id,
     scene_facts,
     scene_scope,
+    shown_details,
+    spotlight,
     tokens,
     view_budget,
 )
@@ -47,6 +52,9 @@ MAX_DATA_KEYS = 12
 MAX_VALUE_CHARS = 160
 WATCHES = ("morning", "afternoon", "evening", "night")
 _DESCRIPTIVE_KEYS = ("pronouns", "desc", "landmarks", "hazards", "openness", "role", "detail", "demeanor")  # first under the cap
+# What drives a person, never the narrator's (12.10.1 world layer; 15.2.1 fields, 12.16.11 knowledge pack)
+MOTIVES = frozenset({"wants", "refusals", "fears", "secrets", "knowledge", "beliefs", "ties", "knowledge_scope"})
+CARD_CHARS = 600  # one scene card line, ~150 tokens (view_budget.scene_cards / max_scene_cards)
 
 
 class PacketError(ValueError):
@@ -64,13 +72,16 @@ def _listed(state: WorldState, ids: list[str], weights: Mapping[str, int], room:
     return {i: names[i] for i in fit(list(names), lambda i: tokens(f"{i} {names[i]}; "), room)}
 
 
-def scene_view(state: WorldState, focus: Iterable[str] = ()) -> dict[str, Any]:  # rule: 12.2.4
+def scene_view(state: WorldState, focus: Iterable[str] = (), *, spot: Sequence[str] = (),
+               cards: bool = False) -> dict[str, Any]:  # rule: 12.2.4
     """The narrator view of the current scene, within `pacing.yaml#packet.view_budget` (12.2.4 item 3). `focus`
     (the beat's target, entities the message names) raises a fact's relevance and puts a present person first for
-    a full profile. Nothing sealed is in it (INV-10)."""
+    a full profile. `spot` (the spotlight) adds the entities outside the scene as the PC knows them, within
+    `view_budget.spotlight`; `cards` adds at most `packet.max_scene_cards` scene cards within
+    `view_budget.scene_cards`. Nothing sealed is in it (INV-10)."""
     from engine.world.social import cast_list, thread_list
 
-    focus = list(focus)
+    focus = list(dict.fromkeys([*focus, *spot]))  # a spotlight entity counts for relevance (12.2.4)
     budget = view_budget()
     scope = scene_scope(state, budget)
     picked = scene_facts(state, scope, focus=focus, budget=budget)
@@ -106,7 +117,135 @@ def scene_view(state: WorldState, focus: Iterable[str] = ()) -> dict[str, Any]: 
     view["entities"] = [e for e in view["entities"] if e["id"] not in by_id or e["id"] in full]
     rest = {i: _label(by_id[i]) for i in ranked if i not in full}
     view["also_here"] = also_here(rest, budget["cast_line"]) if rest else ""
+    view["spotlight"] = [ln for i in fit(list(spot), lambda i: tokens("\n".join(spot_lines(state, i))),
+                                         budget.get("spotlight", 400)) for ln in spot_lines(state, i)]
+    if cards:
+        view["cards"] = scene_card_lines(state, spot, budget.get("scene_cards", 300))
     return view
+
+
+def _pc_knows(state: WorldState, fid: str) -> bool:
+    f = state.facts[fid]
+    return f.visibility in ("shown", "available") or fid in state.knowledge.get(pc_id(state) or "", {})
+
+
+def spot_lines(state: WorldState, eid: str, max_facts: int = 3) -> list[str]:  # rule: 12.2.4
+    """A spotlight entity as the PC knows it (12.2.4 item 3): its name or unnamed label (a sealed one's slice and
+    nothing more), then its details and the facts the PC perceived or learned about it, newest first. Never its
+    world truth. Indented, so nobody reads it as present."""
+    seal = state.seals.get(eid)
+    if seal is not None:
+        return [f"  {eid}: {seal.slice}"] if seal.slice else []
+    e = state.entities[eid]
+    role = e.data.get("role") if name_known(state, eid) else None
+    out = [f"  {eid}: {display_name(state, eid)}" + (f" ({_short(role)})" if isinstance(role, str) and role else "")]
+    shown = shown_details(state, [eid])[0]
+    facts = [f for f in state.facts.values() if f.subject == eid and f.value is not None and _pc_knows(state, f.id)
+             and f.id not in state.seals and f.visibility != "sealed" and f.predicate not in MOTIVES
+             and not f.predicate.startswith("trg.") and (not f.predicate.startswith("detail.") or f.id in shown)]
+    facts.sort(key=lambda f: -f.valid_from_seq)
+    out += [f"    {f.predicate}: {_short(f.value)}" for f in facts[:max_facts]]
+    return out
+
+
+def scene_card_lines(state: WorldState, spot: Sequence[str], room: int, rules: Any = None) -> list[str]:
+    # rule: 12.2.4
+    """At most `packet.max_scene_cards` cards (12.4.8 step 9) from ended scenes: each spotlight entity's latest
+    first, then those of the people present, within `room` tokens."""
+    rules = rules if rules is not None else load_rules()
+    k = int(rules.pacing["packet"].get("max_scene_cards", 2))
+    present = [i for i in (state.scene.cast_present if state.scene else []) if i in state.entities]
+    picked: list[Any] = []
+    for c in [*(c for i in spot for c in cards_for(state, [i], 1)), *cards_for(state, present, k)]:
+        if c not in picked and len(picked) < k:
+            picked.append(c)
+    lines = [ln[:CARD_CHARS] for c in picked for ln in card_lines(state, c)]
+    return fit(lines, lambda ln: tokens(ln), room)
+
+
+# ---------------------------------------------------------------- per-role views (12.2.4 table, DL-12-75)
+
+_PLAYER_SAID = re.compile(r"THE PLAYER'S MESSAGE: \"(.*)\"")
+
+
+def view_ctx(message: str = "", exchanges: Sequence[Any] = (), focus: Iterable[str] = (),
+             beat: Any = None, *, plain: bool = True) -> dict[str, Any]:
+    """The `view_for` context from a packet's own parts: the player's words (the `THE PLAYER'S MESSAGE:` line of a
+    Narrator or Director message; else the whole message when it is the player's own, `plain`), the last delivery
+    (the last exchange's DM part)."""
+    said = _PLAYER_SAID.search(message)
+    last = list(exchanges)[-1] if exchanges else ""
+    dm = last if isinstance(last, str) else (list(last) + ["", ""])[1]
+    words = said.group(1) if said else message if plain else ""  # a scene opening's setting names no one asked
+    return {"message": words, "last_delivery": str(dm or ""), "focus": list(focus), "beat": beat}
+
+
+def _slim(e: Mapping[str, Any], keys: Iterable[str] = ("role", "aliases", "pronouns")) -> dict[str, Any]:
+    """An entity block reduced to its name and the given data keys (names and aliases, 12.2.4 Reader row)."""
+    out = {k: e[k] for k in ("id", "kind", "name", "name_unknown", "slice", "exists") if k in e}
+    out["data"] = {k: v for k, v in (e.get("data") or {}).items() if k in keys}
+    return out
+
+
+def _no_motives(view: dict[str, Any]) -> dict[str, Any]:
+    """The PC-knowledge layer (12.10.1): no motive keys on any entity, no motive facts (the seals and `truth` are
+    already gone in `narrator_view`)."""
+    view["entities"] = [{**e, "data": {k: v for k, v in (e.get("data") or {}).items() if k not in MOTIVES}}
+                        for e in view.get("entities", [])]
+    view["facts"] = [f for f in view.get("facts", []) if f.get("predicate") not in MOTIVES]
+    return view
+
+
+def view_for(role: Role, state: WorldState, ctx: Mapping[str, Any] | None = None) -> str:  # rule: 12.2.4
+    """One role's projection of the turn's selection (12.2.4's per-role table): the same scope, ranking, spotlight
+    and cards for every role, each reading only its columns.
+
+    - Narrator: the PC-knowledge layer (no motives, `truth` or sealed content), the spotlight as the PC knows it,
+      at most 2 scene cards.
+    - Reader: names and aliases of the scene and spotlight entities, the PC's licences and conditions, the open
+      pause (no facts, clocks, profiles or cards).
+    - Framer: the target's and the place's records, positions and conditions, the facts about the target, the
+      place and the PC (no PC sheet, cast list, threads or cards).
+    - Director: threads, clocks, the cast list by weight, scene cards; the people present by name only.
+    - World: the full selection plus cards (its motives are added by `roles/world.py`).
+    Interpret and Checker read the plain scene view (the Checker's packet is built from strings)."""
+    ctx = dict(ctx or {})
+    focus = list(ctx.get("focus") or ())
+    if role in (Role.INTERPRET, Role.CHECKER):
+        return render_view(scene_view(state, focus))
+    spot = spotlight(state, str(ctx.get("message") or ""), str(ctx.get("last_delivery") or ""), ctx.get("beat"))
+    view = scene_view(state, focus, spot=spot, cards=role in (Role.NARRATOR, Role.DIRECTOR, Role.WORLD))
+    pc = pc_id(state)
+    if role == Role.NARRATOR:
+        view = _no_motives(view)
+    elif role == Role.READER:
+        view = {"time": view["time"], "scene": view["scene"], "also_here": view["also_here"],
+                "entities": [_slim(e) for e in view["entities"]],
+                "licenses": {k: v for k, v in view["licenses"].items() if k == pc},
+                "conditions": [c for c in view["conditions"] if c.get("target") == pc],
+                "spotlight": [ln for ln in view["spotlight"] if not ln.startswith("    ")],
+                "open_pause": view["open_pause"]}
+    elif role == Role.FRAMER:
+        target = beat_target(ctx.get("beat")) or next(iter(focus), None)
+        place = state.scene.place_id if state.scene else None
+        full = {target, place}
+        view = _no_motives(view) | {
+            "entities": [e if e["id"] in full else _slim(e, ()) for e in view["entities"]],
+            "facts": [f for f in view["facts"] if f.get("subject") in {*full, pc}],
+            "licenses": {}, "quantities": {k: v for k, v in view["quantities"].items() if k in full},
+            "clocks": [], "threads": {}, "known": {}, "cards": [],
+            "spotlight": spot_lines(state, target) if target in spot else []}
+    elif role == Role.DIRECTOR:
+        view = view | {"entities": [_slim(e, ()) for e in view["entities"]], "facts": [], "spotlight": [],
+                       "positions": {k: v for k, v in view["positions"].items() if k == pc},
+                       "licenses": {}, "quantities": {}, "conditions": []}
+    return render_view(view)
+
+
+
+# TODO(009-B): call sites that build their view from strings and so do not get `view_for` yet (spec 006 files):
+#   engine/dm/roles/world.py::world_view   render_view(scene_view(state)) -> view_for(Role.WORLD, state, ctx)
+#   engine/dm/roles/checker.py::checker_ids   add spotlight(state, message, last_delivery, beat) to the scope
 
 
 def _label(e: Mapping[str, Any]) -> str:
@@ -243,6 +382,12 @@ def render_view(view: Mapping[str, Any]) -> str:
     for key, label in (("threads", "open threads"), ("known", "cast list")):
         if view.get(key):
             lines.append(f"{label}: " + "; ".join(f"{i} {n}" for i, n in view[key].items()))
+    if view.get("spotlight"):  # rule: 12.2.4
+        lines.append("not here (named or linked; as the character knows them):")
+        lines.extend(view["spotlight"])
+    if view.get("cards"):  # rule: 12.4.8
+        lines.append("earlier scenes (from the record):")
+        lines.extend(f"  {c}" for c in view["cards"])
     pause = view.get("open_pause")
     if pause:
         choices = ", ".join(c.get("id", "") for c in pause.get("choices", []))
@@ -331,6 +476,7 @@ def build_packet(  # rule: 12.2.4
     focus: Iterable[str] = (),
     rules: Any = None,
     index: CardIndex | None = None,
+    beat: Any = None,
 ) -> Packet:
     """One call's packet in contract order. Raises PacketError over the card cap.
 
@@ -342,8 +488,9 @@ def build_packet(  # rule: 12.2.4
     cap = max_cards(rules)
     if len(cards) > cap:
         raise PacketError(f"{role.value}: {len(cards)} cards, the cap is {cap} plus the core (00.15.4)")
-    if isinstance(view, WorldState):
-        view_text = render_view(scene_view(view, focus))
+    if isinstance(view, WorldState):  # one selection, this role's projection (12.2.4, DL-12-75)
+        plain = role in (Role.READER, Role.FRAMER, Role.INTERPRET)  # their message is the player's (or beat's) words
+        view_text = view_for(role, view, view_ctx(message, exchanges, focus, beat, plain=plain))
     elif isinstance(view, Mapping):
         view_text = render_view(view)
     else:

@@ -30,6 +30,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from engine import ids
 from engine.dm.adjudication import AdjudicationRecord, BeatEntry, OracleEntry, PartEntry, PauseEntry
+from engine.dm.codex import promise_question, promise_subject, promises
 from engine.dm.context import TurnContext
 from engine.dm.narration import FRAME_NEXT, TurnOutcome, moves_on, narrate_turn, stays
 from engine.dm.roles import director as director_role
@@ -478,7 +479,7 @@ HURT_WORDS = re.compile(r"\bhow (?:badly |bad )?(?:hurt|injured|wounded)\b|\bam 
 
 def _oof_shaped(text: str) -> bool:  # rule: 12.5.10
     low = text.lower().replace("’", "'")
-    return any(w in low for w in STUCK_WORDS) or bool(HURT_WORDS.search(low))
+    return any(w in low for w in STUCK_WORDS) or bool(HURT_WORDS.search(low)) or promise_question(text)
 
 
 SEVERITY_ANSWER = "S1 to S5 is how heavy a cost is: S1 is a light one, S5 the heaviest."
@@ -535,6 +536,8 @@ def oof_answer(ctx: TurnContext, text: str) -> str:  # rule: 12.5.10
         return stuck_answer(ctx.state)
     if any(w in low for w in NEW_WORDS):
         return HOW_TO_PLAY
+    if promise_question(text):  # 15.7.6: "what did I promise X?" from the stored commitments
+        return promises(ctx.state, promise_subject(text), ctx.rules).text
     if knowledge_question(text):  # 14.6.3: the journal, filtered to what was asked about
         from engine.dm.codex import what_you_know
 
