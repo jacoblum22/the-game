@@ -74,6 +74,16 @@ def test_anchor_candidates_find_the_specific_ruling(store: Store) -> None:
     assert anchor_menu(cands, RULES)[0].startswith(cands[0] + ":")
 
 
+def test_a_talk_beat_never_re_anchors_to_force(store: Store) -> None:
+    """P-023/P-064: the Framer picks among candidates, so a Talk beat's candidates hold no Strike/Handle anchor."""
+    beat = {"verb": "verb.talk", "intent_verbs": ["make", "force", "wound", "turn", "use"],
+            "intent": "they give their names", "method": "shout at them to stop"}
+    verbs = {RULES.anchors[a].get("verb") for a in anchor_candidates(beat, store.state, RULES)}
+    assert verbs <= {None, "verb.talk", "verb.setup", "verb.sneak"}, verbs
+    strike = anchor_candidates({**beat, "verb": "verb.strike"}, store.state, RULES)
+    assert "verb.talk" not in {RULES.anchors[a].get("verb") for a in strike}
+
+
 def test_situation_alone_does_not_make_a_candidate(store: Store) -> None:
     cands = anchor_candidates({"verb": None, "intent_verbs": [], "intent": ""}, store.state, RULES)
     assert cands == []

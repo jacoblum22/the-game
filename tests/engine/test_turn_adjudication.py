@@ -409,3 +409,16 @@ def test_nothing_known_says_so_and_how_to_find_out(tmp_path: Path) -> None:
     dock, ctx = setup(tmp_path, model)
     note = " ".join(o["text"] for o in run_turn(ctx, text).oof)
     assert "Nothing on record about the dragon" in note and "ask someone" in note and "remember" in note
+
+
+def test_one_beat_offers_only_its_own_line_not_the_queued_tail() -> None:
+    """P-064: "a bribe and a question" read as one roll because the single beat took the whole restatement."""
+    from engine.dm.roles.reader import ReaderBeat, ReaderResult
+
+    res = ReaderResult(beats=[ReaderBeat(intent="the children say what is below", method="holds up a copper",
+                                         verb="verb.talk")],
+                       restatement="Lisius holds up a copper for whoever tells him. Then, asked aloud: what the "
+                                   "children know about Falwen (no beat).")
+    n = iter(range(9))
+    [plan] = res.plans(actor="pc.x", declared_seq=0, mint=lambda p: f"{p}.{next(n)}")
+    assert plan.beat.restatement == "Lisius holds up a copper for whoever tells him."

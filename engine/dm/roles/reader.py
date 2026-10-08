@@ -35,6 +35,7 @@ NONE = "none"
 # an in-fiction Recall (01.18.6) and is left to the Reader.
 KNOW_QUESTION = re.compile(r"\bwhat (?:do|did) (?:i|we) (?:\w+ )?know\b|\bwhat (?:have i|i've) (?:learn|found out)"
                            r"|\bwhat does my character know\b", re.I)
+_QUEUED_TAIL = re.compile(r"(?:(?<=[.!?;])\s+|\n\s*)Then\b")  # rule: 01.2.3 (queued beats follow the beat's line)
 RECALL_WORDS = re.compile(r"\b(?:remember|recall|think back|try to|search my memory|rack my)", re.I)
 
 
@@ -95,13 +96,15 @@ class ReaderResult(BaseModel):
         """The beats as pipeline inputs, in the player's order (the caller resolves the first three)."""
         out: list[BeatPlan] = []
         single = len(self.beats) == 1
+        # the one beat's line, not the queued "Then, ..." tail: an OFFER must not read as one roll for both
+        own = _QUEUED_TAIL.split(self.restatement, maxsplit=1)[0].strip()
         for b in self.beats:
             target = b.target if b.target and b.target != NONE else None
             lic = b.license if b.license and b.license != NONE else None
             wbl = b.would_be_license if b.would_be_license and b.would_be_license != NONE else None
             beat = Beat(id=mint(ids.BEAT), actor=actor, intent=b.intent, method=b.method or b.intent,
                         assertion=b.assertion, shape=b.shape or "single",  # type: ignore[arg-type]
-                        target=target, restatement=(self.restatement if single and self.restatement else b.intent),
+                        target=target, restatement=(own if single and own else b.intent),
                         gate=b.gate, verb=b.verb, license=lic, g4_fact=b.g4_fact,  # type: ignore[arg-type]
                         would_be_license=wbl,
                         necessity=b.necessity, declared_seq=declared_seq)
