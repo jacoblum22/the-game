@@ -138,6 +138,8 @@ def _one(m: Mention, *, tx: Any, rules: Any, rng: Any, settle: Settle | None, pl
         res.refused.append(m.name)
         return
     found = find_existing(tx.state, m.name, kind)
+    if found is None and kind != "npc" and _proper(m.name):  # "Falett" listed as an object is the NPC (P-073)
+        found = find_existing(tx.state, m.name, "npc")
     if found is not None:
         res.reused[m.name] = found
         return
@@ -158,8 +160,27 @@ def _one(m: Mention, *, tx: Any, rules: Any, rng: Any, settle: Settle | None, pl
     res.created[m.name] = eid
     for imp in implied:
         res.seqs.append(tx.add(_fact(tx, eid, _slug(imp.predicate), imp.value, "narration", "00.6.6")))
+    holder = _holder(tx.state, implied) if kind in ("item", "object") else None
+    if holder is not None:  # "held by Falett Greenbottle": who holds it, as the claim check reads it (P-073)
+        res.seqs.append(tx.add(_fact(tx, eid, "holder", holder, "narration", "00.6.6")))
     for prop in m.unsettled:
         _settle(eid, kind, prop, tx=tx, rules=rules, rng=rng, settle=settle, res=res)
+
+
+_HELD_BY = re.compile(r"\b(?:held|carried|gripped|clutched|worn|kept)\s+by\s+([^,.;()]+)", re.IGNORECASE)
+
+
+def _holder(state: Any, implied: Iterable[Implied]) -> str | None:
+    """The person an implied property says holds the thing ("holder: Mara", "carved bone, held by Mara")."""
+    for imp in implied:
+        pred = _slug(imp.predicate)
+        m = _HELD_BY.search(imp.value)
+        name = imp.value if pred in ("holder", "held_by", "carried_by", "owner") else m.group(1) if m else ""
+        name = name.strip()
+        eid = (find_existing(state, name, "npc") or find_existing(state, name)) if name else None
+        if eid is not None and state.entities[eid].kind in ("npc", "pc", "companion"):
+            return eid
+    return None
 
 
 def _fact(tx: Any, subject: str, predicate: str, value: Any, source: str, rule_id: str) -> Event:

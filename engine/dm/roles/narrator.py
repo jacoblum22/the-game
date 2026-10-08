@@ -208,8 +208,15 @@ _STOP = set("a an the and or but of to in on at by for with from as into onto ov
             "still just".split())
 
 
+def _prose(text: str) -> str:
+    """The fiction of a delivery: no block lines, their indented continuations, menu options or input hints."""
+    return " ".join(ln for ln in text.splitlines()
+                    if not (ln.lstrip().startswith(("[", ">", "Type a number")) or ln[:1].isspace()
+                            or re.match(r"\d+\) ", ln)))
+
+
 def _sentences(text: str) -> list[str]:
-    prose = " ".join(ln for ln in text.splitlines() if not ln.lstrip().startswith(("[", ">")))
+    prose = _prose(text)
     return [s.strip() for s in re.split(r"(?<=[.!?])\s+", prose) if s.strip()]
 
 
@@ -231,6 +238,8 @@ def freshness_lines(deliveries: Sequence[str], names: Sequence[str] = (), *, ope
                     seen.setdefault(g, set()).add(k)
     found: dict[str, list[str]] = {}
     low = [(n, n.lower()) for n in names if len(n) > 2]
+    low += [(n.split()[0], n.split()[0].lower()) for n in names  # a person by their given name ("Calbert")
+            if n[:1].isupper() and len(n.split()) > 1 and len(n.split()[0]) > 2 and n.split()[0].lower() not in _STOP]
     for ss in sents:
         who = "the scene"
         for s, w in ss:
@@ -262,7 +271,43 @@ def freshness_lines(deliveries: Sequence[str], names: Sequence[str] = (), *, ope
         lines.append("Already used lately, do not reuse (find a new image, or none; a deliberate callback "
                      "is fine):")
         lines += [f"- {who}: " + "; ".join(ps[-per_entity:]) for who, ps in found.items()]
+    spoken = _repeated_lines(deliveries, low)
+    if spoken:
+        lines.append("Lines these people already said lately, do not have them say again (give them new words):")
+        lines += [f"- {who}: " + "; ".join(f'"{q}"' for q in qs[-per_entity:]) for who, qs in spoken.items()]
     return lines
+
+
+_QUOTE = re.compile(r"[\"“]([^\"“”]+)[\"”]")
+
+
+def _repeated_lines(deliveries: Sequence[str], low: Sequence[tuple[str, str]]) -> dict[str, list[str]]:
+    """Per speaker, the opening words of their quoted speech ("Mark me") heard in two or more deliveries. The
+    speaker is the last person named before the quote; a quote the PC says ("you say", "You ask: ...") is skipped.
+    ponytail: a quote's first clause stands in for its stock line; single words ("Yes") are not listed."""
+    heard: dict[tuple[str, str], set[int]] = {}
+    order: list[tuple[str, str]] = []
+    for k, d in enumerate(deliveries):
+        prose = _prose(d)
+        for m in _QUOTE.finditer(prose):
+            before, after = prose[:m.start()], prose[m.end():m.end() + 30]
+            clause = re.split(r"[.!?]\s", before)[-1]
+            if re.match(r"\W*you\b", clause, re.I) or re.match(r"\W*you (?:say|ask|tell|call)", after, re.I):
+                continue
+            at, who = max(((before.lower().rfind(ln), n) for n, ln in low if n[:1].isupper()),  # a person
+                          default=(-1, ""))
+            lead = re.split(r"[,;:.!?—]", m.group(1))[0].strip().lower()
+            if at < 0 or len(lead.split()) < 2:
+                continue
+            key = (who, lead)
+            if key not in heard:
+                order.append(key)
+            heard.setdefault(key, set()).add(k)
+    out: dict[str, list[str]] = {}
+    for who, lead in order:
+        if len(heard[(who, lead)]) > 1:
+            out.setdefault(who, []).append(lead)
+    return out
 
 
 def redraft_text(r: Redraft) -> str:  # rule: 12.3.3

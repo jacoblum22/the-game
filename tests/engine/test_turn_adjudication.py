@@ -130,6 +130,21 @@ def test_offer_before_roll_and_nothing_rolled_until_commit(tmp_path: Path) -> No
     assert dock.store.rebuild() == dock.state
 
 
+def test_a_success_rides_and_the_same_ask_does_not_roll_again(tmp_path: Path) -> None:
+    """P-075 (talker 185715 inputs 28-31): she had already agreed, and the same ask rolled again at 50% with a
+    closed door at stake. A success this scene, same target, anchor and approach, rides (01.4.2)."""
+    dock, ctx, model, res = offer_turn(tmp_path, **RISKY)
+    model.push(Role.WORLD, QUIET_WORLD)
+    ctx.rng.faces = [18]  # type: ignore[attr-defined]
+    assert answer_pause(ctx, "commit").record.beats[0].degree == "success"
+    model.push(Role.READER, reader("DECLARATION", "I slip past the watch again.", SNEAK))
+    model.push(Role.FRAMER, framer(**RISKY))
+    model.push(Role.WORLD, QUIET_WORLD)
+    res2 = run_turn(ctx, "I slip past the watch again.")
+    assert res2.pause is None and len(rolls(dock.store)) == 1
+    assert res2.record.beats[0].gate_words == "no roll: riding"
+
+
 def test_withdraw_spends_nothing(tmp_path: Path) -> None:
     dock, ctx, model, res = offer_turn(tmp_path, **RISKY)
     before = dock.state.model_copy(deep=True)

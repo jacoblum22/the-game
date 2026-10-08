@@ -97,9 +97,10 @@ def test_near_miss_block(s: Scene) -> None:
     assert blk.text == "[NEAR MISS] 13 vs 15. So close: succeed and pay a price, or let it fail."
     picks = near_miss_choices(f, s.rules)
     assert [c["id"] for c in picks] == ["success_at_cost:cost.drain", "success_at_cost:cost.footing", "failure"]
-    assert [c["label"] for c in picks] == ["Succeed, and pay: you tire (drain, S2)",
-                                           "Succeed, and pay: you slip (footing, S2)",
-                                           "Let it fail: you tire (drain, S2)"]
+    # P-076: a success and a failure with the same price still read differently
+    assert [c["label"] for c in picks] == ["Succeed: you get what you tried for, at this price: you tire (drain, S2)",
+                                           "Succeed: you get what you tried for, at this price: you slip (footing, S2)",
+                                           "Let it fail: you do not get it, and still pay: you tire (drain, S2)"]
 
 
 def test_result_block_states_the_outcome_once(s: Scene) -> None:
@@ -137,6 +138,14 @@ def test_offer_words_never_cite_negate_or_cut_a_fact() -> None:
     frame.alternate_cost.form_intent = "as fact.144 says"
     assert plain_offer_words(frame, state).alternate_cost.form_intent == (
         "as no one is watching the cobbles where the folded paper lies says")
+    # P-072 (fighter 185739 inputs 26-30): a "Source:" aside is bookkeeping, never shown
+    frame.threatened_cost.form_intent = "he loses his footing. Source: fact.144 (wrist held in the PC's hand)."
+    frame.alternate_cost.form_intent = "he stumbles (source: Falett, who is aware of him)"
+    plain_offer_words(frame, state)
+    assert frame.threatened_cost.form_intent == "he loses his footing."
+    assert frame.alternate_cost.form_intent == "he stumbles"
+    frame.alternate_cost.form_intent = "he shuts the door, source: their friendship, which she is pressing."
+    assert plain_offer_words(frame, state).alternate_cost.form_intent == "he shuts the door"
 
 
 def test_cost_terms_and_several_questions_are_answered(s: Scene) -> None:

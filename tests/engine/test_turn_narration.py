@@ -253,6 +253,18 @@ def test_freshness_lists_repeated_images_per_entity_and_recent_openings() -> Non
                                                                              '"One turn only"']
 
 
+def test_freshness_lists_an_npcs_repeated_spoken_line() -> None:
+    """Talker playtest 185715 inputs 21-26: Calbert opened every reply with "Mark me"; offer blocks never count."""
+    from engine.dm.roles.narrator import freshness_lines
+
+    d = ['Calbert frowns. "Mark me," he says. "I do not know."',
+         'Calbert\'s jaw works. The lake slaps the posts. "Mark me," he says, low. "Leave it."',
+         '"Mark me well," you say. Calbert waits.\n\n[OFFER] Evbert tries it\n        Success or better 85%']
+    text = "\n".join(freshness_lines(d, ["Calbert Oakward", "lake"]))
+    assert '- Calbert: "mark me"' in text and "success or better" not in text
+    assert "- lake:" not in text.split("Lines these people")[1]  # a place never speaks; the PC's own line is not his
+
+
 def test_the_narrator_is_told_what_it_already_used(tmp_path: Path) -> None:
     same = "Tam Harlan leans on his pole, rain beading on the brim. What do you do?"
     model = look_model(narrator=[narr(same), narr(same), narr(same)], checker=[chk(), chk(), chk()])

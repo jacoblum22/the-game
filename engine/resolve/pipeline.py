@@ -313,7 +313,7 @@ def _moved(env: PipelineEnv, plan: BeatPlan) -> list[PositionEntry]:  # rule: PR
     else:
         evs.append(Event.of("position_set", source=beat.id, rule_id="PR-06-4", entity=actor, location=here))
         place = st.entities.get(here) if here else None
-        said = f"moved within {place.name}" if place else "moved"
+        said = f"still in {place.name}" if place else "on the move"  # "you are still in X" (P-077)
     env.add(*evs)
     return [PositionEntry(entity=actor, words=said)]
 
@@ -336,7 +336,29 @@ def _frame(env: PipelineEnv, plan: BeatPlan, dec: GateDecision, queued: list[Bea
     if not cands:
         return BeatOutcome(status="refused", entry=_entry(beat, gate=dec.gate, gate_words="no anchor fits (00.15.3)"))
     proposed = env.framer(beat, cands, gate=dec, note=note)
+    if not proposed.lethal and _rides(env.state, beat, proposed.anchor, proposed.attribute):
+        beat.necessity = "riding"  # the success this scene stands; no new roll (01.4.2; P-075)
+        return _no_roll(env, plan, dec)
     return _checked(env, plan, dec, proposed, cands, queued, warned=warned)
+
+
+def _rides(state: Any, beat: Beat, anchor: str, attribute: str) -> bool:  # rule: 01.4.2
+    """A frame resolved this scene as a success (or success at a cost) by the same actor against the same target,
+    with the same anchor, attribute and method class: the ride is active and the new beat does not roll.
+    ponytail: success rides only, ended by the scene's end or a changed approach; a failure ride (the failure
+    stands) needs the lever/superseded-fact end conditions (01.4.2 items 2, 3, 5) before it can block a retry."""
+    if beat.target in (None, "none", beat.actor):
+        return False
+    since = state.scene.started_seq if state.scene is not None else 0
+    for fs in state.frames.values():
+        r, f = fs.resolved, fs.frame
+        b = f.get("beat") or {}
+        if (r and fs.committed_seq >= since
+                and (r.get("degree") in ("success", "critical_success") or r.get("success_at_cost_taken"))
+                and (b.get("actor"), b.get("target"), b.get("method_class"), f.get("anchor"), f.get("attribute"))
+                == (beat.actor, beat.target, beat.method_class, anchor, attribute)):
+            return True
+    return False
 
 
 def _checked(env: PipelineEnv, plan: BeatPlan, dec: GateDecision, proposed: ProposedFrame, cands: list[str] | None,
