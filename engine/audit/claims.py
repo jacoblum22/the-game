@@ -341,6 +341,8 @@ def _check(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: PR-12-2
     if subject == UNKNOWN and c.cls not in _FREE_SUBJECT:  # rule: 12.3.2 [revision: I-127; DL-12-37]
         if c.cls == "action" and not c.asserts_change and _atmosphere(ctx, c):
             return _v(c, i, "supported", reason="background activity that changes nothing: atmosphere (12.3.2)")
+        if c.cls == "action" and _reacts_to_incident(ctx, c):
+            return _v(c, i, "supported", reason="a bystander's reaction to the inciting incident (12.16.16)")
         if c.asserts_change or c.cls == "action":
             return _v(c, i, "unsourced_change", reason="an unidentified subject changed or acted; cut")
         forbidden = _forbidden_new(c)
@@ -392,6 +394,18 @@ def _involves_pc(ctx: _Ctx, text: str) -> bool:
 def _atmosphere(ctx: _Ctx, c: Claim) -> bool:  # rule: 12.3.2 [revision: I-127]
     """Unnamed background activity that changes nothing and does not touch the PC: atmosphere, never a claim."""
     return not (_forbidden_new(c) or _deed(c.text) or _involves_pc(ctx, c.text))
+
+
+def _reacts_to_incident(ctx: _Ctx, c: Claim) -> bool:  # rule: 12.16.16
+    """The opening's inciting incident is its record source: those who witness it react (heads turn, a murmur,
+    someone swears, folk gather), in words and manner. A deed (taking, leaving, attacking) still needs its own
+    source, and nothing 12.14.13 forbids is created this way."""
+    return _incident_given(ctx) and not _deed(c.text) and not _forbidden_new(c)
+
+
+def _incident_given(ctx: _Ctx) -> bool:  # rule: 12.16.16
+    """This is the opening: the record carries the inciting incident as given."""
+    return any(n.startswith(GIVEN_NOTES[0]) for n in ctx.record.notes)
 
 
 def _addressed(ctx: _Ctx, npc: str) -> bool:  # rule: 12.2.9
@@ -559,6 +573,12 @@ def _identity(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: 12.3.1
         if _negated(c.value) or not tx.covers(c.value, kind, ratio=1.0):
             return _v(c, i, "contradicted", kind, reason=f"the PC's anchor bond: {kind}")
         return _v(c, i, "supported")
+    if store is None and e.kind in ("object", "place") and key not in ("name", "gender", "pronouns") and (
+            _incident_given(ctx) or ctx.backed(e.id, "entity_created")) and not _forbidden_new(c):
+        # how ordinary furniture looks (wet staves, a curling notice, a stone base) is an implied property of an element
+        # written on mention this turn (00.6.6), or the opening's scene dressing; the Oracle is not asked about it
+        # [revision: I-127]. ponytail: not written back; write it as an implied property if later turns ask anew
+        return _v(c, i, "supported", reason="furniture described as it is written (00.6.6; I-127)")
     if store is None:
         return _oracle_settled(ctx, c, i, pred_slug) or _v(
             c, i, "undetermined", reason=f"{c.predicate or 'property'} not settled in the store")
@@ -1010,6 +1030,8 @@ def _action(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: 12.2.9
         # 12.2.9 (2): the PC's beat, question or words are the source of the response; "the DM chooses the words",
         # so speech and manner pass; a deed (giving, leaving, attacking, changing a state) still needs its source
         return _v(c, i, "supported", reason="a response in words and manner to the PC (12.2.9)")
+    if ctx.present(c.subject) and _reacts_to_incident(ctx, c):  # the cast present witness the incident
+        return _v(c, i, "supported", reason="a reaction to the inciting incident (12.16.16)")
     store = "; ".join(a.action for a in rows) or None
     return _v(c, i, "unsourced_change", store, reason="no source for this act in the adjudication record")
 
