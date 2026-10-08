@@ -41,8 +41,8 @@ MESSAGE with the beat: neutral restatement, gate, verb or licence, target, asser
   exposure; time while something moves → time; a tool → gear; effort or supplies → drain; someone who can
   refuse → closed door); not the last cost paid against this obstacle if another fits. Ties in that
   order. Without `source_fact`, fit `stakes_source` per THIS MESSAGE.
-  `alternate_cost`: a different fitting entry, required unless safe (else null). `form_intent`: one
-  plain line naming the concrete form and its source.
+  `alternate_cost`: another fitting entry (if safe: what going big adds). `form_intent`:
+  the concrete form here, in one plain line; never the menu's examples.
 - `method_consequences`: what the method does whatever the roll (noise, a spent item).
 - `secret` (01.4.7): for Observe, Recall or reading a person, true when seeing the odds would tell the
   player what the character cannot know (a sealed target, or whether anything is there). Unsure: true.

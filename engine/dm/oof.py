@@ -126,7 +126,7 @@ def _cost_words(rules: Any, cost: dict[str, Any] | None, *, with_severity: bool)
     if not cost or not cost.get("menu_id"):
         return ""
     menu = name_of(rules, cost.get("menu_id")).lower()
-    form = (cost.get("form") or "").strip() or _menu_form(rules, cost.get("menu_id"), cost.get("severity_on_failure"))
+    form = (cost.get("form") or "").strip()  # never the menu's example list as if it were this scene's (P-083)
     sev = ""
     if with_severity and cost.get("severity_on_failure"):
         sev = f", {cost['severity_on_failure']}"
@@ -352,7 +352,7 @@ def clarify_block(question: str, *, assuming: bool = False) -> OofBlock:  # rule
 
 
 def _price(rules: Any, cost: Any, severity: str | None) -> str:
-    form = (getattr(cost, "form_intent", None) or "").strip() or _menu_form(rules, cost.menu_id, severity)
+    form = (getattr(cost, "form_intent", None) or "").strip()
     menu = name_of(rules, cost.menu_id).lower()
     sev = f", {severity}" if severity else ""
     return f"{form} ({menu}{sev})" if form else f"{menu}{sev}"
@@ -384,7 +384,7 @@ def result_block(frame: Frame, roll: RollResult, *, sac: bool = False, costs: Se
         DEGREE_NAMES.get(roll.degree, roll.degree.replace("_", " ")) + (" (near miss)" if roll.near_miss else ""))
     rest = []
     for c in costs:
-        form = (getattr(c, "form", "") or "").strip() or _menu_form(rules, c.menu_id, c.severity)
+        form = (getattr(c, "form", "") or "").strip()
         tag = ", ".join(x for x in (name_of(rules, c.menu_id).lower(), c.severity or "") if x)
         rest.append(f"Paid: {form} ({tag})." if form else f"Paid: {tag}.")
     return OofBlock(kind="RESULT", text=_block("RESULT", f"d20 {roll.d20} → {roll.total} vs {frame.dc} · {words}",

@@ -500,3 +500,70 @@ def test_one_beat_offers_only_its_own_line_not_the_queued_tail() -> None:
     n = iter(range(9))
     [plan] = res.plans(actor="pc.x", declared_seq=0, mint=lambda p: f"{p}.{next(n)}")
     assert plan.beat.restatement == "Lisius holds up a copper for whoever tells him."
+
+
+# ------------------------------------------------------------------------------------------- extended goals (P-082)
+
+
+def _track(tmp_path: Path, *shapes: str, reach_whole: bool = True) -> tuple[DockScene, TurnContext, list[Any]]:
+    """Fighter playtest 20261007-191941 inputs 22-31: follow a track again and again; each success got the same
+    "the mist hides it, press on?". Each turn: declare, commit, a success on the die."""
+    model = ScriptedModel()
+    dock, ctx = setup(tmp_path, model)
+    with dock.store.transaction() as tx:
+        for oid, name in (("obj.track", "track"), ("obj.track_in_the_mud", "track in the mud")):
+            tx.add(Event.of("entity_created", source="test", entity=EntityRecord(id=oid, kind="object", name=name)))
+            tx.add(Event.of("position_set", source="test", entity=oid, location=dock.place))
+    out = []
+    for i, shape in enumerate(shapes):
+        follow = {**beat("follow the track", "verb.move", target="obj.track_in_the_mud" if i == 0 else "obj.track",
+                         verbs=("follow",)), "shape": shape}
+        model.push(Role.READER, reader("DECLARATION", "I follow the track.", follow))
+        model.push(Role.FRAMER, framer(stakes_source="none", reach_whole=reach_whole))
+        model.push(Role.WORLD, QUIET_WORLD, QUIET_WORLD)
+        run_turn(ctx, "I follow the track.")
+        ctx.rng.faces = [18]  # type: ignore[attr-defined]
+        out.append(answer_pause(ctx, "commit").record.beats[0])
+    return dock, ctx, out
+
+
+def test_an_extended_goal_shows_progress_each_stretch(tmp_path: Path) -> None:
+    dock, ctx, (b1, b2) = _track(tmp_path, "extended", "single", reach_whole=False)  # limited: 1 tick each
+    assert "a first stretch" in b1.progress and "never the same view" in b1.progress
+    assert "more than halfway" in b2.progress  # the same goal, though the Reader said single
+    [clock] = [c for c in dock.state.clocks.values() if c.kind == "progress"]
+    assert clock.filled == 2 and clock.segments == 4 and clock.status == "active"
+
+
+def test_repeated_successes_at_one_goal_end_in_arrival(tmp_path: Path) -> None:
+    from engine.world.common import trigger_raised
+    dock, ctx, (b1, b2) = _track(tmp_path, "single", "single")  # standard: 2 ticks each, the first counted late
+    assert not b1.progress
+    assert b2.progress.startswith("goal reached") and "do not ask whether to press on" in b2.progress
+    [clock] = [c for c in dock.state.clocks.values() if c.kind == "progress"]
+    assert clock.status == "completed"
+    # what lies at the end is a lead from state (12.8.2): delivered by the Director's step, or still owed
+    assert dock.state.meta.get("lead_injection") or trigger_raised(dock.state, "trg.lead_injection")
+
+
+def test_go_big_from_safe_takes_the_framers_fitted_alternate(tmp_path: Path) -> None:
+    """P-083: going big from Safe printed the menu's example list ("left on the far side, down the well, stuck in
+    a beam") in a grassy field. The Framer names the alternate a go-big adds; a safe offer does not show it."""
+    alt = {"menu_id": "cost.exposure", "form_intent": "the watch looks up at the splash", "source_fact": None}
+    dock, ctx, model, res = offer_turn(tmp_path, alternate_cost=alt)
+    assert res.offer is not None and res.offer["stakes"] == "safe" and not res.offer["alternate_cost"]
+    res2 = answer_pause(ctx, "go_big")
+    assert res2.offer is not None and res2.offer["alternate_cost"]["form"] == alt["form_intent"]
+
+
+def test_a_form_that_only_copies_the_menu_examples_is_dropped(tmp_path: Path) -> None:
+    from engine.dm.oof import _cost_words
+    from engine.resolve.frame import _fitted
+    from engine.resolve.types import CostDecl
+    dock = build_dock(tmp_path)
+    copied = CostDecl(menu_id="cost.gear", form_intent="Left on the far side, down the well, stuck in a beam.")
+    assert _fitted(copied, dock.rules).form_intent == ""
+    own = CostDecl(menu_id="cost.gear", form_intent="the mace lost in the long grass")
+    assert _fitted(own, dock.rules).form_intent == own.form_intent
+    assert "well" not in _cost_words(dock.rules, {"menu_id": "cost.gear", "form": "", "severity_on_failure": "S2"},
+                                     with_severity=True)

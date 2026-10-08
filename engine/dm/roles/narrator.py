@@ -114,6 +114,8 @@ def _beat_line(state: WorldState, b: BeatEntry, pc: str | None, paused: bool = F
         bits.append("acting on: " + ", ".join(name_of(state, t, pc) for t in b.targets))
     if b.learned:  # 12.10.5: what the success delivered; the PC is told or sees it, so the fiction names it
         bits.append("the PC learns (say it plainly in the fiction): " + "; ".join(b.learned))
+    if b.progress:
+        bits.append(b.progress)
     return "- " + "; ".join(x for x in bits if x)
 
 

@@ -27,7 +27,7 @@ from pydantic import BaseModel, Field
 
 from engine import ids
 from engine.dm.adjudication import BeatEntry, CostEntry, HarmEntry, PositionEntry
-from engine.resolve.costs import HarmHook, apply_cost, first_fitting_cost
+from engine.resolve.costs import HarmHook, apply_cost, check_cost_decl, first_fitting_cost
 from engine.resolve.frame import (auto_commit_allowed, commit_events, frame_check, legal_trades, offer_preview,
                                   plain_offer_words)
 from engine.resolve.gate import GateDecision, check_gate, words
@@ -488,11 +488,13 @@ def _answer_offer(env: PipelineEnv, plan: BeatPlan, d: dict[str, Any], choice: s
         env.add(Event.of("offer_logged", source="player", rule_id="01.7.3", shown_at=now, choice="trade"))
         dec = _gate_again(env, plan.beat)
         traded = proposed.model_copy(update={"trade": trade})
-        if traded.alternate_cost is None:  # Safe -> Risky needs an alternate (01.6.11): the first that fits uncited
-            traded.alternate_cost = first_fitting_cost(
-                env.rules, role="alternate", other=traded.threatened_cost, state=env.state, actor=plan.beat.actor,
-                stakes_source=traded.stakes_source, declared_seq=plan.beat.declared_seq or env.state.last_seq,
-                target=plan.beat.target if plan.beat.target != "none" else None)
+        # Safe -> Risky needs an alternate (01.6.11): the Framer's own (its form fits the scene, P-083) when legal,
+        # else the first that fits uncited
+        kw = dict(role="alternate", other=traded.threatened_cost, state=env.state, actor=plan.beat.actor,
+                  stakes_source=traded.stakes_source, declared_seq=plan.beat.declared_seq or env.state.last_seq,
+                  target=plan.beat.target if plan.beat.target != "none" else None)
+        if traded.alternate_cost is None or check_cost_decl(traded.alternate_cost, rules=env.rules, **kw):  # type: ignore[arg-type]
+            traded.alternate_cost = first_fitting_cost(env.rules, **kw)  # type: ignore[arg-type]
         check = frame_check(traded, plan.beat, state=env.state, rules=env.rules, gate=dec, candidates=cands,
                             store=env.store, staged=env.tx.events)
         if isinstance(check, FrameRefusal) and check.field != "lethal":  # the trade is illegal: the OFFER stays
@@ -570,6 +572,7 @@ def _finish(env: PipelineEnv, plan: BeatPlan, frame: Frame, roll: RollResult, *,
     delivered = max(0, read.delivered_reach + reach_delta) if read.delivered_reach else 0
     resolved = roll.degree in ("success", "critical_success") or read.success_at_cost_taken
     moved = _moved(env, plan) if resolved and (frame.gate.verb or frame.beat.verb) == MOVE else []
+    progress = _progress(env, frame, delivered if resolved else 0)
     writes = [e.seq for e in env.tx.events[start:] if e.seq is not None]
     ev_ids: list[str] = []
     if frame.deed_tag:  # PR-03-1 for every resolved beat (a degree is a resolved basis)
@@ -601,6 +604,7 @@ def _finish(env: PipelineEnv, plan: BeatPlan, frame: Frame, roll: RollResult, *,
     entry.positions = moved
     entry.harm = env.harm_log[harm_from:]
     entry.reach_words = _reach_words(env.rules, frame, delivered, notes)
+    entry.progress = progress
     if resolved:
         _cleanse(env, frame)
     from engine.dm.oof import result_block  # 12.15.3: the outcome stated once, after the fiction
@@ -610,6 +614,56 @@ def _finish(env: PipelineEnv, plan: BeatPlan, frame: Frame, roll: RollResult, *,
 
 
 _FREEING = re.compile(r"\b(free|loose|escape|break|slip|wriggle|wrench|pull away|get up|stand)\b", re.IGNORECASE)
+
+
+PROGRESS_SEGMENTS = 4  # 00.8.3 "a scene's worth"
+
+
+def _same_goal(a: str | None, b: str | None) -> bool:
+    # ponytail: id-prefix match ("obj.track" ~ "obj.track_in_the_damp_earth"); a named-goal key if it misfires
+    return bool(a and b) and (a == b or a.startswith(f"{b}_") or b.startswith(f"{a}_"))  # type: ignore[union-attr]
+
+
+def _progress(env: PipelineEnv, frame: Frame, delivered: int) -> str:  # rule: 01.14.6
+    # rule: PR-01-6
+    """An `extended` beat, or (outside a conflict) the same verb at the same goal as an earlier success this scene,
+    advances a progress clock named for the obstacle: ticks = delivered reach, earlier successes counted when it
+    is first made. Returns the words the narration needs: a stretch gained, or the goal reached (P-082). Reaching
+    it raises a lead (12.8.2), so what lies at the end is a real thing from state, not an invention."""
+    from engine.store.clocks import create_clock, tick_clock
+    from engine.world.common import raise_trigger
+
+    beat, st = frame.beat, env.state
+    tgt = beat.target if beat.target and beat.target != "none" else None
+    if tgt is None or delivered < 1:
+        return ""
+    verb = frame.gate.verb or beat.verb
+    clock = next((c for c in st.clocks.values() if c.kind == "progress" and c.status == "active"
+                  and _same_goal(c.owner, tgt)), None)
+    if clock is None:
+        earlier = [x.resolved for x in st.frames.values() if x.resolved and (
+            x.resolved.get("degree") in ("success", "critical_success") or x.resolved.get("success_at_cost_taken"))
+            and (x.frame.get("gate") or {}).get("verb") == verb
+            and _same_goal((x.frame.get("beat") or {}).get("target"), tgt)]
+        if beat.shape != "extended" and not (earlier and _mode(st) != "conflict"):
+            return ""
+        before = sum(REACH_VALUE.get(str((r.get("delivered") or {}).get("reach")), 0) for r in earlier)
+        name = st.entities[tgt].name if tgt in st.entities else tgt.split(".", 1)[-1].replace("_", " ")
+        ev = create_clock(st, {"kind": "progress", "segments": PROGRESS_SEGMENTS,
+                               "tick_sources": [{"on": "delivered_reach", "ticks": "delivered_reach"}]},
+                          name=f"The {name}", owner=tgt, rule_id="01.14.6",
+                          filled=min(before, PROGRESS_SEGMENTS - 1))
+        env.add(ev)
+        clock = st.clocks[ev.payload.clock.id]  # type: ignore[attr-defined]
+    res = tick_clock(st, clock.id, "delivered_reach", reach=min(delivered, 4), rule_id="PR-01-6")
+    env.add(*res.events)
+    if res.completed:
+        env.add(raise_trigger(env.tx, "trg.lead_injection", {"progress": clock.id}, rule_id="01.14.6"))
+        return ("goal reached: this stretch ends it; show the arrival plainly (where it ends, what is there) "
+                "and do not ask whether to press on")
+    gained = "more than halfway" if res.filled * 2 >= clock.segments else "a first stretch"
+    return (f"progress toward the goal: {gained}; show something concrete and new this stretch gained (the ground "
+            "changes, it turns, narrows or nears something), never the same view again")
 
 
 def _cleanse(env: PipelineEnv, frame: Frame) -> None:  # rule: 00.9.1
