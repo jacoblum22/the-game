@@ -70,6 +70,24 @@ def test_screen_failures_name_their_rule() -> None:
     assert res.screen["safety_ok"] is False and res.screen["pc_agency_ok"] is False
 
 
+def test_two_questions_each_need_an_answer() -> None:
+    """P-080 (playtest 20261007-201338 breaker, input 28): "Who was the child's mother? And does Rakum have anything
+    to do with the child?" was delivered with only the Rakum half; the parts were marked answered before the draft
+    existed, so the screen never looked, and the shared word "child" covered both."""
+    rec = AdjudicationRecord(parts=[
+        PartEntry.model_validate({"text": "Who was the child's mother?", "class": "FICTION_QUESTION",
+                                  "handled": "answered"}),
+        PartEntry.model_validate({"text": "And does Rakum have anything to do with the child?",
+                                  "class": "FICTION_QUESTION", "handled": "answered"}),
+        PartEntry.model_validate({"text": "what are my options?", "class": "FICTION_QUESTION", "handled": "noted"})])
+    half = screen_draft("You ask whether Rakum has any hand in the child's going. What do you ask her next?",
+                        flags=FLAGS, record=rec)
+    assert not half.passed and "child's mother" in half.reasons[0]
+    both = screen_draft("You ask who the child's mother was; Rosie names none. You ask whether Rakum has any hand "
+                        "in the child's going. What do you ask her next?", flags=FLAGS, record=rec)
+    assert both.passed, both.reasons
+
+
 def test_screen_flags_and_pause() -> None:
     rec = _record()
     rec.pause = PauseEntry(kind="offer")

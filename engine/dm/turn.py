@@ -213,7 +213,9 @@ def _take(rec: AdjudicationRecord, res: PipelineResult, oof: list[dict[str, str]
     for out in res.outcomes:
         out.entry.part = part
         rec.beats.append(out.entry)
-        oof.extend(out.oof)
+        # whose RESULT / REDIRECT / NEAR MISS it is, for a turn of several beats (P-104)
+        oof.extend({**o, "beat": out.entry.restatement} if o["kind"] in ("RESULT", "REDIRECT", "NEAR_MISS") else o
+                   for o in out.oof)
     if res.queued:
         rec.notes.append("queued for the next declaration (01.2.3): " + "; ".join(res.queued))
 
@@ -248,7 +250,7 @@ def _adjudicate(ctx: TurnContext, rec: AdjudicationRecord, reader: ReaderResult,
     # answered before a pending answer, whose open pause stops the rest (P-047: the Luck question went unanswered)
     for part in rec.parts:  # "what are my options?" read as a fiction question is still the stuck question (P-101)
         if part.cls == "OOF_QUESTION" or (part.cls == "FICTION_QUESTION" and _oof_shaped(part.text)):
-            part.handled = "answered"
+            part.handled = "noted"  # answered by its NOTE block, not by the fiction (12.2.7 screens the rest)
             note = {"kind": "NOTE", "text": oof_answer(ctx, part.text)}
             if note not in oof:
                 oof.append(note)
@@ -270,7 +272,7 @@ def _adjudicate(ctx: TurnContext, rec: AdjudicationRecord, reader: ReaderResult,
     _fiction_questions(ctx, rec, reader.fact_questions)
     for part in rec.parts:
         if part.cls == "FICTION_QUESTION":
-            part.handled = "answered"
+            part.handled = part.handled or "answered"
         elif part.cls == "SPEECH":
             part.handled = "answered"  # a free activity; whether an NPC answers is the NPC's (12.2.9)
     kind = rest_kind(message) if "DECLARATION" in classes and rec.pc else None

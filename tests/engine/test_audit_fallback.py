@@ -14,6 +14,7 @@ from engine.dm.adjudication import (
     CostEntry,
     NpcActionEntry,
     OmenEntry,
+    PartEntry,
     PauseEntry,
     PositionEntry,
     SceneEntry,
@@ -176,3 +177,23 @@ def test_a_possessive_or_determiner_restatement_is_its_own_sentence() -> None:
         assert fb.startswith(r + ".") and "try to" not in fb, fb
     rec = AdjudicationRecord(pc="pc.belas", beats=[BeatEntry(restatement="Wrench free", actor="pc.belas")])
     assert "You try to wrench free." in plain_fallback(rec, names={"pc.belas": "Belas Terent"}).fiction
+
+
+def test_a_spoken_line_with_no_beat_is_restated() -> None:
+    """Playtest 20261007-201412 talker, input 31: two SPEECH parts, no beat, and the fallback said only "What do
+    you do?". The player's own words come back, in order, around the beats; a NOTE-answered part does not."""
+    rec = AdjudicationRecord(pc="pc.wren", parts=[
+        PartEntry.model_validate({"text": "I sit on the bench.", "class": "DECLARATION"}),
+        PartEntry.model_validate({"text": "\"That's all right, Oggza. Is Seley one of yours?\"", "class": "SPEECH",
+                                  "handled": "answered"}),
+        PartEntry.model_validate({"text": "what are my options?", "class": "FICTION_QUESTION", "handled": "noted"})],
+        beats=[BeatEntry(restatement="Wren sits on the bench", actor="pc.wren", part=0,
+                         positions=[PositionEntry(entity="pc.wren", words="a few strides from the bench")])],
+        npc_actions=[NpcActionEntry(npc="npc.tam_harlan", action="offers partial help", source="table_row")])
+    fb = plain_fallback(rec, names=NAMES).fiction
+    assert fb == ("You sit on the bench. You are a few strides from the bench. "
+                  "You ask, \"That's all right, Oggza. Is Seley one of yours?\" Tam offers some help. "
+                  "What do you do?"), fb
+    only = AdjudicationRecord(pc="pc.wren", parts=[PartEntry.model_validate(
+        {"text": "I lean in and say, \"Who did you lose?\"", "class": "SPEECH"})])
+    assert plain_fallback(only, names=NAMES).fiction == 'You ask, "Who did you lose?" What do you do?'

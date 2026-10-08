@@ -287,3 +287,23 @@ def test_redraft_and_screen_keep_the_bookkeeping_out_of_prose() -> None:  # P-04
     assert not mechanics_in_fiction("You step into the store. The clerk keeps a record of every sale.")
     src = (Path(__file__).parents[2] / "engine" / "dm" / "narration.py").read_text(encoding="utf-8")
     assert "the store holds:" not in src
+
+
+def test_two_beats_say_whose_result_and_redirect_they_are() -> None:
+    """P-104 (playtest 20261007-202001 fighter, input 24): "[RESULT] ... success" then "[REDIRECT] ... Athletics"
+    read as one contradicting the other. With two beats each block names its action; with one it does not."""
+    from engine.dm.adjudication import AdjudicationRecord, BeatEntry
+    from engine.dm.narration import turn_blocks
+
+    items = [{"kind": "RESULT", "text": "[RESULT] d20 12 → 16 vs 15 · success", "beat": "Ask what was stolen"},
+             {"kind": "REDIRECT", "text": "[REDIRECT] Not as tried: that needs Athletics.\n           - Look around",
+              "beat": "Force the altar lid open (verb.force)"}]
+    two = AdjudicationRecord(beats=[BeatEntry(restatement="Ask what was stolen"),
+                                    BeatEntry(restatement="Force the altar lid open")])
+    blocks, _ = turn_blocks(None, items, two, None)  # type: ignore[arg-type]
+    assert [b.text.split("\n")[0] for b in blocks] == [
+        "[RESULT] Ask what was stolen: d20 12 → 16 vs 15 · success",
+        "[REDIRECT] Force the altar lid open: Not as tried: that needs Athletics."]
+    one = AdjudicationRecord(beats=[BeatEntry(restatement="Ask what was stolen")])
+    blocks, _ = turn_blocks(None, items[:1], one, None)  # type: ignore[arg-type]
+    assert blocks[0].text == "[RESULT] d20 12 → 16 vs 15 · success"
