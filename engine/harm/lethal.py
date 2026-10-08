@@ -96,14 +96,23 @@ def _max_severity(data: dict[str, Any]) -> str | None:
     return max(sevs) if sevs else None
 
 
+def _fight_severity(state: WorldState, eid: str) -> str | None:  # rule: 06.2.1
+    """A foe of the running fight: the heaviest harm its line lists (recorded by `conflict.start`), else None."""
+    from engine.resolve.conflict import record
+
+    rec = record(state)
+    return str((rec.get("severity") or {}).get(eid) or "S1") if eid in rec.get("foes", ()) else None
+
+
 def _rows_for_entity(state: WorldState, pc: str, eid: str) -> LethalTrigger | None:  # rule: 07.3.3
     e = state.entities[eid]
     d = e.data
     if e.exists != "exists" or defeated_manner(state, eid):
         return None
-    hostile = bool(d.get("hostile", e.kind == "adversary"))
+    fight = _fight_severity(state, eid)  # a person fighting the PC is hostile, whatever its record says
+    hostile = bool(d.get("hostile", e.kind == "adversary")) or fight is not None
     hazard = d.get("hazard") if isinstance(d.get("hazard"), dict) else None
-    sev = _max_severity(d)
+    sev = _max_severity(d) or fight
     if hostile and d.get("threat_advisory") == "lethal":
         return LethalTrigger(pc, eid, "advisory")
     if hostile and d.get("lethal_context"):

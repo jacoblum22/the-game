@@ -21,7 +21,7 @@ from engine.dm.adjudication import AdjudicationRecord, NpcActionEntry, OmenEntry
 from engine.dm.answer import name as _name
 from engine.dm.context import TurnContext
 from engine.dm.npc_layer import ensure_activities, respond
-from engine.dm.scene_state import beat_writes
+from engine.dm.scene_state import beat_writes, release_holds
 from engine.resolve.pipeline import BeatOutcome
 from engine.resolve.types import REACH_VALUE
 from engine.retrieve.scene import READING, WRITTEN, cannot_read
@@ -50,6 +50,7 @@ def world_step(ctx: TurnContext, record: AdjudicationRecord, *, beats: Sequence[
     answered = [x["knower"] for x in deliver_learning(ctx, record, beats) if x["speech"]]  # PR-12-10
     acted = foes_act(ctx, record, oof)
     beat_writes(ctx, record, beats)  # T-12-18: the beats' scene state (T1c)
+    release_holds(ctx, record)  # 06.5.2: a hold ends with its holder down, out or moved away
     ensure_activities(ctx, record)  # 12.11.9 step 1
     npcs_respond(ctx, record, beats, skip=[*acted, *answered], oof=oof)
     clock_omens(ctx, record)
@@ -68,9 +69,12 @@ def _foe_turn(ctx: TurnContext, record: AdjudicationRecord, foe: str, oof: list[
     said, res = foe_beat(ctx.time_ctx(), ctx.rng, foe, record.pc or "")
     record.npc_actions.append(NpcActionEntry(npc=foe, action=said, source="behavior", source_ref="beh.default_melee"))
     if res is not None and oof is not None:
+        # whose numbers moved: "<foe> strikes · hit · Changed: Vitality 4 → 0" read as the foe's Vitality (playtest
+        # 20261008-135049); the PC's fall to Down moves no number, so it is said
         changed = changed_line(ctx.state, record.pc or "", tx.events[start:])
-        oof.append({"kind": "RESULT", "text": f"[RESULT] {_name(ctx.state, foe)} strikes · hit"
-                                              + (f" · {changed}" if changed else "")})
+        down = "you go Down" if res.transition == "down" else ""
+        oof.append({"kind": "RESULT", "text": " · ".join(x for x in (
+            f"[RESULT] {_name(ctx.state, foe)} strikes you", "hit", changed, down) if x)})
     if res is not None and res.threshold and oof is not None:  # rule: PR-07-5
         from engine.dm.turn import _env, _harm_followups
 
@@ -306,7 +310,33 @@ def clock_omens(ctx: TurnContext, record: AdjudicationRecord) -> None:  # rule: 
 
 def fired_triggers(ctx: TurnContext, record: AdjudicationRecord) -> None:  # rule: 12.2.3
     """Step 4: the raised triggers, in handling order, for the narration's owed blocks; a lethal warning that a
-    boundary raised (`h.07.lethal_scan`) and no beat delivered is delivered now (PR-07-4)."""
+    boundary raised (`h.07.lethal_scan`) and no beat delivered is delivered now (PR-07-4); the exits card when
+    harm this turn left the PC Staggered or Dying (07.3.7)."""
+    deliver_warnings(ctx, record)
+    exits(ctx, record)
+    for t in get_active_triggers(ctx.state, ctx.rules):
+        if t.id not in record.triggers:
+            record.triggers.append(t.id)
+
+
+EXITS_AT = ("staggered", "dying")  # apply_harm's transitions that raise trg.exits (07.2.3, 07.2.6)
+
+
+def exits(ctx: TurnContext, record: AdjudicationRecord) -> None:  # rule: 07.3.7
+    """`trg.exits` for the turn's owed `[STATUS]` card: a harm event this turn (any path: a foe's blow, a cost, a
+    hazard; read from its `log.harm` record) that made the PC Staggered or put it into Dying."""
+    if not record.pc or "trg.exits" in record.triggers:
+        return
+    for e in ctx.need_tx().events:
+        v = getattr(e.payload, "value", None) if getattr(e.payload, "key", None) == "log.harm" else None
+        if isinstance(v, dict) and v.get("target") == record.pc and v.get("transition") in EXITS_AT:
+            record.triggers.append("trg.exits")
+            return
+
+
+def deliver_warnings(ctx: TurnContext, record: AdjudicationRecord) -> None:  # rule: PR-07-4
+    """07.3.3: a raised lethal warning is delivered the turn it is raised, a paused turn too (a fight that starts at
+    a committed attack raises it at `conflict_start`, before the roll's near-miss pause)."""
     from engine.harm.ctx import HarmCtx
     from engine.harm.lethal import LethalTrigger, active_triggers, record_warning, warning_block
 
@@ -324,9 +354,6 @@ def fired_triggers(ctx: TurnContext, record: AdjudicationRecord) -> None:  # rul
         ctx.need_tx().add_all(record_warning(HarmCtx(state=st, mint=ctx.mint, rules=ctx.rules, rng=ctx.rng), trig,
                                              sign=f"{name} could kill you"))
         record.triggers.append("trg.lethal_warning")
-    for t in get_active_triggers(ctx.state, ctx.rules):
-        if t.id not in record.triggers:
-            record.triggers.append(t.id)
 
 
 def beat_time(ctx: TurnContext, record: AdjudicationRecord, beats: Sequence[BeatOutcome], *,

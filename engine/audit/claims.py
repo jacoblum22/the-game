@@ -1156,17 +1156,33 @@ def _beat_success(b: BeatEntry) -> bool:
 
 
 _PLAIN_FAIL = ["fail", "fails", "failed", "in vain", "no luck", "won't budge", "will not budge", "holds firm",
-               "falls short", "fall short", "does not give", "doesn't give", "stays shut", "comes to nothing"]
+               "falls short", "fall short", "does not give", "doesn't give", "stays shut", "comes to nothing",
+               # a blow or grip that does not land (playtest 20261008-135049: "the point stops a finger's width
+               # short", "stops a finger's width from her", "the cloth slips through your grip")
+               "stops short", "stop short", "width short", "width from", "breadth from", "goes wide", "go wide",
+               "misses", "nothing but air", "slip through your grip", "slip from your grip"]
 _PLAIN_WIN = ["you succeed", "it works", "you manage", "gives way", "you make it", "you do it", "it gives"]
+UNDECIDED = "a near miss not yet decided"
 
 
-def beat_polarity(text: str, b: BeatEntry) -> str | None:  # rule: 12.3.1
+def undecided(b: BeatEntry, pause: Any = None) -> bool:  # rule: 01.9.3
+    """The beat waits on the near-miss choice (01.9.3): its recorded degree is `failure`, but whether it lands is
+    the player's pick, so neither result may be narrated yet."""
+    return bool(b.near_miss and not b.success_at_cost and pause is not None
+                and getattr(pause, "kind", None) == "near_miss" and getattr(pause, "frame_id", None) == b.frame_id)
+
+
+def beat_polarity(text: str, b: BeatEntry, pause: Any = None) -> str | None:  # rule: 12.3.1
     """A sentence citing a beat's line, against the beat's degree (P-112): the degree in words when the sentence
-    plainly says the opposite, else None. Only plain result phrases count (a sentence is prose, not a claim)."""
+    plainly says the opposite, else None. Only plain result phrases count (a sentence is prose, not a claim). A
+    success at a cost is a success (01.9.3); a near miss still waiting on its choice (`pause`, the turn's open
+    pause) is neither, so a plain result either way contradicts it."""
     if b.degree is None and not (b.gate_words or "").startswith("no roll"):
         return None  # unresolved: the pause or the block says it
-    ok = _beat_success(b)
     said_fail, said_win = _has(text, _PLAIN_FAIL), _has(text, _PLAIN_WIN)
+    if undecided(b, pause):
+        return UNDECIDED if said_fail or said_win else None
+    ok = _beat_success(b)
     if (ok and said_fail and not said_win) or (not ok and said_win and not said_fail):
         return (b.degree or "no roll").replace("_", " ")
     return None
@@ -1177,6 +1193,8 @@ def _outcome(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: 12.3.1
     b = _beat_for(ctx, text, c.subject)
     if b is None:
         return _v(c, i, "unsourced_change", reason="no resolved beat this turn")
+    if undecided(b, ctx.record.pause):
+        return _v(c, i, "contradicted", UNDECIDED, reason="the near-miss choice is still open (01.9.3)")
     degree_words = (b.degree or "no roll").replace("_", " ")
     failed_claim = _has(text, _FAILURE) or (_negated(text) and not _has(text, _COST))
     ok = _beat_success(b)
