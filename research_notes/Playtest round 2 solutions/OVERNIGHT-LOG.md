@@ -185,5 +185,26 @@ everything.
   - Suite 1691 (with 012); ruff clean.
   - Gaps: the narrator declares a speaker on only 6 of 156 sentences; four event tags lack the data to fire;
     said records aren't indexed per speaker.
-- **In flight:** 2-persona live playtest on Haiku with a Sonnet player (talker and fighter, 15 turns each,
-  personas told about `/fix`).
+- **2-persona playtest (talker 20261008-135029, fighter 20261008-135049; Haiku engine, Sonnet player):**
+  0 crashes, 0 leaked errors; narrator calls per turn 1.06 / 0.82. Neither persona used `/fix`, though the hint was
+  shown. Findings by cluster:
+  - **A, combat and harm (fighter):**
+    - "held fast" after the target tore free;
+    - an NPC at 0 Vitality keeps fighting;
+    - 12 → 4 Vitality from one hit, then 0 with no dying warning, and nothing said after waking;
+    - the scene reset to morning mid-fight;
+    - narration contradicting a success-at-cost.
+  - **B, OFFER and Framer:**
+    - the auto-commit OFFER got stuck ("d" was rejected; hidden commit/change/withdraw words);
+    - the Framer defaulted 4 times and was re-asked 4 times;
+    - unnamed levers ("a help +2");
+    - the "Takes:" line confused the player;
+    - "Eliius" for Eliia;
+    - journal garble "The rug's detail state: being beaten".
+  - **C, Talk and NPCs (talker):**
+    - "I do not know" 21 times in 17 turns, with pointer chains that lead nowhere;
+    - the same NPC idle lines every turn, even mid-fight;
+    - a non-addressed NPC answered;
+    - a dog with human activities and tattoos;
+    - Recall gave "a fragment" with nothing in it.
+- **In flight:** three fixers (A, B, C), in separate files.
