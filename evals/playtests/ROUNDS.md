@@ -46,3 +46,4 @@ Ledger: I-131..I-136.
 | newcomer 184243 | ae21453 | 17 | 1.24 | 1 | setup clear; witness talks but knows nothing (P-067: store holds nothing about the incident) |
 | explorer 184224 | ae21453 | 17 | 2.65 | 0 | unintroduced name used (P-069); muddled reading of a bill |
 | breaker 185133 | ae21453 | 17 | 2.0 | 2 | journal lists unmet people (P-070); options once unanswered (P-071) |
+| fighter 185739 | 0a0acdf | 17 | 1.35 | 0 | "opening vivid, no complaints"; odds clear; raw source text (P-072); possession drift (P-073) |

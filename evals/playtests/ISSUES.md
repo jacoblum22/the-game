@@ -77,3 +77,5 @@ Status: open · fixing (round N) · fixed (commit) · logged (ledger id) · wont
 | P-069 | bug | med | Narration names NPCs the PC was never introduced to ("Tikash" for "the figure") | 184224-explorer 27–30 | fixing |
 | P-070 | bug | low | Journal "people you have met" lists NPCs not yet met | 185133-breaker 23 | fixing (with P-069) |
 | P-071 | bug | low | "what are my options?" answered with only "What do you do?" once (no LEADS) | 185133-breaker 18 | open (watch) |
+| P-072 | bug | low | OFFER stakes "Source: pc s hand held" (raw predicate) | 185739-fighter 26–27 (on 0a0acdf, before 172b2b2) | open (recheck) |
+| P-073 | bug | low | Possession contradicts itself across turns (pendant in her palm / not in her hand) | 185739-fighter 20, 31 | open |
