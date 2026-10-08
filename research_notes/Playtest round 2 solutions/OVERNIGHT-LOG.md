@@ -233,4 +233,21 @@ everything.
 
     Overall "I don't know" is still 42% offline. The remainder is directions asked at Unlikely odds (I-178,
     **owner**).
-- **In flight:** re-run of the talker and fighter personas on a02f758.
+- **Re-run playtests on a02f758** (talker 20261008-145410, fighter 20261008-145430):
+  - Talk turns ending "I don't know": **8 → 2 of 15**.
+  - The personas used `/fix`, but the replies were wrong or generic.
+  - New issues: NPC line repetition; a purse not given on success; stale levers; pronoun flips.
+  - This led to a structural analysis rather than more patches: [ROUND3-ANALYSIS.md](ROUND3-ANALYSIS.md), with
+    four causes, S1–S4.
+- **Owner approved S1–S4 (2026-10-09). Laya stays deferred** until the schemas settle; new closed-list
+  decisions are designed to be "Laya-ready".
+- **57fc259, R2-H rules wave:**
+  - S1: testimony, plus lazy settlement (PR-12-12);
+  - S2: the must-name diet;
+  - S3: understand first, then verify (PR-12-11);
+  - S4: typed intended change (01.2.7);
+  - precision decides which checks block.
+
+  The answer-ladder sim now needs 4.1 Oracle rolls per 100 questions (was 33.5). DL-12-90..95, DL-01-34..35.
+- **In flight:** spec 013 (dialogue and texture) and spec 014 (feedback loop), in parallel. Next: 015 (intended
+  change), then 016 (patches).
