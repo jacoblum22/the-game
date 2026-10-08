@@ -57,3 +57,4 @@ Ledger: I-131..I-136.
 | talker 192340 | a42ed5e | 17 | 1.88 | 3 | refusals clear and fair; near-miss Enter default (P-089); early [CUT?] (P-088) |
 | fighter 193420 | 9e4bd7f | 17 | 1.88 | 1 | kit weapon missing (P-090); possessive grammar (P-091) |
 | newcomer 194948 | eac0c0f | 17 | 1.82 | 1 | setup fine; hidden success unnamed (fixed in 0c15da2); CUT prompt (P-092); month names (P-093) |
+| breaker 195445 | b3adaaa | 17 | 1.35 | 0 | no crashes; cast inconsistency (P-095) |
