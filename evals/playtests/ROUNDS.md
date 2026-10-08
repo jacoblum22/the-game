@@ -31,3 +31,4 @@ Ledger: I-131..I-136.
 | newcomer 172552 | 790deb1 | 17 | 1.65 | 0 | setup fine; guard never answers (P-026); notice text contradicts itself (P-041) |
 | fighter 172629 | 790deb1 | 17 | 1.65 | 2 | odds screens clear; fallback grammar (P-040); success gives no names (P-025) |
 | breaker 172452 | 790deb1 | 17 | 2.35 | 2 | challenger never speaks (P-026); "what do I know?" unanswered (P-019); scene lines repeat (P-030) |
+| newcomer 174833 | a184dff | 17 | 1.88 | 2 | setup fine; repetition (P-030); "the record holds" leak (P-045); arrival never a person (P-046) |

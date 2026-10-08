@@ -36,7 +36,7 @@ Status: open · fixing (round N) · fixed (commit) · logged (ledger id) · wont
 | P-027 | bug | med | [OFFER] leaks internals: "source: fact.203", "target not yet chosen", "free OFFER", raw OOC text; wrong pronoun ("her" for a he/him NPC) | 170157-breaker inputs 19–26 | fixed (af1fdce) |
 | P-028 | bug | med | A question at an open pause ("what does 'Go big' mean?") gets a generic note and the same OFFER reprinted; "Play it safe" unexplained; no Enter default shown | 170157-breaker inputs 19–28 | fixed (af1fdce); ledger I-138 |
 | P-029 | bug | low | "What do I know about the stranger" folded into a Move roll offer; journal says "nothing yet" after learning things | 170157-breaker inputs 30–31 | fixed (03a9ba7) |
-| P-030 | polish | low | Narration repeats the same scene details turn after turn (the wiped counter, wet wool, the murmur) | 170157-breaker inputs 22–29 | open (claude-only?) |
+| P-030 | polish | low | Narration repeats the same scene details turn after turn (the wiped counter, wet wool, the murmur) | 170157-breaker 22–29; 172452-breaker 27–31; 174833-newcomer 28–36 | fixing (freshness) |
 | P-031 | bug | high | Basic talk refused: "talk to the person on the bridge" / "press him gently" → "[REDIRECT] needs Stonesense, which you have not learned" | 170200-newcomer turns 4–10 | fixed (1e3ec97); ledger I-139 |
 | P-032 | bug | high | Declared movement ("I walk out along the bridge", "go closer", "head into Mossfield") writes no position, so arrival narration is cut as unsourced | 170200-newcomer turns 5–16; 170318-fighter turns 13, 16 | fixed (1e3ec97); ledger I-139 |
 | P-033 | bug | low | NPC called both "they" and "him" in narration | 170200-newcomer turns 8–14 | fixed (1e3ec97) |
@@ -49,3 +49,7 @@ Status: open · fixing (round N) · fixed (commit) · logged (ledger id) · wont
 | P-040 | bug | high | Fallback mangles restatements: "You try to gerella is pinned against the gatepost", "Knows where … can not be found"; "It works." before any roll | 172629-fighter inputs 19–31 | fixed (17eebe7) |
 | P-041 | bug | med | Narration contradicts itself across turns: a notice reads "NO QUESTIONS ASKED", a later turn says it does not (mentioned object's text not stored or not shown back) | 172552-newcomer inputs 27–35 | open |
 | P-042 | polish | low | "What do I know" answers show raw Oracle predicates ("name — yes") | 03a9ba7 fixer report | open |
+| P-043 | bug | low | Sheet shows a raw placeholder: "carries the fact teaches: <the gifted spell>" | 174833-newcomer input 23 | fixing |
+| P-044 | polish | low | OFFER's Enter default is Withdraw; a newcomer pressing Enter backs out without noticing | 174833-newcomer inputs 26, 31 | open |
+| P-045 | bug | med | Narration names the record: "…wound and ruin the record holds" | 174833-newcomer inputs 35–36 | fixing |
+| P-046 | rules | med | A newly arrived figure ("the arrival") can never become a person: Oracle settles yes/no only and 12.14.13 forbids creating a person by mention, so the scene stalls | 174833-newcomer inputs 33–38 | logged I-140(c) |
