@@ -61,3 +61,6 @@ Ledger: I-131..I-136.
 | talker 194952 | eac0c0f | 17 | 1.71 | 1 | vivid; success reveals nothing when the store is empty (I-153); garbled journal (P-097) |
 | explorer 194940 | eac0c0f | 17 | 2.24 | 2 | objects never described (I-153); travel arrival fallback (P-098) |
 | fighter 195734 | b3adaaa | 17 | 1.71 | 3 | first real duel: odds/Go big clear; positions unwritten in conflict (P-099); harm not shown (P-101) |
+| fighter 202001 | 7b46664 | 17 | 1.12 | 0 | no crashes; success-then-redirect confusion (P-104) |
+| breaker 201338 | 7b46664 | 17 | 1.76 | 0 | two questions half-answered (P-080); unreadable bill unclear (P-105) |
+| newcomer 201306 | 7b46664 | 17 | 1.76 | 0 | setup fine; hidden failure vague (P-106); object description drift |
