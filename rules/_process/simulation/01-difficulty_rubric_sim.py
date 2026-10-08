@@ -21,6 +21,9 @@ PCs: modifier at the attribute the act uses: off-attribute -1, untrained 0, aver
   +5 (CT-2), P3 +9 (CT-3) (00.3.17's calibration PCs). Lane D's draft used +3/+7; 00.3.17 is canonical.
 Model-error injection: tier +-1 (p 0.2), an extra hindering snag (q 0.2), stakes one rung high (r 0.15). Under
   B a tier error is a wrong nudge: possible only when an intrinsic fact is citable, and never beyond base +-1.
+[revision: R2-G] I-159 (DL-01-29): B carries one model-chosen modifier per beat: a nudge or a cited Precision snag,
+  not both. A beat whose tier carries a nudge, or whose rung is a class `other` judgement, takes its hindering facts
+  as Protective snags (stakes +1 each, clamped). B1 = the rule read literally (a nudge only), printed for comparison.
 """
 import functools
 import os
@@ -168,16 +171,20 @@ def frame(i, mod, variant, terr=0, kerr=0, serr=0):
     hindering snags, serr stakes rungs. Returns None for a beat that does not roll."""
     a = ACTS[i]
     intr = a["intr"] or variant == "B*"  # B*: B with a citable intrinsic fact on every act (B's worst case)
-    variant = "B" if variant == "B*" else variant
+    literal = variant == "B1"  # [revision: R2-G] I-159 read literally: only a nudge is the model's modifier
+    variant = "B" if variant in ("B*", "B1") else variant
     played = variant == "as_played"
+    model_mod = False  # [revision: R2-G] I-159: the beat already carries its one model-chosen modifier
     # tier (the DM's rung)
     if played or variant == "C":
         t = TIERS.index(a["ap"] if played else a["base"]) + terr
     elif variant == "A" or (variant == "B" and a["cls"] == "other"):
         t = TIERS.index(a["base"] if a["every"] else a["ap"]) + terr
+        model_mod = variant == "B" and not literal  # class `other`: the rung itself is the model's judgement
     else:  # B: base + a nudge that needs a citable intrinsic fact, never two rungs, never across the trivial
         b = TIERS.index(a["base"])  # line (01.4.1 UNCERTAIN reads the class base; 01.6.5)
         t = 0 if b == 0 else clamp(b + clamp(a["nudge"] + (terr if intr else 0), -1, 1), 1, 5)
+        model_mod = t != b
     t = clamp(t, 0, 5)
     # does it roll?
     sources = set(a["src"])
@@ -207,6 +214,8 @@ def frame(i, mod, variant, terr=0, kerr=0, serr=0):
     if played:
         prec, prot = min(h, 2), 0
     elif variant == "C":
+        prec, prot = 0, min(h, 2)
+    elif model_mod:  # [revision: R2-G] I-159: a nudge or a cited Precision snag, not both; the snag goes Protective
         prec, prot = 0, min(h, 2)
     else:
         prec, prot = min(h, 1), min(max(h - 1, 0), 1)
@@ -344,7 +353,7 @@ P("\nError bound: worst success-or-better drop per beat (points) over acts x PCs
   " together (tier +1 and an extra snag; a no-roll beat that starts rolling counts from 100). B* = B with a"
   " citable intrinsic fact on every act (B's worst case: a wrong nudge is always possible)")
 drops = {}
-for v, rows in [(v, "all") for v in VARIANTS] + [("B", "rubric"), ("B", "other"), ("B*", "rubric")]:
+for v, rows in [(v, "all") for v in VARIANTS] + [("B", "rubric"), ("B", "other"), ("B*", "rubric"), ("B1", "all")]:
     single = combined = 0
     worst = []
     for i in range(len(ACTS)):
@@ -408,6 +417,9 @@ P("  [%s] worst-case success drop per beat under error injection <= 25 points: s
 P("         (rubric rows: single %d, all %d; rubric rows if every act had a citable intrinsic fact: single %d,"
   " all %d; class `other`: single %d, all %d)" % (drops[("B", "rubric")] + drops[("B*", "rubric")]
                                                  + drops[("B", "other")]))
+P("         [revision: R2-G] I-159, one model-chosen modifier per beat (a nudge or a cited Precision snag, not both;"
+  " a class `other` rung counts as the model's modifier). Read literally (a nudge only): single %d, all %d"
+  % drops[("B1", "all")])
 P("  [%s] class `other` share < 10%%: %.1f%%"
   % ("pass" if len(other) / len(RUBRIC_ACTS) < 0.10 else "FAIL", 100 * len(other) / len(RUBRIC_ACTS)))
 print("\n".join(out))

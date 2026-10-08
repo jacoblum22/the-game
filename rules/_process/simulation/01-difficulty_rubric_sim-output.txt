@@ -11,7 +11,7 @@ C         |    46.9%   |               75.6      78.0      82.7      89.7      9
 3-4. Rolled frames (acts x PCs): CF > S overall; on non-Dire unopposed non-secret frames (raw / shown without the long-shot label / labelled long shot); max CF at Safe and Risky (all; excluding long shots)
 as_played | rolled 325 | CF>S 100 | non-Dire unopposed:  66 /  66 /   0 | max CF Safe 55% Risky 80% | excl. long shots: 55% / 80% | also excl. opposed and secret: 55% / 80%
 A         | rolled 265 | CF>S  71 | non-Dire unopposed:  34 /   0 /  34 | max CF Safe 55% Risky 80% | excl. long shots: 55% / 80% | also excl. opposed and secret: 25% / 25%
-B         | rolled 265 | CF>S  72 | non-Dire unopposed:  35 /   0 /  35 | max CF Safe 55% Risky 80% | excl. long shots: 55% / 55% | also excl. opposed and secret: 25% / 25%
+B         | rolled 265 | CF>S  70 | non-Dire unopposed:  35 /   0 /  35 | max CF Safe 55% Risky 80% | excl. long shots: 55% / 55% | also excl. opposed and secret: 25% / 25%
 C         | rolled 265 | CF>S   2 | non-Dire unopposed:   0 /   0 /   0 | max CF Safe  5% Risky 35% | excl. long shots:  5% / 35% | also excl. opposed and secret:  5% /  5%
 
 5. Fight approach spread over 300 foes x 5 approaches (strike, shoot, grapple, shove, feint): share of beats with >= 3 distinct odds; mean distinct; mean stdev of success %
@@ -24,31 +24,33 @@ C         | off-attr  98.0% 3.3  9.6 | untrained  26.7% 2.2  6.1 | average  73.0
 no errors:
   as_played | off-attr S3+ 9.23, 3-fail 99.8% | untrained S3+ 8.37, 3-fail 99.3% | average S3+ 6.67, 3-fail 96.7% | P1 S3+ 4.62, 3-fail 82.0% | P3 S3+ 3.01, 3-fail 35.7%
   A         | off-attr S3+ 7.75, 3-fail 94.1% | untrained S3+ 6.99, 3-fail 91.5% | average S3+ 5.55, 3-fail 81.1% | P1 S3+ 4.24, 3-fail 57.2% | P3 S3+ 2.87, 3-fail 19.1%
-  B         | off-attr S3+ 7.71, 3-fail 94.2% | untrained S3+ 6.97, 3-fail 91.5% | average S3+ 5.61, 3-fail 81.2% | P1 S3+ 4.34, 3-fail 57.1% | P3 S3+ 2.86, 3-fail 19.1%
+  B         | off-attr S3+ 7.67, 3-fail 94.0% | untrained S3+ 6.93, 3-fail 91.2% | average S3+ 5.53, 3-fail 80.7% | P1 S3+ 4.25, 3-fail 56.2% | P3 S3+ 2.77, 3-fail 18.8%
   C         | off-attr S3+ 7.17, 3-fail 68.1% | untrained S3+ 6.33, 3-fail 58.9% | average S3+ 4.92, 3-fail 38.2% | P1 S3+ 3.03, 3-fail 12.1% | P3 S3+ 0.84, 3-fail  0.1%
 with errors:
   as_played | off-attr S3+ 10.90, 3-fail 99.9% | untrained S3+ 10.05, 3-fail 99.8% | average S3+ 8.31, 3-fail 97.8% | P1 S3+ 6.12, 3-fail 84.5% | P3 S3+ 3.90, 3-fail 40.7%
   A         | off-attr S3+ 9.61, 3-fail 94.2% | untrained S3+ 8.87, 3-fail 91.2% | average S3+ 7.15, 3-fail 81.5% | P1 S3+ 5.56, 3-fail 58.9% | P3 S3+ 3.59, 3-fail 21.6%
-  B         | off-attr S3+ 9.52, 3-fail 94.5% | untrained S3+ 8.77, 3-fail 91.8% | average S3+ 7.11, 3-fail 82.5% | P1 S3+ 5.55, 3-fail 59.4% | P3 S3+ 3.56, 3-fail 21.1%
+  B         | off-attr S3+ 9.76, 3-fail 94.0% | untrained S3+ 9.01, 3-fail 91.2% | average S3+ 7.31, 3-fail 81.5% | P1 S3+ 5.64, 3-fail 57.2% | P3 S3+ 3.56, 3-fail 19.9%
   C         | off-attr S3+ 8.30, 3-fail 66.4% | untrained S3+ 7.40, 3-fail 56.5% | average S3+ 5.79, 3-fail 36.2% | P1 S3+ 3.54, 3-fail 11.2% | P3 S3+ 0.98, 3-fail  0.1%
 
 Error bound: worst success-or-better drop per beat (points) over acts x PCs: any single error; all errors together (tier +1 and an extra snag; a no-roll beat that starts rolling counts from 100). B* = B with a citable intrinsic fact on every act (B's worst case: a wrong nudge is always possible)
 as_played all    | single  50 | combined  60 | worst: walk a dry road at noon (off-attr) 60; open an unlocked door (off-attr) 60
 A         all    | single  50 | combined  60 | worst: open a well-oiled gate quietly (off-attr) 60; open a well-oiled gate quietly (untrained) 55
-B         all    | single  25 | combined  35 | worst: imitate a bird call to signal an ally (average) 35; imitate a bird call to signal an ally (P1) 35
+B         all    | single  25 | combined  25 | worst: pick a guild-made lock (licensed) (P1) 25; pick a guild-made lock (licensed) (P3) 25
 C         all    | single  50 | combined  50 | worst: open a well-oiled gate quietly (off-attr) 50; open a well-oiled gate quietly (untrained) 45
 B         rubric | single  10 | combined  10 | worst: lift a sticking latch by a sleeper (off-attr) 10; lift a sticking latch by a sleeper (untrained) 10
-B         other  | single  25 | combined  35 | worst: imitate a bird call to signal an ally (average) 35; imitate a bird call to signal an ally (P1) 35
-B*        rubric | single  25 | combined  35 | worst: lift a sticking latch by a sleeper (average) 35; lift a sticking latch by a sleeper (P1) 35
+B         other  | single  25 | combined  25 | worst: pick a guild-made lock (licensed) (P1) 25; pick a guild-made lock (licensed) (P3) 25
+B*        rubric | single  25 | combined  25 | worst: lift a sticking latch by a sleeper (off-attr) 25; lift a sticking latch by a sleeper (untrained) 25
+B1        all    | single  25 | combined  35 | worst: imitate a bird call to signal an ally (average) 35; imitate a bird call to signal an ally (P1) 35
 
 8. Calibration targets (ladder from resolution.yaml; unchanged by the rubric): CT-1 +2 vs Easy >= 60: pass (65); CT-2 +5 vs Moderate 50-65: pass (55); CT-2 +1 vs Moderate 30-40: pass (35); CT-3 +5 vs Hard 25-35: pass (30); CT-3 +9 vs Hard 45-55: pass (50); CT-4 +5 vs Very hard <= 10: pass (5); CT-4 +12 vs Very hard 35-45: pass (40); CT-5 +14 vs Legendary 20-30: pass (25); CT-5 <= +9 vs Legendary only a natural 20: pass (-); CT-6 S >= 50 => CF <= 10 (all rungs, -8..+16): pass (-)
 
 Acceptance (variant B):
   [pass] untrained on everyday Easy-class acts: every rolled frame S >= 45 and CF <= 10 (worst S 45 / CF 10)
   [pass] non-Dire unopposed non-secret frames shown with CF > S (not labelled long shot): 0
-  [pass] P1 (+5) at Moderate succeeds >= 50%: 55% clean; mean 52.5% over Moderate-class rows (snags included)
+  [pass] P1 (+5) at Moderate succeeds >= 50%: 55% clean; mean 53.3% over Moderate-class rows (snags included)
   [pass] CT-1..CT-6 hold
   [pass] >= 3 distinct odds across approaches in >= 70% of combat beats: 73.1% (mean over PCs; per PC off-attr 98%, untrained 27%, average 73%, P1 81%, P3 87%)
-  [FAIL] worst-case success drop per beat under error injection <= 25 points: single error 25, all errors 35
-         (rubric rows: single 10, all 10; rubric rows if every act had a citable intrinsic fact: single 25, all 35; class `other`: single 25, all 35)
+  [pass] worst-case success drop per beat under error injection <= 25 points: single error 25, all errors 25
+         (rubric rows: single 10, all 10; rubric rows if every act had a citable intrinsic fact: single 25, all 25; class `other`: single 25, all 25)
+         [revision: R2-G] I-159, one model-chosen modifier per beat (a nudge or a cited Precision snag, not both; a class `other` rung counts as the model's modifier). Read literally (a nudge only): single 25, all 35
   [pass] class `other` share < 10%: 8.6%

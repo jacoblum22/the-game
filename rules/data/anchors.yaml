@@ -16,7 +16,7 @@ compiled_from:
 - file: data/basic_verbs.yaml
   sha256_16: 4e9ba3e2e6c806c3
 - file: 01-resolution.md
-  sha256_16: 42ac70849ceefaf6
+  sha256_16: 196d9d6db4a5a409
 - file: 02-character.md
   sha256_16: 87f2767c603bb395
 - file: 03-tags-and-evidence.md
@@ -38,11 +38,11 @@ compiled_from:
 - file: 11-living-world.md
   sha256_16: af73eaff3de9196a
 - file: 12-dm-procedures.md
-  sha256_16: fbd4f314b11545d6
+  sha256_16: 7f202be7a60f6d50
 - file: 13-starter-setting.md
   sha256_16: 9dd8a6cbb473d2d5
 - file: 15-social-investigation-downtime.md
-  sha256_16: 3dddf259c09840bb
+  sha256_16: cd68cba80f0ad516
 - file: 16-companions-and-allies.md
   sha256_16: f1f55dce7c5edfda
 compiled_at: integration (Wave 3 -> 4)
