@@ -567,6 +567,9 @@ def schema_context(  # rule: 12.2.4
 
     reach = res.get("reach_flags", {})
     last = state.scene or state.last_scene
+    pending = [c["id"] for c in pause.choices if "id" in c] if pause else []
+    # 12.2.2: PENDING_ANSWER answers a pause point; with none open (no `pending_answer` field) it is not offered
+    classes = [c for c in pacing.get("input_classes", []) if pending or c != "PENDING_ANSWER"]
     return SchemaContext(
         message=message,
         options=list(options),
@@ -575,8 +578,8 @@ def schema_context(  # rule: 12.2.4
         scene_ids=scope,
         fact_ids=facts,
         pc_licences=[x.license_id for x in state.licenses.get(pc, [])] if pc else [],
-        pending_choice_ids=[c["id"] for c in pause.choices if "id" in c] if pause else [],
-        input_classes=list(pacing.get("input_classes", [])),
+        pending_choice_ids=pending,
+        input_classes=classes,
         oracle_rungs=[r["id"] for r in res.get("oracle", {}).get("rungs", [])],
         verbs=list(rules.basic_verbs),
         anchor_ids=anchor_ids,
