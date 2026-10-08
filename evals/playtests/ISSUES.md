@@ -85,7 +85,7 @@ Status: open · fixing (round N) · fixed (commit) · logged (ledger id) · wont
 | P-077 | bug | low | Garbled position text: "moved within Barrowburn… not in Barrowburn and can be found in the village" | 185715-talker 18 | fixed (3c6cbbf) |
 | P-078 | polish | med | NPC repeats the same stock line every turn ("Mark me"); freshness covers images, not dialogue | 185715-talker 21–26 | fixed (3c6cbbf: freshness covers NPC lines) |
 | P-079 | bug | high | Opening still falls back to one line in 7/27 runs; last reason always screen 12.2.7 "a part of the player's message is not answered" though the opening has no message; crowd reactions to the incident cut as unsourced | 7 runs (191540, 185715, 183858, 182337, 170207, 170200, 170157) | fixed (ec9470e): 7/7 recorded openings now narrate; ledger I-150 |
-| P-080 | bug | low | A message with speech plus "what do I know so far?" handled only the speech | 191540-breaker 24 | open, recurring (201338-breaker 28–29: two questions → one half-answer) |
+| P-080 | bug | low | A message with speech plus "what do I know so far?" handled only the speech | 191540-breaker 24 | fixing |
 | P-081 | polish | low | NPC reply contains a stray quoted line that reads like a leaked hint ("Look at who's listening…") | 191540-breaker 23–26 | open |
 | P-082 | bug | med | Repeated tracking loops with no progress ("the mist hides it, do you press on?"); an extended search never advances | 191941-fighter 24–29 | fixed (cc79805: progress clock); ledger I-154e |
 | P-083 | polish | med | Cost form copied from the menu example, not fitted to the scene ("left on the far side, down the well, stuck in a beam" in a grassy field) | 191941-fighter 30–31 | fixed (cc79805) |
@@ -107,6 +107,8 @@ Status: open · fixing (round N) · fixed (commit) · logged (ledger id) · wont
 | P-100 | bug | med | "I go all in" (risky) produced no OFFER/odds screen | 195734-fighter 31 | fixed (f4caed6: attacks never ride) |
 | P-101 | bug | med | After a critical failure \"you're hurt\" but no harm/STATUS line, no menu; "how hurt am I?" unanswered | 195734-fighter 26–29 | fixed (f4caed6: Changed line, how-hurt answered) |
 | P-102 | bug | low | Parroting screen may have fired on the PC's own quoted speech ("I accept…") | 195734-fighter turn 2 | fixed (f4caed6: false positive) || P-103 | bug | critical | Combat core: a successful Strike deals no harm to its target; conflict mode never starts, so bands are never seeded | f4caed6 fixer report (195734-fighter turn 7) | fixing |
-| P-104 | polish | med | A two-beat message shows the first beat's [RESULT] "success", then the second beat's [REDIRECT] ("you lack Athletics"): reads as a contradiction | 202001-fighter 24–26 | open |
+| P-104 | polish | med | A two-beat message shows the first beat's [RESULT] "success", then the second beat's [REDIRECT] ("you lack Athletics"): reads as a contradiction | 202001-fighter 24–26 | fixing |
 | P-105 | polish | low | A literate PC can't read a bill in another tongue; the narration withholds instead of saying plainly "it's in the Old tongue, which you don't read" | 201338-breaker 22–24 | open |
 | P-106 | polish | low | Hidden-roll failure stays vague ("the canvas does not come up cleanly") without saying what went wrong | 201306-newcomer 34–36 | open (with P-086) |
+| P-107 | rules | med | Social odds harsh: first friendly chat 25% with 30% crit-fail (a sword blow); a calmer approach dropped to 5% and dire | 201412-talker 21–23 | logged I-155 |
+| P-108 | bug | med | Fallback prints internal text: "Spoken to Oggza, not a beat", "You are a few strides from bench"; one turn delivered only "What do you do?" | 201412-talker 26, 31 | fixing |

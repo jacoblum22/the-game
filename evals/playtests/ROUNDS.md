@@ -64,3 +64,4 @@ Ledger: I-131..I-136.
 | fighter 202001 | 7b46664 | 17 | 1.12 | 0 | no crashes; success-then-redirect confusion (P-104) |
 | breaker 201338 | 7b46664 | 17 | 1.76 | 0 | two questions half-answered (P-080); unreadable bill unclear (P-105) |
 | newcomer 201306 | 7b46664 | 17 | 1.76 | 0 | setup fine; hidden failure vague (P-106); object description drift |
+| talker 201412 | 7b46664 | 17 | 2.0 | 2 | mostly clear/atmospheric; harsh social odds (I-155); fallback internal text (P-108) |
