@@ -121,6 +121,8 @@ def items(record: AdjudicationRecord, *, names: Mapping[str, str] | None = None)
         add("npc", True, [a.npc], _sentence(f"{name(a.npc)} {NPC_ROW_PROSE.get(a.action, a.action)}"), index=i,
             text=a.action)
     for i, act in enumerate(record.activities):
+        if act.hidden:  # said lately, or replaced by the engagement (12.14.11, 12.11.9): not a line to narrate
+            continue
         add("activity", False, [act.npc], sentence(clause(act.npc, "hold" if act.slot == "held" else "be", act.activity,
                                                          names=names, pc=pc)), index=i, text=act.activity)
     for i, om in enumerate(record.omens):

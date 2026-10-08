@@ -410,9 +410,16 @@ def ladder_lines(learned: list[dict[str, Any]], twice: tuple[int, int]) -> list[
     items = [a for x in learned for a in x["answers"]]
     ptr = sum(1 for a in items if a[1])
     same, asked = twice
+    # ordinary asks (a question put to a person; "who would know" and index repeats excluded, as in the sim): the
+    # "I don't know" share, i.e. pointer answers, against 12-answer_ladder_sim's target (under 35%)
+    asks = [a for x in learned if x["verb"] in ("verb.talk", "speech") and x.get("kind") not in ("who_knows", "repeat")
+            for a in x["answers"]]
+    dont = sum(1 for a in asks if a[1])
     return [f"- learning beats answered (PR-12-10): {n}; empty successes {empty} "
             f"({100 * empty / n if n else 0:.1f}%); items {len(items)}, pointer answers {ptr} "
             f"({100 * ptr / len(items) if items else 0:.1f}%)",
+            f"- don't-know (pointer) share of ordinary asks: {dont}/{len(asks)} "
+            f"({100 * dont / len(asks) if asks else 0:.1f}%; target under 35%)",
             f"- ask-twice consistency: {same}/{asked} ({100 * same / asked if asked else 0:.0f}%)"]
 
 
@@ -472,6 +479,7 @@ def _run_scripted(seed: int, lines: int, model: str, tmp: Path, learned: list[di
         kind = CYCLE[i % len(CYCLE)]
         line = script_line(kind, st, rng, met, home_name)
         kinds[kind] += 1
+        n_learned = len(learned)
         try:
             if kind == "recall" and line and line.startswith("What do I know about "):
                 name = line.removeprefix("What do I know about ").rstrip("?")
@@ -488,6 +496,8 @@ def _run_scripted(seed: int, lines: int, model: str, tmp: Path, learned: list[di
                 n1 = len(learned)
                 r = d.settle(d.call("submit", line))
                 first, again = learned[n0:n1], learned[n1:]
+                for x in again:
+                    x["kind"] = "repeat"  # the index answers it again: not a new ask (the sim's "repeat")
                 if first and again and first[-1]["answers"] and again[-1]["answers"]:
                     twice[1] += 1
                     twice[0] += first[-1]["answers"][0][0] == again[-1]["answers"][0][0]
@@ -501,6 +511,9 @@ def _run_scripted(seed: int, lines: int, model: str, tmp: Path, learned: list[di
             if streak >= 5:
                 break  # five failures in a row: the game is stuck
             continue
+        finally:
+            for x in learned[n_learned:]:
+                x.setdefault("kind", kind)
         streak = 0
         if r.turn_id:
             turn_at.setdefault(i + 1, r.turn_id)

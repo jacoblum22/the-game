@@ -29,6 +29,8 @@ def propose(ctx: TurnContext, who: str, question: str, topic: str, gist: str, *,
     res = call_role(ctx.model, Role.PROPOSER, schema, packet, turn_id=ctx.turn_id, recorder=ctx.record_call,
                     default=lambda: defaults(Role.PROPOSER, sctx) or {})
     d = dict(res.data)
+    if d.get("kind") == "not_ordinary":
+        return d  # the caller routes it to the case graph (PR-12-10 step 4 -> step 1's consequential route)
     if d.get("kind") != "ordinary_fact" or not all(str(d.get(k) or "").strip() for k in ("subject", "value")):
         return None
     return d

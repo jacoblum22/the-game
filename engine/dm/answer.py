@@ -26,7 +26,7 @@ from engine import ids
 from engine.audit import text as words
 from engine.gen._seed_packs import pack_data, role_key
 from engine.gen.case import case_covering, case_for_question, cases, mark_found, pointer, story_option
-from engine.gen.cast import alive, cast, home_of, pointer_target, settlement_of
+from engine.gen.cast import alive, base_pool, cast, home_of, pointer_target, settlement_of
 from engine.store.events import WORLD
 from engine.world.common import active_pc, fact, meta
 from engine.world.social import learn_name, record_knowledge
@@ -175,15 +175,28 @@ def _walk_on(ctx: Any, role: str, topic: str, where: str | None) -> str | None: 
 def point(ctx: Any, knower: str, topic: str, pc: str, *, about: str | None = None) -> tuple[str, str]:
     # rule: PR-12-10
     """Step 5: who would know `topic`, by casting (never the first person present, never one the narration made up):
-    a person, else the topic's place, else a walk-on made there. Anyone who already sent the PC to `knower` on this
-    topic is not sent back to (DL-12-44's chain). Returns (fact id of the pointer, the pointed id)."""
+    a person who can actually answer it first (`_can_answer`), else any the topic casts, else the topic's place, else
+    a walk-on made there. Nobody who already said they do not know it is named (DL-12-44's chain); after
+    `repeat_pointer_limit` such answers the chain is logged for review and ends at the topic's place. Returns (fact id
+    of the pointer, the pointed id)."""
     tx = ctx.need_tx()
     st = tx.state
     here = home_of(st, pc) or (st.scene.place_id if st.scene else None)
-    back = {k.split("|", 1)[0] for k, v in (st.meta.get(INDEX) or {}).items()
-            if k.endswith(f"|{about or topic}") and v.get("pointer") == knower}
+    # everyone who already said they did not know this (and named someone): never sent back to, never a hop again
+    said_no = {k.split("|", 1)[0] for k, v in (st.meta.get(INDEX) or {}).items()
+               if k.endswith(f"|{about or topic}") and v.get("pointer")}
     subjects = {c["solution"]["subject"]["id"] for c in cases(st).values()}  # never the missing one themself
-    kind, ref = pointer_target(st, topic, scope=here, asker=knower, exclude=back | subjects | {pc})
+    exclude = said_no | subjects | {pc}
+    limit = int(ctx.rules.pacing["answer_ladder"]["repeat_pointer_limit"])
+    kind, ref = "", ""
+    if len(said_no) >= limit:  # the chain is long enough (DL-12-44): logged, and it ends at a place, not a person
+        _chain_logged(ctx, topic, about, len(said_no) + 1)
+        kind, ref = _kept_at(st, topic, here)
+    if not ref:
+        # someone who can actually answer it first: a seeded pack item or a record on it (rung 1 or 2 will hit)
+        unsure = {n for n in base_pool(st, pc) if n in st.entities and not _can_answer(st, n, topic, about)}
+        who = cast(st, None, scope=here, topic=topic, asker=knower, exclude=exclude | unsure)
+        kind, ref = ("person", who) if who else pointer_target(st, topic, scope=here, asker=knower, exclude=exclude)
     if kind == "walk_on":
         where = settlement_of(st, here) or (st.meta.get("world.region") or {}).get("haven")
         ref = _walk_on(ctx, ref, topic, where) or where or here or ""
@@ -193,6 +206,38 @@ def point(ctx: Any, knower: str, topic: str, pc: str, *, about: str | None = Non
     fid = _write(ctx, knower, f"points_to.{ids.slug(about or topic)}"[:60], ref, rule="PR-12-10")
     _tell(ctx, pc, fid)
     return fid, ref
+
+
+def _can_answer(st: Any, npc: str, topic: str, about: str | None) -> bool:  # rule: PR-12-10
+    """The ladder's first rungs would answer it: a seeded pack item on the topic (or about the entity asked), or a
+    knowledge record of a fact on it."""
+    if any(k.get("text") and (k.get("topic") == topic or (about and k.get("about") == about))
+           for k in st.entities[npc].data.get("knowledge") or []):
+        return True
+    facts = st.facts
+    return any(fid in facts and (facts[fid].predicate.startswith(f"topic.{topic}.") or (about and facts[fid].subject
+                                                                                         == about))
+               for fid in st.knowledge.get(npc, {}))
+
+
+def _kept_at(st: Any, topic: str, here: str | None) -> tuple[str, str]:  # rule: PR-12-10
+    """The topic's place in the settlement (`common_knowledge.topics[].kept_at`), or ("", "") when it has none."""
+    kept = str((pack_data().CK["topics"].get(topic) or {}).get("kept_at") or "none")
+    where = settlement_of(st, here) or (st.meta.get("world.region") or {}).get("haven")
+    pid = f"{where}.{kept}"
+    return ("place", pid) if kept != "none" and pid in st.entities else ("", "")
+
+
+def _chain_logged(ctx: Any, topic: str, about: str | None, hops: int) -> None:  # rule: PR-12-10
+    """PR-12-10 step 7 (DL-12-44): a pointer chain past `repeat_pointer_limit` for one question, logged for review."""
+    from engine.resolve.rulings import RulingRecord, log_ruling
+
+    tx = ctx.need_tx()
+    r = RulingRecord(signature="answer.pointer_chain", kind="rule_conflict", review_flag=True,
+                     situation=f"pointer {hops} for one question ({about or topic}); it ends at a place",
+                     result={"outcome": "pointer_chain", "topic": topic, "about": about, "hops": hops},
+                     tags=["answer_ladder"])
+    tx.add(log_ruling(r, tx.mint, store=ctx.store, staged=tx.events, turn_id=ctx.turn_id, rule_id="PR-12-10"))
 
 
 def _pointer_said(st: Any, ref: str, what: str, first: bool) -> str:
@@ -262,13 +307,18 @@ def _from_case(ctx: Any, knower: str, case: dict[str, Any], who: bool, pc: str, 
     return Answer(_pointer_said(st, ref, what, first), "", fid, ref)
 
 
-def case_about(st: Any, text: str, about: str | None) -> dict[str, Any] | None:  # rule: PR-12-10
+def case_about(st: Any, text: str, about: str | None, *, need: int = 2) -> dict[str, Any] | None:  # rule: PR-12-10
     """The case a question is about: its subject asked about or named, or most of its story role's words used ("where
-    did the missing child go?")."""
+    did the missing child go?"), or (the opening's incident case) `need` of the incident's own words ("what did the
+    rider say before he died?" asks about "a rider dies in the market with a message")."""
     have = words.content(text)
+    incident = str(((st.meta.get("world.opening") or {}).get("inciting") or {}).get("text") or "")
     for c in cases(st).values():
         sub = c["solution"]["subject"]
         if about == sub["id"] or have & words.content(sub["words"]) or words.covers(sub["role"], text, ratio=0.6):
+            return c
+    for c in cases(st).values():
+        if c.get("trigger") == "incident" and incident and len(have & words.content(incident)) >= need:
             return c
     return None
 
@@ -297,19 +347,28 @@ def _usable(st: Any, f: Any, pc: str) -> bool:
             and st.current_fact_id(f.subject, f.predicate) == f.id)
 
 
-def store_hit(st: Any, knower: str, topic: str, about: str | None, text: str, pc: str) -> str | None:
+def store_hit(st: Any, knower: str, topic: str, about: str | None, text: str, pc: str,
+              specific: set[str] | frozenset[str] = frozenset()) -> str | None:
     # rule: PR-12-10
     """Rung 1: what the knower knows (records written in play), their own facts and the public facts about what was
-    asked (12.10.6 (a)-(c)), ranked by relevance (the topic, the entity asked about, shared words); news first."""
+    asked (12.10.6 (a)-(c)), ranked by relevance (the topic, the entity asked about, shared words); news first. On
+    a public topic a local also knows what the PC has already been told about it (12.10.6(c)): a local never denies
+    the town's news the PC heard from a neighbour. `specific`: the words of a particular thing asked about ("the
+    ambush at the fortress"); then only a fact that shares one answers (the topic alone does not)."""
     known = st.knowledge.get(knower, {})
     pool = set(known) | {f.id for f in st.facts.values()
                          if f.subject == knower or (about and f.subject == about and f.visibility == "shown")}
+    if public_local(st, knower, topic):
+        pool |= {fid for fid in st.knowledge.get(pc, {}) if fid in st.facts and (
+            st.facts[fid].predicate.startswith(f"topic.{topic}.") or (about and st.facts[fid].subject == about))}
     names = " ".join(st.entities[i].name for i in (knower, pc, about) if i and i in st.entities)
     asked = words.content(text) - words.content(names)
     best: tuple[int, int, str] | None = None
     for fid in pool:
         f = st.facts.get(fid)
         if f is None or not _usable(st, f, pc) or not _sentence(st, f):
+            continue
+        if specific and not (specific & words.content(fact_words(st, f))):
             continue
         s = 3 * f.predicate.startswith(f"topic.{topic}.") + 2 * (about is not None and f.subject == about) \
             + len(asked & words.content(fact_words(st, f)))
@@ -335,13 +394,19 @@ def _whereabouts(ctx: Any, knower: str, about: str | None) -> str | None:  # rul
     return None
 
 
-def pack_hit(ctx: Any, knower: str, topic: str, about: str | None, pc: str) -> str | None:  # rule: 12.16.11
-    """Rung 2: the knower's seeded knowledge pack on the topic (or about the entity asked), one the PC has not been
-    told first; written as a fact (`source: data`) the knower knows."""
+def pack_hit(ctx: Any, knower: str, topic: str, about: str | None, pc: str, text: str = "",
+             specific: set[str] | frozenset[str] = frozenset()) -> str | None:
+    # rule: 12.16.11
+    """Rung 2: the knower's seeded knowledge pack on the topic (or about the entity asked), the one sharing most
+    words with the question first, one the PC has not been told first; written as a fact (`source: data`) the
+    knower knows. `specific` as in `store_hit`: a particular thing asked about needs an item that names it."""
     st = ctx.need_tx().state
     # ponytail: a rumor item carries no text (its row is in the region's rumor table, not in the store): untold
-    items = [k for k in st.entities[knower].data.get("knowledge") or []
-             if k.get("text") and (k.get("topic") == topic or (about and k.get("about") == about))]
+    asked = words.content(text)
+    items = sorted((k for k in st.entities[knower].data.get("knowledge") or []
+                    if k.get("text") and (k.get("topic") == topic or (about and k.get("about") == about))
+                    and (not specific or specific & words.content(k["text"]))),
+                   key=lambda k: -len(asked & words.content(k["text"])))
     best = None
     for k in items:
         fid = st.current_fact_id(k.get("about") or WORLD, f"topic.{k['topic']}.{ids.slug(k['fact'])}"[:60])
@@ -358,16 +423,23 @@ def pack_hit(ctx: Any, knower: str, topic: str, about: str | None, pc: str) -> s
     return fid
 
 
+def public_local(st: Any, knower: str, topic: str) -> bool:  # rule: 12.10.6
+    """A public topic (news, folk, law, weather) asked of someone who lives in the haven it concerns (12.10.6(c)/(d))."""
+    haven = (st.meta.get("world.region") or {}).get("haven")
+    return bool((pack_data().CK["topics"].get(topic) or {}).get("public") and haven
+                and settlement_of(st, home_of(st, knower)) == haven)
+
+
 def odds_for(st: Any, knower: str, topic: str) -> str:  # rule: 12.10.6
-    """12.10.6(d) via `social.yaml#common_knowledge`: a role topic Likely; a public topic of a local Likely; else
-    Unlikely. Fixed before the roll (00.12.7)."""
+    """12.10.6(d) via `social.yaml#common_knowledge`: a role topic Likely (a topic of the NPC's seeded pack counts as
+    theirs, as casting reads it: `_knows_topic`); a public topic of a local Likely; else Unlikely. Fixed before the
+    roll (00.12.7)."""
     ck = pack_data().CK
     e = st.entities[knower]
     rk = role_key({"role": e.data.get("role")})
-    haven = (st.meta.get("world.region") or {}).get("haven")
-    if topic in ck["by_role"].get(rk, []):
+    if topic in ck["by_role"].get(rk, []) or any(k.get("topic") == topic for k in e.data.get("knowledge") or []):
         return str(ck["odds"]["on_role_topic"])
-    if (ck["topics"].get(topic) or {}).get("public") and haven and settlement_of(st, home_of(st, knower)) == haven:
+    if public_local(st, knower, topic):
         return str(ck["odds"]["public_local"])
     return str(ck["odds"]["other"])
 
@@ -403,7 +475,9 @@ def ratify(ctx: Any, knower: str, topic: str, text: str, pc: str) -> tuple[str |
                    str((ck["topics"].get(topic) or {}).get("gist") or topic), known=pack)
     if cand is None:
         return None, None
-    said = " ".join(str(cand[k]).strip() for k in ("subject", "predicate", "value")).rstrip(".")
+    said = " ".join(str(cand.get(k) or "").strip() for k in ("subject", "predicate", "value")).rstrip(".")
+    if cand.get("kind") != "ordinary_fact":  # code rejects it: the consequential route (the case it is about)
+        return None, case_about(st, f"{text} {said}", None, need=1)
     hit = _touches(st, said)
     if isinstance(hit, dict):
         return None, hit
@@ -464,15 +538,22 @@ def _route(ctx: Any, knower: str, kind: str, topic: str, about: str | None, text
                          source="data")
             _tell(ctx, pc, fid)
             return Answer(f"tells you where they stand on {toward}: {_why(stance)}", "", fid)
-    what = f"about {_gist(topic, about, st)}"
+    # the asker's own words for it ("the hiring"), never the topic key ("local news") when the Reader gave a phrase
+    phrase = given if given and not about and given not in pack_data().CK["topics"] and given not in st.entities \
+        else None
+    what = f"about {phrase or _gist(topic, about, st)}"
+    # a particular thing asked about ("the ambush at the fortress" filed under local news): the topic alone does
+    # not answer it, only a fact that names it (else rung 3 proposes one about it)
+    gist = str((pack_data().CK["topics"].get(topic) or {}).get("gist") or "")
+    specific = words.content(phrase) - words.content(f"{topic.replace('_', ' ')} {gist}") if phrase else set()
     if kind != "who_knows":
         for rung in rungs:
             fid = None
             if rung == "store":
                 fid = (_whereabouts(ctx, knower, about) if kind == "where_is" else None) or store_hit(
-                    st, knower, topic, about, text, pc)
+                    st, knower, topic, about, text, pc, specific)
             elif rung == "pack":
-                fid = pack_hit(ctx, knower, topic, about, pc)
+                fid = pack_hit(ctx, knower, topic, about, pc, text, specific)
             elif rung == "propose_and_ratify" and st.entities[knower].kind in PEOPLE:
                 fid, touched = ratify(ctx, knower, topic, text, pc)
                 if touched is not None:
@@ -568,6 +649,19 @@ def who_answer(ctx: Any, text: str) -> tuple[str, str] | None:  # rule: PR-12-10
     return who, fid
 
 
+_KNOWS_Q = re.compile(r"^\s*(?:does\s+\S+\s+)?(?:knows?|has heard|heard|have heard|saw|seen|has seen|remembers?|"
+                      r"can tell|could tell)\b", re.IGNORECASE)
+
+
+def ladder_owns(st: Any, subject: str | None, predicate: str, talked_to: Sequence[str]) -> bool:  # rule: PR-12-10
+    # rule: 12.10.6
+    """A Reader fact question about what a person the PC is asking this turn knows ("the neighbour knows the details
+    of the ambush"): 12.10.6's knowledge, answered by the answer ladder at its own odds (12.10.6(d)), never also by
+    the World-Fact Oracle at the Reader's odds (one would say yes and the other no)."""
+    return bool(subject in talked_to and subject in st.entities and st.entities[subject].kind in PEOPLE
+                and _KNOWS_Q.match(predicate))
+
+
 # the seed's stance reasons that are bookkeeping, in the words the NPC would use (12.16.11's stance)
 _WHY = {"holds a placement of the incident's case": "they know something of it and want it settled",
         "of the threat faction": "they would rather you left it alone"}
@@ -603,5 +697,5 @@ def volunteer(ctx: Any, knower: str, pc: str) -> Answer | None:  # rule: T-15-5
 
 
 __all__ = ["INDEX", "NO_ONE", "STORY_ROLES", "Answer", "ask", "case_about", "cast_who", "deliver_count",
-           "deliver_node", "name", "odds_for", "pack_hit", "point", "ratify", "rungs_for", "store_hit", "topic_of",
-           "volunteer", "who_answer"]
+           "deliver_node", "ladder_owns", "name", "odds_for", "pack_hit", "point", "public_local", "ratify", "rungs_for",
+           "store_hit", "topic_of", "volunteer", "who_answer"]

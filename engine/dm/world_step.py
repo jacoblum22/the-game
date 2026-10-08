@@ -116,10 +116,12 @@ NONE = "none"
 
 
 def _learnable(state: Any, f: Any, pc: str) -> bool:
-    return (isinstance(f.value, str | bool | int | float) and f.visibility != "sealed" and f.id not in state.seals
-            and f.subject not in state.seals and f.subject != pc and f.id not in state.knowledge.get(pc, {})
-            and f.predicate != "name" and not f.predicate.endswith((".but", ".and"))
-            and not f.predicate.startswith(("knows_", "points_to.")))
+    """A fact a look or a memory can deliver: in the world (`shown` or `available`, never `background` bookkeeping
+    such as a check's difficulty), not sealed, not a pointer or a knowledge roll, and new to the PC."""
+    return (isinstance(f.value, str | bool | int | float) and f.visibility in ("shown", "available")
+            and f.id not in state.seals and f.subject not in state.seals and f.subject != pc
+            and f.id not in state.knowledge.get(pc, {}) and f.predicate != "name"
+            and not f.predicate.endswith((".but", ".and")) and not f.predicate.startswith(("knows_", "points_to.", "dc.")))
 
 
 def _ok(b: BeatOutcome) -> bool:
@@ -140,7 +142,7 @@ def deliver_learning(ctx: TurnContext, record: AdjudicationRecord, beats: Sequen
     pointer (DL-12-44). A Talk that asks nothing is a request (T-15-5 "yes, as asked"), not a learning beat.
     Returns one summary per learning beat ({beat, verb, knower, speech, answers: [(fact id, pointer, line)]})."""
     from engine.dm import answer as ans
-    from engine.dm.npc_layer import addressed
+    from engine.dm.npc_layer import addressed, said_words
     from engine.dm.roles.world import present_npcs
 
     st = ctx.state
@@ -164,7 +166,7 @@ def deliver_learning(ctx: TurnContext, record: AdjudicationRecord, beats: Sequen
             if not asked or (e.targets and e.targets[0] in st.entities and st.entities[e.targets[0]].kind not in PEOPLE):
                 continue  # a request (T-15-5 "yes, as asked"), or words to a thing: no one to answer
             people = [t for t in e.targets if t in st.entities and st.entities[t].kind in PEOPLE]
-            knower = people[0] if people else next(iter(addressed(st, record, present)), None) or (
+            knower = people[0] if people else next(iter(addressed(st, record, present, said_words(ctx))), None) or (
                 present[0] if len(present) == 1 else None)
             if knower is None:  # asked of no one here: who would know (never empty, DL-12-44)
                 items = _look(ctx, e, verb, reach, pc, asked)
@@ -187,12 +189,12 @@ def _speech_answers(ctx: TurnContext, record: AdjudicationRecord, speech: list[A
                     pc: str) -> list[dict[str, Any]]:  # rule: PR-12-10
     """A plain SPEECH question (no Talk beat, 15.3.10) to a present NPC: answered at Standard, as their act."""
     from engine.dm import answer as ans
-    from engine.dm.npc_layer import addressed
+    from engine.dm.npc_layer import addressed, said_words
 
     if not speech:
         return []
     out = []
-    for npc in addressed(ctx.state, record, present)[:1]:
+    for npc in addressed(ctx.state, record, present, said_words(ctx))[:1]:
         rungs = ans.rungs_for(ctx.rules, 2)
         items = [ans.ask(ctx, npc, p.question_kind, p.topic, p.text, rungs, pc=pc)
                  for p in speech[:ans.deliver_count(len(speech), 2)]]
@@ -256,6 +258,14 @@ def _look(ctx: TurnContext, e: Any, verb: str, reach: int, pc: str, asked: list[
     q = asked[0] if asked else None
     topic, about = ans.topic_of(st, q.topic if q else None, said, pc)
     about = about or next((t for t in e.targets if t in st.entities), None)
+    if verb == "verb.recall" and "propose_and_ratify" in ans.rungs_for(ctx.rules, reach):
+        # PR-12-10 rung 3 with the PC as the knower: what their upbringing or trade would have taught them
+        fid, touched = ans.ratify(ctx, pc, topic, said, pc)
+        if touched is not None:
+            a = ans._from_case(ctx, pc, touched, False, pc, True)
+            return [ans.Answer("", f"You {a.said}", a.fact_id, a.pointer)]
+        if fid is not None:
+            return [ans.Answer("", f"You recall: {ans._sentence(st, st.facts[fid])}", fid)]
     fid, ref = ans.point(ctx, pc, topic, pc, about=about)
     what = f"about {ans.name(st, about) if about else topic.replace('_', ' ')}"
     head = {"verb.recall": "You recall nothing more", "verb.talk": "No one here can tell you more"}.get(

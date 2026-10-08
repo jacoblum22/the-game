@@ -920,7 +920,26 @@ Supersedes the earlier notes on `Beat.gate` / `would_be_license` / `necessity`, 
   A Talk with no question part is a request (no ladder); Observe/Recall run `_look` (a search placement, the store
   ranking, the place's furniture, a pointer). SPEECH questions with no Talk beat are answered as the addressed NPC's
   act (`source: talk_outcome`, `source_ref: PR-12-10`) and that NPC skips the table. `npc_layer.talk_outcome`:
-  "answers what you asked" or T-15-5's yes by reach.
+  "answers what you asked" or T-15-5's yes by reach ("takes what you offer and ..." when the Talk offers something).
+- **Playtest cluster C** (20261008 talker/fighter): `case_about(..., need=2)` also matches the opening incident's case
+  by the incident's own words; a `not_ordinary` Proposer candidate goes to the case it is about (`need=1`), else the
+  pointer. `point` names someone who `_can_answer` (a pack item or a record on the topic) first, never anyone who
+  already said they do not know it; past `pacing.yaml#answer_ladder.repeat_pointer_limit` such answers it logs ruling
+  `answer.pointer_chain` (review) and points to the topic's `kept_at` place. `store_hit`: on a public topic a local
+  (`public_local`) also knows what the PC was told about it. `odds_for`: a seeded pack topic is asked at the role odds.
+  `pack_hit` ranks pack items by words shared with the question. `ladder_owns`: a Reader fact question about what a
+  person being talked to knows is dropped from the World-Fact Oracle (turn.py). Recall (`world_step._look`) delivers
+  only `shown`/`available` facts and runs rung 3 with the PC as the knower before the pointer.
+- **Who answers** (`npc_layer.addressed(state, record, present, message)`): Talk targets, then `named_in` over the
+  typed message (`said_words(ctx)`) and the parts: a name right after "ask"/"turn to"/... first, then by first
+  mention; a name inside someone else's longer name does not count; a role's head noun is "the <noun>" before " of ".
+  Creatures (`is_animal`: `mind: animal`, or an animal head noun; `mentions._npc` makes them with `mind: animal`, no
+  walk-on roll; `cast.base_pool` skips them) get no activity and are never addressed.
+- **Scene-state lines** (`ActivityEntry.hidden`, `npc_layer.hide_stale`): a slot stated within `image_repeat_turns` of
+  its `last_used` and not written this turn is `stale`; the activity of someone engaged with the PC (addressed, acting,
+  a beat's target, a conflict foe) is `engaged`. Hidden lines get no handle; the Narrator gets one guidance line each
+  (`narrator._set_aside`). `narration._mark_used` marks a cited scene-state line's slot. `narration._unanswered` owes
+  no answer to SPEECH said before a move that opened a new scene with no one answering.
 
 ## The player feedback loop (spec 012; PR-12-11, 12.3.6, 12.5.8; DL-12-84..86)
 - **Reporting.** `/fix <what>` (play client) → `Game.dispute(text)` → `turn.play_dispute`: a DISPUTE part, no Reader

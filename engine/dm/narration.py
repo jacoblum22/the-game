@@ -401,9 +401,14 @@ def _names(ctx: TurnContext, ids: Sequence[str]) -> list[str]:
 
 
 def _unanswered(record: AdjudicationRecord, text: str) -> list[str]:  # rule: 12.2.7
+    """Questions with no answer in the fiction, for the repair. Words said to someone the PC then left (a new scene
+    opened this turn and no one answered them) are not owed: asking them again after arriving replays an old
+    question as if just said."""
     from engine.audit.screen import _acknowledged
 
-    return [f"answer: {q}" for q in _acknowledged(record, text)]
+    left = {p.text for p in record.parts if p.cls == "SPEECH"} if record.scene.started and not record.npc_actions \
+        else set()
+    return [f"answer: {q}" for q in _acknowledged(record, text) if q not in left]
 
 
 def _text(sents: Sequence[_Sent]) -> str:
@@ -528,7 +533,7 @@ def _deliver(ctx: TurnContext, record: AdjudicationRecord, turn: _Turn, sents: l
         sents.insert(min(at, len(sents)), _Sent(decl=DeclaredSentence(text=line, refs=[h])))
         cited_at = {k: (v + 1 if v >= at else v) for k, v in cited_at.items()}
     final = [s for s in sents if not s.dropped]
-    _mark_used(ctx, final)
+    _mark_used(ctx, final, record, turn.items)
     text = " ".join(s.decl.text for s in final)
     if had_prompt and record.pause is None and not text.rstrip("\"”’' ").endswith("?"):
         text += " What do you do?"  # 12.3.3: the open prompt (12.14.9), restored by code because repair cut it
@@ -580,17 +585,25 @@ def _said(ctx: TurnContext, record: AdjudicationRecord, final: Sequence[_Sent],
                 learn_name(ctx.time_ctx(), record.pc, eid, "heard")
 
 
-def _mark_used(ctx: TurnContext, final: Sequence[_Sent]) -> None:  # rule: 00.6.6a
+def _mark_used(ctx: TurnContext, final: Sequence[_Sent], record: AdjudicationRecord | None = None,
+               items: Sequence[RecordItem] = ()) -> None:  # rule: 00.6.6a
     # rule: 12.14.11
     """T12 usage marks (00.6.6a item 5, DL-12-76): each established detail a delivered sentence states (a cited
-    `detail.*` fact, or one its words wrote or restated) gets `last_used` = this turn; freshness reads them."""
+    `detail.*` fact, a cited scene-state line's slot, or one its words wrote or restated) gets `last_used` = this
+    turn; freshness reads them."""
     from engine.store.details import used_event
     from engine.store.projection import DETAIL
 
     tx = ctx.need_tx()
-    facts = tx.state.facts
+    st = tx.state
+    facts = st.facts
     used = [r for s in final for r in s.decl.refs if r in facts and facts[r].predicate.startswith(DETAIL)]
     used += [u for s in final for u in s.used if u in facts]
+    lines = {it.handle: record.activities[it.index] for it in items if it.kind == "activity"} if record else {}
+    for r in (r for s in final for r in s.decl.refs if r in lines):  # a scene-state line said (12.11.9, T-12-18)
+        ref = st.details.get(lines[r].npc, {}).get(lines[r].slot)
+        if ref is not None:
+            used.append(ref.fact_id)
     if used:
         tx.add(used_event(list(dict.fromkeys(used))))
 

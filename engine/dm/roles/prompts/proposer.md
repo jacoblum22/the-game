@@ -9,8 +9,10 @@ THIS MESSAGE says who is asked, their role, the question and its topic. The view
 
 Fill:
 - `kind`: `ordinary_fact` for everyday knowledge anyone in their role or place could have (roads, prices,
-  weather, local news, who lives where, customs). `not_ordinary` when any honest answer would be a secret, a
-  clue, a culprit, a hidden motive, where a missing or sought person is, or anything that would solve a mystery.
+  weather, local news, who lives where, customs, and public happenings past or present: a battle, a famine, a
+  fire, a festival, who is hiring). `not_ordinary` when any honest answer would be a secret, a clue, a culprit, a
+  hidden motive, where a missing or sought person is, or anything that would solve a mystery. Never judge whether
+  this person knows it: propose the answer as if they did; the Oracle decides.
 - `subject`: what the fact is about, a few plain words ("the north road", "bread at the market").
 - `predicate`: a short verb phrase ("is", "costs", "has been").
 - `value`: the rest of the sentence, plain and specific ("washed out past the second ford since the rains").

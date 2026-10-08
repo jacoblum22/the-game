@@ -31,6 +31,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from engine import ids
 from engine.dm.adjudication import AdjudicationRecord, BeatEntry, OracleEntry, PartEntry, PauseEntry
+from engine.dm.answer import ladder_owns
 from engine.dm.codex import promise_question, promise_subject, promises
 from engine.dm.context import TurnContext
 from engine.dm.narration import FRAME_NEXT, TurnOutcome, moves_on, narrate_turn, stays
@@ -289,7 +290,9 @@ def _adjudicate(ctx: TurnContext, rec: AdjudicationRecord, reader: ReaderResult,
         if tx.state.open_pause() is not None:
             _hold(rec)
             return outcomes
-    _fiction_questions(ctx, rec, reader.fact_questions)
+    talked = [b.target for b in reader.beats if b.verb == "verb.talk" and b.target]  # the ladder's, not the Oracle's
+    _fiction_questions(ctx, rec, [q for q in reader.fact_questions
+                                  if not ladder_owns(tx.state, q.subject, q.predicate, talked)])
     for part in rec.parts:
         if part.cls == "FICTION_QUESTION":
             part.handled = part.handled or "answered"
