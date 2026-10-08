@@ -8,16 +8,19 @@ what is still open, what went wrong in the process, and where to look next (rule
 
 ## 1. Where things are
 
-**Code.** All work is in **local commits on branch `integrate-r1`**, checked out as the worktree
-`.claude/worktrees/integrate-r1`. Head at handoff: `5715c39` (code head `eb570e1`; later commits are logs).
+**Code.** All work is in **local commits on the owner's branch `claude/project-thread-q2smmv`**.
+- It was fast-forwarded from the integration branch, and the branch structure was then collapsed: only
+  `main` and `claude/project-thread-q2smmv` remain, with one working copy and no extra worktrees.
+- The code head is `eb570e1`; later commits are logs, this report, and the run transcripts.
+- Commit hashes cited below (from the `integrate-r1` and `worktree-agent-*` branches) are all ancestors of
+  this branch, so `git show <hash>` still works.
 - 152 commits since `ead9d5c` (the I-127 commit), about 65 of them substantive.
 - Engine and CLI: +3,466 / −362 lines across 52 files. Tests: +3,528 lines across 33 files.
 - Full suite **1113 passed, 3 skipped**; `rules/_process/validate_ruleset.py` **0 ERROR / 0 WARN**.
-- **Nothing is pushed.** The owner's branch `claude/project-thread-q2smmv` is still at `ead9d5c`. Moving it
-  to `integrate-r1` is the owner's call (offered, not done).
+- **Nothing is pushed.**
 - `rules/` content is untouched except new rows in `rules/_process/issue-ledger.md` (**I-127 … I-158**).
 
-**Tracking files (on `integrate-r1`):**
+**Tracking files (in `evals/playtests/`):**
 - `evals/playtests/ISSUES.md`: 123 deduplicated issues (P-001 … P-127), each with class, severity, evidence
   (run stamp and input numbers) and status. About 90 fixed, 6 logged as rules questions, 3 partly fixed,
   ~24 open (mostly low-severity polish; a few rows still say "open" though fixed: P-091 and P-126 were fixed
@@ -26,20 +29,18 @@ what is still open, what went wrong in the process, and where to look next (rule
   fallbacks, the main findings).
 - `evals/playtest.py`: the harness (section 3).
 
-**Transcripts and saves.** Per-run transcripts (`<stamp>-claude-<persona>.md`) and findings
-(`.findings.jsonl`) were written to the **main checkout's** `evals/playtests/`, untracked. Saves are in the
-main checkout's `saves/` (gitignored). Every issue row cites its run stamp, so the evidence is findable.
+**Transcripts and saves.**
+- Per-run transcripts (`<stamp>-claude-<persona>.md`) and findings (`.findings.jsonl`) are committed in
+  `evals/playtests/` (about 3.4 MB).
+- Saves are in `saves/` (gitignored, local only).
+- Every issue row cites its run stamp, so the evidence is findable.
 
-**Worktrees.** About 43 git worktrees exist under `.claude/worktrees/`:
-- `integrate-r1`: the integration branch.
-- `pt-<persona>` (5): pinned playtest checkouts.
-- `agent-*` (~37): one per fixer, all merged.
+**Worktrees and branches.** At the owner's request, every extra worktree (about 42: the integration
+checkout, 5 pinned playtest checkouts, and one per fixer) was removed, and every merged branch was deleted
+with `git branch -d`. Each was verified merged first. One fixer worktree held stray uncommitted files; they
+were confirmed already contained in the branch, and a patch copy was kept in the session scratchpad.
 
-Nothing was deleted, per the owner's standing rule; cleanup is the owner's call. A generated rules-cache
-pickle is moved aside in the session scratchpad (not deleted).
-
-**Running at handoff.** The last few playtest runs were left to finish; no new runs or fixers were started
-after the owner asked to wind down.
+**Running at handoff.** Nothing. All playtest processes were stopped at the owner's request.
 
 ---
 
