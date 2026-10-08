@@ -16,9 +16,10 @@ from collections.abc import Sequence
 from typing import Any
 
 from engine.audit import text as words
+from engine.audit.fallback import fact_sentence
 from engine.dm.adjudication import AdjudicationRecord, NpcActionEntry, OmenEntry
 from engine.dm.context import TurnContext
-from engine.dm.roles.world import npc_motives, npc_responses
+from engine.dm.roles.world import npc_motives, npc_responses, present_npcs
 from engine.resolve.pipeline import BeatOutcome
 from engine.resolve.tables import roll_table
 from engine.resolve.types import REACH_VALUE
@@ -56,18 +57,25 @@ def npcs_respond(ctx: TurnContext, record: AdjudicationRecord, beats: Sequence[B
     if not beats and not any(p.cls in ("SPEECH", "DECLARATION") for p in record.parts):
         return
     tx = ctx.need_tx()
-    talk = {b.entry.targets[0]: b for b in beats
-            if b.status in RESOLVED and b.entry.targets and "talk" in (b.entry.approach_words or "")}
+    present = present_npcs(ctx.state)
+    # a Talk framed with no target speaks to the one NPC here, if there is only one (P-056)
+    talk = {(b.entry.targets or present)[0]: b for b in beats
+            if b.status in RESOLVED and (b.entry.targets or len(present) == 1)
+            and "talk" in (b.entry.approach_words or "")}
     # 12.11.5: a row never resolves what a frame should; a beat on this NPC that did not resolve (refused, withdrawn,
     # paused) happened to no one, so it draws no table row either
     unresolved = {t for b in beats if b.status not in RESOLVED for t in b.entry.targets}
+
+    def talked(npc: str, tags: list[str]) -> None:
+        b = talk.pop(npc)
+        record.npc_actions.append(NpcActionEntry(npc=npc, action=f"responds as the talk went: "
+                                                 f"{b.entry.degree or 'success'}",
+                                                 source="talk_outcome", source_ref=b.frame_id, tags=tags))
+
     for r in npc_responses(ctx, happened_text(record)):
         motives = npc_motives(ctx.state, r.npc)
         if r.npc in talk:  # (a) a resolved Talk frame's delivered outcome (a certain talk, no roll, is a yes)
-            b = talk[r.npc]
-            record.npc_actions.append(NpcActionEntry(npc=r.npc, action=f"responds as the talk went: "
-                                                     f"{b.entry.degree or 'success'}",
-                                                     source="talk_outcome", source_ref=b.frame_id, tags=r.tags))
+            talked(r.npc, r.tags)
         elif r.refusal_engaged:  # (b) a recorded refusal outranks everything unresolved
             record.npc_actions.append(NpcActionEntry(npc=r.npc, action=f"refuses: {motives.get(r.refusal_engaged)}",
                                                      source="refusal", source_ref=r.refusal_engaged, tags=r.tags))
@@ -86,13 +94,15 @@ def npcs_respond(ctx: TurnContext, record: AdjudicationRecord, beats: Sequence[B
             tx.add_all(res.events)
             record.npc_actions.append(NpcActionEntry(npc=r.npc, action=str(res.entry), source="table_row",
                                                      source_ref=f"{NPC_TABLE}:{res.roll}", tags=r.tags))
+    for npc in [n for n in talk if n in ctx.state.entities]:  # the one spoken to answers as the talk went, always
+        talked(npc, [])
 
 
 LEARN_VERBS = {"verb.talk": "told", "verb.observe": "witnessed", "verb.recall": "recalled"}
 
 
 def _fact_words(state: Any, f: Any) -> str:
-    """A fact in words for the narration: '<who> — <predicate>: <value>' (yes/no for a settled question)."""
+    """A fact's words for relevance ranking only (what the player sees is `fact_sentence`)."""
     from engine.dm.roles.narrator import name_of
 
     who = name_of(state, f.subject) if f.subject in state.entities else ""
@@ -138,14 +148,15 @@ def deliver_learning(ctx: TurnContext, record: AdjudicationRecord, beats: Sequen
         names = " ".join(st.entities[i].name for i in [e.actor, *e.targets] if i and i in st.entities)
         asked = words.content(e.restatement) - words.content(names)
         ranked = sorted(((len(asked & words.content(_fact_words(st, st.facts[fid]))), fid) for fid in pool
-                         if fid in st.facts and _learnable(st, st.facts[fid], pc)), reverse=True)
+                         if fid in st.facts and _learnable(st, st.facts[fid], pc)
+                         and fact_sentence(st, st.facts[fid])), reverse=True)  # only what can be told plainly
         ranked = [fid for score, fid in ranked if score][:5]  # resolution.yaml delivery_rules.max_items
         n = len(ranked)
         reach = REACH_VALUE.get(e.reach or "standard", 2)
         count = {1: max(1, n // 3), 2: -(-n // 2)}.get(reach, n)  # T-01-6; ponytail: no Exceptional bonus item
         for fid in ranked[:count]:
             record_knowledge(ctx.time_ctx(), pc, fid, LEARN_VERBS[verb])
-            e.learned.append(_fact_words(st, st.facts[fid]))
+            e.learned.append(fact_sentence(st, st.facts[fid]))
 
 
 def clock_omens(ctx: TurnContext, record: AdjudicationRecord) -> None:  # rule: 00.8.4

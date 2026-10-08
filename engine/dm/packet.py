@@ -109,7 +109,9 @@ def scene_setting(state: WorldState) -> str:  # rule: 12.4.3
             and e.data.get("parent") == d.get("parent") and e.exists == "exists" and e.data.get("known", True)]
     if near:
         lines.append("- nearby: " + "; ".join(e.data.get("desc") or e.name for e in near[:8]))
-    here = [state.entities[i] for i in (sc.cast_present if sc else []) if i in state.entities and i not in state.seals]
+    from engine.world.scenes import cast_present
+
+    here = [state.entities[i] for i in cast_present(state) if i not in state.seals]  # met mid-scene too (P-056)
     for e in here:
         ed = e.data
         look = ", ".join(str(ed[k]) for k in ("age", "detail", "demeanor") if ed.get(k))

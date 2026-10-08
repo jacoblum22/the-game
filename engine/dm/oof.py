@@ -369,10 +369,14 @@ def when_words(ts: Any) -> str:
 
 
 def short_text(text: str, limit: int = 80) -> str:
-    """The first sentence of `text`, cut at a word boundary with an ellipsis when longer than `limit`."""
+    """The first sentence of `text`; longer than `limit`, it ends at its last whole clause ('; ', ', and ', ' — ')
+    within the limit, else at a word boundary with an ellipsis (never 'one of…')."""
     t = re.split(r"(?<=[.!?])\s", str(text).strip(), maxsplit=1)[0].rstrip(".")
     if len(t) <= limit:
         return t
+    cuts = [m.start() for m in re.finditer(r";\s|\s—\s|,\s(?:and|but|or|so|while|though)\s", t[:limit + 1])]
+    if cuts and cuts[-1] >= limit // 3:
+        return t[:cuts[-1]].rstrip(",;: ")
     return t[:limit].rsplit(" ", 1)[0].rstrip(",;:") + "…"
 
 

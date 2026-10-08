@@ -115,6 +115,51 @@ def _beat_line(state: WorldState, b: BeatEntry, pc: str | None, paused: bool = F
     return "- " + "; ".join(x for x in bits if x)
 
 
+# NPC acts that leave what the PC asked unanswered (talk outcomes, refusals, wants, tbl.npc_action rows 1-6)
+WITHHOLDING = ("responds as the talk went: failure", "responds as the talk went: critical_failure", "refuses",
+               "acts on", "escalates", "ends the exchange", "hinders quietly", "wants something first",
+               "carries on with their own business")
+
+
+def _withheld(state: WorldState, npc: str, action: str, pc: str | None) -> str:  # rule: 12.11.5
+    """For an NPC who does not answer: tell the narration to make that legible in the fiction, with the reason the
+    record holds (the act itself, their manner, their standing), so the player knows to move on (P-056)."""
+    if not action.startswith(WITHHOLDING) or npc not in state.entities:
+        return ""
+    from engine.world.social import _RUNGS, standing
+
+    d = state.entities[npc].data
+    st = standing(state, npc)
+    rung = {v: k for k, v in _RUNGS.items()}.get(st) if st is not None else None
+    why = [x for x in (f"manner: {d['demeanor']}" if d.get("demeanor") else "",
+                       f"standing toward the PC: {rung}" if rung else "") if x]
+    return ("; they do not give the PC what was asked: show it plainly and visibly (a word, a shake of the head, a "
+            "hand lifted for not now, turning back to what they were doing) so the player knows not to wait for an "
+            "answer" + (f"; the reason shows only from this, never a secret: {'; '.join(why)}" if why else ""))
+
+
+def _speech_line(state: WorldState, record: AdjudicationRecord) -> list[str]:  # rule: 12.14.12
+    """When the PC speaks to someone here or an NPC acts, their reply is given in quoted words (P-061): the narrator
+    chooses NPCs' words, only the facts in them are constrained. What they may tell beyond what the PC learns: the
+    open matters any local may know (active threads, never sealed). Never 'his words are lost'."""
+    from engine.dm.oof import short_text
+    from engine.dm.player_text import second_person
+    from engine.dm.roles.world import present_npcs
+
+    spoke = any(p.cls == "SPEECH" for p in record.parts) or any("talk" in (b.approach_words or "")
+                                                               for b in record.beats)
+    if not (spoke or record.npc_actions) or not present_npcs(state):
+        return []
+    matters = [second_person(short_text(str(e.data.get("text") or e.name), 160)) for e in state.entities.values()
+               if e.kind == "thread" and e.data.get("status", "active") == "active"
+               and e.visibility in ("shown", "available") and e.id not in state.seals][:3]
+    return ["- whoever answers or acts here speaks in quoted words (their actual sentence, a question as a "
+            "question): they say only what the record gives (what the PC learns, their act above)"
+            + (f" or these open matters any local may know: {'; '.join(matters)}" if matters else "")
+            + "; or they say plainly they do not know, or will not say. Never write that their words are lost, "
+            "unheard, or only begun; never end on waiting for them to speak"]
+
+
 def record_text(state: WorldState, record: AdjudicationRecord, *, player_message: str = "",
                 purpose: Purpose = "turn", rules: Any = None) -> str:  # rule: 12.14.12
     """The adjudication record in words for THIS MESSAGE (names, never ids or numbers; 12.14.4)."""
@@ -139,7 +184,8 @@ def record_text(state: WorldState, record: AdjudicationRecord, *, player_message
     for o in record.oracle:
         lines.append(f"- question \"{o.question}\": the answer is {o.answer}")
     for a in record.npc_actions:
-        lines.append(f"- {name_of(state, a.npc, pc)} acts: {a.action}")
+        lines.append(f"- {name_of(state, a.npc, pc)} acts: {a.action}" + _withheld(state, a.npc, a.action, pc))
+    lines += _speech_line(state, record)
     for om in record.omens:
         if om.omen:
             lines.append(f"- an omen to show as a trace, never explained: {om.omen}")

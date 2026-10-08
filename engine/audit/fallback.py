@@ -146,6 +146,83 @@ def _oracle_line(question: str, answer: str) -> str:
     return _sentence(f"{s}, {tail}" if s and tail else s)
 
 
+_SLUG_MAX = 60  # turn.py cuts an Oracle question's predicate slug here: one this long is an unfinished clause
+_IS_PREDS = {"state", "kind", "condition", "desc", "posture", "mood", "demeanor", "look", "appearance"}
+_PREPS = {"by", "of", "in", "on", "at", "to", "from", "with", "for", "under", "near", "behind", "inside"}
+_BOOL = {True: True, False: False, "true": True, "false": False, "yes": True, "no": False}
+
+
+def _finite(w: str) -> bool:
+    """'is', 'carries', 'belongs': a verb a statement can turn on (ponytail: suffix test; past tenses are left out)."""
+    w = w.lower()
+    return w in _AUX or (len(w) > 3 and w.endswith("s") and not w.endswith(("ss", "us", "is", "ts", "ns")))
+
+
+def _the(name: str) -> str:
+    return name if not name[:1].islower() or name.split(" ", 1)[0] in _KEEP else f"the {name}"
+
+
+def _cap(s: str) -> str:
+    s = s.strip().rstrip(" ,;:—-")
+    return "" if not s else s[0].upper() + s[1:] + ("" if s[-1] in ".!?" else ".")
+
+
+def fact_sentence(state: object, f: object, subject: str | None = None) -> str:  # rule: 12.14.4
+    """A fact as one short plain sentence for the player: 'The canvas belongs to a pack.', 'The pack is held by
+    Bixok Lucky.' A yes/no fact (an Oracle-settled question) reads as the statement it settles, never ': yes'; one
+    that cannot be phrased as a statement ('coin named none yet', 'size') is '' and is left out."""
+    from engine.dm.codex import _value_words
+    from engine.dm.oof import short_text
+    from engine.dm.player_text import second_person
+    from engine.dm.roles.narrator import name_of
+
+    subj = subject if subject is not None else ("" if f.subject == "world" else name_of(state, f.subject))
+    subj = _the(subj) if subj else ""
+    if f.predicate.endswith((".but", ".and")):  # an Oracle twist's qualifier: meaning words, not a statement
+        return ""
+    pred = f.predicate.removeprefix("lead.")
+    p = re.sub(r"\bthe pc s\b", "your", pred.replace("_", " ").replace(".", " ")).replace("the pc", "you").strip()
+    v = f.value
+    yes = _BOOL.get(v.lower() if isinstance(v, str) else v) if isinstance(v, str | bool) else None
+    if yes is not None:
+        words = p.split()
+        if words[:1] == ["whether"]:
+            words = words[1:]
+        if words[:1] and words[0] in ("it", "he", "she", "they"):
+            words = words[1:]
+        if (not subj or len(f.predicate) >= _SLUG_MAX or len(words) < 2 or not _finite(words[0])
+                or words[1] == "and"):
+            return ""
+        s = f"{subj} {' '.join(words)}"
+        if not yes:
+            s = _negate(s) or (f"{subj} does not {_base(words[0])} {' '.join(words[1:])}"
+                               if words[0].lower() not in _AUX else "")
+        return second_person(_cap(s))
+    val = name_of(state, v) if isinstance(v, str) and v in getattr(state, "entities", {}) else _value_words(v)
+    val = short_text(str(val), 120)
+    if not val:
+        return ""
+    if f.predicate.startswith("lead.") or not subj:
+        s = val if f.predicate.startswith("lead.") else f"{p}: {val}"
+    elif p in _IS_PREDS or p == "kind":
+        art = "a " if p == "kind" and val.split(" ", 1)[0].lower() not in _KEEP else ""
+        s = f"{subj} {val}" if _finite(val.split(" ", 1)[0]) else f"{subj} is {art}{val}"
+    elif p == "location":
+        s = f"{subj} is {val}" if val.split(" ", 1)[0].lower() in _PREPS | {"beyond", "beside", "pushed", "set",
+                                                                           "against", "above", "below"} \
+            else f"{subj} is at {val}"
+    elif p == "owner":
+        s = f"{subj} belongs to {val}"
+    elif _finite(p.split(" ", 1)[0]):
+        s = f"{subj} {p} {val}"
+    elif p.rsplit(" ", 1)[-1] in _PREPS:
+        s = f"{subj} is {p} {val}"
+    else:
+        poss = "'" if subj.endswith("s") else "'s"
+        s = f"{subj}{poss} {p} is {val}"
+    return second_person(_cap(s))
+
+
 # tbl.npc_action rows (12.11.5) and the Talk outcome as plain prose: the row's own act, its conditions left out
 NPC_ROW_PROSE = {
     "escalates: threatens, calls for others, attacks only if able and hostile": "grows threatening and calls for others",
@@ -156,8 +233,10 @@ NPC_ROW_PROSE = {
     "offers partial help": "offers some help",
     "responds as the talk went: critical_success": "agrees readily",
     "responds as the talk went: success": "agrees",
-    "responds as the talk went: failure": "is not persuaded",
-    "responds as the talk went: critical_failure": "is not persuaded",
+    "responds as the talk went: failure": "is not persuaded and gives you no answer",
+    "responds as the talk went: critical_failure": "is not persuaded and gives you no answer",
+    "carries on with their own business": "goes on with what they were doing and does not answer",
+    "ends the exchange and withdraws": "says no more and turns away",
 }
 
 
@@ -190,7 +269,7 @@ def plain_fallback(record: AdjudicationRecord, *, names: Mapping[str, str] | Non
         lines += [_sentence(c) for c in b.conditions]
         lines += [_sentence(f"{who(p.entity)} {'are' if p.entity == record.pc else 'is'} {p.words}")
                   for p in b.positions]
-        lines += [_sentence(x.replace(" — ", " ", 1)) for x in b.learned]
+        lines += [_sentence(x) for x in b.learned]
     for o in record.oracle:
         lines.append(_oracle_line(o.question, o.answer))
     for a in record.npc_actions:

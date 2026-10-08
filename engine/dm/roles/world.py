@@ -17,7 +17,7 @@ from pydantic import BaseModel, Field
 from engine.dm.context import TurnContext
 from engine.dm.packet import build_packet, render_view, scene_view
 from engine.dm.roles.prompts import load_prompt
-from engine.dm.schemas import build_schema, defaults, schema_context
+from engine.dm.schemas import _want_ids, build_schema, defaults, schema_context
 from engine.llm.base import Role, call_role
 from engine.retrieve.anchors import scene_situation_tags
 from engine.retrieve.cards import load_cards_for
@@ -54,11 +54,18 @@ def npc_motives(state: WorldState, npc: str) -> dict[str, str]:
     return out
 
 
+def present_npcs(state: WorldState) -> list[str]:  # rule: 12.4.1
+    """The scene's NPCs: those framed in it and anyone positioned at its place since (one met mid-scene answers
+    too; P-056)."""
+    from engine.world.scenes import cast_present
+
+    return [i for i in cast_present(state) if state.entities[i].kind in ("npc", "companion")]
+
+
 def world_view(state: WorldState) -> str:  # rule: 12.2.9
     """The narrator view of the scene plus each present NPC's standing toward the PC and recorded motives."""
     lines = [render_view(scene_view(state))]
-    cast = [i for i in (state.scene.cast_present if state.scene else []) if i in state.entities]
-    npcs = [i for i in cast if state.entities[i].kind in ("npc", "companion")]
+    npcs = present_npcs(state)
     pc = next((eid for eid, e in state.entities.items() if e.kind == "pc"), None)
     if npcs:
         lines.append("NPC motives (sealed from the narrator; yours to weigh):")
@@ -90,8 +97,13 @@ def npc_responses(ctx: TurnContext, happened: str) -> list[WorldResponse]:  # ru
     """One World call; [] when no NPC is present."""
     st = ctx.state
     sctx = schema_context(st, ctx.rules)
-    if not sctx.npc_ids:
+    npcs = present_npcs(st)
+    if not npcs:
         return []
+    if sctx.npc_ids != npcs:  # the schema's cast is the framed one; an NPC met mid-scene answers too (P-056)
+        motives = [_want_ids(st, n) for n in npcs]
+        sctx = sctx.model_copy(update={"npc_ids": npcs, "want_ids": [w for m in motives for w in m[0]],
+                                       "refusal_ids": [r for m in motives for r in m[1]]})
     schema = build_schema(Role.WORLD, sctx)
     triggers = get_active_triggers(st, ctx.rules)
     mode = st.scene.mode if st.scene else None

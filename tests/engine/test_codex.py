@@ -90,7 +90,7 @@ def test_sections(store: Store, rules: Rules) -> None:
     cond = codex(store.state, "/conditions", rules).text
     assert "Off-balance (S1; rounds:1)" in cond
     j = codex(store.state, "journal", rules)
-    assert "Wren reached Ashford." in j.text and "Iron bar: condition — bent (witnessed)" in j.text
+    assert "Wren reached Ashford." in j.text and "Iron bar is bent (witnessed)." in j.text
     assert [k["fact_id"] for k in j.data["known"]] == ["fact.3"]
     th = codex(store.state, "threads", rules).text
     assert "The missing ferryman [active]" in th
@@ -105,17 +105,48 @@ def test_what_you_know_reads_what_was_seen_and_heard(store: Store, rules: Rules)
         rumour = _fact(tx, "item.iron_bar", "forged_by", "the smiths of Ashford", "available")
         tx.add(Event.of("knowledge_recorded", source="test", knower="pc.wren", fact_id=rumour, how="rumor"))
     j = codex(store.state, "journal", rules).text
-    assert "Iron bar: weight — heavier than it looks" in j and "nothing yet" not in j
+    assert "Iron bar's weight is heavier than it looks." in j and "nothing yet" not in j
     from engine.dm.codex import what_you_know
 
     bar = what_you_know(store.state, "the iron bar", rules).text
     assert bar.startswith("[JOURNAL] What you know about the iron bar:")
-    assert "weight — heavier than it looks" in bar and "smiths of Ashford (a rumour" in bar
+    assert "weight is heavier than it looks" in bar and "Iron bar is forged by the smiths of Ashford (a rumour" in bar
     summary = what_you_know(store.state, None, rules).text
     assert "What drives you: I will find the ferryman" in summary
     for about in (None, "the iron bar", "Wren", "cultist"):
         assert SECRET not in what_you_know(store.state, about, rules).text
     assert "Nothing on record about the moon" in what_you_know(store.state, "the moon", rules).text
+
+
+def test_fact_sentence_reads_plainly(store: Store, rules: Rules) -> None:
+    # P-058 / P-042: a learned fact is a short plain sentence; a settled question that reads as no statement is
+    # left out, and yes/no never prints as ": yes"
+    from engine.audit.fallback import fact_sentence
+    from engine.dm.oof import short_text
+
+    with store.transaction() as tx:
+        tx.add(Event.of("entity_created", source="test", entity=EntityRecord(
+            id="npc.bixok", kind="npc", name="Bixok Lucky")))
+        tx.add(Event.of("entity_created", source="test", entity=EntityRecord(id="obj.pack", kind="object", name="pack")))
+        fids = {p: _fact(tx, s, p, v, "shown") for s, p, v in (
+            ("npc.bixok", "coin_named_none_yet", True), ("npc.bixok", "carries_a_pack", False),
+            ("obj.pack", "whether_it_is_closed", True), ("obj.pack", "held_by", "npc.bixok"),
+            ("obj.pack", "size", True), ("obj.pack", "whether_it_is_closed.but", "lesser"),
+            ("npc.bixok", "agreed_to_tell_calmund_about_the_night_once_the_shrine_door_", False))}
+        tx.add(Event.of("knowledge_recorded", source="test", knower="pc.wren", fact_id=fids["coin_named_none_yet"],
+                        how="told"))
+    st = store.state
+    said = {p: fact_sentence(st, st.facts[f]) for p, f in fids.items()}
+    assert said == {"coin_named_none_yet": "", "carries_a_pack": "Bixok Lucky does not carry a pack.",
+                    "whether_it_is_closed": "The pack is closed.", "held_by": "The pack is held by Bixok Lucky.",
+                    "size": "", "whether_it_is_closed.but": "",
+                    "agreed_to_tell_calmund_about_the_night_once_the_shrine_door_": ""}
+    j = codex(st, "journal", rules).text
+    assert "coin named" not in j and ": yes" not in j and "— yes" not in j and "The pack is closed." in j
+    hook = "a countryman of yours lives in most settlements of any size; one of them will ask a favor before you ask"
+    assert short_text(hook) == "a countryman of yours lives in most settlements of any size"
+    assert short_text("one book, door or grave in the cloister was forbidden to you, and you never learned why "
+                      "though you asked") == "one book, door or grave in the cloister was forbidden to you"
 
 
 def test_rules_card_by_id(store: Store) -> None:
