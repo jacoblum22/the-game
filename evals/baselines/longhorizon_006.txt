@@ -1,0 +1,36 @@
+# Long-horizon harness (model: offline)
+
+## Aged store (seed 7, 300 synthetic scenes)
+- view tokens at scene 50: checker 4793 (view 146), narrator 15828 (view 1262), reader 13104 (view 1244)
+- view tokens at scene 200: checker 5184 (view 196), narrator 16321 (view 1320), reader 13516 (view 1314)
+- view tokens at scene 300: checker 5350 (view 269), narrator 16628 (view 1356), reader 13652 (view 1357)
+- store size: 378 entities, 1022 facts, 634 knowledge records
+- recall probes: 9; precision 0.46, coverage 0.67 (by NPC age: oldest 1.00, middle 0.50, newest 0.50)
+- boundedness, narrator sections growing > 10% from first to last checkpoint: RECENT EXCHANGES 99->534, THIS MESSAGE 541->812
+- promise probes: 3; coverage 0.00
+
+## Scripted player (seed 7, 293 lines, 304 turns, 232 narrated)
+- contradictions per 100 narrated turns: 0.0
+- recall probes: 0 scored of 25; precision n/a, coverage n/a
+- novelty-4 over the previous 10 deliveries: 0.38 (230 deliveries)
+- narration loop (232 narrated): first draft delivered as drafted 175/232 (75.4%); turns with a cut, rendered line or fallback 57/232 (24.6%); narrator calls per narrated turn 1.49; per narrated turn: added_about 1.75, audit_undeclared 0.21, undeclared_new 0.00
+- view tokens at line 50: checker 5012 (view 246), narrator 16510 (view 1312), reader 13248 (view 1319)
+- view tokens at line 200: checker 5008 (view 82), director 6041 (view 810), narrator 16146 (view 1197), reader 13315 (view 1163)
+- cached-prefix share per role: checker 0.94, director 0.81, framer 0.84, narrator 0.94, reader 0.96, world 0.88
+- engine errors: 16
+  - line 227 (revisit): RuntimeError: names exhausted
+  - line 236 (travel): RuntimeError: names exhausted
+  - line 239 (revisit): RuntimeError: names exhausted
+  - line 248 (travel): RuntimeError: names exhausted
+  - line 251 (revisit): RuntimeError: names exhausted
+  - line 260 (travel): RuntimeError: names exhausted
+  - line 263 (revisit): RuntimeError: names exhausted
+  - line 272 (travel): RuntimeError: names exhausted
+  - line 275 (revisit): RuntimeError: names exhausted
+  - line 284 (travel): RuntimeError: names exhausted
+  - line 287 (revisit): RuntimeError: names exhausted
+  - line 289 (look): RuntimeError: names exhausted
+  - line 290 (talk): RuntimeError: names exhausted
+  - line 291 (absent): RuntimeError: names exhausted
+  - line 292 (recall): RuntimeError: names exhausted
+  - line 293 (scuffle): RuntimeError: names exhausted

@@ -373,7 +373,7 @@ def _cited(ctx: _Ctx, c: Claim) -> list[Any]:
 def _restates_cited(ctx: _Ctx, c: Claim) -> bool:  # rule: 12.3.1
     """The claim restates a record line its sentence cites (most of its content words are in that line), about the
     line's own subject (another person saying the same words is not sourced by it, P-118)."""
-    return any(tx.covers(c.text, f"{it.text} {it.render}", ratio=0.75)
+    return any(tx.covers(c.text, f"{it.text} {it.render}", ratio=0.6)
                and (not it.entities or c.subject in it.entities or c.subject in (UNKNOWN, ctx.pc))
                for it in _cited(ctx, c))
 
@@ -678,7 +678,12 @@ def _harm(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: 12.3.1
         return _v(c, i, "supported")
     if harm_write and state_words != "unhurt":  # harm written this turn (a foe's landed strike) in any words (P-116)
         return _v(c, i, "supported")
-    return _v(c, i, "undetermined", state_words, fix="cut", reason="harm words the store cannot settle")
+    # a look or manner the store has not settled ("a dry cough", "flustered"): an incidental property, written as
+    # narrated (12.3.2's split, DL-12-40); the harm words above are the consequential ones
+    if c.asserts_change or c.subject == ctx.pc:  # a blow landed, a change to the PC: nothing written backs it
+        return _v(c, i, "undetermined", state_words, fix="cut", reason="harm words the store cannot settle")
+    v = _v(c, i, "undetermined", state_words, fix="oracle", reason="a manner or look the store has not settled")
+    return v.model_copy(update={"incidental": True})
 
 
 def _position(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: 12.3.1
@@ -697,7 +702,8 @@ def _position(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: 12.3.1
         if actual is not None and actual != place:
             return _v(c, i, "contradicted", ctx.name(actual))
         return _v(c, i, "supported")
-    other = ctx.entity_named(c.value)
+    # beside someone or something in the scene (another place's "hearth" is not this one's: spec 006)
+    other = ctx.entity_named(c.value, among=ctx.scene_ids or None)
     if other is not None and other != c.subject:
         pa, pb = s.positions.get(c.subject), s.positions.get(other)
         if pa and pb and pa.location and pb.location and pa.location != pb.location:
@@ -769,6 +775,8 @@ def _possession(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: 12.3.1
 def _location_time(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: 12.3.1
     s, text = ctx.state, c.text
     watch = s.time.now.watch
+    if _has(text, _ANOTHER_TIME):  # "last night", "yesterday": another time's events, not the hour now (00.6.9e)
+        return _v(c, i, "supported", reason="another time than now: not the store's hour")
     for w, names in _WATCH_WORDS.items():
         hit = tx.any_phrase(text, names)
         if hit:
@@ -790,15 +798,21 @@ def _location_time(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: 12.3.1
         subj = s.entities.get(c.subject)
         if subj is not None and subj.kind == "place":
             return _v(c, i, "supported")  # a place described or a landmark named: nobody's whereabouts
-        who = c.subject if c.subject in s.entities else ctx.pc
+        who = c.subject if c.subject in s.entities else None
+        if who is None:
+            return _v(c, i, "supported")  # where an event took place: nobody's whereabouts (spec 006)
         loc = s.positions[who].location if who in s.positions and s.positions[who].location else None
         here = loc or (s.scene.place_id if s.scene else None)
         if here is not None and place not in _within(s, here):
             return _v(c, i, "contradicted", ctx.name(here), reason=f"the store places them at {ctx.name(here)}")
         return _v(c, i, "supported")
-    return _v(c, i, "undetermined", fix="cut", reason="a time or place the store cannot compute")
+    # 12.3.1: atmosphere is checked only against the hour, season, weather and place the store holds; with none of
+    # those named there is nothing to contradict (spec 006: never cut as "undetermined")
+    return _v(c, i, "supported", reason="names no hour or place the store holds: atmosphere")
 
 
+_ANOTHER_TIME = ["last night", "yesterday", "ago", "the night before", "the day before", "tomorrow", "earlier",
+                 "last week", "years", "once"]
 _ELAPSED = ["hour", "minute", "goes by", "go by", "went by", "passes", "time passes", "elapsed", "a while",
             "the morning wears", "wears on", "moved on"]
 
@@ -820,6 +834,10 @@ def _knowledge(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: 12.3.1
         f = s.facts.get(fid)
         if f is not None:
             pool.append(f"{ctx.name(f.subject)} {f.predicate} {_flat(f.value)}")
+    # the open matters any local may know (12.14.12's speech line: active, shown threads) are known to anyone
+    pool += [str(e.data.get("text") or e.name) for e in s.entities.values() if e.kind == "thread"
+             and e.data.get("status", "active") == "active" and e.visibility in ("shown", "available")
+             and e.id not in s.seals]
     match = any(tx.covers(c.value or c.text, p, ratio=0.5) for p in pool)
     if any(tx.covers(c.value or c.text, w, ratio=0.5) for b in ctx.record.beats for w in b.learned):
         return _v(c, i, "supported")  # delivered by this turn's learning beat (12.10.5)

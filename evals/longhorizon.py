@@ -146,10 +146,50 @@ def _ev(kind: str, payload: dict[str, Any]) -> Event:
     return Event.model_validate({"type": kind, "payload": payload})
 
 
+class _NarrationOnly:
+    """Claude (the CLI, the owner's subscription) as Narrator and Checker; every other role offline (spec 006)."""
+
+    provider = "claude-narration"
+
+    def __init__(self) -> None:
+        from engine.llm.offline import OfflineModel
+        from evals.playtest import ClaudeModel
+
+        self.claude, self.offline = ClaudeModel("haiku"), OfflineModel()
+
+    def fill(self, role: Any, schema: Any, packet: Any, **kw: Any) -> Any:
+        from engine.llm.base import Role
+
+        return (self.claude if role in (Role.NARRATOR, Role.CHECKER) else self.offline).fill(role, schema, packet, **kw)
+
+
 def _model(name: str) -> Any:
     from engine.llm.offline import OfflineModel
 
+    if name == "claude-narration":
+        return _NarrationOnly()
     return OfflineModel() if name == "offline" else GameConfig(offline=False).model()
+
+
+def narration_loop(turns: list[dict[str, Any]]) -> str:
+    """Spec 006's gate measures on the turns played: first drafts delivered as drafted, turns where a sentence was
+    cut or a line rendered, narrator calls per narrated turn (from each turn's draft versions)."""
+    narrated = [t for t in turns if t.get("draft_versions")]
+    if not narrated:
+        return "- narration loop: no narrated turns"
+    kinds = [[v.get("kind") for v in t["draft_versions"]] for t in narrated]
+    first = sum(1 for k in kinds if k == ["draft"])
+    cut = sum(1 for k in kinds if any(x in ("cut", "render", "fallback") for x in k))
+    calls = sum(sum(1 for x in k if x in ("draft", "repair", "redraft")) for k in kinds)
+    stats = Counter[str]()
+    for t in narrated:
+        for v in t["draft_versions"]:
+            stats.update({k: n for k, n in (v.get("stats") or {}).items() if k != "rounds"})
+    n = len(narrated)
+    return (f"- narration loop ({n} narrated): first draft delivered as drafted {first}/{n} ({100 * first / n:.1f}%); "
+            f"turns with a cut, rendered line or fallback {cut}/{n} ({100 * cut / n:.1f}%); narrator calls per "
+            f"narrated turn {calls / n:.2f}; per narrated turn: " + ", ".join(f"{k} {v / n:.2f}" for k, v in
+                                                                               sorted(stats.items())))
 
 
 def _npcs(st: Any) -> list[str]:
@@ -392,6 +432,7 @@ def run_scripted(seed: int, lines: int, model: str, tmp: Path) -> list[str]:
     out.append(f"- recall probes: {len(rec_c)} scored of {kinds['recall']}; precision {_mean(rec_p)}, "
                f"coverage {_mean(rec_c)}")
     out.append(f"- novelty-4 over the previous 10 deliveries: {novelty4(deliveries):.2f} ({len(deliveries)} deliveries)")
+    out.append(narration_loop(turns))
     for mark in CHECKPOINTS:
         near = min(turn_at, key=lambda k: (abs(k - mark), k), default=None)  # an OOF line makes no turn
         tid = turn_at.get(near) if near is not None and abs(near - mark) <= 5 else None
@@ -413,7 +454,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--seed", type=int, default=7)
     ap.add_argument("--scenes", type=int, default=300)
     ap.add_argument("--lines", type=int, default=300)
-    ap.add_argument("--model", choices=("offline", "gemini"), default="offline")
+    ap.add_argument("--model", choices=("offline", "gemini", "claude-narration"), default="offline")
     args = ap.parse_args(argv)
     out = [f"# Long-horizon harness (model: {args.model})", ""]
     with tempfile.TemporaryDirectory(prefix="longhorizon-") as tmp:
