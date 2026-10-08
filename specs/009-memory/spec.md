@@ -151,3 +151,53 @@ the store, resolved through the alias index.
   the current scene, which has no card yet.
 - The promise question is routed out of fiction in `engine/dm/turn.py` (not a 006/007 file); the Reader's own
   classification is untouched.
+
+---
+
+## Part B: the diff-mode Checker and the narration-side hookups
+
+**Input**: spec 006's live loop (21 Haiku turns: first draft 33.3%, cut turns 52.4%, 1.67 narrator calls per turn);
+42 of its 47 first-draft failures came from the full-extraction Checker's claims judged against the store
+(position/identity/existence "contradictions", in-place gestures read as moves, figurative prose labelled
+`clock`/`sealed`). Undeclared new elements: 3.1 per draft, 0.35 declared. Rules: 12.3.1 (the diff audit and its skip
+gate), 12.3.2, 00.6.6a, PR-00-7 step 2, 12.14.11, 12.14.13, OEQ-12-23, DL-12-41/42, DL-12-70..76. Lanes:
+`roles/checker.py` + prompt, `audit/claims.py`, `dm/narration.py`, `roles/narrator.py`, `dm/mentions.py`,
+`roles/world.py`, the narrator/checker schemas.
+
+### User Story 6 - The audit reports only what the declarations do not cover (Priority: P1)
+The Checker reads numbered sentences, each with its declarations rendered in words, and the ids a claim may name
+with their scope (here, not here, new this turn). It returns (i) assertions beyond the declarations, (ii)
+addressable things introduced but not declared (typed by `element_kind`), (iii) declarations a sentence does not
+express. A figure of speech names nothing and is atmosphere.
+
+**Acceptance**: a beyond claim is judged against the store; an unexpressed must-name handle is owed again; a
+`clock`/`sealed`/`existence` claim with no id passes as atmosphere and writes nothing; the prompt is shorter.
+
+### User Story 7 - What the narrator forgot to declare is written by its tier (Priority: P1)
+An undeclared element the audit finds is folded back as the sentence's declaration and written like a declared
+one: T1a written, T1b settled by the Oracle, T2 cut unless a cited line delivers it (I-175). The narrator lists
+`new` before `text` (schema order) and the prompt says so.
+
+### User Story 8 - Details bind and freshness reads marks (Priority: P1)
+A property the narration states about an existing entity is diffed against its profile (empty slot: write
+`narrated`; same: no-op; different: an `identity` failure unless a cited line explains it). Delivered sentences
+mark the details they state (`details_used` at RECORD); freshness lists details by `last_used`, and the image
+3-gram scan is retired.
+
+### Functional Requirements (part B)
+- **FR-B1**: `checker_schema` returns `claims`, `undeclared`, `unexpressed`, `screen`; THIS MESSAGE renders each
+  sentence's declarations (`declares:` lines); `full=True` withholds them (the full extraction).
+- **FR-B2**: the audit may be skipped only with `pacing.yaml#claim_check.audit.skip_enabled` (false); then 1 turn in
+  `full_extraction_every` also runs the full extraction and the harness counts both (OEQ-12-23).
+- **FR-B3**: an unknown-subject claim the store would write as furniture is atmosphere; `clock`/`sealed` with no
+  id and no change are atmosphere; a gesture in place is manner, not a position change.
+- **FR-B4**: `checker_ids` adds the spotlight; a label shared with someone here names the one here (SceneIndex,
+  entity lines).
+- **FR-B5**: `mentions.py` profile diff on reuse; a created entity's look goes in its detail slot.
+- **FR-B6**: `narration.py` emits `details_used` at RECORD; `narrator._freshness` reads `last_used`.
+- **FR-B7**: `world_view` uses `view_for(Role.WORLD, …)`.
+
+### Success Criteria (part B)
+- **SC-B1**: live loop (≤ 25 narrated Haiku turns): first draft > 50%, cut turns < 15%, narrator calls ≤ 1.2.
+- **SC-B2**: undeclared assertions < 0.3 per turn (unlocks the skip; reported, not required).
+- **SC-B3**: offline scripted harness: 0 engine errors, contradictions ≤ 2.0 per 100 narrated turns.

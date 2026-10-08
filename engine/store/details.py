@@ -44,6 +44,39 @@ def slots(rules: Any = None) -> dict[str, str]:  # rule: 00.6.6a
     return out
 
 
+# a stated property's words -> its slot (00.6.6a item 1; spec 009 part B). ponytail: a word list stands in for the
+# declaration naming the slot; a property that maps to none is an identity field, consequential or atmosphere
+_SLOT_WORDS: dict[str, tuple[str, ...]] = {
+    "hair": ("hair", "beard", "braid", "braids", "moustache", "mustache", "bald", "locks"),
+    "face": ("face", "eyes", "eye", "skin", "complexion", "nose", "jaw", "teeth", "features"),
+    "mark": ("mark", "scar", "scars", "scarred", "tattoo", "brand", "birthmark", "hands"),
+    "build": ("build", "height", "frame", "tall", "short", "stout", "broad", "lean", "thin", "heavy", "stature"),
+    "clothing": ("clothing", "clothes", "dress", "coat", "cloak", "apron", "tunic", "robe", "robes", "boots",
+                 "hat", "hood", "shirt", "jerkin", "garb", "attire"),
+    "worn": ("worn", "wears", "jewelry", "jewellery", "ring", "rings", "torc", "necklace", "earring", "brooch",
+             "amulet", "pendant", "belt"),
+    "voice": ("voice", "accent"),
+    "condition_visible": ("soaked", "muddy", "wet", "dusty", "filthy", "bloodstained"),
+    "material": ("material", "made", "wood", "wooden", "stone", "iron", "oak", "brass", "leather"),
+    "state": ("state", "dented", "faded", "cracked", "weathered", "rusted", "peeling", "condition"),
+    "marking": ("marking", "markings", "lettering", "letters", "carving", "carved", "painted", "sign"),
+}
+
+
+def slot_of(predicate: str, rules: Any = None, kind: str | None = None) -> str | None:  # rule: 00.6.6a
+    """The detail slot a stated property's predicate names (`detail.hair`, 'hair', 'scarred hands'), or None.
+    `kind`: the entity's kind picks the person or the object list (both when None)."""
+    p = re.sub(r"^detail\.", "", str(predicate).strip().lower())
+    rules = rules if rules is not None else load_rules()
+    groups = rules.pacing["details"]["slots"]
+    group = None if kind is None else "object" if kind in ("object", "item", "place") else "person"
+    known = {str(k) for g, v in groups.items() if group in (None, g) for k in v}
+    if p in known:
+        return p
+    words = re.findall(r"[a-z]+", p)
+    return next((s for s, ws in _SLOT_WORDS.items() if s in known and any(w in ws for w in words)), None)
+
+
 def max_active(rules: Any = None) -> int:
     rules = rules if rules is not None else load_rules()
     return int(rules.pacing["details"]["max_active"])

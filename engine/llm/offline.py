@@ -203,6 +203,9 @@ def _has_word(text: str, phrase: str) -> bool:
     return re.search(rf"(?<![\w]){re.escape(phrase)}(?![\w])", text, re.IGNORECASE) is not None
 
 
+_SCOPE_WORDS = ("here", "not here", "new this turn")
+
+
 def entity_aliases(ids: Iterable[Any], context: str) -> dict[str, list[str]]:
     """Lower-case names per entity id: the id, its last segment as words, and text beside it in the packet."""
     out: dict[str, list[str]] = {}
@@ -214,10 +217,12 @@ def entity_aliases(ids: Iterable[Any], context: str) -> dict[str, list[str]]:
         names = {eid.lower(), words}
         names.update(w for w in words.split() if len(w) >= 3 and w not in _STOP)
         for line in context.splitlines():
-            if eid in line:
+            if eid in line and not line.lstrip().startswith("declares:"):  # the Checker's declaration lines
                 rest = line.split(eid, 1)[1]
                 for chunk in re.split(r"[:,;|()\[\]—–]|\baliases?\b|\baka\b", rest):
                     chunk = chunk.strip(" -\t'\"").lower()
+                    if chunk in _SCOPE_WORDS:  # the Checker view's `; here` / `; not here` (spec 009 B)
+                        continue
                     if 2 < len(chunk) < 40 and not re.search(r"[\d.]", chunk):
                         names.add(chunk)
         out[eid] = sorted(names, key=len, reverse=True)
@@ -997,7 +1002,9 @@ def _checker(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:
     sents = sentences(draft)
     last = sents[-1].strip() if sents else ""
     ends_on_prompt = last.endswith("?")
+    diff = {k: [] for k in ("undeclared", "unexpressed") if k in schema.get("properties", {})}  # 12.3.1 diff audit
     return {
+        **diff,
         "claims": claims,
         "screen": {
             "intent_acknowledged": bool(draft.strip()),

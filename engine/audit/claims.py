@@ -128,6 +128,9 @@ _COND_WORDS: dict[str, list[str]] = {  # in-fiction words for conditions (T-12-1
 }
 _NEAR = ["shoulder", "beside", "next to", "at your side", "close", "adjacent", "within reach", "elbow"]
 _FAR = ["far", "distant", "across the", "out of reach", "away"]
+# a turn of the head or body where one stands: manner, not a change of position (12.11.9 step 4) [spec 009 B]
+_GESTURE = ["turn", "turns", "turned", "face", "faces", "glance", "glances", "look", "looks", "lean", "leans", "nod",
+            "nods", "shift", "shifts", "step back", "steps back", "half a step", "straighten", "straightens"]
 _WATCH_WORDS: dict[int, list[str]] = {
     0: ["dawn", "morning", "sunrise", "daybreak", "first light"],
     1: ["noon", "midday", "afternoon"],
@@ -163,6 +166,8 @@ _CLOCK_DONE = ["complete", "completes", "done", "finished", "raised", "sounds", 
                "comes to pass", "falls on"]
 _CLOCK_MOVE = ["spread", "build", "rise", "rising", "closer", "grow", "gather", "mount", "near", "louder",
                "quicken", "swell", "creep"]
+_PRESSURE = [*_CLOCK_MOVE, *_CLOCK_DONE, "mass", "brew", "loom", "approach", "storm", "threat", "alarm", "danger",
+             "hunt", "search"]  # what makes a clock claim literal (12.3.1) [spec 009 B]
 _POSSESS_PREDICATES = ("carries", "holds", "has", "equipped", "possessions", "inventory", "owns", "possession",
                        "wields", "wears")
 _HOLDER_KEYS = ("holder", "owner", "carried_by", "held_by")
@@ -341,6 +346,8 @@ def _check(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: PR-12-2
                   reason="matches sealed content")
     if _restates_cited(ctx, c):
         return _v(c, i, "supported", reason="restates a record line the sentence cites (12.3.1)")
+    if _restates_lead(ctx, c):
+        return _v(c, i, "supported", reason="restates an open lead the character knows (12.3.2 support scope)")
     subject = c.subject
     if subject != UNKNOWN and subject not in ctx.state.entities:
         subject = UNKNOWN  # an id the store does not hold is no better than unknown
@@ -350,6 +357,8 @@ def _check(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: PR-12-2
         if c.cls == "action" and not c.asserts_change and ctx.cited.get(c.sentence):
             # an unnamed bystander's reaction to a line the sentence cites (heads turn at the incident): its source
             return _v(c, i, "supported", reason="a reaction to a cited record line (12.3.1)")
+        if c.cls == "action" and not c.asserts_change and _has(c.text, ["no one", "nobody", "none"]):
+            return _v(c, i, "supported", reason="nobody acted: nothing to source (12.3.1)")  # [spec 009 B]
         if c.asserts_change or c.cls == "action":
             return _v(c, i, "unsourced_change", reason="an unidentified subject changed or acted; cut")
         if c.cls in ("knowledge", "sealed"):  # 12.14.13: knowledge beyond the view is T1b/T2, never written so
@@ -376,6 +385,20 @@ def _restates_cited(ctx: _Ctx, c: Claim) -> bool:  # rule: 12.3.1
     return any(tx.covers(c.text, f"{it.text} {it.render}", ratio=0.6)
                and (not it.entities or c.subject in it.entities or c.subject in (UNKNOWN, ctx.pc))
                for it in _cited(ctx, c))
+
+
+def _restates_lead(ctx: _Ctx, c: Claim) -> bool:  # rule: 12.3.2
+    """The claim (with its subject's name) restates an active thread the character knows (an opening lead: "a
+    quarrel in the inn turns to a challenge"; "two banners in the hall"): the view holds it, so it is supported as
+    told, never re-judged as a clock tick or a position here [spec 009 B]."""
+    named = f"{ctx.name(c.subject) if c.subject != UNKNOWN else ''} {c.text}"
+    for e in ctx.state.entities.values():
+        if e.kind != "thread" or e.visibility not in ("shown", "available") or e.id in ctx.state.seals:
+            continue
+        lead = f"{e.name} {e.data.get('text') or ''}"
+        if any(len(tx.content(w)) >= 3 and tx.covers(w, lead, ratio=0.6) for w in (c.text, named)):
+            return True
+    return False
 
 
 def _incidental(c: Claim) -> bool:  # rule: 12.3.2
@@ -507,6 +530,16 @@ def _identity(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: 12.3.1
                 return _v(c, i, "contradicted", unnamed_label(e), reason="the PC has not learned this name")
             return _v(c, i, "supported")
         return _v(c, i, "contradicted", e.name)
+    if key not in ("name", "gender", "pronouns", "age", "role", "people", "kin"):  # rule: 00.6.6a
+        from engine.store.details import current, slot_of
+
+        slot = slot_of(c.predicate, ctx._rules(), e.kind) or slot_of(c.value, ctx._rules(), e.kind)
+        held = current(ctx.state, e.id, slot) if slot else None
+        if held is not None and held.value is not None:  # the profile: same -> supported, else redraft to it
+            if tx.same(c.value, held.value) or tx.covers(c.value, _flat(held.value), ratio=0.5) or tx.covers(
+                    _flat(held.value), c.value):
+                return _v(c, i, "supported", reason=f"restates the established {slot} (00.6.6a)")
+            return _v(c, i, "contradicted", held.value, reason=f"its {slot} is established (00.6.6a)")
     store: Any = None
     for k in [key, pred_slug] if key else [pred_slug]:
         if k is None:
@@ -705,6 +738,9 @@ def _position(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: 12.3.1
         if ctx.entity_named(c.value, kinds=("place",)) is None and any(
                 c.subject in getattr(it, "entities", ()) for it in _cited(ctx, c)):
             return _v(c, i, "supported", reason="manner in the cited record line (12.11.9)")
+        if ctx.present(c.subject) and _has(c.text, _GESTURE) and not _has(c.text, [*_FAR, *_NEAR]) and \
+                ctx.entity_named(c.value, kinds=("place",)) is None:
+            return _v(c, i, "supported", reason="a gesture in place is manner, not a move (12.11.9 step 4)")
         return _v(c, i, "unsourced_change", reason="no position was written this turn")
     pos = s.positions.get(c.subject)
     place = ctx.entity_named(c.value, kinds=("place",))
@@ -944,6 +980,9 @@ def _clock(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: 12.3.1
                 return _v(c, i, "supported")
         if c.asserts_change:
             return _v(c, i, "unsourced_change", reason="no clock ticked this turn")
+        if c.subject == UNKNOWN and not _has(text, _PRESSURE):  # "it is only the beginning": a figure of speech
+            # naming no clock and no pressure building (12.3.1); "a storm is massing" is a pressure, and is cut
+            return _v(c, i, "supported", reason="atmosphere: no addressable clock or omen is named (12.3.1)")
         return _v(c, i, "new_element", fix="cut", reason="a pressure the store does not hold")
     cid, clk = found
     if clk.visibility == "hidden" and not omens:
@@ -1091,6 +1130,8 @@ def _sealed(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: 00.6.5
         # P-120: what a successful Talk asked about an ordinary thing and the store lacks is the NPC's answer, settled
         # and written like a look's (12.3.2); a clue toward a sealed fact or an open thread stays cut (12.14.13)
         return _v(c, i, "undetermined", reason="what the PC asked, not yet settled: the Oracle settles it")
+    if c.subject == UNKNOWN and not c.asserts_change:  # "more than they seem", about no one: no leak matched above
+        return _v(c, i, "supported", reason="atmosphere: names nothing addressable (12.3.1)")
     return _v(c, i, "new_element", fix="cut", reason="a hidden truth the store does not hold")
 
 

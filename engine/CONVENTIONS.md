@@ -681,7 +681,8 @@ readers take a `WorldState`. Errors: `engine.world.common.WorldError`. The PC is
   exchanges, pause_blocks, extra, fallback_text=None)`, needs `ctx.tx`; spec 006): declared sentences → per sentence:
   `scan_sentence`, new elements by tier (T1a written on mention, T1b by the Oracle, T2 cut unless a cited line
   delivers it), safety and echoed quotes → the Checker on those sentences (an audit: claims take the declared
-  subject) → `check_claims(cited=)` → undeclared new elements written (`_apply_writes` backstop), incidental
+  subject; its `undeclared` elements written by tier) → `check_claims(cited=)` → an unknown-subject claim left
+  for furniture is atmosphere (no addressable id), a known subject's feature written (`_apply_writes`), incidental
   `undetermined` written as narrated, consequential ones to the Oracle → a cut-type failure is dropped by code; the
   rest and uncited must-name lines go in one narrow `Repair` call per round (only the failing sentences) → after
   `max_redrafts` rounds still-failing sentences are cut, uncited must-name items are stated by their rendered line
@@ -696,11 +697,18 @@ readers take a `WorldState`. Errors: `engine.world.common.WorldError`. The PC is
 - **Roles**: `roles.narrator.draft(ctx, record, *, player_message, exchanges, purpose, repair: Repair|None, extra,
   items=) -> NarratorDraft(sentences | repairs)` (THIS MESSAGE = `record_text(..., items=)`: one `- R3 MUST: ...`
   line per record item, in names, never ids; a repair adds `repair_text`; the schema's `refs` = handles + view fact
-  ids, `about` = scene scope); `roles.checker.check_draft(..., sentences=)` numbers the narrator's own sentences; `roles.checker.check_draft(ctx, fiction,
-  *, player_message, created, exchanges) -> CheckerOutput(sentences, claims, screen, scene_ids)` — its own prompt,
-  the 12.3.1 card only, view = `entity_lines` (`<id>: Name, aliases`, PC `pc.x: Name, you, your`) over
-  `checker_ids` (scene scope + ids created this turn), message = `[n] sentence` lines then `THE PLAYER'S MESSAGE`
-  (the offline Checker reads only the `[n]` lines). `roles.director.direct(ctx, *, situation, player_message,
+  ids, `about` = scene scope; `new` comes before `text` in the schema); `roles.checker.check_draft(ctx, fiction, *,
+  player_message, created, exchanges, sentences, decls, items, full=False) -> CheckerOutput(sentences, claims,
+  undeclared, unexpressed, screen, scene_ids)` — the diff audit (12.3.1, spec 009 B): its own prompt, the 12.3.1
+  card only, view = `entity_lines` (`<id>: Name, aliases; here|not here|new this turn`, PC `pc.x: Name, you,
+  your`; someone not here loses a label someone here has) over `checker_ids` (scene scope + spotlight + ids
+  created this turn), message = `[n] sentence` lines each followed by `    declares: ...` (`declaration_words`:
+  handles with their words, view facts via `render.relation`, `about`, `new`, `atmosphere`; withheld with
+  `full=True`) then `THE PLAYER'S MESSAGE` (the offline Checker reads only the `[n]` lines). `claims` are only
+  assertions beyond the declarations; `undeclared` (typed elements) are written by tier in `narration._audit`;
+  `unexpressed` refs are dropped (a must-name line is then owed again) or, `says_otherwise`, redrafted.
+  `narration.audit_mode` is `diff` while `claim_check.audit.skip_enabled` is false; then `skip` / `sample` (1 in
+  `full_extraction_every` by the turn id's crc32, also running the full extraction; counts in the version stats). `roles.director.direct(ctx, *, situation, player_message,
   happened, quiet_turns) -> DirectorDecision(cut_now, next_scene: NextScene, push, lead, push_raised, lead_fires)`
   (enums: `director_context` = `director_enums` folded into `schema_context`); `frame_scene(ctx, d, *, reason,
   interrupt, purpose_declared) -> SceneStart` (`places.move` to another reachable place, else `end_scene`, then
@@ -871,6 +879,13 @@ Supersedes the earlier notes on `Beat.gate` / `would_be_license` / `necessity`, 
   with `view_ctx(message, exchanges, focus, beat)`; strings and dicts pass through. Narrator: no `MOTIVES` keys or
   predicates, spotlight as the PC knows it, at most 2 cards; Reader: names, PC licences and conditions, open pause;
   Framer: target and place records, their facts and the PC's; Director: threads, clocks, cast list, cards.
-  Part-B hookups (spec 006 files) are listed as `TODO(009-B)` in packet.py.
+  World: `roles.world.world_view(state, happened)` = `view_for(Role.WORLD, ...)` plus motives.
+- **Part B hookups** (spec 009 B): `details.slot_of(predicate, rules, kind)` (a word list to the closed slots);
+  `mentions.profile_diff` on reuse (new: write `narrated`; same: no-op, listed in `details_used`; different:
+  `contradictions` unless `write_mentions(..., because=)`), a created entity's look written to its slot; claims'
+  `identity` reads `detail.<slot>`; `_settle` writes an incidental look as a lasting detail; `narration._mark_used`
+  emits `details_used` at RECORD for cited `detail.*` facts and the details a sentence wrote or restated;
+  `narrator.used_details(state, now, window)` feeds `freshness_lines(..., used=)` (the image 3-gram scan retired;
+  the opening-clause and speech-opener scans stay as the backstop).
 - **Promises** (`engine.dm.codex.promises(state, about)`, `promise_question`, `promise_subject`): the PC's open
   commitments, filtered through the alias index; `turn.oof_answer` routes "what did I promise X?" there.

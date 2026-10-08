@@ -170,6 +170,13 @@ class SceneIndex(BaseModel):
                     pronouns[eid] = g
             aliases[eid] = [n.lower() for n in dict.fromkeys(n for n in names if n and len(n) > 2)]
             known |= {w for n in names if n for w in re.findall(r"[A-Z][\w'-]+", n)}
+        # a label shared by someone here and someone absent ("the child") names the one here (12.10.2's labels are
+        # roles, so two children share one): the absent one keeps only its unshared names [spec 009 B]
+        from engine.world.scenes import cast_present
+
+        here = {pc, *cast_present(state)} if state.scene is not None else set()
+        taken = {n for eid in here if eid in aliases for n in aliases[eid]}
+        aliases = {eid: ns if eid in here else [n for n in ns if n not in taken] for eid, ns in aliases.items()}
         region = state.meta.get("world.region")
         if isinstance(region, dict):
             known |= {w for x in region.values() if isinstance(x, str) for w in re.findall(r"[A-Z][\w'-]+", x)}

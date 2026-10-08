@@ -63,3 +63,19 @@ Parallel: T010 with T013–T014 (different files); T015 with T017.
 ## Strategy
 
 MVP = Phases 2–3 (store primitives). Then cards, spotlight, views, promises; measure last.
+
+## Part B: diff-mode Checker and narration hookups
+
+- [x] T030 [US6] Diff-mode `checker_schema` (`claims`, `undeclared`, `unexpressed`) in engine/dm/schemas.py
+- [x] T031 [US6] Declarations in words, scope-tagged ids, spotlight in `checker_ids`, `full=` in engine/dm/roles/checker.py
+- [x] T032 [US6] Shorter diff prompt (budget 550) in engine/dm/roles/prompts/checker.md
+- [x] T033 [US6] `audit_mode` (skip disabled; 1-in-10 sampler built) and `_audit` in engine/dm/narration.py
+- [x] T034 [US6] Figurative clock/sealed, no-id claims, gesture-in-place in engine/audit/claims.py and narration.py
+- [x] T035 [US7] Undeclared elements written by tier; narrator `new` before `text`; one prompt line
+- [x] T036 [US8] Profile diff on reuse (`profile_diff`), created looks into slots, `slot_of`
+- [x] T037 [US8] Identity claims read `detail.<slot>`; incidental looks written as details (`_settle`)
+- [x] T038 [US8] `details_used` at RECORD; freshness from `last_used`; image 3-gram scan retired
+- [x] T039 `world_view` -> `view_for(Role.WORLD, …)`; TODO(009-B) removed from packet.py
+- [x] T040 Offline scripted action contradictions: shared labels name the one here (SceneIndex, entity lines)
+- [x] T041 Tests in tests/engine/test_diff_audit.py and test_turn_narration.py (freshness)
+- [x] T042 Gates: full pytest, ruff, pyright; scripted harness; live loop (≤ 25 narrated Haiku turns); results

@@ -324,55 +324,26 @@ def _sentences(text: str) -> list[str]:
 
 
 def freshness_lines(deliveries: Sequence[str], names: Sequence[str] = (), *, openings: int = 3,
-                    per_entity: int = 10) -> list[str]:  # rule: 12.14.11
-    """12.14.11 in THIS MESSAGE: the opening clauses of the last `openings` deliveries and, per entity, the
-    images (runs of 3+ words with a content word) already used in two or more of `deliveries` (oldest first;
-    the caller passes the last `image_repeat_turns`). Attribution: an entity named in the sentence, else the
-    last one named before it in that delivery, else "the scene".
-    ponytail: recurrence of word 3-grams stands in for "distinctive image"; a phrase used once is not listed."""
-    seen: dict[str, set[int]] = {}
-    name_words = {x for n in names for x in re.findall(r"[a-z']+", n.lower())} - _STOP
-    sents = [[(s, re.findall(r"[a-z']+", s.lower())) for s in _sentences(d)] for d in deliveries]
-    for k, ss in enumerate(sents):
-        for _, w in ss:
-            for i in range(len(w) - 2):
-                g = " ".join(w[i:i + 3])
-                if any(x not in _STOP and x not in name_words for x in w[i:i + 3]):
-                    seen.setdefault(g, set()).add(k)
-    found: dict[str, list[str]] = {}
+                    per_entity: int = 10, used: Sequence[tuple[str, str]] = ()) -> list[str]:  # rule: 12.14.11
+    """12.14.11 in THIS MESSAGE: the details stated lately, from their `last_used` marks (`used`: (who, the detail
+    in words), DL-12-76), and the backstop scan of past deliveries (oldest first; the caller passes the last
+    `image_repeat_turns`): the opening clauses of the last `openings`, and each speaker's repeated speech opener.
+    The image 3-gram scan is retired (spec 009 B): the marks say which details were used."""
     low = [(n, n.lower()) for n in names if len(n) > 2]
     low += [(n.split()[0], n.split()[0].lower()) for n in names  # a person by their given name ("Calbert")
             if n[:1].isupper() and len(n.split()) > 1 and len(n.split()[0]) > 2 and n.split()[0].lower() not in _STOP]
-    for ss in sents:
-        who = "the scene"
-        for s, w in ss:
-            who = next((n for n, ln in low if ln in s.lower()), who)
-            hit = [i for i in range(len(w) - 2) if len(seen.get(" ".join(w[i:i + 3]), ())) > 1]
-            runs: list[list[int]] = []
-            for i in hit:  # merge overlapping 3-grams into one phrase ("fingers on the ledger")
-                if runs and i <= runs[-1][1]:
-                    runs[-1][1] = i + 3
-                else:
-                    runs.append([i, i + 3])
-            for a, b in runs:
-                while a < b and w[a] in name_words:  # the name is not the image
-                    a += 1
-                while a < b and w[b - 1] in name_words:
-                    b -= 1
-                if b - a < 3:
-                    continue
-                found.setdefault(who, [])
-                p = " ".join(w[a:b])
-                if p not in found[who]:
-                    found[who].append(p)
     lines = []
-    opened = [re.split(r"[,;:.!?]", ss[0][0])[0].strip() for ss in sents[-openings:] if ss]
+    firsts = [ss[0] for ss in (_sentences(d) for d in deliveries[-openings:]) if ss]
+    opened = [re.split(r"[,;:.!?]", s)[0].strip() for s in firsts]
     if opened:
         lines.append("FRESHNESS (12.14.11): do not open the way these recent turns opened: "
                      + " / ".join(f'"{o}"' for o in opened))
+    found: dict[str, list[str]] = {}
+    for who, words in used:
+        found.setdefault(who, []).append(words)
     if found:
-        lines.append("Already used lately, do not reuse (find a new image, or none; a deliberate callback "
-                     "is fine):")
+        lines.append("Details stated lately, do not restate them (describe something else, or nothing; a deliberate "
+                     "callback is fine):")
         lines += [f"- {who}: " + "; ".join(ps[-per_entity:]) for who, ps in found.items()]
     spoken = _repeated_lines(deliveries, low)
     if spoken:
@@ -430,11 +401,39 @@ def _freshness(ctx: TurnContext) -> list[str]:  # rule: 12.14.11
     from engine.dm.turn import recent_exchanges  # turn imports this module
 
     cfg = (ctx.rules.pacing.get("narration") or {}).get("freshness") or {}
-    past = recent_exchanges(ctx.store, ctx.turn_id or "", n=int(cfg.get("image_repeat_turns", 10)))
+    window = int(cfg.get("image_repeat_turns", 10))
+    past = recent_exchanges(ctx.store, ctx.turn_id or "", n=window)
     st = ctx.state
     names = [e.name for e in st.entities.values() if e.kind != "pc" and e.name and e.id not in st.seals]
     return freshness_lines([x[1] or "" for x in past], names, openings=int(cfg.get("opening_patterns_remembered", 3)),
-                           per_entity=int(cfg.get("images_per_entity_remembered", 10)))
+                           per_entity=int(cfg.get("images_per_entity_remembered", 10)),
+                           used=used_details(st, _turn_n(ctx.turn_id), window))
+
+
+def _turn_n(turn_id: str | None) -> int:
+    from engine import ids
+
+    parsed = ids.parse_counter_id(turn_id) if turn_id else None
+    return parsed[1] if parsed and parsed[0] == ids.TURN else 0
+
+
+def used_details(state: WorldState, now: int, window: int = 10) -> list[tuple[str, str]]:  # rule: 12.14.11
+    """(who, the detail in words) for each established detail whose `last_used` mark is within `window` turns
+    before `now` (00.6.6a item 5), the scene's own first; each by the name the PC knows."""
+    from engine.retrieve.scene import scene_scope
+    from engine.store.projection import DETAIL
+
+    scope = set(scene_scope(state))
+    out: list[tuple[int, str, str]] = []
+    for eid, refs in state.details.items():
+        if eid in state.seals or eid not in state.entities:
+            continue
+        for slot, r in refs.items():
+            f = state.facts.get(r.fact_id)
+            if f is None or f.value is None or not r.last_used or not 0 <= now - r.last_used <= window:
+                continue
+            out.append((0 if eid in scope else 1, name_of(state, eid), f"{slot.removeprefix(DETAIL)}: {f.value}"))
+    return [(who, words) for _, who, words in sorted(out, key=lambda x: x[0])]
 
 
 def narrator_mode(ctx: TurnContext) -> str:

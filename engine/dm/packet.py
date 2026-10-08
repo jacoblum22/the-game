@@ -243,10 +243,6 @@ def view_for(role: Role, state: WorldState, ctx: Mapping[str, Any] | None = None
 
 
 
-# TODO(009-B): call sites that build their view from strings and so do not get `view_for` yet (spec 006 files):
-#   engine/dm/roles/world.py::world_view   render_view(scene_view(state)) -> view_for(Role.WORLD, state, ctx)
-#   engine/dm/roles/checker.py::checker_ids   add spotlight(state, message, last_delivery, beat) to the scope
-
 
 def _label(e: Mapping[str, Any]) -> str:
     """A present person in a few words: the name the PC knows them by (or a sealed one's slice), and the role."""
