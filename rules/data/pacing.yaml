@@ -272,6 +272,60 @@ details:                                  # 00.6.6a established details [revisio
     object: {material: lasting, state: lasting, marking: lasting}
   persistence: [lasting, scene, beat]     # beat: a momentary value of a scene slot, its turn only, never retrieved
   salience: {seeded_generated_or_cited: 2, other: 1}
+  scene_writes:                           # T-12-18: the scene state (T1c) code writes from a resolved beat and an NPC's response (00.6.6a item 4, 12.11.9) [revision: R2-F]
+    who: [pc, npc, companion, adversary]  # only a person or creature takes a scene slot; a beat on anything else writes nothing here
+    degree: {critical_success: success, success: success, no_roll: success, failure: failure, critical_failure: critical_failure}  # a success at cost reads as success
+    # beats: verb -> degree -> rows. Every row whose reach_min (the delivered reach, 00.3.15; a no-roll beat is 2) is met
+    # applies in order, a later value overwriting an earlier one for the same slot; `down: true` needs a knock-down in the
+    # beat's words (trip, sweep, floor, prone). {actor} and {target} are names as the PC knows them, "you" for the PC.
+    # An empty entry writes nothing: the beat line says it all. Bands are not slots: Move and contact write them (PR-06-4, 06.3.5).
+    beats:
+      verb.move: {}                       # position: one band toward or away from the target (PR-06-4)
+      verb.observe: {}
+      verb.recall: {}
+      verb.talk: {}                       # the target's response writes (responses below)
+      verb.strike:
+        success: [{target: {manner: "on guard against {actor}"}}]
+        failure: [{target: {manner: "on guard against {actor}"}}]
+        critical_failure: [{target: {manner: "on guard against {actor}"}}]
+      verb.grapple:
+        success:
+          - {actor: {held: "{target} in a grip"}, target: {posture: "held fast by {actor}", manner: "straining against {actor}"}}
+          - {reach_min: 3, actor: {held: "{target} restrained"}, target: {posture: "restrained by {actor}"}}
+          - {reach_min: 4, actor: {held: "{target} pinned"}, target: {posture: "pinned by {actor}"}}
+        failure: [{target: {manner: "on guard against {actor}"}}]
+        critical_failure: [{target: {manner: "on guard against {actor}"}}]
+      verb.force:
+        success:
+          - {target: {manner: "on guard against {actor}"}}
+          - {reach_min: 2, down: true, target: {posture: "down on the ground"}}
+        failure: [{target: {manner: "on guard against {actor}"}}]
+        critical_failure: [{target: {manner: "on guard against {actor}"}}]
+      verb.exert: {}
+      verb.evade: {}
+      verb.sneak: {}
+      verb.handle: {}
+      verb.endure: {}
+      verb.setup: {}
+      verb.help:
+        success: [{actor: {activity: "helping {target}"}}]
+      verb.ready:
+        success: [{actor: {posture: "braced and ready"}}]
+    # responses: an engaged NPC's response (12.11.9 step 3) -> their manner, and their activity only when the body does
+    # something else (squares up, turns away, takes cover); talk alone never changes the activity. A `by_practice` row replaces the
+    # generic row whole; an empty entry keeps the activity (12.11.9 step 1: it holds until the response changes it).
+    responses:
+      talk: {success: {manner: willing}, failure: {manner: unmoved}}
+      refusal: {manner: unwilling}
+      want: {}
+      rows: {'1': {activity: squaring up to you, manner: hostile}, '2': {activity: turning away from you, manner: closed off}, '3': {manner: guarded}, '4': {manner: calculating}, '5': {}, '6': {}, '7': {manner: curious}, '8': {manner: helpful}, '9': {manner: friendly}, '10': {manner: warm}}
+      by_practice:
+        fight: {'2': {activity: taking cover, manner: frightened}, '3': {activity: getting in the way, manner: guarded}, '5': {activity: keeping clear and watching, manner: wary}, '6': {activity: looking to their own, manner: wary}, '8': {activity: shouting a warning, manner: alarmed}, '9': {activity: helping you, manner: willing}}
+        trade: {'2': {manner: unwilling}, '3': {manner: hard-nosed}, '4': {manner: calculating}, '5': {manner: busy}, '8': {manner: grudging}, '9': {manner: businesslike}, '10': {manner: generous}}
+        greeting: {'2': {manner: curt}, '3': {manner: wary}, '5': {manner: polite}, '6': {manner: preoccupied}}
+        conversation: {'3': {manner: evasive}, '5': {manner: distracted}, '6': {manner: insistent}}
+        crowd: {'1': {activity: calling for the watch, manner: alarmed}, '2': {activity: backing away, manner: uneasy}, '3': {activity: blocking the way, manner: guarded}, '5': {manner: watchful}, '7': {manner: curious}, '8': {activity: stepping up to help, manner: helpful}}
+        work: {'2': {activity: moving off}, '3': {manner: pointedly ignoring you}}
 
 narration:                                # 12.14
   beat_max_words: 200

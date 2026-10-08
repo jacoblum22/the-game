@@ -41,12 +41,15 @@ def test_every_present_npc_has_an_activity_overwritten_never_appended(tmp_path: 
     dock, ctx = setup(tmp_path, _model(2))
     out = play_turn(ctx, ASK)
     st = dock.state
-    acts = {a.npc: a.activity for a in out.adjudication.record.activities}
+    acts = {a.npc: a.activity for a in out.adjudication.record.activities if a.slot == ACTIVITY}
     assert set(acts) == {dock.ferryman, dock.watch} and all(acts.values())
     assert current_activity(st, dock.ferryman) == acts[dock.ferryman]
-    before = [f.id for f in st.facts.values() if f.predicate == ACTIVITY]
-    play_turn(ctx, ASK)
-    assert [f.id for f in dock.state.facts.values() if f.predicate == ACTIVITY] == before  # held, not re-rolled
+    def rolls() -> int:
+        return sum(1 for e in dock.store.events() if e.type == "fact_set" and e.source == "12.11.9")
+
+    before = rolls()
+    play_turn(ctx, ASK)  # held, not re-rolled (a response may overwrite it: T-12-18)
+    assert rolls() == before
 
 
 def test_an_addressed_npc_always_answers_and_a_refusal_is_voiced(tmp_path: Path) -> None:

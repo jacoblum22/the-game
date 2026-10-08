@@ -440,7 +440,7 @@ The claim classes (closed list) and what each is checked against:
 | `identity` | a name, sex or pronoun, age, kin, title, profession, species, appearance detail | entity fields, identity facts, and the entity's `lasting` details (`detail.<slot>`, 00.6.6a) [revision: R2-E] |
 | `quantity` | "your last two arrows"; "a purse of twelve silver" | quantities |
 | `harm_condition` | "you're bleeding"; "he's barely standing"; "you shake off the fear"; "he is dead" | conditions, harm state, shown descriptors (bloodied, down); a death only with `harm_state.dead` (07) [revision: I-030] |
-| `position` | "she's at your shoulder"; "you reach the far door"; "behind the cart"; a present NPC's continuing activity ("the smith works at her forge") [revision: R2-B; I-128] | position, range bands, positional flags (T-06-4's words, T-12-11) [revision: I-030]; an activity against the NPC's presence and the activity code wrote for the scene (T1c, 12.11.9); a posture, hold, manner or activity against the entity's `scene` details (00.6.6a) [revision: R2-E] |
+| `position` | "she's at your shoulder"; "you reach the far door"; "behind the cart"; a present NPC's continuing activity ("the smith works at her forge") [revision: R2-B; I-128] | position, range bands, positional flags (T-06-4's words, T-12-11) [revision: I-030]; an activity against the NPC's presence and the activity code wrote for the scene (T1c, 12.11.9); a posture, hold, manner or activity against the entity's `scene` details (00.6.6a) [revision: R2-E], judged against its record line (T-12-18) [revision: R2-F]; a place named only by a common noun ("the hall") does not place something that is here elsewhere, since the words may name this place's own part, and a place after a direction word (toward, past, beyond) is a direction, not a location [revision: R2-F] |
 | `possession` | "you pocket the key"; "the captain draws his sword" | possessions, equipped |
 | `location_time` | "dusk falls"; "two days after the fire"; "in the archive" | time, place graph (temporal claims are computed, 00.6.9e) |
 | `knowledge` | "you recognize the seal"; "he knows you're lying"; "you remember her name" | knowledge records (PC and NPC) |
@@ -734,7 +734,8 @@ activity unit as those chapters set, run inside `advance_time`. The narration is
 6. **Rotation ledger** (12.9.1) — `h.12.rotation_update` (contrib handler).
 7. **NPC memory** commit (12.11.7) — `h.12.npc_memory` (contrib handler).
 8. **Scene details expire** [revision: R2-E; DL-12-72]: every `scene` detail (00.6.6a) and every activity written
-   for the scene (12.11.9) is superseded at `ended_at`; history is kept.
+   for the scene (12.11.9) is superseded at `ended_at`; history is kept. Range bands between people (06.3.2) are
+   cleared then too: a band from one scene's scuffle never carries into the next [revision: R2-F].
 9. **Scene card** [revision: R2-E; DL-12-73]: a structured view over the scene's events, never a summary of its
    narration: `{scene, place, time (started_at, ended_at), cast, agenda -> answer, beats [(actor, verb, target,
    degree)], facts written, memories committed (step 7), threads touched}`. Every field is computed from the
@@ -1507,8 +1508,8 @@ narrator, decides what each present NPC is doing and how they respond; the narra
 step 2 in full:
 1. **Activity.** When an NPC enters the scene (present when it opens, or joining it), code rolls their activity on
    `tbl.npc_activity` by role (12.11.1) × watch (00.7.1) and writes it as scene state (T1c, 12.14.13): the smith
-   at the forge, a guard on watch. It holds until the NPC's response changes it, is overwritten rather than
-   appended, and expires at scene end. Narrating it is a `position` claim, checked against presence and this
+   at the forge, a guard on watch. It is the NPC's `activity` detail (00.6.6a) [revision: R2-F]. It holds until the NPC's
+   response changes it (step 3), is overwritten rather than appended, and expires at scene end. Narrating it is a `position` claim, checked against presence and this
    line; a deed that changes something stays an `action` claim (12.3.1) [I-128]. An unnamed crowd's collective
    reaction (heads turn, talk stops) is atmosphere (12.3.1) unless it changes something the PC could act on (the
    crowd parts, blocks the way, sends for the watch); then it is the crowd practice's response, with a record line.
@@ -1518,7 +1519,9 @@ step 2 in full:
 3. **Choice.** An NPC who is engaged (12.2.9 step 2) or addressed takes the first that applies: (a) a resolved
    frame's delivered outcome; (b) a recorded refusal or want that matches the event (12.2.9 (b)); (c)
    `tbl.npc_action` by standing (12.11.5), where a rolled row the practice does not allow moves to the nearest row
-   it does (toward row 5 on a tie). Every other present NPC keeps their activity.
+   it does (toward row 5 on a tie). The response writes the NPC's manner by T-12-18's response rows, and their activity only when the body
+   does something else (squares up, turns away, takes cover); talk alone never changes the activity (a practice
+   row replaces the generic row whole; an empty entry keeps the activity) [revision: R2-F]. Every other present NPC keeps their activity.
 4. **An addressed NPC always answers.** An NPC the PC addressed this turn responds in words, never with silence:
    with what the source gave, or, when the source refuses (a recorded refusal, a failed frame, a refusing row),
    with a **refusal spoken in their own voice**: the reason (their recorded refusal, else the row) said through
@@ -1783,7 +1786,7 @@ Who decides that something is true depends on its tier. Each element a sentence 
 | **T0 Atmosphere** | light, smell, sound, weather words, mood, an unnamed crowd's murmur | none (the sentence's atmosphere flag) | the narrator, freely | never | only against the hour, season, weather and climate the store holds, and the lines and veils (12.3.1) |
 | **T1a Incidental detail** | the things any such place has, with ordinary properties (a rope by a door, benches in a hall, a puddle, a woodpile); an ordinary walk-on (a fishwife at the market, 12.11.1); an item or document of common value; an incidental property of a thing in view (the smith's scarred hands, a notice's lettering) | `furniture`, `feature`, `person`, `item`, `document` | the narrator, **as written**: written on mention with the properties the sentence states (00.6.6) | yes; it binds later turns | later prose must not contradict it |
 | **T1b Ordinary knowledge** | what someone in a role would know of the world beyond the view: roads, prices, local news, trade facts | `knowledge` | **proposed**, then **settled by the Oracle** at 12.10.6(d)'s odds (Likely for the NPC's trade, Unlikely otherwise) before it is narrated (12.6.1) | yes, as a fact and a knowledge record; "does not know" is recorded too | the sentence must match the settled answer |
-| **T1c Scene state** | each present NPC's activity (12.11.9), a posture, a hold | none: prose never introduces it | **code**, from the resolved beats and the default NPC layer | yes, for the scene; expires at scene end | the sentence must match the record line |
+| **T1c Scene state** | each present person's activity, posture, hold and manner, and a range band to the PC (T-12-18; 12.11.9) [revision: R2-F] | none: prose never introduces it | **code**, from the resolved beats and the default NPC layer | yes, for the scene; expires at scene end | the sentence must match the record line |
 | **T2 Consequential** | a **clue** toward a sealed fact or an open thread; an **item of more than common value** or any property beyond the mundane; a **hazard** or **trap**; an **adversary**; a **person with a want, a secret or knowledge of a thread**; the identity of a story role | `clue`, `hazard`, `adversary`; and a `person`, `item` or `document` the question below finds true | **generators only**: clue graphs and their placements (ch.15/11), the item generator and the region's data (00.11), ch.10 tables, encounter tables, clocks and behavior lists, NPC generation and the clue graph (12.11.1) | at generation, sealed until revealed | strict: in this turn's record, as delivered or unsealed, or the sentence is cut |
 
 A narrated detail (00.6.6a) is ordinary T1a: it may be cited as a lever under the cap below and never creates value [revision: R2-E].
@@ -2453,6 +2456,7 @@ any paraphrase here (00.1.4 item 5).
 | T-12-15 | The world seed's steps and questions | 12.16.3; `world_seed.yaml#steps`, `#questions` (below) |
 | T-12-16 | What the rules read from a region, and the seed check | 12.16.17; `world_seed.yaml#requirements` (below) |
 | T-12-17 | A present NPC's activity by role and watch; the scene practices and their legal responses | 12.11.9; `oracles.yaml#tbl.npc_activity`, `#tbl.npc_practice` [revision: R2-B] |
+| T-12-18 | Scene state from a resolved beat and an NPC's response | below; 00.6.6a, 12.11.9; `pacing.yaml#details.scene_writes` [revision: R2-F] |
 
 **T-12-1 The always-loaded checklist** (this is the card that travels with every turn; about 250 words;
 `pacing.yaml#packet.core_checklist` holds the same text).
@@ -2621,6 +2625,64 @@ key to it.
 | `ws.pack.npc_stance` | 12 | every cast NPC has a stance toward the opening incident | 12.16.11 | `npcs[]/stance` | stance |
 | `ws.pack.documents` | 12/15 | every seeded document has text from tbl.12.seed.document, and a document a lead points to names the lead's target | 12.16.16 | `documents` | documents |
 | `ws.pack.incident_case` | 15 | the inciting incident's reduced case validates (15.9.4, reduced profile) with a core placement held at the opening place | 12.16.16, PR-15-6, 15.9.4 | `cases` | reduced_case |
+
+**T-12-18 Scene state from a resolved beat and an NPC's response** (`pacing.yaml#details.scene_writes`; 00.6.6a
+item 4, 12.11.9) [revision: R2-F]. Code writes these scene slots (T1c, 12.14.13) for the PC and every present person or
+creature; the narrator cites them and never improvises them. Degree: *success* covers critical success, success at
+cost and a no-roll beat (which counts reach 2). Every row whose `reach_min` is met (the delivered reach,
+00.3.15) applies in order, a later value overwriting an earlier one for the same slot. `{actor}` and `{target}` are names as the PC knows them ("you" for
+the PC). "—" writes nothing: the beat line carries it. A band is not a slot; it is scene state all the same and
+clears at scene end (12.4.8 step 8).
+
+| Verb | Degree | Position (band) | Actor's slots | Target's slots |
+|---|---|---|---|---|
+| Move | any | one band toward or away from the target (PR-06-4) | — | — |
+| Observe, Recall, Exert, Evade, Sneak, Handle, Endure, Setup | any | — | — | — |
+| Talk | any | — | — | — (the target's response writes: below) |
+| Strike | any | melee: engaged on the attempt (06.3.5) | — | manner: on guard against {actor} |
+| Grapple | success, reach 1–2 | engaged on the attempt (06.3.5, 06.5.2) | held: {target} in a grip | posture: held fast by {actor}; manner: straining against {actor} |
+| Grapple | success, reach 3 | engaged on the attempt | held: {target} restrained | posture: restrained by {actor}; manner: straining against {actor} |
+| Grapple | success, reach 4 | engaged on the attempt | held: {target} pinned | posture: pinned by {actor}; manner: straining against {actor} |
+| Grapple | failure, critical failure | engaged on the attempt | — | manner: on guard against {actor} |
+| Force | success | engaged on the attempt (06.3.5); then reach 2 one band away, reach 3+ two bands, unless knocked down (06.5.3) | — | manner: on guard against {actor}; at reach 2+ with a knock-down in the beat's words (trip, sweep, floor, prone), posture: down on the ground |
+| Force | failure, critical failure | engaged on the attempt (06.3.5) | — | manner: on guard against {actor} |
+| Help | success | — | activity: helping {target} | — |
+| Ready | success | — | posture: braced and ready | — |
+| Help, Ready | failure, critical failure | — | — | — |
+
+A posture is the visible face of a beat's outcome and never a ch.07 condition; when a condition is applied
+(06.5.2's `grabbed`, 06.5.3's `prone`) it governs the mechanics (00.6.6a item 1).
+
+**Responses** (12.11.9 step 3: an engaged or addressed NPC's response writes their manner, and their activity
+only when the body does something else: squares up, turns away, takes cover; talk alone never changes the
+activity. "—" keeps that slot).
+
+| Source | Activity | Manner |
+|---|---|---|
+| Talk frame, success | — | willing |
+| Talk frame, failure | — | unmoved |
+| Recorded refusal | — | unwilling |
+| Recorded want | — | — |
+| `tbl.npc_action` row 1 | squaring up to you | hostile |
+| `tbl.npc_action` row 2 | turning away from you | closed off |
+| `tbl.npc_action` row 3 | — | guarded |
+| `tbl.npc_action` row 4 | — | calculating |
+| `tbl.npc_action` rows 5–6 | — | — |
+| `tbl.npc_action` row 7 | — | curious |
+| `tbl.npc_action` row 8 | — | helpful |
+| `tbl.npc_action` row 9 | — | friendly |
+| `tbl.npc_action` row 10 | — | warm |
+
+**Practice rows** (`tbl.npc_practice`): under the scene's practice, a listed row replaces the generic row whole.
+
+| Practice | Rows it replaces (row: activity; manner) |
+|---|---|
+| fight | 2: taking cover; frightened · 3: getting in the way; guarded · 5: keeping clear and watching; wary · 6: looking to their own; wary · 8: shouting a warning; alarmed · 9: helping you; willing |
+| trade | 2: —; unwilling · 3: —; hard-nosed · 4: —; calculating · 5: —; busy · 8: —; grudging · 9: —; businesslike · 10: —; generous |
+| greeting | 2: —; curt · 3: —; wary · 5: —; polite · 6: —; preoccupied |
+| conversation | 3: —; evasive · 5: —; distracted · 6: —; insistent |
+| crowd | 1: calling for the watch; alarmed · 2: backing away; uneasy · 3: blocking the way; guarded · 5: —; watchful · 7: —; curious · 8: stepping up to help; helpful |
+| work | 2: moving off; — · 3: —; pointedly ignoring you |
 
 ---
 

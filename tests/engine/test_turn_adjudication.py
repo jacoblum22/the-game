@@ -160,8 +160,8 @@ def test_withdraw_spends_nothing(tmp_path: Path) -> None:
     assert res2.pause is None and not rolls(dock.store) and not st.frames
     assert st.time.now == before.time.now and st.quantities == before.quantities and st.clocks == before.clocks
     written = [e for e in dock.store.events() if e.turn_id == res2.turn_id]
-    # 12.11.9: the present NPCs' activities (scene state) are the only facts; nothing is spent
-    assert all(e.payload.predicate == "activity" for e in written if e.type == "fact_set")  # type: ignore[attr-defined]
+    # 12.11.9: the present NPCs' activities (scene-state details, T-12-18) are the only facts; nothing is spent
+    assert all(e.payload.predicate == "detail.activity" for e in written if e.type == "fact_set")  # type: ignore[attr-defined]
     assert set(types(dock.store, res2.turn_id)) <= {"pause_closed", "offer_logged", "fact_set"}
 
 

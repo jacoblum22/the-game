@@ -19,6 +19,7 @@ Store conventions read here (other modules write them):
 
 from __future__ import annotations
 
+import re
 from collections.abc import Iterable, Mapping, Sequence
 from typing import Any, Literal
 
@@ -37,7 +38,7 @@ VerdictName = Literal["supported", "new_element", "undetermined", "contradicted"
 Fix = Literal["write_on_mention", "oracle", "redraft_to_store", "cut", "replace_with_slice"]
 
 UNKNOWN = "unknown"
-_SCENE_STATE_KEYS = ("activity", "voice")
+_SCENE_STATE_KEYS = ("activity", "voice", "detail.activity", "detail.posture", "detail.held", "detail.manner")
 # classes not about one entity: checked even when the subject is unknown
 _FREE_SUBJECT = ("clock", "location_time", "sealed", "outcome")
 
@@ -724,6 +725,21 @@ def _harm(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: 12.3.1
     return v.model_copy(update={"incidental": True})
 
 
+_TOWARD = ("toward", "towards", "past", "beyond", "to", "from", "into", "for")  # a direction, not a location
+
+
+def _not_located_at(ctx: _Ctx, c: Claim, place: str) -> bool:  # rule: 12.3.1
+    """The place a position value names does not say the subject is there: it is named after a direction word ("the
+    lane runs past the well toward the temple"), or its name is a common noun ("the hall") and the subject is here,
+    where those words describe this place's own parts ("the fire at the far end of the hall" in an inn) [spec 010].
+    ponytail: the head noun is not checked against this place's kind; a proper name ("the Old Goose") still binds"""
+    name = re.sub(r"^(?:the|a|an)\s+", "", ctx.state.entities[place].name.strip(), flags=re.IGNORECASE)
+    m = re.search(rf"\b{re.escape(name.lower())}\b", c.value.lower())
+    if m is not None and any(w in _TOWARD for w in re.findall(r"[a-z]+", c.value.lower()[:m.start()])[-2:]):
+        return True
+    return not any(w[:1].isupper() for w in name.split()) and ctx.present(c.subject)
+
+
 def _position(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: 12.3.1
     s = ctx.state
     if c.asserts_change:
@@ -744,6 +760,8 @@ def _position(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: 12.3.1
         return _v(c, i, "unsourced_change", reason="no position was written this turn")
     pos = s.positions.get(c.subject)
     place = ctx.entity_named(c.value, kinds=("place",))
+    if place is not None and _not_located_at(ctx, c, place):
+        place = None
     if place is not None and place != c.subject:
         loc = pos.location if pos else None
         here = s.scene.place_id if s.scene else None

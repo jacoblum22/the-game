@@ -289,6 +289,8 @@ def _position_set(s: WorldState, ev: Event, p: Any) -> None:
         pos.location = p.location
     pos.flags = sorted((set(pos.flags) | set(p.flags_add)) - set(p.flags_remove))
     pos.band_to.update(p.band_to)
+    for other in p.band_drop:
+        pos.band_to.pop(other, None)
     sc, e = s.scene, s.entities.get(p.entity)
     if sc is not None and sc.place_id and e is not None and e.kind in _CAST_KINDS and p.location is not None:
         if p.location == sc.place_id and p.entity not in sc.cast_present:  # 12.4.1: whoever is here is in the scene

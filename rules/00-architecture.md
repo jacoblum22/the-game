@@ -965,9 +965,11 @@ source (the delivering turn, the beat or the generator), and a **persistence**:
    archived, queryable and never lost (the 12.11.7 pattern). An archived detail is still checked for
    contradiction, since contradiction is judged against the whole store (12.3.2).
 4. **Who writes.** A `lasting` detail is written as narrated (PR-00-7 step 2) or by a generator. `scene` and
-   `beat` details are written **by code**, never by the narrator (T1c): from the resolved beat (a successful
-   grapple writes `posture: pinned` on its target; a disarm clears `held`) and from the default NPC layer
-   (12.11.9's activity and response). A sentence that states one cites its record line.
+   `beat` details are written **by code**, never by the narrator (T1c), for the PC as for every present person:
+   from the resolved beat by T-12-18's beat rows (a successful grapple writes the holder's `held` and the
+   target's `posture`) and from the default NPC layer by T-12-18's response rows (12.11.9's activity and
+   response). A write that changes a filled slot cites the beat's frame or the response's source as its
+   explaining event (item 2). A scene slot shown as a record line is cited, never improvised [revision: R2-F].
 5. **Usage marks.** Each delivered sentence that states a detail sets the detail's `last_used` to that turn (a
    projection over the log, not a new fact); freshness (12.14.11) and the cap read it.
 6. **Details are ordinary.** A detail can be cited as a lever under 00.3.9's cap and never creates value, a clue or

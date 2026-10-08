@@ -3,7 +3,8 @@
     world_step(ctx, record, beats=outcomes)      # fills record.npc_actions / omens / triggers / notes
 
 1. Adversaries in conflict — Milestone 1 has no round-by-round conflict (coarse).
-2. NPCs present: the default NPC layer (12.11.9, engine/dm/npc_layer.py): activities, the practice, each engaged
+2. NPCs present: each resolved beat's scene state (T-12-18, engine/dm/scene_state.py), then the default NPC layer
+   (12.11.9, engine/dm/npc_layer.py): activities, the practice, each engaged
    NPC's response (a resolved Talk frame, a recorded refusal or want, the action row clamped to the practice).
 3. Clocks that ticked this turn render their omens (INV-14).
 4. Fired triggers in 12.2.3's order (owed blocks for the narration; a due lethal warning is delivered).
@@ -20,6 +21,7 @@ from engine.dm.adjudication import AdjudicationRecord, NpcActionEntry, OmenEntry
 from engine.dm.answer import name as _name
 from engine.dm.context import TurnContext
 from engine.dm.npc_layer import ensure_activities, respond
+from engine.dm.scene_state import beat_writes
 from engine.resolve.pipeline import BeatOutcome
 from engine.resolve.types import REACH_VALUE
 from engine.retrieve.scene import READING, WRITTEN, cannot_read
@@ -47,6 +49,7 @@ def world_step(ctx: TurnContext, record: AdjudicationRecord, *, beats: Sequence[
     # coarse: PR-06-6
     answered = [x["knower"] for x in deliver_learning(ctx, record, beats) if x["speech"]]  # PR-12-10
     acted = foes_act(ctx, record, oof)
+    beat_writes(ctx, record, beats)  # T-12-18: the beats' scene state (T1c)
     ensure_activities(ctx, record)  # 12.11.9 step 1
     npcs_respond(ctx, record, beats, skip=[*acted, *answered], oof=oof)
     clock_omens(ctx, record)

@@ -257,6 +257,7 @@ class PositionSet(Payload):
     flags_add: list[str] = Field(default_factory=list)
     flags_remove: list[str] = Field(default_factory=list)
     band_to: dict[str, str] = Field(default_factory=dict)
+    band_drop: list[str] = Field(default_factory=list)  # bands cleared (scene end, 12.4.8 step 8) [spec 010]
 
 
 class KnowledgeRecorded(Payload):

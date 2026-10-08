@@ -102,10 +102,12 @@ class NpcActionEntry(BaseModel):
 
 
 class ActivityEntry(BaseModel):
-    """A present NPC's continuing activity this scene (T1c scene state, 12.11.9 step 1): citable, not owed."""
+    """A present person's scene state (T1c, 12.11.9 step 1; T-12-18): their activity, or with `slot` their posture,
+    hold, manner or range band to the PC. Citable, not owed."""
 
     npc: str
-    activity: str
+    activity: str  # the slot's value
+    slot: str = "activity"  # activity | posture | held | manner | position
 
 
 class OmenEntry(BaseModel):

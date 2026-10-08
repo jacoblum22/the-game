@@ -16,10 +16,10 @@ from collections.abc import Sequence
 from typing import Any
 
 from engine.audit import text as tx
-from engine.dm.adjudication import ActivityEntry, AdjudicationRecord, NpcActionEntry
+from engine.dm.adjudication import AdjudicationRecord, NpcActionEntry
 from engine.dm.context import TurnContext
 
-ACTIVITY = "activity"  # fact predicate: the NPC's activity, current when written after the scene started
+ACTIVITY = "activity"  # the detail slot (00.6.6a): the NPC's activity, a scene slot cleared at scene end
 SPOKEN = "npc.spoken"  # meta {scene, npcs}: who the PC has spoken with this scene (greeting vs conversation)
 NPC_TABLE = "tbl.npc_action"
 WATCHES = ("morning", "afternoon", "evening", "night")
@@ -33,13 +33,11 @@ _TRADE = re.compile(r"\b(buy|buys|sell|sells|price|prices|cost|costs|coin|coins|
 
 
 def current_activity(state: Any, npc: str) -> str | None:  # rule: 12.11.9
-    """The NPC's activity this scene, or None (expired at scene end: written before this scene started)."""
-    sc = state.scene
-    fid = state.current_fact_id(npc, ACTIVITY) if sc is not None else None
-    if sc is None or fid is None:
-        return None
-    f = state.facts[fid]
-    return str(f.value) if f.value and f.valid_from_seq >= sc.started_seq else None
+    """The NPC's activity this scene, or None (the `activity` detail; cleared at scene end, 12.4.8 step 8)."""
+    from engine.store.details import current
+
+    f = current(state, npc, ACTIVITY) if state.scene is not None else None
+    return str(f.value) if f is not None and f.value else None
 
 
 def role_key(rules: Any, role: Any) -> str:  # rule: 12.11.9
@@ -62,31 +60,32 @@ def role_key(rules: Any, role: Any) -> str:  # rule: 12.11.9
 
 def ensure_activities(ctx: TurnContext, record: AdjudicationRecord) -> None:  # rule: 12.11.9
     """Step 1: each present NPC without an activity this scene gets one rolled on `tbl.npc_activity` (role × watch,
-    d6 pairs) and written as a fact that supersedes the last (overwritten, never appended); every present NPC's
-    activity joins the record as a citable line."""
+    d6 pairs) and written as its `activity` detail (a scene slot, 00.6.6a); then the record's scene-state lines are
+    rebuilt for whoever is present now (T-12-18: activity, posture, hold, manner, band to the PC), so a person who
+    left the scene this turn drops out."""
     from engine.dm.roles.world import present_npcs
-    from engine.world.common import fact
+    from engine.dm.scene_state import lines
+    from engine.store.details import write_detail
     from engine.world.social import npc_field
 
     tx_ = ctx.need_tx()
     st = tx_.state
     if st.scene is None:
+        record.activities = []
         return
-    have = {a.npc for a in record.activities}
     start = len(tx_.events)
     cells = ctx.rules.table("tbl.npc_activity")["by_role"]
-    for npc in present_npcs(st):
-        if npc in have:
-            continue
-        act = current_activity(tx_.state, npc)
-        if act is None:
+    present = present_npcs(st)
+    for npc in present:
+        if current_activity(tx_.state, npc) is None:
             key = role_key(ctx.rules, npc_field(st, npc, "role"))
             options = list(cells[key][WATCHES[st.time.now.watch % 4]])
             roll = ctx.rng.draw(6, f"activity of {npc} (12.11.9)", stream="npc", table_id="tbl.npc_activity")
             act = str(options[min((roll - 1) // 2, len(options) - 1)])
-            tx_.add(fact(tx_, npc, ACTIVITY, act, rule_id="12.11.9", source="generation", visibility="shown"))
-        record.activities.append(ActivityEntry(npc=npc, activity=act))
+            tx_.add_all(write_detail(tx_.state, tx_.mint, npc, ACTIVITY, act, source="generation", because="12.11.9",
+                                     rules=ctx.rules, visibility="shown").events)
     record.add_writes(tx_.events[start:])
+    record.activities = lines(tx_.state, record.pc, present)
 
 
 # ------------------------------------------------------------------------------------------- step 2: practice
@@ -236,6 +235,7 @@ def respond(ctx: TurnContext, record: AdjudicationRecord, beats: Sequence[Any], 
     Talk frame's outcome; (b) a recorded refusal or want the World role finds engaged; (c) `tbl.npc_action` by
     standing, clamped to the practice's rows. An addressed NPC always answers: a refusing source is voiced."""
     from engine.dm.roles.world import npc_motives, present_npcs
+    from engine.dm.scene_state import response_values, write
     from engine.dm.world_step import RESOLVED, _foe_turn, happened_text
     from engine.resolve.tables import roll_table
     from engine.world.common import meta
@@ -260,6 +260,7 @@ def respond(ctx: TurnContext, record: AdjudicationRecord, beats: Sequence[Any], 
     for npc in engaged:
         if npc in skip or (npc in unresolved and npc not in talks):
             continue
+        n_acts = len(record.npc_actions)
         is_addressed = npc in spoke_to or npc in talks
         practice = practice_for(ctx.state, record, npc, spoke_to)
         if npc in talks:  # (a) a resolved Talk frame's delivered outcome (a certain talk, no roll, is a yes)
@@ -301,6 +302,12 @@ def respond(ctx: TurnContext, record: AdjudicationRecord, beats: Sequence[Any], 
                 action = voiced_refusal(ctx, npc, gist) if refuses else gist
                 record.npc_actions.append(NpcActionEntry(npc=npc, action=action, source="table_row",
                                                          source_ref=f"{NPC_TABLE}:{row}", tags=[practice]))
+        for a in record.npc_actions[n_acts:]:  # T-12-18: the response sets their activity and manner
+            src, ref = a.source, a.source_ref or "12.11.9"
+            row = int(ref.rsplit(":", 1)[1]) if src == "table_row" else None
+            degree = talks[npc].entry.degree if src == "talk_outcome" else None
+            write(ctx, record, npc, response_values(ctx.rules, src, practice=practice, row=row, degree=degree),
+                  because=ref)
         if is_addressed and npc not in spoken_with(ctx.state):
             sc = ctx.state.scene
             if sc is not None:

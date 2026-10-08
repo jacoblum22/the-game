@@ -121,7 +121,8 @@ def items(record: AdjudicationRecord, *, names: Mapping[str, str] | None = None)
         add("npc", True, [a.npc], _sentence(f"{name(a.npc)} {NPC_ROW_PROSE.get(a.action, a.action)}"), index=i,
             text=a.action)
     for i, act in enumerate(record.activities):
-        add("activity", False, [act.npc], _sentence(f"{name(act.npc)} is {act.activity}"), index=i, text=act.activity)
+        add("activity", False, [act.npc], sentence(clause(act.npc, "hold" if act.slot == "held" else "be", act.activity,
+                                                         names=names, pc=pc)), index=i, text=act.activity)
     for i, om in enumerate(record.omens):
         if om.omen:
             add("omen", True, [om.clock_id], _sentence(om.omen), index=i, text=om.omen)

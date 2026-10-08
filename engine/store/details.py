@@ -114,11 +114,12 @@ def write_detail(state: WorldState, mint: Callable[[str], str], eid: str, slot: 
         return DetailWrite("contradiction", fact_id=old.id, prior=old.value,
                            reason=f"{slot} is {old.value!r}; nothing in this turn's record changes it")
     fid = mint(ids.FACT)
+    cleared = state.current_fact_id(eid, DETAIL + slot)  # an expired scene slot: its `None` value is still current
     ev = Event.of("fact_set", {"source": source}, source=because or "engine", rule_id="00.6.6a", fact_id=fid,
                   subject=eid, predicate=DETAIL + slot, value=value,
                   certainty="narrated" if source == "narration" else "established",
                   visibility=visibility or ("shown" if source == "narration" else "background"),
-                  persistence=persistence, supersedes=old.id if old else None)
+                  persistence=persistence, supersedes=old.id if old else cleared)
     return DetailWrite("superseded" if old else "new", [ev], fid, old.value if old else None)
 
 
@@ -149,8 +150,9 @@ def archived_details(state: WorldState, eid: str, rules: Any = None) -> list[Fac
 
 def expire_events(state: WorldState, mint: Callable[[str], str]) -> list[Event]:  # rule: 12.4.8
     """12.4.8 step 8: every current `scene` and `beat` detail is cleared (superseded by a `None` value; the log and
-    the fact index keep the history)."""
-    out: list[Event] = []
+    the fact index keep the history), and every range band between people (T-12-18: bands are scene state too)."""
+    out: list[Event] = [Event.of("position_set", rule_id="12.4.8", entity=eid, band_drop=sorted(pos.band_to))
+                        for eid, pos in state.positions.items() if pos.band_to]
     for eid, refs in state.details.items():
         for slot, r in refs.items():
             f = state.facts.get(r.fact_id)

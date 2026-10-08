@@ -1,0 +1,14 @@
+# Long-horizon harness (model: offline)
+
+## Scripted player (seed 7, 300 lines, 383 turns, 309 narrated)
+- contradictions per 100 narrated turns: 0.0
+- recall probes: 13 scored of 23; precision 0.15, coverage 0.12
+- novelty-4 over the previous 10 deliveries: 0.73 (254 deliveries)
+- narration loop (309 narrated): first draft delivered as drafted 266/309 (86.1%); turns with a cut, rendered line or fallback 43/309 (13.9%); narrator calls per narrated turn 1.28; per narrated turn: added_about 1.57, audit_beyond 3.44, audit_undeclared 0.04, undeclared_new 0.00
+- learning beats answered (PR-12-10): 103; empty successes 0 (0.0%); items 103, pointer answers 70 (68.0%)
+- ask-twice consistency: 22/22 (100%)
+- view tokens at line 50: checker 5490 (view 291), director 14464 (view 616), framer 11344 (view 1015), narrator 17004 (view 1627), reader 13386 (view 387)
+- view tokens at line 200: checker 5874 (view 593), narrator 17562 (view 1650)
+- view tokens at line 300: checker 6167 (view 845), framer 11042 (view 677), narrator 17696 (view 1579), reader 13441 (view 349)
+- cached-prefix share per role: checker 0.92, director 0.88, framer 0.88, narrator 0.90, proposer 0.91, reader 0.97
+- engine errors: 0

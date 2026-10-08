@@ -32,6 +32,7 @@ from engine.retrieve.anchors import scene_situation_tags
 from engine.retrieve.cards import load_cards_for
 from engine.retrieve.triggers import get_active_triggers
 from engine.store.projection import WorldState
+from engine.text.render import clause
 
 Purpose = Literal["turn", "scene_open", "opening", "recap", "epilogue"]
 # 12.14.10 (pacing.yaml#narration): the word limit each purpose states in THIS MESSAGE
@@ -230,6 +231,11 @@ def names_for(state: WorldState) -> dict[str, str]:
     return {eid: name_of(state, eid) for eid in state.entities if eid not in state.seals}
 
 
+# a scene-state line's slot in the Narrator's words (T-12-18)
+_STATE_WORDS = {"activity": "what they are doing", "posture": "their posture", "held": "what they hold",
+                "manner": "their manner", "position": "where they stand"}
+
+
 def record_items(state: WorldState, record: AdjudicationRecord) -> list[RecordItem]:  # rule: 12.14.12
     return handle_items(record, names=names_for(state))
 
@@ -266,7 +272,8 @@ def _item_words(state: WorldState, record: AdjudicationRecord, it: RecordItem, r
         return f"{name_of(state, a.npc, pc)} acts: {a.action}" + _withheld(state, a.npc, a.action, pc)
     if it.kind == "activity":
         a = record.activities[it.index]
-        return f"{name_of(state, a.npc, pc)} is {a.activity} (what they are doing this scene; say only this of it)"
+        said = clause(name_of(state, a.npc, pc), "hold" if a.slot == "held" else "be", a.activity)
+        return f"{said} ({_STATE_WORDS.get(a.slot, a.slot)} now; say only this of it, never otherwise)"
     if it.kind == "omen":
         return f"an omen to show as a trace, never explained: {it.text}"
     return f"note: {it.text}"
@@ -430,7 +437,8 @@ def used_details(state: WorldState, now: int, window: int = 10) -> list[tuple[st
             continue
         for slot, r in refs.items():
             f = state.facts.get(r.fact_id)
-            if f is None or f.value is None or not r.last_used or not 0 <= now - r.last_used <= window:
+            if f is None or f.value is None or not r.last_used or not 0 <= now - r.last_used <= window \
+                    or f.persistence == "scene":  # scene state is a record line to cite, not an image (T-12-18)
                 continue
             out.append((0 if eid in scope else 1, name_of(state, eid), f"{slot.removeprefix(DETAIL)}: {f.value}"))
     return [(who, words) for _, who, words in sorted(out, key=lambda x: x[0])]

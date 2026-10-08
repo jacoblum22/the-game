@@ -18,6 +18,7 @@ import argparse
 import copy
 import random
 import re
+import shutil
 import sys
 import tempfile
 from collections import Counter
@@ -512,6 +513,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--scenes", type=int, default=300)
     ap.add_argument("--lines", type=int, default=300)
     ap.add_argument("--model", choices=("offline", "gemini", "claude-narration"), default="offline")
+    ap.add_argument("--keep", type=Path, help="copy the run's stores to this folder (for diagnosis)")
     args = ap.parse_args(argv)
     out = [f"# Long-horizon harness (model: {args.model})", ""]
     with tempfile.TemporaryDirectory(prefix="longhorizon-") as tmp:
@@ -519,6 +521,10 @@ def main(argv: list[str] | None = None) -> int:
             out += run_aged(args.seed, args.scenes, args.model, Path(tmp)) + [""]
         if args.mode in ("scripted", "both"):
             out += run_scripted(args.seed, args.lines, args.model, Path(tmp))
+        if args.keep:
+            args.keep.mkdir(parents=True, exist_ok=True)
+            for db in Path(tmp).glob("*.db"):
+                shutil.copy2(db, args.keep / db.name)
     print("\n".join(out))
     return 0
 
