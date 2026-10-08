@@ -129,4 +129,4 @@ Status: open · fixing (round N) · fixed (commit) · logged (ledger id) · wont
 | P-123 | bug | med | "Gently take the feather token from his hand" framed as unarmed fighting and refused | 212725-fighter 21–22 | fixed (1062541) |
 | P-124 | polish | low | NPC "named his price" but no amount given | 212725-fighter 24 | open |
 | P-125 | polish | med | On a fallback the player's own questions are quoted back ("You ask, '…'") with no answer, reading as an echo | 212917-breaker 18–22 | open |
-| P-126 | bug | low | OFFER grammar: "you finds out who in Garford would talk to them" | 212917-breaker 28–29 | fixed (1062541) |
+| P-126 | bug | low | OFFER grammar: "you finds out who in Garford would talk to them" | 212917-breaker 28–29 | fixed (1062541) || P-127 | polish | med | Physical/NPC state contradictions in a scuffle: a guard "swings wildly" then answers calmly; a pinned man "turns his face to the wall"; the grab narration lists the PC's whole inventory | 215245-fighter 20–31 | open |
