@@ -13,6 +13,7 @@ and anything left for the owner.
 | fea2397 | **Spec 005 measurement harness:** replay bench, Reader golden set (91 lines, 11 negation pairs), long-horizon harness, baselines. | See baselines below. |
 | ad89bba | **R2-A2 cast budget.** Present people are ranked (beat target, then named, then recent interaction, then 12.6.6 weight). Full profiles fit within `view_budget.cast`; the rest go on one capped "also here" line (DL-12-39). | Aged narrator view at scenes 50/200/300: 1337/1612/1952 → **1190/1261/1357**, every section capped. Unit test with 301 people present: 1828/1839/1844. 1177 passed. Validator 0/0. |
 | ef269b7 | **R2-B rules wave:** sentence declarations, coverage, per-sentence repair (12.3.1, 12.3.1a, 12.3.3), tier table (12.14.13), default NPC layer (12.11.9), D1/D2/D4/D5 recorded (DL-12-40..44, DL-15-37). New tables `tbl.npc_activity` and `tbl.npc_practice`. | Merge conflicts were only in generated files: re-assembled, anchors recompiled, cards rebuilt. Replay re-recorded because the rule text changed. Validator 0/0. Suite 1176 passed before the re-record. |
+| 91fc837 | **R2-C rules wave:** computed gate (00.12.3 `[D]`), rubric with obstacle classes plus guardrails (00.3.8, 01.6.5, 01.6.8, the new 01.6.13 critical-failure guard), cost follows stakes source (01.6.11, I-155), Safe frames auto-commit (01.7.4), OFFER template plus glossary (12.15.2, 14.2.7). DL-01-29..32, DL-12-50..51. | Ledger merged row by row; derived files regenerated; replay re-recorded. Suite **1177 passed**, validator 0/0. **Sim:** every acceptance target passes except the compound-error bound. When a wrong nudge and a wrong snag hit the same beat, success drops 35 points (target ≤ 25); a single error stays within 25. Nothing was tuned to force a pass. **Owner to decide.** |
 | 16b92c2, + | Research notes committed; the model-calls contract updated; `cards.json` rebuilt. | Full suite after merges: 1176 passed, 1 failure (stale `cards.json`, now fixed). Validator 0/0. ruff: the 10 errors in untouched files predate this work. |
 
 ## Baselines (spec 005), the gates for later specs
@@ -43,6 +44,9 @@ deferred to the owner.
 
 ## In flight
 
-- R2-C rules wave (adjudication, difficulty rubric + seeded sim, D3/D6/D7).
+- Spec 007 (adjudication), started from 91fc837. The gate is the Reader golden set, scored with Haiku via the
+  Claude CLI.
+- R2-D rules wave (content: answer ladder, casting, reduced case, seed packs, plus a seeded answer-ladder sim).
+- R2-E rules wave (memory: established details, scene cards, spotlight, per-role views, diff-mode audit).
 - Spec 006 (narration contract + NPC layer), started from ef269b7. Model-quality gates run on at most 80
   recorded packets with Haiku via the Claude CLI (subscription, no API spend).
