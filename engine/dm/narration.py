@@ -23,18 +23,19 @@ from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from engine.audit.claims import UNKNOWN, Claim, Verdict, beat_polarity, check_claims, failing, owed_blocks
+from engine.audit.claims import Claim, Verdict, beat_polarity, check_claims, owed_blocks
 from engine.audit.declare import (
     DeclaredSentence,
     Failure,
-    NewElement,
     SceneIndex,
     coverage,
     known_as,
     mention_of,
+    pc_quotes,
     scan_sentence,
     t2_delivered,
     tier_of,
+    voices,
 )
 from engine.audit.fallback import plain_fallback
 from engine.audit.safety import screen_safety
@@ -69,6 +70,8 @@ class NarrationResult(BaseModel):
     verdicts: list[dict[str, Any]] = Field(default_factory=list)
     screen: dict[str, Any] = Field(default_factory=dict)
     created: list[str] = Field(default_factory=list)  # entity ids written on mention
+    claim_log: list[dict[str, Any]] = Field(default_factory=list)  # 12.3.1b: delivered but logged (TurnRecord)
+    said: list[dict[str, Any]] = Field(default_factory=list)  # 12.3.1b item 1: speech as testimony (TurnRecord)
 
 
 class TurnOutcome(BaseModel):
@@ -90,7 +93,6 @@ class _Sent(BaseModel):
     failures: list[Failure] = Field(default_factory=list)
     dropped: bool = False
     replaced: int = 0  # repair rounds that rewrote it
-    verdicts: list[dict[str, Any]] = Field(default_factory=list)  # its claims' verdicts (TurnRecord.verdicts)
     cited_before: list[str] = Field(default_factory=list)  # handles the sentence it replaced cited (its place)
     used: list[str] = Field(default_factory=list)  # detail facts it states (written or restated): usage marks at T12
 
@@ -112,6 +114,7 @@ class _Turn(BaseModel):
     player_message: str = ""
     exchanges: list[Any] = Field(default_factory=list)
     stats: dict[str, int] = Field(default_factory=dict)
+    log: list[dict[str, Any]] = Field(default_factory=list)  # the claim log (12.3.1b)
 
 
 def _max_redrafts(rules: Any) -> int:
@@ -155,78 +158,43 @@ def _ask_oracle(ctx: TurnContext, record: AdjudicationRecord, c: Claim, odds: st
         else str(res.answer)
 
 
-def _settle(ctx: TurnContext, record: AdjudicationRecord, claims: Sequence[Claim],
-            verdicts: Sequence[Verdict], sents: Sequence[_Sent] = ()) -> list[Verdict]:  # rule: 12.3.2
-    """`undetermined` (12.3.2, split by tier): an incidental property is written as narrated and binds later turns
-    (T1a, DL-12-40), a look in its `lasting` detail slot (00.6.6a); a consequential one goes to the Oracle: a yes is
-    the draft's own value (`supported`), any other answer is the redraft's (`store_value`), no answer: cut."""
-    from engine.store.details import slot_of, slots, write_detail
-
-    out = []
-    tx = ctx.need_tx()
-    for v in verdicts:
-        c = claims[v.claim]
-        if v.verdict == "undetermined" and v.incidental and c.subject in tx.state.entities:
-            from engine import ids
-            from engine.world.common import fact
-
-            start = len(tx.events)
-            kind = tx.state.entities[c.subject].kind
-            slot = slot_of(c.predicate, ctx.rules, kind) or slot_of(c.value, ctx.rules, kind)
-            w = write_detail(tx.state, tx.mint, c.subject, slot, c.value, rules=ctx.rules) \
-                if slot and slots(ctx.rules).get(slot) == "lasting" else None
-            if w is not None and w.outcome == "new":
-                tx.add_all(w.events)
-                if 0 <= c.sentence < len(sents) and w.fact_id:
-                    sents[c.sentence].used.append(w.fact_id)
-            else:
-                tx.add(fact(tx, c.subject, ids.slug(c.predicate or "detail")[:60], c.value, rule_id="12.3.2",
-                            source="narration", visibility="shown"))
-            record.add_writes(tx.events[start:])
-            v = Verdict(claim=v.claim, verdict="supported", reason="incidental: written as narrated (12.3.2; T1a)")
-        elif v.verdict != "supported" and v.fix == "oracle":
-            ans = _ask_oracle(ctx, record, c)
-            if ans == "yes":
-                v = Verdict(claim=v.claim, verdict="supported", reason="the Oracle settled it as drafted")
-            elif ans is None:
-                v = v.model_copy(update={"fix": "cut", "reason": "nothing settles it; cut"})
-            else:
-                v = v.model_copy(update={"store_value": ans, "reason": f"the Oracle settled it: {ans}"})
-        out.append(v)
-    return out
+def _log(ctx: TurnContext, turn: _Turn, sentence: int, cls: str, verdict: str, store_value: Any = None,
+         **extra: Any) -> None:  # rule: 12.3.1b
+    """One claim-log record (12.3.1b): delivered as drafted, kept for review and disputes (12.3.6)."""
+    turn.log.append({"turn": ctx.turn_id, "sentence": sentence, "class": cls, "verdict": verdict,
+                     "store_value": None if store_value is None else str(store_value), **extra})
 
 
-def _apply_writes(ctx: TurnContext, record: AdjudicationRecord, claims: Sequence[Claim],
-                  verdicts: Sequence[Verdict]) -> list[Verdict]:  # rule: 00.6.6
-    """The backstop for an element the narrator did not declare (12.3.2 `new_element`, fix `write_on_mention`):
-    written as ordinary furniture, so it is never cut merely for being new [revision: I-127; DL-12-37]; declared
-    `new` elements are the main path (`_write_new`)."""
-    todo = {v.claim: (claims[v.claim].value or claims[v.claim].predicate).strip()[:60]
-            for v in failing(verdicts) if v.fix == "write_on_mention"}
-    todo = {i: name for i, name in todo.items() if name}
-    if not todo:
-        return list(verdicts)
-    res = _write_mentions(ctx, record, [{"kind": "object", "name": n, "implied": [], "unsettled": []}
-                                        for n in dict.fromkeys(todo.values())])
-    refused = set(res.refused)
-    out = []
-    for v in verdicts:
-        name = todo.get(v.claim)
-        if name is None:
-            out.append(v)
-        elif name in refused:
-            out.append(v.model_copy(update={"fix": "cut", "reason": "a kind that is never created by mention; cut"}))
-        else:
-            out.append(Verdict(claim=v.claim, verdict="supported", reason="undeclared: written on mention (backstop)"))
-    return out
+_COARSE_POSTURE = re.compile(r"\b(held|pinned|restrained|mounted|bound|grip)\b", re.I)
+
+
+def _blocking_slot(slot: str, prior: Any) -> bool:  # rule: 12.3.1b
+    """A detail clash that still redraws (12.3.1b item 2): a held weapon or tool, a coarse posture (DL-12-77)."""
+    from engine.audit.claims import relevant_item
+
+    return (slot == "held" and relevant_item(str(prior))) or (slot == "posture" and bool(
+        _COARSE_POSTURE.search(str(prior))))
+
+
+def _in_speech(name: str, s: DeclaredSentence) -> bool:  # rule: 12.3.1b
+    """The element is named only inside the sentence's speech: testimony, never written (12.3.1b item 1)."""
+    from engine.audit import text as atx
+
+    narration, speech = voices(s)
+    return bool(speech) and atx.covers(name, " ".join(speech), ratio=0.6) and not (
+        narration and atx.covers(name, narration, ratio=0.6))
 
 
 def _write_new(ctx: TurnContext, record: AdjudicationRecord, s: _Sent, idx: SceneIndex,
-               out: NarrationResult) -> None:  # rule: PR-00-7
+               out: NarrationResult, turn: _Turn, i: int) -> None:  # rule: PR-00-7
     # rule: 12.14.13
+    # rule: 12.3.1b
     """PR-00-7 step 2: each declared new element by its tier. T1a is written on mention with the properties the
-    sentence states; T1b is proposed and settled by the Oracle (Likely when a present NPC the sentence is about
-    says it, else Unlikely; a "no" is a redraft); T2 passes only when a cited record line delivers it."""
+    sentence states (logged when it cannot be written); T1b is proposed and settled by the Oracle (Likely when a
+    present NPC the sentence is about says it, else Unlikely; a "no" is a redraft); T2 in the narrator's voice
+    passes only when a cited record line delivers it, else it is cut. Named only in speech, any tier is testimony:
+    logged, never written (12.3.1b). A clash with a known person's stored detail is logged and the store keeps its
+    value, unless the slot is on the blocking list."""
     from engine.dm.mentions import Mention, MentionResult, profile_diff
     from engine.dm.roles.world import present_npcs
 
@@ -245,15 +213,22 @@ def _write_new(ctx: TurnContext, record: AdjudicationRecord, s: _Sent, idx: Scen
                 profile_diff(m, known, tx=tx, rules=ctx.rules, res=res, because=because)
                 record.add_writes(tx.events[start:])
                 s.used += res.details_used
-                s.failures += [Failure(why=f"{name}'s {slot} is established otherwise", fix="redraft",
-                                       store_value=prior) for name, slot, prior in res.contradictions]
+                for name, slot, prior in res.contradictions:
+                    if _blocking_slot(slot, prior):
+                        s.failures.append(Failure(why=f"{name}'s {slot} is established otherwise", fix="redraft",
+                                                  store_value=prior))
+                    else:
+                        _log(ctx, turn, i, "detail", "contradicted", prior, subject=known, slot=slot)
             continue
         tier = tier_of(el, ctx.rules)
+        if _in_speech(el.name, s.decl):
+            _log(ctx, turn, i, "speech", "testimony", None, element=el.name, tier=tier)
+            continue
         if tier == "T1a":
             m = mention_of(el)
             res = _write_mentions(ctx, record, [m]) if m is not None else None
             if res is None or res.refused:
-                s.failures.append(Failure(why=f"{el.name!r} cannot be created by mention", fix="cut"))
+                _log(ctx, turn, i, "new_element", "unwritten", None, element=el.name)
             else:
                 out.created += [i for i in res.ids if i not in out.created]
         elif tier == "T1b":
@@ -269,133 +244,117 @@ def _write_new(ctx: TurnContext, record: AdjudicationRecord, s: _Sent, idx: Scen
                                       "delivers (12.14.13)", fix="cut"))
 
 
-def _subject_given(c: Claim, s: DeclaredSentence, idx: SceneIndex, pc: str | None) -> Claim:  # rule: 12.3.1
-    """A claim in a declared sentence takes the declared subject when the sentence declares exactly one subject
-    besides the PC and the audit read the claim as about someone else or no one (never guessed)."""
-    declared = [e for e in idx.subjects(s) if e != pc]
-    if len(declared) == 1 and c.subject != pc and c.subject not in declared and not s.new:
-        return c.model_copy(update={"subject": declared[0]})
-    return c
-
-
-def _polarity(s: DeclaredSentence, record: AdjudicationRecord, its: Mapping[str, RecordItem]) -> list[Failure]:
-    # rule: 12.3.1
-    """Each cited beat line, judged with its subject given: the sentence must not plainly say the opposite of the
-    beat's degree (P-112). Other refs are sources for the claims that cite them (`check_claims(cited=)`)."""
+def _polarity(text: str, s: DeclaredSentence, record: AdjudicationRecord,
+              its: Mapping[str, RecordItem]) -> list[Failure]:  # rule: 12.3.1
+    # rule: 12.3.1a
+    """Outcome words against the frame's degree (P-112), on the narrator's words: each cited beat line; an
+    uncited sentence against the turn's only rolled beat (a code scan, 12.3.1a)."""
+    beats = [record.beats[it.beat] for r in s.refs if (it := its.get(r)) is not None and it.kind == "beat"
+             and it.beat is not None]
+    if not s.refs:
+        rolled = [b for b in record.beats if b.rolled and b.degree]
+        beats = rolled if len(rolled) == 1 else []
     out = []
-    for r in s.refs:
-        it = its.get(r)
-        if it is not None and it.kind == "beat" and it.beat is not None:
-            degree = beat_polarity(s.text, record.beats[it.beat])
-            if degree:
-                out.append(Failure(why=f"contradicts the attempt's result ({degree})", fix="redraft",
-                                   store_value=degree))
+    for b in beats:
+        degree = beat_polarity(text, b) if text else None
+        if degree:
+            out.append(Failure(why=f"contradicts the attempt's result ({degree})", fix="redraft", store_value=degree))
     return out
-
-
-def _in_lead(state: Any, name: str) -> bool:  # rule: 12.3.2
-    """A name every content word of which is in an active thread the character knows (an opening lead's "the
-    challenger"): what the view already holds, so retelling it creates nothing [spec 009 B]."""
-    from engine.audit import text as atx
-
-    return bool(atx.content(name)) and any(
-        e.kind == "thread" and e.visibility in ("shown", "available") and e.id not in state.seals
-        and atx.covers(name, f"{e.name} {e.data.get('text') or ''}", ratio=1.0) for e in state.entities.values())
 
 
 def _count(turn: _Turn, key: str, n: int = 1) -> None:
     turn.stats[key] = turn.stats.get(key, 0) + n
 
 
-def audit_mode(ctx: TurnContext, record: AdjudicationRecord, sents: Sequence[DeclaredSentence],
-               flagged: bool = False) -> str:  # rule: 12.3.1
+def audit_mode(ctx: TurnContext) -> str:  # rule: 12.3.1
     # rule: OEQ-12-23
-    """'diff' (every turn, while `claim_check.audit.skip_enabled` is false). Once enabled: 'sample' on 1 turn in
-    `full_extraction_every` (picked by the turn id, so it draws nothing from the game's dice), which also runs the full
-    extraction to measure what the diff misses; 'skip' on a turn whose sentences are all declared or atmosphere,
-    with no atmosphere sentence `flagged` (it named something) and no SPEECH part in the player's message."""
+    """'sampled' on 1 turn in `claim_check.audit.full_extraction_every`, picked by the turn id's crc32 (so it draws
+    nothing from the game's dice), else 'off'. The sampled audit runs after delivery and only logs (DL-12-83)."""
     cfg = (ctx.rules.pacing.get("claim_check") or {}).get("audit") or {}
-    if not cfg.get("skip_enabled"):
-        return "diff"
     every = int(cfg.get("full_extraction_every") or 0)
-    if every and zlib.crc32((ctx.turn_id or "").encode()) % every == 0:
-        return "sample"
-    if all(s.declared or s.atmosphere for s in sents) and not flagged and not any(
-            p.cls == "SPEECH" for p in record.parts):
-        return "skip"
-    return "diff"
+    return "sampled" if every and zlib.crc32((ctx.turn_id or "").encode()) % every == 0 else "off"
 
 
-def _audit(ctx: TurnContext, record: AdjudicationRecord, turn: _Turn, sents: list[_Sent], order: Sequence[int],
-           out: NarrationResult, idx: SceneIndex) -> checker_role.CheckerOutput:  # rule: 12.3.1
-    # rule: 12.14.13
-    """The diff audit (12.3.1 source 2, DL-12-71) of the sentences in `order`. What it finds beyond the declarations
-    comes back as claims for the caller to judge. An addressable thing a sentence introduced without declaring it is
-    folded back as that sentence's declaration and written by its tier like a declared one (12.14.13; I-175): T1a
-    written, T1b settled by the Oracle, T2 cut unless a cited line delivers it. A declaration the sentence does not
-    say is dropped (a must-name line it cited is then owed again, 12.3.1a); one it says otherwise is redrafted."""
-    decls = [sents[g].decl for g in order]
-    mode = audit_mode(ctx, record, decls, flagged=bool(turn.stats.get("atmosphere_named")))
-    if mode == "skip":
-        _count(turn, "audit_skipped")
-        return checker_role.CheckerOutput(sentences=[d.text for d in decls])
+def _sample(ctx: TurnContext, record: AdjudicationRecord, turn: _Turn, final: Sequence[_Sent],
+            out: NarrationResult) -> None:  # rule: 12.3.1
+    # rule: 12.3.1b
+    # rule: OEQ-12-23
+    """The sampled audit (12.3.1 source 2, DL-12-83), after delivery: the diff and the full extraction on the
+    delivered sentences; every full-extraction claim is judged (`check_claims(texts=)`, a certain subject only)
+    and logged. A failing narrator-voice claim on the blocking list with a certain subject is a `blocking_miss`;
+    nothing is cut, redrafted or written."""
+    from engine.audit import text as atx
+    from engine.audit.claims import blocking
+
+    decls = [s.decl for s in final if s.decl.text]
+    if audit_mode(ctx) != "sampled" or not decls:
+        return
     kw: dict[str, Any] = {"player_message": turn.player_message, "created": out.created, "exchanges": turn.exchanges,
                           "sentences": [d.text for d in decls], "decls": decls, "items": turn.items}
-    chk = checker_role.check_draft(ctx, "", **kw)
-    if mode == "sample":  # ponytail: recall ~ diff findings / full findings on undeclared subjects, summed by the harness
+    try:
+        diff = checker_role.check_draft(ctx, "", **kw)
         full = checker_role.check_draft(ctx, "", full=True, **kw)
-        _count(turn, "sample_turns")
-        _count(turn, "sample_full_undeclared", sum(1 for c in full.claims if c.sentence < len(order) and c.subject
-                                                   not in idx.subjects(decls[c.sentence]) and c.subject != idx.pc))
-        _count(turn, "sample_diff_undeclared", len(chk.claims) + len(chk.undeclared))
+    except ModelInvalid:
+        _count(turn, "sample_failed")
+        return
+    st = ctx.need_tx().state
     by_handle = {it.handle: it for it in turn.items}
-    facts = ctx.need_tx().state.facts
-    for u in chk.unexpressed:
-        g, ref = order[int(u["sentence"])], str(u.get("ref") or "")
-        d = sents[g].decl
-        if ref in d.refs and u.get("says_otherwise"):
-            it = by_handle.get(ref)
-            said = (it.render or it.text) if it is not None else (
-                f"{facts[ref].predicate.replace('_', ' ')}: {facts[ref].value}" if ref in facts else ref)
-            sents[g].failures.append(Failure(why=f"says {ref} otherwise than declared", fix="redraft",
-                                             store_value=said))
-        elif ref in d.refs:
-            d.refs.remove(ref)
-        elif ref in d.about:
-            d.about.remove(ref)
-        else:
+    # what each sentence cites: its record lines, and its view facts as lines about their subject (12.2.10)
+    cited = {g: [by_handle[r] if r in by_handle else
+                 RecordItem(handle=r, kind="note", must_name=False, entities=[st.facts[r].subject],
+                            text=f"{st.facts[r].predicate.replace('_', ' ')} {st.facts[r].value}")
+                 for r in d.refs if r in by_handle or r in st.facts] for g, d in enumerate(decls)}
+    verdicts = check_claims(full.claims, st, record, full.scene_ids, rules=ctx.rules, cited=cited,
+                            texts={g: d.text for g, d in enumerate(decls)})
+    _count(turn, "sample_turns")
+    _count(turn, "sample_diff_findings", len(diff.claims) + len(diff.undeclared))
+    for c, v in zip(full.claims, verdicts, strict=True):
+        narration, speech = voices(decls[c.sentence])
+        if speech and not (narration and atx.covers(c.text, narration, ratio=0.6)):
+            _log(ctx, turn, c.sentence, c.cls, "testimony", None, source="sample")
             continue
-        _count(turn, "audit_unexpressed")
-    for u in chk.undeclared:
-        g = order[int(u["sentence"])]
-        el = NewElement(element_kind=str(u.get("element_kind") or ""), name=str(u.get("name") or "").strip(),
-                        ordinary=bool(u.get("ordinary", True)))
-        if not el.name or el.name.lower() in {n.name.lower() for n in sents[g].decl.new}:
-            continue  # declared already
-        if _in_lead(ctx.need_tx().state, el.name):
-            _count(turn, "audit_lead")  # "the challenger" of a lead the character knows: spoken of, not new
-            continue
-        _count(turn, "audit_new")
-        tmp = _Sent(decl=DeclaredSentence(text=sents[g].decl.text, refs=list(sents[g].decl.refs),
-                                          about=list(sents[g].decl.about), new=[el]))
-        _write_new(ctx, record, tmp, idx, out)
-        sents[g].decl.about = list(dict.fromkeys([*sents[g].decl.about, *tmp.decl.about]))
-        sents[g].failures += tmp.failures
-        sents[g].used += tmp.used
-        if not tmp.failures:
-            sents[g].decl.new.append(el)  # declared now, by the audit
-    return chk
+        miss = v.disposition != "supported" and not v.uncertain and c.subject in st.entities \
+            and blocking(c, v, ctx.rules)
+        _count(turn, "sample_misses", int(miss))
+        _log(ctx, turn, c.sentence, c.cls, v.disposition, v.store_value, source="sample", blocking_miss=miss)
+        out.verdicts.append({**v.model_dump(mode="json"), "sentence": c.sentence, "class": c.cls})
+    for u in diff.undeclared:
+        _log(ctx, turn, int(u.get("sentence") or 0), "new_element", "undeclared", None, source="sample",
+             element=str(u.get("name") or ""), element_kind=str(u.get("element_kind") or ""))
+    out.draft_versions[-1]["sample"] = {"claims": _dump(full.claims), "verdicts": _dump(verdicts)}
+
+
+def _speech(ctx: TurnContext, record: AdjudicationRecord, turn: _Turn, s: _Sent, i: int) -> None:  # rule: 12.3.1b
+    """12.3.1b item 1's three checks, all code: the speaker is present, is not the PC, and no quoted words in the
+    PC's mouth go beyond the player's message (`pc_agency`, a cut). Speech is never checked for truth."""
+    from engine.audit import text as atx
+    from engine.world.scenes import cast_present
+
+    _, speech = voices(s.decl)
+    if not speech:
+        return
+    sp = s.decl.speaker
+    pc_words = speech if sp is not None and sp == record.pc else pc_quotes(s.decl)
+    for q in pc_words:
+        if not (turn.player_message and atx.covers(q, turn.player_message, ratio=0.8)):
+            s.failures.append(Failure(why="puts words in the PC's mouth the player did not say (12.14.3)", fix="cut"))
+            break
+    if sp is not None and sp != record.pc and sp not in cast_present(ctx.need_tx().state):
+        s.failures.append(Failure(why="the speaker is not here", fix="redraft",
+                                  store_value="give the words to someone present"))
+    elif sp is None and not pc_words:
+        _log(ctx, turn, i, "speech", "no_speaker")
 
 
 def _judge(ctx: TurnContext, record: AdjudicationRecord, turn: _Turn, sents: list[_Sent], todo: Sequence[int],
            out: NarrationResult, version: dict[str, Any]) -> None:  # rule: PR-12-2
     # rule: 12.3.1a
-    """PR-12-2 steps 1-6 for the sentences in `todo`: scan each (12.3.1a), write its new elements by tier (T8), run
-    the audit (the Checker) on them, resolve every claim with its subject given, judge with `check_claims`, and
-    turn each verdict into the sentence's failure and fix (12.3.3's table)."""
+    # rule: 12.3.1b
+    """PR-12-2 for the sentences in `todo`, by code only (no per-turn audit, DL-12-83): the code scans on the
+    narrator's voice (names, numerals, sealed strings, outcome words; 12.3.1a), the speech checks, new elements by
+    tier (T8), safety. Only blocking-list hits fail a sentence; the rest is logged (12.3.1b)."""
     tx = ctx.need_tx()
     rules = ctx.rules
-    pc = record.pc
     by_handle = {it.handle: it for it in turn.items}
     idx = SceneIndex.of(tx.state, turn.items)
     names = _names(ctx, list(tx.state.entities))
@@ -405,69 +364,30 @@ def _judge(ctx: TurnContext, record: AdjudicationRecord, turn: _Turn, sents: lis
         valid = set(by_handle) | set(idx.facts)
         s.decl.refs = [r for r in s.decl.refs if r in valid]
         s.decl.about = [a for a in s.decl.about if a in tx.state.entities]
+        if s.decl.speaker is not None and s.decl.speaker not in tx.state.entities:
+            s.decl.speaker = None
         scan = scan_sentence(s.decl, idx, rules=rules, names=names)
         if scan.added_about:
             s.decl.about += scan.added_about
-            turn.stats["added_about"] = turn.stats.get("added_about", 0) + len(scan.added_about)
+            _count(turn, "added_about", len(scan.added_about))
             if s.decl.atmosphere:  # it names someone: declared now, not atmosphere (12.3.1a item 2)
                 s.decl.atmosphere = False
-                turn.stats["atmosphere_named"] = turn.stats.get("atmosphere_named", 0) + 1
-        turn.stats["undeclared_new"] = turn.stats.get("undeclared_new", 0) + scan.undeclared_new
+                _count(turn, "atmosphere_named")
+        _count(turn, "undeclared_new", scan.undeclared_new)
         s.failures += scan.failures
-        _write_new(ctx, record, s, idx, out)
+        for cls, why in scan.logged:
+            _log(ctx, turn, i, cls, "logged", why)
+        _speech(ctx, record, turn, s, i)
+        _write_new(ctx, record, s, idx, out, turn, i)
         safe = screen_safety(s.decl.text, tx.state)
         if not safe.ok and safe.cuts:
             s.failures.append(Failure(why="crosses a line the player set (12.5.6)", fix="cut"))
         echoed = echoed_quotes(s.decl.text, [p.text for p in record.parts])
         if echoed and i > 0:
-            s.failures.append(Failure(why=f"an NPC answers with the player's own words ({echoed[0]})",
-                                      fix="redraft", store_value="write the NPC's own reply"))
-    idx = SceneIndex.of(tx.state, turn.items)  # with this round's new elements
-    order = list(todo)
-    chk = _audit(ctx, record, turn, sents, order, out, idx)
-    version["screen_flags"] = chk.screen
-    claims: list[Claim] = []
-    for c in chk.claims:
-        if not 0 <= c.sentence < len(order):
-            continue
-        g = order[c.sentence]
-        s = sents[g].decl
-        if s.atmosphere and not s.declared and c.cls != "location_time" and (
-                (c.subject == "unknown" and c.cls == "action") or not c.asserts_change):
-            continue  # 12.3.1, 12.11.9: atmosphere (an unnamed crowd's murmur, heads turning) is never a claim
-        c = _subject_given(c.model_copy(update={"sentence": g}), s, idx, pc)
-        _count(turn, "audit_beyond")
-        if c.subject not in idx.subjects(s) and c.subject != pc:
-            _count(turn, "audit_undeclared")
-        claims.append(c)
-    for g in todo:
-        sents[g].failures += _polarity(sents[g].decl, record, by_handle)
-        sents[g].verdicts = []
-    # what each sentence cites: its record lines, and its view facts as lines about their subject (12.2.10: a
-    # stated value cites the view's id; a claim restating what it cites is covered by the declaration)
-    facts = tx.state.facts
-    cited = {g: [by_handle[r] if r in by_handle else
-                 RecordItem(handle=r, kind="note", must_name=False, entities=[facts[r].subject],
-                            text=f"{facts[r].predicate.replace('_', ' ')} {facts[r].value}")
-                 for r in sents[g].decl.refs if r in by_handle or r in facts] for g in todo}
-    verdicts = check_claims(claims, tx.state, record, chk.scene_ids, rules=rules, cited=cited)
-    for k, v in enumerate(verdicts):  # 12.3.1: a claim needs an addressable id. The audit types an addressable
-        # thing in `undeclared` (written by its tier in `_audit`); what is left with no id is a figure of speech or
-        # atmosphere, never written as furniture (the `_apply_writes` backstop keeps a known subject's feature)
-        if v.fix == "write_on_mention" and claims[v.claim].subject == UNKNOWN:
-            _count(turn, "audit_no_id")
-            verdicts[k] = Verdict(claim=v.claim, verdict="supported", reason="names no addressable id: atmosphere")
-    verdicts = _apply_writes(ctx, record, claims, verdicts)
-    verdicts = _settle(ctx, record, claims, verdicts, sents)
-    for v in verdicts:
-        c = claims[v.claim]
-        sents[c.sentence].verdicts.append({**v.model_dump(mode="json"), "sentence": c.sentence, "class": c.cls})
-        if v.verdict != "supported":
-            fix = "cut" if v.fix in _CUT_FIXES else "redraft"
-            sents[c.sentence].failures.append(Failure(why=f"{v.verdict} ({c.cls}: {c.predicate} {c.value})".strip(),
-                                                      fix=fix, store_value=v.store_value))
-    version["claims"] = _dump(claims)
-    version["verdicts"] = _dump(verdicts)
+            _log(ctx, turn, i, "speech", "echoes the player's words", echoed[0])
+        s.failures += _polarity(voices(s.decl)[0], s.decl, record, by_handle)
+        if not s.decl.declared and not s.decl.atmosphere and not s.failures                 and not s.decl.text.rstrip("\"”’' ").endswith("?"):  # the open prompt is no claim (12.14.9)
+            _log(ctx, turn, i, "undeclared", "delivered")  # 12.3.1a: no scan hit, delivered as drafted
     version["checks"] = {str(g): [f.model_dump() for f in sents[g].failures] for g in todo}
 
 
@@ -628,10 +548,36 @@ def _deliver(ctx: TurnContext, record: AdjudicationRecord, turn: _Turn, sents: l
                        rules=ctx.rules, names=names)
     out.screen = res.screen
     out.fiction = text
-    out.verdicts = [v for s in final for v in s.verdicts]  # the delivered sentences' verdicts
     out.draft_versions[-1]["screen"] = res.reasons
+    _said(ctx, record, final, out)
+    _sample(ctx, record, turn, final, out)  # after delivery: it only logs (DL-12-83)
+    out.claim_log = turn.log
     out.draft_versions[-1]["stats"] = dict(turn.stats, rounds=rounds)
     return out
+
+
+def _said(ctx: TurnContext, record: AdjudicationRecord, final: Sequence[_Sent],
+          out: NarrationResult) -> None:  # rule: 12.3.1b
+    """Delivered speech as `said` records `{speaker, turn, words, about}`, never facts (12.3.1b item 1). A stored
+    name the PC did not know, heard in an NPC's words, is known from now on (`how: heard`)."""
+    from engine.audit import text as atx
+    from engine.store.views import name_known
+    from engine.world.social import learn_name
+
+    st = ctx.need_tx().state
+    for s in final:
+        _, speech = voices(s.decl)
+        if not speech or pc_quotes(s.decl) or (s.decl.speaker and s.decl.speaker == record.pc):
+            continue
+        words = " ".join(speech)
+        if s.decl.speaker is None and atx.covers(words, " ".join(p.text for p in record.parts), ratio=0.8):
+            continue  # the player's own words quoted back: not testimony
+        out.said.append({"speaker": s.decl.speaker, "turn": ctx.turn_id, "words": words, "about": list(s.decl.about)})
+        low = words.lower()
+        for eid, e in list(st.entities.items()):
+            if record.pc and e.kind in ("npc", "companion", "adversary") and e.name and not name_known(st, eid) \
+                    and re.search(rf"\b{re.escape(e.name.lower())}\b", low):
+                learn_name(ctx.time_ctx(), record.pc, eid, "heard")
 
 
 def _mark_used(ctx: TurnContext, final: Sequence[_Sent]) -> None:  # rule: 00.6.6a
@@ -925,6 +871,7 @@ def narrate_turn(ctx: TurnContext, adj: Any, message: str) -> TurnOutcome:  # ru
     calls = store.model_calls(adj.turn_id)
     tr = adj.turn_record.model_copy(update={
         "writes": rec.write_seqs, "draft_versions": narr.draft_versions, "verdicts": narr.verdicts,
+        "claim_log": narr.claim_log, "said": narr.said,
         "fallback_used": narr.fallback_used, "screen": narr.screen, "delivered_verbatim": resp.text(),
         "model_calls": list(dict.fromkeys([*adj.turn_record.model_calls, *ctx.call_ids])),
         "cost_usd": float(sum(c.get("cost_usd") or 0.0 for c in calls)),

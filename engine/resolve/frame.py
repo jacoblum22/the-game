@@ -333,7 +333,7 @@ def _frame_check(p: ProposedFrame, beat: Beat, state: Any, rules: Any, gate: Gat
                  precedent=found[-1].id if found else None, attribute=attr, alternative_attribute=alt_attr,
                  deed_tag=deed, traits=list(p.traits or beat.traits), obstacle_id=p.obstacle.id, dc_source=dc_source,
                  tier=tier, defender=defender, dc=dc, mode_price=price, levers=levers, snags=snags, stakes=stakes,
-                 lethal=lethal, reach=reach, reach_factors=factors, trade=p.trade, threatened_cost=tc,
+                 lethal=lethal, reach=reach, reach_factors=factors, asks=p.asks, trade=p.trade, threatened_cost=tc,
                  alternate_cost=ac, method_consequences=consequences, modifier=mod, odds=o, base_odds=base_odds,
                  stored_dc_write=stored_write, notes=notes, obstacle_class=p.obstacle.obstacle_class,
                  nudge=p.obstacle.nudge, long_shot=long_shot, guard=guard, alternatives=alts)
@@ -662,6 +662,12 @@ def _levers(p: ProposedFrame, beat: Beat, state: Any, rules: Any, declared: int,
     cap = int(rules.resolution.get("frame_guards", {}).get("cited_precision_snags_max", 1))
     prec = [s for s in cited_snags if s.type == "precision"]
     cited_snags = [s.model_copy(update={"type": "protective"}) if s in prec[cap:] else s for s in cited_snags]
+    ob = p.obstacle
+    if ob.kind == "tier" and (ob.nudge or ob.obstacle_class == "other"):  # rule: 01.6.8
+        # I-159, DL-01-29: one model-chosen modifier per beat. A nudged or class `other` tier already carries it,
+        # so a cited Precision snag is refused as such and applies as Protective (stakes +1 each, clamped)
+        cited_snags = [s.model_copy(update={"type": "protective"}) if s.type == "precision" else s
+                       for s in cited_snags]
     snags = list(cited_snags)
     rep = list(rules.resolution["repetition"]["engine_snags_by_instance"])
     rep_val = int(rep[min(p.repetition_instance, len(rep)) - 1])

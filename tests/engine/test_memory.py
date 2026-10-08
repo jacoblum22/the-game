@@ -74,21 +74,19 @@ def test_slot_writer_refuses_what_it_may_not_write(tmp_path: Path) -> None:
     assert _write(g, npc, "posture", "pinned", source="ruling").outcome == "new"
 
 
-def test_cap_archives_rather_than_deletes(tmp_path: Path) -> None:
+def test_lasting_details_order_by_salience_then_use(tmp_path: Path) -> None:
+    """Spec 011 item 1 (DL-12-70): no cap; every lasting detail is active, ordered by salience then last use, so
+    the profile budget cuts the tail; a usage mark moves a detail forward."""
     g = Game(tmp_path)
     npc = _npc(g)
     lasting = [s for s, p in dt.slots(g.rules).items() if p == "lasting"]
     written = {s: _write(g, npc, s, f"plain {s}", turn=f"turn.{i + 1}").fact_id for i, s in enumerate(lasting)}
-    cap = dt.max_active(g.rules)
-    active = dt.active_details(g.state, npc, g.rules)
-    archived = dt.archived_details(g.state, npc, g.rules)
-    assert len(active) == min(cap, len(lasting)) and len(active) + len(archived) == len(lasting)
-    assert all(f.id in g.state.facts for f in archived)  # archived, never lost: still current, still checkable
-    if archived:  # the least recently used goes first; a usage mark brings it back
-        old = archived[-1].id
-        g.run(lambda ctx: ctx.tx.add(dt.used_event([old])), "turn.99")
-        assert old in {f.id for f in dt.active_details(g.state, npc, g.rules)}
-        assert g.state.details[npc][g.state.facts[old].predicate[7:]].last_used == 99
+    active = dt.active_details(g.state, npc)
+    assert len(active) == len(lasting) and not hasattr(dt, "max_active")
+    old = active[-1].id
+    g.run(lambda ctx: ctx.tx.add(dt.used_event([old])), "turn.99")
+    assert dt.active_details(g.state, npc)[0].id == old
+    assert g.state.details[npc][g.state.facts[old].predicate[7:]].last_used == 99
     assert written and g.store.rebuild() == g.state
 
 
@@ -98,7 +96,7 @@ def test_scene_details_expire_at_scene_end(tmp_path: Path) -> None:
     _scene(g)
     pinned = _write(g, npc, "posture", "pinned", source="ruling")
     _write(g, npc, "worn", "iron rings")
-    assert [f.id for f in dt.active_details(g.state, npc, g.rules)][0] == pinned.fact_id  # pinned in its scene
+    assert [f.id for f in dt.active_details(g.state, npc)][0] == pinned.fact_id  # pinned in its scene
     g.run(lambda ctx: scenes.end_scene(ctx, "player_cut"))
     assert g.state.fact_value(npc, "detail.posture") is None and "posture" not in g.state.details[npc]
     assert g.state.fact_value(npc, "detail.worn") == "iron rings"  # lasting details stay

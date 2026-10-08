@@ -3,7 +3,7 @@
     res = write_detail(tx.state, tx.mint, "npc.samkin", "worn", "iron rings")          # new | same | refused
     res = write_detail(tx.state, tx.mint, "npc.samkin", "worn", "no rings", because="frame.12")  # superseded
     tx.add_all(res.events); res.outcome            # "contradiction" writes nothing: the caller redrafts (12.3.1)
-    active_details(state, eid)                     # scene details, then the capped lasting ones (the view's)
+    active_details(state, eid)                     # scene details, then the lasting ones by salience, last use
     tx.add_all(expire_events(tx.state, tx.mint))   # scene end (12.4.8 step 8; end_scene does it)
 
 A detail is the fact `detail.<slot>`; the projection indexes them (`WorldState.details`: slot -> fact id and
@@ -23,7 +23,7 @@ from engine.store.events import Event
 from engine.store.projection import DETAIL, FactRecord, WorldState
 
 Outcome = Literal["new", "same", "superseded", "contradiction", "refused"]
-SEEDED = ("generation", "data")  # a seeded or generated look: salience 2 (00.6.6a item 3)
+SEEDED = ("generation", "data", "correction")  # seeded, generated or corrected (12.3.6): salience 2 (00.6.6a item 3)
 
 
 @dataclass
@@ -75,11 +75,6 @@ def slot_of(predicate: str, rules: Any = None, kind: str | None = None) -> str |
         return p
     words = re.findall(r"[a-z]+", p)
     return next((s for s, ws in _SLOT_WORDS.items() if s in known and any(w in ws for w in words)), None)
-
-
-def max_active(rules: Any = None) -> int:
-    rules = rules if rules is not None else load_rules()
-    return int(rules.pacing["details"]["max_active"])
 
 
 def _same(a: Any, b: Any) -> bool:
@@ -135,17 +130,13 @@ def _lasting(state: WorldState, eid: str) -> list[FactRecord]:
     return [f for f, _ in rows]
 
 
-def active_details(state: WorldState, eid: str, rules: Any = None) -> list[FactRecord]:  # rule: 00.6.6a
-    """The entity's details a view may show: its `scene` details (pinned while the scene runs), then at most
-    `details.max_active` lasting ones by salience, then last use. `beat` details are never retrieved."""
+def active_details(state: WorldState, eid: str) -> list[FactRecord]:  # rule: 00.6.6a
+    """The entity's details a view may show: its `scene` details (pinned while the scene runs), then every lasting
+    one by salience (a seeded, generated or corrected value first), then last use; the profile budget cuts the
+    tail (DL-12-70: no cap of its own) [spec 011 item 1]. `beat` details are never retrieved."""
     scene = [f for r in state.details.get(eid, {}).values()
              if (f := state.facts.get(r.fact_id)) is not None and f.persistence == "scene"]
-    return scene + _lasting(state, eid)[:max_active(rules)]
-
-
-def archived_details(state: WorldState, eid: str, rules: Any = None) -> list[FactRecord]:  # rule: 00.6.6a
-    """Lasting details beyond the cap: still current facts (and in the contradiction scope), never in a view."""
-    return _lasting(state, eid)[max_active(rules):]
+    return scene + _lasting(state, eid)
 
 
 def expire_events(state: WorldState, mint: Callable[[str], str]) -> list[Event]:  # rule: 12.4.8
@@ -153,6 +144,12 @@ def expire_events(state: WorldState, mint: Callable[[str], str]) -> list[Event]:
     the fact index keep the history), and every range band between people (T-12-18: bands are scene state too)."""
     out: list[Event] = [Event.of("position_set", rule_id="12.4.8", entity=eid, band_drop=sorted(pos.band_to))
                         for eid, pos in state.positions.items() if pos.band_to]
+    for eid, e in state.entities.items():  # a crowd's response is the place's scene state (12.11.9 step 1)
+        fid = state.current_fact_id(eid, "crowd_response") if e.kind == "place" else None
+        if fid is not None and state.facts[fid].value is not None:
+            out.append(Event.of("fact_set", {"source": "ruling"}, rule_id="12.4.8", fact_id=mint(ids.FACT),
+                                subject=eid, predicate="crowd_response", value=None, persistence="scene",
+                                visibility="shown", supersedes=fid))
     for eid, refs in state.details.items():
         for slot, r in refs.items():
             f = state.facts.get(r.fact_id)

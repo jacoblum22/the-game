@@ -52,6 +52,8 @@ Each item of `sentences` is one sentence with:
   ordinary furniture, features, walk-on people, common items and documents. Never a clue, hazard, adversary, a
   thing of value or a person with a secret or want, unless a record line you cite delivers it.
 - `atmosphere`: true only for pure atmosphere that names nothing addressable.
+- `speaker`: who says its quoted (or reported) words; `none` for narration; never the PC. A character's words
+  are testimony: they may guess, gossip or lie. Your own voice states only what the record and view hold.
 Unsure whether something is addressable: declare it. Fill `new` before `text`: each person or thing the sentence
 will name that the view lacks, then write only those.
 

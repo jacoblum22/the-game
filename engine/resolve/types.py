@@ -46,6 +46,7 @@ class Beat(BaseModel):
     against_will: bool = False  # acts on a person's body or property against their will
     uses_power: bool = False  # needs a supernatural or licensed technique
     speech: bool = False  # mainly words
+    pressure: str = "none"  # 12.2.2: a Talk's pressure mark (request, threat, offer, plea, insistence); event tags
     asks: bool = False  # a Talk beat that asks a plain question (a part with a question_kind): R1 (15.3.2)
     license: str | None = None  # engine-set: a stretched or emulated license (01.3.5)
     mode: GateMode = "normal"
@@ -120,6 +121,8 @@ class ProposedFrame(BaseModel):
     lethal: bool = False
     reach_whole: bool = True
     reach_one_factor: bool = False
+    reach_two_factors: bool = False  # 01.6.10: two effect factors unoffset, or a total potency: G4 (I-160a)
+    asks: str = "none"  # social.yaml#event_tags.asks: what a Talk request asks for, or none (12.11.9; I-176)
     threatened_cost: CostDecl | None = None
     alternate_cost: CostDecl | None = None
     method_consequences: list[str] = Field(default_factory=list)
@@ -230,6 +233,7 @@ class Frame(BaseModel):
     lethal: bool = False
     reach: ReachRung
     reach_factors: list[str] = Field(default_factory=list)
+    asks: str = "none"  # the Framer's event tag on a Talk request (social.yaml#event_tags.asks)
     trade: Trade = "none"
     threatened_cost: CostPreview
     alternate_cost: CostPreview | None = None

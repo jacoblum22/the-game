@@ -75,6 +75,12 @@ class Verdict(BaseModel):
     fix: Fix | None = None
     reason: str = ""
     incidental: bool = False  # an `undetermined` property 12.3.2 writes as narrated (T1a), not one for the Oracle
+    uncertain: bool = False  # 12.3.1b item 4: the subject is not certain, so the verdict counts for nothing (logged)
+
+    @property
+    def disposition(self) -> str:
+        """The claim-log verdict: `no_verdict` for an uncertain subject (DL-12-82), else the verdict."""
+        return "no_verdict" if self.uncertain else self.verdict
 
 
 _DEFAULT_FIX: dict[str, Fix | None] = {
@@ -326,20 +332,117 @@ def _flat(v: Any) -> str:
 
 
 def check_claims(claims: Iterable[Claim | dict[str, Any]], state: Any, record: AdjudicationRecord | None = None,
-                 scene_ids: Sequence[str] = (), *, rules: Any = None,
-                 cited: Mapping[int, Sequence[Any]] | None = None) -> list[Verdict]:  # rule: 12.3.2
+                 scene_ids: Sequence[str] = (), *, rules: Any = None, cited: Mapping[int, Sequence[Any]] | None = None,
+                 texts: Mapping[int, str] | None = None) -> list[Verdict]:  # rule: 12.3.2
     """One verdict per claim (12.3.2). `state`: a `WorldState` or a `Store` (its projection is read).
     `scene_ids`: the ids the Checker was offered (the schema's subject enum). Subjects are checked against the
     whole store; presence in the scene comes from the scene record and positions, not from this list. `cited`:
     per sentence index, the record items (engine/dm/handles.py) that sentence's declaration cites (12.3.1): a
-    claim restating a cited line, or an act its subject's cited line sources, is supported."""
+    claim restating a cited line, or an act its subject's cited line sources, is supported. `texts`: per sentence
+    index, its words; given, a claim about an entity whose subject the words do not make certain takes
+    no verdict in either direction (`uncertain`, 12.3.1b item 4, DL-12-82)."""
     ws: WorldState = state.state if hasattr(state, "transaction") else state
     ctx = _Ctx(ws, record or AdjudicationRecord(), scene_ids, rules, cited)
     out = []
     for i, raw in enumerate(claims):
         c = raw if isinstance(raw, Claim) else Claim.model_validate(raw)
-        out.append(_check(ctx, c, i))
+        v = _check(ctx, c, i)
+        text = (texts or {}).get(c.sentence)
+        if text is not None and v.verdict not in ("pc_agency", "leak") and c.subject in ws.entities \
+                and not certain(ws, c.subject, text, pc=ctx.pc, scope=scene_ids, record=ctx.record):
+            v = v.model_copy(update={"uncertain": True, "fix": None,
+                                     "reason": f"the subject is not certain: no verdict, logged ({v.reason})"})
+        out.append(v)
     return out
+
+
+# ------------------------------------------------------------------------------------------- 12.3.1b
+
+# a mechanically relevant possession (12.3.1b item 2.3): a weapon, armour, tool, key, consumable, coin, value
+_RELEVANT = [*_CONSEQUENTIAL, "armour", "armor", "shield", "mail", "helm", "tool", "rope", "lantern", "torch",
+             "potion", "salve", "ration", "rations", "arrow", "arrows", "coin", "coins", "silver", "gold", "copper",
+             "purse", "money", "crossbow", "club", "mace", "hammer", "crowbar", "lockpick", "pick"]
+_BLOCKING = {"outcome", "capability", "harm_condition", "quantity", "possession", "position", "existence", "sealed",
+             "identity"}  # pacing.yaml#claim_check.blocking's classes (the default when no rules are given)
+
+
+def relevant_item(text: str) -> bool:  # rule: 12.3.1b
+    """A weapon, armour, tool, key, consumable, coin or a thing of value named in `text` (12.3.1b item 2.3)."""
+    return _has(text, _RELEVANT)
+
+
+def blocking(c: Claim, v: Verdict, rules: Any = None) -> bool:  # rule: 12.3.1b
+    """Is this failing claim on the blocking list (12.3.1b item 2)? PC agency and sealed content always; a
+    possession only of a relevant item; identity only for a name. The caller adds the narrator's voice and a
+    certain subject; everything else is logged."""
+    if v.verdict in ("pc_agency", "leak"):
+        return True
+    classes = _BLOCKING
+    if rules is not None:
+        rows = (rules.pacing.get("claim_check") or {}).get("blocking") or []
+        classes = {cl for r in rows for cl in r.get("classes") or []} or _BLOCKING
+    if c.cls not in classes:
+        return False
+    if c.cls == "possession":
+        return _has(c.text, _RELEVANT)
+    if c.cls == "identity":
+        return _identity_key(c.predicate) == "name"
+    return True
+
+
+def _head(name: str) -> str | None:
+    """The last content word of a name ("the red sword" -> "sword"; "shrine attendant" -> "attendant")."""
+    words = [w for w in re.findall(r"[a-z]+", (name or "").lower()) if w not in ("the", "a", "an", "of", "and")]
+    return words[-1] if words else None
+
+
+def _forms(e: Any) -> tuple[list[str], str | None]:
+    """(whole names and aliases, lower case; the head noun of the name or role)."""
+    names = [e.name, *(a for a in e.data.get("aliases") or [] if isinstance(a, str))]
+    if e.kind in ("npc", "pc", "companion", "adversary") and len(e.name.split()) > 1:
+        names.append(e.name.split()[0])
+    names = [re.sub(r"^(?:the|a|an)\s+", "", n.strip().lower()) for n in names if n and len(n) > 2]
+    head = _head(e.name) if e.kind not in ("npc", "pc", "companion", "adversary") else _head(
+        str(e.data.get("role") or "").split(" or ")[0])
+    return names, head
+
+
+def _proper(name: str) -> bool:
+    return any(w[:1].isupper() for w in name.split() if w.lower() not in ("the", "a", "an"))
+
+
+def certain(state: WorldState, subject: str, text: str, *, pc: str | None = None, scope: Iterable[str] = (),
+            record: AdjudicationRecord | None = None) -> bool:  # rule: 12.3.1b
+    """12.3.1b item 4: does `text` make `subject` the one entity it speaks of? The PC and this turn's beats'
+    people are certain; else (a) a whole name or alias no other entity in scope shares (a place's common-noun
+    name, "the hall", does not count); (b) a head noun ("the sword") that only one entity in scope fits; (c) no
+    mention (a pronoun): the only candidate of its kind present."""
+    from engine.retrieve.scene import scene_scope
+
+    if subject == pc or (record is not None and any(subject in (b.actor, *b.targets) for b in record.beats)):
+        return True
+    e = state.entities.get(subject)
+    if e is None:
+        return False
+    pool = [i for i in dict.fromkeys([*scope, *scene_scope(state), subject]) if i in state.entities and i != pc]
+    low = text.lower()
+
+    def said(n: str) -> bool:
+        return bool(re.search(rf"\b{re.escape(n)}\b", low))
+
+    names, head = _forms(e)
+    whole = [n for n in names if said(n)]
+    if whole and (e.kind != "place" or _proper(e.name)):
+        return not any(said(n) for o in pool if o != subject for n in _forms(state.entities[o])[0] if n in whole)
+    if head and said(head):
+        return sum(1 for o in pool if _forms(state.entities[o])[1] == head or any(
+            said(n) for n in _forms(state.entities[o])[0] if head in n.split())) == 1
+    if whole:  # a common-noun place named alone: never certain (DL-12-82)
+        return False
+    people = ("npc", "companion", "adversary")
+    group = [o for o in pool if (state.entities[o].kind in people) == (e.kind in people)
+             and state.entities[o].kind != "place"]
+    return group == [subject]
 
 
 def _check(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: PR-12-2
@@ -368,8 +471,7 @@ def _check(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: PR-12-2
             return _v(c, i, "unsourced_change", reason="an unidentified subject changed or acted; cut")
         if c.cls in ("knowledge", "sealed"):  # 12.14.13: knowledge beyond the view is T1b/T2, never written so
             return _v(c, i, "new_element", fix="cut", reason="undeclared knowledge may not be created by mention; cut")
-        # ponytail: an undeclared new element is written as ordinary furniture (the `_apply_writes` backstop); the
-        # declared `element_kind` is the main path (12.14.13). Remove once undeclared assertions < 0.3/turn (009)
+        # an undeclared new element (spec 011: the sampled audit logs this verdict; nothing writes it after delivery)
         return _v(c, i, "new_element", fix="write_on_mention", reason="a new ordinary element: write it on mention")
     c = c.model_copy(update={"subject": subject})
     return _CLASS_CHECKS[c.cls](ctx, c, i)

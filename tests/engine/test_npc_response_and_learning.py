@@ -237,7 +237,10 @@ def test_what_the_store_lacks_is_answered_before_the_draft(tmp_path: Path) -> No
         kind="where_is")
     learned = out.adjudication.record.beats[0].learned
     assert len(learned) == 1 and learned[0].startswith("Tam Harlan "), learned
-    assert out.response.fiction != text  # the undeclared answer is not the one told
+    assert learned[0] not in text  # the ladder's answer is the record's; the NPC's words are their own
+    # spec 011: speech is testimony (12.3.1b item 1): delivered, kept as a said record, never written or judged
+    assert out.response.fiction == text and any("north stair" in s["words"] for s in out.turn_record.said)
+    assert not any("north stair" in str(f.value) for f in ctx.store.state.facts.values())
 
 
 # ------------------------------------------------------------------------------------------- P-120: success answers
@@ -372,12 +375,14 @@ def _attendant(dock: Any) -> None:
         tx.add(Event.of("entity_created", source="test", entity=EntityRecord(
             id="npc.gilda", kind="npc", name="Gilda Underhill", data={
                 "role": "shrine attendant", "demeanor": "grieving", "pronouns": "he/him",
-                "refusals": ["will not break off his prayer for a stranger"]})))
+                "refusals": ["will not break off his prayer for a stranger"],
+                "wants": [{"text": "find whoever took the relic"}]})))  # untagged motives with opposite rows
         tx.add(Event.of("position_set", source="test", rule_id="10.1.1", entity="npc.gilda", location=dock.place))
 
 
 def test_an_npc_met_mid_scene_answers_and_a_refusal_is_legible(tmp_path: Path) -> None:
-    # P-056: the World role saw only the framed cast, so the attendant never answered and nothing said why
+    # P-056: the World role saw only the framed cast, so the attendant never answered and nothing said why.
+    # Spec 011 (I-176): no tag matches and his motives point to opposite rows, so the World fallback decides
     world = {"responses": [{"npc": "npc.gilda", "want_engaged": "none", "refusal_engaged": "npc.gilda/refusal.1",
                             "table_context": {"tags": []}}]}
     model = ScriptedModel({Role.READER: [reader("SPEECH", PRAY)], Role.WORLD: [world],
@@ -387,7 +392,7 @@ def test_an_npc_met_mid_scene_answers_and_a_refusal_is_legible(tmp_path: Path) -
     _attendant(dock)
     out = play_turn(ctx, PRAY)
     rows = out.adjudication.record.npc_actions
-    assert [(a.npc, a.source) for a in rows] == [("npc.gilda", "refusal")]
+    assert [(a.npc, a.source) for a in rows] == [("npc.gilda", "refusal")] and "world_fallback" in rows[0].tags
     msg = calls(model, Role.NARRATOR)[0].message
     assert "Gilda Underhill acts: refuses, in their own voice (" in msg and "will not break off his prayer" in msg
     assert "show it plainly" in msg and "manner: grieving" in msg and "- present: Gilda Underhill" in msg

@@ -157,6 +157,7 @@ class ReaderBeat(BaseModel):
     against_will: bool = False
     uses_power: bool = False
     speech: bool = False
+    pressure: str = NONE  # 12.2.2: request, threat, offer, plea, insistence (event tags, 12.11.9)
     g4_fact: str | None = None
     intent_verbs: list[str] = Field(default_factory=list)
 
@@ -195,6 +196,7 @@ class ReaderResult(BaseModel):
                         assertion=b.assertion, shape="extended" if b.shape == "extended" else "single",
                         target=target, restatement=(own if single and own else b.intent),
                         verb=b.verb, against_will=b.against_will, uses_power=b.uses_power, speech=b.speech,
+                        pressure=b.pressure or NONE,
                         asks=asks and b.verb == "verb.talk", g4_fact=b.g4_fact, declared_seq=declared_seq)
             out.append(BeatPlan(beat=beat, intent_verbs=list(b.intent_verbs)))
         return out

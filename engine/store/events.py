@@ -265,7 +265,7 @@ class KnowledgeRecorded(Payload):
     entity_refs = ("knower",)
     knower: str
     fact_id: str
-    how: Literal["witnessed", "told", "read", "overheard", "recalled", "inferred", "rumor", "confided"]  # 15.9.17
+    how: Literal["witnessed", "told", "read", "overheard", "heard", "recalled", "inferred", "rumor", "confided"]  # 15.9.17
 
     def check(self, state: Any) -> None:
         super().check(state)

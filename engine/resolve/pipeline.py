@@ -29,7 +29,7 @@ from engine import ids
 from engine.dm.adjudication import BeatEntry, CostEntry, HarmEntry, PositionEntry
 from engine.resolve.costs import HarmHook, apply_cost, check_cost_decl, first_fitting_cost
 from engine.resolve.frame import auto_commit_allowed, commit_events, frame_check, offer_preview
-from engine.resolve.gate import GateDecision, check_gate, words
+from engine.resolve.gate import GateDecision, check_gate, words, zero_reach
 from engine.resolve.necessity import necessity, trivial_class
 from engine.resolve.roll import read_result, roll_check
 from engine.resolve.rulings import RulingRecord, log_ruling
@@ -368,6 +368,11 @@ def _frame(env: PipelineEnv, plan: BeatPlan, dec: GateDecision, queued: list[Bea
     if not cands:
         return BeatOutcome(status="refused", entry=_entry(beat, gate=dec.gate, gate_words="no anchor fits (00.15.3)"))
     proposed = env.framer(beat, cands, gate=dec, note=note)
+    if proposed.reach_two_factors:  # rule: 01.6.10 (I-160a): zero reach is G4 before the OFFER, nothing spent
+        g4 = zero_reach(beat, rules=env.rules, verb=dec.verb, mint=env.tx.mint, store=env.store,
+                        staged=env.tx.events)
+        env.add(*g4.events)
+        return _refused(beat, g4, "G4")
     if trivial_class(proposed, env.rules, dec.verb or beat.verb):  # rule: 01.4.1
         beat.necessity = "trivial"  # the class's base is trivial: anyone, in these conditions, succeeds
         return _no_roll(env, plan, dec)

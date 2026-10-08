@@ -255,8 +255,8 @@ def scene_starts(state: WorldState) -> list[int]:  # rule: 12.2.4
 
 
 def shown_details(state: WorldState, ids: Iterable[str]) -> tuple[set[str], set[str]]:  # rule: 00.6.6a
-    """(detail fact ids a view may show, detail fact ids it never shows) for `ids`: archived lasting details over the
-    cap and `beat` details are never shown (00.6.6a items 3 and 1)."""
+    """(detail fact ids a view may show, detail fact ids it never shows) for `ids`: `beat` details are never shown
+    (00.6.6a item 1)."""
     shown: set[str] = set()
     hidden: set[str] = set()
     for eid in ids:

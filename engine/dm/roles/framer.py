@@ -74,7 +74,8 @@ def to_proposed(data: dict[str, Any], beat: Beat, state: WorldState) -> Proposed
         snags=[LeverCite(fact_id=f) for f in data.get("snags") or []],
         stakes_source=data.get("stakes_source") or NONE, stakes_heavy=bool(data.get("stakes_heavy")),
         lethal=bool(data.get("lethal")), reach_whole=bool(data.get("reach_whole")),
-        reach_one_factor=bool(data.get("reach_one_factor")), threatened_cost=cost(data.get("threatened_cost")),
+        reach_one_factor=bool(data.get("reach_one_factor")), reach_two_factors=bool(data.get("reach_two_factors")),
+        asks=str(data.get("asks") or NONE), threatened_cost=cost(data.get("threatened_cost")),
         alternate_cost=cost(data.get("alternate_cost")), method_consequences=list(data.get("method_consequences") or []),
         secret=bool(data.get("secret")))
 

@@ -89,7 +89,6 @@ claim_check:                              # 12.3
     mode: sampled                         # the diff (beyond the declarations; declared but unexpressed) plus a full extraction, on sampled turns only
     full_extraction_every: 10             # the sample: 1 turn in 10, picked by the turn id, run after delivery
     gates_delivery: false                 # findings go to the claim log; they never cut, redraft or delay a delivered turn
-    skip_enabled: false                   # retired by R2-G (there is no skip: the audit is sampled); kept only for engine/dm/narration.py until spec 011
 
 corrections:                              # 12.3.4
   forms: [in_fiction_reconciliation, oof_note]
@@ -284,7 +283,6 @@ npc:                                      # 12.11
   habit_max_per_scene: 1
 
 details:                                  # 00.6.6a established details [revision: R2-E]
-  max_active: 8                           # retired by R2-G (DL-12-70): not a rule; one value per slot bounds details (8 lasting person slots). Kept only for engine/store/details.py until spec 011
   slots:                                  # closed list; slot: persistence. scene slots are written by code only (T1c)
     person: {hair: lasting, face: lasting, mark: lasting, build: lasting, clothing: lasting, worn: lasting, voice: lasting, condition_visible: lasting, held: scene, manner: scene, posture: scene, activity: scene}
     object: {material: lasting, state: lasting, marking: lasting}

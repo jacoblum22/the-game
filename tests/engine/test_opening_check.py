@@ -53,7 +53,8 @@ def test_opening_with_crowd_reactions_passes_first_draft(tmp_path: Path) -> None
     model.push(Role.CHECKER, checked)
     resp = opening(TurnContext.for_store(store, model=model))
     assert resp.fiction == OPENING and not resp.flags.fallback_used
-    assert len(calls(model, Role.NARRATOR)) == 1 and len(calls(model, Role.CHECKER)) == 1
+    assert len(calls(model, Role.NARRATOR)) == 1  # the sampled audit (turn.1) runs after delivery, logs only
+    assert len(calls(model, Role.CHECKER)) in (0, 2)
 
 
 def test_incident_sources_reactions_not_deeds() -> None:

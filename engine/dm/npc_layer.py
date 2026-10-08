@@ -6,7 +6,9 @@ responds; the narrator voices it.
 
 Every response is an `NpcActionEntry` (a must-name record line with a handle, engine/dm/handles.py), so the
 narration cites it instead of inventing an act. Draws go through the game's RNG, so a seeded replay reproduces
-them. The World role is asked only when an NPC's recorded motive may match the event (12.2.9's `[J:flag]`).
+them. Wants and refusals are matched to the event by closed tags (social.yaml#event_tags; DL-12-87, I-176); the
+World role is only the fallback, when no tag matches and the NPC's motives point to opposite rows. A crowd's
+response that changes something is a scene fact `crowd_response` on the place, with a record line.
 """
 
 from __future__ import annotations
@@ -167,10 +169,118 @@ def _event_words(record: AdjudicationRecord) -> str:
     return " ".join([p.text for p in record.parts] + [b.restatement for b in record.beats])
 
 
+# ------------------------------------------------------------------------------------------- step 3(b): tags
+
+_PEOPLE = ("npc", "companion", "adversary", "pc")
+_HARM_VERBS = ("verb.strike", "verb.grapple")
+_TOPIC_TAGS = {  # social.yaml#event_tags: concerns_* by the topic's words. ponytail: a word list per tag
+    "concerns_trade": re.compile(r"\b(prices?|goods|wares|craft|trade|buy|sell|cost)\b", re.I),
+    "concerns_travel": re.compile(r"\b(roads?|travell?\w*|arriv\w*|water|river|ferry|boats?|crossing)\b", re.I),
+    "concerns_faith": re.compile(r"\b(faith|gods?|temple|shrine|pray\w*|priest\w*)\b", re.I),
+    "concerns_healing": re.compile(r"\b(sick\w*|heal\w*|cure|fever|wound\w*|plague|ill(ness)?)\b", re.I),
+    "concerns_standing": re.compile(r"\b(reputation|title|good name|standing|honou?r)\b", re.I),
+}
+
+
+def _tag_data(rules: Any) -> dict[str, Any]:
+    return dict(rules.social.get("event_tags") or {})
+
+
+def event_tags(state: Any, record: AdjudicationRecord, beats: Sequence[Any], npc: str,
+               practice: str = "") -> set[str]:  # rule: 12.11.9
+    # rule: 12.2.9
+    """The event's closed tags as they bear on `npc` (social.yaml#event_tags; DL-12-87, I-176), from each beat's
+    verb, facets, target and pressure mark, the Framer's `asks` tag on a Talk request, the request's terms, and the
+    topic words. ponytail: `names_object`, `asks_truce`/`asks_surrender` and recorded wrongdoing are not derived
+    yet (no want-object entity, no parley beat, no crime record): those tags never fire."""
+    from engine.world.social import npc_field
+
+    tags: set[str] = set()
+    ties = [str(t) for t in npc_field(state, npc, "ties") or []]
+    kin = [t for t in ties if not t.startswith("fac.")]
+    masters = [t for t in ties if t.startswith("fac.")] + [str(m) for m in npc_field(state, npc, "member_of") or []]
+    for o in beats:
+        e = o.entry
+        fr = state.frames[o.frame_id].frame if o.frame_id and o.frame_id in state.frames else {}
+        b = fr.get("beat") or {}
+        verb = e.verb or b.get("verb")
+        target = next(iter(e.targets), None)
+        held_by = None
+        if target in state.entities:
+            held_by = state.entities[target].data.get("holder") or state.fact_value(target, "holder")
+        harms = bool(b.get("against_will")) or verb in _HARM_VERBS
+        if harms and (target == npc or held_by == npc):
+            tags.add("harms")
+        if harms and target in state.entities and state.entities[target].kind in ("npc", "companion"):
+            tags.add("harms_innocent")  # ponytail: no record of wrongdoing or arms is read yet
+        if target in kin:
+            tags.add("concerns_kin")
+            if harms or b.get("pressure") == "threat":
+                tags.add("against_kin")
+        if target in masters:
+            tags.add("concerns_master")
+        if verb in ("verb.help", "verb.setup") and target == npc:
+            tags.add("offers_help")
+        if verb == "verb.talk" and target == npc:
+            pressure = str(b.get("pressure") or "none")
+            asks = str(fr.get("asks") or "none")
+            if pressure == "threat":
+                tags.add("threatens")
+            if asks != "none":
+                tags.add(asks)
+            if pressure != "none" or asks != "none":
+                tags.add("pc_request")
+            terms = f"{b.get('method') or ''} {b.get('intent') or ''} {e.restatement}"
+            if pressure == "offer" and _TRADE.search(terms):
+                tags.add("offers_payment")
+    if "offers_payment" in tags and tags & {"asks_breach", "asks_lawbreak"}:
+        tags.add("offers_bribe")
+    topics = " ".join(p.topic or "" for p in record.parts) + " " + _event_words(record)
+    tags |= {t for t, rx in _TOPIC_TAGS.items() if rx.search(topics)}
+    if practice == "trade":
+        tags.add("concerns_trade")
+    name = state.entities[npc].name.lower() if npc in state.entities else ""
+    if any(p.question_kind == "what_happened" and name and name in (p.topic or p.text).lower() for p in record.parts):
+        tags.add("concerns_past")
+    return tags
+
+
+def motive_tags(state: Any, rules: Any, npc: str) -> dict[str, set[str]]:  # rule: 12.11.9
+    """Each recorded refusal (by kind) and want (by its object, the end of its text) with its tags, keyed like
+    `npc_motives` ("<npc>/want.1"). A motive with no listed kind or object has none (it never matches)."""
+    et = _tag_data(rules)
+    out: dict[str, set[str]] = {}
+    e = state.entities.get(npc)
+    if e is None:
+        return out
+    for key, kind in (("wants", "want"), ("refusals", "refusal")):
+        v = state.fact_value(npc, key)
+        for i, item in enumerate(v if isinstance(v, list) else (e.data.get(key) or [])):
+            d = item if isinstance(item, dict) else {"text": str(item)}
+            if kind == "refusal":
+                tags = set((et.get("refusals") or {}).get(str(d.get("kind") or ""), []))
+            else:
+                text = str(d.get("text") or d.get("want") or "").lower().strip()
+                obj = max((k for k in (et.get("wants") or {}) if text.endswith(str(k).lower())), key=len, default=None)
+                tags = set((et.get("wants") or {}).get(obj, [])) if obj else set()
+            out[f"{npc}/{kind}.{i + 1}"] = tags
+    return out
+
+
+def want_row(rules: Any, matched: set[str], *, request: bool, hostile: bool) -> int:  # rule: 12.11.9
+    """A matched want's `tbl.npc_action` row before the practice clamp: served 9 (a request) or 8, defeated 2
+    (1 at Hostile), engaged 6."""
+    et = _tag_data(rules)
+    if matched & set(et.get("serves") or []):
+        return 9 if request else 8
+    if matched & set(et.get("defeats") or []):
+        return 1 if hostile else 2
+    return 6
+
+
 def candidates(state: Any, npc: str, record: AdjudicationRecord) -> dict[str, str]:  # rule: 12.2.9
-    """The NPC's recorded wants and refusals, best word overlap with the event first. Wants and refusals carry no
-    tags, so whether one is engaged is the World role's `[J:flag]`; the order is only the fallback's pick when
-    `world_judge` is off. ponytail: content-word overlap."""
+    """The NPC's recorded wants and refusals, best word overlap with the event first (the World fallback's
+    candidates, and its order when `world_judge` is off). ponytail: content-word overlap."""
     from engine.dm.roles.world import npc_motives
 
     said = tx.content(_event_words(record))
@@ -214,8 +324,8 @@ def voiced_refusal(ctx: TurnContext, npc: str, reason: str) -> str:  # rule: 12.
 
 
 def _judge_motive(ctx: TurnContext, npc: str, cands: dict[str, str], happened: str) -> tuple[str | None, list[str]]:
-    """(want/refusal id engaged or None, tags): the World role over the candidates only; without it, the best
-    overlap."""
+    """The World fallback (12.11.9 step 3(b)): (want/refusal id engaged or None, tags), the World role over the
+    candidates only; with `world_judge` off, the best overlap."""
     if (ctx.config or {}).get("world_judge", True):
         from engine.dm.roles.world import npc_responses
 
@@ -232,8 +342,11 @@ def respond(ctx: TurnContext, record: AdjudicationRecord, beats: Sequence[Any], 
     # rule: 12.11.9
     # rule: 12.2.9
     """Steps 2-5 for every engaged or addressed present NPC (addressed, or a resolved beat's target): (a) a resolved
-    Talk frame's outcome; (b) a recorded refusal or want the World role finds engaged; (c) `tbl.npc_action` by
-    standing, clamped to the practice's rows. An addressed NPC always answers: a refusing source is voiced."""
+    Talk frame's outcome; (b) a recorded refusal or want whose tags match the event (a want served takes row 9 for
+    a request, else 8; defeated 2, 1 at Hostile; engaged 6; then the practice clamp), the World role only when no
+    tag matches and the motives point to opposite rows; (c) `tbl.npc_action` by standing, clamped to the practice's
+    rows. An addressed NPC always answers: a refusing source is voiced. With nobody engaged and the crowd
+    practice, the crowd's response (`crowd_response`)."""
     from engine.dm.roles.world import npc_motives, present_npcs
     from engine.dm.scene_state import response_values, write
     from engine.dm.world_step import RESOLVED, _foe_turn, happened_text
@@ -261,6 +374,7 @@ def respond(ctx: TurnContext, record: AdjudicationRecord, beats: Sequence[Any], 
         if npc in skip or (npc in unresolved and npc not in talks):
             continue
         n_acts = len(record.npc_actions)
+        wrow: int | None = None  # a tag-matched want's row (12.11.9 step 3(b))
         is_addressed = npc in spoke_to or npc in talks
         practice = practice_for(ctx.state, record, npc, spoke_to)
         if npc in talks:  # (a) a resolved Talk frame's delivered outcome (a certain talk, no roll, is a yes)
@@ -272,15 +386,34 @@ def respond(ctx: TurnContext, record: AdjudicationRecord, beats: Sequence[Any], 
             record.npc_actions.append(NpcActionEntry(npc=npc, action=action, source="talk_outcome",
                                                      source_ref=b.frame_id, tags=[practice]))
         else:
-            cands = candidates(ctx.state, npc, record)
-            motive, tags = _judge_motive(ctx, npc, cands, happened_text(record)) if cands else (None, [])
+            row_def = practice_rows[practice]
+            allowed = [int(x) for x in row_def["action_rows"]]
+            ev = event_tags(ctx.state, record, beats, npc, practice)
+            mtags = motive_tags(ctx.state, ctx.rules, npc)
+            matched = {m: t & ev for m, t in mtags.items() if t & ev}
+            sv = standing(ctx.state, npc)
+            hostile = sv is not None and int(sv) <= -3
+            motive = next((m for m in matched if "/refusal." in m), None) or next(iter(matched), None)
+            tags = sorted(matched.get(motive or "", set()))
+            if motive is not None and "/want." in motive:
+                wrow = clamp_row(want_row(ctx.rules, matched[motive], request="pc_request" in ev or asked,
+                                          hostile=hostile), allowed, hostile)
+            if motive is None and {m.split("/")[1].split(".")[0] for m in mtags} == {"want", "refusal"}:
+                # no tag matches and the motives point to opposite rows: the World fallback (12.11.9 step 3(b))
+                cands = candidates(ctx.state, npc, record)
+                motive, tags = _judge_motive(ctx, npc, cands, happened_text(record))
+                tags = [*tags, "world_fallback"]
             motives = npc_motives(ctx.state, npc)
             if motive is not None and "/refusal." in motive:  # (b) a recorded refusal outranks everything else
                 record.npc_actions.append(NpcActionEntry(npc=npc, action=voiced_refusal(ctx, npc, motives[motive]),
                                                          source="refusal", source_ref=motive, tags=[practice, *tags]))
             elif motive is not None:
-                record.npc_actions.append(NpcActionEntry(npc=npc, action=f"acts on a want: {motives[motive]}",
-                                                         source="want", source_ref=motive, tags=[practice, *tags]))
+                gist = str((row_def.get("responses") or {}).get(str(wrow)) or "") if wrow is not None else ""
+                action = f"acts on a want: {motives[motive]}" + (f"; {gist}" if gist else "")
+                if wrow is not None and is_addressed and asked and wrow in REFUSING_ROWS:
+                    action = voiced_refusal(ctx, npc, gist or motives[motive])
+                record.npc_actions.append(NpcActionEntry(npc=npc, action=action, source="want", source_ref=motive,
+                                                         tags=[practice, *tags, *([f"row:{wrow}"] if wrow else [])]))
             else:  # (c) the action table by standing, clamped to the practice (12.11.5)
                 value = standing(ctx.state, npc)
                 if value is None:  # PR-12-5 step 3: the first interaction's reaction roll
@@ -304,15 +437,52 @@ def respond(ctx: TurnContext, record: AdjudicationRecord, beats: Sequence[Any], 
                                                          source_ref=f"{NPC_TABLE}:{row}", tags=[practice]))
         for a in record.npc_actions[n_acts:]:  # T-12-18: the response sets their activity and manner
             src, ref = a.source, a.source_ref or "12.11.9"
-            row = int(ref.rsplit(":", 1)[1]) if src == "table_row" else None
+            row = int(ref.rsplit(":", 1)[1]) if src == "table_row" else wrow if src == "want" else None
             degree = talks[npc].entry.degree if src == "talk_outcome" else None
-            write(ctx, record, npc, response_values(ctx.rules, src, practice=practice, row=row, degree=degree),
-                  because=ref)
+            write(ctx, record, npc, response_values(ctx.rules, "table_row" if row is not None else src,
+                                                    practice=practice, row=row, degree=degree), because=ref)
         if is_addressed and npc not in spoken_with(ctx.state):
             sc = ctx.state.scene
             if sc is not None:
                 tx_.add(meta(SPOKEN, {"scene": sc.scene_id, "npcs": [*spoken_with(ctx.state), npc]}, "12.11.9"))
+    if not engaged and any(b.status in RESOLVED for b in beats) \
+            and practice_for(ctx.state, record, None, spoke_to) == "crowd":
+        crowd_response(ctx, record, [int(x) for x in practice_rows["crowd"]["action_rows"]])
 
 
-__all__ = ["ACTIVITY", "addressed", "candidates", "clamp_row", "current_activity", "ensure_activities",
-           "practice_for", "respond", "role_key", "voiced_refusal"]
+CROWD = "crowd_response"  # the scene fact on the place (12.11.9 step 1)
+
+
+def crowd_response(ctx: TurnContext, record: AdjudicationRecord, allowed: Sequence[int]) -> None:  # rule: 12.11.9
+    """12.11.9 step 1: an unnamed crowd's collective reaction is atmosphere unless it changes something the PC could
+    act on; then it is the crowd practice's row (`tbl.npc_action` at standing 0, clamped), written as a scene fact
+    `crowd_response` on the scene's place, with a record line. The crowd is never a person and has no profile."""
+    from engine import ids
+    from engine.dm.scene_state import response_values
+    from engine.resolve.tables import roll_table
+    from engine.store.events import Event
+
+    tx_ = ctx.need_tx()
+    sc = tx_.state.scene
+    if sc is None or not sc.place_id:
+        return
+    res = roll_table(NPC_TABLE, {"standing_modifier": 0}, rules=ctx.rules, state=tx_.state, rng=ctx.rng,
+                     purpose="the crowd's response (12.11.9)")
+    tx_.add_all(res.events)
+    row = clamp_row(int(res.roll or 5), allowed, False)
+    act = response_values(ctx.rules, "table_row", practice="crowd", row=row).get("activity")
+    if not act:
+        return  # heads turn, talk stops: atmosphere (12.3.1)
+    place = sc.place_id
+    ev = Event.of("fact_set", {"source": "ruling"}, source=f"{NPC_TABLE}:{row}", rule_id="12.11.9",
+                  fact_id=tx_.mint(ids.FACT), subject=place, predicate=CROWD, value=act, visibility="shown",
+                  persistence="scene", supersedes=tx_.state.current_fact_id(place, CROWD))
+    tx_.add(ev)
+    record.add_writes([ev])
+    record.npc_actions.append(NpcActionEntry(npc=place, action=f"the crowd: {act}", source="table_row",
+                                             source_ref=f"{NPC_TABLE}:{row}", tags=["crowd"]))
+
+
+__all__ = ["ACTIVITY", "CROWD", "addressed", "candidates", "clamp_row", "crowd_response", "current_activity",
+           "ensure_activities", "event_tags", "motive_tags", "practice_for", "respond", "role_key", "voiced_refusal",
+           "want_row"]

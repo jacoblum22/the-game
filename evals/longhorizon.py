@@ -108,20 +108,34 @@ def recall_score(answer: str, known: list[str], stored: list[str], name: str) ->
 
 
 def contradictions(turn_records: Iterable[dict[str, Any]]) -> tuple[int, Counter[str]]:
-    """(narrated turns, `contradicted` verdicts by claim class in each turn's first checked draft)."""
+    """(narrated turns, `contradicted` claim-log entries by claim class; spec 011: the claim log holds the sampled
+    audit's verdicts, a certain subject only)."""
     n = 0
     by: Counter[str] = Counter()
     for r in turn_records:
-        dv = r.get("draft_versions") or []
-        if not dv:
+        if not r.get("draft_versions"):
             continue
         n += 1
-        v = next((x for x in dv if x.get("claims")), None)
-        for x in (v or {}).get("verdicts") or []:
-            if x.get("verdict") == "contradicted":
-                c = v["claims"][x["claim"]] if v and x.get("claim", -1) < len(v["claims"]) else {}
-                by[str(c.get("class"))] += 1
+        by.update(str(e.get("class")) for e in r.get("claim_log") or [] if e.get("verdict") == "contradicted")
     return n, by
+
+
+def claim_log_lines(turns: list[dict[str, Any]]) -> list[str]:  # rule: OEQ-12-23
+    """Spec 011 item 12: claim-log entries per 100 narrated turns by class, and the sampled audit's blocking-list
+    misses per 100 narrated turns (OEQ-12-23: more than 1 per 100 adds a code scan, DL-12-83)."""
+    narrated = [t for t in turns if t.get("draft_versions")]
+    n = len(narrated)
+    if not n:
+        return []
+    log = [e for t in narrated for e in t.get("claim_log") or []]
+    by = Counter(f"{e.get('class')}/{e.get('verdict')}" for e in log)
+    sampled = sum(1 for t in narrated if any(e.get("source") == "sample" for e in t.get("claim_log") or [])
+                  or any("sample" in v for v in t["draft_versions"]))
+    misses = sum(1 for e in log if e.get("blocking_miss"))
+    return [f"- claim log per 100 narrated turns: {100 * len(log) / n:.1f} ("
+            + ", ".join(f"{k} {100 * v / n:.1f}" for k, v in by.most_common()) + ")",
+            f"- sampled audit: {sampled} of {n} narrated turns sampled; blocking-list misses {misses} "
+            f"({100 * misses / n:.1f} per 100 narrated turns)"]
 
 
 def growth(first: dict[str, int], last: dict[str, int], limit: float = 0.10) -> list[str]:
@@ -509,6 +523,7 @@ def _run_scripted(seed: int, lines: int, model: str, tmp: Path, learned: list[di
                f"coverage {_mean(rec_c)}")
     out.append(f"- novelty-4 over the previous 10 deliveries: {novelty4(deliveries):.2f} ({len(deliveries)} deliveries)")
     out.append(narration_loop(turns))
+    out += claim_log_lines(turns)
     out += ladder_lines(learned, (twice[0], twice[1]))
     for mark in CHECKPOINTS:
         near = min(turn_at, key=lambda k: (abs(k - mark), k), default=None)  # an OOF line makes no turn
