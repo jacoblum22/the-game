@@ -175,6 +175,9 @@ _DEEDS = ["give", "hand over", "hand you", "hand it", "pass you", "slide across"
           "call the", "shout for", "summon", "fetch", "send for", "signal to", "kill", "set free", "let go of",
           "let you pass", "step aside", "show you the", "write", "sign"]
 _YOU = ["you", "your", "yours", "the pc"]
+_REFUSE = ["refuse", "refuses", "refusal", "will not say", "won't say", "will not tell", "won't tell", "not say",
+           "will not give", "won't give", "withhold", "withholds", "declines to", "not from me", "keeps the name",
+           "not now", "says nothing", "gives you nothing", "gives nothing"]
 _LOSE = ["drop", "lose", "lost", "give", "hand over", "hands over", "sold", "sell", "stolen", "no longer", "toss",
          "throw away", "surrender", "gone"]
 
@@ -1039,6 +1042,11 @@ def _action(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: 12.2.9
     text = c.text
     if c.subject == ctx.pc:  # the PC's acts are the player's: judged by the pc_words_or_feelings flag (12.14.3)
         return _v(c, i, "supported")
+    if _has(text, _REFUSE) and any(c.subject in b.targets and "verb.talk" in (b.approach_words or "")
+                                   and b.degree is not None and _beat_success(b) for b in ctx.record.beats):
+        # P-120: T-15-5 "yes, as asked"; a refusal row or standing never outranks a resolved Talk (12.2.9 (a))
+        return _v(c, i, "contradicted", "the Talk on them succeeded: they answer what was asked",
+                  reason="a successful Talk is answered, never refused")
     if not c.asserts_change:  # an ongoing description ("she watches you"), not an act this turn
         if ctx.state.entities[c.subject].exists != "exists" or not ctx.present(c.subject):
             return _v(c, i, "contradicted", "not in this scene")
@@ -1068,7 +1076,25 @@ def _sealed(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: 00.6.5
     for f in ctx.state.facts.values():
         if f.visibility != "sealed" and (c.subject in (f.subject, UNKNOWN)) and tx.covers(c.value or c.text, _flat(f.value)):
             return _v(c, i, "supported")
+    if _talk_answer(ctx, c):
+        # P-120: what a successful Talk asked about an ordinary thing and the store lacks is the NPC's answer, settled
+        # and written like a look's (12.3.2); a clue toward a sealed fact or an open thread stays cut (12.14.13)
+        return _v(c, i, "undetermined", reason="what the PC asked, not yet settled: the Oracle settles it")
     return _v(c, i, "new_element", fix="cut", reason="a hidden truth the store does not hold")
+
+
+def _talk_answer(ctx: _Ctx, c: Claim) -> bool:  # rule: 12.14.13
+    s = ctx.state
+    talks = [b for b in ctx.record.beats if "verb.talk" in (b.approach_words or "") and b.degree is not None
+             and _beat_success(b)]
+    if not talks or _forbidden_new(c):
+        return False
+    if not (c.subject == UNKNOWN or any(c.subject in b.targets for b in talks)
+            or (c.subject in s.entities and s.entities[c.subject].kind in ("object", "item") and ctx.present(c.subject))):
+        return False
+    said = c.value or c.text
+    threads = [str(e.data.get("text") or e.name) for e in s.entities.values() if e.kind == "thread"]
+    return not any(tx.covers(said, t, ratio=0.5) for t in threads)
 
 
 _CLASS_CHECKS = {
