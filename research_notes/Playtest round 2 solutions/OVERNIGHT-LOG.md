@@ -151,3 +151,20 @@ so treat each figure as ±10 points.
 
   All of this is within the sample's ±10 points.
 - **Checks:** suite 1657 passed; validator 0/0.
+
+## Follow-up: "check less" and the player feedback loop (2026-10-09)
+
+**Owner direction:** the rules are too strict. False positives hurt more than occasional slips. Dialogue is
+testimony, not narrator truth. Build a robust feedback loop so the player can flag errors, instead of policing
+everything.
+
+- **3274fcd, R2-G rules wave:**
+  - Rulings recorded: D6, D7 and D8 confirmed for now. I-159 adopts one model-chosen modifier per beat; the
+    sim's compound bound goes from 35 to 25, which passes with a class `other` rung counted as the modifier.
+    I-160, I-171..I-174 and I-176 closed. The detail cap is dropped.
+  - "Check less": a closed blocking list for the narrator's voice; dialogue is recorded as `said` testimony;
+    a claim gets a verdict only when its subject is certain; the audit is sampled.
+  - Feedback loop: PR-12-11, `/fix`, categories, whole-transcript evidence, pinned corrections, and the
+    player's reading wins on uncertain incidental fiction.
+  - DL-12-80..88, DL-01-33. Suite 1657, validator 0/0.
+- **In flight:** spec 011 (check less) and spec 012 (feedback loop), in parallel.
