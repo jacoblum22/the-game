@@ -567,3 +567,65 @@ def test_a_form_that_only_copies_the_menu_examples_is_dropped(tmp_path: Path) ->
     assert _fitted(own, dock.rules).form_intent == own.form_intent
     assert "well" not in _cost_words(dock.rules, {"menu_id": "cost.gear", "form": "", "severity_on_failure": "S2"},
                                      with_severity=True)
+
+
+STAB = beat("stab the watchwoman with a dagger", "verb.strike", target="npc.sela_vey", verbs=("stab",))
+MELEE = {"traits": ["trait.action.attack", "trait.delivery.melee"], "stakes_source": "aware_opponent_or_observer",
+         "stakes_heavy": True, "obstacle": {"kind": "opposed", "tier": None, "entity": "npc.sela_vey"},
+         "threatened_cost": {"menu_id": "cost.harm", "form_intent": "her answering blow", "source_fact": None},
+         "alternate_cost": {"menu_id": "cost.footing", "form_intent": "you slip", "source_fact": None}}
+
+
+def test_strikes_never_ride_close_to_engaged_and_a_hurt_pc_sees_it(tmp_path: Path) -> None:
+    """Playtest 20261007-195734 (fighter): after one hit, three later lunges rode as "it works" with no OFFER
+    (P-100); no strike wrote a band, so every closing step was cut (P-099); a critical failure's harm showed no
+    Vitality change and "how hurt am I?" got the generic help (P-101)."""
+    model = ScriptedModel({Role.READER: [reader("DECLARATION", "I stab her.", STAB)],
+                           Role.FRAMER: [framer(**MELEE)], Role.WORLD: [QUIET_WORLD]})
+    dock, ctx = setup(tmp_path, model)
+    assert run_turn(ctx, "I stab her.").pause is not None
+    model.push(Role.WORLD, QUIET_WORLD)
+    ctx.rng.faces = [19]  # type: ignore[attr-defined]
+    res = answer_pause(ctx, "commit")
+    b = res.record.beats[0]
+    assert b.degree in ("success", "critical_success") and b.positions and "Sela Vey" in b.positions[0].words
+    st = dock.state
+    assert st.positions[dock.pc].band_to[dock.watch] == "engaged" == st.positions[dock.watch].band_to[dock.pc]
+    # the same strike again: an attack rolls each time (06.1.6), so the OFFER is shown again
+    model.push(Role.READER, reader("DECLARATION", "I stab her again.", STAB))
+    model.push(Role.FRAMER, framer(**MELEE))
+    res2 = run_turn(ctx, "I stab her again.")
+    assert res2.pause is not None and res2.pause.kind == "offer" and any(o["kind"] == "OFFER" for o in res2.oof)
+    model.push(Role.WORLD, QUIET_WORLD)
+    ctx.rng.faces = [1]  # type: ignore[attr-defined]
+    res3 = answer_pause(ctx, "commit")
+    assert res3.record.beats[0].degree == "critical_failure"
+    result = next(o["text"] for o in res3.oof if o["kind"] == "RESULT")
+    assert "Changed: Vitality " in result, result
+    # "what are my options?" read as a fiction question, "how hurt am I?" as OOF: both answered
+    data = {"parts": [{"text": "What are my options?", "class": "FICTION_QUESTION"},
+                      {"text": "And how hurt am I right now?", "class": "OOF_QUESTION"}],
+            "pending_answer": None, "fact_questions": [], "beats": [], "clarifying_question": None,
+            "restatement": "", "player_quantity": None}
+    model.push(Role.READER, lambda schema, packet: prune(data, schema))
+    model.push(Role.WORLD, QUIET_WORLD)
+    res4 = run_turn(ctx, "What are my options? And how hurt am I right now?")
+    notes = " ".join(o["text"] for o in res4.oof if o["kind"] == "NOTE")
+    assert "Vitality " in notes and "[LEADS]" in notes, notes
+
+
+def test_a_shove_that_lands_drives_the_target_back_a_band(tmp_path: Path) -> None:
+    """06.5.3: a Force at reach 2 pushes the target one band away and breaks the engagement (P-099)."""
+    shove = beat("shove the watchwoman back off the quay edge", "verb.force", target="npc.sela_vey",
+                 verbs=("shove",))
+    model = ScriptedModel({Role.READER: [reader("DECLARATION", "I shove her back.", shove)],
+                           Role.FRAMER: [framer(**{**MELEE, "traits": ["trait.delivery.melee"]})],
+                           Role.WORLD: [QUIET_WORLD, QUIET_WORLD]})
+    dock, ctx = setup(tmp_path, model)
+    run_turn(ctx, "I shove her back.")
+    ctx.rng.faces = [17]  # type: ignore[attr-defined]
+    res = answer_pause(ctx, "commit")
+    b = res.record.beats[0]
+    assert b.degree == "success" and b.reach == "standard" and b.positions[0].entity == dock.watch
+    st = dock.state
+    assert st.positions[dock.pc].band_to[dock.watch] == "close" == st.positions[dock.watch].band_to[dock.pc]

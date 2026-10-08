@@ -318,6 +318,38 @@ def _moved(env: PipelineEnv, plan: BeatPlan) -> list[PositionEntry]:  # rule: PR
     return [PositionEntry(entity=actor, words=said)]
 
 
+CONTACT = ("verb.strike", "verb.grapple", "verb.force")
+_CREATURES = ("pc", "npc", "adversary", "companion")
+_DOWN = re.compile(r"\b(?:trip\w*|prone|floor|sweep\w*|down)\b", re.IGNORECASE)  # knocked down, not pushed
+
+
+def _contact(env: PipelineEnv, frame: Frame, verb: str | None, delivered: int) -> list[PositionEntry]:
+    # rule: 06.3.5
+    """A melee Strike, a Grapple or a Force is made at arm's reach (06.4.3 IN REACH, 06.5.2 needs engaged), so
+    the attempt writes actor and target engaged, whatever the degree; a Force that lands pushes the target one
+    band away at reach 2 and two at reach 3+, breaking the link (06.5.3), unless the beat knocks it down instead
+    (prone: the band stays). `delivered` is 0 for a beat that did not resolve."""
+    # ponytail: engaged is written even when the weapon has reach (06.4.3 allows close); T-06-6 bands when weapons land
+    beat = frame.beat
+    st = env.state
+    actor, tgt = beat.actor, beat.target
+    ent = st.entities.get(tgt or "") if tgt != actor else None
+    if ent is None or ent.kind not in _CREATURES or (verb == "verb.strike"
+                                                     and "trait.delivery.melee" not in frame.traits):
+        return []
+    band = "engaged"
+    if verb == "verb.force" and delivered >= 2 and not _DOWN.search(f"{beat.method} {beat.intent}"):
+        band = BANDS[min(delivered, 3) - 1]  # 2 -> close (one band), 3+ -> near (two bands)
+    pos = st.positions.get(actor)
+    here = (pos.location if pos else None) or (st.scene.place_id if st.scene else None)
+    env.add(Event.of("position_set", source=beat.id, rule_id="06.3.5", entity=actor, location=here,
+                     band_to={tgt: band}),
+            Event.of("position_set", source=beat.id, rule_id="06.3.5", entity=tgt, band_to={actor: band}))
+    if band == "engaged":
+        return [PositionEntry(entity=actor, words=f"{_BAND_WORDS[band]} {ent.name}")]
+    return [PositionEntry(entity=tgt, words=f"driven back, {_BAND_WORDS[band]} you")]
+
+
 def _verb_deed(rules: Any, verb: str | None) -> str | None:
     aid = verb_anchor(verb, rules)
     tags = rules.anchors.get(aid, {}).get("deed_tags", ()) if aid else ()
@@ -336,10 +368,18 @@ def _frame(env: PipelineEnv, plan: BeatPlan, dec: GateDecision, queued: list[Bea
     if not cands:
         return BeatOutcome(status="refused", entry=_entry(beat, gate=dec.gate, gate_words="no anchor fits (00.15.3)"))
     proposed = env.framer(beat, cands, gate=dec, note=note)
-    if not proposed.lethal and _rides(env.state, beat, proposed.anchor, proposed.attribute):
+    # an attack never rides: each Strike or Grapple is its own action and rolls against the same defense
+    # (06.1.3, 06.1.6 (f)); P-100: a hit let three later lunges pass as "it works" with no OFFER
+    if not proposed.lethal and not _attack(env, beat, proposed) \
+            and _rides(env.state, beat, proposed.anchor, proposed.attribute):
         beat.necessity = "riding"  # the success this scene stands; no new roll (01.4.2; P-075)
         return _no_roll(env, plan, dec)
     return _checked(env, plan, dec, proposed, cands, queued, warned=warned)
+
+
+def _attack(env: PipelineEnv, beat: Beat, proposed: ProposedFrame) -> bool:  # rule: 06.1.6
+    verb_traits = (env.rules.basic_verbs.get(beat.verb or "") or {}).get("traits") or ()
+    return "trait.action.attack" in {*proposed.traits, *beat.traits, *verb_traits}
 
 
 def _rides(state: Any, beat: Beat, anchor: str, attribute: str) -> bool:  # rule: 01.4.2
@@ -571,7 +611,9 @@ def _finish(env: PipelineEnv, plan: BeatPlan, frame: Frame, roll: RollResult, *,
     costs, reach_delta, notes = _consequence(env, frame, read, menu)
     delivered = max(0, read.delivered_reach + reach_delta) if read.delivered_reach else 0
     resolved = roll.degree in ("success", "critical_success") or read.success_at_cost_taken
-    moved = _moved(env, plan) if resolved and (frame.gate.verb or frame.beat.verb) == MOVE else []
+    verb = frame.gate.verb or frame.beat.verb
+    moved = (_moved(env, plan) if resolved and verb == MOVE
+             else _contact(env, frame, verb, delivered if resolved else 0) if verb in CONTACT else [])
     progress = _progress(env, frame, delivered if resolved else 0)
     writes = [e.seq for e in env.tx.events[start:] if e.seq is not None]
     ev_ids: list[str] = []
@@ -607,9 +649,10 @@ def _finish(env: PipelineEnv, plan: BeatPlan, frame: Frame, roll: RollResult, *,
     entry.progress = progress
     if resolved:
         _cleanse(env, frame)
-    from engine.dm.oof import result_block  # 12.15.3: the outcome stated once, after the fiction
+    from engine.dm.oof import changed_line, result_block  # 12.15.3: the outcome stated once, after the fiction
 
-    blk = result_block(frame, roll, sac=read.success_at_cost_taken, costs=costs, rules=env.rules)
+    blk = result_block(frame, roll, sac=read.success_at_cost_taken, costs=costs, rules=env.rules,
+                       changed=changed_line(env.state, env.pc, env.tx.events[start:]) if env.pc else "")
     return BeatOutcome(status="resolved", entry=entry, frame_id=frame.id, oof=[{"kind": "RESULT", "text": blk.text}])
 
 

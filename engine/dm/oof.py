@@ -375,8 +375,31 @@ DEGREE_NAMES = {"critical_success": "critical success", "success": "success", "f
                 "critical_failure": "critical failure"}
 
 
+_SHOWN_QTY = {"vitality": "Vitality", "focus": "Focus", "fate": "fate", "dread": "Dread"}
+
+
+def changed_line(state: WorldState, pc: str, events: Sequence[Any]) -> str:  # rule: 12.15.3
+    """`Changed: Vitality 12 → 4 · bloodied`: the PC's shown quantities this beat moved, then the harm descriptor
+    when Vitality moved (07.1.1); "" when nothing shown changed."""
+    from engine.harm.state import descriptor
+
+    first: dict[str, int] = {}
+    last: dict[str, int] = {}
+    for e in events:
+        p = e.payload
+        if e.type == "quantity_changed" and getattr(p, "entity", None) == pc and p.quantity in _SHOWN_QTY:
+            first.setdefault(p.quantity, p.new_value - p.delta)
+            last[p.quantity] = p.new_value
+    if not last:
+        return ""
+    parts = [f"{_SHOWN_QTY[q]} {first[q]} → {v}" for q, v in last.items() if first[q] != v]
+    if "vitality" in last:
+        parts.append(descriptor(state, pc))
+    return "Changed: " + " · ".join(parts) if parts else ""
+
+
 def result_block(frame: Frame, roll: RollResult, *, sac: bool = False, costs: Sequence[Any] = (),
-                 rules: Any = None) -> OofBlock:  # rule: 12.15.3
+                 rules: Any = None, changed: str = "") -> OofBlock:  # rule: 12.15.3
     """`[RESULT] d20 9 → 13 vs 15 · failure (near miss)`, then what was paid; a secret frame: `hidden check made.`"""
     if frame.secret:
         return OofBlock(kind="RESULT", text="[RESULT] hidden check made.")
@@ -387,6 +410,8 @@ def result_block(frame: Frame, roll: RollResult, *, sac: bool = False, costs: Se
         form = (getattr(c, "form", "") or "").strip()
         tag = ", ".join(x for x in (name_of(rules, c.menu_id).lower(), c.severity or "") if x)
         rest.append(f"Paid: {form} ({tag})." if form else f"Paid: {tag}.")
+    if changed:
+        rest.append(changed)
     return OofBlock(kind="RESULT", text=_block("RESULT", f"d20 {roll.d20} → {roll.total} vs {frame.dc} · {words}",
                                                rest))
 

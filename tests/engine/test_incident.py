@@ -105,3 +105,9 @@ def test_an_npc_echoing_the_players_quote_is_caught() -> None:
     own = '"Captain, someone is missing. Who is it?" you ask. He shrugs. "Ask the miller."'
     assert echoed_quotes(echo, said) == ["Captain, someone is missing. Who is it?"]
     assert echoed_quotes(own, said) == []
+    # P-102: the PC's declared line opening the narration (or a paragraph) is the PC speaking, not an echo
+    said = ['I step up: "I accept. Right now, in the middle of the room." I draw both daggers.']
+    opens = '"I accept. Right now, in the middle of the room." Behind the bar, Tibine keeps a hand flat on the wood.'
+    para = 'You step up.\n\n"I accept. Right now, in the middle of the room."\n\nTaman says nothing.'
+    assert echoed_quotes(opens, said) == [] and echoed_quotes(para, said) == []
+    assert echoed_quotes('Taman laughs. "I accept. Right now, in the middle of the room." He spits.', said)
