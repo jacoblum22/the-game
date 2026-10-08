@@ -10,7 +10,8 @@
 #   writes (the state writes a row makes), tags (row tags; 'threat' rows are filtered by the pacing phase),
 #   phase_substitute, fallback, target_list, means, kind, rooted_in, pronouns, standing, standing_delta,
 #   recency_window (default 5; meaning lists 20), context_rule, rule, modifier, constraints, never, base,
-#   clamp, notes_rule, fallback_forms.
+#   clamp, notes_rule, fallback_forms; by_role (tbl.npc_activity: role -> watch -> 3 activities, d6 pairs),
+#   select_order and action_rows / responses (tbl.npc_practice) [revision: R2-B].
 # Dice: table dice only (00.3.1): d6, d8, d10, d12, d20, d100, 2d6; rolled by roll_table with RC-RNG.
 # All word lists are original to this ruleset (not copied from any published oracle).
 # Basis: [R5 §2.1-2.3 P-01..P-11]; [R4 SG-12, W6, W10]; [R6 B-16]; [01.13.10]; DL-12-01..DL-12-20.
@@ -2345,3 +2346,178 @@ tables:
   - never overrides a recorded refusal
   - never resolves what a Talk frame should resolve
   - 'phase PEAK/RELAX does not filter this table: an NPC''s own reaction is not a director push'
+- id: tbl.npc_activity
+  name: A present NPC's activity at scene entry, by role and watch (12.11.9) [revision R2-B]
+  tags: []
+  die: d6
+  recency: false
+  context_filters:
+  - role
+  - watch
+  rule: 'rolled by code when an NPC enters the scene: find the NPC''s role (12.11.1) by the first word of its tbl.npc_role row (a role not listed uses other) and the watch (00.7.1); roll d6 on that cell (results give the pair). The result is written as the NPC''s activity, scene state (T1c, 12.14.13): overwritten when the NPC''s response changes it, never appended, expiring at scene end. A region''s seed tables replace this one where they exist.'
+  results:
+  - range: 1-2
+    result: the cell's first activity
+  - range: 3-4
+    result: the cell's second activity
+  - range: 5-6
+    result: the cell's third activity
+  by_role:
+    farmer:
+      morning: [hauling water from the well, loading a cart with produce, mending a fence]
+      afternoon: [haggling over the price of seed, resting in the shade with a jug, sharpening a scythe]
+      evening: [eating at the common table, counting the day's coin, walking home with a hoe on one shoulder]
+      night: [checking on a restless animal by lantern light, dozing by a banked fire, walking home late]
+    laborer:
+      morning: [carrying sacks from a cart, digging a ditch, waiting to be hired for the day]
+      afternoon: [stacking timber, hauling stone, eating bread on a break]
+      evening: [drinking with workmates, washing off the day's dust at a trough, dicing in a corner]
+      night: [asleep on a bench, walking home with tools, sitting outside too tired to move]
+    merchant:
+      morning: [setting out goods, checking a delivery against a list, arguing with a carter]
+      afternoon: [calling out prices, haggling with a customer, weighing goods on a scale]
+      evening: [packing up unsold goods, totting up accounts, dining and talking business]
+      night: [locking up a storeroom, counting coin by candlelight, talking late with a partner]
+    innkeeper:
+      morning: [sweeping out the common room, taking in a delivery of ale, stirring a pot of porridge]
+      afternoon: [wiping down tables, airing the rooms, haggling with a supplier]
+      evening: [pouring drinks behind the counter, carrying plates to the tables, keeping an eye on a loud table]
+      night: [banking the fire, barring the door, collecting empty cups]
+    guard:
+      morning: [standing watch at a post, checking travellers at the gate, walking a patrol]
+      afternoon: [leaning on a spear at a post, questioning a carter, walking a patrol]
+      evening: [lighting torches along the wall, changing the watch, sharing a drink after a shift]
+      night: [keeping a cold night watch, walking the wall with a lantern, dozing at a post]
+    priest:
+      morning: [leading morning prayers, sweeping the shrine steps, tending the altar]
+      afternoon: [hearing a petitioner, copying a text, giving alms at the door]
+      evening: [lighting the evening lamps, blessing a meal, sitting with the sick]
+      night: [keeping a vigil, praying alone, reading by a single candle]
+    crafter:
+      morning: [lighting the workshop fire, laying out tools, measuring materials]
+      afternoon: [working at the bench, finishing a piece, showing work to a customer]
+      evening: [cleaning tools, banking the workshop fire, drinking with other crafters]
+      night: [finishing a rush order by lamplight, asleep in the back of the shop, walking home]
+    hunter:
+      morning: [checking snares, setting out for the woods, fletching arrows]
+      afternoon: [skinning a catch, trading pelts, following a trail]
+      evening: [cleaning a bow, roasting meat over a fire, telling stories over a drink]
+      night: [waiting in a hide, sleeping rough by a fire, listening at the edge of the trees]
+    beggar:
+      morning: [asking for coin at a corner, asleep in a doorway, picking through scraps]
+      afternoon: [asking for coin near the market, watching the street, sharing bread with another beggar]
+      evening: [waiting by the tavern door, huddled against a warm wall, counting coppers]
+      night: [asleep in a doorway, huddled by a fire in a barrel, looking for shelter]
+    servant:
+      morning: [fetching water, carrying a basket to market, beating a rug]
+      afternoon: [running an errand, scrubbing a step, carrying a message]
+      evening: [serving at table, lighting lamps, fetching wine]
+      night: [locking up the house, carrying a lantern for a master, stealing a moment's rest]
+    scholar:
+      morning: [reading at a desk, copying a document, sorting papers]
+      afternoon: [writing a letter for a client, arguing a point with a colleague, taking notes]
+      evening: [reading by lamplight, drinking and debating, putting away books]
+      night: [working late over a text, watching the stars, asleep over a book]
+    boatman:
+      morning: [readying a boat, bailing water, loading cargo]
+      afternoon: [ferrying passengers, mending a net, tarring a hull]
+      evening: [tying up for the night, drinking at the waterside, unloading the last cargo]
+      night: [watching the moorings, asleep in the boat, fishing by lantern]
+    herder:
+      morning: [driving animals out to pasture, milking, counting the flock]
+      afternoon: [watching the herd from a rise, chasing a stray, whittling while the animals graze]
+      evening: [bringing the animals in, penning the herd, eating by a fire]
+      night: [keeping watch over the herd, checking the pens with a lantern, asleep near the animals]
+    healer:
+      morning: [grinding herbs, seeing a patient, boiling bandages]
+      afternoon: [gathering herbs, setting a broken bone, sorting remedies]
+      evening: [sitting with a patient, brewing a remedy, washing up after the day's work]
+      night: [tending a fever, dozing in a chair by a sickbed, walking to a late call]
+    minstrel:
+      morning: [tuning an instrument, sleeping late, practising a song]
+      afternoon: [playing for coins in the square, learning a new tune, haggling over a night's pay]
+      evening: [performing for a crowd, telling a story to the room, passing the hat]
+      night: [playing a last quiet song, drinking with the audience, counting the night's take]
+    soldier:
+      morning: [drilling, cleaning gear, nursing a sore head]
+      afternoon: [dicing, loafing in the sun, sharpening a blade]
+      evening: [drinking loudly, arguing over cards, eating at a long table]
+      night: [heading back to quarters, standing a late watch, asleep where they sat]
+    child:
+      morning: [fetching water, doing chores, chasing a dog]
+      afternoon: [playing a game in the street, running an errand, watching strangers]
+      evening: [being called home, helping at a hearth, hiding from chores]
+      night: [sneaking out, asleep, peering from a window]
+    elder:
+      morning: [sitting on a bench in the sun, feeding birds, walking slowly with a stick]
+      afternoon: [dozing in a chair, watching the street, giving advice nobody asked for]
+      evening: [telling an old story, sitting by the fire, grumbling about the young]
+      night: [sitting awake by the window, asleep by the fire, taking a slow late walk]
+    thief:
+      morning: [watching the market crowd, sleeping off last night, idling near the gate]
+      afternoon: [loitering by a stall, drifting through the crowd, dicing in an alley]
+      evening: [drinking in a dark corner, watching the room, talking low in a back room]
+      night: [slipping along an alley, waiting in a doorway, counting a purse]
+    traveler:
+      morning: [packing up to leave, asking directions, eating a quick breakfast]
+      afternoon: [resting their feet, looking around the place, bargaining for supplies]
+      evening: [looking for a bed, eating alone, trading news over a drink]
+      night: [arriving late and tired, asleep in a corner, warming up by the fire]
+    other:
+      morning: [going about their morning work, on an errand, talking with a neighbour]
+      afternoon: [at their work, taking a rest, on an errand]
+      evening: [finishing the day's work, eating, talking with others]
+      night: [heading home, resting, sitting awake by a fire]
+  lifecycle: provisional
+  basis:
+  - '[12.11.9]'
+  - '[00.7.1]'
+  - '[DL-12-42]'
+- id: tbl.npc_practice
+  name: The scene's practice and the NPC responses it allows (12.11.9) [revision R2-B]
+  tags: []
+  die: none
+  recency: false
+  context_filters:
+  - mode
+  - beat_verb
+  - addressed
+  - public_event
+  rule: 'a lookup, not a roll: the practice is the first row in select_order whose when holds this turn. An engaged or addressed NPC''s response (12.11.9 step 3) is one of the row''s action_rows of tbl.npc_action; a rolled row outside them moves to the nearest listed row, toward row 5 on a tie. Row 1 is also legal in every practice for an NPC at Hostile standing. responses gives the gist each allowed row takes in this practice; the DM voices it (12.11.3). A row decides willingness only: what an NPC knows is 12.10.6''s, and whether they lie is 15.6.2''s. In a fight, adversaries act from their behavior lists (12.2.9 step 1); this row governs everyone else.'
+  select_order: [fight, trade, greeting, conversation, crowd, work]
+  results:
+  - range: fight
+    result: a fight is under way or starts this turn
+    when: conflict mode is running (06.2.1), or a Strike, Grapple or Force beat this turn targets a person
+    action_rows: [1, 2, 3, 5, 6, 8, 9]
+    responses: {'1': joins in or calls for others (only if able and the row allows), '2': flees or takes cover, '3': gets in the way, '5': keeps clear and watches, '6': 'looks to their own (kin, goods)', '8': shouts a warning, '9': helps as asked}
+  - range: trade
+    result: buying, selling or bargaining
+    when: a purchase or sale (ch.08), or a Talk beat or speech whose topic is goods, services or a price
+    action_rows: [2, 3, 4, 5, 7, 8, 9, 10]
+    responses: {'2': refuses to deal, '3': stalls or haggles hard, '4': names a price or a condition, '5': serves someone else first, '7': asks what exactly the PC wants, '8': offers a lesser deal, '9': deals at the price, '10': adds something extra}
+  - range: greeting
+    result: a first word between the PC and an NPC this scene
+    when: the PC addresses an NPC with no exchange between them yet this scene
+    action_rows: [2, 3, 5, 6, 7, 8, 9, 10]
+    responses: {'2': 'a curt nod, then back to their activity', '3': 'a wary, guarded reply', '5': returns the greeting without stopping, '6': 'answers, then turns to their own concern', '7': asks the PC's name or business, '8': greets and offers a pointer, '9': greets warmly and listens, '10': welcomes the PC and offers hospitality}
+  - range: conversation
+    result: talk with an NPC already spoken with this scene
+    when: the PC addresses an NPC already spoken with this scene
+    action_rows: [2, 3, 4, 5, 6, 7, 8, 9, 10]
+    responses: {'2': ends the talk and turns away, '3': deflects or changes the subject, '4': wants something before going on, '5': 'answers briefly, attention on their activity', '6': steers the talk to their own want, '7': asks the PC a question back, '8': gives part of what was asked, '9': gives what was asked, '10': gives more than was asked}
+  - range: crowd
+    result: a public event with no one addressed
+    when: a loud or violent act, a lead or an incident in a public place this turn, and the PC addressed no one
+    action_rows: [1, 2, 3, 5, 6, 7, 8]
+    responses: {'1': someone sends for the watch or calls others, '2': people back away or scatter, '3': the crowd closes up or blocks the way, '5': 'people look, then go back to their business', '6': someone takes the chance for their own ends, '7': someone calls out a question, '8': someone steps up to help}
+  - range: work
+    result: everyone at their own business
+    when: otherwise (no one addressed, nothing public happened)
+    action_rows: [2, 3, 5, 6, 7, 8]
+    responses: {'2': moves off, '3': keeps working and pointedly ignores the PC, '5': carries on with their activity, '6': goes after something they want, '7': looks up and asks the PC something, '8': offers a word of help unasked}
+  lifecycle: provisional
+  basis:
+  - '[12.11.9]'
+  - '[12.11.5]'
+  - '[DL-12-42]'

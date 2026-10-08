@@ -295,8 +295,9 @@ declaration order (01.10.3), and offers from 04/11 stay open under their own rul
 **12.2.7 Player-input fidelity.** `[J:flag]` ×3 Before delivery (PR-12-1 step T10) the draft is checked for
 three properties, each `[J:flag]`, each true only when the named evidence exists in the draft:
 1. **Acknowledged** — every DECLARATION, FICTION_QUESTION and SPEECH part of the message is answered in
-   the response, in the order given (resolved, queued per 01.2.3, paused, or redirected). Evidence: the
-   response mentions each part's intent.
+   the response, in the order given (resolved, queued per 01.2.3, paused, or redirected). Evidence: some
+   sentence cites each part's record line (coverage, 12.3.1a) [revision: R2-B; I-150]; a turn with no player
+   part (the opening) has nothing to acknowledge.
 2. **Not substituted** — no part is resolved as a different action than the player declared (a "search
    the desk" is not resolved as "search the room"; a Talk to persuade is not resolved as an intimidation).
    Evidence: each frame's neutral restatement (01.2.6) matches the player's words, or the stated assumed
@@ -322,11 +323,15 @@ conflict, as ch.06's turn order dictates), the world responds in this fixed orde
 closed source (01.11.3):
 1. **Adversaries and hostile NPCs in conflict** act on their turns from their behavior priority lists
    (ch.09) by PR-06-6, an adversary's turn [revision: I-030]; their attacks are rolled by the engine against the PC's defenses (00.3.3).
-2. **NPCs present** whose standing, wants or refusals are engaged by what just happened respond — the
-   response comes from (a) a resolved Talk frame's delivered outcome (ch.15), else (b) an established
+2. **NPCs present** follow the default NPC layer (12.11.9) [revision: R2-B; DL-12-43; I-140]. Each keeps
+   the activity code rolled when they entered the scene. One whose standing, wants or refusals are engaged by
+   what just happened, or whom the PC addressed, responds within the scene's practice, and the response
+   comes from (a) a resolved Talk frame's delivered outcome (ch.15), else (b) an established
    want or refusal that the situation clearly triggers (`[J:flag]` *"Does a recorded want or refusal of
    this NPC name this situation?"*), else (c) `roll_table(tbl.npc_action)` with the NPC's standing as
-   context (12.11.5). The DM chooses the *words*; the source decides *what*.
+   context (12.11.5). **An addressed NPC always answers**, in words, or with a refusal spoken in their own
+   voice. Each response is a record line the narration cites (12.14.12). The DM chooses the *words*; the
+   source decides *what*.
 3. **Clocks** that ticked from this turn's costs, consequences or `auto_ticks` render their omens
    (INV-14), and completions run (00.8, PR-00-3).
 4. **Fired triggers** in 12.2.3's order (lead injection, pacing pushes, offers).
@@ -340,13 +345,26 @@ claim check flags a response contradicting a recorded refusal [R4 W4; R5 P-06].
 clock state or standing the narration mentions is read from the narrator view fetched *after* this turn's
 writes (step T6), never from memory or from the adjudication record's intermediate values. Models act
 correctly on a correctly retrieved updated fact only about 55% of the time; the remedy is to quote the
-store [R1 12.D].
+store [R1 12.D]. Every quantity, condition, position, possession or standing a sentence states cites the fresh
+view's id for it in its `refs` (12.3.1), so the read is checkable: a stated value with no such ref is undeclared
+(12.3.1a) [revision: R2-B; DL-12-41].
 
 ### 12.3 The claim check and error correction
 
 **12.3.1 Claims.** `[D]` + `[J:enum]` [DL-12-25; DL-12-03; C:P13; R5 DM-08; revision: I-065] A **claim** is any assertion in a draft narration that the store
-could confirm or contradict, extracted as `{subject id, claim class, predicate, value}`. The claim classes
-(closed list) and what each is checked against:
+could confirm or contradict, held as `{subject id, claim class, predicate, value}`. Claims come from two places
+[revision: R2-B; DL-12-41]:
+1. **The narrator's sentence declarations** (`[J:enum]`). A draft is a list of sentences, and each sentence
+   declares `refs` (the handles of this turn's adjudication-record lines, `R1`, `R2`…, and fact ids from the
+   narrator view; both lists are built from the packet, so nothing outside the packet can be cited), `about`
+   (the ids in scene scope it speaks of), `new` (each new element it introduces, typed by `element_kind`, with
+   the properties it states; 12.14.13) and an `atmosphere` flag. Code resolves each declaration into claims
+   with the subject given, never guessed.
+2. **Any undeclared assertion the audit finds** (`[J:flag]` per sentence: *"Does this sentence assert
+   something its declarations do not cover?"*). It is a claim like any other, and its sentence also fails
+   coverage (12.3.1a).
+
+The claim classes (closed list) and what each is checked against:
 
 | Class | Examples of claims | Checked against |
 |---|---|---|
@@ -354,7 +372,7 @@ could confirm or contradict, extracted as `{subject id, claim class, predicate, 
 | `identity` | a name, sex or pronoun, age, kin, title, profession, species, appearance detail | entity fields and identity facts |
 | `quantity` | "your last two arrows"; "a purse of twelve silver" | quantities |
 | `harm_condition` | "you're bleeding"; "he's barely standing"; "you shake off the fear"; "he is dead" | conditions, harm state, shown descriptors (bloodied, down); a death only with `harm_state.dead` (07) [revision: I-030] |
-| `position` | "she's at your shoulder"; "you reach the far door"; "behind the cart" | position, range bands, positional flags (T-06-4's words, T-12-11) [revision: I-030] |
+| `position` | "she's at your shoulder"; "you reach the far door"; "behind the cart"; a present NPC's continuing activity ("the smith works at her forge") [revision: R2-B; I-128] | position, range bands, positional flags (T-06-4's words, T-12-11) [revision: I-030]; an activity against the NPC's presence and the activity code wrote for the scene (T1c, 12.11.9) |
 | `possession` | "you pocket the key"; "the captain draws his sword" | possessions, equipped |
 | `location_time` | "dusk falls"; "two days after the fire"; "in the archive" | time, place graph (temporal claims are computed, 00.6.9e) |
 | `knowledge` | "you recognize the seal"; "he knows you're lying"; "you remember her name" | knowledge records (PC and NPC) |
@@ -362,28 +380,45 @@ could confirm or contradict, extracted as `{subject id, claim class, predicate, 
 | `clock` | an omen; "the alarm is spreading"; a completion | clock state, the omen the engine selected |
 | `attitude` | "she warms to you"; "he's furious" | standing rung, NPC memory, the frame's delivered reach |
 | `outcome` | "you make it across"; "the lock gives"; "it costs you" | the frame's degree, delivered reach, the chosen cost form |
-| `action` | "the guard steps aside"; "your companion cuts the rope"; "the merchant pockets the coin and leaves" | the act's closed source in this turn's adjudication record (12.2.9): a behavior list, a Talk frame's outcome, a recorded want or refusal, a `tbl.npc_action` row, a clock or trigger; for an ally, one of 16.13.3's six reasons [revision: I-030] |
+| `action` | a deed that changes something: "the guard steps aside"; "your companion cuts the rope"; "the merchant pockets the coin and leaves" (a continuing activity is `position`) | the act's closed source in this turn's adjudication record (12.2.9): a behavior list, a Talk frame's outcome, a recorded want or refusal, a `tbl.npc_action` row, a clock or trigger; for an ally, one of 16.13.3's six reasons [revision: I-030] |
 | `sealed` | anything matching a sealed fact's content | the sealed partition (a match is a leak) |
 
-Extraction is `[J:enum]`: every sentence of the draft is read and each assertion assigned to a class.
+Declaration is `[J:enum]`: the narrator assigns each assertion of a sentence its refs and class; the audit reads
+each sentence's text for what the declarations missed [revision: R2-B].
 **Atmosphere is never a claim** [revision: I-127; DL-12-37]: sensory and ambient detail that names nothing
 addressable (weather, light, sky, smell, temperature, a sound with no source the player could approach, the
 murmur of an unnamed crowd, mood) is not extracted, matching 00.6.6, which never records it. Such detail is
 checked only against `location_time` (it may not contradict the hour, season, weather or climate the store
 holds) and the lines and veils (12.5.6). When it is uncertain whether a phrase is atmosphere or names an
-addressable element, it is an element: extract it, and it is written on mention if it is ordinary furniture
-(12.3.2). *Worst case (J):* a claim not extracted escapes the check — it is caught later by
+addressable element, it is an element: it is declared, and it is written by its tier (12.14.13)
+[revision: R2-B]. *Worst case (J):* a claim neither declared nor found by the audit escapes the check — it is caught later by
 the scene-end sweep (12.4.8) or the player (12.3.4), class iv.
+
+**12.3.1a Sentence coverage.** `[D]` [DL-12-41; R1 12.D; revision: R2-B] Code checks three things about every
+draft from its declarations, before any verdict:
+1. **Every sentence is declared or atmosphere.** A sentence cites at least one ref, `about` id or `new`
+   element, or it carries the atmosphere flag. A sentence with neither is undeclared.
+2. **Atmosphere names nothing addressable.** A sentence flagged as atmosphere that contains a name, an alias or
+   description of anything in scene scope, a numeral, or a new addressable element (00.6.6) is undeclared. Code
+   scans for names, aliases and numerals; the audit (12.3.1, source 2) finds the rest.
+3. **Every must-name item is cited.** Each item 12.14.12 requires this turn is an adjudication-record line with
+   a handle, and some sentence's `refs` cites it. An uncited item is a coverage failure of the turn.
+
+An undeclared sentence fails as if its assertions were unsupported: it is redrafted with declarations or cut,
+and an uncited must-name item is supplied by 12.3.3. Coverage replaces the Checker's judgement that the
+record's parts were acknowledged (12.2.7, flag 1). Citing per sentence lets code judge each claim with its
+subject given; a second reading that guesses what the prose claimed disagreed with itself on a third of
+unchanged sentences in playtest.
 
 **12.3.2 Verdicts.** `[D]` `check_claims(claims)` (00.14.2 tool 32, RC-AUDIT) returns one verdict per
 claim (closed list):
 
 | Verdict | Means | Required fix |
 |---|---|---|
-| `supported` | the store holds it | none |
-| `new_element` | a new addressable element the store does not hold, contradicting nothing | write it on mention now (00.6.6) with only the properties the draft implies, unless 12.14.13 forbids it: only a clue, an item beyond common value, a hazard or trap, an adversary, or a person with a want, secret or thread knowledge is cut (or brought in through its owning procedure). An element not written at the draft's write-on-mention step is still written here; an unknown subject is never cut merely for being new [revision: I-127] |
-| `undetermined` | a property of an existing element the store has not settled (is the door locked? her pronoun?) | ask the Oracle or roll the table that settles it, then redraft to the answer; or cut it |
-| `contradicted` | the store holds a different value | redraft to the store's value |
+| `supported` | the narrator packet or this turn's adjudication record holds it (scope below) [revision: R2-B] | none |
+| `new_element` | a new addressable element the store does not hold, contradicting nothing | write it by its declared `element_kind`'s tier (12.14.13) [revision: R2-B]: a T1a element is written on mention now (00.6.6) with only the properties the sentence states; a T2 element (a clue, an item beyond common value, a hazard or trap, an adversary, or a person with a want, secret or thread knowledge) not in this turn's record is cut (or brought in through its owning procedure). An element not written at the draft's write-on-mention step is still written here; an unknown subject is never cut merely for being new [revision: I-127] |
+| `undetermined` | a property of an existing element the store has not settled (is the door locked? her pronoun?) | split by tier (12.14.13) [revision: R2-B; DL-12-40; I-132]: **incidental** (an ordinary property of a thing in view, one 12.14.13's question finds false: a coat's colour, a worker's trade, a notice's lettering; T1a) → written on mention as drafted, and it binds later turns; **consequential** (locked, armed, present, knows, or anything the question finds true; uncertain → consequential) → ask the Oracle or roll the table that settles it, write the answer, and redraft that sentence to it. An answer that agrees with the draft passes with no redraft; once answered, the property is settled, so a redraft is `supported` or `contradicted`, never asked again |
+| `contradicted` | the store, anywhere (scope below), holds a different value | redraft to the store's value |
 | `unsourced_change` | the draft says something *changed* (a quantity, a condition, a possession, a position, a standing) with no write this turn, or says a non-player entity *acted* with no source in the adjudication record (an `action` claim; an ally's act with none of 16.13.3's reasons) [revision: I-030] | cut it; a change is never written to match prose (INV-1) |
 | `overreach` | a license, item or effect described doing more than its scope; an outcome beyond the delivered reach; a cost of another entry or severity | redraft to the literal scope / the frame |
 | `leak` | the claim matches a sealed fact | cut it; replace with the permitted slice (tell, omen, atmosphere) |
@@ -394,20 +429,40 @@ claim (closed list):
 lacks an owed block fails the check as if a claim were `contradicted`: it is redrafted with the block, and the
 plain fallback (12.3.3) carries it too, since a warning is never omitted (07.3.4) [revision: I-030].
 
+**Support and contradiction scope.** `[D]` [revision: R2-B; DL-12-42] Support is judged against the narrator
+packet plus this turn's adjudication record; contradiction is judged against the whole store. A claim that only an
+off-packet fact supports passes as `supported` and is logged as a **retrieval miss**, which measures how well the
+view was selected (12.2.4). A claim the packet supports but a fact anywhere in the store contradicts is
+`contradicted`. A claim nothing supports or contradicts takes its verdict from the table (`new_element`,
+`undetermined`, `unsourced_change`).
+
 The **one asymmetry**: a `new_element` may be written to the store because the narration is creating
 a new, non-conflicting thing — exactly what write-on-mention exists for — but an `unsourced_change` may
 never be, because a change needs a resolved source (a frame, a handler, an effect, an Oracle answer)
 [INV-1; 00.6.6; R1 T-14 (tool state wins; "latest wins" only among writes)].
 
-**12.3.3 The redraft cycle and the plain fallback.** `[D]` A draft with any verdict other than `supported`
-is fixed by the table's rule and re-checked. A redraft instruction names each failing claim and its fix. It never
-asks the narrator to shorten, simplify or play safe, and a redraft keeps every sentence that passed
-(atmosphere included) [revision: I-127; DL-12-37]. At most **two redrafts** (`pacing.yaml#claim_check.max_redrafts`).
-If the third check still fails, the DM delivers the **plain fallback**: narration built only from the
-adjudication record's fields (each frame's restated beat, its degree in words, the chosen cost form, the
-visible conditions, the omens, the changed positions) and the scene header, one sentence each, with no
-new elements — and logs a ruling record with `kind: rule_conflict`, `review_flag: true`. The plain fallback
-is dull but true; a vivid falsehood is worse, because every later turn builds on it [R1 12.D; C:III].
+**12.3.3 Per-sentence repair and the plain fallback.** `[D]` [revision: R2-B; DL-12-41; I-131; I-133; I-135; I-136]
+A draft is repaired one sentence at a time, each failing sentence by the table's rule (12.3.2). A sentence whose
+fix is a cut (`unsourced_change`, `leak`, `pc_agency`, a T2 element not in the record, or an undeclared sentence
+that cites no must-name item) is dropped by code. Any other failing sentence is redrafted. A **redraft** re-writes
+only the failing sentences, each sent with its failure and the store's value to use; sentences that passed,
+atmosphere included, are kept as written and are not re-sent or re-checked [revision: I-127; DL-12-37]. A redraft
+instruction never asks the narrator to shorten, simplify or play safe. At most **two redrafts**
+(`pacing.yaml#claim_check.max_redrafts`).
+
+After the second redraft, a sentence that still fails is cut, and every must-name item (12.14.12) that no
+remaining sentence cites is stated by its **rendered line**: one sentence built by code from the record item's
+typed fields (a frame's restated beat and its degree in words, the chosen cost form, a visible condition, an
+omen, a changed position, an NPC's response, a lead, a FICTION_QUESTION's answer stated as the fact it settled).
+A rendered line is always a statement, never a question and answer ("Traders are setting up stalls? Yes." is
+never shown). The delivered narration is the passing sentences in their order, each rendered line in the place of
+the sentence it replaces, then the OOF blocks and the open prompt (12.14.9), which code restores if it was cut.
+
+The **plain fallback** is this rule when no drafted sentence passes: every must-name item is rendered, with the
+scene header only when this turn opened a scene (12.4). A turn that needed any rendered line logs a ruling record
+with `kind: rule_conflict`, `review_flag: true`; a turn repaired by cuts alone, with every must-name item still
+cited, logs none. A rendered line is dull but true; a vivid falsehood is worse, because every later turn builds
+on it [R1 12.D; C:III].
 
 **12.3.4 Correcting an error the player has already seen.** `[D]` + `[J:enum]` When a mismatch between
 something already delivered and the store is found — by the scene-end sweep (12.4.8), by a later claim
@@ -744,8 +799,11 @@ form — it asks `[J:flag]` *"Would I be choosing what is true?"* True when the 
 property, a presence, a choice among possibilities, or an NPC's decision that is not already settled by a
 fact id, setting canon (the region's seed, 12.16.5) or scene logic (the scene type implies it: a smithy has a forge). If true,
 the DM may not decide it; it settles it by the first matching tool of T-12-4 and writes the result before
-narrating it. False only when a fact id, canon line or scene type can be named that settles it. Uncertain →
-true (SG-12). *Worst case (J):* a thing "settled by scene logic" that was actually open — the DM decided one
+narrating it. False only when a fact id, canon line or scene type can be named that settles it, or the
+thing is an incidental detail of something in view (T1a, 12.14.13), which is written as narrated. Uncertain →
+true (SG-12). **Proposing a candidate and letting the Oracle settle it is not choosing; stating it unsettled is**
+[revision: R2-B; DL-12-40]: ordinary knowledge (T1b) may be proposed and settled by the Oracle at odds fixed before
+the roll (12.10.6(d)), and only the settled answer is narrated. *Worst case (J):* a thing "settled by scene logic" that was actually open — the DM decided one
 small fact; it is logged as narration-sourced and any later contradiction is caught by the claim check
 (class iv). Example inside: "Is the ferryman home?" (unestablished → Oracle). Outside: "Does the ferry
 landing have a boat?" (a ferry landing implies a ferry; scene logic → Certain). Non-example: "The
@@ -1340,6 +1398,37 @@ situation timelines. When the PC returns, the NPC's record reflects those result
 DM needs to know something the World Turn did not settle ("is she still at the mill?"), it asks the Oracle
 with a time scope (01.15.7) — it never invents an off-screen life.
 
+**12.11.9 Every present NPC has a default.** `[D]` [DL-12-43; C:I; R4 W4; R5 P-06; revision: R2-B] Code, not the
+narrator, decides what each present NPC is doing and how they respond; the narrator voices it. This is 12.2.9's
+step 2 in full:
+1. **Activity.** When an NPC enters the scene (present when it opens, or joining it), code rolls their activity on
+   `tbl.npc_activity` by role (12.11.1) × watch (00.7.1) and writes it as scene state (T1c, 12.14.13): the smith
+   at the forge, a guard on watch. It holds until the NPC's response changes it, is overwritten rather than
+   appended, and expires at scene end. Narrating it is a `position` claim, checked against presence and this
+   line; a deed that changes something stays an `action` claim (12.3.1) [I-128]. An unnamed crowd's collective
+   reaction (heads turn, talk stops) is atmosphere (12.3.1) unless it changes something the PC could act on (the
+   crowd parts, blocks the way, sends for the watch); then it is the crowd practice's response, with a record line.
+2. **Practice.** Each turn the scene has one practice, fixed by code from the scene and the beat in
+   `tbl.npc_practice`'s order: fight, trade, greeting, conversation, crowd, work. The practice gives the legal
+   responses: the `tbl.npc_action` rows it allows.
+3. **Choice.** An NPC who is engaged (12.2.9 step 2) or addressed takes the first that applies: (a) a resolved
+   frame's delivered outcome; (b) a recorded refusal or want that matches the event (12.2.9 (b)); (c)
+   `tbl.npc_action` by standing (12.11.5), where a rolled row the practice does not allow moves to the nearest row
+   it does (toward row 5 on a tie). Every other present NPC keeps their activity.
+4. **An addressed NPC always answers.** An NPC the PC addressed this turn responds in words, never with silence:
+   with what the source gave, or, when the source refuses (a recorded refusal, a failed frame, a refusing row),
+   with a **refusal spoken in their own voice**: the reason (their recorded refusal, else the row) said through
+   their voice register and habit (12.11.3). A walk-on who answers for the first time has their voice rolled
+   then (12.11.1's tables). Words and manner come from the response line; a deed still needs its source [I-140].
+5. **Acceptance is code.** Whether an NPC agrees to what the PC asks is decided by the source in step 3 (a
+   frame's outcome, a refusal honored by 12.11.4, a want the request serves, the row), never by the narrator.
+6. **Standing changes tone and willingness, never truth.** Standing (12.11.6) moves the row (12.11.5) and colours
+   the words. It never changes what is true or what the NPC knows (12.10.6); whether they lie is 15.6.2's alone.
+
+Each response is a must-name record line (12.14.12, 12.3.1a); each activity is a record line a sentence may cite.
+LLM-voiced characters drift toward engagement and agreement; a default decided before the prose is the remedy
+(12.11.4).
+
 ### 12.12 The ruling ledger in use
 
 **12.12.1 When the DM consults precedent.** `[D]` [DL-12-19; C:III; R5 DM-05; revision: I-065] `find_rulings(anchor_id, deltas, tags)` is called
@@ -1360,7 +1449,7 @@ departed citing a fact that is absent now — then the earlier one applies. Eith
 logged with `review_flag: true`.
 
 **12.12.4 Review flags and Principle III's revisit trigger.** `[D]` `review_flag` is set by 01.5.4's
-conditions and also on: every correction (12.3.4); every plain fallback (12.3.3); every upheld dispute
+conditions and also on: every correction (12.3.4); every turn that needed a rendered line, the plain fallback included (12.3.3) [revision: R2-B]; every upheld dispute
 (12.3.6); every breach of 12.1.3 detected by a sweep; two seasons in a row outside 12.7.7's sessions-per-season
 band (`pacing.yaml#world_time.review`) [revision: I-085]. At `session_end`, `h.12.session_close` compiles the
 session's flagged records into the **review list**. When **three or more** flagged records in which the
@@ -1566,19 +1655,27 @@ the player's own phrase). *Worst case (J):* a repeated phrase — harmless (clas
 **12.14.12 What every narration must name.** `[D]` [DL-12-17; DL-12-01; R5 DM-06; revision: I-065] (from 01.12.2, restated so this card stands alone)
 Every visible condition applied this turn; one omen per sensed or hidden clock tick; every changed range
 band or positional flag involving the PC; the form of every cost paid; every NPC response produced by
-12.2.9; and every lead injected. Missing any of these is a claim-check failure of the sweep (12.4.8).
+12.2.9; every lead injected; and the answer to every FICTION_QUESTION (01.3.8) [revision: R2-B]. Each is an
+adjudication-record line with a handle; coverage checks every turn that some sentence cites it (12.3.1a), and
+12.3.3 states an uncited one by its rendered line. Missing any of these is also a claim-check failure of the sweep (12.4.8).
 
-**12.14.13 What narration may create.** `[J:flag]` + `[D]` [DL-12-05; C:VII; revision: I-065] Write-on-mention lets narration bring **ordinary
-scene furniture** into being: the things any such place has, with ordinary properties (a rope by a
-door, benches in a hall, a fishwife at the market, a puddle, a woodpile). Narration may **not** create, by
-mention alone, anything that functions as: a **clue** toward a sealed fact or an open thread (clues come
-only from clue graphs and their placements, ch.15/11); an **item of more than common value** or any
-property beyond the mundane (items come from the generator or the region's data, 00.11); a **hazard**
-or **trap** (ch.10 tables); an **adversary** (encounter tables, clocks, behavior lists); or a **person with
-a want, a secret or knowledge of a thread** (NPC generation and the clue graph, 12.11.1). `[J:flag]`
-*"Would this element, as described, help or hinder the PC beyond what any such place ordinarily offers, or
-point toward something hidden?"* True → it must come from its owning procedure or be cut. Uncertain →
-true. *Worst case (J):* an ordinary-seeming element that turns out useful is written — it is an
+**12.14.13 What narration may create: the content tiers.** `[J:flag]` + `[D]` [DL-12-05; DL-12-40; C:VII; revision: I-065; revision: R2-B]
+Who decides that something is true depends on its tier. Each element a sentence introduces is declared with an
+`element_kind` from a closed list (`furniture`, `feature`, `person`, `item`, `document`, `knowledge`, `clue`,
+`hazard`, `adversary`), and the kind fixes the tier (`pacing.yaml#claim_check.element_tiers`) [I-129]:
+
+| Tier | Contents | `element_kind` | Who decides it is true | Stored | Checked |
+|---|---|---|---|---|---|
+| **T0 Atmosphere** | light, smell, sound, weather words, mood, an unnamed crowd's murmur | none (the sentence's atmosphere flag) | the narrator, freely | never | only against the hour, season, weather and climate the store holds, and the lines and veils (12.3.1) |
+| **T1a Incidental detail** | the things any such place has, with ordinary properties (a rope by a door, benches in a hall, a puddle, a woodpile); an ordinary walk-on (a fishwife at the market, 12.11.1); an item or document of common value; an incidental property of a thing in view (the smith's scarred hands, a notice's lettering) | `furniture`, `feature`, `person`, `item`, `document` | the narrator, **as written**: written on mention with the properties the sentence states (00.6.6) | yes; it binds later turns | later prose must not contradict it |
+| **T1b Ordinary knowledge** | what someone in a role would know of the world beyond the view: roads, prices, local news, trade facts | `knowledge` | **proposed**, then **settled by the Oracle** at 12.10.6(d)'s odds (Likely for the NPC's trade, Unlikely otherwise) before it is narrated (12.6.1) | yes, as a fact and a knowledge record; "does not know" is recorded too | the sentence must match the settled answer |
+| **T1c Scene state** | each present NPC's activity (12.11.9), a posture, a hold | none: prose never introduces it | **code**, from the resolved beats and the default NPC layer | yes, for the scene; expires at scene end | the sentence must match the record line |
+| **T2 Consequential** | a **clue** toward a sealed fact or an open thread; an **item of more than common value** or any property beyond the mundane; a **hazard** or **trap**; an **adversary**; a **person with a want, a secret or knowledge of a thread**; the identity of a story role | `clue`, `hazard`, `adversary`; and a `person`, `item` or `document` the question below finds true | **generators only**: clue graphs and their placements (ch.15/11), the item generator and the region's data (00.11), ch.10 tables, encounter tables, clocks and behavior lists, NPC generation and the clue graph (12.11.1) | at generation, sealed until revealed | strict: in this turn's record, as delivered or unsealed, or the sentence is cut |
+
+The narrator assigns the kind (`[J:enum]`, part of 12.3.1's declaration). Whether a `person`, `item` or `document`
+is T1a or T2 is one question, `[J:flag]` *"Would this element, as described, help or hinder the PC beyond what any
+such place ordinarily offers, or point toward something hidden?"* True → T2: it must come from its owning
+procedure or be cut. Uncertain → true, and an **uncertain kind is T2**. *Worst case (J):* an ordinary-seeming element that turns out useful is written — it is an
 established fact the player may cite as a lever, worth at most +2, one stakes rung or one reach rung
 (00.3.9; class i). *Example inside (furniture):* "a coil of rope hangs by the boathouse door" at a ferry
 landing. *Outside (a clue):* "the ferryman's boots lie by the hut, laces cut" when the ferryman's fate is a
@@ -2005,26 +2102,31 @@ record. A pause point (12.2.6) jumps to T7 with what has been resolved so far, t
 | **T2** | CLASSIFY | Split the message into parts; classify each (SAFETY, SESSION, DISPUTE, PENDING_ANSWER, OOF_QUESTION, FICTION_QUESTION, DECLARATION, SPEECH); order them. SAFETY first: act on it before anything else. | — | 12.2.2, 12.5 |
 | **T3** | LOAD | `get_active_triggers()`; `get_state(scene, narrator)`; `load_cards(situation tags, mode, triggers)` within the packet cap. The core checklist is always present. | 30, 8, 31 | 12.2.3, 12.2.4 |
 | **T4** | ADJUDICATE | For each SESSION / DISPUTE / OOF part: answer it (12.5, 12.3.6). For each PENDING_ANSWER: resume the paused pipeline. For each FICTION_QUESTION: 01.3.8 (state → canon → Oracle, PR-01-4). For each DECLARATION: PR-01-1 (PARSE … CONSEQUENCE) per beat, up to three, `find_rulings` before any adaptation. Stop at the first pause point reached. | 1–6, 29 | 01.1–01.15 |
-| **T5** | WORLD | World responses in fixed order: adversaries (conflict), NPCs present (frame → want/refusal → `tbl.npc_action`), clocks and omens, fired triggers (lead injection, pacing push, offers), time and boundaries (`advance_time` / `mark_boundary`). Each from its closed source only. | 7, 21–23 | 12.2.9, 01.11.3 |
+| **T5** | WORLD | World responses in fixed order: adversaries (conflict), NPCs present by the default NPC layer (activity, practice, frame → want/refusal → `tbl.npc_action`; the addressed NPC always answers) [revision: R2-B], clocks and omens, fired triggers (lead injection, pacing push, offers), time and boundaries (`advance_time` / `mark_boundary`). Each from its closed source only. | 7, 21–23 | 12.2.9, 12.11.9, 01.11.3 |
 | **T6** | WRITE | All state writes not already made: RECORD of every beat (01.12.1), evidence by **PR-03-1** for every resolved beat, rulings, NPC memories, knowledge records, `beat_end` marks; a cut scene is always marked `scene_end`, since ch.03's settlement hangs on it [integration: IR ch.03 to 12]. Then re-read the narrator view. | 9–18, 25, 29 | 12.2.8, 12.2.10 |
-| **T7** | DRAFT | Draft the narration from the adjudication record and the fresh narrator view only: fiction first, then OOF blocks (12.15). Name everything 12.14.12 requires. Respect length (12.14.10). | — | 12.14 |
-| **T8** | MENTION | List every concrete, addressable element the draft introduces; write each (`create_entity` / `set_fact`), rolling any property the draft needs that is unsettled (Oracle, tables; NPCs via 12.11.1). Redraft if an answer changes the draft. | 6, 7, 9, 10 | 00.6.6, PR-00-7 |
-| **T9** | CHECK | Extract claims (12.3.1); `check_claims`; fix each non-`supported` verdict by its rule (12.3.2); re-check; at most two redrafts, then the plain fallback (12.3.3). | 32 | 12.3 |
+| **T7** | DRAFT | Draft the narration as declared sentences (12.3.1) [revision: R2-B] from the adjudication record and the fresh narrator view only: fiction first, then OOF blocks (12.15). Name everything 12.14.12 requires. Respect length (12.14.10). | — | 12.14 |
+| **T8** | MENTION | Write each declared new element by its tier (12.14.13) [revision: R2-B]: T1a on mention (`create_entity` / `set_fact`; NPCs via 12.11.1), T1b once the Oracle settles it, T2 only if this turn's record holds it. Ask the Oracle or roll the table for a consequential property the draft needs that is unsettled; an incidental one is written as drafted. Redraft a sentence if an answer changes it. | 6, 7, 9, 10 | 00.6.6, PR-00-7 |
+| **T9** | CHECK | Resolve declarations into claims and compute coverage (12.3.1, 12.3.1a) [revision: R2-B]; `check_claims`; fix each failing sentence by its rule (12.3.2); re-check only the redrafted sentences; at most two redrafts, then cut and render (12.3.3). | 32 | 12.3 |
 | **T10** | SCREEN | Input fidelity ×3 (12.2.7); next step exists (01.11.4); safety screen against lines, veils and flags (12.5.6); PC agency (12.14.3); no mechanics in fiction (12.14.4); open prompt or one pause block last (12.14.9). Any failure → back to T7. | — | 12.2.7, 12.5.6, 12.14 |
 | **T11** | DELIVER | Send the response. | — | 12.15 |
 | **T12** | RECORD | Store the delivered response verbatim; update turn counters (dead air, 12.4.2); if a scene cut was reached, `mark_boundary(scene_end)` then frame the next scene (PR-12-7) in the *next* response unless the cut was the player's own request in this message. | 35, 22 | 12.2.5, 12.4 |
 
 **PR-12-2 The claim check.** `[D]` + `[J:enum]` (inside T9)
-1. Split the draft into sentences; for each, list every assertion and classify it (12.3.1). Include the
-   OOF blocks' state values.
-2. `check_claims(claims)` → a verdict per claim (12.3.2).
-3. For each `new_element`: write it on mention (only the implied properties) or cut it.
-4. For each `undetermined`: ask the Oracle or roll the settling table; write the answer; redraft to it.
-5. For each `contradicted` or `overreach`: redraft to the store's value or the literal scope.
-6. For each `unsourced_change`, `leak` or `pc_agency`: cut the claim (and replace a leak with its permitted
-   slice if the sentence needs one).
-7. Re-run steps 1–2 on the redraft. After the second redraft, if any verdict is still not `supported`,
-   deliver the plain fallback (12.3.3) and log a `rule_conflict` ruling with `review_flag: true`.
+1. Resolve each sentence's declarations into claims (12.3.1); scan every sentence for names, aliases and numerals
+   (and the OOF blocks' state values); compute coverage (12.3.1a); run the audit for undeclared assertions
+   [revision: R2-B; DL-12-41].
+2. `check_claims(claims)` → a verdict per claim (12.3.2): support against the packet and the record,
+   contradiction against the whole store.
+3. For each `new_element`: write it by its tier (12.14.13): T1a on mention (only the stated properties); T2 not
+   in this turn's record → cut the sentence.
+4. For each `undetermined`: incidental → write it as drafted; consequential → ask the Oracle or roll the settling
+   table, write the answer, and redraft that sentence to it.
+5. For each `contradicted` or `overreach`: redraft that sentence to the store's value or the literal scope.
+6. For each `unsourced_change`, `leak` or `pc_agency`, and each undeclared sentence citing no must-name item: cut
+   the sentence (and replace a leak with its permitted slice if the narration needs one).
+7. Re-run steps 1–2 on the redrafted sentences only. After the second redraft, cut each sentence still failing
+   and render each uncited must-name item (12.3.3); log a `rule_conflict` ruling with `review_flag: true` if any
+   line was rendered.
 
 **PR-12-3 Lead injection.** `[D]` + `[J:flag]` (when `trg.lead_injection` fires; 12.8.2)
 1. Walk the source ladder (12.8.2 step 1) and take the first eligible source; ties at a rung go to the
@@ -2134,6 +2236,7 @@ any paraphrase here (00.1.4 item 5).
 | T-12-14 | Every ch.12 number | `pacing.yaml` (including `world_time`, 12.7.7 [revision: I-085]) |
 | T-12-15 | The world seed's steps and questions | 12.16.3; `world_seed.yaml#steps`, `#questions` (below) |
 | T-12-16 | What the rules read from a region, and the seed check | 12.16.17; `world_seed.yaml#requirements` (below) |
+| T-12-17 | A present NPC's activity by role and watch; the scene practices and their legal responses | 12.11.9; `oracles.yaml#tbl.npc_activity`, `#tbl.npc_practice` [revision: R2-B] |
 
 **T-12-1 The always-loaded checklist** (this is the card that travels with every turn; about 250 words;
 `pacing.yaml#packet.core_checklist` holds the same text).

@@ -1841,8 +1841,9 @@ looking) is a new beat at its own repetition (01.14.3).
    `forage_tier`, `game_tier`, `openness`, `grazing`, `water_source`; a site takes PR-10-6.
 3. `create_entity` (place, object or link) with every field the narration implies; leave the rest
    undetermined (00.6.6); write `known`; write `discovered` with the frame id if a frame found it (10.1.5).
-4. If the narration needs an undetermined property now, ask the Oracle first (00.12.7) and narrate the
-   answer. Then deliver the narration.
+4. If the narration needs an undetermined consequential property now, ask the Oracle first (00.12.7) and
+   narrate the answer; an incidental one is written as narrated (12.14.13) [revision: R2-B]. Then deliver the
+   narration.
 
 **PR-10-2 A journey.** `[D]` (10.3)
 1. The player names a destination. Compute legs over known links (fewest watches); a destination with no
