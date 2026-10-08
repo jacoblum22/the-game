@@ -175,7 +175,8 @@ def _plan(claims: Sequence[Claim], verdicts: Sequence[Verdict], sents: Sequence[
             plan.lines.append(f"{head}; the Oracle settled it: {v.store_value}. Redraft to that answer")
         elif v.fix == "redraft_to_store":
             plan.needs_narrator = True
-            plan.lines.append(f"{head}; the store holds: {v.store_value or 'something else'}. Make it agree")
+            plan.lines.append(f"{head}; the truth is: {v.store_value or 'something else'}. Make the "
+                              "fiction say that, in its own words")
         elif v.fix == "replace_with_slice" and v.store_value:
             plan.needs_narrator = True
             plan.cut.add(n)

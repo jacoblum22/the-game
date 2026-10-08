@@ -235,3 +235,43 @@ def test_dispute_and_rules_question_answer_out_of_fiction(tmp_path: Path) -> Non
     assert any(b.kind == "NOTE" for b in r.oof_blocks) and r.pause is None
     r2 = play_turn(ctx, "What does 12.2.6 say?").response
     assert any("12.2.6" in b.text for b in r2.oof_blocks)
+
+
+def test_freshness_lists_repeated_images_per_entity_and_recent_openings() -> None:  # 12.14.11 (P-030)
+    from engine.dm.roles.narrator import freshness_lines
+
+    d = ["Makul keeps his fingers on the ledger, eyes on you. The arrival stands still. What do you do?",
+         "You ask again. Makul, fingers on the ledger, eyes on you, says nothing. What do you do?",
+         "The lamp hisses. What do you do?"]
+    lines = freshness_lines(d, ["Makul", "the arrival"], openings=2)
+    text = "\n".join(lines)
+    assert '"You ask again" / "The lamp hisses"' in text and "Makul keeps" not in lines[0]
+    assert "- Makul: fingers on the ledger eyes on you" in text
+    assert "what do you do" not in text.lower().replace("freshness", "")  # the hand-back is all stopwords
+    assert freshness_lines(["One turn only. Nothing repeats here."], []) == ['FRESHNESS (12.14.11): do not open '
+                                                                             'the way these recent turns opened: '
+                                                                             '"One turn only"']
+
+
+def test_the_narrator_is_told_what_it_already_used(tmp_path: Path) -> None:
+    same = "Tam Harlan leans on his pole, rain beading on the brim. What do you do?"
+    model = look_model(narrator=[narr(same), narr(same), narr(same)], checker=[chk(), chk(), chk()])
+    model.push(Role.READER, reader("DECLARATION", "I look over the quay.", LOOK),
+               reader("DECLARATION", "I look over the quay.", LOOK))
+    model.push(Role.WORLD, QUIET_WORLD, QUIET_WORLD)
+    dock, ctx = setup(tmp_path, model)
+    for _ in range(3):
+        play_turn(ctx, "I look over the quay.")
+    msgs = [p.message for p in calls(model, Role.NARRATOR)]
+    assert "Already used lately" not in msgs[0] and "Already used lately" not in msgs[1]
+    assert "- Tam Harlan: leans on his pole rain beading on the brim" in msgs[2]
+
+
+def test_redraft_and_screen_keep_the_bookkeeping_out_of_prose() -> None:  # P-045
+    from engine.audit.screen import mechanics_in_fiction
+
+    assert mechanics_in_fiction("It is unhurt, and the wound the record holds for it is there to be seen.")
+    assert mechanics_in_fiction("Unhurt, as the store says.")
+    assert not mechanics_in_fiction("You step into the store. The clerk keeps a record of every sale.")
+    src = (Path(__file__).parents[2] / "engine" / "dm" / "narration.py").read_text(encoding="utf-8")
+    assert "the store holds:" not in src

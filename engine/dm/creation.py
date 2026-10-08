@@ -481,6 +481,8 @@ def _item_name(tag: str, note: str | None = None, rules: Any = None) -> str:  # 
     """A kit item's name: the kit's own note ("pack and bedroll"), else the base item the tag resolves to
     (`base_items.yaml#kit_resolution`: item.shield.light -> "round shield", item.tool.light -> "torches"), else
     the tag's last segment in words."""
+    if note and "<" in note:  # a data placeholder ("your spellbook: carries the fact teaches: <...>"): name only
+        return note.split(":", 1)[0].removeprefix("your ").strip()
     if note:
         return note
     base = None
@@ -565,6 +567,9 @@ def build_record(d: Draft, state: WorldState, rules: Any) -> dict[str, Any]:  # 
             items += [{**it, "kit": kid} for it in opt]
     for it in items:
         it["name"] = _item_name(it["item_tag"], it.get("note"), rules)
+        if tech and "teaches:" in str(it.get("note") or ""):  # rule: 02.5.5 the spellbook teaches the gifted spell
+            it["teaches"] = tech
+            it["name"] += f" ({(rules.abilities.get(tech) or {}).get('name', tech)})"
         coin += int(kit.get("coin") or 0)
     abilities = [tech] if tech else []
     return {

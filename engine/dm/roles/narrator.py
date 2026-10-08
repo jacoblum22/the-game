@@ -156,6 +156,69 @@ def record_text(state: WorldState, record: AdjudicationRecord, *, player_message
     return "\n".join(lines)
 
 
+_STOP = set("a an the and or but of to in on at by for with from as into onto over under up down out off is are "
+            "was were be been it its it's this that these those there here then than so not no you your yours he she "
+            "his her him they them their we our i me my what who how do does did has have had will would can could "
+            "still just".split())
+
+
+def _sentences(text: str) -> list[str]:
+    prose = " ".join(ln for ln in text.splitlines() if not ln.lstrip().startswith(("[", ">")))
+    return [s.strip() for s in re.split(r"(?<=[.!?])\s+", prose) if s.strip()]
+
+
+def freshness_lines(deliveries: Sequence[str], names: Sequence[str] = (), *, openings: int = 3,
+                    per_entity: int = 10) -> list[str]:  # rule: 12.14.11
+    """12.14.11 in THIS MESSAGE: the opening clauses of the last `openings` deliveries and, per entity, the
+    images (runs of 3+ words with a content word) already used in two or more of `deliveries` (oldest first;
+    the caller passes the last `image_repeat_turns`). Attribution: an entity named in the sentence, else the
+    last one named before it in that delivery, else "the scene".
+    ponytail: recurrence of word 3-grams stands in for "distinctive image"; a phrase used once is not listed."""
+    seen: dict[str, set[int]] = {}
+    name_words = {x for n in names for x in re.findall(r"[a-z']+", n.lower())} - _STOP
+    sents = [[(s, re.findall(r"[a-z']+", s.lower())) for s in _sentences(d)] for d in deliveries]
+    for k, ss in enumerate(sents):
+        for _, w in ss:
+            for i in range(len(w) - 2):
+                g = " ".join(w[i:i + 3])
+                if any(x not in _STOP and x not in name_words for x in w[i:i + 3]):
+                    seen.setdefault(g, set()).add(k)
+    found: dict[str, list[str]] = {}
+    low = [(n, n.lower()) for n in names if len(n) > 2]
+    for ss in sents:
+        who = "the scene"
+        for s, w in ss:
+            who = next((n for n, ln in low if ln in s.lower()), who)
+            hit = [i for i in range(len(w) - 2) if len(seen.get(" ".join(w[i:i + 3]), ())) > 1]
+            runs: list[list[int]] = []
+            for i in hit:  # merge overlapping 3-grams into one phrase ("fingers on the ledger")
+                if runs and i <= runs[-1][1]:
+                    runs[-1][1] = i + 3
+                else:
+                    runs.append([i, i + 3])
+            for a, b in runs:
+                while a < b and w[a] in name_words:  # the name is not the image
+                    a += 1
+                while a < b and w[b - 1] in name_words:
+                    b -= 1
+                if b - a < 3:
+                    continue
+                found.setdefault(who, [])
+                p = " ".join(w[a:b])
+                if p not in found[who]:
+                    found[who].append(p)
+    lines = []
+    opened = [re.split(r"[,;:.!?]", ss[0][0])[0].strip() for ss in sents[-openings:] if ss]
+    if opened:
+        lines.append("FRESHNESS (12.14.11): do not open the way these recent turns opened: "
+                     + " / ".join(f'"{o}"' for o in opened))
+    if found:
+        lines.append("Already used lately, do not reuse (find a new image, or none; a deliberate callback "
+                     "is fine):")
+        lines += [f"- {who}: " + "; ".join(ps[-per_entity:]) for who, ps in found.items()]
+    return lines
+
+
 def redraft_text(r: Redraft) -> str:  # rule: 12.3.3
     lines = ["A REDRAFT. The previous draft, sentences numbered from 0:"]
     lines += [f"[{i}] {s}" for i, s in enumerate(r.previous)]
@@ -168,6 +231,17 @@ def redraft_text(r: Redraft) -> str:  # rule: 12.3.3
         lines.append("SETTLED NOW (write to these answers):")
         lines += [f"- {s}" for s in r.settled]
     return "\n".join(lines)
+
+
+def _freshness(ctx: TurnContext) -> list[str]:  # rule: 12.14.11
+    from engine.dm.turn import recent_exchanges  # turn imports this module
+
+    cfg = (ctx.rules.pacing.get("narration") or {}).get("freshness") or {}
+    past = recent_exchanges(ctx.store, ctx.turn_id or "", n=int(cfg.get("image_repeat_turns", 10)))
+    st = ctx.state
+    names = [e.name for e in st.entities.values() if e.kind != "pc" and e.name and e.id not in st.seals]
+    return freshness_lines([x[1] or "" for x in past], names, openings=int(cfg.get("opening_patterns_remembered", 3)),
+                           per_entity=int(cfg.get("images_per_entity_remembered", 10)))
 
 
 def draft(ctx: TurnContext, record: AdjudicationRecord, *, player_message: str = "",
@@ -184,6 +258,8 @@ def draft(ctx: TurnContext, record: AdjudicationRecord, *, player_message: str =
     msg = [record_text(st, record, player_message=player_message, purpose=purpose, rules=ctx.rules)]
     if purpose in ("turn", "scene_open", "opening") and (setting := scene_setting(st)):
         msg.append(setting)
+    if purpose in ("turn", "scene_open"):
+        msg += _freshness(ctx)
     msg.extend(extra)
     if redraft is not None:
         msg.append(redraft_text(redraft))
@@ -195,4 +271,4 @@ def draft(ctx: TurnContext, record: AdjudicationRecord, *, player_message: str =
                          call_id=res.record.call_id)
 
 
-__all__ = ["NarratorDraft", "Purpose", "Redraft", "draft", "name_of", "record_text", "redraft_text"]
+__all__ = ["NarratorDraft", "Purpose", "Redraft", "draft", "freshness_lines", "name_of", "record_text", "redraft_text"]

@@ -42,6 +42,8 @@ _ALWAYS = [
     r"\b(?:bonus|penalty|modifier)\b", r"\bmana\b", r"\b(?:level|class) (?:up|feature)\b",
     r"\bS[1-5]\b", r"\bcond\.\w+", r"\b(?:tbl|trg|pref|lic|ab|adv|anc|verb|clk|cost)\.[a-z_.]+",
     r"\b[a-z]+_[a-z_]+\b",  # a raw snake_case id (critical_success, off_balance)
+    # the bookkeeping named in prose (P-045 "the wound and ruin the record holds"); a shop or a ledger still passes
+    r"\bthe (?:record|store|engine|adjudication)(?:'s)? (?:holds?|held|has|had|says|said|shows?|names?|gives?|keeps?)\b",
 ]
 _CASED = [r"\bDC\b", r"\bXP\b", r"\bHP\b", r"\bVitality\b", r"\bFocus (?:points?|cost)\b", r"\bG[0-4]\b"]
 

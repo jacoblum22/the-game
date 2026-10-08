@@ -156,6 +156,11 @@ def test_the_pc_has_every_field_and_harm_and_focus_accept_it(tmp_path: Path):
     assert "lic.focus.push" in lics and "lic.lang.common" in lics
     carried = st.fact_value(pc, "carries")
     assert carried and all(st.entities[i].kind == "item" for i in carried)
+    names = [st.entities[i].name for i in carried]  # P-043: no data placeholder on the sheet
+    assert not any("<" in n or "teaches:" in n for n in names)
+    book = next(st.entities[i] for i in carried if st.entities[i].name.startswith("spellbook"))
+    assert book.data["teaches"] == e.data["abilities"][0]
+    assert RULES.abilities[e.data["abilities"][0]]["name"] in book.name
     assert st.positions.get(pc) is not None  # at the opening place
     # engine/harm and engine/abilities accept the created PC
     with store.transaction() as tx:
