@@ -256,7 +256,7 @@ def _polarity(text: str, s: DeclaredSentence, record: AdjudicationRecord,
         beats = rolled if len(rolled) == 1 else []
     out = []
     for b in beats:
-        degree = beat_polarity(text, b) if text else None
+        degree = beat_polarity(text, b, record.pause) if text else None
         if degree:
             out.append(Failure(why=f"contradicts the attempt's result ({degree})", fix="redraft", store_value=degree))
     return out

@@ -88,9 +88,15 @@ def start(tctx: TimeContext, pc: str, foes: list[str], reason: str) -> bool:  # 
         ensure_vitality(tx, tctx.rules, f)
         if _band(st, pc, f) is None:
             _set_band(tx, pc, f, "near", "06.3.9")
+    # each foe's heaviest listed harm (its line's standard or heavy blow, T-09-3): what 07.3.3's severity row reads
+    # for a foe with no `attacks` data of its own (a named NPC who fights)
+    lines = {f: _line(tctx.rules, st.entities[f]) for f in new}
+    sev = {**(rec.get("severity") or {}),
+           **{f: f"S{max(int(ln['sev']), int(ln.get('heavy') or 0))}" for f, ln in lines.items()}}
+    mode = clock.mode_of(st.time.mode)  # a scene framed in conflict mode has no mode of its own to go back to
     tx.add(Event.of("meta_set", source="engine", rule_id="06.2.1", key=KEY,
-                    value={"pc": pc, "foes": [*rec.get("foes", []), *new],
-                           "previous": rec.get("previous") or clock.mode_of(st.time.mode)}))
+                    value={"pc": pc, "foes": [*rec.get("foes", []), *new], "severity": sev,
+                           "previous": rec.get("previous") or (mode if mode != "conflict" else "free")}))
     if rec:
         return False
     set_mode(tctx, "conflict", reason)
@@ -119,6 +125,9 @@ def check_end(tctx: TimeContext, pc: str) -> bool:  # rule: 06.13.1
     if not (is_down(st, pc) or harm_state(st, pc) == DEAD) and any(able(st, f) for f in rec.get("foes", [])):
         return False
     mark_boundary(tctx, "conflict_end", {"foes": rec.get("foes", [])})
+    # the record goes with the fight: a later scene framed in conflict mode must not revive these foes without a
+    # conflict_start of its own (playtest 20261008-135049: the next scene's opener "resumed" the ended fight)
+    tctx.tx.add(Event.of("meta_set", source="engine", rule_id="06.13.1", key=KEY, value=None))
     set_mode(tctx, str(rec.get("previous") or "free"), "the fight is over (06.13.1)")
     return True
 

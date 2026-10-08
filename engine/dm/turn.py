@@ -43,7 +43,7 @@ from engine.dm.roles.reader import (
     possible_dispute,
     read_message,
 )
-from engine.dm.world_step import world_step
+from engine.dm.world_step import deliver_warnings, world_step
 from engine.resolve.oracle import OracleQuestion, ask_oracle
 from engine.resolve.pipeline import (
     BeatOutcome,
@@ -193,6 +193,8 @@ def _turn(ctx: TurnContext, message: str, *, choice: str | None, dispute: bool =
                 _turn_end(ctx, rec, oof)
                 if choice is None:
                     _director_step(ctx, rec, message)  # lead injection, the player's cut, an answered agenda
+            elif not dispute:  # 07.3.3: a warning raised this turn (a fight begun before a near miss) is owed now
+                deliver_warnings(ctx, rec)
             events = list(tx.events)
         finally:
             ctx.tx = None
@@ -760,7 +762,7 @@ def _turn_end(ctx: TurnContext, rec: AdjudicationRecord, oof: list[dict[str, str
     if pc and _finish_last_stand(ctx, rec, pc):
         return
     if pc and is_down(ctx.state, pc):
-        _wake(ctx, rec, pc)
+        _wake(ctx, rec, pc, oof)
         return
     if not pc or harm_state(ctx.state, pc) != DYING:
         return
@@ -773,17 +775,30 @@ def _turn_end(ctx: TurnContext, rec: AdjudicationRecord, oof: list[dict[str, str
         _harm_followups(ctx, env, rec, oof)
 
 
-def _wake(ctx: TurnContext, rec: AdjudicationRecord, pc: str) -> None:  # rule: 07.2.9
+def _wake(ctx: TurnContext, rec: AdjudicationRecord, pc: str, oof: list[dict[str, str]]) -> None:  # rule: 07.2.9
     # coarse: 07.6 (no victor in Milestone 1 takes a Down PC: nothing runs a disposition, so it wakes after an interval)
     """The PC went Down (a non-lethal fall, 07.2.9): out cold for one interval, then it wakes where it fell,
-    Staggered, with its wounds. Without this the ladder stays frozen and every later harm is discarded."""
+    Staggered, with its wounds. Without this the ladder stays frozen and every later harm is discarded. The player
+    is told how long it was out and how it stands now (12.15.3's changes to shown state)."""
     from engine.harm.apply import wake
     from engine.harm.ctx import HarmCtx
+    from engine.harm.state import descriptor
+    from engine.time.clock import ROUNDS
     from engine.time.scheduler import advance_time
 
     advance_time(ctx.time_ctx(), 1, "interval", "down: out cold for an interval (07.2.9)")
     ctx.need_tx().add_all(wake(HarmCtx(state=ctx.state, mint=ctx.mint, rules=ctx.rules, rng=ctx.rng), pc))
-    rec.notes.append("the character blacks out, and comes to a while later where they fell, staggered and hurt")
+    st = ctx.state
+    minutes = ROUNDS["interval"] * 6 // 60  # a round is 6 s (engine/time/clock.py)
+    v = st.quantities.get(pc, {}).get("vitality")
+    prone = any(c.condition_id == "cond.prone" for c in st.conditions_on(pc))
+    over = "" if st.meta.get("conflict") else " · the fight is over"
+    oof.append({"kind": "RESULT", "text": (
+        f"[RESULT] Down: out cold for {minutes} minutes · you come to where you fell · Now: "
+        + (f"Vitality {v.current} of {v.max} · " if v is not None else "") + descriptor(st, pc)
+        + (" · prone" if prone else "") + over)})
+    rec.notes.append("the character blacks out, and comes to some minutes later where they fell, "  # no numeral in
+                     f"{descriptor(st, pc)} and hurt" + ("; the fight is over" if over else ""))  # fiction (12.3.1a)
 
 
 def _finish_last_stand(ctx: TurnContext, rec: AdjudicationRecord, pc: str) -> bool:  # rule: 07.5.9
