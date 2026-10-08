@@ -116,6 +116,11 @@ def scene_setting(state: WorldState) -> str:  # rule: 12.4.3
         ed = e.data
         look = ", ".join(str(ed[k]) for k in ("age", "detail", "demeanor") if ed.get(k))
         lines.append(f"- present: {e.name}" + (f", the {ed['role']}" if ed.get("role") else "") + (f" ({look})" if look else ""))
+    from engine.dm.incident import incident_line
+
+    matter = incident_line(state)  # the opening incident's person, as the character knows it (P-067)
+    if matter:
+        lines.append(f"- the matter at hand (the character knows): {matter}")
     now = (state.time.model_dump(mode="json").get("now") or {})
     watch = now.get("watch")
     when = WATCHES[watch] if isinstance(watch, int) and 0 <= watch < len(WATCHES) else None

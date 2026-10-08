@@ -107,6 +107,14 @@ def _ask_oracle(ctx: TurnContext, record: AdjudicationRecord, c: Claim) -> str |
     # engine/audit/claims.py `_oracle_settled` reads it back
     pred = ids.slug(" ".join(x for x in (c.predicate or c.cls, c.value) if x))[:60]
     start = len(tx.events)
+    from engine.dm.incident import settle_who
+
+    who = settle_who(ctx, f"{c.predicate} {c.value}".strip())  # "who is X?": an existing person (P-067)
+    if who is not None:
+        if c.cls == "knowledge" and record.pc:  # rule: 12.10.5
+            tx.add(Event.of("knowledge_recorded", rule_id="12.10.5", knower=record.pc, fact_id=who[1], how="told"))
+        record.add_writes(tx.events[start:])
+        return who[0]
     res = ask_oracle(OracleQuestion(subject=subject, predicate=pred, question=f"{c.predicate} {c.value}?".strip(),
                                     odds="even", asker="dm"),
                      state=st, rules=ctx.rules, rng=ctx.rng, mint=tx.mint, store=ctx.store, staged=tx.events)

@@ -161,6 +161,28 @@ def _acknowledged(record: AdjudicationRecord, fiction: str) -> list[str]:  # rul
     return missing
 
 
+_QUOTE = re.compile(r"[\"“]([^\"”]+)[\"”]")
+_YOU = re.compile(r"\byou(r|rs|rself)?\b", re.I)
+
+
+def echoed_quotes(fiction: str, said: Iterable[str]) -> list[str]:  # rule: 12.2.7
+    """The player's quoted lines (4+ words) that the fiction quotes back with no "you" in the attribution around
+    them: the last sentence before the quote and the clause after it up to the sentence's end (P-068).
+    '"Who is it?" you ask.' is the PC's line; 'He laughs. "Who is it?" His thumbs...' is an NPC echoing it."""
+    # ponytail: attribution by a "you" nearby; a parser of speech tags if this misfires
+    mine = {tx.norm(q) for t in said for q in _QUOTE.findall(t) if len(tx.words(q)) >= 4}
+    out = []
+    for m in _QUOTE.finditer(fiction):
+        if tx.norm(m.group(1)) not in mine:
+            continue
+        before = re.split(r"(?<=[.!?])\s+", fiction[:m.start()].rstrip())[-1] if fiction[:m.start()].strip() else ""
+        after = re.match(r"[^.!?\"“]*", fiction[m.end():]).group(0)  # type: ignore[union-attr]
+        after = after if after.strip()[:1].islower() or after.strip()[:1] in (",", "") else ""
+        if not _YOU.search(before) and not _YOU.search(after):
+            out.append(m.group(1))
+    return out
+
+
 class ScreenResult(BaseModel):
     passed: bool
     reasons: list[str] = Field(default_factory=list)
@@ -216,6 +238,9 @@ def screen_draft(fiction: str, *, flags: Mapping[str, Any] | None = None, record
     agency_ok = not any(v.verdict == "pc_agency" for v in verdicts)
     if not agency_ok:
         reasons.append("12.14.3: the draft speaks or decides for the PC")
+    echoed = echoed_quotes(fiction, [p.text for p in rec.parts])
+    if echoed:
+        reasons.append(f"12.2.7: an NPC answers with the player's own words ({echoed[0]}); write the NPC's reply")
     # 12.5.6 safety (separate screen)
     safety_ok = safety.ok if safety is not None else True
     if safety is not None and not safety.ok:
