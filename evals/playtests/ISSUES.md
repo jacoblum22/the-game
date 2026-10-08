@@ -118,10 +118,10 @@ Status: open · fixing (round N) · fixed (commit) · logged (ledger id) · wont
 | P-112 | bug | med | [RESULT] says success but the narration says the attempt failed ("the mark does not hold", failed to copy the symbol); the outcome check let it through | 204217-explorer 29–30 | fixed (884f75c) |
 | P-113 | bug | med | Name learned for the wrong person: an officer naming the thief ("Lila Fairwick") was treated as giving his own name | 204112-talker 20–24 | fixed (884f75c) |
 | P-114 | polish | med | NPCs stonewall alike: three NPCs brush off with the same "Not now", even after a successful roll (with I-153) | 204112-talker 25, 30 | open |
-| P-115 | bug | low | A Recall about a token was framed as a Talk roll the NPC reacted to | 204112-talker 26–29 | open (queued after Reader work) |
-| P-116 | polish | low | A foe's strike shows only as a [RESULT] line; the narration never shows it coming | 205745-fighter 25 | open |
-| P-117 | polish | med | Odds identical (60%) across every action in a fight, whatever the approach | 205745-fighter 28 | open (check Framer tier spread) |
-| P-118 | bug | low | Asked one NPC (Helgrim); another (Borga) answered instead | 205857-newcomer 29 | open |
+| P-115 | bug | low | A Recall about a token was framed as a Talk roll the NPC reacted to | 204112-talker 26–29 | fixed (1fc7fe8) |
+| P-116 | polish | low | A foe's strike shows only as a [RESULT] line; the narration never shows it coming | 205745-fighter 25 | fixed (1fc7fe8) |
+| P-117 | polish | med | Odds identical (60%) across every action in a fight, whatever the approach | 205745-fighter 28 | not a bug: odds follow the rules; Framer choices; ledger I-158 |
+| P-118 | bug | low | Asked one NPC (Helgrim); another (Borga) answered instead | 205857-newcomer 29 | fixed (1fc7fe8) |
 | P-119 | bug | low | Journal garbled from a junk mentioned object: "The familiar face in the crowd's recognition is looks familiar to you" | 210433-breaker 29 | open |
 | P-120 | bug | high | A successful Talk (15→17 vs 10) still ends in a refusal; success with nothing stored reads as failure (with I-153) | 210953-talker 24, 30 | open, high: 210627-explorer 23–27 (NPC confirms he knows the name, critical success, still refuses: 'felt like a cheat'); engine fix queued (deliver a who-answer via settle_who on Talk success) |
 | P-121 | polish | low | Coins the player offers are not used as a lever/edge or acknowledged in the offer | 210953-talker 29–31 | open |
