@@ -167,4 +167,15 @@ everything.
   - Feedback loop: PR-12-11, `/fix`, categories, whole-transcript evidence, pinned corrections, and the
     player's reading wins on uncertain incidental fiction.
   - DL-12-80..88, DL-01-33. Suite 1657, validator 0/0.
-- **In flight:** spec 011 (check less) and spec 012 (feedback loop), in parallel.
+- **Spec 012, player feedback loop: merged.**
+  - Players report errors with `/fix <what is wrong>`, or in plain words. The hint "Something wrong? Type /fix
+    and say what." appears after the recap and in the glossary.
+  - Each report is classed as remembered wrong, rule wrong, contradiction, misread action, or other. The engine
+    then checks the whole transcript, where each fact came from, and recomputes the frame.
+  - Possible outcomes: a pinned correction, a take-back across scenes (blocked by death, a session boundary, …),
+    an answer quoting the turn, or the player's reading winning on uncertain incidental fiction.
+  - Review log: `saves/<campaign>.disputes.md`.
+  - 12 scenario tests, one per category and outcome. The live check found a parser bug, now fixed.
+  - Deferred: refunds for spends before the current scene, in-fiction reconciliation, and recomputing opposed
+    DCs. Suite 1679.
+- **In flight:** spec 011 (check less).
