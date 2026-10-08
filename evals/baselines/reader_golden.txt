@@ -1,0 +1,26 @@
+# Reader golden set (91 lines; 61 scored, 30 without an answer)
+
+- verb: 72.1% (44/61)
+- gate: 63.9% (39/61)
+- necessity: 70.5% (31/44)
+- against_will: not scored
+- uses_power: not scored
+- speech: not scored
+- question_kind: not scored
+- necessity as roll / no roll: 81.8% (36/44)
+- issue lines (P-004 … P-123) verb: 50.0% (7/14), gate: 35.7% (5/14)
+
+## Misses (verb, gate): 39
+- g002 verb: got verb.move, want verb.talk  (I step through, sword still out, and call to the strangers o)
+- g004 verb: got verb.talk, want verb.strike  (I hold my sword on the travellers and step toward the neares)
+- g004 gate: got G3, want G1  (I hold my sword on the travellers and step toward the neares)
+- g005 verb: got verb.ready, want verb.handle  (I draw my arming sword, shove the wicket open and step out t)
+- g006 gate: got G3, want G1  (talk to the person on the bridge)
+- g007 gate: got G3, want G1  (press him gently)
+- g008 verb: got verb.recall, want verb.move  (What do I know about the land around Hawkham? Then I'll head)
+- g008 gate: got G3, want G1  (What do I know about the land around Hawkham? Then I'll head)
+- g009 gate: got G1, want G2  (I tap the child's shoulder lightly and say, "I'm Lisius, a m)
+- g010 verb: got verb.handle, want verb.talk  (I gently turn the child's face toward me and say, "Hey. I'm )
+- g010 gate: got G1, want G2  (I gently turn the child's face toward me and say, "Hey. I'm )
+- g012 verb: got verb.recall, want verb.talk  (What do I know about the raven-feather token you wear? I low)
+- … 27 more

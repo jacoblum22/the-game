@@ -1,0 +1,38 @@
+# Replay bench (corpus 960 KB, 150 packets)
+
+## Recorded, all saves
+- population: 74 saves, 1173 turns, 845 narrated
+- first-draft pass rate: 13/845 (1.5%)
+- delivered as first drafted: 9/845 (1.1%)
+- turns with cut sentences: 481/845 (56.9%)
+- fallback turns: 117/845 (13.8%)
+- class instability, unchanged sentences: 1771/5498 (32.2%)
+- calls/turn narrator, checker, other: 1.90, 1.62, 1.40
+- narrator calls/narrated turn: 2.63
+- Oracle on drafted details: asked, no (redraft), cut: 1410, 676, 0
+- new elements per first draft: declared, undeclared: 1.32, 4.00
+- contradicted per first draft, by class: knowledge 255, position 194, identity 171, existence 116, outcome 79, location_time 56, harm_condition 40, possession 36, attitude 6, action 2
+- top failing verdict/class (first drafts): unsourced_change/action 1415, unsourced_change/position 548, undetermined/identity 348, contradicted/knowledge 255, new_element/sealed 227, undetermined/location_time 207
+
+## Recorded, late saves (B §1.2 population)
+- population: 33 saves, 524 turns, 374 narrated
+- first-draft pass rate: 5/374 (1.3%)
+- delivered as first drafted: 3/374 (0.8%)
+- turns with cut sentences: 217/374 (58.0%)
+- fallback turns: 21/374 (5.6%)
+- class instability, unchanged sentences: 845/2684 (31.5%)
+- calls/turn narrator, checker, other: 1.81, 1.61, 1.47
+- narrator calls/narrated turn: 2.53
+- Oracle on drafted details: asked, no (redraft), cut: 713, 342, 0
+- new elements per first draft: declared, undeclared: 0.94, 2.88
+- contradicted per first draft, by class: knowledge 87, identity 86, position 80, existence 50, outcome 40, location_time 21, possession 19, harm_condition 17, attitude 2
+- top failing verdict/class (first drafts): unsourced_change/action 480, unsourced_change/position 267, new_element/sealed 138, undetermined/identity 132, contradicted/knowledge 87, contradicted/identity 86
+
+## Packets: recorded narrator + recorded judge
+- packets: 150
+- first-draft pass rate: 2/150 (1.3%)
+- failing sentences: 657/1484 (44.3%)
+- new elements per draft: declared, undeclared: 0.81, 1.67
+- plug errors: 0
+- top failing classes: action 169, position 118, identity 70, knowledge 56, possession 52
+
