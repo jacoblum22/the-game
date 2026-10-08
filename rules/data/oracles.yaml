@@ -2354,7 +2354,7 @@ tables:
   context_filters:
   - role
   - watch
-  rule: 'rolled by code when an NPC enters the scene: find the NPC''s role (12.11.1) by the first word of its tbl.npc_role row (a role not listed uses other) and the watch (00.7.1); roll d6 on that cell (results give the pair). The result is written as the NPC''s activity, scene state (T1c, 12.14.13): overwritten when the NPC''s response changes it, never appended, expiring at scene end. A region''s seed tables replace this one where they exist.'
+  rule: 'rolled by code once per scene, when an NPC enters it [revision: R2-H; DL-12-93]: find the NPC''s role (12.11.1) by the first word of its tbl.npc_role row (a role not listed uses other, never another role''s cell) and the watch (00.7.1); roll d6 on that cell (results give the pair). The result is written as the NPC''s activity, scene state (T1c, 12.14.13) and optional material (12.14.12): it ends when the NPC engages (talks, fights, or responds with a deed) and is not re-rolled that scene; never appended, expiring at scene end; an ended or stale activity is never a lever (01.6.8). A region''s seed tables replace this one where they exist.'
   results:
   - range: 1-2
     result: the cell's first activity

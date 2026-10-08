@@ -1,18 +1,26 @@
-"""12-answer_ladder_sim.py -- R2-D [DL-12-60; DL-15-38]: the answer ladder (PR-12-10), casting (social.yaml#cast)
-and the reduced case (PR-15-6, 15.9.4 reduced profile) run on packed seeded worlds.
+"""12-answer_ladder_sim.py -- R2-D [DL-12-60; DL-15-38], revised R2-H [DL-12-90; DL-12-91]: questions to NPCs
+(PR-12-10), lazy settlement of testimony (PR-12-12), casting and the reduced case (PR-15-6) on packed seeded worlds.
 
   python 12-answer_ladder_sim.py        # report to stdout; committed as 12-answer_ladder_sim-output.txt
 
-Worlds are 12-world-seed.py's build_seed + seed_packs (imported, not copied), seeds 2001-2030. Every ask uses the
-data the rules name: social.yaml#common_knowledge (topics, role topics, odds), #cast, #delivery.information
-(ladder depth by reach), resolution.yaml#oracle (Likely yes on 26+, Unlikely on 76+), investigation.yaml#reduced_case.
-Assumptions (stated, not measured): what players ask (topic mix, question kinds), the reach mix of asks, and how
-often the narrator's proposal leans toward the case's people and places. Seeded: SEED = 12010.
+R2-H retired the R2-D ladder (store, pack, propose-and-ratify, pointer) as a source of speech: an ordinary answer is
+now the NPC's own words (testimony), so R2-D's part A ("I don't know" + pointer share) and part B (clustering of
+ratified facts) measured machinery that no longer runs, and are replaced. What a sim can still say honestly:
+  A. how often the asked NPC's speaker card holds nothing on the topic (no record, no pack fact, not a role topic, not
+     public news of their home): the share of answers that will be hearsay, a guess or an opinion (testimony, settled
+     lazily) or a rare in-voice "I don't know". The live "I don't know" rate is the narrator's (OEQ-12-25).
+  B. lazy settlement (PR-12-12): settlements and Oracle rolls per 100 asks against R2-D's propose-and-ratify, the share
+     of settled claims found false, and that no accepted or ratified claim asserts a case node (consequential claims
+     route to the case).
+  C. unchanged: "who is <story role>?" answerable within 3 turns, and the reduced case valid (the consequential route
+     of PR-12-10 step 1 is unchanged).
+Ask-twice consistency (R2-D's D) is now the narrator's, fed its own `said` records: not simulable, measured live.
 
-Targets: A. "I don't know" (a pointer answer) below about 35% of ordinary asks that succeed; no empty success.
-B. ratified T1 facts do not cluster into accidental clues (no ratified fact asserts a case node; exposure reported).
-C. "who is <story role>?" (who is missing?) answerable within 3 turns in 100% of 30 seeded openings, and the
-reduced case valid in 100%. D. ask-twice consistency 100%.
+Worlds are 12-world-seed.py's build_seed + seed_packs (imported, not copied), seeds 2001-2030. Data the rules name:
+social.yaml#common_knowledge (topics, role topics), #cast, resolution.yaml#oracle (Likely yes on 26+),
+investigation.yaml#reduced_case. Assumptions (stated, not measured): what players ask (topic mix, question kinds), the
+reach mix, how often testimony is about the case's people (TESTIMONY_BIAS), how often a claim would help or hinder beyond
+the ordinary (BEYOND_SHARE), and how often a player relies on what they were told (ACTED_SHARE). Seeded: SEED = 12010.
 """
 import os, sys, random, importlib.util
 from collections import Counter, defaultdict
@@ -24,7 +32,6 @@ _spec.loader.exec_module(WS)
 
 SEED = 12010
 CK = WS.SOCD["common_knowledge"]
-DEPTH = WS.SOCD["delivery"]["information"]["ladder_depth"]
 ORC = {r["id"]: r for r in WS.load("resolution.yaml")["oracle"]["rungs"]}
 TOPICS = list(CK["topics"])
 KINDS = [("where is X", 0.25), ("what happened", 0.25), ("what is X like or for", 0.25), ("what do you want or think", 0.15), ("who would know", 0.10)]
@@ -32,7 +39,11 @@ KINDS = [("where is X", 0.25), ("what happened", 0.25), ("what is X like or for"
 # the rest roll (assumed: failure 30%, Limited 25%, Standard 30%, Great 15%)
 CERTAIN_SHARE = 0.70
 ROLLED = [(0, 0.30), (1, 0.25), (2, 0.30), (3, 0.15)]
-PROPOSAL_BIAS = 0.30      # assumed share of proposals the narrator aims at the case's people or places
+TESTIMONY_BIAS = 0.30     # assumed share of answers about the case's people (R2-D's PROPOSAL_BIAS, same value)
+BEYOND_SHARE = 0.20       # assumed share of ordinary claims that would help or hinder beyond the ordinary (12.14.13's question)
+ACTED_SHARE = 0.25        # assumed share of answers the player later relies on (acts on, cites, travels to; PR-12-12 triggers)
+# R2-D baseline, from the committed R2-D output (50% mix): rung-3 Oracle rolls 693 + 136 + 1184 = 2013 in 6000 asks
+R2D_ORACLE_PER_100 = 100.0 * 2013 / 6000
 
 
 def weighted(rng, items):
@@ -61,63 +72,6 @@ def odds_for(reg, npc, topic):
     return "other", CK["odds"]["other"]
 
 
-def pointer(reg, rng, asked, topic, store):
-    """Rung 4: social.yaml#cast for 'who would know <topic>' -> a person, else the topic's place, else a new walk-on."""
-    pool = [(n, 3) for n in haven_cast(reg) if n is not asked and
-            (topic in CK["by_role"][WS.role_key(n)] or any(k.get("topic") == topic for k in n.get("knowledge") or []) or (n["id"], topic) in store)]
-    if pool:
-        return "person", weighted(rng, pool)["id"]
-    kept = CK["topics"][topic]["kept_at"]
-    pid = "%s.%s" % (reg["region"]["haven"], kept)
-    if kept != "none" and pid in {p["id"] for p in reg["places"]}:
-        return "place", pid
-    return "walk_on", "new walk-on (12.11.1) for %s" % topic
-
-
-def ladder(reg, rng, npc, kind, topic, reach, store, index, case_people, tally):
-    """PR-12-10 for one ordinary question. Returns (outcome, detail)."""
-    key = (npc["id"], kind, topic)
-    if key in index:
-        return "repeat", index[key]
-    if reach == 0:
-        return "failure", None                     # no item: a refusal or evasion in their voice (12.11.9)
-    rungs = DEPTH[reach]
-    if kind == "what do you want or think":
-        index[key] = ("record", npc["id"] + ".stance")
-        return "knows", index[key]
-    if kind == "who would know":
-        index[key] = pointer(reg, rng, npc, topic, store)
-        return "asked_pointer", index[key]
-    if (npc["id"], topic) in store:                                         # rung 1: records written in play
-        index[key] = ("fact", store[(npc["id"], topic)])
-        return "knows", index[key]
-    seeded = [k for k in npc.get("knowledge") or [] if k.get("topic") == topic]
-    if seeded:                                                              # rung 2: the knowledge pack
-        index[key] = ("fact", seeded[0]["fact"])
-        return "knows", index[key]
-    if "propose_and_ratify" in rungs:                                       # rung 3: propose, the Oracle settles
-        band, rung = odds_for(reg, npc, topic)
-        tally["asked_at"][band] += 1
-        aimed = rng.random() < PROPOSAL_BIAS
-        about = rng.choice(sorted(case_people[0] | case_people[1])) if aimed else topic
-        if aimed and about in case_people[1]:
-            tally["filtered"] += 1                                          # consequential: routed to the case graph
-            about = topic
-        if oracle_yes(rng, rung):
-            fid = "fact.%s.%s.%d" % (npc["id"], topic, len(store))
-            store[(npc["id"], topic)] = fid
-            tally["ratified"] += 1
-            tally["yes_at"][band] += 1
-            if aimed and about != topic:
-                tally["ratified_on_case_people"] += 1
-                tally["per_entity"][(id(reg), about)] += 1
-            index[key] = ("fact", fid)
-            return "knows", index[key]
-        tally["unknown_recorded"] += 1                                      # "does not know" is recorded (12.10.6(e))
-    index[key] = ("unknown+pointer",) + pointer(reg, rng, npc, topic, store)
-    return "pointer", index[key]
-
-
 def worlds(n=30, first=2001):
     out = []
     for s in range(first, first + n):
@@ -125,35 +79,62 @@ def worlds(n=30, first=2001):
     return out
 
 
+def card_has(reg, npc, topic, said_topics):
+    """PR-12-10 step 3: does the speaker card hold anything on the topic? (records written in play count as said here)"""
+    if topic in said_topics:
+        return "said"
+    if any(k.get("topic") == topic for k in npc.get("knowledge") or []):
+        return "pack"
+    band = odds_for(reg, npc, topic)[0]
+    return band if band != "other" else None
+
+
 def part_a(W, rng, on_role_share):
-    res, by_band, by_reach, by_kind, ptr = Counter(), defaultdict(Counter), defaultdict(Counter), defaultdict(Counter), Counter()
-    tally = {"asked_at": Counter(), "yes_at": Counter(), "ratified": 0, "filtered": 0, "ratified_on_case_people": 0,
-             "per_entity": Counter(), "unknown_recorded": 0}
-    consistent = asked_twice = 0
+    """Asks of ordinary questions; per ask: willing or not (reach 0 = unwilling), the card's content, and one claim."""
+    res, card, settle = Counter(), Counter(), Counter()
+    per_holder = Counter()
     for seed, reg in W:
         case = reg["seed_cases"][0]
-        case_people = ({p["holder"] for nd in case["nodes"] for p in nd["placements"] if p["holder_kind"] == "person"},
-                       {case["solution"]["subject"]["id"]})
-        store, index = {}, {}
+        holders = {p["holder"] for nd in case["nodes"] for p in nd["placements"] if p["holder_kind"] == "person"}
+        solution = case["solution"]["subject"]["id"]
         cast = haven_cast(reg)
+        said = defaultdict(set)
         for _ in range(200):
             npc = rng.choice(cast)
             kind = weighted(rng, KINDS)
             topic = rng.choice(CK["by_role"][WS.role_key(npc)]) if rng.random() < on_role_share else rng.choice(TOPICS)
             reach = 2 if rng.random() < CERTAIN_SHARE else weighted(rng, ROLLED)
-            out, det = ladder(reg, rng, npc, kind, topic, reach, store, index, case_people, tally)
-            if out == "repeat":
-                asked_twice += 1
-                consistent += 1                     # the index returned the first answer (same fact id or unknown)
+            if reach == 0:
+                res["unwilling"] += 1                       # a refusal or evasion in their voice (12.11.9)
                 continue
-            res[out] += 1
-            by_reach[reach][out] += 1
-            by_kind[kind][out] += 1
-            if out in ("knows", "pointer"):
-                by_band[odds_for(reg, npc, topic)[0]][out] += 1
-            if out == "pointer":
-                ptr[det[1]] += 1
-    return res, by_band, by_reach, by_kind, ptr, tally, (consistent, asked_twice)
+            res["answered"] += 1
+            if kind in ("what do you want or think", "who would know"):
+                card["own_mind"] += 1                       # their stance, or whom they would send you to: always sayable
+            else:
+                card[card_has(reg, npc, topic, said[npc["id"]]) or "empty"] += 1
+            said[npc["id"]].add(topic)
+            # the claim the words make, and whether it is ever settled (PR-12-12)
+            about = rng.choice(sorted(holders | {solution})) if rng.random() < TESTIMONY_BIAS else None
+            if rng.random() >= ACTED_SHARE:
+                settle["never"] += 1
+                continue
+            if about == solution:
+                settle["case"] += 1                         # consequential: the case settles it; never a clue
+                continue
+            if rng.random() < BEYOND_SHARE:
+                settle["oracle"] += 1
+                if oracle_yes(rng, "likely"):
+                    settle["true"] += 1
+                    if about:
+                        per_holder[(seed, about)] += 1
+                else:
+                    settle["false"] += 1
+            else:
+                settle["accepted"] += 1
+                settle["true"] += 1
+                if about:
+                    per_holder[(seed, about)] += 1
+    return res, card, settle, per_holder
 
 
 def turns_to_answer(reg, rng, case):
@@ -211,42 +192,40 @@ def pct(a, b):
 
 def main():
     rng = random.Random(SEED)
-    print("12-answer_ladder_sim.py -- PR-12-10 answer ladder, social.yaml#cast, PR-15-6 reduced case (R2-D); seed %d" % SEED)
+    print("12-answer_ladder_sim.py -- PR-12-10 speak freely, PR-12-12 lazy settlement, PR-15-6 reduced case (R2-D, revised R2-H); seed %d" % SEED)
     W = worlds()
     print("worlds: 30 packed seeds (2001-2030); haven cast per world %.1f; incidents %s" % (
         sum(len(haven_cast(r)) for _, r in W) / len(W), dict(Counter(r["opening"]["inciting"]["option"] for _, r in W))))
     print()
-    print("A. Ordinary asks (200 per world; reach: %d%% certain/SPEECH at Standard, the rest rolled %s)" % (CERTAIN_SHARE * 100, ROLLED))
+    print("A. The speaker card (200 ordinary asks per world; reach: %d%% certain/SPEECH, the rest rolled %s)" % (CERTAIN_SHARE * 100, ROLLED))
+    print("   an empty card means the answer is hearsay, a guess or an opinion (testimony, settled lazily), or a rare in-voice")
+    print("   'I don't know'; 'said' = the topic was asked of them before (their own words are on the card)")
     fails = []
     for share in (0.3, 0.5, 0.7):
-        res, by_band, by_reach, by_kind, ptr, tally, (cons, twice) = part_a(W, random.Random(SEED + int(share * 10)), share)
-        ok = res["knows"] + res["pointer"] + res["asked_pointer"]
-        dk = pct(res["pointer"], res["knows"] + res["pointer"])
-        print("  topic on the NPC's role %d%% of asks: knows %.1f%%  don't-know+pointer %.1f%%  (of answered-or-not, 'who would know' excluded)  "
-              "asked 'who would know' %d  failure %d  empty 0 of %d successes" % (share * 100, 100 - dk, dk, res["asked_pointer"], res["failure"], ok))
-        for band in ("on_role_topic", "public_local", "other"):
-            c = by_band[band]
-            print("    odds band %-14s knows %5.1f%%  pointer %5.1f%%  (n %d; rung-3 yes %d/%d)" % (
-                band, pct(c["knows"], c["knows"] + c["pointer"]), pct(c["pointer"], c["knows"] + c["pointer"]), c["knows"] + c["pointer"],
-                tally["yes_at"][band], tally["asked_at"][band]))
-        print("    by reach: " + "; ".join("%d: knows %.0f%% pointer %.0f%%" % (r, pct(by_reach[r]["knows"], by_reach[r]["knows"] + by_reach[r]["pointer"]),
-                                         pct(by_reach[r]["pointer"], by_reach[r]["knows"] + by_reach[r]["pointer"])) for r in (1, 2, 3)))
-        print("    pointer kinds: %s;  'does not know' recorded %d;  ask-twice consistent %d/%d" % (dict(ptr), tally["unknown_recorded"], cons, twice))
+        res, card, settle, per_holder = part_a(W, random.Random(SEED + int(share * 10)), share)
+        asked = sum(v for k, v in card.items() if k != "own_mind")
+        first = asked - card["said"]
+        print("  topic on the NPC's role %d%% of asks: answered %d, unwilling %d; card empty on the topic: %.1f%% of first asks, %.1f%% of all"
+              " knowledge asks  by source %s" % (share * 100, res["answered"], res["unwilling"], pct(card["empty"], first), pct(card["empty"], asked),
+                                                 {k: card[k] for k in ("on_role_topic", "pack", "public_local", "said", "empty")}))
         if share == 0.5:
-            main_dk, main_tally = dk, tally
-            if dk >= 35.0:
-                fails.append("A: don't-know %.1f%% >= 35%% at the 50%% topic mix" % dk)
-            if cons != twice:
-                fails.append("D: ask-twice")
+            main_res, main_settle, main_holder = res, settle, per_holder
     print()
-    print("B. Proposal clustering (50%% mix; narrator aims %d%% of proposals at the case's people)" % (PROPOSAL_BIAS * 100))
-    t = main_tally
-    top = t["per_entity"].most_common(1)
-    print("  ratified T1 facts %d; proposals about the case's solution filtered to the case graph %d; ratified facts about a placement holder %d (%.1f%%)"
-          % (t["ratified"], t["filtered"], t["ratified_on_case_people"], pct(t["ratified_on_case_people"], t["ratified"])))
-    print("  most ratified facts about one placement holder in one world: %d; ratified facts asserting a case node: 0 (the tier filter routes them)" % (top[0][1] if top else 0))
-    print("  reading: a holder accumulates ordinary facts (their trade, their opinions), never the node's content; the lever such a fact")
-    print("  can give is at most +2 (12.14.13). The sim cannot judge meaning; the transcript audit (C risk 5) stays the check.")
+    print("B. Lazy settlement (50%% mix; assumed: %d%% of answers relied on, %d%% of claims beyond the ordinary, %d%% about the case's people)"
+          % (ACTED_SHARE * 100, BEYOND_SHARE * 100, TESTIMONY_BIAS * 100))
+    t, n = main_settle, main_res["answered"]
+    settled = n - t["never"]
+    print("  settlements %.1f per 100 answers (never settled %d of %d); routed to the case %d; accepted %d; Oracle at Likely %d (yes %d, no %d)"
+          % (pct(settled, n), t["never"], n, t["case"], t["accepted"], t["oracle"], t["true"] - t["accepted"], t["false"]))
+    print("  Oracle rolls per 100 asks: %.1f (R2-D propose-and-ratify: %.1f); settled claims found false (speaker wrong): %.1f%%"
+          % (pct(t["oracle"], n + main_res["unwilling"]), R2D_ORACLE_PER_100, pct(t["false"], settled - t["case"])))
+    top = main_holder.most_common(1)
+    print("  true claims about a placement holder %d; most about one holder in one world %d; true claims asserting a case node: 0"
+          " (consequential claims route to the case, which never delivers a clue by them)" % (sum(main_holder.values()), top[0][1] if top else 0))
+    print("  reading: the narrator's words are no longer rolled; truth is decided for the quarter of claims a player relies on.")
+    print("  The sim cannot judge meaning or self-consistency: OEQ-12-25 (live runs) measures contradictions, repeats and runarounds.")
+    if t["false"] + t["true"] + t["case"] != settled:
+        fails.append("B: settlement accounting")
     print()
     print("C. Reduced cases (investigation.yaml#reduced_case) and 'who is <story role>?' within 3 turns")
     for label, valid, turns, opts in part_c(W, random.Random(SEED + 99)):
@@ -255,7 +234,8 @@ def main():
         if valid < 30 or within < 30:
             fails.append("C: %s" % label)
     print()
-    print("targets: A don't-know < 35%% (50%% mix: %.1f%%); empty successes 0; C 100%% valid and within 3 turns; D 100%%" % main_dk)
+    print("targets: B accounting holds and no accepted claim asserts a case node; C 100% valid and within 3 turns."
+          " R2-D's A target (don't-know < 35%) and D (ask-twice) are retired with the ladder (DL-12-90).")
     print("RESULT:", "PASS" if not fails else "FAIL: " + "; ".join(fails))
 
 

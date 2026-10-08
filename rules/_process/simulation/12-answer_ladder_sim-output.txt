@@ -1,36 +1,24 @@
-12-answer_ladder_sim.py -- PR-12-10 answer ladder, social.yaml#cast, PR-15-6 reduced case (R2-D); seed 12010
+12-answer_ladder_sim.py -- PR-12-10 speak freely, PR-12-12 lazy settlement, PR-15-6 reduced case (R2-D, revised R2-H); seed 12010
 worlds: 30 packed seeds (2001-2030); haven cast per world 13.9; incidents {'dying_messenger': 4, 'missing': 7, 'offer': 2, 'omen': 3, 'alarm': 7, 'theft': 1, 'refugees': 4, 'duel': 2}
 
-A. Ordinary asks (200 per world; reach: 70% certain/SPEECH at Standard, the rest rolled [(0, 0.3), (1, 0.25), (2, 0.3), (3, 0.15)])
-  topic on the NPC's role 30% of asks: knows 63.5%  don't-know+pointer 36.5%  (of answered-or-not, 'who would know' excluded)  asked 'who would know' 500  failure 446  empty 0 of 4958 successes
-    odds band on_role_topic  knows  89.1%  pointer  10.9%  (n 1763; rung-3 yes 462/610)
-    odds band public_local   knows  87.9%  pointer  12.1%  (n 489; rung-3 yes 132/176)
-    odds band other          knows  37.6%  pointer  62.4%  (n 2206; rung-3 yes 401/1616)
-    by reach: 1: knows 41% pointer 59%; 2: knows 66% pointer 34%; 3: knows 63% pointer 37%
-    pointer kinds: {'person': 1379, 'walk_on': 168, 'place': 80};  'does not know' recorded 1407;  ask-twice consistent 596/596
-  topic on the NPC's role 50% of asks: knows 68.4%  don't-know+pointer 31.6%  (of answered-or-not, 'who would know' excluded)  asked 'who would know' 483  failure 454  empty 0 of 4651 successes
-    odds band on_role_topic  knows  88.8%  pointer  11.2%  (n 2220; rung-3 yes 507/693)
-    odds band public_local   knows  86.4%  pointer  13.6%  (n 367; rung-3 yes 103/136)
-    odds band other          knows  35.5%  pointer  64.5%  (n 1581; rung-3 yes 275/1184)
-    by reach: 1: knows 45% pointer 55%; 2: knows 71% pointer 29%; 3: knows 67% pointer 33%
-    pointer kinds: {'place': 100, 'person': 1082, 'walk_on': 135};  'does not know' recorded 1128;  ask-twice consistent 895/895
-  topic on the NPC's role 70% of asks: knows 76.1%  don't-know+pointer 23.9%  (of answered-or-not, 'who would know' excluded)  asked 'who would know' 498  failure 414  empty 0 of 4358 successes
-    odds band on_role_topic  knows  89.8%  pointer  10.2%  (n 2710; rung-3 yes 562/772)
-    odds band public_local   knows  84.9%  pointer  15.1%  (n 218; rung-3 yes 74/101)
-    odds band other          knows  34.3%  pointer  65.7%  (n 932; rung-3 yes 157/698)
-    by reach: 1: knows 55% pointer 45%; 2: knows 78% pointer 22%; 3: knows 78% pointer 22%
-    pointer kinds: {'person': 753, 'walk_on': 96, 'place': 73};  'does not know' recorded 778;  ask-twice consistent 1228/1228
+A. The speaker card (200 ordinary asks per world; reach: 70% certain/SPEECH, the rest rolled [(0, 0.3), (1, 0.25), (2, 0.3), (3, 0.15)])
+   an empty card means the answer is hearsay, a guess or an opinion (testimony, settled lazily), or a rare in-voice
+   'I don't know'; 'said' = the topic was asked of them before (their own words are on the card)
+  topic on the NPC's role 30% of asks: answered 5473, unwilling 527; card empty on the topic: 56.2% of first asks, 36.8% of all knowledge asks  by source {'on_role_topic': 496, 'pack': 520, 'public_local': 168, 'said': 1425, 'empty': 1520}
+  topic on the NPC's role 50% of asks: answered 5455, unwilling 545; card empty on the topic: 48.0% of first asks, 27.0% of all knowledge asks  by source {'on_role_topic': 542, 'pack': 533, 'public_local': 116, 'said': 1789, 'empty': 1100}
+  topic on the NPC's role 70% of asks: answered 5483, unwilling 517; card empty on the topic: 38.0% of first asks, 16.8% of all knowledge asks  by source {'on_role_topic': 554, 'pack': 481, 'public_local': 76, 'said': 2263, 'empty': 680}
 
-B. Proposal clustering (50% mix; narrator aims 30% of proposals at the case's people)
-  ratified T1 facts 885; proposals about the case's solution filtered to the case graph 129; ratified facts about a placement holder 186 (21.0%)
-  most ratified facts about one placement holder in one world: 6; ratified facts asserting a case node: 0 (the tier filter routes them)
-  reading: a holder accumulates ordinary facts (their trade, their opinions), never the node's content; the lever such a fact
-  can give is at most +2 (12.14.13). The sim cannot judge meaning; the transcript audit (C risk 5) stays the check.
+B. Lazy settlement (50% mix; assumed: 25% of answers relied on, 20% of claims beyond the ordinary, 30% about the case's people)
+  settlements 24.6 per 100 answers (never settled 4115 of 5455); routed to the case 93; accepted 1001; Oracle at Likely 246 (yes 193, no 53)
+  Oracle rolls per 100 asks: 4.1 (R2-D propose-and-ratify: 33.5); settled claims found false (speaker wrong): 4.3%
+  true claims about a placement holder 279; most about one holder in one world 9; true claims asserting a case node: 0 (consequential claims route to the case, which never delivers a clue by them)
+  reading: the narrator's words are no longer rolled; truth is decided for the quarter of claims a player relies on.
+  The sim cannot judge meaning or self-consistency: OEQ-12-25 (live runs) measures contradictions, repeats and runarounds.
 
 C. Reduced cases (investigation.yaml#reduced_case) and 'who is <story role>?' within 3 turns
   seed incident as rolled                  valid 30/30  answered within 3 turns 30/30  turns {1: 23, 2: 7}  options {'dying_messenger': 4, 'missing': 7, 'offer': 2, 'omen': 3, 'alarm': 7, 'theft': 1, 'refugees': 4, 'duel': 2}
   forced 'missing' at the opening          valid 30/30  answered within 3 turns 30/30  turns {1: 17, 2: 13}  options {'missing': 30}
   in play: story-role question, no case    valid 30/30  answered within 3 turns 30/30  turns {1: 21, 2: 9}  options {'missing': 9, 'dying_messenger': 8, 'theft': 8, 'duel': 5}
 
-targets: A don't-know < 35% (50% mix: 31.6%); empty successes 0; C 100% valid and within 3 turns; D 100%
+targets: B accounting holds and no accepted claim asserts a case node; C 100% valid and within 3 turns. R2-D's A target (don't-know < 35%) and D (ask-twice) are retired with the ladder (DL-12-90).
 RESULT: PASS
