@@ -87,3 +87,5 @@ Status: open · fixing (round N) · fixed (commit) · logged (ledger id) · wont
 | P-079 | bug | high | Opening still falls back to one line in 7/27 runs; last reason always screen 12.2.7 "a part of the player's message is not answered" though the opening has no message; crowd reactions to the incident cut as unsourced | 7 runs (191540, 185715, 183858, 182337, 170207, 170200, 170157) | fixing |
 | P-080 | bug | low | A message with speech plus "what do I know so far?" handled only the speech | 191540-breaker 24 | open |
 | P-081 | polish | low | NPC reply contains a stray quoted line that reads like a leaked hint ("Look at who's listening…") | 191540-breaker 23–26 | open |
+| P-082 | bug | med | Repeated tracking loops with no progress ("the mist hides it, do you press on?"); an extended search never advances | 191941-fighter 24–29 | open (queued) |
+| P-083 | polish | med | Cost form copied from the menu example, not fitted to the scene ("left on the far side, down the well, stuck in a beam" in a grassy field) | 191941-fighter 30–31 | open (queued) |
