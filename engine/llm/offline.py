@@ -669,6 +669,24 @@ def _proposer(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:  # rule
             "value": "nothing out of the ordinary this season"}
 
 
+def _locator(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:  # rule: PR-12-11
+    """Step 1 offline: the candidate turn sharing the most words (4+ letters) with the report; the category from
+    the report's words (a stand-in for the model's judgement)."""
+    m = re.search(r'^THE PLAYER\'S REPORT: "(.*)"$', packet.message, re.MULTILINE)
+    report = (m.group(1) if m else "").lower()
+    words = {w for w in re.findall(r"[a-z]{4,}", report)}
+    best, score = "none", 0
+    for tid, text in re.findall(r"^(turn\.\d+) \| (.*)$", packet.message, re.MULTILINE):
+        n = len(words & set(re.findall(r"[a-z]{4,}", text.lower())))
+        if n > score:
+            best, score = tid, n
+    category = ("misread" if re.search(r"\b(meant|didn'?t|did not|never (?:said|asked|tried)|only)\b", report) else
+                "rule_wrong" if re.search(r"\b(dc|odds|roll|modifier|harder|easier|chance)\b", report) else
+                "contradiction" if re.search(r"\b(earlier|before|just said|contradict)", report) else
+                "remembered_wrong" if re.search(r"\b(name|remember|forgot|told me)\b", report) else "other")
+    return {"turn": best, "quote": "", "category": category, "subject": "", "key": "", "value": ""}
+
+
 def _world(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:
     npcs = enum_at(schema, "responses", "[]", "npc")
     return {"responses": [
@@ -1048,6 +1066,7 @@ ROLE_HEURISTICS: dict[Role, Callable[[dict[str, Any], Packet], dict[str, Any]]] 
     Role.NARRATOR: _narrator,
     Role.CHECKER: _checker,
     Role.PROPOSER: _proposer,
+    Role.LOCATOR: _locator,
 }
 
 

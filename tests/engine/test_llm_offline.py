@@ -117,7 +117,9 @@ CHECKER = obj(
 )
 SCHEMAS = {Role.INTERPRET: INTERPRET, Role.READER: READER, Role.FRAMER: FRAMER, Role.WORLD: WORLD,
            Role.DIRECTOR: DIRECTOR, Role.NARRATOR: NARRATOR, Role.CHECKER: CHECKER,
-           Role.PROPOSER: obj(kind=enum("ordinary_fact", "not_ordinary"), subject=STR, predicate=STR, value=STR)}
+           Role.PROPOSER: obj(kind=enum("ordinary_fact", "not_ordinary"), subject=STR, predicate=STR, value=STR),
+           Role.LOCATOR: obj(turn=enum("turn.3", "none"), quote=STR, category=enum(
+               "remembered_wrong", "rule_wrong", "contradiction", "misread", "other"), subject=STR, key=STR, value=STR)}
 
 MODEL = OfflineModel()
 

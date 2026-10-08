@@ -25,7 +25,7 @@ from datetime import date
 from pathlib import Path
 from typing import Any, TextIO
 
-from engine.dm.oof import glossary
+from engine.dm.oof import FIX_HINT, glossary
 from engine.llm.base import MissingKey, ModelRefused, ModelUnavailable
 from play.render import (
     ascii_safe,
@@ -61,7 +61,8 @@ HELP = """Commands (out of fiction; never sent to a model):
   /branch <label>      a save point to return to
   /budget <usd>|off    the session budget for warnings
   /autocommit on|off   auto-commit safe offers (a lethal frame never is)
-  /fix <what>          dispute something: the DM checks the record and corrects a seen error
+  /fix <what>          something wrong? say what (a fact or name, a rule, a contradiction, how your action was
+                       read): the game checks the whole record and fixes it, or shows you the line it went by
   /quit                save and exit (nothing is ever lost)
 At a pause, Enter takes the default the menu names ([Enter] ...), a letter picks another choice, ? explains the
 offer's words, and any other text is what your character does or says. While making the world and your character, "details" tells you more about each
@@ -297,6 +298,7 @@ class Session:
         self.shown = ""  # the last response as printed: Enter on a waiting pause shows it again
         self.last_turn: str | None = None
         self.notice: str | None = None  # a budget notice held until the turn is over
+        self.hinted = False  # 12.3.6 item 1: the fix hint once per sitting, at the first play screen
 
     def run(self, first: Any) -> None:
         try:
@@ -408,6 +410,9 @@ class Session:
             self.last_turn = resp.turn_id
         self.shown = render_response(resp, self.app.width)
         self.app.say(self.shown)
+        if resp.phase == "play" and not self.hinted:  # 12.5.2 / 12.15.11: the SITUATION's last line
+            self.hinted = True
+            self.app.say(FIX_HINT)
         self.budget_check(resp)
 
     def budget_check(self, resp: Any) -> None:

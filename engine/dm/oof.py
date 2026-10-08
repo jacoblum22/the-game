@@ -120,13 +120,20 @@ def chance_word(pct: int) -> str:  # rule: 12.15.2
     return next(w for floor, w in CHANCE_WORDS if pct >= floor)
 
 
+FIX_HINT = "Something wrong? Type /fix and say what."  # pacing.yaml#feedback.hint (12.3.6; asserted by a test)
+FIX_GLOSSARY = (f"{FIX_HINT[:-1]}: a fact or name remembered wrong, a rule applied wrong, a contradiction, or an "
+                "action read wrong. The game checks the record and fixes it.")  # 14.2.7's last line
+
+
 def glossary(word: str = "") -> str:  # rule: 14.2.7
-    """`?` alone: every word; `? <word>`: that word's meaning."""
-    w = word.strip().lower().strip("[]?' ")
+    """`?` alone: every word, then the fix hint (12.3.6); `? <word>`: that word's meaning."""
+    w = word.strip().lower().strip("[]?' /")
+    if w in ("fix", "wrong"):
+        return FIX_GLOSSARY
     if w:
         hit = next((k for k in GLOSSARY if k == w or k.startswith(w)), None)
         return f"{hit}: {GLOSSARY[hit]}" if hit else f"No glossary word {word.strip()!r}. Type ? for the list."
-    return "\n".join(f"{k}: {v}" for k, v in GLOSSARY.items())
+    return "\n".join([*(f"{k}: {v}" for k, v in GLOSSARY.items()), "", FIX_GLOSSARY])
 
 
 def _signed(n: int) -> str:
@@ -549,7 +556,7 @@ def recap_block(state: WorldState, *, since_seq: int = 0, pc: str | None = None,
 
 
 NoteLabel = Literal["NOTE", "CORRECTION", "RULES", "UNKNOWN", "RULING", "LEADS", "SESSION", "OK", "FLAG", "CUT?",
-                    "CHOICE", "SITUATION", "CHECK-IN"]
+                    "CHOICE", "SITUATION", "CHECK-IN", "FIX"]  # FIX: a dispute answered from the record (12.15.9)
 
 
 def note_block(text: str, label: NoteLabel = "NOTE", rest: Sequence[str] = ()) -> OofBlock:  # rule: 12.15.14

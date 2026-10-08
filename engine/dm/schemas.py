@@ -18,7 +18,7 @@ enum across the present NPCs.
 
 from __future__ import annotations
 
-from collections.abc import Callable, Iterable, Mapping
+from collections.abc import Callable, Iterable, Mapping, Sequence
 from typing import Any, get_args
 
 from pydantic import BaseModel, Field
@@ -386,6 +386,17 @@ def proposer_schema(ctx: SchemaContext) -> Schema:  # rule: PR-12-10
     return obj({"kind": enum(CANDIDATE_KINDS), "subject": STR, "predicate": STR, "value": STR})
 
 
+LOCATE_CATEGORIES = ("remembered_wrong", "rule_wrong", "contradiction", "misread", "other")  # 12.3.6 item 2
+
+
+def locator_schema(turns: Sequence[str] | None = None) -> Schema:  # rule: PR-12-11
+    """Step 1's call: `{turn, quote, category}` plus the player's claim restated (`subject`, `key`, `value`); `turn`
+    is one of the candidate turns or `none` (spec 012)."""
+    turn = enum([*turns, "none"]) if turns is not None else STR
+    return obj({"turn": turn, "quote": STR, "category": enum(LOCATE_CATEGORIES), "subject": STR, "key": STR,
+                "value": STR})
+
+
 BUILDERS: dict[Role, Callable[[SchemaContext], Schema]] = {
     Role.INTERPRET: interpret_schema,
     Role.READER: reader_schema,
@@ -395,6 +406,7 @@ BUILDERS: dict[Role, Callable[[SchemaContext], Schema]] = {
     Role.NARRATOR: narrator_schema,
     Role.CHECKER: checker_schema,
     Role.PROPOSER: proposer_schema,
+    Role.LOCATOR: lambda ctx: locator_schema(),
 }
 
 
@@ -506,6 +518,9 @@ DEFAULTS: dict[Role, Callable[[SchemaContext], dict[str, Any]]] = {
     Role.DIRECTOR: _director_default,
     # no candidate: the ladder goes on to the pointer (PR-12-10 step 5)
     Role.PROPOSER: lambda ctx: {"kind": "not_ordinary", "subject": "", "predicate": "", "value": ""},
+    # no passage found: the dispute is answered "which statement?" and logged (PR-12-11 step 1)
+    Role.LOCATOR: lambda ctx: {"turn": "none", "quote": "", "category": "other", "subject": "", "key": "",
+                               "value": ""},
 }
 
 

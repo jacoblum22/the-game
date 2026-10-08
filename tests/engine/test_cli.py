@@ -326,3 +326,29 @@ def test_enter_at_a_near_miss_takes_nothing(tmp_path: Path) -> None:
     _, out = run(["new", "g"], "a\nI climb\n\n/quit\n", tmp_path)
     assert not any(c[0] == "answer" and c[1] == "failure" for c in FakeGame.last.calls)
     assert out.count("[Enter] Show this again") >= 2 and "press Enter for Let it fail" not in out
+
+
+class FixGame(FakeGame):
+    """A game with the /fix API (engine/game.py `dispute`)."""
+
+    def dispute(self, text: str) -> Response:
+        self.calls.append(("dispute", text))
+        return self._next()
+
+
+def test_fix_hint_at_session_start_in_the_glossary_and_fix_runs_the_dispute(tmp_path: Path) -> None:
+    from engine.data.loader import load_rules
+    from engine.dm.oof import FIX_HINT, glossary
+
+    assert FIX_HINT == load_rules().pacing["feedback"]["hint"]  # 12.3.6 item 1: one wording everywhere
+    assert glossary().splitlines()[-1].startswith(FIX_HINT[:-1]) and FIX_HINT[:-1] in glossary("fix")
+    (tmp_path / "g.db").touch()
+    FixGame.script = [play_resp("Fixed.", "turn.3", oof_blocks=[OofBlock(kind="NOTE", text="[CORRECTION] Fixed.")])]
+    out = io.StringIO()
+    cli.main(["continue", "g"], stdin=io.StringIO("?\n/fix the guard was dead\n/quit\n"), stdout=out,
+             saves=tmp_path, game_cls=FixGame, config=lambda offline: {"offline": offline})
+    text = out.getvalue()
+    assert text.count(FIX_HINT) == 1 and text.index("[RECAP]") < text.index(FIX_HINT)  # once, after the recap
+    assert "The game checks the record and fixes it." in " ".join(text.split())  # `?` ends with it (14.2.7)
+    assert ("dispute", "the guard was dead") in FixGame.last.calls  # /fix: a DISPUTE by code, no Reader
+    assert "/fix <what>" in cli.HELP and "[CORRECTION] Fixed." in text

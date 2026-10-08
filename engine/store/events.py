@@ -193,13 +193,14 @@ class FactSet(Payload):  # rule: 00.6.2
     predicate: str
     value: Any
     kind: Literal["fact", "flag", "commitment"] = "fact"
-    source: Literal["narration", "oracle", "generation", "ruling", "data", "player_accepted"]
+    source: Literal["narration", "oracle", "generation", "ruling", "data", "player_accepted", "correction"]
     certainty: Literal["established", "rumored", "believed", "narrated"] = "established"  # narrated: 00.6.6a
     truth: Literal["true", "partial", "false", "outdated"] = "true"  # sealed (00.6.2)
     visibility: Visibility = "background"
     supersedes: str | None = None
     gate: str | None = None  # what unseals it, when visibility is sealed (00.6.5)
     persistence: Literal["lasting", "scene", "beat"] | None = None  # details only (00.6.6a)
+    pinned: bool = False  # a correction (12.3.6): never archived, always in its subject's profile in view
 
     def check(self, state: Any) -> None:
         super().check(state)
@@ -479,6 +480,7 @@ class WritesReverted(Payload):
     reverted: list[int]
     compensating: dict[str, Any] = Field(default_factory=dict)  # informational: the values restored
     reason: str
+    take_back: bool = False  # 12.5.8 item 3: may reach before the scene start (scene events too)
 
 
 class SceneStarted(Payload):

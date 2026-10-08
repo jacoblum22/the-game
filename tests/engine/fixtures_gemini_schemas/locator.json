@@ -1,0 +1,43 @@
+{
+ "type": "object",
+ "properties": {
+  "turn": {
+   "type": "string",
+   "enum": [
+    "turn.4",
+    "none"
+   ]
+  },
+  "quote": {
+   "type": "string"
+  },
+  "category": {
+   "type": "string",
+   "enum": [
+    "remembered_wrong",
+    "rule_wrong",
+    "contradiction",
+    "misread",
+    "other"
+   ]
+  },
+  "subject": {
+   "type": "string"
+  },
+  "key": {
+   "type": "string"
+  },
+  "value": {
+   "type": "string"
+  }
+ },
+ "required": [
+  "turn",
+  "quote",
+  "category",
+  "subject",
+  "key",
+  "value"
+ ],
+ "additionalProperties": false
+}
