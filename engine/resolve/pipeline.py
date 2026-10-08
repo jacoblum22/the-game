@@ -533,9 +533,12 @@ def _answer_redirect(env: PipelineEnv, plan: BeatPlan, d: dict[str, Any], choice
     if not choice.startswith("accept:"):
         return BeatOutcome(status="withdrawn", entry=_entry(plan.beat, gate="G3", gate_words="another way chosen"))
     fb = d["fallback"]
+    # an accepted crude fallback is "a new frame on the fallback verb" with its DC shift and reach cap (01.3.5):
+    # it always rolls through an OFFER, never a no-roll class (playtest 20261007-192159: "take the time" made it
+    # an unrolled success the narration could not support, so the player got "You cannot do it that way")
     beat = plan.beat.model_copy(update={"gate": "G3", "mode": "fallback", "fallback_license": choice.split(":", 1)[1],
                                         "verb": fb.get("verb"), "method": fb.get("method") or plan.beat.method,
-                                        "license": None})
+                                        "license": None, "necessity": ROLLS})
     return _start(env, plan.model_copy(update={"beat": beat}), queued)
 
 

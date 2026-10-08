@@ -356,7 +356,8 @@ def _check(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: PR-12-2
 
 # record notes that hand the narration an event as given (the opening's inciting incident, a lead, the scene's
 # impetus): the engine wrote them from the seed or a table, so the record is their source this turn
-GIVEN_NOTES = ("the inciting incident:", "a lead to make noticeable:", "a lead arrives", "the scene's impetus")
+GIVEN_NOTES = ("the inciting incident:", "a lead to make noticeable:", "a lead arrives", "the scene's impetus",
+               "cannot make out:")  # P-086: repeated failed looks at one target
 
 
 # 12.14.13: a new clue, an item beyond common value, a hazard or trap, an adversary, or a person with a want, secret

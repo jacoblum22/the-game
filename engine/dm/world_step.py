@@ -161,6 +161,8 @@ def deliver_learning(ctx: TurnContext, record: AdjudicationRecord, beats: Sequen
         verb = next((v for v in LEARN_VERBS if v in (e.approach_words or "")), None)
         ok = b.status == "no_roll" or (b.status == "resolved" and (e.degree in ("success", "critical_success")
                                                                      or e.success_at_cost))
+        if b.status == "resolved" and not ok:
+            _stalled(st, record, e, b.frame_id)
         if verb is None or not ok:
             continue
         place = st.scene.place_id if st.scene else None
@@ -183,6 +185,45 @@ def deliver_learning(ctx: TurnContext, record: AdjudicationRecord, beats: Sequen
         for fid in ranked[:count]:
             record_knowledge(ctx.time_ctx(), pc, fid, LEARN_VERBS[verb])
             e.learned.append(fact_sentence(st, st.facts[fid]))
+        if not ranked and verb != "verb.talk" and e.targets and e.targets[0] in st.entities:
+            # P-086: a success that names nothing reads as a failure; what the narration names is settled by the
+            # Oracle at the claim check and written (12.3.2, write-on-mention)
+            record.notes.append(f"the look at {_name(st, e.targets[0])} succeeded: name at least one concrete thing "
+                                "the PC now makes out about it (what it is, what it is made of, a telling detail), "
+                                "plainly, never a vague glimpse")
+
+
+STALLED = "cannot make out: "
+_FAILED = ("failure", "critical_failure")
+
+
+def _name(st: Any, eid: str) -> str:
+    from engine.dm.roles.narrator import name_of
+
+    n = name_of(st, eid)
+    return f"the {n}" if n[:1].islower() and not n.startswith(("the ", "a ", "an ", "your ")) else n
+
+
+def _looked(f: dict[str, Any]) -> bool:
+    """A frame that tried to learn something: a hidden roll, or an Observe or Recall."""
+    return bool(f.get("secret")) or (f.get("gate") or {}).get("verb") in ("verb.observe", "verb.recall")
+
+
+def _stalled(st: Any, record: AdjudicationRecord, e: Any, frame_id: str | None) -> None:
+    # rule: 12.14.8
+    """P-086: the second failed attempt in this scene to make out the same target says so plainly and points to
+    another way, instead of a third vague glimpse (failure is the world's answer, not a loop)."""
+    fs = st.frames.get(frame_id) if frame_id else None
+    if fs is None or not e.targets or e.targets[0] not in st.entities or not _looked(fs.frame):
+        return
+    target = e.targets[0]
+    failed = [x for x in st.frames.values() if x.resolved and x.resolved.get("degree") in _FAILED
+              and (x.frame.get("beat") or {}).get("target") == target and _looked(x.frame)]
+    if len(failed) >= 2:
+        # said plainly, in player-facing words (the plain fallback prints it as is)
+        record.notes.append(f"{STALLED}You cannot make out {_name(st, target)} from here, not this way. Another "
+                            "approach might: ask someone who knows, get it out into the open, or come back with "
+                            "better means.")
 
 
 def clock_omens(ctx: TurnContext, record: AdjudicationRecord) -> None:  # rule: 00.8.4

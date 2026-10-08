@@ -196,6 +196,47 @@ def test_what_the_store_lacks_is_settled_by_the_oracle_and_learned(tmp_path: Pat
     assert len(asked) == 1 and asked[0].value is True and asked[0].id in st.knowledge[dock.pc]
 
 
+LOOK = "I study the crate by the bollard to see what is inside it."
+
+
+def _look_turns(tmp_path: Path, faces: list[int]) -> list[Any]:
+    """P-086: Observe turns on an object the store holds nothing about, one per die face."""
+    from engine.store.events import EntityRecord
+
+    n = len(faces)
+    look = beat("study the crate by the bollard to see what is inside it", "verb.observe", target="obj.crate")
+    model = ScriptedModel({Role.READER: [reader("DECLARATION", LOOK, look)] * n, Role.FRAMER: [framer()] * n,
+                           Role.WORLD: [QUIET_WORLD] * n})
+    dock, ctx = setup(tmp_path, model)
+    with dock.store.transaction() as tx:
+        tx.add(Event.of("entity_created", source="test", entity=EntityRecord(id="obj.crate", kind="object",
+                                                                             name="crate")))
+        tx.add(Event.of("position_set", source="test", rule_id="10.1.1", entity="obj.crate", location=dock.place))
+    outs = []
+    for face in faces:
+        assert play_turn(ctx, LOOK).adjudication.pause.kind == "offer"
+        ctx.rng.faces = [face]  # type: ignore[attr-defined]
+        model.push(Role.NARRATOR, narr("You look. What do you do?"))
+        model.push(Role.CHECKER, chk())
+        outs.append(play_answer(ctx, "commit"))
+    return outs
+
+
+def test_a_successful_look_names_something(tmp_path: Path) -> None:
+    rec = _look_turns(tmp_path, [19])[0].adjudication.record
+    assert rec.beats[0].degree in ("success", "critical_success"), (rec.beats[0], rec.notes)
+    assert any(n.startswith("the look at the crate succeeded: name at least one concrete thing") for n in rec.notes)
+
+
+def test_repeated_failed_looks_say_it_cannot_be_made_out(tmp_path: Path) -> None:
+    first, second = (o.adjudication.record for o in _look_turns(tmp_path, [2, 2]))
+    assert second.beats[0].degree in ("failure", "critical_failure")
+    assert not any(n.startswith("cannot make out:") for n in first.notes)
+    said = [n for n in second.notes if n.startswith("cannot make out:")]
+    assert said and "You cannot make out the crate from here" in said[0]
+    assert "You cannot make out the crate" in plain_fallback(second).fiction
+
+
 # ------------------------------------------------------------------------------------------- 3. silent NPCs, speech
 
 PRAY = 'I kneel beside the attendant and say, "Brother, who took it?"'
@@ -230,6 +271,18 @@ def test_an_npc_met_mid_scene_answers_and_a_refusal_is_legible(tmp_path: Path) -
     assert "show it plainly" in msg and "manner: grieving" in msg and "- present: Gilda Underhill" in msg
     fb = plain_fallback(out.adjudication.record, names={"npc.gilda": "Gilda Underhill"})
     assert "Gilda Underhill refuses" in fb.fiction
+
+
+def test_a_conversation_is_not_dead_air(tmp_path: Path) -> None:
+    # P-088: two speech-only turns with an NPC who answered offered [CUT?] mid-conversation (12.4.2 (7))
+    hello = 'I say to Tam Harlan, "Evening."'
+    model = ScriptedModel({Role.READER: [reader("SPEECH", hello)] * 3, Role.WORLD: [QUIET_WORLD] * 3,
+                           Role.NARRATOR: [narr('"Evening," Tam Harlan says. What do you say?')] * 3,
+                           Role.CHECKER: [chk()] * 3})
+    dock, ctx = setup(tmp_path, model)
+    outs = [play_turn(ctx, hello) for _ in range(3)]
+    assert ctx.store.state.meta.get("dead_air") == 0
+    assert not any(b.kind == "CUT?" or "Or stay a while" in b.text for o in outs for b in o.response.oof_blocks)
 
 
 def test_an_npc_who_asks_is_quoted(tmp_path: Path) -> None:

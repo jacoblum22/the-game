@@ -524,6 +524,7 @@ def record_turn_end(ctx: TurnContext, record: AdjudicationRecord, writes: Sequen
     """T12 counters and the scene cut: dead air (`note_turn`), an interrupt noted, then `cut_due`; a cut ends the
     scene now (`end_scene`, which marks scene_end) and leaves `scene.frame_next` for the next turn to frame
     (the player's own cut was framed in this turn already, by the Director at T5). Returns blocks to add."""
+    from engine.dm.roles.world import present_npcs
     from engine.world.scenes import cut_due, end_scene, note_cut, note_turn, turn_is_quiet
 
     st = ctx.state
@@ -531,7 +532,9 @@ def record_turn_end(ctx: TurnContext, record: AdjudicationRecord, writes: Sequen
         return []
     tctx = ctx.time_ctx()
     evs = [e for e in (ctx.store.event(s) for s in writes) if e is not None]
-    note_turn(tctx, quiet=turn_is_quiet([p.cls for p in record.parts], evs))
+    # someone answered: an NPC's response row, or the PC spoke with someone here (the narrator gives their reply)
+    answered = bool(record.npc_actions) or (any(p.cls == "SPEECH" for p in record.parts) and bool(present_npcs(st)))
+    note_turn(tctx, quiet=turn_is_quiet([p.cls for p in record.parts], evs, answered=answered))
     if any(n.startswith("interrupted:") for n in record.notes):
         note_cut(tctx, "interrupt")
     if ctx.state.open_pause() is not None:

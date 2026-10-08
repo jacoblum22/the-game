@@ -162,18 +162,22 @@ def short_label(label: str) -> str:
 
 
 OFFER_HINT = "Type 1 to commit, or a number from the list."
+PICK_HINT = "Type a number from the list."
+# pause menus where a silent default costs the player: the rules give none for Enter (12.15; P-044, P-089)
+WAITING_PAUSES = frozenset({"offer", "near_miss", "redirect", "last_chance"})
 
 
 def offer_waits(pause: Any) -> bool:
-    """An OFFER: an empty line takes nothing (P-044: Enter-for-Withdraw silently dropped the attempt)."""
-    return bool(pause.choices) and pause.choices[0].id == "commit"
+    """An OFFER, NEAR MISS, REDIRECT or last-chance menu: an empty line takes nothing (P-044: Enter-for-Withdraw
+    silently dropped the attempt; P-089: Enter at a near miss silently let it fail)."""
+    return bool(pause.choices) and (pause.choices[0].id == "commit" or pause.kind in WAITING_PAUSES)
 
 
 def enter_hint(pause: Any) -> str:
-    """`Type a number, or press Enter for Let it fail.` when the pause has a default among its choices; an OFFER
-    names no Enter default (OFFER_HINT)."""
+    """`Type a number, or press Enter for Moving on.` when the pause has a default among its choices; a menu
+    that waits names no Enter default (OFFER_HINT / PICK_HINT)."""
     if offer_waits(pause):
-        return OFFER_HINT
+        return OFFER_HINT if pause.choices[0].id == "commit" else PICK_HINT
     ids = [c.id for c in pause.choices]
     if pause.default_choice not in ids:
         return ""

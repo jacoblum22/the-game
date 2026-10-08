@@ -221,9 +221,12 @@ def _narration(done: list[BoundaryResult]) -> list[str]:
 # --------------------------------------------------------------------------------------- dead air and cuts
 
 
-def turn_is_quiet(input_classes: Iterable[str], events: Iterable[Event]) -> bool:  # rule: 12.4.2
-    """12.4.2 (7): the message held only SPEECH (or free activities) and nothing was written except time."""
-    if not set(input_classes) <= QUIET_CLASSES:
+def turn_is_quiet(input_classes: Iterable[str], events: Iterable[Event], *,
+                  answered: bool = False) -> bool:  # rule: 12.4.2
+    """12.4.2 (7): the message held only SPEECH (or free activities) and nothing was written except time. A
+    turn in which the PC spoke to someone here who answered is a conversation, not empty time (P-088: the cut
+    was offered mid-conversation)."""
+    if answered or not set(input_classes) <= QUIET_CLASSES:
         return False
     return all(e.type in _NOT_WRITES for e in events)
 
