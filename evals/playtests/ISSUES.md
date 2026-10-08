@@ -125,8 +125,8 @@ Status: open · fixing (round N) · fixed (commit) · logged (ledger id) · wont
 | P-119 | bug | low | Journal garbled from a junk mentioned object: "The familiar face in the crowd's recognition is looks familiar to you" | 210433-breaker 29 | open |
 | P-120 | bug | high | A successful Talk (15→17 vs 10) still ends in a refusal; success with nothing stored reads as failure (with I-153) | 210953-talker 24, 30 | fixed (ab69f6f: who via settle_who, what named and written, else a lead; refusal on success contradicted) |
 | P-121 | polish | low | Coins the player offers are not used as a lever/edge or acknowledged in the offer | 210953-talker 29–31 | open |
-| P-122 | bug | high | Sheet says "knack for intimidation", yet threatening → "[REDIRECT] you haven't learned Intimidation" (twice) | 212725-fighter 23–29 | fixing |
-| P-123 | bug | med | "Gently take the feather token from his hand" framed as unarmed fighting and refused | 212725-fighter 21–22 | fixing |
+| P-122 | bug | high | Sheet says "knack for intimidation", yet threatening → "[REDIRECT] you haven't learned Intimidation" (twice) | 212725-fighter 23–29 | fixed (1062541: speech-verb G3 with a no-DC crude fallback is G1) |
+| P-123 | bug | med | "Gently take the feather token from his hand" framed as unarmed fighting and refused | 212725-fighter 21–22 | fixed (1062541) |
 | P-124 | polish | low | NPC "named his price" but no amount given | 212725-fighter 24 | open |
 | P-125 | polish | med | On a fallback the player's own questions are quoted back ("You ask, '…'") with no answer, reading as an echo | 212917-breaker 18–22 | open |
-| P-126 | bug | low | OFFER grammar: "you finds out who in Garford would talk to them" | 212917-breaker 28–29 | fixing (with P-122) |
+| P-126 | bug | low | OFFER grammar: "you finds out who in Garford would talk to them" | 212917-breaker 28–29 | fixed (1062541) |
