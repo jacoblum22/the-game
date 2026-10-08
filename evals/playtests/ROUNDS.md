@@ -78,3 +78,4 @@ Ledger: I-131..I-136.
 | fighter 212725 | 06c7def | 17 | 2.06 | 2 | odds/grapple clear; knack vs licence redirect (P-122); gentle take = attack (P-123) |
 | newcomer 212731 | 06c7def | 17 | 1.88 | 1 | NPC agrees but never says what (P-120); harsh call-out odds (I-158) |
 | breaker 212917 | 06c7def | 17 | 2.29 | 2 | fallback echoes questions (P-125); success non-answer (P-120); OFFER grammar (P-126) |
+| talker 213310 | 06c7def | 17 | 2.0 | 1 | account summarised never told (P-120); NPC shares PC surname (P-052) |
