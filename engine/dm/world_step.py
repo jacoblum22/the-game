@@ -3,8 +3,8 @@
     world_step(ctx, record, beats=outcomes)      # fills record.npc_actions / omens / triggers / notes
 
 1. Adversaries in conflict — Milestone 1 has no round-by-round conflict (coarse).
-2. NPCs present: a resolved Talk frame's outcome, else a recorded want or refusal the World role names, else
-   `tbl.npc_action` rolled with the NPC's standing as the modifier (a first meeting rolls the reaction first).
+2. NPCs present: the default NPC layer (12.11.9, engine/dm/npc_layer.py): activities, the practice, each engaged
+   NPC's response (a resolved Talk frame, a recorded refusal or want, the action row clamped to the practice).
 3. Clocks that ticked this turn render their omens (INV-14).
 4. Fired triggers in 12.2.3's order (owed blocks for the narration; a due lethal warning is delivered).
 5. Time: each resolved beat's cost by the scene's mode (00.7.3) through `advance_time` (boundaries run).
@@ -20,16 +20,15 @@ from engine.audit import text as words
 from engine.audit.fallback import fact_sentence
 from engine.dm.adjudication import AdjudicationRecord, NpcActionEntry, OmenEntry
 from engine.dm.context import TurnContext
-from engine.dm.roles.world import npc_motives, npc_responses, present_npcs
+from engine.dm.npc_layer import ensure_activities, respond
 from engine.resolve.pipeline import BeatOutcome
-from engine.resolve.tables import roll_table
 from engine.resolve.types import REACH_VALUE
 from engine.retrieve.scene import READING, WRITTEN, cannot_read
 from engine.retrieve.triggers import get_active_triggers
+from engine.store.views import name_known
 from engine.time.clock import beat_cost
 from engine.time.scheduler import advance_time
-from engine.store.views import name_known
-from engine.world.social import first_interaction, learn_name, record_knowledge, standing
+from engine.world.social import learn_name, record_knowledge
 
 NPC_TABLE = "tbl.npc_action"
 RESOLVED = ("resolved", "no_roll")
@@ -50,6 +49,7 @@ def world_step(ctx: TurnContext, record: AdjudicationRecord, *, beats: Sequence[
     # coarse: PR-06-6
     deliver_learning(ctx, record, beats)
     acted = foes_act(ctx, record, oof)
+    ensure_activities(ctx, record)  # 12.11.9 step 1
     npcs_respond(ctx, record, beats, skip=acted, oof=oof)
     learn_names(ctx, record, beats)
     clock_omens(ctx, record)
@@ -83,7 +83,8 @@ def foes_act(ctx: TurnContext, record: AdjudicationRecord, oof: list[dict[str, s
     # rule: 06.9.2
     """Step 1: in conflict mode each foe still able answers by its behavior row (06.9.4), then the end test
     (06.13.1). Returns the foes that acted (they draw no social table row this turn)."""
-    from engine.resolve.conflict import able, check_end, record as conflict
+    from engine.resolve.conflict import able, check_end
+    from engine.resolve.conflict import record as conflict
 
     rec = conflict(ctx.state)
     if not rec or not record.pc or ctx.state.open_pause() is not None:
@@ -100,59 +101,9 @@ def foes_act(ctx: TurnContext, record: AdjudicationRecord, oof: list[dict[str, s
 def npcs_respond(ctx: TurnContext, record: AdjudicationRecord, beats: Sequence[BeatOutcome], *,
                  skip: Sequence[str] = (), oof: list[dict[str, str]] | None = None) -> None:
     # rule: 12.2.9
-    """Step 2: only when something happened that an NPC present could respond to (a beat or speech)."""
-    if not beats and not any(p.cls in ("SPEECH", "DECLARATION") for p in record.parts):
-        return
-    tx = ctx.need_tx()
-    present = present_npcs(ctx.state)
-    # a Talk framed with no target speaks to the one NPC here, if there is only one (P-056)
-    talk = {(b.entry.targets or present)[0]: b for b in beats
-            if b.status in RESOLVED and (b.entry.targets or len(present) == 1)
-            and "talk" in (b.entry.approach_words or "")}
-    # 12.11.5: a row never resolves what a frame should; a beat on this NPC that did not resolve (refused, withdrawn,
-    # paused) happened to no one, so it draws no table row either
-    unresolved = {t for b in beats if b.status not in RESOLVED for t in b.entry.targets}
-
-    def talked(npc: str, tags: list[str]) -> None:
-        b = talk.pop(npc)
-        record.npc_actions.append(NpcActionEntry(npc=npc, action=f"responds as the talk went: "
-                                                 f"{b.entry.degree or 'success'}",
-                                                 source="talk_outcome", source_ref=b.frame_id, tags=tags))
-
-    for r in npc_responses(ctx, happened_text(record)):
-        motives = npc_motives(ctx.state, r.npc)
-        if r.npc in talk:  # (a) a resolved Talk frame's delivered outcome (a certain talk, no roll, is a yes)
-            talked(r.npc, r.tags)
-        elif r.refusal_engaged:  # (b) a recorded refusal outranks everything unresolved
-            record.npc_actions.append(NpcActionEntry(npc=r.npc, action=f"refuses: {motives.get(r.refusal_engaged)}",
-                                                     source="refusal", source_ref=r.refusal_engaged, tags=r.tags))
-        elif r.want_engaged:
-            record.npc_actions.append(NpcActionEntry(npc=r.npc, action=f"acts on a want: {motives.get(r.want_engaged)}",
-                                                     source="want", source_ref=r.want_engaged, tags=r.tags))
-        elif r.npc in unresolved or r.npc in skip:  # a foe in the fight acted by its behavior row (06.9.2)
-            continue
-        else:  # (c) the action table, with standing as context (12.11.5)
-            tctx = ctx.time_ctx()
-            st_value = standing(ctx.state, r.npc)
-            if st_value is None:  # PR-12-5 step 3: the first interaction's reaction roll
-                st_value = first_interaction(tctx, r.npc)
-            res = roll_table(NPC_TABLE, {"standing_modifier": int(st_value), "tags": r.tags}, rules=ctx.rules,
-                             state=ctx.state, rng=ctx.rng, purpose=f"npc action {r.npc} (12.11.5)")
-            tx.add_all(res.events)
-            if "attacks" in str(res.entry) and int(st_value) <= -3 and record.pc:  # rule: 06.2.1
-                # a hostile NPC's row says "attacks": the fight starts and it strikes now
-                from engine.resolve.conflict import start
-
-                start(tctx, record.pc, [r.npc], "a hostile NPC attacks (06.2.1)")
-                _foe_turn(ctx, record, r.npc, oof)
-                continue
-            record.npc_actions.append(NpcActionEntry(npc=r.npc, action=str(res.entry), source="table_row",
-                                                     source_ref=f"{NPC_TABLE}:{res.roll}", tags=r.tags))
-    # the one spoken to answers as the talk went, always; a Talk aimed at a thing ("coming up the road") has no
-    # one to answer it (P-096)
-    for npc in [n for n in talk if n in ctx.state.entities
-                and ctx.state.entities[n].kind in ("npc", "adversary", "companion")]:
-        talked(npc, [])
+    """Step 2: only when something happened that an NPC present could respond to (a beat or speech): the default
+    NPC layer decides (12.11.9, engine/dm/npc_layer.py); the World role is asked only about candidate motives."""
+    respond(ctx, record, beats, skip=skip, oof=oof)
 
 
 # the NPC's *own* name or identity only: "the thief's name" / "the name of the thief" asks about someone else, and

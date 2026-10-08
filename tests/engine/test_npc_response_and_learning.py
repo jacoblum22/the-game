@@ -1,4 +1,4 @@
-"""An addressed NPC's answer is sourced by the PC's beat; a successful learning beat delivers what the store holds
+"""An addressed NPC's answer is sourced by the record line its sentence cites (spec 006, 12.11.9); a successful learning beat delivers what the store holds
 (playtests 20261007-170157-breaker and 161323-talker: Bixok's reply was cut until he "repeated my question back"; a
 successful Talk said "It works" next to "hinders quietly", and the PC never learned what was asked).
 
@@ -44,8 +44,12 @@ def _talk_record(dock: Any, *, degree: str | None = "success", gate_words: str =
     return rec
 
 
-def _check(dock: Any, rec: AdjudicationRecord, *cs: dict[str, Any]) -> list[tuple[str, str]]:
-    return [(v.verdict, v.reason) for v in check_claims(list(cs), dock.store.state, rec, [], rules=RULES)]
+def _check(dock: Any, rec: AdjudicationRecord, *cs: dict[str, Any], cite: bool = False) -> list[tuple[str, str]]:
+    """Each claim judged as from sentence 0; with `cite`, that sentence cites every line of the record."""
+    from engine.dm.handles import items
+
+    cited = {0: items(rec, names={})} if cite else None
+    return [(v.verdict, v.reason) for v in check_claims(list(cs), dock.store.state, rec, [], rules=RULES, cited=cited)]
 
 
 def _act(subject: str, predicate: str, value: str, change: bool = True) -> dict[str, Any]:
@@ -61,10 +65,11 @@ def test_an_addressed_npc_answers_in_words_and_manner(tmp_path: Path) -> None:
     vs = _check(dock, rec, _act(dock.ferryman, "says", "not before the tide turns"),
                 _act(dock.ferryman, "glances", "at the stair, then back to you"),
                 _act(dock.ferryman, "shakes head", "slowly"),
-                _act(dock.ferryman, "takes a breath", "before he answers"))
+                _act(dock.ferryman, "takes a breath", "before he answers"), cite=True)
     assert [v for v, _ in vs] == ["supported"] * 4
-    # the same words from an NPC no one addressed have no source
-    assert _check(dock, rec, _act(dock.watch, "says", "the tide is turning"))[0][0] == "unsourced_change"
+    # the same words from an NPC no line names have no source; nor do his, from a sentence citing nothing
+    assert _check(dock, rec, _act(dock.watch, "says", "the tide is turning"), cite=True)[0][0] == "unsourced_change"
+    assert _check(dock, rec, _act(dock.ferryman, "says", "not before the tide turns"))[0][0] == "unsourced_change"
 
 
 def test_an_addressed_npcs_deed_still_needs_a_source(tmp_path: Path) -> None:
@@ -82,22 +87,29 @@ def test_a_question_naming_the_npc_addresses_them(tmp_path: Path) -> None:
     dock, _ = setup(tmp_path, ScriptedModel({}))
     rec = AdjudicationRecord(pc=dock.pc)
     rec.parts.append(PartEntry.model_validate({"text": "Tam, is the ferry running?", "class": "FICTION_QUESTION"}))
-    assert _check(dock, rec, _act(dock.ferryman, "answers", "with a grunt"))[0][0] == "supported"
+    from engine.dm.npc_layer import addressed
+
+    assert addressed(dock.store.state, rec, [dock.ferryman, dock.watch]) == [dock.ferryman]  # 12.11.9: he answers
+    rec.npc_actions.append(NpcActionEntry(npc=dock.ferryman, action="returns the greeting without stopping",
+                                          source="table_row"))
+    assert _check(dock, rec, _act(dock.ferryman, "answers", "with a grunt"), cite=True)[0][0] == "supported"
 
 
 # ------------------------------------------------------------------------------------------- 2. background figures
 
 
 def test_background_activity_that_changes_nothing_is_atmosphere(tmp_path: Path) -> None:
+    """Spec 006: an unnamed figure's continuing business in a sentence that cites a record line is a reaction to
+    it; a change is cut; and with nothing cited (an undeclared sentence) the audit's claim has no source. A sentence
+    the narrator flags as atmosphere is never extracted at all (engine/dm/narration.py)."""
     dock, _ = setup(tmp_path, ScriptedModel({}))
-    rec = AdjudicationRecord(pc=dock.pc)
+    rec = _talk_record(dock)
     vs = _check(dock, rec, _act("unknown", "laughs", "too loudly at a far table", change=False),
                 _act("unknown", "wipes", "the same ring of wood", change=False),
-                _act("unknown", "laughs", "too loudly, then drinks", change=True),  # a change: cut
-                _act("unknown", "watches", "you from the door", change=False),  # involves the PC: cut
-                _act("unknown", "grabs", "a lantern from the hook", change=False),  # a deed: cut
-                _act("unknown", "lurks", "in the shadows behind the shed", change=False))  # an adversary: cut
-    assert [v for v, _ in vs] == ["supported", "supported"] + ["unsourced_change"] * 4
+                _act("unknown", "laughs", "too loudly, then drinks", change=True), cite=True)  # a change: cut
+    assert [v for v, _ in vs] == ["supported", "supported", "unsourced_change"]
+    vs = _check(dock, rec, _act("unknown", "lurks", "in the shadows behind the shed", change=False))
+    assert [v for v, _ in vs] == ["unsourced_change"]
 
 
 # ------------------------------------------------------------------------------------------- 3. what is learned
@@ -124,7 +136,9 @@ def test_unknown_knowledge_on_a_successful_talk_is_settled_not_cut(tmp_path: Pat
     assert _check(dock, _talk_record(dock), k)[0][0] == "undetermined"
     assert _check(dock, _talk_record(dock, degree="failure"), k)[0][0] == "contradicted"
     assert _check(dock, AdjudicationRecord(pc=dock.pc), k)[0][0] == "contradicted"
-    assert _check(dock, _talk_record(dock), secret)[0][0] == "contradicted"  # a secret is never settled by asking
+    # spec 006: no keyword proxy for "a secret" (I-129); the Oracle settles it as a consequential property, and a
+    # sealed fact it would reveal is a leak first (00.6.5)
+    assert _check(dock, _talk_record(dock), secret)[0][0] == "undetermined"
 
 
 def test_a_refused_beat_is_not_it_works(tmp_path: Path) -> None:
@@ -271,7 +285,7 @@ def test_a_successful_what_question_is_answered_and_settled(tmp_path: Path) -> N
     sealed = lambda v: {"subject": dock.ferryman, "class": "sealed", "predicate": "what the shapes are",  # noqa: E731
                         "value": v}
     assert _check(dock, rec, sealed("driftwood caught on the sandbar"))[0][0] == "undetermined"
-    assert _check(dock, rec, sealed("the smugglers' hidden cache"))[0][0] == "new_element"  # 12.14.13
+    assert _check(dock, rec, sealed("the smugglers' hidden cache"))[0][0] == "undetermined"  # no keyword proxy
     assert _check(dock, _talk_record(dock, degree="failure"), sealed("driftwood"))[0][0] == "new_element"
 
 
@@ -284,7 +298,7 @@ def test_a_refusal_never_outranks_a_successful_talk(tmp_path: Path) -> None:
     # the narration may not have them refuse either; after a failed Talk the same words stand
     refuse = _act(dock.ferryman, "says", "I'll not say who it was, not now")
     assert _check(dock, rec, refuse)[0] == ("contradicted", "a successful Talk is answered, never refused")
-    assert _check(dock, _talk_record(dock, degree="failure"), refuse)[0][0] == "supported"
+    assert _check(dock, _talk_record(dock, degree="failure"), refuse, cite=True)[0][0] == "supported"
 
 
 LOOK = "I study the crate by the bollard to see what is inside it."
@@ -358,7 +372,7 @@ def test_an_npc_met_mid_scene_answers_and_a_refusal_is_legible(tmp_path: Path) -
     rows = out.adjudication.record.npc_actions
     assert [(a.npc, a.source) for a in rows] == [("npc.gilda", "refusal")]
     msg = calls(model, Role.NARRATOR)[0].message
-    assert "Gilda Underhill acts: refuses: will not break off his prayer" in msg
+    assert "Gilda Underhill acts: refuses, in their own voice (" in msg and "will not break off his prayer" in msg
     assert "show it plainly" in msg and "manner: grieving" in msg and "- present: Gilda Underhill" in msg
     fb = plain_fallback(out.adjudication.record, names={"npc.gilda": "Gilda Underhill"})
     assert "Gilda Underhill refuses" in fb.fiction

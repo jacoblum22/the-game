@@ -152,7 +152,10 @@ def test_withdraw_spends_nothing(tmp_path: Path) -> None:
     st = dock.state
     assert res2.pause is None and not rolls(dock.store) and not st.frames
     assert st.time.now == before.time.now and st.quantities == before.quantities and st.clocks == before.clocks
-    assert set(types(dock.store, res2.turn_id)) <= {"pause_closed", "offer_logged"}
+    written = [e for e in dock.store.events() if e.turn_id == res2.turn_id]
+    # 12.11.9: the present NPCs' activities (scene state) are the only facts; nothing is spent
+    assert all(e.payload.predicate == "activity" for e in written if e.type == "fact_set")  # type: ignore[attr-defined]
+    assert set(types(dock.store, res2.turn_id)) <= {"pause_closed", "offer_logged", "fact_set"}
 
 
 def test_change_asks_how_then_the_new_way_is_offered(tmp_path: Path) -> None:
@@ -357,7 +360,7 @@ def test_talk_and_trivial_acts_roll_nothing(tmp_path: Path) -> None:
     assert not a.record.beats and a.record.parts[0].handled == "answered"
     assert b.record.beats[0].gate_words == "no roll: trivial" and not b.record.beats[0].rolled
     assert not rolls(dock.store) and not dock.state.frames
-    assert a.record.npc_actions  # the NPCs present answer from their table (offline World role)
+    assert a.record.npc_actions  # spoken to the room: the first present NPC answers (12.11.9 default layer)
 
 
 def test_offline_model_plays_a_turn(tmp_path: Path) -> None:

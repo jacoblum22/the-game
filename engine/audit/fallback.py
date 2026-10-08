@@ -172,20 +172,6 @@ NPC_ROW_PROSE = {
 }
 
 
-_QUOTED = re.compile(r"[\"“]([^\"”]+)[\"”]")
-
-
-def _said_line(text: str) -> str:
-    """The player's own words, quoted back: 'You ask, "Is she one of yours?"' (12.3.3: no new elements)."""
-    t = text.strip()
-    inner = t.strip("\"“” ")
-    if re.search(r"[\"“”]", inner):  # narrated around the speech ('I lean in and say, "..."'): the speech only
-        inner = " ".join(q.strip() for q in _QUOTED.findall(t)) or inner
-    if not inner:
-        return ""
-    return f'You {"ask" if inner.rstrip().endswith("?") else "say"}, "{inner}"'
-
-
 class FallbackResult(BaseModel):
     fiction: str
     review_flag: bool = True
@@ -195,38 +181,13 @@ class FallbackResult(BaseModel):
 
 def plain_fallback(record: AdjudicationRecord, *, names: Mapping[str, str] | None = None,
                    verdicts: Iterable[Verdict] = ()) -> FallbackResult:  # rule: 12.3.3
-    """Sentences, in order: the scene header; per beat its act and degree in words, its cost forms, harm,
-    visible conditions and changed positions; oracle answers; sourced NPC acts; omens; then the open prompt
-    (12.14.9) unless a pause block follows. Every string comes from `record` (names only resolve its ids)."""
-    names = dict(names or {})
-    pc = record.pc
+    """12.3.3 when no drafted sentence passed: the scene header (only when this turn opened a scene), then every
+    must-name record item's rendered line (engine/dm/handles.py), then the open prompt (12.14.9) unless a pause
+    block follows. Every string comes from `record` (names only resolve its ids)."""
+    from engine.dm.handles import items
 
-    def name(eid: str | None) -> str:
-        return who(eid if eid is not None else pc, names=names, pc=pc)
-
-    lines: list[str] = []
-    if record.scene.header:
-        lines.append(_sentence(record.scene.header))
-    # a spoken line or an in-character question with no beat of its own is restated, in the player's order
-    beat_parts = {b.part for b in record.beats}
-    said = [(i, _said_line(p.text)) for i, p in enumerate(record.parts)
-            if p.cls in ("SPEECH", "FICTION_QUESTION") and p.handled in ("", "answered") and i not in beat_parts]
-    for b in record.beats:
-        while said and b.part is not None and said[0][0] < b.part:
-            lines.append(said.pop(0)[1])
-        lines.append(_beat_line(b, pc, names))
-        lines += [_sentence(c.form) if c.form else "It comes at a cost." for c in b.costs]
-        lines += [_sentence(h.words if h.target == pc else f"{name(h.target)}: {h.words}") for h in b.harm]
-        lines += [_sentence(c) for c in b.conditions]
-        lines += [sentence(clause(p.entity, "be", plain(p.words), names=names, pc=pc)) for p in b.positions]
-        lines += [_sentence(x) for x in b.learned]
-    lines += [s for _, s in said]
-    for o in record.oracle:
-        lines.append(_answer_line(o.question, o.answer))
-    for a in record.npc_actions:
-        lines.append(_sentence(f"{name(a.npc)} {NPC_ROW_PROSE.get(a.action, a.action)}"))
-    lines += [_sentence(o.omen) for o in record.omens if o.omen]
-    lines += [n.split(": ", 1)[1] for n in record.notes if n.startswith("cannot make out: ")]  # P-086
+    its = items(record, names=names)
+    lines = [it.render for it in its if it.kind == "scene" or it.must_name]
     if record.pause is None:
         lines.append("What do you do?")
     fiction = " ".join(x for x in lines if x)

@@ -88,10 +88,13 @@ def checker_message(sents: Sequence[str], player_message: str) -> str:  # rule: 
 
 
 def check_draft(ctx: TurnContext, fiction: str, *, player_message: str = "", created: Iterable[str] = (),
-                exchanges: Sequence[str | tuple[str, str]] = ()) -> CheckerOutput:  # rule: PR-12-2
-    """One Checker call: the claims (12.3.1) and the screen flags. Raises ModelInvalid after a failed re-ask."""
+                exchanges: Sequence[str | tuple[str, str]] = (),
+                sentences: Sequence[str] | None = None) -> CheckerOutput:  # rule: PR-12-2
+    """One Checker call: the claims (12.3.1) and the screen flags. Raises ModelInvalid after a failed re-ask.
+    `sentences`: the narrator's own sentences (spec 006), numbered as given, instead of splitting `fiction`; the
+    audit reads them for assertions their declarations do not cover (12.3.1 source 2)."""
     st = ctx.state
-    sents = split_sentences(fiction)
+    sents = list(sentences) if sentences is not None else split_sentences(fiction)
     ids = checker_ids(st, created)
     sctx = schema_context(st, ctx.rules, draft_sentences=sents)
     sctx.scene_ids = ids

@@ -19,15 +19,15 @@ Store conventions read here (other modules write them):
 
 from __future__ import annotations
 
-from collections.abc import Iterable, Sequence
+from collections.abc import Iterable, Mapping, Sequence
 from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from engine.audit import text as tx
 from engine.dm.adjudication import AdjudicationRecord, BeatEntry
-from engine.store.projection import WorldState
 from engine.retrieve.scene import cannot_read
+from engine.store.projection import WorldState
 from engine.store.views import item_words, name_known, unnamed_label
 
 ClaimClass = Literal["existence", "identity", "quantity", "harm_condition", "position", "possession",
@@ -37,6 +37,7 @@ VerdictName = Literal["supported", "new_element", "undetermined", "contradicted"
 Fix = Literal["write_on_mention", "oracle", "redraft_to_store", "cut", "replace_with_slice"]
 
 UNKNOWN = "unknown"
+_SCENE_STATE_KEYS = ("activity", "voice")
 # classes not about one entity: checked even when the subject is unknown
 _FREE_SUBJECT = ("clock", "location_time", "sealed", "outcome")
 
@@ -72,6 +73,7 @@ class Verdict(BaseModel):
     store_value: str | None = None
     fix: Fix | None = None
     reason: str = ""
+    incidental: bool = False  # an `undetermined` property 12.3.2 writes as narrated (T1a), not one for the Oracle
 
 
 _DEFAULT_FIX: dict[str, Fix | None] = {
@@ -164,17 +166,11 @@ _CLOCK_MOVE = ["spread", "build", "rise", "rising", "closer", "grow", "gather", 
 _POSSESS_PREDICATES = ("carries", "holds", "has", "equipped", "possessions", "inventory", "owns", "possession",
                        "wields", "wears")
 _HOLDER_KEYS = ("holder", "owner", "carried_by", "held_by")
-# acts that change the world (12.2.9: the source decides *what*); everything else an addressed NPC does in answer is
-# words and manner, which are the narrator's. ponytail: a phrase list; upgrade path: a Checker field for "deed".
-_DEEDS = ["give", "hand over", "hand you", "hand it", "pass you", "slide across", "toss you", "pay you", "pay the",
-          "pay for", "sell", "buy", "take the", "take your", "take it", "grab", "seize", "snatch", "steal", "pocket",
-          "draw a blade", "draw a knife", "draw a sword", "draw a dagger", "draw steel", "attack", "strike", "hit",
-          "punch", "stab", "slash", "shoot", "kick", "shove", "push you", "leave", "walk away", "walk off",
-          "walk out", "storm off", "storm out", "depart", "exit", "flee", "run off", "run away", "come with you",
-          "go with you", "lead you", "open the", "unlock", "lock the", "shut the door", "close the door", "call for",
-          "call the", "shout for", "summon", "fetch", "send for", "signal to", "kill", "set free", "let go of",
-          "let you pass", "step aside", "show you the", "write", "sign"]
-_YOU = ["you", "your", "yours", "the pc"]
+# 12.3.2's enumerated consequential properties (locked, armed, present, knows) and what 12.14.13 names T2 (hidden,
+# hazard, value); any other class than identity or possession is consequential too (uncertain -> consequential)
+_CONSEQUENTIAL = ["lock", "locked", "unlocked", "armed", "weapon", "blade", "sword", "knife", "dagger", "bow", "spear",
+                  "axe", "present", "absent", "alive", "dead", "know", "knows", "hidden", "secret", "trap", "poison",
+                  "key", "guard", "magic", "enchanted", "valuable", "treasure"]
 _REFUSE = ["refuse", "refuses", "refusal", "will not say", "won't say", "will not tell", "won't tell", "not say",
            "will not give", "won't give", "withhold", "withholds", "declines to", "not from me", "keeps the name",
            "not now", "says nothing", "gives you nothing", "gives nothing"]
@@ -194,11 +190,13 @@ def _negated(text: str) -> bool:
 
 
 class _Ctx:
-    def __init__(self, state: WorldState, record: AdjudicationRecord, scene_ids: Sequence[str], rules: Any) -> None:
+    def __init__(self, state: WorldState, record: AdjudicationRecord, scene_ids: Sequence[str], rules: Any,
+                 cited: Mapping[int, Sequence[Any]] | None = None) -> None:
         self.state = state
         self.record = record
         self.scene_ids = list(scene_ids)
         self.rules = rules
+        self.cited = dict(cited or {})  # sentence index -> the record items it cites (engine/dm/handles.py)
         self.pc = record.pc or next((e.id for e in state.entities.values() if e.kind == "pc"), None)
         self.player_text = " ".join(p.text for p in record.parts)
         self._conditions: dict[str, Any] | None = None
@@ -262,6 +260,8 @@ class _Ctx:
         if entity is None:
             return False
         for w in self.record.writes_for(entity, *types):
+            if w.key in _SCENE_STATE_KEYS:
+                continue  # 12.11.9 scene state (an activity, a voice rolled on first answer) backs no change
             if key is None or w.key is None or tx.same(w.key, key) or key in (w.key or ""):
                 return True
         return False
@@ -316,12 +316,15 @@ def _flat(v: Any) -> str:
 
 
 def check_claims(claims: Iterable[Claim | dict[str, Any]], state: Any, record: AdjudicationRecord | None = None,
-                 scene_ids: Sequence[str] = (), *, rules: Any = None) -> list[Verdict]:  # rule: 12.3.2
+                 scene_ids: Sequence[str] = (), *, rules: Any = None,
+                 cited: Mapping[int, Sequence[Any]] | None = None) -> list[Verdict]:  # rule: 12.3.2
     """One verdict per claim (12.3.2). `state`: a `WorldState` or a `Store` (its projection is read).
     `scene_ids`: the ids the Checker was offered (the schema's subject enum). Subjects are checked against the
-    whole store; presence in the scene comes from the scene record and positions, not from this list."""
+    whole store; presence in the scene comes from the scene record and positions, not from this list. `cited`:
+    per sentence index, the record items (engine/dm/handles.py) that sentence's declaration cites (12.3.1): a
+    claim restating a cited line, or an act its subject's cited line sources, is supported."""
     ws: WorldState = state.state if hasattr(state, "transaction") else state
-    ctx = _Ctx(ws, record or AdjudicationRecord(), scene_ids, rules)
+    ctx = _Ctx(ws, record or AdjudicationRecord(), scene_ids, rules, cited)
     out = []
     for i, raw in enumerate(claims):
         c = raw if isinstance(raw, Claim) else Claim.model_validate(raw)
@@ -336,100 +339,52 @@ def _check(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: PR-12-2
     if leak is not None:
         return _v(c, i, "leak", leak or None, fix="replace_with_slice" if leak else "cut",
                   reason="matches sealed content")
-    if _restates_given(ctx, c):
-        return _v(c, i, "supported")
+    if _restates_cited(ctx, c):
+        return _v(c, i, "supported", reason="restates a record line the sentence cites (12.3.1)")
     subject = c.subject
     if subject != UNKNOWN and subject not in ctx.state.entities:
         subject = UNKNOWN  # an id the store does not hold is no better than unknown
     if subject == UNKNOWN:
         subject = _resolve_new(ctx, c) or UNKNOWN
     if subject == UNKNOWN and c.cls not in _FREE_SUBJECT:  # rule: 12.3.2 [revision: I-127; DL-12-37]
-        if c.cls == "action" and not c.asserts_change and _atmosphere(ctx, c):
-            return _v(c, i, "supported", reason="background activity that changes nothing: atmosphere (12.3.2)")
-        if c.cls == "action" and _reacts_to_incident(ctx, c):
-            return _v(c, i, "supported", reason="a bystander's reaction to the inciting incident (12.16.16)")
+        if c.cls == "action" and not c.asserts_change and ctx.cited.get(c.sentence):
+            # an unnamed bystander's reaction to a line the sentence cites (heads turn at the incident): its source
+            return _v(c, i, "supported", reason="a reaction to a cited record line (12.3.1)")
         if c.asserts_change or c.cls == "action":
             return _v(c, i, "unsourced_change", reason="an unidentified subject changed or acted; cut")
-        forbidden = _forbidden_new(c)
-        if forbidden:  # 12.14.13: the only new things the narration may not create
-            return _v(c, i, "new_element", fix="cut", reason=f"a new {forbidden} may not be created by mention; cut")
+        if c.cls in ("knowledge", "sealed"):  # 12.14.13: knowledge beyond the view is T1b/T2, never written so
+            return _v(c, i, "new_element", fix="cut", reason="undeclared knowledge may not be created by mention; cut")
+        # ponytail: an undeclared new element is written as ordinary furniture (the `_apply_writes` backstop); the
+        # declared `element_kind` is the main path (12.14.13). Remove once undeclared assertions < 0.3/turn (009)
         return _v(c, i, "new_element", fix="write_on_mention", reason="a new ordinary element: write it on mention")
     c = c.model_copy(update={"subject": subject})
     return _CLASS_CHECKS[c.cls](ctx, c, i)
 
 
-# record notes that hand the narration an event as given (the opening's inciting incident, a lead, the scene's
-# impetus): the engine wrote them from the seed or a table, so the record is their source this turn
-GIVEN_NOTES = ("the inciting incident:", "a lead to make noticeable:", "a lead arrives", "the scene's impetus",
-               "cannot make out:")  # P-086: repeated failed looks at one target
-
-
-# 12.14.13: a new clue, an item beyond common value, a hazard or trap, an adversary, or a person with a want, secret
-# or thread knowledge is never created by mention. ponytail: a keyword proxy on the claim's words (the checker
-# schema carries no element kind); upgrade path: have the checker label the kind and test that instead.
-_FORBIDDEN_NEW: dict[str, tuple[str, ...]] = {
-    "clue": ("clue", "hidden", "secret", "concealed", "cipher", "evidence", "sign of", "trace of the", "lead to"),
-    "item beyond common value": ("treasure", "hoard", "jewel", "gem", "relic", "artifact", "artefact", "heirloom",
-                                 "enchanted", "magic item", "ancient", "priceless", "chest of", "vault"),
-    "hazard or trap": ("trap", "snare", "tripwire", "pitfall", "ambush", "hazard", "poisoned", "booby"),
-    "adversary": ("bandit", "assassin", "monster", "cultist", "raider", "brigand", "foe", "enemy", "wolf pack",
-                  "lurk", "stalks", "stalking"),
-    "person with a want, secret or thread knowledge": ("knows about", "knows of", "knows the", "wants ", "seeks",
-                                                       "plots", "plotting", "spy", "informant", "cult"),
-}
-
-
-def _forbidden_new(c: Claim) -> str | None:  # rule: 12.14.13
-    if c.cls == "knowledge":
-        return "secret or thread knowledge"
-    text = c.text.lower()
-    for kind, words in _FORBIDDEN_NEW.items():
-        if any(w in text for w in words):
-            return kind
-    return None
-
-
-def _deed(text: str) -> bool:  # rule: 12.2.9
-    return _has(text, _DEEDS) and not _negated(text)
-
-
-def _involves_pc(ctx: _Ctx, text: str) -> bool:
-    return _has(text, _YOU) or (ctx.pc is not None and ctx.entity_named(text, among=[ctx.pc]) is not None)
-
-
-def _atmosphere(ctx: _Ctx, c: Claim) -> bool:  # rule: 12.3.2 [revision: I-127]
-    """Unnamed background activity that changes nothing and does not touch the PC: atmosphere, never a claim."""
-    return not (_forbidden_new(c) or _deed(c.text) or _involves_pc(ctx, c.text))
-
-
-def _reacts_to_incident(ctx: _Ctx, c: Claim) -> bool:  # rule: 12.16.16
-    """The opening's inciting incident is its record source: those who witness it react (heads turn, a murmur,
-    someone swears, folk gather), in words and manner. A deed (taking, leaving, attacking) still needs its own
-    source, and nothing 12.14.13 forbids is created this way."""
-    return _incident_given(ctx) and not _deed(c.text) and not _forbidden_new(c)
-
-
 def _incident_given(ctx: _Ctx) -> bool:  # rule: 12.16.16
     """This is the opening: the record carries the inciting incident as given."""
-    return any(n.startswith(GIVEN_NOTES[0]) for n in ctx.record.notes)
+    return any(n.startswith("the inciting incident:") for n in ctx.record.notes)
 
 
-def _addressed(ctx: _Ctx, npc: str) -> bool:  # rule: 12.2.9
-    """The PC addressed or acted on this NPC this turn: a beat targets them, a part of the player's message names
-    them, the record gives them a response row, or a question this turn asks what they said or hold (an Oracle
-    entry on them: "What is the warning?" is put to the one who offered it, so she answers, not another, P-118)."""
-    r = ctx.record
-    return (any(npc in b.targets for b in r.beats) or any(a.npc == npc for a in r.npc_actions)
-            or any(o.subject == npc for o in r.oracle)
-            or any(ctx.entity_named(p.text, among=[npc]) for p in r.parts if p.cls != "OOF_QUESTION"))
+def _cited(ctx: _Ctx, c: Claim) -> list[Any]:
+    return list(ctx.cited.get(c.sentence, ()))
 
 
-def _restates_given(ctx: _Ctx, c: Claim) -> bool:  # rule: 12.3.1
-    """The claim restates an event the adjudication record itself gives (most of its content words are in it)."""
-    for note in ctx.record.notes:
-        if note.startswith(GIVEN_NOTES) and tx.covers(c.text, note.split(":", 1)[-1], ratio=0.75):
-            return True
-    return False
+def _restates_cited(ctx: _Ctx, c: Claim) -> bool:  # rule: 12.3.1
+    """The claim restates a record line its sentence cites (most of its content words are in that line), about the
+    line's own subject (another person saying the same words is not sourced by it, P-118)."""
+    return any(tx.covers(c.text, f"{it.text} {it.render}", ratio=0.75)
+               and (not it.entities or c.subject in it.entities or c.subject in (UNKNOWN, ctx.pc))
+               for it in _cited(ctx, c))
+
+
+def _incidental(c: Claim) -> bool:  # rule: 12.3.2
+    """An `undetermined` property 12.3.2 writes as narrated: identity (not name, sex or pronouns) or the possession
+    of an ordinary thing, naming none of 12.3.2's consequential properties (locked, armed, present, knows, ...).
+    Uncertain -> consequential."""
+    if c.cls not in ("identity", "possession") or _identity_key(c.predicate) in ("name", "gender", "pronouns"):
+        return False
+    return not _has(c.text, _CONSEQUENTIAL)
 
 
 def _resolve_new(ctx: _Ctx, c: Claim) -> str | None:
@@ -590,14 +545,17 @@ def _identity(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: 12.3.1
             return _v(c, i, "contradicted", kind, reason=f"the PC's anchor bond: {kind}")
         return _v(c, i, "supported")
     if store is None and e.kind in ("object", "place") and key not in ("name", "gender", "pronouns") and (
-            _incident_given(ctx) or ctx.backed(e.id, "entity_created")) and not _forbidden_new(c):
+            _incident_given(ctx) or ctx.backed(e.id, "entity_created")) and _incidental(c):
         # how ordinary furniture looks (wet staves, a curling notice, a stone base) is an implied property of an element
         # written on mention this turn (00.6.6), or the opening's scene dressing; the Oracle is not asked about it
         # [revision: I-127]. ponytail: not written back; write it as an implied property if later turns ask anew
         return _v(c, i, "supported", reason="furniture described as it is written (00.6.6; I-127)")
     if store is None:
-        return _oracle_settled(ctx, c, i, pred_slug) or _v(
-            c, i, "undetermined", reason=f"{c.predicate or 'property'} not settled in the store")
+        settled = _oracle_settled(ctx, c, i, pred_slug)
+        if settled is not None:
+            return settled
+        v = _v(c, i, "undetermined", reason=f"{c.predicate or 'property'} not settled in the store")
+        return v.model_copy(update={"incidental": _incidental(c)})
     if tx.same(c.value, store) or tx.covers(c.value, _flat(store), ratio=0.5) or tx.covers(_flat(store), c.value):
         return _v(c, i, "supported")
     return _v(c, i, "contradicted", store)
@@ -804,7 +762,8 @@ def _possession(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: 12.3.1
         holder = ctx.holder(item)
         if holder is not None and holder != c.subject:
             return _v(c, i, "contradicted", f"held by {ctx.name(holder)}")
-    return _v(c, i, "undetermined", reason="the store does not say whether they carry it")
+    v = _v(c, i, "undetermined", reason="the store does not say whether they carry it")
+    return v.model_copy(update={"incidental": _incidental(c)})
 
 
 def _location_time(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: 12.3.1
@@ -879,7 +838,7 @@ def _knowledge(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: 12.3.1
         return _v(c, i, "supported")
     if c.asserts_change and ctx.backed(c.subject, "knowledge_recorded"):
         return _v(c, i, "supported")
-    if _learning_success(ctx, c.subject) and not any(w in c.text.lower() for w in _FORBIDDEN_NEW["clue"]):
+    if _learning_success(ctx, c.subject):
         # what a successful Talk/Observe was after and the store lacks: settled now (12.3.2 undetermined -> Oracle)
         return _v(c, i, "undetermined", reason="what the PC asked to learn, not yet settled: the Oracle settles it")
     if c.asserts_change:
@@ -1013,6 +972,23 @@ def _beat_success(b: BeatEntry) -> bool:
     return not (b.gate or "").lower().startswith(("g3", "g4", "redirect", "refus"))
 
 
+_PLAIN_FAIL = ["fail", "fails", "failed", "in vain", "no luck", "won't budge", "will not budge", "holds firm",
+               "falls short", "fall short", "does not give", "doesn't give", "stays shut", "comes to nothing"]
+_PLAIN_WIN = ["you succeed", "it works", "you manage", "gives way", "you make it", "you do it", "it gives"]
+
+
+def beat_polarity(text: str, b: BeatEntry) -> str | None:  # rule: 12.3.1
+    """A sentence citing a beat's line, against the beat's degree (P-112): the degree in words when the sentence
+    plainly says the opposite, else None. Only plain result phrases count (a sentence is prose, not a claim)."""
+    if b.degree is None and not (b.gate_words or "").startswith("no roll"):
+        return None  # unresolved: the pause or the block says it
+    ok = _beat_success(b)
+    said_fail, said_win = _has(text, _PLAIN_FAIL), _has(text, _PLAIN_WIN)
+    if (ok and said_fail and not said_win) or (not ok and said_win and not said_fail):
+        return (b.degree or "no roll").replace("_", " ")
+    return None
+
+
 def _outcome(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: 12.3.1
     text = c.text
     b = _beat_for(ctx, text, c.subject)
@@ -1051,6 +1027,16 @@ def _action(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: 12.2.9
         if ctx.state.entities[c.subject].exists != "exists" or not ctx.present(c.subject):
             return _v(c, i, "contradicted", "not in this scene")
         return _v(c, i, "supported")
+    # a deed this turn: its closed source is a record line (12.2.9). A sentence that cites the subject's response or
+    # beat line declares that it narrates that line: its words and manner are the narrator's (12.11.9 step 4), and a
+    # deed beyond the line shows as a possession or position change, which still needs a write. The activity line
+    # holds a continuing activity (a `position` claim at heart, 12.11.9 step 1; I-128)
+    if any(c.subject in getattr(it, "entities", ()) for it in _cited(ctx, c)):
+        return _v(c, i, "supported", reason="the cited record line is its source (12.3.1)")
+    if ctx.present(c.subject) and any(it.text.startswith("the inciting incident:") for it in _cited(ctx, c)):
+        return _v(c, i, "supported", reason="a witness's reaction to the cited incident (12.16.16)")
+    if any(a.npc == c.subject and tx.overlap(text, a.activity) for a in ctx.record.activities):
+        return _v(c, i, "supported", reason="their activity this scene (12.11.9)")
     rows = [a for a in ctx.record.npc_actions if a.npc == c.subject]
     for a in rows:
         if tx.overlap(text, " ".join([a.action, *a.tags])):
@@ -1061,12 +1047,6 @@ def _action(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: 12.2.9
     for o in ctx.record.omens:
         if o.omen and tx.overlap(text, o.omen) and tx.covers(ctx.name(c.subject), o.omen, ratio=0.5):
             return _v(c, i, "supported")
-    if not _deed(text) and _addressed(ctx, c.subject) and ctx.present(c.subject):
-        # 12.2.9 (2): the PC's beat, question or words are the source of the response; "the DM chooses the words",
-        # so speech and manner pass; a deed (giving, leaving, attacking, changing a state) still needs its source
-        return _v(c, i, "supported", reason="a response in words and manner to the PC (12.2.9)")
-    if ctx.present(c.subject) and _reacts_to_incident(ctx, c):  # the cast present witness the incident
-        return _v(c, i, "supported", reason="a reaction to the inciting incident (12.16.16)")
     store = "; ".join(a.action for a in rows) or None
     return _v(c, i, "unsourced_change", store, reason="no source for this act in the adjudication record")
 
@@ -1087,7 +1067,7 @@ def _talk_answer(ctx: _Ctx, c: Claim) -> bool:  # rule: 12.14.13
     s = ctx.state
     talks = [b for b in ctx.record.beats if "verb.talk" in (b.approach_words or "") and b.degree is not None
              and _beat_success(b)]
-    if not talks or _forbidden_new(c):
+    if not talks:
         return False
     if not (c.subject == UNKNOWN or any(c.subject in b.targets for b in talks)
             or (c.subject in s.entities and s.entities[c.subject].kind in ("object", "item") and ctx.present(c.subject))):
