@@ -834,11 +834,12 @@ Fact:
   predicate: str
   value: any
   source: enum        # narration | oracle | generation | ruling | data | player_accepted
-  certainty: enum     # established | rumored | believed
+  certainty: enum     # established | rumored | believed | narrated (first stated by narration, 00.6.6a) [revision: R2-E]
   truth: enum         # true | partial | false | outdated   (rumors, beliefs; sealed)
   visibility: enum
   established_at: time
   supersedes: fact_id
+  persistence: enum   # details only (00.6.6a): lasting | scene | beat [revision: R2-E]
 
 Clock:           see 00.8.1
 ConditionInstance: see 00.9.1
@@ -927,12 +928,53 @@ player plausibly cite this later as a lever, an obstacle, a hazard, a target, so
 something to take, a route, or a clue?"* True only when the element is concrete and addressable;
 false for pure atmosphere (the smell of rain, the color of the sky). Uncertain → true (SG-05 spirit).
 If true, the element is recorded **before** the narration is delivered: `create_entity` (with an id
-and the properties the narration implies) or `set_fact`. Properties the narration implies are fixed
+and the properties the narration implies) or `set_fact`; for an element that already exists, the properties the narration states are diffed against its
+established details (00.6.6a) [revision: R2-E]. Properties the narration implies are fixed
 now; properties it does not imply stay **undetermined** until first needed: then an incidental one is written as
 first narrated and a consequential one is settled by the Oracle (00.12.7), by 12.14.13's tiers [revision: R2-B],
 with odds set by the facts established at that moment [R4 SG-13; R: https://ianbicking.org/blog/2025/07/intra-llm-text-adventure].
 *Worst case (J):* an atmospheric detail is recorded needlessly (harmless), or a relevant one is not (the
 claim-vs-state check in ch.12 catches the narrated-but-unrecorded element, class iv).
+
+**00.6.6a Established details.** `[D]` + `[J:enum]` [DL-12-70; R: https://arxiv.org/html/2606.16014; revision: R2-E]
+A **detail** is an incidental, concrete property of an addressable entity (T1a, 12.14.13): the smith's scarred
+hands, the rings on a merchant's fingers, a notice's lettering, a guard's posture. It is stored as a fact
+`detail.<slot>` on the entity, with `certainty: narrated` when narration first stated it (a seed's or a
+generator's look, such as a walk-on's `detail` (12.11.1), is `certainty: established`, source `generation`), its
+source (the delivering turn, the beat or the generator), and a **persistence**:
+- `lasting`: appearance, marks, build, voice, what is worn, an object's material, state and marking; it holds
+  until an explaining event changes it;
+- `scene`: what is held, manner, posture, activity; it expires at scene end (12.4.8);
+- `beat`: a momentary value of a scene slot (a flinch, a stagger); it holds for its turn only and is never
+  retrieved.
+1. **Slots are a closed list** (`pacing.yaml#details.slots`): for people and creatures `hair`, `face`, `mark`,
+   `build`, `clothing`, `worn`, `held`, `voice`, `manner`, `posture`, `activity`, `condition_visible` (a visible,
+   non-mechanical state: soaked, muddy; a condition of ch.07 is never a detail); for objects `material`, `state`
+   (an incidental state: dented, faded; locked, lit, broken or anything consequential is settled by the Oracle,
+   12.3.2) and `marking`. A property that fits no slot is an identity field (00.6.2), a consequential property
+   (T2, from its owner) or atmosphere; it is never stored as a detail. The declaration names the slot
+   (`[J:enum]`, 12.3.1); a subject that does not resolve to an id is not written.
+2. **One value per slot.** The value may be a short phrase ("iron rings and a copper torc"). A later value for a
+   filled slot supersedes the earlier one only when this turn's adjudication record holds an event that explains
+   the change (she put the rings away; he was pinned; the notice was torn down); the old value is kept as history
+   (00.6.9c). Otherwise a different value is a contradiction: an `identity` claim for a `lasting` slot, a
+   `position` claim for a `scene` slot (12.3.1), redrafted to the stored value. A value that restates the stored
+   one is a no-op.
+3. **Cap.** At most `details.max_active` (**8**) active `lasting` details per entity, kept by salience (2 for a
+   seeded or generated detail or one cited in a record line or as a lever, else 1), then by last use; the rest are
+   archived, queryable and never lost (the 12.11.7 pattern). An archived detail is still checked for
+   contradiction, since contradiction is judged against the whole store (12.3.2).
+4. **Who writes.** A `lasting` detail is written as narrated (PR-00-7 step 2) or by a generator. `scene` and
+   `beat` details are written **by code**, never by the narrator (T1c): from the resolved beat (a successful
+   grapple writes `posture: pinned` on its target; a disarm clears `held`) and from the default NPC layer
+   (12.11.9's activity and response). A sentence that states one cites its record line.
+5. **Usage marks.** Each delivered sentence that states a detail sets the detail's `last_used` to that turn (a
+   projection over the log, not a new fact); freshness (12.14.11) and the cap read it.
+6. **Details are ordinary.** A detail can be cited as a lever under 00.3.9's cap and never creates value, a clue or
+   a hazard (12.14.13).
+*Worst case (J):* a detail filed under the wrong slot — a later sentence about the right slot is written as new, or
+reads as a contradiction and is redrafted to the store (class i); a junk detail fills a slot — the closed list and
+the cap bound it, and it falls out of the view by last use (class i).
 
 **00.6.7 Assertion is not fact.** `[D]` [DL-00A-22; DL-00A-01; revision: I-065] A player's statement about the world is stored only as the
 beat's `assertion` context in the frame, never as a fact (SG-06). Facts come from exactly six sources:
@@ -2397,13 +2439,18 @@ injured / hurt* in rules (wound, harm), *minor / major / severe* as severity nam
 4. Apply state writes; run core `[T]` rules (Vitality thresholds, harm states, clock completion).
 5. Return the results and every narration obligation (visible conditions, omens, band changes).
 
-**PR-00-7 Write-on-mention.** `[J:flag]` + `[D]` [revision: R2-B; DL-12-40]
+**PR-00-7 Write-on-mention.** `[J:flag]` + `[D]` [revision: R2-B; DL-12-40; revision: R2-E; DL-12-70]
 1. Draft the narration as declared sentences (12.3.1): each concrete, addressable element a sentence introduces is
    declared in its `new` list with its `element_kind` (12.14.13).
 2. Route each by its tier (12.14.13): T0, nothing is written; T1a, apply the 00.6.6 test and, if true,
    `create_entity` or `set_fact` with the properties the sentence states; T1b, the proposed fact is settled by
    the Oracle at 12.10.6(d)'s odds and the answer written; T1c is never written from prose; T2 must already be in
-   this turn's record from its owning procedure, or the sentence is cut.
+   this turn's record from its owning procedure, or the sentence is cut. For an **existing** entity the sentence
+   speaks of (`about`), each property it states is diffed against the entity's profile (its fields and its
+   `detail.*` facts, 00.6.6a) [revision: R2-E]: a property for an empty slot is written as a `lasting` detail
+   (`certainty: narrated`); a match is a no-op; a difference fails as an `identity` claim (a field or a `lasting`
+   slot) or a `position` claim (a `scene` slot) (12.3.1), unless this turn's record holds an event that explains
+   the change, when the new value supersedes the old. A `scene` slot is never written from prose (T1c).
 3. Only for a **consequential** property that is unestablished (is the door locked? is he armed? is she here?
    does he know?), ask the Oracle first and narrate the answer. An incidental property is written as narrated
    (step 2).
@@ -3007,6 +3054,6 @@ Each has a concrete default already in the rules and a named test that would set
 | OEQ-00-3 | Do omens make hidden clocks perceivable? | one omen per tick | **T-00-OMEN**: 3 playtest sessions; share of imminent-stage omens that draw a player response; target ≥ 50% |
 | OEQ-00-4 | Is a one-link trigger chain enough for designed synergies? | depth rule 00.10.8 | **T-00-DEPTH**: enumerate every ability/item pair in 05/08 data; if > 5% of *intended* synergies need a second link, allow a `chain_ok` flag at depth ≤ 2 |
 | OEQ-00-5 | Does halving recent entries give enough variety? | ×½ over the last 5 draws | **T-00-VARIETY**: 200 simulated drops per archetype; target the same property in consecutive drops ≤ 15% |
-| OEQ-00-6 | Does write-on-mention hold over long play? | 00.6.6 | **T-00-WOM**: 50-turn harness; narrated-but-unrecorded elements per turn; target ≤ 2% |
+| OEQ-00-6 | Does write-on-mention hold over long play? | 00.6.6, 00.6.6a | **T-00-WOM**: 50-turn harness; narrated-but-unrecorded elements per turn; target ≤ 2%. Extended to details [revision: R2-E]: a narrated incidental property of an existing entity that is not written to its slot counts as unrecorded; run in `evals/longhorizon.py`'s scripted mode, with the canon audit diffing every delivery against `detail.*` history |
 | OEQ-00-7 | Does the +16 ceiling keep top-band play challenging? | caps 00.3.5 | **T-00-CEIL**: simulate P5 vs T5 and P5 vs T4 encounters; target T5 remains "hard" by 09's advisory |
 | OEQ-00-8 | Is one interval per significant beat the right site cadence? | 00.7.3 | **T-00-SITE**: 3 dungeon runs; light and encounter-check pacing against 10's targets |
