@@ -587,7 +587,22 @@ def _answer_redirect(env: PipelineEnv, plan: BeatPlan, d: dict[str, Any], choice
 # ------------------------------------------------------------------------------------------- ROLL … RECORD
 
 
+def _attacks(env: PipelineEnv, frame: Frame) -> bool:  # rule: 06.2.1
+    """A committed attack-trait beat by the PC on a creature that will resist (an NPC or adversary)."""
+    from engine.resolve.conflict import FOES
+
+    beat = frame.beat
+    ent = env.state.entities.get(beat.target or "")
+    verb_traits = (env.rules.basic_verbs.get(frame.gate.verb or beat.verb or "") or {}).get("traits") or ()
+    return (beat.actor == env.pc and ent is not None and ent.kind in FOES
+            and "trait.action.attack" in {*frame.traits, *beat.traits, *verb_traits})
+
+
 def _roll(env: PipelineEnv, plan: BeatPlan, frame: Frame, queued: list[BeatPlan]) -> BeatOutcome:  # rule: PR-01-3
+    if _attacks(env, frame):  # 06.2.1: the attack is committed, so the fight starts (or the target joins it)
+        from engine.resolve.conflict import start
+
+        start(env.time_ctx(), env.pc, [str(frame.beat.target)], "the PC attacks (06.2.1)")
     roll = roll_check(frame, env.rng)
     if roll.near_miss:  # rule: 01.9.3
         from engine.dm.oof import near_miss_choices  # the labels in words (12.15.4)
@@ -614,6 +629,13 @@ def _finish(env: PipelineEnv, plan: BeatPlan, frame: Frame, roll: RollResult, *,
     verb = frame.gate.verb or frame.beat.verb
     moved = (_moved(env, plan) if resolved and verb == MOVE
              else _contact(env, frame, verb, delivered if resolved else 0) if verb in CONTACT else [])
+    if resolved and verb not in ("verb.grapple", "verb.force") and _attacks(env, frame):  # rule: 06.4.3
+        from engine.resolve.conflict import check_end, strike_harm
+
+        hurt, said = strike_harm(env.tx, env.rules, env.rng, frame, delivered)
+        if hurt.amount or hurt.transition:
+            env.harm_log.append(HarmEntry(target=str(frame.beat.target), words=said))
+        check_end(env.time_ctx(), env.pc)  # 06.13.1: the last foe down ends the fight
     progress = _progress(env, frame, delivered if resolved else 0)
     writes = [e.seq for e in env.tx.events[start:] if e.seq is not None]
     ev_ids: list[str] = []
@@ -868,6 +890,8 @@ def _open(env: PipelineEnv, kind: str, prompt: str, choices: list[dict[str, str]
 
 
 def _mode(state: Any) -> str:
+    if str(state.time.mode) == "conflict":  # 06.2.1: a fight inside a scene runs in conflict mode
+        return "conflict"
     return state.scene.mode if state.scene is not None else str(state.time.mode)
 
 

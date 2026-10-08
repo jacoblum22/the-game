@@ -172,7 +172,7 @@ def _turn(ctx: TurnContext, message: str, *, choice: str | None, dispute: bool =
                 beats = _adjudicate(ctx, rec, reader, message, oof)  # T4
             pause = tx.state.open_pause()
             if pause is None and not dispute:  # a dispute is out of fiction: no world step, no time
-                world_step(ctx, rec, beats=beats)  # T5 (a pause jumps to T7: no world, no time)
+                world_step(ctx, rec, beats=beats, oof=oof)  # T5 (a pause jumps to T7: no world, no time)
                 _turn_end(ctx, rec, oof)
                 if choice is None:
                     _director_step(ctx, rec, message)  # lead injection, the player's cut, an answered agenda
