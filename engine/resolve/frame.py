@@ -580,17 +580,30 @@ def _costs(p: ProposedFrame, beat: Beat, state: Any, rules: Any, stakes: str,
         raise _Refuse(10, "threatened_cost", bad)
     if stakes in ("risky", "dire") and p.alternate_cost is None:
         raise _Refuse(10, "alternate_cost", f"a {stakes} frame needs an alternate cost (01.6.11)")
-    if p.alternate_cost is not None:
-        bad = check_cost_decl(p.alternate_cost, role="alternate", other=p.threatened_cost, **kw)  # type: ignore[arg-type]
+    alt = p.alternate_cost if stakes != "safe" else None  # a safe frame's alternate waits for go big (01.7.3)
+    if alt is not None:
+        bad = check_cost_decl(alt, role="alternate", other=p.threatened_cost, **kw)  # type: ignore[arg-type]
         if bad:
             raise _Refuse(10, "alternate_cost", bad)
     prev = severity_previews(stakes, rules)
     assert p.threatened_cost is not None
-    tc = CostPreview(**p.threatened_cost.model_dump(), **prev)  # type: ignore[arg-type]
+    tc = CostPreview(**_fitted(p.threatened_cost, rules).model_dump(), **prev)  # type: ignore[arg-type]
     ac = None
-    if p.alternate_cost is not None:
-        ac = CostPreview(**p.alternate_cost.model_dump(), on_success_at_cost=prev["on_success_at_cost"])
+    if alt is not None:
+        ac = CostPreview(**_fitted(alt, rules).model_dump(), on_success_at_cost=prev["on_success_at_cost"])
     return tc, ac
+
+
+def _fitted(cost: Any, rules: Any) -> Any:  # rule: 01.13.1
+    """A form that only repeats the cost menu's example words is no form for this scene: blank, so the screen names
+    the menu entry alone (P-083)."""
+    try:
+        examples = {str((f or {}).get("text") or "").strip().lower()
+                    for f in (rules.get(cost.menu_id).get("forms") or {}).values()}
+    except (KeyError, AttributeError, TypeError):
+        return cost
+    form = (cost.form_intent or "").strip().lower().rstrip(".")
+    return cost.model_copy(update={"form_intent": ""}) if form and form in examples else cost
 
 
 # ------------------------------------------------------------------------------------------- OFFER

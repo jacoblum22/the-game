@@ -21,7 +21,7 @@ Split the message into parts in the player's order, one class each.
 One entry per FICTION_QUESTION and per unknown fact a declaration leans on, including one the player
 proposes ("there's bound to be a rope"): subject id, predicate in plain words, odds rung (used only if the
 store has none).
-- Choose the rung from the place, people and situation, never from the player's wish, phrasing or a
+- Choose the rung from the place, people and situation, never the player's wish, phrasing or a
   better story.
 - Between two rungs: the one less favourable to the player's hope; no hope evident: nearer even.
 - Finding out (looking, searching, recalling, reading a person) is an Observe or Recall beat.
@@ -33,9 +33,9 @@ internal monologue makes no beat.
 - `intent`: what the player wants true afterward. Unstated and exactly one obvious: write it; else ask.
 - `method`: the observable act, neutrally.
 - `assertion`: every clause claiming a fact, likelihood or result ("it's a cheap lock", "and he falls").
-  Unsure: assertion. Assertions are context only (INV-9); they never become facts or move any field.
-- `shape` (01.2.2): single vs extended unsure → single if the result is knowable within one beat;
-  bundled vs several → several.
+  Unsure: assertion. Context only (INV-9): never a fact, never moves a field.
+- `shape` (01.2.2): `extended` if the goal takes several stretches (a trail to its end, a wide
+  search); unsure → single. Bundled vs several → several.
 - `target`: one id (Move: whom or where toward). Several fit: in conflict the nearest engaged foe, else
   the latest mentioned of the right kind. None: `none`, and ask.
 - `gate` (01.3.1), first match: G0 a question with no act; G4 impossible by the cards' tests (`g4_fact` =
