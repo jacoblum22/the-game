@@ -91,9 +91,9 @@ Status: open · fixing (round N) · fixed (commit) · logged (ledger id) · wont
 | P-083 | polish | med | Cost form copied from the menu example, not fitted to the scene ("left on the far side, down the well, stuck in a beam" in a grassy field) | 191941-fighter 30–31 | open (queued) |
 | P-084 | bug | critical | Crash loop: an Oracle answer stored as fact "wants" = True replaced an NPC's wants list; every later turn raised "'bool' object is not iterable" ("Sorry, something went wrong") until the run ended | 193315-breaker inputs 21–31 | fixed (Oracle never writes NPC list fields; readers skip non-lists) |
 | P-085 | bug | low | Captain's name swapped to another NPC's ("Vesas de Morois") for one line; a horse appears from nowhere | 191535-explorer 29–31 | open |
-| P-086 | polish | med | Three hidden Observe checks in a row give only vague results ("the shape does not come clearer"); the player learns nothing | 191535-explorer 19–26 | open |
-| P-087 | bug | med | REDIRECT option "Try it anyway" answered "You cannot do it that way" with no roll: dead end | 192159-newcomer 33 | open |
-| P-088 | polish | low | [CUT?] prompt appears after only a few exchanges, mid-conversation | 192340-talker 20 | open |
-| P-089 | bug | med | At the near-miss menu Enter silently picked "Let it fail" (the OFFER re-prompt fix doesn't cover near-miss) | 192340-talker 28 | open |
-| P-090 | bug | high | PC's own kit not recognised: the sheet lists a rapier, drawing it → "your hand finds no blade", action rejected | 193420-fighter 24–30 | fixing |
-| P-091 | bug | low | Fallback "You try to garett's grip on her arm loosens" (possessive restatement) | 193420-fighter 27 | fixing (with P-090) |
+| P-086 | polish | med | Three hidden Observe checks in a row give only vague results ("the shape does not come clearer"); the player learns nothing | 191535-explorer 19–26 | fixed (0c15da2) |
+| P-087 | bug | med | REDIRECT option "Try it anyway" answered "You cannot do it that way" with no roll: dead end | 192159-newcomer 33 | fixed (0c15da2) |
+| P-088 | polish | low | [CUT?] prompt appears after only a few exchanges, mid-conversation | 192340-talker 20 | fixed (0c15da2); ledger I-152 |
+| P-089 | bug | med | At the near-miss menu Enter silently picked "Let it fail" (the OFFER re-prompt fix doesn't cover near-miss) | 192340-talker 28 | fixed (0c15da2) |
+| P-090 | bug | high | PC's own kit not recognised: the sheet lists a rapier, drawing it → "your hand finds no blade", action rejected | 193420-fighter 24–30 | fixed (a31eabe) |
+| P-091 | bug | low | Fallback "You try to garett's grip on her arm loosens" (possessive restatement) | 193420-fighter 27 | fixed (a31eabe) |
