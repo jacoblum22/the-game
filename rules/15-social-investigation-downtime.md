@@ -749,6 +749,13 @@ threatened or alternate cost is paid. A "yes" binds the NPC to the act asked and
 written as a fact or a commitment of the NPC's (`npc.<id>.agreed: <act>`, with its due time), and the
 NPC's later conduct follows it unless a new fact releases them (12.11.4) [01.9; 01.18.7; DL-15-13].
 
+**Questions** [revision: R2-D] [DL-15-39; I-140]: a Talk, a certain beat or a plain SPEECH question that asks an NPC for
+information is a bundled beat (01.10). Of N questions, `deliver_count(N, reach)` (T-01-6) land in the player's rank,
+and each landed one is answered by PR-12-10 at the ladder depth of the reach (`social.yaml#delivery.information`):
+Limited gives the NPC's records and pack, or a pointer; Standard adds propose-and-ratify; Great adds one volunteered
+extra. One question is N = 1, so any success lands it; a certain beat or SPEECH runs at Standard. "Yes, as asked" above
+is the act asked; it never makes the NPC know more than PR-12-10 finds.
+
 **15.3.10 When talk needs no roll.** `[D]` + `[J:flag]` [DL-15-33; DL-15-34; revision: I-065] A social beat is **certain** (01.4.1, no roll) when
 the request's **certainty size** is R1 and the NPC is Neutral or warmer, or the certainty size is at least
 **two rungs below** the ceiling (Warm: R1; Friendly: R1–R2; Devoted: R1–R3) — and no refusal covers it,
@@ -1506,7 +1513,10 @@ in the world (sealed; a new witness, a copy of the letter, a second traveller wh
 reserve is spent it generates one by PR-15-7. The Alexandrian's rule — "for any conclusion you want the
 PCs to make, include at least three clues" — becomes an invariant the engine keeps true, not advice the
 narrator must remember [R: https://thealexandrian.net/wordpress/1118/roleplaying-games/three-clue-rule;
-R6 B-13; R5 P-41; 12.8.4; DL-15-24].
+R6 B-13; R5 P-41; 12.8.4; DL-15-24]. **Reduced profile** [revision: R2-D] [DL-15-38]: a reduced case (PR-15-6) holds
+2 necessary nodes meeting items 1–4 with **one** reserve each, and its entry core placement is at the place where it
+began; `h.15.placement_audit` runs for reduced cases from Milestone 1 (full cases from Milestone 6), so the Three Clue
+Rule holds in the first playable build.
 
 **15.9.5 Core clues never fail.** `[J:flag]` + `[D]`
 
@@ -2167,6 +2177,14 @@ for 02's lost bond and 07's curse lifts)
    then logs a `rule_conflict` and adds generic placements (PR-15-7).
 7. Write everything sealed; write the thread (11) with `clue_placements`; give the narrator the case's
    atmosphere tag.
+**Reduced profile (Milestone 1)** [revision: R2-D] [DL-15-38; DL-15-37]: for the seed's inciting incident (12.16.16)
+and for a story-role question with no case behind it (who is missing, who did it, who sent them; PR-12-10 step 1), the
+case is built at once with `investigation.yaml#reduced_case`: the subject cast first (00.11 `cast`), else generated
+(12.11.1); 2 necessary nodes and no optional ones; 3 placements per node (two holder kinds, two methods, one core,
+two places) and 1 reserve; the first node's core placement held at the place where the question was asked (at seed
+time, the opening place); 1 fallback. Step 6 validates against these numbers. *Evidence:*
+`_process/simulation/12-answer_ladder_sim.py` part C: 30 of 30 valid, and the story-role question answered within 3
+turns in 30 of 30, for the seeded incident, a forced "who is missing?" and an in-play question.
 
 **PR-15-7 A replacement placement.** `[D]` When the audit (15.9.4) finds a necessary node with fewer than
 two live placements and no reserve left: roll `tbl.15.placement_holders` for a holder kind not already

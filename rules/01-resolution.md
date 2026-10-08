@@ -1246,7 +1246,8 @@ which half" that P17's original text left open to drift.
 
 So a success at Standard reach delivers about half (P17's "roughly half"), a critical success from
 Standard (delivered 3) delivers all, a failure gives at most one vague impression, and a critical failure
-nothing reliable — exactly P17's four rows, now computed. Items land in rank order.
+nothing reliable — exactly P17's four rows, now computed. Items land in rank order. A question put to an NPC is one
+item, answered by PR-12-10 at the ladder depth of the delivered reach (T-15-5) [revision: R2-D; DL-15-39].
 - **Vague impression** `[N]`: narrated hedged ("maybe that matters"), recorded as a fact with
   `certainty: believed` whose sealed truth is `true`. It is never wrong, only incomplete.
 - **Plausible falsehood** `[J:flag]` *misleadable*: *"Can the source actually mislead — a lying or

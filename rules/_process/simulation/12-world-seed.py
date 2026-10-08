@@ -11,6 +11,9 @@ travel, oracles, companions, rituals, licenses, calendar, weather, tags). Random
 seed (random.Random(seed)), drawn in step order, so a seed number reproduces its world byte for byte.
 The checks (12.16.17) are `world_seed.yaml#requirements`; the encounter tables are built by PR-10-10
 (`10_table_builder.py`) and audited by PR-10-8 (`10-word-audit.py`), both imported, not copied.
+[revision: R2-D] After build_seed, `seed_packs` adds the seed packs (12.16.9 looks, furniture and exits; 12.16.11
+knowledge packs and stances; 12.16.16 documents and the incident's reduced case, PR-15-6) on streams keyed by the
+seed and the entity id, so build_seed's own record is unchanged; `check_packs` runs `world_seed.yaml#pack_requirements`.
 Output: 12-world-seed-output.txt (stdout); 12-world-seed-example.yaml (--emit). Exit 1 on any failed check.
 """
 import os, sys, random, re, json, copy, itertools, importlib.util
@@ -1439,6 +1442,308 @@ def load_premade(path):
                            "festivals": [f for f in (e.get("festivals") or CAL["festivals"]) if str(f.get("id", "")).startswith("fest.quarter")] or e.get("festivals")}
     return reg
 
+# ------------------------------------------------------------------- seed packs [revision: R2-D] [DL-12-61; DL-15-38]
+# 12.16.9 looks, furniture and exits; 12.16.11 knowledge packs and stances; 12.16.16 documents and the reduced
+# case (PR-15-6, 15.9.4 reduced profile). A pass after build_seed on streams keyed by the seed and the entity id,
+# so packing never moves a draw of the seed itself (the engine port's parity holds) and a pre-made seed can be
+# packed too. Checks: world_seed.yaml#pack_requirements (check_packs).
+import hashlib
+SOCD, INVD = load("social.yaml"), load("investigation.yaml")
+CK, RCASE = SOCD["common_knowledge"], INVD["reduced_case"]
+LOOK, FURN, DOCT, KPACK = (TAB[t] for t in ("tbl.12.seed.place_look", "tbl.12.seed.furniture", "tbl.12.seed.document", "tbl.12.seed.knowledge_pack"))
+
+def keyed(seed, *parts):
+    """A dice stream keyed by the seed and an entity id (C 2.2: a generated answer never depends on draw order)."""
+    return Dice(int(hashlib.sha256("|".join(map(str, (seed,) + parts)).encode()).hexdigest()[:15], 16))
+
+def place_type(p):
+    if p["place_kind"] == "building":
+        return p["id"].rsplit(".", 1)[1]
+    if p["place_kind"] in ("settlement", "landmark"):
+        return p["place_kind"]
+    t = ((p.get("terrain") or ["x"])[0]).split(".")
+    return t[1] if len(t) > 1 else "default"
+
+def role_key(npc):
+    """social.yaml#common_knowledge.rule: first word of the role, else the first role_map pattern, else other."""
+    txt = (npc.get("role") or "").lower()
+    w = txt.split()[0] if txt else "other"
+    if w in CK["by_role"]:
+        return w
+    return next((m["role"] for m in CK["role_map"] if m["pattern"] in txt), "other")
+
+def in_haven(reg, pid):
+    P = {p["id"]: p for p in reg["places"]}
+    hav = reg["region"]["haven"]
+    return pid == hav or (pid in P and P[pid].get("parent") == hav)
+
+def pick_n(d, rows, n):
+    out = []
+    while len(out) < n:
+        i = d.d(len(rows)) - 1
+        while rows[i] in out:
+            i = (i + 1) % len(rows)
+        out.append(rows[i])
+    return out
+
+def pack_places(reg, seed):
+    P = {p["id"]: p for p in reg["places"]}
+    regional = next((t for t in reg.get("tables") or [] if str(t.get("id", "")).endswith(".furnishings")), None)
+    for p in reg["places"]:
+        if p["place_kind"] == "region":
+            continue
+        k, d = place_type(p), keyed(seed, p["id"], "place")
+        p["look"] = d.pick(LOOK["by_kind"].get(k) or LOOK["by_kind"]["default"]).replace("{name}", p["name"])
+        items = pick_n(d, FURN["by_kind"].get(k) or FURN["by_kind"]["default"], d.d(3) + 1)
+        if regional and p["place_kind"] == "building":
+            items[-1] = by_range(regional["results"], d.die(regional["die"]))["result"]
+        p["furniture"] = items
+        if p["links"]:
+            p["exits"] = [l["to"] for l in p["links"]]
+        elif p["place_kind"] == "building":
+            sib = [q for q in P if P[q].get("parent") == p["parent"] and P[q]["place_kind"] == "building" and q != p["id"]]
+            p["exits"] = [p["parent"]] + sib[:2]
+        else:
+            p["exits"] = [p["parent"]] if p.get("parent") in P else []
+
+def walk_on(reg, seed, tag, role, home):
+    """12.11.1 walk-on, minimal (role, name from the seed's own tables, home); written to the store's npcs."""
+    d = keyed(seed, "walk_on", tag)
+    t = d.pick(reg["names"])
+    nm = "%s %s" % (by_range(t["given"], d.d(20))["result"], by_range(t.get("family") or t["epithet"], d.d(12))["result"])
+    n = OrderedDict([("id", "npc.%s" % slug(nm + " " + tag)), ("name", nm), ("role", role), ("depth", "walk_on"), ("home", home),
+                     ("member_of", []), ("kind", "npc"), ("exists", "exists"), ("knowledge", []), ("basis", ["12.11.1", "PR-15-6"])])
+    reg.setdefault("walk_ons", []).append(n)      # entities of the store; kept apart from the seed cast (12.16.11)
+    return n
+
+def lead_holder_place(reg, target):
+    """Where a lead target is found: a place itself; a situation's region; a clock's faction seat (its head's home)."""
+    P = {p["id"]: p for p in reg["places"]}
+    if target in P:
+        return target
+    sit = next((s for s in reg["situations"] if s["id"] == target), None)
+    if sit and sit.get("region") in P:
+        return sit["region"]
+    for f in reg["factions"]["instances"]:
+        if target in (f["id"], f["goal"].get("clock")):
+            head = next((n for n in reg["npcs"] if f["id"] in (n.get("member_of") or []) and n["role"].startswith("head of")), None)
+            if head:
+                return head["home"]
+    return reg["region"]["haven"]
+
+def fill_doc(row, **kw):
+    t = row["text"]
+    for k, v in kw.items():
+        t = t.replace("{%s}" % k, str(v))
+    return t
+
+def make_document(reg, seed, tag, option, at, issuer, contact, target_words):
+    d = keyed(seed, "doc", tag)
+    P = {p["id"]: p for p in reg["places"]}
+    row = next(r for r in DOCT["results"] if r["option"] == option)
+    flds = {k: d.pick(v) for k, v in DOCT["fields"].items()}
+    text = fill_doc(row, issuer=issuer, haven=P[reg["region"]["haven"]]["name"], year=reg["calendar"]["opening_date"].split(",")[-1].strip(),
+                    contact=contact[0], contact_place=contact[1], target=target_words, **flds)
+    doc = OrderedDict([("id", "doc.%s" % tag), ("kind", "document"), ("option", option), ("at", at), ("text", text), ("table", DOCT["id"])])
+    reg.setdefault("documents", []).append(doc)
+    return doc
+
+def cast_pick(d, pool, weight):
+    """social.yaml#cast fill: weighted by fit over the gated pool; None when the pool is empty."""
+    pool = [(n, weight(n)) for n in pool]
+    pool = [(n, w) for n, w in pool if w > 0]
+    return d.weighted(pool) if pool else None
+
+def reduced_case(reg, seed, option, place, lead_target, tag="incident"):
+    """PR-15-6, reduced profile (investigation.yaml#reduced_case): 2 necessary nodes, 3 placements each, 1 reserve
+    each, the first core placement held at `place`. Returns the case record (sealed)."""
+    d = keyed(seed, "case", tag, option)
+    P = {p["id"]: p for p in reg["places"]}
+    hav = reg["region"]["haven"]
+    sub = RCASE["subjects"][option]
+    blds = [p["id"] for p in reg["places"] if p.get("parent") == hav and p["place_kind"] == "building"]
+    locals_ = [n for n in reg["npcs"] if in_haven(reg, n["home"]) and n.get("depth") != "walk_on"]
+    # 1. solution: the subject (a story role), cast first, else generated (12.11.1); never chosen
+    if sub["kind"] == "person":
+        roles = sub.get("cast") or []
+        subj = cast_pick(d, locals_, lambda n: 3 if role_key(n) in roles else 0) if roles else None
+        if subj is None:
+            role = {"missing": lambda: ["child", "child", "child", "elder", "elder", "priest"][d.d(6) - 1],
+                    "refugees": lambda: "traveler"}.get(option, lambda: "traveler")()
+            subj = walk_on(reg, seed, "%s_subject" % tag, role, place if option != "refugees" else place)
+        subject = {"id": subj["id"], "role": sub["role"], "words": subj["name"]}
+    else:
+        fac = {f["id"].rsplit(".", 1)[1]: f["name"] for f in reg["factions"]["instances"]}
+        temple = next((p["name"] for p in reg["places"] if p["id"] in (hav + ".temple", hav + ".shrine")), "the shrine")
+        words = {"alarm": "a war-band of %s" % fac.get("threat", "the enemy"), "omen": "a sign of %s" % reg["situations"][0]["title"].lower(),
+                 "theft": "the relic of %s from %s" % (reg["keepers"][0]["name"].split(",")[0], temple)}[option]
+        subject = {"id": "%s.%s.subject" % (tag, option), "role": sub["role"], "words": words}
+    used = {subject["id"]}
+    # 2-3. placements
+    reporter = next((n for n in reg["npcs"] if n["home"] == place and n["id"] not in used and n.get("depth") != "walk_on"), None) \
+        or walk_on(reg, seed, "%s_reporter" % tag, "reporter", place)
+    used.add(reporter["id"])
+    witness = cast_pick(d, [n for n in locals_ if n["id"] not in used and n["home"] != place], lambda n: 1 + (2 if n["home"] in blds else 0)) \
+        or walk_on(reg, seed, "%s_witness" % tag, "witness", next(b for b in blds if b != place))
+    used.add(witness["id"])
+    third = next(b for b in blds + [hav] if b not in (place, witness["home"]))
+    issuer = next((f["name"] for f in reg["factions"]["instances"] if f["id"].endswith(".rulers")), "the rulers")
+    doc = make_document(reg, seed, "%s_notice" % tag, "bounty" if sub["kind"] == "person" else "warning", third, issuer,
+                        (reporter["name"], P[place]["name"]), subject["words"])
+    way = lead_holder_place(reg, lead_target)
+    seer = cast_pick(d, [n for n in locals_ if n["id"] not in used and n["home"] != way], lambda n: 3 if place_type(P[n["home"]]) in ("gate", "inn", "market") else 1) \
+        or walk_on(reg, seed, "%s_seer" % tag, "witness", next(b for b in blds if b != place))
+    used.add(seer["id"])
+    cid = "case.%s.%s" % (tag, option)
+    def pl(node, i, holder, hk, method, access, at, content):
+        return {"id": "clu.%s.n%d.p%d" % (cid.split(".", 1)[1], node, i), "holder": holder, "holder_kind": hk, "method": method,
+                "access": access, "at": at, "content": content, "status": "unfound", "sealed": True}
+    n1 = "%s: %s" % (subject["role"], subject["words"])
+    n2 = "the way on: toward %s" % P[way]["name"]
+    nodes = [
+        {"id": "clu.%s.n1" % cid.split(".", 1)[1], "fact": n1, "necessary": True, "points_to": ["clu.%s.n2" % cid.split(".", 1)[1]],
+         "placements": [pl(1, 1, reporter["id"], "person", "inquiry", "core", place, n1),
+                        pl(1, 2, witness["id"], "person", "inquiry", "rolled", witness["home"], n1),
+                        pl(1, 3, doc["id"], "document", "search", "rolled", third, n1)],
+         "reserve": [pl(1, 9, "reserve.%s.n1" % tag, "person", "inquiry", "core", None, n1)]},
+        {"id": "clu.%s.n2" % cid.split(".", 1)[1], "fact": n2, "necessary": True, "points_to": [],
+         "placements": [pl(2, 1, way, "place", "search", "core", way, n2),
+                        pl(2, 2, seer["id"], "person", "inquiry", "rolled", seer["home"], n2),
+                        pl(2, 3, "obj.%s.left" % tag, "object", "search", "rolled", place if place != way else third, n2)],
+         "reserve": [pl(2, 9, "reserve.%s.n2" % tag, "person", "inquiry", "core", None, n2)]},
+    ]
+    case = OrderedDict([("id", cid), ("profile", "reduced"), ("trigger", tag), ("option", option), ("opening_place", place),
+                        ("solution", {"subject": subject, "leads_to": lead_target, "sealed": True}), ("nodes", nodes),
+                        ("fallbacks", [{"trigger": "stalled", "form": "tbl.15.fallback_form", "delivers": "the core placement of an unfound necessary node"}]),
+                        ("audit", "h.15.placement_audit"), ("basis", ["PR-15-6", "15.9.4", "12.16.16"])])
+    reg["seed_cases"] = [c for c in reg.get("seed_cases") or [] if c["id"] != cid] + [case]   # the records; reg["cases"] lists ids
+    reg["cases"] = [c for c in reg.get("cases") or [] if c != cid] + [cid]
+    return case
+
+def validate_case(case):
+    """15.9.4 with investigation.yaml#reduced_case's numbers. Returns the failures (empty = valid)."""
+    v, bad = RCASE["per_necessary_node"], []
+    nec = [n for n in case["nodes"] if n["necessary"]]
+    if len(nec) != RCASE["necessary_nodes"]:
+        bad.append("nodes %d" % len(nec))
+    for n in nec:
+        pls = n["placements"]
+        for what, val, lo in (("placements", len(pls), v["min_placements"]), ("holder kinds", len({p["holder_kind"] for p in pls}), v["min_holder_kinds"]),
+                              ("methods", len({p["method"] for p in pls}), v["min_method_kinds"]), ("core", sum(p["access"] == "core" for p in pls), v["min_core"]),
+                              ("places", len({p["at"] for p in pls}), v["min_places"]), ("reserve", len(n["reserve"]), v["reserve"])):
+            if val < lo:
+                bad.append("%s %s %d < %d" % (n["id"], what, val, lo))
+    if not any(p["access"] == "core" and p["at"] == case["opening_place"] for p in nec[0]["placements"]):
+        bad.append("no core placement at the opening place")
+    if len(case["fallbacks"]) < RCASE["per_case"]["min_fallbacks"]:
+        bad.append("fallbacks")
+    return bad
+
+def pack_npcs(reg, seed):
+    P = {p["id"]: p for p in reg["places"]}
+    hav = reg["region"]["haven"]
+    case = next((c for c in reg.get("seed_cases") or [] if c["trigger"] == "incident"), None)
+    secret = {case["solution"]["subject"]["id"]} if case else set()
+    holders = {p["holder"] for n in case["nodes"] for p in n["placements"]} if case else set()
+    near = [p for p in reg["places"] if p["place_kind"] in ("area", "site", "landmark") and p.get("ring") in (1, 2)]
+    routes = P[hav]["links"]
+    facs = [f for f in reg["factions"]["instances"] if not f["id"].endswith(".threat")]
+    keeper = reg["keepers"][0]["name"].split(",")[0]
+    rumors = [(t["id"], r["range"]) for t in reg["rumor_tables"] for r in t["results"]]
+    cast = [n for n in reg["npcs"] if n.get("depth") != "walk_on"]
+    named = [n for n in cast if n["id"] not in secret]          # a pack fact never names the case's solution
+    for n in cast:
+        d = keyed(seed, n["id"], "pack")
+        ring = P[n["home"]]["ring"] if n["home"] in P else 0
+        others = [m for m in named if m is not n and (P[m["home"]]["ring"] if m["home"] in P else 0) == ring] or [m for m in named if m is not n]
+        def fill(row):
+            rt = d.pick(routes) if routes else None
+            return (row.replace("{place}", (P[rt["to"]]["name"] if rt and "{watches}" in row else d.pick(near)["name"]) if near else P[hav]["name"])
+                       .replace("{watches}", num_words(rt["travel_watches"]) if rt else "a few").replace("{route_kind}", rt["route_kind"] if rt else "track")
+                       .replace("{other}", d.pick(others)["name"]).replace("{faction}", d.pick(facs)["name"]).replace("{keeper}", keeper)
+                       .replace("{haven}", P[hav]["name"]))
+        own = []
+        for slot, topic in (("trade", d.pick(CK["by_role"][role_key(n)])), ("local", d.pick(["local_news", "folk"]))):
+            own.append({"fact": "kn.%s.%s" % (n["id"].split(".", 1)[1], slot), "slot": slot, "topic": topic,
+                        "text": fill(d.pick(KPACK["by_topic"][topic])), "how": "seed", "tier": "T1"})
+        other = d.pick(others)
+        own.append({"fact": "kn.%s.tie" % n["id"].split(".", 1)[1], "slot": "tie", "topic": "folk", "about": other["id"],
+                    "text": d.pick(KPACK["ties"]).replace("{other}", other["name"]).replace("{haven}", P[hav]["name"]), "how": "seed", "tier": "T1"})
+        if d.d(6) >= 4 and rumors:
+            rid, rng = d.pick(rumors)
+            own.append({"fact": "kn.%s.rumor" % n["id"].split(".", 1)[1], "slot": "rumor", "topic": "local_news", "rumor": {"table": rid, "range": rng},
+                        "truth": "sealed", "how": "seed"})
+        n["knowledge"] = own
+        st = KPACK["stance"]
+        if n["id"] in holders:
+            n["stance"] = {"toward": "incident", "stance": "helps", "why": "holds a placement of the incident's case"}
+        elif any(m.endswith(".threat") for m in n.get("member_of") or []):
+            n["stance"] = {"toward": "incident", "stance": "hinders", "why": "of the threat faction"}
+        else:
+            r = by_range(st["results"], d.die(st["die"]))
+            n["stance"] = {"toward": "incident", "stance": r["stance"], "why": r["gist"]}
+
+def seed_packs(reg, seed):
+    """The seed-pack pass: places, the incident's reduced case (12.16.16), documents, then NPC packs."""
+    pack_places(reg, seed)
+    o = reg["opening"]
+    case = reduced_case(reg, seed, o["inciting"]["option"], o["start"]["place"], o["leads"][0]["points_to"])
+    o["case"] = case["id"]
+    # the hire lead (12.16.16's third lead) points to a hire notice whose text names who to see and where
+    P = {p["id"]: p for p in reg["places"]}
+    hav = reg["region"]["haven"]
+    for i, ld in enumerate(o["leads"]):
+        fac = next((f for f in reg["factions"]["instances"] if ld["points_to"] == f["goal"].get("clock")), None)
+        if fac and "hiring" in ld["lead"]:
+            head = next(n for n in reg["npcs"] if fac["id"] in (n.get("member_of") or []) and n["role"].startswith("head of"))
+            post = next((p for p in (hav + ".gate", hav + ".market", hav + ".inn") if p in P), hav)
+            doc = make_document(reg, seed, "lead_%d" % (i + 1), "hire", post, fac["name"], (head["name"], P[head["home"]]["name"] if head["home"] in P else P[hav]["name"]), "")
+            ld["document"], ld["names"] = doc["id"], head["name"]
+    d = keyed(seed, "documents")
+    opt = by_range(DOCT["results"], d.d(3) + 1)["option"]          # one more: warning, charter or bounty
+    rul = next(f for f in reg["factions"]["instances"] if f["id"].endswith(".rulers"))
+    capt = next((n for n in reg["npcs"] if n["home"] == hav + ".gate" and n.get("depth") != "walk_on"), None)
+    site = next(p for p in reg["places"] if p["place_kind"] == "site" and p.get("ring") == 1)
+    post = next((p for p in DOCT["results"] if p["option"] == opt))["posted_at"]
+    at = next((hav + "." + k for k in post if hav + "." + k in P), hav)
+    make_document(reg, seed, "notice", opt, at, rul["name"], (capt["name"] if capt else "the watch", P[hav + ".gate"]["name"] if hav + ".gate" in P else P[hav]["name"]), site["name"])
+    pack_npcs(reg, seed)
+    return reg
+
+def check_packs(reg):
+    """world_seed.yaml#pack_requirements on a packed region. Returns [(id, ok, note)]."""
+    places = [p for p in reg["places"] if p["place_kind"] != "region"]
+    cast = [n for n in reg["npcs"] if n.get("depth") != "walk_on" and n.get("knowledge") is not None and "stance" in n]
+    cast_all = [n for n in reg["npcs"] if n.get("depth") != "walk_on"]
+    case = next((c for c in reg.get("seed_cases") or [] if c["trigger"] == "incident"), None)
+    docs = reg.get("documents") or []
+    lead_docs = [(ld, next((x for x in docs if x["id"] == ld["document"]), None)) for ld in reg["opening"]["leads"] if ld.get("document")]
+    out = []
+    for rq in WS["pack_requirements"]:
+        c = rq["check"]
+        if c == "looks":
+            bad = [p["id"] for p in places if not p.get("look")]
+        elif c == "furniture":
+            bad = [p["id"] for p in places if not 2 <= len(p.get("furniture") or []) <= 4]
+        elif c == "exits":
+            bad = [p["id"] for p in places if not p.get("exits")]
+        elif c == "knowledge":
+            bad = [n["id"] for n in cast_all if not (2 <= len([k for k in n.get("knowledge") or [] if k["slot"] in ("trade", "local", "tie", "rumor")]) <= 4
+                                                    and {"trade", "local", "tie"} <= {k["slot"] for k in n.get("knowledge") or []})]
+            sub = case["solution"]["subject"]["id"] if case else None
+            bad += [n["id"] + " names the subject" for n in cast_all for k in n.get("knowledge") or [] if sub and k.get("about") == sub]
+        elif c == "stance":
+            bad = [n["id"] for n in cast_all if not (n.get("stance") or {}).get("stance")]
+        elif c == "documents":
+            bad = [x["id"] for x in docs if not x.get("text") or "{" in x["text"]] + \
+                  [ld["lead"][:30] for ld, x in lead_docs if not x or ld["names"] not in x["text"]]
+        elif c == "reduced_case":
+            bad = ["no incident case"] if not case else validate_case(case)
+        else:
+            bad = ["unknown check " + c]
+        out.append((rq["id"], not bad, "%d places, %d cast, %d documents%s" % (len(places), len(cast_all), len(docs), ("; " + ", ".join(bad[:3])) if bad else "")))
+    return out
+
 # --------------------------------------------------------------------------------------------- main
 def dump(reg):
     def conv(x):
@@ -1454,7 +1759,7 @@ def dump(reg):
     return head + yaml.safe_dump(conv(reg), sort_keys=False, allow_unicode=True, width=130, default_flow_style=None)
 
 def report(reg, verbose=True):
-    res = check_seed(reg)
+    res = check_seed(reg) + (check_packs(reg) if "documents" in reg else [])   # [revision: R2-D] pack checks
     fails = [r for r in res if not r[1]]
     if verbose:
         R_ = reg["region"]
@@ -1496,6 +1801,8 @@ def render_tables():
     for r in WS["requirements"]:
         out.append("| `%s` | %s | %s | %s | `%s` | %s |" % (r["id"], r["from"], r["need"], ", ".join(r["rules"]), r["key"],
                                                           r["check"] + ((": " + r["generic"]) if r.get("generic") else "")))
+    for r in WS["pack_requirements"]:   # [revision: R2-D] the seed-pack checks (12.16.17; I-130)
+        out.append("| `%s` | %s | %s | %s | `%s` | %s |" % (r["id"], r["from"], r["need"], ", ".join(r["rules"]), r["key"], r["check"]))
     return "\n".join(out)
 
 def main():
@@ -1515,7 +1822,7 @@ def main():
     else:
         seeds = [1]
     print()
-    reg = build_seed(seeds[0], given)
+    reg = seed_packs(build_seed(seeds[0], given), seeds[0])
     allfails += report(reg)
     if "--emit" in args:
         open(args[args.index("--emit") + 1], "w", encoding="utf-8", newline="\n").write(dump(reg))
@@ -1529,7 +1836,7 @@ def main():
                   "ws.q.arcane_source": "order_only"}
         print()
         print("guided run (%d answers from the player, the rest by the oracle):" % len(guided))
-        g = build_seed(2, guided)
+        g = seed_packs(build_seed(2, guided), 2)
         gf = report(g, verbose=False)
         print("  %s; %d requirements fail%s" % (g["region"]["name"], len(gf), (": " + ", ".join(f[0] for f in gf)) if gf else ""))
         allfails += gf
@@ -1537,7 +1844,7 @@ def main():
         n = 200
         tally, words, tables = Counter(), Counter(), 0
         for s in range(1, n + 1):
-            rg = build_seed(1000 + s)
+            rg = seed_packs(build_seed(1000 + s), 1000 + s)
             fl = report(rg, verbose=False)
             for f in fl:
                 tally[f[0]] += 1

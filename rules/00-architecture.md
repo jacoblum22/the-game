@@ -1427,7 +1427,9 @@ phase 3 (recover). "Once per encounter" means `per: conflict_end`; "once per res
 **00.11.1 One generator for all emergent content.** `[D]` Every domain in which content is produced by
 circumstance rather than picked from a menu runs this one algorithm: **loot** (08), **craft** (08),
 **gift** (08; patron, order and faction boons), **item_ability** (08; the ability an item grants),
-**absorb** (04; the calling-gated monster-power trait), **birth** (02; P1 birth variance) and **pick**
+**absorb** (04; the calling-gated monster-power trait), **birth** (02; P1 birth variance), **cast** (12; `social.yaml#cast`: the pool is the store's
+existing NPCs gated by role, scope and seal; the fill is weighted by fit; an empty pool goes to 12.11.1's generation
+or the answer "no one you know"; it answers "who is <role>?" and "who would know?") [revision: R2-D] [DL-12-60] and **pick**
 (04; `gen.pick`, the tier pick: a tag-gated `chosen` selection from 05's ability pool using steps 1, 2, 4
 and 6 of 00.11.3, PR-04-5) [amended: IR ch.04 #1]. `gen.birth` uses three declared extensions: slots
 drawn by **layer** (`magnitude_layers`), `degree: none` for every draw, and an entry-level
@@ -1596,7 +1598,10 @@ roll, yes) · Likely · Even · Unlikely · Remote · Impossible (no roll, no). 
 and the doubles-as-twist rule; ch.12 owns the DM's use of the same Oracle for its own questions and
 any tension shift, which may move the rung by at most one. The answer is written as a fact at once
 (`source: oracle`), and a "no" is followed in the same breath by what *is* there (P16). Established
-facts are never asked again. *Worst case (J):* a one-rung odds error shifts the chance by 15–25 points,
+facts are never asked again. **The proposal form** [revision: R2-D] [DL-12-60]: for ordinary knowledge (T1b) the DM may
+frame a candidate answer as the question ("Does the innkeeper know that the north road is washed out?"), at the odds
+12.10.6(d) fixes before the roll; only the settled answer is narrated. A "no" to a knowledge question is followed in
+the same breath by who would know (casting, 00.11 `cast`; PR-12-10). *Worst case (J):* a one-rung odds error shifts the chance by 15–25 points,
 logged with the question (class i).
 
 ### 00.13 The resolution frame
