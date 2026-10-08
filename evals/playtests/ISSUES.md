@@ -77,14 +77,14 @@ Status: open · fixing (round N) · fixed (commit) · logged (ledger id) · wont
 | P-069 | bug | med | Narration names NPCs the PC was never introduced to ("Tikash" for "the figure") | 184224-explorer 27–30 | fixed (db07b1d, 4be967b); ledger I-149 |
 | P-070 | bug | low | Journal "people you have met" lists NPCs not yet met | 185133-breaker 23 | fixed (db07b1d) |
 | P-071 | bug | low | "what are my options?" answered with only "What do you do?" once (no LEADS) | 185133-breaker 18 | open (watch) |
-| P-072 | bug | low | OFFER stakes "Source: pc s hand held" (raw predicate) | 185739-fighter 26–27 (on 0a0acdf, before 172b2b2) | fixing (polish fixer) |
-| P-073 | bug | low | Possession contradicts itself across turns (pendant in her palm / not in her hand) | 185739-fighter 20, 31 | fixing (polish fixer) |
+| P-072 | bug | low | OFFER stakes "Source: pc s hand held" (raw predicate) | 185739-fighter 26–27 (on 0a0acdf, before 172b2b2) | fixed (3c6cbbf) |
+| P-073 | bug | low | Possession contradicts itself across turns (pendant in her palm / not in her hand) | 185739-fighter 20, 31 | fixed (3c6cbbf: holder written on mention, checked) |
 | P-074 | bug | med | Creation: "Wanderer?" at the way-of-life step became Soldier (the default) with no explanation | 190015-newcomer setup (10 notes) | fixed (036cd7f) |
-| P-075 | bug | med | An NPC already agreed ("Yes" to meeting) yet the follow-up ask rolls at 50% with a closed-door risk | 185715-talker 28–31 | fixing (polish fixer) |
-| P-076 | polish | low | Near-miss options 1 and 3 show the same cost text | 185715-talker 22 | fixing (polish fixer) |
-| P-077 | bug | low | Garbled position text: "moved within Barrowburn… not in Barrowburn and can be found in the village" | 185715-talker 18 | fixing (polish fixer) |
-| P-078 | polish | med | NPC repeats the same stock line every turn ("Mark me"); freshness covers images, not dialogue | 185715-talker 21–26 | fixing (polish fixer) |
-| P-079 | bug | high | Opening still falls back to one line in 7/27 runs; last reason always screen 12.2.7 "a part of the player's message is not answered" though the opening has no message; crowd reactions to the incident cut as unsourced | 7 runs (191540, 185715, 183858, 182337, 170207, 170200, 170157) | fixing |
+| P-075 | bug | med | An NPC already agreed ("Yes" to meeting) yet the follow-up ask rolls at 50% with a closed-door risk | 185715-talker 28–31 | fixed (3c6cbbf: riding); ledger I-151 |
+| P-076 | polish | low | Near-miss options 1 and 3 show the same cost text | 185715-talker 22 | fixed (3c6cbbf) |
+| P-077 | bug | low | Garbled position text: "moved within Barrowburn… not in Barrowburn and can be found in the village" | 185715-talker 18 | fixed (3c6cbbf) |
+| P-078 | polish | med | NPC repeats the same stock line every turn ("Mark me"); freshness covers images, not dialogue | 185715-talker 21–26 | fixed (3c6cbbf: freshness covers NPC lines) |
+| P-079 | bug | high | Opening still falls back to one line in 7/27 runs; last reason always screen 12.2.7 "a part of the player's message is not answered" though the opening has no message; crowd reactions to the incident cut as unsourced | 7 runs (191540, 185715, 183858, 182337, 170207, 170200, 170157) | fixed (ec9470e): 7/7 recorded openings now narrate; ledger I-150 |
 | P-080 | bug | low | A message with speech plus "what do I know so far?" handled only the speech | 191540-breaker 24 | open |
 | P-081 | polish | low | NPC reply contains a stray quoted line that reads like a leaked hint ("Look at who's listening…") | 191540-breaker 23–26 | open |
 | P-082 | bug | med | Repeated tracking loops with no progress ("the mist hides it, do you press on?"); an extended search never advances | 191941-fighter 24–29 | open (queued) |
