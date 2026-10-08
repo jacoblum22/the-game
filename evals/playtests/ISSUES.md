@@ -95,3 +95,5 @@ Status: open · fixing (round N) · fixed (commit) · logged (ledger id) · wont
 | P-087 | bug | med | REDIRECT option "Try it anyway" answered "You cannot do it that way" with no roll: dead end | 192159-newcomer 33 | open |
 | P-088 | polish | low | [CUT?] prompt appears after only a few exchanges, mid-conversation | 192340-talker 20 | open |
 | P-089 | bug | med | At the near-miss menu Enter silently picked "Let it fail" (the OFFER re-prompt fix doesn't cover near-miss) | 192340-talker 28 | open |
+| P-090 | bug | high | PC's own kit not recognised: the sheet lists a rapier, drawing it → "your hand finds no blade", action rejected | 193420-fighter 24–30 | fixing |
+| P-091 | bug | low | Fallback "You try to garett's grip on her arm loosens" (possessive restatement) | 193420-fighter 27 | fixing (with P-090) |
