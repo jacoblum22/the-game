@@ -244,6 +244,12 @@ ruleset or the whole history. Each turn it receives exactly:
      of everyone and everything in view; the written words on things in view; every open commitment
      (each involves the PC, 15.7.6); the present NPCs' active memories (never the archived ones); the
      open pause. A thing with written words stays in view however much else lies at the place.
+   - **People present** (the `cast` budget) [revision: R2-A2]: full records for the PC, then the beat's
+     target and anyone the message names, then those the PC dealt with most recently, then by 12.6.6
+     weight; everyone else present is named on one compact `also here:` line (name and role, within
+     `cast_line`, then "and N more"), so a home base that gathers residents does not grow the view and
+     nobody present drops out of sight. The pins too are capped: by kind (written words, commitments,
+     memories), then newest.
    - **Ranked** (fills the facts budget): every other fact about what is in view, by **salience**
      (a memory's salience, 3 for a commitment, else 1) **+ recency** (2 for this scene, 1 for the last,
      else 0: it decays per scene, not per turn, so a long scene does not push out its own start)

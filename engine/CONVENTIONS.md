@@ -228,7 +228,9 @@ Contract: `specs/004-playable-prototype/contracts/model-calls.md`. Nothing in `e
   archived ones, 12.11.7) within `pinned`, then the rest ranked by salience + recency (per scene) + relevance
   (+2: subject/value in `focus`) + adjacency (+1) within `facts`; no `trg.*` flags. `focus_ids(state, text,
   target)` = the beat target + entities named in the message: pass the same ids to `schema_context(focus=)` and
-  `build_packet(focus=)`. `fit(rows, cost, room)`, `pc_id(state)`, `entity_names(state, ids)`. Packets and schema
+  `build_packet(focus=)`. `cast_order(state, people, focus)` ranks the people present for a full profile (focus,
+  most recent dealings, 12.6.6 weight); `also_here(labels, room, ids=True)` is the capped compact line for the
+  rest (`view_budget.cast` / `cast_line`, R2-A2). `fit(rows, cost, room)`, `pc_id(state)`, `entity_names(state, ids)`. Packets and schema
   enums both use these, so fact ids offered in an enum are the ones the view shows.
 
 ## engine/dm packet + schemas API (T106, T026)

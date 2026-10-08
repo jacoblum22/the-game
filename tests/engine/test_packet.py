@@ -151,6 +151,8 @@ def test_view_tokens_stay_flat_over_300_scenes_and_pins_stay(tmp_path: Path) -> 
             walk_on = f"npc.walk_on_{n}"
             tx.add(entity("npc", f"Walk On {n}", tx=tx, data={"role": "dock hand"}))
             tx.add(entity("thread", f"Thread {n}", tx=tx))
+            # they stay at the place, so the cast present grows every scene (R2-A2: a home base gathers residents)
+            tx.add(Event.of("position_set", source="test", entity=walk_on, location="loc.salt_harbor"))
             sid = tx.mint("scn")
             tx.add(Event.of("scene_started", scene_id=sid, scene={
                 "scene_id": sid, "place_id": "loc.salt_harbor", "cast_present": ["npc.mara_voss", walk_on],
@@ -175,3 +177,9 @@ def test_view_tokens_stay_flat_over_300_scenes_and_pins_stay(tmp_path: Path) -> 
     assert "text = NO MOORING AFTER DARK" in text and "commitment.c1" in text
     assert all(f"memory.{n} = " in text for n in range(296, 301))
     assert "memory.295 = " not in text and "memory.1 = " not in text
+    # R2-A2: 300 people present; full profiles within the cast budget (Mara holds the newest memories), the
+    # rest on one capped "also here" line that counts whoever does not fit; the beat's target gets a profile
+    assert len(store.state.scene.cast_present) > 300  # type: ignore[union-attr]
+    assert "npc.mara_voss: Mara Voss" in text and "npc.walk_on_1: " not in text
+    assert text.count("\nalso here: ") == 1 and "more" in text.split("\nalso here: ")[1].split("\n")[0]
+    assert "npc.walk_on_1: Walk On 1" in render_view(scene_view(store.state, focus=["npc.walk_on_1"]))

@@ -21,7 +21,8 @@ T = TypeVar("T")
 VALUE_CHARS = 160  # a fact value as the view shows it (packet.MAX_VALUE_CHARS)
 READING = re.compile(r"\b(read|reads|reading|wording|inscription|lettering|what (?:does|do|did) (?:it|the \w+|they) "
                      r"say|what it says|what's written|what is written)\b", re.I)  # the player reads something
-WRITTEN = ("text", "inscription", "reads", "words", "says", "wording", "writing")  # a thing's written words (P-110)
+CAST_KINDS = ("npc", "companion", "adversary")  # people who can be present (as engine.world.places.cast_at)
+WRITTEN = ("text","inscription", "reads", "words", "says", "wording", "writing")  # a thing's written words (P-110)
 
 
 def written_words(state: WorldState, eid: str) -> Any:
@@ -101,6 +102,32 @@ def scene_scope(state: WorldState, budget: dict[str, int] | None = None) -> list
             kept = set(fit([i for i in reversed(here) if i not in pinned], lambda i: _entity_tokens(state, i), room))
             ids.extend(i for i in here if i in pinned or i in kept)
     return [i for i in dict.fromkeys(ids) if i in state.entities]
+
+
+def cast_order(state: WorldState, people: Iterable[str], focus: Iterable[str] = ()) -> list[str]:  # rule: 12.2.4
+    """The people present, most deserving of a full profile first (12.2.4 item 3): the beat's target and anyone
+    the message names (`focus`), then those the PC dealt with most recently (the newest fact about them the PC
+    learned, or memory of the PC they hold), then by 12.6.6 weight, newest introduced first."""
+    want = set(focus)
+    last: dict[str, int] = {}
+    for fid, k in state.knowledge.get(pc_id(state) or "", {}).items():
+        if (f := state.facts.get(fid)) is not None:
+            last[f.subject] = max(last.get(f.subject, 0), k.seq)
+    for f in state.facts.values():
+        if f.predicate.startswith("memory."):
+            last[f.subject] = max(last.get(f.subject, 0), f.valid_from_seq)
+    weights = state.meta.get("cast_list") or {}
+    order = {eid: n for n, eid in enumerate(state.entities)}
+    return sorted(people, key=lambda i: (i not in want, -last.get(i, 0), -int(weights.get(i, 1)), -order.get(i, 0)))
+
+
+def also_here(labels: dict[str, str], room: int, *, ids: bool = True) -> str:  # rule: 12.2.4
+    """One compact line naming the people present without a full profile (`id label`, or the label alone), within
+    `room` tokens; the ones that do not fit are counted ("and N more"), so nobody present vanishes from sight."""
+    words = {i: f"{i} {v}" if ids else v for i, v in labels.items()}
+    kept = fit(list(words), lambda i: tokens(words[i] + "; "), room)
+    more = len(words) - len(kept)
+    return "also here: " + "; ".join([*(words[i] for i in kept), *([f"and {more} more"] if more else [])])
 
 
 def _sealed(state: WorldState, f: FactRecord) -> bool:

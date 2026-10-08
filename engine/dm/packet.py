@@ -10,8 +10,9 @@ come first, for prompt caching: nothing volatile precedes the view (DL-12-38).
 
 `view` may be a `WorldState` (rendered with `scene_view` + `render_view`), a narrator-view dict (rendered), or a
 pre-rendered string. The rendered view is scene-scoped and held to per-section token budgets
-(`pacing.yaml#packet.view_budget`: pinned and ranked facts, things, clocks, threads, known cast), so the packet
-does not grow with the length of the game (SC-002). Each entity is rendered
+(`pacing.yaml#packet.view_budget`: pinned and ranked facts, people present, things, clocks, threads, known cast),
+so the packet does not grow with the length of the game (SC-002). People present beyond the `cast` budget share
+one `also here:` line (R2-A2). Each entity is rendered
 as `<id>: <name>` and then a `name: <name>` line: the offline model reads names from `name:` lines and entity
 aliases from the text after an id.
 """
@@ -25,7 +26,18 @@ from engine.build.compile_cards import CardIndex, RuleCard
 from engine.data.loader import load_rules
 from engine.llm.base import Packet, Role
 from engine.retrieve.cards import core_cards, max_cards
-from engine.retrieve.scene import entity_names, fit, scene_facts, scene_scope, tokens, view_budget
+from engine.retrieve.scene import (
+    CAST_KINDS,
+    also_here,
+    cast_order,
+    entity_names,
+    fit,
+    pc_id,
+    scene_facts,
+    scene_scope,
+    tokens,
+    view_budget,
+)
 from engine.retrieve.triggers import ActiveTrigger
 from engine.store.projection import WorldState
 from engine.store.views import display_name, name_known, narrator_view
@@ -54,9 +66,11 @@ def _listed(state: WorldState, ids: list[str], weights: Mapping[str, int], room:
 
 def scene_view(state: WorldState, focus: Iterable[str] = ()) -> dict[str, Any]:  # rule: 12.2.4
     """The narrator view of the current scene, within `pacing.yaml#packet.view_budget` (12.2.4 item 3). `focus`
-    (the beat's target, entities the message names) raises a fact's relevance. Nothing sealed is in it (INV-10)."""
+    (the beat's target, entities the message names) raises a fact's relevance and puts a present person first for
+    a full profile. Nothing sealed is in it (INV-10)."""
     from engine.world.social import cast_list, thread_list
 
+    focus = list(focus)
     budget = view_budget()
     scope = scene_scope(state, budget)
     picked = scene_facts(state, scope, focus=focus, budget=budget)
@@ -70,7 +84,7 @@ def scene_view(state: WorldState, focus: Iterable[str] = ()) -> dict[str, Any]: 
     tl = {t["id"]: t["weight"] for t in thread_list(state) if t["status"] == "active" and t["id"] not in scope}
     known = [i for i in others if state.entities[i].kind in ("npc", "companion", "faction")
              and name_known(state, i)]  # people the PC knows by name (12.10.2)
-    return {
+    view: dict[str, Any] = {
         "time": nv["time"],
         "scene": nv["scene"],
         "entities": [nv["entities"][i] for i in scope if i in nv["entities"]],
@@ -84,6 +98,23 @@ def scene_view(state: WorldState, focus: Iterable[str] = ()) -> dict[str, Any]: 
         "known": _listed(state, known, cast_list(state), budget["known"]),
         "open_pause": nv["open_pause"],
     }
+    # The people present beyond the PC: full profiles within `cast`, everyone else on one capped line (R2-A2).
+    by_id = {e["id"]: e for e in view["entities"] if e["id"] != pc_id(state)
+             and state.entities[e["id"]].kind in CAST_KINDS}
+    ranked = cast_order(state, by_id, focus)
+    full = set(fit(ranked, lambda i: tokens("\n".join(_entity_lines(view, by_id[i]))), budget["cast"]))
+    view["entities"] = [e for e in view["entities"] if e["id"] not in by_id or e["id"] in full]
+    rest = {i: _label(by_id[i]) for i in ranked if i not in full}
+    view["also_here"] = also_here(rest, budget["cast_line"]) if rest else ""
+    return view
+
+
+def _label(e: Mapping[str, Any]) -> str:
+    """A present person in a few words: the name the PC knows them by (or a sealed one's slice), and the role."""
+    if "slice" in e:
+        return str(e["slice"])
+    name, role = str(e.get("name", "")), (e.get("data") or {}).get("role")
+    return f"{name} ({_short(role)})" if role and str(role) not in name else name
 
 
 def _bare(tag: Any) -> str:
@@ -125,15 +156,22 @@ def scene_setting(state: WorldState) -> str:  # rule: 12.4.3
         lines.append("- nearby: " + "; ".join(e.data.get("desc") or e.name for e in near[:8]))
     from engine.world.scenes import cast_present
 
-    here = [state.entities[i] for i in cast_present(state) if i not in state.seals]  # met mid-scene too (P-056)
-    for e in here:
-        ed = e.data
+    present: dict[str, str] = {}
+    short: dict[str, str] = {}
+    for i in cast_order(state, [i for i in cast_present(state) if i not in state.seals]):  # met mid-scene too (P-056)
+        ed = state.entities[i].data
         look = ", ".join(str(ed[k]) for k in ("age", "detail", "demeanor") if ed.get(k))
-        who = display_name(state, e.id)
+        who = display_name(state, i)
         role = f", the {ed['role']}" if ed.get("role") and str(ed["role"]) not in who else ""
-        call = "" if name_known(state, e.id) else f'; call them "{who}", as every other screen does'  # P-095
-        lines.append(f"- present: {who}{role}"
-                     + (f" ({look})" if look else "") + call)
+        call = "" if name_known(state, i) else f'; call them "{who}", as every other screen does'  # P-095
+        present[i] = f"- present: {who}{role}" + (f" ({look})" if look else "") + call
+        short[i] = who + (f" ({ed['role']})" if role else "")
+    budget = view_budget()  # the cast budget, as the view's (R2-A2): the rest share one line
+    shown = fit(list(present), lambda i: tokens(present[i]), budget["cast"])
+    lines.extend(present[i] for i in cast_present(state) if i in shown)  # in the scene's order, as the view
+    rest = {i: short[i] for i in present if i not in shown}
+    if rest:
+        lines.append("- " + also_here(rest, budget["cast_line"], ids=False))
     from engine.dm.incident import incident_line
 
     matter = incident_line(state)  # the opening incident's person, as the character knows it (P-067)
@@ -182,38 +220,9 @@ def render_view(view: Mapping[str, Any]) -> str:
     else:
         lines.append("scene: none")
     for e in view.get("entities", []):
-        eid = e["id"]
-        if "slice" in e:
-            lines.append(f"{eid}: {e['slice']}")
-            continue
-        lines.append(f"{eid}: {e.get('name', '')}")
-        lines.append(f"  name: {e.get('name', '')}")
-        if e.get("name_unknown"):  # rule: 12.10.2
-            lines.append(f"  the character does not know their name: call them \"{e.get('name', '')}\" (the words "
-                         "every other screen uses; add how they look if you like), never by a name (not even one "
-                         "in the id) until the record says they gave it")
-        if e.get("exists") not in (None, "exists"):
-            lines.append(f"  state: {e['exists']}")
-        if e.get("tags"):
-            lines.append(f"  tags: {_short(e['tags'])}")
-        data = e.get("data") or {}
-        keys = [k for k in _DESCRIPTIVE_KEYS if k in data] + [k for k in data if k not in _DESCRIPTIVE_KEYS]
-        for k, v in [(k, data[k]) for k in keys][:MAX_DATA_KEYS]:
-            if k not in ("name", "name_known"):
-                lines.append(f"  {k}: {_short(v)}")
-        qs = (view.get("quantities") or {}).get(eid, {})
-        if qs:
-            lines.append("  quantities: " + "; ".join(
-                f"{n} {q['current']}" + (f"/{q['max']}" if q.get("max") is not None else "") for n, q in qs.items()))
-        conds = [c for c in view.get("conditions", []) if c.get("target") == eid]
-        if conds:
-            lines.append("  conditions: " + "; ".join(f"{c['condition_id']} {c['severity']}" for c in conds))
-        lic = (view.get("licenses") or {}).get(eid, [])
-        if lic:
-            lines.append("  licences: " + ", ".join(f"{x['license_id']} ({x.get('grade', '')})" for x in lic))
-        pos = (view.get("positions") or {}).get(eid)
-        if pos and (pos.get("location") or pos.get("flags")):
-            lines.append(f"  position: {pos.get('location') or ''} {_short(pos.get('flags') or [])}".rstrip())
+        lines.extend(_entity_lines(view, e))
+    if view.get("also_here"):
+        lines.append(view["also_here"])
     if view.get("facts"):
         lines.append("facts:")
         lines.extend(f"  {f['id']} about {f['subject']}: {f['predicate']} = {_short(f['value'])}"
@@ -233,6 +242,42 @@ def render_view(view: Mapping[str, Any]) -> str:
         lines.append(f"open pause: {pause.get('pause_id')} {pause.get('kind')}: {pause.get('prompt', '')}"
                      + (f" (choices: {choices})" if choices else ""))
     return "\n".join(lines)
+
+
+def _entity_lines(view: Mapping[str, Any], e: Mapping[str, Any]) -> list[str]:
+    """One entity's block in the view: `<id>: <name>`, its `name:` line, then its record."""
+    eid = e["id"]
+    if "slice" in e:
+        return [f"{eid}: {e['slice']}"]
+    lines = [f"{eid}: {e.get('name', '')}"]
+    lines.append(f"  name: {e.get('name', '')}")
+    if e.get("name_unknown"):  # rule: 12.10.2
+        lines.append(f"  the character does not know their name: call them \"{e.get('name', '')}\" (the words "
+                     "every other screen uses; add how they look if you like), never by a name (not even one "
+                     "in the id) until the record says they gave it")
+    if e.get("exists") not in (None, "exists"):
+        lines.append(f"  state: {e['exists']}")
+    if e.get("tags"):
+        lines.append(f"  tags: {_short(e['tags'])}")
+    data = e.get("data") or {}
+    keys = [k for k in _DESCRIPTIVE_KEYS if k in data] + [k for k in data if k not in _DESCRIPTIVE_KEYS]
+    for k, v in [(k, data[k]) for k in keys][:MAX_DATA_KEYS]:
+        if k not in ("name", "name_known"):
+            lines.append(f"  {k}: {_short(v)}")
+    qs = (view.get("quantities") or {}).get(eid, {})
+    if qs:
+        lines.append("  quantities: " + "; ".join(
+            f"{n} {q['current']}" + (f"/{q['max']}" if q.get("max") is not None else "") for n, q in qs.items()))
+    conds = [c for c in view.get("conditions", []) if c.get("target") == eid]
+    if conds:
+        lines.append("  conditions: " + "; ".join(f"{c['condition_id']} {c['severity']}" for c in conds))
+    lic = (view.get("licenses") or {}).get(eid, [])
+    if lic:
+        lines.append("  licences: " + ", ".join(f"{x['license_id']} ({x.get('grade', '')})" for x in lic))
+    pos = (view.get("positions") or {}).get(eid)
+    if pos and (pos.get("location") or pos.get("flags")):
+        lines.append(f"  position: {pos.get('location') or ''} {_short(pos.get('flags') or [])}".rstrip())
+    return lines
 
 
 # ---------------------------------------------------------------- packet

@@ -16,8 +16,10 @@ lifecycle: provisional
 packet:                                   # 12.2.4
   core: [turn_loop_checklist (T-12-1), invariants (T-00-1), gate_classes (00.12.3), stakes_reach_lever_card (00.3.9, 00.3.14-15)]   # the active-trigger list heads the view [revision: R2-A]
   view_budget:                            # 12.2.4 item 3: tokens per view section (about 4 characters a token), not item counts [revision: R2-A]
-    pinned: 400                           # written words, open commitments, active NPC memories (shown first, never ranked out)
-    facts: 500                            # the ranked facts: salience + recency (per scene) + relevance + adjacency
+    pinned: 400                           # written words, open commitments, active NPC memories (shown first; a hard cap: by that order, then newest) [revision: R2-A2]
+    cast: 320                             # full profiles of the people present beyond the PC: beat target and named, most recently dealt with, then 12.6.6 weight [revision: R2-A2]
+    cast_line: 80                         # the one "also here:" line naming everyone else present, then "and N more" [revision: R2-A2]
+    facts: 500                           # the ranked facts: salience + recency (per scene) + relevance + adjacency
     things: 400                           # things lying at the scene's place beyond those with written words, newest first
     clocks: 120                           # active visible clocks, newest first
     threads: 100                          # active threads by 12.6.6 weight
