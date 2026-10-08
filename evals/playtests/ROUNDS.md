@@ -26,3 +26,4 @@ Ledger: I-131..I-136.
 | breaker 170157 | 12f51f2 | 17 | 1.94 (r1 2.14) | 2 (r1 3 of 7) | prose now good; NPC replies cut (P-026); OFFER leaks (P-027); pause questions (P-028) |
 | newcomer 170200 | 12f51f2 | 17 | 2.06 (r1 1.39) | 1 (r1 6) | setup now clear; NPC never speaks (P-026); talk redirected (P-031); movement unwritten (P-032) |
 | fighter 170318 | 12f51f2 | 17 | 2.0 (r1 2.67) | 3 (r1 9) | odds screens clear; movement (P-032); success reveals nothing (P-025); note leak (P-034) |
+| talker 170207 | 12f51f2 | 17 | 2.41 (r1 2.67) | 2 (r1 13) | conversations stall: NPCs never speak (P-026); friend bond contradicted (P-036); held until P-026 merges |
