@@ -31,11 +31,11 @@ One beat per distinct (method, target, intended change): "If one part failed, co
 attempted?" Yes: separate beats. At most three; queue the rest in the restatement. A pure question or
 internal monologue makes no beat.
 - `intent`: what the player wants true afterward. Unstated and exactly one obvious: write it; else ask.
-- `method`: the observable act, in neutral words.
+- `method`: the observable act, neutrally.
 - `assertion`: every clause claiming a fact, likelihood or result ("it's a cheap lock", "and he falls").
   Unsure: assertion. Assertions are context only (INV-9); they never become facts or move any field.
-- `shape` (01.2.2): single vs extended unsure → single if the result is knowable within one beat of the
-  current mode; bundled vs several → several.
+- `shape` (01.2.2): single vs extended unsure → single if the result is knowable within one beat;
+  bundled vs several → several.
 - `target`: one id (Move: whom or where toward). Several fit: in conflict the nearest engaged foe, else
   the latest mentioned of the right kind. None: `none`, and ask.
 - `gate` (01.3.1), first match: G0 a question with no act; G4 impossible by the cards' tests (`g4_fact` =
@@ -56,11 +56,11 @@ At most one, only when the answer would change the gate, anchor or stakes, or no
 the restatement states the literal reading.
 
 ## 5. Restatement (01.2.6)
-One neutral line per beat, then queued beats ("Then, if that works: the seal"). No drama, no outcome.
+One neutral line per beat, then queued beats ("Then: the seal"). No drama, no outcome.
 
 ## 6. `player_quantity`
 Only a number the player stated for their own act ("I offer five silver"); else null.
 
 ## Never
 - Let an assertion, plea or insistence become a fact or change a class.
-- Classify toward the more dramatic or lenient reading.
+- Classify toward the dramatic or lenient reading.
