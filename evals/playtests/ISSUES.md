@@ -87,8 +87,8 @@ Status: open · fixing (round N) · fixed (commit) · logged (ledger id) · wont
 | P-079 | bug | high | Opening still falls back to one line in 7/27 runs; last reason always screen 12.2.7 "a part of the player's message is not answered" though the opening has no message; crowd reactions to the incident cut as unsourced | 7 runs (191540, 185715, 183858, 182337, 170207, 170200, 170157) | fixed (ec9470e): 7/7 recorded openings now narrate; ledger I-150 |
 | P-080 | bug | low | A message with speech plus "what do I know so far?" handled only the speech | 191540-breaker 24 | open |
 | P-081 | polish | low | NPC reply contains a stray quoted line that reads like a leaked hint ("Look at who's listening…") | 191540-breaker 23–26 | open |
-| P-082 | bug | med | Repeated tracking loops with no progress ("the mist hides it, do you press on?"); an extended search never advances | 191941-fighter 24–29 | open (queued) |
-| P-083 | polish | med | Cost form copied from the menu example, not fitted to the scene ("left on the far side, down the well, stuck in a beam" in a grassy field) | 191941-fighter 30–31 | open (queued) |
+| P-082 | bug | med | Repeated tracking loops with no progress ("the mist hides it, do you press on?"); an extended search never advances | 191941-fighter 24–29 | fixed (cc79805: progress clock); ledger I-154e |
+| P-083 | polish | med | Cost form copied from the menu example, not fitted to the scene ("left on the far side, down the well, stuck in a beam" in a grassy field) | 191941-fighter 30–31 | fixed (cc79805) |
 | P-084 | bug | critical | Crash loop: an Oracle answer stored as fact "wants" = True replaced an NPC's wants list; every later turn raised "'bool' object is not iterable" ("Sorry, something went wrong") until the run ended | 193315-breaker inputs 21–31 | fixed (Oracle never writes NPC list fields; readers skip non-lists) |
 | P-085 | bug | low | Captain's name swapped to another NPC's ("Vesas de Morois") for one line; a horse appears from nowhere | 191535-explorer 29–31 | open |
 | P-086 | polish | med | Three hidden Observe checks in a row give only vague results ("the shape does not come clearer"); the player learns nothing | 191535-explorer 19–26 | fixed (0c15da2) |
@@ -99,11 +99,11 @@ Status: open · fixing (round N) · fixed (commit) · logged (ledger id) · wont
 | P-091 | bug | low | Fallback "You try to garett's grip on her arm loosens" (possessive restatement) | 193420-fighter 27 | fixed (a31eabe) || P-092 | polish | low | "[CUT?] Move on or stay a while." doesn't say what Enter does | 194948-newcomer 35, 38 | open |
 | P-093 | polish | low | Setup step 12 asks to keep/re-roll month names without showing them | 194948-newcomer 19 | open |
 | P-094 | polish | low | A notice's lettering line repeats every turn (object text not covered by freshness) | 194948-newcomer 25–36 | open |
-| P-095 | bug | med | Narrated cast not in the store: opening describes a herb-wife, officer, child, faction heads; engine treats only one NPC as present and they vanish; same NPC is "grieving old man" in prose but "the boatman" in OFFER/LEADS; LEADS say someone is "here with you" who never appeared | 195445-breaker 17–31 | fixing |
-| P-096 | bug | low | "It works. Coming up the road agrees." (description phrase used as a name) | 194952-talker 20 | fixing |
-| P-097 | bug | med | Journal/what-you-know garbled: "The poor quarter is at within Cornburn", "speech is said the journey's origin" | 194952-talker 31 | fixing |
+| P-095 | bug | med | Narrated cast not in the store: opening describes a herb-wife, officer, child, faction heads; engine treats only one NPC as present and they vanish; same NPC is "grieving old man" in prose but "the boatman" in OFFER/LEADS; LEADS say someone is "here with you" who never appeared | 195445-breaker 17–31 | fixed (e17a4f9) |
+| P-096 | bug | low | "It works. Coming up the road agrees." (description phrase used as a name) | 194952-talker 20 | fixed (7b4eadf) |
+| P-097 | bug | med | Journal/what-you-know garbled: "The poor quarter is at within Cornburn", "speech is said the journey's origin" | 194952-talker 31 | fixed (7b4eadf: 614 fact shapes swept) |
 | P-098 | bug | med | Travel to another place fell back to "You try to reach Marlwall. It works." with no arrival description | 194940-explorer 31 | open |
-| P-099 | bug | high | In a fight, closing/stepping/circling writes no position: narration cut, 3 fallbacks | 195734-fighter turns 2, 12, 13 | fixing |
-| P-100 | bug | med | "I go all in" (risky) produced no OFFER/odds screen | 195734-fighter 31 | fixing |
-| P-101 | bug | med | After a critical failure \"you're hurt\" but no harm/STATUS line, no menu; "how hurt am I?" unanswered | 195734-fighter 26–29 | fixing |
-| P-102 | bug | low | Parroting screen may have fired on the PC's own quoted speech ("I accept…") | 195734-fighter turn 2 | fixing (check) |
+| P-099 | bug | high | In a fight, closing/stepping/circling writes no position: narration cut, 3 fallbacks | 195734-fighter turns 2, 12, 13 | fixed (f4caed6) |
+| P-100 | bug | med | "I go all in" (risky) produced no OFFER/odds screen | 195734-fighter 31 | fixed (f4caed6: attacks never ride) |
+| P-101 | bug | med | After a critical failure \"you're hurt\" but no harm/STATUS line, no menu; "how hurt am I?" unanswered | 195734-fighter 26–29 | fixed (f4caed6: Changed line, how-hurt answered) |
+| P-102 | bug | low | Parroting screen may have fired on the PC's own quoted speech ("I accept…") | 195734-fighter turn 2 | fixed (f4caed6: false positive) || P-103 | bug | critical | Combat core: a successful Strike deals no harm to its target; conflict mode never starts, so bands are never seeded | f4caed6 fixer report (195734-fighter turn 7) | fixing |
