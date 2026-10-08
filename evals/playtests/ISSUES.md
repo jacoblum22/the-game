@@ -7,15 +7,21 @@ Status: open · fixing (round N) · fixed (commit) · logged (ledger id) · wont
 
 | ID | Class | Sev | Issue | Evidence | Status |
 |---|---|---|---|---|---|
-| P-001 | bug | high | Raw pydantic error "1 validation error for OracleResult … valid boolean, input_value=[items]" printed to the player as game text | run 20261007-155118 input 26 | fixing (r1) |
-| P-002 | bug | high | Claim check doesn't converge: 5/7 turns fell back. Redrafts re-extract all sentences and fail ones that passed; unnamed background figures' ambient acts cut as unsourced_change; Oracle "yes" still forces a redraft; elapsed-time and empty-reason contradictions | 20261007-155118 turns 1,2,4,6,7 | fixing (r1) |
-| P-003 | bug | high | Plain fallback text reads as debug output: "X? Yes. Y? No.", "No roll: trivial", "Possible now: …", "Time passes ( intervals)", infinitive restatements | 20261007-155118 turns 2,4,6,7 | fixing (r1) |
-| P-004 | bug | high | Hunter's sheet says "good at tracking", then tracking is redirected: "needs Tracking, which you have not learned" | 20261007-155118 input 27–29 | fixing (r1) |
-| P-005 | polish | med | OFFER block jargon: "Mode: fallback — DC +5, reach capped at limited", "time, S1", garbled stakes | 20261007-155118 input 28–29 | fixing (r1, with P-004) |
-| P-006 | bug | low | Name step says "Add he, she or they", but "Branric Blackfield, she" then asks pronouns again | 20261007-155118 input 22 | open |
+| P-001 | bug | high | Raw pydantic error "1 validation error for OracleResult … valid boolean, input_value=[items]" printed to the player as game text | run 20261007-155118 input 26 | fixed (merged in integrate-r1) |
+| P-002 | bug | high | Claim check doesn't converge: 5/7 turns fell back. Redrafts re-extract all sentences and fail ones that passed; unnamed background figures' ambient acts cut as unsourced_change; Oracle "yes" still forces a redraft; elapsed-time and empty-reason contradictions | 20261007-155118 turns 1,2,4,6,7 | fixed (merged in integrate-r1) |
+| P-003 | bug | high | Plain fallback text reads as debug output: "X? Yes. Y? No.", "No roll: trivial", "Possible now: …", "Time passes ( intervals)", infinitive restatements | 20261007-155118 turns 2,4,6,7 | fixed (merged in integrate-r1) |
+| P-004 | bug | high | Hunter's sheet says "good at tracking", then tracking is redirected: "needs Tracking, which you have not learned" | 20261007-155118 input 27–29 | fixed (merged in integrate-r1) |
+| P-005 | polish | med | OFFER block jargon: "Mode: fallback — DC +5, reach capped at limited", "time, S1", garbled stakes | 20261007-155118 input 28–29 | logged I-134 (follows 12.15.2) |
+| P-006 | bug | low | Name step says "Add he, she or they", but "Branric Blackfield, she" then asks pronouns again | 20261007-155118 input 22 | fixed (0046d78) |
 | P-007 | polish | low | "a hunter, half-elf" silently becomes human ("No elves live in this land" shown in passing only) | 20261007-155118 input 18–19 | open |
 | P-008 | harness | — | Player never saw its own typed lines, so it reported "skipped" steps that weren't skipped; notes repeated old complaints | 20261007-155118 inputs 18–24 | fixed (harness echo, round 2 on) |
-| P-009 | polish | med | World-seed summaries too vague to judge: "5 more" places, "the enemy and the prisoner", rumors/wilds as counts only; "3 more" powers unnamed | 20261007-155118 inputs 12–16 | open |
-| P-010 | polish | low | Jargon in setup and sheet without explanation: keepers, haven, Kinspeech, dread, Resolve | 20261007-155118 inputs 8–13, 24 | open |
+| P-009 | polish | med | World-seed summaries too vague to judge: "5 more" places, "the enemy and the prisoner", rumors/wilds as counts only; "3 more" powers unnamed; no way to see the rest | 155118 12–16; 161327-breaker 14–22 | fixed (0046d78) |
+| P-010 | polish | low | Jargon in setup and sheet without explanation: keepers, haven, Kinspeech, dread, Resolve | 20261007-155118 inputs 8–13, 24 | fixed (0046d78) |
 | P-011 | polish | low | Mixed setup: "step N of 14" titles don't match the question asked; 14 keep/re-roll screens feel long | 20261007-155118 inputs 5–10 | open |
 | P-012 | bug | med | A critical failure is announced ("goes badly wrong") but the player never learns what happened | 20261007-155118 turn 6 | open (check after P-002/P-003) |
+| P-013 | bug | med | A question at a setup step ("what does haven mean?") prints "Here is a little more about each choice" with only the option labels, then the whole step again; repeated questions loop | 161327-breaker inputs 8–35 (25 notes) | fixed (0046d78) |
+| P-014 | bug | low | Welcome + step 1 screen reprinted in full after each unparsed answer | 161327-breaker inputs 24–35 | fixed (0046d78) |
+| P-015 | polish | low | Livelihood list shows 7 + "14 other ways of life", then all 21 on the next screen | 161327-breaker inputs 27–34 | open |
+| P-016 | bug | med | Multi-part message ("what are my options? also, who's standing at the gate?") fails screen 12.2.7 "a part of the player's message is not answered" and falls back | 161327-breaker turn.5 | fixed (fd898d8: narrator/checker get only in-fiction parts) |
+| P-017 | polish | low | [LEADS] block repeated on consecutive "what are my options?" | 161327-breaker inputs 38–39 | open |
+| P-018 | bug | high | Beginner never got the scene described: mixed "I'm new / what are my options? / describe where I'm standing" got placeholder notes and repeated LEADS for 10+ turns. Root cause: redrafts failed, fallback had nothing for a question | 161329-newcomer turns 2–11 | fixed (fd898d8); ledger I-135 |
