@@ -45,7 +45,7 @@ Status: open · fixing (round N) · fixed (commit) · logged (ledger id) · wont
 | P-036 | bug | med | Narration says "Edda is not your friend" though the sheet lists Edda as the PC's friend (creation bond does not reach the NPC's standing?) | 170207-talker turns 13–15 | fixed (be20402); ledger I-142 |
 | P-037 | polish | low | Named NPC drifts back to "a woman" / "stranger" after being named (Bixnik Quick-Fingers) | 170207-talker turns 10–15 | open |
 | P-038 | bug | high | "What do I know about the land around Hawkstead?" read as a Mind sorcery attempt → REDIRECT for lacking the spell; plain "what do I know?" only repeats scene text (with P-019) | 170204-explorer inputs 20–23 | fixed (1e3ec97) |
-| P-039 | bug | low | Garbled Oracle twist fragment in narration: "Can say it in answer to a question asked aloud, but lesser"; PC referred to in third person ("he asks") | 170204-explorer inputs 25–26 | fixed (17eebe7), except PC as "he" after a You-sentence |
+| P-039 | bug | low | Garbled Oracle twist fragment in narration: "Can say it in answer to a question asked aloud, but lesser"; PC referred to in third person ("he asks") | 170204-explorer inputs 25–26 | fixed (17eebe7 + db07b1d: verbs after and/then in second person) |
 | P-040 | bug | high | Fallback mangles restatements: "You try to gerella is pinned against the gatepost", "Knows where … can not be found"; "It works." before any roll | 172629-fighter inputs 19–31 | fixed (17eebe7) |
 | P-041 | bug | med | Narration contradicts itself across turns: a notice reads "NO QUESTIONS ASKED", a later turn says it does not (mentioned object's text not stored or not shown back) | 172552-newcomer inputs 27–35 | fixed (be20402) |
 | P-042 | polish | low | "What do I know" answers show raw Oracle predicates ("name — yes") | 03a9ba7 fixer report | fixed (44d181e) |
@@ -74,8 +74,8 @@ Status: open · fixing (round N) · fixed (commit) · logged (ledger id) · wont
 | P-066 | bug | med | OFFER stakes text garbled and cut mid-word: "citing not no one is watching the cobbles where the folded paper lies w" | 183202-breaker inputs 27–28 | fixed (172b2b2) |
 | P-067 | rules | high | Opening says "someone is missing" but never who; nothing in the store names them, so the hook stays empty for the whole session | 183858-fighter 18–30; 155118, 161320 (same) | fixed (00b6534: incident bound to a seed NPC with witnesses); ledger I-148 |
 | P-068 | bug | med | NPC "answers" by repeating the player's own quoted line back as his dialogue | 183858-fighter inputs 20–25 | fixed (00b6534) |
-| P-069 | bug | med | Narration names NPCs the PC was never introduced to ("Tikash" for "the figure") | 184224-explorer 27–30 | fixing |
-| P-070 | bug | low | Journal "people you have met" lists NPCs not yet met | 185133-breaker 23 | fixing (with P-069) |
+| P-069 | bug | med | Narration names NPCs the PC was never introduced to ("Tikash" for "the figure") | 184224-explorer 27–30 | fixed (db07b1d, 4be967b); ledger I-149 |
+| P-070 | bug | low | Journal "people you have met" lists NPCs not yet met | 185133-breaker 23 | fixed (db07b1d) |
 | P-071 | bug | low | "what are my options?" answered with only "What do you do?" once (no LEADS) | 185133-breaker 18 | open (watch) |
 | P-072 | bug | low | OFFER stakes "Source: pc s hand held" (raw predicate) | 185739-fighter 26–27 (on 0a0acdf, before 172b2b2) | fixing (polish fixer) |
 | P-073 | bug | low | Possession contradicts itself across turns (pendant in her palm / not in her hand) | 185739-fighter 20, 31 | fixing (polish fixer) |
