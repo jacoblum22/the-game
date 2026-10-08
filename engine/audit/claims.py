@@ -413,9 +413,11 @@ def _incident_given(ctx: _Ctx) -> bool:  # rule: 12.16.16
 
 def _addressed(ctx: _Ctx, npc: str) -> bool:  # rule: 12.2.9
     """The PC addressed or acted on this NPC this turn: a beat targets them, a part of the player's message names
-    them, or the record gives them a response row."""
+    them, the record gives them a response row, or a question this turn asks what they said or hold (an Oracle
+    entry on them: "What is the warning?" is put to the one who offered it, so she answers, not another, P-118)."""
     r = ctx.record
     return (any(npc in b.targets for b in r.beats) or any(a.npc == npc for a in r.npc_actions)
+            or any(o.subject == npc for o in r.oracle)
             or any(ctx.entity_named(p.text, among=[npc]) for p in r.parts if p.cls != "OOF_QUESTION"))
 
 
@@ -712,6 +714,8 @@ def _harm(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: 12.3.1
             return _v(c, i, "unsourced_change" if c.asserts_change else "contradicted", state_words)
         if c.asserts_change and not harm_write:
             return _v(c, i, "unsourced_change", state_words, reason="no harm was written this turn")
+        return _v(c, i, "supported")
+    if harm_write and state_words != "unhurt":  # harm written this turn (a foe's landed strike) in any words (P-116)
         return _v(c, i, "supported")
     return _v(c, i, "undetermined", state_words, fix="cut", reason="harm words the store cannot settle")
 
