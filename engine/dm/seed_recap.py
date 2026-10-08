@@ -15,7 +15,7 @@ from typing import Any
 from engine.dm import setup_text as T
 from engine.gen._seed_lib import data as seed_data
 from engine.gen._seed_steps import STEP_QUESTIONS
-from engine.gen.world_seed import SeedAnswer, SeedStep
+from engine.gen.world_seed import SeedAnswer, SeedStep, headline_people
 
 AUTO = ("ws.q.hybrid_none", "ws.q.relics_magic")  # taken by the dice, never asked (setup.yaml says why)
 _TERRAIN = {"deepwood": "deep forest", "glacier": "glaciers", "ruin": "ruins", "mountains": "mountains",
@@ -193,9 +193,7 @@ def _s7(st: dict[str, Any], step: SeedStep, words: dict[str, str]) -> list[str]:
 def _s8(st: dict[str, Any], step: SeedStep, words: dict[str, str]) -> list[str]:
     npcs = st["S"]["npcs"]
     rulers = next((f["name"] for f in st["factions"] if f.get("role") == "rulers"), None)
-    picked = [n for n in npcs if rulers and n["role"] == f"head of {rulers}"]
-    picked += [n for n in npcs if n["role"] in ("innkeeper", "smith", "captain of the gate", "healer")]
-    shown = [f"{n['name']} ({n['role'].replace(' of The ', ' of the ')})" for n in picked[:4]]
+    shown = [f"{n['name']} ({n['role'].replace(' of The ', ' of the ')})" for n in headline_people(npcs, rulers)]
     home = _places(st)[st["hid"]]["name"]
     if len(npcs) <= SHORT:
         return [f"The people you may meet in and around {home} are {_and(_people(st))}."]

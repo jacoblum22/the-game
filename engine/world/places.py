@@ -28,7 +28,7 @@ from typing import Any
 from pydantic import BaseModel, Field
 
 from engine import ids
-from engine.gen.world_seed import SeededWorld
+from engine.gen.world_seed import SeededWorld, headline_people
 from engine.retrieve.anchors import natural_key
 from engine.store.db import Transaction
 from engine.store.events import ClockRecord, EntityRecord, Event
@@ -113,8 +113,12 @@ def seed_world_into_store(tx: Transaction, world: SeededWorld) -> dict[str, str]
             id=thread_ids[t.id], kind="thread", name=t.text[:60], visibility="available",
             data={"seed_id": t.id, "thread_kind": t.kind, "text": t.text, "points_to": t.points_to,
                   "status": "active"})))
+    facs = rec.get("factions") or {}
+    rulers = next((x["name"] for x in (facs.get("instances") or [] if isinstance(facs, dict) else facs)
+                   if str(x.get("id", "")).endswith(".rulers")), None)
+    named = {n["id"] for n in headline_people(rec.get("npcs", []), rulers)}  # setup step 8 named them (12.10.2)
     for n in rec.get("npcs", []):
-        tx.add_all(_npc_events(n, tx.state))
+        tx.add_all(_npc_events(n, tx.state, known=n["id"] in named))
     tx.add(meta("world.region", {"id": world.region.id, "name": world.region.name, "haven": world.region.haven},
                 "12.16.1", "seed"))
     tx.add(meta("world.names", rec.get("names", []), "12.16.7", "seed"))
@@ -152,9 +156,10 @@ def _write_links(tx: Transaction, frm: str, link: dict[str, Any], places: dict[s
                     gate=None if value["known"] else UNDISCOVERED_GATE, event_source="seed"))
 
 
-def _npc_events(n: dict[str, Any], state: WorldState) -> list[Event]:  # rule: 12.16.11
+def _npc_events(n: dict[str, Any], state: WorldState, known: bool = False) -> list[Event]:  # rule: 12.16.11
     data = {k: v for k, v in n.items() if k not in ("id", "name", "exists", "standing_to_pc")}
-    data["name_known"] = False  # 12.10.2: the PC learns it in play (or knows their anchor bond)
+    if not known:
+        data["name_known"] = False  # 12.10.2: the PC learns it in play (or knows their anchor bond)
     sealed = [k for k in NPC_SEALED if data.get(k)]
     rec = EntityRecord(id=n["id"], kind="npc", name=n["name"], visibility="background",
                        exists=n.get("exists", "exists"), sealed_fields=sealed, data=data)

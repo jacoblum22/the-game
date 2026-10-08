@@ -84,20 +84,31 @@ def test_a_second_verb_after_and_is_second_person() -> None:
     assert _you("Lorard watches the cart and the dogs", ["Lorard"], []) == "you watch the cart and the dogs"
 
 
-def test_seeded_people_and_walk_ons_are_strangers_until_introduced(tmp_path: Path) -> None:
-    """P-069/P-070: the seed's people and a walk-on met mid-scene are named to neither narrator nor journal."""
-    from engine.world.social import learn_name, meet_npc
+def test_setup_named_people_are_known_and_a_walk_on_is_the_figure(tmp_path: Path) -> None:
+    """P-069/P-070: the people setup step 8 named are known from the start; the rest of the seed's people and a
+    walk-on met mid-scene are named to neither narrator nor journal until introduced."""
+    from engine.dm.mentions import write_mentions
+    from engine.gen.world_seed import headline_people
+    from engine.world.social import learn_name
     from tests.engine.test_world_support import Game
 
     g = Game(tmp_path)
-    walk_on = g.run(lambda ctx: meet_npc(ctx, "ferryman", g.world.incident.place, reuse=False))
+    rec = g.world.record
+    rulers = next(f["name"] for f in rec["factions"]["instances"] if f["id"].endswith(".rulers"))
+    headline = {n["id"] for n in headline_people(rec["npcs"], rulers)}
+    assert len(headline) == 4
+    with g.store.transaction() as tx:
+        figure = write_mentions([{"kind": "npc", "name": "the figure"}], tx=tx, rules=RULES,
+                                rng=g.rng).created["the figure"]
     st = g.state
-    npcs = [e for e in st.entities.values() if e.kind == "npc" and e.id not in st.seals]
-    assert npcs and not any(name_known(st, e.id) for e in npcs)
-    view = render_view(scene_view(st)) + scene_setting(st) + what_you_know(st, rules=RULES).text
-    assert not [e.name for e in npcs if e.name in view]
-    assert name_of(st, walk_on) == "the ferryman"
-    g.run(lambda ctx: learn_name(ctx, g.pc, walk_on))
+    view = render_view(scene_view(st))
+    assert all(st.entities[i].name in view for i in headline)  # step 8 named them: the PC, a local, knows them
+    others = [e for e in st.entities.values() if e.kind == "npc" and e.id not in headline and e.id not in st.seals]
+    assert others and not any(name_known(st, e.id) for e in others)
+    text = view + scene_setting(st) + what_you_know(st, rules=RULES).text
+    assert not [e.name for e in others if e.name in text]
+    assert name_of(st, figure) == "the figure"
+    g.run(lambda ctx: learn_name(ctx, g.pc, figure))
     st = g.state
-    assert name_of(st, walk_on) == st.entities[walk_on].name
-    assert st.entities[walk_on].name in what_you_know(st, rules=RULES).text  # met and introduced
+    assert name_of(st, figure) == st.entities[figure].name
+    assert st.entities[figure].name in what_you_know(st, rules=RULES).text  # met and introduced
