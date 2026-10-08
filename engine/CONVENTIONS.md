@@ -195,6 +195,24 @@ Contract: `specs/004-playable-prototype/contracts/model-calls.md`. Nothing in `e
 - `engine.gen.npc`: `walk_on(rng, role=, home=, people=, name_tables=, given_used=, existing_ids=, member_of=, role_tags=) -> NPC`; `promote_recurring`, `promote_principal`, `reaction_roll(rng, modifiers=0, faction_status=None) -> Reaction`; `NPC.from_record(seed_npc)`.
 - `engine.gen.adversary`: `improvise(archetype, band, role, variant="standard", name=, adv_id=) -> ImprovisedAdversary` (PR-09-2; single creatures only in M1).
 - Precomputed M2 numbers in `engine/gen/data/*.json` (rebuild: `python -m engine.gen.build_tables`).
+- **Seed packs** (spec 008 A; `engine.gen._seed_packs`, a draw-for-draw port of `12-world-seed.py#seed_packs`):
+  `WorldSeed.record()` packs the record after step 13 on streams `keyed(seed, entity id, purpose)`: place `look`,
+  `furniture`, `exits` (place data; `packet.scene_setting` shows the present place's); NPC `knowledge` (sealed field:
+  PR-12-10 tells it) and `stance`; `documents` (things with a `text` fact at `at`); `walk_ons`; `seed_cases`.
+  `check_seed` runs the 7 `#pack_requirements` rows after the 64 (a failing one re-runs from step 13).
+  `seed_flow.write_world` -> `case.write_seeded` puts walk-ons, documents and meta `world.cases` in the store.
+- **Reduced case** (`engine.gen.case`, PR-15-6 reduced profile): `reduced_case(reg, seed, option, place,
+  lead_target, tag)`, `validate_case(case) -> [failures]`, `cases(state)`, `story_option(words)`,
+  `case_covering(state, words)`, `case_for_question(tx, words, place, lead_target=None)` (on demand, writes),
+  `pointer(case, node_id=None, asked=, state=)` (the core holder first), `mark_found(tx, case, node, placement,
+  fact_id=)`, `audit_cases(tx, emit=)` (= `h.15.placement_audit`, live from M1), `world_rec(state)` (a region-record
+  view of the store). Case records are never rendered.
+- **Casting** (`engine.gen.cast`, 00.11.1 `cast`): `cast(state, role, *, scope, topic=None, asker=None, exclude=(),
+  faction=None, gate=True) -> npc id | None`, `pointer_target(state, topic, *, scope, asker=None) -> (kind, ref)`,
+  `base_pool(state, pc)` (the gate; `incident._people` is an alias), `alive`, `home_of`, `settlement_of`. Picks are
+  keyed by the game seed and the question (the same question casts the same person).
+- `engine.dm.incident`: `incident_line(state)` (the incident case as the PC knows it), `start_knowledge(ctx, tx)`
+  (I-149, at each character's opening), `settle_who` (story roles from the case, else casting; part B replaces it).
 
 ## engine/retrieve API (T019)
 - `engine.retrieve.anchors`: `anchor_candidates(beat, state, rules) -> list[anchor_id]` (≤8; `beat` = a Reader
@@ -799,3 +817,60 @@ readers take a `WorldState`. Errors: `engine.world.common.WorldError`. The PC is
   decide)"); a seed/creation default that is not an option (`move_on`, c8.true_thing's `open`) is sent as `move_on`;
   creation c6 now carries `move_on` as its pause default. No default: nothing sent, except the name block, which
   says "Type a name for your character." The engine says the same for "skip"; "suggest" offers three names.
+
+## Adjudication (spec 007; R2-C rules 00.12.3, 01.4.1, 01.6.5, 01.6.13, 12.15.2)
+Supersedes the earlier notes on `Beat.gate` / `would_be_license` / `necessity`, the cli.md OFFER layout,
+`offer_text`, TRADE_LABELS and Enter at an OFFER.
+- **Reader** (12.2.2, DL-12-50): beats carry only `verb`, `target`, `against_will`, `uses_power`, `speech`, `shape`
+  (`now` | `extended` | `queued` | `conditional`; only now/extended run this turn, the rest are restated as
+  queued), `g4_fact`; parts carry `question_kind` + `topic` (the answer ladder's keys, spec 008).
+  `reader.knowledge_parts(message)` routes "what do I know?" before the call. `Beat.asks`: a Talk beat asking a
+  plain question. Each beat also carries `purpose` (`own_change` | `serves_another_act` | `free_activity`) and
+  `pressure` (`none` | `request` | `threat` | `offer` | `plea` | `insistence`); `reader.normalise(data)` runs on
+  the raw answer (engine and `evals/reader_live.py`): a bodily act (Move, Handle, Strike, Grapple, Force, not
+  against anyone's will) that serves another act folds into it, a Move closing on the next against-will beat is its
+  reach, 00.12.6's free acts drop (a look only with a casual word: `CASUAL`), and a Talk beat with pressure `none`
+  in a message that asks is SPEECH (01.2.1, 01.2.2, 00.12.6, 15.3.10; policy B4/A4/C1).
+- **Gate** (`engine.resolve.gate`): `compute_gate(verb, *, against_will, uses_power, speech, method, held, rules,
+  reading, literacy_known)` is pure; `covering_verb` picks the card from the facets; `check_gate(beat, ...)` adds
+  conditions, a cited G4 fact (or `canon_impossible`), accepted fallbacks and engine-set stretch/emulate.
+- **Necessity** (`engine.resolve.necessity`): `necessity(beat, decision, state=, rules=)` before framing (plain
+  reading, certain talk: `trivial`, no Framer call); `trivial_class(proposed, rules, verb)` after it;
+  `parties_who_would_act(state, actor, beat)` backs the observer stakes source (else a cost must cite its fact).
+- **Framer / frame_check**: obstacle `{kind: tier, obstacle_class, tier}` (class base from
+  `basic_verbs.yaml#anchor.obstacle_classes`; `other` names the rung), `nudge_why`/`nudge` ("-1"/"0"/"+1")/
+  `nudge_fact`, `request_size` for talk; `opposed_by(state, beat, verb)` forces the defense; the second cited
+  Precision snag turns Protective; the 01.6.13 guard sets `Frame.guard` / `Frame.long_shot`;
+  `Frame.alternatives` (`alternatives(...)`); costs narrowed by `costs.source_menus` (`stakes_cost_menus`).
+- **OFFER** (`engine.dm.oof`): `offer_block(frame, rules=, fate=, lethal_line=, auto=)` is 12.15.2's template;
+  `CHANCE_WORDS`, `SEVERITY_WORDS`, `REACH_WORDS`, `GLOSSARY` / `glossary(word)` (14.2.7); `offer_choices` labels
+  Do it / Go big / Play it safe / Another way / Back off. The pause prompt is the restated beat.
+- **Menu** (`play/render.py`): `menu_keys`, `enter_choice` (Do it, or None = show again on Dire / lethal / long
+  shot and on near miss, redirect, last chance), `menu_line`; play-phase pauses print it instead of numbers; `?`
+  explains a word. Digits still pick. Auto-commit defaults on (`resolution.yaml#auto_commit`), Safe frames only.
+
+## Memory: details, scene cards, spotlight, role views (spec 009 part A)
+- **Details** (`engine.store.details`, 00.6.6a): a detail is the fact `detail.<slot>` with `persistence` (lasting |
+  scene | beat; new `FactSet` field) and `certainty: narrated` when narration stated it. `write_detail(state, mint,
+  eid, slot, value, *, source="narration", because=None)` -> `DetailWrite(outcome new|same|superseded|
+  contradiction|refused, events, fact_id, prior)`: one value per slot; a change supersedes only with `because` (this
+  turn's explaining record entry), else `contradiction` (nothing written); `scene`/`beat` slots from narration are
+  refused. `active_details` (scene details, then the `details.max_active` lasting ones by salience then last use),
+  `archived_details` (the rest: still current facts), `expire_events` (12.4.8 step 8; `end_scene` stages them),
+  `used_event(fact_ids)` (`details_used`: usage marks). Projection: `WorldState.details[eid][slot] = DetailRef(fact_id,
+  last_used)`; a `None` value clears a slot.
+- **Scene cards** (12.4.8 step 9): folded by the projection from each scene's events into
+  `WorldState.scene_cards[scene_id]` (`SceneCard`: place, agenda, answer, times, cast, beats, facts, memories,
+  threads), so `store.rebuild()` regenerates them. `engine.retrieve.episodes.cards_for(state, ids, k=2)` (ended scenes,
+  overlap then recency), `card_lines(state, card)` (as the PC knows it). `session.recap_summary` lists them (12.5.3).
+  Recency in `scene_facts` reads `scene_starts(state)` (the cards), not `scene`/`last_scene`.
+- **Spotlight** (`engine.retrieve.scene`, 12.2.4): `alias_index(state)` -> (strong, weak) keys of PC-known names;
+  `resolve_names(state, text)` (full names and aliases first; a lone given/family name only when unique and not
+  inside a longer proper name); `spotlight(state, message, last_delivery, beat, k=None)`.
+- **Role views** (`engine.dm.packet.view_for(role, state, ctx)`): `build_packet(role, view=WorldState, ...)` calls it
+  with `view_ctx(message, exchanges, focus, beat)`; strings and dicts pass through. Narrator: no `MOTIVES` keys or
+  predicates, spotlight as the PC knows it, at most 2 cards; Reader: names, PC licences and conditions, open pause;
+  Framer: target and place records, their facts and the PC's; Director: threads, clocks, cast list, cards.
+  Part-B hookups (spec 006 files) are listed as `TODO(009-B)` in packet.py.
+- **Promises** (`engine.dm.codex.promises(state, about)`, `promise_question`, `promise_subject`): the PC's open
+  commitments, filtered through the alias index; `turn.oof_answer` routes "what did I promise X?" there.

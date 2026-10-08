@@ -22,7 +22,9 @@ dc_tiers:          # must satisfy CT-1..CT-6 (00.3.17); proof in 01.8 "Calibrati
   - {id: beyond, name: Beyond, dc: null, gate: G4, anchor: "no mortal without a license that changes the category", tags: [], basis: ["[00.3.17]", "[T-00-5]", "[DL-01-01]"], lifecycle: provisional}
 dc_tier_rules:
   judge: "intrinsic properties only (would it be true tomorrow, for anyone?); circumstances are levers/snags"
-  tie_break: higher
+  tie_break: class_base   # [revision: R2-C; DL-01-29] was 'higher': the obstacle class's base (basic_verbs.yaml anchor.obstacle_classes)
+  nudge: {max_rungs: 1, needs: cited_intrinsic_fact, never_two: true}
+  no_class_fits: "class other: the DM picks the rung by T-01-2; between two rungs, the lower for an everyday act (T-00-5's everyday rows), else the higher"
   stored_key: "dc.<obstacle_id>.<anchor_id>[+dc:<delta>]"
   feasible_range_per_ct: {easy: [8, 11], moderate: [14, 16], hard: [19, 21], very_hard: [24, 26], legendary: [29, 31]}
 
@@ -313,8 +315,29 @@ limits:
   levers_cited: 2
   snags_cited: 2
 
-auto_commit:       # 01.7.4
-  allowed_when: [stakes_safe_or_risky, not_lethal, not_secret, no_mode_price, success_or_better_at_least_50]
+auto_commit:       # 01.7.4 [revision: R2-C; DL-01-32, D7 assumed, owner to confirm]
+  default: true     # a creation-time preference (T-14-1); the player may turn it off
+  allowed_when: [stakes_safe, not_lethal, not_secret, no_mode_price, not_long_shot, success_or_better_at_least_50]
+  never: [risky, dire, lethal]
+
+frame_guards:      # [revision: R2-C; DL-01-29] 00.3.9(b), 01.6.8, 01.6.13
+  cited_precision_snags_max: 1     # a further fitting hindering fact applies as a Protective snag (stakes +1)
+  critical_failure_guard:
+    applies_when: [not_dire, not_opposed, not_secret]
+    require: "critical_failure <= max(5, success_or_better)"
+    then: [convert_precision_snag_to_protective, show_long_shot_with_best_alternative]
+    guard_rung_sets_lethal: false
+
+stakes_cost_menus: # [revision: R2-C; DL-01-31] 01.6.9 / 01.6.11: the cost menus each stakes source may draw on.
+  # cost.shortfall (alternate only) and cost.twist (last resort, 01.13.1) are open to every source.
+  aware_opponent_or_observer: [cost.exposure, cost.closed_door, cost.footing, cost.time, cost.harm]
+  hazard: [cost.harm, cost.footing, cost.gear, cost.time, cost.drain]
+  height_or_depth: [cost.harm, cost.footing, cost.gear]
+  listening_clock: [cost.time, cost.exposure]
+  damageable_item: [cost.gear]
+  goodwill_or_trust: [cost.closed_door, cost.exposure, cost.time]
+  consumed_resource: [cost.drain, cost.gear]
+  harm_only_when: {aware_opponent_or_observer: "the party is armed and hostile to the actor (a cited fact)"}
 
 traits:            # T-01-13 (what each trait tag pulls in); tag definitions: tags.yaml (03)
   trait.action.attack: [target_defense, on_check_against_reactions, repetition_window, starts_conflict, hostile_act_witnessed]

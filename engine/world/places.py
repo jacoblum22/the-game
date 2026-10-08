@@ -41,7 +41,7 @@ UNDISCOVERED_GATE = "the PC arrives, or perceives it"  # 10.1.5
 LINK = "link."  # fact predicate prefix for a route link
 IMPLICIT_LINKS: dict[str, tuple[int, str]] = {"building": (1, "interval"), "landmark": (1, "hour")}
 SITE_KINDS = ("site", "site_area")
-NPC_SEALED = ("wants", "fears", "refusals", "secrets")  # 15.2.1: sealed until learned
+NPC_SEALED = ("wants", "fears", "refusals", "secrets", "knowledge")  # 15.2.1; knowledge: the 12.16.11 pack
 _PLACE_SKIP = ("id", "name", "links")
 
 

@@ -261,6 +261,11 @@ Examples:           inside G1: "I shove the cart into the doorway" (Force: shove
 Anchor:             no
 Basis:              [C:VII] [R7 §4.0 step 2, §4.4] [R4 SG-05, SG-07] [R1 01.B] [00.12.2–00.12.3]
 ```
+**Computed, not proposed** [revision: R2-C] [DL-01-30]. The engine runs the tests above as a pure function of the
+beat's verb, method facets and target (12.2.2), the actor's held licenses, the verb's `excludes`, active
+conditions and any cited G4 fact (00.12.3). No role proposes the gate class or the license; a sheet knack is an
+edge, never a gate. The judgment left is PARSE's verb and facets, whose worst case is the wrong card,
+named in the OFFER and changed for free (class ii).
 
 **01.3.2 What counts as a license.** `[D]` [DL-00A-19; C:V; revision: I-065] A license is any held entry of the 00.12.1 schema: an
 ability (`ab.*`), a spell, a calling capability, a training license (`lic.training.*`), a language
@@ -433,11 +438,14 @@ Loads in:           core
 License check:      as gated
 Decisions (J):      1. UNCERTAIN [J:flag]: "Given the established facts, could this method, done by
                        this actor now, realistically fail?" True unless the obstacle is Trivial:
-                       anyone, in these conditions, succeeds every time (T-01-2 rung 0). The actor's
+                       its obstacle class's base is `trivial` (01.6.5; no class fits: anyone, in
+                       these conditions, succeeds every time, T-01-2 rung 0); a nudge never crosses
+                       this line [revision: R2-C]. The actor's
                        competence never makes an obstacle Trivial — that is what the modifier is for.
                     2. COSTLY [J:flag]: "Would failure cost something, change the situation, or use up
                        a chance that cannot be retaken freely?" True when any running clock listens to
-                       this beat or to time, when an aware opponent or observer is present, when a
+                       this beat or to time, when an aware party would ACT on a failure (hostile, or
+                       the act is against their wishes; mere presence is not enough) [revision: R2-C], when a
                        hazard is present, when failure would alert, break, spend, or close a door, or
                        when the intent is contested by anyone. False only when failure leaves the
                        situation exactly as it was and the attempt can be repeated at leisure.
@@ -446,7 +454,8 @@ Decisions (J):      1. UNCERTAIN [J:flag]: "Given the established facts, could t
                     ROLL = UNCERTAIN and COSTLY and not RIDING.
                     Tie-break for 1 and 2: TRUE (roll). Tie-break for 3: FALSE (roll).
 Computation [D]:    necessity.{roll, reason}; reason ∈ uncertain_and_costly | riding | trivial |
-                    good_idea | impossible | take_the_time | certain_with_cost
+                    good_idea | impossible | take_the_time | certain_with_cost; a Talk beat whose computed
+                    social DC is certain (15.3.10) does not roll [revision: R2-C]
 Stakes:             —
 State writes:       frame.necessity
 Narration may not imply: success that the pipeline did not produce
@@ -457,7 +466,9 @@ Worst case (J):     a needless roll (a false check — the rarer error, ~0.08% i
 Examples:           inside (roll): climbing a rough wall while a patrol clock runs (costly: time).
                     outside (no roll): climbing the same wall at noon with nobody about and nothing
                     pressing (take the time, 01.4.4).
-                    inside (roll): recalling a rival house's crest under a herald's gaze (observer).
+                    inside (roll): recalling a rival house's crest under a herald's gaze (a herald
+                    who would mark the error). outside: slipping through a market crowd that would
+                    not care if you stumbled, with nothing pressing (no roll).
                     outside: recalling your own village's saint's day (free knowledge, 01.3.8).
                     non-example: "This is easy for someone like me, no need to roll" — an assertion;
                     ease is the tier's business, and competence enters as modifier only.
@@ -719,10 +730,12 @@ from the same ladder, so the error is at most one rung, shown in the OFFER as th
    lists under `against` (01.18). Where a card lists two defense attributes, the defender uses the
    higher. Several aware defenders resisting together (watchers on a wall) → the highest defense among
    them. Defenses are computed fresh each time (never stored), because they follow the defender's
-   current state.
+   current state. A social method composes it by 15.3.3, never a tier: a Neutral or warmer listener
+   asked an R1 question is **certain** and does not roll (T-15-3, 15.3.10) [revision: R2-C] [DL-01-31].
 3. **Effect DC** — the beat resists an effect (Endure, Evade) → `10 + source attribute + competence +
    edge`; for a hazard, the tier matching its severity (S1 Easy … S5 Legendary) unless ch.10 lists a DC.
-4. **Obstacle tier** — `[J:rung]` (01.6.5); the engine writes the resulting DC as the stored DC.
+4. **Rubric tier** — `[J:enum]` the obstacle class's base plus at most one cited nudge (01.6.5); the
+   engine writes the resulting DC as the stored DC [revision: R2-C].
 Then, in this order, the engine adds the mode price: crude fallback `dc_shift`, or stretch
 `stretch.dc_shift`, or emulate `emulate.dc_shift` (01.3.5). Situational factors never change a DC — they
 are levers and snags (01.6.8). The OFFER shows the DC's source ("stored", "his guard", "the poison's
@@ -734,22 +747,33 @@ strength", "Hard") and any mode price as its own line.
 Trigger [T]:        a rolled beat's DC source is "tier" (no stored DC, not opposed, not an effect)
 Loads in:           core
 License check:      as gated
-Decisions (J):      1. Tier [J:rung], from T-01-2's anchors, by asking "who could do this, under these
-                       conditions, with no special help?". Judge only the obstacle's INTRINSIC
-                       properties — test: "Would this property still be true tomorrow, for anyone who
-                       tried?" Yes (the lock is guild-made; the wall is nine feet and sheer; the tome is
-                       in an archaic script) → it sets the tier. No (it is dark now; the actor is tired;
-                       a guard is distracted; the player described it well) → it is a lever or snag
-                       (01.6.8), never tier.
+Decisions (J):      [revision: R2-C; DL-01-29]
+                    1. CLASS [J:enum]: the obstacle class, from the verb card's closed list
+                       (`basic_verbs.yaml` anchor.obstacle_classes, at most six; T-00-5's rubric
+                       column). Its base sets the tier. No class fits → class `other`: the rung from
+                       T-01-2's anchors ("who could do this, under these conditions, with no special
+                       help?"); between two adjacent rungs, the lower for an everyday act (T-00-5's
+                       everyday rows), else the higher.
+                    2. NUDGE [J:enum] −1 / 0 / +1: one rung, only with a cited INTRINSIC fact id and a
+                       stated why written before the value. Test: "Would this property still be true
+                       tomorrow, for anyone who tried?" Yes (the lock is guild-made; the wall is
+                       crumbling; the tome is in an archaic script) → it may nudge. No (it is dark now;
+                       the actor is tired; a guard is distracted; the player described it well) → it
+                       is a lever or snag (01.6.8), never tier. Never two rungs. A nudge never crosses
+                       the trivial line: a trivial class does not roll (01.4.1), and a rolled class
+                       never nudges to trivial. Uncertain → 0 (the obstacle class's base).
                        Do not adjust for drama, pacing, the character's stats, or how much the player
-                       wants it. Between two adjacent rungs: the HIGHER.
-Computation [D]:    dc = T-01-2 number; written as stored DC dc.<obstacle>.<signature>
+                       wants it.
+Computation [D]:    tier = obstacle class base + nudge; dc = T-01-2 number; written as stored DC
+                    dc.<obstacle>.<signature>
 Stakes:             —
 State writes:       stored DC fact (source: ruling)
 Narration may not imply: a different difficulty than the stored one on a later attempt
-Worst case (J):     one rung off = 5 on the DC = 25 percentage points of success-or-better at most
-                    (T-01-3); shown in the OFFER before commitment (class i), and fixed thereafter so
-                    the error cannot compound or drift.
+Worst case (J):     a wrong nudge: one rung = 5 on the DC = 25 percentage points of success-or-better
+                    at most (T-01-3), always tied to a cited fact id; a wrong class: the rung of
+                    another listed class; shown in the OFFER before commitment (class i), and fixed
+                    thereafter so the error cannot compound or drift. Measured with an extra wrong
+                    snag on the same beat: 35 points (01-difficulty_rubric_sim-output.txt).
 Examples:           see T-01-2 (two per rung) and WE-01-18 (a boundary pair per rung).
                     non-example: "It's only a cheap lock, surely Easy" — an assertion about an
                     intrinsic property; if unestablished, the lock's make is an Oracle question asked
@@ -757,19 +781,31 @@ Examples:           see T-01-2 (two per rung) and WE-01-18 (a boundary pair per 
 Anchor:             no
 Basis:              [00.3.16–00.3.17; T-00-5] [R4 §4.6 (Story-Engine "do not adjust for drama")] [R7 §4.2]
                     [R: https://2e.aonprd.com/Rules.aspx?ID=2628 (PF2e simple DCs by proficiency)] [DL-01-01]
+                    [R: https://fate-srd.com/fate-condensed/being-game-master (countable factors)] [DL-01-29]
 ```
 
 **T-01-2 Obstacle tiers (canonical numbers in `data/resolution.yaml#dc_tiers` and `scales.yaml`).**
 
-| Rung | DC | Anchor: who could do it (intrinsic obstacle) | Typical example | Boundary example (and why it is this rung, not the next) |
-|---|---|---|---|---|
-| Trivial | no roll | anyone, in these conditions, every time | open an unlocked door; walk a dry road; recall your own name for a thing | climb a knotted rope with handholds, nothing below — *not Easy, because nobody able-bodied fails it* |
-| Easy | **10** | an untrained adult, taking care, usually succeeds | climb a rough stone wall with good holds; calm a familiar nervous horse | spot a carelessly hidden coin purse — *not Moderate: no trained eye is needed* |
-| Moderate | **15** | needs competence; the untrained often fail | follow a clear trail across hard ground; force an iron hasp set in old oak | talk a neutral stranger into bending a small rule — *not Easy: an ordinary person usually fails without a knack for it* |
-| Hard | **20** | challenges a practiced professional | pick a guild-made lock; leap a 12-ft gap from a running start | cut a hanging rope with an arrow at 60 ft — *not Very hard: a good archer hits it often enough to try* |
-| Very hard | **25** | experts often fail | track a ranger over rock in rain; forge a noble's seal well enough to pass a clerk | swim a flooded river in spate in full clothes — *not Legendary: strong swimmers do it, just not reliably* |
-| Legendary | **30** | the edge of mortal ability; needs levers or licenses | hold a collapsing gate alone for a minute; talk a sworn enemy into laying down arms mid-battle | climb the smooth inside of a well shaft without gear — *not Beyond: a master with chimney technique has done it* |
-| Beyond | G4 | no mortal without a license that changes the category | leap a 30-ft chasm unaided; persuade a river with no spirit in it | lift a portcullis alone — *Beyond for a mortal (quality and scale), which a strength-granting license could make Legendary* |
+| Rung | DC | Anchor: who could do it (intrinsic obstacle) | Typical example | Boundary example (and why it is this rung, not the next) | Rubric classes with this base [revision: R2-C] |
+|---|---|---|---|---|---|
+| Trivial | no roll | anyone, in these conditions, every time | open an unlocked door; walk a dry road; recall your own name for a thing | climb a knotted rope with handholds, nothing below — *not Easy, because nobody able-bodied fails it* | Move / open ground; Observe / in plain view; Recall / own knowledge; Exert / easy holds; Handle / ordinary use |
+| Easy | **10** | an untrained adult, taking care, usually succeeds | climb a rough stone wall with good holds; calm a familiar nervous horse | spot a carelessly hidden coin purse — *not Moderate: no trained eye is needed* | Move / crowd; Move / rough ground; Observe / careless concealment; Recall / widely known; Talk / be heard; Strike / large near object; Force / flimsy; Exert / ordinary effort; Evade / cover near; Handle / awkward; Setup / ready to hand |
+| Moderate | **15** | needs competence; the untrained often fail | follow a clear trail across hard ground; force an iron hasp set in old oak | talk a neutral stranger into bending a small rule — *not Easy: an ordinary person usually fails without a knack for it* | Move / obstructed; Observe / deliberate concealment; Observe / clear trail; Recall / trade knowledge; Strike / small or far object; Force / sound fitting; Exert / hard climb; Evade / cover far; Handle / crude work; Setup / prepared |
+| Hard | **20** | challenges a practiced professional | pick a guild-made lock; leap a 12-ft gap from a running start | cut a hanging rope with an arrow at 60 ft — *not Very hard: a good archer hits it often enough to try* | Observe / expert concealment; Recall / edge of common; Strike / tiny and far; Force / reinforced; Exert / gap leap |
+| Very hard | **25** | experts often fail | track a ranger over rock in rain; forge a noble's seal well enough to pass a clerk | swim a flooded river in spate in full clothes — *not Legendary: strong swimmers do it, just not reliably* | Observe / faint trail; Exert / extreme |
+| Legendary | **30** | the edge of mortal ability; needs levers or licenses | hold a collapsing gate alone for a minute; talk a sworn enemy into laying down arms mid-battle | climb the smooth inside of a well shaft without gear — *not Beyond: a master with chimney technique has done it* | Exert / limit |
+| Beyond | G4 | no mortal without a license that changes the category | leap a 30-ft chasm unaided; persuade a river with no spirit in it | lift a portcullis alone — *Beyond for a mortal (quality and scale), which a strength-granting license could make Legendary* | — (Move / hazardous: the tier matching the hazard's severity) |
+
+**Everyday rows (as T-00-5)** [revision: R2-C] [DL-01-29]. The rubric's fixed answers for the acts play meets most. Each
+is the obstacle class's base tier, and it rolls only when the roll test (01.4.1) says so:
+
+| Everyday act | Rubric class | Tier | Rolls only when |
+|---|---|---|---|
+| slip or push through a crowd | Move / crowd | Easy | failure would cost something: an aware party who would act on it, a running clock |
+| open an unbarred door, gate or wicket | Handle / ordinary use | Trivial | never |
+| carry an ordinary load (a sack of grain; a wounded adult a short way) | Exert / ordinary effort | Easy | a clock or a hazard presses |
+| ask someone an ordinary question | Talk (no tier: 15.3.3) | Neutral or warmer, R1: certain (T-15-3, 15.3.10) | the listener is Wary or worse, or has a cited reason to hesitate |
+
 
 **01.6.6 Who rolls.** `[J:flag]` [DL-00A-03; revision: I-065] The active side rolls once (00.3.3): aimed methods roll against a
 defense; resisted effects make the target roll Endure or Evade against the effect DC. Test: *"Does the
@@ -809,9 +845,11 @@ Decisions (J):      1. NAME THE FACT [J:flag] per candidate: "Is there a fact id
                          on your side, a lever-arm on the load) → reach +1 rung / snag −1 rung.
                        A fact that honestly fits two types: the player picks. One fact → one lever.
                     3. Obligation: an established hindering fact that fits is ALWAYS applied as a snag
-                       (the DM may not drop it). Tie-break: uncertain lever → not applied; uncertain
+                       (the DM may not drop it): the first cited as Precision at most, a further one
+                       as Protective (stakes +1 rung) [revision: R2-C] [DL-01-29]. Tie-break: uncertain lever → not applied; uncertain
                        snag → applied (SG-05's anti-leniency direction).
-Computation [D]:    at most two levers and two cited snags; Precision sum capped ±4 (circumstance
+Computation [D]:    at most two levers and two cited snags, of which at most ONE cited Precision
+                    snag [revision: R2-C]; Precision sum capped ±4 (circumstance
                     family); stakes and reach steps clamped to their ladders; engine-applied snags
                     (repetition 01.14.3) are outside the two-snag count but inside the ±4 cap.
                     frame_check refuses a lever whose fact is missing, later than the declaration, or
@@ -839,7 +877,8 @@ Trigger [T]:        FRAME, for every beat that rolls
 Loads in:           core
 License check:      —
 Decisions (J):      1. SOURCE [J:flag]: "Is there an established source that would impose a cost if this
-                       beat failed?" Sources (closed list): an aware opponent or observer; a hazard; a
+                       beat failed?" Sources (closed list): an aware party who would act on a failure (hostile, or
+                       the act is against their wishes; mere presence is not a source) [revision: R2-C]; a hazard; a
                        height or depth; a running clock that listens to this beat, to time or to noise; a
                        tool or item that failure could damage or lose; someone's goodwill or trust that
                        failure would spend; a resource the method consumes. False → SAFE.
@@ -859,7 +898,8 @@ Decisions (J):      1. SOURCE [J:flag]: "Is there an established source that wou
                     action is SAFE (the opponent's action is its own frame); stakes rise only when
                     failure opens something beyond that (a counter, a fall, a lost weapon).
 Computation [D]:    stakes rung after Protective levers/snags and the OFFER trade (01.7.3), clamped
-                    Safe…Dire; the READ table (T-01-5) gives the cost severity per degree.
+                    Safe…Dire; the READ table (T-01-5) gives the cost severity per degree. The stakes
+                    source fixes which cost menus the frame may threaten (01.6.11) [revision: R2-C].
 Stakes:             this rule sets them
 State writes:       frame.stakes.{rung, lethal, failure_preview}
 Narration may not imply: a cost worse than the declared stakes allow; death on a non-lethal frame (INV-6)
@@ -917,7 +957,27 @@ Basis:              [00.3.15] [R: https://bladesinthedark.com/effect] [R7 §4.2 
 one **alternate** `{menu_id, form_intent}` that also fits. The threatened cost is what failure will cost
 (at the severity READ computes); success-at-cost lets the player choose between the threatened cost and
 the alternate. Selection follows 01.13.1. A Safe frame also names a threatened cost, used only on a
-critical failure or a success-at-cost (both at S1). Declaring the cost before the roll is the single
+critical failure or a success-at-cost (both at S1).
+
+**A cost follows its source** [revision: R2-C] [DL-01-31] (`resolution.yaml#stakes_cost_menus`; the schema narrows
+the menu ids by the declared source). cost.shortfall (alternate only) and cost.twist (last resort, 01.13.1)
+are open to every source:
+
+| Stakes source (01.6.9) | May threaten |
+|---|---|
+| an aware party who would act on a failure | exposure, closed door, footing, time; harm only if the party is armed and hostile to the actor |
+| a hazard | harm, footing, gear, time, drain |
+| a height or depth | harm, footing, gear |
+| a running clock | time, exposure |
+| a tool or item failure could damage or lose | gear |
+| someone's goodwill or trust | closed door, exposure, time; never harm |
+| a resource the method consumes | drain, gear |
+
+A first friendly question has the source goodwill: at Neutral or warmer it is certain and does not roll
+(T-15-3); when it does roll (a Wary listener), its worst cost is a standing loss (cost.closed_door at S3:
+they take offence and remember), never a blow (I-155).
+
+Declaring the cost before the roll is the single
 strongest anti-drift commitment the research found (Burning Wheel's stated failure, 7th Sea's announced
 consequences, Blades' position) [R7 §3.3 F8; R4 SG-08]. *Worst case (J):* a poorly fitting cost is
 declared — the player sees it before committing and may withdraw (class ii).
@@ -933,7 +993,22 @@ only success is a natural 20 and the OFFER must say "only a natural 20, and at b
 It refuses: an attribute not allowed by the anchor or knob; a lever or snag citing a missing or
 too-recent fact; more than two cited levers or two cited snags; stakes unset; `lethal` without its
 preconditions; a threatened cost whose menu id's `fits_when` has no matching fact (01.13.1); a G3 beat
-without an accepted fallback.
+without an accepted fallback; a second cited Precision snag; a threatened or alternate cost outside its
+stakes source's menus (01.6.11) [revision: R2-C]. It then applies the critical-failure guard (01.6.13).
+
+**01.6.13 The critical-failure guard.** `[D]` [revision: R2-C] [DL-01-29] On a frame that is not Dire, not
+opposed (01.6.4 sources 2 and 3) and not secret (01.4.7), the engine requires
+`critical_failure ≤ max(5, success_or_better)`. If the computed odds break it: (1) the cited Precision
+snag, if any, applies as Protective instead (−2 removed, stakes +1 rung; a rung the guard adds never sets
+the lethal flag); (2) if the odds still break it, the OFFER shows the frame labelled *long shot*, with the
+best computed alternative approach first (12.15.2), and the frame is never auto-committed (01.7.4). The
+guard changes no number of 01.8.1 or T-01-3: it keeps the harsh region (critical failure above success)
+out of ordinary unopposed frames. Opposed frames are honest contests, Dire frames are telegraphed, and
+secret frames show no odds. *Example:* Might −1, trained +1, two hindering facts, pushing through a crowd:
+as played, Moderate with two −2 snags gave 10% / 45%; under the rubric the crowd is Easy, one snag is
+Precision and one Protective: −2 vs 10 = 45% / 10%, Risky +1. Evidence:
+`rules/_process/simulation/01-difficulty_rubric_sim-output.txt` (0 unlabelled frames with critical failure
+above success; 35 of 265 rolled frames labelled long shot).
 
 ### 01.7 OFFER — the player sees the frame before the die
 
@@ -944,7 +1019,8 @@ without an accepted fallback.
 2. the attribute and the full modifier breakdown (attribute, competence with its tag, edge, each lever
    and snag with its fact, status), and the alternative method that would use a higher attribute, if one
    exists (01.6.1);
-3. the DC and its source — or, on a secret frame, "hidden" (01.4.7);
+3. the DC and its source — or, on a secret frame, "hidden" (01.4.7) and the reason the odds are
+   hidden: the OFFER promises **odds or the reason they're hidden** [revision: R2-C] (I-143);
 4. "you need N or better on the die", the success-or-better percentage, and the critical-success,
    critical-failure and near-miss percentages; if only a natural 20 can succeed: "only a natural 20, and
    at best a plain success" (the old rule's 5% miracle critical no longer exists, 01.8.1);
@@ -955,6 +1031,9 @@ without an accepted fallback.
    items, standing steps);
 7. the action and time the beat costs, every method consequence (loud, scent, evidence left), whether
    the beat rides on an earlier result, and the character's current fate.
+12.15.2 renders these items from a fixed template in plain words: each chance as a number and a word
+("better than even, 55%"), each severity and reach as a word; rule ids and codes stay in the log and the
+`?` key explains any word (14.2.7) [revision: R2-C] [DL-12-51].
 The player chooses: **commit**, **change** (a new method or a new lever citation: back to PARSE, free),
 or **withdraw** (nothing is spent: no time, action, Focus or fate). Asking "what would it take?" or "what
 are my odds?" before declaring runs GATE→FRAME→OFFER at no cost. [R7 §4.0 step 6; R4 §7.3 (visible,
@@ -977,11 +1056,13 @@ or stakes −1 rung, on a beat the character is trained at) is declared here too
 combinable with it, as is its alternate use **grit** (07.2.5: ignore wound penalties for the beat, no
 reach) [integration: IR ch.05 to 01, IR ch.07].
 
-**01.7.4 Auto-commit.** `[D]` [DL-01-28; revision: I-065] A player may set the preference `auto_commit` (ch.14). Then frames whose
-stakes are Safe or Risky, that are not lethal, not secret, carry no mode price (no fallback, stretch or
-emulate), and show success-or-better ≥ 50%, roll without waiting (`offer.choice = auto`); the OFFER is
-still written to the log and shown with the result. Every other frame waits for an explicit commit. A
-lethal frame is never auto-committed (00.13.2).
+**01.7.4 Auto-commit.** `[D]` [DL-01-28; DL-01-32; revision: I-065; revision: R2-C] The preference
+`auto_commit` (ch.14, T-14-1) is set at creation and is **on by default** (D7: assumed, owner to
+confirm); the player may turn it off at any time. While it is on, a frame that is **Safe** (its worst cost
+is S1), not lethal, not secret, not a long shot (01.6.13), carries no mode price (no fallback, stretch or
+emulate) and shows success-or-better ≥ 50% rolls without waiting (`offer.choice = auto`); the OFFER is
+still written to the log and shown with the result, labelled `[OFFER — auto]` (12.15.2). A Risky, Dire or
+lethal frame is never auto-committed (00.13.2); every other frame waits for an explicit commit.
 
 ### 01.8 ROLL — the degree
 
@@ -1000,7 +1081,8 @@ turns certain successes into 5% critical failures for experts (+12 vs DC 10: 5% 
 total that meets the DC) — pushing permissive outcomes in the direction Principle VII guards against and
 punitive ones where the lethality lock forbids them. Under the step rule "only a natural 20" is at best a
 plain success, which is the honest message for the OFFER [R7 §5.9, §7.1 #1; R1 01.A; R2 01; R4 §9 01 #5;
-R: https://2e.aonprd.com/Rules.aspx?ID=2286].
+R: https://2e.aonprd.com/Rules.aspx?ID=2286]. The rule is unchanged by the critical-failure guard (01.6.13),
+which acts on the frame, not on the degree [revision: R2-C].
 
 **01.8.2 Near miss.** `[D]` [DL-01-03; C:P8; revision: I-065] `near_miss = true` when the final degree is `failure` **and** margin ≥ −3.
 This covers the ordinary near miss (a total 1–3 short) *and* a success that a natural 1 stepped down to
@@ -1068,7 +1150,9 @@ breaks CT-5; Easy +2 breaks CT-1). The reference sits at the centre of every fea
 Easy's, keeps the five-point rung spacing that makes one rung exactly two and a half Precision levers,
 and keeps 00's worked examples valid. Moving Easy to 9 (the one rung with room below) would buy +5
 points for untrained people on easy tasks at the cost of a non-round number the AI must hold; the
-evidence gives no reason to (OEQ-01-2 names the test that would).
+evidence gives no reason to (OEQ-01-2 names the test that would). The numbers stay; on an ordinary
+unopposed frame the cells where critical failure exceeds success are kept off the OFFER by the guard
+(01.6.13): the snag goes to stakes, or the frame is labelled a long shot [revision: R2-C] [DL-01-29].
 
 ### 01.9 READ — what was achieved and what is due
 
@@ -1162,7 +1246,8 @@ which half" that P17's original text left open to drift.
 
 So a success at Standard reach delivers about half (P17's "roughly half"), a critical success from
 Standard (delivered 3) delivers all, a failure gives at most one vague impression, and a critical failure
-nothing reliable — exactly P17's four rows, now computed. Items land in rank order.
+nothing reliable — exactly P17's four rows, now computed. Items land in rank order. A question put to an NPC is one
+item, answered by PR-12-10 at the ladder depth of the delivered reach (T-15-5) [revision: R2-D; DL-15-39].
 - **Vague impression** `[N]`: narrated hedged ("maybe that matters"), recorded as a fact with
   `certainty: believed` whose sealed truth is `true`. It is never wrong, only incomplete.
 - **Plausible falsehood** `[J:flag]` *misleadable*: *"Can the source actually mislead — a lying or
@@ -2119,8 +2204,9 @@ uncertain.
    01.15.8) [revision: I-038]; then narrate; a "no" is followed by what is there.
 
 **PR-01-5 A G3 redirect.** `[D]` + `[N]`
-1. Identify the license that would cover the method (data lookup by deed tags and scope); if none
-   exists, the deed branch and a `rule_conflict` ruling (01.3.5).
+1. Code looks up the would-be license: the verb's `excludes[].needs` for the method, then the license
+   data by deed tags and scope; no role proposes it [revision: R2-C] [DL-01-30]. If none exists, the deed branch
+   and a `rule_conflict` ruling (01.3.5).
 2. Read its `crude_fallback` and `acquisition_paths`.
 3. Speak the four-part redirect (01.3.6); nothing is spent.
 4. If the player accepts the fallback: PARSE a new beat on the fallback verb with `mode: fallback`,

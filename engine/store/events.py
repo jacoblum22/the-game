@@ -194,11 +194,12 @@ class FactSet(Payload):  # rule: 00.6.2
     value: Any
     kind: Literal["fact", "flag", "commitment"] = "fact"
     source: Literal["narration", "oracle", "generation", "ruling", "data", "player_accepted"]
-    certainty: Literal["established", "rumored", "believed"] = "established"
+    certainty: Literal["established", "rumored", "believed", "narrated"] = "established"  # narrated: 00.6.6a
     truth: Literal["true", "partial", "false", "outdated"] = "true"  # sealed (00.6.2)
     visibility: Visibility = "background"
     supersedes: str | None = None
     gate: str | None = None  # what unseals it, when visibility is sealed (00.6.5)
+    persistence: Literal["lasting", "scene", "beat"] | None = None  # details only (00.6.6a)
 
     def check(self, state: Any) -> None:
         super().check(state)
@@ -502,6 +503,12 @@ class SceneEnded(Payload):
             raise Rejected(f"scene {self.scene_id} is not the current scene")
 
 
+class DetailsUsed(Payload):  # rule: 00.6.6a
+    """Usage marks (00.6.6a item 5, 12.14.11): the delivered sentences of this turn stated these details."""
+
+    fact_ids: list[str]
+
+
 class MetaSet(Payload):
     key: str
     value: Any
@@ -605,6 +612,7 @@ PAYLOADS: dict[str, type[Payload]] = {
     "scene_started": SceneStarted,
     "scene_ended": SceneEnded,
     "meta_set": MetaSet,
+    "details_used": DetailsUsed,
     "pause_opened": PauseOpened,
     "pause_closed": PauseClosed,
     "seed_answered": SeedAnswered,

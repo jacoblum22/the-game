@@ -46,7 +46,7 @@ with any recorded want or refusal goes to the World call, which is offered only 
 `world_judge` is on (default). Off, code takes the motive with the best word overlap, else the row. A word-overlap
 pre-filter was tried first and dropped: "Brother, who took it?" never overlapped "will not break off his prayer".
 The synthesis said "only when two or more motives match"; one candidate is as much a judgement as two, so this is
-recorded as a deviation (ledger I-160).
+recorded as a deviation (ledger I-176).
 
 **R7. Activity storage.** A fact `activity` (string) on the NPC, superseding the last; it is current when
 written after the scene started (`valid_from_seq >= scene.started_seq`). Rolled for each present NPC without a

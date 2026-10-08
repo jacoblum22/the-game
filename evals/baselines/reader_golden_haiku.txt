@@ -1,0 +1,42 @@
+# Reader golden set (91 lines; 91 scored, 0 without an answer)
+
+- verb: 92.3% (84/91)
+- gate: 97.8% (89/91)
+- necessity: not scored
+- against_will: 93.9% (62/66)
+- uses_power: 100.0% (66/66)
+- speech: 97.0% (64/66)
+- question_kind: 87.9% (80/91)
+- necessity as roll / no roll: not scored
+- issue lines (P-004 … P-123) verb: 78.6% (11/14), gate: 92.9% (13/14)
+
+## Misses (verb, gate): 9
+- g003 verb: got verb.move, want verb.talk  (I draw my sword higher and step toward them. "Last warning. )
+- g004 verb: got verb.talk, want verb.strike  (I hold my sword on the travellers and step toward the neares)
+- g010 verb: got None, want verb.talk  (I gently turn the child's face toward me and say, "Hey. I'm )
+- g010 gate: got None, want G2  (I gently turn the child's face toward me and say, "Hey. I'm )
+- g037 verb: got None, want verb.observe  (I let Edda finish first, then turn to the scarred woman. Who)
+- g037 gate: got None, want G1  (I let Edda finish first, then turn to the scarred woman. Who)
+- g058 verb: got verb.force, want verb.move  (I shove harder, shoulder first, and shout "Make way, guard c)
+- g071 verb: got verb.strike, want verb.handle  (I don't pick the lock. I knock on the cellar door and wait.)
+- g080 verb: got verb.handle, want verb.sneak  (I pour the sleeping draught into the guard's cup when he loo)
+
+## Negation pairs (11 pairs, 22 lines)
+# Reader golden set (22 lines; 22 scored, 0 without an answer)
+
+- verb: 90.9% (20/22)
+- gate: 100.0% (22/22)
+- necessity: not scored
+- against_will: 95.2% (20/21)
+- uses_power: 100.0% (21/21)
+- speech: 100.0% (21/21)
+- question_kind: 100.0% (22/22)
+- necessity as roll / no roll: not scored
+- issue lines (P-004 … P-123) verb: not scored, gate: not scored
+
+## Misses (verb, gate): 2
+- g071 verb: got verb.strike, want verb.handle  (I don't pick the lock. I knock on the cellar door and wait.)
+- g080 verb: got verb.handle, want verb.sneak  (I pour the sleeping draught into the guard's cup when he loo)
+
+Reader's own verb before the facets choose the card: 92.4% (61/66)
+Computed gate where the beat and verb agree: 100.0% (61/61); lines where only one side has a beat (SPEECH vs a beat): 2

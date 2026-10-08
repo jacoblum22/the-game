@@ -206,7 +206,7 @@ def tree_hash(rules: Path) -> tuple[str, dict[str, str]]:
     per_file: dict[str, str] = {}
     h = hashlib.sha256(f"format={FORMAT}\n".encode())
     for p in source_files(rules):
-        digest = hashlib.sha256(p.read_bytes()).hexdigest()
+        digest = hashlib.sha256(p.read_bytes().replace(b"\r\n", b"\n")).hexdigest()  # same hash in CRLF checkouts
         rel = p.relative_to(rules).as_posix()
         per_file[rel] = digest[:16]
         h.update(f"{rel} {digest}\n".encode())

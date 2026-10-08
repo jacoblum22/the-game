@@ -276,6 +276,7 @@ _EXTRA_VERB_WORDS = {
 
 
 @lru_cache(maxsize=1)
+@lru_cache(maxsize=1)
 def basic_verbs() -> list[dict[str, Any]]:
     data = yaml.safe_load((REPO_ROOT / "rules" / "data" / "basic_verbs.yaml").read_text(encoding="utf-8"))
     return list(data["verbs"])
@@ -443,7 +444,6 @@ def _reader(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:
     targets = entity_aliases(enum_at(schema, "beats", "[]", "target"), context)
     subjects = entity_aliases(enum_at(schema, "fact_questions", "[]", "subject"), context)
     pending = enum_at(schema, "pending_answer")
-    licences = entity_aliases(enum_at(schema, "beats", "[]", "license"), context)
     rungs = enum_at(schema, "fact_questions", "[]", "odds_rung")
     parts, questions, beats, declared = [], [], [], []
     pending_answer = None
@@ -452,14 +452,15 @@ def _reader(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:
         picked = _pending_pick(low, pending) if pending_answer is None else None
         if picked is not None:
             pending_answer = picked
-            parts.append({"text": sent, "class": "PENDING_ANSWER"})
+            parts.append({"text": sent, "class": "PENDING_ANSWER", "question_kind": "none", "topic": None})
         elif _QUOTE.search(sent):
-            parts.append({"text": sent, "class": "SPEECH"})
+            parts.append({"text": sent, "class": "SPEECH", "question_kind": _kind(sent), "topic": None})
         elif not re.search(r"[A-Za-z]{2}", sent):
-            parts.append({"text": sent, "class": "OOF_QUESTION"})  # "1", "?" with nothing open: not an act
+            parts.append({"text": sent, "class": "OOF_QUESTION", "question_kind": "none", "topic": None})
         elif sent.rstrip().endswith("?") or _ASKS.match(sent):
             oof = "/" in sent or any(_has_word(sent, w) for w in OOF_WORDS)
-            parts.append({"text": sent, "class": "OOF_QUESTION" if oof else "FICTION_QUESTION"})
+            parts.append({"text": sent, "class": "OOF_QUESTION" if oof else "FICTION_QUESTION",
+                          "question_kind": "none" if oof else _kind(sent), "topic": None})
             if not oof and not _WH.match(sent):  # only a yes/no question goes to the Oracle; "who is here?" is
                 # answered from what the scene shows
                 hit = named_entity(sent, subjects)
@@ -468,30 +469,25 @@ def _reader(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:
                     "odds_rung": rungs[len(rungs) // 2] if rungs else None,
                 })
         else:
-            parts.append({"text": sent, "class": "DECLARATION"})
+            parts.append({"text": sent, "class": "DECLARATION", "question_kind": "none", "topic": None})
             declared.append(sent)
     for sent in declared[:3]:
         verb = primary_verb(sent) or match_verb(sent)
         target = named_entity(sent, targets)
-        licence = named_entity(sent, licences)
-        if licence:
-            gate = "G2"
-        elif verb:
-            gate = "G1"
-        elif target and str(target[0]).startswith(("npc.", "ally.", "foe.")):  # words to someone: talk, not G3
-            verb, gate = ("verb.talk", []), "G1"
-        elif (ex := _excluding_verb(sent)) is not None:  # "pick the lock": Force excludes it (gate → G3)
-            verb, gate = (ex, []), "G1"
-        else:
-            gate = "G3"  # 01.3.1: default when uncertain between G1 and G3
-        risky = any(_has_word(sent, w) for w in RISKY_WORDS)
+        if not verb and target and str(target[0]).startswith(("npc.", "ally.", "foe.")):  # words to someone: talk
+            verb = ("verb.talk", [])
+        elif not verb and (ex := _excluding_verb(sent)) is not None:  # "pick the lock": Force names it (G3)
+            verb = (ex, [])
+        v = verb[0] if verb else None
         beats.append({
-            "intent": sent, "method": sent, "assertion": None, "shape": None,
-            "target": target[0] if target else "none",
-            "verb": verb[0] if verb else None,
-            "license": licence[0] if licence else "none", "would_be_license": "none",
-            "gate": gate, "g4_fact": None,
-            "necessity": "uncertain_and_costly" if risky else "trivial",
+            "intent": sent, "method": sent, "purpose": "own_change", "assertion": None, "shape": "now",
+            "target": target[0] if target else "none", "verb": v,
+            "pressure": "request" if v == "verb.talk" else "none",  # offline Talk is a declared ask (12.2.2)
+            # 12.2.2 facets: force against someone; words; a power word (the gate is computed, 00.12.3)
+            "against_will": v in ("verb.strike", "verb.grapple") or (v == "verb.force" and bool(target) and str(
+                target[0]).startswith(("npc.", "foe."))),
+            "uses_power": any(_has_word(sent, w) for w in POWER_WORDS),
+            "speech": v == "verb.talk", "g4_fact": None,
             "intent_verbs": verb[1] if verb else [],
         })
     quantity = re.search(r"\b(\d+)\b", packet.message)
@@ -501,6 +497,16 @@ def _reader(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:
         "clarifying_question": None, "restatement": restated,
         "player_quantity": int(quantity.group(1)) if quantity else None,
     }
+
+
+POWER_WORDS = ["spell", "magic", "witch-sight", "mind-touch", "sorcery", "conjure"]
+_KINDS = (("who_knows", r"\bwho (?:would|might|could) know\b"), ("who_is", r"^\s*(?:\w+,\s*)?who\b"),
+          ("where_is", r"^\s*(?:\w+,\s*)?where\b"), ("what_happened", r"\bwhat happened\b"),
+          ("what_want", r"\bwhat do you (?:want|think)\b"), ("what_like", r"^\s*(?:\w+,\s*)?what\b"))
+
+
+def _kind(sent: str) -> str:  # 12.2.2 question_kind, from the question's first word
+    return next((k for k, rx in _KINDS if re.search(rx, sent, re.IGNORECASE)), "none") if "?" in sent else "none"
 
 
 _WH = re.compile(r"^\s*(?:\w+,\s*)?(?:what|who|whom|whose|where|when|why|how|which)\b", re.IGNORECASE)
@@ -532,7 +538,7 @@ def _stakes(verb_word: str | None, message: str, view: str, sources: list[Any],
     someone = str(target).startswith(_PEOPLE) or bool(re.search(r"(?m)^(?:npc|foe)\.[\w.]+: ", view))
     pick: tuple[str, list[str]] | None = None
     if verb_word in ("strike", "grapple") and someone:
-        pick = ("aware_opponent_or_observer", ["cost.harm", "cost.footing"])
+        pick = ("aware_opponent_or_observer", ["cost.footing", "cost.exposure"])  # harm from them needs a cited fact
     elif verb_word == "force" and str(target).startswith(_PEOPLE):
         pick = ("aware_opponent_or_observer", ["cost.footing", "cost.harm"])
     elif verb_word in ("exert", "move", "evade") and _HEIGHT.search(act):
@@ -558,6 +564,29 @@ _FORMS: dict[str, dict[str, str]] = {
 }
 
 
+def _obstacle(schema: dict[str, Any], quiet: bool) -> dict[str, Any]:
+    # rule: 01.6.5 (class `other` at the middle rung, Moderate, so the offline odds stay comparable across runs);
+    # a social or attack beat on a person offers only the defender's defense (01.6.4); with nothing at stake
+    # (`quiet`) the verb's trivial class when it has one (looking about, walking open ground: no roll, 01.4.1)
+    node = field(schema, schema, "obstacle")
+    branches = node.get("anyOf") or [node]
+    kinds = {_options(b["properties"]["kind"], schema)[0]: b for b in branches if "properties" in b}
+    if "tier" not in kinds:
+        k = "opposed" if "opposed" in kinds else next(iter(kinds))
+        return {"kind": k, "obstacle_class": None, "tier": None,
+                "entity": _options(kinds[k]["properties"]["entity"], schema)[0]}
+    classes = [c for b in branches if "properties" in b for c in _options(b["properties"].get("obstacle_class", {}),
+                                                                          schema)]
+    trivial = {str(c["id"]) for v in basic_verbs() for c in (v.get("anchor") or {}).get("obstacle_classes") or ()
+               if c.get("base") == "trivial"}
+    easy = next((c for c in classes if c in trivial), None)
+    if quiet and easy:
+        return {"kind": "tier", "obstacle_class": easy, "tier": None, "entity": None}
+    tier_opts = [t for b in branches if "properties" in b for t in _options(b["properties"].get("tier", {}), schema)]
+    tier = "moderate" if "moderate" in tier_opts else (tier_opts[len(tier_opts) // 2] if tier_opts else None)
+    return {"kind": "tier", "obstacle_class": "other", "tier": tier, "entity": None}
+
+
 def _framer(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:
     text = packet.render()
     anchors = enum_at(schema, "anchor")
@@ -572,7 +601,6 @@ def _framer(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:
     verb_attr = None
     if verb_word:
         verb_attr = next((v["attribute"] for v in basic_verbs() if v["id"] == f"verb.{verb_word}"), None)
-    tiers = enum_at(schema, "obstacle", "tier")
     menus = enum_at(schema, "threatened_cost", "menu_id")
     alt_menus = enum_at(schema, "alternate_cost", "menu_id") or menus
     source, fitting = _stakes(verb_word, packet.message, packet.view, enum_at(schema, "stakes_source"), menus)
@@ -590,8 +618,8 @@ def _framer(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:
         "anchor": anchor, "deltas": [],
         "attribute": attribute,
         "deed_tag": None, "traits": [],
-        "obstacle": {"kind": "tier", "entity": None,  # the rule's default tier (Moderate), else the middle one
-                     "tier": "moderate" if "moderate" in tiers else (tiers[len(tiers) // 2] if tiers else None)},
+        "obstacle": _obstacle(schema, quiet=source is None),
+        "nudge_why": None, "nudge": "0", "nudge_fact": None, "request_size": "R2",
         "levers": [], "snags": [], "stakes_source": source,
         "stakes_heavy": False, "lethal": False, "reach_whole": False, "reach_one_factor": False,
         "threatened_cost": {"menu_id": threatened, "form_intent": forms.get(str(threatened), "")},

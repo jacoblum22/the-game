@@ -77,7 +77,8 @@ def test_offline_framer_names_what_the_act_plainly_risks() -> None:
     assert climb["stakes_source"] == "height_or_depth" and climb["threatened_cost"]["menu_id"] == "cost.harm"
     assert climb["alternate_cost"]["menu_id"] == "cost.shortfall" and climb["obstacle"]["tier"] == "moderate"
     hit = _frame("You attack the guard", "strike", target="npc.guard")
-    assert hit["stakes_source"] == "aware_opponent_or_observer" and hit["threatened_cost"]["menu_id"] == "cost.harm"
+    # harm from an aware party needs the cited fact that they are armed (01.6.11): the offline Framer threatens footing
+    assert hit["stakes_source"] == "aware_opponent_or_observer" and hit["threatened_cost"]["menu_id"] == "cost.footing"
     sneak = _frame("You sneak past the watch", "sneak")
     assert sneak["stakes_source"] == "aware_opponent_or_observer"
     assert sneak["threatened_cost"]["menu_id"] == "cost.exposure"
@@ -90,7 +91,7 @@ def test_a_climb_in_play_is_offered_as_risky(tmp_path: Path) -> None:
     r = game.submit("I climb the wall.")
     assert r.pause is not None and r.pause.kind == "offer"
     offer = next(b.text for b in r.oof_blocks if b.kind == "OFFER")
-    assert "Stakes: risky" in offer and "a setback that fits the moment" not in offer
+    assert "— a setback." in offer and "a setback that fits the moment" not in offer  # risky: S2 in words
 
 
 # ------------------------------------------------------------------------------------------- 3. the world

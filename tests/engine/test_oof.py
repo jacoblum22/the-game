@@ -28,7 +28,6 @@ from engine.dm.oof import (
 )
 from engine.harm.lethal import LethalTrigger
 from engine.harm.threshold import Menu, MenuOption, Situation
-from engine.resolve.frame import offer_preview
 from engine.resolve.gate import GateDecision, Redirect, RedirectOption
 from engine.resolve.types import Frame, RollResult
 from engine.store.events import EntityRecord, Event
@@ -44,25 +43,28 @@ def s(tmp_path: Path) -> Scene:
 
 
 def _frame(s: Scene, **kw: Any) -> Frame:
-    f = check(s, stakes_source="aware_opponent_or_observer",
+    f = check(s, stakes_source="consumed_resource",
               threatened_cost={"menu_id": "cost.drain", "form_intent": "you tire"},
-              alternate_cost={"menu_id": "cost.footing", "form_intent": "you slip"}, **kw)
+              alternate_cost={"menu_id": "cost.shortfall", "form_intent": "you get less far"}, **kw)
     assert isinstance(f, Frame)
     return f
 
 
-def test_offer_block_matches_the_cli_layout(s: Scene) -> None:
+def test_offer_block_is_the_12_15_2_template(s: Scene) -> None:
     f = _frame(s)
     blk = offer_block(f, rules=s.rules, fate=1)
-    lines = blk.text.splitlines()
+    lines = [ln.strip() for ln in blk.text.splitlines()]
     assert blk.kind == "OFFER"
-    assert lines[0] == "[OFFER] do it — Move (Agility), a moderate obstacle."
-    assert lines[1].strip() == "Success or better 50% · critical failure 5% · near miss 15% (need 11+ on the die)."
-    assert lines[2].strip().startswith("Stakes: risky. If it goes wrong: you tire (drain, S2")
-    assert "Or instead: you slip (footing)." in lines[2]
-    assert "Reach: standard." in blk.text and "Fate: 1." in blk.text
-    assert "1) Commit" not in blk.text  # the front end lists the pause's choices once, after the block
-    assert [c["id"] for c in offer_choices(f)] == ["commit", "change", "withdraw", "go_big", "play_safe"]
+    assert lines[0] == "[OFFER] do it."
+    assert lines[1] == "Chance: even — 50%   (Agility +3, practised +1)"
+    assert lines[2] == "If it works: what you wanted.   Very well (5%): more than you asked."
+    assert lines[3] == "If it fails: you tire — a setback.   Badly (5%): you tire — serious."
+    assert lines[4] == "Close call (15%): get it anyway and pay (you get less far), or fail."
+    assert lines[5] == "Takes: fate 1"
+    assert lines[6].startswith("Another way: with ")
+    assert "Commit" not in blk.text and "Do it" not in blk.text  # the menu follows the block (play/render.py)
+    assert [c["id"] for c in offer_choices(f)] == ["commit", "go_big", "play_safe", "change", "withdraw"]
+    assert [c["label"] for c in offer_choices(f)] == ["Do it", "Go big", "Play it safe", "Another way", "Back off"]
 
 
 def test_offer_view_has_exactly_the_engine_api_fields(s: Scene) -> None:
@@ -72,20 +74,27 @@ def test_offer_view_has_exactly_the_engine_api_fields(s: Scene) -> None:
     assert v.odds == {"success_or_better_pct": 50, "critical_success_pct": 5, "critical_failure_pct": 5,
                       "near_miss_pct": 15}
     assert v.threatened_cost == {"menu_id": "cost.drain", "form": "you tire", "severity_on_failure": "S2"}
-    assert v.alternate_cost == {"menu_id": "cost.footing", "form": "you slip"}
+    assert v.alternate_cost == {"menu_id": "cost.shortfall", "form": "you get less far"}
 
 
-def test_offer_variants_secret_lethal_auto(s: Scene) -> None:
+def test_offer_variants_secret_lethal_long_shot_auto(s: Scene) -> None:
     secret = offer_block(check(s, secret=True), rules=s.rules)  # type: ignore[arg-type]
-    assert "difficulty hidden" in secret.text and "The roll is hidden" in secret.text and "%" not in secret.text
-    lethal = offer_preview(_frame(s)).model_copy(update={"lethal": True})
-    text = offer_block(lethal, rules=s.rules, lethal_line="THIS CAN KILL YOU — the Guard (warned this scene)").text
-    stakes_at = text.splitlines().index(next(ln for ln in text.splitlines() if "Stakes:" in ln))
-    assert "THIS CAN KILL YOU — the Guard" in text.splitlines()[stakes_at + 1]  # directly under Stakes (12.15.2)
+    assert "Chance: you can't judge how hard this is." in secret.text and "%" not in secret.text
+    assert "Close call" not in secret.text  # I-143: the If lines stay, the odds and the close call do not
+    lethal = _frame(s).model_copy(update={"lethal": True, "stakes": "dire"})
+    lines = offer_block(lethal, rules=s.rules, lethal_line="THIS CAN KILL YOU — the Guard (warned this scene)").text
+    rows = lines.splitlines()
+    fails = next(i for i, ln in enumerate(rows) if "If it fails:" in ln)
+    assert "If it fails: Danger: " in rows[fails]
+    assert "THIS CAN KILL YOU — the Guard" in rows[fails + 1]  # directly under the price (12.15.2)
     auto = offer_block(_frame(s), rules=s.rules, auto=True)
-    assert auto.text.startswith("[OFFER — auto]") and "1) Commit" not in auto.text
-    n20 = offer_preview(_frame(s)).model_copy(update={"only_natural_20": True})
-    assert "Only a natural 20, and at best a plain success." in offer_block(n20).text
+    assert auto.text.startswith("[OFFER — auto]") and "Another way" not in auto.text
+    f = _frame(s)
+    n20 = f.model_copy(update={"odds": f.odds.model_copy(update={"only_natural_20": True})})
+    assert "Chance: only by luck — 5%, and at best what you wanted" in offer_block(n20).text
+    long = f.model_copy(update={"long_shot": True, "odds": f.odds.model_copy(
+        update={"success_or_better": 10, "critical_failure": 45})})
+    assert "Chance: long shot — 10% (failing badly is likelier: 45%)" in offer_block(long).text
 
 
 def test_near_miss_block(s: Scene) -> None:
@@ -96,11 +105,12 @@ def test_near_miss_block(s: Scene) -> None:
     assert blk.kind == "NEAR_MISS"
     assert blk.text == "[NEAR MISS] 13 vs 15. So close: succeed and pay a price, or let it fail."
     picks = near_miss_choices(f, s.rules)
-    assert [c["id"] for c in picks] == ["success_at_cost:cost.drain", "success_at_cost:cost.footing", "failure"]
-    # P-076: a success and a failure with the same price still read differently
-    assert [c["label"] for c in picks] == ["Succeed: you get what you tried for, at this price: you tire (drain, S2)",
-                                           "Succeed: you get what you tried for, at this price: you slip (footing, S2)",
-                                           "Let it fail: you do not get it, and still pay: you tire (drain, S2)"]
+    assert [c["id"] for c in picks] == ["success_at_cost:cost.drain", "success_at_cost:cost.shortfall", "failure"]
+    # P-076: a success and a failure with the same price still read differently; severities in words (12.15.2)
+    assert [c["label"] for c in picks] == [
+        "Succeed: you get what you tried for, at this price: you tire — a setback",
+        "Succeed: you get what you tried for, at this price: you get less far — a setback",
+        "Let it fail: you do not get it, and still pay: you tire — a setback"]
 
 
 def test_result_block_states_the_outcome_once(s: Scene) -> None:
@@ -114,38 +124,21 @@ def test_result_block_states_the_outcome_once(s: Scene) -> None:
     paid = result_block(f, roll, sac=True, costs=[CostEntry(menu_id="cost.drain", severity="S2", form="you tire")],
                         rules=s.rules).text.splitlines()
     assert paid[0] == "[RESULT] d20 9 → 13 vs 15 · success at a cost (near miss)"
-    assert paid[1].strip() == "Paid: you tire (drain, S2)."
+    assert paid[1].strip() == "Paid: you tire (drain, a setback)."
     secret = check(s, secret=True)
     assert result_block(secret, roll).text == "[RESULT] hidden check made."  # type: ignore[arg-type]
 
 
-def test_offer_words_never_cite_negate_or_cut_a_fact() -> None:
-    """Breaker playtest 183202 inputs 27-28: "citing not no one is watching the cobbles where the folded paper lies w"."""
-    from types import SimpleNamespace as NS
-
-    from engine.resolve.frame import plain_offer_words
-
-    fact = NS(visibility="shown", subject="place.square", value=False,
-              predicate="no_one_is_watching_the_cobbles_where_the_folded_paper_lies_w")  # a slug cut at 60
-    state = NS(entities={}, facts={"fact.144": fact}, scene=None)
-    frame = NS(beat=NS(actor="pc.a", target=None, restatement="Grab the paper."),
-               threatened_cost=NS(form_intent="the stooping lift marks her, citing fact.144"),
-               alternate_cost=NS(form_intent="the crowd lingers, as fact.144 says"))
-    plain_offer_words(frame, state)
-    assert frame.threatened_cost.form_intent == "the stooping lift marks her"
-    assert frame.alternate_cost.form_intent == "the crowd lingers, as what is already settled says"
-    fact.value = True
-    frame.alternate_cost.form_intent = "as fact.144 says"
-    assert plain_offer_words(frame, state).alternate_cost.form_intent == (
-        "as no one is watching the cobbles where the folded paper lies says")
-    # P-072 (fighter 185739 inputs 26-30): a "Source:" aside is bookkeeping, never shown
-    frame.threatened_cost.form_intent = "he loses his footing. Source: fact.144 (wrist held in the PC's hand)."
-    frame.alternate_cost.form_intent = "he stumbles (source: Falett, who is aware of him)"
-    plain_offer_words(frame, state)
-    assert frame.threatened_cost.form_intent == "he loses his footing."
-    assert frame.alternate_cost.form_intent == "he stumbles"
-    frame.alternate_cost.form_intent = "he shuts the door, source: their friendship, which she is pressing."
-    assert plain_offer_words(frame, state).alternate_cost.form_intent == "he shuts the door"
+def test_a_cost_form_that_cites_ids_is_not_shown(s: Scene) -> None:
+    """P-072 / breaker 183202: a Framer form citing "fact.144" or a "Source:" aside is bookkeeping; the OFFER says
+    the price in the cost's own plain words instead (no string surgery on model text)."""
+    f = check(s, stakes_source="consumed_resource",
+              threatened_cost={"menu_id": "cost.drain", "form_intent": "you tire, citing fact.144"},
+              alternate_cost={"menu_id": "cost.shortfall", "form_intent": "he stumbles (source: Falett)"})
+    assert isinstance(f, Frame)
+    text = offer_block(f, rules=s.rules).text
+    assert "fact." not in text and "source" not in text.lower()
+    assert "If it fails: something is used up — a setback." in text and "(you get less than you wanted)" in text
 
 
 def test_cost_terms_and_several_questions_are_answered(s: Scene) -> None:
@@ -155,7 +148,7 @@ def test_cost_terms_and_several_questions_are_answered(s: Scene) -> None:
 
     from engine.dm.turn import OOF_HELP, SEVERITY_ANSWER, oof_answer
 
-    ctx = NS(state=s.state, rules=s.rules)
+    ctx: Any = NS(state=s.state, rules=s.rules)
     a = oof_answer(ctx, 'what does "closed door, S2" and "exposure" mean? And can I spend my Fate point on this?')
     assert a != OOF_HELP and a.startswith("Closed door: a cost that fits ")
     assert "At S2: this approach closed until a new fact changes the situation." in a
@@ -233,62 +226,15 @@ def test_recap_from_state_only(s: Scene) -> None:
     assert "• Wren reached Ashford." in text
 
 
-# ------------------------------------------------------------------ the OFFER's model words, player-facing (I-134)
+# ------------------------------------------------------------------ OOF answers about the OFFER's words
 
 
-def test_offer_words_drop_ids_internals_and_fix_the_actors_pronouns() -> None:
-    """The breaker playtest's OFFER (turn 18): a raw fact id, the Reader's aside and an OOF tail, "her" for he/him."""
+def test_questions_about_offer_words_get_their_meaning(s: Scene) -> None:
     from types import SimpleNamespace as NS
 
     from engine.dm.turn import oof_answer
-    from engine.resolve.frame import plain_offer_words
 
-    ent = {"pc.dilly": NS(data={"pronouns": "he/him"}), "npc.bixok": NS(data={"pronouns": "he/him"})}
-    fact = NS(visibility="shown", predicate="saw_who_started_the_quarrel", value=True)
-    state = NS(entities=ent, facts={"fact.233": fact}, scene=NS(cast_present=["pc.dilly", "npc.bixok"]))
-    frame = NS(beat=NS(actor="pc.dilly", target=None, restatement=(
-        "Dilly scans the common room for the stranger who started the quarrel (target not yet chosen; the scan waits "
-        "on the clarifying answer). Out of fiction: the player asks what options are available; answer from the "
-        "codex with a free OFFER, no fictional time.")),
-        threatened_cost=NS(form_intent="her searching eyes sweeping the room draw the notice of the stranger who "
-                                       "started the quarrel (source: fact.203)"),
-        alternate_cost=NS(form_intent="Bixok tells her nothing, as fact.233 says"))
-    plain_offer_words(frame, state)
-    assert frame.beat.restatement == "Dilly scans the common room for the stranger who started the quarrel."
-    assert frame.threatened_cost.form_intent == ("his searching eyes sweeping the room draw the notice of the "
-                                                 "stranger who started the quarrel")
-    assert frame.alternate_cost.form_intent == "Bixok tells him nothing, as saw who started the quarrel says"
-    # someone else present uses she/her: "her" may be them, so it stays
-    ent["npc.bixok"] = NS(data={"pronouns": "she/her"})
-    frame.alternate_cost.form_intent = "Bixok tells her nothing"
-    assert plain_offer_words(frame, state).alternate_cost.form_intent == "Bixok tells her nothing"
-    # a question about an option's word gets that word's meaning, not the generic help
-    ctx = NS(state=state, rules=None)
+    ctx: Any = NS(state=s.state, rules=None)
     assert oof_answer(ctx, 'what does "Go big" mean here?').startswith("Go big: raise the stakes one step")
     assert oof_answer(ctx, 'what does "near miss" mean?').startswith("A near miss is a roll that fails by 3")
-    # P-047: Luck asked about at an OFFER gets 01.16.3's answer (fate is a reroll after the die, never before)
-    assert "reroll" in oof_answer(ctx, "Can I spend my Luck on this first?")
-    # explorer playtest input 20: a structured fact value is said in words, never as a dict repr or predicate id
-    state.facts["fact.9"] = NS(visibility="shown", subject="pc.dilly", predicate="bond.anchor",
-                               value={"kind": "friend", "npc": "npc.zitka"})
-    state.entities["npc.zitka"] = NS(name="Zitka", data={})
-    frame.alternate_cost.form_intent = "Bixok mocks fact.9"
-    assert plain_offer_words(frame, state).alternate_cost.form_intent == "Bixok mocks your friend Zitka"
-    state.facts["fact.9"].value = {"kind": "friend"}
-    frame.alternate_cost.form_intent = "Bixok mocks fact.9"
-    assert plain_offer_words(frame, state).alternate_cost.form_intent == "Bixok mocks what is already settled"
-
-
-def test_offer_menu_says_what_enter_does_and_names_the_trades() -> None:
-    from engine.dm.response import Choice, Pause, Response
-    from engine.resolve.pipeline import TRADE_LABELS
-    from play.render import render_response
-
-    pause = Pause(kind="offer", default_choice="withdraw",
-                  choices=[Choice(id="commit", label="Commit"), Choice(id="withdraw", label="Withdraw (nothing is spent)"),
-                           Choice(id="play_safe", label=TRADE_LABELS["play_it_safe"])])
-    out = render_response(Response(phase="play", oof_blocks=[OofBlock(kind="OFFER", text="[OFFER] Climb.")],
-                                   pause=pause), 80)
-    # P-044: an OFFER names no Enter default (an empty line withdrew silently); the near miss still does
-    assert out.endswith("  3) Play it safe (less at stake, less if it works)\n\n"
-                        "Type 1 to commit, or a number from the list.")
+    assert "reroll" in oof_answer(ctx, "Can I spend my Luck on this first?")  # P-047 (01.16.3)

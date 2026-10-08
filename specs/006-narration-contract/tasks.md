@@ -56,7 +56,7 @@ Independent test: `tests/engine/test_repair.py` with a scripted narrator.
 ## Phase 7: Measurement
 
 - [X] T024 `evals/narration_plug.py`: packet→new-contract packet, `haiku` narrator (Claude CLI, `evals/playtest.ask_claude`), `offline` narrator, `judge` (packet mode), repair simulation counting narrator calls and cuts; `evals/replay_bench.py` reports the four gate measures for plugs that return them
-- [ ] T025 Run longhorizon scripted; run the replay plug on ≤ 80 packets with Haiku; save `evals/baselines/replay_006.txt`
+- [X] T025 Run longhorizon scripted; run the replay plug on ≤ 80 packets with Haiku; save `evals/baselines/replay_006.txt`
 - [X] T026 Re-record replay fixtures (`py -3.12 -m tests.replay.record_games`)
 
 ## Phase 8: Retire (each only after its replacement passes)
@@ -77,7 +77,7 @@ Independent test: `tests/engine/test_repair.py` with a scripted narrator.
 ## Phase 9: Polish
 
 - [X] T039 `engine/CONVENTIONS.md` narration/audit/NPC-layer sections updated
-- [ ] T040 `specs/006-narration-contract/implementation-results.md` with the gate table; append to `research_notes/Playtest round 2 solutions/OVERNIGHT-LOG.md` is the orchestrator's (not done here)
+- [X] T040 `specs/006-narration-contract/implementation-results.md` with the gate table; append to `research_notes/Playtest round 2 solutions/OVERNIGHT-LOG.md` is the orchestrator's (not done here)
 
 ## Dependencies
 

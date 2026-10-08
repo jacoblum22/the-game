@@ -23,7 +23,7 @@ from engine.dm.adjudication import AdjudicationRecord, BeatEntry
 from engine.dm.context import TurnContext
 from engine.dm.handles import RecordItem
 from engine.dm.handles import items as handle_items
-from engine.dm.packet import build_packet, scene_setting
+from engine.dm.packet import build_packet, scene_setting, view_ctx, view_for
 from engine.dm.player_text import clean
 from engine.dm.roles.prompts import load_prompt
 from engine.dm.schemas import build_schema, schema_context
@@ -453,12 +453,6 @@ def draft(ctx: TurnContext, record: AdjudicationRecord, *, player_message: str =
     caller falls back, 12.3.3)."""
     st = ctx.state
     its = list(items) if items is not None else record_items(st, record)
-    sctx = schema_context(st, ctx.rules)
-    sctx = sctx.model_copy(update={"narrator_refs": [*(it.handle for it in its), *sctx.fact_ids],
-                                   "narrator_mode": narrator_mode(ctx),
-                                   "repair_ids": list(repair.failing) if repair is not None else [],
-                                   "repair": repair is not None})
-    schema = build_schema(Role.NARRATOR, sctx)
     triggers = get_active_triggers(st, ctx.rules)
     mode = st.scene.mode if st.scene else None
     cards = load_cards_for(Role.NARRATOR, scene_situation_tags(st, ctx.rules), mode, triggers, rules=ctx.rules)
@@ -471,8 +465,20 @@ def draft(ctx: TurnContext, record: AdjudicationRecord, *, player_message: str =
         msg.extend(extra)
     else:
         msg.append(repair_text(repair))
-    packet = build_packet(Role.NARRATOR, instructions=load_prompt("narrator"), cards=cards, view=st,
-                          exchanges=list(exchanges), message="\n".join(msg), triggers=triggers, rules=ctx.rules)
+    message = "\n".join(msg)
+    # the enums come from the view this packet shows (its facts and entities, spotlight included), so nothing
+    # outside the packet can be cited (12.3.1)
+    view = view_for(Role.NARRATOR, st, view_ctx(message, exchanges, plain=False))
+    sctx = schema_context(st, ctx.rules)
+    sctx = sctx.model_copy(update={
+        "narrator_refs": [*(it.handle for it in its), *re.findall(r"(?m)^\s*(fact\.\d+) about ", view)],
+        "scene_ids": list(dict.fromkeys([*sctx.scene_ids, *(i for i in re.findall(r"(?m)^([a-z]+\.[\w.]+): ", view)
+                                                             if i in st.entities)])),
+        "narrator_mode": narrator_mode(ctx), "repair_ids": list(repair.failing) if repair is not None else [],
+        "repair": repair is not None})
+    schema = build_schema(Role.NARRATOR, sctx)
+    packet = build_packet(Role.NARRATOR, instructions=load_prompt("narrator"), cards=cards, view=view,
+                          exchanges=list(exchanges), message=message, triggers=triggers, rules=ctx.rules)
     res = call_role(ctx.model, Role.NARRATOR, schema, packet, turn_id=ctx.turn_id, recorder=ctx.record_call)
     data = dict(res.data)
     if repair is not None:

@@ -186,9 +186,27 @@ Decisions (J):      1. [J:enum] The message's parts, each classified (a message 
                          questions. Whether an NPC answers a plain question is the NPC's decision (12.2.9).
                        Default when uncertain between SPEECH and DECLARATION: DECLARATION (SG-05: the
                        roll test then decides). Uncertain between DISPUTE and OOF_QUESTION: OOF_QUESTION
-                       answered from the turn log, which surfaces any real error.
+                       answered from the turn log, which surfaces any real error. A DECLARATION
+                       whose computed social DC is certain (15.3.10; T-15-3: a Neutral or warmer
+                       listener asked an R1 question) resolves without a roll [revision: R2-C].
                     2. [D] Order of handling: SAFETY → SESSION → DISPUTE → PENDING_ANSWER →
                        OOF_QUESTION → FICTION_QUESTION → DECLARATION / SPEECH (in the player's order).
+                    3. [J:enum] Beat decisions [revision: R2-C] [DL-12-50]. For each DECLARATION or
+                       FICTION_QUESTION part, PARSE (01.2) records only:
+                       verb — one of the 15 basic verbs (data/basic_verbs.yaml);
+                       target — scene entity ids (01.2.5);
+                       three method facets, yes or no: against_will (acts on a person's body or
+                         property against their will); uses_power (needs a supernatural or
+                         licensed technique); speech (mainly words);
+                       question_kind (question parts only), one of six: who is X · where is X ·
+                         what happened · what is X like or for · what do you want or think · who
+                         would know; plus topic (the entity asked about, else one of the closed topics of
+                         social.yaml#common_knowledge.topics [revision: R2-D]);
+                       shape — now, queued (a Ready beat, 01.14.4: "I attack if they keep
+                         stalling") or conditional on another beat.
+                       Nothing else is proposed. The gate class, the license and the would-be
+                       license (00.12.3, PR-01-5), the roll test (01.4.1) and the DC (01.6.4) are
+                       computed by the engine; the PC's knacks reach PARSE as words, never as gates.
 Computation [D]:    the classification is logged with the verbatim message (12.2.5)
 State writes:       turn log entry {turn, message verbatim, parts, classes}
 Narration may not imply: that SPEECH was a persuasion attempt (no roll was made)
@@ -198,6 +216,9 @@ Worst case (J):     a SPEECH part classified DECLARATION → a roll test that an
                     comes from its reaction/action table (12.11.5) and the player may declare the
                     attempt next turn (class iv). A SAFETY part missed → caught at T10's safety
                     screen of the draft (12.5.6) [editor: E2-032], which is [D] against the lines list.
+                    A wrong verb or facet puts the beat under the wrong card: the OFFER names the
+                    act in plain words and the player changes it for free (class ii); a conditional
+                    read as "now" is shown in the OFFER before anything is spent (class ii).
 Examples:           inside SPEECH: "'Evening. Is this the ferry?'" (a question asked aloud; also a
                     FICTION_QUESTION if the answer is unestablished). outside (DECLARATION): "'You'll
                     take me across tonight — I'll make it worth your while,'" (tries to change the
@@ -250,16 +271,31 @@ ruleset or the whole history. Each turn it receives exactly:
      `cast_line`, then "and N more"), so a home base that gathers residents does not grow the view and
      nobody present drops out of sight. The pins too are capped: by kind (written words, commitments,
      memories), then newest.
+   - **Profiles** [revision: R2-E; DL-12-70]: each person and thing in view, and each spotlight entity, is
+     rendered as a compact profile: its stable identity, then its active details (00.6.6a) by salience then last
+     use, each marked `(used last turn)` when the previous delivery stated it (12.14.11). `scene` details are
+     pinned while their scene runs.
+   - **Spotlight** (the `spotlight` budget) [revision: R2-E; DL-12-74]: up to `packet.spotlight_k` (**4**)
+     entities outside the scene, chosen in this order, skipping any already in view: (1) entities named or
+     aliased in the player's message; (2) the beat's target; (3) entities named in the last delivery; (4) the
+     scene agenda's thread and its linked entities; (5) one hop of relationship neighbours of those, while room
+     remains. Names resolve through an alias index of names, aliases and roles. A spotlight entity is rendered
+     **as the PC knows it**: its name or unnamed label (12.10.2), its profile as the PC perceived it, and the PC's
+     knowledge records about it; never its world truth, and a sealed entity shows its permitted slice or nothing
+     (INV-10). The spotlight is in the claim check's scope, so a claim about an absent person is judged.
+   - **Scene cards** (the `scene_cards` budget) [revision: R2-E; DL-12-73]: at most `packet.max_scene_cards`
+     (**2**) cards (12.4.8 step 9): the most recent card involving a present or spotlight entity whose scene
+     lies outside the verbatim window (item 5), then the next, read through the role's view below.
    - **Ranked** (fills the facts budget): every other fact about what is in view, by **salience**
-     (a memory's salience, 3 for a commitment, else 1) **+ recency** (2 for this scene, 1 for the last,
+     (a memory's salience, 3 for a commitment, 2 for a `scene` detail while its scene runs [revision: R2-E], else 1) **+ recency** (2 for this scene, 1 for the last,
      else 0: it decays per scene, not per turn, so a long scene does not push out its own start)
      **+ relevance** (+2 when the fact's subject or value is the beat's target or an entity the player's
-     message names) **+ adjacency** (+1 when its subject has a relationship to anyone present or its
+     message names, or a spotlight entity [revision: R2-E]) **+ adjacency** (+1 when its subject has a relationship to anyone present or its
      value names someone present). Ties go to the newest.
    - The other things lying at the place, and the open clocks, fill their budgets newest first; open
      threads and the cast list are ordered by their 12.6.6 weights, then newest.
-   Every role that reads the view gets the same selection, and a schema offers only the facts the view
-   shows.
+   The selection is made once per turn and each role reads its projection of it (the table below)
+   [revision: R2-E]; a schema offers only the facts that role's view shows.
 4. **The player's current message, verbatim and complete** — never a paraphrase (12.2.5).
 5. **The last four exchanges verbatim** (player message + DM response), and nothing older except
    through state: the chronicle (11), the threads register, the journal of PC knowledge (15), and the
@@ -272,6 +308,22 @@ player-input conflicts [R1 12.D]. Four verbatim exchanges keep the immediate con
 was just said, the pronoun just used, the offer just made) while everything older that matters lives in
 typed state that cannot drift. The window is a `pacing.yaml` number (`packet.verbatim_exchanges: 4`);
 OEQ-12-1 tests 2/4/8. *Runtime capabilities:* RC-RETRIEVE, RC-STORE, RC-SEAL.
+
+**Views per role.** `[D]` [DL-12-75; revision: R2-E] Item 3's selection is made once per turn; each role reads
+its own projection of it, respecting the three layers of 12.10.1 (`get_state(scene, role)`):
+
+| Role | Sees | Never sees |
+|---|---|---|
+| Reader (PARSE) | the message, the last two exchanges, the names and aliases of the scene and spotlight entities, the PC's knacks as words, the open pause | setting prose, profiles, scene cards |
+| Framer (rolled beats only) | the beat; the target's and the place's profiles (their details are levers, 12.14.13); positions and conditions; anchor cards; candidate facts filtered by code | the PC sheet (the modifier is computed), the cast list, setting prose |
+| World and the NPC layer | world truth for the present NPCs minus seals: motives, memories, knowledge; off-screen clocks; scene cards | usage marks, setting prose |
+| Narrator | **the PC-knowledge layer only**: the adjudication record with handles, the setting and seeded looks, profiles with usage marks, the spotlight as the PC knows it, at most 2 scene cards | motives, `truth`, sealed content, background the PC has not perceived or learned |
+| Checker | the numbered sentences with their declarations in words (12.3.1), compact profiles of the cited, spotlight and created ids | rule cards outside 12.3, setting prose, the narrator's reasoning |
+| Director | threads, clocks, cast weights, scene cards | verbatim exchanges beyond the last one |
+
+Sealed content reaches no view except as its permitted slice (INV-10); a leak test on every Narrator packet
+checks that no `truth`, motive or sealed string is in it. The narrator cannot cite what its view does not show,
+because its `refs` are built from it (12.3.1).
 
 **12.2.5 Verbatim in, verbatim logged.** `[D]` [DL-12-02; DL-12-01; C:P13; revision: I-065] The player's message is stored verbatim in the turn log
 before anything else happens, and the DM's delivered response is stored verbatim after delivery. The turn
@@ -332,7 +384,8 @@ closed source (01.11.3):
 2. **NPCs present** follow the default NPC layer (12.11.9) [revision: R2-B; DL-12-43; I-140]. Each keeps
    the activity code rolled when they entered the scene. One whose standing, wants or refusals are engaged by
    what just happened, or whom the PC addressed, responds within the scene's practice, and the response
-   comes from (a) a resolved Talk frame's delivered outcome (ch.15), else (b) an established
+   comes from (a) a resolved Talk frame's delivered outcome (ch.15), or for a question the PC asked, PR-12-10's answer
+   [revision: R2-D; DL-12-60], else (b) an established
    want or refusal that the situation clearly triggers (`[J:flag]` *"Does a recorded want or refusal of
    this NPC name this situation?"*), else (c) `roll_table(tbl.npc_action)` with the NPC's standing as
    context (12.11.5). **An addressed NPC always answers**, in words, or with a refusal spoken in their own
@@ -369,16 +422,25 @@ could confirm or contradict, held as `{subject id, claim class, predicate, value
 2. **Any undeclared assertion the audit finds** (`[J:flag]` per sentence: *"Does this sentence assert
    something its declarations do not cover?"*). It is a claim like any other, and its sentence also fails
    coverage (12.3.1a).
+   **The audit is a diff, not an extraction** [revision: R2-E; DL-12-71]. The Checker reads the numbered
+   sentences, each with its declarations rendered in words, and compact profiles of the ids they cite (12.2.4's
+   Checker view), and reports only (i) assertions a sentence makes beyond its declarations (each a claim, as
+   above) and (ii) declarations the sentence does not express, or expresses differently (a coverage failure of
+   that sentence, 12.3.1a). A full extraction of every assertion runs on **1 turn in 10** (RC-RNG) to measure what
+   the diff misses. The audit may be **skipped** on a turn whose sentences are all declared, with no atmosphere
+   sentence flagged (12.3.1a item 2) and no SPEECH part in the player's message, **only once** the long-horizon
+   harness measures fewer than **0.3 undeclared assertions per turn** (OEQ-12-23;
+   `pacing.yaml#claim_check.audit`); until then it runs every turn.
 
 The claim classes (closed list) and what each is checked against:
 
 | Class | Examples of claims | Checked against |
 |---|---|---|
 | `existence` | "a guard stands by the gate"; "the rats are gone" | entity `exists`, scene presence |
-| `identity` | a name, sex or pronoun, age, kin, title, profession, species, appearance detail | entity fields and identity facts |
+| `identity` | a name, sex or pronoun, age, kin, title, profession, species, appearance detail | entity fields, identity facts, and the entity's `lasting` details (`detail.<slot>`, 00.6.6a) [revision: R2-E] |
 | `quantity` | "your last two arrows"; "a purse of twelve silver" | quantities |
 | `harm_condition` | "you're bleeding"; "he's barely standing"; "you shake off the fear"; "he is dead" | conditions, harm state, shown descriptors (bloodied, down); a death only with `harm_state.dead` (07) [revision: I-030] |
-| `position` | "she's at your shoulder"; "you reach the far door"; "behind the cart"; a present NPC's continuing activity ("the smith works at her forge") [revision: R2-B; I-128] | position, range bands, positional flags (T-06-4's words, T-12-11) [revision: I-030]; an activity against the NPC's presence and the activity code wrote for the scene (T1c, 12.11.9) |
+| `position` | "she's at your shoulder"; "you reach the far door"; "behind the cart"; a present NPC's continuing activity ("the smith works at her forge") [revision: R2-B; I-128] | position, range bands, positional flags (T-06-4's words, T-12-11) [revision: I-030]; an activity against the NPC's presence and the activity code wrote for the scene (T1c, 12.11.9); a posture, hold, manner or activity against the entity's `scene` details (00.6.6a) [revision: R2-E] |
 | `possession` | "you pocket the key"; "the captain draws his sword" | possessions, equipped |
 | `location_time` | "dusk falls"; "two days after the fire"; "in the archive" | time, place graph (temporal claims are computed, 00.6.9e) |
 | `knowledge` | "you recognize the seal"; "he knows you're lying"; "you remember her name" | knowledge records (PC and NPC) |
@@ -391,6 +453,10 @@ The claim classes (closed list) and what each is checked against:
 
 Declaration is `[J:enum]`: the narrator assigns each assertion of a sentence its refs and class; the audit reads
 each sentence's text for what the declarations missed [revision: R2-B].
+**`narrated` certainty** [revision: R2-E; DL-12-70]: a fact that narration first stated (a T1a element or detail,
+00.6.6a) is written with `certainty: narrated`. It is canon like an established fact: it supports later claims
+and contradicts differing ones (whole store, 12.3.2), and only an explaining event in a turn's record supersedes
+it. It differs only in provenance, so it never creates value, a clue or a hazard (12.14.13).
 **Atmosphere is never a claim** [revision: I-127; DL-12-37]: sensory and ambient detail that names nothing
 addressable (weather, light, sky, smell, temperature, a sound with no source the player could approach, the
 murmur of an unnamed crowd, mood) is not extracted, matching 00.6.6, which never records it. Such detail is
@@ -573,7 +639,8 @@ same id (class iv).
 most **200 words** (`pacing.yaml#narration.scene_open_max_words`):
 1. **The moment** — where, when (time of day and weather from state, never invented), who is present
    (each addressable element written on mention, 00.6.6), and the layout the PC can see: exits, cover,
-   hazards, what is within reach (12.14.6).
+   hazards, what is within reach (12.14.6). A seeded place's look, furniture and exits (12.16.9) are this layout,
+   read from the store and never invented [revision: R2-D; I-130].
 2. **The impetus** — one thing that is happening or about to, drawn `[J:enum]` from this ordered list,
    first eligible: (a) the scene test's alteration or interruption (12.4.4); (b) a fired trigger
    (12.2.3); (c) the PC's own declared purpose for the scene; (d) an NPC present acting on a recorded
@@ -660,12 +727,20 @@ activity unit as those chapters set, run inside `advance_time`. The narration is
 3. **Lists**: the cast list and thread list weights are updated (12.6.6).
 4. **Sweep**: every trigger raised during the scene was handled (12.2.3); every hidden or sensed clock
    tick rendered one omen (INV-14); every claim of class `position`, `possession`, `quantity` and
-   `harm_condition` in the scene's delivered narration is re-checked against the store with
+   `harm_condition` in the scene's delivered narration, each declared sentence's claims as well as those the
+   audit found (12.3.1) [revision: R2-E], is re-checked against the store with
    `check_claims` — a mismatch found here starts PR-12-4.
 5. **Live-lead audit** (12.8.4) — `h.12.lead_audit` (contrib handler).
 6. **Rotation ledger** (12.9.1) — `h.12.rotation_update` (contrib handler).
 7. **NPC memory** commit (12.11.7) — `h.12.npc_memory` (contrib handler).
-8. **Scene record** closed: `ended_at`; when the scene answered an agenda attached to a thread, a
+8. **Scene details expire** [revision: R2-E; DL-12-72]: every `scene` detail (00.6.6a) and every activity written
+   for the scene (12.11.9) is superseded at `ended_at`; history is kept.
+9. **Scene card** [revision: R2-E; DL-12-73]: a structured view over the scene's events, never a summary of its
+   narration: `{scene, place, time (started_at, ended_at), cast, agenda -> answer, beats [(actor, verb, target,
+   degree)], facts written, memories committed (step 7), threads touched}`. Every field is computed from the
+   log, so the card can be regenerated at any time and is never summarized again (00.6.9d); it holds no prose,
+   and each role reads it through its view (12.2.4).
+10. **Scene record** closed: `ended_at`; when the scene answered an agenda attached to a thread, a
    one-line chronicle entry is offered to ch.11 (`chronicle_append`).
 Every step is deterministic except the chronicle line's wording `[N]`.
 
@@ -706,10 +781,12 @@ an unrecorded line [R5 SC-03, SC-04].
 6. **Check-in** if due (12.5.9).
 
 **12.5.3 Recap.** `[D]` + `[N]` A recap — at session start, or whenever the player asks "where were
-we?" — is generated **from state only**: the chronicle entries since the last recap, the active threads
+we?" — is generated **from state only**: the scene cards (12.4.8 step 9) and the chronicle entries since the last
+recap [revision: R2-E; DL-12-73], the active threads
 with their last progress, the PC's current position, condition and pressing clocks (as shown), and the
 last scene's agenda and its answer. It is never generated from a previous recap or from a summary of
-narration (00.6.9d) [R1 12.D (never summarize a summary; recaps from state)]. A recap may be in an
+narration (00.6.9d) [R1 12.D (never summarize a summary; recaps from state)]; a recap sentence that cites no
+card field or chronicle entry fails the check [revision: R2-E]. A recap may be in an
 in-fiction voice ("Three days ago you left Ashford…") but every sentence passes the claim check (12.3).
 
 **12.5.4 End a session.** `[D]` When the player ends the session ("let's stop here"), the DM: (1) finishes
@@ -820,6 +897,8 @@ ferryman is home *because the scene needs him*" — that is the DM choosing what
 | The uncertainty is… | Tool | Example |
 |---|---|---|
 | answered by a fact, canon, or scene type | read it (Certain / Impossible) | the smithy has a forge |
+| who is <role>, for an ordinary role (a story role goes to the case graph, PR-12-10 step 1) | casting: 00.11 `cast` (`social.yaml#cast`) [revision: R2-D] | who keeps the ferry here? |
+| what <NPC> knows about <topic> | the answer ladder, PR-12-10 [revision: R2-D] | what does the innkeeper know of the north road? |
 | whether an actor with known capability manages something | fortune check (01.6.7) | does the messenger outrun the storm? |
 | which of several things, from a *specific* table in data | `roll_table(<specific table>)` — region tables (12.16), encounter tables (10), rumor tables (11), loot (08), NPC tables (12.11) | who is drinking at the inn tonight |
 | what an NPC does when no want, refusal or frame decides it | `roll_table(tbl.npc_action, {standing})` (12.11.5) | the dockhand, after the PC's question |
@@ -914,7 +993,8 @@ scene's agenda, acted in the scene, or was named in a delivered lead; −1 (min 
 the last **six** scenes; an entry is removed when its NPC is dead or departed or its thread is resolved,
 failed or abandoned. A roll on a list draws by weight with RC-RNG; an entry drawn twice in a row is
 re-drawn once (recency). Factions are drawn from ch.11's faction list by the same weights rule when a
-focus names a faction.
+focus names a faction. The same weights order the view's thread list and known-cast list (12.2.4 item 3)
+[DL-12-38; revision: R2-E].
 
 **12.6.7 Meaning tables.** `[D]` + `[J:open]` `tbl.meaning` returns a pair of words: an **action pair**
 (a verb and a subject: "betray — a promise") for events and the "and" of yes-and / no-and answers, or a
@@ -1203,7 +1283,10 @@ relationship appears in narration only after the PC has learned it (a `record_kn
 overheard, read, recognized). Until then the narration uses a descriptor from what the PC can see ("the
 grey-bearded ferryman"), chosen from the NPC's recorded appearance detail. *"Has the PC learned this?"* is
 `[J:flag]`, true only when a knowledge record exists or the PC's origin or prior scenes make it common
-knowledge (an Oracle Certain by scene logic). *Worst case (J):* a name used one scene early — the claim check
+knowledge (an Oracle Certain by scene logic). **A local knows the haven's names** [revision: R2-D] [DL-12-63; I-149]:
+a PC whose anchor bond (02.9.1) is placed in the haven is a local, and starts with knowledge records (`how: common`) of
+the names of the haven's officers of 12.16.11 (smith, innkeeper, gate captain, healer, the wise one, the scribe) and
+of the heads of the factions seated in the haven; an outsider starts with none of them. *Worst case (J):* a name used one scene early — the claim check
 flags it as `knowledge` (class iv).
 
 **12.10.3 Sealed secrets and permitted slices.** `[S]` + `[D]` The narrator's packet never contains sealed
@@ -1252,8 +1335,12 @@ is a free Recall of established facts, 00.12.6).
 match): (a) a knowledge record says so; (b) the NPC is in the `witnesses` of the beat or event that
 established it; (c) the fact is public in the NPC's scope (ch.11 reputation, news and rumors that reached
 their place); (d) the fact is common knowledge of the NPC's role or origin (a harbor master knows the
-tides) — `[J:flag]` *"Would anyone in this role know it?"*, uncertain → the Oracle, Likely for facts of
-their trade, Unlikely otherwise. **An NPC acts only on what it knows** — no NPC reacts to the PC's secret
+tides) — its topic (12.2.2) is one of the role's topics in `social.yaml#common_knowledge`: unless a record settles it, the
+Oracle at Likely; a public topic (news, folk, law, weather) of an NPC who lives where it happened, Likely; anything
+else, Unlikely [revision: R2-D] [DL-12-60]. (e) **A settled answer is a knowledge record**: a ratified answer is
+written with the NPC's record, and so is a "no" (`knows: false`: the NPC does not know it), so the same question is
+never rolled twice; the **asked-and-answered index** `(npc, question_kind, topic) → fact id | unknown` is kept from
+these records and read first by PR-12-10 [revision: R2-D] [DL-12-60]. **An NPC acts only on what it knows** — no NPC reacts to the PC's secret
 plan, hidden identity or off-screen deed unless one of (a)–(d) holds. Updates `[D]`: when the PC tells an
 NPC something (SPEECH or Talk), `record_knowledge(npc, claim, how: told)` — being told is not believing
 (ch.15's claim plausibility decides belief); when an NPC witnesses a beat, a record per witness; when news
@@ -1267,6 +1354,17 @@ data), the shown descriptors (`bloodied`, `down`, visible conditions), and stand
 `bloodied` descriptor and a visible condition. Threat is voiced before a fight through the tells of the
 adversary's band (T-09-13) [revision: I-030] and, when `threat_advisory` is *hard* or *lethal*, through the lethal warning's plain
 words (ch.07) [R4 §5.2 item 2].
+
+**12.10.8 Answering a question.** `[D]` [DL-12-60; DL-12-44; revision: R2-D] When the PC asks an NPC a question (a
+resolved Talk, Observe or Recall part, or a SPEECH question, carrying `question_kind` and `topic`, 12.2.2), the answer
+comes from **PR-12-10**, before the draft, and never from the narration: the asked-and-answered index first, then the
+route by tier (a consequential question goes only to the case graph; "who is <role>" to casting, 00.11 `cast`), then
+the ladder for ordinary knowledge: the NPC's records, their seeded knowledge pack (12.16.11), a candidate proposed and
+settled by the Oracle at 12.10.6(d)'s odds, and last a pointer to a real person or place who would know. How deep the
+ladder goes follows the delivered reach (T-15-5's questions rule). It never ends empty: "I don't know" with a real
+lead is a success (DL-12-44), and "does not know" is recorded so the same question gets the same answer. *Evidence:*
+`_process/simulation/12-answer_ladder_sim.py` (30 packed seeds): "I don't know" is 31.6% of answered ordinary asks when
+half the asks are on the NPC's own trade (36.5% at 30%, 23.9% at 70%); no success is empty.
 
 ### 12.11 NPCs: generation, reaction, voice, decisions, and memory
 
@@ -1523,7 +1621,11 @@ a clock, a license, a hazard or trap entry, a generator output — never as a pr
 (00.16.4). The DM picks `[J:enum]` the nearest existing entry and moves at most two parameters (the
 two-change limit applied to content). If nothing fits within two changes, the DM uses the nearest entry
 unchanged, logs a `rule_conflict` ruling with `review_flag`, and the review list carries an extension
-proposal (PR-00-8). *Worst case (J):* a less apt primitive — its stated numbers apply, inside the
+proposal (PR-00-8). **Tier** [revision: R2-D] [DL-12-64]: what the DM improvises in play is T1 at most (12.14.13), and
+only by a procedure: a seed or region table, the default NPC layer (12.11.9), or propose-and-ratify (PR-12-10). A T2
+element (a hazard, a trap, an adversary, a valuable item, a person with a want, a clue) is never improvised: it comes
+from its generator (ch.10's tables, 12.11.1, 00.11, PR-15-6), and this rule then builds it from primitives.
+*Worst case (J):* a less apt primitive — its stated numbers apply, inside the
 substrate's caps (class i/iv).
 
 **12.13.5 Every improvisation is logged.** `[D]` [DL-12-19; R5 DM-05; revision: I-065] A beat or content improvisation writes a `RulingRecord`
@@ -1577,6 +1679,8 @@ always checked (12.3.1):
 - **properties of things** — what an item does, what a material resists, what a creature fears (the
   probe's invented cold vulnerability, BRIEF §7; SG-15);
 - **motives and knowledge** — why an NPC does something, what they know (12.10.6).
+A detail of an addressable element stated in delivered narration is **established** (00.6.6a): it is stored in
+its slot and binds later turns. Atmosphere is not [revision: R2-E; DL-12-70].
 *Worst case (J):* an addressable detail treated as atmosphere — caught by the claim check as
 `new_element`, and written or cut (class iv). *Example inside:* "A coil of rope hangs by the door" →
 addressable (it could be taken, used as a lever) → `create_entity(obj.rope_…)`. *Outside:* "Rain needles
@@ -1650,12 +1754,16 @@ skip ≤ **150**. Longer only when the player asks ("describe it in detail"). Sh
 consistency measure: every sentence is a claim to check [R1 12.A (narration quality decays through
 repetition); R4 W11].
 
-**12.14.11 Freshness.** `[J:flag]` + `[D]` The engine keeps the opening clause of the last three scene
-openings and, per entity, its last ten distinctive images (a simile, a striking descriptor). The DM does
+**12.14.11 Freshness.** `[J:flag]` + `[D]` [DL-12-76; revision: R2-E] The engine keeps the opening clause of the
+last three scene openings and, per entity, stored **usage marks**: each established detail (00.6.6a), each part
+of an object's written words and each NPC's speech opener carries `last_used`, the turn a delivered sentence
+last stated it, read from the declarations (PR-12-1 T12), not by re-scanning prose. The DM does
 not reuse an opening pattern from the last three scenes (`[J:flag]` *"Does this opening start the same way
-— same time-of-day or weather lead, same sentence shape?"*) and does not repeat a distinctive image for the
-same entity within ten turns, except a deliberate callback (an NPC's recorded habit; a recurring omen;
-the player's own phrase). *Worst case (J):* a repeated phrase — harmless (class i) [R4 W10; R1 12.A
+— same time-of-day or weather lead, same sentence shape?"*) and does not restate a detail, an object's written words or a
+speech opener for the same entity within ten turns of its `last_used` mark (it reaches for another detail, or
+says nothing of the look), except a deliberate callback (an NPC's recorded habit; a recurring omen;
+the player's own phrase) or the player's own request (reading the notice again). A scan of the last ten
+deliveries for repeated opening clauses and speech openers stays as a cheap backstop. *Worst case (J):* a repeated phrase — harmless (class i) [R4 W10; R1 12.A
 (RPGBench's interestingness decay from repetitive narration)].
 
 **12.14.12 What every narration must name.** `[D]` [DL-12-17; DL-12-01; R5 DM-06; revision: I-065] (from 01.12.2, restated so this card stands alone)
@@ -1678,6 +1786,7 @@ Who decides that something is true depends on its tier. Each element a sentence 
 | **T1c Scene state** | each present NPC's activity (12.11.9), a posture, a hold | none: prose never introduces it | **code**, from the resolved beats and the default NPC layer | yes, for the scene; expires at scene end | the sentence must match the record line |
 | **T2 Consequential** | a **clue** toward a sealed fact or an open thread; an **item of more than common value** or any property beyond the mundane; a **hazard** or **trap**; an **adversary**; a **person with a want, a secret or knowledge of a thread**; the identity of a story role | `clue`, `hazard`, `adversary`; and a `person`, `item` or `document` the question below finds true | **generators only**: clue graphs and their placements (ch.15/11), the item generator and the region's data (00.11), ch.10 tables, encounter tables, clocks and behavior lists, NPC generation and the clue graph (12.11.1) | at generation, sealed until revealed | strict: in this turn's record, as delivered or unsealed, or the sentence is cut |
 
+A narrated detail (00.6.6a) is ordinary T1a: it may be cited as a lever under the cap below and never creates value [revision: R2-E].
 The narrator assigns the kind (`[J:enum]`, part of 12.3.1's declaration). Whether a `person`, `item` or `document`
 is T1a or T2 is one question, `[J:flag]` *"Would this element, as described, help or hinder the PC beyond what any
 such place ordinarily offers, or point toward something hidden?"* True → T2: it must come from its owning
@@ -1703,32 +1812,68 @@ NEAR MISS, CHOICE, CLARIFY, FLAG, CUT?) because it awaits the player.
 by name only), and never contradict the store. A block's fields appear in the order given below; empty
 fields are omitted.
 
-**12.15.2 OFFER** [DL-12-18; R5 OB-05; revision: I-065] (renders 01.7.1 items 1–7, exactly). One line of fiction first ("The hasp is old iron in
-older oak; the bar in your hands would do it — loudly."), then:
+**12.15.2 OFFER** [DL-12-18; DL-12-51; R5 OB-05; revision: I-065; revision: R2-C] (renders 01.7.1 items 1–7 as a
+template over the frame's typed fields; no rule id, DC code, severity code or mode name appears in the player's
+text, and the log keeps them all). One line of fiction first ("The press thickens toward the gate; a gap opens
+and closes."), then:
 
 ```
-[OFFER] Break the hasp with the iron bar — verb.force (Force), anchor 01.18.10
-  Mode: normal
-  Roll: Might +1 · competence +1 (deed) · edge 0 · lever +2 (obj.iron_bar_03: Precision) · status 0 = +4
-        (no other method here uses a higher attribute)
-  Against: DC 15 — stored on door_archive.hasp (Moderate)
-  Need: 11+ on the die · 50% success or better · crit success 5% · crit failure 5% · near miss 15%
-  Stakes: Risky — failure: Exposure (S2) · crit failure: Exposure (S3)
-          near miss: succeed and pay Exposure or Time (S2), or fail
-  Reach: Standard — success: the hasp breaks · critical: it breaks, and you can follow up at once
-  Costs: 1 action · 1 interval · loud (heard by anything listening) · rides: no · fate 1
-  → commit · change · withdraw   (one trade: go big / play it safe)
+[OFFER] Slip through the crowd toward the gate.
+  Chance: better than even — 55%   (Agility +1, practised +1, packed bodies −2)
+  If it works:  you reach the gate.            Very well (5%): and no one marks you.
+  If it fails:  you're stuck and jostled — a setback.   Badly (5%): something's lost in the press — serious.
+  Close call (15%): get there anyway and be marked, or fail.
+  Takes: a minute · noisy
+  [Enter] Do it   [b] Go big   [s] Play it safe   [c] Another way   [w] Back off   [?] Explain
+  Another way:  shove through (45%) · wait for it to thin (no roll, takes an hour)
 ```
-Variants: a **lethal** frame adds, directly under Stakes, `THIS CAN KILL YOU — <source> (warned <when>)`; a
-**secret** frame shows `Against: hidden` and omits the Need line's numbers ("the roll is hidden; you'll
-see only what you perceive"); a **stretch / emulate / fallback** shows `Mode:` with its price on its own
-line (`Mode: fallback (crude) — DC +5, reach capped at Standard, loud`); "only a natural 20" replaces the
-Need line when it applies ("only a natural 20, and at best a plain success"); a **bundled** beat adds
-`Rank your questions:` with the deduplicated items. An **ability activation** names its prices on the Costs
-line: `Focus 2 (flared hard) · uses 1 of 2 left` and, when the Focus is short, `overdraw: <its price>` (05.6.6;
-never automatic); a power used **through a relic** adds its own line under Costs, `Relic surcharge: +1 Focus
-(no training license)` (08.4.4) [revision: I-030]. A frame resolved under **auto-commit** shows the same
-block, labelled `[OFFER — auto]`, immediately above its RESULT.
+
+**Lines, from frame fields [D].** *Title*: the beat restated (01.2.6). *Chance*: the band word, a dash, the
+success-or-better percentage, then the modifier in words (attribute, competence by its tag's name, each lever
+and snag by its fact's short name; edge and status when not 0). *If it works / Very well*: what the framed
+reach delivers on success and on a critical success (01.6.10, in the anchor's reach unit). *If it fails /
+Badly*: the threatened cost's form as one clause, with its severity word, on a failure and on a critical
+failure (01.6.11, 01.9.2). *Close call*: the near-miss percentage and the alternate cost (01.9.3); omitted when
+0 and on a hidden roll. *Takes*: action, time, every method consequence (loud → noisy), whether it rides on
+an earlier result, and fate. *Another way*: up to three approaches the engine computes with no model call
+(the verb's alternative attributes and sibling anchors whose DC is stored, opposed or the same obstacle class),
+each with its chance or "no roll".
+
+**Fixed word maps (the glossary, 14.2.7).**
+- Chance: 95 *almost certain* · 75–90 *likely* · 55–70 *better than even* · 45–50 *even* · 25–40 *unlikely* ·
+  10–20 *long shot* · 5 *only by luck* · 0 *impossible as framed*. Both the number and the word are shown
+  (D6: assumed, owner to confirm).
+- Severity: S1 *a nuisance* · S2 *a setback* · S3 *serious* · S4 *grave* · S5 *ruinous*; lethal adds, under If
+  it fails, `THIS CAN KILL YOU — <source> (warned <when>)`. A Dire frame's If-it-fails line starts `Danger:`.
+- Reach: Limited *partly* · Standard *what you wanted* · Great *more than you asked*.
+
+**The trades, one line each** (01.7.3; I-138): `Go big: if it works you get more; if it fails it costs more;
+same chance.` · `Play it safe: if it works you get less; if it fails it costs less; same chance.` A trade not
+allowed on this frame (01.7.3) is not printed. When one is taken, a NOTE line says what changed.
+
+**Variants.**
+- **Mode** (stretch, emulate, fallback; I-134): one line in words, never the mode name, e.g. `You're improvising
+  without training: harder (+5), and at best a partial result.` or `You're stretching what you know: harder
+  (+2).`
+- **Secret frame** (01.4.7; I-143): the If lines stay; the Chance line reads `Chance: you can't judge how hard
+  this is.` and there is no Close call line. The OFFER keeps 01.7.1's promise: odds, or the reason they are
+  hidden.
+- **Long shot** (01.6.13): `Chance: long shot — 10% (failing badly is likelier: 35%)`, and the Another way
+  line lists the best computed alternative first.
+- **Only a natural 20**: `Chance: only by luck — 5%, and at best what you wanted`.
+- **Bundled** beat: `Rank your questions:` with the deduplicated items.
+- **Ability activation**: the Takes line names its prices, `Focus 2 (flared hard) · uses 1 of 2 left`, and,
+  when the Focus is short, `overdraw: <its price>` (05.6.6; never automatic); a power used **through a relic**
+  adds `Relic: +1 Focus (no training license)` (08.4.4) [revision: I-030].
+- **Auto-commit** (01.7.4): the same block, labelled `[OFFER — auto]`, immediately above its RESULT.
+
+**One menu convention for every pause point** (12.2.6: OFFER, clarifying question, redirect, near miss,
+ranking, last chance, recognition, generator pick, rewind). **Enter** is the labelled default and is always
+printed as `[Enter] <label>`; alternatives take **letters**; `?` explains any word from the glossary (14.2.7),
+never a rule card. Enter never withdraws or backs off (P-044). On an OFFER, Enter is `Do it`, except on a
+Dire, lethal or long-shot frame, where it is `Show this again` and committing takes the letter `[d] Do it`.
+An unanswered pause still persists as 12.2.6 says. *Worst case:* none (template; a word map error shows a
+wrong word beside the right number).
 
 **12.15.3 RESULT.** [DL-12-18; C:P7; revision: I-065]
 ```
@@ -1976,6 +2121,12 @@ place of acceptance's schools know (05.8); hire roles and the band limit (16.3.2
 A **place of acceptance** for primal workers (02.5.5; `tbl.12.seed.acceptance`) is written as a landmark in
 ring 1 or 2 with a spirit, three primal schools, what it asks, and a contact. The haven's fight locations
 (06.3.8) come from its site; the region's rare metal and rite components from `world_seed.yaml#defaults`.
+**Seed packs for places** [revision: R2-D] [DL-12-61; I-130]: every place (the region record aside) gets a one-line
+**look** (`tbl.12.seed.place_look`, by place type), **2–4 furniture items** (`tbl.12.seed.furniture`; a haven building
+of a region with its own `tbl.<region>.furnishings` takes its last item from it) and its **exits** (its routes; for a
+building, its settlement and two neighbours). They are rolled after step 13, each on a stream keyed by the seed and the
+place's id, so a pack never moves another draw of the seed. The look is atmosphere and incidental detail (T0/T1a,
+12.14.13); each furniture item is T1a furniture, a lever worth at most +2.
 
 **12.16.10 Factions with running clocks.** `[D]` [DL-12-34; DL-11-05; DL-12-21; R5 LW-01; revision: I-065] At least three full factions (11.3.2), each by PR-11-8 from
 its template (11.3.18): the haven's **rulers** (`tbl.12.seed.rulers` by haven tier; tier 2 in a town, 1 in a
@@ -2023,6 +2174,13 @@ at most (03.4.3).
 **Bond placement** (02.9.2): where each of the eight bond kinds is placed — anchors in the haven, a rival in
 the fourth faction, a creditor in the market, an enemy in the threat's seat, a lost one at a ring-2 site —
 always as a new NPC when the bond is filled (02.9.8), never one already in the cast.
+**Knowledge packs and stances** [revision: R2-D] [DL-12-61; I-130]: every cast NPC gets 2–4 knowledge facts
+(`tbl.12.seed.knowledge_pack`), each a knowledge record (`how: seed`) with its topic: one of their trade (a topic of
+their role, `social.yaml#common_knowledge.by_role`), one local or public (news or folk), one tie to another cast
+member (both hold it), and on a d6 of 4–6 a rumor of 12.16.14 they hold (its truth stays sealed). A pack fact is T1
+ordinary knowledge: it never names a secret, a clue or a case's solution. Each cast NPC also gets a **stance** toward
+the opening incident: helps when they hold a placement of its case, hinders when of the threat faction, else the
+table's d6 (helps, wary, indifferent, hinders). PR-12-10 reads the pack at its rung 2.
 
 **12.16.12 Sites, lairs and threats.** `[D]` [DL-12-23; DL-12-21; R5 LW-07; revision: I-065] One site per area in rings 1–3 and one **lair** in each of rings
 4 and 5, each by PR-10-6 (theme d8 with the wound's themes × 3; a domain whose terrain fits the area; band the
@@ -2066,6 +2224,16 @@ the Peaked shape, the Typical rule unless 02.3.5's exception applies), covering 
 (an Acolyte of the main keeper, trained in one of its schools: healing if it keeps healing, else its first
 school, with the livelihood's suggested technique of that school [revision: I-052]; or a Hedge-taught of the
 place of acceptance when the main keeper is a pact-power); each with a drive, an aspiration and an anchor bond to a cast NPC; birth drawn live when picked.
+**The incident's case** [revision: R2-D] [DL-12-62; DL-15-38; I-145; I-148]: at seed time the inciting incident runs
+PR-15-6 in its reduced profile (15.9.4; `investigation.yaml#reduced_case`). Its subject is the story role the incident
+names (who is missing, who the message was for, who makes the offer, who the challenger is; for an alarm, a theft or an
+omen, the thing itself), cast from the cast where the role fits (00.11 `cast`), else generated by 12.11.1 (a missing
+child, elder or priest, by d6). Two necessary nodes (the subject; the way on, toward the first lead's target), three
+placements and one reserve each, and the first node's core placement held at the opening place (by a reporter there:
+a cast NPC whose home it is, else a walk-on). All sealed. **Documents**: the hire lead's notice and one more notice (a
+warning, a charter or a bounty) are written from `tbl.12.seed.document`, each a `document` entity with a `text` fact,
+delivered first when read (12.10.5). When a lead points to a document, its text names where the lead goes: who to ask,
+and where.
 
 **12.16.17 The seed check.** `[D]` [DL-12-24; DL-12-36; revision: I-065] A seed is complete when every requirement of **T-12-16**
 (`world_seed.yaml#requirements`) holds: 64 checks, one for everything the other chapters read from a region
@@ -2078,6 +2246,9 @@ check: seed 1 (oracle) and a guided run pass 64 of 64; 200 further oracle seeds 
 regional tables built by PR-10-10, every one passing PR-10-8, whose home-1 tables are audited against both
 reference PCs (PR-10-8 step 2; `travel.yaml#encounter_audit_reference`) (word mix trivial 35.4 / easy 26.4 /
 fair 34.7 / hard 3.5 / lethal 0 %) [revision: I-096]. Seed 1 is committed as `_process/simulation/12-world-seed-example.yaml`.
+**Seed-pack checks** [revision: R2-D] [DL-12-61; I-130]: seven more rows (`world_seed.yaml#pack_requirements`, the last
+rows of T-12-16) hold for every place's look, furniture and exits, every cast NPC's knowledge pack and stance, every
+document's text, and the incident's reduced case. Seed 1, the guided run and the 200 oracle seeds pass all 71.
 
 **12.16.18 After the seed.** `[D]` [DL-12-23; DL-12-31; DL-12-35; revision: I-065] The seed writes the world at the depth play starts with; everything
 deeper is written on demand by its owner's rule and never invented in narration: a place on mention (10.1.4),
@@ -2111,11 +2282,11 @@ record. A pause point (12.2.6) jumps to T7 with what has been resolved so far, t
 | **T5** | WORLD | World responses in fixed order: adversaries (conflict), NPCs present by the default NPC layer (activity, practice, frame → want/refusal → `tbl.npc_action`; the addressed NPC always answers) [revision: R2-B], clocks and omens, fired triggers (lead injection, pacing push, offers), time and boundaries (`advance_time` / `mark_boundary`). Each from its closed source only. | 7, 21–23 | 12.2.9, 12.11.9, 01.11.3 |
 | **T6** | WRITE | All state writes not already made: RECORD of every beat (01.12.1), evidence by **PR-03-1** for every resolved beat, rulings, NPC memories, knowledge records, `beat_end` marks; a cut scene is always marked `scene_end`, since ch.03's settlement hangs on it [integration: IR ch.03 to 12]. Then re-read the narrator view. | 9–18, 25, 29 | 12.2.8, 12.2.10 |
 | **T7** | DRAFT | Draft the narration as declared sentences (12.3.1) [revision: R2-B] from the adjudication record and the fresh narrator view only: fiction first, then OOF blocks (12.15). Name everything 12.14.12 requires. Respect length (12.14.10). | — | 12.14 |
-| **T8** | MENTION | Write each declared new element by its tier (12.14.13) [revision: R2-B]: T1a on mention (`create_entity` / `set_fact`; NPCs via 12.11.1), T1b once the Oracle settles it, T2 only if this turn's record holds it. Ask the Oracle or roll the table for a consequential property the draft needs that is unsettled; an incidental one is written as drafted. Redraft a sentence if an answer changes it. | 6, 7, 9, 10 | 00.6.6, PR-00-7 |
+| **T8** | MENTION | Write each declared new element by its tier (12.14.13) [revision: R2-B]: T1a on mention (`create_entity` / `set_fact`; NPCs via 12.11.1), T1b once the Oracle settles it, T2 only if this turn's record holds it. Ask the Oracle or roll the table for a consequential property the draft needs that is unsettled; an incidental one is written as drafted. For an existing entity, diff each stated property against its profile (PR-00-7 step 2) [revision: R2-E]. Redraft a sentence if an answer changes it. | 6, 7, 9, 10 | 00.6.6, 00.6.6a, PR-00-7 |
 | **T9** | CHECK | Resolve declarations into claims and compute coverage (12.3.1, 12.3.1a) [revision: R2-B]; `check_claims`; fix each failing sentence by its rule (12.3.2); re-check only the redrafted sentences; at most two redrafts, then cut and render (12.3.3). | 32 | 12.3 |
 | **T10** | SCREEN | Input fidelity ×3 (12.2.7); next step exists (01.11.4); safety screen against lines, veils and flags (12.5.6); PC agency (12.14.3); no mechanics in fiction (12.14.4); open prompt or one pause block last (12.14.9). Any failure → back to T7. | — | 12.2.7, 12.5.6, 12.14 |
 | **T11** | DELIVER | Send the response. | — | 12.15 |
-| **T12** | RECORD | Store the delivered response verbatim; update turn counters (dead air, 12.4.2); if a scene cut was reached, `mark_boundary(scene_end)` then frame the next scene (PR-12-7) in the *next* response unless the cut was the player's own request in this message. | 35, 22 | 12.2.5, 12.4 |
+| **T12** | RECORD | Store the delivered response verbatim; set `last_used` on each detail, written word and speech opener its sentences stated (12.14.11) [revision: R2-E]; update turn counters (dead air, 12.4.2); if a scene cut was reached, `mark_boundary(scene_end)` then frame the next scene (PR-12-7) in the *next* response unless the cut was the player's own request in this message. | 35, 22 | 12.2.5, 12.4 |
 
 **PR-12-2 The claim check.** `[D]` + `[J:enum]` (inside T9)
 1. Resolve each sentence's declarations into claims (12.3.1); scan every sentence for names, aliases and numerals
@@ -2207,7 +2378,8 @@ data `data/world_seed.yaml`) [revision: I-028]
    (T-12-15) and let the player name the ones they want to answer.
 2. **Run steps 1–13 in order** (T-12-15). For each question: the player's option, or the player's own words
    classified by 12.16.2, or the oracle roll; log `{question, answer, source}`. Each step writes its keys by
-   its rule (12.16.4–12.16.16), reading only earlier steps' writes.
+   its rule (12.16.4–12.16.16), reading only earlier steps' writes. Then run the **seed-pack pass** (12.16.9, 12.16.11,
+   12.16.16) [revision: R2-D].
 3. **Show each step's summary** as `[SEED n/14]` (shown parts only; sealed parts withheld). A veto re-rolls
    that step's oracle answers once and re-runs every later step that read them.
 4. **Seed check** (step 14; 12.16.17): run every T-12-16 requirement; a failure re-runs the step that writes
@@ -2215,6 +2387,44 @@ data `data/world_seed.yaml`) [revision: I-028]
 5. **Hand over** to chapter 02's creation (its C2 shows the seed's present peoples; its defaults read the
    seed's second tongue, keepers and name tables; a pregen may be picked) and then to the opening
    (12.16.16): `mark_boundary(session_start)`, strong start at the incident.
+
+**PR-12-10 Answering a question.** `[D]` + `[J:enum]` as marked (12.10.8; `pacing.yaml#answer_ladder`; reference
+`_process/simulation/12-answer_ladder_sim.py`) [revision: R2-D] [DL-12-60; DL-12-44]. Trigger: an NPC is asked a
+question, a part whose PARSE carries `question_kind` and `topic` (12.2.2). Runs at RECORD for each delivered item
+(01.10.4; a Talk's items by T-15-5's questions rule), before the draft.
+1. **Index and route** `[D]`. Read the asked-and-answered index (12.10.6): `(npc, question_kind, topic)` already
+   answered gives the same fact or the same "does not know"; stop. A topic given as an entity resolves to topics by
+   `social.yaml#common_knowledge.entity_topics`. Then route by tier (12.14.13):
+   - **consequential** (a story role such as who is missing, who did it or who sent them; a case's solution; a sealed
+     fact; a thread's knowledge) goes to the case graph only. An NPC holding a placement on it delivers it (15.9.5–
+     15.9.7); one who holds none says so and points to the holder of the node's core placement, else of a live one. A
+     story-role question with no case behind it builds PR-15-6's reduced case now and is answered from it;
+   - **what do you want or think** is answered from the NPC's record (stance, a revealed want, 12.11.4);
+   - **who is <role>** (not a story role) goes to casting (00.11 `cast`; `social.yaml#cast`); its answer, a person or
+     "no one you know", is a fact;
+   - **who would know** goes to step 5;
+   - everything else is **ordinary** knowledge (T1b): steps 2–5, as deep as step 6 allows.
+2. **Rung 1, the store** `[D]`: the NPC's knowledge records written in play and the public facts in their scope
+   (12.10.6 (a)–(c)), ranked by relevance. A hit is the answer.
+3. **Rung 2, the knowledge pack** `[D]`: the NPC's seeded facts on the topic (12.16.11). A hit is the answer.
+4. **Rung 3, propose and ratify** `[J:enum]` + `[D]`: the DM proposes one typed candidate `{kind: ordinary_fact,
+   subject, predicate, value}`. Code rejects it when `kind` is not ordinary or its subject or predicate touches a
+   sealed fact or a case node (then step 1's consequential route applies). The engine asks the Oracle *"Does <NPC>
+   know that <candidate>?"* at 12.10.6(d)'s odds, fixed before the roll (00.12.7). Yes: write the fact
+   (`source: oracle`, `proposed_by: narrator`) and the NPC's knowledge record; it is the answer. No: write "does not
+   know" (12.10.6(e)) and go to step 5.
+5. **Rung 4, the pointer** `[D]`: the NPC says they don't know and names who would, by casting for "who would know
+   <topic>" (`social.yaml#cast`: an existing person; else the topic's place in the settlement; else a walk-on there
+   by 12.11.1). Never "the first person present", never a name the narration made up. This is a success (DL-12-44).
+6. **Depth by delivered reach** `[D]` (`social.yaml#delivery.information`): Limited runs steps 2, 3 and 5; Standard
+   runs 2–5; Great or better runs 2–5 and the NPC volunteers one extra from their record (a want, a fear, a tie or a
+   lead; T-15-5 row 3). A certain beat or a plain SPEECH question runs at Standard. **Never empty**: every delivered
+   item ends in a fact, a placement, a record answer or a pointer.
+7. **Write** `[D]` the answer as a record line the narration must say (12.14.12), the PC's knowledge record
+   (12.10.5) and the index entry `(npc, question_kind, topic) → fact id | unknown`. A pointer that leads to a pointer
+   more than `repeat_pointer_limit` times for one question is logged for review (DL-12-44).
+*Worst case (J):* a less apt candidate proposed at step 4 — the Oracle still settles it at odds fixed before the roll,
+and a "no" still yields a real lead (class i).
 
 ---
 
@@ -2404,6 +2614,13 @@ key to it.
 | `ws.req.15_relics` | 15 | whether relics count as magic for the magic refusal | 15.3 (refusals) | `canon/relics_and_refusal` | nonempty |
 | `ws.req.16_hire` | 16 | regional hire roles (and quirks, or the generic table), beasts and mounts available, the band limit by tier | 16.3.2, 16.3.3 | `places[]/settlement/hire` | hire |
 | `ws.req.16_recruits` | 16 | named NPCs who might be recruited | 16.3.4 | `npcs[]/recruit` | recruits |
+| `ws.pack.place_look` | 12 | every place (the region record aside) has a one-line look | 12.16.9, 12.4.3 | `places[]/look` | looks |
+| `ws.pack.place_furniture` | 12 | every place (the region record aside) has 2-4 furniture items | 12.16.9 | `places[]/furniture` | furniture |
+| `ws.pack.place_exits` | 12/10 | every place lists its exits from the route graph (a building: its settlement and its neighbours) | 12.16.9, 12.4.3 | `places[]/exits` | exits |
+| `ws.pack.npc_knowledge` | 12 | every cast NPC has 2-4 knowledge facts: one of their trade, one local or public, one tie to another cast member | 12.16.11, 12.10.6 | `npcs[]/knowledge` | knowledge |
+| `ws.pack.npc_stance` | 12 | every cast NPC has a stance toward the opening incident | 12.16.11 | `npcs[]/stance` | stance |
+| `ws.pack.documents` | 12/15 | every seeded document has text from tbl.12.seed.document, and a document a lead points to names the lead's target | 12.16.16 | `documents` | documents |
+| `ws.pack.incident_case` | 15 | the inciting incident's reduced case validates (15.9.4, reduced profile) with a core placement held at the opening place | 12.16.16, PR-15-6, 15.9.4 | `cases` | reduced_case |
 
 ---
 
@@ -3025,7 +3242,7 @@ destination in the project record (proposed: `rules/_process/issue-ledger.md` at
 
 | Id | Question | Default shipped | Named test |
 |---|---|---|---|
-| OEQ-12-1 | Is a four-exchange verbatim window the right trade between input fidelity and drift? | 4 (`packet.verbatim_exchanges`) | **T-12-WINDOW**: a 50-turn harness run at windows 2 / 4 / 8; count player-input conflicts (NCP's rule) and turn-loop step omissions per 10 turns; pick the smallest window whose input-conflict rate is within 1 point of the best |
+| OEQ-12-1 | Is a four-exchange verbatim window the right trade between input fidelity and drift? | 4 (`packet.verbatim_exchanges`) | **T-12-WINDOW**: a 50-turn harness run at windows 2 / 4 / 8; count player-input conflicts (NCP's rule) and turn-loop step omissions per 10 turns; pick the smallest window whose input-conflict rate is within 1 point of the best. With scene cards and the spotlight carrying older context (12.2.4, 12.4.8), 4 is kept unless this test says otherwise; run in `evals/longhorizon.py`'s scripted mode [revision: R2-E] |
 | OEQ-12-2 | Does the claim check catch planted errors? | 12.3, two redrafts then plain fallback | **T-12-CLAIM**: 200 drafts seeded with one planted error each (pronoun, unsourced possession, position, leak, overreach, pc_agency); target ≥ 95% caught, and the plain fallback used in ≤ 2% of live turns |
 | OEQ-12-3 | Do the pacing profiles produce the intended rhythm? | standard 7/2/3/3 | **T-12-PACE**: 3 owner playtest sessions per profile; log phase per scene and a 1–5 "pace felt right" rating per scene; target ≥ 4 average, with PEAK+RELAX between 20% and 45% of scenes |
 | OEQ-12-4 | Is deviation at d10 ≤ T − 3 surprising enough without ignoring the player's plans? | T − 3 | **T-12-SCENE**: two 20-scene runs on the same seed, T − 3 vs Mythic's T; blind-rate "the world surprised me" and "the world ignored my plan" per scene |
@@ -3036,3 +3253,7 @@ destination in the project record (proposed: `rules/_process/issue-ledger.md` at
 | OEQ-12-9 | Is five active memories per NPC enough for consistent recurring NPCs? | 5 | **T-12-MEM**: replay 10 recurring-NPC scenes with caps 3 / 5 / 8; count "the NPC forgot something it should remember" judgments |
 | OEQ-12-10 | Do random events from Oracle doubles add life without noise? | T% per question | **T-12-EVENT**: log events per session and the player's "that mattered later" tag at session end; target ≥ 40% of events referenced again within 3 sessions |
 | OEQ-12-11 | Does a world seed give a first session as playable as a hand-made setting? | 12.16 (14 steps, T-12-16's 64 checks) | **T-12-SEED**: Verification's three paper playtests run in `12-world-seed-example.yaml`; count first-session dead ends (12.8), questions the seed could not answer from state (an Oracle roll where a setting would have had a fact), and the player's "this place feels like somewhere" rating; target no dead ends, at most 3 setting gaps a session, rating ≥ 4/5 [revision: I-028] |
+| OEQ-12-20 | Are A's slot list and a cap of 8 active lasting details per entity the right width and size? | 15 slots (`details.slots`), 8 (`details.max_active`), owner to confirm (D8) | **T-12-DETAIL**: `evals/longhorizon.py`, scripted and aged (300-scene) modes: identity and position contradictions per 100 turns, the share of declared incidental properties that fit no slot, store size per entity, cross-turn novelty-4 per entity; widen the list when more than 5% fit no slot, and lower the cap when profile tokens crowd the `cast` budget at turn 500 without fewer contradictions [revision: R2-E] |
+| OEQ-12-21 | Is K = 4 the right spotlight size? | 4 (`packet.spotlight_k`) | **T-12-SPOT**: `evals/longhorizon.py` scripted mode with absent-person probes at K = 2 / 4 / 6: retrieval misses (12.3.2) per 100 turns and name and pronoun accuracy for absent entities; pick the smallest K within 1 point of the best [revision: R2-E] |
+| OEQ-12-22 | Is the view's budget split right? | `packet.view_budget` (pinned 400, cast 320, facts 500, spotlight 400, scene cards 300, ...) | **T-12-BUDGET**: `evals/longhorizon.py` aged mode: view tokens at the 50th and 95th percentile at turns 50 / 200 / 500, retrieval misses by section, recall probes (precision and coverage); move 100 tokens from the section with the fewest misses to the one with the most until misses even out, keeping the total flat [revision: R2-E] |
+| OEQ-12-23 | Can the diff audit be skipped on fully declared turns? | runs every turn until the gate is met (12.3.1) | **T-12-AUDIT**: `evals/longhorizon.py` scripted mode with the 1-in-10 full extraction: undeclared assertions per turn (gate < 0.3) and the diff audit's recall against full extraction (target ≥ 0.8); enable the skip only when both hold [revision: R2-E] |

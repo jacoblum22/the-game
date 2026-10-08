@@ -28,9 +28,9 @@ from pydantic import BaseModel, Field
 from engine import ids
 from engine.dm.adjudication import BeatEntry, CostEntry, HarmEntry, PositionEntry
 from engine.resolve.costs import HarmHook, apply_cost, check_cost_decl, first_fitting_cost
-from engine.resolve.frame import (auto_commit_allowed, commit_events, frame_check, legal_trades, offer_preview,
-                                  plain_offer_words)
+from engine.resolve.frame import auto_commit_allowed, commit_events, frame_check, offer_preview
 from engine.resolve.gate import GateDecision, check_gate, words
+from engine.resolve.necessity import necessity, trivial_class
 from engine.resolve.roll import read_result, roll_check
 from engine.resolve.rulings import RulingRecord, log_ruling
 from engine.resolve.types import REACH_VALUE, Beat, Frame, FrameRefusal, ProposedFrame, ReadResult, RollResult
@@ -43,8 +43,6 @@ ROLLS = "uncertain_and_costly"
 MOVE = "verb.move"
 NO_ROLL_EVIDENCE = ("good_idea", "take_the_time", "certain_with_cost")  # 03.3.1 bases without a degree
 TRADE_IDS = {"go_big": "go_big", "play_it_safe": "play_safe"}  # Frame trade -> Pause choice id
-TRADE_LABELS = {"go_big": "Go big (more at stake, more if it works)",  # rule: 01.7.3
-                "play_it_safe": "Play it safe (less at stake, less if it works)"}
 REACH_NAME = {v: k for k, v in REACH_VALUE.items()}
 Status = Literal["resolved", "no_roll", "redirected", "refused", "paused", "withdrawn", "question", "queued"]
 
@@ -211,9 +209,8 @@ def _start(env: PipelineEnv, plan: BeatPlan, queued: list[BeatPlan]) -> BeatOutc
         return _refused(beat, dec, "G4")
     if dec.gate == "G3" and not dec.rolls_possible:
         return _redirect(env, plan, dec, queued)
-    # 3. NECESSITY (01.4)
-    if beat.necessity == "impossible":
-        return BeatOutcome(status="refused", entry=_entry(beat, gate="G4", gate_words="impossible (01.4.1)"))
+    # 3. NECESSITY (01.4.1, computed): a certain or plainly trivial beat skips the Framer
+    beat.necessity = necessity(beat, dec, state=env.state, rules=env.rules)
     if beat.necessity != ROLLS:
         return _no_roll(env, plan, dec)
     # 4-5. ANCHOR and FRAME
@@ -371,6 +368,9 @@ def _frame(env: PipelineEnv, plan: BeatPlan, dec: GateDecision, queued: list[Bea
     if not cands:
         return BeatOutcome(status="refused", entry=_entry(beat, gate=dec.gate, gate_words="no anchor fits (00.15.3)"))
     proposed = env.framer(beat, cands, gate=dec, note=note)
+    if trivial_class(proposed, env.rules, dec.verb or beat.verb):  # rule: 01.4.1
+        beat.necessity = "trivial"  # the class's base is trivial: anyone, in these conditions, succeeds
+        return _no_roll(env, plan, dec)
     # an attack never rides: each Strike or Grapple is its own action and rolls against the same defense
     # (06.1.3, 06.1.6 (f)); P-100: a hit let three later lunges pass as "it works" with no OFFER
     if not proposed.lethal and not _attack(env, beat, proposed) \
@@ -444,23 +444,24 @@ def _warn(env: PipelineEnv, plan: BeatPlan, proposed: ProposedFrame, cands: list
 
 def _offer(env: PipelineEnv, plan: BeatPlan, proposed: ProposedFrame, frame: Frame, cands: list[str] | None,
            queued: list[BeatPlan], *, warned: bool) -> BeatOutcome:  # rule: 01.7.1
-    view = offer_preview(plain_offer_words(frame, env.state))
+    from engine.dm.oof import offer_block, offer_choices  # the 12.15.2 template (the dm layer renders)
+
+    view = offer_preview(frame)
     if env.auto_commit and not warned and _may_auto(env, frame):  # rule: 01.7.4
         env.add(*commit_events(frame, "auto", mint=env.tx.mint, state=env.state))
         env.add(Event.of("offer_logged", source=frame.id or "engine", rule_id="01.7.4", frame_id=frame.id,
                          shown_at=env.state.time.now, choice="auto"))
         out = _roll(env, plan, frame, queued)
-        out.oof.insert(0, {"kind": "OFFER", "text": offer_text(view) + " (auto-committed)"})
+        out.oof.insert(0, {"kind": "OFFER", "text": offer_block(frame, rules=env.rules, auto=True).text})
         return out
-    choices = [{"id": "commit", "label": "Commit"}, {"id": "change", "label": "Change approach"},
-               {"id": "withdraw", "label": "Withdraw (nothing is spent)"}]
-    choices += [{"id": TRADE_IDS[t], "label": TRADE_LABELS[t]} for t in legal_trades(frame)]
+    text = offer_block(frame, rules=env.rules).text
     detail = {"stage": "offer", "plan": plan.model_dump(mode="json"), "queued": _dump(queued),
               "proposed": proposed.model_dump(mode="json"), "frame": frame.record(), "candidates": cands,
               "offer": view.model_dump(mode="json"), "warned": warned}
-    _open(env, "offer", offer_text(view), choices, "withdraw", detail)
+    # the pause's prompt is the beat as restated (its block carries the rest; a session close quotes the prompt)
+    _open(env, "offer", view.restated_beat, offer_choices(frame), "withdraw", detail)
     entry = _frame_entry(plan.beat, frame)
-    return BeatOutcome(status="paused", entry=entry, oof=[{"kind": "OFFER", "text": offer_text(view)}])
+    return BeatOutcome(status="paused", entry=entry, oof=[{"kind": "OFFER", "text": text}])
 
 
 def _may_auto(env: PipelineEnv, frame: Frame) -> bool:  # rule: 07.3.6
@@ -471,18 +472,6 @@ def _may_auto(env: PipelineEnv, frame: Frame) -> bool:  # rule: 07.3.6
 
     return may_auto_commit(env.state, {"kind": "pc", "source": frame.defender or frame.beat.target,
                                        "target": frame.beat.actor, "stakes": frame.stakes, "lethal": frame.lethal})
-
-
-def offer_text(view: Any) -> str:  # rule: 01.7.1
-    """A one-line OFFER summary from the computed frame (the full OfferView rides in the pause detail)."""
-    o = view.odds
-    need = f"need {view.need}+" if view.need is not None else "hidden odds"
-    alt = f"; or {view.alternate_cost['menu_id']} on a near miss" if view.alternate_cost else ""
-    lethal = "; THIS CAN KILL YOU" if view.lethal else ""
-    return (f"{view.restated_beat.rstrip('.')}: {view.approach.get('verb') or view.approach.get('license')} with "
-            f"{view.approach.get('attribute')}, {view.difficulty_words}; {need} "
-            f"({o['success_or_better_pct']}%); stakes {view.stakes}, reach {view.reach}; on failure "
-            f"{view.threatened_cost['menu_id']} {view.threatened_cost['severity_on_failure'] or 'none'}{alt}{lethal}")
 
 
 CHANGE_ASK = ("How do you go about it instead? Say what your character does: another way, or something here you "
@@ -503,11 +492,11 @@ def reframe_note(old: Frame, new: Frame, rules: Any = None) -> str | None:  # ru
     if old.attribute != new.attribute:
         why.append(f"it uses {name_of(rules, new.attribute)} ({signed(nm.attribute)}) instead of "
                    f"{name_of(rules, old.attribute)} ({signed(om.attribute)})")
-    for field, words in (("competence", "training"), ("circumstance", "help and hindrances"), ("edge", "edge"),
-                         ("status", "your condition")):
-        a, b = getattr(om, field), getattr(nm, field)
+    for part, label in (("competence", "training"), ("circumstance", "help and hindrances"), ("edge", "edge"),
+                        ("status", "your condition")):
+        a, b = getattr(om, part), getattr(nm, part)
         if a != b:
-            why.append(f"{words} {signed(b)} instead of {signed(a)}")
+            why.append(f"{label} {signed(b)} instead of {signed(a)}")
     if old.dc != new.dc:
         why.append(f"the difficulty is {new.dc} instead of {old.dc}")
     return (f"The odds moved from {old.odds.success_or_better}% to {new.odds.success_or_better}%: "
@@ -581,9 +570,9 @@ def _answer_redirect(env: PipelineEnv, plan: BeatPlan, d: dict[str, Any], choice
     # an accepted crude fallback is "a new frame on the fallback verb" with its DC shift and reach cap (01.3.5):
     # it always rolls through an OFFER, never a no-roll class (playtest 20261007-192159: "take the time" made it
     # an unrolled success the narration could not support, so the player got "You cannot do it that way")
-    beat = plan.beat.model_copy(update={"gate": "G3", "mode": "fallback", "fallback_license": choice.split(":", 1)[1],
+    beat = plan.beat.model_copy(update={"mode": "fallback", "fallback_license": choice.split(":", 1)[1],
                                         "verb": fb.get("verb"), "method": fb.get("method") or plan.beat.method,
-                                        "license": None, "necessity": ROLLS})
+                                        "license": None, "necessity": ROLLS, "uses_power": False})
     return _start(env, plan.model_copy(update={"beat": beat}), queued)
 
 
@@ -674,7 +663,10 @@ def _finish(env: PipelineEnv, plan: BeatPlan, frame: Frame, roll: RollResult, *,
     entry.progress = progress
     if resolved:
         _cleanse(env, frame)
-    from engine.dm.oof import changed_line, result_block  # 12.15.3: the outcome stated once, after the fiction
+    from engine.dm.oof import (  # 12.15.3: the outcome stated once, after the fiction
+        changed_line,
+        result_block,
+    )
 
     blk = result_block(frame, roll, sac=read.success_at_cost_taken, costs=costs, rules=env.rules,
                        changed=changed_line(env.state, env.pc, env.tx.events[start:]) if env.pc else "")

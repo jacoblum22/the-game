@@ -116,7 +116,7 @@ class Packet:
                         "by its handle in `refs`; every line marked MUST needs a sentence that cites it):\n"
                         + "\n".join(out) + ("\n" + "\n".join(tail) if tail else ""))
         self.player = (re.search(r'THE PLAYER\'S MESSAGE: "(.*)"', msg) or [None, ""])[1]
-        self.facts = {m.group(1): m.group(2) for m in re.finditer(r"(?m)^(fact\.\d+) about (.+)$", self.view)}
+        self.facts = {m.group(1): m.group(2) for m in re.finditer(r"(?m)^\s*(fact\.\d+) about (.+)$", self.view)}
 
     def _add(self, kind: str, must: bool, words: str, **kw: Any) -> str:
         h = f"R{len(self.items) + 1}"

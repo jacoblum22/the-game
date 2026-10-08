@@ -49,6 +49,18 @@ def test_walk_on_uses_the_region_name_table() -> None:
     assert n.people == "creature.folk.human" and used == {n.name.split(" ")[0]}
 
 
+def test_names_never_run_out() -> None:
+    """A long campaign's walk-ons (the spec 005 harness hit "names exhausted" after ~220 lines): once a people's 20
+    given names are spent, fresh ones are composed from its syllables."""
+    reg = build_rolled(1).record
+    used: set[str] = set()
+    rng = random.Random(4)
+    names = [walk_on(rng, people="orig.people.halfling", name_tables=reg["names"], given_used=used).name
+             for _ in range(300)]
+    givens = [n.split(" ")[0] for n in names]
+    assert len(names) == 300 and len(set(givens)) >= 140  # the halfling syllables give 150 given names, not 20
+
+
 def test_promotions_add_fields_and_keep_identity() -> None:
     n = walk_on(random.Random(2), role_tags=["deed.martial.blade"])
     r = promote_recurring(random.Random(5), n)

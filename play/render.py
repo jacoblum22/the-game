@@ -166,6 +166,43 @@ PICK_HINT = "Type a number from the list."
 # pause menus where a silent default costs the player: the rules give none for Enter (12.15; P-044, P-089)
 WAITING_PAUSES = frozenset({"offer", "near_miss", "redirect", "last_chance"})
 
+# 12.15.2's one menu convention for every play pause: Enter is the labelled default and always printed, letters
+# pick the alternatives, `?` explains a glossary word (14.2.7). Enter never backs out (P-044).
+KEYS = {"commit": "d", "go_big": "b", "play_safe": "s", "change": "c", "withdraw": "w"}
+SHOW_AGAIN = "Show this again"
+
+
+def menu_keys(pause: Any) -> dict[str, str]:  # rule: 12.15.2
+    """{letter: choice id}: the OFFER's fixed letters, then the first free letter for every other choice."""
+    out: dict[str, str] = {}
+    for c in pause.choices:
+        k = KEYS.get(c.id)
+        if k is None or k in out:
+            k = next(x for x in "abcdefghijklmnopqrstuvwxyz" if x not in out and x not in KEYS.values())
+        out[k] = c.id
+    return out
+
+
+def enter_choice(pause: Any) -> str | None:  # rule: 12.15.2
+    """The choice Enter takes, or None (Enter shows the pause again). An OFFER: Do it, except on a Dire, lethal or
+    long-shot frame; the other waiting pauses (near miss, redirect, last chance): nothing is taken silently."""
+    ids = [c.id for c in pause.choices]
+    if ids and ids[0] == "commit":
+        o = getattr(pause, "frame_summary", None) or {}
+        return None if (o.get("stakes") == "dire" or o.get("lethal") or o.get("long_shot")) else "commit"
+    if pause.kind in WAITING_PAUSES:
+        return None
+    return pause.default_choice if pause.default_choice in ids else None
+
+
+def menu_line(pause: Any) -> str:  # rule: 12.15.2
+    """`[Enter] Do it   [b] Go big   [s] Play it safe   [c] Another way   [w] Back off   [?] Explain`."""
+    enter = enter_choice(pause)
+    labels = {c.id: _bare(c.label) for c in pause.choices}
+    first = f"[Enter] {short_label(labels[enter]) if enter else SHOW_AGAIN}"
+    rest = [f"[{k}] {labels[i]}" for k, i in menu_keys(pause).items() if i != enter]
+    return "   ".join([first, *rest, "[?] Explain"])
+
 
 def offer_waits(pause: Any) -> bool:
     """An OFFER, NEAR MISS, REDIRECT or last-chance menu: an empty line takes nothing (P-044: Enter-for-Withdraw
@@ -184,12 +221,27 @@ def enter_hint(pause: Any) -> str:
     return f"Type a number, or press Enter for {short_label(pause.choices[ids.index(pause.default_choice)].label)}."
 
 
+def _play_menu(resp: Any, width: int) -> str:
+    """Fiction, the blocks (without any listing of the choices of their own), the prompt when no block carries it,
+    then the menu line (12.15.2)."""
+    pause = resp.pause
+    parts = [resp.fiction.strip()] if resp.fiction else []
+    parts += [t.strip() for b in resp.oof_blocks if (t := strip_listing(b.text, pause)).strip()]
+    shown = "\n\n".join(parts)
+    if pause.prompt and pause.prompt.strip() not in shown:
+        parts.append(pause.prompt.strip())
+    parts.append(menu_line(pause))
+    return "\n\n".join(wrap(p, width) for p in parts)
+
+
 def render_response(resp: Any, width: int) -> str:
     """Fiction paragraphs, then the OOF blocks in the engine's order, then the pause prompt (when no block shows
     it already) and its choices, numbered, one per line. Any listing of the choices inside a block (lettered
     options, an inline numbered line) is left out, so each choice is shown exactly once."""
     pause = resp.pause
     choices = bool(pause is not None and pause.choices)
+    if choices and resp.phase == "play":  # 12.15.2: one menu line for every play pause
+        return _play_menu(resp, width)
     parts: list[str] = []
     if resp.fiction:
         parts.append(resp.fiction.strip())

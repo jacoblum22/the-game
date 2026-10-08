@@ -1,0 +1,37 @@
+# Reader golden set (37 lines; 37 scored, 0 without an answer)
+
+- verb: 94.6% (35/37)
+- gate: 94.6% (35/37)
+- necessity: not scored
+- against_will: 100.0% (21/21)
+- uses_power: 100.0% (21/21)
+- speech: 100.0% (21/21)
+- question_kind: 89.2% (33/37)
+- necessity as roll / no roll: not scored
+- issue lines (P-004 … P-123) verb: not scored, gate: not scored
+
+## Misses (verb, gate): 4
+- h019 verb: got verb.move, want None  (I take in the room as I sit down. Is the fire lit?)
+- h019 gate: got G1, want None  (I take in the room as I sit down. Is the fire lit?)
+- h034 verb: got None, want verb.observe  (I watch the merchant's hands closely while he counts, lookin)
+- h034 gate: got None, want G1  (I watch the merchant's hands closely while he counts, lookin)
+
+## Negation pairs (5 pairs, 10 lines)
+# Reader golden set (10 lines; 10 scored, 0 without an answer)
+
+- verb: 90.0% (9/10)
+- gate: 90.0% (9/10)
+- necessity: not scored
+- against_will: 100.0% (5/5)
+- uses_power: 100.0% (5/5)
+- speech: 100.0% (5/5)
+- question_kind: 100.0% (10/10)
+- necessity as roll / no roll: not scored
+- issue lines (P-004 … P-123) verb: not scored, gate: not scored
+
+## Misses (verb, gate): 2
+- h034 verb: got None, want verb.observe  (I watch the merchant's hands closely while he counts, lookin)
+- h034 gate: got None, want G1  (I watch the merchant's hands closely while he counts, lookin)
+
+Reader's own verb before the facets choose the card: 95.5% (21/22)
+Computed gate where the beat and verb agree: 100.0% (21/21); lines where only one side has a beat (SPEECH vs a beat): 2

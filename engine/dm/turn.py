@@ -30,6 +30,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from engine import ids
 from engine.dm.adjudication import AdjudicationRecord, BeatEntry, OracleEntry, PartEntry, PauseEntry
+from engine.dm.codex import promise_question, promise_subject, promises
 from engine.dm.context import TurnContext
 from engine.dm.narration import FRAME_NEXT, TurnOutcome, moves_on, narrate_turn, stays
 from engine.dm.roles import director as director_role
@@ -167,7 +168,8 @@ def _turn(ctx: TurnContext, message: str, *, choice: str | None, dispute: bool =
             else:
                 _scene_open_step(ctx, rec, message)  # PR-12-7: frame a pending (or missing) scene first
                 reader = read_message(ctx, message, exchanges=exchanges)  # T2
-                rec.parts = [PartEntry.model_validate({"text": p.text, "class": p.cls}) for p in reader.parts]
+                rec.parts = [PartEntry.model_validate({"text": p.text, "class": p.cls, "question_kind": p.question_kind,
+                                                       "topic": p.topic}) for p in reader.parts]
                 rec.triggers = [t.id for t in get_active_triggers(tx.state, ctx.rules)]  # T3 (cards: per role)
                 beats = _adjudicate(ctx, rec, reader, message, oof)  # T4
             pause = tx.state.open_pause()
@@ -186,7 +188,8 @@ def _turn(ctx: TurnContext, message: str, *, choice: str | None, dispute: bool =
         rec.pause = PauseEntry(kind=pause.kind, frame_id=pause.frame_id, prompt=pause.prompt,
                                options=[c.get("id", "") for c in pause.choices])
     tr = TurnRecord(turn_id=turn_id, input_verbatim=message,
-                    parts=[Part.model_validate({"text": p.text, "class": p.cls}) for p in rec.parts],
+                    parts=[Part.model_validate({"text": p.text, "class": p.cls, "question_kind": p.question_kind,
+                                                "topic": p.topic}) for p in rec.parts],
                     beats=[b.frame_id for b in rec.beats if b.frame_id],
                     oracle_calls=[e.seq for e in events if e.type == "oracle_answered" and e.seq is not None],
                     pause=({"kind": pause.kind, "frame_id": pause.frame_id,
@@ -294,6 +297,8 @@ def _adjudicate(ctx: TurnContext, rec: AdjudicationRecord, reader: ReaderResult,
         _hold(rec)
         return outcomes
     if not plans:
+        if reader.queued:
+            rec.notes.append("queued for the next declaration (01.2.3): " + "; ".join(reader.queued))
         return outcomes
     if reader.clarifying_question:
         rec.notes.append(f"assumed reading (01.2.4): {reader.restatement}")
@@ -308,6 +313,7 @@ def _adjudicate(ctx: TurnContext, rec: AdjudicationRecord, reader: ReaderResult,
         outcomes += res.outcomes
     decl = next((i for i, p in enumerate(rec.parts) if p.cls == "DECLARATION"), None)
     res = run_beats(env, plans)
+    res.queued += [q for q in reader.queued if q not in res.queued]  # 12.2.2 shape: queued or conditional beats
     _take(rec, res, oof, decl)
     outcomes += res.outcomes
     now = tx.state.open_pause()
@@ -478,7 +484,7 @@ HURT_WORDS = re.compile(r"\bhow (?:badly |bad )?(?:hurt|injured|wounded)\b|\bam 
 
 def _oof_shaped(text: str) -> bool:  # rule: 12.5.10
     low = text.lower().replace("’", "'")
-    return any(w in low for w in STUCK_WORDS) or bool(HURT_WORDS.search(low))
+    return any(w in low for w in STUCK_WORDS) or bool(HURT_WORDS.search(low)) or promise_question(text)
 
 
 SEVERITY_ANSWER = "S1 to S5 is how heavy a cost is: S1 is a light one, S5 the heaviest."
@@ -535,6 +541,8 @@ def oof_answer(ctx: TurnContext, text: str) -> str:  # rule: 12.5.10
         return stuck_answer(ctx.state)
     if any(w in low for w in NEW_WORDS):
         return HOW_TO_PLAY
+    if promise_question(text):  # 15.7.6: "what did I promise X?" from the stored commitments
+        return promises(ctx.state, promise_subject(text), ctx.rules).text
     if knowledge_question(text):  # 14.6.3: the journal, filtered to what was asked about
         from engine.dm.codex import what_you_know
 

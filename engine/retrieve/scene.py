@@ -14,6 +14,7 @@ from collections.abc import Callable, Iterable
 from typing import Any, TypeVar
 
 from engine.data.loader import load_rules
+from engine.store.details import active_details
 from engine.store.projection import FactRecord, WorldState
 from engine.store.views import display_name
 
@@ -145,6 +146,129 @@ def focus_ids(state: WorldState, text: str = "", target: str | None = None) -> l
     return list(dict.fromkeys([*([target] if target in state.entities else []), *named]))
 
 
+SPOT_KINDS = ("npc", "companion", "adversary", "faction", "place", "item", "object")  # what can be named and shown
+_PROPER_RUN = re.compile(r"\b[A-Z][\w'’-]+(?:\s+[A-Z][\w'’-]+)+")  # "Joss Fenn": a full name the index may not hold
+
+
+def _norm(text: str) -> str:
+    return re.sub(r"\s+", " ", re.sub(r"[^\w'’ -]+", " ", text.lower())).strip()
+
+
+def _nameable(state: WorldState, eid: str) -> bool:
+    e = state.entities.get(eid)
+    seal = state.seals.get(eid)
+    return e is not None and e.kind in SPOT_KINDS and (seal is None or bool(seal.slice))
+
+
+def alias_index(state: WorldState) -> tuple[dict[str, list[str]], dict[str, list[str]]]:  # rule: 12.2.4
+    """(strong, weak) key -> ids. Strong: the name the PC knows (the full name once learned, else the unnamed
+    label, 12.10.2), the narration's aliases, a sealed thing's permitted slice. Weak: the given and family names of
+    a person whose name is known. A true name the PC has not learned is never a key, so a match cannot leak it."""
+    from engine.store.views import name_known
+
+    strong: dict[str, list[str]] = {}
+    weak: dict[str, list[str]] = {}
+    for eid, e in state.entities.items():
+        if not _nameable(state, eid):
+            continue
+        seal = state.seals.get(eid)
+        keys = [seal.slice] if seal is not None and seal.slice else [display_name(state, eid)]
+        keys += [a for a in e.data.get("aliases") or [] if isinstance(a, str)] if seal is None else []
+        for k in {_norm(str(x)) for x in keys if x}:
+            if len(k) > 2:
+                strong.setdefault(k, []).append(eid)
+        if seal is None and e.kind in CAST_KINDS and name_known(state, eid):
+            for part in {_norm(w) for w in str(e.name).split()}:
+                if len(part) > 2:
+                    weak.setdefault(part, []).append(eid)
+    return strong, weak
+
+
+def resolve_names(state: WorldState, text: str, index: Any = None) -> list[str]:  # rule: 12.2.4
+    """Ids named in `text`, in order of mention. Full names and aliases first (longest key first; a matched span is
+    used once); then a lone given or family name, only when one person carries it and it is not part of a longer
+    proper name ("Joss Fenn" names neither Joss Dunmere nor Pell Fenn). Ambiguous keys name nobody."""
+    strong, weak = index or alias_index(state)
+    low = text.lower()
+    hits: list[tuple[int, str]] = []
+    for key in sorted(strong, key=len, reverse=True):
+        if len(strong[key]) != 1:
+            continue
+        for m in re.finditer(rf"(?<![\w]){re.escape(key)}(?![\w])", low):
+            hits.append((m.start(), strong[key][0]))
+            low = low[:m.start()] + " " * len(key) + low[m.end():]
+    runs = [(m.start(), m.end()) for m in _PROPER_RUN.finditer(text)]
+    for key, eids in weak.items():
+        if len(eids) != 1:
+            continue
+        for m in re.finditer(rf"(?<![\w]){re.escape(key)}(?![\w])", low):
+            if not any(a <= m.start() < b for a, b in runs):
+                hits.append((m.start(), eids[0]))
+    return list(dict.fromkeys(i for _, i in sorted(hits)))
+
+
+def beat_target(beat: Any) -> str | None:
+    """A Reader beat's (dict or object) target id, or None ("none" included)."""
+    t = beat.get("target") if isinstance(beat, dict) else getattr(beat, "target", None)
+    return t if isinstance(t, str) and t not in ("", "none") else None
+
+
+def spotlight(state: WorldState, message: str = "", last_delivery: str = "", beat: Any = None, *,
+              k: int | None = None, scope: Iterable[str] | None = None, rules: Any = None) -> list[str]:  # rule: 12.2.4
+    """Up to `packet.spotlight_k` entities outside the scene (12.2.4 item 3), in order: named or aliased in the
+    player's message; the beat's target; named in the last delivery; the scene agenda's thread's linked entities;
+    then one relationship hop from those. Never the PC, never one sealed without a permitted slice."""
+    rules = rules if rules is not None else load_rules()
+    k = int(rules.pacing["packet"].get("spotlight_k", 4)) if k is None else k
+    skip = set(scope if scope is not None else scene_scope(state)) | {pc_id(state)}
+    out: list[str] = []
+
+    def add(ids: Iterable[str | None]) -> None:
+        for i in ids:
+            if len(out) < k and i and i not in skip and i not in out and _nameable(state, i):
+                out.append(i)
+
+    index = alias_index(state)
+    add(resolve_names(state, message, index))
+    add([beat_target(beat)])
+    add(resolve_names(state, last_delivery, index))
+    info = state.meta.get("scene")
+    thread = info.get("thread") if isinstance(info, dict) and state.scene and \
+        info.get("scene_id") == state.scene.scene_id else None
+    if isinstance(thread, str) and thread in state.entities:
+        te = state.entities[thread]
+        add([te.data.get("points_to") if isinstance(te.data.get("points_to"), str) else None])
+        add(str(f.value) for f in state.facts.values() if f.subject == thread and isinstance(f.value, str)
+            and f.value in state.entities)
+    for i in list(out):  # one hop (World Info "recursion", bounded)
+        add(sorted(y for r in state.relationships.values() for x, y in ((r.a, r.b), (r.b, r.a)) if x == i))
+    return out
+
+
+def scene_starts(state: WorldState) -> list[int]:  # rule: 12.2.4
+    """The start seqs of the current (or, between scenes, the last) scene and the one before it, newest first: what
+    recency counts (2 / 1 / 0). Read from the scene cards, so the scene before last is known between scenes."""
+    starts = sorted({c.started_seq for c in state.scene_cards.values()}, reverse=True)
+    if not starts:  # a projection folded before scene cards existed
+        starts = [s.started_seq for s in (state.scene, state.last_scene) if s is not None]
+    return starts[:2]
+
+
+def shown_details(state: WorldState, ids: Iterable[str]) -> tuple[set[str], set[str]]:  # rule: 00.6.6a
+    """(detail fact ids a view may show, detail fact ids it never shows) for `ids`: archived lasting details over the
+    cap and `beat` details are never shown (00.6.6a items 3 and 1)."""
+    shown: set[str] = set()
+    hidden: set[str] = set()
+    for eid in ids:
+        refs = state.details.get(eid)
+        if not refs:
+            continue
+        act = {f.id for f in active_details(state, eid)}
+        shown |= act
+        hidden |= {r.fact_id for r in refs.values() if r.fact_id not in act}
+    return shown, hidden
+
+
 def _line_tokens(f: FactRecord) -> int:
     return tokens(f"  {f.id} about {f.subject}: {f.predicate} = {str(f.value)[:VALUE_CHARS]}")
 
@@ -160,10 +284,11 @@ def scene_facts(state: WorldState, scope: list[str] | None = None, *,  # rule: 1
     """
     budget = budget or view_budget()
     keep = set(scope if scope is not None else scene_scope(state, budget))
+    hidden = shown_details(state, keep)[1]
     pins: list[tuple[int, FactRecord]] = []
     pool: list[FactRecord] = []
     for f in state.facts.values():
-        if f.predicate.startswith("trg.") or _sealed(state, f):
+        if f.predicate.startswith("trg.") or _sealed(state, f) or (f.value is None and f.predicate.startswith("detail.")):
             continue
         val = f.value if isinstance(f.value, dict) else {}
         if f.kind == "commitment" and val.get("status") == "open":
@@ -178,15 +303,16 @@ def scene_facts(state: WorldState, scope: list[str] | None = None, *,  # rule: 1
         else:
             pool.append(f)
     pins.sort(key=lambda p: (p[0], -p[1].valid_from_seq, p[1].id))
+    pool = [f for f in pool if f.id not in hidden]
     want = set(focus)
     present = {i for i in [pc_id(state), *(state.scene.cast_present if state.scene else [])] if i}
     linked = {x for r in state.relationships.values() for x, y in ((r.a, r.b), (r.b, r.a)) if y in present and x != y}
-    # ponytail: recency knows only this scene and the last (the state keeps no older scene starts); 2 / 1 / 0
-    starts = [s.started_seq for s in (state.scene, state.last_scene) if s is not None]
+    starts = scene_starts(state)
 
     def score(f: FactRecord) -> int:
         val, text = f.value if isinstance(f.value, dict) else {}, str(f.value)
-        salience = 3 if f.kind == "commitment" else val["salience"] if isinstance(val.get("salience"), int) else 1
+        salience = 3 if f.kind == "commitment" else val["salience"] if isinstance(val.get("salience"), int) else \
+            2 if f.persistence == "scene" else 1  # a scene detail while its scene runs (00.6.6a)
         recency = sum(1 for s in starts if f.valid_from_seq >= s)
         relevance = 2 if f.subject in want or any(i in text for i in want) else 0
         adjacency = 1 if f.subject in linked or any(i in text for i in present - {f.subject}) else 0

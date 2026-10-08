@@ -96,12 +96,11 @@ def test_choices_once_numbered_one_per_line() -> None:
     c0 = Pause(kind="create_step", choices=[Choice(id="fast", label="Quick start"), Choice(id="full", label="workshop")])
     text = strip_listing("[CREATE 1/5] Before we begin\n  (a) What do you like?\n  (b) Anything to avoid?", c0)
     assert text == "[CREATE 1/5] Before we begin\n  - What do you like?\n  - Anything to avoid?"
-    # an OFFER block's own inline numbered line is dropped; the pause's list is printed once
-    offer = Pause(kind="offer", choices=[Choice(id="commit", label="Commit"), Choice(id="withdraw", label="Withdraw")])
-    r = render_response(Response(phase="play", oof_blocks=[OofBlock(kind="OFFER", text="[OFFER] Climb.\n  1) Commit"
-                                                                    "   2) Withdraw")], pause=offer), 80)
-    assert r.count("1) Commit") == 1 and r.endswith("  1) Commit\n  2) Withdraw\n\nType 1 to commit, or a number "
-                                                    "from the list.")
+    # an OFFER block's own inline numbered line is dropped; the menu line (12.15.2) is printed once
+    offer = Pause(kind="offer", choices=[Choice(id="commit", label="Do it"), Choice(id="withdraw", label="Back off")])
+    r = render_response(Response(phase="play", oof_blocks=[OofBlock(kind="OFFER", text="[OFFER] Climb.\n  1) Do it"
+                                                                    "   2) Back off")], pause=offer), 80)
+    assert "1) Do it" not in r and r.endswith("[OFFER] Climb.\n\n[Enter] Do it   [w] Back off   [?] Explain")
 
 
 def test_the_pc_as_subject_takes_a_second_person_verb() -> None:

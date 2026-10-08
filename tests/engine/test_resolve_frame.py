@@ -127,8 +127,10 @@ def test_circumstance_cap_and_lever_types(s: Scene) -> None:
     assert (f.modifier.circumstance, f.reach, f.stakes) == (2, "great", "dire")
     f2 = check(s, levers=[a, b], repetition_instance=3)
     assert isinstance(f2, Frame) and f2.modifier.circumstance == 0  # +4 levers, -4 repetition
-    f3 = check(s, snags=[a, b], repetition_instance=3)
+    f3 = check(s, snags=[a, b], repetition_instance=3, alternate_cost={"menu_id": "cost.shortfall"})
     assert isinstance(f3, Frame) and f3.modifier.circumstance == -4  # capped
+    # 00.3.9(b): one cited Precision snag; the second hindering fact raises the stakes instead
+    assert [x.type for x in f3.snags if not x.engine] == ["precision", "protective"] and f3.stakes == "risky"
 
 
 def test_free_fact_lever_caps(s: Scene) -> None:
@@ -176,11 +178,11 @@ def test_status_from_conditions(s: Scene) -> None:
 
 
 def test_trades_and_offer_view(s: Scene) -> None:
-    f = check(s, stakes_source="aware_opponent_or_observer", threatened_cost={"menu_id": "cost.drain"},
-              alternate_cost={"menu_id": "cost.footing"})
+    f = check(s, stakes_source="consumed_resource", threatened_cost={"menu_id": "cost.drain"},
+              alternate_cost={"menu_id": "cost.shortfall"})
     assert isinstance(f, Frame) and legal_trades(f) == ["go_big", "play_it_safe"]
-    big = check(s, stakes_source="aware_opponent_or_observer", trade="go_big",
-                threatened_cost={"menu_id": "cost.drain"}, alternate_cost={"menu_id": "cost.footing"})
+    big = check(s, stakes_source="consumed_resource", trade="go_big",
+                threatened_cost={"menu_id": "cost.drain"}, alternate_cost={"menu_id": "cost.shortfall"})
     assert isinstance(big, Frame) and (big.stakes, big.reach, big.dc) == ("dire", "great", f.dc)
     assert legal_trades(big) == []
     v = offer_preview(f)

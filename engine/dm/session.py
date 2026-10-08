@@ -120,6 +120,11 @@ def recap_summary(state: WorldState, *, since_seq: int = 0) -> list[str]:  # rul
     for e in chronicle(state, since_seq=since_seq)[-6:]:
         if e.scope in ("public", pc or ""):
             lines.append(f"- earlier: {e.text}")
+    from engine.retrieve.episodes import card_lines
+
+    ended = [c for c in state.scene_cards.values() if c.ended_at is not None and c.started_seq > since_seq]
+    for c in sorted(ended, key=lambda c: c.started_seq)[-3:]:  # 12.5.3: the scene cards since the last recap
+        lines += [f"- a scene: {ln}" for ln in card_lines(state, c)]
     last = state.scene or state.last_scene
     if last is not None and last.agenda:
         lines.append(f"- the last scene asked: {last.agenda}" + (" (answered)" if last.question_answered else ""))
@@ -220,10 +225,10 @@ def opening(ctx: TurnContext) -> Response:  # rule: 12.16.16
             mark_boundary(ctx.time_ctx(), "session_start", {})
             rec = AdjudicationRecord(turn_id=turn_id, pc=active_pc(tx.state))
             later = tx.state.meta.get(OPENED_PC) not in (None, rec.pc)  # a new character in the same world
-            if not later and inciting:  # the incident's person is someone who exists (I-145, P-067)
-                from engine.dm.incident import bind_incident, incident_line
+            from engine.dm.incident import incident_line, start_knowledge
 
-                bind_incident(ctx, tx)
+            start_knowledge(ctx, tx)  # a local knows the haven's names (I-149); the incident's case is seeded
+            if not later and inciting:
                 who = incident_line(tx.state)
                 inciting = f"{inciting}. {who.rstrip('.')}" if who else inciting
             if later and tx.state.scene is not None:

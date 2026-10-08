@@ -171,7 +171,8 @@ def test_enums_come_from_rules_and_state(store: Store) -> None:
     beat = reader["beats"]["items"]["properties"]
     assert reader["beats"]["maxItems"] == 3
     assert beat["target"]["enum"] == ["none", "pc.wren", "npc.mara_voss", "loc.salt_harbor"]
-    assert beat["license"]["enum"] == ["none", "lic.training.martial_blade"]
+    assert "license" not in beat and "gate" not in beat and "necessity" not in beat  # computed (00.12.3, 01.4.1)
+    assert set(beat) >= {"against_will", "uses_power", "speech", "shape"}  # 12.2.2 decision 3 (DL-12-50)
     assert len(beat["verb"]["enum"]) == 15
     assert reader["pending_answer"]["enum"] == ["commit", "decline", None]
     assert reader["fact_questions"]["items"]["properties"]["odds_rung"]["enum"][0] == "certain"
@@ -283,13 +284,18 @@ def test_framer_offers_only_legal_choices(store: Store) -> None:
     s = store.state
     f1 = s.facts["fact.1"]
     beat = Beat(id="beat.1", actor="pc.wren", intent="persuade Mara", method="offer coin", verb="verb.talk",
-                gate="G1", target="none", declared_seq=f1.valid_from_seq)
+                target="none", declared_seq=f1.valid_from_seq)
     schema = build_schema(Role.FRAMER, schema_context(s, RULES, anchors=anchor_candidates(BEAT, s, RULES),
                                                       beat=beat))
     p = schema["properties"]
-    tier, opposed = p["obstacle"]["anyOf"][:2]
+    klass, tier, opposed = p["obstacle"]["anyOf"][:3]
+    assert klass["properties"]["obstacle_class"]["enum"] == ["be_heard"]  # Talk's rubric class (01.6.5)
+    assert tier["properties"]["obstacle_class"]["enum"] == ["other"]
     assert "trivial" not in tier["properties"]["tier"]["enum"] and "moderate" in tier["properties"]["tier"]["enum"]
     assert opposed["properties"]["entity"]["enum"] == ["npc.mara_voss"]
+    keys = list(p)
+    at = keys.index("obstacle")
+    assert keys[at + 1:at + 4] == ["nudge_why", "nudge", "nudge_fact"]  # the why is written before the value
     later = [k for k, f in s.facts.items() if f.valid_from_seq > f1.valid_from_seq]
     assert later and not set(later) & set(p["levers"]["items"]["enum"])
     free, cited = p["threatened_cost"]["anyOf"]
@@ -302,8 +308,8 @@ def test_framer_offers_only_legal_choices(store: Store) -> None:
     assert None not in cited["properties"]["source_fact"]["enum"]
     d = defaults(Role.FRAMER, schema_context(s, RULES, anchors=anchor_candidates(BEAT, s, RULES), beat=beat))
     assert d is not None and validate(d, schema) == []
-    for bad in ({"kind": "opposed", "tier": None, "entity": None}, {"kind": "tier", "tier": "trivial",
-                                                                      "entity": None}):
+    for bad in ({"kind": "opposed", "obstacle_class": None, "tier": None, "entity": None},
+                {"kind": "tier", "obstacle_class": "other", "tier": "trivial", "entity": None}):
         assert validate({**d, "obstacle": bad}, schema)
     assert validate({**d, "threatened_cost": {"menu_id": "cost.time", "form_intent": "", "source_fact": None}},
                     schema)
@@ -312,11 +318,13 @@ def test_framer_offers_only_legal_choices(store: Store) -> None:
 def test_defaults_follow_the_contract(store: Store) -> None:
     s = store.state
     reader = defaults(Role.READER, ctx_for(s, Role.READER))
-    assert reader and reader["parts"] == [{"text": MESSAGES[Role.READER], "class": "DECLARATION"}]
+    assert reader and reader["parts"] == [{"text": MESSAGES[Role.READER], "class": "DECLARATION",
+                                           "question_kind": "none", "topic": None}]
     framer = defaults(Role.FRAMER, ctx_for(s, Role.FRAMER))
     assert framer and framer["anchor"] == "anc.01_18_7" and framer["attribute"] == "presence"
-    assert framer["stakes_source"] == "none" and framer["obstacle"] == {"kind": "tier", "tier": "moderate",
-                                                                         "entity": None}
+    # lane D P2: the default is class `other` at Easy (the Moderate default is retired)
+    assert framer["stakes_source"] == "none" and framer["obstacle"] == {"kind": "tier", "obstacle_class": "other",
+                                                                         "tier": "easy", "entity": None}
     director = defaults(Role.DIRECTOR, ctx_for(s, Role.DIRECTOR))
     assert director and director["next_scene"]["mode"] == "free" and director["push"] == "none"
     assert defaults(Role.INTERPRET, ctx_for(s, Role.INTERPRET))["choice"] == "move_on"  # type: ignore[index]

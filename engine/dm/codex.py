@@ -9,6 +9,7 @@ Only `shown` and `available` state appears; nothing sealed or background, ever. 
 
 from __future__ import annotations
 
+import re
 from typing import Any
 
 from pydantic import BaseModel, Field
@@ -255,8 +256,6 @@ def _known_line(k: dict[str, Any]) -> str:
 
 
 def _stems(text: str) -> set[str]:
-    import re
-
     return {w[:5] for w in re.findall(r"[a-z']+", text.lower().replace("'s", "")) if len(w) > 2 and w not in STOP}
 
 
@@ -288,6 +287,63 @@ def _self_lines(cv: dict[str, Any], pc: str, rules: Any) -> list[str]:
     return out
 
 
+def _about(state: WorldState, ents: dict[str, Any], about: str, want: set[str]) -> tuple[list[str], bool]:
+    # rule: 14.6.3
+    """Who or what `about` names, among the entities the codex shows: through the alias index (full names win; a
+    lone given or family name only when one person carries it), else the entities whose name and role hold every
+    word asked ("the mill"), so "Joss Fenn" does not list Joss Dunmere and Pell Fenn."""
+    from engine.retrieve.scene import resolve_names
+
+    named = [i for i in resolve_names(state, about) if i in ents]
+    if named:
+        return named[:3], True
+    return [i for i, e in ents.items() if want <= _stems(f"{e['name']} {e['data'].get('role') or ''}")][:3], False
+
+
+PROMISE = re.compile(r"\bwhat (?:did|have) (?:i|we) (?:\w+ )?(?:promised?|sworn?|swore|vowed?|owe)\b"
+                     r"|\bwhat (?:do|did) i owe\b|\bmy (?:promises|oaths|vows)\b", re.I)
+
+
+def promise_question(text: str) -> bool:
+    """"What did I promise X?" (and owe, swear, vow): answered from stored commitments (15.7.6), not narrated."""
+    return bool(PROMISE.search(text))
+
+
+def promise_subject(text: str) -> str | None:
+    """X in "what did I promise (to) X?", else None (every open promise)."""
+    m = re.search(r"\b(?:promised?|sworn?|swore|vowed?|owe)\s+(?:to\s+)?(.+)", text, re.I)
+    x = m.group(1).split("?")[0].strip(" .!,;:'\"") if m else ""
+    return None if not x or x.lower() in ("anyone", "anybody", "them", "so far") else x
+
+
+def promises(state: WorldState, about: str | None = None, rules: Any = None) -> CodexView:  # rule: 15.7.6
+    # rule: 14.6.3
+    """The PC's open commitments (15.7.6), those involving `about` when it names someone (alias index), as stored:
+    the promise's words and whom it was made to. Codex view only."""
+    cv = codex_view(state)
+    pc = _pc(state, cv)
+    ents = {i: e for i, e in cv["entities"].items() if i != pc}
+    who = _about(state, ents, about, _stems(about))[0] if about else []
+    rows = []
+    for f in sorted((f for f in cv["facts"].values() if f["kind"] == "commitment"), key=lambda f: f["valid_from_seq"]):
+        val = f["value"] if isinstance(f["value"], dict) else {"act": f["value"]}
+        if val.get("status", "open") != "open" or val.get("by", "pc") != "pc":  # the PC's own obligations
+            continue
+        party = {f["subject"], *(str(v) for v in val.values() if isinstance(v, str))}
+        if about and not party & set(who):  # asked about someone: only theirs (nobody resolved: none)
+            continue
+        to = next((cv["entities"][i]["name"] for i in (f["subject"], val.get("npc"))
+                   if isinstance(i, str) and i in cv["entities"] and i != pc), "")
+        rows.append(_value_words(val.get("act") or f["value"]) + (f" (to {to})" if to else ""))
+    if not rows:
+        whom = cv["entities"][who[0]]["name"] if who else about
+        return CodexView(section="journal", data={"about": about, "promises": []}, text=(
+            f"[JOURNAL] No open promise on record{f' to {whom}' if whom else ''}."))
+    head = f"What you promised {cv['entities'][who[0]]['name']}:" if who else "Your open promises:"
+    return CodexView(section="journal", text="\n".join([f"[JOURNAL] {head}", *(f"  You promised {r}." for r in rows)]),
+                     data={"about": about, "promises": rows, "entities": who})
+
+
 def what_you_know(state: WorldState, about: str | None = None, rules: Any = None) -> CodexView:  # rule: 14.6.3
     # rule: 15.9.16
     """"What do I know (about X)?" (14.6.3, 12.5.10): the journal filtered to X; with no X, a short summary of who
@@ -303,8 +359,7 @@ def what_you_know(state: WorldState, about: str | None = None, rules: Any = None
     ents = {i: e for i, e in cv["entities"].items() if i != pc}
     want = _stems(about or "")
     if about and want and not want <= {"mysel", "me", "chara"}:
-        hits = [i for i, e in ents.items() if want & _stems(f"{e['name']} {e['data'].get('role') or ''}")]
-        hits = hits[:3]
+        hits, named = _about(state, ents, about, want)
         lines = []
         for e in (ents[i] for i in hits):
             if e["kind"] == "thread":  # a thread's name is its text cut at 60 characters: show the whole sentence
@@ -315,8 +370,9 @@ def what_you_know(state: WorldState, about: str | None = None, rules: Any = None
             role, desc = e["data"].get("role"), _value_words(e["data"].get("desc") or "")
             lines.append(e["name"] + (f" ({role})" if isinstance(role, str) and role else "") +
                          (f": {desc}" if desc and desc.lower() != e["name"].lower() else ""))
-        lines += [_known_line(k) for k in known
-                  if k["subject"] in hits or want & _stems(f"{k['what']} {_value_words(k['value'])}")][-12:]
+        lines += [_known_line(k) for k in known  # a named person: what is known about them, not every word match
+                  if k["subject"] in hits or (not named and want & _stems(f"{k['what']} {_value_words(k['value'])}"))
+                  ][-12:]
         lines += [x for x in _self_lines(cv, pc, rules) if any(ents[i]["name"] in x for i in hits)]
         if not lines:
             return CodexView(section="journal", data={"about": about, "known": []}, text=(

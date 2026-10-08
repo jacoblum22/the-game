@@ -18,8 +18,9 @@ from play import cli
 from play.report import replay, turn_lines
 from tests.fixtures.game import entity, new_store
 
-OFFER_CHOICES = [Choice(id="commit", label="Commit"), Choice(id="change", label="Change approach"),
-                 Choice(id="withdraw", label="Withdraw")]
+OFFER_CHOICES = [Choice(id="commit", label="Do it"), Choice(id="change", label="Another way"),
+                 Choice(id="withdraw", label="Back off")]
+MENU = "[Enter] Do it   [c] Another way   [w] Back off   [?] Explain"  # 12.15.2's one menu convention
 
 
 class FakeGame:
@@ -125,9 +126,9 @@ def test_menu_new_game_two_turns_choice_sheet_quit(tmp_path: Path) -> None:
     assert FakeGame.last.calls[:4] == [("answer", "mixed"), ("submit", "I climb the rail"), ("answer", "commit"),
                                        ("codex", "sheet")]
     assert FakeGame.last.calls[-1] == ("close", None)
-    # fiction first, then the OFFER block; its listed choices are not printed twice
+    # fiction first, then the OFFER block; its own listing of the choices is dropped, the menu line printed once
     assert out.index("The barge slides past") < out.index("[OFFER]")
-    assert out.count("1) Commit") == 1
+    assert out.count(MENU) == 1 and "1) Do it" not in out
     assert "You land hard but whole." in out and "[SHEET] Wren" in out and "Saved." in out
 
 
@@ -256,11 +257,12 @@ def test_replay_identical_and_divergent(tmp_path: Path) -> None:
 
 def test_letter_picks_and_a_number_with_nothing_to_pick(tmp_path: Path) -> None:
     FakeGame.script = [play_resp("Begun.", "turn.0"), offer("turn.1"), play_resp("You land.", "turn.2")]
-    _, out = run(["new", "g"], "a\nI climb\nb\n3\n/quit\n", tmp_path)
-    # "a" picks the seed step's first option; "b" picks the offer's second; "3" with no pause open is not sent
+    _, out = run(["new", "g"], "a\nI climb\nc\n3\n/quit\n", tmp_path)
+    # "a" picks the seed step's first option; "c" is the OFFER's Another way (its printed letter); "3" with no
+    # pause open is not sent
     assert FakeGame.last.calls[:3] == [("answer", "mixed"), ("submit", "I climb"), ("answer", "change")]
     assert "Nothing to pick by number here" in out and ("submit", "3") not in FakeGame.last.calls
-    assert out.count("1) Commit") == 1 and "  1) Commit\n  2) Change approach\n  3) Withdraw" in out
+    assert out.count(MENU) == 1
 
 
 def test_enter_takes_the_pause_default_and_asks_for_a_name(tmp_path: Path) -> None:
@@ -293,23 +295,29 @@ def test_enter_takes_the_pause_default_and_asks_for_a_name(tmp_path: Path) -> No
     assert len([c for c in FakeGame.last.calls if c[0] in ("submit", "answer")]) == 4
 
 
-def test_enter_at_an_offer_takes_nothing(tmp_path: Path) -> None:
-    """P-044: an empty line at an OFFER withdrew silently ("a trap"); it now re-prompts, and Withdraw is by number."""
-    from play.render import OFFER_HINT
-
+def test_enter_at_an_offer_does_the_labelled_default(tmp_path: Path) -> None:
+    """12.15.2: Enter is the printed default, never Back off (P-044: Enter withdrew silently). A Safe or Risky
+    OFFER: Enter is Do it; a Dire, lethal or long-shot OFFER: Enter shows it again and Do it takes `d`."""
     o = offer("turn.1")
-    o.pause = Pause(kind="offer", default_choice="withdraw", choices=OFFER_CHOICES)
-    FakeGame.script = [play_resp("Begun.", "turn.0"), o]
+    o.pause = Pause(kind="offer", default_choice="withdraw", choices=OFFER_CHOICES,
+                    frame_summary={"stakes": "risky", "lethal": False, "long_shot": False})
+    FakeGame.script = [play_resp("Begun.", "turn.0"), o, play_resp("You land.", "turn.2")]
     _, out = run(["new", "g"], "a\nI climb\n\n/quit\n", tmp_path)
+    assert FakeGame.last.calls[:3] == [("answer", "mixed"), ("submit", "I climb"), ("answer", "commit")]
+    assert MENU in out and "(Do it)" in out
+    dire = offer("turn.1")
+    dire.pause = Pause(kind="offer", default_choice="withdraw", choices=OFFER_CHOICES,
+                       frame_summary={"stakes": "dire", "lethal": True, "long_shot": False})
+    FakeGame.script = [play_resp("Begun.", "turn.0"), dire]
+    _, out = run(["new", "h"], "a\nI climb\n\n/quit\n", tmp_path)
     assert FakeGame.last.calls[:2] == [("answer", "mixed"), ("submit", "I climb")]
-    assert not any(c[0] == "answer" and c[1] == "withdraw" for c in FakeGame.last.calls)
-    assert out.count(OFFER_HINT) >= 2 and "press Enter for Withdraw" not in out
+    assert not any(c[0] == "answer" for c in FakeGame.last.calls[2:])
+    assert out.count("[Enter] Show this again   [d] Do it   [c] Another way") == 2  # printed, then again on Enter
 
 
 def test_enter_at_a_near_miss_takes_nothing(tmp_path: Path) -> None:
-    """P-089: Enter at the near-miss menu silently picked "Let it fail"; near miss, redirect and last chance wait."""
-    from play.render import PICK_HINT
-
+    """P-089: Enter at the near-miss menu silently picked "Let it fail"; near miss, redirect and last chance wait:
+    Enter shows the pause again."""
     o = offer("turn.1")
     o.pause = Pause(kind="near_miss", default_choice="failure",
                     choices=[Choice(id="success_at_cost:cost.time", label="Succeed and pay: Time"),
@@ -317,4 +325,4 @@ def test_enter_at_a_near_miss_takes_nothing(tmp_path: Path) -> None:
     FakeGame.script = [play_resp("Begun.", "turn.0"), o]
     _, out = run(["new", "g"], "a\nI climb\n\n/quit\n", tmp_path)
     assert not any(c[0] == "answer" and c[1] == "failure" for c in FakeGame.last.calls)
-    assert out.count(PICK_HINT) >= 2 and "press Enter for Let it fail" not in out
+    assert out.count("[Enter] Show this again") >= 2 and "press Enter for Let it fail" not in out

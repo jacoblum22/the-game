@@ -42,16 +42,20 @@ class D20(Rng):
         return super().draw(n, purpose, stream=stream, table_id=table_id)
 
 
-def beat(intent: str, verb: str, *, gate: str = "G1", necessity: str = "uncertain_and_costly", target: str = "none",
-         license: str = "none", g4_fact: str | None = None, verbs: tuple[str, ...] = (),
-         would_be: str = "none") -> dict[str, Any]:
-    return {"intent": intent, "method": intent, "assertion": None, "shape": "single", "target": target, "verb": verb,
-            "license": license, "would_be_license": would_be, "gate": gate, "g4_fact": g4_fact, "necessity": necessity,
-            "intent_verbs": list(verbs)}
+def beat(intent: str, verb: str, *, target: str = "none", g4_fact: str | None = None, verbs: tuple[str, ...] = (),
+         against_will: bool = False, uses_power: bool = False, speech: bool = False,
+         shape: str = "now") -> dict[str, Any]:
+    """A Reader beat (12.2.2 decision 3, DL-12-50): the gate and the roll test are computed from it."""
+    return {"intent": intent, "method": intent, "purpose": "own_change", "assertion": None, "shape": shape,
+            "target": target, "verb": verb, "pressure": "request" if verb == "verb.talk" else "none",
+            "against_will": against_will, "uses_power": uses_power, "speech": speech or verb == "verb.talk",
+            "g4_fact": g4_fact, "intent_verbs": list(verbs)}
 
 
-def reader(cls: str, text: str, *beats: dict[str, Any], questions: tuple[dict[str, Any], ...] = ()) -> Fn:
-    data = {"parts": [{"text": text, "class": cls}], "pending_answer": None, "fact_questions": list(questions),
+def reader(cls: str, text: str, *beats: dict[str, Any], questions: tuple[dict[str, Any], ...] = (),
+           qk: str = "none") -> Fn:
+    data = {"parts": [{"text": text, "class": cls, "question_kind": qk, "topic": None}], "pending_answer": None,
+            "fact_questions": list(questions),
             "beats": list(beats), "clarifying_question": None, "restatement": text, "player_quantity": None}
     return lambda schema, packet: prune(data, schema)
 
@@ -61,7 +65,8 @@ def framer(**over: Any) -> Fn:
         d: dict[str, Any] = {
             "anchor": enum_at(schema, "anchor")[0], "deltas": [], "attribute": enum_at(schema, "attribute")[0],
             "deed_tag": enum_at(schema, "deed_tag")[0], "traits": [],
-            "obstacle": {"kind": "tier", "tier": "moderate", "entity": None}, "levers": [], "snags": [],
+            "obstacle": {"kind": "tier", "obstacle_class": "other", "tier": "moderate", "entity": None},
+            "nudge_why": None, "nudge": "0", "nudge_fact": None, "request_size": "R2", "levers": [], "snags": [],
             "stakes_source": "none", "stakes_heavy": False, "lethal": False, "reach_whole": True,
             "reach_one_factor": False, "threatened_cost": {"menu_id": "cost.time", "form_intent": "",
                                                            "source_fact": None},
@@ -82,7 +87,8 @@ QUIET_WORLD = {"responses": []}
 def setup(tmp_path: Path, model: Any, **config: Any) -> tuple[DockScene, TurnContext]:
     dock = build_dock(tmp_path)
     rng = D20.of(dock.store)
-    ctx = TurnContext(store=dock.store, rules=dock.rules, rng=rng, model=model, config=config)
+    # these tests read the OFFER pause: auto-commit (on by default for Safe frames, DL-01-32) is opted out here
+    ctx = TurnContext(store=dock.store, rules=dock.rules, rng=rng, model=model, config={"auto_commit": False, **config})
     return dock, ctx
 
 
@@ -108,7 +114,8 @@ def offer_turn(tmp_path: Path, **frame: Any) -> tuple[DockScene, TurnContext, Sc
 def test_offer_before_roll_and_nothing_rolled_until_commit(tmp_path: Path) -> None:
     dock, ctx, model, res = offer_turn(tmp_path, **RISKY)
     assert res.pause is not None and res.pause.kind == "offer"
-    assert [c["id"] for c in res.pause.choices][:3] == ["commit", "change", "withdraw"]
+    ids_ = [c["id"] for c in res.pause.choices]
+    assert ids_[0] == "commit" and ids_[-2:] == ["change", "withdraw"]  # 12.15.2: Do it … Another way, Back off
     assert res.offer is not None and res.offer["stakes"] == "risky"
     assert not rolls(dock.store) and not dock.state.frames
     assert "frame_committed" not in types(dock.store, res.turn_id)
@@ -171,11 +178,12 @@ def test_change_asks_how_then_the_new_way_is_offered(tmp_path: Path) -> None:
     assert not rolls(dock.store) and sum(1 for r, _ in model.calls if r == Role.FRAMER) == 1
     # "change approach: I talk my way past instead" carries the new way: it is framed, not the old beat
     talk = beat("talk my way past the watch", "verb.talk", target="npc.sela_vey", verbs=("persuade",))
-    data = {"parts": [{"text": "change approach: I talk my way past instead", "class": "PENDING_ANSWER"}],
+    data = {"parts": [{"text": "change approach: I talk my way past instead", "class": "PENDING_ANSWER", "question_kind": "none", "topic": None}],
             "pending_answer": "change", "fact_questions": [], "beats": [talk], "clarifying_question": None,
             "restatement": "Wren talks her way past the watch", "player_quantity": None}
     model.push(Role.READER, lambda schema, packet: prune(data, schema))
-    model.push(Role.FRAMER, framer())
+    model.push(Role.FRAMER, framer(obstacle={"kind": "opposed", "obstacle_class": None, "tier": None,
+                                             "entity": "npc.sela_vey"}))  # talk to a person: her defense (01.6.4)
     res3 = run_turn(ctx, "change approach: I talk my way past instead")
     assert res3.pause is not None and res3.pause.kind == "offer"
     assert res3.pause.detail["plan"]["beat"]["intent"] == "talk my way past the watch"
@@ -202,7 +210,7 @@ def test_restrained_redirect_names_the_way_out_and_breaking_free_clears_it(tmp_p
     assert len(red) == 1, red  # two beats refused for the same reason: one block
     assert red[0].startswith("[REDIRECT] Not as tried: you are restrained right now, and that stops it; clear it")
     assert "- Break free (one action; a Grapple roll)" in red[0]
-    free = beat("break free of the hold", "verb.grapple", verbs=("escape",))
+    free = beat("break free of the hold", "verb.grapple", verbs=("escape",), against_will=True)
     model.push(Role.READER, reader("DECLARATION", "I break free.", free))
     model.push(Role.FRAMER, framer())
     model.push(Role.WORLD, QUIET_WORLD)
@@ -268,7 +276,7 @@ def test_auto_commit_rolls_without_waiting(tmp_path: Path) -> None:
     ctx.rng.faces = [19]  # type: ignore[attr-defined]
     res = run_turn(ctx, "I slip past.")
     assert res.pause is None and len(rolls(dock.store)) == 1
-    assert any(o["kind"] == "OFFER" and "auto-committed" in o["text"] for o in res.oof)
+    assert any(o["kind"] == "OFFER" and o["text"].startswith("[OFFER — auto]") for o in res.oof)
 
 
 def test_lethal_frame_warns_first_and_is_never_auto_committed(tmp_path: Path) -> None:
@@ -287,9 +295,13 @@ def test_lethal_frame_warns_first_and_is_never_auto_committed(tmp_path: Path) ->
             started_seq=tx.state.last_seq)))
     cut["target"] = "foe.cutthroat"
     model.push(Role.READER, reader("DECLARATION", "I knife the cutthroat.", cut))
+    with dock.store.transaction() as tx:  # 01.6.11: harm from an aware party cites that they are armed and hostile
+        knife = tx.mint("fact")
+        tx.add(Event.of("fact_set", {"source": "oracle"}, source="dm", rule_id="01.15.5", fact_id=knife,
+                        subject="foe.cutthroat", predicate="wields", value="a knife", visibility="shown"))
     lethal = {"stakes_source": "aware_opponent_or_observer", "stakes_heavy": True, "lethal": True,
-              "obstacle": {"kind": "entity_defense", "tier": None, "entity": "foe.cutthroat"},
-              "threatened_cost": {"menu_id": "cost.harm", "form_intent": "his knife", "source_fact": None},
+              "obstacle": {"kind": "entity_defense", "obstacle_class": None, "tier": None, "entity": "foe.cutthroat"},
+              "threatened_cost": {"menu_id": "cost.harm", "form_intent": "his knife", "source_fact": knife},
               "alternate_cost": {"menu_id": "cost.footing", "form_intent": "you slip", "source_fact": None}}
     model.push(Role.FRAMER, framer(**lethal))
     res = run_turn(ctx, "I knife the cutthroat.")
@@ -319,8 +331,8 @@ def test_settled_fact_stays_settled(tmp_path: Path) -> None:
 
 
 def test_g3_gives_an_alternative_and_spends_nothing(tmp_path: Path) -> None:
-    fly = beat("pick the harbour master's strongbox lock with arcane force", "verb.handle", gate="G3",
-               verbs=("pick",), would_be="lic.training.arcane_alteration")
+    fly = beat("spring the harbour master's strongbox with arcane force", "verb.handle", uses_power=True,
+               verbs=("open",))
     model = ScriptedModel({Role.READER: [reader("DECLARATION", "I magic the lock open.", fly)],
                            Role.WORLD: [QUIET_WORLD]})
     dock, ctx = setup(tmp_path, model)
@@ -338,7 +350,7 @@ def test_g3_gives_an_alternative_and_spends_nothing(tmp_path: Path) -> None:
 def test_g4_gives_an_alternative_and_spends_nothing(tmp_path: Path) -> None:
     dock = build_dock(tmp_path)
     ferry = dock.facts["ferry"]
-    walk = beat("walk across the water to the far shore", "verb.move", gate="G4", g4_fact=ferry)
+    walk = beat("walk across the water to the far shore", "verb.move", g4_fact=ferry)
     model = ScriptedModel({Role.READER: [reader("DECLARATION", "I walk across the water.", walk)],
                            Role.WORLD: [QUIET_WORLD]})
     ctx = TurnContext(store=dock.store, rules=dock.rules, rng=dock.rng, model=model)
@@ -351,14 +363,15 @@ def test_g4_gives_an_alternative_and_spends_nothing(tmp_path: Path) -> None:
 
 
 def test_talk_and_trivial_acts_roll_nothing(tmp_path: Path) -> None:
-    talk = beat("ask the ferryman the fare", "verb.talk", necessity="trivial", target="npc.tam_harlan")
-    model = ScriptedModel({Role.READER: [reader("SPEECH", '"Evening."'),
-                                         reader("DECLARATION", "I ask the ferryman the fare.", talk)]})
+    talk = beat("ask the ferryman the fare", "verb.talk", target="npc.tam_harlan")
+    model = ScriptedModel({Role.READER: [reader("DECLARATION", "I ask the ferryman the fare.", talk, qk="what_like"),
+                                         reader("SPEECH", '"Evening."')]})
     dock, ctx = setup(tmp_path, model)
+    b = run_turn(ctx, "I ask the ferryman the fare.")  # a first question to a stranger: certain (T-15-3)
     a = run_turn(ctx, '"Evening."')
-    b = run_turn(ctx, "I ask the ferryman the fare.")
     assert not a.record.beats and a.record.parts[0].handled == "answered"
-    assert b.record.beats[0].gate_words == "no roll: trivial" and not b.record.beats[0].rolled
+    assert b.record.beats[0].gate_words == "no roll: trivial" and not b.record.beats[0].rolled  # certain (15.3.10)
+    assert Role.FRAMER not in [r for r, _ in model.calls]  # a certain beat skips the Framer
     assert not rolls(dock.store) and not dock.state.frames
     assert a.record.npc_actions  # spoken to the room: the first present NPC answers (12.11.9 default layer)
 
@@ -396,14 +409,13 @@ def test_pc_holds_two_licences_and_an_ability(tmp_path: Path) -> None:
     assert dock.clock in st.clocks and st.time.now.watch == 3
 
 
-@pytest.mark.parametrize("would_be", ["none", "lic.training.influence_intimidation"])
-def test_talk_proposed_as_g3_without_a_licence_is_never_redirected(tmp_path: Path, would_be: str) -> None:
-    """Playtest 20261007-170200: "talk to the person on the bridge" / "press him gently" came back G3 with
-    verb.talk and no licence, and the gate's word match redirected them to Stonesense. Talk needs no licence.
-    P-122 (-212725): a threat the Reader tied to Intimidation was redirected though Talk covers intimidate."""
-    talk = beat("press Sela gently to say what she is watching", "verb.talk", gate="G3", target="npc.sela_vey",
-                necessity="take_the_time", verbs=("press", "draw out"), would_be=would_be)
-    model = ScriptedModel({Role.READER: [reader("DECLARATION", "I press her gently.", talk)],
+@pytest.mark.parametrize("method", ["press Sela gently to say what she is watching",
+                                    "threaten Sela until she says what she is watching"])
+def test_talk_is_never_redirected(tmp_path: Path, method: str) -> None:
+    """Playtest 20261007-170200: "press him gently" was redirected to Stonesense; P-122 (-212725): a threat was
+    redirected to Intimidation. The gate is computed (00.12.3): Talk needs no licence, a knack never gates."""
+    talk = beat(method, "verb.talk", target="npc.sela_vey", verbs=("press", "draw out"))
+    model = ScriptedModel({Role.READER: [reader("DECLARATION", "I press her gently.", talk, qk="what_like")],
                            Role.WORLD: [QUIET_WORLD]})
     dock, ctx = setup(tmp_path, model)
     res = run_turn(ctx, "I press her gently.")
@@ -416,7 +428,7 @@ def test_move_toward_someone_writes_the_band(tmp_path: Path) -> None:
     """Playtest 20261007-170200 turns 5/6/12: a declared, resolved Move wrote no position, so every arrival in
     the narration was cut as unsourced. PR-06-4: the band closes one step, written both ways."""
     walk = beat("walk out along the quay toward the watchwoman", "verb.move", target="npc.sela_vey",
-                necessity="trivial", verbs=("approach",))
+                verbs=("approach",))
     model = ScriptedModel({Role.READER: [reader("DECLARATION", "I walk over to her.", walk),
                                          reader("DECLARATION", "I go closer.", walk)],
                            Role.WORLD: [QUIET_WORLD, QUIET_WORLD]})
@@ -436,12 +448,12 @@ def test_move_to_an_object_reads_plainly_and_reader_notes_stay_out(tmp_path: Pat
     """P-108 (playtest 20261007-201412 talker, input 26): "You are a few strides from bench" and the Reader's own
     note "Spoken to Oggza, not a beat: ..." reached the player. The object keeps its article; the note is not
     the beat's line."""
-    sit = beat("sit on the bench", "verb.move", target="obj.bench", necessity="trivial", verbs=("sit",))
+    sit = beat("sit on the bench", "verb.move", target="obj.bench", verbs=("sit",))
     said = "I sit on the bench. \"Who are you?\""
 
     def read(schema: dict[str, Any], packet: Any) -> dict[str, Any]:
-        data = {"parts": [{"text": "I sit on the bench.", "class": "DECLARATION"},
-                          {"text": "\"Who are you?\"", "class": "SPEECH"}], "pending_answer": None,
+        data = {"parts": [{"text": "I sit on the bench.", "class": "DECLARATION", "question_kind": "none", "topic": None},
+                          {"text": "\"Who are you?\"", "class": "SPEECH", "question_kind": "none", "topic": None}], "pending_answer": None,
                 "fact_questions": [], "beats": [sit], "clarifying_question": None, "player_quantity": None,
                 "restatement": "Wren sits on the bench. Spoken to Sela, not a beat: she asks who Sela is."}
         return prune(data, schema)
@@ -467,7 +479,7 @@ def test_move_to_another_place_cuts_the_scene_there(tmp_path: Path) -> None:
         office = "loc.the_ferry_office"
         tx.add(Event.of("entity_created", source="test", entity=Rec(
             id=office, kind="place", name="The Ferry Office", data={"place_kind": "building", "parent": dock.place})))
-    go = beat("go into the ferry office", "verb.move", target=office, necessity="trivial", verbs=("go",))
+    go = beat("go into the ferry office", "verb.move", target=office, verbs=("go",))
     model.push(Role.READER, reader("DECLARATION", "I go into the office.", go))
     model.push(Role.WORLD, QUIET_WORLD)
     from tests.engine.test_director import answer
@@ -486,7 +498,7 @@ def test_what_do_i_know_is_answered_plainly_never_rolled(tmp_path: Path, cls: st
     # 14.6.3 / 12.10.5: whatever the Reader called it, the journal answers, out of fiction; no Recall roll, no
     # Oracle draw about the PC's own memory
     text = "And what do I know about the ferryman so far?"
-    recall = beat("remember what Wren knows of the ferryman", "verb.recall", gate="G3")
+    recall = beat("remember what Wren knows of the ferryman", "verb.recall")
     ask = {"subject": "pc.wren", "predicate": "Wren knows anything of the ferryman", "odds_rung": "unlikely"}
     model = ScriptedModel({Role.READER: [reader(cls, text, recall, questions=(ask,))], Role.WORLD: [QUIET_WORLD]})
     dock, ctx = setup(tmp_path, model)
@@ -501,7 +513,7 @@ def test_what_do_i_know_is_answered_plainly_never_rolled(tmp_path: Path, cls: st
 
 def test_trying_to_remember_stays_in_fiction(tmp_path: Path) -> None:
     text = "I try to remember what I know about the ferryman."
-    recall = beat("remember what Wren knows of the ferryman", "verb.recall", gate="G1")
+    recall = beat("remember what Wren knows of the ferryman", "verb.recall")
     model = ScriptedModel({Role.READER: [reader("DECLARATION", text, recall)], Role.FRAMER: [framer()],
                            Role.WORLD: [QUIET_WORLD]})
     dock, ctx = setup(tmp_path, model)
@@ -546,8 +558,8 @@ def _track(tmp_path: Path, *shapes: str, reach_whole: bool = True) -> tuple[Dock
             tx.add(Event.of("position_set", source="test", entity=oid, location=dock.place))
     out = []
     for i, shape in enumerate(shapes):
-        follow = {**beat("follow the track", "verb.move", target="obj.track_in_the_mud" if i == 0 else "obj.track",
-                         verbs=("follow",)), "shape": shape}
+        follow = beat("follow the track", "verb.move", target="obj.track_in_the_mud" if i == 0 else "obj.track",
+                      verbs=("follow",), shape="now" if shape == "single" else shape)
         model.push(Role.READER, reader("DECLARATION", "I follow the track.", follow))
         model.push(Role.FRAMER, framer(stakes_source="none", reach_whole=reach_whole))
         model.push(Role.WORLD, QUIET_WORLD, QUIET_WORLD)
@@ -587,7 +599,6 @@ def test_go_big_from_safe_takes_the_framers_fitted_alternate(tmp_path: Path) -> 
 
 
 def test_a_form_that_only_copies_the_menu_examples_is_dropped(tmp_path: Path) -> None:
-    from engine.dm.oof import _cost_words
     from engine.resolve.frame import _fitted
     from engine.resolve.types import CostDecl
     dock = build_dock(tmp_path)
@@ -595,15 +606,16 @@ def test_a_form_that_only_copies_the_menu_examples_is_dropped(tmp_path: Path) ->
     assert _fitted(copied, dock.rules).form_intent == ""
     own = CostDecl(menu_id="cost.gear", form_intent="the mace lost in the long grass")
     assert _fitted(own, dock.rules).form_intent == own.form_intent
-    assert "well" not in _cost_words(dock.rules, {"menu_id": "cost.gear", "form": "", "severity_on_failure": "S2"},
-                                     with_severity=True)
 
 
-STAB = beat("stab the watchwoman with a dagger", "verb.strike", target="npc.sela_vey", verbs=("stab",))
+
+STAB = beat("stab the watchwoman with a dagger", "verb.strike", target="npc.sela_vey", verbs=("stab",),
+            against_will=True)
 MELEE = {"traits": ["trait.action.attack", "trait.delivery.melee"], "stakes_source": "aware_opponent_or_observer",
-         "stakes_heavy": True, "obstacle": {"kind": "opposed", "tier": None, "entity": "npc.sela_vey"},
-         "threatened_cost": {"menu_id": "cost.harm", "form_intent": "her answering blow", "source_fact": None},
-         "alternate_cost": {"menu_id": "cost.footing", "form_intent": "you slip", "source_fact": None}}
+         "stakes_heavy": True, "obstacle": {"kind": "opposed", "obstacle_class": None, "tier": None,
+                                            "entity": "npc.sela_vey"},
+         "threatened_cost": {"menu_id": "cost.footing", "form_intent": "her answering blow", "source_fact": None},
+         "alternate_cost": {"menu_id": "cost.exposure", "form_intent": "the quay sees it", "source_fact": None}}
 
 
 def test_strikes_never_ride_close_to_engaged_and_a_hurt_pc_sees_it(tmp_path: Path) -> None:
@@ -613,6 +625,12 @@ def test_strikes_never_ride_close_to_engaged_and_a_hurt_pc_sees_it(tmp_path: Pat
     model = ScriptedModel({Role.READER: [reader("DECLARATION", "I stab her.", STAB)],
                            Role.FRAMER: [framer(**MELEE)], Role.WORLD: [QUIET_WORLD]})
     dock, ctx = setup(tmp_path, model)
+    with dock.store.transaction() as tx:  # 01.6.11: her blow is a cost because she is armed (a cited fact)
+        armed = tx.mint("fact")
+        tx.add(Event.of("fact_set", {"source": "oracle"}, source="dm", rule_id="01.15.5", fact_id=armed,
+                        subject=dock.watch, predicate="wields", value="a short spear", visibility="shown"))
+    harm = {**MELEE, "threatened_cost": {"menu_id": "cost.harm", "form_intent": "her answering blow",
+                                         "source_fact": armed}}
     assert run_turn(ctx, "I stab her.").pause is not None
     model.push(Role.WORLD, QUIET_WORLD)
     ctx.rng.faces = [19]  # type: ignore[attr-defined]
@@ -623,7 +641,7 @@ def test_strikes_never_ride_close_to_engaged_and_a_hurt_pc_sees_it(tmp_path: Pat
     assert st.positions[dock.pc].band_to[dock.watch] == "engaged" == st.positions[dock.watch].band_to[dock.pc]
     # the same strike again: an attack rolls each time (06.1.6), so the OFFER is shown again
     model.push(Role.READER, reader("DECLARATION", "I stab her again.", STAB))
-    model.push(Role.FRAMER, framer(**MELEE))
+    model.push(Role.FRAMER, framer(**harm))
     res2 = run_turn(ctx, "I stab her again.")
     assert res2.pause is not None and res2.pause.kind == "offer" and any(o["kind"] == "OFFER" for o in res2.oof)
     model.push(Role.WORLD, QUIET_WORLD)
@@ -633,8 +651,8 @@ def test_strikes_never_ride_close_to_engaged_and_a_hurt_pc_sees_it(tmp_path: Pat
     result = next(o["text"] for o in res3.oof if o["kind"] == "RESULT")
     assert "Changed: Vitality " in result, result
     # "what are my options?" read as a fiction question, "how hurt am I?" as OOF: both answered
-    data = {"parts": [{"text": "What are my options?", "class": "FICTION_QUESTION"},
-                      {"text": "And how hurt am I right now?", "class": "OOF_QUESTION"}],
+    data = {"parts": [{"text": "What are my options?", "class": "FICTION_QUESTION", "question_kind": "none", "topic": None},
+                      {"text": "And how hurt am I right now?", "class": "OOF_QUESTION", "question_kind": "none", "topic": None}],
             "pending_answer": None, "fact_questions": [], "beats": [], "clarifying_question": None,
             "restatement": "", "player_quantity": None}
     model.push(Role.READER, lambda schema, packet: prune(data, schema))
@@ -647,7 +665,7 @@ def test_strikes_never_ride_close_to_engaged_and_a_hurt_pc_sees_it(tmp_path: Pat
 def test_a_shove_that_lands_drives_the_target_back_a_band(tmp_path: Path) -> None:
     """06.5.3: a Force at reach 2 pushes the target one band away and breaks the engagement (P-099)."""
     shove = beat("shove the watchwoman back off the quay edge", "verb.force", target="npc.sela_vey",
-                 verbs=("shove",))
+                 verbs=("shove",), against_will=True)
     model = ScriptedModel({Role.READER: [reader("DECLARATION", "I shove her back.", shove)],
                            Role.FRAMER: [framer(**{**MELEE, "traits": ["trait.delivery.melee"]})],
                            Role.WORLD: [QUIET_WORLD, QUIET_WORLD]})

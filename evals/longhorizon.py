@@ -296,6 +296,7 @@ def run_aged(seed: int, scenes: int, model: str, tmp: Path) -> list[str]:
     by_age: dict[str, list[float]] = {}
     promise_c: list[float] = []
     narrator_sections: list[dict[str, int]] = []
+    spot_sections: list[dict[str, int]] = []
     for mark in marks:
         _age(d, rng, done, mark, truth)
         done = mark
@@ -304,6 +305,14 @@ def run_aged(seed: int, scenes: int, model: str, tmp: Path) -> list[str]:
         out.append(_fmt_views(f"scene {mark}", view_tokens(calls)))
         narrator = next(((c.get("request") or {}).get("packet") or "" for c in calls if c["role"] == "narrator"), "")
         narrator_sections.append({name: tokens(t) for name, t in sections(narrator)})
+        absent = truth.get(f"npc.aged_{mark // 2}")  # an absent NPC named: the spotlight and scene cards fill (12.2.4)
+        if absent:
+            r = d.settle(d.call("submit", f"I ask around about {absent['name']}."))
+            calls = d.game.store.model_calls(r.turn_id) if r.turn_id else []
+            out.append(_fmt_views(f"scene {mark}, an absent NPC named", view_tokens(calls)))
+            narrator = next(((c.get("request") or {}).get("packet") or "" for c in calls if c["role"] == "narrator"),
+                            "")
+            spot_sections.append({name: tokens(t) for name, t in sections(narrator)})
         for label, k in (("oldest", 1), ("middle", mark // 2), ("newest", mark - 1)):
             npc = f"npc.aged_{k}"
             if npc not in truth:
@@ -327,6 +336,9 @@ def run_aged(seed: int, scenes: int, model: str, tmp: Path) -> list[str]:
                f"(by NPC age: " + ", ".join(f"{k} {_mean(v)}" for k, v in by_age.items()) + ")")
     out.append("- boundedness, narrator sections growing > 10% from first to last checkpoint: "
                + (", ".join(growth(narrator_sections[0], narrator_sections[-1])) or "none"))
+    if spot_sections:
+        out.append("- boundedness with the spotlight and scene cards on (an absent NPC named), sections growing > 10%: "
+                   + (", ".join(growth(spot_sections[0], spot_sections[-1])) or "none"))
     out.append(f"- promise probes: {len(promise_c)}; coverage {_mean(promise_c)}")
     d.game.close()
     return out

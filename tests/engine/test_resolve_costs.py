@@ -30,7 +30,7 @@ def test_previews() -> None:
 
 def _frame(s: Scene, **kw: object) -> Frame:
     p = {"anchor": "anc.01_18_4", "attribute": "agility", "obstacle": {"kind": "tier", "tier": "moderate"},
-         "stakes_source": "aware_opponent_or_observer", "threatened_cost": {"menu_id": "cost.drain"},
+         "stakes_source": "consumed_resource", "threatened_cost": {"menu_id": "cost.drain"},  # 01.6.11
          "alternate_cost": {"menu_id": "cost.shortfall"}, **kw}
     f = frame_check(ProposedFrame(**p), s.beat(gate="G1", verb="verb.move"), state=s.state, rules=s.rules)
     assert isinstance(f, Frame), f
@@ -93,7 +93,8 @@ def test_exposure_and_time(tmp_path: Path) -> None:
     s.apply([Event.of("clock_created", source="test", clock=ClockRecord(
         id="clk.alarm", name="alarm", kind="danger", segments=6,
         tick_sources=[{"on": "cost.exposure", "ticks": "U(severity)"}, {"on": "cost.time", "ticks": "U(severity)"}]))])
-    f = _frame(s, threatened_cost={"menu_id": "cost.exposure"}, alternate_cost={"menu_id": "cost.time"})
+    f = _frame(s, stakes_source="listening_clock", threatened_cost={"menu_id": "cost.exposure"},
+               alternate_cost={"menu_id": "cost.time"})
     rd = read_result(f, _roll(2, "critical_failure", False))  # S3
     with s.store.transaction() as tx:
         app = apply_cost(f, rd, "cost.exposure", state=tx.state, rules=s.rules, mint=tx.mint,

@@ -260,14 +260,19 @@ class Driver:
     # ------------------------------------------------------------------------------- measurements
 
     def packet_sizes(self) -> dict[str, list[tuple[int, int]]]:
-        """{role: [(turn number, rendered packet length)]} over the play turns, from the stored model calls."""
+        """{role: [(turn number, rendered packet length)]} over the play turns, from the stored model calls. The rule
+        cards are left out: they are capped at 12 by construction (00.15.4) and vary with the situation, not with
+        the length of the game, so with few calls (the Director's ~10) they swamp the growth signal (spec 009)."""
+        from evals.replay_bench import sections
+
         out: dict[str, list[tuple[int, int]]] = {}
         for row in self.game.store.model_calls():
             tid = str(row.get("turn_id") or "")
             if not tid.startswith("turn."):
                 continue
             packet = (row.get("request") or {}).get("packet") or ""
-            out.setdefault(str(row["role"]), []).append((int(tid.split(".")[1]), len(packet)))
+            size = len(packet) - sum(len(t) for name, t in sections(packet) if name == "RULE CARDS")
+            out.setdefault(str(row["role"]), []).append((int(tid.split(".")[1]), size))
         return out
 
 

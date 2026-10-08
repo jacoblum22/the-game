@@ -122,7 +122,7 @@ the plain fallback is the case where no sentence passed (12.3.3).
   toward 5); an addressed NPC always answers (a voiced refusal when the source refuses; a walk-on's voice rolled
   on first answer); acceptance decided in code.
 - **FR-011**: NPC responses are must-name record lines with handles; activities are citable record lines.
-- **FR-012**: The World model call runs only as an optional judge (`world_judge`, default on) of an engaged NPC's recorded wants and refusals; an NPC with none (every walk-on) never causes a call (research R6, ledger I-160).
+- **FR-012**: The World model call runs only as an optional judge (`world_judge`, default on) of an engaged NPC's recorded wants and refusals; an NPC with none (every walk-on) never causes a call (research R6, ledger I-176).
 - **FR-013**: The Checker still runs on every draft (and on each repaired sentence set) but only its claims
   not covered by declarations count as undeclared assertions; the diff-mode Checker and skipping it are spec
   009's.
