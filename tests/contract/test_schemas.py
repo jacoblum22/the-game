@@ -207,6 +207,23 @@ def test_enums_come_from_rules_and_state(store: Store) -> None:
                                                      "mechanics_in_fiction", "ends_on_prompt_or_one_pause"}
 
 
+def test_pending_answer_is_offered_only_with_an_open_pause(store: Store, tmp_path: Any) -> None:
+    """12.2.2: PENDING_ANSWER answers a pause point. With none open the `pending_answer` field is dropped, so the
+    class was unsatisfiable (reader_check needs the field): the playtest Reader re-asked and defaulted."""
+    def classes(props: dict[str, Any]) -> list[str]:
+        return props["parts"]["items"]["properties"]["class"]["enum"]
+
+    with_pause = build_schema(Role.READER, ctx_for(store.state, Role.READER))["properties"]
+    assert "PENDING_ANSWER" in classes(with_pause) and "pending_answer" in with_pause
+    s = new_store(tmp_path)
+    try:
+        none_open = build_schema(Role.READER, schema_context(s.state, RULES, message="Stay a while."))["properties"]
+    finally:
+        s.close()
+    assert "PENDING_ANSWER" not in classes(none_open) and "pending_answer" not in none_open
+    assert "DECLARATION" in classes(none_open)
+
+
 def test_empty_enum_drops_the_field(store: Store) -> None:
     s = store.state
     ctx = schema_context(s, RULES, anchors=[])  # no anchors, no push, no lead, no options, no draft

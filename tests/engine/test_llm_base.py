@@ -132,6 +132,15 @@ def test_call_role_default_after_second_failure() -> None:
     assert res.defaulted and res.data == {"kind": "b"}
     assert [r.outcome for r in seen] == [Outcome.INVALID_REASKED, Outcome.DEFAULTED]
     assert "not valid JSON" in (model.calls[1][1].reask or "")
+    assert seen[0].response["rejected"] == ["the response was not valid JSON"]  # why, for any provider
+    assert any("kind" in e for e in seen[1].response["rejected"])
+
+
+def test_call_role_records_check_failures_and_keeps_ok_rows_unchanged() -> None:
+    model = ScriptedModel({Role.FRAMER: [GOOD, {**GOOD, "kind": "b"}]}, fallback=False)
+    _, seen = _run(model, check=lambda d: ["kind a is not allowed here"] if d["kind"] == "a" else [])
+    assert seen[0].response["rejected"] == ["kind a is not allowed here"]
+    assert "rejected" not in (seen[1].response or {})
 
 
 def test_call_role_raises_without_default() -> None:

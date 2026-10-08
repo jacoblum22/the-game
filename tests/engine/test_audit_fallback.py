@@ -60,6 +60,19 @@ def test_pause_and_owed_warning() -> None:
     assert fb.owed_blocks == ["[WARNING]"]
 
 
+def test_npc_action_rows_read_as_prose() -> None:
+    """Playtest 2026-10-07: "Tikka Mud-Walker escalates: threatens, calls for others, attacks only if able and
+    hostile" and "asks the PC something" reached the player verbatim."""
+    rows = ["escalates: threatens, calls for others, attacks only if able and hostile", "asks the PC something",
+            "responds as the talk went: success", "helps as asked"]
+    rec = AdjudicationRecord(pc="pc.wren", npc_actions=[NpcActionEntry(npc="npc.tam_harlan", action=a,
+                                                                       source="table_row") for a in rows])
+    fb = plain_fallback(rec, names=NAMES).fiction
+    assert fb == ("Tam grows threatening and calls for others. Tam has a question for you. Tam agrees. "
+                  "Tam helps as asked. What do you do?")
+    _clean(fb)
+
+
 def test_empty_record_invents_nothing() -> None:
     fb = plain_fallback(AdjudicationRecord(pc="pc.wren"))
     assert fb.fiction == "What do you do?"

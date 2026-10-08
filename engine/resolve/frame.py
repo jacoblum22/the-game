@@ -396,7 +396,7 @@ def _dc(p: ProposedFrame, anchor: Any, deltas: list[str], state: Any, rules: Any
                 vals.append((int(d), w))
             dc, w = max(vals)
             return dc, "opposed", None, w, None
-        attrs = _defense_attrs(ob.defense, anchor, rules)
+        attrs = _defense_attrs(ob.defense, anchor, rules, dc_delta)
         vals = [(_defense(rules, state, w, a, ob.defense_tag), w) for w in who for a in attrs]
         dc, w = max(vals)
         return dc, "opposed", None, w, None
@@ -421,9 +421,17 @@ def _dc(p: ProposedFrame, anchor: Any, deltas: list[str], state: Any, rules: Any
     return dc, "tier", ob.tier, None, write
 
 
-def _defense_attrs(defense: str | None, anchor: Any, rules: Any) -> list[str]:
+# 15.6.1: "DC = mask = 10 + Presence + competence (guile.deception) + ...": a presence defense
+_DC_KNOB_DEFENSE = {"mask": "presence"}
+
+
+def _defense_attrs(defense: str | None, anchor: Any, rules: Any, dc_delta: str | None = None) -> list[str]:
     verb = rules.basic_verbs.get(anchor.get("verb") or "")
     text = str((verb or {}).get("anchor", {}).get("against", "")) if verb else ""
+    if not verb:  # a ch.15 anchor has no verb: its `dc` knob names the defense (15.4.1 "default Resolve")
+        knob = next((k for k in anchor.get("knobs") or () if k.get("knob") == "dc"), {})
+        word = str(dc_delta or knob.get("default") or "").strip().lower()
+        text = _DC_KNOB_DEFENSE.get(word, word)
     named = [a for a in ("might", "agility", "endurance", "wits", "intellect", "presence", "resolve") if a in text]
     if defense:
         if defense not in rules.attributes:

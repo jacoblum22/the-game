@@ -62,7 +62,8 @@ class ModelCallRecord(BaseModel):
     model_id: str
     schema_hash: str
     request: dict[str, Any] = Field(default_factory=dict)
-    # {"data": parsed JSON or None, "text": raw text or None, "error": message or None}
+    # {"data": parsed JSON or None, "text": raw text or None, "error": message or None}, plus "rejected": the
+    # validation failures when `call_role` refused the response (absent on accepted rows and older rows)
     response: dict[str, Any] | None = None
     tokens_in_cached: int = 0
     tokens_in: int = 0  # uncached input tokens (prompt tokens minus cached)
@@ -392,16 +393,18 @@ def call_role(
             rec = res.record.model_copy(update={"outcome": Outcome.OK})
             emit(rec)
             return CallResult(data=res.data, record=rec, attempts=attempt + 1)
+        # why it was refused, for every provider (a key old rows simply lack)
+        rejected = {"response": {**(res.record.response or {}), "rejected": list(errs)}}
         if attempt == 0:
-            emit(res.record.model_copy(update={"outcome": Outcome.INVALID_REASKED}))
+            emit(res.record.model_copy(update={"outcome": Outcome.INVALID_REASKED, **rejected}))
             current = packet.with_reask(errs)
             continue
         if default is not None:
-            rec = res.record.model_copy(update={"outcome": Outcome.DEFAULTED})
+            rec = res.record.model_copy(update={"outcome": Outcome.DEFAULTED, **rejected})
             emit(rec)
             data = dict(default() if callable(default) else default)
             return CallResult(data=data, record=rec, attempts=2, defaulted=True)
-        rec = res.record.model_copy(update={"outcome": Outcome.ERROR})
+        rec = res.record.model_copy(update={"outcome": Outcome.ERROR, **rejected})
         emit(rec)
         raise ModelInvalid(f"{role.value}: invalid after one re-ask: {'; '.join(errs[:5])}", rec)
     raise AssertionError("unreachable")

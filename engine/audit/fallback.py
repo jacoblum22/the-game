@@ -124,6 +124,21 @@ def _oracle_line(question: str, answer: str) -> str:
     return _sentence(f"{s}, {tail}" if s and tail else s)
 
 
+# tbl.npc_action rows (12.11.5) and the Talk outcome as plain prose: the row's own act, its conditions left out
+NPC_ROW_PROSE = {
+    "escalates: threatens, calls for others, attacks only if able and hostile": "grows threatening and calls for others",
+    "hinders quietly: delays, misdirects": "quietly stalls and misdirects",
+    "wants something first: names a price or a favor": "wants a price or a favor first",
+    "acts on one of their own wants": "turns to something they want",
+    "asks the PC something": "has a question for you",
+    "offers partial help": "offers some help",
+    "responds as the talk went: critical_success": "agrees readily",
+    "responds as the talk went: success": "agrees",
+    "responds as the talk went: failure": "is not persuaded",
+    "responds as the talk went: critical_failure": "is not persuaded",
+}
+
+
 class FallbackResult(BaseModel):
     fiction: str
     review_flag: bool = True
@@ -156,7 +171,7 @@ def plain_fallback(record: AdjudicationRecord, *, names: Mapping[str, str] | Non
     for o in record.oracle:
         lines.append(_oracle_line(o.question, o.answer))
     for a in record.npc_actions:
-        lines.append(_sentence(f"{who(a.npc)} {a.action}"))
+        lines.append(_sentence(f"{who(a.npc)} {NPC_ROW_PROSE.get(a.action, a.action)}"))
     lines += [_sentence(o.omen) for o in record.omens if o.omen]
     if record.pause is None:
         lines.append("What do you do?")

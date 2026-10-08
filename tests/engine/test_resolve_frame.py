@@ -56,6 +56,19 @@ def test_a_plain_frame(s: Scene) -> None:
     assert f.base_odds == 50 and auto_commit_allowed(f)
 
 
+def test_a_ch15_anchor_names_its_defense_in_the_dc_knob(s: Scene) -> None:
+    """ch.15 anchors have no verb: the `dc` knob carries the defense (15.4.1 Resolve, Wits by delta; 15.6.1 mask
+    = a presence defense). The Framer schema has no `defense` field, so without this every opposed social frame
+    was refused ("name the defense attribute")."""
+    from engine.resolve.frame import _defense_attrs
+
+    persuade, insight = s.rules.anchors["anc.15_4_1"], s.rules.anchors["anc.15_6_1"]
+    assert _defense_attrs(None, persuade, s.rules) == ["resolve"]
+    assert _defense_attrs(None, persuade, s.rules, "Wits") == ["wits"]
+    assert _defense_attrs(None, insight, s.rules) == ["presence"]
+    assert _defense_attrs(None, s.rules.anchors[MOVE], s.rules) == ["might", "agility"]  # verb text, unchanged
+
+
 def test_refusals_name_their_step(s: Scene) -> None:
     refused(check(s, {"actor": "pc.nobody"}), 1, "unknown actor")
     refused(check(s, {"target": "npc.nobody"}), 1, "target")
