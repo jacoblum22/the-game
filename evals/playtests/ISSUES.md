@@ -79,3 +79,4 @@ Status: open · fixing (round N) · fixed (commit) · logged (ledger id) · wont
 | P-071 | bug | low | "what are my options?" answered with only "What do you do?" once (no LEADS) | 185133-breaker 18 | open (watch) |
 | P-072 | bug | low | OFFER stakes "Source: pc s hand held" (raw predicate) | 185739-fighter 26–27 (on 0a0acdf, before 172b2b2) | open (recheck) |
 | P-073 | bug | low | Possession contradicts itself across turns (pendant in her palm / not in her hand) | 185739-fighter 20, 31 | open |
+| P-074 | bug | med | Creation: "Wanderer?" at the way-of-life step became Soldier (the default) with no explanation | 190015-newcomer setup (10 notes) | fixing |
