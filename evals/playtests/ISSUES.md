@@ -53,3 +53,6 @@ Status: open · fixing (round N) · fixed (commit) · logged (ledger id) · wont
 | P-044 | polish | low | OFFER's Enter default is Withdraw; a newcomer pressing Enter backs out without noticing | 174833-newcomer inputs 26, 31 | open |
 | P-045 | bug | med | Narration names the record: "…wound and ruin the record holds" | 174833-newcomer inputs 35–36 | fixing |
 | P-046 | rules | med | A newly arrived figure ("the arrival") can never become a person: Oracle settles yes/no only and 12.14.13 forbids creating a person by mention, so the scene stalls | 174833-newcomer inputs 33–38 | logged I-140(c) |
+| P-047 | bug | med | Asking about Luck at an open OFFER silently reframed it (75% risky → 50% safe); Luck not spent; no explanation | 175045-breaker inputs 22–30 | fixing (with P-049) |
+| P-048 | polish | low | [LEADS] entry truncated mid-sentence ("and…"); "open thread" label unclear | 175045-breaker inputs 18–19 | open |
+| P-049 | bug | high | Framer offered every cost/tier option, then the engine rejected illegal ones (cost.time with no clock, exposure with no observer, trivial tier rolled, opposed without entity, lever established too late) → re-ask → default frame | 6 saves, 16 rejections | fixing |
