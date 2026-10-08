@@ -199,14 +199,16 @@ def screen_draft(fiction: str, *, flags: Mapping[str, Any] | None = None, record
     f = dict(flags or {})
     rec = record or AdjudicationRecord()
     reasons: list[str] = []
-    # 12.2.7 (1) acknowledged
+    # 12.2.7 (1) acknowledged. With no message part to answer (the opening, a scene opening, a recap: the Checker
+    # saw "(none)") there is nothing to acknowledge or substitute, so its flags do not apply [playtest 2026-10-07]
+    asked = any(p.cls in ANSWERED_CLASSES for p in rec.parts)
     missing = _acknowledged(rec, fiction)
-    ack = bool(f.get("intent_acknowledged", True)) and not missing
+    ack = (bool(f.get("intent_acknowledged", True)) or not asked) and not missing
     if not ack:
         reasons.append("12.2.7: a part of the player's message is not answered"
                        + (f" ({'; '.join(missing)})" if missing else ""))
     # 12.2.7 (2) not substituted
-    substituted = bool(f.get("intent_substituted", False))
+    substituted = bool(f.get("intent_substituted", False)) and asked
     if substituted:
         reasons.append("12.2.7: the PC attempts something other than what the player declared")
     # 12.2.7 (3) not silently reset: no contradiction of the store
