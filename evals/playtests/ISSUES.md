@@ -128,3 +128,5 @@ Status: open · fixing (round N) · fixed (commit) · logged (ledger id) · wont
 | P-122 | bug | high | Sheet says "knack for intimidation", yet threatening → "[REDIRECT] you haven't learned Intimidation" (twice) | 212725-fighter 23–29 | fixing |
 | P-123 | bug | med | "Gently take the feather token from his hand" framed as unarmed fighting and refused | 212725-fighter 21–22 | fixing |
 | P-124 | polish | low | NPC "named his price" but no amount given | 212725-fighter 24 | open |
+| P-125 | polish | med | On a fallback the player's own questions are quoted back ("You ask, '…'") with no answer, reading as an echo | 212917-breaker 18–22 | open |
+| P-126 | bug | low | OFFER grammar: "you finds out who in Garford would talk to them" | 212917-breaker 28–29 | fixing (with P-122) |

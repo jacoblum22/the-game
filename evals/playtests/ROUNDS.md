@@ -77,3 +77,4 @@ Ledger: I-131..I-136.
 | explorer 210627 | 8fc6117 | 17 | 2.41 | 0 | critical success still refused (P-120 high); proverb-dodging NPC; vague notice text |
 | fighter 212725 | 06c7def | 17 | 2.06 | 2 | odds/grapple clear; knack vs licence redirect (P-122); gentle take = attack (P-123) |
 | newcomer 212731 | 06c7def | 17 | 1.88 | 1 | NPC agrees but never says what (P-120); harsh call-out odds (I-158) |
+| breaker 212917 | 06c7def | 17 | 2.29 | 2 | fallback echoes questions (P-125); success non-answer (P-120); OFFER grammar (P-126) |
