@@ -124,3 +124,30 @@ narrator places people differently from the store. The next fix is the planned b
 scene-state positions and postures from resolved beats** (A P7 / 00.6.6a T1c), which needs the per-verb outcome
 table. With that, the narrator would cite positions instead of improvising them. The sample is small (19 turns),
 so treat each figure as ±10 points.
+
+## Follow-up: spec 010, scene state written by code (c91a05f, merged 2026-10-09)
+
+- **Owner ruling:** only coarse position is tracked and checked (place, range band, held or pinned, mounted,
+  departed). Fine placement is atmosphere: never stored, never judged (DL-12-77; T-12-18 per-verb outcome table).
+- **Diagnosis:** across 30 live turns, every position failure was a fine-placement false positive (for example,
+  "the fire at the far end of the hall" matched against a place named `the hall`). The one exception was a stale
+  activity line after travel, which spec 010 removed. None was a narrator error.
+- **Live (19 turns, Haiku), against the final overnight run:**
+
+  | Gate | Overnight | Spec 010 | Target |
+  |---|---|---|---|
+  | First draft as drafted | 36.8% | 42.1% | > 50% |
+  | Cut turns | 10.5% | 26.3% | < 15% |
+  | Narrator calls per turn | 1.53 | 1.37 | ≤ 1.2 |
+  | Position contradictions | 8 | 6 | — |
+
+  None of the 6 position contradictions is about a person, and all 6 are fixed by the post-run judge. Re-judging
+  the recorded verdicts projects first-draft passes at 63%; this was not measured live.
+- **The rise in cut turns is unrelated to position:**
+  - audit-typed clues or documents (2 turns);
+  - an unratified knowledge claim (1);
+  - "a door closes behind you" (1);
+  - a whereabouts question asked to no one, which the answer ladder doesn't handle (1).
+
+  All of this is within the sample's ±10 points.
+- **Checks:** suite 1657 passed; validator 0/0.
