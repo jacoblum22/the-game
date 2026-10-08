@@ -18,6 +18,7 @@ from typing import Any
 from pydantic import BaseModel, Field
 
 from engine import ids
+from engine.audit.fallback import drop_reader_notes
 from engine.dm.context import TurnContext
 from engine.dm.packet import build_packet
 from engine.dm.roles.prompts import load_prompt
@@ -35,8 +36,6 @@ NONE = "none"
 # an in-fiction Recall (01.18.6) and is left to the Reader.
 KNOW_QUESTION = re.compile(r"\bwhat (?:do|did) (?:i|we) (?:\w+ )?know\b|\bwhat (?:have i|i've) (?:learn|found out)"
                            r"|\bwhat does my character know\b", re.I)
-_READER_NOTE = re.compile(r"\bnot a beat\b|\bno act is declared\b|\bquestion to the DM\b|\bno roll\b|\bfree activity\b",
-                          re.IGNORECASE)
 _QUEUED_TAIL = re.compile(r"(?:(?<=[.!?;])\s+|\n\s*)Then\b")  # rule: 01.2.3 (queued beats follow the beat's line)
 RECALL_WORDS = re.compile(r"\b(?:remember|recall|think back|try to|search my memory|rack my)", re.I)
 
@@ -101,7 +100,7 @@ class ReaderResult(BaseModel):
         # the one beat's line, not the queued "Then, ..." tail: an OFFER must not read as one roll for both
         own = _QUEUED_TAIL.split(self.restatement, maxsplit=1)[0].strip()
         # the Reader's own notes ("Spoken to Oggza, not a beat: ...") are not the beat's line (P-108)
-        own = " ".join(s for s in re.split(r"(?<=[.!?])\s+", own) if not _READER_NOTE.search(s))
+        own = drop_reader_notes(own)
         for b in self.beats:
             target = b.target if b.target and b.target != NONE else None
             lic = b.license if b.license and b.license != NONE else None

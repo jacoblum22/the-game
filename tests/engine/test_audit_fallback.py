@@ -194,6 +194,13 @@ def test_a_spoken_line_with_no_beat_is_restated() -> None:
     assert fb == ("You sit on the bench. You are a few strides from the bench. "
                   "You ask, \"That's all right, Oggza. Is Seley one of yours?\" Tam offers some help. "
                   "What do you do?"), fb
+    # playtest 20261007-203717 breaker, input 28: the Reader's queue note reached the player
+    noted = AdjudicationRecord(pc="pc.wren", beats=[BeatEntry(
+        restatement="Wren asks Tam what there is to discover. Queued: looking at Belia, pending clarification of "
+                    "who is in the room. Spoken to Tam, not a beat: she thanks him.", actor="pc.wren",
+        degree="success", rolled=True)])
+    assert plain_fallback(noted, names=NAMES).fiction == ("You ask Tam what there is to discover. It works. "
+                                                          "What do you do?")
     only = AdjudicationRecord(pc="pc.wren", parts=[PartEntry.model_validate(
         {"text": "I lean in and say, \"Who did you lose?\"", "class": "SPEECH"})])
     assert plain_fallback(only, names=NAMES).fiction == 'You ask, "Who did you lose?" What do you do?'

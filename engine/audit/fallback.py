@@ -48,6 +48,16 @@ def plain(text: str) -> str:
     return re.sub(r"([.!?])[.]+", r"\1", s)
 
 
+_READER_NOTE = re.compile(r"\bnot a beat\b|\bno act is declared\b|\bquestion to the DM\b|\bno roll\b|"
+                          r"\bfree activity\b|^Queued\b|\bpending clarification\b", re.IGNORECASE)
+
+
+def drop_reader_notes(text: str) -> str:
+    """A restatement without the Reader's own notes ("Spoken to Oggza, not a beat: ...", "Queued: looking at
+    Belia, pending clarification ..."): bookkeeping, never player text (P-108)."""
+    return " ".join(s for s in re.split(r"(?<=[.!?])\s+", text.strip()) if s and not _READER_NOTE.search(s))
+
+
 def _sentence(text: str) -> str:
     s = plain(text)
     if not s:
@@ -94,7 +104,7 @@ def _you(restated: str, pc_names: Iterable[str], other_names: Iterable[str]) -> 
 
 
 def _beat_line(b: BeatEntry, pc: str | None, names: Mapping[str, str]) -> str:
-    restated = plain(b.restatement)
+    restated = plain(drop_reader_notes(b.restatement))
     if restated and b.actor in (None, pc):
         full = names.get(pc or "", "")
         restated = _you(restated, [full, full.split(" ")[0]],
