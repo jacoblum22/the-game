@@ -49,6 +49,12 @@ and anything left for the owner.
 D5–D8 took their recommended defaults (see 00_SYNTHESIS §4). D9 (a real-Gemini run) and the Laya spike are
 deferred to the owner.
 
+## Interruptions
+
+- **Usage limit hit mid-run.** It interrupted the spec 006 agent after 4 commits (up to d467f04). The agent was
+  resumed with its context once the limit reset, and asked to merge the moved `milestone-1-playable` itself.
+  Because of the limit, I'm running fewer agents in parallel from here on.
+
 ## In flight
 
 - Spec 007 (adjudication), started from 91fc837. The gate is the Reader golden set, scored with Haiku via the
