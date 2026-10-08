@@ -120,6 +120,11 @@ def recap_summary(state: WorldState, *, since_seq: int = 0) -> list[str]:  # rul
     for e in chronicle(state, since_seq=since_seq)[-6:]:
         if e.scope in ("public", pc or ""):
             lines.append(f"- earlier: {e.text}")
+    from engine.retrieve.episodes import card_lines
+
+    ended = [c for c in state.scene_cards.values() if c.ended_at is not None and c.started_seq > since_seq]
+    for c in sorted(ended, key=lambda c: c.started_seq)[-3:]:  # 12.5.3: the scene cards since the last recap
+        lines += [f"- a scene: {ln}" for ln in card_lines(state, c)]
     last = state.scene or state.last_scene
     if last is not None and last.agenda:
         lines.append(f"- the last scene asked: {last.agenda}" + (" (answered)" if last.question_answered else ""))

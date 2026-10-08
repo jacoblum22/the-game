@@ -816,3 +816,29 @@ Supersedes the earlier notes on `Beat.gate` / `would_be_license` / `necessity`, 
 - **Menu** (`play/render.py`): `menu_keys`, `enter_choice` (Do it, or None = show again on Dire / lethal / long
   shot and on near miss, redirect, last chance), `menu_line`; play-phase pauses print it instead of numbers; `?`
   explains a word. Digits still pick. Auto-commit defaults on (`resolution.yaml#auto_commit`), Safe frames only.
+
+## Memory: details, scene cards, spotlight, role views (spec 009 part A)
+- **Details** (`engine.store.details`, 00.6.6a): a detail is the fact `detail.<slot>` with `persistence` (lasting |
+  scene | beat; new `FactSet` field) and `certainty: narrated` when narration stated it. `write_detail(state, mint,
+  eid, slot, value, *, source="narration", because=None)` -> `DetailWrite(outcome new|same|superseded|
+  contradiction|refused, events, fact_id, prior)`: one value per slot; a change supersedes only with `because` (this
+  turn's explaining record entry), else `contradiction` (nothing written); `scene`/`beat` slots from narration are
+  refused. `active_details` (scene details, then the `details.max_active` lasting ones by salience then last use),
+  `archived_details` (the rest: still current facts), `expire_events` (12.4.8 step 8; `end_scene` stages them),
+  `used_event(fact_ids)` (`details_used`: usage marks). Projection: `WorldState.details[eid][slot] = DetailRef(fact_id,
+  last_used)`; a `None` value clears a slot.
+- **Scene cards** (12.4.8 step 9): folded by the projection from each scene's events into
+  `WorldState.scene_cards[scene_id]` (`SceneCard`: place, agenda, answer, times, cast, beats, facts, memories,
+  threads), so `store.rebuild()` regenerates them. `engine.retrieve.episodes.cards_for(state, ids, k=2)` (ended scenes,
+  overlap then recency), `card_lines(state, card)` (as the PC knows it). `session.recap_summary` lists them (12.5.3).
+  Recency in `scene_facts` reads `scene_starts(state)` (the cards), not `scene`/`last_scene`.
+- **Spotlight** (`engine.retrieve.scene`, 12.2.4): `alias_index(state)` -> (strong, weak) keys of PC-known names;
+  `resolve_names(state, text)` (full names and aliases first; a lone given/family name only when unique and not
+  inside a longer proper name); `spotlight(state, message, last_delivery, beat, k=None)`.
+- **Role views** (`engine.dm.packet.view_for(role, state, ctx)`): `build_packet(role, view=WorldState, ...)` calls it
+  with `view_ctx(message, exchanges, focus, beat)`; strings and dicts pass through. Narrator: no `MOTIVES` keys or
+  predicates, spotlight as the PC knows it, at most 2 cards; Reader: names, PC licences and conditions, open pause;
+  Framer: target and place records, their facts and the PC's; Director: threads, clocks, cast list, cards.
+  Part-B hookups (spec 006 files) are listed as `TODO(009-B)` in packet.py.
+- **Promises** (`engine.dm.codex.promises(state, about)`, `promise_question`, `promise_subject`): the PC's open
+  commitments, filtered through the alias index; `turn.oof_answer` routes "what did I promise X?" there.

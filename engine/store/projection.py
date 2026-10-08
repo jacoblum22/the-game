@@ -61,6 +61,27 @@ class FactRecord(BaseModel):  # 00.6.2 Fact plus its bi-temporal start
     established_at: Timestamp | None = None
     supersedes: str | None = None
     valid_from_seq: int
+    persistence: str | None = None  # details only: lasting | scene | beat (00.6.6a)
+
+
+class DetailRef(BaseModel):  # 00.6.6a: the details index entry
+    fact_id: str
+    last_used: int = 0  # the turn number a delivered sentence (or the write) last stated it
+
+
+class SceneCard(BaseModel):  # 12.4.8 step 9: a view over the scene's events, never prose
+    scene: str
+    place: str | None = None
+    agenda: str = ""
+    answer: str | None = None
+    started_at: Timestamp | None = None
+    ended_at: Timestamp | None = None
+    started_seq: int = 0
+    cast: list[str] = Field(default_factory=list)
+    beats: list[dict[str, Any]] = Field(default_factory=list)  # {frame, actor, verb, target, degree}
+    facts: list[str] = Field(default_factory=list)
+    memories: list[str] = Field(default_factory=list)
+    threads: list[str] = Field(default_factory=list)
 
 
 class RelationshipRecord(BaseModel):
@@ -134,6 +155,8 @@ class WorldState(BaseModel):
     seed_answers: list[dict[str, Any]] = Field(default_factory=list)
     creation_answers: list[dict[str, Any]] = Field(default_factory=list)
     reverted: list[int] = Field(default_factory=list)
+    details: dict[str, dict[str, DetailRef]] = Field(default_factory=dict)  # entity -> slot -> detail (00.6.6a)
+    scene_cards: dict[str, SceneCard] = Field(default_factory=dict)  # scene id -> card (12.4.8 step 9)
 
     # -- queries the payload checks use
     def current_fact_id(self, subject: str, predicate: str) -> str | None:
@@ -181,6 +204,23 @@ def _log(s: WorldState, kind: str, ev: Event) -> None:
     s.ledger.setdefault(kind, []).append(_seq(ev))
 
 
+DETAIL = "detail."  # 00.6.6a: a detail is the fact `detail.<slot>`
+
+
+def _turn_n(ev: Event) -> int:
+    parsed = ids.parse_counter_id(ev.turn_id) if ev.turn_id else None
+    return parsed[1] if parsed and parsed[0] == ids.TURN else 0
+
+
+@reducer("details_used")
+def _details_used(s: WorldState, ev: Event, p: Any) -> None:  # rule: 00.6.6a
+    for fid in p.fact_ids:
+        f = s.facts.get(fid)
+        ref = s.details.get(f.subject, {}).get(f.predicate[len(DETAIL):]) if f is not None else None
+        if ref is not None and ref.fact_id == fid:
+            ref.last_used = _turn_n(ev)
+
+
 @reducer("game_created")
 def _game_created(s: WorldState, ev: Event, p: Any) -> None:
     s.game = GameInfo(seed=p.seed, engine_version=p.engine_version, rules_hash=p.rules_hash,
@@ -222,8 +262,15 @@ def _fact_set(s: WorldState, ev: Event, p: Any) -> None:  # rule: 00.6.2
     s.facts[p.fact_id] = FactRecord(
         id=p.fact_id, subject=p.subject, predicate=p.predicate, value=p.value, kind=p.kind, source=p.source,
         certainty=p.certainty, truth=p.truth, visibility=p.visibility, established_at=ev.game_time,
-        supersedes=p.supersedes, valid_from_seq=_seq(ev))
+        supersedes=p.supersedes, valid_from_seq=_seq(ev), persistence=p.persistence)
     s.fact_keys[f"{p.subject}|{p.predicate}"] = p.fact_id
+    if p.predicate.startswith(DETAIL):  # rule: 00.6.6a
+        slots = s.details.setdefault(p.subject, {})
+        slot = p.predicate[len(DETAIL):]
+        if p.value is None:  # cleared (a scene detail expiring, 12.4.8 step 8)
+            slots.pop(slot, None)
+        else:
+            slots[slot] = DetailRef(fact_id=p.fact_id, last_used=_turn_n(ev))
     if p.visibility == "sealed":
         s.seals[p.fact_id] = Seal(gate=p.gate or "unspecified", slice=None, seq=_seq(ev))
     if p.supersedes:
@@ -444,6 +491,60 @@ def _revoke(s: WorldState, ev: Event, p: Any) -> None:
     s.licenses[p.entity] = [x for x in s.licenses.get(p.entity, []) if x.license_id != p.license_id]
 
 
+def _card(s: WorldState, ev: Event, p: Any) -> None:  # rule: 12.4.8
+    """Fold one event into the open scene's card (12.4.8 step 9): a structured view over the scene's events, so a
+    rebuild from the log regenerates every card (00.6.9d). Runs after the event's reducer."""
+    t = ev.type
+    if t == "scene_started":
+        sc = s.scene
+        assert sc is not None
+        card = s.scene_cards.get(sc.scene_id)
+        if card is None:
+            s.scene_cards[sc.scene_id] = SceneCard(scene=sc.scene_id, place=sc.place_id, agenda=sc.agenda,
+                                                   started_at=sc.started_at, started_seq=sc.started_seq,
+                                                   cast=list(sc.cast_present))
+        else:  # re-opened (12.4.2): the same scene goes on
+            card.ended_at = None
+        return
+    if t == "scene_ended":
+        last = s.last_scene
+        card = s.scene_cards.get(last.scene_id) if last else None
+        if last is not None and card is not None:
+            card.ended_at = last.ended_at
+            card.cast = list(dict.fromkeys([*card.cast, *last.cast_present]))
+        return
+    card = s.scene_cards.get(s.scene.scene_id) if s.scene else None
+    if card is None:
+        return
+    if t == "frame_committed":
+        beat = p.frame.get("beat") or {}
+        card.beats.append({"frame": p.frame_id, "actor": beat.get("actor"), "verb": beat.get("verb"),
+                           "target": beat.get("target"), "degree": None})
+    elif t == "frame_resolved":
+        for b in card.beats:
+            if b["frame"] == p.frame_id:
+                b["degree"] = p.degree
+    elif t == "fact_set":
+        if p.value is None or p.predicate.startswith(("trg.", "chronicle.")):
+            return
+        (card.memories if p.predicate.startswith("memory.") else card.facts).append(p.fact_id)
+        if p.subject.startswith("thr.") and p.subject not in card.threads:
+            card.threads.append(p.subject)
+    elif t == "clock_ticked":
+        owner = s.clocks[p.clock_id].owner if p.clock_id in s.clocks else ""
+        if owner.startswith("thr.") and owner not in card.threads:
+            card.threads.append(owner)
+    elif t == "meta_set" and isinstance(p.value, dict) and p.value.get("scene_id") == card.scene:
+        if p.key == "scene_agenda":
+            card.answer = p.value.get("answered")
+        elif p.key == "scene" and isinstance(p.value.get("thread"), str) and p.value["thread"] not in card.threads:
+            card.threads.append(p.value["thread"])
+
+
+_CARD_EVENTS = frozenset({"scene_started", "scene_ended", "frame_committed", "frame_resolved", "fact_set",
+                          "clock_ticked", "meta_set"})
+
+
 def _not_built(s: WorldState, ev: Event, p: Any) -> None:
     family, milestone = NOT_BUILT[ev.type]
     raise NotBuiltYet(f"{ev.type}: the {family} family is built in Milestone {milestone}")
@@ -472,6 +573,8 @@ def apply_inplace(s: WorldState, ev: Event, *, skip: bool = False) -> None:
     _bump_counters(s, ev)
     if not skip:
         REDUCERS[ev.type](s, ev, ev.payload)
+        if ev.type in _CARD_EVENTS:
+            _card(s, ev, ev.payload)
     s.last_seq = _seq(ev)
 
 
