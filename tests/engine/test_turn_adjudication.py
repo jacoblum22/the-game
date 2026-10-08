@@ -393,11 +393,13 @@ def test_pc_holds_two_licences_and_an_ability(tmp_path: Path) -> None:
     assert dock.clock in st.clocks and st.time.now.watch == 3
 
 
-def test_talk_proposed_as_g3_without_a_licence_is_never_redirected(tmp_path: Path) -> None:
+@pytest.mark.parametrize("would_be", ["none", "lic.training.influence_intimidation"])
+def test_talk_proposed_as_g3_without_a_licence_is_never_redirected(tmp_path: Path, would_be: str) -> None:
     """Playtest 20261007-170200: "talk to the person on the bridge" / "press him gently" came back G3 with
-    verb.talk and no licence, and the gate's word match redirected them to Stonesense. Talk needs no licence."""
+    verb.talk and no licence, and the gate's word match redirected them to Stonesense. Talk needs no licence.
+    P-122 (-212725): a threat the Reader tied to Intimidation was redirected though Talk covers intimidate."""
     talk = beat("press Sela gently to say what she is watching", "verb.talk", gate="G3", target="npc.sela_vey",
-                necessity="take_the_time", verbs=("press", "draw out"))
+                necessity="take_the_time", verbs=("press", "draw out"), would_be=would_be)
     model = ScriptedModel({Role.READER: [reader("DECLARATION", "I press her gently.", talk)],
                            Role.WORLD: [QUIET_WORLD]})
     dock, ctx = setup(tmp_path, model)

@@ -166,6 +166,14 @@ def _fallback_option(lid: str, lic: Any) -> RedirectOption | None:
                           consequence=fb.get("consequence"))
 
 
+def _plain_form_of(lid: str, verb_id: str | None, rules: Any) -> bool:
+    """The license's crude fallback is `verb_id` itself with no DC shift and no consequence: its untrained
+    form is that basic verb's own act (Intimidation → Talk "threaten plainly")."""
+    fb = rules.license(lid).get("crude_fallback") if lid in rules.licenses else None
+    return (isinstance(fb, dict) and fb.get("verb") == verb_id and not int(fb.get("dc_shift") or 0)
+            and not fb.get("consequence"))
+
+
 def _valid_alternatives(alts: Iterable[RedirectOption], rules: Any) -> list[RedirectOption]:
     return [a for a in alts if a.verb is None or a.verb in rules.basic_verbs]
 
@@ -293,9 +301,14 @@ def check_gate(beat: Beat, *, state: Any, rules: Any, store: Any = None, staged:
     # would need is that verb's own act (talking to someone, recalling one's own country), unless the verb
     # excludes it; the word-match guess in would_be_license never turns it into a redirect (playtests
     # 20261007-170200 "needs Stonesense", -170204 "needs arcane mind"). A G3 that names the license keeps it.
-    if (proposed == "G3" and beat.mode == "normal" and not (beat.would_be_license or beat.license
-                                                             or beat.fallback_license)
-            and (verb := rules.basic_verbs.get(beat.verb or "")) is not None):
+    # Likewise a speech verb's plain social act (threaten, lie, persuade) when the named license's untrained
+    # form is that same verb at no penalty: Talk covers it, and a knack or trade is an edge, not a requirement
+    # (playtest 20261007-212725 "needs Intimidation" for a threat; P-122).
+    named = [x for x in (beat.would_be_license, beat.license, beat.fallback_license) if x]
+    if (proposed == "G3" and beat.mode == "normal"
+            and (verb := rules.basic_verbs.get(beat.verb or "")) is not None
+            and (not named or ("trait.action.speech" in (verb.get("traits") or ())
+                               and all(_plain_form_of(x, beat.verb, rules) for x in named)))):
         if (ex := excluded_by(verb, beat.method)) is None:
             d.gate, d.license = "G1", None
             d.reason = f"{beat.verb} covers it; no license is named that it needs (01.3.1)"

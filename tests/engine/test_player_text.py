@@ -102,3 +102,10 @@ def test_choices_once_numbered_one_per_line() -> None:
                                                                     "   2) Withdraw")], pause=offer), 80)
     assert r.count("1) Commit") == 1 and r.endswith("  1) Commit\n  2) Withdraw\n\nType 1 to commit, or a number "
                                                     "from the list.")
+
+
+def test_the_pc_as_subject_takes_a_second_person_verb() -> None:
+    """Playtest 20261007-212917: the OFFER read "you finds out who in Garford would talk to them"."""
+    assert clean("the PC finds out who would talk") == "you find out who would talk"
+    assert clean("The PC goes, and the PC tries; the PC has it") == "You go, and you try; you have it"
+    assert clean("a stranger asks after the PC by name") == "a stranger asks after you by name"
