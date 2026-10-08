@@ -67,3 +67,4 @@ Ledger: I-131..I-136.
 | talker 201412 | 7b46664 | 17 | 2.0 | 2 | mostly clear/atmospheric; harsh social odds (I-155); fallback internal text (P-108) |
 | explorer 201748 | 7b46664 | 17 | 1.76 | 0 | successes reveal nothing (I-153); detail repetition; journal wording (P-109) |
 | newcomer 203722 | b3a579d | 17 | 1.65 | 0 | no errors; texts never readable (P-110); mist figure never resolves (I-153) |
+| breaker 203717 | b3a579d | 17 | 2.12 | 1 | literacy breaks both ways (P-110/P-111); queue-note leak (P-111) |
