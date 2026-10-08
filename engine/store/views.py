@@ -87,6 +87,7 @@ def unnamed_label(e: Any) -> str:  # rule: 12.10.2
     d = e.data
     alias = next((a for a in d.get("aliases") or [] if isinstance(a, str) and a.strip()), None)
     base = str(alias or d.get("role") or "stranger").split(" (")[0].strip()
+    base = base.split(" or ")[0].strip() or base  # a rolled "boatman or sailor" is one person: "the boatman" (P-095)
     return base if base.lower().startswith(("the ", "a ", "an ")) else f"the {base}"
 
 

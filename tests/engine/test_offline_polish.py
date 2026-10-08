@@ -124,7 +124,7 @@ def test_only_npcs_present_after_a_cut_act(tmp_path: Path) -> None:
 def test_a_look_around_draws_no_npc_reaction(tmp_path: Path) -> None:
     game, _ = to_play(tmp_path, OfflineModel(), seed=11)
     r = game.submit("I look around.")
-    assert " is here." in r.fiction
+    assert " is here." in r.fiction or " are here." in r.fiction  # everyone positioned here is present (P-095)
     assert not any(w in r.fiction for w in ("offers", "helps", "withdraws", "asks you", "threat"))
 
 

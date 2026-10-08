@@ -455,7 +455,9 @@ def stuck_answer(state: Any) -> str:  # rule: 12.8.5
     shown = entity_names(state)
     threads = sorted((t for t in thread_list(state) if t["status"] == "active" and t["id"] in shown),
                      key=lambda t: -int(t["weight"]))
-    people = [shown[i] for i in (state.scene.cast_present if state.scene else [])
+    from engine.world.scenes import cast_present
+
+    people = [shown[i] for i in cast_present(state)  # "here with you" only for the scene's cast (P-095)
               if i in shown and state.entities[i].kind in ("npc", "companion")]
     here = location(state)
     places = [shown[x.to] for x in (reachable(state, here) if here else []) if x.to != here and x.to in shown]

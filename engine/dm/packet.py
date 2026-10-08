@@ -118,8 +118,9 @@ def scene_setting(state: WorldState) -> str:  # rule: 12.4.3
         look = ", ".join(str(ed[k]) for k in ("age", "detail", "demeanor") if ed.get(k))
         who = display_name(state, e.id)
         role = f", the {ed['role']}" if ed.get("role") and str(ed["role"]) not in who else ""
+        call = "" if name_known(state, e.id) else f'; call them "{who}", as every other screen does'  # P-095
         lines.append(f"- present: {who}{role}"
-                     + (f" ({look})" if look else ""))
+                     + (f" ({look})" if look else "") + call)
     from engine.dm.incident import incident_line
 
     matter = incident_line(state)  # the opening incident's person, as the character knows it (P-067)
@@ -175,8 +176,9 @@ def render_view(view: Mapping[str, Any]) -> str:
         lines.append(f"{eid}: {e.get('name', '')}")
         lines.append(f"  name: {e.get('name', '')}")
         if e.get("name_unknown"):  # rule: 12.10.2
-            lines.append("  the character does not know their name: call them by how they look or what they "
-                         "do, never by a name (not even one in the id) until the record says they gave it")
+            lines.append(f"  the character does not know their name: call them \"{e.get('name', '')}\" (the words "
+                         "every other screen uses; add how they look if you like), never by a name (not even one "
+                         "in the id) until the record says they gave it")
         if e.get("exists") not in (None, "exists"):
             lines.append(f"  state: {e['exists']}")
         if e.get("tags"):

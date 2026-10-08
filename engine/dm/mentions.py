@@ -24,6 +24,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from engine import ids
 from engine.store.events import EntityRecord, Event
+from engine.store.views import unnamed_label
 
 MENTIONABLE = ("npc", "item", "object", "place")
 DEFAULT_ODDS = "even"
@@ -103,8 +104,10 @@ def find_existing(state: Any, name: str, kind: str | None = None) -> str | None:
             continue
         names = [e.name, eid.split(".", 1)[-1].replace("_", " ")]
         names += [a for a in e.data.get("aliases", []) if isinstance(a, str)]
-        if kind == "npc":
+        if kind == "npc" and e.kind == "npc":
             names.append(str(e.data.get("role", "")))
+            if e.data.get("role") or e.data.get("aliases"):
+                names.append(unnamed_label(e))  # the label every screen uses (P-095)
         if any(bare(n).lower() == want for n in names if n):
             return eid
     if kind == "npc" and _proper(name) and " " not in want:  # "Edda" is the one NPC named "Edda Brightcote"
@@ -142,6 +145,10 @@ def _one(m: Mention, *, tx: Any, rules: Any, rng: Any, settle: Settle | None, pl
         found = find_existing(tx.state, m.name, "npc")
     if found is not None:
         res.reused[m.name] = found
+        if (place is not None and tx.state.entities[found].kind in ("npc", "companion")
+                and found not in tx.state.positions):  # narrated here, placed nowhere yet: here now (P-095)
+            res.seqs.append(tx.add(Event.of("position_set", source="mention", rule_id="00.6.6", entity=found,
+                                            location=place)))
         return
     if kind == "npc":
         known = set(tx.state.entities)
@@ -207,7 +214,7 @@ def _npc(m: Mention, *, tx: Any, rules: Any, rng: Any, place: str | None,
             from engine.time.scheduler import TimeContext
 
             before, known = tx.peek_seq(), set(tx.state.entities)
-            eid = meet(TimeContext(tx=tx, rules=rules, rng=rng), role, place)
+            eid = meet(TimeContext(tx=tx, rules=rules, rng=rng), role, place, alias=bare(m.name))
             res.seqs += list(range(before, tx.peek_seq()))
             return eid, ([] if eid in known else rest)
     if rng is None:
