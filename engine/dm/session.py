@@ -220,10 +220,10 @@ def opening(ctx: TurnContext) -> Response:  # rule: 12.16.16
             mark_boundary(ctx.time_ctx(), "session_start", {})
             rec = AdjudicationRecord(turn_id=turn_id, pc=active_pc(tx.state))
             later = tx.state.meta.get(OPENED_PC) not in (None, rec.pc)  # a new character in the same world
-            if not later and inciting:  # the incident's person is someone who exists (I-145, P-067)
-                from engine.dm.incident import bind_incident, incident_line
+            from engine.dm.incident import incident_line, start_knowledge
 
-                bind_incident(ctx, tx)
+            start_knowledge(ctx, tx)  # a local knows the haven's names (I-149); the incident's case is seeded
+            if not later and inciting:
                 who = incident_line(tx.state)
                 inciting = f"{inciting}. {who.rstrip('.')}" if who else inciting
             if later and tx.state.scene is not None:

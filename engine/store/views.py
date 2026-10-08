@@ -58,8 +58,8 @@ def sheet_holds(state: WorldState, subject: str, thing: str) -> str | None:  # r
 def name_known(state: WorldState, eid: str) -> bool:  # rule: 12.10.2
     """Has the PC learned this person's name? NPCs created unintroduced (the seed's people, walk-ons) carry
     `data.name_known: False`; their name is learned by a knowledge record of their `name` fact (told,
-    overheard), being told who they are (a `who_is_*` fact naming them), being the PC's anchor bond (02.9.2),
-    or being the opening incident's subject or reporter. People setup step 8 named never carry the flag."""
+    overheard; a local's `common` names, I-149), being told who they are (a `who_is_*` fact naming them), or
+    being the PC's anchor bond (02.9.2). People setup step 8 named never carry the flag."""
     # ponytail: scans the PC's knowledge per call; index name knowledge if the journal grows large
     e = state.entities.get(eid)
     if e is None or e.data.get("name_known", True) is not False:
@@ -69,9 +69,6 @@ def name_known(state: WorldState, eid: str) -> bool:  # rule: 12.10.2
         return True
     bond = state.fact_value(pc, "bond.anchor")
     if isinstance(bond, dict) and bond.get("npc") == eid:
-        return True
-    inc = state.meta.get("incident.subject") or {}  # engine.dm.incident.INCIDENT: who brought the word is known
-    if eid in (inc.get("npc"), inc.get("reporter")):
         return True
     for fid in state.knowledge.get(pc, {}):
         f = state.facts.get(fid)

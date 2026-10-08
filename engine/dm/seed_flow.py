@@ -550,10 +550,12 @@ class SeedFlow:
 def write_world(tx: Transaction, world: SeededWorld) -> None:  # rule: 12.16.1
     """The seeded world into the store (engine.world.places writes places, routes, factions, clocks, threads and the
     cast) plus what creation and the opening read: tongues, peoples, pregens, the opening, canon."""
+    from engine.gen.case import write_seeded
     from engine.world.places import seed_world_into_store
 
     seed_world_into_store(tx, world)
     rec = world.record
+    write_seeded(tx, rec)  # the incident's case (meta world.cases), its walk-ons and the notices (12.16.16)
     tx.add_all([
         _meta("world.seed", {"seed": world.seed, "mode": world.mode, "region": world.region.model_dump(),
                              "check": [c.model_dump() for c in world.check]}, "12.16.1"),

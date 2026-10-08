@@ -72,7 +72,7 @@ def implemented() -> frozenset[str]:
 # resolved against boundaries.yaml. Deviation: h.12.intensity_scene is M2, as tasks.md T068 says ("waits for
 # M2"), although plan.md's M1 row reads "12 all but intensity and venture_bookkeeping".
 MILESTONE_HANDLERS: dict[int, tuple[str, ...]] = {
-    1: (  # Start to finish (34)
+    1: (  # Start to finish (35)
         "h.00.durations", "h.00.clock_auto", "h.00.reflection",
         "h.01.ruling_log", "h.01.scene_cleanup",
         "h.02.creation_lock", "h.02.bent_offer", "h.02.open_slots",
@@ -85,6 +85,7 @@ MILESTONE_HANDLERS: dict[int, tuple[str, ...]] = {
         "h.12.session_open", "h.12.session_close", "h.12.mode_change", "h.12.pacing_push", "h.12.lead_audit",
         "h.12.rotation_update", "h.12.npc_memory",
         "h.15.patience_reset", "h.15.commitments_due",
+        "h.15.placement_audit",  # reduced cases from M1 (15.9.4, DL-15-38); full cases come at M6
     ),
     2: (  # Fights
         "h.05.round_recharge", "h.05.conflict_recharge",
@@ -115,7 +116,7 @@ MILESTONE_HANDLERS: dict[int, tuple[str, ...]] = {
     6: (  # The living world
         "h.11.situation_timelines", "h.11.world_turn", "h.11.season_turn", "h.11.year_turn", "h.11.reckoning",
         "h.11.world_record", "h.11.moon", "h.11.festival",
-        "h.15.standing_week", "h.15.member_standing", "h.15.placement_audit",
+        "h.15.standing_week", "h.15.member_standing",
     ),
     7: (  # Company, downtime, legacy
         "h.16.retinue_upkeep", "h.16.contract_term", "h.16.conflict_orders", "h.16.follower_offers",

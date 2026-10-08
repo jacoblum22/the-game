@@ -1,4 +1,4 @@
-﻿# Tasks: Content seed, casting and the reduced case (008 part A)
+# Tasks: Content seed, casting and the reduced case (008 part A)
 
 **Input**: [spec.md](spec.md), [plan.md](plan.md), [research.md](research.md), [data-model.md](data-model.md),
 [contracts/api.md](contracts/api.md). Tests are requested by the brief's gates.

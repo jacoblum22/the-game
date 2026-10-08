@@ -69,7 +69,7 @@ def _marked(store: Store, since: int = 0) -> list[tuple[int, str]]:
 def test_registry_matches_boundaries_yaml(rules: Rules) -> None:
     assert reg.check_registry(rules) == []
     assert len(reg.MILESTONE_OF) == len(rules.boundary_handlers()) == 105
-    assert len(reg.live_handlers(1)) == 34
+    assert len(reg.live_handlers(1)) == 35  # h.15.placement_audit is M1 for reduced cases (DL-15-38)
     assert reg.live_handlers(7) == frozenset(reg.MILESTONE_OF)
     assert reg.implemented() <= reg.live_handlers(1)
     assert {"h.00.durations", "h.00.clock_auto", "h.00.reflection"} <= reg.implemented()

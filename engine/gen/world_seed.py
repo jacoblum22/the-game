@@ -29,6 +29,7 @@ from engine.gen import _seed_steps as steps
 from engine.gen._rng import SeedRng
 from engine.gen._seed_check import check_seed
 from engine.gen._seed_lib import Answers, Dice, Names, Rec, data
+from engine.gen._seed_packs import seed_packs
 from engine.gen.npc import NPC
 
 Mode = Literal["guided", "oracle", "mixed"]
@@ -353,7 +354,7 @@ class WorldSeed:
         # the record's mode is the reference's: "guided" when any answer came from the player, else "oracle"
         reg = steps.assemble(st, self.seed, "guided" if self.given else "oracle")
         _apply_words(reg, self.words)
-        return reg
+        return seed_packs(reg, self.seed)  # 12.16.9/11/16: packs on keyed streams, after the 13 steps (DL-12-61)
 
     def run_check(self, max_reruns: int = 3) -> list[CheckResult]:
         """# rule: 12.16.17 -- step 14: every T-12-16 requirement; a failure re-runs the step writing its key."""
@@ -400,7 +401,9 @@ def build_answered(seed: int, given: dict[str, Any]) -> SeededWorld:
 def _step_for(requirement: str) -> int:
     """The step that writes a requirement's key (world_seed.yaml#requirements key vs #steps writes)."""
     D = data()
-    rq = next(r for r in D.WS["requirements"] if r["id"] == requirement)
+    rq = next((r for r in D.WS["requirements"] if r["id"] == requirement), None)
+    if rq is None:  # a seed-pack check (#pack_requirements): the packs follow step 13's opening
+        return LAST_STEP
     head = str(rq["key"]).split("/")[0].split("[")[0].split(" ")[0]
     for s in D.WS["steps"]:
         if any(str(w).split("/")[0].split("[")[0].split(" ")[0] == head for w in s["writes"]) and s["n"] <= LAST_STEP:
