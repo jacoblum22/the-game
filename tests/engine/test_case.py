@@ -32,6 +32,15 @@ def test_thirty_openings_validate_with_the_core_clue_at_the_opening_place() -> N
         assert everyone[core["holder"]]["home"] == case["opening_place"], seed  # someone who is there holds it
 
 
+def test_in_the_store_the_core_holder_stands_at_the_opening_place(tmp_path: Path) -> None:
+    for seed in range(1, 31):
+        store, w = seeded_store(tmp_path / str(seed), seed)
+        st = store.state
+        case = cases(st)[st.meta["world.opening"]["case"]]
+        core = next(p for p in case["nodes"][0]["placements"] if p["access"] == "core")
+        assert st.positions[core["holder"]].location == w.incident.place, seed
+
+
 def test_validity_rules_fail_as_15_9_4_says() -> None:
     good = world(21).record["seed_cases"][0]
 

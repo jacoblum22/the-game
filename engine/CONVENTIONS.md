@@ -195,6 +195,24 @@ Contract: `specs/004-playable-prototype/contracts/model-calls.md`. Nothing in `e
 - `engine.gen.npc`: `walk_on(rng, role=, home=, people=, name_tables=, given_used=, existing_ids=, member_of=, role_tags=) -> NPC`; `promote_recurring`, `promote_principal`, `reaction_roll(rng, modifiers=0, faction_status=None) -> Reaction`; `NPC.from_record(seed_npc)`.
 - `engine.gen.adversary`: `improvise(archetype, band, role, variant="standard", name=, adv_id=) -> ImprovisedAdversary` (PR-09-2; single creatures only in M1).
 - Precomputed M2 numbers in `engine/gen/data/*.json` (rebuild: `python -m engine.gen.build_tables`).
+- **Seed packs** (spec 008 A; `engine.gen._seed_packs`, a draw-for-draw port of `12-world-seed.py#seed_packs`):
+  `WorldSeed.record()` packs the record after step 13 on streams `keyed(seed, entity id, purpose)`: place `look`,
+  `furniture`, `exits` (place data; `packet.scene_setting` shows the present place's); NPC `knowledge` (sealed field:
+  PR-12-10 tells it) and `stance`; `documents` (things with a `text` fact at `at`); `walk_ons`; `seed_cases`.
+  `check_seed` runs the 7 `#pack_requirements` rows after the 64 (a failing one re-runs from step 13).
+  `seed_flow.write_world` -> `case.write_seeded` puts walk-ons, documents and meta `world.cases` in the store.
+- **Reduced case** (`engine.gen.case`, PR-15-6 reduced profile): `reduced_case(reg, seed, option, place,
+  lead_target, tag)`, `validate_case(case) -> [failures]`, `cases(state)`, `story_option(words)`,
+  `case_covering(state, words)`, `case_for_question(tx, words, place, lead_target=None)` (on demand, writes),
+  `pointer(case, node_id=None, asked=, state=)` (the core holder first), `mark_found(tx, case, node, placement,
+  fact_id=)`, `audit_cases(tx, emit=)` (= `h.15.placement_audit`, live from M1), `world_rec(state)` (a region-record
+  view of the store). Case records are never rendered.
+- **Casting** (`engine.gen.cast`, 00.11.1 `cast`): `cast(state, role, *, scope, topic=None, asker=None, exclude=(),
+  faction=None, gate=True) -> npc id | None`, `pointer_target(state, topic, *, scope, asker=None) -> (kind, ref)`,
+  `base_pool(state, pc)` (the gate; `incident._people` is an alias), `alive`, `home_of`, `settlement_of`. Picks are
+  keyed by the game seed and the question (the same question casts the same person).
+- `engine.dm.incident`: `incident_line(state)` (the incident case as the PC knows it), `start_knowledge(ctx, tx)`
+  (I-149, at each character's opening), `settle_who` (story roles from the case, else casting; part B replaces it).
 
 ## engine/retrieve API (T019)
 - `engine.retrieve.anchors`: `anchor_candidates(beat, state, rules) -> list[anchor_id]` (≤8; `beat` = a Reader
