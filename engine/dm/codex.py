@@ -108,6 +108,20 @@ def _inventory(cv: dict[str, Any], pc: str) -> list[str]:
 # ------------------------------------------------------------------------------------------- sections
 
 
+def hurt_line(state: WorldState, rules: Any = None) -> str:  # rule: 07.1.1
+    """'How hurt am I?': the sheet's descriptor, Vitality and conditions in one line (P-101)."""
+    from engine.harm.state import descriptor
+
+    cv = codex_view(state)
+    pc = _pc(state, cv)
+    if pc is None:
+        return ""
+    vit = cv["quantities"].get(pc, {}).get("vitality")
+    conds = " · ".join(f"{c['name']} ({c['severity']})" for c in _conditions(state, cv, pc, rules)) or "none"
+    return (f"You are {descriptor(state, pc)}" + (f": Vitality {_qty(vit)}" if vit else "")
+            + f". Conditions: {conds}.")
+
+
 def sheet(state: WorldState, rules: Any = None) -> CodexView:  # rule: 00.6.4
     """The PC's shown and available state: attributes, Vitality, Focus, fate, conditions, licences, abilities with
     uses, inventory."""

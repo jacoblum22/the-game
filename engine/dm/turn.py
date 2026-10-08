@@ -246,8 +246,8 @@ def _adjudicate(ctx: TurnContext, rec: AdjudicationRecord, reader: ReaderResult,
         _hold(rec)  # the reliance CHOICE (pause point 9) stops the rest
         return outcomes
     # answered before a pending answer, whose open pause stops the rest (P-047: the Luck question went unanswered)
-    for part in rec.parts:
-        if part.cls == "OOF_QUESTION":
+    for part in rec.parts:  # "what are my options?" read as a fiction question is still the stuck question (P-101)
+        if part.cls == "OOF_QUESTION" or (part.cls == "FICTION_QUESTION" and _oof_shaped(part.text)):
             part.handled = "answered"
             note = {"kind": "NOTE", "text": oof_answer(ctx, part.text)}
             if note not in oof:
@@ -468,6 +468,15 @@ def stuck_answer(state: Any) -> str:  # rule: 12.8.5
     return "[LEADS] Some ways forward — or anything else you have in mind:\n" + "\n".join(f"  • {x}" for x in leads)
 
 
+HURT_WORDS = re.compile(r"\bhow (?:badly |bad )?(?:hurt|injured|wounded)\b|\bam i (?:hurt|injured|wounded|bleeding|"
+                        r"bloodied|ok|okay|alright)\b|\bmy (?:health|vitality|wounds?|injur\w*|hp)\b")  # about the PC
+
+
+def _oof_shaped(text: str) -> bool:  # rule: 12.5.10
+    low = text.lower().replace("’", "'")
+    return any(w in low for w in STUCK_WORDS) or bool(HURT_WORDS.search(low))
+
+
 SEVERITY_ANSWER = "S1 to S5 is how heavy a cost is: S1 is a light one, S5 the heaviest."
 
 
@@ -512,7 +521,13 @@ def oof_answer(ctx: TurnContext, text: str) -> str:  # rule: 12.5.10
         terms.append(FATE_ANSWER)
     if terms:  # "what does 'go big' mean?": the term in a line or two, the choices follow as before
         return " ".join(dict.fromkeys(terms[:4]))
-    if any(w in low for w in STUCK_WORDS):
+    hurt = HURT_WORDS.search(low)
+    stuck = any(w in low for w in STUCK_WORDS)
+    if hurt:  # P-101: "what are my options? and how hurt am I?" answers both
+        from engine.dm.codex import hurt_line
+
+        return "\n".join(x for x in (hurt_line(ctx.state, ctx.rules), stuck_answer(ctx.state) if stuck else "") if x)
+    if stuck:
         return stuck_answer(ctx.state)
     if any(w in low for w in NEW_WORDS):
         return HOW_TO_PLAY

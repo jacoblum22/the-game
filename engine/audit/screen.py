@@ -175,7 +175,9 @@ def echoed_quotes(fiction: str, said: Iterable[str]) -> list[str]:  # rule: 12.2
     for m in _QUOTE.finditer(fiction):
         if tx.norm(m.group(1)) not in mine:
             continue
-        before = re.split(r"(?<=[.!?])\s+", fiction[:m.start()].rstrip())[-1] if fiction[:m.start()].strip() else ""
+        if not fiction[:m.start()].rsplit("\n", 1)[-1].strip():  # opens the text or a paragraph: the PC's line
+            continue  # restated as declared, no one else speaking (P-102)
+        before = re.split(r"(?<=[.!?])\s+", fiction[:m.start()].rstrip())[-1]
         after = re.match(r"[^.!?\"“]*", fiction[m.end():]).group(0)  # type: ignore[union-attr]
         after = after if after.strip()[:1].islower() or after.strip()[:1] in (",", "") else ""
         if not _YOU.search(before) and not _YOU.search(after):
