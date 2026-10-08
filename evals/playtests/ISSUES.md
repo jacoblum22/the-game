@@ -77,6 +77,10 @@ Status: open · fixing (round N) · fixed (commit) · logged (ledger id) · wont
 | P-069 | bug | med | Narration names NPCs the PC was never introduced to ("Tikash" for "the figure") | 184224-explorer 27–30 | fixing |
 | P-070 | bug | low | Journal "people you have met" lists NPCs not yet met | 185133-breaker 23 | fixing (with P-069) |
 | P-071 | bug | low | "what are my options?" answered with only "What do you do?" once (no LEADS) | 185133-breaker 18 | open (watch) |
-| P-072 | bug | low | OFFER stakes "Source: pc s hand held" (raw predicate) | 185739-fighter 26–27 (on 0a0acdf, before 172b2b2) | open (recheck) |
-| P-073 | bug | low | Possession contradicts itself across turns (pendant in her palm / not in her hand) | 185739-fighter 20, 31 | open |
+| P-072 | bug | low | OFFER stakes "Source: pc s hand held" (raw predicate) | 185739-fighter 26–27 (on 0a0acdf, before 172b2b2) | fixing (polish fixer) |
+| P-073 | bug | low | Possession contradicts itself across turns (pendant in her palm / not in her hand) | 185739-fighter 20, 31 | fixing (polish fixer) |
 | P-074 | bug | med | Creation: "Wanderer?" at the way-of-life step became Soldier (the default) with no explanation | 190015-newcomer setup (10 notes) | fixing |
+| P-075 | bug | med | An NPC already agreed ("Yes" to meeting) yet the follow-up ask rolls at 50% with a closed-door risk | 185715-talker 28–31 | fixing (polish fixer) |
+| P-076 | polish | low | Near-miss options 1 and 3 show the same cost text | 185715-talker 22 | fixing (polish fixer) |
+| P-077 | bug | low | Garbled position text: "moved within Barrowburn… not in Barrowburn and can be found in the village" | 185715-talker 18 | fixing (polish fixer) |
+| P-078 | polish | med | NPC repeats the same stock line every turn ("Mark me"); freshness covers images, not dialogue | 185715-talker 21–26 | fixing (polish fixer) |

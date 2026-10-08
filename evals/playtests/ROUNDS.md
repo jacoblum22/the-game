@@ -48,3 +48,4 @@ Ledger: I-131..I-136.
 | breaker 185133 | ae21453 | 17 | 2.0 | 2 | journal lists unmet people (P-070); options once unanswered (P-071) |
 | fighter 185739 | 0a0acdf | 17 | 1.35 | 0 | "opening vivid, no complaints"; odds clear; raw source text (P-072); possession drift (P-073) |
 | newcomer 190015 | 0a0acdf | 17 | 1.59 | 1 | Wanderer request ignored (P-074); NPC echo (fixed since in 00b6534) |
+| talker 185715 | 0a0acdf | 17 | 2.12 | 2 | conversations work: "good NPC reply with some suspense", NPC agrees to meet; roll after consent (P-075); repeated refusals (P-078) |
