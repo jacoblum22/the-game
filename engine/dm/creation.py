@@ -684,7 +684,7 @@ def _anchor_text(anchor: Any, state: WorldState | None = None) -> str:
 # ------------------------------------------------------------------------------------------- writing
 
 
-def write_character(tx: Transaction, rec: dict[str, Any], d: Draft) -> str:  # rule: PR-02-6
+def write_character(tx: Transaction, rec: dict[str, Any], d: Draft, rules: Any) -> str:  # rule: PR-02-6
     """Step 2: the PC entity with everything engine/harm and engine/abilities read, kit items, facts, meta."""
     st = tx.state
     pc = ids.entity_id("pc", rec["name"], st.entities)
@@ -730,9 +730,11 @@ def write_character(tx: Transaction, rec: dict[str, Any], d: Draft) -> str:  # r
             ids.FACT), subject=pc, predicate=pred, value=val, kind=kind, visibility="shown",
             supersedes=tx.state.current_fact_id(pc, pred)))
     anchor = rec.get("anchor")
-    if isinstance(anchor, dict) and anchor.get("npc") in tx.state.entities:
-        tx.add(Event.of("relationship_set", source="creation", rule_id="02.9.2", a=pc, b=anchor["npc"],
-                        kind=f"bond.{anchor.get('kind', 'friend')}", value=1, new_value=1, reason="anchor bond"))
+    if isinstance(anchor, dict) and anchor.get("npc") in tx.state.entities:  # 02.9.2: the bond's standing, set
+        kinds = {k["id"]: k.get("standing") for k in _odoc(rules)["bond_kinds"]["anchor"]}
+        start_standing = kinds.get(str(anchor.get("kind", "friend")), 2)
+        tx.add(Event.of("relationship_set", source="creation", rule_id="02.9.2", a=anchor["npc"], b=pc,
+                        kind="standing", value=start_standing, new_value=start_standing, reason="bond"))
     start = ((tx.state.meta.get("world.opening") or {}).get("start") or {}).get("place")
     if start in tx.state.entities and tx.state.entities[start].kind == "place":
         from engine.world.places import put
@@ -1092,7 +1094,7 @@ class CreationFlow:
         d = fold(tx.state)
         rec = apply_birth(build_record(d, tx.state, self.ctx.rules), d.birth)
         rec["birth_entries"] = (d.birth or {}).get("entries", [])
-        pc = write_character(tx, rec, d)
+        pc = write_character(tx, rec, d, self.ctx.rules)
         tx.add(_ev("ready", pc, "player_option", rule="PR-02-6"))
         return [OofBlock(kind="NOTE", text=f"{rec['name']} is ready. The story begins.")]
 

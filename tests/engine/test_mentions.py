@@ -49,6 +49,34 @@ def test_object_with_only_implied_properties(tmp_path: Path, rules: Any) -> None
     assert store.rebuild() == store.state
 
 
+def test_the_words_on_a_notice_are_kept_shown_and_checked(tmp_path: Path, rules: Any) -> None:
+    """P-041: a narrated inscription is stored with the object, shown to the narrator on later turns, and a later
+    claim about the same words is judged against it (not asked of the Oracle anew)."""
+    from engine.audit.claims import check_claims
+    from engine.dm.adjudication import AdjudicationRecord
+    from engine.dm.packet import render_view, scene_view
+    from engine.dm.roles.checker import checker_ids
+
+    store, rng = _game(tmp_path)
+    words = "THE LODGE IS TAKING HANDS / NO QUESTIONS ASKED"
+    with store.transaction("turn.1") as tx:
+        res = write_mentions([{"kind": "object", "name": "the lodge notice",
+                               "implied": [{"predicate": "text", "value": words}]}], tx=tx, rules=rules, rng=rng)
+    eid = res.created["the lodge notice"]
+    assert store.state.fact_value(eid, "text") == words
+    assert eid in checker_ids(store.state)  # the Checker may name it on a later turn
+    assert f"about {eid}: text = {words}" in render_view(scene_view(store.state))  # the narrator sees it again
+
+    def verdict(predicate: str, value: str) -> str:
+        claim = {"subject": eid, "class": "identity", "predicate": predicate, "value": value}
+        [v] = check_claims([claim], store.state, AdjudicationRecord(), [eid], rules=rules)
+        return v.verdict
+
+    assert verdict("smaller text reads", "NO QUESTIONS ASKED") == "supported"
+    assert verdict("reads beneath", "NO QUESTIONS ASKED") == "supported"
+    assert verdict("smaller letters", "do not say NO QUESTIONS ASKED") == "contradicted"
+
+
 def test_dedupe_and_refusals(tmp_path: Path, rules: Any) -> None:
     store, rng = _game(tmp_path)
     assert find_existing(store.state, "The Fence", "npc") == "npc.mara_voss"
@@ -58,6 +86,9 @@ def test_dedupe_and_refusals(tmp_path: Path, rules: Any) -> None:
                               Mention(kind="clue", name="a hidden map"), Mention(kind="adversary", name="a bear")],
                              tx=tx, rules=rules, rng=rng)
     assert res.reused == {"Mara Voss": "npc.mara_voss", "the fence": "npc.mara_voss"}
+    # P-036: the given name alone is the same person, not a new walk-on "Mara" (the bond NPC stays one entity)
+    assert find_existing(store.state, "Mara", "npc") == "npc.mara_voss"
+    assert find_existing(store.state, "Voss", "npc") is None and find_existing(store.state, "Mara", "item") is None
     assert res.refused == ["a hidden map", "a bear"] and not res.created
     assert len(store.state.entities) == n
 

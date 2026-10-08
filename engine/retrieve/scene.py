@@ -13,7 +13,8 @@ from typing import Any
 
 from engine.store.projection import FactRecord, WorldState
 
-MAX_SCENE_FACTS = 40  # newest facts shown per call (the scene's working memory; older ones stay in the store)
+MAX_SCENE_OBJECTS = 12  # newest things lying at the scene's place kept in scope (12.2.4: bounded)
+MAX_SCENE_FACTS = 40 # newest facts shown per call (the scene's working memory; older ones stay in the store)
 
 
 def pc_id(state: WorldState) -> str | None:
@@ -22,7 +23,8 @@ def pc_id(state: WorldState) -> str | None:
 
 
 def scene_scope(state: WorldState) -> list[str]:  # rule: 12.2.4
-    """Entity ids in the current scene: the PC, the cast present, and the place. Existing entities only."""
+    """Entity ids in the current scene: the PC, the cast present, the place and the things lying there. Existing
+    entities only."""
     ids: list[str] = []
     pc = pc_id(state)
     if pc:
@@ -31,6 +33,11 @@ def scene_scope(state: WorldState) -> list[str]:  # rule: 12.2.4
         ids.extend(state.scene.cast_present)
         if state.scene.place_id:
             ids.append(state.scene.place_id)
+            # the things lying here (a notice, a well): what the narration said of them stays in view [P-041]
+            here = [eid for eid, p in state.positions.items() if p.location == state.scene.place_id
+                    and eid in state.entities and state.entities[eid].kind in ("object", "item")
+                    and state.entities[eid].exists == "exists"]
+            ids.extend(here[-MAX_SCENE_OBJECTS:])
     return [i for i in dict.fromkeys(ids) if i in state.entities]
 
 

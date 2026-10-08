@@ -79,3 +79,25 @@ def test_owed_blocks() -> None:
     assert owed_blocks(["trg.lethal_warning", "trg.exits"], "fiction only") == ["[WARNING]", "[STATUS]"]
     assert owed_blocks(["trg.lethal_warning"], "x\n[WARNING] THIS CAN KILL YOU") == []
     assert owed_blocks(["trg.pacing_push"], "") == []
+
+
+def test_the_anchor_bond_settles_friend_claims(tmp_path: Path, rules: Any) -> None:
+    """P-036: a friend anchor bond (02.9.2: standing +2) is never contradicted by "she is not your friend"."""
+    store = _store(tmp_path)
+    with store.transaction("turn.1") as tx:
+        tx.add(Event.of("fact_set", {"source": "player_accepted"}, source="creation", rule_id="02.9.2",
+                        fact_id=tx.mint("fact"), subject="pc.wren", predicate="bond.anchor",
+                        value={"kind": "friend", "npc": "npc.mara_voss"}, visibility="shown"))
+        tx.add(Event.of("relationship_set", source="creation", rule_id="02.9.2", a="npc.mara_voss", b="pc.wren",
+                        kind="standing", value=2, new_value=2, reason="bond"))
+
+    def verdict(cls: str, predicate: str, value: str) -> tuple[str, Any]:
+        claim = {"subject": "npc.mara_voss", "class": cls, "predicate": predicate, "value": value}
+        [v] = check_claims([claim], store.state, AdjudicationRecord(), ["npc.mara_voss"], rules=rules)
+        return v.verdict, v.store_value
+
+    assert verdict("identity", "relation to you", "friend") == ("supported", None)
+    assert verdict("identity", "relation to you", "stranger") == ("contradicted", "friend")
+    assert verdict("identity", "relation to you", "not a friend")[0] == "contradicted"
+    assert verdict("attitude", "relation to PC", "not a friend")[0] == "contradicted"
+    assert verdict("attitude", "toward you", "warm")[0] == "supported"

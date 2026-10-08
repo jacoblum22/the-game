@@ -137,10 +137,13 @@ _NEGATION = ["not", "no", "never", "fail", "cannot", "can't", "doesn't", "don't"
 _KNOW_NEGATIVE = ["no idea", "forgot", "forgets", "unaware", "doesn't know", "does not know", "fails to recogni",
                   "don't know", "do not know", "can't place", "cannot place", "unknown to"]
 _POS_ATT = ["warm", "friendly", "trust", "smile", "soften", "relax", "pleased", "grateful", "kind", "approv",
-            "welcom", "glad", "cordial", "fond", "devoted", "adore", "love", "like", "eager", "help"]
+            "welcom", "glad", "cordial", "fond", "devoted", "adore", "love", "like", "eager", "help", "friend"]
 _NEG_ATT = ["angry", "anger", "furious", "fury", "hostile", "suspicious", "suspicion", "cold", "scowl", "glare",
             "distrust", "wary", "annoyed", "irritat", "contempt", "hate", "sneer", "rude", "unfriendly", "enmity",
             "bristle", "seethe", "resent", "spit", "loathe"]
+_WRITING = ["text", "reads", "read", "says", "say", "words", "letters", "lettering", "inscription", "inscribed",
+            "written", "writing", "wording", "headline", "legend", "caption"]
+_BOND_WORDS = ["relation", "relationship", "bond", "to you", "to the pc"]
 _STRONG_ATT = ["furious", "fury", "hostile", "hate", "loathe", "devoted", "adore", "love", "enmity", "seethe"]
 _SUCCESS = ["make it", "succeed", "gives", "give way", "opens", "open", "works", "manage", "across", "done", "free",
             "catch", "find", "found", "breaks", "break", "lands", "land", "reach", "convince", "agree", "yield",
@@ -542,6 +545,20 @@ def _identity(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: 12.3.1
         if claim_g is None or claim_g == store_g:
             return _v(c, i, "supported")
         return _v(c, i, "contradicted", e.data.get("pronouns") or e.data.get("gender") or store_g)
+    if store is None and (_has(c.predicate, _WRITING) or pred_slug == "text"):  # rule: 12.3.1 [P-041]
+        said = next((ctx.state.fact_value(e.id, k) for k in ("text", "inscription", "reads", "words", "says")
+                     if ctx.state.fact_value(e.id, k) is not None), None)
+        if said is not None and tx.covers(c.value, _flat(said)):  # the stored words hold the claimed ones
+            beyond = " ".join(w for w in c.value.split() if w.lower() not in _flat(said).lower().split())
+            if _negated(beyond):  # "they do not say NO QUESTIONS ASKED" (the notice's own "NO" is not a denial)
+                return _v(c, i, "contradicted", said, reason="the store holds the words written there")
+            return _v(c, i, "supported")
+    bond = ctx.state.fact_value(ctx.pc, "bond.anchor") if ctx.pc else None  # rule: 02.9.2 [P-036]
+    if store is None and isinstance(bond, dict) and bond.get("npc") == e.id and _has(c.predicate, _BOND_WORDS):
+        kind = str(bond.get("kind") or "friend")  # the PC's anchor bond is who this NPC is to them, never asked anew
+        if _negated(c.value) or not tx.covers(c.value, kind, ratio=1.0):
+            return _v(c, i, "contradicted", kind, reason=f"the PC's anchor bond: {kind}")
+        return _v(c, i, "supported")
     if store is None:
         return _oracle_settled(ctx, c, i, pred_slug) or _v(
             c, i, "undetermined", reason=f"{c.predicate or 'property'} not settled in the store")
@@ -909,7 +926,7 @@ def _attitude_sign(text: str) -> int:
     pos, neg = _has(text, _POS_ATT), _has(text, _NEG_ATT)
     if pos == neg:
         return 0
-    return 1 if pos else -1
+    return (1 if pos else -1) * (-1 if _negated(text) else 1)  # "not your friend" reads as negative [P-036]
 
 
 def _attitude(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: 12.3.1

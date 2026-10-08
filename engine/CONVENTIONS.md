@@ -220,7 +220,7 @@ Contract: `specs/004-playable-prototype/contracts/model-calls.md`. Nothing in `e
   raised only for this turn in `raised`. `TRIGGERS` registry (every `trg.*` the rules name, plus engine ids
   `trg.safety_flag` 12.5.6, `trg.interrupt` 00.7.8, `trg.clock_stage` 00.8.4 for 12.2.3 groups 1, 2, 4);
   `trigger_cards(active)`.
-- `engine.retrieve.scene`: `scene_scope(state)` ([pc, cast_present..., place]), `scene_facts(state, scope=None,
+- `engine.retrieve.scene`: `scene_scope(state)` ([pc, cast_present..., place, objects/items at the place (newest 12)]), `scene_facts(state, scope=None,
   limit=40)` (narrator-visible, newest first, no `trg.*` flags), `pc_id(state)`, `entity_names(state, ids)`.
   Packets and schema enums both use these, so fact ids offered in an enum are the ones the view shows.
 
