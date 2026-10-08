@@ -1,0 +1,43 @@
+# Reader golden set (37 lines; 37 scored, 0 without an answer)
+
+- verb: 86.5% (32/37)
+- gate: 86.5% (32/37)
+- necessity: not scored
+- against_will: 100.0% (22/22)
+- uses_power: 100.0% (22/22)
+- speech: 100.0% (22/22)
+- question_kind: 81.1% (30/37)
+- necessity as roll / no roll: not scored
+- issue lines (P-004 … P-123) verb: not scored, gate: not scored
+
+## Misses (verb, gate): 10
+- h004 verb: got verb.move, want None  (I crouch down to the boy's height and ask him what his name )
+- h004 gate: got G1, want None  (I crouch down to the boy's height and ask him what his name )
+- h015 verb: got verb.observe, want None  (I glance at the door now and then while I eat. Is the stew a)
+- h015 gate: got G1, want None  (I glance at the door now and then while I eat. Is the stew a)
+- h016 verb: got verb.observe, want None  (Without making a show of it, I look around the taproom. Who')
+- h016 gate: got G1, want None  (Without making a show of it, I look around the taproom. Who')
+- h019 verb: got verb.observe, want None  (I take in the room as I sit down. Is the fire lit?)
+- h019 gate: got G1, want None  (I take in the room as I sit down. Is the fire lit?)
+- h035 verb: got verb.observe, want None  (I don't watch his hands closely; I just glance around the st)
+- h035 gate: got G1, want None  (I don't watch his hands closely; I just glance around the st)
+
+## Negation pairs (5 pairs, 10 lines)
+# Reader golden set (10 lines; 10 scored, 0 without an answer)
+
+- verb: 90.0% (9/10)
+- gate: 90.0% (9/10)
+- necessity: not scored
+- against_will: 100.0% (6/6)
+- uses_power: 100.0% (6/6)
+- speech: 100.0% (6/6)
+- question_kind: 100.0% (10/10)
+- necessity as roll / no roll: not scored
+- issue lines (P-004 … P-123) verb: not scored, gate: not scored
+
+## Misses (verb, gate): 2
+- h035 verb: got verb.observe, want None  (I don't watch his hands closely; I just glance around the st)
+- h035 gate: got G1, want None  (I don't watch his hands closely; I just glance around the st)
+
+Reader's own verb before the facets choose the card: 81.5% (22/27)
+Computed gate where the beat and verb agree: 100.0% (22/22); lines where only one side has a beat (SPEECH vs a beat): 5

@@ -1,0 +1,45 @@
+# Reader golden set (91 lines; 91 scored, 0 without an answer)
+
+- verb: 83.5% (76/91)
+- gate: 91.2% (83/91)
+- necessity: not scored
+- against_will: 92.5% (62/67)
+- uses_power: 100.0% (67/67)
+- speech: 95.5% (64/67)
+- question_kind: 85.7% (78/91)
+- necessity as roll / no roll: not scored
+- issue lines (P-004 … P-123) verb: 78.6% (11/14), gate: 92.9% (13/14)
+
+## Misses (verb, gate): 23
+- g004 verb: got verb.move, want verb.strike  (I hold my sword on the travellers and step toward the neares)
+- g010 verb: got verb.move, want verb.talk  (I gently turn the child's face toward me and say, "Hey. I'm )
+- g010 gate: got G1, want G2  (I gently turn the child's face toward me and say, "Hey. I'm )
+- g014 verb: got verb.handle, want verb.grapple  (I grab the raven-feather token gently and stare Kerwin down.)
+- g020 verb: got verb.move, want None  (I keep my voice gentle and sit on the bench so I'm lower tha)
+- g020 gate: got G1, want None  (I keep my voice gentle and sit on the bench so I'm lower tha)
+- g022 verb: got verb.observe, want None  (who is sitting at that bench? I describe what I can see of t)
+- g022 gate: got G1, want None  (who is sitting at that bench? I describe what I can see of t)
+- g031 verb: got verb.move, want None  (I turn toward the carters and ask what they saw, and whether)
+- g031 gate: got G1, want None  (I turn toward the carters and ask what they saw, and whether)
+- g033 verb: got verb.talk, want None  (Captain, you've held that count a long time. Tell me plainly)
+- g033 gate: got G1, want None  (Captain, you've held that count a long time. Tell me plainly)
+- … 11 more
+
+## Negation pairs (11 pairs, 22 lines)
+# Reader golden set (22 lines; 22 scored, 0 without an answer)
+
+- verb: 95.5% (21/22)
+- gate: 100.0% (22/22)
+- necessity: not scored
+- against_will: 95.2% (20/21)
+- uses_power: 100.0% (21/21)
+- speech: 100.0% (21/21)
+- question_kind: 100.0% (22/22)
+- necessity as roll / no roll: not scored
+- issue lines (P-004 … P-123) verb: not scored, gate: not scored
+
+## Misses (verb, gate): 1
+- g064 verb: got verb.force, want verb.grapple  (I grab the ledger out of the clerk's hands.)
+
+Reader's own verb before the facets choose the card: 82.2% (60/73)
+Computed gate where the beat and verb agree: 100.0% (59/59); lines where only one side has a beat (SPEECH vs a beat): 7

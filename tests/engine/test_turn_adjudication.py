@@ -46,7 +46,8 @@ def beat(intent: str, verb: str, *, target: str = "none", g4_fact: str | None = 
          against_will: bool = False, uses_power: bool = False, speech: bool = False,
          shape: str = "now") -> dict[str, Any]:
     """A Reader beat (12.2.2 decision 3, DL-12-50): the gate and the roll test are computed from it."""
-    return {"intent": intent, "method": intent, "assertion": None, "shape": shape, "target": target, "verb": verb,
+    return {"intent": intent, "method": intent, "purpose": "own_change", "assertion": None, "shape": shape,
+            "target": target, "verb": verb, "pressure": "request" if verb == "verb.talk" else "none",
             "against_will": against_will, "uses_power": uses_power, "speech": speech or verb == "verb.talk",
             "g4_fact": g4_fact, "intent_verbs": list(verbs)}
 

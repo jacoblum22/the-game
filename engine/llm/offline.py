@@ -480,8 +480,9 @@ def _reader(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:
             verb = (ex, [])
         v = verb[0] if verb else None
         beats.append({
-            "intent": sent, "method": sent, "assertion": None, "shape": "now",
+            "intent": sent, "method": sent, "purpose": "own_change", "assertion": None, "shape": "now",
             "target": target[0] if target else "none", "verb": v,
+            "pressure": "request" if v == "verb.talk" else "none",  # offline Talk is a declared ask (12.2.2)
             # 12.2.2 facets: force against someone; words; a power word (the gate is computed, 00.12.3)
             "against_will": v in ("verb.strike", "verb.grapple") or (v == "verb.force" and bool(target) and str(
                 target[0]).startswith(("npc.", "foe."))),
