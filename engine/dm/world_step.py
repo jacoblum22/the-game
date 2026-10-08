@@ -154,8 +154,13 @@ def npcs_respond(ctx: TurnContext, record: AdjudicationRecord, beats: Sequence[B
         talked(npc, [])
 
 
-_ASKS_NAME = re.compile(r"\bnames?\b|\bwho (?:are|is) (?:you|she|he|they)\b"
-                        r"|\bwho (?:you|she|he|they) (?:are|is)\b|\bintroduc", re.IGNORECASE)
+# the NPC's *own* name or identity only: "the thief's name" / "the name of the thief" asks about someone else, and
+# answering it with the speaker's name made the officer the thief [P-113]; a third party's name goes through
+# `settle_who` (a `who_is_*` fact) on the claim path instead
+_OBJ = r"(?:him|her|them|the [\w' -]{1,40}?)"
+_ASKS_NAME = re.compile(r"\byour (?:own )?name\b|\bwho (?:are|were) you\b|\bwho you are\b|\bintroduc"
+                        rf"|\b(?:ask|asks|asking) {_OBJ} (?:for )?(?:his|her|their) (?:own )?name\b"
+                        rf"|\b(?:ask|asks|asking) {_OBJ} who (?:he|she|they) (?:is|are)\b", re.IGNORECASE)
 
 
 def learn_names(ctx: TurnContext, record: AdjudicationRecord, beats: Sequence[BeatOutcome]) -> None:

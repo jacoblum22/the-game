@@ -142,3 +142,26 @@ def test_the_oracle_never_settles_what_the_sheet_carries(tmp_path: Path, rules: 
                                  staged=tx.events)
                 tx.add_all(res.events)
             assert (res.status, res.answer) == want, (kit, pred, res)
+
+
+def test_failure_narrated_over_a_success_with_a_later_redirect_is_contradicted(tmp_path: Path, rules: Any) -> None:
+    """P-112: a success roll then a G3 redirect in one record; an outcome sharing no words with either beat tied to
+    the redirect ("no roll"), so "the rest of the mark does not hold" passed as a failure that matched."""
+    from engine.dm.adjudication import BeatEntry
+    store = _store(tmp_path)
+    with store.transaction("turn.1") as tx:
+        tx.add(entity("object", "Chalk Mark", tx=tx))
+    rec = AdjudicationRecord(beats=[
+        BeatEntry(beat_id="beat.8", frame_id="frame.2", restatement="Learn whether the chalk symbol smears under a "
+                  "fingertip.", targets=["obj.chalk_mark"], gate="G1", rolled=True, degree="success", reach="limited"),
+        BeatEntry(beat_id="beat.9", restatement="Have a copy of the chalk symbol on parchment in the writing case.",
+                  gate="G3", gate_words="Without lic.training.craft_scribing this is beyond you as tried.")])
+    # the evidence sentence: "The strokes are pale, a cult symbol you do not recognise, and the rest of the mark
+    # does not hold."
+    claim = {"sentence": 2, "subject": "obj.chalk_mark", "class": "outcome", "predicate": "rest of the mark",
+             "value": "does not hold", "asserts_change": True, "pc_words_or_feelings": False}
+    [v] = check_claims([claim], store.state, rec, ["pc.wren"], rules=rules)
+    assert (v.verdict, v.store_value) == ("contradicted", "success")
+    copy = dict(claim, predicate="copy of the symbol on parchment", value="fails")  # the redirect's own failure
+    [v] = check_claims([copy], store.state, rec, ["pc.wren"], rules=rules)
+    assert v.verdict == "supported"
