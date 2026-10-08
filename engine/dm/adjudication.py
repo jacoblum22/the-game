@@ -59,6 +59,7 @@ class BeatEntry(BaseModel):
     part: int | None = None  # index into `parts`
     actor: str | None = None
     targets: list[str] = Field(default_factory=list)  # entity ids the beat acts on
+    verb: str | None = None  # the Reader's basic verb id ("verb.force"): the plain fallback's beat line (B P4)
     restatement: str  # the neutral restatement (01.2.6)
     gate: str | None = None  # gate result id or words (G0..G4, "no roll: necessity")
     gate_words: str = ""  # a redirect's or refusal's words

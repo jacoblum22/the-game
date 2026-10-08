@@ -441,7 +441,7 @@ readers take a `WorldState`. Errors: `engine.world.common.WorldError`. The PC is
 ## engine/audit API and the adjudication record (T043–T047, T107)
 - **Adjudication record** (`engine.dm.adjudication.AdjudicationRecord`, Pydantic, `.dump()` JSON): what T1–T6
   produced and all T7–T10 may narrate from. Fields: `turn_id`, `pc`, `parts` [`PartEntry(text, class, handled,
-  beat_id)`], `beats` [`BeatEntry(beat_id, frame_id, part, actor, targets, restatement, gate, gate_words,
+  beat_id)`], `beats` [`BeatEntry(beat_id, frame_id, part, actor, targets, verb, restatement, gate, gate_words,
   approach_words, difficulty_words, stakes, rolled, degree, near_miss, success_at_cost, reach, reach_words,
   costs [CostEntry(menu_id, severity, form)], harm [HarmEntry(target, words, condition_ids)], conditions (words),
   positions [PositionEntry(entity, words)], license)`], `oracle` [`OracleEntry(question, answer, fact_id, subject,
@@ -471,7 +471,16 @@ readers take a `WorldState`. Errors: `engine.world.common.WorldError`. The PC is
 - `engine.audit.fallback`: `plain_fallback(record, *, names={id: name}, verdicts=()) -> FallbackResult(fiction,
   review_flag=True, owed_blocks, ruling: RulingRecord(kind="rule_conflict", review_flag=True))` (12.3.3; one
   sentence per record item; ends "What do you do?" unless `record.pause`); log it with `log_ruling(fb.ruling, ...)`.
-  `plain(text)` strips ids, snake_case and digits.
+  `plain(text)` strips ids, snake_case and digits. Beat lines render from `actor`, `verb`, `targets` and the degree
+  (never the restatement); an Oracle answer is its question verbatim, and only a yes to a statement-shaped one.
+  `fact_sentence(state, fact, subject=None)` renders through `engine.text.render.relation`.
+- `engine.text.render` (B P4, no dependency): `clause(subject_id_or_words, verb_phrase, obj=None, *, neg, tense,
+  plural, names, pc)` (verb agreement for "you" / third person; the verb's first word must be in the closed `VERBS`
+  list, else KeyError: add it there, never guess), `relation(subject, predicate, value=None, *, neg)` (the
+  `RELATIONS` registry, else a predicate headed by a listed verb; a yes/no with no such verb is ''), `np(noun, n,
+  definite=)`, `plural`, `article`, `who(eid, names=, pc=)`, `the_name`, `degree_words`, `DEGREE_WORDS`,
+  `BEAT_VERBS` (Reader verb id -> phrase with / without a target), `sentence`. Model free text is never passed
+  through it: quote it whole or leave it out.
 - `engine.audit.screen`: `screen_draft(fiction, *, flags=checker["screen"], record, verdicts, safety,
   pause_blocks_text=[rendered OOF pause blocks], rules, names=entity names) -> ScreenResult(passed, reasons,
   screen)`; `screen` has exactly `TurnRecord.screen`'s keys. Also `mechanics_in_fiction(text, rules=, names=)`

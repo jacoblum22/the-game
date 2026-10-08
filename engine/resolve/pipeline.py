@@ -195,8 +195,8 @@ def close_by_default(env: PipelineEnv, pause: PauseRecord) -> PipelineResult:  #
 
 def _entry(beat: Beat, **kw: Any) -> BeatEntry:
     targets = [beat.target] if beat.target and beat.target != "none" else []
-    return BeatEntry(beat_id=beat.id, actor=beat.actor, targets=targets, restatement=beat.restatement or beat.intent,
-                     license=beat.license, **kw)
+    return BeatEntry(beat_id=beat.id, actor=beat.actor, targets=targets, verb=beat.verb,
+                     restatement=beat.restatement or beat.intent, license=beat.license, **kw)
 
 
 def _start(env: PipelineEnv, plan: BeatPlan, queued: list[BeatPlan]) -> BeatOutcome:  # rule: PR-01-1

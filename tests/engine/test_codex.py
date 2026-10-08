@@ -105,12 +105,13 @@ def test_what_you_know_reads_what_was_seen_and_heard(store: Store, rules: Rules)
         rumour = _fact(tx, "item.iron_bar", "forged_by", "the smiths of Ashford", "available")
         tx.add(Event.of("knowledge_recorded", source="test", knower="pc.wren", fact_id=rumour, how="rumor"))
     j = codex(store.state, "journal", rules).text
-    assert "Iron bar's weight is heavier than it looks." in j and "nothing yet" not in j
+    # an open predicate is a label, its value verbatim (B P4): never "<x>'s action is shouts that ..."
+    assert "Iron bar's weight: heavier than it looks." in j and "nothing yet" not in j
     from engine.dm.codex import what_you_know
 
     bar = what_you_know(store.state, "the iron bar", rules).text
     assert bar.startswith("[JOURNAL] What you know about the iron bar:")
-    assert "weight is heavier than it looks" in bar and "Iron bar is forged by the smiths of Ashford (a rumour" in bar
+    assert "weight: heavier than it looks" in bar and "Iron bar is forged by the smiths of Ashford (a rumour" in bar
     summary = what_you_know(store.state, None, rules).text
     assert "What drives you: I will find the ferryman" in summary
     for about in (None, "the iron bar", "Wren", "cultist"):

@@ -20,11 +20,12 @@ from engine.dm.adjudication import (
     SceneEntry,
 )
 
-NAMES = {"pc.wren": "Wren", "npc.tam_harlan": "Tam"}
+NAMES = {"pc.wren": "Wren", "npc.tam_harlan": "Tam", "obj.hasp": "hasp", "obj.door": "door", "obj.bench": "bench"}
 
 
 def _record(**kw: object) -> AdjudicationRecord:
     beat = BeatEntry(restatement="Wren forces the hasp with the iron bar (verb.force)", actor="pc.wren",
+                     verb="verb.force", targets=["obj.hasp"],
                      degree="success", near_miss=True, success_at_cost=True, rolled=True,
                      costs=[CostEntry(menu_id="cost.noise", severity="S2", form="the bar shrieks against the iron")],
                      positions=[PositionEntry(entity="pc.wren", words="inside the archive")])
@@ -90,6 +91,8 @@ def _clean(fiction: str) -> None:
 
 
 def test_oracle_answers_are_statements() -> None:
+    """A yes to a question put as a statement is that statement, verbatim; a no is left out, never negated by
+    regex (B P4 retired `_negate`: "Townsfolk are not yet gathering" was a guess at the model's grammar)."""
     from engine.dm.adjudication import OracleEntry
     rec = AdjudicationRecord(pc="pc.wren", oracle=[
         OracleEntry(question="Traders are already setting up stalls at dawn?", answer="yes"),
@@ -99,9 +102,8 @@ def test_oracle_answers_are_statements() -> None:
         OracleEntry(question="The well is dry?", answer="yes, but the bucket is wet")])
     fb = plain_fallback(rec, names=NAMES).fiction
     _clean(fb)
-    for piece in ("Traders are already setting up stalls at dawn.", "Townsfolk are not yet gathering",
-                  "No one is watching the square", "can no longer be read", "The well is dry, but the bucket is wet."):
-        assert piece in fb, fb
+    assert fb == ("Traders are already setting up stalls at dawn. The well is dry, but the bucket is wet. "
+                  "What do you do?"), fb
 
 
 def test_a_compound_no_is_left_out_not_half_negated() -> None:
@@ -124,20 +126,20 @@ def test_gated_and_failed_beats_read_as_fiction() -> None:
     from engine.resolve.pipeline import _span_words
     rec = AdjudicationRecord(pc="pc.wren", beats=[
         BeatEntry(restatement="Learn whether anyone is watching the square from its doorways", actor="pc.wren",
-                  gate="G1", gate_words="no roll: trivial", reach="standard"),
+                  verb="verb.observe", gate="G1", gate_words="no roll: trivial", reach="standard"),
         BeatEntry(restatement="Learn whether tracks lead away from the square", actor="pc.wren", gate="G3",
+                  verb="verb.observe",
                   gate_words="Without Tracking this is beyond you as tried. Possible now: follow fresh, plain tracks "
                              "(harder, at most limited reach)"),
         BeatEntry(restatement="Learn whether tracks lead away from the square", actor="pc.wren", rolled=True,
-                  degree="critical_failure", costs=[CostEntry(menu_id="cost.time", severity="S2",
-                                                              form=_span_words(6, "intervals"))]),
-        BeatEntry(restatement="Wren tries the door", actor="pc.wren", degree="failure", rolled=True)])
+                  verb="verb.observe", degree="critical_failure",
+                  costs=[CostEntry(menu_id="cost.time", severity="S2", form=_span_words(6, "intervals"))]),
+        BeatEntry(restatement="Wren tries the door", actor="pc.wren", verb="verb.force", targets=["obj.door"],
+                  degree="failure", rolled=True)])
     fb = plain_fallback(rec, names=NAMES).fiction
     _clean(fb)
-    for piece in ("You try to learn whether anyone is watching the square from its doorways. It works.",
-                  "You cannot do it that way.", "It goes badly. About an hour passes.",
-                  "You try the door. It doesn't work."):
-        assert piece in fb, fb
+    assert fb == ("You look around. It works. You look around. You cannot do it that way. You look around. "
+                  "It goes badly. About an hour passes. You force the door. It doesn't work. What do you do?"), fb
     assert "Tracking" not in fb and "harder" not in fb
 
 
@@ -147,16 +149,17 @@ def test_playtest_172629_fallback_is_grammatical() -> None:
     from engine.dm.adjudication import OracleEntry
     names = {"pc.geria": "Geria Salier", "npc.gerella": "Gerella Vasois"}
     rec = AdjudicationRecord(pc="pc.geria", pause=PauseEntry(kind="offer"), beats=[
-        BeatEntry(restatement="Gerella is pinned against the gatepost", actor="pc.geria"),
-        BeatEntry(restatement="Gerella names who is hiring for Larkgate and where to find them", actor="pc.geria"),
+        BeatEntry(restatement="Gerella is pinned against the gatepost", actor="pc.geria", verb="verb.grapple",
+                  targets=["npc.gerella"]),
+        BeatEntry(restatement="Gerella names who is hiring for Larkgate and where to find them", actor="pc.geria",
+                  verb="verb.talk", targets=["npc.gerella"]),
         BeatEntry(restatement="Geria pushes on toward the gate, sword raised. (Her claim about the ankle is context "
-                              "only.)", actor="pc.geria", degree="success", rolled=True)],
+                              "only.)", actor="pc.geria", verb="verb.move", degree="success", rolled=True)],
         oracle=[OracleEntry(question="knows where the Larkgate grain-lords' hiring can be found in Redby", answer="no"),
                 OracleEntry(question="Gerella knows where the hiring can be found?", answer="no"),
                 OracleEntry(question="The people at the wall can say what is at the gate", answer="yes, but lesser")])
     fb = plain_fallback(rec, names=names).fiction
-    assert fb == ("Gerella is pinned against the gatepost. Gerella names who is hiring for Larkgate and where to find "
-                  "them. You push on toward the gate, sword raised. It works. "
+    assert fb == ("You grapple with Gerella Vasois. You speak to Gerella Vasois. You move. It works. "
                   "The people at the wall can say what is at the gate."), fb
     assert not re.search(r"try to [a-z]*(?:gerella|is)\b|\bto [a-z]+ is\b|[()]|can not|but lesser", fb, re.I)
 
@@ -169,14 +172,14 @@ def test_empty_brackets_never_survive() -> None:
 
 
 def test_a_possessive_or_determiner_restatement_is_its_own_sentence() -> None:
-    """Playtest 20261007-193420 (P-091): "You try to garett's grip on her arm loosens"."""
-    for r in ("Garett's grip on her arm loosens", "Some of the crowd steps back", "Each guard turns away"):
+    """Playtest 20261007-193420 (P-091): "You try to garett's grip on her arm loosens". The beat line comes from
+    the typed fields (B P4), so the Reader's restatement is never re-read as a sentence at all."""
+    for r in ("Garett's grip on her arm loosens", "Some of the crowd steps back", "Each guard turns away",
+              "Wrench free"):
         rec = AdjudicationRecord(pc="pc.belas", beats=[BeatEntry(restatement=r, actor="pc.belas", degree="failure",
-                                                                 rolled=True)])
+                                                                 verb="verb.exert", rolled=True)])
         fb = plain_fallback(rec, names={"pc.belas": "Belas Terent"}).fiction
-        assert fb.startswith(r + ".") and "try to" not in fb, fb
-    rec = AdjudicationRecord(pc="pc.belas", beats=[BeatEntry(restatement="Wrench free", actor="pc.belas")])
-    assert "You try to wrench free." in plain_fallback(rec, names={"pc.belas": "Belas Terent"}).fiction
+        assert fb == "You strain. It doesn't work. What do you do?", fb
 
 
 def test_a_spoken_line_with_no_beat_is_restated() -> None:
@@ -187,20 +190,20 @@ def test_a_spoken_line_with_no_beat_is_restated() -> None:
         PartEntry.model_validate({"text": "\"That's all right, Oggza. Is Seley one of yours?\"", "class": "SPEECH",
                                   "handled": "answered"}),
         PartEntry.model_validate({"text": "what are my options?", "class": "FICTION_QUESTION", "handled": "noted"})],
-        beats=[BeatEntry(restatement="Wren sits on the bench", actor="pc.wren", part=0,
+        beats=[BeatEntry(restatement="Wren sits on the bench", actor="pc.wren", part=0, verb="verb.move",
+                         targets=["obj.bench"],
                          positions=[PositionEntry(entity="pc.wren", words="a few strides from the bench")])],
         npc_actions=[NpcActionEntry(npc="npc.tam_harlan", action="offers partial help", source="table_row")])
     fb = plain_fallback(rec, names=NAMES).fiction
-    assert fb == ("You sit on the bench. You are a few strides from the bench. "
+    assert fb == ("You move toward the bench. You are a few strides from the bench. "
                   "You ask, \"That's all right, Oggza. Is Seley one of yours?\" Tam offers some help. "
                   "What do you do?"), fb
     # playtest 20261007-203717 breaker, input 28: the Reader's queue note reached the player
     noted = AdjudicationRecord(pc="pc.wren", beats=[BeatEntry(
         restatement="Wren asks Tam what there is to discover. Queued: looking at Belia, pending clarification of "
                     "who is in the room. Spoken to Tam, not a beat: she thanks him.", actor="pc.wren",
-        degree="success", rolled=True)])
-    assert plain_fallback(noted, names=NAMES).fiction == ("You ask Tam what there is to discover. It works. "
-                                                          "What do you do?")
+        verb="verb.talk", targets=["npc.tam_harlan"], degree="success", rolled=True)])
+    assert plain_fallback(noted, names=NAMES).fiction == "You speak to Tam. It works. What do you do?"
     only = AdjudicationRecord(pc="pc.wren", parts=[PartEntry.model_validate(
         {"text": "I lean in and say, \"Who did you lose?\"", "class": "SPEECH"})])
     assert plain_fallback(only, names=NAMES).fiction == 'You ask, "Who did you lose?" What do you do?'

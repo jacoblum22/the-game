@@ -8,9 +8,9 @@ from typing import Any
 import pytest
 
 from engine.audit.claims import check_claims
-from engine.audit.fallback import _you
+from engine.audit.fallback import plain_fallback
 from engine.data.loader import load_rules
-from engine.dm.adjudication import AdjudicationRecord
+from engine.dm.adjudication import AdjudicationRecord, BeatEntry
 from engine.dm.codex import what_you_know
 from engine.dm.packet import render_view, scene_setting, scene_view
 from engine.dm.roles.checker import entity_lines
@@ -104,10 +104,13 @@ def test_the_journal_lists_only_people_introduced(tmp_path: Path) -> None:
 
 
 def test_a_second_verb_after_and_is_second_person() -> None:
-    """Breaker turn 26: 'You cross the timber yard to the doors and goes out into the lane'."""
-    out = _you("Lorard crosses the timber yard to the doors and goes out into the lane", ["Lorard"], [])
-    assert out == "you cross the timber yard to the doors and go out into the lane"
-    assert _you("Lorard watches the cart and the dogs", ["Lorard"], []) == "you watch the cart and the dogs"
+    """Breaker turn 26: 'You cross the timber yard to the doors and goes out into the lane'. The beat line is now
+    rendered from the Reader's verb and target (B P4), so the restatement's second verb is never re-conjugated."""
+    rec = AdjudicationRecord(pc="pc.lorard", beats=[BeatEntry(
+        restatement="Lorard crosses the timber yard to the doors and goes out into the lane", actor="pc.lorard",
+        verb="verb.move", targets=["loc.lane"], gate="G1", gate_words="no roll: trivial")])
+    fb = plain_fallback(rec, names={"pc.lorard": "Lorard", "loc.lane": "the lane"}).fiction
+    assert fb == "You move toward the lane. It works. What do you do?"
 
 
 def test_setup_named_people_are_known_and_a_walk_on_is_the_figure(tmp_path: Path) -> None:
