@@ -125,3 +125,6 @@ Status: open · fixing (round N) · fixed (commit) · logged (ledger id) · wont
 | P-119 | bug | low | Journal garbled from a junk mentioned object: "The familiar face in the crowd's recognition is looks familiar to you" | 210433-breaker 29 | open |
 | P-120 | bug | high | A successful Talk (15→17 vs 10) still ends in a refusal; success with nothing stored reads as failure (with I-153) | 210953-talker 24, 30 | open, high: 210627-explorer 23–27 (NPC confirms he knows the name, critical success, still refuses: 'felt like a cheat'); engine fix queued (deliver a who-answer via settle_who on Talk success) |
 | P-121 | polish | low | Coins the player offers are not used as a lever/edge or acknowledged in the offer | 210953-talker 29–31 | open |
+| P-122 | bug | high | Sheet says "knack for intimidation", yet threatening → "[REDIRECT] you haven't learned Intimidation" (twice) | 212725-fighter 23–29 | fixing |
+| P-123 | bug | med | "Gently take the feather token from his hand" framed as unarmed fighting and refused | 212725-fighter 21–22 | fixing |
+| P-124 | polish | low | NPC "named his price" but no amount given | 212725-fighter 24 | open |

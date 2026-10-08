@@ -75,3 +75,4 @@ Ledger: I-131..I-136.
 | breaker 210433 | 8fc6117 | 17 | 1.76 | 0 | harsh odds again (I-155); junk-object journal line (P-119); everyone refuses (P-114) |
 | talker 210953 | 8fc6117 | 17 | 1.82 | 1 | real leads from Belo; success-then-refusal (P-120); coins ignored (P-121) |
 | explorer 210627 | 8fc6117 | 17 | 2.41 | 0 | critical success still refused (P-120 high); proverb-dodging NPC; vague notice text |
+| fighter 212725 | 06c7def | 17 | 2.06 | 2 | odds/grapple clear; knack vs licence redirect (P-122); gentle take = attack (P-123) |
