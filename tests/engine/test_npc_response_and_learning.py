@@ -176,6 +176,30 @@ def test_a_talk_target_gets_the_talk_outcome_not_a_table_row(tmp_path: Path) -> 
                                                                      f"{out.adjudication.record.beats[0].degree}")]
 
 
+def test_a_talk_aimed_at_a_thing_gets_no_answer_row(tmp_path: Path) -> None:
+    """P-096 (194952-talker turn 20): the Talk's target was a mention minted as an object ('coming up the road');
+    the fallback said 'Coming up the road agrees.' A thing has no one to answer as the talk went."""
+    from engine.store.events import EntityRecord
+
+    say = "I call to the people coming up the road."
+    talk = beat("call to the people coming up the road", "verb.talk", target="obj.coming_up_the_road",
+                verbs=("call",))
+    model = ScriptedModel({Role.READER: [reader("DECLARATION", say, talk)], Role.FRAMER: [framer()],
+                           Role.WORLD: [QUIET_WORLD]})
+    dock, ctx = setup(tmp_path, model)
+    with dock.store.transaction() as tx:
+        tx.add(Event.of("entity_created", source="test", entity=EntityRecord(
+            id="obj.coming_up_the_road", kind="object", name="coming up the road")))
+        tx.add(Event.of("position_set", source="test", rule_id="10.1.1", entity="obj.coming_up_the_road",
+                        location=dock.place))
+    assert play_turn(ctx, say).adjudication.pause.kind == "offer"
+    ctx.rng.faces = [19]  # type: ignore[attr-defined]
+    model.push(Role.NARRATOR, narr("You call out. What do you do?"))
+    model.push(Role.CHECKER, chk())
+    rec = play_answer(ctx, "commit").adjudication.record
+    assert not any(a.npc == "obj.coming_up_the_road" for a in rec.npc_actions), rec.npc_actions
+
+
 def test_a_failed_talk_delivers_nothing(tmp_path: Path) -> None:
     _, ctx, _, (fid, out) = _talk_turn(tmp_path, [narr("Tam Harlan shrugs. What do you do?")], [chk()], face=2)
     assert out.adjudication.record.beats[0].learned == [] and fid not in ctx.store.state.knowledge.get("pc.wren", {})

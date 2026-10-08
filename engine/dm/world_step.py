@@ -97,7 +97,10 @@ def npcs_respond(ctx: TurnContext, record: AdjudicationRecord, beats: Sequence[B
             tx.add_all(res.events)
             record.npc_actions.append(NpcActionEntry(npc=r.npc, action=str(res.entry), source="table_row",
                                                      source_ref=f"{NPC_TABLE}:{res.roll}", tags=r.tags))
-    for npc in [n for n in talk if n in ctx.state.entities]:  # the one spoken to answers as the talk went, always
+    # the one spoken to answers as the talk went, always; a Talk aimed at a thing ("coming up the road") has no
+    # one to answer it (P-096)
+    for npc in [n for n in talk if n in ctx.state.entities
+                and ctx.state.entities[n].kind in ("npc", "adversary", "companion")]:
         talked(npc, [])
 
 

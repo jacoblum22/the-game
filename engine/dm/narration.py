@@ -360,7 +360,8 @@ def _fallback(ctx: TurnContext, record: AdjudicationRecord, out: NarrationResult
     """The plain fallback (12.3.3): from the record only, `review_flag`, a `rule_conflict` ruling logged."""
     tx = ctx.need_tx()
     st = tx.state
-    names = {eid: e.name for eid, e in st.entities.items() if eid not in st.seals}
+    # the name as the PC knows it ("the wagon driver" until told), never an unlearned name (12.10.2, P-096)
+    names = {eid: narrator_role.name_of(st, eid) for eid in st.entities if eid not in st.seals}
     fb = plain_fallback(record, names=names, verdicts=verdicts)
     ruling = fb.ruling.model_copy(update={"result": {**fb.ruling.result, "reasons": list(reasons)}})
     tx.add(log_ruling(ruling, tx.mint, store=ctx.store, staged=tx.events, turn_id=ctx.turn_id, rule_id="12.3.3"))
