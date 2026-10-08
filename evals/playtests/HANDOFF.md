@@ -8,9 +8,9 @@ what is still open, what went wrong in the process, and where to look next (rule
 
 ## 1. Where things are
 
-**Code.** All work is in **local commits on the owner's branch `claude/project-thread-q2smmv`**.
+**Code.** All work is in **local commits on branch `milestone-1-playable`** (renamed from `claude/project-thread-q2smmv`).
 - It was fast-forwarded from the integration branch, and the branch structure was then collapsed: only
-  `main` and `claude/project-thread-q2smmv` remain, with one working copy and no extra worktrees.
+  `main` and `milestone-1-playable` remain, with one working copy and no extra worktrees.
 - The code head is `eb570e1`; later commits are logs, this report, and the run transcripts.
 - Commit hashes cited below (from the `integrate-r1` and `worktree-agent-*` branches) are all ancestors of
   this branch, so `git show <hash>` still works.
