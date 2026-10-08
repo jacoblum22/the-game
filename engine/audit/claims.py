@@ -27,7 +27,7 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator
 from engine.audit import text as tx
 from engine.dm.adjudication import AdjudicationRecord, BeatEntry
 from engine.store.projection import WorldState
-from engine.store.views import name_known, unnamed_label
+from engine.store.views import item_words, name_known, unnamed_label
 
 ClaimClass = Literal["existence", "identity", "quantity", "harm_condition", "position", "possession",
                      "location_time", "knowledge", "capability", "clock", "attitude", "outcome", "action", "sealed"]
@@ -745,12 +745,14 @@ def _holdings(ctx: _Ctx, subject: str) -> list[str]:
     out: list[str] = []
     for eid in s.entities:
         if eid != subject and ctx.holder(eid) == subject:
-            out += [eid, s.entities[eid].name]
+            out += [eid, s.entities[eid].name, *(w for t in item_words(s, eid)[1:] for w in (t, t))]
     for f in s.facts.values():
         if f.subject == subject and any(tx.same(f.predicate, p) for p in _POSSESS_PREDICATES):
             vals = f.value if isinstance(f.value, list) else [f.value]
             for v in vals:
                 out += [str(v), ctx.name(v) if isinstance(v, str) else str(v)]
+                if isinstance(v, str):  # the sheet's rapier is also "a blade", "a weapon" (P-090)
+                    out += [w for t in item_words(s, v)[1:] for w in (t, t)]
     for q, qty in s.quantities.get(subject, {}).items():
         if qty.current > 0:
             out += [q, *_QTY_SYNONYMS.get(q, [])]

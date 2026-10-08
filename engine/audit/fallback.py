@@ -29,6 +29,7 @@ _AUX = {"is", "are", "was", "were", "can", "could", "will", "would", "has", "hav
         "must", "does", "do", "did"}
 _WH = {"what", "who", "whom", "whose", "which", "where", "when", "why", "how"}
 _KEEP = {"the", "a", "an", "his", "her", "their", "my", "your", "its", "this", "that", "these", "those", "someone"}
+_DET = {"some", "any", "each", "every", "no", "one", "both", "all", "our", "another", "nobody", "everyone"}
 # a second verb of the PC's after "and"/"then", read as a verb when a particle, preposition or article follows
 _AND_VERB = re.compile(r"\b(and|then) ([a-z]+(?<!ss)s)\b(?= (?:the|a|an|out|in|into|on|onto|up|down|to|back|"
                        r"over|through|away|off|his|her|their|its|from|with|toward|towards|across|around|"
@@ -85,7 +86,8 @@ def _you(restated: str, pc_names: Iterable[str], other_names: Iterable[str]) -> 
     named = {w for n in other_names for w in n.split()[:1]}
     # ponytail: "X is/tells/names ..." is read as a subject and its verb; a bare verb ("Learn whether", "Pick the
     # lock") takes "you try to". Anything else is kept as its own sentence, never glued on or lower-cased.
-    if (first.lower() in _KEEP or first in named or second in _AUX
+    head = re.sub(r"['’]s?$", "", first)  # "Garett's grip ...", "the guards' fire": a possessive starts a subject (P-091)
+    if (first.lower() in _KEEP | _DET or head != first or head in named or second in _AUX
             or (re.fullmatch(r"[a-z]+s", second) and not second.endswith("ss"))):
         return restated  # already a sentence about someone or something else ("Gerella is pinned ...", "Tam ...")
     return f"you try to {restated[:1].lower()}{restated[1:]}"

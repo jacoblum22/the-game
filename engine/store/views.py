@@ -27,6 +27,34 @@ def fact(state: WorldState, subject: str, predicate: str) -> Any:
     return state.fact_value(subject, predicate)
 
 
+def item_words(state: WorldState, eid: str) -> list[str]:  # rule: 02.8.1
+    """An item's name and the words of its tags ("item.weapon.blade.rapier" -> weapon, blade, rapier), so a
+    "blade" on the sheet's rapier counts as held (P-090)."""
+    e = state.entities.get(eid)
+    if e is None:
+        return []
+    tags = [*e.tags, e.data.get("item_tag")]
+    return [e.name, *dict.fromkeys(w for t in tags if isinstance(t, str) for w in t.split(".")[1:] if w)]
+
+
+def sheet_holds(state: WorldState, subject: str, thing: str) -> str | None:  # rule: 02.8.1
+    """The `carries` / `holds` fact on `subject`'s sheet that lists something named `thing` (by id, name or
+    tag word), or None (P-090)."""
+    from engine.audit.text import content
+
+    # ponytail: any shared content word counts ("short sword" meets "short bow"); match head nouns if that bites
+    want = content(thing)
+    for pred in ("carries", "holds"):
+        fid = state.current_fact_id(subject, pred)
+        if fid is None or not want:
+            continue
+        vals = state.facts[fid].value
+        for v in vals if isinstance(vals, list) else [vals]:
+            if isinstance(v, str) and want & content(" ".join([v.partition(".")[2], *item_words(state, v)])):
+                return fid
+    return None
+
+
 def name_known(state: WorldState, eid: str) -> bool:  # rule: 12.10.2
     """Has the PC learned this person's name? NPCs created unintroduced (the seed's people, walk-ons) carry
     `data.name_known: False`; their name is learned by a knowledge record of their `name` fact (told,

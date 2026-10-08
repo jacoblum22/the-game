@@ -28,6 +28,8 @@ from engine.store.events import Event, Visibility
 Shape = Literal["yes_and", "yes", "yes_but", "no_but", "no", "no_and"]
 DM = "dm"
 FREE_FACTS_KEY = "oracle.free_facts"
+_POSSESS = frozenset({"carries", "carry", "carrying", "has", "have", "having", "holds", "hold", "holding", "wields",
+                      "wielding", "owns", "possesses", "wears", "wearing", "armed"})
 
 
 class OracleQuestion(BaseModel):
@@ -123,7 +125,15 @@ def ask_oracle(q: OracleQuestion, *, state: Any, rules: Any, rng: Rng, mint: Cal
     """PR-01-4 steps 1, 3-8 (step 2, an actor attempting it, is the caller's: a fortune check instead)."""
     if q.predicate in RECORD_LISTS:  # a yes/no never shadows an NPC's list field (playtest crash, P-084)
         q = q.model_copy(update={"predicate": f"asked_{q.predicate}"})
-    # 1 / 3. established answer → read it; never re-ask the same key (01.15.7)
+    # 1 / 3. the subject's sheet already answers a possession ("carries_a_rapier"): read it, never roll (P-090)
+    verb, _, thing = q.predicate.removeprefix("is_").removeprefix("does_").partition("_")
+    if verb in _POSSESS and thing:
+        from engine.store.views import sheet_holds
+
+        fid = sheet_holds(state, q.subject, thing)
+        if fid is not None:
+            return OracleResult(status="read", reason=f"on the sheet: {fid} (02.8.1)", fact_id=fid, answer=True)
+    # established answer → read it; never re-ask the same key (01.15.7)
     existing = state.current_fact_id(q.subject, q.predicate)
     if existing is not None:
         return OracleResult(status="read", reason=f"already established: {existing} (01.15.7)", fact_id=existing,

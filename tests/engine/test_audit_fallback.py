@@ -165,3 +165,14 @@ def test_empty_brackets_never_survive() -> None:
                                                             costs=[CostEntry(menu_id="cost.time", severity="S1",
                                                                              form="time passes (6 intervals)")])])
     assert "()" not in plain_fallback(rec, names=NAMES).fiction.replace(" ", "")
+
+
+def test_a_possessive_or_determiner_restatement_is_its_own_sentence() -> None:
+    """Playtest 20261007-193420 (P-091): "You try to garett's grip on her arm loosens"."""
+    for r in ("Garett's grip on her arm loosens", "Some of the crowd steps back", "Each guard turns away"):
+        rec = AdjudicationRecord(pc="pc.belas", beats=[BeatEntry(restatement=r, actor="pc.belas", degree="failure",
+                                                                 rolled=True)])
+        fb = plain_fallback(rec, names={"pc.belas": "Belas Terent"}).fiction
+        assert fb.startswith(r + ".") and "try to" not in fb, fb
+    rec = AdjudicationRecord(pc="pc.belas", beats=[BeatEntry(restatement="Wrench free", actor="pc.belas")])
+    assert "You try to wrench free." in plain_fallback(rec, names={"pc.belas": "Belas Terent"}).fiction

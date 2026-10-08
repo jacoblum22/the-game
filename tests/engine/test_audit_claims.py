@@ -101,3 +101,44 @@ def test_the_anchor_bond_settles_friend_claims(tmp_path: Path, rules: Any) -> No
     assert verdict("identity", "relation to you", "not a friend")[0] == "contradicted"
     assert verdict("attitude", "relation to PC", "not a friend")[0] == "contradicted"
     assert verdict("attitude", "toward you", "warm")[0] == "supported"
+
+
+def _kit_store(tmp_path: Path, kit: bool) -> Any:
+    store = _store(tmp_path)
+    with store.transaction("turn.0") as tx:
+        tx.add(entity("item", "rapier", tx=tx, data={"item_tag": "item.weapon.blade.rapier"}))
+        tx.add(Event.of("fact_set", {"source": "player_accepted"}, source="pc.wren", rule_id="02.8.1",
+                        fact_id=tx.mint("fact"), subject="pc.wren", predicate="carries",
+                        value=["item.cloak", *(["item.rapier"] if kit else [])], visibility="shown",
+                        supersedes=None, gate=None))
+    return store
+
+
+@pytest.mark.parametrize("words", ["my rapier", "my blade", "a weapon"])
+def test_the_sheet_kit_counts_as_held(tmp_path: Path, rules: Any, words: str) -> None:
+    """Playtest 20261007-193420 (P-090): the sheet's rapier was drawn and the hand "found no blade"."""
+    claim = {"subject": "pc.wren", "class": "possession", "predicate": "carries", "value": words}
+    [v] = check_claims([claim], _kit_store(tmp_path, True).state, AdjudicationRecord(), ["pc.wren"], rules=rules)
+    assert v.verdict == "supported", v
+    [v] = check_claims([{**claim, "value": f"no {words.split()[-1]}"}], _kit_store(tmp_path / "x", True).state,
+                       AdjudicationRecord(), ["pc.wren"], rules=rules)
+    assert v.verdict == "contradicted", v  # "no blade" against the sheet's rapier
+    [v] = check_claims([claim], _kit_store(tmp_path / "y", False).state, AdjudicationRecord(), ["pc.wren"],
+                       rules=rules)
+    assert v.verdict != "supported", v  # without one, nothing on the sheet backs it
+
+
+def test_the_oracle_never_settles_what_the_sheet_carries(tmp_path: Path, rules: Any) -> None:
+    """P-090: the Reader's "carries a rapier?" rolled no against the sheet; with no rapier it is still asked."""
+    from engine.resolve.oracle import OracleQuestion, ask_oracle
+    from engine.rng import Rng
+
+    for kit, want in ((True, ("read", True)), (False, ("answered", False))):
+        store = _kit_store(tmp_path / str(kit), kit)
+        for pred in ("carries_a_rapier", "has_a_blade"):
+            with store.transaction() as tx:
+                res = ask_oracle(OracleQuestion(subject="pc.wren", predicate=pred, odds="impossible"),
+                                 state=tx.state, rules=rules, rng=Rng(1), mint=tx.mint, store=store,
+                                 staged=tx.events)
+                tx.add_all(res.events)
+            assert (res.status, res.answer) == want, (kit, pred, res)
