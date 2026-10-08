@@ -145,6 +145,13 @@ def scene_setting(state: WorldState) -> str:  # rule: 12.4.3
         if d.get(key):
             bits.append(f"{key}: " + ", ".join(str(x) for x in d[key]))
     lines.append("- place: " + "; ".join(bits))
+    if d.get("look"):  # the seed pack (12.16.9): the layout is read from the store, never invented (12.4.3)
+        lines.append(f"- look: {d['look']}")
+    if d.get("furniture"):
+        lines.append("- furniture: " + ", ".join(str(x) for x in d["furniture"]))
+    exits = [state.entities[x].name for x in d.get("exits") or [] if x in state.entities and x not in state.seals]
+    if exits:
+        lines.append("- exits: toward " + ", ".join(exits))
     parent = state.entities.get(d.get("parent") or "")
     while parent is not None and parent.id not in state.seals:
         pd = parent.data

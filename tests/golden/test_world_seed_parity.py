@@ -62,13 +62,13 @@ def first_diff(a: Any, b: Any, path: str = "") -> str | None:
 
 @pytest.mark.parametrize("seed", SEEDS)
 def test_rolled_seed_matches_reference(ref: ModuleType, seed: int) -> None:
-    want = plain(ref.build_seed(seed))
+    want = plain(ref.seed_packs(ref.build_seed(seed), seed))  # packed (R2-D): packs on keyed streams
     got = plain(build_rolled(seed).record)
     assert first_diff(want, got) is None
 
 
 def test_guided_run_matches_reference(ref: ModuleType) -> None:
-    want = plain(ref.build_seed(2, GUIDED))
+    want = plain(ref.seed_packs(ref.build_seed(2, GUIDED), 2))
     world = build_answered(2, GUIDED)
     assert first_diff(want, plain(world.record)) is None
     assert {a.question for a in world.answers if a.source == "player"} == set(GUIDED)
@@ -77,7 +77,8 @@ def test_guided_run_matches_reference(ref: ModuleType) -> None:
 @pytest.mark.parametrize("seed", [1, 1001])
 def test_seed_check_matches_reference(ref: ModuleType, seed: int) -> None:
     reg = build_rolled(seed).record
-    want = [tuple(r) for r in ref.check_seed(plain(ref.build_seed(seed)))]
+    packed = plain(ref.seed_packs(ref.build_seed(seed), seed))
+    want = [tuple(r) for r in ref.check_seed(packed)] + [tuple(r) for r in ref.check_packs(packed)]
     got = check_seed(reg)
     assert got == want
     assert all(ok for _, ok, _ in got), [r for r in got if not r[1]]

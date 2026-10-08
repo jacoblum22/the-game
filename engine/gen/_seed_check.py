@@ -10,6 +10,7 @@ from typing import Any
 
 from engine.gen import threat_table as TB
 from engine.gen._seed_lib import BRANCHES, Rec, data
+from engine.gen._seed_packs import check_packs
 
 Result = tuple[str, bool, str]
 
@@ -42,6 +43,12 @@ def check_seed(reg: Rec) -> list[Result]:
             _check_one(rq, *ctx)
         except Exception as e:      # a missing or differently shaped key is a failed check, not a crash
             ok(rq["id"], False, f"error: {type(e).__name__}: {str(e)[:80]}")
+    if "seed_cases" not in reg:     # an unpacked record (the reference's build_seed): the 64 rows only
+        return res
+    try:  # the 7 seed-pack rows (#pack_requirements, T-12-16's last rows) [revision: R2-D]
+        res += check_packs(reg)
+    except Exception as e:
+        res += [(rq["id"], False, f"error: {type(e).__name__}: {str(e)[:80]}") for rq in D.WS["pack_requirements"]]
     return res
 
 

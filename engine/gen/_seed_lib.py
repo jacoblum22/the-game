@@ -232,10 +232,25 @@ def person_name(dice: Dice, tables: list[Rec], people_origin: str, given_used: s
         if g in given_used:
             continue
         given_used.add(g)
-        if "family" in t:
-            return "{} {}".format(g, by_range(t["family"], dice.d(12))["result"])
-        return "{} {}".format(g, by_range(t["epithet"], dice.d(12))["result"])
-    raise RuntimeError("names exhausted")
+        return _full_name(dice, t, g)
+    # The table's 20 given names are spent (a long campaign's walk-ons): compose a fresh one from the people's own
+    # syllables (tbl.12.seed.names), so names never run out. The seed's draws above are unchanged.
+    spec = data().TAB["tbl.12.seed.names"]["by_people"].get(people_origin) or {}
+    styles = spec.get("styles") or [spec]
+    for _ in range(200):
+        st = dice.pick(styles)
+        if not st.get("given_start"):
+            break
+        g = dice.pick(st["given_start"]) + dice.pick(st["given_end"])
+        if g not in given_used:
+            given_used.add(g)
+            return _full_name(dice, dice.pick(cands), g)
+    g = by_range(dice.pick(cands)["given"], dice.d(20))["result"]  # ponytail: a reused given name, once all fail
+    return _full_name(dice, dice.pick(cands), g)
+
+
+def _full_name(dice: Dice, t: Rec, given: str) -> str:
+    return "{} {}".format(given, by_range(t["family"] if "family" in t else t["epithet"], dice.d(12))["result"])
 
 
 def template_for(org: str) -> Rec:
