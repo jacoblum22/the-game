@@ -17,25 +17,37 @@ input; `engine.dm.turn.play_turn` / `play_answer` then keep the turn's record as
 from __future__ import annotations
 
 import re
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
 from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from engine.audit.claims import Claim, Verdict, check_claims, failing, owed_blocks
+from engine.audit.claims import Claim, Verdict, beat_polarity, check_claims, failing, owed_blocks
+from engine.audit.declare import (
+    DeclaredSentence,
+    Failure,
+    SceneIndex,
+    coverage,
+    known_as,
+    mention_of,
+    scan_sentence,
+    t2_delivered,
+    tier_of,
+)
 from engine.audit.fallback import plain_fallback
 from engine.audit.safety import screen_safety
-from engine.audit.screen import screen_draft
+from engine.audit.screen import echoed_quotes, screen_draft
 from engine.dm import oof
 from engine.dm.adjudication import AdjudicationRecord
 from engine.dm.context import TurnContext
+from engine.dm.handles import RecordItem
 from engine.dm.mentions import MentionResult, write_mentions
 from engine.dm.response import Flags, OofBlock, Pause, Response
 from engine.dm.roles import checker as checker_role
 from engine.dm.roles import narrator as narrator_role
-from engine.dm.roles.narrator import Purpose, Redraft
+from engine.dm.roles.narrator import Purpose, Repair
 from engine.llm.base import ModelInvalid
-from engine.resolve.rulings import log_ruling
+from engine.resolve.rulings import RulingRecord, log_ruling
 from engine.store.events import WORLD, Event, PauseRecord
 from engine.store.records import TurnRecord
 
@@ -69,11 +81,34 @@ class TurnOutcome(BaseModel):
 # ------------------------------------------------------------------------------------------- T7–T10
 
 
-class _Plan(BaseModel):
-    cut: set[int] = Field(default_factory=set)
-    lines: list[str] = Field(default_factory=list)
-    settled: list[str] = Field(default_factory=list)
-    needs_narrator: bool = False
+class _Sent(BaseModel):
+    """One drafted sentence while it is judged and repaired (12.3.3)."""
+
+    decl: DeclaredSentence
+    failures: list[Failure] = Field(default_factory=list)
+    dropped: bool = False
+    replaced: int = 0  # repair rounds that rewrote it
+    verdicts: list[dict[str, Any]] = Field(default_factory=list)  # its claims' verdicts (TurnRecord.verdicts)
+    cited_before: list[str] = Field(default_factory=list)  # handles the sentence it replaced cited (its place)
+
+    @property
+    def ok(self) -> bool:
+        return not self.failures
+
+    @property
+    def cut(self) -> bool:
+        return any(f.fix == "cut" for f in self.failures)
+
+
+class _Turn(BaseModel):
+    """What one narrate_checked call carries between judging rounds."""
+
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+
+    items: list[RecordItem] = Field(default_factory=list)
+    player_message: str = ""
+    exchanges: list[Any] = Field(default_factory=list)
+    stats: dict[str, int] = Field(default_factory=dict)
 
 
 def _max_redrafts(rules: Any) -> int:
@@ -90,13 +125,10 @@ def _write_mentions(ctx: TurnContext, record: AdjudicationRecord, mentions: Sequ
     return res
 
 
-def _settled_lines(ctx: TurnContext, res: MentionResult) -> list[str]:
-    st = ctx.state
-    return [f"{narrator_role.name_of(st, s.entity)} — {s.property}: {s.value}" for s in res.settled]
-
-
-def _ask_oracle(ctx: TurnContext, record: AdjudicationRecord, c: Claim) -> str | None:  # rule: 12.3.2
-    """An `undetermined` property: settle it with the Oracle (Even odds), write it, return the answer in words."""
+def _ask_oracle(ctx: TurnContext, record: AdjudicationRecord, c: Claim, odds: str = "even") -> str | None:
+    # rule: 12.3.2
+    """A consequential `undetermined` property (or a T1b proposal): settle it with the Oracle, write it, return the
+    answer in words."""
     from engine import ids
     from engine.resolve.oracle import OracleQuestion, ask_oracle
 
@@ -107,16 +139,8 @@ def _ask_oracle(ctx: TurnContext, record: AdjudicationRecord, c: Claim) -> str |
     # engine/audit/claims.py `_oracle_settled` reads it back
     pred = ids.slug(" ".join(x for x in (c.predicate or c.cls, c.value) if x))[:60]
     start = len(tx.events)
-    from engine.dm.incident import settle_who
-
-    who = settle_who(ctx, f"{c.predicate} {c.value}".strip())  # "who is X?": an existing person (P-067)
-    if who is not None:
-        if c.cls == "knowledge" and record.pc:  # rule: 12.10.5
-            tx.add(Event.of("knowledge_recorded", rule_id="12.10.5", knower=record.pc, fact_id=who[1], how="told"))
-        record.add_writes(tx.events[start:])
-        return who[0]
     res = ask_oracle(OracleQuestion(subject=subject, predicate=pred, question=f"{c.predicate} {c.value}?".strip(),
-                                    odds="even", asker="dm"),
+                                    odds=odds, asker="dm"),
                      state=st, rules=ctx.rules, rng=ctx.rng, mint=tx.mint, store=ctx.store, staged=tx.events)
     tx.add_all(res.events)
     if c.cls in ("knowledge", "sealed") and res.answer is True and res.fact_id and record.pc:  # rule: 12.10.5
@@ -130,12 +154,24 @@ def _ask_oracle(ctx: TurnContext, record: AdjudicationRecord, c: Claim) -> str |
 
 def _settle(ctx: TurnContext, record: AdjudicationRecord, claims: Sequence[Claim],
             verdicts: Sequence[Verdict]) -> list[Verdict]:  # rule: 12.3.2
-    """`undetermined` with fix `oracle`: ask the Oracle now. A yes is the draft's own value, so the claim is
-    `supported` and nothing is redrafted; any other answer is the redraft's (`store_value`); no answer: cut."""
+    """`undetermined` (12.3.2, split by tier): an incidental property is written as narrated and binds later turns
+    (T1a, DL-12-40); a consequential one goes to the Oracle: a yes is the draft's own value (`supported`), any other
+    answer is the redraft's (`store_value`), no answer: cut."""
     out = []
+    tx = ctx.need_tx()
     for v in verdicts:
-        if v.verdict != "supported" and v.fix == "oracle":
-            ans = _ask_oracle(ctx, record, claims[v.claim])
+        c = claims[v.claim]
+        if v.verdict == "undetermined" and v.incidental and c.subject in tx.state.entities:
+            from engine import ids
+            from engine.world.common import fact
+
+            start = len(tx.events)
+            tx.add(fact(tx, c.subject, ids.slug(c.predicate or "detail")[:60], c.value, rule_id="12.3.2",
+                        source="narration", visibility="shown"))
+            record.add_writes(tx.events[start:])
+            v = Verdict(claim=v.claim, verdict="supported", reason="incidental: written as narrated (12.3.2; T1a)")
+        elif v.verdict != "supported" and v.fix == "oracle":
+            ans = _ask_oracle(ctx, record, c)
             if ans == "yes":
                 v = Verdict(claim=v.claim, verdict="supported", reason="the Oracle settled it as drafted")
             elif ans is None:
@@ -146,72 +182,13 @@ def _settle(ctx: TurnContext, record: AdjudicationRecord, claims: Sequence[Claim
     return out
 
 
-def _key(sentence: str) -> str:
-    return " ".join(re.findall(r"\w+", sentence.lower()))
-
-
-def _carry(claims: Sequence[Claim], verdicts: Sequence[Verdict], sents: Sequence[str],
-           passed: set[str]) -> list[Verdict]:  # rule: 12.3.3
-    """A redraft keeps every sentence that passed (12.3.3): a sentence unchanged from a check it passed keeps that
-    pass, and fresh claims read from it are not judged again; only new or changed sentences are."""
-    out = []
-    for v in verdicts:
-        n = claims[v.claim].sentence
-        if v.verdict != "supported" and 0 <= n < len(sents) and _key(sents[n]) in passed:
-            v = Verdict(claim=v.claim, verdict="supported", reason="unchanged since a check it passed (12.3.3)")
-        out.append(v)
-    return out
-
-
-def _passed(claims: Sequence[Claim], verdicts: Sequence[Verdict], sents: Sequence[str]) -> set[str]:
-    bad = {claims[v.claim].sentence for v in failing(verdicts)}
-    return {_key(s) for n, s in enumerate(sents) if n not in bad}
-
-
-def _plan(claims: Sequence[Claim], verdicts: Sequence[Verdict], sents: Sequence[str]) -> _Plan:  # rule: PR-12-2
-    """PR-12-2 steps 3–6 for the failing verdicts: what to cut, what the redraft must change (with the store's
-    values), what the Oracle settled (`_settle` asked it)."""
-    plan = _Plan()
-    for v in failing(verdicts):
-        c = claims[v.claim]
-        n = c.sentence
-        s = sents[n] if 0 <= n < len(sents) else ""
-        head = f'sentence {n} "{s}": {v.verdict} ({c.cls}: {c.predicate} {c.value})'.replace("  ", " ")
-        if v.fix == "oracle":
-            plan.needs_narrator = True
-            plan.settled.append(f"{c.predicate}: {v.store_value}")
-            plan.lines.append(f"{head}; the Oracle settled it: {v.store_value}. Redraft to that answer")
-        elif v.fix == "redraft_to_store":
-            plan.needs_narrator = True
-            plan.lines.append(f"{head}; the truth is: {v.store_value or 'something else'}. Make the "
-                              "fiction say that, in its own words")
-        elif v.fix == "replace_with_slice" and v.store_value:
-            plan.needs_narrator = True
-            plan.cut.add(n)
-            plan.lines.append(f"{head}; cut it; if the sentence is needed, use only: {v.store_value}")
-        else:  # cut, write_on_mention not done, replace_with_slice without a slice
-            plan.cut.add(n)
-            plan.lines.append(f"{head}; cut it" + (f" ({v.reason})" if v.reason else ""))
-    return plan
-
-
-_GENERIC_PREDICATES = {"present", "presence", "exists", "exist", "is", "are", "has", "have", "there", "stands", "location"}
-
-
-def _mention_name(c: Claim) -> str:
-    """The new element's name: an existence claim's predicate when it is the noun ("woodsmoke" / "rises thin"), else
-    its value ("present" / "a traveler near the post")."""
-    pred, value = c.predicate.strip(), c.value.strip()
-    name = pred if c.cls == "existence" and pred and pred.lower() not in _GENERIC_PREDICATES else (value or pred)
-    return name[:60]
-
-
 def _apply_writes(ctx: TurnContext, record: AdjudicationRecord, claims: Sequence[Claim],
                   verdicts: Sequence[Verdict]) -> list[Verdict]:  # rule: 00.6.6
-    """`new_element` with fix `write_on_mention` (ordinary furniture, an unknown subject: 12.3.2): write it now, at
-    check time too, and return the verdicts with each written claim `supported` and each refused one a `cut`
-    [revision: I-127; DL-12-37]."""
-    todo = {v.claim: _mention_name(claims[v.claim]) for v in failing(verdicts) if v.fix == "write_on_mention"}
+    """The backstop for an element the narrator did not declare (12.3.2 `new_element`, fix `write_on_mention`):
+    written as ordinary furniture, so it is never cut merely for being new [revision: I-127; DL-12-37]; declared
+    `new` elements are the main path (`_write_new`)."""
+    todo = {v.claim: (claims[v.claim].value or claims[v.claim].predicate).strip()[:60]
+            for v in failing(verdicts) if v.fix == "write_on_mention"}
     todo = {i: name for i, name in todo.items() if name}
     if not todo:
         return list(verdicts)
@@ -226,15 +203,144 @@ def _apply_writes(ctx: TurnContext, record: AdjudicationRecord, claims: Sequence
         elif name in refused:
             out.append(v.model_copy(update={"fix": "cut", "reason": "a kind that is never created by mention; cut"}))
         else:
-            out.append(Verdict(claim=v.claim, verdict="supported"))
+            out.append(Verdict(claim=v.claim, verdict="supported", reason="undeclared: written on mention (backstop)"))
     return out
 
 
-def _renumber(claims: Sequence[Claim], sents: Sequence[str], cut: set[int]) -> tuple[list[str], list[Claim]]:
-    keep = [i for i in range(len(sents)) if i not in cut]
-    new_index = {old: new for new, old in enumerate(keep)}
-    out = [c.model_copy(update={"sentence": new_index[c.sentence]}) for c in claims if c.sentence in new_index]
-    return [sents[i] for i in keep], out
+def _write_new(ctx: TurnContext, record: AdjudicationRecord, s: _Sent, idx: SceneIndex,
+               out: NarrationResult) -> None:  # rule: PR-00-7
+    # rule: 12.14.13
+    """PR-00-7 step 2: each declared new element by its tier. T1a is written on mention with the properties the
+    sentence states; T1b is proposed and settled by the Oracle (Likely when a present NPC the sentence is about
+    says it, else Unlikely; a "no" is a redraft); T2 passes only when a cited record line delivers it."""
+    from engine.dm.roles.world import present_npcs
+
+    for el in s.decl.new:
+        known = known_as(el, idx)
+        if known is not None:  # one of the scene's own: spoken of, not new
+            s.decl.about = list(dict.fromkeys([*s.decl.about, known]))
+            continue
+        tier = tier_of(el, ctx.rules)
+        if tier == "T1a":
+            m = mention_of(el)
+            res = _write_mentions(ctx, record, [m]) if m is not None else None
+            if res is None or res.refused:
+                s.failures.append(Failure(why=f"{el.name!r} cannot be created by mention", fix="cut"))
+            else:
+                out.created += [i for i in res.ids if i not in out.created]
+        elif tier == "T1b":
+            speaker = next((a for a in s.decl.about if a in present_npcs(ctx.state)), None)
+            c = Claim.model_validate({"subject": speaker or WORLD, "class": "knowledge", "predicate": "knows",
+                                      "value": el.name})
+            ans = _ask_oracle(ctx, record, c, odds="likely" if speaker else "unlikely")
+            if ans != "yes":
+                s.failures.append(Failure(why=f"{el.name!r} is not so (the Oracle settled it)", fix="redraft",
+                                          store_value=f"not so: {el.name}" if ans else "say they do not know"))
+        elif not t2_delivered(el, s.decl, idx):
+            s.failures.append(Failure(why=f"a new {el.element_kind or 'element'} ({el.name}) that no record line "
+                                      "delivers (12.14.13)", fix="cut"))
+
+
+def _subject_given(c: Claim, s: DeclaredSentence, idx: SceneIndex, pc: str | None) -> Claim:  # rule: 12.3.1
+    """A claim in a declared sentence takes the declared subject when the sentence declares exactly one subject
+    besides the PC and the audit read the claim as about someone else or no one (never guessed)."""
+    declared = [e for e in idx.subjects(s) if e != pc]
+    if len(declared) == 1 and c.subject != pc and c.subject not in declared and not s.new:
+        return c.model_copy(update={"subject": declared[0]})
+    return c
+
+
+def _polarity(s: DeclaredSentence, record: AdjudicationRecord, its: Mapping[str, RecordItem]) -> list[Failure]:
+    # rule: 12.3.1
+    """Each cited beat line, judged with its subject given: the sentence must not plainly say the opposite of the
+    beat's degree (P-112). Other refs are sources for the claims that cite them (`check_claims(cited=)`)."""
+    out = []
+    for r in s.refs:
+        it = its.get(r)
+        if it is not None and it.kind == "beat" and it.beat is not None:
+            degree = beat_polarity(s.text, record.beats[it.beat])
+            if degree:
+                out.append(Failure(why=f"contradicts the attempt's result ({degree})", fix="redraft",
+                                   store_value=degree))
+    return out
+
+
+def _judge(ctx: TurnContext, record: AdjudicationRecord, turn: _Turn, sents: list[_Sent], todo: Sequence[int],
+           out: NarrationResult, version: dict[str, Any]) -> None:  # rule: PR-12-2
+    # rule: 12.3.1a
+    """PR-12-2 steps 1-6 for the sentences in `todo`: scan each (12.3.1a), write its new elements by tier (T8), run
+    the audit (the Checker) on them, resolve every claim with its subject given, judge with `check_claims`, and
+    turn each verdict into the sentence's failure and fix (12.3.3's table)."""
+    tx = ctx.need_tx()
+    rules = ctx.rules
+    pc = record.pc
+    by_handle = {it.handle: it for it in turn.items}
+    idx = SceneIndex.of(tx.state, turn.items)
+    names = _names(ctx, list(tx.state.entities))
+    for i in todo:
+        s = sents[i]
+        s.failures = []
+        valid = set(by_handle) | set(idx.facts)
+        s.decl.refs = [r for r in s.decl.refs if r in valid]
+        s.decl.about = [a for a in s.decl.about if a in tx.state.entities]
+        scan = scan_sentence(s.decl, idx, rules=rules, names=names)
+        if scan.added_about:
+            s.decl.about += scan.added_about
+            turn.stats["added_about"] = turn.stats.get("added_about", 0) + len(scan.added_about)
+            if s.decl.atmosphere:  # it names someone: declared now, not atmosphere (12.3.1a item 2)
+                s.decl.atmosphere = False
+                turn.stats["atmosphere_named"] = turn.stats.get("atmosphere_named", 0) + 1
+        turn.stats["undeclared_new"] = turn.stats.get("undeclared_new", 0) + scan.undeclared_new
+        s.failures += scan.failures
+        _write_new(ctx, record, s, idx, out)
+        safe = screen_safety(s.decl.text, tx.state)
+        if not safe.ok and safe.cuts:
+            s.failures.append(Failure(why="crosses a line the player set (12.5.6)", fix="cut"))
+        echoed = echoed_quotes(s.decl.text, [p.text for p in record.parts])
+        if echoed and i > 0:
+            s.failures.append(Failure(why=f"an NPC answers with the player's own words ({echoed[0]})",
+                                      fix="redraft", store_value="write the NPC's own reply"))
+    idx = SceneIndex.of(tx.state, turn.items)  # with this round's new elements
+    chk = checker_role.check_draft(ctx, "", player_message=turn.player_message, created=out.created,
+                                   exchanges=turn.exchanges, sentences=[sents[i].decl.text for i in todo])
+    version["screen_flags"] = chk.screen
+    claims: list[Claim] = []
+    order = list(todo)
+    for c in chk.claims:
+        if not 0 <= c.sentence < len(order):
+            continue
+        g = order[c.sentence]
+        s = sents[g].decl
+        if s.atmosphere and not s.declared and c.cls != "location_time" and (
+                (c.subject == "unknown" and c.cls == "action") or not c.asserts_change):
+            continue  # 12.3.1, 12.11.9: atmosphere (an unnamed crowd's murmur, heads turning) is never a claim
+        c = _subject_given(c.model_copy(update={"sentence": g}), s, idx, pc)
+        if c.subject not in idx.subjects(s) and c.subject != pc:
+            turn.stats["audit_undeclared"] = turn.stats.get("audit_undeclared", 0) + 1
+        claims.append(c)
+    for g in todo:
+        sents[g].failures += _polarity(sents[g].decl, record, by_handle)
+        sents[g].verdicts = []
+    # what each sentence cites: its record lines, and its view facts as lines about their subject (12.2.10: a
+    # stated value cites the view's id; a claim restating what it cites is covered by the declaration)
+    facts = tx.state.facts
+    cited = {g: [by_handle[r] if r in by_handle else
+                 RecordItem(handle=r, kind="note", must_name=False, entities=[facts[r].subject],
+                            text=f"{facts[r].predicate.replace('_', ' ')} {facts[r].value}")
+                 for r in sents[g].decl.refs if r in by_handle or r in facts] for g in todo}
+    verdicts = check_claims(claims, tx.state, record, chk.scene_ids, rules=rules, cited=cited)
+    verdicts = _apply_writes(ctx, record, claims, verdicts)
+    verdicts = _settle(ctx, record, claims, verdicts)
+    for v in verdicts:
+        c = claims[v.claim]
+        sents[c.sentence].verdicts.append({**v.model_dump(mode="json"), "sentence": c.sentence, "class": c.cls})
+        if v.verdict != "supported":
+            fix = "cut" if v.fix in _CUT_FIXES else "redraft"
+            sents[c.sentence].failures.append(Failure(why=f"{v.verdict} ({c.cls}: {c.predicate} {c.value})".strip(),
+                                                      fix=fix, store_value=v.store_value))
+    version["claims"] = _dump(claims)
+    version["verdicts"] = _dump(verdicts)
+    version["checks"] = {str(g): [f.model_dump() for f in sents[g].failures] for g in todo}
 
 
 def _dump(items: Sequence[BaseModel]) -> list[dict[str, Any]]:
@@ -246,129 +352,172 @@ def _names(ctx: TurnContext, ids: Sequence[str]) -> list[str]:
     return [st.entities[i].name for i in ids if i in st.entities]
 
 
+def _unanswered(record: AdjudicationRecord, text: str) -> list[str]:  # rule: 12.2.7
+    from engine.audit.screen import _acknowledged
+
+    return [f"answer: {q}" for q in _acknowledged(record, text)]
+
+
+def _text(sents: Sequence[_Sent]) -> str:
+    return " ".join(s.decl.text for s in sents if not s.dropped and s.decl.text)
+
+
+def _snapshot(kind: str, sents: Sequence[_Sent], **extra: Any) -> dict[str, Any]:
+    return {"kind": kind, "text": _text(sents), "sentences": [s.decl.model_dump() for s in sents if not s.dropped],
+            "mentions": [], "claims": [], "verdicts": [], **extra}
+
+
 def narrate_checked(ctx: TurnContext, record: AdjudicationRecord, *, player_message: str = "",
                     purpose: Purpose = "turn", exchanges: Sequence[str | tuple[str, str]] = (),
                     pause_blocks: Sequence[OofBlock] = (), extra: Sequence[str] = (),
                     fallback_text: str | None = None) -> NarrationResult:  # rule: PR-12-1
     # rule: PR-12-2
     # rule: 12.3.3
-    """T7 draft → T8 write-on-mention (one redraft when an answer changes it) → T9 claims and verdicts, fixes, at
-    most `max_redrafts` redrafts → T10 screen (any failure back to T7, same budget) → else the plain fallback
-    (`review_flag`, its `rule_conflict` ruling logged). Needs the turn's open transaction (`ctx.tx`).
-    `fallback_text` replaces the record-built fallback (a recap falls back to its RECAP block: empty fiction)."""
+    """T7 draft (declared sentences) → judge each sentence (scans, tiers, audit, verdicts, coverage) → cut what a
+    cut fixes, repair the rest one narrow call per round (at most `max_redrafts`) → cut what still fails and state
+    each uncited must-name item by its rendered line → the plain fallback when no sentence passed → T10 screen.
+    Needs the turn's open transaction (`ctx.tx`). `fallback_text` replaces the record-built fallback (a recap falls
+    back to its RECAP block: empty fiction)."""
+    from engine.dm.npc_layer import ensure_activities
+
     tx = ctx.need_tx()
     rules = ctx.rules
     max_r = _max_redrafts(rules)
     out = NarrationResult()
-    redrafts = 0
-    redraft: Redraft | None = None
-    mention_redraft_done = False
-    text: str | None = None
-    sents: list[str] = []
-    claims: list[Claim] = []
-    flags: dict[str, Any] = {}
-    scene_ids: list[str] = []
-    verdicts: list[Verdict] = []
-    version: dict[str, Any] = {}
-    reasons: list[str] = []
-    passed: set[str] = set()  # sentences (normalised) that passed a check this call: 12.3.3 keeps them
+    if purpose in ("turn", "scene_open", "opening"):
+        ensure_activities(ctx, record)  # 12.11.9 step 1: every present NPC's activity is a record line
+    turn = _Turn(items=narrator_role.record_items(tx.state, record), player_message=player_message,
+                 exchanges=list(exchanges))
+    must = [it.handle for it in turn.items if it.must_name]
+    sents: list[_Sent] = []
+    had_prompt = False
+    try:
+        nd = narrator_role.draft(ctx, record, player_message=player_message, exchanges=exchanges, purpose=purpose,
+                                 extra=extra, items=turn.items)
+        sents = [_Sent(decl=s) for s in nd.sentences]
+        had_prompt = bool(sents) and sents[-1].decl.text.rstrip("\"”’' ").endswith("?")
+        version = _snapshot("draft", sents)
+        out.draft_versions.append(version)
+        _judge(ctx, record, turn, sents, range(len(sents)), out, version)
+    except ModelInvalid as exc:
+        return _fallback(ctx, record, out, [], [f"{exc.__class__.__name__}: {exc}"], fallback_text)
+    rounds = 0
     while True:
+        for s in sents:  # a cut is done by code at once, never redrafted (12.3.3)
+            s.dropped = s.dropped or s.cut
+        live = [s for s in sents if not s.dropped]
+        missing = coverage([s.decl for s in live], must) + _unanswered(record, _text(sents))
+        redo = {str(i): s for i, s in enumerate(sents) if not s.dropped and not s.ok}
+        if (not redo and not missing) or rounds >= max_r:
+            break
+        rounds += 1
+        words = {it.handle: it.render or it.text for it in turn.items}
+        repair = Repair(failing={i: s.decl.text for i, s in redo.items()},
+                        reasons={i: [f"{f.why}" + (f"; use: {f.store_value}" if f.store_value else "")
+                                     for f in s.failures] for i, s in redo.items()},
+                        missing=[f"{h} ({words.get(h, '')})" if h in words else h for h in missing])
         try:
-            if text is None:  # T7 (or D)
-                nd = narrator_role.draft(ctx, record, player_message=player_message, exchanges=exchanges,
-                                         purpose=purpose, redraft=redraft, extra=extra)
-                text = nd.fiction
-                version = {"kind": "redraft" if redraft else "draft", "text": text, "mentions": nd.mentions,
-                           "claims": [], "verdicts": []}
-                out.draft_versions.append(version)
-                mres = _write_mentions(ctx, record, nd.mentions)  # T8
-                out.created += [i for i in mres.created.values() if i not in out.created]
-                if mres.settled and not mention_redraft_done:
-                    mention_redraft_done = True  # PR-00-7 step 3: narrate the answer (not a T9 redraft)
-                    redraft = Redraft(previous=checker_role.split_sentences(text), settled=_settled_lines(ctx, mres),
-                                      failures=["properties the draft needed were settled now: write to them"])
-                    text = None
-                    continue
-                chk = checker_role.check_draft(ctx, text, player_message=player_message, created=out.created,
-                                               exchanges=exchanges)  # T9
-                sents, claims, flags, scene_ids = chk.sentences, chk.claims, chk.screen, chk.scene_ids
-        except ModelInvalid as exc:
-            reasons = [f"{exc.__class__.__name__}: {exc}"]
+            nd = narrator_role.draft(ctx, record, player_message=player_message, exchanges=exchanges,
+                                     purpose=purpose, repair=repair, items=turn.items)
+        except ModelInvalid:
             break
-        verdicts = check_claims(claims, tx.state, record, scene_ids, rules=rules)
-        verdicts = _carry(claims, verdicts, sents, passed)
-        verdicts = _apply_writes(ctx, record, claims, verdicts)
-        verdicts = _settle(ctx, record, claims, verdicts)
-        passed |= _passed(claims, verdicts, sents)
-        version["claims"], version["verdicts"] = _dump(claims), _dump(verdicts)
-        bad = failing(verdicts)
-        if bad:
-            reasons = [f"{v.verdict}: {v.reason}" for v in bad]
-            plan = _plan(claims, verdicts, sents)
-            if redrafts >= max_r:
-                # past the budget every failing sentence is cut, not redrafted: what is left was checked against the
-                # store, so it is delivered (closed by the open prompt, 12.14.9) instead of the plain fallback when
-                # a sentence of fiction is left [playtest 2026-10-07: a scene asked for came back "What do you do?"]
-                cut = (plan.cut | {claims[v.claim].sentence for v in bad}) & set(range(len(sents)))
-                body = range(len(sents) - (0 if record.pause else 1))  # without a pause the last is the prompt
-                if not cut or not any(i not in cut for i in body):
-                    break
-                redrafts += 1
-                sents, claims = _renumber(claims, sents, cut)
-                if record.pause is None and not sents[-1].rstrip().endswith("?"):
-                    sents.append("What do you do?")
-                text = " ".join(sents)
-                version = {"kind": "cut", "text": text, "mentions": [], "claims": [], "verdicts": [],
-                           "fixes": plan.lines}
-                out.draft_versions.append(version)
-                continue
-            keep_prompt = record.pause is not None or (len(sents) - 1) not in plan.cut
-            pure_cut = not plan.needs_narrator and plan.cut and len(plan.cut) < len(sents) and keep_prompt
-            redrafts += 1
-            if pure_cut:
-                sents, claims = _renumber(claims, sents, plan.cut)  # a pure cut: code removes the sentences
-                text = " ".join(sents)
-                version = {"kind": "cut", "text": text, "mentions": [], "claims": [], "verdicts": [],
-                           "fixes": plan.lines}
-                out.draft_versions.append(version)
-                continue
-            redraft = Redraft(previous=list(sents), failures=plan.lines, settled=plan.settled)
-            text = None
+        todo: list[int] = []
+        for key, decl in nd.repairs:
+            if key in redo and decl.text.strip():
+                i = int(key)
+                old = sents[i]
+                if not decl.refs:  # a replacement keeps its place, so the lines the sentence narrated (12.3.3)
+                    decl.refs = [r for r in old.decl.refs if r in {it.handle for it in turn.items}]
+                sents[i] = _Sent(decl=decl, replaced=old.replaced + 1,
+                                 cited_before=list(dict.fromkeys([*old.cited_before, *old.decl.refs])))
+                todo.append(i)
+            elif key in redo:
+                sents[int(key)].dropped = True
+            elif key == "add" and decl.text.strip():
+                at = len(sents) - (1 if had_prompt and sents and not sents[-1].dropped else 0)
+                sents.insert(at, _Sent(decl=decl))
+                todo = [t + 1 if t >= at else t for t in todo] + [at]
+        version = _snapshot("repair", sents, fixes=[f"[{i}] {'; '.join(r)}" for i, r in repair.reasons.items()],
+                            missing=repair.missing)
+        out.draft_versions.append(version)
+        if todo:
+            try:
+                _judge(ctx, record, turn, sents, sorted(todo), out, version)
+            except ModelInvalid:
+                break
+    return _deliver(ctx, record, turn, sents, must, out, had_prompt, pause_blocks, fallback_text, rounds)
+
+
+def _deliver(ctx: TurnContext, record: AdjudicationRecord, turn: _Turn, sents: list[_Sent], must: Sequence[str],
+             out: NarrationResult, had_prompt: bool, pause_blocks: Sequence[OofBlock], fallback_text: str | None,
+             rounds: int) -> NarrationResult:  # rule: 12.3.3
+    """After the repairs: cut what still fails; state each must-name item no remaining sentence cites by its rendered
+    line, in the place of the sentence that cited it; restore the open prompt only if repair cut it; the plain
+    fallback when no drafted sentence passed (12.3.3)."""
+    tx = ctx.need_tx()
+    reasons = [f"[{i}] {f.why}" for i, s in enumerate(sents) for f in s.failures if not s.dropped]
+    cut_any = any(s.dropped or not s.ok for s in sents)
+    cited_at: dict[str, int] = {}
+    for i, s in enumerate(sents):
+        for r in [*s.decl.refs, *s.cited_before]:
+            cited_at.setdefault(r, i)
+        if not s.ok:
+            s.dropped = True
+    kept = [s for s in sents if not s.dropped]
+    prose = [s for s in kept if not (s.decl.text.rstrip().endswith("?") and not s.decl.declared)]
+    if not prose:
+        return _fallback(ctx, record, out, [], reasons or ["no drafted sentence passed"], fallback_text)
+    by_handle = {it.handle: it for it in turn.items}
+    rendered: list[str] = []
+    for h in coverage([s.decl for s in kept], must):
+        line = by_handle[h].render
+        if not line:
             continue
-        # T10
-        names = _names(ctx, scene_ids)
-        res = screen_draft(text, flags=flags, record=record, verdicts=verdicts,
-                           safety=screen_safety(text, tx.state), pause_blocks_text=[b.text for b in pause_blocks],
-                           rules=rules, names=names)
-        out.screen = res.screen
-        version["screen"] = res.reasons
-        if res.passed:
-            out.fiction = text
-            out.verdicts = _dump(verdicts)
-            return out
-        reasons = res.reasons
-        if redrafts >= max_r:
-            break
-        redrafts += 1
-        redraft = Redraft(previous=list(sents), failures=[f"screen: {r}" for r in res.reasons])
-        text = None
-    return _fallback(ctx, record, out, verdicts, reasons, fallback_text)
+        rendered.append(h)
+        live = [i for i, s in enumerate(sents) if not s.dropped]
+        end = live[-1] if live and sents[live[-1]].decl.text.rstrip().endswith("?") else len(sents)
+        at = cited_at.get(h, end)  # where the sentence that cited it stood, else before the closing question
+        sents.insert(min(at, len(sents)), _Sent(decl=DeclaredSentence(text=line, refs=[h])))
+        cited_at = {k: (v + 1 if v >= at else v) for k, v in cited_at.items()}
+    final = [s for s in sents if not s.dropped]
+    text = " ".join(s.decl.text for s in final)
+    if had_prompt and record.pause is None and not text.rstrip("\"”’' ").endswith("?"):
+        text += " What do you do?"  # 12.3.3: the open prompt (12.14.9), restored by code because repair cut it
+    if cut_any or rendered:
+        out.draft_versions.append({"kind": "render" if rendered else "cut", "text": text, "mentions": [],
+                                   "claims": [], "verdicts": [], "rendered": rendered, "reasons": reasons})
+    if rendered:  # 12.3.3: a rendered line was needed
+        ruling = RulingRecord(signature="claim_check.rendered_line", kind="rule_conflict", review_flag=True,
+                              situation="a must-name item was stated by its rendered line (12.3.3)",
+                              result={"outcome": "rendered_line", "handles": rendered, "reasons": reasons},
+                              tags=["claim_check"])
+        tx.add(log_ruling(ruling, tx.mint, store=ctx.store, staged=tx.events, turn_id=ctx.turn_id, rule_id="12.3.3"))
+        out.review_flag = True
+    names = _names(ctx, list(tx.state.entities))
+    res = screen_draft(text, flags={"intent_acknowledged": True, "next_step_exists": True}, record=record,
+                       safety=screen_safety(text, tx.state), pause_blocks_text=[b.text for b in pause_blocks],
+                       rules=ctx.rules, names=names)
+    out.screen = res.screen
+    out.fiction = text
+    out.verdicts = [v for s in final for v in s.verdicts]  # the delivered sentences' verdicts
+    out.draft_versions[-1]["screen"] = res.reasons
+    out.draft_versions[-1]["stats"] = dict(turn.stats, rounds=rounds)
+    return out
 
 
 def _fallback(ctx: TurnContext, record: AdjudicationRecord, out: NarrationResult, verdicts: Sequence[Verdict],
               reasons: Sequence[str], fallback_text: str | None) -> NarrationResult:  # rule: 12.3.3
-    """The plain fallback (12.3.3): from the record only, `review_flag`, a `rule_conflict` ruling logged."""
+    """The plain fallback (12.3.3): no drafted sentence passed, so every must-name item is rendered; `review_flag`,
+    a `rule_conflict` ruling logged."""
     tx = ctx.need_tx()
     st = tx.state
     # the name as the PC knows it ("the wagon driver" until told), never an unlearned name (12.10.2, P-096)
-    names = {eid: narrator_role.name_of(st, eid) for eid in st.entities if eid not in st.seals}
-    fb = plain_fallback(record, names=names, verdicts=verdicts)
+    fb = plain_fallback(record, names=narrator_role.names_for(st), verdicts=verdicts)
     ruling = fb.ruling.model_copy(update={"result": {**fb.ruling.result, "reasons": list(reasons)}})
     tx.add(log_ruling(ruling, tx.mint, store=ctx.store, staged=tx.events, turn_id=ctx.turn_id, rule_id="12.3.3"))
     out.fiction = fb.fiction if fallback_text is None else fallback_text
     out.fallback_used = True
     out.review_flag = fb.review_flag
-    out.verdicts = _dump(verdicts)
     out.draft_versions.append({"kind": "fallback", "text": out.fiction, "mentions": [], "claims": [],
                                "verdicts": [], "reasons": list(reasons)})
     if not out.screen:

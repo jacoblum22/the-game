@@ -52,6 +52,10 @@ def test_reach_note_is_a_sentence_not_a_raw_ladder_line() -> None:
     assert _reach_sentence("great: more than asked (help, information, a favor)").startswith("Better than that")
 
 
+def _fiction(out: dict) -> str:  # type: ignore[type-arg]
+    return " ".join(x["text"] for x in out["sentences"])
+
+
 def test_record_line_gives_the_reach_rung_and_words_without_ids() -> None:
     rec = AdjudicationRecord(turn_id="turn.1", pc="pc.wren")
     rec.beats = [BeatEntry(beat_id="beat.1", restatement="You climb the wall", degree="success", reach="limited",
@@ -61,7 +65,7 @@ def test_record_line_gives_the_reach_rung_and_words_without_ids() -> None:
     text = record_text(WorldState(), rec, rules=RULES)
     assert "delivered: limited: partway (half the height, a ledge)" in text
     assert "S2" not in text and "cond." not in text
-    fiction = OfflineModel().propose(Role.NARRATOR, {"type": "object"}, Packet(message=text))["fiction"]
+    fiction = _fiction(OfflineModel().propose(Role.NARRATOR, {"type": "object"}, Packet(message=text)))
     assert "You get partway: half the height, a ledge." in fiction and "Partway (" not in fiction
 
 
@@ -161,9 +165,12 @@ def test_claim_restating_the_records_incident_is_supported() -> None:
     rec.notes = ["the inciting incident: a rider dies in the market with a message for someone who is not there"]
     claim = {"sentence": 1, "subject": "unknown", "class": "harm_condition", "predicate": "dies",
              "value": "in the market with a message for someone who is not there", "asserts_change": True}
-    assert check_claims([claim], WorldState(), rec, rules=RULES)[0].verdict == "supported"
+    from engine.dm.handles import items
+
+    cited = {1: items(rec, names={})}  # spec 006: the sentence cites the incident's line
+    assert check_claims([claim], WorldState(), rec, rules=RULES, cited=cited)[0].verdict == "supported"
     other = {**claim, "predicate": "stabs", "value": "the mayor with a knife in the hall"}
-    assert check_claims([other], WorldState(), rec, rules=RULES)[0].verdict != "supported"
+    assert check_claims([other], WorldState(), rec, rules=RULES, cited=cited)[0].verdict != "supported"
 
 
 def test_opening_keeps_the_inciting_incident_and_offers_the_leads(tmp_path: Path) -> None:
@@ -184,7 +191,7 @@ def test_offline_framer_changes_approach_when_asked() -> None:
 
 def test_offline_narrator_words_a_refused_rest() -> None:
     msg = "ADJUDICATION RECORD:\n- note: a long rest is not possible now: one long rest a day"
-    fiction = OfflineModel().propose(Role.NARRATOR, {"type": "object"}, Packet(message=msg))["fiction"]
+    fiction = _fiction(OfflineModel().propose(Role.NARRATOR, {"type": "object"}, Packet(message=msg)))
     assert fiction == "There is no rest to be had yet. What do you do?"
 
 

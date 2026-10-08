@@ -18,9 +18,12 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, Field
 
+from engine.audit.declare import DeclaredSentence, parse_output
 from engine.dm.adjudication import AdjudicationRecord, BeatEntry
 from engine.dm.context import TurnContext
-from engine.dm.packet import build_packet, scene_setting
+from engine.dm.handles import RecordItem
+from engine.dm.handles import items as handle_items
+from engine.dm.packet import build_packet, scene_setting, view_ctx, view_for
 from engine.dm.player_text import clean
 from engine.dm.roles.prompts import load_prompt
 from engine.dm.schemas import build_schema, schema_context
@@ -46,18 +49,23 @@ DEGREE_WORDS = {"critical_success": "critical success (better than hoped)", "suc
                 "failure": "failure (the world answers)", "critical_failure": "critical failure (it goes badly)"}
 
 
-class Redraft(BaseModel):
-    """What a redraft (D) is told: the previous draft's sentences and what failed, with the store's values."""
+class Repair(BaseModel):
+    """A narrow redraft (12.3.3): only the failing sentences, each with its failure and the store's value to use,
+    plus the must-name lines no sentence cites."""
 
-    previous: list[str] = Field(default_factory=list)
-    failures: list[str] = Field(default_factory=list)  # one line per failing verdict or screen reason
-    settled: list[str] = Field(default_factory=list)  # T8/T9 answers to write to ("the door: locked")
+    failing: dict[str, str] = Field(default_factory=dict)  # sentence index -> its text
+    reasons: dict[str, list[str]] = Field(default_factory=dict)  # sentence index -> "why; use: value" lines
+    missing: list[str] = Field(default_factory=list)  # "R2" handles, or "answer: <the player's question>"
 
 
 class NarratorDraft(BaseModel):
-    fiction: str = ""
-    mentions: list[dict[str, Any]] = Field(default_factory=list)
+    sentences: list[DeclaredSentence] = Field(default_factory=list)
+    repairs: list[tuple[str, DeclaredSentence]] = Field(default_factory=list)  # (replaces, sentence) for a repair
     call_id: str | None = None
+
+    @property
+    def fiction(self) -> str:
+        return " ".join(s.text for s in self.sentences)
 
 
 def name_of(state: WorldState, eid: str | None, pc: str | None = None) -> str:
@@ -79,6 +87,8 @@ def name_of(state: WorldState, eid: str | None, pc: str | None = None) -> str:
 
 def _beat_line(state: WorldState, b: BeatEntry, pc: str | None, paused: bool = False,
                rules: Any = None) -> str:  # rule: 12.14.12
+    """The beat's own record line: what was tried and its result (its costs, harm, conditions, positions and what
+    it delivered are lines of their own, each with a handle)."""
     # an aside in brackets ("(Her claim ... is context only.)") is the Framer's note, not something to narrate
     restated = re.sub(r"\s*\([^()]*\)", "", b.restatement).strip().rstrip(".")
     bits = [f"beat: {restated}"]
@@ -102,18 +112,8 @@ def _beat_line(state: WorldState, b: BeatEntry, pc: str | None, paused: bool = F
     words = [w for w in (clean(x, rules) for x in b.reach_words) if not re.search(r"\d", w)]  # 12.14.4
     if words:  # the reach rung, then the anchor's ladder line for it in words (the rung alone says nothing new)
         bits.append(f"delivered: {b.reach or 'as far as it goes'}: " + "; ".join(words))
-    for c in b.costs:
-        bits.append(f"cost paid: {c.form or c.menu_id.removeprefix('cost.').replace('_', ' ')}")
-    for h in b.harm:
-        bits.append(f"harm to {name_of(state, h.target, pc)}: {h.words}")
-    if b.conditions:
-        bits.append("visible conditions: " + "; ".join(b.conditions))
-    for p in b.positions:
-        bits.append(f"position: {name_of(state, p.entity, pc)} {p.words}")
     if b.targets:
         bits.append("acting on: " + ", ".join(name_of(state, t, pc) for t in b.targets))
-    if b.learned:  # 12.10.5: what the success delivered; the PC is told or sees it, so the fiction names it
-        bits.append("the PC learns (say it plainly in the fiction): " + "; ".join(b.learned))
     if "verb.talk" in b.approach_words and b.targets and (b.degree in ("success", "critical_success")
                                                           or b.success_at_cost):  # P-120, T-15-5
         bits.append("it worked: the one asked answers what was asked (never a refusal, a dodge or 'not now')")
@@ -225,10 +225,58 @@ def _reading_lines(state: WorldState, record: AdjudicationRecord, player_message
     return lines
 
 
-def record_text(state: WorldState, record: AdjudicationRecord, *, player_message: str = "",
-                purpose: Purpose = "turn", rules: Any = None) -> str:  # rule: 12.14.12
-    """The adjudication record in words for THIS MESSAGE (names, never ids or numbers; 12.14.4)."""
+def names_for(state: WorldState) -> dict[str, str]:
+    """{id: name as the PC knows it} for every unsealed entity (12.10.2): what rendered lines use."""
+    return {eid: name_of(state, eid) for eid in state.entities if eid not in state.seals}
+
+
+def record_items(state: WorldState, record: AdjudicationRecord) -> list[RecordItem]:  # rule: 12.14.12
+    return handle_items(record, names=names_for(state))
+
+
+def _item_words(state: WorldState, record: AdjudicationRecord, it: RecordItem, rules: Any) -> str:
+    # rule: 12.14.12
+    """One record line in words for the Narrator (names, never ids or numbers; 12.14.4)."""
     pc = record.pc
+    if it.kind == "scene":
+        return f"a new scene opens: {record.scene.header or 'framed now'}; frame it first (12.4.3)"
+    if it.kind == "beat" and it.beat is not None:
+        b = record.beats[it.beat]
+        paused = record.pause is not None and it.beat == len(record.beats) - 1 and not b.degree
+        return _beat_line(state, b, pc, paused=paused, rules=rules).removeprefix("- ")
+    b = record.beats[it.beat] if it.beat is not None else None
+    if it.kind == "cost" and b is not None:
+        c = b.costs[it.index]
+        return f"cost paid: {c.form or c.menu_id.removeprefix('cost.').replace('_', ' ')}"
+    if it.kind == "harm" and b is not None:
+        h = b.harm[it.index]
+        return f"harm to {name_of(state, h.target, pc)}: {h.words}"
+    if it.kind == "condition":
+        return f"visible condition: {it.text}"
+    if it.kind == "position" and b is not None:
+        p = b.positions[it.index]
+        return f"position: {name_of(state, p.entity, pc)} {p.words}"
+    if it.kind == "learned":  # 12.10.5: what the success delivered; the PC is told or sees it
+        return f"the PC learns (say it plainly in the fiction): {it.text}"
+    if it.kind == "oracle":
+        o = record.oracle[it.index]
+        return f"question \"{o.question}\": the answer is {o.answer}"
+    if it.kind == "npc":
+        a = record.npc_actions[it.index]
+        return f"{name_of(state, a.npc, pc)} acts: {a.action}" + _withheld(state, a.npc, a.action, pc)
+    if it.kind == "activity":
+        a = record.activities[it.index]
+        return f"{name_of(state, a.npc, pc)} is {a.activity} (what they are doing this scene; say only this of it)"
+    if it.kind == "omen":
+        return f"an omen to show as a trace, never explained: {it.text}"
+    return f"note: {it.text}"
+
+
+def record_text(state: WorldState, record: AdjudicationRecord, *, player_message: str = "",
+                purpose: Purpose = "turn", rules: Any = None,
+                items: Sequence[RecordItem] | None = None) -> str:  # rule: 12.14.12
+    """The adjudication record in words for THIS MESSAGE (names, never ids or numbers; 12.14.4), one line per
+    record item with its handle (`- R3 MUST: ...`), guidance lines without one."""
     lines = [PURPOSE_LINES[purpose]]
     if rules is not None:
         limit = rules.pacing.get("narration", {}).get(LIMIT_KEYS[purpose])
@@ -236,30 +284,19 @@ def record_text(state: WorldState, record: AdjudicationRecord, *, player_message
             lines.append(f"Length: at most {limit} words of fiction.")
     if player_message:
         lines.append(f'THE PLAYER\'S MESSAGE: "{player_message}"')
-    lines.append("ADJUDICATION RECORD (narrate exactly this, no better and no worse):")
+    lines.append("ADJUDICATION RECORD (narrate exactly this, no better and no worse; cite each line you narrate by "
+                 "its handle in `refs`; every line marked MUST needs a sentence that cites it):")
     for p in record.parts:
         lines.append(f"- part [{p.cls}] \"{p.text}\"" + (f" ({p.handled})" if p.handled else ""))
     if record.scene.ended and not record.scene.started:
         lines.append("- the scene ends here")
-    if record.scene.started:
-        lines.append(f"- a new scene opens: {record.scene.header or 'framed now'}; frame it first (12.4.3)")
-    last = len(record.beats) - 1
-    lines += [_beat_line(state, b, pc, paused=record.pause is not None and i == last and not b.degree, rules=rules)
-              for i, b in enumerate(record.beats)]
-    for o in record.oracle:
-        lines.append(f"- question \"{o.question}\": the answer is {o.answer}")
-    for a in record.npc_actions:
-        lines.append(f"- {name_of(state, a.npc, pc)} acts: {a.action}" + _withheld(state, a.npc, a.action, pc))
+    its = items if items is not None else record_items(state, record)
+    for it in its:
+        lines.append(f"- {it.handle}{' MUST' if it.must_name else ''}: {_item_words(state, record, it, rules)}")
     lines += _speech_line(state, record)
     lines += _reading_lines(state, record, player_message)
-    for om in record.omens:
-        if om.omen:
-            lines.append(f"- an omen to show as a trace, never explained: {om.omen}")
-    for n in record.notes:
-        if n.lstrip().startswith("[WARNING"):
-            lines.append("- the engine shows a lethal warning: make the danger plain in the fiction")
-        elif not n.startswith(("session move", "safety:", "queued for")):
-            lines.append(f"- note: {n}")
+    if any(n.lstrip().startswith("[WARNING") for n in record.notes):
+        lines.append("- the engine shows a lethal warning: make the danger plain in the fiction")
     if record.pause is not None:
         lines.append(f"- the turn stops at a pause ({record.pause.kind}): stop at the moment before it; the "
                      "engine adds the block")
@@ -376,17 +413,16 @@ def _repeated_lines(deliveries: Sequence[str], low: Sequence[tuple[str, str]]) -
     return out
 
 
-def redraft_text(r: Redraft) -> str:  # rule: 12.3.3
-    lines = ["A REDRAFT. The previous draft, sentences numbered from 0:"]
-    lines += [f"[{i}] {s}" for i, s in enumerate(r.previous)]
-    if r.failures:
-        lines.append("FAILING VERDICTS (each claim with its fix; repair exactly these):")
-        lines += [f"- {f}" for f in r.failures]
-        lines.append("Keep every other sentence exactly as written, atmosphere included. Do not shorten the "
-                     "passage, and do not drop detail that passed.")
-    if r.settled:
-        lines.append("SETTLED NOW (write to these answers):")
-        lines += [f"- {s}" for s in r.settled]
+def repair_text(r: Repair) -> str:  # rule: 12.3.3
+    """THIS MESSAGE's repair section: the failing sentences only (the rest of the draft stands and is not shown)."""
+    lines = ["A REPAIR. Only these sentences failed; every other sentence of your draft stands as written. For each, "
+             "write one replacement with `replaces` set to its number, fixing exactly what is named and keeping its "
+             "voice and detail; an empty `text` drops it."]
+    for i, text in r.failing.items():
+        lines.append(f"[{i}] {text}")
+        lines += [f"    - {why}" for why in r.reasons.get(i, [])]
+    if r.missing:
+        lines.append("MISSING (add one sentence for each, `replaces` = add, citing its handle): " + "; ".join(r.missing))
     return "\n".join(lines)
 
 
@@ -401,31 +437,55 @@ def _freshness(ctx: TurnContext) -> list[str]:  # rule: 12.14.11
                            per_entity=int(cfg.get("images_per_entity_remembered", 10)))
 
 
+def narrator_mode(ctx: TurnContext) -> str:
+    """The output shape: declared sentences, or the fallback `fiction` + declarations (config `narrator_schema`)."""
+    return "fiction" if (ctx.config or {}).get("narrator_schema") == "fiction" else "sentences"
+
+
 def draft(ctx: TurnContext, record: AdjudicationRecord, *, player_message: str = "",
           exchanges: Sequence[str | tuple[str, str]] = (), purpose: Purpose = "turn",
-          redraft: Redraft | None = None, extra: Sequence[str] = ()) -> NarratorDraft:  # rule: PR-12-1
-    """One Narrator call (T7, or D with `redraft`). `extra`: lines appended to THIS MESSAGE (a recap's state
-    summary). Raises ModelInvalid when two answers fail the schema (the caller falls back, 12.3.3)."""
+          repair: Repair | None = None, extra: Sequence[str] = (),
+          items: Sequence[RecordItem] | None = None) -> NarratorDraft:  # rule: PR-12-1
+    # rule: 12.3.1
+    """One Narrator call (T7, or a narrow repair with `repair`, 12.3.3). The schema's `refs` are this turn's handles
+    then the view's fact ids, `about` the scene scope (closed lists built from the packet). `extra`: lines
+    appended to THIS MESSAGE (a recap's state summary). Raises ModelInvalid when two answers fail the schema (the
+    caller falls back, 12.3.3)."""
     st = ctx.state
-    sctx = schema_context(st, ctx.rules)
-    schema = build_schema(Role.NARRATOR, sctx)
+    its = list(items) if items is not None else record_items(st, record)
     triggers = get_active_triggers(st, ctx.rules)
     mode = st.scene.mode if st.scene else None
     cards = load_cards_for(Role.NARRATOR, scene_situation_tags(st, ctx.rules), mode, triggers, rules=ctx.rules)
-    msg = [record_text(st, record, player_message=player_message, purpose=purpose, rules=ctx.rules)]
-    if purpose in ("turn", "scene_open", "opening") and (setting := scene_setting(st)):
-        msg.append(setting)
-    if purpose in ("turn", "scene_open"):
-        msg += _freshness(ctx)
-    msg.extend(extra)
-    if redraft is not None:
-        msg.append(redraft_text(redraft))
-    packet = build_packet(Role.NARRATOR, instructions=load_prompt("narrator"), cards=cards, view=st,
-                          exchanges=list(exchanges), message="\n".join(msg), triggers=triggers, rules=ctx.rules)
+    msg = [record_text(st, record, player_message=player_message, purpose=purpose, rules=ctx.rules, items=its)]
+    if repair is None:
+        if purpose in ("turn", "scene_open", "opening") and (setting := scene_setting(st)):
+            msg.append(setting)
+        if purpose in ("turn", "scene_open"):
+            msg += _freshness(ctx)
+        msg.extend(extra)
+    else:
+        msg.append(repair_text(repair))
+    message = "\n".join(msg)
+    # the enums come from the view this packet shows (its facts and entities, spotlight included), so nothing
+    # outside the packet can be cited (12.3.1)
+    view = view_for(Role.NARRATOR, st, view_ctx(message, exchanges, plain=False))
+    sctx = schema_context(st, ctx.rules)
+    sctx = sctx.model_copy(update={
+        "narrator_refs": [*(it.handle for it in its), *re.findall(r"(?m)^\s*(fact\.\d+) about ", view)],
+        "scene_ids": list(dict.fromkeys([*sctx.scene_ids, *(i for i in re.findall(r"(?m)^([a-z]+\.[\w.]+): ", view)
+                                                             if i in st.entities)])),
+        "narrator_mode": narrator_mode(ctx), "repair_ids": list(repair.failing) if repair is not None else [],
+        "repair": repair is not None})
+    schema = build_schema(Role.NARRATOR, sctx)
+    packet = build_packet(Role.NARRATOR, instructions=load_prompt("narrator"), cards=cards, view=view,
+                          exchanges=list(exchanges), message=message, triggers=triggers, rules=ctx.rules)
     res = call_role(ctx.model, Role.NARRATOR, schema, packet, turn_id=ctx.turn_id, recorder=ctx.record_call)
     data = dict(res.data)
-    return NarratorDraft(fiction=str(data.get("fiction") or "").strip(), mentions=list(data.get("mentions") or []),
-                         call_id=res.record.call_id)
+    if repair is not None:
+        reps = [(str(r.get("replaces")), DeclaredSentence.model_validate(r)) for r in data.get("repairs") or []]
+        return NarratorDraft(repairs=reps, call_id=res.record.call_id)
+    return NarratorDraft(sentences=parse_output(data), call_id=res.record.call_id)
 
 
-__all__ = ["NarratorDraft", "Purpose", "Redraft", "draft", "freshness_lines", "name_of", "record_text", "redraft_text"]
+__all__ = ["NarratorDraft", "Purpose", "Repair", "draft", "freshness_lines", "name_of", "names_for",
+           "narrator_mode", "record_items", "record_text", "repair_text"]

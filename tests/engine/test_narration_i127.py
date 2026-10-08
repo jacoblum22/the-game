@@ -15,16 +15,15 @@ import pytest
 from engine.audit.claims import Claim, check_claims
 from engine.data.loader import load_rules
 from engine.dm.adjudication import AdjudicationRecord
-from engine.dm.narration import _mention_name
 from engine.dm.packet import render_view, scene_setting
 from engine.dm.turn import play_turn
 from engine.llm.base import Role
 from tests.engine.test_turn_adjudication import setup
-from tests.engine.test_turn_narration import calls, chk, claim, look_model, narr
+from tests.engine.test_turn_narration import _decl, _must, calls, chk, claim, look_model, narr, rep
 
 # "set the scene" turn: 5 sentences incl. the prompt; claims as the Checker returned them (turn 2, row 10)
 RECORDED_SCENE = ("Morning light settles cold across the village. You stand where the tracks meet at the gate. "
-                  "Behind you, woodsmoke rises thin from the rooftops of Ashgate. "
+                  "Behind you, woodsmoke rises thin from the rooftops of the village. "  # "Ashgate" was that world's: a name the dock world lacks fails 12.3.1a
                   "Beyond the boundary pale, the north road lies open between rough banks, quiet under the early sky. "
                   "What do you do?")
 
@@ -32,12 +31,22 @@ RECORDED_SCENE = ("Morning light settles cold across the village. You stand wher
 def _scene_claims(dock: Any, hour: str) -> list[dict[str, Any]]:
     return [claim(0, "unknown", "location_time", "time_of_day", hour),  # the store's own hour: atmosphere may not contradict it
             claim(1, dock.pc, "position", "location", "where the tracks meet at the gate"),
-            claim(2, "unknown", "existence", "woodsmoke", "rises thin from the rooftops of Ashgate"),
+            claim(2, "unknown", "existence", "woodsmoke", "rises thin from the rooftops of the village"),
             claim(3, "unknown", "existence", "north road", "lies open between rough banks, quiet under the early sky")]
 
 
+def _declared_scene(schema: Any, packet: Any) -> dict[str, Any]:
+    """The recorded prose as declared sentences (spec 006): atmosphere flagged, the two features declared new."""
+    from engine.audit.declare import split
+
+    s = split(RECORDED_SCENE)
+    feat = lambda n: [{"element_kind": "feature", "name": n, "ordinary": True, "implied": []}]  # noqa: E731
+    return {"sentences": [_decl(s[0], atmosphere=True), _decl(s[1], _must(packet)),
+                          _decl(s[2], new=feat("woodsmoke")), _decl(s[3], new=feat("north road")), _decl(s[4])]}
+
+
 def test_recorded_scene_prose_survives_in_one_pass(tmp_path: Path) -> None:
-    model = look_model(narrator=[narr(RECORDED_SCENE)])
+    model = look_model(narrator=[_declared_scene])
     dock, ctx = setup(tmp_path, model)
     hour = ("morning", "afternoon", "evening", "night")[ctx.store.state.time.now.watch]
     model.push(Role.CHECKER, chk(*_scene_claims(dock, hour)))
@@ -48,22 +57,26 @@ def test_recorded_scene_prose_survives_in_one_pass(tmp_path: Path) -> None:
     assert {"woodsmoke", "north road"} <= names  # written on mention at check time, not cut
 
 
-@pytest.mark.parametrize("claim_args", [
-    ("existence", "clue", "a scrap of paper that points to the smugglers' cache"),
-    ("existence", "hidden door", "a hidden door behind the shelves with treasure behind it"),
-    ("knowledge", "knows", "the old man knows about the cult"),
-    ("existence", "trap", "a snare across the path"),
-    ("existence", "bandit", "a bandit lurks by the road"),
+@pytest.mark.parametrize("kind,ordinary,value", [
+    ("clue", True, "a scrap of paper that points to the smugglers' cache"),
+    ("item", False, "a hidden door behind the shelves with treasure behind it"),
+    ("person", False, "an old man who knows about the cult"),
+    ("hazard", True, "a snare across the path"),
+    ("adversary", True, "a bandit lurking by the road"),
 ])
-def test_real_inventions_are_still_cut(tmp_path: Path, claim_args: tuple[str, str, str]) -> None:
-    cls, predicate, value = claim_args
-    model = look_model(narrator=[narr("The quay is quiet. Something is wrong here. What do you do?")])
+def test_real_inventions_are_still_cut(tmp_path: Path, kind: str, ordinary: bool, value: str) -> None:
+    """12.14.13: a declared T2 element (or one of no listed kind) no record line delivers is cut by code."""
+    def draft(schema: Any, packet: Any) -> dict[str, Any]:
+        new = [{"element_kind": kind, "name": value, "ordinary": ordinary, "implied": []}]
+        return {"sentences": [_decl("The quay is quiet.", _must(packet)), _decl("Something is wrong here.", new=new),
+                              _decl("What do you do?")]}
+    model = look_model(narrator=[draft])
     dock, ctx = setup(tmp_path, model)
-    model.push(Role.CHECKER, chk(claim(1, "unknown", cls, predicate, value)))
+    model.push(Role.CHECKER, chk())
     out = play_turn(ctx, "I look over the quay.")
-    first = out.turn_record.draft_versions[0]["verdicts"][0]
-    assert (first["verdict"], first["fix"]) == ("new_element", "cut"), first
-    assert "Something is wrong here." not in out.response.fiction
+    assert out.turn_record.draft_versions[0]["checks"]["1"][0]["fix"] == "cut"
+    assert out.response.fiction == "The quay is quiet. What do you do?"
+    assert len(calls(model, Role.NARRATOR)) == 1  # a cut is code's, no repair call
     assert value not in {e.name for e in ctx.store.state.entities.values()}
 
 
@@ -85,7 +98,7 @@ def test_unknown_subject_that_acts_or_changes_is_still_cut() -> None:
 def test_redraft_names_claims_and_never_asks_for_shorter(tmp_path: Path) -> None:
     bad = "Tam Harlan, a woman, watches you. The fog lies low on the water. What do you do?"
     good = "Tam Harlan, a man, watches you. The fog lies low on the water. What do you do?"
-    model = look_model(narrator=[narr(bad), narr(good)])
+    model = look_model(narrator=[narr(bad), lambda s, p: rep(0, "Tam Harlan, a man, watches you.", _must(p))])
     dock, ctx = setup(tmp_path, model)
     model.push(Role.CHECKER, chk(claim(0, dock.ferryman, "identity", "gender", "woman")),
                chk(claim(0, dock.ferryman, "identity", "gender", "man")))
@@ -94,7 +107,7 @@ def test_redraft_names_claims_and_never_asks_for_shorter(tmp_path: Path) -> None
     msg = calls(model, Role.NARRATOR)[1].message
     assert "Tam Harlan, a woman" in msg and "contradicted" in msg and "he/him" in msg
     low = msg.lower()
-    assert "keep every other sentence" in low or "keep every passing sentence" in low
+    assert "every other sentence of your draft stands as written" in low
     assert not any(w in low for w in ("shorten the", "simplify", "play it safe", "be safe")) or "do not shorten" in low
 
 
@@ -113,13 +126,6 @@ def test_descriptive_keys_are_not_lost_to_the_view_cap() -> None:
     data = {f"k{i:02d}": i for i in range(20)} | {"desc": "a village where two roads cross"}
     view = {"entities": [{"id": "loc.x", "name": "Ashgate", "data": data}]}
     assert "desc: a village where two roads cross" in render_view(view)
-
-
-def test_mention_name_prefers_the_noun() -> None:
-    mk = lambda **k: Claim.model_validate({"subject": "unknown", **k})  # noqa: E731
-    assert _mention_name(mk(**{"class": "existence", "predicate": "woodsmoke", "value": "rises thin"})) == "woodsmoke"
-    assert _mention_name(mk(**{"class": "existence", "predicate": "present", "value": "a traveler near the post"})) \
-        == "a traveler near the post"
 
 
 def _empty_state() -> Any:

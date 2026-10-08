@@ -830,93 +830,127 @@ def _narrator(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:
     asked = {m.group(1).rstrip("?") for m in re.finditer(r'(?m)^- question "(.*)": the answer is', msg)}
     lines: list[str] = []
     replies: list[str] = []  # speech is answered after what happened
+    handle_of: dict[int, str] = {}  # line index -> the record handle it narrates (spec 006: refs)
+    reply_handle: dict[str, str] = {}
     paused = False
-    for raw in msg.splitlines():
+    record = msg.split("A REPAIR.", 1)[0]
+    for raw in record.splitlines():
         line = raw.strip()
-        if line.startswith("- a new scene opens:"):
-            head = line.split(":", 1)[1].split("; frame it")[0].strip()
-            where, _, when = head.partition(", ")
-            lines.append(f"It is {when} at {where}." if when else _sentence(head))
-        elif line.startswith("- note: the inciting incident:"):
-            lines.append(_sentence(line.split("incident:", 1)[1]))
-        elif line.startswith("- beat:"):
-            bits = dict(b.split(": ", 1) for b in line[2:].split("; ") if ": " in b)
-            res = bits.get("result")
-            undone = bits.get("not done") is not None
-            if undone:  # refused, redirected, withdrawn: the act did not happen (the block says why)
-                lines.append(_sentence("You size up how to " + re.sub(r"^you\s+", "", bits.get("beat", ""), flags=re.I)))
-                continue
-            lines.append(_sentence(bits.get("beat", "")))
-            learned = re.search(r"the PC learns \([^)]*\): (.*)$", line)
-            if learned:
-                lines += [_sentence(x.replace(" — ", " ", 1)) for x in learned.group(1).split("; ")]
-            verb = (primary_verb(bits.get("beat", "")) or ("", []))[0]
-            looks = verb == "verb.observe"
-            if verb == "verb.talk" and not res:  # words to someone: they answer, or no one is there to
-                who = named_entity(bits.get("beat", ""), {k: [v.lower()] for k, v in npcs.items()})
-                name = npcs[who[0]] if who else next(iter(npcs.values()), None)
-                replies.append(f"{name} hears you out, and answers in kind." if name else "No one here answers.")
-                continue
-            if looks and (not res or "success" in res):
-                lines += _look(packet.view, npcs)
-                if not res:
-                    continue
-            if res:
-                if "a near miss" in res and "- the turn stops at a pause" not in msg:
-                    res = res.replace("a near miss", "")  # the near miss was settled: the failure stands
-                lines.append(next((t for k, t in _RESULTS if k in res), "It is done."))
-            elif "not resolved yet" in line:
-                paused = True
-            if bits.get("cost paid"):
-                lines.append(_sentence(bits["cost paid"]))
-            if bits.get("delivered") and res and "success" in res:
-                lines.append(_reach_sentence(bits["delivered"]))
-        elif line.startswith("- question "):
-            m = re.match(r'- question "(.*)": the answer is (.*)$', line)
-            if m:
-                ans = m.group(2).strip().rstrip(".")
-                lines.append(_ANSWERS.get(ans.lower(), _sentence(f"The answer: {ans}")))
-        elif re.match(r"- .+ acts: ", line):
-            who, act = line[2:].split(" acts: ", 1)
-            lines.append(_npc_act(who, act, "\n".join(packet.exchanges)))
-        elif re.match(r"- note: an? [\w ]*rest is not possible now", line):
-            lines.append("There is no rest to be had yet.")
-        elif line.startswith("- note: the character "):
-            note = line.removeprefix("- note: the character ")
-            lines.append(_sentence("you " + re.sub(r"\b(\w+?)s\b(?= and | rested|$| [a-z])", r"\1", note, count=2)))
-        elif line.startswith("- an omen"):
-            lines.append(_sentence(line.split(":", 1)[1]))
-        elif line.startswith("- part [FICTION_QUESTION]"):
-            q = line.split("]", 1)[1].split('"')[1] if '"' in line else ""
-            if q and q.rstrip("?") not in asked:
-                lines += _wh_answer(q, packet.view, npcs)
-        elif line.startswith("- part [SPEECH]"):
-            said = line.split("]", 1)[1]
-            who = named_entity(said, {k: [v.lower(), *v.lower().split()[:1]] for k, v in npcs.items()})
-            name = npcs[who[0]] if who else next(iter(npcs.values()), None)
-            if name and not any(ln.startswith(name) for ln in replies):
-                replies.append(f"{name} hears you out, and answers in kind.")
-        elif line.startswith("- the turn stops at a pause"):
+        hm = re.match(r"^- (R\d+)(?: MUST)?: (.*)$", line)
+        handle = hm.group(1) if hm else None
+        if hm:
+            line = "- " + hm.group(2)
+        start, n_replies = len(lines), len(replies)
+        _narrate_line(line, lines, replies, msg, packet, npcs, asked)
+        if line.startswith(("- the turn stops at a pause", "- beat:")) and (
+                line.startswith("- the turn stops") or "not resolved yet" in line):
             paused = True
-        elif "STATE SUMMARY" in msg and re.match(r"- .+ is (?:at .+, )?in the \w+$", line):  # a recap (12.5.3)
-            lines.append(_sentence("You are " + line.split(" is ", 1)[1]))
-        elif "STATE SUMMARY" in msg and line.startswith("- earlier: "):
-            lines.append(_sentence(line.removeprefix("- earlier: ")))
-        elif "STATE SUMMARY" in msg and line.startswith("- an open thread: ") and not any(
-                ln.startswith("Still open") for ln in lines):
-            lines.append(_sentence("Still open: " + re.split(r"(?<=[.!?])\s", line.split(": ", 1)[1])[0]))
-    lines += list(dict.fromkeys(r for r in replies if not any(ln.startswith(r.split(" hears")[0]) for ln in lines)))
-    if "A REDRAFT." in msg:  # keep the previous draft minus the sentences the verdicts failed (12.3.3)
-        prev = re.findall(r"(?m)^\[(\d+)\] (.*)$", msg.split("A REDRAFT.", 1)[1])
-        bad = {int(n) for n in re.findall(r"(?m)^- sentence (\d+) ", msg)}
-        kept = [t for n, t in prev if int(n) not in bad]
-        if kept:
-            return {"fiction": " ".join(kept), "mentions": []}
-    if not lines:
-        lines.append("The moment holds.")
+        for k in range(start, len(lines)):
+            if handle:
+                handle_of[k] = handle
+        for r in replies[n_replies:]:
+            if handle:
+                reply_handle[r] = handle
+    said = list(dict.fromkeys(r for r in replies if not any(ln.startswith(r.split(" hears")[0]) for ln in lines)))
+    pairs = [(t, handle_of.get(k)) for k, t in enumerate(lines)] + [(r, reply_handle.get(r)) for r in said]
+    pairs = [(t, h) for t, h in pairs if t]
+    if "A REPAIR." in msg:  # drop the failing sentences; add one for each missing must-name line (12.3.3)
+        rep = msg.split("A REPAIR.", 1)[1]
+        bad = re.findall(r"(?m)^\[(\d+)\] ", rep)
+        missing = set(re.findall(r"\b(R\d+)\b", rep.split("MISSING", 1)[1])) if "MISSING" in rep else set()
+        repairs = [{"replaces": n, "text": "", "refs": [], "about": [], "new": [], "atmosphere": False} for n in bad]
+        repairs += [{"replaces": "add", "text": t, "refs": [h], "about": [], "new": [], "atmosphere": False}
+                    for t, h in pairs if h in missing]
+        return {"repairs": repairs}
+    if not pairs:
+        pairs.append(("The moment holds.", None))
     if not paused:
-        lines.append("What do you do?")
-    return {"fiction": " ".join(x for x in lines if x), "mentions": []}
+        pairs.append(("What do you do?", None))
+    sents = [{"text": t, "refs": [h] if h else [], "about": [], "new": [], "atmosphere": False} for t, h in pairs]
+    if "fiction" in (schema.get("properties") or {}):  # the fallback shape (B risk 2)
+        return {"fiction": " ".join(s["text"] for s in sents),
+                "declarations": [{"sentence": str(i), **{k: v for k, v in s.items() if k != "text"}}
+                                 for i, s in enumerate(sents)]}
+    return {"sentences": sents}
+
+
+def _narrate_line(line: str, lines: list[str], replies: list[str], msg: str, packet: Packet,
+                  npcs: dict[str, str], asked: set[str]) -> None:
+    """One record line of THIS MESSAGE in plain words (appended to `lines`, or a reply to `replies`)."""
+    if line.startswith("- a new scene opens:"):
+        head = line.split(":", 1)[1].split("; frame it")[0].strip()
+        where, _, when = head.partition(", ")
+        lines.append(f"It is {when} at {where}." if when else _sentence(head))
+    elif line.startswith("- note: the inciting incident:"):
+        lines.append(_sentence(line.split("incident:", 1)[1]))
+    elif line.startswith("- beat:"):
+        bits = dict(b.split(": ", 1) for b in line[2:].split("; ") if ": " in b)
+        res = bits.get("result")
+        undone = bits.get("not done") is not None
+        if undone:  # refused, redirected, withdrawn: the act did not happen (the block says why)
+            lines.append(_sentence("You size up how to " + re.sub(r"^you\s+", "", bits.get("beat", ""), flags=re.I)))
+            return
+        lines.append(_sentence(bits.get("beat", "")))
+        learned = re.search(r"the PC learns \([^)]*\): (.*)$", line)
+        if learned:
+            lines += [_sentence(x.replace(" — ", " ", 1)) for x in learned.group(1).split("; ")]
+        verb = (primary_verb(bits.get("beat", "")) or ("", []))[0]
+        looks = verb == "verb.observe"
+        if verb == "verb.talk" and not res:  # words to someone: they answer, or no one is there to
+            who = named_entity(bits.get("beat", ""), {k: [v.lower()] for k, v in npcs.items()})
+            name = npcs[who[0]] if who else next(iter(npcs.values()), None)
+            replies.append(f"{name} hears you out, and answers in kind." if name else "No one here answers.")
+            return
+        if looks and (not res or "success" in res):
+            lines += _look(packet.view, npcs)
+            if not res:
+                return
+        if res:
+            if "a near miss" in res and "- the turn stops at a pause" not in msg:
+                res = res.replace("a near miss", "")  # the near miss was settled: the failure stands
+            lines.append(next((t for k, t in _RESULTS if k in res), "It is done."))
+        if bits.get("cost paid"):
+            lines.append(_sentence(bits["cost paid"]))
+        if bits.get("delivered") and res and "success" in res:
+            lines.append(_reach_sentence(bits["delivered"]))
+    elif line.startswith("- cost paid: "):
+        lines.append(_sentence(line.removeprefix("- cost paid: ")))
+    elif line.startswith("- the PC learns"):
+        lines += [_sentence(x.replace(" — ", " ", 1)) for x in line.split("): ", 1)[-1].split("; ")]
+    elif line.startswith(("- visible condition: ", "- harm to ")):
+        lines.append(_sentence(line.split(": ", 1)[1]))
+    elif line.startswith("- question "):
+        m = re.match(r'- question "(.*)": the answer is (.*)$', line)
+        if m:
+            ans = m.group(2).strip().rstrip(".")
+            lines.append(_ANSWERS.get(ans.lower(), _sentence(f"The answer: {ans}")))
+    elif re.match(r"- .+ acts: ", line):
+        who, act = line[2:].split(" acts: ", 1)
+        lines.append(_npc_act(who, act, "\n".join(packet.exchanges)))
+    elif re.match(r"- note: an? [\w ]*rest is not possible now", line):
+        lines.append("There is no rest to be had yet.")
+    elif line.startswith("- note: the character "):
+        note = line.removeprefix("- note: the character ")
+        lines.append(_sentence("you " + re.sub(r"\b(\w+?)s\b(?= and | rested|$| [a-z])", r"\1", note, count=2)))
+    elif line.startswith("- an omen"):
+        lines.append(_sentence(line.split(":", 1)[1]))
+    elif line.startswith("- part [FICTION_QUESTION]"):
+        q = line.split("]", 1)[1].split('"')[1] if '"' in line else ""
+        if q and q.rstrip("?") not in asked:
+            lines += _wh_answer(q, packet.view, npcs)
+    elif line.startswith("- part [SPEECH]"):
+        said = line.split("]", 1)[1]
+        who = named_entity(said, {k: [v.lower(), *v.lower().split()[:1]] for k, v in npcs.items()})
+        name = npcs[who[0]] if who else next(iter(npcs.values()), None)
+        if name and not any(ln.startswith(name) for ln in replies):
+            replies.append(f"{name} hears you out, and answers in kind.")
+    elif "STATE SUMMARY" in msg and re.match(r"- .+ is (?:at .+, )?in the \w+$", line):  # a recap (12.5.3)
+        lines.append(_sentence("You are " + line.split(" is ", 1)[1]))
+    elif "STATE SUMMARY" in msg and line.startswith("- earlier: "):
+        lines.append(_sentence(line.removeprefix("- earlier: ")))
+    elif "STATE SUMMARY" in msg and line.startswith("- an open thread: ") and not any(
+            ln.startswith("Still open") for ln in lines):
+        lines.append(_sentence("Still open: " + re.split(r"(?<=[.!?])\s", line.split(": ", 1)[1])[0]))
 
 
 _CLASS_WORDS = [

@@ -66,7 +66,11 @@ def test_p118_the_one_the_question_is_about_answers(tmp_path: Path, rules: Any) 
                                                  answer="yes, but lesser", subject="npc.mara_voss")])
     said = {"class": "action", "predicate": "says", "value": "there is a warning, a lesser one",
             "asserts_change": True}
+    from engine.dm.handles import items
+
+    # spec 006: the answer is a record line with a handle; the sentence citing it sources what she says
+    cited = {0: items(rec, names={})}
     mara, borga = check_claims([{**said, "subject": "npc.mara_voss"}, {**said, "subject": "npc.borga_ironhammer"}],
-                               store.state, rec, ["npc.mara_voss"], rules=rules)
+                               store.state, rec, ["npc.mara_voss"], rules=rules, cited=cited)
     assert mara.verdict == "supported"
     assert borga.verdict == "unsourced_change"

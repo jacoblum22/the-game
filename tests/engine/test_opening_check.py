@@ -18,7 +18,7 @@ from engine.dm.session import opening
 from engine.llm.base import Role
 from engine.llm.offline import ScriptedModel
 from tests.engine.test_incident import _world
-from tests.engine.test_turn_narration import calls, chk, claim, narr
+from tests.engine.test_turn_narration import _decl, _must, calls, chk, claim
 
 OPENING = ("Gulls wheel over the market, and the stalls are wet from the night. "
            "Heads turn toward the gate, and the hands at the nets stop mid-lift. "
@@ -30,7 +30,15 @@ INCIDENT = "the inciting incident: a child (or an elder, or a priest) is missing
 
 def test_opening_with_crowd_reactions_passes_first_draft(tmp_path: Path) -> None:
     store = _world(tmp_path, option="omen")  # no bound person: the incident is the note alone
-    model = ScriptedModel({Role.NARRATOR: [narr(OPENING)]})
+    def draft(schema: object, packet: object) -> dict[str, object]:
+        """Spec 006: the crowd's reactions are declared atmosphere; Corra's sentence cites the incident's line."""
+        from engine.audit.declare import split
+
+        s = split(OPENING)
+        return {"sentences": [_decl(s[0], atmosphere=True), _decl(s[1], atmosphere=True),
+                              _decl(s[2], atmosphere=True), _decl(s[3], _must(packet), about=["npc.corra_pike"]),
+                              _decl(s[4])]}
+    model = ScriptedModel({Role.NARRATOR: [draft]})
     check = chk(claim(0, "loc.market", "identity", "appearance", "stalls wet from the night"),
                 claim(1, "unknown", "action", "heads turn", "toward the gate", change=True),
                 claim(1, "unknown", "action", "hands stop mid-lift", "stopped", change=True),
@@ -44,20 +52,22 @@ def test_opening_with_crowd_reactions_passes_first_draft(tmp_path: Path) -> None
 
 
 def test_incident_sources_reactions_not_deeds() -> None:
+    """Spec 006: a sentence citing the incident's line sources an unnamed witness's reaction; a change still needs
+    its own source; with nothing cited the same murmur has none."""
     store_rules = load_rules()
+    from engine.dm.handles import items
     from engine.store.projection import WorldState
 
     cs = [{"subject": "unknown", "class": "action", "predicate": "murmur", "value": "goes through the crowd",
-           "asserts_change": True},
+           "asserts_change": False},
           {"subject": "unknown", "class": "action", "predicate": "grabs", "value": "the purse and flees",
            "asserts_change": True},
           {"subject": "unknown", "class": "action", "predicate": "bandit lurks", "value": "by the gate",
            "asserts_change": True}]
     given = AdjudicationRecord(notes=[INCIDENT])
-    vs = check_claims(cs, WorldState(), given, [], rules=store_rules)
+    vs = check_claims(cs, WorldState(), given, [], rules=store_rules, cited={0: items(given, names={})})
     assert [v.verdict for v in vs] == ["supported", "unsourced_change", "unsourced_change"]
-    # outside the opening the same murmur has no source
-    plain = check_claims(cs[:1], WorldState(), AdjudicationRecord(), [], rules=store_rules)
+    plain = check_claims(cs[:1], WorldState(), given, [], rules=store_rules)
     assert plain[0].verdict == "unsourced_change"
 
 

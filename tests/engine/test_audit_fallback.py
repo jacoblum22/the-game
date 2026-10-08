@@ -30,7 +30,7 @@ def _record(**kw: object) -> AdjudicationRecord:
                      costs=[CostEntry(menu_id="cost.noise", severity="S2", form="the bar shrieks against the iron")],
                      positions=[PositionEntry(entity="pc.wren", words="inside the archive")])
     return AdjudicationRecord(
-        turn_id="turn.4", pc="pc.wren", beats=[beat], scene=SceneEntry(header="The old archive, morning"),
+        turn_id="turn.4", pc="pc.wren", beats=[beat], scene=SceneEntry(started="scn.4", header="The old archive, morning"),
         npc_actions=[NpcActionEntry(npc="npc.tam_harlan", action="turns toward the noise", source="table_row")],
         omens=[OmenEntry(clock_id="clk.alarm", omen="boots on the upper stairs")], **kw)  # type: ignore[arg-type]
 
@@ -138,7 +138,8 @@ def test_gated_and_failed_beats_read_as_fiction() -> None:
                   degree="failure", rolled=True)])
     fb = plain_fallback(rec, names=NAMES).fiction
     _clean(fb)
-    assert fb == ("You look around. It works. You look around. You cannot do it that way. You look around. "
+    # the refused beat is said by its REDIRECT block, not owed by the narration (12.14.12; spec 006)
+    assert fb == ("You look around. It works. You look around. "
                   "It goes badly. About an hour passes. You force the door. It doesn't work. What do you do?"), fb
     assert "Tracking" not in fb and "harder" not in fb
 
@@ -182,9 +183,9 @@ def test_a_possessive_or_determiner_restatement_is_its_own_sentence() -> None:
         assert fb == "You strain. It doesn't work. What do you do?", fb
 
 
-def test_a_spoken_line_with_no_beat_is_restated() -> None:
-    """Playtest 20261007-201412 talker, input 31: two SPEECH parts, no beat, and the fallback said only "What do
-    you do?". The player's own words come back, in order, around the beats; a NOTE-answered part does not."""
+def test_the_fallback_states_the_owed_lines_never_the_players_words() -> None:
+    """12.3.3 (spec 006): the plain fallback is every must-name item's rendered line. The player's own words are not
+    echoed back (P-018, P-125); playtest 20261007-201412's "only What do you do?" is answered by the owed lines."""
     rec = AdjudicationRecord(pc="pc.wren", parts=[
         PartEntry.model_validate({"text": "I sit on the bench.", "class": "DECLARATION"}),
         PartEntry.model_validate({"text": "\"That's all right, Oggza. Is Seley one of yours?\"", "class": "SPEECH",
@@ -195,8 +196,7 @@ def test_a_spoken_line_with_no_beat_is_restated() -> None:
                          positions=[PositionEntry(entity="pc.wren", words="a few strides from the bench")])],
         npc_actions=[NpcActionEntry(npc="npc.tam_harlan", action="offers partial help", source="table_row")])
     fb = plain_fallback(rec, names=NAMES).fiction
-    assert fb == ("You move toward the bench. You are a few strides from the bench. "
-                  "You ask, \"That's all right, Oggza. Is Seley one of yours?\" Tam offers some help. "
+    assert fb == ("You move toward the bench. You are a few strides from the bench. Tam offers some help. "
                   "What do you do?"), fb
     # playtest 20261007-203717 breaker, input 28: the Reader's queue note reached the player
     noted = AdjudicationRecord(pc="pc.wren", beats=[BeatEntry(
@@ -206,4 +206,4 @@ def test_a_spoken_line_with_no_beat_is_restated() -> None:
     assert plain_fallback(noted, names=NAMES).fiction == "You speak to Tam. It works. What do you do?"
     only = AdjudicationRecord(pc="pc.wren", parts=[PartEntry.model_validate(
         {"text": "I lean in and say, \"Who did you lose?\"", "class": "SPEECH"})])
-    assert plain_fallback(only, names=NAMES).fiction == 'You ask, "Who did you lose?" What do you do?'
+    assert plain_fallback(only, names=NAMES).fiction == "What do you do?"

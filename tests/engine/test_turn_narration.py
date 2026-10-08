@@ -20,8 +20,32 @@ GOOD_SCREEN = {"intent_acknowledged": True, "intent_substituted": False, "next_s
 LOOK = beat("look over the quay", "verb.observe", verbs=("look",))  # offline Framer: in plain view
 
 
-def narr(text: str) -> dict[str, Any]:
-    return {"fiction": text, "mentions": []}
+def _decl(text: str, refs: list[str] | None = None, **kw: Any) -> dict[str, Any]:
+    return {"text": text, "refs": refs or [], "about": [], "new": [], "atmosphere": False, **kw}
+
+
+def narr(text: str, *, cite: bool = True) -> Any:
+    """A scripted draft (spec 006: declared sentences). With `cite`, every sentence but a closing question cites
+    every MUST line of the record, so coverage holds whatever the test cuts."""
+    from engine.audit.declare import split
+
+    def build(schema: Any, packet: Any) -> dict[str, Any]:
+        import re
+
+        must = re.findall(r"(?m)^- (R\d+) MUST:", packet.message) if cite else []
+        return {"sentences": [_decl(s, [] if s.endswith("?") else list(must)) for s in split(text)]}
+    return build
+
+
+def _must(packet: Any) -> list[str]:
+    import re
+
+    return re.findall(r"(?m)^- (R\d+) MUST:", packet.message)
+
+
+def rep(n: int | str, text: str, refs: list[str] | None = None) -> dict[str, Any]:
+    """A scripted narrow repair (12.3.3): one replacement for sentence `n` ("add" adds one)."""
+    return {"repairs": [{"replaces": str(n), **_decl(text, refs)}]}
 
 
 def claim(n: int, subject: str, cls: str, predicate: str, value: str, change: bool = False) -> dict[str, Any]:
@@ -47,15 +71,16 @@ def calls(model: ScriptedModel, role: Role) -> list[Any]:
 
 def test_contradiction_is_redrafted_to_the_store_value(tmp_path: Path) -> None:
     bad, good = "Tam Harlan, a woman, watches you. What do you do?", "Tam Harlan, a man, watches you. What do you do?"
-    model = look_model(narrator=[narr(bad), narr(good)])
+    model = look_model(narrator=[narr(bad), lambda s, p: rep(0, good.split(". ")[0] + ".", _must(p))])
     dock, ctx = setup(tmp_path, model)
     model.push(Role.CHECKER, chk(claim(0, dock.ferryman, "identity", "gender", "woman")),
                chk(claim(0, dock.ferryman, "identity", "gender", "man")))
     out = play_turn(ctx, "I look over the quay.")
     assert out.response.fiction == good and not out.response.flags.fallback_used
-    redraft = calls(model, Role.NARRATOR)[1].message
-    assert "FAILING VERDICTS" in redraft and "contradicted" in redraft and "he/him" in redraft
-    assert [v["kind"] for v in out.turn_record.draft_versions] == ["draft", "redraft"]
+    repair = calls(model, Role.NARRATOR)[1].message
+    assert "A REPAIR" in repair and "contradicted" in repair and "he/him" in repair
+    assert "[0] Tam Harlan, a woman" in repair and "What do you do?" not in repair.split("A REPAIR")[1]
+    assert [v["kind"] for v in out.turn_record.draft_versions] == ["draft", "repair"]
     assert out.turn_record.draft_versions[0]["verdicts"][0]["verdict"] == "contradicted"
     # the Checker never sees the Narrator's prompt or the record (FR-034)
     checker = calls(model, Role.CHECKER)[0]
@@ -71,22 +96,24 @@ def test_unsourced_change_is_cut(tmp_path: Path) -> None:
     model.push(Role.CHECKER, chk(claim(0, dock.watch, "possession", "draws", "her sword", change=True)))
     out = play_turn(ctx, "I look over the quay.")
     assert out.response.fiction == "The fog lies low on the water. What do you do?"
-    assert not out.response.flags.fallback_used and len(calls(model, Role.NARRATOR)) == 1
+    assert not out.response.flags.fallback_used and len(calls(model, Role.NARRATOR)) == 1  # a cut is code's
     kinds = [v["kind"] for v in out.turn_record.draft_versions]
     assert kinds == ["draft", "cut"] and out.turn_record.draft_versions[0]["verdicts"][0]["verdict"] == \
         "unsourced_change"
+    assert not out.response.flags.review_flag  # cuts alone, every must-name line still cited: no ruling (12.3.3)
 
 
 def test_two_failed_redrafts_fall_back_with_review_flag(tmp_path: Path) -> None:
     bad = "Tam Harlan, a woman, watches you. What do you do?"
-    model = look_model(narrator=[narr(bad)] * 3)
+    model = look_model(narrator=[narr(bad), rep(0, "Tam Harlan, a woman, watches you."),
+                                 rep(0, "Tam Harlan, a woman, watches you.")])
     dock, ctx = setup(tmp_path, model)
     model.push(Role.CHECKER, *[chk(claim(0, dock.ferryman, "identity", "gender", "woman"))] * 3)
     out = play_turn(ctx, "I look over the quay.")
     r = out.response
     assert r.flags.fallback_used and r.flags.review_flag and out.turn_record.fallback_used
     assert "woman" not in r.fiction and r.fiction.endswith("What do you do?")
-    assert [v["kind"] for v in out.turn_record.draft_versions] == ["draft", "redraft", "redraft", "fallback"]
+    assert [v["kind"] for v in out.turn_record.draft_versions] == ["draft", "repair", "repair", "fallback"]
     assert len(calls(model, Role.NARRATOR)) == 3
     rulings = [e.payload.ruling for e in dock.store.events(types=["ruling_logged"])  # type: ignore[attr-defined]
                if e.turn_id == out.turn_record.turn_id]
@@ -105,9 +132,10 @@ def test_new_player_asking_for_options_and_the_scene_gets_both(tmp_path: Path) -
             "beats": [], "clarifying_question": None, "restatement": msg, "player_quantity": None}
     bad = "Fog lies low on the quay. Tam Harlan, a woman, mends a net. Do you go to the water or the town?"
     model = ScriptedModel({Role.READER: [lambda schema, packet: prune(data, schema)], Role.WORLD: [QUIET_WORLD],
-                           Role.NARRATOR: [narr(bad)] * 3})
+                           Role.NARRATOR: [narr(bad)] + [rep(1, "Tam Harlan, a woman, mends a net.")] * 2})
     dock, ctx = setup(tmp_path, model)
-    model.push(Role.CHECKER, *[chk(claim(1, dock.ferryman, "identity", "gender", "woman"))] * 3)
+    model.push(Role.CHECKER, chk(claim(1, dock.ferryman, "identity", "gender", "woman")),
+               *[chk(claim(0, dock.ferryman, "identity", "gender", "woman"))] * 2)  # a repair checks [0] only
     out = play_turn(ctx, msg)
     r = out.response
     assert r.fiction == "Fog lies low on the quay. Do you go to the water or the town?", r.fiction

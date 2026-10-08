@@ -93,14 +93,20 @@ def world_check(data: Any) -> list[str]:  # rule: 12.2.9
     return errs
 
 
-def npc_responses(ctx: TurnContext, happened: str) -> list[WorldResponse]:  # rule: 12.2.9
-    """One World call; [] when no NPC is present."""
+def npc_responses(ctx: TurnContext, happened: str,
+                  only: dict[str, list[str]] | None = None) -> list[WorldResponse]:  # rule: 12.2.9
+    """One World call; [] when no NPC is present. `only` ({npc: candidate motive ids}) restricts the call to judging
+    those candidates (the default NPC layer's tie-breaker, 12.11.9; spec 006 R6)."""
     st = ctx.state
     sctx = schema_context(st, ctx.rules)
-    npcs = present_npcs(st)
+    npcs = present_npcs(st) if only is None else [n for n in only if n in st.entities]
     if not npcs:
         return []
-    if sctx.npc_ids != npcs:  # the schema's cast is the framed one; an NPC met mid-scene answers too (P-056)
+    if only is not None:
+        ids = [m for ms in only.values() for m in ms]
+        sctx = sctx.model_copy(update={"npc_ids": npcs, "want_ids": [m for m in ids if "/want." in m],
+                                       "refusal_ids": [m for m in ids if "/refusal." in m]})
+    elif sctx.npc_ids != npcs:  # the schema's cast is the framed one; an NPC met mid-scene answers too (P-056)
         motives = [_want_ids(st, n) for n in npcs]
         sctx = sctx.model_copy(update={"npc_ids": npcs, "want_ids": [w for m in motives for w in m[0]],
                                        "refusal_ids": [r for m in motives for r in m[1]]})

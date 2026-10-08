@@ -276,25 +276,53 @@ def recorded_judge(packet: dict[str, Any], draft: dict[str, Any]) -> list[dict[s
     return out
 
 
-def plugged_measures(items: list[dict[str, Any]], narrator: Plug, judge: Plug) -> dict[str, Any]:
+def _drafts(items: list[dict[str, Any]], narrator: Plug, workers: int) -> list[dict[str, Any] | None]:
+    """Each item's draft (None for a plug failure), `workers` at a time (a model plug is I/O bound)."""
+    def one(item: dict[str, Any]) -> dict[str, Any] | None:
+        try:
+            return narrator(item)
+        except Exception as e:  # noqa: BLE001 - a plug failure is a failed draft, not a bench failure
+            print(f"plug error: {e.__class__.__name__}: {str(e)[:200]}", file=sys.stderr)
+            return None
+    if workers <= 1:
+        return [one(i) for i in items]
+    from concurrent.futures import ThreadPoolExecutor
+
+    with ThreadPoolExecutor(workers) as pool:
+        return list(pool.map(one, items))
+
+
+def plugged_measures(items: list[dict[str, Any]], narrator: Plug, judge: Plug, workers: int = 1) -> dict[str, Any]:
     passed = errors = sents = bad = undeclared = declared = 0
     classes: Counter[str] = Counter()
-    for item in items:
+    loop: Counter[str] = Counter()  # spec 006 plugs report the whole narration loop (calls, cuts, renders)
+    for item, draft in zip(items, _drafts(items, narrator, workers), strict=True):
         try:
-            draft = narrator(item)
+            if draft is None:
+                raise ValueError("no draft")
             verdicts = judge(item, draft)
         except Exception:  # noqa: BLE001 - a plug failure is a failed draft, not a bench failure
             errors += 1
             continue
         fails = [s for s in verdicts if not s["ok"]]
-        passed += not fails
+        if "_first_pass" in draft:  # coverage counts too (12.3.1a item 3)
+            passed += bool(draft["_first_pass"])
+            loop.update(turns=1, calls=draft["_calls"], cut=draft["_cut"], rendered=draft["_rendered"],
+                        missing_first=bool(draft["_missing_first"]), sentences=len(verdicts),
+                        added_about=sum(s.get("added_about", 0) for s in verdicts))
+            loop.update(**{k: v for k, v in (draft.get("_audit") or {}).items()},
+                        audited=bool(draft.get("_audit")))
+            undeclared += sum(s.get("undeclared_new", 0) for s in verdicts)
+            declared += sum(len(s.get("new") or []) for s in draft.get("_sentences") or [])
+        else:
+            passed += not fails
+            undeclared += sum(1 for s in verdicts if s.get("undeclared_new"))
+            declared += len(draft.get("mentions") or [])
         sents += len(verdicts)
         bad += len(fails)
         classes.update(str(s.get("cls")) for s in fails)
-        undeclared += sum(1 for s in verdicts if s.get("undeclared_new"))
-        declared += len(draft.get("mentions") or [])
     n = len(items)
-    return {
+    out = {
         "packets": n,
         "first-draft pass rate": _pct(passed, n),
         "failing sentences": _pct(bad, sents),
@@ -302,10 +330,24 @@ def plugged_measures(items: list[dict[str, Any]], narrator: Plug, judge: Plug) -
         "plug errors": errors,
         "top failing classes": ", ".join(f"{k} {v}" for k, v in classes.most_common(5)),
     }
+    if loop["turns"]:
+        t = loop["turns"]
+        out.update({
+            "first drafts missing a must-name line": _pct(loop["missing_first"], t),
+            "turns with cut sentences": _pct(loop["cut"], t),
+            "turns with a rendered line": _pct(loop["rendered"], t),
+            "narrator calls per turn": f"{loop['calls'] / t:.2f}",
+            "names used but not declared (added to about) per draft": f"{loop['added_about'] / t:.2f}",
+        })
+        if loop["audited"]:
+            a = loop["audited"]
+            out["audit (Checker) per first draft: undeclared new elements, claims on undeclared subjects"] = (
+                f"{loop['audit_unknown_new'] / a:.2f}, {loop['audit_undeclared_subject'] / a:.2f} ({a} drafts)")
+    return out
 
 
 def report(corpus: dict[str, Any], narrator: str | None = None, judge: str | None = None,
-           limit: int | None = None) -> str:
+           limit: int | None = None, workers: int = 1) -> str:
     size = CORPUS.stat().st_size if CORPUS.exists() else 0
     lines = [f"# Replay bench (corpus {size // 1024} KB, {len(corpus['packets'])} packets)", ""]
     for label, late in (("all saves", False), ("late saves (B §1.2 population)", True)):
@@ -320,7 +362,8 @@ def report(corpus: dict[str, Any], narrator: str | None = None, judge: str | Non
                      load_plug(judge) if judge else recorded_judge))
     for label, n, j in runs:
         lines.append(f"## Packets: {label}")
-        lines += [f"- {k}: {v}" for k, v in plugged_measures(items, n, j).items()]
+        lines += [f"- {k}: {v}" for k, v in plugged_measures(items, n, j, workers if n is not recorded_narrator
+                                                                            else 1).items()]
         lines.append("")
     return "\n".join(lines)
 
@@ -335,13 +378,14 @@ def main(argv: list[str] | None = None) -> int:
     rn.add_argument("--narrator")
     rn.add_argument("--judge")
     rn.add_argument("--limit", type=int)
+    rn.add_argument("--workers", type=int, default=1, help="plugged narrator calls at a time")
     args = ap.parse_args(argv)
     if args.cmd == "extract":
         c = extract(args.saves, args.max_packets)
         print(f"corpus: {len(c['saves'])} saves, {len(c['turns'])} narrated turns, {len(c['packets'])} packets, "
               f"{len(c['sections'])} sections, {CORPUS.stat().st_size // 1024} KB")
         return 0
-    print(report(load(), args.narrator, args.judge, args.limit))
+    print(report(load(), args.narrator, args.judge, args.limit, args.workers))
     return 0
 
 

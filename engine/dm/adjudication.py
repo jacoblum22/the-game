@@ -101,6 +101,13 @@ class NpcActionEntry(BaseModel):
     tags: list[str] = Field(default_factory=list)
 
 
+class ActivityEntry(BaseModel):
+    """A present NPC's continuing activity this scene (T1c scene state, 12.11.9 step 1): citable, not owed."""
+
+    npc: str
+    activity: str
+
+
 class OmenEntry(BaseModel):
     clock_id: str
     stage: str | None = None
@@ -171,6 +178,7 @@ class AdjudicationRecord(BaseModel):
     beats: list[BeatEntry] = Field(default_factory=list)
     oracle: list[OracleEntry] = Field(default_factory=list)
     npc_actions: list[NpcActionEntry] = Field(default_factory=list)
+    activities: list[ActivityEntry] = Field(default_factory=list)  # 12.11.9 step 1 (spec 006)
     omens: list[OmenEntry] = Field(default_factory=list)
     scene: SceneEntry = Field(default_factory=SceneEntry)
     writes: list[WriteRef] = Field(default_factory=list)

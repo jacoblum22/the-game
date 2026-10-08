@@ -1,0 +1,7 @@
+## Scripted player (seed 7, 24 lines, 25 turns, 21 narrated)
+- contradictions per 100 narrated turns: 57.1 (position 6, existence 3, knowledge 2, identity 1)
+- recall probes: 0 scored of 2; precision n/a, coverage n/a
+- novelty-4 over the previous 10 deliveries: 0.84 (20 deliveries)
+- narration loop (21 narrated): first draft delivered as drafted 7/21 (33.3%); turns with a cut, rendered line or fallback 11/21 (52.4%); narrator calls per narrated turn 1.67; per narrated turn: added_about 2.76, atmosphere_named 0.05, audit_undeclared 3.10, undeclared_new 0.00
+- cached-prefix share per role: checker 0.90, director 0.72, narrator 0.89, reader 0.90
+- engine errors: 0

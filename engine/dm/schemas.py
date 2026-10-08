@@ -109,8 +109,13 @@ class SchemaContext(BaseModel):
     push_options: list[str] = Field(default_factory=list)  # empty unless trg.pacing_push is raised
     thread_ids: list[str] = Field(default_factory=list)
     lead_routes: list[str] = Field(default_factory=list)  # empty unless trg.lead_injection fires
-    # Narrator
+    # Narrator (spec 006: declared sentences, 12.3.1)
     entity_kinds: list[str] = Field(default_factory=list)
+    narrator_refs: list[str] = Field(default_factory=list)  # this turn's record handles, then the view's fact ids
+    element_kinds: list[str] = Field(default_factory=list)  # pacing.yaml#claim_check.element_tiers keys
+    narrator_mode: str = "sentences"  # "sentences" | "fiction" (the fallback shape, B risk 2)
+    repair_ids: list[str] = Field(default_factory=list)  # failing sentence indices ("3") for a repair call
+    repair: bool = False  # a narrow repair call (12.3.3): replacements only
     # Checker
     claim_classes: list[str] = Field(default_factory=list)
     sentence_ids: list[str] = Field(default_factory=list)
@@ -311,16 +316,33 @@ def director_schema(ctx: SchemaContext) -> Schema:  # rule: 12.4.2
     })
 
 
-def narrator_schema(ctx: SchemaContext) -> Schema:  # rule: 00.6.6
-    return obj({
-        "fiction": STR,
-        "mentions": arr(obj({
-            "kind": enum(ctx.entity_kinds),
+MAX_SENTENCE_INDEX = 30  # the fallback shape's sentence keys "0".."29" (a string enum: INV-3)
+
+
+def _declaration(ctx: SchemaContext) -> dict[str, Schema | None]:  # rule: 12.3.1
+    return {
+        "refs": arr(enum(ctx.narrator_refs)) if ctx.narrator_refs else None,
+        "about": arr(enum(ctx.scene_ids)) if ctx.scene_ids else None,
+        "new": arr(obj({
+            "element_kind": enum(ctx.element_kinds),
             "name": STR,
+            "ordinary": BOOL,
             "implied": arr(obj({"predicate": STR, "value": STR})),
-            "unsettled": STRS,
         })),
-    })
+        "atmosphere": BOOL,
+    }
+
+
+def narrator_schema(ctx: SchemaContext) -> Schema:  # rule: 12.3.1
+    """Declared sentences (12.3.1 source 1); `narrator_mode` "fiction" is the fallback shape: the prose whole, with
+    declarations keyed by sentence index. A repair call (`repair_ids`) returns replacements only (12.3.3)."""
+    if ctx.repair or ctx.repair_ids:
+        return obj({"repairs": arr(obj({"replaces": enum([*ctx.repair_ids, "add"]), "text": STR,
+                                        **_declaration(ctx)}))})
+    if ctx.narrator_mode == "fiction":
+        return obj({"fiction": STR, "declarations": arr(obj({
+            "sentence": enum([str(i) for i in range(MAX_SENTENCE_INDEX)]), **_declaration(ctx)}))})
+    return obj({"sentences": arr(obj({"text": STR, **_declaration(ctx)}))})
 
 
 def checker_schema(ctx: SchemaContext) -> Schema:  # rule: 12.3.1
@@ -723,6 +745,8 @@ def schema_context(  # rule: 12.2.4
         thread_ids=by_kind("thread"),
         lead_routes=list(pacing.get("lead_injection", {}).get("source_ladder", [])) if lead_fires else [],
         entity_kinds=[k for k in get_args(EntityKind) if k != "pc"],
+        element_kinds=list((pacing.get("claim_check") or {}).get("element_tiers") or {}),
+        narrator_refs=list(facts),
         claim_classes=list(pacing.get("claim_check", {}).get("classes", [])),
         sentence_ids=[str(i) for i, _ in enumerate(draft_sentences)],
     )
