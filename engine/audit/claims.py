@@ -285,7 +285,7 @@ def _v(c: Claim, idx: int, verdict: VerdictName, store_value: Any = None, *, fix
        reason: str = "") -> Verdict:
     sv = None if store_value is None else (store_value if isinstance(store_value, str) else _words(store_value))
     if not reason and sv and verdict != "supported":
-        reason = f"the store holds: {sv}"  # the redraft is told why, never an empty reason
+        reason = f"the truth is: {sv}"  # the redraft is told why, never an empty reason; never "store" (P-045)
     return Verdict(claim=idx, verdict=verdict, store_value=sv,
                    fix=_DEFAULT_FIX[verdict] if fix == "default" else fix, reason=reason)
 
@@ -551,7 +551,7 @@ def _identity(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: 12.3.1
         if said is not None and tx.covers(c.value, _flat(said)):  # the stored words hold the claimed ones
             beyond = " ".join(w for w in c.value.split() if w.lower() not in _flat(said).lower().split())
             if _negated(beyond):  # "they do not say NO QUESTIONS ASKED" (the notice's own "NO" is not a denial)
-                return _v(c, i, "contradicted", said, reason="the store holds the words written there")
+                return _v(c, i, "contradicted", said, reason="the words written there are on record; use them")
             return _v(c, i, "supported")
     bond = ctx.state.fact_value(ctx.pc, "bond.anchor") if ctx.pc else None  # rule: 02.9.2 [P-036]
     if store is None and isinstance(bond, dict) and bond.get("npc") == e.id and _has(c.predicate, _BOND_WORDS):
