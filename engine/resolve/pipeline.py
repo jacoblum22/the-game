@@ -19,6 +19,7 @@ success_at_cost:<menu>), `redirect` (accept:<license> / other), `clarify` (free 
 
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass, field
 from typing import Any, Literal, Protocol
 
@@ -419,6 +420,35 @@ def offer_text(view: Any) -> str:  # rule: 01.7.1
             f"{view.threatened_cost['menu_id']} {view.threatened_cost['severity_on_failure'] or 'none'}{alt}{lethal}")
 
 
+CHANGE_ASK = ("How do you go about it instead? Say what your character does: another way, or something here you "
+              "use. Nothing is spent, and this offer stays open until you do.")
+
+
+def reframe_note(old: Frame, new: Frame, rules: Any = None) -> str | None:  # rule: 01.7.1
+    """One line saying why the odds moved when a new approach replaces an open OFFER on the same target."""
+    if old.secret or new.secret or old.odds.success_or_better == new.odds.success_or_better:
+        return None
+    from engine.dm.oof import name_of
+
+    def signed(n: int) -> str:
+        return f"{n:+d}"
+
+    why = []
+    om, nm = old.modifier, new.modifier
+    if old.attribute != new.attribute:
+        why.append(f"it uses {name_of(rules, new.attribute)} ({signed(nm.attribute)}) instead of "
+                   f"{name_of(rules, old.attribute)} ({signed(om.attribute)})")
+    for field, words in (("competence", "training"), ("circumstance", "help and hindrances"), ("edge", "edge"),
+                         ("status", "your condition")):
+        a, b = getattr(om, field), getattr(nm, field)
+        if a != b:
+            why.append(f"{words} {signed(b)} instead of {signed(a)}")
+    if old.dc != new.dc:
+        why.append(f"the difficulty is {new.dc} instead of {old.dc}")
+    return (f"The odds moved from {old.odds.success_or_better}% to {new.odds.success_or_better}%: "
+            f"{'; '.join(why) or 'the new approach is framed differently'}.")
+
+
 def _answer_offer(env: PipelineEnv, plan: BeatPlan, d: dict[str, Any], choice: str,
                   queued: list[BeatPlan]) -> BeatOutcome:  # rule: 01.7.1
     frame = Frame.model_validate(d["frame"])
@@ -453,12 +483,12 @@ def _answer_offer(env: PipelineEnv, plan: BeatPlan, d: dict[str, Any], choice: s
                 "You play it safe: the stakes and the reach each drop one step.")
         out.oof.insert(0, {"kind": "NOTE", "text": f"{said} The odds stay the same."})
         return out
-    if choice == "change":  # back to PARSE/FRAME, free (01.7.1)
-        env.add(Event.of("offer_logged", source="player", rule_id="01.7.1", shown_at=now, choice="change"))
-        dec = _gate_again(env, plan.beat)
-        return _frame(env, plan, dec, queued, warned=warned,
-                      note="The player chose CHANGE at the OFFER: propose a different approach (another anchor, "
-                           "attribute or cited lever) for the same intent.")
+    if choice == "change":  # rule: 01.7.1
+        # change is "a new method or a new lever citation: back to PARSE": the method is the player's to say, so
+        # the offer stays open and asks; their words are a new declaration, which replaces it free (12.2.6)
+        out = _offer(env, plan, proposed, frame, cands, queued, warned=warned)
+        out.oof.insert(0, {"kind": "NOTE", "text": CHANGE_ASK})
+        return out
     env.add(Event.of("offer_logged", source="player", rule_id="01.7.1", shown_at=now, choice="withdraw"))
     return BeatOutcome(status="withdrawn", entry=_entry(plan.beat, gate_words="withdrawn at the OFFER"))
 
@@ -546,7 +576,37 @@ def _finish(env: PipelineEnv, plan: BeatPlan, frame: Frame, roll: RollResult, *,
     entry.positions = moved
     entry.harm = env.harm_log[harm_from:]
     entry.reach_words = _reach_words(env.rules, frame, delivered, notes)
-    return BeatOutcome(status="resolved", entry=entry, frame_id=frame.id)
+    if resolved:
+        _cleanse(env, frame)
+    from engine.dm.oof import result_block  # 12.15.3: the outcome stated once, after the fiction
+
+    blk = result_block(frame, roll, sac=read.success_at_cost_taken, costs=costs, rules=env.rules)
+    return BeatOutcome(status="resolved", entry=entry, frame_id=frame.id, oof=[{"kind": "RESULT", "text": blk.text}])
+
+
+_FREEING = re.compile(r"\b(free|loose|escape|break|slip|wriggle|wrench|pull away|get up|stand)\b", re.IGNORECASE)
+
+
+def _cleanse(env: PipelineEnv, frame: Frame) -> None:  # rule: 00.9.1
+    """A resolved beat whose verb is an active condition's cleanse check ("break free: one action", Grapple) ends
+    that condition on the actor, when it was aimed at the condition (no other target, the holder, or freeing words)."""
+    from engine.store.conditions import remove_condition
+
+    beat = frame.beat
+    verb = frame.gate.verb or beat.verb
+    for inst in list(env.state.conditions_on(beat.actor)):
+        try:
+            cdef = env.rules.condition(inst.condition_id)
+        except Exception:  # noqa: BLE001 - an unknown condition id has no cleanse here
+            continue
+        checks = [c for c in cdef.get("cleanse") or () if (c.get("check") or {}).get("verb") == verb]
+        holder = (inst.source or {}).get("entity")
+        aimed = beat.target in (None, "", "none", beat.actor, holder) or bool(
+            _FREEING.search(f"{beat.intent} {beat.method}"))
+        # ponytail: "aimed at the condition" is a target/word heuristic; a beat field naming the condition would be exact
+        if checks and aimed:
+            env.add(*remove_condition(env.state, env.rules, inst.instance_id, checks[0].get("means") or "cleansed",
+                                      rule_id="00.9.1").events)
 
 
 def _consequence(env: PipelineEnv, frame: Frame, read: ReadResult,

@@ -10,7 +10,8 @@ licences, open pause), RECENT EXCHANGES, THIS MESSAGE (verbatim). Every enum off
 Split the message into parts in the player's order, one class each.
 - SAFETY only for discomfort with content ("not that"), never unhappiness with a result.
 - DISPUTE says the DM made an error. Unsure between DISPUTE and OOF_QUESTION: OOF_QUESTION.
-- PENDING_ANSWER answers the open pause: set `pending_answer` to its choice id, else null.
+- PENDING_ANSWER answers the open pause: set `pending_answer` to its choice id, else null; a
+  "change" naming a new way is a beat too.
 - SPEECH is talk that does not try to change a mind; talk that does is a DECLARATION (Talk). Unsure:
   DECLARATION.
 - Words said to someone present (quoted, or "I ask her") are SPEECH or DECLARATION, never FICTION_QUESTION

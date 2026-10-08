@@ -255,7 +255,9 @@ def _why(dec: GateDecision, state: WorldState | None, rules: Any) -> str:
             return f"that needs training in {name_of(rules, red.missing).lower()}, which you do not have"
         return "nothing you know how to do covers it as tried"
     if red.missing_kind == "condition":
-        return f"{name_of(rules, red.missing).lower()} prevents it right now"
+        cdef = _condition_def(state, rules, red.missing)
+        name = str((cdef or {}).get("name") or "a condition").lower()
+        return f"you are {name} right now, and that stops it" + ("; clear it first" if clear_options(cdef) else "")
     if red.missing_kind == "canon":
         return "no one in this world can do that"
     if red.missing_kind == "zero_reach":
@@ -270,10 +272,36 @@ _LEARN = {"mentor": "train with someone who knows it", "project": "study it from
           "origin": "it can only come from where you were born and raised"}
 
 
-def redirect_options(dec: GateDecision, rules: Any = None, *, limit: int = 3) -> list[str]:  # rule: 01.3.6
-    """1-3 concrete things the player could do instead, in words they can type."""
+def _condition_def(state: WorldState | None, rules: Any, missing: str) -> Any:
+    """The condition entry behind a G4 condition redirect (`missing` is the instance id, or a condition id)."""
+    inst = state.conditions.get(missing) if state is not None else None
+    cid = getattr(inst, "condition_id", None) or missing
+    try:
+        return rules.condition(cid) if rules is not None else None
+    except Exception:  # noqa: BLE001 - an unknown id: the plain fallback words show
+        return None
+
+
+def clear_options(cdef: Any, rules: Any = None) -> list[str]:  # rule: 00.9.1
+    """How a condition ends, from its `cleanse` entries: "Break free: one action (a Grapple roll)"."""
+    out = []
+    for c in (cdef or {}).get("cleanse") or ():
+        means = re.sub(r"\s*\((?:verb|cond|trait)\.[a-z_.]+\)", "", str(c.get("means") or "")).strip()
+        verb = (c.get("check") or {}).get("verb")
+        head, _, tail = means.partition(": ")
+        extra = "; ".join(x for x in (tail, f"a {name_of(rules, verb)} roll" if verb else "") if x)
+        if head:
+            out.append(head[:1].upper() + head[1:] + (f" ({extra})" if extra else ""))
+    return out
+
+
+def redirect_options(dec: GateDecision, rules: Any = None, *, limit: int = 3,
+                     state: WorldState | None = None) -> list[str]:  # rule: 01.3.6
+    """1-3 concrete things the player could do instead, in words they can type (a condition's way out first)."""
     red = dec.redirect
     out: list[str] = []
+    if red is not None and red.missing_kind == "condition":
+        out += clear_options(_condition_def(state, rules, red.missing), rules)
     for o in red.options if red else []:
         if o.method.startswith(_GENERIC):
             continue
@@ -298,7 +326,7 @@ def redirect_block(dec: GateDecision, *, state: WorldState | None = None,
     """`[REDIRECT]` for a G3 or G4 decision in plain words: what cannot be done and why in one line, then 1-3
     things to do instead, then how it could be learned (a missing licence)."""
     red = dec.redirect
-    rest = ["You could instead:", *(f"- {o}" for o in redirect_options(dec, rules))]
+    rest = ["You could instead:", *(f"- {o}" for o in redirect_options(dec, rules, state=state))]
     if red is not None and red.missing_kind == "license":
         paths = []
         for p in red.acquisition_paths:
@@ -340,6 +368,26 @@ def near_miss_choices(frame: Frame, rules: Any = None) -> list[dict[str, str]]: 
     lose = f": {_price(rules, frame.threatened_cost, fail)}" if fail else " (nothing more is lost)"
     out.append({"id": "failure", "label": f"Let it fail{lose}"})
     return out
+
+
+DEGREE_NAMES = {"critical_success": "critical success", "success": "success", "failure": "failure",
+                "critical_failure": "critical failure"}
+
+
+def result_block(frame: Frame, roll: RollResult, *, sac: bool = False, costs: Sequence[Any] = (),
+                 rules: Any = None) -> OofBlock:  # rule: 12.15.3
+    """`[RESULT] d20 9 → 13 vs 15 · failure (near miss)`, then what was paid; a secret frame: `hidden check made.`"""
+    if frame.secret:
+        return OofBlock(kind="RESULT", text="[RESULT] hidden check made.")
+    words = "success at a cost (near miss)" if sac else (
+        DEGREE_NAMES.get(roll.degree, roll.degree.replace("_", " ")) + (" (near miss)" if roll.near_miss else ""))
+    rest = []
+    for c in costs:
+        form = (getattr(c, "form", "") or "").strip() or _menu_form(rules, c.menu_id, c.severity)
+        tag = ", ".join(x for x in (name_of(rules, c.menu_id).lower(), c.severity or "") if x)
+        rest.append(f"Paid: {form} ({tag})." if form else f"Paid: {tag}.")
+    return OofBlock(kind="RESULT", text=_block("RESULT", f"d20 {roll.d20} → {roll.total} vs {frame.dc} · {words}",
+                                               rest))
 
 
 def near_miss_block(frame: Frame, roll: RollResult, *, rules: Any = None) -> OofBlock:  # rule: 12.15.4
@@ -440,7 +488,7 @@ def create_block(text: str, n: int | None = None, total: int | None = None) -> O
     return OofBlock(kind="CREATE", text=t)
 
 
-_ORDER = {"NOTE": 0, "RECAP": 1, "SEED": 5, "CREATE": 5, "STATUS": 2, "REDIRECT": 3, "WARNING": 4, "OFFER": 5,
+_ORDER = {"NOTE": 0, "RECAP": 1, "RESULT": 2, "SEED": 5, "CREATE": 5, "STATUS": 2, "REDIRECT": 3, "WARNING": 4, "OFFER": 5,
           "NEAR_MISS": 5, "CLARIFY": 5, "LAST_CHANCE": 5, "EPILOGUE": 6}
 
 
@@ -452,4 +500,4 @@ def ordered(blocks: Iterable[OofBlock]) -> list[OofBlock]:  # rule: 12.15
 
 __all__ = ["OfferView", "OofBlock", "OofKind", "clarify_block", "create_block", "last_chance_block", "name_of",
            "near_miss_block", "near_miss_choices", "note_block", "offer_block", "offer_choices", "offer_view",
-           "ordered", "recap_block", "redirect_block", "seed_block", "status_block", "warning_block"]
+           "ordered", "recap_block", "redirect_block", "result_block", "seed_block", "status_block", "warning_block"]

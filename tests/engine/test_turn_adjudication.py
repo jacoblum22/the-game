@@ -123,6 +123,9 @@ def test_offer_before_roll_and_nothing_rolled_until_commit(tmp_path: Path) -> No
     fid = res2.record.beats[0].frame_id
     assert fid and dock.state.frames[fid].resolved is not None
     assert res2.record.beats[0].beat_id == beat_id and res2.record.beats[0].degree == "success"
+    # P-012: the committed roll states its outcome once (12.15.3)
+    result = [o["text"] for o in res2.oof if o["kind"] == "RESULT"]
+    assert len(result) == 1 and result[0].startswith("[RESULT] d20 18 → ") and result[0].endswith("· success")
     assert "evidence_recorded" in t and res2.turn_record.beats == [fid]
     assert dock.store.rebuild() == dock.state
 
@@ -137,14 +140,74 @@ def test_withdraw_spends_nothing(tmp_path: Path) -> None:
     assert set(types(dock.store, res2.turn_id)) <= {"pause_closed", "offer_logged"}
 
 
-def test_change_gives_a_fresh_offer(tmp_path: Path) -> None:
+def test_change_asks_how_then_the_new_way_is_offered(tmp_path: Path) -> None:
+    """P-057: Change approach re-showed the same beat ("offers three coins") with new odds and never asked how.
+    It now asks; the player's words are the new declaration, framed on their own."""
+    from engine.resolve.pipeline import CHANGE_ASK
+
     dock, ctx, model, res = offer_turn(tmp_path, **RISKY)
     assert res.pause is not None
-    model.push(Role.FRAMER, framer())  # the second framing: safe this time
     res2 = answer_pause(ctx, "change")
-    assert res2.pause is not None and res2.pause.kind == "offer" and res2.pause.pause_id != res.pause.pause_id
-    assert res2.offer is not None and res2.offer["stakes"] == "safe"
+    assert res2.pause is not None and res2.pause.kind == "offer" and res2.offer["stakes"] == "risky"
+    assert {"kind": "NOTE", "text": CHANGE_ASK} in res2.oof
+    assert not rolls(dock.store) and sum(1 for r, _ in model.calls if r == Role.FRAMER) == 1
+    # "change approach: I talk my way past instead" carries the new way: it is framed, not the old beat
+    talk = beat("talk my way past the watch", "verb.talk", target="npc.sela_vey", verbs=("persuade",))
+    data = {"parts": [{"text": "change approach: I talk my way past instead", "class": "PENDING_ANSWER"}],
+            "pending_answer": "change", "fact_questions": [], "beats": [talk], "clarifying_question": None,
+            "restatement": "Wren talks her way past the watch", "player_quantity": None}
+    model.push(Role.READER, lambda schema, packet: prune(data, schema))
+    model.push(Role.FRAMER, framer())
+    res3 = run_turn(ctx, "change approach: I talk my way past instead")
+    assert res3.pause is not None and res3.pause.kind == "offer"
+    assert res3.pause.detail["plan"]["beat"]["intent"] == "talk my way past the watch"
     assert not rolls(dock.store) and sum(1 for r, _ in model.calls if r == Role.FRAMER) == 2
+
+
+def test_restrained_redirect_names_the_way_out_and_breaking_free_clears_it(tmp_path: Path) -> None:
+    """Fighter playtest 181737 inputs 20-31: Restrained refused every Move with "1 prevents it right now", twice per
+    reply, and nothing could end it. The block names the condition and its cleanse; a won Grapple ends it."""
+    from engine.store.conditions import apply_condition
+
+    climb = beat("climb onto the well rim", "verb.move", verbs=("climb",))
+    leap = beat("leap after the face", "verb.move", verbs=("chase",))
+    model = ScriptedModel({Role.READER: [reader("DECLARATION", "I climb the rim and leap after it.", climb, leap)],
+                           Role.WORLD: [QUIET_WORLD]})
+    dock, ctx = setup(tmp_path, model)
+    with dock.store.transaction() as tx:
+        tx.add_all(apply_condition(tx.state, tx.mint, dock.rules, dock.pc, "cond.restrained").events)
+    from engine.dm.narration import turn_blocks
+
+    res = run_turn(ctx, "I climb the rim and leap after it.")
+    blocks, _ = turn_blocks(ctx, res.oof, res.record, None)
+    red = [b.text for b in blocks if b.kind == "REDIRECT"]
+    assert len(red) == 1, red  # two beats refused for the same reason: one block
+    assert red[0].startswith("[REDIRECT] Not as tried: you are restrained right now, and that stops it; clear it")
+    assert "- Break free (one action; a Grapple roll)" in red[0]
+    free = beat("break free of the hold", "verb.grapple", verbs=("escape",))
+    model.push(Role.READER, reader("DECLARATION", "I break free.", free))
+    model.push(Role.FRAMER, framer())
+    model.push(Role.WORLD, QUIET_WORLD)
+    res2 = run_turn(ctx, "I break free.")
+    assert res2.pause is not None and res2.pause.kind == "offer"
+    ctx.rng.faces = [20]  # type: ignore[attr-defined]
+    answer_pause(ctx, "commit")
+    assert not [c for c in dock.state.conditions.values() if c.condition_id == "cond.restrained"]
+
+
+def test_a_reframe_that_moves_the_odds_says_why(tmp_path: Path) -> None:
+    from engine.resolve.pipeline import reframe_note
+    from engine.resolve.types import Frame
+
+    dock, ctx, model, res = offer_turn(tmp_path, **RISKY)
+    old = Frame.model_validate(res.pause.detail["frame"])
+    assert reframe_note(old, old, dock.rules) is None
+    new = old.model_copy(update={"attribute": "intellect",
+                                 "modifier": old.modifier.model_copy(update={"attribute": old.modifier.attribute - 1}),
+                                 "odds": old.odds.model_copy(update={"success_or_better": 40})})
+    note = reframe_note(old, new, dock.rules)
+    assert note is not None and note.startswith(f"The odds moved from {old.odds.success_or_better}% to 40%: ")
+    assert "uses Intellect" in note and "instead of" in note
 
 
 def test_go_big_reframes_once(tmp_path: Path) -> None:

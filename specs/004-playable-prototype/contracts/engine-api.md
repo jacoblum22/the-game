@@ -41,7 +41,7 @@ Response:
   turn_id: str | null            # null during seed and creation
   phase: seed | creation | play | ending
   fiction: str                   # checked narration, or the plain fallback; empty in pure OOF steps
-  oof_blocks: [{kind: SEED|CREATE|OFFER|STATUS|WARNING|REDIRECT|CLARIFY|NEAR_MISS|LAST_CHANCE|RECAP|NOTE|EPILOGUE, text: str}]  # 12.15
+  oof_blocks: [{kind: SEED|CREATE|OFFER|RESULT|STATUS|WARNING|REDIRECT|CLARIFY|NEAR_MISS|LAST_CHANCE|RECAP|NOTE|EPILOGUE, text: str}]  # 12.15
   pause: Pause | null
   scene_ended: bool
   budget_notice: str | null      # set between turns once spending passes the budget; asks to continue

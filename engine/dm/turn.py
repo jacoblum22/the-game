@@ -43,9 +43,11 @@ from engine.resolve.pipeline import (
     PipelineResult,
     close_by_default,
     harm_hook_for,
+    reframe_note,
     resume,
     run_beats,
 )
+from engine.resolve.types import Frame
 from engine.retrieve.scene import pc_id
 from engine.retrieve.triggers import get_active_triggers
 from engine.store.events import WORLD, Event, PauseRecord
@@ -251,8 +253,10 @@ def _adjudicate(ctx: TurnContext, rec: AdjudicationRecord, reader: ReaderResult,
             if note not in oof:
                 oof.append(note)
     pause = tx.state.open_pause()
-    if pause is not None and reader.pending_answer and any(c.get("id") == reader.pending_answer
-                                                           for c in pause.choices):
+    # "change approach: I just ask nicely" names the new method: that declaration replaces the offer (below)
+    new_way = reader.pending_answer == "change" and bool(reader.beats)
+    if pause is not None and reader.pending_answer and not new_way and any(c.get("id") == reader.pending_answer
+                                                                           for c in pause.choices):
         env = _env(ctx)
         res = _resume(ctx, env, pause, reader.pending_answer, oof)
         _take(rec, res, oof, next((i for i, p in enumerate(rec.parts) if p.cls == "PENDING_ANSWER"), None))
@@ -293,7 +297,10 @@ def _adjudicate(ctx: TurnContext, rec: AdjudicationRecord, reader: ReaderResult,
         rec.notes.append(f"assumed reading (01.2.4): {reader.restatement}")
     env = _env(ctx)
     pause = tx.state.open_pause()
+    old_frame = None
     if pause is not None:  # a new declaration with a pause open: 12.2.6's defaults
+        if pause.detail.get("stage") == "offer" and pause.detail.get("frame"):
+            old_frame = Frame.model_validate(pause.detail["frame"])
         res = close_by_default(env, pause)
         _take(rec, res, oof, None)
         outcomes += res.outcomes
@@ -301,8 +308,15 @@ def _adjudicate(ctx: TurnContext, rec: AdjudicationRecord, reader: ReaderResult,
     res = run_beats(env, plans)
     _take(rec, res, oof, decl)
     outcomes += res.outcomes
+    now = tx.state.open_pause()
+    if old_frame is not None and now is not None and now.detail.get("stage") == "offer" and now.detail.get("frame"):
+        new_frame = Frame.model_validate(now.detail["frame"])
+        if new_frame.beat.target == old_frame.beat.target and new_frame.beat.target not in (None, "", "none"):
+            note = reframe_note(old_frame, new_frame, ctx.rules)  # P-057: the odds never move unexplained
+            if note:
+                oof.append({"kind": "NOTE", "text": note})
     for p in rec.parts:
-        if p.cls == "DECLARATION":
+        if p.cls == "DECLARATION" or (new_way and p.cls == "PENDING_ANSWER"):
             p.handled = "paused" if res.pause else "resolved"
     _harm_followups(ctx, env, rec, oof)
     return outcomes
@@ -412,7 +426,8 @@ OFFER_TERMS = (  # the OFFER's words in plain English (01.7.1, 01.7.3, 01.8.2, 0
                                   "you), risky, or dire."),
     (("reach",), "Reach is how much a success gets you: limited, standard or great."),
     (("withdraw",), "Withdraw: drop the attempt. Nothing is spent."),
-    (("change approach",), "Change approach: try it another way. Nothing is spent."),
+    (("change approach",), "Change approach: say another way to do it, and that is offered instead. Nothing "
+                                    "is spent."),
     (("commit",), "Commit: roll for it as shown."),
 )
 FATE_ANSWER = ("Fate (your luck) is not spent before a roll: once you have seen the die, you may spend 1 fate to "
@@ -446,6 +461,33 @@ def stuck_answer(state: Any) -> str:  # rule: 12.8.5
     return "[LEADS] Some ways forward — or anything else you have in mind:\n" + "\n".join(f"  • {x}" for x in leads)
 
 
+SEVERITY_ANSWER = "S1 to S5 is how heavy a cost is: S1 is a light one, S5 the heaviest."
+
+
+def cost_terms(rules: Any, low: str) -> list[str]:  # rule: 01.11.1
+    """The cost-menu entries a question names ("closed door", "exposure"), from the loaded cost menu: its name and
+    what it is at the severity asked about (S2 when none is)."""
+    from engine.dm.oof import _menu_form
+
+    sev = re.search(r"\bs([1-5])\b", low)
+    out: list[str] = []
+    for cid in rules.ids("cost.") if rules is not None else []:
+        e = rules.get(cid)
+        name = str(e.get("name") or cid.split(".", 1)[1].replace("_", " "))
+        if not re.search(rf"\b{re.escape(name.lower())}\b", low):
+            continue
+        s = f"S{sev.group(1)}" if sev else "S2"
+        form = _menu_form(rules, cid, s) or next(
+            (str(e.get(k) or "").split(": ", 1)[-1] for k in ("standard_form", "heavy_form")
+             if str(e.get(k) or "").startswith(s + ":")), "")
+        fits = str(e.get("fits_when") or "").split(":")[0].split(";")[0]
+        what = f"{name}: a cost that fits {fits}" if fits else f"{name}: a cost"
+        out.append(f"{what}. At {s}: {form}." if form else f"{what}.")
+    if sev:
+        out.append(SEVERITY_ANSWER)
+    return out
+
+
 def oof_answer(ctx: TurnContext, text: str) -> str:  # rule: 12.5.10
     """12.5.10: a rule id → its card (engine.dm.codex); a codex section by name; odds → the OFFER shows them;
     "what can I do?" → the stuck answer (12.8.5)."""
@@ -455,12 +497,14 @@ def oof_answer(ctx: TurnContext, text: str) -> str:  # rule: 12.5.10
     if m:
         return codex(ctx.state, f"rules {m.group(1)}", ctx.rules).text
     low = text.lower().replace("’", "'")
-    if re.search(r"\b(fate|luck)\b", low):  # rule: 01.16.3
-        return FATE_ANSWER
     asks = any(w in low for w in ("mean", "what is", "what's", "what does", "explain", "what happens if"))
+    # every term asked about in the message, in one note (P-028: "what does near miss mean? Also, can I…")
     terms = [say for words, say in OFFER_TERMS if asks and any(w in low for w in words)]
+    terms += cost_terms(ctx.rules, low) if asks else []
+    if re.search(r"\b(fate|luck)\b", low):  # rule: 01.16.3
+        terms.append(FATE_ANSWER)
     if terms:  # "what does 'go big' mean?": the term in a line or two, the choices follow as before
-        return " ".join(terms[:2])
+        return " ".join(dict.fromkeys(terms[:4]))
     if any(w in low for w in STUCK_WORDS):
         return stuck_answer(ctx.state)
     if any(w in low for w in NEW_WORDS):

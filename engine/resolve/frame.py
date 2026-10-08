@@ -640,6 +640,7 @@ def offer_preview(frame: Frame, rules: Any = None) -> OfferPreview:  # rule: 01.
 
 
 _CITED_FACT = re.compile(r"\s*\((?:source:\s*)?fact\.\d+\)")  # "(source: fact.203)": the words already say it
+_CITING = re.compile(r",?\s*\b(?:citing|per|source(?: is)?:?)\s+fact\.\d+", re.IGNORECASE)  # "…, citing fact.144"
 _BARE_FACT = re.compile(r"\bfact\.\d+\b")
 _OOF_TAIL = re.compile(r"\s*\b(?:out of fiction|OOF)\s*:.*$", re.IGNORECASE | re.DOTALL)
 _PAREN = re.compile(r"\s*\([^()]*\)")
@@ -695,7 +696,10 @@ def _fact_words(state: Any, fid: str) -> str:
     if isinstance(f.value, list) or "." in f.predicate:  # a list, or a dotted predicate id: no plain words
         return settled
     pred = f.predicate.replace("_", " ").strip()
-    return pred if f.value is True else f"{pred}: {f.value}" if f.value not in (False, None) else f"not {pred}"
+    if len(f.predicate) >= 60:  # a slug cut at 60 (engine/dm/turn.py, narration.py): never show a cut word
+        pred = pred.rsplit(" ", 1)[0]
+    # a false or empty fact is never negated in words ("not no one is watching ..."): the plain phrase stands
+    return pred if f.value is True else f"{pred}: {f.value}" if f.value not in (False, None) else settled
 
 
 def plain_offer_words(frame: Frame, state: Any) -> Frame:  # rule: 12.14.4
@@ -712,7 +716,7 @@ def plain_offer_words(frame: Frame, state: Any) -> Frame:  # rule: 12.14.4
             want = None
 
     def plain(text: str, beat: bool = False) -> str:
-        t = _CITED_FACT.sub("", text or "")
+        t = _CITING.sub("", _CITED_FACT.sub("", text or ""))
         t = _BARE_FACT.sub(lambda m: _fact_words(state, m.group(0)), t)
         if beat:
             t = _PAREN.sub("", _OOF_TAIL.sub("", t)).strip()

@@ -102,6 +102,59 @@ def test_near_miss_block(s: Scene) -> None:
                                            "Let it fail: you tire (drain, S2)"]
 
 
+def test_result_block_states_the_outcome_once(s: Scene) -> None:
+    from engine.dm.adjudication import CostEntry
+    from engine.dm.oof import result_block
+
+    f = _frame(s)
+    roll = RollResult(frame_id=None, d20=9, total=13, margin=-2, base_degree="failure", degree="failure",
+                      near_miss=True)
+    assert result_block(f, roll, rules=s.rules).text == "[RESULT] d20 9 → 13 vs 15 · failure (near miss)"
+    paid = result_block(f, roll, sac=True, costs=[CostEntry(menu_id="cost.drain", severity="S2", form="you tire")],
+                        rules=s.rules).text.splitlines()
+    assert paid[0] == "[RESULT] d20 9 → 13 vs 15 · success at a cost (near miss)"
+    assert paid[1].strip() == "Paid: you tire (drain, S2)."
+    secret = check(s, secret=True)
+    assert result_block(secret, roll).text == "[RESULT] hidden check made."  # type: ignore[arg-type]
+
+
+def test_offer_words_never_cite_negate_or_cut_a_fact() -> None:
+    """Breaker playtest 183202 inputs 27-28: "citing not no one is watching the cobbles where the folded paper lies w"."""
+    from types import SimpleNamespace as NS
+
+    from engine.resolve.frame import plain_offer_words
+
+    fact = NS(visibility="shown", subject="place.square", value=False,
+              predicate="no_one_is_watching_the_cobbles_where_the_folded_paper_lies_w")  # a slug cut at 60
+    state = NS(entities={}, facts={"fact.144": fact}, scene=None)
+    frame = NS(beat=NS(actor="pc.a", target=None, restatement="Grab the paper."),
+               threatened_cost=NS(form_intent="the stooping lift marks her, citing fact.144"),
+               alternate_cost=NS(form_intent="the crowd lingers, as fact.144 says"))
+    plain_offer_words(frame, state)
+    assert frame.threatened_cost.form_intent == "the stooping lift marks her"
+    assert frame.alternate_cost.form_intent == "the crowd lingers, as what is already settled says"
+    fact.value = True
+    frame.alternate_cost.form_intent = "as fact.144 says"
+    assert plain_offer_words(frame, state).alternate_cost.form_intent == (
+        "as no one is watching the cobbles where the folded paper lies says")
+
+
+def test_cost_terms_and_several_questions_are_answered(s: Scene) -> None:
+    """Breaker playtest inputs 19, 25-26 (P-028): cost names and severities, and several questions in one message,
+    got the generic note."""
+    from types import SimpleNamespace as NS
+
+    from engine.dm.turn import OOF_HELP, SEVERITY_ANSWER, oof_answer
+
+    ctx = NS(state=s.state, rules=s.rules)
+    a = oof_answer(ctx, 'what does "closed door, S2" and "exposure" mean? And can I spend my Fate point on this?')
+    assert a != OOF_HELP and a.startswith("Closed door: a cost that fits ")
+    assert "At S2: this approach closed until a new fact changes the situation." in a
+    assert "Exposure: a cost that fits " in a and SEVERITY_ANSWER in a and "reroll" in a
+    b = oof_answer(ctx, 'what does "near miss" mean here? Also, can I change approach to just asking nicely?')
+    assert b.startswith("A near miss is a roll that fails by 3") and "Change approach:" in b
+
+
 def test_redirect_g3_and_g4(s: Scene) -> None:
     g3 = GateDecision(gate="G3", proposed="G3", redirect=Redirect(
         intent="open the lock", missing="lic.training.lockwork", missing_kind="license",
@@ -227,5 +280,6 @@ def test_offer_menu_says_what_enter_does_and_names_the_trades() -> None:
                            Choice(id="play_safe", label=TRADE_LABELS["play_it_safe"])])
     out = render_response(Response(phase="play", oof_blocks=[OofBlock(kind="OFFER", text="[OFFER] Climb.")],
                                    pause=pause), 80)
+    # P-044: an OFFER names no Enter default (an empty line withdrew silently); the near miss still does
     assert out.endswith("  3) Play it safe (less at stake, less if it works)\n\n"
-                        "Type a number, or press Enter for Withdraw.")
+                        "Type 1 to commit, or a number from the list.")
