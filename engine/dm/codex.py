@@ -179,7 +179,9 @@ def conditions(state: WorldState, rules: Any = None) -> CodexView:  # rule: 00.6
 
 
 def _value_words(v: Any) -> str:
-    """A fact value in words: a record's own words (`form`, `text`, `name`), a list joined, else as is."""
+    """A fact value in words: a record's own words (`form`, `text`, `name`), a list joined, yes/no, else as is."""
+    if isinstance(v, bool):
+        return "yes" if v else "no"
     if isinstance(v, dict):
         for key in ("form", "text", "name", "value"):
             if v.get(key):
@@ -190,11 +192,137 @@ def _value_words(v: Any) -> str:
     return str(v)
 
 
+NOT_KNOWLEDGE = ("trg.", "link.", "pref.")
+QUALIFIERS = (".but", ".and")  # an Oracle twist's qualifier rides on its answer's fact
+HOW_SAID = {"seen": "", "rumor": " (a rumour: true or not, you cannot say)"}
+STOP = {"the", "this", "that", "these", "those", "about", "so", "far", "already", "yet", "know", "what", "with",
+        "and", "any", "anything", "who", "them", "him", "her", "it", "its", "of", "a", "an", "my", "our"}
+
+
+def _known(state: WorldState, cv: dict[str, Any], pc: str | None) -> list[dict[str, Any]]:  # rule: 12.10.5
+    """What the PC has learned, oldest first: their knowledge records (any `how`, rumours included) and the shown
+    facts about the world the player has been told in play (narrated, or answered by the Oracle: `how` "seen").
+    Codex view only, so nothing sealed or background; facts about the PC are the sheet's."""
+    from engine.dm.oof import short_text
+    from engine.world.chronicle import PREFIX
+
+    facts = cv["facts"]
+    recs = state.knowledge.get(pc or "", {}) or {}
+    seen = {fid for fid, f in facts.items() if f["visibility"] == "shown" and f["subject"] not in (pc, "world")}
+    out: list[dict[str, Any]] = []
+    at: dict[tuple[str, str], int] = {}
+    for fid in sorted(set(recs) | seen, key=lambda i: state.facts[i].valid_from_seq if i in state.facts else 0):
+        f = facts.get(fid)
+        if f is None or f["predicate"].startswith((*NOT_KNOWLEDGE, PREFIX)) or f["predicate"].endswith(QUALIFIERS):
+            continue
+        subj = cv["entities"].get(f["subject"], {}).get("name") if f["subject"] != "world" else "the world"
+        if subj is None:  # about something the codex does not show
+            continue
+        ent = state.entities.get(f["subject"])
+        if ent is not None and ent.kind == "thread":
+            subj = short_text(ent.data.get("text") or subj)
+        what = "a lead" if f["predicate"].startswith("lead.") else f["predicate"].replace("_", " ").replace(".", " ")
+        k = recs.get(fid)
+        at[(f["subject"], f["predicate"])] = len(out)  # a later answer to the same thing replaces the earlier one
+        out.append({"fact_id": fid, "subject": f["subject"], "about": subj, "what": what.strip(),
+                    "value": f["value"], "how": k.how if k else "seen"})
+    keep = set(at.values())
+    return [k for i, k in enumerate(out) if i in keep]
+
+
+def _known_line(k: dict[str, Any]) -> str:
+    how = HOW_SAID.get(k["how"], f" ({k['how']})")
+    return second_person(f"{k['about']}: {k['what']} — {_value_words(k['value'])}{how}")
+
+
+def _stems(text: str) -> set[str]:
+    import re
+
+    return {w[:5] for w in re.findall(r"[a-z']+", text.lower().replace("'s", "")) if len(w) > 2 and w not in STOP}
+
+
+def _self_lines(cv: dict[str, Any], pc: str, rules: Any) -> list[str]:
+    """Who the PC is, as they know it: origin (a free Recall of what that life teaches, 12.10.5), drive, bond,
+    aim and hooks (their creation answers)."""
+    from engine.dm.oof import short_text
+
+    mine: dict[str, Any] = {}
+    for f in sorted((f for f in cv["facts"].values() if f["subject"] == pc), key=lambda f: f.get("valid_from_seq", 0)):
+        mine[f["predicate"]] = f["value"]
+    out = []
+    origin = ("origin.livelihood", "origin.upbringing", "origin.people")
+    life = [_name(rules, str(mine[k])) for k in origin if mine.get(k)]
+    if life:
+        out.append("Your life before this: " + " · ".join(life) + " (what that life teaches, you know)")
+    if mine.get("drive"):
+        out.append(f"What drives you: {_value_words(mine['drive'])}")
+    bond = mine.get("bond.anchor")
+    if isinstance(bond, dict) and bond.get("npc"):
+        who = cv["entities"].get(str(bond["npc"]), {}).get("name") or ""
+        if who:
+            out.append(f"Who matters to you: {who}" + (f" ({bond['kind']})" if bond.get("kind") else ""))
+    if mine.get("aspiration"):
+        out.append(f"What you hope for: {_value_words(mine['aspiration'])}")
+    hooks = mine.get("hooks")
+    if isinstance(hooks, list) and hooks:
+        out.append("Ties: " + "; ".join(second_person(short_text(str(h).split(": ", 1)[-1])) for h in hooks[:2]))
+    return out
+
+
+def what_you_know(state: WorldState, about: str | None = None, rules: Any = None) -> CodexView:  # rule: 14.6.3
+    # rule: 15.9.16
+    """"What do I know (about X)?" (14.6.3, 12.5.10): the journal filtered to X; with no X, a short summary of who
+    the PC is, the land any local knows, leads and rumours, and the people met. Codex view only: nothing sealed,
+    background or unlearned. Nothing known says so, and how to find out (ask, look, or Recall, 01.18.6)."""
+    from engine.world.places import location
+
+    cv = codex_view(state)
+    pc = _pc(state, cv)
+    if pc is None:
+        return CodexView(section="journal", text="[JOURNAL] No character yet.")
+    known = _known(state, cv, pc)
+    ents = {i: e for i, e in cv["entities"].items() if i != pc}
+    want = _stems(about or "")
+    if about and want and not want <= {"mysel", "me", "chara"}:
+        hits = [i for i, e in ents.items() if want & _stems(f"{e['name']} {e['data'].get('role') or ''}")]
+        hits = hits[:3]
+        lines = []
+        for e in (ents[i] for i in hits):
+            role, desc = e["data"].get("role"), _value_words(e["data"].get("desc") or "")
+            lines.append(e["name"] + (f" ({role})" if isinstance(role, str) and role else "") +
+                         (f": {desc}" if desc and desc.lower() != e["name"].lower() else ""))
+        lines += [_known_line(k) for k in known
+                  if k["subject"] in hits or want & _stems(f"{k['what']} {_value_words(k['value'])}")][-12:]
+        lines += [x for x in _self_lines(cv, pc, rules) if any(ents[i]["name"] in x for i in hits)]
+        if not lines:
+            return CodexView(section="journal", data={"about": about, "known": []}, text=(
+                f"[JOURNAL] Nothing on record about {about}: your character doesn't know anything about that yet. "
+                "To find out, ask someone who might know, go and look, or say you try to remember (a Recall roll, "
+                "for what your upbringing or trade would have taught you)."))
+        return CodexView(section="journal", text="\n".join([f"[JOURNAL] What you know about {about}:"] +
+                                                           [f"  {x}" for x in lines]),
+                         data={"about": about, "entities": hits})
+    lines = _self_lines(cv, pc, rules)
+    here = location(state)
+    home = state.entities[here].data.get("settlement_scope") if here in state.entities else None
+    for i, e in ents.items():
+        if e["kind"] == "place" and e["data"].get("desc") and (e["data"].get("place_kind") == "region" or i == home):
+            lines.append(f"{e['name']}: {_value_words(e['data']['desc'])} (as anyone here knows)")
+    lines += [_known_line(k) for k in known if k["how"] != "seen"][-6:]
+    met = [e["name"] for i, e in ents.items() if e["kind"] in ("npc", "companion") and e["visibility"] == "shown"
+           and any(k["subject"] == i for k in known)]
+    if met:
+        lines.append("People you have met: " + ", ".join(met[-8:]))
+    lines.append('Ask "what do I know about <someone or something>?" for the details, or type "journal" for '
+                 "everything you have noted.")
+    return CodexView(section="journal", text="\n".join(["[JOURNAL] What you know:"] + [f"  {x}" for x in lines]),
+                     data={"known": known})
+
+
 def journal(state: WorldState, rules: Any = None, limit: int = 30) -> CodexView:  # rule: 11.12.4
     # rule: 00.6.4
     """The chronicle (player-facing entries) and what the character has learned (recorded knowledge of shown or
     available facts)."""
-    from engine.dm.oof import short_text
     from engine.world.chronicle import PREFIX, chronicle
 
     cv = codex_view(state)
@@ -208,25 +336,12 @@ def journal(state: WorldState, rules: Any = None, limit: int = 30) -> CodexView:
         if e.scope != "public" and not (pc and (e.scope == pc or (isinstance(e.scope, list) and pc in e.scope))):
             continue
         entries.append({"id": e.id, "time": e.time, "text": e.text})
-    known = []
-    for fid, k in (state.knowledge.get(pc or "", {}) or {}).items():
-        f = facts.get(fid)
-        if f is None or f["predicate"].startswith(("trg.", PREFIX)):
-            continue
-        subj = cv["entities"].get(f["subject"], {}).get("name") if f["subject"] != "world" else "the world"
-        if subj is None:  # about something the codex does not show
-            continue
-        ent = state.entities.get(f["subject"])
-        if ent is not None and ent.kind == "thread":
-            subj = short_text(ent.data.get("text") or subj)
-        what = "a lead" if f["predicate"].startswith("lead.") else f["predicate"].replace("_", " ").replace(".", " ")
-        known.append({"fact_id": fid, "about": subj, "what": what, "value": f["value"], "how": k.how})
+    known = _known(state, cv, pc)
     lines = ["[JOURNAL]"]
     lines += [f"  {e['time']}: {e['text']}" for e in entries[-limit:]]
     if known:
         lines.append("  Known:")
-        lines += [second_person(f"    {k['about']}: {k['what']} — {_value_words(k['value'])} ({k['how']})")
-              for k in known[-limit:]]
+        lines += [f"    {_known_line(k)}" for k in known[-limit:]]
     if len(lines) == 1:
         lines.append("  nothing yet")
     return CodexView(section="journal", text="\n".join(lines), data={"chronicle": entries, "known": known})
@@ -280,4 +395,5 @@ def codex(state: WorldState, section: str | None = None, rules: Any = None, *,
     return fn(state, rules)
 
 
-__all__ = ["SECTIONS", "CodexView", "abilities", "codex", "conditions", "journal", "rule_card", "sheet", "threads"]
+__all__ = ["SECTIONS", "CodexView", "abilities", "codex", "conditions", "journal", "rule_card", "sheet", "threads",
+           "what_you_know"]

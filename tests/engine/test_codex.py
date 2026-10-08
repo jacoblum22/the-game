@@ -97,6 +97,27 @@ def test_sections(store: Store, rules: Rules) -> None:
     assert codex(store.state, "nonsense", rules).text.startswith("[NOTE] Codex sections:")
 
 
+def test_what_you_know_reads_what_was_seen_and_heard(store: Store, rules: Rules) -> None:
+    # 12.10.5 / 15.9.16: facts shown in play are known even without a knowledge record; rumours say so
+    with store.transaction() as tx:
+        _fact(tx, "item.iron_bar", "weight", "heavier than it looks", "shown")
+        _fact(tx, "pc.wren", "drive", "I will find the ferryman", "shown")
+        rumour = _fact(tx, "item.iron_bar", "forged_by", "the smiths of Ashford", "available")
+        tx.add(Event.of("knowledge_recorded", source="test", knower="pc.wren", fact_id=rumour, how="rumor"))
+    j = codex(store.state, "journal", rules).text
+    assert "Iron bar: weight — heavier than it looks" in j and "nothing yet" not in j
+    from engine.dm.codex import what_you_know
+
+    bar = what_you_know(store.state, "the iron bar", rules).text
+    assert bar.startswith("[JOURNAL] What you know about the iron bar:")
+    assert "weight — heavier than it looks" in bar and "smiths of Ashford (a rumour" in bar
+    summary = what_you_know(store.state, None, rules).text
+    assert "What drives you: I will find the ferryman" in summary
+    for about in (None, "the iron bar", "Wren", "cultist"):
+        assert SECRET not in what_you_know(store.state, about, rules).text
+    assert "Nothing on record about the moon" in what_you_know(store.state, "the moon", rules).text
+
+
 def test_rules_card_by_id(store: Store) -> None:
     v = codex(store.state, "rules 01.7.1")
     assert v.text.startswith("[RULES] 01.7.1 What the OFFER shows") and "commit" in v.text

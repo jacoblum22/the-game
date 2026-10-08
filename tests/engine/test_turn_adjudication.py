@@ -358,3 +358,44 @@ def test_move_to_another_place_cuts_the_scene_there(tmp_path: Path) -> None:
     st = dock.state
     assert st.positions[dock.pc].location == office
     assert st.scene is not None and st.scene.place_id == office and res.record.scene.cut
+
+
+# ------------------------------------------------------------------------------------------- "what do I know?"
+
+
+@pytest.mark.parametrize("cls", ["FICTION_QUESTION", "DECLARATION"])
+def test_what_do_i_know_is_answered_plainly_never_rolled(tmp_path: Path, cls: str) -> None:
+    # 14.6.3 / 12.10.5: whatever the Reader called it, the journal answers, out of fiction; no Recall roll, no
+    # Oracle draw about the PC's own memory
+    text = "And what do I know about the ferryman so far?"
+    recall = beat("remember what Wren knows of the ferryman", "verb.recall", gate="G3")
+    ask = {"subject": "pc.wren", "predicate": "Wren knows anything of the ferryman", "odds_rung": "unlikely"}
+    model = ScriptedModel({Role.READER: [reader(cls, text, recall, questions=(ask,))], Role.WORLD: [QUIET_WORLD]})
+    dock, ctx = setup(tmp_path, model)
+    res = run_turn(ctx, text)
+    assert [p.cls for p in res.record.parts] == ["OOF_QUESTION"]
+    assert res.pause is None and not res.record.beats and not res.record.oracle
+    assert "oracle_answered" not in types(dock.store, res.turn_id)
+    note = next(o["text"] for o in res.oof if o["text"].startswith("[JOURNAL]"))
+    assert note.startswith("[JOURNAL] What you know about the ferryman:") and "Tam Harlan" in note
+    assert "silver" not in note and "tide" not in note  # his sealed wants
+
+
+def test_trying_to_remember_stays_in_fiction(tmp_path: Path) -> None:
+    text = "I try to remember what I know about the ferryman."
+    recall = beat("remember what Wren knows of the ferryman", "verb.recall", gate="G1")
+    model = ScriptedModel({Role.READER: [reader("DECLARATION", text, recall)], Role.FRAMER: [framer()],
+                           Role.WORLD: [QUIET_WORLD]})
+    dock, ctx = setup(tmp_path, model)
+    res = run_turn(ctx, text)
+    assert [p.cls for p in res.record.parts] == ["DECLARATION"]
+    assert not any(o["text"].startswith("[JOURNAL]") for o in res.oof)
+    assert res.pause is not None or res.record.beats
+
+
+def test_nothing_known_says_so_and_how_to_find_out(tmp_path: Path) -> None:
+    text = "what do I know about the dragon?"
+    model = ScriptedModel({Role.READER: [reader("FICTION_QUESTION", text)], Role.WORLD: [QUIET_WORLD]})
+    dock, ctx = setup(tmp_path, model)
+    note = " ".join(o["text"] for o in run_turn(ctx, text).oof)
+    assert "Nothing on record about the dragon" in note and "ask someone" in note and "remember" in note
