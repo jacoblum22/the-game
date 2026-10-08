@@ -59,3 +59,5 @@ Status: open · fixing (round N) · fixed (commit) · logged (ledger id) · wont
 | P-050 | bug | high | "Go big" at an OFFER sometimes → "You cannot do it that way. What do you do?", offer lost; once "It works" twice then a new offer | 174829-fighter inputs 19–25 | fixing (with P-049) |
 | P-051 | rules | med | Odds: 20% success vs 35% critical failure on "safe" stakes; hidden-roll offers show no odds despite the promise | 174829-fighter inputs 19–31 | logged I-143 |
 | P-052 | polish | low | Walk-on NPC shares the PC's first name (Aldett Redley / Aldett Blackbrook) | 174829-fighter input 30 | logged I-142 |
+| P-053 | bug | med | OFFER prints a raw dict: "bond.anchor: {'kind': 'friend', 'npc': …}" (fact-id-to-words replacement on a structured value) | 174825-explorer input 20 | fixing (with P-049) |
+| P-054 | bug | med | Asking to see the sky omen / a notice's words gets a restated question ("has not visible colours, shapes and motion") or "The notice is a hire." with no detail | 174825-explorer inputs 21–31 | open (recheck on eeff286) |
