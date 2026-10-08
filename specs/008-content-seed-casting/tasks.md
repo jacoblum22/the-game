@@ -52,3 +52,18 @@ US3 (T014) before T011's `settle_who` casting. US4 independent. Parallel: the te
 ## Strategy
 
 MVP = US1 + US2 (the seed and its case); US3/US4 complete the brief. Commit after each phase.
+
+---
+
+# Tasks: part B, the answer ladder (PR-12-10)
+
+- [X] T021 [US5] `engine/dm/answer.py`: index, tier route, store, pack, propose and ratify, pointer, volunteer, depth by reach
+- [X] T022 [US5] Role `proposer`: base Role, schema + default, prompt, call module, offline heuristic, Gemini cap, cards, fixture, smoke list
+- [X] T023 [US5] `world_step.deliver_learning` -> the ladder (Talk/Observe/Recall beats, SPEECH questions); retire `_talk_answers`, `_who_questions`, `_WHAT_ASKED`, `_NAME_OF`, `_WHO_ASKED`, `_ASKS_NAME`, `learn_names`, the concrete-thing notes, the thread and first-present fallbacks
+- [X] T024 [US5] `npc_layer` Talk outcome wording by reach; skip SPEECH-answered NPCs
+- [X] T025 [US6] Consequential route through the case graph; `mark_found` on delivery; Observe at a holder place/object/document; retire `incident.settle_who` (`turn._fiction_questions` -> `answer.who_answer`)
+- [X] T026 [US5] `claims._learning_success` unreachable, `TODO(008-B retire)` (009-B's file: one line)
+- [X] T027 [P] [US5] Offline Reader: question kinds on declared asks
+- [X] T028 [P] [US5/US6] Tests `tests/engine/test_answer.py`: each rung, depth by reach, never-empty, ask-twice, does-not-know recorded, consequential routing, offline determinism, 30 seeded openings within 3 turns; update the retired paths' tests
+- [X] T029 `evals/longhorizon.py`: empty-success rate, ask-twice consistency
+- [X] T030 Full suite, ruff, pyright; re-record replay; long-horizon scripted; `implementation-results.md` part-B gate table; CONVENTIONS section

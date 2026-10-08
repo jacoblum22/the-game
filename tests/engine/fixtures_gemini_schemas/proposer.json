@@ -1,0 +1,28 @@
+{
+ "type": "object",
+ "properties": {
+  "kind": {
+   "type": "string",
+   "enum": [
+    "ordinary_fact",
+    "not_ordinary"
+   ]
+  },
+  "subject": {
+   "type": "string"
+  },
+  "predicate": {
+   "type": "string"
+  },
+  "value": {
+   "type": "string"
+  }
+ },
+ "required": [
+  "kind",
+  "subject",
+  "predicate",
+  "value"
+ ],
+ "additionalProperties": false
+}

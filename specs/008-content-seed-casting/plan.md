@@ -68,3 +68,22 @@ tests/engine/test_seed_packs.py, test_case.py, test_cast.py; tests/golden/test_w
 | Deviation | Why | Simpler alternative rejected |
 |---|---|---|
 | Edits outside the lane (`session.py`, `packet.py`, `places.py`, handler table) | The binding is called from `session.opening`, not `opening.py`; 12.4.3 needs the look rendered; knowledge must not reach the narrator view | Leaving them would keep the retired binding live or leak packs into packets |
+
+---
+
+## Part B plan: the answer ladder
+
+- New `engine/dm/answer.py` (PR-12-10): `ask(ctx, knower, kind, topic, text, rungs, pc=)` -> `Answer(line, said,
+  fact_id, pointer)`; `volunteer`; `deliver_count`; `who_answer` (the DM-side "who is X?", replacing
+  `settle_who`); `deliver_placements` (15.9.5 for Observe at a holder).
+- New role `proposer` (`engine/llm/base.Role`, schema in `engine/dm/schemas.py`, prompt
+  `engine/dm/roles/prompts/proposer.md`, call in `engine/dm/roles/proposer.py`, offline heuristic in
+  `engine/llm/offline.py`, Gemini output cap, card list, schema fixture).
+- `world_step.deliver_learning` routes successful learning beats with questions (and SPEECH questions with no Talk
+  beat) to the ladder; returns per-beat summaries (the harness's empty-success and ask-twice metrics).
+- `npc_layer`: the Talk outcome is "answers what you asked" / T-15-5's yes by reach; SPEECH-answered NPCs are
+  skipped.
+- `turn._fiction_questions` calls `answer.who_answer` (one-line call site).
+- Offline Reader: question kinds for declared asks ("I ask X what ..."), topic left null.
+- `evals/longhorizon.py`: empty-success rate and ask-twice consistency; an `ask_twice` script line.
+- Lanes: `claims.py` (009-B) gets one line (`_learning_success` unreachable).

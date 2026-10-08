@@ -67,3 +67,57 @@ state=None)`, `mark_found(...)`, `validate_case`, `incident_line`, `start_knowle
 - In-play casting and on-demand cases draw from keyed `random.Random` streams (pure in seed + question), not the
   logged game RNG.
 - Step 8's headline people stay named at setup (places.py); DL-12-63 would fold them into I-149.
+
+---
+
+# Part B: the answer ladder (PR-12-10)
+
+Branch `worktree-agent-a0a478d32693a1c9c`, from e601d22. Spec-kit: part-B sections appended to spec/plan/tasks
+(T021-T030); clarify and analyze skipped (the brief and PR-12-10 fix the design); implement.
+
+## Gates
+
+| Gate | Result |
+|---|---|
+| Full suite | **1645 passed**, 4 skipped (base e601d22: 1619 + new tests; 8 retired-path tests rewritten to the ladder) |
+| ruff / pyright on touched files | clean / 0 errors in touched code (pyright's unresolved `pydantic`/`pytest` imports are the uvx environment) |
+| Unit tests (`tests/engine/test_answer.py`, 16) | each rung (store, pack, propose+ratify yes/no, pointer), depth by reach, never-empty (3 reaches x 18 topics), ask-twice (same fact, no new RNG draw), "does not know" recorded (`knows_*` = false + index pointer), story role -> case graph (no proposer call), candidate touching a case routed to it, DM-side who, search at a holder place marks node 2 found, offline determinism, 30 openings |
+| Long-horizon scripted, offline, 320 lines (`evals/baselines/longhorizon_008b.txt`) | **0 engine errors**; **108 learning beats, 0 empty successes (0.0%)**; pointer answers 77/108 (71%: "who would know" lines are pointers by design, and the offline proposer's candidates face Unlikely odds); **ask-twice 23/23 (100%)**; contradictions 0.3/100 (unchanged) |
+| Seeded openings, "who is missing?" | **30 of 30 within 3 turns** through the whole offline pipeline (Driver + OfflineModel; 12 in 1 turn, 18 in 2); also as a unit test at engine level |
+| Live check (Reader + Proposer on Haiku via the Claude CLI, 15 Talk turns; `evals/baselines/live_answer_008b.txt`) | 15 learning beats, **0 empty**, 6/15 pointers (40%), 7 proposer calls, 22 CLI calls in all |
+
+## What changed
+
+- New: `engine/dm/answer.py` (index, tier route, store, pack, propose+ratify, pointer, volunteer, `who_answer`,
+  `deliver_node`), Role `proposer` (`engine/dm/roles/proposer.py`, prompt, schema + default, offline heuristic,
+  Gemini cap, cards entry, schema fixture, smoke list), `tests/engine/test_answer.py`.
+- `world_step.deliver_learning` -> the ladder; returns per-beat summaries; SPEECH questions without a Talk beat are
+  answered as the NPC's act and skip the NPC table. `npc_layer.talk_outcome` (T-15-5 by reach) replaces the
+  placeholder. `turn._fiction_questions` calls `answer.who_answer` (call site). `cast.pointer_target(exclude=)`.
+- Offline Reader: question kinds on declared asks and quoted questions; "who ... would know" is `who_knows`.
+  Offline narrator: an unnamed speech reply never answers for a Talk's listener. Replay re-recorded.
+- `evals/longhorizon.py`: empty-success rate, pointer rate, ask-twice consistency (an `ask_twice` script line).
+- Ledger I-140, I-153: engine notes. Validator: 0 ERROR / 0 WARN.
+
+## Retired
+
+`world_step._talk_answers`, `_who_questions`, `_WHAT_ASKED`, `_NAME_OF`, `_WHO_ASKED`, `_ASKS_NAME`, `learn_names`,
+`_fact_words`/`_name` (moved to answer.py), the "name one concrete thing" look/talk notes, the top-thread and
+first-present-person fallbacks, the "responds as the talk went" act, `incident.settle_who`, `WHO`, `STORY_ROLES`,
+`NO_ONE`, `_people` (moved or gone).
+
+## TODO(008-B retire), outside the lane
+
+- `engine/audit/claims.py` (spec 009-B): the `_learning_success` call is `if False:  # TODO(008-B retire)`; delete
+  the function and that branch after both merge.
+- `engine/audit/fallback.py` `NPC_ROW_PROSE["responds as the talk went: *"]` and `roles/narrator.WITHHOLDING`'s
+  two "responds as the talk went" entries are dead (nothing writes them now).
+
+## Deferred
+
+- Rumor pack items (no text in the store: the region's rumor tables are not stored) are never told.
+- `proposed_by: narrator` has no fact column; ratified facts carry `source: oracle`, rule PR-12-10.
+- Topic inference for a null Reader topic is word overlap (live: "where can I find a healer?" got a local-news pack
+  line); "what do you want?" of an NPC with no seeded stance falls through to the ordinary rungs.
+- The DL-12-44 `repeat_pointer_limit` log; pointers only avoid sending the PC back to who pointed here.
+- Exceptional reach's bonus item (T-01-6) is not added.

@@ -25,6 +25,7 @@ class Role(StrEnum):
     DIRECTOR = "director"
     NARRATOR = "narrator"
     CHECKER = "checker"
+    PROPOSER = "proposer"  # PR-12-10 rung 3: one typed candidate answer (spec 008 part B)
 
 
 class Outcome(StrEnum):

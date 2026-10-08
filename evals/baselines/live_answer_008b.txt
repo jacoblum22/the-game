@@ -1,0 +1,17 @@
+I ask Elias Lanande, "what are the roads like these days?" -> ['The guard tells you: the main road out of town is passable in daylight but rutted and muddy after the autumn r']
+I ask Grak Three-Scar, "who is missing?" -> ['Grak Three-Scar does not know who is missing, but Coran Longmore would']
+I ask Coran Longmore, "what happened here?" -> ['Coran Longmore tells you: the harvest stores are lower than anyone likes']
+I ask Elias Lanande, "what do you want?" -> ['The guard does not know about local news, but Zugka Iron-Tusk would']
+I ask Grak Three-Scar, "how are prices at the market?" -> ['Grak Three-Scar tells you: prices at the Ravenford market are somewhat higher than usual since the thaw, with ']
+I ask Coran Longmore, "who would know about the weather?" -> ['Coran Longmore does not know about weather, but Urash Who Came Back would']
+I ask Elias Lanande, "where can I find a healer?" -> ['The guard tells you: the healer in the settlement works from a small room above the herb stall on the market s']
+I ask Grak Three-Scar, "what are the roads like these days?" -> ['Grak Three-Scar tells you: the roads around Ravenford are passable in good weather, though the low road is mud']
+I ask Coran Longmore, "who is missing?" -> ['Coran Longmore tells you who is missing: Selwin Coldward']
+I ask Elias Lanande, "what happened here?" -> ['The guard does not know about the Old Goose, but Zugka Iron-Tusk would']
+I ask Grak Three-Scar, "what do you want?" -> ['Grak Three-Scar tells you where they stand on the trouble: they know something of it and want it settled']
+I ask Coran Longmore, "how are prices at the market?" -> ['Coran Longmore does not know about prices, but Grak Three-Scar would']
+I ask Elias Lanande, "who would know about the weather?" -> ['The guard does not know about weather, but Urash Who Came Back would']
+I ask Grak Three-Scar, "where can I find a healer?" -> ['Grak Three-Scar tells you: the spring festival is the talk of Ravenford']
+I ask Coran Longmore, "what are the roads like these days?" -> ['Coran Longmore tells you: carters avoid the road to The Broken Moor after dark']
+learning beats 15; empty 0; items 15; pointers 6; claude calls 22
+proposer calls 7

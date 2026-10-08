@@ -1,5 +1,5 @@
 """The opening incident is the seed's reduced case (12.16.16; DL-12-62; the P-067 binding retired), "who is X?" is
-answered from the case or by casting (12.3.2, 00.11.1), a local knows the haven's names (I-149), and an NPC never
+answered from the case or by casting (PR-12-10, 00.11.1), a local knows the haven's names (I-149), and an NPC never
 answers with the player's own words (P-068)."""
 
 from __future__ import annotations
@@ -8,8 +8,9 @@ from pathlib import Path
 from typing import Any
 
 from engine.audit.screen import echoed_quotes
+from engine.dm.answer import NO_ONE, ask, rungs_for, who_answer
 from engine.dm.context import TurnContext
-from engine.dm.incident import NO_ONE, incident_line, settle_who, start_knowledge
+from engine.dm.incident import incident_line, start_knowledge
 from engine.dm.packet import scene_setting
 from engine.dm.session import opening
 from engine.gen.case import cases
@@ -47,12 +48,16 @@ def _world(tmp_path: Path, option: str = "missing", seed: int = 1234, npcs: list
     return store
 
 
-def _ask(store, text: str, **kw) -> Any:  # type: ignore[no-untyped-def]
+def _ask(store, text: str, npc: str | None = None) -> Any:  # type: ignore[no-untyped-def]
+    """The DM-side "who is X?" (`who_answer`), or put to `npc` (the ladder: (line, fact id))."""
     ctx = TurnContext.for_store(store, model=OfflineModel())
     with store.transaction() as tx:
         ctx.tx = tx
         try:
-            return settle_who(ctx, text, **kw)
+            if npc is None:
+                return who_answer(ctx, text)
+            a = ask(ctx, npc, "who_is", None, text, rungs_for(ctx.rules, 2), pc="pc.wren")
+            return a.line, a.fact_id
         finally:
             ctx.tx = None
 
@@ -62,9 +67,11 @@ def test_who_is_missing_is_the_seeded_case_subject_and_stays_answered(tmp_path: 
     case = w.record["seed_cases"][0]
     subject = case["solution"]["subject"]["id"]
     name = store.state.entities[subject].name
-    assert _ask(store, "who the missing person is (name and household)")[0] == name
-    assert _ask(store, "who is missing")[0] == name
+    core = next(p["holder"] for p in case["nodes"][0]["placements"] if p["access"] == "core")
+    assert _ask(store, "who is missing")[0].startswith("no one has told you")  # the PC was not told: a pointer
+    assert name in _ask(store, "who is missing?", npc=core)[0]  # the core holder tells it (15.9.5)
     assert cases(store.state)[case["id"]]["nodes"][0]["found"] is True
+    assert _ask(store, "who is missing")[0] == name  # now the PC knows it
     assert "incident.subject" not in store.state.meta  # the opening binding is retired (I-148)
     assert store.rebuild() == store.state
 
@@ -86,7 +93,8 @@ def test_other_who_questions_are_cast_among_existing_people(tmp_path: Path) -> N
     assert enemy[0] in LOCALS[:-1]  # an existing person, never the anchor bond or a far power
     assert _ask(store, "who is the old enemy") == enemy  # settled once
     assert _ask(store, "who is here") is None and _ask(store, "is the door locked") is None  # the Oracle's
-    assert _ask(store, "who is the old enemy", asked=True) == enemy
+    line, fid = _ask(store, "who is the old enemy?", npc="npc.ala_oakhill")
+    assert enemy[0] in line and fid == enemy[1]
 
 
 def test_who_with_no_one_fitting_is_no_one_you_know(tmp_path: Path) -> None:

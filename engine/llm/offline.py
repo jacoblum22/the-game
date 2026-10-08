@@ -469,7 +469,7 @@ def _reader(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:
                     "odds_rung": rungs[len(rungs) // 2] if rungs else None,
                 })
         else:
-            parts.append({"text": sent, "class": "DECLARATION", "question_kind": "none", "topic": None})
+            parts.append({"text": sent, "class": "DECLARATION", "question_kind": _asked_kind(sent), "topic": None})
             declared.append(sent)
     for sent in declared[:3]:
         verb = primary_verb(sent) or match_verb(sent)
@@ -500,13 +500,24 @@ def _reader(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:
 
 
 POWER_WORDS = ["spell", "magic", "witch-sight", "mind-touch", "sorcery", "conjure"]
-_KINDS = (("who_knows", r"\bwho (?:would|might|could) know\b"), ("who_is", r"^\s*(?:\w+,\s*)?who\b"),
+_KINDS = (("who_knows", r"\bwho\b[\w ]{0,20}\b(?:would|might|could) know\b"), ("who_is", r"^\s*(?:\w+,\s*)?who\b"),
           ("where_is", r"^\s*(?:\w+,\s*)?where\b"), ("what_happened", r"\bwhat happened\b"),
           ("what_want", r"\bwhat do you (?:want|think)\b"), ("what_like", r"^\s*(?:\w+,\s*)?what\b"))
 
 
 def _kind(sent: str) -> str:  # 12.2.2 question_kind, from the question's first word
-    return next((k for k, rx in _KINDS if re.search(rx, sent, re.IGNORECASE)), "none") if "?" in sent else "none"
+    said = sent.strip(" \"'“”‘’")  # a quoted question starts at its first word
+    return next((k for k, rx in _KINDS if re.search(rx, said, re.IGNORECASE)), "none") if "?" in sent else "none"
+
+
+_ASKED = re.compile(r"\bask(?:s|ed|ing)?\b(?:[^.?!]*?\b(who|where|what|when|why|how)\b(.*)|.*\babout\b)", re.I)
+
+
+def _asked_kind(sent: str) -> str:  # 12.2.2: "I ask Mira what is going on" carries a question too
+    m = _ASKED.search(sent)
+    if m is None:
+        return "none"
+    return (_kind(f"{m.group(1)}{m.group(2)}?") if m.group(1) else "none").replace("none", "what_like")
 
 
 _WH = re.compile(r"^\s*(?:\w+,\s*)?(?:what|who|whom|whose|where|when|why|how|which)\b", re.IGNORECASE)
@@ -643,6 +654,14 @@ def _engaged(npcs: list[Any], happened: str, view: str) -> list[Any]:
     spoke = re.search(r"\((?:SPEECH)\)$", happened, re.MULTILINE) or re.search(
         r"(?m)^beat: .*\b(ask|asks|tell|tells|talk|talks|greet|greets|say|says|speak|speaks|call|calls)\b", happened)
     return list(npcs[:1]) if spoke else []
+
+
+def _proposer(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:  # rule: PR-12-10
+    """Rung 3 offline: one bland ordinary candidate on the asked topic (`topic: <key>` in the message)."""
+    m = re.search(r"^topic: ([\w-]+)", packet.message, re.MULTILINE)
+    topic = (m.group(1) if m else "local_news").replace("_", " ")
+    return {"kind": "ordinary_fact", "subject": f"talk of {topic}", "predicate": "is",
+            "value": "nothing out of the ordinary this season"}
 
 
 def _world(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:
@@ -851,6 +870,10 @@ def _narrator(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:
         for r in replies[n_replies:]:
             if handle:
                 reply_handle[r] = handle
+    if any(not r.endswith("~") for r in replies):  # the speech's listener is the Talk's, never the first in view
+        replies = [r for r in replies if not r.endswith("~")]
+    replies = [r.rstrip("~") for r in replies]
+    reply_handle = {k.rstrip("~"): v for k, v in reply_handle.items()}
     said = list(dict.fromkeys(r for r in replies if not any(ln.startswith(r.split(" hears")[0]) for ln in lines)))
     pairs = [(t, handle_of.get(k)) for k, t in enumerate(lines)] + [(r, reply_handle.get(r)) for r in said]
     pairs = [(t, h) for t, h in pairs if t]
@@ -898,7 +921,7 @@ def _narrate_line(line: str, lines: list[str], replies: list[str], msg: str, pac
         looks = verb == "verb.observe"
         if verb == "verb.talk" and not res:  # words to someone: they answer, or no one is there to
             who = named_entity(bits.get("beat", ""), {k: [v.lower()] for k, v in npcs.items()})
-            name = npcs[who[0]] if who else next(iter(npcs.values()), None)
+            name = npcs[who[0]] if who else (bits.get("acting on") or next(iter(npcs.values()), None))
             replies.append(f"{name} hears you out, and answers in kind." if name else "No one here answers.")
             return
         if looks and (not res or "success" in res):
@@ -940,10 +963,10 @@ def _narrate_line(line: str, lines: list[str], replies: list[str], msg: str, pac
             lines += _wh_answer(q, packet.view, npcs)
     elif line.startswith("- part [SPEECH]"):
         said = line.split("]", 1)[1]
-        who = named_entity(said, {k: [v.lower(), *v.lower().split()[:1]] for k, v in npcs.items()})
+        who = named_entity(said, {k: [v.lower(), *[w for w in v.lower().split()[:1] if w not in ("the", "a", "an")]] for k, v in npcs.items()})
         name = npcs[who[0]] if who else next(iter(npcs.values()), None)
-        if name and not any(ln.startswith(name) for ln in replies):
-            replies.append(f"{name} hears you out, and answers in kind.")
+        if name and not any(ln.startswith(name) for ln in replies):  # "~": a guess, dropped if a Talk answers
+            replies.append(f"{name} hears you out, and answers in kind." + ("" if who else "~"))
     elif "STATE SUMMARY" in msg and re.match(r"- .+ is (?:at .+, )?in the \w+$", line):  # a recap (12.5.3)
         lines.append(_sentence("You are " + line.split(" is ", 1)[1]))
     elif "STATE SUMMARY" in msg and line.startswith("- earlier: "):
@@ -1017,6 +1040,7 @@ ROLE_HEURISTICS: dict[Role, Callable[[dict[str, Any], Packet], dict[str, Any]]] 
     Role.DIRECTOR: _director,
     Role.NARRATOR: _narrator,
     Role.CHECKER: _checker,
+    Role.PROPOSER: _proposer,
 }
 
 

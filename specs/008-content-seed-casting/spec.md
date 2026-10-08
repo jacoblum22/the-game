@@ -141,3 +141,68 @@ none); `evals/longhorizon.py --mode scripted` runs past 300 lines.
 - Pre-R2-D saves are not re-packed on load (no such saves are supported in M1).
 - Minimal call-site edits outside the lane: `session.opening` (the binding call), `packet.scene_setting` (render
   the present place's pack), `places.NPC_SEALED` (+knowledge), the handler milestone table; each reported.
+
+---
+
+# Part B: the answer ladder (PR-12-10, 12.10.8)
+
+Owner rulings D1 (tiered authority) and D2 ("I don't know" plus a real lead is a success). Rules: PR-12-10,
+12.10.8, 12.10.6 (d)(e), 00.12.7 (proposal form), T-15-5 questions, T-01-6, 15.9.5, DL-12-44, DL-12-60..64,
+DL-15-38..39. Reference: `rules/_process/simulation/12-answer_ladder_sim.py`.
+
+## User Story 5 - A question to an NPC is answered before the draft (Priority: P1)
+
+A resolved Talk, Observe or Recall that carries a question (the Reader's `question_kind` and `topic`), or a plain
+SPEECH question to a present NPC, is answered by code at RECORD: the asked-and-answered index, then the tier
+route (consequential -> the case graph; "who is <role>" -> casting; "what do you want" -> the record), then for
+ordinary knowledge the store, the NPC's knowledge pack, one typed candidate proposed and settled by the Oracle at
+12.10.6(d)'s odds, and last a pointer to a real person or place. The answer is a record line with a handle.
+
+**Acceptance**: each rung answers when the rungs above it are empty; asking the same NPC the same question twice
+gives the same fact id (or the same "does not know" and pointer); a Limited reach never proposes; a Great reach
+adds one volunteered extra; a success is never empty.
+
+## User Story 6 - Story-role questions reach the case (Priority: P1)
+
+"Who is missing?" goes only to the case graph: a holder of a placement on the node delivers it (and the node is
+marked found); anyone else says they do not know and names the holder of the node's core placement. With no case
+behind the question, the reduced case is built now. A search at a place holding a placement delivers it too, so
+node 2 can complete.
+
+**Acceptance**: in 30 of 30 seeded openings, "who is missing?" is answered within 3 turns (offline).
+
+### Functional Requirements (part B)
+
+- **FR-011**: `engine/dm/answer.py` implements PR-12-10 steps 1-7; the index is meta `answers.index`
+  `(npc|kind|topic) -> {fact, line, pointer}`; "does not know" is the Oracle's `knows_*` = false fact plus the
+  pointer.
+- **FR-012**: Rung 3 is a dedicated small model call (Role `proposer`: `{kind, subject, predicate, value}`), made
+  only when rungs 1-2 are empty and the reach allows it; code rejects a non-ordinary candidate or one touching a
+  sealed fact or a case node; the Oracle settles it at odds fixed before the roll (`social.yaml#common_knowledge`).
+  The offline model implements it deterministically.
+- **FR-013**: Depth by reach (`social.yaml#delivery.information.ladder_depth`); of N questions `deliver_count(N,
+  reach)` are answered (T-01-6); a certain beat or SPEECH runs at Standard.
+- **FR-014**: The pointer comes from casting (`pointer_target`): a person, else the topic's place, else a walk-on
+  generated there; never the first present person.
+- **FR-015**: Retire `world_step._talk_answers`, `_who_questions`, `_WHAT_ASKED`, `_NAME_OF`, `_WHO_ASKED`,
+  `_ASKS_NAME`, `learn_names`, the "name one concrete thing" notes, the top-thread and first-present fallbacks, the
+  "responds as the talk went" placeholder and `incident.settle_who`; `claims._learning_success` becomes
+  unreachable (`TODO(008-B retire)`, spec 009-B's file).
+- **FR-016**: `mark_found` when a placement is delivered (Talk to a holder, a search at a holder place, object or
+  document).
+
+### Success Criteria (part B)
+
+- **SC-006**: Unit tests per rung, depth by reach, never-empty, ask-twice, "does not know" recorded,
+  consequential routing, offline determinism.
+- **SC-007**: Long-horizon scripted (offline): 0 engine errors; empty-success rate 0; ask-twice consistency 100%.
+- **SC-008**: 30 of 30 seeded openings answer "who is missing?" within 3 turns (offline).
+
+### Assumptions (part B)
+
+- The Reader's topic may be null (the offline Reader never sets it): the topic is then inferred from the
+  question's words against the closed topic list's keys and gists, else `local_news`.
+- A Talk with no question part is a request (T-15-5 "yes, as asked"), not a learning beat.
+- Observe and Recall keep the store ranking as rung 1; their pack rung is the place's furniture; no Oracle rung
+  (PR-12-10 is about an NPC's knowledge).
+- `proposed_by: narrator` has no column on facts; the rule id `PR-12-10` and `source: oracle` mark ratified facts.

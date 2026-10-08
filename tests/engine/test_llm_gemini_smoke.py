@@ -60,8 +60,8 @@ def test_dry_run_builds_every_request_and_sends_nothing() -> None:
         raise AssertionError("a dry run must not build a client")
 
     assert smoke.run(smoke.parse_args(["--dry-run"]), no_model, lines.append) == 0
-    assert lines[0].startswith("7 role(s), model gemini-3.8-flash, thinking low; worst case $")
-    assert all("problems none" in ln for ln in lines[1:]) and len(lines) == 8
+    assert lines[0].startswith("8 role(s), model gemini-3.8-flash, thinking low; worst case $")
+    assert all("problems none" in ln for ln in lines[1:]) and len(lines) == 9
 
 
 def test_run_sends_one_request_per_role_with_converted_schema() -> None:
@@ -75,7 +75,7 @@ def test_run_sends_one_request_per_role_with_converted_schema() -> None:
     lines: list[str] = []
     assert smoke.run(smoke.parse_args([]), factory, lines.append) == 0
     assert len(made) == 1 and set(made[0]) == set(Role)
-    assert len(client.models.calls) == 7 and all(" ok " in ln for ln in lines[1:])
+    assert len(client.models.calls) == 8 and all(" ok " in ln for ln in lines[1:])
     reader = next(c for c in client.models.calls if "reader step" in str(c["config"].system_instruction))
     schema = smoke.load_schema(smoke.FIXTURES, Role.READER)
     assert schema is not None and reader["config"].response_json_schema == to_gemini(schema)

@@ -12,23 +12,21 @@
 
 from __future__ import annotations
 
-import re
 from collections.abc import Sequence
 from typing import Any
 
 from engine.audit import text as words
-from engine.audit.fallback import fact_sentence
 from engine.dm.adjudication import AdjudicationRecord, NpcActionEntry, OmenEntry
+from engine.dm.answer import name as _name
 from engine.dm.context import TurnContext
 from engine.dm.npc_layer import ensure_activities, respond
 from engine.resolve.pipeline import BeatOutcome
 from engine.resolve.types import REACH_VALUE
 from engine.retrieve.scene import READING, WRITTEN, cannot_read
 from engine.retrieve.triggers import get_active_triggers
-from engine.store.views import name_known
 from engine.time.clock import beat_cost
 from engine.time.scheduler import advance_time
-from engine.world.social import learn_name, record_knowledge
+from engine.world.social import record_knowledge
 
 NPC_TABLE = "tbl.npc_action"
 RESOLVED = ("resolved", "no_roll")
@@ -47,11 +45,10 @@ def world_step(ctx: TurnContext, record: AdjudicationRecord, *, beats: Sequence[
                oof: list[dict[str, str]] | None = None) -> None:
     # rule: 12.2.9
     # coarse: PR-06-6
-    deliver_learning(ctx, record, beats)
+    answered = [x["knower"] for x in deliver_learning(ctx, record, beats) if x["speech"]]  # PR-12-10
     acted = foes_act(ctx, record, oof)
     ensure_activities(ctx, record)  # 12.11.9 step 1
-    npcs_respond(ctx, record, beats, skip=acted, oof=oof)
-    learn_names(ctx, record, beats)
+    npcs_respond(ctx, record, beats, skip=[*acted, *answered], oof=oof)
     clock_omens(ctx, record)
     fired_triggers(ctx, record)
     beat_time(ctx, record, beats, fought=bool(acted))
@@ -106,180 +103,163 @@ def npcs_respond(ctx: TurnContext, record: AdjudicationRecord, beats: Sequence[B
     respond(ctx, record, beats, skip=skip, oof=oof)
 
 
-# the NPC's *own* name or identity only: "the thief's name" / "the name of the thief" asks about someone else, and
-# answering it with the speaker's name made the officer the thief [P-113]; a third party's name goes through
-# `settle_who` (a `who_is_*` fact) on the claim path instead
-_OBJ = r"(?:him|her|them|the [\w' -]{1,40}?)"
-_ASKS_NAME = re.compile(r"\byour (?:own )?name\b|\bwho (?:are|were) you\b|\bwho you are\b|\bintroduc"
-                        rf"|\b(?:ask|asks|asking) {_OBJ} (?:for )?(?:his|her|their) (?:own )?name\b"
-                        rf"|\b(?:ask|asks|asking) {_OBJ} who (?:he|she|they) (?:is|are)\b", re.IGNORECASE)
-
-
-def learn_names(ctx: TurnContext, record: AdjudicationRecord, beats: Sequence[BeatOutcome]) -> None:
-    # rule: 12.10.2
-    """The PC asked who someone is (or gave their own name) and that NPC answers (a resolved Talk on them,
-    else the one NPC whose response this turn is not a withholding one): they give their name, recorded for
-    the PC (`learn_name`) and named in their act so the narration says it."""
-    from engine.dm.roles.narrator import WITHHOLDING
-
-    st = ctx.state
-    if record.pc is None or not _ASKS_NAME.search(" ".join([p.text for p in record.parts]
-                                                           + [b.entry.restatement for b in beats])):
-        return
-    answering = [a for a in record.npc_actions if a.npc in st.entities
-                 and not a.action.startswith(WITHHOLDING) and not name_known(st, a.npc)]
-    talked = {t for b in beats if "talk" in (b.entry.approach_words or "") for t in b.entry.targets}
-    for a in [a for a in answering if a.npc in talked] or (answering if len(answering) == 1 else []):
-        learn_name(ctx.time_ctx(), record.pc, a.npc, "told")
-        a.action += f"; gives their name, in their own words: {st.entities[a.npc].name}"
-
-
 LEARN_VERBS = {"verb.talk": "told", "verb.observe": "witnessed", "verb.recall": "recalled"}
-
-
-def _fact_words(state: Any, f: Any) -> str:
-    """A fact's words for relevance ranking only (what the player sees is `fact_sentence`)."""
-    from engine.dm.roles.narrator import name_of
-
-    who = name_of(state, f.subject) if f.subject in state.entities else ""
-    value = {True: "yes", False: "no"}.get(f.value, f.value) if isinstance(f.value, bool) else f.value
-    head = f"{who} — " if who else ""
-    return f"{head}{f.predicate.replace('_', ' ')}: {value}"
+PEOPLE = ("npc", "companion", "adversary")
+NONE = "none"
 
 
 def _learnable(state: Any, f: Any, pc: str) -> bool:
     return (isinstance(f.value, str | bool | int | float) and f.visibility != "sealed" and f.id not in state.seals
             and f.subject not in state.seals and f.subject != pc and f.id not in state.knowledge.get(pc, {})
-            and f.predicate != "name" and not f.predicate.endswith((".but", ".and")))
+            and f.predicate != "name" and not f.predicate.endswith((".but", ".and"))
+            and not f.predicate.startswith(("knows_", "points_to.")))
 
 
-def deliver_learning(ctx: TurnContext, record: AdjudicationRecord, beats: Sequence[BeatOutcome]) -> None:
+def _ok(b: BeatOutcome) -> bool:
+    e = b.entry
+    return b.status == "no_roll" or (b.status == "resolved" and (e.degree in ("success", "critical_success")
+                                                                 or e.success_at_cost))
+
+
+def deliver_learning(ctx: TurnContext, record: AdjudicationRecord, beats: Sequence[BeatOutcome]
+                     ) -> list[dict[str, Any]]:
+    # rule: PR-12-10
     # rule: 12.10.5
-    """A successful Talk, Observe or Recall delivers what the store holds on what was asked, ranked by the words it
-    shares with the beat, `deliver_count`'s many at the delivered reach (01.10.4); each is `record_knowledge`d for the
-    PC and named in the record (BeatEntry.learned) for the narration. Talk draws on what the listener knows (their
-    knowledge and their own facts, 15.6.2: they tell what they know); Observe and Recall on what is here.
-    Nothing relevant in the store: nothing is delivered here, and what the narration then says the PC learns is
-    settled by the Oracle at the claim check (12.3.2)."""
-    # ponytail: relevance is shared content words; no per-NPC belief model of the scene's public facts
+    """A successful Talk that asks (a part with a `question_kind`), Observe or Recall is answered by the answer ladder
+    (engine/dm/answer.py) before the draft: of N questions `deliver_count(N, reach)` (T-01-6), each at the ladder depth
+    of the delivered reach (a no-roll beat runs at Standard), plus a volunteered extra at Great; each answer is a
+    `BeatEntry.learned` line (a record line with a handle). A plain SPEECH question with no Talk beat is answered at
+    Standard as the addressed NPC's act. Never empty: an answer is a fact, a placement, a record answer or a
+    pointer (DL-12-44). A Talk that asks nothing is a request (T-15-5 "yes, as asked"), not a learning beat.
+    Returns one summary per learning beat ({beat, verb, knower, speech, answers: [(fact id, pointer, line)]})."""
+    from engine.dm import answer as ans
+    from engine.dm.npc_layer import addressed
+    from engine.dm.roles.world import present_npcs
+
     st = ctx.state
     pc = record.pc
     if pc is None:
-        return
+        return []
+    asked = [p for p in record.parts if p.question_kind not in (None, NONE) and p.cls in ("DECLARATION", "SPEECH")]
+    present = present_npcs(st)
+    out: list[dict[str, Any]] = []
     for b in beats:
         e = b.entry
         verb = next((v for v in LEARN_VERBS if v in (e.approach_words or "")), None)
-        ok = b.status == "no_roll" or (b.status == "resolved" and (e.degree in ("success", "critical_success")
-                                                                     or e.success_at_cost))
-        if b.status == "resolved" and not ok:
+        if b.status == "resolved" and not _ok(b):
             _stalled(st, record, e, b.frame_id)
-        if verb is None or not ok:
+        if verb is None or not _ok(b):
             continue
-        place = st.scene.place_id if st.scene else None
-        here = {*(st.scene.cast_present if st.scene else ()), place, *e.targets, "world"} | {
-            i for i, p in st.positions.items() if place and p.location == place}
-        if verb == "verb.talk" and e.targets:
-            pool = set(st.knowledge.get(e.targets[0], {})) | {f.id for f in st.facts.values()
-                                                               if f.subject == e.targets[0]}
+        reach = 2 if b.status == "no_roll" else REACH_VALUE.get(e.reach or "standard", 2)
+        rungs = ans.rungs_for(ctx.rules, reach)
+        knower = None
+        if verb == "verb.talk":
+            if not asked or (e.targets and e.targets[0] in st.entities and st.entities[e.targets[0]].kind not in PEOPLE):
+                continue  # a request (T-15-5 "yes, as asked"), or words to a thing: no one to answer
+            people = [t for t in e.targets if t in st.entities and st.entities[t].kind in PEOPLE]
+            knower = people[0] if people else next(iter(addressed(st, record, present)), None) or (
+                present[0] if len(present) == 1 else None)
+            if knower is None:  # asked of no one here: who would know (never empty, DL-12-44)
+                items = _look(ctx, e, verb, reach, pc, asked)
+            else:
+                items = [ans.ask(ctx, knower, p.question_kind, p.topic, p.text, rungs, pc=pc)
+                         for p in asked[:ans.deliver_count(len(asked), reach)]]
+                extra = ans.volunteer(ctx, knower, pc) if "volunteer" in rungs else None
+                items += [extra] if extra else []
         else:
-            pool = {f.id for f in st.facts.values() if f.subject in here}
-        names = " ".join(st.entities[i].name for i in [e.actor, *e.targets] if i and i in st.entities)
-        asked = words.content(e.restatement) - words.content(names)
-        ranked = sorted(((len(asked & words.content(_fact_words(st, st.facts[fid]))), fid) for fid in pool
-                         if fid in st.facts and _learnable(st, st.facts[fid], pc)
-                         and fact_sentence(st, st.facts[fid])), reverse=True)  # only what can be told plainly
-        ranked = [fid for score, fid in ranked if score][:5]  # resolution.yaml delivery_rules.max_items
-        said = next((f for k in WRITTEN if e.targets and (f := st.current_fact_id(e.targets[0], k))), None)
-        if said in pool and READING.search(e.restatement) and not cannot_read(st, pc, e.targets[0]):  # reading it delivers its words first (P-110)
-            ranked = [said] + [f for f in ranked if f != said][:4]
-        n = len(ranked)
-        reach = REACH_VALUE.get(e.reach or "standard", 2)
-        count = {1: max(1, n // 3), 2: -(-n // 2)}.get(reach, n)  # T-01-6; ponytail: no Exceptional bonus item
-        for fid in ranked[:count]:
-            record_knowledge(ctx.time_ctx(), pc, fid, LEARN_VERBS[verb])
-            e.learned.append(fact_sentence(st, st.facts[fid]))
-        if verb == "verb.talk" and e.targets and e.targets[0] in st.entities \
-                and st.entities[e.targets[0]].kind in ("npc", "companion", "adversary"):
-            _talk_answers(ctx, record, e, pc)
-        if not ranked and verb != "verb.talk" and e.targets and e.targets[0] in st.entities:
-            # P-086: a success that names nothing reads as a failure; what the narration names is settled by the
-            # Oracle at the claim check and written (12.3.2, write-on-mention)
-            record.notes.append(f"the look at {_name(st, e.targets[0])} succeeded: name at least one concrete thing "
-                                "the PC now makes out about it (what it is, what it is made of, a telling detail), "
-                                "plainly, never a vague glimpse")
+            items = _look(ctx, e, verb, reach, pc, asked)
+        e.learned += [a.line for a in items]
+        out.append({"beat": e.beat_id, "verb": verb, "knower": knower, "speech": False,
+                    "answers": [(a.fact_id, a.pointer, a.line) for a in items]})
+    if not any("verb.talk" in (b.entry.approach_words or "") for b in beats):
+        out += _speech_answers(ctx, record, [p for p in asked if p.cls == "SPEECH"], present, pc)
+    return out
 
 
-# "who ..." asked of someone: at a sentence start or after an asking verb ("asking who is behind the coin", "says who
-# told him"), never a relative clause ("the man who sold me the horse"); "the name of/behind X" asks "who is X"
-_WHO_ASKED = re.compile(r"(?:^|[.?!:;\"“]\s*|\b(?i:ask|asks|asked|asking|say|says|saying|tell|tells|telling|learn|"
-                        r"learns|know|knows|reveal|reveals|names?|whether)\s+(?:(?i:him|her|them|me|us|again|politely|"
-                        r"plainly|directly)\s+|[A-Z][\w'-]+\s+){0,3}?)([Ww]ho\b(?:(?! and | or | so )[^?.!;,\"”])+)")
-_WHAT_ASKED = re.compile(r"\bwhat (?:is|are|was|were|they are|it is|you saw|did you see)\b[^?.!;,\"”]*", re.I)
-_NAME_OF = re.compile(r"\bname (?:of|behind) ([^?.!;,\"”]+)", re.I)
+def _speech_answers(ctx: TurnContext, record: AdjudicationRecord, speech: list[Any], present: list[str],
+                    pc: str) -> list[dict[str, Any]]:  # rule: PR-12-10
+    """A plain SPEECH question (no Talk beat, 15.3.10) to a present NPC: answered at Standard, as their act."""
+    from engine.dm import answer as ans
+    from engine.dm.npc_layer import addressed
+
+    if not speech:
+        return []
+    out = []
+    for npc in addressed(ctx.state, record, present)[:1]:
+        rungs = ans.rungs_for(ctx.rules, 2)
+        items = [ans.ask(ctx, npc, p.question_kind, p.topic, p.text, rungs, pc=pc)
+                 for p in speech[:ans.deliver_count(len(speech), 2)]]
+        for a in items:
+            record.npc_actions.append(NpcActionEntry(npc=npc, action=a.said, source="talk_outcome",
+                                                     source_ref="PR-12-10"))
+        out.append({"beat": None, "verb": "speech", "knower": npc, "speech": True,
+                    "answers": [(a.fact_id, a.pointer, a.line) for a in items]})
+    return out
 
 
-def _who_questions(text: str) -> list[str]:
-    return [re.sub(r"^who(?:'s|’s)", "who is", m.group(1).strip(), flags=re.I).replace("Who", "who", 1)
-            for m in _WHO_ASKED.finditer(text)] + [
-        f"who is {m.group(1).strip()}" for m in _NAME_OF.finditer(text)]
-
-
-def _talk_answers(ctx: TurnContext, record: AdjudicationRecord, e: Any, pc: str) -> None:
-    # rule: 12.3.2
-    """P-120: a successful Talk is "yes, as asked" (T-15-5), never a refusal. A "who is X?" the store cannot answer
-    is settled among existing people (`settle_who`, I-148) and told by the one asked; a Talk that delivers nothing
-    still gives what the NPC can from state (12.8.2's sources, no new clue: 12.14.13): an open thread any local may
-    know, else who else might know (an existing person)."""
-    from engine.dm.incident import _people, settle_who
-    from engine.dm.oof import short_text
-    from engine.dm.player_text import second_person
-    from engine.dm.roles.world import present_npcs
-    from engine.world.social import thread_list
+def _look(ctx: TurnContext, e: Any, verb: str, reach: int, pc: str, asked: list[Any]) -> list[Any]:
+    # rule: PR-12-10
+    # rule: 15.9.5
+    """Observe or Recall: a placement held here (a search at a holder place, object or document: the node is found,
+    15.9.5); else what the store holds here, ranked by the words the beat shares with it, `deliver_count`'s many
+    (Observe and Recall draw on what is here); else the place's seeded furniture (Observe); else who would know."""
+    from engine.audit.fallback import fact_sentence
+    from engine.dm import answer as ans
+    from engine.gen.case import cases
 
     st = ctx.state
-    speaker = e.targets[0]
-    if not _ASKS_NAME.search(" ".join([e.restatement, *(p.text for p in record.parts)])):  # their own name: 12.10.2
-        for q in [q for t in [e.restatement, *(p.text for p in record.parts)] for q in _who_questions(t)]:
-            who = settle_who(ctx, q, asked=True, exclude=(speaker,))
-            if who is None:
-                continue
-            name, fid = who
-            if fid not in st.knowledge.get(pc, {}):
-                record_knowledge(ctx.time_ctx(), pc, fid, "told")
-            e.learned.insert(0, f"{_name(st, speaker)} tells you {q}: {name}")
-            return
-    if e.learned:
-        return
-    what = next((m.group(0).rstrip() for t in [*(p.text for p in record.parts), e.restatement]
-                 for m in _WHAT_ASKED.finditer(t)), None)
-    if what:  # like a look that finds nothing stored (P-086): they name it, settled at the claim check (12.3.2)
-        record.notes.append(f"the talk with {_name(st, speaker)} succeeded: they answer {what.lower()} plainly, in "
-                            "their own words, naming one concrete, ordinary thing it is (never a hint toward anything "
-                            "hidden; if they cannot know, they say who or where might)")
-        return
-    threads = sorted((t for t in thread_list(st) if t["status"] == "active" and t["id"] not in st.seals
-                      and st.entities[t["id"]].visibility in ("shown", "available")), key=lambda t: -t["weight"])
-    if threads:
-        lead = second_person(short_text(str(threads[0]["text"]), 160)).rstrip(".")
-        e.learned.append(f"{_name(st, speaker)} gives what they can: {lead}")
-        return
-    here = set(present_npcs(st))
-    # ponytail: the pointer is the first present (else first known) person, not who would really know; a "who
-    # would know" table belongs to the rules (I-153)
-    others = sorted((n for n in _people(st, pc) if n != speaker), key=lambda n: (n not in here, n))
-    if others:
-        e.learned.append(f"{_name(st, speaker)} gives what they can: {_name(st, others[0])} might know more")
+    place = st.positions[pc].location if pc in st.positions else st.scene.place_id if st.scene else None
+    here = {*(st.scene.cast_present if st.scene else ()), place, *e.targets, "world"} | {
+        i for i, p in st.positions.items() if place and p.location == place}
+    if verb == "verb.observe":
+        for case in cases(st).values():
+            node = ans.open_node(case, False)
+            p = next((p for p in node["placements"] if not node.get("found") and p["method"] == "search"
+                      and p.get("status") not in ("found", "lost")
+                      and (p["holder"] in here or (p["holder"] not in st.entities and p.get("at") == place))), None)
+            if p is not None:
+                how = "read" if p["holder_kind"] == "document" else "witnessed"
+                fid = ans.deliver_node(ctx, case, node, p["id"], pc, how)
+                return [ans.Answer("", f"You make out {node['fact']}", fid)]
+    pool = {f.id for f in st.facts.values() if f.subject in here}
+    names = " ".join(st.entities[i].name for i in [e.actor, *e.targets] if i and i in st.entities)
+    said = " ".join([e.restatement, *(p.text for p in asked)])
+    want = words.content(said) - words.content(names)
+    ranked = sorted(((len(want & words.content(ans.fact_words(st, st.facts[fid]))), fid) for fid in pool
+                     if fid in st.facts and _learnable(st, st.facts[fid], pc)
+                     and fact_sentence(st, st.facts[fid])), reverse=True)  # only what can be told plainly
+    ranked = [fid for score, fid in ranked if score][:5]  # resolution.yaml delivery_rules.max_items
+    written = next((f for k in WRITTEN if e.targets and (f := st.current_fact_id(e.targets[0], k))), None)
+    if written in pool and READING.search(e.restatement) and not cannot_read(st, pc, e.targets[0]):
+        ranked = [written] + [f for f in ranked if f != written][:4]  # reading it delivers its words first (P-110)
+    out = []
+    for fid in ranked[:ans.deliver_count(len(ranked), reach)]:
+        record_knowledge(ctx.time_ctx(), pc, fid, LEARN_VERBS[verb])
+        out.append(ans.Answer("", fact_sentence(st, st.facts[fid]), fid))
+    if out:
+        return out
+    if verb == "verb.observe" and place in st.entities:  # the place's seeded furniture (12.16.9): what is here
+        for i, item in enumerate(st.entities[place].data.get("furniture") or []):
+            pred = f"furniture.{i}"
+            cur = st.current_fact_id(place, pred)
+            if cur is None or cur not in st.knowledge.get(pc, {}):
+                fid = cur or ans._write(ctx, place, pred, str(item), rule="12.16.9", source="data")
+                record_knowledge(ctx.time_ctx(), pc, fid, "witnessed")
+                return [ans.Answer("", f"You make out {item}", fid)]
+    q = asked[0] if asked else None
+    topic, about = ans.topic_of(st, q.topic if q else None, said, pc)
+    about = about or next((t for t in e.targets if t in st.entities), None)
+    fid, ref = ans.point(ctx, pc, topic, pc, about=about)
+    what = f"about {ans.name(st, about) if about else topic.replace('_', ' ')}"
+    head = {"verb.recall": "You recall nothing more", "verb.talk": "No one here can tell you more"}.get(
+        verb, "You find nothing more here")
+    who = ans.name(st, ref) if ref in st.entities and st.entities[ref].kind in PEOPLE else \
+        f"someone at {ans.name(st, ref)}"
+    return [ans.Answer("", f"{head} {what}, but {who} would know", fid, ref)]
 
 
 STALLED = "cannot make out: "
 _FAILED = ("failure", "critical_failure")
-
-
-def _name(st: Any, eid: str) -> str:
-    from engine.dm.roles.narrator import name_of
-
-    n = name_of(st, eid)
-    return f"the {n}" if n[:1].islower() and not n.startswith(("the ", "a ", "an ", "your ")) else n
 
 
 def _looked(f: dict[str, Any]) -> bool:

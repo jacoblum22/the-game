@@ -116,7 +116,8 @@ CHECKER = obj(
                mechanics_in_fiction=arr(STR), ends_on_prompt_or_one_pause=BOOL),
 )
 SCHEMAS = {Role.INTERPRET: INTERPRET, Role.READER: READER, Role.FRAMER: FRAMER, Role.WORLD: WORLD,
-           Role.DIRECTOR: DIRECTOR, Role.NARRATOR: NARRATOR, Role.CHECKER: CHECKER}
+           Role.DIRECTOR: DIRECTOR, Role.NARRATOR: NARRATOR, Role.CHECKER: CHECKER,
+           Role.PROPOSER: obj(kind=enum("ordinary_fact", "not_ordinary"), subject=STR, predicate=STR, value=STR)}
 
 MODEL = OfflineModel()
 
