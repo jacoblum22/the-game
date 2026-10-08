@@ -34,7 +34,7 @@ from engine.dm.context import TurnContext
 from engine.dm.narration import FRAME_NEXT, TurnOutcome, moves_on, narrate_turn, stays
 from engine.dm.roles import director as director_role
 from engine.dm.roles.framer import framer_for
-from engine.dm.roles.reader import FactQuestion, ReaderResult, read_message
+from engine.dm.roles.reader import FactQuestion, ReaderResult, knowledge_question, read_message
 from engine.dm.world_step import world_step
 from engine.resolve.oracle import OracleQuestion, ask_oracle
 from engine.resolve.pipeline import (
@@ -388,7 +388,7 @@ def _yes_no(v: Any) -> str:
 
 
 CODEX_WORDS = {"sheet": ("sheet", "my stats", "my character"), "abilities": ("abilities", "ability", "powers"),
-               "conditions": ("conditions", "condition", "status"), "journal": ("journal", "what do i know"),
+               "conditions": ("conditions", "condition", "status"), "journal": ("journal",),
                "threads": ("threads", "leads", "quests")}
 
 
@@ -460,6 +460,10 @@ def oof_answer(ctx: TurnContext, text: str) -> str:  # rule: 12.5.10
         return stuck_answer(ctx.state)
     if any(w in low for w in NEW_WORDS):
         return HOW_TO_PLAY
+    if knowledge_question(text):  # 14.6.3: the journal, filtered to what was asked about
+        from engine.dm.codex import what_you_know
+
+        return what_you_know(ctx.state, knowledge_subject(text), ctx.rules).text
     for section, words in CODEX_WORDS.items():
         if any(w in low for w in words):
             return codex(ctx.state, section, ctx.rules).text
@@ -467,6 +471,15 @@ def oof_answer(ctx: TurnContext, text: str) -> str:  # rule: 12.5.10
         return ("Declare what you try: the OFFER shows the odds, stakes and costs before anything is rolled, and "
                 "withdrawing spends nothing (01.7.1).")
     return OOF_HELP
+
+
+def knowledge_subject(text: str) -> str | None:
+    """X in "what do I know about X?", without the trailing "so far" / "already" and the like."""
+    m = re.search(r"\b(?:about|of|regarding) (.+)", text, re.I)
+    if not m:
+        return None
+    x = re.sub(r"\b(?:so far|already|yet|now|then|at all)\b", "", m.group(1).split("?")[0], flags=re.I)
+    return " ".join(x.strip(" .!,;:'\"").split()) or None
 
 
 def session_answer(ctx: TurnContext, text: str) -> str:  # rule: 12.5.3

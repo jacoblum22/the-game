@@ -11,6 +11,7 @@ The model classifies and proposes from closed enums; the engine checks the gate 
 
 from __future__ import annotations
 
+import re
 from collections.abc import Callable, Sequence
 from typing import Any
 
@@ -30,6 +31,30 @@ from engine.retrieve.triggers import get_active_triggers
 from engine.store.records import Part
 
 NONE = "none"
+# "what do I know (about X)?" is the codex's Journal (14.6.3, 12.5.10), out of fiction; "I try to remember ..." is
+# an in-fiction Recall (01.18.6) and is left to the Reader.
+KNOW_QUESTION = re.compile(r"\bwhat (?:do|did) (?:i|we) (?:\w+ )?know\b|\bwhat (?:have i|i've) (?:learn|found out)"
+                           r"|\bwhat does my character know\b", re.I)
+RECALL_WORDS = re.compile(r"\b(?:remember|recall|think back|try to|search my memory|rack my)", re.I)
+
+
+def knowledge_question(text: str) -> bool:
+    """A player's out-of-fiction "what do I know?" (not a Recall attempt, not a question to an NPC)."""
+    return bool(KNOW_QUESTION.search(text)) and not RECALL_WORDS.search(text)
+
+
+def _knowledge_parts(out: ReaderResult, pc: str | None) -> None:  # rule: 14.6.3
+    """A "what do I know?" part is an OOF_QUESTION whatever the Reader called it, so it is answered from the
+    journal (12.10.5) instead of becoming a Recall roll, an Oracle draw about the PC's own memory, or a scene."""
+    hit = False
+    for p in out.parts:
+        if p.cls in ("FICTION_QUESTION", "DECLARATION") and knowledge_question(p.text):
+            p.cls = "OOF_QUESTION"  # type: ignore[assignment]
+            hit = True
+    if hit:
+        out.fact_questions = [q for q in out.fact_questions if not (q.subject == pc and "know" in q.predicate)]
+        if not any(RECALL_WORDS.search(p.text) for p in out.parts):  # nobody asked to recall in-fiction
+            out.beats = [b for b in out.beats if b.verb != "verb.recall"]
 
 
 class FactQuestion(BaseModel):
@@ -124,4 +149,7 @@ def read_message(ctx: TurnContext, message: str, *, exchanges: Sequence[Any] = (
         player_quantity=data.get("player_quantity"),
         defaulted=res.defaulted,
     )
+    from engine.world.common import active_pc
+
+    _knowledge_parts(out, active_pc(st))
     return out
