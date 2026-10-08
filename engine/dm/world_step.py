@@ -24,6 +24,7 @@ from engine.dm.roles.world import npc_motives, npc_responses, present_npcs
 from engine.resolve.pipeline import BeatOutcome
 from engine.resolve.tables import roll_table
 from engine.resolve.types import REACH_VALUE
+from engine.retrieve.scene import READING, WRITTEN, cannot_read
 from engine.retrieve.triggers import get_active_triggers
 from engine.time.clock import beat_cost
 from engine.time.scheduler import advance_time
@@ -232,6 +233,9 @@ def deliver_learning(ctx: TurnContext, record: AdjudicationRecord, beats: Sequen
                          if fid in st.facts and _learnable(st, st.facts[fid], pc)
                          and fact_sentence(st, st.facts[fid])), reverse=True)  # only what can be told plainly
         ranked = [fid for score, fid in ranked if score][:5]  # resolution.yaml delivery_rules.max_items
+        said = next((f for k in WRITTEN if e.targets and (f := st.current_fact_id(e.targets[0], k))), None)
+        if said in pool and READING.search(e.restatement) and not cannot_read(st, pc, e.targets[0]):  # reading it delivers its words first (P-110)
+            ranked = [said] + [f for f in ranked if f != said][:4]
         n = len(ranked)
         reach = REACH_VALUE.get(e.reach or "standard", 2)
         count = {1: max(1, n // 3), 2: -(-n // 2)}.get(reach, n)  # T-01-6; ponytail: no Exceptional bonus item
