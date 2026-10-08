@@ -30,3 +30,4 @@ Ledger: I-131..I-136.
 | explorer 170204 | 12f51f2 | 17 | 2.41 (r1 3.06) | 2 (r1 12) | NPC never answers (P-026); lore question → sorcery redirect (P-038); held until P-026/P-031 merge |
 | newcomer 172552 | 790deb1 | 17 | 1.65 | 0 | setup fine; guard never answers (P-026); notice text contradicts itself (P-041) |
 | fighter 172629 | 790deb1 | 17 | 1.65 | 2 | odds screens clear; fallback grammar (P-040); success gives no names (P-025) |
+| breaker 172452 | 790deb1 | 17 | 2.35 | 2 | challenger never speaks (P-026); "what do I know?" unanswered (P-019); scene lines repeat (P-030) |
