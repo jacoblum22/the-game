@@ -1,0 +1,11 @@
+# Long-horizon harness (model: claude-narration)
+
+## Scripted player (seed 7, 16 lines, 24 turns, 19 narrated)
+- contradictions per 100 narrated turns: 47.4 (position 8, knowledge 1)
+- recall probes: 0 scored of 1; precision n/a, coverage n/a
+- novelty-4 over the previous 10 deliveries: 0.79 (14 deliveries)
+- narration loop (19 narrated): first draft delivered as drafted 7/19 (36.8%); turns with a cut, rendered line or fallback 2/19 (10.5%); narrator calls per narrated turn 1.53; per narrated turn: added_about 5.16, atmosphere_named 0.37, audit_beyond 3.58, audit_lead 0.26, audit_new 1.53, audit_undeclared 0.32, audit_unexpressed 1.32, undeclared_new 0.00
+- learning beats answered (PR-12-10): 6; empty successes 0 (0.0%); items 6, pointer answers 1 (16.7%)
+- ask-twice consistency: 1/1 (100%)
+- cached-prefix share per role: checker 0.85, director 0.66, framer 0.85, narrator 0.89, proposer 0.92, reader 0.94
+- engine errors: 0

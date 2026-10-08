@@ -108,6 +108,19 @@ deferred to the owner.
   resumed with its context once the limit reset, and asked to merge the moved `milestone-1-playable` itself.
   Because of the limit, I'm running fewer agents in parallel from here on.
 
-## In flight
+## Final live run (Haiku narrator and Checker via the Claude CLI; 19 narrated turns; no API spend)
 
-- Final live run (scripted, 16 lines, Haiku narrator and Checker via the Claude CLI).
+| Gate | Baseline | 006 live | 009-B live | **Final** | Target |
+|---|---|---|---|---|---|
+| First draft delivered as drafted | 1.3% | 33.3% | 30.8% | **36.8%** | > 50%, missed |
+| Turns with a cut, rendered line or fallback | 58% | 52.4% | 38.5% | **10.5%** | < 15%, **met** |
+| Narrator calls per narrated turn | 1.81 | 1.67 | 1.54 | **1.53** | ≤ 1.2, missed |
+| Empty Talk successes | common | n/a | n/a | **0 / 6** | 0, met |
+| Novelty-4 | 0.33 | n/a | n/a | **0.79** | higher |
+| Engine errors | n/a | 0 | 0 | **0** | 0 |
+
+**The dominant remaining failure is position:** 8 of 19 turns had a flagged position contradiction. The
+narrator places people differently from the store. The next fix is the planned but unbuilt piece: **code writes
+scene-state positions and postures from resolved beats** (A P7 / 00.6.6a T1c), which needs the per-verb outcome
+table. With that, the narrator would cite positions instead of improvising them. The sample is small (19 turns),
+so treat each figure as ±10 points.
