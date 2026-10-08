@@ -123,7 +123,7 @@ def _beat_line(state: WorldState, b: BeatEntry, pc: str | None, paused: bool = F
 
 
 # NPC acts that leave what the PC asked unanswered (talk outcomes, refusals, wants, tbl.npc_action rows 1-6)
-WITHHOLDING = ("responds as the talk went: failure", "responds as the talk went: critical_failure", "refuses",
+WITHHOLDING = ("refuses",
                "acts on", "escalates", "ends the exchange", "hinders quietly", "wants something first",
                "carries on with their own business")
 

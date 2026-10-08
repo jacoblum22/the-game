@@ -163,10 +163,6 @@ NPC_ROW_PROSE = {
     "acts on one of their own wants": "turns to something they want",
     "asks the PC something": "has a question for you",
     "offers partial help": "offers some help",
-    "responds as the talk went: critical_success": "agrees readily",
-    "responds as the talk went: success": "agrees",
-    "responds as the talk went: failure": "is not persuaded and gives you no answer",
-    "responds as the talk went: critical_failure": "is not persuaded and gives you no answer",
     "carries on with their own business": "goes on with what they were doing and does not answer",
     "ends the exchange and withdraws": "says no more and turns away",
 }

@@ -905,27 +905,9 @@ def _knowledge(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: 12.3.1
         return _v(c, i, "supported")
     if c.asserts_change and ctx.backed(c.subject, "knowledge_recorded"):
         return _v(c, i, "supported")
-    if False:  # TODO(008-B retire): `_learning_success`; PR-12-10 answers before the draft
-        # what a successful Talk/Observe was after and the store lacks: settled now (12.3.2 undetermined -> Oracle)
-        return _v(c, i, "undetermined", reason="what the PC asked to learn, not yet settled: the Oracle settles it")
     if c.asserts_change:
         return _v(c, i, "unsourced_change", "not known", reason="no knowledge was recorded this turn")
     return _v(c, i, "contradicted", "not known")
-
-
-_LEARN_VERBS = ("verb.talk", "verb.observe", "verb.recall")
-
-
-def _learning_success(ctx: _Ctx, subject: str) -> bool:  # rule: 12.10.5
-    """A Talk, Observe or Recall succeeded this turn on `subject` (or `subject` is the PC who made it)."""
-    for b in ctx.record.beats:
-        if not any(v in (b.approach_words or "") for v in _LEARN_VERBS) or not _beat_success(b):
-            continue
-        if b.degree is None and not (b.gate_words or "").startswith("no roll"):
-            continue
-        if subject in (ctx.pc, *b.targets) or ("verb.talk" not in b.approach_words and ctx.present(subject)):
-            return True
-    return False
 
 
 def _settled_question(ctx: _Ctx, c: Claim) -> tuple[str, bool] | None:  # rule: 01.15.7

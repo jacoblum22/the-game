@@ -66,11 +66,11 @@ def test_npc_action_rows_read_as_prose() -> None:
     """Playtest 2026-10-07: "Tikka Mud-Walker escalates: threatens, calls for others, attacks only if able and
     hostile" and "asks the PC something" reached the player verbatim."""
     rows = ["escalates: threatens, calls for others, attacks only if able and hostile", "asks the PC something",
-            "responds as the talk went: success", "helps as asked"]
+            "helps as asked"]  # "responds as the talk went" is retired: PR-12-10 answers Talk (spec 008-B)
     rec = AdjudicationRecord(pc="pc.wren", npc_actions=[NpcActionEntry(npc="npc.tam_harlan", action=a,
                                                                        source="table_row") for a in rows])
     fb = plain_fallback(rec, names=NAMES).fiction
-    assert fb == ("Tam grows threatening and calls for others. Tam has a question for you. Tam agrees. "
+    assert fb == ("Tam grows threatening and calls for others. Tam has a question for you. "
                   "Tam helps as asked. What do you do?")
     _clean(fb)
 
