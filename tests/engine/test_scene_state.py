@@ -74,3 +74,11 @@ def test_a_common_noun_place_or_a_direction_does_not_place_a_thing_elsewhere(tmp
     assert verdict("at the far end of the hall") == "supported"  # a common noun: this place's own hall
     assert verdict("smoke drifting toward the temple of Halwin") == "supported"  # a direction, not a location
     assert verdict("in the temple of Halwin") == "contradicted"  # a proper name still binds
+
+    def moved(who: str, value: str) -> str:  # a change this turn, nothing written for it
+        return check_claims([{"class": "position", "subject": who, "predicate": "moves", "value": value,
+                              "asserts_change": True}], dock.store)[0].verdict
+
+    assert moved(dock.ferryman, "crosses to the window") == "supported"  # fine placement: atmosphere (T0)
+    assert moved(dock.ferryman, "leaves the dock") == "unsourced_change"  # departing is coarse
+    assert moved(dock.ferryman, "steps out of your reach") == "unsourced_change"  # a band to the PC is coarse

@@ -129,9 +129,13 @@ _COND_WORDS: dict[str, list[str]] = {  # in-fiction words for conditions (T-12-1
 }
 _NEAR = ["shoulder", "beside", "next to", "at your side", "close", "adjacent", "within reach", "elbow"]
 _FAR = ["far", "distant", "across the", "out of reach", "away"]
-# a turn of the head or body where one stands: manner, not a change of position (12.11.9 step 4) [spec 009 B]
-_GESTURE = ["turn", "turns", "turned", "face", "faces", "glance", "glances", "look", "looks", "lean", "leans", "nod",
-            "nods", "shift", "shifts", "step back", "steps back", "half a step", "straighten", "straightens"]
+# coarse position (owner ruling, DL-12-77): a hold or its end, mounting, arriving or leaving; with a named place and a
+# band to the PC, the only position a sentence is judged on. Fine placement is atmosphere (T0) [spec 010]
+_HOLD = ["grab", "grabs", "seize", "seizes", "pin", "pins", "pinned", "restrain", "restrains", "let go", "lets go",
+         "release", "releases", "breaks free", "pulls free", "twists free", "mount", "mounts", "dismount", "dismounts"]
+_COME_GO = ["leave", "leaves", "left", "goes out", "walks out", "steps out", "slips out", "exits", "departs", "gone",
+            "arrive", "arrives", "enters", "comes in", "walks in", "steps in"]
+_TO_PC = ["you", "your", "reach"]  # a band is stated to the PC ("at your shoulder", "out of reach")
 _WATCH_WORDS: dict[int, list[str]] = {
     0: ["dawn", "morning", "sunrise", "daybreak", "first light"],
     1: ["noon", "midday", "afternoon"],
@@ -740,6 +744,14 @@ def _not_located_at(ctx: _Ctx, c: Claim, place: str) -> bool:  # rule: 12.3.1
     return not any(w[:1].isupper() for w in name.split()) and ctx.present(c.subject)
 
 
+def _coarse(ctx: _Ctx, c: Claim) -> bool:  # rule: 12.3.1
+    """The claim states coarse position (DL-12-77): a place by its name, a band to the PC, a hold or its end,
+    mounting, arriving or leaving. Anything else ("by the hearth", "turns to the window") is atmosphere (T0)."""
+    place = ctx.entity_named(c.value, kinds=("place",))
+    return (place is not None and not _not_located_at(ctx, c, place)) or _has(c.text, [*_HOLD, *_COME_GO]) or (
+        _has(c.value, _TO_PC) and _has(c.value, [*_NEAR, *_FAR]))
+
+
 def _position(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: 12.3.1
     s = ctx.state
     if c.asserts_change:
@@ -754,9 +766,8 @@ def _position(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: 12.3.1
         if ctx.entity_named(c.value, kinds=("place",)) is None and any(
                 c.subject in getattr(it, "entities", ()) for it in _cited(ctx, c)):
             return _v(c, i, "supported", reason="manner in the cited record line (12.11.9)")
-        if ctx.present(c.subject) and _has(c.text, _GESTURE) and not _has(c.text, [*_FAR, *_NEAR]) and \
-                ctx.entity_named(c.value, kinds=("place",)) is None:
-            return _v(c, i, "supported", reason="a gesture in place is manner, not a move (12.11.9 step 4)")
+        if ctx.present(c.subject) and not _coarse(ctx, c):  # a turn, a lean, a step to the window
+            return _v(c, i, "supported", reason="fine placement is atmosphere (T0, DL-12-77)")
         return _v(c, i, "unsourced_change", reason="no position was written this turn")
     pos = s.positions.get(c.subject)
     place = ctx.entity_named(c.value, kinds=("place",))
@@ -775,7 +786,7 @@ def _position(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: 12.3.1
         pa, pb = s.positions.get(c.subject), s.positions.get(other)
         if pa and pb and pa.location and pb.location and pa.location != pb.location:
             return _v(c, i, "contradicted", ctx.name(pa.location))
-    if pos is not None and ctx.pc and ctx.pc in pos.band_to:
+    if pos is not None and ctx.pc and ctx.pc in pos.band_to and _has(c.value, _TO_PC):  # a band is to the PC
         band = pos.band_to[ctx.pc]
         near = band in ("engaged", "close", "melee", "adjacent")
         if (_has(c.value, _NEAR) and not near) or (_has(c.value, _FAR) and near):

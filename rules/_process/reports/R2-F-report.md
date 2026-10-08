@@ -33,3 +33,4 @@ Appended after every step.
   practice tables regenerated from the yaml; 12.11.9 step 3 reworded (talk alone never changes the activity);
   DL-12-77 decision and evidence updated; appendix re-assembled. Anchors 129 / 0 / 0; validator 0 ERROR / 0 WARN.
 - Step 10 (engine session, after the live run): 12.3.1 `position` row gains the common-noun and direction clause; DL-12-77 gains the live result; appendix re-assembled; anchors recompiled; validator 0 ERROR / 0 WARN.
+- Step 11 (owner ruling, 2026-10-08): fine placement is T0 atmosphere, never stored or judged; only coarse position (place, band to the PC, held/pinned, mounted, arriving/leaving) is a claim. DL-12-77 records the ruling with the owner's words; 12.3.1 position row and 12.14.13 T0 row edited; 00.6.6a's slot list has no fine-placement slot (unchanged). Engine: claims `_coarse`.

@@ -322,11 +322,17 @@ cases:
       - {sentence: 0, subject: npc.tam_harlan, class: action, predicate: lunges, value: at you with his sword,
          asserts_change: true}
     expect: [unsourced_change]
-  - id: unsourced.mara_moves
+  - id: fine.mara_moves  # a step within the room is fine placement: atmosphere, never judged (DL-12-77, owner ruling)
     fixture: archive
     draft: Mara moves to the door.
     claims:
       - {sentence: 0, subject: npc.mara_voss, class: position, predicate: moves, value: to the door, asserts_change: true}
+    expect: [supported]
+  - id: unsourced.mara_leaves  # leaving is coarse: it needs a write
+    fixture: archive
+    draft: Mara leaves through the door.
+    claims:
+      - {sentence: 0, subject: npc.mara_voss, class: position, predicate: leaves, value: through the door, asserts_change: true}
     expect: [unsourced_change]
   - id: unsourced.pocket_ledger
     fixture: archive

@@ -24,8 +24,28 @@ must-name lines the canned offline narrator never cites (lead notes, the beat's 
 Scene-state lines are never must-name. The trajectory also changed (383 turns vs 388), because activity rolls now
 come at different times on the NPC RNG stream.
 
-**Suite:** 1656 passed, 4 skipped (the offline replay re-recorded and `cards.json` rebuilt for the rule-text change). ruff clean; pyright clean on touched files, except one existing
+**Suite:** 1657 passed, 4 skipped (the offline replay re-recorded and `cards.json` rebuilt for the rule-text change). ruff clean; pyright clean on touched files, except one existing
 error in `tests/engine/test_turn_adjudication.py:176` (untouched code). Rules validator 0 ERROR / 0 WARN.
+
+## Position failures by category (orchestrator steer and owner ruling, 2026-10-08)
+
+Categories: (a) narrator error (contradicts its own prose or a recorded move); (b) store lag (the fiction or a
+stale line put someone somewhere nothing wrote); (c) granularity (fine placement judged against a coarse position).
+The final overnight run's store was deleted (a temp dir), so its exact 8 cannot be re-read. Instead: the same
+seed and script on the **baseline code** (ffbede0, 8 lines, 11 narrated Haiku turns, `--keep`) and the spec 010 run.
+
+| Run | Position failures | (a) | (b) | (c) |
+|---|---|---|---|---|
+| Baseline code, 11 turns | 1 (+1 counted as `action`) | 0 | 1: after travel, a stale activity line put Grak in the new scene ("not in this scene", class `action`) | 1: the guard "across the hall" vs the town's `the hall` |
+| Spec 010, 19 turns | 6 | 0 | 0 | 6: "the fire at the far end of the hall" ×5, "the lane runs toward the temple" ×1 |
+| Spec 010 re-judged, coarse-only judge | 0 | 0 | 0 | 0 |
+
+Every position failure seen in 30 live turns was a fine-placement false positive (c), plus one store lag (b) that
+spec 010 removed (lines are rebuilt for whoever is present). The 009-B run's analysis found the same (the "middle
+of the hall"). Owner ruling applied: fine placement is T0, never stored or judged; only place, band to the PC,
+held/pinned/freed, mounted, arriving or leaving is a position claim (`claims._coarse`, 12.3.1, 12.14.13 T0,
+DL-12-77). Re-judging used each store's final state; the two claims whose subject had left by then (the lane,
+the baseline guard) were judged on presence there, and their original verdicts show the subject here.
 
 ## What the live run showed
 

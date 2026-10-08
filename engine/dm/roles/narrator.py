@@ -233,7 +233,7 @@ def names_for(state: WorldState) -> dict[str, str]:
 
 # a scene-state line's slot in the Narrator's words (T-12-18)
 _STATE_WORDS = {"activity": "what they are doing", "posture": "their posture", "held": "what they hold",
-                "manner": "their manner", "position": "where they stand"}
+                "manner": "their manner", "position": "their range to you"}
 
 
 def record_items(state: WorldState, record: AdjudicationRecord) -> list[RecordItem]:  # rule: 12.14.12

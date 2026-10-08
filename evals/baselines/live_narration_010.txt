@@ -20,4 +20,8 @@
   failing check; turns 10 (says R1 otherwise) and 18 (a door "closes behind you", unsourced) still fail.
 - Cut turns 5/19, none from scene state: a T2 clue/document typed by the audit (turns 8, 12), an unratified knowledge
   claim (15), the door (18), and "Where is Dunys Brightward?" with no record line to answer it (24).
-- Budget: 19 narrated Haiku turns (of 25), no smoke run, no API spend.
+- Budget: 19 narrated Haiku turns (of 25), no smoke run, no API spend; then 11 narrated turns on the baseline code
+  (ffbede0, --lines 8) for the position-failure classification the orchestrator asked for (it allowed ~10).
+- Classification (a narrator / b store lag / c granularity): baseline 11 turns: position 1 = c ("across the hall"),
+  plus 1 b counted as `action` (stale activity line after travel); spec 010: 6 = c. Owner ruling (fine placement is
+  T0) applied after: all re-judge to supported.
