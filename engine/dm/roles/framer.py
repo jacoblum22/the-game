@@ -4,8 +4,9 @@
     proposed = propose(beat, candidates, gate=decision)          # a ProposedFrame frame_check accepts
 
 The call's `check=` runs `frame_check` (PR-01-2) on the proposal, so a refusal is re-asked once naming the failed
-step, then the rule's default frame applies (the basic verb's anchor, its default attribute, a Moderate tier,
-safe stakes, the first fitting cost by 01.13.1's order). A lethal claim refused only for want of a recorded lethal
+step, then the rule's default frame applies (the basic verb's anchor, its default attribute, the defender's
+defense for a social or attack beat, else class `other` at Easy; safe stakes, the first fitting cost by 01.13.1's
+order). The Framer picks the obstacle class and at most one cited nudge; code computes the tier (01.6.5). A lethal claim refused only for want of a recorded lethal
 context passes the check: the pipeline then gives the lethal warning first (07.3.4).
 
 Schema seam (lead decision (a)): `engine.dm.schemas.framer_schema` gives the cost objects a nullable `source_fact`
@@ -26,6 +27,7 @@ from engine.llm.base import Role, call_role
 from engine.resolve.costs import check_cost_decl, uncited_by_stakes
 from engine.resolve.frame import frame_check
 from engine.resolve.gate import GateDecision
+from engine.resolve.necessity import trivial_class
 from engine.resolve.types import Beat, CostDecl, Delta, LeverCite, Obstacle, ProposedFrame
 from engine.retrieve.anchors import anchor_menu, scene_situation_tags
 from engine.retrieve.cards import anchor_card_ids, load_cards_for
@@ -50,8 +52,15 @@ def to_proposed(data: dict[str, Any], beat: Beat, state: WorldState) -> Proposed
     defense = None
     if kind == "entity_defense" and entity in state.entities:  # the entity's named defense (01.6.4)
         defense = next(iter(state.entities[entity].data.get("defenses") or {}), None)
+    try:
+        nudge = int(str(data.get("nudge") or "0").replace("+", ""))
+    except ValueError:
+        nudge = 0
     obstacle = Obstacle(kind=kind, tier=ob.get("tier") if kind == "tier" else None, entity=entity,
-                        defense=defense, id=obstacle_id(beat) if kind == "tier" else None)
+                        defense=defense, id=obstacle_id(beat) if kind == "tier" else None,
+                        obstacle_class=ob.get("obstacle_class") if kind == "tier" else None,
+                        nudge=nudge if kind == "tier" else 0, nudge_fact=data.get("nudge_fact"),
+                        nudge_why=data.get("nudge_why"), request_size=data.get("request_size"))
 
     def cost(c: Any) -> CostDecl | None:
         if not c or not c.get("menu_id"):
@@ -91,7 +100,7 @@ def default_frame(sctx: SchemaContext, schema: Schema, beat: Beat, state: WorldS
 def cost_note(beat: Beat, state: WorldState, rules: Any) -> str:  # rule: PR-01-2
     """Step 10 in words where the schema cannot pair two fields: which stakes sources let a cost go uncited."""
     tgt = beat.target if beat.target and beat.target != NONE else None
-    by = uncited_by_stakes(state=state, rules=rules, actor=beat.actor, target=tgt)
+    by = uncited_by_stakes(state=state, rules=rules, actor=beat.actor, target=tgt, beat=beat)
     need = {m: [s for s, ms in by.items() if m in ms] for m in dict.fromkeys(m for ms in by.values() for m in ms)
             if m not in by[NONE] and m != "cost.twist"}
     lines = [f"{m} needs stakes_source {' or '.join(ss)}" for m, ss in need.items()]
@@ -102,7 +111,8 @@ def cost_note(beat: Beat, state: WorldState, rules: Any) -> str:  # rule: PR-01-
 def beat_message(beat: Beat, gate: GateDecision, note: str | None = None) -> str:
     lines = [f"beat: {beat.restatement or beat.intent}", f"intent: {beat.intent}", f"method: {beat.method}",
              f"gate: {gate.gate} ({gate.mode}) verb: {gate.verb or beat.verb or 'none'} "
-             f"licence: {gate.license or 'none'}", f"target: {beat.target or 'none'}"]
+             f"licence: {gate.license or 'none'}", f"target: {beat.target or 'none'}",
+             f"against their will: {'yes' if beat.against_will else 'no'}"]
     if beat.assertion:
         lines.append(f"assertion (context only, never a fact): {beat.assertion}")
     if note:
@@ -138,6 +148,8 @@ def framer_for(ctx: TurnContext) -> Any:
                 errs.append(f"obstacle kind {p.obstacle.kind} must set entity")
             if errs:
                 return errs
+            if trivial_class(p, ctx.rules, gate.verb or beat.verb):
+                return []  # a trivial class: the pipeline resolves it without a roll (01.4.1)
             out = frame_check(p, beat, state=st, rules=ctx.rules, gate=gate, candidates=candidates,
                               store=ctx.store, staged=ctx.need_tx().events)
             if hasattr(out, "step"):

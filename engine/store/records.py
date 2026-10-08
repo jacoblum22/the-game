@@ -14,6 +14,8 @@ PartClass = Literal["SAFETY", "SESSION", "DISPUTE", "PENDING_ANSWER", "OOF_QUEST
 class Part(BaseModel):
     text: str
     cls: PartClass = Field(alias="class")
+    question_kind: str = "none"  # 12.2.2: who_is, where_is, what_happened, what_like, what_want, who_knows, none
+    topic: str | None = None  # the entity or subject asked about (the answer ladder's key, spec 008)
     model_config = {"populate_by_name": True}
 
 

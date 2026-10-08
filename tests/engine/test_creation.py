@@ -307,7 +307,7 @@ def test_every_sheet_competence_passes_the_gate(tmp_path: Path):
     G3 proposal on it gates G2 (01.3.1): every livelihood x profile, and every ready-made character."""
     from types import SimpleNamespace
 
-    from engine.dm.creation import Draft, _of_kind, _odoc, _training_license, build_record
+    from engine.dm.creation import Draft, _odoc, _of_kind, _training_license, build_record
     from engine.resolve.gate import check_gate
     from engine.resolve.types import Beat
     from engine.store.events import LicenseInstance
@@ -324,8 +324,10 @@ def test_every_sheet_competence_passes_the_gate(tmp_path: Path):
                                conditions_on=lambda _: [])
         for tag in rec["deep"] + rec["access"]:
             lid = _training_license(tag, RULES)
-            beat = Beat(id="beat.1", actor="pc", intent=f"use {tag}", method=f"use {tag}", gate="G3",
-                        would_be_license=lid)
+            fb = (RULES.license(lid).get("crude_fallback") if lid in RULES.licenses else None) or {}
+            verb = fb.get("verb") if isinstance(fb, dict) else None  # the act the license is the trained form of
+            beat = Beat(id="beat.1", actor="pc", intent=f"use {tag}", method=f"use {tag}", verb=verb,
+                        uses_power=verb is None)
             if lid not in rec["licenses"] or check_gate(beat, state=held, rules=RULES).gate != "G2":
                 bad.append((rec["livelihood"], rec["profile"], tag, lid))
     assert not bad, bad

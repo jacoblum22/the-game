@@ -24,8 +24,9 @@ from typing import Any, get_args
 from pydantic import BaseModel, Field
 
 from engine.llm.base import Role
-from engine.resolve.costs import uncited_by_stakes
-from engine.resolve.frame import fact_usable, rolling_tiers
+from engine.resolve.costs import OBSERVER, uncited_by_stakes
+from engine.resolve.frame import fact_usable, opposed_by, rolling_tiers, verb_classes
+from engine.resolve.gate import covering_verb
 from engine.retrieve.anchors import verb_anchor
 from engine.retrieve.scene import pc_id, scene_facts, scene_scope
 from engine.store.events import EntityKind
@@ -34,10 +35,10 @@ from engine.store.projection import WorldState
 Schema = dict[str, Any]
 
 # Closed lists the rules state in prose (no data file carries them).
-SHAPES = ("single", "sequential", "repeated", "bundled", "conditional", "extended")  # 01.2.2
-GATES = ("G0", "G1", "G2", "G3", "G4")  # 01.3.1
-NECESSITY = ("uncertain_and_costly", "riding", "trivial", "good_idea", "impossible", "take_the_time",
-             "certain_with_cost")  # 01.4.1
+BEAT_SHAPES = ("now", "extended", "queued", "conditional")  # 12.2.2 decision 3 (I-146c); extended: 01.2.2 (P-082)
+QUESTION_KINDS = ("none", "who_is", "where_is", "what_happened", "what_like", "what_want", "who_knows")  # 12.2.2
+NUDGES = ("0", "-1", "+1")  # 01.6.5: one rung at most; strings, never a numeric field (INV-3)
+REQUEST_SIZES = ("R1", "R2", "R3", "R4", "R5")  # 15.3.2
 SPECIAL_CHOICES = ("own_words", "move_on", "details", "suggest")  # contracts/model-calls.md I
 OBSTACLE_KINDS = ("tier", "opposed", "entity_defense")  # 01.6.3
 MODE_PILLAR = {"conflict": "conflict", "site": "exploration", "travel": "travel", "downtime": "downtime",
@@ -74,6 +75,9 @@ class SchemaContext(BaseModel):
     deed_tags: list[str] = Field(default_factory=list)
     traits: list[str] = Field(default_factory=list)
     dc_tiers: list[str] = Field(default_factory=list)
+    obstacle_classes: list[str] = Field(default_factory=list)  # the beat's verb's rubric classes (01.6.5)
+    opposed_ids: list[str] = Field(default_factory=list)  # a social or attack beat's defender: no tier (01.6.4)
+    social: bool = False  # a Talk aimed at a person: the 15.3.3 DC, with a request size
     cast_ids: list[str] = Field(default_factory=list)
     defender_ids: list[str] = Field(default_factory=list)  # present entities with a named defense (01.6.4)
     lever_fact_ids: list[str] = Field(default_factory=list)
@@ -163,22 +167,24 @@ def interpret_schema(ctx: SchemaContext) -> Schema:  # rule: 12.16.2
 
 
 def reader_schema(ctx: SchemaContext) -> Schema:  # rule: 12.2.2
+    # DL-12-50: the verb, target, three method facets and the shape; the gate, the licence, the would-be licence and
+    # the roll test are computed (00.12.3, PR-01-5, 01.4.1)
     beat = obj({
         "intent": STR,
         "method": STR,
         "assertion": STR_OR_NULL,
-        "shape": enum(SHAPES),
+        "shape": enum(BEAT_SHAPES),
         "target": enum([*ctx.scene_ids, *ctx.reachable_places], first=NONE),
         "verb": enum(ctx.verbs),
-        "license": enum(ctx.pc_licences, first=NONE),
-        "would_be_license": enum(ctx.licences, first=NONE),  # PR-01-5 step 1: what a G3 lacks
-        "gate": enum(GATES),
+        "against_will": BOOL,
+        "uses_power": BOOL,
+        "speech": BOOL,
         "g4_fact": enum(ctx.fact_ids, nullable=True),
-        "necessity": enum(NECESSITY),
         "intent_verbs": STRS,
     })
     return obj({
-        "parts": arr(obj({"text": STR, "class": enum(ctx.input_classes)})),
+        "parts": arr(obj({"text": STR, "class": enum(ctx.input_classes), "question_kind": enum(QUESTION_KINDS),
+                          "topic": STR_OR_NULL})),
         "pending_answer": enum(ctx.pending_choice_ids, nullable=True),
         "fact_questions": arr(obj({
             "subject": enum(ctx.scene_ids),
@@ -214,14 +220,29 @@ def _cost(menu: list[str], facts: list[str], uncited: list[str] | None = None) -
     return _one_of(out or [obj({"menu_id": enum(menu), "form_intent": STR})])
 
 
-def _obstacle(ctx: SchemaContext) -> Schema:  # rule: 01.6.3
-    """A tier (one that rolls, T-01-2) with no entity, or an opposed / entity-defense obstacle naming its entity."""
-    tier = obj({"kind": enum(["tier"]), "tier": enum(ctx.dc_tiers), "entity": NULL})
-    out = [tier]
-    if ctx.cast_ids:
-        out.append(obj({"kind": enum(["opposed"]), "tier": NULL, "entity": enum(ctx.cast_ids)}))
-    if ctx.defender_ids:
-        out.append(obj({"kind": enum(["entity_defense"]), "tier": NULL, "entity": enum(ctx.defender_ids)}))
+def _obstacle(ctx: SchemaContext) -> Schema:  # rule: 00.3.8
+    # rule: 01.6.5
+    """The DC's source as a choice (00.3.8): the verb's obstacle class (its base sets the tier; `other` names the
+    rung by T-01-2), or an opposed / entity-defense obstacle naming its entity. A social or attack beat aimed at a
+    creature (`opposed_ids`) offers only its defense (01.6.4: never a tier)."""
+    out: list[Schema] = []
+    defenders = ctx.defender_ids
+    if ctx.opposed_ids:
+        out.append(obj({"kind": enum(["opposed"]), "obstacle_class": NULL, "tier": NULL,
+                        "entity": enum(ctx.opposed_ids)}))
+        defenders = [d for d in defenders if d in ctx.opposed_ids]
+    else:
+        if ctx.obstacle_classes:
+            out.append(obj({"kind": enum(["tier"]), "obstacle_class": enum(ctx.obstacle_classes), "tier": NULL,
+                            "entity": NULL}))
+        out.append(obj({"kind": enum(["tier"]), "obstacle_class": enum(["other"]), "tier": enum(ctx.dc_tiers),
+                        "entity": NULL}))
+        if ctx.cast_ids:
+            out.append(obj({"kind": enum(["opposed"]), "obstacle_class": NULL, "tier": NULL,
+                            "entity": enum(ctx.cast_ids)}))
+    if defenders:
+        out.append(obj({"kind": enum(["entity_defense"]), "obstacle_class": NULL, "tier": NULL,
+                        "entity": enum(defenders)}))
     return _one_of(out)
 
 
@@ -235,6 +256,11 @@ def framer_schema(ctx: SchemaContext) -> Schema:  # rule: 01.5.1
         "deed_tag": enum(ctx.deed_tags),
         "traits": arr(enum(ctx.traits)),
         "obstacle": _obstacle(ctx),
+        # 01.6.5: one rung at most, the why written before the value, citing an intrinsic fact
+        "nudge_why": STR_OR_NULL if ctx.obstacle_classes and not ctx.opposed_ids else None,
+        "nudge": enum(NUDGES) if ctx.obstacle_classes and not ctx.opposed_ids else None,
+        "nudge_fact": enum(facts, nullable=True) if ctx.obstacle_classes and not ctx.opposed_ids else None,
+        "request_size": enum(REQUEST_SIZES) if ctx.social else None,  # 15.3.2: what the talk asks for
         "levers": arr(enum(facts), max_items=2),  # 01.6.8
         "snags": arr(enum(facts), max_items=2),
         "stakes_source": enum(ctx.stakes_sources, first=NONE),  # 01.6.9
@@ -374,24 +400,29 @@ def _interpret_default(ctx: SchemaContext) -> dict[str, Any]:
 def _reader_default(ctx: SchemaContext) -> dict[str, Any]:
     # 12.2.2: SPEECH vs DECLARATION ties go to DECLARATION; no beats are guessed
     return {
-        "parts": [{"text": ctx.message, "class": "DECLARATION"}] if ctx.message.strip() else [],
+        "parts": [{"text": ctx.message, "class": "DECLARATION", "question_kind": "none", "topic": None}]
+        if ctx.message.strip() else [],
         "pending_answer": None, "fact_questions": [], "beats": [], "clarifying_question": None,
         "restatement": ctx.message, "player_quantity": None,
     }
 
 
 def _framer_default(ctx: SchemaContext) -> dict[str, Any]:
-    # 00.15.3: the basic verb's anchor; 01.6.1: the anchor's default attribute; stakes none -> safe
-    tier = _first(ctx.dc_tiers, "moderate")
+    # 00.15.3: the basic verb's anchor; 01.6.1: the anchor's default attribute; stakes none -> safe; the obstacle:
+    # the defender's defense for a social or attack beat (01.6.4), else class `other` at Easy (lane D P2)
     free = [m for m in ctx.cost_menu_ids if ctx.cost_uncited_ids is None or m in ctx.cost_uncited_ids]
     menu = _first(free or ctx.cost_menu_ids, *ctx.cost_tie_order)
+    obstacle = ({"kind": "opposed", "obstacle_class": None, "tier": None, "entity": ctx.opposed_ids[0]}
+                if ctx.opposed_ids else
+                {"kind": "tier", "obstacle_class": "other", "tier": _first(ctx.dc_tiers, "easy"), "entity": None})
     return {
         "anchor": _first(ctx.anchor_ids, ctx.default_anchor),
         "deltas": [],
         "attribute": _first(ctx.attributes, ctx.default_attribute),
         "deed_tag": _first(ctx.deed_tags),
         "traits": [],
-        "obstacle": {"kind": "tier", "tier": tier, "entity": None},
+        "obstacle": obstacle,
+        "nudge_why": None, "nudge": "0", "nudge_fact": None, "request_size": "R2",
         "levers": [], "snags": [],
         "stakes_source": NONE, "stakes_heavy": False, "lethal": False,
         "reach_whole": ctx.reach_tie_whole, "reach_one_factor": ctx.reach_tie_one_factor,
@@ -596,10 +627,18 @@ def schema_context(  # rule: 12.2.4
     uncited = None
     usable = facts
     sources = list(rules.resolution.get("stakes_flags", {}).get("source", {}).get("sources", []))
+    ob_classes: list[str] = []
+    opposed: list[str] = []
+    social = False
     if beat is not None and not isinstance(beat, Mapping) and getattr(beat, "actor", None):  # the Framer's beat
         tgt = beat.target if beat.target and beat.target != NONE else None
-        by = uncited_by_stakes(state=state, rules=rules, actor=beat.actor, target=tgt)  # PR-01-2 steps 8, 10
-        sources = [s for s in sources if s in by]
+        cv = covering_verb(beat.verb, against_will=beat.against_will, speech=beat.speech)
+        ob_classes = list(verb_classes(rules, cv))
+        opposed = opposed_by(state, beat, cv)
+        social = bool(opposed) and cv == "verb.talk"
+        by = uncited_by_stakes(state=state, rules=rules, actor=beat.actor, target=tgt, beat=beat)  # steps 8, 10
+        # an onlooker who would act: present (computed), or named by a cited source fact (frame_check)
+        sources = [s for s in sources if s in by or s == OBSERVER]
         uncited = [m for m in dict.fromkeys(m for ms in by.values() for m in ms) if m != "cost.twist"
                    or m in by[NONE]]
         usable = [f for f in facts if fact_usable(state, f, beat.declared_seq or state.last_seq)]
@@ -650,6 +689,9 @@ def schema_context(  # rule: 12.2.4
         deed_tags=ae["deed_tags"],
         traits=list(res.get("traits", {})),
         dc_tiers=rolling_tiers(rules),
+        obstacle_classes=ob_classes,
+        opposed_ids=opposed,
+        social=social,
         cast_ids=cast,
         defender_ids=[i for i in cast if (state.entities[i].data.get("defenses") or {})],
         lever_fact_ids=list(lever_fact_ids) if lever_fact_ids is not None else usable,

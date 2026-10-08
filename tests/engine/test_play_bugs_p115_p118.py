@@ -12,7 +12,7 @@ from engine import ids
 from engine.audit.claims import check_claims
 from engine.data.loader import load_rules
 from engine.dm.adjudication import AdjudicationRecord, OracleEntry
-from engine.dm.roles.reader import Part, ReaderBeat, ReaderResult, _knowledge_parts
+from engine.dm.roles.reader import knowledge_parts
 from engine.store.events import Event, SceneRecord
 from tests.fixtures.game import entity, new_store
 
@@ -35,19 +35,14 @@ def _store(tmp_path: Path) -> Any:
     return store
 
 
-def test_p115_kept_talk_is_not_labelled_as_the_dropped_recall() -> None:
-    out = ReaderResult(
-        parts=[Part.model_validate({"class": "FICTION_QUESTION", "text": "What do I know about the token you wear?"}),
-               Part.model_validate({"class": "DECLARATION", "text": "Tell me what the niche held."})],
-        beats=[ReaderBeat(intent="Learn what the token signifies", method="Recall it", verb="verb.recall",
-                          target="npc.mara_voss"),
-               ReaderBeat(intent="Get her to say what the niche held", method="Speak aloud", verb="verb.talk",
-                          target="npc.mara_voss")],
-        restatement="Recall: what the PC knows of the token. Then: speak to her about the niche.")
-    _knowledge_parts(out, "pc.wren")
-    [plan] = out.plans(actor="pc.wren", declared_seq=0, mint=lambda k: f"{k}.1")
-    assert plan.beat.verb == "verb.talk"
-    assert plan.beat.restatement == "Get her to say what the niche held"
+def test_p115_what_do_i_know_is_routed_by_code_before_the_reader() -> None:
+    """P-115 / P-038: the "what do I know?" sentence never reaches the Reader (no Recall beat to drop, no Recall
+    line on the kept Talk); the rest of the message does."""
+    known, rest = knowledge_parts("What do I know about the token you wear? Tell me what the niche held.")
+    assert [(p.cls, p.text) for p in known] == [("OOF_QUESTION", "What do I know about the token you wear?")]
+    assert rest == "Tell me what the niche held."
+    assert knowledge_parts("I try to remember what I know of the token.") == ([], "I try to remember what I know "
+                                                                                  "of the token.")
 
 
 def test_p116_harm_written_this_turn_backs_the_strike_in_any_words(tmp_path: Path, rules: Any) -> None:

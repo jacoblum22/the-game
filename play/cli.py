@@ -25,8 +25,19 @@ from datetime import date
 from pathlib import Path
 from typing import Any, TextIO
 
+from engine.dm.oof import glossary
 from engine.llm.base import MissingKey, ModelRefused, ModelUnavailable
-from play.render import ascii_safe, enter_hint, offer_waits, render_response, short_label, terminal_width, wrap
+from play.render import (
+    ascii_safe,
+    enter_choice,
+    enter_hint,
+    menu_keys,
+    offer_waits,
+    render_response,
+    short_label,
+    terminal_width,
+    wrap,
+)
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 SAVES = REPO_ROOT / "saves"
@@ -52,8 +63,8 @@ HELP = """Commands (out of fiction; never sent to a model):
   /autocommit on|off   auto-commit safe offers (a lethal frame never is)
   /fix <what>          dispute something: the DM checks the record and corrects a seen error
   /quit                save and exit (nothing is ever lost)
-At a pause, a number (or letter) picks that choice, Enter takes the default it names, and any other text is what
-your character does or says. While making the world and your character, "details" tells you more about each
+At a pause, Enter takes the default the menu names ([Enter] ...), a letter picks another choice, ? explains the
+offer's words, and any other text is what your character does or says. While making the world and your character, "details" tells you more about each
 choice and "suggest" lets the dice pick."""
 # Pauses of the world setup and character creation: Enter there moves on (the step's own default).
 FLOW_PAUSES = frozenset({"seed_step", "create_step"})
@@ -282,6 +293,8 @@ class Session:
     def __init__(self, app: App, game: Any) -> None:
         self.app, self.game = app, game
         self.pause: Any = None
+        self.phase: str = ""
+        self.shown = ""  # the last response as printed: Enter on a waiting pause shows it again
         self.last_turn: str | None = None
         self.notice: str | None = None  # a budget notice held until the turn is over
 
@@ -303,7 +316,13 @@ class Session:
         if text.startswith("/"):
             self.command(text)
             return
+        if text.startswith("?"):  # 14.2.7: the glossary of the OFFER's words
+            self.app.say(glossary(text[1:]))
+            return
         choices = self.pause.choices if self.pause is not None else []
+        if choices and self.phase == "play" and len(text) == 1 and text.lower() in (keys := menu_keys(self.pause)):
+            self.pick(keys[text.lower()])  # 12.15.2: the letters the menu line prints
+            return
         if choices and len(text) == 1 and "a" <= text.lower() <= "z" and ord(text.lower()) - 96 <= len(choices):
             text = str(ord(text.lower()) - 96)  # a letter picks too: a is 1)
         if not choices and text.isdigit():
@@ -324,6 +343,14 @@ class Session:
         p = self.pause
         if p is None:
             self.app.say("(Say what your character does, or type /help.)")
+            return
+        if self.phase == "play" and p.choices:  # 12.15.2: Enter does the labelled default, or shows it again
+            choice = enter_choice(p)
+            if choice is None:
+                self.app.say(self.shown)
+                return
+            self.app.say(f"({short_label(next(c.label for c in p.choices if c.id == choice))})")
+            self.pick(choice)
             return
         if offer_waits(p):
             self.app.say(enter_hint(p))
@@ -376,9 +403,11 @@ class Session:
 
     def show(self, resp: Any) -> None:
         self.pause = resp.pause
+        self.phase = resp.phase
         if resp.turn_id:
             self.last_turn = resp.turn_id
-        self.app.say(render_response(resp, self.app.width))
+        self.shown = render_response(resp, self.app.width)
+        self.app.say(self.shown)
         self.budget_check(resp)
 
     def budget_check(self, resp: Any) -> None:

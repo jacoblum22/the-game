@@ -790,3 +790,29 @@ readers take a `WorldState`. Errors: `engine.world.common.WorldError`. The PC is
   decide)"); a seed/creation default that is not an option (`move_on`, c8.true_thing's `open`) is sent as `move_on`;
   creation c6 now carries `move_on` as its pause default. No default: nothing sent, except the name block, which
   says "Type a name for your character." The engine says the same for "skip"; "suggest" offers three names.
+
+## Adjudication (spec 007; R2-C rules 00.12.3, 01.4.1, 01.6.5, 01.6.13, 12.15.2)
+Supersedes the earlier notes on `Beat.gate` / `would_be_license` / `necessity`, the cli.md OFFER layout,
+`offer_text`, TRADE_LABELS and Enter at an OFFER.
+- **Reader** (12.2.2, DL-12-50): beats carry only `verb`, `target`, `against_will`, `uses_power`, `speech`, `shape`
+  (`now` | `extended` | `queued` | `conditional`; only now/extended run this turn, the rest are restated as
+  queued), `g4_fact`; parts carry `question_kind` + `topic` (the answer ladder's keys, spec 008).
+  `reader.knowledge_parts(message)` routes "what do I know?" before the call. `Beat.asks`: a Talk beat asking a
+  plain question.
+- **Gate** (`engine.resolve.gate`): `compute_gate(verb, *, against_will, uses_power, speech, method, held, rules,
+  reading, literacy_known)` is pure; `covering_verb` picks the card from the facets; `check_gate(beat, ...)` adds
+  conditions, a cited G4 fact (or `canon_impossible`), accepted fallbacks and engine-set stretch/emulate.
+- **Necessity** (`engine.resolve.necessity`): `necessity(beat, decision, state=, rules=)` before framing (plain
+  reading, certain talk: `trivial`, no Framer call); `trivial_class(proposed, rules, verb)` after it;
+  `parties_who_would_act(state, actor, beat)` backs the observer stakes source (else a cost must cite its fact).
+- **Framer / frame_check**: obstacle `{kind: tier, obstacle_class, tier}` (class base from
+  `basic_verbs.yaml#anchor.obstacle_classes`; `other` names the rung), `nudge_why`/`nudge` ("-1"/"0"/"+1")/
+  `nudge_fact`, `request_size` for talk; `opposed_by(state, beat, verb)` forces the defense; the second cited
+  Precision snag turns Protective; the 01.6.13 guard sets `Frame.guard` / `Frame.long_shot`;
+  `Frame.alternatives` (`alternatives(...)`); costs narrowed by `costs.source_menus` (`stakes_cost_menus`).
+- **OFFER** (`engine.dm.oof`): `offer_block(frame, rules=, fate=, lethal_line=, auto=)` is 12.15.2's template;
+  `CHANCE_WORDS`, `SEVERITY_WORDS`, `REACH_WORDS`, `GLOSSARY` / `glossary(word)` (14.2.7); `offer_choices` labels
+  Do it / Go big / Play it safe / Another way / Back off. The pause prompt is the restated beat.
+- **Menu** (`play/render.py`): `menu_keys`, `enter_choice` (Do it, or None = show again on Dire / lethal / long
+  shot and on near miss, redirect, last chance), `menu_line`; play-phase pauses print it instead of numbers; `?`
+  explains a word. Digits still pick. Auto-commit defaults on (`resolution.yaml#auto_commit`), Safe frames only.

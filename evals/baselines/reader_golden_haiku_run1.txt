@@ -1,0 +1,48 @@
+# Reader golden set (91 lines; 91 scored, 0 without an answer)
+
+- verb: 75.8% (69/91)
+- gate: 90.1% (82/91)
+- necessity: not scored
+- against_will: 89.5% (68/76)
+- uses_power: 98.7% (75/76)
+- speech: 88.2% (67/76)
+- question_kind: 78.0% (71/91)
+- necessity as roll / no roll: not scored
+- issue lines (P-004 … P-123) verb: 57.1% (8/14), gate: 85.7% (12/14)
+
+## Misses (verb, gate): 31
+- g002 verb: got verb.move, want verb.talk  (I step through, sword still out, and call to the strangers o)
+- g003 verb: got verb.move, want verb.talk  (I draw my sword higher and step toward them. "Last warning. )
+- g004 verb: got verb.talk, want verb.strike  (I hold my sword on the travellers and step toward the neares)
+- g009 verb: got verb.move, want verb.talk  (I tap the child's shoulder lightly and say, "I'm Lisius, a m)
+- g009 gate: got G1, want G2  (I tap the child's shoulder lightly and say, "I'm Lisius, a m)
+- g010 verb: got verb.handle, want verb.talk  (I gently turn the child's face toward me and say, "Hey. I'm )
+- g010 gate: got G1, want G2  (I gently turn the child's face toward me and say, "Hey. I'm )
+- g014 verb: got verb.grapple, want verb.handle  (I grab the raven-feather token gently and stare Kerwin down.)
+- g024 verb: got verb.talk, want None  (I gently ask about the child. "Rosie, forget Rakum a moment.)
+- g024 gate: got G1, want None  (I gently ask about the child. "Rosie, forget Rakum a moment.)
+- g025 verb: got verb.force, want verb.move  (I shove through the crowd after that face, chasing it hard.)
+- g031 verb: got verb.talk, want None  (I turn toward the carters and ask what they saw, and whether)
+- … 19 more
+
+## Negation pairs (11 pairs, 22 lines)
+# Reader golden set (22 lines; 22 scored, 0 without an answer)
+
+- verb: 81.8% (18/22)
+- gate: 95.5% (21/22)
+- necessity: not scored
+- against_will: 86.4% (19/22)
+- uses_power: 100.0% (22/22)
+- speech: 100.0% (22/22)
+- question_kind: 95.5% (21/22)
+- necessity as roll / no roll: not scored
+- issue lines (P-004 … P-123) verb: not scored, gate: not scored
+
+## Misses (verb, gate): 5
+- g069 verb: got verb.talk, want None  (I don't threaten her, I just ask the innkeeper who rented th)
+- g069 gate: got G1, want None  (I don't threaten her, I just ask the innkeeper who rented th)
+- g070 verb: got verb.force, want verb.handle  (I pick the lock on the cellar door.)
+- g079 verb: got verb.ready, want verb.move  (I don't push him. I wait for the old man to step aside, then)
+- g080 verb: got verb.handle, want verb.sneak  (I pour the sleeping draught into the guard's cup when he loo)
+
+Reader's own verb before the facets choose the card: 71.1% (54/76)

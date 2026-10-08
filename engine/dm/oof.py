@@ -3,7 +3,7 @@
 Every number, odds line, choice and rules matter goes in one of these blocks (12.14.4); the fiction carries none.
 Each builder returns an `engine.dm.response.OofBlock(kind, text)` (the engine-api `Response.oof_blocks[]` item).
 
-    blk = offer_block(offer_preview(frame), rules=rules, fate=1)     # the [OFFER] pause block
+    blk = offer_block(frame, rules=rules, fate=1)                    # the [OFFER] pause block (12.15.2 template)
     blk.model_dump()                                                  # {"kind": "OFFER", "text": "..."}
 """
 
@@ -68,7 +68,8 @@ def name_of(rules: Any, data_id: str | None) -> str:
 
 
 def _menu_form(rules: Any, menu_id: str | None, severity: str | None) -> str:
-    """The cost menu's own example words for a severity (resolution.yaml cost_menu `forms.<S>.text`)."""
+    """The cost menu's own example words for a severity (resolution.yaml cost_menu `forms.<S>.text`): for answers
+    about a cost term (engine/dm/turn.py), never as this scene's price (P-083)."""
     try:
         forms = rules.get(menu_id).get("forms") or {} if rules is not None and menu_id and rules.has(menu_id) else {}
         return str((forms.get(severity or "S1") or {}).get("text") or "")
@@ -76,20 +77,103 @@ def _menu_form(rules: Any, menu_id: str | None, severity: str | None) -> str:
         return ""
 
 
-def _difficulty_phrase(words: str) -> str:
-    w = (words or "").strip()
-    phrases = {"stored": "a difficulty already set", "their defense": "against their defense",
-               "the effect's strength": "against the effect's strength", "hidden": "difficulty hidden", "": ""}
-    if w in phrases:
-        return phrases[w]
-    return f"{'an' if w[:1].lower() in 'aeiou' else 'a'} {w.lower()} obstacle"
-
-
 def _view(src: Frame | OfferPreview, rules: Any) -> OfferPreview:
     return offer_preview(src, rules) if isinstance(src, Frame) else src
 
 
-# ------------------------------------------------------------------------------------------- OFFER
+# ------------------------------------------------------------------------------------------- OFFER words (14.2.7)
+
+# rule: 12.15.2 (the fixed word maps; the glossary 14.2.7 explains them behind `?`)
+CHANCE_WORDS = ((95, "almost certain"), (75, "likely"), (55, "better than even"), (45, "even"), (25, "unlikely"),
+                (10, "long shot"), (5, "only by luck"), (0, "impossible as framed"))
+SEVERITY_WORDS = {"S1": "a nuisance", "S2": "a setback", "S3": "serious", "S4": "grave", "S5": "ruinous"}
+REACH_WORDS = {"limited": "partly what you wanted", "standard": "what you wanted", "great": "more than you asked"}
+COST_WORDS = {  # the price in plain words when the frame names no form of its own (never the menu's example list)
+    "cost.harm": "you get hurt", "cost.footing": "you lose your footing", "cost.gear": "your gear suffers",
+    "cost.time": "it costs you time", "cost.exposure": "you are noticed", "cost.closed_door": "a door closes to you",
+    "cost.drain": "something is used up", "cost.shortfall": "you get less than you wanted",
+    "cost.twist": "something complicates things"}
+MODE_WORDS = {"fallback": "You're improvising without training: harder (+{n}), and at best a partial result.",
+              "stretch": "You're stretching what you know: harder (+{n}).",
+              "emulate": "You're copying what you've seen done: harder (+{n})."}
+GLOSSARY: dict[str, str] = {  # rule: 14.2.7
+    "almost certain": "95% to succeed", "likely": "75–90% to succeed", "better than even": "55–70% to succeed",
+    "even": "45–50% to succeed", "unlikely": "25–40% to succeed", "long shot": "10–20% to succeed; as a label: "
+    "failing badly is likelier than succeeding, and the offer shows a better way first",
+    "only by luck": "5%: only a natural 20", "a nuisance": "the mildest price of a failure",
+    "a setback": "a failure's price that sets you back", "serious": "a heavy price", "grave": "a very heavy price",
+    "this can kill you": "this roll can leave you dying; you were warned before, and may back off",
+    "danger": "a failure here costs something serious, even before a bad roll",
+    "partly": "a success gets you part of what you wanted", "what you wanted": "a success gets you what you asked",
+    "more than you asked": "a success goes further than you asked", "very well": "a critical success",
+    "badly": "a critical failure", "close call": "you just missed: take what you wanted and pay the price shown, "
+    "or fail", "go big": "if it works you get more; if it fails it costs more; same chance",
+    "play it safe": "if it works you get less; if it fails it costs less; same chance",
+    "another way": "other approaches the game worked out for you, each with its chance",
+    "you can't judge how hard this is": "the roll is hidden; you see only what your character perceives",
+    "improvising without training": "harder, and at best a partial result (you lack the training)",
+    "auto": "a safe, likely roll made without asking you (you can turn this off)",
+}
+
+
+def chance_word(pct: int) -> str:  # rule: 12.15.2
+    return next(w for floor, w in CHANCE_WORDS if pct >= floor)
+
+
+def glossary(word: str = "") -> str:  # rule: 14.2.7
+    """`?` alone: every word; `? <word>`: that word's meaning."""
+    w = word.strip().lower().strip("[]?' ")
+    if w:
+        hit = next((k for k in GLOSSARY if k == w or k.startswith(w)), None)
+        return f"{hit}: {GLOSSARY[hit]}" if hit else f"No glossary word {word.strip()!r}. Type ? for the list."
+    return "\n".join(f"{k}: {v}" for k, v in GLOSSARY.items())
+
+
+def _signed(n: int) -> str:
+    return f"+{n}" if n >= 0 else f"−{-n}"
+
+
+_DATA_ID = re.compile(r"^[a-z_]+(?:\.[a-z0-9_]+)+$")  # a data id (trait.sense.loud): its name is shown
+_BOOKKEEPING = re.compile(r"\b(?:fact|npc|pc|obj|loc|clk|cost|verb|lic)\.[a-z0-9_]+|\bsource:|\bS[1-5]\b", re.I)
+
+
+def _cost_clause(cost: Any) -> str:  # rule: 12.15.2
+    """The price as one clause: the Framer's own form for this scene, unless it carries ids or bookkeeping (then
+    the cost's plain words; the text is never rewritten, P-072)."""
+    form = (getattr(cost, "form_intent", "") or "").strip().rstrip(".")
+    if not form or _BOOKKEEPING.search(form):
+        return COST_WORDS.get(cost.menu_id, "it costs you")
+    return form
+
+
+def _breakdown(f: Frame, rules: Any) -> str:
+    m = f.modifier
+    parts = [f"{name_of(rules, f.attribute)} {_signed(m.attribute)}"]
+    if m.competence:
+        tag = m.competence_tag
+        word = "practised" if tag in (None, "deed") else f"trained ({name_of(rules, tag).lower()})"
+        parts.append(f"{word} {_signed(m.competence)}")
+    if m.edge:
+        parts.append(f"edge {_signed(m.edge)}")
+    lv = [x for x in f.levers if x.type == "precision"]
+    sn = [x for x in f.snags if x.type == "precision"]
+    parts += ["a help +2"] * len(lv) + [("tried before " if x.engine else "a hindrance ") + "−2" for x in sn]
+    if m.status:
+        parts.append(f"your condition {_signed(m.status)}")
+    return ", ".join(parts)
+
+
+def _chance_line(f: Frame, rules: Any) -> str:
+    o = f.odds
+    if f.secret:
+        return "Chance: you can't judge how hard this is."
+    if f.long_shot:  # 01.6.13: the label wins; a natural-20-only chance says so too
+        n20 = ", only on a natural 20" if o.only_natural_20 else ""
+        return (f"Chance: long shot — {o.success_or_better}%{n20} (failing badly is likelier: "
+                f"{o.critical_failure}%)")
+    if o.only_natural_20:
+        return "Chance: only by luck — 5%, and at best what you wanted"
+    return f"Chance: {chance_word(o.success_or_better)} — {o.success_or_better}%   ({_breakdown(f, rules)})"
 
 
 def offer_view(src: Frame | OfferPreview, rules: Any = None) -> OfferView:  # rule: 01.7.1
@@ -108,100 +192,64 @@ def offer_view(src: Frame | OfferPreview, rules: Any = None) -> OfferView:  # ru
         only_natural_20=v.only_natural_20)
 
 
+# 12.15.2's menu: the labels; play/render.py gives each its key ([Enter], d, b, s, c, w)
+OFFER_LABELS = {"commit": "Do it", "go_big": "Go big", "play_safe": "Play it safe", "change": "Another way",
+                "withdraw": "Back off"}
+
+
 def offer_choices(src: Frame | OfferPreview, rules: Any = None) -> list[dict[str, str]]:  # rule: 01.7.3
-    """Pause choices for an offer: commit, change, withdraw, and the trades legal now (go big / play it safe)."""
+    """Pause choices for an offer: do it, the trades legal now, another way (asks how), back off."""
     v = _view(src, rules)
-    out = [{"id": "commit", "label": "Commit"}, {"id": "change", "label": "Change approach"},
-           {"id": "withdraw", "label": "Withdraw"}]
-    from engine.resolve.pipeline import TRADE_LABELS
-
-    if "go_big" in v.trades:
-        out.append({"id": "go_big", "label": TRADE_LABELS["go_big"]})
-    if "play_it_safe" in v.trades or "play_safe" in v.trades:
-        out.append({"id": "play_safe", "label": TRADE_LABELS["play_it_safe"]})
-    return out
+    ids = ["commit", *[t for t in ("go_big", "play_safe") if t in v.trades or (t == "play_safe" and
+                                                                              "play_it_safe" in v.trades)],
+           "change", "withdraw"]
+    return [{"id": i, "label": OFFER_LABELS[i]} for i in ids]
 
 
-def _cost_words(rules: Any, cost: dict[str, Any] | None, *, with_severity: bool) -> str:
-    if not cost or not cost.get("menu_id"):
-        return ""
-    menu = name_of(rules, cost.get("menu_id")).lower()
-    form = (cost.get("form") or "").strip()  # never the menu's example list as if it were this scene's (P-083)
-    sev = ""
-    if with_severity and cost.get("severity_on_failure"):
-        sev = f", {cost['severity_on_failure']}"
-        if cost.get("severity_on_critical_failure"):
-            sev += f"; {cost['severity_on_critical_failure']} on a critical failure"
-    return f"{form} ({menu}{sev})" if form else menu + (f" ({sev[2:]})" if sev else "")
-
-
-def offer_block(src: Frame | OfferPreview, *, rules: Any = None, fate: int | None = None,
-                lethal_line: str | None = None, auto: bool = False,
-                costs_line: str | None = None) -> OofBlock:  # rule: 12.15.2
+def offer_block(f: Frame, *, rules: Any = None, fate: int | None = None, lethal_line: str | None = None,
+                auto: bool = False) -> OofBlock:  # rule: 12.15.2
     # rule: 01.7.1
-    """The `[OFFER]` block in contracts/cli.md's layout: approach and difficulty in words, the odds line, stakes
-    with the threatened and alternate cost in words, the lethal line, reach, fate, and the numbered choices.
-    `lethal_line`: engine/harm's `lethal_scan(...).offer_line` (THIS CAN KILL YOU — <source> (warned <when>)).
-    `costs_line`: the action, time and Focus prices when the caller has them (12.15.2 Costs). `auto`: the
-    auto-commit variant (labelled `OFFER — auto`, no choices)."""
-    v = _view(src, rules)
-    ap = v.approach
-    verb = name_of(rules, ap.get("verb")) if ap.get("verb") else name_of(rules, ap.get("license"))
-    attr = name_of(rules, ap.get("attribute"))
-    how = verb + (f" ({attr})" if attr and attr != verb else "")
-    lic = ap.get("license")
-    if lic and ap.get("verb"):
-        how += f", {name_of(rules, lic)}"
-    diff = _difficulty_phrase(v.difficulty_words)
-    first = f"{v.restated_beat.rstrip(' .')} — {how}" + (f", {diff}" if diff else "") + "."
+    """The `[OFFER]` block: 12.15.2's template over the frame's typed fields (contracts/offer.md). No rule id, DC,
+    severity code or mode name reaches the player; the menu follows from the pause's choices (play/render.py).
+    `lethal_line`: engine/harm's `lethal_scan(...).offer_line`. `auto`: the auto-commit variant."""
+    o = f.odds
     rest: list[str] = []
-    mp = v.mode_price
-    if mp and mp.get("mode") and mp.get("mode") != "normal":
-        price = []
-        if mp.get("dc_shift"):
-            price.append(f"DC +{mp['dc_shift']}")
-        if mp.get("focus_add"):
-            price.append(f"Focus +{mp['focus_add']}")
-        if mp.get("reach_cap"):
-            price.append(f"reach capped at {mp['reach_cap']}")
-        if mp.get("consequence"):
-            price.append(str(mp["consequence"]))
-        rest.append(f"Mode: {mp['mode']}" + (f" — {', '.join(price)}" if price else "") + ".")
-    if v.alternative_attribute:
-        rest.append(f"(A method using {name_of(rules, v.alternative_attribute)} would use a higher attribute.)")
-    o = v.odds
-    if v.dc_source == "hidden":
-        rest.append("The roll is hidden; you'll see only what you perceive.")
-    elif v.only_natural_20:
-        rest.append("Only a natural 20, and at best a plain success.")
+    mp = f.mode_price
+    if mp is not None and mp.mode in MODE_WORDS:
+        line = MODE_WORDS[mp.mode].format(n=mp.dc_shift)
+        rest.append(line.replace("harder (+0), and ", "") if not mp.dc_shift else line)
+    rest.append(_chance_line(f, rules))
+    reach = REACH_WORDS.get(f.reach, "what you wanted")
+    works = f"If it works: {reach}."
+    if o.critical_success and not f.secret:  # a critical success delivers one reach rung more (01.6.10)
+        better = "more than you asked" if f.reach != "great" else "more than you asked, and then some"
+        works += f"   Very well ({o.critical_success}%): {better}."
+    rest.append(works)
+    tc = f.threatened_cost
+    if tc.on_failure:
+        fails = f"If it fails: {'Danger: ' if f.stakes == 'dire' else ''}{_cost_clause(tc)} — " \
+                f"{SEVERITY_WORDS.get(tc.on_failure, tc.on_failure)}."
     else:
-        need = f" (need {v.need}+ on the die)" if v.need is not None else ""
-        rest.append(f"Success or better {o.get('success_or_better_pct', 0)}% · critical failure "
-                    f"{o.get('critical_failure_pct', 0)}% · near miss {o.get('near_miss_pct', 0)}%{need}.")
-    stakes = f"Stakes: {v.stakes}."
-    threat = _cost_words(rules, v.threatened_cost, with_severity=True)
-    if threat and v.threatened_cost.get("severity_on_failure"):
-        stakes += f" If it goes wrong: {threat}."
-    elif threat and v.threatened_cost.get("severity_on_critical_failure"):
-        crit = dict(v.threatened_cost, severity_on_failure=v.threatened_cost["severity_on_critical_failure"],
-                    severity_on_critical_failure=None)
-        stakes += (" If it goes wrong: it just doesn't work, at no other cost; on a critical failure, "
-                   f"{_cost_words(rules, crit, with_severity=True)}.")
-    elif v.threatened_cost.get("menu_id"):
-        stakes += " If it goes wrong: it just doesn't work, at no other cost."
-    alt = _cost_words(rules, v.alternate_cost, with_severity=False)
-    if alt:
-        stakes += f" Or instead: {alt}."
-    rest.append(stakes)
-    if v.lethal:
+        fails = "If it fails: it just doesn't work."
+    if tc.on_critical_failure and (o.critical_failure or f.secret):
+        bad = f" ({o.critical_failure}%)" if not f.secret else ""
+        fails += f"   Badly{bad}: {_cost_clause(tc)} — {SEVERITY_WORDS.get(tc.on_critical_failure, '')}."
+    rest.append(fails)
+    if f.lethal:
         rest.append(lethal_line or "THIS CAN KILL YOU.")
-    rest.append(f"Reach: {v.reach}.")
-    if costs_line:
-        rest.append(costs_line)
+    if f.alternate_cost is not None and o.near_miss and not f.secret:
+        rest.append(f"Close call ({o.near_miss}%): get it anyway and pay ({_cost_clause(f.alternate_cost)}), "
+                    "or fail.")
+    takes = [name_of(rules, c).lower() if _DATA_ID.match(c.strip()) else c.strip().rstrip(".")
+             for c in f.method_consequences if c.strip()]
     if fate is not None:
-        rest.append(f"Fate: {fate}.")
-    label = "OFFER — auto" if auto else "OFFER"
-    return OofBlock(kind="OFFER", text=_block(label, first, rest))  # the pause's choices follow it, numbered
+        takes.append(f"fate {fate}")
+    if takes:
+        rest.append("Takes: " + " · ".join(takes))
+    if f.alternatives and not auto and not f.secret:
+        rest.append("Another way: " + " · ".join(f"{a.label} ({a.chance}%)" for a in f.alternatives))
+    title = (f.beat.restatement or f.beat.intent).strip().rstrip(".") + "."
+    return OofBlock(kind="OFFER", text=_block("OFFER — auto" if auto else "OFFER", title, rest))
 
 
 # ------------------------------------------------------------------------------------------- harm blocks
@@ -351,11 +399,10 @@ def clarify_block(question: str, *, assuming: bool = False) -> OofBlock:  # rule
     return OofBlock(kind="CLARIFY", text=f"[CLARIFY] One question: {q}")
 
 
-def _price(rules: Any, cost: Any, severity: str | None) -> str:
-    form = (getattr(cost, "form_intent", None) or "").strip()
-    menu = name_of(rules, cost.menu_id).lower()
-    sev = f", {severity}" if severity else ""
-    return f"{form} ({menu}{sev})" if form else f"{menu}{sev}"
+def _price(rules: Any, cost: Any, severity: str | None) -> str:  # rule: 12.15.2
+    """A price in words: the cost's clause and its severity word (never an S-code)."""
+    sev = f" — {SEVERITY_WORDS.get(severity, severity)}" if severity else ""
+    return f"{_cost_clause(cost)}{sev}"
 
 
 def near_miss_choices(frame: Frame, rules: Any = None) -> list[dict[str, str]]:  # rule: 01.9.3
@@ -382,7 +429,6 @@ def changed_line(state: WorldState, pc: str, events: Sequence[Any]) -> str:  # r
     """`Changed: Vitality 12 → 4 · bloodied`: the PC's shown quantities this beat moved, then the harm descriptor
     when Vitality moved (07.1.1); "" when nothing shown changed."""
     from engine.harm.state import descriptor
-
     from engine.resolve.conflict import state_words
 
     first: dict[str, int] = {}
@@ -417,7 +463,8 @@ def result_block(frame: Frame, roll: RollResult, *, sac: bool = False, costs: Se
     rest = []
     for c in costs:
         form = (getattr(c, "form", "") or "").strip()
-        tag = ", ".join(x for x in (name_of(rules, c.menu_id).lower(), c.severity or "") if x)
+        tag = ", ".join(x for x in (name_of(rules, c.menu_id).lower(), SEVERITY_WORDS.get(c.severity or "", ""))
+                        if x)
         rest.append(f"Paid: {form} ({tag})." if form else f"Paid: {tag}.")
     if changed:
         rest.append(changed)

@@ -99,25 +99,44 @@ def uncited_candidates(*, state: Any, rules: Any, actor: str, stakes_source: str
     """The menu ids legal WITHOUT a cited source fact (menu order): the structural fits, with cost.twist only
     when no other entry fits (01.13.1 (d)). `check_cost_decl` and the Framer schema both read this."""
     m = menu(rules)
+    allowed = source_menus(rules, stakes_source)
     fits = [k for k in m if k != "cost.twist" and structural_fit(
-        k, state=state, actor=actor, stakes_source=stakes_source, target=target)]
+        k, state=state, actor=actor, stakes_source=stakes_source, target=target)
+        and (allowed is None or k in allowed) and not (k == "cost.harm" and stakes_source == OBSERVER)]
     if not any(k != "cost.shortfall" for k in fits):
         fits.append("cost.twist")
     return fits
 
 
-def established_stakes_sources(state: Any, rules: Any, actor: str) -> list[str]:  # rule: 01.6.9
-    """The stakes sources the state can back: a listening clock needs an active clock. The rest are the
-    Framer's judgment of the fiction. ponytail: only the clock is checked; an observer is a judgment call."""
+OBSERVER = "aware_opponent_or_observer"
+
+
+def established_stakes_sources(state: Any, rules: Any, actor: str, beat: Any = None) -> list[str]:  # rule: 01.6.9
+    """The stakes sources the state can back: a listening clock needs an active clock; an aware party counts only
+    if one present would act on a failure (01.4.1, 01.6.9: hostile, or the act is against their wishes). The rest
+    are the Framer's reading of the fiction (a height, a hazard, an item at risk)."""
+    from engine.resolve.necessity import parties_who_would_act
+
     sources = ["none", *_rules(rules).resolution["stakes_flags"]["source"]["sources"]]
     clock = any(c.status == "active" for c in state.clocks.values())
-    return [s for s in sources if s != "listening_clock" or clock]
+    actors = bool(parties_who_would_act(state, actor, beat))
+    return [s for s in sources if (s != "listening_clock" or clock) and (s != OBSERVER or actors)]
 
 
-def uncited_by_stakes(*, state: Any, rules: Any, actor: str, target: str | None = None) -> dict[str, list[str]]:
+def uncited_by_stakes(*, state: Any, rules: Any, actor: str, target: str | None = None,
+                      beat: Any = None) -> dict[str, list[str]]:
     """`uncited_candidates` for each established stakes source (the Framer schema's union and packet note)."""
     return {ss: uncited_candidates(state=state, rules=rules, actor=actor, stakes_source=ss, target=target)
-            for ss in established_stakes_sources(state, rules, actor)}
+            for ss in established_stakes_sources(state, rules, actor, beat)}
+
+
+def source_menus(rules: Any, stakes_source: str) -> list[str] | None:  # rule: 01.6.11
+    """The cost menus a stakes source may threaten (`resolution.yaml#stakes_cost_menus`), with the shortfall and
+    the twist open to every source; None when nothing narrows it (no source: Safe)."""
+    table = _rules(rules).resolution.get("stakes_cost_menus") or {}
+    if stakes_source not in table:
+        return None
+    return [*table[stakes_source], "cost.shortfall", "cost.twist"]
 
 
 def first_fitting_cost(rules: Any, *, role: Literal["threatened", "alternate"], other: CostDecl | None = None,
@@ -143,6 +162,12 @@ def check_cost_decl(decl: CostDecl | None, *, role: Literal["threatened", "alter
         return f"{decl.menu_id} is only ever an alternate (01.13.1)"
     if other is not None and other.menu_id == decl.menu_id:
         return "the alternate must be a different entry from the threatened cost"
+    allowed = source_menus(rules, stakes_source)  # 01.6.11: a cost follows its source (DL-01-31, I-155)
+    # an alternate citing its own source fact follows that source (the bar a hasp is forced with: gear)
+    if allowed is not None and decl.menu_id not in allowed and not (role == "alternate" and decl.source_fact):
+        return f"{decl.menu_id} does not follow from stakes source {stakes_source} (may threaten: {', '.join(allowed)})"
+    if decl.menu_id == "cost.harm" and stakes_source == OBSERVER and decl.source_fact is None:
+        return "cost.harm from an aware party needs the cited fact that they are armed and hostile (01.6.11)"
     fits = uncited_candidates(state=state, rules=rules, actor=actor, stakes_source=stakes_source, target=target)
     if decl.menu_id == "cost.twist" and "cost.twist" not in fits:
         others = [k for k in fits if k != "cost.shortfall"]

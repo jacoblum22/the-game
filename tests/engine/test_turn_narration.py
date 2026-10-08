@@ -17,7 +17,7 @@ from tests.engine.test_turn_adjudication import QUIET_WORLD, RISKY, SNEAK, beat,
 
 GOOD_SCREEN = {"intent_acknowledged": True, "intent_substituted": False, "next_step_exists": True,
                "mechanics_in_fiction": [], "ends_on_prompt_or_one_pause": True}
-LOOK = beat("look over the quay", "verb.observe", necessity="trivial", verbs=("look",))
+LOOK = beat("look over the quay", "verb.observe", verbs=("look",))  # offline Framer: in plain view
 
 
 def narr(text: str) -> dict[str, Any]:
@@ -100,7 +100,8 @@ def test_new_player_asking_for_options_and_the_scene_gets_both(tmp_path: Path) -
     msg = "I'm new to this. What are my options? Can you describe what I see around me?"
     parts = [("OOF_QUESTION", "I'm new to this."), ("OOF_QUESTION", "What are my options?"),
              ("FICTION_QUESTION", "Can you describe what I see around me?")]
-    data = {"parts": [{"text": t, "class": c} for c, t in parts], "pending_answer": None, "fact_questions": [],
+    data = {"parts": [{"text": t, "class": c, "question_kind": "none", "topic": None} for c, t in parts],
+            "pending_answer": None, "fact_questions": [],
             "beats": [], "clarifying_question": None, "restatement": msg, "player_quantity": None}
     bad = "Fog lies low on the quay. Tam Harlan, a woman, mends a net. Do you go to the water or the town?"
     model = ScriptedModel({Role.READER: [lambda schema, packet: prune(data, schema)], Role.WORLD: [QUIET_WORLD],

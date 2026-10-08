@@ -106,13 +106,13 @@ def test_unwritten_notice_carries_the_opening_lead(tmp_path: Path) -> None:
 
 
 def test_reading_words_on_record_needs_no_roll(tmp_path: Path) -> None:
-    from engine.dm.roles.reader import ReaderBeat, ReaderResult, _plain_reading
+    from engine.resolve.necessity import plain_reading
+    from engine.resolve.types import Beat
 
-    def necessity(store: Any) -> str:
-        out = ReaderResult(beats=[ReaderBeat(intent="know what the bill says", method="read the bill",
-                                             target="obj.bill_on_the_gatepost", verb="verb.observe", gate="G2")])
-        _plain_reading(out, store.state, "pc.wren")
-        return out.beats[0].necessity
+    def trivial(store: Any) -> bool:  # 01.4.1, computed (engine/resolve/necessity.py): no Framer call
+        b = Beat(id="beat.1", actor="pc.wren", intent="know what the bill says", method="read the bill",
+                 target="obj.bill_on_the_gatepost", verb="verb.observe")
+        return plain_reading(b, "verb.observe", store.state)
 
-    assert necessity(_game(tmp_path, READER, text=WORDS)) == "trivial"
-    assert necessity(_game(tmp_path / "b", UNLETTERED, text=WORDS)) == "uncertain_and_costly"
+    assert trivial(_game(tmp_path, READER, text=WORDS))
+    assert not trivial(_game(tmp_path / "b", UNLETTERED, text=WORDS))
