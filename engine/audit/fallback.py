@@ -32,11 +32,15 @@ _KEEP = {"the", "a", "an", "his", "her", "their", "my", "your", "its", "this", "
 _SOMEONE = re.compile(r"^(?:someone|somebody|anyone|anybody)\b", re.IGNORECASE)
 
 
+_ASIDE = re.compile(r"\s*\([^()]*\)")  # "(Her claim about the ankle is context only.)", "(speech, no roll)"
+
+
 def plain(text: str) -> str:
-    """Strip ids, snake_case keys and digits (12.14.4), drop brackets left empty, and tidy the spacing."""
-    s = re.sub(r"[(\[]\s*[)\]]", "", _ID.sub("", text))
+    """Strip asides in brackets (engine notes, never fiction), ids, snake_case keys and digits (12.14.4), and tidy
+    the spacing and doubled stops."""
+    s = re.sub(r"\[[^\[\]]*\]", "", _ASIDE.sub("", _ID.sub("", text)))
     s = re.sub(r"\s+([,.;:!?)])", r"\1", re.sub(r"\s{2,}", " ", s)).strip(" ,;:—-")
-    return s
+    return re.sub(r"([.!?])[.]+", r"\1", s)
 
 
 def _sentence(text: str) -> str:
@@ -69,10 +73,16 @@ def _you(restated: str, pc_names: Iterable[str], other_names: Iterable[str]) -> 
     first, _, rest = restated.partition(" ")
     if first.lower() in ("i", "you"):
         return f"you {rest}"
-    if first.lower() in _KEEP or any(n and restated.startswith(n) for n in other_names):
-        return restated  # already a sentence about something else ("The door gives", "Tam ...")
     if first.lower() == "to":
         restated = rest
+        first, _, rest = restated.partition(" ")
+    second = rest.split(" ", 1)[0].lower()
+    named = {w for n in other_names for w in n.split()[:1]}
+    # ponytail: "X is/tells/names ..." is read as a subject and its verb; a bare verb ("Learn whether", "Pick the
+    # lock") takes "you try to". Anything else is kept as its own sentence, never glued on or lower-cased.
+    if (first.lower() in _KEEP or first in named or second in _AUX
+            or (re.fullmatch(r"[a-z]+s", second) and not second.endswith("ss"))):
+        return restated  # already a sentence about someone or something else ("Gerella is pinned ...", "Tam ...")
     return f"you try to {restated[:1].lower()}{restated[1:]}"
 
 
@@ -83,8 +93,9 @@ def _beat_line(b: BeatEntry, pc: str | None, names: Mapping[str, str]) -> str:
         restated = _you(restated, [full, full.split(" ")[0]],
                         [n for e, n in names.items() if e != pc and n])
     if b.degree is None:  # no roll; the gate's own words (redirects, options) belong to the OOF block, not here
-        result = {"G0": "", "G3": "you cannot do it that way", "G4": "you cannot do it that way"}.get(b.gate or "",
-                                                                                               "it works")
+        # a no-roll success says so; a paused or unrolled beat has no result yet, so none is narrated
+        result = ("you cannot do it that way" if b.gate in ("G3", "G4")
+                  else "it works" if b.gate_words.startswith("no roll") else "")
     elif b.near_miss or b.success_at_cost:
         result = "it works, at a cost" if b.success_at_cost else "it falls just short"
     else:
@@ -100,6 +111,8 @@ def _negate(s: str) -> str:
         return "no one" + s[m.end():]
     words = s.split()
     for i, w in enumerate(words):
+        if w.lower() in _WH | {"that", "whether", "if"}:
+            return ""  # the first auxiliary is inside a clause ("knows where the hiring can be found")
         if w.lower() in _AUX:
             if i + 1 < len(words) and words[i + 1].lower() in ("not", "no", "never"):
                 return ""
@@ -118,9 +131,16 @@ def _oracle_line(question: str, answer: str) -> str:
     head, tail = head.strip().lower(), tail.strip()
     if head not in ("yes", "no"):
         return _sentence(f"{q}: {answer.strip()}")
-    if q.split(" ", 1)[0].lower() in _AUX | _WH:
+    first = q.split(" ", 1)[0]
+    if first.lower() in _AUX | _WH:
         return ""  # ponytail: an interrogative ('Is anyone ...?') is not turned round; the store keeps the fact
+    if first.islower() and first not in _KEEP and not _SOMEONE.match(first) and first not in ("he", "she", "they", "it"):
+        return ""  # no subject ("knows where ..."): not a statement of anything; left out (I-133)
     s = q if head == "yes" else _negate(q)
+    # a twist ("yes, but ...") only as a clause of its own ("but the bucket is wet"), never "but lesser"
+    twist = tail.split()
+    if not (len(twist) >= 4 and twist[0].lower() == "but" and any(w.lower() in _AUX or w.endswith("s") for w in twist)):
+        tail = ""
     return _sentence(f"{s}, {tail}" if s and tail else s)
 
 

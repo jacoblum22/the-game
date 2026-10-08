@@ -77,7 +77,9 @@ def name_of(state: WorldState, eid: str | None, pc: str | None = None) -> str:
 
 def _beat_line(state: WorldState, b: BeatEntry, pc: str | None, paused: bool = False,
                rules: Any = None) -> str:  # rule: 12.14.12
-    bits = [f"beat: {b.restatement.rstrip('.')}"]
+    # an aside in brackets ("(Her claim ... is context only.)") is the Framer's note, not something to narrate
+    restated = re.sub(r"\s*\([^()]*\)", "", b.restatement).strip().rstrip(".")
+    bits = [f"beat: {restated}"]
     if b.approach_words:
         bits.append(f"approach: {b.approach_words}")
     if b.difficulty_words:

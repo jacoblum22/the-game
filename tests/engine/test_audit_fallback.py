@@ -132,6 +132,26 @@ def test_gated_and_failed_beats_read_as_fiction() -> None:
     assert "Tracking" not in fb and "harder" not in fb
 
 
+def test_playtest_172629_fallback_is_grammatical() -> None:
+    """Playtests 20261007-172629/170318/170204: "You try to gerella is pinned against the gatepost. It works.",
+    "Knows where ... hiring can not be found", "..., but lesser", "(Her claim about the ankle is context only.)"."""
+    from engine.dm.adjudication import OracleEntry
+    names = {"pc.geria": "Geria Salier", "npc.gerella": "Gerella Vasois"}
+    rec = AdjudicationRecord(pc="pc.geria", pause=PauseEntry(kind="offer"), beats=[
+        BeatEntry(restatement="Gerella is pinned against the gatepost", actor="pc.geria"),
+        BeatEntry(restatement="Gerella names who is hiring for Larkgate and where to find them", actor="pc.geria"),
+        BeatEntry(restatement="Geria pushes on toward the gate, sword raised. (Her claim about the ankle is context "
+                              "only.)", actor="pc.geria", degree="success", rolled=True)],
+        oracle=[OracleEntry(question="knows where the Larkgate grain-lords' hiring can be found in Redby", answer="no"),
+                OracleEntry(question="Gerella knows where the hiring can be found?", answer="no"),
+                OracleEntry(question="The people at the wall can say what is at the gate", answer="yes, but lesser")])
+    fb = plain_fallback(rec, names=names).fiction
+    assert fb == ("Gerella is pinned against the gatepost. Gerella names who is hiring for Larkgate and where to find "
+                  "them. You push on toward the gate, sword raised. It works. "
+                  "The people at the wall can say what is at the gate."), fb
+    assert not re.search(r"try to [a-z]*(?:gerella|is)\b|\bto [a-z]+ is\b|[()]|can not|but lesser", fb, re.I)
+
+
 def test_empty_brackets_never_survive() -> None:
     rec = AdjudicationRecord(pc="pc.wren", beats=[BeatEntry(restatement="x", actor="npc.tam_harlan", degree="failure",
                                                             costs=[CostEntry(menu_id="cost.time", severity="S1",
