@@ -616,18 +616,7 @@ readers take a `WorldState`. Errors: `engine.world.common.WorldError`. The PC is
   text, data)`; sections `sheet` (default), `abilities`, `conditions`, `journal`, `threads`, `rules <id>` (a leading
   `/` is accepted). Reads `engine.store.views.codex_view` only (plus `descriptor` for the harm word); conditions whose
   data has `visible: false` are hidden; inventory = items/objects whose data or `holder`-type fact names the PC.
-- **Disputes** (`engine.dm.dispute`, 12.3.6 / PR-12-4): `dispute(ctx, text, *, identify=None, choice=None) -> str`
-  matches `TurnContext.dispute` (the turn loop should set `ctx.dispute = dispute`, or wrap it with a model-backed
-  `identify`); `settle_dispute(...) -> DisputeResult(kind, blocks, events, reverted, choices, claim, correction)`.
-  `identify(ctx, text) -> DisputedClaim(kind fact|quantity|ruling, subject, key, said, quote, turn_id, source,
-  frame_id, missed_fact) | None` is the model's part; `default_identify` reads explicit ids and shown quantities.
-  Kinds: unclear, hidden (not player-facing: `[UNKNOWN]`, never revealed, objection logged), not_said (store value +
-  quoted exchange; no fact, INV-9), stands, record_error (corrective `fact_set`/`quantity_changed`, Event `source=
-  "correction"`), narration_error (store stands; relying frames of this scene → `choices` accept_forward/rewind;
-  call again with `choice="rewind"` to `writes_reverted` from the first relying beat, never before the scene start),
-  ruling_stands, ruling_error. Every correction appends meta `corrections` (12.3.4 step 4 record) and logs a
-  `ruling_logged` (`kind rule_conflict`, `review_flag: true`); a rewind also appends meta `rolls_voided`. Writes go
-  to `ctx.tx` when open, else a one-shot transaction.
+- **Disputes**: superseded by "The player feedback loop (spec 012)" at the end of this file.
 
 ## engine/dm seed + creation API (T063, T064, T109)
 - **Responses** (`engine.dm.response`): `Response(turn_id, phase seed|creation|play|ending, fiction, oof_blocks
@@ -912,3 +901,50 @@ Supersedes the earlier notes on `Beat.gate` / `would_be_license` / `necessity`, 
   ranking, the place's furniture, a pointer). SPEECH questions with no Talk beat are answered as the addressed NPC's
   act (`source: talk_outcome`, `source_ref: PR-12-10`) and that NPC skips the table. `npc_layer.talk_outcome`:
   "answers what you asked" or T-15-5's yes by reach.
+
+## The player feedback loop (spec 012; PR-12-11, 12.3.6, 12.5.8; DL-12-84..86)
+- **Reporting.** `/fix <what>` (play client) → `Game.dispute(text)` → `turn.play_dispute`: a DISPUTE part, no Reader
+  call, no world step. A Reader DISPUTE part runs the same path. `reader.possible_dispute(message, classes)` (a code
+  scan) adds a NOTE with `oof.FIX_HINT` (= `pacing.yaml#feedback.hint`) to a fiction turn that may be a dispute. The
+  CLI prints the hint once per sitting after the first play screen; `oof.glossary()` ends with `oof.FIX_GLOSSARY`
+  (`? fix` shows it). The answer to a dispute's CHOICE is OOF too (no world step, no narration).
+- **`engine.dm.dispute`**: `settle_dispute(ctx, text, *, identify=None, choice=None) -> DisputeResult(kind, blocks,
+  events, reverted, choices, claim, correction, record)`; `dispute(...) -> str` (TurnContext.dispute);
+  `locate(ctx, text, model=True) -> DisputedClaim | None` (code pins over EVERY turn: `turn N`, `frame.N`,
+  `fact.N`, a quoted phrase, names/aliases/unique first names of visible entities, quantity words, detail-slot
+  words, possessions "I had/have/carry X", explicit `subject.predicate`; then ONE `Role.LOCATOR` call when the
+  passage or the category is unpinned: `{turn, quote, category, subject, key, value}`, schema
+  `schemas.locator_schema(turns)`, prompt `prompts/locator.md`; `default_identify` = code only).
+  `DisputedClaim(kind fact|quantity|ruling|beat, subject, key, said = the player's value, quote, turn_id, source,
+  frame_id, missed_fact, category, located_by)`. `recompute(store, rules, frame, commit_seq) -> [differences]`
+  (DC from `resolution.dc_tiers` / the stored DC fact + mode shift, the modifier from the sheet at the commit, cited
+  facts usable, odds). `dispute_stats(state) -> {all, upheld, by_category}`. `review_log_path(store)`.
+- **Outcomes** (first row that fits): rule_wrong → recompute differs or a named fact was omitted → `ruling_error`
+  (CHOICE accept_forward / rewind) else `ruling_stands` (`[FIX]`); misread (category) → the beat was auto-committed
+  or rolled nothing AND report words are in the player's input but not the reading → `taken_back`, else `stands`;
+  an earlier resolved write (`RESOLVED` sources) of the player's value replaced by a narration write, or a named
+  `source` → `record_error` (pinned corrective write); store = player → `store_agrees` (a told name also writes the
+  PC's `knowledge_recorded`); the narration said the player's value, the store another → `narration_error` (store
+  wins; reliance CHOICE in the scene); otherwise `mistaken` (`[FIX]` quoting the turn that set the value); nothing
+  stored + an `INCIDENTAL_SLOTS` detail → `player_wins` (pinned); nothing stored + anything else → `unverified`
+  (INV-9: what the record holds, logged, nothing written); `hidden` for background/sealed or an unlearned name.
+- **Corrections** are `fact_set` with `source: correction`, `supersedes`, `pinned: True` (`FactSet.pinned`,
+  `FactRecord.pinned`). `packet.scene_view` adds every pinned fact about an entity in scope (past the budget, never
+  archived); `render_view` marks it "(corrected by the player's report; keep it)"; `spot_lines` keeps pinned details
+  first.
+- **Take-backs** (12.5.8): `_can_rewind(ctx, from_seq, turn)`: within the scene always; past its start only when no
+  blocker followed (`_blocked`: a `session_start`/`session_end` boundary, `unsealed`, a completed `clock_ticked`, a
+  `dying_step` / `setback.dying_entered` / `defeated: dead` / `exists: dead` fact) and at most
+  `corrections.take_back.max_turns_back` turns back. `WritesReverted.take_back=True` lets `Transaction._revert`
+  reach before the scene start and also revert `db.TAKE_BACK_EXTRA` (`scene_started`, `scene_ended`,
+  `time_advanced`, `boundary_marked`): the PC is back in the beat's scene at its hour. Events with `source:
+  "correction"` (the ledger, earlier corrections) are never reverted. Rolls go to meta `rolls_voided`.
+- **Review log.** Every report appends a dispute record to meta `corrections` (`type: dispute`, `id: dsp.N`, `time`
+  = game time in words, `turn`, `words`, `category`, `located_by`, `passage {turn, quote}`, `evidence`, `outcome`
+  (correct | take_back | player_reading_wins | explain_with_quote | explain_and_log | pending), `upheld`, `writes`,
+  `reverted`) and a markdown block to **`<save stem>.disputes.md` beside the game file** (`saves/<campaign>.disputes.md`
+  for the play client; wall-clock time only there). A CHOICE logs `pending`; its answer replaces the record (same id)
+  and appends a "(resolved)" block. Corrections also keep 12.3.4's correction record and a `ruling_logged` with
+  `review_flag: true`.
+- **Metric.** `evals/longhorizon.py`: `dispute_lines(stats, narrated)` ("disputes per 100 narrated turns: all
+  (upheld ...) (by category)"), `--fix-every N` plants /fix reports in the scripted run.

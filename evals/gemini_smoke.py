@@ -45,7 +45,7 @@ from engine.llm.gemini_schema import convert, problems  # noqa: E402
 
 FIXTURES = REPO_ROOT / "tests" / "engine" / "fixtures_gemini_schemas"
 ROLE_ORDER = [Role.INTERPRET, Role.READER, Role.FRAMER, Role.WORLD, Role.DIRECTOR, Role.NARRATOR, Role.CHECKER,
-              Role.PROPOSER]
+              Role.PROPOSER, Role.LOCATOR]
 
 SCENE = (
     "Test scene (a connectivity check, not a real game): Wren (pc.wren), a scout, stands in the village shrine "
@@ -62,6 +62,8 @@ MESSAGES = {
                   "2: What do you do?",
     Role.PROPOSER: "The innkeeper is asked: what are the roads like? topic: roads (routes, distances, the state of "
                    "the ways)",
+    Role.LOCATOR: "THE PLAYER'S REPORT: \"Wren's cloak was grey, not blue\"\nCANDIDATE TURNS:\nturn.4 | player: "
+                  "\"I look at Wren.\" | game: \"Wren's blue cloak drips.\"",
 }
 
 

@@ -89,6 +89,9 @@ REVERTIBLE = frozenset({
     "knowledge_recorded", "clock_created", "clock_ticked", "condition_applied", "condition_removed", "sealed",
     "unsealed", "license_granted", "license_revoked", "meta_set",
 })
+# A take-back past the scene start (12.5.8 item 3) also reverts the scene change and the time that passed, so the PC
+# is back in the beat's scene at the beat's hour (the RNG draws and the logs stay).
+TAKE_BACK_EXTRA = frozenset({"scene_started", "scene_ended", "time_advanced", "boundary_marked"})
 
 
 class TxParticipant(Protocol):
@@ -169,13 +172,15 @@ class Transaction:
         if scene is None:
             raise Rejected("writes_reverted outside a scene")
         staged = {e.seq: e for e in self.events}
+        # 12.5.8 item 3 (DL-12-85): a take-back may reach before the scene start, and reverts the scene change too
+        allowed = REVERTIBLE | TAKE_BACK_EXTRA if p.take_back else REVERTIBLE
         for s in p.reverted:
-            if s < scene.started_seq:
+            if s < scene.started_seq and not p.take_back:
                 raise Rejected(f"writes_reverted: seq {s} is before the current scene (DL-12-04)")
             if s in self.state.reverted:
                 raise Rejected(f"writes_reverted: seq {s} is already reverted")
             target = staged.get(s) or self.store.event(s)
-            if target is None or target.type not in REVERTIBLE:
+            if target is None or target.type not in allowed:
                 raise Rejected(f"writes_reverted: seq {s} is not a revertible write")
         try:
             self.state = self.store._replay(before=min(p.reverted), extra=[*self.events, ev])  # noqa: SLF001

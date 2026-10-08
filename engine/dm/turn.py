@@ -22,6 +22,7 @@ player asks for in this message is framed in this turn, after T5 (the Director c
 
 from __future__ import annotations
 
+import dataclasses
 import re
 from collections.abc import Sequence
 from typing import Any
@@ -35,7 +36,13 @@ from engine.dm.context import TurnContext
 from engine.dm.narration import FRAME_NEXT, TurnOutcome, moves_on, narrate_turn, stays
 from engine.dm.roles import director as director_role
 from engine.dm.roles.framer import framer_for
-from engine.dm.roles.reader import FactQuestion, ReaderResult, knowledge_question, read_message
+from engine.dm.roles.reader import (
+    FactQuestion,
+    ReaderResult,
+    knowledge_question,
+    possible_dispute,
+    read_message,
+)
 from engine.dm.world_step import world_step
 from engine.resolve.oracle import OracleQuestion, ask_oracle
 from engine.resolve.pipeline import (
@@ -153,6 +160,8 @@ def _turn(ctx: TurnContext, message: str, *, choice: str | None, dispute: bool =
     ctx.call_ids = []
     oof: list[dict[str, str]] = []
     reader: ReaderResult | None = None
+    held = store.state.open_pause()  # the answer to a dispute's CHOICE is out of fiction too (12.3.6)
+    dispute = dispute or (choice is not None and held is not None and held.detail.get("stage") == "dispute")
     with store.transaction(turn_id) as tx:
         ctx.tx = tx
         try:
@@ -161,7 +170,9 @@ def _turn(ctx: TurnContext, message: str, *, choice: str | None, dispute: bool =
             if choice is not None:
                 rec.parts = [PartEntry.model_validate({"text": choice, "class": "PENDING_ANSWER"})]
                 beats = _adjudicate_answer(ctx, rec, choice, oof)
-            elif dispute:
+                if dispute:  # the reliance CHOICE answered: OOF only, so no narration (narration.pure_oof)
+                    rec.parts = [PartEntry.model_validate({"text": choice, "class": "DISPUTE", "handled": "answered"})]
+            elif dispute:  # rule: 12.3.6
                 rec.parts = [PartEntry.model_validate({"text": message, "class": "DISPUTE", "handled": "answered"})]
                 _dispute(ctx, message, oof)
                 beats = []
@@ -172,6 +183,10 @@ def _turn(ctx: TurnContext, message: str, *, choice: str | None, dispute: bool =
                                                        "topic": p.topic}) for p in reader.parts]
                 rec.triggers = [t.id for t in get_active_triggers(tx.state, ctx.rules)]  # T3 (cards: per role)
                 beats = _adjudicate(ctx, rec, reader, message, oof)  # T4
+                if possible_dispute(message, reader.classes()):  # 12.3.6 item 1: fiction that may be a dispute
+                    from engine.dm.oof import FIX_HINT
+
+                    oof.append({"kind": "NOTE", "text": FIX_HINT})
             pause = tx.state.open_pause()
             if pause is None and not dispute:  # a dispute is out of fiction: no world step, no time
                 world_step(ctx, rec, beats=beats, oof=oof)  # T5 (a pause jumps to T7: no world, no time)
@@ -588,22 +603,29 @@ def _dispute(ctx: TurnContext, text: str, oof: list[dict[str, str]]) -> None:  #
     from engine.dm.dispute import settle_dispute
 
     res = settle_dispute(ctx, text)
-    oof.extend({"kind": b.kind, "text": b.text} for b in res.blocks)
+    # the CHOICE block's question becomes the pause (shown once, with its menu)
+    oof.extend({"kind": b.kind, "text": b.text} for b in res.blocks if not (res.choices and "[CHOICE]" in b.text))
     if res.choices:
         tx = ctx.need_tx()
-        rec = PauseRecord(pause_id=tx.mint(ids.PAUSE), kind="clarify", prompt=res.text.splitlines()[0] if res.text
-                          else "Keep the result, or rewind?", choices=list(res.choices),
-                          default_choice=res.choices[0]["id"], detail={"stage": "dispute", "text": text})
+        claim = dataclasses.asdict(res.claim) if res.claim is not None else None  # the choice re-uses the passage
+        ask = next((b.text.split("]", 1)[1].strip().splitlines()[0] for b in res.blocks if "[CHOICE]" in b.text),
+                   "Keep the result, or rewind?")
+        rec = PauseRecord(pause_id=tx.mint(ids.PAUSE), kind="clarify", prompt=ask, choices=list(res.choices),
+                          default_choice=res.choices[0]["id"], detail={"stage": "dispute", "text": text,
+                                                                        "claim": claim})
         tx.add(Event.of("pause_opened", source="engine", rule_id="12.3.4", pause=rec))
 
 
 def _dispute_choice(ctx: TurnContext, pause: PauseRecord, choice: str, oof: list[dict[str, str]]) -> None:
     # rule: 12.3.4
-    from engine.dm.dispute import settle_dispute
+    from engine.dm.dispute import DisputedClaim, settle_dispute
 
     tx = ctx.need_tx()
     tx.add(Event.of("pause_closed", source="player", rule_id="12.3.4", pause_id=pause.pause_id, choice=choice))
-    res = settle_dispute(ctx, str(pause.detail.get("text") or ""), choice=choice)  # type: ignore[arg-type]
+    saved = pause.detail.get("claim")
+    ident = (lambda _c, _t: DisputedClaim(**saved)) if isinstance(saved, dict) else None  # no second locate call
+    res = settle_dispute(ctx, str(pause.detail.get("text") or ""), identify=ident,
+                         choice=choice)  # type: ignore[arg-type]
     oof.extend({"kind": b.kind, "text": b.text} for b in res.blocks)
 
 

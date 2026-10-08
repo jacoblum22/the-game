@@ -30,6 +30,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from engine import ids  # noqa: E402
+from engine.dm.dispute import dispute_stats  # noqa: E402
 from engine.game import GameConfig  # noqa: E402
 from engine.store.events import Event  # noqa: E402
 from engine.world.common import active_pc  # noqa: E402
@@ -401,7 +402,21 @@ def ladder_lines(learned: list[dict[str, Any]], twice: tuple[int, int]) -> list[
             f"- ask-twice consistency: {same}/{asked} ({100 * same / asked if asked else 0:.0f}%)"]
 
 
-def run_scripted(seed: int, lines: int, model: str, tmp: Path) -> list[str]:
+FIX_REPORTS = ("My vitality is wrong: I was not hurt.", "I still have my lantern.", "That's not what I meant.",
+               "You said earlier the road north was open.")  # --fix-every: planted /fix reports (spec 012)
+
+
+def dispute_lines(stats: dict[str, Any], narrated: int) -> str:
+    """OEQ-12-24 (pacing.yaml#feedback.metric): disputes per 100 narrated turns, all and upheld, by category."""
+    def per(n: int) -> str:
+        return f"{100 * n / narrated if narrated else 0:.1f}"
+
+    by = ", ".join(f"{k} {v}" for k, v in sorted(stats["by_category"].items()))
+    return f"- disputes per 100 narrated turns: {per(stats['all'])} (upheld {per(stats['upheld'])})" + (
+        f" ({by})" if by else "")
+
+
+def run_scripted(seed: int, lines: int, model: str, tmp: Path, fix_every: int = 0) -> list[str]:
     import engine.dm.world_step as ws
 
     learned: list[dict[str, Any]] = []
@@ -414,12 +429,13 @@ def run_scripted(seed: int, lines: int, model: str, tmp: Path) -> list[str]:
 
     ws.deliver_learning = spy  # type: ignore[assignment]  # the measure only reads what the ladder returns
     try:
-        return _run_scripted(seed, lines, model, tmp, learned)
+        return _run_scripted(seed, lines, model, tmp, learned, fix_every)
     finally:
         ws.deliver_learning = real  # type: ignore[assignment]
 
 
-def _run_scripted(seed: int, lines: int, model: str, tmp: Path, learned: list[dict[str, Any]]) -> list[str]:
+def _run_scripted(seed: int, lines: int, model: str, tmp: Path, learned: list[dict[str, Any]],
+                  fix_every: int = 0) -> list[str]:
     rng = random.Random(seed)
     d = Driver.start(tmp / "scripted.db", seed=seed, model=_model(model))
     st = d.game.store.state
@@ -463,6 +479,8 @@ def _run_scripted(seed: int, lines: int, model: str, tmp: Path, learned: list[di
                     twice[0] += first[-1]["answers"][0][0] == again[-1]["answers"][0][0]
             else:
                 r = d.travel() if line is None else d.settle(d.call("submit", line))
+            if fix_every and (i + 1) % fix_every == 0 and r.pause is None:  # a planted /fix report (spec 012)
+                r = d.settle(d.call("dispute", FIX_REPORTS[(i // fix_every) % len(FIX_REPORTS)]))
         except Exception as e:  # noqa: BLE001 - an engine error is a finding: counted, and the run goes on
             errors.append(f"line {i + 1} ({kind}): {type(e).__name__}: {e}"[:160])
             streak += 1
@@ -486,6 +504,7 @@ def _run_scripted(seed: int, lines: int, model: str, tmp: Path, learned: list[di
     total = sum(by.values())
     out.append(f"- contradictions per 100 narrated turns: {100 * total / narrated if narrated else 0:.1f}"
                + (" (" + ", ".join(f"{k} {v}" for k, v in by.most_common()) + ")" if by else ""))
+    out.append(dispute_lines(dispute_stats(store.state), narrated))
     out.append(f"- recall probes: {len(rec_c)} scored of {kinds['recall']}; precision {_mean(rec_p)}, "
                f"coverage {_mean(rec_c)}")
     out.append(f"- novelty-4 over the previous 10 deliveries: {novelty4(deliveries):.2f} ({len(deliveries)} deliveries)")
@@ -512,6 +531,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--seed", type=int, default=7)
     ap.add_argument("--scenes", type=int, default=300)
     ap.add_argument("--lines", type=int, default=300)
+    ap.add_argument("--fix-every", type=int, default=0, help="plant a /fix report every N scripted lines (spec 012)")
     ap.add_argument("--model", choices=("offline", "gemini", "claude-narration"), default="offline")
     ap.add_argument("--keep", type=Path, help="copy the run's stores to this folder (for diagnosis)")
     args = ap.parse_args(argv)
@@ -520,7 +540,7 @@ def main(argv: list[str] | None = None) -> int:
         if args.mode in ("aged", "both"):
             out += run_aged(args.seed, args.scenes, args.model, Path(tmp)) + [""]
         if args.mode in ("scripted", "both"):
-            out += run_scripted(args.seed, args.lines, args.model, Path(tmp))
+            out += run_scripted(args.seed, args.lines, args.model, Path(tmp), args.fix_every)
         if args.keep:
             args.keep.mkdir(parents=True, exist_ok=True)
             for db in Path(tmp).glob("*.db"):

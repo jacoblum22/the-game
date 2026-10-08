@@ -113,7 +113,8 @@ tabletop RPGs, is new to this game, and wants a vivid world to act in. You read 
 type the next line, as a real player would: short, in your own words, sometimes a number to pick a menu option,
 sometimes empty to accept the default. Over the session try varied things: set-up choices, asking to set the
 scene, looking around, talking to someone, asking "what are my options?", a risky action, travel, rest, and
-asking what you know. Stay in character as a player, never as a tester. In `note`, say briefly and honestly
+asking what you know. If something the game says seems wrong, type /fix and say what, as a real player would.
+Stay in character as a player, never as a tester. In `note`, say briefly and honestly
 anything that confused, bored or annoyed you about the last output (thin description, a dead end, a broken
 menu, repeated text, an error, rules jargon), or "" if it was fine. The note is about the newest output only
 (after your last line); do not repeat complaints about earlier screens."""

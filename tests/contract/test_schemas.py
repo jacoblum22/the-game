@@ -36,6 +36,7 @@ MESSAGES = {
     Role.NARRATOR: "success_at_cost",
     Role.CHECKER: "Mara Voss draws a knife. She smiles at you. What do you do?",
     Role.PROPOSER: "Mara Voss is asked: where does the night boat leave from?\ntopic: water",
+    Role.LOCATOR: "THE PLAYER'S REPORT: \"Mara's coat was grey\"\nturn.3 | player: \"hi\" | game: \"Mara's blue coat.\"",
 }
 
 # The engine's JSON Schema subset (engine.llm.base.validate) plus annotation keywords.

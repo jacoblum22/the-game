@@ -85,6 +85,9 @@ def scene_view(state: WorldState, focus: Iterable[str] = (), *, spot: Sequence[s
     budget = view_budget()
     scope = scene_scope(state, budget)
     picked = scene_facts(state, scope, focus=focus, budget=budget)
+    # rule: 12.3.6
+    # a pinned correction is never archived: always in its subject's profile while the subject is in view
+    picked += [f for f in state.facts.values() if f.pinned and f.subject in scope and f not in picked]
     nv = narrator_view(state, [*scope, *(f.subject for f in picked)])  # an open commitment's NPC may be away
     visible_facts = nv["facts"]
     facts = [visible_facts[f.id] for f in picked if f.id in visible_facts]
@@ -142,8 +145,9 @@ def spot_lines(state: WorldState, eid: str, max_facts: int = 3) -> list[str]:  #
     shown = shown_details(state, [eid])[0]
     facts = [f for f in state.facts.values() if f.subject == eid and f.value is not None and _pc_knows(state, f.id)
              and f.id not in state.seals and f.visibility != "sealed" and f.predicate not in MOTIVES
-             and not f.predicate.startswith("trg.") and (not f.predicate.startswith("detail.") or f.id in shown)]
-    facts.sort(key=lambda f: -f.valid_from_seq)
+             and not f.predicate.startswith("trg.") and (not f.predicate.startswith("detail.") or f.id in shown
+                                                         or f.pinned)]
+    facts.sort(key=lambda f: (not f.pinned, -f.valid_from_seq))  # a pinned correction first (12.3.6)
     out += [f"    {f.predicate}: {_short(f.value)}" for f in facts[:max_facts]]
     return out
 
@@ -369,6 +373,7 @@ def render_view(view: Mapping[str, Any]) -> str:
         lines.append("facts:")
         lines.extend(f"  {f['id']} about {f['subject']}: {f['predicate']} = {_short(f['value'])}"
                      + (f" ({f['certainty']})" if f.get("certainty") not in (None, "established") else "")
+                     + (" (corrected by the player's report; keep it)" if f.get("pinned") else "")
                      for f in view["facts"])
     if view.get("clocks"):
         lines.append("clocks:")

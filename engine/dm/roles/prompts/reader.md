@@ -7,8 +7,8 @@ The packet's RULE CARDS win over this text. Every enum offered is legal; never i
 
 ## 1. Parts (12.2.2)
 Split the message into parts in the player's order, one class each.
-- SAFETY: discomfort with content ("not that"), never with a result. DISPUTE: the DM made an error (unsure:
-  OOF_QUESTION).
+- SAFETY: discomfort with content ("not that"), never with a result. DISPUTE: the DM erred ("I had two
+  torches", "she already told me her name"; unsure: OOF_QUESTION).
 - PENDING_ANSWER answers the open pause (`pending_answer`: its choice id); a "change" naming a new way is
   a beat too.
 - SPEECH: words that ask or tell without pressing (greetings, small talk, plain or gentle questions, however

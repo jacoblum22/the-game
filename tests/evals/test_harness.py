@@ -145,6 +145,16 @@ def test_short_runs_complete() -> None:
     assert any("view tokens at scene 6" in s and "narrator" in s for s in aged)
     assert any(s.startswith("- recall probes: 3;") for s in aged)
     assert any(s.startswith("- novelty-4") for s in scripted) and "- engine errors: 0" in scripted
+    assert "- disputes per 100 narrated turns: 0.0 (upheld 0.0)" in scripted
+
+
+def test_dispute_rate_per_100_narrated_turns() -> None:  # spec 012, OEQ-12-24
+    line = lh.dispute_lines({"all": 3, "upheld": 1, "by_category": {"misread": 1, "remembered_wrong": 2}}, 60)
+    assert line == "- disputes per 100 narrated turns: 5.0 (upheld 1.7) (misread 1, remembered_wrong 2)"
+    with tempfile.TemporaryDirectory() as tmp:
+        scripted = lh.run_scripted(7, 10, "offline", Path(tmp), fix_every=4)  # two planted /fix reports
+    rate = next(s for s in scripted if s.startswith("- disputes per 100"))
+    assert not rate.startswith("- disputes per 100 narrated turns: 0.0") and "- engine errors: 0" in scripted
 
 
 @pytest.mark.slow

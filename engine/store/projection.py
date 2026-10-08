@@ -62,6 +62,7 @@ class FactRecord(BaseModel):  # 00.6.2 Fact plus its bi-temporal start
     supersedes: str | None = None
     valid_from_seq: int
     persistence: str | None = None  # details only: lasting | scene | beat (00.6.6a)
+    pinned: bool = False  # a correction (12.3.6): never archived, always in view with its subject
 
 
 class DetailRef(BaseModel):  # 00.6.6a: the details index entry
@@ -262,7 +263,7 @@ def _fact_set(s: WorldState, ev: Event, p: Any) -> None:  # rule: 00.6.2
     s.facts[p.fact_id] = FactRecord(
         id=p.fact_id, subject=p.subject, predicate=p.predicate, value=p.value, kind=p.kind, source=p.source,
         certainty=p.certainty, truth=p.truth, visibility=p.visibility, established_at=ev.game_time,
-        supersedes=p.supersedes, valid_from_seq=_seq(ev), persistence=p.persistence)
+        supersedes=p.supersedes, valid_from_seq=_seq(ev), persistence=p.persistence, pinned=p.pinned)
     s.fact_keys[f"{p.subject}|{p.predicate}"] = p.fact_id
     if p.predicate.startswith(DETAIL):  # rule: 00.6.6a
         slots = s.details.setdefault(p.subject, {})

@@ -11,6 +11,7 @@
 
 ## Scripted player (seed 7, 300 lines, 311 turns, 246 narrated)
 - contradictions per 100 narrated turns: 0.0
+- disputes per 100 narrated turns: 0.0 (upheld 0.0)
 - recall probes: 0 scored of 25; precision n/a, coverage n/a
 - novelty-4 over the previous 10 deliveries: 0.33 (244 deliveries)
 - view tokens at line 50: checker 4656 (view 230), narrator 16287 (view 1781), reader 13716 (view 1781), world 15284 (view 1984)

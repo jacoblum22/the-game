@@ -206,6 +206,18 @@ class ReaderResult(BaseModel):
         return [b.intent for b in now[MAX_BEATS:]] + later
 
 
+_MAYBE_DISPUTE = re.compile(
+    r"\b(?:you said|you told me|that'?s (?:wrong|not right|not what)|already (?:told|said|gave|did|happened)|"
+    r"i meant|not what i meant|i (?:didn'?t|did not) (?:say|mean|do)|never happened|didn'?t happen|"
+    r"(?:he|she|they) (?:already|just) (?:told|said))\b", re.IGNORECASE)
+
+
+def possible_dispute(message: str, classes: Sequence[str]) -> bool:  # rule: 12.2.2
+    """12.2.2 / 12.3.6 item 1: a fiction message that may also be a dispute (a code scan of the player's words; the
+    Reader classified no DISPUTE part): the response ends with the fix hint."""
+    return "DISPUTE" not in classes and bool(_MAYBE_DISPUTE.search(message))
+
+
 def reader_check(data: Any) -> list[str]:  # rule: 12.2.2
     """Semantic constraints the schema cannot express."""
     classes = [p.get("class") for p in data.get("parts", [])]
