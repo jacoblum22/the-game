@@ -123,5 +123,5 @@ Status: open · fixing (round N) · fixed (commit) · logged (ledger id) · wont
 | P-117 | polish | med | Odds identical (60%) across every action in a fight, whatever the approach | 205745-fighter 28 | open (check Framer tier spread) |
 | P-118 | bug | low | Asked one NPC (Helgrim); another (Borga) answered instead | 205857-newcomer 29 | open |
 | P-119 | bug | low | Journal garbled from a junk mentioned object: "The familiar face in the crowd's recognition is looks familiar to you" | 210433-breaker 29 | open |
-| P-120 | bug | med | A successful Talk (15→17 vs 10) still ends in a refusal; success with nothing stored reads as failure (with I-153) | 210953-talker 24, 30 | open |
+| P-120 | bug | high | A successful Talk (15→17 vs 10) still ends in a refusal; success with nothing stored reads as failure (with I-153) | 210953-talker 24, 30 | open, high: 210627-explorer 23–27 (NPC confirms he knows the name, critical success, still refuses: 'felt like a cheat'); engine fix queued (deliver a who-answer via settle_who on Talk success) |
 | P-121 | polish | low | Coins the player offers are not used as a lever/edge or acknowledged in the offer | 210953-talker 29–31 | open |
