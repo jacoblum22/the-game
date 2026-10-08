@@ -41,15 +41,16 @@ class Beat(BaseModel):
     parent_beat: str | None = None
     declared: bool = True
     restatement: str = ""
-    # GATE proposal (ReaderOutput)
-    gate: GateClass = "G3"
+    # PARSE (12.2.2 decision 3): the verb and three method facets; the gate is computed from them (00.12.3)
     verb: str | None = None
-    license: str | None = None
+    against_will: bool = False  # acts on a person's body or property against their will
+    uses_power: bool = False  # needs a supernatural or licensed technique
+    speech: bool = False  # mainly words
+    asks: bool = False  # a Talk beat that asks a plain question (a part with a question_kind): R1 (15.3.2)
+    license: str | None = None  # engine-set: a stretched or emulated license (01.3.5)
     mode: GateMode = "normal"
     method_class: str | None = None  # the verb's `covers` entry the method falls under, when named
-    g4_fact: str | None = None
-    g4_test: Literal["fact", "canon", "zero_reach", "condition"] | None = None
-    would_be_license: str | None = None  # G3: the license that would cover the method, when known
+    g4_fact: str | None = None  # the established fact the Reader cites as ruling the method out (G4)
     fallback_license: str | None = None  # an accepted crude fallback: the license whose fallback it is
     traits: list[str] = Field(default_factory=list)
     deed_tag: str | None = None
@@ -87,6 +88,13 @@ class Obstacle(BaseModel):
     defense: str | None = None  # attribute id (opposed/effect) or a named defense in entity.data.defenses
     defense_tag: str | None = None  # the defender's competence tag, when the anchor lists one
     severity: Severity | None = None  # a hazard's severity (effect DC by tier)
+    # the rubric (00.3.8 source 3, 01.6.5): the verb's obstacle class (`other`: `tier` is the model's rung),
+    # at most one rung of nudge citing an intrinsic fact, with its why
+    obstacle_class: str | None = None
+    nudge: int = 0
+    nudge_fact: str | None = None
+    nudge_why: str | None = None
+    request_size: str | None = None  # a social DC's request size, R1..R5 (15.3.2)
 
 
 class CostDecl(BaseModel):
@@ -184,6 +192,17 @@ class ModePrice(BaseModel):
     source: str = ""  # the license id the price is read from
 
 
+class Alternative(BaseModel):
+    """Another approach the engine computed with no model call (12.15.2): same obstacle, another attribute or
+    sibling verb."""
+
+    label: str  # plain words: "with Might", "grapple instead"
+    verb: str | None = None
+    attribute: str
+    chance: int  # success-or-better %
+    critical_failure: int = 0
+
+
 class Frame(BaseModel):
     """A computed frame (00.13.1), up to OFFER. `record()` is the `frame_committed` payload."""
 
@@ -221,6 +240,11 @@ class Frame(BaseModel):
     stored_dc_write: dict[str, Any] | None = None  # {subject, predicate, value}: written at commit (01.6.5)
     notes: list[str] = Field(default_factory=list)
     offer_choice: OfferChoice | None = None
+    obstacle_class: str | None = None  # the rubric class the tier came from (01.6.5)
+    nudge: int = 0
+    long_shot: bool = False  # 01.6.13: critical failure above success after the guard
+    guard: str | None = None  # what the critical-failure guard changed, when it changed something
+    alternatives: list[Alternative] = Field(default_factory=list)  # "Another way" (12.15.2), best first
 
     def record(self) -> dict[str, Any]:
         return self.model_dump(mode="json", by_alias=True)
@@ -244,6 +268,7 @@ class OfferPreview(BaseModel):
     alternative_attribute: str | None
     only_natural_20: bool
     trades: list[str]  # the trades legal now (01.7.3)
+    long_shot: bool = False  # 01.6.13
 
 
 class RollResult(BaseModel):

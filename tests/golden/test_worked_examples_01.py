@@ -333,8 +333,8 @@ def test_we_01_6_emulate_and_no_fallback(tmp_path: Path) -> None:
     (G2 emulate: DC 13 + 5 = 18; +5 -> 13+ 40%; Focus x2; Limited); near miss; drain cannot land (Focus 0) so
     the threatened harm lands through the harm hook."""
     s = Scene.new(tmp_path)
-    a = s.beat(intent="cast the spell I saw", method="cast the flame spell the hedge-witch cast", gate="G3",
-               would_be_license="lic.training.arcane_fire", verb="verb.observe")
+    a = s.beat(intent="cast the spell I saw", method="cast the flame spell the hedge-witch cast", uses_power=True,
+               verb="verb.observe")  # 00.12.3: a supernatural technique, no technique held -> G3, computed
     d = check_gate(a, state=s.state, rules=s.rules,
                    alternatives=[RedirectOption(kind="basic_verb", verb="verb.observe",
                                                 method="fix what you saw before it fades")])
@@ -435,10 +435,12 @@ def test_we_01_10_play_dead_then_torch(tmp_path: Path) -> None:
     names Might; the charge: +4 vs 13, Limited, Dire and lethal (never auto-committed); d20 9 -> 13 success."""
     s = Scene.new(tmp_path)
     pack = s.add("adversary", "Wolf Pack", attributes={"resolve": 1}, defenses={"intimidation": 13})
-    s.fact(pack, "lethal_context", True)
+    lethal_ctx = s.fact(pack, "lethal_context", True)
     torch = s.fact(s.pc, "holds", "a lit torch")
-    dead = s.beat(intent="the wolves lose interest", method="play dead", gate="G4", g4_test="zero_reach",
-                  target=pack)
+    # R2-C: no role proposes a gate class; the Reader cites the fact that rules the method out (00.12.3). The
+    # example's zero-reach test (two effect factors) has no proposer since the Reader shrank: the fact stands in.
+    scent = s.fact(pack, "hunts_by", "scent: a still body fools no wolf")
+    dead = s.beat(intent="the wolves lose interest", method="play dead", g4_fact=scent, target=pack)
     with s.store.transaction() as tx:
         d = check_gate(dead, state=tx.state, rules=s.rules, store=s.store, staged=tx.events, mint=tx.mint,
                        alternatives=[RedirectOption(kind="basic_verb", verb="verb.talk",
@@ -450,7 +452,8 @@ def test_we_01_10_play_dead_then_torch(tmp_path: Path) -> None:
     kw: dict[str, Any] = dict(anchor=TALK, obstacle={"kind": "entity_defense", "entity": pack,
                                                        "defense": "intimidation"},
                               stakes_source="aware_opponent_or_observer", stakes_heavy=True, lethal=True,
-                              reach_one_factor=True, threatened_cost={"menu_id": "cost.harm"},
+                              reach_one_factor=True,  # 01.6.11: harm from the pack, cited
+                              threatened_cost={"menu_id": "cost.harm", "source_fact": lethal_ctx},
                               alternate_cost={"menu_id": "cost.footing"})
     tie = frame(s, roar, attribute="might", attribute_tie="presence", **kw)
     assert (tie.attribute, tie.alternative_attribute) == ("presence", "might")
@@ -513,8 +516,8 @@ def test_we_01_13_back_door(tmp_path: Path) -> None:
               threatened_cost={"menu_id": "cost.exposure", "source_fact": arguing},
               alternate_cost={"menu_id": "cost.time", "source_fact": arguing})
     assert numbers(f)[:3] == (6, 11, 80) and f.odds.need == 5 and f.defender == t1
-    assert auto_commit_allowed(f)
-    committed(s, f, "auto")
+    assert f.stakes == "risky" and not auto_commit_allowed(f)  # DL-01-32: a Risky frame never auto-commits
+    committed(s, f)
     assert roll_check(f, FixedRng([6])).total == 12
     s2 = Scene.new(tmp_path / "b")
     with s2.store.transaction() as tx:
@@ -536,7 +539,7 @@ def test_we_01_14_i_kill_it(tmp_path: Path) -> None:
                                                             "defense": "guard"},
               stakes_source="aware_opponent_or_observer", threatened_cost={"menu_id": "cost.footing",
                                                                            "source_fact": jaws},
-              alternate_cost={"menu_id": "cost.harm"})
+              alternate_cost={"menu_id": "cost.harm", "source_fact": jaws})  # 01.6.11: an armed party, cited
     assert numbers(f)[:3] == (4, 13, 60) and f.odds.need == 9
     committed(s, f)
     r = roll_check(f, FixedRng([1]))
@@ -550,9 +553,8 @@ def test_we_01_16_elven_runes(tmp_path: Path) -> None:
     gesture and tone.) The offered alternative, read the stone, frames Observe +3 vs Easy 10, Limited."""
     s = Scene.new(tmp_path)
     s.fact("world", "shrine.inscription.script", "elvish_old")
-    b = s.beat(intent="read the inscription", method="reading an unknown script: the old elven runes", gate="G1",
-               verb="verb.observe", would_be_license="lic.lang.elvish",
-               assertion="I'm a hunter, I read signs all day")
+    b = s.beat(intent="read the inscription", method="reading an unknown script: the old elven runes",
+               verb="verb.observe", assertion="I'm a hunter, I read signs all day")  # the tongue is found by code
     d = check_gate(b, state=s.state, rules=s.rules, alternatives=[
         RedirectOption(kind="basic_verb", verb="verb.observe", method="read the carving's placement and wear")])
     assert d.gate == "G3" and d.redirect is not None and d.redirect.missing == "lic.lang.elvish"

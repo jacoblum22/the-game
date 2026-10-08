@@ -54,18 +54,17 @@ INTERPRET = obj(
     own_words_text=nullable(STR),
     lines_and_veils=arr(STR),
 )
-BEAT = obj(
-    intent=STR, method=STR, assertion=nullable(STR), shape=enum("single", "sequence", "contingent"),
-    target=enum(*SCENE, "none"), verb=enum(*VERBS), license=enum("lic.lockpicking", "none"),
-    gate=enum("G0", "G1", "G2", "G3", "G4"), g4_fact=nullable(enum("fact.f1", "fact.f2")),
-    necessity=enum("uncertain_and_costly", "riding", "trivial", "good_idea", "impossible", "take_the_time",
-                   "certain_with_cost"),
-    intent_verbs=arr(STR),
+BEAT = obj(  # 12.2.2 decision 3 (DL-12-50): no gate, licence or necessity
+    intent=STR, method=STR, assertion=nullable(STR), shape=enum("now", "extended", "queued", "conditional"),
+    target=enum(*SCENE, "none"), verb=enum(*VERBS), against_will=BOOL, uses_power=BOOL, speech=BOOL,
+    g4_fact=nullable(enum("fact.f1", "fact.f2")), intent_verbs=arr(STR),
 )
 READER = {
     **obj(
         parts=arr(obj(text=STR, **{"class": enum("SAFETY", "SESSION", "DISPUTE", "PENDING_ANSWER", "OOF_QUESTION",
-                                               "FICTION_QUESTION", "DECLARATION", "SPEECH")})),
+                                               "FICTION_QUESTION", "DECLARATION", "SPEECH")},
+                      question_kind=enum("none", "who_is", "where_is", "what_happened", "what_like", "what_want",
+                                         "who_knows"), topic=nullable(STR))),
         pending_answer=nullable(enum("commit", "withdraw")),
         fact_questions=arr(obj(subject=enum(*SCENE), predicate=STR,
                                odds_rung=enum("certain", "likely", "even", "unlikely", "impossible"))),
@@ -180,10 +179,10 @@ def test_reader_classifies_and_gates() -> None:
     out = fill(Role.READER, "I attack the gate guard. I look around. I pick the lock. I sing.", view=held)
     assert len(out["beats"]) == 3  # 01.2.3
     attack, look, lock = out["beats"]
-    assert attack["verb"] == "verb.strike" and attack["gate"] == "G1" and attack["target"] == "npc.gate_guard"
-    assert attack["necessity"] == "uncertain_and_costly"
-    assert look["verb"] == "verb.observe" and look["necessity"] == "trivial"
-    assert lock["gate"] == "G2" and lock["license"] == "lic.lockpicking"
+    # 12.2.2 decision 3: verb, target and facets only; the gate and the roll test are computed (00.12.3, 01.4.1)
+    assert attack["verb"] == "verb.strike" and attack["against_will"] and attack["target"] == "npc.gate_guard"
+    assert look["verb"] == "verb.observe" and not look["against_will"] and "gate" not in look
+    assert lock["verb"] == "verb.force" and "license" not in lock  # Force's excludes name lockpicking
     assert out["restatement"].startswith("You attack")
 
 
@@ -193,8 +192,8 @@ def test_reader_pending_answer() -> None:
 
 
 def test_reader_unknown_act_defaults_to_g3() -> None:
-    out = fill(Role.READER, "I transmute it into gold.")
-    assert out["beats"][0]["gate"] == "G3"
+    out = fill(Role.READER, "I transmute it into gold with a spell.")
+    assert out["beats"][0]["uses_power"]  # the computed gate redirects it (G3) unless a technique is held
 
 
 def test_verb_table_covers_fifteen_basic_verbs() -> None:

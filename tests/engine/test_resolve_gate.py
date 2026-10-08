@@ -1,4 +1,4 @@
-"""engine/resolve/gate.py: G0-G4 against holdings and data (01.3), the PR-01-5 redirect, rulings (FR-022)."""
+"""engine/resolve/gate.py: the computed gate (00.12.3 `[D]`), G4 from state, the PR-01-5 redirect, rulings (FR-022)."""
 
 from __future__ import annotations
 
@@ -11,21 +11,29 @@ from engine.store.events import Event, LicenseInstance
 from tests.engine.test_resolve_scene import Scene
 
 
-def test_g0_passes_through(tmp_path: Path) -> None:
+def test_a_basic_verb_is_g1_and_a_knack_never_gates(tmp_path: Path) -> None:
+    """P-122, P-031: a threat or a gentle question is Talk's own act; nothing the Reader says moves it to G3."""
     s = Scene.new(tmp_path)
-    assert check_gate(s.beat(gate="G0"), state=s.state, rules=s.rules).gate == "G0"
+    for verb, method in (("verb.talk", "slam a fist and demand the price"),
+                         ("verb.talk", "speak to Evred in a gentle, pressing tone"),
+                         ("verb.recall", "call to mind what he knows of the land around Hawkham"),
+                         ("verb.force", "shove the cart into the doorway")):
+        d = check_gate(s.beat(verb=verb, method=method), state=s.state, rules=s.rules)
+        assert (d.gate, d.verb, d.redirect) == ("G1", verb, None), d.reason
 
 
-def test_g1_needs_a_real_verb_and_its_covers(tmp_path: Path) -> None:
+def test_the_facets_choose_the_card(tmp_path: Path) -> None:
+    """P-023 / P-064: "gently turn the child's face" is not a Grapple; a raised fist with words is Talk."""
     s = Scene.new(tmp_path)
-    ok = check_gate(s.beat(gate="G1", verb="verb.force", method="shove the cart into the doorway",
-                           method_class="shove"), state=s.state, rules=s.rules)
-    assert (ok.gate, ok.verb) == ("G1", "verb.force")
-    bad_verb = check_gate(s.beat(gate="G1", verb="verb.fly"), state=s.state, rules=s.rules)
-    assert bad_verb.gate == "G3" and "unknown basic verb" in bad_verb.reason
-    bad_class = check_gate(s.beat(gate="G1", verb="verb.force", method_class="lockpicking"), state=s.state,
-                           rules=s.rules)
-    assert bad_class.gate == "G3" and bad_class.redirect is not None and bad_class.redirect.options
+    gentle = check_gate(s.beat(verb="verb.grapple", method="gently turn the child's face"), state=s.state,
+                        rules=s.rules)
+    assert gentle.verb == "verb.handle"
+    asked = check_gate(s.beat(verb="verb.grapple", speech=True, method="ask for the ledger"), state=s.state,
+                       rules=s.rules)
+    assert asked.verb == "verb.talk"
+    grab = check_gate(s.beat(verb="verb.grapple", against_will=True, method="grab the ledger"), state=s.state,
+                      rules=s.rules)
+    assert grab.verb == "verb.grapple"
 
 
 def test_excludes_match_a_literal_mention(tmp_path: Path) -> None:
@@ -36,18 +44,50 @@ def test_excludes_match_a_literal_mention(tmp_path: Path) -> None:
     assert excluded_by(force, "I break the lock") is None
 
 
-def test_g2_needs_the_license_held(tmp_path: Path) -> None:
-    s = Scene.new(tmp_path, pc_licenses=["lic.lang.common", "lic.training.guile_thievery"])
-    b = s.beat(gate="G2", license="lic.training.guile_thievery", method="pick the lock", verb="verb.handle")
-    assert check_gate(b, state=s.state, rules=s.rules).gate == "G2"
-    lacks = check_gate(s.beat(gate="G2", license="lic.training.arcane_fire", method="cast"), state=s.state,
-                       rules=s.rules)
-    assert lacks.gate == "G3" and "not held" in lacks.reason and lacks.redirect is not None
-    assert lacks.redirect.missing == "lic.training.arcane_fire"
-    s.apply([Event.of("license_revoked", source="test", entity=s.pc, license_id="x", reason="noop")])
-    assert held_license(s.state, s.pc, "lic.training.guile_thievery") is not None
-    stretch = check_gate(s.beat(gate="G2", license="lic.lang.common", mode="stretch"), state=s.state, rules=s.rules)
-    assert stretch.gate == "G3" and "no stretch" in stretch.reason  # languages declare no stretch
+def test_an_excluded_method_needs_its_license(tmp_path: Path) -> None:
+    s = Scene.new(tmp_path)
+    d = check_gate(s.beat(verb="verb.handle", method="pick the lock on the cellar door"), state=s.state,
+                   rules=s.rules)  # Handle read it, Force's excludes name it
+    assert d.gate == "G3" and d.redirect is not None and d.redirect.missing == "lic.training.guile_thievery"
+    held = Scene.new(tmp_path / "held", pc_licenses=["lic.lang.common", "lic.training.guile_thievery"])
+    d2 = check_gate(held.beat(verb="verb.handle", method="pick the lock"), state=held.state, rules=held.rules)
+    assert (d2.gate, d2.license) == ("G2", "lic.training.guile_thievery")
+
+
+def test_a_power_needs_a_held_technique(tmp_path: Path) -> None:
+    s = Scene.new(tmp_path)
+    d = check_gate(s.beat(verb="verb.observe", uses_power=True, method="use my witch-sight to see the spirits"),
+                   state=s.state, rules=s.rules)
+    assert d.gate == "G3" and d.redirect is not None
+    mind = Scene.new(tmp_path / "mind", pc_licenses=["lic.lang.common", "lic.training.arcane_mind"])
+    d2 = check_gate(mind.beat(verb="verb.observe", uses_power=True, method="read his surface thoughts"),
+                    state=mind.state, rules=mind.rules)
+    assert (d2.gate, d2.license) == ("G2", "lic.training.arcane_mind")
+
+
+def test_a_held_trained_form_is_g2(tmp_path: Path) -> None:
+    """A hunter holding Tracking is never redirected to learn it (playtest 20261007-155118); a persuader's talk
+    is licensed."""
+    s = Scene.new(tmp_path, pc_licenses=["lic.lang.common", "lic.training.wilds_tracking",
+                                         "lic.training.influence_persuasion"])
+    obs = check_gate(s.beat(verb="verb.observe", method="follow fresh, plain tracks"), state=s.state, rules=s.rules)
+    assert (obs.gate, obs.license, obs.redirect) == ("G2", "lic.training.wilds_tracking", None)
+    talk = check_gate(s.beat(verb="verb.talk", speech=True, method="talk him round"), state=s.state, rules=s.rules)
+    assert (talk.gate, talk.license) == ("G2", "lic.training.influence_persuasion")
+
+
+def test_reading_needs_letters_once_literacy_is_on_record(tmp_path: Path) -> None:
+    s = Scene.new(tmp_path)  # holds the common tongue, not letters
+    d = check_gate(s.beat(verb="verb.observe", method="read the notice"), state=s.state, rules=s.rules)
+    assert d.gate == "G3" and d.redirect is not None and d.redirect.missing == "lic.lang.letters"
+    assert d.redirect.options[0].kind == "fallback"  # pick out numerals and seals (letters' crude fallback)
+    lettered = Scene.new(tmp_path / "l", pc_licenses=["lic.lang.common", "lic.lang.letters"])
+    d2 = check_gate(lettered.beat(verb="verb.observe", method="read the notice"), state=lettered.state,
+                    rules=lettered.rules)
+    assert (d2.gate, d2.license) == ("G2", "lic.lang.letters")
+    bare = Scene.new(tmp_path / "b", pc_licenses=[])  # no tongues recorded: literacy is not known to be lacking
+    assert check_gate(bare.beat(verb="verb.observe", method="read the notice"), state=bare.state,
+                      rules=bare.rules).gate == "G1"
 
 
 def test_expired_license_is_not_held(tmp_path: Path) -> None:
@@ -57,11 +97,11 @@ def test_expired_license_is_not_held(tmp_path: Path) -> None:
     assert held_license(s.state, s.pc, "lic.training.guile_thievery") is None
 
 
-def test_g4_from_condition_overrides_the_proposal(tmp_path: Path) -> None:
+def test_g4_from_condition(tmp_path: Path) -> None:
     s = Scene.new(tmp_path)
     with s.store.transaction() as tx:
         tx.add_all(apply_condition(tx.state, tx.mint, s.rules, s.pc, "cond.choking").events)
-    b = s.beat(gate="G1", verb="verb.talk", traits=["trait.action.speech"], method="shout for help")
+    b = s.beat(verb="verb.talk", traits=["trait.action.speech"], method="shout for help")
     d = check_gate(b, state=s.state, rules=s.rules)
     assert d.gate == "G4" and d.redirect is not None and d.redirect.missing_kind == "condition"
     assert d.redirect.options and d.redirect.options[0].verb != "verb.talk"
@@ -69,17 +109,15 @@ def test_g4_from_condition_overrides_the_proposal(tmp_path: Path) -> None:
 
 def test_g4_fact_must_exist(tmp_path: Path) -> None:
     s = Scene.new(tmp_path)
-    d = check_gate(s.beat(gate="G4", g4_test="fact", g4_fact="fact.999", verb="verb.talk"), state=s.state,
-                   rules=s.rules)
-    assert d.gate == "G1" and "default false" in d.reason  # falls through and rolls
-    canon = check_gate(s.beat(gate="G4", g4_test="canon", g4_fact="canon.no_mortal_flight"), state=s.state,
-                       rules=s.rules, canon_impossible=["canon.no_mortal_flight"])
-    assert canon.gate == "G4"
+    assert check_gate(s.beat(g4_fact="fact.999", verb="verb.talk"), state=s.state, rules=s.rules).gate == "G1"
+    fid = s.fact("world", "bridge.state", "collapsed")
+    d = check_gate(s.beat(g4_fact=fid, verb="verb.move"), state=s.state, rules=s.rules)
+    assert d.gate == "G4" and d.fact_cited == fid
 
 
 def test_g3_redirect_logs_and_finds_precedent(tmp_path: Path) -> None:
     s = Scene.new(tmp_path)
-    b = s.beat(gate="G1", verb="verb.force", method="pick the lock", deed_tag="deed.guile.thievery")
+    b = s.beat(verb="verb.force", method="pick the lock", deed_tag="deed.guile.thievery")
     for _ in range(2):
         with s.store.transaction() as tx:
             d = check_gate(b, state=tx.state, rules=s.rules, store=s.store, staged=tx.events, mint=tx.mint)
@@ -91,8 +129,8 @@ def test_g3_redirect_logs_and_finds_precedent(tmp_path: Path) -> None:
 
 def test_g3_with_no_license_in_data_names_the_branch(tmp_path: Path) -> None:
     s = Scene.new(tmp_path)
-    b = s.beat(gate="G3", method="xyzzy plugh", intent="qwv", deed_tag="deed.arcane")
-    assert would_be_license(b, s.rules) is None
+    b = s.beat(verb="verb.observe", uses_power=True, method="xyzzy plugh", intent="qwv", deed_tag="deed.arcane")
+    assert would_be_license(b.method, s.rules) is None
     with s.store.transaction() as tx:
         d = check_gate(b, state=tx.state, rules=s.rules, store=s.store, staged=tx.events, mint=tx.mint)
         tx.add_all(d.events)
@@ -103,57 +141,12 @@ def test_g3_with_no_license_in_data_names_the_branch(tmp_path: Path) -> None:
 
 def test_accepted_fallback_rolls(tmp_path: Path) -> None:
     s = Scene.new(tmp_path)
-    b = s.beat(gate="G3", mode="fallback", fallback_license="lic.training.guile_thievery", verb="verb.force")
+    b = s.beat(mode="fallback", fallback_license="lic.training.guile_thievery", verb="verb.force")
     d = check_gate(b, state=s.state, rules=s.rules)
     assert (d.gate, d.mode, d.license, d.rolls_possible) == ("G3", "fallback", "lic.training.guile_thievery", True)
-    wrong = check_gate(s.beat(gate="G3", mode="fallback", fallback_license="lic.training.guile_thievery",
-                              verb="verb.talk"), state=s.state, rules=s.rules)
-    assert not wrong.rolls_possible
 
 
-def test_proposed_g3_on_a_held_license_is_g2(tmp_path: Path) -> None:
-    """01.3.1 first match wins: a hunter holding lic.training.wilds_tracking is never redirected to learn it
-    (playtest 20261007-155118), neither on the Reader's G3 proposal nor on an accepted fallback."""
+def test_stretch_needs_a_declared_stretch(tmp_path: Path) -> None:
     s = Scene.new(tmp_path)
-    s.apply([Event.of("license_granted", source="test", entity=s.pc,
-                      license=LicenseInstance(license_id="lic.training.wilds_tracking"))])
-    for b in (s.beat(gate="G3", verb="verb.observe", method="follow fresh, plain tracks",
-                     would_be_license="lic.training.wilds_tracking"),
-              s.beat(gate="G3", mode="fallback", fallback_license="lic.training.wilds_tracking", verb="verb.observe")):
-        d = check_gate(b, state=s.state, rules=s.rules)
-        assert (d.gate, d.mode, d.license, d.redirect) == ("G2", "normal", "lic.training.wilds_tracking", None)
-    stretch = check_gate(s.beat(gate="G3", mode="stretch", would_be_license="lic.training.wilds_tracking"),
-                         state=s.state, rules=s.rules)
-    assert stretch.gate == "G3"  # a stretch the license does not declare is still G3 (01.3.5)
-
-
-def test_basic_verb_g3_without_a_licence_is_g1(tmp_path: Path) -> None:
-    """01.3.1 first match: G1 before G3. The Reader's G3 on Talk / Recall naming no licence it needs is the
-    verb's own act (playtests 20261007-170200 Stonesense, -170204 arcane mind); a named licence keeps the G3."""
-    s = Scene.new(tmp_path)
-    for verb, method in (("verb.talk", "speaks to Evred again in a gentle, pressing tone, asking what is wrong"),
-                         ("verb.recall", "calls to mind what he knows of the land around Hawkham")):
-        d = check_gate(s.beat(gate="G3", verb=verb, method=method), state=s.state, rules=s.rules)
-        assert (d.gate, d.redirect) == ("G1", None), d.reason
-    named = check_gate(s.beat(gate="G3", verb="verb.handle", method="open the lock with arcane force",
-                              would_be_license="lic.training.arcane_alteration"), state=s.state, rules=s.rules)
-    assert named.gate == "G3" and named.redirect is not None
-    assert named.redirect.missing == "lic.training.arcane_alteration"
-    excluded = check_gate(s.beat(gate="G3", verb="verb.force", method="pick the lock"), state=s.state, rules=s.rules)
-    assert excluded.gate == "G3" and "excludes" in excluded.reason
-
-
-def test_plain_social_act_on_talk_is_g1_whatever_licence_is_named(tmp_path: Path) -> None:
-    """P-122 (playtest 20261007-212725): a threat on Talk naming Intimidation (untrained form: Talk,
-    "threaten plainly", no penalty) is Talk's own act, never a redirect; a penalised form keeps the G3."""
-    s = Scene.new(tmp_path)
-    for lid in ("lic.training.influence_intimidation", "lic.training.guile_deception"):
-        d = check_gate(s.beat(gate="G3", verb="verb.talk", method="slam a fist and demand the price",
-                              would_be_license=lid), state=s.state, rules=s.rules)
-        assert (d.gate, d.redirect, d.license) == ("G1", None, None), d.reason
-    trade = check_gate(s.beat(gate="G3", verb="verb.talk", method="haggle in the merchants' way",
-                              would_be_license="lic.training.influence_trade"), state=s.state, rules=s.rules)
-    assert trade.gate == "G3" and trade.redirect is not None  # haggle as a customer: DC +5, limited
-    axe = check_gate(s.beat(gate="G3", verb="verb.strike", method="hew the rope like a trained axeman",
-                            would_be_license="lic.training.martial_axe"), state=s.state, rules=s.rules)
-    assert axe.gate == "G3"  # only a speech verb's plain form; a trained technique still needs the licence
+    d = check_gate(s.beat(license="lic.lang.common", mode="stretch", verb="verb.talk"), state=s.state, rules=s.rules)
+    assert d.mode == "normal"  # languages declare no stretch: computed as the plain act

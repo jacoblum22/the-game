@@ -86,8 +86,9 @@ class TurnContext:
         return int(cap) if cap is not None else None
 
     def auto_commit(self) -> bool:
-        """The player's `auto_commit` preference (01.7.4; ch.14): meta, else the config, else off."""
+        """The player's `auto_commit` preference (01.7.4; ch.14): meta, else the config, else the rules' default
+        (`resolution.yaml#auto_commit.default`: on, DL-01-32; it only ever applies to Safe frames)."""
         v = self.state.meta.get("auto_commit")
         if v is None:
-            v = self.config.get("auto_commit", False)
+            v = self.config.get("auto_commit", self.rules.resolution.get("auto_commit", {}).get("default", False))
         return bool(v)

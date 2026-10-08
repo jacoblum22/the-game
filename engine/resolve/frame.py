@@ -13,16 +13,23 @@ from __future__ import annotations
 
 import re
 from collections.abc import Callable, Iterable, Sequence
-from typing import Any
+from typing import Any, cast
 
 from engine import ids
-from engine.resolve.costs import check_cost_decl, established_stakes_sources, severity_previews
+from engine.resolve.costs import (
+    OBSERVER,
+    check_cost_decl,
+    established_stakes_sources,
+    first_fitting_cost,
+    severity_previews,
+)
 from engine.resolve.gate import GateDecision, check_gate
 from engine.resolve.odds import odds
 from engine.resolve.rulings import find_rulings, signature
 from engine.resolve.types import (
     REACH_LADDER,
     STAKES_LADDER,
+    Alternative,
     Beat,
     CostPreview,
     Frame,
@@ -31,6 +38,7 @@ from engine.resolve.types import (
     LeverCite,
     ModePrice,
     Modifier,
+    Odds,
     OfferChoice,
     OfferPreview,
     ProposedFrame,
@@ -189,6 +197,27 @@ def stored_dc_key(obstacle: str, anchor: str, dc_delta: str | None = None) -> st
     return f"dc.{obstacle}.{anchor}" + (f"+dc:{dc_delta}" if dc_delta else "")
 
 
+def verb_classes(rules: Any, verb: str | None) -> dict[str, str]:  # rule: 01.6.5
+    """The verb card's obstacle classes and their base tiers (`basic_verbs.yaml` anchor.obstacle_classes; T-00-5's
+    rubric column). A class whose base is not a tier (`by_hazard`) is left to `other`."""
+    tiers = {t["id"] for t in rules.resolution["dc_tiers"]}
+    entry = rules.basic_verbs.get(verb or "") or {}
+    return {str(c["id"]): str(c["base"]) for c in (entry.get("anchor") or {}).get("obstacle_classes") or ()
+            if str(c.get("base")) in tiers}
+
+
+OPPOSED_VERBS = ("verb.talk", "verb.strike", "verb.grapple", "verb.force", "verb.setup")  # aimed at a person
+PEOPLE = ("npc", "companion", "adversary", "pc")
+
+
+def opposed_by(state: Any, beat: Beat, verb: str | None) -> list[str]:  # rule: 01.6.4
+    """A social or attack beat aimed at a person is resisted by that person's defense, never a tier (00.3.8 source
+    2, mandatory; 15.3.3 for talk)."""
+    tgt = beat.target
+    ent = state.entities.get(tgt or "")
+    return [str(tgt)] if verb in OPPOSED_VERBS and ent is not None and ent.kind in PEOPLE and tgt != beat.actor else []
+
+
 def _verb_entry(rules: Any, anchor: Any, beat: Beat) -> Any | None:
     v = anchor.get("verb") or beat.verb
     return rules.basic_verbs.get(v) if v else None
@@ -240,22 +269,25 @@ def _frame_check(p: ProposedFrame, beat: Beat, state: Any, rules: Any, gate: Gat
         raise _Refuse(5, "deed_tag", f"unknown deed tag {p.deed_tag!r}")
     deed = p.deed_tag or beat.deed_tag
     comp, comp_tag = competence(rules, actor, deed)
-    # 6. DC (stored, opposed, effect, tier) plus the mode's dc_shift
-    dc, dc_source, tier, defender, stored_write = _dc(p, anchor, deltas, state, rules, notes)
+    # 6. DC (stored, opposed, effect, rubric tier) plus the mode's dc_shift
+    verb = g.verb or beat.verb or anchor.get("verb")
+    dc, dc_source, tier, defender, stored_write = _dc(p, anchor, deltas, state, rules, notes, beat=beat, verb=verb,
+                                                     declared=declared)
     if price is not None:
         dc += price.dc_shift
-    # 7. levers and snags
+    # 7. levers and snags (at most one cited Precision snag: a further one is Protective, 00.3.9(b))
     levers, snags, circ = _levers(p, beat, state, rules, declared, limits)
     free = set(state.meta.get(FREE_FACTS_KEY, []))
     # 8. stakes and lethal
-    if p.stakes_source == "listening_clock" and p.stakes_source not in established_stakes_sources(
-            state, rules, beat.actor):  # rule: 01.6.9
-        raise _Refuse(8, "stakes_source", "listening_clock: no clock is running")
     stakes, lethal = _stakes(p, levers, snags, free, state, rules, declared)
+    # rule: 01.6.9
+    cited_party = p.stakes_source == OBSERVER and any(c is not None and c.source_fact for c in (
+        p.threatened_cost, p.alternate_cost))  # the party named by a fact on record (guards awake on the wall)
+    if p.stakes_source not in established_stakes_sources(state, rules, beat.actor, beat) and not cited_party:
+        raise _Refuse(8, "stakes_source", f"{p.stakes_source}: not established (a running clock; a party who would "
+                                          "act on a failure, present or cited by a cost's source fact, 01.4.1)")
     # 9. reach
     reach, factors = _reach(p, levers, snags, stakes, price)
-    # 10. costs
-    tc, ac = _costs(p, beat, state, rules, stakes, declared)
     # 11. modifier
     caps = _caps(rules)
     a_val = attribute_value(actor, attr)
@@ -264,14 +296,34 @@ def _frame_check(p: ProposedFrame, beat: Beat, state: Any, rules: Any, gate: Gat
     base_max = int(caps["base_pc"]["max"] if actor.kind == "pc" else caps["base_non_pc"]["max"])
     base = min(base_max, a_val + comp + edge)
     lo, hi = int(caps["total"]["min"]), int(caps["total"]["max"])
+    # 12. odds, and the critical-failure guard (01.6.13) before the costs, since it can raise the stakes
+    o = odds(_clamp(base + circ + st, lo, hi), dc)
+    guard, long_shot = None, False
+    if _guarded(stakes, dc_source, p.secret) and o.critical_failure > max(5, o.success_or_better):
+        snag = next((s for s in snags if s.type == "precision" and not s.engine), None)
+        if snag is not None:  # rule: 01.6.13
+            snags = [s.model_copy(update={"type": "protective"}) if s is snag else s for s in snags]
+            circ = _clamp(circ + int(_caps(rules)["circumstance"]["lever_value"]), int(caps["circumstance"]["min"]),
+                          int(caps["circumstance"]["max"]))
+            stakes = cast(StakesRung, _step(STAKES_LADDER, stakes, 1))  # the guard's rung never sets lethal
+            guard = f"{snag.fact_id} applies as Protective (critical-failure guard, 01.6.13)"
+            o = odds(_clamp(base + circ + st, lo, hi), dc)
+        long_shot = _guarded(stakes, dc_source, p.secret) and o.critical_failure > max(5, o.success_or_better)
+    # 10. costs (with the final stakes)
+    if guard and stakes != "safe" and p.alternate_cost is None:
+        p = p.model_copy(update={"alternate_cost": first_fitting_cost(
+            rules, role="alternate", other=p.threatened_cost, state=state, actor=beat.actor,
+            stakes_source=p.stakes_source, target=beat.target if beat.target != "none" else None,
+            declared_seq=declared)})
+    tc, ac = _costs(p, beat, state, rules, stakes, declared)
     total = _clamp(base + circ + st, lo, hi)
     mod = Modifier(attribute=a_val, competence=comp, competence_tag=comp_tag, edge=edge, circumstance=circ,
                    status=st, total=total)
-    # 12. odds
-    o = odds(total, dc)
     base_odds = odds(_clamp(base + st, lo, hi), dc).success_or_better
     if o.only_natural_20:
         notes.append("only a natural 20, and at best a plain success")
+    alts = alternatives(rules, state, actor, verb=verb, attribute=attr, comp=comp, edge=edge, circ=circ, status=st,
+                        dc=dc, defender=defender, dc_source=dc_source)
     consequences = list(p.method_consequences)
     if price is not None and price.consequence and price.consequence not in consequences:
         consequences.append(price.consequence)
@@ -283,7 +335,67 @@ def _frame_check(p: ProposedFrame, beat: Beat, state: Any, rules: Any, gate: Gat
                  tier=tier, defender=defender, dc=dc, mode_price=price, levers=levers, snags=snags, stakes=stakes,
                  lethal=lethal, reach=reach, reach_factors=factors, trade=p.trade, threatened_cost=tc,
                  alternate_cost=ac, method_consequences=consequences, modifier=mod, odds=o, base_odds=base_odds,
-                 stored_dc_write=stored_write, notes=notes)
+                 stored_dc_write=stored_write, notes=notes, obstacle_class=p.obstacle.obstacle_class,
+                 nudge=p.obstacle.nudge, long_shot=long_shot, guard=guard, alternatives=alts)
+
+
+def _guarded(stakes: str, dc_source: str, secret: bool) -> bool:  # rule: 01.6.13
+    """The guard applies to frames not Dire, not opposed (01.6.4 sources 2 and 3) and not secret."""
+    return stakes != "dire" and dc_source not in ("opposed", "effect") and not secret
+
+
+ATTACK_SIBLINGS = {"verb.strike": "strike instead", "verb.grapple": "grapple instead", "verb.force": "shove instead",
+                   "verb.setup": "feint first"}  # 12.15.2 "sibling anchors" for an aimed attack (P-117)
+
+
+def _attr_name(rules: Any, attr: str) -> str:
+    try:
+        return str(rules.attribute(attr).get("name") or attr.capitalize())
+    except (KeyError, AttributeError):
+        return attr.capitalize()
+
+
+def alternatives(rules: Any, state: Any, actor: Any, *, verb: str | None, attribute: str, comp: int, edge: int,
+                 circ: int, status: int, dc: int, defender: str | None, dc_source: str,
+                 limit: int = 3) -> list[Alternative]:  # rule: 12.15.2
+    """"Another way", computed with no model call: the same obstacle with each other attribute the verb allows
+    (`attribute`, `alt_attributes`), and for an attack on a person the sibling verbs against that person's defense
+    for each verb's `against`. Best chance first, at most `limit`.
+    ponytail: the current competence is reused for every alternative; a per-verb deed tag would refine it."""
+    caps = _caps(rules)
+    base_max = int(caps["base_pc"]["max"] if actor.kind == "pc" else caps["base_non_pc"]["max"])
+    lo, hi = int(caps["total"]["min"]), int(caps["total"]["max"])
+
+    def chance(attr: str, target_dc: int) -> Odds:
+        return odds(_clamp(min(base_max, attribute_value(actor, attr) + comp + edge) + circ + status, lo, hi),
+                    target_dc)
+
+    out: list[Alternative] = []
+    entry = rules.basic_verbs.get(verb or "") or {}
+    known = set(rules.attributes)
+    for w in [entry.get("attribute"), *[x.get("attribute") for x in entry.get("alt_attributes") or ()]]:
+        a = str(w or "").split(" ")[0]
+        if a in known and a != attribute and all(x.attribute != a for x in out):
+            o = chance(a, dc)
+            out.append(Alternative(label=f"with {_attr_name(rules, a)}", verb=verb, attribute=a,
+                                   chance=o.success_or_better, critical_failure=o.critical_failure))
+    if dc_source == "opposed" and defender and verb in ATTACK_SIBLINGS and defender in state.entities:
+        for v, label in ATTACK_SIBLINGS.items():
+            ve = rules.basic_verbs.get(v) or {}
+            a = str(ve.get("attribute") or "")
+            a = a if a in known else "wits"  # a feint is by method: wits against wits (01.18 Setup)
+            if v == verb:
+                continue
+            try:
+                attrs = _defense_attrs(None, resolve_anchor(rules, v), rules)
+            except _Refuse:
+                continue
+            d = max(_defense(rules, state, defender, x, None) for x in attrs)
+            o = chance(a, d)
+            out.append(Alternative(label=label, verb=v, attribute=a, chance=o.success_or_better,
+                                   critical_failure=o.critical_failure))
+    out.sort(key=lambda x: (-x.chance, x.critical_failure, x.label))
+    return out[:limit]
 
 
 def _mode_price(g: GateDecision, state: Any, beat: Beat, rules: Any) -> ModePrice | None:  # rule: 01.3.5
@@ -385,9 +497,53 @@ def _defense(rules: Any, state: Any, who: str, attr: str, tag: str | None) -> in
     return 10 + attribute_value(ent, attr) + comp + edge + st
 
 
-def _dc(p: ProposedFrame, anchor: Any, deltas: list[str], state: Any, rules: Any,
-        notes: list[str]) -> tuple[int, Any, str | None, str | None, dict[str, Any] | None]:  # rule: 01.6.4
+def _social_terms(rules: Any, state: Any, who: str, actor: str, size: str | None) -> int:  # rule: 15.3.3
+    """The standing mod (T-15-1, from state; never met: Neutral) and the request-size mod (15.3.2)."""
+    r = state.relationships.get(f"{who}|{actor}|standing")
+    value = r.value if r else 0
+    standing = next((int(x.get("dc_mod") or 0) for x in rules.social["standing_effects"]
+                     if int(x["standing"]) == value), 0)
+    request = next((int(x.get("dc_mod") or 0) for x in rules.social["request_sizes"] if x.get("rung") == size), 0)
+    return standing + request
+
+
+def _tier_step(rules: Any, base: str, nudge: int) -> str:  # rule: 01.6.5
+    """base + nudge on the T-01-2 ladder; never across the trivial line, never off the rolling rungs."""
+    ladder = [t["id"] for t in rules.resolution["dc_tiers"] if t.get("dc") is not None]
+    if base not in ladder:
+        raise _Refuse(6, "obstacle.obstacle_class", f"a {base} class does not roll (01.4.1)")
+    i = ladder.index(base) + nudge
+    if i < 0:
+        raise _Refuse(6, "nudge", "a nudge never crosses the trivial line (01.6.5): a rolled class stays rolled")
+    if i >= len(ladder):
+        raise _Refuse(6, "nudge", f"no rung above {base}")
+    return ladder[i]
+
+
+def _check_nudge(ob: Any, p: ProposedFrame, state: Any, declared: int) -> None:  # rule: 01.6.5
+    if not ob.nudge:
+        return
+    if abs(ob.nudge) > 1:
+        raise _Refuse(6, "nudge", "one rung at most (01.6.5)")
+    if ob.obstacle_class in (None, "other"):
+        raise _Refuse(6, "nudge", "a nudge moves a class's base; with class other name the rung itself")
+    if not ob.nudge_fact or not fact_usable(state, ob.nudge_fact, declared):
+        raise _Refuse(6, "nudge_fact", "a nudge cites an established intrinsic fact (01.6.5)")
+    if not (ob.nudge_why or "").strip():
+        raise _Refuse(6, "nudge_why", "say why the fact is intrinsic before nudging (01.6.5)")
+    if ob.nudge_fact in {c.fact_id for c in [*p.levers, *p.snags]}:
+        # one fact is intrinsic (the tier) or situational (a lever or snag), never both: the same fact counted
+        # twice is the sim's double-error case (01-difficulty_rubric_sim-output.txt)
+        raise _Refuse(6, "nudge_fact", f"{ob.nudge_fact} is already a lever or snag; one fact moves the odds once")
+
+
+def _dc(p: ProposedFrame, anchor: Any, deltas: list[str], state: Any, rules: Any, notes: list[str], *,
+        beat: Beat, verb: str | None,
+        declared: int) -> tuple[int, Any, str | None, str | None, dict[str, Any] | None]:  # rule: 01.6.4
     ob = p.obstacle
+    opp = opposed_by(state, beat, verb)
+    if opp and ob.kind not in ("opposed", "entity_defense"):  # rule: 00.3.8
+        raise _Refuse(6, "obstacle", f"{verb} aimed at {opp[0]} is resisted by their defense, never a tier (01.6.4)")
     dc_delta = next((d.split(":", 1)[1] for d in deltas if d.startswith("dc:")), None)
     key = stored_dc_key(ob.id, anchor["id"], dc_delta) if ob.id else None
     # 1. stored DC
@@ -412,6 +568,8 @@ def _dc(p: ProposedFrame, anchor: Any, deltas: list[str], state: Any, rules: Any
         attrs = _defense_attrs(ob.defense, anchor, rules, dc_delta)
         vals = [(_defense(rules, state, w, a, ob.defense_tag), w) for w in who for a in attrs]
         dc, w = max(vals)
+        if verb == "verb.talk" and state.entities[w].kind in ("npc", "companion", "adversary"):  # rule: 15.3.3
+            dc += _social_terms(rules, state, w, beat.actor, ob.request_size)  # none named: R1 (+0)
         return dc, "opposed", None, w, None
     # 3. effect DC
     if ob.kind == "effect":
@@ -424,10 +582,19 @@ def _dc(p: ProposedFrame, anchor: Any, deltas: list[str], state: Any, rules: Any
             edge = min(int(_caps(rules)["edge"]["max"]), int(ent.data.get("edge", 0) or 0))
             return 10 + attribute_value(ent, ob.defense) + comp + edge, "effect", None, ob.entity, None
         raise _Refuse(6, "obstacle", "an effect DC needs a hazard severity or a source entity and attribute")
-    # 4. tier
-    if not ob.tier:
-        raise _Refuse(6, "obstacle", "a tiered obstacle needs a tier")
-    dc = _tier_dc(rules, ob.tier)
+    # 4. rubric tier (00.3.8 source 3): the class's base plus at most one cited nudge; class `other`: the rung
+    _check_nudge(ob, p, state, declared)
+    tier_id = ob.tier
+    if ob.obstacle_class and ob.obstacle_class != "other":
+        classes = verb_classes(rules, verb)
+        if ob.obstacle_class not in classes:
+            raise _Refuse(6, "obstacle.obstacle_class", f"{ob.obstacle_class!r} is not one of {verb}'s classes "
+                                                         f"({', '.join(classes) or 'none'}; else other)")
+        tier_id = _tier_step(rules, classes[ob.obstacle_class], ob.nudge)
+    if not tier_id:
+        raise _Refuse(6, "obstacle", "a tiered obstacle needs a class, or class other with a tier")
+    dc = _tier_dc(rules, tier_id)
+    ob = ob.model_copy(update={"tier": tier_id})
     write = {"subject": WORLD, "predicate": key, "value": dc} if key else None
     if key is None:
         notes.append("tiered DC not stored: the obstacle has no id")
@@ -491,6 +658,10 @@ def _levers(p: ProposedFrame, beat: Beat, state: Any, rules: Any, declared: int,
     if free_here and _free_fact_rolls(state, beat.actor, free) >= FREE_FACT_ROLLS_PER_SCENE:
         raise _Refuse(7, "levers", f"free facts were levers on {FREE_FACT_ROLLS_PER_SCENE} rolls this scene: "
                                    f"{free_here[0].fact_id} must be worked by a Setup (01.15.8)")
+    # 00.3.9(b), 01.6.8: at most one cited Precision snag; a further fitting hindering fact applies as Protective
+    cap = int(rules.resolution.get("frame_guards", {}).get("cited_precision_snags_max", 1))
+    prec = [s for s in cited_snags if s.type == "precision"]
+    cited_snags = [s.model_copy(update={"type": "protective"}) if s in prec[cap:] else s for s in cited_snags]
     snags = list(cited_snags)
     rep = list(rules.resolution["repetition"]["engine_snags_by_instance"])
     rep_val = int(rep[min(p.repetition_instance, len(rep)) - 1])
@@ -622,8 +793,9 @@ def legal_trades(frame: Frame) -> list[str]:  # rule: 01.7.3
 
 
 def auto_commit_allowed(frame: Frame) -> bool:  # rule: 01.7.4
-    """Safe or Risky, not lethal, not secret, no mode price, success-or-better >= 50%."""
-    return (frame.stakes in ("safe", "risky") and not frame.lethal and not frame.secret
+    """Safe (worst cost S1), not lethal, not secret, not a long shot, no mode price, success-or-better >= 50%.
+    A Risky, Dire or lethal frame never auto-commits (DL-01-32)."""
+    return (frame.stakes == "safe" and not frame.lethal and not frame.secret and not frame.long_shot
             and frame.mode_price is None and frame.odds.success_or_better >= 50)
 
 
@@ -649,101 +821,7 @@ def offer_preview(frame: Frame, rules: Any = None) -> OfferPreview:  # rule: 01.
                         if frame.alternate_cost else None),
         reach=frame.reach, mode_price=frame.mode_price.model_dump() if frame.mode_price else None,
         alternative_attribute=frame.alternative_attribute, only_natural_20=frame.odds.only_natural_20,
-        trades=legal_trades(frame))
-
-
-_CITED_FACT = re.compile(r"\s*\((?:source:\s*)?fact\.\d+\)")  # "(source: fact.203)": the words already say it
-_CITING = re.compile(r",?\s*\b(?:citing|per|source(?: is)?:?)\s+fact\.\d+", re.IGNORECASE)  # "…, citing fact.144"
-_BARE_FACT = re.compile(r"\bfact\.\d+\b")
-# "Source: fact.158 (wrist held in the PC's hand)." / "(source: Falett, who is aware of him)": the source is the
-# engine's bookkeeping, not the price; the whole aside goes (P-072)
-_SOURCE_ASIDE = re.compile(r"\s*[,;]?\s*(?:\(\s*source:[^()]*\)|\bsource:\s*(?:fact\.\d+)?[^.()]*(?:\([^()]*\))?\.?)",
-                           re.IGNORECASE)
-_OOF_TAIL = re.compile(r"\s*\b(?:out of fiction|OOF)\s*:.*$", re.IGNORECASE | re.DOTALL)
-_PAREN = re.compile(r"\s*\([^()]*\)")
-_PRONOUNS = {"he": ("he", "him", "his", "himself"), "she": ("she", "her", "hers", "herself")}
-_NOT_A_NOUN = frozenset("a an the to of in on at for from with by and or but as if so that this it is was "
-                        "when while than then nothing anything something everything away back up down off out "
-                        "too again alone here there what how why where who into over".split())
-
-
-def _pron_set(entity: Any) -> str | None:
-    p = str((getattr(entity, "data", None) or {}).get("pronouns") or "").lower()
-    return p.split("/")[0] if p.split("/")[0] in _PRONOUNS else None
-
-
-def _fix_pronouns(text: str, want: str) -> str:
-    """Swap the other set's pronouns for `want`'s ("her" before a noun is possessive)."""
-    wrong = "she" if want == "he" else "he"
-    subj, obj, poss, refl = _PRONOUNS[want]
-    wsubj, wobj, wposs, wrefl = _PRONOUNS[wrong]
-
-    def sub(m: re.Match[str]) -> str:
-        w, nxt = m.group(1), m.group(2) or ""
-        lw = w.lower()
-        if lw == wsubj:
-            out = subj
-        elif lw == wrefl:
-            out = refl
-        elif want == "he" and lw == "her":
-            out = "his" if nxt and nxt.lower() not in _NOT_A_NOUN else "him"
-        elif want == "he" and lw == "hers":
-            out = "his"
-        elif lw == wobj:
-            out = obj
-        else:  # "his" -> "her"
-            out = poss if want == "he" else "her"
-        return (out[:1].upper() + out[1:]) if w[:1].isupper() else out
-
-    words = "|".join(sorted({wsubj, wobj, wposs, wrefl}, key=len, reverse=True))
-    return re.sub(rf"\b({words})\b(?=(?:\s+([A-Za-z']+))?)", sub, text, flags=re.IGNORECASE)
-
-
-def _fact_words(state: Any, fid: str) -> str:
-    f = state.facts.get(fid) if state is not None else None
-    settled = "what is already settled"
-    if f is None or f.visibility not in ("shown", "available"):
-        return settled
-    if isinstance(f.value, dict):  # a structured value (a bond: {"kind": "friend", "npc": ...}) in words, or dropped
-        ent = state.entities.get(str(f.value.get("npc") or f.value.get("entity") or ""))
-        if ent is None or not getattr(ent, "name", ""):
-            return settled
-        kind = f.value.get("kind")
-        return f"your {str(kind).replace('_', ' ')} {ent.name}" if kind and f.subject.startswith("pc.") else ent.name
-    if isinstance(f.value, list) or "." in f.predicate:  # a list, or a dotted predicate id: no plain words
-        return settled
-    pred = f.predicate.replace("_", " ").strip()
-    if len(f.predicate) >= 60:  # a slug cut at 60 (engine/dm/turn.py, narration.py): never show a cut word
-        pred = pred.rsplit(" ", 1)[0]
-    # a false or empty fact is never negated in words ("not no one is watching ..."): the plain phrase stands
-    return pred if f.value is True else f"{pred}: {f.value}" if f.value not in (False, None) else settled
-
-
-def plain_offer_words(frame: Frame, state: Any) -> Frame:  # rule: 12.14.4
-    """The model-written words the OFFER shows (the restated beat, the cost forms) without ids or internals: a
-    cited fact id is dropped (the form already says it in words), a bare one becomes the fact's words; the
-    restatement loses its asides and any "out of fiction" tail; the actor's pronouns are the store's.
-    ponytail: pronouns are fixed only for a he/she actor and only when no one else present uses the other set."""
-    actor = state.entities.get(frame.beat.actor) if state is not None else None
-    want = _pron_set(actor)
-    if want and state.scene is not None:
-        others = [state.entities.get(i) for i in [*state.scene.cast_present, frame.beat.target or ""]
-                  if i and i != frame.beat.actor]
-        if any(_pron_set(e) not in (None, want) for e in others):
-            want = None
-
-    def plain(text: str, beat: bool = False) -> str:
-        t = _CITING.sub("", _CITED_FACT.sub("", _SOURCE_ASIDE.sub("", text or "")))
-        t = _BARE_FACT.sub(lambda m: _fact_words(state, m.group(0)), t)
-        if beat:
-            t = _PAREN.sub("", _OOF_TAIL.sub("", t)).strip()
-        return _fix_pronouns(t, want) if want else t
-
-    frame.beat.restatement = plain(frame.beat.restatement, beat=True)
-    for cost in (frame.threatened_cost, frame.alternate_cost):
-        if cost is not None:
-            cost.form_intent = plain(cost.form_intent)
-    return frame
+        trades=legal_trades(frame), long_shot=frame.long_shot)
 
 
 def commit_events(frame: Frame, choice: OfferChoice, *, mint: Callable[[str], str], state: Any,

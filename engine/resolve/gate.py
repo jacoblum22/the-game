@@ -1,20 +1,22 @@
-"""GATE (01.3; PR-01-5): verify the Reader's proposed gate class against the actor's holdings and the data.
+"""GATE (01.3; 00.12.3 `[D]`; PR-01-5): the gate class, computed from the beat's verb, facets and the actor's holdings.
 
     dec = check_gate(beat, state=tx.state, rules=rules, store=store, staged=tx.events, mint=tx.mint)
-    tx.add_all(dec.events)        # the g3_redirect / g4 ruling (none for G0-G2)
+    tx.add_all(dec.events)        # the g3_redirect / g4 ruling (none for G1, G2)
 
-The engine checks what state and data can settle: a cited verb exists and its `excludes` do not name the method;
-a cited license is held (not retired or expired, not forbidden by an active condition); a G4 fact exists; an
-active condition forbids the verb or a trait (G4 test 4, answered from state). Anything that fails falls to G3
-(SG-05). G3 builds the four-part redirect from the license entry (crude fallback, acquisition paths); at least
-one concrete option is always present (P16). `find_rulings` runs before every G3/G4 decision (FR-022).
+No role proposes the class (00.12.3, DL-01-30). `compute_gate` is a pure function of the verb, the three method
+facets (12.2.2: `against_will`, `uses_power`, `speech`), the method's words matched against the verbs' `excludes`,
+the held licences and whether literacy is on record; `check_gate` adds what only state holds (an active condition
+forbidding the method, a cited G4 fact, an accepted crude fallback) and the redirect. A sheet knack is an edge,
+never a gate: it is not an input. G3 builds the four-part redirect from the license entry (crude fallback,
+acquisition paths); at least one concrete option is always present (P16). `find_rulings` runs before every G3/G4
+decision (FR-022).
 """
 
 from __future__ import annotations
 
 import re
 from collections.abc import Callable, Iterable, Sequence
-from typing import Any, Literal
+from typing import Any, Literal, NamedTuple
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -31,6 +33,10 @@ from engine.store.events import Event, LicenseInstance
 
 _STOP = {"the", "and", "with", "from", "into", "onto", "your", "you", "that", "this", "for", "not", "any", "a", "an",
          "its", "their", "own", "other", "than", "which"}
+LETTERS = "lic.lang.letters"  # 02.4.6: reading needs it once literacy is on record
+WRITING = re.compile(r"\b(notice|sign|letter|inscription|script|rune|book|ledger|writing|written|words|page|scroll"
+                     r"|bill|placard|poster|note|label|list|map|tablet|plaque|carved name)s?\b", re.I)
+_LIC = re.compile(r"\blic\.[a-z_]+\.[a-z_]+")
 
 
 class RedirectOption(BaseModel):
@@ -57,7 +63,7 @@ class GateDecision(BaseModel):
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
     gate: GateClass
-    proposed: GateClass
+    proposed: GateClass | None = None  # no role proposes the class any more (00.12.3); kept for old records
     verb: str | None = None
     license: str | None = None
     mode: GateMode = "normal"
@@ -98,12 +104,35 @@ def excluded_by(verb: Any, method: str) -> Any | None:  # rule: 01.3.1
     return None
 
 
+def excluded_anywhere(rules: Any, verb_id: str | None, method: str) -> Any | None:  # rule: 01.3.1
+    """The beat's own verb's `excludes` first, then every other verb's: "pick the lock" read as Handle is still
+    the method Force names as needing Thievery."""
+    order = [verb_id, *[v for v in rules.basic_verbs if v != verb_id]] if verb_id else list(rules.basic_verbs)
+    for v in order:
+        entry = rules.basic_verbs.get(v or "")
+        if entry is not None and (ex := excluded_by(entry, method)) is not None:
+            return ex
+    return None
+
+
 def held_license(state: Any, actor: str, license_id: str) -> LicenseInstance | None:  # rule: 01.3.2
     """The actor's instance of `license_id`, unless retired or expired (00.6.1 license state)."""
     for lic in state.licenses.get(actor, []):
         if lic.license_id == license_id and lic.lifecycle != "retired" and not lic.expires:
             return lic
     return None
+
+
+def _lic(rules: Any, lid: str | None) -> Any | None:
+    """A license entry from `licenses.yaml` or another data file (the language licenses), else None."""
+    if not lid:
+        return None
+    if lid in rules.licenses:
+        return rules.license(lid)
+    try:
+        return rules.get(lid) if rules.has(lid) else None
+    except (KeyError, AttributeError):
+        return None
 
 
 def _restricts(rules: Any, state: Any, actor: str) -> Iterable[tuple[str, Any]]:
@@ -117,14 +146,17 @@ def _restricts(rules: Any, state: Any, actor: str) -> Iterable[tuple[str, Any]]:
                 yield inst.instance_id, (m.get("params") or {}).get("forbid") or {}
 
 
-def forbidden_by_condition(beat: Beat, *, state: Any, rules: Any) -> tuple[str, str] | None:  # rule: 01.3.7
+def forbidden_by_condition(beat: Beat, *, state: Any, rules: Any, verb: str | None = None,
+                           license: str | None = None) -> tuple[str, str] | None:  # rule: 01.3.7
     """G4 test 4 from state: an active condition's restrict forbids the verb, a trait of the beat or the license.
     Returns (condition instance id, what is forbidden)."""
+    verb = verb or beat.verb
+    license = license or beat.license
     for inst_id, forbid in _restricts(rules, state, beat.actor):
-        if beat.verb and beat.verb in (forbid.get("verbs") or ()):
-            return inst_id, beat.verb
-        if beat.license and beat.license in (forbid.get("licenses") or ()):
-            return inst_id, beat.license
+        if verb and verb in (forbid.get("verbs") or ()):
+            return inst_id, verb
+        if license and license in (forbid.get("licenses") or ()):
+            return inst_id, license
         for m in forbid.get("methods") or ():
             t = re.match(r"any beat with (trait\.[a-z_.]+)", str(m))
             if t and t.group(1) in beat.traits:
@@ -132,21 +164,108 @@ def forbidden_by_condition(beat: Beat, *, state: Any, rules: Any) -> tuple[str, 
     return None
 
 
+# ------------------------------------------------------------------------------------------- the computation
+
+
+def covering_verb(verb: str | None, *, against_will: bool, speech: bool) -> str | None:  # rule: 00.12.3
+    """The verb card the facets put the beat under: a hold or a blow that is not against anyone's will is not a
+    Grapple or a Strike ("gently turn the child's face" is Handle; words said with a raised fist are Talk)."""
+    if against_will:
+        return verb
+    if verb == "verb.grapple":
+        return "verb.talk" if speech else "verb.handle"
+    if verb == "verb.strike" and speech:
+        return "verb.talk"
+    return verb
+
+
+class Computed(NamedTuple):
+    gate: GateClass
+    verb: str | None
+    license: str | None  # G2: the covering license; G3: the would-be license (None: a deed branch)
+    reason: str
+
+
+def _fallback_shift(rules: Any, lid: str) -> int:
+    fb = (_lic(rules, lid) or {}).get("crude_fallback")
+    return int(fb.get("dc_shift") or 0) if isinstance(fb, dict) else 99
+
+
+def _plain_cover(rules: Any, verb: str | None, held: Sequence[str]) -> str | None:
+    """A held training license whose untrained form (crude fallback) is this verb: the licensed way of the same
+    act (persuasion for Talk, tracking for Observe). The lowest fallback price first.
+    ponytail: the method's deed tag would pick between two such licenses better than the price does."""
+    fits = [lid for lid in held if (e := _lic(rules, lid)) is not None and e.get("kind") == "training"
+            and isinstance(e.get("crude_fallback"), dict) and e["crude_fallback"].get("verb") == verb]
+    return min(fits, key=lambda x: (_fallback_shift(rules, x), fits.index(x))) if fits else None
+
+
+def _power_cover(rules: Any, held: Sequence[str]) -> str | None:
+    """A held technique license (no crude fallback: its methods have no untrained form)."""
+    return next((lid for lid in held if (e := _lic(rules, lid)) is not None and e.get("kind") == "training"
+                 and not isinstance(e.get("crude_fallback"), dict)), None)
+
+
+def _tongue(rules: Any, method: str, needs: str) -> list[str]:  # rule: PR-01-5
+    """A language exclude ("reading an unknown script" needs a language license): the tongue the method names.
+    ponytail: matched on a name's first three letters ("elven" → Elvish); a script fact on the target is better."""
+    if "language" not in needs:
+        return []
+    heads = {w[:3] for w in re.findall(r"[a-z]+", method.lower()) if len(w) >= 3}
+    return [lid for lid in rules.ids("lic.lang.") if lid not in ("lic.lang.common", LETTERS)
+            and any(w[:3] in heads for w in re.findall(r"[a-z]+", str(rules.get(lid).get("name", "")).lower())
+                    if len(w) >= 4)]
+
+
+def compute_gate(verb: str | None, *, against_will: bool = False, uses_power: bool = False, speech: bool = False,
+                 method: str = "", held: Sequence[str] = (), rules: Any, reading: bool = False,
+                 literacy_known: bool = False, deed_tag: str | None = None) -> Computed:  # rule: 00.12.3
+    """00.12.3's computation, pure. A *need* is an excluded method (any verb's `excludes`, matched literally), a
+    supernatural or licensed technique (`uses_power`), or reading writing once literacy is on record. With a need,
+    a held covering license gives G2, else G3 naming the would-be license (PR-01-5 step 1, looked up by code).
+    Without one, the act is the basic verb's (G1), or G2 when a held license is the trained form of that verb."""
+    v = covering_verb(verb, against_will=against_will, speech=speech)
+    if v is None or v not in rules.basic_verbs:
+        if uses_power:
+            v = None
+        else:
+            return Computed("G3", v, would_be_license(method, rules, deed_tag), f"no basic verb {verb!r} fits")
+    ex = excluded_anywhere(rules, v, method)
+    need: str | None = None
+    wanted: str | None = None
+    if ex is not None:
+        need = f"{ex['what']} needs {ex.get('needs')}"
+        named = _LIC.findall(str(ex.get("needs") or "")) or _tongue(rules, method, str(ex.get("needs") or ""))
+        wanted = next((x for x in named if x in held), named[0] if named else None)
+    elif reading and literacy_known and not uses_power:  # reading a mind is a power, not letters
+        need, wanted = "reading writing needs letters", LETTERS
+    elif uses_power:
+        need = "a supernatural or licensed technique"
+    if need is None:
+        cover = _plain_cover(rules, v, held)
+        if cover:
+            return Computed("G2", v, cover, f"held license {cover} is the trained form of {v}")
+        return Computed("G1", v, None, f"{v} covers it")
+    wanted = wanted or would_be_license(method, rules, deed_tag)
+    if wanted and wanted in held:
+        return Computed("G2", v, wanted, f"held license {wanted} covers it ({need})")
+    if wanted is None and uses_power and (cover := _power_cover(rules, held)) is not None:
+        return Computed("G2", v, cover, f"held license {cover} covers it ({need})")
+    return Computed("G3", v, wanted, f"no held license covers it ({need})")
+
+
 # ------------------------------------------------------------------------------------------- redirect
 
 
-def would_be_license(beat: Beat, rules: Any) -> str | None:  # rule: PR-01-5
-    """PR-01-5 step 1: the license that would cover the method (named by the Reader, else the best word match
-    over license names, scopes and fallbacks; at least two shared words)."""
-    for cand in (beat.would_be_license, beat.license):
-        if cand and cand in rules.licenses:
-            return cand
-    m = words(f"{beat.method} {beat.intent}")
+def would_be_license(method: str, rules: Any, deed_tag: str | None = None) -> str | None:  # rule: PR-01-5
+    """PR-01-5 step 1: the license whose name and scope share the most words with the method (at least two), by
+    code; no role names it."""
+    m = words(method)
     best, score = None, 1
     for lid, lic in rules.licenses.items():
         text = f"{lic.get('name', '')} {lic.get('scope', '')}"
         s = len(m & words(text))
-        if beat.deed_tag and beat.deed_tag in (lic.get("tags") or ()):
+        if deed_tag and deed_tag in (lic.get("tags") or ()):
             s += 2
         if s > score:
             best, score = lid, s
@@ -166,41 +285,33 @@ def _fallback_option(lid: str, lic: Any) -> RedirectOption | None:
                           consequence=fb.get("consequence"))
 
 
-def _plain_form_of(lid: str, verb_id: str | None, rules: Any) -> bool:
-    """The license's crude fallback is `verb_id` itself with no DC shift and no consequence: its untrained
-    form is that basic verb's own act (Intimidation → Talk "threaten plainly")."""
-    fb = rules.license(lid).get("crude_fallback") if lid in rules.licenses else None
-    return (isinstance(fb, dict) and fb.get("verb") == verb_id and not int(fb.get("dc_shift") or 0)
-            and not fb.get("consequence"))
-
-
 def _valid_alternatives(alts: Iterable[RedirectOption], rules: Any) -> list[RedirectOption]:
     return [a for a in alts if a.verb is None or a.verb in rules.basic_verbs]
 
 
-def _nearest(beat: Beat, rules: Any) -> RedirectOption:
-    if beat.verb and beat.verb in rules.basic_verbs:
-        return RedirectOption(kind="basic_verb", verb=beat.verb, method=f"another way to {beat.intent}")
+def _nearest(beat: Beat, rules: Any, verb: str | None = None) -> RedirectOption:
+    verb = verb or beat.verb
+    if verb and verb in rules.basic_verbs:
+        return RedirectOption(kind="basic_verb", verb=verb, method=f"another way to {beat.intent}")
     return RedirectOption(kind="intent", verb="verb.observe", method=f"look for what could serve: {beat.intent}")
 
 
-def build_redirect(beat: Beat, rules: Any, alternatives: Iterable[RedirectOption] = ()) -> Redirect:
-    # rule: PR-01-5
+def build_redirect(beat: Beat, rules: Any, alternatives: Iterable[RedirectOption] = (), *,
+                   lid: str | None = None, verb: str | None = None) -> Redirect:  # rule: PR-01-5
     """PR-01-5 steps 1-3 (the four-part redirect of 01.3.6): nothing is spent."""
-    lid = would_be_license(beat, rules)
+    lic = _lic(rules, lid)
     options: list[RedirectOption] = []
-    if lid is not None:
-        lic = rules.license(lid)
+    if lid is not None and lic is not None:
         fb = _fallback_option(lid, lic)
         if fb is not None:
             options.append(fb)
         options += _valid_alternatives(alternatives, rules)
         if not options:
-            options.append(_nearest(beat, rules))
+            options.append(_nearest(beat, rules, verb))
         return Redirect(intent=beat.intent, missing=lid, missing_kind="license", options=options,
                         acquisition_paths=_paths(lic))
     branch = beat.deed_tag or "deed"
-    options = _valid_alternatives(alternatives, rules) or [_nearest(beat, rules)]
+    options = _valid_alternatives(alternatives, rules) or [_nearest(beat, rules, verb)]
     return Redirect(intent=beat.intent, missing=branch, missing_kind="deed_branch", options=options,
                     acquisition_paths=[{"type": "mentor", "detail": f"someone who holds a {branch} license"},
                                        {"type": "recognition", "detail": f"a calling keyed at or above {branch}"}])
@@ -220,111 +331,75 @@ def _ruling(kind: Literal["g3_redirect", "g4"], key: str, beat: Beat, reason: st
     return [log_ruling(rec, mint, store=store, staged=staged, rule_id="01.3.6")]
 
 
+def held_ids(state: Any, actor: str) -> list[str]:
+    return [x.license_id for x in state.licenses.get(actor, []) if held_license(state, actor, x.license_id)]
+
+
+def reads_writing(beat: Beat, verb: str | None, state: Any = None) -> bool:  # rule: 02.4.6
+    """An Observe beat that reads writing: the reading words, and a target with words on record or writing named
+    in the method ("read a person or a scene" is Observe's own act, never letters)."""
+    from engine.retrieve.scene import READING, written_words
+
+    text = f"{beat.method} {beat.intent}"
+    if verb != "verb.observe" or not READING.search(text):
+        return False
+    on_record = (state is not None and beat.target in getattr(state, "entities", {})
+                 and written_words(state, str(beat.target)) is not None)
+    return on_record or bool(WRITING.search(text))
+
+
 def check_gate(beat: Beat, *, state: Any, rules: Any, store: Any = None, staged: Sequence[Event] = (),
                mint: Callable[[str], str] | None = None, canon_impossible: Iterable[str] = (),
                alternatives: Iterable[RedirectOption] = ()) -> GateDecision:  # rule: 01.3.1
-    """The engine's GATE: G0 passes; G4 from state (condition) or a cited fact/canon; G1 verb covers and not
-    excludes; G2 a held license; otherwise G3 with a redirect (or an accepted crude fallback, rollable)."""
-    d = GateDecision(gate=beat.gate, proposed=beat.gate, verb=beat.verb, license=beat.license, mode=beat.mode)
-    if beat.gate == "G0":
-        d.reason = "a question about the world: state, knowledge, or the Oracle (01.3.8)"
-        return d
+    # rule: 00.12.3
+    """The engine's GATE: G4 from an active condition or a cited fact on record; an accepted crude fallback rolls;
+    otherwise `compute_gate` from the beat's verb and facets and the actor's held licences."""
     alts = list(alternatives)
-    # G4 (01.3.7): test 4 answered from state, whatever was proposed
-    g4: tuple[str, str, Literal["fact", "canon", "zero_reach", "condition"]] | None = None
-    forbid = forbidden_by_condition(beat, state=state, rules=rules)
+    held = [x for x in held_ids(state, beat.actor)
+            if not any(x in (f.get("licenses") or ()) for _, f in _restricts(rules, state, beat.actor))]
+    # an accepted crude fallback (01.3.5): a G3 that rolls, on the fallback's own verb
+    if beat.mode == "fallback" and beat.fallback_license and (lic := _lic(rules, beat.fallback_license)) is not None:
+        fb = _fallback_option(beat.fallback_license, lic)
+        if fb is not None and fb.verb == beat.verb:
+            return GateDecision(gate="G3", verb=beat.verb, license=beat.fallback_license, mode="fallback",
+                                reason=f"crude fallback of {beat.fallback_license} accepted")
+    # a stretched or emulated license the engine set (01.3.5): G2 under its price, when held and declared
+    if beat.mode in ("stretch", "emulate") and beat.license:
+        lic = _lic(rules, beat.license)
+        if beat.license in held and lic is not None and lic.get(beat.mode):
+            return GateDecision(gate="G2", verb=beat.verb, license=beat.license, mode=beat.mode,
+                                reason=f"held license {beat.license} ({beat.mode})")
+    langs = any(x.startswith("lic.lang.") for x in held_ids(state, beat.actor))
+    c = compute_gate(beat.verb, against_will=beat.against_will, uses_power=beat.uses_power, speech=beat.speech,
+                     method=f"{beat.method} {beat.intent}", held=held, rules=rules,
+                     reading=reads_writing(beat, covering_verb(beat.verb, against_will=beat.against_will,
+                                                               speech=beat.speech), state),
+                     literacy_known=langs, deed_tag=beat.deed_tag)
+    # G4 (01.3.7): a condition that forbids the method, or an established fact the Reader cites
+    g4: tuple[str, str, Literal["fact", "condition"]] | None = None
+    forbid = forbidden_by_condition(beat, state=state, rules=rules, verb=c.verb,
+                                    license=c.license if c.gate == "G2" else None)
     if forbid is not None:
         g4 = (forbid[0], f"an active condition forbids {forbid[1]}", "condition")
-    elif beat.gate == "G4":
-        test = beat.g4_test or ("fact" if beat.g4_fact else "zero_reach")
-        if test == "fact":
-            if beat.g4_fact and beat.g4_fact in state.facts:
-                g4 = (beat.g4_fact, "success requires an established fact to be false", "fact")
-            else:
-                d.reason = f"G4 cites no established fact ({beat.g4_fact!r}); default false (01.3.7)"
-        elif test == "canon":
-            if beat.g4_fact and (beat.g4_fact in set(canon_impossible) or beat.g4_fact in state.facts):
-                g4 = (beat.g4_fact, "impossible for anyone in the setting (canon)", "canon")
-            else:
-                d.reason = f"G4 canon test cites nothing on record ({beat.g4_fact!r}); default false"
-        else:
-            g4 = (beat.g4_fact or "reach", "two effect factors stand against the method (zero reach)", "zero_reach")
+    elif beat.g4_fact and beat.g4_fact in state.facts:
+        g4 = (beat.g4_fact, "success requires an established fact to be false", "fact")
+    elif beat.g4_fact and beat.g4_fact in set(canon_impossible):
+        g4 = (beat.g4_fact, "impossible for anyone in the setting (canon)", "fact")
     if g4 is not None:
         key, why, kind = g4
         found = find_rulings(store, gate_signature("g4", key), staged=staged)
-        options = _valid_alternatives(alts, rules) or [_nearest(beat, rules)]
-        if kind == "condition" and options[0].verb == beat.verb:
+        options = _valid_alternatives(alts, rules) or [_nearest(beat, rules, c.verb)]
+        if kind == "condition" and options[0].verb == c.verb:
             options = [RedirectOption(kind="intent", verb="verb.observe", method=f"another way to {beat.intent}")]
-        d.gate, d.reason, d.fact_cited, d.precedent = "G4", why, key, found
-        d.redirect = Redirect(intent=beat.intent, missing=key, missing_kind=kind, options=options)
-        d.events = _ruling("g4", key, beat, why, [key] if kind in ("fact", "canon") else [], precedent_for(found),
-                           mint, store, staged)
-        return d
-    # a G4 that did not hold falls through to G1/G2 (01.3.7: default false)
-    proposed = beat.gate if beat.gate != "G4" else ("G2" if beat.license else "G1")
-    # G2: a held license (01.3.2)
-    if beat.license and proposed in ("G1", "G2"):
-        if held_license(state, beat.actor, beat.license) is not None and beat.license in rules.licenses:
-            lic = rules.license(beat.license)
-            if beat.mode in ("stretch", "emulate") and not lic.get(beat.mode):
-                d.reason = f"{beat.license} declares no {beat.mode} (01.3.5)"
-            else:
-                d.gate, d.mode = "G2", beat.mode if beat.mode in ("stretch", "emulate") else "normal"
-                d.reason = f"held license {beat.license}"
-                return d
-        else:
-            d.reason = f"license {beat.license} is not held by {beat.actor}"
-    # G1: the verb covers it and does not exclude it (01.3.1)
-    elif proposed == "G1":
-        verb = rules.basic_verbs.get(beat.verb or "")
-        if verb is None:
-            d.reason = f"unknown basic verb {beat.verb!r}"
-        elif beat.method_class and beat.method_class.lower() not in {c.lower() for c in verb["covers"]}:
-            d.reason = f"{beat.method_class!r} is not in {beat.verb}'s covers"
-        elif (ex := excluded_by(verb, beat.method)) is not None:
-            d.reason = f"{beat.verb} excludes {ex['what']!r} (needs {ex.get('needs')})"
-        else:
-            d.gate, d.mode, d.license = "G1", "normal", None
-            d.reason = "; ".join(x for x in (d.reason, f"{beat.verb} covers it") if x)
-            return d
-    # G2 before G3 (01.3.1, first match wins): a license the Reader cited as covering the method (would-be,
-    # proposed or the accepted fallback's) is held, so it is G2 whatever class was proposed. Only a cited id
-    # counts (G2: "the DM must cite its id"); the word-match guess in would_be_license is never upgraded.
-    if beat.mode not in ("stretch", "emulate"):
-        for lid in dict.fromkeys((beat.would_be_license, beat.license, beat.fallback_license)):
-            if (lid and lid in rules.licenses and held_license(state, beat.actor, lid) is not None
-                    and not any(lid in (f.get("licenses") or ()) for _, f in _restricts(rules, state, beat.actor))):
-                d.gate, d.mode, d.license = "G2", "normal", lid
-                d.reason = f"held license {lid}"
-                return d
-    # G1 before G3 (01.3.1, first match wins): a G3 proposal on a basic verb that names no license the method
-    # would need is that verb's own act (talking to someone, recalling one's own country), unless the verb
-    # excludes it; the word-match guess in would_be_license never turns it into a redirect (playtests
-    # 20261007-170200 "needs Stonesense", -170204 "needs arcane mind"). A G3 that names the license keeps it.
-    # Likewise a speech verb's plain social act (threaten, lie, persuade) when the named license's untrained
-    # form is that same verb at no penalty: Talk covers it, and a knack or trade is an edge, not a requirement
-    # (playtest 20261007-212725 "needs Intimidation" for a threat; P-122).
-    named = [x for x in (beat.would_be_license, beat.license, beat.fallback_license) if x]
-    if (proposed == "G3" and beat.mode == "normal"
-            and (verb := rules.basic_verbs.get(beat.verb or "")) is not None
-            and (not named or ("trait.action.speech" in (verb.get("traits") or ())
-                               and all(_plain_form_of(x, beat.verb, rules) for x in named)))):
-        if (ex := excluded_by(verb, beat.method)) is None:
-            d.gate, d.license = "G1", None
-            d.reason = f"{beat.verb} covers it; no license is named that it needs (01.3.1)"
-            return d
-        d.reason = f"{beat.verb} excludes {ex['what']!r} (needs {ex.get('needs')})"
-    # G3: an accepted crude fallback rolls; otherwise the redirect
-    if beat.mode == "fallback" and beat.fallback_license and beat.fallback_license in rules.licenses:
-        fb = _fallback_option(beat.fallback_license, rules.license(beat.fallback_license))
-        if fb is not None and fb.verb == beat.verb:
-            d.gate, d.mode, d.license = "G3", "fallback", beat.fallback_license
-            d.reason = f"crude fallback of {beat.fallback_license} accepted"
-            return d
-    red = build_redirect(beat, rules, alts)
+        return GateDecision(gate="G4", verb=c.verb, reason=why, fact_cited=key, precedent=found,
+                            redirect=Redirect(intent=beat.intent, missing=key, missing_kind=kind, options=options),
+                            events=_ruling("g4", key, beat, why, [key] if kind == "fact" else [],
+                                           precedent_for(found), mint, store, staged))
+    if c.gate in ("G1", "G2"):
+        return GateDecision(gate=c.gate, verb=c.verb, license=c.license, reason=c.reason)
+    red = build_redirect(beat, rules, alts, lid=c.license, verb=c.verb)
     found = find_rulings(store, gate_signature("g3_redirect", red.missing), staged=staged)
-    d.gate, d.mode, d.redirect, d.precedent = "G3", "normal", red, found
-    d.reason = d.reason or "beyond the basic verbs and no held license covers it"
+    d = GateDecision(gate="G3", verb=c.verb, redirect=red, precedent=found, reason=c.reason)
     d.events = _ruling("g3_redirect", red.missing, beat, d.reason, [], precedent_for(found), mint, store, staged)
     if red.missing_kind == "deed_branch" and mint is not None:  # no license in data covers it (01.3.5)
         rec = RulingRecord(signature=f"rule_conflict:{red.missing}", situation=beat.restatement or beat.intent,

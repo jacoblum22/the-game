@@ -31,6 +31,8 @@ class PartEntry(BaseModel):
     text: str
     cls: str = Field(alias="class")  # SAFETY|SESSION|DISPUTE|PENDING_ANSWER|OOF_QUESTION|FICTION_QUESTION|...
     handled: str = ""  # resolved | queued | paused | redirected | answered | refused (01.2.3)
+    question_kind: str = "none"  # 12.2.2 (DL-12-50); read by the answer ladder (spec 008)
+    topic: str | None = None
     beat_id: str | None = None
 
 

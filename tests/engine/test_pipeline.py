@@ -12,22 +12,27 @@ from tests.engine.test_turn_adjudication import D20
 from tests.fixtures.scene_dock import DockScene, build_dock
 
 
-def stub_framer(attribute: str = "agility", **over: Any) -> Any:
+def stub_framer(attribute: str = "agility", trivial: tuple[str, ...] = (), **over: Any) -> Any:
+    """A fixed proposal; for a verb in `trivial`, that verb's trivial rubric class (no roll, 01.4.1)."""
     def propose(beat: Beat, candidates: list[str], *, gate: GateDecision, note: str | None = None) -> ProposedFrame:
+        if beat.verb in trivial:
+            cls = {"verb.observe": "in_plain_view", "verb.move": "open_ground", "verb.handle": "ordinary_use"}
+            return ProposedFrame(anchor=candidates[0], attribute=attribute,
+                                 obstacle=Obstacle(kind="tier", obstacle_class=cls[beat.verb or ""], id="obs.test"),
+                                 threatened_cost=CostDecl(menu_id="cost.time"))
         base: dict[str, Any] = {
             "anchor": candidates[0], "attribute": attribute,
             "obstacle": Obstacle(kind="tier", tier="moderate", id="obs.test"),
-            "stakes_source": "aware_opponent_or_observer",
+            "stakes_source": "listening_clock",
             "threatened_cost": CostDecl(menu_id="cost.exposure"), "alternate_cost": CostDecl(menu_id="cost.time")}
         return ProposedFrame(**{**base, **over})
 
     return propose
 
 
-def plan(dock: DockScene, intent: str, verb: str, *, necessity: str = "uncertain_and_costly", gate: str = "G1",
-         n: int = 1, **kw: Any) -> BeatPlan:
-    beat = Beat(id=f"beat.{n}", actor=dock.pc, intent=intent, method=intent, verb=verb, gate=gate,  # type: ignore[arg-type]
-                necessity=necessity, declared_seq=dock.state.last_seq, **kw)
+def plan(dock: DockScene, intent: str, verb: str, *, n: int = 1, **kw: Any) -> BeatPlan:
+    beat = Beat(id=f"beat.{n}", actor=dock.pc, intent=intent, method=intent, verb=verb,
+                declared_seq=dock.state.last_seq, **kw)
     return BeatPlan(beat=beat, intent_verbs=[intent.split()[0]])
 
 
@@ -44,9 +49,9 @@ def setup(tmp_path: Path) -> tuple[DockScene, D20]:
 
 def test_at_most_three_beats_the_rest_queued(tmp_path: Path) -> None:
     dock, rng = setup(tmp_path)
-    plans = [plan(dock, f"look around {i}", "verb.observe", necessity="trivial", n=i) for i in range(4)]
+    plans = [plan(dock, f"look around {i}", "verb.observe", n=i) for i in range(4)]
     with dock.store.transaction("turn.1") as tx:
-        res = run_beats(env_for(dock, tx, rng), plans)
+        res = run_beats(env_for(dock, tx, rng, framer=stub_framer(trivial=("verb.observe",))), plans)
     assert [o.status for o in res.outcomes] == ["no_roll"] * 3 and res.queued == ["look around 3"]
     assert res.pause is None and dock.state.time.now.beat == 3  # three beat_end marks
 
@@ -54,14 +59,15 @@ def test_at_most_three_beats_the_rest_queued(tmp_path: Path) -> None:
 def test_resume_continues_the_beat_then_the_queue(tmp_path: Path) -> None:
     dock, rng = setup(tmp_path)
     plans = [plan(dock, "sneak to the ferry", "verb.sneak", n=1),
-             plan(dock, "look at the ferry", "verb.observe", necessity="trivial", n=2)]
+             plan(dock, "look at the ferry", "verb.observe", n=2)]
+    fr = stub_framer(trivial=("verb.observe",))
     with dock.store.transaction("turn.1") as tx:
-        res = run_beats(env_for(dock, tx, rng), plans)
+        res = run_beats(env_for(dock, tx, rng, framer=fr), plans)
     assert res.pause is not None and [o.status for o in res.outcomes] == ["paused"]
     assert len(res.pause.detail["queued"]) == 1
     rng.faces = [20]
     with dock.store.transaction("turn.2") as tx:
-        res2 = resume(env_for(dock, tx, rng), dock.state.open_pause(), "commit")  # type: ignore[arg-type]
+        res2 = resume(env_for(dock, tx, rng, framer=fr), dock.state.open_pause(), "commit")  # type: ignore[arg-type]
     assert [o.status for o in res2.outcomes] == ["resolved", "no_roll"]
     assert res2.outcomes[0].entry.degree == "critical_success" and dock.state.open_pause() is None
     assert dock.store.rebuild() == dock.state
@@ -97,8 +103,7 @@ def test_open_near_miss_defaults_to_failure(tmp_path: Path) -> None:
 
 def test_redirect_offers_the_crude_fallback(tmp_path: Path) -> None:
     dock, rng = setup(tmp_path)
-    axe = plan(dock, "hew the mooring rope with the axe like a trained axeman", "verb.strike", gate="G3",
-               would_be_license="lic.training.martial_axe")
+    axe = plan(dock, "hew the mooring rope with the axe like a trained axeman", "verb.strike", uses_power=True)
     with dock.store.transaction("turn.1") as tx:
         res = run_beats(env_for(dock, tx, rng, framer=stub_framer("might")), [axe])
     assert res.pause is not None and res.pause.kind == "redirect"
@@ -114,8 +119,7 @@ def test_redirect_offers_the_crude_fallback(tmp_path: Path) -> None:
 def test_accepted_fallback_rolls_even_from_a_no_roll_class(tmp_path: Path) -> None:
     """P-087: "Try it anyway" on a take-the-time beat was an unrolled success the narration then refused."""
     dock, rng = setup(tmp_path)
-    axe = plan(dock, "hew the mooring rope with the axe like a trained axeman", "verb.strike", gate="G3",
-               necessity="take_the_time", would_be_license="lic.training.martial_axe")
+    axe = plan(dock, "hew the mooring rope with the axe like a trained axeman", "verb.strike", uses_power=True)
     with dock.store.transaction("turn.1") as tx:
         run_beats(env_for(dock, tx, rng, framer=stub_framer("might")), [axe])
     with dock.store.transaction("turn.2") as tx:

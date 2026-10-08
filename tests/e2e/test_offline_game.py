@@ -25,7 +25,7 @@ from engine.llm.base import Role
 from engine.llm.offline import ScriptedModel
 from engine.world.places import location
 from tests.e2e.driver import OFFLINE, Driver, trend
-from tests.engine.test_ending import LETHAL, STRIKE, wight_scene
+from tests.engine.test_ending import STRIKE, lethal, wight_scene
 from tests.engine.test_turn_adjudication import framer, reader
 
 SEED_KINDS = {"seed_step:mode", "seed_step:pick", "seed_step:question", "seed_step:summary"}
@@ -99,7 +99,7 @@ def test_lethal_warning_last_chance_death_and_a_new_character(tmp_path: Path) ->
     wight_scene(d.game)  # test set-up, not play: Milestone 1 places no adversaries by itself
     for _ in range(12):
         model.push(Role.READER, reader("DECLARATION", "I hack at the wight.", STRIKE))
-        model.push(Role.FRAMER, framer(**LETHAL))
+        model.push(Role.FRAMER, framer(**lethal(d.game)))
         r = d.call("submit", "I hack at the wight.")
         for _ in range(4):
             if r.pause is None or r.pause.kind != "offer":
@@ -112,7 +112,7 @@ def test_lethal_warning_last_chance_death_and_a_new_character(tmp_path: Path) ->
     pc = d.game.store.state.meta["pc.active"]
     r = d.call("answer", "lc.last_stand")
     model.push(Role.READER, reader("DECLARATION", "I hack at the wight.", STRIKE))
-    model.push(Role.FRAMER, framer(**LETHAL))
+    model.push(Role.FRAMER, framer(**lethal(d.game)))
     r = d.settle(d.call("submit", "I fight on."))
     assert ending_state(d.game.store.state) == "death" and r.phase == "ending" and "ending" in d.resumed
     assert any(b.kind == "EPILOGUE" for b in d.last.oof_blocks) or d.game.store.state.meta.get(f"legacy.{pc}")

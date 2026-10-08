@@ -4,6 +4,7 @@ the ending menu (resumable), a new character in the same world, and retiring by 
 from __future__ import annotations
 
 from pathlib import Path
+from typing import Any
 
 from engine import ids
 from engine.dm.ending import ending_choice, is_retire, retire_choice
@@ -20,10 +21,10 @@ from tests.engine.test_turn_adjudication import beat, framer, reader
 
 OFFLINE = GameConfig(offline=True)
 LETHAL = {"stakes_source": "aware_opponent_or_observer", "stakes_heavy": True, "lethal": True,
-          "obstacle": {"kind": "entity_defense", "tier": None, "entity": "foe.wight"},
+          "obstacle": {"kind": "entity_defense", "obstacle_class": None, "tier": None, "entity": "foe.wight"},
           "threatened_cost": {"menu_id": "cost.harm", "form_intent": "its claws", "source_fact": None},
           "alternate_cost": {"menu_id": "cost.footing", "form_intent": "you slip", "source_fact": None}}
-STRIKE = beat("hack at the wight", "verb.strike", target="foe.wight", verbs=("hack",))
+STRIKE = beat("hack at the wight", "verb.strike", target="foe.wight", verbs=("hack",), against_will=True)
 
 
 def wight_scene(game: Game) -> None:
@@ -38,6 +39,9 @@ def wight_scene(game: Game) -> None:
                   "attacks": [{"name": "claw", "severity": "S4"}]})))
         sc = tx.state.scene
         assert sc is not None
+        # 01.6.11: harm from an aware party cites the fact that it is armed and hostile
+        tx.add(Event.of("fact_set", {"source": "oracle"}, source="dm", rule_id="01.15.5", fact_id=tx.mint("fact"),
+                        subject="foe.wight", predicate="wields", value="claws", visibility="shown"))
         tx.add(Event.of("scene_ended", source="test", scene_id=sc.scene_id, reason="test"))
         sid = tx.mint(ids.SCENE)
         tx.add(Event.of("scene_started", source="test", scene_id=sid, scene=SceneRecord(
@@ -45,10 +49,16 @@ def wight_scene(game: Game) -> None:
             started_seq=tx.state.last_seq)))
 
 
+def lethal(game: Game) -> dict[str, Any]:
+    """LETHAL citing the wight's claws: harm from an aware party cites that it is armed and hostile (01.6.11)."""
+    claws = next(f.id for f in game.store.state.facts.values() if f.subject == "foe.wight" and f.predicate == "wields")
+    return {**LETHAL, "threatened_cost": {**LETHAL["threatened_cost"], "source_fact": claws}}
+
+
 def attack(game: Game, model: ScriptedModel) -> tuple[Response, list[str]]:
     """One lethal attack; returns the last response and every choice id the step offered (in order)."""
     model.push(Role.READER, reader("DECLARATION", "I hack at the wight.", STRIKE))
-    model.push(Role.FRAMER, framer(**LETHAL))
+    model.push(Role.FRAMER, framer(**lethal(game)))
     r = game.submit("I hack at the wight.")
     seen: list[str] = []
     for _ in range(4):
