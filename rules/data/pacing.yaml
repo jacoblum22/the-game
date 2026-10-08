@@ -14,8 +14,15 @@ schema_version: 1
 lifecycle: provisional
 
 packet:                                   # 12.2.4
-  core: [turn_loop_checklist (T-12-1), invariants (T-00-1), gate_classes (00.12.3), stakes_reach_lever_card (00.3.9, 00.3.14-15), active_triggers]
-  max_loaded_cards: 12                    # beyond the core; priority: triggers > anchors > situation cards by specificity
+  core: [turn_loop_checklist (T-12-1), invariants (T-00-1), gate_classes (00.12.3), stakes_reach_lever_card (00.3.9, 00.3.14-15)]   # the active-trigger list heads the view [revision: R2-A]
+  view_budget:                            # 12.2.4 item 3: tokens per view section (about 4 characters a token), not item counts [revision: R2-A]
+    pinned: 400                           # written words, open commitments, active NPC memories (shown first, never ranked out)
+    facts: 500                            # the ranked facts: salience + recency (per scene) + relevance + adjacency
+    things: 400                           # things lying at the scene's place beyond those with written words, newest first
+    clocks: 120                           # active visible clocks, newest first
+    threads: 100                          # active threads by 12.6.6 weight
+    known: 120                            # the cast list beyond the scene: people known by name, by 12.6.6 weight
+  max_loaded_cards: 12                   # beyond the core; priority: triggers > anchors > situation cards by specificity
   verbatim_exchanges: 4                   # player message + DM response pairs kept verbatim (OEQ-12-1)
   current_message: verbatim_complete
   older_context: state_only               # chronicle, threads, journal, scene header; never a summary of a summary

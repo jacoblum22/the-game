@@ -4,7 +4,7 @@
     core = core_cards()                         # the always-loaded core; travels with every call, uncapped
 
 The always-loaded core is exactly 00.15.4's list (`CardIndex.core()`: T-12-1, T-00-1, 00.12.3, 00.3.9,
-00.3.14, 00.3.15) plus the active-trigger list (rendered by the packet builder). The ch.01 cards whose
+00.3.14, 00.3.15); the active-trigger list heads the view (the packet builder renders it). The ch.01 cards whose
 `Loads in:` line says `core` are NOT core here: 00.15.4 says "only these travel with every turn", and those
 cards matter only to the calls that make their decisions. They are this call's **role cards** (the role's
 pipeline steps, contracts/model-calls.md), and they count toward the twelve-card cap.
@@ -19,7 +19,8 @@ Selection under the cap (`pacing.yaml#packet.max_loaded_cards`, 12), in order:
    procedures that carry a `[J*]` or `[N]` mark are eligible.
 Triggers and situation cards go only to the scene roles (`SCENE_ROLES`); the Checker and Interpret get their
 role cards and `extra_ids`.
-Every step is deterministic; duplicates are dropped.
+Every step is deterministic; duplicates are dropped. The chosen cards are returned stable to volatile (role,
+situation, trigger, extra), so a role's packet prefix repeats across calls for prompt caching (DL-12-38).
 """
 
 from __future__ import annotations
@@ -126,29 +127,30 @@ def load_cards_for(  # rule: 12.2.4
     index: CardIndex | None = None,
     cap: int | None = None,
 ) -> list[RuleCard]:
-    """At most `cap` (12) cards for one call: role, trigger, extra, then situation cards (module docstring)."""
+    """At most `cap` (12) cards for one call: chosen role, trigger, extra, then situation cards (module
+    docstring), returned stable to volatile for prompt caching: role, situation, trigger, extra (DL-12-38)."""
     idx = index or _index()
     rules = rules if rules is not None else load_rules()
     limit = cap if cap is not None else max_cards(rules)
-    out: dict[str, RuleCard] = {}
+    out: dict[str, tuple[int, RuleCard]] = {}
 
-    def take(cards: Iterable[RuleCard | None]) -> None:
+    def take(cards: Iterable[RuleCard | None], place: int) -> None:
         for c in cards:
             if len(out) >= limit:
                 return
             if c is not None and c.id not in out:
-                out[c.id] = c
+                out[c.id] = (place, c)
 
     core_ids = {c.id for c in idx.core()}
     scene_role = role in SCENE_ROLES
-    take(role_cards(role, idx))
+    take(role_cards(role, idx), 0)
     if scene_role:
-        take(idx.get(i) for i in trigger_cards(triggers) if i in idx and i not in core_ids)
-    take((idx.get(i) if i in idx else data_card(i, rules)) for i in extra_ids if i not in core_ids)
+        take((idx.get(i) for i in trigger_cards(triggers) if i in idx and i not in core_ids), 2)
+    take(((idx.get(i) if i in idx else data_card(i, rules)) for i in extra_ids if i not in core_ids), 3)
     if scene_role:
         tags = list(situation_tags) + mode_tags(mode, rules)
-        take(c for c in situation_cards(tags, idx) if c.id not in core_ids)
-    return list(out.values())
+        take((c for c in situation_cards(tags, idx) if c.id not in core_ids), 1)
+    return [c for _, c in sorted(out.values(), key=lambda pc: pc[0])]
 
 
 def anchor_card_ids(anchor_ids: Iterable[str], rules: Any) -> list[str]:

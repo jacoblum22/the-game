@@ -1748,7 +1748,9 @@ the beat's verb and tags (at most eight candidates; default: the anchor of the b
 
 **00.15.4 The always-loaded core.** `[D]` Only these travel with every turn: the turn-loop checklist
 (ch.12), the invariants T-00-1, the gate classes (00.12.3), the stakes/reach/lever card (00.3.9,
-00.3.14–15), and the active-trigger list. Everything else loads by `situation.*` tag, anchor, or
+00.3.14–15). The active-trigger list also travels with every turn, at the head of the narrator view
+rather than in the core, so the core is the same on every call and can be served from the prompt cache
+(12.2.4) [revision: R2-A] [amended: DL-12-38]. Everything else loads by `situation.*` tag, anchor, or
 trigger [R4 §9 00 #5; R4 §3.3 W12]. The packet is capped at the core plus **at most twelve** loaded
 cards, with the player's message verbatim and the **last four exchanges** verbatim; ch.12 owns these
 numbers (`pacing.yaml#packet`) [amended: DL-12-02].

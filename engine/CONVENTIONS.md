@@ -204,11 +204,12 @@ Contract: `specs/004-playable-prototype/contracts/model-calls.md`. Nothing in `e
   `anchor_menu(ids, rules) -> list[str]` (one line per anchor; pass as `notes=` to the Framer's packet),
   `verb_anchor(verb, rules)`, `mode_tags(mode, rules)` (pacing.yaml#modes), `natural_key(id)`.
 - `engine.retrieve.cards`: `load_cards_for(role, situation_tags, mode, triggers, extra_ids, *, rules=None,
-  index=None, cap=None) -> list[RuleCard]` (≤12 = `pacing.yaml#packet.max_loaded_cards`). Order: role cards
-  (`ROLE_CARDS`) → active triggers' cards → `extra_ids` (anchor cards via `anchor_card_ids(anchors, rules)`,
-  rulings, ability/licence data ids become cards) → situation cards (deeper tag first, explicit `Loads in`
-  first, rule-id order; only `[J*]`/`[N]` rules and procedures). Checker and Interpret get no trigger or
-  situation cards. `core_cards()` = 00.15.4 exactly (`CardIndex.core()`).
+  index=None, cap=None) -> list[RuleCard]` (≤12 = `pacing.yaml#packet.max_loaded_cards`). Chosen under the cap
+  in priority order: role cards (`ROLE_CARDS`) → active triggers' cards → `extra_ids` (anchor cards via
+  `anchor_card_ids(anchors, rules)`, rulings, ability/licence data ids become cards) → situation cards (deeper
+  tag first, explicit `Loads in` first, rule-id order; only `[J*]`/`[N]` rules and procedures); returned stable
+  to volatile for prompt caching: role, situation, trigger, extra (DL-12-38). Checker and Interpret get no
+  trigger or situation cards. `core_cards()` = 00.15.4 exactly (`CardIndex.core()`).
   **Decision:** the ch.01 cards tagged `Loads in: core` are NOT core: 00.15.4 says "only these travel with
   every turn". They are the Reader's/Framer's role cards and count toward the 12. Role cards whose marks are
   all `[D]` (01.2.3, 01.2.6, 01.6.4, 01.6.7) are dropped (code runs them; research R5); 01.6.6/01.6.7 are not
@@ -220,18 +221,27 @@ Contract: `specs/004-playable-prototype/contracts/model-calls.md`. Nothing in `e
   raised only for this turn in `raised`. `TRIGGERS` registry (every `trg.*` the rules name, plus engine ids
   `trg.safety_flag` 12.5.6, `trg.interrupt` 00.7.8, `trg.clock_stage` 00.8.4 for 12.2.3 groups 1, 2, 4);
   `trigger_cards(active)`.
-- `engine.retrieve.scene`: `scene_scope(state)` ([pc, cast_present..., place, objects/items at the place (newest 12)]), `scene_facts(state, scope=None,
-  limit=40)` (narrator-visible, newest first, no `trg.*` flags), `pc_id(state)`, `entity_names(state, ids)`.
-  Packets and schema enums both use these, so fact ids offered in an enum are the ones the view shows.
+- `engine.retrieve.scene` (12.2.4 item 3; budgets `view_budget(rules)` = `pacing.yaml#packet.view_budget`, in
+  `tokens(text)` ≈ chars/4): `scene_scope(state, budget=None)` ([pc, cast_present..., place, things at the
+  place: those with written words always, the rest newest first within `things`]); `scene_facts(state,
+  scope=None, *, focus=(), budget=None)` = pins (open commitments, written words, active NPC memories; never
+  archived ones, 12.11.7) within `pinned`, then the rest ranked by salience + recency (per scene) + relevance
+  (+2: subject/value in `focus`) + adjacency (+1) within `facts`; no `trg.*` flags. `focus_ids(state, text,
+  target)` = the beat target + entities named in the message: pass the same ids to `schema_context(focus=)` and
+  `build_packet(focus=)`. `fit(rows, cost, room)`, `pc_id(state)`, `entity_names(state, ids)`. Packets and schema
+  enums both use these, so fact ids offered in an enum are the ones the view shows.
 
 ## engine/dm packet + schemas API (T106, T026)
 - `engine.dm.packet.build_packet(role, *, instructions, cards, view, exchanges, message, triggers=(),
-  quiet_turns=None, notes=(), rules=None, index=None) -> Packet`. `view`: a `WorldState` (→ `scene_view` +
-  `render_view`), a view dict, or a string. Core = the 00.15.4 cards + "Active triggers:" list. >12 cards
+  quiet_turns=None, notes=(), focus=(), rules=None, index=None) -> Packet`. `view`: a `WorldState` (→
+  `scene_view` + `render_view`), a view dict, or a string. Core = the 00.15.4 cards only (identical on every
+  call); the "Active triggers:" list (`render_triggers`) heads the view (DL-12-38). >12 cards
   raises `PacketError`; only the last 4 (`pacing.yaml#packet.verbatim_exchanges`) exchanges are kept;
   exchanges are strings or `(player, dm)` tuples. `notes` and `quiet_turns: N` lines follow the view.
-- The view (`scene_view(state)`) is scene-scoped and capped: scope entities, ≤40 scene facts, ≤8 active
-  clocks, ≤8 other threads, ≤12 other cast, ≤12 data keys per entity, values ≤160 chars. Entities render as
+- The view (`scene_view(state, focus=())`) is scene-scoped and token-budgeted per section
+  (`pacing.yaml#packet.view_budget`): scope entities, pinned + ranked facts, active clocks (newest), other
+  active threads and known cast (by 12.6.6 weight, then newest), ≤12 data keys per entity, values ≤160 chars.
+  Entities render as
   `<id>: <name>` then `  name: <name>`; facts as `<fact id> about <subject>: <predicate> = <value>`.
 - `engine.dm.schemas`: `ctx = schema_context(state, rules, *, message="", options=(), own_words_classes=(),
   lines_and_veils=False, anchors=(), beat=None, lever_fact_ids=None, cost_menu_ids=None, places=None,

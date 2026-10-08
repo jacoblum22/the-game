@@ -224,17 +224,36 @@ scene-end sweep (12.4.8 step 4) [R4 SG-11, W12, W13].
 ruleset or the whole history. Each turn it receives exactly:
 1. **The always-loaded core** (00.15.4): the turn-loop checklist T-12-1 (this chapter's card, about 250
    words), the invariants T-00-1, the gate classes (00.12.3), the stakes/reach/lever card (00.3.9,
-   00.3.14–15), and the active-trigger list from T3.
+   00.3.14–15). It is the same on every call, so it is the packet's cacheable prefix; the active-trigger
+   list heads the view instead (item 3) [revision: R2-A].
 2. **Loaded rule cards**: by the scene's `situation.*` tags and time mode (12.4.5), by the anchors the
    ANCHOR step retrieves (00.15.3), by fired triggers (12.2.3), and by the PC's held abilities whose
    situation tags match (an ability's card is its data entry; the rank's `text` is quoted verbatim, 05.3.6) [revision: I-030]. Cap: the core plus at most **twelve**
    cards; if more are eligible, triggers first, then anchors, then situation cards by specificity
-   (`data/pacing.yaml#packet`). Irrelevant-but-plausible rules degrade accuracy far more than filler
+   (`data/pacing.yaml#packet`). The packet lists the chosen cards from stable to volatile: situation and
+   mode cards, then trigger cards, then anchor, precedent and ability cards, so consecutive calls share
+   the longest identical prefix for prompt caching [revision: R2-A]. Irrelevant-but-plausible rules degrade accuracy far more than filler
    [R4 W13; R: https://arxiv.org/abs/2412.08972].
-3. **The narrator view of state** (`get_state(scene, narrator)`): the scene header (time, mode, place,
-   present entities and their positions, open clocks visible to the PC, the scene's agenda), the PC
-   sheet, the present NPCs' records with their active memories of the PC (12.11.7), open threads and the
-   cast list, and the permitted slices of anything sealed (00.6.5). Nothing sealed is in it (INV-10).
+3. **The narrator view of state** (`get_state(scene, narrator)`), headed by the active-trigger list from
+   T3: the scene header (time, mode, place, present entities and their positions, open clocks visible
+   to the PC, the scene's agenda), the PC sheet, the present NPCs' records with their active memories of
+   the PC (12.11.7), open threads and the cast list, and the permitted slices of anything sealed
+   (00.6.5). Nothing sealed is in it (INV-10). Each section has a **token budget**, not an item count
+   (`pacing.yaml#packet.view_budget`), so the view does not grow with the game [revision: R2-A]:
+   - **Pinned** (always shown, within their own budget): the identity fields, conditions and quantities
+     of everyone and everything in view; the written words on things in view; every open commitment
+     (each involves the PC, 15.7.6); the present NPCs' active memories (never the archived ones); the
+     open pause. A thing with written words stays in view however much else lies at the place.
+   - **Ranked** (fills the facts budget): every other fact about what is in view, by **salience**
+     (a memory's salience, 3 for a commitment, else 1) **+ recency** (2 for this scene, 1 for the last,
+     else 0: it decays per scene, not per turn, so a long scene does not push out its own start)
+     **+ relevance** (+2 when the fact's subject or value is the beat's target or an entity the player's
+     message names) **+ adjacency** (+1 when its subject has a relationship to anyone present or its
+     value names someone present). Ties go to the newest.
+   - The other things lying at the place, and the open clocks, fill their budgets newest first; open
+     threads and the cast list are ordered by their 12.6.6 weights, then newest.
+   Every role that reads the view gets the same selection, and a schema offers only the facts the view
+   shows.
 4. **The player's current message, verbatim and complete** — never a paraphrase (12.2.5).
 5. **The last four exchanges verbatim** (player message + DM response), and nothing older except
    through state: the chronicle (11), the threads register, the journal of PC knowledge (15), and the
@@ -1307,7 +1326,8 @@ Valve's "characters remember your specific history" [R6 B-19]):
 - **Active memory cap**: at most **5** active memories per NPC, kept by salience then recency; older ones
   are archived, queryable, never lost (Thousand Year Old Vampire's bounded memory, used here as the
   state-summarization pattern it models [R5 P-42]).
-- **Used**: when the NPC is present, their active memories are in the packet. At their first line in a
+- **Used**: when the NPC is present, their active memories are in the packet (pinned, 12.2.4); archived
+  memories never are [revision: R2-A]. At their first line in a
   scene `[J:flag]` *"Does one of this NPC's active memories bear on this exchange?"* — true when it
   involves the same place, the same people, an open promise or debt, or salience 3. If true, the first
   line acknowledges the **most specific** relevant memory (same deed > same people > same place >

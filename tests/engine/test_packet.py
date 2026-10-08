@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import random
 from pathlib import Path
 
 import pytest
@@ -12,6 +13,7 @@ from engine.dm.packet import PacketError, build_packet, render_view, scene_view
 from engine.llm.base import Role
 from engine.llm.offline import OfflineModel, view_names
 from engine.retrieve.cards import load_cards_for
+from engine.retrieve.scene import tokens
 from engine.retrieve.triggers import get_active_triggers
 from engine.store.db import Store
 from engine.store.events import Event
@@ -58,7 +60,7 @@ def test_sections_come_in_contract_order(tmp_path: Path) -> None:
     assert [k for k, _ in p.sections()] == ["instructions", "core", "cards", "view", "exchanges", "message"]
     for core_id in ("T-12-1", "T-00-1", "00.12.3", "00.3.9", "00.3.14", "00.3.15"):
         assert INDEX.get(core_id).body.strip() in p.core
-    assert "Active triggers: none" in p.core
+    assert "Active triggers" not in p.core and p.view.startswith("Active triggers: none\n")  # DL-12-38
     assert p.message == "I ask Mara Voss about the boat."
     assert p.render().endswith("I ask Mara Voss about the boat.")
 
@@ -123,6 +125,53 @@ def test_packet_size_does_not_grow_with_turn_count(tmp_path: Path) -> None:
     for role in Role:
         assert late[role] <= early[role] * 1.1, (role, early[role], late[role])
     text = render_view(scene_view(store.state))
-    assert text.count("\n  memory_") == 0 and text.count("about pc.wren: memory_") == 40
+    shown = text.count("about pc.wren: memory_")
+    assert text.count("\n  memory_") == 0 and 10 < shown < 60 and "memory_0003" not in text  # a budget, newest
     assert "rumor_" not in text  # world facts outside the scene stay in the store
     assert store.rebuild() == store.state
+
+
+def test_view_tokens_stay_flat_over_300_scenes_and_pins_stay(tmp_path: Path) -> None:
+    """SC-002 at age (12.2.4 item 3): 300 seeded scenes in one place, each adding a walk-on, things, facts, a
+    memory and a thread. The view's tokens stay flat; the pins (written words, an absent NPC's open commitment,
+    the five active memories) are always shown; archived memories never are (12.11.7)."""
+    rng = random.Random(300)
+    store = scene_store(tmp_path)
+    with store.transaction("turn.2") as tx:
+        tx.add(entity("object", "Notice Board", tx=tx))
+        tx.add(Event.of("position_set", source="test", entity="obj.notice_board", location="loc.salt_harbor"))
+        tx.add(fact(tx, "obj.notice_board", "text", "NO MOORING AFTER DARK"))
+        tx.add(entity("npc", "Ines Sorrel", tx=tx))  # never on stage again
+        tx.add(fact(tx, "npc.ines_sorrel", "commitment.c1", {"npc": "npc.ines_sorrel", "by": "pc", "act": "repay",
+                                                            "status": "open"}, kind="commitment"))
+    sizes: dict[int, int] = {}
+    for n in range(1, 301):
+        with store.transaction(f"turn.s{n}") as tx:
+            tx.add(Event.of("scene_ended", source="test", scene_id=tx.state.scene.scene_id, reason="test"))  # type: ignore[union-attr]
+            walk_on = f"npc.walk_on_{n}"
+            tx.add(entity("npc", f"Walk On {n}", tx=tx, data={"role": "dock hand"}))
+            tx.add(entity("thread", f"Thread {n}", tx=tx))
+            sid = tx.mint("scn")
+            tx.add(Event.of("scene_started", scene_id=sid, scene={
+                "scene_id": sid, "place_id": "loc.salt_harbor", "cast_present": ["npc.mara_voss", walk_on],
+                "mode": "free"}))
+            for k in range(2):
+                thing = entity("object", f"Crate {n}-{k}", tx=tx)
+                tx.add(thing)
+                tx.add(Event.of("position_set", source="test", entity=thing.payload.entity.id,  # type: ignore[attr-defined]
+                                location="loc.salt_harbor"))
+            for k in range(5):
+                subject = rng.choice(["pc.wren", "npc.mara_voss", walk_on])
+                tx.add(fact(tx, subject, f"note_{n}_{k}", "a detail " * rng.randint(1, 6)))
+            tx.add(fact(tx, "npc.mara_voss", f"memory.{n}", {"deed": f"deed {n}", "salience": rng.randint(1, 3),
+                                                             "status": "active"}))
+            if n > 5:  # the 12.11.7 cap: the sixth-newest is archived
+                tx.add(fact(tx, "npc.mara_voss", f"memory.{n - 5}", {"deed": f"deed {n - 5}", "salience": 1,
+                                                                     "status": "archived"}))
+        if n in (50, 200, 300):
+            sizes[n] = tokens(render_view(scene_view(store.state)))
+    text = render_view(scene_view(store.state))
+    assert sizes[300] <= sizes[50] * 1.1 and sizes[200] <= sizes[50] * 1.1, sizes
+    assert "text = NO MOORING AFTER DARK" in text and "commitment.c1" in text
+    assert all(f"memory.{n} = " in text for n in range(296, 301))
+    assert "memory.295 = " not in text and "memory.1 = " not in text

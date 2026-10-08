@@ -29,6 +29,7 @@ from engine.resolve.gate import GateDecision
 from engine.resolve.types import Beat, CostDecl, Delta, LeverCite, Obstacle, ProposedFrame
 from engine.retrieve.anchors import anchor_menu, scene_situation_tags
 from engine.retrieve.cards import anchor_card_ids, load_cards_for
+from engine.retrieve.scene import focus_ids
 from engine.retrieve.triggers import get_active_triggers
 from engine.store.projection import WorldState
 
@@ -115,7 +116,8 @@ def framer_for(ctx: TurnContext) -> Any:
     def propose(beat: Beat, candidates: list[str], *, gate: GateDecision, note: str | None = None) -> ProposedFrame:
         # rule: 01.5.1
         st = ctx.state
-        sctx = schema_context(st, ctx.rules, anchors=candidates, beat=beat, message=beat.intent)
+        focus = focus_ids(st, beat.intent, beat.target)  # 12.2.4: the beat's target and whom it names rank higher
+        sctx = schema_context(st, ctx.rules, anchors=candidates, beat=beat, message=beat.intent, focus=focus)
         schema = build_schema(Role.FRAMER, sctx)  # cost `source_fact` and the 01.6.1 `attribute` enum included
         triggers = get_active_triggers(st, ctx.rules)
         mode = st.scene.mode if st.scene else None
@@ -124,7 +126,7 @@ def framer_for(ctx: TurnContext) -> Any:
         packet = build_packet(Role.FRAMER, instructions=load_prompt("framer"), cards=cards, view=st, exchanges=[],
                               message=beat_message(beat, gate, "\n".join(filter(None, [note, cost_note(
                                   beat, st, ctx.rules)]))), triggers=triggers,
-                              notes=anchor_menu(candidates, ctx.rules), rules=ctx.rules)
+                              notes=anchor_menu(candidates, ctx.rules), focus=focus, rules=ctx.rules)
 
         def check(data: Any) -> list[str]:  # rule: PR-01-2
             try:
