@@ -363,10 +363,11 @@ def near_miss_choices(frame: Frame, rules: Any = None) -> list[dict[str, str]]: 
     sac = cost_severity(frame.stakes, "failure", success_at_cost=True, rules=rules)
     fail = cost_severity(frame.stakes, "failure", rules=rules)
     costs = [frame.threatened_cost] + ([frame.alternate_cost] if frame.alternate_cost else [])
-    out = [{"id": f"success_at_cost:{c.menu_id}", "label": f"Succeed, and pay: {_price(rules, c, sac)}"}
-           for c in costs]
-    lose = f": {_price(rules, frame.threatened_cost, fail)}" if fail else " (nothing more is lost)"
-    out.append({"id": "failure", "label": f"Let it fail{lose}"})
+    # each label says whether the attempt lands, so a success and a failure with the same price differ (P-076)
+    out = [{"id": f"success_at_cost:{c.menu_id}",
+            "label": f"Succeed: you get what you tried for, at this price: {_price(rules, c, sac)}"} for c in costs]
+    lose = f"and still pay: {_price(rules, frame.threatened_cost, fail)}" if fail else "and nothing more is lost"
+    out.append({"id": "failure", "label": f"Let it fail: you do not get it, {lose}"})
     return out
 
 

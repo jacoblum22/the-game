@@ -642,6 +642,10 @@ def offer_preview(frame: Frame, rules: Any = None) -> OfferPreview:  # rule: 01.
 _CITED_FACT = re.compile(r"\s*\((?:source:\s*)?fact\.\d+\)")  # "(source: fact.203)": the words already say it
 _CITING = re.compile(r",?\s*\b(?:citing|per|source(?: is)?:?)\s+fact\.\d+", re.IGNORECASE)  # "…, citing fact.144"
 _BARE_FACT = re.compile(r"\bfact\.\d+\b")
+# "Source: fact.158 (wrist held in the PC's hand)." / "(source: Falett, who is aware of him)": the source is the
+# engine's bookkeeping, not the price; the whole aside goes (P-072)
+_SOURCE_ASIDE = re.compile(r"\s*[,;]?\s*(?:\(\s*source:[^()]*\)|\bsource:\s*(?:fact\.\d+)?[^.()]*(?:\([^()]*\))?\.?)",
+                           re.IGNORECASE)
 _OOF_TAIL = re.compile(r"\s*\b(?:out of fiction|OOF)\s*:.*$", re.IGNORECASE | re.DOTALL)
 _PAREN = re.compile(r"\s*\([^()]*\)")
 _PRONOUNS = {"he": ("he", "him", "his", "himself"), "she": ("she", "her", "hers", "herself")}
@@ -716,7 +720,7 @@ def plain_offer_words(frame: Frame, state: Any) -> Frame:  # rule: 12.14.4
             want = None
 
     def plain(text: str, beat: bool = False) -> str:
-        t = _CITING.sub("", _CITED_FACT.sub("", text or ""))
+        t = _CITING.sub("", _CITED_FACT.sub("", _SOURCE_ASIDE.sub("", text or "")))
         t = _BARE_FACT.sub(lambda m: _fact_words(state, m.group(0)), t)
         if beat:
             t = _PAREN.sub("", _OOF_TAIL.sub("", t)).strip()

@@ -103,6 +103,14 @@ def test_oracle_answers_are_statements() -> None:
         assert piece in fb, fb
 
 
+def test_a_compound_no_is_left_out_not_half_negated() -> None:
+    """P-077 (talker 185715 input 18): "Calbert Oakward is not in Barrowburn and can be found in the village"."""
+    from engine.dm.adjudication import OracleEntry
+    rec = AdjudicationRecord(pc="pc.wren", oracle=[OracleEntry(
+        question="Calbert Oakward is in Barrowburn and can be found in the village today", answer="no")])
+    assert plain_fallback(rec, names=NAMES).fiction == "What do you do?"
+
+
 def test_a_wh_question_is_never_echoed_back() -> None:
     """Playtest 2026-10-07: "What stands and moves around the crossroads ...? Yes." reached the player."""
     from engine.dm.adjudication import OracleEntry

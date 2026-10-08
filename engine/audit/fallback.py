@@ -123,6 +123,8 @@ def _negate(s: str) -> str:
         if w.lower() in _AUX:
             if i + 1 < len(words) and words[i + 1].lower() in ("not", "no", "never"):
                 return ""
+            if {"and", "or", "but"} & {x.lower().strip(",") for x in words[i + 1:]}:
+                return ""  # a compound ("is in X and can be found in Y"): 'not' would deny only half (P-077)
             out = " ".join([*words[:i + 1], "not", *words[i + 1:]])
             return out.replace("not already", "not yet").replace("not still", "no longer")
     return ""

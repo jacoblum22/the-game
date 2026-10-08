@@ -758,6 +758,13 @@ def _holdings(ctx: _Ctx, subject: str) -> list[str]:
 
 
 def _possession(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: 12.3.1
+    subj = ctx.state.entities.get(c.subject)
+    if subj is not None and subj.kind in ("item", "object", "clue") and not c.asserts_change:
+        # the thing is the subject ("the bone: not in Falett's hand"): read its holder (P-073)
+        holder, who = ctx.holder(c.subject), ctx.entity_named(c.text, kinds=("npc", "pc", "companion"))
+        if holder is not None and who is not None:
+            said = (who == holder) != (_negated(c.text) or _has(c.text, _LOSE))
+            return _v(c, i, "supported") if said else _v(c, i, "contradicted", f"held by {ctx.name(holder)}")
     item = ctx.entity_named(c.value, kinds=("item", "object", "clue"))
     held = _holdings(ctx, c.subject)
     has_it = (item is not None and item in held) or any(

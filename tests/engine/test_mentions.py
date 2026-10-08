@@ -77,6 +77,30 @@ def test_the_words_on_a_notice_are_kept_shown_and_checked(tmp_path: Path, rules:
     assert verdict("smaller letters", "do not say NO QUESTIONS ASKED") == "contradicted"
 
 
+def test_who_holds_it_is_written_and_checked(tmp_path: Path, rules: Any) -> None:
+    """P-073 (fighter 185739 inputs 20, 31): a pendant "held by" an NPC on mention later drifted to "not in her
+    hand"; the holder is written, the NPC named as an object is the NPC, and the drift is contradicted."""
+    from engine.audit.claims import check_claims
+    from engine.dm.adjudication import AdjudicationRecord
+
+    store, rng = _game(tmp_path)
+    with store.transaction("turn.1") as tx:
+        res = write_mentions([{"kind": "object", "name": "a bone pendant",
+                               "implied": [{"predicate": "property", "value": "carved bone, held by Mara Voss"}]},
+                              {"kind": "object", "name": "Mara"}], tx=tx, rules=rules, rng=rng)
+    eid = res.created["a bone pendant"]
+    assert store.state.fact_value(eid, "holder") == "npc.mara_voss"
+    assert res.reused["Mara"] == "npc.mara_voss"
+
+    def verdict(predicate: str, value: str) -> str:
+        claim = {"subject": eid, "class": "possession", "predicate": predicate, "value": value}
+        [v] = check_claims([claim], store.state, AdjudicationRecord(), [eid], rules=rules)
+        return v.verdict
+
+    assert verdict("held in", "Mara's hand") == "supported"
+    assert verdict("held by", "not Mara") == "contradicted"
+
+
 def test_dedupe_and_refusals(tmp_path: Path, rules: Any) -> None:
     store, rng = _game(tmp_path)
     assert find_existing(store.state, "The Fence", "npc") == "npc.mara_voss"
