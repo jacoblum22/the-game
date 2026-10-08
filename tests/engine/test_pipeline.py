@@ -111,5 +111,19 @@ def test_redirect_offers_the_crude_fallback(tmp_path: Path) -> None:
     assert res2.pause.detail["frame"]["gate"]["mode"] == "fallback"
 
 
+def test_accepted_fallback_rolls_even_from_a_no_roll_class(tmp_path: Path) -> None:
+    """P-087: "Try it anyway" on a take-the-time beat was an unrolled success the narration then refused."""
+    dock, rng = setup(tmp_path)
+    axe = plan(dock, "hew the mooring rope with the axe like a trained axeman", "verb.strike", gate="G3",
+               necessity="take_the_time", would_be_license="lic.training.martial_axe")
+    with dock.store.transaction("turn.1") as tx:
+        run_beats(env_for(dock, tx, rng, framer=stub_framer("might")), [axe])
+    with dock.store.transaction("turn.2") as tx:
+        res2 = resume(env_for(dock, tx, rng, framer=stub_framer("might")), dock.state.open_pause(),  # type: ignore[arg-type]
+                      "accept:lic.training.martial_axe")
+    assert res2.pause is not None and res2.pause.kind == "offer"
+    assert res2.pause.detail["frame"]["gate"]["mode"] == "fallback"
+
+
 def test_challenge_band() -> None:
     assert [challenge_band(x) for x in (None, 10, 15, 20, 25, 30)] == [1, 1, 2, 3, 4, 5]

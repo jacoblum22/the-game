@@ -99,7 +99,9 @@ def _beat_line(b: BeatEntry, pc: str | None, names: Mapping[str, str]) -> str:
                         [n for e, n in names.items() if e != pc and n])
     if b.degree is None:  # no roll; the gate's own words (redirects, options) belong to the OOF block, not here
         # a no-roll success says so; refused or withdrawn says not yet; a paused or unrolled beat has no result
-        result = ("you cannot do it that way" if b.gate in ("G3", "G4")
+        # an accepted G3 fallback that resolved is not a refusal (P-087)
+        result = ("it works" if b.gate_words.startswith("no roll")
+                  else "you cannot do it that way" if b.gate in ("G3", "G4")
                   else "" if b.gate == "G0" or not b.gate_words
                   else "it works" if b.gate_words.startswith("no roll")
                   else "it does not happen yet")
@@ -282,6 +284,7 @@ def plain_fallback(record: AdjudicationRecord, *, names: Mapping[str, str] | Non
     for a in record.npc_actions:
         lines.append(_sentence(f"{who(a.npc)} {NPC_ROW_PROSE.get(a.action, a.action)}"))
     lines += [_sentence(o.omen) for o in record.omens if o.omen]
+    lines += [n.split(": ", 1)[1] for n in record.notes if n.startswith("cannot make out: ")]  # P-086
     if record.pause is None:
         lines.append("What do you do?")
     fiction = " ".join(x for x in lines if x)

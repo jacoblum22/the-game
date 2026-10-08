@@ -304,3 +304,17 @@ def test_enter_at_an_offer_takes_nothing(tmp_path: Path) -> None:
     assert FakeGame.last.calls[:2] == [("answer", "mixed"), ("submit", "I climb")]
     assert not any(c[0] == "answer" and c[1] == "withdraw" for c in FakeGame.last.calls)
     assert out.count(OFFER_HINT) >= 2 and "press Enter for Withdraw" not in out
+
+
+def test_enter_at_a_near_miss_takes_nothing(tmp_path: Path) -> None:
+    """P-089: Enter at the near-miss menu silently picked "Let it fail"; near miss, redirect and last chance wait."""
+    from play.render import PICK_HINT
+
+    o = offer("turn.1")
+    o.pause = Pause(kind="near_miss", default_choice="failure",
+                    choices=[Choice(id="success_at_cost:cost.time", label="Succeed and pay: Time"),
+                             Choice(id="failure", label="Let it fail: it fails")])
+    FakeGame.script = [play_resp("Begun.", "turn.0"), o]
+    _, out = run(["new", "g"], "a\nI climb\n\n/quit\n", tmp_path)
+    assert not any(c[0] == "answer" and c[1] == "failure" for c in FakeGame.last.calls)
+    assert out.count(PICK_HINT) >= 2 and "press Enter for Let it fail" not in out
