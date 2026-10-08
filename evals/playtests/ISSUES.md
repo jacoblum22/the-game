@@ -96,4 +96,6 @@ Status: open · fixing (round N) · fixed (commit) · logged (ledger id) · wont
 | P-088 | polish | low | [CUT?] prompt appears after only a few exchanges, mid-conversation | 192340-talker 20 | fixed (0c15da2); ledger I-152 |
 | P-089 | bug | med | At the near-miss menu Enter silently picked "Let it fail" (the OFFER re-prompt fix doesn't cover near-miss) | 192340-talker 28 | fixed (0c15da2) |
 | P-090 | bug | high | PC's own kit not recognised: the sheet lists a rapier, drawing it → "your hand finds no blade", action rejected | 193420-fighter 24–30 | fixed (a31eabe) |
-| P-091 | bug | low | Fallback "You try to garett's grip on her arm loosens" (possessive restatement) | 193420-fighter 27 | fixed (a31eabe) |
+| P-091 | bug | low | Fallback "You try to garett's grip on her arm loosens" (possessive restatement) | 193420-fighter 27 | fixed (a31eabe) || P-092 | polish | low | "[CUT?] Move on or stay a while." doesn't say what Enter does | 194948-newcomer 35, 38 | open |
+| P-093 | polish | low | Setup step 12 asks to keep/re-roll month names without showing them | 194948-newcomer 19 | open |
+| P-094 | polish | low | A notice's lettering line repeats every turn (object text not covered by freshness) | 194948-newcomer 25–36 | open |
