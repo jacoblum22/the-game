@@ -60,3 +60,4 @@ Ledger: I-131..I-136.
 | breaker 195445 | b3adaaa | 17 | 1.35 | 0 | no crashes; cast inconsistency (P-095) |
 | talker 194952 | eac0c0f | 17 | 1.71 | 1 | vivid; success reveals nothing when the store is empty (I-153); garbled journal (P-097) |
 | explorer 194940 | eac0c0f | 17 | 2.24 | 2 | objects never described (I-153); travel arrival fallback (P-098) |
+| fighter 195734 | b3adaaa | 17 | 1.71 | 3 | first real duel: odds/Go big clear; positions unwritten in conflict (P-099); harm not shown (P-101) |

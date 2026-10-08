@@ -103,3 +103,7 @@ Status: open · fixing (round N) · fixed (commit) · logged (ledger id) · wont
 | P-096 | bug | low | "It works. Coming up the road agrees." (description phrase used as a name) | 194952-talker 20 | fixing |
 | P-097 | bug | med | Journal/what-you-know garbled: "The poor quarter is at within Cornburn", "speech is said the journey's origin" | 194952-talker 31 | fixing |
 | P-098 | bug | med | Travel to another place fell back to "You try to reach Marlwall. It works." with no arrival description | 194940-explorer 31 | open |
+| P-099 | bug | high | In a fight, closing/stepping/circling writes no position: narration cut, 3 fallbacks | 195734-fighter turns 2, 12, 13 | fixing |
+| P-100 | bug | med | "I go all in" (risky) produced no OFFER/odds screen | 195734-fighter 31 | fixing |
+| P-101 | bug | med | After a critical failure \"you're hurt\" but no harm/STATUS line, no menu; "how hurt am I?" unanswered | 195734-fighter 26–29 | fixing |
+| P-102 | bug | low | Parroting screen may have fired on the PC's own quoted speech ("I accept…") | 195734-fighter turn 2 | fixing (check) |
