@@ -84,3 +84,6 @@ Status: open · fixing (round N) · fixed (commit) · logged (ledger id) · wont
 | P-076 | polish | low | Near-miss options 1 and 3 show the same cost text | 185715-talker 22 | fixing (polish fixer) |
 | P-077 | bug | low | Garbled position text: "moved within Barrowburn… not in Barrowburn and can be found in the village" | 185715-talker 18 | fixing (polish fixer) |
 | P-078 | polish | med | NPC repeats the same stock line every turn ("Mark me"); freshness covers images, not dialogue | 185715-talker 21–26 | fixing (polish fixer) |
+| P-079 | bug | high | Opening still falls back to one line in 7/27 runs; last reason always screen 12.2.7 "a part of the player's message is not answered" though the opening has no message; crowd reactions to the incident cut as unsourced | 7 runs (191540, 185715, 183858, 182337, 170207, 170200, 170157) | fixing |
+| P-080 | bug | low | A message with speech plus "what do I know so far?" handled only the speech | 191540-breaker 24 | open |
+| P-081 | polish | low | NPC reply contains a stray quoted line that reads like a leaked hint ("Look at who's listening…") | 191540-breaker 23–26 | open |

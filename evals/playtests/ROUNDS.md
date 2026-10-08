@@ -49,3 +49,4 @@ Ledger: I-131..I-136.
 | fighter 185739 | 0a0acdf | 17 | 1.35 | 0 | "opening vivid, no complaints"; odds clear; raw source text (P-072); possession drift (P-073) |
 | newcomer 190015 | 0a0acdf | 17 | 1.59 | 1 | Wanderer request ignored (P-074); NPC echo (fixed since in 00b6534) |
 | talker 185715 | 0a0acdf | 17 | 2.12 | 2 | conversations work: "good NPC reply with some suspense", NPC agrees to meet; roll after consent (P-075); repeated refusals (P-078) |
+| breaker 191540 | 1fd21f9 | 17 | 1.18 | 1 | vivid scenes, distinct NPCs; opening fell back (P-079); OFFER reprinted in full after a question |
