@@ -72,3 +72,4 @@ Ledger: I-131..I-136.
 | talker 204112 | b3a579d | 17 | 1.71 | 0 | name mix-up (P-113); stonewalling alike (P-114); Recall as Talk (P-115) |
 | fighter 205745 | 8fc6117 | 17 | 1.18 | 0 | first real combat: works, odds clear; foe strike unnarrated (P-116); flat odds (P-117) |
 | newcomer 205857 | 8fc6117 | 17 | 1.59 | 0 | setup fine; NPC never states the warning/work (I-153) |
+| breaker 210433 | 8fc6117 | 17 | 1.76 | 0 | harsh odds again (I-155); junk-object journal line (P-119); everyone refuses (P-114) |

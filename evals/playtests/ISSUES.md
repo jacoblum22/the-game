@@ -110,7 +110,7 @@ Status: open · fixing (round N) · fixed (commit) · logged (ledger id) · wont
 | P-104 | polish | med | A two-beat message shows the first beat's [RESULT] "success", then the second beat's [REDIRECT] ("you lack Athletics"): reads as a contradiction | 202001-fighter 24–26 | fixed (76d5d60: blocks name their beat) |
 | P-105 | polish | low | A literate PC can't read a bill in another tongue; the narration withholds instead of saying plainly "it's in the Old tongue, which you don't read" | 201338-breaker 22–24 | open |
 | P-106 | polish | low | Hidden-roll failure stays vague ("the canvas does not come up cleanly") without saying what went wrong | 201306-newcomer 34–36 | open (with P-086) |
-| P-107 | rules | med | Social odds harsh: first friendly chat 25% with 30% crit-fail (a sword blow); a calmer approach dropped to 5% and dire | 201412-talker 21–23 | logged I-155 |
+| P-107 | rules | med | Social odds harsh: first friendly chat 25% with 30% crit-fail (a sword blow); a calmer approach dropped to 5% and dire | 201412-talker 21–23; 210433-breaker 20–24 (crowd: 10–15% vs 40–45% crit) | logged I-155; engine check in progress |
 | P-108 | bug | med | Fallback prints internal text: "Spoken to Oggza, not a beat", "You are a few strides from bench"; one turn delivered only "What do you do?" | 201412-talker 26, 31 | fixed (76d5d60) |
 | P-109 | bug | low | Journal: "Who is missing person: Betey Woodhill", fragment "keep close around Nedey Woodhill" (incident-binding predicates) | 201748-explorer 22 | fixed (12492f1) |
 | P-110 | bug | high | Reading a notice/bill/board withholds the words turn after turn even for literate PCs ("the wording stays just beyond what you can carry away"); often the opening lead's own notice | 203722-newcomer 33–39; 201748-explorer 29–31; 201338-breaker 22–25 | fixed (cf4d28c); ledger I-157 |
@@ -122,3 +122,4 @@ Status: open · fixing (round N) · fixed (commit) · logged (ledger id) · wont
 | P-116 | polish | low | A foe's strike shows only as a [RESULT] line; the narration never shows it coming | 205745-fighter 25 | open |
 | P-117 | polish | med | Odds identical (60%) across every action in a fight, whatever the approach | 205745-fighter 28 | open (check Framer tier spread) |
 | P-118 | bug | low | Asked one NPC (Helgrim); another (Borga) answered instead | 205857-newcomer 29 | open |
+| P-119 | bug | low | Journal garbled from a junk mentioned object: "The familiar face in the crowd's recognition is looks familiar to you" | 210433-breaker 29 | open |
