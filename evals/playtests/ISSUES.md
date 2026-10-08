@@ -18,7 +18,7 @@ Status: open · fixing (round N) · fixed (commit) · logged (ledger id) · wont
 | P-009 | polish | med | World-seed summaries too vague to judge: "5 more" places, "the enemy and the prisoner", rumors/wilds as counts only; "3 more" powers unnamed; no way to see the rest | 155118 12–16; 161327-breaker 14–22 | fixed (0046d78) |
 | P-010 | polish | low | Jargon in setup and sheet without explanation: keepers, haven, Kinspeech, dread, Resolve | 20261007-155118 inputs 8–13, 24 | fixed (0046d78) |
 | P-011 | polish | low | Mixed setup: "step N of 14" titles don't match the question asked; 14 keep/re-roll screens feel long | 20261007-155118 inputs 5–10 | open |
-| P-012 | bug | med | A critical failure is announced ("goes badly wrong") but the player never learns what happened | 20261007-155118 turn 6 | open (check after P-002/P-003) |
+| P-012 | bug | med | A critical failure is announced ("goes badly wrong") but the player never learns what happened | 20261007-155118 turn 6 | open, recurring: players can't tell if a committed roll succeeded (155118 t6; 170318; 175928-talker 22, 29) |
 | P-013 | bug | med | A question at a setup step ("what does haven mean?") prints "Here is a little more about each choice" with only the option labels, then the whole step again; repeated questions loop | 161327-breaker inputs 8–35 (25 notes) | fixed (0046d78) |
 | P-014 | bug | low | Welcome + step 1 screen reprinted in full after each unparsed answer | 161327-breaker inputs 24–35 | fixed (0046d78) |
 | P-015 | polish | low | Livelihood list shows 7 + "14 other ways of life", then all 21 on the next screen | 161327-breaker inputs 27–34 | open |
@@ -50,7 +50,7 @@ Status: open · fixing (round N) · fixed (commit) · logged (ledger id) · wont
 | P-041 | bug | med | Narration contradicts itself across turns: a notice reads "NO QUESTIONS ASKED", a later turn says it does not (mentioned object's text not stored or not shown back) | 172552-newcomer inputs 27–35 | fixed (be20402) |
 | P-042 | polish | low | "What do I know" answers show raw Oracle predicates ("name — yes") | 03a9ba7 fixer report | open |
 | P-043 | bug | low | Sheet shows a raw placeholder: "carries the fact teaches: <the gifted spell>" | 174833-newcomer input 23 | fixed (74f7749) |
-| P-044 | polish | low | OFFER's Enter default is Withdraw; a newcomer pressing Enter backs out without noticing | 174833-newcomer inputs 26, 31 | open |
+| P-044 | polish | low | OFFER's Enter default is Withdraw; a newcomer pressing Enter backs out without noticing | 174833-newcomer inputs 26, 31 | open, recurring ("a trap": 175928-talker 27–30; 175045-breaker 29–31) |
 | P-045 | bug | med | Narration names the record: "…wound and ruin the record holds" | 174833-newcomer inputs 35–36 | fixed (74f7749 + verdict reasons reworded) |
 | P-046 | rules | med | A newly arrived figure ("the arrival") can never become a person: Oracle settles yes/no only and 12.14.13 forbids creating a person by mention, so the scene stalls | 174833-newcomer inputs 33–38 | logged I-140(c) |
 | P-047 | bug | med | Asking about Luck at an open OFFER silently reframed it (75% risky → 50% safe); Luck not spent; no explanation | 175045-breaker inputs 22–30 | fixing (with P-049) |
@@ -61,3 +61,4 @@ Status: open · fixing (round N) · fixed (commit) · logged (ledger id) · wont
 | P-052 | polish | low | Walk-on NPC shares the PC's first name (Aldett Redley / Aldett Blackbrook) | 174829-fighter input 30 | logged I-142 |
 | P-053 | bug | med | OFFER prints a raw dict: "bond.anchor: {'kind': 'friend', 'npc': …}" (fact-id-to-words replacement on a structured value) | 174825-explorer input 20 | fixing (with P-049) |
 | P-054 | bug | med | Asking to see the sky omen / a notice's words gets a restated question ("has not visible colours, shapes and motion") or "The notice is a hire." with no detail | 174825-explorer inputs 21–31 | open (recheck on eeff286) |
+| P-056 | bug | med | An NPC (praying attendant) never answers across several turns, even after a Talk roll, and nothing tells the player he won't: a silent refusal reads as a stall | 175928-talker inputs 18–23 | open |
