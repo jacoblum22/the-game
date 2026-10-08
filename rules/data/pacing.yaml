@@ -62,8 +62,10 @@ claim_check:                              # 12.3
   classes: [existence, identity, quantity, harm_condition, position, possession, location_time, knowledge, capability, clock, attitude, outcome, action, sealed]   # action: [revision: I-030] (16.13.3)
   verdicts: [supported, new_element, undetermined, contradicted, unsourced_change, overreach, leak, pc_agency]
   writable_verdicts: [new_element, undetermined]   # only these may cause a write (write-on-mention / Oracle); unsourced_change never
-  max_redrafts: 2
-  on_exhausted: plain_fallback            # + RulingRecord kind rule_conflict, review_flag true
+  max_redrafts: 2                         # a redraft re-writes only the failing sentences (12.3.3) [revision: R2-B]
+  on_exhausted: cut_and_render            # 12.3.3: cut each still-failing sentence, render each uncited must-name item; the plain fallback when none passed; RulingRecord kind rule_conflict, review_flag true only if a line was rendered [revision: R2-B]
+  sentence_declaration: [text, refs, about, new, atmosphere]   # 12.3.1; refs = record handles (R1, R2...) + narrator-view fact ids, closed lists built from the packet [revision: R2-B]
+  element_tiers: {furniture: T1a, feature: T1a, person: T1a, item: T1a, document: T1a, knowledge: T1b, clue: T2, hazard: T2, adversary: T2}   # 12.14.13; a person, item or document is T2 when 12.14.13's question is true; an uncertain kind is T2 [revision: R2-B]
   sweep_classes_at_scene_end: [position, possession, quantity, harm_condition]
 
 corrections:                              # 12.3.4

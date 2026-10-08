@@ -922,8 +922,9 @@ something to take, a route, or a clue?"* True only when the element is concrete 
 false for pure atmosphere (the smell of rain, the color of the sky). Uncertain → true (SG-05 spirit).
 If true, the element is recorded **before** the narration is delivered: `create_entity` (with an id
 and the properties the narration implies) or `set_fact`. Properties the narration implies are fixed
-now; properties it does not imply stay **undetermined** and are settled by the Oracle when first needed
-(00.12.7), with odds set by the facts established at that moment [R4 SG-13; R: https://ianbicking.org/blog/2025/07/intra-llm-text-adventure].
+now; properties it does not imply stay **undetermined** until first needed: then an incidental one is written as
+first narrated and a consequential one is settled by the Oracle (00.12.7), by 12.14.13's tiers [revision: R2-B],
+with odds set by the facts established at that moment [R4 SG-13; R: https://ianbicking.org/blog/2025/07/intra-llm-text-adventure].
 *Worst case (J):* an atmospheric detail is recorded needlessly (harmless), or a relevant one is not (the
 claim-vs-state check in ch.12 catches the narrated-but-unrecorded element, class iv).
 
@@ -2383,12 +2384,16 @@ injured / hurt* in rules (wound, harm), *minor / major / severe* as severity nam
 4. Apply state writes; run core `[T]` rules (Vitality thresholds, harm states, clock completion).
 5. Return the results and every narration obligation (visible conditions, omens, band changes).
 
-**PR-00-7 Write-on-mention.** `[J:flag]` + `[D]`
-1. Draft the narration. List every concrete, addressable element it introduces.
-2. For each, apply the 00.6.6 test; for each true, `create_entity` or `set_fact` with the properties
-   the narration implies.
-3. If the narration needs a property that is unestablished (is the door locked?), ask the Oracle first
-   and narrate the answer.
+**PR-00-7 Write-on-mention.** `[J:flag]` + `[D]` [revision: R2-B; DL-12-40]
+1. Draft the narration as declared sentences (12.3.1): each concrete, addressable element a sentence introduces is
+   declared in its `new` list with its `element_kind` (12.14.13).
+2. Route each by its tier (12.14.13): T0, nothing is written; T1a, apply the 00.6.6 test and, if true,
+   `create_entity` or `set_fact` with the properties the sentence states; T1b, the proposed fact is settled by
+   the Oracle at 12.10.6(d)'s odds and the answer written; T1c is never written from prose; T2 must already be in
+   this turn's record from its owning procedure, or the sentence is cut.
+3. Only for a **consequential** property that is unestablished (is the door locked? is he armed? is she here?
+   does he know?), ask the Oracle first and narrate the answer. An incidental property is written as narrated
+   (step 2).
 4. Only then deliver the narration. The claim-vs-state check (ch.12) compares it with the store.
 
 **PR-00-8 Authoring an extension (tag, effect, hook, id).** `[D]`
