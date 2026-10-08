@@ -607,6 +607,105 @@ tables:
       org.cult.doomsday: ["the Wakers", "the Children of the Tremor"]
       org.cult: ["the {place} Circle"]
 
+  # [revision: R2-D] [DL-12-61] seed packs (I-130): looks, furniture, documents, knowledge packs. Rolled by the
+  # seed-pack pass (12.16.9, 12.16.11, 12.16.16) on a stream keyed by the seed and the entity id, so a pack never
+  # changes the rest of the seed and a pre-made seed can be packed after the fact.
+  - id: tbl.12.seed.place_look
+    name: "A place's one-line look, by place type (12.16.9, 12.4.3)"
+    die: d4
+    note: "the place type is a haven building's kind (the last part of its id), else settlement, else the terrain group of an area or site (the second part of its first terrain tag), else default. {name} is the place's name. The look is atmosphere and incidental detail only (T0/T1a, 12.14.13): it never names a person, clue, hazard or valuable item. Written as the place's `look`; scene framing reads it (12.4.3)."
+    by_kind:
+      settlement: ["{name}: smoke from a score of chimneys, a muddy main street, dogs underfoot", "{name}: timber houses leaning together inside an old earth bank", "{name}: a cluster of roofs around a well, washing strung between the eaves", "{name}: stone footings, thatch above, and a bell tower that leans a little"]
+      inn: ["a low common room, smoke-dark beams, the smell of ale and wet wool", "a long hall with a fire at one end and benches worn smooth", "a crowded taproom loud with talk, a stair climbing to the rooms", "a quiet front room, rushes on the floor, a cat on the hearth"]
+      smithy: ["an open-fronted forge, the heat felt from the street, iron ringing", "a soot-black shed with a glowing hearth and a water trough", "a cramped workshop hung with tongs and half-made blades", "a yard of scrap iron before a forge that never quite goes cold"]
+      temple: ["a whitewashed shrine, candles guttering before the keeper's sign", "a squat stone temple, cool and dim, smelling of old incense", "a timber hall of worship, its posts carved with the keeper's sign", "a small chapel with a worn step and a bell rope by the door"]
+      hall: ["the rulers' hall: a high roof, a long table, banners gone grey with smoke", "a stone hall with a dais, a fire pit and guards at the door", "a timber longhall, its doors open to the yard, clerks at a side table", "a fortified house, its windows narrow, its door studded with iron"]
+      gate: ["the gate: heavy doors, a bar as thick as a man, a watch platform above", "a gatehouse of old stone, the road rutted where it passes under", "a palisade gate with a guard hut and a brazier", "the way in, a toll board and a bored watch beside it"]
+      market: ["an open square of stalls and awnings, sellers calling prices", "a market under a timber roof, sacks and baskets stacked high", "a muddy square ringed by stalls, a weighing beam at its centre", "a narrow market street, every doorway a shop"]
+      healer: ["a low house smelling of herbs and boiled linen, cots along one wall", "a cottage hung with drying bundles, jars crowded on every shelf", "a whitewashed sickroom, quiet except for a kettle", "a herb garden before a small house, its door always open"]
+      graveyard: ["a walled graveyard, the keeper's markers leaning in long grass", "rows of low stones under old yews, a path kept clear", "a hillside of graves above the roofs, a bench by the gate", "a tended burial ground, fresh flowers on a few mounds"]
+      landmark: ["{name}: a place the old stories gather around, quiet and watched", "{name}: older than the haven, worn smooth by weather and hands", "{name}: offerings left here by people who will not say why", "{name}: a stillness here that travellers remark on"]
+      highland: ["{name}: bare slopes, scree and heather, wind that never stops", "{name}: high ground under a wide sky, sheep tracks and grey rock", "{name}: crags above steep valleys, mist in the low places", "{name}: a rolling upland of rough grass and old cairns"]
+      plains: ["{name}: open fields and hedgerows to the horizon", "{name}: flat grassland where the wind moves like water", "{name}: farmland, a few steadings, a long straight road", "{name}: moor and bog-cotton, a road marked by stones"]
+      forest: ["{name}: tall trees, deep shade, the smell of leaf-mould", "{name}: tangled woodland, paths that come and go", "{name}: an old wood of oak and holly, quiet as a church", "{name}: thin birch woods, bright and full of birdsong"]
+      water: ["{name}: shingle, salt wind and the cry of gulls", "{name}: a broad river, slow and brown, reeds along the banks", "{name}: a grey shore where boats are drawn up on the stones", "{name}: a lake edge, still water and a far bank in mist"]
+      wetland: ["{name}: reed beds and black pools, the ground soft underfoot", "{name}: a marsh of hummocks and channels, midges thick in the air", "{name}: fen and willow, a causeway half under water", "{name}: a bog, its surface green and wrong-looking"]
+      ruin: ["{name}: broken walls furred with moss, a doorway into dark", "{name}: fallen stones in a ring, a stair that goes nowhere", "{name}: a shell of a building, its roof long gone", "{name}: tumbled masonry and a cold that the sun does not reach"]
+      underground: ["{name}: a mouth in the rock, cold air breathing out", "{name}: a shaft and a spoil heap, old timbers at the entrance", "{name}: a cave under an overhang, soot on the ceiling", "{name}: a low passage going down, water dripping somewhere"]
+      default: ["{name}: quiet, the weather the loudest thing here", "{name}: a place that has seen better days", "{name}: unremarkable at first glance", "{name}: a place people pass through rather than stay"]
+
+  - id: tbl.12.seed.furniture
+    name: "A place's furniture: what is in it to look at, lean on or use (12.16.9)"
+    die: d8
+    note: "the place type as tbl.12.seed.place_look. Roll d3+1 times (2-4 items), a repeated row moving to the next. A haven building of a region with its own furnishing table (tbl.<region>.furnishings, e.g. tbl.thallen.furnishings) takes its last item from that table instead. Each item is T1a furniture (12.14.13): ordinary, of common value, never a clue or a hazard; a cited item is a lever worth at most +2."
+    by_kind:
+      settlement: ["a well with a stone trough", "a notice post at the crossroads", "a horse trough and a mounting block", "a woodpile against a wall", "a shrine niche with a stub of candle", "a handcart left in the lane", "a bench under a lime tree", "a midden heap behind the houses"]
+      inn: ["a long trestle table", "a hearth with a spit and a blackened kettle", "barrels racked behind the counter", "a slate with the day's prices chalked on it", "a settle by the fire", "a stair to the rooms above", "a row of tankards on hooks", "a dartboard scarred with old holes"]
+      smithy: ["an anvil on an oak block", "a bellows the size of a door", "a quenching trough", "racks of tongs and hammers", "a grindstone on a treadle", "a pile of horseshoes waiting to be fitted", "a bench vice", "a barrel of charcoal"]
+      temple: ["an altar with the keeper's sign", "rows of plain benches", "an offering bowl by the door", "candles in a sand tray", "a lectern with a chained book", "painted panels of the keeper's deeds", "a bell rope", "a font of still water"]
+      hall: ["a long table with carved chairs", "a dais with the rulers' seat", "banners on the walls", "a fire pit with a smoke hole above", "a clerk's table with ink and tally sticks", "a weapons rack by the door", "a strongbox chained to the wall", "a map of the land painted on hide"]
+      gate: ["a heavy bar in iron brackets", "a brazier for the watch", "a toll board", "a ladder to the watch platform", "a guard hut with a stool", "a horn on a hook", "a chain across the road", "a ledger of who comes and goes"]
+      market: ["stalls under striped awnings", "a weighing beam with its stones", "baskets of produce", "a pen of geese", "a well at the square's centre", "a cart unloading sacks", "a notice post", "a pie-seller's brazier"]
+      healer: ["cots with clean linen", "shelves of stoppered jars", "bundles of herbs hung to dry", "a mortar and pestle", "a basin and a jug of boiled water", "a chest of bandages", "a small stove with a simmering pot", "a chair by the window"]
+      graveyard: ["leaning grave markers", "an old yew", "a lych-gate with a bench", "a spade left against the wall", "a bier in a lean-to", "a stone cross worn smooth", "a row of fresh mounds", "a tended plot of flowers"]
+      landmark: ["an old standing stone", "a spring in a stone basin", "a ring of offerings", "a carved marker post", "a fallen statue", "a twisted tree", "a cairn of stones", "a worn stone seat"]
+      highland: ["a cairn on the skyline", "a sheepfold of dry stone", "a shepherd's hut", "a cold stream", "a boulder field", "a ruined shieling", "a waymarker stone", "a lone rowan"]
+      plains: ["a hedge with a stile", "a haystack", "a ditch and a plank bridge", "a field shelter", "a milestone", "a lone oak", "a ruined barn", "a pond with reeds"]
+      forest: ["a fallen trunk across the path", "a woodcutter's stump", "a clearing with a fire ring", "a stream with stepping stones", "a hollow oak", "a charcoal burner's mound", "a hunter's blind", "a thicket of bramble"]
+      water: ["boats drawn up on the shingle", "a jetty of tarred posts", "nets hung to dry", "a fish-drying rack", "a capstan", "a ferry rope across the water", "a beacon post", "a boathouse"]
+      wetland: ["a causeway of logs", "a punt tied to a post", "a reed-cutter's shelter", "a line of marker poles", "a heron's tree", "a peat stack", "a drowned cart", "a hummock island"]
+      ruin: ["a broken archway", "a stair of worn steps", "a collapsed wall", "a well choked with rubble", "a carved lintel on the ground", "a hearthstone", "a doorway into dark", "an empty niche"]
+      underground: ["old pit props", "a rusted ore cart", "a dripping pool", "soot marks on the ceiling", "a rope ladder", "a narrow ledge", "a pile of spoil", "a cold draught from a crack"]
+      default: ["a path", "a stone", "a tree", "a fence", "a cart track", "a heap of rubble", "a post", "a hollow"]
+
+  - id: tbl.12.seed.document
+    name: "Seeded documents: notices, bills and charters (12.16.16)"
+    die: d4
+    note: "a document is an entity (kind document; T1 of common value, unless a case placement makes it a clue holder) with a `text` fact written at seed time, posted at the first place of its kind's `posted_at` that the haven has. When a lead points to a document, {target} is the lead's target and {contact} the person (else the place) it sends the PC to, so the text names where the lead goes. {issuer} is the faction or person who posts it, {haven} the haven, {year} the seed's year; the other fields are rolled from `fields`. Reading delivers the text first (12.10.5)."
+    results:
+      - {range: "1", option: hire, text: "WANTED: able hands for {task}. Good coin, no questions. Ask for {contact} at {contact_place}. {issuer}", posted_at: [gate, market, inn]}
+      - {range: "2", option: warning, text: "By order of {issuer}: none to go toward {target} after dark. {reason} Report anything seen to {contact} at {contact_place}.", posted_at: [gate, hall]}
+      - {range: "3", option: charter, text: "Charter of {haven}: {issuer} holds the right of {right}, sealed in {year}. Disputes go to {contact} at {contact_place}.", posted_at: [hall, temple]}
+      - {range: "4", option: bounty, text: "BOUNTY: {reward} for word of {target}. Bring proof to {contact} at {contact_place}. {issuer}", posted_at: [gate, market, inn]}
+    fields:
+      task: ["guarding the roads", "a journey into the hills", "clearing an old place", "carrying a sealed message", "escorting a cart", "a matter best discussed in private"]
+      reason: ["Two have not come back.", "Lights have been seen there.", "The watch cannot answer for it.", "It is not safe, whatever the old folk say.", "Tracks were found that no one can name.", "This is the second warning."]
+      right: ["the market tolls", "the ford and its ferry", "the common grazing", "the mill and its weir", "the hunting in the near woods", "judgement of quarrels"]
+      reward: ["ten silver", "a purse of silver", "a horse and saddle", "a season's lodging", "twenty silver", "the council's thanks and coin"]
+
+  - id: tbl.12.seed.knowledge_pack
+    name: "A cast NPC's knowledge pack and stance (12.16.11)"
+    die: d4
+    note: "2-4 facts per cast NPC, each written as a knowledge record of the NPC (how: seed) with its topic (social.yaml#common_knowledge.topics). Slot 1 trade: a row of a topic of the NPC's role (social.yaml#common_knowledge.by_role). Slot 2 local or public: a row of local_news or folk. Slot 3 a tie: a row of `ties` naming another cast member of the same home ring, written for both. Slot 4, on a d6 of 4-6: a rumor of 12.16.14 the NPC holds (its id; its truth stays sealed). Fields: {place} a place within two rings of the haven, {watches} and {route_kind} a route from the haven to it, {other} another cast NPC, {faction} a faction, {keeper} the main keeper, {haven} the haven. Every pack fact is T1 ordinary knowledge: none names a secret, a clue, a case's solution or a story role (12.14.13); a row whose field would need one is skipped for the next."
+    by_topic:
+      roads: ["the way to {place} is {watches} watches by {route_kind}", "the {route_kind} to {place} floods after heavy rain", "carters avoid the {route_kind} to {place} after dark", "there is a shorter way to {place} that only locals use"]
+      travellers: ["a pedlar comes through every month from {place}", "few strangers have stayed in {haven} since the thaw", "pilgrims pass through on the way to {place}", "a tinker's family camps by the {haven} gate each spring"]
+      arrivals: ["the gate logs everyone who comes in after dusk", "more folk have come in from {place} this year than last", "carts from {place} come on market days", "the watch turns back anyone without a name to give"]
+      prices: ["bread costs more in {haven} this spring than last", "iron has to be brought in from {place} and costs dear", "wool fetches a good price at the {haven} market", "salt is scarce and the price keeps rising"]
+      goods: ["the best leather in the land comes from {place}", "the {haven} market sells rope, salt, tools and cloth", "good blades are hard to come by this side of {place}", "anything unusual has to be ordered from {place}"]
+      weather: ["the spring storms come in from the direction of {place}", "fog sits in the low ground around {place} most mornings", "the last winter was the hardest in years", "when the wind turns, rain follows within a day"]
+      land: ["the best grazing is toward {place}", "the fields by {place} are fallow this year", "the soil near {haven} is thin and stony", "a blight took the barley around {place} two years back"]
+      wild: ["wolves den in the hills toward {place}", "the hunting is best around {place} in autumn", "boar have been seen near {place}", "the woods by {place} are full of deer this year"]
+      water: ["the ford toward {place} is passable in summer only", "a ferry crosses toward {place} by day", "the river rises fast after rain upstream", "the well water in {haven} is sweet; the river is not"]
+      local_news: ["the spring festival is the talk of {haven}", "{faction} has been holding meetings late at night", "a new roof is going on the {haven} hall", "the harvest stores are lower than anyone likes"]
+      folk: ["{other} has lived in {haven} longer than anyone can remember", "{other} keeps to themself these days", "everyone in {haven} goes to {other} when they need advice", "{other} came to {haven} from {place} years ago"]
+      law: ["{faction} judge quarrels at the hall on the first day of the week", "carrying a drawn blade in {haven} is fined", "the watch answers to {faction}", "debts are settled before the {keeper} priest"]
+      factions: ["{faction} want more say in how {haven} is run", "{faction} and the rulers do not trust each other", "{faction} has been hiring", "{faction} pay well but ask a lot"]
+      faith: ["the rites of {keeper} are held at dawn", "the {keeper} priests bless the fields each spring", "an old shrine stands near {place}", "the faithful of {keeper} tend the graveyard"]
+      sickness: ["a cough has been going round {haven}", "feverfew and willow bark grow near {place}", "the healer has more patients than beds this month", "a bad wound should be cleaned with boiled water"]
+      craft: ["good charcoal comes from the burners near {place}", "the bridge toward {place} needs mending", "a blade from the {haven} forge holds an edge well", "seasoned timber is hard to find this year"]
+      lore: ["{place} was a holy place before {haven} was built", "the old tales say {place} was once a fortress", "the hall keeps the oldest records in the land", "the first settlers of {haven} came from beyond {place}"]
+      underworld: ["things that go missing in {haven} turn up at {place}", "someone in {haven} buys goods without asking where they came from", "smugglers use the old track toward {place}", "the watch can be paid to look the other way"]
+    ties: ["learned their trade from {other}", "owes {other} money", "is cousin to {other}", "quarrelled with {other} last winter", "drinks with {other} most evenings", "trusts {other} more than anyone in {haven}"]
+    stance:
+      die: d6
+      rule: "toward the opening incident (12.16.16): an NPC tied to the incident's subject (kin, tie or placement holder) helps; one of the threat faction hinders; else d6"
+      results:
+        - {range: "1-2", stance: helps, gist: "wants it settled and will help"}
+        - {range: "3-4", stance: wary, gist: "will help for a reason or a price"}
+        - {range: "5", stance: indifferent, gist: "has their own troubles"}
+        - {range: "6", stance: hinders, gist: "has a reason to want it left alone"}
+
 # ------------------------------------------------------------------------------------------ defaults
 # What the seed writes when a step's question is not answered otherwise; the bracketed defaults of 05.7.10,
 # 07.7.6 and 15's relics rule, and the haven's furnishing by tier (08.6, 15.13, 16.3.2).
@@ -754,3 +853,15 @@ requirements:
   - {id: ws.req.15_relics, from: "15", need: "whether relics count as magic for the magic refusal", rules: ["15.3 (refusals)"], key: "canon/relics_and_refusal", check: nonempty}
   - {id: ws.req.16_hire, from: "16", need: "regional hire roles (and quirks, or the generic table), beasts and mounts available, the band limit by tier", rules: ["16.3.2", "16.3.3"], key: "places[]/settlement/hire", check: hire}
   - {id: ws.req.16_recruits, from: "16", need: "named NPCs who might be recruited", rules: ["16.3.4"], key: "npcs[]/recruit", check: recruits}
+
+# ------------------------------------------------------------------------------------------ pack_requirements
+# [revision: R2-D] [DL-12-61] The seed-pack checks (12.16.17; T-12-16's second part; I-130). Run by
+# 12-world-seed.py#check_packs after the seed-pack pass; a failed check re-runs the pass for the entity named.
+pack_requirements:
+  - {id: ws.pack.place_look, from: "12", need: "every place (the region record aside) has a one-line look", rules: ["12.16.9", "12.4.3"], key: "places[]/look", check: looks}
+  - {id: ws.pack.place_furniture, from: "12", need: "every place (the region record aside) has 2-4 furniture items", rules: ["12.16.9"], key: "places[]/furniture", check: furniture}
+  - {id: ws.pack.place_exits, from: "12/10", need: "every place lists its exits from the route graph (a building: its settlement and its neighbours)", rules: ["12.16.9", "12.4.3"], key: "places[]/exits", check: exits}
+  - {id: ws.pack.npc_knowledge, from: "12", need: "every cast NPC has 2-4 knowledge facts: one of their trade, one local or public, one tie to another cast member", rules: ["12.16.11", "12.10.6"], key: "npcs[]/knowledge", check: knowledge}
+  - {id: ws.pack.npc_stance, from: "12", need: "every cast NPC has a stance toward the opening incident", rules: ["12.16.11"], key: "npcs[]/stance", check: stance}
+  - {id: ws.pack.documents, from: "12/15", need: "every seeded document has text from tbl.12.seed.document, and a document a lead points to names the lead's target", rules: ["12.16.16"], key: "documents", check: documents}
+  - {id: ws.pack.incident_case, from: "15", need: "the inciting incident's reduced case validates (15.9.4, reduced profile) with a core placement held at the opening place", rules: ["12.16.16", "PR-15-6", "15.9.4"], key: "cases", check: reduced_case}

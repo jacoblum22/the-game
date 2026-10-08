@@ -14,13 +14,13 @@ seed 1 (oracle mode): The High Fells, haven Merestead; wound invasion; climate h
     tbl.high_fells.enc.black_crags                 home 1  trivial:14 easy:5 fair:1                 fair-or-easier 20/20  PASS  pool 20
     tbl.high_fells.enc.drowned_ridge               home 2  trivial:6 easy:3 fair:11                 fair-or-easier 20/20  PASS  pool 20
     tbl.high_fells.enc.red_crags                   home 3  trivial:5 easy:7 fair:8                  fair-or-easier 20/20  PASS  pool 20
-    tbl.high_fells.enc.thorny_edge                 home 2  trivial:6 easy:3 fair:11                 fair-or-easier 20/20  PASS  pool 17
+    tbl.high_fells.enc.thorny_edge                 home 2  trivial:6 easy:6 fair:8                  fair-or-easier 20/20  PASS  pool 17
     tbl.high_fells.enc.weeping_halls               home 2  trivial:9 fair:10 hard:1                 fair-or-easier 19/20  PASS  pool 29
     tbl.high_fells.enc.still_heath                 home 4  easy:5 fair:12 hard:3                    fair-or-easier 17/20  PASS  pool 13
-    tbl.high_fells.enc.lonely_ridge                home 3  trivial:3 easy:8 fair:9                  fair-or-easier 20/20  PASS  pool 17
+    tbl.high_fells.enc.lonely_ridge                home 3  trivial:3 easy:9 fair:8                  fair-or-easier 20/20  PASS  pool 17
     tbl.high_fells.enc.broken_greenwood            home 4  easy:3 fair:14 hard:3                    fair-or-easier 17/20  PASS  pool 14
     tbl.high_fells.enc.tangled_ridge               home 5  trivial:3 easy:11 fair:3 hard:3          fair-or-easier 17/20  PASS  pool 20
-  requirements (T-12-16): 64 checked, 64 pass
+  requirements (T-12-16): 71 checked, 71 pass
     ok   ws.req.01_canon_impossible       7 entries
     ok   ws.req.01_spirits                
     ok   ws.req.01_tongues                8 tongues
@@ -85,12 +85,19 @@ seed 1 (oracle mode): The High Fells, haven Merestead; wound invasion; climate h
     ok   ws.req.15_relics                 
     ok   ws.req.16_hire                   
     ok   ws.req.16_recruits               
+    ok   ws.pack.place_look               34 places, 21 cast, 3 documents
+    ok   ws.pack.place_furniture          34 places, 21 cast, 3 documents
+    ok   ws.pack.place_exits              34 places, 21 cast, 3 documents
+    ok   ws.pack.npc_knowledge            34 places, 21 cast, 3 documents
+    ok   ws.pack.npc_stance               34 places, 21 cast, 3 documents
+    ok   ws.pack.documents                34 places, 21 cast, 3 documents
+    ok   ws.pack.incident_case            34 places, 21 cast, 3 documents
 
 guided run (14 answers from the player, the rest by the oracle):
   The Green Vale; 0 requirements fail
 
 robustness: 200 oracle seeds (1001-1200): seeds with any failed check 0; failures by requirement none
-  2600 regional encounter tables built and audited; word mix over their threat faces: trivial 35.4% easy 26.4% fair 34.7% hard 3.5% lethal 0.0%
+  2600 regional encounter tables built and audited; word mix over their threat faces: trivial 35.6% easy 26.5% fair 34.4% hard 3.5% lethal 0.0%
 
 pre-made seed: data/region_thallen.yaml (chapter 13, optional, unmaintained): 54 of 64 requirements hold
     gap  ws.req.02_keepers                6 keepers

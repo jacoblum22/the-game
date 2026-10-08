@@ -220,6 +220,97 @@ delivery:                  # T-15-5 (15.3.9)
     - {reach: 3, result: "+1 step and one want revealed"}
     - {reach: 4, result: "as 3"}
   agreement_write: "npc.<id>.agreed: <act> with its due time"
+  information:             # [revision: R2-D] [DL-15-39] questions put to an NPC (I-140b): items by T-01-6, each answered by PR-12-10
+    rule: "a Talk, or a certain beat, that asks an NPC for information is a bundled beat (01.10): N questions, deliver_count(N, reach) (T-01-6) land in the player's rank, and each landed item is answered by PR-12-10 at the ladder depth of the delivered reach; a single question is N = 1, so Limited and better land it. A certain beat (15.3.10) and a plain SPEECH question run at Standard. Failure: no item, the NPC's reply is a refusal or an evasion in their voice (12.11.9)."
+    ladder_depth: {1: [store, pack, pointer], 2: [store, pack, propose_and_ratify, pointer], 3: [store, pack, propose_and_ratify, pointer, volunteer], 4: [store, pack, propose_and_ratify, pointer, volunteer]}
+    volunteer: "Great or better: the NPC adds one extra from their record (a want, a fear, a tie or a lead), as T-15-5 row 3"
+
+common_knowledge:          # 12.10.6(d), PR-12-10 rung 3 [revision: R2-D] [DL-12-60]
+  rule: "the role key is the first word of the NPC's tbl.npc_role row (as tbl.npc_activity), else the first role_map pattern found in the NPC's role text, else other. A topic in the role's list is asked at Likely; a public topic, of an NPC whose home is in the settlement it concerns, at Likely; any other topic at Unlikely. A topic that is consequential (a story role, a case's solution, a sealed fact, a thread's knowledge) is never asked here: PR-12-10 routes it to the case graph."
+  odds: {on_role_topic: likely, public_local: likely, other: unlikely}
+  topics:                  # the closed topic list; the Reader's `topic` is an entity id or one of these (12.2.2)
+    roads: {gist: "routes, distances, the state of the ways", kept_at: inn}
+    travellers: {gist: "who stays, who passed through", kept_at: inn}
+    arrivals: {gist: "who came in or left by the gate", kept_at: gate}
+    prices: {gist: "what things cost", kept_at: market}
+    goods: {gist: "trade goods and where to get them", kept_at: market}
+    weather: {gist: "sky, seasons, signs", kept_at: none, public: true}
+    land: {gist: "fields, herds, grazing", kept_at: none}
+    wild: {gist: "beasts, hunting grounds, the wild places near", kept_at: none}
+    water: {gist: "rivers, fords, boats, the shore", kept_at: gate}
+    local_news: {gist: "what has happened in the settlement lately", kept_at: inn, public: true}
+    folk: {gist: "who is who, who lives where", kept_at: inn, public: true}
+    law: {gist: "the rulers, customs, fines, the watch", kept_at: hall, public: true}
+    factions: {gist: "faction tensions, who backs whom", kept_at: hall}
+    faith: {gist: "keepers, rites, holy places", kept_at: temple}
+    sickness: {gist: "the sick and injured, cures, herbs", kept_at: healer}
+    craft: {gist: "tools, metal, building, repair", kept_at: smithy}
+    lore: {gist: "history, old tales, letters", kept_at: hall}
+    underworld: {gist: "thefts, fences, smuggling", kept_at: none}
+  entity_topics:           # a topic given as an entity id resolves to these topics
+    place_in_settlement: [folk, local_news]
+    place_beyond: [roads, wild]
+    npc: [folk]
+    faction: [factions]
+    keeper: [faith]
+    item: [goods]
+    document: [lore]
+    creature: [wild]
+  by_role:
+    farmer: [weather, land, folk]
+    laborer: [folk, local_news, prices]
+    merchant: [prices, goods, roads, travellers]
+    innkeeper: [travellers, roads, prices, local_news, folk]
+    guard: [arrivals, law, factions, local_news]
+    priest: [faith, folk, sickness, lore]
+    crafter: [craft, goods, prices]
+    hunter: [wild, land, weather, roads]
+    beggar: [folk, local_news, underworld]
+    servant: [folk, law, local_news]
+    scholar: [lore, faith, law]
+    boatman: [water, roads, travellers, weather]
+    herder: [land, wild, weather]
+    healer: [sickness, faith, folk]
+    minstrel: [local_news, lore, travellers, roads]
+    soldier: [factions, roads, law, wild]
+    child: [folk, local_news]
+    elder: [folk, lore, weather, land]
+    thief: [underworld, folk, goods]
+    traveler: [roads, travellers, weather]
+    head: [factions, law, folk]
+    officer: [factions, law, arrivals]
+    wise: [lore, wild, faith, sickness]
+    other: [local_news, folk]
+  role_map:                # role-text patterns (first match) for cast NPCs whose role is not a tbl.npc_role row (12.16.11)
+    - {pattern: "head of", role: head}
+    - {pattern: "officer of", role: officer}
+    - {pattern: "captain", role: guard}
+    - {pattern: "smith", role: crafter}
+    - {pattern: "sellsword", role: soldier}
+    - {pattern: "scribe", role: scholar}
+    - {pattern: "hedge-mage", role: scholar}
+    - {pattern: "herb-wife", role: healer}
+    - {pattern: "wise", role: wise}
+    - {pattern: "hermit", role: wise}
+    - {pattern: "archmage", role: scholar}
+    - {pattern: "heir", role: head}
+    - {pattern: "master", role: crafter}
+
+cast:                      # 00.11.1 domain cast: "who is <role>?" and "who would know?" [revision: R2-D] [DL-12-60]
+  domain: "cast (00.11.1)"
+  output_kind: an existing NPC id (or a place id for a pointer), else a new NPC by 12.11.1
+  pool_gate:
+    from: "the store's existing NPCs (never the narration)"
+    excludes: [the PC, "the anchor-bond NPC (02.9.1) unless the question names them", "an NPC whose existence or identity is sealed", "a power of the far rings (12.16.11) unless the question is asked in their area", "an NPC dead, departed or of a faction the question's scope excludes", "the NPC being asked (for a pointer)"]
+    role: "who is <role>: the NPC's role key (common_knowledge.rule) or role tags match the role asked; who would know <topic>: the topic is in the NPC's role topics, or the NPC holds a fact on it (a knowledge record)"
+    scope: "home in the settlement the question concerns, else within one ring of where it is asked"
+  fill:
+    method: weighted
+    weights: {role_or_topic_match: 3, same_place_as_asker: 2, member_of_the_faction_named: 2, known_to_pc: 1, holds_a_case_placement_on_it: 3}
+    recency: "an NPC cast for the same question before is cast again (the asked-and-answered index); the rest by weight on the seeded stream"
+  empty_pool:
+    who_is_role: "T-12-4's last row: a person who must exist now (12.11.1, PR-12-5) when the scene or the question implies one (a clerk behind a counter); else the answer 'no one you know', written as a fact"
+    who_would_know: "a place pointer: the topic's kept_at place in the settlement (common_knowledge.topics); else a new walk-on there by 12.11.1 with a role whose topics include it"
 
 patience:                  # 15.2.6
   by_standing: {-3: 0, -2: 1, -1: 2, 0: 3, 1: 3, 2: 4, 3: unlimited}

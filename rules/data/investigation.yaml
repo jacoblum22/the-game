@@ -221,6 +221,37 @@ tables:
     lifecycle: provisional
     basis: ["15.13.8", "R5 P-45 (Blades overindulgence)"]
 
+reduced_case:              # 15.9.4 reduced profile; PR-15-6 (Milestone 1) [revision: R2-D] [DL-15-38]
+  necessary_nodes: 2
+  optional_nodes: 0
+  per_necessary_node: {min_placements: 3, min_holder_kinds: 2, min_method_kinds: 2, min_core: 1, min_places: 2, reserve: 1}
+  per_case: {entry_core_at_opening_place: true, min_fallbacks: 1}
+  audit: "h.15.placement_audit runs from Milestone 1 for reduced cases (min_live 2; on_short places the reserve, then PR-15-7)"
+  triggers:
+    - "seed time: the inciting incident (12.16.16)"
+    - "in play: a story-role question (who is missing, who did it, who sent them) with no case behind it (PR-12-10 step 1)"
+  node_1: "the subject: who or what the incident is about (the story role named), and where it was last seen"
+  node_2: "the way on: where it leads, which is the incident's first lead target (12.16.16)"
+  placements:              # per node, in order; the first of node 1 is the core entry
+    node_1:
+      - {holder_kind: person, method: inquiry, access: core, request_size: R1, who: "the reporter: a cast NPC whose home is the opening place, else a walk-on there (12.11.1)"}
+      - {holder_kind: person, method: inquiry, access: rolled, request_size: R2, who: "a witness: a cast NPC elsewhere in the haven, by casting (social.yaml#cast)"}
+      - {holder_kind: document, method: search, access: rolled, detect_tier: easy, who: "a notice or note at a third haven place (tbl.12.seed.document; its text names the subject)"}
+    node_2:
+      - {holder_kind: place, method: search, access: core, detect_tier: moderate, who: "a trace at the lead target, or on the way out of the haven toward it"}
+      - {holder_kind: person, method: inquiry, access: rolled, request_size: R2, who: "someone who saw which way: a cast NPC of the gate, the inn or the market, by casting"}
+      - {holder_kind: object, method: search, access: rolled, detect_tier: moderate, who: "something dropped or left at the opening place or the subject's home"}
+    reserve: {holder_kind: person, method: inquiry, access: core, who: "a second witness, sealed until the audit places them"}
+  subjects:                # the story role node 1 names, by inciting option (tbl.12.seed.inciting)
+    alarm: {role: "what is at the gate", kind: creature, from: "a war-band of the threat faction (12.16.10)"}
+    dying_messenger: {role: "who the message was for", kind: person, cast: [head, officer], else: generate}
+    missing: {role: "who is missing", kind: person, generate: "a walk-on by 12.11.1, role by d6 (1-3 child, 4-5 elder, 6 priest), kin to a cast NPC by casting"}
+    offer: {role: "who makes the offer", kind: person, cast: [head], else: generate}
+    theft: {role: "what was taken, and from whom", kind: item, from: "the main keeper's relic from the temple or shrine (08 storied item)"}
+    omen: {role: "what the omen shows", kind: event, from: "a sign of the wound situation (12.16.12)"}
+    refugees: {role: "who leads the refugees", kind: person, generate: "a walk-on by 12.11.1 (traveler), from the lead's ring-2 site"}
+    duel: {role: "who the challenger is", kind: person, cast: [officer, soldier], else: generate}
+
 cases:
   - id: case.mill_fire
     name: The mill fire at Ashford

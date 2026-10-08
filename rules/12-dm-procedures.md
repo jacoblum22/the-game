@@ -200,7 +200,8 @@ Decisions (J):      1. [J:enum] The message's parts, each classified (a message 
                          licensed technique); speech (mainly words);
                        question_kind (question parts only), one of six: who is X · where is X ·
                          what happened · what is X like or for · what do you want or think · who
-                         would know; plus topic (the entity or subject asked about);
+                         would know; plus topic (the entity asked about, else one of the closed topics of
+                         social.yaml#common_knowledge.topics [revision: R2-D]);
                        shape — now, queued (a Ready beat, 01.14.4: "I attack if they keep
                          stalling") or conditional on another beat.
                        Nothing else is proposed. The gate class, the license and the would-be
@@ -383,7 +384,8 @@ closed source (01.11.3):
 2. **NPCs present** follow the default NPC layer (12.11.9) [revision: R2-B; DL-12-43; I-140]. Each keeps
    the activity code rolled when they entered the scene. One whose standing, wants or refusals are engaged by
    what just happened, or whom the PC addressed, responds within the scene's practice, and the response
-   comes from (a) a resolved Talk frame's delivered outcome (ch.15), else (b) an established
+   comes from (a) a resolved Talk frame's delivered outcome (ch.15), or for a question the PC asked, PR-12-10's answer
+   [revision: R2-D; DL-12-60], else (b) an established
    want or refusal that the situation clearly triggers (`[J:flag]` *"Does a recorded want or refusal of
    this NPC name this situation?"*), else (c) `roll_table(tbl.npc_action)` with the NPC's standing as
    context (12.11.5). **An addressed NPC always answers**, in words, or with a refusal spoken in their own
@@ -637,7 +639,8 @@ same id (class iv).
 most **200 words** (`pacing.yaml#narration.scene_open_max_words`):
 1. **The moment** — where, when (time of day and weather from state, never invented), who is present
    (each addressable element written on mention, 00.6.6), and the layout the PC can see: exits, cover,
-   hazards, what is within reach (12.14.6).
+   hazards, what is within reach (12.14.6). A seeded place's look, furniture and exits (12.16.9) are this layout,
+   read from the store and never invented [revision: R2-D; I-130].
 2. **The impetus** — one thing that is happening or about to, drawn `[J:enum]` from this ordered list,
    first eligible: (a) the scene test's alteration or interruption (12.4.4); (b) a fired trigger
    (12.2.3); (c) the PC's own declared purpose for the scene; (d) an NPC present acting on a recorded
@@ -894,6 +897,8 @@ ferryman is home *because the scene needs him*" — that is the DM choosing what
 | The uncertainty is… | Tool | Example |
 |---|---|---|
 | answered by a fact, canon, or scene type | read it (Certain / Impossible) | the smithy has a forge |
+| who is <role>, for an ordinary role (a story role goes to the case graph, PR-12-10 step 1) | casting: 00.11 `cast` (`social.yaml#cast`) [revision: R2-D] | who keeps the ferry here? |
+| what <NPC> knows about <topic> | the answer ladder, PR-12-10 [revision: R2-D] | what does the innkeeper know of the north road? |
 | whether an actor with known capability manages something | fortune check (01.6.7) | does the messenger outrun the storm? |
 | which of several things, from a *specific* table in data | `roll_table(<specific table>)` — region tables (12.16), encounter tables (10), rumor tables (11), loot (08), NPC tables (12.11) | who is drinking at the inn tonight |
 | what an NPC does when no want, refusal or frame decides it | `roll_table(tbl.npc_action, {standing})` (12.11.5) | the dockhand, after the PC's question |
@@ -1278,7 +1283,10 @@ relationship appears in narration only after the PC has learned it (a `record_kn
 overheard, read, recognized). Until then the narration uses a descriptor from what the PC can see ("the
 grey-bearded ferryman"), chosen from the NPC's recorded appearance detail. *"Has the PC learned this?"* is
 `[J:flag]`, true only when a knowledge record exists or the PC's origin or prior scenes make it common
-knowledge (an Oracle Certain by scene logic). *Worst case (J):* a name used one scene early — the claim check
+knowledge (an Oracle Certain by scene logic). **A local knows the haven's names** [revision: R2-D] [DL-12-63; I-149]:
+a PC whose anchor bond (02.9.1) is placed in the haven is a local, and starts with knowledge records (`how: common`) of
+the names of the haven's officers of 12.16.11 (smith, innkeeper, gate captain, healer, the wise one, the scribe) and
+of the heads of the factions seated in the haven; an outsider starts with none of them. *Worst case (J):* a name used one scene early — the claim check
 flags it as `knowledge` (class iv).
 
 **12.10.3 Sealed secrets and permitted slices.** `[S]` + `[D]` The narrator's packet never contains sealed
@@ -1327,8 +1335,12 @@ is a free Recall of established facts, 00.12.6).
 match): (a) a knowledge record says so; (b) the NPC is in the `witnesses` of the beat or event that
 established it; (c) the fact is public in the NPC's scope (ch.11 reputation, news and rumors that reached
 their place); (d) the fact is common knowledge of the NPC's role or origin (a harbor master knows the
-tides) — `[J:flag]` *"Would anyone in this role know it?"*, uncertain → the Oracle, Likely for facts of
-their trade, Unlikely otherwise. **An NPC acts only on what it knows** — no NPC reacts to the PC's secret
+tides) — its topic (12.2.2) is one of the role's topics in `social.yaml#common_knowledge`: unless a record settles it, the
+Oracle at Likely; a public topic (news, folk, law, weather) of an NPC who lives where it happened, Likely; anything
+else, Unlikely [revision: R2-D] [DL-12-60]. (e) **A settled answer is a knowledge record**: a ratified answer is
+written with the NPC's record, and so is a "no" (`knows: false`: the NPC does not know it), so the same question is
+never rolled twice; the **asked-and-answered index** `(npc, question_kind, topic) → fact id | unknown` is kept from
+these records and read first by PR-12-10 [revision: R2-D] [DL-12-60]. **An NPC acts only on what it knows** — no NPC reacts to the PC's secret
 plan, hidden identity or off-screen deed unless one of (a)–(d) holds. Updates `[D]`: when the PC tells an
 NPC something (SPEECH or Talk), `record_knowledge(npc, claim, how: told)` — being told is not believing
 (ch.15's claim plausibility decides belief); when an NPC witnesses a beat, a record per witness; when news
@@ -1342,6 +1354,17 @@ data), the shown descriptors (`bloodied`, `down`, visible conditions), and stand
 `bloodied` descriptor and a visible condition. Threat is voiced before a fight through the tells of the
 adversary's band (T-09-13) [revision: I-030] and, when `threat_advisory` is *hard* or *lethal*, through the lethal warning's plain
 words (ch.07) [R4 §5.2 item 2].
+
+**12.10.8 Answering a question.** `[D]` [DL-12-60; DL-12-44; revision: R2-D] When the PC asks an NPC a question (a
+resolved Talk, Observe or Recall part, or a SPEECH question, carrying `question_kind` and `topic`, 12.2.2), the answer
+comes from **PR-12-10**, before the draft, and never from the narration: the asked-and-answered index first, then the
+route by tier (a consequential question goes only to the case graph; "who is <role>" to casting, 00.11 `cast`), then
+the ladder for ordinary knowledge: the NPC's records, their seeded knowledge pack (12.16.11), a candidate proposed and
+settled by the Oracle at 12.10.6(d)'s odds, and last a pointer to a real person or place who would know. How deep the
+ladder goes follows the delivered reach (T-15-5's questions rule). It never ends empty: "I don't know" with a real
+lead is a success (DL-12-44), and "does not know" is recorded so the same question gets the same answer. *Evidence:*
+`_process/simulation/12-answer_ladder_sim.py` (30 packed seeds): "I don't know" is 31.6% of answered ordinary asks when
+half the asks are on the NPC's own trade (36.5% at 30%, 23.9% at 70%); no success is empty.
 
 ### 12.11 NPCs: generation, reaction, voice, decisions, and memory
 
@@ -1598,7 +1621,11 @@ a clock, a license, a hazard or trap entry, a generator output — never as a pr
 (00.16.4). The DM picks `[J:enum]` the nearest existing entry and moves at most two parameters (the
 two-change limit applied to content). If nothing fits within two changes, the DM uses the nearest entry
 unchanged, logs a `rule_conflict` ruling with `review_flag`, and the review list carries an extension
-proposal (PR-00-8). *Worst case (J):* a less apt primitive — its stated numbers apply, inside the
+proposal (PR-00-8). **Tier** [revision: R2-D] [DL-12-64]: what the DM improvises in play is T1 at most (12.14.13), and
+only by a procedure: a seed or region table, the default NPC layer (12.11.9), or propose-and-ratify (PR-12-10). A T2
+element (a hazard, a trap, an adversary, a valuable item, a person with a want, a clue) is never improvised: it comes
+from its generator (ch.10's tables, 12.11.1, 00.11, PR-15-6), and this rule then builds it from primitives.
+*Worst case (J):* a less apt primitive — its stated numbers apply, inside the
 substrate's caps (class i/iv).
 
 **12.13.5 Every improvisation is logged.** `[D]` [DL-12-19; R5 DM-05; revision: I-065] A beat or content improvisation writes a `RulingRecord`
@@ -2094,6 +2121,12 @@ place of acceptance's schools know (05.8); hire roles and the band limit (16.3.2
 A **place of acceptance** for primal workers (02.5.5; `tbl.12.seed.acceptance`) is written as a landmark in
 ring 1 or 2 with a spirit, three primal schools, what it asks, and a contact. The haven's fight locations
 (06.3.8) come from its site; the region's rare metal and rite components from `world_seed.yaml#defaults`.
+**Seed packs for places** [revision: R2-D] [DL-12-61; I-130]: every place (the region record aside) gets a one-line
+**look** (`tbl.12.seed.place_look`, by place type), **2–4 furniture items** (`tbl.12.seed.furniture`; a haven building
+of a region with its own `tbl.<region>.furnishings` takes its last item from it) and its **exits** (its routes; for a
+building, its settlement and two neighbours). They are rolled after step 13, each on a stream keyed by the seed and the
+place's id, so a pack never moves another draw of the seed. The look is atmosphere and incidental detail (T0/T1a,
+12.14.13); each furniture item is T1a furniture, a lever worth at most +2.
 
 **12.16.10 Factions with running clocks.** `[D]` [DL-12-34; DL-11-05; DL-12-21; R5 LW-01; revision: I-065] At least three full factions (11.3.2), each by PR-11-8 from
 its template (11.3.18): the haven's **rulers** (`tbl.12.seed.rulers` by haven tier; tier 2 in a town, 1 in a
@@ -2141,6 +2174,13 @@ at most (03.4.3).
 **Bond placement** (02.9.2): where each of the eight bond kinds is placed — anchors in the haven, a rival in
 the fourth faction, a creditor in the market, an enemy in the threat's seat, a lost one at a ring-2 site —
 always as a new NPC when the bond is filled (02.9.8), never one already in the cast.
+**Knowledge packs and stances** [revision: R2-D] [DL-12-61; I-130]: every cast NPC gets 2–4 knowledge facts
+(`tbl.12.seed.knowledge_pack`), each a knowledge record (`how: seed`) with its topic: one of their trade (a topic of
+their role, `social.yaml#common_knowledge.by_role`), one local or public (news or folk), one tie to another cast
+member (both hold it), and on a d6 of 4–6 a rumor of 12.16.14 they hold (its truth stays sealed). A pack fact is T1
+ordinary knowledge: it never names a secret, a clue or a case's solution. Each cast NPC also gets a **stance** toward
+the opening incident: helps when they hold a placement of its case, hinders when of the threat faction, else the
+table's d6 (helps, wary, indifferent, hinders). PR-12-10 reads the pack at its rung 2.
 
 **12.16.12 Sites, lairs and threats.** `[D]` [DL-12-23; DL-12-21; R5 LW-07; revision: I-065] One site per area in rings 1–3 and one **lair** in each of rings
 4 and 5, each by PR-10-6 (theme d8 with the wound's themes × 3; a domain whose terrain fits the area; band the
@@ -2184,6 +2224,16 @@ the Peaked shape, the Typical rule unless 02.3.5's exception applies), covering 
 (an Acolyte of the main keeper, trained in one of its schools: healing if it keeps healing, else its first
 school, with the livelihood's suggested technique of that school [revision: I-052]; or a Hedge-taught of the
 place of acceptance when the main keeper is a pact-power); each with a drive, an aspiration and an anchor bond to a cast NPC; birth drawn live when picked.
+**The incident's case** [revision: R2-D] [DL-12-62; DL-15-38; I-145; I-148]: at seed time the inciting incident runs
+PR-15-6 in its reduced profile (15.9.4; `investigation.yaml#reduced_case`). Its subject is the story role the incident
+names (who is missing, who the message was for, who makes the offer, who the challenger is; for an alarm, a theft or an
+omen, the thing itself), cast from the cast where the role fits (00.11 `cast`), else generated by 12.11.1 (a missing
+child, elder or priest, by d6). Two necessary nodes (the subject; the way on, toward the first lead's target), three
+placements and one reserve each, and the first node's core placement held at the opening place (by a reporter there:
+a cast NPC whose home it is, else a walk-on). All sealed. **Documents**: the hire lead's notice and one more notice (a
+warning, a charter or a bounty) are written from `tbl.12.seed.document`, each a `document` entity with a `text` fact,
+delivered first when read (12.10.5). When a lead points to a document, its text names where the lead goes: who to ask,
+and where.
 
 **12.16.17 The seed check.** `[D]` [DL-12-24; DL-12-36; revision: I-065] A seed is complete when every requirement of **T-12-16**
 (`world_seed.yaml#requirements`) holds: 64 checks, one for everything the other chapters read from a region
@@ -2196,6 +2246,9 @@ check: seed 1 (oracle) and a guided run pass 64 of 64; 200 further oracle seeds 
 regional tables built by PR-10-10, every one passing PR-10-8, whose home-1 tables are audited against both
 reference PCs (PR-10-8 step 2; `travel.yaml#encounter_audit_reference`) (word mix trivial 35.4 / easy 26.4 /
 fair 34.7 / hard 3.5 / lethal 0 %) [revision: I-096]. Seed 1 is committed as `_process/simulation/12-world-seed-example.yaml`.
+**Seed-pack checks** [revision: R2-D] [DL-12-61; I-130]: seven more rows (`world_seed.yaml#pack_requirements`, the last
+rows of T-12-16) hold for every place's look, furniture and exits, every cast NPC's knowledge pack and stance, every
+document's text, and the incident's reduced case. Seed 1, the guided run and the 200 oracle seeds pass all 71.
 
 **12.16.18 After the seed.** `[D]` [DL-12-23; DL-12-31; DL-12-35; revision: I-065] The seed writes the world at the depth play starts with; everything
 deeper is written on demand by its owner's rule and never invented in narration: a place on mention (10.1.4),
@@ -2325,7 +2378,8 @@ data `data/world_seed.yaml`) [revision: I-028]
    (T-12-15) and let the player name the ones they want to answer.
 2. **Run steps 1–13 in order** (T-12-15). For each question: the player's option, or the player's own words
    classified by 12.16.2, or the oracle roll; log `{question, answer, source}`. Each step writes its keys by
-   its rule (12.16.4–12.16.16), reading only earlier steps' writes.
+   its rule (12.16.4–12.16.16), reading only earlier steps' writes. Then run the **seed-pack pass** (12.16.9, 12.16.11,
+   12.16.16) [revision: R2-D].
 3. **Show each step's summary** as `[SEED n/14]` (shown parts only; sealed parts withheld). A veto re-rolls
    that step's oracle answers once and re-runs every later step that read them.
 4. **Seed check** (step 14; 12.16.17): run every T-12-16 requirement; a failure re-runs the step that writes
@@ -2333,6 +2387,44 @@ data `data/world_seed.yaml`) [revision: I-028]
 5. **Hand over** to chapter 02's creation (its C2 shows the seed's present peoples; its defaults read the
    seed's second tongue, keepers and name tables; a pregen may be picked) and then to the opening
    (12.16.16): `mark_boundary(session_start)`, strong start at the incident.
+
+**PR-12-10 Answering a question.** `[D]` + `[J:enum]` as marked (12.10.8; `pacing.yaml#answer_ladder`; reference
+`_process/simulation/12-answer_ladder_sim.py`) [revision: R2-D] [DL-12-60; DL-12-44]. Trigger: an NPC is asked a
+question, a part whose PARSE carries `question_kind` and `topic` (12.2.2). Runs at RECORD for each delivered item
+(01.10.4; a Talk's items by T-15-5's questions rule), before the draft.
+1. **Index and route** `[D]`. Read the asked-and-answered index (12.10.6): `(npc, question_kind, topic)` already
+   answered gives the same fact or the same "does not know"; stop. A topic given as an entity resolves to topics by
+   `social.yaml#common_knowledge.entity_topics`. Then route by tier (12.14.13):
+   - **consequential** (a story role such as who is missing, who did it or who sent them; a case's solution; a sealed
+     fact; a thread's knowledge) goes to the case graph only. An NPC holding a placement on it delivers it (15.9.5–
+     15.9.7); one who holds none says so and points to the holder of the node's core placement, else of a live one. A
+     story-role question with no case behind it builds PR-15-6's reduced case now and is answered from it;
+   - **what do you want or think** is answered from the NPC's record (stance, a revealed want, 12.11.4);
+   - **who is <role>** (not a story role) goes to casting (00.11 `cast`; `social.yaml#cast`); its answer, a person or
+     "no one you know", is a fact;
+   - **who would know** goes to step 5;
+   - everything else is **ordinary** knowledge (T1b): steps 2–5, as deep as step 6 allows.
+2. **Rung 1, the store** `[D]`: the NPC's knowledge records written in play and the public facts in their scope
+   (12.10.6 (a)–(c)), ranked by relevance. A hit is the answer.
+3. **Rung 2, the knowledge pack** `[D]`: the NPC's seeded facts on the topic (12.16.11). A hit is the answer.
+4. **Rung 3, propose and ratify** `[J:enum]` + `[D]`: the DM proposes one typed candidate `{kind: ordinary_fact,
+   subject, predicate, value}`. Code rejects it when `kind` is not ordinary or its subject or predicate touches a
+   sealed fact or a case node (then step 1's consequential route applies). The engine asks the Oracle *"Does <NPC>
+   know that <candidate>?"* at 12.10.6(d)'s odds, fixed before the roll (00.12.7). Yes: write the fact
+   (`source: oracle`, `proposed_by: narrator`) and the NPC's knowledge record; it is the answer. No: write "does not
+   know" (12.10.6(e)) and go to step 5.
+5. **Rung 4, the pointer** `[D]`: the NPC says they don't know and names who would, by casting for "who would know
+   <topic>" (`social.yaml#cast`: an existing person; else the topic's place in the settlement; else a walk-on there
+   by 12.11.1). Never "the first person present", never a name the narration made up. This is a success (DL-12-44).
+6. **Depth by delivered reach** `[D]` (`social.yaml#delivery.information`): Limited runs steps 2, 3 and 5; Standard
+   runs 2–5; Great or better runs 2–5 and the NPC volunteers one extra from their record (a want, a fear, a tie or a
+   lead; T-15-5 row 3). A certain beat or a plain SPEECH question runs at Standard. **Never empty**: every delivered
+   item ends in a fact, a placement, a record answer or a pointer.
+7. **Write** `[D]` the answer as a record line the narration must say (12.14.12), the PC's knowledge record
+   (12.10.5) and the index entry `(npc, question_kind, topic) → fact id | unknown`. A pointer that leads to a pointer
+   more than `repeat_pointer_limit` times for one question is logged for review (DL-12-44).
+*Worst case (J):* a less apt candidate proposed at step 4 — the Oracle still settles it at odds fixed before the roll,
+and a "no" still yields a real lead (class i).
 
 ---
 
@@ -2522,6 +2614,13 @@ key to it.
 | `ws.req.15_relics` | 15 | whether relics count as magic for the magic refusal | 15.3 (refusals) | `canon/relics_and_refusal` | nonempty |
 | `ws.req.16_hire` | 16 | regional hire roles (and quirks, or the generic table), beasts and mounts available, the band limit by tier | 16.3.2, 16.3.3 | `places[]/settlement/hire` | hire |
 | `ws.req.16_recruits` | 16 | named NPCs who might be recruited | 16.3.4 | `npcs[]/recruit` | recruits |
+| `ws.pack.place_look` | 12 | every place (the region record aside) has a one-line look | 12.16.9, 12.4.3 | `places[]/look` | looks |
+| `ws.pack.place_furniture` | 12 | every place (the region record aside) has 2-4 furniture items | 12.16.9 | `places[]/furniture` | furniture |
+| `ws.pack.place_exits` | 12/10 | every place lists its exits from the route graph (a building: its settlement and its neighbours) | 12.16.9, 12.4.3 | `places[]/exits` | exits |
+| `ws.pack.npc_knowledge` | 12 | every cast NPC has 2-4 knowledge facts: one of their trade, one local or public, one tie to another cast member | 12.16.11, 12.10.6 | `npcs[]/knowledge` | knowledge |
+| `ws.pack.npc_stance` | 12 | every cast NPC has a stance toward the opening incident | 12.16.11 | `npcs[]/stance` | stance |
+| `ws.pack.documents` | 12/15 | every seeded document has text from tbl.12.seed.document, and a document a lead points to names the lead's target | 12.16.16 | `documents` | documents |
+| `ws.pack.incident_case` | 15 | the inciting incident's reduced case validates (15.9.4, reduced profile) with a core placement held at the opening place | 12.16.16, PR-15-6, 15.9.4 | `cases` | reduced_case |
 
 ---
 

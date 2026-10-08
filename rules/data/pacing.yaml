@@ -308,12 +308,28 @@ modes:                                    # 12.4.5; T-12-3
 
 dm_questions:                             # 12.6.1; T-12-4 (first match)
   - {when: settled_by_fact_canon_or_scene_type, tool: read}
+  - {when: who_is_role, tool: casting}                    # [revision: R2-D] social.yaml#cast; a story role -> the case graph
+  - {when: what_npc_knows_about_topic, tool: answer_ladder}   # [revision: R2-D] PR-12-10
   - {when: actor_with_capability_attempts, tool: fortune_check}
   - {when: which_of_several_specific_table_exists, tool: roll_table_specific}
   - {when: npc_decision_undecided, tool: tbl.npc_action}
   - {when: yes_no_fact, tool: oracle}
   - {when: meaning_form_or_and, tool: tbl.meaning}
   - {when: a_person_must_exist, tool: npc_generation}
+
+answer_ladder:                            # 12.10.8, PR-12-10 [revision: R2-D] [DL-12-60]
+  trigger: "an NPC is asked a question: a resolved Talk, Observe or Recall part, or a SPEECH question, carrying question_kind and topic (12.2.2)"
+  index: "asked_and_answered: (npc, question_kind, topic) -> fact id | unknown, read before any rung"
+  routes:
+    consequential: "a story role, a case's solution, a sealed fact or a thread's knowledge -> the case graph only (PR-15-6; no case behind a story role -> the reduced case now)"
+    who_is_role: "who is <role> (not a story role) -> casting (social.yaml#cast)"
+    ordinary: "everything else -> the rungs"
+  rungs: [store, pack, propose_and_ratify, pointer]
+  depth_by_reach: "social.yaml#delivery.information.ladder_depth"
+  ratify_odds: "social.yaml#common_knowledge.odds"
+  pointer_order: [person_by_casting, place_kept_at, new_walk_on]
+  never_empty: true
+  repeat_pointer_limit: 2                 # DL-12-44 revisit: a pointer chain longer than this for one question is logged
 
 clock_templates:                          # clocks created by ch.12's twist rows (oracles.yaml tbl.twist_s2..s4); 00.8.1 shape
   # ch.12 owns these templates (00.17.1 Q7). '<opposition>' / '<champion>' are filled with entity ids at creation.

@@ -697,6 +697,9 @@ places:
   visibility: shown
   lifecycle: provisional
   basis: [10.1.2, 12.16.8]
+  look: 'The Weeping Meads: open fields and hedgerows to the horizon'
+  furniture: [a lone oak, a ruined barn]
+  exits: [loc.high_fells_sunken_fells, loc.high_fells_old_downs, loc.high_fells_hungry_pikes, loc.high_fells_merestead, loc.high_fells_shephollows_undercroft]
 - id: loc.high_fells_sunken_fells
   name: The Sunken Fells
   place_kind: area
@@ -782,6 +785,9 @@ places:
   visibility: shown
   lifecycle: provisional
   basis: [10.1.2, 12.16.8]
+  look: 'The Sunken Fells: bare slopes, scree and heather, wind that never stops'
+  furniture: [a waymarker stone, a lone rowan, a cairn on the skyline]
+  exits: [loc.high_fells_weeping_meads, loc.high_fells_old_downs, loc.high_fells_black_crags, loc.high_fells_merestead, loc.high_fells_caves_of_crowton]
 - id: loc.high_fells_old_downs
   name: The Old Downs
   place_kind: area
@@ -867,6 +873,9 @@ places:
   visibility: shown
   lifecycle: provisional
   basis: [10.1.2, 12.16.8]
+  look: 'The Old Downs: open fields and hedgerows to the horizon'
+  furniture: [a ditch and a plank bridge, a milestone, a pond with reeds]
+  exits: [loc.high_fells_sunken_fells, loc.high_fells_weeping_meads, loc.high_fells_drowned_ridge, loc.high_fells_merestead, loc.high_fells_whitfields_temple]
 - id: loc.high_fells_hungry_pikes
   name: The Hungry Pikes
   place_kind: area
@@ -942,6 +951,9 @@ places:
   visibility: shown
   lifecycle: provisional
   basis: [10.1.2, 12.16.8]
+  look: 'The Hungry Pikes: high ground under a wide sky, sheep tracks and grey rock'
+  furniture: [a ruined shieling, a shepherd's hut]
+  exits: [loc.high_fells_black_crags, loc.high_fells_drowned_ridge, loc.high_fells_weeping_meads, loc.high_fells_calmeres_keep]
 - id: loc.high_fells_black_crags
   name: The Black Crags
   place_kind: area
@@ -1027,6 +1039,9 @@ places:
   visibility: shown
   lifecycle: provisional
   basis: [10.1.2, 12.16.8]
+  look: 'The Black Crags: a rolling upland of rough grass and old cairns'
+  furniture: [a boulder field, a lone rowan, a cairn on the skyline, a waymarker stone]
+  exits: [loc.high_fells_hungry_pikes, loc.high_fells_drowned_ridge, loc.high_fells_sunken_fells, loc.high_fells_red_crags, loc.high_fells_whispering_tower]
 - id: loc.high_fells_drowned_ridge
   name: The Drowned Ridge
   place_kind: area
@@ -1122,6 +1137,10 @@ places:
   visibility: shown
   lifecycle: provisional
   basis: [10.1.2, 12.16.8]
+  look: 'The Drowned Ridge: crags above steep valleys, mist in the low places'
+  furniture: [a boulder field, a sheepfold of dry stone, a shepherd's hut, a ruined shieling]
+  exits: [loc.high_fells_black_crags, loc.high_fells_hungry_pikes, loc.high_fells_old_downs, loc.high_fells_thorny_edge, loc.high_fells_weeping_halls,
+    loc.high_fells_hollymores_tower]
 - id: loc.high_fells_red_crags
   name: The Red Crags
   place_kind: area
@@ -1197,6 +1216,9 @@ places:
   visibility: shown
   lifecycle: provisional
   basis: [10.1.2, 12.16.8]
+  look: 'The Red Crags: bare slopes, scree and heather, wind that never stops'
+  furniture: [a shepherd's hut, a ruined shieling, a waymarker stone]
+  exits: [loc.high_fells_thorny_edge, loc.high_fells_weeping_halls, loc.high_fells_black_crags, loc.high_fells_wolfcrags_delving]
 - id: loc.high_fells_thorny_edge
   name: The Thorny Edge
   place_kind: area
@@ -1282,6 +1304,9 @@ places:
   visibility: shown
   lifecycle: provisional
   basis: [10.1.2, 12.16.8]
+  look: 'The Thorny Edge: high ground under a wide sky, sheep tracks and grey rock'
+  furniture: [a cairn on the skyline, a boulder field, a shepherd's hut, a sheepfold of dry stone]
+  exits: [loc.high_fells_red_crags, loc.high_fells_weeping_halls, loc.high_fells_drowned_ridge, loc.high_fells_lonely_ridge, loc.high_fells_oakwalls_warren]
 - id: loc.high_fells_weeping_halls
   name: The Weeping Halls
   place_kind: area
@@ -1367,6 +1392,9 @@ places:
   visibility: shown
   lifecycle: provisional
   basis: [10.1.2, 12.16.8]
+  look: 'The Weeping Halls: fallen stones in a ring, a stair that goes nowhere'
+  furniture: [a hearthstone, a broken archway, a well choked with rubble, an empty niche]
+  exits: [loc.high_fells_thorny_edge, loc.high_fells_red_crags, loc.high_fells_drowned_ridge, loc.high_fells_still_heath, loc.high_fells_broken_warren]
 - id: loc.high_fells_still_heath
   name: The Still Heath
   place_kind: area
@@ -1452,6 +1480,10 @@ places:
   visibility: shown
   lifecycle: provisional
   basis: [10.1.2, 12.16.8]
+  look: 'The Still Heath: moor and bog-cotton, a road marked by stones'
+  furniture: [a ruined barn, a milestone, a ditch and a plank bridge, a lone oak]
+  exits: [loc.high_fells_lonely_ridge, loc.high_fells_weeping_halls, loc.high_fells_broken_greenwood, loc.high_fells_tangled_ridge,
+    loc.high_fells_whitmouths_undercroft]
 - id: loc.high_fells_lonely_ridge
   name: The Lonely Ridge
   place_kind: area
@@ -1507,6 +1539,9 @@ places:
   visibility: shown
   lifecycle: provisional
   basis: [10.1.2, 12.16.8]
+  look: 'The Lonely Ridge: high ground under a wide sky, sheep tracks and grey rock'
+  furniture: [a boulder field, a cold stream]
+  exits: [loc.high_fells_still_heath, loc.high_fells_thorny_edge]
 - id: loc.high_fells_broken_greenwood
   name: The Broken Greenwood
   place_kind: area
@@ -1572,6 +1607,9 @@ places:
   visibility: shown
   lifecycle: provisional
   basis: [10.1.2, 12.16.8]
+  look: 'The Broken Greenwood: an old wood of oak and holly, quiet as a church'
+  furniture: [a hollow oak, a woodcutter's stump, a clearing with a fire ring, a hunter's blind]
+  exits: [loc.high_fells_tangled_ridge, loc.high_fells_still_heath, loc.high_fells_delving_of_ashhollow]
 - id: loc.high_fells_tangled_ridge
   name: The Tangled Ridge
   place_kind: area
@@ -1627,6 +1665,9 @@ places:
   visibility: shown
   lifecycle: provisional
   basis: [10.1.2, 12.16.8]
+  look: 'The Tangled Ridge: bare slopes, scree and heather, wind that never stops'
+  furniture: [a ruined shieling, a shepherd's hut, a lone rowan, a cold stream]
+  exits: [loc.high_fells_broken_greenwood, loc.high_fells_still_heath]
 - id: loc.high_fells_merestead
   name: Merestead
   place_kind: settlement
@@ -1741,6 +1782,9 @@ places:
     - {post: the hall, day: suspicious, night: suspicious}
     - {post: the temple of Oswen, day: unaware, night: suspicious}
     lifestyle_overrides: []
+  look: 'Merestead: timber houses leaning together inside an old earth bank'
+  furniture: [a woodpile against a wall, a midden heap behind the houses]
+  exits: [loc.high_fells_weeping_meads, loc.high_fells_sunken_fells, loc.high_fells_old_downs]
 - id: loc.high_fells_merestead.temple
   name: the temple of Oswen
   place_kind: building
@@ -1776,6 +1820,9 @@ places:
   visibility: shown
   lifecycle: provisional
   basis: [10.1.2, 12.16.8]
+  look: a small chapel with a worn step and a bell rope by the door
+  furniture: [rows of plain benches, an offering bowl by the door, a bell rope]
+  exits: [loc.high_fells_merestead, loc.high_fells_merestead.inn, loc.high_fells_merestead.smithy]
 - id: loc.high_fells_merestead.inn
   name: the Golden Hound
   place_kind: building
@@ -1811,6 +1858,9 @@ places:
   visibility: shown
   lifecycle: provisional
   basis: [10.1.2, 12.16.8]
+  look: a long hall with a fire at one end and benches worn smooth
+  furniture: [a settle by the fire, a slate with the day's prices chalked on it, a row of tankards on hooks, a long trestle table]
+  exits: [loc.high_fells_merestead, loc.high_fells_merestead.temple, loc.high_fells_merestead.smithy]
 - id: loc.high_fells_merestead.smithy
   name: the smithy
   place_kind: building
@@ -1846,6 +1896,9 @@ places:
   visibility: shown
   lifecycle: provisional
   basis: [10.1.2, 12.16.8]
+  look: a cramped workshop hung with tongs and half-made blades
+  furniture: [a bellows the size of a door, a quenching trough, a pile of horseshoes waiting to be fitted, a barrel of charcoal]
+  exits: [loc.high_fells_merestead, loc.high_fells_merestead.temple, loc.high_fells_merestead.inn]
 - id: loc.high_fells_merestead.hall
   name: the hall
   place_kind: building
@@ -1881,6 +1934,9 @@ places:
   visibility: shown
   lifecycle: provisional
   basis: [10.1.2, 12.16.8]
+  look: a fortified house, its windows narrow, its door studded with iron
+  furniture: [a clerk's table with ink and tally sticks, a dais with the rulers' seat]
+  exits: [loc.high_fells_merestead, loc.high_fells_merestead.temple, loc.high_fells_merestead.inn]
 - id: loc.high_fells_merestead.gate
   name: the quay
   place_kind: building
@@ -1916,6 +1972,9 @@ places:
   visibility: shown
   lifecycle: provisional
   basis: [10.1.2, 12.16.8]
+  look: 'the gate: heavy doors, a bar as thick as a man, a watch platform above'
+  furniture: [a chain across the road, a ladder to the watch platform, a ledger of who comes and goes, a heavy bar in iron brackets]
+  exits: [loc.high_fells_merestead, loc.high_fells_merestead.temple, loc.high_fells_merestead.inn]
 - id: loc.high_fells_merestead.market
   name: the market square
   place_kind: building
@@ -1951,6 +2010,9 @@ places:
   visibility: shown
   lifecycle: provisional
   basis: [10.1.2, 12.16.8]
+  look: a narrow market street, every doorway a shop
+  furniture: [a pie-seller's brazier, a notice post]
+  exits: [loc.high_fells_merestead, loc.high_fells_merestead.temple, loc.high_fells_merestead.inn]
 - id: loc.high_fells_merestead.healer
   name: the healer's house
   place_kind: building
@@ -1986,6 +2048,9 @@ places:
   visibility: shown
   lifecycle: provisional
   basis: [10.1.2, 12.16.8]
+  look: a cottage hung with drying bundles, jars crowded on every shelf
+  furniture: [a basin and a jug of boiled water, a mortar and pestle]
+  exits: [loc.high_fells_merestead, loc.high_fells_merestead.temple, loc.high_fells_merestead.inn]
 - id: loc.high_fells_merestead.graveyard
   name: the graveyard
   place_kind: building
@@ -2021,6 +2086,9 @@ places:
   visibility: shown
   lifecycle: provisional
   basis: [10.1.2, 12.16.8]
+  look: rows of low stones under old yews, a path kept clear
+  furniture: [a lych-gate with a bench, a tended plot of flowers, leaning grave markers]
+  exits: [loc.high_fells_merestead, loc.high_fells_merestead.temple, loc.high_fells_merestead.inn]
 - id: loc.high_fells_shepwell_spring
   name: Shepwell Spring
   place_kind: landmark
@@ -2056,6 +2124,9 @@ places:
   visibility: shown
   lifecycle: provisional
   basis: [10.1.2, 12.16.8]
+  look: 'Shepwell Spring: offerings left here by people who will not say why'
+  furniture: [a cairn of stones, a twisted tree]
+  exits: [loc.high_fells_drowned_ridge]
 - id: loc.high_fells_shephollows_undercroft
   name: Shephollow's Undercroft
   place_kind: site
@@ -2195,6 +2266,9 @@ places:
   visibility: shown
   lifecycle: provisional
   basis: [10.1.2, 12.16.8]
+  look: 'Shephollow''s Undercroft: broken walls furred with moss, a doorway into dark'
+  furniture: [an empty niche, a hearthstone, a doorway into dark]
+  exits: [loc.high_fells_weeping_meads]
 - id: loc.high_fells_caves_of_crowton
   name: The Caves of Crowton
   place_kind: site
@@ -2334,6 +2408,9 @@ places:
   visibility: shown
   lifecycle: provisional
   basis: [10.1.2, 12.16.8]
+  look: 'The Caves of Crowton: a mouth in the rock, cold air breathing out'
+  furniture: [a dripping pool, a narrow ledge, a pile of spoil]
+  exits: [loc.high_fells_sunken_fells]
 - id: loc.high_fells_whitfields_temple
   name: Whitfield's Temple
   place_kind: site
@@ -2473,6 +2550,9 @@ places:
   visibility: shown
   lifecycle: provisional
   basis: [10.1.2, 12.16.8]
+  look: 'Whitfield''s Temple: fallen stones in a ring, a stair that goes nowhere'
+  furniture: [a collapsed wall, a well choked with rubble, a carved lintel on the ground, an empty niche]
+  exits: [loc.high_fells_old_downs]
 - id: loc.high_fells_calmeres_keep
   name: Calmere's Keep
   place_kind: site
@@ -2612,6 +2692,9 @@ places:
   visibility: shown
   lifecycle: provisional
   basis: [10.1.2, 12.16.8]
+  look: 'Calmere''s Keep: broken walls furred with moss, a doorway into dark'
+  furniture: [an empty niche, a well choked with rubble]
+  exits: [loc.high_fells_hungry_pikes]
 - id: loc.high_fells_whispering_tower
   name: The Whispering Tower
   place_kind: site
@@ -2751,6 +2834,9 @@ places:
   visibility: shown
   lifecycle: provisional
   basis: [10.1.2, 12.16.8]
+  look: 'The Whispering Tower: broken walls furred with moss, a doorway into dark'
+  furniture: [an empty niche, a hearthstone, a carved lintel on the ground, a broken archway]
+  exits: [loc.high_fells_black_crags]
 - id: loc.high_fells_hollymores_tower
   name: Hollymore's Tower
   place_kind: site
@@ -2891,6 +2977,9 @@ places:
   visibility: shown
   lifecycle: provisional
   basis: [10.1.2, 12.16.8]
+  look: 'Hollymore''s Tower: broken walls furred with moss, a doorway into dark'
+  furniture: [a hearthstone, a carved lintel on the ground, an empty niche, a stair of worn steps]
+  exits: [loc.high_fells_drowned_ridge]
 - id: loc.high_fells_wolfcrags_delving
   name: Wolfcrag's Delving
   place_kind: site
@@ -3032,6 +3121,9 @@ places:
   visibility: shown
   lifecycle: provisional
   basis: [10.1.2, 12.16.8]
+  look: 'Wolfcrag''s Delving: a mouth in the rock, cold air breathing out'
+  furniture: [a narrow ledge, a dripping pool, soot marks on the ceiling, a rusted ore cart]
+  exits: [loc.high_fells_red_crags]
 - id: loc.high_fells_oakwalls_warren
   name: Oakwall's Warren
   place_kind: site
@@ -3172,6 +3264,9 @@ places:
   visibility: shown
   lifecycle: provisional
   basis: [10.1.2, 12.16.8]
+  look: 'Oakwall''s Warren: a shell of a building, its roof long gone'
+  furniture: [a well choked with rubble, an empty niche]
+  exits: [loc.high_fells_thorny_edge]
 - id: loc.high_fells_broken_warren
   name: The Broken Warren
   place_kind: site
@@ -3311,6 +3406,9 @@ places:
   visibility: shown
   lifecycle: provisional
   basis: [10.1.2, 12.16.8]
+  look: 'The Broken Warren: a shell of a building, its roof long gone'
+  furniture: [a carved lintel on the ground, a well choked with rubble]
+  exits: [loc.high_fells_weeping_halls]
 - id: loc.high_fells_whitmouths_undercroft
   name: Whitmouth's Undercroft
   place_kind: site
@@ -3452,6 +3550,9 @@ places:
   visibility: shown
   lifecycle: provisional
   basis: [10.1.2, 12.16.8]
+  look: 'Whitmouth''s Undercroft: tumbled masonry and a cold that the sun does not reach'
+  furniture: [a well choked with rubble, an empty niche, a collapsed wall, a doorway into dark]
+  exits: [loc.high_fells_still_heath]
 - id: loc.high_fells_delving_of_ashhollow
   name: The Delving of Ashhollow
   place_kind: site
@@ -3593,6 +3694,9 @@ places:
   visibility: shown
   lifecycle: provisional
   basis: [10.1.2, 12.16.8]
+  look: 'The Delving of Ashhollow: a cave under an overhang, soot on the ceiling'
+  furniture: [a cold draught from a crack, a pile of spoil, a rusted ore cart]
+  exits: [loc.high_fells_broken_greenwood]
 places_of_acceptance:
 - place: loc.high_fells_shepwell_spring
   spirit: the lady of the spring (creature.spirit.place.water)
@@ -3653,9 +3757,16 @@ npcs:
   visibility: background
   sealed_fields: [wants, fears, refusals, secrets, knowledge]
   mind: sapient
-  knowledge: []
+  knowledge:
+  - {fact: kn.tible_of_the_wet_warren.trade, slot: trade, topic: factions, text: The faithful of Halda pay well but ask a lot, how: seed,
+    tier: T1}
+  - {fact: kn.tible_of_the_wet_warren.local, slot: local, topic: local_news, text: the harvest stores are lower than anyone likes, how: seed,
+    tier: T1}
+  - {fact: kn.tible_of_the_wet_warren.tie, slot: tie, topic: folk, about: npc.ranella_whitefield, text: quarrelled with Ranella Whitefield
+      last winter, how: seed, tier: T1}
   lifecycle: provisional
   basis: [12.11.1, 12.16.11]
+  stance: {toward: incident, stance: helps, why: holds a placement of the incident's case}
 - id: npc.kazek_graniteborn
   name: Kazek Graniteborn
   role: officer of The lords of Hawkgate
@@ -3698,9 +3809,15 @@ npcs:
   visibility: background
   sealed_fields: [wants, fears, refusals, secrets, knowledge]
   mind: sapient
-  knowledge: []
+  knowledge:
+  - {fact: kn.kazek_graniteborn.trade, slot: trade, topic: factions, text: The lords of Hawkgate has been hiring, how: seed, tier: T1}
+  - {fact: kn.kazek_graniteborn.local, slot: local, topic: local_news, text: the spring festival is the talk of Merestead, how: seed,
+    tier: T1}
+  - {fact: kn.kazek_graniteborn.tie, slot: tie, topic: folk, about: npc.mila_greenhill, text: is cousin to Mila Greenhill, how: seed,
+    tier: T1}
   lifecycle: provisional
   basis: [12.11.1, 12.16.11]
+  stance: {toward: incident, stance: hinders, why: has a reason to want it left alone}
 - id: npc.milby_greenfoot
   name: Milby Greenfoot
   role: head of The faithful of Oswen
@@ -3746,9 +3863,15 @@ npcs:
   visibility: background
   sealed_fields: [wants, fears, refusals, secrets, knowledge]
   mind: sapient
-  knowledge: []
+  knowledge:
+  - {fact: kn.milby_greenfoot.trade, slot: trade, topic: law, text: the watch answers to The council of Merestead, how: seed, tier: T1}
+  - {fact: kn.milby_greenfoot.local, slot: local, topic: folk, text: Falkin Greenfoot came to Merestead from Shepwell Spring years ago,
+    how: seed, tier: T1}
+  - {fact: kn.milby_greenfoot.tie, slot: tie, topic: folk, about: npc.tible_of_the_wet_warren, text: trusts Tible of the Wet Warren
+      more than anyone in Merestead, how: seed, tier: T1}
   lifecycle: provisional
   basis: [12.11.1, 12.16.11]
+  stance: {toward: incident, stance: hinders, why: has a reason to want it left alone}
 - id: npc.milie_thistlefoot
   name: Milie Thistlefoot
   role: officer of The faithful of Oswen
@@ -3790,9 +3913,16 @@ npcs:
   visibility: background
   sealed_fields: [wants, fears, refusals, secrets, knowledge]
   mind: sapient
-  knowledge: []
+  knowledge:
+  - {fact: kn.milie_thistlefoot.trade, slot: trade, topic: factions, text: The faithful of Oswen pay well but ask a lot, how: seed,
+    tier: T1}
+  - {fact: kn.milie_thistlefoot.local, slot: local, topic: folk, text: Alo Thornwell came to Merestead from The Black Crags years ago,
+    how: seed, tier: T1}
+  - {fact: kn.milie_thistlefoot.tie, slot: tie, topic: folk, about: npc.falkin_greenfoot, text: is cousin to Falkin Greenfoot, how: seed,
+    tier: T1}
   lifecycle: provisional
   basis: [12.11.1, 12.16.11]
+  stance: {toward: incident, stance: hinders, why: has a reason to want it left alone}
 - id: npc.brugnak_three_scar
   name: Brugnak Three-Scar
   role: head of The Horde of the Millwick
@@ -3835,9 +3965,21 @@ npcs:
   visibility: background
   sealed_fields: [wants, fears, refusals, secrets, knowledge]
   mind: sapient
-  knowledge: []
+  knowledge:
+  - {fact: kn.brugnak_three_scar.trade, slot: trade, topic: law, text: the watch answers to The faithful of Oswen, how: seed, tier: T1}
+  - {fact: kn.brugnak_three_scar.local, slot: local, topic: local_news, text: The faithful of Ala has been holding meetings late at
+      night, how: seed, tier: T1}
+  - {fact: kn.brugnak_three_scar.tie, slot: tie, topic: folk, about: npc.murznak_red_hand, text: learned their trade from Murznak Red-Hand,
+    how: seed, tier: T1}
+  - fact: kn.brugnak_three_scar.rumor
+    slot: rumor
+    topic: local_news
+    rumor: {table: tbl.high_fells.rumors, range: '15'}
+    truth: sealed
+    how: seed
   lifecycle: provisional
   basis: [12.11.1, 12.16.11]
+  stance: {toward: incident, stance: hinders, why: of the threat faction}
 - id: npc.murznak_red_hand
   name: Murznak Red-Hand
   role: officer of The Horde of the Millwick
@@ -3879,9 +4021,16 @@ npcs:
   visibility: background
   sealed_fields: [wants, fears, refusals, secrets, knowledge]
   mind: sapient
-  knowledge: []
+  knowledge:
+  - {fact: kn.murznak_red_hand.trade, slot: trade, topic: arrivals, text: the watch turns back anyone without a name to give, how: seed,
+    tier: T1}
+  - {fact: kn.murznak_red_hand.local, slot: local, topic: local_news, text: The faithful of Halda has been holding meetings late at
+      night, how: seed, tier: T1}
+  - {fact: kn.murznak_red_hand.tie, slot: tie, topic: folk, about: npc.brugnak_three_scar, text: drinks with Brugnak Three-Scar most
+      evenings, how: seed, tier: T1}
   lifecycle: provisional
   basis: [12.11.1, 12.16.11]
+  stance: {toward: incident, stance: hinders, why: of the threat faction}
 - id: npc.yagum_iron_tusk
   name: Yagum Iron-Tusk
   role: head of The council of Merestead
@@ -3926,9 +4075,21 @@ npcs:
   visibility: background
   sealed_fields: [wants, fears, refusals, secrets, knowledge]
   mind: sapient
-  knowledge: []
+  knowledge:
+  - {fact: kn.yagum_iron_tusk.trade, slot: trade, topic: factions, text: The council of Merestead pay well but ask a lot, how: seed,
+    tier: T1}
+  - {fact: kn.yagum_iron_tusk.local, slot: local, topic: folk, text: Kazek Graniteborn keeps to themself these days, how: seed, tier: T1}
+  - {fact: kn.yagum_iron_tusk.tie, slot: tie, topic: folk, about: npc.mila_greenhill, text: trusts Mila Greenhill more than anyone in
+      Merestead, how: seed, tier: T1}
+  - fact: kn.yagum_iron_tusk.rumor
+    slot: rumor
+    topic: local_news
+    rumor: {table: tbl.high_fells.rumors, range: '5'}
+    truth: sealed
+    how: seed
   lifecycle: provisional
   basis: [12.11.1, 12.16.11]
+  stance: {toward: incident, stance: helps, why: wants it settled and will help}
 - id: npc.ranella_whitefield
   name: Ranella Whitefield
   role: officer of The council of Merestead
@@ -3971,9 +4132,22 @@ npcs:
   visibility: background
   sealed_fields: [wants, fears, refusals, secrets, knowledge]
   mind: sapient
-  knowledge: []
+  knowledge:
+  - {fact: kn.ranella_whitefield.trade, slot: trade, topic: arrivals, text: the gate logs everyone who comes in after dusk, how: seed,
+    tier: T1}
+  - {fact: kn.ranella_whitefield.local, slot: local, topic: local_news, text: The faithful of Ala has been holding meetings late at
+      night, how: seed, tier: T1}
+  - {fact: kn.ranella_whitefield.tie, slot: tie, topic: folk, about: npc.milie_thistlefoot, text: is cousin to Milie Thistlefoot, how: seed,
+    tier: T1}
+  - fact: kn.ranella_whitefield.rumor
+    slot: rumor
+    topic: local_news
+    rumor: {table: tbl.high_fells.rumors, range: '18'}
+    truth: sealed
+    how: seed
   lifecycle: provisional
   basis: [12.11.1, 12.16.11]
+  stance: {toward: incident, stance: helps, why: holds a placement of the incident's case}
 - id: npc.samo_applefoot
   name: Samo Applefoot
   role: head of The faithful of Halda
@@ -4017,9 +4191,22 @@ npcs:
   visibility: background
   sealed_fields: [wants, fears, refusals, secrets, knowledge]
   mind: sapient
-  knowledge: []
+  knowledge:
+  - {fact: kn.samo_applefoot.trade, slot: trade, topic: folk, text: Alo Thornwell has lived in Merestead longer than anyone can remember,
+    how: seed, tier: T1}
+  - {fact: kn.samo_applefoot.local, slot: local, topic: folk, text: everyone in Merestead goes to Tible of the Wet Warren when they
+      need advice, how: seed, tier: T1}
+  - {fact: kn.samo_applefoot.tie, slot: tie, topic: folk, about: npc.loran_millbrook, text: is cousin to Loran Millbrook, how: seed,
+    tier: T1}
+  - fact: kn.samo_applefoot.rumor
+    slot: rumor
+    topic: local_news
+    rumor: {table: tbl.high_fells.rumors, range: '18'}
+    truth: sealed
+    how: seed
   lifecycle: provisional
   basis: [12.11.1, 12.16.11]
+  stance: {toward: incident, stance: wary, why: will help for a reason or a price}
 - id: npc.mila_greenhill
   name: Mila Greenhill
   role: head of The faithful of Ala
@@ -4063,9 +4250,20 @@ npcs:
   visibility: background
   sealed_fields: [wants, fears, refusals, secrets, knowledge]
   mind: sapient
-  knowledge: []
+  knowledge:
+  - {fact: kn.mila_greenhill.trade, slot: trade, topic: law, text: The faithful of Ala judge quarrels at the hall on the first day of
+      the week, how: seed, tier: T1}
+  - {fact: kn.mila_greenhill.local, slot: local, topic: local_news, text: the spring festival is the talk of Merestead, how: seed, tier: T1}
+  - {fact: kn.mila_greenhill.tie, slot: tie, topic: folk, about: npc.alo_thornwell, text: is cousin to Alo Thornwell, how: seed, tier: T1}
+  - fact: kn.mila_greenhill.rumor
+    slot: rumor
+    topic: local_news
+    rumor: {table: tbl.high_fells.rumors, range: '3'}
+    truth: sealed
+    how: seed
   lifecycle: provisional
   basis: [12.11.1, 12.16.11]
+  stance: {toward: incident, stance: indifferent, why: has their own troubles}
 - id: npc.harin_deepdelve
   name: Harin Deepdelve
   role: smith
@@ -4107,9 +4305,21 @@ npcs:
   visibility: background
   sealed_fields: [wants, fears, refusals, secrets, knowledge]
   mind: sapient
-  knowledge: []
+  knowledge:
+  - {fact: kn.harin_deepdelve.trade, slot: trade, topic: craft, text: the bridge toward The Hungry Pikes needs mending, how: seed, tier: T1}
+  - {fact: kn.harin_deepdelve.local, slot: local, topic: local_news, text: the spring festival is the talk of Merestead, how: seed,
+    tier: T1}
+  - {fact: kn.harin_deepdelve.tie, slot: tie, topic: folk, about: npc.ranella_whitefield, text: owes Ranella Whitefield money, how: seed,
+    tier: T1}
+  - fact: kn.harin_deepdelve.rumor
+    slot: rumor
+    topic: local_news
+    rumor: {table: tbl.high_fells.rumors, range: '19'}
+    truth: sealed
+    how: seed
   lifecycle: provisional
   basis: [12.11.1, 12.16.11]
+  stance: {toward: incident, stance: wary, why: will help for a reason or a price}
 - id: npc.falkin_greenfoot
   name: Falkin Greenfoot
   role: innkeeper
@@ -4150,9 +4360,21 @@ npcs:
   visibility: background
   sealed_fields: [wants, fears, refusals, secrets, knowledge]
   mind: sapient
-  knowledge: []
+  knowledge:
+  - {fact: kn.falkin_greenfoot.trade, slot: trade, topic: local_news, text: The faithful of Ala has been holding meetings late at night,
+    how: seed, tier: T1}
+  - {fact: kn.falkin_greenfoot.local, slot: local, topic: folk, text: Kazek Graniteborn keeps to themself these days, how: seed, tier: T1}
+  - {fact: kn.falkin_greenfoot.tie, slot: tie, topic: folk, about: npc.kazek_graniteborn, text: is cousin to Kazek Graniteborn, how: seed,
+    tier: T1}
+  - fact: kn.falkin_greenfoot.rumor
+    slot: rumor
+    topic: local_news
+    rumor: {table: tbl.high_fells.rumors, range: '3'}
+    truth: sealed
+    how: seed
   lifecycle: provisional
   basis: [12.11.1, 12.16.11]
+  stance: {toward: incident, stance: helps, why: wants it settled and will help}
 - id: npc.loran_millbrook
   name: Loran Millbrook
   role: captain of the gate
@@ -4197,9 +4419,22 @@ npcs:
   visibility: background
   sealed_fields: [wants, fears, refusals, secrets, knowledge]
   mind: sapient
-  knowledge: []
+  knowledge:
+  - {fact: kn.loran_millbrook.trade, slot: trade, topic: local_news, text: the spring festival is the talk of Merestead, how: seed,
+    tier: T1}
+  - {fact: kn.loran_millbrook.local, slot: local, topic: folk, text: Ranan Brightsmith came to Merestead from Whitfield's Temple years
+      ago, how: seed, tier: T1}
+  - {fact: kn.loran_millbrook.tie, slot: tie, topic: folk, about: npc.harin_deepdelve, text: quarrelled with Harin Deepdelve last winter,
+    how: seed, tier: T1}
+  - fact: kn.loran_millbrook.rumor
+    slot: rumor
+    topic: local_news
+    rumor: {table: tbl.high_fells.rumors, range: '4'}
+    truth: sealed
+    how: seed
   lifecycle: provisional
   basis: [12.11.1, 12.16.11]
+  stance: {toward: incident, stance: helps, why: holds a placement of the incident's case}
 - id: npc.kazain_ironborn
   name: Kazain Ironborn
   role: wise-woman of Shepwell Spring
@@ -4243,9 +4478,21 @@ npcs:
   visibility: background
   sealed_fields: [wants, fears, refusals, secrets, knowledge]
   mind: sapient
-  knowledge: []
+  knowledge:
+  - {fact: kn.kazain_ironborn.trade, slot: trade, topic: sickness, text: a cough has been going round Merestead, how: seed, tier: T1}
+  - {fact: kn.kazain_ironborn.local, slot: local, topic: folk, text: everyone in Merestead goes to Magwen Thistlefoot when they need
+      advice, how: seed, tier: T1}
+  - {fact: kn.kazain_ironborn.tie, slot: tie, topic: folk, about: npc.milby_greenfoot, text: drinks with Milby Greenfoot most evenings,
+    how: seed, tier: T1}
+  - fact: kn.kazain_ironborn.rumor
+    slot: rumor
+    topic: local_news
+    rumor: {table: tbl.high_fells.rumors, range: '12'}
+    truth: sealed
+    how: seed
   lifecycle: provisional
   basis: [12.11.1, 12.16.11]
+  stance: {toward: incident, stance: helps, why: wants it settled and will help}
 - id: npc.zzirik_swift
   name: Zzirik Swift
   role: sellsword between contracts
@@ -4287,9 +4534,21 @@ npcs:
   visibility: background
   sealed_fields: [wants, fears, refusals, secrets, knowledge]
   mind: sapient
-  knowledge: []
+  knowledge:
+  - {fact: kn.zzirik_swift.trade, slot: trade, topic: roads, text: the road to The Old Downs floods after heavy rain, how: seed, tier: T1}
+  - {fact: kn.zzirik_swift.local, slot: local, topic: local_news, text: The faithful of Oswen has been holding meetings late at night,
+    how: seed, tier: T1}
+  - {fact: kn.zzirik_swift.tie, slot: tie, topic: folk, about: npc.tible_of_the_wet_warren, text: owes Tible of the Wet Warren money,
+    how: seed, tier: T1}
+  - fact: kn.zzirik_swift.rumor
+    slot: rumor
+    topic: local_news
+    rumor: {table: tbl.high_fells.rumors, range: '10'}
+    truth: sealed
+    how: seed
   lifecycle: provisional
   basis: [12.11.1, 12.16.11]
+  stance: {toward: incident, stance: helps, why: wants it settled and will help}
 - id: npc.ranan_brightsmith
   name: Ranan Brightsmith
   role: scribe and teacher of letters
@@ -4334,9 +4593,22 @@ npcs:
   visibility: background
   sealed_fields: [wants, fears, refusals, secrets, knowledge]
   mind: sapient
-  knowledge: []
+  knowledge:
+  - {fact: kn.ranan_brightsmith.trade, slot: trade, topic: lore, text: Hollymore's Tower was a holy place before Merestead was built,
+    how: seed, tier: T1}
+  - {fact: kn.ranan_brightsmith.local, slot: local, topic: local_news, text: the harvest stores are lower than anyone likes, how: seed,
+    tier: T1}
+  - {fact: kn.ranan_brightsmith.tie, slot: tie, topic: folk, about: npc.yagum_iron_tusk, text: drinks with Yagum Iron-Tusk most evenings,
+    how: seed, tier: T1}
+  - fact: kn.ranan_brightsmith.rumor
+    slot: rumor
+    topic: local_news
+    rumor: {table: tbl.high_fells.rumors, range: '7'}
+    truth: sealed
+    how: seed
   lifecycle: provisional
   basis: [12.11.1, 12.16.11]
+  stance: {toward: incident, stance: hinders, why: has a reason to want it left alone}
 - id: npc.alo_thornwell
   name: Alo Thornwell
   role: healer
@@ -4380,9 +4652,16 @@ npcs:
   visibility: background
   sealed_fields: [wants, fears, refusals, secrets, knowledge]
   mind: sapient
-  knowledge: []
+  knowledge:
+  - {fact: kn.alo_thornwell.trade, slot: trade, topic: folk, text: Mila Greenhill came to Merestead from The Drowned Ridge years ago,
+    how: seed, tier: T1}
+  - {fact: kn.alo_thornwell.local, slot: local, topic: local_news, text: The faithful of Halda has been holding meetings late at night,
+    how: seed, tier: T1}
+  - {fact: kn.alo_thornwell.tie, slot: tie, topic: folk, about: npc.harin_deepdelve, text: quarrelled with Harin Deepdelve last winter,
+    how: seed, tier: T1}
   lifecycle: provisional
   basis: [12.11.1, 12.16.11]
+  stance: {toward: incident, stance: hinders, why: has a reason to want it left alone}
 - id: npc.magwen_thistlefoot
   name: Magwen Thistlefoot
   role: hermit-judge whom the old lands still obey
@@ -4426,12 +4705,25 @@ npcs:
   visibility: background
   sealed_fields: [wants, fears, refusals, secrets, knowledge, keeps]
   mind: sapient
-  knowledge: []
+  knowledge:
+  - {fact: kn.magwen_thistlefoot.trade, slot: trade, topic: lore, text: The Whispering Tower was a holy place before Merestead was built,
+    how: seed, tier: T1}
+  - {fact: kn.magwen_thistlefoot.local, slot: local, topic: folk, text: everyone in Merestead goes to Selda Thornwell when they need
+      advice, how: seed, tier: T1}
+  - {fact: kn.magwen_thistlefoot.tie, slot: tie, topic: folk, about: npc.selda_thornwell, text: drinks with Selda Thornwell most evenings,
+    how: seed, tier: T1}
+  - fact: kn.magwen_thistlefoot.rumor
+    slot: rumor
+    topic: local_news
+    rumor: {table: tbl.high_fells.rumors, range: '19'}
+    truth: sealed
+    how: seed
   lifecycle: provisional
   basis: [12.11.1, 12.16.11]
   power: true
   keeps: {fact: truth.magwen_thistlefoot, text: a crime the region's powers buried, sealed: true, gate: 'a lore contest kept by this
       power (15.9.20), or standing Devoted'}
+  stance: {toward: incident, stance: hinders, why: has a reason to want it left alone}
 - id: npc.selda_thornwell
   name: Selda Thornwell
   role: archmage in a tower that should have fallen
@@ -4474,12 +4766,24 @@ npcs:
   visibility: background
   sealed_fields: [wants, fears, refusals, secrets, knowledge, keeps]
   mind: sapient
-  knowledge: []
+  knowledge:
+  - {fact: kn.selda_thornwell.trade, slot: trade, topic: faith, text: the faithful of Oswen tend the graveyard, how: seed, tier: T1}
+  - {fact: kn.selda_thornwell.local, slot: local, topic: local_news, text: The faithful of Oswen has been holding meetings late at night,
+    how: seed, tier: T1}
+  - {fact: kn.selda_thornwell.tie, slot: tie, topic: folk, about: npc.magwen_thistlefoot, text: drinks with Magwen Thistlefoot most
+      evenings, how: seed, tier: T1}
+  - fact: kn.selda_thornwell.rumor
+    slot: rumor
+    topic: local_news
+    rumor: {table: tbl.high_fells.rumors, range: '10'}
+    truth: sealed
+    how: seed
   lifecycle: provisional
   basis: [12.11.1, 12.16.11]
   power: true
   keeps: {fact: truth.selda_thornwell, text: 'the working that made the wound, and the one that could close it', sealed: true, gate: 'a
       lore contest kept by this power (15.9.20), or standing Devoted'}
+  stance: {toward: incident, stance: helps, why: wants it settled and will help}
 - id: npc.sketaa_of_the_reed_clan
   name: Sketaa of the Reed Clan
   role: exiled heir and the court that followed
@@ -4524,12 +4828,19 @@ npcs:
   visibility: background
   sealed_fields: [wants, fears, refusals, secrets, knowledge, keeps]
   mind: sapient
-  knowledge: []
+  knowledge:
+  - {fact: kn.sketaa_of_the_reed_clan.trade, slot: trade, topic: folk, text: Ymmulf of the Long Winter has lived in Merestead longer
+      than anyone can remember, how: seed, tier: T1}
+  - {fact: kn.sketaa_of_the_reed_clan.local, slot: local, topic: folk, text: Ymmulf of the Long Winter came to Merestead from Shepwell
+      Spring years ago, how: seed, tier: T1}
+  - {fact: kn.sketaa_of_the_reed_clan.tie, slot: tie, topic: folk, about: npc.ymmulf_of_the_long_winter, text: drinks with Ymmulf of
+      the Long Winter most evenings, how: seed, tier: T1}
   lifecycle: provisional
   basis: [12.11.1, 12.16.11]
   power: true
   keeps: {fact: truth.sketaa_of_the_reed_clan, text: the true line of the haven's rulers, sealed: true, gate: 'a lore contest kept by
       this power (15.9.20), or standing Devoted'}
+  stance: {toward: incident, stance: helps, why: wants it settled and will help}
 - id: npc.ymmulf_of_the_long_winter
   name: Ymmulf of the Long Winter
   role: master of a lost guild's last hall
@@ -4574,12 +4885,25 @@ npcs:
   visibility: background
   sealed_fields: [wants, fears, refusals, secrets, knowledge, keeps]
   mind: sapient
-  knowledge: []
+  knowledge:
+  - {fact: kn.ymmulf_of_the_long_winter.trade, slot: trade, topic: craft, text: a blade from the Merestead forge holds an edge well,
+    how: seed, tier: T1}
+  - {fact: kn.ymmulf_of_the_long_winter.local, slot: local, topic: local_news, text: a new roof is going on the Merestead hall, how: seed,
+    tier: T1}
+  - {fact: kn.ymmulf_of_the_long_winter.tie, slot: tie, topic: folk, about: npc.sketaa_of_the_reed_clan, text: drinks with Sketaa of
+      the Reed Clan most evenings, how: seed, tier: T1}
+  - fact: kn.ymmulf_of_the_long_winter.rumor
+    slot: rumor
+    topic: local_news
+    rumor: {table: tbl.high_fells.rumors, range: '17'}
+    truth: sealed
+    how: seed
   lifecycle: provisional
   basis: [12.11.1, 12.16.11]
   power: true
   keeps: {fact: truth.ymmulf_of_the_long_winter, text: the recipe of a wondrous work and where its metal lies, sealed: true, gate: 'a
       lore contest kept by this power (15.9.20), or standing Devoted'}
+  stance: {toward: incident, stance: wary, why: will help for a reason or a price}
 bond_placement:
 - {slot: anchor, kind: kin, where: loc.high_fells_merestead, default_npc: null, note: 'a new NPC in Merestead (02.9.8: never one already
     in the cast)'}
@@ -6686,7 +7010,7 @@ encounter_table_audit:
   tbl.high_fells.enc.thorny_edge:
     pass: true
     bands: {home-1: 6, home: 11, home+1: 3}
-    words: {trivial: 6, fair: 11, easy: 3}
+    words: {trivial: 6, easy: 6, fair: 8}
     fair_or_easier: 20
     failures: []
     pool_size: 17
@@ -6710,7 +7034,7 @@ encounter_table_audit:
   tbl.high_fells.enc.lonely_ridge:
     pass: true
     bands: {home-1: 6, home: 11, home+1: 3}
-    words: {easy: 8, trivial: 3, fair: 9}
+    words: {easy: 9, trivial: 3, fair: 8}
     fair_or_easier: 20
     failures: []
     pool_size: 17
@@ -6782,7 +7106,7 @@ terrain_by_ring:
   '3': [terrain.highland.hills, terrain.highland.mountains, terrain.ruin]
   '4': [terrain.highland.hills, terrain.plains.moor]
   '5': [terrain.forest.woodland, terrain.highland.mountains]
-cases: []
+cases: [case.incident.alarm]
 bestiary:
   archetypes: [arch.abomination, arch.air_elemental, arch.ancestor, arch.animated, arch.bear, arch.brigand, arch.celestial, arch.clockwork,
     arch.cultist, arch.drake, arch.dwarf_holdguard, arch.earth_elemental, arch.fey_noble, arch.folk_mage, arch.frost_elemental, arch.fungal,
@@ -6941,9 +7265,11 @@ opening:
   leads:
   - {lead: 'the incident itself: the haven''s alarm sounds: something from the wound is at the gate', points_to: sit.high_fells.wound}
   - {lead: A savaged ewe; folk say it is only the beginning., points_to: sit.high_fells.local}
-  - {lead: 'The council of Merestead is hiring, and asks no questions', points_to: clk.high_fells.fourth.goal}
+  - {lead: 'The council of Merestead is hiring, and asks no questions', points_to: clk.high_fells.fourth.goal, document: doc.lead_3,
+    names: Yagum Iron-Tusk}
   starting_state: {known_places: ring 0-3 areas and their known sites (rumor), status: 0 with every faction unless a creation tie sets
       it (02.9.5)}
+  case: case.incident.alarm
 calendar:
   months: [the Month of Thaw, Plough, Lambing-month, Swarming-month, Ripening-month, the Month of Midsummer, Gleaning, Ember-month,
     Apple-month, the Month of Deep Dark, the Month of Hearth, the Month of Wolf]
@@ -6957,3 +7283,55 @@ calendar:
   lifespans: calendar.yaml#lifespans (generic)
   opening_date: the spring quarter day, 23 years since the Burning
   basis: [11.10.1, 11.10.4, 12.16.15]
+documents:
+- {id: doc.incident_notice, kind: document, option: warning, at: loc.high_fells_merestead.temple, text: 'By order of The lords of Hawkgate:
+    none to go toward a war-band of The Horde of the Millwick after dark. Lights have been seen there. Report anything seen to Loran
+    Millbrook at the quay.', table: tbl.12.seed.document}
+- {id: doc.lead_3, kind: document, option: hire, at: loc.high_fells_merestead.gate, text: 'WANTED: able hands for a journey into the
+    hills. Good coin, no questions. Ask for Yagum Iron-Tusk at the market square. The council of Merestead', table: tbl.12.seed.document}
+- {id: doc.notice, kind: document, option: warning, at: loc.high_fells_merestead.gate, text: 'By order of The lords of Hawkgate: none
+    to go toward Shephollow''s Undercroft after dark. The watch cannot answer for it. Report anything seen to Loran Millbrook at the
+    quay.', table: tbl.12.seed.document}
+seed_cases:
+- id: case.incident.alarm
+  profile: reduced
+  trigger: incident
+  option: alarm
+  opening_place: loc.high_fells_merestead.gate
+  solution:
+    subject: {id: incident.alarm.subject, role: what is at the gate, words: a war-band of The Horde of the Millwick}
+    leads_to: sit.high_fells.wound
+    sealed: true
+  nodes:
+  - id: clu.incident.alarm.n1
+    fact: 'what is at the gate: a war-band of The Horde of the Millwick'
+    necessary: true
+    points_to: [clu.incident.alarm.n2]
+    placements:
+    - {id: clu.incident.alarm.n1.p1, holder: npc.loran_millbrook, holder_kind: person, method: inquiry, access: core, at: loc.high_fells_merestead.gate,
+      content: 'what is at the gate: a war-band of The Horde of the Millwick', status: unfound, sealed: true}
+    - {id: clu.incident.alarm.n1.p2, holder: npc.tible_of_the_wet_warren, holder_kind: person, method: inquiry, access: rolled, at: loc.high_fells_merestead.hall,
+      content: 'what is at the gate: a war-band of The Horde of the Millwick', status: unfound, sealed: true}
+    - {id: clu.incident.alarm.n1.p3, holder: doc.incident_notice, holder_kind: document, method: search, access: rolled, at: loc.high_fells_merestead.temple,
+      content: 'what is at the gate: a war-band of The Horde of the Millwick', status: unfound, sealed: true}
+    reserve:
+    - {id: clu.incident.alarm.n1.p9, holder: reserve.incident.n1, holder_kind: person, method: inquiry, access: core, at: null, content: 'what
+        is at the gate: a war-band of The Horde of the Millwick', status: unfound, sealed: true}
+  - id: clu.incident.alarm.n2
+    fact: 'the way on: toward The Hungry Pikes'
+    necessary: true
+    points_to: []
+    placements:
+    - {id: clu.incident.alarm.n2.p1, holder: loc.high_fells_hungry_pikes, holder_kind: place, method: search, access: core, at: loc.high_fells_hungry_pikes,
+      content: 'the way on: toward The Hungry Pikes', status: unfound, sealed: true}
+    - {id: clu.incident.alarm.n2.p2, holder: npc.ranella_whitefield, holder_kind: person, method: inquiry, access: rolled, at: loc.high_fells_merestead.market,
+      content: 'the way on: toward The Hungry Pikes', status: unfound, sealed: true}
+    - {id: clu.incident.alarm.n2.p3, holder: obj.incident.left, holder_kind: object, method: search, access: rolled, at: loc.high_fells_merestead.gate,
+      content: 'the way on: toward The Hungry Pikes', status: unfound, sealed: true}
+    reserve:
+    - {id: clu.incident.alarm.n2.p9, holder: reserve.incident.n2, holder_kind: person, method: inquiry, access: core, at: null, content: 'the
+        way on: toward The Hungry Pikes', status: unfound, sealed: true}
+  fallbacks:
+  - {trigger: stalled, form: tbl.15.fallback_form, delivers: the core placement of an unfound necessary node}
+  audit: h.15.placement_audit
+  basis: [PR-15-6, 15.9.4, 12.16.16]
