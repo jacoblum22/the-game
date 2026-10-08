@@ -70,3 +70,5 @@ Ledger: I-131..I-136.
 | breaker 203717 | b3a579d | 17 | 2.12 | 1 | literacy breaks both ways (P-110/P-111); queue-note leak (P-111) |
 | explorer 204217 | b3a579d | 17 | 1.94 | 0 | "fine overall"; success narrated as failure (P-112); NPC dodges (I-153) |
 | talker 204112 | b3a579d | 17 | 1.71 | 0 | name mix-up (P-113); stonewalling alike (P-114); Recall as Talk (P-115) |
+| fighter 205745 | 8fc6117 | 17 | 1.18 | 0 | first real combat: works, odds clear; foe strike unnarrated (P-116); flat odds (P-117) |
+| newcomer 205857 | 8fc6117 | 17 | 1.59 | 0 | setup fine; NPC never states the warning/work (I-153) |
