@@ -12,6 +12,7 @@ and anything left for the owner.
 | 82c60e5 | **R2-A ranked, budgeted view.** Archived NPC memories no longer leak into it (12.11.7), and the trigger list now heads the view so it can be cached (DL-12-38). | Director cached prefix 25% → 78%; World 83% → 95%. Validator 0/0. |
 | fea2397 | **Spec 005 measurement harness:** replay bench, Reader golden set (91 lines, 11 negation pairs), long-horizon harness, baselines. | See baselines below. |
 | ad89bba | **R2-A2 cast budget.** Present people are ranked (beat target, then named, then recent interaction, then 12.6.6 weight). Full profiles fit within `view_budget.cast`; the rest go on one capped "also here" line (DL-12-39). | Aged narrator view at scenes 50/200/300: 1337/1612/1952 → **1190/1261/1357**, every section capped. Unit test with 301 people present: 1828/1839/1844. 1177 passed. Validator 0/0. |
+| ef269b7 | **R2-B rules wave:** sentence declarations, coverage, per-sentence repair (12.3.1, 12.3.1a, 12.3.3), tier table (12.14.13), default NPC layer (12.11.9), D1/D2/D4/D5 recorded (DL-12-40..44, DL-15-37). New tables `tbl.npc_activity` and `tbl.npc_practice`. | Merge conflicts were only in generated files: re-assembled, anchors recompiled, cards rebuilt. Replay re-recorded because the rule text changed. Validator 0/0. Suite 1176 passed before the re-record. |
 | 16b92c2, + | Research notes committed; the model-calls contract updated; `cards.json` rebuilt. | Full suite after merges: 1176 passed, 1 failure (stale `cards.json`, now fixed). Validator 0/0. ruff: the 10 errors in untouched files predate this work. |
 
 ## Baselines (spec 005), the gates for later specs
@@ -42,6 +43,6 @@ deferred to the owner.
 
 ## In flight
 
-- R2-B rules wave (narration contract, NPC layer, D1/D2/D4/D5 DL entries).
 - R2-C rules wave (adjudication, difficulty rubric + seeded sim, D3/D6/D7).
-- R2-A2 fixer (cast budget).
+- Spec 006 (narration contract + NPC layer), started from ef269b7. Model-quality gates run on at most 80
+  recorded packets with Haiku via the Claude CLI (subscription, no API spend).
