@@ -160,6 +160,11 @@ def _oracle_line(question: str, answer: str) -> str:
 _SLUG_MAX = 60  # turn.py cuts an Oracle question's predicate slug here: one this long is an unfinished clause
 _IS_PREDS = {"state", "kind", "condition", "desc", "posture", "mood", "demeanor", "look", "appearance"}
 _PREPS = {"by", "of", "in", "on", "at", "to", "from", "with", "for", "under", "near", "behind", "inside"}
+_LOC_PREPS = _PREPS | {"beyond", "beside", "pushed", "set", "against", "above", "below", "within", "outside", "across",
+                       "along", "among", "amid", "between", "around", "over", "through", "past", "toward", "towards",
+                       "atop", "upon", "into", "onto", "beneath", "underneath", "inside", "here", "there", "up",
+                       "down", "hung", "hanging", "lying", "standing", "where", "just", "close"}
+_RAW = re.compile(r"\b[a-z]+(?:\.[a-z0-9_]+)+\b|\b\w+_\w+\b")
 _BOOL = {True: True, False: False, "true": True, "false": False, "yes": True, "no": False}
 
 
@@ -192,7 +197,8 @@ def fact_sentence(state: object, f: object, subject: str | None = None) -> str: 
     if f.predicate.endswith((".but", ".and")):  # an Oracle twist's qualifier: meaning words, not a statement
         return ""
     pred = f.predicate.removeprefix("lead.")
-    p = re.sub(r"\bthe pc s\b", "your", pred.replace("_", " ").replace(".", " ")).replace("the pc", "you").strip()
+    p = re.sub(r"\b(?:the )?pc s\b", "your", pred.replace("_", " ").replace(".", " "))
+    p = re.sub(r"\b(\w+) s\b", r"\1's", re.sub(r"\b(?:the )?pc\b", "you", p)).strip()  # 'selda s sleeve' (P-097)
     v = f.value
     yes = _BOOL.get(v.lower() if isinstance(v, str) else v) if isinstance(v, str | bool) else None
     if yes is not None:
@@ -210,18 +216,32 @@ def fact_sentence(state: object, f: object, subject: str | None = None) -> str: 
                                if words[0].lower() not in _AUX else "")
         return second_person(_cap(s))
     val = name_of(state, v) if isinstance(v, str) and v in getattr(state, "entities", {}) else _value_words(v)
+    said = [re.sub(r"^(?:said|says)\s+(?:that\s+)?", "", c.strip()) for c in str(val).split(";")]
+    if subj and str(val).lstrip().startswith(("said ", "says ")):  # a speech record (P-097): what they said
+        out = f"{subj} said that {said[0]}"
+        more = [c for c in said[1:] if c]
+        while more and len(out) + sum(len(c) + 12 for c in more) > 200:  # ponytail: drops the latest clauses
+            more.pop()
+        out += "".join(f", and that {c}" if i == len(more) - 1 else f", that {c}" for i, c in enumerate(more))
+        return second_person(_cap(out))
     val = short_text(str(val), 120)
-    if not val:
+    if not val or _RAW.search(val):  # an id or key ('orig.life.soldier', a route record) is not words (P-097)
         return ""
+    first = val.split(" ", 1)[0].lower()
     if f.predicate.startswith("lead.") or not subj:
         s = val if f.predicate.startswith("lead.") else f"{p}: {val}"
     elif p in _IS_PREDS or p == "kind":
-        art = "a " if p == "kind" and val.split(" ", 1)[0].lower() not in _KEEP else ""
-        s = f"{subj} {val}" if _finite(val.split(" ", 1)[0]) else f"{subj} is {art}{val}"
+        art = "a " if p == "kind" and first not in _KEEP else ""
+        if _AUX & {w.lower() for w in val.split()[1:4]}:  # a clause ('a cough is spreading there'), not a state
+            if not val.endswith(" there"):
+                return ""
+            s = f"{val.removesuffix(' there')} in {subj}"
+        else:
+            s = f"{subj} {val}" if _finite(first) else f"{subj} is {art}{val}"
     elif p == "location":
-        s = f"{subj} is {val}" if val.split(" ", 1)[0].lower() in _PREPS | {"beyond", "beside", "pushed", "set",
-                                                                           "against", "above", "below"} \
-            else f"{subj} is at {val}"
+        s = f"{subj} is {val}" if first in _LOC_PREPS or first.endswith("ed") else f"{subj} is at {val}"
+    elif p in ("text", "content", "contents", "wording", "inscription", "writing", "words"):
+        s = f"{subj} reads: {val}"
     elif p == "owner":
         s = f"{subj} belongs to {val}"
     elif _finite(p.split(" ", 1)[0]):
