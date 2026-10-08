@@ -127,18 +127,19 @@ def test_an_oracle_settled_no_supports_the_npcs_denial(tmp_path: Path) -> None:
     assert [v for v, _ in vs] == ["supported", "supported", "contradicted"]
 
 
-def test_unknown_knowledge_on_a_successful_talk_is_settled_not_cut(tmp_path: Path) -> None:
+def test_unknown_knowledge_on_a_successful_talk_is_not_settled_at_the_check(tmp_path: Path) -> None:
+    """Spec 008 part B: the answer ladder answers before the draft (PR-12-10), so what the record does not declare is
+    no longer settled by the Oracle at the check (`_learning_success` is retired)."""
     dock, _ = setup(tmp_path, ScriptedModel({}))
     k = {"subject": dock.ferryman, "class": "knowledge", "predicate": "knows", "value": "the night boat leaves from the "
          "north stair"}
     secret = {"subject": dock.ferryman, "class": "knowledge", "predicate": "knows", "value": "the secret of the "
               "smugglers' hidden cache"}
-    assert _check(dock, _talk_record(dock), k)[0][0] == "undetermined"
+    assert _check(dock, _talk_record(dock), k)[0][0] == "contradicted"
     assert _check(dock, _talk_record(dock, degree="failure"), k)[0][0] == "contradicted"
     assert _check(dock, AdjudicationRecord(pc=dock.pc), k)[0][0] == "contradicted"
-    # spec 006: no keyword proxy for "a secret" (I-129); the Oracle settles it as a consequential property, and a
-    # sealed fact it would reveal is a leak first (00.6.5)
-    assert _check(dock, _talk_record(dock), secret)[0][0] == "undetermined"
+    # spec 006: no keyword proxy for "a secret" (I-129); undeclared, it is cut like any other knowledge claim
+    assert _check(dock, _talk_record(dock), secret)[0][0] == "contradicted"
 
 
 def test_a_refused_beat_is_not_it_works(tmp_path: Path) -> None:
@@ -153,17 +154,22 @@ def test_a_refused_beat_is_not_it_works(tmp_path: Path) -> None:
 
 
 def _talk_turn(tmp_path: Path, narrator: list[Any], checker: list[Any], world: Any = QUIET_WORLD,
-               face: int = 19) -> tuple[Any, Any, ScriptedModel, Any]:
-    model = ScriptedModel({Role.READER: [reader("DECLARATION", ASK, TALK)], Role.FRAMER: [framer()],
+               face: int = 19, kind: str = "none") -> tuple[Any, Any, ScriptedModel, Any]:
+    """The ferry Talk; with a `question_kind` it asks (PR-12-10), a plain question to a Neutral listener being
+    certain (no roll, 15.3.10); else it is a request, committed at `face`."""
+    model = ScriptedModel({Role.READER: [reader("DECLARATION", ASK, TALK, qk=kind)], Role.FRAMER: [framer()],
                            Role.WORLD: [world]})
     dock, ctx = setup(tmp_path, model)
     fid = _fact(dock, dock.ferryman, "last_ferry_crossing", "at the turn of the tide, an hour before dawn")
     _fact(dock, dock.ferryman, "boat", "a flat-bottomed ferry with a patched sail")
-    assert play_turn(ctx, ASK).adjudication.pause.kind == "offer"
-    ctx.rng.faces = [face]  # type: ignore[attr-defined]
     model.push(Role.NARRATOR, *narrator)
     model.push(Role.CHECKER, *checker)
-    return dock, ctx, model, (fid, play_answer(ctx, "commit"))
+    ctx.rng.faces = [face]  # type: ignore[attr-defined]
+    out = play_turn(ctx, ASK)
+    if out.adjudication.pause is not None:
+        assert out.adjudication.pause.kind == "offer"
+        out = play_answer(ctx, "commit")
+    return dock, ctx, model, (fid, out)
 
 
 def test_a_successful_talk_delivers_what_the_npc_knows(tmp_path: Path) -> None:
@@ -172,9 +178,10 @@ def test_a_successful_talk_delivers_what_the_npc_knows(tmp_path: Path) -> None:
     dock, ctx, model, (fid, out) = _talk_turn(tmp_path, [narr(text)], [chk(
         claim(0, "npc.tam_harlan", "action", "says", "at the turn of the tide", change=True),
         claim(0, "npc.tam_harlan", "action", "glances", "at the water", change=True),
-        claim(1, "pc.wren", "knowledge", "learns", "the last ferry crosses an hour before dawn", change=True))])
+        claim(1, "pc.wren", "knowledge", "learns", "the last ferry crosses an hour before dawn", change=True))],
+        kind="what_like")
     b = out.adjudication.record.beats[0]
-    assert b.degree in ("success", "critical_success")
+    assert b.degree in ("success", "critical_success") or b.gate_words.startswith("no roll")
     assert len(b.learned) == 1 and "turn of the tide" in b.learned[0]  # the boat is not what was asked
     assert fid in ctx.store.state.knowledge[dock.pc]
     assert "the PC learns" in calls(model, Role.NARRATOR)[0].message
@@ -186,8 +193,10 @@ def test_a_talk_target_gets_the_talk_outcome_not_a_table_row(tmp_path: Path) -> 
                             "table_context": {"tags": []}}]}
     _, _, _, (_, out) = _talk_turn(tmp_path, [narr("Tam Harlan nods. What do you do?")], [chk()], world=world)
     rows = out.adjudication.record.npc_actions
-    assert [(a.source, a.action) for a in rows] == [("talk_outcome", f"responds as the talk went: "
-                                                                     f"{out.adjudication.record.beats[0].degree}")]
+    from engine.dm.npc_layer import talk_outcome
+
+    assert [(a.source, a.action) for a in rows] == [("talk_outcome", talk_outcome(out.adjudication.record.beats[0]))]
+    assert "responds as the talk went" not in rows[0].action  # T-15-5's yes, not a placeholder
 
 
 def test_a_talk_aimed_at_a_thing_gets_no_answer_row(tmp_path: Path) -> None:
@@ -219,19 +228,16 @@ def test_a_failed_talk_delivers_nothing(tmp_path: Path) -> None:
     assert out.adjudication.record.beats[0].learned == [] and fid not in ctx.store.state.knowledge.get("pc.wren", {})
 
 
-def test_what_the_store_lacks_is_settled_by_the_oracle_and_learned(tmp_path: Path, monkeypatch: Any) -> None:
-    """The store holds nothing on the north stair: the narration's answer is settled at the check (yes here), so it
-    stands as drafted and the PC's knowledge of it is written (12.10.5)."""
-    from engine.resolve import oracle
-
-    monkeypatch.setattr(oracle, "shape_for", lambda *a: "yes")
+def test_what_the_store_lacks_is_answered_before_the_draft(tmp_path: Path) -> None:
+    """PR-12-10: nothing stored on what was asked: the ladder answers at RECORD (pack, propose and ratify, else a
+    pointer), so the narration says a declared answer and never settles one at the check."""
     text = '"The night boat leaves from the north stair," Tam Harlan says. What do you do?'
     dock, ctx, model, (_, out) = _talk_turn(tmp_path, [narr(text)], [chk(
-        claim(0, "npc.tam_harlan", "knowledge", "knows", "the night boat leaves from the north stair"))])
-    assert out.response.fiction == text and not out.response.flags.fallback_used
-    st = ctx.store.state
-    asked = [f for f in st.facts.values() if f.subject == dock.ferryman and f.predicate.startswith("knows_the_night")]
-    assert len(asked) == 1 and asked[0].value is True and asked[0].id in st.knowledge[dock.pc]
+        claim(0, "npc.tam_harlan", "knowledge", "knows", "the night boat leaves from the north stair"))],
+        kind="where_is")
+    learned = out.adjudication.record.beats[0].learned
+    assert len(learned) == 1 and learned[0].startswith("Tam Harlan "), learned
+    assert out.response.fiction != text  # the undeclared answer is not the one told
 
 
 # ------------------------------------------------------------------------------------------- P-120: success answers
@@ -239,22 +245,26 @@ def test_what_the_store_lacks_is_settled_by_the_oracle_and_learned(tmp_path: Pat
 # 210953-talker (15 -> 17 vs 10, the bailiff "I'll not say"): a successful Talk is "yes, as asked" (T-15-5)
 
 
-def _asked(tmp_path: Path, say: str, intent: str, world: Any = QUIET_WORLD, face: int = 19) -> tuple[Any, Any]:
+def _asked(tmp_path: Path, say: str, intent: str, world: Any = QUIET_WORLD, face: int = 19,
+           kind: str = "none") -> tuple[Any, Any]:
     talk = beat(intent, "verb.talk", target="npc.tam_harlan", verbs=("ask",))
-    model = ScriptedModel({Role.READER: [reader("DECLARATION", say, talk)], Role.FRAMER: [framer()],
+    model = ScriptedModel({Role.READER: [reader("DECLARATION", say, talk, qk=kind)], Role.FRAMER: [framer()],
                            Role.WORLD: [world]})
     dock, ctx = setup(tmp_path, model)
-    assert play_turn(ctx, say).adjudication.pause.kind == "offer"
-    ctx.rng.faces = [face]  # type: ignore[attr-defined]
     model.push(Role.NARRATOR, narr("Tam Harlan answers. What do you do?"))
     model.push(Role.CHECKER, chk())
-    return dock, play_answer(ctx, "commit").adjudication.record
+    ctx.rng.faces = [face]  # type: ignore[attr-defined]
+    out = play_turn(ctx, say)
+    if out.adjudication.pause is not None:
+        out = play_answer(ctx, "commit")
+    return dock, out.adjudication.record
 
 
 def test_a_successful_who_question_names_an_existing_person(tmp_path: Path) -> None:
-    dock, rec = _asked(tmp_path, "Who's behind the coin, Tam?", "ask Tam Harlan who is behind the coin")
+    dock, rec = _asked(tmp_path, "Who's behind the coin, Tam?", "ask Tam Harlan who is behind the coin",
+                       kind="who_is")
     b = rec.beats[0]
-    assert b.degree in ("success", "critical_success") and b.learned, b
+    assert b.learned, b
     assert b.learned[0].startswith("Tam Harlan tells you who is behind the coin: ")
     assert "Tam Harlan" not in b.learned[0].split(": ", 1)[1]  # an existing person, never the one asked
     st = dock.store.state
@@ -268,24 +278,30 @@ def test_a_failed_who_question_settles_nothing(tmp_path: Path) -> None:
     assert not any(f.predicate.startswith("who_is_") for f in dock.store.state.facts.values())
 
 
-def test_a_success_with_nothing_stored_still_gives_what_they_can(tmp_path: Path) -> None:
+def test_a_success_with_nothing_stored_still_gives_a_real_lead(tmp_path: Path, monkeypatch: Any) -> None:
+    """DL-12-44: the Oracle says Tam does not know; the answer is "does not know" plus who would (never empty)."""
+    from engine.resolve import oracle
+
+    monkeypatch.setattr(oracle, "shape_for", lambda *a: "no")
     dock, rec = _asked(tmp_path, "Tam, what happened to the lighthouse keeper's lamp?",
-                       "ask Tam Harlan what happened to the lighthouse keeper's lamp")
+                       "ask Tam Harlan what happened to the lighthouse keeper's lamp", kind="what_happened")
     learned = rec.beats[0].learned
-    assert len(learned) == 1 and learned[0].startswith("Tam Harlan gives what they can: "), learned
+    assert len(learned) == 1 and learned[0].startswith("Tam Harlan does not know"), learned
+    assert not any("concrete" in n or "plainly" in n for n in rec.notes)  # the narrator notes are retired
 
 
-def test_a_successful_what_question_is_answered_and_settled(tmp_path: Path) -> None:
-    """212731-newcomer: Mauette 'agrees' and 'knows what the shapes are' five times, every answer cut as a hidden
-    truth. The narration is told to name it; the claim check settles the answer (a yes stands) and writes it."""
+def test_a_successful_what_question_is_proposed_and_ratified(tmp_path: Path, monkeypatch: Any) -> None:
+    """212731-newcomer: Mauette 'knows what the shapes are' five times, every answer cut. Now the Proposer frames one
+    ordinary candidate and the Oracle settles it before the draft (PR-12-10 rung 3)."""
+    from engine.resolve import oracle
+
+    monkeypatch.setattr(oracle, "shape_for", lambda *a: "yes")
     dock, rec = _asked(tmp_path, "Tam, what are those shapes out on the water?",
-                       "ask Tam Harlan what the shapes on the water are")
-    assert any(n.startswith("the talk with Tam Harlan succeeded: they answer what are those shapes out on the "
-                            "water plainly") for n in rec.notes), rec.notes
+                       "ask Tam Harlan what the shapes on the water are", kind="what_like")
+    learned = rec.beats[0].learned
+    assert len(learned) == 1 and learned[0].startswith("Tam Harlan tells you: "), learned
     sealed = lambda v: {"subject": dock.ferryman, "class": "sealed", "predicate": "what the shapes are",  # noqa: E731
                         "value": v}
-    assert _check(dock, rec, sealed("driftwood caught on the sandbar"))[0][0] == "undetermined"
-    assert _check(dock, rec, sealed("the smugglers' hidden cache"))[0][0] == "undetermined"  # no keyword proxy
     assert _check(dock, _talk_record(dock, degree="failure"), sealed("driftwood"))[0][0] == "new_element"
 
 
@@ -328,9 +344,10 @@ def _look_turns(tmp_path: Path, faces: list[int]) -> list[Any]:
 
 
 def test_a_successful_look_names_something(tmp_path: Path) -> None:
+    """Nothing stored on the crate: the look still ends in a real lead (PR-12-10 step 5), never a note to invent."""
     rec = _look_turns(tmp_path, [19])[0].adjudication.record
     assert rec.beats[0].degree in ("success", "critical_success"), (rec.beats[0], rec.notes)
-    assert any(n.startswith("the look at the crate succeeded: name at least one concrete thing") for n in rec.notes)
+    assert rec.beats[0].learned and not any("concrete thing" in n for n in rec.notes), rec.beats[0].learned
 
 
 def test_repeated_failed_looks_say_it_cannot_be_made_out(tmp_path: Path) -> None:

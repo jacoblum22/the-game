@@ -129,11 +129,11 @@ def cast(state: Any, role: str | None = None, *, scope: str | None, topic: str |
     return d.weighted([(n, fit(n)) for n in pool])
 
 
-def pointer_target(state: Any, topic: str, *, scope: str | None, asker: str | None = None
-                   ) -> tuple[Literal["person", "place", "walk_on"], str]:  # rule: PR-12-10
-    """Rung 4's "who would know <topic>": a person by casting; else the topic's `kept_at` place in the settlement
-    (`common_knowledge.topics`); else a walk-on to generate there (the role to give them)."""
-    who = cast(state, None, scope=scope, topic=topic, asker=asker)
+def pointer_target(state: Any, topic: str, *, scope: str | None, asker: str | None = None,
+                   exclude: Iterable[str] = ()) -> tuple[Literal["person", "place", "walk_on"], str]:  # rule: PR-12-10
+    """Rung 4's "who would know <topic>": a person by casting (never `exclude`); else the topic's `kept_at` place in
+    the settlement (`common_knowledge.topics`); else a walk-on to generate there (the role to give them)."""
+    who = cast(state, None, scope=scope, topic=topic, asker=asker, exclude=exclude)
     if who is not None:
         return "person", who
     CK = pack_data().CK

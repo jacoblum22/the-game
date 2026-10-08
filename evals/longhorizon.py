@@ -351,7 +351,7 @@ def _mean(xs: list[float]) -> str:
 # ------------------------------------------------------------------------------------------------ scripted
 
 CYCLE = ("look", "talk", "absent", "recall", "scuffle", "notice", "who_knows", "travel", "look2", "promise",
-         "revisit", "options")
+         "revisit", "options", "ask_twice")
 
 
 def script_line(kind: str, st: Any, rng: random.Random, met: list[str], home_name: str) -> str | None:
@@ -381,10 +381,44 @@ def script_line(kind: str, st: Any, rng: random.Random, met: list[str], home_nam
         return f"I head back to {home_name}."
     if kind == "options":
         return "What are my options?"
+    if kind == "ask_twice":  # PR-12-10's index: the same question to the same NPC, twice (spec 008 part B)
+        return f'"What are the roads like around here?" I ask {who}.'
     return None  # travel
 
 
+def ladder_lines(learned: list[dict[str, Any]], twice: tuple[int, int]) -> list[str]:
+    """Spec 008 part B: successful learning beats with no item and no pointer (target 0), pointer answers, and the
+    same question to the same NPC answered with the same fact (target 100%)."""
+    n = len(learned)
+    empty = sum(1 for x in learned if not x["answers"] or not all(a[0] or a[1] for a in x["answers"]))
+    items = [a for x in learned for a in x["answers"]]
+    ptr = sum(1 for a in items if a[1])
+    same, asked = twice
+    return [f"- learning beats answered (PR-12-10): {n}; empty successes {empty} "
+            f"({100 * empty / n if n else 0:.1f}%); items {len(items)}, pointer answers {ptr} "
+            f"({100 * ptr / len(items) if items else 0:.1f}%)",
+            f"- ask-twice consistency: {same}/{asked} ({100 * same / asked if asked else 0:.0f}%)"]
+
+
 def run_scripted(seed: int, lines: int, model: str, tmp: Path) -> list[str]:
+    import engine.dm.world_step as ws
+
+    learned: list[dict[str, Any]] = []
+    real = ws.deliver_learning
+
+    def spy(ctx: Any, record: Any, beats: Any) -> list[dict[str, Any]]:
+        out = real(ctx, record, beats)
+        learned.extend(out)
+        return out
+
+    ws.deliver_learning = spy  # type: ignore[assignment]  # the measure only reads what the ladder returns
+    try:
+        return _run_scripted(seed, lines, model, tmp, learned)
+    finally:
+        ws.deliver_learning = real  # type: ignore[assignment]
+
+
+def _run_scripted(seed: int, lines: int, model: str, tmp: Path, learned: list[dict[str, Any]]) -> list[str]:
     rng = random.Random(seed)
     d = Driver.start(tmp / "scripted.db", seed=seed, model=_model(model))
     st = d.game.store.state
@@ -400,6 +434,7 @@ def run_scripted(seed: int, lines: int, model: str, tmp: Path) -> list[str]:
     kinds: Counter[str] = Counter()
     errors: list[str] = []
     streak = 0
+    twice = [0, 0]
     for i in range(lines):
         st = d.game.store.state
         met += [x for x in (st.scene.cast_present if st.scene else []) if x not in met and x in st.entities]
@@ -416,6 +451,15 @@ def run_scripted(seed: int, lines: int, model: str, tmp: Path) -> list[str]:
                 if p is not None:
                     rec_p.append(p)
                 r = d.last
+            elif kind == "ask_twice" and line:
+                n0 = len(learned)
+                d.settle(d.call("submit", line))
+                n1 = len(learned)
+                r = d.settle(d.call("submit", line))
+                first, again = learned[n0:n1], learned[n1:]
+                if first and again and first[-1]["answers"] and again[-1]["answers"]:
+                    twice[1] += 1
+                    twice[0] += first[-1]["answers"][0][0] == again[-1]["answers"][0][0]
             else:
                 r = d.travel() if line is None else d.settle(d.call("submit", line))
         except Exception as e:  # noqa: BLE001 - an engine error is a finding: counted, and the run goes on
@@ -445,6 +489,7 @@ def run_scripted(seed: int, lines: int, model: str, tmp: Path) -> list[str]:
                f"coverage {_mean(rec_c)}")
     out.append(f"- novelty-4 over the previous 10 deliveries: {novelty4(deliveries):.2f} ({len(deliveries)} deliveries)")
     out.append(narration_loop(turns))
+    out += ladder_lines(learned, (twice[0], twice[1]))
     for mark in CHECKPOINTS:
         near = min(turn_at, key=lambda k: (abs(k - mark), k), default=None)  # an OOF line makes no turn
         tid = turn_at.get(near) if near is not None and abs(near - mark) <= 5 else None

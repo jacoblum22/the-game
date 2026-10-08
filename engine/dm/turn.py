@@ -385,9 +385,9 @@ def _fiction_questions(ctx: TurnContext, rec: AdjudicationRecord, questions: Seq
             rec.oracle.append(OracleEntry(question=q.predicate, answer=_yes_no(st.facts[fid].value), fact_id=fid,
                                           subject=subject, predicate=pred))
             continue
-        from engine.dm.incident import settle_who
+        from engine.dm.answer import who_answer
 
-        who = settle_who(ctx, q.predicate)  # "who is X?": an existing person, never a yes/no (P-067)
+        who = who_answer(ctx, q.predicate)  # "who is X?": the case graph or casting, never a yes/no (PR-12-10)
         if who is not None:
             rec.oracle.append(OracleEntry(question=q.predicate, answer=who[0], fact_id=who[1], subject=subject,
                                           predicate=pred))

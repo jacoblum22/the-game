@@ -49,6 +49,7 @@ ROLE_CARDS: dict[Role, tuple[str, ...]] = {
     Role.DIRECTOR: ("12.4.2", "12.4.3", "12.9.1", "T-12-7"),
     Role.NARRATOR: ("12.14.2", "12.14.3", "12.14.4", "12.14.9", "12.14.12", "12.14.13", "00.6.6"),
     Role.CHECKER: ("12.3.1",),
+    Role.PROPOSER: (),  # PR-12-10 rung 3: its prompt and the asked NPC's lines are the whole packet
 }
 
 # Which roles get trigger and situation cards. The Checker sees only its own instructions and the draft

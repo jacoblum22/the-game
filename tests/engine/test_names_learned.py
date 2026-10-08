@@ -52,18 +52,26 @@ def test_the_narrator_sees_a_stranger_by_role_until_named(tmp_path: Path) -> Non
     assert check_claims([name], st, rec, [], rules=RULES)[0].verdict == "contradicted"
 
 
-def test_asking_who_they_are_learns_the_name_and_the_check_keeps_it(tmp_path: Path) -> None:
-    ask = "I ask the ferryman his name."
-    talk = beat("ask the ferryman his name", "verb.talk", target="npc.tam_harlan", verbs=("ask",))
-    text = '"Tam Harlan," the ferryman says. What do you do?'
-    model = ScriptedModel({Role.READER: [reader("DECLARATION", ask, talk)], Role.FRAMER: [framer()],
+def _asked(tmp_path: Path, say: str, intent: str, kind: str, narration: str, *claims: Any) -> tuple[Any, Any, Any]:
+    """A Talk that asks (a `question_kind` part, PR-12-10): a plain question to a Neutral listener is certain (no
+    roll, 15.3.10), else it is committed at a high face."""
+    talk = beat(intent, "verb.talk", target="npc.tam_harlan", verbs=("ask",))
+    model = ScriptedModel({Role.READER: [reader("DECLARATION", say, talk, qk=kind)], Role.FRAMER: [framer()],
                            Role.WORLD: [QUIET_WORLD]})
     dock, ctx = setup(tmp_path, model)
-    assert play_turn(ctx, ask).adjudication.pause.kind == "offer"
+    model.push(Role.NARRATOR, narr(narration))
+    model.push(Role.CHECKER, chk(*claims))
     ctx.rng.faces = [19]  # type: ignore[attr-defined]
-    model.push(Role.NARRATOR, narr(text))
-    model.push(Role.CHECKER, chk(claim(0, "npc.tam_harlan", "identity", "name", "Tam Harlan")))
-    out = play_answer(ctx, "commit")
+    out = play_turn(ctx, say)
+    if out.adjudication.pause is not None:
+        out = play_answer(ctx, "commit")
+    return dock, ctx, (model, out)
+
+
+def test_asking_who_they_are_learns_the_name_and_the_check_keeps_it(tmp_path: Path) -> None:
+    text = '"Tam Harlan," the ferryman says. What do you do?'
+    dock, ctx, (model, out) = _asked(tmp_path, "I ask the ferryman his name.", "ask the ferryman his name",
+                                     "what_like", text, claim(0, "npc.tam_harlan", "identity", "name", "Tam Harlan"))
     st = ctx.store.state
     assert name_known(st, dock.ferryman)
     assert "gives their name, in their own words: Tam Harlan" in calls(model, Role.NARRATOR)[0].message
@@ -74,27 +82,19 @@ def test_asking_who_they_are_learns_the_name_and_the_check_keeps_it(tmp_path: Pa
 def test_asking_a_third_partys_name_never_names_the_one_asked(tmp_path: Path) -> None:
     """P-113: "the name of the thief" put to the officer gave him his own name in his act; the narration then
     had him say it as the thief's, and the game took it as his. Only his own name or identity learns it."""
-    from engine.dm.world_step import _ASKS_NAME
+    from engine.dm.answer import _OWN_NAME, _SELF, _role_words
 
-    ask = "I ask the ferryman his price for the name of the thief."
-    talk = beat("ask the ferryman his price for the thief's name", "verb.talk", target="npc.tam_harlan",
-                verbs=("ask",))
-    model = ScriptedModel({Role.READER: [reader("DECLARATION", ask, talk)], Role.FRAMER: [framer()],
-                           Role.WORLD: [QUIET_WORLD]})
-    dock, ctx = setup(tmp_path, model)
-    assert play_turn(ctx, ask).adjudication.pause.kind == "offer"
-    ctx.rng.faces = [19]  # type: ignore[attr-defined]
-    model.push(Role.NARRATOR, narr('"I don\'t know who took it," the ferryman says. What do you do?'))
-    model.push(Role.CHECKER, chk())
-    play_answer(ctx, "commit")
+    dock, ctx, (model, _) = _asked(tmp_path, "I ask the ferryman his price for the name of the thief.",
+                                   "ask the ferryman his price for the thief's name", "what_like",
+                                   '"I don\'t know who took it," the ferryman says. What do you do?')
     assert not name_known(ctx.store.state, dock.ferryman)
     assert "gives their name" not in calls(model, Role.NARRATOR)[0].message
-    for own in ("I ask the ferryman his name.", "What's your name?", "I ask her who she is.", "Who are you?",
-                "I introduce myself."):
-        assert _ASKS_NAME.search(own), own
-    for other in ("the name of the thief", "his price for the thief's name", "why he gave me her name",
-                  "I ask him who Lila Fairwick is"):
-        assert not _ASKS_NAME.search(other), other
+    for own in ("I ask the ferryman his name.", "What's your name?"):
+        assert _OWN_NAME.search(own), own
+    for own in ("Who are you?", "I ask her who she is."):
+        assert _SELF.match(_role_words(own) or ""), own
+    for other in ("the name of the thief", "his price for the thief's name", "I ask him who Lila Fairwick is"):
+        assert not _OWN_NAME.search(other) and not _SELF.match(_role_words(other) or ""), other
 
 
 def test_the_journal_lists_only_people_introduced(tmp_path: Path) -> None:

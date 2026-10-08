@@ -889,3 +889,26 @@ Supersedes the earlier notes on `Beat.gate` / `would_be_license` / `necessity`, 
   the opening-clause and speech-opener scans stay as the backstop).
 - **Promises** (`engine.dm.codex.promises(state, about)`, `promise_question`, `promise_subject`): the PC's open
   commitments, filtered through the alias index; `turn.oof_answer` routes "what did I promise X?" there.
+
+## Answer ladder (spec 008 part B; PR-12-10, 12.10.8)
+- **`engine.dm.answer`**: `ask(ctx, knower, question_kind, topic, text, rungs, pc=) -> Answer(said, line, fact_id,
+  pointer)` answers one delivered question at RECORD (before the draft): the index (meta `answers.index`,
+  `"<npc>|<kind>|<topic or entity>" -> {fact, said, pointer}`; a repeat rolls nothing), then "who is <role>" (own
+  name; a named person; a story role -> the case graph, building the reduced case; else `cast_who`), a question about
+  a case (`case_about`: the subject asked about or named, or its role's words) -> `_from_case` (a holder delivers
+  and `deliver_node` marks it found; anyone else names the core holder), `what_want` -> the stance, then the rungs
+  `rungs_for(rules, reach)` (`social.yaml#delivery.information.ladder_depth`): `store_hit`, `pack_hit` (the NPC's
+  seeded pack, written as a `topic.<topic>.<pack fact>` fact the NPC knows), `ratify` (Role `proposer`, then the
+  Oracle at `odds_for`; a "no" is the `knows_*` = false fact), `point` (casting via `pointer_target`; a walk-on made
+  when no one and no place fits; never the case subject, never back to who pointed here). `volunteer` (Great+),
+  `deliver_count(n, reach)` (T-01-6), `who_answer(ctx, text)` (the DM-side "who is X?", the PC as knower),
+  `topic_of(state, topic, text)` (a null Reader topic is read from the words, else `local_news`).
+- **Role `proposer`** (`engine.dm.roles.proposer.propose`): schema `{kind: ordinary_fact|not_ordinary, subject,
+  predicate, value}`, default `not_ordinary` (no candidate); a bare packet (prompt, known lines, question; no core,
+  no cards). Offline: a bland candidate on the topic.
+- **Consumers**: `world_step.deliver_learning` returns one summary per learning beat (`{beat, verb, knower, speech,
+  answers: [(fact id, pointer, line)]}`; the long-horizon harness's empty-success and ask-twice metrics read it).
+  A Talk with no question part is a request (no ladder); Observe/Recall run `_look` (a search placement, the store
+  ranking, the place's furniture, a pointer). SPEECH questions with no Talk beat are answered as the addressed NPC's
+  act (`source: talk_outcome`, `source_ref: PR-12-10`) and that NPC skips the table. `npc_layer.talk_outcome`:
+  "answers what you asked" or T-15-5's yes by reach.

@@ -378,6 +378,14 @@ def checker_schema(ctx: SchemaContext) -> Schema:  # rule: 12.3.1
     })
 
 
+CANDIDATE_KINDS = ("ordinary_fact", "not_ordinary")  # PR-12-10 step 4: only an ordinary fact may be ratified
+
+
+def proposer_schema(ctx: SchemaContext) -> Schema:  # rule: PR-12-10
+    """Rung 3's one typed candidate `{kind, subject, predicate, value}` (12.10.8; 00.12.7's proposal form)."""
+    return obj({"kind": enum(CANDIDATE_KINDS), "subject": STR, "predicate": STR, "value": STR})
+
+
 BUILDERS: dict[Role, Callable[[SchemaContext], Schema]] = {
     Role.INTERPRET: interpret_schema,
     Role.READER: reader_schema,
@@ -386,6 +394,7 @@ BUILDERS: dict[Role, Callable[[SchemaContext], Schema]] = {
     Role.DIRECTOR: director_schema,
     Role.NARRATOR: narrator_schema,
     Role.CHECKER: checker_schema,
+    Role.PROPOSER: proposer_schema,
 }
 
 
@@ -495,6 +504,8 @@ DEFAULTS: dict[Role, Callable[[SchemaContext], dict[str, Any]]] = {
     Role.FRAMER: _framer_default,
     Role.WORLD: _world_default,
     Role.DIRECTOR: _director_default,
+    # no candidate: the ladder goes on to the pointer (PR-12-10 step 5)
+    Role.PROPOSER: lambda ctx: {"kind": "not_ordinary", "subject": "", "predicate": "", "value": ""},
 }
 
 

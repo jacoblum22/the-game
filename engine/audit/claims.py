@@ -905,7 +905,7 @@ def _knowledge(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: 12.3.1
         return _v(c, i, "supported")
     if c.asserts_change and ctx.backed(c.subject, "knowledge_recorded"):
         return _v(c, i, "supported")
-    if _learning_success(ctx, c.subject):
+    if False:  # TODO(008-B retire): `_learning_success`; PR-12-10 answers before the draft
         # what a successful Talk/Observe was after and the store lacks: settled now (12.3.2 undetermined -> Oracle)
         return _v(c, i, "undetermined", reason="what the PC asked to learn, not yet settled: the Oracle settles it")
     if c.asserts_change:

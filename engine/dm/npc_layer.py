@@ -197,6 +197,18 @@ def _voice(ctx: TurnContext, npc: str) -> str:  # rule: 12.11.9
     return f"{v.get('register')}, {v.get('habit')}"
 
 
+REACH_YES = {"limited": "grants a lesser version of what you ask", "standard": "agrees to what you ask",
+             "great": "agrees to what you ask, and more", "exceptional": "agrees to what you ask, and more"}
+
+
+def talk_outcome(e: Any) -> str:  # rule: T-15-5
+    """A successful Talk's act: the question answered (its PR-12-10 lines are the record's), else T-15-5's yes by the
+    delivered reach (a certain beat, no roll, is a yes as asked)."""
+    if e.learned:
+        return "answers what you asked"
+    return REACH_YES.get(e.reach or "standard", REACH_YES["standard"])
+
+
 def voiced_refusal(ctx: TurnContext, npc: str, reason: str) -> str:  # rule: 12.11.9
     """Step 4: a refusal spoken in the NPC's own voice: the reason said through their register and habit."""
     return f"refuses, in their own voice ({_voice(ctx, npc)}): {reason}"
@@ -253,7 +265,7 @@ def respond(ctx: TurnContext, record: AdjudicationRecord, beats: Sequence[Any], 
         if npc in talks:  # (a) a resolved Talk frame's delivered outcome (a certain talk, no roll, is a yes)
             b = talks[npc]
             degree = b.entry.degree or "success"
-            action = f"responds as the talk went: {degree}"
+            action = talk_outcome(b.entry)
             if degree in ("failure", "critical_failure"):
                 action = voiced_refusal(ctx, npc, f"the talk did not move them ({degree.replace('_', ' ')})")
             record.npc_actions.append(NpcActionEntry(npc=npc, action=action, source="talk_outcome",

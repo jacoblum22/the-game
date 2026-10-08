@@ -44,7 +44,8 @@ from engine.llm.gemini import build_config, max_output_tokens  # noqa: E402
 from engine.llm.gemini_schema import convert, problems  # noqa: E402
 
 FIXTURES = REPO_ROOT / "tests" / "engine" / "fixtures_gemini_schemas"
-ROLE_ORDER = [Role.INTERPRET, Role.READER, Role.FRAMER, Role.WORLD, Role.DIRECTOR, Role.NARRATOR, Role.CHECKER]
+ROLE_ORDER = [Role.INTERPRET, Role.READER, Role.FRAMER, Role.WORLD, Role.DIRECTOR, Role.NARRATOR, Role.CHECKER,
+              Role.PROPOSER]
 
 SCENE = (
     "Test scene (a connectivity check, not a real game): Wren (pc.wren), a scout, stands in the village shrine "
@@ -59,6 +60,8 @@ MESSAGES = {
     Role.NARRATOR: "Outcome: success. Wren finds fresh boot prints leading to the back door. Narrate it briefly.",
     Role.CHECKER: "Draft to check:\n0: Wren kneels by the altar.\n1: Fresh boot prints lead to the back door.\n"
                   "2: What do you do?",
+    Role.PROPOSER: "The innkeeper is asked: what are the roads like? topic: roads (routes, distances, the state of "
+                   "the ways)",
 }
 
 
