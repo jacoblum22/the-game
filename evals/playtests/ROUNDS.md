@@ -40,3 +40,4 @@ Ledger: I-131..I-136.
 | fighter 181737 | eeff286 | 17 | 1.47 | 2 | odds screens and Go big clear; cryptic condition redirect traps the PC (P-060) |
 | explorer 181732 | eeff286 | 17 | 2.0 | 0 | storyteller never tells the story (P-061); journal labels (P-062) |
 | newcomer 181028 | 5ec5452 | 17 | 2.06 | 0 | NPC's question never printed; notice words withheld (P-061) |
+| talker 182337 | 04a3736 | 17 | 1.88 | 1 | NPCs silent (P-056/P-061); talk framed as force (P-064); child became a man (P-065) |

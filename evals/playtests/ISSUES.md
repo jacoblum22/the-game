@@ -61,7 +61,7 @@ Status: open · fixing (round N) · fixed (commit) · logged (ledger id) · wont
 | P-052 | polish | low | Walk-on NPC shares the PC's first name (Aldett Redley / Aldett Blackbrook) | 174829-fighter input 30 | logged I-142 |
 | P-053 | bug | med | OFFER prints a raw dict: "bond.anchor: {'kind': 'friend', 'npc': …}" (fact-id-to-words replacement on a structured value) | 174825-explorer input 20 | fixed (01a3737) |
 | P-054 | bug | med | Asking to see the sky omen / a notice's words gets a restated question ("has not visible colours, shapes and motion") or "The notice is a hire." with no detail | 174825-explorer inputs 21–31 | fixing (with P-061) |
-| P-056 | bug | med | An NPC (praying attendant) never answers across several turns, even after a Talk roll, and nothing tells the player he won't: a silent refusal reads as a stall | 175928-talker inputs 18–23 | fixing (fact-wording fixer) |
+| P-056 | bug | med | An NPC (praying attendant) never answers across several turns, even after a Talk roll, and nothing tells the player he won't: a silent refusal reads as a stall | 175928-talker inputs 18–23 | fixing (fact-wording fixer); recurring 182337-talker 20–31 |
 | P-057 | bug | med | "Change approach" re-shows the offer with changed odds and never asks for the new approach; "ask nicely, no coins" still framed as offering coins; attribute switched to Intellect | 181158-breaker inputs 20–24 | fixing (OFFER/roll fixer) |
 | P-058 | bug | med | Learned facts rendered raw: "coin named none yet: yes", journal "Bixok Lucky: coin named none yet — yes (told)", entries truncated "one of…" (with P-042) | 181158-breaker inputs 23–28 | fixing (fact-wording fixer) |
 | P-059 | bug | med | "Spend my Fate point" at an OFFER: no answer whether it was spent; no result shown | 181158-breaker inputs 29–31 | open (with P-047) |
@@ -69,3 +69,5 @@ Status: open · fixing (round N) · fixed (commit) · logged (ledger id) · wont
 | P-061 | bug | high | NPC speech never quoted: a storyteller only "begins/pauses" for 4 turns ending "Do you wait?"; an NPC's question is never printed so the player can't answer; a notice's words withheld for 4 tries | 181732-explorer 19–26; 181028-newcomer 25–39 | fixing (fact-wording fixer) |
 | P-062 | bug | low | Journal lists people and objects under "locations"; an entry cut mid-sentence | 181732-explorer 23–26 | fixing (fact-wording fixer) |
 | P-063 | polish | low | Same-turn self-contradiction about an object (rings catch the light / no rings) | 181732-explorer 27–30 | open |
+| P-064 | bug | high | Gentle talk framed as force: greeting a child → "Handle (Agility): turn the child's face" at 35% (recurrence of P-023); a bribe and a question bundled into one roll | 182337-talker inputs 22–30 | fixing |
+| P-065 | bug | med | NPC identity drift: "the child" became Falwen Underwort, a middle-aged man (roster/given-name reuse ignoring implied age) | 182337-talker inputs 23–26 | fixing |
