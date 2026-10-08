@@ -46,6 +46,7 @@ class ReaderBeat(BaseModel):
     target: str | None = None
     verb: str | None = None
     license: str | None = None
+    would_be_license: str | None = None  # G3: the licence the method needs (PR-01-5 step 1)
     gate: str = "G3"
     g4_fact: str | None = None
     necessity: str = "uncertain_and_costly"
@@ -72,10 +73,12 @@ class ReaderResult(BaseModel):
         for b in self.beats:
             target = b.target if b.target and b.target != NONE else None
             lic = b.license if b.license and b.license != NONE else None
+            wbl = b.would_be_license if b.would_be_license and b.would_be_license != NONE else None
             beat = Beat(id=mint(ids.BEAT), actor=actor, intent=b.intent, method=b.method or b.intent,
                         assertion=b.assertion, shape=b.shape or "single",  # type: ignore[arg-type]
                         target=target, restatement=(self.restatement if single and self.restatement else b.intent),
                         gate=b.gate, verb=b.verb, license=lic, g4_fact=b.g4_fact,  # type: ignore[arg-type]
+                        would_be_license=wbl,
                         necessity=b.necessity, declared_seq=declared_seq)
             out.append(BeatPlan(beat=beat, intent_verbs=list(b.intent_verbs)))
         return out

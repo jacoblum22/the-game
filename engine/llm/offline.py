@@ -329,6 +329,13 @@ def primary_verb(text: str) -> tuple[str, list[str]] | None:
     return (best[2], [best[3]]) if best else None
 
 
+def _excluding_verb(text: str) -> str | None:
+    """The basic verb whose `excludes` names this act (a literal mention), if any."""
+    from engine.resolve.gate import excluded_by
+
+    return next((v["id"] for v in basic_verbs() if excluded_by(v, text) is not None), None)
+
+
 def match_verb(text: str) -> tuple[str, list[str]] | None:
     """The basic verb whose longest keyword occurs in `text`, with every matched keyword."""
     best: tuple[int, str] | None = None
@@ -473,6 +480,8 @@ def _reader(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:
             gate = "G1"
         elif target and str(target[0]).startswith(("npc.", "ally.", "foe.")):  # words to someone: talk, not G3
             verb, gate = ("verb.talk", []), "G1"
+        elif (ex := _excluding_verb(sent)) is not None:  # "pick the lock": Force excludes it (gate → G3)
+            verb, gate = (ex, []), "G1"
         else:
             gate = "G3"  # 01.3.1: default when uncertain between G1 and G3
         risky = any(_has_word(sent, w) for w in RISKY_WORDS)
@@ -480,7 +489,7 @@ def _reader(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:
             "intent": sent, "method": sent, "assertion": None, "shape": None,
             "target": target[0] if target else "none",
             "verb": verb[0] if verb else None,
-            "license": licence[0] if licence else "none",
+            "license": licence[0] if licence else "none", "would_be_license": "none",
             "gate": gate, "g4_fact": None,
             "necessity": "uncertain_and_costly" if risky else "trivial",
             "intent_verbs": verb[1] if verb else [],

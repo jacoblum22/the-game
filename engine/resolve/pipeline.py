@@ -25,10 +25,10 @@ from typing import Any, Literal, Protocol
 from pydantic import BaseModel, Field
 
 from engine import ids
-from engine.dm.adjudication import BeatEntry, CostEntry, HarmEntry
+from engine.dm.adjudication import BeatEntry, CostEntry, HarmEntry, PositionEntry
 from engine.resolve.costs import HarmHook, apply_cost
 from engine.resolve.frame import auto_commit_allowed, commit_events, frame_check, legal_trades, offer_preview
-from engine.resolve.gate import GateDecision, check_gate
+from engine.resolve.gate import GateDecision, check_gate, words
 from engine.resolve.roll import read_result, roll_check
 from engine.resolve.rulings import RulingRecord, log_ruling
 from engine.resolve.types import REACH_VALUE, Beat, Frame, FrameRefusal, ProposedFrame, ReadResult, RollResult
@@ -38,6 +38,7 @@ from engine.time.scheduler import TimeContext, advance_time, mark_boundary
 
 MAX_BEATS = 3  # 01.2.3
 ROLLS = "uncertain_and_costly"
+MOVE = "verb.move"
 NO_ROLL_EVIDENCE = ("good_idea", "take_the_time", "certain_with_cost")  # 03.3.1 bases without a degree
 TRADE_IDS = {"go_big": "go_big", "play_it_safe": "play_safe"}  # Frame trade -> Pause choice id
 REACH_NAME = {v: k for k, v in REACH_VALUE.items()}
@@ -267,8 +268,50 @@ def _no_roll(env: PipelineEnv, plan: BeatPlan, dec: GateDecision) -> BeatOutcome
                                                result={"degree": None, "outcome": "success (good idea)"}),
                                   env.tx.mint, store=env.store, staged=env.tx.events, rule_id="01.5.4"))
     env.add(*evs)
+    if (dec.verb or beat.verb) == MOVE:
+        entry.positions = _moved(env, plan)
     mark_boundary(env.time_ctx(), "beat_end", {"beat": beat.id})
     return BeatOutcome(status="no_roll", entry=entry)
+
+
+BANDS = ("engaged", "close", "near", "far", "distant")  # 06.3.2, nearest first
+_BAND_WORDS = {"engaged": "at arm's reach of", "close": "a few strides from", "near": "a stone's throw from",
+               "far": "a long bowshot from", "distant": "at the edge of sight of"}  # T-12-11
+_AWAY = {"withdraw", "retreat", "flee", "away", "back", "leave"}
+
+
+def _moved(env: PipelineEnv, plan: BeatPlan) -> list[PositionEntry]:  # rule: PR-06-4
+    """A resolved Move writes where it took the mover: one band step toward (or away from) its target in the
+    scene, in both directions, at the mover's place. A place that is not here is travel: the scene cut moves the
+    PC there (12.4.2, 10.1.3), so nothing is written here."""
+    # ponytail: one band step per resolved Move, whatever the reach; engaged only through an existing link (06.3.5)
+    beat = plan.beat
+    st = env.state
+    actor = beat.actor
+    pos = st.positions.get(actor)
+    here = (pos.location if pos else None) or (st.scene.place_id if st.scene else None)
+    tgt = beat.target if beat.target not in (None, "none", actor) else None
+    ent = st.entities.get(tgt) if tgt else None
+    if ent is not None and ent.kind == "place":
+        if tgt != here:
+            return []
+        tgt, ent = None, None
+    evs = []
+    if ent is not None and tgt is not None:
+        cur = str((pos.band_to.get(tgt) if pos else None) or "near").removeprefix("band.")
+        i = BANDS.index(cur) if cur in BANDS else 2
+        away = bool(_AWAY & words(" ".join([beat.method, beat.intent, *plan.intent_verbs])))
+        band = BANDS[min(i + 1, 4)] if away else BANDS[i if i == 0 else max(i - 1, 1)]
+        evs.append(Event.of("position_set", source=beat.id, rule_id="PR-06-4", entity=actor, location=here,
+                            band_to={tgt: band}))
+        evs.append(Event.of("position_set", source=beat.id, rule_id="PR-06-4", entity=tgt, band_to={actor: band}))
+        said = f"{_BAND_WORDS[band]} {ent.name}"
+    else:
+        evs.append(Event.of("position_set", source=beat.id, rule_id="PR-06-4", entity=actor, location=here))
+        place = st.entities.get(here) if here else None
+        said = f"moved within {place.name}" if place else "moved"
+    env.add(*evs)
+    return [PositionEntry(entity=actor, words=said)]
 
 
 def _verb_deed(rules: Any, verb: str | None) -> str | None:
@@ -450,8 +493,9 @@ def _finish(env: PipelineEnv, plan: BeatPlan, frame: Frame, roll: RollResult, *,
     harm_from = len(env.harm_log)
     costs, reach_delta, notes = _consequence(env, frame, read, menu)
     delivered = max(0, read.delivered_reach + reach_delta) if read.delivered_reach else 0
-    writes = [e.seq for e in env.tx.events[start:] if e.seq is not None]
     resolved = roll.degree in ("success", "critical_success") or read.success_at_cost_taken
+    moved = _moved(env, plan) if resolved and (frame.gate.verb or frame.beat.verb) == MOVE else []
+    writes = [e.seq for e in env.tx.events[start:] if e.seq is not None]
     ev_ids: list[str] = []
     if frame.deed_tag:  # PR-03-1 for every resolved beat (a degree is a resolved basis)
         ev = evidence_event(env, frame.beat, frame.deed_tag, frame=frame, degree=roll.degree,
@@ -479,6 +523,7 @@ def _finish(env: PipelineEnv, plan: BeatPlan, frame: Frame, roll: RollResult, *,
     entry = _frame_entry(frame.beat, frame, rolled=True, degree=roll.degree, near_miss=roll.near_miss,
                          sac=read.success_at_cost_taken, reach=REACH_NAME.get(delivered, str(delivered)))
     entry.costs = costs
+    entry.positions = moved
     entry.harm = env.harm_log[harm_from:]
     entry.reach_words = _reach_words(env.rules, frame, delivered, notes)
     return BeatOutcome(status="resolved", entry=entry, frame_id=frame.id)

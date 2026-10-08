@@ -43,9 +43,10 @@ class D20(Rng):
 
 
 def beat(intent: str, verb: str, *, gate: str = "G1", necessity: str = "uncertain_and_costly", target: str = "none",
-         license: str = "none", g4_fact: str | None = None, verbs: tuple[str, ...] = ()) -> dict[str, Any]:
+         license: str = "none", g4_fact: str | None = None, verbs: tuple[str, ...] = (),
+         would_be: str = "none") -> dict[str, Any]:
     return {"intent": intent, "method": intent, "assertion": None, "shape": "single", "target": target, "verb": verb,
-            "license": license, "gate": gate, "g4_fact": g4_fact, "necessity": necessity,
+            "license": license, "would_be_license": would_be, "gate": gate, "g4_fact": g4_fact, "necessity": necessity,
             "intent_verbs": list(verbs)}
 
 
@@ -228,7 +229,7 @@ def test_settled_fact_stays_settled(tmp_path: Path) -> None:
 
 def test_g3_gives_an_alternative_and_spends_nothing(tmp_path: Path) -> None:
     fly = beat("pick the harbour master's strongbox lock with arcane force", "verb.handle", gate="G3",
-               verbs=("pick",))
+               verbs=("pick",), would_be="lic.training.arcane_alteration")
     model = ScriptedModel({Role.READER: [reader("DECLARATION", "I magic the lock open.", fly)],
                            Role.WORLD: [QUIET_WORLD]})
     dock, ctx = setup(tmp_path, model)
@@ -302,3 +303,58 @@ def test_pc_holds_two_licences_and_an_ability(tmp_path: Path) -> None:
     assert st.scene is not None and st.scene.cast_present == [dock.ferryman, dock.watch]
     assert st.entities[dock.watch].data["wants"] and "wants" in st.entities[dock.watch].sealed_fields
     assert dock.clock in st.clocks and st.time.now.watch == 3
+
+
+def test_talk_proposed_as_g3_without_a_licence_is_never_redirected(tmp_path: Path) -> None:
+    """Playtest 20261007-170200: "talk to the person on the bridge" / "press him gently" came back G3 with
+    verb.talk and no licence, and the gate's word match redirected them to Stonesense. Talk needs no licence."""
+    talk = beat("press Sela gently to say what she is watching", "verb.talk", gate="G3", target="npc.sela_vey",
+                necessity="take_the_time", verbs=("press", "draw out"))
+    model = ScriptedModel({Role.READER: [reader("DECLARATION", "I press her gently.", talk)],
+                           Role.WORLD: [QUIET_WORLD]})
+    dock, ctx = setup(tmp_path, model)
+    res = run_turn(ctx, "I press her gently.")
+    b = res.record.beats[0]
+    assert b.gate == "G1" and not any(o["kind"] == "REDIRECT" for o in res.oof) and res.pause is None
+    assert "ruling_logged" not in types(dock.store, res.turn_id)  # no g3_redirect ruling
+
+
+def test_move_toward_someone_writes_the_band(tmp_path: Path) -> None:
+    """Playtest 20261007-170200 turns 5/6/12: a declared, resolved Move wrote no position, so every arrival in
+    the narration was cut as unsourced. PR-06-4: the band closes one step, written both ways."""
+    walk = beat("walk out along the quay toward the watchwoman", "verb.move", target="npc.sela_vey",
+                necessity="trivial", verbs=("approach",))
+    model = ScriptedModel({Role.READER: [reader("DECLARATION", "I walk over to her.", walk),
+                                         reader("DECLARATION", "I go closer.", walk)],
+                           Role.WORLD: [QUIET_WORLD, QUIET_WORLD]})
+    dock, ctx = setup(tmp_path, model)
+    res = run_turn(ctx, "I walk over to her.")
+    b = res.record.beats[0]
+    assert b.positions and b.positions[0].entity == dock.pc and "Sela Vey" in b.positions[0].words
+    st = dock.state
+    assert st.positions[dock.pc].band_to[dock.watch] == "close" == st.positions[dock.watch].band_to[dock.pc]
+    assert st.positions[dock.pc].location == dock.place
+    assert res.record.writes_for(dock.pc, "position_set")
+    run_turn(ctx, "I go closer.")  # never engaged without an engagement link (06.3.5)
+    assert dock.state.positions[dock.pc].band_to[dock.watch] == "close"
+
+
+def test_move_to_another_place_cuts_the_scene_there(tmp_path: Path) -> None:
+    """12.4.2 (2) / 10.1.3: a resolved Move to a reachable place is travel: the scene ends and the next one
+    opens there, with the PC's position written."""
+    from engine.store.events import EntityRecord as Rec
+    model = ScriptedModel()
+    dock, ctx = setup(tmp_path, model)
+    with dock.store.transaction() as tx:
+        office = "loc.the_ferry_office"
+        tx.add(Event.of("entity_created", source="test", entity=Rec(
+            id=office, kind="place", name="The Ferry Office", data={"place_kind": "building", "parent": dock.place})))
+    go = beat("go into the ferry office", "verb.move", target=office, necessity="trivial", verbs=("go",))
+    model.push(Role.READER, reader("DECLARATION", "I go into the office.", go))
+    model.push(Role.WORLD, QUIET_WORLD)
+    from tests.engine.test_director import answer
+    model.push(Role.DIRECTOR, answer(dock.place))  # the Director did not cut: the place change does
+    res = run_turn(ctx, "I go into the office.")
+    st = dock.state
+    assert st.positions[dock.pc].location == office
+    assert st.scene is not None and st.scene.place_id == office and res.record.scene.cut
