@@ -129,6 +129,41 @@ def test_lines_and_veils_are_kept_verbatim(tmp_path: Path):
     assert a["c0.limits"]["choice"] == {"lines": ["spiders"], "veils": ["torture only off-stage"]}
 
 
+P074 = "What would you suggest for exploring and mysteries? Maybe a Wanderer?"  # the player's words (P-074)
+
+
+def test_a_question_naming_an_option_is_answered_not_defaulted(tmp_path: Path):
+    model = ScriptedModel()  # the live model's reading in the P-074 save: "suggest"
+    store, ctx, flow = seeded(tmp_path, model)
+    flow.submit("")
+    model.push(Role.INTERPRET, {"choice": "suggest", "own_words_class": None, "own_words_text": None,
+                                "answer": None})
+    r = flow.submit(P074)  # answered; step 2 stays open
+    assert "Wanderer" in r.oof_blocks[0].text and "soldier" not in r.oof_blocks[0].text.lower()
+    assert "c1" not in answers(store) and pz(r).kind == "create_step"
+    r = flow.submit("Wanderer?")  # a bare option name picks it, "?" or not (no model call)
+    assert r.oof_blocks[0].text.startswith("So your character was a wanderer")
+    assert answers(store)["c1"]["source"] == "player_option"
+
+
+@pytest.mark.parametrize("reply", [P074, "Wanderer?"])
+def test_offline_wanderer_never_becomes_soldier(tmp_path: Path, reply: str):
+    store, ctx, flow = seeded(tmp_path)
+    flow.submit("")
+    flow.submit(reply)
+    assert answers(store).get("c1", {}).get("choice") != "orig.life.soldier"
+
+
+def test_a_typed_reply_that_defaults_says_so(tmp_path: Path):
+    model = ScriptedModel()
+    store, ctx, flow = seeded(tmp_path, model)
+    flow.submit("")
+    model.push(Role.INTERPRET, {"choice": "suggest", "own_words_class": None, "own_words_text": None,
+                                "answer": None})
+    r = flow.submit("you pick for me")
+    assert any("so I took the default: Soldier" in b.text for b in r.oof_blocks)
+
+
 def finish_fast(flow: CreationFlow, life: str = "", name: str = "Wren, she/her") -> None:
     for msg in ("", life, "", "", name, "begin"):
         flow.submit(msg)

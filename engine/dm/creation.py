@@ -30,6 +30,7 @@ from engine.dm import setup_text as T
 from engine.dm.context import TurnContext
 from engine.dm.response import Choice, OofBlock, Pause, Response
 from engine.dm.roles.interpret import DETAILS, MOVE_ON, OWN_WORDS, SUGGEST, InterpretResult
+from engine.dm.schemas import SPECIAL_CHOICES
 from engine.dm.seed_flow import PHASE_KEY, answer_pause, close_pause, flow_tx, open_pause, present_pause
 from engine.gen.birth import BentState, birth_draw, circumstance_for, source_tags
 from engine.store.db import Transaction
@@ -898,6 +899,7 @@ class CreationFlow:
                 if bid not in ("ready", "change") else None
             res = T.read_answer(self.ctx, message or "", rec, tag="[CREATE]", classes=spec.classes if spec else (),
                                 lines_and_veils=bool(spec and spec.limits), cards=spec.cards if spec else ("PR-02-7",))
+            res = self._reread(bid, message or "", choices, res)
         if res.choice == DETAILS or (bid == "c1" and res.choice == "more"):
             if bid == "c1":  # every way of life, so the answer can speak of any of them
                 choices = block_spec("c1", d, st, self.ctx.rules, show_all=True).options
@@ -913,6 +915,19 @@ class CreationFlow:
             if notes is None:  # the block stays open (a name is required; names were offered)
                 return self._ask(tx, self.retry, bid, fold(tx.state), reopen=rec)
             return self.advance(tx, notes)
+
+    @staticmethod
+    def _reread(bid: str, message: str, choices: list[Choice], res: InterpretResult) -> InterpretResult:
+        """P-074: a skip or "suggest" reading of words that ask a question or name an option never becomes the
+        default. A question is answered (the block stays open); a reply naming exactly one option picks it."""
+        if res.choice not in (SUGGEST, MOVE_ON) or not message.strip() or bid in ("c9.name", "rm.name"):
+            return res
+        if message.strip().endswith("?"):
+            return res.model_copy(update={"choice": DETAILS})
+        hit = [c for c in T.named(message, choices) if c.id not in (*SPECIAL_CHOICES, "more")]
+        if len(hit) == 1:
+            return res.model_copy(update={"choice": hit[0].id, "picks": [hit[0].id]})
+        return res
 
     def _about(self, bid: str, rec: PauseRecord, choices: list[Choice]) -> dict[str, str]:
         """What each option of a block would do, for a player who asks: the plain explanation (setup.yaml), a way
@@ -983,6 +998,11 @@ class CreationFlow:
                 plural = str((T.seed("peoples") or {}).get(absent, _origins(self.ctx.rules)[absent]["name"]))
                 notes.append(OofBlock(kind="NOTE", text=f"No {plural} live in this land, so you will pick from the "
                                                         "peoples who do."))
+        if src == "default" and (message or "").strip():  # P-074: a typed reply never becomes the default silently
+            took = {c.id: c.label for c in spec.options}.get(spec.default or "", str(value))
+            why = "You left this one to me" if res.choice in (MOVE_ON, SUGGEST) else "I didn't read a choice in that"
+            notes.append(OofBlock(kind="NOTE", text=f"{why}, so I took the default: {took}. You can change it "
+                                                    "before you begin."))
         return notes
 
     def _value(self, bid: str, spec: Block, picked: str | None, res: InterpretResult,
