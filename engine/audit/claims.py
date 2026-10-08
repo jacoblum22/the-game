@@ -987,12 +987,15 @@ def _attitude(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: 12.3.1
     return _v(c, i, "supported")
 
 
-def _beat_for(ctx: _Ctx, text: str) -> BeatEntry | None:
+def _beat_for(ctx: _Ctx, text: str, subject: str | None = None) -> BeatEntry | None:
     beats = [b for b in ctx.record.beats if b.degree is not None or b.gate]
     if not beats:
         return None
-    scored = [(len(tx.overlap(text, " ".join([b.restatement, *b.reach_words]))), n, b) for n, b in enumerate(beats)]
-    return max(scored, key=lambda x: (x[0], x[1]))[2]
+    # ties go to a beat acting on the claim's subject, then to a rolled beat: an outcome no words tie to a later
+    # redirect is the roll's, not the redirect's "no roll" [P-112]
+    scored = [(len(tx.overlap(text, " ".join([b.restatement, *b.reach_words]))), subject in b.targets,
+               b.degree is not None, n, b) for n, b in enumerate(beats)]
+    return max(scored, key=lambda x: x[:4])[4]
 
 
 def _beat_success(b: BeatEntry) -> bool:
@@ -1005,7 +1008,7 @@ def _beat_success(b: BeatEntry) -> bool:
 
 def _outcome(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: 12.3.1
     text = c.text
-    b = _beat_for(ctx, text)
+    b = _beat_for(ctx, text, c.subject)
     if b is None:
         return _v(c, i, "unsourced_change", reason="no resolved beat this turn")
     degree_words = (b.degree or "no roll").replace("_", " ")

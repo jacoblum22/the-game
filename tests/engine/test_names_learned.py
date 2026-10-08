@@ -71,6 +71,32 @@ def test_asking_who_they_are_learns_the_name_and_the_check_keeps_it(tmp_path: Pa
     assert "Tam Harlan" in render_view(scene_view(st))
 
 
+def test_asking_a_third_partys_name_never_names_the_one_asked(tmp_path: Path) -> None:
+    """P-113: "the name of the thief" put to the officer gave him his own name in his act; the narration then
+    had him say it as the thief's, and the game took it as his. Only his own name or identity learns it."""
+    from engine.dm.world_step import _ASKS_NAME
+
+    ask = "I ask the ferryman his price for the name of the thief."
+    talk = beat("ask the ferryman his price for the thief's name", "verb.talk", target="npc.tam_harlan",
+                verbs=("ask",))
+    model = ScriptedModel({Role.READER: [reader("DECLARATION", ask, talk)], Role.FRAMER: [framer()],
+                           Role.WORLD: [QUIET_WORLD]})
+    dock, ctx = setup(tmp_path, model)
+    assert play_turn(ctx, ask).adjudication.pause.kind == "offer"
+    ctx.rng.faces = [19]  # type: ignore[attr-defined]
+    model.push(Role.NARRATOR, narr('"I don\'t know who took it," the ferryman says. What do you do?'))
+    model.push(Role.CHECKER, chk())
+    play_answer(ctx, "commit")
+    assert not name_known(ctx.store.state, dock.ferryman)
+    assert "gives their name" not in calls(model, Role.NARRATOR)[0].message
+    for own in ("I ask the ferryman his name.", "What's your name?", "I ask her who she is.", "Who are you?",
+                "I introduce myself."):
+        assert _ASKS_NAME.search(own), own
+    for other in ("the name of the thief", "his price for the thief's name", "why he gave me her name",
+                  "I ask him who Lila Fairwick is"):
+        assert not _ASKS_NAME.search(other), other
+
+
 def test_the_journal_lists_only_people_introduced(tmp_path: Path) -> None:
     dock, _ = setup(tmp_path, ScriptedModel({}))
     text = what_you_know(dock.state, rules=RULES).text
