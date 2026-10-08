@@ -37,12 +37,12 @@ Status: open · fixing (round N) · fixed (commit) · logged (ledger id) · wont
 | P-028 | bug | med | A question at an open pause ("what does 'Go big' mean?") gets a generic note and the same OFFER reprinted; "Play it safe" unexplained; no Enter default shown | 170157-breaker inputs 19–28 | fixed (af1fdce); ledger I-138 |
 | P-029 | bug | low | "What do I know about the stranger" folded into a Move roll offer; journal says "nothing yet" after learning things | 170157-breaker inputs 30–31 | open |
 | P-030 | polish | low | Narration repeats the same scene details turn after turn (the wiped counter, wet wool, the murmur) | 170157-breaker inputs 22–29 | open (claude-only?) |
-| P-031 | bug | high | Basic talk refused: "talk to the person on the bridge" / "press him gently" → "[REDIRECT] needs Stonesense, which you have not learned" | 170200-newcomer turns 4–10 | fixing |
-| P-032 | bug | high | Declared movement ("I walk out along the bridge", "go closer", "head into Mossfield") writes no position, so arrival narration is cut as unsourced | 170200-newcomer turns 5–16; 170318-fighter turns 13, 16 | fixing |
-| P-033 | bug | low | NPC called both "they" and "him" in narration | 170200-newcomer turns 8–14 | fixing (with P-031) |
+| P-031 | bug | high | Basic talk refused: "talk to the person on the bridge" / "press him gently" → "[REDIRECT] needs Stonesense, which you have not learned" | 170200-newcomer turns 4–10 | fixed (1e3ec97); ledger I-139 |
+| P-032 | bug | high | Declared movement ("I walk out along the bridge", "go closer", "head into Mossfield") writes no position, so arrival narration is cut as unsourced | 170200-newcomer turns 5–16; 170318-fighter turns 13, 16 | fixed (1e3ec97); ledger I-139 |
+| P-033 | bug | low | NPC called both "they" and "him" in narration | 170200-newcomer turns 8–14 | fixed (1e3ec97) |
 | P-034 | bug | med | Internal note in narration: "(Her claim about the ankle is context only)" | 170318-fighter input 28–30 | open |
 | P-035 | polish | med | A failed beat doesn't show what it cost or what happened ("the press holds you", an ankle "holds" you); "Go big" raises stakes with no stated gain | 170318-fighter inputs 19–27 | open (with P-012, P-028) |
 | P-036 | bug | med | Narration says "Edda is not your friend" though the sheet lists Edda as the PC's friend (creation bond does not reach the NPC's standing?) | 170207-talker turns 13–15 | open |
 | P-037 | polish | low | Named NPC drifts back to "a woman" / "stranger" after being named (Bixnik Quick-Fingers) | 170207-talker turns 10–15 | open |
-| P-038 | bug | high | "What do I know about the land around Hawkstead?" read as a Mind sorcery attempt → REDIRECT for lacking the spell; plain "what do I know?" only repeats scene text (with P-019) | 170204-explorer inputs 20–23 | fixing (with P-031) |
+| P-038 | bug | high | "What do I know about the land around Hawkstead?" read as a Mind sorcery attempt → REDIRECT for lacking the spell; plain "what do I know?" only repeats scene text (with P-019) | 170204-explorer inputs 20–23 | fixed (1e3ec97) |
 | P-039 | bug | low | Garbled Oracle twist fragment in narration: "Can say it in answer to a question asked aloud, but lesser"; PC referred to in third person ("he asks") | 170204-explorer inputs 25–26 | open (with P-034) |
