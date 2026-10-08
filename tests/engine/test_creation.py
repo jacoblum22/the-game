@@ -185,7 +185,9 @@ def test_ready_made_character(tmp_path: Path):
     assert st.entities[pc].name == pregens[1]["name"]
     assert st.entities[pc].data["attributes"] == pregens[1]["attributes"]
     bond = pregens[1]["anchor_bond"]["npc"]
-    assert any(r.a == pc and r.b == bond for r in st.relationships.values())
+    # 02.9.2: a friend anchor starts at standing +2 Friendly toward the PC (the store the claim check reads)
+    assert pregens[1]["anchor_bond"]["kind"] == "friend"
+    assert st.relationships[f"{bond}|{pc}|standing"].value == 2
 
 
 def test_workshop_all_defaults(tmp_path: Path):

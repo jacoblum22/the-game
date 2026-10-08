@@ -107,6 +107,11 @@ def find_existing(state: Any, name: str, kind: str | None = None) -> str | None:
             names.append(str(e.data.get("role", "")))
         if any(bare(n).lower() == want for n in names if n):
             return eid
+    if kind == "npc" and _proper(name) and " " not in want:  # "Edda" is the one NPC named "Edda Brightcote"
+        given = [eid for eid, e in state.entities.items()
+                 if e.kind == "npc" and e.name and str(e.name).split()[0].lower() == want]
+        if len(given) == 1:  # given names are kept unique (walk-on `given_used`); two matches stay ambiguous
+            return given[0]
     return None
 
 
