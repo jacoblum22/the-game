@@ -25,3 +25,7 @@ Status: open · fixing (round N) · fixed (commit) · logged (ledger id) · wont
 | P-016 | bug | med | Multi-part message ("what are my options? also, who's standing at the gate?") fails screen 12.2.7 "a part of the player's message is not answered" and falls back | 161327-breaker turn.5 | fixed (fd898d8: narrator/checker get only in-fiction parts) |
 | P-017 | polish | low | [LEADS] block repeated on consecutive "what are my options?" | 161327-breaker inputs 38–39 | open |
 | P-018 | bug | high | Beginner never got the scene described: mixed "I'm new / what are my options? / describe where I'm standing" got placeholder notes and repeated LEADS for 10+ turns. Root cause: redrafts failed, fallback had nothing for a question | 161329-newcomer turns 2–11 | fixed (fd898d8); ledger I-135 |
+| P-019 | bug | med | "What do I know about the High Vale?" gets "Session move noted" / "Already knows… No." instead of an answer; loops | 161320-explorer inputs 33–40 | open (recheck on 12f51f2) |
+| P-020 | bug | med | Same [OFFER] shown twice; a typed choice ignored; a persuasion result never shown | 161323-talker inputs 28–38 | fixing (P-022 fixer) |
+| P-021 | bug | med | Raw NPC action-row text in fiction: "Tikka Mud-Walker escalates: threatens, calls for others", "asks the PC something" | 161323-talker inputs 26–28 | fixing (P-022 fixer) |
+| P-022 | bug | med | Framer/Reader responses rejected (invalid_reasked → defaulted) with no reason logged | talker 2+2, explorer 1 | fixing |
