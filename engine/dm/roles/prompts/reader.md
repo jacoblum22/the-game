@@ -21,8 +21,7 @@ Split the message into parts in the player's order, one class each.
 One entry per FICTION_QUESTION and per unknown fact a declaration leans on, including one the player
 proposes ("there's bound to be a rope"): subject id, predicate in plain words, odds rung (used only if the
 store has none).
-- Choose the rung from the place, people and situation, never the player's wish, phrasing or a
-  better story.
+- Choose the rung from the place, people and situation, never the player's wish or phrasing.
 - Between two rungs: the one less favourable to the player's hope; no hope evident: nearer even.
 - Finding out (looking, searching, recalling, reading a person) is an Observe or Recall beat.
 
@@ -42,10 +41,10 @@ internal monologue makes no beat.
   the fact ruling it out, else null); G1 a basic verb whose covers include the method and excludes do not;
   G2 a held licence whose literal scope covers it; else G3. Unsure G1/G3 or G2/G3: G3.
 - `verb`: the nearest basic verb, for every gate. `license`: the held licence for G2, else `none`.
-- A touch or gesture for a person's attention or answer (a tap, gently turning a face, a held-up coin) is
-  that Talk beat's method, not a beat. Strike, Grapple, Force or Handle a person only when the words state
-  force or bodily care (grab, shove, hit, bandage).
-- `would_be_license`: G3's needed licence, else `none` (none: G1; talking, walking need none).
+- A touch or gesture for a person's attention (a tap, a held-up coin) is that Talk beat's method. Taking
+  a thing from someone gently is Handle (asking: Talk); Strike, Grapple or Force a person only when the
+  words state force against their will (wrench, shove, hit).
+- `would_be_license`: G3's needed licence, else `none` (G1: talking, threatening, lying, walking need none).
 - `necessity` (01.4.1): `uncertain_and_costly` when the method could realistically fail AND failure would
   cost or change something, and no ride applies. Ties go to the roll; competence never makes an obstacle
   trivial. Another reason only when its card plainly applies; G4 → `impossible`.

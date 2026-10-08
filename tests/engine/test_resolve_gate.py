@@ -141,3 +141,19 @@ def test_basic_verb_g3_without_a_licence_is_g1(tmp_path: Path) -> None:
     assert named.redirect.missing == "lic.training.arcane_alteration"
     excluded = check_gate(s.beat(gate="G3", verb="verb.force", method="pick the lock"), state=s.state, rules=s.rules)
     assert excluded.gate == "G3" and "excludes" in excluded.reason
+
+
+def test_plain_social_act_on_talk_is_g1_whatever_licence_is_named(tmp_path: Path) -> None:
+    """P-122 (playtest 20261007-212725): a threat on Talk naming Intimidation (untrained form: Talk,
+    "threaten plainly", no penalty) is Talk's own act, never a redirect; a penalised form keeps the G3."""
+    s = Scene.new(tmp_path)
+    for lid in ("lic.training.influence_intimidation", "lic.training.guile_deception"):
+        d = check_gate(s.beat(gate="G3", verb="verb.talk", method="slam a fist and demand the price",
+                              would_be_license=lid), state=s.state, rules=s.rules)
+        assert (d.gate, d.redirect, d.license) == ("G1", None, None), d.reason
+    trade = check_gate(s.beat(gate="G3", verb="verb.talk", method="haggle in the merchants' way",
+                              would_be_license="lic.training.influence_trade"), state=s.state, rules=s.rules)
+    assert trade.gate == "G3" and trade.redirect is not None  # haggle as a customer: DC +5, limited
+    axe = check_gate(s.beat(gate="G3", verb="verb.strike", method="hew the rope like a trained axeman",
+                            would_be_license="lic.training.martial_axe"), state=s.state, rules=s.rules)
+    assert axe.gate == "G3"  # only a speech verb's plain form; a trained technique still needs the licence

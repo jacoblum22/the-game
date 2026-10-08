@@ -133,12 +133,24 @@ def name_ids(text: str, rules: Any = None, names: Mapping[str, str] | None = Non
 _SECOND = [(r"(?:PC|character)'s\b", "your"), (r"(?:PC|character) is\b", "you are"),
            (r"(?:PC|character) has\b", "you have"), (r"(?:PC|character) was\b", "you were"),
            (r"(?:PC|character)\b(?! sheet| creation| record)", "you")]
+# "the PC" as a clause's subject: its verb loses the -s ("the PC finds out" -> "you find out")
+# ponytail: subject position = text start, after punctuation or a clause word; a noun right after "the PC"
+# there ("the PC orders") would lose its -s, which no rule or Reader text has shown
+_SUBJ_VERB = re.compile(r"(^|[.;:!?(\"]\s*|\b(?i:and|or|that|when|if|whether|until|while|then|unless) )"
+                        r"([Tt])he (?:PC|character) (?!(?:has|was)\b)([a-z]+[^s\W]s)\b")
+_SUBJ_VERB_PC = re.compile(_SUBJ_VERB.pattern.replace("(?:PC|character)", "PC"))
+
+
+def _subject_verb(m: re.Match[str]) -> str:
+    v = m.group(3)
+    v = v[:-3] + "y" if v.endswith("ies") else v[:-2] if re.search(r"(?:sh|ch|x|ss|z|o)es$", v) else v[:-1]
+    return f"{m.group(1)}{'Y' if m.group(2) == 'T' else 'y'}ou {v}"
 
 
 def second_person(text: str, *, character: bool = True) -> str:  # rule: 12.14.1
     """Rules and seed data speak of "the PC" / "the character"; the player is "you" ("a stranger asks after the PC
     by name" -> "a stranger asks after you by name"). `character=False` leaves "the character" alone."""
-    out = text
+    out = (_SUBJ_VERB if character else _SUBJ_VERB_PC).sub(_subject_verb, text)
     for pat, rep in _SECOND:
         if not character:
             pat = pat.replace("(?:PC|character)", "PC")
