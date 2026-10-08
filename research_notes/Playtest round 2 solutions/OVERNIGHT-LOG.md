@@ -207,4 +207,30 @@ everything.
     - a non-addressed NPC answered;
     - a dog with human activities and tattoos;
     - Recall gave "a fragment" with nothing in it.
-- **In flight:** three fixers (A, B, C), in separate files.
+- **Fixes merged (24ac719 A, e180f38 C, a02f758 B; suite 1729, validator 0/0, ruff clean):**
+  - **A, combat:**
+    - holds now release per 06.5.2;
+    - the "NPC at 0 Vitality" was the PC's Vitality printed under the NPC's name;
+    - the 12 → 4 hit was a legitimate critical, so the foe's threat warning and the STATUS card now show;
+    - waking now reports time out and condition;
+    - the conflict is cleared at fight end, which was the cause of the scene reset to morning;
+    - near-miss wording is now caught as an outcome contradiction.
+  - **B, OFFER:**
+    - auto-commit had worked: its block was printed below its RESULT, so it looked like an offer still open;
+    - a lone letter typed with nothing open is no longer sent as an action;
+    - the Framer failures came from the conflict anchor having no verb defense, plus stakes/cost mismatches,
+      which the schema now prevents;
+    - levers are named;
+    - a cost form may not undo the success;
+    - "Eliius" is the PC's own name, which had been put in an OFFER title.
+  - **C, Talk and NPCs:**
+    - pointers name someone who can answer, with a chain limit;
+    - public news the player has already heard is no longer denied, cutting "I don't know" on public topics
+      from 27% to 0%;
+    - unchanged or engaged idle lines are hidden;
+    - an NPC's title no longer matches a faction name (the wrong-speaker bug);
+    - animals no longer get human details.
+
+    Overall "I don't know" is still 42% offline. The remainder is directions asked at Unlikely odds (I-178,
+    **owner**).
+- **In flight:** re-run of the talker and fighter personas on a02f758.
