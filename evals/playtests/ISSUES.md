@@ -112,3 +112,4 @@ Status: open · fixing (round N) · fixed (commit) · logged (ledger id) · wont
 | P-106 | polish | low | Hidden-roll failure stays vague ("the canvas does not come up cleanly") without saying what went wrong | 201306-newcomer 34–36 | open (with P-086) |
 | P-107 | rules | med | Social odds harsh: first friendly chat 25% with 30% crit-fail (a sword blow); a calmer approach dropped to 5% and dire | 201412-talker 21–23 | logged I-155 |
 | P-108 | bug | med | Fallback prints internal text: "Spoken to Oggza, not a beat", "You are a few strides from bench"; one turn delivered only "What do you do?" | 201412-talker 26, 31 | fixing |
+| P-109 | bug | low | Journal: "Who is missing person: Betey Woodhill", fragment "keep close around Nedey Woodhill" (incident-binding predicates) | 201748-explorer 22 | fixing (with P-108) |
