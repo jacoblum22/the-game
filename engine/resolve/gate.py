@@ -170,8 +170,8 @@ def forbidden_by_condition(beat: Beat, *, state: Any, rules: Any, verb: str | No
 def covering_verb(verb: str | None, *, against_will: bool, speech: bool) -> str | None:  # rule: 00.12.3
     """The verb card the facets put the beat under: a hold or a blow that is not against anyone's will is not a
     Grapple or a Strike ("gently turn the child's face" is Handle; words said with a raised fist are Talk)."""
-    if against_will:
-        return verb
+    if against_will:  # words are never against anyone's will: a Talk read so carries a hold (a hand over a mouth)
+        return "verb.grapple" if verb == "verb.talk" else verb
     if verb == "verb.grapple":
         return "verb.talk" if speech else "verb.handle"
     if verb == "verb.strike" and speech:

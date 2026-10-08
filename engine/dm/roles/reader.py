@@ -45,6 +45,16 @@ NOW = "now"
 NOW_SHAPES = (NOW, "extended")  # resolved this turn; `extended` (01.2.2) is a goal of several stretches
 
 
+def now_beats(beats: Sequence[Any]) -> list[Any]:  # rule: 12.2.2
+    """The beats resolved this turn: shape now or extended. A conditional beat waits on another beat; with no
+    other beat to wait on ("I pour the draught when he looks away") it is this turn's beat."""
+    def shape(b: Any) -> str:
+        return str((b.get("shape") if isinstance(b, dict) else b.shape) or NOW)
+
+    now = [b for b in beats if shape(b) in NOW_SHAPES]
+    return now or [b for b in beats if shape(b) == "conditional"][:1]
+
+
 def knowledge_question(text: str) -> bool:
     """A player's out-of-fiction "what do I know?" (not a Recall attempt, not a question to an NPC)."""
     return bool(KNOW_QUESTION.search(text)) and not RECALL_WORDS.search(text)
@@ -100,7 +110,7 @@ class ReaderResult(BaseModel):
         return [p.cls for p in self.parts]
 
     def _now(self) -> list[ReaderBeat]:
-        return [b for b in self.beats if (b.shape or NOW) in NOW_SHAPES]
+        return now_beats(self.beats)
 
     def plans(self, *, actor: str, declared_seq: int, mint: Callable[[str], str]) -> list[BeatPlan]:  # rule: 01.2.3
         """The beats to resolve now, in the player's order (the caller resolves the first three). A queued or
@@ -126,8 +136,9 @@ class ReaderResult(BaseModel):
 
     @property
     def queued(self) -> list[str]:
-        later = [b.intent for b in self.beats if (b.shape or NOW) not in NOW_SHAPES]
-        return [b.intent for b in self._now()[MAX_BEATS:]] + later
+        now = self._now()
+        later = [b.intent for b in self.beats if b not in now]
+        return [b.intent for b in now[MAX_BEATS:]] + later
 
 
 def reader_check(data: Any) -> list[str]:  # rule: 12.2.2
