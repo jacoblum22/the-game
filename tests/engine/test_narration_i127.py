@@ -52,7 +52,9 @@ def test_recorded_scene_prose_survives_in_one_pass(tmp_path: Path) -> None:
     model.push(Role.CHECKER, chk(*_scene_claims(dock, hour)))
     out = play_turn(ctx, "I look over the quay.")
     assert out.response.fiction == RECORDED_SCENE and not out.response.flags.fallback_used
-    assert len(calls(model, Role.NARRATOR)) == 1 and len(calls(model, Role.CHECKER)) == 1  # was 6 on the opening
+    assert len(calls(model, Role.NARRATOR)) == 1  # was 6 on the opening
+    assert len(calls(model, Role.CHECKER)) == 2  # turn.1 is a sampled turn: the diff and the full extraction, after
+    # delivery, logged only (spec 011, DL-12-83)
     names = {e.name for e in ctx.store.state.entities.values()}
     assert {"woodsmoke", "north road"} <= names  # written on mention at check time, not cut
 
@@ -96,16 +98,15 @@ def test_unknown_subject_that_acts_or_changes_is_still_cut() -> None:
 
 
 def test_redraft_names_claims_and_never_asks_for_shorter(tmp_path: Path) -> None:
-    bad = "Tam Harlan, a woman, watches you. The fog lies low on the water. What do you do?"
-    good = "Tam Harlan, a man, watches you. The fog lies low on the water. What do you do?"
-    model = look_model(narrator=[narr(bad), lambda s, p: rep(0, "Tam Harlan, a man, watches you.", _must(p))])
+    """A code-scan hit (an unknown name in the narrator's voice, 12.3.1b item 2.6) is redrafted with its reason."""
+    bad = "Tam Harlan nods to Brannoc. The fog lies low on the water. What do you do?"
+    good = "Tam Harlan nods to you. The fog lies low on the water. What do you do?"
+    model = look_model(narrator=[narr(bad), lambda s, p: rep(0, "Tam Harlan nods to you.", _must(p))])
     dock, ctx = setup(tmp_path, model)
-    model.push(Role.CHECKER, chk(claim(0, dock.ferryman, "identity", "gender", "woman")),
-               chk(claim(0, dock.ferryman, "identity", "gender", "man")))
     out = play_turn(ctx, "I look over the quay.")
     assert out.response.fiction == good
     msg = calls(model, Role.NARRATOR)[1].message
-    assert "Tam Harlan, a woman" in msg and "contradicted" in msg and "he/him" in msg
+    assert "Tam Harlan nods to Brannoc" in msg and "names 'Brannoc'" in msg
     low = msg.lower()
     assert "every other sentence of your draft stands as written" in low
     assert not any(w in low for w in ("shorten the", "simplify", "play it safe", "be safe")) or "do not shorten" in low

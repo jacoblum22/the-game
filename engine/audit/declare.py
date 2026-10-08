@@ -16,7 +16,7 @@ import re
 from collections.abc import Iterable, Mapping, Sequence
 from typing import Any, Literal
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from engine.audit import text as tx
 
@@ -52,6 +52,12 @@ class DeclaredSentence(BaseModel):
     about: list[str] = Field(default_factory=list)
     new: list[NewElement] = Field(default_factory=list)
     atmosphere: bool = False
+    speaker: str | None = None  # 12.3.1b item 1: who says the quoted (or reported) words; never the PC
+
+    @field_validator("speaker", mode="before")
+    @classmethod
+    def _none(cls, v: Any) -> Any:
+        return None if v in (None, "", "none") else v
 
     @property
     def declared(self) -> bool:
@@ -68,6 +74,7 @@ class SentenceScan(BaseModel):
     added_about: list[str] = Field(default_factory=list)  # names the sentence used but did not declare (logged)
     failures: list[Failure] = Field(default_factory=list)
     undeclared_new: int = 0  # undeclared addressable elements code found (unknown proper names)
+    logged: list[tuple[str, str]] = Field(default_factory=list)  # (class, why): found, off the blocking list (12.3.1b)
 
 
 # ------------------------------------------------------------------------------------------- parsing
@@ -105,13 +112,13 @@ def joined(sents: Iterable[DeclaredSentence]) -> str:
 def tier_of(el: NewElement, rules: Any = None) -> Tier:  # rule: 12.14.13
     """The element's tier from its declared kind (`pacing.yaml#claim_check.element_tiers`). A `person`, `item` or
     `document` the narrator did not declare ordinary is T2 (12.14.13's question found true); an unknown kind is
-    T2 (an uncertain kind is T2)."""
+    T1a (an uncertain kind is T1a: R2-G, DL-12-80)."""
     tiers = dict(ELEMENT_TIERS)
     if rules is not None:
         tiers.update((rules.pacing.get("claim_check") or {}).get("element_tiers") or {})
     t = tiers.get(el.element_kind)
     if t is None:
-        return "T2"
+        return "T1a"
     if el.element_kind in ("person", "item", "document") and not el.ordinary:
         return "T2"
     return t  # type: ignore[return-value]
@@ -233,6 +240,26 @@ _SHE = re.compile(r"\b(she|her|hers|herself)\b", re.I)
 _QUOTED = re.compile(r"[\"“][^\"”]*[\"”]")
 
 
+_PC_SAYS = re.compile(r"\byou\s+(?:say|ask|call|shout|whisper|reply|answer|tell|mutter|murmur|cry|add|growl|snap|"
+                      r"plead|demand|insist|offer|begin|start|venture)\w*\b", re.I)
+
+
+def voices(s: DeclaredSentence) -> tuple[str, list[str]]:  # rule: 12.3.1b
+    """(the narrator's words, the speech spans). Quoted words are speech; a sentence with a declared speaker and
+    no quotes is reported speech, whole ("she tells you it left at dawn")."""
+    spans = [m.group(0).strip("\"“”") for m in _QUOTED.finditer(s.text)]
+    if not spans:
+        return ("", [s.text]) if s.speaker else (s.text, [])
+    return re.sub(r"\s+", " ", _QUOTED.sub(" ", s.text)).strip(), spans
+
+
+def pc_quotes(s: DeclaredSentence) -> list[str]:  # rule: 12.14.3
+    """Quoted words the sentence puts in the PC's mouth: quotes with no declared speaker whose narration says
+    "you say / ask / call ...". The only speech check on content (12.3.1b item 1: no words in the PC's mouth)."""
+    narration, spans = voices(s)
+    return spans if spans and not s.speaker and _PC_SAYS.search(narration) else []
+
+
 def _names_in(text: str, idx: SceneIndex) -> list[str]:
     """Entity ids whose name or alias appears in `text` (whole words; the longest match per span wins)."""
     low = text.lower()
@@ -274,13 +301,14 @@ def unknown_names(text: str, idx: SceneIndex, s: DeclaredSentence) -> list[str]:
 def scan_sentence(s: DeclaredSentence, idx: SceneIndex, *, rules: Any = None,
                   names: Iterable[str] = ()) -> SentenceScan:  # rule: 12.3.1a
     # rule: 12.2.10
-    """12.3.1a's code checks for one sentence: names and aliases against `about` (a resolvable name is added and
-    logged; an invented one fails), numerals against quantities and cited values, pronouns against the one person
-    the sentence is about, mechanics words (12.14.4) and sealed content (00.6.5)."""
+    """12.3.1a's code checks for one sentence, on the narrator's voice only (speech is testimony, 12.3.1b item 1):
+    names and aliases against `about` (a resolvable name is added and logged; an invented one fails), numerals
+    against quantities and cited values, sealed content (00.6.5); a pronoun clash is logged (off the blocking
+    list); mechanics words (12.14.4, any voice) fail."""
     from engine.audit.screen import mechanics_in_fiction
 
     out = SentenceScan()
-    text = s.text
+    text, _ = voices(s)
     subjects = idx.subjects(s)
     for eid in _names_in(text, idx):
         if eid not in subjects and eid != idx.pc:
@@ -311,9 +339,8 @@ def scan_sentence(s: DeclaredSentence, idx: SceneIndex, *, rules: Any = None,
         wrong = (g == "f" and _HE.search(said) and not _SHE.search(said)) or (
             g == "m" and _SHE.search(said) and not _HE.search(said))
         if wrong:
-            out.failures.append(Failure(why="the pronoun does not match the person's", fix="redraft",
-                                        store_value={"f": "she/her", "m": "he/him"}.get(g, "they/them")))
-    mech = mechanics_in_fiction(text, rules=rules, names=names)
+            out.logged.append(("identity", "the pronoun does not match the person's"))
+    mech = mechanics_in_fiction(s.text, rules=rules, names=names)
     if mech:
         out.failures.append(Failure(why=f"mechanics in the fiction: {', '.join(mech)}", fix="redraft",
                                     store_value="say it in the world's words"))
@@ -343,5 +370,5 @@ def t2_delivered(el: NewElement, s: DeclaredSentence, idx: SceneIndex) -> bool: 
 
 
 __all__ = ["ELEMENT_TIERS", "DeclaredSentence", "Failure", "NewElement", "SceneIndex", "SentenceScan", "coverage", "known_as",
-           "joined", "mention_of", "parse_output", "scan_sentence", "split", "t2_delivered", "tier_of",
-           "unknown_names"]
+           "joined", "mention_of", "parse_output", "pc_quotes", "scan_sentence", "split", "t2_delivered", "tier_of",
+           "unknown_names", "voices"]

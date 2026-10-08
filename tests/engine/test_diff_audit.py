@@ -1,5 +1,6 @@
-"""Spec 009 part B: the diff-mode Checker (12.3.1 source 2, DL-12-71), the audit's undeclared elements written by
-tier (12.14.13; I-175), the profile diff on reuse (PR-00-7 step 2, 00.6.6a) and the Checker's spotlight scope."""
+"""Spec 009 part B, as spec 011 left it: the diff-mode Checker (12.3.1 source 2) runs on a sampled turn (1 in 10
+by the turn id; turn.1 is one), after delivery, and only logs (DL-12-83); the profile diff on reuse (PR-00-7 step
+2, 00.6.6a) and the Checker's spotlight scope."""
 
 from __future__ import annotations
 
@@ -10,7 +11,7 @@ from engine.dm.turn import play_turn
 from engine.llm.base import Role
 from engine.store.events import EntityRecord, Event
 from tests.engine.test_turn_adjudication import setup
-from tests.engine.test_turn_narration import _decl, _must, calls, chk, claim, look_model, rep
+from tests.engine.test_turn_narration import _decl, _must, calls, chk, claim, look_model
 from tests.fixtures.scene_dock import build_dock
 
 
@@ -18,39 +19,25 @@ def _names(ctx: Any) -> set[str]:
     return {e.name for e in ctx.store.state.entities.values()}
 
 
-def test_the_audit_reads_declarations_in_words_and_judges_what_goes_beyond(tmp_path: Path) -> None:
-    """The Checker sees each sentence's declarations rendered in words; a claim beyond them is judged against the
-    store (a contradicted pronoun is redrafted to the store's value)."""
+def test_the_audit_reads_declarations_in_words_after_delivery(tmp_path: Path) -> None:
+    """The sampled diff sees each delivered sentence's declarations rendered in words; what it finds is logged and
+    changes nothing (a gender is off the blocking list, DL-12-80)."""
     holder: dict[str, Any] = {}
 
     def draft(schema: Any, packet: Any) -> dict[str, Any]:
         return {"sentences": [_decl("Tam Harlan, a woman, watches you.", _must(packet),
                                     about=[holder["dock"].ferryman]), _decl("What do you do?")]}
-    model = look_model(narrator=[draft, lambda s, p: rep(0, "Tam Harlan watches you.", _must(p))])
+    model = look_model(narrator=[draft])
     dock, ctx = setup(tmp_path, model)
     holder["dock"] = dock
-    model.push(Role.CHECKER, chk(claim(0, dock.ferryman, "identity", "gender", "woman")), chk())
+    model.push(Role.CHECKER, chk(), chk(claim(0, dock.ferryman, "identity", "gender", "woman")))
     out = play_turn(ctx, "I look over the quay.")
     msg = calls(model, Role.CHECKER)[0].message
     assert "[0] Tam Harlan, a woman, watches you.\n    declares: R1 (" in msg
     assert f"about Tam Harlan ({dock.ferryman})" in msg and "    declares: nothing" in msg
-    assert out.response.fiction == "Tam Harlan watches you. What do you do?"
-
-
-def test_an_unexpressed_declaration_is_dropped_and_the_line_is_owed_again(tmp_path: Path) -> None:
-    """(ii): a declared handle the sentence never says no longer covers its must-name line (12.3.1a), so the repair
-    adds a sentence for it; the sentence itself stands."""
-    def draft(schema: Any, packet: Any) -> dict[str, Any]:
-        return {"sentences": [_decl("The fog lies thick on the water.", _must(packet)), _decl("What do you do?")]}
-    model = look_model(narrator=[draft, lambda s, p: rep("add", "You look over the quay.", _must(p))])
-    dock, ctx = setup(tmp_path, model)
-    model.push(Role.CHECKER, chk(unexpressed=[{"sentence": "0", "ref": "R1", "says_otherwise": False}]), chk())
-    out = play_turn(ctx, "I look over the quay.")
-    repair = calls(model, Role.NARRATOR)[1].message
-    assert "MISSING" in repair and "R1" in repair.split("MISSING", 1)[1]
-    assert out.response.fiction == "The fog lies thick on the water. You look over the quay. What do you do?"
-    stats = out.turn_record.draft_versions[-1]["stats"]
-    assert stats["audit_unexpressed"] == 1
+    assert out.response.fiction == "Tam Harlan, a woman, watches you. What do you do?"
+    [e] = [e for e in out.turn_record.claim_log if e.get("source") == "sample"]
+    assert (e["class"], e["verdict"], e["blocking_miss"]) == ("identity", "contradicted", False)
 
 
 def test_a_figure_of_speech_is_atmosphere_not_a_claim(tmp_path: Path) -> None:
@@ -62,7 +49,7 @@ def test_a_figure_of_speech_is_atmosphere_not_a_claim(tmp_path: Path) -> None:
     model = look_model(narrator=[draft])
     dock, ctx = setup(tmp_path, model)
     before = _names(ctx)
-    model.push(Role.CHECKER, chk(claim(0, "unknown", "clock", "is", "only the beginning"),
+    model.push(Role.CHECKER, chk(), chk(claim(0, "unknown", "clock", "is", "only the beginning"),
                                  claim(1, "unknown", "sealed", "is", "more than it seems"),
                                  claim(1, "unknown", "existence", "the silence", "presses")))
     out = play_turn(ctx, "I look over the quay.")
@@ -71,9 +58,9 @@ def test_a_figure_of_speech_is_atmosphere_not_a_claim(tmp_path: Path) -> None:
     assert _names(ctx) == before  # no "only the beginning" or "silence" furniture
 
 
-def test_undeclared_elements_are_written_by_tier(tmp_path: Path) -> None:
-    """I-175: what the audit finds undeclared is folded back as the sentence's declaration and written by its tier:
-    ordinary furniture is written (T1a), an adversary no record line delivers is cut (T2)."""
+def test_undeclared_elements_the_audit_finds_are_logged_only(tmp_path: Path) -> None:
+    """Spec 011 (DL-12-80, DL-12-83): what the sampled audit finds undeclared is logged; audit-typed T2 never cuts
+    and nothing is written after delivery."""
     def draft(schema: Any, packet: Any) -> dict[str, Any]:
         return {"sentences": [_decl("You look over the quay; a coil of rope lies by the stair.", _must(packet)),
                               _decl("A cutthroat waits in the dark."), _decl("What do you do?")]}
@@ -81,11 +68,13 @@ def test_undeclared_elements_are_written_by_tier(tmp_path: Path) -> None:
     dock, ctx = setup(tmp_path, model)
     model.push(Role.CHECKER, chk(undeclared=[
         {"sentence": "0", "element_kind": "furniture", "name": "coil of rope", "ordinary": True},
-        {"sentence": "1", "element_kind": "adversary", "name": "cutthroat", "ordinary": False}]))
+        {"sentence": "1", "element_kind": "adversary", "name": "cutthroat", "ordinary": False}]), chk())
+    before = _names(ctx)
     out = play_turn(ctx, "I look over the quay.")
-    assert "coil of rope" in _names(ctx) and "cutthroat" not in _names(ctx)
-    assert "cutthroat" not in out.response.fiction and "coil of rope" in out.response.fiction
-    assert out.turn_record.draft_versions[-1]["stats"]["audit_new"] == 2
+    assert _names(ctx) == before
+    assert "cutthroat" in out.response.fiction and "coil of rope" in out.response.fiction
+    logged = [e["element"] for e in out.turn_record.claim_log if e["verdict"] == "undeclared"]
+    assert logged == ["coil of rope", "cutthroat"]
 
 
 def test_profile_diff_on_reuse(tmp_path: Path) -> None:
@@ -147,32 +136,22 @@ def test_restating_a_known_lead_is_supported(tmp_path: Path) -> None:
                "value": "names him", "asserts_change": False}]
     got = [v.verdict for v in check_claims(claims, dock.store.state, None, [], rules=dock.rules)]
     assert got == ["supported", "unsourced_change", "supported"]
-    from engine.dm.narration import _in_lead  # an "undeclared" element the lead names is spoken of, not new
-
-    assert _in_lead(dock.store.state, "the quarrel") and not _in_lead(dock.store.state, "a cutthroat")
 
 
-def test_the_audit_skip_stays_off_until_the_gate_is_met(tmp_path: Path) -> None:
-    """OEQ-12-23: with `skip_enabled` false the diff runs every turn; once enabled, a fully declared turn with no
-    SPEECH part skips it, and 1 turn in `full_extraction_every` is sampled for a full extraction."""
+def test_the_audit_is_sampled_by_the_turn_id() -> None:
+    """Spec 011 item 1 (DL-12-83, OEQ-12-23): the skip gate is retired; 1 turn in `full_extraction_every` is
+    sampled by the turn id's crc32, every other turn runs no audit."""
     from types import SimpleNamespace
 
-    from engine.audit.declare import DeclaredSentence
     from engine.data.loader import load_rules
-    from engine.dm.adjudication import AdjudicationRecord
     from engine.dm.narration import audit_mode
 
     audit = dict(load_rules().pacing["claim_check"]["audit"])
-    assert audit["skip_enabled"] is False and audit["full_extraction_every"] == 10
-    decl = [DeclaredSentence(text="You look.", refs=["R1"])]
-    bare = [DeclaredSentence(text="A man waits.")]
+    assert "skip_enabled" not in audit and audit["full_extraction_every"] == 10 and audit["mode"] == "sampled"
+    assert "max_active" not in load_rules().pacing["details"]
 
-    def ctx(turn: str, **cfg: Any) -> Any:
-        return SimpleNamespace(rules=SimpleNamespace(pacing={"claim_check": {"audit": {**audit, **cfg}}}),
-                               turn_id=turn)
-    rec = AdjudicationRecord()
-    assert audit_mode(ctx("turn.3"), rec, decl) == "diff"
-    turns = [f"turn.{n}" for n in range(1, 41)]
-    modes = [audit_mode(ctx(t, skip_enabled=True), rec, decl) for t in turns]
-    assert 1 <= modes.count("sample") <= 10 and set(modes) == {"sample", "skip"}  # about 1 in 10 sampled
-    assert {audit_mode(ctx(t, skip_enabled=True), rec, bare) for t in turns} == {"sample", "diff"}
+    def ctx(turn: str) -> Any:
+        return SimpleNamespace(rules=SimpleNamespace(pacing={"claim_check": {"audit": audit}}), turn_id=turn)
+    modes = [audit_mode(ctx(f"turn.{n}")) for n in range(1, 101)]
+    assert set(modes) == {"sampled", "off"} and 5 <= modes.count("sampled") <= 15
+    assert audit_mode(ctx("turn.1")) == "sampled" and audit_mode(ctx("turn.2")) == "off"

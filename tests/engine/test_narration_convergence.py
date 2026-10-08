@@ -22,53 +22,54 @@ from engine.dm.adjudication import AdjudicationRecord, BeatEntry, WriteRef
 from engine.dm.turn import play_turn
 from engine.llm.base import Role
 from tests.engine.test_turn_adjudication import setup
-from tests.engine.test_turn_narration import _must, calls, chk, claim, look_model, narr, rep
+from tests.engine.test_turn_narration import _decl, _must, calls, look_model, narr, rep
 
 PROMPT = "What do you do?"
 
 
 def test_a_repair_resends_only_the_failing_sentence(tmp_path: Path) -> None:
-    """The turn-3 pattern: one sentence is wrong. Only it is sent back and re-checked; the others stand as written
-    and a fresh misreading of them is never made (the Checker sees the replacement alone)."""
-    draft = f"Tam Harlan, a woman, watches the water. He mends a net by the post. Stallholders call their prices. {PROMPT}"
-    model = look_model(narrator=[narr(draft), rep(0, "Tam Harlan, a man, watches the water.")])
+    """The turn-3 pattern: one sentence is wrong. Only it is sent back and re-checked; the others stand as written.
+    Spec 011: the failure is a code-scan hit (an unknown name); a coat's colour or a gender is no longer judged."""
+    draft = f"Tam Harlan nods to Brannoc. He mends a net by the post. Stallholders call their prices. {PROMPT}"
+    model = look_model(narrator=[narr(draft), rep(0, "Tam Harlan nods to you.")])
     dock, ctx = setup(tmp_path, model)
-    model.push(Role.CHECKER,
-               chk(claim(0, dock.ferryman, "identity", "gender", "woman"),
-                   claim(1, dock.ferryman, "action", "mends", "a net")),
-               chk(claim(0, dock.ferryman, "identity", "gender", "man")))
     out = play_turn(ctx, "I look over the quay.")
     assert not out.response.flags.fallback_used
-    assert out.response.fiction == ("Tam Harlan, a man, watches the water. He mends a net by the post. "
+    assert out.response.fiction == ("Tam Harlan nods to you. He mends a net by the post. "
                                     f"Stallholders call their prices. {PROMPT}")
     assert len(calls(model, Role.NARRATOR)) == 2  # one narrow repair
-    second = calls(model, Role.CHECKER)[1].message
-    assert "[0] Tam Harlan, a man" in second and "mends a net" not in second
     repair = calls(model, Role.NARRATOR)[1].message.split("A REPAIR", 1)[1]
-    assert "Tam Harlan, a woman" in repair and "mends a net" not in repair
+    assert "Brannoc" in repair and "mends a net" not in repair
     assert [v["kind"] for v in out.turn_record.draft_versions] == ["draft", "repair"]
 
 
 def test_oracle_yes_needs_no_redraft(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
-    text = f"Tam Harlan's coat is patched with a crowbar. {PROMPT}"  # 'crowbar': not incidental (a tool, armed?)
-    model = look_model(narrator=[narr(text)])
+    """A declared T1b element (knowledge) is settled by the Oracle; a yes is the draft's own value."""
+    text = "The tide turns at dusk here."
+
+    def draft(schema: Any, packet: Any) -> dict[str, Any]:
+        new = [{"element_kind": "knowledge", "name": "the tide turns at dusk", "ordinary": True, "implied": []}]
+        return {"sentences": [_decl(text, _must(packet), new=new), _decl(PROMPT)]}
+    model = look_model(narrator=[draft])
     dock, ctx = setup(tmp_path, model)
-    model.push(Role.CHECKER, chk(claim(0, dock.ferryman, "possession", "carries", "a key to the shed")))
     monkeypatch.setattr(narration, "_ask_oracle", lambda *a, **k: "yes")
     out = play_turn(ctx, "I look over the quay.")
-    assert out.response.fiction == text and not out.response.flags.fallback_used
-    assert len(calls(model, Role.NARRATOR)) == 1 and len(calls(model, Role.CHECKER)) == 1
+    assert out.response.fiction == f"{text} {PROMPT}" and not out.response.flags.fallback_used
+    assert len(calls(model, Role.NARRATOR)) == 1
 
 
 def test_an_incidental_property_is_written_as_narrated(tmp_path: Path) -> None:
     """12.3.2 / DL-12-40 (B P5): a coat's look is T1a: written as drafted, no Oracle, no repair; it binds later."""
-    text = f"Tam Harlan's coat is patched at the elbows. {PROMPT}"
-    model = look_model(narrator=[narr(text)])
+    text = "Tam Harlan's coat is patched at the elbows."
+
+    def draft(schema: Any, packet: Any) -> dict[str, Any]:
+        new = [{"element_kind": "person", "name": "Tam Harlan", "ordinary": True,
+                "implied": [{"predicate": "clothing", "value": "coat patched at the elbows"}]}]
+        return {"sentences": [_decl(text, _must(packet), new=new), _decl(PROMPT)]}
+    model = look_model(narrator=[draft])
     dock, ctx = setup(tmp_path, model)
-    model.push(Role.CHECKER, chk(claim(0, dock.ferryman, "identity", "appearance", "coat patched at the elbows")))
-    asked: list[Any] = []
     out = play_turn(ctx, "I look over the quay.")
-    assert out.response.fiction == text and not asked
+    assert out.response.fiction == f"{text} {PROMPT}"
     ref = dock.state.details[dock.ferryman]["clothing"]  # a look goes in its detail slot (00.6.6a; spec 009 B)
     assert dock.state.facts[ref.fact_id].value == "coat patched at the elbows"
     assert not any(e.type == "oracle_answered" for e in dock.store.events(types=["oracle_answered"]))
@@ -90,11 +91,9 @@ def test_oracle_no_is_redrafted_and_its_answer_is_readable(tmp_path: Path) -> No
 
 
 def test_still_failing_after_two_repairs_is_cut_and_the_rest_delivered(tmp_path: Path) -> None:
-    bad = "Tam Harlan, a woman, watches you."
+    bad = "Tam Harlan nods to Brannoc."
     model = look_model(narrator=[narr(f"{bad} The fog lies low on the water. {PROMPT}"), rep(0, bad), rep(0, bad)])
     dock, ctx = setup(tmp_path, model)
-    woman = claim(0, dock.ferryman, "identity", "gender", "woman")
-    model.push(Role.CHECKER, chk(woman), chk(woman), chk(woman))
     out = play_turn(ctx, "I look over the quay.")
     assert not out.response.flags.fallback_used
     assert out.response.fiction == f"The fog lies low on the water. {PROMPT}"
@@ -102,11 +101,9 @@ def test_still_failing_after_two_repairs_is_cut_and_the_rest_delivered(tmp_path:
 
 
 def test_after_the_repairs_a_cut_leaving_only_the_prompt_falls_back(tmp_path: Path) -> None:
-    bad = "Tam Harlan, a woman, watches you."
+    bad = "Tam Harlan nods to Brannoc."
     model = look_model(narrator=[narr(f"{bad} {PROMPT}"), rep(0, bad), rep(0, bad)])
     dock, ctx = setup(tmp_path, model)
-    woman = claim(0, dock.ferryman, "identity", "gender", "woman")
-    model.push(Role.CHECKER, chk(woman), chk(woman), chk(woman))
     assert play_turn(ctx, "I look over the quay.").response.flags.fallback_used
 
 
@@ -117,19 +114,17 @@ def test_after_the_repairs_a_cut_leaving_only_the_prompt_falls_back(tmp_path: Pa
 ])
 def test_declared_inventions_in_a_repair_are_still_cut(tmp_path: Path, new: dict[str, Any]) -> None:
     """12.14.13: a T2 element no record line delivers is cut, also when a repair adds it."""
-    bad = f"Tam Harlan, a woman, watches you. {PROMPT}"
+    bad = f"Tam Harlan nods to Brannoc. {PROMPT}"
 
     def repair(schema: Any, packet: Any) -> dict[str, Any]:
-        return {"repairs": [{"replaces": "0", "text": "Tam Harlan, a man, watches you.", "refs": _must(packet),
-                             "about": [], "new": [], "atmosphere": False},
+        return {"repairs": [{"replaces": "0", "text": "Tam Harlan nods to you.", "refs": _must(packet),
+                             "about": [], "new": [], "atmosphere": False, "speaker": "none"},
                             {"replaces": "add", "text": "Something is waiting here.", "refs": [], "about": [],
-                             "new": [{**new, "implied": []}], "atmosphere": False}]}
+                             "new": [{**new, "implied": []}], "atmosphere": False, "speaker": "none"}]}
     model = look_model(narrator=[narr(bad), repair])
     dock, ctx = setup(tmp_path, model)
-    model.push(Role.CHECKER, chk(claim(0, dock.ferryman, "identity", "gender", "woman")),
-               chk(claim(0, dock.ferryman, "identity", "gender", "man")))
     out = play_turn(ctx, "I look over the quay.")
-    assert out.response.fiction == f"Tam Harlan, a man, watches you. {PROMPT}"
+    assert out.response.fiction == f"Tam Harlan nods to you. {PROMPT}"
     assert new["name"] not in {e.name for e in ctx.store.state.entities.values()}
 
 

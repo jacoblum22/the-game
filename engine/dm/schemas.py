@@ -82,6 +82,7 @@ class SchemaContext(BaseModel):
     obstacle_classes: list[str] = Field(default_factory=list)  # the beat's verb's rubric classes (01.6.5)
     opposed_ids: list[str] = Field(default_factory=list)  # a social or attack beat's defender: no tier (01.6.4)
     social: bool = False  # a Talk aimed at a person: the 15.3.3 DC, with a request size
+    asks_tags: list[str] = Field(default_factory=list)  # social.yaml#event_tags.asks (12.11.9; I-176)
     cast_ids: list[str] = Field(default_factory=list)
     defender_ids: list[str] = Field(default_factory=list)  # present entities with a named defense (01.6.4)
     lever_fact_ids: list[str] = Field(default_factory=list)
@@ -113,6 +114,7 @@ class SchemaContext(BaseModel):
     entity_kinds: list[str] = Field(default_factory=list)
     narrator_refs: list[str] = Field(default_factory=list)  # this turn's record handles, then the view's fact ids
     element_kinds: list[str] = Field(default_factory=list)  # pacing.yaml#claim_check.element_tiers keys
+    speaker_ids: list[str] = Field(default_factory=list)  # 12.3.1b: present people who may speak (never the PC)
     narrator_mode: str = "sentences"  # "sentences" | "fiction" (the fallback shape, B risk 2)
     repair_ids: list[str] = Field(default_factory=list)  # failing sentence indices ("3") for a repair call
     repair: bool = False  # a narrow repair call (12.3.3): replacements only
@@ -280,6 +282,8 @@ def framer_schema(ctx: SchemaContext) -> Schema:  # rule: 01.5.1
         "lethal": BOOL,
         "reach_whole": BOOL,  # 01.6.10
         "reach_one_factor": BOOL,
+        "reach_two_factors": BOOL,  # 01.6.10 decision 2: two unoffset, or a total potency -> G4 (I-160a)
+        "asks": enum(ctx.asks_tags, first=NONE) if ctx.social else None,  # 12.11.9 step 3(b): the request's tag
         "threatened_cost": _cost(ctx.cost_menu_ids, facts, ctx.cost_uncited_ids),  # 01.6.11, 01.13.1
         "alternate_cost": nullable(_cost(ctx.alternate_cost_menu_ids or ctx.cost_menu_ids, facts,
                                          ctx.cost_uncited_ids)),
@@ -334,6 +338,7 @@ def _declaration(ctx: SchemaContext, text: bool = False) -> dict[str, Schema | N
         })),
         **({"text": STR} if text else {}),
         "atmosphere": BOOL,
+        "speaker": enum(ctx.speaker_ids, first=NONE),  # 12.3.1b item 1: whose words the quotes are; never the PC
     }
 
 
@@ -474,6 +479,7 @@ def _framer_default(ctx: SchemaContext) -> dict[str, Any]:
         "levers": [], "snags": [],
         "stakes_source": NONE, "stakes_heavy": False, "lethal": False,
         "reach_whole": ctx.reach_tie_whole, "reach_one_factor": ctx.reach_tie_one_factor,
+        "reach_two_factors": False, "asks": NONE,
         "threatened_cost": {"menu_id": menu, "form_intent": "", "source_fact": None},
         "alternate_cost": None,
         "method_consequences": [], "secret": False,
@@ -742,6 +748,7 @@ def schema_context(  # rule: 12.2.4
         obstacle_classes=ob_classes,
         opposed_ids=opposed,
         social=social,
+        asks_tags=[str(t) for t in (rules.social.get("event_tags") or {}).get("asks") or []],
         cast_ids=cast,
         defender_ids=[i for i in cast if (state.entities[i].data.get("defenses") or {})],
         lever_fact_ids=list(lever_fact_ids) if lever_fact_ids is not None else usable,
@@ -768,6 +775,7 @@ def schema_context(  # rule: 12.2.4
         lead_routes=list(pacing.get("lead_injection", {}).get("source_ladder", [])) if lead_fires else [],
         entity_kinds=[k for k in get_args(EntityKind) if k != "pc"],
         element_kinds=list((pacing.get("claim_check") or {}).get("element_tiers") or {}),
+        speaker_ids=[i for i in cast if i != pc and state.entities[i].kind in ("npc", "companion", "adversary")],
         narrator_refs=list(facts),
         claim_classes=list(pacing.get("claim_check", {}).get("classes", [])),
         sentence_ids=[str(i) for i, _ in enumerate(draft_sentences)],

@@ -132,10 +132,14 @@ def test_metrics() -> None:
     assert (p, c) == (0.5, 0.5)
     assert lh.recall_score("anything", [], [], "X") == (None, None)
     assert lh.growth({"VIEW": 100, "CORE": 50}, {"VIEW": 150, "CORE": 50}) == ["VIEW 100->150"]
-    n, by = lh.contradictions([{"draft_versions": [{"claims": [{"class": "identity"}],
-                                                    "verdicts": [{"claim": 0, "verdict": "contradicted"}]}]},
-                               {"draft_versions": []}])
-    assert n == 1 and by == {"identity": 1}
+    turns = [{"draft_versions": [{"kind": "draft", "sample": {}}],
+              "claim_log": [{"class": "identity", "verdict": "contradicted", "source": "sample", "blocking_miss": False},
+                            {"class": "quantity", "verdict": "contradicted", "source": "sample", "blocking_miss": True}]},
+             {"draft_versions": [{"kind": "draft"}], "claim_log": []}, {"draft_versions": []}]
+    n, by = lh.contradictions(turns)
+    assert n == 2 and by == {"identity": 1, "quantity": 1}
+    lines = lh.claim_log_lines(turns)  # spec 011 item 12
+    assert "identity/contradicted 50.0" in lines[0] and "1 of 2 narrated turns sampled; blocking-list misses 1" in lines[1]
 
 
 def test_short_runs_complete() -> None:

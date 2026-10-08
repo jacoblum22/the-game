@@ -488,7 +488,9 @@ readers take a `WorldState`. Errors: `engine.world.common.WorldError`. The PC is
   list[Verdict]` (12.3.2: PC agency → leak via the sealed partition → `unknown` subject = cut, never an entity
   (an unknown subject whose text names an entity created this turn resolves to it) → per-class store comparison);
   `owed_blocks(triggers, response) -> ["[WARNING]", "[STATUS]"]` missing (counts as contradicted);
-  `failing(verdicts)`; `OWED_BLOCKS`. Fixes: new_element → `write_on_mention` (a feature of the place) or `cut`;
+  `failing(verdicts)`; `OWED_BLOCKS`; spec 011: `check_claims(..., texts={sentence: words})` marks a claim whose
+  subject the words do not make `certain` (12.3.1b item 4) `uncertain`; `blocking(c, v, rules)` (the closed
+  list, narrator voice assumed); `relevant_item(text)`. Fixes: new_element → `write_on_mention` (a feature of the place) or `cut`;
   undetermined → `oracle` (or `cut` when nothing can settle it); contradicted/overreach → `redraft_to_store`;
   unsourced_change/pc_agency → `cut`; leak → `replace_with_slice` when the seal has a slice, else `cut`.
   PC `action` claims are judged by the Checker's `pc_words_or_feelings` flag only; an NPC `action` without
@@ -589,8 +591,12 @@ readers take a `WorldState`. Errors: `engine.world.common.WorldError`. The PC is
 - **World step** (`engine.dm.world_step.world_step(ctx, record, beats=)`): NPCs by the default NPC layer
   (`engine.dm.npc_layer`, 12.11.9: `ensure_activities` writes each present NPC's `activity` fact once per scene and
   `record.activities`; `respond` picks each engaged/addressed NPC's response: a resolved Talk → a recorded refusal or
-  want the World role judges (asked only about an NPC with recorded motives; config `world_judge`, default on) →
-  `tbl.npc_action` by standing clamped to `tbl.npc_practice`'s rows; an addressed NPC always answers, a refusing
+  want matched by tags (`event_tags` from the beat's verb, facets, target, `Beat.pressure`, the Framer's
+  `Frame.asks`, topic words; `motive_tags` by refusal kind and want object, `social.yaml#event_tags`; a want's row
+  by `want_row`: served 9/8, defeated 2/1, engaged 6, then the clamp; the World role only when no tag matches and
+  the NPC has a want and a refusal, tag `world_fallback`; config `world_judge`) → `tbl.npc_action` by standing
+  clamped to `tbl.npc_practice`'s rows; with nobody engaged and the crowd practice, `crowd_response` (a scene fact
+  on the place plus an `NpcActionEntry` on the place); an addressed NPC always answers, a refusing
   source as "refuses, in their own voice (register, habit): ..."; meta `npc.spoken`), clock omens from this
   turn's `clock_ticked`, fired triggers (a pending `trg.lethal_warning` is delivered: block in `record.notes`),
   time per resolved beat by `beat_cost(scene mode)`.
@@ -678,17 +684,24 @@ readers take a `WorldState`. Errors: `engine.world.common.WorldError`. The PC is
   screen, created), adjudication: AdjudicationResult)`. T7–T12 are one transaction under the turn id (T8 mentions,
   the fallback's ruling, T12 counters/cut); a model error there raises and writes nothing after T6.
 - **Loop** (`narrate_checked(ctx, record, *, player_message, purpose="turn"|"scene_open"|"opening"|"recap"|"epilogue",
-  exchanges, pause_blocks, extra, fallback_text=None)`, needs `ctx.tx`; spec 006): declared sentences → per sentence:
-  `scan_sentence`, new elements by tier (T1a written on mention, T1b by the Oracle, T2 cut unless a cited line
-  delivers it), safety and echoed quotes → the Checker on those sentences (an audit: claims take the declared
-  subject; its `undeclared` elements written by tier) → `check_claims(cited=)` → an unknown-subject claim left
-  for furniture is atmosphere (no addressable id), a known subject's feature written (`_apply_writes`), incidental
-  `undetermined` written as narrated, consequential ones to the Oracle → a cut-type failure is dropped by code; the
+  exchanges, pause_blocks, extra, fallback_text=None)`, needs `ctx.tx`; spec 006, spec 011 "check less"): declared
+  sentences → per sentence, code only (12.3.1b): `scan_sentence` on the narrator's voice (`declare.voices`: quoted
+  spans with a `speaker` are speech; unknown names, numerals, sealed strings fail; a pronoun clash is logged),
+  the speech checks (`speaker` present and not the PC; `pc_quotes` beyond the player's message: `pc_agency`, cut),
+  new elements by tier (T1a written on mention, logged when it cannot be; T1b by the Oracle; T2 in the narrator's
+  voice cut unless a cited line delivers it; named only in speech: testimony, logged, never written; a clash with a
+  stored detail logged unless the slot blocks: a held weapon, a coarse posture), safety, outcome words against
+  cited beats (an uncited sentence: the turn's only rolled beat) → a cut-type failure is dropped by code; the
   rest and uncited must-name lines go in one narrow `Repair` call per round (only the failing sentences) → after
   `max_redrafts` rounds still-failing sentences are cut, uncited must-name items are stated by their rendered line
   (a `rule_conflict` ruling, `review_flag`), and the open prompt is restored only if repair cut it → the plain
-  fallback when no drafted sentence passed → T10 `screen_draft` (recorded). Config `narrator_schema: "fiction"`
-  selects the fallback output shape. `ModelInvalid` on the first draft falls back.
+  fallback when no drafted sentence passed → T10 `screen_draft` (recorded) → `_said` (`NarrationResult.said` →
+  `TurnRecord.said` `{speaker, turn, words, about}`, never a fact; a stored unknown name heard: `learn_name(...,
+  "heard")`) → `_sample`: on a sampled turn the Checker's diff and full extraction on the delivered sentences,
+  `check_claims(texts=)` (an uncertain subject: `Verdict.uncertain`, `disposition` `no_verdict`), every claim to
+  the claim log with `blocking_miss` (`claims.blocking`), never a cut or a write. `NarrationResult.claim_log` →
+  `TurnRecord.claim_log` `{turn, sentence, class, verdict, store_value, ...}` (12.3.1b). Config `narrator_schema:
+  "fiction"` selects the fallback output shape. `ModelInvalid` on the first draft falls back.
 - An OFFER pause (stage offer) with nothing else in the record skips T7–T10: fiction = the beat's restatement, then
   the OFFER block (`skip_drafting`). OOF blocks: `turn_blocks(ctx, adj.oof, record, pause)` renders the open pause
   from its stored detail (`pause_blocks`: `oof.offer_block(Frame)`, `near_miss_block`, `clarify_block`, CHOICE notes)
@@ -706,9 +719,9 @@ readers take a `WorldState`. Errors: `engine.world.common.WorldError`. The PC is
   handles with their words, view facts via `render.relation`, `about`, `new`, `atmosphere`; withheld with
   `full=True`) then `THE PLAYER'S MESSAGE` (the offline Checker reads only the `[n]` lines). `claims` are only
   assertions beyond the declarations; `undeclared` (typed elements) are written by tier in `narration._audit`;
-  `unexpressed` refs are dropped (a must-name line is then owed again) or, `says_otherwise`, redrafted.
-  `narration.audit_mode` is `diff` while `claim_check.audit.skip_enabled` is false; then `skip` / `sample` (1 in
-  `full_extraction_every` by the turn id's crc32, also running the full extraction; counts in the version stats). `roles.director.direct(ctx, *, situation, player_message,
+  `unexpressed` refs are logged only. `narration.audit_mode(ctx)` is `sampled` on 1 turn in
+  `full_extraction_every` (the turn id's crc32), else `off` (DL-12-83; the skip gate is retired). The narrator
+  schema's `speaker` enum is the present people, never the PC (`SchemaContext.speaker_ids`). `roles.director.direct(ctx, *, situation, player_message,
   happened, quiet_turns) -> DirectorDecision(cut_now, next_scene: NextScene, push, lead, push_raised, lead_fires)`
   (enums: `director_context` = `director_enums` folded into `schema_context`); `frame_scene(ctx, d, *, reason,
   interrupt, purpose_declared) -> SceneStart` (`places.move` to another reachable place, else `end_scene`, then
@@ -857,14 +870,21 @@ Supersedes the earlier notes on `Beat.gate` / `would_be_license` / `necessity`, 
   shot and on near miss, redirect, last chance), `menu_line`; play-phase pauses print it instead of numbers; `?`
   explains a word. Digits still pick. Auto-commit defaults on (`resolution.yaml#auto_commit`), Safe frames only.
 
+- **Spec 011 (R2-G):** I-159: on a tier obstacle with a nonzero nudge or class `other`, `frame._levers` turns every
+  cited Precision snag Protective (one model-chosen modifier per beat, DL-01-29). I-160(a): the Framer's
+  `reach_two_factors` (two unoffset factors or a total potency) routes the beat to G4 in `pipeline._frame` before
+  the OFFER (`gate.zero_reach`: `missing_kind zero_reach`, a `g4` ruling, nothing spent; DL-01-33). The Framer's
+  `asks` enum (`social.yaml#event_tags.asks`, Talk aimed at a person) is `ProposedFrame.asks` / `Frame.asks`.
+
 ## Memory: details, scene cards, spotlight, role views (spec 009 part A)
 - **Details** (`engine.store.details`, 00.6.6a): a detail is the fact `detail.<slot>` with `persistence` (lasting |
   scene | beat; new `FactSet` field) and `certainty: narrated` when narration stated it. `write_detail(state, mint,
   eid, slot, value, *, source="narration", because=None)` -> `DetailWrite(outcome new|same|superseded|
   contradiction|refused, events, fact_id, prior)`: one value per slot; a change supersedes only with `because` (this
   turn's explaining record entry), else `contradiction` (nothing written); `scene`/`beat` slots from narration are
-  refused. `active_details` (scene details, then the `details.max_active` lasting ones by salience then last use),
-  `archived_details` (the rest: still current facts), `expire_events` (12.4.8 step 8; `end_scene` stages them),
+  refused. `active_details` (scene details, then every lasting one by salience, 2 for seeded, generated or
+  corrected, then last use; the profile budget cuts the tail: no cap, spec 011), `expire_events` (12.4.8 step 8;
+  `end_scene` stages them; also clears a place's `crowd_response`),
   `used_event(fact_ids)` (`details_used`: usage marks). Projection: `WorldState.details[eid][slot] = DetailRef(fact_id,
   last_used)`; a `None` value clears a slot.
 - **Scene cards** (12.4.8 step 9): folded by the projection from each scene's events into

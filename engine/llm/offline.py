@@ -638,6 +638,7 @@ def _framer(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:
         "nudge_why": None, "nudge": "0", "nudge_fact": None, "request_size": "R2",
         "levers": [], "snags": [], "stakes_source": source,
         "stakes_heavy": False, "lethal": False, "reach_whole": False, "reach_one_factor": False,
+        "reach_two_factors": False, "asks": "none",
         "threatened_cost": {"menu_id": threatened, "form_intent": forms.get(str(threatened), "")},
         "alternate_cost": {"menu_id": alternate, "form_intent": forms.get(str(alternate), "")},
         "method_consequences": [], "secret": False,
@@ -886,15 +887,17 @@ def _narrator(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:
         rep = msg.split("A REPAIR.", 1)[1]
         bad = re.findall(r"(?m)^\[(\d+)\] ", rep)
         missing = set(re.findall(r"\b(R\d+)\b", rep.split("MISSING", 1)[1])) if "MISSING" in rep else set()
-        repairs = [{"replaces": n, "text": "", "refs": [], "about": [], "new": [], "atmosphere": False} for n in bad]
-        repairs += [{"replaces": "add", "text": t, "refs": [h], "about": [], "new": [], "atmosphere": False}
-                    for t, h in pairs if h in missing]
+        repairs = [{"replaces": n, "text": "", "refs": [], "about": [], "new": [], "atmosphere": False,
+                    "speaker": "none"} for n in bad]
+        repairs += [{"replaces": "add", "text": t, "refs": [h], "about": [], "new": [], "atmosphere": False,
+                     "speaker": "none"} for t, h in pairs if h in missing]
         return {"repairs": repairs}
     if not pairs:
         pairs.append(("The moment holds.", None))
     if not paused:
         pairs.append(("What do you do?", None))
-    sents = [{"text": t, "refs": [h] if h else [], "about": [], "new": [], "atmosphere": False} for t, h in pairs]
+    sents = [{"text": t, "refs": [h] if h else [], "about": [], "new": [], "atmosphere": False, "speaker": "none"}
+             for t, h in pairs]
     if "fiction" in (schema.get("properties") or {}):  # the fallback shape (B risk 2)
         return {"fiction": " ".join(s["text"] for s in sents),
                 "declarations": [{"sentence": str(i), **{k: v for k, v in s.items() if k != "text"}}

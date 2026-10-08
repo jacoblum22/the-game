@@ -68,8 +68,9 @@ def framer(**over: Any) -> Fn:
             "obstacle": {"kind": "tier", "obstacle_class": "other", "tier": "moderate", "entity": None},
             "nudge_why": None, "nudge": "0", "nudge_fact": None, "request_size": "R2", "levers": [], "snags": [],
             "stakes_source": "none", "stakes_heavy": False, "lethal": False, "reach_whole": True,
-            "reach_one_factor": False, "threatened_cost": {"menu_id": "cost.time", "form_intent": "",
-                                                           "source_fact": None},
+            "reach_one_factor": False, "reach_two_factors": False, "asks": "none",
+            "threatened_cost": {"menu_id": "cost.time", "form_intent": "",
+                                  "source_fact": None},
             "alternate_cost": None, "method_consequences": [], "secret": False}
         d.update(over)
         return prune(d, schema)

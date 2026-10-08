@@ -331,6 +331,22 @@ def _ruling(kind: Literal["g3_redirect", "g4"], key: str, beat: Beat, reason: st
     return [log_ruling(rec, mint, store=store, staged=staged, rule_id="01.3.6")]
 
 
+def zero_reach(beat: Beat, *, rules: Any, verb: str | None = None, mint: Callable[[str], str] | None = None,
+               store: Any = None, staged: Sequence[Event] = ()) -> GateDecision:  # rule: 01.3.7
+    # rule: 01.6.10
+    """I-160(a), DL-01-33: the Framer's reach factors (two unoffset, or a total potency) leave no reach: G4 before
+    the OFFER, with 01.3.7's redirect, no roll and nothing spent."""
+    from engine import ids
+
+    why = "two effect factors stand against the method, unoffset: it cannot reach its intent (01.3.7, 01.6.10)"
+    key = f"zero_reach.{beat.target if beat.target and beat.target != 'none' else ids.slug(beat.intent)[:40]}"
+    found = find_rulings(store, gate_signature("g4", key), staged=staged)
+    return GateDecision(gate="G4", verb=verb or beat.verb, reason=why, precedent=found,
+                        redirect=Redirect(intent=beat.intent, missing=key, missing_kind="zero_reach",
+                                          options=[_nearest(beat, rules, verb)]),
+                        events=_ruling("g4", key, beat, why, [], precedent_for(found), mint, store, staged))
+
+
 def held_ids(state: Any, actor: str) -> list[str]:
     return [x.license_id for x in state.licenses.get(actor, []) if held_license(state, actor, x.license_id)]
 

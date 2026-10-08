@@ -53,7 +53,7 @@ def test_element_kind_fixes_the_tier() -> None:
     assert k("knowledge") == "T1b"
     assert [k("clue"), k("hazard"), k("adversary")] == ["T2"] * 3
     assert k("person", ordinary=False) == "T2" and k("item", ordinary=False) == "T2"  # 12.14.13's question
-    assert k("relic") == "T2"  # an uncertain kind is T2
+    assert k("relic") == "T1a"  # an uncertain kind is T1a (R2-G, DL-12-80)
 
 
 def test_a_t2_element_passes_only_when_a_cited_line_delivers_it() -> None:
@@ -79,7 +79,9 @@ def test_numerals_against_quantities_and_cited_values() -> None:
 
 
 def test_pronouns_against_the_one_person_the_sentence_is_about() -> None:
-    assert fails(s("She leans on the pole.", about=["npc.tam"]))
+    """Spec 011: a pronoun clash is off the blocking list (12.3.1b): logged, never a failure."""
+    assert not fails(s("She leans on the pole.", about=["npc.tam"]))
+    assert scan_sentence(s("She leans on the pole.", about=["npc.tam"]), IDX, rules=RULES).logged
     assert not fails(s("He leans on the pole.", about=["npc.tam"]))
     assert not fails(s("She watches him.", about=["npc.tam", "npc.sela"]))  # two people: not judged
 
@@ -119,17 +121,18 @@ def test_a_declared_turn_passes_on_the_first_draft(tmp_path: Path) -> None:
     assert dock.state.fact_value(rope.id, "location") == "by the bollard"  # T1a: written as narrated
 
 
-def test_the_audit_takes_the_declared_subject_not_its_guess(tmp_path: Path) -> None:
-    """12.3.1: subject given, never guessed. The Checker read "he" as the watch; the sentence is about Tam."""
+def test_the_audit_never_judges_a_guessed_subject(tmp_path: Path) -> None:
+    """12.3.1b item 4 (DL-12-82): the Checker read "he" as the watch; with two people present "he" is not a
+    certain subject, so the sampled claim takes no verdict and the sentence stands."""
     def draft(schema: Any, packet: Any) -> dict[str, Any]:
         return {"sentences": [_decl("He mends a net by the post.", _must(packet), about=["npc.tam_harlan"]),
                               _decl("What do you do?")]}
     model = look_model(narrator=[draft])
     dock, ctx = setup(tmp_path, model)
-    model.push(Role.CHECKER, chk(claim(0, dock.watch, "identity", "gender", "man")))
-    out = play_turn(ctx, "I look over the quay.")
-    v = out.turn_record.draft_versions[0]["claims"][0]
-    assert v["subject"] == dock.ferryman and out.response.fiction.startswith("He mends a net")
+    model.push(Role.CHECKER, chk(), chk(claim(0, dock.watch, "identity", "gender", "woman")))
+    out = play_turn(ctx, "I look over the quay.")  # turn.1: sampled
+    [e] = [e for e in out.turn_record.claim_log if e.get("source") == "sample"]
+    assert e["verdict"] == "no_verdict" and out.response.fiction.startswith("He mends a net")
 
 
 def test_a_claim_restating_a_cited_fact_is_covered_by_the_declaration(tmp_path: Path) -> None:
@@ -141,9 +144,9 @@ def test_a_claim_restating_a_cited_fact_is_covered_by_the_declaration(tmp_path: 
         return {"sentences": [_decl("One hooded lantern burns at the stair.", [*_must(packet), lantern],
                                     about=[dock.place]), _decl("What do you do?")]}
     ctx.model.push(Role.NARRATOR, draft)  # type: ignore[attr-defined]
-    ctx.model.push(Role.CHECKER, chk(claim(0, "unknown", "existence", "hooded lantern", "one at the stair")))  # type: ignore[attr-defined]
-    out = play_turn(ctx, "I look over the quay.")
-    v = out.turn_record.draft_versions[0]["verdicts"][0]
+    ctx.model.push(Role.CHECKER, chk(), chk(claim(0, "unknown", "existence", "hooded lantern", "one at the stair")))  # type: ignore[attr-defined]
+    out = play_turn(ctx, "I look over the quay.")  # turn.1: sampled
+    v = out.turn_record.draft_versions[-1]["sample"]["verdicts"][0]
     assert v["verdict"] == "supported" and "restates" in v["reason"]
 
 

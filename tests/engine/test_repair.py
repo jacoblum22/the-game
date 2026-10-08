@@ -10,9 +10,9 @@ from typing import Any
 from engine.dm.turn import play_turn
 from engine.llm.base import Role
 from tests.engine.test_turn_adjudication import setup
-from tests.engine.test_turn_narration import _decl, _must, calls, chk, claim, look_model, rep
+from tests.engine.test_turn_narration import _decl, _must, calls, chk, look_model, rep
 
-WOMAN = "Tam Harlan, a woman, looks over the quay with you."
+WOMAN = "Tam Harlan looks over the quay with Brannoc."  # an unknown name: a blocking code-scan hit (spec 011)
 
 
 def _rulings(dock: Any, turn_id: str) -> list[dict[str, Any]]:
@@ -28,7 +28,6 @@ def test_an_uncovered_must_name_line_is_stated_by_its_rendered_line(tmp_path: Pa
                               _decl("What do you do?")]}
     model = look_model(narrator=[draft, rep(0, WOMAN), rep(0, WOMAN)])
     dock, ctx = setup(tmp_path, model)
-    model.push(Role.CHECKER, *[chk(claim(0, dock.ferryman, "identity", "gender", "woman"))] * 3)
     out = play_turn(ctx, "I look over the quay.")
     r = out.response
     assert not r.flags.fallback_used and r.flags.review_flag

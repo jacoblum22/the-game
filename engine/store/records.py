@@ -31,6 +31,10 @@ class TurnRecord(BaseModel):
     writes: list[int] = Field(default_factory=list)  # event seqs
     draft_versions: list[dict[str, Any]] = Field(default_factory=list)  # {text, mentions, claims, verdicts}
     verdicts: list[dict[str, Any]] = Field(default_factory=list)  # the final draft's verdicts
+    # 12.3.1b (spec 011): what was delivered but logged {turn, sentence, class, verdict, store_value}, and the
+    # speech it carried as testimony {speaker, turn, words, about}; never world facts
+    claim_log: list[dict[str, Any]] = Field(default_factory=list)
+    said: list[dict[str, Any]] = Field(default_factory=list)
     fallback_used: bool = False
     screen: dict[str, Any] = Field(default_factory=dict)
     delivered_verbatim: str = ""
