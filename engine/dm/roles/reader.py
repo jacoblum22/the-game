@@ -28,6 +28,7 @@ from engine.resolve.pipeline import MAX_BEATS, BeatPlan
 from engine.resolve.types import Beat
 from engine.retrieve.anchors import scene_situation_tags
 from engine.retrieve.cards import load_cards_for
+from engine.retrieve.scene import focus_ids
 from engine.retrieve.triggers import get_active_triggers
 from engine.store.records import Part
 
@@ -138,13 +139,15 @@ def read_message(ctx: TurnContext, message: str, *, exchanges: Sequence[Any] = (
     # rule: 12.2.2
     """One Reader call: classify the message's parts and propose its beats and fact questions."""
     st = ctx.state
-    sctx = schema_context(st, ctx.rules, message=message)
+    focus = focus_ids(st, message)  # 12.2.4: facts about whom the player names rank higher
+    sctx = schema_context(st, ctx.rules, message=message, focus=focus)
     schema = build_schema(Role.READER, sctx)
     triggers = get_active_triggers(st, ctx.rules)
     mode = st.scene.mode if st.scene else None
     cards = load_cards_for(Role.READER, scene_situation_tags(st, ctx.rules), mode, triggers, rules=ctx.rules)
     packet = build_packet(Role.READER, instructions=load_prompt("reader"), cards=cards, view=st,
-                          exchanges=list(exchanges), message=message, triggers=triggers, rules=ctx.rules)
+                          exchanges=list(exchanges), message=message, triggers=triggers, focus=focus,
+                          rules=ctx.rules)
     res = call_role(ctx.model, Role.READER, schema, packet, turn_id=ctx.turn_id, recorder=ctx.record_call,
                     default=lambda: defaults(Role.READER, sctx) or {}, check=reader_check)
     data = dict(res.data)

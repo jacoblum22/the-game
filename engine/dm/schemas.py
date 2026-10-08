@@ -574,10 +574,12 @@ def schema_context(  # rule: 12.2.4
     push_raised: bool = False,
     lead_fires: bool = False,
     draft_sentences: Iterable[str] = (),
+    focus: Iterable[str] = (),
 ) -> SchemaContext:
-    """The enums for this call, from the rules and the current state (scene-scoped; bounded)."""
+    """The enums for this call, from the rules and the current state (scene-scoped; bounded). `focus` must be
+    the ids the call's `build_packet` got, so the fact enum is the view's facts."""
     scope = scene_scope(state)
-    facts = [f.id for f in scene_facts(state, scope)]
+    facts = [f.id for f in scene_facts(state, scope, focus=focus)]
     pc = pc_id(state)
     pause = state.open_pause()
     anchor_ids = list(dict.fromkeys(anchors))

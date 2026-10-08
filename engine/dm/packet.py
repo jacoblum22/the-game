@@ -3,14 +3,15 @@
     packet = build_packet(Role.READER, instructions=text, cards=load_cards_for(...), view=state,
                           exchanges=last_exchanges, message=player_text, triggers=active, quiet_turns=2)
 
-Order: role instructions -> always-loaded core (00.15.4 cards + the active-trigger list) -> loaded cards
-(at most `pacing.yaml#packet.max_loaded_cards`, 12; more is a caller error) -> narrator view -> the last
-`packet.verbatim_exchanges` (4) exchanges verbatim -> this message verbatim. Stable sections come first, for
-prompt caching.
+Order: role instructions -> always-loaded core (00.15.4 cards) -> loaded cards, stable to volatile (at most
+`pacing.yaml#packet.max_loaded_cards`, 12; more is a caller error) -> the active-trigger list, then the narrator
+view -> the last `packet.verbatim_exchanges` (4) exchanges verbatim -> this message verbatim. Stable sections
+come first, for prompt caching: nothing volatile precedes the view (DL-12-38).
 
 `view` may be a `WorldState` (rendered with `scene_view` + `render_view`), a narrator-view dict (rendered), or a
-pre-rendered string. The rendered view is scene-scoped and capped (scene facts, clocks, threads, known
-cast, data keys), so the packet does not grow with the length of the game (SC-002). Each entity is rendered
+pre-rendered string. The rendered view is scene-scoped and held to per-section token budgets
+(`pacing.yaml#packet.view_budget`: pinned and ranked facts, things, clocks, threads, known cast), so the packet
+does not grow with the length of the game (SC-002). Each entity is rendered
 as `<id>: <name>` and then a `name: <name>` line: the offline model reads names from `name:` lines and entity
 aliases from the text after an id.
 """
@@ -24,15 +25,12 @@ from engine.build.compile_cards import CardIndex, RuleCard
 from engine.data.loader import load_rules
 from engine.llm.base import Packet, Role
 from engine.retrieve.cards import core_cards, max_cards
-from engine.retrieve.scene import entity_names, scene_facts, scene_scope
+from engine.retrieve.scene import entity_names, fit, scene_facts, scene_scope, tokens, view_budget
 from engine.retrieve.triggers import ActiveTrigger
 from engine.store.projection import WorldState
 from engine.store.views import display_name, name_known, narrator_view
 
 VERBATIM_EXCHANGES = 4  # fallback; the rules value is pacing.yaml#packet.verbatim_exchanges
-MAX_VIEW_CLOCKS = 8
-MAX_VIEW_THREADS = 8
-MAX_VIEW_KNOWN = 12  # the cast list beyond the scene: most recently introduced first
 MAX_DATA_KEYS = 12
 MAX_VALUE_CHARS = 160
 WATCHES = ("morning", "afternoon", "evening", "night")
@@ -46,17 +44,32 @@ class PacketError(ValueError):
 # ---------------------------------------------------------------- view
 
 
-def scene_view(state: WorldState) -> dict[str, Any]:  # rule: 12.2.4
-    """The narrator view of the current scene, bounded (12.2.4 item 3). Nothing sealed is in it (INV-10)."""
-    scope = scene_scope(state)
-    nv = narrator_view(state, scope)
+def _listed(state: WorldState, ids: list[str], weights: Mapping[str, int], room: int) -> dict[str, Any]:  # rule: 12.6.6
+    """id -> name for a view list: by 12.6.6 weight, then newest introduced, within `room` tokens."""
+    order = {eid: n for n, eid in enumerate(state.entities)}
+    ranked = sorted(ids, key=lambda i: (-weights.get(i, 1), -order[i]))
+    names = entity_names(state, ranked)
+    return {i: names[i] for i in fit(list(names), lambda i: tokens(f"{i} {names[i]}; "), room)}
+
+
+def scene_view(state: WorldState, focus: Iterable[str] = ()) -> dict[str, Any]:  # rule: 12.2.4
+    """The narrator view of the current scene, within `pacing.yaml#packet.view_budget` (12.2.4 item 3). `focus`
+    (the beat's target, entities the message names) raises a fact's relevance. Nothing sealed is in it (INV-10)."""
+    from engine.world.social import cast_list, thread_list
+
+    budget = view_budget()
+    scope = scene_scope(state, budget)
+    picked = scene_facts(state, scope, focus=focus, budget=budget)
+    nv = narrator_view(state, [*scope, *(f.subject for f in picked)])  # an open commitment's NPC may be away
     visible_facts = nv["facts"]
-    facts = [visible_facts[f.id] for f in scene_facts(state, scope) if f.id in visible_facts]
-    clocks = [c for c in nv["clocks"].values() if c.get("status") == "active"][-MAX_VIEW_CLOCKS:]
+    facts = [visible_facts[f.id] for f in picked if f.id in visible_facts]
+    active = [c for c in nv["clocks"].values() if c.get("status") == "active"]
+    kept = fit(reversed(active), lambda c: tokens(f"  {c['id']}: {c['name']} ({c['kind']}) 00/00"), budget["clocks"])
+    clocks = [c for c in active if c in kept]
     others = [eid for eid, e in state.entities.items() if eid not in scope]
-    threads = [i for i in others if state.entities[i].kind == "thread"][-MAX_VIEW_THREADS:]
+    tl = {t["id"]: t["weight"] for t in thread_list(state) if t["status"] == "active" and t["id"] not in scope}
     known = [i for i in others if state.entities[i].kind in ("npc", "companion", "faction")
-             and name_known(state, i)][-MAX_VIEW_KNOWN:]  # people the PC knows by name (12.10.2)
+             and name_known(state, i)]  # people the PC knows by name (12.10.2)
     return {
         "time": nv["time"],
         "scene": nv["scene"],
@@ -67,8 +80,8 @@ def scene_view(state: WorldState) -> dict[str, Any]:  # rule: 12.2.4
         "positions": nv["positions"],
         "facts": facts,
         "clocks": clocks,
-        "threads": entity_names(state, list(reversed(threads))),
-        "known": entity_names(state, list(reversed(known))),
+        "threads": _listed(state, list(tl), tl, budget["threads"]),
+        "known": _listed(state, known, cast_list(state), budget["known"]),
         "open_pause": nv["open_pause"],
     }
 
@@ -229,12 +242,15 @@ def render_card(card: RuleCard | str) -> str:
     return card if isinstance(card, str) else card.body.strip()
 
 
-def render_core(index: CardIndex | None, triggers: Iterable[ActiveTrigger | str]) -> str:  # rule: 00.15.4
-    """The always-loaded core: the 00.15.4 cards and the active-trigger list."""
-    parts = [c.body.strip() for c in core_cards(index)]
+def render_core(index: CardIndex | None = None) -> str:  # rule: 00.15.4
+    """The always-loaded core: the 00.15.4 cards, identical on every call (the cacheable prefix)."""
+    return "\n\n".join(c.body.strip() for c in core_cards(index))
+
+
+def render_triggers(triggers: Iterable[ActiveTrigger | str]) -> str:  # rule: 12.2.4
+    """The active-trigger list: travels with every call at the head of the view, not in the core (DL-12-38)."""
     lines = [t if isinstance(t, str) else t.line() for t in triggers]
-    parts.append("Active triggers: " + ("none" if not lines else "\n" + "\n".join(f"- {x}" for x in lines)))
-    return "\n\n".join(parts)
+    return "Active triggers: " + ("none" if not lines else "\n" + "\n".join(f"- {x}" for x in lines))
 
 
 def render_exchange(ex: str | tuple[str, str] | Sequence[str]) -> str:
@@ -260,20 +276,22 @@ def build_packet(  # rule: 12.2.4
     triggers: Iterable[ActiveTrigger | str] = (),
     quiet_turns: int | None = None,
     notes: Iterable[str] = (),
+    focus: Iterable[str] = (),
     rules: Any = None,
     index: CardIndex | None = None,
 ) -> Packet:
     """One call's packet in contract order. Raises PacketError over the card cap.
 
     `notes` are extra per-call lines shown after the view (e.g. the Framer's anchor menu); `quiet_turns`
-    adds a `quiet_turns: N` line for the Director.
+    adds a `quiet_turns: N` line for the Director. `focus` (`focus_ids`) feeds a `WorldState` view's ranking;
+    pass the same ids to `schema_context` so the fact enum is the view's.
     """
     rules = rules if rules is not None else load_rules()
     cap = max_cards(rules)
     if len(cards) > cap:
         raise PacketError(f"{role.value}: {len(cards)} cards, the cap is {cap} plus the core (00.15.4)")
     if isinstance(view, WorldState):
-        view_text = render_view(scene_view(view))
+        view_text = render_view(scene_view(view, focus))
     elif isinstance(view, Mapping):
         view_text = render_view(view)
     else:
@@ -281,13 +299,12 @@ def build_packet(  # rule: 12.2.4
     extra = list(notes)
     if quiet_turns is not None:
         extra.append(f"quiet_turns: {quiet_turns}")
-    if extra:
-        view_text = "\n".join([view_text, *extra]) if view_text else "\n".join(extra)
+    view_text = "\n".join(filter(None, [render_triggers(triggers), view_text, *extra]))
     keep = verbatim_exchanges(rules)
     recent = list(exchanges)[-keep:] if keep > 0 else []
     return Packet(
         instructions=instructions,
-        core=render_core(index, triggers),
+        core=render_core(index),
         cards=[render_card(c) for c in cards],
         view=view_text,
         exchanges=[render_exchange(e) for e in recent],

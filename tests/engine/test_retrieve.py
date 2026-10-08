@@ -12,7 +12,7 @@ from engine.data.loader import load_rules
 from engine.llm.base import Role
 from engine.retrieve.anchors import anchor_candidates, anchor_menu, natural_key, verb_anchor
 from engine.retrieve.cards import ROLE_CARDS, load_cards_for, role_cards, situation_cards
-from engine.retrieve.scene import MAX_SCENE_FACTS, scene_facts, scene_scope
+from engine.retrieve.scene import _line_tokens, focus_ids, scene_facts, scene_scope, view_budget
 from engine.retrieve.triggers import TRIGGERS, get_active_triggers, trigger_cards
 from engine.store.db import Store
 from engine.store.events import Event
@@ -119,12 +119,14 @@ def test_cards_are_capped_and_exclude_the_core(role: Role) -> None:
 
 
 def test_priority_role_then_triggers_then_extra_then_situation() -> None:
+    """Chosen by priority (triggers, extra, then situation under the cap); returned stable to volatile: role,
+    situation, trigger, extra (DL-12-38)."""
     cards = [c.id for c in load_cards_for(Role.WORLD, ["situation.social"], None, ["trg.lead_injection"],
                                           ["06.5.10"], rules=RULES)]
     roles = [c.id for c in role_cards(Role.WORLD)]
-    assert cards[: len(roles)] == roles
-    assert cards[len(roles): len(roles) + 3] == ["12.8.2", "PR-12-3", "06.5.10"]
-    rest = cards[len(roles) + 3:]
+    assert len(cards) == 12 and cards[: len(roles)] == roles
+    assert cards[-3:] == ["12.8.2", "PR-12-3", "06.5.10"]
+    rest = cards[len(roles): -3]
     assert rest and rest == [c.id for c in situation_cards(["situation.social"])][: len(rest)]
 
 
@@ -175,14 +177,40 @@ def test_active_triggers_come_from_flags_in_12_2_3_order(store: Store) -> None:
 
 
 def test_scene_slice_is_bounded(store: Store) -> None:
+    budget = view_budget(RULES)
     with store.transaction("turn.2") as tx:
-        for i in range(MAX_SCENE_FACTS + 25):
+        for i in range(100):
             tx.add(fact(tx, "pc.wren", f"note_{i}", "x", visibility="shown"))
         tx.add(entity("npc", "Off Stage", tx=tx))
         tx.add(fact(tx, "npc.off_stage", "secret", "y", visibility="shown"))
     s = store.state
     assert scene_scope(s) == ["pc.wren", "npc.mara_voss", "loc.salt_harbor"]
     facts = scene_facts(s)
-    assert len(facts) == MAX_SCENE_FACTS
+    assert 10 < len(facts) < 100 and sum(_line_tokens(f) for f in facts) <= budget["facts"]  # tokens, not items
     assert all(f.subject in scene_scope(s) for f in facts)
-    assert facts[0].predicate == f"note_{MAX_SCENE_FACTS + 24}"  # newest first
+    assert facts[0].predicate == "note_99"  # equal scores: newest first
+
+
+def test_scene_facts_pins_and_ranking(store: Store) -> None:
+    """12.2.4 item 3: pins are never ranked out; archived memories never shown (12.11.7); relevance and
+    adjacency lift a fact; recency steps per scene, not per turn."""
+    with store.transaction("turn.2") as tx:
+        tx.add(entity("npc", "Tam Harlan", tx=tx))  # off stage
+        tx.add(fact(tx, "npc.mara_voss", "memory.1", {"deed": "Wren lied", "salience": 2, "status": "archived"}))
+        tx.add(fact(tx, "npc.mara_voss", "memory.2", {"deed": "Wren paid", "salience": 1, "status": "active"}))
+        tx.add(fact(tx, "npc.tam_harlan", "commitment.x", {"npc": "npc.tam_harlan", "status": "open"},
+                    kind="commitment"))
+        tx.add(fact(tx, "npc.mara_voss", "commitment.y", {"npc": "npc.mara_voss", "status": "kept"},
+                    kind="commitment"))
+        tx.add(fact(tx, "npc.mara_voss", "mood", "sour"))
+        tx.add(fact(tx, "pc.wren", "owes", "npc.mara_voss"))
+        for i in range(100):  # newer filler that would crowd out a newest-first list
+            tx.add(fact(tx, "pc.wren", f"note_{i}", "x"))
+    s = store.state
+    preds = [f.predicate for f in scene_facts(s)]
+    assert preds[:2] == ["commitment.x", "memory.2"]  # pins first: the open commitment of an absent NPC too
+    assert "memory.1" not in preds  # archived (12.11.7)
+    assert preds[2] == "commitment.y" and preds[3] == "owes"  # salience 3; then adjacency (+1, names Mara)
+    focused = [f.predicate for f in scene_facts(s, focus=focus_ids(s, "I ask Mara Voss about it"))]
+    assert focused[2:5] == ["commitment.y", "owes", "mood"]  # relevance +2 for facts about or naming Mara
+    assert focus_ids(s, "", "npc.tam_harlan") == ["npc.tam_harlan"]
