@@ -9,8 +9,9 @@ else the turn errors with nothing written.
 
 ## Packet order (all roles)
 
-`role instructions → always-loaded core (00.15.4) → loaded cards (≤12, this call's) → narrator view →
-last 4 exchanges verbatim → this message verbatim`. Stable first, for prompt caching. The Reader and
+`role instructions → always-loaded core (00.15.4) → loaded cards (≤12, this call's) → [active-trigger list +
+narrator view] → last 4 exchanges verbatim → this message verbatim`. The trigger list heads the view, not the
+core (DL-12-38), so the core prefix stays byte-identical across calls. Stable first, for prompt caching. The Reader and
 Framer instructions are persona-free; only the Narrator has a voice.
 
 ## I Interpret (Gemini, thinking low) — world seed and creation answers
