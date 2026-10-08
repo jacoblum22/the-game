@@ -69,20 +69,38 @@ claim_check:                              # 12.3
   max_redrafts: 2                         # a redraft re-writes only the failing sentences (12.3.3) [revision: R2-B]
   on_exhausted: cut_and_render            # 12.3.3: cut each still-failing sentence, render each uncited must-name item; the plain fallback when none passed; RulingRecord kind rule_conflict, review_flag true only if a line was rendered [revision: R2-B]
   sentence_declaration: [text, refs, about, new, atmosphere]   # 12.3.1; refs = record handles (R1, R2...) + narrator-view fact ids, closed lists built from the packet [revision: R2-B]
-  element_tiers: {furniture: T1a, feature: T1a, person: T1a, item: T1a, document: T1a, knowledge: T1b, clue: T2, hazard: T2, adversary: T2}   # 12.14.13; a person, item or document is T2 when 12.14.13's question is true; an uncertain kind is T2 [revision: R2-B]
+  element_tiers: {furniture: T1a, feature: T1a, person: T1a, item: T1a, document: T1a, knowledge: T1b, clue: T2, hazard: T2, adversary: T2}   # 12.14.13; a person, item or document is T2 when 12.14.13's question is clearly true; an uncertain kind is T1a [revision: R2-B; revision: R2-G]
+  voice: [narrator, speech]               # 12.3.1b: speech = quoted or reported words with a declared speaker; testimony [revision: R2-G] [DL-12-81]
+  speech_checks: [speaker_present, speaker_not_pc, no_words_in_pc_mouth]   # the only checks on speech; it is recorded as a `said` record on the speaker, never as a fact
+  blocking:                               # 12.3.1b item 2 (closed), the narrator's voice only, a certain subject only [revision: R2-G] [DL-12-80]
+    - {item: 1, what: outcome against degree and reach, classes: [outcome, capability]}
+    - {item: 2, what: harm, conditions and quantities, classes: [harm_condition, quantity]}
+    - {item: 3, what: possession of a mechanically relevant item, classes: [possession]}
+    - {item: 4, what: coarse position, presence and alive status, classes: [position, existence]}
+    - {item: 5, what: PC agency, verdicts: [pc_agency]}
+    - {item: 6, what: sealed content or a name the PC does not know, classes: [sealed, identity]}
+  t2_in_narrator_voice: cut               # 12.3.1b item 3: a declared clue, hazard, adversary, or a T2 person, item or document with no source
+  otherwise: log                          # every other verdict: delivered as drafted, T1a written by tier, a claim-log record
+  claim_log: [turn, sentence, class, verdict, store_value]
+  certain_subject: [unique_proper_name, declared_about_only_fit_in_scope, only_candidate_present]   # 12.3.1b item 4; else no verdict (DL-12-82)
+  code_scans: [numerals, names_and_aliases, outcome_words, sealed_strings]   # the blocking checks that are code, every turn (12.3.1)
   sweep_classes_at_scene_end: [position, possession, quantity, harm_condition]   # declared sentences included (12.4.8 step 4) [revision: R2-E]
-  audit:                                  # 12.3.1: a diff audit of undeclared assertions, not a full extraction [revision: R2-E]
-    mode: diff                            # reports (i) assertions beyond a sentence's declarations, (ii) declarations it does not express
-    full_extraction_every: 10             # turns; a full extraction on 1 turn in 10 measures what the diff misses
-    skip_when: [all_sentences_declared, no_atmosphere_flagged, no_speech_part]
-    skip_gate_undeclared_per_turn: 0.3    # the skip is allowed only once the harness measures fewer (OEQ-12-23)
-    skip_enabled: false                   # set true only after the gate is met
+  audit:                                  # 12.3.1: a sampled measurement, never a per-turn gate [revision: R2-E; revision: R2-G] [DL-12-83]
+    mode: sampled                         # the diff (beyond the declarations; declared but unexpressed) plus a full extraction, on sampled turns only
+    full_extraction_every: 10             # the sample: 1 turn in 10, picked by the turn id, run after delivery
+    gates_delivery: false                 # findings go to the claim log; they never cut, redraft or delay a delivered turn
+    skip_enabled: false                   # retired by R2-G (there is no skip: the audit is sampled); kept only for engine/dm/narration.py until spec 011
 
 corrections:                              # 12.3.4
   forms: [in_fiction_reconciliation, oof_note]
   default_form: oof_note
   record_error_form: oof_note
-  rewind_scope: current_scene_only        # never past the error's turn or the scene start
+  rewind_scope: current_scene_only        # never past the error's turn; past the scene start only under take_back [revision: R2-G]
+  take_back:                              # 12.5.8 item 3, the take-back limit [revision: R2-G] [DL-12-85]
+    max_turns_back: 10
+    needs: code_confirmed_evidence        # a stored value, a recomputed frame or the transcript contradicts what was delivered
+    blocked_by: [death_or_dying, unsealed_content, clock_completed, session_boundary]
+  pinned: true                            # a correction write (source: correction) is never archived and is always in its subject's profile in view (12.3.6)
   make_whole: spent_quantities_only       # coin, Focus, supply, consumables, fate spent because of the falsehood
   never_corrected: [valid_roll, correctly_resolved_degree_reach_or_cost, own_method_consequence, lethal_resolution, accepted_recognition, session_boundary]
 
@@ -266,12 +284,12 @@ npc:                                      # 12.11
   habit_max_per_scene: 1
 
 details:                                  # 00.6.6a established details [revision: R2-E]
-  max_active: 8                           # active lasting details per entity, by salience then last use; the rest archived (OEQ-12-20; D8, owner to confirm)
+  max_active: 8                           # retired by R2-G (DL-12-70): not a rule; one value per slot bounds details (8 lasting person slots). Kept only for engine/store/details.py until spec 011
   slots:                                  # closed list; slot: persistence. scene slots are written by code only (T1c)
     person: {hair: lasting, face: lasting, mark: lasting, build: lasting, clothing: lasting, worn: lasting, voice: lasting, condition_visible: lasting, held: scene, manner: scene, posture: scene, activity: scene}
     object: {material: lasting, state: lasting, marking: lasting}
   persistence: [lasting, scene, beat]     # beat: a momentary value of a scene slot, its turn only, never retrieved
-  salience: {seeded_generated_or_cited: 2, other: 1}
+  salience: {seeded_generated_or_cited: 2, other: 1}   # a pinned correction (12.3.6) counts as cited [revision: R2-G]
   scene_writes:                           # T-12-18: the scene state (T1c) code writes from a resolved beat and an NPC's response (00.6.6a item 4, 12.11.9) [revision: R2-F]
     who: [pc, npc, companion, adversary]  # only a person or creature takes a scene slot; a beat on anything else writes nothing here
     degree: {critical_success: success, success: success, no_roll: success, failure: failure, critical_failure: critical_failure}  # a success at cost reads as success
@@ -338,7 +356,20 @@ narration:                                # 12.14
 
 oof_formats:                              # 12.15 (ch.14 owns rendering and the marker)
   order: [safety_and_session, correction, fiction, result, redirect, pause_block_last]
-  labels: [OFFER, "OFFER — auto", RESULT, "NEAR MISS", REDIRECT, CHOICE, CLARIFY, ASSUMING, RULING, CORRECTION, LEADS, SITUATION, CHECK-IN, OK, FLAG, RULES, UNKNOWN, SESSION, "CUT?"]
+  labels: [OFFER, "OFFER — auto", RESULT, "NEAR MISS", REDIRECT, CHOICE, CLARIFY, ASSUMING, RULING, CORRECTION, FIX, LEADS, SITUATION, CHECK-IN, OK, FLAG, RULES, UNKNOWN, SESSION, "CUT?"]   # FIX: 12.15.9 [revision: R2-G]
+
+feedback:                                 # 12.3.6, PR-12-11: the player's report [revision: R2-G] [DL-12-84; DL-12-85; DL-12-86]
+  command: /fix                           # a DISPUTE by code; natural disputes are classified by 12.2.2
+  hint: "Something wrong? Type /fix and say what."
+  hint_at: [session_start, glossary, possible_dispute_in_fiction]
+  categories: [remembered_wrong, rule_wrong, contradiction, misread, other]
+  evidence: [whole_transcript, fact_provenance, frame_cited_facts_and_rule_ids, claim_log]
+  locate_call: when_unpinned              # one model call returns {turn, quote, category}; it judges nothing
+  outcomes: [correct, take_back, explain_with_quote, player_reading_wins, explain_and_log]
+  player_wins_scope: [T0, T1a]            # incidental fiction only; mechanics and consequential content keep INV-9
+  record: [id, time, turn, words, category, passage, evidence, outcome, writes, reverted]
+  review_log: "saves/<campaign>.disputes.md"   # one block per dispute, newest last, beside the save
+  metric: disputes_per_100_narrated_turns # all, upheld, by category (OEQ-12-24)
 
 checkin:                                  # 12.5.9
   at: [session_zero, every_n_sessions, on_request]

@@ -312,6 +312,81 @@ cast:                      # 00.11.1 domain cast: "who is <role>?" and "who woul
     who_is_role: "T-12-4's last row: a person who must exist now (12.11.1, PR-12-5) when the scene or the question implies one (a clerk behind a counter); else the answer 'no one you know', written as a fact"
     who_would_know: "a place pointer: the topic's kept_at place in the settlement (common_knowledge.topics); else a new walk-on there by 12.11.1 with a role whose topics include it"
 
+event_tags:                # 12.11.9 step 3(b), 12.2.9 (b): the closed tags code matches wants and refusals against, CiF-style [revision: R2-G] [DL-12-87; I-176]
+  rule: "code tags each event from the beat's verb, facets, target, topic, terms and pressure mark, and from a Talk request's one asks tag (the Framer's [J:enum], or none). A refusal or want engages when one of its tags is on the event. The World call runs only when no tag matches and the event is ambiguous."
+  tags:
+    harms: "against_will true, or verb strike, shoot or grapple, aimed at the NPC or what they hold"
+    harms_innocent: "harms aimed at a child, or at a person with no recorded wrongdoing who is not armed against the actor"
+    against_kin: "a beat or request that harms, exposes or works against a recorded kin member of the NPC"
+    threatens: "a Talk beat by smethod.intimidate, or pressure mark threat"
+    offers_payment: "a frame with term.payment, or coin or goods handed over"
+    offers_bribe: "offers_payment on a request tagged asks_breach or asks_lawbreak"
+    offers_help: "a Help or Setup beat for the NPC, or a term that serves the NPC's recorded want"
+    pc_request: "any Talk request from the PC to the NPC"
+    asks_loan: "asks: coin, goods or gear on credit"
+    asks_travel: "asks: leave their home place overnight"
+    asks_wilds: "asks: leave road and settlement for wilds, ruins or underground"
+    asks_fight: "asks: take up arms or strike someone"
+    asks_lawbreak: "asks: break a law where it could be seen or known"
+    asks_breach: "asks: an act a duty, rule or oath they keep forbids"
+    asks_false_oath: "asks: false sworn testimony"
+    asks_against_master: "asks: an act against their master's or faction's recorded interest"
+    asks_magic: "asks: take part in, receive or handle magic; or a uses_power beat on the NPC"
+    asks_truce: "a parley offer in conflict (09.7.6)"
+    asks_surrender: "a demand to yield in conflict (09.7.6)"
+    concerns_kin: "target or topic is a recorded kin of the NPC"
+    concerns_master: "target or topic is the NPC's master or faction, or topic factions"
+    concerns_past: "a question about the NPC themself with question_kind what happened"
+    concerns_secret: "target or topic is a fact the NPC hides"
+    concerns_standing: "stakes, a term or a topic that names the NPC's reputation, title or place in the town"
+    concerns_trade: "practice trade, or topic prices, goods or craft"
+    concerns_travel: "topic roads, travellers, arrivals or water"
+    concerns_faith: "topic faith"
+    concerns_healing: "topic sickness, or a beat that heals or treats someone"
+    names_object: "target or topic is the want's object entity (a lost love, an old enemy, a rival, a child, a stolen thing)"
+  asks: [asks_loan, asks_travel, asks_wilds, asks_fight, asks_lawbreak, asks_breach, asks_false_oath, asks_against_master, asks_magic]   # the Framer's one [J:enum] on a Talk request, or none
+  serves: [offers_payment, offers_help]               # a want it engages is served: row 9 for a request, else row 8
+  defeats: [harms, threatens, against_kin, asks_against_master]   # a want it engages is defeated: row 2, row 1 at Hostile; any other engaging tag: row 6
+  refusals:                # refusal_kinds id -> tags
+    refusal.family: [against_kin]
+    refusal.open_law: [asks_lawbreak]
+    refusal.wilds: [asks_wilds]
+    refusal.bribe: [offers_bribe]
+    refusal.past: [concerns_past]
+    refusal.innocent: [harms_innocent]
+    refusal.master: [asks_against_master]
+    refusal.place: [asks_travel]
+    refusal.magic: [asks_magic]
+    refusal.lend: [asks_loan]
+    refusal.oath: [asks_false_oath]
+    refusal.fight: [asks_fight]
+    refusal.pc_requests: [pc_request]
+    refusal.parley: [asks_truce]
+    refusal.yield: [asks_surrender]
+    refusal.oath_bound: [asks_breach]
+    refusal.duty: [asks_breach]
+  wants:                   # oracles.yaml tbl.npc_want_object result -> tags
+    their family: [concerns_kin, against_kin]
+    their good name: [concerns_standing]
+    a lost love: [names_object]
+    money: [offers_payment, concerns_trade]
+    a debt: [offers_payment, asks_loan]
+    a secret: [concerns_secret, concerns_past]
+    a place of their own: [concerns_standing, offers_payment]
+    an old enemy: [names_object]
+    their master's favor: [concerns_master, asks_against_master]
+    the truth about the past: [concerns_past]
+    safe passage: [concerns_travel, asks_travel]
+    their faith: [concerns_faith, asks_magic]
+    a cure: [concerns_healing]
+    a stolen thing: [names_object]
+    standing in the town: [concerns_standing]
+    their freedom: [harms, threatens, offers_help]
+    a rival: [names_object]
+    peace and quiet: [harms, threatens, asks_fight]
+    a child: [names_object, concerns_kin]
+    recognition: [concerns_standing]
+
 patience:                  # 15.2.6
   by_standing: {-3: 0, -2: 1, -1: 2, 0: 3, 1: 3, 2: 4, 3: unlimited}
   minus_one_on: [talk_failure, talk_critical_failure (-2), near_miss_taken_as_failure, refusal_or_ceiling_g4, insulted_memory]

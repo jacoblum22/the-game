@@ -496,7 +496,8 @@ the OFFER, where the player may restate (class ii) [01.18.7; 00.4.1; R4 §3.2 S1
 Trigger [T]:        FRAME of any request, deceive, intimidate, provoke, bargain or command beat
 Loads in:           situation.social.*
 License check:      basic verb: verb.talk
-Decisions (J):      1. SIZE [J:rung] What would granting this cost or risk THIS person, as their record
+Decisions (J):      1. SIZE [J:rung] (the Framer's pick, R1-R5 [revision: R2-G; I-160d])
+                       What would granting this cost or risk THIS person, as their record
                        and the scene's facts show? (T-15-7; canonical data/social.yaml#request_sizes)
                        R1 TRIFLE -- costs them nothing and risks nothing. Typical: directions; when the
                          watch changes. Boundary: let you sit by their fire for an hour.
@@ -771,8 +772,9 @@ one buys another free yes. A certain beat's necessity reason is `trivial`, so it
 (03.2.6), and its RESULT line says so (12.15.3) [revision: I-054]. Basis: `15-certainty-sim.py` (seed 48):
 under an assumed request mix, certain beats fall from 37.7% to 32.0% of requests for an honest player and
 from 53.6% to 38.8% for one who always brings two terms; certain R3+ requests fall from 39.6% to 8.2%
-(optimizer); a request that defeats a want is never certain (from 53.8%). Plain speech that asks for no decision (telling, greeting, asking a question anyone would
-answer) is the free activity "speak a few words" (00.12.6) and is never framed. *Worst case (J):* a request
+(optimizer); a request that defeats a want is never certain (from 53.8%). Plain speech that asks for no decision (telling, greeting, asking a plain question: one whose words request no act or object and carry no pressure,
+whatever the listener's inclination, 12.2.2 [revision: R2-G; I-172]) is the free activity "speak a few words" (00.12.6) and is never framed. A plain question is SPEECH (12.2.2) and
+never reaches this test, so the hesitation flag applies to requests only [revision: R2-G; I-160c; I-172]. *Worst case (J):* a request
 treated as certain that should have rolled — the cheap end of the leniency failure, bounded at two rungs
 below the ceiling (class i); a cited hesitation reason always restores the roll.
 

@@ -101,8 +101,9 @@ decline or defer. Declining costs nothing and the offer can return (04.7.7). An 
 can be set aside at any rest, at no cost (04.8.2) [editor: E2-051].
 
 **14.2.5 When things go wrong for you.** `[N]` [12.3.6; 12.5.7; DL-14-02]
-- **The DM made a mistake.** Say so. The DM answers from the record, not from memory, and corrects real
-  errors (12.3.6, 12.3.4).
+- **The game made a mistake.** Type `/fix` and say what, or just say so ("that's wrong"). It checks the whole
+  record, then corrects the error, takes back a beat it got wrong, or shows you the line it went by. On small
+  details the record can't settle, your reading wins (12.3.6) [revision: R2-G].
 - **Content isn't working for you.** Say "adjust", "skip this", or "X". The DM reframes at once and never
   asks why (12.5.7).
 - **You don't know what to do.** Say "I'm stuck". You will get concrete options from the current situation
@@ -135,6 +136,9 @@ word always means the same odds or the same price.
 
 At every pause, **Enter** does the labelled default (printed as `[Enter] …`), letters pick the others, and `?`
 explains a word. Enter never backs you out of anything.
+
+**Something wrong?** Type `/fix` and say what: a fact or name remembered wrong, a rule applied wrong, a
+contradiction, or an action read wrong. The game checks the record and fixes it (12.3.6) [revision: R2-G].
 
 ### 14.3 Session zero
 

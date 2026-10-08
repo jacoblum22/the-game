@@ -957,13 +957,14 @@ source (the delivering turn, the beat or the generator), and a **persistence**:
 2. **One value per slot.** The value may be a short phrase ("iron rings and a copper torc"). A later value for a
    filled slot supersedes the earlier one only when this turn's adjudication record holds an event that explains
    the change (she put the rings away; he was pinned; the notice was torn down); the old value is kept as history
-   (00.6.9c). Otherwise a different value is a contradiction: an `identity` claim for a `lasting` slot, a
-   `position` claim for a `scene` slot (12.3.1), redrafted to the stored value. A value that restates the stored
-   one is a no-op.
-3. **Cap.** At most `details.max_active` (**8**) active `lasting` details per entity, kept by salience (2 for a
-   seeded or generated detail or one cited in a record line or as a lever, else 1), then by last use; the rest are
-   archived, queryable and never lost (the 12.11.7 pattern). An archived detail is still checked for
-   contradiction, since contradiction is judged against the whole store (12.3.2).
+   (00.6.9c). Otherwise a different value is a clash: an `identity` claim for a `lasting` slot, a `position`
+   claim for a `scene` slot (12.3.1). It is logged while the store keeps its value (12.3.1b), unless the claim is
+   on the blocking list (a held weapon, a coarse position), which is redrafted to the stored value
+   [revision: R2-G]. A value that restates the stored one is a no-op.
+3. **No separate cap** [revision: R2-G; DL-12-70]. One value per slot (item 2) bounds an entity's details: a person
+   has at most 8 `lasting` and 4 `scene` slots, an object 3. The view orders them by salience (2 for a seeded or
+   generated detail, one cited in a record line or as a lever, or a pinned correction (12.3.6), else 1), then by
+   last use, within the profile budget (12.2.4).
 4. **Who writes.** A `lasting` detail is written as narrated (PR-00-7 step 2) or by a generator. `scene` and
    `beat` details are written **by code**, never by the narrator (T1c), for the PC as for every present person:
    from the resolved beat by T-12-18's beat rows (a successful grapple writes the holder's `held` and the
@@ -971,17 +972,20 @@ source (the delivering turn, the beat or the generator), and a **persistence**:
    response). A write that changes a filled slot cites the beat's frame or the response's source as its
    explaining event (item 2). A scene slot shown as a record line is cited, never improvised [revision: R2-F].
 5. **Usage marks.** Each delivered sentence that states a detail sets the detail's `last_used` to that turn (a
-   projection over the log, not a new fact); freshness (12.14.11) and the cap read it.
+   projection over the log, not a new fact); freshness (12.14.11) and the view's order read it [revision: R2-G].
 6. **Details are ordinary.** A detail can be cited as a lever under 00.3.9's cap and never creates value, a clue or
    a hazard (12.14.13).
 *Worst case (J):* a detail filed under the wrong slot — a later sentence about the right slot is written as new, or
 reads as a contradiction and is redrafted to the store (class i); a junk detail fills a slot — the closed list and
-the cap bound it, and it falls out of the view by last use (class i).
+one value per slot bound it, and it falls out of the view by last use (class i) [revision: R2-G].
 
 **00.6.7 Assertion is not fact.** `[D]` [DL-00A-22; DL-00A-01; revision: I-065] A player's statement about the world is stored only as the
 beat's `assertion` context in the frame, never as a fact (SG-06). Facts come from exactly six sources:
 narration by the DM (recorded under 00.6.6), the Oracle, a generator, a ruling, data, or a player
-proposal the DM *accepts* as an Oracle "Certain" (the scene type implies it). *Invariant INV-9.*
+proposal the DM *accepts* as an Oracle "Certain" (the scene type implies it, or a disputed reading of incidental
+fiction the record cannot refute, 12.3.6 [revision: R2-G; DL-12-85]). *Invariant INV-9.* It holds in full for
+mechanics and consequential content; for incidental fiction (T0, T1a, 12.14.13) a player's disputed reading wins
+when the evidence is uncertain (12.3.6 item 4), and is written as a pinned correction.
 
 **00.6.8 Evidence event (tag_event) core shape.** `[D]` Ch.03 owns capture and weighting; these fields
 are fixed so 01, 04, 06 and 11 can emit and read evidence in parallel [R6 §A.6; R1 #11]:
@@ -1597,7 +1601,8 @@ chapter refers to [R7 §4.0 step 2]:
 **The class is computed, never proposed** [revision: R2-C]. The engine computes it from the beat's verb, its three
 method facets (12.2.2: `against_will`, `uses_power`, `speech`), the actor's held licenses (a license covers
 the beat only when its scope tags match the verb and the facets), the verb's `excludes` (an excluded method
-needs the listed license: G2 if held, else G3), active conditions (a forbidding condition: G4) and any cited
+needs the listed license: G2 if held, else G3), active conditions (a forbidding condition: G4), the Framer's reach factors (01.6.10: two unoffset factors, or a
+total potency, route the beat to G4) [revision: R2-G; I-160a] and any cited
 G4 fact. No role proposes the gate class. A sheet knack ("intimidating", "a way with horses") is an edge, never
 a gate: it never moves a basic-verb beat to G2 or G3. No held license covering an excluded method: G3
 (SG-05). *Worst case (J, upstream):* the judgments left are PARSE's verb and facets (12.2.2); a wrong one
@@ -1632,7 +1637,10 @@ named uses of basic verbs that are always legal; ch.07 owns their outcomes [R6 �
 per the time mode: wait; rest; eat and drink; sleep; speak a few words (not an attempt to persuade);
 draw, stow, drop, pick up or hand over an unattended item; look around casually (noticing without a
 check is ch.01's passive rule); recall your own memories and the character's established facts; ask the
-DM an out-of-fiction question (takes no fictional time).
+DM an out-of-fiction question (takes no fictional time). A step, posture or gesture that only accompanies another act
+(menace, manner, attention, reaching for a blow) has no intended change of its own, so it is part of that act's beat
+(01.2.2), not a beat; a move with a destination of its own ("step through the gate") is its own Move beat
+[revision: R2-G; I-171].
 
 **00.12.7 The World-Fact Oracle (G0).** `[J:rung]` + `[D]` When the answer to a question about the world
 is **unestablished** (not in state, not implied by narration) and **not settled by setting canon or
@@ -2493,7 +2501,7 @@ defined here.
 | INV-6 | No death without a lethal frame (Key 1) and ch.07's Key 2. |
 | INV-7 | Rolls never grant licenses. |
 | INV-8 | Licenses are read literally at their grade. |
-| INV-9 | Player text is intent and method; assertions never become facts. |
+| INV-9 | Player text is intent and method; assertions never become facts (an uncertain dispute about incidental fiction is the one exception, accepted as Certain, 00.6.7, 12.3.6). |
 | INV-10 | Sealed state never enters narrator context until unsealed. |
 | INV-11 | No effect grants additional actions per turn (P9). |
 | INV-12 | Triggered effects do not trigger (depth rule). |

@@ -165,7 +165,8 @@ the old anger rise") creates no beat.
 
 **01.2.2 Splitting beats.** `[J:enum]` A declaration becomes one beat per distinct (method, target,
 intended change). Test: *"If one part failed, could the other part still be attempted as described?"*
-Yes → separate beats. No → one beat. Each beat is then classified by **shape**:
+Yes → separate beats. No → one beat. A step or gesture that only accompanies another act is part of that act's
+beat (00.12.6) [revision: R2-G; I-171]. Each beat is then classified by **shape**:
 
 | Shape | True only when | False for | Resolved by |
 |---|---|---|---|
@@ -762,6 +763,10 @@ Decisions (J):      [revision: R2-C; DL-01-29]
                        is a lever or snag (01.6.8), never tier. Never two rungs. A nudge never crosses
                        the trivial line: a trivial class does not roll (01.4.1), and a rolled class
                        never nudges to trivial. Uncertain → 0 (the obstacle class's base).
+                       ONE MODEL-CHOSEN MODIFIER [revision: R2-G; I-159; DL-01-29]: a nudge is the
+                       beat's one model-chosen modifier, and so is a rung of class `other`. Such a beat
+                       takes no cited Precision snag: its hindering facts apply as Protective snags
+                       (01.6.8). A nudge or a cited Precision snag, never both.
                        Do not adjust for drama, pacing, the character's stats, or how much the player
                        wants it.
 Computation [D]:    tier = obstacle class base + nudge; dc = T-01-2 number; written as stored DC
@@ -772,8 +777,10 @@ Narration may not imply: a different difficulty than the stored one on a later a
 Worst case (J):     a wrong nudge: one rung = 5 on the DC = 25 percentage points of success-or-better
                     at most (T-01-3), always tied to a cited fact id; a wrong class: the rung of
                     another listed class; shown in the OFFER before commitment (class i), and fixed
-                    thereafter so the error cannot compound or drift. Measured with an extra wrong
-                    snag on the same beat: 35 points (01-difficulty_rubric_sim-output.txt).
+                    thereafter so the error cannot compound or drift. With one model-chosen modifier
+                    per beat, an extra wrong snag on a nudged beat goes Protective, so the combined
+                    bound is 25 points, as for one error (01-difficulty_rubric_sim-output.txt, seed
+                    158; it was 35) [revision: R2-G].
 Examples:           see T-01-2 (two per rung) and WE-01-18 (a boundary pair per rung).
                     non-example: "It's only a cheap lock, surely Easy" — an assertion about an
                     intrinsic property; if unestablished, the lock's make is an Oracle question asked
@@ -846,10 +853,13 @@ Decisions (J):      1. NAME THE FACT [J:flag] per candidate: "Is there a fact id
                        A fact that honestly fits two types: the player picks. One fact → one lever.
                     3. Obligation: an established hindering fact that fits is ALWAYS applied as a snag
                        (the DM may not drop it): the first cited as Precision at most, a further one
-                       as Protective (stakes +1 rung) [revision: R2-C] [DL-01-29]. Tie-break: uncertain lever → not applied; uncertain
+                       as Protective (stakes +1 rung) [revision: R2-C] [DL-01-29]. On a beat whose
+                       tier carries a nudge or a rung of class `other` (01.6.5), no snag is Precision:
+                       each applies as Protective [revision: R2-G; I-159]. Tie-break: uncertain lever → not applied; uncertain
                        snag → applied (SG-05's anti-leniency direction).
 Computation [D]:    at most two levers and two cited snags, of which at most ONE cited Precision
-                    snag [revision: R2-C]; Precision sum capped ±4 (circumstance
+                    snag, and none on a nudged or class `other` beat [revision: R2-C; revision: R2-G];
+                    Precision sum capped ±4 (circumstance
                     family); stakes and reach steps clamped to their ladders; engine-applied snags
                     (repetition 01.14.3) are outside the two-snag count but inside the ±4 cap.
                     frame_check refuses a lever whose fact is missing, later than the declaration, or
@@ -929,7 +939,9 @@ Decisions (J):      1. WHOLE [J:flag]: "Would this method, done well, achieve th
                        True → STANDARD. False → LIMITED, and the DM restates what the method can reach
                        ("one voice can quiet this corner of the square, not the square").
                     2. ONE FACTOR [J:flag]: "Does exactly one effect factor (potency, quality, scale;
-                       01.3.7) stand against the method, unoffset?" True → LIMITED (two → G4 at GATE;
+                       01.3.7) stand against the method, unoffset?" True → LIMITED (two → G4: the gate is
+                       computed (00.12.3), so the Framer's factors route the beat to G4 before the
+                       OFFER, with no roll, nothing spent, and 01.3.7's redirect [revision: R2-G; I-160a];
                        a total potency counts two, 01.3.7 test 3 [revision: I-073]).
                     GREAT is never picked: it is reached only by an Amplifying lever, a license or effect
                     step, or the OFFER trade (01.7.3).
@@ -1057,8 +1069,8 @@ combinable with it, as is its alternate use **grit** (07.2.5: ignore wound penal
 reach) [integration: IR ch.05 to 01, IR ch.07].
 
 **01.7.4 Auto-commit.** `[D]` [DL-01-28; DL-01-32; revision: I-065; revision: R2-C] The preference
-`auto_commit` (ch.14, T-14-1) is set at creation and is **on by default** (D7: assumed, owner to
-confirm); the player may turn it off at any time. While it is on, a frame that is **Safe** (its worst cost
+`auto_commit` (ch.14, T-14-1) is set at creation and is **on by default** (D7: owner confirmed 2026-10-09;
+may revisit odds display and menus; DL-01-32) [revision: R2-G]; the player may turn it off at any time. While it is on, a frame that is **Safe** (its worst cost
 is S1), not lethal, not secret, not a long shot (01.6.13), carries no mode price (no fallback, stretch or
 emulate) and shows success-or-better ≥ 50% rolls without waiting (`offer.choice = auto`); the OFFER is
 still written to the log and shown with the result, labelled `[OFFER — auto]` (12.15.2). A Risky, Dire or
