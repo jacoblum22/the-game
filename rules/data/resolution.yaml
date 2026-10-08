@@ -364,3 +364,42 @@ traits:            # T-01-13 (what each trait tag pulls in); tag definitions: ta
   trait.duration.sustained: [implies: trait.action.concentrate]
   trait.duration.lasting: [carries_duration_form]
   trait.duration.permanent: [until_removed_by_named_means]
+
+intended_change:   # 01.2.7 [revision: R2-H] [DL-01-34]: each beat's typed intended change; applied on success, scaled by reach, cited (must-name)
+  kinds:
+    take: {slots: [item, from], applies: "the item's holder becomes the actor"}
+    give: {slots: [item, to], applies: "the item's holder becomes the recipient"}
+    move_to: {slots: [place_or_band, who], applies: "position: the place, or bands toward or away (PR-06-4)"}
+    open: {slots: [thing], applies: "the thing's state: open"}
+    close: {slots: [thing], applies: "the thing's state: closed"}
+    learn: {slots: [topic_or_entity], applies: "delivered items (01.10; PR-12-10; 15.9)"}
+    persuade_to: {slots: [person, act], applies: "npc.<id>.agreed: <act> (15.3)"}
+    restrain: {slots: [person], applies: "held, restrained or pinned (T-12-18 Grapple rows)"}
+    free: {slots: [person], applies: "the hold ends"}
+    harm: {slots: [target], applies: "harm and conditions (ch.06, ch.07)"}
+    hide: {slots: [who_or_item, from_whom], applies: "hidden (Sneak, 01.18.13)"}
+    make: {slots: [item_kind, from], applies: "a made or mended thing (Handle; ch.08)"}
+    none: {slots: [], applies: "nothing beyond the beat's own rule"}
+  slot_ids: in_scope                 # ids from the Reader's view (scene and spotlight entities) or a place the PC knows
+  reach:                             # delivered reach -> how much of the change lands
+    0: nothing
+    1: "partial: take = a hand on it, still contested; move_to = one band or part of the way; persuade_to = a smaller act; restrain = a grip; learn = 01.10's count"
+    2: whole
+    3: "whole, plus the kind's extra where it has one (restrain: restrained)"
+    4: "as 3 (restrain: pinned)"
+  failure: nothing
+  success_at_cost: "the change and its cost; the cost never undoes the change (01.9.3)"
+  unapplicable: "not applied; the RESULT says why (the item is not where the slot says), so 12.3.6 can explain it"
+  split: "two changes in one message are two beats (01.2.2)"
+  log: [restatement, verb, ids_in_scope, kind, slots]   # Laya-ready: a short-input decision with at most 20 options, logged with its inputs
+
+attribute_rubric:  # 01.6.1 [revision: R2-H] [DL-01-35]
+  lift_or_carry:
+    when: "a beat whose typed change is take, or whose method lifts, carries or palms a thing (Exert, Force, Handle or Sneak)"
+    allowed: [might, agility, endurance]
+    words:                           # the method's words decide when they pick one
+      might: [heave, haul, hoist, wrench, drag, shoulder]
+      agility: [palm, slip, snatch, pluck, quick and quiet, deft]
+      endurance: [carry far, all day, for hours]
+    default: best_computed           # no word picks: the allowed attribute with the best odds (the one exception to 01.6.1's lower-on-a-tie)
+    offer: list_alternatives         # the OFFER lists the others with their odds; the player picks at no cost (00.4.5)

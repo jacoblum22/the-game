@@ -752,10 +752,10 @@ NPC's later conduct follows it unless a new fact releases them (12.11.4) [01.9; 
 
 **Questions** [revision: R2-D] [DL-15-39; I-140]: a Talk, a certain beat or a plain SPEECH question that asks an NPC for
 information is a bundled beat (01.10). Of N questions, `deliver_count(N, reach)` (T-01-6) land in the player's rank,
-and each landed one is answered by PR-12-10 at the ladder depth of the reach (`social.yaml#delivery.information`):
-Limited gives the NPC's records and pack, or a pointer; Standard adds propose-and-ratify; Great adds one volunteered
-extra. One question is N = 1, so any success lands it; a certain beat or SPEECH runs at Standard. "Yes, as asked" above
-is the act asked; it never makes the NPC know more than PR-12-10 finds.
+and each landed one is answered by PR-12-10 (`social.yaml#delivery.information`): a consequential one by the case
+graph, any other in the NPC's own words within the willingness code set (12.10.8); Great adds one volunteered extra
+[revision: R2-H; DL-12-90]. One question is N = 1, so any success lands it; a certain beat or SPEECH runs at Standard. "Yes, as asked" above
+is the act asked; it never makes the NPC know more than their speaker card holds (PR-12-10 step 3).
 
 **15.3.10 When talk needs no roll.** `[D]` + `[J:flag]` [DL-15-33; DL-15-34; revision: I-065] A social beat is **certain** (01.4.1, no roll) when
 the request's **certainty size** is R1 and the NPC is Neutral or warmer, or the certainty size is at least

@@ -1650,10 +1650,10 @@ roll, yes) · Likely · Even · Unlikely · Remote · Impossible (no roll, no). 
 and the doubles-as-twist rule; ch.12 owns the DM's use of the same Oracle for its own questions and
 any tension shift, which may move the rung by at most one. The answer is written as a fact at once
 (`source: oracle`), and a "no" is followed in the same breath by what *is* there (P16). Established
-facts are never asked again. **The proposal form** [revision: R2-D] [DL-12-60]: for ordinary knowledge (T1b) the DM may
-frame a candidate answer as the question ("Does the innkeeper know that the north road is washed out?"), at the odds
-12.10.6(d) fixes before the roll; only the settled answer is narrated. A "no" to a knowledge question is followed in
-the same breath by who would know (casting, 00.11 `cast`; PR-12-10). *Worst case (J):* a one-rung odds error shifts the chance by 15–25 points,
+facts are never asked again. **The proposal form** [revision: R2-D; revision: R2-H] [DL-12-60; DL-12-91]: for ordinary knowledge (T1b) in the
+narrator's voice the DM may frame a candidate answer as the question ("Does the innkeeper know that the north road is
+washed out?"), at the odds 12.10.6(d) fixes before the roll; only the settled answer is narrated. What a character
+merely says is testimony and is never asked; it is settled, at Likely, only when it comes to matter (PR-12-12). *Worst case (J):* a one-rung odds error shifts the chance by 15–25 points,
 logged with the question (class i).
 
 ### 00.13 The resolution frame
@@ -2458,8 +2458,9 @@ injured / hurt* in rules (wound, harm), *minor / major / severe* as severity nam
 1. Draft the narration as declared sentences (12.3.1): each concrete, addressable element a sentence introduces is
    declared in its `new` list with its `element_kind` (12.14.13).
 2. Route each by its tier (12.14.13): T0, nothing is written; T1a, apply the 00.6.6 test and, if true,
-   `create_entity` or `set_fact` with the properties the sentence states; T1b, the proposed fact is settled by
-   the Oracle at 12.10.6(d)'s odds and the answer written; T1c is never written from prose; T2 must already be in
+   `create_entity` or `set_fact` with the properties the sentence states; T1b in the narrator's voice, the proposed fact is settled by
+   the Oracle at 12.10.6(d)'s odds and the answer written (in speech it is testimony, a `said` record, settled by
+   PR-12-12 only when it matters [revision: R2-H]); T1c is never written from prose; T2 must already be in
    this turn's record from its owning procedure, or the sentence is cut. For an **existing** entity the sentence
    speaks of (`about`), each property it states is diffed against the entity's profile (its fields and its
    `detail.*` facts, 00.6.6a) [revision: R2-E]: a property for an empty slot is written as a `lasting` detail

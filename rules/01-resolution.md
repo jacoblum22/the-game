@@ -144,7 +144,8 @@ Decisions (J):      1. Split the declaration into three fields [J:enum over sent
                        state it ("Taking that as: you want him to let you in"). If false, ask (01.2.4).
 Computation [D]:    none
 Stakes:             none (no roll)
-State writes:       frame.beat.intent, .method, .assertion (assertion is context only: INV-9)
+State writes:       frame.beat.intent, .method, .assertion (assertion is context only: INV-9),
+                    .change {kind, slots} (01.2.7) [revision: R2-H]
 Narration may not imply: that an asserted fact or outcome is true
 Worst case (J):     a result-clause read as method (e.g. "I kill it" treated as done). Bounded because
                     method never produces outcomes by itself — every outcome passes GATE→READ; the
@@ -165,7 +166,9 @@ the old anger rise") creates no beat.
 
 **01.2.2 Splitting beats.** `[J:enum]` A declaration becomes one beat per distinct (method, target,
 intended change). Test: *"If one part failed, could the other part still be attempted as described?"*
-Yes → separate beats. No → one beat. A step or gesture that only accompanies another act is part of that act's
+Yes → separate beats. No → one beat. Each beat carries one typed intended change (01.2.7): a message with two
+changes is two beats, so no part is lost ("grab the purse and punch her" is `take` and `harm`) [revision: R2-H;
+DL-01-34]. A step or gesture that only accompanies another act is part of that act's
 beat (00.12.6) [revision: R2-G; I-171]. Each beat is then classified by **shape**:
 
 | Shape | True only when | False for | Resolved by |
@@ -210,7 +213,49 @@ several candidates; the OFFER names the target before commitment, so the player 
 restatement ("Wren tries to open the guild lock with a knife tip") into `beat.method`. GATE, NECESSITY
 and FRAME read the restatement, never the player's dramatic phrasing: framing measurably moves model
 decisions [R1 01.B; R: https://arxiv.org/abs/2607.18566], and the neutral line is what the ruling ledger
-stores.
+stores. The restatement ends with the beat's typed change in plain words ("…, to take the purse from Murzak"), and the
+OFFER shows it, so a wrong kind or slot is fixed for free before anything is spent (01.2.7) [revision: R2-H; DL-01-34].
+
+**01.2.7 The typed intended change.** `[J:enum]` + `[D]` [DL-01-34; revision: R2-H] Each beat carries one **typed
+intended change**: what the player wants to be different afterward (01.2.1's INTENT), as one kind from a closed list
+with typed slots (`resolution.yaml#intended_change`). Slots take ids from scope (the Reader's view: the scene's and
+the spotlight's entities) or a place the PC knows.
+
+| Kind | Slots | On success, resolution applies |
+|---|---|---|
+| `take` | item; from (a person, place or container) | the item's holder becomes the actor |
+| `give` | item; to (a person) | the item's holder becomes the recipient (one who refuses it is a Talk) |
+| `move_to` | place or band; who (default the actor) | the position: the place, or bands toward or away (PR-06-4) |
+| `open` / `close` | thing (a door, lock, container or way) | the thing's state |
+| `learn` | topic or entity | delivered items (01.10; PR-12-10; 15.9) |
+| `persuade_to` | person; act | the agreement (15.3; `npc.<id>.agreed`) |
+| `restrain` / `free` | person | held, restrained or pinned (T-12-18's Grapple rows) / the hold ends |
+| `harm` | person or thing | harm and conditions (ch.06, ch.07) |
+| `hide` | who or item; from whom | hidden (Sneak, 01.18.13) |
+| `make` | item kind; from | a made or mended thing (Handle; ch.08 crafting) |
+| `none` | — | a beat that seeks no change in the world (a look around, Ready, Help: their own rules write) |
+
+1. **Choose** `[J:enum]` at PARSE (12.2.2 decision 3): the kind and its slots, from the restatement, the verb and the
+   ids in scope. A message with two changes is two beats (01.2.2).
+2. **Apply on success** `[D]` at RECORD (PR-01-3 step 5); **reach scales it** (`intended_change.reach`): delivered
+   reach 1 gives the partial form (`take`: a hand on it, still contested; `move_to`: one band or part of the way;
+   `persuade_to`: a smaller act; `restrain`: a grip; `learn`: 01.10's count), reach 2 or more the whole change, and
+   the kind's extra where it has one (`restrain`: restrained at 3, pinned at 4, T-12-18). A failure applies nothing;
+   a success at a cost applies the change and its cost, and the cost never undoes it (01.9.3). A change code cannot
+   apply (the slot is not in scope; the item is not where the slot says) is not applied, and the RESULT says why
+   ("the purse is not on her"), so 12.3.6 can explain it.
+3. **Cite** `[D]`: the applied change is a must-name record line (12.14.12); narration that omits it fails coverage
+   (12.3.1a), and narration of a different change fails the outcome check (12.3.1b, blocking item 1).
+4. **One table among them**: T-12-18's per-verb scene writes (a Grapple's hold, a Force's knock-down, a Move's
+   bands) are the scene-state face of `restrain`, `harm` and `move_to`, and stay the table for the slots they write.
+
+**Design note (Laya-ready).** Choosing the kind and slots is a short-input decision with at most 20 options (the
+beat's restatement, its verb and the ids in scope in; one kind and its slot ids out), logged with its inputs
+(`intended_change.log`), so a small trained classifier can replace the model call later without changing this rule.
+*Worst case (J):* a wrong kind or slot — the OFFER and the restatement show it in plain words ("Taking: the purse,
+from Murzak") and the player fixes it for free before anything is spent (class ii); after commit, a misread beat is
+taken back by 12.5.8 (class ii). *Evidence:* ROUND3-ANALYSIS S4: "take the purse" succeeded (18 vs 10) and nothing
+moved the purse; a punch in a two-part message vanished.
 
 ### 01.3 GATE — may this be attempted at all?
 
@@ -700,7 +745,12 @@ commitment (class ii). *Example:* "I haul myself up the rope hand over hand" →
 like a beam" → Agility; "I climb it all night to the tower top" → Endurance. *Non-example:* "I climb
 the wall — carefully, which is Agility, my best stat" — "carefully" describes no different act from
 climbing by strength and grip; Might, with the OFFER naming the Agility method (a balance traverse along
-the ledge) if one exists.
+the ledge) if one exists. **Lifting and carrying** [revision: R2-H; DL-01-35] (`resolution.yaml#attribute_rubric.lift_or_carry`): a beat that lifts,
+carries or takes a thing fits more than one kind of act honestly (a quick, quiet lift is Agility; a heavy one, Might; a
+long carry, Endurance). When the method's words pick one (heave, haul: Might; palm, slip, quick and quiet: Agility;
+carry far: Endurance), they decide; otherwise the frame defaults to the allowed attribute with the **best
+computed odds**, and the OFFER lists the others with their odds, for the player to pick at no cost. This is the one
+exception to "the lower on a tie".
 
 **01.6.2 Primary deed tag and traits.** `[J:enum]` + `[J:flag]` [DL-00A-06; DL-00A-13; revision: I-065] The primary deed tag is the most
 specific `deed` tag that describes the method, classified one tag depth at a time — branch, then child (00.5.6); competence reads it.
@@ -839,10 +889,14 @@ Loads in:           core
 License check:      —
 Decisions (J):      1. NAME THE FACT [J:flag] per candidate: "Is there a fact id in state, established
                        BEFORE this declaration (or created by an earlier beat such as a Setup or Help),
-                       that this method exploits (lever) or that works against it (snag)?" True only
+                       that this method exploits (lever) or that works against it (snag), and is still
+                       true now?" True only
                        with an id. "Cool", "clever", "well described", "surely", and "everyone knows"
                        are never facts. A player-proposed fact is an Oracle question first; its answer
                        may be cited from the NEXT beat onward (00.3.9a).
+                       Still true now [revision: R2-H; DL-12-93]: an NPC's activity that has ended (the
+                       NPC engaged, 12.11.9 step 1) or is carried unchanged from before they last
+                       engaged is not a lever; a `said` record is a lever only once settled (PR-12-12).
                     2. TYPE [J:enum] from what the fact does:
                        PRECISION — lets the method be done better (a tool, a blind or distracted target,
                          a running start, help, a Setup, darkness for a sneak) → +2 roll / snag −2.
@@ -1259,7 +1313,8 @@ which half" that P17's original text left open to drift.
 So a success at Standard reach delivers about half (P17's "roughly half"), a critical success from
 Standard (delivered 3) delivers all, a failure gives at most one vague impression, and a critical failure
 nothing reliable — exactly P17's four rows, now computed. Items land in rank order. A question put to an NPC is one
-item, answered by PR-12-10 at the ladder depth of the delivered reach (T-15-5) [revision: R2-D; DL-15-39].
+item, answered by PR-12-10 (T-15-5): by the case graph when consequential, else in the NPC's own words
+[revision: R2-D; DL-15-39; revision: R2-H; DL-12-90].
 - **Vague impression** `[N]`: narrated hedged ("maybe that matters"), recorded as a fact with
   `certainty: believed` whose sealed truth is `true`. It is never wrong, only incomplete.
 - **Plausible falsehood** `[J:flag]` *misleadable*: *"Can the source actually mislead — a lying or
@@ -1351,7 +1406,8 @@ computed one; reach beyond the delivered number; a cost of another menu entry or
 doing more than its scope; a new fact not written this turn; a mechanical number voiced in fiction
 (T-00-22); a sealed fact; "almost" on a secret frame; a death on a non-lethal frame. Narration *must*
 name: every visible condition applied, one omen per hidden or sensed clock tick (INV-14), every changed
-range band or positional flag, and the chosen cost's form.
+range band or positional flag, the chosen cost's form, and the typed intended change applied (01.2.7); nothing
+beyond 12.14.12's must-name list is required [revision: R2-H; DL-01-34; DL-12-92].
 
 **01.12.3 The ruling-log handler.** `[D]` [DL-00A-12; DL-00A-24; revision: I-065] `h.01.ruling_log` (boundary `beat_end`, phase 9): finalizes the
 frame (immutable thereafter), writes the ruling record when 01.5.4 requires one, and closes any Setup or
@@ -2145,7 +2201,7 @@ uncertain.
 
 **PR-01-1 The resolution pipeline (the DM's per-beat checklist).** `[D]` + `[J]` as marked in each rule.
 1. **PARSE** (01.2): split intent / method / assertion; queue embedded fact-questions to the Oracle;
-   split beats (≤ 3 resolved per declaration); classify each beat's shape; resolve the target; ask at
+   split beats (≤ 3 resolved per declaration); classify each beat's shape; type its intended change (01.2.7) [revision: R2-H]; resolve the target; ask at
    most one clarifying question or state the assumed reading; write the neutral restatement.
 2. **GATE** (01.3): G0 → PR-01-4 or answer from state; G4 tests; G1 (verb covers, not excludes,
    sensitive-upgrade test false); G2 (cite a held license id; mode normal/stretch/emulate); else G3 →
@@ -2167,7 +2223,7 @@ uncertain.
    content per item.
 10. **CONSEQUENCE** (01.11): apply the one due cost's form at its severity (`apply_costs`); apply method
     consequences; check that a next step exists.
-11. **RECORD** (01.12): state writes → stored DC → ride → evidence → ruling → `mark_boundary(beat_end)`;
+11. **RECORD** (01.12): state writes, the typed intended change applied at its reach (01.2.7) [revision: R2-H] → stored DC → ride → evidence → ruling → `mark_boundary(beat_end)`;
     then narrate from the store.
 
 **PR-01-2 `frame_check` validation.** `[D]` (engine; refusal names the failed step)
@@ -2201,7 +2257,8 @@ uncertain.
 4. `apply_costs(frame_id, [{menu_id, form}])`: validate the menu id is the threatened or (for
    success-at-cost) the alternate, the form belongs to that entry at that severity, and the cost can land
    in full; apply the entry's writes; else refuse, and the DM uses 01.13.1's next candidate.
-5. Apply method consequences; write the ride record; emit evidence; log the ruling; `mark_boundary(beat_end)`.
+5. On a success, apply the beat's typed intended change at its delivered reach (01.2.7) [revision: R2-H]; apply
+   method consequences; write the ride record; emit evidence; log the ruling; `mark_boundary(beat_end)`.
 
 **PR-01-4 Asking the Oracle.** `[D]` + `[J:rung]`
 1. Is there an established fact, canon or scene-type answer? → read it (Certain / Impossible); stop.
@@ -2836,3 +2893,4 @@ false: G4 for the belief intent); the `alertness` ladder unaware → suspicious 
 | OEQ-01-7 | Is fate earned at the right rate? | start 1; hard luck ≤ 2; deeds to 3 | **FATE-1**: 10 simulated ventures from 12's pacing model; target mean fate at a lethal brink 1.0–1.5 and ≤ 1 reprieve per 3 ventures |
 | OEQ-01-8 | Does declaring the threatened cost before the roll remove post-roll softening? | 01.6.11 | **SOFT-1** (R4's T-R4-03): compare declared to narrated failure costs in playtest logs; target 0 softened costs |
 | OEQ-01-9 | Is 0/−2/−4 enough to make repetition a decision? | 01.14.3 | **REP-1**: simulate turn plans in 06's economy; if "attack three times" is chosen in > 70% of turns where a Setup or move was viable, steepen to 0/−4/−4 |
+| OEQ-01-10 | Does the closed list of intended changes cover what players try? | 12 kinds plus `none` (01.2.7, `resolution.yaml#intended_change`) [revision: R2-H] | **CHANGE-1**: the Reader golden set and live runs: share of beats typed `none` that seek a change (target under 5%), and of successes whose narration names a change other than the typed one; add a kind when one paraphrase recurs more than 3 times in 100 beats |

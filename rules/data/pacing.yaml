@@ -31,6 +31,7 @@ packet:                                   # 12.2.4
   max_loaded_cards: 12                   # beyond the core; priority: triggers > anchors > situation cards by specificity
   verbatim_exchanges: 4                   # player message + DM response pairs kept verbatim (OEQ-12-1)
   current_message: verbatim_complete
+  calendar_line: pinned_first            # 12.2.4 item 3 [revision: R2-H] [DL-12-95]: day, month, season, watch, weather; first in the scene header, outside every budget
   older_context: state_only               # chronicle, threads, journal, scene header; never a summary of a summary
   core_checklist: >-
     Every turn. T1 Store the message verbatim. T2 Classify its parts; safety first. T3 Load triggers, the
@@ -71,7 +72,7 @@ claim_check:                              # 12.3
   sentence_declaration: [text, refs, about, new, atmosphere]   # 12.3.1; refs = record handles (R1, R2...) + narrator-view fact ids, closed lists built from the packet [revision: R2-B]
   element_tiers: {furniture: T1a, feature: T1a, person: T1a, item: T1a, document: T1a, knowledge: T1b, clue: T2, hazard: T2, adversary: T2}   # 12.14.13; a person, item or document is T2 when 12.14.13's question is clearly true; an uncertain kind is T1a [revision: R2-B; revision: R2-G]
   voice: [narrator, speech]               # 12.3.1b: speech = quoted or reported words with a declared speaker; testimony [revision: R2-G] [DL-12-81]
-  speech_checks: [speaker_present, speaker_not_pc, no_words_in_pc_mouth]   # the only checks on speech; it is recorded as a `said` record on the speaker, never as a fact
+  speech_checks: [speaker_present, speaker_not_pc, no_words_in_pc_mouth, not_a_repeat]   # the only checks on speech (not_a_repeat over the speaker's said records, 12.14.11 [revision: R2-H] [DL-12-90]); it is recorded as a `said` record on the speaker, never as a fact; season words are a precision check in both voices
   blocking:                               # 12.3.1b item 2 (closed), the narrator's voice only, a certain subject only [revision: R2-G] [DL-12-80]
     - {item: 1, what: outcome against degree and reach, classes: [outcome, capability]}
     - {item: 2, what: harm, conditions and quantities, classes: [harm_condition, quantity]}
@@ -84,6 +85,12 @@ claim_check:                              # 12.3
   claim_log: [turn, sentence, class, verdict, store_value]
   certain_subject: [unique_proper_name, declared_about_only_fit_in_scope, only_candidate_present]   # 12.3.1b item 4; else no verdict (DL-12-82)
   code_scans: [numerals, names_and_aliases, outcome_words, sealed_strings]   # the blocking checks that are code, every turn (12.3.1)
+  precision_checks:                       # 12.3.2 "Precision, not class, decides blocking" [revision: R2-H] [DL-12-95]: a cheap code check blocks whatever its class when measured precise enough
+    min_precision: 0.95                   # share of hits that are real errors on the narration gate corpus; re-measured each playtest round; below it, log only (OEQ-12-27)
+    checks:
+      - {id: pronoun_certain_subject, class: identity, voices: [narrator], what: "a third-person pronoun whose antecedent is certain (12.3.1b item 4) against the subject's stored gender_pronouns (12.11.1)", fix: redraft}
+      - {id: season_words, class: location_time, voices: [narrator, speech], what: "a season word or season-bound phrase naming a season other than the calendar line's, with no time-shift word in its clause", time_shift_words: [last, next, ago, coming, since, until, before, after, every, each, past, previous], fix: redraft}
+    adopted: "owner ruling 2026-10-09 (R2-H); precision to be confirmed by measurement"
   sweep_classes_at_scene_end: [position, possession, quantity, harm_condition]   # declared sentences included (12.4.8 step 4) [revision: R2-E]
   audit:                                  # 12.3.1: a sampled measurement, never a per-turn gate [revision: R2-E; revision: R2-G] [DL-12-83]
     mode: sampled                         # the diff (beyond the declarations; declared but unexpressed) plus a full extraction, on sampled turns only
@@ -281,6 +288,13 @@ npc:                                      # 12.11
     relevance_order: [same_deed, same_people, same_place, highest_salience]
   voice_registers: [formal, plain, rough, flowery, terse, nervous, jovial, cold]
   habit_max_per_scene: 1
+  activity:                               # 12.11.9 step 1 [revision: R2-H] [DL-12-93]
+    rolled: once_per_scene
+    rows: own_role_cell_else_other        # never another role's rows
+    ends_on: engage                       # talks with or fights the PC, or responds with a deed; not re-rolled that scene
+    material: optional                    # 12.14.12
+    lever: current_only                   # an ended or stale activity is never a lever (01.6.8)
+  responds: [addressed, concerned]        # 12.11.9 step 3: concerned = a tag in social.yaml#event_tags.concerns bears on the NPC; nobody else reacts
 
 details:                                  # 00.6.6a established details [revision: R2-E]
   slots:                                  # closed list; slot: persistence. scene slots are written by code only (T1c)
@@ -327,9 +341,9 @@ details:                                  # 00.6.6a established details [revisio
         success: [{actor: {activity: "helping {target}"}}]
       verb.ready:
         success: [{actor: {posture: "braced and ready"}}]
-    # responses: an engaged NPC's response (12.11.9 step 3) -> their manner, and their activity only when the body does
+    # responses: a responding NPC's response (12.11.9 step 3) -> their manner, and their activity only when the body does
     # something else (squares up, turns away, takes cover); talk alone never changes the activity. A `by_practice` row replaces the
-    # generic row whole; an empty entry keeps the activity (12.11.9 step 1: it holds until the response changes it).
+    # generic row whole; an empty entry keeps the activity (12.11.9 step 1: it ends when the NPC engages [revision: R2-H]).
     responses:
       talk: {success: {manner: willing}, failure: {manner: unmoved}}
       refusal: {manner: unwilling}
@@ -349,8 +363,10 @@ narration:                                # 12.14
   scene_open_max_words: 200
   recap_max_words: 120
   skip_max_words: 150
-  freshness: {opening_patterns_remembered: 3, images_per_entity_remembered: 10, image_repeat_turns: 10, keyed_on: last_used, covers: [details, written_words, speech_openers], backstop: opening_and_speech_opener_scan}   # 12.14.11 [revision: R2-E]
+  freshness: {opening_patterns_remembered: 3, images_per_entity_remembered: 10, image_repeat_turns: 10, keyed_on: last_used, covers: [details, written_words, speech_openers, said], said_overlap: 0.6, backstop: opening_and_speech_opener_scan}   # 12.14.11 [revision: R2-E]
   forbidden_recognition_phrasing: ["you gain", "you have unlocked", "your skill increases", "level", "experience", "class", "achievement", "stat names in any in-world voice", "bracketed or boxed text inside fiction", "a disembodied announcing voice"]
+  must_name: [beat_outcome_and_change, cost_form, changed_harm_conditions_quantities_possessions_positions, direct_question_answer, clue_or_lead_delivered, pause]   # 12.14.12, closed [revision: R2-H] [DL-12-92]
+  optional_material: [activities, postures, manners, details, other_npcs_reactions, crowd_mood, scene_texture]   # shown as material, never required; no check requires it
 
 oof_formats:                              # 12.15 (ch.14 owns rendering and the marker)
   order: [safety_and_session, correction, fiction, result, redirect, pause_block_last]
@@ -360,9 +376,18 @@ feedback:                                 # 12.3.6, PR-12-11: the player's repor
   command: /fix                           # a DISPUTE by code; natural disputes are classified by 12.2.2
   hint: "Something wrong? Type /fix and say what."
   hint_at: [session_start, glossary, possible_dispute_in_fiction]
-  categories: [remembered_wrong, rule_wrong, contradiction, misread, other]
+  categories: [remembered_wrong, rule_wrong, contradiction, misread, ruling_question, other]   # ruling_question [revision: R2-H]
   evidence: [whole_transcript, fact_provenance, frame_cited_facts_and_rule_ids, claim_log]
-  locate_call: when_unpinned              # one model call returns {turn, quote, category}; it judges nothing
+  locate_call: retired                    # [revision: R2-H] [DL-12-94]: replaced by understand_call; code no longer pins a report first
+  understand_call:                        # PR-12-11 step 1: understand first, then verify
+    when: every_report
+    reads: whole_transcript               # past transcript_budget_tokens: the scene cards plus search hits for the report's words
+    transcript_budget_tokens: 30000
+    returns: [believes, happened, category, turn, quote]
+    restate: true                         # the answer opens with the complaint in plain words
+  answers: [corrected, explained, not_found]   # every report gets one in plain words; never "logged" alone; not_found offers "did you mean" with the nearest passage
+  bias: {fiction: act, mechanics: explain}     # INV-9
+  test_corpus: "the /fix lines of the persona runs (evals/playtests/*.findings.jsonl) beside planted cases (OEQ-12-26)"
   outcomes: [correct, take_back, explain_with_quote, player_reading_wins, explain_and_log]
   player_wins_scope: [T0, T1a]            # incidental fiction only; mechanics and consequential content keep INV-9
   record: [id, time, turn, words, category, passage, evidence, outcome, writes, reverted]
@@ -392,7 +417,7 @@ modes:                                    # 12.4.5; T-12-3
 dm_questions:                             # 12.6.1; T-12-4 (first match)
   - {when: settled_by_fact_canon_or_scene_type, tool: read}
   - {when: who_is_role, tool: casting}                    # [revision: R2-D] social.yaml#cast; a story role -> the case graph
-  - {when: what_npc_knows_about_topic, tool: answer_ladder}   # [revision: R2-D] PR-12-10
+  - {when: what_npc_knows_about_topic, tool: answer_ladder}   # [revision: R2-D] PR-12-10; [revision: R2-H] the case graph if consequential, else the NPC's words (testimony), settled by PR-12-12 only when it matters
   - {when: actor_with_capability_attempts, tool: fortune_check}
   - {when: which_of_several_specific_table_exists, tool: roll_table_specific}
   - {when: npc_decision_undecided, tool: tbl.npc_action}
@@ -400,19 +425,35 @@ dm_questions:                             # 12.6.1; T-12-4 (first match)
   - {when: meaning_form_or_and, tool: tbl.meaning}
   - {when: a_person_must_exist, tool: npc_generation}
 
-answer_ladder:                            # 12.10.8, PR-12-10 [revision: R2-D] [DL-12-60]
+answer_ladder:                            # 12.10.8, PR-12-10 [revision: R2-D] [DL-12-60]; rewritten [revision: R2-H] [DL-12-90]: characters speak freely, truth is settled lazily (testimony, PR-12-12)
   trigger: "an NPC is asked a question: a resolved Talk, Observe or Recall part, or a SPEECH question, carrying question_kind and topic (12.2.2)"
-  index: "asked_and_answered: (npc, question_kind, topic) -> fact id | unknown, read before any rung"
+  index: "asked_and_answered: (npc, question_kind, topic) -> said id | fact id; the NPC's memory, shown on the speaker card, never a source of words"
   routes:
-    consequential: "a story role, a case's solution, a sealed fact or a thread's knowledge -> the case graph only (PR-15-6; no case behind a story role -> the reduced case now)"
+    consequential: "a story role, a case's solution, a sealed fact or a thread's knowledge -> the case graph only (PR-15-6; no case behind a story role -> the reduced case now); a non-holder points to the core placement's holder"
     who_is_role: "who is <role> (not a story role) -> casting (social.yaml#cast)"
-    ordinary: "everything else -> the rungs"
-  rungs: [store, pack, propose_and_ratify, pointer]
-  depth_by_reach: "social.yaml#delivery.information.ladder_depth"
-  ratify_odds: "social.yaml#common_knowledge.odds"
-  pointer_order: [person_by_casting, place_kept_at, new_walk_on]
-  never_empty: true
-  repeat_pointer_limit: 2                 # DL-12-44 revisit: a pointer chain longer than this for one question is logged
+    ordinary: "everything else (ordinary knowledge, what they want or think, who would know) -> willingness by code, words by the narrator"
+  willingness: [willing, guarded, unwilling]
+  willingness_source: [matching_refusal, talk_frame_outcome, certainty_test, npc_action_row]   # first that applies (PR-12-10 step 2); certainty_test = 15.3.10
+  willingness_by_row: {'1': unwilling, '2': unwilling, '3': unwilling, '4': guarded, '5': guarded, '6': guarded, '7': willing, '8': willing, '9': willing, '10': willing}   # tbl.npc_action with standing; the row's wording never scripts speech
+  speaker_card: [question, willingness, knowledge_records_on_topic, pack_facts_on_topic, role_topics, public_news_in_scope, said_records]   # nothing sealed, no undelivered placement, no motive (INV-10)
+  said_shown: 6                           # the speaker's most recent said records on the card, plus every one on the asked topic
+  volunteer_at_reach: 3                   # Great or better: one extra from the NPC's record (T-15-5 row 3)
+  dont_know: "the character's choice: rare, in voice, with a natural redirect; a redirect is testimony, never a code pointer"
+  retired: [rungs, depth_by_reach, ratify_odds, pointer_order, never_empty]   # R2-D's ladder (store, pack, propose_and_ratify, pointer) [revision: R2-H] [DL-12-90]
+  repeat_pointer_limit: 2                 # retired with the pointer [revision: R2-H]; kept only until spec 013 removes its reader (engine/dm/answer.py)
+
+testimony:                                # PR-12-12, settling testimony when it matters [revision: R2-H] [DL-12-91]
+  record: "said {speaker, turn, words, about, question}; settled: true | false with the fact id; never settled twice"
+  triggers: [acted_on, cited, travel, mechanics]   # closed (PR-12-12 step 1)
+  never_triggers: [heard, repeated, asked_about, contradicted_by_another_character]
+  state_claim: "[J:enum] {subject, predicate, value} from the said words; it judges nothing else"
+  routes:                                 # first that applies
+    consequential: case                   # a case node, sealed fact, story role, thread knowledge or clue: true when the case holds it, else false; never delivers a clue
+    beyond_ordinary: {oracle: likely}     # 12.14.13's question is true
+    ordinary: accept
+  write_true: "fact {source: testimony | oracle, said_by, said_turn}; citable from this beat"
+  write_false: "npc.<id>.wrong_about: <claim> (a lie when 15.6.2 recorded one), then what is there (P16)"
+
 
 clock_templates:                          # clocks created by ch.12's twist rows (oracles.yaml tbl.twist_s2..s4); 00.8.1 shape
   # ch.12 owns these templates (00.17.1 Q7). '<opposition>' / '<champion>' are filled with entity ids at creation.
