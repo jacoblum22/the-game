@@ -24,7 +24,7 @@ must-name lines the canned offline narrator never cites (lead notes, the beat's 
 Scene-state lines are never must-name. The trajectory also changed (383 turns vs 388), because activity rolls now
 come at different times on the NPC RNG stream.
 
-**Suite:** see the final line in the commit message. ruff clean; pyright clean on touched files, except one existing
+**Suite:** 1656 passed, 4 skipped (the offline replay re-recorded and `cards.json` rebuilt for the rule-text change). ruff clean; pyright clean on touched files, except one existing
 error in `tests/engine/test_turn_adjudication.py:176` (untouched code). Rules validator 0 ERROR / 0 WARN.
 
 ## What the live run showed
