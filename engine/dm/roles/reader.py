@@ -155,4 +155,16 @@ def read_message(ctx: TurnContext, message: str, *, exchanges: Sequence[Any] = (
     from engine.world.common import active_pc
 
     _knowledge_parts(out, active_pc(st))
+    _plain_reading(out, st, active_pc(st))
     return out
+
+
+def _plain_reading(out: ReaderResult, st: Any, pc: str | None) -> None:  # rule: 01.4.1
+    """P-110: reading words already on record (the legible part of a notice) in a tongue the PC reads is not
+    COSTLY: failure would leave things as they were and can be retried at leisure, so no roll (01.4.1)."""
+    from engine.retrieve.scene import READING, cannot_read, written_words
+
+    for b in out.beats:
+        if (b.target and b.target in st.entities and b.gate != "G4" and READING.search(f"{b.method} {b.intent}")
+                and written_words(st, b.target) is not None and not cannot_read(st, pc, b.target)):
+            b.necessity = "trivial"

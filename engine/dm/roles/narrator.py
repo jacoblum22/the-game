@@ -164,6 +164,63 @@ def _speech_line(state: WorldState, record: AdjudicationRecord) -> list[str]:  #
             "unheard, or only begun; never end on waiting for them to speak"]
 
 
+_POSTED = re.compile(r"\b(notice|bill|board|sign|signboard|placard|poster|plaque|inscription|letter|note|scroll|"
+                     r"proclamation|broadsheet|writ|tablet|marker|milestone|headstone)s?\b", re.I)
+
+
+_UNREAD = ("never quote or paraphrase written words as read by the character; writing shows only as marks they "
+           "cannot read, and its news reaches them only when someone in the record reads it aloud (then as speech)")
+
+
+def _reading_lines(state: WorldState, record: AdjudicationRecord, player_message: str) -> list[str]:  # rule: 12.14.13
+    """When the PC reads posted words, the narrator is told what they say (the stored text, else the opening's lead
+    the notice carries, else ordinary words to write on mention), or plainly why the PC cannot read them (P-110).
+    On any turn with writing in view, a PC who cannot read is never shown its words."""
+    from engine.retrieve.scene import READING, cannot_read, scene_scope, written_words
+
+    things = [i for i in scene_scope(state) if state.entities[i].kind in ("object", "item")
+              and (written_words(state, i) is not None or _POSTED.search(state.entities[i].name or ""))]
+    asked = " ".join([player_message] + [b.restatement for b in record.beats])
+    if not READING.search(asked):
+        lead = any(n.startswith(("a lead to make noticeable", "a lead arrives")) for n in record.notes)
+        unread = [state.entities[i].name for i in things if cannot_read(state, record.pc, i)]
+        if lead and cannot_read(state, record.pc, None):
+            unread.append("any posted notice")
+        return [f"- the character cannot read the {', the '.join(unread)}: {_UNREAD}"] if unread else []
+    named = [i for i in things if any(w in asked.lower() for w in re.findall(r"[a-z]{3,}", (state.entities[i].name
+                                                                                             or "").lower()))]
+    failed = {t for b in record.beats if b.degree in ("failure", "critical_failure") for t in b.targets}
+    lines: list[str] = []
+    for eid in (named or things)[:2]:
+        name = state.entities[eid].name
+        if eid in failed:
+            lines.append(f"- reading the {name} failed: say plainly which words could not be made out and why "
+                         "(smeared, too far, a hurried hand); never a vague 'the words will not come'")
+            continue
+        why = cannot_read(state, record.pc, eid)
+        if why:
+            lines.append(f"- the character cannot read the {name}: {why}. Say so once, in one plain sentence, and "
+                         "that someone who reads could read it to them; describe only what shows without reading "
+                         f"(numerals, a seal, the hand); {_UNREAD}")
+            continue
+        words = written_words(state, eid)
+        if words is not None:
+            lines.append(f"- the character reads the {name}: quote its words exactly, in quotation marks: \"{words}\"")
+            continue
+        op = state.meta.get("world.opening") or {}
+        leads = [str(x.get("lead") or x.get("text") or "") if isinstance(x, dict) else str(x)
+                 for x in op.get("leads") or []]
+        leads = [x for x in leads if x and not x.startswith("the incident itself")]
+        here = state.scene is not None and state.scene.place_id == (op.get("start") or {}).get("place")
+        carry = (f" If it posts one of these leads, its words are that lead's: {'; '.join(leads)}." if leads and here
+                 else "")
+        lines.append(f"- the character reads the {name}: quote its words in quotation marks.{carry} Otherwise write "
+                     "the ordinary words such a thing carries (a hiring's terms, a sale, a fair day, a shop's name) "
+                     f"and list them under `mentions` for the {name} as implied `text`. Never words that point "
+                     "toward anything hidden (12.14.13): then quote only what is plain and say the rest is not on it")
+    return lines
+
+
 def record_text(state: WorldState, record: AdjudicationRecord, *, player_message: str = "",
                 purpose: Purpose = "turn", rules: Any = None) -> str:  # rule: 12.14.12
     """The adjudication record in words for THIS MESSAGE (names, never ids or numbers; 12.14.4)."""
@@ -190,6 +247,7 @@ def record_text(state: WorldState, record: AdjudicationRecord, *, player_message
     for a in record.npc_actions:
         lines.append(f"- {name_of(state, a.npc, pc)} acts: {a.action}" + _withheld(state, a.npc, a.action, pc))
     lines += _speech_line(state, record)
+    lines += _reading_lines(state, record, player_message)
     for om in record.omens:
         if om.omen:
             lines.append(f"- an omen to show as a trace, never explained: {om.omen}")

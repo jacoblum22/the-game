@@ -27,6 +27,7 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator
 from engine.audit import text as tx
 from engine.dm.adjudication import AdjudicationRecord, BeatEntry
 from engine.store.projection import WorldState
+from engine.retrieve.scene import cannot_read
 from engine.store.views import item_words, name_known, unnamed_label
 
 ClaimClass = Literal["existence", "identity", "quantity", "harm_condition", "position", "possession",
@@ -571,6 +572,11 @@ def _identity(ctx: _Ctx, c: Claim, i: int) -> Verdict:  # rule: 12.3.1
             beyond = " ".join(w for w in c.value.split() if w.lower() not in _flat(said).lower().split())
             if _negated(beyond):  # "they do not say NO QUESTIONS ASKED" (the notice's own "NO" is not a denial)
                 return _v(c, i, "contradicted", said, reason="the words written there are on record; use them")
+            why = cannot_read(ctx.state, ctx.pc, e.id)  # 02.4.6: words the PC cannot read reach them only aloud
+            aloud = ctx.record.npc_actions or any("talk" in (b.approach_words or "") for b in ctx.record.beats)
+            if why and not aloud:  # [P-110]
+                return _v(c, i, "contradicted", "words the character cannot read",
+                          reason=f"the character cannot read it ({why}); say so instead of quoting it")
             return _v(c, i, "supported")
     bond = ctx.state.fact_value(ctx.pc, "bond.anchor") if ctx.pc else None  # rule: 02.9.2 [P-036]
     if store is None and isinstance(bond, dict) and bond.get("npc") == e.id and _has(c.predicate, _BOND_WORDS):
