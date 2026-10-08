@@ -33,3 +33,4 @@ Ledger: I-131..I-136.
 | breaker 172452 | 790deb1 | 17 | 2.35 | 2 | challenger never speaks (P-026); "what do I know?" unanswered (P-019); scene lines repeat (P-030) |
 | newcomer 174833 | a184dff | 17 | 1.88 | 2 | setup fine; repetition (P-030); "the record holds" leak (P-045); arrival never a person (P-046) |
 | breaker 175045 | a184dff | 17 | 1.47 | 1 | reach/Go big explanations clear; NPC reacted naturally; Luck question reframed offer (P-047); framer rejections (P-049) |
+| fighter 174829 | a184dff | 17 | 2.47 | 3 | Go big dead end (P-050); odds band oddity (P-051); name collision (P-052) |

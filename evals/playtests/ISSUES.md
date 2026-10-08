@@ -42,12 +42,12 @@ Status: open · fixing (round N) · fixed (commit) · logged (ledger id) · wont
 | P-033 | bug | low | NPC called both "they" and "him" in narration | 170200-newcomer turns 8–14 | fixed (1e3ec97) |
 | P-034 | bug | med | Internal note in narration: "(Her claim about the ankle is context only)" | 170318-fighter input 28–30 | fixed (17eebe7) |
 | P-035 | polish | med | A failed beat doesn't show what it cost or what happened ("the press holds you", an ankle "holds" you); "Go big" raises stakes with no stated gain | 170318-fighter inputs 19–27 | open (with P-012, P-028) |
-| P-036 | bug | med | Narration says "Edda is not your friend" though the sheet lists Edda as the PC's friend (creation bond does not reach the NPC's standing?) | 170207-talker turns 13–15 | open |
+| P-036 | bug | med | Narration says "Edda is not your friend" though the sheet lists Edda as the PC's friend (creation bond does not reach the NPC's standing?) | 170207-talker turns 13–15 | fixed (be20402); ledger I-142 |
 | P-037 | polish | low | Named NPC drifts back to "a woman" / "stranger" after being named (Bixnik Quick-Fingers) | 170207-talker turns 10–15 | open |
 | P-038 | bug | high | "What do I know about the land around Hawkstead?" read as a Mind sorcery attempt → REDIRECT for lacking the spell; plain "what do I know?" only repeats scene text (with P-019) | 170204-explorer inputs 20–23 | fixed (1e3ec97) |
 | P-039 | bug | low | Garbled Oracle twist fragment in narration: "Can say it in answer to a question asked aloud, but lesser"; PC referred to in third person ("he asks") | 170204-explorer inputs 25–26 | fixed (17eebe7), except PC as "he" after a You-sentence |
 | P-040 | bug | high | Fallback mangles restatements: "You try to gerella is pinned against the gatepost", "Knows where … can not be found"; "It works." before any roll | 172629-fighter inputs 19–31 | fixed (17eebe7) |
-| P-041 | bug | med | Narration contradicts itself across turns: a notice reads "NO QUESTIONS ASKED", a later turn says it does not (mentioned object's text not stored or not shown back) | 172552-newcomer inputs 27–35 | open |
+| P-041 | bug | med | Narration contradicts itself across turns: a notice reads "NO QUESTIONS ASKED", a later turn says it does not (mentioned object's text not stored or not shown back) | 172552-newcomer inputs 27–35 | fixed (be20402) |
 | P-042 | polish | low | "What do I know" answers show raw Oracle predicates ("name — yes") | 03a9ba7 fixer report | open |
 | P-043 | bug | low | Sheet shows a raw placeholder: "carries the fact teaches: <the gifted spell>" | 174833-newcomer input 23 | fixing |
 | P-044 | polish | low | OFFER's Enter default is Withdraw; a newcomer pressing Enter backs out without noticing | 174833-newcomer inputs 26, 31 | open |
@@ -56,3 +56,6 @@ Status: open · fixing (round N) · fixed (commit) · logged (ledger id) · wont
 | P-047 | bug | med | Asking about Luck at an open OFFER silently reframed it (75% risky → 50% safe); Luck not spent; no explanation | 175045-breaker inputs 22–30 | fixing (with P-049) |
 | P-048 | polish | low | [LEADS] entry truncated mid-sentence ("and…"); "open thread" label unclear | 175045-breaker inputs 18–19 | open |
 | P-049 | bug | high | Framer offered every cost/tier option, then the engine rejected illegal ones (cost.time with no clock, exposure with no observer, trivial tier rolled, opposed without entity, lever established too late) → re-ask → default frame | 6 saves, 16 rejections | fixing |
+| P-050 | bug | high | "Go big" at an OFFER sometimes → "You cannot do it that way. What do you do?", offer lost; once "It works" twice then a new offer | 174829-fighter inputs 19–25 | fixing (with P-049) |
+| P-051 | rules | med | Odds: 20% success vs 35% critical failure on "safe" stakes; hidden-roll offers show no odds despite the promise | 174829-fighter inputs 19–31 | logged I-143 |
+| P-052 | polish | low | Walk-on NPC shares the PC's first name (Aldett Redley / Aldett Blackbrook) | 174829-fighter input 30 | logged I-142 |
