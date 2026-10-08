@@ -44,3 +44,5 @@ Status: open · fixing (round N) · fixed (commit) · logged (ledger id) · wont
 | P-035 | polish | med | A failed beat doesn't show what it cost or what happened ("the press holds you", an ankle "holds" you); "Go big" raises stakes with no stated gain | 170318-fighter inputs 19–27 | open (with P-012, P-028) |
 | P-036 | bug | med | Narration says "Edda is not your friend" though the sheet lists Edda as the PC's friend (creation bond does not reach the NPC's standing?) | 170207-talker turns 13–15 | open |
 | P-037 | polish | low | Named NPC drifts back to "a woman" / "stranger" after being named (Bixnik Quick-Fingers) | 170207-talker turns 10–15 | open |
+| P-038 | bug | high | "What do I know about the land around Hawkstead?" read as a Mind sorcery attempt → REDIRECT for lacking the spell; plain "what do I know?" only repeats scene text (with P-019) | 170204-explorer inputs 20–23 | fixing (with P-031) |
+| P-039 | bug | low | Garbled Oracle twist fragment in narration: "Can say it in answer to a question asked aloud, but lesser"; PC referred to in third person ("he asks") | 170204-explorer inputs 25–26 | open (with P-034) |
