@@ -38,3 +38,5 @@ Ledger: I-131..I-136.
 | talker 175928 | 50f21c3 | 17 | 2.0 | 0 | first run with NPC replies: Borin answers well; a silent NPC stalls (P-056); roll results unclear (P-012); Enter=Withdraw trap (P-044) |
 | breaker 181158 | 5ec5452 | 17 | 1.41 | 1 | change approach broken (P-057); learned facts raw (P-058); Fate spend unclear (P-059) |
 | fighter 181737 | eeff286 | 17 | 1.47 | 2 | odds screens and Go big clear; cryptic condition redirect traps the PC (P-060) |
+| explorer 181732 | eeff286 | 17 | 2.0 | 0 | storyteller never tells the story (P-061); journal labels (P-062) |
+| newcomer 181028 | 5ec5452 | 17 | 2.06 | 0 | NPC's question never printed; notice words withheld (P-061) |
