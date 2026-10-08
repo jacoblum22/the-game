@@ -56,7 +56,10 @@ def _knowledge_parts(out: ReaderResult, pc: str | None) -> None:  # rule: 14.6.3
     if hit:
         out.fact_questions = [q for q in out.fact_questions if not (q.subject == pc and "know" in q.predicate)]
         if not any(RECALL_WORDS.search(p.text) for p in out.parts):  # nobody asked to recall in-fiction
-            out.beats = [b for b in out.beats if b.verb != "verb.recall"]
+            kept = [b for b in out.beats if b.verb != "verb.recall"]
+            if len(kept) < len(out.beats):  # the restatement's first line was the dropped Recall's: a kept Talk
+                out.restatement = " Then ".join(b.intent for b in kept)  # must not read "Recall: ..." (P-115)
+            out.beats = kept
 
 
 class FactQuestion(BaseModel):
