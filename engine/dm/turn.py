@@ -735,6 +735,19 @@ def _scene_open_step(ctx: TurnContext, rec: AdjudicationRecord, message: str) ->
     _scene_entry(ctx, rec, start, ended=None)
 
 
+def _heads_for(st: Any, rec: AdjudicationRecord) -> str | None:  # rule: 10.1.3
+    """The reachable place another than here that a resolved Move beat this turn headed for (travel)."""
+    from engine.world.places import location, reachable
+
+    here = location(st)
+    ways = {x.to for x in reachable(st, here)} if here else set()
+    for b in rec.beats:
+        done = b.degree in ("success", "critical_success") or b.success_at_cost or             b.gate_words.startswith("no roll")
+        if done and b.approach_words.startswith("verb.move") and b.targets and b.targets[0] != here and b.targets[0] in ways:
+            return b.targets[0]
+    return None
+
+
 def _director_step(ctx: TurnContext, rec: AdjudicationRecord, message: str) -> None:  # rule: 12.4.2
     # rule: 12.8.2
     """After T5: ask the Director when the player moves on, something settled this turn could answer the scene's
@@ -746,7 +759,8 @@ def _director_step(ctx: TurnContext, rec: AdjudicationRecord, message: str) -> N
     st = ctx.state
     if st.scene is None or rec.scene.started == st.scene.scene_id:
         return
-    moving = moves_on(message)
+    dest = _heads_for(st, rec)
+    moving = moves_on(message) or dest is not None
     lead = trigger_raised(st, "trg.lead_injection")
     settled = any(b.degree for b in rec.beats) or any(o.completed for o in rec.omens) \
         or any(a.source == "refusal" for a in rec.npc_actions)
@@ -760,6 +774,9 @@ def _director_step(ctx: TurnContext, rec: AdjudicationRecord, message: str) -> N
                                       if settled else "") if x)
     d = director_role.direct(ctx, situation=situation, player_message=message, happened=happened_text(rec),
                              quiet_turns=int(st.meta.get("dead_air") or 0))
+    if dest is not None:  # 12.4.2 (2): a place change ends the scene; the player named where (10.1.3)
+        d.cut_now = True
+        d.next_scene.place = dest
     tctx = ctx.time_ctx()
     if lead:
         try:

@@ -36,7 +36,7 @@ MAX_VIEW_KNOWN = 12  # the cast list beyond the scene: most recently introduced 
 MAX_DATA_KEYS = 12
 MAX_VALUE_CHARS = 160
 WATCHES = ("morning", "afternoon", "evening", "night")
-_DESCRIPTIVE_KEYS = ("desc", "landmarks", "hazards", "openness", "role", "detail", "demeanor")  # first under the cap
+_DESCRIPTIVE_KEYS = ("pronouns", "desc", "landmarks", "hazards", "openness", "role", "detail", "demeanor")  # first under the cap
 
 
 class PacketError(ValueError):

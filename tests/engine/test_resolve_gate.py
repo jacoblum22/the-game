@@ -125,3 +125,19 @@ def test_proposed_g3_on_a_held_license_is_g2(tmp_path: Path) -> None:
     stretch = check_gate(s.beat(gate="G3", mode="stretch", would_be_license="lic.training.wilds_tracking"),
                          state=s.state, rules=s.rules)
     assert stretch.gate == "G3"  # a stretch the license does not declare is still G3 (01.3.5)
+
+
+def test_basic_verb_g3_without_a_licence_is_g1(tmp_path: Path) -> None:
+    """01.3.1 first match: G1 before G3. The Reader's G3 on Talk / Recall naming no licence it needs is the
+    verb's own act (playtests 20261007-170200 Stonesense, -170204 arcane mind); a named licence keeps the G3."""
+    s = Scene.new(tmp_path)
+    for verb, method in (("verb.talk", "speaks to Evred again in a gentle, pressing tone, asking what is wrong"),
+                         ("verb.recall", "calls to mind what he knows of the land around Hawkham")):
+        d = check_gate(s.beat(gate="G3", verb=verb, method=method), state=s.state, rules=s.rules)
+        assert (d.gate, d.redirect) == ("G1", None), d.reason
+    named = check_gate(s.beat(gate="G3", verb="verb.handle", method="open the lock with arcane force",
+                              would_be_license="lic.training.arcane_alteration"), state=s.state, rules=s.rules)
+    assert named.gate == "G3" and named.redirect is not None
+    assert named.redirect.missing == "lic.training.arcane_alteration"
+    excluded = check_gate(s.beat(gate="G3", verb="verb.force", method="pick the lock"), state=s.state, rules=s.rules)
+    assert excluded.gate == "G3" and "excludes" in excluded.reason

@@ -55,6 +55,8 @@ class SchemaContext(BaseModel):
     scene_ids: list[str] = Field(default_factory=list)
     fact_ids: list[str] = Field(default_factory=list)
     pc_licences: list[str] = Field(default_factory=list)
+    licences: list[str] = Field(default_factory=list)  # every licence id in data (a G3's would-be licence)
+    reachable_places: list[str] = Field(default_factory=list)  # places a Move can head for (10.1.3)
     pending_choice_ids: list[str] = Field(default_factory=list)
     # Reader (rules)
     input_classes: list[str] = Field(default_factory=list)
@@ -161,9 +163,10 @@ def reader_schema(ctx: SchemaContext) -> Schema:  # rule: 12.2.2
         "method": STR,
         "assertion": STR_OR_NULL,
         "shape": enum(SHAPES),
-        "target": enum(ctx.scene_ids, first=NONE),
+        "target": enum([*ctx.scene_ids, *ctx.reachable_places], first=NONE),
         "verb": enum(ctx.verbs),
         "license": enum(ctx.pc_licences, first=NONE),
+        "would_be_license": enum(ctx.licences, first=NONE),  # PR-01-5 step 1: what a G3 lacks
         "gate": enum(GATES),
         "g4_fact": enum(ctx.fact_ids, nullable=True),
         "necessity": enum(NECESSITY),
@@ -425,6 +428,15 @@ def _anchor_enums(anchor_ids: list[str], rules: Any) -> dict[str, list[str]]:  #
             {"knobs": knobs, "deltas": deltas, "attributes": attrs, "deed_tags": deeds}.items()}
 
 
+def _reachable(state: Any) -> list[str]:  # rule: 10.1.3
+    from engine.world.places import reachable
+
+    try:
+        return [x.to for x in reachable(state)]
+    except Exception:  # noqa: BLE001 - no PC position yet: nowhere to head for
+        return []
+
+
 def _verb_attribute(anchor_id: str | None, rules: Any) -> str | None:
     if not anchor_id:
         return None
@@ -578,6 +590,8 @@ def schema_context(  # rule: 12.2.4
         scene_ids=scope,
         fact_ids=facts,
         pc_licences=[x.license_id for x in state.licenses.get(pc, [])] if pc else [],
+        licences=list(rules.licenses),
+        reachable_places=_reachable(state),
         pending_choice_ids=pending,
         input_classes=classes,
         oracle_rungs=[r["id"] for r in res.get("oracle", {}).get("rungs", [])],

@@ -87,12 +87,14 @@ def words(text: str) -> set[str]:
 
 
 def excluded_by(verb: Any, method: str) -> Any | None:  # rule: 01.3.1
-    """The verb's `excludes` entry whose every content word appears in the method (a literal mention)."""
+    """The verb's `excludes` entry one of whose alternatives ("flying or teleporting") has every content word in
+    the method (a literal mention)."""
     m = words(method)
     for e in verb.get("excludes") or ():
-        w = words(str(e.get("what", "")))
-        if w and w <= m:
-            return e
+        for alt in str(e.get("what", "")).split(" or "):
+            w = words(alt)
+            if w and w <= m:
+                return e
     return None
 
 
@@ -287,6 +289,18 @@ def check_gate(beat: Beat, *, state: Any, rules: Any, store: Any = None, staged:
                 d.gate, d.mode, d.license = "G2", "normal", lid
                 d.reason = f"held license {lid}"
                 return d
+    # G1 before G3 (01.3.1, first match wins): a G3 proposal on a basic verb that names no license the method
+    # would need is that verb's own act (talking to someone, recalling one's own country), unless the verb
+    # excludes it; the word-match guess in would_be_license never turns it into a redirect (playtests
+    # 20261007-170200 "needs Stonesense", -170204 "needs arcane mind"). A G3 that names the license keeps it.
+    if (proposed == "G3" and beat.mode == "normal" and not (beat.would_be_license or beat.license
+                                                             or beat.fallback_license)
+            and (verb := rules.basic_verbs.get(beat.verb or "")) is not None):
+        if (ex := excluded_by(verb, beat.method)) is None:
+            d.gate, d.license = "G1", None
+            d.reason = f"{beat.verb} covers it; no license is named that it needs (01.3.1)"
+            return d
+        d.reason = f"{beat.verb} excludes {ex['what']!r} (needs {ex.get('needs')})"
     # G3: an accepted crude fallback rolls; otherwise the redirect
     if beat.mode == "fallback" and beat.fallback_license and beat.fallback_license in rules.licenses:
         fb = _fallback_option(beat.fallback_license, rules.license(beat.fallback_license))
