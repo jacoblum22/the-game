@@ -11,7 +11,11 @@
   gates, so threats with no licence are G1 (P-122). `necessity` is null when the gate stops the beat (G3, G4).
 - facets (`against_will`, `uses_power`, `speech`) and `question_kind` (C §3: who_is, where_is, what_happened,
   what_like, what_want, who_knows, none) are the proposed Reader fields.
-A field the Reader does not return is "not scored". `necessity` is scored only where its label is set.
+Since the 2026-10-08 label audit, `evals/reader_golden_POLICY.md` is the labelling policy (it supersedes the notes above
+where they differ).
+A field the Reader does not return is "not scored". `necessity` is scored only where its label is set. The facets
+are scored only where the label has a beat: they describe the first beat (12.2.2), so a no-beat line has none to
+compare (the segmentation error already shows in `verb`).
 """
 
 from __future__ import annotations
@@ -28,6 +32,7 @@ sys.path.insert(0, str(ROOT))
 
 GOLDEN = ROOT / "evals" / "reader_golden.jsonl"
 FIELDS = ("verb", "gate", "necessity", "against_will", "uses_power", "speech", "question_kind")
+FACETS = ("against_will", "uses_power", "speech")
 GATES = (None, "G0", "G1", "G2", "G3", "G4")
 QUESTION_KINDS = ("who_is", "where_is", "what_happened", "what_like", "what_want", "who_knows", "none")
 NECESSITY = (None, "uncertain_and_costly", "riding", "trivial", "good_idea", "impossible", "take_the_time",
@@ -53,7 +58,7 @@ def score(lines: list[dict[str, Any]], reader: Reader | None) -> str:
             continue
         lab = g["labels"]
         for f in FIELDS:
-            if f not in out or (f == "necessity" and lab[f] is None):
+            if f not in out or (f == "necessity" and lab[f] is None) or (f in FACETS and lab["verb"] is None):
                 continue
             ok = out[f] == lab[f]
             hits[f][0] += ok
