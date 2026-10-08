@@ -119,7 +119,7 @@ def _ask_oracle(ctx: TurnContext, record: AdjudicationRecord, c: Claim) -> str |
                                     odds="even", asker="dm"),
                      state=st, rules=ctx.rules, rng=ctx.rng, mint=tx.mint, store=ctx.store, staged=tx.events)
     tx.add_all(res.events)
-    if c.cls == "knowledge" and res.answer is True and res.fact_id and record.pc:  # rule: 12.10.5
+    if c.cls in ("knowledge", "sealed") and res.answer is True and res.fact_id and record.pc:  # rule: 12.10.5
         tx.add(Event.of("knowledge_recorded", rule_id="12.10.5", knower=record.pc, fact_id=res.fact_id, how="told"))
     record.add_writes(tx.events[start:])
     if res.status == "refused" or res.answer is None:

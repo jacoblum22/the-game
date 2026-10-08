@@ -220,6 +220,73 @@ def test_what_the_store_lacks_is_settled_by_the_oracle_and_learned(tmp_path: Pat
     assert len(asked) == 1 and asked[0].value is True and asked[0].id in st.knowledge[dock.pc]
 
 
+# ------------------------------------------------------------------------------------------- P-120: success answers
+# playtests 20261007-210627-explorer (critical success, "Who's behind the coin?", Aldmund still would not say) and
+# 210953-talker (15 -> 17 vs 10, the bailiff "I'll not say"): a successful Talk is "yes, as asked" (T-15-5)
+
+
+def _asked(tmp_path: Path, say: str, intent: str, world: Any = QUIET_WORLD, face: int = 19) -> tuple[Any, Any]:
+    talk = beat(intent, "verb.talk", target="npc.tam_harlan", verbs=("ask",))
+    model = ScriptedModel({Role.READER: [reader("DECLARATION", say, talk)], Role.FRAMER: [framer()],
+                           Role.WORLD: [world]})
+    dock, ctx = setup(tmp_path, model)
+    assert play_turn(ctx, say).adjudication.pause.kind == "offer"
+    ctx.rng.faces = [face]  # type: ignore[attr-defined]
+    model.push(Role.NARRATOR, narr("Tam Harlan answers. What do you do?"))
+    model.push(Role.CHECKER, chk())
+    return dock, play_answer(ctx, "commit").adjudication.record
+
+
+def test_a_successful_who_question_names_an_existing_person(tmp_path: Path) -> None:
+    dock, rec = _asked(tmp_path, "Who's behind the coin, Tam?", "ask Tam Harlan who is behind the coin")
+    b = rec.beats[0]
+    assert b.degree in ("success", "critical_success") and b.learned, b
+    assert b.learned[0].startswith("Tam Harlan tells you who is behind the coin: ")
+    assert "Tam Harlan" not in b.learned[0].split(": ", 1)[1]  # an existing person, never the one asked
+    st = dock.store.state
+    fid = next(f.id for f in st.facts.values() if f.predicate.startswith("who_is_behind"))
+    assert st.facts[fid].value != dock.ferryman and fid in st.knowledge[dock.pc]
+
+
+def test_a_failed_who_question_settles_nothing(tmp_path: Path) -> None:
+    dock, rec = _asked(tmp_path, "Who's behind the coin, Tam?", "ask Tam Harlan who is behind the coin", face=2)
+    assert rec.beats[0].learned == []
+    assert not any(f.predicate.startswith("who_is_") for f in dock.store.state.facts.values())
+
+
+def test_a_success_with_nothing_stored_still_gives_what_they_can(tmp_path: Path) -> None:
+    dock, rec = _asked(tmp_path, "Tam, what happened to the lighthouse keeper's lamp?",
+                       "ask Tam Harlan what happened to the lighthouse keeper's lamp")
+    learned = rec.beats[0].learned
+    assert len(learned) == 1 and learned[0].startswith("Tam Harlan gives what they can: "), learned
+
+
+def test_a_successful_what_question_is_answered_and_settled(tmp_path: Path) -> None:
+    """212731-newcomer: Mauette 'agrees' and 'knows what the shapes are' five times, every answer cut as a hidden
+    truth. The narration is told to name it; the claim check settles the answer (a yes stands) and writes it."""
+    dock, rec = _asked(tmp_path, "Tam, what are those shapes out on the water?",
+                       "ask Tam Harlan what the shapes on the water are")
+    assert any(n.startswith("the talk with Tam Harlan succeeded: they answer what are those shapes out on the "
+                            "water plainly") for n in rec.notes), rec.notes
+    sealed = lambda v: {"subject": dock.ferryman, "class": "sealed", "predicate": "what the shapes are",  # noqa: E731
+                        "value": v}
+    assert _check(dock, rec, sealed("driftwood caught on the sandbar"))[0][0] == "undetermined"
+    assert _check(dock, rec, sealed("the smugglers' hidden cache"))[0][0] == "new_element"  # 12.14.13
+    assert _check(dock, _talk_record(dock, degree="failure"), sealed("driftwood"))[0][0] == "new_element"
+
+
+def test_a_refusal_never_outranks_a_successful_talk(tmp_path: Path) -> None:
+    world = {"responses": [{"npc": "npc.tam_harlan", "want_engaged": "none",
+                            "refusal_engaged": "npc.tam_harlan/refusal.1", "table_context": {"tags": []}}]}
+    dock, rec = _asked(tmp_path, "Tam, who came across on the last boat?", "ask Tam Harlan who came across on "
+                       "the last boat", world=world)
+    assert [a.source for a in rec.npc_actions if a.npc == dock.ferryman] == ["talk_outcome"]
+    # the narration may not have them refuse either; after a failed Talk the same words stand
+    refuse = _act(dock.ferryman, "says", "I'll not say who it was, not now")
+    assert _check(dock, rec, refuse)[0] == ("contradicted", "a successful Talk is answered, never refused")
+    assert _check(dock, _talk_record(dock, degree="failure"), refuse)[0][0] == "supported"
+
+
 LOOK = "I study the crate by the bollard to see what is inside it."
 
 

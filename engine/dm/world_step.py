@@ -247,12 +247,77 @@ def deliver_learning(ctx: TurnContext, record: AdjudicationRecord, beats: Sequen
         for fid in ranked[:count]:
             record_knowledge(ctx.time_ctx(), pc, fid, LEARN_VERBS[verb])
             e.learned.append(fact_sentence(st, st.facts[fid]))
+        if verb == "verb.talk" and e.targets and e.targets[0] in st.entities \
+                and st.entities[e.targets[0]].kind in ("npc", "companion", "adversary"):
+            _talk_answers(ctx, record, e, pc)
         if not ranked and verb != "verb.talk" and e.targets and e.targets[0] in st.entities:
             # P-086: a success that names nothing reads as a failure; what the narration names is settled by the
             # Oracle at the claim check and written (12.3.2, write-on-mention)
             record.notes.append(f"the look at {_name(st, e.targets[0])} succeeded: name at least one concrete thing "
                                 "the PC now makes out about it (what it is, what it is made of, a telling detail), "
                                 "plainly, never a vague glimpse")
+
+
+# "who ..." asked of someone: at a sentence start or after an asking verb ("asking who is behind the coin", "says who
+# told him"), never a relative clause ("the man who sold me the horse"); "the name of/behind X" asks "who is X"
+_WHO_ASKED = re.compile(r"(?:^|[.?!:;\"“]\s*|\b(?i:ask|asks|asked|asking|say|says|saying|tell|tells|telling|learn|"
+                        r"learns|know|knows|reveal|reveals|names?|whether)\s+(?:(?i:him|her|them|me|us|again|politely|"
+                        r"plainly|directly)\s+|[A-Z][\w'-]+\s+){0,3}?)([Ww]ho\b(?:(?! and | or | so )[^?.!;,\"”])+)")
+_WHAT_ASKED = re.compile(r"\bwhat (?:is|are|was|were|they are|it is|you saw|did you see)\b[^?.!;,\"”]*", re.I)
+_NAME_OF = re.compile(r"\bname (?:of|behind) ([^?.!;,\"”]+)", re.I)
+
+
+def _who_questions(text: str) -> list[str]:
+    return [re.sub(r"^who(?:'s|’s)", "who is", m.group(1).strip(), flags=re.I).replace("Who", "who", 1)
+            for m in _WHO_ASKED.finditer(text)] + [
+        f"who is {m.group(1).strip()}" for m in _NAME_OF.finditer(text)]
+
+
+def _talk_answers(ctx: TurnContext, record: AdjudicationRecord, e: Any, pc: str) -> None:
+    # rule: 12.3.2
+    """P-120: a successful Talk is "yes, as asked" (T-15-5), never a refusal. A "who is X?" the store cannot answer
+    is settled among existing people (`settle_who`, I-148) and told by the one asked; a Talk that delivers nothing
+    still gives what the NPC can from state (12.8.2's sources, no new clue: 12.14.13): an open thread any local may
+    know, else who else might know (an existing person)."""
+    from engine.dm.incident import _people, settle_who
+    from engine.dm.oof import short_text
+    from engine.dm.player_text import second_person
+    from engine.dm.roles.world import present_npcs
+    from engine.world.social import thread_list
+
+    st = ctx.state
+    speaker = e.targets[0]
+    if not _ASKS_NAME.search(" ".join([e.restatement, *(p.text for p in record.parts)])):  # their own name: 12.10.2
+        for q in [q for t in [e.restatement, *(p.text for p in record.parts)] for q in _who_questions(t)]:
+            who = settle_who(ctx, q, asked=True, exclude=(speaker,))
+            if who is None:
+                continue
+            name, fid = who
+            if fid not in st.knowledge.get(pc, {}):
+                record_knowledge(ctx.time_ctx(), pc, fid, "told")
+            e.learned.insert(0, f"{_name(st, speaker)} tells you {q}: {name}")
+            return
+    if e.learned:
+        return
+    what = next((m.group(0).rstrip() for t in [*(p.text for p in record.parts), e.restatement]
+                 for m in _WHAT_ASKED.finditer(t)), None)
+    if what:  # like a look that finds nothing stored (P-086): they name it, settled at the claim check (12.3.2)
+        record.notes.append(f"the talk with {_name(st, speaker)} succeeded: they answer {what.lower()} plainly, in "
+                            "their own words, naming one concrete, ordinary thing it is (never a hint toward anything "
+                            "hidden; if they cannot know, they say who or where might)")
+        return
+    threads = sorted((t for t in thread_list(st) if t["status"] == "active" and t["id"] not in st.seals
+                      and st.entities[t["id"]].visibility in ("shown", "available")), key=lambda t: -t["weight"])
+    if threads:
+        lead = second_person(short_text(str(threads[0]["text"]), 160)).rstrip(".")
+        e.learned.append(f"{_name(st, speaker)} gives what they can: {lead}")
+        return
+    here = set(present_npcs(st))
+    # ponytail: the pointer is the first present (else first known) person, not who would really know; a "who
+    # would know" table belongs to the rules (I-153)
+    others = sorted((n for n in _people(st, pc) if n != speaker), key=lambda n: (n not in here, n))
+    if others:
+        e.learned.append(f"{_name(st, speaker)} gives what they can: {_name(st, others[0])} might know more")
 
 
 STALLED = "cannot make out: "

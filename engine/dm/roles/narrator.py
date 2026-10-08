@@ -114,6 +114,9 @@ def _beat_line(state: WorldState, b: BeatEntry, pc: str | None, paused: bool = F
         bits.append("acting on: " + ", ".join(name_of(state, t, pc) for t in b.targets))
     if b.learned:  # 12.10.5: what the success delivered; the PC is told or sees it, so the fiction names it
         bits.append("the PC learns (say it plainly in the fiction): " + "; ".join(b.learned))
+    if "verb.talk" in b.approach_words and b.targets and (b.degree in ("success", "critical_success")
+                                                          or b.success_at_cost):  # P-120, T-15-5
+        bits.append("it worked: the one asked answers what was asked (never a refusal, a dodge or 'not now')")
     if b.progress:
         bits.append(b.progress)
     return "- " + "; ".join(x for x in bits if x)
@@ -160,7 +163,8 @@ def _speech_line(state: WorldState, record: AdjudicationRecord) -> list[str]:  #
     return ["- whoever answers or acts here speaks in quoted words (their actual sentence, a question as a "
             "question): they say only what the record gives (what the PC learns, their act above)"
             + (f" or these open matters any local may know: {'; '.join(matters)}" if matters else "")
-            + "; or they say plainly they do not know, or will not say. Never write that their words are lost, "
+            + "; or they say plainly they do not know, or (only after a failed Talk or a recorded refusal) will not "
+            "say. Never write that their words are lost, "
             "unheard, or only begun; never end on waiting for them to speak"]
 
 

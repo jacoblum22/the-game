@@ -159,10 +159,13 @@ def incident_line(state: Any) -> str:
     return " ".join(sents)
 
 
-def settle_who(ctx: Any, text: str) -> tuple[str, str] | None:  # rule: 12.3.2
+def settle_who(ctx: Any, text: str, *, asked: bool = False, exclude: tuple[str, ...] = ()) -> tuple[str, str] | None:
+    # rule: 12.3.2
     """"Who is X?": an existing binding answers it; else, when X is a person-role (STORY_ROLES), one existing NPC is
     rolled among the fitting ones and written (`who_is_<x>`), or "no one you know" when none fits. Anything else
-    (not a who-question, not a person-role): None, and the caller's Oracle asks it as before."""
+    (not a who-question, not a person-role): None, and the caller's Oracle asks it as before. `asked`: a successful
+    Talk put the question to someone (T-15-5 "yes, as asked"), so any person-role is settled, unless it touches a
+    sealed fact (12.14.13); `exclude` (the one answering) is never the answer."""
     m = WHO.match(text.replace("_", " "))
     if not m:
         return None
@@ -174,10 +177,15 @@ def settle_who(ctx: Any, text: str) -> tuple[str, str] | None:  # rule: 12.3.2
                 and f.id not in st.seals and st.current_fact_id(WORLD, f.predicate) == f.id
                 and words.covers(f.predicate[7:].replace("_", " "), role)):
             return _name(st, f.value), f.id
-    if not words.content(role) & STORY_ROLES:
+    if asked:
+        if not words.content(role) or any((f.visibility == "sealed" or f.id in st.seals)
+                                          and words.covers(f.predicate.replace("_", " "), role)
+                                          for f in st.facts.values()):
+            return None
+    elif not words.content(role) & STORY_ROLES:
         return None
     pc = active_pc(st)
-    fit = _people(st, pc)
+    fit = [n for n in _people(st, pc) if n not in exclude]
     # ponytail: every existing NPC fits any person-role; filter by faction or standing if picks read as arbitrary
     who = ctx.rng.choice(fit, f"who is {role}", stream=STREAM) if fit else NO_ONE
     ev = fact(tx, WORLD, "who_is_" + ids.slug(role)[:50], who, rule_id="12.3.2", visibility="shown")
