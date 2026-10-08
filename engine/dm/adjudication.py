@@ -108,6 +108,7 @@ class ActivityEntry(BaseModel):
     npc: str
     activity: str  # the slot's value
     slot: str = "activity"  # activity | posture | held | manner | position
+    hidden: str = ""  # why the narration is not shown it this turn: "stale" (12.14.11) | "engaged" (12.11.9)
 
 
 class OmenEntry(BaseModel):

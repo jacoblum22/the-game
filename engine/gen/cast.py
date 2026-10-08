@@ -61,7 +61,7 @@ def base_pool(state: Any, pc: str | None) -> list[str]:  # rule: 00.11.1
     anchor = bond.get("npc") if isinstance(bond, dict) else None
     return sorted(i for i, e in state.entities.items()
                   if e.kind == "npc" and alive(state, i) and i != anchor and i not in state.seals
-                  and not e.data.get("power"))
+                  and not e.data.get("power") and e.data.get("mind") != "animal")  # a creature is never cast
 
 
 def _role_matches(state: Any, npc: str, key: str, role: str) -> bool:

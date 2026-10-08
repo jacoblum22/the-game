@@ -164,8 +164,10 @@ def _speech_line(state: WorldState, record: AdjudicationRecord) -> list[str]:  #
     return ["- whoever answers or acts here speaks in quoted words (their actual sentence, a question as a "
             "question): they say only what the record gives (what the PC learns, their act above)"
             + (f" or these open matters any local may know: {'; '.join(matters)}" if matters else "")
-            + "; or they say plainly they do not know, or (only after a failed Talk or a recorded refusal) will not "
-            "say. Never write that their words are lost, "
+            + ". A question the record gives no answer to is left for later in their own way (one thing at a time, a "
+            "shrug, back to what they do know), never a claim not to know: they say they do not know only when a "
+            "record line says so, and never deny what the PC has already been told; (only after a failed Talk or a "
+            "recorded refusal) they will not say. Never write that their words are lost, "
             "unheard, or only begun; never end on waiting for them to speak"]
 
 
@@ -279,6 +281,22 @@ def _item_words(state: WorldState, record: AdjudicationRecord, it: RecordItem, r
     return f"note: {it.text}"
 
 
+def _set_aside(state: WorldState, record: AdjudicationRecord) -> list[str]:  # rule: 12.14.11
+    # rule: 12.11.9
+    """The scene-state lines not shown as record lines this turn (`ActivityEntry.hidden`), as guidance only: an
+    activity someone left off to deal with the PC (never narrated as still going on), and lines said lately (not
+    restated: 12.14.11)."""
+    pc = record.pc
+    busy = [a for a in record.activities if a.hidden == "engaged"]
+    stale = [a for a in record.activities if a.hidden == "stale"]
+    out = [f"- {name_of(state, a.npc, pc)} has left off {a.activity} to deal with you: never narrate them still at it"
+           for a in busy]
+    if stale:
+        out.append("- said lately, so not restated (unless it changes): " + "; ".join(
+            clause(name_of(state, a.npc, pc), "hold" if a.slot == "held" else "be", a.activity) for a in stale))
+    return out
+
+
 def record_text(state: WorldState, record: AdjudicationRecord, *, player_message: str = "",
                 purpose: Purpose = "turn", rules: Any = None,
                 items: Sequence[RecordItem] | None = None) -> str:  # rule: 12.14.12
@@ -300,6 +318,7 @@ def record_text(state: WorldState, record: AdjudicationRecord, *, player_message
     its = items if items is not None else record_items(state, record)
     for it in its:
         lines.append(f"- {it.handle}{' MUST' if it.must_name else ''}: {_item_words(state, record, it, rules)}")
+    lines += _set_aside(state, record)
     lines += _speech_line(state, record)
     lines += _reading_lines(state, record, player_message)
     if any(n.lstrip().startswith("[WARNING") for n in record.notes):

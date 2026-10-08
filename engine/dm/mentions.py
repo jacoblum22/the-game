@@ -234,7 +234,21 @@ def _fact(tx: Any, subject: str, predicate: str, value: Any, source: str, rule_i
 
 def _npc(m: Mention, *, tx: Any, rules: Any, rng: Any, place: str | None,
          res: MentionResult) -> tuple[str, list[Implied]]:  # rule: 12.11.1
-    """Create an NPC (PR-12-5). Returns its id and the implied properties still to write as facts."""
+    """Create an NPC (PR-12-5). Returns its id and the implied properties still to write as facts. A creature
+    ("the dog at Nero's heel") is not a person: no walk-on roll (people, looks, demeanour, a trade), only what was
+    said of it, marked `mind: animal` (12.11.9's tables are for people)."""
+    from engine.dm.npc_layer import ANIMAL
+
+    if not _proper(m.name) and ANIMAL.match(bare(m.name)):
+        eid = ids.entity_id("npc", bare(m.name), tx.state.entities)
+        rec = EntityRecord(id=eid, kind="npc", name=bare(m.name), visibility="shown",
+                           data={"mind": "animal", "role": bare(m.name), "name_known": False,
+                                 **({"home": place} if place else {})})
+        res.seqs.append(tx.add(Event.of("entity_created", source="mention", rule_id="PR-00-7", entity=rec)))
+        if place is not None:
+            res.seqs.append(tx.add(Event.of("position_set", source="mention", rule_id="PR-00-7", entity=eid,
+                                            location=place)))
+        return eid, list(m.implied)
     fixed: dict[str, str] = {}
     rest: list[Implied] = []
     for imp in m.implied:
