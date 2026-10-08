@@ -271,8 +271,42 @@ def test_framer_costs_may_cite_a_scene_fact(store: Store) -> None:
     d = defaults(Role.FRAMER, ctx_for(s, Role.FRAMER))
     assert d is not None and d["threatened_cost"]["source_fact"] is None
     bare = schema_context(s, RULES, anchors=["anc.01_18_7"], cost_menu_ids=["cost.twist"])
-    bare.fact_ids = []
+    bare.fact_ids = bare.lever_fact_ids = []
     assert "source_fact" not in build_schema(Role.FRAMER, bare)["properties"]["threatened_cost"]["properties"]
+
+
+def test_framer_offers_only_legal_choices(store: Store) -> None:
+    """PR-01-2 steps 6, 7, 10 as enums: playtest Framers picked a no-roll tier, `opposed` without an entity,
+    a lever established after the declaration, and costs with no source; none of those is offered now."""
+    from engine.resolve.types import Beat
+
+    s = store.state
+    f1 = s.facts["fact.1"]
+    beat = Beat(id="beat.1", actor="pc.wren", intent="persuade Mara", method="offer coin", verb="verb.talk",
+                gate="G1", target="none", declared_seq=f1.valid_from_seq)
+    schema = build_schema(Role.FRAMER, schema_context(s, RULES, anchors=anchor_candidates(BEAT, s, RULES),
+                                                      beat=beat))
+    p = schema["properties"]
+    tier, opposed = p["obstacle"]["anyOf"][:2]
+    assert "trivial" not in tier["properties"]["tier"]["enum"] and "moderate" in tier["properties"]["tier"]["enum"]
+    assert opposed["properties"]["entity"]["enum"] == ["npc.mara_voss"]
+    later = [k for k, f in s.facts.items() if f.valid_from_seq > f1.valid_from_seq]
+    assert later and not set(later) & set(p["levers"]["items"]["enum"])
+    free, cited = p["threatened_cost"]["anyOf"]
+    # no clock runs: cost.time fits only with a cited source; Wren holds nothing, so twist is a candidate uncited
+    assert "cost.time" not in free["properties"]["menu_id"]["enum"] and "cost.twist" in free["properties"]["menu_id"][
+        "enum"] and "cost.harm" in free["properties"]["menu_id"]["enum"]
+    assert "cost.time" in cited["properties"]["menu_id"]["enum"] and "cost.twist" not in cited["properties"][
+        "menu_id"]["enum"]
+    assert "listening_clock" not in p["stakes_source"]["enum"]
+    assert None not in cited["properties"]["source_fact"]["enum"]
+    d = defaults(Role.FRAMER, schema_context(s, RULES, anchors=anchor_candidates(BEAT, s, RULES), beat=beat))
+    assert d is not None and validate(d, schema) == []
+    for bad in ({"kind": "opposed", "tier": None, "entity": None}, {"kind": "tier", "tier": "trivial",
+                                                                      "entity": None}):
+        assert validate({**d, "obstacle": bad}, schema)
+    assert validate({**d, "threatened_cost": {"menu_id": "cost.time", "form_intent": "", "source_fact": None}},
+                    schema)
 
 
 def test_defaults_follow_the_contract(store: Store) -> None:

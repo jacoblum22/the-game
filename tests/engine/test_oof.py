@@ -204,6 +204,17 @@ def test_offer_words_drop_ids_internals_and_fix_the_actors_pronouns() -> None:
     ctx = NS(state=state, rules=None)
     assert oof_answer(ctx, 'what does "Go big" mean here?').startswith("Go big: raise the stakes one step")
     assert oof_answer(ctx, 'what does "near miss" mean?').startswith("A near miss is a roll that fails by 3")
+    # P-047: Luck asked about at an OFFER gets 01.16.3's answer (fate is a reroll after the die, never before)
+    assert "reroll" in oof_answer(ctx, "Can I spend my Luck on this first?")
+    # explorer playtest input 20: a structured fact value is said in words, never as a dict repr or predicate id
+    state.facts["fact.9"] = NS(visibility="shown", subject="pc.dilly", predicate="bond.anchor",
+                               value={"kind": "friend", "npc": "npc.zitka"})
+    state.entities["npc.zitka"] = NS(name="Zitka", data={})
+    frame.alternate_cost.form_intent = "Bixok mocks fact.9"
+    assert plain_offer_words(frame, state).alternate_cost.form_intent == "Bixok mocks your friend Zitka"
+    state.facts["fact.9"].value = {"kind": "friend"}
+    frame.alternate_cost.form_intent = "Bixok mocks fact.9"
+    assert plain_offer_words(frame, state).alternate_cost.form_intent == "Bixok mocks what is already settled"
 
 
 def test_offer_menu_says_what_enter_does_and_names_the_trades() -> None:

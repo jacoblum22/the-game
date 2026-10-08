@@ -23,7 +23,7 @@ from engine.dm.packet import build_packet
 from engine.dm.roles.prompts import load_prompt
 from engine.dm.schemas import SchemaContext, build_schema, defaults, schema_context
 from engine.llm.base import Role, call_role
-from engine.resolve.costs import check_cost_decl
+from engine.resolve.costs import check_cost_decl, uncited_by_stakes
 from engine.resolve.frame import frame_check
 from engine.resolve.gate import GateDecision
 from engine.resolve.types import Beat, CostDecl, Delta, LeverCite, Obstacle, ProposedFrame
@@ -87,6 +87,17 @@ def default_frame(sctx: SchemaContext, schema: Schema, beat: Beat, state: WorldS
     return d
 
 
+def cost_note(beat: Beat, state: WorldState, rules: Any) -> str:  # rule: PR-01-2
+    """Step 10 in words where the schema cannot pair two fields: which stakes sources let a cost go uncited."""
+    tgt = beat.target if beat.target and beat.target != NONE else None
+    by = uncited_by_stakes(state=state, rules=rules, actor=beat.actor, target=tgt)
+    need = {m: [s for s, ms in by.items() if m in ms] for m in dict.fromkeys(m for ms in by.values() for m in ms)
+            if m not in by[NONE] and m != "cost.twist"}
+    lines = [f"{m} needs stakes_source {' or '.join(ss)}" for m, ss in need.items()]
+    lines.append("cost.twist only with stakes_source none" if "cost.twist" in by[NONE] else "cost.twist: never")
+    return "costs without a source_fact: " + "; ".join(lines)
+
+
 def beat_message(beat: Beat, gate: GateDecision, note: str | None = None) -> str:
     lines = [f"beat: {beat.restatement or beat.intent}", f"intent: {beat.intent}", f"method: {beat.method}",
              f"gate: {gate.gate} ({gate.mode}) verb: {gate.verb or beat.verb or 'none'} "
@@ -111,7 +122,8 @@ def framer_for(ctx: TurnContext) -> Any:
         cards = load_cards_for(Role.FRAMER, scene_situation_tags(st, ctx.rules), mode, triggers,
                                anchor_card_ids(candidates, ctx.rules), rules=ctx.rules)
         packet = build_packet(Role.FRAMER, instructions=load_prompt("framer"), cards=cards, view=st, exchanges=[],
-                              message=beat_message(beat, gate, note), triggers=triggers,
+                              message=beat_message(beat, gate, "\n".join(filter(None, [note, cost_note(
+                                  beat, st, ctx.rules)]))), triggers=triggers,
                               notes=anchor_menu(candidates, ctx.rules), rules=ctx.rules)
 
         def check(data: Any) -> list[str]:  # rule: PR-01-2

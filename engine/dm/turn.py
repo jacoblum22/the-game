@@ -243,6 +243,13 @@ def _adjudicate(ctx: TurnContext, rec: AdjudicationRecord, reader: ReaderResult,
             and tx.state.open_pause().detail.get("stage") == "dispute":  # type: ignore[union-attr]
         _hold(rec)  # the reliance CHOICE (pause point 9) stops the rest
         return outcomes
+    # answered before a pending answer, whose open pause stops the rest (P-047: the Luck question went unanswered)
+    for part in rec.parts:
+        if part.cls == "OOF_QUESTION":
+            part.handled = "answered"
+            note = {"kind": "NOTE", "text": oof_answer(ctx, part.text)}
+            if note not in oof:
+                oof.append(note)
     pause = tx.state.open_pause()
     if pause is not None and reader.pending_answer and any(c.get("id") == reader.pending_answer
                                                            for c in pause.choices):
@@ -256,12 +263,6 @@ def _adjudicate(ctx: TurnContext, rec: AdjudicationRecord, reader: ReaderResult,
         if tx.state.open_pause() is not None:
             _hold(rec)
             return outcomes
-    for part in rec.parts:
-        if part.cls == "OOF_QUESTION":
-            part.handled = "answered"
-            note = {"kind": "NOTE", "text": oof_answer(ctx, part.text)}
-            if note not in oof:
-                oof.append(note)
     _fiction_questions(ctx, rec, reader.fact_questions)
     for part in rec.parts:
         if part.cls == "FICTION_QUESTION":
@@ -414,6 +415,8 @@ OFFER_TERMS = (  # the OFFER's words in plain English (01.7.1, 01.7.3, 01.8.2, 0
     (("change approach",), "Change approach: try it another way. Nothing is spent."),
     (("commit",), "Commit: roll for it as shown."),
 )
+FATE_ANSWER = ("Fate (your luck) is not spent before a roll: once you have seen the die, you may spend 1 fate to "
+               "reroll it once, and the second roll stands. Never on a hidden roll.")
 OOF_HELP = ('You can ask about a rule by its number, type "sheet", "abilities", "conditions" or "journal", ask '
             '"what are my options?", or just say what your character does.')
 
@@ -452,6 +455,8 @@ def oof_answer(ctx: TurnContext, text: str) -> str:  # rule: 12.5.10
     if m:
         return codex(ctx.state, f"rules {m.group(1)}", ctx.rules).text
     low = text.lower().replace("’", "'")
+    if re.search(r"\b(fate|luck)\b", low):  # rule: 01.16.3
+        return FATE_ANSWER
     asks = any(w in low for w in ("mean", "what is", "what's", "what does", "explain", "what happens if"))
     terms = [say for words, say in OFFER_TERMS if asks and any(w in low for w in words)]
     if terms:  # "what does 'go big' mean?": the term in a line or two, the choices follow as before

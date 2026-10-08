@@ -16,7 +16,7 @@ from collections.abc import Callable, Iterable, Sequence
 from typing import Any
 
 from engine import ids
-from engine.resolve.costs import check_cost_decl, severity_previews
+from engine.resolve.costs import check_cost_decl, established_stakes_sources, severity_previews
 from engine.resolve.gate import GateDecision, check_gate
 from engine.resolve.odds import odds
 from engine.resolve.rulings import find_rulings, signature
@@ -173,6 +173,17 @@ def lethal_context_recorded(state: Any, declared_seq: int) -> bool:  # rule: 00.
                for f in state.facts.values())
 
 
+def fact_usable(state: Any, fact_id: str, declared_seq: int) -> bool:  # rule: PR-01-2
+    """Step 7 (and step 3's cited facts): the fact exists and was established before the declaration."""
+    f = state.facts.get(fact_id)
+    return f is not None and f.valid_from_seq <= declared_seq
+
+
+def rolling_tiers(rules: Any) -> list[str]:  # rule: T-01-2
+    """The DC tiers that roll (a tier with no DC is no-roll or G4; step 6 refuses it)."""
+    return [t["id"] for t in rules.resolution["dc_tiers"] if t.get("dc") is not None]
+
+
 def stored_dc_key(obstacle: str, anchor: str, dc_delta: str | None = None) -> str:  # rule: 01.6.5
     """resolution.yaml#dc_tier_rules.stored_key: dc.<obstacle_id>.<anchor_id>[+dc:<delta>]."""
     return f"dc.{obstacle}.{anchor}" + (f"+dc:{dc_delta}" if dc_delta else "")
@@ -237,6 +248,9 @@ def _frame_check(p: ProposedFrame, beat: Beat, state: Any, rules: Any, gate: Gat
     levers, snags, circ = _levers(p, beat, state, rules, declared, limits)
     free = set(state.meta.get(FREE_FACTS_KEY, []))
     # 8. stakes and lethal
+    if p.stakes_source == "listening_clock" and p.stakes_source not in established_stakes_sources(
+            state, rules, beat.actor):  # rule: 01.6.9
+        raise _Refuse(8, "stakes_source", "listening_clock: no clock is running")
     stakes, lethal = _stakes(p, levers, snags, free, state, rules, declared)
     # 9. reach
     reach, factors = _reach(p, levers, snags, stakes, price)
@@ -315,10 +329,9 @@ def _check_deltas(p: ProposedFrame, anchor: Any, state: Any, declared: int, limi
             raise _Refuse(3, "deltas", f"{anchor['id']} has no knob {d.knob!r}")
         if not _allowed_delta(d.delta, knobs[d.knob].get("allowed_deltas") or ()):
             raise _Refuse(3, "deltas", f"{d.delta!r} is not an allowed delta of {d.knob} on {anchor['id']}")
-        f = state.facts.get(d.cites_fact or "")
-        if f is None:
+        if (d.cites_fact or "") not in state.facts:
             raise _Refuse(3, "deltas", f"knob {d.knob} cites no established fact ({d.cites_fact!r})")
-        if f.valid_from_seq > declared:
+        if not fact_usable(state, d.cites_fact or "", declared):
             raise _Refuse(3, "deltas", f"{d.cites_fact} was established after the declaration")
         out.append(f"{d.knob}:{d.delta}")
     return out
@@ -466,10 +479,9 @@ def _levers(p: ProposedFrame, beat: Beat, state: Any, rules: Any, declared: int,
         if c.fact_id in seen:
             raise _Refuse(7, "levers", f"{c.fact_id} cited twice (one fact, one lever)")
         seen.add(c.fact_id)
-        f = state.facts.get(c.fact_id)
-        if f is None:
+        if c.fact_id not in state.facts:
             raise _Refuse(7, "levers", f"{c.fact_id} is not an established fact")
-        if f.valid_from_seq > declared:
+        if not fact_usable(state, c.fact_id, declared):
             raise _Refuse(7, "levers", f"{c.fact_id} was established after the declaration (usable next beat)")
     # free facts (01.15.8)
     free = set(state.meta.get(FREE_FACTS_KEY, []))
@@ -671,8 +683,17 @@ def _fix_pronouns(text: str, want: str) -> str:
 
 def _fact_words(state: Any, fid: str) -> str:
     f = state.facts.get(fid) if state is not None else None
+    settled = "what is already settled"
     if f is None or f.visibility not in ("shown", "available"):
-        return "what is already settled"
+        return settled
+    if isinstance(f.value, dict):  # a structured value (a bond: {"kind": "friend", "npc": ...}) in words, or dropped
+        ent = state.entities.get(str(f.value.get("npc") or f.value.get("entity") or ""))
+        if ent is None or not getattr(ent, "name", ""):
+            return settled
+        kind = f.value.get("kind")
+        return f"your {str(kind).replace('_', ' ')} {ent.name}" if kind and f.subject.startswith("pc.") else ent.name
+    if isinstance(f.value, list) or "." in f.predicate:  # a list, or a dotted predicate id: no plain words
+        return settled
     pred = f.predicate.replace("_", " ").strip()
     return pred if f.value is True else f"{pred}: {f.value}" if f.value not in (False, None) else f"not {pred}"
 
