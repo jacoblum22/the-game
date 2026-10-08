@@ -72,3 +72,5 @@ Status: open · fixing (round N) · fixed (commit) · logged (ledger id) · wont
 | P-064 | bug | high | Gentle talk framed as force: greeting a child → "Handle (Agility): turn the child's face" at 35% (recurrence of P-023); a bribe and a question bundled into one roll | 182337-talker inputs 22–30 | fixing |
 | P-065 | bug | med | NPC identity drift: "the child" became Falwen Underwort, a middle-aged man (roster/given-name reuse ignoring implied age) | 182337-talker inputs 23–26 | fixing |
 | P-066 | bug | med | OFFER stakes text garbled and cut mid-word: "citing not no one is watching the cobbles where the folded paper lies w" | 183202-breaker inputs 27–28 | fixing (OFFER/roll fixer) |
+| P-067 | rules | high | Opening says "someone is missing" but never who; nothing in the store names them, so the hook stays empty for the whole session | 183858-fighter 18–30; 155118, 161320 (same) | logged I-145 |
+| P-068 | bug | med | NPC "answers" by repeating the player's own quoted line back as his dialogue | 183858-fighter inputs 20–25 | open |
