@@ -427,6 +427,31 @@ def test_move_toward_someone_writes_the_band(tmp_path: Path) -> None:
     assert dock.state.positions[dock.pc].band_to[dock.watch] == "close"
 
 
+def test_move_to_an_object_reads_plainly_and_reader_notes_stay_out(tmp_path: Path) -> None:
+    """P-108 (playtest 20261007-201412 talker, input 26): "You are a few strides from bench" and the Reader's own
+    note "Spoken to Oggza, not a beat: ..." reached the player. The object keeps its article; the note is not
+    the beat's line."""
+    sit = beat("sit on the bench", "verb.move", target="obj.bench", necessity="trivial", verbs=("sit",))
+    said = "I sit on the bench. \"Who are you?\""
+
+    def read(schema: dict[str, Any], packet: Any) -> dict[str, Any]:
+        data = {"parts": [{"text": "I sit on the bench.", "class": "DECLARATION"},
+                          {"text": "\"Who are you?\"", "class": "SPEECH"}], "pending_answer": None,
+                "fact_questions": [], "beats": [sit], "clarifying_question": None, "player_quantity": None,
+                "restatement": "Wren sits on the bench. Spoken to Sela, not a beat: she asks who Sela is."}
+        return prune(data, schema)
+
+    model = ScriptedModel({Role.READER: [read], Role.WORLD: [QUIET_WORLD]})
+    dock, ctx = setup(tmp_path, model)
+    with dock.store.transaction() as tx:
+        tx.add(Event.of("entity_created", source="test", entity=EntityRecord(id="obj.bench", kind="object",
+                                                                             name="bench")))
+        tx.add(Event.of("position_set", source="test", rule_id="10.1.1", entity="obj.bench", location=dock.place))
+    b = run_turn(ctx, said).record.beats[0]
+    assert b.restatement == "Wren sits on the bench."
+    assert [p.words for p in b.positions] == ["a few strides from the bench"], b
+
+
 def test_move_to_another_place_cuts_the_scene_there(tmp_path: Path) -> None:
     """12.4.2 (2) / 10.1.3: a resolved Move to a reachable place is travel: the scene ends and the next one
     opens there, with the PC's position written."""

@@ -18,6 +18,7 @@ from typing import Any
 from pydantic import BaseModel, Field
 
 from engine import ids
+from engine.audit.fallback import drop_reader_notes
 from engine.dm.context import TurnContext
 from engine.dm.packet import build_packet
 from engine.dm.roles.prompts import load_prompt
@@ -98,6 +99,8 @@ class ReaderResult(BaseModel):
         single = len(self.beats) == 1
         # the one beat's line, not the queued "Then, ..." tail: an OFFER must not read as one roll for both
         own = _QUEUED_TAIL.split(self.restatement, maxsplit=1)[0].strip()
+        # the Reader's own notes ("Spoken to Oggza, not a beat: ...") are not the beat's line (P-108)
+        own = drop_reader_notes(own)
         for b in self.beats:
             target = b.target if b.target and b.target != NONE else None
             lic = b.license if b.license and b.license != NONE else None

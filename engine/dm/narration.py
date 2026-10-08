@@ -468,20 +468,39 @@ def _item_block(ctx: TurnContext, item: dict[str, str]) -> OofBlock:
     return _labelled(item["kind"], item["text"])
 
 
+_PER_BEAT = ("RESULT", "REDIRECT", "NEAR_MISS")
+
+
+def _for_beat(block: OofBlock, beat: str) -> OofBlock:
+    """'[RESULT] Learn what was stolen: d20 12 → 16 vs 15 · success': the beat's restatement in a few words."""
+    words = oof.short_text(re.sub(r"\s*\([^()]*\)", "", beat or ""), 48).strip()
+    if not words or block.kind not in _PER_BEAT or "] " not in block.text:
+        return block
+    head, rest = block.text.split("] ", 1)
+    return block.model_copy(update={"text": f"{head}] {words[:1].upper()}{words[1:]}: {rest}"})
+
+
 def turn_blocks(ctx: TurnContext, oof_items: Sequence[dict[str, str]], record: AdjudicationRecord,
                 pause: PauseRecord | None) -> tuple[list[OofBlock], list[OofBlock]]:  # rule: 12.15
     """(all blocks in 12.15 order, the pause's own blocks). The items T4–T5 owed, the open pause's block rendered
     from state in place of its one-line summary, and any warning block the record carries."""
     items = list(oof_items)
     owned: list[OofBlock] = []
+    # with two or more beats, each RESULT / REDIRECT / NEAR MISS says which action it belongs to (P-104)
+    multi = len(record.beats) > 1
     if pause is not None:
         owned = pause_blocks(ctx, pause, items)
         for kind in _PAUSE_ITEM.get(str(pause.detail.get("stage") or pause.kind), ()):
             idx = max((i for i, it in enumerate(items) if it["kind"] == kind), default=None)
             if idx is not None:
-                items.pop(idx)
+                it = items.pop(idx)
+                if multi:
+                    owned = [_for_beat(b, it.get("beat", "")) if b.kind == kind else b for b in owned]
     # two beats refused for the same reason owe one block, not two copies (12.15: each block once)
-    blocks = list({b.text: b for b in (_item_block(ctx, i) for i in items)}.values())
+    rendered = [(_item_block(ctx, i), i.get("beat", "")) for i in items]
+    twice = {b.text for b, _ in rendered if sum(c.text == b.text for c, _ in rendered) > 1}
+    blocks = list({b.text: _for_beat(b, beat if multi and b.text not in twice else "")
+                   for b, beat in rendered}.values())
     texts = {b.text for b in blocks} | {b.text for b in owned}
     for n in record.notes:
         if n.lstrip().startswith("[WARNING") and n.strip() not in texts:

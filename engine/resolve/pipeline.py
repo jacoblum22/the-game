@@ -309,7 +309,10 @@ def _moved(env: PipelineEnv, plan: BeatPlan) -> list[PositionEntry]:  # rule: PR
         evs.append(Event.of("position_set", source=beat.id, rule_id="PR-06-4", entity=actor, location=here,
                             band_to={tgt: band}))
         evs.append(Event.of("position_set", source=beat.id, rule_id="PR-06-4", entity=tgt, band_to={actor: band}))
-        said = f"{_BAND_WORDS[band]} {ent.name}"
+        from engine.audit.fallback import the_name
+        from engine.store.views import display_name
+
+        said = f"{_BAND_WORDS[band]} {the_name(display_name(st, tgt))}"  # "the bench", as the PC knows it (P-108)
     else:
         evs.append(Event.of("position_set", source=beat.id, rule_id="PR-06-4", entity=actor, location=here))
         place = st.entities.get(here) if here else None

@@ -151,12 +151,23 @@ def pause_blocks(blocks: Iterable[str]) -> list[str]:
 
 def _acknowledged(record: AdjudicationRecord, fiction: str) -> list[str]:  # rule: 12.2.7
     """Parts of the player's message with no evidence of an answer (12.2.7 (1))."""
+    # a SPEECH or FICTION_QUESTION part is marked "answered" before the draft exists (turn.py). One such part is the
+    # Checker's to judge (a "describe what I see" is answered by description, not by its words); two or more are
+    # each looked for, so one answered half no longer passes for both (P-080). A part answered elsewhere (a NOTE
+    # block, a pause, a hold) is skipped.
     beat_parts = {b.part for b in record.beats if b.part is not None}
+    asked = [(i, p) for i, p in enumerate(record.parts) if p.cls in ANSWERED_CLASSES]
+    several = sum(p.handled == "answered" for _, p in asked) > 1
     missing = []
-    for i, p in enumerate(record.parts):
-        if p.cls not in ANSWERED_CLASSES or p.handled or i in beat_parts:
+    for i, p in asked:
+        if p.handled not in ("", "answered") or (p.handled and not several) or i in beat_parts:
             continue
-        if not tx.covers(p.text, fiction, ratio=0.34):
+        # the words this part has that its siblings lack: two questions about the child are told apart by
+        # "mother", not by "child" (one answered half no longer covers both)
+        others = set().union(*(tx.content(q.text) for j, q in asked if j != i))
+        own = " ".join(w for w in tx.words(p.text) if tx.stem(w) not in others)
+        needle = own if tx.content(own) else p.text
+        if not tx.covers(needle, fiction, ratio=0.34):
             missing.append(p.text)
     return missing
 

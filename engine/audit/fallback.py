@@ -48,6 +48,16 @@ def plain(text: str) -> str:
     return re.sub(r"([.!?])[.]+", r"\1", s)
 
 
+_READER_NOTE = re.compile(r"\bnot a beat\b|\bno act is declared\b|\bquestion to the DM\b|\bno roll\b|"
+                          r"\bfree activity\b|^Queued\b|\bpending clarification\b", re.IGNORECASE)
+
+
+def drop_reader_notes(text: str) -> str:
+    """A restatement without the Reader's own notes ("Spoken to Oggza, not a beat: ...", "Queued: looking at
+    Belia, pending clarification ..."): bookkeeping, never player text (P-108)."""
+    return " ".join(s for s in re.split(r"(?<=[.!?])\s+", text.strip()) if s and not _READER_NOTE.search(s))
+
+
 def _sentence(text: str) -> str:
     s = plain(text)
     if not s:
@@ -94,7 +104,7 @@ def _you(restated: str, pc_names: Iterable[str], other_names: Iterable[str]) -> 
 
 
 def _beat_line(b: BeatEntry, pc: str | None, names: Mapping[str, str]) -> str:
-    restated = plain(b.restatement)
+    restated = plain(drop_reader_notes(b.restatement))
     if restated and b.actor in (None, pc):
         full = names.get(pc or "", "")
         restated = _you(restated, [full, full.split(" ")[0]],
@@ -174,7 +184,8 @@ def _finite(w: str) -> bool:
     return w in _AUX or (len(w) > 3 and w.endswith("s") and not w.endswith(("ss", "us", "is", "ts", "ns")))
 
 
-def _the(name: str) -> str:
+def the_name(name: str) -> str:
+    """'bench' -> 'the bench'; a proper name or one with its own article stays as it is."""
     return name if not name[:1].islower() or name.split(" ", 1)[0] in _KEEP else f"the {name}"
 
 
@@ -193,7 +204,7 @@ def fact_sentence(state: object, f: object, subject: str | None = None) -> str: 
     from engine.dm.roles.narrator import name_of
 
     subj = subject if subject is not None else ("" if f.subject == "world" else name_of(state, f.subject))
-    subj = _the(subj) if subj else ""
+    subj = the_name(subj) if subj else ""
     if f.predicate.endswith((".but", ".and")):  # an Oracle twist's qualifier: meaning words, not a statement
         return ""
     pred = f.predicate.removeprefix("lead.")
@@ -228,7 +239,9 @@ def fact_sentence(state: object, f: object, subject: str | None = None) -> str: 
     if not val or _RAW.search(val):  # an id or key ('orig.life.soldier', a route record) is not words (P-097)
         return ""
     first = val.split(" ", 1)[0].lower()
-    if f.predicate.startswith("lead.") or not subj:
+    if not subj and f.predicate.startswith("who_is_") and v in getattr(state, "entities", {}):
+        s = f"{val} is {the_name(p.removeprefix('who is '))}"  # the opening incident's role (12.16.16)
+    elif f.predicate.startswith("lead.") or not subj:
         s = val if f.predicate.startswith("lead.") else f"{p}: {val}"
     elif p in _IS_PREDS or p == "kind":
         art = "a " if p == "kind" and first not in _KEEP else ""
@@ -271,6 +284,20 @@ NPC_ROW_PROSE = {
 }
 
 
+_QUOTED = re.compile(r"[\"“]([^\"”]+)[\"”]")
+
+
+def _said_line(text: str) -> str:
+    """The player's own words, quoted back: 'You ask, "Is she one of yours?"' (12.3.3: no new elements)."""
+    t = text.strip()
+    inner = t.strip("\"“” ")
+    if re.search(r"[\"“”]", inner):  # narrated around the speech ('I lean in and say, "..."'): the speech only
+        inner = " ".join(q.strip() for q in _QUOTED.findall(t)) or inner
+    if not inner:
+        return ""
+    return f'You {"ask" if inner.rstrip().endswith("?") else "say"}, "{inner}"'
+
+
 class FallbackResult(BaseModel):
     fiction: str
     review_flag: bool = True
@@ -293,7 +320,13 @@ def plain_fallback(record: AdjudicationRecord, *, names: Mapping[str, str] | Non
     lines: list[str] = []
     if record.scene.header:
         lines.append(_sentence(record.scene.header))
+    # a spoken line or an in-character question with no beat of its own is restated, in the player's order
+    beat_parts = {b.part for b in record.beats}
+    said = [(i, _said_line(p.text)) for i, p in enumerate(record.parts)
+            if p.cls in ("SPEECH", "FICTION_QUESTION") and p.handled in ("", "answered") and i not in beat_parts]
     for b in record.beats:
+        while said and b.part is not None and said[0][0] < b.part:
+            lines.append(said.pop(0)[1])
         lines.append(_beat_line(b, record.pc, names))
         lines += [_sentence(c.form) if c.form else "It comes at a cost." for c in b.costs]
         lines += [_sentence(h.words if h.target == record.pc else f"{who(h.target)}: {h.words}") for h in b.harm]
@@ -301,6 +334,7 @@ def plain_fallback(record: AdjudicationRecord, *, names: Mapping[str, str] | Non
         lines += [_sentence(f"{who(p.entity)} {'are' if p.entity == record.pc else 'is'} {p.words}")
                   for p in b.positions]
         lines += [_sentence(x) for x in b.learned]
+    lines += [s for _, s in said]
     for o in record.oracle:
         lines.append(_oracle_line(o.question, o.answer))
     for a in record.npc_actions:
