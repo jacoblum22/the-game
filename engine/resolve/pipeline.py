@@ -27,7 +27,8 @@ from pydantic import BaseModel, Field
 from engine import ids
 from engine.dm.adjudication import BeatEntry, CostEntry, HarmEntry
 from engine.resolve.costs import HarmHook, apply_cost
-from engine.resolve.frame import auto_commit_allowed, commit_events, frame_check, legal_trades, offer_preview
+from engine.resolve.frame import (auto_commit_allowed, commit_events, frame_check, legal_trades, offer_preview,
+                                  plain_offer_words)
 from engine.resolve.gate import GateDecision, check_gate
 from engine.resolve.roll import read_result, roll_check
 from engine.resolve.rulings import RulingRecord, log_ruling
@@ -40,6 +41,8 @@ MAX_BEATS = 3  # 01.2.3
 ROLLS = "uncertain_and_costly"
 NO_ROLL_EVIDENCE = ("good_idea", "take_the_time", "certain_with_cost")  # 03.3.1 bases without a degree
 TRADE_IDS = {"go_big": "go_big", "play_it_safe": "play_safe"}  # Frame trade -> Pause choice id
+TRADE_LABELS = {"go_big": "Go big (more at stake, more if it works)",  # rule: 01.7.3
+                "play_it_safe": "Play it safe (less at stake, less if it works)"}
 REACH_NAME = {v: k for k, v in REACH_VALUE.items()}
 Status = Literal["resolved", "no_roll", "redirected", "refused", "paused", "withdrawn", "question", "queued"]
 
@@ -332,7 +335,7 @@ def _warn(env: PipelineEnv, plan: BeatPlan, proposed: ProposedFrame, cands: list
 
 def _offer(env: PipelineEnv, plan: BeatPlan, proposed: ProposedFrame, frame: Frame, cands: list[str] | None,
            queued: list[BeatPlan], *, warned: bool) -> BeatOutcome:  # rule: 01.7.1
-    view = offer_preview(frame)
+    view = offer_preview(plain_offer_words(frame, env.state))
     if env.auto_commit and not warned and _may_auto(env, frame):  # rule: 01.7.4
         env.add(*commit_events(frame, "auto", mint=env.tx.mint, state=env.state))
         env.add(Event.of("offer_logged", source=frame.id or "engine", rule_id="01.7.4", frame_id=frame.id,
@@ -342,7 +345,7 @@ def _offer(env: PipelineEnv, plan: BeatPlan, proposed: ProposedFrame, frame: Fra
         return out
     choices = [{"id": "commit", "label": "Commit"}, {"id": "change", "label": "Change approach"},
                {"id": "withdraw", "label": "Withdraw (nothing is spent)"}]
-    choices += [{"id": TRADE_IDS[t], "label": t.replace("_", " ").capitalize()} for t in legal_trades(frame)]
+    choices += [{"id": TRADE_IDS[t], "label": TRADE_LABELS[t]} for t in legal_trades(frame)]
     detail = {"stage": "offer", "plan": plan.model_dump(mode="json"), "queued": _dump(queued),
               "proposed": proposed.model_dump(mode="json"), "frame": frame.record(), "candidates": cands,
               "offer": view.model_dump(mode="json"), "warned": warned}
@@ -389,7 +392,11 @@ def _answer_offer(env: PipelineEnv, plan: BeatPlan, d: dict[str, Any], choice: s
         trade = "go_big" if choice == "go_big" else "play_it_safe"
         env.add(Event.of("offer_logged", source="player", rule_id="01.7.3", shown_at=now, choice="trade"))
         dec = _gate_again(env, plan.beat)
-        return _checked(env, plan, dec, proposed.model_copy(update={"trade": trade}), cands, queued, warned=warned)
+        out = _checked(env, plan, dec, proposed.model_copy(update={"trade": trade}), cands, queued, warned=warned)
+        said = ("You go big: the stakes and the reach each rise one step." if trade == "go_big" else
+                "You play it safe: the stakes and the reach each drop one step.")
+        out.oof.insert(0, {"kind": "NOTE", "text": f"{said} The odds stay the same."})
+        return out
     if choice == "change":  # back to PARSE/FRAME, free (01.7.1)
         env.add(Event.of("offer_logged", source="player", rule_id="01.7.1", shown_at=now, choice="change"))
         dec = _gate_again(env, plan.beat)

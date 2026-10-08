@@ -400,6 +400,20 @@ NEW_WORDS = ("new to this", "new here", "first time", "never played", "how do i 
 HOW_TO_PLAY = ('You play by saying what your character does or says, in plain words: "I look around", "I ask the '
                'smith about the road", "I head for the heath". Ask what you see or who is here and the story '
                'answers. Type "what are my options?" for ideas, or "sheet" or "journal" to see your character.')
+OFFER_TERMS = (  # the OFFER's words in plain English (01.7.1, 01.7.3, 01.8.2, 01.6.9)
+    (("go big",), "Go big: raise the stakes one step and the reach one step. More can go wrong, and you get more "
+                  "if it works; the odds stay the same."),
+    (("play it safe", "play safe"), "Play it safe: lower the stakes one step and the reach one step. Less can go "
+                                    "wrong, and you get less if it works; the odds stay the same."),
+    (("near miss", "near-miss"), "A near miss is a roll that fails by 3 or less: you choose to take the failure, "
+                                 "or to succeed and pay a cost."),
+    (("stakes", "risky", "dire"), "Stakes say how much a failure can cost: safe (only a critical failure costs "
+                                  "you), risky, or dire."),
+    (("reach",), "Reach is how much a success gets you: limited, standard or great."),
+    (("withdraw",), "Withdraw: drop the attempt. Nothing is spent."),
+    (("change approach",), "Change approach: try it another way. Nothing is spent."),
+    (("commit",), "Commit: roll for it as shown."),
+)
 OOF_HELP = ('You can ask about a rule by its number, type "sheet", "abilities", "conditions" or "journal", ask '
             '"what are my options?", or just say what your character does.')
 
@@ -438,6 +452,10 @@ def oof_answer(ctx: TurnContext, text: str) -> str:  # rule: 12.5.10
     if m:
         return codex(ctx.state, f"rules {m.group(1)}", ctx.rules).text
     low = text.lower().replace("’", "'")
+    asks = any(w in low for w in ("mean", "what is", "what's", "what does", "explain", "what happens if"))
+    terms = [say for words, say in OFFER_TERMS if asks and any(w in low for w in words)]
+    if terms:  # "what does 'go big' mean?": the term in a line or two, the choices follow as before
+        return " ".join(terms[:2])
     if any(w in low for w in STUCK_WORDS):
         return stuck_answer(ctx.state)
     if any(w in low for w in NEW_WORDS):
