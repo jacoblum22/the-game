@@ -309,8 +309,9 @@ def _frame_check(p: ProposedFrame, beat: Beat, state: Any, rules: Any, gate: Gat
             guard = f"{snag.fact_id} applies as Protective (critical-failure guard, 01.6.13)"
             o = odds(_clamp(base + circ + st, lo, hi), dc)
         long_shot = _guarded(stakes, dc_source, p.secret) and o.critical_failure > max(5, o.success_or_better)
-    # 10. costs (with the final stakes)
-    if guard and stakes != "safe" and p.alternate_cost is None:
+    # 10. costs (with the final stakes); stakes the engine raised (a Protective snag, the guard) above a declared
+    # Safe frame get the rule's first fitting alternate (01.13.1), since a Safe frame declares none
+    if stakes != "safe" and p.alternate_cost is None and (guard or p.stakes_source == "none"):
         p = p.model_copy(update={"alternate_cost": first_fitting_cost(
             rules, role="alternate", other=p.threatened_cost, state=state, actor=beat.actor,
             stakes_source=p.stakes_source, target=beat.target if beat.target != "none" else None,
@@ -565,7 +566,7 @@ def _dc(p: ProposedFrame, anchor: Any, deltas: list[str], state: Any, rules: Any
                 vals.append((int(d), w))
             dc, w = max(vals)
             return dc, "opposed", None, w, None
-        attrs = _defense_attrs(ob.defense, anchor, rules, dc_delta)
+        attrs = _defense_attrs(ob.defense, anchor, rules, dc_delta, verb)
         vals = [(_defense(rules, state, w, a, ob.defense_tag), w) for w in who for a in attrs]
         dc, w = max(vals)
         if verb == "verb.talk" and state.entities[w].kind in ("npc", "companion", "adversary"):  # rule: 15.3.3
@@ -605,13 +606,16 @@ def _dc(p: ProposedFrame, anchor: Any, deltas: list[str], state: Any, rules: Any
 _DC_KNOB_DEFENSE = {"mask": "presence"}
 
 
-def _defense_attrs(defense: str | None, anchor: Any, rules: Any, dc_delta: str | None = None) -> list[str]:
-    verb = rules.basic_verbs.get(anchor.get("verb") or "")
-    text = str((verb or {}).get("anchor", {}).get("against", "")) if verb else ""
-    if not verb:  # a ch.15 anchor has no verb: its `dc` knob names the defense (15.4.1 "default Resolve")
+def _defense_attrs(defense: str | None, anchor: Any, rules: Any, dc_delta: str | None = None,
+                   verb: str | None = None) -> list[str]:
+    own = rules.basic_verbs.get(anchor.get("verb") or "")
+    text = str((own or {}).get("anchor", {}).get("against", "")) if own else ""
+    if not own:  # a ch.15 anchor has no verb: its `dc` knob names the defense (15.4.1 "default Resolve")
         knob = next((k for k in anchor.get("knobs") or () if k.get("knob") == "dc"), {})
         word = str(dc_delta or knob.get("default") or "").strip().lower()
         text = _DC_KNOB_DEFENSE.get(word, word)
+        if not text and verb in rules.basic_verbs:  # a ch.06 conflict anchor (Strike, anc.06_4_3): the beat's verb
+            text = str(rules.basic_verbs[verb].get("anchor", {}).get("against", ""))  # [fix: playtest 20261008 B]
     named = [a for a in ("might", "agility", "endurance", "wits", "intellect", "presence", "resolve") if a in text]
     if defense:
         if defense not in rules.attributes:
@@ -748,6 +752,17 @@ def _reach(p: ProposedFrame, levers: list[LeverCite], snags: list[LeverCite], st
     return reach, factors
 
 
+# 01.9.3 "a consequence never negates a success": a price paid on success at a cost cannot be the person acted on
+# getting loose (playtest 20261008: a grapple "succeeded" and paid "she tears away", so the hold was both set and
+# gone). ponytail: a closed list of escape phrasings; a typed `form_subject` field would replace it if forms drift
+_UNDO = re.compile(
+    r"\b(?:break|breaks|broke|pull|pulls|pulled|tear|tears|tore|wrench|wrenches|wrenched|twist|twists|twisted|"
+    r"slip|slips|slipped|get|gets|got|wriggle|wriggles|wriggled|squirm|squirms|squirmed)\s+(?:\S+\s+){0,3}?"
+    r"(?:free|away|loose|clear)\b"
+    r"|\b(?:escape[sd]?|walk(?:s|ed)? (?:off|away)|refuses? to be held|(?:grip|hold) (?:on \S+ )?(?:slips|breaks|fails)"
+    r"|lose (?:your|the) (?:grip|hold))\b", re.I)
+
+
 def _costs(p: ProposedFrame, beat: Beat, state: Any, rules: Any, stakes: str,
            declared: int) -> tuple[CostPreview, CostPreview | None]:  # rule: 01.6.11
     kw = dict(state=state, rules=rules, actor=beat.actor, stakes_source=p.stakes_source,
@@ -755,6 +770,11 @@ def _costs(p: ProposedFrame, beat: Beat, state: Any, rules: Any, stakes: str,
     bad = check_cost_decl(p.threatened_cost, role="threatened", **kw)  # type: ignore[arg-type]
     if bad:
         raise _Refuse(10, "threatened_cost", bad)
+    for role, c in (("threatened_cost", p.threatened_cost), ("alternate_cost", p.alternate_cost)):
+        if c is not None and beat.against_will and beat.target not in (None, "none") and _UNDO.search(
+                c.form_intent or ""):  # rule: 01.9.3
+            raise _Refuse(10, role, f"a cost's form never undoes the beat's own success (01.9.3): "
+                                    f"{c.form_intent!r} undoes acting on {beat.target}; price it on the actor")
     if stakes in ("risky", "dire") and p.alternate_cost is None:
         raise _Refuse(10, "alternate_cost", f"a {stakes} frame needs an alternate cost (01.6.11)")
     alt = p.alternate_cost if stakes != "safe" else None  # a safe frame's alternate waits for go big (01.7.3)

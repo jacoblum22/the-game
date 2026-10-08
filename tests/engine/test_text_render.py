@@ -59,6 +59,16 @@ GOLDEN = [  # (rendered, expected)
     (relation("Tam", "fingers_ink_stained"), ""),  # a noun head: never guessed into a verb
     (relation("the door", "open_or_shut"), ""),  # the question's options, not a statement
     (relation("Calbert", "notices_the_pc_coming_does_not"), ""),
+    # 00.6.6a details and scene state read plainly, never "The rug's detail state: ..." (playtest 20261008 talker 23)
+    (relation("the rug", "detail.state", "being beaten by the officer"), "the rug is being beaten by the officer"),
+    (relation("Eliia", "detail.activity", "beating a rug"), "Eliia is beating a rug"),
+    (relation("Eliia", "detail.manner", "on guard against you"), "Eliia is on guard against you"),
+    (relation("Eliia", "detail.posture", "held fast by you"), "Eliia is held fast by you"),
+    (relation("Tam", "detail.held", "Eliia in a grip"), "Tam holds Eliia in a grip"),
+    (relation("Tam", "detail.clothing", "a grey cloak"), "Tam wears a grey cloak"),
+    (relation("Tam", "detail.hair", "cropped short"), ""),  # a slot with no plain verb: left out, never a label
+    (relation("Eliia", "alertness", "alarmed"), "Eliia is alarmed"),
+    (relation("Tam", "wound_load", "3"), ""),  # bookkeeping, not a sentence
     (degree_words("critical_failure"), "it goes badly"),
     (degree_words("success", success_at_cost=True), "it works, at a cost"),
     (degree_words(None), ""),

@@ -84,9 +84,8 @@ FRAMER = obj(
     obstacle=obj(kind=enum("tier", "opposed", "entity_defense"), tier=nullable(enum("easy", "standard", "hard")),
                  entity=nullable(enum("npc.gate_guard"))),
     levers=arr(enum("fact.f1", "fact.f2"), 2), snags=arr(enum("fact.f1", "fact.f2"), 2),
-    stakes_source=enum("source.harm", "source.loss", "none"),
+    stakes=obj(source=enum("source.harm", "source.loss", "none"), threatened_cost=COST, alternate_cost=nullable(COST)),
     stakes_heavy=BOOL, lethal=BOOL, reach_whole=BOOL, reach_one_factor=BOOL,
-    threatened_cost=COST, alternate_cost=nullable(COST),
     method_consequences=arr(STR), secret=BOOL,
 )
 WORLD = obj(responses=arr(obj(
@@ -207,9 +206,10 @@ def test_verb_table_covers_fifteen_basic_verbs() -> None:
 def test_framer_defaults() -> None:
     out = fill(Role.FRAMER, "beat: verb.strike at the guard")
     assert out["anchor"] == "anchor.verb.strike" and out["attribute"] == "might"
-    assert out["obstacle"]["tier"] == "standard"
-    assert out["stakes_source"] == "source.harm" and out["threatened_cost"]["menu_id"] == "cost.harm"
-    assert out["alternate_cost"]["menu_id"] == "cost.gear"
+    assert out["obstacle"]["tier"] == "easy"  # nothing at stake: the default frame's Easy
+    st = out["stakes"]
+    assert st["source"] == "none" and st["threatened_cost"]["menu_id"] == "cost.harm"
+    assert st["alternate_cost"]["menu_id"] == "cost.gear"
 
 
 def test_world_answers_only_the_npcs_engaged() -> None:

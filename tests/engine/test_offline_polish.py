@@ -33,13 +33,15 @@ def _framer_schema() -> dict[str, Any]:
         "anchor": enum("anc.01_18_11", "anc.01_18_8"), "attribute": enum("might", "agility"),
         "obstacle": {"type": "object", "properties": {"kind": enum("tier"), "tier": enum("easy", "moderate", "hard"),
                                                       "entity": {"type": ["string", "null"]}}},
-        "stakes_source": enum("none", *SOURCES), "threatened_cost": cost, "alternate_cost": cost}}
+        "stakes": {"type": "object", "properties": {"source": enum("none", *SOURCES), "threatened_cost": cost,
+                                                     "alternate_cost": cost}}}}
 
 
 def _frame(beat: str, verb: str, target: str = "none", view: str = "") -> dict[str, Any]:
     msg = (f"beat: {beat}\nintent: {beat}\nmethod: {beat}\ngate: G1 (normal) verb: verb.{verb} licence: none\n"
            f"target: {target}")
-    return OfflineModel().propose(Role.FRAMER, _framer_schema(), Packet(message=msg, view=view))
+    out = OfflineModel().propose(Role.FRAMER, _framer_schema(), Packet(message=msg, view=view))
+    return {**out, **out["stakes"]}  # the paired stakes choice, read flat below
 
 
 # ------------------------------------------------------------------------------------------- 1. reach in words
@@ -74,16 +76,16 @@ def test_record_line_gives_the_reach_rung_and_words_without_ids() -> None:
 
 def test_offline_framer_names_what_the_act_plainly_risks() -> None:
     climb = _frame("You climb onto the roof", "exert")
-    assert climb["stakes_source"] == "height_or_depth" and climb["threatened_cost"]["menu_id"] == "cost.harm"
+    assert climb["source"] == "height_or_depth" and climb["threatened_cost"]["menu_id"] == "cost.harm"
     assert climb["alternate_cost"]["menu_id"] == "cost.shortfall" and climb["obstacle"]["tier"] == "moderate"
     hit = _frame("You attack the guard", "strike", target="npc.guard")
     # harm from an aware party needs the cited fact that they are armed (01.6.11): the offline Framer threatens footing
-    assert hit["stakes_source"] == "aware_opponent_or_observer" and hit["threatened_cost"]["menu_id"] == "cost.footing"
+    assert hit["source"] == "aware_opponent_or_observer" and hit["threatened_cost"]["menu_id"] == "cost.footing"
     sneak = _frame("You sneak past the watch", "sneak")
-    assert sneak["stakes_source"] == "aware_opponent_or_observer"
+    assert sneak["source"] == "aware_opponent_or_observer"
     assert sneak["threatened_cost"]["menu_id"] == "cost.exposure"
-    assert _frame("You lift the crate", "exert")["stakes_source"] is None  # nothing plainly at risk: Safe
-    assert _frame("You swing at the air", "strike")["stakes_source"] is None  # no one present to hit back
+    assert _frame("You lift the crate", "exert")["source"] == "none"  # nothing plainly at risk: Safe
+    assert _frame("You swing at the air", "strike")["source"] == "none"  # no one present to hit back
 
 
 def test_a_climb_in_play_is_offered_as_risky(tmp_path: Path) -> None:

@@ -25,7 +25,7 @@ and THIS MESSAGE with the beat. Every enum offered is legal.
 - `levers` / `snags` (01.6.8): at most two each, fact ids established before this declaration. "Clever"
   and "surely" are not facts. Unsure lever: omit. Every fitting hindering fact is a snag (code applies the
   first as −2, the next as higher stakes). One fact, one lever.
-- `stakes_source` (01.6.9): the established source a failure would cost from (aware opponent or observer,
+- `stakes.source` (01.6.9): the established source a failure would cost from (aware opponent or observer,
   hazard, height, listening clock, tool at risk, goodwill, consumed resource), else `none` (safe). In
   conflict the opponent's ordinary next action is not a source. An onlooker counts only if they would act
   on a failure. `stakes_heavy`: true only for a Heavy setback (a 20-ft+ fall, a serious hazard, an armed foe
@@ -36,11 +36,11 @@ and THIS MESSAGE with the beat. Every enum offered is legal.
   `reach_one_factor` true when one effect factor (potency, quality, scale) stands against it unoffset (tie:
   true); `reach_two_factors` when two do, or a total potency. Great reach is never yours.
 - `asks` (talk only): what the request asks of them, else `none`.
-- `threatened_cost` (01.13.1), first match: the entry already threatened in the scene; else the one the
+- `stakes.threatened_cost` (01.13.1), first match: the entry already threatened in the scene; else the one the
   method most directly engages (body in harm's way → harm; grip → footing; stealth, lies, noise →
   exposure; time while something moves → time; a tool → gear; effort or supplies → drain; someone who can
-  refuse → closed door); it must follow from `stakes_source` (goodwill never threatens harm).
-  `alternate_cost`: another fitting entry (if safe: what going big adds). `form_intent`:
+  refuse → closed door). Its source offers only its costs. `stakes.alternate_cost`: another fitting entry (if
+  safe: what going big adds). `form_intent`:
   the concrete form here, in one plain line; never the menu's examples.
 - `method_consequences`: what the method does whatever the roll.
 - `secret` (01.4.7): for Observe, Recall or reading a person, true when seeing the odds would tell the

@@ -153,7 +153,28 @@ def _cost_clause(cost: Any) -> str:  # rule: 12.15.2
     return form
 
 
-def _breakdown(f: Frame, rules: Any) -> str:
+def fact_short(state: WorldState | None, fact_id: str) -> str:  # rule: 12.15.2
+    """A fact's short name for the Chance line ("held fast by you", "crowd density: packed"); "" when the player
+    cannot see it or it has no words (an id, a long value)."""
+    from engine.text.render import slug_words
+
+    f = state.facts.get(fact_id) if state is not None else None
+    if f is None or f.visibility not in PLAYER_FACING or fact_id in state.seals:  # type: ignore[union-attr]
+        return ""
+    v, pred = f.value, f.predicate.removeprefix("detail.")
+    words = slug_words(pred)
+    if v is True or v in ("true", "yes"):
+        return words
+    if isinstance(v, int | float) and not isinstance(v, bool):
+        return f"{words} {v}"
+    if not isinstance(v, str) or not v.strip() or len(v) > 48:
+        return ""
+    if _DATA_ID.match(v.strip()):
+        return v.rsplit(".", 1)[-1].replace("_", " ")  # 'harm_state.staggered' -> 'staggered'
+    return v.strip() if f.predicate.startswith("detail.") else f"{words}: {v.strip()}"
+
+
+def _breakdown(f: Frame, rules: Any, state: WorldState | None = None) -> str:
     m = f.modifier
     parts = [f"{name_of(rules, f.attribute)} {_signed(m.attribute)}"]
     if m.competence:
@@ -162,25 +183,42 @@ def _breakdown(f: Frame, rules: Any) -> str:
         parts.append(f"{word} {_signed(m.competence)}")
     if m.edge:
         parts.append(f"edge {_signed(m.edge)}")
-    lv = [x for x in f.levers if x.type == "precision"]
-    sn = [x for x in f.snags if x.type == "precision"]
-    parts += ["a help +2"] * len(lv) + [("tried before " if x.engine else "a hindrance ") + "−2" for x in sn]
+    # each lever and snag by its fact's short name (12.15.2), the generic word only when it has none
+    parts += [f"{fact_short(state, x.fact_id) or 'a help'} +2" for x in f.levers if x.type == "precision"]
+    parts += [f"{'tried before' if x.engine else fact_short(state, x.fact_id) or 'a hindrance'} −2"
+              for x in f.snags if x.type == "precision"]
     if m.status:
         parts.append(f"your condition {_signed(m.status)}")
     return ", ".join(parts)
 
 
-def _chance_line(f: Frame, rules: Any) -> str:
+SECRET_WHY = "(The odds would tell you what your character can't know.)"  # 01.7.1 item 3: the reason they're hidden
+
+
+def _chance_line(f: Frame, rules: Any, state: WorldState | None = None) -> str:
     o = f.odds
     if f.secret:
-        return "Chance: you can't judge how hard this is."
+        return f"Chance: you can't judge how hard this is. {SECRET_WHY}"
     if f.long_shot:  # 01.6.13: the label wins; a natural-20-only chance says so too
         n20 = ", only on a natural 20" if o.only_natural_20 else ""
         return (f"Chance: long shot — {o.success_or_better}%{n20} (failing badly is likelier: "
                 f"{o.critical_failure}%)")
     if o.only_natural_20:
         return "Chance: only by luck — 5%, and at best what you wanted"
-    return f"Chance: {chance_word(o.success_or_better)} — {o.success_or_better}%   ({_breakdown(f, rules)})"
+    return f"Chance: {chance_word(o.success_or_better)} — {o.success_or_better}%   ({_breakdown(f, rules, state)})"
+
+
+def offer_title(f: Frame) -> str:  # rule: 12.15.2
+    """The beat restated, as the player's own order. A restatement led by the PC's name ("Eliius gets up and
+    slashes at Eliia", once read as a typo for the NPC) gives way to the beat's method, the act in the player's
+    words; a proper name is never inflected (playtest 20261008)."""
+    text = (f.beat.restatement or f.beat.intent).strip().rstrip(".")
+    pc = f.beat.actor.split(".", 1)[-1].split("_")  # the PC id is its name's slug: pc.eliius_varier
+    lead = re.match(r"^(?:[A-Z][a-z]+:\s+)?(\w+)", text)
+    method = (f.beat.method or "").strip().rstrip(".")
+    if lead and lead.group(1).lower() in pc and method and method.split()[0].lower() not in pc:
+        text = method[:1].upper() + method[1:]
+    return text + "."
 
 
 def offer_view(src: Frame | OfferPreview, rules: Any = None) -> OfferView:  # rule: 01.7.1
@@ -214,18 +252,19 @@ def offer_choices(src: Frame | OfferPreview, rules: Any = None) -> list[dict[str
 
 
 def offer_block(f: Frame, *, rules: Any = None, fate: int | None = None, lethal_line: str | None = None,
-                auto: bool = False) -> OofBlock:  # rule: 12.15.2
+                auto: bool = False, state: WorldState | None = None) -> OofBlock:  # rule: 12.15.2
     # rule: 01.7.1
     """The `[OFFER]` block: 12.15.2's template over the frame's typed fields (contracts/offer.md). No rule id, DC,
     severity code or mode name reaches the player; the menu follows from the pause's choices (play/render.py).
-    `lethal_line`: engine/harm's `lethal_scan(...).offer_line`. `auto`: the auto-commit variant."""
+    `lethal_line`: engine/harm's `lethal_scan(...).offer_line`. `auto`: the auto-commit variant. `state`: names
+    each lever and snag by its fact."""
     o = f.odds
     rest: list[str] = []
     mp = f.mode_price
     if mp is not None and mp.mode in MODE_WORDS:
         line = MODE_WORDS[mp.mode].format(n=mp.dc_shift)
         rest.append(line.replace("harder (+0), and ", "") if not mp.dc_shift else line)
-    rest.append(_chance_line(f, rules))
+    rest.append(_chance_line(f, rules, state))
     reach = REACH_WORDS.get(f.reach, "what you wanted")
     works = f"If it works: {reach}."
     if o.critical_success and not f.secret:  # a critical success delivers one reach rung more (01.6.10)
@@ -247,16 +286,19 @@ def offer_block(f: Frame, *, rules: Any = None, fate: int | None = None, lethal_
     if f.alternate_cost is not None and o.near_miss and not f.secret:
         rest.append(f"Close call ({o.near_miss}%): get it anyway and pay ({_cost_clause(f.alternate_cost)}), "
                     "or fail.")
+    # 12.15.2's Takes line, labelled for what it holds: what the method does whatever the roll (playtest 20261008:
+    # "Takes:" read as a price); the current fate on its own line, since nothing spends it (01.7.1 item 7, 01.16.3)
     takes = [name_of(rules, c).lower() if _DATA_ID.match(c.strip()) else c.strip().rstrip(".")
              for c in f.method_consequences if c.strip()]
-    if fate is not None:
-        takes.append(f"fate {fate}")
     if takes:
-        rest.append("Takes: " + " · ".join(takes))
+        rest.append("Whatever the roll: " + " · ".join(takes))
+    if fate is not None:
+        why = ("none to spend" if fate <= 0 else "no reroll: you won't see this die" if f.secret else
+               "you may spend one to reroll the die once you see it")
+        rest.append(f"Fate: {fate} ({why})")
     if f.alternatives and not auto and not f.secret:
         rest.append("Another way: " + " · ".join(f"{a.label} ({a.chance}%)" for a in f.alternatives))
-    title = (f.beat.restatement or f.beat.intent).strip().rstrip(".") + "."
-    return OofBlock(kind="OFFER", text=_block("OFFER — auto" if auto else "OFFER", title, rest))
+    return OofBlock(kind="OFFER", text=_block("OFFER — auto" if auto else "OFFER", offer_title(f), rest))
 
 
 # ------------------------------------------------------------------------------------------- harm blocks
@@ -407,9 +449,11 @@ def clarify_block(question: str, *, assuming: bool = False) -> OofBlock:  # rule
 
 
 def _price(rules: Any, cost: Any, severity: str | None) -> str:  # rule: 12.15.2
-    """A price in words: the cost's clause and its severity word (never an S-code)."""
-    sev = f" — {SEVERITY_WORDS.get(severity, severity)}" if severity else ""
-    return f"{_cost_clause(cost)}{sev}"
+    """A price in words: the cost's clause, then what kind of price and its severity word (never an S-code), as the
+    RESULT's Paid line says it ("you tire (drain, a setback)"; 12.15.4 names the kind)."""
+    tag = ", ".join(x for x in (name_of(rules, cost.menu_id).lower(), SEVERITY_WORDS.get(severity or "", ""))
+                    if x)
+    return f"{_cost_clause(cost)} ({tag})" if tag else _cost_clause(cost)
 
 
 def near_miss_choices(frame: Frame, rules: Any = None) -> list[dict[str, str]]:  # rule: 01.9.3
@@ -418,10 +462,10 @@ def near_miss_choices(frame: Frame, rules: Any = None) -> list[dict[str, str]]: 
     fail = cost_severity(frame.stakes, "failure", rules=rules)
     costs = [frame.threatened_cost] + ([frame.alternate_cost] if frame.alternate_cost else [])
     # each label says whether the attempt lands, so a success and a failure with the same price differ (P-076)
-    out = [{"id": f"success_at_cost:{c.menu_id}",
-            "label": f"Succeed: you get what you tried for, at this price: {_price(rules, c, sac)}"} for c in costs]
+    out = [{"id": f"success_at_cost:{c.menu_id}", "label": f"Succeed, and pay: {_price(rules, c, sac)}"}
+           for c in costs]
     lose = f"and still pay: {_price(rules, frame.threatened_cost, fail)}" if fail else "and nothing more is lost"
-    out.append({"id": "failure", "label": f"Let it fail: you do not get it, {lose}"})
+    out.append({"id": "failure", "label": f"Let it fail, {lose}"})
     return out
 
 
@@ -583,8 +627,10 @@ _ORDER = {"NOTE": 0, "RECAP": 1, "RESULT": 2, "SEED": 5, "CREATE": 5, "STATUS": 
 
 def ordered(blocks: Iterable[OofBlock]) -> list[OofBlock]:  # rule: 12.15
     """12.15's order: acknowledgements and corrections, the status and redirect blocks, the warning, then the one
-    pause block last (stable otherwise)."""
-    return sorted(blocks, key=lambda b: _ORDER.get(b.kind, 3))
+    pause block last (stable otherwise). An auto-committed OFFER is no pause: it stays immediately above its RESULT
+    (12.15.2; below it, it read as an open offer and "d" went to the Reader, playtest 20261008 fighter 26-31)."""
+    return sorted(blocks, key=lambda b: _ORDER["RESULT"] if b.text.startswith("[OFFER — auto]")
+                  else _ORDER.get(b.kind, 3))
 
 
 __all__ = ["OfferView", "OofBlock", "OofKind", "clarify_block", "create_block", "last_chance_block", "name_of",
