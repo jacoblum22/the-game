@@ -24,6 +24,7 @@ from typing import Any, get_args
 from pydantic import BaseModel, Field
 
 from engine.llm.base import Role
+from engine.resolve.change import kinds, things_held
 from engine.resolve.costs import OBSERVER, source_menus, uncited_by_stakes
 from engine.resolve.frame import fact_usable, opposed_by, rolling_tiers, verb_classes
 from engine.resolve.gate import covering_verb
@@ -70,6 +71,8 @@ class SchemaContext(BaseModel):
     input_classes: list[str] = Field(default_factory=list)
     oracle_rungs: list[str] = Field(default_factory=list)
     verbs: list[str] = Field(default_factory=list)
+    change_kinds: list[str] = Field(default_factory=list)  # resolution.yaml#intended_change.kinds (01.2.7)
+    change_ids: list[str] = Field(default_factory=list)  # slot ids: scope, the things people here hold
     # Framer
     anchor_ids: list[str] = Field(default_factory=list)
     default_anchor: str | None = None
@@ -180,6 +183,16 @@ def interpret_schema(ctx: SchemaContext) -> Schema:  # rule: 12.16.2
     })
 
 
+def change_schema(ctx: SchemaContext) -> Schema | None:  # rule: 01.2.7
+    """The beat's typed intended change: a closed kind (13 in data, `none` first) and two slot ids from the Reader's
+    scope (`what`: the kind's first slot; `whom`: its second), so the decision is short-input with ≤ 20 options."""
+    if not ctx.change_kinds:
+        return None
+    ids_ = [*ctx.change_ids, *ctx.reachable_places]
+    return obj({"kind": enum(ctx.change_kinds, first=NONE), "what": enum(ids_, first=NONE),
+                "whom": enum(ctx.change_ids, first=NONE)})
+
+
 def reader_schema(ctx: SchemaContext) -> Schema:  # rule: 12.2.2
     # DL-12-50: the verb, target, three method facets and the shape; the gate, the licence, the would-be licence and
     # the roll test are computed (00.12.3, PR-01-5, 01.4.1)
@@ -197,6 +210,7 @@ def reader_schema(ctx: SchemaContext) -> Schema:  # rule: 12.2.2
         "speech": BOOL,
         "g4_fact": enum(ctx.fact_ids, nullable=True),
         "intent_verbs": STRS,
+        "change": change_schema(ctx),
     })
     return obj({
         "parts": arr(obj({"text": STR, "class": enum(ctx.input_classes), "question_kind": enum(QUESTION_KINDS),
@@ -788,6 +802,8 @@ def schema_context(  # rule: 12.2.4
         input_classes=classes,
         oracle_rungs=[r["id"] for r in res.get("oracle", {}).get("rungs", [])],
         verbs=list(rules.basic_verbs),
+        change_kinds=kinds(rules),
+        change_ids=list(dict.fromkeys([*scope, *things_held(state, scope)])),
         anchor_ids=anchor_ids,
         default_anchor=default_anchor,
         knobs=ae["knobs"],

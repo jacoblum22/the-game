@@ -81,6 +81,11 @@ class BeatEntry(BaseModel):
     license: str | None = None  # the licence or ability used, if any
     learned: list[str] = Field(default_factory=list)  # what a successful learning beat delivered, in words (12.10.5)
     progress: str = ""  # an extended goal's progress clock, in words (01.14.6; P-082)
+    # 01.2.7: the typed intended change (kind; its plain words), what RECORD applied, or why it could not
+    change_kind: str | None = None  # None: untyped (T-12-18 reads the verb alone)
+    change: str = ""  # "take the coin purse from Murzak Red-Hand"
+    changed: str = ""  # "you have the coin purse" (applied, at the delivered reach)
+    change_refused: str = ""  # "the coin purse is not on Feney" (not applied; the RESULT says it)
 
 
 class OracleEntry(BaseModel):

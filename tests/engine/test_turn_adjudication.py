@@ -44,12 +44,14 @@ class D20(Rng):
 
 def beat(intent: str, verb: str, *, target: str = "none", g4_fact: str | None = None, verbs: tuple[str, ...] = (),
          against_will: bool = False, uses_power: bool = False, speech: bool = False,
-         shape: str = "now") -> dict[str, Any]:
-    """A Reader beat (12.2.2 decision 3, DL-12-50): the gate and the roll test are computed from it."""
+         shape: str = "now", change: dict[str, Any] | None = None) -> dict[str, Any]:
+    """A Reader beat (12.2.2 decision 3, DL-12-50): the gate and the roll test are computed from it. `change`: the
+    typed intended change (01.2.7), `none` by default."""
     return {"intent": intent, "method": intent, "purpose": "own_change", "assertion": None, "shape": shape,
             "target": target, "verb": verb, "pressure": "request" if verb == "verb.talk" else "none",
             "against_will": against_will, "uses_power": uses_power, "speech": speech or verb == "verb.talk",
-            "g4_fact": g4_fact, "intent_verbs": list(verbs)}
+            "g4_fact": g4_fact, "intent_verbs": list(verbs),
+            "change": {"kind": "none", "what": "none", "whom": "none", **(change or {})}}
 
 
 def reader(cls: str, text: str, *beats: dict[str, Any], questions: tuple[dict[str, Any], ...] = (),
@@ -184,7 +186,7 @@ def test_change_asks_how_then_the_new_way_is_offered(tmp_path: Path) -> None:
     dock, ctx, model, res = offer_turn(tmp_path, **RISKY)
     assert res.pause is not None
     res2 = answer_pause(ctx, "change")
-    assert res2.pause is not None and res2.pause.kind == "offer" and res2.offer["stakes"] == "risky"
+    assert res2.pause is not None and res2.pause.kind == "offer" and (res2.offer or {})["stakes"] == "risky"
     assert {"kind": "NOTE", "text": CHANGE_ASK} in res2.oof
     assert not rolls(dock.store) and sum(1 for r, _ in model.calls if r == Role.FRAMER) == 1
     # "change approach: I talk my way past instead" carries the new way: it is framed, not the old beat

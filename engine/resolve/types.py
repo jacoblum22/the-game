@@ -28,6 +28,15 @@ REACH_LADDER: tuple[ReachRung, ...] = ("limited", "standard", "great")
 REACH_VALUE: dict[str, int] = {"zero": 0, "limited": 1, "standard": 2, "great": 3, "exceptional": 4}  # 00.3.15
 
 
+class Change(BaseModel):
+    """The beat's typed intended change (01.2.7; `resolution.yaml#intended_change`): one kind and its two slot ids,
+    `what` the kind's first data slot (item, place, thing, person, target), `whom` its second (from, to, who)."""
+
+    kind: str = "none"
+    what: str | None = None
+    whom: str | None = None
+
+
 class Beat(BaseModel):
     """One beat after PARSE and the Reader's GATE proposal (00.13.1 `beat` + `gate` candidates)."""
 
@@ -57,6 +66,7 @@ class Beat(BaseModel):
     deed_tag: str | None = None
     necessity: str = "uncertain_and_costly"
     declared_seq: int = 0  # the last event seq before the declaration: levers and snags must be older
+    change: Change | None = None  # 01.2.7 (PARSE); None: untyped (a beat from before spec 015)
 
 
 class LeverCite(BaseModel):

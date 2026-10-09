@@ -74,8 +74,12 @@ def _foe_turn(ctx: TurnContext, record: AdjudicationRecord, foe: str, oof: list[
         # 20261008-135049); the PC's fall to Down moves no number, so it is said
         changed = changed_line(ctx.state, record.pc or "", tx.events[start:])
         down = "you go Down" if res.transition == "down" else ""
+        # the wound load a blow added while Staggered (07.2.4): one heavy blow at 0/3 is a knockout (problem 13)
+        added = int((res.wound or {}).get("load") or 0)
+        load = (f"wound load {res.load - added} → {res.load}"
+                if added and res.transition not in ("dying_step", "threshold") else "")
         oof.append({"kind": "RESULT", "text": " · ".join(x for x in (
-            f"[RESULT] {_name(ctx.state, foe)} strikes you", "hit", changed, down) if x)})
+            f"[RESULT] {_name(ctx.state, foe)} strikes you", "hit", changed, load, down) if x)})
     if res is not None and res.threshold and oof is not None:  # rule: PR-07-5
         from engine.dm.turn import _env, _harm_followups
 

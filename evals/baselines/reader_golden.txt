@@ -7,6 +7,7 @@
 - uses_power: not scored
 - speech: not scored
 - question_kind: not scored
+- change_kind: not scored
 - necessity as roll / no roll: 83.3% (35/42)
 - issue lines (P-004 … P-123) verb: 64.3% (9/14), gate: 35.7% (5/14)
 

@@ -1032,3 +1032,26 @@ speech, with `answer_ladder.repeat_pointer_limit` and `delivery.information.ladd
 - **Re-asks.** `frame._sets_hold(beat, state)`: only a grapple by an actor holding no one yet makes the hold the
   beat's own success; there a form in which the held one gets loose is blanked (the cost's plain words), never
   refused, so it cannot cause a re-ask. Losing a hold set earlier is an ordinary price.
+
+## The typed intended change (spec 015; 01.2.7, DL-01-34, DL-01-35)
+- **Reader**: each beat carries `change {kind, what, whom}` (`schemas.change_schema`): `kind` from
+  `resolution.yaml#intended_change.kinds` (13, `none` first); `what` = `SchemaContext.change_ids` (scope plus
+  `change.things_held` by people in scope) + reachable places; `whom` = `change_ids`. `what`/`whom` are the kind's first
+  and second data slot. `ReaderBeat.change` → `Beat.change` (`engine.resolve.types.Change`; None = untyped, old saves).
+  `reader.log_changes` appends one line per beat to `<save>.changes.jsonl` (turn, restatement, intent, method, verb,
+  ids_in_scope, kind, slots, defaulted): the Laya log, never game state.
+- **RECORD** (`engine.resolve.change`): `apply_change(tx, rules, beat, reach, pc=)` -> `ChangeResult(words, refused,
+  events)`, called by `pipeline._finish` (delivered reach on success or success at a cost, after the cost; 0 on
+  failure) and `_no_roll` (reach 2). take/give write the item's `holder` fact (take at reach 1: `contested_by`),
+  open/close `open`, persuade_to `agreed` (reach 1: "a smaller part"), hide `hidden_from`; restrain/free are
+  scene_state's; move_to/harm/learn keep their own writers (no words); make is refused (not built). `holder_of(state,
+  item)`: `holder` fact, then narrated `carried_on`/`held_by`/`carried_by`, then data keys; claims' `_Ctx.holder` and
+  the codex inventory read it that way. `BeatEntry.change_kind/change/changed/change_refused`.
+- **Player-facing**: `oof.offer_change_lines` (the change in plain words via `change.plain`, "Then: <method>" for
+  queued beats; `offer_block(..., then=)`), `oof.change_result_line` ("Now: …" / "Not applied: …" in the RESULT).
+  `handles.items` adds a must-name `change` item per beat with `changed` or `change_refused`.
+- **T-12-18 fold** (`scene_state._face`): Grapple rows only for `restrain` or untyped/`none`; a Grapple typed
+  another change writes the failure row (wariness); `restrain` on any verb uses the Grapple rows; `free` clears holds.
+- **Lift rubric** (`frame.lift_or_carry`, `lift_attribute`): a `take` change, or Exert/Force/Handle/Sneak with a
+  lift/carry/palm word: rubric words pick, else the best of might/agility/endurance (the proposed kept on a tie);
+  `alternatives(..., attrs=)` lists the others.

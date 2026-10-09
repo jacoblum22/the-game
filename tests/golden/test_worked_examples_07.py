@@ -69,7 +69,7 @@ def test_we_07_1_the_ninefold_barrow(tmp_path):
     assert (vit(store), descriptor(store.state, "pc.wren")) == (3, "bloodied")
     res = frost(store, 5)
     assert vit(store) == 0 and res.breakdown["discarded"] == 2 and harm_state(store.state, "pc.wren") == STAGGERED
-    assert "at wound load 3 you fall to Dying. Load 0/3." in (status_block(RULES, View(store.state), "pc.wren") or "")
+    assert "at wound load 3 you fall to Dying. Load 0/3;" in (status_block(RULES, View(store.state), "pc.wren") or "")
     # Round 3: a Heavy wound (load 2), then a natural 20: one rung heavier, S4 = 8: load 5 -> Dying 1.
     assert frost(store, 5).load == 2
     res = frost(store, 8)
@@ -172,7 +172,7 @@ def test_we_07_4_taken_in_the_reeds(tmp_path):
     assert lethal.danger_notice(store.state, "pc.wren", "foe.guild_rider", "being taken alive by the Guild") == \
         "[WARNING] A hard fight — you may well lose this. Losing here means being taken alive by the Guild."
     run(store, apply_harm, "pc.wren", severity="S2", harm_tags=["harm.physical.cut"], source="foe.guild_rider")
-    assert "you go Down. Load 0/3." in (status_block(RULES, View(store.state), "pc.wren") or "")
+    assert "you go Down. Load 0/3;" in (status_block(RULES, View(store.state), "pc.wren") or "")
     ans = yield_answer(RULES, store.state, "pc.wren", "foe.guild_rider")
     assert ans.accepted and "keep_one_thing" in [t["id"] for t in ans.terms]
     run(store, commit_yield, "pc.wren", ans, term="keep_one_thing")

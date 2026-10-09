@@ -181,7 +181,6 @@ _PRESSURE = [*_CLOCK_MOVE, *_CLOCK_DONE, "mass", "brew", "loom", "approach", "st
              "hunt", "search"]  # what makes a clock claim literal (12.3.1) [spec 009 B]
 _POSSESS_PREDICATES = ("carries", "holds", "has", "equipped", "possessions", "inventory", "owns", "possession",
                        "wields", "wears")
-_HOLDER_KEYS = ("holder", "owner", "carried_by", "held_by")
 # 12.3.2's enumerated consequential properties (locked, armed, present, knows) and what 12.14.13 names T2 (hidden,
 # hazard, value); any other class than identity or possession is consequential too (uncertain -> consequential)
 _CONSEQUENTIAL = ["lock", "locked", "unlocked", "armed", "weapon", "blade", "sword", "knife", "dagger", "bow", "spear",
@@ -262,14 +261,11 @@ class _Ctx:
             return loc == here
         return sc is None and loc is None  # no scene and no position: nothing says it is elsewhere
 
-    def holder(self, eid: str) -> str | None:
-        e = self.state.entities.get(eid)
-        if e is not None:
-            for k in _HOLDER_KEYS:
-                if isinstance(e.data.get(k), str):
-                    return e.data[k]
-        v = self.state.fact_value(eid, "holder")
-        return v if isinstance(v, str) else None
+    def holder(self, eid: str) -> str | None:  # rule: 01.2.7
+        """The current `holder` fact (what a take or give wrote) before narrated holder facts and data keys."""
+        from engine.resolve.change import holder_of
+
+        return holder_of(self.state, eid)
 
     def backed(self, entity: str | None, *types: str, key: str | None = None) -> bool:
         """A write this turn touched `entity` (of one of `types`; with `key` when given)."""
@@ -1142,7 +1138,8 @@ def _beat_for(ctx: _Ctx, text: str, subject: str | None = None) -> BeatEntry | N
         return None
     # ties go to a beat acting on the claim's subject, then to a rolled beat: an outcome no words tie to a later
     # redirect is the roll's, not the redirect's "no roll" [P-112]
-    scored = [(len(tx.overlap(text, " ".join([b.restatement, *b.reach_words]))), subject in b.targets,
+    scored = [(len(tx.overlap(text, " ".join([b.restatement, *b.reach_words, b.change, b.changed]))),
+               subject in b.targets,
                b.degree is not None, n, b) for n, b in enumerate(beats)]
     return max(scored, key=lambda x: x[:4])[4]
 

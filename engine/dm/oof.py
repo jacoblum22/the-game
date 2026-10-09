@@ -308,14 +308,15 @@ def offer_choices(src: Frame | OfferPreview, rules: Any = None) -> list[dict[str
 
 
 def offer_block(f: Frame, *, rules: Any = None, fate: int | None = None, lethal_line: str | None = None,
-                auto: bool = False, state: WorldState | None = None) -> OofBlock:  # rule: 12.15.2
+                auto: bool = False, state: WorldState | None = None, then: Sequence[str] = ()) -> OofBlock:
+    # rule: 12.15.2
     # rule: 01.7.1
     """The `[OFFER]` block: 12.15.2's template over the frame's typed fields (contracts/offer.md). No rule id, DC,
     severity code or mode name reaches the player; the menu follows from the pause's choices (play/render.py).
     `lethal_line`: engine/harm's `lethal_scan(...).offer_line`. `auto`: the auto-commit variant. `state`: names
-    each lever and snag by its fact."""
+    each lever and snag by its fact. `then`: the restatements of the beats queued after this one (01.2.2)."""
     o = f.odds
-    rest: list[str] = []
+    rest: list[str] = offer_change_lines(f, state, then)
     mp = f.mode_price
     if mp is not None and mp.mode in MODE_WORDS:
         line = MODE_WORDS[mp.mode].format(n=mp.dc_shift)
@@ -568,14 +569,37 @@ def price_line(cost: Any) -> str:  # rule: 12.15.3
     return f"It cost you: {form or 'a price'}" + (f" — {sev}." if sev else ".")
 
 
+def change_result_line(entry: Any) -> str:  # rule: 01.2.7
+    """The RESULT's line for the typed change: what was applied, or why it was not (so 12.3.6 can explain it)."""
+    if getattr(entry, "change_refused", ""):
+        return f"Not applied: {entry.change_refused}."
+    words = getattr(entry, "changed", "")
+    return f"Now: {words[:1].upper()}{words[1:]}." if words else ""
+
+
+def offer_change_lines(f: Frame, state: WorldState | None, then: Sequence[str] = ()) -> list[str]:  # rule: 01.2.6
+    """Under the OFFER's title: the typed change in plain words ("Taking: the coin purse, from Murzak Red-Hand"),
+    and the beats of the same message still to come ("Then: punch Murzak"), so none reads as dropped (01.2.2)."""
+    from engine.resolve.change import plain
+
+    out = []
+    said = plain(state, f.beat.change, actor=f.beat.actor, pc=f.beat.actor) if state is not None else ""
+    if said:
+        out.append(said)
+    if then:
+        out.append("Then: " + " · ".join(t.strip().rstrip(".") for t in then if t.strip()))
+    return out
+
+
 def result_block(frame: Frame, roll: RollResult, *, sac: bool = False, costs: Sequence[Any] = (),
-                 rules: Any = None, changed: str = "") -> OofBlock:  # rule: 12.15.3
+                 rules: Any = None, changed: str = "", change: str = "") -> OofBlock:  # rule: 12.15.3
     """`[RESULT] d20 9 → 13 vs 15 · failure (near miss)`, then what was paid; a secret frame: `hidden check made.`"""
     if frame.secret:
         return OofBlock(kind="RESULT", text="[RESULT] hidden check made.")
     words = "success at a cost (near miss)" if sac else (
         DEGREE_NAMES.get(roll.degree, roll.degree.replace("_", " ")) + (" (near miss)" if roll.near_miss else ""))
-    rest = [price_line(c) for c in costs]
+    rest = [change] if change else []
+    rest += [price_line(c) for c in costs]
     if changed:
         rest.append(changed)
     return OofBlock(kind="RESULT", text=_block("RESULT", f"d20 {roll.d20} → {roll.total} vs {frame.dc} · {words}",

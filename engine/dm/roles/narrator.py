@@ -280,6 +280,10 @@ def _item_words(state: WorldState, record: AdjudicationRecord, it: RecordItem, r
         return f"position: {name_of(state, p.entity, pc)} {p.words}"
     if it.kind == "learned":  # 12.10.5: what the success delivered; the PC is told or sees it
         return f"the PC learns (say it plainly in the fiction): {it.text}"
+    if it.kind == "change" and b is not None:  # 01.2.7: what the beat changed, or why it did not
+        if b.change_refused:
+            return f"the attempt worked, but this did not change (say why plainly): {it.text}"
+        return f"what changed (say it plainly; it is done): {it.text}"
     if it.kind == "oracle":
         o = record.oracle[it.index]
         return f"question \"{o.question}\": the answer is {o.answer}"

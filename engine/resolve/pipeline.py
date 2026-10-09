@@ -27,6 +27,7 @@ from pydantic import BaseModel, Field
 
 from engine import ids
 from engine.dm.adjudication import BeatEntry, CostEntry, HarmEntry, PositionEntry
+from engine.resolve.change import ChangeResult, apply_change, plain
 from engine.resolve.costs import HarmHook, apply_cost, check_cost_decl, first_fitting_cost
 from engine.resolve.frame import auto_commit_allowed, commit_events, frame_check, offer_preview
 from engine.resolve.gate import GateDecision, check_gate, words, zero_reach
@@ -271,6 +272,7 @@ def _no_roll(env: PipelineEnv, plan: BeatPlan, dec: GateDecision) -> BeatOutcome
     env.add(*evs)
     if (dec.verb or beat.verb) == MOVE:
         entry.positions = _moved(env, plan)
+    _change_entry(env, beat, entry, apply_change(env.tx, env.rules, beat, 2, pc=env.pc))  # rule: 01.2.7
     mark_boundary(env.time_ctx(), "beat_end", {"beat": beat.id})
     return BeatOutcome(status="no_roll", entry=entry)
 
@@ -347,7 +349,7 @@ def _contact(env: PipelineEnv, frame: Frame, verb: str | None, delivered: int) -
             Event.of("position_set", source=beat.id, rule_id="06.3.5", entity=tgt, band_to={actor: band}))
     if band == "engaged":
         return [PositionEntry(entity=actor, words=f"{_BAND_WORDS[band]} {ent.name}")]
-    return [PositionEntry(entity=tgt, words=f"driven back, {_BAND_WORDS[band]} you")]
+    return [PositionEntry(entity=str(tgt), words=f"driven back, {_BAND_WORDS[band]} you")]
 
 
 def _verb_deed(rules: Any, verb: str | None) -> str | None:
@@ -457,9 +459,10 @@ def _offer(env: PipelineEnv, plan: BeatPlan, proposed: ProposedFrame, frame: Fra
         env.add(Event.of("offer_logged", source=frame.id or "engine", rule_id="01.7.4", frame_id=frame.id,
                          shown_at=env.state.time.now, choice="auto"))
         out = _roll(env, plan, frame, queued)
-        out.oof.insert(0, {"kind": "OFFER", "text": offer_block(frame, rules=env.rules, auto=True, state=env.state).text})
+        out.oof.insert(0, {"kind": "OFFER", "text": offer_block(frame, rules=env.rules, auto=True, state=env.state,
+                                                                then=_then(queued)).text})
         return out
-    text = offer_block(frame, rules=env.rules, state=env.state).text
+    text = offer_block(frame, rules=env.rules, state=env.state, then=_then(queued)).text
     detail = {"stage": "offer", "plan": plan.model_dump(mode="json"), "queued": _dump(queued),
               "proposed": proposed.model_dump(mode="json"), "frame": frame.record(), "candidates": cands,
               "offer": view.model_dump(mode="json"), "warned": warned}
@@ -467,6 +470,12 @@ def _offer(env: PipelineEnv, plan: BeatPlan, proposed: ProposedFrame, frame: Fra
     _open(env, "offer", view.restated_beat, offer_choices(frame), "withdraw", detail)
     entry = _frame_entry(plan.beat, frame)
     return BeatOutcome(status="paused", entry=entry, oof=[{"kind": "OFFER", "text": text}])
+
+
+def _then(queued: list[BeatPlan]) -> list[str]:  # rule: 01.2.2
+    """The beats of the same message still to come, for the OFFER's "Then:" line (playtest: the punch read as dropped):
+    each one's act, never its intent (an intent reads as an outcome promised, live run 015)."""
+    return [q.beat.method or q.beat.restatement for q in queued]
 
 
 def _may_auto(env: PipelineEnv, frame: Frame) -> bool:  # rule: 07.3.6
@@ -633,6 +642,7 @@ def _finish(env: PipelineEnv, plan: BeatPlan, frame: Frame, roll: RollResult, *,
         if hurt.amount or hurt.transition:
             env.harm_log.append(HarmEntry(target=str(frame.beat.target), words=said))
         check_end(env.time_ctx(), env.pc)  # 06.13.1: the last foe down ends the fight
+    chg = apply_change(env.tx, env.rules, frame.beat, delivered if resolved else 0, pc=env.pc)  # rule: 01.2.7
     progress = _progress(env, frame, delivered if resolved else 0)
     writes = [e.seq for e in env.tx.events[start:] if e.seq is not None]
     ev_ids: list[str] = []
@@ -666,16 +676,27 @@ def _finish(env: PipelineEnv, plan: BeatPlan, frame: Frame, roll: RollResult, *,
     entry.harm = env.harm_log[harm_from:]
     entry.reach_words = _reach_words(env.rules, frame, delivered, notes)
     entry.progress = progress
+    _change_entry(env, frame.beat, entry, chg)
     if resolved:
         _cleanse(env, frame)
     from engine.dm.oof import (  # 12.15.3: the outcome stated once, after the fiction
+        change_result_line,
         changed_line,
         result_block,
     )
 
     blk = result_block(frame, roll, sac=read.success_at_cost_taken, costs=costs, rules=env.rules,
-                       changed=changed_line(env.state, env.pc, env.tx.events[start:]) if env.pc else "")
+                       changed=changed_line(env.state, env.pc, env.tx.events[start:]) if env.pc else "",
+                       change=change_result_line(entry))
     return BeatOutcome(status="resolved", entry=entry, frame_id=frame.id, oof=[{"kind": "RESULT", "text": blk.text}])
+
+
+def _change_entry(env: PipelineEnv, beat: Beat, entry: BeatEntry, res: ChangeResult) -> None:  # rule: 01.2.7
+    """The typed change on the record: its kind, its plain words, and what RECORD applied or why not."""
+    c = beat.change
+    entry.change_kind = c.kind if c is not None else None
+    entry.change = plain(env.state, c, actor=beat.actor, pc=env.pc)
+    entry.changed, entry.change_refused = res.words, res.refused
 
 
 _FREEING = re.compile(r"\b(free|loose|escape|break|slip|wriggle|wrench|pull away|get up|stand)\b", re.IGNORECASE)

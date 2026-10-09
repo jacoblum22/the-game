@@ -26,7 +26,7 @@ from engine.dm.roles.prompts import load_prompt
 from engine.dm.schemas import build_schema, defaults, schema_context
 from engine.llm.base import Role, call_role
 from engine.resolve.pipeline import MAX_BEATS, BeatPlan
-from engine.resolve.types import Beat
+from engine.resolve.types import Beat, Change
 from engine.retrieve.anchors import scene_situation_tags
 from engine.retrieve.cards import load_cards_for
 from engine.retrieve.scene import focus_ids
@@ -160,6 +160,7 @@ class ReaderBeat(BaseModel):
     pressure: str = NONE  # 12.2.2: request, threat, offer, plea, insistence (event tags, 12.11.9)
     g4_fact: str | None = None
     intent_verbs: list[str] = Field(default_factory=list)
+    change: Change | None = None  # 01.2.7: the typed intended change (None: the schema offered none)
 
 
 class ReaderResult(BaseModel):
@@ -198,7 +199,8 @@ class ReaderResult(BaseModel):
                         target=target, restatement=(own if single and own else b.intent),
                         verb=b.verb, against_will=b.against_will, uses_power=b.uses_power, speech=b.speech,
                         pressure=b.pressure or NONE,
-                        asks=asks and b.verb == "verb.talk", g4_fact=b.g4_fact, declared_seq=declared_seq)
+                        asks=asks and b.verb == "verb.talk", g4_fact=b.g4_fact, declared_seq=declared_seq,
+                        change=b.change)
             out.append(BeatPlan(beat=beat, intent_verbs=list(b.intent_verbs)))
         return out
 
@@ -229,6 +231,35 @@ def reader_check(data: Any) -> list[str]:  # rule: 12.2.2
     return []
 
 
+def change_log_path(store: Any) -> Any:
+    """`saves/<campaign>.changes.jsonl`: beside the game file, like the disputes log (01.2.7 design note)."""
+    path = getattr(store, "path", None)
+    return path.with_name(f"{path.stem}.changes.jsonl") if path is not None else None
+
+
+def log_changes(ctx: TurnContext, data: dict[str, Any], scope: Sequence[str], *, defaulted: bool) -> None:
+    # rule: 01.2.7
+    """The Laya log: one line per beat with the decision's short inputs (restatement, verb, ids in scope) and its
+    output (kind, slots), so a small classifier can be trained on it later. Never game state; a write failure never
+    fails the turn."""
+    import json
+
+    path = change_log_path(ctx.store)
+    beats = [b for b in data.get("beats", []) if isinstance(b, dict)]
+    if path is None or not beats:
+        return
+    rows = [{"turn": ctx.turn_id, "restatement": data.get("restatement") or "", "intent": b.get("intent"),
+             "method": b.get("method"), "verb": b.get("verb"), "ids_in_scope": list(scope),
+             "kind": (b.get("change") or {}).get("kind", NONE),
+             "slots": {k: (b.get("change") or {}).get(k, NONE) for k in ("what", "whom")}, "defaulted": defaulted}
+            for b in beats]
+    try:
+        with path.open("a", encoding="utf-8") as fh:
+            fh.writelines(json.dumps(r) + "\n" for r in rows)
+    except OSError:
+        pass
+
+
 def read_message(ctx: TurnContext, message: str, *, exchanges: Sequence[Any] = ()) -> ReaderResult:
     # rule: 12.2.2
     """One Reader call: classify the message's parts and parse its beats and fact questions. A message that is only
@@ -249,6 +280,7 @@ def read_message(ctx: TurnContext, message: str, *, exchanges: Sequence[Any] = (
     res = call_role(ctx.model, Role.READER, schema, packet, turn_id=ctx.turn_id, recorder=ctx.record_call,
                     default=lambda: defaults(Role.READER, sctx) or {}, check=reader_check)
     data = normalise(dict(res.data))
+    log_changes(ctx, data, sctx.change_ids, defaulted=res.defaulted)
     return ReaderResult(
         parts=[*known, *[Part.model_validate(p) for p in data.get("parts", [])]],
         pending_answer=data.get("pending_answer"),

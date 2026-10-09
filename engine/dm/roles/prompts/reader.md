@@ -50,6 +50,12 @@ SPEECH and questions make no beat.
 - `target`: one id (the nearest engaged foe in conflict, else the latest mentioned); else `none`.
 - `g4_fact`: only a fact in the view that makes the method impossible for anyone, else null.
 - `intent_verbs`: one to three verbs.
+- `change` (01.2.7): what the intent changes, as a `kind` with ids; `what` is the thing changed, `whom` the
+  other party. `take` (item; from whom), `give` (item; to whom), `move_to` (place or person; who moves),
+  `open`/`close`, `learn` (finding out: looking, reading, words pressing someone to tell; a plain question stays
+  SPEECH), `persuade_to` (words asking someone to act or give), `restrain` (seizing or holding someone), `free`,
+  `harm`, `hide` (who or what; from whom), `make`, `none` (looking around, waiting, helping). Lifting a purse is
+  `take`. Two changes are two beats ("grab the purse and punch her": `take`, then `harm`).
 
 ## 4. The rest
 - `clarifying_question` (01.2.4): only when no target fits or two readings are different acts; else null.
