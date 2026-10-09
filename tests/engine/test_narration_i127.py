@@ -19,7 +19,7 @@ from engine.dm.packet import render_view, scene_setting
 from engine.dm.turn import play_turn
 from engine.llm.base import Role
 from tests.engine.test_turn_adjudication import setup
-from tests.engine.test_turn_narration import _decl, _must, calls, chk, claim, look_model, narr, rep
+from tests.engine.test_turn_narration import _must, calls, chk, claim, look_model, narr, passage
 
 # "set the scene" turn: 5 sentences incl. the prompt; claims as the Checker returned them (turn 2, row 10)
 RECORDED_SCENE = ("Morning light settles cold across the village. You stand where the tracks meet at the gate. "
@@ -36,13 +36,9 @@ def _scene_claims(dock: Any, hour: str) -> list[dict[str, Any]]:
 
 
 def _declared_scene(schema: Any, packet: Any) -> dict[str, Any]:
-    """The recorded prose as declared sentences (spec 006): atmosphere flagged, the two features declared new."""
-    from engine.audit.declare import split
-
-    s = split(RECORDED_SCENE)
-    feat = lambda n: [{"element_kind": "feature", "name": n, "ordinary": True, "implied": []}]  # noqa: E731
-    return {"sentences": [_decl(s[0], atmosphere=True), _decl(s[1], _must(packet)),
-                          _decl(s[2], new=feat("woodsmoke")), _decl(s[3], new=feat("north road")), _decl(s[4])]}
+    """The recorded prose as one passage (spec 019), the two features in the side list's `new`."""
+    feat = lambda n: {"element_kind": "feature", "name": n, "ordinary": True, "implied": []}  # noqa: E731
+    return passage(RECORDED_SCENE, _must(packet), new=[feat("woodsmoke"), feat("north road")])
 
 
 def test_recorded_scene_prose_survives_in_one_pass(tmp_path: Path) -> None:
@@ -70,15 +66,14 @@ def test_real_inventions_are_still_cut(tmp_path: Path, kind: str, ordinary: bool
     """12.14.13: a declared T2 element (or one of no listed kind) no record line delivers is cut by code."""
     def draft(schema: Any, packet: Any) -> dict[str, Any]:
         new = [{"element_kind": kind, "name": value, "ordinary": ordinary, "implied": []}]
-        return {"sentences": [_decl("The quay is quiet.", _must(packet)), _decl("Something is wrong here.", new=new),
-                              _decl("What do you do?")]}
+        return passage(f"The quay is quiet. Here is {value}. What do you do?", _must(packet), new=new)
     model = look_model(narrator=[draft])
     dock, ctx = setup(tmp_path, model)
     model.push(Role.CHECKER, chk())
     out = play_turn(ctx, "I look over the quay.")
     assert out.turn_record.draft_versions[0]["checks"]["1"][0]["fix"] == "cut"
     assert out.response.fiction == "The quay is quiet. What do you do?"
-    assert len(calls(model, Role.NARRATOR)) == 1  # a cut is code's, no repair call
+    assert len(calls(model, Role.NARRATOR)) == 1  # a cut is code's, no revision call
     assert value not in {e.name for e in ctx.store.state.entities.values()}
 
 
@@ -97,18 +92,19 @@ def test_unknown_subject_that_acts_or_changes_is_still_cut() -> None:
     assert [(v.verdict, v.fix) for v in vs] == [("unsourced_change", "cut")] * 2
 
 
-def test_redraft_names_claims_and_never_asks_for_shorter(tmp_path: Path) -> None:
-    """A code-scan hit (an unknown name in the narrator's voice, 12.3.1b item 2.6) is redrafted with its reason."""
+def test_the_revision_names_what_failed_and_never_asks_for_shorter(tmp_path: Path) -> None:
+    """A code-scan hit (an unknown name in the narrator's voice, 12.3.1b item 2.6) goes to the revision with its
+    reason; the revision keeps the rest as written and never asks to shorten or play safe (12.3.3)."""
     bad = "Tam Harlan nods to Brannoc. The fog lies low on the water. What do you do?"
     good = "Tam Harlan nods to you. The fog lies low on the water. What do you do?"
-    model = look_model(narrator=[narr(bad), lambda s, p: rep(0, "Tam Harlan nods to you.", _must(p))])
+    model = look_model(narrator=[narr(bad), narr(good)])
     dock, ctx = setup(tmp_path, model)
     out = play_turn(ctx, "I look over the quay.")
     assert out.response.fiction == good
     msg = calls(model, Role.NARRATOR)[1].message
     assert "Tam Harlan nods to Brannoc" in msg and "names 'Brannoc'" in msg
     low = msg.lower()
-    assert "every other sentence of your draft stands as written" in low
+    assert "keep the rest as you wrote it" in low
     assert not any(w in low for w in ("shorten the", "simplify", "play it safe", "be safe")) or "do not shorten" in low
 
 

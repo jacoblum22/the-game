@@ -122,7 +122,7 @@ def test_view_names_entities_and_hides_sealed_data(tmp_path: Path) -> None:
     assert "fact.1 about npc.mara_voss: attitude = wary" in text
     out = OfflineModel().propose(Role.NARRATOR, {"type": "object"},
                                  packet_for(store, Role.NARRATOR, [], message='- part [SPEECH] "Evening, Mara."'))
-    assert "Mara Voss" in " ".join(s["text"] for s in out["sentences"])  # a reply from the named NPC in the view
+    assert "Mara Voss" in out["passage"]  # a reply from the named NPC in the view
 
 
 def test_quiet_turns_and_notes_go_after_the_view(tmp_path: Path) -> None:

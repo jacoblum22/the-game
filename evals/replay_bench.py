@@ -313,7 +313,8 @@ def plugged_measures(items: list[dict[str, Any]], narrator: Plug, judge: Plug, w
             loop.update(**{k: v for k, v in (draft.get("_audit") or {}).items()},
                         audited=bool(draft.get("_audit")))
             undeclared += sum(s.get("undeclared_new", 0) for s in verdicts)
-            declared += sum(len(s.get("new") or []) for s in draft.get("_sentences") or [])
+            declared += int(draft.get("_declared_new") or 0)
+            loop.update(revised=bool(draft.get("_revised")))
         else:
             passed += not fails
             undeclared += sum(1 for s in verdicts if s.get("undeclared_new"))
@@ -334,6 +335,7 @@ def plugged_measures(items: list[dict[str, Any]], narrator: Plug, judge: Plug, w
         t = loop["turns"]
         out.update({
             "first drafts missing a must-name line": _pct(loop["missing_first"], t),
+            "turns with a revision": _pct(loop["revised"], t),
             "turns with cut sentences": _pct(loop["cut"], t),
             "turns with a rendered line": _pct(loop["rendered"], t),
             "narrator calls per turn": f"{loop['calls'] / t:.2f}",

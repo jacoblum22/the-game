@@ -55,7 +55,7 @@ def test_reach_note_is_a_sentence_not_a_raw_ladder_line() -> None:
 
 
 def _fiction(out: dict) -> str:  # type: ignore[type-arg]
-    return " ".join(x["text"] for x in out["sentences"])
+    return str(out["passage"])
 
 
 def test_record_line_gives_the_reach_rung_and_words_without_ids() -> None:

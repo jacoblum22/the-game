@@ -12,7 +12,7 @@ import sqlite3
 from pathlib import Path
 from typing import Any
 
-from engine.audit.declare import DeclaredSentence, pc_quotes
+from engine.audit.declare import Sentence, pc_quotes
 from engine.audit.text import covers
 from engine.data.loader import load_rules
 from engine.dm.context import TurnContext
@@ -166,8 +166,8 @@ def test_the_speaker_card_and_speech_line_ask_for_plain_speech() -> None:
 def test_pc_words_inside_a_speech_attribution_are_caught() -> None:
     """Playtest 20261008-192926, turn 26: '"Fair enough," you say' inside the carter's line. The sentence's speaker is
     the carter, so the quote beside "you say" was never checked (DL-12-100)."""
-    s = DeclaredSentence(text='"Ivas Terier would know it, since he\'s the one who brought the word." "Fair enough," '
+    s = Sentence(text='"Ivas Terier would know it, since he\'s the one who brought the word." "Fair enough," '
                               'you say, and the words sit on the board between the cups.', speaker="npc.carter")
     assert pc_quotes(s) == ["Fair enough,"]
     assert not covers("Fair enough,", "Then who would know? Who do the carters sell to?", ratio=0.8)  # → cut
-    assert pc_quotes(DeclaredSentence(text='"Go on," she says, and you nod.', speaker="npc.carter")) == []
+    assert pc_quotes(Sentence(text='"Go on," she says, and you nod.', speaker="npc.carter")) == []

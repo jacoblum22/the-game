@@ -1,4 +1,5 @@
-"""Replay-bench plugs for spec 006 (the narration contract): recorded first-draft packets in the new contract.
+"""Replay-bench plugs for the narration contract (spec 006; spec 019's passage): recorded first-draft packets in
+today's contract.
 
     py -3.12 evals/replay_bench.py run --narrator evals.narration_plug:haiku --judge evals.narration_plug:judge \
         --limit 80 --workers 4
@@ -7,14 +8,15 @@
 Each recorded packet (spec 005's corpus) is rebuilt in the new contract: its record lines get handles (`R1`, …,
 must-name by kind, the beat's costs, harm, conditions, positions and delivered items split into lines of their
 own, 12.14.12), the instructions are today's narrator prompt, and the schema's enums come from the packet (record
-handles + the view's fact ids; the view's entity ids). The narrator plug then runs the turn's narration loop
-against the packet: the first draft, the declaration judge (engine.audit.declare: 12.3.1a scans, tiers, beat
-polarity, coverage), and up to `max_redrafts` narrow repairs (12.3.3), counting calls, cuts and rendered lines.
+handles; the view's people as speakers). The narrator plug then runs the turn's narration loop against the
+packet: the first draft (one passage and its side list), the passage judge (engine.audit.declare: 12.3.1a scans,
+tiers, coverage, the quote-mark check), and at most one revision that sees the whole draft (12.3.3), counting calls,
+revisions, cuts and rendered lines.
 
 What the replay cannot judge: the store. Support is the packet's (DL-12-42); a contradiction with a stored value,
 an Oracle answer and the Checker's verdicts need the game's state, which the corpus does not hold. With `audit`
 on, the Checker (same model) reads each first draft so undeclared assertions can be counted like spec 005's
-baseline (unknown-subject claims no declared new element covers).
+baseline (unknown-subject claims no new element in the side list covers).
 """
 
 from __future__ import annotations
@@ -31,26 +33,30 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from engine.audit import text as tx  # noqa: E402
-from engine.audit.claims import beat_polarity  # noqa: E402
+from engine.audit.claims import beat_polarity, passage_beat  # noqa: E402
 from engine.audit.declare import (  # noqa: E402
-    DeclaredSentence,
+    Passage,
     SceneIndex,
+    Sentence,
     coverage,
     known_as,
     parse_output,
     scan_sentence,
+    sentences_of,
     t2_delivered,
     tier_of,
+    unquoted,
+    voices,
 )
 from engine.dm.adjudication import BeatEntry  # noqa: E402
 from engine.dm.handles import MUST_NOTES  # noqa: E402
-from engine.dm.roles.narrator import Repair, repair_text  # noqa: E402
+from engine.dm.roles.narrator import Revision, revision_text  # noqa: E402
 from engine.dm.roles.prompts import load_prompt  # noqa: E402
 from engine.dm.schemas import SchemaContext, checker_schema, narrator_schema  # noqa: E402
 
 HAIKU = "haiku"
 _LOCK = threading.Lock()
-MAX_REDRAFTS = 2
+MAX_REVISIONS = 1
 AUDIT = True
 _HEADER = "ADJUDICATION RECORD"
 _GUIDE = ("- part [", "- whoever answers", "- the character ", "- the turn stops at a pause", "- end by handing",
@@ -112,8 +118,8 @@ class Packet:
         out = []
         for ln in record:
             out += self._convert(ln)
-        self.message = (head + _HEADER + " (narrate exactly this, no better and no worse; cite each line you narrate "
-                        "by its handle in `refs`; every line marked MUST needs a sentence that cites it):\n"
+        self.message = (head + _HEADER + " (narrate exactly this, no better and no worse; list each line you narrate "
+                        "by its handle in `covers`; narrate every line marked MUST):\n"
                         + "\n".join(out) + ("\n" + "\n".join(tail) if tail else ""))
         self.player = (re.search(r'THE PLAYER\'S MESSAGE: "(.*)"', msg) or [None, ""])[1]
         self.facts = {m.group(1): m.group(2) for m in re.finditer(r"(?m)^\s*(fact\.\d+) about (.+)$", self.view)}
@@ -148,7 +154,7 @@ class Packet:
             out = [self._add("beat", owed, beat, entities=ents, degree=degree,
                              gate_words="no roll" if no_roll and not degree else "")]
             for kind, words in subs:
-                words = f"the PC learns (say it plainly in the fiction): {words}" if kind == "learned" else words
+                words = f"the PC learns: {words}" if kind == "learned" else words
                 out.append(self._add(kind, True, words, entities=_ids_named(words, self.names)))
             return out
         if body.startswith("question "):
@@ -173,11 +179,11 @@ class Packet:
     def must(self) -> list[str]:
         return [x["handle"] for x in self.items if x["must"]]
 
-    def ctx(self, *, repair_ids: list[str] | None = None, repair: bool = False) -> SchemaContext:
+    def ctx(self) -> SchemaContext:
         rules = _rules()
-        return SchemaContext(scene_ids=list(self.names), narrator_refs=[*self.handles, *self.facts],
-                             element_kinds=list(rules.pacing["claim_check"]["element_tiers"]),
-                             repair_ids=repair_ids or [], repair=repair)
+        return SchemaContext(scene_ids=list(self.names), narrator_refs=self.handles,
+                             speaker_ids=[i for i in self.names if not i.startswith("pc.")],
+                             element_kinds=list(rules.pacing["claim_check"]["element_tiers"]))
 
     def render(self, message: str | None = None) -> str:
         order = ["CORE RULES", "RULE CARDS", "NARRATOR VIEW", "RECENT EXCHANGES"]
@@ -225,36 +231,37 @@ class Packet:
 # ------------------------------------------------------------------------------------------- judging
 
 
-def judge_sentence(p: Packet, idx: SceneIndex, s: DeclaredSentence) -> dict[str, Any]:  # rule: 12.3.1a
-    """The declaration judge in packet mode: scans, tiers, beat polarity. Returns {ok, fix, why, undeclared_new}."""
+def judge_sentence(p: Packet, idx: SceneIndex, s: Sentence, beat: BeatEntry | None) -> dict[str, Any]:
+    # rule: 12.3.1a
+    """One sentence of a passage in packet mode: scans, tiers, plain result words. Returns {ok, fix, why, ...}."""
     rules = _rules()
-    s.refs = [r for r in s.refs if r in idx.handles or r in idx.facts]
-    s.about = [a for a in s.about if a in idx.aliases]
     known = {el.name: known_as(el, idx) for el in s.new}
     s.about += [k for k in known.values() if k]
     s.new = [el for el in s.new if not known[el.name]]  # one of the scene's own, spoken of: not new
     scan = scan_sentence(s, idx, rules=rules, names=list(p.names.values()))
     fails = [(f.fix, f.why) for f in scan.failures]
     for el in s.new:
-        tier = tier_of(el, rules)
-        if tier == "T2" and not t2_delivered(el, s, idx):
+        if tier_of(el, rules) == "T2" and not t2_delivered(el, s, idx):
             fails.append(("cut", f"a new {el.element_kind} no record line delivers"))
-    by_h = {x["handle"]: x for x in p.items}
-    for r in s.refs:
-        x = by_h.get(r)
-        if x and x["kind"] == "beat":
-            deg = beat_polarity(s.text, BeatEntry(restatement="", degree=x.get("degree"),
-                                                  gate_words=x.get("gate_words", "")))
-            if deg:
-                fails.append(("redraft", f"contradicts the attempt's result ({deg})"))
+    deg = beat_polarity(voices(s)[0], beat) if beat is not None else None
     cut = any(f == "cut" for f, _ in fails)
     return {"text": s.text, "ok": not fails, "fix": "cut" if cut else ("redraft" if fails else None),
             "why": [w for _, w in fails], "cls": fails[0][1].split(" (")[0] if fails else None,
-            "undeclared_new": scan.undeclared_new, "added_about": len(scan.added_about)}
+            "outcome_words": deg, "undeclared_new": scan.undeclared_new, "added_about": len(scan.added_about)}
 
 
-def _audit(p: Packet, sents: list[DeclaredSentence], model: str) -> dict[str, int]:
-    """The Checker on the first draft (12.3.1 source 2): claims on subjects no declaration covers."""
+def judge_passage(p: Packet, idx: SceneIndex, passage: Passage) -> tuple[list[Sentence], list[dict[str, Any]],
+                                                                         list[str], list[str]]:  # rule: PR-12-2
+    """The passage judge in packet mode: (sentences, their checks, uncovered must-name handles, unquoted words).
+    Plain result words are logged, never failed (measured 1 real of 10; pacing.yaml outcome_words)."""
+    sents, _ = sentences_of(passage)
+    beat = passage_beat([BeatEntry(restatement="", degree=x.get("degree"), gate_words=x.get("gate_words", ""))
+                         for x in p.items if x["kind"] == "beat"])
+    return sents, [judge_sentence(p, idx, s, beat) for s in sents], coverage(passage, p.must), unquoted(passage)
+
+
+def _audit(p: Packet, passage: Passage, sents: list[Sentence], model: str) -> dict[str, int]:
+    """The Checker on the first draft (12.3.1 source 2): claims on subjects the side list and names do not cover."""
     from evals.playtest import ask_claude
 
     rules = _rules()
@@ -273,9 +280,7 @@ def _audit(p: Packet, sents: list[DeclaredSentence], model: str) -> dict[str, in
             continue
         if c.get("subject") == "unknown":
             text = f"{c.get('predicate', '')} {c.get('value', '')}"
-            if s.atmosphere and c.get("class") == "action":
-                continue  # atmosphere is never a claim (12.3.1)
-            if not any(tx.overlap(text, el.name) for el in s.new):
+            if not any(tx.overlap(text, el.name) for el in passage.new):
                 unknown += 1
         elif c.get("subject") not in idx.subjects(s) and c.get("subject") != idx.pc:
             undeclared += 1
@@ -285,56 +290,48 @@ def _audit(p: Packet, sents: list[DeclaredSentence], model: str) -> dict[str, in
 # ------------------------------------------------------------------------------------------- narrators
 
 
+def _failed(sents: list[Sentence], checks: list[dict[str, Any]], missing: list[str], quote: list[str]) -> list[str]:
+    """What the one revision is told (engine.dm.narration._Draft.failed's words)."""
+    out = []
+    if any(c["fix"] == "redraft" for c in checks):
+        for s, c in zip(sents, checks, strict=True):
+            out += [f'remove "{s.text}": {w}' if c["fix"] == "cut" else f'"{s.text}": {w}' for w in c["why"]]
+    out += [f"not narrated: {h} (narrate it and list it in `covers`)" for h in missing]
+    out += [f'speech outside quote marks: "{w}" (put the spoken words inside quote marks)' for w in quote]
+    return out
+
+
 def _run(item: dict[str, Any], call: Any, audit: Any = None) -> dict[str, Any]:
-    """The narration loop on one packet: draft, judge, up to MAX_REDRAFTS narrow repairs, then cut and render."""
+    """The narration loop on one packet: draft, judge the passage, at most one revision, then cut and render."""
     p = Packet(item)
     instructions = load_prompt("narrator")
     data = call(instructions, p.render(), narrator_schema(p.ctx()))
     calls = 1
-    sents = parse_output(data)
+    passage = parse_output(data)
     idx = p.index()
-    first = [judge_sentence(p, idx, s) for s in sents]
-    missing0 = coverage(sents, p.must)
-    result: dict[str, Any] = {"fiction": " ".join(s.text for s in sents), "mentions": [], "_first": first,
-                              "_missing_first": missing0, "_sentences": [s.model_dump() for s in sents]}
+    sents, first, missing0, quote0 = judge_passage(p, idx, passage)
+    result: dict[str, Any] = {"fiction": passage.text, "mentions": [], "_first": first, "_missing_first": missing0,
+                              "_unquoted_first": quote0, "_side_list": passage.model_dump(exclude={"text"}),
+                              "_declared_new": len(passage.new)}
     if audit is not None:
-        result["_audit"] = audit(p, sents)
-    checks = list(first)
-    dropped = [False] * len(sents)
-    rounds = 0
-    while True:
-        for i, c in enumerate(checks):
-            dropped[i] = dropped[i] or c["fix"] == "cut"
-        live = [s for s, d in zip(sents, dropped, strict=True) if not d]
-        missing = coverage(live, p.must)
-        redo = {str(i): sents[i].text for i, c in enumerate(checks) if not dropped[i] and not c["ok"]}
-        if (not redo and not missing) or rounds >= MAX_REDRAFTS:
-            break
-        rounds += 1
-        rep = Repair(failing=redo, reasons={i: checks[int(i)]["why"] for i in redo},
-                     missing=[f"{h}" for h in missing])
-        msg = p.message + "\n" + repair_text(rep)
-        data = call(instructions, p.render(msg), narrator_schema(p.ctx(repair_ids=list(redo), repair=True)))
+        result["_audit"] = audit(p, passage, sents)
+    checks, missing, quote = first, missing0, quote0
+    revised = False
+    failed = _failed(sents, checks, missing, quote)
+    if failed and MAX_REVISIONS:
+        rev = Revision(draft=passage.text, failed=failed)
+        data = call(instructions, p.render(p.message + "\n" + revision_text(rev)), narrator_schema(p.ctx()))
         calls += 1
-        for r in data.get("repairs") or []:
-            key = str(r.get("replaces"))
-            d = DeclaredSentence.model_validate(r)
-            if key in redo and d.text.strip():
-                i = int(key)
-                d.refs = d.refs or sents[i].refs
-                sents[i], checks[i] = d, judge_sentence(p, idx, d)
-            elif key in redo:
-                dropped[int(key)] = True
-            elif key == "add" and d.text.strip():
-                sents.append(d)
-                checks.append(judge_sentence(p, idx, d))
-                dropped.append(False)
-    cut = any(dropped) or any(not c["ok"] for i, c in enumerate(checks) if not dropped[i])
-    kept = [s for i, s in enumerate(sents) if not dropped[i] and checks[i]["ok"]]
-    result.update(_calls=calls, _cut=cut, _rendered=bool(coverage(kept, p.must)),
-                  _first_pass=all(c["ok"] for c in first) and not missing0, _rounds=rounds,
+        revised = True
+        if str(data.get("passage") or "").strip():
+            passage = parse_output(data)
+            sents, checks, missing, quote = judge_passage(p, idx, passage)
+            result["_revision"] = passage.text
+    kept = [s for s, c in zip(sents, checks, strict=True) if c["ok"]]
+    result.update(_calls=calls, _cut=len(kept) < len(sents), _rendered=bool(missing), _revised=revised,
+                  _quoted_by_code=len(quote), _first_pass=not failed, _rounds=int(revised),
                   _turn=f"{item['_recorded']['save']}/{item['_recorded']['turn']}",
-                  _final=[s.model_dump() for i, s in enumerate(sents) if not dropped[i] and checks[i]["ok"]])
+                  _final=" ".join(s.text for s in kept))
     dump = os.environ.get("NARRATION_PLUG_DUMP")
     if dump:  # per-packet detail, for reading what drives a miss
         with _LOCK, open(dump, "a", encoding="utf-8") as f:
@@ -347,7 +344,7 @@ def haiku(item: dict[str, Any]) -> dict[str, Any]:
 
     def call(system: str, prompt: str, schema: dict[str, Any]) -> dict[str, Any]:
         return ask_claude(system, prompt, schema, HAIKU)[0]
-    return _run(item, call, (lambda p, s: _audit(p, s, HAIKU)) if AUDIT else None)
+    return _run(item, call, (lambda p, ps, s: _audit(p, ps, s, HAIKU)) if AUDIT else None)
 
 
 def offline(item: dict[str, Any]) -> dict[str, Any]:
@@ -369,5 +366,5 @@ def _role() -> Any:
 
 
 def judge(item: dict[str, Any], draft: dict[str, Any]) -> list[dict[str, Any]]:  # noqa: ARG001
-    """The first draft's per-sentence verdicts (computed by the narrator plug, which needs them to repair)."""
+    """The first draft's per-sentence checks (computed by the narrator plug, which needs them to revise)."""
     return draft.get("_first") or []

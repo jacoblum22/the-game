@@ -149,29 +149,6 @@ def pause_blocks(blocks: Iterable[str]) -> list[str]:
     return out
 
 
-def _acknowledged(record: AdjudicationRecord, fiction: str) -> list[str]:  # rule: 12.2.7
-    """Parts of the player's message with no evidence of an answer (12.2.7 (1))."""
-    # a SPEECH or FICTION_QUESTION part is marked "answered" before the draft exists (turn.py). One such part is the
-    # Checker's to judge (a "describe what I see" is answered by description, not by its words); two or more are
-    # each looked for, so one answered half no longer passes for both (P-080). A part answered elsewhere (a NOTE
-    # block, a pause, a hold) is skipped.
-    beat_parts = {b.part for b in record.beats if b.part is not None}
-    asked = [(i, p) for i, p in enumerate(record.parts) if p.cls in ANSWERED_CLASSES]
-    several = sum(p.handled == "answered" for _, p in asked) > 1
-    missing = []
-    for i, p in asked:
-        if p.handled not in ("", "answered") or (p.handled and not several) or i in beat_parts:
-            continue
-        # the words this part has that its siblings lack: two questions about the child are told apart by
-        # "mother", not by "child" (one answered half no longer covers both)
-        others = set().union(*(tx.content(q.text) for j, q in asked if j != i))
-        own = " ".join(w for w in tx.words(p.text) if tx.stem(w) not in others)
-        needle = own if tx.content(own) else p.text
-        if not tx.covers(needle, fiction, ratio=0.34):
-            missing.append(p.text)
-    return missing
-
-
 _QUOTE = re.compile(r"[\"“]([^\"”]+)[\"”]")
 _YOU = re.compile(r"\byou(r|rs|rself)?\b", re.I)
 
@@ -212,14 +189,13 @@ def screen_draft(fiction: str, *, flags: Mapping[str, Any] | None = None, record
     f = dict(flags or {})
     rec = record or AdjudicationRecord()
     reasons: list[str] = []
-    # 12.2.7 (1) acknowledged. With no message part to answer (the opening, a scene opening, a recap: the Checker
-    # saw "(none)") there is nothing to acknowledge or substitute, so its flags do not apply [playtest 2026-10-07]
+    # 12.2.7 (1) acknowledged: the flag only. With no message part to answer (the opening, a scene opening, a recap)
+    # there is nothing to acknowledge or substitute [playtest 2026-10-07]. Speech and questions are not tracked part
+    # by part: the word-overlap "answered" check (about 6% precise) is retired [revision: R2-J; DL-12-101; spec 019]
     asked = any(p.cls in ANSWERED_CLASSES for p in rec.parts)
-    missing = _acknowledged(rec, fiction)
-    ack = (bool(f.get("intent_acknowledged", True)) or not asked) and not missing
+    ack = bool(f.get("intent_acknowledged", True)) or not asked
     if not ack:
-        reasons.append("12.2.7: a part of the player's message is not answered"
-                       + (f" ({'; '.join(missing)})" if missing else ""))
+        reasons.append("12.2.7: the response does not take up what the player tried")
     # 12.2.7 (2) not substituted
     substituted = bool(f.get("intent_substituted", False)) and asked
     if substituted:

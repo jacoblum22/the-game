@@ -1169,6 +1169,18 @@ def undecided(b: BeatEntry, pause: Any = None) -> bool:  # rule: 01.9.3
                 and getattr(pause, "kind", None) == "near_miss" and getattr(pause, "frame_id", None) == b.frame_id)
 
 
+def passage_beat(beats: Iterable[BeatEntry]) -> BeatEntry | None:  # rule: 12.3.1
+    # rule: 12.3.1b
+    """The beat a passage's plain result words are judged against (12.3.1b item 1, outcome): the turn's one resolved
+    beat, or the first of several that all went the same way; None when their results differ, since a passage
+    declares no sentence's beat (12.3.1, the side list) and a guess would be a false block.
+    ponytail: mixed results go unchecked; tie sentences to beats by their words if that ever lets one through."""
+    done = [b for b in beats if b.degree is not None or (b.gate_words or "").startswith("no roll")]
+    if not done or len({_beat_success(b) for b in done}) > 1:
+        return None
+    return done[0]
+
+
 def beat_polarity(text: str, b: BeatEntry, pause: Any = None) -> str | None:  # rule: 12.3.1
     """A sentence citing a beat's line, against the beat's degree (P-112): the degree in words when the sentence
     plainly says the opposite, else None. Only plain result phrases count (a sentence is prose, not a claim). A
@@ -1334,7 +1346,7 @@ class PrecisionHit(BaseModel):
     """One precision check's hit (12.3.2 "Precision, not class"): logged always, with whether it blocked, so each
     check's precision can be measured (OEQ-12-27)."""
 
-    check: str  # pronoun_certain_subject | season_words
+    check: str  # pronoun_certain_subject | season_words | outcome_words
     cls: str  # the claim class the check belongs to (pacing.yaml)
     voice: Literal["narrator", "speech"]
     words: str  # the word that hit
@@ -1346,6 +1358,8 @@ class PrecisionHit(BaseModel):
     def why(self) -> str:
         if self.check == "pronoun_certain_subject":
             return f"{self.words!r} does not fit the person this speaks of, whose pronouns are {self.store_value}"
+        if self.check == "outcome_words":
+            return f"contradicts the attempt's result ({self.store_value})"
         return f"names the season {self.words!r}, but it is {self.store_value} now"
 
 
@@ -1430,15 +1444,16 @@ def _pronoun_hit(text: str, before: Sequence[str], idx: Any, about: Iterable[str
 
 
 def precision_checks(text: str, *, idx: Any, before: Sequence[str] = (), speech: Sequence[str] = (),
-                     about: Iterable[str] = (), season: str | None = None,
-                     rules: Any = None) -> list[PrecisionHit]:  # rule: 12.3.2
+                     about: Iterable[str] = (), season: str | None = None, rules: Any = None,
+                     beat: BeatEntry | None = None, pause: Any = None) -> list[PrecisionHit]:  # rule: 12.3.2
     # rule: 12.3.1b
     # rule: OEQ-12-27
     """12.3.2's precision checks on one sentence, by code: `text` is its narrator's words, `speech` its speech spans,
     `before` the narrator's words of the draft's sentences before it (oldest first), `about` its declared ids, `idx`
-    a `declare.SceneIndex` (names, stored pronouns), `season` the calendar line's (`SEASONS`). Each check runs in
-    the voices its data lists (`claim_check.precision_checks.checks`); a check whose measured `precision` is below
-    `min_precision` still hits but does not block (logged only, OEQ-12-27)."""
+    a `declare.SceneIndex` (names, stored pronouns), `season` the calendar line's (`SEASONS`), `beat` the turn's
+    beat the passage's plain result words answer to (`passage_beat`; spec 019). Each check runs in the voices its data
+    lists (`claim_check.precision_checks.checks`); a check whose measured `precision` is below `min_precision` still
+    hits but does not block (logged only, OEQ-12-27)."""
     min_p, checks = _precision_cfg(rules)
     out: list[PrecisionHit] = []
 
@@ -1461,6 +1476,10 @@ def precision_checks(text: str, *, idx: Any, before: Sequence[str] = (), speech:
                              *((("speech", sp) for sp in speech) if "speech" in voices_on else ())]:
             for w in _season_hits(words, season, shift):
                 hit("season_words", "speech" if voice == "speech" else "narrator", w, season)
+    if checks.get("outcome_words") is not None and beat is not None:
+        degree = beat_polarity(_QUOTE_RE.sub(" ", text), beat, pause)
+        if degree:
+            hit("outcome_words", "narrator", degree, degree)
     return out
 
 

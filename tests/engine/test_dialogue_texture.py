@@ -34,13 +34,13 @@ def _said(store: Any, speaker: str, words: str, about: list[str] | None = None, 
 
 
 def _speaks(speaker: str, *lines: str) -> Any:
-    """A scripted draft in which `speaker` says each line (declared speech, citing every MUST line)."""
+    """A scripted passage in which `speaker` says each line (spec 019: each a speech in the side list, every MUST line
+    covered)."""
     def build(schema: Any, packet: Any) -> dict[str, Any]:
         must = re.findall(r"(?m)^- (R\d+) MUST:", packet.message)
-        out = [{"text": f'"{x}"', "refs": list(must), "about": [speaker], "new": [], "atmosphere": False,
-                "speaker": speaker} for x in lines]
-        return {"sentences": [*out, {"text": "What do you do?", "refs": [], "about": [], "new": [],
-                                     "atmosphere": False, "speaker": "none"}]}
+        return {"passage": " ".join([*(f'"{x}"' for x in lines), "What do you do?"]),
+                "speech": [{"speaker": speaker, "words": x, "form": "direct"} for x in lines], "new": [],
+                "covers": must}
     return build
 
 
@@ -58,7 +58,8 @@ def test_said_lines_feed_back_on_the_speaker_card(tmp_path: Path) -> None:
 
 
 def test_a_repeated_line_is_redrafted(tmp_path: Path) -> None:
-    """`not_a_repeat`: the second turn's draft repeats the speaker's own said line; the repair replaces it."""
+    """`not_a_repeat`: the second turn's draft repeats the speaker's own said line; the one revision replaces it.
+    The said record is the whole speech (spec 019)."""
     hello = 'I say to Tam Harlan, "Evening."'
     model = ScriptedModel({Role.READER: [reader("SPEECH", hello)] * 2, Role.WORLD: [QUIET_WORLD] * 2,
                            Role.CHECKER: [chk()] * 3})
@@ -68,9 +69,7 @@ def test_a_repeated_line_is_redrafted(tmp_path: Path) -> None:
     assert [r["words"] for r in tm.said_by(dock.state, dock.ferryman)] == [
         "The last ferry crosses an hour before the dawn tide"]
     model.push(Role.NARRATOR, _speaks(dock.ferryman, "The last ferry crosses an hour before the dawn tide, friend"))
-    model.push(Role.NARRATOR, {"repairs": [{"replaces": "0", "text": '"Mind the fog on the stair."', "refs": [],
-                                            "about": [dock.ferryman], "new": [], "atmosphere": False,
-                                            "speaker": dock.ferryman}]})
+    model.push(Role.NARRATOR, _speaks(dock.ferryman, "Mind the fog on the stair."))
     second = play_turn(ctx, hello)
     assert first.response.fiction.count("dawn tide") == 1
     assert "dawn tide" not in second.response.fiction and "fog on the stair" in second.response.fiction

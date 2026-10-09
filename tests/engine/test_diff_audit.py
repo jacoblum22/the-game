@@ -11,7 +11,7 @@ from engine.dm.turn import play_turn
 from engine.llm.base import Role
 from engine.store.events import EntityRecord, Event
 from tests.engine.test_turn_adjudication import setup
-from tests.engine.test_turn_narration import _decl, _must, calls, chk, claim, look_model
+from tests.engine.test_turn_narration import _must, calls, chk, claim, look_model, passage
 from tests.fixtures.scene_dock import build_dock
 
 
@@ -19,22 +19,18 @@ def _names(ctx: Any) -> set[str]:
     return {e.name for e in ctx.store.state.entities.values()}
 
 
-def test_the_audit_reads_declarations_in_words_after_delivery(tmp_path: Path) -> None:
-    """The sampled diff sees each delivered sentence's declarations rendered in words; what it finds is logged and
-    changes nothing (a gender is off the blocking list, DL-12-80)."""
-    holder: dict[str, Any] = {}
-
+def test_the_audit_reads_the_side_list_in_words_after_delivery(tmp_path: Path) -> None:
+    """The sampled diff sees the delivered passage's sentences and its side list rendered in words; what it finds is
+    logged and changes nothing (a gender is off the blocking list, DL-12-80)."""
     def draft(schema: Any, packet: Any) -> dict[str, Any]:
-        return {"sentences": [_decl("Tam Harlan, a woman, watches you.", _must(packet),
-                                    about=[holder["dock"].ferryman]), _decl("What do you do?")]}
+        return passage("Tam Harlan, a woman, watches you. What do you do?", _must(packet))
     model = look_model(narrator=[draft])
     dock, ctx = setup(tmp_path, model)
-    holder["dock"] = dock
     model.push(Role.CHECKER, chk(), chk(claim(0, dock.ferryman, "identity", "gender", "woman")))
     out = play_turn(ctx, "I look over the quay.")
     msg = calls(model, Role.CHECKER)[0].message
-    assert "[0] Tam Harlan, a woman, watches you.\n    declares: R1 (" in msg
-    assert f"about Tam Harlan ({dock.ferryman})" in msg and "    declares: nothing" in msg
+    assert "[0] Tam Harlan, a woman, watches you.\n[1] What do you do?" in msg
+    assert "THE SIDE LIST:\n- covers R1: " in msg
     assert out.response.fiction == "Tam Harlan, a woman, watches you. What do you do?"
     [e] = [e for e in out.turn_record.claim_log if e.get("source") == "sample"]
     assert (e["class"], e["verdict"], e["blocking_miss"]) == ("identity", "contradicted", False)
@@ -44,8 +40,8 @@ def test_a_figure_of_speech_is_atmosphere_not_a_claim(tmp_path: Path) -> None:
     """12.3.1 as revised: a claim needs a literal assertion about an addressable id. A clock or sealed label on a
     metaphor, or an existence claim with no id, passes as atmosphere and writes nothing."""
     def draft(schema: Any, packet: Any) -> dict[str, Any]:
-        return {"sentences": [_decl("You look over the quay, and it is only the beginning.", _must(packet)),
-                              _decl("The silence presses, more than it seems."), _decl("What do you do?")]}
+        return passage("You look over the quay, and it is only the beginning. The silence presses, more than it "
+                       "seems. What do you do?", _must(packet))
     model = look_model(narrator=[draft])
     dock, ctx = setup(tmp_path, model)
     before = _names(ctx)
@@ -62,8 +58,8 @@ def test_undeclared_elements_the_audit_finds_are_logged_only(tmp_path: Path) -> 
     """Spec 011 (DL-12-80, DL-12-83): what the sampled audit finds undeclared is logged; audit-typed T2 never cuts
     and nothing is written after delivery."""
     def draft(schema: Any, packet: Any) -> dict[str, Any]:
-        return {"sentences": [_decl("You look over the quay; a coil of rope lies by the stair.", _must(packet)),
-                              _decl("A cutthroat waits in the dark."), _decl("What do you do?")]}
+        return passage("You look over the quay; a coil of rope lies by the stair. A cutthroat waits in the dark. "
+                       "What do you do?", _must(packet))
     model = look_model(narrator=[draft])
     dock, ctx = setup(tmp_path, model)
     model.push(Role.CHECKER, chk(undeclared=[

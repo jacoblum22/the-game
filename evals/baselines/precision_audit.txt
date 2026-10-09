@@ -1,8 +1,10 @@
-sentences checked: 2810
+sentences checked: 3235
 narration pronoun_certain_subject: 4 hits, 4 real, 0 character as he/she, 0 false, 0 unjudged; precision 1.00
-narration season_words: 1 hits, 1 real, 0 character as he/she, 0 false, 0 unjudged; precision 1.00
+narration season_words: 2 hits, 1 real, 0 character as he/she, 1 false, 0 unjudged; precision 0.50
+narration pronoun_in_speech: 5 hits, 0 real, 0 character as he/she, 5 false, 0 unjudged; precision 0.00
 framer pronoun_certain_subject: 26 hits, 11 real, 15 character as he/she, 0 false, 0 unjudged; precision 1.00
 framer season_words: 0 hits, 0 real, 0 character as he/she, 0 false, 0 unjudged; precision n/a
+framer pronoun_in_speech: 0 hits, 0 real, 0 character as he/she, 0 false, 0 unjudged; precision n/a
 - [pc] pronoun_certain_subject narrator 'her' (store: he/him) playtest-20261007-161320-explorer:framer turn.3: 'Elanae notices her steady watching in the open market and turns it into a question or a walk-away' | before: ''
 - [pc] pronoun_certain_subject narrator 'she' (store: he/him) playtest-20261007-181158-breaker:framer turn.9: 'Bixok notices she is pressing about the night, and the question is carried back to whoever came to the shrine.' | before: ''
 - [real] pronoun_certain_subject narrator 'he' (store: she/her) playtest-20261007-183202-breaker:framer turn.7: 'Bram turns back to the well and the moment closes before he answers' | before: ''
@@ -22,6 +24,10 @@ framer season_words: 0 hits, 0 real, 0 character as he/she, 0 false, 0 unjudged;
 - [real] pronoun_certain_subject narrator 'him' (store: she/her) playtest-20261007-210953-talker:framer turn.16: "the crowd behind you hears the smith's name said aloud and marks you as asking after him" | before: ''
 - [pc] pronoun_certain_subject narrator 'she' (store: he/him) playtest-20261007-213310-talker:framer turn.8: 'the captain or the gate guards at the arch overhear what she is saying' | before: ''
 - [pc] pronoun_certain_subject narrator 'his' (store: she/her) playtest-20261007-220207-talker:framer turn.9: 'Edella declines to answer, and the gate stays shut to his questions.' | before: ''
+- [false] pronoun_in_speech speech 'he' (store: f) playtest-20261008-135029-talker turn.2: '"I do not know what he said before he died," Nero says, "nor who the word was meant for."' | before: 'Nero says,'
+- [false] pronoun_in_speech speech 'He' (store: f) playtest-20261008-135029-talker turn.3: '"He is at the hall," Nero says, her voice flat with grief.' | before: 'Nero says, her voice flat with grief.'
+- [false] pronoun_in_speech speech 'he' (store: f) playtest-20261008-135029-talker turn.15: '"I do not know where he keeps himself," she says.' | before: 'she says.'
+- [false] pronoun_in_speech speech 'he' (store: f) playtest-20261008-135029-talker turn.16: '"I do not know who else would know where he keeps himself," she says.' | before: 'she says.'
 - [real] pronoun_certain_subject narrator 'his' (store: she/her) playtest-20261008-135049-fighter:framer turn.11: 'Eliius goes back down on the market stones, unable to keep his feet under him' | before: ''
 - [real] pronoun_certain_subject narrator 'his' (store: she/her) playtest-20261008-135049-fighter:framer turn.14: 'Eliius loses his footing on the stones after the lunge and goes down again' | before: ''
 - [real] pronoun_certain_subject narrator 'his' (store: she/her) playtest-20261008-135049-fighter:framer turn.14: 'Eliius loses his footing on the ground as he is pulled off balance after the cut' | before: ''
@@ -34,3 +40,5 @@ framer season_words: 0 hits, 0 real, 0 character as he/she, 0 false, 0 unjudged;
 - [real] pronoun_certain_subject narrator 'His' (store: she/her) playtest-20261008-145410-talker turn.4: 'His answer is curt, and he does not finish it.' | before: 'says Ysrion Leafward.'
 - [real] pronoun_certain_subject narrator 'him' (store: she/her) playtest-20261008-145410-talker turn.6: 'You step close to Ysrion and lower your voice, and you put the offer to him: coin for his time, and a quiet place where he names it.' | before: ''
 - [real] pronoun_certain_subject narrator 'his' (store: she/her) playtest-20261008-145430-fighter:framer turn.12: 'Murzak twists and shrugs the grab off, and I lose my footing against his weight' | before: ''
+- [false] season_words speech 'winter' (store: spring) playtest-20261008-192946-fighter turn.9: 'Mind that point, and I will tell you what I can. Folk say it is the winter that drove us out: it came early to the Windy March eight years back, and it has stayed a little longer every year since. Nobody in this town bel'
+- [false] pronoun_in_speech speech 'he' (store: f) playtest-20261008-192946-fighter turn.10: '"I only heard it said," she answers, "but folk say he is held in the reeve\'s cell, and that he swears he is innocent."' | before: 'she answers,'

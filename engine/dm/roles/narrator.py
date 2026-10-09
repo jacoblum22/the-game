@@ -1,12 +1,12 @@
-"""The Narrator role (B draft, D redraft; contracts/model-calls.md B): turns the adjudication record into fiction plus
-the new elements it mentions. It decides nothing.
+"""The Narrator role (B draft, D revision; contracts/model-calls.md B): turns the adjudication record into one passage
+of fiction plus its side list (speech, new elements, the record lines it covers; 12.3.1). It decides nothing.
 
     out = draft(ctx, record, player_message="I slip past the watch.", exchanges=recent)
-    out.fiction, out.mentions          # mentions go to engine.dm.mentions.write_mentions (T8)
-    out = draft(ctx, record, player_message=..., redraft=Redraft(previous=sentences, failures=[...]))   # D
+    out.passage.text, out.passage.speech, out.passage.covers
+    out = draft(ctx, record, player_message=..., revision=Revision(draft=text, failed=[...]))   # D, 12.3.3
 
-THIS MESSAGE carries the player's words, the adjudication record (rendered in words by `record_text`), and for a
-redraft the failing verdicts with the store's values (lead decision). The view is the narrator view
+THIS MESSAGE carries the player's words, the adjudication record (rendered in words by `record_text`), and for the
+one revision the whole draft with what failed and the store's values. The view is the narrator view
 (`engine.dm.packet.scene_view`): nothing sealed reaches this role (INV-10).
 """
 
@@ -18,10 +18,10 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, Field
 
-from engine.audit.declare import DeclaredSentence, parse_output
+from engine.audit.declare import Passage, parse_output
 from engine.dm.adjudication import AdjudicationRecord, BeatEntry
 from engine.dm.context import TurnContext
-from engine.dm.handles import RecordItem
+from engine.dm.handles import AGREED, RecordItem
 from engine.dm.handles import items as handle_items
 from engine.dm.packet import build_packet, scene_setting, view_ctx, view_for
 from engine.dm.player_text import clean
@@ -52,23 +52,20 @@ DEGREE_WORDS = {"critical_success": "critical success (better than hoped)", "suc
                 "failure": "failure (the world answers)", "critical_failure": "critical failure (it goes badly)"}
 
 
-class Repair(BaseModel):
-    """A narrow redraft (12.3.3): only the failing sentences, each with its failure and the store's value to use,
-    plus the must-name lines no sentence cites."""
+class Revision(BaseModel):
+    """The one revision (12.3.3): the whole draft and each failure in words, with the store's value to use."""
 
-    failing: dict[str, str] = Field(default_factory=dict)  # sentence index -> its text
-    reasons: dict[str, list[str]] = Field(default_factory=dict)  # sentence index -> "why; use: value" lines
-    missing: list[str] = Field(default_factory=list)  # "R2" handles, or "answer: <the player's question>"
+    draft: str
+    failed: list[str] = Field(default_factory=list)
 
 
 class NarratorDraft(BaseModel):
-    sentences: list[DeclaredSentence] = Field(default_factory=list)
-    repairs: list[tuple[str, DeclaredSentence]] = Field(default_factory=list)  # (replaces, sentence) for a repair
+    passage: Passage = Field(default_factory=Passage)
     call_id: str | None = None
 
     @property
     def fiction(self) -> str:
-        return " ".join(s.text for s in self.sentences)
+        return self.passage.text
 
 
 def name_of(state: WorldState, eid: str | None, pc: str | None = None) -> str:
@@ -287,11 +284,12 @@ def _item_words(state: WorldState, record: AdjudicationRecord, it: RecordItem, r
         p = b.positions[it.index]
         return f"position: {name_of(state, p.entity, pc)} {p.words}"
     if it.kind == "learned":  # 12.10.5: what the success delivered; the PC is told or sees it
-        return f"the PC learns (say it plainly in the fiction): {it.text}"
-    if it.kind == "change" and b is not None:  # 01.2.7: what the beat changed, or why it did not
+        return f"the PC learns: {it.text}"
+    if it.kind == "change" and b is not None:  # 01.2.7 item 3: the state the change wrote, never a line to repeat
         if b.change_refused:
-            return f"the attempt worked, but this did not change (say why plainly): {it.text}"
-        return f"what changed (say it plainly; it is done): {it.text}"
+            return f"this did not change: {it.text}"
+        agreed = AGREED.match(it.text)
+        return f"{agreed.group(1)} agrees to what was asked" if agreed else f"now so: {it.text}"
     if it.kind == "oracle":
         o = record.oracle[it.index]
         return f"question \"{o.question}\": the answer is {o.answer}"
@@ -337,8 +335,8 @@ def record_text(state: WorldState, record: AdjudicationRecord, *, player_message
             lines.append(f"Length: at most {limit} words of fiction.")
     if player_message:
         lines.append(f'THE PLAYER\'S MESSAGE: "{player_message}"')
-    lines.append("ADJUDICATION RECORD (narrate exactly this, no better and no worse; cite each line you narrate by "
-                 "its handle in `refs`; every line marked MUST needs a sentence that cites it):")
+    lines.append("ADJUDICATION RECORD (narrate exactly this, no better and no worse; list each line you narrate by its "
+                 "handle in `covers`; narrate every line marked MUST):")
     for p in record.parts:
         lines.append(f"- part [{p.cls}] \"{p.text}\"" + (f" ({p.handled})" if p.handled else ""))
     if record.scene.ended and not record.scene.started:
@@ -439,17 +437,12 @@ def _repeated_lines(deliveries: Sequence[str], low: Sequence[tuple[str, str]]) -
     return out
 
 
-def repair_text(r: Repair) -> str:  # rule: 12.3.3
-    """THIS MESSAGE's repair section: the failing sentences only (the rest of the draft stands and is not shown)."""
-    lines = ["A REPAIR. Only these sentences failed; every other sentence of your draft stands as written. For each, "
-             "write one replacement with `replaces` set to its number, fixing exactly what is named and keeping its "
-             "voice and detail; an empty `text` drops it."]
-    for i, text in r.failing.items():
-        lines.append(f"[{i}] {text}")
-        lines += [f"    - {why}" for why in r.reasons.get(i, [])]
-    if r.missing:
-        lines.append("MISSING (add one sentence for each, `replaces` = add, citing its handle): " + "; ".join(r.missing))
-    return "\n".join(lines)
+def revision_text(r: Revision) -> str:  # rule: 12.3.3
+    """THIS MESSAGE's revision section: the whole draft, then each failure in words."""
+    return "\n".join(["A REVISION. Your draft is below, then what failed. Write the whole passage and its side list "
+                      "again: fix exactly what is named and keep the rest as you wrote it (its voice, detail and "
+                      "length). Never shorten or play safe.", "YOUR DRAFT:", r.draft, "WHAT FAILED:",
+                      *(f"- {x}" for x in r.failed)])
 
 
 def _freshness(ctx: TurnContext) -> list[str]:  # rule: 12.14.11
@@ -497,56 +490,41 @@ LOOKS_AROUND = re.compile(r"\blook(?:s|ing)? (?:around|about|round)\b|\bsurround
                           r"|\bdescribe\b|\btake in the\b", re.IGNORECASE)
 
 
-def narrator_mode(ctx: TurnContext) -> str:
-    """The output shape: declared sentences, or the fallback `fiction` + declarations (config `narrator_schema`)."""
-    return "fiction" if (ctx.config or {}).get("narrator_schema") == "fiction" else "sentences"
-
-
 def draft(ctx: TurnContext, record: AdjudicationRecord, *, player_message: str = "",
           exchanges: Sequence[str | tuple[str, str]] = (), purpose: Purpose = "turn",
-          repair: Repair | None = None, extra: Sequence[str] = (),
+          revision: Revision | None = None, extra: Sequence[str] = (),
           items: Sequence[RecordItem] | None = None) -> NarratorDraft:  # rule: PR-12-1
     # rule: 12.3.1
-    """One Narrator call (T7, or a narrow repair with `repair`, 12.3.3). The schema's `refs` are this turn's handles
-    then the view's fact ids, `about` the scene scope (closed lists built from the packet). `extra`: lines
-    appended to THIS MESSAGE (a recap's state summary). Raises ModelInvalid when two answers fail the schema (the
-    caller falls back, 12.3.3)."""
+    """One Narrator call (T7, or the one revision with `revision`, 12.3.3): one passage and its side list. The
+    schema's `covers` are this turn's record handles, `speech` speakers the people present (closed lists built from
+    the packet). `extra`: lines appended to THIS MESSAGE (a recap's state summary). Raises ModelInvalid when two
+    answers fail the schema (the caller falls back, 12.3.3)."""
     st = ctx.state
     its = list(items) if items is not None else record_items(st, record)
     triggers = get_active_triggers(st, ctx.rules)
     mode = st.scene.mode if st.scene else None
     cards = load_cards_for(Role.NARRATOR, scene_situation_tags(st, ctx.rules), mode, triggers, rules=ctx.rules)
     msg = [record_text(st, record, player_message=player_message, purpose=purpose, rules=ctx.rules, items=its)]
-    if repair is None:
-        full = purpose != "turn" or bool(LOOKS_AROUND.search(player_message))  # setting once (DL-12-99)
-        if purpose in ("turn", "scene_open", "opening") and (setting := scene_setting(st, full=full)):
-            msg.append(setting)
-        if purpose in ("turn", "scene_open"):
-            msg += _freshness(ctx)
-        msg.extend(extra)
-    else:
-        msg.append(repair_text(repair))
+    full = purpose != "turn" or bool(LOOKS_AROUND.search(player_message))  # setting once (DL-12-99)
+    if purpose in ("turn", "scene_open", "opening") and (setting := scene_setting(st, full=full)):
+        msg.append(setting)
+    if purpose in ("turn", "scene_open"):
+        msg += _freshness(ctx)
+    msg.extend(extra)
+    if revision is not None:  # the same packet, plus the whole draft and what failed (12.3.3)
+        msg.append(revision_text(revision))
     message = "\n".join(msg)
-    # the enums come from the view this packet shows (its facts and entities, spotlight included), so nothing
-    # outside the packet can be cited (12.3.1)
+    # the enums come from this packet (its record handles, the people present), so nothing outside it can be cited
     view = view_for(Role.NARRATOR, st, view_ctx(message, exchanges, plain=False))
-    sctx = schema_context(st, ctx.rules)
-    sctx = sctx.model_copy(update={
-        "narrator_refs": [*(it.handle for it in its), *re.findall(r"(?m)^\s*(fact\.\d+) about ", view)],
-        "scene_ids": list(dict.fromkeys([*sctx.scene_ids, *(i for i in re.findall(r"(?m)^([a-z]+\.[\w.]+): ", view)
-                                                             if i in st.entities)])),
-        "narrator_mode": narrator_mode(ctx), "repair_ids": list(repair.failing) if repair is not None else [],
-        "repair": repair is not None})
+    sctx = schema_context(st, ctx.rules).model_copy(update={"narrator_refs": [it.handle for it in its]})
     schema = build_schema(Role.NARRATOR, sctx)
     packet = build_packet(Role.NARRATOR, instructions=load_prompt("narrator"), cards=cards, view=view,
                           exchanges=list(exchanges), message=message, triggers=triggers, rules=ctx.rules)
     res = call_role(ctx.model, Role.NARRATOR, schema, packet, turn_id=ctx.turn_id, recorder=ctx.record_call)
-    data = dict(res.data)
-    if repair is not None:
-        reps = [(str(r.get("replaces")), DeclaredSentence.model_validate(r)) for r in data.get("repairs") or []]
-        return NarratorDraft(repairs=reps, call_id=res.record.call_id)
-    return NarratorDraft(sentences=parse_output(data), call_id=res.record.call_id)
+    p = parse_output(dict(res.data))
+    return NarratorDraft(passage=p.model_copy(update={"covers": [c for c in p.covers if c in sctx.narrator_refs]}),
+                         call_id=res.record.call_id)
 
 
-__all__ = ["NarratorDraft", "Purpose", "Repair", "draft", "freshness_lines", "name_of", "names_for",
-           "narrator_mode", "record_items", "record_text", "repair_text"]
+__all__ = ["NarratorDraft", "Purpose", "Revision", "draft", "freshness_lines", "name_of", "names_for",
+           "record_items", "record_text", "revision_text"]

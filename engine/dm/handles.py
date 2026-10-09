@@ -29,6 +29,10 @@ MUST_NOTES = ("the inciting incident:", "a lead to make noticeable:", "a lead ar
               "the character takes ")
 SKIP_NOTES = ("session move", "safety:", "queued for", "[WARNING", "oracle:", "dying check:", "testimony settled")
 OPTIONAL = "optional"  # an NpcActionEntry tag: a non-addressed NPC's reaction, optional material (12.14.12)
+# 01.2.7 item 3 [revision: R2-J; DL-01-39]: a persuade_to result ("Agreed by Belby Haydale: <the player's goal>") is
+# the RESULT block's line; the narration gets who agreed (the beat line says what was asked), never the goal restated
+# as their agreement ("settled between you", round 6 I1 §6)
+AGREED = re.compile(r"^Agreed (?:already )?by (.+?): ")
 
 
 class RecordItem(BaseModel):
@@ -116,9 +120,12 @@ def items(record: AdjudicationRecord, *, names: Mapping[str, str] | None = None)
                 beat=n, index=i, text=p.words)
         for i, x in enumerate(b.learned):
             add("learned", True, [pc or "", *b.targets], _sentence(x), beat=n, index=i, text=x)
-        said = b.changed or b.change_refused  # 01.2.7 item 3: the applied change (or why not) is owed
+        # 01.2.7 item 3: the applied change is owed; one not applied is the RESULT's to explain (citable, not owed)
+        said = b.changed or b.change_refused
         if said:
-            add("change", True, [x for x in (b.actor or pc, *b.targets) if x], _sentence(said), beat=n, text=said)
+            agreed = AGREED.match(b.changed)
+            add("change", not b.change_refused, [x for x in (b.actor or pc, *b.targets) if x],
+                _sentence(f"{agreed.group(1)} agrees" if agreed else said), beat=n, text=said)
     if record.scene.started and record.scene.cut:  # the beats led there: the arrival is owed (12.4.3; P-098)
         add("scene", bool(arrival), [], arrival)
     for i, o in enumerate(record.oracle):
@@ -144,4 +151,4 @@ def by_handle(its: list[RecordItem]) -> dict[str, RecordItem]:
     return {it.handle: it for it in its}
 
 
-__all__ = ["MUST_NOTES", "OPTIONAL", "RecordItem", "by_handle", "items"]
+__all__ = ["AGREED", "MUST_NOTES", "OPTIONAL", "RecordItem", "by_handle", "items"]
