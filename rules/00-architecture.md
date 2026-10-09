@@ -11,9 +11,10 @@
 > data-file convention, and one glossary. It is shaped by a single finding that recurs across all
 > seven research digests: an AI Dungeon Master is excellent at *interpreting* free-form intent into a
 > closed vocabulary and poor at *choosing numbers, remembering situational rules, resisting
-> persuasion, keeping secrets, and imposing loss*. So this chapter makes the AI's job classification
-> onto closed lists and makes everything else deterministic, stored, and triggered — which is what
-> lets the player try anything (goal 1) while the AI still rules it correctly (goal 2).
+> persuasion, keeping secrets, and imposing loss*. So code owns that spine (numbers, dice, state,
+> secrets, clues, rules that fire from state) and the model owns language and judgment: reading what the
+> player means, voicing the world and its people, and making the calls the rules leave to it. That is
+> what lets the player try anything (goal 1) while the AI still rules it correctly (goal 2) [revision: R2-J0; DL-00-06].
 
 **Reading this chapter.** 00 is written in the standard chapter format (00.19). Its *Rules* section is
 organized in nineteen parts (00.1–00.19); its *Tables* section holds the reference tables the rules
@@ -44,9 +45,12 @@ of checks [R4 §3.4]. Therefore this chapter (a) moves every number, sum, stack,
 and random choice into deterministic tools; (b) reduces every remaining AI judgment to its most
 reliable form — flag, then enum, then rung, then open judgment only where unavoidable; (c) caps the
 damage any single wrong judgment can do to one step, one tick, an offer, or a reversible change; and
-(d) makes situational rules *fire from tracked state* instead of relying on recall. The richness of
-the substrate is kept — maximized, per constitution P3 — but it lives in retrievable rule cards, data
-files, an anchor index, and a ruling ledger, never dumped wholesale into the DM's context [BRIEF A3].
+(d) makes situational rules *fire from tracked state* instead of relying on recall. Steps (a)–(d) are
+for the spine: what code must decide or remember exactly. Language is not atomised: models read whole
+messages and write whole passages [C:VIII]. The richness of the substrate is kept — maximized, per
+constitution P3 — and it lives in the rules, data files, an anchor index and a ruling ledger. They are the
+specification the code implements. A model call receives the situation plus short guidance for its own
+judgment, never the substrate wholesale (00.15.1) [BRIEF A3] [revision: R2-J0; DL-00-06].
 
 **What this chapter deliberately avoids.**
 - Numbers chosen by the AI. The AI picks rungs, flags, enums, fact ids; tools compute [BRIEF A2 #1].
@@ -67,6 +71,33 @@ narrate the result; the tools do the arithmetic, the dice, and the bookkeeping. 
 mechanical engine of the game in the constitution's sense: nothing happens that the DM did not set in
 motion, and nothing the DM sets in motion bypasses the instruments [C:I; C:P13; R1 §4 T-18].
 
+**The working stance (constitution VIII).** [revision: R2-J0; DL-00-06] The model is a capable reader and writer, given good
+context, trusted where a mistake does not break the game, and corrected when it is wrong. It is not an
+unreliable part to be constrained at every step. Eight rules govern every chapter and every revision:
+1. **Code owns the spine; the model owns language and judgment.** The spine is state, dice, rules
+   arithmetic, secrets and clues, and what must be exact. Code does not author narrative content that a
+   model must repeat (prose, NPC lines, facts mislabelled from speech).
+2. **Check by measured precision, only what breaks the game.** A check blocks only where its measured
+   precision is high and its target would break the game (12.3.2; DL-12-95). Everything else is trusted,
+   logged, or corrected by the player.
+3. **Truth only when it matters.** Speech is testimony. It is settled into world truth only when the player
+   relies on it mechanically (PR-12-12; DL-12-91).
+4. **Whole over parts.** Atomise only what code must decide or remember exactly.
+5. **Remove friction before adding procedure.** Fixes are not sacred. Fine position matters much less than
+   place and range.
+6. **Better context, not more rules.** Each model call gets the situation plus short guidance for the
+   judgment it makes (00.15.1, 00.15.4).
+7. **Diagnose from evidence.** Trace the actual model inputs and outputs before naming a cause; analyse
+   holistically, not symptom by symptom.
+8. **The player is part of error correction.** The feedback loop (`/fix`, 12.3.6; DL-12-94) is the safety
+   net that lets the system be loose.
+
+Kept: structured state, typed goals, clues and cases, dice, the feedback loop. Read through this stance,
+not against it: "never narrate against state" (00.1.5) protects the spine; "the DM never chooses what is
+true" (12.6.1) governs what the game will rely on, not speech or incidental detail (D1, S1); a second
+model checking every claim (the old reading of C:P13) is withdrawn. Trust is model-dependent: each
+loosening is validated on the target model, Gemini Flash, before it is treated as settled.
+
 ---
 
 ## Rules
@@ -82,7 +113,7 @@ serve which.
 | Audience | Reads | Needs from the text | Never receives |
 |---|---|---|---|
 | **Player** | 14 (Player's Guide), the codex (14), OFFER lines, out-of-fiction markers | What they may try, what it costs, the odds, what they know | Sealed state; raw tallies; adversary stat blocks |
-| **AI DM** (runtime) | The always-loaded core (00.15.4), rule cards retrieved per situation, data entries, active triggers, the ruling ledger | Closed choices with "true only when" definitions; examples on both sides of each boundary | Whole chapters at once; sealed state until unsealed |
+| **AI DM** (runtime) | The situation (state, scene, the conversation so far, active triggers, relevant precedents) plus short guidance for the judgment each call makes (00.15.4) [revision: R2-J0; DL-00-06] | Closed choices with "true only when" definitions where code must record the answer; whole messages to read and room to write whole passages | Whole chapters; rule text for decisions it does not make; sealed state until unsealed |
 | **Implementer** (engine builder) | 00 (all), `data/SCHEMAS.md`, every chapter's *State touched* and *Tables* | Types, schemas, tool contracts, runtime capabilities | — |
 
 **00.1.2 How the chapters relate.** `[N]` [R: rules/_process/BRIEF.md §A1; revision: I-065] 00 fixes form and interfaces. 01 is the adjudication
@@ -95,11 +126,12 @@ reaches into another chapter's state except through a named interface.
 
 **00.1.3 Reading order.** `[N]` [DL-00A-33; revision: I-065] Implementers and chapter authors: 00 → 01 → 12 → 03 → 04 → 05 → 06 →
 07 → 02 → 08 → 09 → 10 → 15 → 16 → 11 → 13 → 14. Players: 14 → 13 (opening only) → the codex. The AI
-DM at runtime reads nothing in order; it receives the core (00.15.4) plus retrieved cards.
+DM at runtime reads nothing in order; each call receives the situation plus short guidance for its
+judgment (00.15.4) [revision: R2-J0; DL-00-06].
 
 **00.1.4 Precedence of rules.** `[D]` When two rules seem to conflict, apply the first matching line
 (a flat, first-match list; no nesting) [R4 SG-10]:
-1. The constitution's Core Principles I–VII.
+1. The constitution's Core Principles I–VIII [revision: R2-J0; DL-00-06].
 2. The invariants of this chapter (T-00-1).
 3. The rule of the chapter that owns the state family being changed (00.6.3).
 4. A license's literal scope, for the part of the beat it covers (00.12.4).
@@ -111,7 +143,8 @@ State always beats narration; among state writes, the latest write wins [R1 §4 
 
 **00.1.5 Precedence of concerns.** `[J:enum]` When the DM must trade concerns off (not rules — goals
 within the rules), the order is: (1) the player's safety settings (lines and veils, 14); (2) state
-truth — never narrate against state; (3) rules integrity — no MUST is broken; (4) player intent
+truth — never narrate against state (the spine; what is not yet state is settled only when it
+matters, C:VIII [revision: R2-J0; DL-00-06]); (3) rules integrity — no MUST is broken; (4) player intent
 fidelity — acknowledge the stated intent, never substitute another, never silently reset
 [R1 #3]; (5) fairness — declared stakes are honored exactly; (6) pacing and drama. *Worst case (J) of a
 wrong call:* a scene paced worse than it could be; items 1–5 are protected by `[D]` rules elsewhere.
@@ -143,7 +176,8 @@ binding authoring standard for every chapter [BRIEF A1].
 - **P-A — Put every judgment in its most reliable form.** For each decision a rule needs, ask in
   order: can the engine compute it (`[D]`)? a yes/no question about established facts (`[J:flag]`)?
   a choice from a closed, defined set (`[J:enum]`)? a rung on a short anchored ladder (`[J:rung]`)?
-  Only if none fits is it open judgment (`[J:open]`) [R4 §4.1].
+  Only if none fits is it open judgment (`[J:open]`) [R4 §4.1]. P-A is for decisions code must record
+  or compute from. Language (what is said, and how) is left whole to the model [C:VIII] [revision: R2-J0; DL-00-06].
 - **P-B — Bound the blast radius.** Every `[J:*]` rule states, in its text, the largest mechanical
   effect a wrong call can produce, and that effect must be one of: (i) one rung, one step, or one
   clock tick; (ii) an *offer* the player can decline instead of a grant; (iii) self-correcting as
@@ -1650,7 +1684,9 @@ roll, yes) · Likely · Even · Unlikely · Remote · Impossible (no roll, no). 
 and the doubles-as-twist rule; ch.12 owns the DM's use of the same Oracle for its own questions and
 any tension shift, which may move the rung by at most one. The answer is written as a fact at once
 (`source: oracle`), and a "no" is followed in the same breath by what *is* there (P16). Established
-facts are never asked again. **The proposal form** [revision: R2-D; revision: R2-H] [DL-12-60; DL-12-91]: for ordinary knowledge (T1b) in the
+facts are never asked again. Truth only when it matters [C:VIII] [revision: R2-J0; DL-00-06]: the Oracle settles
+what the game will rely on; incidental fiction is written as narrated (12.6.1, 12.14.13) and speech is
+testimony. **The proposal form** [revision: R2-D; revision: R2-H] [DL-12-60; DL-12-91]: for ordinary knowledge (T1b) in the
 narrator's voice the DM may frame a candidate answer as the question ("Does the innkeeper know that the north road is
 washed out?"), at the odds 12.10.6(d) fixes before the roll; only the settled answer is narrated. What a character
 merely says is testimony and is never asked; it is settled, at Likely, only when it comes to matter (PR-12-12). *Worst case (J):* a one-rung odds error shifts the chance by 15–25 points,
@@ -1663,7 +1699,9 @@ resolved through one typed record, the **frame**, produced by a structured adjud
 prose is written, then consumed by narration [R4 §9 00 #2; R4 R-07; R: https://arxiv.org/abs/2502.19519].
 Ch.01 owns the procedure that fills it (the pipeline PARSE → GATE → NECESSITY → ANCHOR → FRAME → OFFER
 → ROLL → READ → DELIVER → CONSEQUENCE → RECORD); every chapter's rules must be expressible as fields of
-it, and none may add a judgment step outside it.
+it, and none may add a judgment step outside it. The frame is the spine of a rolled beat, not a script for
+the prose. Narration reads the frame and the situation and writes one whole passage. It must name the
+outcome and what changed, and the rest is the narrator's (12.14.12; DL-12-92) [revision: R2-J0; DL-00-06].
 
 ```yaml
 Frame:
@@ -1783,10 +1821,14 @@ price or duration (SG-01). *Invariant INV-3.*
 
 ### 00.15 Rule cards, the anchor index, and the ruling ledger
 
-**00.15.1 The substrate is delivered as retrievable cards.** `[D]` The rich substrate lives as
-numbered rules packaged as **rule cards**, plus data entries, plus an **anchor index**, plus the
-**ruling ledger**. It is never loaded wholesale: irrelevant-but-plausible rules degrade accuracy far
-more than neutral filler [BRIEF A3; R4 §3.3 W13; R: https://arxiv.org/abs/2412.08972].
+**00.15.1 The rules are the specification; a model call gets the situation and short guidance.** `[D]`
+[revision: R2-J0; DL-00-06] The rich substrate lives as numbered rules packaged as **rule cards**, plus data entries, plus an
+**anchor index**, plus the **ruling ledger**. They are the specification the code implements, and the
+lookup for implementers, authors and tools (by id). They are not the model's payload: a model call
+receives the situation (00.15.4) plus short guidance for the one judgment its role makes, written from
+the cards that judgment applies [C:VIII]. Rule text for decisions a call does not make, or that code
+computes, is never sent: irrelevant-but-plausible rules degrade accuracy far more than neutral filler
+[BRIEF A3; R4 §3.3 W13; R: https://arxiv.org/abs/2412.08972].
 
 **00.15.2 Rule-card record.** `[D]` [DL-00A-24; revision: I-065] Each numbered rule compiles to one card (the markdown template of
 00.2.5 is its source):
@@ -1817,14 +1859,15 @@ situation tags. At the ANCHOR step the DM chooses `[J:enum]` among the anchors t
 the beat's verb and tags (at most eight candidates; default: the anchor of the beat's basic verb).
 *Worst case:* a near-but-wrong anchor, bounded by the two-change limit and logged (class iv).
 
-**00.15.4 The always-loaded core.** `[D]` Only these travel with every turn: the turn-loop checklist
-(ch.12), the invariants T-00-1, the gate classes (00.12.3), the stakes/reach/lever card (00.3.9,
-00.3.14–15). The active-trigger list also travels with every turn, at the head of the narrator view
-rather than in the core, so the core is the same on every call and can be served from the prompt cache
-(12.2.4) [revision: R2-A] [amended: DL-12-38]. Everything else loads by `situation.*` tag, anchor, or
-trigger [R4 §9 00 #5; R4 §3.3 W12]. The packet is capped at the core plus **at most twelve** loaded
-cards, with the player's message verbatim and the **last four exchanges** verbatim; ch.12 owns these
-numbers (`pacing.yaml#packet`) [amended: DL-12-02].
+**00.15.4 The packet: the situation plus guidance for the call's judgment.** `[D]` [revision: R2-J0; DL-00-06] Every call
+carries the situation: the view, with the active-trigger list at its head [revision: R2-A] [amended:
+DL-12-38], the player's message verbatim, and the **last four exchanges** verbatim. Rule text goes only
+to a call that applies it. The **core** is the turn-loop checklist (ch.12), the invariants T-00-1, the gate
+classes (00.12.3) and the stakes/reach/lever card (00.3.9, 00.3.14–15). It is the guidance for framing a
+check, and is kept identical from call to call so it can be served from the prompt cache (12.2.4). Each other
+role gets short guidance for its own judgment, loaded by role, `situation.*` tag, anchor or trigger,
+**at most twelve** cards' worth [R4 §9 00 #5; R4 §3.3 W12]. A call never gets cards for fields code
+computes. Ch.12 owns these numbers (`pacing.yaml#packet`) [amended: DL-12-02].
 
 **00.15.5 Ruling ledger record.** `[D]` [DL-00A-24; C:III; revision: I-065]
 

@@ -1,5 +1,55 @@
 <!--
 Sync Impact Report
+Version change: 2.0.0 → 3.0.0 (MAJOR: the project's stance toward the model is redefined. The owner directed
+  it on 2026-10-08/09 and approved recording it here and in rules/00-architecture.md.)
+Added principles:
+  - VIII. Code Owns the Spine; the Model Owns Language and Judgment. Eight rules: (1) code owns the spine
+    (state, dice, rules arithmetic, secrets and clues, what must be exact) and does not author narrative
+    content models must repeat; (2) check by measured precision, only what breaks the game; (3) truth only
+    when it matters (speech is testimony); (4) whole over parts; (5) remove friction before adding
+    procedure; (6) better context, not more rules; (7) diagnose from evidence; (8) the player is part of
+    error correction. Kept: structured state, typed goals, clues and cases, dice, the feedback loop.
+    Caution: trust is model-dependent; validate on Gemini Flash.
+Superseded or reinterpreted (each listed under VIII, "What VIII supersedes"):
+  - Truth-gated narration (state only what the store holds): reinterpreted. The store holds the spine and
+    what has been settled; nothing else needs a source before it is narrated.
+  - P13's independent checker (a second model, of another family, checking every claim): superseded by
+    VIII.2. P13 amended in place; TODO(CROSS_FAMILY_CHECKER) closed by withdrawal.
+  - "The DM never chooses what is true" (rules 12.6.1): reinterpreted as already loosened by owner rulings
+    D1 (T1b) and S1 (rules DL-12-91). It governs what the game relies on, not speech or incidental detail.
+  - NPCs mute unless sourced: superseded (already reversed by S1/S2, rules DL-12-91 to DL-12-93).
+  - Atomising every message, sentence and fact so it can be checked: superseded by VIII.4.
+  - Rule cards as the model's payload (rules 00.15.1, 00.15.4): superseded by VIII.6. Cards stay as the
+    specification and the lookup.
+Modified principles and patterns:
+  - I: one sentence ties the instruments to VIII's spine. Meaning unchanged.
+  - P3: AMENDED note. The "reconciliation layer" is the code-owned spine, precision checks and the feedback
+    loop, not a check of every narrated claim.
+  - P13: AMENDED note. The gate is narrowed to VIII.2; the cross-family requirement is withdrawn for
+    narration checks (moderation stays separate).
+  - Technology Constraints: closed-choice forms are for what code must record; TODO(CROSS_FAMILY_CHECKER)
+    closed.
+Bump rationale: MAJOR. A design that complied with 2.0.0 (a second-family model checking every claim,
+  cards as the packet, code-scripted NPC lines) now violates VIII; a design that P13 forbade (one model
+  family, trusted except where precision checks catch real breaks) now complies.
+Resolved deferrals: TODO(CROSS_FAMILY_CHECKER): withdrawn (Technology Constraints).
+Deferred: validation of every loosening on Gemini Flash (no playtest has run on it yet). Engine packets still
+  carry the core and situation cards to every role (rules DL-00-06, Migration); aligning them is follow-up
+  work.
+Dependent artifacts: rules/00-architecture.md (design intent, 00.1.1, 00.1.3, 00.1.4, 00.1.5, 00.2.1,
+  00.12.7, 00.13.1, 00.15.1, 00.15.4; [revision: R2-J0]); rules decision DL-00-06; traceability row VIII.
+  specs/*/plan.md Constitution Check rows keep citing the version they were planned under.
+Evidence: research_notes/Playtest round 2 solutions/ROUND3-ANALYSIS.md (S1-S3: code-scripted dialogue,
+  mandatory texture, a feedback loop built for precise claims; "check less should be decided by measured
+  precision, not by claim class"), ROUND4-ANALYSIS.md (R1 hedging from a hearsay rule; R3/R5 friction),
+  ROUND5-ANALYSIS.md (T3 repetition traced to blind repair calls, not the model), and round6-investigation/
+  I1 (sentence-array schema and coverage repairs cause choppy, repeated speech; 28 of 30 repair targets
+  from coverage), I2 (settling testimony is what produced the garbage in mechanics), I3 (`/fix`: 1 of 15
+  disputes right; complaint text pinned as fact), I4 (rule text is 70-85% of each packet and mostly unused;
+  the situation plus short guidance cuts input about 73%; goal/method splitting comes from instructions, not
+  model size).
+
+Prior report (1.8.0 → 2.0.0):
 Version change: 1.8.0 → 2.0.0 (MAJOR: Principle I is redefined. The owner approved the first
   feature's tech stack on 2026-10-07; recording it here also brings Principle I's wording in line
   with the reading the ruleset already uses.)
@@ -259,7 +309,8 @@ every judgment that sets something in motion: *when* to call an instrument, *wha
 and *how* to narrate the result. The instruments do the arithmetic, the dice, and the
 bookkeeping. Code runs only the steps the rules mark `[D]`, in the order PR-12-1 (the turn loop)
 fixes, and MUST NOT make a judgment the rules mark `[J]`. Nothing happens that the AI DM did not
-set in motion, and nothing the AI DM sets in motion bypasses the instruments.
+set in motion, and nothing the AI DM sets in motion bypasses the instruments. The instruments are
+the spine of Principle VIII; language and judgment are the model's.
 
 ### II. Custom Ruleset by Design
 The project builds a custom tabletop-style ruleset rather than adapting an existing system
@@ -354,6 +405,70 @@ ends), and this principle is its counterpart, guarding against an AI DM being to
 not *outcome quality* — it answers "can you even try this," a question logically prior to and
 separate from P8's "how well did the attempt go."
 
+### VIII. Code Owns the Spine; the Model Owns Language and Judgment
+Owner direction, 2026-10-08/09 (rules DL-00-06). The earlier stance treated the model as an unreliable
+component to be constrained at every step. This principle replaces that stance. The model is a capable
+reader and writer: it is given good context, trusted where a mistake does not break the game, and
+corrected when it is wrong. The owner's own words: "fixes aren't sacred"; "we might be too intense with the
+rules; AI doesn't hallucinate so much… pull back on non-critical cases"; "dialogue is testimony"; "make the
+system less strict… a robust system for the player to provide feedback… have it go back and check"; "don't
+get too in the weeds"; "analyse things holistically, not individually".
+
+1. **Code owns the spine; the model owns language and judgment.** The spine is structured state, dice,
+   rules arithmetic, secrets and clues, and anything else that must be exact. Code MUST own it
+   (Principle I). Code MUST NOT author narrative content that a model is then made to repeat: prose, NPC
+   lines, or facts mislabelled from speech.
+2. **Check by measured precision, and only what breaks the game.** A check MAY block output only where its
+   measured precision is high and what it guards would break the game: the spine, a sealed secret or clue,
+   or a safety line. Everything else is trusted, logged, or corrected by the player. Whether a check
+   blocks is decided by measurement, not by the class of claim it inspects.
+3. **Truth only when it matters.** What a character says is testimony, not world truth. It is settled into
+   world truth only when the player relies on it mechanically, and it is settled at that moment.
+4. **Whole over parts.** Models read whole messages and write whole passages. Only what code must decide or
+   remember exactly is atomised into closed choices, fields and records. Messages, sentences and facts
+   are not split up just so they can be checked.
+5. **Remove friction before adding procedure.** When play stalls or feels stiff, first remove the step,
+   gate or mandatory content that causes it. Add a new procedure only when removal cannot fix the problem.
+   Fixes are not sacred: a past fix that now causes friction is removed, not defended. Model the world at
+   the grain play needs; fine position matters much less than place and range.
+6. **Better context, not more rules.** The ruleset is the specification the code implements, not a
+   payload for the model. Each model call gets the situation, plus short guidance for the judgment that
+   call makes. A model call MUST NOT be given rule text for decisions it does not make.
+7. **Diagnose from evidence.** Before naming a cause, trace the actual model inputs and outputs of the
+   failing turn (what the call was given, what it returned, what code did with it). A model that can see
+   the conversation should not normally repeat itself, so a failure that looks like the model's is first
+   checked against what it was shown. Analyse holistically: group symptoms by shared cause, and don't
+   patch them one at a time.
+8. **The player is part of error correction.** The feedback loop (`/fix`) MUST understand a report, go
+   back and check the record, repair visibly, and answer plainly. It is the safety net that lets the rest
+   of the system be loose, so its quality is measured on real complaints.
+
+*What VIII keeps:* structured state, typed goals (intended changes), clues and cases, dice, and the
+feedback loop.
+
+*What VIII supersedes or reinterprets* (older text that conflicts is read through this list):
+- **Truth-gated narration** ("state only what the store holds"): reinterpreted. The store holds the spine
+  and what has been settled. Nothing else needs a source before it is narrated; incidental detail is
+  written as narrated, and speech is testimony.
+- **P13's independent checker** (a second model, of another family, checking every claim): superseded by
+  VIII.2. See P13's v3.0.0 amendment.
+- **"The DM never chooses what is true"** (rules 12.6.1): reinterpreted, as owner rulings D1 (T1b) and S1
+  (rules DL-12-91) already loosened it. It governs what the game will rely on (spine facts, clues,
+  consequential content). It does not govern a character's speech or incidental detail.
+- **NPCs mute unless sourced:** superseded. Characters speak freely in character (rules DL-12-91 to
+  DL-12-93).
+- **Atomising every message, sentence and fact so it can be checked:** superseded by VIII.4.
+- **Rule cards delivered to the model** (rules 00.15.1, 00.15.4): superseded by VIII.6. The cards remain the
+  specification, and the lookup for implementers, authors and tools.
+
+*Caution: trust is model-dependent.* The evidence for this principle comes from Haiku-engine playtests.
+Each loosening MUST be validated on the target model, Gemini Flash (Technology Constraints), before it is
+treated as settled. If that model needs more checking, the checking is added back by measured precision
+(VIII.2), not by claim class.
+
+*Precedence.* Where an Adopted Design Pattern, or a rule written under the earlier stance, conflicts with
+VIII, VIII governs. The conflict is resolved by revising that pattern or rule, not by tightening VIII.
+
 ## Technology Constraints
 
 The owner approved this stack on 2026-10-07 with the first feature's plan. Detail, alternatives and
@@ -362,16 +477,17 @@ costs are in `specs/004-playable-prototype/plan.md` (Technical Context, Complexi
 document, not a plan-level default.
 
 - **Engine:** Python 3.11+, one engine package, `engine/`. Code drives the PR-12-1 turn loop and the
-  PR-01-1 resolution pipeline. Model roles fill per-turn JSON-Schema forms whose enums come from the
-  rules and the current game state, so every judgment is a closed choice (Principle I).
+  PR-01-1 resolution pipeline. Where code must record or compute from an answer, model roles fill
+  per-turn JSON-Schema forms whose enums come from the rules and the current game state, so that
+  judgment is a closed choice (Principle I). Narration and speech are whole passages (VIII.4).
 - **Schemas and state objects:** Pydantic v2.
 - **Storage:** one SQLite event log per game: append-only events as the source of truth, a typed
   projection, and snapshots. This is the external store Pattern P13 requires.
 - **Models:** Gemini 3.8 Flash for every model role, on one key (`GEMINI_API_KEY`). The claim
   checker is a separate call that can be swapped out on its own.
-  `TODO(CROSS_FAMILY_CHECKER)`: the checker shares the narrator's model family. This is a recorded
-  deviation from Pattern P13, made by owner decision (one provider, one key). It stays open until a
-  second-family checker is restored. The target is gpt-oss-120b on Groq or Claude Haiku.
+  `TODO(CROSS_FAMILY_CHECKER)` is closed (v3.0.0): Principle VIII.2 withdraws the requirement that a
+  second model family check narration. A second-family checker is restored only if measurement on
+  the target model shows a check that breaks the game needs one.
 - **Front end:** a terminal front end first, then a FastAPI + htmx web front end.
 - **Hosting:** one SQLite file per game.
 
@@ -464,6 +580,10 @@ research context but is **not** a design budget for this project. No rule is cut
 reduce what the player must track; rules are judged only by player freedom and AI correctness. The
 MUST to classify every piece of tracked state stands (rules 00.6.3, 00.6.4), and the player-facing
 load is carried by the codex (P7; rules ch.14).
+
+AMENDED (v3.0.0, Principle VIII): the "reconciliation layer" this pattern requires is the code-owned
+spine, the blocking checks that measure as precise (VIII.2), and the feedback loop (VIII.8). It is not a
+check of every narrated claim against the store.
 
 **P4. Character-Creation Trade-offs Locked at Creation.** Race/origin (and similar foundational
 choices) set a stat-quantity-vs-freedom trade-off (more points but less placement freedom, or
@@ -710,6 +830,14 @@ the failure this pattern is designed against — the narrating model's own self-
 reliable substitute for independent verification, confirmed in this project's own data, not
 only in the literature.
 
+AMENDED (v3.0.0, Principle VIII): the first two layers stand. The third, a calibrated gate of another
+model family between a proposal and its narration as true, is superseded by VIII.2. Blocking checks are
+the ones whose measured precision is high and whose target would break the game (the pronoun of a certain
+subject is one: rules DL-12-95). Everything else is trusted, logged, or corrected by the player through the
+feedback loop (VIII.8). The probe's pronoun error above is now answered by exactly that precise check plus
+`/fix`, not by a second model reading every claim. The separation of moderation from consistency
+gating stands.
+
 **P14. Asymmetric Base Cadence for Class Differentiation.** A single cadence parameter (e.g.
 the base delay between actions) MAY differ by class/archetype group, rather than being
 uniform, as a low-overhead way to create a durable, structural feel-difference between groups
@@ -775,4 +903,4 @@ bumps follow semantic versioning: MAJOR for backward-incompatible principle remo
 redefinitions, MINOR for new principles/patterns or materially expanded guidance, PATCH for
 wording or clarification only.
 
-**Version**: 2.0.0 | **Ratified**: 2026-09-27 | **Last Amended**: 2026-10-07
+**Version**: 3.0.0 | **Ratified**: 2026-09-27 | **Last Amended**: 2026-10-09
