@@ -369,7 +369,7 @@ intended_change:   # 01.2.7 [revision: R2-H] [DL-01-34]: each beat's typed inten
   kinds:
     take: {slots: [item, from], applies: "the item's holder becomes the actor"}
     give: {slots: [item, to], applies: "the item's holder becomes the recipient"}
-    move_to: {slots: [place_or_band, who], applies: "position: the place, or bands toward or away (PR-06-4)"}
+    move_to: {slots: [place_or_band, who], applies: "position: the place, or beside the person or thing (an approach: one beat, 01.4.1); in a conflict, bands toward or away (PR-06-4)"}   # [revision: R2-I] [DL-12-98]
     open: {slots: [thing], applies: "the thing's state: open"}
     close: {slots: [thing], applies: "the thing's state: closed"}
     learn: {slots: [topic_or_entity], applies: "delivered items (01.10; PR-12-10; 15.9)"}
@@ -380,10 +380,15 @@ intended_change:   # 01.2.7 [revision: R2-H] [DL-01-34]: each beat's typed inten
     hide: {slots: [who_or_item, from_whom], applies: "hidden (Sneak, 01.18.13)"}
     make: {slots: [item_kind, from], applies: "a made or mended thing (Handle; ch.08)"}
     none: {slots: [], applies: "nothing beyond the beat's own rule"}
+  descriptions: "a whom/what slot may hold an unnamed description of people or things present ('the refugees', 'the queue'): the change is a scene fact about it, the narrator voices whoever speaks; no group entity, no spokesperson; consequential -> the case or casting picks an individual (01.2.7)"   # [revision: R2-I] [DL-12-97]
+  before_framing:                    # 01.2.7 step 1 [revision: R2-I] [DL-01-36]
+    already_true: certain            # the change already holds in the store: no roll, no OFFER (01.4.1: trivial)
+    no_valid_target: [description, ask_who]
+    rule: "never offer a roll whose success has nothing to deliver"
   slot_ids: in_scope                 # ids from the Reader's view (scene and spotlight entities) or a place the PC knows
   reach:                             # delivered reach -> how much of the change lands
     0: nothing
-    1: "partial: take = a hand on it, still contested; move_to = one band or part of the way; persuade_to = a smaller act; restrain = a grip; learn = 01.10's count"
+    1: "partial: take = a hand on it, still contested; move_to = part of the way (one band in a conflict); persuade_to = a smaller act; restrain = a grip; learn = 01.10's count"
     2: whole
     3: "whole, plus the kind's extra where it has one (restrain: restrained)"
     4: "as 3 (restrain: pinned)"

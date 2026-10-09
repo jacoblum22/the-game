@@ -204,7 +204,8 @@ Decisions (J):      1. [J:enum] The message's parts, each classified (a message 
                     3. [J:enum] Beat decisions [revision: R2-C] [DL-12-50]. For each DECLARATION or
                        FICTION_QUESTION part, PARSE (01.2) records only:
                        verb — one of the 15 basic verbs (data/basic_verbs.yaml);
-                       target — scene entity ids (01.2.5);
+                       target — scene entity ids (01.2.5), or an unnamed description of people or
+                         things present ("the refugees", "the queue"; 01.2.7) [revision: R2-I; DL-12-97];
                        three method facets, yes or no: against_will (acts on a person's body or
                          property against their will; with no will stated, true when the act takes,
                          restrains, moves or harms a person or what they hold without evident consent,
@@ -340,7 +341,7 @@ its own projection of it, respecting the three layers of 12.10.1 (`get_state(sce
 | Reader (PARSE) | the message, the last two exchanges, the names and aliases of the scene and spotlight entities, the PC's knacks as words, the open pause | setting prose, profiles, scene cards |
 | Framer (rolled beats only) | the beat; the target's and the place's profiles (their details are levers, 12.14.13); positions and conditions; anchor cards; candidate facts filtered by code | the PC sheet (the modifier is computed), the cast list, setting prose |
 | World and the NPC layer | world truth for the present NPCs minus seals: motives, memories, knowledge; off-screen clocks; scene cards | usage marks, setting prose |
-| Narrator | **the PC-knowledge layer only**: the adjudication record with handles, the setting and seeded looks, profiles with usage marks, the spotlight as the PC knows it, at most 2 scene cards, the calendar line pinned first; the **speaker card** of each NPC the PC asked or addressed this turn (PR-12-10 step 3: willingness, their ordinary knowledge on the topic, public news, their recent `said` records); and the optional material, marked as such (12.14.12) [revision: R2-H; DL-12-90; DL-12-92] | motives, `truth`, sealed content, undelivered case placements, background the PC has not perceived or learned (beyond a speaker card's ordinary knowledge) |
+| Narrator | **the PC-knowledge layer only**: the adjudication record with handles, the setting and seeded looks (on arrival and at scene framing; on later turns of the scene only as optional material marked described, 12.14.11) [revision: R2-I; DL-12-99], profiles with usage marks, the spotlight as the PC knows it, at most 2 scene cards, the calendar line pinned first; the **speaker card** of each NPC the PC asked or addressed this turn (PR-12-10 step 3: willingness, their ordinary knowledge on the topic, public news, their recent `said` records); and the optional material, marked as such (12.14.12) [revision: R2-H; DL-12-90; DL-12-92] | motives, `truth`, sealed content, undelivered case placements, background the PC has not perceived or learned (beyond a speaker card's ordinary knowledge) |
 | Checker | the numbered sentences with their declarations in words (12.3.1), compact profiles of the cited, spotlight and created ids | rule cards outside 12.3, setting prose, the narrator's reasoning |
 | Director | threads, clocks, cast weights, scene cards | verbatim exchanges beyond the last one |
 
@@ -526,7 +527,8 @@ claim-log record `{turn, sentence, class, verdict, store_value}` is kept for rev
    knows (12.10.6) or for secrets. The narrator never sees sealed content (INV-10), so a "leak" in speech is only a
    claim, and it may be false. Speech is checked for four things only, all by code: the speaker is present in the
    scene, the speaker is not the PC, no words are put in the PC's mouth beyond what the player said
-   (`pc_agency`), and the words do not repeat a line the speaker already said (their `said` records, 12.14.11)
+   (`pc_agency`; this covers words given to the PC inside an NPC's speech or its attribution, "'Fair enough,' you
+   say": a speaker tag never exempts them [revision: R2-I; DL-12-100]), and the words do not repeat a line the speaker already said (their `said` records, 12.14.11)
    [revision: R2-H; DL-12-90]; season words are scanned in speech too (item 2.7). Speech never unseals anything, never delivers a clue (a clue is delivered only by its placement,
    15.9), and never writes a fact. A name heard in speech that matches the entity's stored name is known to the PC
    from then on (a knowledge record, `how: heard`); any other name stays a said claim. A said claim becomes world
@@ -791,7 +793,8 @@ most **200 words** (`pacing.yaml#narration.scene_open_max_words`):
 1. **The moment** — where, when (time of day and weather from state, never invented), who is present
    (each addressable element written on mention, 00.6.6), and the layout the PC can see: exits, cover,
    hazards, what is within reach (12.14.6). A seeded place's look, furniture and exits (12.16.9) are this layout,
-   read from the store and never invented [revision: R2-D; I-130].
+   read from the store and never invented [revision: R2-D; I-130], and given here once (12.14.11, setting once)
+   [revision: R2-I; DL-12-99].
 2. **The impetus** — one thing that is happening or about to, drawn `[J:enum]` from this ordered list,
    first eligible: (a) the scene test's alteration or interruption (12.4.4); (b) a fired trigger
    (12.2.3); (c) the PC's own declared purpose for the scene; (d) an NPC present acting on a recorded
@@ -803,7 +806,9 @@ most **200 words** (`pacing.yaml#narration.scene_open_max_words`):
    with the PC at leisure — only for downtime and havens). Default when uncertain: at the threshold.
    Skip any stretch in which no meaningful decision could be made
    [R: https://thealexandrian.net/wordpress/31520/roleplaying-games/the-art-of-pacing-part-2-scene-framing;
-   R1 M-41].
+   R1 M-41]. **Travel** between places frames the arrival [revision: R2-I; DL-12-98]: a scene that opens because
+   the PC went somewhere opens at the threshold with the arrival narrated (the road's end, the gate, the door and what
+   is through it), never with a bare "It works." or a jump with no travel (P-098).
 4. **The open prompt** (12.14.9).
 *Narration may not imply:* any element not written on mention; any clock fill not public; a sealed fact.
 *Worst case (J):* a weaker impetus chosen from the list — the scene opens flatter, never falser (no state
@@ -1543,8 +1548,10 @@ three ways, before the draft:
 
 What the NPC says is **testimony**: a `said` record on the speaker, fed back into their next turns. An NPC never
 contradicts its own testimony unprompted (only when confronted, caught out, or lying by 15.6.2), and never repeats a
-line it already said (freshness over `said`, 12.14.11). Beyond what the card holds, a character may still answer
-from hearsay, a guess or an opinion, as people do; that too is testimony. **"I don't know" is the character's
+line it already said (freshness over `said`, 12.14.11). Beyond what the card holds, a character speaks
+plainly and with ordinary confidence about ordinary things, as people do; that too is testimony, settled lazily
+whatever its tone, so a hedge ("folk say", "I could not say") is a characterisation choice for a cautious or gossipy
+NPC, never the default [revision: R2-I; DL-12-96]. **"I don't know" is the character's
 choice**: rare, in their
 voice, with a natural redirect ("ask at the harbour; they hear everything"); a redirect is testimony like any other,
 never a code pointer. Code never scripts the content of an ordinary answer: no record line says what the NPC knows or
@@ -1982,7 +1989,11 @@ the player's own phrase) or the player's own request (reading the notice again).
 deliveries for repeated opening clauses and speech openers stays as a cheap backstop. **Said lines** [revision: R2-H; DL-12-90]: an NPC never repeats a line it already said.
 Each `said` record (12.3.1b) is a usage mark on its speaker, and a speech span whose content words overlap one of
 the speaker's `said` records by more than `narration.freshness.said_overlap` is redrafted (a code scan), unless the
-player asked them to say it again. *Worst case (J):* a repeated phrase — harmless (class i) [R4 W10; R1 12.A
+player asked them to say it again. **Setting once** [revision: R2-I; DL-12-99]: a place's stored look, furniture and
+exits (12.16.9) reach the narrator on arrival or at scene framing (12.4.3) and are then marked described; on later
+turns of the scene they are optional material only (12.14.12), not restated unless the PC looks again or asks.
+(ROUND4-ANALYSIS R6: the seeded look line was in every narrator packet, and five turns in one place repeated it.)
+*Worst case (J):* a repeated phrase — harmless (class i) [R4 W10; R1 12.A
 (RPGBench's interestingness decay from repetitive narration)].
 
 **12.14.12 What every narration must name: the must-name diet.** `[D]` [DL-12-17; DL-12-01; DL-12-92; R5 DM-06;
@@ -1997,7 +2008,8 @@ injected; (5) a **pause** (its one block, 12.14.9). Each is an adjudication-reco
 every turn that some sentence cites it (12.3.1a), and 12.3.3 states an uncited one by its rendered line. Missing any
 of these is also a claim-check failure of the sweep (12.4.8).
 **Optional material** is everything else code supplies: NPCs' activities, postures and manners, detail slots, other
-present NPCs' reactions, the crowd's mood, scene texture. The view lists it as material the narrator may use, never as
+present NPCs' reactions, the crowd's mood, scene texture, and a place's look and furniture after the turn they were first given (12.14.11,
+setting once) [revision: R2-I]. The view lists it as material the narrator may use, never as
 a line it must cite; no check requires it, and leaving it out is never a coverage failure. A sentence that does use it
 is checked like any other (12.3.1b). *Evidence:* ROUND3-ANALYSIS S2: with every code line mandatory, idle activity
 lines appeared every turn in all four runs and NPCs spoke out of turn.
@@ -2016,6 +2028,12 @@ Who decides that something is true depends on its tier. Each element a sentence 
 | **T2 Consequential** | a **clue** toward a sealed fact or an open thread; an **item of more than common value** or any property beyond the mundane; a **hazard** or **trap**; an **adversary**; a **person with a want, a secret or knowledge of a thread**; the identity of a story role | `clue`, `hazard`, `adversary`; and a `person`, `item` or `document` the question below finds true | **generators only**: clue graphs and their placements (ch.15/11), the item generator and the region's data (00.11), ch.10 tables, encounter tables, clocks and behavior lists, NPC generation and the clue graph (12.11.1) | at generation, sealed until revealed | in the narrator's voice: in this turn's record, as delivered or unsealed, or the sentence is cut; in speech: testimony, never checked or written (12.3.1b) [revision: R2-G] |
 
 A narrated detail (00.6.6a) is ordinary T1a: it may be cited as a lever under the cap below and never creates value [revision: R2-E].
+An **unnamed description** of people or things present ("the refugees", "the other carters", "the queue") is T1a: a
+beat may target it, a typed change on it is a scene fact about the description (01.2.7), and the narrator voices
+whoever answers for it as an ordinary walk-on. It becomes an individual only when it is consequential (it holds a
+clue or a story role); then the case's placement or casting picks the person (15.9.5; 00.11 `cast`), never the
+narrator [revision: R2-I; DL-12-97]. Something **ordinary looked for** that is not in the scene (a well, an inn, a
+carter for hire) is found and written as established, T1a (01.18.5) [revision: R2-I; DL-12-98].
 The narrator assigns the kind (`[J:enum]`, part of 12.3.1's declaration). Whether a `person`, `item` or `document`
 is T1a or T2 is one question, `[J:flag]` *"Would this element, as described, help or hinder the PC beyond what any
 such place ordinarily offers, or point toward something hidden?"* True → T2: it must come from its owning
@@ -2666,10 +2684,14 @@ R2-D's rungs (the store, the knowledge pack, propose-and-ratify, the pointer) ar
    (`answer_ladder.said_shown`, and every one on this topic). Never anything sealed, an undelivered placement or a
    motive (INV-10).
 4. **Voice** `[J]` (the narrator): the answer in character, within the willingness, from the card first. Beyond the
-   card the NPC may still answer from hearsay, a guess or an opinion, hedged as a character would ("I heard …",
-   "probably …"); it is testimony like the rest (PR-12-12). "I don't know" is the character's choice: rare, in voice,
-   with a natural redirect. (`12-answer_ladder_sim.py` part A: the card holds nothing on the topic for 48% of first
-   asks when half the asks are on the NPC's trade, so most such answers are hearsay, settled only if relied on.)
+   card the NPC still answers **plainly and with ordinary confidence** about ordinary things, as people do. Every
+   ordinary claim is testimony settled lazily (PR-12-12) whatever its tone, so a hedge protects nothing: a hedge ("I
+   only hear it", "folk say", "I could not say") is a characterisation choice for a cautious or gossipy NPC, not the
+   default [revision: R2-I; DL-12-96]. Speech never opens by reciting the speaker's own name or title unless asked:
+   the card is what the narrator knows, not what the NPC says [revision: R2-I; DL-12-100]. "I don't know" is the
+   character's choice: rare, in voice, with a natural redirect. (`12-answer_ladder_sim.py` part A: the card holds
+   nothing on the topic for 48% of first asks when half the asks are on the NPC's trade, so most answers come from
+   beyond the card, plain testimony settled only if relied on.)
 5. **Write** `[D]` the spoken words as a `said` record `{speaker, turn, words, about, question}` (12.3.1b); the index
    entry `(npc, question_kind, topic) → said id`; a name heard that equals the stored name, a PC knowledge record
    `how: heard` (12.10.2). No world fact is written: the PC learns *that the NPC said it* (12.10.5).
@@ -2812,7 +2834,7 @@ defaults).
 
 | Id | Words | Id | Words |
 |---|---|---|---|
-| `band.engaged` | at blade's reach; locked together | `flag.flanked` | caught between them |
+| `band.engaged` | at blade's reach; locked together (outside a conflict: beside) | `flag.flanked` | caught between them |
 | `band.close` | a few strides off; a lunge away | `flag.cornered` | your back to the wall |
 | `band.near` | across the room; a stone's throw | `flag.in_cover` | behind (the cover named) |
 | `band.far` | a long bowshot; across the field | `flag.elevated` | above them (the height named) |
@@ -2953,7 +2975,7 @@ clears at scene end (12.4.8 step 8).
 
 | Verb | Degree | Position (band) | Actor's slots | Target's slots |
 |---|---|---|---|---|
-| Move | any | one band toward or away from the target (PR-06-4) | — | — |
+| Move | any | in a conflict (ch.06): one band toward or away from the target (PR-06-4); outside one, an approach to someone or something present ends beside it (`band.engaged`) in one beat (01.4.1) [revision: R2-I; DL-12-98] | — | — |
 | Observe, Recall, Exert, Evade, Sneak, Handle, Endure, Setup | any | — | — | — |
 | Talk | any | — | — | — (the target's response writes: below) |
 | Strike | any | melee: engaged on the attempt (06.3.5) | — | manner: on guard against {actor} |

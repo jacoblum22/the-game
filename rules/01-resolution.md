@@ -200,7 +200,8 @@ cost. Reason: models that assume silently "do not recover", while a stated assum
 [R: https://arxiv.org/abs/2505.06120; R7 §4.0 step 1]. *Worst case (J):* a wrong assumed reading reaches
 OFFER, where the player sees it and can change it for free (class ii).
 
-**01.2.5 The target is resolved before GATE.** `[J:enum]` + `[D]` A beat's target must be one id. If
+**01.2.5 The target is resolved before GATE.** `[J:enum]` + `[D]` A beat's target must be one id, or one unnamed description of people or things present (01.2.7)
+[revision: R2-I; DL-12-97]. If
 the player's words plus relationship-state (06) leave exactly one legal candidate, it is that one; if
 several, the stated default applies (in conflict: the nearest engaged foe; otherwise: the most recently
 mentioned addressable element of the right kind); if none fits, ask (this counts as the one clarifying
@@ -219,13 +220,17 @@ OFFER shows it, so a wrong kind or slot is fixed for free before anything is spe
 **01.2.7 The typed intended change.** `[J:enum]` + `[D]` [DL-01-34; revision: R2-H] Each beat carries one **typed
 intended change**: what the player wants to be different afterward (01.2.1's INTENT), as one kind from a closed list
 with typed slots (`resolution.yaml#intended_change`). Slots take ids from scope (the Reader's view: the scene's and
-the spotlight's entities) or a place the PC knows.
+the spotlight's entities) or a place the PC knows. A person or thing slot (`whom`, `what`) may instead hold an
+**unnamed description** ("the refugees", "the other carters", "the queue") [revision: R2-I; DL-12-97]: a change on it
+applies as a scene fact about the description ("the refugees are willing to talk"), and the narrator voices whoever
+speaks for it. There is no group entity and no spokesperson; only when the description becomes consequential (it
+holds a clue) do the case and casting pick an individual (12.14.13).
 
 | Kind | Slots | On success, resolution applies |
 |---|---|---|
 | `take` | item; from (a person, place or container) | the item's holder becomes the actor |
 | `give` | item; to (a person) | the item's holder becomes the recipient (one who refuses it is a Talk) |
-| `move_to` | place or band; who (default the actor) | the position: the place, or bands toward or away (PR-06-4) |
+| `move_to` | place or band, or a person or thing present; who (default the actor) | the position: the place, or beside the person or thing in one beat (an approach, 01.4.1); in a conflict, bands toward or away (PR-06-4) [revision: R2-I] |
 | `open` / `close` | thing (a door, lock, container or way) | the thing's state |
 | `learn` | topic or entity | delivered items (01.10; PR-12-10; 15.9) |
 | `persuade_to` | person; act | the agreement (15.3; `npc.<id>.agreed`) |
@@ -236,9 +241,14 @@ the spotlight's entities) or a place the PC knows.
 | `none` | — | a beat that seeks no change in the world (a look around, Ready, Help: their own rules write) |
 
 1. **Choose** `[J:enum]` at PARSE (12.2.2 decision 3): the kind and its slots, from the restatement, the verb and the
-   ids in scope. A message with two changes is two beats (01.2.2).
+   ids in scope. A message with two changes is two beats (01.2.2). **Before framing** `[D]` [revision: R2-I;
+   DL-01-36]: a change **already true** in the store (the actor already holds the item; `npc.<id>.agreed` already
+   holds the same act; the door is already open; the actor is already beside the target) is certain: no roll and no
+   OFFER, the beat narrated as already so (01.4.1). A change with **no valid target** is settled before anything is
+   framed: by a description (above), else by asking "who?" (01.2.5's clarifying question). A roll is never offered
+   whose success would have nothing to deliver.
 2. **Apply on success** `[D]` at RECORD (PR-01-3 step 5); **reach scales it** (`intended_change.reach`): delivered
-   reach 1 gives the partial form (`take`: a hand on it, still contested; `move_to`: one band or part of the way;
+   reach 1 gives the partial form (`take`: a hand on it, still contested; `move_to`: part of the way, one band in a conflict;
    `persuade_to`: a smaller act; `restrain`: a grip; `learn`: 01.10's count), reach 2 or more the whole change, and
    the kind's extra where it has one (`restrain`: restrained at 3, pinned at 4, T-12-18). A failure applies nothing;
    a success at a cost applies the change and its cost, and the cost never undoes it (01.9.3). A change code cannot
@@ -526,6 +536,13 @@ Basis:              [R4 SG-05, §9 01 #2; R: https://arxiv.org/abs/2607.02802] [
 The no-roll classes are closed: **trivial** (01.4.1 decision 1 false), **free activity** (00.12.6),
 **riding** (01.4.2), **good idea** (01.4.3), **take the time** (01.4.4), **certain with cost** (01.4.5),
 **question** (G0) and **impossible** (G4). Every other gated beat rolls.
+
+**Already true, and approaching** [revision: R2-I; DL-01-36; DL-12-98]: two everyday readings of decision 1, not new
+classes. A beat whose typed change (01.2.7) is **already true** in the store cannot fail: it is `trivial`, with no
+roll and no OFFER (persuading someone whose `agreed` fact already holds the same request). **Approaching** someone or
+something present in the scene, outside a conflict, is Move / open ground: one beat, no roll, no band-by-band steps,
+ending beside it (T-12-18), unless something obstructs it (an obstacle on the way, or a hostile watcher who would act
+on it, decision 2); then it is framed like any Move. Range bands are tracked step by step only in a conflict (ch.06).
 
 **01.4.2 Let it ride.** `[J:flag]` + `[D]` One resolved beat settles one obstacle for one approach. The
 engine stores a **ride** record `{actor, obstacle_id, anchor_id, method_class, degree, facts_at: [fact
@@ -2019,6 +2036,11 @@ frame (01.4.7). *Knobs:* `dc` (stored/tier → opposed); `attribute` (Wits → I
 search leaves traces (things moved) — a method consequence when the searched place is someone's.
 *Distinguish:* Observe vs Recall — the answer is in front of you (Observe) or in your head (Recall);
 Observe vs passive noticing — casual looking is free and only compares notice to concealment (01.4.6).
+*Looking for what is not in the scene* [revision: R2-I; DL-12-98]: something ordinary (a well, an inn, the carters'
+yard) is found and written as established (T1a, 12.14.13) in the same beat, with a roll only when a real obstacle,
+danger or time pressure stands in the way (01.4.1); something consequential (a case's target, a fugitive) is where
+its case puts it and is found by the case's placements and leads (15.9.6), never by walking until it appears. Looking
+is never a Move toward the place the PC already stands in.
 
 **01.18.6 `verb.recall` — Recall.** [DL-00A-19; DL-00A-08; DL-02-12; revision: I-065] *Intent verbs:* remember, know, recognize, recall. *Covers:* common
 knowledge of one's origin, culture and trade. *Does not cover:* specialist lore (history, bestiary,
@@ -2201,12 +2223,12 @@ uncertain.
 
 **PR-01-1 The resolution pipeline (the DM's per-beat checklist).** `[D]` + `[J]` as marked in each rule.
 1. **PARSE** (01.2): split intent / method / assertion; queue embedded fact-questions to the Oracle;
-   split beats (≤ 3 resolved per declaration); classify each beat's shape; type its intended change (01.2.7) [revision: R2-H]; resolve the target; ask at
+   split beats (≤ 3 resolved per declaration); classify each beat's shape; type its intended change (01.2.7) [revision: R2-H]; resolve the target (an id or a description; none valid: ask "who?") and mark a change already true as certain [revision: R2-I]; ask at
    most one clarifying question or state the assumed reading; write the neutral restatement.
 2. **GATE** (01.3): G0 → PR-01-4 or answer from state; G4 tests; G1 (verb covers, not excludes,
    sensitive-upgrade test false); G2 (cite a held license id; mode normal/stretch/emulate); else G3 →
    PR-01-5. Split partly-licensed beats (01.3.4).
-3. **NECESSITY** (01.4): Trivial? free activity? riding? Good Idea? take the time? certain with cost?
+3. **NECESSITY** (01.4): Trivial (a change already true; an unobstructed approach)? free activity? riding? Good Idea? take the time? certain with cost?
    Otherwise roll. Tie → roll.
 4. **ANCHOR** (01.5): `find_rulings` first (INV-19); pick the anchor from ≤ 8 candidates; at most two
    knob changes, each citing a fact; else re-anchor or split.

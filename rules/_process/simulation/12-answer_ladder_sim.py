@@ -1,4 +1,4 @@
-"""12-answer_ladder_sim.py -- R2-D [DL-12-60; DL-15-38], revised R2-H [DL-12-90; DL-12-91]: questions to NPCs
+"""12-answer_ladder_sim.py -- R2-D [DL-12-60; DL-15-38], revised R2-H [DL-12-90; DL-12-91], R2-I wording [DL-12-96]: questions to NPCs
 (PR-12-10), lazy settlement of testimony (PR-12-12), casting and the reduced case (PR-15-6) on packed seeded worlds.
 
   python 12-answer_ladder_sim.py        # report to stdout; committed as 12-answer_ladder_sim-output.txt
@@ -7,8 +7,8 @@ R2-H retired the R2-D ladder (store, pack, propose-and-ratify, pointer) as a sou
 now the NPC's own words (testimony), so R2-D's part A ("I don't know" + pointer share) and part B (clustering of
 ratified facts) measured machinery that no longer runs, and are replaced. What a sim can still say honestly:
   A. how often the asked NPC's speaker card holds nothing on the topic (no record, no pack fact, not a role topic, not
-     public news of their home): the share of answers that will be hearsay, a guess or an opinion (testimony, settled
-     lazily) or a rare in-voice "I don't know". The live "I don't know" rate is the narrator's (OEQ-12-25).
+     public news of their home): the share of answers spoken from beyond the card, plainly (testimony, settled lazily
+     whatever its tone; R2-I) or as a rare in-voice "I don't know". The live "I don't know" rate is the narrator's (OEQ-12-25).
   B. lazy settlement (PR-12-12): settlements and Oracle rolls per 100 asks against R2-D's propose-and-ratify, the share
      of settled claims found false, and that no accepted or ratified claim asserts a case node (consequential claims
      route to the case).
@@ -198,7 +198,7 @@ def main():
         sum(len(haven_cast(r)) for _, r in W) / len(W), dict(Counter(r["opening"]["inciting"]["option"] for _, r in W))))
     print()
     print("A. The speaker card (200 ordinary asks per world; reach: %d%% certain/SPEECH, the rest rolled %s)" % (CERTAIN_SHARE * 100, ROLLED))
-    print("   an empty card means the answer is hearsay, a guess or an opinion (testimony, settled lazily), or a rare in-voice")
+    print("   an empty card means the answer is spoken plainly from beyond the card (testimony, settled lazily), or a rare in-voice")
     print("   'I don't know'; 'said' = the topic was asked of them before (their own words are on the card)")
     fails = []
     for share in (0.3, 0.5, 0.7):

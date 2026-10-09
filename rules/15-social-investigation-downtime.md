@@ -1564,6 +1564,9 @@ Basis:              [R: https://pelgranepress.com/gumshoe/files/GUMSHOE%20SRD%20
 **15.9.6 Investigative methods.** `[J:enum]` [C:V; R5 EX-11; revision: I-065] Every investigative beat is one method kind of T-15-13
 (canonical `data/investigation.yaml#methods`), which fixes its anchor, attribute, DC source and time.
 Default when uncertain between two: the one whose anchor is a basic verb the beat already uses.
+Looking for a case's target (a fugitive, a missing person, a placed thing) is an investigative beat like any other:
+where it is and how it is found come from the case's placements and leads (15.9.5, 15.9.8), never from a Move toward
+an unplaced target (01.18.5) [revision: R2-I; DL-12-98].
 
 **T-15-13 Investigative methods.**
 

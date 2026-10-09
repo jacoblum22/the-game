@@ -2559,6 +2559,8 @@ is the obstacle class's base tier, and it rolls only when the roll test (01.4.1)
 | open an unbarred door, gate or wicket | Handle / ordinary use | Trivial | never |
 | carry an ordinary load (a sack of grain; a wounded adult a short way) | Exert / ordinary effort | Easy | a clock or a hazard presses |
 | ask someone an ordinary question | Talk (no tier: 15.3.3) | Neutral or warmer, R1: certain (T-15-3, 15.3.10) | the listener is Wary or worse, or has a cited reason to hesitate |
+| approach someone or something present, outside a conflict [revision: R2-I] | Move / open ground | Trivial: one beat, ends beside it | something obstructs it: an obstacle on the way, a hostile watcher who would act (01.4.1) |
+| look for something ordinary not in the scene (a well, an inn) [revision: R2-I] | — (found as written, T1a; 01.18.5) | Trivial | a real obstacle, danger or time pressure; a consequential target is the case's (15.9.6) |
 
 
 *Worst case of a one-rung error:* DC off by one step (5 at reference), visible in the OFFER.
