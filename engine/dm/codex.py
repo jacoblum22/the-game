@@ -93,8 +93,10 @@ def _abilities(cv: dict[str, Any], pc: str, rules: Any) -> list[dict[str, Any]]:
 
 def _inventory(cv: dict[str, Any], pc: str) -> list[str]:
     items = []
+    # a `holder` fact (what a take or give wrote, 01.2.7) wins over a kit item's data `owner`
+    moved = {f["subject"] for f in cv["facts"].values() if f["predicate"] == "holder"}
     for e in cv["entities"].values():
-        if e["kind"] not in ("item", "object") or e.get("exists", "exists") != "exists":
+        if e["kind"] not in ("item", "object") or e.get("exists", "exists") != "exists" or e["id"] in moved:
             continue
         if any(e["data"].get(k) == pc for k in HOLDER_KEYS):
             items.append(e["name"])

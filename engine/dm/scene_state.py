@@ -68,7 +68,12 @@ def beat_writes(ctx: TurnContext, record: AdjudicationRecord, beats: Sequence[An
         if b.status not in RESOLVED:
             continue
         e = b.entry
-        rows = (spec["beats"].get(e.verb or "") or {}).get(spec["degree"].get(_band(e), ""), [])
+        band = spec["degree"].get(_band(e), "")
+        if e.change_kind == "free" and band == "success":
+            _free(ctx, record, e)
+            continue
+        verb, band = _face(e, band)
+        rows = (spec["beats"].get(verb) or {}).get(band, [])
         if not rows:
             continue
         reach = REACH_VALUE.get(e.reach or "standard", 2) if e.degree is not None else 2
@@ -87,6 +92,33 @@ def beat_writes(ctx: TurnContext, record: AdjudicationRecord, beats: Sequence[An
             eid = parties[side]
             if eid and eid in st.entities and st.entities[eid].kind in people:
                 write(ctx, record, eid, values, because=e.frame_id or e.beat_id or "T-12-18", fill=fill)
+
+
+def _face(e: Any, band: str) -> tuple[str, str]:  # rule: 01.2.7
+    """01.2.7 item 4: T-12-18's rows are the scene-state face of the typed change. A hold is `restrain`'s face: a
+    `restrain` on any verb takes the Grapple rows, and a Grapple typed another change (a purse lifted, not a person
+    held) writes only the target's wariness (the failure row). Untyped or `none`: the verb's rows, as before."""
+    kind, verb = e.change_kind, e.verb or ""
+    if kind == "restrain":
+        return "verb.grapple", band
+    if verb == "verb.grapple" and kind not in (None, "none") and band == "success":
+        return verb, "failure"
+    return verb, band
+
+
+def _free(ctx: TurnContext, record: AdjudicationRecord, e: Any) -> None:  # rule: 01.2.7
+    """A `free` that lands: the hold on its target (else the actor) ends, both slots cleared (the hold ends)."""
+    tx_ = ctx.need_tx()
+    st = tx_.state
+    who = next((t for t in e.targets if t in st.entities), None) or e.actor or record.pc
+    start = len(tx_.events)
+    for holder, held in _holds(ctx.rules, st, record.pc):
+        if who in (holder, held):
+            for eid, slot in ((holder, "held"), (held, "posture")):
+                tx_.add_all(write_detail(tx_.state, tx_.mint, eid, slot, None, source="ruling",
+                                         because=e.frame_id or e.beat_id or "01.2.7", rules=ctx.rules,
+                                         visibility="shown").events)
+    record.add_writes(tx_.events[start:])
 
 
 LETS_GO = ("cond.unconscious", "cond.stunned")  # 06.5.2: a holder in either condition lets go

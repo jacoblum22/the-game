@@ -20,8 +20,8 @@ from pydantic import BaseModel, Field
 
 from engine.dm.adjudication import AdjudicationRecord
 
-Kind = Literal["scene", "beat", "cost", "harm", "condition", "position", "learned", "oracle", "npc", "activity",
-               "omen", "note"]
+Kind = Literal["scene", "beat", "cost", "harm", "condition", "position", "learned", "change", "oracle", "npc",
+               "activity", "omen", "note"]
 
 # notes the narration must carry (12.14.12: a lead injected; the opening's incident; a repeated failed look, P-086;
 # a rest taken); every other note is citable but not owed
@@ -115,6 +115,9 @@ def items(record: AdjudicationRecord, *, names: Mapping[str, str] | None = None)
                 beat=n, index=i, text=p.words)
         for i, x in enumerate(b.learned):
             add("learned", True, [pc or "", *b.targets], _sentence(x), beat=n, index=i, text=x)
+        said = b.changed or b.change_refused  # 01.2.7 item 3: the applied change (or why not) is owed
+        if said:
+            add("change", True, [x for x in (b.actor or pc, *b.targets) if x], _sentence(said), beat=n, text=said)
     for i, o in enumerate(record.oracle):
         add("oracle", True, [o.subject or ""], _oracle_render(o.question, o.answer, o.subject, o.predicate, names),
             index=i, text=f"{o.question}: {o.answer}")

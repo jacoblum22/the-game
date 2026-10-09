@@ -269,6 +269,9 @@ def _frame_check(p: ProposedFrame, beat: Beat, state: Any, rules: Any, gate: Gat
         raise _Refuse(5, "deed_tag", f"unknown deed tag {p.deed_tag!r}")
     deed = p.deed_tag or beat.deed_tag
     comp, comp_tag = competence(rules, actor, deed)
+    lift = lift_or_carry(rules, beat)  # DL-01-35: the one exception to the lower on a tie
+    if lift is not None:
+        attr, alt_attr = lift_attribute(lift, rules, state, beat, actor, attr, comp), None
     # 6. DC (stored, opposed, effect, rubric tier) plus the mode's dc_shift
     verb = g.verb or beat.verb or anchor.get("verb")
     dc, dc_source, tier, defender, stored_write = _dc(p, anchor, deltas, state, rules, notes, beat=beat, verb=verb,
@@ -324,7 +327,8 @@ def _frame_check(p: ProposedFrame, beat: Beat, state: Any, rules: Any, gate: Gat
     if o.only_natural_20:
         notes.append("only a natural 20, and at best a plain success")
     alts = alternatives(rules, state, actor, verb=verb, attribute=attr, comp=comp, edge=edge, circ=circ, status=st,
-                        dc=dc, defender=defender, dc_source=dc_source)
+                        dc=dc, defender=defender, dc_source=dc_source,
+                        attrs=list(lift["allowed"]) if lift is not None else None)
     consequences = list(p.method_consequences)
     if price is not None and price.consequence and price.consequence not in consequences:
         consequences.append(price.consequence)
@@ -338,6 +342,43 @@ def _frame_check(p: ProposedFrame, beat: Beat, state: Any, rules: Any, gate: Gat
                  alternate_cost=ac, method_consequences=consequences, modifier=mod, odds=o, base_odds=base_odds,
                  stored_dc_write=stored_write, notes=notes, obstacle_class=p.obstacle.obstacle_class,
                  nudge=p.obstacle.nudge, long_shot=long_shot, guard=guard, alternatives=alts)
+
+
+_LIFT_VERBS = ("verb.exert", "verb.force", "verb.handle", "verb.sneak")
+_LIFT = re.compile(r"\b(?:lift|carr(?:y|ies|ied|ying)|palm|pick\w* up|heave|haul|hoist)", re.IGNORECASE)
+
+
+def lift_or_carry(rules: Any, beat: Beat) -> Any | None:  # rule: 01.6.1
+    """`resolution.yaml#attribute_rubric.lift_or_carry` when it applies (DL-01-35): a beat whose typed change is
+    `take`, or an Exert, Force, Handle or Sneak whose method lifts, carries or palms a thing; else None."""
+    spec = (rules.resolution.get("attribute_rubric") or {}).get("lift_or_carry")
+    if not spec:
+        return None
+    take = beat.change is not None and beat.change.kind == "take"
+    lifts = beat.verb in _LIFT_VERBS and bool(_LIFT.search(f"{beat.method} {beat.intent}"))
+    return spec if take or lifts else None
+
+
+def lift_attribute(spec: Any, rules: Any, state: Any, beat: Beat, actor: Any, proposed: str,
+                   comp: int) -> str:  # rule: 01.6.1
+    """The method's words pick (heave: Might; palm, quick and quiet: Agility; carry far: Endurance); else the allowed
+    attribute with the best computed odds, the proposed one kept on a tie (the OFFER lists the others)."""
+    text = f"{beat.method} {beat.intent}"
+    for attr, words in (spec.get("words") or {}).items():
+        for w in words:
+            if re.search(r"\b" + r"\w*\s+".join(map(re.escape, str(w).split())) + r"\w*", text, re.IGNORECASE):
+                return str(attr)
+    caps = _caps(rules)
+    base_max = int(caps["base_pc"]["max"] if actor.kind == "pc" else caps["base_non_pc"]["max"])
+    edge = min(int(caps["edge"]["max"]), int(actor.data.get("edge", 0) or 0))
+
+    def score(a: str) -> int:
+        return min(base_max, attribute_value(actor, a) + comp + edge) + status(
+            rules, state, beat.actor, a, beat.verb, beat.traits, [])
+
+    allowed = [str(a) for a in spec.get("allowed") or ()]
+    best = max(score(a) for a in allowed)
+    return proposed if proposed in allowed and score(proposed) == best else next(a for a in allowed if score(a) == best)
 
 
 def _guarded(stakes: str, dc_source: str, secret: bool) -> bool:  # rule: 01.6.13
@@ -358,10 +399,11 @@ def _attr_name(rules: Any, attr: str) -> str:
 
 def alternatives(rules: Any, state: Any, actor: Any, *, verb: str | None, attribute: str, comp: int, edge: int,
                  circ: int, status: int, dc: int, defender: str | None, dc_source: str,
-                 limit: int = 3) -> list[Alternative]:  # rule: 12.15.2
+                 limit: int = 3, attrs: Sequence[str] | None = None) -> list[Alternative]:  # rule: 12.15.2
     """"Another way", computed with no model call: the same obstacle with each other attribute the verb allows
-    (`attribute`, `alt_attributes`), and for an attack on a person the sibling verbs against that person's defense
-    for each verb's `against`. Best chance first, at most `limit`.
+    (`attribute`, `alt_attributes`; `attrs` instead when a rubric names them, DL-01-35), and for an attack on a
+    person the sibling verbs against that person's defense for each verb's `against`. Best chance first, at most
+    `limit`.
     ponytail: the current competence is reused for every alternative; a per-verb deed tag would refine it."""
     caps = _caps(rules)
     base_max = int(caps["base_pc"]["max"] if actor.kind == "pc" else caps["base_non_pc"]["max"])
@@ -374,7 +416,9 @@ def alternatives(rules: Any, state: Any, actor: Any, *, verb: str | None, attrib
     out: list[Alternative] = []
     entry = rules.basic_verbs.get(verb or "") or {}
     known = set(rules.attributes)
-    for w in [entry.get("attribute"), *[x.get("attribute") for x in entry.get("alt_attributes") or ()]]:
+    named = list(attrs) if attrs is not None else [entry.get("attribute"),
+                                                   *[x.get("attribute") for x in entry.get("alt_attributes") or ()]]
+    for w in named:
         a = str(w or "").split(" ")[0]
         if a in known and a != attribute and all(x.attribute != a for x in out):
             o = chance(a, dc)

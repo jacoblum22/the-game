@@ -31,8 +31,9 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 GOLDEN = ROOT / "evals" / "reader_golden.jsonl"
-FIELDS = ("verb", "gate", "necessity", "against_will", "uses_power", "speech", "question_kind")
+FIELDS = ("verb", "gate", "necessity", "against_will", "uses_power", "speech", "question_kind", "change_kind")
 FACETS = ("against_will", "uses_power", "speech")
+BEAT_FIELDS = (*FACETS, "change_kind")  # first-beat fields: a no-beat line has none (change_kind: 01.2.7, spec 015)
 GATES = (None, "G0", "G1", "G2", "G3", "G4")
 QUESTION_KINDS = ("who_is", "where_is", "what_happened", "what_like", "what_want", "who_knows", "none")
 NECESSITY = (None, "uncertain_and_costly", "riding", "trivial", "good_idea", "impossible", "take_the_time",
@@ -58,7 +59,7 @@ def score(lines: list[dict[str, Any]], reader: Reader | None) -> str:
             continue
         lab = g["labels"]
         for f in FIELDS:
-            if f not in out or (f == "necessity" and lab[f] is None) or (f in FACETS and lab["verb"] is None):
+            if f not in out or f not in lab or (f == "necessity" and lab[f] is None) or (f in BEAT_FIELDS and lab["verb"] is None):
                 continue
             ok = out[f] == lab[f]
             hits[f][0] += ok

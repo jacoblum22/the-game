@@ -46,7 +46,8 @@ HELD = re.compile(r"(?<!not )\b(?:holds?|holding)\s+(lic\.[a-z_]+\.[a-z_]+)")
 def schema() -> dict[str, Any]:
     res, pacing = RULES.resolution, RULES.pacing
     ctx = SchemaContext(input_classes=[c for c in pacing["input_classes"] if c != "PENDING_ANSWER"],
-                        oracle_rungs=[r["id"] for r in res["oracle"]["rungs"]], verbs=list(RULES.basic_verbs))
+                        oracle_rungs=[r["id"] for r in res["oracle"]["rungs"]], verbs=list(RULES.basic_verbs),
+                        change_kinds=list(res["intended_change"]["kinds"]))
     return build_schema(Role.READER, ctx)
 
 
@@ -87,7 +88,8 @@ def labels_from(data: dict[str, Any], line: str, context: str) -> dict[str, Any]
     reading = verb == "verb.observe" and bool(READING.search(text)) and bool(WRITING.search(text))
     c = compute_gate(b.get("verb"), against_will=aw, uses_power=up, speech=sp, method=text,
                      held=HELD.findall(context), rules=RULES, reading=reading, literacy_known="lic.lang" in context)
-    out.update(verb=c.verb, gate=c.gate, against_will=aw, uses_power=up, speech=sp, raw_verb=b.get("verb"))
+    out.update(verb=c.verb, gate=c.gate, against_will=aw, uses_power=up, speech=sp, raw_verb=b.get("verb"),
+               change_kind=(b.get("change") or {}).get("kind"))
     return out
 
 

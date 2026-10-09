@@ -327,8 +327,11 @@ def status_block(rules: Any, r: Any, eid: str, exits: str | None = None) -> str 
     if hs == STAGGERED and not is_down(r, eid):
         fall = "fall to Dying" if any(lethal_mod.effective(r.state, s) for s in lethal_mod.scene_sources(r.state)) \
             else "go Down"
+        # a blow adds 1 to 4 load by how hard it lands (00.3.11 units), so one heavy blow can end it (problem 13)
+        units = sorted(set(rules.severity_units().values())) if rules is not None else [1, 4]
         return (f"[STATUS] STAGGERED — blows now wound you; at wound load 3 you {fall}. "
-                f"Load {wound_load(r, eid)}/3.\n         Exits: {ex} · or fight on.")
+                f"Load {wound_load(r, eid)}/3; a blow adds {units[0]} to {units[-1]} by how hard it lands.\n"
+                f"         Exits: {ex} · or fight on.")
     if hs == DYING:
         step = dying_step(r, eid)
         dc = dc_of(rules, ("easy", "moderate", "hard")[max(1, step) - 1])

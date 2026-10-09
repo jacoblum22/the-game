@@ -680,7 +680,9 @@ def pause_blocks(ctx: TurnContext, pause: PauseRecord, items: Sequence[dict[str,
     last = {i["kind"]: i["text"] for i in items}
     try:
         if stage == "offer":
-            return [oof.offer_block(Frame.model_validate(d["frame"]), rules=rules, fate=_pc_fate(ctx), state=ctx.state)]
+            then = [str(q["beat"].get("method") or q["beat"].get("restatement") or "") for q in d.get("queued") or ()]
+            return [oof.offer_block(Frame.model_validate(d["frame"]), rules=rules, fate=_pc_fate(ctx), state=ctx.state,
+                                    then=then)]
         if stage == "near_miss":
             return [oof.near_miss_block(Frame.model_validate(d["frame"]), RollResult.model_validate(d["roll"]),
                                         rules=rules)]

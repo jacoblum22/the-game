@@ -172,4 +172,4 @@ def test_status_block_without_context_says_down(tmp_path):
     store = make_game(tmp_path, vitality=1)
     run(store, apply_harm, "pc.wren", dealt=5, source="x")
     block = status_block(RULES, View(store.state), "pc.wren")
-    assert block is not None and "you go Down. Load 0/3" in block
+    assert block is not None and "you go Down. Load 0/3;" in block

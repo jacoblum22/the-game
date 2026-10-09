@@ -450,6 +450,7 @@ def _reader(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:
     subjects = entity_aliases(enum_at(schema, "fact_questions", "[]", "subject"), context)
     pending = enum_at(schema, "pending_answer")
     rungs = enum_at(schema, "fact_questions", "[]", "odds_rung")
+    change_kinds = enum_at(schema, "beats", "[]", "change", "kind")
     parts, questions, beats, declared = [], [], [], []
     pending_answer = None
     for sent in sentences(packet.message):
@@ -495,6 +496,9 @@ def _reader(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:
             "speech": v == "verb.talk", "g4_fact": None,
             "intent_verbs": verb[1] if verb else [],
         })
+        if change_kinds:
+            beats[-1]["change"] = _change(v, target[0] if target else None, sent, change_kinds,
+                                          enum_at(schema, "beats", "[]", "change", "what"))
     quantity = re.search(r"\b(\d+)\b", packet.message)
     restated = " ".join(_restate(s) for s in declared) or _restate(packet.message.strip())
     return {
@@ -502,6 +506,26 @@ def _reader(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:
         "clarifying_question": None, "restatement": restated,
         "player_quantity": int(quantity.group(1)) if quantity else None,
     }
+
+
+_BY_VERB = {"verb.strike": "harm", "verb.force": "harm", "verb.move": "move_to", "verb.observe": "learn",
+            "verb.recall": "learn", "verb.talk": "persuade_to"}  # an offline reading of 01.2.7's kinds
+
+
+def _change(verb: str | None, target: str | None, sent: str, kinds: list[Any], whats: list[Any]) -> dict[str, Any]:
+    # rule: 01.2.7
+    """The typed intended change, read from the verb and target (a Grapple on a thing takes it; on a person holds
+    them; a Handle with open/unlock words opens)."""
+    item = bool(target) and str(target).startswith(("item.", "obj."))
+    kind = _BY_VERB.get(verb or "", "none")
+    if verb == "verb.grapple":
+        kind = "take" if item else "restrain"
+    elif verb == "verb.handle":
+        kind = "open" if _has_word(sent, "open") or _has_word(sent, "unlock") else "take" if item else "none"
+    if kind not in kinds:
+        kind = "none"
+    what = target if kind != "none" and target in whats else "none"
+    return {"kind": kind, "what": what, "whom": "none"}
 
 
 POWER_WORDS = ["spell", "magic", "witch-sight", "mind-touch", "sorcery", "conjure"]
