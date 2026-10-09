@@ -178,7 +178,9 @@ def _spans(text: str, phrase: str) -> list[tuple[int, int]]:
 # words that turn the PC's words to someone: "ask the neighbour", "turn to Nero", "walk over to the officer"
 _ADDRESS = re.compile(r"\b(?:ask|asks|asking|tell|tells|say to|says to|question|questions|greet|greets|address|"
                       r"addresses|call to|calls to|(?:turn|turns|walk|walks|step|steps|go|goes|come|comes|head|heads|"
-                      r"lean|leans|cross|crosses)(?:\s+(?:back|over|up|across))?\s+to(?:ward)?)\s+$", re.I)
+                      r"lean|leans|cross|crosses|sit|sits)(?:\s+[\w'-]+){0,3}?\s+(?:to(?:ward)?|beside))\s+$", re.I)
+# a name opening the quoted words is spoken to ("Zitok, isn't it?"; live run 20261008-170802, spec 013)
+_VOCATIVE = re.compile(r"[\"“]\s*$")
 
 
 def named_in(state: Any, text: str, present: Sequence[str]) -> list[str]:  # rule: 12.11.9
@@ -191,16 +193,44 @@ def named_in(state: Any, text: str, present: Sequence[str]) -> list[str]:  # rul
                                        for o in hits)]
     first: dict[str, tuple[int, int]] = {}
     for s, _, n in hits:
-        k = (0 if _ADDRESS.search(text[:s]) else 1, s)
+        k = (0 if _ADDRESS.search(text[:s]) or _VOCATIVE.search(text[:s]) else 1, s)
         first[n] = min(first.get(n, k), k)
     return sorted(first, key=lambda n: first[n])
+
+
+def _looks(state: Any, npc: str) -> set[str]:
+    """The content words a player may describe `npc` by: their label and role, their detail, their scene state
+    (activity, posture, hold) and woman or man by pronouns."""
+    from engine.audit.text import content
+    from engine.store.details import current
+    from engine.store.views import unnamed_label
+
+    e = state.entities[npc]
+    pron = str(e.data.get("pronouns") or "")
+    bits = [unnamed_label(e), str(e.data.get("role") or ""), str(e.data.get("detail") or ""),
+            "woman" if pron.startswith("she") else "man" if pron.startswith("he") else "",
+            *(str(f.value) for slot in ("activity", "posture", "held") if (f := current(state, npc, slot)) and f.value)]
+    return content(" ".join(bits))
+
+
+def described_in(state: Any, text: str, present: Sequence[str]) -> str | None:  # rule: 12.11.9
+    """The one present person the narration (outside quotes) describes best ("I turn to the old woman on the
+    bench"), when exactly one shares the most content words with it; else None."""
+    from engine.audit.text import content
+
+    said = content(re.sub(r"[\"“][^\"”]*[\"”]", " ", text))
+    scored = sorted(((len(said & _looks(state, n)), n) for n in present if not is_animal(state, n)), reverse=True)
+    if not scored or scored[0][0] == 0 or (len(scored) > 1 and scored[1][0] == scored[0][0]):
+        return None
+    return scored[0][1]
 
 
 def addressed(state: Any, record: AdjudicationRecord, present: Sequence[str], message: str = "") -> list[str]:
     # rule: 12.11.9
     """NPCs the PC addressed this turn: a talk beat on them; else the one the player's words turn to (`named_in`'s
-    first: a name right after "ask", "turn to", ..., else the first named; the message as typed first, then the
-    parts); else the one last spoken with or the only NPC here when the PC speaks to no one by name ("talk with no
+    first: a name right after "ask", "turn to", ... or opening the quoted words, else the first named; the message
+    as typed first, then the parts); else the one the narration describes (`described_in`); else the one last
+    spoken with or the only NPC here when the PC speaks to no one by name ("talk with no
     target speaks to the only NPC", P-056). Naming someone else ("Ysrion's gone cold on me") does not address them:
     they are at most concerned (`concerns_self`, 12.11.9 step 3; DL-12-93)."""
     out = [t for b in record.beats if (b.verb == "verb.talk" or "talk" in (b.approach_words or ""))
@@ -210,6 +240,8 @@ def addressed(state: Any, record: AdjudicationRecord, present: Sequence[str], me
         out += named_in(state, t, present)[:1]
         if out:
             break
+    if not out and any(p.cls == "SPEECH" for p in record.parts):  # described, not named ("the old woman")
+        out += [n for n in [described_in(state, message or " ".join(spoken), present)] if n]
     present = [n for n in present if not is_animal(state, n)]
     if not out and present and any(p.cls == "SPEECH" for p in record.parts):
         # spoken to no one by name: the one last spoken with this scene, else the first present (cast order).

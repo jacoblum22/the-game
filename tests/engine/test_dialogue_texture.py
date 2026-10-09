@@ -217,6 +217,38 @@ def test_a_bystander_stays_silent_unless_the_event_concerns_them(tmp_path: Path)
     assert dock.watch not in {e for it in items(second) for e in it.entities}  # never a must-name line
 
 
+def test_the_addressee_is_the_one_turned_to_not_the_last_spoken_with(tmp_path: Path) -> None:
+    """Live run 20261008-170802: "I turn to the old woman on the bench" was answered by the innkeeper (the last one
+    spoken with), and "cross the floor to Zitok ... 'Zitok, isn't it?'" by the innkeeper named first."""
+    from engine.dm.npc_layer import SPOKEN, addressed
+    from engine.store.details import write_detail
+    from engine.store.events import Event
+    from tests.fixtures.game import entity, new_store
+
+    store = new_store(tmp_path)
+    with store.transaction() as tx:
+        tx.add(entity("npc", "Kerric Thornby", tx=tx, data={"role": "innkeeper", "pronouns": "she/her"}))
+        tx.add(entity("npc", "Zitok Rope-Dancer", tx=tx, data={"role": "elder", "pronouns": "she/her",
+                                                                "detail": "a pipe never lit", "name_known": False}))
+    kerric, zitok = "npc.kerric_thornby", "npc.zitok_rope_dancer"
+    with store.transaction() as tx:
+        tx.add_all(write_detail(tx.state, tx.mint, zitok, "activity", "sitting on a bench in the sun",
+                                source="generation", because="12.11.9", visibility="shown").events)
+        tx.add(Event.of("meta_set", source="test", rule_id="12.11.9", key=SPOKEN, value={"scene": None,
+                                                                                       "npcs": [kerric]}))
+    st = store.state
+    present = [kerric, zitok]
+
+    def to(msg: str) -> list[str]:
+        rec = AdjudicationRecord(parts=[PartEntry.model_validate({"text": msg, "class": "SPEECH"})])
+        return addressed(st, rec, present, msg)
+
+    assert to('I turn to the old woman on the bench and sit down beside her. "That pipe\'s never been lit."') == [zitok]
+    assert to('I nod my thanks to Kerric, cross the floor to Zitok Rope-Dancer, and sit beside her. '
+              '"Zitok, isn\'t it? Kerric gave me your name."') == [zitok]
+    assert to('"Kerric, another cup," I say.') == [kerric]
+
+
 def test_offline_turns_have_no_engine_error(tmp_path: Path) -> None:
     dock, _ = setup(tmp_path, OfflineModel())
     ctx = TurnContext(store=dock.store, rules=dock.rules, rng=dock.rng, model=OfflineModel())
