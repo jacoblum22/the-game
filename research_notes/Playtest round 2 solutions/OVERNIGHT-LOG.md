@@ -280,5 +280,22 @@ everything.
     - an item that exists only as an Oracle fact can't be taken;
     - `make` isn't built.
   - Suite **1768**.
-- **In flight:** round-3 talker and fighter persona playtests on a6b1480. These are also the held-out test of the
-  feedback loop.
+- **Round-3 playtests** (talker 20261008-192926, fighter 20261008-192946): **positive notes for the first time**.
+  "I don't know" in 1 of 15 turns, 0 verbatim NPC repeats, and `/fix` understood 2/2 in each run.
+  Analysis: [ROUND4-ANALYSIS.md](ROUND4-ANALYSIS.md), covering hedging, groups, find/movement, the message plan,
+  deliverability and scenery repetition. The scenery repetition was traced to the seeded look line sitting in
+  every narrator packet.
+- **Gemini:** the key is in `.env`; the smoke test passed on all 9 roles for under 1¢. The harness gained
+  `--engine gemini`. Two Gemini playtests were started, then stopped at the owner's request, so the agreed
+  fixes could go in first.
+- **528fd04, R2-I rules wave.** All light, per the owner. The rules for hedging, targets and movement got shorter,
+  not longer:
+  - plain NPC speech;
+  - description targets;
+  - approaching costs no roll, ordinary finds are narrated, travel narrates the arrival;
+  - something already true is certain;
+  - the setting is given once;
+  - two patches.
+
+  DL-12-96..100, DL-01-36.
+- **In flight:** spec 017 (the message plan across pauses) and spec 018 (the R2-I engine side), in parallel.
