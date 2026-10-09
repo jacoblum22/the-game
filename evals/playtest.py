@@ -254,7 +254,7 @@ def write_findings(path: Path, player: Player, save: Path, code: int) -> int:
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--engine", choices=("offline", "claude"), default="offline")
+    ap.add_argument("--engine", choices=("offline", "claude", "gemini"), default="offline")  # gemini: GameConfig's own model
     ap.add_argument("--player", choices=("script", "claude"), default="script")
     ap.add_argument("--turns", type=int, default=15, help="player inputs after the story begins")
     ap.add_argument("--quick-setup", action="store_true", help="script world-building and a ready-made character")
