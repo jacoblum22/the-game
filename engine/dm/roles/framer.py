@@ -29,8 +29,8 @@ from engine.resolve.frame import frame_check
 from engine.resolve.gate import GateDecision
 from engine.resolve.necessity import trivial_class
 from engine.resolve.types import Beat, CostDecl, Delta, LeverCite, Obstacle, ProposedFrame
-from engine.retrieve.anchors import anchor_menu, scene_situation_tags
-from engine.retrieve.cards import anchor_card_ids, load_cards_for
+from engine.retrieve.anchors import anchor_menu
+from engine.retrieve.cards import TALK_CARD, anchor_card_ids, load_cards_for
 from engine.retrieve.scene import focus_ids
 from engine.retrieve.triggers import get_active_triggers
 from engine.store.projection import WorldState
@@ -139,9 +139,10 @@ def framer_for(ctx: TurnContext) -> Any:
         sctx = schema_context(st, ctx.rules, anchors=candidates, beat=beat, message=beat.intent, focus=focus)
         schema = build_schema(Role.FRAMER, sctx)  # cost `source_fact` and the 01.6.1 `attribute` enum included
         triggers = get_active_triggers(st, ctx.rules)
-        mode = st.scene.mode if st.scene else None
-        cards = load_cards_for(Role.FRAMER, scene_situation_tags(st, ctx.rules), mode, triggers,
-                               anchor_card_ids(candidates, ctx.rules), rules=ctx.rules)
+        # 12.2.4 item 2: the cards code knows apply: the anchor candidates' and, on a Talk frame, 15.3.2 (request size)
+        talk = [TALK_CARD] if (gate.verb or beat.verb) == "verb.talk" else []
+        cards = load_cards_for(Role.FRAMER, triggers=triggers,
+                               extra_ids=[*anchor_card_ids(candidates, ctx.rules), *talk], rules=ctx.rules)
         packet = build_packet(Role.FRAMER, instructions=load_prompt("framer"), cards=cards, view=st, exchanges=[],
                               message=beat_message(beat, gate, note), triggers=triggers,
                               notes=anchor_menu(candidates, ctx.rules), focus=focus, rules=ctx.rules)

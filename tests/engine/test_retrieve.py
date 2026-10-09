@@ -1,4 +1,4 @@
-"""Retrieval caps and determinism (T020): anchors (≤8), cards (≤12 plus the core), active triggers."""
+"""Retrieval caps and determinism (T020): anchors (≤8), cards (≤12; guidance digests, spec 020), active triggers."""
 
 from __future__ import annotations
 
@@ -11,7 +11,7 @@ from engine.build.compile_cards import load_cards
 from engine.data.loader import load_rules
 from engine.llm.base import Role
 from engine.retrieve.anchors import anchor_candidates, anchor_menu, natural_key, verb_anchor
-from engine.retrieve.cards import ROLE_CARDS, load_cards_for, role_cards, situation_cards
+from engine.retrieve.cards import GUIDANCE, guidance_digest, load_cards_for
 from engine.retrieve.scene import _line_tokens, focus_ids, scene_facts, scene_scope, view_budget
 from engine.retrieve.triggers import TRIGGERS, get_active_triggers, trigger_cards
 from engine.store.db import Store
@@ -97,57 +97,45 @@ def test_natural_key_orders_rule_ids() -> None:
 # ---------------------------------------------------------------- cards
 
 
-def test_role_card_ids_exist_and_d_only_cards_are_dropped() -> None:
-    for role, ids in ROLE_CARDS.items():
+def test_guidance_ids_exist_and_digests_are_short_and_stable() -> None:
+    """12.2.4 item 1 (spec 020): each role's guidance is generated from its cards' J blocks, identical per call."""
+    for role, ids in GUIDANCE.items():
         assert all(i in INDEX for i in ids), role
-    reader = [c.id for c in role_cards(Role.READER)]
-    assert "01.2.3" not in reader and "01.2.6" not in reader  # [D] only: run by code
-    assert reader[0] == "12.2.2"
+    reader = guidance_digest(Role.READER)
+    assert "one beat per goal" in reader and "Verb covers" in reader and "persuade_to (person, act)" in reader
+    assert "[revision:" not in reader and "*Retires:*" not in reader  # history, not guidance
+    assert guidance_digest(Role.READER) is guidance_digest(Role.READER)  # cached: the cacheable prefix
+    framer = guidance_digest(Role.FRAMER)
+    assert "Decisions (J):" in framer and "Computation [D]:" not in framer  # the judgment, not code's arithmetic
+    assert "T-12-7" in guidance_digest(Role.DIRECTOR) and "COVERS" in guidance_digest(Role.WORLD)
+    assert guidance_digest(Role.TESTIMONY) == ""
+    core = "\n".join(c.body for c in INDEX.core())
+    assert all(len(guidance_digest(r)) < len(core) * 2 for r in GUIDANCE)
 
 
 @pytest.mark.parametrize("role", list(Role))
 def test_cards_are_capped_and_exclude_the_core(role: Role) -> None:
     triggers = list(TRIGGERS)  # every trigger at once
     extra = [c.id for c in INDEX if c.chapter == "06"][:30]
-    cards = load_cards_for(role, ["situation.conflict.chase", "situation.social"], "conflict", triggers, extra,
-                           rules=RULES)
+    cards = load_cards_for(role, triggers=triggers, extra_ids=extra, rules=RULES)
     ids = [c.id for c in cards]
     assert len(ids) <= 12 and len(ids) == len(set(ids))
     assert not set(ids) & {c.id for c in INDEX.core()}
-    assert ids == [c.id for c in load_cards_for(role, ["situation.conflict.chase", "situation.social"], "conflict",
-                                                triggers, extra, rules=RULES)]
+    assert ids == [c.id for c in load_cards_for(role, triggers=triggers, extra_ids=extra, rules=RULES)]
 
 
-def test_priority_role_then_triggers_then_extra_then_situation() -> None:
-    """Chosen by priority (triggers, extra, then situation under the cap); returned stable to volatile: role,
-    situation, trigger, extra (DL-12-38)."""
-    cards = [c.id for c in load_cards_for(Role.WORLD, ["situation.social"], None, ["trg.lead_injection"],
+def test_only_cards_code_knows_apply_triggers_then_extra() -> None:
+    """12.2.4 item 2 (DL-12-104): no role cards and no situation cards by tag; the fired triggers' cards, then the
+    extra ids, stable to volatile (DL-12-38)."""
+    cards = [c.id for c in load_cards_for(Role.WORLD, ["situation.social"], "free", ["trg.lead_injection"],
                                           ["06.5.10"], rules=RULES)]
-    roles = [c.id for c in role_cards(Role.WORLD)]
-    assert len(cards) == 12 and cards[: len(roles)] == roles
-    assert cards[-3:] == ["12.8.2", "PR-12-3", "06.5.10"]
-    rest = cards[len(roles): -3]
-    assert rest and rest == [c.id for c in situation_cards(["situation.social"])][: len(rest)]
+    assert cards == ["12.8.2", "PR-12-3", "06.5.10"]
+    assert load_cards_for(Role.NARRATOR, ["situation.social"], "conflict", [], [], rules=RULES) == []
 
 
-def test_checker_and_interpret_get_no_scene_cards() -> None:
+def test_checker_and_interpret_get_no_trigger_cards() -> None:
     for role in (Role.CHECKER, Role.INTERPRET):
-        ids = [c.id for c in load_cards_for(role, ["situation.conflict"], "conflict", ["trg.exits"], [], rules=RULES)]
-        assert ids == [c.id for c in role_cards(role)]
-
-
-def test_mode_loads_its_situation_cards() -> None:
-    by_mode = load_cards_for(Role.NARRATOR, [], "conflict", [], [], rules=RULES)
-    assert len(by_mode) > len(role_cards(Role.NARRATOR))
-    assert len(load_cards_for(Role.NARRATOR, [], None, [], [], rules=RULES)) == len(role_cards(Role.NARRATOR))
-
-
-def test_situation_cards_are_most_specific_first() -> None:
-    cards = situation_cards(["situation.conflict.chase"])
-    chase = [i for i, c in enumerate(cards) if "situation.conflict.chase" in c.tags]
-    plain = [i for i, c in enumerate(cards) if "situation.conflict.chase" not in c.tags]
-    assert chase and plain and max(chase) < min(plain)
-    assert all(c.kind in ("rule", "procedure") for c in cards)
+        assert load_cards_for(role, triggers=["trg.exits"], rules=RULES) == []
 
 
 # ---------------------------------------------------------------- triggers

@@ -15,11 +15,10 @@ from typing import Any
 from pydantic import BaseModel, Field
 
 from engine.dm.context import TurnContext
-from engine.dm.packet import build_packet, view_ctx, view_for
+from engine.dm.packet import build_packet, turn_exchanges, view_ctx, view_for
 from engine.dm.roles.prompts import load_prompt
 from engine.dm.schemas import _want_ids, build_schema, defaults, schema_context
 from engine.llm.base import Role, call_role
-from engine.retrieve.anchors import scene_situation_tags
 from engine.retrieve.cards import load_cards_for
 from engine.retrieve.triggers import get_active_triggers
 from engine.store.projection import WorldState
@@ -114,10 +113,9 @@ def npc_responses(ctx: TurnContext, happened: str,
                                        "refusal_ids": [r for m in motives for r in m[1]]})
     schema = build_schema(Role.WORLD, sctx)
     triggers = get_active_triggers(st, ctx.rules)
-    mode = st.scene.mode if st.scene else None
-    cards = load_cards_for(Role.WORLD, scene_situation_tags(st, ctx.rules), mode, triggers, rules=ctx.rules)
+    cards = load_cards_for(Role.WORLD, triggers=triggers, rules=ctx.rules)
     packet = build_packet(Role.WORLD, instructions=load_prompt("world"), cards=cards, view=world_view(st, happened),
-                          exchanges=[], message=happened, triggers=triggers, rules=ctx.rules)
+                          exchanges=turn_exchanges(ctx, 1), message=happened, triggers=triggers, rules=ctx.rules)
     res = call_role(ctx.model, Role.WORLD, schema, packet, turn_id=ctx.turn_id, recorder=ctx.record_call,
                     default=lambda: defaults(Role.WORLD, sctx) or {"responses": []}, check=world_check)
     out = []

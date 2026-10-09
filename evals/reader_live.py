@@ -38,7 +38,13 @@ from evals import reader_golden as rg  # noqa: E402
 CACHE = ROOT / "evals" / "baselines" / "reader_golden_haiku.jsonl"
 # the held-out set (labelled by the same policy before the beat normalisation was written) is never tuned on
 SETS = {"golden": (rg.GOLDEN, CACHE),
-        "heldout": (ROOT / "evals" / "reader_heldout.jsonl", ROOT / "evals" / "baselines" / "reader_heldout_haiku.jsonl")}
+        "heldout": (ROOT / "evals" / "reader_heldout.jsonl", ROOT / "evals" / "baselines" / "reader_heldout_haiku.jsonl"),
+        # spec 020's goal-shape breadth set (labelled by 01.2.2 before any run; never tuned on)
+        "goalshape": (ROOT / "evals" / "reader_goalshape.jsonl",
+                      ROOT / "evals" / "baselines" / "reader_goalshape_haiku.jsonl"),
+        # 14 more, labelled after the first post-change run, before the prompt revision was run: never tuned on
+        "goalshape_heldout": (ROOT / "evals" / "reader_goalshape_heldout.jsonl",
+                              ROOT / "evals" / "baselines" / "reader_goalshape_heldout_haiku.jsonl")}
 RULES = load_rules()
 HELD = re.compile(r"(?<!not )\b(?:holds?|holding)\s+(lic\.[a-z_]+\.[a-z_]+)")
 
@@ -77,8 +83,9 @@ def labels_from(data: dict[str, Any], line: str, context: str) -> dict[str, Any]
     computed gate of the first beat."""
     data = normalise(data)
     kinds = [p.get("question_kind") for p in data.get("parts", []) if p.get("question_kind") not in (None, "none")]
-    out: dict[str, Any] = {"question_kind": kinds[0] if kinds else "none", "verb": None, "gate": None}
     beats = now_beats(data.get("beats", []))
+    out: dict[str, Any] = {"question_kind": kinds[0] if kinds else "none", "verb": None, "gate": None,
+                           "goals": [(b.get("change") or {}).get("kind") or "none" for b in beats]}
     if not beats:
         return out
     b = beats[0]

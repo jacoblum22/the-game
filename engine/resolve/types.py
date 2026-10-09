@@ -45,6 +45,7 @@ class Beat(BaseModel):
     actor: str
     intent: str
     method: str
+    how: str | None = None  # 01.2.6: the method in the player's own words, verbatim from the message (DL-01-39)
     assertion: str | None = None  # context only, never a fact (INV-9)
     shape: Shape = "single"
     target: str | None = None

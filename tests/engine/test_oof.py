@@ -55,14 +55,14 @@ def test_offer_block_is_the_12_15_2_template(s: Scene) -> None:
     blk = offer_block(f, rules=s.rules, fate=1)
     lines = [ln.strip() for ln in blk.text.splitlines()]
     assert blk.kind == "OFFER"
-    assert lines[0] == "[OFFER] do it."
+    assert lines[0] == "[OFFER] Do it."  # no slot and no player words: the intent (spec 020)
     assert lines[1] == "Chance: even — 50%   (Agility +3, practised +1)"
     assert lines[2] == "If it works: what you wanted.   Very well (5%): more than you asked."
     assert lines[3] == "If it fails: you tire — a setback.   Badly (5%): you tire — serious."
     assert lines[4] == "Close call (15%): get it anyway and pay (you get less far), or fail."
     assert lines[5] == "Fate: 1 (you may spend one to reroll the die once you see it)"
     assert lines[6].startswith("Another way: with ")
-    assert "Commit" not in blk.text and "Do it" not in blk.text  # the menu follows the block (play/render.py)
+    assert "Commit" not in blk.text and "Do it" not in " ".join(lines[1:])  # the menu follows the block
     assert [c["id"] for c in offer_choices(f)] == ["commit", "go_big", "play_safe", "change", "withdraw"]
     assert [c["label"] for c in offer_choices(f)] == ["Do it", "Go big", "Play it safe", "Another way", "Back off"]
 
@@ -75,7 +75,8 @@ def test_offer_words_playtest_20261008(s: Scene) -> None:
     wary = s.fact("npc.guard", "detail.manner", "on guard against you")
     name = s.state.entities[s.pc].name.split()[0]
     f = _frame(s, levers=[held], snags=[wary], method_consequences=["the knife is out whatever the roll"],
-               beat_kw={"restatement": f"{name} gets up and slashes at the Guard.", "method": "slash at the guard"})
+               beat_kw={"restatement": f"{name} gets up and slashes at the Guard.", "method": "slash at the guard",
+                        "how": "slash at the guard"})
     text = offer_block(f, rules=s.rules, fate=1, state=s.state).text
     assert "held fast by you +2" in text and "on guard against you −2" in text and "a help" not in text
     assert "Takes:" not in text and "fate 1" not in text

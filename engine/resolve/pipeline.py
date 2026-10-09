@@ -219,11 +219,11 @@ def _leaves(env: PipelineEnv, beat: Beat) -> bool:  # rule: PR-06-4
 
 
 def _ask(env: PipelineEnv, why: str, todo: list[BeatPlan]) -> PauseRecord:  # rule: 01.2.3
-    """The plan pause: one line, "Still go on to <act>?", before the next beat (kind offer: a new declaration
+    """The plan pause: one line, "Still go on: <the next goal>?", before the next beat (kind offer: a new declaration
     withdraws it, 12.2.6). It falls between beats, so T5 still runs for what resolved (spec 017)."""
-    act = todo[0].beat.method or todo[0].beat.restatement or todo[0].beat.intent
+    act = _then(env.state, todo[:1])[0]  # the typed goal, never the raw `method` (DL-01-39)
     act = act[:1].lower() + act[1:]
-    prompt = f"{why} Still go on to {act.rstrip('.')}?".strip()
+    prompt = f"{why} Still go on: {act.rstrip('.')}?".strip()
     choices = [{"id": "continue", "label": f"Go on: {act}"}, {"id": "withdraw", "label": "Stop here"}]
     return _open(env, "offer", prompt, choices, "withdraw", {"stage": "plan", "queued": _dump(todo)})
 
@@ -598,9 +598,9 @@ def _offer(env: PipelineEnv, plan: BeatPlan, proposed: ProposedFrame, frame: Fra
                          shown_at=env.state.time.now, choice="auto"))
         out = _roll(env, plan, frame, queued)
         out.oof.insert(0, {"kind": "OFFER", "text": offer_block(frame, rules=env.rules, auto=True, state=env.state,
-                                                                then=_then(queued)).text})
+                                                                then=_then(env.state, queued)).text})
         return out
-    text = offer_block(frame, rules=env.rules, state=env.state, then=_then(queued)).text
+    text = offer_block(frame, rules=env.rules, state=env.state, then=_then(env.state, queued)).text
     detail = {"stage": "offer", "plan": plan.model_dump(mode="json"), "queued": _dump(queued),
               "proposed": proposed.model_dump(mode="json"), "frame": frame.record(), "candidates": cands,
               "offer": view.model_dump(mode="json"), "warned": warned}
@@ -610,10 +610,14 @@ def _offer(env: PipelineEnv, plan: BeatPlan, proposed: ProposedFrame, frame: Fra
     return BeatOutcome(status="paused", entry=entry, oof=[{"kind": "OFFER", "text": text}])
 
 
-def _then(queued: list[BeatPlan]) -> list[str]:  # rule: 01.2.2
-    """The beats of the same message still to come, for the OFFER's "Then:" line (playtest: the punch read as dropped):
-    each one's act, never its intent (an intent reads as an outcome promised, live run 015)."""
-    return [q.beat.method or q.beat.restatement for q in queued]
+def _then(state: Any, queued: list[BeatPlan]) -> list[str]:  # rule: 01.2.2
+    # rule: 01.2.6
+    """The goals of the same message still to come, for the OFFER's "Then:" line (playtest: the punch read as
+    dropped): each one's typed goal and the player's method words (`oof.goal_line`), never the Reader's `method`
+    field, which printed garbled (I1 §3; DL-01-39)."""
+    from engine.dm.oof import goal_line
+
+    return [goal_line(q.beat, state) for q in queued]
 
 
 def _may_auto(env: PipelineEnv, frame: Frame) -> bool:  # rule: 07.3.6

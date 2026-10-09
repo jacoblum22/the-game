@@ -197,7 +197,8 @@ def reader_schema(ctx: SchemaContext) -> Schema:  # rule: 12.2.2
     beat = obj({
         "intent": STR,
         "method": STR,
-        "purpose": enum(BEAT_PURPOSES),  # code folds and drops (reader.normalise_beats)
+        "how": STR_OR_NULL,  # 01.2.6: the method in the player's own words (kept only when verbatim; DL-01-39)
+        "purpose": enum(BEAT_PURPOSES),  # code folds and drops (reader.normalise)
         "assertion": STR_OR_NULL,
         "shape": enum(BEAT_SHAPES),
         "target": enum([*ctx.scene_ids, *ctx.reachable_places], first=NONE),

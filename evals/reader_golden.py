@@ -31,7 +31,8 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 GOLDEN = ROOT / "evals" / "reader_golden.jsonl"
-FIELDS = ("verb", "gate", "necessity", "against_will", "uses_power", "speech", "question_kind", "change_kind")
+FIELDS = ("verb", "gate", "necessity", "against_will", "uses_power", "speech", "question_kind", "change_kind",
+          "goals")  # goals: the now-beats' change kinds in order (policy E, spec 020)
 FACETS = ("against_will", "uses_power", "speech")
 BEAT_FIELDS = (*FACETS, "change_kind")  # first-beat fields: a no-beat line has none (change_kind: 01.2.7, spec 015)
 GATES = (None, "G0", "G1", "G2", "G3", "G4")
@@ -61,13 +62,13 @@ def score(lines: list[dict[str, Any]], reader: Reader | None) -> str:
         for f in FIELDS:
             if f not in out or f not in lab or (f == "necessity" and lab[f] is None) or (f in BEAT_FIELDS and lab["verb"] is None):
                 continue
-            ok = out[f] == lab[f]
+            ok = out[f] == lab[f] or (f == "goals" and out[f] in lab.get("goals_alt", []))
             hits[f][0] += ok
             hits[f][1] += 1
             if g.get("issue") and f in issue_hits:
                 issue_hits[f][0] += ok
                 issue_hits[f][1] += 1
-            if not ok and f in ("verb", "gate"):
+            if not ok and f in ("verb", "gate", "goals"):
                 misses.append(f"{g['id']} {f}: got {out[f]}, want {lab[f]}  ({g['line'][:60]})")
         if "necessity" in out and lab["necessity"] is not None:
             hits["roll"][0] += (out["necessity"] == "uncertain_and_costly") == (lab["necessity"] == "uncertain_and_costly")
