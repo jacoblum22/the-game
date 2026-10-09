@@ -33,7 +33,31 @@ stub. They predate spec 019. Live novelty-4 is 0.95–0.97, and novelty-4 cannot
 
 ## 2. Root-cause families
 
-### T1. The yes/no Oracle answers questions that something else already owns
+Each family has a plain summary, the playtest example, a made-up example that shows how far the problem reaches, and the fix in plain words. The traced evidence follows.
+
+### T1. The game flips a coin for things it already knows
+**In plain words.** When you act on a person, the game sometimes asks a yes/no dice roll (the "Oracle")
+about that same person: "Is he paying attention?", "Can she read?", "Will he tell you?". The answer is rolled
+instead of looked up, so it can contradict what the game already knows about them. The odds screen then counts the
+rolled answer against you as a penalty.
+
+**From the playtest** (fighter, inputs 21–27). Belie is the town scribe: her record says she can read. Before the
+fighter asked her about the stolen list, a roll decided she can't. She said "I can't read a line of it", and the
+next offer screen asked him to *persuade her to read it*, with her illiteracy as a −2. Earlier, a roll said Magby
+"is not alert" to a pickpocket; the label came out as "is not not alert … while h −2".
+
+**Another example (made up, to show the reach).** You ask the blacksmith to mend your sword. A roll decides "the
+smith can't work iron", so he shrugs at his own anvil, and your offer to pay him shows "can't work iron −2". Or an
+old friend you saved last week: a roll on "is she willing to help?" comes up no, and she turns you away. Anything
+the game already knows about a person can be overwritten by a coin flip this way: their skills, their attitude,
+what they'd agree to.
+
+**The fix, plainly.** Every question has one owner. *Is the person willing?* → their attitude to you. *Can they do
+it?* → their record and skills. *Something nobody has decided yet* → the content makers (T2). The coin flip only
+answers open questions about the world ("is it raining at the pass?"), and a rolled answer is never a penalty on the
+odds.
+
+**The evidence:**
 **Cause, traced** (I3 §1–2, §9 A; I2 §1, §7 B):
 - Before framing, the Reader's fact questions about the beat's own target ("is he alert?", "can she read?",
   "will he name the place?") go to the blind d100 Oracle. Its answer is written as a fact.
@@ -60,7 +84,28 @@ stub. They predate spec 019. Live novelty-4 is 0.95–0.97, and novelty-4 cannot
 **Retires:** pre-frame Oracle questions about the target, the `_KNOWS_Q` word list, Oracle booleans standing in for
 content, and slug labels in the odds breakdown.
 
-### T2. The world promises content that nothing writes, and clues can't be reached
+### T2. The story promises things nobody ever writes, and clues can't be found
+**In plain words.** When a lead says "someone is hiring" or "refugees came in", the game creates the hook but
+not its details: what the job is, what it pays, where it is, who the refugees are and what happened to them. So the
+people who should know have nothing to say, and they dodge. Separately, a clue is handed over only when your words
+happen to share a word with the clue's description, which almost never happens.
+
+**From the playtest.** The fighter chased "a delivery list that names the most dangerous place". For three turns
+Magby kept saying "the name's written there", because no place was ever written. In the explorer's game, Morga was
+meant to know the refugees' story; no story existed, the refugees never appeared in the room, and Roswen sent the
+player back to Morga in a loop. Across all three games: 38 questions, 0 clues delivered.
+
+**Another example (made up).** A notice says "Reward for the missing ferryman". You ask the ferry-keeper how much,
+who posted it, where he was last seen. Nobody has decided any of it, so everyone hedges ("you'd have to ask
+around"). You ask his widow "Did he have enemies?" She holds the clue "he owed the toll-keeper money", but your
+question shares no word with "owed" or "toll-keeper", so she's never given it to say. Any mystery stalls the same
+way, however well the player asks.
+
+**The fix, plainly.** When a hook is made, also write its key facts (the job, the pay, the place, who's involved)
+and give them to the people who'd know. Let the director bring in a group like "the carters". Decide whether a
+question is about a clue by its meaning, not shared words (decision 2). Give deals a real price.
+
+**The evidence:**
 **Cause, traced** (I2 §1, §3–5, §7 A, C, D, E):
 - Nothing generates the hook's terms. A lead says "someone is hiring" or "refugees came in", but no step writes the
   job, the pay, the place or the refugees' story. The fighter's "delivery list" grew from an activity line, and
@@ -83,7 +128,24 @@ carters absent; the price never named; part of the "wall" feeling; no clue progr
 **Retires:** Oracle booleans for content, word-overlap case routing (`case_about`'s one-word hit), random walk-ons
 for a stated purpose, and the regex price parsed from Framer prose.
 
-### T3. Code still writes story text the narrator repeats
+### T3. The game hands the narrator ready-made sentences, and it repeats them
+**In plain words.** Some of what the narrator gets isn't facts but finished sentences and labels. Some
+character notes, like a habit, are shown every single turn as if they always happen. The narrator tries to use
+what it's given, so it keeps repeating them.
+
+**From the playtest.** Kerric counted on his fingers in nearly every reply: his habit was shown in 16 of 21 turns
+where he spoke. "Branine Brightford brought the word" was in every turn's input, and it finally leaked into the
+explorer's temple scene from nowhere. The sellsword's notes said "call them…" although he's a he, so the narrator
+drifted to "they".
+
+**Another example (made up).** An innkeeper's note says "wipes the bar with a rag". Over ten turns she wipes the
+bar ten times, even while her inn is on fire. A guild is given as "the officer of The Order of the Grey Hand", and
+every mention repeats that exact clumsy phrase. Any fixed text we feed every turn becomes a verbal tic.
+
+**The fix, plainly.** Give facts, not sentences. Offer a look or habit once per scene, then mark it as used. Write
+habits as "sometimes". Templates use the person's real pronouns.
+
+**The evidence:**
 **Cause, traced** (I1 §1, §5; I2 §2, §5, §7 D, G):
 - "X brought the word" is a code sentence built from the case's first clue holder, and it is in **44 of 44**
   narrator packets.
@@ -107,7 +169,23 @@ pronoun drift.
 **Retires:** `incident_line` in every SCENE SETTING, the verbatim faction label, raw `voice`/`detail` in the view, and
 pronoun-neutral template strings.
 
-### T4. One outcome is read three ways
+### T4. "Succeed at a cost" gets read as a failure
+**In plain words.** When a roll just misses, you can choose to succeed anyway at a price. Three parts of the
+code look only at the raw roll ("failed") and ignore that choice, so the person still refuses after you've paid.
+And before you choose, the narrator is already told "it failed", so it writes ahead of your decision.
+
+**From the playtest** (talker, inputs 27–28). The talker offered to buy the sellsword a round, rolled a near miss,
+and chose "succeed and pay". He paid a coin, and the sellsword turned the round down anyway. Before the choice, the
+narration already had the sellsword reaching for the coin.
+
+**Another example (made up).** You barely miss picking a lock and choose "succeed, but the guard hears you". The
+lock opens, but the guard's reaction is computed as if you'd failed, so the door is described as still locked while
+the guard comes running. Any near miss you accept can be undone this way.
+
+**The fix, plainly.** One place decides how a roll turned out, and everything else asks it. A roll still waiting for
+your choice isn't shown to the narrator as decided.
+
+**The evidence:**
 **Cause, traced** (I1 §3; I2 §7 F):
 - When the player takes "succeed at a cost", three places check only the raw degree: `npc_layer.py:570`,
   `answer.py:271` and `scene_state.py:160`. They read the result as a failure and voice a refusal.
@@ -123,7 +201,25 @@ pronoun-neutral template strings.
 
 **Retires:** degree-only checks, and "a near miss" as narrated result.
 
-### T5. Goal-first stops at the Reader
+### T5. The "main goal first" fix stops halfway
+**In plain words.** Round 6 taught the game to read "grab him and demand the key" as one goal: the demand.
+But other parts still look at the *type* of action, or at nothing. The "can you read this?" check, the offer's
+title and the rule that a price can't undo your win don't follow the goal.
+
+**From the playtest** (fighter, input 19; talker, input 27). The fighter wrote "I read the list over his shoulder
+and ask him the name". That became one talking action, so the reading check never ran (it only runs on "look"
+actions), and he stole the list before learning he can't read. Three of seven offers recorded no goal at all, so
+one title came out as "Talk to a coin on the table", and the near miss's price was the goal itself ("he turns you
+down").
+
+**Another example (made up).** "I sweet-talk the clerk and sneak a look at the ledger." The ledger is folded into
+the talk, the reading check never fires, and a character who can't read reads the accounts fluently. Or "I shoulder
+past the guard to reach the door" is recorded with no goal: you succeed, and nothing changes.
+
+**The fix, plainly.** Every rolled action records its goal. Checks, titles and the "a price can't undo your win"
+rule follow the goal, not the action type. A fallback ("just pick out the numbers") is judged on its own size.
+
+**The evidence:**
 **Cause, traced** (I3 §5–7, §9 C, E):
 - Spec 020 folds methods into goals, but downstream code still keys on verb labels:
   - the literacy gate checks only `verb.observe`, so reading folded into a Talk beat met no gate, and the list was
@@ -152,7 +248,21 @@ pronoun-neutral template strings.
 **Retires:** the verb-only gate keys, rolled `change: none`, description-first titles, and double-counted fallback
 difficulty.
 
-### T6. Rolls with nothing at stake
+### T6. You roll for things with nothing at stake
+**In plain words.** The rules say that when nothing bad can happen, you just take the time: no roll. That rule
+was never built, so any action with some difficulty gets a dice screen.
+
+**From the playtest** (explorer, inputs 25–29). Already seated with Morga, the explorer asked to sit and listen.
+They got an offer screen ("you can't judge how hard this is") and then an opaque "hidden check made". 4 of the 7
+offers in these games had nothing at stake.
+
+**Another example (made up).** Searching your own empty room for a dropped ring, with no hurry: a 40% roll, and on
+a failure you simply search again. Practising on a training dummy, or reading a book you own on a quiet evening, all
+cost a roll and a screen for nothing.
+
+**The fix, plainly.** Build the "take the time" rule: no risk, no roll, just say how long it takes.
+
+**The evidence:**
 **Cause, traced** (I3 §4, §9 B): rule 01.4.4 ("take the time": no roll when nothing is at stake) was scoped out of
 spec 007 and never built. 4 of 7 OFFERs had nothing at stake, for example sitting down to listen while already
 seated, or persuading someone who has already half-agreed.
@@ -167,7 +277,23 @@ time spent.
 
 **Retires:** rolling every gated beat, and secret-check lines for beats with nothing at stake.
 
-### T7. `/fix` can't see or change enough
+### T7. `/fix` can't see enough to fix things
+**In plain words.** The new `/fix` investigates before acting, which works. But its tools don't show an NPC's
+skills, it can only re-show results that were already rolled, and it can't rebuild an offer that's still waiting
+for you.
+
+**From the playtest** (fighter, inputs 27–28). The fighter reported "Belie can't read, but you want me to persuade
+her to read". `/fix` agreed, but it couldn't see Belie's reading skill and couldn't rebuild the offer, so it showed
+the same broken offer again.
+
+**Another example (made up).** You report "the guard should know me, I'm a captain of the watch". `/fix` can see
+the guard's attitude but not your rank, so it can only apologise and explain. Every complaint that hinges on a
+skill, a rank, or an offer still on screen hits the same wall.
+
+**The fix, plainly.** The tools read the whole record, skills included. Add "rebuild a waiting offer". Give the
+fixer a short rules crib: holds, scene labels are never penalties, refusals are never facts.
+
+**The evidence:**
 **Cause, traced** (I3 §3):
 - The Fixer's entity tool hides an NPC's role and licences, so it couldn't see that Belie can read.
 - `rerender` looks only at rolled frames.

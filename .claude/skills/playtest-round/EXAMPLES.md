@@ -101,9 +101,52 @@ Another, shorter one (round 3):
 
 ---
 
+## Step 5: a family in the owner's four-part format (round 7)
+
+The owner asked for this after round 7: "a little more detail in the T1-7, maybe put them in simpler language, and
+give the example from the play test and a separate example that you make up designed to show the breadth of the
+problem". Every family in the phone update, and at the top of each family in the analysis, takes this shape:
+
+> ### T1. The game flips a coin for things it already knows
+> **In plain words.** When you act on a person, the game sometimes asks a yes/no dice roll about that same person:
+> "Is he paying attention?", "Can she read?", "Will he tell you?". The answer is rolled instead of looked up, so it
+> can contradict what the game already knows about them. The odds screen then counts the rolled answer against you.
+>
+> **From the playtest** (fighter, inputs 21–27). Belie is the town scribe: her record says she can read. A roll
+> decided she can't. She said "I can't read a line of it", and the next offer screen asked him to *persuade her to
+> read it*, with her illiteracy as a −2.
+>
+> **Another example (made up).** You ask the blacksmith to mend your sword. A roll decides "the smith can't work
+> iron", so he shrugs at his own anvil, and your offer to pay him shows "can't work iron −2". Or an old friend you
+> saved last week: a roll on "is she willing?" comes up no, and she turns you away. Anything the game already knows
+> about a person (skills, attitude, what they'd agree to) can be overwritten by a coin flip this way.
+>
+> **The fix, plainly.** Every question has one owner: willing → their attitude to you; able → their record; not yet
+> decided → the content makers. The coin flip only answers open questions about the world, and a rolled answer is
+> never a penalty. *Retires:* pre-roll questions about the target and coin-flip "facts" on the odds screen.
+
+**Why each part is there:**
+- The plain words are the cause as a player would describe it. The mechanism is named ("a yes/no dice roll"); the
+  module (`ask_oracle`) is not.
+- The playtest example proves it happened, and the owner can find it in the transcript.
+- The made-up example is a *different* person or situation. The owner judges a fix by how much it covers, and one
+  instance can't show that. Close it with a sentence that generalises.
+- The fix says what changes *in play* first, then what it retires.
+
+**Too thin** (the round-6 style, now replaced):
+
+> - **T1. Code writes story content the model must treat as true.** The garbled odds line, "settled between you".
+>   *Fix:* code only writes real facts.
+
+It names symptoms the owner hasn't seen, uses our jargon ("story content", "real facts"), and gives no example of
+what goes wrong in play.
+
+---
+
 ## Step 5: owner update, in plain words
 
-**The round summary** (short, for a phone):
+**The round summary** (short, for a phone). The families below are in the old, too-thin style; use the four-part
+format above instead:
 
 > **What we set out to fix worked:** hedging went from a third of lines to 1 instance; walking in place and wasted
 > successes went to 0.

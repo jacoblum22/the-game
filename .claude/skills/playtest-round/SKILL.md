@@ -61,6 +61,8 @@ The method is built into the agent type.
   - the cross-cutting causes;
   - **one structural fix per real problem, naming what it retires**;
   - small bugs listed separately as patches.
+- Write each family in the **four-part plain format** first, then the traced evidence (see step 5 and
+  `EXAMPLES.md`).
 - Prefer deleting machinery over adding it.
 
 ### 5. Owner review, in the owner's style
@@ -70,13 +72,22 @@ The method is built into the agent type.
   2. **families T1, T2, T3…**, formed only *after* the investigators' traces;
   3. the recommended order;
   4. the decisions needed, each with 2–3 options and a recommendation.
-- **A family is a traced root cause**, not a surface grouping of complaints. Each family gives:
-  - the cause, with evidence;
-  - the symptoms it explains;
-  - **a proposed structural fix and what it retires**.
+- **A family is a traced root cause**, not a surface grouping of complaints. Give each family a plain-words title
+  (what goes wrong in play, not the code's name for it: "The game flips a coin for things it already knows", not
+  "Oracle pre-frame questions"), then four parts, in the owner's words, not the code's:
+  1. **In plain words:** what goes wrong and why, in 2–4 sentences a player would follow. Name the mechanism
+     ("a yes/no dice roll"), not the module (`ask_oracle`).
+  2. **From the playtest:** the concrete instance that happened, with the run and input numbers: who, what the
+     player did, what the game did wrong.
+  3. **Another example (made up):** a *different* situation the same cause would break, chosen to show how far the
+     problem reaches (another kind of person, action or scene). It is not a rewording of the playtest example. End
+     on one line that generalises ("anything the game already knows about a person can be overwritten this way").
+  4. **The fix, plainly:** what changes, in play terms, and in one line what it retires.
 
+  The traced evidence (files, counts, code paths) follows in the analysis document, not in the phone summary.
   List small one-off bugs separately as patches.
-- Keep it short; the owner reads on a phone. Send documents with `SendUserFile`.
+- Keep each part short (the owner reads on a phone), but never drop a part: the two examples are what make a
+  family understandable. Send documents with `SendUserFile`.
 - Wait for approval of any principle or rules change.
 - If the owner pushes back, take it seriously and re-trace.
 
