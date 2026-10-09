@@ -35,6 +35,7 @@ class Change(BaseModel):
     kind: str = "none"
     what: str | None = None
     whom: str | None = None
+    description: str | None = None  # people or things present with no id ("the refugees"; DL-12-97)
 
 
 class Beat(BaseModel):

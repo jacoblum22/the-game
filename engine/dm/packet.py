@@ -271,17 +271,8 @@ def _bare(tag: Any) -> str:
     return str(tag).rsplit(".", 1)[-1].replace("_", " ")
 
 
-def scene_setting(state: WorldState) -> str:  # rule: 12.4.3
-    """Material for describing the place, in words (never ids): the place and its desc, landmarks and openness, the
-    town or region around it, the places beside it, who is here, and the hour, season and weather. Seed facts only:
-    nothing here is invented, and the narrator may name ordinary furniture of such a place [revision: I-127]."""
-    sc = state.scene
-    place = state.entities.get(sc.place_id) if sc and sc.place_id else None
-    if place is None or place.id in state.seals:
-        return ""
+def _place_bits(place: Any) -> list[str]:
     d = place.data
-    lines = ["SCENE SETTING (what the character sees here; describe the place from this, naming ordinary furniture "
-             "of such a place as needed; people here act only as the record says, so show how they look and stand):"]
     bits = [f"{place.name}" + (f", {d['desc']}" if d.get("desc") and d["desc"] != place.name else "")]
     for key, label in (("place_kind", "a"), ("openness", "openness")):
         if d.get(key):
@@ -294,21 +285,43 @@ def scene_setting(state: WorldState) -> str:  # rule: 12.4.3
     for key in ("landmarks", "hazards"):
         if d.get(key):
             bits.append(f"{key}: " + ", ".join(str(x) for x in d[key]))
-    lines.append("- place: " + "; ".join(bits))
-    if d.get("look"):  # the seed pack (12.16.9): the layout is read from the store, never invented (12.4.3)
-        lines.append(f"- look: {d['look']}")
-    if d.get("furniture"):
-        lines.append("- furniture: " + ", ".join(str(x) for x in d["furniture"]))
+    return bits
+
+
+def scene_setting(state: WorldState, *, full: bool = True) -> str:  # rule: 12.4.3
+    # rule: 12.14.11
+    """Material for describing the place, in words (never ids): the place and its desc, landmarks and openness, the
+    town or region around it, the places beside it, who is here, and the hour, season and weather. Seed facts only:
+    nothing here is invented, and the narrator may name ordinary furniture of such a place [revision: I-127].
+    `full=False` (a later turn of the scene, DL-12-99): the look, furniture and description were given when the scene
+    opened, so only the place's name and an "already described" line; people, exits and time stay."""
+    sc = state.scene
+    place = state.entities.get(sc.place_id) if sc and sc.place_id else None
+    if place is None or place.id in state.seals:
+        return ""
+    d = place.data
+    if not full:
+        lines = ["SCENE SETTING (already described this scene: do not describe the place again unless the character "
+                 "looks around or asks; people here act only as the record says):", f"- place: {place.name}"]
+    else:
+        lines = ["SCENE SETTING (what the character sees here; describe the place from this, naming ordinary "
+                 "furniture of such a place as needed; people here act only as the record says, so show how they "
+                 "look and stand):", "- place: " + "; ".join(_place_bits(place))]
+        if d.get("look"):  # the seed pack (12.16.9): the layout is read from the store, never invented (12.4.3)
+            lines.append(f"- look: {d['look']}")
+        if d.get("furniture"):
+            lines.append("- furniture: " + ", ".join(str(x) for x in d["furniture"]))
     exits = [state.entities[x].name for x in d.get("exits") or [] if x in state.entities and x not in state.seals]
     if exits:
         lines.append("- exits: toward " + ", ".join(exits))
-    parent = state.entities.get(d.get("parent") or "")
+    parent = state.entities.get(d.get("parent") or "") if full else None
     while parent is not None and parent.id not in state.seals:
         pd = parent.data
         lines.append(f"- within: {parent.name}" + (f", {pd['desc']}" if pd.get("desc") else ""))
         parent = state.entities.get(pd.get("parent") or "") if pd.get("place_kind") != "settlement" else None
-    near = [e for e in state.entities.values() if e.kind == "place" and e.id != place.id and e.id not in state.seals
-            and e.data.get("parent") == d.get("parent") and e.exists == "exists" and e.data.get("known", True)]
+    near = [e for e in state.entities.values() if full and e.kind == "place" and e.id != place.id
+            and e.id not in state.seals and e.data.get("parent") == d.get("parent") and e.exists == "exists"
+            and e.data.get("known", True)]
     if near:
         lines.append("- nearby: " + "; ".join(e.data.get("desc") or e.name for e in near[:8]))
     from engine.world.scenes import cast_present
@@ -537,9 +550,10 @@ def speaker_card(state: WorldState, npc: str, *, topic: str | None = None, about
             if t.kind == "thread" and t.data.get("status", "active") == "active"
             and t.visibility in ("shown", "available") and t.id not in state.seals][:3]
     said = said_by(state, npc, topic=topic, about=about, k=shown)
-    out = [f"SPEAKER CARD for {display_name(state, npc)} (PR-12-10: answer from this first; beyond it, hearsay or a "
-           "guess, hedged):"]
-    out += [f"- knows: {_short(x)}" for x in known] or ["- knows: nothing on record (answer from hearsay or a guess)"]
+    out = [f"SPEAKER CARD for {display_name(state, npc)} (PR-12-10: answer from this first; beyond it, plainly, with "
+           "ordinary confidence; a hedge only if they are cautious or gossipy; never open by saying their own name or "
+           "title unless asked):"]
+    out += [f"- knows: {_short(x)}" for x in known] or ["- knows: nothing on record (answer plainly about ordinary things)"]
     if roles:
         out.append("- their trade's common knowledge: " + "; ".join(roles))
     if news:

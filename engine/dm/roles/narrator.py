@@ -41,7 +41,9 @@ LIMIT_KEYS: dict[str, str] = {"turn": "beat_max_words", "scene_open": "scene_ope
                               "epilogue": "beat_max_words"}
 PURPOSE_LINES: dict[str, str] = {
     "turn": "Narrate this turn from the record.",
-    "scene_open": "Frame the new scene (12.4.3): the moment, the one impetus the record names, the open prompt.",
+    "scene_open": "Narrate this turn from the record, then frame the new scene it reaches (12.4.3): the way there in "
+                  "a line, the arrival and the place from SCENE SETTING, the one impetus the record names, the open "
+                  "prompt.",
     "opening": "The first opening (12.16.16): the inciting incident from the record, at a moment of decision.",
     "recap": "A recap (12.5.3) from the state summary below only, never from earlier prose.",
     "epilogue": "The epilogue (PR-11-6): word only what the record gives.",
@@ -150,7 +152,8 @@ def _speech_line(state: WorldState, record: AdjudicationRecord) -> list[str]:  #
     # rule: 12.14.12
     """When the PC speaks to someone here, the one they addressed answers in quoted words (P-061), in character,
     within the willingness code gave, from their speaker card first (PR-12-10 steps 3-4; DL-12-90): beyond it,
-    hearsay or a guess, hedged; "I don't know" rare, in voice, with a natural redirect; never contradicting or
+    plainly, with ordinary confidence (a hedge only for a cautious or gossipy character; DL-12-96), never opening on
+    their own name or title unless asked (DL-12-100); "I don't know" rare, in voice, with a natural redirect; never contradicting or
     repeating their own `said` lines unprompted. Nobody else interjects (12.11.9 step 3)."""
     from engine.dm.roles.world import present_npcs
 
@@ -159,8 +162,10 @@ def _speech_line(state: WorldState, record: AdjudicationRecord) -> list[str]:  #
     if not (spoke or record.npc_actions) or not present_npcs(state):
         return []
     return ["- the one the PC addressed answers in quoted words (their actual sentence, a question as a question), in "
-            "character and within the willingness their line gives: from their SPEAKER CARD first; beyond it, from "
-            "hearsay, a guess or an opinion, hedged as people do (\"I heard...\", \"probably...\"). \"I don't know\" is "
+            "character and within the willingness their line gives: from their SPEAKER CARD first; beyond it, plainly and "
+            "with ordinary confidence, as people talk about ordinary things; a hedge only if the character is cautious "
+            "or gossipy. Never open their speech by saying their own name or title unless they were asked who they "
+            "are. \"I don't know\" is "
             "rare: only in their own voice, with a natural redirect, never a chain of names. Never contradict or "
             "repeat what their card says they already said (build on it; say something new). A refusal is said in "
             "their own voice, never a stock formula. Nobody else present speaks or interjects unless the optional "
@@ -260,6 +265,9 @@ def _item_words(state: WorldState, record: AdjudicationRecord, it: RecordItem, r
     # rule: 12.14.12
     """One record line in words for the Narrator (names, never ids or numbers; 12.14.4)."""
     pc = record.pc
+    if it.kind == "scene" and record.scene.cut:  # travel: the beats above led here (P-098)
+        return f"a new scene opens: {record.scene.header or 'framed now'}; frame it as the arrival the beats above " \
+               "led to (12.4.3)"
     if it.kind == "scene":
         return f"a new scene opens: {record.scene.header or 'framed now'}; frame it first (12.4.3)"
     if it.kind == "beat" and it.beat is not None:
@@ -484,6 +492,11 @@ def used_details(state: WorldState, now: int, window: int = 10) -> list[tuple[st
     return [(who, words) for _, who, words in sorted(out, key=lambda x: x[0])]
 
 
+# the PC looks again or asks (12.14.11 setting once): the place's look is given again
+LOOKS_AROUND = re.compile(r"\blook(?:s|ing)? (?:around|about|round)\b|\bsurroundings\b|\bwhat (?:do|can) i see\b"
+                          r"|\bdescribe\b|\btake in the\b", re.IGNORECASE)
+
+
 def narrator_mode(ctx: TurnContext) -> str:
     """The output shape: declared sentences, or the fallback `fiction` + declarations (config `narrator_schema`)."""
     return "fiction" if (ctx.config or {}).get("narrator_schema") == "fiction" else "sentences"
@@ -505,7 +518,8 @@ def draft(ctx: TurnContext, record: AdjudicationRecord, *, player_message: str =
     cards = load_cards_for(Role.NARRATOR, scene_situation_tags(st, ctx.rules), mode, triggers, rules=ctx.rules)
     msg = [record_text(st, record, player_message=player_message, purpose=purpose, rules=ctx.rules, items=its)]
     if repair is None:
-        if purpose in ("turn", "scene_open", "opening") and (setting := scene_setting(st)):
+        full = purpose != "turn" or bool(LOOKS_AROUND.search(player_message))  # setting once (DL-12-99)
+        if purpose in ("turn", "scene_open", "opening") and (setting := scene_setting(st, full=full)):
             msg.append(setting)
         if purpose in ("turn", "scene_open"):
             msg += _freshness(ctx)

@@ -27,7 +27,7 @@ from pydantic import BaseModel, Field
 
 from engine import ids
 from engine.dm.adjudication import BeatEntry, CostEntry, HarmEntry, PositionEntry
-from engine.resolve.change import ChangeResult, apply_change, plain
+from engine.resolve.change import ChangeResult, apply_change, needs_target, plain
 from engine.resolve.costs import HarmHook, apply_cost, check_cost_decl, first_fitting_cost
 from engine.resolve.frame import auto_commit_allowed, commit_events, frame_check, offer_preview
 from engine.resolve.gate import GateDecision, check_gate, words, zero_reach
@@ -338,6 +338,9 @@ def _start(env: PipelineEnv, plan: BeatPlan, queued: list[BeatPlan]) -> BeatOutc
         return _refused(beat, dec, "G4")
     if dec.gate == "G3" and not dec.rolls_possible:
         return _redirect(env, plan, dec, queued)
+    ask = needs_target(env.state, beat)  # DL-01-36: no one named and no description → "who?", never a roll
+    if ask:
+        return BeatOutcome(status="question", entry=_entry(beat, gate="G0", gate_words=ask))
     # 3. NECESSITY (01.4.1, computed): a certain or plainly trivial beat skips the Framer
     beat.necessity = necessity(beat, dec, state=env.state, rules=env.rules)
     if beat.necessity != ROLLS:
@@ -411,11 +414,18 @@ _BAND_WORDS = {"engaged": "at arm's reach of", "close": "a few strides from", "n
 _AWAY = {"withdraw", "retreat", "flee", "away", "back", "leave"}
 
 
-def _moved(env: PipelineEnv, plan: BeatPlan) -> list[PositionEntry]:  # rule: PR-06-4
-    """A resolved Move writes where it took the mover: one band step toward (or away from) its target in the
-    scene, in both directions, at the mover's place. A place that is not here is travel: the scene cut moves the
-    PC there (12.4.2, 10.1.3), so nothing is written here."""
-    # ponytail: one band step per resolved Move, whatever the reach; engaged only through an existing link (06.3.5)
+def band_words(state: Any, band: str) -> str:  # rule: T-12-11
+    """T-12-11's words for a band; `engaged` outside a conflict is "beside" (DL-12-98)."""
+    return "beside" if band == "engaged" and str(state.time.mode) != "conflict" else _BAND_WORDS[band]
+
+
+def _moved(env: PipelineEnv, plan: BeatPlan, reach: int = 2) -> list[PositionEntry]:  # rule: PR-06-4
+    # rule: 01.4.1
+    """A resolved Move writes where it took the mover, at the mover's place. Toward someone or something here,
+    outside a conflict, an approach ends beside it in one beat (DL-12-98); in a conflict, or a partial (reach 1),
+    one band step toward (or away from) it, in both directions. A Move to the place here (a look) or with no
+    target writes the place only, no line. A place that is not here is travel: the scene cut moves the PC there
+    (12.4.2, 10.1.3), so nothing is written."""
     beat = plan.beat
     st = env.state
     actor = beat.actor
@@ -423,28 +433,28 @@ def _moved(env: PipelineEnv, plan: BeatPlan) -> list[PositionEntry]:  # rule: PR
     here = (pos.location if pos else None) or (st.scene.place_id if st.scene else None)
     tgt = beat.target if beat.target not in (None, "none", actor) else None
     ent = st.entities.get(tgt) if tgt else None
-    if ent is not None and ent.kind == "place":
-        if tgt != here:
-            return []
-        tgt, ent = None, None
-    evs = []
-    if ent is not None and tgt is not None:
-        cur = str((pos.band_to.get(tgt) if pos else None) or "near").removeprefix("band.")
-        i = BANDS.index(cur) if cur in BANDS else 2
-        away = bool(_AWAY & words(" ".join([beat.method, beat.intent, *plan.intent_verbs])))
-        band = BANDS[min(i + 1, 4)] if away else BANDS[i if i == 0 else max(i - 1, 1)]
-        evs.append(Event.of("position_set", source=beat.id, rule_id="PR-06-4", entity=actor, location=here,
-                            band_to={tgt: band}))
-        evs.append(Event.of("position_set", source=beat.id, rule_id="PR-06-4", entity=tgt, band_to={actor: band}))
-        from engine.audit.fallback import the_name
-        from engine.store.views import display_name
+    if ent is not None and ent.kind == "place" and tgt != here:
+        return []
+    if ent is None or ent.kind == "place":  # a look here, or going on with no one to go to: no "still in X" line
+        env.add(Event.of("position_set", source=beat.id, rule_id="PR-06-4", entity=actor, location=here))
+        return []  # (the fighter runs' "still in Saltton", "still at the crossroads cross": walking in place)
+    assert tgt is not None
+    cur = str((pos.band_to.get(tgt) if pos else None) or "near").removeprefix("band.")
+    i = BANDS.index(cur) if cur in BANDS else 2
+    away = bool(_AWAY & words(" ".join([beat.method, beat.intent, *plan.intent_verbs])))
+    if away:
+        band = BANDS[min(i + 1, 4)]
+    elif reach >= 2 and str(st.time.mode) != "conflict":
+        band = "engaged"  # an approach is one beat and ends beside it (DL-12-98)
+    else:  # engaged in a conflict only through an existing link (06.3.5)
+        band = BANDS[i if i == 0 else max(i - 1, 1)]
+    env.add(Event.of("position_set", source=beat.id, rule_id="PR-06-4", entity=actor, location=here,
+                     band_to={tgt: band}),
+            Event.of("position_set", source=beat.id, rule_id="PR-06-4", entity=tgt, band_to={actor: band}))
+    from engine.audit.fallback import the_name
+    from engine.store.views import display_name
 
-        said = f"{_BAND_WORDS[band]} {the_name(display_name(st, tgt))}"  # "the bench", as the PC knows it (P-108)
-    else:
-        evs.append(Event.of("position_set", source=beat.id, rule_id="PR-06-4", entity=actor, location=here))
-        place = st.entities.get(here) if here else None
-        said = f"still in {place.name}" if place else "on the move"  # "you are still in X" (P-077)
-    env.add(*evs)
+    said = f"{band_words(st, band)} {the_name(display_name(st, tgt))}"  # "the bench", as the PC knows it (P-108)
     return [PositionEntry(entity=actor, words=said)]
 
 
@@ -761,7 +771,7 @@ def _finish(env: PipelineEnv, plan: BeatPlan, frame: Frame, roll: RollResult, *,
     delivered = max(0, read.delivered_reach + reach_delta) if read.delivered_reach else 0
     resolved = roll.degree in ("success", "critical_success") or read.success_at_cost_taken
     verb = frame.gate.verb or frame.beat.verb
-    moved = (_moved(env, plan) if resolved and verb == MOVE
+    moved = (_moved(env, plan, delivered) if resolved and verb == MOVE
              else _contact(env, frame, verb, delivered if resolved else 0) if verb in CONTACT else [])
     if resolved and verb not in ("verb.grapple", "verb.force") and _attacks(env, frame):  # rule: 06.4.3
         from engine.resolve.conflict import check_end, strike_harm

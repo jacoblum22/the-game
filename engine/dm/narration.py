@@ -338,6 +338,7 @@ def _speech(ctx: TurnContext, record: AdjudicationRecord, turn: _Turn, s: _Sent,
         return
     sp = s.decl.speaker
     pc_words = speech if sp is not None and sp == record.pc else pc_quotes(s.decl)
+    speech = [q for q in speech if q not in pc_words] or speech  # the NPC's own words (DL-12-100)
     for q in pc_words:
         if not (turn.player_message and atx.covers(q, turn.player_message, ratio=0.8)):
             s.failures.append(Failure(why="puts words in the PC's mouth the player did not say (12.14.3)", fix="cut"))
@@ -611,8 +612,9 @@ def _said(ctx: TurnContext, record: AdjudicationRecord, final: Sequence[_Sent],
     asked = {a.npc: t.removeprefix("ask:") for a in record.npc_actions for t in a.tags if t.startswith("ask:")}
     start = len(out.said)
     for s in final:
-        _, speech = voices(s.decl)
-        if not speech or pc_quotes(s.decl) or (s.decl.speaker and s.decl.speaker == record.pc):
+        mine = pc_quotes(s.decl)
+        speech = [q for q in voices(s.decl)[1] if q not in mine]  # an NPC line beside the PC's is still theirs
+        if not speech or (s.decl.speaker and s.decl.speaker == record.pc):
             continue
         words = " ".join(speech)
         if s.decl.speaker is None and atx.covers(words, " ".join(p.text for p in record.parts), ratio=0.8):
@@ -906,6 +908,7 @@ def narrate_turn(ctx: TurnContext, adj: Any, message: str) -> TurnOutcome:  # ru
                 if any(p.cls in OOF_CLASSES for p in rec.parts):
                     message = " ".join(p.text for p in rec.parts if p.cls not in OOF_CLASSES) or message
                 narr = narrate_checked(ctx, rec, player_message=message, exchanges=exchanges,
+                                       purpose="scene_open" if rec.scene.started else "turn",  # 12.4.3; P-098
                                        pause_blocks=owned if pause is not None else ())
             blocks += record_turn_end(ctx, rec, adj.writes)  # T12
         finally:

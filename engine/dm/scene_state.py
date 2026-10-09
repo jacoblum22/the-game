@@ -16,7 +16,7 @@ from typing import Any
 
 from engine.dm.adjudication import ActivityEntry, AdjudicationRecord
 from engine.dm.context import TurnContext
-from engine.resolve.pipeline import _BAND_WORDS, _DOWN
+from engine.resolve.pipeline import _BAND_WORDS, _DOWN, band_words
 from engine.resolve.types import REACH_VALUE
 from engine.store.details import current, write_detail
 
@@ -198,7 +198,7 @@ def lines(state: Any, pc: str | None, present: Sequence[str]) -> list[ActivityEn
         band = (mine.band_to.get(pc) if mine and pc else None) or (theirs.band_to.get(npc) if theirs else None)
         band = str(band or "").removeprefix("band.")
         if band in _BAND_WORDS:
-            out.append(ActivityEntry(npc=npc, slot="position", activity=f"{_BAND_WORDS[band]} you"))
+            out.append(ActivityEntry(npc=npc, slot="position", activity=f"{band_words(state, band)} you"))
     return out
 
 

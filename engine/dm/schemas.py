@@ -190,7 +190,8 @@ def change_schema(ctx: SchemaContext) -> Schema | None:  # rule: 01.2.7
         return None
     ids_ = [*ctx.change_ids, *ctx.reachable_places]
     return obj({"kind": enum(ctx.change_kinds, first=NONE), "what": enum(ids_, first=NONE),
-                "whom": enum(ctx.change_ids, first=NONE)})
+                "whom": enum(ctx.change_ids, first=NONE),
+                "description": STR_OR_NULL})  # DL-12-97: an unnamed description, only when no id fits
 
 
 def reader_schema(ctx: SchemaContext) -> Schema:  # rule: 12.2.2

@@ -97,7 +97,8 @@ def items(record: AdjudicationRecord, *, names: Mapping[str, str] | None = None)
     def name(eid: str | None) -> str:
         return who(eid if eid is not None else pc, names=names, pc=pc)
 
-    if record.scene.started:
+    arrival = _sentence(f"you arrive: {record.scene.header}") if record.scene.header else ""
+    if record.scene.started and not record.scene.cut:  # framed before the beats (PR-12-7)
         add("scene", False, [], _sentence(record.scene.header) if record.scene.header else "")
     for n, b in enumerate(record.beats):
         paused = record.pause is not None and n == len(record.beats) - 1 and b.degree is None
@@ -118,6 +119,8 @@ def items(record: AdjudicationRecord, *, names: Mapping[str, str] | None = None)
         said = b.changed or b.change_refused  # 01.2.7 item 3: the applied change (or why not) is owed
         if said:
             add("change", True, [x for x in (b.actor or pc, *b.targets) if x], _sentence(said), beat=n, text=said)
+    if record.scene.started and record.scene.cut:  # the beats led there: the arrival is owed (12.4.3; P-098)
+        add("scene", bool(arrival), [], arrival)
     for i, o in enumerate(record.oracle):
         add("oracle", True, [o.subject or ""], _oracle_render(o.question, o.answer, o.subject, o.predicate, names),
             index=i, text=f"{o.question}: {o.answer}")

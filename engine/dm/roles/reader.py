@@ -253,7 +253,8 @@ def log_changes(ctx: TurnContext, data: dict[str, Any], scope: Sequence[str], *,
     rows = [{"turn": ctx.turn_id, "restatement": data.get("restatement") or "", "intent": b.get("intent"),
              "method": b.get("method"), "verb": b.get("verb"), "ids_in_scope": list(scope),
              "kind": (b.get("change") or {}).get("kind", NONE),
-             "slots": {k: (b.get("change") or {}).get(k, NONE) for k in ("what", "whom")}, "defaulted": defaulted}
+             "slots": {k: (b.get("change") or {}).get(k, NONE) for k in ("what", "whom")},
+             "description": (b.get("change") or {}).get("description"), "defaulted": defaulted}
             for b in beats]
     try:
         with path.open("a", encoding="utf-8") as fh:

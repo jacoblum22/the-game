@@ -52,7 +52,8 @@ def test_each_kind_applies_on_success_scaled_by_reach(tmp_path: Path) -> None:
         whole = apply_change(tx, rules, _beat(dock, "take", "item.lantern", dock.ferryman), 2, pc=dock.pc)
         assert holder_of(st, "item.lantern") == dock.pc and "you hold the lantern, taken from" in whole.words
         assert st.fact_value("item.lantern", "contested_by") is None
-        assert apply_change(tx, rules, _beat(dock, "take", "item.lantern"), 2, pc=dock.pc).refused  # already yours
+        mine = apply_change(tx, rules, _beat(dock, "take", "item.lantern"), 2, pc=dock.pc)  # already yours (DL-01-36)
+        assert mine.words == "you already have the lantern" and not mine.refused and not mine.events
         apply_change(tx, rules, _beat(dock, "give", "item.lantern", dock.watch), 2, pc=dock.pc)
         assert holder_of(st, "item.lantern") == dock.watch
         assert apply_change(tx, rules, _beat(dock, "give", "item.lantern", dock.ferryman), 2, pc=dock.pc).refused
@@ -139,7 +140,7 @@ def test_the_purse_from_the_fighter_save_is_taken(tmp_path: Path) -> None:
             "method": "lift the purse from her belt while she is pinned, quick and quiet", "purpose": "own_change",
             "shape": "now", "speech": False, "target": "npc.murzak_red_hand", "uses_power": False,
             "verb": "verb.grapple",
-            "change": {"kind": "take", "what": "item.coin_purse", "whom": "npc.murzak_red_hand"}}
+            "change": {"kind": "take", "what": "item.coin_purse", "whom": "npc.murzak_red_hand", "description": None}}
     text = "I try to lift the purse from her belt while she's pinned, quick and quiet."
     model = ScriptedModel({Role.READER: [reader("DECLARATION", text, lift)], Role.FRAMER: [framer()]})
     from engine.rng import Rng

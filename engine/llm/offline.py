@@ -525,7 +525,9 @@ def _change(verb: str | None, target: str | None, sent: str, kinds: list[Any], w
     if kind not in kinds:
         kind = "none"
     what = target if kind != "none" and target in whats else "none"
-    return {"kind": kind, "what": what, "whom": "none"}
+    if what == "none" and kind in ("persuade_to", "take", "restrain", "open", "close"):
+        kind = "none"  # no one named and no description read offline: untyped, never a "who?" (DL-01-36)
+    return {"kind": kind, "what": what, "whom": "none", "description": None}
 
 
 POWER_WORDS = ["spell", "magic", "witch-sight", "mind-touch", "sorcery", "conjure"]

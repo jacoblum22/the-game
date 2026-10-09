@@ -5,7 +5,8 @@
 
 Before framing (the Framer is not called): an accepted crude fallback always rolls; reading words on record in a
 tongue the PC reads is trivial (P-110); a Talk that asks a Neutral-or-warmer listener a plain question is certain
-(15.3.10, T-15-3: an R1 request; reason `trivial`, so no evidence). After framing: a rubric class whose base is
+(15.3.10, T-15-3: an R1 request; reason `trivial`, so no evidence); a Move to the place the mover is in is a look
+(DL-12-98); a change already true is certain (DL-01-36). After framing: a rubric class whose base is
 `trivial` does not roll (01.4.1 decision 1; a nudge never crosses that line, 01.6.5). Every other beat rolls.
 
 `parties_who_would_act` is 01.4.1's COSTLY test and 01.6.9's stakes source: an aware party counts only if it would
@@ -86,9 +87,21 @@ def necessity(beat: Beat, decision: Any, *, state: Any, rules: Any) -> str:  # r
     if decision.mode == "fallback":
         return ROLLS  # an accepted crude fallback is a new frame on the fallback verb (01.3.5): it rolls
     verb = decision.verb or beat.verb
-    if plain_reading(beat, verb, state) or certain_talk(beat, verb, state):
+    if plain_reading(beat, verb, state) or certain_talk(beat, verb, state) or looks_here(beat, verb, state):
         return TRIVIAL
-    return ROLLS
+    from engine.resolve.change import already_true
+
+    return TRIVIAL if already_true(state, beat) else ROLLS  # DL-01-36: already so is certain, no OFFER
+
+
+def looks_here(beat: Beat, verb: str | None, state: Any) -> bool:  # rule: 01.4.1
+    """DL-12-98: a Move to the place the mover is already in is looking around for something (the fighter run's four
+    turns of "keep hunting for the refugees"): ordinary, so no roll unless a party would act on a failure."""
+    if verb != "verb.move" or not beat.target or beat.target not in state.entities:
+        return False
+    pos = state.positions.get(beat.actor)
+    here = (pos.location if pos else None) or (state.scene.place_id if state.scene is not None else None)
+    return beat.target == here and not parties_who_would_act(state, beat.actor, beat)
 
 
 def class_base(rules: Any, verb: str | None, obstacle_class: str | None) -> str | None:  # rule: 01.6.5

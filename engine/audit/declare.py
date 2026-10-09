@@ -240,6 +240,8 @@ _QUOTED = re.compile(r"[\"“][^\"”]*[\"”]")
 
 _PC_SAYS = re.compile(r"\byou\s+(?:say|ask|call|shout|whisper|reply|answer|tell|mutter|murmur|cry|add|growl|snap|"
                       r"plead|demand|insist|offer|begin|start|venture)\w*\b", re.I)
+_PC_SAYS_AFTER = re.compile(r"[^\w\"“]{0,3}" + _PC_SAYS.pattern, re.I)  # '"...," you say'
+_PC_SAYS_BEFORE = re.compile(_PC_SAYS.pattern + r"[^\w\"“]{0,3}$", re.I)  # 'you say, "..."'
 
 
 def voices(s: DeclaredSentence) -> tuple[str, list[str]]:  # rule: 12.3.1b
@@ -252,10 +254,18 @@ def voices(s: DeclaredSentence) -> tuple[str, list[str]]:  # rule: 12.3.1b
 
 
 def pc_quotes(s: DeclaredSentence) -> list[str]:  # rule: 12.14.3
+    # rule: 12.3.1b
     """Quoted words the sentence puts in the PC's mouth: quotes with no declared speaker whose narration says
-    "you say / ask / call ...". The only speech check on content (12.3.1b item 1: no words in the PC's mouth)."""
+    "you say / ask / call ...", and, under an NPC speaker, the quote right beside a "you say" clause ("'Fair enough,'
+    you say, and she nods"; a speaker tag never exempts them, DL-12-100). The only speech check on content (12.3.1b
+    item 1: no words in the PC's mouth)."""
     narration, spans = voices(s)
-    return spans if spans and not s.speaker and _PC_SAYS.search(narration) else []
+    if not spans or not _PC_SAYS.search(narration):
+        return []
+    if not s.speaker:
+        return spans
+    return [m.group(0).strip("\"“”") for m in _QUOTED.finditer(s.text)
+            if _PC_SAYS_AFTER.match(s.text[m.end():]) or _PC_SAYS_BEFORE.search(s.text[:m.start()])]
 
 
 def name_spans(text: str, idx: SceneIndex) -> list[tuple[int, int, str]]:

@@ -10,6 +10,9 @@ on it); `open`/`close` the thing's `open` fact; `persuade_to` the person's `agre
 `hide` `hidden_from`. `restrain`/`free` are T-12-18's slots (engine/dm/scene_state.py, at the world step); `move_to`,
 `harm` and `learn` already have their writers (PR-06-4 and 06.3.5, ch.06/07, 01.10): their words come from what those
 wrote. A failure applies nothing: the caller never calls this then.
+
+Before framing (DL-01-36): `already_true` (certain: no roll, no OFFER) and `needs_target` (ask "who?", never roll).
+A slot may be an unnamed description ("the refugees", DL-12-97): the change is a scene fact on the scene's place.
 """
 
 from __future__ import annotations
@@ -90,15 +93,99 @@ def plain(state: Any, change: Change | None, *, actor: str | None = None, pc: st
         return ""
     label, prep = LABELS[change.kind]
     what, whom = _id(change.what), _id(change.whom)
-    head = _name(state, what, pc) if what else "as described"
+    if change.kind == "persuade_to" and what in (None, actor):  # never "Persuading: you" (talker run, input 20)
+        what, whom = whom, None
+    head = _name(state, what, pc) if what else (change.description or "as described")
     tail = f", {prep} {_name(state, whom, pc)}" if whom and prep and whom != actor else ""
     return f"{label}: {head}{tail}"
 
 
-def _fact(tx: Any, beat: Beat, subject: str, predicate: str, value: Any) -> Event:
+def _fact(tx: Any, beat: Beat, subject: str, predicate: str, value: Any, persistence: str | None = None) -> Event:
     return Event.of("fact_set", {"source": "ruling"}, source=beat.id, rule_id="01.2.7", fact_id=tx.mint(ids.FACT),
-                    subject=subject, predicate=predicate, value=value, visibility="shown",
+                    subject=subject, predicate=predicate, value=value, visibility="shown", persistence=persistence,
                     supersedes=tx.state.current_fact_id(subject, predicate))
+
+
+def _person(state: Any, beat: Beat) -> str | None:  # rule: 01.2.7
+    """The one a `persuade_to` asks: a person in either slot or the beat's target, never the actor (the talker run's
+    "You agrees to ..."), else the one person in scope the description names (DL-12-97)."""
+    c = beat.change or Change()
+    for x in (c.what, c.whom, beat.target):
+        if x and x != beat.actor and x in state.entities and state.entities[x].kind in PEOPLE:
+            return x
+    if not c.description:
+        return None
+    from engine.retrieve.scene import resolve_names, scene_scope
+
+    here = set(scene_scope(state))
+    named = [i for i in resolve_names(state, c.description)
+             if i in here and i != beat.actor and state.entities[i].kind in PEOPLE]
+    return named[0] if len(named) == 1 else None
+
+
+def _thing(state: Any, beat: Beat) -> str | None:
+    c = beat.change or Change()
+    return next((x for x in (_id(c.what), beat.target) if x and x != beat.actor and x in state.entities), None)
+
+
+def _act(beat: Beat) -> str:
+    return (beat.intent or beat.method).strip().rstrip(".")
+
+
+def already_true(state: Any, beat: Beat, *, pc: str | None = None) -> str:  # rule: 01.2.7
+    # rule: 01.4.1
+    """DL-01-36: the change already holds in the store, so it is certain (no roll, no OFFER); its words, or "".
+    The actor already holds the item; the person already agreed to this act; the thing is already open/closed."""
+    c = beat.change
+    if c is None or c.kind == NONE:
+        return ""
+    actor = beat.actor
+    what = _id(c.what)
+    you = actor == pc
+    if c.kind == "take" and what is not None and what in state.entities and holder_of(state, what) == actor:
+        return f"{_name(state, actor, pc)} already {'have' if you else 'has'} {_name(state, what, pc)}"
+    if c.kind in ("open", "close") and (t := _thing(state, beat)) is not None \
+            and state.fact_value(t, "open") is (c.kind == "open"):
+        return f"{_name(state, t, pc)} is already {'open' if c.kind == 'open' else 'closed'}"
+    if c.kind == "persuade_to" and (p := _person(state, beat)) is not None:
+        from engine.audit.text import covers
+
+        done = state.fact_value(p, "agreed")
+        act = _act(beat)  # the same act: each covers most of the other (a bigger ask is a new one)
+        if isinstance(done, str) and not done.startswith("a smaller part") and covers(done, act, ratio=0.6) \
+                and covers(act, done, ratio=0.6):
+            return f"Agreed already by {_name(state, p, pc)}: {done}"
+    return ""  # move_to: an approach is already no-roll open ground (the Move rubric) and ends beside (DL-12-98)
+
+
+_ASK = {"persuade_to": ("who", "persuade"), "restrain": ("who", "hold"), "take": ("what", "take"),
+        "give": ("what", "give"), "open": ("what", "open"), "close": ("what", "close")}
+
+
+def needs_target(state: Any, beat: Beat) -> str:  # rule: 01.2.5
+    # rule: 01.2.7
+    """DL-01-36: a change that needs a person or thing and names none (no id, no target, no description) is asked
+    about before framing, never rolled: the question's words, or ""."""
+    c = beat.change
+    if c is None or c.kind not in _ASK or c.description:
+        return ""
+    ok = _person(state, beat) if c.kind == "persuade_to" else _thing(state, beat) or _id(c.whom)
+    if ok:
+        return ""
+    q, verb = _ASK[c.kind]
+    return f"ask the player {q} they mean: nothing here was named to {verb}"
+
+
+def _described(tx: Any, beat: Beat, kind: str, value: Any, words: str) -> ChangeResult:  # rule: 01.2.7
+    """DL-12-97: a change on an unnamed description is a scene fact on the scene's place (cleared at scene end)."""
+    st = tx.state
+    place = st.scene.place_id if st.scene is not None else None
+    if not place:
+        return ChangeResult(refused=f"{(beat.change or Change()).description} is not here")
+    desc = str((beat.change or Change()).description)
+    ev = _fact(tx, beat, place, f"{kind}.{ids.slug(desc)[:40]}", value, persistence="scene")
+    tx.add(ev)
+    return ChangeResult(words=words, events=[ev])
 
 
 def apply_change(tx: Any, rules: Any, beat: Beat, reach: int, *, pc: str | None = None) -> ChangeResult:
@@ -115,6 +202,9 @@ def apply_change(tx: Any, rules: Any, beat: Beat, reach: int, *, pc: str | None 
     for slot in (what, whom):
         if slot is not None and slot not in st.entities:
             return ChangeResult(refused=f"{_name(st, slot, pc)} is not in the record")
+    already = already_true(st, beat, pc=pc)
+    if already:  # certain, nothing to write (DL-01-36)
+        return ChangeResult(words=already)
     w = _name(st, what, pc)
     res = ChangeResult()
     k = c.kind
@@ -122,8 +212,6 @@ def apply_change(tx: Any, rules: Any, beat: Beat, reach: int, *, pc: str | None 
         if what is None or st.entities[what].kind not in THINGS:
             return ChangeResult(refused="nothing on record by that name to take")
         held = holder_of(st, what)
-        if held == actor:
-            return ChangeResult(refused=f"{_name(st, actor, pc)} already {'have' if actor == pc else 'has'} {w}")
         if whom is not None and held is not None and held != whom:
             return ChangeResult(refused=f"{w} is not with {_name(st, whom, pc)}")
         src = held or whom
@@ -148,20 +236,24 @@ def apply_change(tx: Any, rules: Any, beat: Beat, reach: int, *, pc: str | None 
         res.events.append(_fact(tx, beat, what, "holder", whom))
         res.words = f"{_name(st, whom, pc)} {'hold' if whom == pc else 'holds'} {w} now"
     elif k in ("open", "close"):
-        if what is None:
+        thing = _thing(st, beat)
+        state_word = "open" if k == "open" else "closed"
+        if thing is None and c.description:
+            return _described(tx, beat, "open", k == "open", f"{c.description}: {state_word} now")
+        if thing is None:
             return ChangeResult(refused=f"nothing on record by that name to {k}")
-        res.events.append(_fact(tx, beat, what, "open", k == "open"))
-        res.words = f"{w} is {'open' if k == 'open' else 'closed'} now"
+        res.events.append(_fact(tx, beat, thing, "open", k == "open"))
+        res.words = f"{_name(st, thing, pc)} is {state_word} now"
     elif k == "persuade_to":
-        what = next((x for x in (what, whom, beat.target) if x and x in st.entities and st.entities[x].kind in PEOPLE),
-                    None)  # the person may come in either slot (live run 015), else the beat's target
-        if what is None:
-            return ChangeResult(refused="no one named to persuade")
-        w = _name(st, what, pc)
-        act = (beat.intent or beat.method).strip().rstrip(".")
+        who = _person(st, beat)  # either slot or the beat's target (live run 015), never the actor
+        act = _act(beat)
         part = act if reach >= 2 else f"a smaller part of it ({act})"
-        res.events.append(_fact(tx, beat, what, "agreed", part))
-        res.words = f"{w} agrees to {part}"
+        if who is None and c.description:  # "the refugees" (DL-12-97)
+            return _described(tx, beat, "agreed", f"{c.description}: {part}", f"Agreed by {c.description}: {part}")
+        if who is None:
+            return ChangeResult(refused="no one named to persuade")
+        res.events.append(_fact(tx, beat, who, "agreed", part))
+        res.words = f"Agreed by {_name(st, who, pc)}: {part}"  # no verb to agree ("You agrees to ...", talker run)
     elif k == "hide":
         hidden = what or actor
         res.events.append(_fact(tx, beat, hidden, "hidden_from", whom or "everyone"))
@@ -180,4 +272,5 @@ def apply_change(tx: Any, rules: Any, beat: Beat, reach: int, *, pc: str | None 
     return res
 
 
-__all__ = ["ChangeResult", "apply_change", "holder_of", "kinds", "plain", "things_held"]
+__all__ = ["ChangeResult", "already_true", "apply_change", "holder_of", "kinds", "needs_target", "plain",
+           "things_held"]

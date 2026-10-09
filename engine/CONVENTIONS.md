@@ -1063,3 +1063,26 @@ speech, with `answer_ladder.repeat_pointer_limit` and `delivery.information.ladd
 - **Lift rubric** (`frame.lift_or_carry`, `lift_attribute`): a `take` change, or Exert/Force/Handle/Sneak with a
   lift/carry/palm word: rubric words pick, else the best of might/agility/endurance (the proposed kept on a tie);
   `alternatives(..., attrs=)` lists the others.
+
+## Round-4 fixes (spec 018; DL-12-96..100, DL-01-36)
+- **Plain speech**: the speaker card and the narrator's speech line say "plainly, with ordinary confidence; a hedge
+  only if cautious or gossipy; never open on their own name or title unless asked". No hedging instruction remains.
+- **Description slot**: `Change.description` (Reader `change.description`, optional string; logged in the Laya log).
+  `change._person` (never the actor; else the one person in scope the description names). `persuade_to`/`open`/
+  `close` on a description write a scene fact on the scene's place (`agreed.<slug>`, `open.<slug>`,
+  `persistence="scene"`); `details.expire_events` clears every scene-persistence fact at scene end. Result words:
+  "Agreed by <who>: <act>".
+- **Before framing**: `change.already_true(state, beat)` (take held, agreed same act by `covers` 0.6, open/close
+  already) → `necessity` `trivial`, and `apply_change` returns the words with no events. `change.needs_target` →
+  `pipeline._start` returns `question` (G0, "ask the player who they mean ...") before NECESSITY.
+- **Movement**: `necessity.looks_here` (a Move to the place the mover is in: trivial, no line). `pipeline._moved(...,
+  reach)`: outside a conflict, reach 2+ → `engaged`; reach 1 or a conflict keeps the one-band step; a Move to the
+  place here or with no target writes the place only (the "still in X" line is gone).
+  `pipeline.band_words(state, band)` → "beside" for engaged outside a conflict (`scene_state.lines` too).
+- **Travel / scene start**: `narrate_turn` uses purpose `scene_open` when the record started a scene; a mid-turn cut's
+  scene item comes after the beats and is must-name ("You arrive: ...").
+- **Setting once**: `packet.scene_setting(state, full=)`; `narrator.draft` passes `full` for `scene_open`/`opening`
+  or a look-around message (`narrator.LOOKS_AROUND`); otherwise the place name, "already described", exits, people,
+  time.
+- **PC words**: `declare.pc_quotes` also returns the quote beside a "you say" clause under an NPC speaker; `_speech`
+  and `_said` treat it as the PC's.

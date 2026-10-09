@@ -144,12 +144,12 @@ def expire_events(state: WorldState, mint: Callable[[str], str]) -> list[Event]:
     the fact index keep the history), and every range band between people (T-12-18: bands are scene state too)."""
     out: list[Event] = [Event.of("position_set", rule_id="12.4.8", entity=eid, band_drop=sorted(pos.band_to))
                         for eid, pos in state.positions.items() if pos.band_to]
-    for eid, e in state.entities.items():  # a crowd's response is the place's scene state (12.11.9 step 1)
-        fid = state.current_fact_id(eid, "crowd_response") if e.kind == "place" else None
-        if fid is not None and state.facts[fid].value is not None:
+    for f in list(state.facts.values()):  # the place's scene state: a crowd's response (12.11.9 step 1), a change
+        # on a description (DL-12-97); details are cleared below
+        if f.persistence == "scene" and f.value is not None and not f.predicate.startswith(DETAIL):
             out.append(Event.of("fact_set", {"source": "ruling"}, rule_id="12.4.8", fact_id=mint(ids.FACT),
-                                subject=eid, predicate="crowd_response", value=None, persistence="scene",
-                                visibility="shown", supersedes=fid))
+                                subject=f.subject, predicate=f.predicate, value=None, persistence="scene",
+                                visibility="shown", supersedes=f.id))
     for eid, refs in state.details.items():
         for slot, r in refs.items():
             f = state.facts.get(r.fact_id)

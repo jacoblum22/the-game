@@ -30,7 +30,7 @@ One beat per distinct act whose failure would not stop the other, in the player'
 SPEECH and questions make no beat.
 - `purpose`: `own_change`, going somewhere included (through a gate, over to someone);
   `serves_another_act`: a step, turn, posture or touch that only serves another act or the words (stepping
-  in to strike, turning to someone, sitting lower, looming); `free_activity`: only drawing a weapon, waiting,
+  in to strike, looming); `free_activity`: only drawing a weapon, waiting,
   resting, staying put, a glance the player calls casual. Looking, searching, reading, words: `own_change`.
 - `intent`: what the player wants true after. `method`: the act in the player's key words ("witch-sight").
 - `assertion`: any clause claiming a fact or result ("it's a cheap lock"); never a fact.
@@ -42,11 +42,10 @@ SPEECH and questions make no beat.
 - `pressure` (Talk; else `none`): `request` (an act, object or favour, not information), `threat`, `offer`, `plea`,
   `insistence`; a plain question is `none`.
 - Facets, yes or no: `against_will` — physically acts on a person's body or held property against their
-  will (a shove, a grab, a blow, drugging their cup); words, threats, moving past people and working a lock
-  are no. `uses_power` — a supernatural technique (a spell, witch-sight, mind-touch); ordinary skills are
+  will (a shove, a grab, drugging their cup); words, threats, moving past people and working a lock are no. `uses_power` — a supernatural technique (a spell, witch-sight, mind-touch); ordinary skills are
   no. `speech` — mainly words. A negated act ("I don't grab it, I ask") takes the act actually done.
 - `shape`: `now`; `extended` for a goal of several stretches; `queued` for an act readied for a trigger;
-  `conditional` for one that waits on another ("I attack if they keep stalling").
+  `conditional` for one that waits on another.
 - `target`: one id (the nearest engaged foe in conflict, else the latest mentioned); else `none`.
 - `g4_fact`: only a fact in the view that makes the method impossible for anyone, else null.
 - `intent_verbs`: one to three verbs.
@@ -54,8 +53,9 @@ SPEECH and questions make no beat.
   other party. `take` (item; from whom), `give` (item; to whom), `move_to` (place or person; who moves),
   `open`/`close`, `learn` (finding out: looking, reading, words pressing someone to tell; a plain question stays
   SPEECH), `persuade_to` (words asking someone to act or give), `restrain` (seizing or holding someone), `free`,
-  `harm`, `hide` (who or what; from whom), `make`, `none` (looking around, waiting, helping). Lifting a purse is
-  `take`. Two changes are two beats ("grab the purse and punch her": `take`, then `harm`).
+  `harm`, `hide` (who or what; from whom), `make`, `none` (looking around, waiting, helping).
+  Two changes are two beats (`take`, then `harm`). `description`: people or things present with no id
+  ("the refugees"), else null. Searching for someone not here: Observe, never `move_to` the place you are in.
 
 ## 4. The rest
 - `clarifying_question` (01.2.4): only when no target fits or two readings are different acts; else null.

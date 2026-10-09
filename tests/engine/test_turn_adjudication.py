@@ -51,7 +51,7 @@ def beat(intent: str, verb: str, *, target: str = "none", g4_fact: str | None = 
             "target": target, "verb": verb, "pressure": "request" if verb == "verb.talk" else "none",
             "against_will": against_will, "uses_power": uses_power, "speech": speech or verb == "verb.talk",
             "g4_fact": g4_fact, "intent_verbs": list(verbs),
-            "change": {"kind": "none", "what": "none", "whom": "none", **(change or {})}}
+            "change": {"kind": "none", "what": "none", "whom": "none", "description": None, **(change or {})}}
 
 
 def reader(cls: str, text: str, *beats: dict[str, Any], questions: tuple[dict[str, Any], ...] = (),
@@ -439,7 +439,8 @@ def test_talk_is_never_redirected(tmp_path: Path, method: str) -> None:
 
 def test_move_toward_someone_writes_the_band(tmp_path: Path) -> None:
     """Playtest 20261007-170200 turns 5/6/12: a declared, resolved Move wrote no position, so every arrival in
-    the narration was cut as unsourced. PR-06-4: the band closes one step, written both ways."""
+    the narration was cut as unsourced. Written both ways; outside a conflict an approach is one beat that ends
+    beside them (DL-12-98, spec 018; it was one band step per Move)."""
     walk = beat("walk out along the quay toward the watchwoman", "verb.move", target="npc.sela_vey",
                 verbs=("approach",))
     model = ScriptedModel({Role.READER: [reader("DECLARATION", "I walk over to her.", walk),
@@ -450,11 +451,12 @@ def test_move_toward_someone_writes_the_band(tmp_path: Path) -> None:
     b = res.record.beats[0]
     assert b.positions and b.positions[0].entity == dock.pc and "Sela Vey" in b.positions[0].words
     st = dock.state
-    assert st.positions[dock.pc].band_to[dock.watch] == "close" == st.positions[dock.watch].band_to[dock.pc]
+    assert st.positions[dock.pc].band_to[dock.watch] == "engaged" == st.positions[dock.watch].band_to[dock.pc]
+    assert b.positions[0].words == "beside Sela Vey"
     assert st.positions[dock.pc].location == dock.place
     assert res.record.writes_for(dock.pc, "position_set")
-    run_turn(ctx, "I go closer.")  # never engaged without an engagement link (06.3.5)
-    assert dock.state.positions[dock.pc].band_to[dock.watch] == "close"
+    run_turn(ctx, "I go closer.")  # already beside: stays there, no walking in place
+    assert dock.state.positions[dock.pc].band_to[dock.watch] == "engaged"
 
 
 def test_move_to_an_object_reads_plainly_and_reader_notes_stay_out(tmp_path: Path) -> None:
@@ -479,7 +481,7 @@ def test_move_to_an_object_reads_plainly_and_reader_notes_stay_out(tmp_path: Pat
         tx.add(Event.of("position_set", source="test", rule_id="10.1.1", entity="obj.bench", location=dock.place))
     b = run_turn(ctx, said).record.beats[0]
     assert b.restatement == "Wren sits on the bench."
-    assert [p.words for p in b.positions] == ["a few strides from the bench"], b
+    assert [p.words for p in b.positions] == ["beside the bench"], b  # one approach (DL-12-98)
 
 
 def test_move_to_another_place_cuts_the_scene_there(tmp_path: Path) -> None:

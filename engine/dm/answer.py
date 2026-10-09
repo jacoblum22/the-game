@@ -46,7 +46,7 @@ PEOPLE = ("npc", "companion", "adversary")
 # (the question itself is the record's part line; never quoted here, so no words read as the PC's, 12.14.3)
 WILL_WORDS = {
     "willing": "answers what you asked, willingly ({why}): in their own words, from what they know or have heard",
-    "guarded": "answers what you asked, guardedly ({why}): a part of it, hedged or short, in their own words",
+    "guarded": "answers what you asked, guardedly ({why}): a part of it, short, in their own words",
     "unwilling": "refuses to answer what you asked ({why}): a refusal in their own voice, never a stock formula",
 }
 
