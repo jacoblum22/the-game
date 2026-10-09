@@ -260,5 +260,25 @@ everything.
   - Live, 3 talker runs: verbatim NPC repeats 2 → 0, "I don't know" turns 2 → 0.
   - Role-list conflicts with 014 resolved.
   - Suite 1743.
-- **In flight:** spec 015 (typed intended change, plus the lift-attribute rubric) and spec 016 (precision checks,
-  calendar line, OFFER wording, Framer re-asks), in parallel.
+- **713d408, spec 016: patches.**
+  - Pronoun and season precision checks, with every hit logged.
+  - The calendar line is pinned in the view.
+  - Pronouns now appear in the scene setting. This was the root cause of Ysrion being called "he": her profile
+    had been cut from the narrator's view.
+  - OFFER wording fixed.
+  - Framer re-asks: root cause fixed.
+  - Measured precision: 4/4, 1/1 and 26/26. These were tuned on the same corpus.
+- **a6b1480, spec 015: typed intended change.**
+  - Each beat now carries `change {kind, what, whom}`, applied on success and scaled by reach. The purse case
+    is fixed in tests.
+  - Two-change messages become two beats.
+  - The lift-attribute rubric is in.
+  - A Laya log is written to `<save>.changes.jsonl`.
+  - Reader held-out: verb and gate **91.9 → 94.6%**; change kind 22/22.
+  - Gaps:
+    - takes and gives were not exercised live;
+    - an item that exists only as an Oracle fact can't be taken;
+    - `make` isn't built.
+  - Suite **1768**.
+- **In flight:** round-3 talker and fighter persona playtests on a6b1480. These are also the held-out test of the
+  feedback loop.
