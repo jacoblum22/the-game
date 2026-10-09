@@ -71,10 +71,11 @@ def test_pronoun_a_time_shift_clause_is_not_an_exemption_only_names_are() -> Non
 
 
 def test_season_hit_in_speech_and_narration() -> None:
-    """Playtest 20261008-145410 talker, input 18: "the autumn harvest" on the spring quarter day."""
+    """Playtest 20261008-145410 talker, input 18: "the autumn harvest" on the spring quarter day. Spec 019: the check
+    is measured at 0.5 precise (1 real of 2), below `min_precision`, so it hits and logs but never blocks."""
     assert hits("", speech=("Day wages, for the guild is taking on extra hands for the autumn harvest.",)) == [
-        ("season_words", "speech", "autumn", True)]
-    assert hits("Snow lies on the winter fields.") == [("season_words", "narrator", "winter", True)]
+        ("season_words", "speech", "autumn", False)]
+    assert hits("Snow lies on the winter fields.") == [("season_words", "narrator", "winter", False)]
 
 
 def test_season_no_hit() -> None:
@@ -96,7 +97,7 @@ def test_season_time_shift_clause_allowed() -> None:
     # replay corpus 20261007-194952 talker turn.4: a past winter, said so by its determiner
     assert hits("", speech=("The Broken Fells were the heart of a realm that fell in one bad winter.",)) == []
     assert hits("", speech=("The road closed, and the snow came in winter.",)) == [
-        ("season_words", "speech", "winter", True)]  # the shift word must be in the season word's clause
+        ("season_words", "speech", "winter", False)]  # the shift word must be in the season word's clause
 
 
 # ---------------------------------------------------------------------------------------- demotion by data

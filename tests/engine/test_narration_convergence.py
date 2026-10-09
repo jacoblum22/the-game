@@ -1,10 +1,10 @@
-"""The claim check converges (12.3.3; spec 006): the evidence of playtest 20261007-155118, where 5 of 7 turns fell
-back, and the per-sentence repair that replaces whole-draft redrafts.
+"""The claim check converges (12.3.3; spec 006, spec 019): the evidence of playtest 20261007-155118, where 5 of 7
+turns fell back, and round 6's blind repairs (I1 §2, §5).
 
-- a repair re-sends only the failing sentence; the sentences that passed are neither re-sent nor re-checked;
-- an Oracle answer that agrees with the draft forces no repair;
+- the one revision sees the whole draft and what failed, and answers with the whole passage;
+- an Oracle answer that agrees with the draft forces no revision;
 - "an hour goes by" was undetermined on a turn where time passed; place and outcome contradictions had no reason;
-- after two repair rounds a still-failing sentence is cut and the passing ones are delivered.
+- after the revision a still-failing sentence is cut and the passing ones are delivered.
 Declared inventions (a clue, a hidden door with treasure, a person who knows of the cult) are still cut (T2).
 """
 
@@ -22,25 +22,25 @@ from engine.dm.adjudication import AdjudicationRecord, BeatEntry, WriteRef
 from engine.dm.turn import play_turn
 from engine.llm.base import Role
 from tests.engine.test_turn_adjudication import setup
-from tests.engine.test_turn_narration import _decl, _must, calls, look_model, narr, rep
+from tests.engine.test_turn_narration import _must, calls, look_model, narr, passage
 
 PROMPT = "What do you do?"
 
 
-def test_a_repair_resends_only_the_failing_sentence(tmp_path: Path) -> None:
-    """The turn-3 pattern: one sentence is wrong. Only it is sent back and re-checked; the others stand as written.
-    Spec 011: the failure is a code-scan hit (an unknown name); a coat's colour or a gender is no longer judged."""
+def test_the_revision_sees_the_whole_draft(tmp_path: Path) -> None:
+    """The turn-3 pattern: one sentence is wrong (spec 011: a code-scan hit, an unknown name). The one revision sees
+    the whole draft with the failure named (never a blind repair of one sentence; round 6, I1 §2) and answers with
+    the whole passage, which is checked again."""
     draft = f"Tam Harlan nods to Brannoc. He mends a net by the post. Stallholders call their prices. {PROMPT}"
-    model = look_model(narrator=[narr(draft), rep(0, "Tam Harlan nods to you.")])
+    fixed = f"Tam Harlan nods to you. He mends a net by the post. Stallholders call their prices. {PROMPT}"
+    model = look_model(narrator=[narr(draft), narr(fixed)])
     dock, ctx = setup(tmp_path, model)
     out = play_turn(ctx, "I look over the quay.")
-    assert not out.response.flags.fallback_used
-    assert out.response.fiction == ("Tam Harlan nods to you. He mends a net by the post. "
-                                    f"Stallholders call their prices. {PROMPT}")
-    assert len(calls(model, Role.NARRATOR)) == 2  # one narrow repair
-    repair = calls(model, Role.NARRATOR)[1].message.split("A REPAIR", 1)[1]
-    assert "Brannoc" in repair and "mends a net" not in repair
-    assert [v["kind"] for v in out.turn_record.draft_versions] == ["draft", "repair"]
+    assert not out.response.flags.fallback_used and out.response.fiction == fixed
+    assert len(calls(model, Role.NARRATOR)) == 2  # one revision
+    revision = calls(model, Role.NARRATOR)[1].message.split("A REVISION", 1)[1]
+    assert "Brannoc" in revision and "mends a net" in revision  # the whole draft
+    assert [v["kind"] for v in out.turn_record.draft_versions] == ["draft", "revision"]
 
 
 def test_oracle_yes_needs_no_redraft(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
@@ -49,7 +49,7 @@ def test_oracle_yes_needs_no_redraft(tmp_path: Path, monkeypatch: pytest.MonkeyP
 
     def draft(schema: Any, packet: Any) -> dict[str, Any]:
         new = [{"element_kind": "knowledge", "name": "the tide turns at dusk", "ordinary": True, "implied": []}]
-        return {"sentences": [_decl(text, _must(packet), new=new), _decl(PROMPT)]}
+        return passage(f"{text} {PROMPT}", _must(packet), new=new)
     model = look_model(narrator=[draft])
     dock, ctx = setup(tmp_path, model)
     monkeypatch.setattr(narration, "_ask_oracle", lambda *a, **k: "yes")
@@ -65,7 +65,7 @@ def test_an_incidental_property_is_written_as_narrated(tmp_path: Path) -> None:
     def draft(schema: Any, packet: Any) -> dict[str, Any]:
         new = [{"element_kind": "person", "name": "Tam Harlan", "ordinary": True,
                 "implied": [{"predicate": "clothing", "value": "coat patched at the elbows"}]}]
-        return {"sentences": [_decl(text, _must(packet), new=new), _decl(PROMPT)]}
+        return passage(f"{text} {PROMPT}", _must(packet), new=new)
     model = look_model(narrator=[draft])
     dock, ctx = setup(tmp_path, model)
     out = play_turn(ctx, "I look over the quay.")
@@ -90,19 +90,19 @@ def test_oracle_no_is_redrafted_and_its_answer_is_readable(tmp_path: Path) -> No
     assert (v.verdict, v.store_value) == ("contradicted", "not closed") and v.reason
 
 
-def test_still_failing_after_two_repairs_is_cut_and_the_rest_delivered(tmp_path: Path) -> None:
-    bad = "Tam Harlan nods to Brannoc."
-    model = look_model(narrator=[narr(f"{bad} The fog lies low on the water. {PROMPT}"), rep(0, bad), rep(0, bad)])
+def test_still_failing_after_the_revision_is_cut_and_the_rest_delivered(tmp_path: Path) -> None:
+    text = f"Tam Harlan nods to Brannoc. The fog lies low on the water. {PROMPT}"
+    model = look_model(narrator=[narr(text), narr(text)])
     dock, ctx = setup(tmp_path, model)
     out = play_turn(ctx, "I look over the quay.")
     assert not out.response.flags.fallback_used
     assert out.response.fiction == f"The fog lies low on the water. {PROMPT}"
-    assert [v["kind"] for v in out.turn_record.draft_versions] == ["draft", "repair", "repair", "cut"]
+    assert [v["kind"] for v in out.turn_record.draft_versions] == ["draft", "revision", "cut"]
 
 
-def test_after_the_repairs_a_cut_leaving_only_the_prompt_falls_back(tmp_path: Path) -> None:
+def test_after_the_revision_a_cut_leaving_only_the_prompt_falls_back(tmp_path: Path) -> None:
     bad = "Tam Harlan nods to Brannoc."
-    model = look_model(narrator=[narr(f"{bad} {PROMPT}"), rep(0, bad), rep(0, bad)])
+    model = look_model(narrator=[narr(f"{bad} {PROMPT}"), narr(f"{bad} {PROMPT}")])
     dock, ctx = setup(tmp_path, model)
     assert play_turn(ctx, "I look over the quay.").response.flags.fallback_used
 
@@ -112,16 +112,14 @@ def test_after_the_repairs_a_cut_leaving_only_the_prompt_falls_back(tmp_path: Pa
     {"element_kind": "item", "name": "a hidden door with treasure behind it", "ordinary": False},
     {"element_kind": "person", "name": "an old man who knows about the cult", "ordinary": False},
 ])
-def test_declared_inventions_in_a_repair_are_still_cut(tmp_path: Path, new: dict[str, Any]) -> None:
-    """12.14.13: a T2 element no record line delivers is cut, also when a repair adds it."""
+def test_declared_inventions_in_a_revision_are_still_cut(tmp_path: Path, new: dict[str, Any]) -> None:
+    """12.14.13: a T2 element no record line delivers is cut, also when the revision adds it."""
     bad = f"Tam Harlan nods to Brannoc. {PROMPT}"
 
-    def repair(schema: Any, packet: Any) -> dict[str, Any]:
-        return {"repairs": [{"replaces": "0", "text": "Tam Harlan nods to you.", "refs": _must(packet),
-                             "about": [], "new": [], "atmosphere": False, "speaker": "none"},
-                            {"replaces": "add", "text": "Something is waiting here.", "refs": [], "about": [],
-                             "new": [{**new, "implied": []}], "atmosphere": False, "speaker": "none"}]}
-    model = look_model(narrator=[narr(bad), repair])
+    def revision(schema: Any, packet: Any) -> dict[str, Any]:
+        return passage(f"Tam Harlan nods to you. Here is {new['name']}. {PROMPT}", _must(packet),
+                       new=[{**new, "implied": []}])
+    model = look_model(narrator=[narr(bad), revision])
     dock, ctx = setup(tmp_path, model)
     out = play_turn(ctx, "I look over the quay.")
     assert out.response.fiction == f"Tam Harlan nods to you. {PROMPT}"

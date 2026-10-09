@@ -1,0 +1,15 @@
+# Long-horizon harness (model: claude-narration)
+
+## Scripted player (seed 7, 12 lines, 19 turns, 14 narrated)
+- contradictions per 100 narrated turns: 7.1 (knowledge 1)
+- disputes per 100 narrated turns: 0.0 (upheld 0.0)
+- recall probes: 0 scored of 1; precision n/a, coverage n/a
+- novelty-4 over the previous 10 deliveries: 0.98 (10 deliveries)
+- narration loop (14 narrated): first draft delivered as drafted 14/14 (100.0%); turns with a cut, rendered line or fallback 0/14 (0.0%); narrator calls per narrated turn 1.00; per narrated turn: sample_diff_findings 1.36, sample_misses 0.07, sample_turns 0.14, undeclared_new 0.00
+- claim log per 100 narrated turns: 71.4 (knowledge/supported 14.3, position/supported 14.3, new_element/undeclared 14.3, action/pc_agency 7.1, action/unsourced_change 7.1, location_time/supported 7.1, knowledge/contradicted 7.1)
+- sampled audit: 2 of 14 narrated turns sampled; blocking-list misses 1 (7.1 per 100 narrated turns)
+- learning beats answered (PR-12-10): 3; empty successes 0 (0.0%); items 3, case pointers 0, willingness lines 2
+- ask-twice consistency: 0/0 (0%)
+- NPC lines 2; per 100: repeats 0.0, "I don't know" 0.0, runarounds 0.0, self-contradictions 0.0 (OEQ-12-25)
+- cached-prefix share per role: checker 0.94, director 0.66, framer 0.87, narrator 0.89, reader 0.94
+- engine errors: 0

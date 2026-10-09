@@ -21,17 +21,26 @@ from engine.store.views import name_known
 from tests.engine.test_rubric import frame, ok
 from tests.engine.test_rubric import s as s  # noqa: F401  (the fixture)
 from tests.engine.test_turn_adjudication import QUIET_WORLD, SNEAK, framer, reader, rolls, setup
-from tests.engine.test_turn_narration import _decl, _must, calls, look_model
+from tests.engine.test_turn_narration import _must, calls, look_model, passage
 
 RULES = load_rules()
 PROMPT = "What do you do?"
 
 
+def _s(text: str, *, speaker: str | None = None, new: list[dict[str, Any]] | None = None) -> dict[str, Any]:
+    """One piece of a scripted passage: its words, who speaks its quoted words, the new elements it names."""
+    return {"text": text, "speaker": speaker, "new": new or []}
+
+
 def _say(*sents: dict[str, Any]) -> Any:
+    """A passage (spec 019) of these pieces then the open prompt; each speaker's quoted words in the side list."""
+    import re
+
     def draft(schema: Any, packet: Any) -> dict[str, Any]:
-        out = [dict(x) for x in sents]
-        out[0]["refs"] = _must(packet)
-        return {"sentences": [*out, _decl(PROMPT)]}
+        speech = [{"speaker": x["speaker"], "words": " ".join(re.findall(r'"([^"]*)"', x["text"])), "form": "direct"}
+                  for x in sents if x["speaker"]]
+        return passage(" ".join([*(x["text"] for x in sents), PROMPT]), _must(packet), speech=speech,
+                       new=[n for x in sents for n in x["new"]])
     return draft
 
 
@@ -80,8 +89,10 @@ def test_blocking_list_classes_block_and_others_log_only() -> None:
 
 def test_a_pronoun_clash_on_a_certain_subject_now_redrafts(tmp_path: Path) -> None:
     """Spec 011 logged a pronoun clash; spec 016 (12.3.2 "Precision, not class", DL-12-95) makes the pronoun of a
-    certain subject a precision check: logged with its verdict (OEQ-12-27) and the sentence redrafted."""
-    model = look_model(narrator=[_say(_decl("He leans on the pole by the stair.", about=["npc.sela_vey"]))])
+    certain subject a precision check: logged with its verdict (OEQ-12-27) and the sentence revised (spec 019: the
+    subject is certain from the sentence before; still wrong after the revision, it is cut)."""
+    say = _say(_s("Sela Vey keeps to the stair."), _s("He leans on the pole by the stair."))
+    model = look_model(narrator=[say, say])
     _, ctx = setup(tmp_path, model)
     out = play_turn(ctx, "I look over the quay.")
     assert "He leans" not in out.response.fiction
@@ -98,7 +109,7 @@ def test_a_detail_clash_is_logged_and_the_store_keeps_its_value(tmp_path: Path) 
         tx.add_all(write_detail(tx.state, tx.mint, dock.ferryman, "hair", "grey and cropped", rules=dock.rules).events)
     new = [{"element_kind": "person", "name": "Tam Harlan", "ordinary": True,
             "implied": [{"predicate": "hair", "value": "long and black"}]}]
-    ctx.model.push(Role.NARRATOR, _say(_decl("Tam Harlan pushes back his long black hair.", new=new)))  # type: ignore[attr-defined]
+    ctx.model.push(Role.NARRATOR, _say(_s("Tam Harlan pushes back his long black hair.", new=new)))  # type: ignore[attr-defined]
     out = play_turn(ctx, "I look over the quay.")
     assert out.response.fiction.startswith("Tam Harlan pushes back his long black hair.")
     assert dock.store.state.fact_value(dock.ferryman, "detail.hair") == "grey and cropped"
@@ -107,9 +118,8 @@ def test_a_detail_clash_is_logged_and_the_store_keeps_its_value(tmp_path: Path) 
 
 def test_t2_in_the_narrators_voice_is_cut_and_in_speech_is_testimony(tmp_path: Path) -> None:
     bandit = [{"element_kind": "adversary", "name": "a bandit", "ordinary": True, "implied": []}]
-    model = look_model(narrator=[_say(_decl("The quay is quiet."), _decl("A bandit waits on the north road.", new=bandit),
-                                      _decl('"A bandit waits on the north road," Tam Harlan says.', new=bandit,
-                                            speaker="npc.tam_harlan"))])
+    model = look_model(narrator=[_say(_s("The quay is quiet."), _s("A bandit waits on the north road.", new=bandit),
+                                      _s('"A bandit waits on the north road," Tam Harlan says.', speaker="npc.tam_harlan"))])
     _, ctx = setup(tmp_path, model)
     out = play_turn(ctx, "I look over the quay.")
     assert out.response.fiction == f'The quay is quiet. "A bandit waits on the north road," Tam Harlan says. {PROMPT}'
@@ -124,7 +134,7 @@ def test_speech_is_testimony_a_said_record_never_a_fact(tmp_path: Path) -> None:
     """An NPC may name someone unknown and state a number: speech is never checked for truth (12.3.1b item 1);
     it is kept as a said record and writes no fact."""
     words = '"Brannoc took five silver from the ferry box," Tam Harlan says.'
-    model = look_model(narrator=[_say(_decl(words, speaker="npc.tam_harlan"))])
+    model = look_model(narrator=[_say(_s(words, speaker="npc.tam_harlan"))])
     dock, ctx = setup(tmp_path, model)
     before = set(dock.store.state.facts)
     out = play_turn(ctx, "I look over the quay.")
@@ -141,7 +151,7 @@ def test_a_name_heard_in_speech_is_learned(tmp_path: Path) -> None:
         tx.add(Event.of("entity_created", source="test", entity=EntityRecord(
             id="npc.odo_brant", kind="npc", name="Odo Brant", data={"role": "boatman", "name_known": False})))
     assert not name_known(dock.store.state, "npc.odo_brant")
-    ctx.model.push(Role.NARRATOR, _say(_decl('"Odo Brant will row you across," Tam Harlan says.',  # type: ignore[attr-defined]
+    ctx.model.push(Role.NARRATOR, _say(_s('"Odo Brant will row you across," Tam Harlan says.',  # type: ignore[attr-defined]
                                              speaker="npc.tam_harlan")))
     play_turn(ctx, "I look over the quay.")
     st = dock.store.state
@@ -150,8 +160,8 @@ def test_a_name_heard_in_speech_is_learned(tmp_path: Path) -> None:
 
 
 def test_words_put_in_the_pcs_mouth_are_caught(tmp_path: Path) -> None:
-    model = look_model(narrator=[_say(_decl("You look over the quay."),
-                                      _decl('You say, "I will pay you ten silver for the crossing."'))])
+    model = look_model(narrator=[_say(_s("You look over the quay."),
+                                      _s('You say, "I will pay you ten silver for the crossing."'))])
     _, ctx = setup(tmp_path, model)
     out = play_turn(ctx, "I look over the quay.")
     assert "ten silver" not in out.response.fiction and len(calls(model, Role.NARRATOR)) == 1  # a cut is code's

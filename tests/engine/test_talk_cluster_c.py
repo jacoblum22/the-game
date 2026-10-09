@@ -177,16 +177,6 @@ def test_an_engaged_npcs_activity_ends_and_activities_are_optional_material(tmp_
 # ------------------------------------------------------------------------------------------- 5. small ones
 
 
-def test_a_question_left_behind_by_a_move_is_not_owed(tmp_path: Path) -> None:
-    from engine.dm.narration import _unanswered
-
-    parts = [_part('"Which way is the hall from here?"', "answered"), _part('"And is it a long walk?"', "answered")]
-    record = AdjudicationRecord(pc=PC, parts=parts)
-    assert _unanswered(record, "You cross into the hall.")
-    record.scene.started = "scn.2"
-    assert _unanswered(record, "You cross into the hall.") == []  # said to someone left behind: not replayed
-
-
 def test_something_offered_with_a_talk_is_taken() -> None:
     from engine.dm.npc_layer import talk_outcome
 

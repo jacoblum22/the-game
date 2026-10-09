@@ -1,0 +1,2 @@
+playtest-20261009-142708-talker: 13 narrated turns; stacked quotes 0 in 0 turns; echoed player lines 0; duplicated answers 0 in 0 turns; first draft delivered 100%; revised 0%; narrator calls/turn 1.00; cut or fallback 0%
+scripted: 14 narrated turns; stacked quotes 0 in 0 turns; echoed player lines 0; duplicated answers 0 in 0 turns; first draft delivered 100%; revised 0%; narrator calls/turn 1.00; cut or fallback 0%
