@@ -1,5 +1,8 @@
 # Automated playtest loop: handoff report (2026-10-07)
 
+> **Superseded for current work (2026-10-09):** read `research_notes/Playtest round 2 solutions/HANDOFF-2026-10-09.md` first. This file describes round 1 only.
+
+
 For the next agent picking this up. It covers what was done, how, what was found, what was fixed and how,
 what is still open, what went wrong in the process, and where to look next (rules and tech stack). Read
 "Where things are" and "Recommendations" first.

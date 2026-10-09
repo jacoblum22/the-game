@@ -120,13 +120,42 @@ Covers the held foe still hitting, coins, and the silent take-back.
 - Payments deduct coin.
 - Every state restore (take-back, correction) prints a "Now:" line.
 
-### F6. Feedback loop outcomes
-Covers 8 of 15 wrong and 6 of 15 unclear.
-- Settle multiple complaints together on one snapshot.
-- New categories: display error, testimony vs record, and a refused turn (not "misread").
-- Route coin, bond and position complaints to their lookups.
-- Every outcome ends with "Now:".
-- Never pin complaint text.
+### F6. `/fix` as an investigator, on Sonnet (owner-approved 2026-10-09)
+**Replaces** the piecemeal outcome patches.
+
+**The gap.** The current loop is one model call over the *player-visible transcript*. Its output is a fixed form,
+and its outcomes come from a short menu applied by narrow code. Code also pre-decided before any model saw the
+report ("vitality 18"). The orchestrating agent found causes by reading turn records, frames, provenance and
+model I/O, and by working iteratively. The gap is design, not model size.
+
+**The design:**
+- **Read-only tools** over the game:
+  - a turn's record (frame, roll, cited facts, costs);
+  - an entity's state and the provenance of each fact;
+  - transcript search;
+  - recompute a frame from the rules;
+  - the inventory and coin ledger;
+  - what an NPC said versus the record.
+
+  The fixer investigates for a bounded number of steps, about 3–6 tool calls, before deciding.
+- **A broad set of proposed corrections:**
+  - set or remove a fact;
+  - restore state as of turn N;
+  - refund or deduct;
+  - re-render a display;
+  - take back to turn N;
+  - correct testimony;
+  - explain.
+
+  **Code validates every proposal:** mechanical changes need evidence in the record (INV-9), sealed content stays
+  sealed, and the spine's invariants hold.
+- **Model: Sonnet for the fixer** (the owner's choice). Normal turns stay on the play model. Reports are rare, so
+  the cost is small.
+- **All complaints in one report are handled together**, on one snapshot.
+- **The reply states what it found, what it did, then a "Now:" line.**
+- **Never pin complaint text.**
+- **Test** on the real complaint corpus (`evals/feedback_corpus.py`), plus the 15 live disputes I3 classified
+  (1 right, 6 unclear, 8 wrong), plus new held-out complaints collected from the next playtests.
 
 ### F7. Small items
 - The quest-giver's reaction roll respects his seeded stance.
@@ -150,7 +179,7 @@ Covers 8 of 15 wrong and 6 of 15 unclear.
    | **019** | F1 + F4's narration side | `narration.py`, `narrator.py`, `claims.py` |
    | **020** | F2 + F3 | Reader, `packet.py`, `cards.py`, prompts |
    | **021** | F4's testimony and answer lines + pronouns and bond | `answer.py`, `npc_layer.py`, testimony |
-   | **022** | F5 + F6 | `resolve/`, `dispute.py`, `understand.py` |
+   | **022** | F5 (mechanics as state) + F6 (`/fix` investigator on Sonnet) | `resolve/`, `dispute.py`, `understand.py`, a new fixer tool layer |
 
 4. **Test:** two Haiku personas, plus the replay bench, plus golden and held-out sets on a goal-shape breadth set.
    Then Gemini, when the owner is ready.
