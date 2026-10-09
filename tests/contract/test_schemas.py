@@ -36,8 +36,8 @@ MESSAGES = {
     Role.NARRATOR: "success_at_cost",
     Role.CHECKER: "Mara Voss draws a knife. She smiles at you. What do you do?",
     Role.TESTIMONY: "npc.mara_voss: Mara Voss said: \"The night boat leaves from the north pier.\"",
-    Role.UNDERSTAND: "THE PLAYER'S REPORT: \"Mara's coat was grey\"\nPEOPLE:\nnpc.mara_voss: Mara Voss (she/her)\n"
-                     "TRANSCRIPT:\nturn.3 | player: \"hi\" | game: \"Mara's blue coat.\"",
+    Role.FIXER: "THE PLAYER'S REPORT: \"Mara's coat was grey\"\nPEOPLE IN VIEW:\nnpc.mara_voss: Mara Voss (she/her)\n"
+                "INVESTIGATION SO FAR:\n[1] search('coat'):\nturn.3 (1/1 words) player: \"hi\" | Mara's blue coat.",
 }
 
 # The engine's JSON Schema subset (engine.llm.base.validate) plus annotation keywords.

@@ -386,7 +386,7 @@ feedback:                                 # 12.3.6, PR-12-11: the player's repor
   categories: [remembered_wrong, rule_wrong, contradiction, misread, ruling_question, other]   # ruling_question [revision: R2-H]
   evidence: [whole_transcript, fact_provenance, frame_cited_facts_and_rule_ids, claim_log]
   locate_call: retired                    # [revision: R2-H] [DL-12-94]: replaced by understand_call; code no longer pins a report first
-  investigate:                            # PR-12-11 [revision: R2-J] [DL-12-105]: the Fixer role; its model is configuration (owner: Sonnet, 2026-10-09)
+  investigate:                            # PR-12-11 [revision: R2-J] [DL-12-105]: the Fixer role (engine/dm/fixer.py, spec 022); its model is configuration (owner: Sonnet, 2026-10-09); understand_call and the outcome menu deleted [verification: spec 022]
     steps: {min: 3, max_steps: 6}         # a bounded read-only investigation before deciding
     tools: [turn_record, entity_state_and_provenance, transcript_search, recompute_frame, coin_and_inventory_ledger, said_vs_record]
     proposals: [set_fact, remove_fact, restore_as_of_turn, refund, deduct, rerender_display, take_back_to_turn, correct_testimony, explain]
@@ -394,16 +394,9 @@ feedback:                                 # 12.3.6, PR-12-11: the player's repor
     one_snapshot: true                    # all complaints in one report, together
     reply: [found, did, now_line]
     never_pin_report_text: true
-  understand_call:                        # RETIRED by investigate [revision: R2-J] [DL-12-105]; read only by the code spec 022 replaces
-    when: every_report
-    reads: whole_transcript               # past transcript_budget_tokens: the scene cards plus search hits for the report's words
-    transcript_budget_tokens: 30000
-    returns: [believes, happened, category, turn, quote]
-    restate: true                         # the answer opens with the complaint in plain words
   answers: [corrected, explained, not_found]   # every report gets one in plain words; never "logged" alone; not_found offers "did you mean" with the nearest passage
   bias: {fiction: act, mechanics: explain}     # INV-9
   test_corpus: "the /fix lines of the persona runs (evals/playtests/*.findings.jsonl) beside planted cases (OEQ-12-26)"
-  outcomes: [correct, take_back, explain_with_quote, player_reading_wins, explain_and_log]   # RETIRED fixed menu: investigate.proposals [revision: R2-J]
   player_wins_scope: [T0, T1a]            # incidental fiction only; mechanics and consequential content keep INV-9
   record: [id, time, turn, words, category, passage, evidence, outcome, writes, reverted]
   review_log: "saves/<campaign>.disputes.md"   # one block per dispute, newest last, beside the save

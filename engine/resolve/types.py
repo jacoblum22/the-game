@@ -55,6 +55,7 @@ class Beat(BaseModel):
     # PARSE (12.2.2 decision 3): the verb and three method facets; the gate is computed from them (00.12.3)
     verb: str | None = None
     against_will: bool = False  # acts on a person's body or property against their will
+    holds: str | None = None  # a hold folded into this goal's method (01.2.2): applied on a success (06.5.2; spec 022)
     uses_power: bool = False  # needs a supernatural or licensed technique
     speech: bool = False  # mainly words
     pressure: str = "none"  # 12.2.2: a Talk's pressure mark (request, threat, offer, plea, insistence); event tags

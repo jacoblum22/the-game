@@ -49,7 +49,10 @@ def world_step(ctx: TurnContext, record: AdjudicationRecord, *, beats: Sequence[
     # rule: 12.2.9
     # coarse: PR-06-6
     deliver_learning(ctx, record, beats)  # PR-12-10: an asked NPC's answer line (respond keeps it, adds no row)
-    acted = foes_act(ctx, record, oof)
+    # 01.3.6-01.3.7: a turn whose every beat was refused (G4, a question, withdrawn) spends nothing, so no foe answers
+    # it and no round passes (round 6, I3 §3: a G4 turn still gave the held foe a free strike)
+    spent = not beats or any(b.status not in ("refused", "question", "withdrawn") for b in beats)
+    acted = foes_act(ctx, record, oof) if spent else []
     beat_writes(ctx, record, beats)  # T-12-18: the beats' scene state (T1c)
     release_holds(ctx, record)  # 06.5.2: a hold ends with its holder down, out or moved away
     ensure_activities(ctx, record)  # 12.11.9 step 1

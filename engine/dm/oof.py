@@ -589,7 +589,7 @@ DEGREE_NAMES = {"critical_success": "critical success", "success": "success", "f
                 "critical_failure": "critical failure"}
 
 
-_SHOWN_QTY = {"vitality": "Vitality", "focus": "Focus", "fate": "fate", "dread": "Dread"}
+_SHOWN_QTY = {"vitality": "Vitality", "focus": "Focus", "fate": "fate", "dread": "Dread", "coin": "coin"}
 
 
 def changed_line(state: WorldState, pc: str, events: Sequence[Any]) -> str:  # rule: 12.15.3

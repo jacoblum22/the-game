@@ -29,9 +29,13 @@ def _hold(dock: Any, ctx: Any, rec: AdjudicationRecord) -> None:
     beat = SimpleNamespace(status="resolved", entry=BeatEntry(
         frame_id="frame.1", actor=dock.pc, targets=[dock.ferryman], verb="verb.grapple", restatement="hold Tam",
         degree="failure", success_at_cost=True, reach="standard"))  # a near miss taken as success at a cost
+    from engine.store.conditions import apply_condition
+
     tx = ctx.need_tx()
     for a, b in ((dock.pc, dock.ferryman), (dock.ferryman, dock.pc)):
         tx.add(Event.of("position_set", rule_id="06.3.5", entity=a, band_to={b: "engaged"}))
+    tx.add_all(apply_condition(tx.state, tx.mint, ctx.rules, dock.ferryman, "cond.grabbed", severity="S2",
+                               source={"entity": dock.pc}).events)  # RECORD's hold (06.5.2; spec 022)
     beat_writes(ctx, rec, [beat])
 
 

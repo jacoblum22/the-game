@@ -45,7 +45,7 @@ from engine.llm.gemini_schema import convert, problems  # noqa: E402
 
 FIXTURES = REPO_ROOT / "tests" / "engine" / "fixtures_gemini_schemas"
 ROLE_ORDER = [Role.INTERPRET, Role.READER, Role.FRAMER, Role.WORLD, Role.DIRECTOR, Role.NARRATOR, Role.CHECKER,
-              Role.TESTIMONY, Role.UNDERSTAND]
+              Role.TESTIMONY, Role.FIXER]
 
 SCENE = (
     "Test scene (a connectivity check, not a real game): Wren (pc.wren), a scout, stands in the village shrine "
@@ -61,9 +61,9 @@ MESSAGES = {
     Role.CHECKER: "Draft to check:\n0: Wren kneels by the altar.\n1: Fresh boot prints lead to the back door.\n"
                   "2: What do you do?",
     Role.TESTIMONY: "npc.innkeeper: the innkeeper said: \"The north road is washed out past the second ford.\"",
-    Role.UNDERSTAND: "THE PLAYER'S REPORT: \"Wren's cloak was grey, not blue\"\nNOW: spring, the morning of day 1\n"
-                     "PEOPLE:\nnpc.wren: Wren (she/her)\nTRANSCRIPT:\nturn.4 | player: \"I look at Wren.\" | game: "
-                     "\"Wren's blue cloak drips.\"",
+    Role.FIXER: "THE PLAYER'S REPORT: \"Wren's cloak was grey, not blue\"\nNOW: spring, the morning of day 1\n"
+                "PEOPLE IN VIEW:\npc.wren: Wren (she/her)\nINVESTIGATION SO FAR:\n[1] turn('turn.4'):\nturn.4 player: "
+                "\"I look at Wren.\"\ngame: \"Wren's blue cloak drips.\"",
 }
 
 

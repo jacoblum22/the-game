@@ -1,9 +1,9 @@
-"""Spec 014: the real complaint corpus, code's half (PR-12-11 steps 2-5).
+"""Specs 014 and 022: the Fixer on real complaints, code's half (PR-12-11 steps 4-7).
 
-Each corpus item (tests/fixtures/feedback_corpus) runs on its save cut back to just before the report, with the
-understanding the live model (Haiku) gave in the committed after run (evals/baselines/feedback_corpus_after_haiku.json)
-replayed by a ScriptedModel. Verification and the outcome are code, so they must reproduce the recorded run, and every
-answer must restate the complaint and end in a plain answer.
+Each report of the round-6 and held-out sets runs on its save cut back to just before it, with the Fixer answers
+Sonnet gave in the committed runs (evals/baselines/fixer_*_sonnet.json) replayed by a ScriptedModel. The tools,
+validation and application are code, so every answer must end in `Now:`, never pin the report, and refuse what
+the record does not allow (identity fields, the clue trail).
 """
 
 from __future__ import annotations
@@ -17,19 +17,24 @@ import pytest
 from engine.data.loader import load_rules
 from engine.llm.base import Role
 from engine.llm.offline import ScriptedModel
-from evals.feedback_corpus import BARE, load_corpus, run_item, score
+from evals.feedback_corpus import BARE, load_corpus, run_item
 
-AFTER = Path(__file__).resolve().parents[2] / "evals" / "baselines" / "feedback_corpus_after_haiku.json"
-RECORDED = {r["id"]: r for r in json.loads(AFTER.read_text(encoding="utf-8"))["results"]}
+BASE = Path(__file__).resolve().parents[2] / "evals" / "baselines"
+RUNS = {s: {r["id"]: r for r in json.loads((BASE / f"fixer_{s}_sonnet.json").read_text(encoding="utf-8"))["results"]}
+        for s in ("round6", "heldout")}
+ITEMS = [(s, i) for s in RUNS for i in load_corpus(s)]
 
 
-@pytest.mark.parametrize("item", load_corpus(), ids=lambda i: i["id"])
-def test_corpus_item_reproduces_the_recorded_outcome(item: dict[str, Any], tmp_path: Path) -> None:
-    rec = RECORDED[item["id"]]
-    data = next(u["data"] for u in rec["understood"] if u and u.get("data"))
-    model = ScriptedModel({Role.UNDERSTAND: [data]}, fallback=False)
-    got = run_item(item, model, load_rules(), tmp_path)
-    assert (got["category"], got["turn"], got["outcome"]) == (rec["category"], rec["turn"], rec["outcome"]), got["answer"]
-    assert got["answer"].split("] ", 1)[1].startswith("You're saying "), got["answer"]
-    assert not any(b in got["answer"] for b in BARE) and "Logged." not in got["answer"]
-    assert score(item, got) == rec["score"]
+@pytest.mark.parametrize(("which", "item"), ITEMS, ids=lambda x: x if isinstance(x, str) else x["id"])
+def test_the_recorded_fixer_answers_replay_through_code(which: str, item: dict[str, Any], tmp_path: Path) -> None:
+    rec = RUNS[which][item["id"]]
+    script = [u["data"] for u in rec["understood"] if u and u.get("data") is not None]
+    got = run_item(item, ScriptedModel({Role.FIXER: script}, fallback=False), load_rules(), tmp_path)
+    answer = got["answer"]
+    assert answer.splitlines()[-1].strip().startswith("Now:") and not any(b in answer for b in BARE)
+    assert item["report"] not in answer.split("Done:")[-1]
+    assert got["tools"] == rec["tools"]  # the same investigation, read from the same snapshot
+    if item["id"] == "232941-t12":  # Sonnet proposed overwriting the captain's pronouns: identity is not a fact
+        assert "Not done: set fact: Sevella de Belac's pronouns is fixed on record" in answer
+    if item["id"] == "192926-t12":  # ... and removing the carter's pointer to Ivas: the clue trail is the spine
+        assert "is part of the mystery's clue trail" in answer
