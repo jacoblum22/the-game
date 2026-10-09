@@ -325,3 +325,9 @@ everything.
     - position after a fall.
 - **Owner: no Gemini runs tonight.** Tests stay on Haiku so they isolate the fixes.
 - **In flight:** talker and fighter persona runs on the combined 0d3f8c1, Haiku.
+
+## Round 6 implementation (2026-10-09, orchestrator: spec-010 session)
+
+- **R2-J rules wave merged (007219f).** Split by goal (01.2.2, 01.2.7), testimony settled only when acted on and refusals never facts (PR-12-12), hindering facts mechanical only (01.6.8), holds as conditions (06.5.2), the /fix investigator (PR-12-11), role context (12.2.4, 00.15.4), passage narration (12.3.x, 12.14.12). DL-00-07, DL-01-37..40, DL-06-31, DL-12-101..107; ledger I-194..I-204. Validator 0/0; suite **1779 passed**, 4 skipped. Report: `rules/_process/reports/R2-J-report.md` (engine checklist per spec 019-022).
+- **Owner decisions defaulted provisionally** (DL entries marked): DL-01-37, a separately-rolled move in a conflict stays a beat before the goal beat (option A of 3); DL-12-107, the seeded stance bounds the quest-giver reaction roll (helps never below Neutral, hinders never above Wary; option A of 3).
+- **Next:** specs 019 (F1 + F4 narration side) and 020 (F2 + F3) in parallel worktrees.
