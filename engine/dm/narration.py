@@ -660,15 +660,15 @@ def _labelled(kind: str, text: str) -> OofBlock:
 def pause_blocks(ctx: TurnContext, pause: PauseRecord, items: Sequence[dict[str, str]] = ()) -> list[OofBlock]:
     # rule: 12.15
     """The open pause's block(s), rendered from the stored pause (so resume re-shows exactly this)."""
-    from engine.resolve.types import Frame, RollResult
+    from engine.resolve.types import Beat, Frame, RollResult
 
     d = pause.detail or {}
     stage = d.get("stage")
     rules = ctx.rules
     last = {i["kind"]: i["text"] for i in items}
     try:
-        if stage == "offer":
-            then = [str(q["beat"].get("method") or q["beat"].get("restatement") or "") for q in d.get("queued") or ()]
+        if stage == "offer":  # "Then:" from each queued goal, never the Reader's `method` (DL-01-39, as `_then`)
+            then = [oof.goal_line(Beat.model_validate(q["beat"]), ctx.state) for q in d.get("queued") or ()]
             return [oof.offer_block(Frame.model_validate(d["frame"]), rules=rules, fate=_pc_fate(ctx), state=ctx.state,
                                     then=then)]
         if stage == "near_miss":

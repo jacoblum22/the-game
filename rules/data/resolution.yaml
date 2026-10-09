@@ -395,7 +395,7 @@ intended_change:   # 01.2.7 [revision: R2-H] [DL-01-34]: each beat's typed inten
   failure: nothing
   success_at_cost: "the change and its cost; the cost never undoes the change (01.9.3)"
   unapplicable: "not applied; the RESULT says why (the item is not where the slot says), so 12.3.6 can explain it"
-  split: "two changes in one message are two beats (01.2.2)"
+  split: "one beat per goal: two goals in one message are two beats; a method, or force or movement in service of a goal, is that goal's beat and is rolled as the goal, never a change of its own (01.2.2, 01.2.7)"   # [revision: R2-J] [DL-01-37]
   log: [restatement, verb, ids_in_scope, kind, slots]   # Laya-ready: a short-input decision with at most 20 options, logged with its inputs
 
 attribute_rubric:  # 01.6.1 [revision: R2-H] [DL-01-35]

@@ -928,17 +928,25 @@ speech, with `answer_ladder.repeat_pointer_limit` and `delivery.information.ladd
   `turn.speech_owns` keeps the "what does the person I'm talking to know" Reader question from the Oracle.
 - **Speaker card** (`packet.speaker_card(state, npc, topic=, about=)`, `narrator.speaker_cards(state, record)` in
   `record_text`): the NPC's knowledge records and own shown facts, pack items (no rumor slot), role topics, open
-  threads, `said_by(..., k=answer_ladder.said_shown)`; no sealed fact, no `MOTIVES` key, no case data.
+  threads, `said_by(..., k=answer_ladder.said_shown)`; no sealed fact, no `MOTIVES` key, no case data. Spec 021: the
+  header carries the speaker's identity line (pronouns, the PC's bond); "people this card names" lists identity lines
+  for names in its knows and said lines; "knows:" never shows `agreed`, `correction.*`, a pinned fact, or a fact
+  whose source is `correction` or `testimony`.
 - **Testimony** (`engine.dm.testimony`): meta `npc.said` `{n, records: [{id said.N, speaker, turn, words, about,
   question, settled, fact, route}]}` (newest `KEEP`); `add_said` (from `narration._said`, filing each line under its
-  speaker's `ask:` key), `said_by`, `open_records` (the Reader's TESTIMONY lines and `SchemaContext.said_ids`),
-  `is_repeat` / `overlap` (`not_a_repeat` in `narration._speech`: overlap above `narration.freshness.said_overlap`
-  with the speaker's said lines or their earlier line in the draft -> redraft). PR-12-12: `settle_triggered(ctx,
-  reader, record)` at T4 before plans: triggers (a) Reader `rests_on` (schema field only when `said_ids`) or a beat
-  target known only from testimony (a name `how: heard`, a place no PC record is about), (c) a Move target likewise;
-  `settle(ctx, said_id)`: one `Role.TESTIMONY` call `{subject, predicate, value}`, routes case (true only when a node
-  covers it; nothing written or told) / Oracle at Likely (`_BEYOND` word test) / accepted; writes a fact `source:
-  testimony` (or the Oracle's), or `<speaker> wrong_about`; marks the record settled once. (b) and (d) are deferred.
+  speaker's `ask:` key), `said_by`, `said_for(state, fact_id)` (the record a settled fact came from: its `said_by` /
+  `said_turn`), `is_repeat` / `overlap` (`not_a_repeat` in `narration._speech`: overlap above
+  `narration.freshness.said_overlap` with the speaker's said lines or their earlier line in the draft -> redraft).
+  PR-12-12 (spec 021): `settle_triggered(ctx, reader, record)` at T4 before plans; `triggered(state, beats)`: (a)/(c)
+  a beat target known only from testimony (a name `how: heard`, a place no PC record is about) that a record names;
+  (b) a beat `assertion` restating a record (`_premise`). The Reader's `rests_on` is retired. `settle(ctx, said_id)`:
+  one `Role.TESTIMONY` call `{kind, subject, predicate, value}` over identity lines and the exchange (names, no ids);
+  `kind != claim` or a speaker-subject predicate of their own will (`_OWN_WILL`) writes nothing (`settled: "none"`);
+  else routes case (true only when a node covers it; nothing written or told) / Oracle at Likely (`_BEYOND`) /
+  accepted; writes a fact `source: testimony` with the claim's own predicate (or the Oracle's), or `<speaker>
+  wrong_about`; marks the record settled once. `oof.fact_short` labels it "<Speaker> said: ...".
+  Framer lever/snag candidates (`schemas.lever_candidate`, 01.6.8): never `detail.activity|posture|held|manner`,
+  `said.*` or `source: correction`.
 - **Must-name diet** (`handles.items`): activities are not items; an NpcActionEntry tagged `optional` (`OPTIONAL`) is
   not an item. `narrator.optional_material` renders them under `OPTIONAL MATERIAL` with no handles. `hide_stale`,
   `_set_aside` and `_mark_used`'s activity branch are retired.

@@ -268,16 +268,15 @@ def _asked(tmp_path: Path, say: str, intent: str, world: Any = QUIET_WORLD, face
     return dock, out.adjudication.record
 
 
-def test_a_successful_who_question_names_an_existing_person(tmp_path: Path) -> None:
+def test_a_who_question_no_one_fits_writes_nothing(tmp_path: Path) -> None:
+    """Spec 021 (DL-12-103): no one here fits "behind the coin", so casting finds no one. This test used to accept
+    the line "Tam Harlan tells you who is behind the coin: no one you know"; now nothing is written and Tam answers
+    in his own words within his willingness."""
     dock, rec = _asked(tmp_path, "Who's behind the coin, Tam?", "ask Tam Harlan who is behind the coin",
                        kind="who_is")
-    b = rec.beats[0]
-    assert b.learned, b
-    assert b.learned[0].startswith("Tam Harlan tells you who is behind the coin: ")
-    assert "Tam Harlan" not in b.learned[0].split(": ", 1)[1]  # an existing person, never the one asked
-    st = dock.store.state
-    fid = next(f.id for f in st.facts.values() if f.predicate.startswith("who_is_behind"))
-    assert st.facts[fid].value != dock.ferryman and fid in st.knowledge[dock.pc]
+    assert rec.beats[0].learned == []
+    assert not any(f.predicate.startswith("who_is_") for f in dock.store.state.facts.values())
+    assert [a.tags[0] for a in rec.npc_actions if a.source_ref == "PR-12-10"] == ["willingness:willing"]
 
 
 def test_a_failed_who_question_settles_nothing(tmp_path: Path) -> None:

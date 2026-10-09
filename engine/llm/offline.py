@@ -719,10 +719,11 @@ def _engaged(npcs: list[Any], happened: str, view: str) -> list[Any]:
 
 
 def _testimony(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:  # rule: PR-12-12
-    """Step 2 offline: the first id the view names as the subject, the quoted words as the value."""
+    """Step 2 offline: a claim, its subject the last person the view names (the speaker comes first; else the
+    world), the quoted words as the value."""
     m = re.search(r'said: "(.*)"', packet.message)
-    sub = re.search(r"(?m)^([a-z]+\.[\w.]+): ", packet.view or "")
-    return {"subject": sub.group(1) if sub else "world", "predicate": "is said to be",
+    subs = re.findall(r"(?m)^\s*- ([^:\n]+):", packet.view or "")
+    return {"kind": "claim", "subject": subs[-1].strip() if subs else "world", "predicate": "is said to be",
             "value": (m.group(1) if m else "")[:160]}
 
 

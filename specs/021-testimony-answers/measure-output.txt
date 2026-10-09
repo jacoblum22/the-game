@@ -1,0 +1,50 @@
+## 1. Settlement per turn (Reader calls with testimony open)
+    192926-talker turn.5: settles said.7 "The carters drink at the Sleeping Goose, Ask them there, and they will" via ['target loc.long_reach_sandburn.inn']
+    192926-talker turn.14: settles said.1 "I brought the word up from the river at first light, and the whole hav" via ['target loc.long_reach_sandburn.gate']
+    192926-talker turn.16: settles said.17 "The carters at the back table talk of lamp oil barrels, I hear it is o" via ['premise "The oil barrels leave by night."']
+  192926-talker: offered 12, before (rests_on) 8, after 3
+    192946-fighter turn.3: settles said.2 "They're still within Saltton, and you can find them on foot. One of th" via ['target loc.windy_march_saltton']
+  192946-fighter: offered 10, before (rests_on) 3, after 1
+    214013-talker turn.5: settles said.8 "As for trust, a man who pays out silver for wagon guards with no quest" via ['target loc.weeping_hundred_millford.market']
+  214013-talker: offered 3, before (rests_on) 2, after 1
+  214033-fighter: offered 2, before (rests_on) 2, after 0
+    232941-talker turn.14: settles said.30 "A child gone since last night, and the trail running out past the last" via ['premise "The trail stops on the road past the last house"']
+  232941-talker: offered 12, before (rests_on) 7, after 1
+  233000-fighter: offered 6, before (rests_on) 5, after 0
+  TOTAL: before 27/45 (60%), after 6/45 (13%), records settled after 6
+## 2. Claims (the recorded testimony calls)
+  192926-talker turn.2 "Strangers have been buying lamp oil by the barrel " -> {'predicate': 'have been buying lamp oil by the barrel since', 'subject': 'strangers', 'value': 'the thaw'} LOST
+  192926-talker turn.3 "And the Circle of Barrowham is hiring able hands f" -> {'predicate': 'is hiring', 'subject': 'the Circle of Barrowham', 'value': 'able hands for guarding the roads, paying good coin'} LOST
+  192926-talker turn.4 "I have a connection to the Circle of Barrowham tha" -> {'predicate': 'has a connection to', 'subject': 'npc.ivas_terier', 'value': 'the Circle of Barrowham'}
+  192926-talker turn.5 "Then your name goes with mine, and I will carry bo" -> {'predicate': 'will carry both names to', 'subject': 'npc.ivas_terier', 'value': 'them'} REFUSAL
+  192926-talker turn.5 "The carters drink at the Sleeping Goose, Ask them " -> {'predicate': 'drink at', 'subject': 'the carters', 'value': 'the Sleeping Goose'} LOST
+  192926-talker turn.9 "The carters at the back table talk of lamp oil bar" -> {'predicate': 'is going out', 'subject': 'lamp oil', 'value': 'by night, in barrels talked of by the carters at the back table'} LOST
+  192926-talker turn.10 "Half the haven says it's for the festival coming, " -> {'predicate': 'is buying the oil', 'subject': 'someone', 'value': 'by the barrel'} LOST
+  192926-talker turn.11 "I know no one who buys that oil, so I've no name t" -> {'predicate': 'knows no one who buys', 'subject': 'npc.sylthas_of_the_quiet_wood', 'value': 'that oil'}
+  192926-talker turn.14 "Ivas Terier keeps the gate, so folk say, as captai" -> {'predicate': 'is captain of', 'subject': 'Ivas Terier', 'value': 'the gate'} LOST
+  192926-talker turn.14 "I brought the word up from the river at first ligh" -> {'predicate': 'has hanging at it now', 'subject': 'loc.long_reach_sandburn.gate', 'value': 'something the whole haven has seen'}
+  192946-fighter turn.3 "They're still within Saltton, and you can find the" -> {'predicate': 'are still located within', 'subject': 'the people Branwen Longsmith is referring to', 'value': 'Saltton'} LOST
+  192946-fighter turn.4 "The refugees came in at the jetties with a story n" -> {'predicate': 'came in at', 'subject': 'the refugees', 'value': 'the jetties with a story nobody believes'} LOST
+  192946-fighter turn.10 "Mind that point, and I will tell you what I can. F" -> {'predicate': 'were driven out by', 'subject': 'the refugees', 'value': 'the cold, which came early to the Windy March eight years back and has stayed a little longer every year since'} LOST
+  192946-fighter turn.13 "I only heard it said, but folk say he is held in t" -> {'predicate': 'is held in', 'subject': 'the man folk speak of (unnamed)', 'value': "the reeve's cell"} LOST
+  214013-talker turn.4 "Safe work does not offer a purse like that; Belwis" -> {'predicate': 'waits at', 'subject': 'Belwise Tumwort', 'value': 'the market square'} LOST
+  214013-talker turn.5 "Belwise heads the Circle of Halburn here, and he w" -> {'predicate': 'heads', 'subject': 'Belwise', 'value': 'the Circle of Halburn here'} LOST
+  214013-talker turn.5 "As for trust, a man who pays out silver for wagon " -> {'predicate': 'answers to', 'subject': 'the man who pays out silver for wagon guards', 'value': 'masters who keep their own reckonings'} LOST
+  214033-fighter turn.3 "Would any honest soul in Greybridge look toward th" -> {'predicate': 'tore', 'subject': 'something', 'value': 'the sky above the wild hills'} LOST
+  214033-fighter turn.4 "Do you think the sky tore open anywhere else than " -> {'predicate': 'tore open above', 'subject': 'the sky', 'value': 'the Keep of Halford'} LOST
+  232941-talker turn.2 "Someone has been missing since last night, and the" -> {'predicate': 'runs out of', 'subject': 'the trail of the missing person', 'value': 'the haven'} LOST
+  232941-talker turn.3 "Well? Will you walk the lanes out of the haven for" -> {'predicate': 'asks whether', 'subject': 'npc.belby_haydale', 'value': 'you will walk the lanes out of the haven for him, or want more before you answer'} GARBLED
+  232941-talker turn.4 "Name it once you have said you'll walk, not before" -> {'predicate': 'is to be given only after', 'subject': 'the name', 'value': "you have said you'll walk"} LOST
+  232941-talker turn.8 "Sevella de Belac would know who the Warren trusts," -> {'predicate': 'would know', 'subject': 'Sevella de Belac', 'value': 'who the Warren trusts'} LOST
+  232941-talker turn.10 "Sevella de Belac, is captain of the gate, and she " -> {'predicate': 'is', 'subject': 'Sevella de Belac', 'value': 'captain of the gate'} LOST
+  232941-talker turn.14 "Past the last house is no beat of mine, and I'll n" -> {'predicate': 'is not', 'subject': 'past the last house', 'value': "part of Sevella de Belac's beat"} LOST
+  232941-talker turn.15 "Little I would swear to about The Red Warren itsel" -> {'predicate': 'knows the ground of', 'subject': 'Ssaaa of the Hill Den', 'value': 'The Red Warren better than anyone in Stanstead'} LOST
+  233000-fighter turn.2 "Everyone has seen it, so I'll say it plain, I have" -> {'predicate': 'has', 'subject': 'npc.dunwen_redmore', 'value': 'the word'}
+  233000-fighter turn.5 "I didn't mark a face in that crowd, duck, I was lo" -> {'predicate': 'did not mark a face in', 'subject': 'npc.dunwen_redmore', 'value': 'that crowd'}
+  233000-fighter turn.7 "You'll get no word out of me with your hand on me," -> {'predicate': 'will give no word out while', 'subject': 'npc.dunwen_redmore', 'value': 'pc.evine_oakwell has a hand on him'} GARBLED REFUSAL
+  233000-fighter turn.11 "Part of the word, duck, and that's all you'll pull" -> {'predicate': 'will share only', 'subject': 'npc.dunwen_redmore', 'value': 'part of the word, and that is all he will reveal today'} GARBLED REFUSAL
+  233000-fighter turn.14 "No more of the word, duck. You can wrench the arm " -> {'predicate': 'will reveal', 'subject': 'npc.dunwen_redmore', 'value': 'nothing more, even if his arm is wrenched off at the shoulder'} GARBLED REFUSAL
+  BEFORE: {'n': 31, 'written': 31, 'lost': 21, 'garbled': 4, 'refusal_stored': 4}
+## 3. Speaker cards (absent people named on a card: pronouns shown; bond on a bonded NPC's card)
+  absent people named on cards: 93; pronouns in the recorded packet 2, on the new card 71
+  bonded NPC cards: 7; bond shown before 1, after 7

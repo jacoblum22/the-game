@@ -304,14 +304,6 @@ def view_for(role: Role, state: WorldState, ctx: Mapping[str, Any] | None = None
                                f"{ctx.get('message') or ''}\n{ctx.get('talk') or ''}")
         if lines:
             text += "\npeople here or named (name: pronouns; their tie to you):\n" + "\n".join(lines)
-    if role == Role.READER:  # PR-12-12: testimony a beat may rest on (`rests_on`)
-        from engine.dm.testimony import open_records
-
-        recs = open_records(state)
-        if recs:
-            text += "\nTESTIMONY (unsettled; `rests_on` names the one the player's action relies on):\n" + "\n".join(
-                f"{r['id']}: {display_name(state, r['speaker']) if r['speaker'] in state.entities else 'someone'}"
-                f" said \"{_short(r['words'])}\"" for r in recs)
     return text
 
 
@@ -559,15 +551,23 @@ def name_line(state: WorldState, eid: str) -> str:
     return f"{eid}: {seal.slice or 'someone'}" if seal is not None else f"{eid}: {display_name(state, eid)}"
 
 
-_CARD_SKIP = ("name", "voice", "activity", "exists", "harm_state", "stance.said")
-_CARD_SKIP_PREFIX = ("knows_", "points_to.", "trg.", "detail.", "asked_", "case.", "bond.", "memory.", "said.")
+_CARD_SKIP = ("name", "voice", "activity", "exists", "harm_state", "stance.said", "agreed")
+_CARD_SKIP_PREFIX = ("knows_", "points_to.", "trg.", "detail.", "asked_", "case.", "bond.", "memory.", "said.",
+                     "correction.")
+# what the NPC never "knows": a dispute's words or a correction (I1 §5d: Sevella voiced the player's complaint) and
+# settled testimony (what someone said, already on the card as their own words when it is theirs)
+_CARD_SKIP_SOURCE = ("correction", "testimony")
 
 
 def _card_fact(state: WorldState, f: Any) -> bool:
-    """A fact the speaker card may show: in the world, never sealed, never bookkeeping or a motive (INV-10)."""
-    return (isinstance(f.value, str | bool | int | float) and f.visibility != "sealed" and f.id not in state.seals
+    """A fact the speaker card may show: in the world, never sealed, never bookkeeping or a motive (INV-10), never
+    a correction, an agreement (the player's goal restated, I1 §6) or testimony (DL-12-103)."""
+    # never a yes/no fact: it rendered as "knows: Valine Varault is at the inn and can be found there False" (live 021)
+    return (isinstance(f.value, str | int | float) and not isinstance(f.value, bool) and f.visibility != "sealed"
+            and f.id not in state.seals
             and f.subject not in state.seals and f.predicate not in _CARD_SKIP and f.predicate not in MOTIVES
             and not f.predicate.startswith(_CARD_SKIP_PREFIX) and not f.predicate.startswith("who_is_")
+            and f.source not in _CARD_SKIP_SOURCE and not f.pinned
             and state.current_fact_id(f.subject, f.predicate) == f.id)
 
 
@@ -611,9 +611,11 @@ def speaker_card(state: WorldState, npc: str, *, topic: str | None = None, about
             if t.kind == "thread" and t.data.get("status", "active") == "active"
             and t.visibility in ("shown", "available") and t.id not in state.seals][:3]
     said = said_by(state, npc, topic=topic, about=about, k=shown)
-    out = [f"SPEAKER CARD for {display_name(state, npc)} (PR-12-10: answer from this first; beyond it, plainly, with "
-           "ordinary confidence; a hedge only if they are cautious or gossipy; never open by saying their own name or "
-           "title unless asked):"]
+    # 12.2.4 item 3: who the speaker is to the PC (pronouns, bond) and who the card's lines name (I2 §2, §4)
+    me = (identity_lines(state, [npc]) or [""])[0].split(": ", 1)[-1]
+    out = [f"SPEAKER CARD for {display_name(state, npc)}{f' ({me})' if me else ''} (PR-12-10: answer from this first; "
+           "beyond it, plainly, with ordinary confidence; a hedge only if they are cautious or gossipy; never open by "
+           "saying their own name or title unless asked):"]
     out += [f"- knows: {_short(x)}" for x in known] or ["- knows: nothing on record (answer plainly about ordinary things)"]
     if roles:
         out.append("- their trade's common knowledge: " + "; ".join(roles))
@@ -622,6 +624,11 @@ def speaker_card(state: WorldState, npc: str, *, topic: str | None = None, about
     if said:
         out.append("- they already said (never contradict or repeat these unprompted; build on them):")
         out += [f"  - \"{_short(r['words'])}\"" for r in said]
+    named = [ln for ln in identity_lines(state, [], "\n".join([*known, *(str(r["words"]) for r in said)]))
+             if not ln.startswith(f"  - {display_name(state, npc)}:")]
+    if named:
+        out.append("- people this card names (name: pronouns; their tie to you):")
+        out += named
     return out
 
 

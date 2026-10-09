@@ -65,7 +65,6 @@ class SchemaContext(BaseModel):
     pc_licences: list[str] = Field(default_factory=list)
     licences: list[str] = Field(default_factory=list)  # every licence id in data (a G3's would-be licence)
     reachable_places: list[str] = Field(default_factory=list)  # places a Move can head for (10.1.3)
-    said_ids: list[str] = Field(default_factory=list)  # unsettled `said` records the Reader may name (PR-12-12)
     pending_choice_ids: list[str] = Field(default_factory=list)
     # Reader (rules)
     input_classes: list[str] = Field(default_factory=list)
@@ -225,7 +224,6 @@ def reader_schema(ctx: SchemaContext) -> Schema:  # rule: 12.2.2
         "restatement": STR,  # 01.2.6
         "player_quantity": {"type": ["integer", "null"]},  # 01.1.4: the only numeric field (INV-3)
         # PR-12-12 trigger (a): the testimony the action relies on; offered only when some is unsettled
-        "rests_on": enum(ctx.said_ids, first=NONE) if ctx.said_ids else None,
     })
 
 
@@ -411,9 +409,11 @@ def checker_schema(ctx: SchemaContext) -> Schema:  # rule: 12.3.1
 
 
 def testimony_schema(ctx: SchemaContext) -> Schema:  # rule: PR-12-12
-    """PR-12-12 step 2: the said words as one claim `{subject, predicate, value}` in the typed form of a fact (00.6);
-    the subject is an id in scope or a new name (spec 013; replaces R2-D's proposer)."""
-    return obj({"subject": STR, "predicate": STR, "value": STR})
+    """PR-12-12 step 2: whether the said words claim anything about the world (`kind`: `claim`, or why not: a
+    refusal, opinion, want, feeling, intention or question; spec 021), then the claim `{subject, predicate, value}` in
+    the typed form of a fact (00.6); the subject a name (spec 013; replaces R2-D's proposer)."""
+    return obj({"kind": enum(["claim", "refusal", "opinion", "want", "feeling", "intention", "question", "none"]),
+                "subject": STR, "predicate": STR, "value": STR})
 
 
 def _fixer_schema(ctx: SchemaContext) -> Schema:  # spec 022: the role's schema lives in engine/dm/fixer.py
@@ -550,7 +550,7 @@ DEFAULTS: dict[Role, Callable[[SchemaContext], dict[str, Any]]] = {
     Role.WORLD: _world_default,
     Role.DIRECTOR: _director_default,
     # no claim stated: the caller states the words as said (PR-12-12 step 2)
-    Role.TESTIMONY: lambda ctx: {"subject": "world", "predicate": "is said to be", "value": ""},
+    Role.TESTIMONY: lambda ctx: {"kind": "none", "subject": "", "predicate": "", "value": ""},
     # nothing understood: the answer asks for the turn (PR-12-11; engine/dm/fixer.py)
     Role.FIXER: lambda ctx: _fixer_default(),
 }
@@ -686,6 +686,19 @@ def _visible(state: WorldState, eid: str) -> bool:
     return seal is None or bool(seal.slice)
 
 
+# T-12-18's scene slots: the visible face of the scene, never levers or snags (01.6.8; engine/dm/scene_state.SLOTS)
+_SCENE_LABELS = tuple(f"detail.{s}" for s in ("activity", "posture", "held", "manner"))
+
+
+def lever_candidate(state: WorldState, fact_id: str) -> bool:  # rule: 01.6.8
+    """DL-01-38: only a mechanically relevant fact is a lever or snag candidate. Never a scene label (a posture,
+    manner, activity or held slot: "straining against you", I3 §4), a dispute's words (`source: correction`), or a
+    pre-021 `said.*` fact (a speaker's words slugged into a predicate, unattributed: 233000's refusal snag)."""
+    f = state.facts.get(fact_id)
+    return f is not None and f.predicate not in _SCENE_LABELS and not f.predicate.startswith("said.") \
+        and f.source != "correction"
+
+
 def schema_context(  # rule: 12.2.4
     state: WorldState,
     rules: Any,
@@ -706,8 +719,6 @@ def schema_context(  # rule: 12.2.4
 ) -> SchemaContext:
     """The enums for this call, from the rules and the current state (scene-scoped; bounded). `focus` must be
     the ids the call's `build_packet` got, so the fact enum is the view's facts."""
-    from engine.dm.testimony import open_records
-
     scope = scene_scope(state)
     facts = [f.id for f in scene_facts(state, scope, focus=focus)]
     pc = pc_id(state)
@@ -738,7 +749,8 @@ def schema_context(  # rule: 12.2.4
         by = uncited_by_stakes(state=state, rules=rules, actor=beat.actor, target=tgt, beat=beat)  # steps 8, 10
         # an onlooker who would act: present (computed), or named by a cited source fact (frame_check)
         sources = [s for s in sources if s in by or s == OBSERVER]
-        usable = [f for f in facts if fact_usable(state, f, beat.declared_seq or state.last_seq)]
+        usable = [f for f in facts if fact_usable(state, f, beat.declared_seq or state.last_seq)
+                  and lever_candidate(state, f)]
     if cost_menu_ids is not None:
         threatened = list(cost_menu_ids)
         alternate = list(dict.fromkeys([*threatened, *alternate]))
@@ -786,7 +798,6 @@ def schema_context(  # rule: 12.2.4
         pc_licences=[x.license_id for x in state.licenses.get(pc, [])] if pc else [],
         licences=list(rules.licenses),
         reachable_places=_reachable(state),
-        said_ids=[r["id"] for r in open_records(state)],
         pending_choice_ids=pending,
         input_classes=classes,
         oracle_rungs=[r["id"] for r in res.get("oracle", {}).get("rungs", [])],

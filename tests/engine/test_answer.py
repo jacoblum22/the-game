@@ -105,6 +105,7 @@ def test_ask_twice_keeps_the_willingness_and_rolls_nothing(seeded: Any) -> None:
     for npc in here(seeded):
         for kind, text, topic in (("what_like", "what are the roads like?", "roads"),
                                   ("who_is", "who is missing?", None), ("what_want", "what do you want?", None)):
+            ask(seeded, npc, kind, text, topic=topic)  # a clue delivered here is found: asked again, words (021)
             first = ask(seeded, npc, kind, text, topic=topic)
             draws = len(seeded.rng_draws())
             again = ask(seeded, npc, kind, text, topic=topic)
@@ -121,9 +122,13 @@ def test_a_story_role_goes_to_the_case_graph(seeded: Any) -> None:
     case = next(c for c in cases(seeded.state).values() if c["option"] == "missing") if any(
         c["option"] == "missing" for c in cases(seeded.state).values()) else None
     people = here(seeded)
-    answers = {n: ask(seeded, n, "who_is", '"Who is missing?"') for n in people}
+    if case is None:  # the reduced case is built by the first question (PR-15-6)
+        with turn(seeded) as ctx:
+            ans.who_case(ctx, "missing", PC)
     case = case or next(c for c in cases(seeded.state).values() if c["option"] == "missing")
     core = next(p["holder"] for p in case["nodes"][0]["placements"] if p["access"] == "core")
+    people = sorted(people, key=lambda n: n == core)  # non-holders first: the holder's delivery finds the node
+    answers = {n: ask(seeded, n, "who_is", '"Who is missing?"') for n in people}
     st = seeded.state
     for n, a in answers.items():
         if n == core:
@@ -134,6 +139,9 @@ def test_a_story_role_goes_to_the_case_graph(seeded: Any) -> None:
             assert a.willingness is not None
     assert any(a.pointer == core for a in answers.values())
     assert cases(st)[case["id"]]["nodes"][0]["found"] is True
+    for n in people:  # found: never delivered or pointed at again (DL-12-103; 232941 t5)
+        again = ask(seeded, n, "who_is", '"Who is missing?"')
+        assert again.fact_id is None and again.pointer is None and again.willingness is not None
 
 
 def test_who_is_a_role_is_cast_and_the_dm_side_points_until_told(seeded: Any) -> None:

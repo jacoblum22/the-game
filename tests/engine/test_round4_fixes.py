@@ -36,6 +36,8 @@ def _open(tmp_path: Path, name: str) -> tuple[Store, dict[str, dict[str, list[An
     said: dict[str, dict[str, list[Any]]] = {}
     for tid, role, resp in con.execute("select turn_id, role, response from model_calls order by row_id"):
         data = json.loads(resp)["data"]
+        if role == "reader":
+            data.pop("rests_on", None)  # the field spec 021 retired (PR-12-12: code finds the triggers)
         for b in data.get("beats", []) if role == "reader" else ():
             b["change"].setdefault("description", None)  # the slot spec 018 added (null: an id fits, or none)
             b.setdefault("how", None)  # the method words spec 020 added (null: none verbatim)

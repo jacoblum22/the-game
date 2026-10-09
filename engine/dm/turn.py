@@ -428,8 +428,9 @@ def _fiction_questions(ctx: TurnContext, rec: AdjudicationRecord, questions: Seq
 
         who = who_answer(ctx, q.predicate)  # "who is X?": the case graph or casting, never a yes/no (PR-12-10)
         if who is not None:
-            rec.oracle.append(OracleEntry(question=q.predicate, answer=who[0], fact_id=who[1], subject=subject,
-                                          predicate=pred))
+            if who[0]:  # no one cast: nothing written, no line (DL-12-103)
+                rec.oracle.append(OracleEntry(question=q.predicate, answer=who[0], fact_id=who[1], subject=subject,
+                                              predicate=pred))
             continue
         odds = q.odds_rung if q.odds_rung and q.odds_rung in rungs else "even"
         res = ask_oracle(OracleQuestion(subject=subject, predicate=pred, question=q.predicate, odds=odds, asker=pc),
