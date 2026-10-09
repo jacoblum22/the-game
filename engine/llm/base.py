@@ -116,7 +116,7 @@ class ModelInvalid(ModelError):
 
 SECTION_TITLES = {
     "instructions": "ROLE INSTRUCTIONS",
-    "core": "CORE RULES",
+    "core": "GUIDANCE",  # the role's guidance digest (12.2.4 item 1); the 00.15.4 core is not sent (DL-00-07)
     "cards": "RULE CARDS",
     "view": "NARRATOR VIEW",
     "exchanges": "RECENT EXCHANGES",

@@ -27,7 +27,7 @@ def _beat(intent: str, method: str, verb: str, target: str, change: dict[str, st
           purpose: str = "own_change", against_will: bool = False, verbs: tuple[str, ...] = (),
           pressure: str = "none") -> dict[str, Any]:
     slots = {**change, "description": None}  # the Reader slot DL-12-97 added (spec 018); null: an id fits, or none
-    return {"against_will": against_will, "assertion": None, "change": slots, "g4_fact": None, "intent": intent,
+    return {"against_will": against_will, "assertion": None, "change": slots, "g4_fact": None, "how": None, "intent": intent,
             "intent_verbs": list(verbs), "method": method, "pressure": pressure, "purpose": purpose, "shape": shape,
             "speech": verb == "verb.talk", "target": target, "uses_power": False, "verb": verb}
 
@@ -140,7 +140,7 @@ def test_fighter_turn_4_demand_their_story_runs_after_the_offer(tmp_path: Path) 
     ctx = _game(tmp_path, "plan_fighter_turn4.db.gz", FIGHTER_4, faces=[19, 19, 19])
     res = run_turn(ctx, " ".join(p["text"] for p in FIGHTER_4["parts"]))
     assert res.pause is not None and res.pause.detail["stage"] == "offer"
-    assert "Then: walk up to the refugees and demand they tell their story" in _blocks(res, "OFFER")[0]
+    assert "Then: make the refugees tell their story" in _blocks(res, "OFFER")[0]  # the goal (spec 020)
     assert [q["when"] for q in res.pause.detail["queued"]] == ["conditional"]
     out = [answer_pause(ctx, "commit")]
     while out[-1].pause is not None and out[-1].pause.detail.get("stage") == "offer":
@@ -170,7 +170,7 @@ def test_a_plan_stops_and_asks_when_the_pc_goes_down(tmp_path: Path, monkeypatch
         res = pl.run_beats(env_for(dock, tx, rng, framer=fr), plans)
     assert [o.status for o in res.outcomes] == ["no_roll"]
     assert res.pause is not None and res.pause.detail["stage"] == "plan"
-    assert res.pause.prompt == "You are down. Still go on to look around 2?"
+    assert res.pause.prompt == "You are down. Still go on: look around 2?"
     assert [c["id"] for c in res.pause.choices] == ["continue", "withdraw"]
     with dock.store.transaction("turn.2") as tx:  # stop: said, not run
         stop = pl.resume(env_for(dock, tx, rng, framer=fr), dock.state.open_pause(), "withdraw")  # type: ignore[arg-type]
@@ -187,7 +187,7 @@ def test_a_withdrawn_offer_asks_before_the_rest_and_go_on_runs_it(tmp_path: Path
         pl.run_beats(env_for(dock, tx, rng, framer=fr), plans)
     with dock.store.transaction("turn.2") as tx:
         res = pl.resume(env_for(dock, tx, rng, framer=fr), dock.state.open_pause(), "withdraw")  # type: ignore[arg-type]
-    assert res.pause is not None and res.pause.prompt == "That did not happen. Still go on to look at the ferry?"
+    assert res.pause is not None and res.pause.prompt == "That did not happen. Still go on: look at the ferry?"
     with dock.store.transaction("turn.3") as tx:
         res = pl.resume(env_for(dock, tx, rng, framer=fr), dock.state.open_pause(), "continue")  # type: ignore[arg-type]
     assert [o.status for o in res.outcomes] == ["no_roll"] and res.pause is None
@@ -196,7 +196,7 @@ def test_a_withdrawn_offer_asks_before_the_rest_and_go_on_runs_it(tmp_path: Path
 def test_talker_turn_14_the_carters_answer_before_the_move_to_the_gate(tmp_path: Path) -> None:
     """"... ask the other carters at the table if any of them have actually seen the barrels loaded. Then I head for
     the gate": the move resolved first and the NPC step ran at the gate, so no carter answered. The words said here
-    are answered here; the move waits on a one-line "Still go on to ...?"."""
+    are answered here; the move waits on a one-line "Still go on: ...?"."""
     ctx = _game(tmp_path, "plan_talker_turn14.db.gz", TALKER_14, faces=[19, 19])
     st = ctx.store.state
     inn = st.scene.place_id if st.scene else None
@@ -206,7 +206,7 @@ def test_talker_turn_14_the_carters_answer_before_the_move_to_the_gate(tmp_path:
     assert res.pause.detail["said_first"][-1].startswith("ask the other carters")
     out = answer_pause(ctx, "commit")
     assert out.pause is not None and out.pause.detail["stage"] == "plan"
-    assert out.pause.prompt == "Still go on to walk from the back table to the gate?"
+    assert out.pause.prompt == "Still go on: go to the ford?"  # the typed goal (DL-01-39), never the raw method
     assert any(p.cls == "SPEECH" and p.text.startswith("ask the other carters") for p in out.record.parts)
     answered = [a for a in out.record.npc_actions if a.npc.startswith("npc.")]
     assert answered, "a carter at the table answers (T5 ran in the inn)"

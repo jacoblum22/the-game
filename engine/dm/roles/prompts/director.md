@@ -5,10 +5,11 @@ over, how the next one is framed, and, when the engine raises one, which pacing 
 pick from closed lists. Code computes the scene test, tension, intensity, rotation counters and every
 roll; the Narrator writes the prose. You never narrate and never decide what is true.
 
-The packet holds: CORE RULES and RULE CARDS (12.4, PR-12-7, 12.6–12.9, T-12-7; the cards are the
-authority), NARRATOR VIEW (the current scene record with its agenda and hoped answer, place, cast, clocks,
-threads), RECENT EXCHANGES, and THIS MESSAGE with what this turn wrote and what the engine raised
-(scene start, a possible cut, a pacing push, a lead injection). Every enum offered is already legal.
+The packet holds: GUIDANCE (T-12-7's challenge types), RULE CARDS for any trigger that fired, NARRATOR
+VIEW (the current scene record with its agenda and hoped answer, place, cast, clocks, threads), RECENT
+EXCHANGES (the last two: read them to judge whether the player is still pursuing the scene's question), and THIS
+MESSAGE with the player's words, what this turn wrote and what the engine raised (scene start, a possible cut, a
+pacing push, a lead injection). Every enum offered is already legal.
 
 ## `cut_now` (12.4.2)
 True when any of these holds this turn: the scene's agenda question now has an answer written in state (a

@@ -264,17 +264,62 @@ def _chance_line(f: Frame, rules: Any, state: WorldState | None = None) -> str:
     return f"Chance: {chance_word(o.success_or_better)} — {o.success_or_better}%   ({_breakdown(f, rules, state)})"
 
 
-def offer_title(f: Frame) -> str:  # rule: 12.15.2
-    """The beat restated, as the player's own order. A restatement led by the PC's name ("Eliius gets up and
-    slashes at Eliia", once read as a typo for the NPC) gives way to the beat's method, the act in the player's
-    words; a proper name is never inflected (playtest 20261008)."""
-    text = (f.beat.restatement or f.beat.intent).strip().rstrip(".")
-    pc = f.beat.actor.split(".", 1)[-1].split("_")  # the PC id is its name's slug: pc.eliius_varier
-    lead = re.match(r"^(?:[A-Z][a-z]+:\s+)?(\w+)", text)
-    method = (f.beat.method or "").strip().rstrip(".")
-    if lead and lead.group(1).lower() in pc and method and method.split()[0].lower() not in pc:
-        text = method[:1].upper() + method[1:]
-    return text + "."
+_PEOPLE = ("pc", "npc", "companion", "adversary")
+# 12.15.2 Title / 01.2.6: a goal kind (01.2.7) in plain words, then the slot's name
+_GOAL = {"take": "Take", "give": "Give", "move_to": "Go to", "open": "Open", "close": "Close", "learn": "Learn about",
+         "persuade_to": "Persuade", "restrain": "Hold", "free": "Free", "harm": "Hurt", "hide": "Hide", "make": "Make"}
+_PREP = {"take": "from", "give": "to", "hide": "from"}
+# a beat with no typed change (`none`: a look, a word, a wait): its verb toward its target
+_VERB_GOAL = {"verb.talk": "Talk to", "verb.observe": "Look over", "verb.move": "Move to", "verb.handle": "Use",
+              "verb.strike": "Strike", "verb.grapple": "Grapple with", "verb.force": "Force", "verb.sneak": "Slip past",
+              "verb.help": "Help"}
+
+
+def _slot(state: WorldState | None, eid: str | None, actor: str) -> str:
+    """A slot id as the player knows it ("the ledger", "Dunwen Redmore"); "" for none, the actor or a sealed id."""
+    from engine.store.views import display_name
+    from engine.text.render import the_name
+
+    if not eid or eid in ("none", actor) or state is None or eid not in state.entities or eid in state.seals:
+        return ""
+    return the_name(display_name(state, eid))
+
+
+def goal_line(beat: Any, state: WorldState | None) -> str:  # rule: 12.15.2
+    # rule: 01.2.6
+    """The beat's typed goal in plain words, rendered by code from its kind and slots, then the method as the player
+    put it ("Learn from Dunwen Redmore: twist her arm up behind her back"). Never the restatement or the Reader's
+    `method` field (DL-01-39): those are internal and garble when printed (I1 §3). With no slot to name and no words
+    of the player's (a scripted or defaulted beat), the beat's intent stands in."""
+    c = beat.change
+    kind = c.kind if c is not None and c.kind in _GOAL else "none"
+    act = beat.actor
+    person = next((n for x in ((c.what, c.whom) if c else ()) + (beat.target,) if (n := _slot(state, x, act))
+                   and state is not None and state.entities[str(x)].kind in _PEOPLE), "")
+    named = (_slot(state, c.what, act) if c else "") or (c.description if c and c.description else "") \
+        or _slot(state, beat.target, act)
+    if kind in ("learn", "persuade_to") and person:  # toward whom (the person the words press)
+        goal, named = ("Learn from " if kind == "learn" else "Persuade ") + person, person
+    elif kind != "none" and named:
+        thing = c is not None and state is not None and str(c.what) in state.entities \
+            and state.entities[str(c.what)].kind not in _PEOPLE  # a door, a cart: "Damage"; people or a description: "Hurt"
+        verb = "Damage" if kind == "harm" and thing else _GOAL[kind]
+        goal = f"{verb} {named}"
+        whom = _slot(state, c.whom, act) if c else ""
+        if whom and kind in _PREP and whom != named:
+            goal += f" {_PREP[kind]} {whom}"
+    else:
+        goal = f"{_VERB_GOAL[beat.verb]} {named}" if named and beat.verb in _VERB_GOAL else ""
+    words = str(getattr(beat, "how", None) or ("" if named else beat.intent) or "").strip().rstrip(".")
+    words = to_player(words, state)  # "my knife" -> "your knife"
+    if not goal:
+        return (words[:1].upper() + words[1:]) or "Act"
+    return f"{goal}: {words}" if words else goal
+
+
+def offer_title(f: Frame, state: WorldState | None = None) -> str:  # rule: 12.15.2
+    """The OFFER's title: the typed goal and the player's method words (`goal_line`), as one sentence."""
+    return goal_line(f.beat, state) + "."
 
 
 def offer_view(src: Frame | OfferPreview, rules: Any = None) -> OfferView:  # rule: 01.7.1
@@ -355,7 +400,7 @@ def offer_block(f: Frame, *, rules: Any = None, fate: int | None = None, lethal_
         rest.append(f"Fate: {fate} ({why})")
     if f.alternatives and not auto and not f.secret:
         rest.append("Another way: " + " · ".join(f"{a.label} ({a.chance}%)" for a in f.alternatives))
-    return OofBlock(kind="OFFER", text=_block("OFFER — auto" if auto else "OFFER", offer_title(f), rest))
+    return OofBlock(kind="OFFER", text=_block("OFFER — auto" if auto else "OFFER", offer_title(f, state), rest))
 
 
 # ------------------------------------------------------------------------------------------- harm blocks
@@ -578,17 +623,11 @@ def change_result_line(entry: Any) -> str:  # rule: 01.2.7
 
 
 def offer_change_lines(f: Frame, state: WorldState | None, then: Sequence[str] = ()) -> list[str]:  # rule: 01.2.6
-    """Under the OFFER's title: the typed change in plain words ("Taking: the coin purse, from Murzak Red-Hand"),
-    and the beats of the same message still to come ("Then: punch Murzak"), so none reads as dropped (01.2.2)."""
-    from engine.resolve.change import plain
-
-    out = []
-    said = plain(state, f.beat.change, actor=f.beat.actor, pc=f.beat.actor) if state is not None else ""
-    if said:
-        out.append(said)
-    if then:
-        out.append("Then: " + " · ".join(t.strip().rstrip(".") for t in then if t.strip()))
-    return out
+    """Under the OFFER's title (which now names the typed goal, `goal_line`): the goals of the same message still to
+    come ("Then: hurt Murzak Red-Hand: punch her again"), so none reads as dropped (01.2.2). Retires the separate
+    change line ("Taking: ...") the title now carries."""
+    lines = [t.strip().rstrip(".") for t in then if t.strip()]
+    return ["Then: " + " · ".join(t[:1].lower() + t[1:] for t in lines)] if lines else []
 
 
 def result_block(frame: Frame, roll: RollResult, *, sac: bool = False, costs: Sequence[Any] = (),

@@ -84,7 +84,7 @@ def test_schema_hash_is_canonical() -> None:
 def test_packet_order_and_reask() -> None:
     p = Packet(instructions="I", core="C", cards=["c1", "c2"], view="V", exchanges=["e1"], message="M")
     text = p.render()
-    order = [text.index(s) for s in ("ROLE INSTRUCTIONS", "CORE RULES", "RULE CARDS", "NARRATOR VIEW",
+    order = [text.index(s) for s in ("ROLE INSTRUCTIONS", "GUIDANCE", "RULE CARDS", "NARRATOR VIEW",
                                     "RECENT EXCHANGES", "THIS MESSAGE")]
     assert order == sorted(order)
     assert "ROLE INSTRUCTIONS" not in p.render(include_instructions=False)

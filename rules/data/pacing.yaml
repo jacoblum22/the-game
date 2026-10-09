@@ -32,7 +32,7 @@ packet:                                   # 12.2.4
     scene_cards: 300                      # up to max_scene_cards cards from outside the verbatim window, ~150 tokens each (12.4.8 step 9) [revision: R2-E]
   spotlight_k: 4                          # 12.2.4 item 3: message names, beat target, last delivery, agenda thread, one hop (OEQ-12-21) [revision: R2-E]
   max_scene_cards: 2                      # 12.2.4 item 3 (OEQ-12-22) [revision: R2-E]
-  max_loaded_cards: 12                   # beyond the core; priority: triggers > anchors > situation cards by specificity
+  max_loaded_cards: 12                   # cards code knows apply, beyond the guidance digest: triggers > anchors and extra (situation cards retired) [revision: spec 020] [DL-12-104]
   verbatim_exchanges: 4                   # player message + DM response pairs kept verbatim (OEQ-12-1)
   current_message: verbatim_complete
   calendar_line: pinned_first            # 12.2.4 item 3 [revision: R2-H] [DL-12-95]: day, month, season, watch, weather; first in the scene header, outside every budget

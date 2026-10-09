@@ -3,10 +3,11 @@
     packet = build_packet(Role.READER, instructions=text, cards=load_cards_for(...), view=state,
                           exchanges=last_exchanges, message=player_text, triggers=active, quiet_turns=2)
 
-Order: role instructions -> always-loaded core (00.15.4 cards) -> loaded cards, stable to volatile (at most
-`pacing.yaml#packet.max_loaded_cards`, 12; more is a caller error) -> the active-trigger list, then the narrator
-view -> the last `packet.verbatim_exchanges` (4) exchanges verbatim -> this message verbatim. Stable sections
-come first, for prompt caching: nothing volatile precedes the view (DL-12-38).
+Order: role instructions -> the role's guidance digest (12.2.4 item 1, in the `core` slot, titled GUIDANCE; the
+00.15.4 core is never sent, DL-00-07) -> the cards code knows apply, stable to volatile (at most
+`pacing.yaml#packet.max_loaded_cards`, 12; more is a caller error) -> the active-trigger list, then the role's view
+-> the role's exchanges verbatim (`ROLE_EXCHANGES`: Director 2, World 1, else `packet.verbatim_exchanges`, 4) -> this
+message verbatim. Stable sections come first, for prompt caching: nothing volatile precedes the view (DL-12-38).
 
 `view` may be a `WorldState` (rendered with `scene_view` + `render_view`), a narrator-view dict (rendered), or a
 pre-rendered string. The rendered view is scene-scoped and held to per-section token budgets
@@ -23,10 +24,10 @@ import re
 from collections.abc import Iterable, Mapping, Sequence
 from typing import Any
 
-from engine.build.compile_cards import CardIndex, RuleCard
+from engine.build.compile_cards import RuleCard
 from engine.data.loader import load_rules
 from engine.llm.base import Packet, Role
-from engine.retrieve.cards import core_cards, max_cards
+from engine.retrieve.cards import guidance_digest, max_cards
 from engine.retrieve.episodes import card_lines, cards_for
 from engine.retrieve.scene import (
     CAST_KINDS,
@@ -49,6 +50,8 @@ from engine.store.projection import WorldState
 from engine.store.views import display_name, name_known, narrator_view
 
 VERBATIM_EXCHANGES = 4  # fallback; the rules value is pacing.yaml#packet.verbatim_exchanges
+# 12.2.4's role table [DL-12-104]: the conversation a role's judgment needs (the Checker's is spec 019's)
+ROLE_EXCHANGES = {Role.DIRECTOR: 2, Role.WORLD: 1}
 MAX_DATA_KEYS = 12
 MAX_VALUE_CHARS = 160
 WATCHES = ("morning", "afternoon", "evening", "night")
@@ -122,6 +125,7 @@ def scene_view(state: WorldState, focus: Iterable[str] = (), *, spot: Sequence[s
     view["entities"] = [e for e in view["entities"] if e["id"] not in by_id or e["id"] in full]
     rest = {i: _label(by_id[i]) for i in ranked if i not in full}
     view["also_here"] = also_here(rest, budget["cast_line"]) if rest else ""
+    view["also_here_ids"] = list(rest)  # their identity lines (12.2.4 item 3)
     view["spotlight"] = [ln for i in fit(list(spot), lambda i: tokens("\n".join(spot_lines(state, i))),
                                          budget.get("spotlight", 400)) for ln in spot_lines(state, i)]
     if cards:
@@ -178,12 +182,58 @@ def view_ctx(message: str = "", exchanges: Sequence[Any] = (), focus: Iterable[s
              beat: Any = None, *, plain: bool = True) -> dict[str, Any]:
     """The `view_for` context from a packet's own parts: the player's words (the `THE PLAYER'S MESSAGE:` line of a
     Narrator or Director message; else the whole message when it is the player's own, `plain`), the last delivery
-    (the last exchange's DM part)."""
+    (the last exchange's DM part), and the recent exchanges' text (`talk`: whom they name gets an identity line)."""
     said = _PLAYER_SAID.search(message)
     last = list(exchanges)[-1] if exchanges else ""
     dm = last if isinstance(last, str) else (list(last) + ["", ""])[1]
     words = said.group(1) if said else message if plain else ""  # a scene opening's setting names no one asked
-    return {"message": words, "last_delivery": str(dm or ""), "focus": list(focus), "beat": beat}
+    talk = "\n".join(render_exchange(e) for e in exchanges)
+    return {"message": words, "last_delivery": str(dm or ""), "focus": list(focus), "beat": beat, "talk": talk}
+
+
+def identity_lines(state: WorldState, ids: Iterable[str] = (), text: str = "") -> list[str]:  # rule: 12.2.4
+    """12.2.4 item 3 (`pacing.yaml#packet.identity_lines: named_or_mentioned`): one line for each person in `ids` or
+    named in `text`, present or absent: the name as the PC knows it, their pronouns and the PC's bond to them
+    (02.9.2's `bond.` facts), so no call writes or reads around who someone is (I2 §2, §4). Never the PC, never a
+    sealed person (INV-10).
+    ponytail: capped at 12 lines; a budget key if casts grow past it"""
+    from engine.retrieve.scene import resolve_names
+
+    pc = pc_id(state)
+    bonds = {f.value["npc"]: str(f.value.get("kind") or "bond") for f in state.facts.values()
+             if f.subject == pc and f.predicate.startswith("bond.") and isinstance(f.value, dict)
+             and f.value.get("npc") and state.current_fact_id(f.subject, f.predicate) == f.id}
+    out: list[str] = []
+    named: list[str] = [*ids, *(resolve_names(state, text) if text else [])]
+    for eid in dict.fromkeys(named):
+        e = state.entities.get(eid)
+        if e is None or eid == pc or eid in state.seals or e.kind not in CAST_KINDS or len(out) >= 12:
+            continue
+        bits = [str(e.data.get("pronouns") or "pronouns not recorded")]
+        if eid in bonds:
+            bits.append(f"your {bonds[eid]}")
+        out.append(f"  - {display_name(state, eid)}: {'; '.join(bits)}")
+    return out
+
+
+def _touched_threads(state: WorldState, threads: Mapping[str, Any], focus: Iterable[str], words: str) -> dict[str, Any]:
+    # rule: 12.2.4
+    """12.2.4 item 3 (`lead_line: when_new_or_relevant`): a thread's lead line only when the lead is new this turn
+    or the turn touches it (it or the entity it points to is in focus or the spotlight, or the player's words share
+    a content word with it); not in every packet (I1 §5: the levy line copied into 5 of 14 turns).
+    ponytail: one shared content word counts as "asked about"; a stray match only costs one line of context"""
+    from engine.audit.text import content
+
+    near = set(focus)
+    said = content(words)
+    out: dict[str, Any] = {}
+    for tid, name in threads.items():
+        e = state.entities.get(tid)
+        new = e is not None and e.introduced_at is not None and e.introduced_at == state.time.now
+        points = (e.data.get("points_to") if e is not None else None) or None
+        if new or tid in near or points in near or content(f"{name} {e.data.get('text', '') if e else ''}") & said:
+            out[tid] = name
+    return out
 
 
 def _slim(e: Mapping[str, Any], keys: Iterable[str] = ("role", "aliases", "pronouns")) -> dict[str, Any]:
@@ -222,6 +272,8 @@ def view_for(role: Role, state: WorldState, ctx: Mapping[str, Any] | None = None
     spot = spotlight(state, str(ctx.get("message") or ""), str(ctx.get("last_delivery") or ""), ctx.get("beat"))
     view = scene_view(state, focus, spot=spot, cards=role in (Role.NARRATOR, Role.DIRECTOR, Role.WORLD))
     pc = pc_id(state)
+    if role in (Role.NARRATOR, Role.WORLD):  # the Director keeps every thread: picking leads is its job
+        view["threads"] = _touched_threads(state, view["threads"], [*focus, *spot], str(ctx.get("message") or ""))
     if role == Role.NARRATOR:
         view = _no_motives(view)
     elif role == Role.READER:
@@ -246,6 +298,12 @@ def view_for(role: Role, state: WorldState, ctx: Mapping[str, Any] | None = None
                        "positions": {k: v for k, v in view["positions"].items() if k == pc},
                        "licenses": {}, "quantities": {}, "conditions": []}
     text = render_view(view)
+    if role == Role.NARRATOR:  # 12.2.4 item 3: who everyone here, in the spotlight or named is
+        people = [e["id"] for e in view["entities"] if e["id"] in state.entities]
+        lines = identity_lines(state, [*people, *spot, *(view.get("also_here_ids") or [])],
+                               f"{ctx.get('message') or ''}\n{ctx.get('talk') or ''}")
+        if lines:
+            text += "\npeople here or named (name: pronouns; their tie to you):\n" + "\n".join(lines)
     if role == Role.READER:  # PR-12-12: testimony a beat may rest on (`rests_on`)
         from engine.dm.testimony import open_records
 
@@ -466,11 +524,6 @@ def render_card(card: RuleCard | str) -> str:
     return card if isinstance(card, str) else card.body.strip()
 
 
-def render_core(index: CardIndex | None = None) -> str:  # rule: 00.15.4
-    """The always-loaded core: the 00.15.4 cards, identical on every call (the cacheable prefix)."""
-    return "\n\n".join(c.body.strip() for c in core_cards(index))
-
-
 def render_triggers(triggers: Iterable[ActiveTrigger | str]) -> str:  # rule: 12.2.4
     """The active-trigger list: travels with every call at the head of the view, not in the core (DL-12-38)."""
     lines = [t if isinstance(t, str) else t.line() for t in triggers]
@@ -482,6 +535,14 @@ def render_exchange(ex: str | tuple[str, str] | Sequence[str]) -> str:
         return ex
     player, dm = (list(ex) + ["", ""])[:2]
     return f"Player: {player}\nDM: {dm}"
+
+
+def turn_exchanges(ctx: Any, n: int) -> list[tuple[str, str]]:  # rule: 12.2.4
+    """The last `n` exchanges before this turn, from the turn log (12.2.4's role table: the Director 2, the World 1;
+    DL-12-104), so a role whose prompt promises RECENT EXCHANGES gets them without its callers passing them."""
+    from engine.dm.turn import recent_exchanges
+
+    return recent_exchanges(ctx.store, ctx.turn_id, n) if ctx.turn_id else []
 
 
 def verbatim_exchanges(rules: Any = None) -> int:  # rule: 12.2.4
@@ -577,7 +638,6 @@ def build_packet(  # rule: 12.2.4
     notes: Iterable[str] = (),
     focus: Iterable[str] = (),
     rules: Any = None,
-    index: CardIndex | None = None,
     beat: Any = None,
 ) -> Packet:
     """One call's packet in contract order. Raises PacketError over the card cap.
@@ -601,11 +661,11 @@ def build_packet(  # rule: 12.2.4
     if quiet_turns is not None:
         extra.append(f"quiet_turns: {quiet_turns}")
     view_text = "\n".join(filter(None, [render_triggers(triggers), view_text, *extra]))
-    keep = verbatim_exchanges(rules)
+    keep = ROLE_EXCHANGES.get(role, verbatim_exchanges(rules))
     recent = list(exchanges)[-keep:] if keep > 0 else []
     return Packet(
         instructions=instructions,
-        core=render_core(index),
+        core=guidance_digest(role, rules),  # 12.2.4 item 1: the role's guidance, never the 00.15.4 core
         cards=[render_card(c) for c in cards],
         view=view_text,
         exchanges=[render_exchange(e) for e in recent],

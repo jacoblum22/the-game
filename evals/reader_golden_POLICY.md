@@ -39,7 +39,7 @@
 - **B2. Queued and conditional beats are not now-beats.** These are Ready beats such as "I'm ready if they draw" and
   "I attack if they keep stalling", and "if X, then Y" beats (12.2.2 dec. 3 shape; 01.14.4). They are skipped when a
   now-beat exists. A conditional with no other beat to wait on is this turn's beat (as `now_beats` reads 12.2.2).
-- **B3. A move is not a free activity.** Move is a basic verb (T-00-11) and is not in 00.12.6's closed list. A move
+- **B3. A move is not a free activity.** *(Superseded by B3', 2026-10-09, below.)* Move is a basic verb (T-00-11) and is not in 00.12.6's closed list. A move
   with an evident purpose of its own is its own Move beat (01.2.2: one beat per distinct (method, target, intended
   change); its split test passes because the words could still be said if the move failed). That purpose is getting
   somewhere: through a gate, over to a person or place, after someone, out of a room. If the move comes before the
@@ -54,7 +54,8 @@
   - attention: a tap on the shoulder, gently turning a face;
   - reach: stepping in to strike or grab. The 01.2.2 split test fails here, because the blow cannot be attempted as
     described without closing.
-- **B5. Touching a person or what they hold against their will is its own beat,** for example grabbing a collar,
+- **B5. Touching a person or what they hold against their will is its own beat,** *(Superseded by B5', 2026-10-09,
+  below: it encoded the act-by-act split rule 01.2.2 now retires.)* for example grabbing a collar,
   shoving, snatching or clamping a mouth. It has its own change: the person is held, moved or deprived. So it is the
   first beat when said first, even when words follow (01.2.2; 12.2.2 facet `against_will`).
 - **B6. Keeping up a state is not a new beat.** An already established grip or position ("I keep my grip on his arm")
@@ -83,7 +84,8 @@
 
 ### D. Facets and question kind on mixed messages
 
-- **D1. Facets belong to the first beat** (12.2.2 dec. 3 records them per beat).
+- **D1. Facets belong to the first beat** (12.2.2 dec. 3 records them per beat). *(Its walk-first and "words never
+  act on a body" bullets are revised by D1', 2026-10-09, below.)*
   - A Move beat followed by words has `speech` false. The words are another part.
   - A Talk beat has `speech` true and `against_will` false, threats included. Words never act on a body or property
     (12.2.2's definition of `against_will`).
@@ -184,3 +186,72 @@ Owner rulings on I-171..I-174 may move some of these lines. Until they do, the l
 
 The baselines `evals/baselines/reader_golden.txt` (the old engine's recorded answers) and `reader_golden_haiku.txt`
 were regenerated against the new labels. The `_run1`..`_run3` files are kept as history.
+
+## Revision 2026-10-09: one beat per goal (spec 020; rule 01.2.2 as revised by R2-J, DL-01-37)
+
+- **Why:** round 6 traced "the method rolled, not the goal" to three layers that all required the act-by-act split:
+  the Reader prompt, `reader.normalise`, and **this policy's B5**, which rewarded the split (I3 §6, I4 B; I-204). A
+  golden set that encodes the anti-pattern being fixed is a harness bug (handoff §3.3).
+- **How (blind, rule-first):** B3', B5', D1' and E below were written from 01.2.2, 01.2.7, 01.4.1, 12.2.2 dec. 3 and
+  DL-01-37 only. They were then applied to all 128 golden and held-out lines, and the goal-shape breadth set
+  (`evals/reader_goalshape.jsonl`, 35 lines) was written and labelled, **before** any Reader answer was run against
+  the new prompt. No baseline answer file (`evals/baselines/reader_*`) was opened during the relabel. The goal-shape
+  set's first five lines are the five single-goal coercion messages of I3 §6, copied verbatim from the saves' turn
+  inputs (`turns.input_verbatim`; the Reader's answers in those saves were not read).
+
+### Revised items
+
+- **B3'. A move is the method of what it serves, unless getting somewhere is itself a goal** (01.2.2: "I walk over
+  and ask the smith about the road" is one beat, the walk its method; 01.4.1: approaching someone or something
+  present is one no-roll step; DL-12-77: fine position is atmosphere).
+  - An approach to a person or thing **in the scene**, followed by words or an act toward them, is that act's
+    method: no beat of its own. When it serves only plain SPEECH, the message has no beat.
+  - Going to **another place** (through a gate, into a building or room, out into an alley, after someone who has
+    left, down to the dock) is a goal of its own (`move_to`), its own beat, even when words or an act follow there:
+    what follows depends on arriving (shape `sequential`, 01.2.2).
+  - In a conflict, a move or leap ch.06 rolls separately stays a sequential beat before the goal's (DL-01-37,
+    provisional).
+- **B5'. Force on a person in service of a goal is that goal's method** (01.2.2: "I pin him to the wall and demand who
+  sent him" is one `learn` beat, its method force against his will). A grip, shove, twist, clamp or blade at the
+  throat that serves words pressing the person is part of the Talk goal's beat, with `against_will` true on it. It
+  is its own beat only when it **is** the goal: to hold them (`restrain`), to take what they hold (`take`), or to hurt
+  them (`harm`), as an end in itself. An act toward a **different** person than the words is a different goal
+  ("grab the child's token and stare Kerwin down": `take`, then `learn`).
+- **D1'. Facets of a goal beat.** `against_will` is true on the goal beat when its method acts on the person's body
+  or held property against their will (B5'), including a Talk goal pressed by force. `speech` is true when the goal
+  is pursued mainly through words, whatever the method. The covering verb of a Talk beat with `against_will` is
+  Grapple (00.12.3's `covering_verb`), so a coerced demand's verb label is Grapple. A walk that is the method of
+  words (B3') makes no beat, so its facets are not scored.
+- **E. Goals (new label `goals`).** The now-beats' change kinds, in the player's order (01.2.7): one entry per goal,
+  queued and conditional beats excluded (B2). `goals_alt` lists other readings the rule allows on a genuinely
+  ambiguous line; a Reader answer matching either is right. Scored on every line ([] for a line with no beat).
+
+### Label changes (128 lines reviewed; 11 changed, `goals` added to all)
+
+| Line | Field(s) | Old | New | Policy |
+|---|---|---|---|---|
+| g015 | change_kind, speech | restrain, False | learn, True | B5': the collar grab serves the demand |
+| g027 | verb, gate, necessity, change_kind | Move, G1, trivial, move_to | none (no beat) | B3': the walk to Seley (present) serves plain SPEECH |
+| g034 | verb, change_kind | Strike, harm | Grapple, free | B5': the stamp serves breaking the hold (06.5.2: break free is Grapple); goals `free, move_to` |
+| g049 | verb, change_kind, speech | Force, restrain, False | Grapple, learn, True | B5', D1': the shove serves the demand |
+| g050 | change_kind, speech | restrain, False | learn, True | B5': clamp and drag serve the demand |
+| g051 | change_kind, speech | take, False | learn, True | B5': the snatch forces the repeated question (alt: `take, learn`) |
+| g054 | change_kind, speech | restrain, False | persuade_to, True | B5': the grab serves the plea |
+| h009 | verb, gate, change_kind | Move, G1, move_to | none (no beat) | B3': the well is across the same square |
+| h012 | verb, gate, change_kind | Move, G1, move_to | none (no beat) | B3': the gatekeeper is present |
+| h028 | change_kind, speech | restrain, False | learn, True | B5': the grab presses the question |
+| h032 | verb, gate, change_kind | Move, G1, move_to | none (no beat) | B3': the captain is in the same hall |
+
+D1's walk-first rows were reviewed by B3': **g029** stays Move (the Blue Bell is another place, a building across the
+way) and **g027** changes (above). g002, g008, h010, h011, h013, h014 and h031 keep their Move first beat (another
+place, or a move with nothing to serve). g014 keeps `take` first: the token is the child's, the demand is Kerwin's
+(two people; alt `learn`).
+
+Multi-goal `goals` labels: g001 `learn, learn`; g002 `move_to, learn`; g005 `open, move_to`; g014 `take, learn`;
+g034 `free, move_to`; g040 `learn, make`; g058 `move_to, learn`; h014 `move_to, learn`. Every other line is its first
+beat's change kind, or [] with no beat.
+
+### Scorer
+
+`evals/reader_golden.py` scores `goals` on every line (the Reader's now-beat kinds after `normalise`, against
+`goals` or any `goals_alt`). `evals/reader_live.py --set goalshape` runs the breadth set.

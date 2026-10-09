@@ -55,7 +55,7 @@ def test_at_most_three_beats_the_rest_queued(tmp_path: Path) -> None:
     assert [o.status for o in res.outcomes] == ["no_roll"] * 3 and dock.state.time.now.beat == 3  # three beat_ends
     # 01.2.3: the fourth is confirmed, not run and not dropped (spec 017: the plan waits in the pause)
     assert res.pause is not None and res.pause.detail["stage"] == "plan"
-    assert res.pause.prompt == "That is three actions this turn. Still go on to look around 3?"
+    assert res.pause.prompt == "That is three actions this turn. Still go on: look around 3?"
     assert [q["beat"]["intent"] for q in res.pause.detail["queued"]] == ["look around 3"]
 
 

@@ -38,6 +38,7 @@ def _open(tmp_path: Path, name: str) -> tuple[Store, dict[str, dict[str, list[An
         data = json.loads(resp)["data"]
         for b in data.get("beats", []) if role == "reader" else ():
             b["change"].setdefault("description", None)  # the slot spec 018 added (null: an id fits, or none)
+            b.setdefault("how", None)  # the method words spec 020 added (null: none verbatim)
         said.setdefault(tid, {}).setdefault(role, []).append(data)
     con.close()
     return Store.open(path), said

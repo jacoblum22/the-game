@@ -12,7 +12,7 @@ from engine.data.loader import load_rules
 from engine.dm.packet import PacketError, build_packet, render_view, scene_view
 from engine.llm.base import Role
 from engine.llm.offline import OfflineModel, view_names
-from engine.retrieve.cards import load_cards_for
+from engine.retrieve.cards import guidance_digest, load_cards_for
 from engine.retrieve.scene import tokens
 from engine.retrieve.triggers import get_active_triggers
 from engine.store.db import Store
@@ -57,9 +57,12 @@ def packet_for(store: Store, role: Role, exchanges, message: str = "I ask Mara V
 def test_sections_come_in_contract_order(tmp_path: Path) -> None:
     store = scene_store(tmp_path)
     p = packet_for(store, Role.READER, [EXCHANGE])
-    assert [k for k, _ in p.sections()] == ["instructions", "core", "cards", "view", "exchanges", "message"]
+    # no trigger fired, so no card: the Reader's guidance, never the 00.15.4 core (12.2.4 item 1, DL-00-07)
+    assert [k for k, _ in p.sections()] == ["instructions", "core", "view", "exchanges", "message"]
+    assert p.core == guidance_digest(Role.READER, RULES)
     for core_id in ("T-12-1", "T-00-1", "00.12.3", "00.3.9", "00.3.14", "00.3.15"):
-        assert INDEX.get(core_id).body.strip() in p.core
+        assert INDEX.get(core_id).body.strip()[:200] not in p.render()
+    assert "[GUIDANCE]" in p.render() and "CORE RULES" not in p.render()
     assert "Active triggers" not in p.core and p.view.startswith("Active triggers: none\n")  # DL-12-38
     assert p.message == "I ask Mara Voss about the boat."
     assert p.render().endswith("I ask Mara Voss about the boat.")
@@ -154,8 +157,11 @@ def test_packet_size_does_not_grow_with_turn_count(tmp_path: Path) -> None:
         turn += 1
     assert store.state.last_seq >= 1000 and len(store.state.facts) > 900
     late = {r: len(packet_for(store, r, exchanges).render()) for r in Role}
+    # the cast list fills to its token budget as walk-ons are met, then stops: bounded (spec 020's packets are small
+    # enough without the core that this budget is more than 10% of some)
+    slack = 4 * RULES.pacing["packet"]["view_budget"]["known"]
     for role in Role:
-        assert late[role] <= early[role] * 1.1, (role, early[role], late[role])
+        assert late[role] <= early[role] * 1.1 + slack, (role, early[role], late[role])
     text = render_view(scene_view(store.state))
     shown = text.count("about pc.wren: memory_")
     assert text.count("\n  memory_") == 0 and 10 < shown < 60 and "memory_0003" not in text  # a budget, newest

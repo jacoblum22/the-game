@@ -1,17 +1,18 @@
 # Reader golden set (91 lines; 61 scored, 30 without an answer)
 
-- verb: 68.9% (42/61)
-- gate: 60.7% (37/61)
-- necessity: 73.8% (31/42)
+- verb: 63.9% (39/61)
+- gate: 59.0% (36/61)
+- necessity: 73.2% (30/41)
 - against_will: not scored
 - uses_power: not scored
 - speech: not scored
 - question_kind: not scored
 - change_kind: not scored
-- necessity as roll / no roll: 83.3% (35/42)
+- goals: not scored
+- necessity as roll / no roll: 82.9% (34/41)
 - issue lines (P-004 … P-123) verb: 64.3% (9/14), gate: 35.7% (5/14)
 
-## Misses (verb, gate): 43
+## Misses (verb, gate): 47
 - g004 verb: got verb.talk, want verb.strike  (I hold my sword on the travellers and step toward the neares)
 - g004 gate: got G3, want G1  (I hold my sword on the travellers and step toward the neares)
 - g005 verb: got verb.ready, want verb.handle  (I draw my arming sword, shove the wicket open and step out t)
@@ -24,4 +25,4 @@
 - g010 gate: got G1, want G2  (I gently turn the child's face toward me and say, "Hey. I'm )
 - g012 verb: got verb.recall, want verb.talk  (What do I know about the raven-feather token you wear? I low)
 - g012 gate: got G3, want G1  (What do I know about the raven-feather token you wear? I low)
-- … 31 more
+- … 35 more

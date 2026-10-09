@@ -16,11 +16,10 @@ from typing import Any
 from pydantic import BaseModel, Field
 
 from engine.dm.context import TurnContext
-from engine.dm.packet import WATCHES, build_packet
+from engine.dm.packet import WATCHES, build_packet, turn_exchanges
 from engine.dm.roles.prompts import load_prompt
 from engine.dm.schemas import NONE, SchemaContext, build_schema, defaults, schema_context
 from engine.llm.base import Role, call_role
-from engine.retrieve.anchors import scene_situation_tags
 from engine.retrieve.cards import load_cards_for
 from engine.retrieve.triggers import get_active_triggers
 from engine.store.projection import WorldState
@@ -63,8 +62,7 @@ def direct(ctx: TurnContext, *, situation: str, player_message: str = "", happen
     sctx = director_context(st, ctx.rules)
     schema = build_schema(Role.DIRECTOR, sctx)
     triggers = get_active_triggers(st, ctx.rules)
-    mode = st.scene.mode if st.scene else None
-    cards = load_cards_for(Role.DIRECTOR, scene_situation_tags(st, ctx.rules), mode, triggers, rules=ctx.rules)
+    cards = load_cards_for(Role.DIRECTOR, triggers=triggers, rules=ctx.rules)
     msg = [f"RAISED: {situation}"]
     named = [f"- {p}: {st.entities[p].name}" for p in sctx.places if p in st.entities]
     if named:  # the player names places in words; the enum holds ids
@@ -73,8 +71,8 @@ def direct(ctx: TurnContext, *, situation: str, player_message: str = "", happen
         msg.append(f"THIS TURN: {happened}")
     msg.append(f'THE PLAYER\'S MESSAGE: "{player_message}"' if player_message else "THE PLAYER'S MESSAGE: (none)")
     packet = build_packet(Role.DIRECTOR, instructions=load_prompt("director"), cards=cards, view=st,
-                          exchanges=[], message="\n".join(msg), triggers=triggers, quiet_turns=quiet_turns,
-                          rules=ctx.rules)
+                          exchanges=turn_exchanges(ctx, 2), message="\n".join(msg), triggers=triggers,
+                          quiet_turns=quiet_turns, rules=ctx.rules)
     res = call_role(ctx.model, Role.DIRECTOR, schema, packet, turn_id=ctx.turn_id, recorder=ctx.record_call,
                     default=lambda: defaults(Role.DIRECTOR, sctx) or {"cut_now": False, "next_scene": {}})
     d = dict(res.data)
