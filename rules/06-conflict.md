@@ -732,6 +732,15 @@ next rung, or an ability (01.18.8 "distinguish").
   target: 06.3.10.
 - **Ladder** (delivered reach): 1 → `cond.grabbed` S1; 2 → `cond.grabbed` S2; 3 → `cond.restrained`;
   4 → `cond.pinned`. The condition's source is the holder; its duration is `while` the hold lasts.
+- **The hold is state, not words** [revision: R2-J; DL-06-31]. Code applies the ladder's condition to the held one at
+  RECORD (T-06-10) and ends it only by the breaking-free and ending rules below. T-12-18's posture line ("held fast
+  by you") is the condition's visible face: written from it, cleared with it, never a second hold. No manner label
+  is written for the held one, and no scene label is a lever or snag (01.6.8); the condition's own entry is.
+- **The held one's turn.** A held adversary or NPC tries to break free first (06.9.4's "held → break free" row;
+  06.9.2; PR-06-6), and while the condition lasts its turn respects the condition's limits (T-06-10): no Move away
+  from the holder; restrained, Strikes only with `close_quarters` weapons and no Fend; pinned, only break free,
+  Talk, Endure and workings needing no hands. *Retires:* the hold kept as scene words while the foe's turn ignored
+  it (round 6, I3 §1: 8 of 13 foe hits landed while the foe was held).
 - **Holding** costs no action. The holder keeps one hand on the hold, cannot Move except by dragging
   (each transition costs +1 action, and the held one comes along if `grabbed` S2 or worse), and is
   itself engaged with the held one.
@@ -2181,7 +2190,8 @@ deltas):
 ### Edge cases
 
 - **Two beats in one sentence.** "I vault the table and stab him": a Move or Exert, then a Strike; two
-  actions; the second is framed after the first resolves (01.14.1). If the first fails the player may
+  actions (01.2.2's conflict clause: a move ch.06 prices with its own roll stays its own beat; outside a conflict
+  the walk or vault is the goal's method) [revision: R2-J; DL-01-37]; the second is framed after the first resolves (01.14.1). If the first fails the player may
   abandon the second at no cost.
 - **A beat that would cost more actions than remain.** It is not begun: the DM says what fits ("a
   heavy swing needs two; you have one: Defend, step, or a one-handed blow with the haft, hand rung").

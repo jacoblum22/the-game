@@ -14,7 +14,11 @@ schema_version: 1
 lifecycle: provisional
 
 packet:                                   # 12.2.4
-  core: [turn_loop_checklist (T-12-1), invariants (T-00-1), gate_classes (00.12.3), stakes_reach_lever_card (00.3.9, 00.3.14-15)]   # the active-trigger list heads the view [revision: R2-A]
+  core: [turn_loop_checklist (T-12-1), invariants (T-00-1), gate_classes (00.12.3), stakes_reach_lever_card (00.3.9, 00.3.14-15)]   # the active-trigger list heads the view [revision: R2-A]; the specification, not sent to model calls [revision: R2-J] [DL-00-07]
+  guidance_digest: per_role             # 12.2.4 item 1: a short digest for the call's own judgment [revision: R2-J] [DL-12-104]
+  situation_cards_by_tag: retired       # 12.2.4 item 2 [revision: R2-J] [DL-12-104]
+  identity_lines: named_or_mentioned    # 12.2.4 item 3: name, pronouns, bond; present or absent [revision: R2-J] [DL-12-104]
+  lead_line: when_new_or_relevant       # 12.2.4 item 3 [revision: R2-J] [DL-12-104]
   view_budget:                            # 12.2.4 item 3: tokens per view section (about 4 characters a token), not item counts [revision: R2-A]
     pinned: 400                           # written words, open commitments, active NPC memories (shown first; a hard cap: by that order, then newest) [revision: R2-A2]
     cast: 320                             # full profiles of the people present beyond the PC: beat target and named, most recently dealt with, then 12.6.6 weight [revision: R2-A2]
@@ -67,9 +71,12 @@ claim_check:                              # 12.3
   classes: [existence, identity, quantity, harm_condition, position, possession, location_time, knowledge, capability, clock, attitude, outcome, action, sealed]   # action: [revision: I-030] (16.13.3)
   verdicts: [supported, new_element, undetermined, contradicted, unsourced_change, overreach, leak, pc_agency]
   writable_verdicts: [new_element, undetermined]   # only these may cause a write (write-on-mention / Oracle); unsourced_change never
-  max_redrafts: 2                         # a redraft re-writes only the failing sentences (12.3.3) [revision: R2-B]
+  max_redrafts: 2                         # RETIRED by max_revisions [revision: R2-J] [DL-12-101]; read only by the per-sentence repair spec 019 removes
+  max_revisions: 1                        # 12.3.3: at most one revision, which sees the whole draft [revision: R2-J] [DL-12-101]
+  passage_side_list: [speech, new, covers]   # 12.3.1: one passage plus a side list; speech = {speaker, words, direct | reported} [revision: R2-J] [DL-12-101]
+  speech_quoted: true                     # 12.3.1a item 2: a direct speech stands inside quote marks; no first-person narrator-voice sentence [revision: R2-J]
   on_exhausted: cut_and_render            # 12.3.3: cut each still-failing sentence, render each uncited must-name item; the plain fallback when none passed; RulingRecord kind rule_conflict, review_flag true only if a line was rendered [revision: R2-B]
-  sentence_declaration: [text, refs, about, new, atmosphere]   # 12.3.1; refs = record handles (R1, R2...) + narrator-view fact ids, closed lists built from the packet [revision: R2-B]
+  sentence_declaration: [text, refs, about, new, atmosphere]   # RETIRED by passage_side_list [revision: R2-J] [DL-12-101];   # 12.3.1; refs = record handles (R1, R2...) + narrator-view fact ids, closed lists built from the packet [revision: R2-B]
   element_tiers: {furniture: T1a, feature: T1a, person: T1a, item: T1a, document: T1a, knowledge: T1b, clue: T2, hazard: T2, adversary: T2}   # 12.14.13; a person, item or document is T2 when 12.14.13's question is clearly true; an uncertain kind is T1a [revision: R2-B; revision: R2-G]
   voice: [narrator, speech]               # 12.3.1b: speech = quoted or reported words with a declared speaker; testimony [revision: R2-G] [DL-12-81]
   speech_checks: [speaker_present, speaker_not_pc, no_words_in_pc_mouth, not_a_repeat]   # the only checks on speech (not_a_repeat over the speaker's said records, 12.14.11 [revision: R2-H] [DL-12-90]); it is recorded as a `said` record on the speaker, never as a fact; season words are a precision check in both voices; no_words_in_pc_mouth covers words given to the PC inside an NPC's speech or its attribution [revision: R2-I] [DL-12-100]
@@ -320,7 +327,7 @@ details:                                  # 00.6.6a established details [revisio
         critical_failure: [{target: {manner: "on guard against {actor}"}}]
       verb.grapple:
         success:
-          - {actor: {held: "{target} in a grip"}, target: {posture: "held fast by {actor}", manner: "straining against {actor}"}}
+          - {actor: {held: "{target} in a grip"}, target: {posture: "held fast by {actor}"}}   # posture = the face of cond.grabbed, applied as a condition (06.5.2); no manner label [revision: R2-J] [DL-06-31]
           - {reach_min: 3, actor: {held: "{target} restrained"}, target: {posture: "restrained by {actor}"}}
           - {reach_min: 4, actor: {held: "{target} pinned"}, target: {posture: "pinned by {actor}"}}
         failure: [{target: {manner: "on guard against {actor}"}}]
@@ -379,7 +386,15 @@ feedback:                                 # 12.3.6, PR-12-11: the player's repor
   categories: [remembered_wrong, rule_wrong, contradiction, misread, ruling_question, other]   # ruling_question [revision: R2-H]
   evidence: [whole_transcript, fact_provenance, frame_cited_facts_and_rule_ids, claim_log]
   locate_call: retired                    # [revision: R2-H] [DL-12-94]: replaced by understand_call; code no longer pins a report first
-  understand_call:                        # PR-12-11 step 1: understand first, then verify
+  investigate:                            # PR-12-11 [revision: R2-J] [DL-12-105]: the Fixer role; its model is configuration (owner: Sonnet, 2026-10-09)
+    steps: {min: 3, max_steps: 6}         # a bounded read-only investigation before deciding
+    tools: [turn_record, entity_state_and_provenance, transcript_search, recompute_frame, coin_and_inventory_ledger, said_vs_record]
+    proposals: [set_fact, remove_fact, restore_as_of_turn, refund, deduct, rerender_display, take_back_to_turn, correct_testimony, explain]
+    validate: [mechanical_needs_record_evidence (INV-9), sealed_stays_sealed (INV-10), invariants (T-00-1), take_back_limit (12.5.8)]
+    one_snapshot: true                    # all complaints in one report, together
+    reply: [found, did, now_line]
+    never_pin_report_text: true
+  understand_call:                        # RETIRED by investigate [revision: R2-J] [DL-12-105]; read only by the code spec 022 replaces
     when: every_report
     reads: whole_transcript               # past transcript_budget_tokens: the scene cards plus search hits for the report's words
     transcript_budget_tokens: 30000
@@ -388,7 +403,7 @@ feedback:                                 # 12.3.6, PR-12-11: the player's repor
   answers: [corrected, explained, not_found]   # every report gets one in plain words; never "logged" alone; not_found offers "did you mean" with the nearest passage
   bias: {fiction: act, mechanics: explain}     # INV-9
   test_corpus: "the /fix lines of the persona runs (evals/playtests/*.findings.jsonl) beside planted cases (OEQ-12-26)"
-  outcomes: [correct, take_back, explain_with_quote, player_reading_wins, explain_and_log]
+  outcomes: [correct, take_back, explain_with_quote, player_reading_wins, explain_and_log]   # RETIRED fixed menu: investigate.proposals [revision: R2-J]
   player_wins_scope: [T0, T1a]            # incidental fiction only; mechanics and consequential content keep INV-9
   record: [id, time, turn, words, category, passage, evidence, outcome, writes, reverted]
   review_log: "saves/<campaign>.disputes.md"   # one block per dispute, newest last, beside the save
@@ -445,8 +460,10 @@ answer_ladder:                            # 12.10.8, PR-12-10 [revision: R2-D] [
 
 testimony:                                # PR-12-12, settling testimony when it matters [revision: R2-H] [DL-12-91]
   record: "said {speaker, turn, words, about, question}; settled: true | false with the fact id; never settled twice"
-  triggers: [acted_on, cited, travel, mechanics]   # closed (PR-12-12 step 1)
-  never_triggers: [heard, repeated, asked_about, contradicted_by_another_character]
+  triggers: [travel, cited, mechanical_input]   # closed (PR-12-12 step 1): only when the player acts on a specific claim; acted_on (rests_on) retired [revision: R2-J] [DL-12-102]
+  never_facts: [refusal, opinion, want, feeling, intention]   # PR-12-12 step 2: the call returns none [revision: R2-J] [DL-12-102]
+  state_claim_sees: [speaker, words, exchange, identity_lines]   # identity line = name, pronouns, bond of each person named (12.2.4 item 3) [revision: R2-J]
+  never_triggers: [heard, repeated, asked_about, relied_on_in_talk, contradicted_by_another_character]
   state_claim: "[J:enum] {subject, predicate, value} from the said words; it judges nothing else"
   routes:                                 # first that applies
     consequential: case                   # a case node, sealed fact, story role, thread knowledge or clue: true when the case holds it, else false; never delivers a clue
