@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Any
 
 from engine.data.loader import load_rules
-from engine.dm.npc_layer import ACTIVITY, REFUSING_ROWS, clamp_row, current_activity, role_key
+from engine.dm.npc_layer import ACTIVITY, clamp_row, current_activity, role_key
 from engine.dm.turn import play_turn
 from engine.llm.base import Role
 from engine.llm.offline import ScriptedModel
@@ -37,13 +37,20 @@ def test_a_role_finds_its_activity_cell() -> None:
     assert role_key(RULES, "lamplighter") == "other"
 
 
-def test_every_present_npc_has_an_activity_overwritten_never_appended(tmp_path: Path) -> None:
+def test_every_present_npc_has_an_activity_rolled_once_and_the_engaged_one_ends(tmp_path: Path) -> None:
+    """12.11.9 step 1 [revision: R2-H]: rolled once per scene for each present NPC; Tam, asked, engages and his
+    activity ends (not re-rolled); the watch's stays."""
+    from engine.dm.npc_layer import rolled_this_scene
+
     dock, ctx = setup(tmp_path, _model(2))
     out = play_turn(ctx, ASK)
     st = dock.state
     acts = {a.npc: a.activity for a in out.adjudication.record.activities if a.slot == ACTIVITY}
-    assert set(acts) == {dock.ferryman, dock.watch} and all(acts.values())
-    assert current_activity(st, dock.ferryman) == acts[dock.ferryman]
+    assert set(rolled_this_scene(st)) == {dock.ferryman, dock.watch}
+    assert dock.ferryman not in acts and current_activity(st, dock.ferryman) is None
+    assert current_activity(st, dock.watch) and acts.get(dock.watch, current_activity(st, dock.watch)) == \
+        current_activity(st, dock.watch)
+
     def rolls() -> int:
         return sum(1 for e in dock.store.events() if e.type == "fact_set" and e.source == "12.11.9")
 
@@ -53,12 +60,12 @@ def test_every_present_npc_has_an_activity_overwritten_never_appended(tmp_path: 
 
 
 def test_an_addressed_npc_always_answers_and_a_refusal_is_voiced(tmp_path: Path) -> None:
-    """Twelve seeds: Tam, asked by name, answers every time; a refusing row is said in his own voice."""
+    """Twelve seeds: Tam, asked by name, answers every time with one willingness line (PR-12-10 step 2); an
+    unwilling answer is a refusal in his own voice, never a talk wording."""
     from engine.dm.context import TurnContext
     from tests.engine.test_turn_adjudication import D20
     from tests.fixtures.scene_dock import build_dock
 
-    seen_refusal = False
     for seed in range(12):
         dock = build_dock(tmp_path / str(seed), seed=seed)
         ask = "Tam, what news from upriver?"  # touches none of his recorded wants or refusals: the table decides
@@ -67,13 +74,10 @@ def test_an_addressed_npc_always_answers_and_a_refusal_is_voiced(tmp_path: Path)
         rec = play_turn(ctx, ask).adjudication.record
         mine = [a for a in rec.npc_actions if a.npc == dock.ferryman]
         assert len(mine) == 1, (seed, rec.npc_actions)
-        row = int(str(mine[0].source_ref).rsplit(":", 1)[-1]) if mine[0].source == "table_row" else None
-        if row in REFUSING_ROWS:
-            seen_refusal = True
-            assert mine[0].action.startswith("refuses, in their own voice ("), mine[0].action
-        assert mine[0].tags[0] in ("greeting", "trade", "conversation")
-        assert dock.state.fact_value(dock.ferryman, "voice") or not mine[0].action.startswith("refuses")
-    assert seen_refusal  # the seeds cover a refusing row
+        band = next(t.split(":", 1)[1] for t in mine[0].tags if t.startswith("willingness:"))
+        assert mine[0].source_ref == "PR-12-10" and band in ("willing", "guarded", "unwilling")
+        assert mine[0].action.startswith("refuses") == (band == "unwilling"), mine[0].action
+        assert not any(w in mine[0].action for w in ("asks the PC something", "wants something first"))
 
 
 def test_the_same_seed_gives_the_same_responses(tmp_path: Path) -> None:
@@ -87,10 +91,12 @@ def test_the_same_seed_gives_the_same_responses(tmp_path: Path) -> None:
 
 
 def test_greeting_then_conversation(tmp_path: Path) -> None:
+    from engine.dm.npc_layer import practice_for, spoken_with
+
     dock, ctx = setup(tmp_path, _model(2), world_judge=False)
-    first = play_turn(ctx, ASK).adjudication.record.npc_actions
-    second = play_turn(ctx, ASK).adjudication.record.npc_actions
-    assert first[0].tags[0] in ("greeting", "trade") and second[0].tags[0] in ("conversation", "trade")
+    first = play_turn(ctx, ASK).adjudication.record
+    assert dock.ferryman in spoken_with(dock.state)  # the exchange is remembered: the next is a conversation
+    assert practice_for(dock.state, first, dock.ferryman, [dock.ferryman]) == "conversation"
 
 
 def test_the_world_role_is_asked_only_about_an_npc_with_recorded_motives(tmp_path: Path) -> None:

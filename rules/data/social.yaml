@@ -222,7 +222,7 @@ delivery:                  # T-15-5 (15.3.9)
   agreement_write: "npc.<id>.agreed: <act> with its due time"
   information:             # [revision: R2-D] [DL-15-39] questions put to an NPC (I-140b): items by T-01-6, each answered by PR-12-10
     rule: "a Talk, or a certain beat, that asks an NPC for information is a bundled beat (01.10): N questions, deliver_count(N, reach) (T-01-6) land in the player's rank, and each landed item is answered by PR-12-10: a consequential one by the case graph, any other in the NPC's own words within the willingness code sets; a single question is N = 1, so Limited and better land it. A certain beat (15.3.10) and a plain SPEECH question run at Standard. Failure: no item, the NPC's reply is a refusal or an evasion in their voice (12.11.9). [revision: R2-H; DL-12-90]"
-    ladder_depth: {1: [store, pack, pointer], 2: [store, pack, propose_and_ratify, pointer], 3: [store, pack, propose_and_ratify, pointer, volunteer], 4: [store, pack, propose_and_ratify, pointer, volunteer]}   # retired [revision: R2-H] [DL-12-90]: the ladder no longer sources speech; kept only until spec 013 removes its reader (engine/dm/answer.py)
+    # ladder_depth: removed with its reader engine/dm/answer.py [revision: spec 013] [DL-12-90]
     volunteer: "Great or better: the NPC adds one extra from their record (a want, a fear, a tie or a lead), as T-15-5 row 3"
 
 common_knowledge:          # 12.10.6(d), PR-12-10 rung 3 [revision: R2-D] [DL-12-60]

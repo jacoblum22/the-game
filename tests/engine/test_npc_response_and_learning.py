@@ -182,9 +182,13 @@ def test_a_successful_talk_delivers_what_the_npc_knows(tmp_path: Path) -> None:
         kind="what_like")
     b = out.adjudication.record.beats[0]
     assert b.degree in ("success", "critical_success") or b.gate_words.startswith("no roll")
-    assert len(b.learned) == 1 and "turn of the tide" in b.learned[0]  # the boat is not what was asked
-    assert fid in ctx.store.state.knowledge[dock.pc]
-    assert "the PC learns" in calls(model, Role.NARRATOR)[0].message
+    # spec 013 (PR-12-10 steps 2-4): an ordinary question is a willingness line; what Tam knows is on his speaker
+    # card and the narrator voices it; the PC learns that Tam said it (testimony), not the fact itself
+    lines = [a for a in out.adjudication.record.npc_actions if a.source_ref == "PR-12-10"]
+    assert b.learned == [] and len(lines) == 1 and lines[0].npc == dock.ferryman
+    msg = calls(model, Role.NARRATOR)[0].message
+    assert "SPEAKER CARD for Tam Harlan" in msg and "turn of the tide" in msg
+    assert fid not in ctx.store.state.knowledge.get(dock.pc, {})
     assert out.response.fiction == text and not out.response.flags.fallback_used
 
 
@@ -229,15 +233,15 @@ def test_a_failed_talk_delivers_nothing(tmp_path: Path) -> None:
 
 
 def test_what_the_store_lacks_is_answered_before_the_draft(tmp_path: Path) -> None:
-    """PR-12-10: nothing stored on what was asked: the ladder answers at RECORD (pack, propose and ratify, else a
-    pointer), so the narration says a declared answer and never settles one at the check."""
+    """PR-12-10 (spec 013): nothing stored on what was asked: code gives willingness only and the narrator answers
+    in Tam's words; the words are testimony (a said record), never a world fact."""
     text = '"The night boat leaves from the north stair," Tam Harlan says. What do you do?'
     dock, ctx, model, (_, out) = _talk_turn(tmp_path, [narr(text)], [chk(
         claim(0, "npc.tam_harlan", "knowledge", "knows", "the night boat leaves from the north stair"))],
         kind="where_is")
-    learned = out.adjudication.record.beats[0].learned
-    assert len(learned) == 1 and learned[0].startswith("Tam Harlan "), learned
-    assert learned[0] not in text  # the ladder's answer is the record's; the NPC's words are their own
+    lines = [a.action for a in out.adjudication.record.npc_actions if a.source_ref == "PR-12-10"]
+    assert len(lines) == 1 and lines[0].startswith("answers"), lines
+    assert lines[0] not in text  # the record gives willingness; the NPC's words are their own
     # spec 011: speech is testimony (12.3.1b item 1): delivered, kept as a said record, never written or judged
     assert out.response.fiction == text and any("north stair" in s["words"] for s in out.turn_record.said)
     assert not any("north stair" in str(f.value) for f in ctx.store.state.facts.values())
@@ -281,28 +285,21 @@ def test_a_failed_who_question_settles_nothing(tmp_path: Path) -> None:
     assert not any(f.predicate.startswith("who_is_") for f in dock.store.state.facts.values())
 
 
-def test_a_success_with_nothing_stored_still_gives_a_real_lead(tmp_path: Path, monkeypatch: Any) -> None:
-    """DL-12-44: the Oracle says Tam does not know; the answer is "does not know" plus who would (never empty)."""
-    from engine.resolve import oracle
-
-    monkeypatch.setattr(oracle, "shape_for", lambda *a: "no")
+def test_a_success_with_nothing_stored_is_never_a_runaround(tmp_path: Path) -> None:
+    """DL-12-90 (spec 013): no code pointer: the record never says "does not know ..., but X would"; Tam answers in
+    his own words within the willingness."""
     dock, rec = _asked(tmp_path, "Tam, what happened to the lighthouse keeper's lamp?",
                        "ask Tam Harlan what happened to the lighthouse keeper's lamp", kind="what_happened")
-    learned = rec.beats[0].learned
-    assert len(learned) == 1 and learned[0].startswith("Tam Harlan does not know"), learned
-    assert not any("concrete" in n or "plainly" in n for n in rec.notes)  # the narrator notes are retired
+    lines = [a.action for a in rec.npc_actions if a.source_ref == "PR-12-10"]
+    assert rec.beats[0].learned == [] and len(lines) == 1, (rec.beats[0].learned, lines)
+    assert "does not know" not in lines[0] and " would" not in lines[0].split(")")[-1]
+    assert not any(f.predicate.startswith("points_to.") for f in dock.store.state.facts.values())
 
 
-def test_a_successful_what_question_is_proposed_and_ratified(tmp_path: Path, monkeypatch: Any) -> None:
-    """212731-newcomer: Mauette 'knows what the shapes are' five times, every answer cut. Now the Proposer frames one
-    ordinary candidate and the Oracle settles it before the draft (PR-12-10 rung 3)."""
-    from engine.resolve import oracle
-
-    monkeypatch.setattr(oracle, "shape_for", lambda *a: "yes")
-    dock, rec = _asked(tmp_path, "Tam, what are those shapes out on the water?",
-                       "ask Tam Harlan what the shapes on the water are", kind="what_like")
-    learned = rec.beats[0].learned
-    assert len(learned) == 1 and learned[0].startswith("Tam Harlan tells you: "), learned
+def test_a_sealed_claim_after_a_failed_talk_is_a_new_element(tmp_path: Path) -> None:
+    """212731-newcomer: what the shapes are is not the narration's to settle after a failed Talk."""
+    dock, _ = _asked(tmp_path, "Tam, what are those shapes out on the water?",
+                     "ask Tam Harlan what the shapes on the water are", kind="what_like")
     sealed = lambda v: {"subject": dock.ferryman, "class": "sealed", "predicate": "what the shapes are",  # noqa: E731
                         "value": v}
     assert _check(dock, _talk_record(dock, degree="failure"), sealed("driftwood"))[0][0] == "new_element"
@@ -383,21 +380,20 @@ def _attendant(dock: Any) -> None:
 def test_an_npc_met_mid_scene_answers_and_a_refusal_is_legible(tmp_path: Path) -> None:
     # P-056: the World role saw only the framed cast, so the attendant never answered and nothing said why.
     # Spec 011 (I-176): no tag matches and his motives point to opposite rows, so the World fallback decides
-    world = {"responses": [{"npc": "npc.gilda", "want_engaged": "none", "refusal_engaged": "npc.gilda/refusal.1",
-                            "table_context": {"tags": []}}]}
-    model = ScriptedModel({Role.READER: [reader("SPEECH", PRAY)], Role.WORLD: [world],
+    # Spec 013: for speech the source gives willingness only (12.11.9 step 3, PR-12-10 step 2): his untagged motives
+    # match nothing, so no World call; the answer line is his and the narrator gets his speaker card
+    model = ScriptedModel({Role.READER: [reader("SPEECH", PRAY)],
                            Role.NARRATOR: [narr('Gilda keeps praying and lifts a hand: "Not now." What do you do?')],
                            Role.CHECKER: [chk()]})
     dock, ctx = setup(tmp_path, model)
     _attendant(dock)
     out = play_turn(ctx, PRAY)
     rows = out.adjudication.record.npc_actions
-    assert [(a.npc, a.source) for a in rows] == [("npc.gilda", "refusal")] and "world_fallback" in rows[0].tags
+    assert [(a.npc, a.source_ref) for a in rows] == [("npc.gilda", "PR-12-10")]
+    assert not calls(model, Role.WORLD)
     msg = calls(model, Role.NARRATOR)[0].message
-    assert "Gilda Underhill acts: refuses, in their own voice (" in msg and "will not break off his prayer" in msg
-    assert "show it plainly" in msg and "manner: grieving" in msg and "- present: Gilda Underhill" in msg
-    fb = plain_fallback(out.adjudication.record, names={"npc.gilda": "Gilda Underhill"})
-    assert "Gilda Underhill refuses" in fb.fiction
+    assert "Gilda Underhill acts: " in msg and "SPEAKER CARD for Gilda Underhill" in msg
+    assert "- present: Gilda Underhill" in msg
 
 
 def test_a_conversation_is_not_dead_air(tmp_path: Path) -> None:
@@ -427,6 +423,6 @@ def test_an_npc_who_asks_is_quoted(tmp_path: Path) -> None:
     ctx.rng.faces = [7]  # type: ignore[attr-defined]
     out = play_turn(ctx, hello)
     msg = calls(model, Role.NARRATOR)[0].message
-    assert "speaks in quoted words" in msg and "Never write that their words are lost" in msg
+    assert "answers in quoted words" in msg and "Never write that their words are lost" in msg
     assert out.response.fiction == text and not out.response.flags.fallback_used
     assert '"Who sent you down here at this hour?"' in out.response.fiction

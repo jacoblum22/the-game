@@ -1,11 +1,12 @@
-"""The default NPC layer (12.11.9; DL-12-43): code decides what each present NPC is doing and how an engaged one
-responds; the narrator voices it.
+"""The default NPC layer (12.11.9; DL-12-43, DL-12-93): code decides what each present NPC is doing and how an
+addressed or concerned one responds; the narrator voices it.
 
-    ensure_activities(ctx, record)          # step 1: every present NPC's activity this scene (T1c), as record lines
-    respond(ctx, record, beats, skip=foes)  # steps 2-5: the practice, each engaged NPC's response, as record lines
+    ensure_activities(ctx, record)          # step 1: activities rolled once per scene (optional material)
+    respond(ctx, record, beats, skip=foes)  # steps 2-5: the practice, each addressed or concerned NPC's response
 
-Every response is an `NpcActionEntry` (a must-name record line with a handle, engine/dm/handles.py), so the
-narration cites it instead of inventing an act. Draws go through the game's RNG, so a seeded replay reproduces
+An addressed NPC's response is an `NpcActionEntry` (a must-name record line with a handle, engine/dm/handles.py);
+a concerned bystander's is tagged `optional` (12.14.12). For speech the response is willingness only (PR-12-10
+step 2): the narrator chooses the words. Draws go through the game's RNG, so a seeded replay reproduces
 them. Wants and refusals are matched to the event by closed tags (social.yaml#event_tags; DL-12-87, I-176); the
 World role is only the fallback, when no tag matches and the NPC's motives point to opposite rows. A crowd's
 response that changes something is a scene fact `crowd_response` on the place, with a record line.
@@ -61,8 +62,11 @@ def current_activity(state: Any, npc: str) -> str | None:  # rule: 12.11.9
 
 
 def role_key(rules: Any, role: Any) -> str:  # rule: 12.11.9
-    """`tbl.npc_activity.by_role`'s key for a role: the role itself, else the first word of the `tbl.npc_role` row
-    that names it ("smith" → crafter), else `other`."""
+    """`tbl.npc_activity.by_role`'s key for a role: the role itself or its first word, else the first word of the
+    `tbl.npc_role` row that shares a content word with it ("smith" → crafter), else `other`; never another role's
+    cell (DL-12-93: "of" once matched "servant of a great house", so guild officers beat rugs in the hall)."""
+    from engine.audit.text import content
+
     cells = rules.table("tbl.npc_activity")["by_role"]
     words = re.findall(r"[a-z]+", str(role or "").lower())
     if not words:
@@ -71,21 +75,31 @@ def role_key(rules: Any, role: Any) -> str:  # rule: 12.11.9
         return " ".join(words)
     if words[0] in cells:
         return words[0]
+    have = content(" ".join(words))
     for row in rules.table("tbl.npc_role")["results"]:
         row_words = re.findall(r"[a-z]+", str(row["result"]).lower())
-        if row_words and row_words[0] in cells and any(w in row_words for w in words):
+        if row_words and row_words[0] in cells and have & content(" ".join(row_words)):
             return row_words[0]
     return "other"
 
 
+ROLLED = "npc.activity_rolled"  # meta {scene, npcs}: whose activity was rolled this scene (rolled once, DL-12-93)
+
+
+def rolled_this_scene(state: Any) -> list[str]:
+    v = state.meta.get(ROLLED) or {}
+    return list(v.get("npcs") or []) if state.scene is not None and v.get("scene") == state.scene.scene_id else []
+
+
 def ensure_activities(ctx: TurnContext, record: AdjudicationRecord) -> None:  # rule: 12.11.9
-    """Step 1: each present NPC without an activity this scene gets one rolled on `tbl.npc_activity` (role × watch,
-    d6 pairs) and written as its `activity` detail (a scene slot, 00.6.6a); then the record's scene-state lines are
-    rebuilt for whoever is present now (T-12-18: activity, posture, hold, manner, band to the PC), so a person who
-    left the scene this turn drops out."""
+    """Step 1: each present NPC whose activity has not been rolled this scene gets one on `tbl.npc_activity` (their
+    own role's cell, else `other`, × watch, d6 pairs), written as its `activity` detail (a scene slot, 00.6.6a);
+    never re-rolled that scene, so an activity ended by engagement stays ended. Then the record's scene-state lines
+    are rebuilt for whoever is present now (T-12-18): optional material (12.14.12), never a must-name line."""
     from engine.dm.roles.world import present_npcs
     from engine.dm.scene_state import lines
     from engine.store.details import write_detail
+    from engine.world.common import meta
     from engine.world.social import npc_field
 
     tx_ = ctx.need_tx()
@@ -96,50 +110,49 @@ def ensure_activities(ctx: TurnContext, record: AdjudicationRecord) -> None:  # 
     start = len(tx_.events)
     cells = ctx.rules.table("tbl.npc_activity")["by_role"]
     present = present_npcs(st)
-    for npc in present:
-        if current_activity(tx_.state, npc) is None and not is_animal(st, npc):  # people's tables, people only
+    done = rolled_this_scene(st)
+    new = [n for n in present if n not in done and not is_animal(st, n)]  # people's tables, people only
+    for npc in new:
+        if current_activity(tx_.state, npc) is None:
             key = role_key(ctx.rules, npc_field(st, npc, "role"))
             options = list(cells[key][WATCHES[st.time.now.watch % 4]])
             roll = ctx.rng.draw(6, f"activity of {npc} (12.11.9)", stream="npc", table_id="tbl.npc_activity")
             act = str(options[min((roll - 1) // 2, len(options) - 1)])
             tx_.add_all(write_detail(tx_.state, tx_.mint, npc, ACTIVITY, act, source="generation", because="12.11.9",
                                      rules=ctx.rules, visibility="shown").events)
+    if new:
+        tx_.add(meta(ROLLED, {"scene": st.scene.scene_id, "npcs": [*done, *new]}, "12.11.9"))
     record.add_writes(tx_.events[start:])
-    record.activities = lines(tx_.state, record.pc, present)
-    hide_stale(ctx, record, present)
+    record.activities = fresh_lines(ctx, record, lines(tx_.state, record.pc, present))
 
 
-def engaged_with_pc(ctx: TurnContext, record: AdjudicationRecord, present: Sequence[str]) -> set[str]:
-    # rule: 12.11.9
-    """Who is busy with the PC this turn: addressed, acting toward them (a response line), a beat's target, or a
-    foe in the running conflict."""
-    from engine.resolve.conflict import record as conflict
+def fresh_lines(ctx: TurnContext, record: AdjudicationRecord, acts: Sequence[Any]) -> list[Any]:  # rule: 12.14.11
+    """Optional scene-state material worth offering: all of it when a scene opens, else only a slot written this
+    turn (a new or changed activity, posture, hold or manner). An unchanged line is not offered again (12.14.11;
+    live run 20261008-173008: "the farmer's crate thump" every turn)."""
+    from engine.store.details import current
 
-    st = ctx.need_tx().state
-    out = set(addressed(st, record, present, said_words(ctx)))
-    out |= {a.npc for a in record.npc_actions} | {t for b in record.beats for t in b.targets}
-    out |= set(conflict(st).get("foes") or [])
-    return out & set(present)
+    if record.scene.started:
+        return list(acts)
+    written = {getattr(e.payload, "fact_id", None) for e in ctx.need_tx().events if e.type == "fact_set"}
+    return [a for a in acts if a.slot != "position" and (f := current(ctx.state, a.npc, a.slot)) is not None
+            and f.id in written]
 
 
-def hide_stale(ctx: TurnContext, record: AdjudicationRecord, present: Sequence[str]) -> None:  # rule: 12.14.11
-    # rule: 12.11.9
-    """The scene-state lines the narration is not shown again (they stay in the record, citable and checked):
-    a slot stated within `image_repeat_turns` of its `last_used` mark and not written this turn (12.14.11: an
-    unchanged line is not re-narrated), and the activity of someone engaged with the PC this turn (talking,
-    fighting: the engagement replaces it, 12.11.9 step 3)."""
-    from engine.dm.roles.narrator import _turn_n
+def end_activity(ctx: TurnContext, record: AdjudicationRecord, npc: str) -> None:  # rule: 12.11.9
+    """Step 1: an activity ends when the NPC engages (talks with or fights the PC, or responds with a deed); the slot
+    is cleared, so it is no longer scene state and never a lever (01.6.8). A response that writes a new activity
+    (T-12-18) supersedes it afterwards."""
+    from engine.store.details import write_detail
 
-    st = ctx.need_tx().state
-    window = int(((ctx.rules.pacing.get("narration") or {}).get("freshness") or {}).get("image_repeat_turns", 10))
-    now = _turn_n(ctx.turn_id)
-    busy = engaged_with_pc(ctx, record, present)
-    for a in record.activities:
-        ref = st.details.get(a.npc, {}).get(a.slot)
-        if a.slot == ACTIVITY and a.npc in busy:
-            a.hidden = "engaged"
-        elif ref is not None and now and 0 < now - ref.last_used <= window:
-            a.hidden = "stale"
+    tx_ = ctx.need_tx()
+    if current_activity(tx_.state, npc) is None:
+        return
+    res = write_detail(tx_.state, tx_.mint, npc, ACTIVITY, None, source="ruling", because="12.11.9",
+                       rules=ctx.rules, visibility="shown")
+    tx_.add_all(res.events)
+    record.add_writes(res.events)
+    record.activities = [a for a in record.activities if not (a.npc == npc and a.slot == ACTIVITY)]
 
 
 def said_words(ctx: TurnContext) -> str:
@@ -178,7 +191,12 @@ def _spans(text: str, phrase: str) -> list[tuple[int, int]]:
 # words that turn the PC's words to someone: "ask the neighbour", "turn to Nero", "walk over to the officer"
 _ADDRESS = re.compile(r"\b(?:ask|asks|asking|tell|tells|say to|says to|question|questions|greet|greets|address|"
                       r"addresses|call to|calls to|(?:turn|turns|walk|walks|step|steps|go|goes|come|comes|head|heads|"
-                      r"lean|leans|cross|crosses)(?:\s+(?:back|over|up|across))?\s+to(?:ward)?)\s+$", re.I)
+                      r"lean|leans|cross|crosses|sit|sits)(?:\s+[\w'-]+){0,3}?\s+(?:to(?:ward)?|beside))\s+$", re.I)
+# the narration turns to someone described ("turn to the baker's queue", "ask the nearest person in line")
+_TURNS_TO = re.compile(r"\b(?:ask\w*\s+(?:the|a|an|someone|anyone)|approach\w*\s+(?:the|a|an)|(?:turn|walk|step|go|"
+                       r"head|cross|sit)\w*(?:\s+[\w'-]+){0,3}?\s+(?:to|toward|beside)\s+(?:the|a|an))\b", re.I)
+# a name opening the quoted words is spoken to ("Zitok, isn't it?"; live run 20261008-170802, spec 013)
+_VOCATIVE = re.compile(r"[\"“]\s*$")
 
 
 def named_in(state: Any, text: str, present: Sequence[str]) -> list[str]:  # rule: 12.11.9
@@ -191,25 +209,61 @@ def named_in(state: Any, text: str, present: Sequence[str]) -> list[str]:  # rul
                                        for o in hits)]
     first: dict[str, tuple[int, int]] = {}
     for s, _, n in hits:
-        k = (0 if _ADDRESS.search(text[:s]) else 1, s)
+        k = (0 if _ADDRESS.search(text[:s]) or _VOCATIVE.search(text[:s]) else 1, s)
         first[n] = min(first.get(n, k), k)
     return sorted(first, key=lambda n: first[n])
 
 
+def _looks(state: Any, npc: str) -> set[str]:
+    """The content words a player may describe `npc` by: their label and role, their detail, their scene state
+    (activity, posture, hold) and woman or man by pronouns."""
+    from engine.audit.text import content
+    from engine.store.details import current
+    from engine.store.views import unnamed_label
+
+    e = state.entities[npc]
+    pron = str(e.data.get("pronouns") or "")
+    bits = [unnamed_label(e), str(e.data.get("role") or ""), str(e.data.get("detail") or ""),
+            "woman" if pron.startswith("she") else "man" if pron.startswith("he") else "",
+            *(str(f.value) for slot in ("activity", "posture", "held") if (f := current(state, npc, slot)) and f.value)]
+    return content(" ".join(bits))
+
+
+def described_in(state: Any, text: str, present: Sequence[str]) -> str | None:  # rule: 12.11.9
+    """The one present person the narration (outside quotes) describes best ("I turn to the old woman on the
+    bench"), when exactly one shares the most content words with it; else None."""
+    from engine.audit.text import content
+
+    said = content(re.sub(r"[\"“][^\"”]*[\"”]", " ", text))
+    scored = sorted(((len(said & _looks(state, n)), n) for n in present if not is_animal(state, n)), reverse=True)
+    if not scored or scored[0][0] == 0 or (len(scored) > 1 and scored[1][0] == scored[0][0]):
+        return None
+    return scored[0][1]
+
+
 def addressed(state: Any, record: AdjudicationRecord, present: Sequence[str], message: str = "") -> list[str]:
     # rule: 12.11.9
-    """NPCs the PC addressed this turn: a talk beat on them, then those the player's words name (the message as
-    typed first, then the parts: `named_in`), or the one NPC here when the PC speaks to no one by name ("talk with no
-    target speaks to the only NPC", P-056)."""
+    """NPCs the PC addressed this turn: a talk beat on them; else the one the player's words turn to (`named_in`'s
+    first: a name right after "ask", "turn to", ... or opening the quoted words, else the first named; the message
+    as typed first, then the parts); else the one the narration describes (`described_in`); else the one last
+    spoken with or the only NPC here when the PC speaks to no one by name ("talk with no
+    target speaks to the only NPC", P-056). Naming someone else ("Ysrion's gone cold on me") does not address them:
+    they are at most concerned (`concerns_self`, 12.11.9 step 3; DL-12-93)."""
     out = [t for b in record.beats if (b.verb == "verb.talk" or "talk" in (b.approach_words or ""))
            for t in b.targets if t in present]
     spoken = [p.text for p in record.parts if p.cls in ("SPEECH", "FICTION_QUESTION", "DECLARATION")]
-    for t in [message, *spoken]:
-        out += named_in(state, t, present)
+    for t in [message, *spoken] if not out else []:
+        out += named_in(state, t, present)[:1]
+        if out:
+            break
+    if not out and any(p.cls == "SPEECH" for p in record.parts):  # described, not named ("the old woman")
+        out += [n for n in [described_in(state, message or " ".join(spoken), present)] if n]
     present = [n for n in present if not is_animal(state, n)]
-    if not out and present and any(p.cls == "SPEECH" for p in record.parts):
-        # spoken to no one by name: the one last spoken with this scene, else the first present (cast order).
-        # ponytail: nearness and who would answer are not modelled
+    elsewhere = _TURNS_TO.search(re.sub(r"[\"“][^\"”]*[\"”]", " ", message or " ".join(spoken)))
+    if not out and present and not elsewhere and any(p.cls == "SPEECH" for p in record.parts):
+        # spoken to no one by name or description: the one last spoken with this scene, else the first present
+        # (cast order); never when the words turn to someone else no one here matches ("I ask the nearest person in
+        # line": live run 20261008-175000). ponytail: nearness and who would answer are not modelled
         last = [n for n in spoken_with(state) if n in present]
         out.append(last[-1] if last else present[0])
     return list(dict.fromkeys(out))
@@ -332,7 +386,28 @@ def event_tags(state: Any, record: AdjudicationRecord, beats: Sequence[Any], npc
     name = state.entities[npc].name.lower() if npc in state.entities else ""
     if any(p.question_kind == "what_happened" and name and name in (p.topic or p.text).lower() for p in record.parts):
         tags.add("concerns_past")
+    targets = {t for o in beats for t in o.entry.targets}
+    held = {t for t in targets if t in state.entities and (state.entities[t].data.get("holder")
+                                                           or state.fact_value(t, "holder")) == npc}
+    if npc in targets or held or (npc in state.entities and named_in(state, _event_words(record), [npc])):
+        tags.add("concerns_self")  # [revision: R2-H] the beat or the words name the NPC or what they hold
     return tags
+
+
+# event tags that bear on the NPC by construction (computed against them); the topic-word tags and harms_innocent
+# bear on a bystander only through a refusal or want of theirs (12.11.9 step 3)
+_RELATIVE = frozenset({"harms", "against_kin", "threatens", "offers_payment", "offers_bribe", "offers_help",
+                       "pc_request", "concerns_kin", "concerns_master", "concerns_past", "concerns_secret",
+                       "names_object", "concerns_self"})
+
+
+def concerned(state: Any, rules: Any, record: AdjudicationRecord, beats: Sequence[Any], npc: str) -> set[str]:
+    # rule: 12.11.9
+    """12.11.9 step 3: the event's tags in `social.yaml#event_tags.concerns` that bear on `npc` (computed against
+    them, or matching one of their recorded refusals or wants). Empty: the NPC does nothing new and says nothing."""
+    ev = event_tags(state, record, beats, npc) & set(_tag_data(rules).get("concerns") or [])
+    mine = set().union(*motive_tags(state, rules, npc).values()) if motive_tags(state, rules, npc) else set()
+    return {t for t in ev if t in _RELATIVE or t in mine}
 
 
 def motive_tags(state: Any, rules: Any, npc: str) -> dict[str, set[str]]:  # rule: 12.11.9
@@ -430,19 +505,29 @@ def _judge_motive(ctx: TurnContext, npc: str, cands: dict[str, str], happened: s
     return next((k for k, v in cands.items() if tx.content(v) & said), None), []
 
 
+def _speech_only(record: AdjudicationRecord, beats: Sequence[Any], npc: str) -> bool:
+    """The PC only spoke to `npc` this turn (plain speech or a question): no beat other than a Talk acts on them."""
+    return not any(npc in b.entry.targets and "talk" not in (b.entry.approach_words or "") for b in beats)
+
+
 def respond(ctx: TurnContext, record: AdjudicationRecord, beats: Sequence[Any], *, skip: Sequence[str] = (),
             oof: list[dict[str, str]] | None = None) -> None:
     # rule: 12.11.9
     # rule: 12.2.9
-    """Steps 2-5 for every engaged or addressed present NPC (addressed, or a resolved beat's target): (a) a resolved
-    Talk frame's outcome; (b) a recorded refusal or want whose tags match the event (a want served takes row 9 for
-    a request, else 8; defeated 2, 1 at Hostile; engaged 6; then the practice clamp), the World role only when no
-    tag matches and the motives point to opposite rows; (c) `tbl.npc_action` by standing, clamped to the practice's
-    rows. An addressed NPC always answers: a refusing source is voiced. With nobody engaged and the crowd
-    practice, the crowd's response (`crowd_response`)."""
+    """Steps 2-5 for the NPCs who respond this turn (step 3): those the PC addressed or acted on, and those the
+    event concerns (`concerned`); every other present NPC does nothing new and says nothing. Sources, first that
+    applies: (a) a resolved Talk frame's outcome; (b) a recorded refusal or want whose tags match the event (a want
+    served takes row 9 for a request, else 8; defeated 2, 1 at Hostile; engaged 6; then the practice clamp), the
+    World role only when no tag matches and the motives point to opposite rows; (c) `tbl.npc_action` by standing,
+    clamped to the practice's rows. For plain speech or a question to an addressed NPC the source gives willingness
+    only (PR-12-10 step 2): no talk wording is a record line; an NPC already answered this turn (PR-12-10) adds no
+    row. A refusing source to an addressed NPC is voiced. A concerned bystander's response is a deed tagged
+    `optional` (12.14.12: optional material). Engaging ends the NPC's activity (step 1). With nobody responding and
+    the crowd practice, the crowd's response (`crowd_response`)."""
+    from engine.dm import answer as ans
     from engine.dm.roles.world import npc_motives, present_npcs
     from engine.dm.scene_state import response_values, write
-    from engine.dm.world_step import RESOLVED, _foe_turn, happened_text
+    from engine.dm.world_step import RESOLVED, _foe_turn, answer_line, happened_text
     from engine.resolve.tables import roll_table
     from engine.world.common import meta
     from engine.world.social import first_interaction, standing
@@ -454,24 +539,33 @@ def respond(ctx: TurnContext, record: AdjudicationRecord, beats: Sequence[Any], 
     present = present_npcs(st)
     spoke_to = addressed(st, record, present, said_words(ctx))
     talks = {t: b for b in beats if b.status in RESOLVED and "talk" in (b.entry.approach_words or "")
-             for t in (b.entry.targets or (present if len(present) == 1 else []))}
+             for t in (b.entry.targets or (present if len(present) == 1 else spoke_to[:1]))}
     unresolved = {t for b in beats if b.status not in RESOLVED for t in b.entry.targets}
     targets = [t for b in beats if b.status in RESOLVED for t in b.entry.targets if t in present]
-    engaged = [n for n in dict.fromkeys([*talks, *spoke_to, *targets])
-               if n in st.entities and st.entities[n].kind in ("npc", "companion", "adversary")
-               and not (st.entities[n].kind == "npc" and is_animal(st, n))]  # a beast foe still answers by its row
+
+    def person(n: str) -> bool:
+        return n in st.entities and st.entities[n].kind in ("npc", "companion", "adversary") \
+            and not (st.entities[n].kind == "npc" and is_animal(st, n))  # a beast foe still answers by its row
+
+    engaged = [n for n in dict.fromkeys([*talks, *spoke_to, *targets]) if person(n)]
+    bystanders = [n for n in present if n not in engaged and n not in skip and person(n)
+                  and concerned(st, ctx.rules, record, beats, n)]
+    answered = {a.npc for a in record.npc_actions if a.source_ref == "PR-12-10"}
     practice_rows = {r["range"]: r for r in ctx.rules.table("tbl.npc_practice")["results"]}
     # the PC asked for something (a question, a request, a Talk): a refusing source is then said as a refusal
     asked = any(b.verb == "verb.talk" for b in record.beats) or any(
         p.cls == "FICTION_QUESTION" or (p.cls == "SPEECH" and "?" in p.text) for p in record.parts)
-    for npc in engaged:
+    for npc in [*engaged, *bystanders]:
         if npc in skip or (npc in unresolved and npc not in talks):
             continue
         n_acts = len(record.npc_actions)
         wrow: int | None = None  # a tag-matched want's row (12.11.9 step 3(b))
         is_addressed = npc in spoke_to or npc in talks
+        optional = npc in bystanders
         practice = practice_for(ctx.state, record, npc, spoke_to)
-        if npc in talks:  # (a) a resolved Talk frame's delivered outcome (a certain talk, no roll, is a yes)
+        if npc in answered:
+            pass  # PR-12-10 answered them this turn: that line is their response
+        elif npc in talks:  # (a) a resolved Talk frame's delivered outcome (a certain talk, no roll, is a yes)
             b = talks[npc]
             degree = b.entry.degree or "success"
             fr = st.frames[b.frame_id].frame if b.frame_id and b.frame_id in st.frames else {}
@@ -481,6 +575,14 @@ def respond(ctx: TurnContext, record: AdjudicationRecord, beats: Sequence[Any], 
                 action = voiced_refusal(ctx, npc, f"the talk did not move them ({degree.replace('_', ' ')})")
             record.npc_actions.append(NpcActionEntry(npc=npc, action=action, source="talk_outcome",
                                                      source_ref=b.frame_id, tags=[practice]))
+        elif is_addressed and _speech_only(record, beats, npc):
+            # plain speech or a question: willingness only, the words are the narrator's (PR-12-10 step 2)
+            band, why = ans.willingness(ctx, npc, record, beats)
+            said = ans.WILL_WORDS[band].format(why=why)
+            if not asked:  # plain speech asks nothing: they reply (12.11.9 step 4), within the same willingness
+                said = said.replace("answers what you asked", "replies").replace("refuses to answer what you asked",
+                                                                                 "turns you away")
+            answer_line(record, npc, ans.Answer(said, said, willingness=band))
         else:
             row_def = practice_rows[practice]
             allowed = [int(x) for x in row_def["action_rows"]]
@@ -500,16 +602,19 @@ def respond(ctx: TurnContext, record: AdjudicationRecord, beats: Sequence[Any], 
                 motive, tags = _judge_motive(ctx, npc, cands, happened_text(record))
                 tags = [*tags, "world_fallback"]
             motives = npc_motives(ctx.state, npc)
+            extra = ["optional"] if optional else []
             if motive is not None and "/refusal." in motive:  # (b) a recorded refusal outranks everything else
-                record.npc_actions.append(NpcActionEntry(npc=npc, action=voiced_refusal(ctx, npc, motives[motive]),
-                                                         source="refusal", source_ref=motive, tags=[practice, *tags]))
+                act = voiced_refusal(ctx, npc, motives[motive]) if is_addressed else f"bristles: {motives[motive]}"
+                record.npc_actions.append(NpcActionEntry(npc=npc, action=act, source="refusal", source_ref=motive,
+                                                         tags=[practice, *tags, *extra]))
             elif motive is not None:
                 gist = str((row_def.get("responses") or {}).get(str(wrow)) or "") if wrow is not None else ""
                 action = f"acts on a want: {motives[motive]}" + (f"; {gist}" if gist else "")
                 if wrow is not None and is_addressed and asked and wrow in REFUSING_ROWS:
                     action = voiced_refusal(ctx, npc, gist or motives[motive])
                 record.npc_actions.append(NpcActionEntry(npc=npc, action=action, source="want", source_ref=motive,
-                                                         tags=[practice, *tags, *([f"row:{wrow}"] if wrow else [])]))
+                                                         tags=[practice, *tags, *([f"row:{wrow}"] if wrow else []),
+                                                               *extra]))
             else:  # (c) the action table by standing, clamped to the practice (12.11.5)
                 value = standing(ctx.state, npc)
                 if value is None:  # PR-12-5 step 3: the first interaction's reaction roll
@@ -518,8 +623,7 @@ def respond(ctx: TurnContext, record: AdjudicationRecord, beats: Sequence[Any], 
                 res = roll_table(NPC_TABLE, {"standing_modifier": value}, rules=ctx.rules, state=ctx.state,
                                  rng=ctx.rng, purpose=f"npc action {npc} (12.11.5)")
                 tx_.add_all(res.events)
-                row_def = practice_rows[practice]
-                row = clamp_row(int(res.roll or 5), [int(x) for x in row_def["action_rows"]], value <= -3)
+                row = clamp_row(int(res.roll or 5), allowed, value <= -3)
                 if row == 1 and value <= -3 and record.pc:  # rule: 06.2.1
                     from engine.resolve.conflict import start
 
@@ -530,18 +634,19 @@ def respond(ctx: TurnContext, record: AdjudicationRecord, beats: Sequence[Any], 
                 refuses = is_addressed and asked and row in REFUSING_ROWS  # what was asked is not given
                 action = voiced_refusal(ctx, npc, gist) if refuses else gist
                 record.npc_actions.append(NpcActionEntry(npc=npc, action=action, source="table_row",
-                                                         source_ref=f"{NPC_TABLE}:{row}", tags=[practice]))
+                                                         source_ref=f"{NPC_TABLE}:{row}", tags=[practice, *extra]))
+        end_activity(ctx, record, npc)  # step 1: engaging ends the activity; a response may write a new one
         for a in record.npc_actions[n_acts:]:  # T-12-18: the response sets their activity and manner
             src, ref = a.source, a.source_ref or "12.11.9"
             row = int(ref.rsplit(":", 1)[1]) if src == "table_row" else wrow if src == "want" else None
-            degree = talks[npc].entry.degree if src == "talk_outcome" else None
+            degree = talks[npc].entry.degree if src == "talk_outcome" and npc in talks else None
             write(ctx, record, npc, response_values(ctx.rules, "table_row" if row is not None else src,
                                                     practice=practice, row=row, degree=degree), because=ref)
         if is_addressed and npc not in spoken_with(ctx.state):
             sc = ctx.state.scene
             if sc is not None:
                 tx_.add(meta(SPOKEN, {"scene": sc.scene_id, "npcs": [*spoken_with(ctx.state), npc]}, "12.11.9"))
-    if not engaged and any(b.status in RESOLVED for b in beats) \
+    if not engaged and not bystanders and any(b.status in RESOLVED for b in beats) \
             and practice_for(ctx.state, record, None, spoke_to) == "crowd":
         crowd_response(ctx, record, [int(x) for x in practice_rows["crowd"]["action_rows"]])
 
@@ -579,6 +684,7 @@ def crowd_response(ctx: TurnContext, record: AdjudicationRecord, allowed: Sequen
                                              source_ref=f"{NPC_TABLE}:{row}", tags=["crowd"]))
 
 
-__all__ = ["ACTIVITY", "ANIMAL", "CROWD", "addressed", "candidates", "clamp_row", "crowd_response", "current_activity",
-           "engaged_with_pc", "ensure_activities", "event_tags", "hide_stale", "is_animal", "motive_tags", "named_in",
-           "practice_for", "respond", "role_key", "said_words", "voiced_refusal", "want_row"]
+__all__ = ["ACTIVITY", "ANIMAL", "CROWD", "ROLLED", "addressed", "candidates", "clamp_row", "concerned",
+           "crowd_response", "current_activity", "end_activity", "ensure_activities", "event_tags", "is_animal",
+           "motive_tags", "named_in", "practice_for", "respond", "role_key", "rolled_this_scene", "said_words",
+           "voiced_refusal", "want_row"]

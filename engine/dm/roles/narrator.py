@@ -146,29 +146,43 @@ def _withheld(state: WorldState, npc: str, action: str, pc: str | None) -> str: 
             "answer" + (f"; the reason shows only from this, never a secret: {'; '.join(why)}" if why else ""))
 
 
-def _speech_line(state: WorldState, record: AdjudicationRecord) -> list[str]:  # rule: 12.14.12
-    """When the PC speaks to someone here or an NPC acts, their reply is given in quoted words (P-061): the narrator
-    chooses NPCs' words, only the facts in them are constrained. What they may tell beyond what the PC learns: the
-    open matters any local may know (active threads, never sealed). Never 'his words are lost'."""
-    from engine.dm.oof import short_text
-    from engine.dm.player_text import second_person
+def _speech_line(state: WorldState, record: AdjudicationRecord) -> list[str]:  # rule: 12.10.8
+    # rule: 12.14.12
+    """When the PC speaks to someone here, the one they addressed answers in quoted words (P-061), in character,
+    within the willingness code gave, from their speaker card first (PR-12-10 steps 3-4; DL-12-90): beyond it,
+    hearsay or a guess, hedged; "I don't know" rare, in voice, with a natural redirect; never contradicting or
+    repeating their own `said` lines unprompted. Nobody else interjects (12.11.9 step 3)."""
     from engine.dm.roles.world import present_npcs
 
     spoke = any(p.cls == "SPEECH" for p in record.parts) or any("talk" in (b.approach_words or "")
                                                                for b in record.beats)
     if not (spoke or record.npc_actions) or not present_npcs(state):
         return []
-    matters = [second_person(short_text(str(e.data.get("text") or e.name), 160)) for e in state.entities.values()
-               if e.kind == "thread" and e.data.get("status", "active") == "active"
-               and e.visibility in ("shown", "available") and e.id not in state.seals][:3]
-    return ["- whoever answers or acts here speaks in quoted words (their actual sentence, a question as a "
-            "question): they say only what the record gives (what the PC learns, their act above)"
-            + (f" or these open matters any local may know: {'; '.join(matters)}" if matters else "")
-            + ". A question the record gives no answer to is left for later in their own way (one thing at a time, a "
-            "shrug, back to what they do know), never a claim not to know: they say they do not know only when a "
-            "record line says so, and never deny what the PC has already been told; (only after a failed Talk or a "
-            "recorded refusal) they will not say. Never write that their words are lost, "
-            "unheard, or only begun; never end on waiting for them to speak"]
+    return ["- the one the PC addressed answers in quoted words (their actual sentence, a question as a question), in "
+            "character and within the willingness their line gives: from their SPEAKER CARD first; beyond it, from "
+            "hearsay, a guess or an opinion, hedged as people do (\"I heard...\", \"probably...\"). \"I don't know\" is "
+            "rare: only in their own voice, with a natural redirect, never a chain of names. Never contradict or "
+            "repeat what their card says they already said (build on it; say something new). A refusal is said in "
+            "their own voice, never a stock formula. Nobody else present speaks or interjects unless the optional "
+            "material gives them a reaction. Never write that their words are lost, unheard, or only begun; never end "
+            "on waiting for them to speak"]
+
+
+def speaker_cards(state: WorldState, record: AdjudicationRecord, rules: Any = None) -> list[str]:  # rule: PR-12-10
+    """One speaker card per NPC answering this turn (their PR-12-10 line), topic from its `ask:` index key."""
+    from engine.dm.packet import speaker_card
+
+    out: list[str] = []
+    seen: set[str] = set()
+    for a in record.npc_actions:
+        if a.source_ref != "PR-12-10" or a.npc in seen:
+            continue
+        seen.add(a.npc)
+        key = next((t.removeprefix("ask:") for t in a.tags if t.startswith("ask:")), "")
+        topic = key.rsplit("|", 1)[-1] if key else None
+        about = topic if topic in state.entities else None
+        out += speaker_card(state, a.npc, topic=None if about else topic, about=about, rules=rules)
+    return out
 
 
 _POSTED = re.compile(r"\b(notice|bill|board|sign|signboard|placard|poster|plaque|inscription|letter|note|scroll|"
@@ -281,20 +295,22 @@ def _item_words(state: WorldState, record: AdjudicationRecord, it: RecordItem, r
     return f"note: {it.text}"
 
 
-def _set_aside(state: WorldState, record: AdjudicationRecord) -> list[str]:  # rule: 12.14.11
+def optional_material(state: WorldState, record: AdjudicationRecord) -> list[str]:  # rule: 12.14.12
     # rule: 12.11.9
-    """The scene-state lines not shown as record lines this turn (`ActivityEntry.hidden`), as guidance only: an
-    activity someone left off to deal with the PC (never narrated as still going on), and lines said lately (not
-    restated: 12.14.11)."""
+    """12.14.12's optional material: present people's scene state (activity, posture, hold, manner, range) and the
+    reactions of NPCs the PC did not address (tagged `optional`). No handles: the narrator may use any of it or none,
+    and no check requires it (DL-12-92). An unchanged line need not be said again (12.14.11)."""
+    from engine.dm.handles import OPTIONAL
+
     pc = record.pc
-    busy = [a for a in record.activities if a.hidden == "engaged"]
-    stale = [a for a in record.activities if a.hidden == "stale"]
-    out = [f"- {name_of(state, a.npc, pc)} has left off {a.activity} to deal with you: never narrate them still at it"
-           for a in busy]
-    if stale:
-        out.append("- said lately, so not restated (unless it changes): " + "; ".join(
-            clause(name_of(state, a.npc, pc), "hold" if a.slot == "held" else "be", a.activity) for a in stale))
-    return out
+    lines = [clause(name_of(state, a.npc, pc), "hold" if a.slot == "held" else "be", a.activity)
+             for a in record.activities if a.npc != pc]
+    lines += [f"{name_of(state, a.npc, pc)}, not addressed: {a.action} (a brief deed at most; no words unless it "
+              "says so)" for a in record.npc_actions if OPTIONAL in a.tags]
+    if not lines:
+        return []
+    return ["OPTIONAL MATERIAL (use any of it, all of it or none; nothing requires it; do not repeat a line you "
+            "already used; never cite these):", *(f"- {x}" for x in lines)]
 
 
 def record_text(state: WorldState, record: AdjudicationRecord, *, player_message: str = "",
@@ -318,8 +334,9 @@ def record_text(state: WorldState, record: AdjudicationRecord, *, player_message
     its = items if items is not None else record_items(state, record)
     for it in its:
         lines.append(f"- {it.handle}{' MUST' if it.must_name else ''}: {_item_words(state, record, it, rules)}")
-    lines += _set_aside(state, record)
     lines += _speech_line(state, record)
+    lines += speaker_cards(state, record, rules)
+    lines += optional_material(state, record)
     lines += _reading_lines(state, record, player_message)
     if any(n.lstrip().startswith("[WARNING") for n in record.notes):
         lines.append("- the engine shows a lethal warning: make the danger plain in the fiction")

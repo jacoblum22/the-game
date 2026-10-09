@@ -65,7 +65,7 @@ OUTPUT_TOKENS: dict[Role, int] = {
     Role.DIRECTOR: 600,
     Role.NARRATOR: 1200,
     Role.CHECKER: 1500,
-    Role.PROPOSER: 200,
+    Role.TESTIMONY: 200,
     Role.UNDERSTAND: 900,
 }
 # Thought tokens count against max_output_tokens (ai.google.dev "Token limits and max_output_tokens"); the cap

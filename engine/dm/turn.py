@@ -31,7 +31,6 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from engine import ids
 from engine.dm.adjudication import AdjudicationRecord, BeatEntry, OracleEntry, PartEntry, PauseEntry
-from engine.dm.answer import ladder_owns
 from engine.dm.codex import promise_question, promise_subject, promises
 from engine.dm.context import TurnContext
 from engine.dm.narration import FRAME_NEXT, TurnOutcome, moves_on, narrate_turn, stays
@@ -44,6 +43,7 @@ from engine.dm.roles.reader import (
     possible_dispute,
     read_message,
 )
+from engine.dm.testimony import settle_triggered
 from engine.dm.world_step import deliver_warnings, world_step
 from engine.resolve.oracle import OracleQuestion, ask_oracle
 from engine.resolve.pipeline import (
@@ -290,9 +290,9 @@ def _adjudicate(ctx: TurnContext, rec: AdjudicationRecord, reader: ReaderResult,
         if tx.state.open_pause() is not None:
             _hold(rec)
             return outcomes
-    talked = [b.target for b in reader.beats if b.verb == "verb.talk" and b.target]  # the ladder's, not the Oracle's
+    talked = [b.target for b in reader.beats if b.verb == "verb.talk" and b.target]  # their words, not the Oracle's
     _fiction_questions(ctx, rec, [q for q in reader.fact_questions
-                                  if not ladder_owns(tx.state, q.subject, q.predicate, talked)])
+                                  if not speech_owns(tx.state, q.subject, q.predicate, talked)])
     for part in rec.parts:
         if part.cls == "FICTION_QUESTION":
             part.handled = part.handled or "answered"
@@ -311,6 +311,7 @@ def _adjudicate(ctx: TurnContext, rec: AdjudicationRecord, reader: ReaderResult,
             if p.cls == "DECLARATION":
                 p.handled = "resolved"
         return outcomes
+    settle_triggered(ctx, reader, rec)  # PR-12-12: testimony the beats rely on is settled before they frame
     plans = reader.plans(actor=rec.pc or "", declared_seq=tx.state.last_seq, mint=tx.mint) if rec.pc else []
     if reader.clarifying_question and not plans:  # 01.2.4: at most one, and only when no reading can be assumed
         _clarify(ctx, reader.clarifying_question)
@@ -427,6 +428,18 @@ def _fiction_questions(ctx: TurnContext, rec: AdjudicationRecord, questions: Seq
             words += ", and " + " ".join(str(w) for w in res.meaning)
         rec.oracle.append(OracleEntry(question=q.predicate, answer=words, fact_id=res.fact_id, subject=subject,
                                       predicate=pred))
+
+
+_KNOWS_Q = re.compile(r"^\s*(?:does\s+\S+\s+)?(?:knows?|has heard|heard|have heard|saw|seen|has seen|remembers?|"
+                      r"can tell|could tell)\b", re.IGNORECASE)
+
+
+def speech_owns(st: Any, subject: str | None, predicate: str, talked_to: Sequence[str]) -> bool:  # rule: 12.10.8
+    """A Reader fact question about what a person the PC is talking to knows ("the neighbour knows the details of
+    the ambush"): the NPC answers it in words, within their willingness (PR-12-10), as testimony; the World-Fact
+    Oracle never also settles it (one would say yes and the other no)."""
+    return bool(subject in talked_to and subject in st.entities
+                and st.entities[subject].kind in ("npc", "companion", "adversary") and _KNOWS_Q.match(predicate))
 
 
 def _yes_no(v: Any) -> str:

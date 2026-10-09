@@ -27,7 +27,8 @@ Kind = Literal["scene", "beat", "cost", "harm", "condition", "position", "learne
 # a rest taken); every other note is citable but not owed
 MUST_NOTES = ("the inciting incident:", "a lead to make noticeable:", "a lead arrives", "cannot make out:",
               "the character takes ")
-SKIP_NOTES = ("session move", "safety:", "queued for", "[WARNING", "oracle:", "dying check:")
+SKIP_NOTES = ("session move", "safety:", "queued for", "[WARNING", "oracle:", "dying check:", "testimony settled")
+OPTIONAL = "optional"  # an NpcActionEntry tag: a non-addressed NPC's reaction, optional material (12.14.12)
 
 
 class RecordItem(BaseModel):
@@ -118,13 +119,11 @@ def items(record: AdjudicationRecord, *, names: Mapping[str, str] | None = None)
         add("oracle", True, [o.subject or ""], _oracle_render(o.question, o.answer, o.subject, o.predicate, names),
             index=i, text=f"{o.question}: {o.answer}")
     for i, a in enumerate(record.npc_actions):
+        if OPTIONAL in a.tags:  # a bystander's reaction is optional material (12.14.12), not a record line
+            continue
         add("npc", True, [a.npc], _sentence(f"{name(a.npc)} {NPC_ROW_PROSE.get(a.action, a.action)}"), index=i,
             text=a.action)
-    for i, act in enumerate(record.activities):
-        if act.hidden:  # said lately, or replaced by the engagement (12.14.11, 12.11.9): not a line to narrate
-            continue
-        add("activity", False, [act.npc], sentence(clause(act.npc, "hold" if act.slot == "held" else "be", act.activity,
-                                                         names=names, pc=pc)), index=i, text=act.activity)
+    # activities, postures and manners are optional material (12.14.12; DL-12-92): no handle, nothing requires them
     for i, om in enumerate(record.omens):
         if om.omen:
             add("omen", True, [om.clock_id], _sentence(om.omen), index=i, text=om.omen)
@@ -139,4 +138,4 @@ def by_handle(its: list[RecordItem]) -> dict[str, RecordItem]:
     return {it.handle: it for it in its}
 
 
-__all__ = ["MUST_NOTES", "RecordItem", "by_handle", "items"]
+__all__ = ["MUST_NOTES", "OPTIONAL", "RecordItem", "by_handle", "items"]

@@ -1,9 +1,9 @@
 """Playtest cluster C (20261008 talker/fighter): Talk answers, NPC repetition, speaker attribution, animals.
 
-The "I don't know" runaround (PR-12-10, 12.10.6, DL-12-44), unchanged activity lines re-narrated every turn and an
-engaged NPC still "fetching water" (12.14.11, 12.11.9), the wrong NPC answering (12.11.9 step 4), a dog given a
-person's activity and looks, and three small ones (an old question replayed after a move, a Recall that delivered a
-difficulty number, a pie never taken)."""
+The incident's question goes to its case (PR-12-10), an engaged NPC's activity ends (12.11.9, spec 013), the wrong
+NPC answering (12.11.9 step 4), a dog given a person's activity and looks, and three small ones (an old question
+replayed after a move, a Recall that delivered a difficulty number, a pie never taken). The runaround fixes of
+cluster C (pointer rules) were retired with the ladder (spec 013, DL-12-90)."""
 
 from __future__ import annotations
 
@@ -13,12 +13,10 @@ from typing import Any
 import pytest
 
 from engine.data.loader import load_rules
-from engine.dm import answer as ans
 from engine.dm.adjudication import AdjudicationRecord, BeatEntry, PartEntry
-from engine.gen._seed_packs import pack_data
 from engine.gen.case import cases
 from engine.store.events import WORLD, Event
-from tests.engine.test_answer import PC, ask, here, npc_with_pack, outside_topic, turn
+from tests.engine.test_answer import PC, ask, here, turn
 from tests.fixtures.seeded import seeded_store
 
 
@@ -50,87 +48,14 @@ def test_a_question_about_the_incident_goes_to_its_case(seeded: Any) -> None:
     assert a.pointer is None and case["nodes"][0]["fact"] in a.line, a
 
 
-def test_a_not_ordinary_candidate_is_routed_to_the_case(seeded: Any, monkeypatch: Any) -> None:
-    """PR-12-10 step 4: code rejects a `not_ordinary` candidate and step 1's consequential route answers."""
-    from engine.dm.roles import proposer
+def test_a_knowledge_question_to_the_one_asked_is_their_speech(seeded: Any) -> None:
+    from engine.dm.turn import speech_owns
 
-    case, core, _ = _incident(seeded)
-    word = sorted(ans.words.content(seeded.state.meta["world.opening"]["inciting"]["text"]))[0]
-    monkeypatch.setattr(proposer, "propose", lambda *a, **k: {"kind": "not_ordinary", "subject": f"the {word}",
-                                                                 "predicate": "is", "value": "a clue"})
-    a = ask(seeded, core, "what_happened", "And the other business, what was that?",
-            topic=outside_topic(seeded, core))  # nothing in their pack or the store: rung 3 proposes
-    assert a.pointer is None and case["nodes"][0]["fact"] in a.line, a
-
-
-def test_the_pointer_names_someone_who_can_answer(seeded: Any) -> None:
-    owner, item = npc_with_pack(seeded)
-    topic = str(item["topic"])
-    st = seeded.state
-    asked = next(n for n in sorted(st.entities) if st.entities[n].kind == "npc" and n != owner
-                 and not ans._can_answer(st, n, topic, None) and n in ans.base_pool(st, PC))
-    a = ask(seeded, asked, "who_knows", f"who would know about {topic}?", topic=topic)
-    assert a.pointer is not None and ans._can_answer(seeded.state, a.pointer, topic, None), a
-
-
-def test_a_pointer_chain_is_capped_at_a_place_and_logged(seeded: Any) -> None:
-    st = seeded.state
-    haven = st.meta["world.region"]["haven"]
-    topics = pack_data().CK["topics"]
-    topic = next(t for t, v in topics.items() if f"{haven}.{v.get('kept_at')}" in st.entities)
-    limit = int(load_rules().pacing["answer_ladder"]["repeat_pointer_limit"])
-    people = ans.base_pool(st, PC)[: limit + 1]
-    with turn(seeded) as ctx:  # `limit` people already said they did not know it and named someone
-        idx = {f"{n}|what_like|{topic}": {"fact": None, "said": "does not know", "pointer": people[-1]}
-               for n in people[:limit]}
-        ctx.need_tx().add(Event.of("meta_set", source="test", rule_id="12.10.6", key=ans.INDEX, value=idx))
-    with turn(seeded) as ctx:
-        _, ref = ans.point(ctx, people[-1], topic, PC)
-    assert seeded.state.entities[ref].kind == "place", ref  # the chain ends: no further person to chase
-    assert seeded.rulings("answer.pointer_chain")  # PR-12-10 step 7: logged for review (DL-12-44)
-
-
-def test_a_local_never_denies_public_news_the_pc_was_told(seeded: Any, monkeypatch: Any) -> None:
-    from engine.resolve import oracle
-
-    monkeypatch.setattr(oracle, "shape_for", lambda *a: "no")
-    st = seeded.state
-    local = next(n for n in here(seeded) if ans.public_local(st, n, "local_news"))
-    with turn(seeded) as ctx:
-        tx = ctx.need_tx()
-        fid = tx.mint("fact")
-        tx.add(Event.of("fact_set", {"source": "oracle"}, source="test", rule_id="PR-12-10", fact_id=fid,
-                        subject=WORLD, predicate="topic.local_news.the_ford", value="the ford washed out last night",
-                        visibility="shown"))
-        tx.add(Event.of("knowledge_recorded", source="test", rule_id="12.10.6", knower=PC, fact_id=fid, how="told"))
-    a = ask(seeded, local, "what_happened", "What happened to the ford?", topic="local_news")
-    assert a.fact_id == fid and a.pointer is None, a
-
-
-def test_a_particular_question_is_not_answered_by_any_fact_on_its_topic(seeded: Any) -> None:
-    """"What's the word on the ambush at the fortress?" filed under local news: the festival gossip in their pack is
-    not its answer (Fenwin, talker 29)."""
-    owner, item = npc_with_pack(seeded)
-    topic = str(item["topic"])
-    a = ask(seeded, owner, "what_happened", "What's the word on the ambush at the fortress?", reach=1,
-            topic="the ambush at the fortress")
-    assert item["text"] not in a.line, a
-    b = ask(seeded, owner, "what_like", f"what do you hear about {topic.replace('_', ' ')}?", reach=1, topic=topic)
-    assert item["text"] in b.line, b  # asked about the topic itself, the pack answers
-
-
-def test_a_pack_topic_is_asked_at_the_role_odds(seeded: Any) -> None:
-    owner, item = npc_with_pack(seeded)
-    ck = pack_data().CK
-    assert ans.odds_for(seeded.state, owner, str(item["topic"])) == ck["odds"]["on_role_topic"]
-
-
-def test_a_knowledge_question_to_the_one_asked_is_the_ladders(seeded: Any) -> None:
     npc = here(seeded)[0]
     st = seeded.state
-    assert ans.ladder_owns(st, npc, "knows the details of the ambush at the fortress", [npc])
-    assert not ans.ladder_owns(st, npc, "knows the details of the ambush", [])  # not asked: the Oracle's
-    assert not ans.ladder_owns(st, npc, "is locked", [npc])
+    assert speech_owns(st, npc, "knows the details of the ambush at the fortress", [npc])
+    assert not speech_owns(st, npc, "knows the details of the ambush", [])  # not asked: the Oracle's
+    assert not speech_owns(st, npc, "is locked", [npc])
 
 
 # ------------------------------------------------------------------------------------------- 5. a Recall
@@ -204,7 +129,9 @@ def test_a_dog_is_a_creature_never_a_person(tmp_path: Path) -> None:
     e = store.state.entities[eid]
     assert e.data.get("mind") == "animal" and is_animal(store.state, eid)
     assert not {"people", "detail", "demeanor", "pronouns"} & set(e.data)  # no person's walk-on roll
-    assert eid not in ans.base_pool(store.state, None)  # never cast as one who would know
+    from engine.gen.cast import base_pool
+
+    assert eid not in base_pool(store.state, None)  # never cast as one who would know
 
 
 def test_a_horse_trader_is_a_person() -> None:
@@ -217,8 +144,11 @@ def test_a_horse_trader_is_a_person() -> None:
 # ------------------------------------------------------------------------------------------- 2. repeated lines
 
 
-def test_unchanged_lines_are_not_shown_again_and_an_engaged_npc_left_off_their_activity(tmp_path: Path) -> None:
+def test_an_engaged_npcs_activity_ends_and_activities_are_optional_material(tmp_path: Path) -> None:
+    """Spec 013 (DL-12-92/93): the asked NPC's activity ends on engagement and is not re-rolled; the other's stays,
+    rolled once; no activity is a record line (optional material, no handle)."""
     from engine.dm.handles import items
+    from engine.dm.npc_layer import current_activity
     from engine.dm.roles.narrator import record_text
     from engine.dm.turn import play_turn
     from engine.llm.base import Role
@@ -229,14 +159,19 @@ def test_unchanged_lines_are_not_shown_again_and_an_engaged_npc_left_off_their_a
     hello = '"Evening," I say.'
     dock, ctx = setup(tmp_path, ScriptedModel({Role.READER: [reader("FICTION_QUESTION", ask_),
                                                              reader("SPEECH", hello)]}), world_judge=False)
+    watch_before = current_activity(dock.state, dock.watch)
     first = play_turn(ctx, ask_).adjudication.record
-    acts = {a.npc: a for a in first.activities if a.slot == "activity"}
-    assert acts[dock.ferryman].hidden == "engaged" and not acts[dock.watch].hidden  # Tam is being asked
-    assert "has left off" in record_text(dock.state, first) and "Tam" in record_text(dock.state, first)
+    acts = {a.npc: a.activity for a in first.activities if a.slot == "activity"}
+    assert dock.ferryman not in acts and current_activity(dock.state, dock.ferryman) is None  # ended: Tam engaged
+    assert not [it for it in items(first) if it.kind == "activity"]
+    watch = current_activity(dock.state, dock.watch)
+    assert watch and (watch_before is None or watch == watch_before)
+    if dock.watch in acts:  # offered only the turn it is new (12.14.11): optional material
+        assert "OPTIONAL MATERIAL" in record_text(dock.state, first)
     second = play_turn(ctx, hello).adjudication.record
-    watch = next(a for a in second.activities if a.npc == dock.watch and a.slot == "activity")
-    assert watch.hidden == "stale"  # unchanged since last turn: not a line to narrate again (12.14.11)
-    assert not [it for it in items(second) if it.kind == "activity" and it.text == watch.activity]
+    again = {a.npc: a.activity for a in second.activities if a.slot == "activity"}
+    assert dock.watch not in again and dock.ferryman not in again  # unchanged: not offered again
+    assert current_activity(dock.state, dock.watch) == watch and current_activity(dock.state, dock.ferryman) is None
 
 
 # ------------------------------------------------------------------------------------------- 5. small ones

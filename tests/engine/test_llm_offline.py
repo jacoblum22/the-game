@@ -117,7 +117,7 @@ CHECKER = obj(
 )
 SCHEMAS = {Role.INTERPRET: INTERPRET, Role.READER: READER, Role.FRAMER: FRAMER, Role.WORLD: WORLD,
            Role.DIRECTOR: DIRECTOR, Role.NARRATOR: NARRATOR, Role.CHECKER: CHECKER,
-           Role.PROPOSER: obj(kind=enum("ordinary_fact", "not_ordinary"), subject=STR, predicate=STR, value=STR),
+           Role.TESTIMONY: obj(subject=STR, predicate=STR, value=STR),
            Role.UNDERSTAND: understand_schema(["turn.3"], ["npc.mara_voss"])}
 
 MODEL = OfflineModel()

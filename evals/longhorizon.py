@@ -403,24 +403,51 @@ def script_line(kind: str, st: Any, rng: random.Random, met: list[str], home_nam
 
 
 def ladder_lines(learned: list[dict[str, Any]], twice: tuple[int, int]) -> list[str]:
-    """Spec 008 part B: successful learning beats with no item and no pointer (target 0), pointer answers, and the
-    same question to the same NPC answered with the same fact (target 100%)."""
+    """PR-12-10 (spec 013): successful learning beats with no answer (target 0: a fact, a case pointer or a
+    willingness line), case-route pointers, and the same question to the same NPC answered the same way (the same
+    fact or the same willingness; target 100%)."""
     n = len(learned)
-    empty = sum(1 for x in learned if not x["answers"] or not all(a[0] or a[1] for a in x["answers"]))
+    empty = sum(1 for x in learned if not x["answers"] or not all(a[0] or a[1] or a[3] for a in x["answers"]))
     items = [a for x in learned for a in x["answers"]]
     ptr = sum(1 for a in items if a[1])
     same, asked = twice
-    # ordinary asks (a question put to a person; "who would know" and index repeats excluded, as in the sim): the
-    # "I don't know" share, i.e. pointer answers, against 12-answer_ladder_sim's target (under 35%)
-    asks = [a for x in learned if x["verb"] in ("verb.talk", "speech") and x.get("kind") not in ("who_knows", "repeat")
-            for a in x["answers"]]
-    dont = sum(1 for a in asks if a[1])
     return [f"- learning beats answered (PR-12-10): {n}; empty successes {empty} "
-            f"({100 * empty / n if n else 0:.1f}%); items {len(items)}, pointer answers {ptr} "
-            f"({100 * ptr / len(items) if items else 0:.1f}%)",
-            f"- don't-know (pointer) share of ordinary asks: {dont}/{len(asks)} "
-            f"({100 * dont / len(asks) if asks else 0:.1f}%; target under 35%)",
+            f"({100 * empty / n if n else 0:.1f}%); items {len(items)}, case pointers {ptr}, willingness lines "
+            f"{sum(1 for a in items if a[3])}",
             f"- ask-twice consistency: {same}/{asked} ({100 * same / asked if asked else 0:.0f}%)"]
+
+
+_DONT = re.compile(r"\b(?:i (?:don'?t|do not) know|no idea|can'?t say|couldn'?t say)\b", re.IGNORECASE)
+_REDIRECT = re.compile(r"\b(?:but|ask|try)\b[^.?!]*\b(?:would|knows?|ask)\b", re.IGNORECASE)
+
+
+def dialogue_lines(turns: list[dict[str, Any]]) -> list[str]:  # rule: 12.10.8
+    """OEQ-12-25 (spec 013): per 100 NPC lines (the turn records' `said` spans with a speaker), self-repeats (content
+    overlap above `said_overlap` with the same speaker's earlier line), "I don't know" lines, runarounds (an "I don't
+    know" with a redirect to someone else), and self-contradictions (a speaker denying knowing a name they said
+    earlier; a proxy)."""
+    from engine.dm.testimony import overlap
+
+    said = [(str(x.get("speaker")), str(x.get("words") or "")) for t in turns for x in t.get("said") or []
+            if x.get("speaker")]
+    seen: dict[str, list[str]] = {}
+    rep = dont = run = contra = 0
+    for sp, w in said:
+        prior = seen.setdefault(sp, [])
+        rep += any(overlap(w, x) > 0.6 for x in prior)
+        if _DONT.search(w):
+            dont += 1
+            run += bool(_REDIRECT.search(w))
+            names = set(re.findall(r"\b[A-Z][a-z]{2,}\b", w))
+            contra += any(nm in x for nm in names for x in prior)
+        prior.append(w)
+    n = len(said)
+
+    def per(k: int) -> str:
+        return f"{100 * k / n if n else 0:.1f}"
+
+    return [f"- NPC lines {n}; per 100: repeats {per(rep)}, \"I don't know\" {per(dont)}, runarounds {per(run)}, "
+            f"self-contradictions {per(contra)} (OEQ-12-25)"]
 
 
 FIX_REPORTS = ("My vitality is wrong: I was not hurt.", "I still have my lantern.", "That's not what I meant.",
@@ -500,7 +527,8 @@ def _run_scripted(seed: int, lines: int, model: str, tmp: Path, learned: list[di
                     x["kind"] = "repeat"  # the index answers it again: not a new ask (the sim's "repeat")
                 if first and again and first[-1]["answers"] and again[-1]["answers"]:
                     twice[1] += 1
-                    twice[0] += first[-1]["answers"][0][0] == again[-1]["answers"][0][0]
+                    a0, a1 = first[-1]["answers"][0], again[-1]["answers"][0]
+                    twice[0] += (a0[0], a0[3]) == (a1[0], a1[3])
             else:
                 r = d.travel() if line is None else d.settle(d.call("submit", line))
             if fix_every and (i + 1) % fix_every == 0 and r.pause is None:  # a planted /fix report (spec 012)
@@ -538,6 +566,7 @@ def _run_scripted(seed: int, lines: int, model: str, tmp: Path, learned: list[di
     out.append(narration_loop(turns))
     out += claim_log_lines(turns)
     out += ladder_lines(learned, (twice[0], twice[1]))
+    out += dialogue_lines(turns)
     for mark in CHECKPOINTS:
         near = min(turn_at, key=lambda k: (abs(k - mark), k), default=None)  # an OOF line makes no turn
         tid = turn_at.get(near) if near is not None and abs(near - mark) <= 5 else None
