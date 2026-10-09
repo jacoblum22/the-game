@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import Any
 
 from engine.audit.screen import echoed_quotes
-from engine.dm.answer import NO_ONE, ask, rungs_for, who_answer
+from engine.dm.answer import NO_ONE, ask, who_answer
 from engine.dm.context import TurnContext
 from engine.dm.incident import incident_line, start_knowledge
 from engine.dm.packet import scene_setting
@@ -56,7 +56,7 @@ def _ask(store, text: str, npc: str | None = None) -> Any:  # type: ignore[no-un
         try:
             if npc is None:
                 return who_answer(ctx, text)
-            a = ask(ctx, npc, "who_is", None, text, rungs_for(ctx.rules, 2), pc="pc.wren")
+            a = ask(ctx, npc, "who_is", None, text, pc="pc.wren")
             return a.line, a.fact_id
         finally:
             ctx.tx = None

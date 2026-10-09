@@ -899,47 +899,50 @@ Supersedes the earlier notes on `Beat.gate` / `would_be_license` / `necessity`, 
 - **Promises** (`engine.dm.codex.promises(state, about)`, `promise_question`, `promise_subject`): the PC's open
   commitments, filtered through the alias index; `turn.oof_answer` routes "what did I promise X?" there.
 
-## Answer ladder (spec 008 part B; PR-12-10, 12.10.8)
-- **`engine.dm.answer`**: `ask(ctx, knower, question_kind, topic, text, rungs, pc=) -> Answer(said, line, fact_id,
-  pointer)` answers one delivered question at RECORD (before the draft): the index (meta `answers.index`,
-  `"<npc>|<kind>|<topic or entity>" -> {fact, said, pointer}`; a repeat rolls nothing), then "who is <role>" (own
-  name; a named person; a story role -> the case graph, building the reduced case; else `cast_who`), a question about
-  a case (`case_about`: the subject asked about or named, or its role's words) -> `_from_case` (a holder delivers
-  and `deliver_node` marks it found; anyone else names the core holder), `what_want` -> the stance, then the rungs
-  `rungs_for(rules, reach)` (`social.yaml#delivery.information.ladder_depth`): `store_hit`, `pack_hit` (the NPC's
-  seeded pack, written as a `topic.<topic>.<pack fact>` fact the NPC knows), `ratify` (Role `proposer`, then the
-  Oracle at `odds_for`; a "no" is the `knows_*` = false fact), `point` (casting via `pointer_target`; a walk-on made
-  when no one and no place fits; never the case subject, never back to who pointed here). `volunteer` (Great+),
-  `deliver_count(n, reach)` (T-01-6), `who_answer(ctx, text)` (the DM-side "who is X?", the PC as knower),
-  `topic_of(state, topic, text)` (a null Reader topic is read from the words, else `local_news`).
-- **Role `proposer`** (`engine.dm.roles.proposer.propose`): schema `{kind: ordinary_fact|not_ordinary, subject,
-  predicate, value}`, default `not_ordinary` (no candidate); a bare packet (prompt, known lines, question; no core,
-  no cards). Offline: a bland candidate on the topic.
-- **Consumers**: `world_step.deliver_learning` returns one summary per learning beat (`{beat, verb, knower, speech,
-  answers: [(fact id, pointer, line)]}`; the long-horizon harness's empty-success and ask-twice metrics read it).
-  A Talk with no question part is a request (no ladder); Observe/Recall run `_look` (a search placement, the store
-  ranking, the place's furniture, a pointer). SPEECH questions with no Talk beat are answered as the addressed NPC's
-  act (`source: talk_outcome`, `source_ref: PR-12-10`) and that NPC skips the table. `npc_layer.talk_outcome`:
-  "answers what you asked" or T-15-5's yes by reach ("takes what you offer and ..." when the Talk offers something).
-- **Playtest cluster C** (20261008 talker/fighter): `case_about(..., need=2)` also matches the opening incident's case
-  by the incident's own words; a `not_ordinary` Proposer candidate goes to the case it is about (`need=1`), else the
-  pointer. `point` names someone who `_can_answer` (a pack item or a record on the topic) first, never anyone who
-  already said they do not know it; past `pacing.yaml#answer_ladder.repeat_pointer_limit` such answers it logs ruling
-  `answer.pointer_chain` (review) and points to the topic's `kept_at` place. `store_hit`: on a public topic a local
-  (`public_local`) also knows what the PC was told about it. `odds_for`: a seeded pack topic is asked at the role odds.
-  `pack_hit` ranks pack items by words shared with the question. `ladder_owns`: a Reader fact question about what a
-  person being talked to knows is dropped from the World-Fact Oracle (turn.py). Recall (`world_step._look`) delivers
-  only `shown`/`available` facts and runs rung 3 with the PC as the knower before the pointer.
-- **Who answers** (`npc_layer.addressed(state, record, present, message)`): Talk targets, then `named_in` over the
-  typed message (`said_words(ctx)`) and the parts: a name right after "ask"/"turn to"/... first, then by first
-  mention; a name inside someone else's longer name does not count; a role's head noun is "the <noun>" before " of ".
-  Creatures (`is_animal`: `mind: animal`, or an animal head noun; `mentions._npc` makes them with `mind: animal`, no
-  walk-on roll; `cast.base_pool` skips them) get no activity and are never addressed.
-- **Scene-state lines** (`ActivityEntry.hidden`, `npc_layer.hide_stale`): a slot stated within `image_repeat_turns` of
-  its `last_used` and not written this turn is `stale`; the activity of someone engaged with the PC (addressed, acting,
-  a beat's target, a conflict foe) is `engaged`. Hidden lines get no handle; the Narrator gets one guidance line each
-  (`narrator._set_aside`). `narration._mark_used` marks a cited scene-state line's slot. `narration._unanswered` owes
-  no answer to SPEECH said before a move that opened a new scene with no one answering.
+## Answering and testimony (spec 013; PR-12-10, PR-12-12, 12.10.8, 12.11.9, 12.14.12; DL-12-90..93)
+Spec 008 part B's ladder (store, pack, propose-and-ratify, pointer; `roles/proposer.py`) is retired as a source of
+speech, with `answer_ladder.repeat_pointer_limit` and `delivery.information.ladder_depth`.
+- **`engine.dm.answer`**: `ask(ctx, knower, question_kind, topic, text, pc=, record=None, beats=()) -> Answer(said,
+  line, fact_id, pointer, willingness, key)`: "who is <role>" (own name; a named person; a story role -> the case
+  graph via `who_case`, building the reduced case; else `cast_who`), a question about a case (`case_about`) ->
+  `_from_case` (a holder delivers, `deliver_node` marks it found; a non-holder names the core holder; None when the
+  case names no one), else the ordinary route: `willingness(ctx, npc, record, beats) -> (band, reason)` (a matching
+  refusal by tags -> `unwilling`; a resolved Talk on the NPC -> its outcome; Neutral or warmer -> `willing`; else
+  `tbl.npc_action` read through `answer_ladder.willingness_by_row`), remembered in meta `answers.index`
+  (`"<npc>|<kind>|<topic>" -> {willingness, reason, said: [said ids]}`), so a repeat draws nothing. `WILL_WORDS` are
+  the line's words. `volunteer` (reach >= `answer_ladder.volunteer_at_reach`), `deliver_count`, `who_answer`,
+  `topic_of` stay.
+- **Consumers**: `world_step.deliver_learning` puts fact answers in `BeatEntry.learned` and willingness answers in
+  `record.npc_actions` via `answer_line` (`source talk_outcome`, `source_ref PR-12-10`, tags `willingness:<band>`,
+  `ask:<index key>`); summaries carry `answers: [(fact id, pointer, line, willingness)]`. A question asked of no one
+  here gets no line. Recall with nothing stored: "You recall nothing more about X" (the case route still answers).
+  `turn.speech_owns` keeps the "what does the person I'm talking to know" Reader question from the Oracle.
+- **Speaker card** (`packet.speaker_card(state, npc, topic=, about=)`, `narrator.speaker_cards(state, record)` in
+  `record_text`): the NPC's knowledge records and own shown facts, pack items (no rumor slot), role topics, open
+  threads, `said_by(..., k=answer_ladder.said_shown)`; no sealed fact, no `MOTIVES` key, no case data.
+- **Testimony** (`engine.dm.testimony`): meta `npc.said` `{n, records: [{id said.N, speaker, turn, words, about,
+  question, settled, fact, route}]}` (newest `KEEP`); `add_said` (from `narration._said`, filing each line under its
+  speaker's `ask:` key), `said_by`, `open_records` (the Reader's TESTIMONY lines and `SchemaContext.said_ids`),
+  `is_repeat` / `overlap` (`not_a_repeat` in `narration._speech`: overlap above `narration.freshness.said_overlap`
+  with the speaker's said lines or their earlier line in the draft -> redraft). PR-12-12: `settle_triggered(ctx,
+  reader, record)` at T4 before plans: triggers (a) Reader `rests_on` (schema field only when `said_ids`) or a beat
+  target known only from testimony (a name `how: heard`, a place no PC record is about), (c) a Move target likewise;
+  `settle(ctx, said_id)`: one `Role.TESTIMONY` call `{subject, predicate, value}`, routes case (true only when a node
+  covers it; nothing written or told) / Oracle at Likely (`_BEYOND` word test) / accepted; writes a fact `source:
+  testimony` (or the Oracle's), or `<speaker> wrong_about`; marks the record settled once. (b) and (d) are deferred.
+- **Must-name diet** (`handles.items`): activities are not items; an NpcActionEntry tagged `optional` (`OPTIONAL`) is
+  not an item. `narrator.optional_material` renders them under `OPTIONAL MATERIAL` with no handles. `hide_stale`,
+  `_set_aside` and `_mark_used`'s activity branch are retired.
+- **Activities** (`npc_layer`): `ensure_activities` rolls once per scene (meta `npc.activity_rolled {scene, npcs}`,
+  `rolled_this_scene`) from `role_key` (exact role, first word, else a `tbl.npc_role` row sharing a content word,
+  else `other`); `end_activity` clears the slot when the NPC responds (never re-rolled), so it is never a lever.
+- **Who responds** (`npc_layer.respond`): `addressed` is one addressee (Talk targets, else `named_in`'s first, else
+  the one last spoken with / the only NPC); responders = addressed ∪ beat targets ∪ `concerned(state, rules, record,
+  beats, npc)` (event tags in `event_tags.concerns` computed against the NPC, incl. `concerns_self`, or matching their
+  motives). An NPC already answered by PR-12-10 adds no row; plain speech to the addressee is a willingness line
+  ("replies" / "turns you away" when nothing was asked); a concerned bystander's row is tagged `optional`. An
+  untargeted Talk applies to the addressee.
+- Creatures (`is_animal`) get no activity and are never addressed (unchanged).
 
 ## The player feedback loop (spec 012; PR-12-11, 12.3.6, 12.5.8; DL-12-84..86)
 - **Reporting.** `/fix <what>` (play client) → `Game.dispute(text)` → `turn.play_dispute`: a DISPUTE part, no Reader

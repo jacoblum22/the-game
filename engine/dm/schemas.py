@@ -64,6 +64,7 @@ class SchemaContext(BaseModel):
     pc_licences: list[str] = Field(default_factory=list)
     licences: list[str] = Field(default_factory=list)  # every licence id in data (a G3's would-be licence)
     reachable_places: list[str] = Field(default_factory=list)  # places a Move can head for (10.1.3)
+    said_ids: list[str] = Field(default_factory=list)  # unsettled `said` records the Reader may name (PR-12-12)
     pending_choice_ids: list[str] = Field(default_factory=list)
     # Reader (rules)
     input_classes: list[str] = Field(default_factory=list)
@@ -210,6 +211,8 @@ def reader_schema(ctx: SchemaContext) -> Schema:  # rule: 12.2.2
         "clarifying_question": STR_OR_NULL,  # 01.2.4
         "restatement": STR,  # 01.2.6
         "player_quantity": {"type": ["integer", "null"]},  # 01.1.4: the only numeric field (INV-3)
+        # PR-12-12 trigger (a): the testimony the action relies on; offered only when some is unsettled
+        "rests_on": enum(ctx.said_ids, first=NONE) if ctx.said_ids else None,
     })
 
 
@@ -404,12 +407,10 @@ def checker_schema(ctx: SchemaContext) -> Schema:  # rule: 12.3.1
     })
 
 
-CANDIDATE_KINDS = ("ordinary_fact", "not_ordinary")  # PR-12-10 step 4: only an ordinary fact may be ratified
-
-
-def proposer_schema(ctx: SchemaContext) -> Schema:  # rule: PR-12-10
-    """Rung 3's one typed candidate `{kind, subject, predicate, value}` (12.10.8; 00.12.7's proposal form)."""
-    return obj({"kind": enum(CANDIDATE_KINDS), "subject": STR, "predicate": STR, "value": STR})
+def testimony_schema(ctx: SchemaContext) -> Schema:  # rule: PR-12-12
+    """PR-12-12 step 2: the said words as one claim `{subject, predicate, value}` in the typed form of a fact (00.6);
+    the subject is an id in scope or a new name (spec 013; replaces R2-D's proposer)."""
+    return obj({"subject": STR, "predicate": STR, "value": STR})
 
 
 LOCATE_CATEGORIES = ("remembered_wrong", "rule_wrong", "contradiction", "misread", "other")  # 12.3.6 item 2
@@ -431,7 +432,7 @@ BUILDERS: dict[Role, Callable[[SchemaContext], Schema]] = {
     Role.DIRECTOR: director_schema,
     Role.NARRATOR: narrator_schema,
     Role.CHECKER: checker_schema,
-    Role.PROPOSER: proposer_schema,
+    Role.TESTIMONY: testimony_schema,
     Role.LOCATOR: lambda ctx: locator_schema(),
 }
 
@@ -544,8 +545,8 @@ DEFAULTS: dict[Role, Callable[[SchemaContext], dict[str, Any]]] = {
     Role.FRAMER: _framer_default,
     Role.WORLD: _world_default,
     Role.DIRECTOR: _director_default,
-    # no candidate: the ladder goes on to the pointer (PR-12-10 step 5)
-    Role.PROPOSER: lambda ctx: {"kind": "not_ordinary", "subject": "", "predicate": "", "value": ""},
+    # no claim stated: the caller states the words as said (PR-12-12 step 2)
+    Role.TESTIMONY: lambda ctx: {"subject": "world", "predicate": "is said to be", "value": ""},
     # no passage found: the dispute is answered "which statement?" and logged (PR-12-11 step 1)
     Role.LOCATOR: lambda ctx: {"turn": "none", "quote": "", "category": "other", "subject": "", "key": "",
                                "value": ""},
@@ -702,6 +703,8 @@ def schema_context(  # rule: 12.2.4
 ) -> SchemaContext:
     """The enums for this call, from the rules and the current state (scene-scoped; bounded). `focus` must be
     the ids the call's `build_packet` got, so the fact enum is the view's facts."""
+    from engine.dm.testimony import open_records
+
     scope = scene_scope(state)
     facts = [f.id for f in scene_facts(state, scope, focus=focus)]
     pc = pc_id(state)
@@ -780,6 +783,7 @@ def schema_context(  # rule: 12.2.4
         pc_licences=[x.license_id for x in state.licenses.get(pc, [])] if pc else [],
         licences=list(rules.licenses),
         reachable_places=_reachable(state),
+        said_ids=[r["id"] for r in open_records(state)],
         pending_choice_ids=pending,
         input_classes=classes,
         oracle_rungs=[r["id"] for r in res.get("oracle", {}).get("rungs", [])],

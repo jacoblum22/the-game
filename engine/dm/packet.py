@@ -243,7 +243,16 @@ def view_for(role: Role, state: WorldState, ctx: Mapping[str, Any] | None = None
         view = view | {"entities": [_slim(e, ()) for e in view["entities"]], "facts": [], "spotlight": [],
                        "positions": {k: v for k, v in view["positions"].items() if k == pc},
                        "licenses": {}, "quantities": {}, "conditions": []}
-    return render_view(view)
+    text = render_view(view)
+    if role == Role.READER:  # PR-12-12: testimony a beat may rest on (`rests_on`)
+        from engine.dm.testimony import open_records
+
+        recs = open_records(state)
+        if recs:
+            text += "\nTESTIMONY (unsettled; `rests_on` names the one the player's action relies on):\n" + "\n".join(
+                f"{r['id']}: {display_name(state, r['speaker']) if r['speaker'] in state.entities else 'someone'}"
+                f" said \"{_short(r['words'])}\"" for r in recs)
+    return text
 
 
 
@@ -461,6 +470,80 @@ def render_exchange(ex: str | tuple[str, str] | Sequence[str]) -> str:
 def verbatim_exchanges(rules: Any = None) -> int:  # rule: 12.2.4
     rules = rules if rules is not None else load_rules()
     return int(rules.pacing.get("packet", {}).get("verbatim_exchanges", VERBATIM_EXCHANGES))
+
+
+def name_line(state: WorldState, eid: str) -> str:
+    """`<id>: <name as the PC knows it>` (a sealed entity: its slice or "someone")."""
+    e = state.entities.get(eid)
+    if e is None:
+        return f"{eid}: someone"
+    seal = state.seals.get(eid)
+    return f"{eid}: {seal.slice or 'someone'}" if seal is not None else f"{eid}: {display_name(state, eid)}"
+
+
+_CARD_SKIP = ("name", "voice", "activity", "exists", "harm_state", "stance.said")
+_CARD_SKIP_PREFIX = ("knows_", "points_to.", "trg.", "detail.", "asked_", "case.", "bond.", "memory.", "said.")
+
+
+def _card_fact(state: WorldState, f: Any) -> bool:
+    """A fact the speaker card may show: in the world, never sealed, never bookkeeping or a motive (INV-10)."""
+    return (isinstance(f.value, str | bool | int | float) and f.visibility != "sealed" and f.id not in state.seals
+            and f.subject not in state.seals and f.predicate not in _CARD_SKIP and f.predicate not in MOTIVES
+            and not f.predicate.startswith(_CARD_SKIP_PREFIX) and not f.predicate.startswith("who_is_")
+            and state.current_fact_id(f.subject, f.predicate) == f.id)
+
+
+def speaker_card(state: WorldState, npc: str, *, topic: str | None = None, about: str | None = None,
+                 rules: Any = None) -> list[str]:  # rule: PR-12-10
+    # rule: 12.10.8
+    """PR-12-10 step 3 (`answer_ladder.speaker_card`): for the asked or addressed NPC, what they know (their
+    knowledge records and their seeded pack's ordinary facts, those on the topic first), their role's common
+    knowledge topics, public news in their scope (open threads), and their recent `said` records
+    (`answer_ladder.said_shown`) plus every one on the topic. Never a sealed fact, an undelivered placement (a case
+    lives in meta, never here) or a motive (INV-10)."""
+    from engine.dm.testimony import said_by
+    from engine.gen._seed_packs import pack_data, role_key
+
+    e = state.entities.get(npc)
+    if e is None or npc in state.seals:
+        return []
+    rules = rules or load_rules()
+    ck = pack_data().CK
+    shown = int((rules.pacing.get("answer_ladder") or {}).get("said_shown", 6))
+
+    def on(text_topic: str | None, subj: str | None) -> bool:
+        return bool((topic and text_topic == topic) or (about and subj == about))
+
+    mine = {fid for fid in state.knowledge.get(npc, {}) if fid in state.facts}  # 12.10.6 (a)-(b): records, own facts
+    mine |= {f.id for f in state.facts.values() if f.subject == npc and f.visibility in ("shown", "available")}
+    facts = sorted((state.facts[fid] for fid in sorted(mine) if _card_fact(state, state.facts[fid])),
+                   key=lambda f: not on(f.predicate.split(".")[1] if f.predicate.startswith("topic.") else None,
+                                        f.subject))
+    known = [str(f.value) if f.predicate.startswith("topic.") and isinstance(f.value, str)
+             else f"{display_name(state, f.subject) if f.subject in state.entities else ''} "
+                  f"{f.predicate.replace('_', ' ').replace('.', ' ')} {f.value}".strip() for f in facts[:5]]
+    pack = sorted((k for k in e.data.get("knowledge") or [] if k.get("text") and k.get("slot") != "rumor"),
+                  key=lambda k: not on(k.get("topic"), k.get("about")))
+    for k in pack[:4]:
+        if str(k["text"]) not in known:
+            known.append(str(k["text"]))
+    roles = [f"{t} ({ck['topics'][t]['gist']})" for t in ck["by_role"].get(role_key({"role": e.data.get("role")}), [])
+             if t in ck["topics"]]
+    news = [str(t.data.get("text") or t.name) for t in state.entities.values()
+            if t.kind == "thread" and t.data.get("status", "active") == "active"
+            and t.visibility in ("shown", "available") and t.id not in state.seals][:3]
+    said = said_by(state, npc, topic=topic, about=about, k=shown)
+    out = [f"SPEAKER CARD for {display_name(state, npc)} (PR-12-10: answer from this first; beyond it, hearsay or a "
+           "guess, hedged):"]
+    out += [f"- knows: {_short(x)}" for x in known] or ["- knows: nothing on record (answer from hearsay or a guess)"]
+    if roles:
+        out.append("- their trade's common knowledge: " + "; ".join(roles))
+    if news:
+        out.append("- public news anyone here may know: " + "; ".join(_short(x) for x in news))
+    if said:
+        out.append("- they already said (never contradict or repeat these unprompted; build on them):")
+        out += [f"  - \"{_short(r['words'])}\"" for r in said]
+    return out
 
 
 def build_packet(  # rule: 12.2.4

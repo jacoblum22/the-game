@@ -193,7 +193,7 @@ class FactSet(Payload):  # rule: 00.6.2
     predicate: str
     value: Any
     kind: Literal["fact", "flag", "commitment"] = "fact"
-    source: Literal["narration", "oracle", "generation", "ruling", "data", "player_accepted", "correction"]
+    source: Literal["narration", "oracle", "generation", "ruling", "data", "player_accepted", "correction", "testimony"]
     certainty: Literal["established", "rumored", "believed", "narrated"] = "established"  # narrated: 00.6.6a
     truth: Literal["true", "partial", "false", "outdated"] = "true"  # sealed (00.6.2)
     visibility: Visibility = "background"

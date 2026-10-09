@@ -234,17 +234,17 @@ def test_tags_match_wants_and_refusals_and_set_the_row(tmp_path: Path) -> None:
     assert want_row(RULES, {"concerns_travel"}, request=False, hostile=False) == 6
 
 
-def test_a_matching_want_sets_the_row_without_a_world_call(tmp_path: Path) -> None:
-    """12.11.9 step 3(b): the words touch the ferry crossing (concerns_travel), which his want for safe passage
-    carries: it engages (row 6, then the practice clamp) by code, with no World call."""
+def test_plain_speech_gets_willingness_only_without_a_world_call(tmp_path: Path) -> None:
+    """12.11.9 step 3 [revision: R2-H]: plain speech to Tam touches his want (concerns_travel), but for speech the
+    source gives willingness only (PR-12-10 step 2): one willingness line, no row wording, no World call."""
     say = "Tam Harlan, the river crossing must be hard these days."
     model = ScriptedModel({Role.READER: [reader("SPEECH", say)], Role.WORLD: [QUIET_WORLD]})
     dock, ctx = setup(tmp_path, model)
     _motives(dock, dock.ferryman, [{"text": "keep safe passage"}], [{"kind": "refusal.lend", "text": "never lends"}])
     out = play_turn(ctx, say)
     acts = [a for a in out.adjudication.record.npc_actions if a.npc == dock.ferryman]
-    assert [(a.source, a.source_ref) for a in acts] == [("want", f"{dock.ferryman}/want.1")]
-    assert "concerns_travel" in acts[0].tags and any(t.startswith("row:") for t in acts[0].tags)
+    assert [(a.source, a.source_ref) for a in acts] == [("talk_outcome", "PR-12-10")]
+    assert any(t.startswith("willingness:") for t in acts[0].tags)
     assert not calls(model, Role.WORLD)
 
 

@@ -4,8 +4,9 @@
 
 1. Adversaries in conflict — Milestone 1 has no round-by-round conflict (coarse).
 2. NPCs present: each resolved beat's scene state (T-12-18, engine/dm/scene_state.py), then the default NPC layer
-   (12.11.9, engine/dm/npc_layer.py): activities, the practice, each engaged
-   NPC's response (a resolved Talk frame, a recorded refusal or want, the action row clamped to the practice).
+   (12.11.9, engine/dm/npc_layer.py): activities (once per scene, optional material), the practice, and a response
+   only from an addressed or concerned NPC (a resolved Talk frame, a recorded refusal or want, the action row clamped
+   to the practice; for speech the row gives willingness only).
 3. Clocks that ticked this turn render their omens (INV-14).
 4. Fired triggers in 12.2.3's order (owed blocks for the narration; a due lethal warning is delivered).
 5. Time: each resolved beat's cost by the scene's mode (00.7.3) through `advance_time` (boundaries run).
@@ -47,12 +48,12 @@ def world_step(ctx: TurnContext, record: AdjudicationRecord, *, beats: Sequence[
                oof: list[dict[str, str]] | None = None) -> None:
     # rule: 12.2.9
     # coarse: PR-06-6
-    answered = [x["knower"] for x in deliver_learning(ctx, record, beats) if x["speech"]]  # PR-12-10
+    deliver_learning(ctx, record, beats)  # PR-12-10: an asked NPC's answer line (respond keeps it, adds no row)
     acted = foes_act(ctx, record, oof)
     beat_writes(ctx, record, beats)  # T-12-18: the beats' scene state (T1c)
     release_holds(ctx, record)  # 06.5.2: a hold ends with its holder down, out or moved away
     ensure_activities(ctx, record)  # 12.11.9 step 1
-    npcs_respond(ctx, record, beats, skip=[*acted, *answered], oof=oof)
+    npcs_respond(ctx, record, beats, skip=acted, oof=oof)
     clock_omens(ctx, record)
     fired_triggers(ctx, record)
     beat_time(ctx, record, beats, fought=bool(acted))
@@ -134,13 +135,14 @@ def deliver_learning(ctx: TurnContext, record: AdjudicationRecord, beats: Sequen
                      ) -> list[dict[str, Any]]:
     # rule: PR-12-10
     # rule: 12.10.5
-    """A successful Talk that asks (a part with a `question_kind`), Observe or Recall is answered by the answer ladder
-    (engine/dm/answer.py) before the draft: of N questions `deliver_count(N, reach)` (T-01-6), each at the ladder depth
-    of the delivered reach (a no-roll beat runs at Standard), plus a volunteered extra at Great; each answer is a
-    `BeatEntry.learned` line (a record line with a handle). A plain SPEECH question with no Talk beat is answered at
-    Standard as the addressed NPC's act. Never empty: an answer is a fact, a placement, a record answer or a
-    pointer (DL-12-44). A Talk that asks nothing is a request (T-15-5 "yes, as asked"), not a learning beat.
-    Returns one summary per learning beat ({beat, verb, knower, speech, answers: [(fact id, pointer, line)]})."""
+    """A successful Talk that asks (a part with a `question_kind`), Observe or Recall is answered before the draft
+    (PR-12-10, engine/dm/answer.py): of N questions `deliver_count(N, reach)` (T-01-6) (a no-roll beat runs at
+    Standard), plus a volunteered extra at `answer_ladder.volunteer_at_reach`. A fact answer (the case route,
+    casting, Observe/Recall) is a `BeatEntry.learned` line; an ordinary question's answer is the asked NPC's
+    willingness line (`answer_line`), whose words the narrator chooses from the speaker card. A plain SPEECH question
+    with no Talk beat is answered the same way by the one addressed NPC. A Talk that asks nothing is a request (T-15-5
+    "yes, as asked"), not a learning beat; a question asked of no one here gets no line. Returns one summary per
+    learning beat ({beat, verb, knower, speech, answers: [(fact id, pointer, line, willingness)]})."""
     from engine.dm import answer as ans
     from engine.dm.npc_layer import addressed, said_words
     from engine.dm.roles.world import present_npcs
@@ -151,6 +153,7 @@ def deliver_learning(ctx: TurnContext, record: AdjudicationRecord, beats: Sequen
         return []
     asked = [p for p in record.parts if p.question_kind not in (None, NONE) and p.cls in ("DECLARATION", "SPEECH")]
     present = present_npcs(st)
+    vol = int(ctx.rules.pacing["answer_ladder"].get("volunteer_at_reach", 3))
     out: list[dict[str, Any]] = []
     for b in beats:
         e = b.entry
@@ -160,7 +163,6 @@ def deliver_learning(ctx: TurnContext, record: AdjudicationRecord, beats: Sequen
         if verb is None or not _ok(b):
             continue
         reach = 2 if b.status == "no_roll" else REACH_VALUE.get(e.reach or "standard", 2)
-        rungs = ans.rungs_for(ctx.rules, reach)
         knower = None
         if verb == "verb.talk":
             if not asked or (e.targets and e.targets[0] in st.entities and st.entities[e.targets[0]].kind not in PEOPLE):
@@ -168,26 +170,37 @@ def deliver_learning(ctx: TurnContext, record: AdjudicationRecord, beats: Sequen
             people = [t for t in e.targets if t in st.entities and st.entities[t].kind in PEOPLE]
             knower = people[0] if people else next(iter(addressed(st, record, present, said_words(ctx))), None) or (
                 present[0] if len(present) == 1 else None)
-            if knower is None:  # asked of no one here: who would know (never empty, DL-12-44)
-                items = _look(ctx, e, verb, reach, pc, asked)
-            else:
-                items = [ans.ask(ctx, knower, p.question_kind, p.topic, p.text, rungs, pc=pc)
-                         for p in asked[:ans.deliver_count(len(asked), reach)]]
-                extra = ans.volunteer(ctx, knower, pc) if "volunteer" in rungs else None
-                items += [extra] if extra else []
+            if knower is None:
+                continue  # asked of no one here: no answer line, never a code pointer (DL-12-90)
+            items = [ans.ask(ctx, knower, p.question_kind, p.topic, p.text, pc=pc, record=record, beats=beats)
+                     for p in asked[:ans.deliver_count(len(asked), reach)]]
+            extra = ans.volunteer(ctx, knower, pc) if reach >= vol else None
+            items += [extra] if extra else []
         else:
             items = _look(ctx, e, verb, reach, pc, asked)
-        e.learned += [a.line for a in items]
+        for a in items:
+            if a.willingness is None:
+                e.learned.append(a.line)
+            else:
+                answer_line(record, knower or "", a)
         out.append({"beat": e.beat_id, "verb": verb, "knower": knower, "speech": False,
-                    "answers": [(a.fact_id, a.pointer, a.line) for a in items]})
+                    "answers": [(a.fact_id, a.pointer, a.line, a.willingness) for a in items]})
     if not any("verb.talk" in (b.entry.approach_words or "") for b in beats):
-        out += _speech_answers(ctx, record, [p for p in asked if p.cls == "SPEECH"], present, pc)
+        out += _speech_answers(ctx, record, beats, [p for p in asked if p.cls == "SPEECH"], present, pc)
     return out
 
 
-def _speech_answers(ctx: TurnContext, record: AdjudicationRecord, speech: list[Any], present: list[str],
-                    pc: str) -> list[dict[str, Any]]:  # rule: PR-12-10
-    """A plain SPEECH question (no Talk beat, 15.3.10) to a present NPC: answered at Standard, as their act."""
+def answer_line(record: AdjudicationRecord, npc: str, a: Any) -> None:  # rule: PR-12-10
+    """The asked NPC's answer as a must-name record line `{npc, question, willingness, reason}` (PR-12-10 step 2):
+    a fact told, or the willingness the narrator voices; tagged with the index key its `said` lines file under."""
+    tags = [f"willingness:{a.willingness}"] if a.willingness else []
+    record.npc_actions.append(NpcActionEntry(npc=npc, action=a.said, source="talk_outcome", source_ref="PR-12-10",
+                                             tags=[*tags, *([f"ask:{a.key}"] if a.key else [])]))
+
+
+def _speech_answers(ctx: TurnContext, record: AdjudicationRecord, beats: Sequence[BeatOutcome], speech: list[Any],
+                    present: list[str], pc: str) -> list[dict[str, Any]]:  # rule: PR-12-10
+    """A plain SPEECH question (no Talk beat, 15.3.10) to the one addressed NPC, answered as their act."""
     from engine.dm import answer as ans
     from engine.dm.npc_layer import addressed, said_words
 
@@ -195,14 +208,12 @@ def _speech_answers(ctx: TurnContext, record: AdjudicationRecord, speech: list[A
         return []
     out = []
     for npc in addressed(ctx.state, record, present, said_words(ctx))[:1]:
-        rungs = ans.rungs_for(ctx.rules, 2)
-        items = [ans.ask(ctx, npc, p.question_kind, p.topic, p.text, rungs, pc=pc)
+        items = [ans.ask(ctx, npc, p.question_kind, p.topic, p.text, pc=pc, record=record, beats=beats)
                  for p in speech[:ans.deliver_count(len(speech), 2)]]
         for a in items:
-            record.npc_actions.append(NpcActionEntry(npc=npc, action=a.said, source="talk_outcome",
-                                                     source_ref="PR-12-10"))
+            answer_line(record, npc, a)
         out.append({"beat": None, "verb": "speech", "knower": npc, "speech": True,
-                    "answers": [(a.fact_id, a.pointer, a.line) for a in items]})
+                    "answers": [(a.fact_id, a.pointer, a.line, a.willingness) for a in items]})
     return out
 
 
@@ -211,7 +222,8 @@ def _look(ctx: TurnContext, e: Any, verb: str, reach: int, pc: str, asked: list[
     # rule: 15.9.5
     """Observe or Recall: a placement held here (a search at a holder place, object or document: the node is found,
     15.9.5); else what the store holds here, ranked by the words the beat shares with it, `deliver_count`'s many
-    (Observe and Recall draw on what is here); else the place's seeded furniture (Observe); else who would know."""
+    (Observe and Recall draw on what is here); else the place's seeded furniture (Observe); else a plain "nothing
+    more" (a Recall of the case the PC was told still delivers; no proposer, no pointer: DL-12-90)."""
     from engine.audit.fallback import fact_sentence
     from engine.dm import answer as ans
     from engine.gen.case import cases
@@ -258,21 +270,14 @@ def _look(ctx: TurnContext, e: Any, verb: str, reach: int, pc: str, asked: list[
     q = asked[0] if asked else None
     topic, about = ans.topic_of(st, q.topic if q else None, said, pc)
     about = about or next((t for t in e.targets if t in st.entities), None)
-    if verb == "verb.recall" and "propose_and_ratify" in ans.rungs_for(ctx.rules, reach):
-        # PR-12-10 rung 3 with the PC as the knower: what their upbringing or trade would have taught them
-        fid, touched = ans.ratify(ctx, pc, topic, said, pc)
-        if touched is not None:
-            a = ans._from_case(ctx, pc, touched, False, pc, True)
+    if verb == "verb.recall":
+        case = ans.case_about(st, said, about)
+        a = ans._from_case(ctx, pc, case, False, pc, True) if case is not None else None
+        if a is not None:  # the consequential route with the PC as the knower (what they were told, or its holder)
             return [ans.Answer("", f"You {a.said}", a.fact_id, a.pointer)]
-        if fid is not None:
-            return [ans.Answer("", f"You recall: {ans._sentence(st, st.facts[fid])}", fid)]
-    fid, ref = ans.point(ctx, pc, topic, pc, about=about)
     what = f"about {ans.name(st, about) if about else topic.replace('_', ' ')}"
-    head = {"verb.recall": "You recall nothing more", "verb.talk": "No one here can tell you more"}.get(
-        verb, "You find nothing more here")
-    who = ans.name(st, ref) if ref in st.entities and st.entities[ref].kind in PEOPLE else \
-        f"someone at {ans.name(st, ref)}"
-    return [ans.Answer("", f"{head} {what}, but {who} would know", fid, ref)]
+    head = "You recall nothing more" if verb == "verb.recall" else "You find nothing more here"
+    return [ans.Answer("", f"{head} {what}")]
 
 
 STALLED = "cannot make out: "

@@ -324,9 +324,12 @@ def _sample(ctx: TurnContext, record: AdjudicationRecord, turn: _Turn, final: Se
     out.draft_versions[-1]["sample"] = {"claims": _dump(full.claims), "verdicts": _dump(verdicts)}
 
 
-def _speech(ctx: TurnContext, record: AdjudicationRecord, turn: _Turn, s: _Sent, i: int) -> None:  # rule: 12.3.1b
-    """12.3.1b item 1's three checks, all code: the speaker is present, is not the PC, and no quoted words in the
-    PC's mouth go beyond the player's message (`pc_agency`, a cut). Speech is never checked for truth."""
+def _speech(ctx: TurnContext, record: AdjudicationRecord, turn: _Turn, s: _Sent, i: int,
+            earlier: Sequence[str] = ()) -> None:  # rule: 12.3.1b
+    """12.3.1b item 1's checks, all code: the speaker is present, is not the PC, no quoted words in the PC's mouth
+    go beyond the player's message (`pc_agency`, a cut), and `not_a_repeat` (12.14.11; DL-12-90): words that repeat
+    one of the speaker's own `said` records, or their earlier line in this draft, are redrafted. Speech is never
+    checked for truth."""
     from engine.audit import text as atx
     from engine.world.scenes import cast_present
 
@@ -344,6 +347,17 @@ def _speech(ctx: TurnContext, record: AdjudicationRecord, turn: _Turn, s: _Sent,
                                   store_value="give the words to someone present"))
     elif sp is None and not pc_words:
         _log(ctx, turn, i, "speech", "no_speaker")
+    if sp is not None and sp != record.pc:
+        from engine.dm.testimony import is_repeat, overlap
+
+        said = " ".join(speech)
+        limit = float(((ctx.rules.pacing.get("narration") or {}).get("freshness") or {}).get("said_overlap") or 0.6)
+        again = is_repeat(ctx.need_tx().state, ctx.rules, sp, said) or next(
+            (e for e in earlier if overlap(said, e) > limit), None)
+        if again:
+            s.failures.append(Failure(why="repeats a line this speaker already said (not_a_repeat, 12.14.11)",
+                                      fix="redraft", store_value=f'they already said "{again[:120]}": new words, '
+                                                              "or drop the line"))
 
 
 def _judge(ctx: TurnContext, record: AdjudicationRecord, turn: _Turn, sents: list[_Sent], todo: Sequence[int],
@@ -377,7 +391,8 @@ def _judge(ctx: TurnContext, record: AdjudicationRecord, turn: _Turn, sents: lis
         s.failures += scan.failures
         for cls, why in scan.logged:
             _log(ctx, turn, i, cls, "logged", why)
-        _speech(ctx, record, turn, s, i)
+        earlier = [" ".join(voices(sents[j].decl)[1]) for j in range(i) if sents[j].decl.speaker == s.decl.speaker]
+        _speech(ctx, record, turn, s, i, earlier)
         _write_new(ctx, record, s, idx, out, turn, i)
         safe = screen_safety(s.decl.text, tx.state)
         if not safe.ok and safe.cuts:
@@ -438,7 +453,7 @@ def narrate_checked(ctx: TurnContext, record: AdjudicationRecord, *, player_mess
     max_r = _max_redrafts(rules)
     out = NarrationResult()
     if purpose in ("turn", "scene_open", "opening"):
-        ensure_activities(ctx, record)  # 12.11.9 step 1: every present NPC's activity is a record line
+        ensure_activities(ctx, record)  # 12.11.9 step 1: once per scene; optional material, never a record line
     turn = _Turn(items=narrator_role.record_items(tx.state, record), player_message=player_message,
                  exchanges=list(exchanges))
     must = [it.handle for it in turn.items if it.must_name]
@@ -563,13 +578,18 @@ def _deliver(ctx: TurnContext, record: AdjudicationRecord, turn: _Turn, sents: l
 
 def _said(ctx: TurnContext, record: AdjudicationRecord, final: Sequence[_Sent],
           out: NarrationResult) -> None:  # rule: 12.3.1b
-    """Delivered speech as `said` records `{speaker, turn, words, about}`, never facts (12.3.1b item 1). A stored
-    name the PC did not know, heard in an NPC's words, is known from now on (`how: heard`)."""
+    """Delivered speech as `said` records `{speaker, turn, words, about, question}`, never facts (12.3.1b item 1;
+    PR-12-10 step 5): kept in state (`engine.dm.testimony`), fed back on the speaker's card, filed under the index key
+    of the question they answered this turn. A stored name the PC did not know, heard in an NPC's words, is known
+    from now on (`how: heard`)."""
     from engine.audit import text as atx
+    from engine.dm.testimony import add_said
     from engine.store.views import name_known
     from engine.world.social import learn_name
 
     st = ctx.need_tx().state
+    asked = {a.npc: t.removeprefix("ask:") for a in record.npc_actions for t in a.tags if t.startswith("ask:")}
+    start = len(out.said)
     for s in final:
         _, speech = voices(s.decl)
         if not speech or pc_quotes(s.decl) or (s.decl.speaker and s.decl.speaker == record.pc):
@@ -577,12 +597,14 @@ def _said(ctx: TurnContext, record: AdjudicationRecord, final: Sequence[_Sent],
         words = " ".join(speech)
         if s.decl.speaker is None and atx.covers(words, " ".join(p.text for p in record.parts), ratio=0.8):
             continue  # the player's own words quoted back: not testimony
-        out.said.append({"speaker": s.decl.speaker, "turn": ctx.turn_id, "words": words, "about": list(s.decl.about)})
+        out.said.append({"speaker": s.decl.speaker, "turn": ctx.turn_id, "words": words, "about": list(s.decl.about),
+                         "question": asked.get(s.decl.speaker or "")})
         low = words.lower()
         for eid, e in list(st.entities.items()):
             if record.pc and e.kind in ("npc", "companion", "adversary") and e.name and not name_known(st, eid) \
                     and re.search(rf"\b{re.escape(e.name.lower())}\b", low):
                 learn_name(ctx.time_ctx(), record.pc, eid, "heard")
+    add_said(ctx, [x for x in out.said[start:] if x.get("speaker")])
 
 
 def _mark_used(ctx: TurnContext, final: Sequence[_Sent], record: AdjudicationRecord | None = None,
@@ -599,11 +621,6 @@ def _mark_used(ctx: TurnContext, final: Sequence[_Sent], record: AdjudicationRec
     facts = st.facts
     used = [r for s in final for r in s.decl.refs if r in facts and facts[r].predicate.startswith(DETAIL)]
     used += [u for s in final for u in s.used if u in facts]
-    lines = {it.handle: record.activities[it.index] for it in items if it.kind == "activity"} if record else {}
-    for r in (r for s in final for r in s.decl.refs if r in lines):  # a scene-state line said (12.11.9, T-12-18)
-        ref = st.details.get(lines[r].npc, {}).get(lines[r].slot)
-        if ref is not None:
-            used.append(ref.fact_id)
     if used:
         tx.add(used_event(list(dict.fromkeys(used))))
 

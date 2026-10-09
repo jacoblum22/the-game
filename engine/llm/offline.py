@@ -692,12 +692,12 @@ def _engaged(npcs: list[Any], happened: str, view: str) -> list[Any]:
     return list(npcs[:1]) if spoke else []
 
 
-def _proposer(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:  # rule: PR-12-10
-    """Rung 3 offline: one bland ordinary candidate on the asked topic (`topic: <key>` in the message)."""
-    m = re.search(r"^topic: ([\w-]+)", packet.message, re.MULTILINE)
-    topic = (m.group(1) if m else "local_news").replace("_", " ")
-    return {"kind": "ordinary_fact", "subject": f"talk of {topic}", "predicate": "is",
-            "value": "nothing out of the ordinary this season"}
+def _testimony(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:  # rule: PR-12-12
+    """Step 2 offline: the first id the view names as the subject, the quoted words as the value."""
+    m = re.search(r'said: "(.*)"', packet.message)
+    sub = re.search(r"(?m)^([a-z]+\.[\w.]+): ", packet.view or "")
+    return {"subject": sub.group(1) if sub else "world", "predicate": "is said to be",
+            "value": (m.group(1) if m else "")[:160]}
 
 
 def _locator(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:  # rule: PR-12-11
@@ -1098,7 +1098,7 @@ ROLE_HEURISTICS: dict[Role, Callable[[dict[str, Any], Packet], dict[str, Any]]] 
     Role.DIRECTOR: _director,
     Role.NARRATOR: _narrator,
     Role.CHECKER: _checker,
-    Role.PROPOSER: _proposer,
+    Role.TESTIMONY: _testimony,
     Role.LOCATOR: _locator,
 }
 

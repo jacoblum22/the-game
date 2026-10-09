@@ -25,7 +25,7 @@ class Role(StrEnum):
     DIRECTOR = "director"
     NARRATOR = "narrator"
     CHECKER = "checker"
-    PROPOSER = "proposer"  # PR-12-10 rung 3: one typed candidate answer (spec 008 part B)
+    TESTIMONY = "testimony"  # PR-12-12 step 2: a said claim stated as {subject, predicate, value} (spec 013)
     LOCATOR = "locator"  # PR-12-11 step 1: which passage a player's report means (spec 012)
 
 
