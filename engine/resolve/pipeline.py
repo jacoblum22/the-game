@@ -229,11 +229,14 @@ def _ask(env: PipelineEnv, why: str, todo: list[BeatPlan]) -> PauseRecord:  # ru
 
 
 def own_line(restatement: str, act: str, *, alone: bool = True) -> str:  # rule: 01.2.2
-    """The restatement's clause for one beat ("A. Then: B. Then: C"): the clause sharing the most content words with
-    the beat's own act (its method and intent); a tie goes to the first; "" when none shares a word, or when the
-    restatement is one clause and the beat is not `alone` (it speaks for every beat: P-064). Fighter turn 11:
-    "Sheathe the sword." titled a Force on the door. Spec 017."""
-    clauses = [c.strip(" ,:\n") for c in _THEN.split(restatement or "") if c.strip(" ,:\n")]
+    """The restatement's clause for one beat ("A. Then: B. Then: C"): the sentence sharing the most content words with
+    the beat's own act (its method and intent), without its "Then" or a label ("Move:", "Beat 1:"); a tie goes to the
+    first; "" when none shares a word, or when the restatement is one clause and the beat is not `alone` (it speaks
+    for every beat: P-064). Fighter turn 11: "Sheathe the sword." titled a Force on the door; live run 220608: "Draw
+    the dagger. Ask Aldwen to open the chain" titled (and labelled the RESULT of) the ask. Spec 017."""
+    clauses = [_LABEL.sub("", _THEN.sub("", c.strip())).strip(" ,:")
+               for c in _SENTENCE.split(restatement or "")]
+    clauses = [c for c in clauses if c]
     if len(clauses) <= 1:
         return clauses[0] if clauses and alone else ""
     want = words(act)
@@ -244,7 +247,9 @@ def own_line(restatement: str, act: str, *, alone: bool = True) -> str:  # rule:
     return line[:1].upper() + line[1:]
 
 
-_THEN = re.compile(r"(?:(?<=[.!?;])\s+|\n\s*)Then\b:?")
+_SENTENCE = re.compile(r"(?<=[.!?;])\s+|\n\s*")
+_THEN = re.compile(r"^then\b[\s,:]*", re.IGNORECASE)
+_LABEL = re.compile(r"^(?:beat \d+|step \d+|[A-Z][a-z]+):\s+", re.IGNORECASE)
 
 
 def resume(env: PipelineEnv, pause: PauseRecord, choice: str, *, by: str = "option",

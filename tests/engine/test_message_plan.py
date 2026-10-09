@@ -119,6 +119,20 @@ def test_fighter_turn_11_offer_is_titled_by_its_own_beat_and_resolves(tmp_path: 
     ctx.store.close()
 
 
+def test_own_line_takes_the_beats_own_sentence() -> None:
+    """Live run 20261008-220608: a free act's sentence and the Reader's "Beat 1:" label titled the OFFER."""
+    from engine.resolve.pipeline import own_line
+
+    two = "Draw the dagger. Ask Aldwen to open the chain across the road. Then: walk out through the gate."
+    assert own_line(two, "ask Aldwen to open the gate chain Aldwen opens the chain") == \
+        "Ask Aldwen to open the chain across the road."
+    assert own_line(two, "walk out through the gate the PC is outside") == "Walk out through the gate."
+    beat1 = "Beat 1: go down into the ditch to the looted wagon. Then: check the wagon for anything left behind."
+    assert own_line(beat1, "go down into the ditch to the wagon", alone=False) == \
+        "Go down into the ditch to the looted wagon."
+    assert own_line("Grab the purse and punch her.", "punch her", alone=False) == ""  # P-064: one line, two beats
+
+
 def test_fighter_turn_4_demand_their_story_runs_after_the_offer(tmp_path: Path) -> None:
     """"... If I find them, I walk straight up and demand they tell me their story": the conditional Talk beat was a
     "queued" note and never ran. It is on the plan: the OFFER names it, and it runs once the move succeeds."""
