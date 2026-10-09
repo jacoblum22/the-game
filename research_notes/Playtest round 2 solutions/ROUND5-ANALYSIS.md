@@ -57,24 +57,38 @@ Examples:
 
 **Structural, and a rules decision.**
 
-### T3. Repetition keeps returning in new forms
-This round's examples:
-- "Mark me" ×5 from the captain: a seeded voice habit used in every line;
+### T3. Repetition: one turn's narration is stitched from blind calls (revised after tracing the save)
+Examples:
+- "Mark me" ×5 from the captain;
 - "the missing child" said three times;
-- Lilett repeating Belby's facts;
-- people's descriptions every turn (kept so pronouns stay right);
-- the player's own previous line echoed back. This is a **spec 017 regression**: speech carried across a pause
-  gets restated.
+- answers that keep restating the same facts.
 
-Each round we fix one source (activities, NPC lines, place looks), and another appears.
+**Traced in the talker save (turn 13).** The captain's answer was written by **three separate narrator calls**:
+1. the first draft;
+2. a repair call that *adds* a sentence (`"replaces": "add"`) because a must-name item, the answer to the
+   direct question, wasn't covered;
+3. a second repair call that also adds a sentence.
 
-**Option:** a **single freshness mechanism over all recent output**, instead of one patch per source:
-- distinctive phrases from the last N deliveries, the narrator's and NPCs' alike, are passed back to the
-  narrator as "already said, don't repeat";
-- voice habits are marked *occasional*;
-- descriptions keep only the pronoun line every turn and drop the rest.
+**The repair calls never see the draft they are adding to.** The first draft's lines are not in their packets.
+Each one wrote "Sevella answers about the missing child" from scratch, each opening with the habit. In the talker
+run this happened on **5 of 14 turns** (7 blind add calls). The fighter run had none.
 
-**Structural; it replaces several per-source patches.**
+**A second, smaller cause:** the habit is stored as a rule, `habit = says 'mark me' before anything important`.
+Every answer counts as important.
+
+The owner pushed back: a model that can see the conversation doesn't normally repeat a catchphrase every turn.
+That was right. **A global freshness list would only have treated the symptom.**
+
+**Options: one voice per turn.**
+- **Repairs see the whole draft.** A repair revises the draft and returns it, instead of appending a free-standing
+  sentence.
+- **Repairs become rarer.** The coverage gap that triggers most of them (the direct question) should be met by the
+  first draft, or rendered from the record.
+- **Habits are phrased as occasional.**
+
+Separately, people's descriptions still go out every turn so pronouns stay right. Send only the pronoun line on
+later turns. The player's own line being echoed back is a spec 017 regression (speech carried across a pause gets
+restated); patch it.
 
 ### T4. `/fix` outcomes are muddy
 Examples:
@@ -124,14 +138,14 @@ Fighter examples:
 |---|---|
 | T1: finish S1 (settle testimony before mechanics; render it as speech) | small, structural |
 | T2: bond reaches standing (bug) + "success is willingness" (rule) | structural, **owner decision** |
-| T3: one freshness mechanism over all output | structural; replaces per-source patches |
+| T3: one voice per turn (repairs see the draft; habits occasional) | structural; small |
 | T4: `/fix` outcomes (display error, inconsistency, visible "Now:") | medium |
 | T5: combat feel (grapple restriction, low-Vitality warning, ordering bug) | mixed; part of the known combat gaps |
 | Patches (3) | small |
 
 ## 4. Suggested order
 1. T2's rule decision.
-2. T1 + T3 together (both are about what text the narrator gets and returns).
+2. T1 + T3 together (both are about what text the narrator gets and returns; T3 is the blind repair calls).
 3. T4.
 4. The patches.
 5. T5, which can wait for the combat-subsystems work.
