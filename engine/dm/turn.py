@@ -195,7 +195,9 @@ def _turn(ctx: TurnContext, message: str, *, choice: str | None, dispute: bool =
             if (pause is None or between) and not dispute:  # a dispute is out of fiction: no world step, no time
                 world_step(ctx, rec, beats=beats, oof=oof)  # T5 (a pause jumps to T7: no world, no time)
                 _turn_end(ctx, rec, oof)
-                if choice is None and not between:
+                # a travel Move resolved by an answer (an OFFER committed, a plan's "go on") still cuts the scene
+                # there (12.4.2 (2); DL-12-98: travel frames the arrival)
+                if not between and (choice is None or _heads_for(ctx.state, rec)):
                     _director_step(ctx, rec, message)  # lead injection, the player's cut, an answered agenda
             elif not dispute:  # 07.3.3: a warning raised this turn (a fight begun before a near miss) is owed now
                 deliver_warnings(ctx, rec)

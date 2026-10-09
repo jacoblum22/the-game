@@ -578,7 +578,8 @@ readers take a `WorldState`. Errors: `engine.world.common.WorldError`. The PC is
   "<why> Still go on to <act>?") for: three beats this turn (01.2.3), the PC down, the target down or gone, the last
   beat withdrawn or refused, a conditional after a beat that did not succeed (01.14.4), a move to another place
   while SPEECH said before it waits (`env.said_first`); a Threshold voids the rest (`queued`). A `plan` pause runs
-  T5 (it falls between beats). Any other pause carries `env.said`/`said_first` in its detail; `resume` /
+  T5 (it falls between beats). A travel Move resolved in an answer turn (the plan's `continue`, a committed OFFER)
+  still runs `turn._director_step`, so the scene cuts there (12.4.2 (2); DL-12-98). Any other pause carries `env.said`/`said_first` in its detail; `resume` /
   `close_by_default` return them as `said`, and `turn._take` adds them to the record's parts so T5 answers them.
   `own_line(restatement, act, alone=)`: the beat's own "Then:" clause (the OFFER title);
   `close_by_default(env, pause)`; `harm_hook_for(env)` (apply_harm + HarmEntry; `env.threshold_due`);

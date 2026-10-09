@@ -26,7 +26,8 @@ RULES = load_rules()
 def _beat(intent: str, method: str, verb: str, target: str, change: dict[str, str], *, shape: str = "now",
           purpose: str = "own_change", against_will: bool = False, verbs: tuple[str, ...] = (),
           pressure: str = "none") -> dict[str, Any]:
-    return {"against_will": against_will, "assertion": None, "change": change, "g4_fact": None, "intent": intent,
+    slots = {**change, "description": None}  # the Reader slot DL-12-97 added (spec 018); null: an id fits, or none
+    return {"against_will": against_will, "assertion": None, "change": slots, "g4_fact": None, "intent": intent,
             "intent_verbs": list(verbs), "method": method, "pressure": pressure, "purpose": purpose, "shape": shape,
             "speech": verb == "verb.talk", "target": target, "uses_power": False, "verb": verb}
 

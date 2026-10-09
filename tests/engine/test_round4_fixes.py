@@ -50,10 +50,11 @@ def _ctx(store: Store, model: Any, faces: list[int] = ()) -> TurnContext:  # typ
 
 
 def _play(ctx: TurnContext, text: str) -> Any:
-    """One message narrated, its OFFERs committed; the first adjudication result with every beat it led to."""
+    """One message narrated, its OFFERs committed and its plan gone on with (spec 017's "Still go on to …?", asked
+    when speech said here waits on a later move away); the first adjudication result with every beat it led to."""
     first = out = play_turn(ctx, text).adjudication
     while out.pause is not None and out.pause.kind == "offer":
-        out = play_answer(ctx, "commit").adjudication
+        out = play_answer(ctx, "continue" if out.pause.detail.get("stage") == "plan" else "commit").adjudication
         first.record.beats += [b for b in out.record.beats if b not in first.record.beats]
     return first
 
