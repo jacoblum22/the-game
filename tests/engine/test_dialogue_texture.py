@@ -150,6 +150,24 @@ def test_a_consequential_question_still_goes_only_through_the_case(tmp_path: Pat
     assert b.pointer is None and case["nodes"][0]["fact"] in b.line
 
 
+def test_a_namesake_of_the_case_subject_is_not_the_case(tmp_path: Path) -> None:
+    """Live run 20261008-173008: "where is Kerda Coldbrook?" went to Calda Coldbrook's case, so everyone answered
+    "someone at the Barrow of Calton would know"."""
+    from engine.dm.answer import case_about
+    from engine.store.events import EntityRecord, Event
+
+    store = seeded_store(tmp_path, 8)[0]
+    case = next(iter(cases(store.state).values()))
+    sub = store.state.entities.get(case["solution"]["subject"]["id"])
+    last = (sub.name.split()[-1] if sub is not None else case["solution"]["subject"]["words"].split()[-1])
+    with turn(store) as ctx:
+        ctx.need_tx().add(Event.of("entity_created", source="test", entity=EntityRecord(
+            id="npc.kerda_x", kind="npc", name=f"Kerda {last}", data={"role": "smith"})))
+    st = store.state
+    assert case_about(st, f"Where can I find Kerda {last}?", "npc.kerda_x") is None
+    assert case_about(st, f"Where did {case['solution']['subject']['words']} go?", None) == case
+
+
 # ------------------------------------------------------------------------------------------- 3. the must-name diet
 
 

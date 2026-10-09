@@ -159,14 +159,19 @@ def test_an_engaged_npcs_activity_ends_and_activities_are_optional_material(tmp_
     hello = '"Evening," I say.'
     dock, ctx = setup(tmp_path, ScriptedModel({Role.READER: [reader("FICTION_QUESTION", ask_),
                                                              reader("SPEECH", hello)]}), world_judge=False)
+    watch_before = current_activity(dock.state, dock.watch)
     first = play_turn(ctx, ask_).adjudication.record
     acts = {a.npc: a.activity for a in first.activities if a.slot == "activity"}
     assert dock.ferryman not in acts and current_activity(dock.state, dock.ferryman) is None  # ended: Tam engaged
-    assert dock.watch in acts and "OPTIONAL MATERIAL" in record_text(dock.state, first)
     assert not [it for it in items(first) if it.kind == "activity"]
+    watch = current_activity(dock.state, dock.watch)
+    assert watch and (watch_before is None or watch == watch_before)
+    if dock.watch in acts:  # offered only the turn it is new (12.14.11): optional material
+        assert "OPTIONAL MATERIAL" in record_text(dock.state, first)
     second = play_turn(ctx, hello).adjudication.record
     again = {a.npc: a.activity for a in second.activities if a.slot == "activity"}
-    assert again.get(dock.watch) == acts[dock.watch] and dock.ferryman not in again  # rolled once, never re-rolled
+    assert dock.watch not in again and dock.ferryman not in again  # unchanged: not offered again
+    assert current_activity(dock.state, dock.watch) == watch and current_activity(dock.state, dock.ferryman) is None
 
 
 # ------------------------------------------------------------------------------------------- 5. small ones

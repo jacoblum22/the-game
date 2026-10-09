@@ -47,8 +47,9 @@ def test_every_present_npc_has_an_activity_rolled_once_and_the_engaged_one_ends(
     st = dock.state
     acts = {a.npc: a.activity for a in out.adjudication.record.activities if a.slot == ACTIVITY}
     assert set(rolled_this_scene(st)) == {dock.ferryman, dock.watch}
-    assert set(acts) == {dock.watch} and all(acts.values()) and current_activity(st, dock.ferryman) is None
-    assert current_activity(st, dock.watch) == acts[dock.watch]
+    assert dock.ferryman not in acts and current_activity(st, dock.ferryman) is None
+    assert current_activity(st, dock.watch) and acts.get(dock.watch, current_activity(st, dock.watch)) == \
+        current_activity(st, dock.watch)
 
     def rolls() -> int:
         return sum(1 for e in dock.store.events() if e.type == "fact_set" and e.source == "12.11.9")

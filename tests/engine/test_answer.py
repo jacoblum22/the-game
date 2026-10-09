@@ -128,8 +128,11 @@ def test_a_story_role_goes_to_the_case_graph(seeded: Any) -> None:
     for n, a in answers.items():
         if n == core:
             assert case["solution"]["subject"]["words"] in a.line and a.pointer is None
-        else:
+        elif a.pointer is not None:  # the first non-holder names the core holder
             assert a.pointer == core and "does not know who is missing" in a.line
+        else:  # once the PC has that lead, others answer in words (no pointer repeated in everyone's mouth)
+            assert a.willingness is not None
+    assert any(a.pointer == core for a in answers.values())
     assert cases(st)[case["id"]]["nodes"][0]["found"] is True
 
 

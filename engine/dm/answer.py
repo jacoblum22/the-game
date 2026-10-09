@@ -185,7 +185,10 @@ def _from_case(ctx: Any, knower: str, case: dict[str, Any], who: bool, pc: str, 
         said = f"{'remember' if first else 'tells you'} {node['fact']}"
         return Answer(said, "", fid)
     ref = pointer(case, node["id"], asked=knower, state=st)
-    if ref is None:
+    pred = f"points_to.{ids.slug(node['id'])}"[:60]
+    if ref is None or (knower != pc and any(  # the PC already has this lead: the knower answers in words
+            f in st.facts and st.facts[f].predicate == pred and st.facts[f].subject != knower
+            for f in st.knowledge.get(pc, {}))):
         return None
     if ref not in st.entities:  # a trace left at a place: the place
         p = next(p for p in node["placements"] if p["holder"] == ref)
@@ -206,11 +209,17 @@ def case_about(st: Any, text: str, about: str | None, *, need: int = 2) -> dict[
     """The case a question is about: its subject asked about or named, or most of its story role's words used ("where
     did the missing child go?"), or (the opening's incident case) `need` of the incident's own words ("what did the
     rider say before he died?" asks about "a rider dies in the market with a message")."""
+    from engine.retrieve.scene import resolve_names
+
     have = words.content(text)
     incident = str(((st.meta.get("world.opening") or {}).get("inciting") or {}).get("text") or "")
+    named = [i for i in {*resolve_names(st, text), *([about] if about in st.entities else [])}]
     for c in cases(st).values():
         sub = c["solution"]["subject"]
-        if about == sub["id"] or have & words.content(sub["words"]) or words.covers(sub["role"], text, ratio=0.6):
+        # another person's name is not the subject's ("Kerda Coldbrook" is not "Calda Coldbrook"; live run
+        # 20261008-173008: every question about Kerda went to Calda's case and pointed at the barrow)
+        own = have - {w for i in named if i != sub["id"] for w in words.content(st.entities[i].name)}
+        if about == sub["id"] or own & words.content(sub["words"]) or words.covers(sub["role"], text, ratio=0.6):
             return c
     for c in cases(st).values():
         if c.get("trigger") == "incident" and incident and len(have & words.content(incident)) >= need:
@@ -309,7 +318,7 @@ def _route(ctx: Any, knower: str, kind: str, about: str | None, text: str, pc: s
     if kind == "who_is" or about == knower or _OWN_NAME.search(text):
         a = _who(ctx, knower, text, about, pc, given)
         if a is not None:
-            return a
+            return a if a.said else None
     case = case_about(st, text, about)
     return _from_case(ctx, knower, case, False, pc, False) if case is not None else None
 
@@ -345,7 +354,7 @@ def _who(ctx: Any, knower: str, text: str, about: str | None, pc: str, given: st
         return None
     found = who_case(ctx, role, pc)
     if found is not None:
-        return _from_case(ctx, knower, found, True, pc, False)
+        return _from_case(ctx, knower, found, True, pc, False) or Answer("", "")  # "": the ordinary route
     fid, who = cast_who(ctx, role, story=bool(words.content(role) & STORY_ROLES), exclude=(knower,))
     _tell(ctx, pc, fid)
     return Answer(f"tells you who {_who_verb(text)} {role}: {who}", "", fid)

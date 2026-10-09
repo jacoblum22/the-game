@@ -123,7 +123,20 @@ def ensure_activities(ctx: TurnContext, record: AdjudicationRecord) -> None:  # 
     if new:
         tx_.add(meta(ROLLED, {"scene": st.scene.scene_id, "npcs": [*done, *new]}, "12.11.9"))
     record.add_writes(tx_.events[start:])
-    record.activities = lines(tx_.state, record.pc, present)
+    record.activities = fresh_lines(ctx, record, lines(tx_.state, record.pc, present))
+
+
+def fresh_lines(ctx: TurnContext, record: AdjudicationRecord, acts: Sequence[Any]) -> list[Any]:  # rule: 12.14.11
+    """Optional scene-state material worth offering: all of it when a scene opens, else only a slot written this
+    turn (a new or changed activity, posture, hold or manner). An unchanged line is not offered again (12.14.11;
+    live run 20261008-173008: "the farmer's crate thump" every turn)."""
+    from engine.store.details import current
+
+    if record.scene.started:
+        return list(acts)
+    written = {getattr(e.payload, "fact_id", None) for e in ctx.need_tx().events if e.type == "fact_set"}
+    return [a for a in acts if a.slot != "position" and (f := current(ctx.state, a.npc, a.slot)) is not None
+            and f.id in written]
 
 
 def end_activity(ctx: TurnContext, record: AdjudicationRecord, npc: str) -> None:  # rule: 12.11.9
