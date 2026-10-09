@@ -94,7 +94,7 @@ def test_golden_set_labels_are_legal_and_cover_the_issues() -> None:
     verbs = set(rb.load_plug("engine.data.loader:load_rules")().basic_verbs)
     for g in lines:
         lab = g["labels"]
-        assert set(lab) == set(rg.FIELDS), g["id"]
+        assert set(lab) - {"goals_alt"} == set(rg.FIELDS), g["id"]  # goals_alt: other readings (policy E)
         assert lab["verb"] is None or lab["verb"] in verbs, g["id"]
         assert lab["gate"] in rg.GATES and lab["necessity"] in rg.NECESSITY, g["id"]
         assert lab["question_kind"] in rg.QUESTION_KINDS, g["id"]

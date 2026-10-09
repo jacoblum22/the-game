@@ -6,10 +6,10 @@ who has recorded wants or refusals, and the enums hold only theirs. You do not c
 table with the context you give, or uses a resolved Talk frame's outcome; the Narrator then words it. An
 NPC never acts from your preference, only from its record or the table (12.2.9, 01.11.3).
 
-The packet holds: CORE RULES and RULE CARDS (12.2.9, the NPC action table, PR-12-5; the cards are the
-authority), NARRATOR VIEW (the NPCs present with their standing, recorded wants and refusals, the scene's
-facts), RECENT EXCHANGES, and THIS MESSAGE with what just happened this turn (the resolved beats, their
-degrees and costs). Every enum offered is already legal: the NPCs present, each NPC's want and refusal ids,
+The packet holds: GUIDANCE (15.2.3's test for whether a refusal covers a request), RULE CARDS for any
+trigger that fired, NARRATOR VIEW (the NPCs present with their standing, recorded wants and refusals, the scene's
+facts), RECENT EXCHANGES (the last one), and THIS MESSAGE with what just happened this turn (the player's words,
+the resolved beats, their degrees and costs). Every enum offered is already legal: the NPCs present, each NPC's want and refusal ids,
 and the action table's tags.
 
 ## What to fill

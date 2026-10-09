@@ -27,7 +27,6 @@ from engine.dm.schemas import build_schema, defaults, schema_context
 from engine.llm.base import Role, call_role
 from engine.resolve.pipeline import BeatPlan, own_line
 from engine.resolve.types import Beat, Change
-from engine.retrieve.anchors import scene_situation_tags
 from engine.retrieve.cards import load_cards_for
 from engine.retrieve.scene import focus_ids
 from engine.retrieve.triggers import get_active_triggers
@@ -42,8 +41,8 @@ RECALL_WORDS = re.compile(r"\b(?:remember|recall|think back|try to|search my mem
 _SENTENCE = re.compile(r"(?<=[.!?])\s+")
 NOW = "now"
 SERVES, FREE_ACTIVITY = "serves_another_act", "free_activity"  # schemas.BEAT_PURPOSES
-# the verbs a step, posture, gesture or touch is read under (policy B4: menace, manner, attention, reach)
-BODY_VERBS = ("verb.move", "verb.handle", "verb.strike", "verb.grapple", "verb.force")
+# the verbs a method act is read under (policy B4: menace, manner, attention, reach; B5': force; moving quietly)
+BODY_VERBS = ("verb.move", "verb.handle", "verb.strike", "verb.grapple", "verb.force", "verb.sneak", "verb.exert")
 # 00.12.6's free activities by verb: draw, stow, pick up or put down (Handle), stay put (Move), rest (Endure),
 # wait (Ready), a casual look (Observe)
 FREE_VERBS = ("verb.handle", "verb.move", "verb.endure", "verb.ready", "verb.observe")
@@ -63,8 +62,55 @@ def now_beats(beats: Sequence[Any]) -> list[Any]:  # rule: 12.2.2
     return now or [b for b in beats if shape(b) == "conditional"][:1]
 
 
+def _fold_methods(beats: list[dict[str, Any]]) -> list[dict[str, Any]]:  # rule: 01.2.2
+    """One beat per goal (01.2.2, DL-01-37): force or a power used in service of another goal is that goal's method.
+    A beat against someone's will or using a power folds into the next now-beat when the Reader marks it
+    `serves_another_act`, or when it is a hold (`restrain`, or no change) on the person the next beat's Talk
+    addresses ("I pin him to the wall and demand who sent him": one Talk beat, `against_will`). The goal beat takes its
+    facets and its words (`how`). A take, a blow or a hold with no goal after it stays its own beat.
+    ponytail: a blow folds only when the Reader marks it; code cannot tell a wanted blow from a coercive one."""
+    out: list[dict[str, Any]] = []
+    for i, b in enumerate(beats):
+        nxt = next((c for c in beats[i + 1:] if (c.get("shape") or NOW) in NOW_SHAPES), None)
+        pinned = bool(b.get("against_will") or b.get("uses_power"))
+        hold = ((b.get("change") or {}).get("kind") in (None, NONE, "restrain") and nxt is not None
+                and nxt.get("verb") == "verb.talk" and b.get("target") not in (None, NONE)
+                and nxt.get("target") in (None, NONE, b.get("target")))
+        if not pinned or nxt is None or b.get("verb") not in BODY_VERBS or not (b.get("purpose") == SERVES or hold):
+            out.append(b)
+            continue
+        nxt["method"] = f"{b.get('method')}, {nxt.get('method')}"
+        nxt["how"] = b.get("how") or nxt.get("how")
+        nxt["target"] = nxt.get("target") if nxt.get("target") not in (None, NONE) else b.get("target")
+        for facet in ("against_will", "uses_power"):
+            nxt[facet] = bool(nxt.get(facet) or b.get(facet))
+    return _bundle(out)
+
+
+def _bundle(beats: list[dict[str, Any]]) -> list[dict[str, Any]]:  # rule: 01.2.2
+    """Several questions pressed on one person in one act are one goal (01.2.2 shape `bundled`: "one act seeks several
+    distinct pieces of information"): consecutive now-beats with the same verb, the same `learn` or `persuade_to` kind
+    and the same target are one beat (round 6: "Who was that face? Tell me the word" split into two rolls)."""
+    out: list[dict[str, Any]] = []
+    for b in beats:
+        prev = out[-1] if out else None
+        key = (b.get("verb"), (b.get("change") or {}).get("kind"), b.get("target"), b.get("shape") or NOW)
+        if (prev is not None and key[1] in ("learn", "persuade_to") and key[2] not in (None, NONE) and key[3] == NOW
+                and key == (prev.get("verb"), (prev.get("change") or {}).get("kind"), prev.get("target"),
+                            prev.get("shape") or NOW)):
+            if b.get("intent") and b.get("intent") != prev.get("intent"):
+                prev["intent"] = f"{prev.get('intent')}; {b.get('intent')}"
+            for facet in ("against_will", "uses_power", "speech"):
+                prev[facet] = bool(prev.get(facet) or b.get(facet))
+            prev["how"] = prev.get("how") or b.get("how")
+            continue
+        out.append(b)
+    return out
+
+
 def normalise(data: dict[str, Any]) -> dict[str, Any]:  # rule: 01.2.1, 01.2.2, 00.12.6, 12.2.2, 15.3.10
     """Code decides what the Reader marks (the model proposes, DL-12-50), on its raw answer:
+    - force or a power in service of another goal is that goal's method (`_fold_methods`, 01.2.2);
     - a beat that only serves another act or the words (a step, turn, posture or touch: no intended change of its
       own, 01.2.1) is part of the beat it serves (01.2.2): its method joins the next kept beat (else the one
       before); with only words to serve, it goes;
@@ -73,10 +119,11 @@ def normalise(data: dict[str, Any]) -> dict[str, Any]:  # rule: 01.2.1, 01.2.2, 
       no beat;
     - a Talk beat with no request, threat, offer, plea or insistence, in a message that asks something, is a plain
       question: SPEECH (12.2.2, 15.3.10), so its DECLARATION question parts become SPEECH when no beat is left.
-    The marks are honoured only where the rules allow them: only a bodily act (a step, posture, touch) serves
+    The marks are honoured only where the rules allow them: only a bodily act (a step, posture, touch, force) serves
     another; only 00.12.6's acts are free, a look only when the player says it is casual; a beat against someone's
-    will or using a power is always its own beat (12.2.2 facets)."""
-    beats = [dict(b) for b in data.get("beats", [])]
+    will or using a power that serves no other goal is its own beat (12.2.2 facets). Supersedes "a beat against
+    someone's will is always its own beat", which split every coercion into a grip and an unrolled demand (I3 §6)."""
+    beats = _fold_methods([dict(b) for b in data.get("beats", [])])
     parts = [dict(p) for p in data.get("parts", [])]
     asks = any(p.get("question_kind") not in (None, NONE) for p in parts)
 
@@ -110,6 +157,7 @@ def normalise(data: dict[str, Any]) -> dict[str, Any]:  # rule: 01.2.1, 01.2.2, 
         served = next((j for j in acts if j > i), acts[-1] if acts else None)
         if served is not None:
             beats[served]["method"] = f"{b.get('method')}, {beats[served].get('method')}"
+            beats[served]["how"] = beats[served].get("how") or b.get("how")
         gone[i] = served is not None or words  # a lone step with nothing to serve stays a beat
     kept = [b for i, b in enumerate(beats) if not gone[i]]
     if not kept and any(plain_talk(b) for b in beats):
@@ -117,6 +165,17 @@ def normalise(data: dict[str, Any]) -> dict[str, Any]:  # rule: 01.2.1, 01.2.2, 
             if p.get("class") == "DECLARATION" and p.get("question_kind") not in (None, NONE):
                 p["class"] = "SPEECH"
     return {**data, "beats": kept, "parts": parts}
+
+
+def _flat(text: str) -> str:
+    return " ".join(text.replace("’", "'").lower().split())
+
+
+def verbatim(how: Any, message: str) -> str | None:  # rule: 01.2.6
+    """The Reader's `how` when it is the player's own words (found in the message, case and spacing aside), else
+    None: the OFFER prints the player's words, never a model's paraphrase (DL-01-39; I1 §3's garbled "Then:")."""
+    words = str(how or "").strip().strip("\"'“”.,;:!").strip()
+    return words if len(words) > 2 and _flat(words) in _flat(message) else None
 
 
 def knowledge_question(text: str) -> bool:
@@ -149,6 +208,7 @@ class FactQuestion(BaseModel):
 class ReaderBeat(BaseModel):
     intent: str
     method: str
+    how: str | None = None  # 01.2.6: the method in the player's words (verbatim, or None)
     assertion: str | None = None
     shape: str | None = NOW  # 12.2.2: now, queued (a Ready beat) or conditional on another beat
     target: str | None = None
@@ -195,7 +255,7 @@ class ReaderResult(BaseModel):
             own = drop_reader_notes(own_line(self.restatement, f"{b.method} {b.intent}",
                                               alone=single and b in now))
             target = b.target if b.target and b.target != NONE else None
-            beat = Beat(id=mint(ids.BEAT), actor=actor, intent=b.intent, method=b.method or b.intent,
+            beat = Beat(id=mint(ids.BEAT), actor=actor, intent=b.intent, method=b.method or b.intent, how=b.how,
                         assertion=b.assertion, shape="extended" if b.shape == "extended" else "single",
                         target=target, restatement=own or b.intent,
                         verb=b.verb, against_will=b.against_will, uses_power=b.uses_power, speech=b.speech,
@@ -275,14 +335,15 @@ def read_message(ctx: TurnContext, message: str, *, exchanges: Sequence[Any] = (
     sctx = schema_context(st, ctx.rules, message=rest, focus=focus)
     schema = build_schema(Role.READER, sctx)
     triggers = get_active_triggers(st, ctx.rules)
-    mode = st.scene.mode if st.scene else None
-    cards = load_cards_for(Role.READER, scene_situation_tags(st, ctx.rules), mode, triggers, rules=ctx.rules)
+    cards = load_cards_for(Role.READER, triggers=triggers, rules=ctx.rules)
     packet = build_packet(Role.READER, instructions=load_prompt("reader"), cards=cards, view=st,
                           exchanges=list(exchanges), message=rest, triggers=triggers, focus=focus,
                           rules=ctx.rules)
     res = call_role(ctx.model, Role.READER, schema, packet, turn_id=ctx.turn_id, recorder=ctx.record_call,
                     default=lambda: defaults(Role.READER, sctx) or {}, check=reader_check)
     data = normalise(dict(res.data))
+    for b in data.get("beats", []):
+        b["how"] = verbatim(b.get("how"), rest)
     log_changes(ctx, data, sctx.change_ids, defaulted=res.defaulted)
     return ReaderResult(
         parts=[*known, *[Part.model_validate(p) for p in data.get("parts", [])]],

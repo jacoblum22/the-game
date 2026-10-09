@@ -95,7 +95,7 @@ LIFT = beat("the lantern is in my hand", "verb.handle", target="npc.tam_harlan",
 def test_success_applies_the_change_offer_and_result_say_it_and_it_is_must_name(tmp_path: Path) -> None:
     dock, ctx, out = _turn(tmp_path, LIFT, faces=[19])
     offer = next(o["text"] for o in out[0].oof if o["kind"] == "OFFER")
-    assert "Taking: the lantern" in offer
+    assert offer.startswith("[OFFER] Take the lantern from Tam Harlan.")  # the title is the typed goal (DL-01-39)
     assert "Agility" in offer.split("Chance:")[1].split("\n")[0]  # DL-01-35: the best of might/agility/endurance
     assert "with Might" in offer and "with Endurance" in offer  # the others listed with their odds
     st = dock.store.state
@@ -122,7 +122,7 @@ def test_two_changes_are_two_beats_and_the_offer_names_the_second(tmp_path: Path
                  change={"kind": "harm", "what": "npc.tam_harlan"})
     dock, _, out = _turn(tmp_path, LIFT, punch, faces=[19, 19, 19])
     first = next(o["text"] for o in out[0].oof if o["kind"] == "OFFER")
-    assert "Then: the ferryman is struck" in first  # the act (the test beat's method is its intent)
+    assert "Then: hurt Tam Harlan" in first  # the typed goal (DL-01-39)
     kinds = [b.change_kind for o in out for b in o.record.beats if b.degree]
     assert kinds == ["take", "harm"]
     assert holder_of(dock.store.state, "item.lantern") == dock.pc
@@ -135,7 +135,7 @@ def test_the_purse_from_the_fighter_save_is_taken(tmp_path: Path) -> None:
     with gzip.open(FIXTURE, "rb") as src, path.open("wb") as dst:
         shutil.copyfileobj(src, dst)
     store = Store.open(path)
-    lift = {"against_will": True, "assertion": None, "g4_fact": None, "intent_verbs": ["lift", "take"],
+    lift = {"against_will": True, "assertion": None, "g4_fact": None, "how": None, "intent_verbs": ["lift", "take"],
             "intent": "The coin purse is in the PC's hands and off Murzak's belt.", "pressure": "none",
             "method": "lift the purse from her belt while she is pinned, quick and quiet", "purpose": "own_change",
             "shape": "now", "speech": False, "target": "npc.murzak_red_hand", "uses_power": False,

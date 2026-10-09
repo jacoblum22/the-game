@@ -247,7 +247,7 @@ def test_no_narrator_packet_leaks_truth_motives_or_seals(tmp_path: Path) -> None
                if str(r["role"]) == "narrator"]
     d.game.close()
     assert packets and secret
-    fixed = ("ROLE INSTRUCTIONS", "CORE RULES", "RULE CARDS")  # fixed text: card examples quote sample motives
+    fixed = ("ROLE INSTRUCTIONS", "GUIDANCE", "RULE CARDS")  # fixed text: card examples quote sample motives
     for p in packets:
         live = "\n".join(t for name, t in sections(p) if name not in fixed)
         assert live and not re.search(r"\btruth\b", live)

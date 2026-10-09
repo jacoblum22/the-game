@@ -141,7 +141,7 @@ _BEYOND = re.compile(r"\b(secret\w*|hidden|treasure\w*|hoard|weak(?:ness|\s+spot
 
 def _claim(ctx: Any, r: dict[str, Any]) -> dict[str, str]:  # rule: PR-12-12
     """Step 2: one `[J:enum]` call states the said words as `{subject, predicate, value}`; it judges nothing else."""
-    from engine.dm.packet import name_line
+    from engine.dm.packet import identity_lines, name_line
     from engine.dm.roles.prompts import load_prompt
     from engine.dm.schemas import build_schema, schema_context
     from engine.llm.base import Packet, Role, call_role
@@ -152,6 +152,11 @@ def _claim(ctx: Any, r: dict[str, Any]) -> dict[str, str]:  # rule: PR-12-12
     sctx = sctx.model_copy(update={"scene_ids": list(dict.fromkeys([*about, *sctx.scene_ids]))})
     schema = build_schema(Role.TESTIMONY, sctx)
     view = "\n".join(name_line(st, a) for a in about)
+    # rule: 12.2.4
+    # item 3: who the speaker and everyone the words name are (pronouns, bond), so "he" and "my sister" resolve (I2 §4)
+    people = identity_lines(st, [r.get("speaker") or "", *about], str(r.get("words") or ""))
+    if people:
+        view += "\npeople named (name: pronouns; \"your\" means the player's character's):\n" + "\n".join(people)
     packet = Packet(instructions=load_prompt("testimony"), core="", cards=[], view=view, exchanges=[],
                     message=f"{name_line(st, r.get('speaker') or '')} said: \"{r['words']}\"")
     default = {"subject": about[0] if about else "world", "predicate": "is said to be", "value": r["words"][:160]}
