@@ -44,7 +44,7 @@ open(os.path.join(APP, "decision-log.md"), "w", encoding="utf-8", newline="\n").
 print("decision-log entries by section:", dict(counts), "total", sum(counts.values()))
 
 # ------------------------------------------------------------------ traceability
-CLAUSES = ["I", "II", "III", "IV", "V", "VI", "VII"] + ["P%d" % i for i in range(1, 18)]
+CLAUSES = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII"] + ["P%d" % i for i in range(1, 18)]  # [revision: R2-J0] C:VIII
 ID_RE = re.compile(r"\b(?:\d\d\.\d+(?:\.\d+)?(?:\s?[a-z]\b)?|PR-\d\d-\d+|T-\d\d-\d+|DL-\d\d[A]?-\d+|INV-\d+|SG-\d+|WE-\d\d-\d+|OEQ-\d\d-\d+)")
 ROW_RE = re.compile(r"^\|(.+)\|\s*$")
 
@@ -61,7 +61,7 @@ def rows(path):
     return out
 
 def clause_key(label):
-    m = re.match(r"^(?:C:)?(VII|VI|V|IV|III|II|I|P1[0-7]|P[1-9])\b", label)
+    m = re.match(r"^(?:C:)?(VIII|VII|VI|V|IV|III|II|I|P1[0-7]|P[1-9])\b", label)
     return m.group(1) if m else None
 
 tr = read(os.path.join(APP, "traceability.md"))
