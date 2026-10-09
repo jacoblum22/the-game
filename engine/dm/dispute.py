@@ -1,21 +1,25 @@
-"""Disputes and corrections (12.3.6, PR-12-11, PR-12-4; DL-12-84..86): the player says the game erred; the game
-answers from the whole transcript, the stored facts' provenance and the frames, never from memory.
+"""Disputes and corrections (12.3.6, PR-12-11, PR-12-4; DL-12-84..86, DL-12-94): the player says the game erred;
+the game understands the report first, then answers from the whole transcript, the stored facts' provenance and the
+frames, never from memory.
 
-    res = settle_dispute(ctx, "Nedwin's coat is grey, not blue")      # locate, gather, decide, deliver, log
+    res = settle_dispute(ctx, "I succeeded but never got the purse")  # understand, verify, decide, deliver, log
     res = settle_dispute(ctx, text, choice="rewind")                  # answer the reliance CHOICE
     text = dispute(ctx, text)                                         # engine/dm/context.py DisputeHandler
 
-PR-12-11: (1) **locate** (`locate`): code pins a turn id, a quote, a name, a number or a frame id against EVERY
-turn; when the passage or the category is not pinned, one `Role.LOCATOR` call returns `{turn, quote, category}`
-(plus the player's claim restated) and judges nothing; (2) **gather**: the passage and the other turns naming the
-subject, the stored value with its provenance (source event, source kind, turn), the frame with a code
-recomputation (`recompute`), the claim log; (3) **decide** by PR-12-11's table (first row that fits); (4)
-**deliver** a `[CORRECTION]` or `[FIX]` block, with a CHOICE when reliance applies; (5) **log** the dispute record
-(meta `corrections`, `type: dispute`) and a block in the save's review log `<save>.disputes.md`.
+PR-12-11: (1) **understand** (`locate`): one `Role.UNDERSTAND` call (engine/dm/understand.py) reads the report with
+the WHOLE transcript and returns up to three complaints `{believes, happened, category, turn, quote}` plus what each
+is about; code never pins a report first by a number or a name in it (`feedback.locate_call: retired`); code checks
+the turn and the quote exist; (2) **restate**: every answer opens with "You're saying <believes>."; (3) **verify**:
+the passage and the other turns naming the subject, the stored value with its provenance (source event, source kind,
+turn), the frame with a code recomputation (`recompute`) and what it wrote, the calendar and pronouns on record, the
+claim log; (4) **decide** by PR-12-11's table (first row that fits), with "not found" (a "did you mean" with the
+nearest passage) and `ruling_question` (the frame explained in plain words); (5) **deliver** a `[CORRECTION]` or
+`[FIX]` block, with a CHOICE when reliance applies; never "logged" alone; (6) **log** the dispute record (meta
+`corrections`, `type: dispute`) and a block in the save's review log `<save>.disputes.md`.
 
 A correction is a `fact_set` with `source: correction`, `supersedes` and `pinned: true` (never archived; always in
 its subject's profile in view). The player's reading wins only on incidental detail slots with nothing on record;
-everything else keeps INV-9: only the record decides. Take-backs (12.5.8): within the scene always; past its start
+everything else keeps INV-9: only the record decides (bias: act on fiction, explain on mechanics). Take-backs (12.5.8): within the scene always; past its start
 when nothing irreversible followed and at most `corrections.take_back.max_turns_back` turns back.
 """
 
@@ -30,6 +34,7 @@ from typing import Any, Literal
 
 from engine import ids
 from engine.dm.oof import FIX_HINT, OofBlock, note_block, when_words
+from engine.dm.understand import CATEGORIES, season_word, understand
 from engine.resolve.rulings import RulingRecord, log_ruling
 from engine.store.db import REVERTIBLE, TAKE_BACK_EXTRA, Rejected, Transaction
 from engine.store.events import WORLD, Event
@@ -38,12 +43,15 @@ from engine.store.projection import WorldState, project
 PLAYER_FACING = ("shown", "available")
 Choice = Literal["rewind", "accept_forward", "keep"]
 DisputeKind = Literal["unclear", "hidden", "not_said", "stands", "narration_error", "record_error", "ruling_stands",
-                      "ruling_error", "store_agrees", "mistaken", "player_wins", "unverified", "taken_back", "misread"]
-CATEGORIES = ("remembered_wrong", "rule_wrong", "contradiction", "misread", "other")  # = schemas.LOCATE_CATEGORIES
+                      "ruling_error", "store_agrees", "mistaken", "player_wins", "unverified", "taken_back", "misread",
+                      "not_found"]
 # Resolved sources (12.3.4 step 1): a write from one of these can require a value; narration alone cannot.
 RESOLVED = frozenset({"oracle", "generation", "ruling", "data", "player_accepted", "correction"})
-# T0/T1a incidental fiction (12.14.13): the lasting look slots. Everything else keeps INV-9.
-INCIDENTAL_SLOTS = frozenset({"hair", "face", "mark", "build", "clothing", "worn", "voice", "material", "marking"})
+# T0/T1a incidental fiction (12.14.13): the lasting look slots and what someone is doing. Everything else keeps INV-9.
+INCIDENTAL_SLOTS = frozenset({"hair", "face", "mark", "build", "clothing", "worn", "voice", "material", "marking",
+                              "activity"})
+# what an understood complaint is about (understand.ABOUT): mechanics keep INV-9; the rest is fiction (act on it)
+MECHANICS = frozenset({"quantity", "possession", "roll_or_outcome", "name"})
 UPHELD = frozenset({"correct", "take_back", "player_reading_wins"})
 
 
@@ -63,7 +71,10 @@ class DisputedClaim:
     frame_id: str | None = None
     missed_fact: str | None = None
     category: str = "other"
-    located_by: str = "code"  # code | model | caller
+    located_by: str = "model"  # model | caller
+    believes: str = ""  # the complaint in plain words (the understanding call's), restated first in the answer
+    happened: str = ""  # what the transcript shows, as the understanding call read it (the review log)
+    about: str = "other"  # understand.ABOUT
 
 
 Identify = Callable[[Any, str], "DisputedClaim | None"]
@@ -115,13 +126,20 @@ def _turn_words(turn_id: str | None) -> str:
 
 
 def _excerpt(text: str, needle: str = "", n: int = 160) -> str:
-    """The sentence of `text` holding `needle` (else its start), at most `n` characters."""
+    """The sentence of `text` holding `needle` (else its start), at most `n` characters; a long sentence is cut
+    around the needle."""
     flat = " ".join(str(text).split())
     if needle:
-        for s in re.split(r"(?<=[.!?])\s+", flat):
+        for s in _SENTENCES.split(flat):
             if _norm(needle) in _norm(s):
-                return s[:n] + ("…" if len(s) > n else "")
+                if len(s) <= n:
+                    return s
+                at = max(0, s.lower().find(_norm(needle)[:20]) - n // 3)
+                return ("…" if at else "") + s[at:at + n] + ("…" if at + n < len(s) else "")
     return flat[:n] + ("…" if len(flat) > n else "")
+
+
+_SENTENCES = re.compile(r"(?<=[.!?])\s+|(?<=[.!?][\"”])\s+")
 
 
 def _quote(tr: Any, needle: str = "", n: int = 160) -> str:
@@ -132,15 +150,22 @@ def _has(text: str, phrase: str) -> bool:
     return bool(phrase) and re.search(rf"(?<![\w-]){re.escape(_norm(phrase))}(?![\w-])", _norm(text)) is not None
 
 
-def _relevant_exchange(store: Any, words: list[str], current: str | None) -> Any:
-    """The latest play turn whose exchange mentions any of `words` (else the latest play turn). Engine turns (the
-    opening, a session's open or close, an epilogue: input "(...)") hold where-you-stand lines, not exchanges."""
-    turns = [tr for tr in _turns(store, current) if not tr.input_verbatim.startswith("(")]
-    for tr in turns:
-        hay = (tr.input_verbatim + " " + tr.delivered_verbatim).lower()
-        if any(w and w.lower() in hay for w in words):
-            return tr
-    return turns[0] if turns else None
+_WORD_STOP = frozenset("that this with from have they them then into never were your there about what when which "
+                       "would should could said says just only also again still been being because while wrong "
+                       "right turn game".split())
+
+
+def _nearest(store: Any, text: str, current: str | None) -> Any:  # rule: PR-12-11
+    """The 'did you mean' passage: the turn sharing the most words (4+ letters) with `text`, newest on a tie; else
+    the latest turn."""
+    words = {w for w in re.findall(r"[a-z]{4,}", text.lower()) if w not in _WORD_STOP}
+    best, score = None, 0
+    turns = _turns(store, current)
+    for tr in turns:  # newest first: a later turn needs strictly more words to win
+        n = len(words & set(re.findall(r"[a-z]{4,}", (tr.input_verbatim + " " + tr.delivered_verbatim).lower())))
+        if n > score:
+            best, score = tr, n
+    return best or (turns[0] if turns else None)
 
 
 # ------------------------------------------------------------------------------------------- the store side
@@ -176,24 +201,39 @@ def _visible_entity(state: WorldState, eid: str) -> bool:
     return e is not None and eid not in state.seals and e.visibility in PLAYER_FACING
 
 
-def _store_value(state: WorldState, c: DisputedClaim) -> tuple[Any, bool, str | None]:
-    """(value, player-facing?, fact id) for the claim's subject and key."""
+def _seen(store: Any, state: WorldState, eid: str, current: str | None) -> bool:
+    """The player can check this subject: player-facing, or met in play (its name as the PC knows it is in a
+    delivered turn; NPCs seeded as background stay `background` after they are met). Sealed: never."""
+    from engine.store.views import display_name
+
+    if _visible_entity(state, eid):
+        return True
+    if eid not in state.entities or eid in state.seals:
+        return False
+    name = display_name(state, eid)
+    return len(name) >= 3 and any(_has(t.delivered_verbatim, name) for t in _turns(store, current))
+
+
+def _store_value(state: WorldState, c: DisputedClaim, seen: bool | None = None) -> tuple[Any, bool, str | None]:
+    """(value, player-facing?, fact id) for the claim's subject and key. `seen`: whether the player has met the
+    subject (default: the subject is player-facing)."""
     from engine.store.views import name_known
 
+    vis = _visible_entity(state, c.subject) if seen is None else seen
     if c.kind == "quantity":
         q = state.quantities.get(c.subject, {}).get(c.key)
         if q is None:
-            return None, _visible_entity(state, c.subject), None
-        return q.current, q.visibility in PLAYER_FACING and _visible_entity(state, c.subject), None
+            return None, vis, None
+        return q.current, q.visibility in PLAYER_FACING and vis, None
     if c.key == "name" and c.subject in state.entities:
         e = state.entities[c.subject]
-        return e.name, _visible_entity(state, c.subject) and (name_known(state, c.subject) or _same(c.said, e.name)), \
+        return e.name, vis and (name_known(state, c.subject) or _same(c.said, e.name)), \
             state.current_fact_id(c.subject, "name")
     fid = state.current_fact_id(c.subject, c.key)
     if fid is None or state.facts[fid].value is None:
-        return None, _visible_entity(state, c.subject), None
+        return None, vis, None
     f = state.facts[fid]
-    ok = f.visibility in PLAYER_FACING and fid not in state.seals and _visible_entity(state, c.subject)
+    ok = f.visibility in PLAYER_FACING and fid not in state.seals and vis
     return f.value, ok, fid
 
 
@@ -237,7 +277,8 @@ def _resolved_earlier(store: Any, state: WorldState, c: DisputedClaim) -> dict[s
         return None
     cur = state.current_fact_id(c.subject, c.key)
     hist = store.fact_history(c.subject, c.key)
-    if not hist or cur is None or state.facts[cur].source in RESOLVED:
+    incidental = c.key.removeprefix("detail.") in INCIDENTAL_SLOTS  # re-rolled incidental fiction: continuity wins
+    if not hist or cur is None or (state.facts[cur].source in RESOLVED and not incidental):
         return None
     for row in reversed(hist[:-1]):
         if row["fact_id"] != cur and row["source"] in RESOLVED and _same(c.said, row["value"]):
@@ -469,7 +510,8 @@ def _log_dispute(tx: Transaction, ctx: Any, text: str, c: DisputedClaim | None, 
     prior = next((r for r in reversed(disputes) if r.get("outcome") == "pending" and r.get("words") == text), None)
     did = prior["id"] if prior else f"dsp.{len(disputes) + 1}"
     rec = {"type": "dispute", "id": did, "time": when_words(tx.state.time.now), "turn": tx.turn_id, "words": text,
-           "category": c.category if c else "other", "located_by": c.located_by if c else "code",
+           "believes": c.believes if c else "", "category": c.category if c else "other",
+           "located_by": c.located_by if c else "model",
            "passage": {"turn": c.turn_id if c else None, "quote": c.quote if c else ""},
            "evidence": evidence, "outcome": outcome, "upheld": outcome in UPHELD, "writes": writes,
            "reverted": reverted}
@@ -489,7 +531,8 @@ def _review_log(store: Any, rec: dict[str, Any], answer: str, *, resolved: bool)
     head = f"## {rec['id']}{' (resolved)' if resolved else ''} · {rec['turn']} · {now} (game: {rec['time']})"
     p = rec["passage"]
     lines = [head, "", f"- **Player**: \"{rec['words']}\"",
-             f"- **Category**: {rec['category']} (located by {rec['located_by']})",
+             f"- **Understood**: {rec.get('believes') or '(nothing understood)'}",
+             f"- **Category**: {rec['category']} (understood by {rec['located_by']})",
              f"- **Passage**: {p['turn'] or 'none pinned'}" + (f": \"{p['quote']}\"" if p.get("quote") else ""),
              "- **Evidence**:", *(f"  - {e}" for e in rec["evidence"] or ["(none on record)"]),
              f"- **Outcome**: {rec['outcome']}" + (" (upheld)" if rec["upheld"] else ""),
@@ -502,7 +545,7 @@ def _review_log(store: Any, rec: dict[str, Any], answer: str, *, resolved: bool)
             if new:
                 fh.write(f"# Disputes: {path.stem.removesuffix('.disputes')}\n\nEvery /fix or reported error, newest "
                          "last (12.3.6 item 6). Outcomes: correct, take_back, player_reading_wins (upheld); "
-                         "explain_with_quote, explain_and_log (the record stands).\n\n")
+                         "explain_with_quote, explain_and_log (the record stands); not_found.\n\n")
             fh.write("\n".join(lines))
     except OSError:  # the ledger record is the durable one; a read-only folder must not fail the turn
         pass
@@ -517,222 +560,129 @@ def dispute_stats(state: WorldState) -> dict[str, Any]:  # rule: 12.3.6
     return {"all": len(recs), "upheld": sum(1 for r in recs if r.get("upheld")), "by_category": by}
 
 
-# ------------------------------------------------------------------------------------------- locate (item 2)
+# ------------------------------------------------------------------------------------------- understand (item 1)
 
 
-_NUM = re.compile(r"(?<![\w.])(\d+)(?![\w.])")
-_NUMBER_WORDS = {w: i for i, w in enumerate(("zero one two three four five six seven eight nine ten eleven twelve "
-                                             "thirteen fourteen fifteen sixteen seventeen eighteen nineteen "
-                                             "twenty").split())}
-_QUOTED = re.compile(r"[\"“](.+?)[\"”]")
-_STOP = frozenset("the a an his her their my your its this that these those of and or to in on at is was were are "
-                  "not but now no it he she they you i me we just only actually really said says".split())
+def _pc(state: WorldState) -> str | None:
+    return next((eid for eid, e in state.entities.items() if e.kind == "pc" and e.exists == "exists"), None)
 
 
-def _number(text: str) -> int | None:
-    m = _NUM.search(text)
+def _words(s: str) -> set[str]:
+    return set(re.findall(r"[a-z]+", str(s).lower().replace("_", " ")))
+
+
+def _number_of(value: Any) -> int | None:
+    """The model's value as a number ("14", "fourteen"); None when it is not one."""
+    words = ("zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen "
+             "seventeen eighteen nineteen twenty").split()
+    m = re.search(r"-?\d+", str(value or ""))
     if m:
-        return int(m.group(1))
-    return next((v for w, v in _NUMBER_WORDS.items() if re.search(rf"\b{w}\b", text.lower())), None)
+        return int(m.group(0))
+    return next((i for i, w in enumerate(words) if re.search(rf"\b{w}\b", str(value or "").lower())), None)
 
 
-def _named(state: WorldState, text: str) -> list[str]:
-    """Entities the report names (full name, alias, or a unique first name), in order of mention; visible only."""
-    low = text.lower()
-    keys: dict[str, set[str]] = {}
-    for eid, e in state.entities.items():
-        if not _visible_entity(state, eid) or e.kind in ("thread", "rumor", "clue"):
-            continue
-        names = {e.name, *(a for a in e.data.get("aliases") or [] if isinstance(a, str))}
-        names |= {n.split()[0] for n in list(names) if " " in n and len(n.split()[0]) >= 4}
-        for n in names:
-            if len(n) >= 3:
-                keys.setdefault(n.lower(), set()).add(eid)
-    hits: list[tuple[int, str]] = []
-    for key in sorted(keys, key=len, reverse=True):
-        if len(keys[key]) != 1:
-            continue
-        m = re.search(rf"(?<![\w]){re.escape(key)}(?![\w])", low)
-        if m:
-            hits.append((m.start(), next(iter(keys[key]))))
-            low = low[:m.start()] + " " * len(key) + low[m.end():]
-    return list(dict.fromkeys(eid for _, eid in sorted(hits)))
-
-
-def _slot(word: str, kind: str | None, rules: Any) -> str | None:
+def _stored_key(ctx: Any, subject: str, key: str) -> str:
+    """The stored predicate the model's `key` names on `subject`: an exact predicate, a detail slot
+    (`details.slot_of`), or a predicate holding the key's words; else the slot it would be ("" when none)."""
     from engine.store.details import slot_of
 
-    return slot_of(word, rules, kind)
-
-
-def _value_near(text: str, word: str) -> str | None:
-    """The player's value for `word`: "<word> is/was <value>" or "<value> <word>"."""
-    m = re.search(rf"\b{re.escape(word)}\b\s+(?:is|was|were|are|should be)\s+(?:actually\s+|really\s+)?"
-                  r"([\w'-]+(?:\s+[\w'-]+){0,2}?)(?=\s*(?:[,.;!?]|$|\s(?:not|but|and|now|you|i|when|in|before|earlier|"
-                  r"then|again|yesterday|today|at|on)\b))",
-                  text, re.IGNORECASE)
-    if m:
-        return m.group(1).strip()
-    m = re.search(rf"((?:[\w'-]+\s+){{1,2}}){re.escape(word)}\b", text, re.IGNORECASE)
-    if m:
-        words = [w for w in m.group(1).split() if w.lower() not in _STOP and not w.lower().endswith("'s")
-                 and not w[:1].isupper()]
-        return " ".join(words) or None
-    return None
-
-
-def _claim_from(ctx: Any, text: str, subject_hint: str = "", key_hint: str = "", value_hint: str = "",
-                ) -> DisputedClaim:
-    """Code's reading of the report's claim: subject, key and the player's value (12.3.6; the locator fills gaps)."""
     state: WorldState = ctx.state
-    low = text.lower()
-    pc = next((eid for eid, e in state.entities.items() if e.kind == "pc" and e.exists == "exists"), None)
-    for k, fid in state.fact_keys.items():  # an explicit `subject.predicate` (a front end, the turn record)
+    key = key.strip().lower()
+    if not key:
+        return ""
+    if state.current_fact_id(subject, key) is not None:
+        return key
+    kind = state.entities[subject].kind if subject in state.entities else None
+    slot = slot_of(key, ctx.rules, kind)
+    if slot:
+        return f"detail.{slot}"
+    want = _words(key) - {"the", "a", "an", "of"}
+    for k in state.fact_keys:
         subj, pred = k.split("|", 1)
-        if f"{subj}.{pred}".lower() in low and state.facts[fid].visibility in PLAYER_FACING:
-            return DisputedClaim(subject=subj, key=pred, said=_value_near(text, f"{subj}.{pred}"))
-    named = _named(state, text) or (_named(state, subject_hint) if subject_hint else [])
-    c = DisputedClaim()
-    subjects = [*named, *([pc] if pc else [])]
-    # a quantity of a named entity, or the PC's ("my vitality", "I had 3 torches")
-    for eid in subjects:
-        for qname, q in (state.quantities.get(eid) or {}).items():
-            word = qname.replace("_", " ").lower()
-            if q.visibility in PLAYER_FACING and re.search(rf"\b{re.escape(word)}s?\b", low + " " + key_hint.lower()):
-                n = _number(text) if _number(text) is not None else _number(value_hint)
-                return DisputedClaim(kind="quantity", subject=eid, key=qname, said=n)
-    mine = bool(re.search(r"\b(?:i|my|me)\b", low))
-    has = re.search(r"\b(?:i|my character)\s+(?:had|have|has|carry|carried|am carrying|was carrying|hold|held|own|"
-                    r"still have|still had)\s+(.+?)(?=[,.;!?]|$|\s(?:but|and|not|you)\b)", low)
-    if pc and has and all(state.entities[e].kind == "item" for e in named):  # a possession (mechanical, INV-9)
-        said = re.sub(r"^(?:my|a|an|the|some|still)\s+", "", has.group(1).strip())
-        return DisputedClaim(subject=pc, key="carries", said=said)
-    for eid in named or ([pc] if pc and mine else []):
-        kind = state.entities[eid].kind
-        if re.search(r"\bname\b", low):
-            m = re.search(r"\bname (?:is|was)\s+([A-Z][\w'-]+(?:\s+[A-Z][\w'-]+)*)", text)
-            return DisputedClaim(subject=eid, key="name", said=m.group(1) if m else state.entities[eid].name)
-        for w in [*re.findall(r"[a-z]+", low), *re.findall(r"[a-z]+", key_hint.lower())]:
-            slot = _slot(w, kind, ctx.rules)
-            if slot:
-                said = _value_near(text, w) or value_hint or None
-                if said and not _has(said, w):
-                    said = f"{said} {w}"
-                return DisputedClaim(subject=eid, key=f"detail.{slot}", said=said)
-        for key, fid in state.fact_keys.items():
-            subj, pred = key.split("|", 1)
-            words = pred.replace("_", " ").replace(".", " ").lower()
-            if subj == eid and len(words) > 3 and words in low and state.facts[fid].visibility in PLAYER_FACING:
-                return DisputedClaim(subject=eid, key=pred, said=_value_near(text, words.split()[-1]) or None)
-    if named:
-        c.subject = named[0]
-    return c
+        if subj == subject and want and want <= _words(pred):
+            return pred
+    return ""
 
 
-def _pins(ctx: Any, text: str, c: DisputedClaim, current: str | None) -> None:  # rule: PR-12-11
-    """Step 1 `[D]`: a turn id, a frame id, a fact id or a quoted phrase pins the passage."""
-    store = ctx.store
-    low = text.lower()
-    m = re.search(r"\bturn[ .#]?(\d+)\b", low)
-    if m and store.turn(f"turn.{m.group(1)}") is not None:
-        c.turn_id = f"turn.{m.group(1)}"
-    frame = re.search(r"\bframe\.\d+\b", low)
-    if frame:
-        c.kind, c.frame_id, c.category = "ruling", frame.group(0), "rule_wrong"
-        fact = re.search(r"\bfact\.\d+\b", low)
-        c.missed_fact = fact.group(0) if fact else None
-        ev = _frame_event(store, c.frame_id)
-        c.turn_id = c.turn_id or (ev.turn_id if ev else None)
-    q = _QUOTED.search(text)
-    if q:
-        c.quote = q.group(1).strip()
-        if not c.turn_id:
-            for tr in _turns(store, current):
-                if _has(tr.delivered_verbatim, c.quote) or _has(tr.input_verbatim, c.quote):
-                    c.turn_id = tr.turn_id
-                    break
+def _claim(ctx: Any, u: dict[str, Any], turns: dict[str, Any]) -> DisputedClaim:  # rule: PR-12-11
+    """One understood complaint as a claim code can verify: the turn kept only when it is a transcript turn, the
+    quote only when that turn holds it (else the turn that does); `about`/`key`/`value` mapped to what is stored."""
+    state: WorldState = ctx.state
+    cat = str(u.get("category") or "other")
+    c = DisputedClaim(believes=" ".join(str(u.get("believes") or "").split()).rstrip("."),
+                      happened=str(u.get("happened") or ""), category=cat if cat in CATEGORIES else "other",
+                      about=str(u.get("about") or "other"), located_by="model")
+    quote = str(u.get("quote") or "").strip().strip('"')
+    tr = turns.get(str(u.get("turn") or ""))
 
+    def holds(t: Any) -> bool:
+        return bool(quote) and (_has(t.delivered_verbatim, quote) or _has(t.input_verbatim, quote))
 
-def _candidates(ctx: Any, c: DisputedClaim, text: str, current: str | None, k: int = 12) -> list[Any]:
-    """The locate call's candidates: this scene's turns first, then turns anywhere that mention what the report
-    names (whole transcript)."""
-    store, state = ctx.store, ctx.state
-    start = state.scene.started_seq if state.scene else 0
-    turns = [tr for tr in _turns(store, current) if not tr.input_verbatim.startswith("(")]
-    here = [tr for tr in turns if _last_seq(store, tr.turn_id) > start]
-    words = [w for w in {*re.findall(r"[a-z]{4,}", text.lower()),
-                         *(n.lower() for n in (_names_of(state, c.subject) if c.subject else []))} if w not in _STOP]
-    hits = [tr for tr in turns if tr not in here
-            and any(w in (tr.input_verbatim + " " + tr.delivered_verbatim).lower() for w in words)]
-    return [*here[:k // 2], *hits][:k]
-
-
-def _ask_locator(ctx: Any, text: str, cands: list[Any]) -> dict[str, Any]:  # rule: PR-12-11
-    """Step 1 `[J:enum]`: one call reads the report and the candidate turns; returns {turn, quote, category} and
-    the player's claim restated. It judges nothing else."""
-    from engine.dm.roles.prompts import load_prompt
-    from engine.dm.schemas import locator_schema
-    from engine.llm.base import Packet, Role, call_role
-
-    lines = [f'THE PLAYER\'S REPORT: "{" ".join(text.split())}"', "CANDIDATE TURNS (this scene first, then search "
-             "hits):"]
-    lines += [f'{tr.turn_id} | player: "{" ".join(tr.input_verbatim.split())[:160]}" | game: '
-              f'"{" ".join(tr.delivered_verbatim.split())[:400]}"' for tr in cands]
-    packet = Packet(instructions=load_prompt("locator"), core="", cards=[], view="", exchanges=[],
-                    message="\n".join(lines))
-    res = call_role(ctx.model, Role.LOCATOR, locator_schema([tr.turn_id for tr in cands]), packet,
-                    turn_id=getattr(ctx, "turn_id", None), recorder=getattr(ctx, "record_call", None),
-                    default={"turn": "none", "quote": "", "category": "other", "subject": "", "key": "",
-                             "value": ""})
-    return dict(res.data)
-
-
-def locate(ctx: Any, text: str, *, model: bool = True) -> DisputedClaim | None:  # rule: PR-12-11
-    # rule: 12.3.6
-    """PR-12-11 step 1. Code first (`[D]`): ids, quotes and names against every turn, and the claim's subject, key
-    and value. The category is code's only from structural markers (a frame or fact id: rule_wrong); otherwise, or
-    when no passage is pinned, ONE locator call (`model=False`: code only). None: nothing to go on."""
-    current = getattr(ctx, "turn_id", None)
-    c = _claim_from(ctx, text)
-    _pins(ctx, text, c, current)
-    if c.kind == "fact" and c.subject and c.key and not c.turn_id:  # the latest turn saying the subject or value
-        names = _names_of(ctx.state, c.subject)
-        words = [c.key.removeprefix("detail."), *(w for w in re.findall(r"[a-z]{4,}", str(c.said or "").lower()))]
-        for tr in _turns(ctx.store, current):
-            hay = tr.delivered_verbatim
-            if (c.said is not None and _has(hay, str(c.said))) or (any(_has(hay, n) for n in names) and any(
-                    _has(hay, w) for w in words)):
-                c.turn_id = tr.turn_id
-                break
-    if model and (c.turn_id is None or c.category == "other") and c.kind != "ruling":
-        cands = _candidates(ctx, c, text, current)
-        if cands:
-            got = _ask_locator(ctx, text, cands)
-            if got.get("category") in CATEGORIES:
-                c.category = str(got["category"])
-            if not c.turn_id and got.get("turn") in {tr.turn_id for tr in cands}:
-                c.turn_id, c.located_by = str(got["turn"]), "model"
-                tr = ctx.store.turn(c.turn_id)
-                q = str(got.get("quote") or "").strip()
-                if q and tr is not None and (_has(tr.delivered_verbatim, q) or _has(tr.input_verbatim, q)):
-                    c.quote = c.quote or q  # the call's quote is kept only when the turn holds it
-            if not c.key and (got.get("subject") or got.get("key")):
-                filled = _claim_from(ctx, text, str(got.get("subject") or ""), str(got.get("key") or ""),
-                                     str(got.get("value") or ""))
-                if filled.key:
-                    c.kind, c.subject, c.key, c.said = filled.kind, filled.subject, filled.key, filled.said
-    if c.category == "other" and c.key and c.kind == "fact":
-        c.category = "remembered_wrong"  # a named fact or name: the label only (outcomes follow the evidence)
-    if c.category == "misread" and not c.key and c.kind != "ruling":
+    if quote and (tr is None or not holds(tr)):
+        tr = next((t for t in turns.values() if holds(t)), tr)
+    if tr is not None:
+        c.turn_id, c.quote = tr.turn_id, quote if holds(tr) else ""
+    subject = str(u.get("subject") or "")
+    c.subject = subject if subject in state.entities else ""
+    key, value = str(u.get("key") or ""), str(u.get("value") or "").strip()
+    said: Any = value or None
+    pc = _pc(state)
+    kw = _words(key)
+    if c.about == "season_or_time" or kw & {"season", "seasons"}:
+        c.about = "season_or_time"
+    elif c.about == "pronoun" or kw & {"pronoun", "pronouns"}:
+        c.about = "pronoun"
+    elif c.about == "roll_or_outcome" or c.category in ("rule_wrong", "ruling_question"):
+        c.kind = "ruling"  # a roll, its odds or its result: the frame recomputed and explained
+        return c
+    elif c.about == "action_reading":  # how the player's own action was read (who spoke or acted is never this)
         c.kind = "beat"
-    if not (c.turn_id or c.subject or c.frame_id):
-        return None
+        return c
+    if c.about == "quantity":
+        subj = c.subject if c.subject in state.quantities else (pc or "")
+        want = _words(key)
+        q = next((n for n in state.quantities.get(subj, {}) if want and (want & _words(n))), None)
+        if q is not None:
+            c.kind, c.subject, c.key, c.said = "quantity", subj, q, _number_of(value)
+            return c
+        c.about = "fact"
+    if c.about == "possession":
+        c.subject = c.subject if c.subject and state.entities[c.subject].kind != "item" else (pc or "")
+        c.key, c.said = "carries", re.sub(r"^(?:my|a|an|the|some|still)\s+", "", value, flags=re.I) or None
+        if c.subject != pc and state.current_fact_id(c.subject, "carries") is None:
+            c.key, c.about = "", "who_said_what"  # an NPC's unrecorded cup or coat: incidental fiction, not mechanics
+    elif c.about == "name":
+        c.key, c.said = "name", said
+    elif c.about == "pronoun":
+        c.key, c.said = "pronouns", said
+    elif c.about == "season_or_time":
+        c.subject, c.key, c.said = c.subject or WORLD, "season", said
+    elif c.subject and c.about in ("fact", "look_or_activity", "other"):
+        c.key = _stored_key(ctx, c.subject, key)
+        c.said = said
+    if c.category == "other" and c.key and c.kind == "fact":
+        c.category = "remembered_wrong"  # a named stored fact: the label only (outcomes follow the evidence)
     return c
+
+
+def locate(ctx: Any, text: str) -> list[DisputedClaim]:  # rule: PR-12-11
+    # rule: 12.3.6
+    """PR-12-11 step 1: the understanding call (engine/dm/understand.py; no model: nothing understood), each
+    complaint verified into a claim. Code never pins the report itself by a number or a name."""
+    turns = {t.turn_id: t for t in _turns(ctx.store, getattr(ctx, "turn_id", None))}
+    if getattr(ctx, "model", None) is None:
+        from engine.dm.understand import default
+
+        complaints = default()["complaints"]
+    else:
+        complaints = understand(ctx, text)
+    return [_claim(ctx, u, turns) for u in complaints]
 
 
 def default_identify(ctx: Any, text: str) -> DisputedClaim | None:  # rule: 12.3.6
-    """Code only (no model call): `locate(..., model=False)`."""
-    return locate(ctx, text, model=False)
+    """The first understood complaint (`identify=` hook for a front end)."""
+    got = locate(ctx, text)
+    return got[0] if got else None
 
 
 # ------------------------------------------------------------------------------------------- the outcomes
@@ -741,13 +691,42 @@ def default_identify(ctx: Any, text: str) -> DisputedClaim | None:  # rule: 12.3
 def _done(tx: Transaction, ctx: Any, text: str, c: DisputedClaim | None, kind: DisputeKind, blocks: list[OofBlock],
           *, outcome: str, evidence: list[str], start: int, reverted: list[int] | None = None,
           correction: dict[str, Any] | None = None, choices: list[dict[str, str]] | None = None) -> DisputeResult:
-    """Every answer ends here: the dispute record and its review-log block (12.3.6 item 6), then the result."""
+    """Every answer ends here: the complaint restated first (PR-12-11 step 2), the dispute record and its review-log
+    block (12.3.6 item 6), then the result."""
+    if c is not None and c.believes and blocks:
+        blocks = [_restated(blocks[0], c.believes), *blocks[1:]]
     writes = [e.seq for e in tx.events[start:] if e.seq is not None]
     answer = "\n".join(b.text for b in blocks)
     rec = _log_dispute(tx, ctx, text, c, outcome=outcome, answer=answer, evidence=evidence, writes=writes,
                        reverted=list(reverted or []))
     return DisputeResult(kind, blocks, events=tx.events[start:], reverted=list(reverted or []),
                          choices=list(choices or []), claim=c, correction=correction, record=rec)
+
+
+_LOWER_LEADS = frozenset("the a an it its you your there that this these those he she they his her their my when "
+                         "after before even although".split())
+
+
+def _cite(tr: Any, c: DisputedClaim | None) -> str:
+    """`turn N: "<the sentence in question>"`: the claim's verified quote, else the turn's sentence sharing the most
+    words with what the player believes."""
+    needle = c.quote if c is not None else ""
+    if not needle and c is not None and c.believes:
+        want = {w for w in re.findall(r"[a-z]{4,}", c.believes.lower()) if w not in _WORD_STOP}
+        sentences = _SENTENCES.split(" ".join(str(tr.delivered_verbatim).split()))
+        best = max(sentences, key=lambda s: len(want & set(re.findall(r"[a-z]{4,}", s.lower()))), default="")
+        needle = best if want & set(re.findall(r"[a-z]{4,}", best.lower())) else ""
+    return _quote(tr, needle)
+
+
+def _restated(block: OofBlock, believes: str) -> OofBlock:  # rule: PR-12-11
+    """`[LABEL] You're saying <believes>.` as the block's first line; its old first line follows, aligned."""
+    label, _, first = block.text.partition("] ")
+    lead = believes.split(" ", 1)[0]
+    lead = re.split(r"['’]", lead)[0].lower()
+    said = believes[:1].lower() + believes[1:] if lead in _LOWER_LEADS else believes  # names keep capitals
+    pad = " " * (len(label) + 2)
+    return OofBlock(kind=block.kind, text=f"{label}] You're saying {said.rstrip('.')}.\n{pad}{first}")
 
 
 def _evidence_fact(state: WorldState, prov: dict[str, Any] | None, c: DisputedClaim) -> list[str]:
@@ -764,15 +743,15 @@ def _ruling(ctx: Any, text: str, c: DisputedClaim, choice: Choice | None) -> Dis
     its start under 12.5.8's limit); otherwise the frame stands, shown with its numbers and cited facts."""
     state: WorldState = ctx.state
     ev = _frame_event(ctx.store, c.frame_id)
-    if ev is None and c.turn_id:  # the passage's beat
-        ev = next((e for e in ctx.store.events(types=["frame_committed"]) if e.turn_id == c.turn_id), None)
+    if ev is None and c.turn_id:  # the passage's beat, or the roll its OFFER led to (committed within two turns)
+        n = _turn_no(c.turn_id)
+        ev = next((e for e in ctx.store.events(types=["frame_committed"]) if e.turn_id == c.turn_id), None) or next(
+            (e for e in ctx.store.events(types=["frame_committed"]) if n < _turn_no(e.turn_id) <= n + 2), None)
         c.frame_id = getattr(ev.payload, "frame_id", None) if ev else None
     with _tx(ctx) as tx:
         start = len(tx.events)
         if ev is None:
-            return _done(tx, ctx, text, c, "unclear", [note_block(
-                f"No committed frame {c.frame_id or 'in that turn'} on record: nothing was rolled there. Logged.",
-                "FIX")], outcome="explain_and_log", evidence=["no frame_committed"], start=start)
+            return _unrolled(ctx, tx, text, c, start)
         frame: dict[str, Any] = ev.payload.frame  # type: ignore[attr-defined]
         committed = int(ev.seq or 0)
         c.turn_id = c.turn_id or ev.turn_id
@@ -790,12 +769,13 @@ def _ruling(ctx: Any, text: str, c: DisputedClaim, choice: Choice | None) -> Dis
             diffs.append(f"{c.missed_fact} ({f.subject} {f.predicate} = {f.value}) was on record and was left out")
         evidence = [f"{c.frame_id} ({ev.turn_id}, event {committed}): {summary}",
                     *(f"recomputed: {d}" for d in diffs or ["matches"])]
-        if not diffs:
+        if not diffs:  # ruling_question / rule_wrong, the frame recomputes the same: explain it in plain words
             why = (f"{c.missed_fact} is already cited" if c.missed_fact and c.missed_fact in cited else
                    f"{c.missed_fact} was not on record before that roll" if c.missed_fact else
                    "recomputed from the rules and the record, it comes out the same")
+            head, rest = _explain_roll(ctx, frame, ev)
             return _done(tx, ctx, text, c, "ruling_stands", [note_block(
-                f"That roll stands ({_turn_words(ev.turn_id)}): {summary}.", "FIX", [f"{why.capitalize()}. Logged."])],
+                head, "FIX", [*rest, f"{why.capitalize()} ({summary})."])],
                 outcome="explain_with_quote", evidence=evidence, start=start)
         desc = f"The roll in {_turn_words(ev.turn_id)} was framed wrong: {'; '.join(diffs)}."
         first = _beat_start(ctx.store, c.frame_id or "", committed)
@@ -819,11 +799,180 @@ def _ruling(ctx: Any, text: str, c: DisputedClaim, choice: Choice | None) -> Dis
                       store_value=None, rewound=[c.frame_id or ""] if reverted else [], fact_id=c.missed_fact)
         _log(tx, ctx, c, desc, rec, frame_id=c.frame_id)
         tail = ("Taken back: that beat is undone and its roll is void. Declare again." if reverted else
-                "The result stands and is corrected going forward. Logged." if ok else
-                f"It can't be taken back ({why_not}): corrected going forward. Logged.")
+                "The result stands and is corrected going forward." if ok else
+                f"It can't be taken back ({why_not}): corrected going forward.")
         return _done(tx, ctx, text, c, "ruling_error", [note_block(desc, "CORRECTION", [tail])],
                      outcome="take_back" if reverted else "correct", evidence=evidence, start=start,
                      reverted=reverted, correction=rec)
+
+
+def _whose(state: WorldState, eid: str) -> str:
+    e = state.entities.get(eid)
+    return "your" if e is not None and e.kind == "pc" else f"{_name(state, eid)}'s"
+
+
+def _changes(store: Any, state: WorldState, turn_id: str | None, from_seq: int) -> list[str]:  # rule: PR-12-11
+    """What a turn wrote on record from `from_seq`, in plain words: shown facts and shown quantities (12.3.6 item 3:
+    the frame's writes)."""
+    out: list[str] = []
+    for e in store.events(since=from_seq - 1):
+        p: Any = e.payload
+        if e.turn_id != turn_id or e.seq in state.reverted:
+            continue
+        if (e.type == "fact_set" and p.visibility in PLAYER_FACING and p.value not in (None, "", False, [])
+                and p.subject in state.entities and not p.predicate.startswith(("closed.", "trg.", "log.", "lethal"))):
+            what = p.predicate.removeprefix("detail.").replace("_", " ").replace(".", " ")
+            out.append(f"{_whose(state, p.subject)} {what}: {_excerpt(str(p.value), n=80)}")
+        elif e.type == "quantity_changed":
+            q = state.quantities.get(p.entity, {}).get(p.quantity)
+            if q is not None and q.visibility in PLAYER_FACING:
+                out.append(f"{_whose(state, p.entity)} {p.quantity.replace('_', ' ')} {p.new_value - p.delta} → "
+                           f"{p.new_value}")
+    return list(dict.fromkeys(out))[:6]
+
+
+def _explain_roll(ctx: Any, frame: dict[str, Any], ev: Event) -> tuple[str, list[str]]:  # rule: PR-12-11
+    """A committed frame in plain words: what was rolled and as what, the roll, the degree and reach, what it
+    changed on record, and its aim (the typed intended change is spec 015's)."""
+    from engine.dm.oof import name_of
+
+    fid = getattr(ev.payload, "frame_id", None)
+    res: Any = next((e.payload for e in ctx.store.events(since=int(ev.seq or 0), types=["frame_resolved"])
+                     if getattr(e.payload, "frame_id", None) == fid), None)
+    b = frame.get("beat") or {}
+    what = str(b.get("restatement") or b.get("intent") or "that action").rstrip(".")
+    verb = name_of(ctx.rules, b.get("verb")).lower() or "check"
+    if res is not None:
+        roll = res.roll if isinstance(res.roll, dict) else {}
+        reach = (res.delivered or {}).get("reach") or frame.get("reach")
+        head = (f"Here's why: {_turn_words(ev.turn_id)} rolled \"{what}\" as a {verb} (d20 {roll.get('d20')} → "
+                f"{roll.get('total')} vs {frame.get('dc')}): {str(res.degree).replace('_', ' ')}, reach {reach}.")
+    else:
+        head = f"Here's why: {_turn_words(ev.turn_id)} committed \"{what}\" as a {verb}; it was not rolled."
+    changes = _changes(ctx.store, ctx.state, ev.turn_id, int(ev.seq or 0))
+    rest = [f"It changed on record: {'; '.join(changes)}." if changes else "It changed nothing on record."]
+    if b.get("intent"):
+        rest.append(f"Its aim was \"{str(b['intent']).rstrip('.')}\": a success changes only what is listed; "
+                    "anything else in the aim takes another action.")
+    return head, rest
+
+
+def _unrolled(ctx: Any, tx: Transaction, text: str, c: DisputedClaim, start: int) -> DisputeResult:  # rule: PR-12-11
+    """A ruling complaint with no committed frame: an open OFFER is explained from its cited facts (INV-9: a cited
+    fact is changed only by the record; logged for review); otherwise the turn is quoted: nothing was rolled."""
+    state: WorldState = ctx.state
+    pause = state.open_pause()
+    fr = (pause.detail or {}).get("frame") if pause is not None and pause.kind == "offer" else None
+    if isinstance(fr, dict):
+        lines, evidence = [], []
+        for sign, cites in (("bonus", fr.get("levers") or []), ("penalty", fr.get("snags") or [])):
+            for x in cites:
+                cite = str(x.get("fact_id") if isinstance(x, dict) else x)
+                f = state.facts.get(cite)
+                if f is None:
+                    continue
+                src = ctx.store.event(f.valid_from_seq)
+                since = _turn_words(src.turn_id) if src is not None else "the start"
+                lines.append(f"a {sign} from \"{_name(state, f.subject)} {f.predicate.removeprefix('detail.')}: "
+                             f"{f.value}\" (on record since {since}, source {f.source})")
+                evidence.append(f"{cite} {f.subject} {f.predicate} = {f.value!r} ({f.source}, seq {f.valid_from_seq})")
+        rec = _record(c, turn_found=tx.turn_id, kind="unverified", form="oof_note", reliance=[], store_value=None,
+                      rewound=[])
+        _log(tx, ctx, c, f"player disputes the open offer's levers: {text[:120]}", rec)
+        head = "That offer isn't rolled yet. Its odds come from the record: " + ("; ".join(lines) or "no cited facts") + "."
+        return _done(tx, ctx, text, c, "stands", [note_block(head, "FIX", [
+            "An activity that has ended is never a bonus (01.6.8). I can't strike a cited fact on your word alone, so "
+            "this is logged for review; if it's stale, back off and declare again."])],
+            outcome="explain_and_log", evidence=evidence or ["open offer, no cited facts"], start=start, correction=rec)
+    tr = ctx.store.turn(c.turn_id) if c.turn_id else None
+    if tr is None:
+        return _not_found(ctx, tx, text, c, start)
+    first = ctx.store.conn.execute("SELECT MIN(seq) FROM events WHERE turn_id=?", (tr.turn_id,)).fetchone()[0]
+    changes = _changes(ctx.store, state, tr.turn_id, int(first or 0)) if first else []
+    return _done(tx, ctx, text, c, "stands", [note_block(
+        f"Nothing was rolled there ({_cite(tr, c)}).", "FIX",
+        [f"That turn changed on record: {'; '.join(changes)}." if changes else "That turn changed nothing on record."])],
+        outcome="explain_with_quote", evidence=[f"no frame committed in {tr.turn_id}"], start=start)
+
+
+def _not_found(ctx: Any, tx: Transaction, text: str, c: DisputedClaim | None, start: int) -> DisputeResult:
+    # rule: PR-12-11
+    """No passage fits what the player believes: "I can't find that; did you mean …?" with the nearest passage."""
+    tr = _nearest(ctx.store, f"{text} {c.believes if c else ''} {c.quote if c else ''}", getattr(ctx, "turn_id", None))
+    head = "I can't find that" + (f"; did you mean {_cite(tr, c)}?" if tr else " in the story so far.")
+    return _done(tx, ctx, text, c, "not_found", [note_block(head, "FIX", [
+        "Say it again with the turn number (/turn N shows a turn) and I'll check it against the record."])],
+        outcome="not_found", evidence=[f"nearest: {tr.turn_id}" if tr else "no turns"], start=start)
+
+
+def _computed(ctx: Any, text: str, c: DisputedClaim) -> DisputeResult:  # rule: PR-12-11
+    # rule: 12.3.6
+    """The season (the calendar) and a person's pronouns (on their record): the store agrees with the player → the
+    narration slipped (a correction with nothing to write); otherwise the record is explained. Nothing on record
+    for a pronoun: incidental fiction, the player's reading wins."""
+    state: WorldState = ctx.state
+    if c.key == "season":
+        value, what = season_word(state), "it is"
+        tail = f" ({when_words(state.time.now)})"
+    else:
+        e = state.entities.get(c.subject)
+        value = str(e.data.get("pronouns") or "") if e is not None else ""
+        what, tail = f"{_name(state, c.subject)} is", " on record"
+        if not value:
+            return _incidental(ctx, text, c)
+    said = _words(c.said or "")
+    agrees = not said or bool(said & _words(value))
+    tr = ctx.store.turn(c.turn_id) if c.turn_id else None
+    where = f" ({_cite(tr, c)})" if tr is not None else ""
+    with _tx(ctx) as tx:
+        start = len(tx.events)
+        evidence = [f"{c.subject or WORLD} {c.key} = {value!r} (record)", *([f"passage {tr.turn_id}"] if tr else [])]
+        if agrees:
+            rec = _record(c, turn_found=tx.turn_id, kind="narration_error", form="oof_note", reliance=[],
+                          store_value=value, rewound=[])
+            _log(tx, ctx, c, f"narration error: {what} {value}", rec)
+            return _done(tx, ctx, text, c, "store_agrees", [note_block(
+                f"You're right: {what} {value}{tail}; the narration slipped{where}.", "CORRECTION",
+                ["The record has it right, and it stays."])], outcome="correct", evidence=evidence, start=start,
+                correction=rec)
+        return _done(tx, ctx, text, c, "mistaken", [note_block(
+            f"As recorded: {what} {value}{tail}.", "FIX", [f"The record does not say {c.said}{where}."])],
+            outcome="explain_with_quote", evidence=evidence, start=start)
+
+
+def _incidental(ctx: Any, text: str, c: DisputedClaim) -> DisputeResult:  # rule: 12.3.6
+    # rule: PR-12-11
+    """Nothing stored to check: incidental fiction (who said or did what in passing, a look, an activity) → the
+    player's reading wins as a pinned correction on the subject (else `world`), holding the complaint in their
+    words (00.6.7 "Certain"); mechanics → what the record holds, logged for review, nothing written (INV-9)."""
+    state: WorldState = ctx.state
+    tr = ctx.store.turn(c.turn_id) if c.turn_id else None
+    where = f" ({_cite(tr, c)})" if tr is not None else ""
+    with _tx(ctx) as tx:
+        start = len(tx.events)
+        if c.about in MECHANICS:
+            rec = _record(c, turn_found=tx.turn_id, kind="unverified", form="oof_note", reliance=[], store_value=None,
+                          rewound=[])
+            _log(tx, ctx, c, f"unverified mechanical claim: {c.believes or text}"[:300], rec)
+            held = _holdings(state, c.subject) if c.subject else ""
+            return _done(tx, ctx, text, c, "unverified", [note_block(
+                "The record has nothing that settles that" + (f" (it holds: {held})" if held else "") + f"{where}.",
+                "FIX", ["Without a record I can't change it; it's logged for review."])],
+                outcome="explain_and_log", evidence=[f"nothing on record; passage {c.turn_id}"], start=start,
+                correction=rec)
+        subject = c.subject if c.subject in state.entities else WORLD
+        n = 1 + sum(1 for k in state.fact_keys if k.startswith(f"{subject}|correction."))
+        fid = tx.mint(ids.FACT)
+        tx.add(Event.of("fact_set", {"source": "correction"}, source="correction", rule_id="12.3.6", fact_id=fid,
+                        subject=subject, predicate=f"correction.{n}", value=(c.believes or text)[:300],
+                        visibility="shown", pinned=True))
+        rec = _record(c, turn_found=tx.turn_id, kind="player_reading", form="oof_note", reliance=[], store_value=None,
+                      rewound=[], fact_id=fid)
+        _log(tx, ctx, c, f"player's reading accepted: {c.believes or text}"[:300], rec)
+        return _done(tx, ctx, text, c, "player_wins", [note_block(
+            f"You're right{where}: it's taken as you say, and it stays.", "CORRECTION")],
+            outcome="player_reading_wins", evidence=[f"nothing on record; passage {c.turn_id}"], start=start,
+            correction=rec)
 
 
 _STEM_STOP = frozenset("that this with from didn just only meant said what have they them then into never wanted "
@@ -848,21 +997,29 @@ def _misread(ctx: Any, text: str, c: DisputedClaim) -> DisputeResult:  # rule: 1
             return _done(tx, ctx, text, c, "unclear", [note_block(
                 "Which action? Name the turn (/turn shows them) and I check how it was read.", "FIX")],
                 outcome="explain_and_log", evidence=["no turn pinned"], start=start)
+        from engine.dm.oof import name_of
+
         frames = [e for e in store.events(types=["frame_committed"]) if e.turn_id == tr.turn_id]
-        reading = " ".join(str((e.payload.frame.get("beat") or {}).get("restatement") or "")  # type: ignore[attr-defined]
-                           for e in frames) or _excerpt(tr.delivered_verbatim, n=120)
+        beats = [e.payload.frame.get("beat") or {} for e in frames]  # type: ignore[attr-defined]
+        reading = " ".join(str(b.get("restatement") or "") for b in beats) or _excerpt(tr.delivered_verbatim, n=120)
+        verbs = ", ".join(name_of(ctx.rules, b["verb"]).lower() for b in beats if b.get("verb"))
+        as_verb = f" (as {verbs})" if verbs else ""
+        # the player's words: the declaring turn (an OFFER's commit turn holds only "commit")
+        decl = min((int(b.get("declared_seq") or 0) for b in beats), default=0)
+        ev_decl = store.event(decl + 1) if decl else None
+        said_tr = (store.turn(ev_decl.turn_id) if ev_decl is not None and ev_decl.turn_id else None) or tr
         unseen = (any(e.payload.frame.get("offer_choice") == "auto" for e in frames)  # type: ignore[attr-defined]
                   or (not frames and bool(tr.writes)))
-        support = (_stems(text) & _stems(tr.input_verbatim)) - _stems(reading)
-        evidence = [f"{tr.turn_id} input: \"{tr.input_verbatim}\"", f"read as: \"{reading}\"",
+        support = (_stems(text) & _stems(said_tr.input_verbatim)) - _stems(reading)
+        evidence = [f"{said_tr.turn_id} input: \"{said_tr.input_verbatim}\"", f"read as: \"{reading}\"",
                     f"OFFER shown: {'no' if unseen else 'yes'}", f"report words in the input, not the reading: "
                     f"{sorted(support) or 'none'}"]
         if not (unseen and support):
             why = ("the OFFER showed that reading before the roll" if not unseen else
                    "your words then match the reading")
             return _done(tx, ctx, text, c, "stands", [note_block(
-                f"As recorded: {_turn_words(tr.turn_id)}, you wrote \"{tr.input_verbatim}\"; it was read as "
-                f"\"{reading}\".", "FIX", [f"It stands: {why}. Logged."])],
+                f"As recorded: {_turn_words(said_tr.turn_id)}, you wrote \"{said_tr.input_verbatim}\"; it was read as "
+                f"\"{reading}\"{as_verb}.", "FIX", [f"It stands: {why}."])],
                 outcome="explain_with_quote", evidence=evidence, start=start)
         seqs = [s for s in tr.writes if s not in tx.state.reverted]
         first = min([*seqs, *(_beat_start(store, e.payload.frame_id, int(e.seq or 0))  # type: ignore[attr-defined]
@@ -919,7 +1076,7 @@ def _fact(ctx: Any, text: str, c: DisputedClaim, choice: Choice | None) -> Dispu
     store = ctx.store
     current = getattr(ctx, "turn_id", None)
     what = _what(state, c)
-    value, facing, fact_id = _store_value(state, c)
+    value, facing, fact_id = _store_value(state, c, _seen(store, state, c.subject, current) if c.subject else None)
     prov = _provenance(store, state, c)
     evidence = _evidence_fact(state, prov, c)
     held = ""
@@ -987,7 +1144,7 @@ def _fact(ctx: Any, text: str, c: DisputedClaim, choice: Choice | None) -> Dispu
                         f"on record since {_turn_words(prov['turn'])}" if prov and prov.get("turn") else "on record")
             if c.said is None:  # nothing claimed: show what the record went by
                 return _done(tx, ctx, text, c, "stands", [note_block(
-                    f"As recorded: {what} is {shown} ({src_line}).", "FIX", ["Logged."])],
+                    f"As recorded: {what} is {shown} ({src_line}).", "FIX")],
                     outcome="explain_with_quote", evidence=evidence, start=start)
             if _same(c.said, value):  # the store holds what the player says: narration error or omission
                 if c.key == "name" and fact_id and said_tr is not None:
@@ -1004,14 +1161,14 @@ def _fact(ctx: Any, text: str, c: DisputedClaim, choice: Choice | None) -> Dispu
                 head = (f"You're right: you carry {shown} (on record)." if c.key == "carries" else
                         f"You're right: {what} is {shown}{said_where}.")
                 return _done(tx, ctx, text, c, "store_agrees", [note_block(head, "CORRECTION",
-                    ["The record has it; the narration slipped. Logged."])],
+                    ["The record has it right; the narration slipped."])],
                     outcome="correct", evidence=evidence, start=start, correction=rec)
             if said_tr is not None:  # the narration said the player's value, the store holds another: store wins
                 c.turn_id = c.turn_id or said_tr.turn_id
                 return _narration_error(ctx, tx, text, c, value, fact_id, choice, evidence, start)
             return _done(tx, ctx, text, c, "mistaken", [note_block(
                 f"As recorded: {what} is {shown} ({src_line}).", "FIX",
-                [f"{c.said} was never said. Logged."])],
+                [f"{c.said} was never said."])],
                 outcome="explain_with_quote", evidence=evidence, start=start)
         # nothing on record: uncertain evidence
         slot = c.key.removeprefix("detail.") if c.key.startswith("detail.") else ""
@@ -1074,44 +1231,52 @@ def _narration_error(ctx: Any, tx: Transaction, text: str, c: DisputedClaim, val
     if reverted:
         tail = "Rewound to before that beat; its roll is void. Declare again."
     elif relying:
-        tail = ("The result stands, corrected around it. Logged." if choice != "rewind" else
-                "That can't be rewound cleanly any more; corrected going forward. Logged.")
+        tail = ("The result stands, corrected around it." if choice != "rewind" else
+                "That can't be rewound cleanly any more; corrected going forward.")
     else:
         # coarse: 12.3.4 (refunds for spends before the current scene are not computed in M1)
-        tail = "You spent nothing because of it. Logged."
+        tail = "You spent nothing because of it; the record stands."
     return _done(tx, ctx, text, c, "narration_error", [note_block(head, "CORRECTION", [tail])],
                  outcome="take_back" if reverted else "correct", evidence=evidence, start=start, reverted=reverted,
                  correction=rec)
+
+
+def _settle_one(ctx: Any, text: str, c: DisputedClaim | None, choice: Choice | None) -> DisputeResult:
+    # rule: PR-12-11
+    """PR-12-11 step 4 for one understood complaint, first row that fits."""
+    if c is None or not (c.turn_id or c.subject or c.frame_id):
+        with _tx(ctx) as tx:
+            return _not_found(ctx, tx, text, c, len(tx.events))
+    if c.kind == "ruling":
+        return _ruling(ctx, text, c, choice)
+    if c.kind == "beat":
+        return _misread(ctx, text, c)
+    if c.key in ("pronouns", "season"):
+        return _computed(ctx, text, c)
+    if c.subject and c.key:
+        return _fact(ctx, text, c, choice)
+    return _incidental(ctx, text, c)
 
 
 def settle_dispute(ctx: Any, text: str, *, identify: Identify | None = None,
                    choice: Choice | None = None) -> DisputeResult:  # rule: 12.3.6
     # rule: PR-12-11
     """PR-12-11 from the whole transcript and the store. `ctx`: anything with `store`, `state`, `rules`, optional
-    `tx` (the turn's open transaction; else a one-shot transaction), `model` and `record_call` (the locate call).
-    `identify` (tests, a front end) replaces `locate`."""
-    c = identify(ctx, text) if identify else locate(ctx, text, model=getattr(ctx, "model", None) is not None)
-    if c is None:
-        tr = _relevant_exchange(ctx.store, [], getattr(ctx, "turn_id", None))
-        rest = [f"From the turn log — {_quote(tr)}"] if tr else []
-        with _tx(ctx) as tx:
-            return _done(tx, ctx, text, None, "unclear", [note_block(
-                "Which statement, and when? Name what was said (and the turn if you can); I check it against the "
-                "record.", "FIX", rest)], outcome="explain_and_log", evidence=["nothing pinned"],
-                start=len(tx.events))
-    if c.kind == "ruling" or (c.category == "rule_wrong" and c.turn_id and not c.key):
-        return _ruling(ctx, text, c, choice)
-    if c.kind == "beat":
-        return _misread(ctx, text, c)
-    if c.subject and c.key:
-        return _fact(ctx, text, c, choice)
-    tr = ctx.store.turn(c.turn_id) if c.turn_id else None
-    with _tx(ctx) as tx:  # a passage but no fact or rule to check: quote it, log it
-        return _done(tx, ctx, text, c, "not_said", [note_block(
-            f"As recorded: {_quote(tr, c.quote)}." if tr else "I found nothing on record to check that against.",
-            "FIX", ["Say which fact or roll is wrong (a name, a number, a frame) and I check it. Logged."])],
-            outcome="explain_and_log", evidence=[f"passage {c.turn_id}" if tr else "no passage"],
-            start=len(tx.events))
+    `tx` (the turn's open transaction; else a one-shot transaction), `model` and `record_call` (the understanding
+    call). `identify` (a CHOICE answer, tests, a front end) replaces the understanding call with one claim.
+    Each complaint is answered in order (one dispute record each); at most one reliance CHOICE per report, later
+    ones are answered forward. The result's `claim`/`record` are the CHOICE's complaint, else the first."""
+    claims = [identify(ctx, text)] if identify else locate(ctx, text)
+    results: list[DisputeResult] = []
+    for c in claims or [None]:
+        open_choice = any(r.choices for r in results)
+        results.append(_settle_one(ctx, text, c, "accept_forward" if open_choice and choice is None else choice))
+    lead = next((r for r in results if r.choices), results[0])
+    if len(results) == 1:
+        return lead
+    return DisputeResult(lead.kind, [b for r in results for b in r.blocks], events=[e for r in results for e in r.events],
+                         reverted=[s for r in results for s in r.reverted], choices=lead.choices, claim=lead.claim,
+                         correction=next((r.correction for r in results if r.correction), None), record=lead.record)
 
 
 def dispute(ctx: Any, text: str, *, identify: Identify | None = None,

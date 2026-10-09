@@ -7,6 +7,7 @@ from typing import Any
 
 import pytest
 
+from engine.dm.understand import understand_schema
 from engine.llm.base import Packet, Role, call_role, validate
 from engine.llm.offline import (
     QUIET_TURNS_TO_CUT,
@@ -117,8 +118,7 @@ CHECKER = obj(
 SCHEMAS = {Role.INTERPRET: INTERPRET, Role.READER: READER, Role.FRAMER: FRAMER, Role.WORLD: WORLD,
            Role.DIRECTOR: DIRECTOR, Role.NARRATOR: NARRATOR, Role.CHECKER: CHECKER,
            Role.PROPOSER: obj(kind=enum("ordinary_fact", "not_ordinary"), subject=STR, predicate=STR, value=STR),
-           Role.LOCATOR: obj(turn=enum("turn.3", "none"), quote=STR, category=enum(
-               "remembered_wrong", "rule_wrong", "contradiction", "misread", "other"), subject=STR, key=STR, value=STR)}
+           Role.UNDERSTAND: understand_schema(["turn.3"], ["npc.mara_voss"])}
 
 MODEL = OfflineModel()
 

@@ -941,32 +941,46 @@ Supersedes the earlier notes on `Beat.gate` / `would_be_license` / `necessity`, 
   (`narrator._set_aside`). `narration._mark_used` marks a cited scene-state line's slot. `narration._unanswered` owes
   no answer to SPEECH said before a move that opened a new scene with no one answering.
 
-## The player feedback loop (spec 012; PR-12-11, 12.3.6, 12.5.8; DL-12-84..86)
+## The player feedback loop (specs 012, 014; PR-12-11, 12.3.6, 12.5.8; DL-12-84..86, DL-12-94)
 - **Reporting.** `/fix <what>` (play client) → `Game.dispute(text)` → `turn.play_dispute`: a DISPUTE part, no Reader
   call, no world step. A Reader DISPUTE part runs the same path. `reader.possible_dispute(message, classes)` (a code
   scan) adds a NOTE with `oof.FIX_HINT` (= `pacing.yaml#feedback.hint`) to a fiction turn that may be a dispute. The
   CLI prints the hint once per sitting after the first play screen; `oof.glossary()` ends with `oof.FIX_GLOSSARY`
   (`? fix` shows it). The answer to a dispute's CHOICE is OOF too (no world step, no narration).
+- **Understand first (spec 014).** `engine.dm.understand.understand(ctx, text) -> [complaint]`: ONE `Role.UNDERSTAND`
+  call per report (prompt `prompts/understand.md`; schema `understand_schema(turn_ids, subject_ids)` lives in
+  `understand.py`, `schemas.BUILDERS/DEFAULTS` only point to it). Packet: the report, `NOW: <season>, <when>`, the
+  people (`id: name (pronouns)`: the PC, the cast present, everyone named in the transcript), and the WHOLE transcript
+  oldest first (`turn.N | player | game`, plus `rolled: frame.K "<restatement>" (verb) -> degree, reach` lines);
+  past `feedback.understand_call.transcript_budget_tokens` the scene's turns plus the turns holding the report's
+  words. Returns ≤3 complaints `{believes, happened, category (feedback.categories, with ruling_question), turn,
+  quote, subject, about (understand.ABOUT), key, value}`. Code never pins a report by a number or a name in it
+  (`feedback.locate_call: retired`).
 - **`engine.dm.dispute`**: `settle_dispute(ctx, text, *, identify=None, choice=None) -> DisputeResult(kind, blocks,
   events, reverted, choices, claim, correction, record)`; `dispute(...) -> str` (TurnContext.dispute);
-  `locate(ctx, text, model=True) -> DisputedClaim | None` (code pins over EVERY turn: `turn N`, `frame.N`,
-  `fact.N`, a quoted phrase, names/aliases/unique first names of visible entities, quantity words, detail-slot
-  words, possessions "I had/have/carry X", explicit `subject.predicate`; then ONE `Role.LOCATOR` call when the
-  passage or the category is unpinned: `{turn, quote, category, subject, key, value}`, schema
-  `schemas.locator_schema(turns)`, prompt `prompts/locator.md`; `default_identify` = code only).
-  `DisputedClaim(kind fact|quantity|ruling|beat, subject, key, said = the player's value, quote, turn_id, source,
-  frame_id, missed_fact, category, located_by)`. `recompute(store, rules, frame, commit_seq) -> [differences]`
-  (DC from `resolution.dc_tiers` / the stored DC fact + mode shift, the modifier from the sheet at the commit, cited
-  facts usable, odds). `dispute_stats(state) -> {all, upheld, by_category}`. `review_log_path(store)`.
-- **Outcomes** (first row that fits): rule_wrong → recompute differs or a named fact was omitted → `ruling_error`
-  (CHOICE accept_forward / rewind) else `ruling_stands` (`[FIX]`); misread (category) → the beat was auto-committed
-  or rolled nothing AND report words are in the player's input but not the reading → `taken_back`, else `stands`;
-  an earlier resolved write (`RESOLVED` sources) of the player's value replaced by a narration write, or a named
-  `source` → `record_error` (pinned corrective write); store = player → `store_agrees` (a told name also writes the
-  PC's `knowledge_recorded`); the narration said the player's value, the store another → `narration_error` (store
-  wins; reliance CHOICE in the scene); otherwise `mistaken` (`[FIX]` quoting the turn that set the value); nothing
-  stored + an `INCIDENTAL_SLOTS` detail → `player_wins` (pinned); nothing stored + anything else → `unverified`
-  (INV-9: what the record holds, logged, nothing written); `hidden` for background/sealed or an unlearned name.
+  `locate(ctx, text) -> [DisputedClaim]` (the understanding, each complaint verified by `_claim`: the turn kept only
+  if it is a transcript turn, the quote only if the turn holds it, `about`/`key`/`value` mapped to a quantity, a
+  stored predicate (`details.slot_of`), `carries`, `name`, `pronouns`, `season`; no model → nothing understood);
+  `default_identify` = the first claim. `DisputedClaim(kind fact|quantity|ruling|beat, subject, key, said, quote,
+  turn_id, source, frame_id, missed_fact, category, located_by, believes, happened, about)`.
+  `recompute(store, rules, frame, commit_seq) -> [differences]`. `dispute_stats(state)`. `review_log_path(store)`.
+  Each complaint is answered (one record each; one CHOICE at most, later ones forward); `_done` restates first
+  (`[LABEL] You're saying <believes>.`); no answer ends in a bare "Logged.".
+- **Outcomes** (first row that fits, per complaint): no passage → `not_found` ("I can't find that; did you mean
+  turn N, "…"?", the turn sharing most words); a roll / rule_wrong / ruling_question → the passage's frame (or the
+  one its OFFER led to within two turns) recomputed: differs or a named fact omitted → `ruling_error` (CHOICE) else
+  `ruling_stands`, explained in plain words (`_explain_roll`: what was rolled and as what, d20, degree, reach, what it
+  wrote on record, its aim); no frame but an open OFFER → its cited facts with provenance (explain_and_log); an
+  action reading → `_misread` (the declaring turn's words); `season` (calendar) / `pronouns` (entity data) → store
+  agrees: `store_agrees` ("the narration slipped"), else explained; a stored key → spec 012's table (an incidental
+  slot, now with `activity`, re-rolled away from the player's earlier value → corrected to it); nothing stored:
+  fiction (who said or did what, a look, an NPC's unrecorded possession) → `player_wins`, a pinned
+  `correction.<n>` fact on the subject or `world` holding `believes`; mechanics (`dispute.MECHANICS`: quantity, the
+  PC's possessions, a roll, a name) → `unverified` (INV-9: explained, logged for review); `hidden` for sealed state.
+  A subject met in play counts as player-facing (`_seen`: its name is in a delivered turn).
+- **Corpus.** `evals/feedback_corpus.py` scores the loop on `tests/fixtures/feedback_corpus` (real `/fix` lines;
+  `open_at(save, turn, dir)` cuts a gzipped slim save back to the report's turn): understanding (category and turn)
+  and outcome. `tests/engine/test_feedback_corpus.py` replays the recorded Haiku understanding.
 - **Corrections** are `fact_set` with `source: correction`, `supersedes`, `pinned: True` (`FactSet.pinned`,
   `FactRecord.pinned`). `packet.scene_view` adds every pinned fact about an entity in scope (past the budget, never
   archived); `render_view` marks it "(corrected by the player's report; keep it)"; `spot_lines` keeps pinned details
@@ -979,8 +993,8 @@ Supersedes the earlier notes on `Beat.gate` / `would_be_license` / `necessity`, 
   `time_advanced`, `boundary_marked`): the PC is back in the beat's scene at its hour. Events with `source:
   "correction"` (the ledger, earlier corrections) are never reverted. Rolls go to meta `rolls_voided`.
 - **Review log.** Every report appends a dispute record to meta `corrections` (`type: dispute`, `id: dsp.N`, `time`
-  = game time in words, `turn`, `words`, `category`, `located_by`, `passage {turn, quote}`, `evidence`, `outcome`
-  (correct | take_back | player_reading_wins | explain_with_quote | explain_and_log | pending), `upheld`, `writes`,
+  = game time in words, `turn`, `words`, `believes`, `category`, `located_by`, `passage {turn, quote}`, `evidence`, `outcome`
+  (correct | take_back | player_reading_wins | explain_with_quote | explain_and_log | not_found | pending), `upheld`, `writes`,
   `reverted`) and a markdown block to **`<save stem>.disputes.md` beside the game file** (`saves/<campaign>.disputes.md`
   for the play client; wall-clock time only there). A CHOICE logs `pending`; its answer replaces the record (same id)
   and appends a "(resolved)" block. Corrections also keep 12.3.4's correction record and a `ruling_logged` with

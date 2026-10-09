@@ -1,0 +1,35 @@
+### 20261008-145430-fighter.db.gz @ turn.6 (/fix): I succeeded but never got the purse
+[FIX] You're saying you succeeded at the lift, but you never got the purse.
+      Here's why: turn 5 rolled "First: slip through the crowd toward Murzak Red-Hand" as a grapple (d20 14 → 18 vs 10): success, reach great.
+      It changed on record: your vitality 12 → 7; your held: Murzak Red-Hand restrained; Murzak Red-Hand's posture: restrained by you; Murzak Red-Hand's manner: straining against you.
+      Its aim was "have Murzak Red-Hand's coin purse in hand": a success changes only what is listed; anything else in the aim takes another action.
+      Recomputed from the rules and the record, it comes out the same (agility, opposed DC 10, modifier +4, 75% to succeed, stakes dire, reach great; cited: fact.92, fact.95).
+(model calls: 1)
+
+### 20261008-145410-talker.db.gz @ turn.3 (/fix): the season is wrong: it's spring but he talked about the autumn harvest
+[CORRECTION] You're saying it's spring, but Ysrion talked of the autumn harvest.
+             You're right: it is spring (the morning of day 1); the narration slipped (turn 2: ""Day wages," he says, "for the guild is taking on extra hands for the autumn harvest."").
+             The record has it right, and it stays.
+(model calls: 1)
+
+### 20261008-145430-fighter.db.gz @ turn.13 (/fix): The offer calls Murzak "his" weight, but Murzak Red-Hand has been "her" the whole scene.
+[CORRECTION] You're saying the game calls Murzak 'his' when Murzak has been 'her' the whole scene.
+             You're right: Murzak Red-Hand is she/her on record; the narration slipped (turn 12: "If it fails: Murzak twists and shrugs the grab off, and I lose my footing against his weight — a setback.").
+             The record has it right, and it stays.
+
+[OFFER] Grab the purse with my free hand.
+        Chance: better than even — 60%   (Might +0, practised +1, Murzak Red-Hand restrained +2, staggered −2)
+        If it works: partly what you wanted.   Very well (10%): more than you asked.
+        If it fails: Murzak twists and shrugs the grab off, and I lose my footing against his weight — a setback.   Badly (5%): Murzak twists and shrugs the grab off, and I lose my footing against his weight — serious.
+        Close call (15%): get it anyway and pay (the grab is seen across the square and Murzak raises the alarm), or fail.
+        Whatever the roll: The free hand reaches Murzak's belt whatever the roll
+        Fate: 1 (you may spend one to reroll the die once you see it)
+        Another way: with Agility (75%) · feint first (70%) · shove instead (60%)
+(model calls: 1)
+
+### 20261008-135029-talker.db.gz @ turn.6 (plain words): Wait, that's wrong: Nero answered for the officer. I asked the officer, not Nero.
+[CORRECTION] You're saying you asked the officer about the hiring and pay, but Nero answered instead of the officer.
+             You're right (turn 5: "Nero Verent shifts her basket against her hip and says, "The hauling work in Sandcrag pays two silver a day, carrying stone for repairs to the north wall."): it's taken as you say, and it stays.
+(model calls: 2)
+
+total model calls: 9

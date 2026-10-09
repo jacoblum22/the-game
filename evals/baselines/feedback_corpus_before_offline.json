@@ -1,0 +1,305 @@
+{
+ "model": "offline",
+ "understood": 2,
+ "outcome": 1,
+ "n": 11,
+ "results": [
+  {
+   "id": "talker-18",
+   "category": "misread",
+   "turn": "turn.2",
+   "believes": "",
+   "outcome": "take_back",
+   "kind": "taken_back",
+   "answer": "[CORRECTION] Taken back: \"Ysrion Leafward leaves off with the rug and turns to face you. \"The work is hauling grain sacks,\" says Ysrion Leafward, …\" (turn 2) was a misreading; it is undone.\n             Declare again.",
+   "understood": [
+    {
+     "data": {
+      "turn": "turn.2",
+      "quote": "",
+      "category": "misread",
+      "subject": "",
+      "key": "",
+      "value": ""
+     },
+     "text": null,
+     "error": null
+    }
+   ],
+   "score": {
+    "understood": false,
+    "outcome": false
+   }
+  },
+  {
+   "id": "talker-23",
+   "category": "other",
+   "turn": "turn.7",
+   "believes": "",
+   "outcome": "explain_and_log",
+   "kind": "not_said",
+   "answer": "[FIX] As recorded: turn 7: \"It is morning in the hall, and the salt wind pulls the smoke from the fire pit toward the hole above. Ysrion Leafward brought the word, and its weight still sit…\".\n      Say which fact or roll is wrong (a name, a number, a frame) and I check it. Logged.",
+   "understood": [
+    {
+     "data": {
+      "turn": "turn.7",
+      "quote": "",
+      "category": "other",
+      "subject": "",
+      "key": "",
+      "value": ""
+     },
+     "text": null,
+     "error": null
+    }
+   ],
+   "score": {
+    "understood": false,
+    "outcome": false
+   }
+  },
+  {
+   "id": "talker-30",
+   "category": "misread",
+   "turn": "turn.14",
+   "believes": "",
+   "outcome": "take_back",
+   "kind": "taken_back",
+   "answer": "[CORRECTION] Taken back: \"Garwen Deepwell stands a few strides from you, his rough voice settling low. \"Thanks is fair coin, Vesthas,\" says Garwen…\" (turn 14) was a misreading; it is undone.\n             Declare again.",
+   "understood": [
+    {
+     "data": {
+      "turn": "turn.10",
+      "quote": "",
+      "category": "misread",
+      "subject": "",
+      "key": "",
+      "value": ""
+     },
+     "text": null,
+     "error": null
+    }
+   ],
+   "score": {
+    "understood": false,
+    "outcome": false
+   }
+  },
+  {
+   "id": "fighter-19",
+   "category": "rule_wrong",
+   "turn": "turn.3",
+   "believes": "",
+   "outcome": "player_reading_wins",
+   "kind": "player_wins",
+   "answer": "[CORRECTION] You're right: your face is turned face.\n             Fixed; it stays.",
+   "understood": [
+    {
+     "data": {
+      "turn": "turn.2",
+      "quote": "",
+      "category": "rule_wrong",
+      "subject": "",
+      "key": "",
+      "value": ""
+     },
+     "text": null,
+     "error": null
+    }
+   ],
+   "score": {
+    "understood": true,
+    "outcome": false
+   }
+  },
+  {
+   "id": "fighter-21",
+   "category": "misread",
+   "turn": "turn.5",
+   "believes": "",
+   "outcome": "correct",
+   "kind": "narration_error",
+   "answer": "[CORRECTION] Earlier I said your vitality was 18; the record has 7.\n             You spent nothing because of it. Logged.",
+   "understood": [
+    {
+     "data": {
+      "turn": "turn.5",
+      "quote": "",
+      "category": "misread",
+      "subject": "",
+      "key": "",
+      "value": ""
+     },
+     "text": null,
+     "error": null
+    }
+   ],
+   "score": {
+    "understood": false,
+    "outcome": false
+   }
+  },
+  {
+   "id": "fighter-22",
+   "category": "misread",
+   "turn": "turn.5",
+   "believes": "",
+   "outcome": "correct",
+   "kind": "narration_error",
+   "answer": "[CORRECTION] Earlier I said your vitality was 18; the record has 7.\n             You spent nothing because of it. Logged.",
+   "understood": [
+    {
+     "data": {
+      "turn": "turn.5",
+      "quote": "",
+      "category": "misread",
+      "subject": "",
+      "key": "",
+      "value": ""
+     },
+     "text": null,
+     "error": null
+    }
+   ],
+   "score": {
+    "understood": false,
+    "outcome": false
+   }
+  },
+  {
+   "id": "fighter-28",
+   "category": "misread",
+   "turn": "turn.12",
+   "believes": "",
+   "outcome": "take_back",
+   "kind": "taken_back",
+   "answer": "[CORRECTION] Taken back: \"[OFFER] Grab the purse with my free hand. Chance: better than even — 60% (Might +0, practised +1, Murzak Red-Hand restra…\" (turn 12) was a misreading; it is undone.\n             Declare again.",
+   "understood": [
+    {
+     "data": {
+      "turn": "turn.12",
+      "quote": "",
+      "category": "misread",
+      "subject": "",
+      "key": "",
+      "value": ""
+     },
+     "text": null,
+     "error": null
+    }
+   ],
+   "score": {
+    "understood": false,
+    "outcome": false
+   }
+  },
+  {
+   "id": "fighter-31",
+   "category": "remembered_wrong",
+   "turn": "turn.11",
+   "believes": "",
+   "outcome": "explain_and_log",
+   "kind": "unverified",
+   "answer": "[FIX] The record has nothing for your murzak's purse (it holds: plain clothes, hooded, boots, belt pouch, trail rations, dagger, dagger, thieves' tools, climbing kit, dark and hooded, gloves).\n      Without a record I can't change it; logged for review.",
+   "understood": [
+    {
+     "data": {
+      "turn": "turn.12",
+      "quote": "",
+      "category": "other",
+      "subject": "",
+      "key": "",
+      "value": ""
+     },
+     "text": null,
+     "error": null
+    }
+   ],
+   "score": {
+    "understood": false,
+    "outcome": true
+   }
+  },
+  {
+   "id": "short-season",
+   "category": "other",
+   "turn": "turn.2",
+   "believes": "",
+   "outcome": "explain_and_log",
+   "kind": "not_said",
+   "answer": "[FIX] As recorded: turn 2: \"Ysrion Leafward leaves off with the rug and turns to face you. \"The work is hauling grain sacks,\" says Ysrion Leafward, \"from the riverside granary to the mill.…\".\n      Say which fact or roll is wrong (a name, a number, a frame) and I check it. Logged.",
+   "understood": [
+    {
+     "data": {
+      "turn": "turn.2",
+      "quote": "",
+      "category": "other",
+      "subject": "",
+      "key": "",
+      "value": ""
+     },
+     "text": null,
+     "error": null
+    }
+   ],
+   "score": {
+    "understood": false,
+    "outcome": false
+   }
+  },
+  {
+   "id": "short-purse",
+   "category": "other",
+   "turn": "turn.5",
+   "believes": "",
+   "outcome": "explain_and_log",
+   "kind": "not_said",
+   "answer": "[FIX] As recorded: turn 5: \"You slip through the crowd and come to arm's reach of Murzak Red-Hand. You have her restrained, and she is straining against you. Murzak strikes you, and the bl…\".\n      Say which fact or roll is wrong (a name, a number, a frame) and I check it. Logged.",
+   "understood": [
+    {
+     "data": {
+      "turn": "turn.5",
+      "quote": "",
+      "category": "other",
+      "subject": "",
+      "key": "",
+      "value": ""
+     },
+     "text": null,
+     "error": null
+    }
+   ],
+   "score": {
+    "understood": false,
+    "outcome": false
+   }
+  },
+  {
+   "id": "short-nero",
+   "category": "other",
+   "turn": "turn.5",
+   "believes": "",
+   "outcome": "explain_and_log",
+   "kind": "not_said",
+   "answer": "[FIX] As recorded: turn 5: \"You cross the square between the stalls until you stand a few strides from the officer of The Swanley Collegium, who is still at the rug. \"Good morning,\" you sa…\".\n      Say which fact or roll is wrong (a name, a number, a frame) and I check it. Logged.",
+   "understood": [
+    {
+     "data": {
+      "turn": "turn.5",
+      "quote": "",
+      "category": "other",
+      "subject": "",
+      "key": "",
+      "value": ""
+     },
+     "text": null,
+     "error": null
+    }
+   ],
+   "score": {
+    "understood": true,
+    "outcome": false
+   }
+  }
+ ]
+}

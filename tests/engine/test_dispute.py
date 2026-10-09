@@ -9,8 +9,10 @@ import pytest
 
 from engine import ids
 from engine.dm.context import TurnContext
-from engine.dm.dispute import DisputedClaim, _value_near, default_identify, dispute, settle_dispute
-from engine.llm.offline import OfflineModel
+from engine.dm.dispute import DisputedClaim, default_identify, dispute, settle_dispute
+from engine.dm.understand import understand_schema
+from engine.llm.base import Role, validate
+from engine.llm.offline import OfflineModel, ScriptedModel, _report_value
 from engine.store.events import Event, Quantity
 from engine.store.records import TurnRecord
 from tests.engine.test_resolve_scene import Scene
@@ -128,7 +130,7 @@ def test_record_backs_the_player_or_the_dm_explains_with_the_evidence(w: World) 
                                                         quote="the gate is made of gold"))
     assert never.kind == "mistaken" and w.store.state.facts == facts  # INV-9: nothing written
     assert never.text.startswith("[FIX] As recorded: Gate's state is open (on record since turn 1).")
-    assert "gold was never said. Logged." in never.text
+    assert "gold was never said." in never.text and "Logged." not in never.text
     assert never.record is not None and never.record["outcome"] == "explain_with_quote"
 
 
@@ -140,9 +142,35 @@ def test_hidden_state_is_never_revealed(w: World) -> None:
     assert unverified[-1]["store_value"] is None and "the cult" not in str(res.record)
 
 
-def test_ruling_disputes(w: World) -> None:
-    stands = settle_dispute(w.ctx, f"{w.frame_id} should have been Easy", identify=default_identify)
-    assert stands.kind == "ruling_stands" and stands.text.startswith("[FIX] That roll stands (turn 2): agility, hard DC 15")
+# ---------------------------------------------------------------- spec 014: understand first, then verify
+
+
+def understood(**kw: Any) -> dict[str, Any]:
+    """One complaint as the understanding call returns it."""
+    return {"believes": "", "happened": "", "category": "other", "turn": "none", "quote": "", "subject": "none",
+            "about": "other", "key": "", "value": "", **kw}
+
+
+def scripted(w: World, *complaints: dict[str, Any]) -> Any:
+    model = ScriptedModel({Role.UNDERSTAND: [{"complaints": list(complaints)}]}, fallback=False)
+    return TurnContext.for_store(w.store, model=model, rules=w.s.rules), model
+
+
+def test_a_ruling_question_is_restated_and_explained_in_plain_words(w: World) -> None:
+    ctx, model = scripted(w, understood(believes="The climb worked but you never got over the gate",
+                                        category="ruling_question", turn="turn.2", about="roll_or_outcome"))
+    res = settle_dispute(ctx, "why am I not over the gate?")
+    packet = model.calls[0][1].message  # the WHOLE transcript, with the roll under its turn
+    assert "turn.1 | player:" in packet and f"rolled: {w.frame_id}" in packet and "NOW: spring" in packet
+    assert res.kind == "ruling_stands" and res.record is not None and res.record["outcome"] == "explain_with_quote"
+    lines = res.text.splitlines()
+    assert lines[0] == "[FIX] You're saying the climb worked but you never got over the gate."
+    assert lines[1].strip().startswith("Here's why: turn 2 committed \"get over\"")
+    assert "your perch: on the wall" in res.text and "agility, hard DC 15" in res.text
+    assert res.record["believes"].startswith("The climb worked") and "Logged." not in res.text
+
+
+def test_a_ruling_error_still_offers_the_choice(w: World) -> None:
     missed = settle_dispute(w.ctx, "x", identify=w.claim(kind="ruling", frame_id=w.frame_id, missed_fact=w.gate_fact))
     assert missed.kind == "ruling_error" and [c["id"] for c in missed.choices] == ["accept_forward", "rewind"]
     fwd = settle_dispute(w.ctx, "x", identify=w.claim(kind="ruling", frame_id=w.frame_id, missed_fact=w.gate_fact),
@@ -151,15 +179,38 @@ def test_ruling_disputes(w: World) -> None:
     assert w.store.state.quantities[w.s.pc]["vitality"].current == 10
 
 
-def test_default_identify_and_the_handler_signature(w: World) -> None:
-    c = default_identify(w.ctx, "You told me I had 20 arrows")
+def test_nothing_fits_is_answered_with_a_did_you_mean(w: World) -> None:
+    ctx, _ = scripted(w, understood(believes="the purse was stolen from you", category="contradiction"))
+    res = settle_dispute(ctx, "my purse was stolen, you never said")
+    assert res.kind == "not_found" and res.record is not None and res.record["outcome"] == "not_found"
+    assert "I can't find that; did you mean turn 1: \"Your purse holds twenty coins.\"?" in res.text, res.text
+    assert "Logged." not in res.text
+
+
+def test_the_calendar_backs_the_player_and_two_complaints_get_two_answers(w: World) -> None:
+    ctx, _ = scripted(w, understood(believes="it's spring, but the game spoke of autumn", category="contradiction",
+                                    turn="turn.1", about="season_or_time", key="season", value="spring"),
+                      understood(believes="nobody scraped a knee", category="contradiction", turn="turn.2",
+                                 quote="scraping a knee", about="who_said_what"))
+    facts = len(w.store.state.facts)
+    res = settle_dispute(ctx, "it's spring not autumn, and I never scraped a knee")
+    assert res.text.count("You're saying") == 2
+    assert "You're right: it is spring (the morning of day 1); the narration slipped" in res.text
+    assert "scraping a knee" in res.text and "it's taken as you say, and it stays" in res.text
+    st = w.store.state
+    disputes = [r for r in st.meta["corrections"] if r.get("type") == "dispute"]
+    assert [r["outcome"] for r in disputes] == ["correct", "player_reading_wins"]
+    fid = st.current_fact_id("world", "correction.1")  # incidental fiction: the player's reading, pinned
+    assert fid is not None and st.facts[fid].pinned and len(st.facts) == facts + 1
+
+
+def test_the_understanding_schema_and_the_offline_stand_in(w: World) -> None:
+    assert validate(understood(), understand_schema()["properties"]["complaints"]["items"]) == []
+    c = default_identify(w.ctx, "You told me I had 20 arrows")  # the offline double reads the report
     assert c is not None and (c.kind, c.subject, c.key, c.said) == ("quantity", w.s.pc, "arrows", 20)
-    f = default_identify(w.ctx, f'the narration said {w.gate}.state was "stands barred"')
-    assert f is not None and (f.subject, f.key, f.quote) == (w.gate, "state", "stands barred")
-    assert default_identify(w.ctx, "that was wrong") is None
-    # the live check's report (spec 012): the value stops at "before", not "grey before"
-    assert _value_near("Nedwin's coat was grey before, now you say blue", "coat") == "grey"
-    assert _value_near("her hair is iron-grey, you just said red", "hair") == "iron-grey"
-    assert _value_near("the grey coat, not the blue one", "coat") == "grey"
     text = dispute(w.ctx, "that was wrong")  # engine/dm/context.py DisputeHandler: (ctx, text) -> str
-    assert text.startswith("[FIX] Which statement, and when?") and "turn 2" in text
+    assert text.startswith("[FIX] You're saying that was wrong.") and "I can't find that; did you mean turn " in text
+    assert _report_value("Nedwin's coat was grey before, now you say blue", "coat") == "grey"
+    assert _report_value("her hair is iron-grey, you just said red", "hair") == "iron-grey"
+
+

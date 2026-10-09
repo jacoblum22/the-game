@@ -1,0 +1,305 @@
+{
+ "model": "haiku",
+ "understood": 5,
+ "outcome": 1,
+ "n": 11,
+ "results": [
+  {
+   "id": "talker-18",
+   "category": "contradiction",
+   "turn": "turn.2",
+   "believes": "",
+   "outcome": "explain_and_log",
+   "kind": "not_said",
+   "answer": "[FIX] As recorded: turn 2: \"\"The work is hauling grain sacks,\" says Ysrion Leafward, \"from the riverside granary to the mill.\" \"Day wages,\" he says, \"for the guild is taking on extra hands…\".\n      Say which fact or roll is wrong (a name, a number, a frame) and I check it. Logged.",
+   "understood": [
+    {
+     "data": {
+      "turn": "turn.2",
+      "quote": "for the guild is taking on extra hands for the autumn harvest",
+      "category": "contradiction",
+      "subject": "Ysrion Leafward",
+      "key": "season",
+      "value": "spring quarter day"
+     },
+     "text": null,
+     "error": null
+    }
+   ],
+   "score": {
+    "understood": true,
+    "outcome": false
+   }
+  },
+  {
+   "id": "talker-23",
+   "category": "remembered_wrong",
+   "turn": "turn.7",
+   "believes": "",
+   "outcome": "explain_and_log",
+   "kind": "not_said",
+   "answer": "[FIX] As recorded: turn 7: \"You stop a few strides from Nibwen Haybarrel, who has left off beating a rug to deal with you.\".\n      Say which fact or roll is wrong (a name, a number, a frame) and I check it. Logged.",
+   "understood": [
+    {
+     "data": {
+      "turn": "turn.7",
+      "quote": "who has left off beating a rug to deal with you",
+      "category": "remembered_wrong",
+      "subject": "Nibwen Haybarrel",
+      "key": "current chore",
+      "value": "carrying a basket to market"
+     },
+     "text": null,
+     "error": null
+    }
+   ],
+   "score": {
+    "understood": false,
+    "outcome": false
+   }
+  },
+  {
+   "id": "talker-30",
+   "category": "other",
+   "turn": "turn.14",
+   "believes": "",
+   "outcome": "explain_and_log",
+   "kind": "not_said",
+   "answer": "[FIX] As recorded: turn 14: \"\"Before I go on with you, Vesthas,\" says Nibwen Haybarrel, \"I'd have another cup poured, and quick about it.\" Garwen gives one slow nod, as if to say Nibwen sen…\".\n      Say which fact or roll is wrong (a name, a number, a frame) and I check it. Logged.",
+   "understood": [
+    {
+     "data": {
+      "turn": "turn.10",
+      "quote": "Laendil learned their trade from Tibgit Lucky",
+      "category": "other",
+      "subject": "Laendil",
+      "key": "trade",
+      "value": ""
+     },
+     "text": null,
+     "error": null
+    }
+   ],
+   "score": {
+    "understood": false,
+    "outcome": false
+   }
+  },
+  {
+   "id": "fighter-19",
+   "category": "rule_wrong",
+   "turn": "turn.3",
+   "believes": "",
+   "outcome": "player_reading_wins",
+   "kind": "player_wins",
+   "answer": "[CORRECTION] You're right: your face is turned face.\n             Fixed; it stays.",
+   "understood": [
+    {
+     "data": {
+      "turn": "turn.3",
+      "quote": "beating a rug +2",
+      "category": "rule_wrong",
+      "subject": "Murzak Red-Hand",
+      "key": "modifier",
+      "value": "\"beating a rug +2\" should not apply; Murzak has stopped beating the rug and is alert, not busy"
+     },
+     "text": null,
+     "error": null
+    }
+   ],
+   "score": {
+    "understood": true,
+    "outcome": false
+   }
+  },
+  {
+   "id": "fighter-21",
+   "category": "rule_wrong",
+   "turn": "turn.5",
+   "believes": "",
+   "outcome": "correct",
+   "kind": "narration_error",
+   "answer": "[CORRECTION] Earlier I said your vitality was 18; the record has 7.\n             You spent nothing because of it. Logged.",
+   "understood": [
+    {
+     "data": {
+      "turn": "turn.5",
+      "quote": "Murzak strikes you, and the blow lands hard enough to leave you worn.",
+      "category": "rule_wrong",
+      "subject": "player's roll",
+      "key": "purse",
+      "value": "lifted (roll of 18 vs 10 was a success)"
+     },
+     "text": null,
+     "error": null
+    }
+   ],
+   "score": {
+    "understood": true,
+    "outcome": false
+   }
+  },
+  {
+   "id": "fighter-22",
+   "category": "misread",
+   "turn": "turn.5",
+   "believes": "",
+   "outcome": "correct",
+   "kind": "narration_error",
+   "answer": "[CORRECTION] Earlier I said your vitality was 18; the record has 7.\n             You spent nothing because of it. Logged.",
+   "understood": [
+    {
+     "data": {
+      "turn": "turn.5",
+      "quote": "You have her restrained, and she is straining against you.",
+      "category": "misread",
+      "subject": "I",
+      "key": "roll",
+      "value": "success (18 vs 10) should have lifted the purse; I never tried to grab Murzak"
+     },
+     "text": null,
+     "error": null
+    }
+   ],
+   "score": {
+    "understood": false,
+    "outcome": false
+   }
+  },
+  {
+   "id": "fighter-28",
+   "category": "contradiction",
+   "turn": "turn.12",
+   "believes": "",
+   "outcome": "explain_and_log",
+   "kind": "not_said",
+   "answer": "[FIX] As recorded: turn 12: \"If it fails: Murzak twists and shrugs the grab off, and I lose my footing against his weight — a setback.\".\n      Say which fact or roll is wrong (a name, a number, a frame) and I check it. Logged.",
+   "understood": [
+    {
+     "data": {
+      "turn": "turn.12",
+      "quote": "I lose my footing against his weight",
+      "category": "contradiction",
+      "subject": "Murzak Red-Hand",
+      "key": "pronoun",
+      "value": "her"
+     },
+     "text": null,
+     "error": null
+    }
+   ],
+   "score": {
+    "understood": true,
+    "outcome": false
+   }
+  },
+  {
+   "id": "fighter-31",
+   "category": "rule_wrong",
+   "turn": "turn.11",
+   "believes": "",
+   "outcome": "explain_and_log",
+   "kind": "unverified",
+   "answer": "[FIX] The record has nothing for your murzak's purse (it holds: plain clothes, hooded, boots, belt pouch, trail rations, dagger, dagger, thieves' tools, climbing kit, dark and hooded, gloves).\n      Without a record I can't change it; logged for review.",
+   "understood": [
+    {
+     "data": {
+      "turn": "turn.15",
+      "quote": "your legs fold and you go down onto the cobbles",
+      "category": "rule_wrong",
+      "subject": "I",
+      "key": "wound load",
+      "value": "0/3"
+     },
+     "text": null,
+     "error": null
+    }
+   ],
+   "score": {
+    "understood": false,
+    "outcome": true
+   }
+  },
+  {
+   "id": "short-season",
+   "category": "contradiction",
+   "turn": "turn.2",
+   "believes": "",
+   "outcome": "explain_and_log",
+   "kind": "not_said",
+   "answer": "[FIX] As recorded: turn 2: \"\"The work is hauling grain sacks,\" says Ysrion Leafward, \"from the riverside granary to the mill.\" \"Day wages,\" he says, \"for the guild is taking on extra hands…\".\n      Say which fact or roll is wrong (a name, a number, a frame) and I check it. Logged.",
+   "understood": [
+    {
+     "data": {
+      "turn": "turn.2",
+      "quote": "for the guild is taking on extra hands for the autumn harvest.",
+      "category": "contradiction",
+      "subject": "",
+      "key": "season",
+      "value": "spring"
+     },
+     "text": null,
+     "error": null
+    }
+   ],
+   "score": {
+    "understood": true,
+    "outcome": false
+   }
+  },
+  {
+   "id": "short-purse",
+   "category": "contradiction",
+   "turn": "turn.5",
+   "believes": "",
+   "outcome": "explain_and_log",
+   "kind": "not_said",
+   "answer": "[FIX] As recorded: turn 5: \"Her coin purse is still carried on her person, at her side.\".\n      Say which fact or roll is wrong (a name, a number, a frame) and I check it. Logged.",
+   "understood": [
+    {
+     "data": {
+      "turn": "turn.5",
+      "quote": "Her coin purse is still carried on her person, at her side.",
+      "category": "contradiction",
+      "subject": "the player",
+      "key": "purse",
+      "value": "obtained after succeeding"
+     },
+     "text": null,
+     "error": null
+    }
+   ],
+   "score": {
+    "understood": false,
+    "outcome": false
+   }
+  },
+  {
+   "id": "short-nero",
+   "category": "misread",
+   "turn": "turn.5",
+   "believes": "",
+   "outcome": "explain_with_quote",
+   "kind": "stands",
+   "answer": "[FIX] As recorded: turn 5, you wrote \"I walk over to the officer of The Swanley Collegium. \"Good morning. I hear you're hiring. What's the work, and what does it pay?\"\"; it was read as \"You cross the square between the stalls until you stand a few strides from the officer of The Swanley Collegium, who is …\".\n      It stands: your words then match the reading. Logged.",
+   "understood": [
+    {
+     "data": {
+      "turn": "turn.5",
+      "quote": "Nero Verent shifts her basket against her hip and says, \"The hauling work in Sandcrag pays two silver a day",
+      "category": "misread",
+      "subject": "the officer of The Swanley Collegium",
+      "key": "speaker",
+      "value": "the officer (not Nero) answered the player's question"
+     },
+     "text": null,
+     "error": null
+    }
+   ],
+   "score": {
+    "understood": false,
+    "outcome": false
+   }
+  }
+ ]
+}
