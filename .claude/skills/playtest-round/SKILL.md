@@ -20,6 +20,9 @@ governs every decision:
 - diagnose from evidence;
 - the player is part of error correction.
 
+**Worked examples for every step** are in `EXAMPLES.md`, next to this file. They are drawn from real rounds; match
+their shape and tone.
+
 ## The one rule that shapes the loop
 **Never state a cause for a problem from the surface.** Most first guesses have been wrong. Go straight to the
 evidence with `root-cause-investigator` agents, then synthesise. No guess-then-check round-trips.
