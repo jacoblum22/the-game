@@ -2,7 +2,7 @@
 worlds: 30 packed seeds (2001-2030); haven cast per world 13.9; incidents {'dying_messenger': 4, 'missing': 7, 'offer': 2, 'omen': 3, 'alarm': 7, 'theft': 1, 'refugees': 4, 'duel': 2}
 
 A. The speaker card (200 ordinary asks per world; reach: 70% certain/SPEECH, the rest rolled [(0, 0.3), (1, 0.25), (2, 0.3), (3, 0.15)])
-   an empty card means the answer is hearsay, a guess or an opinion (testimony, settled lazily), or a rare in-voice
+   an empty card means the answer is spoken plainly from beyond the card (testimony, settled lazily), or a rare in-voice
    'I don't know'; 'said' = the topic was asked of them before (their own words are on the card)
   topic on the NPC's role 30% of asks: answered 5473, unwilling 527; card empty on the topic: 56.2% of first asks, 36.8% of all knowledge asks  by source {'on_role_topic': 496, 'pack': 520, 'public_local': 168, 'said': 1425, 'empty': 1520}
   topic on the NPC's role 50% of asks: answered 5455, unwilling 545; card empty on the topic: 48.0% of first asks, 27.0% of all knowledge asks  by source {'on_role_topic': 542, 'pack': 533, 'public_local': 116, 'said': 1789, 'empty': 1100}
