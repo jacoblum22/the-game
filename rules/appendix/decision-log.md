@@ -47,6 +47,14 @@ entries are append-only once other chapters cite them (`[DL-CC-NN]`).
 - Migration: none for saves. The engine's packets (`engine/dm/packet.py`) still send the core and situation cards to every role; aligning them with 00.15.1/00.15.4 is follow-up work (I4 Part A). `CardIndex.core()` is unchanged.
 - Revisit if: playtests on the target model (Gemini Flash) show a loosened area breaking the game. Then add back a check chosen by measured precision (12.3.2), not by claim class.
 
+### DL-00-07: Each model call gets the situation plus a short guidance digest, not the core or id-sorted cards (revision R2-J; F3; owner approval 2026-10-09)
+- Decision: [revision: R2-J] 00.15.4 now says what DL-00-06 implied for the packet: every call carries the situation (the view, the message, the conversation the role needs, and the name, pronouns and bond of everyone named or mentioned, present or absent), then a short guidance digest for its own judgment. No call gets the core, cards sorted by id, or cards for fields code computes; a card reaches a call only where code knows it applies. The core stays defined (the six ids are unchanged) as the specification the pipeline implements and the lookup for tools. Ch.12's side is DL-12-104. The owner's direction, quoted in DL-00-06: "an LLM that can see the conversation wouldn't repeat that"; "analyse things holistically, not individually".
+- Alternatives considered: keep the core as a cached prefix (rejected: no role applies the turn-loop checklist; the code pipeline is it).
+- Evidence: research_notes/Playtest round 2 solutions/ROUND6-PLAN.md (owner-approved 2026-10-09) and HANDOFF-2026-10-09.md §6, F3; round6-investigation I4 A (rule text is 70–87% of each role's input; about −73% input with digests).
+- Serves: goal 1; constitution VIII.6.
+- Migration: none.
+- Revisit if: a role's accuracy drops on the golden or held-out sets once its digest replaces the core.
+
 ## DL-00A — Architecture
 
 Decisions made in `00-architecture.md` (Wave 2). Digest shorthand `[R1 §x]`…`[R7 §x]` per 00.1.6.
@@ -539,6 +547,38 @@ Decisions made in `00-architecture.md` (Wave 2). Digest shorthand `[R1 §x]`…`
 - Serves: goal 2 (every roll can deliver); C:VII (outcomes are written before prose).
 - Migration: none.
 - Revisit if: a playtest shows a rolled beat whose success applied nothing, or an already-true change rolled.
+
+### DL-01-37: One beat per goal: a method, force or movement in service of a goal is that goal's beat (revision R2-J; F2; owner approval 2026-10-09; conflict clause provisional)
+- Decision: [revision: R2-J] 01.2.2 splits a declaration by **goal** (what is to be different, and toward whom), not by act. A method, a supporting act, or force or movement in service of a goal is part of that goal's beat and is rolled as the goal ("I pin him to the wall and demand who sent him" is one `learn` beat whose method is force against his will). Two goals stay two beats (DL-01-34's "grab the purse and punch her"). In a conflict, a move or leap that ch.06 prices as an action with its own roll stays a sequential beat before the goal's beat (provisional, owner to confirm), and the goal's beat is always framed. The same rule governs 01.2.7 item 1, 12.2.2's `change` field and 12.13.3's split tell. The owner's direction, quoted in constitution VIII: "analyse things holistically, not individually". Retires the test "if one part failed, could the other part still be attempted?" and "two changes are two beats" read act by act.
+- Alternatives considered: fold against-will acts only in code (`normalise`) and keep the prompt and golden policy (rejected: all three enforce the split, I4 B); fold every in-service move in a conflict as well, so "vault the table and stab him" is one Strike with the vault as stakes (deferred to the owner: it changes ch.06's action economy and T-06-9's composed rows).
+- Evidence: research_notes/Playtest round 2 solutions/ROUND6-PLAN.md (owner-approved 2026-10-09) and HANDOFF-2026-10-09.md §6, F2; round6-investigation I3 §6 and I4 B (5 of 5 single-goal coercion messages split by act, the goal never rolled in 2; Sonnet split goal from method on the same 7 of 8 messages as Haiku).
+- Serves: goal 2 (the player's goal is what gets rolled); C:I (typed goals stay the spine).
+- Migration: none for saves. `evals/reader_golden_POLICY.md` B5 (and D1's walk-first rows) must be relabelled blind, by this rule, before scoring (spec 020).
+- Revisit if: the goal-shape breadth set (force in service of words, movement in service of an act, an object as the method, deception, stealth, two real goals, conversation only, mixed messages) scores below the act-split baseline on Haiku.
+
+### DL-01-38: Only mechanically relevant facts are levers or snags; scene-state labels never are (revision R2-J; F4)
+- Decision: [revision: R2-J] 01.6.8 decision 1 admits only a mechanically relevant fact (a condition, a quantity, an item or its property, a coarse position, band or flag, a settled property of the obstacle or place, a clock, an earlier Setup's or Help's fact, a settled testimony claim). A posture, manner or activity (T-12-18), a speaker's refusal or opinion, and a dispute's words are never levers or snags; where a condition stands behind a label (a hold), the condition counts once, through its own entry. The obligation to apply a fitting hindering fact now reads "mechanically relevant". Retires DL-12-93's activity-as-lever clause.
+- Alternatives considered: keep labels and cap their effect (rejected: a label is the visible face of state, so it double-counts); drop the obligation entirely (rejected: real hindrances must still bite).
+- Evidence: research_notes/Playtest round 2 solutions/ROUND6-PLAN.md (owner-approved 2026-10-09) and HANDOFF-2026-10-09.md §6, F4; I3 §4 ("straining against you" was −2 on 12 of 26 fight frames, penalising the holder); I2 §1 (a speaker's own refusal cited as a −2 snag).
+- Serves: goal 2 (odds that reflect the situation); C:I.
+- Migration: none; stored labels stay as scene state and simply stop being cited.
+- Revisit if: the Framer cites a non-mechanical fact as a lever or snag in more than 1 frame in 50 after the engine change.
+
+### DL-01-39: The OFFER title renders from the typed goal; the applied change is shown in RESULT, never handed to the narrator as done (revision R2-J; F2, F4)
+- Decision: [revision: R2-J] 01.2.6 and 12.15.2: the OFFER title (and any follow-on line) is rendered by code from the beat's kind and slots, then the method in the player's words; the restatement and the Reader's `method` field are internal and never printed raw. 01.2.7 item 3: the applied change is shown to the player in RESULT's `Changed:` line; the narrator gets the beat's outcome and the state it wrote, never a code-written sentence to repeat or an instruction that it "is done".
+- Alternatives considered: tidy the Reader's `method` wording (rejected: the field is free text and will garble again); keep the plain-words change line for the narrator without the imperative (rejected: the line restated the player's goal as an agreement, so the fact itself was wrong).
+- Evidence: research_notes/Playtest round 2 solutions/ROUND6-PLAN.md (owner-approved 2026-10-09) and HANDOFF-2026-10-09.md §6, F2 and F4; I1 §3 (the garbled "Then:" was the raw `method`), I1 §6 ("Agreed by X: <the player's intent>" plus "say it plainly; it is done" narrated as "settled between you").
+- Serves: goal 1 (clean OFFERs and prose); goal 2 (the player sees what changed).
+- Migration: none.
+- Revisit if: players misread an OFFER title rendered from slots more than once per run.
+
+### DL-01-40: A price the method pays is a write (revision R2-J; F5)
+- Decision: [revision: R2-J] 01.11.2: coin handed over, a consumable used or an item given is deducted from the store at RECORD, whatever the degree, and shown in RESULT's `Changed:` line; words alone never pay it.
+- Alternatives considered: none; the rules already treated quantities as state, and the gap was a consequence kept as text.
+- Evidence: research_notes/Playtest round 2 solutions/ROUND6-PLAN.md (owner-approved 2026-10-09) and HANDOFF-2026-10-09.md §6, F5; I3 §5 dispute 192926 d3 ("the coin for the round is spent whatever the answer" was text only; no `quantity_changed` in the save).
+- Serves: goal 2 (the spine stays exact).
+- Migration: none.
+- Revisit if: never; a missed deduction is an engine bug.
 
 ## DL-02 — Character
 
@@ -1675,6 +1715,14 @@ row), output `06-conflict-sim-output.txt`, write-up `06-conflict-sim.md`.
 - Evidence: [C:VII] (moving a creature two steps larger is G4 with a redirect, not a harder roll); DL-00A-10; DL-06-07 (bands, links and capacity); DL-06-11 (object size rungs hand / body / heavy / massive, the same discrete shape for objects); [R5 CF-03] (positioning in text without a grid).
 - Serves: goal 2 (the engine reads one field; the DM never sets it).
 - Revisit if: 09's templates need a seventh rung, or play shows two-step grapples are wanted more often than the redirect allows.
+
+### DL-06-31: A hold is a condition on the held one; its turn breaks free first and respects the hold (revision R2-J; F5)
+- Decision: [revision: R2-J] 06.5.2: code applies the ladder's condition (`cond.grabbed`, `restrained`, `pinned`; source the holder) at RECORD and ends it only by the breaking-free and ending rules. T-12-18's posture line is the condition's visible face, written from it and cleared with it; the "straining against {actor}" manner is removed (`pacing.yaml#details.scene_writes`), and no label is a lever or snag (DL-01-38). A held adversary or NPC tries to break free first (06.9.4's row) and, while held, its turn respects T-06-10's limits.
+- Alternatives considered: keep the scene words and teach the foe's turn to read them (rejected: mechanics stored as text, the anti-pattern this round traced).
+- Evidence: research_notes/Playtest round 2 solutions/ROUND6-PLAN.md (owner-approved 2026-10-09) and HANDOFF-2026-10-09.md §6, F5; I3 §1 (the engine wrote only text for a hold, `foe_beat` skipped break-free, 8 of 13 foe hits landed while held), I3 §4 (the manner label penalised the holder).
+- Serves: goal 2 (holds do what the rules say); C:I.
+- Migration: a save with a hold written only as scene words gets no condition; the hold ends at scene end as before.
+- Revisit if: a held foe acts outside its condition's limits in a playtest after spec 022.
 
 ## DL-07 — Harm, Recovery, and Death
 
@@ -3425,6 +3473,62 @@ chapter 06's fight model and T-06-12 lines), output `07-harm-sim-output.txt`, wr
 - Serves: goal 1; the PC's agency (12.14.3).
 - Migration: none.
 - Revisit if: either recurs in two playtests after the engine change.
+
+### DL-12-101: Holistic narration: one passage and a side list; precise checks on the whole passage; one revision that sees the draft (revision R2-J; F1)
+- Decision: [revision: R2-J] The narrator writes one passage plus a passage-level side list (`speech` as words with speaker, `new` elements, `covers` record handles) (12.3.1). Coverage is the side list's (12.3.1a); a quote-mark check on speech is added; blocking checks run on the whole passage, and a precision check blocks only while measured precise (12.3.1b item 2.7). A failure gets at most one revision, which sees the whole draft (12.3.3; PR-12-2; `claim_check.max_revisions: 1`). 12.2.7's "Acknowledged" no longer tracks speech or questions part by part. In the owner's words (constitution VIII): "analyse things holistically, not individually"; "we might be too intense with the rules; AI doesn't hallucinate so much… pull back on non-critical cases". Retires the sentence array, per-sentence judging and repair, coverage "add" calls, the answered-question check, and "every part answered" bookkeeping.
+- Alternatives considered: keep sentences and merge adjacent quotes after the fact (rejected: 88% of stacked quotes are in first drafts, so the schema causes them); keep the answered check with a higher threshold (rejected: about 6% precise, and its repairs echoed the player).
+- Evidence: research_notes/Playtest round 2 solutions/ROUND6-PLAN.md (owner-approved 2026-10-09) and HANDOFF-2026-10-09.md §6, F1; I1 §1 (stacked quotes), §2 (the answered check demanded answers to statements; 8 of 8 wrong, 4 echoed), §5 (blind repairs stitched repetition), §7 (28 of 30 repair targets from coverage, 1–2 real; must-name coverage never failed in 106 turns; the one precision block was false; 5 of 161 speeches unquoted).
+- Serves: goal 1 (prose that reads like a person wrote it); goal 2 (the spine checks that are precise stay).
+- Migration: none for saves; `claim_check.max_redrafts` and `sentence_declaration` stay in data, marked retired, until spec 019 removes the code that reads them.
+- Revisit if: a blocking error class the per-sentence checks used to catch reaches players more than once per run on the replay bench.
+
+### DL-12-102: Testimony is settled only when the player acts on a specific claim; refusals and opinions are never facts; settlement sees pronouns (revision R2-J; F4)
+- Decision: [revision: R2-J] PR-12-12's triggers are narrowed to travel to a place a `said` record names, citing it in a roll, or a mechanical input (including a target known only through it); not every reliance. The Reader's `rests_on` is retired (12.2.2). The claim call sees the speaker, the exchange and the identity lines (name, pronouns, bond) of everyone the words name, and returns none for a refusal, opinion, want, feeling or intention: these are never facts, levers or snags, and a refusal shapes only that NPC's willingness. The owner, quoted in constitution VIII: "dialogue is testimony".
+- Alternatives considered: keep `rests_on` with a stricter prompt (rejected: settlement fired on 64% of turns, and the trigger itself is the over-trigger); drop settlement (rejected: a claim the player travels on must become true or false once).
+- Evidence: research_notes/Playtest round 2 solutions/ROUND6-PLAN.md (owner-approved 2026-10-09) and HANDOFF-2026-10-09.md §6, F4; I2 §1 (settlement on 64% of turns; `settle()` accepted a speaker's own refusal as a world fact, then cited as a −2 snag; the testimony call had no pronouns: 4 of 30 claims garbled, 17 of 26 lost their subject).
+- Serves: goal 1 (characters talk freely); goal 2 (truth only when it matters).
+- Migration: settled facts already written stay; unsettled `said` records are unaffected.
+- Revisit if: a player acts on testimony in a way none of the three triggers catches, more than once per run.
+
+### DL-12-103: Code-written answer lines carry a fact or a clue, or are not written; a found clue is not re-delivered (revision R2-J; F4)
+- Decision: [revision: R2-J] PR-12-10, 12.10.8, 12.14.12 item 3: the only code-written answer lines are a case's delivery, a pointer to a placement's holder and a cast person. A failed cast or lookup writes nothing (no "no one you know" fact), and the NPC answers in character. A clue the PC already has is never delivered again. A speaker card never shows a dispute's words, a correction or an agreement as what the NPC knows. An ordinary answer in speech is not a must-name item.
+- Alternatives considered: keep the lines and reword them (rejected: wrong or empty lines were the wall, not their wording).
+- Evidence: research_notes/Playtest round 2 solutions/ROUND6-PLAN.md (owner-approved 2026-10-09) and HANDOFF-2026-10-09.md §6, F4; I2 §3 (willingness "willing" 19 of 19, yet 7 wrong or empty code answer lines across two talker runs), I1 §5 (`_from_case` re-delivered a found clue; `/fix` complaints fed back as "knows:").
+- Serves: goal 1 (talk that is not a wall); C:I (clues stay strict).
+- Migration: none.
+- Revisit if: an NPC withholds an ordinary answer the player needed more than once per run with no line from code.
+
+### DL-12-104: Context per role: the situation plus a short guidance digest; conversation for Director, World and Checker; identity lines for everyone named (revision R2-J; F3)
+- Decision: [revision: R2-J] 12.2.4: each role gets the situation and a short guidance digest for its own judgment; the core and the id-sorted situation cards are not sent to model calls; a card reaches a call only where code knows it applies. The Director, the World and the Checker get the player's message and recent exchanges. Everyone named or mentioned, present or absent, gets an identity line (name, pronouns, bond) in the narrator's and the testimony call's view. A lead line is shown only when new or relevant. 12.14.2: the narrator uses names, pronouns and bonds and is never told to write around names or kinship. The owner, quoted in DL-00-06: "an LLM that can see the conversation wouldn't repeat that".
+- Alternatives considered: trim the card cap from twelve (rejected: the problem is which text, not how much); keep the core as a cached prefix (rejected: it is the pipeline's checklist, and no role applies it).
+- Evidence: research_notes/Playtest round 2 solutions/ROUND6-PLAN.md (owner-approved 2026-10-09) and HANDOFF-2026-10-09.md §6, F3; I4 A (rule text 70–87% of input; the same lowest-numbered 8 cards for every role; Director, World and Checker saw no conversation though their prompts said so; about −73% input estimated), I2 §2 and §4 (the speaker card skipped `bond.`; absent people's pronouns in no packet; 5 of 9 checkable lines flipped).
+- Serves: goal 1; constitution VIII.6.
+- Migration: none.
+- Revisit if: a role's decision accuracy on the golden or held-out sets drops after its digest replaces its cards.
+
+### DL-12-105: `/fix` is an investigator: read-only tools, a bounded investigation, a broad proposal set validated by code, one snapshot, found → did → Now: (revision R2-J; F6; owner approval 2026-10-09)
+- Decision: [revision: R2-J] PR-12-11 and 12.3.6: a Fixer role investigates a report with read-only tools (turn record, entity state and provenance, transcript search, a recomputed frame, the coin and inventory ledger, testimony against the record) for about 3–6 steps, proposes corrections from a broad list (set or remove a fact, restore as of turn N, refund or deduct, re-render a display, take back, correct testimony, explain), and code validates each (mechanical changes need evidence in the record, INV-9; sealed stays sealed; the invariants hold). All complaints in one report are handled together on one snapshot. A correction writes the typed value, never the complaint's words. The reply states what was found, what was done, then `Now:`. The rules name the role; the model is configuration: the owner chose Sonnet for the fixer (approved with the plan, 2026-10-09), normal turns staying on the play model. The owner, quoted in constitution VIII: "make the system less strict… a robust system for the player to provide feedback… have it go back and check".
+- Alternatives considered: add outcome categories to the one-shot call (rejected: the gap is design, not menu size; the orchestrating agent found causes by iterating over records); run the fixer on the play model (rejected by the owner's model choice; reports are rare, so the cost is small).
+- Evidence: research_notes/Playtest round 2 solutions/ROUND6-PLAN.md (owner-approved 2026-10-09) and HANDOFF-2026-10-09.md §6, F6; I3 §5 (of 15 live disputes, 1 right, 6 right but unclear, 8 wrong; complaint text pinned as a fact; complaints settled one after another; coin, bond and position never looked up; code pre-deciding "vitality 18").
+- Serves: goal 2; constitution VIII.8 (the player is part of error correction).
+- Migration: `feedback.understand_call` and `feedback.outcomes` stay in data, marked retired, until spec 022 replaces the code.
+- Revisit if: on the complaint corpus plus the 15 live disputes and new held-out complaints, fewer than 12 of 15 are graded right and clear.
+
+### DL-12-106: Every restore shows a `Now:` line (revision R2-J; F5)
+- Decision: [revision: R2-J] 12.5.8, 12.15.9: every restore (a take-back, a rewind, a correction, a refund) shows a `Now:` line with each shown value it changed; no restore is silent.
+- Alternatives considered: none.
+- Evidence: research_notes/Playtest round 2 solutions/ROUND6-PLAN.md (owner-approved 2026-10-09) and HANDOFF-2026-10-09.md §6, F5; I3 §2 (a `/fix` take-back silently restored Vitality to 1, read by the player as "no warning").
+- Serves: goal 2 (the player always sees the state).
+- Migration: none.
+- Revisit if: never; a silent restore is an engine bug.
+
+### DL-12-107: A cast NPC's seeded stance bounds the first-interaction reaction roll (revision R2-J; F7; provisional, owner to confirm)
+- Decision: [revision: R2-J] 12.11.2 and 15.1.4: a stance of `helps` toward the opening incident (12.16.11) never starts below Neutral; `hinders` never above Wary; `wary` and `indifferent` roll as before. With no modifier (T-12-12's exact 2d6 distribution) `helps` gives Neutral 72.2%, Warm 19.4%, Friendly 8.3%. The plan says only that the roll "respects his seeded stance"; the bound is the provisional mechanism (R2-J report, owner decisions).
+- Alternatives considered: the stance as one more ±1 cited modifier inside the ±2 clamp (a `helps` NPC still starts Unfriendly or worse 8.3% of the time); the stance sets standing outright like a bond (helps +1, hinders −1; no first impression at all).
+- Evidence: research_notes/Playtest round 2 solutions/ROUND6-PLAN.md (owner-approved 2026-10-09) and HANDOFF-2026-10-09.md §6, F7; I2 §3 (Belby, the quest-giver with stance `helps`, rolled −2 on first interaction).
+- Serves: goal 1 (the person who brought the PC the job talks to them).
+- Migration: standing already rolled stays.
+- Revisit if: the owner prefers another option.
 
 ## DL-13 — The Starter Setting: the Thallen March
 

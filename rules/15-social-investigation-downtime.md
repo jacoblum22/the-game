@@ -153,7 +153,8 @@ interaction** with the PC, and never chosen:
 1. A **bond** NPC (02.9.2): the set value of the bond kind (anchor kin/friend/ward +2, mentor +1 [verification: V2b-021]; thorn rival
    −1, creditor 0, enemy −2), reason `bond` [02.9.2].
 2. A **faction member** (00.17.1 Q13): the faction's status plus the member roll (12.11.2 step 1).
-3. **Anyone else**: the reaction roll, 2d6 plus at most ±2 in cited modifiers (12.11.2 step 2): ≤2 Hostile,
+3. **Anyone else**: the reaction roll, 2d6 plus at most ±2 in cited modifiers, bounded by a cast NPC's seeded
+   stance (12.11.2 step 2) [revision: R2-J; DL-12-107]: ≤2 Hostile,
    3–4 Unfriendly, 5–6 Wary, 7–8 Neutral, 9–10 Warm, 11+ Friendly; **never Devoted** as a first impression.
 4. **Adversaries** met outside a fight: only if their archetype has `reaction_roll: true` (09.2.7); a
    `cunning` mind met in a fight starts Hostile; a `mindless` one has no standing at all.

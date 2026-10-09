@@ -164,19 +164,30 @@ unless it names an established fact id; if it proposes a new fact, it is a World
 (01.15) that PARSE queues ahead of the beat (00.6.7, SG-06). A player's *internal monologue* ("I feel
 the old anger rise") creates no beat.
 
-**01.2.2 Splitting beats.** `[J:enum]` A declaration becomes one beat per distinct (method, target,
-intended change). Test: *"If one part failed, could the other part still be attempted as described?"*
-Yes → separate beats. No → one beat. Each beat carries one typed intended change (01.2.7): a message with two
-changes is two beats, so no part is lost ("grab the purse and punch her" is `take` and `harm`) [revision: R2-H;
-DL-01-34]. A step or gesture that only accompanies another act is part of that act's
-beat (00.12.6) [revision: R2-G; I-171]. Each beat is then classified by **shape**:
+**01.2.2 Splitting beats: one beat per goal.** `[J:enum]` [revision: R2-J; DL-01-37] A declaration becomes one
+beat per distinct **goal**: what the player wants to be different afterward, and toward whom (the typed intended
+change, 01.2.7). Test: *"Does the player want two different things changed, or one change toward two different
+people?"* Yes → one beat per goal. No → one beat. A **method**, a supporting act, or force or movement **in service of
+a goal** is part of that goal's beat and is rolled as the goal: "I pin him to the wall and demand who sent him" is
+one beat (`learn`: who sent him), its method force against his will (12.2.2 facet `against_will`), never a Grapple
+beat followed by a Talk; "I walk over and ask the smith about the road" is one beat, the walk its method (01.4.1);
+"I show her the abbot's seal and say he sent me" is one beat, the seal its method. Two goals are two beats, so no
+goal is lost ("grab the purse and punch her" is `take` and `harm`) [revision: R2-H; DL-01-34]. A step or gesture that
+only accompanies another act is part of that act's beat (00.12.6) [revision: R2-G; I-171]. The method's price is
+paid inside the goal's beat: its actions, its time and its method consequences (01.11.2). **In a conflict** (ch.06's
+rounds) a move or leap that ch.06 prices as an action with a roll of its own ("I vault the table and stab him",
+06's edge cases; T-06-9's rows written "X, then Y") stays a sequential beat before the goal's beat, and the goal's
+beat is always framed (provisional, owner to confirm: DL-01-37). *Retires:* the test "if one part failed, could the
+other part still be attempted as described?" and DL-01-34's "two changes are two beats" read act by act, which split
+every coercion into a grip and a demand and left the demand unrolled (round 6, I3 §6 and I4 B: 5 of 5 single-goal
+coercion messages split). Each beat is then classified by **shape**:
 
 | Shape | True only when | False for | Resolved by |
 |---|---|---|---|
 | `single` | one method, one target, one change | — | the pipeline once |
-| `sequential` | a later beat depends on an earlier beat's result ("throw sand, *then* slide under") | beats that merely happen in the same turn | 01.14.1 |
+| `sequential` | a later goal depends on an earlier goal's result ("pick the lock, *then* take the ledger inside") [revision: R2-J] | beats that merely happen in the same turn | 01.14.1 |
 | `repeated` | the same method against the same kind of target, N times ("shoot it ten times", "stab again and again") | one sustained effort toward a single result (that is `extended`) | 01.14.3 |
-| `bundled` | one act seeks several distinct pieces of information or several distinct results ("is it a demon, does it have a weakness, is it intelligent?"; "disarm him and knock him down") | several acts (split them instead) | 01.10 (DELIVER) |
+| `bundled` | one act seeks several distinct pieces of information or several distinct results ("is it a demon, does it have a weakness, is it intelligent?"; "disarm him and knock him down") | several goals (split them instead) [revision: R2-J] | 01.10 (DELIVER) |
 | `conditional` | "if X, then Y", where X is a fact or an earlier result | a plain sequence | 01.14.4 |
 | `extended` | the intent cannot honestly be achieved by one attempt in one time unit of the current mode (search a library, learn a tongue, dig a tunnel, calm a riot) | a hard single attempt (that is a high tier) | 01.14.6 (clock) |
 
@@ -214,8 +225,12 @@ several candidates; the OFFER names the target before commitment, so the player 
 restatement ("Wren tries to open the guild lock with a knife tip") into `beat.method`. GATE, NECESSITY
 and FRAME read the restatement, never the player's dramatic phrasing: framing measurably moves model
 decisions [R1 01.B; R: https://arxiv.org/abs/2607.18566], and the neutral line is what the ruling ledger
-stores. The restatement ends with the beat's typed change in plain words ("…, to take the purse from Murzak"), and the
-OFFER shows it, so a wrong kind or slot is fixed for free before anything is spent (01.2.7) [revision: R2-H; DL-01-34].
+stores. The restatement is internal: GATE, NECESSITY and FRAME read it, and the ledger stores it. The **OFFER's title**
+(12.15.2) is rendered by code from the beat's typed goal, its kind and slots in plain words, then the method as the
+player put it ("Learn who sent him: pinning him to the wall"), and so is any follow-on line of a sequential beat; the
+restatement and the Reader's `method` field are never printed raw [revision: R2-J; DL-01-39]. A wrong kind or slot
+is fixed from the title for free before anything is spent (01.2.7) [revision: R2-H; DL-01-34]. *Retires:* the OFFER
+line that printed the Reader's internal `method` field as written (the garbled "Then:", round 6, I1 §3).
 
 **01.2.7 The typed intended change.** `[J:enum]` + `[D]` [DL-01-34; revision: R2-H] Each beat carries one **typed
 intended change**: what the player wants to be different afterward (01.2.1's INTENT), as one kind from a closed list
@@ -241,7 +256,8 @@ holds a clue) do the case and casting pick an individual (12.14.13).
 | `none` | — | a beat that seeks no change in the world (a look around, Ready, Help: their own rules write) |
 
 1. **Choose** `[J:enum]` at PARSE (12.2.2 decision 3): the kind and its slots, from the restatement, the verb and the
-   ids in scope. A message with two changes is two beats (01.2.2). **Before framing** `[D]` [revision: R2-I;
+   ids in scope. A message with two goals is two beats; a method in service of a goal is not a change of its own (01.2.2)
+   [revision: R2-J; DL-01-37]. **Before framing** `[D]` [revision: R2-I;
    DL-01-36]: a change **already true** in the store (the actor already holds the item; `npc.<id>.agreed` already
    holds the same act; the door is already open; the actor is already beside the target) is certain: no roll and no
    OFFER, the beat narrated as already so (01.4.1). A change with **no valid target** is settled before anything is
@@ -254,8 +270,14 @@ holds a clue) do the case and casting pick an individual (12.14.13).
    a success at a cost applies the change and its cost, and the cost never undoes it (01.9.3). A change code cannot
    apply (the slot is not in scope; the item is not where the slot says) is not applied, and the RESULT says why
    ("the purse is not on her"), so 12.3.6 can explain it.
-3. **Cite** `[D]`: the applied change is a must-name record line (12.14.12); narration that omits it fails coverage
-   (12.3.1a), and narration of a different change fails the outcome check (12.3.1b, blocking item 1).
+3. **Show and cite** `[D]` [revision: R2-J; DL-01-39]: the applied change is shown to the player in the RESULT
+   block's `Changed:` line, in words code renders from its kind and slots (12.15.3). The narrator gets it as the
+   beat's outcome and the state it wrote (who holds the item, where the actor is, the condition, the act the NPC
+   agreed to, in that NPC's terms), never as a code-written sentence to repeat and never with an instruction that it
+   "is done" or must be said plainly. It is a must-name item (12.14.12), covered when the passage's side list names
+   its record line (12.3.1a); narration of a different change fails the outcome check (12.3.1b, blocking item 1).
+   *Retires:* the plain-words change line handed to the narrator ("Agreed by <NPC>: <the player's goal>"; "say it
+   plainly; it is done"), which narration repeated as "settled between you" (round 6, I1 §6).
 4. **One table among them**: T-12-18's per-verb scene writes (a Grapple's hold, a Force's knock-down, a Move's
    bands) are the scene-state face of `restrain`, `harm` and `move_to`, and stay the table for the slots they write.
 
@@ -911,18 +933,28 @@ Decisions (J):      1. NAME THE FACT [J:flag] per candidate: "Is there a fact id
                        with an id. "Cool", "clever", "well described", "surely", and "everyone knows"
                        are never facts. A player-proposed fact is an Oracle question first; its answer
                        may be cited from the NEXT beat onward (00.3.9a).
-                       Still true now [revision: R2-H; DL-12-93]: an NPC's activity that has ended (the
-                       NPC engaged, 12.11.9 step 1) or is carried unchanged from before they last
-                       engaged is not a lever; a `said` record is a lever only once settled (PR-12-12).
+                       Mechanically relevant only [revision: R2-J; DL-01-38]: the fact is a condition,
+                       a quantity, an item or its property, a coarse position, band or positional
+                       flag (T-06-4), a settled property of the obstacle or place, a clock, an
+                       earlier Setup's or Help's fact, or a settled testimony claim (PR-12-12; a
+                       `said` record before it is settled never counts). A scene-state label is
+                       never a lever or a snag: a posture, manner or activity (T-12-18; "straining
+                       against you", "on guard", "sly", "works at her forge"); nor is a speaker's
+                       refusal or opinion, or a dispute's words. Where a condition stands behind a
+                       label (a hold, 06.5.2), the condition counts, through its own entry, once.
+                       *Retires:* "every hindering fact is a snag" read over scene labels (round
+                       6, I3 §4: "straining against you" was −2 on 12 of 26 fight frames) and
+                       DL-12-93's activity-as-lever clause.
                     2. TYPE [J:enum] from what the fact does:
-                       PRECISION — lets the method be done better (a tool, a blind or distracted target,
+                       PRECISION — lets the method be done better (a tool, a blinded target or one a Setup distracted,
                          a running start, help, a Setup, darkness for a sneak) → +2 roll / snag −2.
                        PROTECTIVE — makes failure less bad (cover, a tied-off rope, a clear retreat,
                          soft ground below) → stakes −1 rung / snag +1 rung.
                        AMPLIFYING — makes success go further (a weak spot, numbers, a resonance, a crowd
                          on your side, a lever-arm on the load) → reach +1 rung / snag −1 rung.
                        A fact that honestly fits two types: the player picks. One fact → one lever.
-                    3. Obligation: an established hindering fact that fits is ALWAYS applied as a snag
+                    3. Obligation: an established, mechanically relevant hindering fact (decision 1)
+                       that fits is ALWAYS applied as a snag
                        (the DM may not drop it): the first cited as Precision at most, a further one
                        as Protective (stakes +1 rung) [revision: R2-C] [DL-01-29]. On a beat whose
                        tier carries a nudge or a rung of class `other` (01.6.5), no snag is Precision:
@@ -1381,7 +1413,10 @@ card's `consequences` field (01.18); (c) a license, effect or fallback text; (d)
 necessarily creates (`[J:flag]` *"Would this state exist after the act whether or not the intent
 succeeded?"* — true only for physical traces of the act itself). Consequences are applied at RECORD
 through their own writes (a `trait.sense.loud` beat ticks every clock that lists it; a scent trail is
-written as a fact) [R: https://theangrygm.com/adjudicate-actions-like-a-boss/ (outcome vs
+written as a fact). **A price the method pays is a write** [revision: R2-J; DL-01-40]: coin handed over (a
+round of drinks, a bribe, a fee, a purchase, 08.8.4), a consumable used or an item given is deducted from the store
+at RECORD, whatever the degree, and shown in the RESULT's `Changed:` line (12.15.3); words alone never pay it (round 6,
+I3: "the coin for the round is spent whatever the answer" was text, and no coin left the purse) [R: https://theangrygm.com/adjudicate-actions-like-a-boss/ (outcome vs
 consequence); R7 §4.0 step 10]. *Worst case (J):* one consequence missed or added — one listed tick or one
 fact (class i), caught by the claim-vs-state check.
 

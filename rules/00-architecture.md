@@ -1859,15 +1859,18 @@ situation tags. At the ANCHOR step the DM chooses `[J:enum]` among the anchors t
 the beat's verb and tags (at most eight candidates; default: the anchor of the beat's basic verb).
 *Worst case:* a near-but-wrong anchor, bounded by the two-change limit and logged (class iv).
 
-**00.15.4 The packet: the situation plus guidance for the call's judgment.** `[D]` [revision: R2-J0; DL-00-06] Every call
-carries the situation: the view, with the active-trigger list at its head [revision: R2-A] [amended:
-DL-12-38], the player's message verbatim, and the **last four exchanges** verbatim. Rule text goes only
-to a call that applies it. The **core** is the turn-loop checklist (ch.12), the invariants T-00-1, the gate
-classes (00.12.3) and the stakes/reach/lever card (00.3.9, 00.3.14–15). It is the guidance for framing a
-check, and is kept identical from call to call so it can be served from the prompt cache (12.2.4). Each other
-role gets short guidance for its own judgment, loaded by role, `situation.*` tag, anchor or trigger,
-**at most twelve** cards' worth [R4 §9 00 #5; R4 §3.3 W12]. A call never gets cards for fields code
-computes. Ch.12 owns these numbers (`pacing.yaml#packet`) [amended: DL-12-02].
+**00.15.4 The packet: the situation plus guidance for the call's judgment.** `[D]` [revision: R2-J0; DL-00-06;
+revision: R2-J; DL-00-07] Every call carries the **situation**: the view, with the active-trigger list at its head
+[revision: R2-A] [amended: DL-12-38], the player's message verbatim, the conversation the role needs (the **last four
+exchanges** verbatim for the narrator; the last exchanges for the Reader, Director, World and Checker, 12.2.4), and the
+name, pronouns and bond of every person named or mentioned, present or absent. Each role then gets a short **guidance
+digest** for its own judgment instead of rule text: no call gets the core, cards sorted by id, or cards for fields code
+computes, and a card reaches a call only where code knows it applies (the retrieved anchor, a fired trigger, the
+ability in use), **at most twelve** cards' worth [R4 §9 00 #5; R4 §3.3 W12]. The **core** is the turn-loop checklist
+(ch.12), the invariants T-00-1, the gate classes (00.12.3) and the stakes/reach/lever card (00.3.9, 00.3.14–15): the
+specification the pipeline implements, and the lookup for implementers, authors and tools; it is no longer a model
+payload. Ch.12 owns these numbers (`pacing.yaml#packet`) [amended: DL-12-02]. *Retires:* the core and the id-sorted
+situation cards in every packet (round 6, I4 A: 70–87% of each role's input was rule text it did not use).
 
 **00.15.5 Ruling ledger record.** `[D]` [DL-00A-24; C:III; revision: I-065]
 
