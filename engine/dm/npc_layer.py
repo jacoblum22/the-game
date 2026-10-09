@@ -192,6 +192,9 @@ def _spans(text: str, phrase: str) -> list[tuple[int, int]]:
 _ADDRESS = re.compile(r"\b(?:ask|asks|asking|tell|tells|say to|says to|question|questions|greet|greets|address|"
                       r"addresses|call to|calls to|(?:turn|turns|walk|walks|step|steps|go|goes|come|comes|head|heads|"
                       r"lean|leans|cross|crosses|sit|sits)(?:\s+[\w'-]+){0,3}?\s+(?:to(?:ward)?|beside))\s+$", re.I)
+# the narration turns to someone described ("turn to the baker's queue", "ask the nearest person in line")
+_TURNS_TO = re.compile(r"\b(?:ask\w*\s+(?:the|a|an|someone|anyone)|approach\w*\s+(?:the|a|an)|(?:turn|walk|step|go|"
+                       r"head|cross|sit)\w*(?:\s+[\w'-]+){0,3}?\s+(?:to|toward|beside)\s+(?:the|a|an))\b", re.I)
 # a name opening the quoted words is spoken to ("Zitok, isn't it?"; live run 20261008-170802, spec 013)
 _VOCATIVE = re.compile(r"[\"“]\s*$")
 
@@ -256,9 +259,11 @@ def addressed(state: Any, record: AdjudicationRecord, present: Sequence[str], me
     if not out and any(p.cls == "SPEECH" for p in record.parts):  # described, not named ("the old woman")
         out += [n for n in [described_in(state, message or " ".join(spoken), present)] if n]
     present = [n for n in present if not is_animal(state, n)]
-    if not out and present and any(p.cls == "SPEECH" for p in record.parts):
-        # spoken to no one by name: the one last spoken with this scene, else the first present (cast order).
-        # ponytail: nearness and who would answer are not modelled
+    elsewhere = _TURNS_TO.search(re.sub(r"[\"“][^\"”]*[\"”]", " ", message or " ".join(spoken)))
+    if not out and present and not elsewhere and any(p.cls == "SPEECH" for p in record.parts):
+        # spoken to no one by name or description: the one last spoken with this scene, else the first present
+        # (cast order); never when the words turn to someone else no one here matches ("I ask the nearest person in
+        # line": live run 20261008-175000). ponytail: nearness and who would answer are not modelled
         last = [n for n in spoken_with(state) if n in present]
         out.append(last[-1] if last else present[0])
     return list(dict.fromkeys(out))

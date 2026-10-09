@@ -194,6 +194,8 @@ def answer_line(record: AdjudicationRecord, npc: str, a: Any) -> None:  # rule: 
     """The asked NPC's answer as a must-name record line `{npc, question, willingness, reason}` (PR-12-10 step 2):
     a fact told, or the willingness the narrator voices; tagged with the index key its `said` lines file under."""
     tags = [f"willingness:{a.willingness}"] if a.willingness else []
+    if any(x.npc == npc and x.action == a.said for x in record.npc_actions):
+        return  # one willingness line covers all their questions this turn (no stacked, overlapping answers)
     record.npc_actions.append(NpcActionEntry(npc=npc, action=a.said, source="talk_outcome", source_ref="PR-12-10",
                                              tags=[*tags, *([f"ask:{a.key}"] if a.key else [])]))
 

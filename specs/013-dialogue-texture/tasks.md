@@ -32,10 +32,10 @@ Plan: [plan.md](plan.md). Item numbers = R2-H "Spec 013" checklist. Tests are re
 ## Phase 7: Tests and polish
 - [X] T016 tests/engine/test_dialogue_texture.py: said fed back (no contradiction / no repeat), settlement triggers, consequential via case only, must-name diet, activity once + ends on engagement, ended activity not a lever, bystander silent unless tag match (item 9)
 - [X] T017 Delete/rewrite ladder tests in tests/engine/ (test_answer.py, test_talk_cluster_c.py, test_incident.py, test_npc_response_and_learning.py, test_names_learned.py, others the suite shows)
-- [ ] T018 evals/longhorizon.py OEQ-12-25 counts; run `--mode scripted`
-- [ ] T019 Re-record replay (`py -3.12 -m tests.replay.record_games`); full pytest; ruff + pyright on touched files
-- [ ] T020 Live talker playtest (15 turns, Haiku); compare to the re-run baseline
-- [ ] T021 engine/CONVENTIONS.md "Answer ladder" section rewritten; specs/013-dialogue-texture/implementation-results.md; commit
+- [X] T018 evals/longhorizon.py OEQ-12-25 counts; run `--mode scripted`
+- [X] T019 Re-record replay (`py -3.12 -m tests.replay.record_games`); full pytest; ruff + pyright on touched files
+- [X] T020 Live talker playtest (15 turns, Haiku); compare to the re-run baseline
+- [X] T021 engine/CONVENTIONS.md "Answer ladder" section rewritten; specs/013-dialogue-texture/implementation-results.md; commit
 
 ## Dependencies
 T002-T003 → US1 → US2, US4 (parallel-able in principle, same files in practice: sequential) → US3 → Phase 7.

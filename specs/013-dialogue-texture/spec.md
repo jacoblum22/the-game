@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-08
 
-**Status**: Draft
+**Status**: Implemented (see [implementation-results.md](implementation-results.md))
 
 **Input**: Owner ruling 2026-10-09 ("I definitely agree with S1 and S2"; structural fixes over patches).
 Scope: `rules/_process/reports/R2-H-report.md`, "Engine checklist → Spec 013", items 1-9. Rules implemented (look up

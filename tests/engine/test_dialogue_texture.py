@@ -265,6 +265,9 @@ def test_the_addressee_is_the_one_turned_to_not_the_last_spoken_with(tmp_path: P
     assert to('I nod my thanks to Kerric, cross the floor to Zitok Rope-Dancer, and sit beside her. '
               '"Zitok, isn\'t it? Kerric gave me your name."') == [zitok]
     assert to('"Kerric, another cup," I say.') == [kerric]
+    # live run 20261008-175000: someone no one here matches is not answered by the last one spoken with
+    assert to('I turn to the baker\'s queue and ask the nearest person in line, "Did you see the rider?"') == []
+    assert to('"Did you see the rider?"') == [kerric]  # spoken to no one: the first present (no exchange yet)
 
 
 def test_offline_turns_have_no_engine_error(tmp_path: Path) -> None:
