@@ -102,6 +102,7 @@ def run_item(item: dict[str, Any], model: Any, rules: Any, tmp: Path) -> dict[st
         res = settle_dispute(ctx, item["report"])
         complaints = [{"believes": r["believes"], "category": r["category"], "turn": r["passage"]["turn"],
                        "verdict": r["verdict"], "class": _class(r), "outcome": r["outcome"], "done": r["done"],
+                       "done_kinds": r.get("done_kinds", []),
                        "not_done": r["not_done"]} for r in res.records]
         first = complaints[0] if complaints else {}
         return {"id": item["id"], "category": first.get("category"), "turn": first.get("turn"),
@@ -134,8 +135,7 @@ def score(item: dict[str, Any], got: dict[str, Any]) -> dict[str, Any]:
         understood = c is not None and c["turn"] in turns and (not exp.get("category") or c["category"] in exp["category"])
         ok = c is not None and c["class"] in classes and plain
         need = set(exp.get("done") or [])
-        did = {d.split(":", 1)[0].split(" ", 1)[0] for d in (c or {}).get("done", [])}
-        kinds_ok = all(any(k.split("_")[0] in d or d.startswith(k[:4]) for d in did) for k in need)
+        kinds_ok = not need or bool(need & set((c or {}).get("done_kinds", [])))  # any one of the expected kinds
         rows.append({"id": exp.get("id", item["id"]), "understood": understood, "outcome": ok,
                      "auto": "right" if ok and kinds_ok else "unclear" if ok else "wrong"})
     return {"understood": all(r["understood"] for r in rows), "outcome": all(r["outcome"] for r in rows),

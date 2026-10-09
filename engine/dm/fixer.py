@@ -401,7 +401,8 @@ def opening(ctx: Any, text: str) -> str:
     pc = pc_of(state)
     here = list(state.scene.cast_present) if state.scene else []
     people = []
-    for eid in dict.fromkeys([*([pc] if pc else []), *here]):
+    who: list[str] = [*([pc] if pc else []), *(str(x) for x in here)]
+    for eid in dict.fromkeys(who):
         e = state.entities.get(eid)
         if e is None or eid in state.seals:
             continue

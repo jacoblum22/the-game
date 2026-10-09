@@ -45,6 +45,8 @@ DisputeKind = Literal["explained", "corrected", "taken_back", "not_found"]
 INCIDENTAL_SLOTS = frozenset({"hair", "face", "mark", "build", "clothing", "worn", "voice", "material", "marking",
                               "activity", "manner"})
 NO_EVIDENCE = ("explain", "rerender", "correct_testimony")
+IDENTITY = ("name", "pronouns")  # entity data set at creation (12.11.1), never a corrective fact (spec 022)
+CASE_PREDICATES = ("points_to.", "clue", "case.", "knows_")  # the case graph and clue delivery (INV-10; PR-15-6)
 MAX_AMOUNT = 50
 _ID = re.compile(r"\b(?:turn|frame|fact|said|rul|cinst)\.\d+\b")
 
@@ -58,6 +60,7 @@ class DisputedClaim:
     turn_id: str | None = None
     verdict: str = "unclear"
     found: str = ""
+    done_kinds: list[str] = field(default_factory=list)  # the proposal kinds code applied for it
 
 
 @dataclass
@@ -346,7 +349,7 @@ def _apply(ctx: Any, tx: Transaction, text: str, p: dict[str, Any], inv: Investi
                        "(an offer it closed is gone: declare again)")
     if kind == "rerender":
         shown = _rerender(ctx, turn_id) if turn_id else ""
-        return ("did", f"turn {turn_no(turn_id)} shown again: {shown}") if shown else ("not", "nothing to show again")
+        return "did", f"turn {turn_no(turn_id)} shown again: {shown}" if shown else ""  # no roll there: nothing to add
     if kind in ("refund", "deduct", "restore"):
         q = _quantity(st, pc, str(p.get("quantity") or ""))
         if pc is None or q is None:
@@ -371,6 +374,8 @@ def _apply(ctx: Any, tx: Transaction, text: str, p: dict[str, Any], inv: Investi
             return "not", f"{kind.replace('_', ' ')}: {fid or 'no fact'} is not a current fact you can see"
         if kind == "correct_testimony" and f.source != "testimony":
             return "not", f"correct testimony: {fid} was not settled from what someone said"
+        if f.predicate.startswith(CASE_PREDICATES):
+            return "not", f"{kind.replace('_', ' ')}: {fid} is part of the mystery's clue trail, which only play changes"
         value = str(p.get("value") or "").strip() if kind == "correct_testimony" else ""
         if value and _copies_report(value, text):
             return "not", "correct testimony: the new words must be the corrected value, not the report"
@@ -396,6 +401,10 @@ def _apply(ctx: Any, tx: Transaction, text: str, p: dict[str, Any], inv: Investi
         value = str(p.get("value") or "").strip()
         if not pred or pred.startswith(("correction", "said.", "trg.", "log.")) or not value:
             return "not", "set fact: it needs a property and its value"
+        if pred in IDENTITY or pred.startswith(CASE_PREDICATES):  # identity is entity data; clues are the spine
+            held = ((e.name if pred == "name" else e.data.get("pronouns") or "not set") if pred in IDENTITY
+                    else "the clue trail")
+            return "not", f"set fact: {name(st, subject)}'s {pred} is fixed on record ({held}); the narration follows it"
         if _copies_report(value, text):
             return "not", "set fact: the value must be the corrected value, not the report's words"
         if slot not in INCIDENTAL_SLOTS and (why := _evidence(p, inv)):  # incidental fiction goes the player's way
@@ -445,16 +454,20 @@ def settle_dispute(ctx: Any, text: str, **_: Any) -> DisputeResult:  # rule: 12.
                       key=lambda x: (ORDER.get(str(x[2].get("kind")), 2), x[0], x[1]))
         did: dict[int, list[str]] = {}
         nots: dict[int, list[str]] = {}
+        kinds: dict[int, list[str]] = {}
         for i, _j, p in todo:
             status, words = _apply(ctx, tx, text, p, inv, reverted)
             if words:
                 (did if status == "did" else nots).setdefault(i, []).append(words)
+            if status == "did":
+                kinds.setdefault(i, []).append(str(p.get("kind")))
         for i, c in enumerate(inv.complaints):
             t = str(c.get("turn") or "")
             claims.append(DisputedClaim(believes=str(c.get("believes") or ""), category=str(c.get("category") or "other"),
                                         turn_id=ids.counter_id(ids.TURN, int(m.group(0)))
                                         if (m := re.search(r"\d+", t)) else None,
-                                        verdict=str(c.get("verdict") or "unclear"), found=str(c.get("found") or "")))
+                                        verdict=str(c.get("verdict") or "unclear"), found=str(c.get("found") or ""),
+                                        done_kinds=kinds.get(i, [])))
             results.append((did.get(i, []), nots.get(i, [])))
         after = sheet(tx.state, ctx.rules, pc)
         writes = [e.seq for e in tx.events[start:] if e.seq is not None]
@@ -505,7 +518,7 @@ def _log(tx: Transaction, ctx: Any, text: str, inv: Investigation, claims: list[
         recs.append({"type": "dispute", "id": f"dsp.{n + k + 1}", "report": report, "time": when_words(tx.state.time.now),
                      "turn": tx.turn_id, "words": text, "believes": c.believes, "category": c.category,
                      "verdict": c.verdict, "passage": {"turn": c.turn_id}, "found": c.found, "evidence": tools,
-                     "done": done, "not_done": refused, "outcome": outcome,
+                     "done": done, "done_kinds": c.done_kinds, "not_done": refused, "outcome": outcome,
                      "upheld": c.verdict in ("player_right", "partly") or bool(done), "writes": writes,
                      "reverted": reverted})
     tx.add(Event.of("meta_set", source="correction", rule_id="12.3.6", key="corrections", value=[*ledger, *recs]))
