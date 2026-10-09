@@ -26,7 +26,7 @@ class Role(StrEnum):
     NARRATOR = "narrator"
     CHECKER = "checker"
     PROPOSER = "proposer"  # PR-12-10 rung 3: one typed candidate answer (spec 008 part B)
-    LOCATOR = "locator"  # PR-12-11 step 1: which passage a player's report means (spec 012)
+    UNDERSTAND = "understand"  # PR-12-11 step 1: what a player's report means, from the whole transcript (spec 014)
 
 
 class Outcome(StrEnum):

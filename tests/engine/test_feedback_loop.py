@@ -93,6 +93,14 @@ def review(g: Game) -> str:
     return review_log_path(g.store).read_text(encoding="utf-8")
 
 
+def body(text: str) -> str:
+    """The answer after its restatement (spec 014: every answer opens `[LABEL] You're saying …`)."""
+    first, _, rest = text.partition("\n")
+    label, _, said = first.partition("] ")
+    assert said.startswith("You're saying "), text
+    return f"{label}] {rest.lstrip()}"
+
+
 def test_remembered_wrong_is_corrected_pinned_and_still_right_20_turns_later(game: Game) -> None:
     npc = present_npc(game)
     name = game.store.state.entities[npc].name
@@ -110,7 +118,7 @@ def test_remembered_wrong_is_corrected_pinned_and_still_right_20_turns_later(gam
     plant(game, "I wait.", f"{name}'s blue coat flaps in the gusts.", slip)
     r = game.dispute(f"{name}'s coat is grey, not blue")
     label = display_name(game.store.state, npc)  # as the PC knows them: an unlearned name is never revealed
-    assert r.text().startswith(f"[CORRECTION] You're right: {label}'s clothing is a grey coat (turn "), r.text()
+    assert body(r.text()).startswith(f"[CORRECTION] You're right: {label}'s clothing is a grey coat (turn "), r.text()
     assert "the record had slipped to a blue coat" in r.text()
     st = game.store.state
     fid = st.current_fact_id(npc, "detail.clothing")
@@ -162,7 +170,7 @@ def test_rule_applied_wrong_is_taken_back_past_the_scene_and_redone(game: Game) 
     _travel(game)
     assert game.store.state.scene.scene_id != old_scene  # type: ignore[union-attr]
     r = game.dispute(f"{fid}: the DC was too high")
-    assert r.text().startswith("[CORRECTION] The roll in turn") and f"DC {before}, but tier" in r.text()
+    assert body(r.text()).startswith("[CORRECTION] The roll in turn") and f"DC {before}, but tier" in r.text()
     assert r.pause is not None and [c.id for c in r.pause.choices] == ["accept_forward", "rewind"]
     assert record(game)["outcome"] == "pending"
     r = game.answer("rewind")
@@ -210,11 +218,11 @@ def test_contradiction_with_an_earlier_scene_is_found_in_the_whole_transcript(ga
     r = game.dispute(f"{name}'s hair is iron-grey, you just said red")
     text = r.text()
     label = display_name(st, npc)
-    assert text.startswith(f"[CORRECTION] You're right: {label}'s hair is iron-grey (turn {EARLY['turn'][5:]}:"), text
+    assert body(text).startswith(f"[CORRECTION] You're right: {label}'s hair is iron-grey (turn {EARLY['turn'][5:]}:"), text
     assert "iron-grey hair" in text and game.store.state.fact_value(npc, "detail.hair") == "iron-grey"
     rec = record(game)
     assert rec["passage"]["turn"] == red and rec["outcome"] == "correct"
-    assert rec["category"] == "contradiction"  # the locator's label (offline stand-in)
+    assert rec["category"] == "contradiction"  # the understanding's label (offline stand-in)
 
 
 def test_an_action_misread_is_taken_back_and_redone(game: Game) -> None:
@@ -233,7 +241,7 @@ def test_an_action_misread_is_taken_back_and_redone(game: Game) -> None:
     turn = game.store.turn(r.turn_id)
     assert turn is not None and turn.writes
     r = game.dispute("I only told a joke, I didn't ask them anything")
-    assert r.text().startswith("[CORRECTION] Taken back: \"You ask them what is going on.\"") and "Declare again" in r.text()
+    assert body(r.text()).startswith("[CORRECTION] Taken back: \"You ask them what is going on.\"") and "Declare again" in r.text()
     st = game.store.state
     assert ev.payload.frame_id in st.meta["rolls_voided"]  # type: ignore[attr-defined]
     revertible = {s for s in turn.writes if (e := game.store.event(s)) is not None and e.type in REVERTIBLE}
@@ -250,8 +258,8 @@ def test_the_player_mistaken_is_answered_with_the_quote(game: Game) -> None:
     facts = dict(st.facts)
     r = game.dispute(f"My vitality should be {vit + 6}")
     text = r.text()
-    assert text.startswith(f"[FIX] As recorded: your vitality is {vit} (turn "), text
-    assert ': "' in text and f"{vit + 6} was never said. Logged." in text
+    assert body(text).startswith(f"[FIX] As recorded: your vitality is {vit} (turn "), text
+    assert ': "' in text and f"{vit + 6} was never said." in text and "Logged." not in text
     assert game.store.state.facts == facts and game.store.state.quantities["pc.bram"]["vitality"].current == vit
     assert record(game)["outcome"] == "explain_with_quote" and not record(game)["upheld"]
 
@@ -262,7 +270,7 @@ def test_incidental_fiction_with_uncertain_evidence_the_players_reading_wins(gam
     assert game.store.state.current_fact_id(npc, "detail.clothing") is None  # nothing on record
     r = game.dispute(f"{name}'s cloak was green")
     label = display_name(game.store.state, npc)
-    assert r.text().startswith(f"[CORRECTION] You're right: {label}'s clothing is green cloak."), r.text()
+    assert body(r.text()).startswith(f"[CORRECTION] You're right: {label}'s clothing is green cloak."), r.text()
     st = game.store.state
     fid = st.current_fact_id(npc, "detail.clothing")
     assert fid is not None and st.facts[fid].value == "green cloak" and st.facts[fid].pinned
@@ -273,7 +281,7 @@ def test_a_mechanical_claim_the_player_cannot_back_up_leaves_the_store(game: Gam
     st = game.store.state
     facts, qs = dict(st.facts), {k: v.current for k, v in st.quantities["pc.bram"].items()}
     r = game.dispute("I still have my silver lantern")
-    assert r.text().startswith("[FIX] The record has nothing for your silver lantern (it holds: "), r.text()
+    assert body(r.text()).startswith("[FIX] The record has nothing for your silver lantern (it holds: "), r.text()
     assert "Without a record I can't change it; logged for review." in r.text()
     st = game.store.state
     assert st.facts == facts and {k: v.current for k, v in st.quantities["pc.bram"].items()} == qs  # INV-9
@@ -298,4 +306,4 @@ def test_dispute_stats_and_the_review_log(game: Game) -> None:
     # the review log was copied with the game file only in the test's own folder: it holds this sitting's reports
     assert log.startswith("# Disputes:") and log.count("- **Player**:") == 2
     block = log.split("That's wrong", 1)[1]
-    assert "- **Outcome**: explain_and_log" in block and "> [FIX]" in block  # the record stands; still logged
+    assert "- **Outcome**: not_found" in block and "did you mean" in block  # never "logged" alone (spec 014)
