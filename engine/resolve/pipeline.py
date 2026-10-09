@@ -53,6 +53,7 @@ class BeatPlan(BaseModel):
 
     beat: Beat
     intent_verbs: list[str] = Field(default_factory=list)
+    when: str = "now"  # 12.2.2 shape: now, conditional (on an earlier result) or queued (a Ready beat) (spec 017)
 
     def lookup(self) -> dict[str, Any]:
         return {**self.beat.model_dump(), "intent_verbs": self.intent_verbs}
@@ -92,6 +93,8 @@ class PipelineEnv:
     milestone: int = 0
     harm_log: list[HarmEntry] = field(default_factory=list)  # filled by the harm hook for the record
     threshold_due: list[str] = field(default_factory=list)  # PCs whose harm opened the Threshold (07.5)
+    said: list[str] = field(default_factory=list)  # the message's SPEECH parts, carried by a pause (spec 017)
+    said_first: list[str] = field(default_factory=list)  # those said before a later declaration: answered here
 
     @property
     def state(self) -> Any:
@@ -114,7 +117,8 @@ class BeatOutcome(BaseModel):
 class PipelineResult(BaseModel):
     outcomes: list[BeatOutcome] = Field(default_factory=list)
     pause: PauseRecord | None = None
-    queued: list[str] = Field(default_factory=list)  # beats beyond the third, restated (01.2.3)
+    queued: list[str] = Field(default_factory=list)  # beats not attempted, restated (a Threshold voids the rest)
+    said: list[str] = Field(default_factory=list)  # SPEECH a closed pause carried: the record answers it (spec 017)
 
     def extend(self, other: PipelineResult) -> PipelineResult:
         self.outcomes += other.outcomes
@@ -126,32 +130,144 @@ class PipelineResult(BaseModel):
 # ------------------------------------------------------------------------------------------- driver
 
 
-def run_beats(env: PipelineEnv, plans: list[BeatPlan]) -> PipelineResult:  # rule: PR-01-1
-    """Run up to three beats in the player's order; stop at the first pause (the rest wait in its detail)."""
+def run_beats(env: PipelineEnv, plans: list[BeatPlan], *, prev: BeatOutcome | None = None,
+              ran: int = 0, here: set[str] | None = None) -> PipelineResult:
+    # rule: PR-01-1
+    """Run the message's plan in the player's order; stop at the first pause (the rest of the plan waits in its
+    detail). Before each beat `_recheck` may ask "Still go on to …?" instead (01.2.3, 01.14.4; spec 017). `prev`:
+    the beat a resumed pause just resolved; `ran`: beats already resolved this turn; `here`: the plan's targets
+    able before it (`_able`)."""
     res = PipelineResult()
-    todo = list(plans[:MAX_BEATS])
-    res.queued = [p.beat.restatement or p.beat.intent for p in plans[MAX_BEATS:]]  # rule: 01.2.3
+    todo = list(plans)
+    here = _able(env, todo) if here is None else here
     while todo:
+        why = _recheck(env, todo[0], prev, ran, here)
+        if why == VOID:  # 07.5: the last-chance menu is the question; the rest is said, not attempted
+            res.queued = [p.beat.method or p.beat.restatement for p in todo]
+            return res
+        if why is not None:
+            _ask(env, why, todo)
+            res.pause = env.state.open_pause()
+            return res
         plan = todo.pop(0)
         out = _start(env, plan, todo)
         res.outcomes.append(out)
+        prev, ran = out, ran + 1
         if out.status == "paused":
             res.pause = env.state.open_pause()
             return res
     return res
 
 
+VOID = "void"
+SUCCESS = ("success", "critical_success")
+
+
+def _able(env: PipelineEnv, plans: list[BeatPlan]) -> set[str]:
+    """The plan's targets that are creatures able to act and here now (06.13.1's `able`)."""
+    from engine.resolve.conflict import able
+
+    st = env.state
+    out = set()
+    for p in plans:
+        ent = st.entities.get(p.beat.target or "")
+        if ent is not None and ent.kind in _CREATURES and able(st, ent.id):
+            out.add(ent.id)
+    return out
+
+
+def _recheck(env: PipelineEnv, plan: BeatPlan, prev: BeatOutcome | None, ran: int, here: set[str]) -> str | None:
+    # rule: 01.2.3, 01.14.4
+    """Whether the next beat of the plan still runs as declared: None (run it), the line said before "Still go on
+    to …?" ("" for none), or VOID (a Threshold opened)."""
+    from engine.harm.state import is_down
+    from engine.resolve.conflict import able
+
+    st, beat = env.state, plan.beat
+    if env.pc in env.threshold_due:
+        return VOID
+    if ran >= MAX_BEATS:  # 01.2.3: the rest is confirmed, never run past a decision point
+        return "That is three actions this turn."
+    if env.said_first and _leaves(env, beat):  # the words said here are answered here first
+        return ""
+    if prev is None:
+        return None
+    if env.pc and is_down(st, env.pc):
+        return "You are down."
+    if beat.target in here and not able(st, str(beat.target)):
+        from engine.store.views import display_name
+
+        return f"{display_name(st, str(beat.target))} is down or gone."
+    if prev.status in ("withdrawn", "refused"):
+        return "That did not happen."
+    done = prev.status == "no_roll" or (prev.status == "resolved" and (prev.entry.degree in SUCCESS
+                                                                         or prev.entry.success_at_cost))
+    if plan.when == "conditional" and not done:  # 01.14.4: what it waited on may not be true
+        return "That did not work."
+    return None
+
+
+def _leaves(env: PipelineEnv, beat: Beat) -> bool:  # rule: PR-06-4
+    """A beat that takes its actor to a place that is not here (travel: the scene cuts to it)."""
+    st = env.state
+    pos = st.positions.get(beat.actor)
+    here = (pos.location if pos else None) or (st.scene.place_id if st.scene else None)
+    c = beat.change
+    to = c.what if c is not None and c.kind == "move_to" else beat.target if beat.verb == MOVE else None
+    ent = st.entities.get(to or "")
+    return ent is not None and ent.kind == "place" and to != here
+
+
+def _ask(env: PipelineEnv, why: str, todo: list[BeatPlan]) -> PauseRecord:  # rule: 01.2.3
+    """The plan pause: one line, "Still go on to <act>?", before the next beat (kind offer: a new declaration
+    withdraws it, 12.2.6). It falls between beats, so T5 still runs for what resolved (spec 017)."""
+    act = todo[0].beat.method or todo[0].beat.restatement or todo[0].beat.intent
+    act = act[:1].lower() + act[1:]
+    prompt = f"{why} Still go on to {act.rstrip('.')}?".strip()
+    choices = [{"id": "continue", "label": f"Go on: {act}"}, {"id": "withdraw", "label": "Stop here"}]
+    return _open(env, "offer", prompt, choices, "withdraw", {"stage": "plan", "queued": _dump(todo)})
+
+
+def own_line(restatement: str, act: str, *, alone: bool = True) -> str:  # rule: 01.2.2
+    """The restatement's clause for one beat ("A. Then: B. Then: C"): the sentence sharing the most content words with
+    the beat's own act (its method and intent), without its "Then" or a label ("Move:", "Beat 1:"); a tie goes to the
+    first; "" when none shares a word, or when the restatement is one clause and the beat is not `alone` (it speaks
+    for every beat: P-064). Fighter turn 11: "Sheathe the sword." titled a Force on the door; live run 220608: "Draw
+    the dagger. Ask Aldwen to open the chain" titled (and labelled the RESULT of) the ask. Spec 017."""
+    clauses = [_LABEL.sub("", _THEN.sub("", c.strip())).strip(" ,:")
+               for c in _SENTENCE.split(restatement or "")]
+    clauses = [c for c in clauses if c]
+    if len(clauses) <= 1:
+        return clauses[0] if clauses and alone else ""
+    want = words(act)
+    best = max(range(len(clauses)), key=lambda i: (len(words(clauses[i]) & want), -i))
+    if not words(clauses[best]) & want:
+        return ""
+    line = clauses[best]
+    return line[:1].upper() + line[1:]
+
+
+_SENTENCE = re.compile(r"(?<=[.!?;])\s+|\n\s*")
+_THEN = re.compile(r"^then\b[\s,:]*", re.IGNORECASE)
+_LABEL = re.compile(r"^(?:beat \d+|step \d+|[A-Z][a-z]+):\s+", re.IGNORECASE)
+
+
 def resume(env: PipelineEnv, pause: PauseRecord, choice: str, *, by: str = "option",
            words: str | None = None) -> PipelineResult:  # rule: 12.2.6
-    """Answer the open pause and continue the same beat from the stored frame, then the queued beats."""
+    """Answer the open pause and continue the same beat from the stored frame, then the rest of the plan."""
     d = pause.detail
     env.add(Event.of("pause_closed", source="player", rule_id="12.2.6", pause_id=pause.pause_id, choice=choice,
                      by=by, words=words))
     stage = d.get("stage")
-    if stage not in ("offer", "warning", "near_miss", "redirect"):  # clarify: the Reader re-reads the words
-        return PipelineResult()
-    plan = BeatPlan.model_validate(d["plan"])
+    env.said, env.said_first = list(d.get("said") or []), list(d.get("said_first") or [])
+    carried = PipelineResult(said=list(env.said))
+    if stage not in ("offer", "warning", "near_miss", "redirect", "plan"):  # clarify: the Reader re-reads the words
+        return carried
     queued = [BeatPlan.model_validate(q) for q in d.get("queued", [])]
+    here = _able(env, queued)  # before the paused beat lands: a target it downs is then "down or gone"
+    if stage == "plan":  # rule: 01.2.3
+        return carried.extend(_plan_answer(env, choice, queued, here))
+    plan = BeatPlan.model_validate(d["plan"])
     if stage == "offer":
         out = _answer_offer(env, plan, d, choice, queued)
     elif stage == "warning":
@@ -164,19 +280,31 @@ def resume(env: PipelineEnv, pause: PauseRecord, choice: str, *, by: str = "opti
         out = _finish(env, plan, frame, roll, take_sac=sac, menu=menu)
     else:
         out = _answer_redirect(env, plan, d, choice, queued)
-    res = PipelineResult(outcomes=[out])
+    carried.outcomes = [out]
     if out.status == "paused":
+        carried.pause = env.state.open_pause()
+        return carried
+    # the plan goes on with its next beat (a withdrawn one asks first: `_recheck`)
+    return carried.extend(run_beats(env, queued, prev=out, ran=1, here=here))
+
+
+def _plan_answer(env: PipelineEnv, choice: str, queued: list[BeatPlan], here: set[str]) -> PipelineResult:
+    # rule: 01.2.3
+    """The plan pause answered: go on with the next beat (the player confirmed it), or stop (said, not run)."""
+    if choice != "continue" or not queued:
+        return PipelineResult(queued=[p.beat.method or p.beat.restatement for p in queued])
+    first = _start(env, queued[0], queued[1:])
+    res = PipelineResult(outcomes=[first])
+    if first.status == "paused":
         res.pause = env.state.open_pause()
         return res
-    if out.status == "withdrawn":  # the rest of that declaration depended on it: dropped, restated
-        res.queued = [p.beat.restatement or p.beat.intent for p in queued]
-        return res
-    return res.extend(run_beats(env, queued))
+    return res.extend(run_beats(env, queued[1:], prev=first, ran=1, here=here))
 
 
 def close_by_default(env: PipelineEnv, pause: PauseRecord) -> PipelineResult:  # rule: 12.2.6
     """A new declaration while a pause is open: OFFER withdrawn (nothing spent), near miss → failure, redirect →
-    the player chose another way. Queued beats of the old declaration are dropped (the new one replaces them)."""
+    the player chose another way. Queued beats of the old declaration are dropped (the new one replaces them); the
+    words it carried are still answered (`said`, spec 017)."""
     stage = pause.detail.get("stage")
     if stage == "near_miss":
         pause.detail["queued"] = []
@@ -186,7 +314,7 @@ def close_by_default(env: PipelineEnv, pause: PauseRecord) -> PipelineResult:  #
     if stage in ("offer", "warning"):
         env.add(Event.of("offer_logged", source="engine", rule_id="01.7.1", frame_id=None,
                          shown_at=env.state.time.now, choice="withdraw"))
-    return PipelineResult()
+    return PipelineResult(said=list(pause.detail.get("said") or []))
 
 
 # ------------------------------------------------------------------------------------------- GATE … FRAME
@@ -904,6 +1032,8 @@ def _dump(plans: list[BeatPlan]) -> list[dict[str, Any]]:
 
 def _open(env: PipelineEnv, kind: str, prompt: str, choices: list[dict[str, str]], default: str | None,
           detail: dict[str, Any], *, frame_id: str | None = None) -> PauseRecord:  # rule: 12.2.6
+    if detail.get("stage") != "plan" and (env.said or env.said_first):  # T5 is skipped: the words wait (spec 017)
+        detail = {**detail, "said": list(env.said), "said_first": list(env.said_first)}
     rec = PauseRecord(pause_id=env.tx.mint(ids.PAUSE), kind=kind, prompt=prompt,  # type: ignore[arg-type]
                       frame_id=frame_id, choices=choices, default_choice=default, detail=detail)
     env.add(Event.of("pause_opened", source="engine", rule_id="12.2.6", pause=rec))

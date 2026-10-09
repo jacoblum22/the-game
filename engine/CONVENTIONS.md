@@ -572,11 +572,19 @@ readers take a `WorldState`. Errors: `engine.world.common.WorldError`. The PC is
 - **Pipeline** (`engine.resolve.pipeline`): `PipelineEnv(tx, rules, rng, store, framer, pc, auto_commit, harm_hook,
   lethal=None, milestone)`; `run_beats(env, [BeatPlan(beat, intent_verbs)]) -> PipelineResult(outcomes
   [BeatOutcome(status resolved|no_roll|redirected|refused|paused|withdrawn|question, entry: BeatEntry, frame_id,
-  oof)], pause, queued)` (≤3 beats, stops at the first pause); `resume(env, pause, choice)`;
+  oof)], pause, queued, said)` (stops at the first pause); `resume(env, pause, choice)`; spec 017 (the message's
+  plan): `BeatPlan.when` now|conditional (the Reader's conditional beats are on the plan, Ready beats stay in
+  `reader.queued`); before each beat `_recheck` may open the `plan` pause (kind offer, `continue`/`withdraw`, prompt
+  "<why> Still go on to <act>?") for: three beats this turn (01.2.3), the PC down, the target down or gone, the last
+  beat withdrawn or refused, a conditional after a beat that did not succeed (01.14.4), a move to another place
+  while SPEECH said before it waits (`env.said_first`); a Threshold voids the rest (`queued`). A `plan` pause runs
+  T5 (it falls between beats). Any other pause carries `env.said`/`said_first` in its detail; `resume` /
+  `close_by_default` return them as `said`, and `turn._take` adds them to the record's parts so T5 answers them.
+  `own_line(restatement, act, alone=)`: the beat's own "Then:" clause (the OFFER title);
   `close_by_default(env, pause)`; `harm_hook_for(env)` (apply_harm + HarmEntry; `env.threshold_due`);
   `harm_lethal_warning` (default `LethalCheck`); `evidence_event`, `challenge_band(dc)` (03.4.3); `offer_text`.
   `FramerFn(beat, candidates, *, gate, note=None) -> ProposedFrame`. Pause detail (`PauseRecord.detail`) holds
-  `stage` (offer|warning|near_miss|redirect|clarify), `plan`, `queued`, `proposed`, `frame`, `roll`, `offer`
+  `stage` (offer|warning|near_miss|redirect|clarify|plan), `plan`, `queued`, `said`, `said_first`, `proposed`, `frame`, `roll`, `offer`
   (OfferView), `candidates`, `warned`; choice ids: offer `commit, change, withdraw, go_big, play_safe`; warning
   (kind `offer`) `continue, withdraw`; near_miss `failure, success_at_cost:<menu>`; redirect `accept:<licence>,
   other`; clarify none (free words). A lethal frame (or a Dire one against a 07.3.3 source) is preceded by the
