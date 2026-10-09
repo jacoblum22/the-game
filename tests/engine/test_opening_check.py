@@ -19,7 +19,7 @@ from engine.dm.session import opening
 from engine.llm.base import Role
 from engine.llm.offline import ScriptedModel
 from tests.engine.test_incident import _world
-from tests.engine.test_turn_narration import _decl, _must, calls, chk, claim
+from tests.engine.test_turn_narration import _must, calls, chk, claim, passage
 
 OPENING = ("Gulls wheel over the market, and the stalls are wet from the night. "
            "Heads turn toward the gate, and the hands at the nets stop mid-lift. "
@@ -32,13 +32,8 @@ INCIDENT = "the inciting incident: a child (or an elder, or a priest) is missing
 def test_opening_with_crowd_reactions_passes_first_draft(tmp_path: Path) -> None:
     store = _world(tmp_path, option="omen")  # no bound person: the incident is the note alone
     def draft(schema: object, packet: object) -> dict[str, object]:
-        """Spec 006: the crowd's reactions are declared atmosphere; Corra's sentence cites the incident's line."""
-        from engine.audit.declare import split
-
-        s = split(OPENING)
-        return {"sentences": [_decl(s[0], atmosphere=True), _decl(s[1], atmosphere=True),
-                              _decl(s[2], atmosphere=True), _decl(s[3], _must(packet), about=["npc.corra_pike"]),
-                              _decl(s[4])]}
+        """Spec 019: one passage; its side list covers the incident's line."""
+        return passage(OPENING, _must(packet))
     model = ScriptedModel({Role.NARRATOR: [draft]})
     check = chk(claim(0, "loc.market", "identity", "appearance", "stalls wet from the night"),
                 claim(1, "unknown", "action", "heads turn", "toward the gate", change=True),

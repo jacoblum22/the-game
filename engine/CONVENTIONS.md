@@ -1087,3 +1087,38 @@ speech, with `answer_ladder.repeat_pointer_limit` and `delivery.information.ladd
   time.
 - **PC words**: `declare.pc_quotes` also returns the quote beside a "you say" clause under an NPC speaker; `_speech`
   and `_said` treat it as the PC's.
+
+## Holistic narration (spec 019; 12.3.1, 12.3.1a, 12.3.3, PR-12-2, 01.2.7 item 3; DL-12-101, DL-01-39)
+Supersedes the spec 006 bullets above on declared sentences, narrow repairs and `declaration_words`.
+- **Output**: `narrator_schema` = `{passage, speech[{speaker (present people or none, never the PC), words, form
+  direct|reported}], new[NewElement], covers[record handles]}`; no `sentences`, `refs`, `about`, `atmosphere`,
+  repair or "fiction" shape (`narrator_mode` and config `narrator_schema` are gone). A revision answers in the same
+  shape.
+- **declare**: `parse_output(data) -> Passage(text, speech, new, covers)`; `sentences_of(p) -> ([Sentence], unplaced
+  new)`: code's quote-aware split, `speaker` from the speech whose quoted words the sentence holds (a sentence with
+  no quotes: a `reported` speech it holds), `refs` = covers, each new element on the sentence that names it best;
+  `coverage(p, must)`; `unquoted(p)` (12.3.1a item 2: a direct speech's words outside quote marks, and a sentence
+  with `first_person` words in the narrator's voice); `quote(text, words)`.
+- **Loop** (`narration.narrate_checked`): `_draft` (split, `_judge` over every sentence: scans, precision checks
+  incl. `outcome_words` against `claims.passage_beat`, speech checks with `pc_agency` against the player's words
+  plus carried parts, tiers, safety; coverage; quote check) → while `_Draft.failed()` (a blocking redraft-type
+  failure, an uncovered must-name handle, unquoted speech; a cut alone is not) and fewer than
+  `claim_check.max_revisions` (1): `narrator.draft(revision=Revision(draft, failed))`, the same packet plus the
+  whole draft and what failed (handles only, never a rendered line) → `_deliver`: cut what still fails, `quote`
+  what is still unquoted, rendered lines for uncovered must-name items before the closing question, the prompt
+  restored only if a cut removed it, the plain fallback when nothing survives. Draft version kinds: `draft`,
+  `revision`, then `cut` / `render` / `fallback` (with `quoted`, `rendered`, `reasons`); each version keeps
+  `side_list`, `checks`, `missing`, `unquoted`.
+- **said**: one record per side-list speech whose words the delivered text holds (0.8), whole; never the player's own
+  words. **Usage marks**: a detail of someone the passage names whose value it states (0.8, 2+ content words).
+- **Retired**: `MAX_REDRAFTS`, `_max_redrafts`, `_unanswered`, `screen._acknowledged`, `Repair`/`repair_text`,
+  `checker.declaration_words`; data `claim_check.max_redrafts`, `sentence_declaration`.
+- **Precision**: `precision_checks.checks[].precision` (measured) below `min_precision` logs only: `season_words`
+  0.5, `outcome_words` 0.1; the pronoun check stays narrator-only (speech measured 0 of 5).
+- **Change lines (F4)**: `handles.AGREED` reads "Agreed (already) by X:"; the narrator's line is "X agrees to what was
+  asked", the rendered line "X agrees."; other changes "now so: <words>"; a refused change is citable, not
+  must-name ("this did not change: ..."); no record line says "say it plainly" or "it is done". The full words stay
+  in RESULT (`oof.change_result_line`).
+- **Checker audit**: `check_draft(ctx, "", sentences=, passage=, items=, exchanges=)`: the passage's numbered
+  sentences, `side_list_words` (speech, new, covered lines) unless `full`, the last exchange only; `unexpressed` is
+  `{ref, says_otherwise}` (passage-level, logged).

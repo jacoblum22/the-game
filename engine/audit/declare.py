@@ -1,13 +1,17 @@
-"""Declared sentences (12.3.1 source 1, 12.3.1a, 12.14.13; spec 006): the narrator's output parsed, the content
-tiers, and the deterministic checks code runs on every sentence before any verdict.
+"""The narrator's passage and its side list (12.3.1, 12.3.1a, 12.14.13; spec 019): the output parsed, the content
+tiers, and the deterministic checks code runs over the passage before any verdict.
 
-    sents = parse_output(narrator_data)                       # [DeclaredSentence], either output shape
+    p = parse_output(narrator_data)                           # Passage: text + side list (speech, new, covers)
+    sents, unplaced = sentences_of(p)                         # code's split, for locating a failure or a cut
     idx = SceneIndex.of(state, items)                         # names, aliases, pronouns, quantities, facts
     scan = scan_sentence(sents[0], idx, rules=rules)          # names added to `about`, failures found by code
-    coverage(sents, items)                                    # must-name handles no sentence cites
+    coverage(p, must)                                         # must-name handles the side list does not cover
+    unquoted(p)                                               # speech standing outside quote marks (12.3.1a item 2)
 
 Everything here is `[D]`: no model call, no store write. The narration loop (engine/dm/narration.py) turns the
-failures into cuts and narrow redrafts (12.3.3) and writes new elements by tier (PR-00-7).
+failures into cuts and the one revision (12.3.3) and writes new elements by tier (PR-00-7). The model writes one
+passage; code splits it into sentences only to say where a failure is and what a cut removes [revision: R2-J;
+DL-12-101].
 """
 
 from __future__ import annotations
@@ -30,6 +34,10 @@ ELEMENT_TIERS: dict[str, Tier] = {"furniture": "T1a", "feature": "T1a", "person"
 MENTION_KIND = {"person": "npc", "item": "item", "document": "item", "furniture": "object", "feature": "object"}
 
 
+def _none(v: Any) -> Any:
+    return None if v in (None, "", "none") else v
+
+
 class Implied(BaseModel):
     predicate: str
     value: str
@@ -44,24 +52,48 @@ class NewElement(BaseModel):
     implied: list[Implied] = Field(default_factory=list)
 
 
-class DeclaredSentence(BaseModel):
+class Speech(BaseModel):
+    """One thing a character says (12.3.1 side list): who, their words (a direct speech's words as they stand inside
+    the passage's quote marks), and whether it is quoted or reported."""
+
+    model_config = ConfigDict(extra="ignore")
+
+    speaker: str | None = None  # never the PC
+    words: str = ""
+    form: Literal["direct", "reported"] = "direct"
+
+    @field_validator("speaker", mode="before")
+    @classmethod
+    def _speaker(cls, v: Any) -> Any:
+        return _none(v)
+
+
+class Passage(BaseModel):
+    """The narrator's output (12.3.1 source 1): one passage and its passage-level side list."""
+
+    text: str = ""
+    speech: list[Speech] = Field(default_factory=list)
+    new: list[NewElement] = Field(default_factory=list)
+    covers: list[str] = Field(default_factory=list)  # record handles (R1, R2...) the passage narrates
+
+
+class Sentence(BaseModel):
+    """One sentence of the passage as code reads it: split by code, never written one by one. `speaker` is the side
+    list's (the speech whose words it holds), `about` what the name scan finds, `refs` the passage's `covers`, `new`
+    the side list's elements it names."""
+
     model_config = ConfigDict(extra="ignore")
 
     text: str = ""
     refs: list[str] = Field(default_factory=list)
     about: list[str] = Field(default_factory=list)
     new: list[NewElement] = Field(default_factory=list)
-    atmosphere: bool = False
-    speaker: str | None = None  # 12.3.1b item 1: who says the quoted (or reported) words; never the PC
+    speaker: str | None = None  # 12.3.1b item 1: who says its quoted (or reported) words; never the PC
 
     @field_validator("speaker", mode="before")
     @classmethod
-    def _none(cls, v: Any) -> Any:
-        return None if v in (None, "", "none") else v
-
-    @property
-    def declared(self) -> bool:
-        return bool(self.refs or self.about or self.new)
+    def _speaker(cls, v: Any) -> Any:
+        return _none(v)
 
 
 class Failure(BaseModel):
@@ -71,7 +103,7 @@ class Failure(BaseModel):
 
 
 class SentenceScan(BaseModel):
-    added_about: list[str] = Field(default_factory=list)  # names the sentence used but did not declare (logged)
+    added_about: list[str] = Field(default_factory=list)  # names the sentence uses (found by the scan)
     failures: list[Failure] = Field(default_factory=list)
     undeclared_new: int = 0  # undeclared addressable elements code found (unknown proper names)
     logged: list[tuple[str, str]] = Field(default_factory=list)  # (class, why): found, off the blocking list (12.3.1b)
@@ -86,23 +118,47 @@ def split(text: str) -> list[str]:
     return sentences(text)
 
 
-def parse_output(data: Mapping[str, Any]) -> list[DeclaredSentence]:  # rule: 12.3.1
-    """Either output shape (contracts/narrator.md) as the same list: `sentences[]`, or `fiction` plus
-    `declarations` keyed by sentence index (the fallback schema, B risk 2)."""
-    if data.get("sentences") is not None:
-        out = [DeclaredSentence.model_validate(s) for s in data.get("sentences") or []]
-        return [s.model_copy(update={"text": s.text.strip()}) for s in out if s.text.strip()]
-    texts = split(str(data.get("fiction") or ""))
-    decl: dict[int, dict[str, Any]] = {}
-    for d in data.get("declarations") or []:
-        try:
-            decl.setdefault(int(str(d.get("sentence"))), dict(d))
-        except ValueError:
+def parse_output(data: Mapping[str, Any]) -> Passage:  # rule: 12.3.1
+    """The narrator's answer (`passage` plus `speech`, `new`, `covers`) as a Passage; empty speech entries dropped."""
+    speech = [Speech.model_validate(x) for x in data.get("speech") or [] if str(x.get("words") or "").strip()]
+    return Passage(text=str(data.get("passage") or "").strip(),
+                   speech=[x.model_copy(update={"words": x.words.strip()}) for x in speech],
+                   new=[NewElement.model_validate(x) for x in data.get("new") or []],
+                   covers=list(dict.fromkeys(str(c) for c in data.get("covers") or [])))
+
+
+def _in_quote(span: str, words: str) -> bool:
+    return bool(tx.norm(span)) and (tx.norm(span) in tx.norm(words) or tx.covers(span, words, ratio=0.8))
+
+
+def speech_of(text: str, p: Passage) -> Speech | None:  # rule: 12.3.1b
+    """The side list's speech a sentence carries: the direct speech its quoted words belong to, else (no quote marks)
+    a reported speech whose words the sentence holds. Narration that repeats a quoted line stays the narrator's."""
+    spans = [m.group(0).strip('"“”') for m in _QUOTED.finditer(text)]
+    if spans:
+        return next((sp for sp in p.speech if sp.form == "direct" and any(_in_quote(q, sp.words) for q in spans)),
+                    None)
+    return next((sp for sp in p.speech if sp.form == "reported" and tx.covers(sp.words, text, ratio=0.6)), None)
+
+
+def sentences_of(p: Passage) -> tuple[list[Sentence], list[NewElement]]:  # rule: 12.3.1
+    """The passage split by code into sentences (quoted speech kept whole), each with its speaker from the side list,
+    the passage's `covers` as refs, and each new element on the sentence that names it best; (sentences, the new
+    elements no sentence names)."""
+    texts = split(p.text)
+    sents = [Sentence(text=t, refs=list(p.covers), speaker=(sp.speaker if (sp := speech_of(t, p)) else None))
+             for t in texts]
+    unplaced: list[NewElement] = []
+    for el in p.new:
+        score = [len(tx.overlap(el.name, t)) for t in texts]
+        if not score or max(score) == 0:
+            unplaced.append(el)
             continue
-    return [DeclaredSentence.model_validate({**decl.get(i, {}), "text": t}) for i, t in enumerate(texts)]
+        sents[score.index(max(score))].new.append(el)
+    return sents, unplaced
 
 
-def joined(sents: Iterable[DeclaredSentence]) -> str:
+def joined(sents: Iterable[Sentence]) -> str:
     return " ".join(s.text for s in sents if s.text)
 
 
@@ -202,7 +258,7 @@ class SceneIndex(BaseModel):
                    handles={it.handle: f"{it.text} {it.render}" for it in its},
                    handle_entities={it.handle: list(it.entities) for it in its}, known_words=known, sealed=sealed)
 
-    def subjects(self, s: DeclaredSentence) -> set[str]:
+    def subjects(self, s: Sentence) -> set[str]:
         """The ids a sentence declares it speaks of: `about`, cited facts' subjects, cited lines' entities."""
         out = set(s.about)
         for r in s.refs:
@@ -211,7 +267,7 @@ class SceneIndex(BaseModel):
             out.update(self.handle_entities.get(r, ()))
         return out
 
-    def cited_words(self, s: DeclaredSentence) -> str:
+    def cited_words(self, s: Sentence) -> str:
         return " ".join(self.handles.get(r) or self.facts.get(r) or "" for r in s.refs)
 
 
@@ -244,7 +300,7 @@ _PC_SAYS_AFTER = re.compile(r"[^\w\"“]{0,3}" + _PC_SAYS.pattern, re.I)  # '"..
 _PC_SAYS_BEFORE = re.compile(_PC_SAYS.pattern + r"[^\w\"“]{0,3}$", re.I)  # 'you say, "..."'
 
 
-def voices(s: DeclaredSentence) -> tuple[str, list[str]]:  # rule: 12.3.1b
+def voices(s: Sentence) -> tuple[str, list[str]]:  # rule: 12.3.1b
     """(the narrator's words, the speech spans). Quoted words are speech; a sentence with a declared speaker and
     no quotes is reported speech, whole ("she tells you it left at dawn")."""
     spans = [m.group(0).strip("\"“”") for m in _QUOTED.finditer(s.text)]
@@ -253,7 +309,20 @@ def voices(s: DeclaredSentence) -> tuple[str, list[str]]:  # rule: 12.3.1b
     return re.sub(r"\s+", " ", _QUOTED.sub(" ", s.text)).strip(), spans
 
 
-def pc_quotes(s: DeclaredSentence) -> list[str]:  # rule: 12.14.3
+_FIRST_PERSON = re.compile(r"\b(?:I|I'm|I'll|I've|I'd|me|my|myself|we|we're|we'll|we've|us|our|ours|ourselves)\b"
+                           r"|(?<![\w'’])(?:i'm|i'll|i've|i'd)\b")
+_SINGLE_QUOTED = re.compile(r"‘[^‘’]*’")
+
+
+def first_person(text: str) -> str | None:  # rule: 12.3.1a
+    """The first first-person word ("I", "my", "we") in the narrator's voice of `text` (outside double and curly
+    single quote marks), else None: a second-person narrator never says "I", so it is speech left unquoted
+    (12.3.1a item 2)."""
+    m = _FIRST_PERSON.search(_SINGLE_QUOTED.sub(" ", _QUOTED.sub(" ", text)))
+    return m.group(0) if m else None
+
+
+def pc_quotes(s: Sentence) -> list[str]:  # rule: 12.14.3
     # rule: 12.3.1b
     """Quoted words the sentence puts in the PC's mouth: quotes with no declared speaker whose narration says
     "you say / ask / call ...", and, under an NPC speaker, the quote right beside a "you say" clause ("'Fair enough,'
@@ -293,7 +362,7 @@ def _names_in(text: str, idx: SceneIndex) -> list[str]:
     return list(dict.fromkeys(eid for _, _, eid in name_spans(text, idx)))
 
 
-def unknown_names(text: str, idx: SceneIndex, s: DeclaredSentence) -> list[str]:  # rule: 12.3.1a
+def unknown_names(text: str, idx: SceneIndex, s: Sentence) -> list[str]:  # rule: 12.3.1a
     """Capitalised words mid-sentence (outside quoted speech's first word) that name no entity, no new element and
     no known place or people: a name the narration invented. ponytail: capital letters stand in for proper nouns;
     a quote's sentence starts are skipped, other false positives are words like "Rot" used as a curse."""
@@ -313,7 +382,7 @@ def unknown_names(text: str, idx: SceneIndex, s: DeclaredSentence) -> list[str]:
     return list(dict.fromkeys(out))
 
 
-def scan_sentence(s: DeclaredSentence, idx: SceneIndex, *, rules: Any = None,
+def scan_sentence(s: Sentence, idx: SceneIndex, *, rules: Any = None,
                   names: Iterable[str] = ()) -> SentenceScan:  # rule: 12.3.1a
     # rule: 12.2.10
     """12.3.1a's code checks for one sentence, on the narrator's voice only (speech is testimony, 12.3.1b item 1):
@@ -356,10 +425,28 @@ def scan_sentence(s: DeclaredSentence, idx: SceneIndex, *, rules: Any = None,
     return out
 
 
-def coverage(sents: Iterable[DeclaredSentence], must: Iterable[str]) -> list[str]:  # rule: 12.3.1a
-    """Must-name handles no sentence cites (12.3.1a item 3)."""
-    cited = {r for s in sents for r in s.refs}
-    return [h for h in must if h not in cited]
+def coverage(p: Passage, must: Iterable[str]) -> list[str]:  # rule: 12.3.1a
+    """Must-name handles the passage's side list does not cover (12.3.1a item 1)."""
+    return [h for h in must if h not in p.covers]
+
+
+def unquoted(p: Passage) -> list[str]:  # rule: 12.3.1a
+    """12.3.1a item 2, the quote-mark check: the words to put inside quote marks. Each direct speech whose words
+    stand in the passage outside quote marks, and each sentence with a first-person word in the narrator's voice
+    (measured: 9 of 9 such sentences in the round 2-6 saves were speech left unquoted)."""
+    bare = _QUOTED.sub(" ", p.text)
+    spans = [m.group(0).strip('"“”') for m in _QUOTED.finditer(p.text)]
+    out = [sp.words.rstrip(" ,") for sp in p.speech
+           if sp.form == "direct" and len(tx.words(sp.words)) >= 3 and sp.words.rstrip(" ,") in bare
+           and not any(_in_quote(q, sp.words) for q in spans)]
+    out += [t for t in split(p.text) if first_person(t) and not any(w in t for w in out)]
+    return list(dict.fromkeys(out))
+
+
+def quote(text: str, words: str) -> str:  # rule: 12.3.1a
+    """`text` with `words` put inside quote marks, where they stand outside them; else `text` unchanged."""
+    at = _QUOTED.sub(lambda m: "\x00" * len(m.group(0)), text).find(words)
+    return text if at < 0 or not words else f'{text[:at]}"{words}"{text[at + len(words):]}'
 
 
 def known_as(el: NewElement, idx: SceneIndex) -> str | None:  # rule: 00.6.6
@@ -368,12 +455,13 @@ def known_as(el: NewElement, idx: SceneIndex) -> str | None:  # rule: 00.6.6
     return next((eid for eid, names in idx.aliases.items() if want and want in names), None)
 
 
-def t2_delivered(el: NewElement, s: DeclaredSentence, idx: SceneIndex) -> bool:  # rule: 12.14.13
+def t2_delivered(el: NewElement, s: Sentence, idx: SceneIndex) -> bool:  # rule: 12.14.13
     """A T2 element passes only when a line this sentence cites delivers it (its name's words are in that line)."""
     lines = " ".join(idx.handles.get(r, "") for r in s.refs)
     return bool(lines) and tx.covers(el.name, lines, ratio=0.5)
 
 
-__all__ = ["ELEMENT_TIERS", "DeclaredSentence", "Failure", "NewElement", "SceneIndex", "SentenceScan", "coverage", "known_as",
-           "joined", "mention_of", "name_spans", "parse_output", "pc_quotes", "scan_sentence", "split", "t2_delivered",
-           "tier_of", "unknown_names", "voices"]
+__all__ = ["ELEMENT_TIERS", "Failure", "NewElement", "Passage", "SceneIndex", "Sentence", "SentenceScan", "Speech",
+           "coverage", "first_person", "joined", "known_as", "mention_of", "name_spans", "parse_output", "pc_quotes",
+           "quote", "scan_sentence", "sentences_of", "speech_of", "split", "t2_delivered", "tier_of", "unknown_names",
+           "unquoted", "voices"]

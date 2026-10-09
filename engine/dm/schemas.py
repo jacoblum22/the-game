@@ -115,18 +115,15 @@ class SchemaContext(BaseModel):
     push_options: list[str] = Field(default_factory=list)  # empty unless trg.pacing_push is raised
     thread_ids: list[str] = Field(default_factory=list)
     lead_routes: list[str] = Field(default_factory=list)  # empty unless trg.lead_injection fires
-    # Narrator (spec 006: declared sentences, 12.3.1)
+    # Narrator (spec 019: one passage and its side list, 12.3.1)
     entity_kinds: list[str] = Field(default_factory=list)
-    narrator_refs: list[str] = Field(default_factory=list)  # this turn's record handles, then the view's fact ids
+    narrator_refs: list[str] = Field(default_factory=list)  # this turn's record handles (the side list's `covers`)
     element_kinds: list[str] = Field(default_factory=list)  # pacing.yaml#claim_check.element_tiers keys
     speaker_ids: list[str] = Field(default_factory=list)  # 12.3.1b: present people who may speak (never the PC)
-    narrator_mode: str = "sentences"  # "sentences" | "fiction" (the fallback shape, B risk 2)
-    repair_ids: list[str] = Field(default_factory=list)  # failing sentence indices ("3") for a repair call
-    repair: bool = False  # a narrow repair call (12.3.3): replacements only
     # Checker
     claim_classes: list[str] = Field(default_factory=list)
     sentence_ids: list[str] = Field(default_factory=list)
-    checker_refs: list[str] = Field(default_factory=list)  # what the draft's sentences declare (refs, about ids)
+    checker_refs: list[str] = Field(default_factory=list)  # the record handles the passage's side list covers
 
 
 # ---------------------------------------------------------------- schema helpers
@@ -360,42 +357,32 @@ def director_schema(ctx: SchemaContext) -> Schema:  # rule: 12.4.2
     })
 
 
-MAX_SENTENCE_INDEX = 30  # the fallback shape's sentence keys "0".."29" (a string enum: INV-3)
-
-
-def _declaration(ctx: SchemaContext, text: bool = False) -> dict[str, Schema | None]:  # rule: 12.3.1
-    """The declaration fields; with `text`, the sentence's `text` goes after `new` (spec 009 B: the new elements are
-    listed before the sentence is written, so what it introduces is planned, then said)."""
-    return {
-        "refs": arr(enum(ctx.narrator_refs)) if ctx.narrator_refs else None,
-        "about": arr(enum(ctx.scene_ids)) if ctx.scene_ids else None,
+def narrator_schema(ctx: SchemaContext) -> Schema:  # rule: 12.3.1
+    """One passage and its side list (12.3.1 source 1; spec 019): `speech` (each thing a character says: speaker,
+    words, direct or reported), `new` (each new element, typed by kind, with the properties it states), `covers` (the
+    record handles the passage narrates). A revision (12.3.3) answers in the same shape: the whole passage again."""
+    return obj({
+        "passage": STR,
+        "speech": arr(obj({
+            "speaker": enum(ctx.speaker_ids, first=NONE),  # 12.3.1b item 1: never the PC
+            "words": STR,
+            "form": enum(["direct", "reported"]),
+        })),
         "new": arr(obj({
             "element_kind": enum(ctx.element_kinds),
             "name": STR,
             "ordinary": BOOL,
             "implied": arr(obj({"predicate": STR, "value": STR})),
         })),
-        **({"text": STR} if text else {}),
-        "atmosphere": BOOL,
-        "speaker": enum(ctx.speaker_ids, first=NONE),  # 12.3.1b item 1: whose words the quotes are; never the PC
-    }
-
-
-def narrator_schema(ctx: SchemaContext) -> Schema:  # rule: 12.3.1
-    """Declared sentences (12.3.1 source 1); `narrator_mode` "fiction" is the fallback shape: the prose whole, with
-    declarations keyed by sentence index. A repair call (`repair_ids`) returns replacements only (12.3.3)."""
-    if ctx.repair or ctx.repair_ids:
-        return obj({"repairs": arr(obj({"replaces": enum([*ctx.repair_ids, "add"]), **_declaration(ctx, True)}))})
-    if ctx.narrator_mode == "fiction":
-        return obj({"fiction": STR, "declarations": arr(obj({
-            "sentence": enum([str(i) for i in range(MAX_SENTENCE_INDEX)]), **_declaration(ctx)}))})
-    return obj({"sentences": arr(obj(_declaration(ctx, True)))})
+        "covers": arr(enum(ctx.narrator_refs) if ctx.narrator_refs else STR),  # no handles: an empty list
+    })
 
 
 def checker_schema(ctx: SchemaContext) -> Schema:  # rule: 12.3.1
-    """The diff audit (12.3.1 source 2, DL-12-71): `claims` are only assertions beyond a sentence's declarations;
-    `undeclared` the addressable things a sentence introduces that it does not declare, typed by kind (written by
-    their tier, 12.14.13); `unexpressed` the declarations a sentence does not say (or says otherwise)."""
+    """The sampled audit (12.3.1 source 2, DL-12-71) of a whole passage: `claims` are only assertions beyond its side
+    list (each located by its sentence's number); `undeclared` the addressable things it introduces that the side
+    list does not name, typed by kind (12.14.13); `unexpressed` the record lines the side list covers that the passage
+    does not say (or says otherwise)."""
     sent = enum(ctx.sentence_ids)
     claim = obj({
         "sentence": sent,
@@ -411,7 +398,7 @@ def checker_schema(ctx: SchemaContext) -> Schema:  # rule: 12.3.1
         "claims": arr(claim),
         "undeclared": arr(obj({"sentence": sent, "element_kind": enum(ctx.element_kinds), "name": STR,
                                "ordinary": BOOL})) if ctx.element_kinds else None,
-        "unexpressed": arr(obj({"sentence": sent, "ref": refs, "says_otherwise": BOOL})) if refs else None,
+        "unexpressed": arr(obj({"ref": refs, "says_otherwise": BOOL})) if refs else None,
         "screen": obj({  # no safety field: the safety screen is separate (FR-036)
             "intent_acknowledged": BOOL,
             "intent_substituted": BOOL,

@@ -1,19 +1,19 @@
-"""The Checker role (C; contracts/model-calls.md C): the diff audit of one draft (12.3.1 source 2, DL-12-71). A
-separate call with only its own prompt (FR-034): it never sees the Narrator's prompt, earlier drafts or reasoning,
-only the sentences and what each declares, rendered in words.
+"""The Checker role (C; contracts/model-calls.md C): the sampled audit of one delivered passage (12.3.1 source 2,
+DL-12-71). A separate call with only its own prompt (FR-034): it never sees the Narrator's prompt, earlier drafts or
+reasoning, only the passage, its side list in words, and the last exchange as conversation (12.2.4).
 
-    out = check_draft(ctx, "", player_message="I wave him off.", sentences=texts, decls=decls, items=items,
+    out = check_draft(ctx, "", player_message="I wave him off.", sentences=texts, passage=p, items=items,
                       created=["npc.bessa_crane"])
-    out.claims        # assertions beyond the declarations: Claims for engine.audit.claims.check_claims
-    out.undeclared    # addressable things a sentence introduces but does not declare, typed (12.14.13 tiers)
-    out.unexpressed   # declarations a sentence does not say, or says otherwise
+    out.claims        # assertions beyond the side list: Claims for engine.audit.claims.check_claims
+    out.undeclared    # addressable things the passage introduces that the side list does not name (12.14.13 tiers)
+    out.unexpressed   # record lines the side list covers that the passage does not say, or says otherwise
     out.screen        # flags for engine.audit.screen
 
-THIS MESSAGE holds the draft's sentences numbered from 0 (`[n] text`), each followed by an indented `declares:`
-line, then the player's message. `full=True` withholds the declarations (the 1-in-10 full extraction that measures
-what the diff misses). The view lists the ids a claim may name: the scene scope, the spotlight (absent people the
-turn speaks of) and every id created this turn, each as `<id>: <names>; <here | not here | new this turn>`; the PC
-as `pc.x: Name, you, your` so pronoun claims resolve.
+THIS MESSAGE holds the passage, its sentences numbered from 0 (`[n] text`, code's split, so a claim can say where it
+is), then the side list in words, then the player's message. `full=True` withholds the side list (the full
+extraction that measures what the diff misses). The view lists the ids a claim may name: the scene scope, the
+spotlight (absent people the turn speaks of) and every id created this turn, each as `<id>: <names>; <here | not here
+| new this turn>`; the PC as `pc.x: Name, you, your` so pronoun claims resolve.
 """
 
 from __future__ import annotations
@@ -24,7 +24,7 @@ from typing import Any
 from pydantic import BaseModel, Field
 
 from engine.audit.claims import Claim
-from engine.audit.declare import DeclaredSentence
+from engine.audit.declare import Passage
 from engine.dm.context import TurnContext
 from engine.dm.handles import RecordItem
 from engine.dm.packet import build_packet
@@ -34,9 +34,8 @@ from engine.llm.base import Role, call_role
 from engine.llm.offline import sentences as _sentences
 from engine.retrieve.cards import load_cards_for
 from engine.retrieve.scene import pc_id, scene_scope, spotlight
-from engine.store.projection import DETAIL, WorldState
+from engine.store.projection import WorldState
 from engine.store.views import display_name, name_known, unnamed_label
-from engine.text.render import relation
 
 ALIAS_KEYS = ("role", "aliases", "pronouns", "people", "detail")
 FULL_HEADER = "FULL EXTRACTION: the declarations are withheld this time; report every assertion as a claim."
@@ -107,47 +106,31 @@ def entity_lines(state: WorldState, ids: Sequence[str], created: Iterable[str] =
     return lines
 
 
-def _fact_words(state: WorldState, fid: str) -> str:
-    f = state.facts.get(fid)
-    if f is None:
-        return fid
-    who = display_name(state, f.subject) if f.subject in state.entities else f.subject
-    if f.predicate.startswith(DETAIL):
-        return f"{who}'s {f.predicate[len(DETAIL):].replace('_', ' ')}: {f.value}"
-    try:
-        return relation(who, f.predicate, None if f.value is None else str(f.value)) or f"{who} {f.predicate}"
-    except KeyError:  # a verb outside the closed list: the predicate's words as they are
-        return f"{who} {f.predicate.replace('_', ' ')}: {f.value}"
+def side_list_words(state: WorldState, p: Passage, items: Mapping[str, RecordItem]) -> list[str]:  # rule: 12.3.1
+    """The passage's side list in words: each speech with its speaker, each new element with the properties it
+    states, each covered record line by handle."""
+    out = []
+    for sp in p.speech:
+        who = display_name(state, sp.speaker) if sp.speaker in state.entities else "someone"
+        out.append(f'- {who} says ({sp.form}): "{sp.words}"')
+    for el in p.new:
+        props = "; ".join(f"{x.predicate}: {x.value}" for x in el.implied)
+        out.append(f'- new {el.element_kind or "element"} "{el.name}"' + (f" ({props})" if props else ""))
+    for h in p.covers:
+        it = items.get(h)
+        if it is not None:
+            out.append(f"- covers {h}: {it.render or it.text}")
+    return out or ["- nothing"]
 
 
-def declaration_words(state: WorldState, d: DeclaredSentence, items: Mapping[str, RecordItem]) -> str:
-    # rule: 12.3.1
-    """What one sentence declares, in words (B P2, P4): each cited line or view fact by handle, who it is about,
-    each new element with the properties it states, or the atmosphere flag."""
-    parts: list[str] = []
-    for r in d.refs:
-        it = items.get(r)
-        parts.append(f"{r} ({(it.render or it.text) if it is not None else _fact_words(state, r)})")
-    if d.about:
-        parts.append("about " + ", ".join(f"{display_name(state, a) if a in state.entities else a} ({a})"
-                                          for a in d.about))
-    for el in d.new:
-        props = "; ".join(f"{p.predicate}: {p.value}" for p in el.implied)
-        parts.append(f'new {el.element_kind or "element"} "{el.name}"' + (f" ({props})" if props else ""))
-    if d.atmosphere:
-        parts.append("atmosphere")
-    return "; ".join(parts) or "nothing"
-
-
-def checker_message(sents: Sequence[str], player_message: str, declares: Sequence[str] | None = None,
+def checker_message(sents: Sequence[str], player_message: str, side: Sequence[str] | None = None,
                     full: bool = False) -> str:  # rule: 12.3.1
-    """The draft's sentences `[n] text`, each with its `declares:` line (none in a full extraction), then the
+    """The passage's sentences `[n] text`, then its side list in words (none in a full extraction), then the
     player's message (12.14.3's comparison)."""
     lines = [FULL_HEADER, ""] if full else []
-    for i, s in enumerate(sents):
-        lines.append(f"[{i}] {s}")
-        if declares is not None and not full and i < len(declares):
-            lines.append(f"    declares: {declares[i]}")
+    lines += [f"[{i}] {s}" for i, s in enumerate(sents)]
+    if side is not None and not full:
+        lines += ["", "THE SIDE LIST:", *side]
     lines.append("")
     lines.append(f'THE PLAYER\'S MESSAGE: "{player_message}"' if player_message else "THE PLAYER'S MESSAGE: (none)")
     return "\n".join(lines)
@@ -155,11 +138,13 @@ def checker_message(sents: Sequence[str], player_message: str, declares: Sequenc
 
 def check_draft(ctx: TurnContext, fiction: str, *, player_message: str = "", created: Iterable[str] = (),
                 exchanges: Sequence[str | tuple[str, str]] = (), sentences: Sequence[str] | None = None,
-                decls: Sequence[DeclaredSentence] | None = None, items: Sequence[RecordItem] = (),
+                passage: Passage | None = None, items: Sequence[RecordItem] = (),
                 full: bool = False) -> CheckerOutput:  # rule: PR-12-2
-    """One Checker call. Raises ModelInvalid after a failed re-ask. `sentences`: the narrator's own sentences (spec
-    006), numbered as given, instead of splitting `fiction`; `decls`: their declarations, shown in words so the
-    audit reports only what they do not cover (12.3.1's diff); `full`: withhold them (a full extraction)."""
+    # rule: 12.2.4
+    """One Checker call. Raises ModelInvalid after a failed re-ask. `sentences`: the delivered passage's sentences,
+    numbered as given, instead of splitting `fiction`; `passage`: its side list, shown in words so the audit reports
+    only what it does not cover (12.3.1's diff); `full`: withhold it (a full extraction). The conversation is the last
+    exchange only (12.2.4's Checker row)."""
     st = ctx.state
     created = list(created)
     sents = list(sentences) if sentences is not None else split_sentences(fiction)
@@ -167,16 +152,16 @@ def check_draft(ctx: TurnContext, fiction: str, *, player_message: str = "", cre
     dm = last if isinstance(last, str) else (list(last) + ["", ""])[1]
     ids = checker_ids(st, created, message=player_message, last_delivery=str(dm or ""), rules=ctx.rules)
     by_handle = {it.handle: it for it in items}
-    declares = [declaration_words(st, d, by_handle) for d in decls] if decls is not None else None
+    side = side_list_words(st, passage, by_handle) if passage is not None else None
     sctx = schema_context(st, ctx.rules, draft_sentences=sents)
     sctx.scene_ids = ids
-    if decls is not None and not full:
-        sctx.checker_refs = list(dict.fromkeys(r for d in decls for r in [*d.refs, *d.about]))
+    if passage is not None and not full:
+        sctx.checker_refs = [h for h in passage.covers if h in by_handle]
     schema = build_schema(Role.CHECKER, sctx)
     cards = load_cards_for(Role.CHECKER, (), None, (), rules=ctx.rules)
     packet = build_packet(Role.CHECKER, instructions=load_prompt("checker"), cards=cards,
-                          view="\n".join(entity_lines(st, ids, created)), exchanges=list(exchanges),
-                          message=checker_message(sents, player_message, declares, full), rules=ctx.rules)
+                          view="\n".join(entity_lines(st, ids, created)), exchanges=list(exchanges)[-1:],
+                          message=checker_message(sents, player_message, side, full), rules=ctx.rules)
     res = call_role(ctx.model, Role.CHECKER, schema, packet, turn_id=ctx.turn_id, recorder=ctx.record_call)
     data = dict(res.data)
 
@@ -186,9 +171,9 @@ def check_draft(ctx: TurnContext, fiction: str, *, player_message: str = "", cre
     claims = [Claim.model_validate(c) for c in data.get("claims") or [] if ok(c)]
     return CheckerOutput(sentences=sents, claims=claims, screen=dict(data.get("screen") or {}), scene_ids=ids,
                          undeclared=[dict(x) for x in data.get("undeclared") or [] if ok(x)],
-                         unexpressed=[dict(x) for x in data.get("unexpressed") or [] if ok(x)],
+                         unexpressed=[dict(x) for x in data.get("unexpressed") or []],
                          call_id=res.record.call_id)
 
 
-__all__ = ["CheckerOutput", "check_draft", "checker_ids", "checker_message", "declaration_words", "entity_lines",
+__all__ = ["CheckerOutput", "check_draft", "checker_ids", "checker_message", "entity_lines", "side_list_words",
            "split_sentences"]

@@ -102,8 +102,9 @@ DIRECTOR = obj(
     push=enum("push.complication", "none"),
     lead=nullable(obj(thread=enum("thread.t1"), via=enum("via.rumor", "via.clue"))),
 )
-NARRATOR = obj(fiction=STR, mentions=arr(obj(kind=enum("npc", "item", "place"), name=STR,
-                                             implied=arr(obj(predicate=STR, value=STR)), unsettled=arr(STR))))
+NARRATOR = obj(passage=STR, speech=arr(obj(speaker=STR, words=STR, form=enum("direct", "reported"))),
+               new=arr(obj(element_kind=STR, name=STR, ordinary=BOOL, implied=arr(obj(predicate=STR, value=STR)))),
+               covers=arr(STR))
 CHECKER = obj(
     claims=arr(obj(
         sentence={"type": "integer"}, subject=enum(*SCENE, "unknown"),
@@ -246,19 +247,19 @@ def test_director_cuts_to_the_named_reachable_place() -> None:
 
 def test_narrator_words_the_record_and_uses_only_view_names() -> None:
     out = fill(Role.NARRATOR, RECORD + "\nroll 14 vs 12", view="npc.mara_voss: Mara Voss\n  name: Mara Voss")
-    fiction = out["fiction"]
+    fiction = out["passage"]
     assert fiction.startswith("You climb the wall. It works, but not cleanly.")
     assert "Mara Voss hears you out" in fiction  # speech gets a reply from a present NPC, by name
-    assert not any(ch.isdigit() for ch in fiction) and fiction.endswith("?") and out["mentions"] == []
-    bare = fill(Role.NARRATOR, "anything", view="")["fiction"]
+    assert not any(ch.isdigit() for ch in fiction) and fiction.endswith("?") and out["new"] == []
+    bare = fill(Role.NARRATOR, "anything", view="")["passage"]
     assert "Mara" not in bare and not any(ch.isdigit() for ch in bare)
     # a question gets an answer-shaped line; a roll-less beat never claims a degree
     q = fill(Role.NARRATOR, '- question "Is the gate barred?": the answer is no\n'
-                            "- beat: You wait by the door; no roll: no roll: trivial")["fiction"]
+                            "- beat: You wait by the door; no roll: no roll: trivial")["passage"]
     assert "No, it is not so." in q and "better than" not in q and "You wait by the door." in q
     look = fill(Role.NARRATOR, "- beat: You look around; no roll: no roll: trivial",
                 view="scene: scn.1 at loc.dock; mode free\nloc.dock: the dock\n  desc: wet planks\n"
-                     "npc.mara_voss: Mara Voss")["fiction"]
+                     "npc.mara_voss: Mara Voss")["passage"]
     assert look == "You look around. You take in the dock: wet planks. Mara Voss is here. What do you do?"
 
 
@@ -283,12 +284,12 @@ def test_sentences_keep_quotes_whole() -> None:
 
 
 def test_scripted_queue_fallback_and_exhaustion() -> None:
-    model = ScriptedModel({Role.NARRATOR: [{"fiction": "Bad 7 draft", "mentions": []}]})
+    model = ScriptedModel({Role.NARRATOR: [{"passage": "Bad 7 draft", "speech": [], "new": [], "covers": []}]})
     first = call_role(model, Role.NARRATOR, NARRATOR, Packet())
-    assert first.data["fiction"] == "Bad 7 draft" and first.record.provider == "scripted"
+    assert first.data["passage"] == "Bad 7 draft" and first.record.provider == "scripted"
     second = call_role(model, Role.NARRATOR, NARRATOR, Packet(view="npc.old_tam: Old Tam",
                                                               message='- part [SPEECH] "Evening."'))
-    assert "Old Tam" in second.data["fiction"]  # fell back to OfflineModel
+    assert "Old Tam" in second.data["passage"]  # fell back to OfflineModel
     model.push(Role.CHECKER, lambda schema, packet: {"claims": [], "screen": {}})
     assert model.fill(Role.CHECKER, CHECKER, Packet(), turn_id=None, attempt=0).data["claims"] == []
     strict = ScriptedModel(fallback=False)

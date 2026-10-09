@@ -21,20 +21,16 @@ GOOD_SCREEN = {"intent_acknowledged": True, "intent_substituted": False, "next_s
 LOOK = beat("look over the quay", "verb.observe", verbs=("look",))  # offline Framer: in plain view
 
 
-def _decl(text: str, refs: list[str] | None = None, **kw: Any) -> dict[str, Any]:
-    return {"text": text, "refs": refs or [], "about": [], "new": [], "atmosphere": False, "speaker": "none", **kw}
+def passage(text: str, covers: Sequence[str] = (), *, speech: Sequence[dict[str, Any]] = (),
+            new: Sequence[dict[str, Any]] = ()) -> dict[str, Any]:
+    """A narrator answer (spec 019): one passage and its side list."""
+    return {"passage": text, "speech": list(speech), "new": list(new), "covers": list(covers)}
 
 
-def narr(text: str, *, cite: bool = True) -> Any:
-    """A scripted draft (spec 006: declared sentences). With `cite`, every sentence but a closing question cites
-    every MUST line of the record, so coverage holds whatever the test cuts."""
-    from engine.audit.declare import split
-
+def narr(text: str, *, cite: bool = True, speech: Sequence[dict[str, Any]] = ()) -> Any:
+    """A scripted draft (spec 019: one passage). With `cite`, the side list covers every MUST line of the record."""
     def build(schema: Any, packet: Any) -> dict[str, Any]:
-        import re
-
-        must = re.findall(r"(?m)^- (R\d+) MUST:", packet.message) if cite else []
-        return {"sentences": [_decl(s, [] if s.endswith("?") else list(must)) for s in split(text)]}
+        return passage(text, _must(packet) if cite else [], speech=speech)
     return build
 
 
@@ -42,11 +38,6 @@ def _must(packet: Any) -> list[str]:
     import re
 
     return re.findall(r"(?m)^- (R\d+) MUST:", packet.message)
-
-
-def rep(n: int | str, text: str, refs: list[str] | None = None) -> dict[str, Any]:
-    """A scripted narrow repair (12.3.3): one replacement for sentence `n` ("add" adds one)."""
-    return {"repairs": [{"replaces": str(n), **_decl(text, refs)}]}
 
 
 def claim(n: int, subject: str, cls: str, predicate: str, value: str, change: bool = False) -> dict[str, Any]:
@@ -76,18 +67,19 @@ def calls(model: ScriptedModel, role: Role) -> list[Any]:
     return [p for r, p in model.calls if r == role]
 
 
-def test_a_blocking_scan_hit_is_redrafted_with_the_view_value(tmp_path: Path) -> None:
-    """Spec 011: a count the view does not hold (a quantity, on the blocking list) is redrafted by code; the
-    sampled audit (turn.1) runs after delivery on the delivered sentences and never sees the Narrator's prompt."""
+def test_a_blocking_scan_hit_gets_one_revision_that_sees_the_whole_draft(tmp_path: Path) -> None:
+    """Spec 011 / 019 (12.3.3): a count the view does not hold (a quantity, on the blocking list) sends the passage
+    to the one revision, which sees the whole draft and the failure; the sampled audit (turn.1) runs after delivery
+    on the delivered passage and never sees the Narrator's prompt."""
     bad, good = "Tam Harlan wants five silver from you. What do you do?", "Tam Harlan watches you. What do you do?"
-    model = look_model(narrator=[narr(bad), lambda s, p: rep(0, good.split(". ")[0] + ".", _must(p))])
+    model = look_model(narrator=[narr(bad), narr(good)])
     dock, ctx = setup(tmp_path, model)
     out = play_turn(ctx, "I look over the quay.")
     assert out.response.fiction == good and not out.response.flags.fallback_used
-    repair = calls(model, Role.NARRATOR)[1].message
-    assert "A REPAIR" in repair and "states the count 'five'" in repair
-    assert "[0] Tam Harlan wants five" in repair and "What do you do?" not in repair.split("A REPAIR")[1]
-    assert [v["kind"] for v in out.turn_record.draft_versions] == ["draft", "repair"]
+    revision = calls(model, Role.NARRATOR)[1].message
+    assert "A REVISION" in revision and "states the count 'five'" in revision
+    assert f"YOUR DRAFT:\n{bad}" in revision and "ADJUDICATION RECORD" in revision  # the same packet, whole draft
+    assert [v["kind"] for v in out.turn_record.draft_versions] == ["draft", "revision"]
     # the Checker never sees the Narrator's prompt or the record (FR-034)
     checker = calls(model, Role.CHECKER)[0]
     assert "Role: Narrator" not in checker.render() and "ADJUDICATION RECORD" not in checker.render()
@@ -109,17 +101,17 @@ def test_a_sampled_unsourced_change_is_a_logged_blocking_miss(tmp_path: Path) ->
     assert (e["class"], e["verdict"], e["blocking_miss"]) == ("possession", "unsourced_change", True)
 
 
-def test_two_failed_redrafts_fall_back_with_review_flag(tmp_path: Path) -> None:
+def test_a_failed_revision_falls_back_with_review_flag(tmp_path: Path) -> None:
+    """12.3.3: at most one revision; what still fails is cut, and with no prose left the plain fallback."""
     bad = "Tam Harlan nods to Brannoc. What do you do?"
-    model = look_model(narrator=[narr(bad), rep(0, "Tam Harlan nods to Brannoc."),
-                                 rep(0, "Tam Harlan nods to Brannoc.")])
+    model = look_model(narrator=[narr(bad), narr(bad)])
     dock, ctx = setup(tmp_path, model)
     out = play_turn(ctx, "I look over the quay.")
     r = out.response
     assert r.flags.fallback_used and r.flags.review_flag and out.turn_record.fallback_used
     assert "Brannoc" not in r.fiction and r.fiction.endswith("What do you do?")
-    assert [v["kind"] for v in out.turn_record.draft_versions] == ["draft", "repair", "repair", "fallback"]
-    assert len(calls(model, Role.NARRATOR)) == 3
+    assert [v["kind"] for v in out.turn_record.draft_versions] == ["draft", "revision", "fallback"]
+    assert len(calls(model, Role.NARRATOR)) == 2
     rulings = [e.payload.ruling for e in dock.store.events(types=["ruling_logged"])  # type: ignore[attr-defined]
                if e.turn_id == out.turn_record.turn_id]
     assert any(x["kind"] == "rule_conflict" and x["review_flag"] for x in rulings)
@@ -128,7 +120,7 @@ def test_two_failed_redrafts_fall_back_with_review_flag(tmp_path: Path) -> None:
 def test_new_player_asking_for_options_and_the_scene_gets_both(tmp_path: Path) -> None:
     """Playtest 2026-10-07 (newcomer): "I'm new to this. What are my options? Can you describe what I see?" got
     "What do you do?" plus canned notes. Each part is answered: the help and the leads by their blocks, the scene
-    by the fiction; past the redraft budget the checked sentences are kept and only the failing one is cut."""
+    by the fiction; past the one revision the checked sentences are kept and only the failing one is cut."""
     msg = "I'm new to this. What are my options? Can you describe what I see around me?"
     parts = [("OOF_QUESTION", "I'm new to this."), ("OOF_QUESTION", "What are my options?"),
              ("FICTION_QUESTION", "Can you describe what I see around me?")]
@@ -137,7 +129,7 @@ def test_new_player_asking_for_options_and_the_scene_gets_both(tmp_path: Path) -
             "beats": [], "clarifying_question": None, "restatement": msg, "player_quantity": None}
     bad = "Fog lies low on the quay. Tam Harlan mends a net with Brannoc. Do you go to the water or the town?"
     model = ScriptedModel({Role.READER: [lambda schema, packet: prune(data, schema)], Role.WORLD: [QUIET_WORLD],
-                           Role.NARRATOR: [narr(bad)] + [rep(1, "Tam Harlan mends a net with Brannoc.")] * 2})
+                           Role.NARRATOR: [narr(bad), narr(bad)]})
     dock, ctx = setup(tmp_path, model)
     out = play_turn(ctx, msg)
     r = out.response
@@ -303,8 +295,7 @@ def test_the_narrator_is_told_what_it_already_used(tmp_path: Path) -> None:
     def scarred(schema: Any, packet: Any) -> dict[str, Any]:
         tam = {"element_kind": "person", "name": "Tam Harlan", "ordinary": True,
                "implied": [{"predicate": "hands", "value": "rope-scarred"}]}
-        return {"sentences": [_decl("Tam Harlan works the line with rope-scarred hands.", _must(packet), new=[tam]),
-                              _decl("What do you do?")]}
+        return passage("Tam Harlan works the line with rope-scarred hands. What do you do?", _must(packet), new=[tam])
     plain = "The quay is quiet. What do you do?"
     model = look_model(narrator=[scarred, narr(plain)], checker=[chk(), chk()])
     model.push(Role.READER, reader("DECLARATION", "I look over the quay.", LOOK))

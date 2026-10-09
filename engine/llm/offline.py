@@ -898,6 +898,8 @@ _ANSWERS = {"yes": "Yes, that is so.", "no": "No, it is not so.", "yes, and": "Y
 
 def _sentence(text: str) -> str:
     t = re.sub(r"\b(?:the character|the PC)\b", "you", text.strip().strip('"').rstrip(" .;"))
+    # the narrator's voice is the second person: a restatement in the player's "I" reads as unquoted speech
+    t = re.sub(r"\b(?:I|me)\b", "you", re.sub(r"\bmy\b", "your", t))
     return (t[:1].upper() + t[1:] + ".") if t else ""
 
 
@@ -1007,7 +1009,7 @@ def _narrator(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:
     handle_of: dict[int, str] = {}  # line index -> the record handle it narrates (spec 006: refs)
     reply_handle: dict[str, str] = {}
     paused = False
-    record = msg.split("A REPAIR.", 1)[0]
+    record = msg.split("A REVISION.", 1)[0]
     for raw in record.splitlines():
         line = raw.strip()
         hm = re.match(r"^- (R\d+)(?: MUST)?: (.*)$", line)
@@ -1032,26 +1034,16 @@ def _narrator(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:
     said = list(dict.fromkeys(r for r in replies if not any(ln.startswith(r.split(" hears")[0]) for ln in lines)))
     pairs = [(t, handle_of.get(k)) for k, t in enumerate(lines)] + [(r, reply_handle.get(r)) for r in said]
     pairs = [(t, h) for t, h in pairs if t]
-    if "A REPAIR." in msg:  # drop the failing sentences; add one for each missing must-name line (12.3.3)
-        rep = msg.split("A REPAIR.", 1)[1]
-        bad = re.findall(r"(?m)^\[(\d+)\] ", rep)
-        missing = set(re.findall(r"\b(R\d+)\b", rep.split("MISSING", 1)[1])) if "MISSING" in rep else set()
-        repairs = [{"replaces": n, "text": "", "refs": [], "about": [], "new": [], "atmosphere": False,
-                    "speaker": "none"} for n in bad]
-        repairs += [{"replaces": "add", "text": t, "refs": [h], "about": [], "new": [], "atmosphere": False,
-                     "speaker": "none"} for t, h in pairs if h in missing]
-        return {"repairs": repairs}
+    if "A REVISION." in msg:  # the whole passage again, without the sentences it was told to remove (12.3.3)
+        gone = set(re.findall(r'(?m)^- remove "(.*)": ', msg.split("A REVISION.", 1)[1]))
+        pairs = [(t, h) for t, h in pairs if t not in gone]
     if not pairs:
         pairs.append(("The moment holds.", None))
     if not paused:
         pairs.append(("What do you do?", None))
-    sents = [{"text": t, "refs": [h] if h else [], "about": [], "new": [], "atmosphere": False, "speaker": "none"}
-             for t, h in pairs]
-    if "fiction" in (schema.get("properties") or {}):  # the fallback shape (B risk 2)
-        return {"fiction": " ".join(s["text"] for s in sents),
-                "declarations": [{"sentence": str(i), **{k: v for k, v in s.items() if k != "text"}}
-                                 for i, s in enumerate(sents)]}
-    return {"sentences": sents}
+    # one passage and its side list (12.3.1; spec 019): its replies are reported, so no speech is quoted
+    return {"passage": " ".join(t for t, _ in pairs), "speech": [], "new": [],
+            "covers": list(dict.fromkeys(h for _, h in pairs if h))}
 
 
 def _narrate_line(line: str, lines: list[str], replies: list[str], msg: str, packet: Packet,
@@ -1071,7 +1063,7 @@ def _narrate_line(line: str, lines: list[str], replies: list[str], msg: str, pac
             lines.append(_sentence("You size up how to " + re.sub(r"^you\s+", "", bits.get("beat", ""), flags=re.I)))
             return
         lines.append(_sentence(bits.get("beat", "")))
-        learned = re.search(r"the PC learns \([^)]*\): (.*)$", line)
+        learned = re.search(r"the PC learns(?: \([^)]*\))?: (.*)$", line)
         if learned:
             lines += [_sentence(x.replace(" — ", " ", 1)) for x in learned.group(1).split("; ")]
         verb = (primary_verb(bits.get("beat", "")) or ("", []))[0]
@@ -1096,7 +1088,8 @@ def _narrate_line(line: str, lines: list[str], replies: list[str], msg: str, pac
     elif line.startswith("- cost paid: "):
         lines.append(_sentence(line.removeprefix("- cost paid: ")))
     elif line.startswith("- the PC learns"):
-        lines += [_sentence(x.replace(" — ", " ", 1)) for x in line.split("): ", 1)[-1].split("; ")]
+        lines += [_sentence(x.replace(" — ", " ", 1))
+                  for x in re.sub(r"^- the PC learns(?: \([^)]*\))?: ", "", line).split("; ")]
     elif line.startswith(("- visible condition: ", "- harm to ")):
         lines.append(_sentence(line.split(": ", 1)[1]))
     elif line.startswith("- question "):

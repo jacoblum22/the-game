@@ -236,7 +236,8 @@ def test_what_the_store_lacks_is_answered_before_the_draft(tmp_path: Path) -> No
     """PR-12-10 (spec 013): nothing stored on what was asked: code gives willingness only and the narrator answers
     in Tam's words; the words are testimony (a said record), never a world fact."""
     text = '"The night boat leaves from the north stair," Tam Harlan says. What do you do?'
-    dock, ctx, model, (_, out) = _talk_turn(tmp_path, [narr(text)], [chk(
+    said = [{"speaker": "npc.tam_harlan", "words": "The night boat leaves from the north stair,", "form": "direct"}]
+    dock, ctx, model, (_, out) = _talk_turn(tmp_path, [narr(text, speech=said)], [chk(
         claim(0, "npc.tam_harlan", "knowledge", "knows", "the night boat leaves from the north stair"))],
         kind="where_is")
     lines = [a.action for a in out.adjudication.record.npc_actions if a.source_ref == "PR-12-10"]

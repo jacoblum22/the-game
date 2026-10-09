@@ -28,8 +28,8 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from engine.audit.claims import SEASONS, calendar_season, precision_checks  # noqa: E402
-from engine.audit.declare import DeclaredSentence, SceneIndex, parse_output, voices  # noqa: E402
+from engine.audit.claims import SEASONS, _pronoun_hit, calendar_season, precision_checks  # noqa: E402
+from engine.audit.declare import Passage, SceneIndex, Sentence, parse_output, sentences_of, voices  # noqa: E402
 from engine.data.loader import load_rules  # noqa: E402
 
 # (source, turn, check, word) -> "real" | "false": judged by reading the sentence, its neighbours and the record.
@@ -42,6 +42,14 @@ JUDGED: dict[tuple[str, str, str, str], str] = {
     ("playtest-20261008-145410-talker", "turn.6", "pronoun_certain_subject", "him"): "real",
     # "hiring extra hands for the autumn harvest" on the spring quarter day (talker note 18)
     ("playtest-20261008-145410-talker", "turn.2", "season_words", "autumn"): "real",
+    # spec 019 (round 6, I1 §7): "the winter that drove us out ... eight years back" is speech about a past winter
+    ("playtest-20261008-192946-fighter", "turn.9", "season_words", "winter"): "false",
+    # spec 019: the pronoun check run on speech (measurement only). Each speaker (she) speaks of an absent man.
+    ("playtest-20261008-135029-talker", "turn.2", "pronoun_in_speech", "he"): "false",
+    ("playtest-20261008-135029-talker", "turn.3", "pronoun_in_speech", "He"): "false",
+    ("playtest-20261008-135029-talker", "turn.15", "pronoun_in_speech", "he"): "false",
+    ("playtest-20261008-135029-talker", "turn.16", "pronoun_in_speech", "he"): "false",
+    ("playtest-20261008-192946-fighter", "turn.10", "pronoun_in_speech", "he"): "false",
 }
 # The Framer's cost forms and consequences (framer.pronoun_errors). "real": a pronoun flip against the store;
 # "pc": the player's character spoken of as he/she (the OFFER must say "you"; the same re-ask fixes it).
@@ -61,7 +69,21 @@ JUDGED |= {(f"playtest-{k}:framer", t, _P, w): v for k, t, w, v in [
     ("20261008-145430-fighter", "turn.12", "his", "real")]}
 
 
-def _run(src: str, turn: str, sents: list[DeclaredSentence], idx: SceneIndex, season: str | None,
+def drafted(draft: dict[str, Any]) -> list[Sentence]:
+    """A recorded first draft's sentences: the declared-sentence shape (rounds 2-6), or spec 019's passage (as the
+    model's answer `passage`, or a draft version's `text` plus `side_list`), split as the narration loop splits it."""
+    if draft.get("sentences") is not None:
+        return [Sentence.model_validate(x) for x in draft.get("sentences") or [] if str(x.get("text") or "").strip()]
+    if draft.get("passage") is not None:
+        return sentences_of(parse_output(draft))[0]
+    if draft.get("side_list") is not None:
+        return sentences_of(Passage.model_validate({**draft["side_list"], "text": draft.get("text") or ""}))[0]
+    if draft.get("fiction"):  # the pre-006 prose shape (the replay corpus)
+        return sentences_of(Passage(text=str(draft["fiction"])))[0]
+    return []
+
+
+def _run(src: str, turn: str, sents: list[Sentence], idx: SceneIndex, season: str | None,
          rules: Any) -> list[dict[str, Any]]:
     out = []
     before: list[str] = []
@@ -72,6 +94,13 @@ def _run(src: str, turn: str, sents: list[DeclaredSentence], idx: SceneIndex, se
             out.append({"source": src, "turn": turn, "check": h.check, "voice": h.voice, "word": h.words,
                         "store": h.store_value, "sentence": s.text, "prev": before[-1] if before else "",
                         "verdict": JUDGED.get((src, turn, h.check, h.words), "unjudged")})
+        for sp in speech:  # spec 019: the pronoun check on speech, measured before it may block there (never run live)
+            ph = _pronoun_hit(sp, [*before, narration], idx, s.about)
+            if ph is not None:
+                out.append({"source": src, "turn": turn, "check": "pronoun_in_speech", "voice": "speech",
+                            "word": ph[0], "store": idx.pronouns.get(ph[1], ""), "sentence": s.text,
+                            "prev": narration, "verdict": JUDGED.get((src, turn, "pronoun_in_speech", ph[0]),
+                                                                     "unjudged")})
         before.append(narration)
     return out
 
@@ -88,7 +117,7 @@ def corpus_hits(rules: Any) -> tuple[int, list[dict[str, Any]]]:
         m = re.search(r"season (\d+)", p.view)
         season = SEASONS[(int(m.group(1)) - 1) % 4] if m else None
         draft = rec["draft"] or {}
-        sents = parse_output(draft) if draft.get("sentences") is not None or draft.get("fiction") else []
+        sents = drafted(draft)
         n += len(sents)
         hits += _run(f"corpus:{rec['save']}", rec["turn"], sents, p.index(), season, rules)
     return n, hits
@@ -108,7 +137,7 @@ def save_hits(path: Path, rules: Any) -> tuple[int, list[dict[str, Any]]]:
     n = 0
     for turn, rec in con.execute("select turn_id, record from turns"):
         dv = (json.loads(rec).get("draft_versions") or [{}])[0]
-        sents = [DeclaredSentence.model_validate(s) for s in dv.get("sentences") or []]
+        sents = drafted(dv)
         n += len(sents)
         hits += _run(path.stem, turn, sents, idx, season, rules)
     from engine.dm.roles.framer import frame_texts
@@ -117,7 +146,7 @@ def save_hits(path: Path, rules: Any) -> tuple[int, list[dict[str, Any]]]:
         data = (json.loads(resp or "{}") or {}).get("data") or {}
         for t in frame_texts(data):  # the pronoun check only, each text on its own (as framer.check runs it)
             n += 1
-            hits += _run(f"{path.stem}:framer", turn, [DeclaredSentence(text=t)], idx, None, rules)
+            hits += _run(f"{path.stem}:framer", turn, [Sentence(text=t)], idx, None, rules)
     con.close()
     return n, hits
 
@@ -135,7 +164,7 @@ def main(argv: list[str]) -> int:
         hits += h
     print(f"sentences checked: {n}")
     for where in ("narration", "framer"):
-        for check in ("pronoun_certain_subject", "season_words"):
+        for check in ("pronoun_certain_subject", "season_words", "pronoun_in_speech"):
             mine = [h for h in hits if h["check"] == check and h["source"].endswith(":framer") == (where == "framer")]
             n_of = {v: sum(h["verdict"] == v for h in mine) for v in ("real", "pc", "false", "unjudged")}
             judged = n_of["real"] + n_of["pc"] + n_of["false"]

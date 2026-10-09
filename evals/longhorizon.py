@@ -196,11 +196,11 @@ def narration_loop(turns: list[dict[str, Any]]) -> str:
     kinds = [[v.get("kind") for v in t["draft_versions"]] for t in narrated]
     first = sum(1 for k in kinds if k == ["draft"])
     cut = sum(1 for k in kinds if any(x in ("cut", "render", "fallback") for x in k))
-    calls = sum(sum(1 for x in k if x in ("draft", "repair", "redraft")) for k in kinds)
+    calls = sum(sum(1 for x in k if x in ("draft", "repair", "redraft", "revision")) for k in kinds)
     stats = Counter[str]()
     for t in narrated:
         for v in t["draft_versions"]:
-            stats.update({k: n for k, n in (v.get("stats") or {}).items() if k != "rounds"})
+            stats.update({k: n for k, n in (v.get("stats") or {}).items() if k not in ("rounds", "revisions")})
     n = len(narrated)
     return (f"- narration loop ({n} narrated): first draft delivered as drafted {first}/{n} ({100 * first / n:.1f}%); "
             f"turns with a cut, rendered line or fallback {cut}/{n} ({100 * cut / n:.1f}%); narrator calls per "
