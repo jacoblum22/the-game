@@ -64,10 +64,15 @@ The method is built into the agent type.
 - Plain words, no rules shorthand. Concrete examples ("vault the table and stab him: one roll or two?").
 - Order the update:
   1. what the last fixes achieved, with numbers;
-  2. the problems grouped into **families T1, T2, T3…**, each with its traced cause and whether it's structural
-     or a patch;
+  2. **families T1, T2, T3…**, formed only *after* the investigators' traces;
   3. the recommended order;
   4. the decisions needed, each with 2–3 options and a recommendation.
+- **A family is a traced root cause**, not a surface grouping of complaints. Each family gives:
+  - the cause, with evidence;
+  - the symptoms it explains;
+  - **a proposed structural fix and what it retires**.
+
+  List small one-off bugs separately as patches.
 - Keep it short; the owner reads on a phone. Send documents with `SendUserFile`.
 - Wait for approval of any principle or rules change.
 - If the owner pushes back, take it seriously and re-trace.
