@@ -66,6 +66,33 @@ def view_budget(rules: Any = None) -> dict[str, int]:  # rule: 12.2.4
     return {k: int(v) for k, v in rules.pacing["packet"]["view_budget"].items()}
 
 
+CAL_SEASONS = ("spring", "summer", "autumn", "winter")  # calendar.yaml#seasons order (11.10.1)
+CAL_WATCHES = ("morning", "afternoon", "evening", "night")  # Timestamp.watch 0..3
+
+
+def calendar_line(state: WorldState, rules: Any = None) -> str:  # rule: 12.2.4
+    # rule: 12.16.15
+    """The calendar line (12.2.4 item 3; `pacing.yaml#packet.calendar_line`): day and month, watch, season and
+    weather in words, from the store's clock and calendar.yaml's months ("calendar: the spring quarter day, morning;
+    season: spring"); "" when `calendar_line` is not `pinned_first`. It heads the scene header, outside every budget,
+    so the season in front of the narrator is never squeezed out (playtest 20261008-145410: "the autumn harvest" on
+    the spring quarter day)."""
+    rules = rules if rules is not None else load_rules()
+    if (rules.pacing.get("packet") or {}).get("calendar_line") != "pinned_first":
+        return ""
+    now = state.time.now
+    season = CAL_SEASONS[(int(now.season or 1) - 1) % 4]
+    day = (int(now.week or 1) - 1) * 7 + int(now.day or 1)  # day of the season; day 1 is the quarter day (11.10.1)
+    date = f"the {season} quarter day"
+    if day > 1:
+        months = [m for m in (rules.doc("calendar").get("months") or []) if m.get("season") == season]
+        m = next((m for m in months if m["days_of_season"][0] <= day <= m["days_of_season"][1]), None)
+        date = f"day {day - m['days_of_season'][0] + 1} of the {str(m['name']).lower()}" if m else f"day {day} of {season}"
+    watch = CAL_WATCHES[now.watch] if 0 <= now.watch < len(CAL_WATCHES) else "now"
+    weather = state.fact_value("world", "weather")
+    return f"calendar: {date}, {watch}; season: {season}" + (f"; weather: {weather}" if weather else "")
+
+
 def fit(rows: Iterable[T], cost: Callable[[T], int], room: int) -> list[T]:  # rule: 12.2.4
     """The rows, in order, that fit in `room` tokens (a row too big for what is left is skipped)."""
     out: list[T] = []

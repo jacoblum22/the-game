@@ -98,6 +98,25 @@ def default_frame(sctx: SchemaContext, schema: Schema, beat: Beat, state: WorldS
     return prune(d, schema)
 
 
+def frame_texts(data: dict[str, Any]) -> list[str]:
+    """The Framer's own words the OFFER shows: the two cost forms and the method's consequences."""
+    st = data.get("stakes") or data
+    out = [str((st.get(k) or {}).get("form_intent") or "") for k in ("threatened_cost", "alternate_cost")]
+    return [t for t in [*out, *(str(x) for x in data.get("method_consequences") or [])] if t.strip()]
+
+
+def pronoun_errors(data: dict[str, Any], state: WorldState, rules: Any) -> list[str]:  # rule: 12.3.2
+    """12.3.2's pronoun precision check on the Framer's words (a re-ask, its redraft): a he/she that fits no one
+    but the one person a text names (playtest 20261008-145430 fighter 28-29: "his weight" for Murzak, she/her;
+    talker 21: "makes her unwelcome" for the PC beside Ysrion, he/him)."""
+    from engine.audit.claims import precision_checks
+    from engine.audit.declare import SceneIndex
+
+    idx = SceneIndex.of(state)
+    return [f"{t!r}: {h.why}; write the player's character as \"you\" (12.3.2)" for t in frame_texts(data)
+            for h in precision_checks(t, idx=idx, rules=rules) if h.blocks]
+
+
 def beat_message(beat: Beat, gate: GateDecision, note: str | None = None) -> str:
     lines = [f"beat: {beat.restatement or beat.intent}", f"intent: {beat.intent}", f"method: {beat.method}",
              f"gate: {gate.gate} ({gate.mode}) verb: {gate.verb or beat.verb or 'none'} "
@@ -127,7 +146,10 @@ def framer_for(ctx: TurnContext) -> Any:
                               message=beat_message(beat, gate, note), triggers=triggers,
                               notes=anchor_menu(candidates, ctx.rules), focus=focus, rules=ctx.rules)
 
+        calls: list[bool] = []
+
         def check(data: Any) -> list[str]:  # rule: PR-01-2
+            calls.append(True)
             try:
                 p = to_proposed(data, beat, st)
             except (KeyError, ValueError) as e:
@@ -145,7 +167,9 @@ def framer_for(ctx: TurnContext) -> Any:
                 if getattr(out, "field", "") == "lethal" and "lethal_context" in getattr(out, "reason", ""):
                     return []  # the pipeline warns first (07.3.4)
                 return [out.message]  # type: ignore[union-attr]
-            return []
+            # a pronoun slip is worth one redraft, never the default frame: raised on the first check only
+            # ponytail: a schema failure on attempt 0 makes attempt 1 the first check; a slip there defaults
+            return pronoun_errors(data, st, ctx.rules) if len(calls) == 1 else []
 
         res = call_role(ctx.model, Role.FRAMER, schema, packet, turn_id=ctx.turn_id, recorder=ctx.record_call,
                         default=lambda: default_frame(sctx, schema, beat, st, ctx.rules), check=check)

@@ -78,14 +78,15 @@ def test_blocking_list_classes_block_and_others_log_only() -> None:
     assert not blocks("identity", predicate="gender", value="woman")  # identity blocks for a name only
 
 
-def test_a_blocking_scan_hit_redrafts_and_a_non_blocking_clash_is_logged(tmp_path: Path) -> None:
-    """An unknown name in the narrator's voice redrafts; a pronoun clash is logged and delivered as drafted."""
+def test_a_pronoun_clash_on_a_certain_subject_now_redrafts(tmp_path: Path) -> None:
+    """Spec 011 logged a pronoun clash; spec 016 (12.3.2 "Precision, not class", DL-12-95) makes the pronoun of a
+    certain subject a precision check: logged with its verdict (OEQ-12-27) and the sentence redrafted."""
     model = look_model(narrator=[_say(_decl("He leans on the pole by the stair.", about=["npc.sela_vey"]))])
     _, ctx = setup(tmp_path, model)
     out = play_turn(ctx, "I look over the quay.")
-    assert out.response.fiction == f"He leans on the pole by the stair. {PROMPT}"
-    assert [v["kind"] for v in out.turn_record.draft_versions] == ["draft"] and len(calls(model, Role.NARRATOR)) == 1
-    assert any(e["class"] == "identity" and e["verdict"] == "logged" for e in out.turn_record.claim_log)
+    assert "He leans" not in out.response.fiction
+    assert any(e.get("check") == "pronoun_certain_subject" and e["verdict"] == "contradicted" and e["blocks"]
+               and e["store_value"] == "she/her" for e in out.turn_record.claim_log)
 
 
 def test_a_detail_clash_is_logged_and_the_store_keeps_its_value(tmp_path: Path) -> None:

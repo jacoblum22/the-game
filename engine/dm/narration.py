@@ -360,6 +360,25 @@ def _speech(ctx: TurnContext, record: AdjudicationRecord, turn: _Turn, s: _Sent,
                                                               "or drop the line"))
 
 
+def _precision(ctx: TurnContext, turn: _Turn, sents: list[_Sent], i: int, idx: SceneIndex) -> None:  # rule: 12.3.2
+    # rule: OEQ-12-27
+    """12.3.2's precision checks on sentence `i` (the pronoun of a certain subject, season words against the calendar
+    line): every hit is logged with whether it blocked, so each check's precision can be measured (OEQ-12-27); a
+    blocking hit redrafts the sentence."""
+    from engine.audit.claims import calendar_season, precision_checks
+
+    s = sents[i]
+    narration, speech = voices(s.decl)
+    before = [voices(sents[j].decl)[0] for j in range(i) if not sents[j].dropped]
+    for h in precision_checks(narration, idx=idx, before=before, speech=speech, about=s.decl.about,
+                              season=calendar_season(ctx.need_tx().state), rules=ctx.rules):
+        _log(ctx, turn, i, h.cls, "contradicted" if h.blocks else "logged", h.store_value, check=h.check,
+             voice=h.voice, words=h.words, subject=h.subject, blocks=h.blocks, source="precision")
+        _count(turn, f"precision.{h.check}")
+        if h.blocks:
+            s.failures.append(Failure(why=h.why, fix="redraft", store_value=h.store_value))
+
+
 def _judge(ctx: TurnContext, record: AdjudicationRecord, turn: _Turn, sents: list[_Sent], todo: Sequence[int],
            out: NarrationResult, version: dict[str, Any]) -> None:  # rule: PR-12-2
     # rule: 12.3.1a
@@ -391,6 +410,7 @@ def _judge(ctx: TurnContext, record: AdjudicationRecord, turn: _Turn, sents: lis
         s.failures += scan.failures
         for cls, why in scan.logged:
             _log(ctx, turn, i, cls, "logged", why)
+        _precision(ctx, turn, sents, i, idx)
         earlier = [" ".join(voices(sents[j].decl)[1]) for j in range(i) if sents[j].decl.speaker == s.decl.speaker]
         _speech(ctx, record, turn, s, i, earlier)
         _write_new(ctx, record, s, idx, out, turn, i)

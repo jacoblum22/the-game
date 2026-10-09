@@ -41,7 +41,7 @@ and THIS MESSAGE with the beat. Every enum offered is legal.
   exposure; time while something moves → time; a tool → gear; effort or supplies → drain; someone who can
   refuse → closed door). Its source offers only its costs. `stakes.alternate_cost`: another fitting entry (if
   safe: what going big adds). `form_intent`:
-  the concrete form here, in one plain line; never the menu's examples.
+  the concrete form in one plain line, never the menu's examples, the character as "you".
 - `method_consequences`: what the method does whatever the roll.
 - `secret` (01.4.7): for Observe, Recall or reading a person, true when seeing the odds would tell the
   player what the character cannot know (a sealed target, or whether anything is there). Unsure: true.

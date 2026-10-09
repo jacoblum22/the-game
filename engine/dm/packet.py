@@ -32,6 +32,7 @@ from engine.retrieve.scene import (
     CAST_KINDS,
     also_here,
     beat_target,
+    calendar_line,
     cast_order,
     entity_names,
     fit,
@@ -99,6 +100,7 @@ def scene_view(state: WorldState, focus: Iterable[str] = (), *, spot: Sequence[s
     known = [i for i in others if state.entities[i].kind in ("npc", "companion", "faction")
              and name_known(state, i)]  # people the PC knows by name (12.10.2)
     view: dict[str, Any] = {
+        "calendar": calendar_line(state),  # 12.2.4 item 3: first in the scene header, outside every budget
         "time": nv["time"],
         "scene": nv["scene"],
         "entities": [nv["entities"][i] for i in scope if i in nv["entities"]],
@@ -315,7 +317,9 @@ def scene_setting(state: WorldState) -> str:  # rule: 12.4.3
     short: dict[str, str] = {}
     for i in cast_order(state, [i for i in cast_present(state) if i not in state.seals]):  # met mid-scene too (P-056)
         ed = state.entities[i].data
-        look = ", ".join(str(ed[k]) for k in ("age", "detail", "demeanor") if ed.get(k))
+        # pronouns first: a person squeezed out of the view's full profiles keeps them (playtest 20261008-145410:
+        # Ysrion, she/her, narrated "he" all game; the pronoun precision check, 12.3.2)
+        look = ", ".join(str(ed[k]) for k in ("pronouns", "age", "detail", "demeanor") if ed.get(k))
         who = display_name(state, i)
         role = f", the {ed['role']}" if ed.get("role") and str(ed["role"]) not in who else ""
         call = "" if name_known(state, i) else f'; call them "{who}", as every other screen does'  # P-095
@@ -361,7 +365,7 @@ def _time_line(t: Mapping[str, Any]) -> str:
 
 def render_view(view: Mapping[str, Any]) -> str:
     """Compact text of a `scene_view` dict: one line per item, entity names on `name:` lines."""
-    lines: list[str] = []
+    lines: list[str] = [view["calendar"]] if view.get("calendar") else []  # rule: 12.2.4 (pinned first)
     if view.get("time"):
         lines.append(_time_line(view["time"]))
     sc = view.get("scene")

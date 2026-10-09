@@ -1303,3 +1303,171 @@ def owed_blocks(triggers: Iterable[Any], response: str) -> list[str]:  # rule: 1
 def failing(verdicts: Iterable[Verdict]) -> list[Verdict]:
     """The verdicts that need a fix (anything but supported, 12.3.3)."""
     return [v for v in verdicts if v.verdict != "supported"]
+
+
+# ------------------------------------------------------------------------------------------- precision checks
+
+SEASONS = ("spring", "summer", "autumn", "winter")
+_SEASON_FORMS = {"spring": ("spring", "springtime", "vernal"), "summer": ("summer", "summertime", "midsummer"),
+                 "autumn": ("autumn", "autumnal"), "winter": ("winter", "wintertime", "midwinter", "wintry")}
+_SEASON_OF = {w: s for s, ws in _SEASON_FORMS.items() for w in ws}
+_SEASON_RE = re.compile(r"\b(" + "|".join(_SEASON_OF) + r")\b", re.I)
+# "spring" the verb or the well, not the season: "spring to your feet", "the spring behind the mill"
+_SPRING_VERB = re.compile(r"^\s+(?:to|up|into|back|forward|open|free|from|at|out|clear|aside|away|on|off|upon)\b", re.I)
+_SPRING_THING = re.compile(r"\b(?:a|the|its|their|his|her|that|this old)\s+$", re.I)
+_SPRING_SEASON_NEXT = re.compile(r"^\s+(?:rain|rains|air|morning|mornings|day|days|sun|wind|winds|thaw|flowers|planting|"
+                                 r"quarter|festival|fair|light|green|night|nights|evening|evenings|weather|sowing)\b", re.I)
+_CLAUSE_END = re.compile(r"[,;:()—–]|\s-\s")
+# "fell in one bad winter", "that summer": a season other than now, said so by its determiner (replay corpus)
+_SOME_SEASON = re.compile(r"\b(?:a|an|one|that|some|single)\s+(?:\w+\s+)?$", re.I)
+_PRONOUN = {"he": "m", "him": "m", "his": "m", "himself": "m", "she": "f", "her": "f", "hers": "f", "herself": "f"}
+_PRONOUN_RE = re.compile(r"\b(" + "|".join(_PRONOUN) + r")\b", re.I)
+_PRONOUN_WORDS = {"f": "she/her", "m": "he/him"}
+_NOT_PEOPLE = ("loc.", "obj.", "item.", "fac.", "thr.", "clk.", "rum.", "clu.", "world")  # id prefixes
+# someone a pronoun could stand for that no stored name covers: the antecedent is then not certain (12.3.1b item 4)
+_OTHER_ANTECEDENT = re.compile(
+    r"\b(?:man|men|woman|women|boy|boys|girl|girls|lad|lass|child|children|baby|wife|husband|mother|father|son|"
+    r"daughter|brother|sister|uncle|aunt|widow|widower|guard|guards|stranger|strangers|someone|somebody|anyone|"
+    r"everyone|nobody|fellow|figure|rider|traveller|traveler|priest|priestess|merchant|clerk|servant|soldier|elder|"
+    r"lord|lady|king|queen|god|goddess|dog|hound|horse|mare|stallion|pony|cat|ox|goat|bird|raven|crow|beast)\b", re.I)
+_QUOTE_RE = re.compile(r"[\"“][^\"”]*[\"”]")
+
+
+class PrecisionHit(BaseModel):
+    """One precision check's hit (12.3.2 "Precision, not class"): logged always, with whether it blocked, so each
+    check's precision can be measured (OEQ-12-27)."""
+
+    check: str  # pronoun_certain_subject | season_words
+    cls: str  # the claim class the check belongs to (pacing.yaml)
+    voice: Literal["narrator", "speech"]
+    words: str  # the word that hit
+    store_value: str  # the subject's stored pronouns, or the calendar line's season
+    subject: str | None = None
+    blocks: bool = True  # False when the check's measured precision is below min_precision: logged only
+
+    @property
+    def why(self) -> str:
+        if self.check == "pronoun_certain_subject":
+            return f"{self.words!r} does not fit the person this speaks of, whose pronouns are {self.store_value}"
+        return f"names the season {self.words!r}, but it is {self.store_value} now"
+
+
+def _precision_cfg(rules: Any) -> tuple[float, dict[str, Any]]:
+    pc = ((rules.pacing.get("claim_check") or {}).get("precision_checks") or {}) if rules is not None else {}
+    checks = {str(c.get("id")): c for c in pc.get("checks") or []} if pc else {
+        "pronoun_certain_subject": {"class": "identity", "voices": ["narrator"]},
+        "season_words": {"class": "location_time", "voices": ["narrator", "speech"],
+                         "time_shift_words": ["last", "next", "ago", "coming", "since", "until", "before", "after",
+                                              "every", "each", "past", "previous"]}}
+    return float(pc.get("min_precision") or 0.95), checks
+
+
+def _clause(text: str, at: int, end: int) -> str:
+    """The clause around `text[at:end]`: between the nearest clause marks (a comma, semicolon, dash, bracket)."""
+    starts = [m.end() for m in _CLAUSE_END.finditer(text, 0, at)]
+    stop = _CLAUSE_END.search(text, end)
+    return text[starts[-1] if starts else 0: stop.start() if stop else len(text)]
+
+
+def _season_hits(text: str, season: str, shift: Sequence[str]) -> list[str]:  # rule: 12.3.2
+    out = []
+    for m in _SEASON_RE.finditer(text):
+        w = m.group(1)
+        named = _SEASON_OF[w.lower()]
+        if named == season:
+            continue
+        before = text[:m.start()].rstrip(" \"“”'‘’(")
+        if w[0].isupper() and before and before[-1] not in ".!?:;":
+            continue  # a capitalised season word mid-sentence is a name ("Winter's Rest")
+        after = text[m.end():]
+        if named == "spring" and (_SPRING_VERB.match(after) or (
+                _SPRING_THING.search(text[:m.start()]) and not _SPRING_SEASON_NEXT.match(after))):
+            continue
+        clause = _clause(text, m.start(), m.end()).lower()
+        if any(re.search(rf"\b{re.escape(s)}\b", clause) for s in shift) or _SOME_SEASON.search(text[:m.start()]):
+            continue
+        out.append(w)
+    return out
+
+
+def _pronoun_hit(text: str, before: Sequence[str], idx: Any, about: Iterable[str]) -> tuple[str, str] | None:
+    # rule: 12.3.2
+    # rule: 12.3.1b
+    """(the pronoun, the person) when `text` (the narrator's words) uses a he/she pronoun whose antecedent is
+    certain (12.3.1b item 4: the only person named before it in this sentence or in the one before, or the one
+    person the sentence is declared about) and none of its pronouns fits that person's stored ones. No verdict when
+    anyone else could be meant: two candidates, an unnamed man or woman (or animal) in either sentence, a pronoun
+    in the sentence before that fits someone else, or another person named in this draft whose pronouns fit
+    (or are not stored). `before`: the narrator's words of the sentences before, oldest first."""
+    from engine.audit.declare import name_spans
+
+    found = list(_PRONOUN_RE.finditer(text))
+    if not found:
+        return None
+    prev = before[-1] if before else ""
+
+    def named(t: str, upto: int | None = None) -> set[str]:  # the PC too when named ("a blow on Rosett as she …")
+        return {eid for a, _, eid in name_spans(t, idx) if (upto is None or a < upto) and not eid.startswith(_NOT_PEOPLE)}
+
+    people = {a for a in about if not a.startswith(_NOT_PEOPLE) and a != idx.pc} | named(prev) | named(
+        text, found[0].start())  # an antecedent comes before its pronoun
+    for t in (prev, text):
+        rest = t
+        for a, b, _ in reversed(name_spans(t, idx)):  # a stored name's own words ("the merchant") are that person
+            rest = rest[:a] + " " + rest[b:]
+        if _OTHER_ANTECEDENT.search(rest):
+            return None
+    if len(people) != 1:
+        return None
+    who = next(iter(people))
+    g = idx.pronouns.get(who)
+    used = {_PRONOUN[p.group(1).lower()] for p in found}
+    if g not in _PRONOUN_WORDS or g in used:
+        return None
+    if any(_PRONOUN[p.lower()] != g for p in _PRONOUN_RE.findall(prev)):
+        return None  # the sentence before already speaks of someone else unnamed ("Her glance ... the scribe")
+    others = set().union(*(named(t) for t in [*before, text])) - {who}
+    if any(idx.pronouns.get(o) in used or idx.pronouns.get(o) is None for o in others):
+        return None  # "Ghazra ... Liso stands silent. Her hand stays raised": the earlier woman is meant
+    return found[0].group(1), who
+
+
+def precision_checks(text: str, *, idx: Any, before: Sequence[str] = (), speech: Sequence[str] = (),
+                     about: Iterable[str] = (), season: str | None = None,
+                     rules: Any = None) -> list[PrecisionHit]:  # rule: 12.3.2
+    # rule: 12.3.1b
+    # rule: OEQ-12-27
+    """12.3.2's precision checks on one sentence, by code: `text` is its narrator's words, `speech` its speech spans,
+    `before` the narrator's words of the draft's sentences before it (oldest first), `about` its declared ids, `idx`
+    a `declare.SceneIndex` (names, stored pronouns), `season` the calendar line's (`SEASONS`). Each check runs in
+    the voices its data lists (`claim_check.precision_checks.checks`); a check whose measured `precision` is below
+    `min_precision` still hits but does not block (logged only, OEQ-12-27)."""
+    min_p, checks = _precision_cfg(rules)
+    out: list[PrecisionHit] = []
+
+    def hit(cid: str, voice: Literal["narrator", "speech"], words: str, value: str, subject: str | None = None) -> None:
+        c = checks[cid]
+        measured = c.get("precision")
+        out.append(PrecisionHit(check=cid, cls=str(c.get("class") or ""), voice=voice, words=words, store_value=value,
+                                subject=subject, blocks=measured is None or float(measured) >= min_p))
+
+    pron = checks.get("pronoun_certain_subject")
+    if pron is not None and "narrator" in (pron.get("voices") or ["narrator"]):
+        h = _pronoun_hit(_QUOTE_RE.sub(" ", text), [_QUOTE_RE.sub(" ", b) for b in before], idx, about)
+        if h is not None:
+            hit("pronoun_certain_subject", "narrator", h[0], _PRONOUN_WORDS[idx.pronouns[h[1]]], h[1])
+    sw = checks.get("season_words")
+    if sw is not None and season is not None and season in SEASONS:
+        voices_on = sw.get("voices") or ["narrator", "speech"]
+        shift = [str(x) for x in sw.get("time_shift_words") or []]
+        for voice, words in [*((("narrator", text),) if "narrator" in voices_on else ()),
+                             *((("speech", sp) for sp in speech) if "speech" in voices_on else ())]:
+            for w in _season_hits(words, season, shift):
+                hit("season_words", "speech" if voice == "speech" else "narrator", w, season)
+    return out
+
+
+def calendar_season(state: Any) -> str:  # rule: 12.16.15
+    """The calendar line's season word (`SEASONS`), from the store's clock."""
+    s = int(getattr(state.time.now, "season", 1) or 1)
+    return SEASONS[(s - 1) % 4]

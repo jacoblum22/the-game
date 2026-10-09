@@ -127,21 +127,42 @@ def test_refusals_name_their_step(s: Scene) -> None:
 def test_a_cost_form_never_undoes_the_beats_own_success(s: Scene) -> None:
     """Playtest 20261008 fighter 19-22 (01.9.3: a cost never negates a success): a grapple taken as success at a
     cost paid "she pulls her sleeve free ... as she tears away", so the narration had her both held and gone. A
-    cost form on a person acted on against their will may not undo the act; the Framer is re-asked."""
+    form in which the one a grapple takes hold of gets loose is dropped (the cost's plain words stand), never
+    refused: spec 016, so no Framer choice can force a re-ask."""
     grab = {"verb": "verb.grapple", "target": "npc.guard", "against_will": True}
     kw: dict[str, Any] = {"anchor": "anc.01_18_9", "attribute": "might",
                           "obstacle": {"kind": "opposed", "entity": "npc.guard"}}
     for undo in ("She pulls her sleeve free of your grip and you stumble as she tears away",
                  "She refuses to be held and walks off", "your grip on her slips and you go down"):
-        refused(check(s, grab, threatened_cost={"menu_id": "cost.drain", "form_intent": undo}, **kw), 10,
-                "never undoes")
-        refused(check(s, grab, stakes_source="consumed_resource", threatened_cost={"menu_id": "cost.drain"},
-                      alternate_cost={"menu_id": "cost.shortfall", "form_intent": undo}, **kw), 10, "never undoes")
+        f = check(s, grab, threatened_cost={"menu_id": "cost.drain", "form_intent": undo}, **kw)
+        assert isinstance(f, Frame) and f.threatened_cost.form_intent == "", f
+        f = check(s, grab, stakes_source="consumed_resource", threatened_cost={"menu_id": "cost.drain"},
+                  alternate_cost={"menu_id": "cost.shortfall", "form_intent": undo}, **kw)
+        assert isinstance(f, Frame) and f.alternate_cost is not None and f.alternate_cost.form_intent == "", f
     ok = check(s, grab, threatened_cost={"menu_id": "cost.drain", "form_intent": "the struggle leaves you winded"},
                **kw)
-    assert isinstance(ok, Frame), ok
+    assert isinstance(ok, Frame) and ok.threatened_cost.form_intent == "the struggle leaves you winded", ok
     away = check(s, threatened_cost={"menu_id": "cost.drain", "form_intent": "you slip free of the mud, spent"})
-    assert isinstance(away, Frame)  # no one acted on: nothing to undo
+    assert isinstance(away, Frame) and away.threatened_cost.form_intent  # no one acted on: nothing to undo
+
+
+def test_losing_a_hold_set_earlier_is_a_price_like_any_other(s: Scene) -> None:
+    """Spec 016, the re-ask root cause (saves playtest-20261008-145430-fighter turns 8 and 10): a lift and a punch
+    "while holding her" were refused for "she twists free" / "her wrench free", though the hold was set by an
+    earlier beat; both Framer re-asks of that run. Only a beat whose own success is the hold is guarded."""
+    from engine.store.details import write_detail
+
+    pc = s.beat(gate="G1", verb="verb.move").actor
+    with s.store.transaction() as tx:
+        tx.add_all(write_detail(tx.state, tx.mint, pc, "held", "Guard restrained", source="ruling",
+                                rules=s.rules).events)  # as T-12-18's grapple row writes it
+    kw: dict[str, Any] = {"anchor": "anc.01_18_9", "attribute": "might",
+                          "obstacle": {"kind": "opposed", "entity": "npc.guard"}}
+    twist = "she twists free and you lose your grip on her"
+    for verb in ("verb.grapple", "verb.strike"):
+        f = check(s, {"verb": verb, "target": "npc.guard", "against_will": True},
+                  threatened_cost={"menu_id": "cost.drain", "form_intent": twist}, **kw)
+        assert isinstance(f, Frame) and f.threatened_cost.form_intent == twist, f
 
 
 def test_stakes_raised_by_a_snag_get_the_rules_alternate(s: Scene) -> None:

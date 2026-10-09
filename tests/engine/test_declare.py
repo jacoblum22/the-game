@@ -78,12 +78,11 @@ def test_numerals_against_quantities_and_cited_values() -> None:
     assert not fails(s("Two gulls fight over a fish head."))  # a count of nothing the store keeps
 
 
-def test_pronouns_against_the_one_person_the_sentence_is_about() -> None:
-    """Spec 011: a pronoun clash is off the blocking list (12.3.1b): logged, never a failure."""
-    assert not fails(s("She leans on the pole.", about=["npc.tam"]))
-    assert scan_sentence(s("She leans on the pole.", about=["npc.tam"]), IDX, rules=RULES).logged
-    assert not fails(s("He leans on the pole.", about=["npc.tam"]))
-    assert not fails(s("She watches him.", about=["npc.tam", "npc.sela"]))  # two people: not judged
+def test_pronouns_are_no_longer_a_scan() -> None:
+    """Spec 016: the pronoun of a certain subject is a precision check (claims.precision_checks, 12.3.2; tested in
+    test_precision_checks.py), run with the sentence before; the scan neither fails nor logs it."""
+    scan = scan_sentence(s("She leans on the pole.", about=["npc.tam"]), IDX, rules=RULES)
+    assert not scan.failures and not scan.logged
 
 
 def test_mechanics_and_sealed_content_fail() -> None:
