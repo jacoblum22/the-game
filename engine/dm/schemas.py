@@ -416,14 +416,14 @@ def testimony_schema(ctx: SchemaContext) -> Schema:  # rule: PR-12-12
     return obj({"subject": STR, "predicate": STR, "value": STR})
 
 
-def _understand_schema(ctx: SchemaContext) -> Schema:  # spec 014: the role's schema lives in engine/dm/understand.py
-    from engine.dm.understand import understand_schema
+def _fixer_schema(ctx: SchemaContext) -> Schema:  # spec 022: the role's schema lives in engine/dm/fixer.py
+    from engine.dm.fixer import step_schema
 
-    return understand_schema()
+    return step_schema(final=True)
 
 
-def _understand_default() -> dict[str, Any]:
-    from engine.dm.understand import default
+def _fixer_default() -> dict[str, Any]:
+    from engine.dm.fixer import default
 
     return default()
 
@@ -437,7 +437,7 @@ BUILDERS: dict[Role, Callable[[SchemaContext], Schema]] = {
     Role.NARRATOR: narrator_schema,
     Role.CHECKER: checker_schema,
     Role.TESTIMONY: testimony_schema,
-    Role.UNDERSTAND: _understand_schema,
+    Role.FIXER: _fixer_schema,
 }
 
 
@@ -551,8 +551,8 @@ DEFAULTS: dict[Role, Callable[[SchemaContext], dict[str, Any]]] = {
     Role.DIRECTOR: _director_default,
     # no claim stated: the caller states the words as said (PR-12-12 step 2)
     Role.TESTIMONY: lambda ctx: {"subject": "world", "predicate": "is said to be", "value": ""},
-    # nothing understood: answered "I can't find that; did you mean …?" (PR-12-11 step 1; engine/dm/understand.py)
-    Role.UNDERSTAND: lambda ctx: _understand_default(),
+    # nothing understood: the answer asks for the turn (PR-12-11; engine/dm/fixer.py)
+    Role.FIXER: lambda ctx: _fixer_default(),
 }
 
 

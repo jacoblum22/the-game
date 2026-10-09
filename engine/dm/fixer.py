@@ -33,7 +33,6 @@ MAX_STEPS, MIN_STEPS = 6, 3  # pacing.yaml#feedback.investigate.steps (read from
 PER_STEP = 3  # tool calls one answer may ask for
 OUT_CHARS = 2400  # one tool output, at most
 SKIP_PREDICATES = ("trg.", "log.", "closed.", "lethal", "dc.")
-_INT = {"type": "integer"}
 
 
 @dataclass
@@ -187,6 +186,11 @@ def _event_line(store: Any, state: Any, e: Any) -> str | None:  # noqa: PLR0911 
         return f"  {e.seq} {name(state, p.entity)} now at {name(state, p.location)}{mark}"
     if t == "scene_started":
         return f"  {e.seq} scene started at {name(state, getattr(p.scene, 'place_id', '') or '')}{mark}"
+    if t == "meta_set" and p.key == "log.harm" and isinstance(p.value, dict):
+        v = p.value
+        amount = f", {v.get('amount')} after reductions {v.get('breakdown')}" if v.get("target") == pc_of(state) else ""
+        return (f"  {e.seq} harm to {name(state, str(v.get('target')))}: a {v.get('severity')} blow{amount}, from "
+                f"{name(state, str(v.get('source')))}{mark}")
     if t == "writes_reverted":
         return f"  {e.seq} reverted {len(p.reverted)} writes: {_flat(p.reason, 120)}"
     if t == "knowledge_recorded" and p.fact_id in state.facts:
@@ -369,7 +373,7 @@ def step_schema(final: bool = False, first: bool = False) -> Schema:  # rule: PR
     """One Fixer answer: tool calls to make next, or (final) the complaints with their findings and proposals."""
     call = obj({"tool": enum(TOOLS), "arg": STR})
     proposal = obj({"kind": enum(PROPOSALS), "turn": STR, "subject": STR, "key": STR, "value": STR,
-                    "quantity": STR, "amount": _INT, "fact_id": STR, "evidence": STRS})
+                    "quantity": STR, "amount": STR, "fact_id": STR, "evidence": STRS})
     complaint = obj({"believes": STR, "category": enum(CATEGORIES), "turn": STR, "verdict": enum(VERDICTS),
                      "found": STR, "proposals": arr(proposal, max_items=4)})
     calls = arr(call, max_items=0 if final else PER_STEP)
@@ -390,8 +394,8 @@ def default() -> dict[str, Any]:
 
 def opening(ctx: Any, text: str) -> str:
     """THIS MESSAGE's fixed part: the report, the calendar, the PC's sheet, the people in view, the last turns."""
+    from engine.audit.claims import calendar_season as season_word
     from engine.dm.oof import when_words
-    from engine.dm.understand import season_word
 
     state = ctx.state
     pc = pc_of(state)

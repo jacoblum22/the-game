@@ -26,7 +26,7 @@ class Role(StrEnum):
     NARRATOR = "narrator"
     CHECKER = "checker"
     TESTIMONY = "testimony"  # PR-12-12 step 2: a said claim stated as {subject, predicate, value} (spec 013)
-    UNDERSTAND = "understand"  # PR-12-11 step 1: what a player's report means, from the whole transcript (spec 014)
+    FIXER = "fixer"  # PR-12-11: investigates a player's report with read-only tools, proposes corrections (spec 022)
 
 
 class Outcome(StrEnum):
@@ -173,6 +173,20 @@ class StructuredModel(Protocol):
 
 
 Recorder = Callable[[ModelCallRecord], None]
+
+
+class Routed:
+    """`StructuredModel` that sends some roles to their own model (`GameConfig.models`: the Fixer on Sonnet while
+    play stays on the play model, DL-12-105) and every other role to `default`."""
+
+    def __init__(self, default: StructuredModel, by_role: Mapping[Role, StructuredModel]):
+        self.default, self.by_role = default, dict(by_role)
+        self.provider = default.provider
+
+    def fill(self, role: Role, schema: dict[str, Any], packet: Packet, *, turn_id: str | None, attempt: int,
+             seq: int = 0) -> CallResult:
+        return self.by_role.get(role, self.default).fill(role, schema, packet, turn_id=turn_id, attempt=attempt,
+                                                         seq=seq)
 
 
 class CallSequence:

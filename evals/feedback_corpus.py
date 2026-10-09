@@ -1,15 +1,19 @@
-"""Spec 014: the feedback loop scored on the real complaint corpus (PR-12-11; OEQ-12-26).
+"""Specs 014 and 022: the feedback loop (the Fixer, PR-12-11) scored on real complaints (OEQ-12-26).
 
-    py -3.12 evals/feedback_corpus.py --model haiku --out evals/baselines/feedback_corpus_after.json
-    py -3.12 evals/feedback_corpus.py --model offline           # the offline stand-in, no call
-    py -3.12 evals/feedback_corpus.py --cached X.json --out X.json   # re-score a run's understanding, no call
+    py -3.12 evals/feedback_corpus.py --model sonnet --out evals/baselines/fixer_corpus_sonnet.json
+    py -3.12 evals/feedback_corpus.py --set round6 --model sonnet     # the 15 round-6 live disputes (I3 §5)
+    py -3.12 evals/feedback_corpus.py --set heldout --model sonnet    # held-out complaints, labelled before the run
+    py -3.12 evals/feedback_corpus.py --model offline                 # the offline stand-in, no call
+    py -3.12 evals/feedback_corpus.py --cached X.json --out X.json    # re-score a run's Fixer answers, no call
 
-The corpus (`tests/fixtures/feedback_corpus/corpus.json`) is every `/fix` line of the two 20261008 persona re-runs
-(talker 145410, fighter 145430), what the player's note says each was about, plus three short forms of the round-3
-complaints. Each item runs on its save cut back to just before the report (`open_at`), through `settle_dispute`
-with the given model, on a throwaway copy. Scored per item: the understanding (category and turn as expected) and
-the outcome (the dispute record's outcome among the expected ones, and a plain answer: never "Say which fact" or
-a bare "Logged."). Haiku runs through the Claude CLI (the owner's subscription; no API spend).
+Sets (`tests/fixtures/feedback_corpus/`): `corpus` (spec 014: every `/fix` line of the two 20261008 persona re-runs
+plus three short forms of round-3 complaints, one expected complaint each), `round6` (the seven round-6 reports
+holding I3 §5's 15 disputes) and `heldout` (new complaints from other turns of the saves). Each report runs on its save
+cut back to just before it (`open_at`), through `settle_dispute` with the given model as the Fixer, on a throwaway
+copy. Scored per complaint: understood (category and turn as expected; the `corpus` set) and the outcome class:
+`upheld` (the player is right: a correction, a take-back, or the record agrees and the narration slipped),
+`stands` (the record stands, explained) or `not_found`; plus the corrections expected applied (`done` kinds), and
+a plain answer ending in `Now:`. Claude models run through the Claude CLI (the owner's subscription; no API spend).
 """
 
 from __future__ import annotations
@@ -28,11 +32,12 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 CORPUS = ROOT / "tests" / "fixtures" / "feedback_corpus"
+SETS = {"corpus": "corpus.json", "round6": "round6.json", "heldout": "heldout.json"}
 BARE = ("Say which fact or roll is wrong", "Which statement, and when?")
 
 
-def load_corpus() -> list[dict[str, Any]]:
-    return json.loads((CORPUS / "corpus.json").read_text(encoding="utf-8"))["items"]
+def load_corpus(which: str = "corpus") -> list[dict[str, Any]]:
+    return json.loads((CORPUS / SETS[which]).read_text(encoding="utf-8"))["items"]
 
 
 def _turn_n(turn_id: str | None) -> int:
@@ -80,6 +85,14 @@ class Ctx:
         self.calls.append(rec)
 
 
+UPHELD = {"correct", "take_back", "player_reading_wins", "upheld"}  # spec 014's outcome names, by class
+STANDS = {"explain_with_quote", "explain_and_log", "stands"}
+
+
+def _class(rec: dict[str, Any]) -> str:
+    return "upheld" if rec.get("upheld") else "not_found" if rec.get("outcome") == "not_found" else "stands"
+
+
 def run_item(item: dict[str, Any], model: Any, rules: Any, tmp: Path) -> dict[str, Any]:
     from engine.dm.dispute import settle_dispute
 
@@ -87,23 +100,46 @@ def run_item(item: dict[str, Any], model: Any, rules: Any, tmp: Path) -> dict[st
     try:
         ctx = Ctx(store, rules, model, item["turn"])
         res = settle_dispute(ctx, item["report"])
-        claim = res.claim
-        rec = res.record or {}
-        return {"id": item["id"], "category": getattr(claim, "category", None),
-                "turn": getattr(claim, "turn_id", None), "believes": getattr(claim, "believes", ""),
-                "outcome": rec.get("outcome"), "kind": res.kind, "answer": res.text,
+        complaints = [{"believes": r["believes"], "category": r["category"], "turn": r["passage"]["turn"],
+                       "verdict": r["verdict"], "class": _class(r), "outcome": r["outcome"], "done": r["done"],
+                       "not_done": r["not_done"]} for r in res.records]
+        first = complaints[0] if complaints else {}
+        return {"id": item["id"], "category": first.get("category"), "turn": first.get("turn"),
+                "outcome": first.get("outcome"), "kind": res.kind, "answer": res.text, "complaints": complaints,
+                "tools": (res.record or {}).get("evidence", []),
                 "understood": [c.get("response") for c in (r.model_dump() for r in ctx.calls)]}
     finally:
         store.close()
 
 
-def score(item: dict[str, Any], got: dict[str, Any]) -> dict[str, bool]:
-    exp = item["expected"]
+def _match(exp: dict[str, Any], got: list[dict[str, Any]]) -> dict[str, Any] | None:
+    """The answered complaint for an expected one: the same turn, else the same class, else none."""
     turns = exp["turn"] if isinstance(exp["turn"], list) else [exp["turn"]]
-    understood = got["category"] in exp["category"] and got["turn"] in turns
-    plain = not any(b in got["answer"] for b in BARE) and got["answer"].strip() not in ("", "Logged.")
-    outcome = got["outcome"] in exp["outcome"] and plain
-    return {"understood": understood, "outcome": outcome}
+    return next((c for c in got if c["turn"] in turns), None) or next(
+        (c for c in got if c["class"] == exp.get("class")), None)
+
+
+def score(item: dict[str, Any], got: dict[str, Any]) -> dict[str, Any]:
+    """Per expected complaint: understood (category and turn), class (upheld / stands / not_found as expected), and
+    `auto`: right (class and every expected correction applied), unclear (class right, a correction missing), wrong."""
+    plain = not any(b in got["answer"] for b in BARE) and "Now:" in got["answer"]
+    exps = item["expected"]["complaints"] if "complaints" in item["expected"] else [item["expected"]]
+    rows = []
+    for exp in exps:
+        cls = exp.get("class") or ("upheld" if set(exp["outcome"]) & UPHELD else
+                                   "not_found" if "not_found" in exp["outcome"] else "stands")
+        classes = cls if isinstance(cls, list) else [cls]
+        c = _match({**exp, "class": classes[0]}, got["complaints"])
+        turns = exp["turn"] if isinstance(exp["turn"], list) else [exp["turn"]]
+        understood = c is not None and c["turn"] in turns and (not exp.get("category") or c["category"] in exp["category"])
+        ok = c is not None and c["class"] in classes and plain
+        need = set(exp.get("done") or [])
+        did = {d.split(":", 1)[0].split(" ", 1)[0] for d in (c or {}).get("done", [])}
+        kinds_ok = all(any(k.split("_")[0] in d or d.startswith(k[:4]) for d in did) for k in need)
+        rows.append({"id": exp.get("id", item["id"]), "understood": understood, "outcome": ok,
+                     "auto": "right" if ok and kinds_ok else "unclear" if ok else "wrong"})
+    return {"understood": all(r["understood"] for r in rows), "outcome": all(r["outcome"] for r in rows),
+            "complaints": rows}
 
 
 def model_for(name: str) -> Any:
@@ -118,17 +154,18 @@ def model_for(name: str) -> Any:
 
 def main() -> int:
     ap = argparse.ArgumentParser(description=(__doc__ or "").splitlines()[0])
-    ap.add_argument("--model", default="offline", help="offline, or a Claude CLI model (haiku)")
+    ap.add_argument("--model", default="offline", help="offline, or a Claude CLI model (sonnet)")
+    ap.add_argument("--set", default="corpus", choices=sorted(SETS))
     ap.add_argument("--only", default="", help="comma-separated item ids")
     ap.add_argument("--out", default="", help="write the results as JSON here")
-    ap.add_argument("--cached", default="", help="re-score with the understanding recorded in this results file")
+    ap.add_argument("--cached", default="", help="re-score with the Fixer answers recorded in this results file")
     args = ap.parse_args()
     from engine.data.loader import load_rules
     from engine.llm.base import Role
     from engine.llm.offline import ScriptedModel
 
     rules = load_rules()
-    items = [i for i in load_corpus() if not args.only or i["id"] in args.only.split(",")]
+    items = [i for i in load_corpus(args.set) if not args.only or i["id"] in args.only.split(",")]
     cached = {r["id"]: r for r in json.loads(Path(args.cached).read_text(encoding="utf-8"))["results"]} \
         if args.cached else {}
     model = model_for(args.model)
@@ -136,22 +173,24 @@ def main() -> int:
     with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as tmp:
         for item in items:
             if cached:
-                data = next(u["data"] for u in cached[item["id"]]["understood"] if u and u.get("data"))
-                model = ScriptedModel({Role.UNDERSTAND: [data]}, fallback=False)
+                data = [u["data"] for u in cached[item["id"]]["understood"] if u and u.get("data") is not None]
+                model = ScriptedModel({Role.FIXER: data}, fallback=False)
             got = run_item(item, model, rules, Path(tmp))
             got["score"] = score(item, got)
             results.append(got)
-            s = got["score"]
-            print(f"{item['id']:<12} understood={'Y' if s['understood'] else 'n'} outcome={'Y' if s['outcome'] else 'n'}"
-                  f"  ({got['category']}, {got['turn']}, {got['outcome']})")
-    n = len(results)
-    u = sum(r["score"]["understood"] for r in results)
-    o = sum(r["score"]["outcome"] for r in results)
-    print(f"understanding (category and turn): {u}/{n}; outcome: {o}/{n}")
+            for r in got["score"]["complaints"]:
+                print(f"{r['id']:<14} understood={'Y' if r['understood'] else 'n'} outcome={'Y' if r['outcome'] else 'n'}"
+                      f" auto={r['auto']:<7} ({got['kind']}; {len(got['tools'])} tools)")
+    rows = [r for g in results for r in g["score"]["complaints"]]
+    n = len(rows)
+    u = sum(r["understood"] for r in rows)
+    o = sum(r["outcome"] for r in rows)
+    auto = {k: sum(r["auto"] == k for r in rows) for k in ("right", "unclear", "wrong")}
+    print(f"complaints {n}: understood {u}/{n}; outcome class {o}/{n}; auto {auto}")
     if args.out:
         label = f"{json.loads(Path(args.cached).read_text(encoding='utf-8'))['model']} (cached)" if cached else args.model
-        Path(args.out).write_text(json.dumps({"model": label, "understood": u, "outcome": o, "n": n,
-                                              "results": results}, indent=1, ensure_ascii=False) + "\n",
+        Path(args.out).write_text(json.dumps({"model": label, "set": args.set, "understood": u, "outcome": o, "n": n,
+                                              "auto": auto, "results": results}, indent=1, ensure_ascii=False) + "\n",
                                   encoding="utf-8")
     return 0
 

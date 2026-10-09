@@ -82,6 +82,8 @@ def _fold_methods(beats: list[dict[str, Any]]) -> list[dict[str, Any]]:  # rule:
         nxt["method"] = f"{b.get('method')}, {nxt.get('method')}"
         nxt["how"] = b.get("how") or nxt.get("how")
         nxt["target"] = nxt.get("target") if nxt.get("target") not in (None, NONE) else b.get("target")
+        if hold or (b.get("change") or {}).get("kind") == "restrain" or b.get("verb") == "verb.grapple":
+            nxt["holds"] = b.get("target")  # the grip stays real: applied when the goal succeeds (06.5.2; spec 022)
         for facet in ("against_will", "uses_power"):
             nxt[facet] = bool(nxt.get(facet) or b.get(facet))
     return _bundle(out)
@@ -216,6 +218,7 @@ class ReaderBeat(BaseModel):
     against_will: bool = False
     uses_power: bool = False
     speech: bool = False
+    holds: str | None = None  # code-set: a hold folded into this goal as its method (06.5.2; spec 022)
     pressure: str = NONE  # 12.2.2: request, threat, offer, plea, insistence (event tags, 12.11.9)
     g4_fact: str | None = None
     intent_verbs: list[str] = Field(default_factory=list)
@@ -259,6 +262,7 @@ class ReaderResult(BaseModel):
                         assertion=b.assertion, shape="extended" if b.shape == "extended" else "single",
                         target=target, restatement=own or b.intent,
                         verb=b.verb, against_will=b.against_will, uses_power=b.uses_power, speech=b.speech,
+                        holds=b.holds if b.holds not in (None, NONE) else None,
                         pressure=b.pressure or NONE,
                         asks=asks and b.verb == "verb.talk", g4_fact=b.g4_fact, declared_seq=declared_seq,
                         change=b.change)

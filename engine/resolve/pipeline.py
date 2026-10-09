@@ -404,6 +404,7 @@ def _no_roll(env: PipelineEnv, plan: BeatPlan, dec: GateDecision) -> BeatOutcome
     if (dec.verb or beat.verb) == MOVE:
         entry.positions = _moved(env, plan)
     _change_entry(env, beat, entry, apply_change(env.tx, env.rules, beat, 2, pc=env.pc))  # rule: 01.2.7
+    _folded_hold(env, beat, 2)
     mark_boundary(env.time_ctx(), "beat_end", {"beat": beat.id})
     return BeatOutcome(status="no_roll", entry=entry)
 
@@ -786,6 +787,7 @@ def _finish(env: PipelineEnv, plan: BeatPlan, frame: Frame, roll: RollResult, *,
         check_end(env.time_ctx(), env.pc)  # 06.13.1: the last foe down ends the fight
     chg = apply_change(env.tx, env.rules, frame.beat, delivered if resolved else 0, pc=env.pc)  # rule: 01.2.7
     pay(env.tx, frame.method_consequences, frame.beat.actor)  # rule: 01.11.2 (a price paid whatever the degree)
+    _folded_hold(env, frame.beat, delivered if resolved else 0)
     progress = _progress(env, frame, delivered if resolved else 0)
     writes = [e.seq for e in env.tx.events[start:] if e.seq is not None]
     ev_ids: list[str] = []
@@ -832,6 +834,17 @@ def _finish(env: PipelineEnv, plan: BeatPlan, frame: Frame, roll: RollResult, *,
                        changed=changed_line(env.state, env.pc, env.tx.events[start:]) if env.pc else "",
                        change=change_result_line(entry))
     return BeatOutcome(status="resolved", entry=entry, frame_id=frame.id, oof=[{"kind": "RESULT", "text": blk.text}])
+
+
+def _folded_hold(env: PipelineEnv, beat: Beat, reach: int) -> None:  # rule: 06.5.2
+    """A grip folded into the goal it serves (01.2.2, spec 020: "grab him and demand the key") is the goal's method:
+    when the goal's beat succeeds the grip held, so the hold condition applies at the delivered reach (DL-06-31)."""
+    held = beat.holds
+    if reach >= 1 and held and held in env.state.entities and held != beat.actor:
+        from engine.resolve.change import PEOPLE, hold
+
+        if env.state.entities[held].kind in PEOPLE:
+            env.add(*hold(env.tx, env.rules, held, beat.actor, reach, beat.id))
 
 
 def _change_entry(env: PipelineEnv, beat: Beat, entry: BeatEntry, res: ChangeResult) -> None:  # rule: 01.2.7

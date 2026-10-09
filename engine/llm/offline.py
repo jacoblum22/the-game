@@ -726,97 +726,29 @@ def _testimony(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:  # rul
             "value": (m.group(1) if m else "")[:160]}
 
 
-_QUANTITY_WORDS = ("vitality", "fate", "coins", "coin", "focus", "dread", "torches", "arrows", "rations")
-_LOOK_WORDS = ("hair", "coat", "cloak", "clothing", "clothes", "eyes", "face", "scar", "mark", "build", "voice",
-               "beard", "hat", "boots", "tattoo", "basket", "rug", "activity")
-_SEASON_WORDS = ("spring", "summer", "autumn", "winter")
-
-
-def _report_value(report: str, word: str) -> str:
-    """The player's value for `word` in the report: "<word> is/was <value>" or "<value> <word>"."""
-    m = re.search(rf"\b{re.escape(word)}\b\s+(?:is|was|were|are|should be)\s+(?:actually\s+)?"
-                  r"([\w'-]+(?:\s+[\w'-]+){0,2}?)(?=\s*(?:[,.;!?]|$|\s(?:not|but|and|now|you|i|before|earlier|then)\b))",
-                  report, re.IGNORECASE)
-    if m:
-        return m.group(1).strip()
-    m = re.search(rf"((?:[\w'-]+\s+){{1,2}}){re.escape(word)}\b", report, re.IGNORECASE)
-    stop = {"the", "a", "an", "his", "her", "their", "my", "your", "its", "was", "is", "of"}
-    return " ".join(w for w in (m.group(1).split() if m else []) if w.lower() not in stop and not w.endswith("'s")
-                    and not w[:1].isupper())
-
-
-def _understand(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:  # rule: PR-12-11
-    """Step 1 offline (a test double for the understanding call): the subject by name, what it is about and the
-    player's value from the report's words, the turn sharing the most words with it (newest on a tie), or the turn
-    whose roll the report names."""
+def _fixer(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:  # rule: PR-12-11
+    """The Fixer offline (a test double, spec 022): first a transcript search for the report's words and the PC's
+    ledger; then one complaint: the report restated, the best search hit as its turn, explained (nothing proposed)."""
     msg = packet.message
     m = re.search(r'^THE PLAYER\'S REPORT: "(.*)"$', msg, re.MULTILINE)
-    report = m.group(1) if m else ""
+    report = (m.group(1) if m else "").strip()
     low = report.lower()
-    people = re.findall(r"^((?:pc|npc|foe|ally|item|loc|obj)\.[\w.]+): ([^(\[\n]+)", msg, re.MULTILINE)
-    pc = next((i for i, _ in people if i.startswith("pc.")), "none")
-    def named(eid: str, name: str) -> bool:  # the name shown, its first word, or the id's own words
-        first = name.split()[0] if name.split() else ""
-        slug = eid.split(".", 1)[1].replace("_", " ")
-        return (name.strip().lower() in low or slug in low
-                or (len(first) >= 4 and re.search(rf"\b{re.escape(first.lower())}\b", low) is not None))
-
-    subject = next((i for i, n in sorted(people, key=lambda p: p[0].startswith("item.")) if named(i, n)), "none")
-    turns = re.findall(r"^(turn\.\d+) \| (.*)$", msg, re.MULTILINE)
-    frame = re.search(r"\bframe\.\d+\b", low)
-    about, key, value = "other", "", ""
-    if frame:
-        about = "roll_or_outcome"
-    elif q := next((w for w in _QUANTITY_WORDS if re.search(rf"\b{w}\b", low)), None):
-        about, key = "quantity", q
-        n = re.search(r"\b(\d+)\b", low)
-        value, subject = (n.group(1) if n else ""), (subject if subject != "none" else pc)
-    elif h := re.search(r"\bi\s+(?:still\s+)?(?:have|had|carry|carried|hold)\s+(?:my\s+|a\s+|an\s+|the\s+)?(.+?)(?=[,.;!?]|$|"
-                        r"\s(?:but|and|not)\b)", low):
-        about, key, value, subject = "possession", "carries", h.group(1).strip(), pc
-    elif re.search(r"\b(pronoun|he|she|his|her|him)\b", low) and subject != "none" and "said" not in low:
-        about, key = "pronoun", "pronoun"
-    elif s := next((w for w in _SEASON_WORDS if w in low), None) or ("season" in low and "season"):
-        now = re.search(r"^NOW: (\w+)", msg, re.MULTILINE)
-        about, key, value = "season_or_time", "season", now.group(1) if now and now.group(1) in low else s
-    elif re.search(r"\bname\b", low):
-        about, key = "name", "name"
-        n = re.search(r"\bname (?:is|was)\s+([A-Z][\w'-]+(?:\s+[A-Z][\w'-]+)*)", report)
-        value = n.group(1) if n else ""
-    elif w := next((w for w in _LOOK_WORDS if re.search(rf"\b{w}\b", low)), None):
-        about, key = "look_or_activity", w
-        value = _report_value(report, w)
-        if value and w not in value.split():
-            value = f"{value} {w}"
-    if subject == "none" and re.search(r"\b(i|my|me)\b", low) and about in ("quantity", "fact"):
-        subject = pc
-    category = ("rule_wrong" if frame or re.search(r"\b(dc|odds|modifier|harder|easier|chance|bonus)\b", low) else
+    if "(nothing yet)" in msg:
+        return {"calls": [{"tool": "search", "arg": report}, {"tool": "ledger", "arg": ""}], "final": False,
+                "complaints": []}
+    hit = re.search(r"^(turn\.\d+) \(\d+/\d+ words\)", msg, re.MULTILINE)
+    category = ("rule_wrong" if re.search(r"\b(dc|odds|modifier|chance|bonus|penalty)\b", low) else
                 "ruling_question" if re.search(r"\b(why|succeed\w*|success)\b", low) else
-                "misread" if re.search(r"\b(meant|didn'?t|did not|never (?:said|asked|tried)|only)\b", low) else
-                "contradiction" if re.search(r"\b(earlier|before|just said|contradict|wrong)", low) else
-                "remembered_wrong" if re.search(r"\b(name|remember|forgot|told me|should be)\b", low) else "other")
-    if category == "misread" and about == "other":
-        about = "action_reading"
-    turn = "none"
-    if frame:
-        current = "none"
-        for line in msg.splitlines():
-            if t := re.match(r"(turn\.\d+) \|", line):
-                current = t.group(1)
-            elif line.strip().startswith(f"rolled: {frame.group(0)} "):
-                turn = current
-    else:
-        words = {w for w in re.findall(r"[a-z]{4,}", low)} - {"that", "this", "with", "said", "your", "were", "what"}
-        wrong = re.search(r"\bsaid\s+(\w+)", low)  # "you just said red": the passage says the wrong word
-        best = 0
-        for tid, text in turns:  # oldest first: the newest of equal scores wins
-            if wrong and not re.search(rf"\b{wrong.group(1)}\b", text.lower()):
-                continue
-            n = len(words & set(re.findall(r"[a-z]{4,}", text.lower())))
-            if n and n >= best:
-                turn, best = tid, n
-    return {"complaints": [{"believes": report.rstrip(".!"), "happened": "", "category": category, "turn": turn,
-                            "quote": "", "subject": subject, "about": about, "key": key, "value": value}]}
+                "misread" if re.search(r"\b(meant|didn'?t mean|never (?:said|asked|tried))\b", low) else
+                "contradiction" if re.search(r"\b(earlier|before|contradict|wrong)", low) else "other")
+    turn = hit.group(1) if hit else ""
+    found = (f"You're saying {report.rstrip('.!')}. The record for {turn} is as shown; nothing in it differs."
+             if turn else "")
+    return {"calls": [], "final": True, "complaints": [{
+        "believes": report.rstrip(".!"), "category": category, "turn": turn, "verdict": "record_stands" if turn else
+        "unclear", "found": found, "proposals": [{"kind": "explain", "turn": turn, "subject": "", "key": "",
+                                                  "value": "", "quantity": "", "amount": 0, "fact_id": "",
+                                                  "evidence": [turn] if turn else []}]}]}
 
 
 def _world(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:
@@ -1193,7 +1125,7 @@ ROLE_HEURISTICS: dict[Role, Callable[[dict[str, Any], Packet], dict[str, Any]]] 
     Role.NARRATOR: _narrator,
     Role.CHECKER: _checker,
     Role.TESTIMONY: _testimony,
-    Role.UNDERSTAND: _understand,
+    Role.FIXER: _fixer,
 }
 
 

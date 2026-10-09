@@ -62,7 +62,8 @@ def test_session_close_and_dispute_quote_no_offer_mechanics(tmp_path: Path) -> N
     game, _ = Game.open(tmp_path / "g.db", GameConfig(offline=True), model=OfflineModel())
     game.answer("withdraw")
     note = game.dispute("My Vitality is wrong: I was not hurt.").oof_blocks[0].text
-    assert "As recorded: your vitality is" in note and "focus on next time" not in note and "Where:" not in note
+    # spec 022: the Fixer's answer ends in Now: with the sheet as it stands (the record's value)
+    assert "Now:" in note and "Vitality" in note and "focus on next time" not in note and "Where:" not in note
     assert "%" not in note  # spec 012: the answer is the record's value, never the OFFER's mechanics
 
 

@@ -211,6 +211,17 @@ def hold_level(reach: int, held: int) -> int:  # rule: 06.5.2
     return min(4, max(1, reach, held + 1 if held else 0))
 
 
+def hold(tx: Any, rules: Any, held: str, holder: str, reach: int, beat_id: str | None = None) -> list[Event]:
+    # rule: 06.5.2
+    """The hold applied at RECORD (DL-06-31): the ladder condition for `reach` (or one rung up when tightening) on
+    `held`, its source `holder`. Events are returned for the caller to stage (apply_change stages its own)."""
+    from engine.store.conditions import apply_condition
+
+    cid, sev = LADDER[hold_level(reach, current_hold(tx.state, held, holder))]
+    return apply_condition(tx.state, tx.mint, rules, held, cid, severity=sev, rule_id="06.5.2",
+                           source={"entity": holder, "beat_id": beat_id}).events
+
+
 _PAID = re.compile(r"\b(?:spent|paid|pays|handed over|hands over|changes hands|set (?:down )?on|laid (?:down )?on|"
                    r"left (?:on|with)|on the (?:table|counter|bar|trestle))\b", re.IGNORECASE)
 _COIN = re.compile(r"\b(?:(\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+)?(?:[a-z]+\s+)?"
@@ -321,12 +332,8 @@ def apply_change(tx: Any, rules: Any, beat: Beat, reach: int, *, pc: str | None 
     elif k == "restrain":  # the hold is a condition (06.5.2; DL-06-31); T-12-18's posture row is its face
         if what is None or st.entities[what].kind not in PEOPLE:
             return ChangeResult(refused="no one named to restrain")
-        from engine.store.conditions import apply_condition
-
         level = hold_level(reach, current_hold(st, what, actor))
-        cid, sev = LADDER[level]
-        res.events += apply_condition(st, tx.mint, rules, what, cid, severity=sev, rule_id="06.5.2",
-                                      source={"entity": actor, "beat_id": beat.id}).events
+        res.events += hold(tx, rules, what, actor, reach, beat.id)
         res.words = f"{w} {'held fast' if level <= 2 else 'restrained' if level == 3 else 'pinned'} by " \
                     f"{_name(st, actor, pc)}"
     elif k == "free":
@@ -337,5 +344,5 @@ def apply_change(tx: Any, rules: Any, beat: Beat, reach: int, *, pc: str | None 
     return res
 
 
-__all__ = ["HOLDS", "LADDER", "ChangeResult", "already_true", "apply_change", "current_hold", "hold_level",
+__all__ = ["HOLDS", "LADDER", "ChangeResult", "already_true", "apply_change", "current_hold", "hold", "hold_level",
            "holder_of", "kinds", "needs_target", "pay", "plain", "price", "things_held"]

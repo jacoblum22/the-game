@@ -260,6 +260,7 @@ def main() -> int:
     ap.add_argument("--quick-setup", action="store_true", help="script world-building and a ready-made character")
     ap.add_argument("--engine-model", default="haiku")
     ap.add_argument("--player-model", default="sonnet")
+    ap.add_argument("--fixer-model", default="sonnet", help="the Fixer's model (/fix, PR-12-11; owner: Sonnet)")
     ap.add_argument("--persona", choices=sorted(PERSONAS), default="explorer")
     ap.add_argument("--out", type=Path, default=OUT, help="where transcripts and findings go")
     ap.add_argument("--saves", type=Path, default=ROOT / "saves")
@@ -268,10 +269,15 @@ def main() -> int:
     stamp = time.strftime("%Y%m%d-%H%M%S")
     name = f"playtest-{stamp}-{args.persona}"
     engine = ClaudeModel(args.engine_model) if args.engine == "claude" else None
+    fixer = ClaudeModel(args.fixer_model) if engine is not None else None  # spec 022: /fix on its own model
 
     class Config(GameConfig):
         def model(self) -> Any:  # only the model differs from `python -m play`
-            return engine if engine is not None else super().model()
+            if engine is None or fixer is None:
+                return super().model()
+            from engine.llm.base import Role, Routed
+
+            return Routed(engine, {Role.FIXER: fixer})
 
     out = io.StringIO()
     player = Player(out, args.player, args.player_model, args.turns, args.persona, args.quick_setup,
