@@ -52,8 +52,11 @@ def test_at_most_three_beats_the_rest_queued(tmp_path: Path) -> None:
     plans = [plan(dock, f"look around {i}", "verb.observe", n=i) for i in range(4)]
     with dock.store.transaction("turn.1") as tx:
         res = run_beats(env_for(dock, tx, rng, framer=stub_framer(trivial=("verb.observe",))), plans)
-    assert [o.status for o in res.outcomes] == ["no_roll"] * 3 and res.queued == ["look around 3"]
-    assert res.pause is None and dock.state.time.now.beat == 3  # three beat_end marks
+    assert [o.status for o in res.outcomes] == ["no_roll"] * 3 and dock.state.time.now.beat == 3  # three beat_ends
+    # 01.2.3: the fourth is confirmed, not run and not dropped (spec 017: the plan waits in the pause)
+    assert res.pause is not None and res.pause.detail["stage"] == "plan"
+    assert res.pause.prompt == "That is three actions this turn. Still go on to look around 3?"
+    assert [q["beat"]["intent"] for q in res.pause.detail["queued"]] == ["look around 3"]
 
 
 def test_resume_continues_the_beat_then_the_queue(tmp_path: Path) -> None:

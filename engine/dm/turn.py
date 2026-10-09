@@ -189,10 +189,13 @@ def _turn(ctx: TurnContext, message: str, *, choice: str | None, dispute: bool =
 
                     oof.append({"kind": "NOTE", "text": FIX_HINT})
             pause = tx.state.open_pause()
-            if pause is None and not dispute:  # a dispute is out of fiction: no world step, no time
+            # a plan pause falls between beats (spec 017): what resolved before it gets its world step, so words
+            # said before a move are answered where they were said
+            between = pause is not None and pause.detail.get("stage") == "plan"
+            if (pause is None or between) and not dispute:  # a dispute is out of fiction: no world step, no time
                 world_step(ctx, rec, beats=beats, oof=oof)  # T5 (a pause jumps to T7: no world, no time)
                 _turn_end(ctx, rec, oof)
-                if choice is None:
+                if choice is None and not between:
                     _director_step(ctx, rec, message)  # lead injection, the player's cut, an answered agenda
             elif not dispute:  # 07.3.3: a warning raised this turn (a fight begun before a near miss) is owed now
                 deliver_warnings(ctx, rec)
@@ -239,6 +242,19 @@ def _take(rec: AdjudicationRecord, res: PipelineResult, oof: list[dict[str, str]
                    for o in out.oof)
     if res.queued:
         rec.notes.append("queued for the next declaration (01.2.3): " + "; ".join(res.queued))
+    said = {p.text for p in rec.parts if p.cls == "SPEECH"}
+    for text in res.said:  # spec 017: words a pause held are answered now (T5 reads the record's parts)
+        if text not in said:
+            rec.parts.append(PartEntry.model_validate({"text": text, "class": "SPEECH", "handled": "answered"}))
+
+
+def _said(env: PipelineEnv, rec: AdjudicationRecord) -> PipelineEnv:  # rule: 12.2.2
+    """The message's SPEECH parts on the plan (spec 017): carried by any pause that skips T5, and those said before
+    a later declaration keep a move out of the scene waiting until they are answered here."""
+    last = max((i for i, p in enumerate(rec.parts) if p.cls == "DECLARATION"), default=-1)
+    env.said = [p.text for p in rec.parts if p.cls == "SPEECH"]
+    env.said_first = [p.text for i, p in enumerate(rec.parts) if p.cls == "SPEECH" and i < last]
+    return env
 
 
 def _adjudicate(ctx: TurnContext, rec: AdjudicationRecord, reader: ReaderResult, message: str,
@@ -301,7 +317,7 @@ def _adjudicate(ctx: TurnContext, rec: AdjudicationRecord, reader: ReaderResult,
     kind = rest_kind(message) if "DECLARATION" in classes and rec.pc else None
     held = tx.state.open_pause()
     if kind is not None and held is not None and held.detail.get("stage") in ("offer", "warning", "redirect",
-                                                                              "near_miss"):
+                                                                              "near_miss", "plan"):
         res = close_by_default(_env(ctx), held)  # 12.2.6: the rest is a new declaration; the pause closes first
         _take(rec, res, oof, None)
         outcomes += res.outcomes
@@ -333,7 +349,7 @@ def _adjudicate(ctx: TurnContext, rec: AdjudicationRecord, reader: ReaderResult,
         _take(rec, res, oof, None)
         outcomes += res.outcomes
     decl = next((i for i, p in enumerate(rec.parts) if p.cls == "DECLARATION"), None)
-    res = run_beats(env, plans)
+    res = run_beats(_said(env, rec), plans)
     res.queued += [q for q in reader.queued if q not in res.queued]  # 12.2.2 shape: queued or conditional beats
     _take(rec, res, oof, decl)
     outcomes += res.outcomes

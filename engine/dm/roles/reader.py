@@ -3,7 +3,7 @@
     res = read_message(ctx, "I slip past the watchman. Is the ferry running?", exchanges=recent)
     res.parts            # [Part(text, class, question_kind, topic)] in the player's order (12.2.2)
     res.fact_questions   # FICTION_QUESTION and embedded questions (01.2.1, 01.3.8)
-    plans = res.plans(actor="pc.wren", declared_seq=state.last_seq, mint=tx.mint)    # ≤3 BeatPlans (01.2.3)
+    plans = res.plans(actor="pc.wren", declared_seq=state.last_seq, mint=tx.mint)    # the message's plan (spec 017)
 
 The model classifies from closed enums: per beat only the verb, target, three method facets and the shape; per part
 the question kind and topic. The gate (engine/resolve/gate.py), the roll test (engine/resolve/necessity.py) and the
@@ -25,7 +25,7 @@ from engine.dm.packet import build_packet
 from engine.dm.roles.prompts import load_prompt
 from engine.dm.schemas import build_schema, defaults, schema_context
 from engine.llm.base import Role, call_role
-from engine.resolve.pipeline import MAX_BEATS, BeatPlan
+from engine.resolve.pipeline import BeatPlan, own_line
 from engine.resolve.types import Beat, Change
 from engine.retrieve.anchors import scene_situation_tags
 from engine.retrieve.cards import load_cards_for
@@ -38,7 +38,6 @@ NONE = "none"
 # an in-fiction Recall (01.18.6) and is left to the Reader.
 KNOW_QUESTION = re.compile(r"\bwhat (?:do|did) (?:i|we) (?:\w+ )?know\b|\bwhat (?:have i|i've) (?:learn|found out)"
                            r"|\bwhat does my character know\b", re.I)
-_QUEUED_TAIL = re.compile(r"(?:(?<=[.!?;])\s+|\n\s*)Then\b")  # rule: 01.2.3 (queued beats follow the beat's line)
 RECALL_WORDS = re.compile(r"\b(?:remember|recall|think back|try to|search my memory|rack my)", re.I)
 _SENTENCE = re.compile(r"(?<=[.!?])\s+")
 NOW = "now"
@@ -181,34 +180,37 @@ class ReaderResult(BaseModel):
         return now_beats(self.beats)
 
     def plans(self, *, actor: str, declared_seq: int, mint: Callable[[str], str]) -> list[BeatPlan]:  # rule: 01.2.3
-        """The beats to resolve now, in the player's order (the caller resolves the first three). A queued or
-        conditional beat ("I attack if they keep stalling") is not resolved now: it waits in `queued` (I-146c)."""
+        """The message's plan, in the player's order: the beats to resolve now and the conditional ones ("if I find
+        them, I demand their story"), which run after what they wait on (spec 017; the pipeline re-checks each). A
+        queued (Ready) beat ("I attack if they keep stalling") waits on the world: it stays in `queued` (I-146c)."""
         out: list[BeatPlan] = []
         now = self._now()
         single = len(now) == 1
-        # the one beat's line, not the queued "Then, ..." tail: an OFFER must not read as one roll for both
-        own = _QUEUED_TAIL.split(self.restatement, maxsplit=1)[0].strip()
-        # the Reader's own notes ("Spoken to Oggza, not a beat: ...") are not the beat's line (P-108)
-        own = drop_reader_notes(own)
         # ponytail: a Talk beat "asks" when any part carries a question kind; per-beat kinds if two Talks differ
         asks = any(p.question_kind not in (None, NONE) for p in self.parts if p.cls in ("DECLARATION", "SPEECH"))
-        for b in now:
+        # spec 017: a conditional beat is part of the message's plan (it runs after what it waits on)
+        for b in [b for b in self.beats if b in now or b.shape == "conditional"]:
+            # the one beat's own clause of the restatement, not another beat's (fighter turn 11), nor the Reader's
+            # notes ("Spoken to Oggza, not a beat: ...", P-108): an OFFER must not read as one roll for both
+            own = drop_reader_notes(own_line(self.restatement, f"{b.method} {b.intent}",
+                                              alone=single and b in now))
             target = b.target if b.target and b.target != NONE else None
             beat = Beat(id=mint(ids.BEAT), actor=actor, intent=b.intent, method=b.method or b.intent,
                         assertion=b.assertion, shape="extended" if b.shape == "extended" else "single",
-                        target=target, restatement=(own if single and own else b.intent),
+                        target=target, restatement=own or b.intent,
                         verb=b.verb, against_will=b.against_will, uses_power=b.uses_power, speech=b.speech,
                         pressure=b.pressure or NONE,
                         asks=asks and b.verb == "verb.talk", g4_fact=b.g4_fact, declared_seq=declared_seq,
                         change=b.change)
-            out.append(BeatPlan(beat=beat, intent_verbs=list(b.intent_verbs)))
+            out.append(BeatPlan(beat=beat, intent_verbs=list(b.intent_verbs),
+                                when="now" if b in now else "conditional"))
         return out
 
     @property
     def queued(self) -> list[str]:
+        """A queued (Ready) beat waits on the world, not on this message's plan (12.2.2)."""
         now = self._now()
-        later = [b.intent for b in self.beats if b not in now]
-        return [b.intent for b in now[MAX_BEATS:]] + later
+        return [b.intent for b in self.beats if b not in now and b.shape != "conditional"]
 
 
 _MAYBE_DISPUTE = re.compile(
