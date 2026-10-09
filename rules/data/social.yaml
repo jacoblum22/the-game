@@ -309,7 +309,7 @@ cast:                      # 00.11.1 domain cast: "who is <role>?" and "who woul
     weights: {role_or_topic_match: 3, same_place_as_asker: 2, member_of_the_faction_named: 2, known_to_pc: 1, holds_a_case_placement_on_it: 3}
     recency: "an NPC cast for the same question before is cast again (the asked-and-answered index); the rest by weight on the seeded stream"
   empty_pool:
-    who_is_role: "T-12-4's last row: a person who must exist now (12.11.1, PR-12-5) when the scene or the question implies one (a clerk behind a counter); else the answer 'no one you know', written as a fact"
+    who_is_role: "T-12-4's last row: a person who must exist now (12.11.1, PR-12-5) when the scene or the question implies one (a clerk behind a counter); else nothing is written (no line, no fact) and the NPC answers in character (PR-12-10 step 1)"   # [revision: R2-J] [DL-12-103]
     who_would_know: "a place pointer: the topic's kept_at place in the settlement (common_knowledge.topics); else a new walk-on there by 12.11.1 with a role whose topics include it"
 
 event_tags:                # 12.11.9 step 3(b), 12.2.9 (b): the closed tags code matches wants and refusals against, CiF-style [revision: R2-G] [DL-12-87; I-176]

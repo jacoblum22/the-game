@@ -7,8 +7,8 @@ are answered with a person who already exists, never one the narration made up.
 The pool gate is the store's existing NPCs minus the PC, the anchor bond, anyone sealed and the far powers
 (`base_pool`, formerly `incident._people`), then the role (or topic) and the scope. The fill is weighted by fit
 (`#cast.fill.weights`) on a stream keyed by the game's seed and the question, so the same question casts the same
-person while the pool is unchanged (`#cast.fill.recency`). An empty pool is the caller's: 12.11.1 generation or
-"no one you know" (`#cast.empty_pool`).
+person while the pool is unchanged (`#cast.fill.recency`). An empty pool is the caller's: 12.11.1 generation, or
+nothing written and the NPC answers in character (`#cast.empty_pool`; DL-12-103).
 """
 
 from __future__ import annotations

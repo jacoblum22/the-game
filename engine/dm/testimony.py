@@ -4,9 +4,12 @@ back on their speaker card, never a world fact until it matters.
     add_said(ctx, [{"speaker": "npc.nibwen", "words": "...", "about": [...], "question": "npc.nibwen|what_is|folk"}])
     said_by(state, "npc.nibwen", topic="folk")      # recent lines + every one on the topic (`answer_ladder.said_shown`)
     is_repeat(state, rules, "npc.nibwen", words)     # `not_a_repeat`: overlap above `narration.freshness.said_overlap`
-    settle_triggered(ctx, reader, record)            # PR-12-12 triggers (a) and (c): settle once, before framing
+    settle_triggered(ctx, reader, record)            # PR-12-12 step 1's triggers: settle once, before framing
 
-Records live in meta `npc.said` {"n": int, "records": [{id, speaker, turn, words, about, question, settled, fact}]}.
+Records live in meta `npc.said` {"n": int, "records": [{id, speaker, turn, words, about, question, settled, fact}]}:
+`settled` is None (open), True / False (the fact or the speaker's error), or "none" (the words claimed nothing about
+the world: a refusal, opinion, want, feeling, intention or question; nothing written). The record is the settled
+fact's `said_by` / `said_turn` (PR-12-12 step 4; `said_for`).
 The asked-and-answered index (meta `answers.index`, `"<npc>|<kind>|<topic>" -> {willingness, reason, said}`) is the
 NPC's memory; it never supplies words.
 """
@@ -29,11 +32,6 @@ PEOPLE = ("npc", "companion", "adversary")
 
 def records(state: Any) -> list[dict[str, Any]]:
     return list((state.meta.get(SAID) or {}).get("records") or [])
-
-
-def open_records(state: Any, k: int = 8) -> list[dict[str, Any]]:  # rule: PR-12-12
-    """The newest `k` unsettled `said` records: what the Reader may name as `rests_on`."""
-    return [r for r in records(state) if r.get("settled") is None and r.get("speaker")][-k:]
 
 
 def get(state: Any, said_id: str) -> dict[str, Any] | None:
@@ -118,18 +116,32 @@ def _known_only_from_testimony(state: Any, pc: str, eid: str) -> bool:  # rule: 
     return False
 
 
-def triggered(state: Any, rests_on: str | None, targets: Sequence[str]) -> list[str]:  # rule: PR-12-12
-    """PR-12-12 step 1, triggers (a) acted on and (c) travel, over the unsettled `said` records: the Reader's
-    `rests_on`, or a beat's target (a person, or a place a Move or travel sets out for) that a `said` record names
-    and the PC knows only from testimony. Hearing, repeating or asking about testimony settles nothing.
-    ponytail: (b) a lever citing a `said` id and (d) a frame input are not derived (spec 015/016 own them)."""
-    open_ = [r for r in records(state) if r.get("settled") is None]
-    out = [r["id"] for r in open_ if r["id"] == rests_on]
+def _premise(assertion: str, r: dict[str, Any]) -> bool:
+    """The beat's stated premise restates the said words: most of the shorter one's content words are in the other
+    (two at least), so "the guard sleeps at noon, as Dunwen said" cites her line and "I don't believe you" does not."""
+    a, w = words.content(assertion), words.content(r.get("words") or "")
+    small = min(len(a), len(w))
+    return small >= 2 and len(a & w) >= max(2, 0.6 * small)
+
+
+def triggered(state: Any, beats: Sequence[Any]) -> list[str]:  # rule: PR-12-12
+    """PR-12-12 step 1 over the open `said` records, only when the player acts on a specific claim (DL-12-102):
+    (a) travel / (c) a target: a beat's target (a person, or a place a Move or travel sets out for) that a record
+    names and the PC knows only from testimony; (b) cited in the roll: the beat's stated premise (the Reader's
+    `assertion`) restates a record. Hearing, repeating, asking about or arguing with testimony settles nothing.
+    Retires the Reader's `rests_on`, which fired on 64% of turns (I2 §1).
+    ponytail: (c)'s other frame inputs (a gate, tier or cost taken from a claim) are not derived; no field carries
+    them (revisit per DL-12-102)."""
+    open_ = [r for r in records(state) if r.get("settled") is None and r.get("speaker")]
     pc = active_pc(state)
-    for t in targets:
-        if pc is None or t not in state.entities or not _known_only_from_testimony(state, pc, t):
-            continue
-        out += [r["id"] for r in open_ if _named(state, r, t)][-1:]  # the latest line that named it
+    out: list[str] = []
+    for b in beats:
+        t = str(getattr(b, "target", None) or "")
+        if pc is not None and t in state.entities and _known_only_from_testimony(state, pc, t):
+            out += [r["id"] for r in open_ if _named(state, r, t)][-1:]  # the latest line that named it
+        claim = str(getattr(b, "assertion", None) or "")
+        if claim:
+            out += [r["id"] for r in open_ if _premise(claim, r)][-1:]
     return list(dict.fromkeys(out))
 
 
@@ -140,30 +152,56 @@ _BEYOND = re.compile(r"\b(secret\w*|hidden|treasure\w*|hoard|weak(?:ness|\s+spot
 
 
 def _claim(ctx: Any, r: dict[str, Any]) -> dict[str, str]:  # rule: PR-12-12
-    """Step 2: one `[J:enum]` call states the said words as `{subject, predicate, value}`; it judges nothing else."""
-    from engine.dm.packet import identity_lines, name_line
+    """Step 2: one `[J:enum]` call reads the said words with the speaker, the exchange they were said in and the
+    identity lines (name, pronouns, bond) of everyone they name (12.2.4 item 3), and states them as `{kind, subject,
+    predicate, value}`; `kind` is `claim`, or why there is none (a refusal, opinion, want, feeling, intention or
+    question). It judges nothing else. Names, never ids, so no id lands in a value (I2 §1)."""
+    from engine.dm.packet import identity_lines, render_exchange
     from engine.dm.roles.prompts import load_prompt
     from engine.dm.schemas import build_schema, schema_context
     from engine.llm.base import Packet, Role, call_role
+    from engine.store.views import display_name
 
     st = ctx.need_tx().state
-    sctx = schema_context(st, ctx.rules)
+    schema = build_schema(Role.TESTIMONY, schema_context(st, ctx.rules))
+    speaker = str(r.get("speaker") or "")
     about = [a for a in r.get("about") or [] if a in st.entities and a not in st.seals]
-    sctx = sctx.model_copy(update={"scene_ids": list(dict.fromkeys([*about, *sctx.scene_ids]))})
-    schema = build_schema(Role.TESTIMONY, sctx)
-    view = "\n".join(name_line(st, a) for a in about)
     # rule: 12.2.4
-    # item 3: who the speaker and everyone the words name are (pronouns, bond), so "he" and "my sister" resolve (I2 §4)
-    people = identity_lines(st, [r.get("speaker") or "", *about], str(r.get("words") or ""))
-    if people:
-        view += "\npeople named (name: pronouns; \"your\" means the player's character's):\n" + "\n".join(people)
-    packet = Packet(instructions=load_prompt("testimony"), core="", cards=[], view=view, exchanges=[],
-                    message=f"{name_line(st, r.get('speaker') or '')} said: \"{r['words']}\"")
-    default = {"subject": about[0] if about else "world", "predicate": "is said to be", "value": r["words"][:160]}
+    people = identity_lines(st, [speaker, *about], str(r.get("words") or ""))
+    view = ("people (name: pronouns; their tie to the player's character, who is \"you\"):\n" + "\n".join(people)
+            ) if people else ""
+    turn = ctx.store.turn(r["turn"]) if getattr(ctx, "store", None) is not None and r.get("turn") else None
+    who = display_name(st, speaker) if speaker in st.entities and speaker not in st.seals else "someone"
+    packet = Packet(instructions=load_prompt("testimony"), core="", cards=[], view=view,
+                    exchanges=[render_exchange((turn.input_verbatim, turn.delivered_verbatim))] if turn else [],
+                    message=f"{who} said: \"{r['words']}\"")
+    default = {"kind": "none", "subject": "", "predicate": "", "value": ""}  # no claim stated: nothing is written
     res = call_role(ctx.model, Role.TESTIMONY, schema, packet, turn_id=ctx.turn_id, recorder=ctx.record_call,
                     default=default)
-    d = {k: str(res.data.get(k) or default[k]) for k in default}
-    return d
+    return {k: str(res.data.get(k) or default[k]).strip() for k in default}
+
+
+# a claim about the speaker's own will is an intention or a refusal, never a world fact (PR-12-12 step 2): "will give
+# no word", "won't say", "refuses" (233000 t7: the refusal written as fact.103 and cited as a -2 snag)
+_OWN_WILL = re.compile(r"^(?:will|won'?t|would|wouldn'?t|shall|shan'?t|refuses?|wants?|wishes|intends?|means to|"
+                       r"is (?:not )?willing|is unwilling|declines?)\b", re.I)
+
+
+def _subject(st: Any, name: str) -> str:
+    """The claim's subject as an id: an id in the store, the PC for "you", else the one entity the name names."""
+    from engine.retrieve.scene import resolve_names
+
+    if name in st.entities:
+        return name
+    if name.lower() in ("you", "yourself", "the player's character"):
+        return active_pc(st) or "world"
+    hits = [i for i in resolve_names(st, name) if i not in st.seals]
+    return hits[0] if len(hits) == 1 else "world"
+
+
+def said_for(state: Any, fact_id: str) -> dict[str, Any] | None:  # rule: PR-12-12
+    """Step 4's `said_by` / `said_turn`: the `said` record a settled fact came from (it holds speaker and turn)."""
+    return next((r for r in records(state) if r.get("fact") == fact_id), None)
 
 
 def _case_route(st: Any, subject: str, text: str) -> bool | None:  # rule: PR-12-12
@@ -199,9 +237,16 @@ def settle(ctx: Any, said_id: str, record: Any = None) -> str | None:  # rule: P
     if r is None or r.get("settled") is not None:
         return None
     c = _claim(ctx, r)
-    subject = c["subject"] if c["subject"] in st.entities else "world"
+    subject = _subject(st, c["subject"])
+    speaker = r.get("speaker") or "world"
+    if c["kind"] != "claim" or not c["predicate"] or (subject == speaker and _OWN_WILL.match(c["predicate"])):
+        # step 2: no world claim (a refusal, opinion, want, feeling, intention, question): nothing is written
+        _mark(tx, said_id, settled="none", fact=None, route=c["kind"] if c["kind"] != "claim" else "own_will")
+        if record is not None:
+            record.notes.append(f"testimony settled (none: {c['kind']}): nothing written")
+        return None
     text = f"{c['subject'] if subject == 'world' else st.entities[subject].name} {c['predicate']} {c['value']}"
-    pred = ("said." + ids.slug(f"{c['predicate']} {c['value']}"))[:60]
+    pred = (ids.slug(c["predicate"]) or "is")[:60]  # the claim's own predicate; the value stays the value (I2 §1)
     route, true = "accepted", True
     case = _case_route(st, subject, text)
     fid: str | None = None
@@ -213,7 +258,6 @@ def settle(ctx: Any, said_id: str, record: Any = None) -> str | None:  # rule: P
                          store=ctx.store, staged=tx.events)
         tx.add_all(res.events)
         route, true, fid = "oracle", res.answer is True, (res.fact_id if res.answer is True else None)
-    speaker = r.get("speaker") or "world"
     if route == "case" and true:
         pass  # the case already holds it: nothing is written or told (a clue comes only by its placement, 15.9)
     elif true and fid is None:
@@ -228,13 +272,16 @@ def settle(ctx: Any, said_id: str, record: Any = None) -> str | None:  # rule: P
     pc = active_pc(tx.state)
     if pc and fid and fid in tx.state.facts and fid not in tx.state.knowledge.get(pc, {}):
         record_knowledge(ctx.time_ctx(), pc, fid, "told")
-    cur = dict(tx.state.meta.get(SAID) or {})
-    recs = [dict(x, settled=bool(true), fact=fid, route=route) if x["id"] == said_id else x
-            for x in cur.get("records") or []]
-    tx.add(meta(SAID, {**cur, "records": recs}, "PR-12-12"))
+    _mark(tx, said_id, settled=bool(true), fact=fid, route=route)
     if record is not None:
         record.notes.append(f"testimony settled ({route}): {text} -> {'true' if true else 'false'}")
     return fid
+
+
+def _mark(tx: Any, said_id: str, **fields: Any) -> None:
+    cur = dict(tx.state.meta.get(SAID) or {})
+    recs = [dict(x, **fields) if x["id"] == said_id else x for x in cur.get("records") or []]
+    tx.add(meta(SAID, {**cur, "records": recs}, "PR-12-12"))
 
 
 def settle_triggered(ctx: Any, reader: Any, record: Any = None) -> list[str]:  # rule: PR-12-12
@@ -243,12 +290,11 @@ def settle_triggered(ctx: Any, reader: Any, record: Any = None) -> list[str]:  #
     st = ctx.need_tx().state
     if not records(st):
         return []
-    targets = [b.target for b in getattr(reader, "beats", []) if b.target and b.target != "none"]
-    out = triggered(st, getattr(reader, "rests_on", None), targets)
+    out = triggered(st, getattr(reader, "beats", []))
     for sid in out:
         settle(ctx, sid, record)
     return out
 
 
-__all__ = ["INDEX", "SAID", "add_said", "get", "is_repeat", "overlap", "records", "said_by", "settle",
+__all__ = ["INDEX", "SAID", "add_said", "get", "is_repeat", "overlap", "records", "said_by", "said_for", "settle",
            "settle_triggered", "triggered"]

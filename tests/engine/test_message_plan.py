@@ -39,7 +39,7 @@ def _part(text: str, cls: str = "DECLARATION", qk: str = "none", topic: str | No
 def _reader(parts: list[dict[str, Any]], beats: list[dict[str, Any]], restatement: str,
             questions: list[dict[str, Any]] | None = None) -> dict[str, Any]:
     return {"beats": beats, "clarifying_question": None, "fact_questions": questions or [], "parts": parts,
-            "player_quantity": None, "restatement": restatement, "rests_on": "none"}
+            "player_quantity": None, "restatement": restatement}
 
 
 NONE = {"kind": "none", "what": "none", "whom": "none"}

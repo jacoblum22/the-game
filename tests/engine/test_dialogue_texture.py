@@ -28,6 +28,11 @@ from tests.fixtures.seeded import seeded_store
 NAMED = "Laendil learned their trade from Tibgit Lucky, down at the smithy."
 
 
+class _Beat:  # a Reader beat's fields PR-12-12's triggers read
+    def __init__(self, target: str | None = None, assertion: str | None = None) -> None:
+        self.target, self.assertion = target, assertion
+
+
 def _said(store: Any, speaker: str, words: str, about: list[str] | None = None, question: str | None = None) -> str:
     with turn(store) as ctx:
         return tm.add_said(ctx, [{"speaker": speaker, "words": words, "about": about or [], "question": question}])[0]
@@ -87,15 +92,23 @@ def test_a_runaround_cannot_come_from_code(tmp_path: Path) -> None:
 # ------------------------------------------------------------------------------------------- 2. lazy settlement
 
 
-def test_relied_on_testimony_is_settled_once_before_the_beat(tmp_path: Path) -> None:
+def test_testimony_cited_as_the_premise_is_settled_once_before_the_beat(tmp_path: Path) -> None:
     store = seeded_store(tmp_path, 8)[0]
     npc = here(store)[0]
     sid = _said(store, npc, "The ford below the mill is shallow this week.")
 
-    class R:
-        rests_on = sid
-        beats: list[Any] = []
+    class B:
+        target = None
+        assertion = "the ford below the mill is shallow"
 
+    class R:
+        beats: list[Any] = [B()]
+
+    class Talk:  # arguing with it, or asking about it, settles nothing (PR-12-12 step 1)
+        target = npc
+        assertion = None
+
+    assert tm.triggered(store.state, [Talk()]) == []
     with turn(store) as ctx:
         assert tm.settle_triggered(ctx, R()) == [sid]
     rec = tm.get(store.state, sid)
@@ -116,8 +129,8 @@ def test_a_target_known_only_from_testimony_triggers_settlement(tmp_path: Path) 
             id="npc.garwen", kind="npc", name="Garwen Deepwell", data={"role": "sellsword", "name_known": False})))
         learn_name(ctx.time_ctx(), PC, "npc.garwen", "heard")
     sid = _said(store, npc, "Garwen Deepwell drinks at the Crooked Lantern most mornings.")
-    assert tm.triggered(store.state, None, ["npc.garwen"]) == [sid]
-    assert tm.triggered(store.state, None, [npc]) == []  # someone the PC met is not known only from testimony
+    assert tm.triggered(store.state, [_Beat("npc.garwen")]) == [sid]
+    assert tm.triggered(store.state, [_Beat(npc)]) == []  # someone the PC met is not known only from testimony
 
 
 def test_a_consequential_claim_is_settled_by_the_case_and_delivers_no_clue(tmp_path: Path) -> None:

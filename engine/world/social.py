@@ -309,8 +309,9 @@ def first_interaction(ctx: TimeContext, npc: str, *, modifiers: int = 0,
                       faction_status: int | None = None) -> int:  # rule: 12.11.2
     # rule: 15.1.4
     """12.11.2 / 15.1.4: at the NPC's first interaction with the PC, roll the starting standing (a faction member:
-    status + tbl.npc_reaction_member; anyone else: tbl.npc_reaction + cited modifiers, clamped +-2; never Devoted)
-    and write it. Returns the standing (the existing one if already set)."""
+    status + tbl.npc_reaction_member; anyone else: tbl.npc_reaction + cited modifiers, clamped +-2, bounded by a
+    seeded stance: `helps` never below Neutral, `hinders` never above Wary; never Devoted) and write it. Returns the
+    standing (the existing one if already set)."""
     state = ctx.tx.state
     pc = active_pc(state)
     if pc is None:
@@ -326,11 +327,19 @@ def first_interaction(ctx: TimeContext, npc: str, *, modifiers: int = 0,
                 break
     react = gen_npc.reaction_roll(LoggedSeedRng(_rng(ctx), f"reaction roll {npc} (12.11.2)"),
                                   modifiers=modifiers, faction_status=faction_status)
-    stage(ctx, Event.of("relationship_set", rule_id="12.11.2", a=npc, b=pc, kind="standing", value=react.standing,
-                        new_value=react.standing, reason=f"reaction roll ({react.table} {react.roll}"
-                        f"{react.modifier:+d})"))
+    value, bound = react.standing, ""
+    if faction_status is None:  # 12.11.2 step 2, DL-12-107: a cast NPC's seeded stance bounds the roll
+        seed = npc_field(state, npc, "stance")
+        stance = seed.get("stance") if isinstance(seed, dict) else None
+        if stance == "helps" and value < _RUNGS["neutral"]:
+            value, bound = _RUNGS["neutral"], "; stance helps: never below Neutral"
+        elif stance == "hinders" and value > _RUNGS["wary"]:
+            value, bound = _RUNGS["wary"], "; stance hinders: never above Wary"
+    stage(ctx, Event.of("relationship_set", rule_id="12.11.2", a=npc, b=pc, kind="standing", value=value,
+                        new_value=value, reason=f"reaction roll ({react.table} {react.roll}"
+                        f"{react.modifier:+d}{bound})"))
     _add_to_cast(ctx, npc)
-    return react.standing
+    return value
 
 
 def step_standing(ctx: TimeContext, npc: str, steps: int, reason: str, *, cap: str | None = None,

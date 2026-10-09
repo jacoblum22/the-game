@@ -218,6 +218,15 @@ def fact_short(state: WorldState | None, fact_id: str) -> str:  # rule: 12.15.2
         return ""
     v, pred = f.value, f.predicate.removeprefix("detail.")
     words = slug_words(pred)
+    if getattr(f, "source", None) == "testimony":  # PR-12-12 step 4: a settled claim says who said it ("Dunwen said: ..."), I2 §1
+        from engine.dm.testimony import said_for
+
+        r = said_for(state, fact_id)  # type: ignore[arg-type]
+        who = _who(state, str(r.get("speaker"))) if r else ""  # type: ignore[arg-type]
+        about = _who(state, f.subject) if f.subject in state.entities else ""  # type: ignore[union-attr]
+        claim = " ".join(x for x in (about, pred.replace("_", " "), str(v)) if x)
+        claim = claim if len(claim) <= 60 else claim[:57].rstrip() + "…"
+        return f"{who[:1].upper()}{who[1:]} said: {claim}" if who else claim
     if v is True or v in ("true", "yes"):
         return words
     if v is False or v in ("false", "no"):

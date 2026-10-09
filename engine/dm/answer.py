@@ -32,14 +32,14 @@ from engine.store.events import WORLD
 from engine.world.common import active_pc, fact, meta
 from engine.world.social import learn_name, record_knowledge
 
-NO_ONE = "no one you know"
 NPC_TABLE = "tbl.npc_action"
 # "who is X?" with X one of these (stems) is a story role: the case graph answers it (PR-12-10 step 1)
 STORY_ROLES = words.content("missing enemy rival challenger stranger thief culprit killer messenger refugee arrival "
                             "behind responsible traitor taken kidnapper attacker")
 _WHO = re.compile(r"\bwho(?:'s|’s|\s+(is|was|are|were|took|has|had|did|sent|would|might|could))?\s+([^?!.;,\"”]+)",
                   re.IGNORECASE)
-_SELF = re.compile(r"^(?:you|he|she|they|your(?: own)? name)\b", re.IGNORECASE)  # asked of the one answering
+# asked of the one answering ("who she is"); never "they" ("who are they?" got the knower's own name, I2 §3)
+_SELF = re.compile(r"^(?:you|he|she|your(?: own)? name)\b", re.IGNORECASE)
 _OWN_NAME = re.compile(r"\b(?:your|his|her|their)(?: own)? name\b", re.IGNORECASE)  # never "the name of X" (P-113)
 PEOPLE = ("npc", "companion", "adversary")
 # the willingness line's words (PR-12-10 step 2); the narrator chooses the NPC's words within it (step 4)
@@ -175,12 +175,15 @@ def deliver_node(ctx: Any, case: dict[str, Any], node: dict[str, Any], placement
 def _from_case(ctx: Any, knower: str, case: dict[str, Any], who: bool, pc: str, first: bool) -> Answer | None:
     # rule: PR-12-10
     """The consequential route: a holder of a live placement on the node delivers it; anyone else says so and names
-    the holder of the node's core placement (the one that cannot fail), else of a live one. None when the case names
-    no one to send the PC to (the knower then answers in words, within their willingness)."""
+    the holder of the node's core placement (the one that cannot fail), else of a live one. None when the node is
+    already found (an NPC never re-delivers it: 232941 t5, I1 §5a) or the case names no one to send the PC to (the
+    knower then answers in words, within their willingness)."""
     st = ctx.need_tx().state
     node = open_node(case, who)
+    if node.get("found") and knower != pc:
+        return None  # a found clue is never delivered or pointed at again: the NPC speaks of it in words (DL-12-103)
     held = next((p for p in node["placements"] if p["holder"] == knower and p.get("status") != "lost"), None)
-    if held is not None or (node.get("found") and knower == pc and node.get("fact_id") in st.knowledge.get(pc, {})):
+    if held is not None or (node.get("found") and node.get("fact_id") in st.knowledge.get(pc, {})):
         fid = deliver_node(ctx, case, node, held["id"] if held else None, pc)
         said = f"{'remember' if first else 'tells you'} {node['fact']}"
         return Answer(said, "", fid)
@@ -336,7 +339,7 @@ def _who_verb(text: str) -> str:
 def _who(ctx: Any, knower: str, text: str, about: str | None, pc: str, given: str | None = None
          ) -> Answer | None:  # rule: PR-12-10
     """"Who is <role>?": their own name (12.10.2); a person asked about by name; a story role -> the case graph (the
-    reduced case built now when none is behind it); any other role -> casting, else "no one you know"."""
+    reduced case built now when none is behind it); any other role -> casting, else the ordinary route."""
     st = ctx.need_tx().state
     role = _role_words(text) or ""
     if about == knower or _SELF.match(role) or (not role and _OWN_NAME.search(text)):
@@ -355,7 +358,10 @@ def _who(ctx: Any, knower: str, text: str, about: str | None, pc: str, given: st
     found = who_case(ctx, role, pc)
     if found is not None:
         return _from_case(ctx, knower, found, True, pc, False) or Answer("", "")  # "": the ordinary route
-    fid, who = cast_who(ctx, role, story=bool(words.content(role) & STORY_ROLES), exclude=(knower,))
+    cast_ = cast_who(ctx, role, story=bool(words.content(role) & STORY_ROLES), exclude=(knower,))
+    if cast_ is None:
+        return Answer("", "")  # no one cast: nothing written; the NPC answers in words (DL-12-103)
+    fid, who = cast_
     _tell(ctx, pc, fid)
     return Answer(f"tells you who {_who_verb(text)} {role}: {who}", "", fid)
 
@@ -369,25 +375,30 @@ def who_case(ctx: Any, role: str, pc: str) -> dict[str, Any] | None:  # rule: PR
     return case_covering(st, role) or case_for_question(ctx.need_tx(), role, here)
 
 
-def cast_who(ctx: Any, role: str, *, story: bool, exclude: Sequence[str] = ()) -> tuple[str, str]:  # rule: 00.11.1
-    """"Who is <role>?" (not a story role a case answers): a stored `who_is_*` fact, else an existing person by
-    casting (`social.yaml#cast`), else "no one you know"; written as a fact. Returns (fact id, the answer in words)."""
+def cast_who(ctx: Any, role: str, *, story: bool, exclude: Sequence[str] = ()) -> tuple[str, str] | None:
+    # rule: 00.11.1
+    """"Who is <role>?" (not a story role a case answers): a stored `who_is_*` fact naming a person, else an existing
+    person by casting (`social.yaml#cast`), written as a fact. Returns (fact id, their name); None when no one is
+    cast: a failed cast writes nothing (PR-12-10 step 1, DL-12-103; retires the "no one you know" fact, I2 §3)."""
     st = ctx.need_tx().state
     pred = ("who_is_" + ids.slug(role))[:57]
     cur = st.current_fact_id(WORLD, pred)
-    if cur is None:
+    v = st.facts[cur].value if cur is not None else None
+    if not (isinstance(v, str) and v in st.entities):  # nothing stored, or a pre-021 "no one you know": cast again
         pc = active_pc(st)
         here = home_of(st, pc) if pc in st.entities else None
-        who = cast(st, role, scope=here, exclude=exclude, gate=not story) or NO_ONE
-        cur = _write(ctx, WORLD, pred, who, rule="00.11.1", source="generation")
-    v = st.facts[cur].value
-    return cur, (st.entities[v].name if isinstance(v, str) and v in st.entities else str(v))
+        v = cast(st, role, scope=here, exclude=exclude, gate=not story)
+        if v is None:
+            return None
+        cur = _write(ctx, WORLD, pred, v, rule="00.11.1", source="generation")
+    return str(cur), st.entities[str(v)].name
 
 
 def who_answer(ctx: Any, text: str) -> tuple[str, str] | None:  # rule: PR-12-10
     """A "who is X?" put to the DM (a FICTION_QUESTION, 01.3.8): the PC is the knower. A story role is answered from
     the case only when the PC has been told it, else with who would know (the core holder); any other role by
-    casting. None when the text is not a who-question (the caller's Oracle asks it)."""
+    casting. None when the text is not a who-question (the caller's Oracle asks it); ("", "") when no one is cast
+    (nothing is written or told: the narration answers in words, DL-12-103)."""
     role = _role_words(text)
     if not role or not words.content(role) or _SELF.match(role):
         return None
@@ -404,7 +415,10 @@ def who_answer(ctx: Any, text: str) -> tuple[str, str] | None:  # rule: PR-12-10
             v = st.facts[a.fact_id].value if a.fact_id else None
             return (st.entities[v].name if isinstance(v, str) and v in st.entities else str(v)), str(a.fact_id)
         return f"no one has told you; {name(st, a.pointer)} would know", str(a.fact_id)
-    fid, who = cast_who(ctx, role, story=bool(words.content(role) & STORY_ROLES))
+    cast_ = cast_who(ctx, role, story=bool(words.content(role) & STORY_ROLES))
+    if cast_ is None:
+        return "", ""
+    fid, who = cast_
     _tell(ctx, pc, fid)
     return who, fid
 
@@ -452,5 +466,5 @@ def volunteer(ctx: Any, knower: str, pc: str) -> Answer | None:  # rule: T-15-5
     return None
 
 
-__all__ = ["INDEX", "NO_ONE", "STORY_ROLES", "WILL_WORDS", "Answer", "ask", "case_about", "cast_who",
+__all__ = ["INDEX", "STORY_ROLES", "WILL_WORDS", "Answer", "ask", "case_about", "cast_who",
            "deliver_count", "deliver_node", "name", "topic_of", "volunteer", "who_answer", "willingness"]

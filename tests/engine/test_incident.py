@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import Any
 
 from engine.audit.screen import echoed_quotes
-from engine.dm.answer import NO_ONE, ask, who_answer
+from engine.dm.answer import ask, who_answer
 from engine.dm.context import TurnContext
 from engine.dm.incident import incident_line, start_knowledge
 from engine.dm.packet import scene_setting
@@ -97,9 +97,12 @@ def test_other_who_questions_are_cast_among_existing_people(tmp_path: Path) -> N
     assert enemy[0] in line and fid == enemy[1]
 
 
-def test_who_with_no_one_fitting_is_no_one_you_know(tmp_path: Path) -> None:
+def test_who_with_no_one_fitting_writes_nothing(tmp_path: Path) -> None:
+    """Spec 021 (DL-12-103): a failed cast writes no "no one you know" fact and no line."""
     store = _world(tmp_path, npcs=[])
-    assert _ask(store, "who is the old enemy")[0] == NO_ONE
+    before = dict(store.state.facts)
+    assert _ask(store, "who is the old enemy") == ("", "")
+    assert not any(f.predicate.startswith("who_is_") for f in store.state.facts.values() if f.id not in before)
 
 
 def test_a_local_knows_the_havens_names_and_an_outsider_does_not(tmp_path: Path) -> None:

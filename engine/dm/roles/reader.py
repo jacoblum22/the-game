@@ -230,7 +230,6 @@ class ReaderResult(BaseModel):
     clarifying_question: str | None = None
     restatement: str = ""
     player_quantity: int | None = None
-    rests_on: str | None = None  # PR-12-12 (a): the `said` id the action relies on (spec 013)
     defaulted: bool = False
 
     def classes(self) -> list[str]:
@@ -353,6 +352,5 @@ def read_message(ctx: TurnContext, message: str, *, exchanges: Sequence[Any] = (
         clarifying_question=data.get("clarifying_question"),
         restatement=data.get("restatement") or "",
         player_quantity=data.get("player_quantity"),
-        rests_on=data.get("rests_on") if data.get("rests_on") not in (None, NONE) else None,
         defaulted=res.defaulted,
     )
