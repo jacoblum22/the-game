@@ -298,4 +298,30 @@ everything.
   - two patches.
 
   DL-12-96..100, DL-01-36.
-- **In flight:** spec 017 (the message plan across pauses) and spec 018 (the R2-I engine side), in parallel.
+- **10e8258, spec 017: message plan.**
+  - Conditional beats are part of the plan, and the plan survives every pause.
+  - A one-line check asks "Still go on to …?".
+  - Speech is carried across pauses.
+  - The OFFER title comes from the beat's own sentence.
+  - Live fighter run: no dropped parts, no mismatched titles.
+- **0d3f8c1, spec 018: R2-I engine side**, plus the reconciliation with 017.
+  - Live results (Haiku):
+
+    | Measure | Talker | Fighter |
+    |---|---|---|
+    | Hedged NPC lines | 32% → 8% | 33% → 0% |
+    | Walking-in-place loops | → 0 | → 0 |
+    | Wasted successes | → 0 | 4 → 0 |
+
+  - Merging the two specs broke 4 tests. Three were 017's test fixtures missing 018's new schema field. The
+    fourth exposed a real bug from before either spec: a confirmed travel move never cut the scene. Fixed in
+    `turn.py`.
+  - Suite **1779**, validator 0/0.
+  - Remaining complaints:
+    - scenery repetition, now from people's descriptions;
+    - pronoun flips;
+    - no visible repair after `/fix`;
+    - "[NEAR MISS] hidden.";
+    - position after a fall.
+- **Owner: no Gemini runs tonight.** Tests stay on Haiku so they isolate the fixes.
+- **In flight:** talker and fighter persona runs on the combined 0d3f8c1, Haiku.
