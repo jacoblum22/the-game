@@ -3,6 +3,17 @@
 Branch `worktree-agent-aecf2f5b7d82fd196`, from `milestone-1-playable` (f9d5221, R2-J merged). Haiku for every
 engine call; the playtest player on Sonnet (the harness default). No Gemini, no API spend.
 
+## After merging milestone-1-playable (spec 019, a65c306)
+- Conflict only in the replay; re-recorded. `cards.json` rebuilt (unchanged). Suite on the combined code:
+  **1792 passed, 4 skipped, 0 failed**. Long-horizon scripted 300: **0 engine errors**
+  (`longhorizon_020_merged.txt`; line 50 narrator 6631, reader 3341, director 2287).
+- 019's notes: `narrator.md`'s "CORE RULES" now reads GUIDANCE (the one sanctioned edit there). Identity lines reach
+  the narrator packet through `view_for(Role.NARRATOR, …)`, which `narrator.draft` still calls. The OFFER leak
+  ("the height citation (fact.73) is unverified"; "must be answered by the Oracle before any roll") came through
+  "Whatever the roll:" and cost forms: `oof.player_words` now drops any Framer clause with an id or talk about the
+  record (view, citation, unverified, Oracle, established, recorded, fact, lever, snag…); tested on both live strings.
+- Still open (019's file): `narration.py:671` re-shows a paused OFFER with `then=` the raw `method`.
+
 ## Gates
 
 | Gate | Result |
@@ -110,7 +121,7 @@ code folds a blow only when the Reader marks it.
   `test_memory`, `test_harness`, offer snapshots); `evals/baselines/reader_golden.txt` regenerated for the new labels.
 
 ## Hand-off notes
-- **019:** `narration.py:705` re-shows a paused OFFER with `then=[q["beat"]["method"] …]`: replace with
+- **019:** `narration.py:671` re-shows a paused OFFER with `then=[q["beat"]["method"] …]`: replace with
   `oof.goal_line(BeatPlan.model_validate(q).beat, ctx.state)`. `narration._for_beat` labels RESULT blocks with the
   restatement (turn.py:243 passes `entry.restatement`): use `goal_line` too. The narrator prompt's "write around
   names or kinship" line is yours to remove; the identity lines it worked around are now in the narrator view

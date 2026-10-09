@@ -128,3 +128,16 @@ def test_director_and_world_get_their_exchanges(tmp_path: Path) -> None:
     for role, n in ((Role.DIRECTOR, 2), (Role.WORLD, 1), (Role.NARRATOR, 4)):
         p = build_packet(role, instructions="", cards=[], view=store.state, exchanges=talk, message="m", rules=RULES)
         assert len(p.exchanges) == n, role
+
+
+def test_offer_text_never_shows_ids_or_talk_about_the_record() -> None:
+    """Live runs 20261009 (talker 19, fighter 18): the Framer's notes reached "Whatever the roll:" in the OFFER."""
+    from engine.dm.oof import player_words
+
+    ladder = ("you stay on the ladder, climbing, until you reach the watch platform or come back down; the platform's "
+              "height is not recorded in the view, so the height citation (fact.73) is unverified")
+    assert player_words(ladder) == "you stay on the ladder, climbing, until you reach the watch platform or come back down"
+    oracle = ("No bandit is recorded in the scene yet; the condition 'if bandits are near the wagon' is unestablished "
+              "and must be answered by the Oracle before any roll")
+    assert player_words(oracle) == ""
+    assert player_words("the charge is loud and announces you") == "the charge is loud and announces you"

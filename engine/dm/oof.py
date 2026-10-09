@@ -167,11 +167,25 @@ def to_player(text: str, state: WorldState | None = None) -> str:  # rule: 12.14
     return out
 
 
+# the Framer talking about the record rather than the fiction (live runs 20261009: "the height citation (fact.73) is
+# unverified"; "must be answered by the Oracle before any roll")
+_META = re.compile(r"\b(?:view|citations?|cited?|unverified|oracle|(?:un)?established|recorded|record|schema|frame|"
+                   r"levers?|snags?|anchors?|facts?|DC)\b", re.I)
+
+
+def player_words(text: str) -> str:  # rule: 12.15.2
+    """A Framer phrase as the player may see it (12.15.2: no rule id or bookkeeping in OFFER text): its clauses
+    ("; ", or a new sentence) that carry no id and no talk about the record; "" when none is left."""
+    keep = [c.strip() for c in re.split(r";\s+|(?<=[.!?])\s+", text or "")
+            if c.strip() and not _BOOKKEEPING.search(c) and not _META.search(c)]
+    return "; ".join(keep).rstrip(".")
+
+
 def _cost_clause(cost: Any, state: WorldState | None = None) -> str:  # rule: 12.15.2
     """The price as one clause: the Framer's own form for this scene, addressed to the player (`to_player`), unless
     it carries ids or bookkeeping (then the cost's plain words; P-072)."""
-    form = (getattr(cost, "form_intent", "") or "").strip().rstrip(".")
-    if not form or _BOOKKEEPING.search(form):
+    form = player_words(getattr(cost, "form_intent", "") or "")
+    if not form:
         return COST_WORDS.get(cost.menu_id, "it costs you")
     return to_player(form, state)
 
@@ -390,8 +404,8 @@ def offer_block(f: Frame, *, rules: Any = None, fate: int | None = None, lethal_
                     "or fail.")
     # 12.15.2's Takes line, labelled for what it holds: what the method does whatever the roll (playtest 20261008:
     # "Takes:" read as a price); the current fate on its own line, since nothing spends it (01.7.1 item 7, 01.16.3)
-    takes = [name_of(rules, c).lower() if _DATA_ID.match(c.strip()) else to_player(c.strip().rstrip("."), state)
-             for c in f.method_consequences if c.strip()]
+    takes = [name_of(rules, c).lower() if _DATA_ID.match(c.strip()) else to_player(c, state)
+             for c in (c if _DATA_ID.match(c.strip()) else player_words(c) for c in f.method_consequences) if c]
     if takes:
         rest.append("Whatever the roll: " + " · ".join(takes))
     if fate is not None:
