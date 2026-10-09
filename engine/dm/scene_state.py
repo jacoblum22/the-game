@@ -16,6 +16,7 @@ from typing import Any
 
 from engine.dm.adjudication import ActivityEntry, AdjudicationRecord
 from engine.dm.context import TurnContext
+from engine.resolve.change import current_hold
 from engine.resolve.pipeline import _BAND_WORDS, _DOWN, band_words
 from engine.resolve.types import REACH_VALUE
 from engine.store.details import current, write_detail
@@ -80,6 +81,9 @@ def beat_writes(ctx: TurnContext, record: AdjudicationRecord, beats: Sequence[An
         down = bool(_DOWN.search(f"{e.restatement} {e.approach_words}"))
         parties = {"actor": e.actor or record.pc,
                    "target": next((t for t in e.targets if t in st.entities and st.entities[t].kind in people), None)}
+        if verb == "verb.grapple" and band == "success" and not (
+                parties["target"] and current_hold(st, parties["target"], parties["actor"])):
+            continue  # the posture is the hold condition's face (06.5.2): none once it is broken, or never applied
         fill = {k: _name(st, v, record.pc) for k, v in parties.items() if v}
         merged: dict[str, dict[str, str]] = {}
         for row in rows:
@@ -107,47 +111,28 @@ def _face(e: Any, band: str) -> tuple[str, str]:  # rule: 01.2.7
 
 
 def _free(ctx: TurnContext, record: AdjudicationRecord, e: Any) -> None:  # rule: 01.2.7
-    """A `free` that lands: the hold on its target (else the actor) ends, both slots cleared (the hold ends)."""
+    """A `free` that lands: the hold on its target (else the actor) ends: its conditions and their face (06.5.2)."""
+    from engine.resolve.conflict import end_hold, holds
+
     tx_ = ctx.need_tx()
     st = tx_.state
     who = next((t for t in e.targets if t in st.entities), None) or e.actor or record.pc
     start = len(tx_.events)
-    for holder, held in _holds(ctx.rules, st, record.pc):
+    for holder, held in holds(st):
         if who in (holder, held):
-            for eid, slot in ((holder, "held"), (held, "posture")):
-                tx_.add_all(write_detail(tx_.state, tx_.mint, eid, slot, None, source="ruling",
-                                         because=e.frame_id or e.beat_id or "01.2.7", rules=ctx.rules,
-                                         visibility="shown").events)
+            end_hold(tx_, ctx.rules, holder, held, "freed (01.2.7)", because=e.frame_id or e.beat_id or "01.2.7")
     record.add_writes(tx_.events[start:])
 
 
 LETS_GO = ("cond.unconscious", "cond.stunned")  # 06.5.2: a holder in either condition lets go
 
 
-def _holds(rules: Any, st: Any, pc: str | None) -> list[tuple[str, str]]:
-    """(holder, held) for every hold the scene state shows: a holder's `held` slot and the person whose posture is
-    one of T-12-18's hold postures by that holder (the rows are the only writer of both)."""
-    rows = _spec(rules)["beats"].get("verb.grapple", {}).get("success", [])
-    postures = [str((r.get("target") or {}).get("posture") or "") for r in rows]
-    out = []
-    for holder in st.details:
-        h = current(st, holder, "held")
-        if h is None or not h.value:
-            continue
-        name = _name(st, holder, pc)
-        for eid in st.details:
-            p = current(st, eid, "posture")
-            if eid != holder and p is not None and p.value in [x.replace("{actor}", name) for x in postures if x]:
-                out.append((holder, eid))
-    return out
-
-
 def release_holds(ctx: TurnContext, record: AdjudicationRecord) -> None:  # rule: 06.5.2
     """06.5.2: "the hold also ends if the holder lets go, is moved away, or is stunned, unconscious or defeated" (and
-    a held one who is down or gone is held by no one). Clears the holder's `held` and the held one's posture, so no
-    line keeps saying "held fast" after the grip is gone (playtest 20261008-135049)."""
+    a held one who is down or gone is held by no one). Ends the hold's conditions and their face, so no line keeps
+    saying "held fast" after the grip is gone (playtest 20261008-135049)."""
     from engine.harm.state import DEAD, LADDER_KINDS, harm_state, is_down
-    from engine.resolve.conflict import _band
+    from engine.resolve.conflict import _band, end_hold, holds
 
     tx_ = ctx.need_tx()
     st = tx_.state
@@ -159,13 +144,10 @@ def release_holds(ctx: TurnContext, record: AdjudicationRecord) -> None:  # rule
                 or (e.kind not in LADDER_KINDS and bool(st.fact_value(eid, "defeated")))
                 or any(c.condition_id in LETS_GO for c in st.conditions_on(eid)))
 
-    for holder, held in _holds(ctx.rules, st, record.pc):
+    for holder, held in holds(st):
         band = _band(st, holder, held) or _band(st, held, holder)
-        if not (out(holder) or out(held) or (band is not None and band != "engaged")):
-            continue
-        for eid, slot in ((holder, "held"), (held, "posture")):
-            tx_.add_all(write_detail(tx_.state, tx_.mint, eid, slot, None, source="ruling", because="06.5.2",
-                                     rules=ctx.rules, visibility="shown").events)
+        if out(holder) or out(held) or (band is not None and band != "engaged"):
+            end_hold(tx_, ctx.rules, holder, held, "the hold ends (06.5.2)")
     record.add_writes(tx_.events[start:])
 
 

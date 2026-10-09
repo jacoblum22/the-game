@@ -189,11 +189,16 @@ def test_a_grapple_that_takes_holds_no_one(tmp_path: Path) -> None:
         assert current(tx.state, dock.ferryman, "posture") is None and current(tx.state, dock.pc, "held") is None
         assert current(tx.state, dock.ferryman, "manner").value == "on guard against you"  # type: ignore[union-attr]
         held = entry.model_copy(update={"verb": "verb.force", "change_kind": "restrain"})  # restrain on any verb
+        from engine.store.conditions import apply_condition
+
+        tx.add_all(apply_condition(tx.state, tx.mint, ctx.rules, dock.ferryman, "cond.restrained",
+                                   source={"entity": dock.pc}).events)  # RECORD's hold (06.5.2)
         beat_writes(ctx, rec, [SimpleNamespace(status="resolved", entry=held)])
         assert current(tx.state, dock.ferryman, "posture").value == "restrained by you"  # type: ignore[union-attr]
         freed = entry.model_copy(update={"change_kind": "free"})
         beat_writes(ctx, rec, [SimpleNamespace(status="resolved", entry=freed)])
         assert current(tx.state, dock.ferryman, "posture") is None
+        assert not tx.state.conditions_on(dock.ferryman)  # the condition goes with its face
         ctx.tx = None
 
 

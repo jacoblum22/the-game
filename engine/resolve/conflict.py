@@ -2,7 +2,8 @@
 
     start(tctx, pc, ["npc.taman"], "a Strike (06.2.1)")   # conflict_start: foes listed, bands seeded, mode conflict
     res, words = strike_harm(tx, rules, rng, frame, delivered)   # a landed Strike's harm on its target
-    words, res = foe_beat(tctx, rng, "npc.taman", pc)     # the foe's answer: stand, close, or strike (06.9.4)
+    words, res = foe_beat(tctx, rng, "npc.taman", pc)     # the foe's answer: break free, stand, close, or strike (06.9.4)
+    end_hold(tx, rules, "pc.wren", "npc.taman", "lets go")  # 06.5.2: the hold's conditions and their posture face go
     check_end(tctx, pc)                                   # 06.13.1 (a)/(d): conflict_end, the previous mode back
 
 The record is `meta.conflict` {pc, foes, previous}. Not run here (follow-ups): sides' objectives and morale clocks
@@ -183,11 +184,65 @@ def strike_harm(tx: Any, rules: Any, rng: Any, frame: Any, delivered: int) -> tu
     return res, state_words(tx.state, beat.target)
 
 
+def holds(st: Any) -> list[tuple[str, str]]:  # rule: 06.5.2
+    """(holder, held) for every hold: a hold-ladder condition (`cond.grabbed`, `restrained`, `pinned`) whose source is
+    its holder (DL-06-31: the condition is the hold; T-12-18's posture is only its face)."""
+    from engine.resolve.change import HOLDS
+
+    return list(dict.fromkeys((str((i.source or {}).get("entity")), i.target) for i in st.conditions.values()
+                              if i.condition_id in HOLDS and (i.source or {}).get("entity") in st.entities))
+
+
+def end_hold(tx: Any, rules: Any, holder: str, held: str, reason: str, because: str = "06.5.2") -> list[Event]:
+    # rule: 06.5.2
+    """The hold ends: the hold-ladder conditions `holder` put on `held` are removed, and with them their face (the
+    holder's `held` slot and the held one's `posture`, T-12-18)."""
+    from engine.resolve.change import HOLDS
+    from engine.store.conditions import remove_condition
+    from engine.store.details import current, write_detail
+
+    start = len(tx.events)
+    for i in list(tx.state.conditions_on(held)):
+        if i.condition_id in HOLDS and (i.source or {}).get("entity") == holder:
+            tx.add_all(remove_condition(tx.state, rules, i.instance_id, reason, rule_id="06.5.2").events)
+    for eid, slot in ((holder, "held"), (held, "posture")):
+        f = current(tx.state, eid, slot)
+        if f is not None and f.value:
+            tx.add_all(write_detail(tx.state, tx.mint, eid, slot, None, source="ruling", because=because,
+                                    rules=rules, visibility="shown").events)
+    return tx.events[start:]
+
+
+def _break_free(tctx: TimeContext, rng: Any, foe: str, holder: str) -> str:  # rule: 06.5.2
+    # rule: 06.9.4
+    """`beh.default_melee` row 2, "held → break free": one action, its line's attack (a Grapple with Might or Agility)
+    against the holder's Might defense; a success ends the hold, a critical also leaves the holder off balance."""
+    from engine.harm.dice import degree
+    from engine.resolve.frame import _defense
+    from engine.store.conditions import apply_condition
+
+    tx, rules = tctx.tx, tctx.rules
+    st = tx.state
+    line = _line(rules, st.entities[foe])
+    natural = int(rng.d(20, f"foe breaks free {foe} (06.5.2)"))
+    deg, _ = degree(natural, int(line["atk"]), _defense(rules, st, holder, "might", "deed.martial"))
+    who = "your" if st.entities[holder].kind == "pc" else "the"
+    if deg not in ("success", "critical_success"):
+        return f"strains against {who} hold and cannot break it"
+    end_hold(tx, rules, holder, foe, "breaks free (06.5.2)")
+    if deg == "critical_success":
+        tx.add_all(apply_condition(tx.state, tx.mint, rules, holder, "cond.off_balance", rule_id="06.5.2",
+                                   source={"entity": foe}).events)
+        return f"tears free of {who} hold and leaves you off balance"
+    return f"breaks free of {who} hold"
+
+
 def foe_beat(tctx: TimeContext, rng: Any, foe: str, pc: str) -> tuple[str, Any]:  # rule: 06.9.2
     # rule: 06.9.4
-    """The foe's beat by `beh.default_melee`: prone -> stand; not engaged with the PC -> move one band toward;
-    else Strike: d20 + its line's attack against the PC's Guard (06.4.1), its line's severity on a hit (one
-    rung more on a critical), harm applied by the engine (INV-2). Returns (what it did, in words; the harm)."""
+    """The foe's beat by `beh.default_melee`: held -> break free (the hold's conditions forbid the rest, T-06-10);
+    prone -> stand; not engaged with the PC -> move one band toward; else Strike: d20 + its line's attack against the
+    PC's Guard (06.4.1), its line's severity on a hit (one rung more on a critical), harm applied by the engine
+    (INV-2). Returns (what it did, in words; the harm)."""
     from engine.harm.apply import apply_harm, shift
     from engine.harm.ctx import HarmCtx
     from engine.harm.dice import degree
@@ -195,9 +250,12 @@ def foe_beat(tctx: TimeContext, rng: Any, foe: str, pc: str) -> tuple[str, Any]:
     from engine.resolve.frame import _defense
     from engine.store.conditions import remove_condition
 
-    # ponytail: melee row only (no break/windup/flank/ranged rows, no Fend or reactions); one beat per round
+    # ponytail: melee rows 2, 3, 5 and 7 only (no windup/flank/ranged rows, no Fend or reactions); one beat per round
     tx, rules = tctx.tx, tctx.rules
     st = tx.state
+    holder = next((h for h, held in holds(st) if held == foe), None)
+    if holder is not None:
+        return _break_free(tctx, rng, foe, holder), None
     prone = [c for c in st.conditions_on(foe) if c.condition_id == "cond.prone"]
     if prone:
         tx.add_all(remove_condition(st, rules, prone[0].instance_id, "stands (06.9.4)", rule_id="06.9.4").events)

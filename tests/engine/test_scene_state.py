@@ -19,6 +19,16 @@ def _grapple(dock: object, reach: str, degree: str = "success") -> SimpleNamespa
         restatement="You grab Tam", degree=degree, reach=reach))
 
 
+def _hold(tx: object, rules: object, dock: object, rung: int) -> None:
+    """RECORD's hold (06.5.2): the ladder condition on the held one, its source the holder (spec 022)."""
+    from engine.resolve.change import LADDER
+    from engine.store.conditions import apply_condition
+
+    cid, sev = LADDER[rung]
+    tx.add_all(apply_condition(tx.state, tx.mint, rules, dock.ferryman, cid, severity=sev,  # type: ignore[attr-defined]
+                               source={"entity": dock.pc}).events)  # type: ignore[attr-defined]
+
+
 def test_responses_set_manner_and_physical_rows_set_activity(tmp_path: Path) -> None:
     dock, _ = setup(tmp_path, None)
     rules = dock.rules
@@ -34,12 +44,16 @@ def test_a_beat_writes_slots_lines_show_them_and_scene_end_clears_them(tmp_path:
     with dock.store.transaction("turn.t") as tx:
         ctx.tx = tx
         rec = AdjudicationRecord(pc=dock.pc)
+        beat_writes(ctx, rec, [_grapple(dock, "standard")])  # no hold condition: no posture (its face, 06.5.2)
+        assert current(tx.state, dock.ferryman, "posture") is None
+        _hold(tx, ctx.rules, dock, 2)
         beat_writes(ctx, rec, [_grapple(dock, "standard")])
         assert current(tx.state, dock.ferryman, "posture").value.startswith("held fast by you")  # type: ignore[union-attr]
         assert "in a grip" in str(current(tx.state, dock.pc, "held").value)  # type: ignore[union-attr]
+        _hold(tx, ctx.rules, dock, 3)
         beat_writes(ctx, rec, [_grapple(dock, "great")])  # reach 3 supersedes, citing its frame
         assert current(tx.state, dock.ferryman, "posture").value == "restrained by you"  # type: ignore[union-attr]
-        assert rec.writes and all(w.type == "fact_set" for w in rec.writes)
+        assert rec.writes and all(w.type in ("fact_set", "condition_applied") for w in rec.writes)
         write(ctx, rec, dock.watch, response_values(ctx.rules, "table_row", practice="fight", row=2), because="r.1")
         tx.add(Event.of("position_set", rule_id="06.3.5", entity=dock.ferryman, band_to={dock.pc: "engaged"}))
         shown = {(a.npc, a.slot): a.activity for a in lines(tx.state, dock.pc, [dock.ferryman, dock.watch])}

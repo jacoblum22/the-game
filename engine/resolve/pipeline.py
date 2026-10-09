@@ -27,7 +27,7 @@ from pydantic import BaseModel, Field
 
 from engine import ids
 from engine.dm.adjudication import BeatEntry, CostEntry, HarmEntry, PositionEntry
-from engine.resolve.change import ChangeResult, apply_change, needs_target, plain
+from engine.resolve.change import ChangeResult, apply_change, needs_target, pay, plain
 from engine.resolve.costs import HarmHook, apply_cost, check_cost_decl, first_fitting_cost
 from engine.resolve.frame import auto_commit_allowed, commit_events, frame_check, offer_preview
 from engine.resolve.gate import GateDecision, check_gate, words, zero_reach
@@ -781,6 +781,7 @@ def _finish(env: PipelineEnv, plan: BeatPlan, frame: Frame, roll: RollResult, *,
             env.harm_log.append(HarmEntry(target=str(frame.beat.target), words=said))
         check_end(env.time_ctx(), env.pc)  # 06.13.1: the last foe down ends the fight
     chg = apply_change(env.tx, env.rules, frame.beat, delivered if resolved else 0, pc=env.pc)  # rule: 01.2.7
+    pay(env.tx, frame.method_consequences, frame.beat.actor)  # rule: 01.11.2 (a price paid whatever the degree)
     progress = _progress(env, frame, delivered if resolved else 0)
     writes = [e.seq for e in env.tx.events[start:] if e.seq is not None]
     ev_ids: list[str] = []
