@@ -249,5 +249,16 @@ everything.
   - precision decides which checks block.
 
   The answer-ladder sim now needs 4.1 Oracle rolls per 100 questions (was 33.5). DL-12-90..95, DL-01-34..35.
-- **In flight:** spec 013 (dialogue and texture) and spec 014 (feedback loop), in parallel. Next: 015 (intended
-  change), then 016 (patches).
+- **b5e960e, spec 014: the feedback loop understands first, then verifies.**
+  - On the real complaint corpus (11 complaints), it understood **11/11** (was 5/11) and gave the right outcome
+    **11/11** (was 1/11). The prompt was tuned on this same corpus, so the next playtest is the real test.
+  - The code-first pinner and the locator role are retired.
+- **ed291dd, spec 013: dialogue and texture.**
+  - Testimony is fed back into what NPCs say, and truth is settled lazily.
+  - The proposer role and the answer ladder's speech steps are retired.
+  - Must-name is cut back to the diet; activities are rolled once per scene; other NPCs react only on a tag match.
+  - Live, 3 talker runs: verbatim NPC repeats 2 → 0, "I don't know" turns 2 → 0.
+  - Role-list conflicts with 014 resolved.
+  - Suite 1743.
+- **In flight:** spec 015 (typed intended change, plus the lift-attribute rubric) and spec 016 (precision checks,
+  calendar line, OFFER wording, Framer re-asks), in parallel.
