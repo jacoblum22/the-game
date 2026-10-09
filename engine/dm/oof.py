@@ -144,18 +144,59 @@ _DATA_ID = re.compile(r"^[a-z_]+(?:\.[a-z0-9_]+)+$")  # a data id (trait.sense.l
 _BOOKKEEPING = re.compile(r"\b(?:fact|npc|pc|obj|loc|clk|cost|verb|lic)\.[a-z0-9_]+|\bsource:|\bS[1-5]\b", re.I)
 
 
-def _cost_clause(cost: Any) -> str:  # rule: 12.15.2
-    """The price as one clause: the Framer's own form for this scene, unless it carries ids or bookkeeping (then
-    the cost's plain words; the text is never rewritten, P-072)."""
+_FIRST_PERSON = ((r"\bI am\b", "you are"), (r"\bI'm\b", "you're"), (r"\bI was\b", "you were"),
+                 (r"\bmyself\b", "yourself"), (r"\bmy\b", "your"), (r"\bmine\b", "yours"), (r"\bme\b", "you"),
+                 (r"\bI\b", "you"))
+
+
+def to_player(text: str, state: WorldState | None = None) -> str:  # rule: 12.14.1
+    """The Framer's words addressed to the player (spec 016; playtest 20261008 "I lose my footing", "Vesthas's step
+    close"): the first person and the character's name in the possessive become "you"/"your". Words with a quote in
+    them are left whole (an "I" there is someone speaking)."""
+    if not text or re.search(r"[\"“”]", text):
+        return text
+    out = text
+    for pat, rep in _FIRST_PERSON:
+        out = re.sub(pat, rep, out)
+    if state is not None:
+        from engine.retrieve.scene import pc_id
+
+        pc = state.entities.get(pc_id(state) or "")
+        for n in ([pc.name, pc.name.split()[0]] if pc is not None and pc.name else []):
+            out = re.sub(rf"\b{re.escape(n)}['’]s\b", "your", out)
+    return out
+
+
+def _cost_clause(cost: Any, state: WorldState | None = None) -> str:  # rule: 12.15.2
+    """The price as one clause: the Framer's own form for this scene, addressed to the player (`to_player`), unless
+    it carries ids or bookkeeping (then the cost's plain words; P-072)."""
     form = (getattr(cost, "form_intent", "") or "").strip().rstrip(".")
     if not form or _BOOKKEEPING.search(form):
         return COST_WORDS.get(cost.menu_id, "it costs you")
-    return form
+    return to_player(form, state)
+
+
+_DETAIL_VERB = {"activity": "is", "posture": "is", "manner": "is", "held": "holds"}
+
+
+def _who(state: WorldState, eid: str) -> str:
+    """A person's short name for an odds line: the first word of a known proper name, else the label they go by."""
+    from engine.retrieve.scene import pc_id
+    from engine.store.views import display_name, name_known
+
+    if eid == pc_id(state):
+        return "you"
+    if eid not in state.entities:
+        return ""
+    name = display_name(state, eid)
+    return name.split()[0] if name_known(state, eid) and name[:1].isupper() else name
 
 
 def fact_short(state: WorldState | None, fact_id: str) -> str:  # rule: 12.15.2
-    """A fact's short name for the Chance line ("held fast by you", "crowd density: packed"); "" when the player
-    cannot see it or it has no words (an id, a long value)."""
+    """A fact's short name for the Chance line, the fact in plain words (spec 016: "curt −2" named no one): a
+    person's scene state with who it is ("Ysrion is curt", "you hold Murzak restrained"), a yes/no fact as its
+    words or their negation ("is not crowded enough …"), else "crowd density: packed"; "" when the player cannot see
+    it or it has no words (an id, a long value)."""
     from engine.text.render import slug_words
 
     f = state.facts.get(fact_id) if state is not None else None
@@ -165,13 +206,28 @@ def fact_short(state: WorldState | None, fact_id: str) -> str:  # rule: 12.15.2
     words = slug_words(pred)
     if v is True or v in ("true", "yes"):
         return words
+    if v is False or v in ("false", "no"):
+        head, _, rest = words.partition(" ")
+        return f"{head} not {rest}" if head in ("is", "are", "was", "were", "has", "have", "can") and rest else \
+            f"not {words}"
     if isinstance(v, int | float) and not isinstance(v, bool):
         return f"{words} {v}"
     if not isinstance(v, str) or not v.strip() or len(v) > 48:
         return ""
     if _DATA_ID.match(v.strip()):
         return v.rsplit(".", 1)[-1].replace("_", " ")  # 'harm_state.staggered' -> 'staggered'
-    return v.strip() if f.predicate.startswith("detail.") else f"{words}: {v.strip()}"
+    if not f.predicate.startswith("detail."):
+        return f"{words}: {v.strip()}"
+    who = _who(state, f.subject)  # type: ignore[arg-type]
+    verb = _DETAIL_VERB.get(pred)
+    if not who:
+        return v.strip()
+    if verb is None:
+        owner = "your" if who == "you" else who + "'s"
+        return f"{owner} {words}: {v.strip()}"
+    if who == "you":
+        verb = {"is": "are", "holds": "hold"}[verb]
+    return f"{who} {verb} {v.strip()}"
 
 
 def _breakdown(f: Frame, rules: Any, state: WorldState | None = None) -> str:
@@ -273,22 +329,22 @@ def offer_block(f: Frame, *, rules: Any = None, fate: int | None = None, lethal_
     rest.append(works)
     tc = f.threatened_cost
     if tc.on_failure:
-        fails = f"If it fails: {'Danger: ' if f.stakes == 'dire' else ''}{_cost_clause(tc)} — " \
+        fails = f"If it fails: {'Danger: ' if f.stakes == 'dire' else ''}{_cost_clause(tc, state)} — " \
                 f"{SEVERITY_WORDS.get(tc.on_failure, tc.on_failure)}."
     else:
         fails = "If it fails: it just doesn't work."
     if tc.on_critical_failure and (o.critical_failure or f.secret):
         bad = f" ({o.critical_failure}%)" if not f.secret else ""
-        fails += f"   Badly{bad}: {_cost_clause(tc)} — {SEVERITY_WORDS.get(tc.on_critical_failure, '')}."
+        fails += f"   Badly{bad}: {_cost_clause(tc, state)} — {SEVERITY_WORDS.get(tc.on_critical_failure, '')}."
     rest.append(fails)
     if f.lethal:
         rest.append(lethal_line or "THIS CAN KILL YOU.")
     if f.alternate_cost is not None and o.near_miss and not f.secret:
-        rest.append(f"Close call ({o.near_miss}%): get it anyway and pay ({_cost_clause(f.alternate_cost)}), "
+        rest.append(f"Close call ({o.near_miss}%): get it anyway and pay ({_cost_clause(f.alternate_cost, state)}), "
                     "or fail.")
     # 12.15.2's Takes line, labelled for what it holds: what the method does whatever the roll (playtest 20261008:
     # "Takes:" read as a price); the current fate on its own line, since nothing spends it (01.7.1 item 7, 01.16.3)
-    takes = [name_of(rules, c).lower() if _DATA_ID.match(c.strip()) else c.strip().rstrip(".")
+    takes = [name_of(rules, c).lower() if _DATA_ID.match(c.strip()) else to_player(c.strip().rstrip("."), state)
              for c in f.method_consequences if c.strip()]
     if takes:
         rest.append("Whatever the roll: " + " · ".join(takes))
@@ -504,6 +560,14 @@ def changed_line(state: WorldState, pc: str, events: Sequence[Any]) -> str:  # r
     return "Changed: " + " · ".join(parts) if parts else ""
 
 
+def price_line(cost: Any) -> str:  # rule: 12.15.3
+    """What a result cost, in the OFFER's own words (spec 016: "Paid: … (closed door, a setback)" read as
+    bookkeeping): `It cost you: <the form, else the cost's plain words> — <severity word>.`"""
+    form = to_player((getattr(cost, "form", "") or "").strip().rstrip(".")) or COST_WORDS.get(cost.menu_id, "")
+    sev = SEVERITY_WORDS.get(getattr(cost, "severity", None) or "", "")
+    return f"It cost you: {form or 'a price'}" + (f" — {sev}." if sev else ".")
+
+
 def result_block(frame: Frame, roll: RollResult, *, sac: bool = False, costs: Sequence[Any] = (),
                  rules: Any = None, changed: str = "") -> OofBlock:  # rule: 12.15.3
     """`[RESULT] d20 9 → 13 vs 15 · failure (near miss)`, then what was paid; a secret frame: `hidden check made.`"""
@@ -511,12 +575,7 @@ def result_block(frame: Frame, roll: RollResult, *, sac: bool = False, costs: Se
         return OofBlock(kind="RESULT", text="[RESULT] hidden check made.")
     words = "success at a cost (near miss)" if sac else (
         DEGREE_NAMES.get(roll.degree, roll.degree.replace("_", " ")) + (" (near miss)" if roll.near_miss else ""))
-    rest = []
-    for c in costs:
-        form = (getattr(c, "form", "") or "").strip()
-        tag = ", ".join(x for x in (name_of(rules, c.menu_id).lower(), SEVERITY_WORDS.get(c.severity or "", ""))
-                        if x)
-        rest.append(f"Paid: {form} ({tag})." if form else f"Paid: {tag}.")
+    rest = [price_line(c) for c in costs]
     if changed:
         rest.append(changed)
     return OofBlock(kind="RESULT", text=_block("RESULT", f"d20 {roll.d20} → {roll.total} vs {frame.dc} · {words}",

@@ -1004,3 +1004,31 @@ speech, with `answer_ladder.repeat_pointer_limit` and `delivery.information.ladd
   `review_flag: true`.
 - **Metric.** `evals/longhorizon.py`: `dispute_lines(stats, narrated)` ("disputes per 100 narrated turns: all
   (upheld ...) (by category)"), `--fix-every N` plants /fix reports in the scripted run.
+
+## Patches (spec 016; 12.3.2 "Precision, not class", 12.2.4 calendar line, DL-12-95, OEQ-12-27)
+- **Precision checks.** `engine.audit.claims.precision_checks(text, *, idx, before=(), speech=(), about=(),
+  season=None, rules=None) -> [PrecisionHit(check, cls, voice, words, store_value, subject, blocks)]` on one
+  sentence (`text` = its narrator's words, `before` = the narrator's words of the draft's earlier sentences, `idx` =
+  `declare.SceneIndex`). `pronoun_certain_subject` (narrator voice): a he/she whose antecedent is certain (the only
+  person named before it in the sentence or the one before, or the one declared about; no unnamed man/woman/animal,
+  no earlier-named person whose pronouns fit) that fits none of the stored `pronouns`. `season_words` (both voices):
+  a season word other than `calendar_season(state)` with no `time_shift_words` in its clause (and no "a/one/that"
+  before it); capitalised mid-sentence words and "spring" the verb or the well are skipped. A check whose data entry
+  carries a measured `precision` below `min_precision` hits with `blocks=False` (log only).
+  `narration._precision` runs them per sentence: every hit goes to the claim log (`source: precision`, `check`,
+  `blocks`), a blocking one redrafts (`Failure(fix="redraft", store_value=...)`). The pronoun scan left
+  `declare.scan_sentence`. `evals/precision_audit.py` measures hits offline (replay corpus + saves, hand verdicts in
+  `JUDGED`); output in `evals/baselines/precision_audit.txt`.
+- **Framer words.** `framer.frame_texts(data)` (cost forms + method consequences); `framer.pronoun_errors` runs the
+  pronoun check on them at the first `check` only (one redraft, never the default frame). `oof.to_player(text,
+  state)`: first person and the PC's possessive name become "you"/"your" in OFFER forms and consequences.
+- **Calendar line.** `engine.retrieve.scene.calendar_line(state, rules)` ("calendar: the spring quarter day,
+  morning; season: spring[; weather: …]", "day 9 of the first month of autumn" after the quarter day): `scene_view`
+  stores it as `view["calendar"]` and `render_view` prints it first (outside every budget); "" unless
+  `packet.calendar_line: pinned_first`. SCENE SETTING's `present:` lines carry pronouns first.
+- **OFFER/RESULT wording.** `oof.fact_short`: a detail fact names whose it is ("Ysrion is curt", "you hold Murzak
+  restrained"); a false yes/no fact reads negated ("is not crowded enough …"). `oof.price_line(cost)`: RESULT's
+  "It cost you: <form, else COST_WORDS> — <severity>." (was "Paid: … (menu, severity)").
+- **Re-asks.** `frame._sets_hold(beat, state)`: only a grapple by an actor holding no one yet makes the hold the
+  beat's own success; there a form in which the held one gets loose is blanked (the cost's plain words), never
+  refused, so it cannot cause a re-ask. Losing a hold set earlier is an ordinary price.

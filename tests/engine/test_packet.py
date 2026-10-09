@@ -65,6 +65,38 @@ def test_sections_come_in_contract_order(tmp_path: Path) -> None:
     assert p.render().endswith("I ask Mara Voss about the boat.")
 
 
+def test_the_calendar_line_is_pinned_first_outside_the_budget(tmp_path: Path) -> None:
+    """Spec 016 (12.2.4 item 3, `packet.calendar_line: pinned_first`; playtest 20261008-145410 talker 18: "the
+    autumn harvest" on the spring quarter day): the calendar line is the scene header's first line, right under
+    the active-trigger list, in every role that sees the scene header, and no view budget can drop it."""
+    store = scene_store(tmp_path)
+    for role in (Role.NARRATOR, Role.FRAMER, Role.WORLD):
+        lines = packet_for(store, role, []).view.splitlines()
+        assert lines[0] == "Active triggers: none"
+        assert lines[1] == "calendar: the spring quarter day, morning; season: spring", (role, lines[:3])
+    with store.transaction("turn.2") as tx:
+        tx.add(fact(tx, "world", "weather", "thin rain off the sea"))
+    import engine.dm.packet as pk
+
+    tiny = {k: 0 for k in RULES.pacing["packet"]["view_budget"]}
+    real = pk.view_budget
+    pk.view_budget = lambda rules=None: tiny  # type: ignore[assignment]  # every section budget at zero
+    try:
+        text = render_view(scene_view(store.state))
+    finally:
+        pk.view_budget = real
+    assert text.splitlines()[0] == "calendar: the spring quarter day, morning; season: spring; weather: thin rain off the sea"
+
+
+def test_the_calendar_line_names_the_month_after_the_quarter_day(tmp_path: Path) -> None:
+    from engine.retrieve.scene import calendar_line
+
+    store = scene_store(tmp_path)
+    later = store.state.model_copy(update={"time": store.state.time.model_copy(update={
+        "now": store.state.time.now.model_copy(update={"season": 3, "week": 2, "day": 3, "watch": 2})})})
+    assert calendar_line(later, RULES) == "calendar: day 9 of the first month of autumn, evening; season: autumn"
+
+
 def test_exactly_the_last_four_exchanges_verbatim(tmp_path: Path) -> None:
     store = scene_store(tmp_path)
     history = [(f"player {i}", f"dm {i}") for i in range(10)]

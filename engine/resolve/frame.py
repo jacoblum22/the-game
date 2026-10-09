@@ -763,6 +763,18 @@ _UNDO = re.compile(
     r"|lose (?:your|the) (?:grip|hold))\b", re.I)
 
 
+def _sets_hold(beat: Beat, state: Any) -> bool:  # rule: 01.9.3
+    """The beat's own success is a hold on its target: a grapple against their will by an actor who holds no one
+    yet (T-12-18's `held` slot). Losing a hold set earlier is a price like any other: it undoes nothing this beat
+    did (playtest 20261008-145430: a lift and a punch "while holding her" were re-asked for "she twists free")."""
+    from engine.store.details import current
+
+    if beat.verb != "verb.grapple" or not beat.against_will or beat.target in (None, "none"):
+        return False
+    held = current(state, beat.actor, "held") if state is not None and hasattr(state, "details") else None
+    return held is None or not held.value
+
+
 def _costs(p: ProposedFrame, beat: Beat, state: Any, rules: Any, stakes: str,
            declared: int) -> tuple[CostPreview, CostPreview | None]:  # rule: 01.6.11
     kw = dict(state=state, rules=rules, actor=beat.actor, stakes_source=p.stakes_source,
@@ -770,11 +782,12 @@ def _costs(p: ProposedFrame, beat: Beat, state: Any, rules: Any, stakes: str,
     bad = check_cost_decl(p.threatened_cost, role="threatened", **kw)  # type: ignore[arg-type]
     if bad:
         raise _Refuse(10, "threatened_cost", bad)
-    for role, c in (("threatened_cost", p.threatened_cost), ("alternate_cost", p.alternate_cost)):
-        if c is not None and beat.against_will and beat.target not in (None, "none") and _UNDO.search(
-                c.form_intent or ""):  # rule: 01.9.3
-            raise _Refuse(10, role, f"a cost's form never undoes the beat's own success (01.9.3): "
-                                    f"{c.form_intent!r} undoes acting on {beat.target}; price it on the actor")
+    if _sets_hold(beat, state):  # rule: 01.9.3
+        # a form in which the held one gets loose would undo the beat's own success: its words are dropped (the screen
+        # names the cost's plain words) rather than the frame refused, so no Framer choice can force a re-ask
+        p = p.model_copy(update={k: c.model_copy(update={"form_intent": ""}) for k in ("threatened_cost",
+                                                                                     "alternate_cost")
+                                 if (c := getattr(p, k)) is not None and _UNDO.search(c.form_intent or "")})
     if stakes in ("risky", "dire") and p.alternate_cost is None:
         raise _Refuse(10, "alternate_cost", f"a {stakes} frame needs an alternate cost (01.6.11)")
     alt = p.alternate_cost if stakes != "safe" else None  # a safe frame's alternate waits for go big (01.7.3)

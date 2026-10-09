@@ -235,8 +235,6 @@ _STOP_CAPS = frozenset("I You Your The A An He She They It His Her Their Its We 
 _QTY_NOUNS = ("coin", "coins", "silver", "gold", "copper", "penny", "pennies", "arrow", "arrows", "ration", "rations",
               "torch", "torches", "shaft", "shafts", "purse")
 _NUM_WORDS = {k: v for k, v in tx.NUMBER_WORDS.items() if v >= 2 and k not in ("pair", "both", "dozen")}
-_HE = re.compile(r"\b(he|him|his|himself)\b", re.I)
-_SHE = re.compile(r"\b(she|her|hers|herself)\b", re.I)
 _QUOTED = re.compile(r"[\"“][^\"”]*[\"”]")
 
 
@@ -260,22 +258,29 @@ def pc_quotes(s: DeclaredSentence) -> list[str]:  # rule: 12.14.3
     return spans if spans and not s.speaker and _PC_SAYS.search(narration) else []
 
 
-def _names_in(text: str, idx: SceneIndex) -> list[str]:
-    """Entity ids whose name or alias appears in `text` (whole words; the longest match per span wins)."""
+def name_spans(text: str, idx: SceneIndex) -> list[tuple[int, int, str]]:
+    """(start, end, entity id) of each name or alias in `text` (whole words; the longest match per span wins)."""
     low = text.lower()
     hits: list[tuple[int, int, str]] = []
     for eid, names in idx.aliases.items():
         for n in names:
+            if n in tx.STOP:  # "the" from "the second voice"'s first word names no one
+                continue
             for m in re.finditer(rf"\b{re.escape(n)}\b", low):
                 hits.append((m.start(), m.end(), eid))
     hits.sort(key=lambda h: (h[0], -(h[1] - h[0])))
-    out: list[str] = []
+    out: list[tuple[int, int, str]] = []
     end = -1
     for a, b, eid in hits:
         if a >= end:
-            out.append(eid)
+            out.append((a, b, eid))
             end = b
-    return list(dict.fromkeys(out))
+    return out
+
+
+def _names_in(text: str, idx: SceneIndex) -> list[str]:
+    """Entity ids whose name or alias appears in `text` (whole words; the longest match per span wins)."""
+    return list(dict.fromkeys(eid for _, _, eid in name_spans(text, idx)))
 
 
 def unknown_names(text: str, idx: SceneIndex, s: DeclaredSentence) -> list[str]:  # rule: 12.3.1a
@@ -303,8 +308,8 @@ def scan_sentence(s: DeclaredSentence, idx: SceneIndex, *, rules: Any = None,
     # rule: 12.2.10
     """12.3.1a's code checks for one sentence, on the narrator's voice only (speech is testimony, 12.3.1b item 1):
     names and aliases against `about` (a resolvable name is added and logged; an invented one fails), numerals
-    against quantities and cited values, sealed content (00.6.5); a pronoun clash is logged (off the blocking
-    list); mechanics words (12.14.4, any voice) fail."""
+    against quantities and cited values, sealed content (00.6.5); mechanics words (12.14.4, any voice) fail. The
+    pronoun and season scans are `claims.precision_checks` (12.3.2)."""
     from engine.audit.screen import mechanics_in_fiction
 
     out = SentenceScan()
@@ -329,17 +334,7 @@ def scan_sentence(s: DeclaredSentence, idx: SceneIndex, *, rules: Any = None,
             out.failures.append(Failure(why=f"states the count {w!r}, which the view does not hold", fix="redraft",
                                         store_value="drop the count or use the view's"))
             break
-    # pronouns: the one person this sentence names or is declared about (the PC aside; a cited line's people
-    # are not counted), when every one of them has stored pronouns
-    people = {e for e in [*s.about, *_names_in(text, idx)] if e != idx.pc and e in idx.aliases}
-    people = {e for e in people if not e.startswith(("loc.", "obj.", "item.", "fac.", "thr.", "clk."))}
-    if len(people) == 1 and not s.new and all(e in idx.pronouns for e in people):
-        g = idx.pronouns[next(iter(people))]
-        said = _QUOTED.sub("", text)
-        wrong = (g == "f" and _HE.search(said) and not _SHE.search(said)) or (
-            g == "m" and _SHE.search(said) and not _HE.search(said))
-        if wrong:
-            out.logged.append(("identity", "the pronoun does not match the person's"))
+    # pronouns: a precision check now (claims.precision_checks, 12.3.2), run by the caller with the sentence before
     mech = mechanics_in_fiction(s.text, rules=rules, names=names)
     if mech:
         out.failures.append(Failure(why=f"mechanics in the fiction: {', '.join(mech)}", fix="redraft",
@@ -370,5 +365,5 @@ def t2_delivered(el: NewElement, s: DeclaredSentence, idx: SceneIndex) -> bool: 
 
 
 __all__ = ["ELEMENT_TIERS", "DeclaredSentence", "Failure", "NewElement", "SceneIndex", "SentenceScan", "coverage", "known_as",
-           "joined", "mention_of", "parse_output", "pc_quotes", "scan_sentence", "split", "t2_delivered", "tier_of",
-           "unknown_names", "voices"]
+           "joined", "mention_of", "name_spans", "parse_output", "pc_quotes", "scan_sentence", "split", "t2_delivered",
+           "tier_of", "unknown_names", "voices"]

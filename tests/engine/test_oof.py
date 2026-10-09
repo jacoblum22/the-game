@@ -161,7 +161,9 @@ def test_result_block_states_the_outcome_once(s: Scene) -> None:
     paid = result_block(f, roll, sac=True, costs=[CostEntry(menu_id="cost.drain", severity="S2", form="you tire")],
                         rules=s.rules).text.splitlines()
     assert paid[0] == "[RESULT] d20 9 → 13 vs 15 · success at a cost (near miss)"
-    assert paid[1].strip() == "Paid: you tire (drain, a setback)."
+    assert paid[1].strip() == "It cost you: you tire — a setback."  # spec 016: no "Paid:" bookkeeping
+    bare = result_block(f, roll, costs=[CostEntry(menu_id="cost.closed_door", severity="S2", form="")]).text
+    assert bare.splitlines()[1].strip() == "It cost you: a door closes to you — a setback."
     secret = check(s, secret=True)
     assert result_block(secret, roll).text == "[RESULT] hidden check made."  # type: ignore[arg-type]
 
