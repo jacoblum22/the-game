@@ -748,10 +748,16 @@ terms:
         seen by: "{witness}"
         what the watch saw: "armed figures on the road, too far to count; the watch will say more to someone it trusts"
     dying_messenger:
-      label: "the rider who died in the market"
+      label: "the rider who died at {place}"
       at: start
       know: [reporter, witness]
       stage: {label: "the dying rider", dead: true}
+      doc:
+        name: "rider's satchel"
+        aliases: ["satchel", "the satchel", "leather satchel", "the rider's satchel", "pouch", "saddlebag"]
+        kind: satchel
+        at: start
+        text: "A strip of waxed hide from the satchel, unsigned: {message}"
       pick:
         message:
           - "Tell him it is done. They know. Do not let it reach the hall."
@@ -759,8 +765,9 @@ terms:
           - "He lied, all of it. Tell the one who sent me it was never the river."
           - "Do not trust the ones who wait at the ford. Tell her to run."
       fields:
-        what: "a rider fell from the saddle at {place} and died where he lay, his pouch empty at his belt"
+        what: "a rider fell from the saddle at {place} and died where he lay, a strip of waxed hide in his satchel"
         the rider's last words: "\"{message}\""
+        the strip in his satchel: "{doc_text}"
         heard by: "{reporter}, {witness}"
     missing:
       label: "the missing {subject_role}"

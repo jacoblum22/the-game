@@ -146,6 +146,9 @@ def test_k_dying_messenger_has_the_riders_words_and_a_body(tmp_path: Path) -> No
     assert rider.exists == "dead" and st.positions[rider.id].location == t["where"]
     sub = _case(store)["solution"]["subject"]["id"]
     assert sub not in t["know"]  # the person the message was for is the sealed subject, off stage
+    satchel = st.entities[t["doc"]]  # round 8's explorer opened the rider's satchel: something is behind it
+    assert satchel.name == "rider's satchel" and st.positions[satchel.id].location == t["where"]
+    assert "waxed hide" in str(written_words(st, satchel.id)) and sub not in str(written_words(st, satchel.id))
 
 
 def test_k_missing_has_since_last_seen_the_reward_and_a_notice(tmp_path: Path) -> None:
@@ -686,6 +689,15 @@ def test_j5_a_name_that_contains_and_is_not_split(tmp_path: Path) -> None:
         tx.add(entity("place", "Hall and Keep", tx=tx, data={"place_kind": "building", "desc": "an old strong hall"}))
     text = what_you_know(store.state, "Hall and Keep").text
     assert "Hall and Keep" in text and "Nothing on record" not in text
+
+
+def test_j6_a_question_that_names_nothing_asks_for_the_summary(tmp_path: Path) -> None:
+    """live 029 (explorer turn.8): "what do I know about this place and what's going on here?" named nothing and got
+    "Nothing on record about this place"; it asks for the summary, with what people said."""
+    store, _ = _journal_world(tmp_path)
+    _say(store, "npc.betric_marsh", "The ford floods after rain.", [])
+    text = what_you_know(store.state, "this place and what's going on here").text
+    assert text.startswith("[JOURNAL] What you know:") and "Betric Marsh told you" in text
 
 
 def test_the_general_journal_lists_what_you_were_told(tmp_path: Path) -> None:

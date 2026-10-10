@@ -215,6 +215,10 @@ QUALIFIERS = (".but", ".and")  # an Oracle twist's qualifier rides on its answer
 HOW_SAID = {"seen": "", "rumor": " (a rumour: true or not, you cannot say)"}
 STOP = {"the", "this", "that", "these", "those", "about", "so", "far", "already", "yet", "know", "what", "with",
         "and", "any", "anything", "who", "them", "him", "her", "it", "its", "of", "a", "an", "my", "our"}
+# "what do I know about this place and what's going on here?" names nothing: it asks for the summary (live 029: the
+# explorer got "Nothing on record about this place...")
+GENERAL = {"place", "here", "there", "going", "aroun", "every", "happe", "thing", "situa", "town", "area", "local",
+           "nearb", "world", "story"}  # stems (five letters)
 
 
 def _known(state: WorldState, cv: dict[str, Any], pc: str | None) -> list[dict[str, Any]]:  # rule: 12.10.5
@@ -446,7 +450,7 @@ def what_you_know(state: WorldState, about: str | None = None, rules: Any = None
     known = _known(state, cv, pc)
     ents = {i: e for i, e in cv["entities"].items() if i != pc}
     want = _stems(about or "")
-    if about and want and not want <= {"mysel", "me", "chara"}:
+    if about and want and not want <= {"mysel", "me", "chara"} | GENERAL:
         # 15.9.16 (DL-15-46): the lookup searches thread text, said records and knowledge records, never names alone;
         # "X and Y" is split, and a name that resolves does not stop the search (round 8: the winter and the banners)
         lines: list[str] = []

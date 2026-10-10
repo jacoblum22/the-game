@@ -132,9 +132,7 @@ def explorer(model: Any, tmp: Path, out: list[str]) -> None:
         out.append("  NPC lines for this turn: " + str([(a.npc == betric, a.action[:60]) for a in rec.npc_actions]))
         out.append(f"  parts answered: {[p.handled for p in asked]}")
         found = cases(tx.state)[case["id"]]["nodes"][0].get("found")
-        calls = len([c for c in store.model_calls()]) if hasattr(store, "model_calls") else -1
-        out.append(f"  GATE challenger clue delivered (not dropped by the cap): {bool(rec.learned) and bool(found)} "
-                   f"(model calls recorded in the scratch copy: {calls})")
+        out.append(f"  GATE challenger clue delivered (not dropped by the cap): {bool(rec.learned) and bool(found)}")
         sub = case["solution"]["subject"]["id"]
         out.append(f"  the challenger the clue names is the case's subject {tx.state.entities[sub].name} "
                    f"({tx.state.entities[sub].data.get('role')})")
