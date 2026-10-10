@@ -352,6 +352,7 @@ def director_schema(ctx: SchemaContext) -> Schema:  # rule: 12.4.2
             "pillar": enum(ctx.pillars),  # 12.9.1
             "challenge_type": enum(ctx.challenge_types, nullable=True),  # T-12-7; null without opposition
             "cast": arr(enum([*ctx.known_ids, "new_npc"])),
+            "cast_described": arr(STR),  # 12.2.4 Director row [R2-K; DL-12-110]: a description cast present
         }),
         "push": enum(ctx.push_options, first=NONE) if ctx.push_options else None,  # 12.7.4
         "lead": lead,  # 12.8.2
@@ -418,6 +419,14 @@ def testimony_schema(ctx: SchemaContext) -> Schema:  # rule: PR-12-12
                 "subject": STR, "predicate": STR, "value": STR})
 
 
+CLUE_ITEMS = ("1", "2", "3", "4")  # at most four open clues judged at once (engine/dm/roles/clue.py)
+
+
+def clue_schema(ctx: SchemaContext) -> Schema:  # rule: PR-12-10
+    """PR-12-10 step 1 (D2 A, spec 025): which listed clue the question is about, by its number, or none."""
+    return obj({"about": enum(["none", *CLUE_ITEMS])})
+
+
 def _fixer_schema(ctx: SchemaContext) -> Schema:  # spec 022: the role's schema lives in engine/dm/fixer.py
     from engine.dm.fixer import step_schema
 
@@ -440,6 +449,7 @@ BUILDERS: dict[Role, Callable[[SchemaContext], Schema]] = {
     Role.CHECKER: checker_schema,
     Role.TESTIMONY: testimony_schema,
     Role.FIXER: _fixer_schema,
+    Role.CLUE: clue_schema,
 }
 
 
@@ -539,6 +549,7 @@ def _director_default(ctx: SchemaContext) -> dict[str, Any]:
         "next_scene": {
             "mode": mode, "place": _first(ctx.places, ctx.current_place), "agenda": "", "hoped_answer": "",
             "pillar": _first(ctx.pillars, MODE_PILLAR.get(mode or "")), "challenge_type": None, "cast": [],
+            "cast_described": [],
         },
         "push": NONE, "lead": None,
     }
@@ -554,6 +565,8 @@ DEFAULTS: dict[Role, Callable[[SchemaContext], dict[str, Any]]] = {
     Role.TESTIMONY: lambda ctx: {"kind": "none", "subject": "", "predicate": "", "value": ""},
     # nothing understood: the answer asks for the turn (PR-12-11; engine/dm/fixer.py)
     Role.FIXER: lambda ctx: _fixer_default(),
+    # no judgment: the question is not about a clue (PR-12-10 step 1; spec 025)
+    Role.CLUE: lambda ctx: {"about": "none"},
 }
 
 

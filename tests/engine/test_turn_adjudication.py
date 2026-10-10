@@ -388,7 +388,7 @@ def test_talk_and_trivial_acts_roll_nothing(tmp_path: Path) -> None:
     assert b.record.beats[0].gate_words == "no roll: trivial" and not b.record.beats[0].rolled  # certain (15.3.10)
     assert Role.FRAMER not in [r for r, _ in model.calls]  # a certain beat skips the Framer
     assert not rolls(dock.store) and not dock.state.frames
-    assert a.record.npc_actions  # spoken to the room: the first present NPC answers (12.11.9 default layer)
+    assert not a.record.npc_actions  # P3 (DL-12-120, spec 025): a greeting gets no willingness line
 
 
 def test_offline_model_plays_a_turn(tmp_path: Path) -> None:

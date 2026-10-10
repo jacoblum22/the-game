@@ -279,7 +279,7 @@ def _look(ctx: TurnContext, e: Any, verb: str, reach: int, pc: str, asked: list[
     topic, about = ans.topic_of(st, q.topic if q else None, said, pc)
     about = about or next((t for t in e.targets if t in st.entities), None)
     if verb == "verb.recall":
-        case = ans.case_about(st, said, about)
+        case = ans.clue_case(ctx, pc, said, about)  # D2 A: by meaning, never shared words (spec 025)
         a = ans._from_case(ctx, pc, case, False, pc, True) if case is not None else None
         if a is not None:  # the consequential route with the PC as the knower (what they were told, or its holder)
             return [ans.Answer("", f"You {a.said}", a.fact_id, a.pointer)]

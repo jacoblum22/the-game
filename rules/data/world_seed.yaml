@@ -671,7 +671,7 @@ tables:
       task: ["guarding the roads", "a journey into the hills", "clearing an old place", "carrying a sealed message", "escorting a cart", "a matter best discussed in private"]
       reason: ["Two have not come back.", "Lights have been seen there.", "The watch cannot answer for it.", "It is not safe, whatever the old folk say.", "Tracks were found that no one can name.", "This is the second warning."]
       right: ["the market tolls", "the ford and its ferry", "the common grazing", "the mill and its weir", "the hunting in the near woods", "judgement of quarrels"]
-      reward: ["ten silver", "a purse of silver", "a horse and saddle", "a season's lodging", "twenty silver", "the council's thanks and coin"]
+      reward: ["a reward in coin", "a purse of coin", "good coin", "a fair reward in coin", "coin from the chest", "the council's thanks and coin"]   # [revision: R2-K] [DL-12-109]: no figure in the words; the amount is the hook's typed pay (11.5.6; economy AI-6)
 
   - id: tbl.12.seed.knowledge_pack
     name: "A cast NPC's knowledge pack and stance (12.16.11)"

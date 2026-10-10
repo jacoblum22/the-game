@@ -179,8 +179,10 @@ def _speech_line(state: WorldState, record: AdjudicationRecord) -> list[str]:  #
 
 
 def speaker_cards(state: WorldState, record: AdjudicationRecord, rules: Any = None) -> list[str]:  # rule: PR-12-10
-    """One speaker card per NPC answering this turn (their PR-12-10 line), topic from its `ask:` index key."""
+    """One speaker card per NPC answering this turn (their PR-12-10 line), topic from its `ask:` index key, then what
+    others have said on that topic (PR-12-12's guard)."""
     from engine.dm.packet import speaker_card
+    from engine.dm.testimony import said_by_others
 
     out: list[str] = []
     seen: set[str] = set()
@@ -192,6 +194,11 @@ def speaker_cards(state: WorldState, record: AdjudicationRecord, rules: Any = No
         topic = key.rsplit("|", 1)[-1] if key else None
         about = topic if topic in state.entities else None
         out += speaker_card(state, a.npc, topic=None if about else topic, about=about, rules=rules)
+        others = said_by_others(state, a.npc, topic=None if about else topic, about=about)
+        if others:  # PR-12-12's guard (DL-12-109): improvised details agree, or differ knowingly
+            out.append("- others have said on this (testimony, not fact; agree with it or knowingly differ, never "
+                       "repeat it word for word):")
+            out += [f"  - {name_of(state, r['speaker'])}: \"{r['words']}\"" for r in others]
     return out
 
 

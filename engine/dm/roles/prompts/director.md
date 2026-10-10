@@ -36,8 +36,9 @@ Fill it at scene start and whenever `cut_now` is true; otherwise describe the cu
   (terrain, a cunning foe, being outnumbered, an objective other than winning, a deadline, attrition, two
   kinds at once, a person to move under pressure, something to figure out). Use each type's "false for"
   line: a fight that merely happens somewhere is not terrain. No opposition: null.
-- `cast`: the known entities present at the opening. `new_npc` only when the place plainly calls for
-  someone not yet known (a ferry needs a ferryman); the engine generates them.
+- `cast`: the known entities present at the opening. `new_npc` only when the place needs someone unknown
+  and unnamed (a ferry, a ferryman).
+- `cast_described`: whom the agenda names that `cast` cannot list ("the carters"): present.
 
 ## `push` (12.7.4)
 Only when the field is offered (the engine raised a pacing push). Choose among the eligible candidates by

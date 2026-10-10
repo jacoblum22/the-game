@@ -16,7 +16,8 @@ from tests.engine.test_turn_adjudication import setup
 def answer(place: str, *, cut: bool = False, push: str | None = None, **ns: Any) -> Any:
     def fill(schema: dict[str, Any], packet: Any) -> dict[str, Any]:
         nxt = {"mode": "site", "place": place, "agenda": "Does the ferryman talk?", "hoped_answer": "yes",
-               "pillar": enum_at(schema, "next_scene", "pillar")[0], "challenge_type": None, "cast": []}
+               "pillar": enum_at(schema, "next_scene", "pillar")[0], "challenge_type": None, "cast": [],
+               "cast_described": []}
         nxt.update(ns)
         return prune({"cut_now": cut, "next_scene": nxt, "push": push or "none", "lead": None}, schema)
 
