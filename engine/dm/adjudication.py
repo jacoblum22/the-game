@@ -193,6 +193,7 @@ class AdjudicationRecord(BaseModel):
     triggers: list[str] = Field(default_factory=list)  # active trigger ids this turn (owed blocks, 12.3.2)
     pause: PauseEntry | None = None
     notes: list[str] = Field(default_factory=list)  # anything else the narration must carry, in words
+    learned: list[str] = Field(default_factory=list)  # facts the PC learned outside a beat (a clue to plain speech)
     player_quantity: int | None = None  # the Reader's typed number (01.1.4): a deal's stated amount (15.7.1)
 
     def add_writes(self, events: Iterable[Event]) -> None:

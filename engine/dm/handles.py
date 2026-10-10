@@ -129,6 +129,8 @@ def items(record: AdjudicationRecord, *, names: Mapping[str, str] | None = None)
                 _sentence(f"{agreed.group(1)} agrees" if agreed else said), beat=n, text=said)
     if record.scene.started and record.scene.cut:  # the beats led there: the arrival is owed (12.4.3; P-098)
         add("scene", bool(arrival), [], arrival)
+    for i, x in enumerate(record.learned):  # spec 029 (P9): a clue to plain speech is a fact, whoever of the knowers tells it
+        add("learned", True, [pc or ""], _sentence(x), index=i, text=x)
     for i, o in enumerate(record.oracle):
         add("oracle", True, [o.subject or ""], _oracle_render(o.question, o.answer, o.subject, o.predicate, names),
             index=i, text=f"{o.question}: {o.answer}")

@@ -1,0 +1,30 @@
+spec 029 round-8 gates (clue judgment on haiku)
+== talker turn.4: 'I look at the last entry at the foot of the page. Who signed it, and what does it say about the cart?' (a no-roll Observe with Letters)
+  the gate log (a document made with the cart lead): doc.thr_lead_2_gate_log; its text: "Entry, the spring quarter day, after dusk: One closed cart through the gate, no trader's mark, two men on the box and the canvas laced down. Toll paid by the driver, who gave no name. It took the road to The Grey Leas. Passed on the word of the Crowbridge Circle's runner. Entered by Helian Lanent."
+  typed verb of a beat done with the licence: verb.observe  (round 8: None, so nothing was delivered)
+  delivered: 'The gate log reads: "Entry, the spring quarter day, after dusk: One closed cart through the gate, no trader\'s mark, two men on the box and the canvas laced down. Toll paid by the driver, who gave no name. It took the road to The Grey Leas. Passed on the word of the Crowbridge Circle\'s runner. Entered by Helian Lanent."'
+  GATE real words delivered: True; parts marked answered only if a fact came: ['answered', 'answered']
+  the captain's card: - knows: the closed cart: what: a closed cart came through the gate after dusk and took the road to The Grey Leas; the canvas was laced down
+  the captain's card: - knows: the closed cart: the gate log's entry: Entry, the spring quarter day, after dusk: One closed cart through the gate, no trader's mark, two men on the…
+  the captain's card: - knows: the closed cart: whose: it came on the word of the Crowbridge Circle's runner; the driver: Haline Whiteward; seen by: Helian Lanent, Norra Deepborn
+  the captain's card: - knows: the charter of Redcrag: holds the right of: the hunting in the near woods; sealed in: 20 years since the Wrong
+== explorer turn.3: Betric asked 'what she meant about the two banners in the hall, and who the young man really is' (round 8: only the banners part reached the clue check; the clue was dropped by the cap)
+  Betric holds the core clue of 'who the challenger is': True
+  parts judged together; answers: [(None, None), (None, 'willing')]
+  record.learned (the clue, a fact with no speaker): ['who the challenger is: Falbo Bramblewick']
+  NPC lines for this turn: [(True, 'answers what you asked, willingly (a plain question to a war')]
+  parts answered: ['', 'answered']
+  GATE challenger clue delivered (not dropped by the cap): True (model calls recorded in the scratch copy: 52)
+  the challenger the clue names is the case's subject Falbo Bramblewick (sellsword between contracts)
+== explorer turn.4: 'What do I know about the Long Downs and the winter that brought the realm down?' (round 8: one line, nothing of what Betric said)
+  said records in the save at turn.3: ["Mind him. That one is more than he seems, whatever he'd have this room think.", 'And the hall has two banners hung in it that nobody will take down. Ask anyone i', "The Merestead Collegium is hiring, too, if you've a hand worth selling.", 'The banners are the old colours of the Long Downs, from before the winter that b', "The young man, I can't tell you what he is. He has talked as if this room owes h", 'Keep your hand off your purse and your eyes on his rings.']
+[JOURNAL] What you know about the Long Downs and the winter that brought the realm down:
+  The Long Downs: a fallen realm: a kingdom broke two generations ago; its roads, keeps and heirs remain
+  the Long Downs was the heartland of a realm that fell in a single bad winter.
+  What you were told (what people said; whether it is true, you cannot say):
+    Betric Brightcote told you: "The banners are the old colours of the Long Downs, from before the winter that brought the realm down"
+  GATE includes what people said: True
+== fighter: the duel. The sealed case's challenger is Alred Millfield (npc.alred_millfield); in the save the opening staged a different youth
+  stage: {'subject': 'npc.alred_millfield', 'label': 'the challenger', 'dead': False}; note: reporter: Ghazka Who Came Back; the challenger: the officer
+  scene cast present: ['Alred Millfield', 'Dilo Mugdale', 'Ghazka Who Came Back', 'Rakak Red-Hand', 'Murzra Iron-Tusk']
+  GATE the challenger is the person on stage: True (opening narrated: True)

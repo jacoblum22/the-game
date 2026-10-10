@@ -215,6 +215,10 @@ QUALIFIERS = (".but", ".and")  # an Oracle twist's qualifier rides on its answer
 HOW_SAID = {"seen": "", "rumor": " (a rumour: true or not, you cannot say)"}
 STOP = {"the", "this", "that", "these", "those", "about", "so", "far", "already", "yet", "know", "what", "with",
         "and", "any", "anything", "who", "them", "him", "her", "it", "its", "of", "a", "an", "my", "our"}
+# "what do I know about this place and what's going on here?" names nothing: it asks for the summary (live 029: the
+# explorer got "Nothing on record about this place...")
+GENERAL = {"place", "here", "there", "going", "aroun", "every", "happe", "thing", "situa", "town", "area", "local",
+           "nearb", "world", "story"}  # stems (five letters)
 
 
 def _known(state: WorldState, cv: dict[str, Any], pc: str | None) -> list[dict[str, Any]]:  # rule: 12.10.5
@@ -347,6 +351,91 @@ def promises(state: WorldState, about: str | None = None, rules: Any = None) -> 
                      data={"about": about, "promises": rows, "entities": who})
 
 
+_SPLIT = re.compile(r"\s*(?:,|;|&|\band\b)\s*", re.I)
+
+
+def _pieces(state: WorldState, about: str) -> list[str]:  # rule: 15.9.16
+    """"X and Y" is two questions. A name that is itself one entity's full name ("Hall and Keep") is kept whole."""
+    from engine.retrieve.scene import resolve_names
+
+    have = _stems(about)
+    for i in resolve_names(state, about):
+        e = state.entities.get(i)
+        if e is not None and have and have <= _stems(e.name):
+            return [about]
+    parts = [p.strip(" .!?'\"") for p in _SPLIT.split(about)]
+    return [p for p in parts if _stems(p)] or [about]
+
+
+def _fits(want: set[str], have: set[str]) -> bool:
+    """A piece of the question is about a text when it shares its words: one for a one-word piece, else two."""
+    return bool(want) and len(want & have) >= min(2, len(want))
+
+
+def _entity_lines(ents: dict[str, Any], hits: list[str], named: bool, known: list[dict[str, Any]], want: set[str],
+                  cv: dict[str, Any], pc: str, rules: Any) -> list[str]:
+    """What the codex shows of the entities a piece names, then the known facts about them (or, for a piece naming no
+    entity, the known facts that share its words), then what the PC's own life says of them."""
+    from engine.dm.oof import short_text
+
+    lines: list[str] = []
+    for e in (ents[i] for i in hits):
+        if e["kind"] == "thread":  # a thread's name is its text cut at 60 characters: show the whole sentence
+            lines.append(second_person(short_text(str(e["data"].get("text") or e["name"]), 160)) + ".")
+            continue
+        role, desc = e["data"].get("role"), _value_words(e["data"].get("desc") or "")
+        lines.append(e["name"] + (f" ({role})" if isinstance(role, str) and role else "") +
+                     (f": {desc}" if desc and desc.lower() != e["name"].lower() else ""))
+    lines += [_known_line(k) for k in known  # a named person: what is known about them, not every word match
+              if k["subject"] in hits or (not named and _fits(want, _stems(f"{k['what']} {_value_words(k['value'])}")))
+              ][-12:]
+    lines += [x for x in _self_lines(cv, pc, rules) if any(ents[i]["name"] in x for i in hits)]
+    return lines
+
+
+def _thread_lines(ents: dict[str, Any], want: set[str], hits: list[str]) -> list[str]:
+    """Threads (the wound, a situation, a lead) whose **text** shares the words asked; a thread is matched by what it
+    says, not by its name (which is its text cut at 60 characters)."""
+    from engine.dm.oof import short_text
+
+    return [second_person(short_text(str(e["data"].get("text") or e["name"]), 160)) + "."
+            for i, e in ents.items() if e["kind"] == "thread" and i not in hits
+            and _fits(want, _stems(str(e["data"].get("text") or "")))]
+
+
+def _told(state: WorldState, pc: str | None) -> list[dict[str, Any]]:  # rule: 15.9.16
+    """The `said` records spoken to the PC (what people said, not what is true): everyone's but the PC's own."""
+    from engine.dm.testimony import records
+
+    return [r for r in records(state) if r.get("words") and r.get("speaker") in state.entities
+            and r.get("speaker") != pc]
+
+
+def _told_about(state: WorldState, said: list[dict[str, Any]], hits: list[str], want: set[str]) -> list[dict[str, Any]]:
+    """Said records on a piece of the question: about a named entity, spoken by one, or sharing its words."""
+    return [r for r in said if set(r.get("about") or []) & set(hits) or r.get("speaker") in hits
+            or _fits(want, _stems(str(r["words"])))]
+
+
+def _told_lines(state: WorldState, told: list[dict[str, Any]]) -> list[str]:  # rule: 15.9.16
+    """"What you were told", each line attributed to who said it (and where, when it was noted); testimony, never
+    settled as fact (DL-12-102)."""
+    from engine.dm.oof import short_text
+    from engine.store.views import display_name
+
+    if not told:
+        return []
+    out = ["What you were told (what people said; whether it is true, you cannot say):"]
+    for r in told:
+        at = state.entities.get(r.get("place") or "")
+        day = r.get("day")
+        when = f"day {day[1]} of week {day[0]}" if isinstance(day, list) and len(day) >= 2 else ""
+        where = f" ({', '.join(x for x in ((f'at {at.name}' if at is not None else ''), when) if x)})" \
+            if at is not None or when else ""
+        out.append(f"  {display_name(state, r['speaker'])} told you: \"{short_text(str(r['words']), 220)}\"{where}")
+    return [f"  {x}" for x in out]
+
+
 def what_you_know(state: WorldState, about: str | None = None, rules: Any = None) -> CodexView:  # rule: 14.6.3
     # rule: 15.9.16
     """"What do I know (about X)?" (14.6.3, 12.5.10): the journal filtered to X; with no X, a short summary of who
@@ -361,30 +450,28 @@ def what_you_know(state: WorldState, about: str | None = None, rules: Any = None
     known = _known(state, cv, pc)
     ents = {i: e for i, e in cv["entities"].items() if i != pc}
     want = _stems(about or "")
-    if about and want and not want <= {"mysel", "me", "chara"}:
-        hits, named = _about(state, ents, about, want)
-        lines = []
-        for e in (ents[i] for i in hits):
-            if e["kind"] == "thread":  # a thread's name is its text cut at 60 characters: show the whole sentence
-                from engine.dm.oof import short_text
-
-                lines.append(second_person(short_text(str(e["data"].get("text") or e["name"]), 160)) + ".")
-                continue
-            role, desc = e["data"].get("role"), _value_words(e["data"].get("desc") or "")
-            lines.append(e["name"] + (f" ({role})" if isinstance(role, str) and role else "") +
-                         (f": {desc}" if desc and desc.lower() != e["name"].lower() else ""))
-        lines += [_known_line(k) for k in known  # a named person: what is known about them, not every word match
-                  if k["subject"] in hits or (not named and want & _stems(f"{k['what']} {_value_words(k['value'])}"))
-                  ][-12:]
-        lines += [x for x in _self_lines(cv, pc, rules) if any(ents[i]["name"] in x for i in hits)]
-        if not lines:
+    if about and want and not want <= {"mysel", "me", "chara"} | GENERAL:
+        # 15.9.16 (DL-15-46): the lookup searches thread text, said records and knowledge records, never names alone;
+        # "X and Y" is split, and a name that resolves does not stop the search (round 8: the winter and the banners)
+        lines: list[str] = []
+        told: list[dict[str, Any]] = []
+        hit_ids: list[str] = []
+        said = _told(state, pc)
+        for piece in _pieces(state, about):
+            pw = _stems(piece)
+            hits, named = _about(state, ents, piece, pw)
+            hit_ids += [h for h in hits if h not in hit_ids]
+            new = _entity_lines(ents, hits, named, known, pw, cv, pc, rules) + _thread_lines(ents, pw, hits)
+            lines += [x for x in new if x not in lines]
+            told += [r for r in _told_about(state, said, hits, pw) if r not in told]
+        if not lines and not told:
             return CodexView(section="journal", data={"about": about, "known": []}, text=(
                 f"[JOURNAL] Nothing on record about {about}: your character doesn't know anything about that yet. "
                 "To find out, ask someone who might know, go and look, or say you try to remember (a Recall roll, "
                 "for what your upbringing or trade would have taught you)."))
-        return CodexView(section="journal", text="\n".join([f"[JOURNAL] What you know about {about}:"] +
-                                                           [f"  {x}" for x in lines]),
-                         data={"about": about, "entities": hits})
+        body = [f"  {x}" for x in lines] + _told_lines(state, told[-8:])
+        return CodexView(section="journal", text="\n".join([f"[JOURNAL] What you know about {about}:"] + body),
+                         data={"about": about, "entities": hit_ids, "told": [r["id"] for r in told[-8:]]})
     lines = _self_lines(cv, pc, rules)
     here = location(state)
     home = state.entities[here].data.get("settlement_scope") if here in state.entities else None
@@ -399,8 +486,10 @@ def what_you_know(state: WorldState, about: str | None = None, rules: Any = None
         lines.append("People you have met: " + ", ".join(met[-8:]))
     lines.append('Ask "what do I know about <someone or something>?" for the details, or type "journal" for '
                  "everything you have noted.")
-    return CodexView(section="journal", text="\n".join(["[JOURNAL] What you know:"] + [f"  {x}" for x in lines]),
-                     data={"known": known})
+    told = _told(state, pc)[-4:]
+    return CodexView(section="journal", text="\n".join(["[JOURNAL] What you know:"] + [f"  {x}" for x in lines]
+                                                       + _told_lines(state, told)),
+                     data={"known": known, "told": [r["id"] for r in told]})
 
 
 def journal(state: WorldState, rules: Any = None, limit: int = 30) -> CodexView:  # rule: 11.12.4
@@ -426,9 +515,12 @@ def journal(state: WorldState, rules: Any = None, limit: int = 30) -> CodexView:
     if known:
         lines.append("  Known:")
         lines += [f"    {_known_line(k)}" for k in known[-limit:]]
+    told = _told(state, pc)[-limit:]
+    lines += _told_lines(state, told)
     if len(lines) == 1:
         lines.append("  nothing yet")
-    return CodexView(section="journal", text="\n".join(lines), data={"chronicle": entries, "known": known})
+    return CodexView(section="journal", text="\n".join(lines),
+                     data={"chronicle": entries, "known": known, "told": [r["id"] for r in told]})
 
 
 def threads(state: WorldState, rules: Any = None) -> CodexView:  # rule: 12.6.6

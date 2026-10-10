@@ -68,7 +68,7 @@ def _scene(store: Any) -> None:
 
 def _ask(store: Any, npc: str, text: str, clue: Any = "none", kind: str = "what_happened",
          topic: str | None = None, record: Any = None, beats: Any = ()) -> tuple[ans.Answer, ScriptedModel]:
-    model = ScriptedModel({Role.CLUE: [{"about": clue}] * 4})
+    model = ScriptedModel({Role.CLUE: [{"about": clue, "part": "none"}] * 4})
     with turn(store, model) as ctx:
         a = ans.ask(ctx, npc, kind, topic, text, pc=PC, record=record, beats=beats)
     return a, model
@@ -83,13 +83,14 @@ def _clue_calls(model: ScriptedModel) -> list[str]:
 
 def test_c1_bounty_terms_are_written_and_last_seen_is_improvised(tmp_path: Path) -> None:
     """made-up C1: the missing person's bounty: pay (a job fee), issuer and contact written as the reporter's
-    knowledge; "where was he last seen" has no term (the reporter answers in words)."""
+    knowledge. Spec 029 (T2, every kind): "where was he last seen" now has a term too (a place bound), so the
+    reporter's card carries it; what is said beyond is still improvised."""
     store = seeded_store(tmp_path, MISSING)[0]
     case = _case(store)
     t = hook_terms(store.state)["thr.lead_1"]
     assert t["kind"] == "missing" and t["pay"] == job_fee(1) and t["issuer"].endswith(".rulers")
     card = _card(store, _core(case))
-    assert f"pay: {job_fee(1)} coins" in card and "posted by:" in card and "last seen" not in card
+    assert f"pay: {job_fee(1)} coins" in card and "posted by:" in card and "last seen:" in card
     notice = next(p["holder"] for p in case["nodes"][0]["placements"] if p["holder_kind"] == "document")
     text = str(store.state.fact_value(notice, "text"))
     assert not re.search(r"\d|silver|gold", text), text  # the notice names no figure the purse could disagree with

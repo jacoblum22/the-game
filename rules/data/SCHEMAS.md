@@ -346,7 +346,10 @@ Owner 12 (12.16). Keys: `modes` [{id, text}], `steps` [{id `ws.step.*`, n, name,
 from/map, by?}}], `tables` [{id `tbl.12.seed.*`, die?, results | by_people | by | climates …}], `defaults`
 {canon_impossible [{key, text, scope}], sources, components_by_band, rare_metals, haven_by_tier, market_by_terrain,
 sentry_floors, areas_per_ring, watches_between, uses_generic}, `requirements` [{id `ws.req.*`, from, need, rules,
-key (a path, `/`-separated), check, generic?}] [revision: I-028].
+key (a path, `/`-separated), check, generic?}] [revision: I-028]. `terms` {holders, incident, hire, situation,
+document, lead_form, rumor, creation}: one entry per lead and incident kind the data has (label, at, know, people,
+away, pick, fields, doc {name, aliases, kind, at, text}, stage {label}): the terms written when the hook is made
+(11.5.6; `engine/gen/hooks.py`) [revision: R2-L; DL-12-135].
 
 ## codex.yaml
 Owner 14. Keys: `views` [{id, shows [state family], class_filter [visibility class], layout}],

@@ -16,6 +16,7 @@ walk-ons are NPC entities and its documents are things with a `text` fact.
 
 from __future__ import annotations
 
+from collections.abc import Collection
 from typing import Any
 
 from engine.audit import text as words
@@ -216,31 +217,49 @@ def _live(state: Any, p: Rec) -> bool:
 # ------------------------------------------------------------------------------------------- the store
 
 
-def write_seeded(tx: Any, rec: Rec, *, source: str = "seed") -> None:  # rule: 12.16.16
-    """Write a packed record's case walk-ons, documents and case records into the store (seed time, or the new
-    parts of an on-demand case). A missing person is not placed anywhere: they are missing."""
+def write_walk_ons(tx: Any, walk_ons: list[Rec], *, source: str = "seed", unplaced: Collection[str] = ()) -> None:
+    # rule: 12.11.1
+    """The walk-ons a case or a hook's terms made, as unintroduced NPC entities at their homes (`unplaced`: a missing
+    person is not placed anywhere; a dead one lies where it fell)."""
     st = tx.state
-    missing = {c["solution"]["subject"]["id"] for c in rec.get("seed_cases") or [] if c["option"] == "missing"}
-    for n in rec.get("walk_ons") or []:
+    for n in walk_ons:
         if n["id"] in st.entities:
             continue
         data = {k: v for k, v in n.items() if k not in ("id", "name", "exists", "kind")}
         data["name_known"] = False  # 12.10.2
         tx.add(Event.of("entity_created", source=source, rule_id="12.11.1", entity=EntityRecord(
-            id=n["id"], kind="npc", name=n["name"], visibility="background", data=data)))
-        if n.get("home") in st.entities and n["id"] not in missing:
+            id=n["id"], kind="npc", name=n["name"], visibility="background", exists=n.get("exists") or "exists",
+            data=data)))
+        if n.get("home") in st.entities and n["id"] not in unplaced:
             tx.add(Event.of("position_set", source=source, rule_id="12.11.1", entity=n["id"], location=n["home"]))
-    for doc in rec.get("documents") or []:
+
+
+def write_documents(tx: Any, docs: list[Rec], *, source: str = "seed") -> None:  # rule: 12.16.16
+    """A document is an object entity with a `text` fact, written when it is made, so reading it delivers its words
+    (a notice, or a gate log, a muster notice, a letter that a hook's terms made: spec 029)."""
+    st = tx.state
+    for doc in docs:
         if doc["id"] in st.entities:
             continue
-        name = "{} notice".format(doc["option"])
+        data = {"document": doc["option"], "table": doc["table"]}
+        if doc.get("aliases"):
+            data["aliases"] = list(doc["aliases"])
         tx.add(Event.of("entity_created", source=source, rule_id="12.16.16", entity=EntityRecord(
-            id=doc["id"], kind="object", name=name, visibility="available",
-            data={"document": doc["option"], "table": doc["table"]})))
+            id=doc["id"], kind="object", name=doc.get("name") or "{} notice".format(doc["option"]),
+            visibility="available", data=data)))
         tx.add(fact(tx, doc["id"], "text", doc["text"], rule_id="12.16.16", source="data", visibility="available",
                     event_source=source))
         if doc.get("at") in st.entities:
             tx.add(Event.of("position_set", source=source, rule_id="12.16.16", entity=doc["id"], location=doc["at"]))
+
+
+def write_seeded(tx: Any, rec: Rec, *, source: str = "seed") -> None:  # rule: 12.16.16
+    """Write a packed record's case walk-ons, documents and case records into the store (seed time, or the new
+    parts of an on-demand case). A missing person is not placed anywhere: they are missing."""
+    st = tx.state
+    missing = {c["solution"]["subject"]["id"] for c in rec.get("seed_cases") or [] if c["option"] == "missing"}
+    write_walk_ons(tx, rec.get("walk_ons") or [], source=source, unplaced=missing)
+    write_documents(tx, rec.get("documents") or [], source=source)
     if rec.get("seed_cases"):
         merged = cases(st) | {c["id"]: c for c in rec["seed_cases"]}
         tx.add(meta(CASES, merged, "PR-15-6", source))

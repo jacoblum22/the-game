@@ -123,6 +123,16 @@ PEOPLE = ("npc", "companion", "adversary")
 NONE = "none"
 
 
+def beat_verb(e: Any) -> str | None:  # rule: 12.10.5
+    """The learning verb of a beat (Talk, Observe or Recall), by the beat's **typed** verb (`BeatEntry.verb`), else by
+    the words of its approach. A beat done with a licence (reading with Letters, `lic.lang.letters`) carries the licence
+    in `approach_words`, not the verb, so word-matching delivered nothing (round 8, R8-I2 cause D: the talker's gate
+    log read)."""
+    if e.verb in LEARN_VERBS:
+        return str(e.verb)
+    return next((v for v in LEARN_VERBS if v in (e.approach_words or "")), None)
+
+
 def _learnable(state: Any, f: Any, pc: str) -> bool:
     """A fact a look or a memory can deliver: in the world (`shown` or `available`, never `background` bookkeeping
     such as a check's difficulty), not sealed, not a pointer or a knowledge roll, and new to the PC."""
@@ -163,7 +173,7 @@ def deliver_learning(ctx: TurnContext, record: AdjudicationRecord, beats: Sequen
     out: list[dict[str, Any]] = []
     for b in beats:
         e = b.entry
-        verb = next((v for v in LEARN_VERBS if v in (e.approach_words or "")), None)
+        verb = beat_verb(e)
         if b.status == "resolved" and not _ok(b):
             _stalled(st, record, e, b.frame_id)
         if verb is None or not _ok(b):
@@ -178,22 +188,38 @@ def deliver_learning(ctx: TurnContext, record: AdjudicationRecord, beats: Sequen
                 present[0] if len(present) == 1 else None)
             if knower is None:
                 continue  # asked of no one here: no answer line, never a code pointer (DL-12-90)
-            items = [ans.ask(ctx, knower, p.question_kind, p.topic, p.text, pc=pc, record=record, beats=beats)
-                     for p in asked[:ans.deliver_count(len(asked), reach)]]
+            # P9 (DL-15-45): one clue judgment over every part, before the cap; the cap counts ordinary answers only
+            items = ans.ask_message(ctx, knower, asked, reach, pc=pc, record=record, beats=beats)
             extra = ans.volunteer(ctx, knower, pc) if reach >= vol else None
             items += [extra] if extra else []
         else:
             items = _look(ctx, e, verb, reach, pc, asked)
-        for a in items:
-            if a.willingness is None:
-                e.learned.append(a.line)
-            else:
-                answer_line(record, knower or "", a)
+        _give(record, e, knower, items, asked, look=verb != "verb.talk",
+              also=[p for p in record.parts if p.cls == "FICTION_QUESTION" and p.question_kind not in (None, NONE)])
         out.append({"beat": e.beat_id, "verb": verb, "knower": knower, "speech": False,
                     "answers": [(a.fact_id, a.pointer, a.line, a.willingness) for a in items]})
-    if not any("verb.talk" in (b.entry.approach_words or "") for b in beats):
+    if not any(beat_verb(b.entry) == "verb.talk" for b in beats):
         out += _speech_answers(ctx, record, beats, [p for p in asked if p.cls == "SPEECH"], present, pc)
     return out
+
+
+def _give(record: AdjudicationRecord, e: Any, knower: str | None, items: Sequence[Any], asked: Sequence[Any], *,
+          look: bool = False, also: Sequence[Any] = ()) -> None:  # rule: 12.14.12
+    """What the answers deliver reaches the record. A fact (a clue, a pointer, a cast person, what a look found) is a
+    **learned** line, a fact the narrator conveys from any knower present (DL-15-44): on the beat that carried the
+    ask, else on the record itself (plain speech has no beat). An ordinary answer is the asked NPC's willingness line.
+    A question is marked answered only when a fact was delivered for it (`look`: an Observe or Recall that found a
+    fact answers the questions it was asked)."""
+    for a in items:
+        if a.willingness is None:
+            (e.learned if e is not None else record.learned).append(a.line)
+        else:
+            answer_line(record, knower or "", a)
+        if a.fact_id and a.part is not None and a.part < len(asked):
+            asked[a.part].handled = "answered"
+    if look and any(a.fact_id for a in items):
+        for p in [*asked, *also]:
+            p.handled = "answered"
 
 
 def answer_line(record: AdjudicationRecord, npc: str, a: Any) -> None:  # rule: PR-12-10
@@ -216,10 +242,8 @@ def _speech_answers(ctx: TurnContext, record: AdjudicationRecord, beats: Sequenc
         return []
     out = []
     for npc in addressed(ctx.state, record, present, said_words(ctx))[:1]:
-        items = [ans.ask(ctx, npc, p.question_kind, p.topic, p.text, pc=pc, record=record, beats=beats)
-                 for p in speech[:ans.deliver_count(len(speech), 2)]]
-        for a in items:
-            answer_line(record, npc, a)
+        items = ans.ask_message(ctx, npc, speech, 2, pc=pc, record=record, beats=beats)  # P9: one judgment, then the cap
+        _give(record, None, npc, items, speech)
         out.append({"beat": None, "verb": "speech", "knower": npc, "speech": True,
                     "answers": [(a.fact_id, a.pointer, a.line, a.willingness) for a in items]})
     return out
@@ -264,7 +288,11 @@ def _look(ctx: TurnContext, e: Any, verb: str, reach: int, pc: str, asked: list[
     out = []
     for fid in ranked[:ans.deliver_count(len(ranked), reach)]:
         record_knowledge(ctx.time_ctx(), pc, fid, LEARN_VERBS[verb])
-        out.append(ans.Answer("", fact_sentence(st, st.facts[fid]), fid))
+        f = st.facts[fid]
+        who = _name(st, f.subject)
+        line = (f'{who[:1].upper()}{who[1:]} reads: "{f.value}"' if f.predicate in WRITTEN and isinstance(f.value, str)
+                else fact_sentence(st, f))  # a document's words are delivered whole, never cut (spec 029: T2)
+        out.append(ans.Answer("", line, fid))
     if out:
         return out
     if verb == "verb.observe" and place in st.entities:  # the place's seeded furniture (12.16.9): what is here
@@ -279,7 +307,8 @@ def _look(ctx: TurnContext, e: Any, verb: str, reach: int, pc: str, asked: list[
     topic, about = ans.topic_of(st, q.topic if q else None, said, pc)
     about = about or next((t for t in e.targets if t in st.entities), None)
     if verb == "verb.recall":
-        case = ans.clue_case(ctx, pc, said, about)  # D2 A: by meaning, never shared words (spec 025)
+        # D2 A: by meaning, never shared words (spec 025); one judgment over every question asked (P9, spec 029)
+        case, _ = ans.clue_judgment(ctx, pc, [p.text for p in asked] or [said], [about])
         a = ans._from_case(ctx, pc, case, False, pc, True) if case is not None else None
         if a is not None:  # the consequential route with the PC as the knower (what they were told, or its holder)
             return [ans.Answer("", f"You {a.said}", a.fact_id, a.pointer)]
