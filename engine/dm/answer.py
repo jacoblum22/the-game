@@ -7,13 +7,17 @@ words by the narrator from the speaker card and the NPC's own testimony.
     a.fact_id       # the fact told on the consequential route or by casting
     who = who_answer(ctx, "who is missing")      # the DM-side "who is X?" (a FICTION_QUESTION): (words, fact id)
 
-Route (PR-12-10 step 1): "who is <role>" (their own name; a person asked about by name; a story role -> the case
-graph, building the reduced case when none is behind it; any other role -> casting), a question judged about a clue
-(`clue_case`, one small model call; D2 A) -> the case graph (a holder delivers its placement and the node is found;
-anyone else names the holder of the node's core placement); everything else is the NPC's to answer in words: code
-gives only the willingness (step 2), decided when the talk starts and held for the scene (D3 A), an unwilling answer
-with one pointer onward. R2-D's rungs (the store, the knowledge pack, propose-and-ratify, the pointer) are retired as
-sources of speech (DL-12-90).
+    answers = ask_message(ctx, npc, parts, reach, pc=pc, record=rec, beats=outcomes)   # one message, P9 (spec 029)
+
+Route (PR-12-10 step 1), per **message** [P9; DL-15-45]: their own name or a person asked about by name (typed);
+then **one** clue judgment over all the remaining questions (`clue_judgment`, one small model call; D2 A) -> the case
+graph (a holder delivers its placement as a learned fact and the node is found; anyone else names the holder of the
+node's core placement); then "who is <role>" (a story role -> the case graph, building the reduced case when none is
+behind it; any other role -> casting); everything else is the NPC's to answer in words: code gives only the
+willingness (step 2), decided when the talk starts and held for the scene (D3 A), an unwilling answer with one pointer
+onward. `deliver_count` (T-15-5) caps these ordinary answers only, after the judgment, so a clue is never dropped by
+the cap. R2-D's rungs (the store, the knowledge pack, propose-and-ratify, the pointer) are retired as sources of
+speech (DL-12-90).
 """
 
 from __future__ import annotations
@@ -21,6 +25,7 @@ from __future__ import annotations
 import re
 from collections.abc import Sequence
 from dataclasses import dataclass
+from types import SimpleNamespace
 from typing import Any
 
 from engine import ids
@@ -69,6 +74,8 @@ class Answer:
     pointer: str | None = None  # the holder a non-holder named on the consequential route
     willingness: str | None = None  # an ordinary question's willingness (PR-12-10 step 2); None: a fact answer
     key: str | None = None  # the asked-and-answered index key `<npc>|<kind>|<topic>`
+    learned: str = ""  # a clue or pointer as the fact the PC learns, naming no speaker (DL-15-44)
+    part: int | None = None  # the index of the question part this answers (the message's parts)
 
 
 def deliver_count(n: int, reach: int) -> int:  # rule: T-01-6
@@ -196,7 +203,7 @@ def _from_case(ctx: Any, knower: str, case: dict[str, Any], who: bool, pc: str, 
     if held is not None or (node.get("found") and node.get("fact_id") in st.knowledge.get(pc, {})):
         fid = deliver_node(ctx, case, node, held["id"] if held else None, pc)
         said = f"{'remember' if first else 'tells you'} {node['fact']}"
-        return Answer(said, "", fid)
+        return Answer(said, "", fid, learned=str(node["fact"]))
     ref = pointer(case, node["id"], asked=knower, state=st)
     pred = f"points_to.{ids.slug(node['id'])}"[:60]
     if ref is None or (knower != pc and any(  # the PC already has this lead: the knower answers in words
@@ -215,17 +222,20 @@ def _from_case(ctx: Any, knower: str, case: dict[str, Any], who: bool, pc: str, 
     what = node["fact"].split(":", 1)[0]
     dont = "do not know" if first else "does not know"
     where = name(st, ref) if ref in st.entities and st.entities[ref].kind in PEOPLE else f"someone at {name(st, ref)}"
-    return Answer(f"{dont} {what}, but {where} would", "", fid, ref)
+    return Answer(f"{dont} {what}, but {where} would", "", fid, ref,
+                  learned=f"{_cap(name(st, knower))} {dont} {what}, but {where} would")
 
 
-def clue_case(ctx: Any, knower: str, text: str, about: str | None = None) -> dict[str, Any] | None:
+def clue_judgment(ctx: Any, knower: str, texts: Sequence[str], abouts: Sequence[str | None] = ()
+                  ) -> tuple[dict[str, Any] | None, int | None]:
     # rule: PR-12-10
     # rule: 15.9.5
-    """The case a question is about (PR-12-10 step 1, D2 A; DL-12-112): the case whose subject the question asks
-    about by id (typed, no call), else one small model call (`Role.CLUE`) over the question and the about lines of
-    each case's open node, the ones `knower` holds a live placement on marked and listed first. None: not about a
-    clue (the question is ordinary). Retires `case_about`'s word overlap (round 7: 0 clues in 38 questions; "signed"
-    matched "a sign of the rite")."""
+    """The case a **message** is about (PR-12-10 step 1, D2 A; DL-12-112; P9, DL-15-45) and the question that asks it:
+    the case whose subject any question asks about by id (typed, no call), else **one** small model call
+    (`Role.CLUE`) over all the questions together and the about lines of each case's open node, the ones `knower`
+    holds a live placement on marked and listed first. (None, None): not about a clue (the questions are ordinary).
+    Retires `case_about`'s word overlap (round 7: 0 clues in 38 questions; "signed" matched "a sign of the rite") and
+    the per-part call (round 8: the cap dropped Betric's clue before the second question was judged)."""
     from engine.dm.roles.clue import MAX_ITEMS, judge
     from engine.gen.case import about_line
 
@@ -233,8 +243,9 @@ def clue_case(ctx: Any, knower: str, text: str, about: str | None = None) -> dic
     pc = active_pc(st)
     open_: list[tuple[dict[str, Any], dict[str, Any], dict[str, Any] | None]] = []
     for c in cases(st).values():
-        if about is not None and about == c["solution"]["subject"]["id"]:
-            return c
+        for i, about in enumerate(abouts):
+            if about is not None and about == c["solution"]["subject"]["id"]:
+                return c, i
         node = open_node(c, False)
         if node.get("found") and knower != pc:
             continue  # a found clue is never delivered or pointed at again (DL-12-103)
@@ -243,8 +254,14 @@ def clue_case(ctx: Any, knower: str, text: str, about: str | None = None) -> dic
         open_.append((c, node, held))
     open_.sort(key=lambda x: x[2] is None)  # held first
     open_ = open_[:MAX_ITEMS]
-    pick = judge(ctx, text, [(about_line(st, c, n, p), p is not None) for c, n, p in open_])
-    return open_[pick][0] if pick is not None else None
+    pick, part = judge(ctx, list(texts), [(about_line(st, c, n, p), p is not None) for c, n, p in open_])
+    return (open_[pick][0], part) if pick is not None else (None, None)
+
+
+def clue_case(ctx: Any, knower: str, text: str, about: str | None = None) -> dict[str, Any] | None:
+    # rule: PR-12-10
+    """`clue_judgment` over one question: the case it is about, else None."""
+    return clue_judgment(ctx, knower, [text], [about])[0]
 
 
 def fact_words(st: Any, f: Any) -> str:
@@ -314,7 +331,7 @@ def willingness(ctx: Any, npc: str, record: Any = None, beats: Sequence[Any] = (
             if "/refusal." in m and tags & ev:
                 return "unwilling", str(npc_motives(st, npc).get(m) or "a refusal of theirs")
     talk = next((b for b in beats if b.status in ("resolved", "no_roll") and npc in (b.entry.targets or [])
-                 and "talk" in (b.entry.approach_words or "")), None)
+                 and (b.entry.verb == "verb.talk" or "talk" in (b.entry.approach_words or ""))), None)
     if talk is not None:
         if effective_degree(talk.entry) in ("failure", "critical_failure"):  # DL-01-48
             return "unwilling", "the talk did not move them"
@@ -361,18 +378,80 @@ def refusal_pointer(ctx: Any, knower: str, topic: str, about: str | None) -> str
 
 def ask(ctx: Any, knower: str, kind: str, topic: str | None, text: str, *, pc: str, record: Any = None,
         beats: Sequence[Any] = ()) -> Answer:  # rule: PR-12-10
-    """One delivered question put to `knower` (an NPC): the consequential route or casting when it applies, else
-    the willingness line the narrator voices. The index remembers the willingness, so asking twice draws nothing."""
+    """One question put to `knower` (an NPC): a one-part message (`ask_message`)."""
+    part = SimpleNamespace(question_kind=kind, topic=topic, text=text)
+    return ask_message(ctx, knower, [part], 2, pc=pc, record=record, beats=beats)[0]
+
+
+def ask_message(ctx: Any, knower: str, parts: Sequence[Any], reach: int, *, pc: str, record: Any = None,
+                beats: Sequence[Any] = ()) -> list[Answer]:  # rule: PR-12-10
+    # rule: T-15-5
+    """The questions of **one message** put to `knower` (P9; DL-15-45; DL-15-39 as amended). `parts` carry
+    `question_kind`, `topic` and `text`; `reach` is the delivered reach (T-01-6).
+    1. A part that asks for the knower's own name, or a named person's, is answered at once (typed; no call).
+    2. **One** clue judgment reads every other part together (`clue_judgment`) *before* any cap: a clue it finds is
+       delivered as a fact (`Answer.learned`, no speaker), or the knower points to its holder; the part that asked it
+       is done. A clue is never dropped by the cap.
+    3. A "who is <role>" part still left goes to the case graph or to casting (typed; a fact too).
+    4. `deliver_count` caps the ordinary parts that remain (the willingness line the narrator voices; the index
+       remembers it, so asking twice draws nothing).
+    Facts first, in the order of the parts, then the ordinary answers. Each answer carries its `part`."""
     st = ctx.need_tx().state
-    if kind == "who_is" and re.search(r"\b(?:would|might|could)\s+know\b", text, re.IGNORECASE):
-        kind = "who_knows"  # "who around here would know ...?" is the NPC's to answer in words, not casting
-    key_topic, about = topic_of(st, topic, text, knower)
-    key = _key(knower, kind, about or key_topic)
+    info: dict[int, tuple[str, str, str | None, str]] = {}  # part -> (kind, key, about, topic key)
+    for i, p in enumerate(parts):
+        kind = "who_knows" if p.question_kind == "who_is" and re.search(
+            r"\b(?:would|might|could)\s+know\b", p.text, re.IGNORECASE) else p.question_kind
+        key_topic, about = topic_of(st, p.topic, p.text, knower)
+        info[i] = (kind, _key(knower, kind, about or key_topic), about, key_topic)
     k_name = _cap(name(st, knower))
-    a = _route(ctx, knower, kind, about, text, pc, topic)
-    if a is not None:
-        a.line, a.key = f"{k_name} {a.said}", key
-        return a
+    facts: list[Answer] = []
+    left: list[int] = []
+    for i, p in enumerate(parts):
+        kind, key, about, _ = info[i]
+        a = _who_identity(ctx, knower, p.text, about, pc, p.topic) if (
+            kind == "who_is" or about == knower or _OWN_NAME.search(p.text)) else None
+        if a is not None:
+            facts.append(_fact(a, i, key, f"{k_name} {a.said}"))
+        else:
+            left.append(i)
+    clue_part: int | None = None
+    if left:
+        case, hit = clue_judgment(ctx, knower, [parts[i].text for i in left], [info[i][2] for i in left])
+        if case is not None:
+            a = _from_case(ctx, knower, case, False, pc, False)
+            if a is not None:
+                clue_part = left[hit] if hit is not None else (left[0] if len(left) == 1 else None)
+                facts.append(_fact(a, clue_part, info[clue_part][1] if clue_part is not None else None,
+                                   a.learned or f"{k_name} {a.said}"))
+    ordinary: list[int] = []
+    for i in left:
+        if i == clue_part:
+            continue
+        kind, key, about, _ = info[i]
+        a = _who_role(ctx, knower, parts[i].text, pc) if kind == "who_is" else None
+        if a is not None and a.said:
+            facts.append(_fact(a, i, key, f"{k_name} {a.said}"))
+        else:
+            ordinary.append(i)
+    facts.sort(key=lambda a: -1 if a.part is None else a.part)
+    out = list(facts)
+    for i in ordinary[:deliver_count(len(ordinary), reach)]:  # the cap counts ordinary answers only
+        kind, key, about, key_topic = info[i]
+        out.append(_ordinary(ctx, knower, key, about, key_topic, i, pc=pc, record=record, beats=beats))
+    return out
+
+
+def _fact(a: Answer, part: int | None, key: str | None, line: str) -> Answer:
+    a.part, a.key, a.line = part, key, line
+    return a
+
+
+def _ordinary(ctx: Any, knower: str, key: str, about: str | None, key_topic: str, part: int, *, pc: str,
+              record: Any, beats: Sequence[Any]) -> Answer:  # rule: PR-12-10
+    """An ordinary question: the willingness line the narrator voices (held for the scene, DL-12-118), and one
+    pointer onward when the answer is a refusal (DL-12-119)."""
+    st = ctx.need_tx().state
+    k_name = _cap(name(st, knower))
     band, why = willingness(ctx, knower, record, beats)  # held for the scene (DL-12-118): no per-topic re-roll
     idx = dict(st.meta.get(INDEX) or {})
     hit = idx.get(key) or {}
@@ -386,18 +465,7 @@ def ask(ctx: Any, knower: str, kind: str, topic: str | None, text: str, *, pc: s
         at = home_of(st, ref)  # where to find them, so the pointer leads somewhere (live 025: "where is Yipoo?")
         said += f"; and names one person who would know: {name(st, ref)}" + (
             f", found at {st.entities[at].name}" if at in st.entities else "")
-    return Answer(said, f"{k_name} {said}", willingness=band, key=key, pointer=ref)
-
-
-def _route(ctx: Any, knower: str, kind: str, about: str | None, text: str, pc: str,
-           given: str | None = None) -> Answer | None:  # rule: PR-12-10
-    """Step 1's consequential and casting routes; None: ordinary (the NPC's to answer in words)."""
-    if kind == "who_is" or about == knower or _OWN_NAME.search(text):
-        a = _who(ctx, knower, text, about, pc, given)
-        if a is not None:
-            return a if a.said else None
-    case = clue_case(ctx, knower, text, about)
-    return _from_case(ctx, knower, case, False, pc, False) if case is not None else None
+    return Answer(said, f"{k_name} {said}", willingness=band, key=key, pointer=ref, part=part)
 
 
 def _role_words(text: str) -> str | None:
@@ -410,10 +478,10 @@ def _who_verb(text: str) -> str:
     return (m.group(1) or "is").lower() if m else "is"
 
 
-def _who(ctx: Any, knower: str, text: str, about: str | None, pc: str, given: str | None = None
-         ) -> Answer | None:  # rule: PR-12-10
-    """"Who is <role>?": their own name (12.10.2); a person asked about by name; a story role -> the case graph (the
-    reduced case built now when none is behind it); any other role -> casting, else the ordinary route."""
+def _who_identity(ctx: Any, knower: str, text: str, about: str | None, pc: str, given: str | None = None
+                  ) -> Answer | None:  # rule: PR-12-10
+    """"Who are you?" / "who is Bran?": their own name (12.10.2), or a person asked about by name. Typed; None when the
+    question is neither (a story role or another role is `_who_role`'s, after the clue judgment)."""
     st = ctx.need_tx().state
     role = _role_words(text) or ""
     if about == knower or _SELF.match(role) or (not role and _OWN_NAME.search(text)):
@@ -427,6 +495,13 @@ def _who(ctx: Any, knower: str, text: str, about: str | None, pc: str, given: st
     if about is not None and named and st.entities[about].kind == "npc" and about not in st.seals:
         learn_name(ctx.time_ctx(), pc, about, "told")
         return Answer(f"tells you who that is: {st.entities[about].name}", "", st.current_fact_id(about, "name"))
+    return None
+
+
+def _who_role(ctx: Any, knower: str, text: str, pc: str) -> Answer | None:  # rule: PR-12-10
+    """"Who is <role>?": a story role -> the case graph (the reduced case built now when none is behind it); any
+    other role -> casting. `Answer("", "")`: nothing found, the NPC answers in words (DL-12-103); None: no role."""
+    role = _role_words(text) or ""
     if not words.content(role):
         return None
     found = who_case(ctx, role, pc)
@@ -540,6 +615,6 @@ def volunteer(ctx: Any, knower: str, pc: str) -> Answer | None:  # rule: T-15-5
     return None
 
 
-__all__ = ["HELD", "INDEX", "STORY_ROLES", "WILL_WORDS", "Answer", "ask", "cast_who", "clue_case",
-           "deliver_count", "deliver_node", "held", "name", "refusal_pointer", "refused_on", "topic_of",
+__all__ = ["HELD", "INDEX", "STORY_ROLES", "WILL_WORDS", "Answer", "ask", "ask_message", "cast_who", "clue_case",
+           "clue_judgment", "deliver_count", "deliver_node", "held", "name", "refusal_pointer", "refused_on", "topic_of",
            "volunteer", "who_answer", "willingness"]

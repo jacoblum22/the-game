@@ -177,7 +177,7 @@ def test_a_namesake_of_the_case_subject_is_not_the_case(tmp_path: Path) -> None:
         ctx.need_tx().add(Event.of("entity_created", source="test", entity=EntityRecord(
             id="npc.kerda_x", kind="npc", name=f"Kerda {last}", data={"role": "smith"})))
     npc = here(store)[0]
-    model = ScriptedModel({Role.CLUE: [{"about": "none"}]})
+    model = ScriptedModel({Role.CLUE: [{"about": "none", "part": "none"}]})
     with turn(store, model) as ctx:
         assert clue_case(ctx, npc, f"Where can I find Kerda {last}?", "npc.kerda_x") is None
         assert clue_case(ctx, npc, "Where did they go?", sub["id"]) == case  # typed: no call

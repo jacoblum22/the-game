@@ -312,6 +312,10 @@ def inject_lead(ctx: TimeContext, *, form_misfit: bool = False) -> LeadInjection
     if src is not None or thr is not None:
         from engine.world.social import feature
         feature(ctx, [x for x in (src, thr) if x])
+        # spec 029 (T2): the form's terms, like any hook's: who brings it, where, the words of what is found
+        from engine.gen.hooks import write_injection
+        omen = clock_trace(state, src) if src in state.clocks else None
+        write_injection(tx, roll=out.form_roll, form=form, thread=thr, src=src, source_text=omen or "")
     return out
 
 

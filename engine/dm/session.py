@@ -239,6 +239,10 @@ def opening(ctx: TurnContext) -> Response:  # rule: 12.16.16
                 d = direct(ctx, situation=("a new character enters the story (12.16.16): frame their first scene"
                                            if later else "the first opening (12.16.16): frame the inciting "
                                            "incident in the haven") + (f": {inciting}" if inciting else ""))
+                if not later:  # the incident's actor is the person on stage, cast by id (12.16.16; DL-15-43)
+                    from engine.dm.incident import stage_actor
+
+                    d.next_scene.cast = list(dict.fromkeys([*d.next_scene.cast, *stage_actor(ctx, tx)]))
                 start = frame_scene(ctx, d, reason="opening")
                 rec.scene = SceneEntry(started=start.scene_id, header=scene_header(ctx.state))
             if inciting:

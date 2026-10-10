@@ -736,6 +736,9 @@ def write_character(tx: Transaction, rec: dict[str, Any], d: Draft, rules: Any) 
             ids.FACT), subject=pc, predicate=pred, value=val, kind=kind, visibility="shown",
             supersedes=tx.state.current_fact_id(pc, pred)))
     anchor = rec.get("anchor")
+    from engine.gen.hooks import write_creation
+
+    write_creation(tx, pc, list(rec.get("hooks") or []), anchor)  # 11.5.6: each creation hook gets its terms (spec 029)
     if isinstance(anchor, dict) and anchor.get("npc") in tx.state.entities:  # 02.9.2: the bond's standing, set
         kinds = {k["id"]: k.get("standing") for k in _odoc(rules)["bond_kinds"]["anchor"]}
         start_standing = kinds.get(str(anchor.get("kind", "friend")), 2)

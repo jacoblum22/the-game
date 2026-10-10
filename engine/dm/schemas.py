@@ -420,11 +420,13 @@ def testimony_schema(ctx: SchemaContext) -> Schema:  # rule: PR-12-12
 
 
 CLUE_ITEMS = ("1", "2", "3", "4")  # at most four open clues judged at once (engine/dm/roles/clue.py)
+CLUE_PARTS = ("1", "2", "3", "4", "5", "6")  # at most six question parts in one message
 
 
 def clue_schema(ctx: SchemaContext) -> Schema:  # rule: PR-12-10
-    """PR-12-10 step 1 (D2 A, spec 025): which listed clue the question is about, by its number, or none."""
-    return obj({"about": enum(["none", *CLUE_ITEMS])})
+    """PR-12-10 step 1 (D2 A, spec 025; P9, spec 029): which listed clue the message is about, by its number, or none,
+    and which of its questions asks it (`part`, optional: a one-question message needs none)."""
+    return obj({"about": enum(["none", *CLUE_ITEMS]), "part": enum(["none", *CLUE_PARTS])})
 
 
 def _fixer_schema(ctx: SchemaContext) -> Schema:  # spec 022: the role's schema lives in engine/dm/fixer.py
@@ -566,7 +568,7 @@ DEFAULTS: dict[Role, Callable[[SchemaContext], dict[str, Any]]] = {
     # nothing understood: the answer asks for the turn (PR-12-11; engine/dm/fixer.py)
     Role.FIXER: lambda ctx: _fixer_default(),
     # no judgment: the question is not about a clue (PR-12-10 step 1; spec 025)
-    Role.CLUE: lambda ctx: {"about": "none"},
+    Role.CLUE: lambda ctx: {"about": "none", "part": "none"},
 }
 
 

@@ -148,7 +148,8 @@ journal:                   # T-15-15 (15.9.16)
     - {id: journal.cases, shows: [clues_found_with_content_and_invites, live_leads_with_method_hints, theories_with_status, open_questions]}
     - {id: journal.people, shows: [names_learned, standing_rung, known_wants, known_fears, known_refusals, what_the_pc_told_them]}
     - {id: journal.places, shows: [discovered_places, notes]}
-    - {id: journal.told, shows: [said_records_to_pc, speaker, place, day, thread_or_topic]}   # [revision: R2-L] [DL-15-46] "what you were told", attributed testimony    - {id: journal.rumors, shows: [rumor_text, source]}
+    - {id: journal.told, shows: [said_records_to_pc, speaker, place, day, thread_or_topic]}   # [revision: R2-L] [DL-15-46] "what you were told", attributed testimony
+    - {id: journal.rumors, shows: [rumor_text, source]}   # [revision: R2-L] [spec 029] restored: it was swallowed by the comment above
     - {id: journal.lies, shows: [claim, believers_known_to_pc]}
     - {id: journal.commitments, shows: [debts, promises, agreements, due_conditions]}
   lookup: [thread_text, said_records, knowledge_records]   # [revision: R2-L] [DL-15-46]: never names alone; "X and Y" split

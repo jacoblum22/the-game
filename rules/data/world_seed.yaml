@@ -708,6 +708,523 @@ tables:
         - {range: "5", stance: indifferent, gist: "has their own troubles"}
         - {range: "6", stance: hinders, gist: "has a reason to want it left alone"}
 
+# ------------------------------------------------------------------------------------------ terms (T2)
+# [revision: R2-L] [DL-12-135] 11.5.6, 12.16.16, PR-15-6 step 7: the terms every lead and incident kind gets when it
+# is made, one entry per kind the data has (the tables above and in world_turn.yaml, oracles.yaml, origins.yaml; the
+# engine's test walks them, so a kind added to any of those without an entry here fails). Kind by kind the terms are
+# WHO (people by id: bound, cast or created), WHAT (the act or event, as data), WHERE (a place bound or created), the
+# WORDS of any document or message, and the PAY where one is offered (a job fee, economy AI-6). They are written as
+# unsealed knowledge on the cards of the people who would know (`know`), and as the `text` of a document entity made
+# at the same time (`doc`). A node's answer (the case's sealed subject) is never a term. Not sentences to repeat:
+# fields filled from ids and names (`engine/gen/hooks.py`).
+#   label   the heading on a knower's card              at     where it is (a place key, below)
+#   know    who holds it (a holder, below, or reporter | witness | subject | contact | head)
+#   people  {token: role}: a walk-on made at `at` (the token fills fields and `know`)
+#   pick    {name: [options]} drawn on the hook's own stream ("doc:reason" draws from the document table's field)
+#   fields  ordered {label: template}; {tokens} are names, places and picks
+#   doc     {name, aliases, kind, at, text}: a document made with the hook; its text is what reading it delivers
+#   stage   {label}: the incident's actor is the case's subject, cast on stage (12.16.16) under this label
+#   away    [tokens] of `people` who are made but not standing at the place (gone with the cart)
+# place keys: start (the opening place), gate | market | hall | inn | temple | smithy (the haven's building of that
+# kind, else the haven), haven, area (the situation's region), site (the first lead's target), scene (the PC's place).
+terms:
+  holders:
+    watch:    {at: gate,   roles: [captain, guard, watch],                         role: "guard"}
+    clerk:    {at: hall,   roles: [scribe, clerk, steward, officer, reeve],        role: "clerk"}
+    priest:   {at: temple, roles: [abbot, priest, acolyte, officer, oracle],       role: "acolyte"}
+    healer:   {at: temple, roles: [healer, herb-wife, wise-woman],                 role: "healer"}
+    publican: {at: inn,    roles: [innkeeper],                                     role: "innkeeper"}
+    trader:   {at: market, roles: [merchant, trader, innkeeper, smith],            role: "trader"}
+    farmer:   {at: area,   roles: [],                                              role: "farmer"}
+  incident:
+    alarm:
+      label: "the alarm at the gate"
+      at: start
+      know: [reporter, watch, witness]
+      fields:
+        what: "the alarm horn sounded at {place} and the watch dropped the bar; no one was let in or out after"
+        when: "as the sun cleared the wall"
+        raised by: "{watch}"
+        seen by: "{witness}"
+        what the watch saw: "armed figures on the road, too far to count; the watch will say more to someone it trusts"
+    dying_messenger:
+      label: "the rider who died in the market"
+      at: start
+      know: [reporter, witness]
+      stage: {label: "the dying rider", dead: true}
+      pick:
+        message:
+          - "Tell him it is done. They know. Do not let it reach the hall."
+          - "The road is cut behind me. Warn them before the new moon."
+          - "He lied, all of it. Tell the one who sent me it was never the river."
+          - "Do not trust the ones who wait at the ford. Tell her to run."
+      fields:
+        what: "a rider fell from the saddle at {place} and died where he lay, his pouch empty at his belt"
+        the rider's last words: "\"{message}\""
+        heard by: "{reporter}, {witness}"
+    missing:
+      label: "the missing {subject_role}"
+      at: start
+      know: [reporter, witness]
+      fields:
+        what: "{subject_a} of {haven} has been missing since last night; the bed was cold at dawn"
+        last seen: "{last_seen}"
+        raised by: "{reporter}"
+    offer:
+      label: "the offer of work"
+      at: start
+      know: [reporter, subject]
+      stage: {label: "the one making the offer"}
+      pick:
+        warning: "doc:reason"
+      fields:
+        what: "a powerful person at {place} offers the newcomer work, coin and a warning"
+        warning: "{warning}"
+        offered by: "{subject_label}"
+    theft:
+      label: "the theft from {place}"
+      at: start
+      know: [reporter, priest, witness]
+      fields:
+        what: "something sacred was taken from {place} in the night; the niche was found empty at dawn and the seal broken"
+        found gone by: "{reporter}"
+        last seen: "at the evening rites, in its niche"
+        kept by: "the faith of {keeper}"
+    omen:
+      label: "the omen over the walls"
+      at: start
+      know: [reporter, priest, witness]
+      pick:
+        sign:
+          - "a seam of pale light across the sky"
+          - "a dark star at noon"
+          - "the ground trembling without a sound"
+          - "every shadow leaning the same way"
+      fields:
+        what was seen: "{sign}, seen by the whole of {haven} from {place}"
+        when: "at first light"
+        who reads omens: "{priest}"
+        seen by: "{reporter}, {witness}"
+    refugees:
+      label: "the refugees who came in"
+      at: start
+      know: [reporter, subject, watch]
+      stage: {label: "the refugees' leader"}
+      pick:
+        story:
+          - "the dead walk the lower fields and the dogs howl at nothing"
+          - "the hills moved in the night and buried a village"
+          - "a light fell from the sky and took the herds"
+          - "their lord rode off with the grain and left them to the winter"
+      fields:
+        what: "a company of refugees came to {place} asking to be let in"
+        their story: "\"{story}\""
+        speaks for them: "{subject_label}"
+        doubted by: "{watch}"
+    duel:
+      label: "the challenge in the inn"
+      at: start
+      know: [reporter, subject, witness]
+      stage: {label: "the challenger"}
+      people: {challenged: "patron"}
+      pick:
+        challenge:
+          - "Say that again and answer for it, here, with steel."
+          - "You will take that back or take this."
+          - "Name your second. I will not wait on the watch."
+        grievance:
+          - "an insult to a name"
+          - "a debt unpaid since the fair"
+          - "a seat taken at the wrong table"
+          - "a word said of a dead kinsman"
+      fields:
+        what: "a quarrel in {place} turned to a challenge and blades came out"
+        the challenge: "\"{challenge}\""
+        over: "{grievance}"
+        challenged: "{challenged}"
+        seen by: "{reporter}, {witness}"
+  hire:
+    label: "the hiring by {issuer_name}"
+    at: haven
+    fields:
+      ask for: "{contact}"
+  situation:
+    feud:
+      label: "hard words at the market"
+      at: market
+      know: [trader, witness]
+      fields:
+        what: "hard words at {place} between people of {house_a} and {house_b}, loud enough to stop the stalls"
+        between: "{house_a} and {house_b}"
+        seen by: "{trader}, {witness}"
+    sickness:
+      label: "the chalked door"
+      at: haven
+      know: [healer, witness]
+      fields:
+        what: "a door in {place} was marked with a chalk cross and the household inside keeps it shut"
+        seen by: "{healer}, {witness}"
+    road_of_knives:
+      label: "the looted wagon"
+      at: gate
+      know: [watch, witness]
+      doc:
+        name: "gate log"
+        aliases: ["the gate log", "gate ledger", "the ledger", "log"]
+        kind: log
+        at: gate
+        text: "Entry, {date}: a laden wagon left by the {route} at first light, three drovers, no escort. It had not come to {route_to} by the second night. Its team was found loose in the ditch at the third mile, the load gone. Entered by {watch}."
+      fields:
+        what: "a wagon that left {place} by the {route} was found looted in the ditch, its team loose"
+        the gate log's entry: "{doc_text}"
+        seen by: "{watch}, {witness}"
+    succession:
+      label: "the two banners"
+      at: hall
+      know: [clerk, witness]
+      fields:
+        what: "two banners hang in {place}, one for each claimant to the headship of {faction}"
+        whose: "the banner of {faction} and the banner of {claimants}"
+        seen by: "{clerk}, {witness}"
+    hunger:
+      label: "the queues at the bakery"
+      at: market
+      know: [trader, witness]
+      doc:
+        name: "price board"
+        aliases: ["the price board", "board"]
+        kind: board
+        at: market
+        text: "PRICES, {place}: bread dear, two notches up since the thaw. Flour for the houses of {haven} first, strangers after. By the market-warden's leave."
+      fields:
+        what: "long queues at the bakery in {place}; bread is two notches dearer than at the thaw"
+        the price board: "{doc_text}"
+        seen by: "{trader}, {witness}"
+    hunting_ground:
+      label: "the savaged ewe"
+      at: area
+      know: [farmer, witness]
+      fields:
+        what: "a ewe was found savaged on the pasture near {place}, torn and not butchered; the flock had been folded the night before"
+        found by: "{farmer}"
+    the_rite:
+      label: "the stolen bell"
+      at: temple
+      know: [priest, witness]
+      fields:
+        what: "a bell was stolen from {place} in the night, and a sheep is missing from the near fold"
+        missed by: "{priest}"
+        seen by: "{witness}"
+    war_comes:
+      label: "the call of the levy"
+      at: hall
+      know: [clerk, witness]
+      doc:
+        name: "muster notice"
+        aliases: ["the muster notice", "levy notice", "notice"]
+        kind: notice
+        at: hall
+        text: "MUSTER. {defender} calls the levy: every able hand of {haven} to bring what arms he has to {place} at the next bell, against {attacker}. Names to {clerk}."
+      fields:
+        what: "the levy was called at {place}; {attacker} is named as the enemy"
+        the notice: "{doc_text}"
+        names taken by: "{clerk}"
+    flood_and_fire:
+      label: "the ford is impassable"
+      at: gate
+      know: [watch, witness]
+      doc:
+        name: "road board"
+        aliases: ["the road board", "board"]
+        kind: board
+        at: gate
+        text: "ROADS, {date}: the ford on the {route} is impassable; none to cross until the water falls. Carters turned back at {place}. Entered by {watch}."
+      fields:
+        what: "the ford on the {route} is impassable and carters are turned back at {place}"
+        the road board: "{doc_text}"
+        turned back by: "{watch}"
+    the_debt:
+      label: "the bailiff at the door"
+      at: hall
+      know: [clerk, witness]
+      doc:
+        name: "writ"
+        aliases: ["the writ", "notice"]
+        kind: writ
+        at: hall
+        text: "WRIT. {creditor} claims payment of {debtor}; a bailiff has served it at the door. The sum stands unpaid since the last quarter day. Before {clerk}, at {place}."
+      fields:
+        what: "a bailiff of {creditor} served a writ on {debtor} at the door"
+        the writ: "{doc_text}"
+        seen by: "{witness}"
+    the_missing:
+      label: "the mother asking at every door"
+      at: market
+      know: [mother, trader]
+      people: {mother: "mother"}
+      doc:
+        name: "missing notice"
+        aliases: ["the missing notice", "notice"]
+        kind: notice
+        at: market
+        text: "MISSING: a person of {missing_person}, gone since {when}. Word to the mother, at {place}."
+      fields:
+        what: "a mother asks at every door in {place} after a person of {missing_person} who has not been seen since {when}"
+        the mother: "{mother}"
+        the notice: "{doc_text}"
+    festival_trouble:
+      label: "the strangers buying lamp oil"
+      at: market
+      know: [trader, witness]
+      doc:
+        name: "stall tally"
+        aliases: ["the stall tally", "tally", "ledger"]
+        kind: ledger
+        at: market
+        text: "LAMP OIL, this week: sold in lots too large for any household, all to strangers, paid in coin. The stallkeeper has marked their faces and their cart."
+      fields:
+        what: "strangers bought lamp oil in large lots at {place}, all in coin"
+        the tally: "{doc_text}"
+        seen by: "{trader}, {witness}"
+    cursed_ground:
+      label: "the silent birds"
+      at: area
+      know: [farmer, healer]
+      fields:
+        what: "the birds fell silent over the field at {place} and the dogs will not cross it"
+        seen by: "{farmer}"
+        the healer's word: "{healer} says the stock sicken after grazing there"
+    the_prisoner:
+      label: "the closed cart"
+      at: gate
+      know: [watch, witness]
+      people: {driver: "carter"}
+      away: [driver]               # gone with the cart: made, but not standing at the gate
+      doc:
+        name: "gate log"
+        aliases: ["the gate log", "gate ledger", "the ledger", "log"]
+        kind: log
+        at: gate
+        text: "Entry, {date}, after dusk: one closed cart through the gate, no trader's mark, two men on the box and the canvas laced down. Toll paid by the driver, who gave no name. It took the {route}. Passed on the word of {captor}'s runner. Entered by {watch}."
+      fields:
+        what: "a closed cart came through {place} after dusk and took the {route}; the canvas was laced down"
+        the gate log's entry: "{doc_text}"
+        whose: "it came on the word of {captor}'s runner"
+        the driver: "{driver}"
+        seen by: "{watch}, {witness}"
+    scandal:
+      label: "the whispers in the hall"
+      at: hall
+      know: [clerk, witness]
+      fields:
+        what: "whispers in {place} that a matter touching {exposed} is known to the clerks; talk stops when a stranger comes near"
+        heard by: "{clerk}, {witness}"
+    the_enemy:
+      label: "the familiar face"
+      at: gate
+      know: [watch]
+      fields:
+        what: "a face the newcomer knew was seen in the crowd at {place}, watching, and was gone when looked for"
+        seen by: "{watch}"
+  document:
+    hire:
+      label: "the hire notice"
+      fields:
+        work: "{task}"
+        ask for: "{contact} at {contact_place}"
+        posted by: "{issuer}"
+    warning:
+      label: "the warning posted at {place}"
+      know: [contact]
+      fields:
+        why: "{reason}"
+        keeps people from: "{target}"
+        report to: "{contact} at {contact_place}"
+        posted by: "{issuer}"
+    charter:
+      label: "the charter of {haven}"
+      know: [contact]
+      fields:
+        holds the right of: "{right}"
+        sealed in: "{year}"
+        disputes go to: "{contact} at {contact_place}"
+        held by: "{issuer}"
+    bounty:
+      label: "the bounty notice"
+      know: [contact]
+      fields:
+        reward for word of: "{target}"
+        bring proof to: "{contact} at {contact_place}"
+        posted by: "{issuer}"
+  lead_form:
+    "1":
+      label: "word brought to {place}"
+      at: scene
+      people: {bringer: "messenger"}
+      know: [bringer]
+      fields:
+        what: "{bringer} came to {place} with word of {matter}"
+        brought by: "{bringer}"
+    "2":
+      label: "words overheard at {place}"
+      at: scene
+      people: {speaker_a: "traveler", speaker_b: "traveler"}
+      know: [speaker_a, speaker_b]
+      fields:
+        what: "two voices at {place} spoke low of {matter}, not meant to be heard"
+        the speakers: "{speaker_a}, {speaker_b}"
+    "3":
+      label: "a letter found at {place}"
+      at: scene
+      know: [witness]
+      doc:
+        name: "dropped letter"
+        aliases: ["the letter", "letter"]
+        kind: letter
+        at: scene
+        text: "To the one who knows the road. It concerns {matter}. Burn this. No name, but you know the hand."
+      fields:
+        what: "a dropped letter lay at {place}"
+        the letter: "{doc_text}"
+    "4":
+      label: "a trace left at {place}"
+      at: scene
+      people: {runner: "runner"}
+      away: [runner]
+      know: [runner, witness]
+      doc:
+        name: "dropped token"
+        aliases: ["the token", "token"]
+        kind: token
+        at: scene
+        text: "A stamped lead token, scored with the mark of {opposition}."
+      fields:
+        what: "a wrong man was sent: {runner} left a token of {opposition} at {place}"
+        the token: "{doc_text}"
+    "5":
+      label: "a sign at {place}"
+      at: scene
+      know: [witness]
+      pick:
+        sign:
+          - "cart tracks leaving the road toward a place with no road"
+          - "smoke from a camp that should be cold"
+          - "a disturbed grave with the earth thrown outward"
+      fields:
+        what: "{sign}, near {place}, touching {matter}"
+        seen by: "{witness}"
+    "6":
+      label: "an old contact remembers"
+      at: scene
+      know: [contact_old]
+      fields:
+        what: "{contact_old} remembers something of {matter}"
+        remembered by: "{contact_old}"
+    "7":
+      label: "an offer to trade what is known"
+      at: scene
+      people: {informant: "informant"}
+      know: [informant]
+      pick:
+        favour:
+          - "a message carried to the next town"
+          - "a debt looked into"
+          - "a night's watch kept"
+      fields:
+        what: "{informant} offers what they know of {matter}"
+        in return for: "{favour}"
+    "8":
+      label: "someone seeks the PC out"
+      at: scene
+      know: [seeker]
+      fields:
+        what: "{seeker} has heard of the newcomer and seeks them out at {place} about {matter}"
+        sought by: "{seeker}"
+    "9":
+      label: "a detail overlooked at {place}"
+      at: scene
+      know: [witness]
+      fields:
+        what: "a detail at {place}, seen fresh, touching {matter}"
+        also seen by: "{witness}"
+    "10":
+      label: "the opposition shows itself"
+      at: scene
+      know: [watch]
+      pick:
+        move:
+          - "riders watching the road"
+          - "a scout counting the gate"
+          - "a rumour planted in the market"
+      fields:
+        what: "{opposition} shows itself at {place}: {move}"
+        seen by: "{watch}"
+    "11":
+      label: "a plea for help"
+      at: scene
+      people: {pleader: "petitioner"}
+      know: [pleader]
+      fields:
+        what: "{pleader} pleads at {place} for help with {matter}"
+        asks: "help with {matter}"
+    "12":
+      label: "talk in {place}"
+      at: scene
+      know: [trader, publican]
+      fields:
+        what: "{matter} is on everyone's lips at {place}"
+        told by: "{trader}, {publican}"
+  rumor:
+    faction_goal:
+      label: "rumour of an aim"
+      fields:
+        says: "{text}"
+        points toward: "{target}"
+    situation:
+      label: "rumour of trouble"
+      fields:
+        says: "{text}"
+        points toward: "{target}"
+    site:
+      label: "rumour of a place"
+      fields:
+        says: "{text}"
+        points toward: "{target}"
+    dream:
+      label: "rumour of a dream"
+      fields:
+        says: "{text}"
+        points toward: "{target}"
+  creation:             # the PC's creation hooks (02.9.7), `kind: text`; {text} is the hook, {bond} the cast person it binds
+    thread:
+      label: "a matter you know of"
+      know: [clerk]
+      fields: {what: "{text}"}
+    rumor:
+      label: "a story told about you"
+      know: [publican]
+      fields: {what: "{text}"}
+    npc:
+      label: "someone who knows you"
+      know: [bond]
+      fields: {what: "{text}", who: "{bond}"}
+    place:
+      label: "a place that matters to you"
+      know: [publican]
+      fields: {what: "{text}", where: "{place}"}
+    debt:
+      label: "a debt"
+      know: [bond]
+      fields: {what: "{text}", owed to: "{bond}"}
+    enemy:
+      label: "an enemy"
+      know: [bond]
+      fields: {what: "{text}", the enemy: "{bond}"}
+    question:
+      label: "a question you carry"
+      know: [bond]
+      fields: {what: "{text}", asked of: "{bond}"}
+
 # ------------------------------------------------------------------------------------------ defaults
 # What the seed writes when a step's question is not answered otherwise; the bracketed defaults of 05.7.10,
 # 07.7.6 and 15's relics rule, and the haven's furnishing by tier (08.6, 15.13, 16.3.2).

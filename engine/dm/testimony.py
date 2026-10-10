@@ -91,12 +91,15 @@ def add_said(ctx: Any, entries: Sequence[dict[str, Any]]) -> list[str]:  # rule:
     n, recs = int(cur.get("n") or 0), list(cur.get("records") or [])
     idx = dict(tx.state.meta.get(INDEX) or {})
     out = []
+    st, now = tx.state, tx.state.time.now
+    place = st.scene.place_id if st.scene is not None else None
     for e in entries:
         n += 1
         sid = f"said.{n}"
         recs.append({"id": sid, "speaker": e.get("speaker"), "turn": e.get("turn") or ctx.turn_id,
                      "words": str(e.get("words") or ""), "about": list(e.get("about") or []),
-                     "question": e.get("question"), "settled": None, "fact": None})
+                     "question": e.get("question"), "settled": None, "fact": None,
+                     "place": place, "day": [now.week, now.day, now.watch]})  # where and when (the journal's told)
         q = e.get("question")
         if q and q in idx:
             idx[q] = {**idx[q], "said": [*(idx[q].get("said") or []), sid]}

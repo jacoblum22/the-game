@@ -1123,11 +1123,16 @@ def _clue(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:  # rule: PR
     from engine.audit import text as words
 
     m = re.search(r'^THE QUESTION: "(.*)"$', packet.message, re.MULTILINE)
-    q = words.content(m.group(1) if m else "")
-    hits = [(bool(held), len(q & words.content(about)), n)
-            for n, held, about in re.findall(r"^(\d)(\*?): (.*)$", packet.message, re.MULTILINE)]
-    ok = [h for h in hits if h[1] >= (1 if h[0] else 2)]
-    return {"about": max(ok)[2] if ok else "none"}
+    qs = [m.group(1)] if m else [x for _, x in re.findall(r'^Q(\d): "(.*)"$', packet.message, re.MULTILINE)]
+    clues = re.findall(r"^(\d)(\*?): (.*)$", packet.message, re.MULTILINE)
+    best: tuple[bool, int, int, str, int] | None = None  # (held, shared words, -part, clue, part), the best first
+    for part, text in enumerate(qs, 1):
+        q = words.content(text)
+        for n, held, about in clues:
+            hit = len(q & words.content(about))
+            if hit >= (1 if held else 2) and (best is None or (bool(held), hit, -part) > best[:3]):
+                best = (bool(held), hit, -part, n, part)
+    return {"about": best[3] if best else "none", "part": str(best[4]) if best and len(qs) > 1 else "none"}
 
 
 ROLE_HEURISTICS: dict[Role, Callable[[dict[str, Any], Packet], dict[str, Any]]] = {
