@@ -66,6 +66,8 @@ class GameConfig(BaseModel):
     budget_usd_per_session: float | None = 2.00  # a warning threshold, never a limit (FR-039)
     oracle_free_cap_per_scene: int | None = 6  # engine-side stopgap for I-038
     milestone: int = 1
+    engine: str = "pipeline"  # "dm-tools": spec 031's prototype, one DM model with tools (engine/dm/dm_tools.py)
+    dm_secrets: str = "hidden"  # "visible": the dm-tools DM sees each present NPC's private case knowledge
 
     def model(self) -> StructuredModel:
         """The model every role calls (raises MissingKey for Gemini without a key, before anything is written)."""
@@ -102,7 +104,8 @@ class Game:
             self.tracker.budget_usd = pref["usd"]
         self._noticed = False
         self.ctx = TurnContext.for_store(store, model=model, rules=self.rules, recorder=self._record,
-                                         config={"oracle_free_cap_per_scene": config.oracle_free_cap_per_scene})
+                                         config={"oracle_free_cap_per_scene": config.oracle_free_cap_per_scene,
+                                                 "engine": config.engine, "dm_secrets": config.dm_secrets})
         self._prime_call_seq()
         self._seed_flow: SeedFlow | None = None
         self.closed = False
@@ -479,8 +482,6 @@ class Game:
             present_ending,
             retire_choice,
         )
-        from engine.dm.turn import play_turn
-
         first = self._settle_pending()
         if first is not None and first.phase == "ending":
             return first
@@ -503,13 +504,13 @@ class Game:
             return self._restart_flow()
         if is_retire(message) and st.open_pause() is None:
             return self._merge(first, ask_retire(self.ctx))
-        out = play_turn(self.ctx, message)
+        out = self._engine().play_turn(self.ctx, message)
         return self._merge(first, self._after_turn(out.response))
 
     def _answer(self, choice_id: str) -> Response:
+        from engine.dm import turn
         from engine.dm.creation import CreationFlow
         from engine.dm.ending import answer_ending, answer_retire
-        from engine.dm.turn import play_answer
 
         first = self._settle_pending()
         if first is not None and first.phase == "ending":
@@ -529,8 +530,16 @@ class Game:
             return self._after_creation(answer_ending(self.ctx, choice_id))
         if flow == "retire":
             return self._after_turn(answer_retire(self.ctx, choice_id))
-        out = play_answer(self.ctx, choice_id)
+        dm = self._engine() if (pause.detail or {}).get("stage") != "dispute" else None  # /fix stays the pipeline's
+        out = (dm or turn).play_answer(self.ctx, choice_id)
         return self._merge(first, self._after_turn(out.response), keep_first_pause=False)
+
+    def _engine(self) -> Any:
+        """The module whose `play_turn` / `play_answer` run play: the pipeline (engine/dm/turn.py) or spec 031's
+        DM with tools (engine/dm/dm_tools.py, `GameConfig.engine == "dm-tools"`)."""
+        from engine.dm import dm_tools, turn
+
+        return dm_tools if dm_tools.enabled(self.ctx) else turn
 
     def _new_character(self) -> Response:
         from engine.dm.creation import new_character
