@@ -514,8 +514,9 @@ Precision snag and its reach is capped at Limited), **accented** (everyday speec
 technical or courtly matters hold a Precision snag), **native** (everything). Speaking with someone in
 a tongue not held is not Talk in that tongue: it is the license's crude fallback (gesture, tone and
 shared nouns; DC +5, reach Limited; 01.18). **Letters** (`lic.lang.letters`) lets a character read and
-write every tongue they hold at accented or native; without it, reading is Observe's excluded method
-and falls to the license's crude fallback (numerals, seals, a few signs). Nine tongues are defined for
+write every tongue they hold at accented or native; without it, reading is Observe's excluded method,
+whatever the beat's verb label (a look, or reading folded into a Talk: 01.3.1, gates key on the goal and its
+method) [revision: R2-K; DL-01-43], and falls to the license's crude fallback (numerals, seals, a few signs). Nine tongues are defined for
 the eight peoples: Common, Elvish, Dwarvish, Orcish, Goblin, Giantish, Kin-speech, the Old Tongue (dead;
 at most accented), and the Cant. The region's seed sets the tongues of its region (12.16.7) and may rename
 them; a pre-made setting may add one [revision: I-028]

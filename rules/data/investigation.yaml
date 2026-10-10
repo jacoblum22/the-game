@@ -35,6 +35,7 @@ clue_graph_template:       # T-15-14 (15.9.2)
         access: "core | rolled"
         detect_tier: "obstacle tier (rolled)"
         request_size: "R1..R5 (person holders)"
+        about: "plain words: what a question must be about to reach it (person holders; PR-12-10 step 1's judgment) [revision: R2-K] [DL-15-40]"
         content: "the clue fact learned"
         direct: "bool: the content IS the node's fact"
         reveals_lead: "[placement ids]"

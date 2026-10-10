@@ -2094,49 +2094,50 @@ tables:
   name: Voice habit
   tags: []
   die: d20
+  rule: "occasional, background, never must-use; the engine writes the person's own pronouns for 'their' and 'themselves' (12.11.1, 12.11.3) [revision: R2-K] [DL-12-113]"
   recency: true
   context_filters: []
   results:
   - range: '1'
-    result: calls everyone by a nickname
+    result: now and then calls everyone by a nickname
   - range: '2'
-    result: answers a question with a question
+    result: now and then answers a question with a question
   - range: '3'
-    result: swears by a saint or a god
+    result: now and then swears by a saint or a god
   - range: '4'
-    result: quotes proverbs
+    result: now and then quotes proverbs
   - range: '5'
-    result: trails off mid-sentence
+    result: now and then trails off mid-sentence
   - range: '6'
-    result: speaks of themselves by name
+    result: now and then speaks of themselves by name
   - range: '7'
-    result: uses the jargon of their trade
+    result: now and then uses the jargon of their trade
   - range: '8'
-    result: laughs before bad news
+    result: now and then laughs before bad news
   - range: '9'
-    result: says 'mark me' before anything important
+    result: now and then says 'mark me' before anything important
   - range: '10'
-    result: whispers secrets far too loudly
+    result: now and then whispers secrets far too loudly
   - range: '11'
-    result: repeats your last word back
+    result: now and then repeats your last word back
   - range: '12'
-    result: counts on their fingers while thinking
+    result: now and then counts on their fingers while thinking
   - range: '13'
-    result: never says no outright
+    result: now and then dodges a plain no
   - range: '14'
-    result: apologizes constantly
+    result: now and then apologizes for nothing
   - range: '15'
-    result: brings up an old deed of theirs
+    result: now and then brings up an old deed of theirs
   - range: '16'
-    result: gets names slightly wrong
+    result: now and then gets names slightly wrong
   - range: '17'
-    result: tells everything as a long tale
+    result: now and then tells everything as a long tale
   - range: '18'
-    result: uses old-fashioned courtesies
+    result: now and then uses old-fashioned courtesies
   - range: '19'
-    result: mutters to a pet or a charm
+    result: now and then mutters to a pet or a charm
   - range: '20'
-    result: clicks their tongue when displeased
+    result: now and then clicks their tongue when displeased
   lifecycle: provisional
   basis:
   - '[R5 NP-01, P-04 (UNE), P-06]'

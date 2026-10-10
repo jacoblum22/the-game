@@ -294,7 +294,8 @@ npc:                                      # 12.11
     archive: queryable
     relevance_order: [same_deed, same_people, same_place, highest_salience]
   voice_registers: [formal, plain, rough, flowery, terse, nervous, jovial, cold]
-  habit_max_per_scene: 1
+  habit_max_per_scene: 1                  # retired [revision: R2-K] [DL-12-113]: nothing counts or gates a habit (12.11.3); key kept until spec 024
+  habit_phrasing: occasional              # 12.11.3 [revision: R2-K]: background, never must-use; never required in refusal or answer lines
   activity:                               # 12.11.9 step 1 [revision: R2-H] [DL-12-93]
     rolled: once_per_scene
     rows: own_role_cell_else_other        # never another role's rows
@@ -370,7 +371,7 @@ narration:                                # 12.14
   scene_open_max_words: 200
   recap_max_words: 120
   skip_max_words: 150
-  freshness: {opening_patterns_remembered: 3, images_per_entity_remembered: 10, image_repeat_turns: 10, keyed_on: last_used, covers: [details, written_words, speech_openers, said], said_overlap: 0.6, backstop: opening_and_speech_opener_scan, setting_once: on_arrival_then_optional}   # 12.14.11 [revision: R2-E]
+  freshness: {opening_patterns_remembered: 3, images_per_entity_remembered: 10, image_repeat_turns: 10, keyed_on: last_used, covers: [details, written_words, speech_openers, said], said_overlap: 0.6, backstop: opening_and_speech_opener_scan, setting_once: on_arrival_then_optional, usage_marks: retired, quote_back: retired, repetition_scan: log_only}   # 12.14.11 [revision: R2-E]; [revision: R2-K] [DL-12-113]: last_used marks, their ten-turn gate and the quote-back retired; the scan is logged only (images, openings, closings); keys kept until spec 024
   forbidden_recognition_phrasing: ["you gain", "you have unlocked", "your skill increases", "level", "experience", "class", "achievement", "stat names in any in-world voice", "bracketed or boxed text inside fiction", "a disembodied announcing voice"]
   must_name: [beat_outcome_and_change, cost_form, changed_harm_conditions_quantities_possessions_positions, direct_question_answer, clue_or_lead_delivered, pause]   # 12.14.12, closed [revision: R2-H] [DL-12-92]
   optional_material: [activities, postures, manners, details, other_npcs_reactions, crowd_mood, scene_texture, place_look_after_framing]   # shown as material, never required; no check requires it
@@ -389,7 +390,15 @@ feedback:                                 # 12.3.6, PR-12-11: the player's repor
   investigate:                            # PR-12-11 [revision: R2-J] [DL-12-105]: the Fixer role (engine/dm/fixer.py, spec 022); its model is configuration (owner: Sonnet, 2026-10-09); understand_call and the outcome menu deleted [verification: spec 022]
     steps: {min: 3, max_steps: 6}         # a bounded read-only investigation before deciding
     tools: [turn_record, entity_state_and_provenance, transcript_search, recompute_frame, coin_and_inventory_ledger, said_vs_record]
-    proposals: [set_fact, remove_fact, restore_as_of_turn, refund, deduct, rerender_display, take_back_to_turn, correct_testimony, explain]
+    proposals: [set_fact, remove_fact, restore_as_of_turn, refund, deduct, rerender_display, take_back_to_turn, correct_testimony, explain]   # rerender_display retired [revision: R2-K] [DL-12-117]; key kept until spec 026
+    proposals_added: [reframe_open_offer, take_back_pending_turn]   # PR-12-11 step 3 [revision: R2-K] [DL-12-117]
+    dry_run: true                         # any proposal runs first on a copy of the snapshot (gate, necessity, frame, or the turn)
+    check_screen: true                    # inspect what the player will see after the repair; iterate within max_steps
+    sees: [people_card, plain_facts, turn_model_io, mechanics_digest]   # what the play roles see [DL-12-116]
+    mechanics_digest: [hold_is_a_condition, labels_never_penalties, refusals_never_facts, stagger, sheet_capability_outranks_oracle_fact]
+    open_offer: reframe                   # never explain only (12.3.6 item 4)
+    code_guards: [no_conjured_coin, sealed_stays_sealed, mechanical_needs_evidence]
+    scored_on: fresh_held_out_real_complaints_incl_open_offers   # the scorer checks the repaired screen (OEQ-12-26)
     validate: [mechanical_needs_record_evidence (INV-9), sealed_stays_sealed (INV-10), invariants (T-00-1), take_back_limit (12.5.8)]
     one_snapshot: true                    # all complaints in one report, together
     reply: [found, did, now_line]
@@ -426,10 +435,12 @@ dm_questions:                             # 12.6.1; T-12-4 (first match)
   - {when: settled_by_fact_canon_or_scene_type, tool: read}
   - {when: who_is_role, tool: casting}                    # [revision: R2-D] social.yaml#cast; a story role -> the case graph
   - {when: what_npc_knows_about_topic, tool: answer_ladder}   # [revision: R2-D] PR-12-10; [revision: R2-H] the case graph if consequential, else the NPC's words (testimony), settled by PR-12-12 only when it matters
+  - {when: target_willing_or_able, tool: willingness_or_record}   # [revision: R2-K] [DL-12-108] 01.15.1: never the Oracle about the beat's own target or a person present
+  - {when: hook_terms, tool: hook_terms_written_at_making}        # [revision: R2-K] [DL-12-109] 11.5.6
   - {when: actor_with_capability_attempts, tool: fortune_check}
   - {when: which_of_several_specific_table_exists, tool: roll_table_specific}
   - {when: npc_decision_undecided, tool: tbl.npc_action}
-  - {when: yes_no_fact, tool: oracle}
+  - {when: yes_no_fact, tool: oracle, never_about: [beat_target, person_present], never_for: [what, where, how_much]}   # [revision: R2-K] [DL-12-108]
   - {when: meaning_form_or_and, tool: tbl.meaning}
   - {when: a_person_must_exist, tool: npc_generation}
 
@@ -441,6 +452,11 @@ answer_ladder:                            # 12.10.8, PR-12-10 [revision: R2-D] [
     who_is_role: "who is <role> (not a story role) -> casting (social.yaml#cast)"
     ordinary: "everything else (ordinary knowledge, what they want or think, who would know) -> willingness by code, words by the narrator"
   willingness: [willing, guarded, unwilling]
+  clue_judgment: {call: small_model, asks: "is this question about what this person holds?", reads: [question, exchange, placement_about], uncertain: yes, on_yes: code_hands_clue_to_narrator}   # PR-12-10 step 1 [revision: R2-K] [DL-12-112]; word-overlap case_about retired
+  willingness_holds: scene               # PR-12-10 step 2 [revision: R2-K] [DL-12-118]: decided when the talk starts, held for the scene
+  willingness_changes_on: [payment, threat, insult, won_persuasion]   # by the effective degree (01.9.3)
+  refusal_pointer: {to: someone_new_who_would_know, order: [live_placement_holder_on_topic, cast_person_whose_role_knows_it], never: already_refused_on_topic}   # [revision: R2-K] [DL-12-119]
+  willingness_line_never_on: [greeting, thanks]   # P3 [revision: R2-K] [DL-12-120]
   willingness_source: [matching_refusal, talk_frame_outcome, certainty_test, npc_action_row]   # first that applies (PR-12-10 step 2); certainty_test = 15.3.10
   willingness_by_row: {'1': unwilling, '2': unwilling, '3': unwilling, '4': guarded, '5': guarded, '6': guarded, '7': willing, '8': willing, '9': willing, '10': willing}   # tbl.npc_action with standing; the row's wording never scripts speech
   speaker_card: [question, willingness, knowledge_records_on_topic, pack_facts_on_topic, role_topics, public_news_in_scope, said_records]   # nothing sealed, no undelivered placement, no motive (INV-10)
@@ -457,6 +473,12 @@ testimony:                                # PR-12-12, settling testimony when it
   never_facts: [refusal, opinion, want, feeling, intention]   # PR-12-12 step 2: the call returns none [revision: R2-J] [DL-12-102]
   state_claim_sees: [speaker, words, exchange, identity_lines]   # identity line = name, pronouns, bond of each person named (12.2.4 item 3) [revision: R2-J]
   never_triggers: [heard, repeated, asked_about, relied_on_in_talk, contradicted_by_another_character]
+  guards:                               # PR-12-12 step 1 [revision: R2-K] [DL-12-109]
+    speaker_sees: said_on_same_topic_by_others
+    hook_terms: written_knowledge_not_testimony   # 11.5.6
+    price_outside_hook: price_band_at_settlement  # 08.8.2; economy.yaml#price_bands
+    place_heard_in_speech: real_site_on_travel     # trigger (a); 10's generators
+    what_where_how_much: never_yes_no_oracle
   state_claim: "[J:enum] {subject, predicate, value} from the said words; it judges nothing else"
   routes:                                 # first that applies
     consequential: case                   # a case node, sealed fact, story role, thread knowledge or clue: true when the case holds it, else false; never delivers a clue
