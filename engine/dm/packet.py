@@ -691,7 +691,8 @@ def speaker_card(state: WorldState, npc: str, *, topic: str | None = None, about
         out.append("- public news anyone here may know (the gist; in the speaker's own words, never these): "
                    + "; ".join(_short(x) for x in news))
     if said:
-        out.append("- they already said (never contradict or repeat these unprompted; build on them):")
+        out.append(f"- {display_name(state, npc)} already said (never contradict or repeat these unprompted; build on "
+                   "them):")
         out += [f"  - \"{_short(r['words'])}\"" for r in said]
     named = [ln for ln in identity_lines(state, [], "\n".join([*known, *(str(r["words"]) for r in said)]))
              if not ln.startswith(f"  - {display_name(state, npc)}:")]

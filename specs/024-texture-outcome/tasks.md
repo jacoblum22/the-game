@@ -25,8 +25,8 @@
       tests that asserted the retired behaviour.
 - [x] T13 `replay_r7.py`: rebuild the round-7 talker and explorer narrator packets; C10, C24, C25.
 - [x] T14 Full suite, replay re-recorded, ruff, pyright, validator, `longhorizon --mode scripted`.
-- [ ] T15 Live talker playtest (Haiku, player Sonnet, ≤15 turns); `measure.py`.
-- [ ] T16 Merge milestone-1-playable, regenerate, full suite; `implementation-results.md`; hand-offs.
+- [x] T15 Live talker playtest (Haiku, player Sonnet, ≤15 turns); `measure.py`.
+- [x] T16 Merge milestone-1-playable, regenerate, full suite; `implementation-results.md`; hand-offs.
 
 ## Analyze (consistency check, done by hand)
 - Every R2-K "Spec 024" build item maps to a task: `effective_degree` and its readers (T3), the paused beat (T4),

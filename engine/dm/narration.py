@@ -364,8 +364,9 @@ def _speech(ctx: TurnContext, record: AdjudicationRecord, turn: _Turn, s: _Sent,
             (e for e in earlier if overlap(said, e) > limit), None)
         if again:
             s.failures.append(Failure(why="repeats a line this speaker already said (not_a_repeat, 12.14.11)",
-                                      fix="redraft", store_value=f'they already said "{again[:120]}": new words, '
-                                                              "or drop the line"))
+                                      fix="redraft",
+                                      store_value=f'{narrator_role.name_of(ctx.need_tx().state, sp, record.pc)} '
+                                                  f'already said "{again[:120]}": new words, or drop the line'))
 
 
 def _precision(ctx: TurnContext, record: AdjudicationRecord, turn: _Turn, sents: list[_Sent], i: int,
