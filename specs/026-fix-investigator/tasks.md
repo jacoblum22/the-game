@@ -4,24 +4,24 @@
 - [x] T2 Write and label the fresh held-out complaints (13, `fresh.json`) and their made-up saves
       (`evals/fix_scenarios.py` → `fresh-*.db.gz`); label `round7.json`; screen label on round-6 233000-t9. Commit
       before implementing.
-- [ ] T3 [US1] `packet.people_card`; cards in the Reader, Framer and Narrator views; delete `framer.target_record`.
-- [ ] T4 [US2] Fixer tools: people card in `entity` and the opening; `plain_fact` everywhere; `calls`; effective
+- [x] T3 [US1] `packet.people_card`; cards in the Reader, Framer and Narrator views; delete `framer.target_record`.
+- [x] T4 [US2] Fixer tools: people card in `entity` and the opening; `plain_fact` everywhere; `calls`; effective
       degree in `turn`.
-- [ ] T5 [US3] `reframe` in `dispute._apply`; `_take_back` closes the pending OFFER; delete `rerender`/`_rerender`;
+- [x] T5 [US3] `reframe` in `dispute._apply`; `_take_back` closes the pending OFFER; delete `rerender`/`_rerender`;
       `DisputeResult.outcomes`; `turn._dispute` takes them.
-- [ ] T6 [US4] `sandbox`/`preview`; `try` and `replay` tools; the check-screen loop in `fixer.investigate`.
-- [ ] T7 [US2] `fixer.md`: tools, re-frame, pending take-back, mechanics digest, sheet over Oracle; budget.
-- [ ] T8 [US5] Validation review: the spine guards only (conjured coin, sealed, evidence, identity, take-back limit).
-- [ ] T9 `pacing.yaml#feedback.investigate` keys; validator 0/0.
-- [ ] T10 [US6] `feedback_corpus.py`: whole-turn run, screen scoring, `fresh`/`round7` sets, cached replay of Fixer and
+- [x] T6 [US4] `sandbox`/`preview`; `try` and `replay` tools; the check-screen loop in `fixer.investigate`.
+- [x] T7 [US2] `fixer.md`: tools, re-frame, pending take-back, mechanics digest, sheet over Oracle; budget.
+- [x] T8 [US5] Validation review: the spine guards only (conjured coin, sealed, evidence, identity, take-back limit).
+- [x] T9 `pacing.yaml#feedback.investigate` keys; validator 0/0.
+- [x] T10 [US6] `feedback_corpus.py`: whole-turn run, screen scoring, `fresh`/`round7` sets, cached replay of Fixer and
       Framer answers.
-- [ ] T11 Tests: people card (Belie in all three roles + the Fixer), plain facts, `calls`, re-frame (Belie, Tam),
+- [x] T11 Tests: people card (Belie in all three roles + the Fixer), plain facts, `calls`, re-frame (Belie, Tam),
       pending take-back, dry run leaves the store untouched, check-screen revision, spine guards; update tests that
       used `rerender`, `target_record`, the old replay baselines.
-- [ ] T12 Re-record the replay; full suite; ruff and pyright on touched files; validator; longhorizon scripted.
-- [ ] T13 Sonnet runs: `fresh` (headline, once), `round7`, `round6` (after; before from the 022 baseline), `heldout`.
-- [ ] T14 Live fighter playtest on Haiku (Fixer on Sonnet), at most 15 turns; grade every `/fix`.
-- [ ] T15 Merge milestone-1-playable, regenerate, full suite; `implementation-results.md`; anti-pattern check.
+- [x] T12 Re-record the replay; full suite; ruff and pyright on touched files; validator; longhorizon scripted.
+- [x] T13 Sonnet runs: `fresh` (headline, once), `round7`, `round6` (after; before from the 022 baseline). Spec 022's `heldout` set was not re-run.
+- [x] T14 Live fighter playtest on Haiku (Fixer on Sonnet), at most 15 turns; grade every `/fix`.
+- [x] T15 Merge milestone-1-playable, regenerate, full suite; `implementation-results.md`; anti-pattern check.
 
 ## Analyze (consistency check, done by hand)
 - R2-K "Spec 026" build list → tasks: shared people card (T3, T4), plain facts (T4), model I/O (T4), dry run (T6),
