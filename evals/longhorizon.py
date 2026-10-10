@@ -38,6 +38,7 @@ from evals.replay_bench import sections  # noqa: E402
 from tests.e2e.driver import Driver  # noqa: E402
 
 CHECKPOINTS = (50, 200, 300)
+CONFIG = GameConfig(offline=True)  # main() sets the engine (spec 031: --engine dm-tools) and the secrets arm
 _STOP = {"the", "and", "with", "that", "this", "from", "into", "for", "has", "have", "was", "are", "her", "his",
          "their", "they", "them", "you", "your", "not", "but", "who", "what"}
 
@@ -184,6 +185,10 @@ def _model(name: str) -> Any:
 
     if name == "claude-narration":
         return _NarrationOnly()
+    if name == "claude":  # every role on Claude Haiku through the CLI (spec 031's head-to-head)
+        from evals.playtest import ClaudeModel
+
+        return ClaudeModel("haiku")
     return OfflineModel() if name == "offline" else GameConfig(offline=False).model()
 
 
@@ -300,7 +305,7 @@ def _age(d: Driver, rng: random.Random, start: int, stop: int, truth: dict[str, 
 
 def run_aged(seed: int, scenes: int, model: str, tmp: Path) -> list[str]:
     rng = random.Random(seed)
-    d = Driver.start(tmp / "aged.db", seed=seed, model=_model(model))
+    d = Driver.start(tmp / "aged.db", seed=seed, model=_model(model), config=CONFIG)
     truth: dict[str, dict[str, Any]] = {}
     pc = active_pc(d.game.store.state)
     assert pc is not None
@@ -485,7 +490,7 @@ def run_scripted(seed: int, lines: int, model: str, tmp: Path, fix_every: int = 
 def _run_scripted(seed: int, lines: int, model: str, tmp: Path, learned: list[dict[str, Any]],
                   fix_every: int = 0) -> list[str]:
     rng = random.Random(seed)
-    d = Driver.start(tmp / "scripted.db", seed=seed, model=_model(model))
+    d = Driver.start(tmp / "scripted.db", seed=seed, model=_model(model), config=CONFIG)
     st = d.game.store.state
     pc = active_pc(st)
     assert pc is not None
@@ -593,10 +598,17 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--scenes", type=int, default=300)
     ap.add_argument("--lines", type=int, default=300)
     ap.add_argument("--fix-every", type=int, default=0, help="plant a /fix report every N scripted lines (spec 012)")
-    ap.add_argument("--model", choices=("offline", "gemini", "claude-narration"), default="offline")
+    ap.add_argument("--model", choices=("offline", "gemini", "claude-narration", "claude"), default="offline")
+    ap.add_argument("--engine", choices=("pipeline", "dm-tools"), default="pipeline",
+                    help="the play engine (spec 031: dm-tools is one DM model with tools)")
+    ap.add_argument("--dm-secrets", choices=("hidden", "visible"), default="hidden",
+                    help="dm-tools only: show the DM each present NPC's private case knowledge")
     ap.add_argument("--keep", type=Path, help="copy the run's stores to this folder (for diagnosis)")
     args = ap.parse_args(argv)
-    out = [f"# Long-horizon harness (model: {args.model})", ""]
+    global CONFIG
+    CONFIG = GameConfig(offline=True, engine=args.engine, dm_secrets=args.dm_secrets)
+    arm = "" if args.engine == "pipeline" else f"; engine: {args.engine}, secrets {args.dm_secrets}"
+    out = [f"# Long-horizon harness (model: {args.model}{arm})", ""]
     with tempfile.TemporaryDirectory(prefix="longhorizon-") as tmp:
         if args.mode in ("aged", "both"):
             out += run_aged(args.seed, args.scenes, args.model, Path(tmp)) + [""]

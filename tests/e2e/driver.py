@@ -76,9 +76,9 @@ class Driver:
 
     @classmethod
     def start(cls, path: Path, seed: int = 11, *, model: StructuredModel | None = None, name: str = "Bram, he/him",
-              player_seed: int | None = None) -> Driver:
+              player_seed: int | None = None, config: GameConfig | None = None) -> Driver:
         model = model or OfflineModel()
-        game, r = Game.new(path, OFFLINE, seed=seed, model=model)
+        game, r = Game.new(path, config or OFFLINE, seed=seed, model=model)
         d = cls(path=path, game=game, model=model, rng=random.Random(player_seed or seed), last=r)
         d._note(r)
         d.seed_world()
@@ -159,7 +159,7 @@ class Driver:
         """Quit at this pause and come back: the same pause must be presented again."""
         self.resumed[key] = self.resumed.get(key, 0) + 1
         self.game.close()
-        self.game, back = Game.open(self.path, OFFLINE, model=self.model)
+        self.game, back = Game.open(self.path, self.game.config, model=self.model)
         assert back.pause == r.pause, f"resume at {key}: {back.pause!r} != {r.pause!r}"
         if self.on_resume is not None:
             self.on_resume(r, back)
