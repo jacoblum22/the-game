@@ -1,0 +1,20 @@
+{
+ "about": "Spec 026: the three round-7 live /fix reports (R7-I3 §3, R7-H2 T7: 1 right, 0 unclear, 2 wrong live), each run through the whole turn loop on its save cut back to just before the report, and scored on the screen the player sees afterwards. Labelled from R7-I3 §3 and the R2-K report's spec-026 cases before any run.",
+ "items": [
+  {"id": "r7-fighter-dsp1", "save": "20261009-160622-fighter.db.gz", "turn": "turn.6", "kind": "open OFFER, garbled odds line",
+   "report": "The odds line reads \"is not not alert to a hand reaching into his coat pocket while h −2\" — a double \"not\" and the text is cut off mid-word.",
+   "expected": {"complaints": [{"id": "r7f1", "turn": ["turn.5"], "class": "upheld",
+     "why": "fact.106 is an Oracle answer about the target's own awareness (Magby IS alert), counted twice (opposed and a −2 snag); remove it and re-frame: no −2, no garble (R7-I3 §1, §3)"}],
+    "screen": {"must": ["Now:"], "must_not": ["not not", "while h\\b", "alert to a hand[^\\n]*−2"]}}},
+  {"id": "r7-fighter-dsp2", "save": "20261009-160622-fighter.db.gz", "turn": "turn.12", "kind": "open OFFER, impossible as shown (Belie)",
+   "report": "Belie just told me she can't read the list at all, yet the offer lets me \"Persuade\" her as if she could. Persuading can't make her read it, and the odds line even says she \"can not read the writing\" as a penalty.",
+   "expected": {"complaints": [{"id": "r7f2", "turn": ["turn.11"], "class": "upheld",
+     "why": "Belie is a scribe and teacher of letters (Letters on her record); fact.113 is an Oracle draw that contradicts the sheet: remove it and re-frame: the new screen no longer counts 'can not read' (R2-K case 1)"}],
+    "screen": {"must": ["Now:"], "must_not": ["can ?not read"]}}},
+  {"id": "r7-talker-dsp1", "save": "20261009-160602-talker.db.gz", "turn": "turn.14", "kind": "narration only (pronouns)",
+   "report": "The sellsword between contracts is called \"they\" at first, then suddenly \"he\" and \"his\" in the barrow-track reply. Pick one pronoun and keep it.",
+   "expected": {"complaints": [{"id": "r7t1", "turn": ["turn.11", "turn.9", "turn.10", "turn.13"], "class": "upheld",
+     "why": "the record has him as he/him; the 'they' lines were the slip (graded right live)"}],
+    "screen": {"must": ["Now:", "\\bhe\\b"], "must_not": []}}}
+ ]
+}
