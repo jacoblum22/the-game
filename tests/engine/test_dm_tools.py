@@ -104,7 +104,7 @@ def test_a_proposed_roll_pauses_on_the_offer_then_the_dm_narrates_the_result(tmp
     npc = npc_here(game)
     roll = {"tool": "propose_roll", "goal": "slip past the guard unseen", "verb": "verb.sneak", "target": npc,
             "how": "keeping to the shadows", "attribute": "agility", "difficulty": "moderate",
-            "why_uncertain": "she is watching the door", "stakes": "risky", "change_kind": "none",
+            "why_uncertain": "she is watching the door", "stakes": "risky", "nonlethal": False, "change_kind": "none",
             "change_what": "", "change_whom": ""}
     model.push(DM, {"calls": [roll], "passage": "You edge toward the door.", "asks": []})
     r = game.submit("I sneak past her.")

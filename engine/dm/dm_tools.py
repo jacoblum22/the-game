@@ -45,6 +45,8 @@ DM_ROLE = Role.NARRATOR  # ponytail: the DM's calls are logged under the narrato
 # prompt, packet and offline heuristic per role in the contract tests. Add it if the prototype is kept.
 MOOD = {"willing": "open", "guarded": "guarded", "unwilling": "closed"}
 OUT_CHARS = 1600
+PREFERRED_COST = {"verb.strike": "cost.harm", "verb.grapple": "cost.harm", "verb.force": "cost.harm",
+                  "verb.exert": "cost.harm", "verb.sneak": "cost.exposure", "verb.talk": "cost.closed_door"}
 
 PROMPT = """You are the game master of a text tabletop RPG, played in a terminal by one player. You run the world:
 the people, the places, what happens. Code keeps the mechanical spine (dice, odds, coin, items, conditions, who is
@@ -56,7 +58,8 @@ involved, then write the passage.
 Tools (each call is one object in `calls`; leave `calls` empty when you are done and write `passage`):
 - propose_roll: the player's character attempts something whose outcome is uncertain AND failure would cost
   something. Give the goal (what success achieves), the verb, the target id (or "none"), how they do it, why it is
-  uncertain, and the stakes. Code computes the odds. If a roll is needed the turn pauses on the odds screen: write
+  uncertain, and the stakes; set nonlethal for a fight that should not kill (a bout to yield, subduing,
+  knocking out). Code computes the odds. If a roll is needed the turn pauses on the odds screen: write
   only the lead-up in `passage` (never the outcome); you narrate the result next turn. With nothing at stake or a
   certain outcome, don't propose a roll: just narrate it.
 - state: read the sheet ("pc"), a person or thing (its id), "here" (place, people, exits), or "time".
@@ -203,6 +206,7 @@ def step_schema(ctx: TurnContext, *, final: bool) -> Schema:
     calls = [
         obj({"tool": enum(["propose_roll"]), "goal": STR, "verb": enum(verbs), "target": STR, "how": STR,
              "attribute": STR, "difficulty": STR, "why_uncertain": STR, "stakes": enum(STAKES),
+             "nonlethal": {"type": "boolean"},
              "change_kind": enum(kinds), "change_what": STR, "change_whom": STR}),
         obj({"tool": enum(["state"]), "about": STR}),
         obj({"tool": enum(["change"]), "kind": enum(CHANGES), "who": STR, "what": STR, "to": STR,
@@ -321,7 +325,7 @@ def secrets(st: Any, eid: str) -> list[str]:
 
     out: list[str] = []
     for c in cases(st).values():
-        if (c.get("solution") or {}).get("subject", {}).get("id") == eid:
+        if (c.get("solution") or {}).get("subject", {}).get("id") == eid and not c["nodes"][0].get("found"):
             out.append(f"they are the one the matter turns on: {_flat(c.get('about') or c['nodes'][0]['fact'], 200)}")
         for n in c["nodes"]:
             if n.get("found"):
@@ -403,13 +407,17 @@ def _propose_roll(ctx: TurnContext, t: Turn, c: dict[str, Any]) -> str:
         return f"REFUSED: no one or nothing on record called {target!r} (use an id from the situation, or none)"
     kind = str(c.get("change_kind") or "none")
     what, whom = _id(st, c.get("change_what")), _id(st, c.get("change_whom"))
-    change = None
-    if kind != "none":
-        change = Change(kind=kind, what=what if what in st.entities else None,
-                        whom=whom if whom in st.entities else None,
-                        description=None if what in st.entities else (str(c.get("change_what") or "") or None))
     goal = str(c.get("goal") or "").strip() or "act"
     how = str(c.get("how") or "").strip() or None
+    if c.get("nonlethal"):  # the harm rules read the words (engine/resolve/conflict.py NONLETHAL)
+        how = f"{how or goal} (nonlethal)"
+    change = None
+    if kind != "none":
+        if kind in ("harm", "restrain") and what not in st.entities:
+            what = target
+        change = Change(kind=kind, what=what if what in st.entities else None,
+                        whom=whom if whom in st.entities else None,
+                        description=None if what in st.entities else goal)
     verb = str(c.get("verb") or "") or None
     beat = Beat(id=tx.mint(ids.BEAT), actor=pc, intent=goal, method=how or goal, how=how, target=target,
                 restatement=goal[:1].upper() + goal[1:], verb=verb, speech=verb == "verb.talk",
@@ -467,9 +475,12 @@ def code_framer(ctx: TurnContext, t: Turn) -> Any:
         if stakes != "safe" and sctx.stakes_menus:  # the first stakes source the rules accept here (01.6.9)
             for src, m in sctx.stakes_menus.items():
                 if src != "none" and m["threatened"] and m["alternate"]:
-                    alt = next((x for x in m["alternate"] if x != m["threatened"][0]), m["alternate"][0])
+                    # ponytail: the cost a verb most plainly risks first (a fight risks harm, a sneak being noticed)
+                    want = PREFERRED_COST.get(str(beat.verb), "")
+                    threat = want if want in m["threatened"] else m["threatened"][0]
+                    alt = next((x for x in m["alternate"] if x != threat), m["alternate"][0])
                     cands.append({**d, "stakes_heavy": stakes == "dire", "stakes": {
-                        "source": src, "threatened_cost": {"menu_id": m["threatened"][0], "form_intent": "",
+                        "source": src, "threatened_cost": {"menu_id": threat, "form_intent": "",
                                                            "source_fact": None},
                         "alternate_cost": {"menu_id": alt, "form_intent": "", "source_fact": None}}})
         for cand in (*cands, d, base):
