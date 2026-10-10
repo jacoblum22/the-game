@@ -61,7 +61,7 @@ Tools (each call is one object in `calls`; leave `calls` empty when you are done
   certain outcome, don't propose a roll: just narrate it.
 - state: read the sheet ("pc"), a person or thing (its id), "here" (place, people, exits), or "time".
 - change: apply a state change the fiction makes: coin (who pays `who`, who receives `to`, `amount`), give_item
-  (`what` item id to `to`), new_item (`what` a short name, held by `to`), condition_add / condition_remove (`who`,
+  (`what` item id from `who`, default the character, to `to`), new_item (`what` a short name, held by `to`), condition_add / condition_remove (`who`,
   `what` condition id), npc_leaves (`who`, optional `to` place id), new_npc (`what` their role, e.g. "a ferryman"),
   travel (`to` a reachable place id), rest (`what`: breather, rest_short or rest_long), fact (`who` subject id,
   `what` a short predicate, `note` the value). Code refuses only what the game can't hold and tells you why.
@@ -322,7 +322,7 @@ def secrets(st: Any, eid: str) -> list[str]:
     out: list[str] = []
     for c in cases(st).values():
         if (c.get("solution") or {}).get("subject", {}).get("id") == eid:
-            out.append(f"you are the one the matter turns on: {_flat(c.get('about') or c['nodes'][0]['fact'], 200)}")
+            out.append(f"they are the one the matter turns on: {_flat(c.get('about') or c['nodes'][0]['fact'], 200)}")
         for n in c["nodes"]:
             if n.get("found"):
                 continue
@@ -543,7 +543,7 @@ def _reveal_clue(ctx: TurnContext, t: Turn, c: dict[str, Any]) -> str:
         return "NO CLUE TO GIVE: they have nothing more on it. Answer in their own words."
     learned = clean(a.learned or a.said, ctx.rules)
     t.stats["clues"].append({"npc": npc, "learned": learned[:200]})
-    if a.ref:
+    if a.pointer:
         return f"POINTER: {_name(st, npc)} doesn't know, but points the player on. Deliver: {learned}"
     return f"CLUE (deliver it plainly, in their voice; the player now knows it): {learned}"
 
@@ -614,7 +614,7 @@ def _change(ctx: TurnContext, t: Turn, c: dict[str, Any]) -> str:
     if kind == "coin":
         return _coin(ctx, t, payer=who, payee=to, amount=amount)
     if kind == "give_item":
-        return _give(ctx, item=what, to=to)
+        return _give(ctx, item=what, giver=who or pc, to=to)
     if kind == "new_item":
         name = str(c.get("what") or "").strip()
         holder = to or pc
@@ -713,19 +713,21 @@ def _coin(ctx: TurnContext, t: Turn, *, payer: str | None, payee: str | None, am
         f"; the character now has {left.current}" if left is not None else "")
 
 
-def _give(ctx: TurnContext, *, item: str | None, to: str | None) -> str:
-    from engine.resolve.change import THINGS, holder_of
+def _give(ctx: TurnContext, *, item: str | None, giver: str, to: str | None) -> str:
+    """An item changes hands: the giver must hold it (or it lies loose here) and be able to act; the receiver must
+    be alive and here."""
+    from engine.resolve.change import PEOPLE, THINGS, holder_of
 
     tx = ctx.need_tx()
     st = tx.state
     if item is None or item not in st.entities or st.entities[item].kind not in THINGS:
         return f"REFUSED: no item on record called {item!r} (use new_item for something new)"
     holder = holder_of(st, item)
-    if holder is not None and holder in st.entities and st.entities[holder].kind in ("pc", "npc", "companion",
-                                                                                       "adversary"):
-        why = _acting(st, holder)
-        if why:
-            return f"REFUSED: {_name(st, item)} is held by {_name(st, holder)}, and {why}"
+    if holder in st.entities and st.entities[holder].kind in PEOPLE and holder != giver:  # type: ignore[index]
+        return f"REFUSED: {_name(st, item)} is not {_name(st, giver)}'s to give; {_name(st, holder)} has it"
+    why = _acting(st, giver)
+    if why:
+        return f"REFUSED: {why}"
     why = _acting(st, to)
     if why:
         return f"REFUSED: {why}"
