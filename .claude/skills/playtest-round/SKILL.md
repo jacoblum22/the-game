@@ -42,6 +42,9 @@ py -3.12 evals/playtest.py --engine claude --player claude --engine-model haiku 
 ### 2. Collect symptoms. Don't diagnose.
 - Read the `.findings.jsonl` player notes and stats, and list the symptoms.
 - Record what the last fixes' targets did, with numbers.
+- **Re-check every recorded "Revisit if" condition** (`grep -n "Revisit if" rules/appendix/fragments/DL-*.md` and the
+  open items in `OVERNIGHT-LOG.md` and the handoff). List each one that has fired this round as a symptom. Round 7
+  found two that had fired and were never acted on (DL-12-99, DL-01-36). Owner rule, 2026-10-09.
 - Commit the transcripts.
 
 ### 3. Trace, with 3–4 `root-cause-investigator` agents in parallel
@@ -111,6 +114,15 @@ Use **one** `rules-worker` agent in a worktree. Its brief:
   - the evidence to test against;
   - real gates: tests built from real saves, live Haiku runs with a turn budget, and a held-out set labelled
     *before* looking at answers;
+  - **made-up cases, including edge cases** (owner rule, 2026-10-09). Before implementing, the spec writes and labels
+    situations it was *not* derived from:
+    - the family's "another example";
+    - other people, verbs and scenes the same cause would break;
+    - deliberately hard edge cases (a smaller ask in other words, a folded method, an open OFFER, an absent person,
+      a negated question).
+
+    A fix is accepted only if it passes these as well as the save it came from. Round 7 traced T3, T6 and T7 to fixes
+    each accepted on the one case that prompted them: one surface, one wording, a tuned scoring set;
   - "report real numbers, never fake a pass";
   - what to retire;
   - Edit/Write tools for code, never Git Bash heredocs;
