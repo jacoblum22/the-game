@@ -29,6 +29,13 @@ re-reads it.
 - **Do not edit ch.13** (an optional, unmaintained example setting). Never commit; the orchestrator
   commits.
 
+## Subagents (the weekly usage limit is the binding constraint)
+- Every turn re-reads the agent's whole context, so cost grows with the square of an agent's length. Use **short
+  agents, one per slice, with a written handoff**, and Sonnet unless the slice is design-heavy.
+- Rules work: `rules-worker`. Engine specs: `spec-implementer`. Tracing: `root-cause-investigator`. Avoid
+  `general-purpose`, which starts at 60k tokens per turn against 12–27k for these.
+- The model, slicing and handoff rules are in `.claude/skills/playtest-round/SKILL.md` ("Agents").
+
 ## Code checks (`engine/`, `play/`, `evals/`, `tests/`)
 Cloud sessions install `requirements-dev.txt` automatically (`.claude/hooks/session-start.sh`). Before
 pushing code, run `ruff check .`, `pyright` and `python -m pytest -q -p no:cacheprovider` (about 3 minutes;

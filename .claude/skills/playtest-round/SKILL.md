@@ -95,8 +95,11 @@ The method is built into the agent type.
 - If the owner pushes back, take it seriously and re-trace.
 
 ### 6. Rules wave
-Use **one** `rules-worker` agent in a worktree. Its brief:
-- start with `git reset --hard milestone-1-playable`;
+Use `rules-worker` agents in a worktree, **one at a time, one fresh agent per slice** (Sonnet, a 100-turn cap; see
+"Agents" below). A slice is 2–4 revisions or issues, one audit, or one sim. The wave report's `## Handoff` section
+carries state between slices. Commit each slice's worktree before starting the next. Each slice's brief:
+- start with `git reset --hard milestone-1-playable` (slice 1) or the previous slice's branch;
+- which slice it is, and whether it is the **last** one (the last runs assemble, anchors and cards);
 - revisions tagged `[revision: R2-x]`;
 - DL entries quoting the owner, with a numbering range assigned so parallel agents don't collide;
 - re-assemble the appendix, run the anchors, then compile `engine/build/compile_cards.py` **last**;
@@ -107,6 +110,16 @@ Use **one** `rules-worker` agent in a worktree. Its brief:
 ### 7. Engine specs
 - One spec-kit feature per structural fix: specify → plan → tasks → analyze → implement. Skip clarify and record
   assumptions instead.
+- **Split each spec into slices, one fresh `spec-implementer` agent per slice** (Sonnet, a 100-turn cap). One long
+  agent re-reads its whole growing context on every turn; specs 020–029 averaged 270 turns, peaked at 400–710k
+  context, and were about 70% of a week's usage.
+  - Slice 1 is the design: specify → plan → tasks → analyze. Pass `model: opus` when the fix is design-heavy.
+  - Then one slice per phase of `tasks.md` (merge small phases, so a slice is roughly 15–60 turns of work).
+  - Run each slice with `isolation: worktree`. Slice 1 resets to `milestone-1-playable`; each later slice resets to
+    the previous slice's branch. Merge the last slice's branch.
+  - The handoff between slices is the ticked `tasks.md` plus `specs/<feature>/HANDOFF.md`. Don't paste earlier
+    reports into the next brief.
+  - If a slice stops at the turn cap (its output is marked partial), resume it with `SendMessage`. Don't restart it.
 - Each runs in its own worktree with explicit **file lanes**.
 - **At most 2 in parallel**, because of usage limits.
 - Each brief includes:
@@ -146,6 +159,24 @@ git commit -m "Merge … (gate numbers)\n\nCo-Authored-By: Claude Opus 5.5 <nore
   fix it, then fast-forward. Never commit a red merge to `milestone-1-playable`.
 - Update `research_notes/Playtest round 2 solutions/OVERNIGHT-LOG.md` after each merge.
 - Then go back to step 1.
+
+## Agents (owner, 2026-10-10: the weekly usage limit is the binding constraint)
+An agent's cost grows with the square of its length, because every turn re-reads the whole context. So use short
+agents with a written handoff, and the cheapest model that can do the slice.
+
+| Job | Agent type | Model |
+|---|---|---|
+| Trace causes (step 3) | `root-cause-investigator` | Opus (from its file) |
+| Rules wave slice (step 6) | `rules-worker` | Sonnet; pass `model: opus` only for a design-heavy slice (a new mechanic, a principle or constitution change) |
+| Spec design slice (step 7) | `spec-implementer` | Sonnet; pass `model: opus` when the fix is design-heavy |
+| Spec implementation slice (step 7) | `spec-implementer` | Sonnet |
+| Anything else (audits, prototypes, research) | the closest typed agent; `general-purpose` only as a last resort | Sonnet (the default, `CLAUDE_CODE_SUBAGENT_MODEL` in user settings); Opus only for design-heavy work |
+
+- Prefer a typed agent over `general-purpose`. `general-purpose` starts at about 60k tokens per turn; the typed ones
+  start at 12–27k.
+- Auto-compaction triggers at about 380k tokens (`CLAUDE_CODE_AUTO_COMPACT_WINDOW=400000` in user settings). It is a
+  safety net, not the plan; size slices so they finish well below it.
+- A slice that stops at its turn cap returns partial output. Resume it with `SendMessage`; don't restart it.
 
 ## Standing constraints
 - Don't push; the owner pushes.
