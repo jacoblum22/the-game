@@ -337,3 +337,10 @@ everything.
 - **Spec 021 merged (e12b7e4, via integrate-021: schemas.py DEFAULTS conflict with 022).** Settlement 60% -> 13% of testimony turns; refusals as facts 4 -> 0; garbled claims 4/31 -> 0/23; live pronoun flips 0/6; "no one you know" 0. Combined suite **1804 passed**, validator 0/0.
 - **Open after the four specs:** golden-set blind relabel (verb 84.6 after 020); Fixer needs a short mechanics guidance block (both held-out misses); a willingness MUST line on greet/thank makes NPCs recite seeded card lines (021 hand-off); 00.11.1 still says "no one you know"; owner decision on /fix taking back on its own (A taken).
 - **Next:** playtest round (talker, fighter, explorer on Haiku) and trace with root-cause investigators.
+
+## Round 7 (2026-10-09)
+
+- **Playtests** (talker, fighter, explorer on a9ba5cf, Haiku) and three traces plus two history traces and one research note: `ROUND7-ANALYSIS.md`. Owner approved all of `ROUND7-PLAN.md` (T1-T7, D2 A clue judgment call, D3 A willingness per scene).
+- **Process rules (owner):** every fix passes made-up and edge cases plus a held-out set; each round re-checks the "Revisit if" notes. In the playtest-round skill.
+- **R2-K rules wave merged.** DL-00-08, DL-01-41..48, DL-12-108..121, DL-15-40..42; ledger I-205..I-219. Validator 0/0; 1804 passed. Provisional (owner to confirm): DL-01-46, an accepted fallback with nothing at stake also takes the time (no roll).
+- **Next:** specs 023 (T1+T5+T6+P2) and 024 (T3+T4+P1,P4-P6) in parallel.
