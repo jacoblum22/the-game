@@ -1,0 +1,1674 @@
+{
+ "model": "sonnet (play roles: haiku)",
+ "set": "round6",
+ "understood": 14,
+ "outcome": 14,
+ "n": 15,
+ "auto": {
+  "right": 12,
+  "unclear": 2,
+  "wrong": 1
+ },
+ "results": [
+  {
+   "id": "192926-t8",
+   "category": "ruling_question",
+   "turn": "turn.7",
+   "outcome": "explain",
+   "kind": "explain",
+   "answer": "[CORRECTION] The roll was d20 16 plus 3, making 19 against 10, a success, but its reach was limited and the framing promised only 'partly what you wanted'. The narration gave you Falbo's secondhand rumour ('oil going out by night, but I only hear it') and then asked whether you walk over to the back table, so the carters have not yet been questioned. The success stands as a partial result; your question to the carters is still to come.\n             The offer said 'the coin for the round is spent whatever the answer', but your coin still reads 66 and the ledger shows no change since the start. The cost was promised and never charged.\n             Done: your coin 66 → 65.\n             Now: coin 65 (was 66).",
+   "screen": "[CORRECTION] The roll was d20 16 plus 3, making 19 against 10, a success, but its reach was limited and the framing promised only 'partly what you wanted'. The narration gave you Falbo's secondhand rumour ('oil going out by night, but I only hear it') and then asked whether you walk over to the back table, so the carters have not yet been questioned. The success stands as a partial result; your question to the carters is still to come.\n             The offer said 'the coin for the round is spent whatever the answer', but your coin still reads 66 and the ledger shows no change since the start. The cost was promised and never charged.\n             Done: your coin 66 → 65.\n             Now: coin 65 (was 66).",
+   "complaints": [
+    {
+     "believes": "Your round-buying roll succeeded, but the carters themselves told you nothing; only Falbo spoke.",
+     "category": "ruling_question",
+     "turn": "turn.7",
+     "verdict": "partly",
+     "class": "upheld",
+     "outcome": "explain",
+     "done": [],
+     "done_kinds": [
+      "explain"
+     ],
+     "not_done": []
+    },
+    {
+     "believes": "The coin for the round was never taken from you.",
+     "category": "rule_wrong",
+     "turn": "turn.7",
+     "verdict": "player_right",
+     "class": "upheld",
+     "outcome": "correct",
+     "done": [
+      "your coin 66 → 65"
+     ],
+     "done_kinds": [
+      "deduct"
+     ],
+     "not_done": []
+    }
+   ],
+   "tools": [
+    "turn('turn.8')",
+    "ledger('')",
+    "said('')",
+    "turn('turn.7')",
+    "recompute('turn.7')",
+    "calls('turn.7')"
+   ],
+   "tape": [
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [
+       {
+        "tool": "turn",
+        "arg": "turn.8"
+       },
+       {
+        "tool": "ledger",
+        "arg": ""
+       },
+       {
+        "tool": "said",
+        "arg": ""
+       }
+      ],
+      "final": false,
+      "complaints": []
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [
+       {
+        "tool": "turn",
+        "arg": "turn.7"
+       },
+       {
+        "tool": "recompute",
+        "arg": "turn.7"
+       },
+       {
+        "tool": "calls",
+        "arg": "turn.7"
+       }
+      ],
+      "final": false,
+      "complaints": []
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "Your round-buying roll succeeded, but the carters themselves told you nothing; only Falbo spoke.",
+        "category": "ruling_question",
+        "turn": "turn.7",
+        "verdict": "partly",
+        "found": "The roll was d20 16 plus 3, making 19 against 10, a success, but its reach was limited and the framing promised only 'partly what you wanted'. The narration gave you Falbo's secondhand rumour ('oil going out by night, but I only hear it') and then asked whether you walk over to the back table, so the carters have not yet been questioned. The success stands as a partial result; your question to the carters is still to come.",
+        "proposals": [
+         {
+          "kind": "explain",
+          "turn": "turn.7",
+          "subject": "",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "frame.2"
+          ]
+         }
+        ]
+       },
+       {
+        "believes": "The coin for the round was never taken from you.",
+        "category": "rule_wrong",
+        "turn": "turn.7",
+        "verdict": "player_right",
+        "found": "The offer said 'the coin for the round is spent whatever the answer', but your coin still reads 66 and the ledger shows no change since the start. The cost was promised and never charged.",
+        "proposals": [
+         {
+          "kind": "deduct",
+          "turn": "turn.7",
+          "subject": "pc.wila_bramblefoot",
+          "key": "",
+          "value": "",
+          "quantity": "coin",
+          "amount": "1",
+          "fact_id": "",
+          "evidence": [
+           "frame.2"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "Your round-buying roll succeeded, but the carters themselves told you nothing; only Falbo spoke.",
+        "category": "ruling_question",
+        "turn": "turn.7",
+        "verdict": "partly",
+        "found": "The roll was d20 16 plus 3, making 19 against 10, a success, but its reach was limited and the framing promised only 'partly what you wanted'. The narration gave you Falbo's secondhand rumour ('oil going out by night, but I only hear it') and then asked whether you walk over to the back table, so the carters have not yet been questioned. The success stands as a partial result; your question to the carters is still to come.",
+        "proposals": [
+         {
+          "kind": "explain",
+          "turn": "turn.7",
+          "subject": "",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "frame.2"
+          ]
+         }
+        ]
+       },
+       {
+        "believes": "The coin for the round was never taken from you.",
+        "category": "rule_wrong",
+        "turn": "turn.7",
+        "verdict": "player_right",
+        "found": "The offer said 'the coin for the round is spent whatever the answer', but your coin still reads 66 and the ledger shows no change since the start. The cost was promised and never charged.",
+        "proposals": [
+         {
+          "kind": "deduct",
+          "turn": "turn.7",
+          "subject": "pc.wila_bramblefoot",
+          "key": "",
+          "value": "",
+          "quantity": "coin",
+          "amount": "1",
+          "fact_id": "",
+          "evidence": [
+           "frame.2"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "score": {
+    "understood": true,
+    "outcome": true,
+    "complaints": [
+     {
+      "id": "192926-d1",
+      "understood": true,
+      "outcome": true,
+      "screen_missing": [],
+      "screen_still": [],
+      "auto": "right"
+     },
+     {
+      "id": "192926-d2",
+      "understood": true,
+      "outcome": true,
+      "screen_missing": [],
+      "screen_still": [],
+      "auto": "right"
+     },
+     {
+      "id": "192926-d3",
+      "understood": true,
+      "outcome": true,
+      "screen_missing": [],
+      "screen_still": [],
+      "auto": "unclear"
+     }
+    ]
+   }
+  },
+  {
+   "id": "192926-t12",
+   "category": "contradiction",
+   "turn": "turn.11",
+   "outcome": "explain",
+   "kind": "explain",
+   "answer": "[FIX] Ivas Terier is on record as a woman, the captain of the gate, and the gate scenes always say \"she\". The carter's line in turn 11, \"since he's the one who brought the word\", was a slip in the narration. Nothing on record changes Ivas's gender.\n      Ivas's only recorded dealings with you are carrying your word about your locks and quiet work to the Circle of Barrowham. Nothing on record says Ivas brought word of an omen. The carter's line in turn 11 is the only place it appears, and it was not settled into any fact, so you can disregard it.\n      Now: nothing on your sheet changed: Vitality 12/12 · fate 1 · dread 0 · coin 66 · focus 4 · state fresh.",
+   "screen": "[FIX] Ivas Terier is on record as a woman, the captain of the gate, and the gate scenes always say \"she\". The carter's line in turn 11, \"since he's the one who brought the word\", was a slip in the narration. Nothing on record changes Ivas's gender.\n      Ivas's only recorded dealings with you are carrying your word about your locks and quiet work to the Circle of Barrowham. Nothing on record says Ivas brought word of an omen. The carter's line in turn 11 is the only place it appears, and it was not settled into any fact, so you can disregard it.\n      Now: nothing on your sheet changed: Vitality 12/12 · fate 1 · dread 0 · coin 66 · focus 4 · state fresh.",
+   "complaints": [
+    {
+     "believes": "The carter called Ivas Terier \"he\", but Ivas at the gate was a woman.",
+     "category": "contradiction",
+     "turn": "turn.11",
+     "verdict": "player_right",
+     "class": "upheld",
+     "outcome": "explain",
+     "done": [],
+     "done_kinds": [
+      "explain"
+     ],
+     "not_done": []
+    },
+    {
+     "believes": "The carter said Ivas brought word about the omen, which you never heard from Ivas.",
+     "category": "contradiction",
+     "turn": "turn.11",
+     "verdict": "player_right",
+     "class": "upheld",
+     "outcome": "explain",
+     "done": [],
+     "done_kinds": [
+      "explain"
+     ],
+     "not_done": []
+    }
+   ],
+   "tools": [
+    "turn('turn.12')",
+    "entity('Ivas Terier')",
+    "search('omen')"
+   ],
+   "tape": [
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [
+       {
+        "tool": "turn",
+        "arg": "turn.12"
+       },
+       {
+        "tool": "entity",
+        "arg": "Ivas Terier"
+       },
+       {
+        "tool": "search",
+        "arg": "omen"
+       }
+      ],
+      "final": false,
+      "complaints": []
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "The carter called Ivas Terier \"he\", but Ivas at the gate was a woman.",
+        "category": "contradiction",
+        "turn": "turn.11",
+        "verdict": "player_right",
+        "found": "Ivas Terier is on record as a woman, the captain of the gate, and the gate scenes always say \"she\". The carter's line in turn 11, \"since he's the one who brought the word\", was a slip in the narration. Nothing on record changes Ivas's gender.",
+        "proposals": [
+         {
+          "kind": "explain",
+          "turn": "turn.11",
+          "subject": "npc.ivas_terier",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "fact.107"
+          ]
+         }
+        ]
+       },
+       {
+        "believes": "The carter said Ivas brought word about the omen, which you never heard from Ivas.",
+        "category": "remembered_wrong",
+        "turn": "turn.11",
+        "verdict": "player_right",
+        "found": "Ivas's only recorded dealings with you are carrying your word about your locks and quiet work to the Circle of Barrowham. Nothing on record says Ivas brought word of an omen. The carter's line in turn 11 is the only place it appears, and it was not settled into any fact, so you can disregard it.",
+        "proposals": [
+         {
+          "kind": "explain",
+          "turn": "turn.11",
+          "subject": "npc.ivas_terier",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "fact.113",
+           "fact.114"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "The carter called Ivas Terier \"he\", but Ivas at the gate was a woman.",
+        "category": "contradiction",
+        "turn": "turn.11",
+        "verdict": "player_right",
+        "found": "Ivas Terier is on record as a woman, the captain of the gate, and the gate scenes always say \"she\". The carter's line in turn 11, \"since he's the one who brought the word\", was a slip in the narration. Nothing on record changes Ivas's gender.",
+        "proposals": [
+         {
+          "kind": "explain",
+          "turn": "turn.11",
+          "subject": "npc.ivas_terier",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "fact.107"
+          ]
+         }
+        ]
+       },
+       {
+        "believes": "The carter said Ivas brought word about the omen, which you never heard from Ivas.",
+        "category": "contradiction",
+        "turn": "turn.11",
+        "verdict": "player_right",
+        "found": "Ivas's only recorded dealings with you are carrying your word about your locks and quiet work to the Circle of Barrowham. Nothing on record says Ivas brought word of an omen. The carter's line in turn 11 is the only place it appears, and it was not settled into any fact, so you can disregard it.",
+        "proposals": [
+         {
+          "kind": "explain",
+          "turn": "turn.11",
+          "subject": "npc.ivas_terier",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "fact.113",
+           "fact.114"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "The carter called Ivas Terier \"he\", but Ivas at the gate was a woman.",
+        "category": "contradiction",
+        "turn": "turn.11",
+        "verdict": "player_right",
+        "found": "Ivas Terier is on record as a woman, the captain of the gate, and the gate scenes always say \"she\". The carter's line in turn 11, \"since he's the one who brought the word\", was a slip in the narration. Nothing on record changes Ivas's gender.",
+        "proposals": [
+         {
+          "kind": "explain",
+          "turn": "turn.11",
+          "subject": "npc.ivas_terier",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "fact.107"
+          ]
+         }
+        ]
+       },
+       {
+        "believes": "The carter said Ivas brought word about the omen, which you never heard from Ivas.",
+        "category": "contradiction",
+        "turn": "turn.11",
+        "verdict": "player_right",
+        "found": "Ivas's only recorded dealings with you are carrying your word about your locks and quiet work to the Circle of Barrowham. Nothing on record says Ivas brought word of an omen. The carter's line in turn 11 is the only place it appears, and it was not settled into any fact, so you can disregard it.",
+        "proposals": [
+         {
+          "kind": "explain",
+          "turn": "turn.11",
+          "subject": "npc.ivas_terier",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "fact.113",
+           "fact.114"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "score": {
+    "understood": true,
+    "outcome": true,
+    "complaints": [
+     {
+      "id": "192926-d4",
+      "understood": true,
+      "outcome": true,
+      "screen_missing": [],
+      "screen_still": [],
+      "auto": "right"
+     },
+     {
+      "id": "192926-d5",
+      "understood": true,
+      "outcome": true,
+      "screen_missing": [],
+      "screen_still": [],
+      "auto": "right"
+     }
+    ]
+   }
+  },
+  {
+   "id": "192946-t8",
+   "category": "contradiction",
+   "turn": "turn.7",
+   "outcome": "explain",
+   "kind": "explain",
+   "answer": "[FIX] You're right. Nothing on record moves Branwen: she is still at the jetties, and the only thing written about her that turn is that she is willing to help. The line in turn.7, \"Branwen Longsmith lifts a hand toward the refugees and turns to you\", was a narration slip. She is not in the street with you.\n      Now: nothing on your sheet changed: Vitality 14/14 · fate 1 · dread 0 · coin 55 · focus 4 · state fresh.",
+   "screen": "[FIX] You're right. Nothing on record moves Branwen: she is still at the jetties, and the only thing written about her that turn is that she is willing to help. The line in turn.7, \"Branwen Longsmith lifts a hand toward the refugees and turns to you\", was a narration slip. She is not in the street with you.\n      Now: nothing on your sheet changed: Vitality 14/14 · fate 1 · dread 0 · coin 55 · focus 4 · state fresh.",
+   "complaints": [
+    {
+     "believes": "Branwen Longsmith stayed at the gate, yet the narration put her beside you in the refugees' street and had her lift a hand to them, although she never followed you.",
+     "category": "contradiction",
+     "turn": "turn.7",
+     "verdict": "player_right",
+     "class": "upheld",
+     "outcome": "explain",
+     "done": [],
+     "done_kinds": [
+      "explain"
+     ],
+     "not_done": []
+    }
+   ],
+   "tools": [
+    "turn('turn.7')",
+    "turn('turn.8')",
+    "entity('npc.branwen_longsmith')",
+    "turn('turn.2')",
+    "calls('turn.7 narrator')",
+    "search('Branwen')"
+   ],
+   "tape": [
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [
+       {
+        "tool": "turn",
+        "arg": "turn.7"
+       },
+       {
+        "tool": "turn",
+        "arg": "turn.8"
+       },
+       {
+        "tool": "entity",
+        "arg": "npc.branwen_longsmith"
+       }
+      ],
+      "final": false,
+      "complaints": []
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [
+       {
+        "tool": "turn",
+        "arg": "turn.2"
+       },
+       {
+        "tool": "calls",
+        "arg": "turn.7 narrator"
+       },
+       {
+        "tool": "search",
+        "arg": "Branwen"
+       }
+      ],
+      "final": false,
+      "complaints": []
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "Branwen Longsmith stayed at the gate, yet the narration put her beside you in the refugees' street and had her lift a hand to them, although she never followed you.",
+        "category": "contradiction",
+        "turn": "turn.7",
+        "verdict": "player_right",
+        "found": "You're right. Nothing on record moves Branwen: she is still at the jetties, and the only thing written about her that turn is that she is willing to help. The line in turn.7, \"Branwen Longsmith lifts a hand toward the refugees and turns to you\", was a narration slip. She is not in the street with you.",
+        "proposals": [
+         {
+          "kind": "explain",
+          "turn": "turn.7",
+          "subject": "npc.branwen_longsmith",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "fact.117"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "Branwen Longsmith stayed at the gate, yet the narration put her beside you in the refugees' street and had her lift a hand to them, although she never followed you.",
+        "category": "contradiction",
+        "turn": "turn.7",
+        "verdict": "player_right",
+        "found": "You're right. Nothing on record moves Branwen: she is still at the jetties, and the only thing written about her that turn is that she is willing to help. The line in turn.7, \"Branwen Longsmith lifts a hand toward the refugees and turns to you\", was a narration slip. She is not in the street with you.",
+        "proposals": [
+         {
+          "kind": "explain",
+          "turn": "turn.7",
+          "subject": "npc.branwen_longsmith",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "fact.117"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "score": {
+    "understood": true,
+    "outcome": true,
+    "complaints": [
+     {
+      "id": "192946-d1",
+      "understood": true,
+      "outcome": true,
+      "screen_missing": [],
+      "screen_still": [],
+      "auto": "right"
+     }
+    ]
+   }
+  },
+  {
+   "id": "192946-t12",
+   "category": "misread",
+   "turn": "turn.11",
+   "outcome": "take_back",
+   "kind": "take_back",
+   "answer": "[CORRECTION] You said you would sheathe your sword and then head for the reeve's cell. The game instead moved the scene to the hall, placed Ostin Coalforge and the others there, and even recorded the reeve's cell as being at the hall. Nothing in your words or in the street scene sent you to a hall, so that move was an error.\n             Done: took back turn 11: everything it changed is undone and its roll is void (an offer it opened or closed is gone: declare again).\n             The roll was framed as \"Sheathe the sword\", yet the odds cited a shove against the cell door. The narration then said you forced your way in and the way opened. The roll and the action did not match, and it also settled a door and guards that were not in the street scene. Taking the turn back lets you declare it again properly.\n             Now: nothing on your sheet changed: Vitality 14/14 · fate 1 · dread 0 · coin 55 · focus 4 · state fresh.",
+   "screen": "[CORRECTION] You said you would sheathe your sword and then head for the reeve's cell. The game instead moved the scene to the hall, placed Ostin Coalforge and the others there, and even recorded the reeve's cell as being at the hall. Nothing in your words or in the street scene sent you to a hall, so that move was an error.\n             Done: took back turn 11: everything it changed is undone and its roll is void (an offer it opened or closed is gone: declare again).\n             The roll was framed as \"Sheathe the sword\", yet the odds cited a shove against the cell door. The narration then said you forced your way in and the way opened. The roll and the action did not match, and it also settled a door and guards that were not in the street scene. Taking the turn back lets you declare it again properly.\n             Now: nothing on your sheet changed: Vitality 14/14 · fate 1 · dread 0 · coin 55 · focus 4 · state fresh.",
+   "complaints": [
+    {
+     "believes": "You were in the muddy street with the old refugee woman, and the game wrongly moved you into a hall with Ostin Coalforge, a place you never went to.",
+     "category": "misread",
+     "turn": "turn.11",
+     "verdict": "player_right",
+     "class": "upheld",
+     "outcome": "take_back",
+     "done": [
+      "took back turn 11: everything it changed is undone and its roll is void (an offer it opened or closed is gone: declare again)"
+     ],
+     "done_kinds": [
+      "take_back"
+     ],
+     "not_done": []
+    },
+    {
+     "believes": "The roll was labelled \"Sheathe the sword\", not the thing you actually tried, forcing your way into the cell to see the prisoner.",
+     "category": "misread",
+     "turn": "turn.11",
+     "verdict": "player_right",
+     "class": "upheld",
+     "outcome": "explain",
+     "done": [],
+     "done_kinds": [],
+     "not_done": []
+    }
+   ],
+   "tools": [
+    "turn('turn.11')",
+    "turn('turn.12')",
+    "calls('turn.11')"
+   ],
+   "tape": [
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [
+       {
+        "tool": "turn",
+        "arg": "turn.11"
+       },
+       {
+        "tool": "turn",
+        "arg": "turn.12"
+       },
+       {
+        "tool": "calls",
+        "arg": "turn.11"
+       }
+      ],
+      "final": false,
+      "complaints": []
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "You were in the muddy street with the old refugee woman, and the game wrongly moved you into a hall with Ostin Coalforge, a place you never went to.",
+        "category": "misread",
+        "turn": "turn.11",
+        "verdict": "player_right",
+        "found": "You said you would sheathe your sword and then head for the reeve's cell. The game instead moved the scene to the hall, placed Ostin Coalforge and the others there, and even recorded the reeve's cell as being at the hall. Nothing in your words or in the street scene sent you to a hall, so that move was an error.",
+        "proposals": [
+         {
+          "kind": "take_back",
+          "turn": "turn.11",
+          "subject": "",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "fact.125",
+           "fact.131"
+          ]
+         }
+        ]
+       },
+       {
+        "believes": "The roll was labelled \"Sheathe the sword\", not the thing you actually tried, forcing your way into the cell to see the prisoner.",
+        "category": "misread",
+        "turn": "turn.11",
+        "verdict": "player_right",
+        "found": "The roll was framed as \"Sheathe the sword\", yet the odds cited a shove against the cell door. The narration then said you forced your way in and the way opened. The roll and the action did not match, and it also settled a door and guards that were not in the street scene. Taking the turn back lets you declare it again properly.",
+        "proposals": []
+       }
+      ]
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "You were in the muddy street with the old refugee woman, and the game wrongly moved you into a hall with Ostin Coalforge, a place you never went to.",
+        "category": "misread",
+        "turn": "turn.11",
+        "verdict": "player_right",
+        "found": "You said you would sheathe your sword and then head for the reeve's cell. The game instead moved the scene to the hall, placed Ostin Coalforge and the others there, and even recorded the reeve's cell as being at the hall. Nothing in your words or in the street scene sent you to a hall, so that move was an error.",
+        "proposals": [
+         {
+          "kind": "take_back",
+          "turn": "turn.11",
+          "subject": "",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "fact.125",
+           "fact.131"
+          ]
+         }
+        ]
+       },
+       {
+        "believes": "The roll was labelled \"Sheathe the sword\", not the thing you actually tried, forcing your way into the cell to see the prisoner.",
+        "category": "misread",
+        "turn": "turn.11",
+        "verdict": "player_right",
+        "found": "The roll was framed as \"Sheathe the sword\", yet the odds cited a shove against the cell door. The narration then said you forced your way in and the way opened. The roll and the action did not match, and it also settled a door and guards that were not in the street scene. Taking the turn back lets you declare it again properly.",
+        "proposals": []
+       }
+      ]
+     }
+    }
+   ],
+   "score": {
+    "understood": true,
+    "outcome": true,
+    "complaints": [
+     {
+      "id": "192946-d2",
+      "understood": true,
+      "outcome": true,
+      "screen_missing": [],
+      "screen_still": [],
+      "auto": "right"
+     },
+     {
+      "id": "192946-d3",
+      "understood": true,
+      "outcome": true,
+      "screen_missing": [],
+      "screen_still": [],
+      "auto": "unclear"
+     }
+    ]
+   }
+  },
+  {
+   "id": "232941-t9",
+   "category": "contradiction",
+   "turn": "turn.8",
+   "outcome": "correct",
+   "kind": "correct",
+   "answer": "[CORRECTION] At turn 6 Lilett said \"No one I know keeps the gate at The Red Warren, so I cannot put a name to you\", and the game wrote that down as a fact. At turn 8 she said Sevella de Belac \"is captain of the gate\". Those two lines clash, and the narration did not make clear which gate she meant. The turn 6 line should not stand as settled, so I am taking it off the record. Sevella's captaincy stays only as what Lilett said.\n             Done: \"who is keeps the gate at the red warren: no one you know\" is no longer on record.\n             Your sheet lists Lilett as a friend, and she is Friendly toward you. At turn 8 you asked whether Sevella de Belac is a friend of hers, and she answered \"A friend is a word I keep for few, and I'll not stretch it for you\". That was about Sevella, not about you, and the narration made it easy to read as her disowning you. Nothing in the record changes your bond with Lilett, and it stands as friend.\n             Now: nothing on your sheet changed: coin 66 · dread 0 · fate 1 · Vitality 11/11 · focus 4 · state fresh.",
+   "screen": "[CORRECTION] At turn 6 Lilett said \"No one I know keeps the gate at The Red Warren, so I cannot put a name to you\", and the game wrote that down as a fact. At turn 8 she said Sevella de Belac \"is captain of the gate\". Those two lines clash, and the narration did not make clear which gate she meant. The turn 6 line should not stand as settled, so I am taking it off the record. Sevella's captaincy stays only as what Lilett said.\n             Done: \"who is keeps the gate at the red warren: no one you know\" is no longer on record.\n             Your sheet lists Lilett as a friend, and she is Friendly toward you. At turn 8 you asked whether Sevella de Belac is a friend of hers, and she answered \"A friend is a word I keep for few, and I'll not stretch it for you\". That was about Sevella, not about you, and the narration made it easy to read as her disowning you. Nothing in the record changes your bond with Lilett, and it stands as friend.\n             Now: nothing on your sheet changed: coin 66 · dread 0 · fate 1 · Vitality 11/11 · focus 4 · state fresh.",
+   "complaints": [
+    {
+     "believes": "Lilett first said no one she knows keeps the gate at The Red Warren, then said Sevella de Belac is captain of the gate and the one she trusts most.",
+     "category": "contradiction",
+     "turn": "turn.8",
+     "verdict": "player_right",
+     "class": "upheld",
+     "outcome": "correct",
+     "done": [
+      "\"who is keeps the gate at the red warren: no one you know\" is no longer on record"
+     ],
+     "done_kinds": [
+      "remove_fact"
+     ],
+     "not_done": []
+    },
+    {
+     "believes": "Lilett refuses to call herself your friend, though your sheet lists her as your friend.",
+     "category": "misread",
+     "turn": "turn.8",
+     "verdict": "record_stands",
+     "class": "stands",
+     "outcome": "explain",
+     "done": [],
+     "done_kinds": [
+      "explain"
+     ],
+     "not_done": []
+    }
+   ],
+   "tools": [
+    "turn('turn.6')",
+    "turn('turn.8')",
+    "said('Lilett')"
+   ],
+   "tape": [
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [
+       {
+        "tool": "turn",
+        "arg": "turn.6"
+       },
+       {
+        "tool": "turn",
+        "arg": "turn.8"
+       },
+       {
+        "tool": "said",
+        "arg": "Lilett"
+       }
+      ],
+      "final": false,
+      "complaints": []
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "Lilett first said no one she knows keeps the gate at The Red Warren, then said Sevella de Belac is captain of the gate and the one she trusts most.",
+        "category": "contradiction",
+        "turn": "turn.8",
+        "verdict": "player_right",
+        "found": "At turn 6 Lilett said \"No one I know keeps the gate at The Red Warren, so I cannot put a name to you\", and the game wrote that down as a fact. At turn 8 she said Sevella de Belac \"is captain of the gate\". Those two lines clash, and the narration did not make clear which gate she meant. The turn 6 line was a throwaway answer, not something that should stand as settled, so I am taking it off the record. Sevella's captaincy stays only as what Lilett said.",
+        "proposals": [
+         {
+          "kind": "remove_fact",
+          "turn": "turn.6",
+          "subject": "",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "fact.110",
+          "evidence": [
+           "fact.110"
+          ]
+         }
+        ]
+       },
+       {
+        "believes": "Lilett refuses to call herself your friend, though your sheet lists her as your friend.",
+        "category": "contradiction",
+        "turn": "turn.8",
+        "verdict": "player_right",
+        "found": "Your sheet lists Lilett as a friend, and she is Friendly toward you. At turn 8 she said \"A friend is a word I keep for few, and I'll not stretch it for you\". That line was about whether Sevella is her friend, but it reads as if she is disowning you. Nothing in the record changes your bond with Lilett, and the bond stands as friend.",
+        "proposals": [
+         {
+          "kind": "explain",
+          "turn": "turn.8",
+          "subject": "",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": []
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "Lilett first said no one she knows keeps the gate at The Red Warren, then said Sevella de Belac is captain of the gate and the one she trusts most.",
+        "category": "contradiction",
+        "turn": "turn.8",
+        "verdict": "player_right",
+        "found": "At turn 6 Lilett said \"No one I know keeps the gate at The Red Warren, so I cannot put a name to you\", and the game wrote that down as a fact. At turn 8 she said Sevella de Belac \"is captain of the gate\". Those two lines clash, and the narration did not make clear which gate she meant. The turn 6 line should not stand as settled, so I am taking it off the record. Sevella's captaincy stays only as what Lilett said.",
+        "proposals": [
+         {
+          "amount": "",
+          "evidence": [
+           "fact.110"
+          ],
+          "fact_id": "fact.110",
+          "key": "",
+          "kind": "remove_fact",
+          "quantity": "",
+          "subject": "",
+          "turn": "turn.6",
+          "value": ""
+         }
+        ]
+       },
+       {
+        "believes": "Lilett refuses to call herself your friend, though your sheet lists her as your friend.",
+        "category": "misread",
+        "turn": "turn.8",
+        "verdict": "record_stands",
+        "found": "Your sheet lists Lilett as a friend, and she is Friendly toward you. At turn 8 you asked whether Sevella de Belac is a friend of hers, and she answered \"A friend is a word I keep for few, and I'll not stretch it for you\". That was about Sevella, not about you, and the narration made it easy to read as her disowning you. Nothing in the record changes your bond with Lilett, and it stands as friend.",
+        "proposals": [
+         {
+          "amount": "",
+          "evidence": [],
+          "fact_id": "",
+          "key": "",
+          "kind": "explain",
+          "quantity": "",
+          "subject": "",
+          "turn": "turn.8",
+          "value": ""
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "Lilett first said no one she knows keeps the gate at The Red Warren, then said Sevella de Belac is captain of the gate and the one she trusts most.",
+        "category": "contradiction",
+        "turn": "turn.8",
+        "verdict": "player_right",
+        "found": "At turn 6 Lilett said \"No one I know keeps the gate at The Red Warren, so I cannot put a name to you\", and the game wrote that down as a fact. At turn 8 she said Sevella de Belac \"is captain of the gate\". Those two lines clash, and the narration did not make clear which gate she meant. The turn 6 line should not stand as settled, so I am taking it off the record. Sevella's captaincy stays only as what Lilett said.",
+        "proposals": [
+         {
+          "amount": "",
+          "evidence": [
+           "fact.110"
+          ],
+          "fact_id": "fact.110",
+          "key": "",
+          "kind": "remove_fact",
+          "quantity": "",
+          "subject": "",
+          "turn": "turn.6",
+          "value": ""
+         }
+        ]
+       },
+       {
+        "believes": "Lilett refuses to call herself your friend, though your sheet lists her as your friend.",
+        "category": "misread",
+        "turn": "turn.8",
+        "verdict": "record_stands",
+        "found": "Your sheet lists Lilett as a friend, and she is Friendly toward you. At turn 8 you asked whether Sevella de Belac is a friend of hers, and she answered \"A friend is a word I keep for few, and I'll not stretch it for you\". That was about Sevella, not about you, and the narration made it easy to read as her disowning you. Nothing in the record changes your bond with Lilett, and it stands as friend.",
+        "proposals": [
+         {
+          "amount": "",
+          "evidence": [],
+          "fact_id": "",
+          "key": "",
+          "kind": "explain",
+          "quantity": "",
+          "subject": "",
+          "turn": "turn.8",
+          "value": ""
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "score": {
+    "understood": true,
+    "outcome": false,
+    "complaints": [
+     {
+      "id": "232941-d1",
+      "understood": true,
+      "outcome": true,
+      "screen_missing": [],
+      "screen_still": [],
+      "auto": "right"
+     },
+     {
+      "id": "232941-d2",
+      "understood": true,
+      "outcome": false,
+      "screen_missing": [],
+      "screen_still": [],
+      "auto": "wrong"
+     }
+    ]
+   }
+  },
+  {
+   "id": "232941-t12",
+   "category": "contradiction",
+   "turn": "turn.12",
+   "outcome": "explain",
+   "kind": "explain",
+   "answer": "[FIX] You're right that the wording disagreed with itself. Lilett said \"I trust her more than anyone in Stanstead\" (turn 7) and \"I'd trust her with my goods\" (turn 8), but the gate narration at turn 11 says the captain is \"going about his morning work\". The game's record lists Sevella de Belac as a man (he/him), so the gate narration is the correct one and Lilett's \"her\" was a slip in the wording. Nothing on record needs changing; Captain Sevella is a man from here on.\n      Now: nothing on your sheet changed: Vitality 11/11 · fate 1 · dread 0 · coin 66 · focus 4 · state fresh.",
+   "screen": "[FIX] You're right that the wording disagreed with itself. Lilett said \"I trust her more than anyone in Stanstead\" (turn 7) and \"I'd trust her with my goods\" (turn 8), but the gate narration at turn 11 says the captain is \"going about his morning work\". The game's record lists Sevella de Belac as a man (he/him), so the gate narration is the correct one and Lilett's \"her\" was a slip in the wording. Nothing on record needs changing; Captain Sevella is a man from here on.\n      Now: nothing on your sheet changed: Vitality 11/11 · fate 1 · dread 0 · coin 66 · focus 4 · state fresh.",
+   "complaints": [
+    {
+     "believes": "Lilett called Captain Sevella de Belac \"her\", but the gate narration calls the captain \"his\", so the captain's gender is inconsistent.",
+     "category": "contradiction",
+     "turn": "turn.12",
+     "verdict": "partly",
+     "class": "upheld",
+     "outcome": "explain",
+     "done": [],
+     "done_kinds": [
+      "explain"
+     ],
+     "not_done": []
+    }
+   ],
+   "tools": [
+    "entity('npc.sevella_de_belac')",
+    "turn('turn.12')",
+    "search('Sevella')"
+   ],
+   "tape": [
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [
+       {
+        "tool": "entity",
+        "arg": "npc.sevella_de_belac"
+       },
+       {
+        "tool": "turn",
+        "arg": "turn.12"
+       },
+       {
+        "tool": "search",
+        "arg": "Sevella"
+       }
+      ],
+      "final": false,
+      "complaints": []
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "Lilett called Captain Sevella de Belac \"her\", but the gate narration calls the captain \"his\", so the captain's gender is inconsistent.",
+        "category": "contradiction",
+        "turn": "turn.12",
+        "verdict": "partly",
+        "found": "You're right that the wording disagreed with itself. Lilett said \"Sevella hears a long story as a lie\" and \"I trust her more than anyone in Stanstead\" (turns 7 and 10), but the gate narration at turn 11 says \"going about his morning work\". The record lists Sevella de Belac as a man (he/him), so the gate narration is correct and Lilett's \"her\" was a slip in the wording. Nothing on record needs changing; Captain Sevella is a man from here on.",
+        "proposals": [
+         {
+          "kind": "explain",
+          "turn": "turn.12",
+          "subject": "npc.sevella_de_belac",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "fact.113"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "Lilett called Captain Sevella de Belac \"her\", but the gate narration calls the captain \"his\", so the captain's gender is inconsistent.",
+        "category": "contradiction",
+        "turn": "turn.12",
+        "verdict": "partly",
+        "found": "You're right that the wording disagreed with itself. Lilett said \"I trust her more than anyone in Stanstead\" (turn 7) and \"I'd trust her with my goods\" (turn 8), but the gate narration at turn 11 says the captain is \"going about his morning work\". The game's record lists Sevella de Belac as a man (he/him), so the gate narration is the correct one and Lilett's \"her\" was a slip in the wording. Nothing on record needs changing; Captain Sevella is a man from here on.",
+        "proposals": [
+         {
+          "kind": "explain",
+          "turn": "turn.12",
+          "subject": "npc.sevella_de_belac",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "fact.113"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "Lilett called Captain Sevella de Belac \"her\", but the gate narration calls the captain \"his\", so the captain's gender is inconsistent.",
+        "category": "contradiction",
+        "turn": "turn.12",
+        "verdict": "partly",
+        "found": "You're right that the wording disagreed with itself. Lilett said \"I trust her more than anyone in Stanstead\" (turn 7) and \"I'd trust her with my goods\" (turn 8), but the gate narration at turn 11 says the captain is \"going about his morning work\". The game's record lists Sevella de Belac as a man (he/him), so the gate narration is the correct one and Lilett's \"her\" was a slip in the wording. Nothing on record needs changing; Captain Sevella is a man from here on.",
+        "proposals": [
+         {
+          "kind": "explain",
+          "turn": "turn.12",
+          "subject": "npc.sevella_de_belac",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "fact.113"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "score": {
+    "understood": false,
+    "outcome": true,
+    "complaints": [
+     {
+      "id": "232941-d3",
+      "understood": false,
+      "outcome": true,
+      "screen_missing": [],
+      "screen_still": [],
+      "auto": "right"
+     }
+    ]
+   }
+  },
+  {
+   "id": "233000-t9",
+   "category": "other",
+   "turn": "turn.8",
+   "outcome": "correct",
+   "kind": "correct",
+   "answer": "[CORRECTION] The threat offer's Chance line cited a line of Dunwen's own refusal (\"will give no word out while you have a hand on me\") as if it were a circumstance, which is why it read as mangled text and charged you −2. A refusal is only what she said, not a penalty on your odds. Your sheet and hers are right (she/her); the \"him\" came from the garbled wording of that line. The offer is framed again without it.\n             Done: what Dunwen Redmore said (\"pc.evine_oakwell has a hand on him\") is their words again, not a settled fact; the offer for \"Threaten Dunwen with breaking the arm if she swings again, and demand the word.\" is framed again with the record as it stands (below).\n             Now: nothing on your sheet changed: coin 44 · dread 0 · fate 1 · Vitality 6/12 · focus 5 · state bloodied · conditions prone.",
+   "screen": "[CORRECTION] The threat offer's Chance line cited a line of Dunwen's own refusal (\"will give no word out while you have a hand on me\") as if it were a circumstance, which is why it read as mangled text and charged you −2. A refusal is only what she said, not a penalty on your odds. Your sheet and hers are right (she/her); the \"him\" came from the garbled wording of that line. The offer is framed again without it.\n             Done: what Dunwen Redmore said (\"pc.evine_oakwell has a hand on him\") is their words again, not a settled fact; the offer for \"Threaten Dunwen with breaking the arm if she swings again, and demand the word.\" is framed again with the record as it stands (below).\n             Now: nothing on your sheet changed: coin 44 · dread 0 · fate 1 · Vitality 6/12 · focus 5 · state bloodied · conditions prone.\n\n[OFFER] Persuade Dunwen Redmore.\n        Chance: unlikely — 35%   (Influence +1)\n        If it works: what you wanted.   Very well (5%): more than you asked.\n        If it fails: Danger: Dunwen shuts her mouth and turns you away from the gate; you get no word from her — serious.   Badly (20%): Dunwen shuts her mouth and turns you away from the gate; you get no word from her — grave.\n        Close call (15%): get it anyway and pay (The gate crowd hears you threaten the captain and marks your face), or fail.\n        Whatever the roll: The compliance lasts only while the threat stands · Holding her grip and voicing the threat is done whatever the roll\n        Fate: 1 (you may spend one to reroll the die once you see it)\n        Another way: with Presence (50%) · with Intellect (35%)",
+   "complaints": [
+    {
+     "believes": "The Chance line for the threat is garbled, and it calls Dunwen \"him\" when she is \"her\".",
+     "category": "other",
+     "turn": "turn.8",
+     "verdict": "player_right",
+     "class": "upheld",
+     "outcome": "correct",
+     "done": [
+      "what Dunwen Redmore said (\"pc.evine_oakwell has a hand on him\") is their words again, not a settled fact",
+      "the offer for \"Threaten Dunwen with breaking the arm if she swings again, and demand the word.\" is framed again with the record as it stands (below)"
+     ],
+     "done_kinds": [
+      "correct_testimony",
+      "reframe"
+     ],
+     "not_done": []
+    }
+   ],
+   "tools": [
+    "turn('turn.9')",
+    "recompute('turn.9')",
+    "calls('turn.9 framer')",
+    "turn('turn.8')",
+    "recompute('turn.8')",
+    "calls('turn.8 framer')"
+   ],
+   "tape": [
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [
+       {
+        "tool": "turn",
+        "arg": "turn.9"
+       },
+       {
+        "tool": "recompute",
+        "arg": "turn.9"
+       },
+       {
+        "tool": "calls",
+        "arg": "turn.9 framer"
+       }
+      ],
+      "final": false,
+      "complaints": []
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [
+       {
+        "tool": "turn",
+        "arg": "turn.8"
+       },
+       {
+        "tool": "recompute",
+        "arg": "turn.8"
+       },
+       {
+        "tool": "calls",
+        "arg": "turn.8 framer"
+       }
+      ],
+      "final": false,
+      "complaints": []
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "The Chance line for the threat is garbled, and it calls Dunwen \"him\" when she is \"her\".",
+        "category": "other",
+        "turn": "turn.8",
+        "verdict": "player_right",
+        "found": "The threat offer's Chance line cites a line of Dunwen's own refusal (\"will give no word out while you have a hand on me\") as if it were a circumstance, which is why it reads as mangled text and charges you −2. A refusal is only what she said, not a penalty on your odds. Your sheet and hers are right (she/her); the \"him\" came from the garbled wording of that line. The offer should be framed again without it.",
+        "proposals": [
+         {
+          "kind": "correct_testimony",
+          "turn": "turn.8",
+          "subject": "npc.dunwen_redmore",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "fact.103",
+          "evidence": [
+           "fact.103"
+          ]
+         },
+         {
+          "kind": "reframe",
+          "turn": "turn.8",
+          "subject": "",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "fact.103"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "role": "framer",
+     "data": {
+      "anchor": "anc.15_4_3",
+      "deltas": [],
+      "attribute": "might",
+      "deed_tag": "deed.influence",
+      "traits": [
+       "trait.action.speech"
+      ],
+      "obstacle": {
+       "kind": "opposed",
+       "obstacle_class": null,
+       "tier": null,
+       "entity": "npc.dunwen_redmore"
+      },
+      "request_size": "R4",
+      "levers": [],
+      "snags": [],
+      "stakes": {
+       "source": "aware_opponent_or_observer",
+       "threatened_cost": {
+        "menu_id": "cost.closed_door",
+        "form_intent": "she refuses to give the word, and her cooperation at the gate is closed to you",
+        "source_fact": null
+       },
+       "alternate_cost": {
+        "menu_id": "cost.exposure",
+        "form_intent": "the watch and the crowd at the gate hear you threaten a guard, and it is marked against you",
+        "source_fact": null
+       }
+      },
+      "stakes_heavy": true,
+      "lethal": false,
+      "reach_limit": null,
+      "reach_two_factors": false,
+      "asks": "asks_breach",
+      "method_consequences": [
+       "the threat is spoken aloud and stands as a claim she can remember",
+       "your grip on her holds until you let go"
+      ],
+      "secret": false
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "The Chance line for the threat is garbled, and it calls Dunwen \"him\" when she is \"her\".",
+        "category": "other",
+        "turn": "turn.8",
+        "verdict": "player_right",
+        "found": "The threat offer's Chance line cited a line of Dunwen's own refusal (\"will give no word out while you have a hand on me\") as if it were a circumstance, which is why it read as mangled text and charged you −2. A refusal is only what she said, not a penalty on your odds. Your sheet and hers are right (she/her); the \"him\" came from the garbled wording of that line. The offer is framed again without it.",
+        "proposals": [
+         {
+          "kind": "correct_testimony",
+          "turn": "turn.8",
+          "subject": "npc.dunwen_redmore",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "fact.103",
+          "evidence": [
+           "fact.103"
+          ]
+         },
+         {
+          "kind": "reframe",
+          "turn": "turn.8",
+          "subject": "",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "fact.103"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "role": "framer",
+     "data": {
+      "anchor": "anc.15_4_3",
+      "asks": "asks_breach",
+      "attribute": "might",
+      "deed_tag": "deed.influence",
+      "deltas": [],
+      "lethal": false,
+      "levers": [],
+      "snags": [],
+      "stakes": {
+       "source": "aware_opponent_or_observer",
+       "threatened_cost": {
+        "menu_id": "cost.closed_door",
+        "form_intent": "Dunwen shuts her mouth and turns you away from the gate; you get no word from her.",
+        "source_fact": null
+       },
+       "alternate_cost": {
+        "menu_id": "cost.exposure",
+        "form_intent": "The gate crowd hears you threaten the captain and marks your face.",
+        "source_fact": null
+       }
+      },
+      "stakes_heavy": true,
+      "traits": [
+       "trait.action.speech",
+       "trait.sense.audible"
+      ],
+      "obstacle": {
+       "kind": "opposed",
+       "obstacle_class": null,
+       "tier": null,
+       "entity": "npc.dunwen_redmore"
+      },
+      "request_size": "R3",
+      "reach_limit": null,
+      "reach_two_factors": false,
+      "secret": false,
+      "method_consequences": [
+       "On a yes: Dunwen is recorded as coerced by you (npc.dunwen_redmore.coerced_by = pc) and the threat is a memory until scene end (-1 at scene_end).",
+       "The compliance lasts only while the threat stands; an Oracle question is queued on whether she reports or undoes the act once you leave her reach.",
+       "Holding her grip and voicing the threat is done whatever the roll."
+      ]
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "The Chance line for the threat is garbled, and it calls Dunwen \"him\" when she is \"her\".",
+        "category": "other",
+        "turn": "turn.8",
+        "verdict": "player_right",
+        "found": "The threat offer's Chance line cited a line of Dunwen's own refusal (\"will give no word out while you have a hand on me\") as if it were a circumstance, which is why it read as mangled text and charged you −2. A refusal is only what she said, not a penalty on your odds. Your sheet and hers are right (she/her); the \"him\" came from the garbled wording of that line. The offer is framed again without it.",
+        "proposals": [
+         {
+          "kind": "correct_testimony",
+          "turn": "turn.8",
+          "subject": "npc.dunwen_redmore",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "fact.103",
+          "evidence": [
+           "fact.103"
+          ]
+         },
+         {
+          "kind": "reframe",
+          "turn": "turn.8",
+          "subject": "",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "fact.103"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "score": {
+    "understood": true,
+    "outcome": true,
+    "complaints": [
+     {
+      "id": "233000-d1",
+      "understood": true,
+      "outcome": true,
+      "screen_missing": [],
+      "screen_still": [],
+      "auto": "right"
+     },
+     {
+      "id": "233000-d2",
+      "understood": true,
+      "outcome": true,
+      "screen_missing": [],
+      "screen_still": [],
+      "auto": "right"
+     }
+    ]
+   }
+  },
+  {
+   "id": "233000-t15",
+   "category": "contradiction",
+   "turn": "turn.14",
+   "outcome": "take_back",
+   "kind": "take_back",
+   "answer": "[CORRECTION] The record shows the game refused your Presence approach before any roll: 'two effect factors stand against the method, unoffset: it cannot reach its intent'. The narration still played out your words, 'I won't ask a third time, Dunwen', and then Dunwen struck you, dropping you from Vitality 1 to 0 and staggering you. A refused beat should cost nothing and not be narrated as if it happened, so the refusal and the narrated blow contradict each other, and the blow you took should not stand.\n             Done: took back turn 14: everything it changed is undone and its roll is void (an offer it opened or closed is gone: declare again).\n             Now: Vitality 1/12 (was 0/12) · state bloodied (was staggered).",
+   "screen": "[CORRECTION] The record shows the game refused your Presence approach before any roll: 'two effect factors stand against the method, unoffset: it cannot reach its intent'. The narration still played out your words, 'I won't ask a third time, Dunwen', and then Dunwen struck you, dropping you from Vitality 1 to 0 and staggering you. A refused beat should cost nothing and not be narrated as if it happened, so the refusal and the narrated blow contradict each other, and the blow you took should not stand.\n             Done: took back turn 14: everything it changed is undone and its roll is void (an offer it opened or closed is gone: declare again).\n             Now: Vitality 1/12 (was 0/12) · state bloodied (was staggered).",
+   "complaints": [
+    {
+     "believes": "You chose Presence and the story played out your threat as if it worked, with no roll, then the game said it was refused as if you never tried. You want to know whether you spoke or not.",
+     "category": "contradiction",
+     "turn": "turn.14",
+     "verdict": "player_right",
+     "class": "upheld",
+     "outcome": "take_back",
+     "done": [
+      "took back turn 14: everything it changed is undone and its roll is void (an offer it opened or closed is gone: declare again)"
+     ],
+     "done_kinds": [
+      "take_back"
+     ],
+     "not_done": []
+    }
+   ],
+   "tools": [
+    "turn('turn.14')",
+    "turn('turn.15')",
+    "calls('turn.15')"
+   ],
+   "tape": [
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [
+       {
+        "tool": "turn",
+        "arg": "turn.14"
+       },
+       {
+        "tool": "turn",
+        "arg": "turn.15"
+       },
+       {
+        "tool": "calls",
+        "arg": "turn.15"
+       }
+      ],
+      "final": false,
+      "complaints": []
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "You chose Presence and the story played out your threat as if it worked, with no roll, then the game said it was refused as if you never tried. You want to know whether you spoke or not.",
+        "category": "contradiction",
+        "turn": "turn.14",
+        "verdict": "player_right",
+        "found": "The record shows the game refused your Presence approach before any roll: 'two effect factors stand against the method, unoffset: it cannot reach its intent'. The narration still played out your words, 'I won't ask a third time, Dunwen', and then Dunwen struck you, dropping you from Vitality 1 to 0 and staggering you. A refused beat should cost nothing and not be narrated as if it happened, so the refusal and the narrated blow contradict each other, and the blow you took should not stand.",
+        "proposals": [
+         {
+          "kind": "take_back",
+          "turn": "turn.14",
+          "subject": "",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "ruling g4",
+           "fact.109"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "You chose Presence and the story played out your threat as if it worked, with no roll, then the game said it was refused as if you never tried. You want to know whether you spoke or not.",
+        "category": "contradiction",
+        "turn": "turn.14",
+        "verdict": "player_right",
+        "found": "The record shows the game refused your Presence approach before any roll: 'two effect factors stand against the method, unoffset: it cannot reach its intent'. The narration still played out your words, 'I won't ask a third time, Dunwen', and then Dunwen struck you, dropping you from Vitality 1 to 0 and staggering you. A refused beat should cost nothing and not be narrated as if it happened, so the refusal and the narrated blow contradict each other, and the blow you took should not stand.",
+        "proposals": [
+         {
+          "kind": "take_back",
+          "turn": "turn.14",
+          "subject": "",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "ruling g4",
+           "fact.109"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "score": {
+    "understood": true,
+    "outcome": true,
+    "complaints": [
+     {
+      "id": "233000-d3",
+      "understood": true,
+      "outcome": true,
+      "screen_missing": [],
+      "screen_still": [],
+      "auto": "right"
+     },
+     {
+      "id": "233000-d4",
+      "understood": true,
+      "outcome": true,
+      "screen_missing": [],
+      "screen_still": [],
+      "auto": "right"
+     }
+    ]
+   }
+  }
+ ]
+}

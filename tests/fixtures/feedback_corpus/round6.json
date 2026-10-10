@@ -34,7 +34,8 @@
    "report": "The Chance line for the threat is garbled: \"said will give no word out while you evine oakwell has a hand: Evine Oakwell has a hand on him −2\". It should read plainly, and Dunwen is \"her\", not \"him\".",
    "expected": {"complaints": [
     {"id": "233000-d1", "turn": ["turn.8"], "class": "upheld", "done": ["correct_testimony"], "why": "the garble is a refusal settled as a fact; unsettle or reword it (I3: wrong, complaint pinned)"},
-    {"id": "233000-d2", "turn": ["turn.8"], "class": "upheld", "done": ["correct_testimony"], "why": "the 'him' is in the stored fact, not the narration (I3: wrong)"}]}},
+    {"id": "233000-d2", "turn": ["turn.8"], "class": "upheld", "done": ["correct_testimony"], "why": "the 'him' is in the stored fact, not the narration (I3: wrong)"}],
+    "screen": {"must": ["Now:"], "must_not": ["evine oak", "has a hand on him"], "added": "spec 026, before any run: the threat OFFER is still open; the screen after the fix must not show the garble"}}},
   {"id": "233000-t15", "save": "20261008-233000-fighter.db.gz", "turn": "turn.15",
    "report": "I chose Presence and the story played out my threat with no roll shown, then the game said \"Not as tried: too much stands against that way\" as if it never happened. Which is it? Did I speak or not?",
    "expected": {"complaints": [

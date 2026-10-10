@@ -175,7 +175,7 @@ def _turn(ctx: TurnContext, message: str, *, choice: str | None, dispute: bool =
                     rec.parts = [PartEntry.model_validate({"text": choice, "class": "DISPUTE", "handled": "answered"})]
             elif dispute:  # rule: 12.3.6
                 rec.parts = [PartEntry.model_validate({"text": message, "class": "DISPUTE", "handled": "answered"})]
-                _dispute(ctx, message, oof)
+                _dispute(ctx, message, oof, rec)
                 beats = []
             else:
                 _scene_open_step(ctx, rec, message)  # PR-12-7: frame a pending (or missing) scene first
@@ -282,7 +282,7 @@ def _adjudicate(ctx: TurnContext, rec: AdjudicationRecord, reader: ReaderResult,
                 oof.append(note)
         elif part.cls == "DISPUTE":
             part.handled = "answered"
-            _dispute(ctx, part.text, oof)
+            _dispute(ctx, part.text, oof, rec)
     if any(p.cls == "DISPUTE" for p in rec.parts) and tx.state.open_pause() is not None \
             and tx.state.open_pause().detail.get("stage") == "dispute":  # type: ignore[union-attr]
         _hold(rec)  # the reliance CHOICE (pause point 9) stops the rest
@@ -657,9 +657,11 @@ def session_answer(ctx: TurnContext, text: str) -> str:  # rule: 12.5.3
             "just say what your character does.")
 
 
-def _dispute(ctx: TurnContext, text: str, oof: list[dict[str, str]]) -> None:  # rule: 12.3.6
+def _dispute(ctx: TurnContext, text: str, oof: list[dict[str, str]],
+             rec: AdjudicationRecord | None = None) -> None:  # rule: 12.3.6
     """12.3.6 through engine.dm.dispute (or an injected `ctx.dispute`); a reliance CHOICE becomes a pause
-    (kind clarify, stage dispute) answered by `settle_dispute(..., choice=)`."""
+    (kind clarify, stage dispute) answered by `settle_dispute(..., choice=)`. A re-framed OFFER's beat (spec 026)
+    joins the record, so the new OFFER, refusal or result is shown and narrated from the declaration's words."""
     if ctx.dispute is not None:
         oof.append({"kind": "NOTE", "text": ctx.dispute(ctx, text)})
         return
@@ -668,6 +670,11 @@ def _dispute(ctx: TurnContext, text: str, oof: list[dict[str, str]]) -> None:  #
     res = settle_dispute(ctx, text)
     # the CHOICE block's question becomes the pause (shown once, with its menu)
     oof.extend({"kind": b.kind, "text": b.text} for b in res.blocks if not (res.choices and "[CHOICE]" in b.text))
+    if res.outcomes and rec is not None:
+        _take(rec, PipelineResult(outcomes=res.outcomes), oof, None)
+        if any(o.status != "paused" for o in res.outcomes):  # resolved now: narrated as the beat, not the report
+            rec.parts.append(PartEntry.model_validate({"text": res.outcomes[0].entry.restatement or text,
+                                                       "class": "DECLARATION", "handled": "resolved"}))
     if res.choices:
         tx = ctx.need_tx()
         claim = dataclasses.asdict(res.claim) if res.claim is not None else None  # the choice re-uses the passage

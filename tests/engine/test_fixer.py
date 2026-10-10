@@ -36,7 +36,7 @@ def _final(*complaints: dict[str, Any]) -> dict[str, Any]:
 
 def _settle(save: Path, turn: str, report: str, script: list[dict[str, Any]], tmp: Path) -> tuple[Any, Any, Any]:
     store = open_at(save, turn, tmp)
-    model = ScriptedModel({Role.FIXER: script}, fallback=False)
+    model = ScriptedModel({Role.FIXER: [*script, script[-1]]}, fallback=False)  # spec 026: the screen check keeps it
     ctx = Ctx(store, RULES, model, turn)
     return settle_dispute(ctx, report), store, model
 
@@ -66,7 +66,7 @@ def test_the_g4_turn_is_taken_back_and_both_complaints_answer_on_one_snapshot(tm
         assert res.records[0]["evidence"] == ["turn('turn.14')", "recompute('turn.14')", "ledger('')"]
         assert [k for k in st.fact_keys if "|correction." in k] == ["npc.dunwen_redmore|correction.1"]  # the old
         # code's pin (dsp.1, turn 9) is all there is: no complaint text is pinned now
-        assert len([c for c in model.calls if c[0] == Role.FIXER]) == 2
+        assert len([c for c in model.calls if c[0] == Role.FIXER]) == 3  # look, decide, check the screen
     finally:
         store.close()
 
@@ -99,8 +99,7 @@ def test_a_correction_writes_the_value_never_the_report(tmp_path: Path) -> None:
         _final({"turn": "turn.8", "found": "The garbled line is a refusal of Dunwen's settled as a fact.",
                 "proposals": [_p("set_fact", subject="npc.dunwen_redmore", key="mood", value=report,
                                  evidence=["turn.8"]),
-                              _p("correct_testimony", fact_id="fact.103"),
-                              _p("rerender", turn="turn.8")]})], tmp_path)
+                              _p("correct_testimony", fact_id="fact.103")]})], tmp_path)
     try:
         st = store.state
         pred = "said.will_give_no_word_out_while_pc_evine_oakwell_has_a_hand"
@@ -133,11 +132,13 @@ def test_the_investigation_is_bounded(tmp_path: Path) -> None:
     """3-6 tool calls (feedback.investigate.steps): a Fixer that keeps asking is made to decide."""
     store = open_at(FIGHTER, "turn.9", tmp_path)
     greedy = _calls(("search", "word"), ("ledger", ""), ("said", ""))
-    model = ScriptedModel({Role.FIXER: [greedy, greedy, greedy, _final({"found": "Done looking."})]}, fallback=False)
+    done = _final({"found": "Done looking."})
+    model = ScriptedModel({Role.FIXER: [greedy, greedy, greedy, done, done]}, fallback=False)
     try:
         res = settle_dispute(Ctx(store, RULES, model, "turn.9"), "something is off")
         assert len(res.records[0]["evidence"]) == MAX_STEPS and res.text.startswith("[FIX] Done looking.")
-        assert len(model.calls) == 4  # two answers of three calls, a third refused (no calls left), the decision
+        assert len(model.calls) == 5  # two answers of three calls, a third refused (no calls left), the decision,
+        # and the screen check (spec 026), which keeps it
     finally:
         store.close()
 

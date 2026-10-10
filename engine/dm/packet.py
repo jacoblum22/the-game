@@ -128,6 +128,133 @@ def background_line(data: Mapping[str, Any]) -> str:  # rule: 12.11.3
     return "  background (use or leave out as you like; nothing requires it): " + "; ".join(bits) if bits else ""
 
 
+# ---------------------------------------------------------------- the people card (DL-12-116)
+
+_PLAIN_LICENCE = {"lic.lang.letters": "Letters (reads and writes)"}
+_STATION = ("rank", "title", "office")  # facts about a person's station, shown on the card (the guard knows a rank)
+CARD_KEYS = frozenset({"pronouns", "people", "role", "licenses", "speaks", "competence", "stance", "member_of",
+                       "livelihood", "upbringing", "refusals"})  # what the card says: not dumped again as raw data
+
+
+def _bare_words(tag: Any) -> str:
+    return str(tag).rsplit(".", 1)[-1].replace("_", " ")
+
+
+def _named(rules: Any, rid: Any, *getters: str) -> str:
+    """A rules entry's `name` (a licence, a language, an origin), else the id's last part in words."""
+    for g in getters:
+        try:
+            x = getattr(rules, g)(str(rid))
+            if x is not None and x.get("name"):
+                return str(x["name"])
+        except Exception:  # noqa: BLE001, S112 - not in that table: try the next, then plain words
+            continue
+    return _bare_words(rid)
+
+
+def _licence_words(rules: Any, lid: str, grade: Any) -> str:
+    if lid in _PLAIN_LICENCE:
+        return _PLAIN_LICENCE[lid]
+    name = _named(rules, lid, "license", "get")
+    if lid.startswith("lic.lang."):
+        return f"speaks {name}" + (f" ({grade})" if grade else "")
+    return name + (f" ({grade})" if grade and grade != "permanent" else "")
+
+
+def people_card(state: WorldState, eid: str, *, rules: Any = None, hidden: bool = False) -> list[str]:
+    # rule: 12.2.4
+    # rule: PR-12-11
+    """DL-12-116: one person in plain words, the same card for the Reader, the Framer, the Narrator and the Fixer: who
+    they are (name as the PC knows it, pronouns, people, role; the PC's livelihood and upbringing), what they can do
+    (licences by name and grade, competences), their stance and standing toward the PC, the PC's bond to them, and
+    their station on record (a rank, a title, a membership). Line 1 is the head; the rest are indented. A sealed person
+    is their slice only. A play role never sees a sealed field (motives stay where 12.10.1 puts them); `hidden=True`
+    (the Fixer) adds the refusals on record, marked as hidden from the player. Never ids, never slugs."""
+    e = state.entities.get(eid)
+    if e is None:
+        return []
+    seal = state.seals.get(eid)
+    if seal is not None:
+        return [seal.slice] if seal.slice else []
+    rules = rules if rules is not None else load_rules()
+    d = e.data
+
+    def has(k: str) -> bool:
+        return d.get(k) not in (None, "", [], {}) and (hidden or k not in e.sealed_fields) \
+            and f"{eid}#{k}" not in state.seals
+
+    pc = pc_id(state)
+    who = [str(d["pronouns"])] if has("pronouns") else []
+    if has("people"):
+        who.append(_named(rules, d["people"], "origin").lower())
+    if eid == pc:
+        bits = ["the player's character"]
+        if has("livelihood"):
+            bits.append(_named(rules, d["livelihood"], "origin").lower())
+        if has("upbringing"):
+            bits.append(f"upbringing: {_named(rules, d['upbringing'], 'origin').lower()}")
+        what = ", ".join(bits)
+    else:
+        what = next((str(d[k]) for k in ("role", "trade", "occupation") if has(k)), e.kind)
+    out = [f"{display_name(state, eid)}" + (f" ({'; '.join(who)})" if who else "") + f": {what}"]
+    held: dict[str, Any] = {}
+    for x in state.licenses.get(eid, []):
+        held[x.license_id] = x.grade
+    for x in d.get("licenses") or () if has("licenses") else ():
+        if isinstance(x, Mapping) and x.get("id"):
+            held.setdefault(str(x["id"]), x.get("grade"))
+    for x in d.get("speaks") or () if has("speaks") else ():
+        held.setdefault(str(x), None)
+    lic = [_licence_words(rules, k, v) for k, v in held.items()]
+    out.append("  can: " + ("; ".join(lic) if lic else "no licences on record"))
+    comp = d.get("competence") if has("competence") else None
+    pairs = (list(comp.items()) if isinstance(comp, Mapping) else
+             [(c.get("tag"), c.get("value")) for c in comp or () if isinstance(c, Mapping)])
+    good = [f"{_bare_words(t)} {int(v):+d}" for t, v in pairs if t and isinstance(v, int) and v]
+    if good:
+        out.append("  good at: " + ", ".join(good))
+    if has("stance") and isinstance(d["stance"], Mapping):
+        s = d["stance"]
+        toward = {"pc": "you", "incident": "the matter at hand"}.get(str(s.get("toward") or ""),
+                                                                   _bare_words(s.get("toward") or "")) or ""
+        # the why only for the Fixer: it can name a case placement ("holds a placement of the incident's case")
+        out.append(f"  stance: {s.get('stance')}" + (f" ({toward})" if toward else "")
+                   + (f": {s['why']}" if hidden and s.get("why") else ""))
+    if pc and eid != pc:
+        from engine.world.social import standing
+
+        v = standing(state, eid, pc)
+        if v is not None:
+            row = next((r for r in rules.social.get("standing_effects") or () if int(r["standing"]) == v), None)
+            out.append(f"  toward you: {row['name'] if row else v}")
+        bonds = [str(f.value.get("kind") or "bond") for f in state.facts.values()
+                 if f.subject == pc and f.predicate.startswith("bond.") and isinstance(f.value, dict)
+                 and f.value.get("npc") == eid and state.current_fact_id(f.subject, f.predicate) == f.id]
+        if bonds:
+            out.append(f"  your bond: {', '.join(bonds)}")
+    station = [f"{f.predicate}: {_short(f.value)}" for f in state.facts.values()
+               if f.subject == eid and f.predicate in _STATION and f.value not in (None, False)
+               and f.id not in state.seals and (hidden or f.visibility != "sealed")
+               and state.current_fact_id(f.subject, f.predicate) == f.id]
+    if has("member_of"):
+        station.append("member of: " + ", ".join(
+            display_name(state, str(m)) if str(m) in state.entities and str(m) not in state.seals
+            else _bare_words(m) if str(m).startswith(("fac.", "org.")) else str(m) for m in d["member_of"]))
+    if station:
+        out.append("  " + "; ".join(station))
+    if hidden and d.get("refusals"):
+        refs = [str(r.get("text") or r.get("kind")) if isinstance(r, Mapping) else str(r) for r in d["refusals"]]
+        out.append("  refusals (hidden from the player: explain their effect, never quote them): " + "; ".join(refs))
+    return out
+
+
+def _carded(state: WorldState, entities: list[dict[str, Any]], only: set[Any] | None = None) -> list[dict[str, Any]]:
+    """Each person in a view block gets their people card (`card`), printed in place of their raw data."""
+    return [{**e, "card": people_card(state, e["id"])} if "slice" not in e and e["id"] in state.entities
+            and state.entities[e["id"]].kind in CAST_KINDS and (only is None or e["id"] in only) else e
+            for e in entities]
+
+
 # ---------------------------------------------------------------- view
 
 
@@ -337,11 +464,13 @@ def view_for(role: Role, state: WorldState, ctx: Mapping[str, Any] | None = None
     pc = pc_id(state)
     if role in (Role.NARRATOR, Role.WORLD):  # the Director keeps every thread: picking leads is its job
         view["threads"] = _touched_threads(state, view["threads"], [*focus, *spot], str(ctx.get("message") or ""))
+    target = None
     if role == Role.NARRATOR:
         view = _no_motives(view)
+        view["entities"] = _carded(state, view["entities"])  # the shared people card (DL-12-116)
     elif role == Role.READER:
         view = {"time": view["time"], "scene": view["scene"], "also_here": view["also_here"],
-                "entities": [_slim(e) for e in view["entities"]],
+                "entities": _carded(state, [_slim(e) for e in view["entities"]]),
                 "licenses": {k: v for k, v in view["licenses"].items() if k == pc},
                 "conditions": [c for c in view["conditions"] if c.get("target") == pc],
                 "spotlight": [ln for ln in view["spotlight"] if not ln.startswith("    ")],
@@ -351,7 +480,7 @@ def view_for(role: Role, state: WorldState, ctx: Mapping[str, Any] | None = None
         place = state.scene.place_id if state.scene else None
         full = {target, place}
         view = _no_motives(view) | {
-            "entities": [e if e["id"] in full else _slim(e, ()) for e in view["entities"]],
+            "entities": _carded(state, [e if e["id"] in full else _slim(e, ()) for e in view["entities"]], {target}),
             "facts": [f for f in view["facts"] if f.get("subject") in {*full, pc}],
             "licenses": {}, "quantities": {k: v for k, v in view["quantities"].items() if k in full},
             "clocks": [], "threads": {}, "known": {}, "cards": [],
@@ -361,6 +490,9 @@ def view_for(role: Role, state: WorldState, ctx: Mapping[str, Any] | None = None
                        "positions": {k: v for k, v in view["positions"].items() if k == pc},
                        "licenses": {}, "quantities": {}, "conditions": []}
     text = render_view(view)
+    if role == Role.FRAMER and target in state.entities and state.entities[target].kind in CAST_KINDS \
+            and not any(e["id"] == target for e in view["entities"]):  # a target not in view still has a record
+        text += "\nthe target (people card):\n" + "\n".join(people_card(state, target))
     if role == Role.NARRATOR:  # 12.2.4 item 3: who everyone here, in the spotlight or named is
         people = [e["id"] for e in view["entities"] if e["id"] in state.entities]
         lines = identity_lines(state, [*people, *spot, *(view.get("also_here_ids") or [])],
@@ -551,9 +683,14 @@ def _entity_lines(view: Mapping[str, Any], e: Mapping[str, Any]) -> list[str]:
                                "in the id) until the record says it was given", forms))
     if e.get("exists") not in (None, "exists"):
         lines.append(f"  state: {e['exists']}")
-    if e.get("tags"):
+    card = e.get("card") or []
+    if e.get("tags") and not card:
         lines.append(f"  tags: {_short(e['tags'])}")
+    if card:  # a person: the shared people card (DL-12-116), then only what describes them beyond it
+        lines.append(f"  who: {card[0]}")
+        lines.extend(card[1:])
     keys = [k for k in _DESCRIPTIVE_KEYS if k in data] + [k for k in data if k not in _DESCRIPTIVE_KEYS]
+    keys = [k for k in keys if k not in CARD_KEYS] if card else keys
     for k, v in [(k, data[k]) for k in keys if k not in _BACKGROUND][:MAX_DATA_KEYS]:
         if k not in ("name", "name_known"):
             lines.append(f"  {k}: {own_words(_short(v), forms) if k in _TEMPLATED else _short(v)}")
@@ -567,7 +704,7 @@ def _entity_lines(view: Mapping[str, Any], e: Mapping[str, Any]) -> list[str]:
     conds = [c for c in view.get("conditions", []) if c.get("target") == eid]
     if conds:
         lines.append("  conditions: " + "; ".join(f"{c['condition_id']} {c['severity']}" for c in conds))
-    lic = (view.get("licenses") or {}).get(eid, [])
+    lic = [] if card else (view.get("licenses") or {}).get(eid, [])
     if lic:
         lines.append("  licences: " + ", ".join(f"{x['license_id']} ({x.get('grade', '')})" for x in lic))
     pos = (view.get("positions") or {}).get(eid)
