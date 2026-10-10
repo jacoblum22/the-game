@@ -354,3 +354,54 @@ Score: 1 right, 0 unclear, 2 wrong of 3. All 3 were tool limits, not Sonnet.
   - C: per topic, but a refusal always points to someone who would know.
 
   *Recommended:* A, with C's pointer when they refuse.
+
+## 6. Owner follow-up (2026-10-09): history traces and T2 research
+
+The owner approved T1 and T4. They asked for T5 to be explained more, which was done in the conversation, using the
+same four-part format. They also asked why T3, T6 and T7 recurred when each was supposedly fixed, and how other
+systems handle details nobody has decided (T2). Reports: `round7-investigation/R7-H1-repetition-history.md`,
+`R7-H2-rolls-fix-history.md` and `R7-R1-improvised-details.md`.
+
+- **T3, same cause, never fixed in general.** Each earlier fix covered one surface:
+  - place looks (spec 018);
+  - activities (013);
+  - lead lines (020);
+  - speech openers (P-078).
+
+  People's looks and habits, "X brought the word" and the labels sit on surfaces no fix reached. There is also a
+  regression: spec 009 B replaced the P-030 word scan with usage marks, but the seed never stores looks and habits
+  where the marks can see them, so the marks fired 0 times in round 7. The rule 12.14.11 exempts "an NPC's recorded
+  habit" as a callback, and the refusal line requires the habit (`npc_layer.py:491`). Two recorded "revisit if"
+  conditions were met and not acted on: DL-12-99, and handoff §4 on speech habits.
+
+  *Fix, this time:* one offer-once-per-scene gate for all standing texture, marked used when code offers it rather
+  than by matching prose, with the habit exemptions removed. Keep a cheap repeated-image backstop that covers
+  closings. Add a test that flags any packet line repeated word for word across a scene.
+- **T6, a regression, not a rule never built.** Before spec 007, the Reader could mark a beat "take the time" and
+  the roll was skipped: round-1 saves hold 65 no-roll successes. Spec 007 removed the field and chose not to compute
+  "can failure cost anything?" in code; there have been 0 no-roll successes in 13 saves since. P-024 (the door) was
+  fixed at the screen (auto-commit), not the roll. The explorer's half-answered persuasion is different: spec 018's
+  "already agreed" check needs 60% word overlap both ways, so it missed the narrower ask.
+
+  *Fix, this time:* code computes "no stakes source → no roll". "Already agreed" is judged against the typed goal,
+  not by word overlap.
+- **T7, measured on the wrong set.** Spec 022's 10/3/2 was scored on the disputes its prompt was tuned on. The
+  held-out set scored 4/1/2 of 7. Only 1 of the 15 disputes concerned an open offer, and the scorer marked a wrong
+  re-render right, because it checks only the outcome class. Since spec 014, complaints about an open offer only
+  ever get an explanation.
+
+  *Fix, this time:* the missing tools (licences, re-framing a waiting offer), scored on held-out live complaints that
+  include open offers, with a scorer that checks the actual repaired output.
+- **Shared lesson.** Each fix was fitted to the last round's cases and accepted on those cases alone. Proposed
+  process change: every fix's gate includes made-up breadth cases (as in the families' "another example") plus a
+  held-out set, and each round checks the recorded "revisit if" conditions.
+- **T2 research.**
+  - Tabletop practice (Apocalypse World, Blades, Ironsworn, the Three Clue Rule, GUMSHOE) improvises flavour around a
+    small written core. AI game-masters report the same failure modes we would risk: narrated money then spent
+    (Hidden Door), contradiction rates of 40–68% (NCP-Bench), and leaked secrets.
+  - Our rules already forbid coin from narration (economy AI-6), and seeded notices already roll their issuer and
+    contact.
+  - *Recommended (Option 2):* code decides a hook's money, destination, issuer and people when the hook is created.
+    The model improvises everything else as testimony. Each speaker sees what others said on the topic, a price
+    outside a hook uses the price band, and a place first heard in speech gets a real site when the player travels
+    there.
