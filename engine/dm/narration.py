@@ -98,7 +98,7 @@ class _Sent(BaseModel):
     decl: Sentence
     failures: list[Failure] = Field(default_factory=list)
     dropped: bool = False
-    used: list[str] = Field(default_factory=list)  # detail facts it states (written or restated): usage marks at T12
+    orig: str = ""  # the sentence as it stands in the passage: where it is, so delivery keeps the passage (P1)
 
     @property
     def ok(self) -> bool:
@@ -239,7 +239,6 @@ def _write_new(ctx: TurnContext, record: AdjudicationRecord, s: _Sent, idx: Scen
                                             "implied": [i.model_dump() for i in el.implied]})
                 profile_diff(m, known, tx=tx, rules=ctx.rules, res=res, because=because)
                 record.add_writes(tx.events[start:])
-                s.used += res.details_used
                 for name, slot, prior in res.contradictions:
                     if _blocking_slot(slot, prior):
                         s.failures.append(Failure(why=f"{name}'s {slot} is established otherwise", fix="redraft",
@@ -382,7 +381,7 @@ def _precision(ctx: TurnContext, record: AdjudicationRecord, turn: _Turn, sents:
     before = [voices(sents[j].decl)[0] for j in range(i) if not sents[j].dropped]
     for h in precision_checks(narration, idx=idx, before=before, speech=speech, about=s.decl.about,
                               season=calendar_season(ctx.need_tx().state), rules=ctx.rules,
-                              beat=passage_beat(record.beats), pause=record.pause):
+                              beat=passage_beat(record.beats), pause=record.pause, speaker=s.decl.speaker):
         _log(ctx, turn, i, h.cls, "contradicted" if h.blocks else "logged", h.store_value, check=h.check,
              voice=h.voice, words=h.words, subject=h.subject, blocks=h.blocks, source="precision")
         _count(turn, f"precision.{h.check}")
@@ -442,15 +441,34 @@ def _names(ctx: TurnContext, ids: Sequence[str]) -> list[str]:
     return [st.entities[i].name for i in ids if i in st.entities]
 
 
-def _text(sents: Sequence[_Sent]) -> str:
-    return " ".join(s.decl.text for s in sents if not s.dropped and s.decl.text)
+def _text(sents: Sequence[_Sent], source: str = "") -> str:  # rule: 12.3.3
+    """P1: the passage as written. Each kept sentence stands where it stood in `source` (the model's passage), with
+    the whitespace before it, so paragraphs survive (round 7: 21 of 43 drafts had paragraph breaks, 0 of 43
+    deliveries); code's edits to a sentence (quoting) are applied in place; a cut sentence goes with the space before
+    it, and a paragraph break it opened passes to the next kept sentence; a line code adds (a rendered must-name
+    item, which has no place in the passage) joins with a space. The split is only an index into the passage."""
+    out: list[str] = []
+    at, carry = 0, ""
+    for s in sents:
+        i = source.find(s.orig, at) if s.orig and source else -1
+        gap = (source[at:i] or " ") if i >= 0 else " "
+        if i >= 0:
+            at = i + len(s.orig)
+        if s.dropped or not s.decl.text:
+            carry = carry or (gap if "\n" in gap else "")
+            continue
+        if carry and "\n" not in gap:
+            gap = carry
+        carry = ""
+        out.append((gap if out else "") + s.decl.text)
+    return "".join(out).strip()
 
 
 def _draft(ctx: TurnContext, record: AdjudicationRecord, turn: _Turn, passage: Passage, out: NarrationResult,
            kind: str) -> _Draft:  # rule: PR-12-2
     """One passage parsed into code's sentences, judged, and recorded as a draft version."""
     sents, unplaced = sentences_of(passage)
-    d = _Draft(passage=passage, sents=[_Sent(decl=x) for x in sents])
+    d = _Draft(passage=passage, sents=[_Sent(decl=x, orig=x.text) for x in sents])
     version: dict[str, Any] = {"kind": kind, "text": passage.text, "side_list": passage.model_dump(exclude={"text"}),
                                "mentions": [], "claims": [], "verdicts": []}
     out.draft_versions.append(version)
@@ -528,8 +546,11 @@ def _deliver(ctx: TurnContext, record: AdjudicationRecord, turn: _Turn, d: _Draf
     lines = [_Sent(decl=Sentence(text=by_handle[h].render, refs=[h])) for h in rendered]
     at = len(kept) - (1 if kept[-1].decl.text.rstrip(_CLOSE).endswith("?") else 0)
     final = [*kept[:at], *lines, *kept[at:]]
-    _mark_used(ctx, final)
-    text = _text(final)
+    # every sentence, cut ones too, in passage order, the rendered lines before the closing question: the cuts close
+    # their gaps and the paragraphs stay (P1). No usage marks are set (12.14.11; PR-12-1 T12).
+    close = kept[at] if at < len(kept) else None
+    ordered = [x for s in sents for x in ([*lines, s] if s is close else [s])] + (lines if close is None else [])
+    text = _text(ordered, d.passage.text)
     had_prompt = sents[-1].decl.text.rstrip(_CLOSE).endswith("?")
     if had_prompt and record.pause is None and not text.rstrip(_CLOSE).endswith("?"):
         text += " What do you do?"  # 12.3.3: the open prompt (12.14.9), restored by code because a cut removed it
@@ -588,29 +609,6 @@ def _said(ctx: TurnContext, record: AdjudicationRecord, passage: Passage, kept: 
                     and re.search(rf"\b{re.escape(e.name.lower())}\b", low):
                 learn_name(ctx.time_ctx(), record.pc, eid, "heard")
     add_said(ctx, out.said[start:])
-
-
-def _mark_used(ctx: TurnContext, final: Sequence[_Sent]) -> None:  # rule: 00.6.6a
-    # rule: 12.14.11
-    """T12 usage marks (00.6.6a item 5, DL-12-76): each established detail the delivered passage states (one its words
-    wrote or restated, or a detail of someone it names whose words it repeats) gets `last_used` = this turn;
-    freshness reads them."""
-    from engine.audit import text as atx
-    from engine.store.details import used_event
-
-    tx = ctx.need_tx()
-    st = tx.state
-    used = [u for s in final for u in s.used if u in st.facts]
-    named = {a for s in final for a in s.decl.about}
-    text = _text(final)
-    for eid in named:
-        for r in (st.details.get(eid) or {}).values():
-            f = st.facts.get(r.fact_id)
-            if f is not None and f.value is not None and f.persistence != "scene" \
-                    and len(atx.content(f.value)) >= 2 and atx.covers(f.value, text, ratio=0.8):
-                used.append(r.fact_id)
-    if used:
-        tx.add(used_event(list(dict.fromkeys(used))))
 
 
 def _fallback(ctx: TurnContext, record: AdjudicationRecord, out: NarrationResult, verdicts: Sequence[Verdict],

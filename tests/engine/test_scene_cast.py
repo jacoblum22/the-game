@@ -88,7 +88,9 @@ def test_one_label_per_unintroduced_npc(tmp_path: Path, rules: Any) -> None:
     assert display_name(st, "npc.borvald") == "the boatman"  # one person, not "the boatman or sailor"
     assert find_existing(st, "the boatman", "npc") == "npc.borvald"  # the label finds him again
     setting = scene_setting(st)
-    assert 'call them "the boatman"' in setting and 'call them "the herb-wife"' in setting
+    # spec 024 (DL-12-114): the label is who they are, never an order to repeat it word for word
+    assert "present: the boatman" in setting and "present: the herb-wife" in setting and "call them" not in setting
+    assert setting.count("name not known to the character") >= 2
     leads = stuck_answer(st)
     assert "the boatman, here with you" in leads and "innkeeper" not in leads
     with store.transaction("turn.1") as tx:  # a walk-on made from prose keeps the prose's words as their label

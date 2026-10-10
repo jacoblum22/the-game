@@ -3,28 +3,28 @@
 - [x] T1 Trace on copies of the round-7 saves: standing-line inventory; talker turn.12/13; explorer turn.4/5;
       fighter turn.1 (plan "Trace first").
 - [x] T2 Write and label the made-up and edge cases (`cases.md`); commit before implementing.
-- [ ] T3 [US2] `effective_degree` and `undecided` in `dm/adjudication.py`; readers: `npc_layer` (talk outcome,
+- [x] T3 [US2] `effective_degree` and `undecided` in `dm/adjudication.py`; readers: `npc_layer` (talk outcome,
       response rows), `answer.willingness`, `scene_state._band`, `world_step._ok`, `audit/claims` (`_beat_success`,
       `undecided` re-exported), `audit/fallback._beat_line`, `handles.items`, `roles/narrator` (beat line, reading).
-- [ ] T4 [US2] Paused beat unresolved: `_beat_line` and the handle render carry no result; not owed; `_speech_line`
+- [x] T4 [US2] Paused beat unresolved: `_beat_line` and the handle render carry no result; not owed; `_speech_line`
       says the paused ask's target has not answered yet.
-- [ ] T5 [US1] Pronoun helpers in `packet.py`; fill in view background, `present:` lines, name-unknown lines, refusal,
+- [x] T5 [US1] Pronoun helpers in `packet.py`; fill in view background, `present:` lines, name-unknown lines, refusal,
       willingness, activity and response rows, NPC act lines.
-- [ ] T6 [US1] `packet.py`: background line for look/manner/voice (habit occasional); `present:` look only when
+- [x] T6 [US1] `packet.py`: background line for look/manner/voice (habit occasional); `present:` look only when
       `full`; drop "call them" and "every other screen"; drop the incident line; news as gist; header wording.
-- [ ] T7 [US1] `narrator.py`: delete freshness (`freshness_lines`, `_repeated_lines`, `_freshness`, `used_details`);
+- [x] T7 [US1] `narrator.py`: delete freshness (`freshness_lines`, `_repeated_lines`, `_freshness`, `used_details`);
       lead notes as gist; impetus wording; optional-material wording; `narration.py`: delete `_mark_used` and
       `_Sent.used`. `prompts/narrator.md`: background line, impetus.
-- [ ] T8 [US1] `npc_layer.voiced_refusal` without the habit; `incident_line` as data.
-- [ ] T9 [US3] `narration._text(sents, source)`: the passage as written.
-- [ ] T10 [US4] P4 `_withheld` on refusals only; P5 "any posted notice", READING precision, pronoun tag precision,
+- [x] T8 [US1] `npc_layer.voiced_refusal` without the habit; `incident_line` as data.
+- [x] T9 [US3] `narration._text(sents, source)`: the passage as written.
+- [x] T10 [US4] P4 `_withheld` on refusals only; P5 "any posted notice", READING precision, pronoun tag precision,
       notice separator (`world_seed.yaml`); P6 `longhorizon.py` labels.
-- [ ] T11 Data: delete `habit_max_per_scene` and the retired freshness keys (`pacing.yaml`); pronoun-fill rule lines
+- [x] T11 Data: delete `habit_max_per_scene` and the retired freshness keys (`pacing.yaml`); pronoun-fill rule lines
       on the person tables (`oracles.yaml`); validator 0/0.
-- [ ] T12 Tests: `tests/engine/test_spec024_cases.py` (every case in `cases.md`); update the freshness and texture
+- [x] T12 Tests: `tests/engine/test_spec024_cases.py` (every case in `cases.md`); update the freshness and texture
       tests that asserted the retired behaviour.
-- [ ] T13 `replay_r7.py`: rebuild the round-7 talker and explorer narrator packets; C10, C24, C25.
-- [ ] T14 Full suite, replay re-recorded, ruff, pyright, validator, `longhorizon --mode scripted`.
+- [x] T13 `replay_r7.py`: rebuild the round-7 talker and explorer narrator packets; C10, C24, C25.
+- [x] T14 Full suite, replay re-recorded, ruff, pyright, validator, `longhorizon --mode scripted`.
 - [ ] T15 Live talker playtest (Haiku, player Sonnet, ≤15 turns); `measure.py`.
 - [ ] T16 Merge milestone-1-playable, regenerate, full suite; `implementation-results.md`; hand-offs.
 

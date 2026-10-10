@@ -18,7 +18,7 @@ from typing import Literal
 
 from pydantic import BaseModel, Field
 
-from engine.dm.adjudication import AdjudicationRecord
+from engine.dm.adjudication import AdjudicationRecord, paused_beat
 
 Kind = Literal["scene", "beat", "cost", "harm", "condition", "position", "learned", "change", "oracle", "npc",
                "activity", "omen", "note"]
@@ -50,7 +50,7 @@ def _owed(b: object, paused: bool) -> bool:  # rule: 12.14.12
     """A beat the narration owes: it has a result (a degree, or "no roll"), or it simply happened (no gate words);
     not one refused, redirected or withdrawn (its block says so) and not the one a pause holds."""
     degree, gate_words = getattr(b, "degree", None), getattr(b, "gate_words", "") or ""
-    return degree is not None or gate_words.startswith("no roll") or (not gate_words and not paused)
+    return not paused and (degree is not None or gate_words.startswith("no roll") or not gate_words)
 
 
 def _note_render(note: str) -> str:  # rule: 12.3.3
@@ -105,8 +105,9 @@ def items(record: AdjudicationRecord, *, names: Mapping[str, str] | None = None)
     if record.scene.started and not record.scene.cut:  # framed before the beats (PR-12-7)
         add("scene", False, [], _sentence(record.scene.header) if record.scene.header else "")
     for n, b in enumerate(record.beats):
-        paused = record.pause is not None and n == len(record.beats) - 1 and b.degree is None
-        add("beat", _owed(b, paused),[x for x in (b.actor or pc, *b.targets) if x], _beat_line(b, pc, names), beat=n)
+        paused = paused_beat(record, n)  # unresolved until the player chooses (12.2.6; DL-12-115)
+        add("beat", _owed(b, paused), [x for x in (b.actor or pc, *b.targets) if x], _beat_line(b, pc, names, paused),
+            beat=n)
         for i, c in enumerate(b.costs):
             add("cost", True, [pc or ""], _sentence(c.form) if c.form else "It comes at a cost.", beat=n, index=i,
                 text=c.form)

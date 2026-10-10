@@ -43,7 +43,7 @@ def test_the_narrator_sees_a_stranger_by_role_until_named(tmp_path: Path) -> Non
     st = dock.state
     view, setting = render_view(scene_view(st)), scene_setting(st)
     assert "Tam Harlan" not in setting and "present: the ferryman" in setting
-    assert "name: the ferryman" in view and "does not know their name" in view and "Tam Harlan" not in view
+    assert "name: the ferryman" in view and "does not know his name" in view and "Tam Harlan" not in view
     assert "Sela Vey" in view  # an NPC without the flag is unchanged
     assert name_of(st, dock.ferryman) == "the ferryman"
     assert entity_lines(st, [dock.ferryman])[0].startswith(f"{dock.ferryman}: the ferryman, Tam Harlan")

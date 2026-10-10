@@ -215,3 +215,27 @@ class AdjudicationRecord(BaseModel):
 
     def dump(self) -> dict[str, Any]:
         return self.model_dump(mode="json", by_alias=True)
+
+
+def undecided(b: BeatEntry, pause: Any = None) -> bool:  # rule: 01.9.3
+    """The beat waits on the near-miss choice (01.9.3): its recorded degree is `failure`, but whether it lands is
+    the player's pick, so neither result may be narrated yet (12.2.6; DL-12-115)."""
+    return bool(b.near_miss and not b.success_at_cost and pause is not None
+                and getattr(pause, "kind", None) == "near_miss" and getattr(pause, "frame_id", None) == b.frame_id)
+
+
+def effective_degree(b: BeatEntry, pause: Any = None) -> str | None:  # rule: 01.9.3
+    """DL-01-48: the one outcome every reader uses. A success at a cost taken is `success`; a beat waiting on its
+    near-miss choice (`pause`, the turn's open pause) has none yet; else the rolled degree (None: no roll)."""
+    if undecided(b, pause):
+        return None
+    return "success" if b.success_at_cost else b.degree
+
+
+def paused_beat(record: AdjudicationRecord, n: int) -> bool:  # rule: 12.2.6
+    """Beat `n` is the one the open pause holds before its outcome (an OFFER, a redirect, a warning, a near-miss
+    choice): unresolved in the narrator's record, no result words and not owed (DL-12-115)."""
+    if record.pause is None or n != len(record.beats) - 1:
+        return False
+    b = record.beats[n]
+    return (b.degree is None and not b.gate_words.startswith("no roll")) or undecided(b, record.pause)

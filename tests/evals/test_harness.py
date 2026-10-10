@@ -148,7 +148,10 @@ def test_short_runs_complete() -> None:
         scripted = lh.run_scripted(7, 14, "offline", Path(tmp))
     assert any("view tokens at scene 6" in s and "narrator" in s for s in aged)
     assert any(s.startswith("- recall probes: 3;") for s in aged)
-    assert any(s.startswith("- novelty-4") for s in scripted) and "- engine errors: 0" in scripted
+    # P6 (spec 024): offline narration lines are labelled stub plumbing, never reported as narration measures
+    assert any(s.startswith("- [offline stub") and "novelty-4" in s for s in scripted)
+    assert not any(s.startswith(("- novelty-4", "- narration loop")) for s in scripted)
+    assert "- engine errors: 0" in scripted
     assert "- disputes per 100 narrated turns: 0.0 (upheld 0.0)" in scripted
 
 

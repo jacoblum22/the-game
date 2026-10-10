@@ -26,7 +26,7 @@ from typing import Any, Literal
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from engine.audit import text as tx
-from engine.dm.adjudication import AdjudicationRecord, BeatEntry
+from engine.dm.adjudication import AdjudicationRecord, BeatEntry, effective_degree, undecided
 from engine.retrieve.scene import cannot_read
 from engine.store.projection import WorldState
 from engine.store.views import item_words, name_known, unnamed_label
@@ -1148,7 +1148,7 @@ def _beat_success(b: BeatEntry) -> bool:
     if b.degree is None and b.gate_words and b.gate != "G0" and not b.gate_words.startswith("no roll"):
         return False  # refused or withdrawn before any result (pipeline `_entry` gate words)
     if b.degree is not None:
-        return b.degree in ("success", "critical_success") or b.success_at_cost
+        return effective_degree(b) in ("success", "critical_success")  # DL-01-48
     return not (b.gate or "").lower().startswith(("g3", "g4", "redirect", "refus"))
 
 
@@ -1160,14 +1160,6 @@ _PLAIN_FAIL = ["fail", "fails", "failed", "in vain", "no luck", "won't budge", "
                "misses", "nothing but air", "slip through your grip", "slip from your grip"]
 _PLAIN_WIN = ["you succeed", "it works", "you manage", "gives way", "you make it", "you do it", "it gives"]
 UNDECIDED = "a near miss not yet decided"
-
-
-def undecided(b: BeatEntry, pause: Any = None) -> bool:  # rule: 01.9.3
-    """The beat waits on the near-miss choice (01.9.3): its recorded degree is `failure`, but whether it lands is
-    the player's pick, so neither result may be narrated yet."""
-    return bool(b.near_miss and not b.success_at_cost and pause is not None
-                and getattr(pause, "kind", None) == "near_miss" and getattr(pause, "frame_id", None) == b.frame_id)
-
 
 def passage_beat(beats: Iterable[BeatEntry]) -> BeatEntry | None:  # rule: 12.3.1
     # rule: 12.3.1b
@@ -1340,6 +1332,10 @@ _OTHER_ANTECEDENT = re.compile(
     r"everyone|nobody|fellow|figure|rider|traveller|traveler|priest|priestess|merchant|clerk|servant|soldier|elder|"
     r"lord|lady|king|queen|god|goddess|dog|hound|horse|mare|stallion|pony|cat|ox|goat|bird|raven|crow|beast)\b", re.I)
 _QUOTE_RE = re.compile(r"[\"“][^\"”]*[\"”]")
+# a speech tag: the pronoun of whoever speaks the sentence's quoted words (P5)
+_TAG_RE = re.compile(r"\b(he|she)\s+(?:\w+ly\s+)?(?:says|said|asks|asked|adds|added|answers|replies|mutters|murmurs|"
+                     r"whispers|calls|snaps|tells you|continues|repeats|admits|insists|warns|growls|grunts|sighs|"
+                     r"breathes|shouts|laughs|goes on|offers)\b", re.I)
 
 
 class PrecisionHit(BaseModel):
@@ -1401,7 +1397,8 @@ def _season_hits(text: str, season: str, shift: Sequence[str]) -> list[str]:  # 
     return out
 
 
-def _pronoun_hit(text: str, before: Sequence[str], idx: Any, about: Iterable[str]) -> tuple[str, str] | None:
+def _pronoun_hit(text: str, before: Sequence[str], idx: Any, about: Iterable[str], *,
+                 speaker: str | None = None, tagged: bool = False) -> tuple[str, str] | None:
     # rule: 12.3.2
     # rule: 12.3.1b
     """(the pronoun, the person) when `text` (the narrator's words) uses a he/she pronoun whose antecedent is
@@ -1409,9 +1406,19 @@ def _pronoun_hit(text: str, before: Sequence[str], idx: Any, about: Iterable[str
     person the sentence is declared about) and none of its pronouns fits that person's stored ones. No verdict when
     anyone else could be meant: two candidates, an unnamed man or woman (or animal) in either sentence, a pronoun
     in the sentence before that fits someone else, or another person named in this draft whose pronouns fit
-    (or are not stored). `before`: the narrator's words of the sentences before, oldest first."""
+    (or are not stored). `before`: the narrator's words of the sentences before, oldest first.
+    A speech tag ("she says") in a sentence with speech (`tagged`) speaks of the speech's declared `speaker`, never
+    of the last person named: it is judged against the speaker's pronouns, no verdict without one (P5; round 7's one
+    blocking hit took Magby, named just before, for the subject of "she says")."""
     from engine.audit.declare import name_spans
 
+    if tagged and _TAG_RE.search(text):
+        g = idx.pronouns.get(speaker) if speaker else None
+        bad = next((m.group(1) for m in _TAG_RE.finditer(text) if g in _PRONOUN_WORDS
+                    and _PRONOUN[m.group(1).lower()] != g), None)
+        if bad is not None and speaker is not None:
+            return bad, speaker
+        text = _TAG_RE.sub(" ", text)
     found = list(_PRONOUN_RE.finditer(text))
     if not found:
         return None
@@ -1445,7 +1452,8 @@ def _pronoun_hit(text: str, before: Sequence[str], idx: Any, about: Iterable[str
 
 def precision_checks(text: str, *, idx: Any, before: Sequence[str] = (), speech: Sequence[str] = (),
                      about: Iterable[str] = (), season: str | None = None, rules: Any = None,
-                     beat: BeatEntry | None = None, pause: Any = None) -> list[PrecisionHit]:  # rule: 12.3.2
+                     beat: BeatEntry | None = None, pause: Any = None,
+                     speaker: str | None = None) -> list[PrecisionHit]:  # rule: 12.3.2
     # rule: 12.3.1b
     # rule: OEQ-12-27
     """12.3.2's precision checks on one sentence, by code: `text` is its narrator's words, `speech` its speech spans,
@@ -1465,7 +1473,8 @@ def precision_checks(text: str, *, idx: Any, before: Sequence[str] = (), speech:
 
     pron = checks.get("pronoun_certain_subject")
     if pron is not None and "narrator" in (pron.get("voices") or ["narrator"]):
-        h = _pronoun_hit(_QUOTE_RE.sub(" ", text), [_QUOTE_RE.sub(" ", b) for b in before], idx, about)
+        h = _pronoun_hit(_QUOTE_RE.sub(" ", text), [_QUOTE_RE.sub(" ", b) for b in before], idx, about,
+                         speaker=speaker, tagged=bool(speech))
         if h is not None:
             hit("pronoun_certain_subject", "narrator", h[0], _PRONOUN_WORDS[idx.pronouns[h[1]]], h[1])
     sw = checks.get("season_words")

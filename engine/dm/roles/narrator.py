@@ -19,11 +19,11 @@ from typing import Any, Literal
 from pydantic import BaseModel, Field
 
 from engine.audit.declare import Passage, parse_output
-from engine.dm.adjudication import AdjudicationRecord, BeatEntry
+from engine.dm.adjudication import AdjudicationRecord, BeatEntry, effective_degree, paused_beat
 from engine.dm.context import TurnContext
 from engine.dm.handles import AGREED, RecordItem
 from engine.dm.handles import items as handle_items
-from engine.dm.packet import build_packet, scene_setting, view_ctx, view_for
+from engine.dm.packet import build_packet, own_words, pronoun_words, scene_setting, view_ctx, view_for
 from engine.dm.player_text import clean
 from engine.dm.roles.prompts import load_prompt
 from engine.dm.schemas import build_schema, schema_context
@@ -42,7 +42,7 @@ LIMIT_KEYS: dict[str, str] = {"turn": "beat_max_words", "scene_open": "scene_ope
 PURPOSE_LINES: dict[str, str] = {
     "turn": "Narrate this turn from the record.",
     "scene_open": "Narrate this turn from the record, then frame the new scene it reaches (12.4.3): the way there in "
-                  "a line, the arrival and the place from SCENE SETTING, the one impetus the record names, the open "
+                  "a line, the arrival and the place from SCENE SETTING, any impetus the record names, the open "
                   "prompt.",
     "opening": "The first opening (12.16.16): the inciting incident from the record, at a moment of decision.",
     "recap": "A recap (12.5.3) from the state summary below only, never from earlier prose.",
@@ -88,7 +88,8 @@ def name_of(state: WorldState, eid: str | None, pc: str | None = None) -> str:
 def _beat_line(state: WorldState, b: BeatEntry, pc: str | None, paused: bool = False,
                rules: Any = None) -> str:  # rule: 12.14.12
     """The beat's own record line: what was tried and its result (its costs, harm, conditions, positions and what
-    it delivered are lines of their own, each with a handle)."""
+    it delivered are lines of their own, each with a handle). A beat the open pause holds (`paused`: an OFFER, a
+    redirect, a near-miss choice) is unresolved: no degree, no "near miss", no result words (12.2.6; DL-12-115)."""
     # an aside in brackets ("(Her claim ... is context only.)") is the Framer's note, not something to narrate
     restated = re.sub(r"\s*\([^()]*\)", "", b.restatement).strip().rstrip(".")
     bits = [f"beat: {restated}"]
@@ -96,10 +97,13 @@ def _beat_line(state: WorldState, b: BeatEntry, pc: str | None, paused: bool = F
         bits.append(f"approach: {b.approach_words}")
     if b.difficulty_words:
         bits.append(f"difficulty: {b.difficulty_words}")
-    if b.degree:
+    if paused:
+        bits.append("not resolved yet: the player chooses next, so narrate up to the moment before its outcome and "
+                    "never the outcome (neither that it works nor that it fails)")
+    elif b.degree:
         res = DEGREE_WORDS.get(b.degree, b.degree.replace("_", " "))
         if b.near_miss and not b.success_at_cost:
-            res += ", a near miss"
+            res += ", a near miss"  # after the choice (the default failure), never before it
         if b.success_at_cost:
             res = "success at cost (it works, and the cost is paid)"
         bits.append(f"result: {res}")
@@ -107,31 +111,24 @@ def _beat_line(state: WorldState, b: BeatEntry, pc: str | None, paused: bool = F
         bits.append(b.gate_words)
     elif b.gate_words:  # refused, withdrawn or redirected: it did not happen (never narrate it as done)
         bits.append(f"not done: {b.gate_words}")
-    elif paused:
-        bits.append("not resolved yet: the turn waits at the pause before it")
     words = [w for w in (clean(x, rules) for x in b.reach_words) if not re.search(r"\d", w)]  # 12.14.4
-    if words:  # the reach rung, then the anchor's ladder line for it in words (the rung alone says nothing new)
+    if words and not paused:  # the reach rung, then the anchor's ladder line for it in words
         bits.append(f"delivered: {b.reach or 'as far as it goes'}: " + "; ".join(words))
     if b.targets:
         bits.append("acting on: " + ", ".join(name_of(state, t, pc) for t in b.targets))
-    if "verb.talk" in b.approach_words and b.targets and (b.degree in ("success", "critical_success")
-                                                          or b.success_at_cost):  # P-120, T-15-5
+    if "verb.talk" in b.approach_words and b.targets and not paused \
+            and effective_degree(b) in ("success", "critical_success"):  # P-120, T-15-5; DL-01-48
         bits.append("it worked: the one asked answers what was asked (never a refusal, a dodge or 'not now')")
     if b.progress:
         bits.append(b.progress)
     return "- " + "; ".join(x for x in bits if x)
 
 
-# NPC acts that leave what the PC asked unanswered (talk outcomes, refusals, wants, tbl.npc_action rows 1-6)
-WITHHOLDING = ("refuses",
-               "acts on", "escalates", "ends the exchange", "hinders quietly", "wants something first",
-               "carries on with their own business")
-
-
 def _withheld(state: WorldState, npc: str, action: str, pc: str | None) -> str:  # rule: 12.11.5
-    """For an NPC who does not answer: tell the narration to make that legible in the fiction, with the reason the
-    record holds (the act itself, their manner, their standing), so the player knows to move on (P-056)."""
-    if not action.startswith(WITHHOLDING) or npc not in state.entities:
+    """For an NPC who refuses: tell the narration to make that legible in the fiction, with the reason the record
+    holds (the act itself, their manner, their standing), so the player knows to move on (P-056). Only on a refusal
+    (P4): a row that answers in its own way (carries on, wants something first) is voiced as its line says."""
+    if not action.startswith("refuses") or npc not in state.entities:
         return ""
     from engine.world.social import _RUNGS, standing
 
@@ -140,8 +137,8 @@ def _withheld(state: WorldState, npc: str, action: str, pc: str | None) -> str: 
     rung = {v: k for k, v in _RUNGS.items()}.get(st) if st is not None else None
     why = [x for x in (f"manner: {d['demeanor']}" if d.get("demeanor") else "",
                        f"standing toward the PC: {rung}" if rung else "") if x]
-    return ("; they do not give the PC what was asked: show it plainly and visibly (a word, a shake of the head, a "
-            "hand lifted for not now, turning back to what they were doing) so the player knows not to wait for an "
+    return ("; the PC does not get what was asked: show it plainly and visibly (a word, a shake of the head, a "
+            "hand lifted for not now, a turn back to other business) so the player knows not to wait for an "
             "answer" + (f"; the reason shows only from this, never a secret: {'; '.join(why)}" if why else ""))
 
 
@@ -154,10 +151,21 @@ def _speech_line(state: WorldState, record: AdjudicationRecord) -> list[str]:  #
     repeating their own `said` lines unprompted. Nobody else interjects (12.11.9 step 3)."""
     from engine.dm.roles.world import present_npcs
 
-    spoke = any(p.cls == "SPEECH" for p in record.parts) or any("talk" in (b.approach_words or "")
-                                                               for b in record.beats)
-    if not (spoke or record.npc_actions) or not present_npcs(state):
+    present = present_npcs(state)
+    held = [b for n, b in enumerate(record.beats) if paused_beat(record, n)]
+    waiting = [t for b in held for t in b.targets if t in present]
+    spoke = any(p.cls == "SPEECH" for p in record.parts) or any(
+        "talk" in (b.approach_words or "") for b in record.beats if b not in held)
+    if not present or not (spoke or record.npc_actions or waiting):
         return []
+    # a paused ask is unresolved (12.2.6; DL-12-115): its target has not answered it yet (round 7, talker input 27:
+    # "I'll not say no to it" before the near-miss choice)
+    who = ", ".join(name_of(state, t, record.pc) for t in dict.fromkeys(waiting))
+    asks = ", ".join(re.sub(r"\s*\([^()]*\)", "", b.restatement).strip() for b in held)
+    pending = (f"{who} has not answered what the paused beat asks ({asks}) yet: the turn stops before that answer, "
+               "which waits on the player's choice") if waiting else ""
+    if not (spoke or record.npc_actions):
+        return [f"- {pending}"]
     return ["- the one the PC addressed answers in quoted words (their actual sentence, a question as a question), in "
             "character and within the willingness their line gives: from their SPEAKER CARD first; beyond it, plainly and "
             "with ordinary confidence, as people talk about ordinary things; a hedge only if the character is cautious "
@@ -166,8 +174,8 @@ def _speech_line(state: WorldState, record: AdjudicationRecord) -> list[str]:  #
             "rare: only in their own voice, with a natural redirect, never a chain of names. Never contradict or "
             "repeat what their card says they already said (build on it; say something new). A refusal is said in "
             "their own voice, never a stock formula. Nobody else present speaks or interjects unless the optional "
-            "material gives them a reaction. Never write that their words are lost, unheard, or only begun; never end "
-            "on waiting for them to speak"]
+            "material gives them a reaction. Never write that their words are lost, unheard, or only begun"
+            + (f". Except: {pending}" if pending else "; never end on waiting for them to speak")]
 
 
 def speaker_cards(state: WorldState, record: AdjudicationRecord, rules: Any = None) -> list[str]:  # rule: PR-12-10
@@ -193,6 +201,16 @@ _POSTED = re.compile(r"\b(notice|bill|board|sign|signboard|placard|poster|plaque
 
 _UNREAD = ("never quote or paraphrase written words as read by the character; writing shows only as marks they "
            "cannot read, and its news reaches them only when someone in the record reads it aloud (then as speech)")
+# READING without "what did they say" (people, not writing): enough on its own when one written thing is in view
+_READ_VERB = re.compile(r"\b(read|reads|reading|wording|inscription|lettering|what (?:does|do|did) it say|what it says|"
+                        r"what's written|what is written)\b", re.I)
+# "what did the ferry notice say?": READING's `the \w+` takes one word; with a written thing named, this counts
+_SAYS = re.compile(r"\bwhat (?:does|do|did)\b[^?.!]*\bsay\b", re.I)
+
+
+def _either(things: Sequence[str]) -> str:
+    """"the hire notice", "the hire notice or the bounty notice", "the hire notice, the list or any posted notice"."""
+    return things[0] if len(things) == 1 else ", ".join(things[:-1]) + " or " + things[-1]
 
 
 def _reading_lines(state: WorldState, record: AdjudicationRecord, player_message: str) -> list[str]:  # rule: 12.14.13
@@ -204,17 +222,22 @@ def _reading_lines(state: WorldState, record: AdjudicationRecord, player_message
     things = [i for i in scene_scope(state) if state.entities[i].kind in ("object", "item")
               and (written_words(state, i) is not None or _POSTED.search(state.entities[i].name or ""))]
     asked = " ".join([player_message] + [b.restatement for b in record.beats])
-    if not READING.search(asked):
+    hits = {i: sum(w in asked.lower() for w in re.findall(r"[a-z]{3,}", (state.entities[i].name or "").lower()))
+            for i in things}
+    named = [i for i in things if hits[i] and hits[i] == max(hits.values())]  # "the ferry notice", not every notice
+    named += [t for b in record.beats for t in b.targets if t in things and t not in named]
+    # P5: reading needs a written thing named or acted on, or a plain "read it" with one in view; "what did they say"
+    # about people is not reading (round 7, talker turn.4: both notices quoted for a question to the captain)
+    picked = named or (things[:1] if len(things) == 1 and _READ_VERB.search(asked) else [])
+    if not ((READING.search(asked) or _SAYS.search(asked)) and picked):
         lead = any(n.startswith(("a lead to make noticeable", "a lead arrives")) for n in record.notes)
-        unread = [state.entities[i].name for i in things if cannot_read(state, record.pc, i)]
+        unread = [f"the {state.entities[i].name}" for i in things if cannot_read(state, record.pc, i)]
         if lead and cannot_read(state, record.pc, None):
             unread.append("any posted notice")
-        return [f"- the character cannot read the {', the '.join(unread)}: {_UNREAD}"] if unread else []
-    named = [i for i in things if any(w in asked.lower() for w in re.findall(r"[a-z]{3,}", (state.entities[i].name
-                                                                                             or "").lower()))]
-    failed = {t for b in record.beats if b.degree in ("failure", "critical_failure") for t in b.targets}
+        return [f"- the character cannot read {_either(unread)}: {_UNREAD}"] if unread else []
+    failed = {t for b in record.beats if effective_degree(b) in ("failure", "critical_failure") for t in b.targets}
     lines: list[str] = []
-    for eid in (named or things)[:2]:
+    for eid in picked[:2]:
         name = state.entities[eid].name
         if eid in failed:
             lines.append(f"- reading the {name} failed: say plainly which words could not be made out and why "
@@ -249,6 +272,8 @@ def names_for(state: WorldState) -> dict[str, str]:
     return {eid: name_of(state, eid) for eid in state.entities if eid not in state.seals}
 
 
+_LEAD_NOTE = "a lead to make noticeable:"  # the opening's lead notes (engine/dm/session.py)
+
 # a scene-state line's slot in the Narrator's words (T-12-18)
 _STATE_WORDS = {"activity": "what they are doing", "posture": "their posture", "held": "what they hold",
                 "manner": "their manner", "position": "their range to you"}
@@ -269,8 +294,7 @@ def _item_words(state: WorldState, record: AdjudicationRecord, it: RecordItem, r
         return f"a new scene opens: {record.scene.header or 'framed now'}; frame it first (12.4.3)"
     if it.kind == "beat" and it.beat is not None:
         b = record.beats[it.beat]
-        paused = record.pause is not None and it.beat == len(record.beats) - 1 and not b.degree
-        return _beat_line(state, b, pc, paused=paused, rules=rules).removeprefix("- ")
+        return _beat_line(state, b, pc, paused=paused_beat(record, it.beat), rules=rules).removeprefix("- ")
     b = record.beats[it.beat] if it.beat is not None else None
     if it.kind == "cost" and b is not None:
         c = b.costs[it.index]
@@ -295,13 +319,17 @@ def _item_words(state: WorldState, record: AdjudicationRecord, it: RecordItem, r
         return f"question \"{o.question}\": the answer is {o.answer}"
     if it.kind == "npc":
         a = record.npc_actions[it.index]
-        return f"{name_of(state, a.npc, pc)} acts: {a.action}" + _withheld(state, a.npc, a.action, pc)
+        act = own_words(a.action, pronoun_words(state, a.npc))  # a table row's "their" in their pronouns
+        return f"{name_of(state, a.npc, pc)} acts: {act}" + _withheld(state, a.npc, a.action, pc)
     if it.kind == "activity":
         a = record.activities[it.index]
-        said = clause(name_of(state, a.npc, pc), "hold" if a.slot == "held" else "be", a.activity)
+        said = clause(name_of(state, a.npc, pc), "hold" if a.slot == "held" else "be",
+                      own_words(a.activity, pronoun_words(state, a.npc)))
         return f"{said} ({_STATE_WORDS.get(a.slot, a.slot)} now; say only this of it, never otherwise)"
     if it.kind == "omen":
         return f"an omen to show as a trace, never explained: {it.text}"
+    if it.text.startswith(_LEAD_NOTE):  # a seeded lead is its gist, never a sentence to recite (DL-12-114)
+        return f"note: {_LEAD_NOTE[:-1]} (its gist, in your own words or a speaker's):{it.text[len(_LEAD_NOTE):]}"
     return f"note: {it.text}"
 
 
@@ -313,14 +341,14 @@ def optional_material(state: WorldState, record: AdjudicationRecord) -> list[str
     from engine.dm.handles import OPTIONAL
 
     pc = record.pc
-    lines = [clause(name_of(state, a.npc, pc), "hold" if a.slot == "held" else "be", a.activity)
-             for a in record.activities if a.npc != pc]
-    lines += [f"{name_of(state, a.npc, pc)}, not addressed: {a.action} (a brief deed at most; no words unless it "
-              "says so)" for a in record.npc_actions if OPTIONAL in a.tags]
+    lines = [clause(name_of(state, a.npc, pc), "hold" if a.slot == "held" else "be",
+                    own_words(a.activity, pronoun_words(state, a.npc))) for a in record.activities if a.npc != pc]
+    lines += [f"{name_of(state, a.npc, pc)}, not addressed: {own_words(a.action, pronoun_words(state, a.npc))} (a "
+              "brief deed at most; no words unless it says so)" for a in record.npc_actions if OPTIONAL in a.tags]
     if not lines:
         return []
-    return ["OPTIONAL MATERIAL (use any of it, all of it or none; nothing requires it; do not repeat a line you "
-            "already used; never cite these):", *(f"- {x}" for x in lines)]
+    return ["OPTIONAL MATERIAL (use any of it, all of it or none; nothing requires it; an unchanged line need not be "
+            "said again; never cite these):", *(f"- {x}" for x in lines)]
 
 
 def record_text(state: WorldState, record: AdjudicationRecord, *, player_message: str = "",
@@ -358,131 +386,12 @@ def record_text(state: WorldState, record: AdjudicationRecord, *, player_message
     return "\n".join(lines)
 
 
-_STOP = set("a an the and or but of to in on at by for with from as into onto over under up down out off is are "
-            "was were be been it its it's this that these those there here then than so not no you your yours he she "
-            "his her him they them their we our i me my what who how do does did has have had will would can could "
-            "still just".split())
-
-
-def _prose(text: str) -> str:
-    """The fiction of a delivery: no block lines, their indented continuations, menu options or input hints."""
-    return " ".join(ln for ln in text.splitlines()
-                    if not (ln.lstrip().startswith(("[", ">", "Type a number")) or ln[:1].isspace()
-                            or re.match(r"\d+\) ", ln)))
-
-
-def _sentences(text: str) -> list[str]:
-    prose = _prose(text)
-    return [s.strip() for s in re.split(r"(?<=[.!?])\s+", prose) if s.strip()]
-
-
-def freshness_lines(deliveries: Sequence[str], names: Sequence[str] = (), *, openings: int = 3,
-                    per_entity: int = 10, used: Sequence[tuple[str, str]] = ()) -> list[str]:  # rule: 12.14.11
-    """12.14.11 in THIS MESSAGE: the details stated lately, from their `last_used` marks (`used`: (who, the detail
-    in words), DL-12-76), and the backstop scan of past deliveries (oldest first; the caller passes the last
-    `image_repeat_turns`): the opening clauses of the last `openings`, and each speaker's repeated speech opener.
-    The image 3-gram scan is retired (spec 009 B): the marks say which details were used."""
-    low = [(n, n.lower()) for n in names if len(n) > 2]
-    low += [(n.split()[0], n.split()[0].lower()) for n in names  # a person by their given name ("Calbert")
-            if n[:1].isupper() and len(n.split()) > 1 and len(n.split()[0]) > 2 and n.split()[0].lower() not in _STOP]
-    lines = []
-    firsts = [ss[0] for ss in (_sentences(d) for d in deliveries[-openings:]) if ss]
-    opened = [re.split(r"[,;:.!?]", s)[0].strip() for s in firsts]
-    if opened:
-        lines.append("FRESHNESS (12.14.11): do not open the way these recent turns opened: "
-                     + " / ".join(f'"{o}"' for o in opened))
-    found: dict[str, list[str]] = {}
-    for who, words in used:
-        found.setdefault(who, []).append(words)
-    if found:
-        lines.append("Details stated lately, do not restate them (describe something else, or nothing; a deliberate "
-                     "callback is fine):")
-        lines += [f"- {who}: " + "; ".join(ps[-per_entity:]) for who, ps in found.items()]
-    spoken = _repeated_lines(deliveries, low)
-    if spoken:
-        lines.append("Lines these people already said lately, do not have them say again (give them new words):")
-        lines += [f"- {who}: " + "; ".join(f'"{q}"' for q in qs[-per_entity:]) for who, qs in spoken.items()]
-    return lines
-
-
-_QUOTE = re.compile(r"[\"“]([^\"“”]+)[\"”]")
-
-
-def _repeated_lines(deliveries: Sequence[str], low: Sequence[tuple[str, str]]) -> dict[str, list[str]]:
-    """Per speaker, the opening words of their quoted speech ("Mark me") heard in two or more deliveries. The
-    speaker is the last person named before the quote; a quote the PC says ("you say", "You ask: ...") is skipped.
-    ponytail: a quote's first clause stands in for its stock line; single words ("Yes") are not listed."""
-    heard: dict[tuple[str, str], set[int]] = {}
-    order: list[tuple[str, str]] = []
-    for k, d in enumerate(deliveries):
-        prose = _prose(d)
-        for m in _QUOTE.finditer(prose):
-            before, after = prose[:m.start()], prose[m.end():m.end() + 30]
-            clause = re.split(r"[.!?]\s", before)[-1]
-            if re.match(r"\W*you\b", clause, re.I) or re.match(r"\W*you (?:say|ask|tell|call)", after, re.I):
-                continue
-            at, who = max(((before.lower().rfind(ln), n) for n, ln in low if n[:1].isupper()),  # a person
-                          default=(-1, ""))
-            lead = re.split(r"[,;:.!?—]", m.group(1))[0].strip().lower()
-            if at < 0 or len(lead.split()) < 2:
-                continue
-            key = (who, lead)
-            if key not in heard:
-                order.append(key)
-            heard.setdefault(key, set()).add(k)
-    out: dict[str, list[str]] = {}
-    for who, lead in order:
-        if len(heard[(who, lead)]) > 1:
-            out.setdefault(who, []).append(lead)
-    return out
-
-
 def revision_text(r: Revision) -> str:  # rule: 12.3.3
     """THIS MESSAGE's revision section: the whole draft, then each failure in words."""
     return "\n".join(["A REVISION. Your draft is below, then what failed. Write the whole passage and its side list "
                       "again: fix exactly what is named and keep the rest as you wrote it (its voice, detail and "
                       "length). Never shorten or play safe.", "YOUR DRAFT:", r.draft, "WHAT FAILED:",
                       *(f"- {x}" for x in r.failed)])
-
-
-def _freshness(ctx: TurnContext) -> list[str]:  # rule: 12.14.11
-    from engine.dm.turn import recent_exchanges  # turn imports this module
-
-    cfg = (ctx.rules.pacing.get("narration") or {}).get("freshness") or {}
-    window = int(cfg.get("image_repeat_turns", 10))
-    past = recent_exchanges(ctx.store, ctx.turn_id or "", n=window)
-    st = ctx.state
-    names = [e.name for e in st.entities.values() if e.kind != "pc" and e.name and e.id not in st.seals]
-    return freshness_lines([x[1] or "" for x in past], names, openings=int(cfg.get("opening_patterns_remembered", 3)),
-                           per_entity=int(cfg.get("images_per_entity_remembered", 10)),
-                           used=used_details(st, _turn_n(ctx.turn_id), window))
-
-
-def _turn_n(turn_id: str | None) -> int:
-    from engine import ids
-
-    parsed = ids.parse_counter_id(turn_id) if turn_id else None
-    return parsed[1] if parsed and parsed[0] == ids.TURN else 0
-
-
-def used_details(state: WorldState, now: int, window: int = 10) -> list[tuple[str, str]]:  # rule: 12.14.11
-    """(who, the detail in words) for each established detail whose `last_used` mark is within `window` turns
-    before `now` (00.6.6a item 5), the scene's own first; each by the name the PC knows."""
-    from engine.retrieve.scene import scene_scope
-    from engine.store.projection import DETAIL
-
-    scope = set(scene_scope(state))
-    out: list[tuple[int, str, str]] = []
-    for eid, refs in state.details.items():
-        if eid in state.seals or eid not in state.entities:
-            continue
-        for slot, r in refs.items():
-            f = state.facts.get(r.fact_id)
-            if f is None or f.value is None or not r.last_used or not 0 <= now - r.last_used <= window \
-                    or f.persistence == "scene":  # scene state is a record line to cite, not an image (T-12-18)
-                continue
-            out.append((0 if eid in scope else 1, name_of(state, eid), f"{slot.removeprefix(DETAIL)}: {f.value}"))
-    return [(who, words) for _, who, words in sorted(out, key=lambda x: x[0])]
 
 
 # the PC looks again or asks (12.14.11 setting once): the place's look is given again
@@ -508,8 +417,6 @@ def draft(ctx: TurnContext, record: AdjudicationRecord, *, player_message: str =
     full = purpose != "turn" or bool(LOOKS_AROUND.search(player_message))  # setting once (DL-12-99)
     if purpose in ("turn", "scene_open", "opening") and (setting := scene_setting(st, full=full)):
         msg.append(setting)
-    if purpose in ("turn", "scene_open"):
-        msg += _freshness(ctx)
     msg.extend(extra)
     if revision is not None:  # the same packet, plus the whole draft and what failed (12.3.3)
         msg.append(revision_text(revision))
@@ -526,5 +433,5 @@ def draft(ctx: TurnContext, record: AdjudicationRecord, *, player_message: str =
                          call_id=res.record.call_id)
 
 
-__all__ = ["NarratorDraft", "Purpose", "Revision", "draft", "freshness_lines", "name_of", "names_for",
+__all__ = ["NarratorDraft", "Purpose", "Revision", "draft", "name_of", "names_for",
            "record_items", "record_text", "revision_text"]
