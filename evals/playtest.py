@@ -103,7 +103,8 @@ class ClaudeModel:
                          attempt=attempt, seq=seq, request={"attempt": attempt, "packet": packet.render()})
         rec = rec.model_copy(update={"response": {"data": data, "text": None, "error": None},
                                      "latency_ms": watch.ms(), "tokens_in": int(usage.get("input_tokens") or 0)
-                                     + int(usage.get("cache_read_input_tokens") or 0),
+                                     + int(usage.get("cache_read_input_tokens") or 0)
+                                     + int(usage.get("cache_creation_input_tokens") or 0),  # all input (spec 031)
                                      "tokens_out": int(usage.get("output_tokens") or 0)})
         return CallResult(data=data, record=rec)
 
@@ -196,7 +197,7 @@ class Player(io.TextIOBase):
 
 def report(path: Path, args: argparse.Namespace, player: Player, engine: Any, save: Path, secs: float) -> None:
     lines = [f"# Playtest {path.stem}", "",
-             f"engine: {args.engine}; player: {args.player}; inputs: {len(player.lines)}; "
+             f"engine: {args.engine} ({args.dm_engine}, secrets {args.dm_secrets}); player: {args.player}; inputs: {len(player.lines)}; "
              f"engine model calls: {getattr(engine, 'calls', 'n/a')}; {secs / 60:.1f} min; save: `{save.name}`", "",
              "## Player notes", ""]
     notes = [(i, s, n) for i, (_, s, n) in enumerate(player.lines, 1) if n]
@@ -247,9 +248,30 @@ def write_findings(path: Path, player: Player, save: Path, code: int) -> int:
         turns = db.execute("select count(*) from turns").fetchone()[0]
         rows.append({"kind": "stats", "turns": turns, "calls": calls,
                      "narrator_per_turn": round(calls.get("narrator", 0) / turns, 2) if turns else None})
+        rows.append(turn_costs(db))
+        dm = [json.loads(r[0] or "{}").get("screen", {}).get("dm_tools") for r in db.execute("select record from turns")]
+        dm = [d for d in dm if d]
+        if dm:  # spec 031: the DM-with-tools engine's own log, summed over its turns
+            rows.append({"kind": "dm_tools", "turns": len(dm), **{k: sum(int(d.get(k) or 0) for d in dm) for k in
+                                                                ("tool_calls", "steps", "model_calls")},
+                         **{k: [x for d in dm for x in d.get(k) or []] for k in
+                            ("refusals", "ceiling_violations", "leaks", "clues", "rolls")},
+                         "asks": sum(len(d.get("asks") or []) for d in dm)})
         db.close()
     path.write_text("".join(json.dumps(r) + "\n" for r in rows), encoding="utf-8")
     return len(rows)
+
+
+def turn_costs(db: Any) -> dict[str, Any]:
+    """Per play turn, for either engine: model calls, tokens in and out, and the summed model latency (seconds),
+    each as a mean and a max over the turns that made a call (spec 031's cost measures)."""
+    rows = db.execute("select turn_id, count(*), sum(coalesce(tokens_in, 0) + coalesce(tokens_in_cached, 0)), sum(tokens_out), sum(latency_ms) "
+                      "from model_calls where turn_id is not null and turn_id like 'turn.%' group by turn_id").fetchall()
+    out: dict[str, Any] = {"kind": "turn_costs", "turns_with_calls": len(rows)}
+    for i, key in ((1, "calls"), (2, "tokens_in"), (3, "tokens_out"), (4, "latency_s")):
+        vals = [(r[i] or 0) / (1000 if key == "latency_s" else 1) for r in rows]
+        out[key] = {"mean": round(sum(vals) / len(vals), 1), "max": round(max(vals), 1)} if vals else None
+    return out
 
 
 def main() -> int:
@@ -262,12 +284,17 @@ def main() -> int:
     ap.add_argument("--player-model", default="sonnet")
     ap.add_argument("--fixer-model", default="sonnet", help="the Fixer's model (/fix, PR-12-11; owner: Sonnet)")
     ap.add_argument("--persona", choices=sorted(PERSONAS), default="explorer")
+    ap.add_argument("--dm-engine", choices=("pipeline", "dm-tools"), default="pipeline",
+                    help="the play engine (spec 031: dm-tools is one DM model with tools over the spine)")
+    ap.add_argument("--dm-secrets", choices=("hidden", "visible"), default="hidden",
+                    help="dm-tools only: show the DM each present NPC's private case knowledge")
     ap.add_argument("--out", type=Path, default=OUT, help="where transcripts and findings go")
     ap.add_argument("--saves", type=Path, default=ROOT / "saves")
     args = ap.parse_args()
 
     stamp = time.strftime("%Y%m%d-%H%M%S")
-    name = f"playtest-{stamp}-{args.persona}"
+    tag = "" if args.dm_engine == "pipeline" else f"-{args.dm_engine}" + ("-secrets" if args.dm_secrets == "visible" else "")
+    name = f"playtest-{stamp}-{args.persona}{tag}"
     engine = ClaudeModel(args.engine_model) if args.engine == "claude" else None
     fixer = ClaudeModel(args.fixer_model) if engine is not None else None  # spec 022: /fix on its own model
 
@@ -285,10 +312,11 @@ def main() -> int:
     start = time.time()
     args.saves.mkdir(parents=True, exist_ok=True)
     code = play_main(["new", name], stdin=player, stdout=out, saves=args.saves,
-                     config=lambda _offline: Config(offline=args.engine == "offline"))
+                     config=lambda _offline: Config(offline=args.engine == "offline", engine=args.dm_engine,
+                                                   dm_secrets=args.dm_secrets))
     player.lines.append((out.getvalue()[player.seen:], f"(exit {code})", ""))
     args.out.mkdir(parents=True, exist_ok=True)
-    path = args.out / f"{stamp}-{args.engine}-{args.persona}.md"
+    path = args.out / f"{stamp}-{args.engine}-{args.persona}{tag}.md"
     save = args.saves / f"{name}.db"
     report(path, args, player, engine, save, time.time() - start)
     n = write_findings(path.with_suffix(".findings.jsonl"), player, save, code)
