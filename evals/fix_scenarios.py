@@ -95,7 +95,7 @@ class Game:
         set_mode(TimeContext(tx, RULES, self.rng), "free", "the scene opens")
 
     def turn(self, said: str, shown: str, build: Callable[[Any], Any] | None = None,
-             calls: list[tuple[Role, str, dict[str, Any]]] = ()) -> Any:
+             calls: tuple[tuple[Role, str, dict[str, Any]], ...] | list[tuple[Role, str, dict[str, Any]]] = ()) -> Any:
         """One turn: `build(tx)` writes its events; the record keeps the words and the screen."""
         self.n += 1
         tid = f"turn.{self.n}"

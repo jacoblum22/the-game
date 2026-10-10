@@ -19,22 +19,29 @@ corrections ledger and one block per report in `saves/<campaign>.disputes.md`.
 *Retires* (spec 022): the one-shot understanding call over the player-visible transcript (engine/dm/understand.py),
 `_claim`'s fixed branches and the fixed outcome table, the pinned `correction.N` complaint text, complaints settled one
 after another on a changing state, and the reliance CHOICE pause (a take-back is proposed and applied, with `Now:`).
+*Retires* (spec 026; DL-12-117): `rerender` (re-showing a stored line could not change it) and explain-only at an
+open OFFER: `reframe` withdraws the OFFER on screen (nothing spent) and runs gate, necessity and frame again with the
+corrections; a take-back of the unrolled pending turn closes its OFFER. Any decision can be dry-run on a copy
+(`preview`), which is how the Fixer checks the screen before anything is applied.
 """
 
 from __future__ import annotations
 
 import re
+import sqlite3
+import tempfile
 from collections.abc import Iterator
 from contextlib import contextmanager
 from dataclasses import dataclass, field
 from datetime import datetime
+from pathlib import Path
 from typing import Any, Literal
 
 from engine import ids
 from engine.dm.fixer import Investigation, investigate, name, pc_of, sheet, turn_no
 from engine.dm.oof import FIX_HINT, OofBlock, note_block, when_words
 from engine.resolve.rulings import RulingRecord, log_ruling
-from engine.store.db import REVERTIBLE, TAKE_BACK_EXTRA, Rejected, Transaction
+from engine.store.db import REVERTIBLE, TAKE_BACK_EXTRA, Rejected, Store, Transaction
 from engine.store.events import WORLD, Event
 from engine.store.projection import WorldState, project
 
@@ -44,7 +51,8 @@ DisputeKind = Literal["explained", "corrected", "taken_back", "not_found"]
 # no evidence (the player's reading wins, 12.3.6 item 4). Every other key keeps INV-9: only the record decides.
 INCIDENTAL_SLOTS = frozenset({"hair", "face", "mark", "build", "clothing", "worn", "voice", "material", "marking",
                               "activity", "manner"})
-NO_EVIDENCE = ("explain", "rerender", "correct_testimony")
+NO_EVIDENCE = ("explain", "reframe", "correct_testimony")  # a re-frame spends nothing: the gate and frame decide
+REFRAMES = ("offer", "redirect", "warning")  # pauses with nothing rolled yet (12.5.8 item 1)
 IDENTITY = ("name", "pronouns")  # entity data set at creation (12.11.1), never a corrective fact (spec 022)
 CASE_PREDICATES = ("points_to.", "clue", "case.", "knows_")  # the case graph and clue delivery (INV-10; PR-15-6)
 MAX_AMOUNT = 50
@@ -75,6 +83,7 @@ class DisputeResult:
     record: dict[str, Any] | None = None
     claims: list[DisputedClaim] = field(default_factory=list)
     records: list[dict[str, Any]] = field(default_factory=list)
+    outcomes: list[Any] = field(default_factory=list)  # a re-frame's beat outcomes (engine/resolve BeatOutcome)
 
     @property
     def text(self) -> str:
@@ -298,35 +307,98 @@ def _take_back(ctx: Any, tx: Transaction, turn_id: str, reason: str) -> tuple[st
         seqs = _rewind(ctx, tx, first, reason)
     except Rejected as e:
         return f"later events depend on it ({e})", []
-    if not seqs:
+    closed = _withdraw_since(ctx, tx, first)  # an OFFER that turn (or a later one) opened goes with it (12.5.8 item 1)
+    if not seqs and not closed:
         return "there was nothing left to undo", []
-    _void(tx, [str(getattr(e.payload, "frame_id", "")) for e in ctx.store.events(since=first - 1,
-                                                                                 types=["frame_committed"])])
+    if seqs:
+        _void(tx, [str(getattr(e.payload, "frame_id", "")) for e in ctx.store.events(since=first - 1,
+                                                                                     types=["frame_committed"])])
     return None, seqs
 
 
-def _rerender(ctx: Any, turn_id: str) -> str:  # rule: 12.15.2
-    """A turn's rolls shown again from their frames (the Chance line as code renders it now)."""
-    from engine.dm.oof import _breakdown
-    from engine.resolve.types import Frame
-
-    out = []
-    for e in ctx.store.events(types=["frame_committed"]):
-        if e.turn_id != turn_id:
-            continue
-        f: dict[str, Any] = e.payload.frame  # type: ignore[attr-defined]
-        b = f.get("beat") or {}
-        try:
-            parts = _breakdown(Frame.model_validate(f), ctx.rules, ctx.state)
-        except Exception:  # noqa: BLE001 - an old frame that no longer validates: its numbers only
-            parts = f"modifier {int((f.get('modifier') or {}).get('total') or 0):+d}"
-        out.append(f"\"{str(b.get('restatement') or b.get('intent') or '').rstrip('.')}\": Chance "
-                   f"{(f.get('odds') or {}).get('success_or_better')}% ({parts})")
-    return "; ".join(out)
+def _pending(ctx: Any, tx: Transaction, turn_id: str) -> bool:  # rule: 12.5.8
+    """`turn_id` opened the OFFER (or redirect) on screen and rolled nothing: taking it back spends nothing (12.5.8
+    item 1)."""
+    pause = tx.state.open_pause()
+    if not turn_id or pause is None or (pause.detail or {}).get("stage") not in REFRAMES:
+        return False
+    opened = next((e for e in ctx.store.events(types=["pause_opened"])
+                   if getattr(e.payload, "pause_id", None) == pause.pause_id), None)
+    return opened is not None and opened.turn_id == turn_id and not any(
+        e.turn_id == turn_id for e in ctx.store.events(types=["frame_resolved"]))
 
 
-def _apply(ctx: Any, tx: Transaction, text: str, p: dict[str, Any], inv: Investigation,
-           reverted: list[int]) -> tuple[str, str]:  # noqa: PLR0911, PLR0912 - one branch per proposal kind
+def _withdraw_since(ctx: Any, tx: Transaction, first: int) -> bool:  # rule: 12.5.8
+    """The open pause, when it was opened at or after `first`: withdrawn (nothing was rolled at an OFFER). A
+    `pause_opened` is not a revertible write, so a take-back alone left the OFFER on screen."""
+    pause = tx.state.open_pause()
+    if pause is None or not any(getattr(e.payload, "pause_id", None) == pause.pause_id
+                                for e in ctx.store.events(since=first - 1, types=["pause_opened"])):
+        return False
+    tx.add(Event.of("pause_closed", source="correction", rule_id="12.5.8", pause_id=pause.pause_id,
+                    choice="withdraw", by="withdrawn"))
+    return True
+
+
+@contextmanager
+def _turn_ctx(ctx: Any, tx: Transaction) -> Iterator[Any]:
+    """A TurnContext over this transaction (the pipeline's Framer is built from one), restored afterwards."""
+    from engine.dm.context import TurnContext
+
+    tc = ctx if isinstance(ctx, TurnContext) else TurnContext.for_store(ctx.store, model=ctx.model, rules=ctx.rules)
+    old = tc.tx
+    tc.tx = tx
+    try:
+        yield tc
+    finally:
+        tc.tx = old
+
+
+def _reframe(ctx: Any, tx: Transaction, p: dict[str, Any], outcomes: list[Any]) -> tuple[str, str]:  # rule: PR-12-11
+    # rule: 12.3.6
+    # rule: 12.5.8
+    """PR-12-11 step 3, 12.3.6 item 4 (DL-12-117): the OFFER on screen withdrawn (nothing was spent) and its beat run
+    through gate, necessity and frame again, declared now so the corrections applied before it count. `fact_id`: a
+    fact on record that makes the goal impossible (the gate refuses, G4). Never rolls (auto-commit off)."""
+    from engine.dm.turn import _env
+    from engine.resolve.pipeline import BeatPlan, run_beats
+
+    pause = tx.state.open_pause()
+    d = pause.detail if pause is not None else {}
+    if pause is None or d.get("stage") not in REFRAMES or not d.get("plan"):
+        return "not", "re-frame: no offer is waiting on screen (a rolled beat is taken back instead)"
+    fid = str(p.get("fact_id") or "").strip()
+    if fid and (fid not in tx.state.facts or fid in tx.state.seals or tx.state.facts[fid].value is None):
+        return "not", f"re-frame: {fid} is not a fact on record"
+    tx.add(Event.of("pause_closed", source="correction", rule_id="12.5.8", pause_id=pause.pause_id,
+                    choice="withdraw", by="withdrawn"))
+    tx.add(Event.of("offer_logged", source="correction", rule_id="01.7.1", frame_id=None, shown_at=tx.state.time.now,
+                    choice="withdraw"))
+    plan = BeatPlan.model_validate(d["plan"])
+    beat = plan.beat.model_copy(update={"declared_seq": tx.state.last_seq, "necessity": "uncertain_and_costly",
+                                        **({"g4_fact": fid} if fid else {})})
+    queued = [BeatPlan.model_validate(q) for q in d.get("queued") or []]
+    with _turn_ctx(ctx, tx) as tc:
+        env = _env(tc)
+        env.auto_commit = False  # a /fix never rolls for the player
+        env.said, env.said_first = list(d.get("said") or []), list(d.get("said_first") or [])
+        res = run_beats(env, [plan.model_copy(update={"beat": beat}), *queued])
+    outcomes += res.outcomes
+    out = res.outcomes[0] if res.outcomes else None
+    what = (out.entry.restatement if out is not None else "") or beat.restatement or beat.intent
+    if out is None:
+        return "did", f"the offer for \"{what}\" is withdrawn; nothing was spent"
+    if out.status == "paused" and res.pause is not None and res.pause.detail.get("stage") == "offer":
+        return "did", f"the offer for \"{what}\" is framed again with the record as it stands (below)"
+    if out.status in ("refused", "redirected", "paused"):
+        return "did", f"\"{what}\" is not possible as tried, and nothing was spent (below)"
+    if out.status == "question":
+        return "did", f"the offer for \"{what}\" is withdrawn: {out.entry.gate_words}"
+    return "did", f"\"{what}\" needs no roll after all (below)"
+
+
+def _apply(ctx: Any, tx: Transaction, text: str, p: dict[str, Any], inv: Investigation,  # noqa: PLR0911, PLR0912
+           reverted: list[int], outcomes: list[Any]) -> tuple[str, str]:  # one branch per proposal kind
     # rule: PR-12-11
     """PR-12-11 steps 4-5 for one proposal: ("did", words) when it was validated and applied, else ("not", why)."""
     st = tx.state
@@ -334,10 +406,13 @@ def _apply(ctx: Any, tx: Transaction, text: str, p: dict[str, Any], inv: Investi
     kind = str(p.get("kind") or "")
     if kind == "explain":
         return "did", ""
-    if kind not in NO_EVIDENCE and (why := _evidence(p, inv)):
-        return "not", f"{kind.replace('_', ' ')}: {why}, so the record stands (INV-9)"
     turn = str(p.get("turn") or "")
     turn_id = ids.counter_id(ids.TURN, int(m.group(0))) if (m := re.search(r"\d+", turn)) else ""
+    pending = kind == "take_back" and _pending(ctx, tx, turn_id)  # an unrolled turn: nothing spent, nothing to prove
+    if kind not in NO_EVIDENCE and not pending and (why := _evidence(p, inv)):
+        return "not", f"{kind.replace('_', ' ')}: {why}, so the record stands (INV-9)"
+    if kind == "reframe":
+        return _reframe(ctx, tx, p, outcomes)
     if kind == "take_back":
         if not turn_id or ctx.store.turn(turn_id) is None:
             return "not", "take back: no such turn"
@@ -345,11 +420,11 @@ def _apply(ctx: Any, tx: Transaction, text: str, p: dict[str, Any], inv: Investi
         if why:
             return "not", f"take back {turn_id}: {why}"
         reverted += seqs
+        if pending and not seqs:
+            return "did", (f"took back turn {turn_no(turn_id)}: its offer is withdrawn and nothing was spent "
+                           "(declare again)")
         return "did", (f"took back turn {turn_no(turn_id)}: everything it changed is undone and its roll is void "
-                       "(an offer it closed is gone: declare again)")
-    if kind == "rerender":
-        shown = _rerender(ctx, turn_id) if turn_id else ""
-        return "did", f"turn {turn_no(turn_id)} shown again: {shown}" if shown else ""  # no roll there: nothing to add
+                       "(an offer it opened or closed is gone: declare again)")
     if kind in ("refund", "deduct", "restore"):
         q = _quantity(st, pc, str(p.get("quantity") or ""))
         if pc is None or q is None:
@@ -379,12 +454,15 @@ def _apply(ctx: Any, tx: Transaction, text: str, p: dict[str, Any], inv: Investi
         value = str(p.get("value") or "").strip() if kind == "correct_testimony" else ""
         if value and _copies_report(value, text):
             return "not", "correct testimony: the new words must be the corrected value, not the report"
+        from engine.dm.fixer import plain_fact
+
+        said = plain_fact(st, f)  # before the write: the fact as the player read it
         _write(tx, f.subject, f.predicate, value or None, fid, "PR-12-12" if kind == "correct_testimony" else "12.3.6")
         what = _what(st, f.subject, f.predicate)
         if f.source == "testimony":
             return "did", (f"{what} is reworded on record: \"{value}\"" if value else
                            f"{what} (\"{_flat(f.value, 80)}\") is their words again, not a settled fact")
-        return "did", f"{what} is no longer on record"
+        return "did", f"\"{_flat(said, 120)}\" is no longer on record"
     if kind == "set_fact":
         from engine.dm.fixer import resolve
         from engine.store.details import slot_of
@@ -421,7 +499,8 @@ def _flat(s: Any, n: int) -> str:
     return t if len(t) <= n else t[:n] + "…"
 
 
-ORDER = {"take_back": 0, "restore": 1, "refund": 1, "deduct": 1}  # a take-back first: the rest apply after it
+# a take-back first: the rest apply after it; a re-frame last, so the corrections before it count in the new frame
+ORDER = {"take_back": 0, "restore": 1, "refund": 1, "deduct": 1, "reframe": 3}
 
 
 def now_line(before: dict[str, str], after: dict[str, str]) -> str:  # rule: 12.5.8
@@ -441,58 +520,117 @@ def settle_dispute(ctx: Any, text: str, **_: Any) -> DisputeResult:  # rule: 12.
     # rule: PR-12-11
     """PR-12-11 from the store. `ctx`: anything with `store`, `state`, `rules`, optional `tx` (the turn's open
     transaction; else a one-shot one), `model` (the Fixer's, routed by role) and `record_call`."""
-    inv = investigate(ctx, text)  # one snapshot: nothing is written while the Fixer looks
+    inv = investigate(ctx, text)  # one snapshot: nothing is written while the Fixer looks (dry runs use a copy)
     with _tx(ctx) as tx:
-        start = len(tx.events)
-        pc = pc_of(tx.state)
-        before = sheet(tx.state, ctx.rules, pc)
-        claims: list[DisputedClaim] = []
-        results: list[tuple[list[str], list[str]]] = []
-        reverted: list[int] = []
-        todo = sorted(((i, j, p) for i, c in enumerate(inv.complaints)
-                       for j, p in enumerate(c.get("proposals") or []) if isinstance(p, dict)),
-                      key=lambda x: (ORDER.get(str(x[2].get("kind")), 2), x[0], x[1]))
-        did: dict[int, list[str]] = {}
-        nots: dict[int, list[str]] = {}
-        kinds: dict[int, list[str]] = {}
-        for i, _j, p in todo:
-            status, words = _apply(ctx, tx, text, p, inv, reverted)
-            if words:
-                (did if status == "did" else nots).setdefault(i, []).append(words)
-            if status == "did":
-                kinds.setdefault(i, []).append(str(p.get("kind")))
-        for i, c in enumerate(inv.complaints):
-            t = str(c.get("turn") or "")
-            claims.append(DisputedClaim(believes=str(c.get("believes") or ""), category=str(c.get("category") or "other"),
-                                        turn_id=ids.counter_id(ids.TURN, int(m.group(0)))
-                                        if (m := re.search(r"\d+", t)) else None,
-                                        verdict=str(c.get("verdict") or "unclear"), found=str(c.get("found") or ""),
-                                        done_kinds=kinds.get(i, [])))
-            results.append((did.get(i, []), nots.get(i, [])))
-        after = sheet(tx.state, ctx.rules, pc)
-        writes = [e.seq for e in tx.events[start:] if e.seq is not None]
-        lines: list[str] = []
-        for c, (done, refused) in zip(claims, results, strict=True):
-            lines.append(c.found.strip() or "I can't pin that down from the record; say it again with the turn "
-                         "number (/turn N shows a turn).")
-            if done:
-                lines.append("Done: " + "; ".join(done) + ".")
-            lines += [f"Not done: {w}." for w in refused]
-        lines.append(now_line(before, after))
-        label = "CORRECTION" if writes else "FIX"
-        block = note_block(lines[0], label, lines[1:])
-        kind: DisputeKind = ("taken_back" if reverted else "corrected" if writes else
-                             "not_found" if all(c.verdict == "unclear" and not c.found for c in claims) else "explained")
-        records = _log(tx, ctx, text, inv, claims, results, kind=kind, answer=block.text, writes=writes,
-                       reverted=reverted)
-        if writes:
-            rr = RulingRecord(signature=f"correction:{records[0]['report']}", situation=_flat(text, 300),
-                              kind="rule_conflict", review_flag=True, tags=["correction", kind])
-            tx.add(log_ruling(rr, tx.mint, store=ctx.store, staged=tx.events, rule_id="12.3.4"))
-        return DisputeResult(kind, [block], events=tx.events[start:], reverted=reverted,
-                             claim=claims[0] if claims else None, record=records[0] if records else None,
-                             claims=claims, records=records,
-                             correction={"writes": writes, "reverted": reverted} if writes else None)
+        return _settle(ctx, tx, text, inv)
+
+
+def _settle(ctx: Any, tx: Transaction, text: str, inv: Investigation, *, log: bool = True) -> DisputeResult:
+    # rule: PR-12-11
+    """PR-12-11 steps 4-6 on `tx`: every proposal validated and applied together, then the answer (found → Done /
+    Not done → `Now:`); step 7's log when `log` (never for a dry run)."""
+    start = len(tx.events)
+    pc = pc_of(tx.state)
+    before = sheet(tx.state, ctx.rules, pc)
+    claims: list[DisputedClaim] = []
+    results: list[tuple[list[str], list[str]]] = []
+    reverted: list[int] = []
+    outcomes: list[Any] = []
+    todo = sorted(((i, j, p) for i, c in enumerate(inv.complaints)
+                   for j, p in enumerate(c.get("proposals") or []) if isinstance(p, dict)),
+                  key=lambda x: (ORDER.get(str(x[2].get("kind")), 2), x[0], x[1]))
+    did: dict[int, list[str]] = {}
+    nots: dict[int, list[str]] = {}
+    kinds: dict[int, list[str]] = {}
+    for i, _j, p in todo:
+        status, words = _apply(ctx, tx, text, p, inv, reverted, outcomes)
+        if words:
+            (did if status == "did" else nots).setdefault(i, []).append(words)
+        if status == "did":
+            kinds.setdefault(i, []).append(str(p.get("kind")))
+    for i, c in enumerate(inv.complaints):
+        t = str(c.get("turn") or "")
+        claims.append(DisputedClaim(believes=str(c.get("believes") or ""), category=str(c.get("category") or "other"),
+                                    turn_id=ids.counter_id(ids.TURN, int(m.group(0)))
+                                    if (m := re.search(r"\d+", t)) else None,
+                                    verdict=str(c.get("verdict") or "unclear"), found=str(c.get("found") or ""),
+                                    done_kinds=kinds.get(i, [])))
+        results.append((did.get(i, []), nots.get(i, [])))
+    after = sheet(tx.state, ctx.rules, pc)
+    writes = [e.seq for e in tx.events[start:] if e.seq is not None]
+    lines: list[str] = []
+    for c, (done, refused) in zip(claims, results, strict=True):
+        lines.append(c.found.strip() or "I can't pin that down from the record; say it again with the turn "
+                     "number (/turn N shows a turn).")
+        if done:
+            lines.append("Done: " + "; ".join(done) + ".")
+        lines += [f"Not done: {w}." for w in refused]
+    lines.append(now_line(before, after))
+    label = "CORRECTION" if writes else "FIX"
+    block = note_block(lines[0], label, lines[1:])
+    kind: DisputeKind = ("taken_back" if reverted else "corrected" if writes else
+                         "not_found" if all(c.verdict == "unclear" and not c.found for c in claims) else "explained")
+    records = _log(tx, ctx, text, inv, claims, results, kind=kind, answer=block.text, writes=writes,
+                   reverted=reverted) if log else []
+    if writes and log:
+        rr = RulingRecord(signature=f"correction:{records[0]['report']}", situation=_flat(text, 300),
+                          kind="rule_conflict", review_flag=True, tags=["correction", kind])
+        tx.add(log_ruling(rr, tx.mint, store=ctx.store, staged=tx.events, rule_id="12.3.4"))
+    return DisputeResult(kind, [block], events=tx.events[start:], reverted=reverted,
+                         claim=claims[0] if claims else None, record=records[0] if records else None,
+                         claims=claims, records=records, outcomes=outcomes,
+                         correction={"writes": writes, "reverted": reverted} if writes else None)
+
+
+# ------------------------------------------------------------------------------------------- dry runs (DL-12-117)
+
+
+@contextmanager
+def sandbox(ctx: Any) -> Iterator[Any]:  # rule: PR-12-11
+    """A throwaway copy of the game (SQLite backup into a temp file) and a TurnContext on it, no transaction open;
+    the play roles' model is the same routed model. Nothing done there reaches the real save.
+    ponytail: copies the committed save only; a dispute turn stages nothing before the investigation"""
+    from engine.dm.context import TurnContext
+
+    with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as tmp:
+        path = Path(tmp) / "dry-run.db"
+        dst = sqlite3.connect(path)
+        try:
+            ctx.store.conn.backup(dst)
+        finally:
+            dst.close()
+        store = Store.open(path)
+        try:
+            yield TurnContext.for_store(store, model=getattr(ctx, "model", None), rules=ctx.rules,  # type: ignore[arg-type]
+                                        config=getattr(ctx, "config", None))
+        finally:
+            store.close()
+
+
+def screen(sx: Any, res: DisputeResult) -> str:  # rule: PR-12-11
+    """What the player sees after the repair: the answer, any refusal or result a re-frame produced, and the pause
+    then open (the re-framed OFFER, or the one still waiting), rendered as the turn renders it."""
+    from engine.dm.narration import pause_blocks
+
+    parts = [res.text]
+    parts += [o["text"] for out in res.outcomes for o in out.oof if o.get("kind") in ("REDIRECT", "RESULT", "NOTE")]
+    pause = sx.state.open_pause()
+    if pause is not None:
+        parts += [b.text for b in pause_blocks(sx, pause)]
+    return "\n".join(parts)
+
+
+def preview(ctx: Any, text: str, complaints: list[dict[str, Any]], calls: list[tuple[str, str, str]]) -> str:
+    # rule: PR-12-11
+    """PR-12-11 steps 4 and 6 (DL-12-117): a decision applied on a copy, validation included, and the screen the
+    player would then see. The real game is untouched."""
+    with sandbox(ctx) as sx, sx.store.transaction(getattr(ctx, "turn_id", None)) as tx:
+        sx.tx = tx
+        try:
+            return screen(sx, _settle(sx, tx, text, Investigation(complaints=complaints, calls=list(calls)),
+                                      log=False))
+        finally:
+            sx.tx = None
 
 
 def dispute(ctx: Any, text: str, **_: Any) -> str:  # rule: 12.3.6

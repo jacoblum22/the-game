@@ -126,7 +126,7 @@ def test_c2_guild_label_is_data_never_a_verbatim_label(tmp_path: Path) -> None:
     for full in (True, False, False):
         pkt = _packet(st, rec, full=full)
         assert not any(p in pkt for p in PUSHES)
-        assert "role: officer of The Order of the Grey Hand" in pkt
+        assert "(he/him): officer of The Order of the Grey Hand" in pkt  # spec 026: the people card's head line
         assert "does not know his name: never call him by a name" in pkt
         assert "name not known to the character" in pkt
     assert off in st.entities

@@ -15,7 +15,8 @@ from engine.data.loader import load_rules
 from engine.dm.adjudication import AdjudicationRecord
 from engine.dm.context import TurnContext
 from engine.dm.oof import fact_short, near_miss_choices
-from engine.dm.roles.framer import beat_message, target_record
+from engine.dm.packet import people_card
+from engine.dm.roles.framer import beat_message
 from engine.dm.roles.reader import FactQuestion, ReaderResult, normalise
 from engine.dm.turn import _fiction_questions, not_oracle
 from engine.resolve.change import typed_goal
@@ -78,7 +79,7 @@ def test_belies_reading_is_her_record_never_a_coin_flip(tmp_path: Path) -> None:
                                targets=[belie])
             assert not any(e.type in ("oracle_answered", "fact_set") for e in tx.events), tx.events
             assert not rec.oracle and any("not asked of the Oracle" in n for n in rec.notes)
-            assert "lic.lang.letters" in target_record(tx.state, belie)
+            assert "Letters (reads and writes)" in "\n".join(people_card(tx.state, belie))  # spec 026: the card
             ctx.tx = None
             raise _Rollback
     except _Rollback:

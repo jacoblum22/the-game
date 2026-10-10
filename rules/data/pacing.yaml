@@ -388,8 +388,8 @@ feedback:                                 # 12.3.6, PR-12-11: the player's repor
   locate_call: retired                    # [revision: R2-H] [DL-12-94]: replaced by understand_call; code no longer pins a report first
   investigate:                            # PR-12-11 [revision: R2-J] [DL-12-105]: the Fixer role (engine/dm/fixer.py, spec 022); its model is configuration (owner: Sonnet, 2026-10-09); understand_call and the outcome menu deleted [verification: spec 022]
     steps: {min: 3, max_steps: 6}         # a bounded read-only investigation before deciding
-    tools: [turn_record, entity_state_and_provenance, transcript_search, recompute_frame, coin_and_inventory_ledger, said_vs_record]
-    proposals: [set_fact, remove_fact, restore_as_of_turn, refund, deduct, rerender_display, take_back_to_turn, correct_testimony, explain]   # rerender_display retired [revision: R2-K] [DL-12-117]; key kept until spec 026
+    tools: [turn_record, entity_state_and_provenance, transcript_search, recompute_frame, coin_and_inventory_ledger, said_vs_record, turn_model_io, dry_run, replay_turn]   # the last three [revision: R2-K] [DL-12-116] [DL-12-117] [verification: spec 026]
+    proposals: [set_fact, remove_fact, restore_as_of_turn, refund, deduct, take_back_to_turn, correct_testimony, explain]   # rerender_display deleted [revision: R2-K] [DL-12-117] [verification: spec 026]
     proposals_added: [reframe_open_offer, take_back_pending_turn]   # PR-12-11 step 3 [revision: R2-K] [DL-12-117]
     dry_run: true                         # any proposal runs first on a copy of the snapshot (gate, necessity, frame, or the turn)
     check_screen: true                    # inspect what the player will see after the repair; iterate within max_steps

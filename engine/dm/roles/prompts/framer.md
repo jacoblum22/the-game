@@ -24,7 +24,7 @@ CARDS (the authority), NARRATOR VIEW (entities, facts, clocks), THIS MESSAGE (th
   cost; R4 a serious risk; R5 more.
 - `levers` / `snags` (01.6.8): at most two each, fact ids established before this declaration. "Clever"
   and "surely" are not facts. Unsure lever: omit. A fitting hindering fact is a snag; never an Oracle answer,
-  refusal or scene label. One fact, one lever. The target's ability is their `target's record`.
+  refusal or scene label. One fact, one lever. The target's ability is their card's `can:`.
 - `stakes.source` (01.6.9): the established source a failure would cost from (aware opponent or observer,
   hazard, height, listening clock, tool at risk, goodwill, consumed resource), else `none` (safe). In
   conflict the opponent's ordinary next action is not a source. An onlooker counts only if they would act

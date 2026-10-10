@@ -170,7 +170,11 @@ def test_c1_the_smiths_ability_is_his_record_never_a_coin_flip(tmp_path: Path) -
     assert fid not in (schema_context(r.state, RULES, beat=b).snag_fact_ids or [])
     with pytest.raises(AssertionError, match="never a snag"):
         frame_of(r, b, snags=[fid], obstacle=Obstacle(kind="opposed", entity=smith))
-    assert "lic.training.craft_smithing" in beat_message(b, GateDecision(gate="G1", verb="verb.talk"), state=r.state)
+    from engine.dm.packet import view_ctx, view_for
+    from engine.llm.base import Role
+
+    framer_view = view_for(Role.FRAMER, r.state, view_ctx(b.intent, (), [smith], b))  # spec 026: the people card
+    assert "Smithing" in framer_view and "can:" in framer_view
 
 
 def test_c2_an_old_friends_will_is_willingness(tmp_path: Path) -> None:

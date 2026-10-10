@@ -130,27 +130,11 @@ def beat_message(beat: Beat, gate: GateDecision, note: str | None = None, state:
         lines.append(f"goal: {c.kind} {' '.join(x for x in (c.what, c.whom, c.description) if x and x != NONE)}")
     if fallback:
         lines.append("an untrained fallback: rate only what this method itself can reach; code adds its shift")
-    record = target_record(state, beat.target) if state is not None else ""
-    if record:  # 12.11.1 (DL-12-108): what they can do is their record, never an Oracle answer
-        lines.append(record)
     if beat.assertion:
         lines.append(f"assertion (context only, never a fact): {beat.assertion}")
     if note:
         lines.append(note)
     return "\n".join(lines)
-
-
-def target_record(state: WorldState, target: str | None) -> str:  # rule: 12.11.1
-    """The target person's record for the Framer: their role and licences (the Framer's view carries no licences,
-    so a scribe's Letters could be contradicted, round 7 I3 §2)."""
-    ent = state.entities.get(target or "")
-    if ent is None or ent.kind not in ("npc", "companion", "adversary"):
-        return ""
-    role = ent.data.get("role") or ent.data.get("trade") or ent.data.get("occupation") or ""
-    lic = [x.license_id for x in state.licenses.get(ent.id, [])] or [
-        str(x.get("id")) for x in ent.data.get("licenses") or () if isinstance(x, dict) and x.get("id")]
-    parts = [f"role: {role}" if role else "", f"holds: {', '.join(lic)}" if lic else "holds no licences"]
-    return "target's record: " + "; ".join(p for p in parts if p)
 
 
 def framer_for(ctx: TurnContext) -> Any:
