@@ -1,7 +1,7 @@
 """The opening incident as the character knows it and the names a local starts with (12.16.16, 12.10.2).
 
     start_knowledge(ctx, tx)            # at a character's opening: a local knows the haven's names (I-149)
-    incident_line(state)                # the incident's case as the PC knows it (scene setting, opening note)
+    incident_line(state)                # the incident's case as data, as the PC knows it (the opening note)
 
 The incident is a reduced case built at seed time (`engine.gen.case`; DL-12-62): its subject, reporter and clues are
 generated, never bound at the opening [I-145, I-148; the P-067 binding is retired]. "Who is X?" is the answer
@@ -26,23 +26,24 @@ def _incident_case(state: Any) -> dict[str, Any] | None:
 
 
 def incident_line(state: Any) -> str:  # rule: 12.16.16
-    """The incident's case in words, as the PC knows it: who brought the word (the reporter at the opening place)
-    and each necessary node the PC has been told."""
+    """The incident's case as data, as the PC knows it (12.16.16 "data, not sentences"; DL-12-114): `reporter:` the
+    person at the opening place who holds its first clue, and `known:` each necessary node the PC has been told.
+    Fields for the opening note only, never a sentence in every scene setting ("X brought the word", retired)."""
     from engine.store.views import display_name
 
     case = _incident_case(state)
     if case is None:
         return ""
     node1 = case["nodes"][0]
-    sents = []
-    for n in case["nodes"]:
-        fid = n.get("fact_id")
-        if n.get("found") and fid in state.knowledge.get(active_pc(state) or "", {}):
-            sents.append(f"{n['fact'][0].upper()}{n['fact'][1:]}.")
+    fields = []
     core = next((p for p in node1["placements"] if p["access"] == "core" and p["holder_kind"] == "person"), None)
     if core and core["holder"] in state.entities and core["holder"] not in state.seals:
-        sents.append(f"{display_name(state, core['holder'])} brought the word.")
-    return " ".join(sents)
+        fields.append(f"reporter: {display_name(state, core['holder'])}")
+    known = [str(n["fact"]) for n in case["nodes"]
+             if n.get("found") and n.get("fact_id") in state.knowledge.get(active_pc(state) or "", {})]
+    if known:
+        fields.append("known: " + "; ".join(known))
+    return "; ".join(fields)
 
 
 def start_knowledge(ctx: Any, tx: Any) -> list[str]:  # rule: 12.10.2

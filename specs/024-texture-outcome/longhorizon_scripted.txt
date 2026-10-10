@@ -1,0 +1,18 @@
+# Long-horizon harness (model: offline)
+
+## Scripted player (seed 7, 300 lines, 382 turns, 308 narrated)
+- contradictions per 100 narrated turns: 0.0
+- disputes per 100 narrated turns: 0.0 (upheld 0.0)
+- recall probes: 3 scored of 23; precision 1.00, coverage 0.67
+- [offline stub: plumbing only, NOT a narration measure; judge narration on live saves] novelty-4 over the previous 10 deliveries: 0.65 (254 deliveries)
+- [offline stub: plumbing only, NOT a narration measure; judge narration on live saves] narration loop (308 narrated): first draft delivered as drafted 200/308 (64.9%); turns with a cut, rendered line or fallback 108/308 (35.1%); narrator calls per narrated turn 1.35; per narrated turn: precision.outcome_words 0.03, sample_diff_findings 0.42, sample_misses 0.00, sample_turns 0.11, undeclared_new 0.00
+- claim log per 100 narrated turns: 43.2 (action/supported 34.4, position/supported 3.6, outcome/logged 2.6, action/no_verdict 2.6)
+- sampled audit: 35 of 308 narrated turns sampled; blocking-list misses 0 (0.0 per 100 narrated turns)
+- learning beats answered (PR-12-10): 106; empty successes 11 (10.4%); items 106, case pointers 2, willingness lines 90
+- ask-twice consistency: 23/23 (100%)
+- NPC lines 0; per 100: repeats 0.0, "I don't know" 0.0, runarounds 0.0, self-contradictions 0.0 (OEQ-12-25)
+- view tokens at line 50: director 2247 (view 586), narrator 6558 (view 1624), reader 3284 (view 345)
+- view tokens at line 200: narrator 6746 (view 1590)
+- view tokens at line 300: framer 11740 (view 796), narrator 6436 (view 1611), reader 3297 (view 322)
+- cached-prefix share per role: checker 0.92, director 0.55, framer 0.65, narrator 0.81, reader 0.88
+- engine errors: 0

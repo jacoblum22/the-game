@@ -19,7 +19,7 @@ from collections.abc import Sequence
 from typing import Any
 
 from engine.audit import text as tx
-from engine.dm.adjudication import AdjudicationRecord, NpcActionEntry
+from engine.dm.adjudication import AdjudicationRecord, NpcActionEntry, effective_degree
 from engine.dm.context import TurnContext
 
 ACTIVITY = "activity"  # the detail slot (00.6.6a): the NPC's activity, a scene slot cleared at scene end
@@ -96,6 +96,7 @@ def ensure_activities(ctx: TurnContext, record: AdjudicationRecord) -> None:  # 
     own role's cell, else `other`, × watch, d6 pairs), written as its `activity` detail (a scene slot, 00.6.6a);
     never re-rolled that scene, so an activity ended by engagement stays ended. Then the record's scene-state lines
     are rebuilt for whoever is present now (T-12-18): optional material (12.14.12), never a must-name line."""
+    from engine.dm.packet import own_words, pronoun_words
     from engine.dm.roles.world import present_npcs
     from engine.dm.scene_state import lines
     from engine.store.details import write_detail
@@ -117,7 +118,7 @@ def ensure_activities(ctx: TurnContext, record: AdjudicationRecord) -> None:  # 
             key = role_key(ctx.rules, npc_field(st, npc, "role"))
             options = list(cells[key][WATCHES[st.time.now.watch % 4]])
             roll = ctx.rng.draw(6, f"activity of {npc} (12.11.9)", stream="npc", table_id="tbl.npc_activity")
-            act = str(options[min((roll - 1) // 2, len(options) - 1)])
+            act = own_words(str(options[min((roll - 1) // 2, len(options) - 1)]), pronoun_words(st, npc))
             tx_.add_all(write_detail(tx_.state, tx_.mint, npc, ACTIVITY, act, source="generation", because="12.11.9",
                                      rules=ctx.rules, visibility="shown").events)
     if new:
@@ -454,7 +455,10 @@ def candidates(state: Any, npc: str, record: AdjudicationRecord) -> dict[str, st
 
 
 def _voice(ctx: TurnContext, npc: str) -> str:  # rule: 12.11.9
-    """The NPC's voice register and habit; a walk-on's are rolled on first answer (12.11.1's tables)."""
+    """The NPC's voice register; a walk-on's voice (register and habit) is rolled on first answer (12.11.1's
+    tables), the habit in their own pronouns. The habit is background, never required in a line (12.11.3;
+    DL-12-113), so only the register is returned."""
+    from engine.dm.packet import own_words, pronoun_words
     from engine.world.common import fact
     from engine.world.social import npc_field
 
@@ -465,10 +469,11 @@ def _voice(ctx: TurnContext, npc: str) -> str:  # rule: 12.11.9
         hab = tbl("tbl.npc_voice_habit")["results"]
         r = ctx.rng.draw(len(reg), f"voice register of {npc} (12.11.9)", stream="npc", table_id="tbl.npc_voice_register")
         h = ctx.rng.draw(len(hab), f"voice habit of {npc} (12.11.9)", stream="npc", table_id="tbl.npc_voice_habit")
-        v = {"register": str(reg[r - 1]["result"]), "habit": str(hab[h - 1]["result"])}
+        v = {"register": str(reg[r - 1]["result"]),
+             "habit": own_words(str(hab[h - 1]["result"]), pronoun_words(ctx.state, npc))}
         tx_ = ctx.need_tx()
         tx_.add(fact(tx_, npc, "voice", v, rule_id="12.11.9", visibility="background"))
-    return f"{v.get('register')}, {v.get('habit')}"
+    return str(v.get("register"))
 
 
 REACH_YES = {"limited": "grants a lesser version of what you ask", "standard": "agrees to what you ask",
@@ -487,8 +492,12 @@ def talk_outcome(e: Any, offered: bool = False) -> str:  # rule: T-15-5
 
 
 def voiced_refusal(ctx: TurnContext, npc: str, reason: str) -> str:  # rule: 12.11.9
-    """Step 4: a refusal spoken in the NPC's own voice: the reason said through their register and habit."""
-    return f"refuses, in their own voice ({_voice(ctx, npc)}): {reason}"
+    """Step 4: a refusal spoken in the NPC's own voice: the reason said in their register; the habit is never
+    required (12.11.9 step 4; DL-12-113: round 7's "(jovial, whispers secrets far too loudly)" in every refusal).
+    In the NPC's own pronouns (DL-12-114)."""
+    from engine.dm.packet import own_words, pronoun_words
+
+    return own_words(f"refuses, in their own voice ({_voice(ctx, npc)}): {reason}", pronoun_words(ctx.state, npc))
 
 
 def _judge_motive(ctx: TurnContext, npc: str, cands: dict[str, str], happened: str) -> tuple[str | None, list[str]]:
@@ -567,18 +576,18 @@ def respond(ctx: TurnContext, record: AdjudicationRecord, beats: Sequence[Any], 
             pass  # PR-12-10 answered them this turn: that line is their response
         elif npc in talks:  # (a) a resolved Talk frame's delivered outcome (a certain talk, no roll, is a yes)
             b = talks[npc]
-            degree = b.entry.degree or "success"
+            degree = effective_degree(b.entry) or "success"  # DL-01-48: a success at a cost taken is a success
             fr = st.frames[b.frame_id].frame if b.frame_id and b.frame_id in st.frames else {}
             offered = (fr.get("beat") or {}).get("pressure") == "offer" or bool(_OFFER.search(b.entry.restatement))
             action = talk_outcome(b.entry, offered)
             if degree in ("failure", "critical_failure"):
-                action = voiced_refusal(ctx, npc, f"the talk did not move them ({degree.replace('_', ' ')})")
+                action = voiced_refusal(ctx, npc, "the talk did not move them")
             record.npc_actions.append(NpcActionEntry(npc=npc, action=action, source="talk_outcome",
                                                      source_ref=b.frame_id, tags=[practice]))
         elif is_addressed and _speech_only(record, beats, npc):
             # plain speech or a question: willingness only, the words are the narrator's (PR-12-10 step 2)
             band, why = ans.willingness(ctx, npc, record, beats)
-            said = ans.WILL_WORDS[band].format(why=why)
+            said = ans.will_words(ctx.state, npc, band, why)
             if not asked:  # plain speech asks nothing: they reply (12.11.9 step 4), within the same willingness
                 said = said.replace("answers what you asked", "replies").replace("refuses to answer what you asked",
                                                                                  "turns you away")
@@ -639,7 +648,7 @@ def respond(ctx: TurnContext, record: AdjudicationRecord, beats: Sequence[Any], 
         for a in record.npc_actions[n_acts:]:  # T-12-18: the response sets their activity and manner
             src, ref = a.source, a.source_ref or "12.11.9"
             row = int(ref.rsplit(":", 1)[1]) if src == "table_row" else wrow if src == "want" else None
-            degree = talks[npc].entry.degree if src == "talk_outcome" and npc in talks else None
+            degree = effective_degree(talks[npc].entry) if src == "talk_outcome" and npc in talks else None
             write(ctx, record, npc, response_values(ctx.rules, "table_row" if row is not None else src,
                                                     practice=practice, row=row, degree=degree), because=ref)
         if is_addressed and npc not in spoken_with(ctx.state):

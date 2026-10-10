@@ -562,8 +562,12 @@ def _run_scripted(seed: int, lines: int, model: str, tmp: Path, learned: list[di
     out.append(dispute_lines(dispute_stats(store.state), narrated))
     out.append(f"- recall probes: {len(rec_c)} scored of {kinds['recall']}; precision {_mean(rec_p)}, "
                f"coverage {_mean(rec_c)}")
-    out.append(f"- novelty-4 over the previous 10 deliveries: {novelty4(deliveries):.2f} ({len(deliveries)} deliveries)")
-    out.append(narration_loop(turns))
+    loop = [f"- novelty-4 over the previous 10 deliveries: {novelty4(deliveries):.2f} ({len(deliveries)} deliveries)",
+            narration_loop(turns)]
+    if model == "offline":  # P6 (round 7, R7-I1 §6): the stub's canned prose, not a narration measure
+        loop = [f"- [offline stub: plumbing only, NOT a narration measure; judge narration on live saves] "
+                f"{x.removeprefix('- ')}" for x in loop]
+    out += loop
     out += claim_log_lines(turns)
     out += ladder_lines(learned, (twice[0], twice[1]))
     out += dialogue_lines(turns)

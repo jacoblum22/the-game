@@ -1764,6 +1764,7 @@ tables:
     result: old
   lifecycle: provisional
   basis: *id003
+  notes_rule: "a template row about one person: the engine writes the person's own pronouns for 'their', 'them', 'themselves' and 'theirs' (12.11.1) [revision: R2-K] [DL-12-114]"
 - id: tbl.npc_detail
   name: Distinctive detail
   tags: []
@@ -1873,6 +1874,7 @@ tables:
     result: a brand on the wrist
   lifecycle: provisional
   basis: *id003
+  notes_rule: "a template row about one person: the engine writes the person's own pronouns for 'their', 'them', 'themselves' and 'theirs' (12.11.1) [revision: R2-K] [DL-12-114]"
 - id: tbl.npc_demeanor
   name: Demeanor
   tags: []
@@ -2094,7 +2096,7 @@ tables:
   name: Voice habit
   tags: []
   die: d20
-  rule: "occasional, background, never must-use; the engine writes the person's own pronouns for 'their' and 'themselves' (12.11.1, 12.11.3) [revision: R2-K] [DL-12-113]"
+  rule: "occasional, background, never must-use; the engine writes the person's own pronouns for 'their', 'them', 'themselves' and 'theirs' (12.11.1, 12.11.3) [revision: R2-K] [DL-12-113] [DL-12-114]"
   recency: true
   context_filters: []
   results:
@@ -2355,7 +2357,7 @@ tables:
   context_filters:
   - role
   - watch
-  rule: 'rolled by code once per scene, when an NPC enters it [revision: R2-H; DL-12-93]: find the NPC''s role (12.11.1) by the first word of its tbl.npc_role row (a role not listed uses other, never another role''s cell) and the watch (00.7.1); roll d6 on that cell (results give the pair). The result is written as the NPC''s activity, scene state (T1c, 12.14.13) and optional material (12.14.12): it ends when the NPC engages (talks, fights, or responds with a deed) and is not re-rolled that scene; never appended, expiring at scene end; an ended or stale activity is never a lever (01.6.8). A region''s seed tables replace this one where they exist.'
+  rule: 'rolled by code once per scene, when an NPC enters it [revision: R2-H; DL-12-93]: find the NPC''s role (12.11.1) by the first word of its tbl.npc_role row (a role not listed uses other, never another role''s cell) and the watch (00.7.1); roll d6 on that cell (results give the pair). The result is written as the NPC''s activity, scene state (T1c, 12.14.13) and optional material (12.14.12): it ends when the NPC engages (talks, fights, or responds with a deed) and is not re-rolled that scene; never appended, expiring at scene end; an ended or stale activity is never a lever (01.6.8). A region''s seed tables replace this one where they exist. The engine writes the person''s own pronouns for ''their'', ''them'', ''themselves'' and ''theirs'' (12.11.1) [revision: R2-K] [DL-12-114].'
   results:
   - range: 1-2
     result: the cell's first activity

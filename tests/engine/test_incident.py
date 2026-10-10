@@ -16,7 +16,7 @@ from engine.dm.session import opening
 from engine.gen.case import cases
 from engine.llm.offline import OfflineModel
 from engine.store.events import Event
-from engine.store.views import name_known
+from engine.store.views import display_name, name_known
 from tests.fixtures.game import entity, new_store
 from tests.fixtures.seeded import seeded_store
 
@@ -76,14 +76,19 @@ def test_who_is_missing_is_the_seeded_case_subject_and_stays_answered(tmp_path: 
     assert store.rebuild() == store.state
 
 
-def test_the_opening_names_who_brought_the_word(tmp_path: Path) -> None:
+def test_the_opening_names_the_reporter_as_data(tmp_path: Path) -> None:
+    """Spec 024 C19 (DL-12-114): the incident's reporter is a field of the opening note, never a code sentence
+    ("X brought the word") in every scene setting."""
     store, w = seeded_store(tmp_path, 21)
     resp = opening(TurnContext.for_store(store, model=OfflineModel()))
     st = store.state
     core = next(p for p in w.record["seed_cases"][0]["nodes"][0]["placements"] if p["access"] == "core")
-    assert resp.fiction and "brought the word" in incident_line(st)
+    assert resp.fiction and incident_line(st) == f"reporter: {display_name(st, core['holder'])}"
     assert st.scene is not None and core["holder"] in st.scene.cast_present  # the reporter is there, at the opening place
-    assert "brought the word" in scene_setting(st)
+    note = next(str(r["request"]) for r in store.model_calls() if r["role"] == "narrator")
+    assert "reporter: " in note and "brought the word" not in note
+    for full in (True, False):
+        assert "brought the word" not in scene_setting(st, full=full) and "matter at hand" not in scene_setting(st, full=full)
     assert store.rebuild() == store.state
 
 

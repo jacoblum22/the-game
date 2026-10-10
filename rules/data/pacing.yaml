@@ -294,7 +294,6 @@ npc:                                      # 12.11
     archive: queryable
     relevance_order: [same_deed, same_people, same_place, highest_salience]
   voice_registers: [formal, plain, rough, flowery, terse, nervous, jovial, cold]
-  habit_max_per_scene: 1                  # retired [revision: R2-K] [DL-12-113]: nothing counts or gates a habit (12.11.3); key kept until spec 024
   habit_phrasing: occasional              # 12.11.3 [revision: R2-K]: background, never must-use; never required in refusal or answer lines
   activity:                               # 12.11.9 step 1 [revision: R2-H] [DL-12-93]
     rolled: once_per_scene
@@ -371,7 +370,7 @@ narration:                                # 12.14
   scene_open_max_words: 200
   recap_max_words: 120
   skip_max_words: 150
-  freshness: {opening_patterns_remembered: 3, images_per_entity_remembered: 10, image_repeat_turns: 10, keyed_on: last_used, covers: [details, written_words, speech_openers, said], said_overlap: 0.6, backstop: opening_and_speech_opener_scan, setting_once: on_arrival_then_optional, usage_marks: retired, quote_back: retired, repetition_scan: log_only}   # 12.14.11 [revision: R2-E]; [revision: R2-K] [DL-12-113]: last_used marks, their ten-turn gate and the quote-back retired; the scan is logged only (images, openings, closings); keys kept until spec 024
+  freshness: {said_overlap: 0.6, setting_once: on_arrival_then_optional, repetition_scan: log_only, scan_window: 10}   # 12.14.11 [revision: R2-E]; [revision: R2-K] [DL-12-113]: no usage marks, no quote-back; the repetition scan (images, openings, closings over the last scan_window deliveries) is a measure run on saves (specs/024-texture-outcome/measure.py), never a gate; the retired keys deleted by spec 024
   forbidden_recognition_phrasing: ["you gain", "you have unlocked", "your skill increases", "level", "experience", "class", "achievement", "stat names in any in-world voice", "bracketed or boxed text inside fiction", "a disembodied announcing voice"]
   must_name: [beat_outcome_and_change, cost_form, changed_harm_conditions_quantities_possessions_positions, direct_question_answer, clue_or_lead_delivered, pause]   # 12.14.12, closed [revision: R2-H] [DL-12-92]
   optional_material: [activities, postures, manners, details, other_npcs_reactions, crowd_mood, scene_texture, place_look_after_framing]   # shown as material, never required; no check requires it

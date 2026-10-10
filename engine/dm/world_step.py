@@ -18,7 +18,7 @@ from collections.abc import Sequence
 from typing import Any
 
 from engine.audit import text as words
-from engine.dm.adjudication import AdjudicationRecord, NpcActionEntry, OmenEntry
+from engine.dm.adjudication import AdjudicationRecord, NpcActionEntry, OmenEntry, effective_degree
 from engine.dm.answer import name as _name
 from engine.dm.context import TurnContext
 from engine.dm.npc_layer import ensure_activities, respond
@@ -133,9 +133,8 @@ def _learnable(state: Any, f: Any, pc: str) -> bool:
 
 
 def _ok(b: BeatOutcome) -> bool:
-    e = b.entry
-    return b.status == "no_roll" or (b.status == "resolved" and (e.degree in ("success", "critical_success")
-                                                                 or e.success_at_cost))
+    return b.status == "no_roll" or (b.status == "resolved"
+                                     and effective_degree(b.entry) in ("success", "critical_success"))  # DL-01-48
 
 
 def deliver_learning(ctx: TurnContext, record: AdjudicationRecord, beats: Sequence[BeatOutcome]

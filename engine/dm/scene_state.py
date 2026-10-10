@@ -14,7 +14,7 @@ from __future__ import annotations
 from collections.abc import Mapping, Sequence
 from typing import Any
 
-from engine.dm.adjudication import ActivityEntry, AdjudicationRecord
+from engine.dm.adjudication import ActivityEntry, AdjudicationRecord, effective_degree
 from engine.dm.context import TurnContext
 from engine.resolve.change import current_hold
 from engine.resolve.pipeline import _BAND_WORDS, _DOWN, band_words
@@ -40,6 +40,8 @@ def write(ctx: TurnContext, record: AdjudicationRecord, eid: str, values: Mappin
           fill: Mapping[str, str] | None = None) -> None:  # rule: 00.6.6a
     """Write each slot's value on `eid` (a scene slot, `because` the explaining record entry); `{actor}`/`{target}`
     in a value are filled from `fill`, and a value naming a party that is not there is skipped."""
+    from engine.dm.packet import own_words, pronoun_words
+
     tx_ = ctx.need_tx()
     start = len(tx_.events)
     for slot, value in values.items():
@@ -48,15 +50,14 @@ def write(ctx: TurnContext, record: AdjudicationRecord, eid: str, values: Mappin
             v = v.replace("{" + k + "}", name)
         if "{" in v:
             continue
+        v = own_words(v, pronoun_words(tx_.state, eid))  # the person's own pronouns (12.11.1; DL-12-114)
         tx_.add_all(write_detail(tx_.state, tx_.mint, eid, slot, v, source="ruling", because=because,
                                  rules=ctx.rules, visibility="shown").events)
     record.add_writes(tx_.events[start:])
 
 
 def _band(e: Any) -> str:
-    if e.degree is None or e.degree in ("success", "critical_success"):
-        return "no_roll" if e.degree is None else e.degree
-    return "success" if e.success_at_cost else e.degree
+    return effective_degree(e) or "no_roll"  # DL-01-48: a success at a cost is a success
 
 
 def beat_writes(ctx: TurnContext, record: AdjudicationRecord, beats: Sequence[Any]) -> None:  # rule: T-12-18
