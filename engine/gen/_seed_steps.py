@@ -328,11 +328,13 @@ def step6_haven(st: Rec, dice: Dice, A: Answers, names: Names) -> None:
         inn = "the {} {}".format(dice.pick(["Drowned", "Golden", "Old", "Blue", "Crooked", "Last", "Sleeping", "Red"]),
                              dice.pick(["Lamb", "Lantern", "Plough", "Bell", "Stag", "Barrel", "Hound", "Goose"]))
         bname = {"temple": f"the temple of {kname}", "shrine": f"the shrine of {kname}", "inn": inn,
-                 "smithy": "the smithy", "hall": "the hall", "gate": hsite["feature"], "market": "the market square",
+                 "smithy": "the smithy", "hall": "the hall", "gate": hsite["feature"] if "gate" in hsite["feature"] else "the gate", "market": "the market square",
                  "healer": "the healer's house"}[b]
         bid = f"{hid}.{b}"
         assert bid not in P, bid
-        P[bid] = place_record(bid, bname, "building", hid, 0, None, "safe", ["terrain.settlement." + tier], climate, bname,
+        # the gate keeps the site feature in its description, never as its name ("go to the ford"; DL-12-125)
+        desc = f"the gate, by {hsite['feature']}" if b == "gate" and bname != hsite["feature"] else bname
+        P[bid] = place_record(bid, bname, "building", hid, 0, None, "safe", ["terrain.settlement." + tier], climate, desc,
                               safe=True, rest_site="haven" if b == "inn" else None, settlement_scope=hid, discovered=True)
         P[bid]["openness"] = "closed"
         blds[b] = bid

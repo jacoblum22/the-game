@@ -1778,7 +1778,7 @@ places:
       max_band: 2
       quirk_table: companions.yaml#tbl.16.hire_quirk
     sentry_floors:
-    - {post: the quay, day: suspicious, night: alert}
+    - {post: the gate, day: suspicious, night: alert}
     - {post: the hall, day: suspicious, night: suspicious}
     - {post: the temple of Oswen, day: unaware, night: suspicious}
     lifestyle_overrides: []
@@ -1938,7 +1938,7 @@ places:
   furniture: [a clerk's table with ink and tally sticks, a dais with the rulers' seat]
   exits: [loc.high_fells_merestead, loc.high_fells_merestead.temple, loc.high_fells_merestead.inn]
 - id: loc.high_fells_merestead.gate
-  name: the quay
+  name: the gate
   place_kind: building
   parent: loc.high_fells_merestead
   ring: 0
@@ -1965,7 +1965,7 @@ places:
   state_log: []
   links: []
   facts: {}
-  desc: the quay
+  desc: the gate, by the quay
   kind: place
   tags: [terrain.settlement.town]
   exists: exists
@@ -7285,12 +7285,12 @@ calendar:
 documents:
 - {id: doc.incident_notice, kind: document, option: warning, at: loc.high_fells_merestead.temple, text: 'By order of The lords of Hawkgate:
     none to go toward a war-band of The Horde of the Millwick after dark. Lights have been seen there. Report anything seen to Loran
-    Millbrook at the quay.', table: tbl.12.seed.document}
+    Millbrook at the gate.', table: tbl.12.seed.document}
 - {id: doc.lead_3, kind: document, option: hire, at: loc.high_fells_merestead.gate, text: 'WANTED: able hands for a journey into the
     hills. Good coin, no questions. Ask for Yagum Iron-Tusk at the market square. Posted by The council of Merestead.', table: tbl.12.seed.document}
 - {id: doc.notice, kind: document, option: warning, at: loc.high_fells_merestead.gate, text: 'By order of The lords of Hawkgate: none
     to go toward Shephollow''s Undercroft after dark. The watch cannot answer for it. Report anything seen to Loran Millbrook at the
-    quay.', table: tbl.12.seed.document}
+    gate.', table: tbl.12.seed.document}
 seed_cases:
 - id: case.incident.alarm
   profile: reduced

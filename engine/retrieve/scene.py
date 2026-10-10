@@ -20,8 +20,9 @@ from engine.store.views import display_name
 
 T = TypeVar("T")
 VALUE_CHARS = 160  # a fact value as the view shows it (packet.MAX_VALUE_CHARS)
-READING = re.compile(r"\b(read|reads|reading|wording|inscription|lettering|what (?:does|do|did) (?:it|the \w+|they) "
-                     r"say|what it says|what's written|what is written)\b", re.I)  # the player reads something
+READING = re.compile(r"\b(read|reads|reading|wording|inscription|lettering|what (?:does|do|did) (?:it|the(?: \w+){1,2}) "
+                     r"say|what it says|what's written|what is written)\b", re.I)  # the player reads something;
+# never "what did they say" (people speak; spec 024 hand-off), and "the ferry notice" is two words
 CAST_KINDS = ("npc", "companion", "adversary")  # people who can be present (as engine.world.places.cast_at)
 WRITTEN = ("text","inscription", "reads", "words", "says", "wording", "writing")  # a thing's written words (P-110)
 

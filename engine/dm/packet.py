@@ -31,6 +31,7 @@ from engine.retrieve.cards import guidance_digest, max_cards
 from engine.retrieve.episodes import card_lines, cards_for
 from engine.retrieve.scene import (
     CAST_KINDS,
+    WRITTEN,
     also_here,
     beat_target,
     calendar_line,
@@ -369,16 +370,18 @@ _PLAYER_SAID = re.compile(r"THE PLAYER'S MESSAGE: \"(.*)\"")
 
 
 def view_ctx(message: str = "", exchanges: Sequence[Any] = (), focus: Iterable[str] = (),
-             beat: Any = None, *, plain: bool = True) -> dict[str, Any]:
+             beat: Any = None, *, plain: bool = True, shown: Iterable[str] | None = None) -> dict[str, Any]:
     """The `view_for` context from a packet's own parts: the player's words (the `THE PLAYER'S MESSAGE:` line of a
     Narrator or Director message; else the whole message when it is the player's own, `plain`), the last delivery
-    (the last exchange's DM part), and the recent exchanges' text (`talk`: whom they name gets an identity line)."""
+    (the last exchange's DM part), and the recent exchanges' text (`talk`: whom they name gets an identity line).
+    `shown`: on a later turn of a scene, whose look and description the narrator gets (DL-12-122); None, everyone's."""
     said = _PLAYER_SAID.search(message)
     last = list(exchanges)[-1] if exchanges else ""
     dm = last if isinstance(last, str) else (list(last) + ["", ""])[1]
     words = said.group(1) if said else message if plain else ""  # a scene opening's setting names no one asked
     talk = "\n".join(render_exchange(e) for e in exchanges)
-    return {"message": words, "last_delivery": str(dm or ""), "focus": list(focus), "beat": beat, "talk": talk}
+    return {"message": words, "last_delivery": str(dm or ""), "focus": list(focus), "beat": beat, "talk": talk,
+            "shown": None if shown is None else list(shown)}
 
 
 def identity_lines(state: WorldState, ids: Iterable[str] = (), text: str = "") -> list[str]:  # rule: 12.2.4
@@ -433,6 +436,44 @@ def _slim(e: Mapping[str, Any], keys: Iterable[str] = ("role", "aliases", "prono
     return out
 
 
+# setting once for people and things (12.14.11; DL-12-122): how someone looks, and how a thing looks or what it says
+_PERSON_LOOK = frozenset({"hair", "face", "mark", "build", "clothing", "worn"})  # pacing.yaml#details.slots: the look
+_THING_LOOK = frozenset({"desc", "look", "detail"})  # a thing's description in its data
+THINGS = ("item", "object")
+
+
+def describes(state: WorldState, f: Mapping[str, Any]) -> bool:  # rule: 12.14.11
+    """A view fact that only says how its subject looks (a person's look slot; a thing's narrated or written
+    description), never a ruled state, a pinned correction or anything about a place (DL-12-122)."""
+    e = state.entities.get(str(f.get("subject")))
+    pred = str(f.get("predicate") or "")
+    if e is None or f.get("pinned"):
+        return False
+    if e.kind in CAST_KINDS:
+        return pred.startswith("detail.") and pred.removeprefix("detail.") in _PERSON_LOOK
+    return e.kind in THINGS and f.get("source") != "ruling" and pred not in _HELD and (
+        pred.startswith("detail.") or pred in WRITTEN or f.get("source") == "narration")
+
+
+_HELD = ("holder", "owner", "carried_by", "held_by")  # who has a thing is its state, never its description
+
+
+def setting_once(state: WorldState, view: dict[str, Any], shown: set[str]) -> dict[str, Any]:  # rule: 12.14.11
+    """DL-12-122 (owner ruling B): a person's look and a thing's description stay in the narrator's view only for
+    `shown` (who came into the scene this turn, or whom the player looks at or asks about); everyone else keeps their
+    name, card, manner and voice, and a thing its name and ruled state. Nothing is counted or stored."""
+    def trim(e: dict[str, Any]) -> dict[str, Any]:
+        ent = state.entities.get(e["id"])
+        if ent is None or e["id"] in shown or "data" not in e:
+            return e
+        drop = {"detail"} if ent.kind in CAST_KINDS else _THING_LOOK if ent.kind in THINGS else set()
+        return {**e, "data": {k: v for k, v in e["data"].items() if k not in drop}} if drop else e
+
+    view["entities"] = [trim(e) for e in view.get("entities", [])]
+    view["facts"] = [f for f in view.get("facts", []) if f.get("subject") in shown or not describes(state, f)]
+    return view
+
+
 def _no_motives(view: dict[str, Any]) -> dict[str, Any]:
     """The PC-knowledge layer (12.10.1): no motive keys on any entity, no motive facts (the seals and `truth` are
     already gone in `narrator_view`)."""
@@ -467,6 +508,8 @@ def view_for(role: Role, state: WorldState, ctx: Mapping[str, Any] | None = None
     target = None
     if role == Role.NARRATOR:
         view = _no_motives(view)
+        if ctx.get("shown") is not None:  # a later turn of the scene: looks only for whom this turn shows (DL-12-122)
+            view = setting_once(state, view, set(ctx["shown"]))
         view["entities"] = _carded(state, view["entities"])  # the shared people card (DL-12-116)
     elif role == Role.READER:
         view = {"time": view["time"], "scene": view["scene"], "also_here": view["also_here"],
@@ -533,13 +576,15 @@ def _place_bits(place: Any) -> list[str]:
     return bits
 
 
-def scene_setting(state: WorldState, *, full: bool = True) -> str:  # rule: 12.4.3
+def scene_setting(state: WorldState, *, full: bool = True, shown: Iterable[str] = ()) -> str:  # rule: 12.4.3
     # rule: 12.14.11
     """Material for describing the place, in words (never ids): the place and its desc, landmarks and openness, the
     town or region around it, the places beside it, who is here, and the hour, season and weather. Seed facts only:
     nothing here is invented, and the narrator may name ordinary furniture of such a place [revision: I-127].
     `full=False` (a later turn of the scene, DL-12-99): the look, furniture and description were given when the scene
-    opened, so only the place's name and an "already described" line; people, exits and time stay."""
+    opened, so only the place's name and an "already described" line; people, exits and time stay, and a person in
+    `shown` (come in this turn, or looked at or asked about) keeps their look on their line (DL-12-122)."""
+    shown = set(shown)
     sc = state.scene
     place = state.entities.get(sc.place_id) if sc and sc.place_id else None
     if place is None or place.id in state.seals:
@@ -578,7 +623,8 @@ def scene_setting(state: WorldState, *, full: bool = True) -> str:  # rule: 12.4
         # pronouns first: a person squeezed out of the view's full profiles keeps them (playtest 20261008-145410:
         # Ysrion, she/her, narrated "he" all game; the pronoun precision check, 12.3.2). The look only when the place
         # is described (setting once, DL-12-99; DL-12-113): later turns carry who they are, not how they look.
-        keys = ("pronouns", "age", "detail", "demeanor") if full else ("pronouns",)
+        keys = ("pronouns", "age", "detail", "demeanor") if full else ("pronouns", "detail") if i in shown \
+            else ("pronouns",)
         look = own_words(", ".join(str(ed[k]) for k in keys if ed.get(k)), pronouns_of(ed.get("pronouns")))
         who = display_name(state, i)
         role = f", the {ed['role']}" if ed.get("role") and str(ed["role"]) not in who else ""

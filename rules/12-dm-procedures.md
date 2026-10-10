@@ -299,7 +299,9 @@ ruleset or the whole history. Each turn it receives exactly:
    - **Profiles** [revision: R2-E; DL-12-70]: each person and thing in view, and each spotlight entity, is
      rendered as a compact profile: its stable identity, then its active details (00.6.6a) by salience, with no
      usage marks (12.14.11) [revision: R2-K; DL-12-113]. A person's look and habit are background on their profile, as
-     data, and are not repeated on every `present:` line after framing. `scene` details are
+     data, and are not repeated on every `present:` line after framing. The look, and a thing's description, are on the
+     profile only on the turns 12.14.11 names (it first appears, a look-around, the player looks at it or asks about
+     it) [revision: R2-K; DL-12-122]. `scene` details are
      pinned while their scene runs.
    - **Spotlight** (the `spotlight` budget) [revision: R2-E; DL-12-74]: up to `packet.spotlight_k` (**4**)
      entities outside the scene, chosen in this order, skipping any already in view: (1) entities named or
@@ -351,7 +353,7 @@ its own projection of it, respecting the three layers of 12.10.1 (`get_state(sce
 | Reader (PARSE) | the message, the last two exchanges, the names and aliases of the scene and spotlight entities, the PC's knacks as words, the open pause | setting prose, profiles, scene cards |
 | Framer (rolled beats only) | the beat; the target's and the place's profiles (their details are levers, 12.14.13); positions and conditions; anchor cards; candidate facts filtered by code | the PC sheet (the modifier is computed), the cast list, setting prose |
 | World and the NPC layer | world truth for the present NPCs minus seals: motives, memories, knowledge; off-screen clocks; scene cards; the player's message and the last exchange [revision: R2-J; DL-12-104] | setting prose |
-| Narrator | **the PC-knowledge layer only**: the adjudication record with handles, the setting and seeded looks (on arrival and at scene framing; on later turns of the scene only as optional material marked described, 12.14.11) [revision: R2-I; DL-12-99], profiles (no usage marks; looks and habits as background, 12.14.11) [revision: R2-K], the spotlight as the PC knows it, at most 2 scene cards, the calendar line pinned first; the name, pronouns and bond of everyone named or mentioned, present or absent (item 3) [revision: R2-J; DL-12-104]; the **speaker card** of each NPC the PC asked or addressed this turn (PR-12-10 step 3: willingness, their ordinary knowledge on the topic, public news, their recent `said` records); and the optional material, marked as such (12.14.12) [revision: R2-H; DL-12-90; DL-12-92] | motives, `truth`, sealed content, undelivered case placements, background the PC has not perceived or learned (beyond a speaker card's ordinary knowledge) |
+| Narrator | **the PC-knowledge layer only**: the adjudication record with handles, the setting and seeded looks (on arrival and at scene framing; on later turns of the scene only as optional material marked described, 12.14.11) [revision: R2-I; DL-12-99], profiles (no usage marks; habits as background; a person's look and a thing's description only when it first appears, on a look-around, or when the player looks at or asks about it, 12.14.11) [revision: R2-K; DL-12-122], the spotlight as the PC knows it, at most 2 scene cards, the calendar line pinned first; the name, pronouns and bond of everyone named or mentioned, present or absent (item 3) [revision: R2-J; DL-12-104]; the **speaker card** of each NPC the PC asked or addressed this turn (PR-12-10 step 3: willingness, their ordinary knowledge on the topic, public news, their recent `said` records); and the optional material, marked as such (12.14.12) [revision: R2-H; DL-12-90; DL-12-92] | motives, `truth`, sealed content, undelivered case placements, background the PC has not perceived or learned (beyond a speaker card's ordinary knowledge) |
 | Checker | the passage with its side list (12.3.1), the player's message and the last exchange [revision: R2-J; DL-12-104], compact profiles of the named, spotlight and created ids | rule cards outside 12.3, setting prose, the narrator's reasoning |
 | Director | threads, clocks, cast weights, scene cards; the player's message and the last two exchanges [revision: R2-J; DL-12-104]; it may cast a **description** present in the scene for a stated purpose ("the carters", "the refugees"; 01.2.7's unnamed description, no group entity), never a random walk-on for it [revision: R2-K; DL-12-110] | older verbatim exchanges |
 | Fixer (`/fix`, PR-12-11) [revision: R2-J; DL-12-105] | the player's report and, through read-only tools, the record: turn records, entity state and provenance, the whole transcript, a recomputed frame, the coin and inventory ledger, the `said` records against the record; and everything the play roles see [revision: R2-K; DL-12-116]: the shared people card (role, licences and competences, stance, standing, bonds), facts in plain words, that turn's model inputs and outputs, and a short mechanics digest | sealed content beyond its permitted slice (INV-10); any write |
@@ -1681,7 +1683,9 @@ wrongly applied — the 2d6 total moves by 1, changing the rung in about a third
 eight: formal, plain, rough, flowery, terse, nervous, jovial, cold) and their **habit** (one recorded
 speech habit — a saying, a way of addressing people, a tic of rhythm), background, never must-use, and worded as occasional
 ("now and then calls people by a nickname") [revision: R2-K; DL-12-113]. Nothing counts, gates or pushes it: the
-narrator, which sees the recent exchanges, uses it when it fits and may use it again knowingly. *Retires:* the
+narrator, which sees the recent exchanges, uses it when it fits and may use it again knowingly. A person's look
+follows setting once (12.14.11): it reaches the narrator when they first appear, or when the player looks at or asks
+about them [revision: R2-K; DL-12-122]. *Retires:* the
 once-per-scene cap and the habit required in refusal and answer lines (round 7, H1: Kerric's habit was in 16 of 21
 speaking turns). What the NPC calls the PC follows knowledge (their name only once
 they know it) and standing (12.14.7). Dialogue reveals only what the NPC knows (12.10.6) and never voices
@@ -2041,6 +2045,13 @@ the speaker's `said` records by more than `narration.freshness.said_overlap` is 
 player asked them to say it again. **Setting once** [revision: R2-I; DL-12-99]: a place's stored look, furniture and
 exits (12.16.9) reach the narrator on arrival or at scene framing (12.4.3) and are then marked described; on later
 turns of the scene they are optional material only (12.14.12), not restated unless the PC looks again or asks.
+**People and things too** [revision: R2-K; DL-12-122]: a person's look, and a thing's description (how it looks,
+its written words, narrated details about it), reach the narrator only on the turn the person or thing first
+appears in the scene (the scene opens, or it comes into the scene; a return after leaving is a new appearance), on
+a look-around, or when the player looks at it or asks about it. On other turns its profile has no look line.
+Nothing is counted, marked or gated: the narrator still sees the conversation and may mention the look again if it
+chooses. A thing stays listed by name, with its mechanical facts (a holder, a ruled state), every turn; manner and
+voice stay as background (12.11.3); a read of written words still gets them (12.14.13).
 (ROUND4-ANALYSIS R6: the seeded look line was in every narrator packet, and five turns in one place repeated it.)
 *Worst case (J):* a repeated phrase — harmless (class i) [R4 W10; R1 12.A
 (RPGBench's interestingness decay from repetitive narration)].
@@ -2104,7 +2115,8 @@ Every number, odds, choice and rules matter goes in an **OOF block**: a line or 
 with a bracketed label, set apart from the fiction, never written in a character's voice. Ch.14 owns how
 blocks are rendered for the player (14.6.5) [editor: E2-040]; these are the contents and the default
 text form. Order within one DM response: (1) SAFETY and SESSION acknowledgements; (2) CORRECTION blocks;
-(3) the fiction; (4) RESULT blocks in beat order; (5) REDIRECT blocks; (6) one pause block last (OFFER,
+(3) the fiction, with any auto-committed OFFER and its RESULT just before it (12.15.2) [revision: R2-K;
+DL-12-124]; (4) the other RESULT blocks in beat order; (5) REDIRECT blocks; (6) one pause block last (OFFER,
 NEAR MISS, CHOICE, CLARIFY, FLAG, CUT?) because it awaits the player.
 
 **12.15.1 General rules.** `[D]` [DL-12-18; C:P7; R5 DM-09; revision: I-065] OOF blocks are terse, use ids and canonical names, show only `shown` and
@@ -2176,7 +2188,9 @@ allowed on this frame (01.7.3) is not printed. When one is taken, a NOTE line sa
 - **Ability activation**: the Takes line names its prices, `Focus 2 (flared hard) · uses 1 of 2 left`, and,
   when the Focus is short, `overdraw: <its price>` (05.6.6; never automatic); a power used **through a relic**
   adds `Relic: +1 Focus (no training license)` (08.4.4) [revision: I-030].
-- **Auto-commit** (01.7.4): the same block, labelled `[OFFER — auto]`, immediately above its RESULT.
+- **Auto-commit** (01.7.4): the same block, labelled `[OFFER — auto]`, immediately above its RESULT. Both stand
+  above the passage, because the roll came first and the passage narrates its outcome [revision: R2-K; DL-12-124].
+  An explicitly committed OFFER was on the previous screen; its RESULT stays after the fiction (12.15).
 
 **One menu convention for every pause point** (12.2.6: OFFER, clarifying question, redirect, near miss,
 ranking, last chance, recognition, generator pick, rewind). **Enter** is the labelled default and is always
@@ -2441,7 +2455,9 @@ roads and tracks in rings 1–2, trackless beyond. Rings 1–3 are `known`; ring
 **12.16.9 The haven.** `[D]` [DL-12-22; DL-12-21; revision: I-065] One settlement in ring 0 (10.2.3: `safe: true`, `rest_site: haven`), a village
 or a town, standing where `tbl.12.seed.haven_site` says (a ford, a bridge, a harbour, an old fort…), with its
 buildings (a temple or shrine of the main keeper, consecrated and with `resonance`; an inn; a smithy; the
-rulers' hall; its gate; in a town a market and a healer) and a graveyard tended by the main keeper's faith.
+rulers' hall; its gate, named "the gate" (or the site feature when that is itself a gate, "the hill gate") and
+described by the feature it stands by, "the gate, by the ford" [revision: R2-K; DL-12-125]; in a town a market and a
+healer) and a graveyard tended by the main keeper's faith.
 Its settlement record: tier (15, 16.3.2); market (common and scarce goods by terrain, 08.8.4; depth 30 or
 150); crafters by tier (08.6); teachers drawn from the cast (12.16.11); texts; the rites the keepers' and the
 place of acceptance's schools know (05.8); hire roles and the band limit (16.3.2); sentry post floors (15).
@@ -2804,7 +2820,10 @@ configuration, not rule (DL-12-105).
    outranks an Oracle fact (01.15.1). The tools never write, and show sealed content only as its permitted slice
    (INV-10). Code does not pre-decide, or pin the report by a number or a name in it.
 3. **Propose** `[J:enum]`: what the player believes, what the record shows, and corrections from a broad list: set or
-   remove a fact; restore state as of turn N; refund or deduct; re-frame an OFFER still on screen (`reframe`: gate, necessity and frame run again with the correction) and take back
+   remove a fact; restore state as of turn N; refund or deduct; re-frame an OFFER still on screen (`reframe`: gate, necessity and frame run again with the correction; it may carry a one-line note for the
+   re-frame's Framer, the context it lacked ("he outranks the guard; the guard should simply let him in"), never a
+   fact and never odds: the Framer still owns the odds, so a note that states odds, a number or a roll is not passed,
+   the re-frame still runs and the reply says why [revision: R2-K; DL-12-123]) and take back
    an unrolled pending turn [revision: R2-K; DL-12-117]; take back to turn N (12.5.8);
    correct testimony (a `said` record or its settlement); explain (with the turn and its words, or the frame and its
    reasons). Several may be proposed together.
@@ -3528,14 +3547,14 @@ the mode, and the player says "surprise me": oracle mode (12.16.2). Every number
 | 3 Faith | three keepers: war, knowledge, sky; bargainer: a tempter | **Oswen, Lord of the Line** (smiting, oaths, warding; courage +, loyalty +) is the main keeper; Halda, the Keeper of Keys, and Ala, the High One, have petty faiths. `canon.default_bargainer = arch.tempter`. |
 | 4 Peoples | halflings common; humans, orc-kin and beastfolk uncommon; dwarves, goblin-kin and giant-kin rare; elves absent | seven name tables (humans uncommon: one style; the orc-kin's also serves the horde); second tongue: the Old Tongue, "the speech of the time before the Burning". |
 | 5 Land | ring 1 farmland and hills; rings 2–5 mostly mountains and hills, a ruin, a moor, a wood | 13 areas (3, 3, 3, 2, 2) with T-10-2's bands and ratings (both ring-5 areas rolled 4, so the Tangled Ridge is home 5 [revision: I-084]), 35 places in all, every one reachable from the haven. |
-| 6 Haven | a **town** at a **harbour** | **Merestead**: temple of Oswen (consecrated, resonance divine), the Golden Hound inn, smithy, hall, quay, market square, healer's house, graveyard; market depth 150; hire up to band 2. Place of acceptance: Shepwell Spring and its lady (weather, growth, elements). |
+| 6 Haven | a **town** at a **harbour** | **Merestead**: temple of Oswen (consecrated, resonance divine), the Golden Hound inn, smithy, hall, the gate (by the quay) [revision: R2-K; DL-12-125], market square, healer's house, graveyard; market depth 150; hire up to band 2. Place of acceptance: Shepwell Spring and its lady (weather, growth, elements). |
 | 7 Factions | rulers **a noble house**; fourth **a town council** | the lords of Hawkgate (tier 2, goal 4/12: *humble the rival house*); the faithful of Oswen (tier 2, 3/12); **the Horde of the Millwick** (tier 3, aggressive, 4/12: *break the watch on the passes and burn the lowlands again*; −2 to both); the council of Merestead (tier 0, 1/8); two petty faiths on 6-segment `petty_goals` clocks (1/6 each): Halda's would *win more of Merestead to it, and a hold of its own*, Ala's would *settle its quarrel with the faithful of Oswen* (a feud) [revision: I-070]. Every linchpin's four fates sealed. |
 | 8 Cast | 12.11.1's tables | 17 NPCs: heads and officers (Tible of the Wet Warren, the goblin-kin lord; Milby Greenfoot, Oswen's halfling priest; Brugnak Three-Scar of the horde), the smith, innkeeper, gate captain Loran Millbrook and the sellsword Zzirik Swift (both recruitable), Shepwell's wise-woman, a scribe, a healer. 12 teachings (`12-world-seed-output.txt`, `ws.req.15_teachers`) [verification: V2b-020]. The powers of the far rings (4 more, 21 in all) [revision: I-083]: Magwen Thistlefoot, a hermit-judge whom the old lands still obey (the Still Heath, band 4), and Selda Thornwell, an archmage in a tower that should have fallen (the Lonely Ridge, band 4); Sketaa of the Reed Clan, an exiled heir and her court (the Broken Greenwood, band 5), and Ymmulf of the Long Winter, master of a lost guild's last hall (the Tangled Ridge, band 5); each keeps a sealed truth. |
 | 9 Sites | 9 sites and 2 lairs | e.g. Whitfield's Temple (haunted temple, band 1: *the dead rising tonight*, sealed); **Wolfcrag's Delving** (fortified mine, band 3: the horde's seat); lairs Whitmouth's Undercroft (band 5) and the Delving of Ashhollow (band 5). Situations: *War comes* in the Hungry Pikes (step 1 done: the levy called) and *The hunting ground* in the Sunken Fells (a savaged ewe). |
 | 10 Tables | PR-10-10 at each area's band | 13 regional tables, all passing PR-10-8. The Drowned Ridge (home 2): 4–6 raptor minions and two orcs at band 1; a dwarf holdguard elite, a monstrous beast elite (complication), two frost elementals, two ancestor spirits at band 2; a bear minion and a wyvern minion at band 3. Words: 6 trivial, 3 easy, 11 fair. |
 | 11 Rumors | `tbl.11.rumor_truth` per site | 20 rumors (8 true, 7 partial, 5 false) [verification: V2b-020]: "Word is that the Horde of the Millwick will try to break the watch on the passes…" (true); "Whitfield's Temple is empty now" (false). |
 | 12 Calendar | months **named** | the Month of Thaw, Plough, Lambing-month…; Oswen's Day (spring), the Midsummer Fair, Harvest Home, the Night of Remembrance; the era "years since the Burning". |
-| 13 Opening | incident **alarm** | the spring quarter day, 23 years since the Burning (the pitch's twenty-three winters) [revision: I-069], dawn, Merestead's gate: the haven's alarm sounds, and something from the wound is at the gate. Leads: the war situation (the incident), *The hunting ground* ("a savaged ewe; folk say it is only the beginning"), the council's goal (it is hiring). Pregens: Tamred Stoneby (Soldier), Magly Mughill (halfling Thief), Tamric Ashsmith (Courtier), Evo Elderward (Acolyte of Oswen). |
+| 13 Opening | incident **alarm** | the spring quarter day, 23 years since the Burning (the pitch's twenty-three winters) [revision: I-069], dawn, Merestead's gate: the haven's alarm sounds, and something from the wound is at the gate. Leads: the war situation (the incident), *The hunting ground* (its trace, "a savaged ewe", data the narrator may use, never a code sentence: 12.16.16) [revision: R2-K; DL-12-114], the council's goal (it is hiring). Pregens: Tamred Stoneby (Soldier), Magly Mughill (halfling Thief), Tamric Ashsmith (Courtier), Evo Elderward (Acolyte of Oswen). |
 | 14 Check | T-12-16 | 64 of 64 requirements hold. |
 
 *Boundary pair — guided.* A second player answers fourteen questions themselves (a long winter, northern,

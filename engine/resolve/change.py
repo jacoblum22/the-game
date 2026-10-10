@@ -259,13 +259,6 @@ def hold(tx: Any, rules: Any, held: str, holder: str, reach: int, beat_id: str |
                            source={"entity": holder, "beat_id": beat_id}).events
 
 
-def pay(tx: Any, consequences: Iterable[str], payer: str | None) -> list[Event]:  # rule: 01.11.2
-    """Retired (spec 025; 15.7.1 item 3, DL-15-42): coin never leaves the purse because Framer prose says so (the
-    regex price, round 7 I2 §3). A deal's typed price is paid by `pay_deal`. Kept as a no-op until the pipeline's two
-    calls are removed (hand-off)."""
-    return []
-
-
 DEAL = "deal.price"  # the price record's predicate, on the payee (15.7.1 item 3)
 
 
@@ -395,5 +388,5 @@ def apply_change(tx: Any, rules: Any, beat: Beat, reach: int, *, pc: str | None 
 
 
 __all__ = ["HOLDS", "LADDER", "ChangeResult", "agreed_covers", "already_true", "apply_change", "current_hold", "hold", "hold_level",
-           "holder_of", "kinds", "needs_target", "pay", "pay_deal", "deal_price", "DEAL", "plain", "things_held",
+           "holder_of", "kinds", "needs_target", "pay_deal", "deal_price", "DEAL", "plain", "things_held",
            "typed_goal"]

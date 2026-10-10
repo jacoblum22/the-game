@@ -17,6 +17,7 @@ from pydantic import BaseModel, Field
 from engine.dm.player_text import second_person
 from engine.store.projection import WorldState
 from engine.store.views import codex_view
+from engine.text.render import slug_words
 
 SECTIONS = ("sheet", "abilities", "conditions", "journal", "threads", "rules")
 CORE_QUANTITIES = ("vitality", "focus", "fate", "dread")
@@ -240,7 +241,7 @@ def _known(state: WorldState, cv: dict[str, Any], pc: str | None) -> list[dict[s
         ent = state.entities.get(f["subject"])
         if ent is not None and ent.kind == "thread":
             subj = short_text(ent.data.get("text") or subj)
-        what = "a lead" if f["predicate"].startswith("lead.") else f["predicate"].replace("_", " ").replace(".", " ")
+        what = "a lead" if f["predicate"].startswith("lead.") else slug_words(f["predicate"])
         k = recs.get(fid)
         line = fact_sentence(state, state.facts[fid], subject=subj if f["subject"] != "world" else "")
         if not line:  # a settled question that reads as no statement ('coin named none yet: yes') is left out

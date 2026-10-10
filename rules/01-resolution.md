@@ -666,7 +666,7 @@ Very hard or Legendary cannot be taken with time: those rungs require a roll whe
 applies this after framing, for every verb, from 01.4.1's computed COSTLY; the time is charged through
 `advance_time`, and the RESULT says how long it took (never "hidden check made"); a beat on a secret frame is taken
 with time the same way. An **accepted fallback** (01.3.5) meets the same test on its own frame and scope, at its
-reach cap, with its tier read after its shift [provisional, DL-01-46]. *Retires:* rolling every gated beat (round
+reach cap, with its tier read after its shift [revision: R2-K; DL-01-46; owner-confirmed 2026-10-10]. *Retires:* rolling every gated beat (round
 7, H2: 3 of 7 OFFERs had nothing at stake, and 0 no-roll successes in 13 saves since spec 007); the verb- and
 case-specific carve-outs this one test covers; the forced roll on every accepted fallback (0c15da2). [R: 5e "take 20" and PF2e "take your time"
 lineage via R7 §2.8; DL-01-09]
@@ -1211,7 +1211,8 @@ reach) [integration: IR ch.05 to 01, IR ch.07].
 may revisit odds display and menus; DL-01-32) [revision: R2-G]; the player may turn it off at any time. While it is on, a frame that is **Safe** (its worst cost
 is S1), not lethal, not secret, not a long shot (01.6.13), carries no mode price (no fallback, stretch or
 emulate) and shows success-or-better ≥ 50% rolls without waiting (`offer.choice = auto`); the OFFER is
-still written to the log and shown with the result, labelled `[OFFER — auto]` (12.15.2). A Risky, Dire or
+still written to the log and shown with the result, above the passage, labelled `[OFFER — auto]` (12.15.2)
+[revision: R2-K; DL-12-124]. A Risky, Dire or
 lethal frame is never auto-committed (00.13.2); every other frame waits for an explicit commit. **Only Safe
 frames that remain costly** [revision: R2-K; DL-01-47]: a Safe frame that is not costly never reaches an OFFER (take
 the time, 01.4.4), so auto-commit covers only Safe frames whose failure costs at most a nuisance but cannot be retried
@@ -2499,30 +2500,28 @@ hit the cap; three flowery paragraphs would have earned the same numbers.
 standing neutral). Wren wants into the keep.
 
 - **PARSE.** Method: a lie (Talk, deceive). Intent unstated → "Taking that as: you want him to let you
-  in." Embedded fact: does he have a long-lost sister? → queued to the Oracle.
-- **ORACLE** (PR-01-4). Unestablished; no canon settles it. Odds from the world: most men have no
-  vanished sister → **Unlikely (76+)**.
-- **Branch A:** d100 = 41 → **no**. `set_fact(npc.tam_harlan.siblings = two brothers, no sister)`. The lie
-  now contradicts an established fact the target knows → **G4 for the belief intent** (01.3.7 test 1). No
-  roll, nothing spent. Redirect: "He grew up with two brothers and no sister. You could still play it as
+  in." Embedded fact: does he have a long-lost sister? It is about the beat's own target, so it is **not** asked
+  of the Oracle (01.15.1, one owner per question) [revision: R2-K; DL-01-41]: his family is his record, and whether
+  he believes her is the roll itself (01.6.7).
+- **Branch A:** his record says `npc.tam_harlan.siblings = two brothers, no sister`. The lie contradicts an
+  established fact the target knows → **G4 for the belief intent** (01.3.7 test 1). No roll, nothing spent. Redirect: "He grew up with two brothers and no sister. You could still play it as
   a drunk's joke to get him talking, or try another story." [integration: I-024] The player takes the joke and asks
   when the watch changes. **FRAME:** Talk-persuade: Presence 0 + floor 1 = **+1** vs Resolve defense
   10 + 0 = **10** (standing neutral adds nothing, *15 owns*). Stakes: his goodwill is spent by a flat
   joke → **Risky**; threatened `cost.closed_door`, alternate `cost.exposure`. OFFER: 9+ (60%). d20 = 9 →
   10 → **success** (a tie goes to the actor). He laughs and says the watch changes at the midnight bell:
   `set_fact(keep.watch_change = midnight)`.
-- **Branch B:** d100 = 88 → a double → **yes, and**. The engine rolls `tbl.meaning` for the "and"
-  (*illustrative 12*: "vigil / hope") → his younger sister vanished at sea fifteen years ago, and his
-  mother still keeps a candle lit. Both written as facts. The claim is now possible but **doubtful**
-  (Wren is about the right age; he remembers a face) → one snag −2 (*claim plausibility, 15*).
-  **FRAME:** Talk-deceive: Presence 0 + floor 1 − 2 = **−1** vs Wits defense 10 + 1 = **11**. Stakes:
+- **Branch B:** his record says his younger sister vanished at sea fifteen years ago (written in an earlier scene,
+  when he spoke of her). The claim is possible, and nothing about it is a snag: whether he is fooled is the roll
+  against his Wits, and an Oracle answer is never a snag (01.15.8) [revision: R2-K; DL-01-41].
+  **FRAME:** Talk-deceive: Presence 0 + floor 1 = **+1** vs Wits defense 10 + 1 = **11**. Stakes:
   being caught impersonating his lost sister, by an armed guard of her band → **Dire**; threatened
-  `cost.exposure` (S3: spotted as an impostor), alternate `cost.closed_door`. OFFER: 12+ (45%; critical
-  failure 10%). d20 = 17 → 16 → **success**. He lets her in "to see Mother". **Method consequence:** a
+  `cost.exposure` (S3: spotted as an impostor), alternate `cost.closed_door`. OFFER: 10+ (55%; critical
+  failure 5%, a natural 1). d20 = 17 → 18 → **success**. He lets her in "to see Mother". **Method consequence:** a
   family now believes Wren is their lost daughter — a commitment and a thread (11).
 
-*Why:* the Oracle is what makes this free *and* fair; the odds were committed before the die, and "no"
-ended in a redirect, not a wall.
+*Why:* one owner per question keeps this fair: his family is his record, whether he believes her is the die, and
+no coin flip about him decides either; "no" ended in a redirect, not a wall [revision: R2-K; DL-01-41].
 
 ### WE-01-3 "I walk through the burning barn to save the horse — my heat resistance protects me."
 
