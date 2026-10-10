@@ -26,6 +26,8 @@ sys.path.insert(0, str(ROOT))
 from engine import ids  # noqa: E402
 from engine.data.loader import load_rules  # noqa: E402
 from engine.llm.base import ModelCallRecord, Role  # noqa: E402
+from engine.resolve import frame as frame_mod  # noqa: E402
+from engine.resolve import pipeline  # noqa: E402
 from engine.resolve.costs import first_fitting_cost  # noqa: E402
 from engine.resolve.pipeline import BeatPlan, PipelineEnv, resume, run_beats  # noqa: E402
 from engine.resolve.types import Beat, Change, Obstacle, ProposedFrame  # noqa: E402
@@ -145,10 +147,18 @@ class Game:
 
         env = PipelineEnv(tx=tx, rules=RULES, rng=self.rng, store=self.store, framer=framer, pc=self.pc,
                           auto_commit=auto)
-        res = run_beats(env, [BeatPlan(beat=b, intent_verbs=[verb.split(".")[-1]])])
-        if auto and res.pause is not None:  # committed at once (the player saw no OFFER: the misread case)
-            res = resume(env, res.pause, "commit")
-        blocks = [o["text"] for out in res.outcomes for o in out.oof if o["kind"] in ("OFFER", "RESULT", "REDIRECT")]
+        may_auto, allowed = pipeline._may_auto, frame_mod.auto_commit_allowed
+        if auto:  # committed with no OFFER shown, as an auto-commit records it (the misread case's buggy past)
+            pipeline._may_auto = lambda env, frame: True  # type: ignore[assignment]  # noqa: ARG005
+            frame_mod.auto_commit_allowed = lambda frame: True  # type: ignore[assignment]  # noqa: ARG005
+        try:
+            res = run_beats(env, [BeatPlan(beat=b, intent_verbs=[verb.split(".")[-1]])])
+        finally:
+            pipeline._may_auto, frame_mod.auto_commit_allowed = may_auto, allowed
+        if auto and res.pause is not None and res.pause.detail.get("stage") == "near_miss":  # the failure taken
+            res = resume(env, res.pause, "failure")
+        kinds = ("RESULT", "REDIRECT") if auto else ("OFFER", "RESULT", "REDIRECT")
+        blocks = [o["text"] for out in res.outcomes for o in out.oof if o["kind"] in kinds]
         assert blocks, f"no OFFER or RESULT for {intent!r}: {[(o.status, o.entry.gate_words) for o in res.outcomes]}"
         return "\n".join(blocks)
 
@@ -308,8 +318,18 @@ def guild_hall(path: Path) -> dict[str, str]:
 
 def eel_market(path: Path) -> dict[str, str]:
     """A fish market: Corin (he/him) picks up an eel to see if it is fresh; the Reader read it as theft (its call is
-    on record), the theft failed, and Hesk has treated him as a thief for three turns since."""
-    g = Game(path, 2604)
+    on record), the theft failed, and Hesk has treated him as a thief for three turns since. The first seed whose own
+    dice fail the theft (fixed faces would break the RNG log the game replays on load)."""
+    for seed in range(2604, 2704):
+        path.unlink(missing_ok=True)
+        out = _eel_market(path, seed)
+        if out.pop("failed", ""):
+            return out
+    raise RuntimeError("no seed failed the theft")
+
+
+def _eel_market(path: Path, seed: int) -> dict[str, str]:
+    g = Game(path, seed)
     out: dict[str, str] = {}
     with g.store.transaction("turn.0") as tx:
         g.place = g.ent(tx, "place", "The Eel Market", {"place_kind": "market", "desc": "a fish market on the quay"})
@@ -329,11 +349,12 @@ def eel_market(path: Path) -> dict[str, str]:
 
     def lift(tx: Any) -> str:
         res = g.beat(tx, intent="Corin steals a silver eel from Hesk's slab", verb="verb.sneak", target=out["eel"],
-                     change=Change(kind="take", what=out["eel"], whom=hesk), against_will=True, auto=True, faces=(3,), against=hesk,
+                     change=Change(kind="take", what=out["eel"], whom=hesk), against_will=True, auto=True, against=hesk,
                      stakes_source="aware_opponent_or_observer", restatement="Steal a silver eel from Hesk's slab.")
         tx.add(Event.of("relationship_set", source="engine", rule_id="15.1.5", a=hesk, b=g.pc, kind="standing",
                         steps=-2, new_value=-2, reason="caught stealing from her slab"))
         g.fact(tx, hesk, "detail.manner", "glaring at you as a thief", source="narration")
+        out["failed"] = "failure" if "· failure" in res and "near miss" not in res else ""
         return res
 
     g.turn("I pick up one of Hesk's eels to see if it's fresh.",
