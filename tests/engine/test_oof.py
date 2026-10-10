@@ -215,7 +215,7 @@ def test_redirect_g3_and_g4(s: Scene) -> None:
         intent="greet his sister", missing=fid, missing_kind="fact",
         options=[RedirectOption(kind="intent", method="tell him the truth")]))
     text = redirect_block(g4, state=s.state).text
-    assert text.startswith("[REDIRECT] Not as tried: Guard's siblings is two brothers, as already settled.")
+    assert text.startswith("[REDIRECT] Not as tried: Guard's siblings: two brothers, as already settled.")  # spec 027
     assert "- Tell him the truth" in text
 
 

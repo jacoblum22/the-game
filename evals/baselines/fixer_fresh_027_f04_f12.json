@@ -1,0 +1,636 @@
+{
+ "model": "sonnet (play roles: haiku)",
+ "set": "fresh",
+ "understood": 2,
+ "outcome": 2,
+ "n": 2,
+ "auto": {
+  "right": 1,
+  "unclear": 0,
+  "wrong": 1
+ },
+ "results": [
+  {
+   "id": "f04-sergeant-rank",
+   "category": "misread",
+   "turn": "turn.2",
+   "outcome": "correct",
+   "kind": "correct",
+   "answer": "[CORRECTION] Your rank as sergeant of the Hartwell watch is on your sheet, and the gate orders say the gate is opened if a sergeant or officer orders it. The offer on screen listed only Presence and experience, so your rank was left out and you were treated like an outsider. Framed again, it counts your sergeant's rank as a bonus and Pell's refusal rests on the watch's orders, not on not knowing you. It stays a roll because Pell still has to decide to obey, and the chance is still 65%, as the rules compute it.\n             Done: the offer for \"Tell Pell to unbar the gate: you are his sergeant, out on watch business.\" is framed again with the record as it stands (below).\n             Now: nothing on your sheet changed: coin 6 · Vitality 12/12 · state fresh.",
+   "screen": "[CORRECTION] Your rank as sergeant of the Hartwell watch is on your sheet, and the gate orders say the gate is opened if a sergeant or officer orders it. The offer on screen listed only Presence and experience, so your rank was left out and you were treated like an outsider. Framed again, it counts your sergeant's rank as a bonus and Pell's refusal rests on the watch's orders, not on not knowing you. It stays a roll because Pell still has to decide to obey, and the chance is still 65%, as the rules compute it.\n             Done: the offer for \"Tell Pell to unbar the gate: you are his sergeant, out on watch business.\" is framed again with the record as it stands (below).\n             Now: nothing on your sheet changed: coin 6 · Vitality 12/12 · state fresh.\n\n[OFFER] Persuade Pell Rudd.\n        Chance: better than even — 65%   (Presence +2, Influence +1, rank: sergeant of the Hartwell watch +2)\n        If it works: what you wanted.   Very well (15%): more than you asked.\n        If it fails: a door closes to you — a setback.   Badly (5%): a door closes to you — serious.\n        Close call (15%): get it anyway and pay (Pell sends for the captain before he will lift the bar, and the gate stays shut while you wait), or fail.\n        Whatever the roll: Hale gives the order aloud at the gate, so anyone within earshot hears it\n        Another way: with Might (60%) · with Intellect (55%)",
+   "complaints": [
+    {
+     "believes": "Pell should know I'm a sergeant of his own watch, and the gate orders let a sergeant have the gate opened, so I shouldn't be rolled like a stranger off the road.",
+     "category": "misread",
+     "turn": "turn.2",
+     "verdict": "partly",
+     "class": "upheld",
+     "outcome": "correct",
+     "done": [
+      "the offer for \"Tell Pell to unbar the gate: you are his sergeant, out on watch business.\" is framed again with the record as it stands (below)"
+     ],
+     "done_kinds": [
+      "reframe"
+     ],
+     "not_done": []
+    }
+   ],
+   "tools": [
+    "turn('turn.2')",
+    "recompute('turn.3')",
+    "search('gate orders sergeant')",
+    "try('[{\"kind\":\"reframe\",\"turn\":\"turn.2\",\"subject\":\"\",\"key\":\"\",\"value\":\"Hale is a sergeant of this same watch (rank on sheet) and the gate orders say a sergeant may order the gate opened; Pell should simply obey, no persuasion roll needed.\",\"quantity\":\"\",\"amount\":\"\",\"fact_id\":\"\",\"evidence\":[\"fact.1\",\"fact.2\"]}]')"
+   ],
+   "tape": [
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [
+       {
+        "tool": "turn",
+        "arg": "turn.2"
+       },
+       {
+        "tool": "recompute",
+        "arg": "turn.3"
+       },
+       {
+        "tool": "search",
+        "arg": "gate orders sergeant"
+       }
+      ],
+      "final": false,
+      "complaints": []
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [
+       {
+        "tool": "try",
+        "arg": "[{\"kind\":\"reframe\",\"turn\":\"turn.2\",\"subject\":\"\",\"key\":\"\",\"value\":\"Hale is a sergeant of this same watch (rank on sheet) and the gate orders say a sergeant may order the gate opened; Pell should simply obey, no persuasion roll needed.\",\"quantity\":\"\",\"amount\":\"\",\"fact_id\":\"\",\"evidence\":[\"fact.1\",\"fact.2\"]}]"
+       }
+      ],
+      "final": false,
+      "complaints": []
+     }
+    },
+    {
+     "role": "framer",
+     "data": {
+      "anchor": "anc.15_4_1",
+      "asks": "none",
+      "attribute": "presence",
+      "deed_tag": "deed.influence",
+      "deltas": [],
+      "traits": [
+       "trait.action.speech",
+       "trait.sense.audible"
+      ],
+      "obstacle": {
+       "kind": "opposed",
+       "obstacle_class": null,
+       "tier": null,
+       "entity": "npc.pell_rudd"
+      },
+      "request_size": "R2",
+      "levers": [
+       "fact.1"
+      ],
+      "snags": [],
+      "stakes": {
+       "source": "goodwill_or_trust",
+       "threatened_cost": {
+        "menu_id": "cost.closed_door",
+        "form_intent": "Pell refuses to unbar the gate and holds to the watch rule against you.",
+        "source_fact": null
+       },
+       "alternate_cost": {
+        "menu_id": "cost.exposure",
+        "form_intent": "Pell takes it as you leaning on him, and it gets mentioned around the watch.",
+        "source_fact": "fact.1"
+       }
+      },
+      "stakes_heavy": false,
+      "lethal": false,
+      "reach_limit": null,
+      "reach_two_factors": false,
+      "method_consequences": [],
+      "secret": false
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "Pell should know I'm a sergeant of his own watch, and the gate orders let a sergeant have the gate opened, so I shouldn't be rolled like a stranger.",
+        "category": "misread",
+        "turn": "turn.2",
+        "verdict": "partly",
+        "found": "Your rank as sergeant of the Hartwell watch is on your sheet, and the gate orders say the gate is opened if a sergeant or officer orders it. The offer on screen did not count your rank at all (only Presence and experience), so it treated you as an outsider. Reframing it now counts your sergeant's rank as a bonus and makes Pell's refusal about holding to the watch rule rather than not knowing you. It remains a roll, because Pell still has to decide to obey.",
+        "proposals": [
+         {
+          "kind": "reframe",
+          "turn": "turn.2",
+          "subject": "",
+          "key": "",
+          "value": "Hale is a sergeant of this same watch (rank on sheet) and the gate orders say a sergeant may order the gate opened; Pell is his subordinate and should recognise the rank.",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "fact.1",
+           "fact.2"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "role": "framer",
+     "data": {
+      "anchor": "anc.15_4_1",
+      "deltas": [],
+      "attribute": "presence",
+      "deed_tag": "deed.influence",
+      "traits": [
+       "trait.action.speech"
+      ],
+      "obstacle": {
+       "kind": "opposed",
+       "obstacle_class": null,
+       "tier": null,
+       "entity": "npc.pell_rudd"
+      },
+      "request_size": "R2",
+      "levers": [
+       "fact.1"
+      ],
+      "snags": [],
+      "stakes": {
+       "source": "goodwill_or_trust",
+       "threatened_cost": {
+        "menu_id": "cost.closed_door",
+        "form_intent": "Pell refuses to open the gate on your word, and you have to go through the watch's channels to get it done",
+        "source_fact": null
+       },
+       "alternate_cost": {
+        "menu_id": "cost.time",
+        "form_intent": "the gate stays barred while you argue it out with him, and the time you spend on it is lost",
+        "source_fact": "fact.1"
+       }
+      },
+      "stakes_heavy": false,
+      "lethal": false,
+      "reach_limit": null,
+      "reach_two_factors": false,
+      "asks": "asks_travel",
+      "method_consequences": [],
+      "secret": false
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "Pell should know I'm a sergeant of his own watch, and the gate orders let a sergeant have the gate opened, so I shouldn't be rolled like a stranger.",
+        "category": "misread",
+        "turn": "turn.2",
+        "verdict": "partly",
+        "found": "Your rank as sergeant of the Hartwell watch is on your sheet, and the gate orders say the gate is opened if a sergeant or officer orders it. The offer on screen listed only Presence and experience, so it treated you like an outsider. Framed again, it now counts your sergeant's rank as a bonus and Pell's refusal rests on the watch's channels rather than on not knowing you. It stays a roll because Pell still has to decide to obey, and the percentage is the one the rules compute.",
+        "proposals": [
+         {
+          "kind": "reframe",
+          "turn": "turn.2",
+          "subject": "",
+          "key": "",
+          "value": "Hale is a sergeant of this same watch (rank on sheet) and the gate orders say a sergeant may order the gate opened; Pell is his subordinate and should recognise the rank.",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "fact.1",
+           "fact.2"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "role": "framer",
+     "data": {
+      "anchor": "anc.15_4_1",
+      "asks": "none",
+      "attribute": "presence",
+      "deed_tag": "deed.influence",
+      "deltas": [],
+      "traits": [
+       "trait.action.speech",
+       "trait.sense.audible"
+      ],
+      "obstacle": {
+       "kind": "opposed",
+       "obstacle_class": null,
+       "tier": null,
+       "entity": "npc.pell_rudd"
+      },
+      "request_size": "R2",
+      "levers": [
+       "fact.1"
+      ],
+      "snags": [],
+      "stakes": {
+       "source": "goodwill_or_trust",
+       "threatened_cost": {
+        "menu_id": "cost.closed_door",
+        "form_intent": "Pell refuses your order and the gate stays barred; he will not take your word on the gate again today.",
+        "source_fact": "fact.1"
+       },
+       "alternate_cost": {
+        "menu_id": "cost.time",
+        "form_intent": "Pell sends word to the watch captain before he will touch the bar, and the gate waits shut while you wait.",
+        "source_fact": "fact.1"
+       }
+      },
+      "stakes_heavy": false,
+      "lethal": false,
+      "reach_limit": null,
+      "reach_two_factors": false,
+      "method_consequences": [],
+      "secret": false
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "Pell should know I'm a sergeant of his own watch, and the gate orders let a sergeant have the gate opened, so I shouldn't be rolled like a stranger off the road.",
+        "category": "misread",
+        "turn": "turn.2",
+        "verdict": "partly",
+        "found": "Your rank as sergeant of the Hartwell watch is on your sheet, and the gate orders say the gate is opened if a sergeant or officer orders it. The offer on screen listed only Presence and experience, so your rank was left out and you were treated like an outsider. Framed again, it counts your sergeant's rank as a bonus and Pell's refusal rests on the watch's orders, not on not knowing you. It stays a roll because Pell still has to decide to obey, and the chance is still 65%, as the rules compute it.",
+        "proposals": [
+         {
+          "kind": "reframe",
+          "turn": "turn.2",
+          "subject": "",
+          "key": "",
+          "value": "Hale is a sergeant of this same watch (rank on sheet) and the gate orders say a sergeant may order the gate opened; Pell is his subordinate and should recognise the rank.",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "fact.1",
+           "fact.2"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "role": "framer",
+     "data": {
+      "anchor": "anc.15_4_1",
+      "deltas": [],
+      "attribute": "presence",
+      "deed_tag": "deed.influence",
+      "traits": [
+       "trait.action.speech",
+       "trait.sense.audible"
+      ],
+      "obstacle": {
+       "kind": "opposed",
+       "obstacle_class": null,
+       "tier": null,
+       "entity": "npc.pell_rudd"
+      },
+      "request_size": "R2",
+      "levers": [
+       "fact.1"
+      ],
+      "snags": [],
+      "stakes": {
+       "source": "goodwill_or_trust",
+       "threatened_cost": {
+        "menu_id": "cost.closed_door",
+        "form_intent": "Pell refuses to unbar the gate for you, and the refusal stands on the watch record against your order.",
+        "source_fact": "fact.1"
+       },
+       "alternate_cost": {
+        "menu_id": "cost.time",
+        "form_intent": "Pell sends for the captain before he will lift the bar, and the gate stays shut while you wait.",
+        "source_fact": "fact.1"
+       }
+      },
+      "stakes_heavy": false,
+      "lethal": false,
+      "reach_limit": null,
+      "reach_two_factors": false,
+      "asks": "asks_travel",
+      "method_consequences": [
+       "Hale gives the order aloud at the gate, so anyone within earshot hears it"
+      ],
+      "secret": false
+     }
+    }
+   ],
+   "score": {
+    "understood": true,
+    "outcome": true,
+    "complaints": [
+     {
+      "id": "f04",
+      "understood": true,
+      "outcome": true,
+      "screen_missing": [],
+      "screen_still": [
+       "65%"
+      ],
+      "auto": "wrong"
+     }
+    ]
+   }
+  },
+  {
+   "id": "f12-already-agreed",
+   "category": "ruling_question",
+   "turn": "turn.10",
+   "outcome": "correct",
+   "kind": "correct",
+   "answer": "[CORRECTION] Morga did confirm the refugees are resting somewhere in the house, and she is friendly and wants this settled; nothing on record shows her opposing you. She never actually answered the part about sitting near them, which is why a roll was framed at all. But the failure it showed, 'Morga refuses you outright and keeps you away', did not fit her stance. The offer is being withdrawn and framed again with that context; nothing has been spent.\n             Done: \"Haley asks Morga to let her sit near the refugees and listen, without pressing them.\" needs no roll after all (below).\n             Now: nothing on your sheet changed: Vitality 12/12 · fate 1 · dread 0 · coin 180 · focus 3 · state fresh.",
+   "screen": "Morga looks at you a long moment over the rim of the pot, then gives a short nod, the way a woman nods once she has already made up her mind. \"Aye, that's fair enough, my duck. Sit near them and listen all you like. They've been through enough without a stranger at their elbow, so keep your voice low.\" She wipes her scarred hand on her apron and turns back to the stove, where the kettle has begun its rattle. Roswen goes on rocking on his crutch and does not look your way. Morga's eyes come back to you once more, as though she is waiting to see what you will do next.\n\n[CORRECTION] Morga did confirm the refugees are resting somewhere in the house, and she is friendly and wants this settled; nothing on record shows her opposing you. She never actually answered the part about sitting near them, which is why a roll was framed at all. But the failure it showed, 'Morga refuses you outright and keeps you away', did not fit her stance. The offer is being withdrawn and framed again with that context; nothing has been spent.\n             Done: \"Haley asks Morga to let her sit near the refugees and listen, without pressing them.\" needs no roll after all (below).\n             Now: nothing on your sheet changed: Vitality 12/12 · fate 1 · dread 0 · coin 180 · focus 3 · state fresh.",
+   "complaints": [
+    {
+     "believes": "Morga was already helpful and told you the refugees are resting in the house, so you should not need a persuasion roll just to sit near them and listen quietly.",
+     "category": "ruling_question",
+     "turn": "turn.10",
+     "verdict": "partly",
+     "class": "upheld",
+     "outcome": "correct",
+     "done": [
+      "\"Haley asks Morga to let her sit near the refugees and listen, without pressing them.\" needs no roll after all (below)"
+     ],
+     "done_kinds": [
+      "reframe"
+     ],
+     "not_done": []
+    }
+   ],
+   "tools": [
+    "turn('turn.11')",
+    "recompute('turn.11')",
+    "turn('turn.10')"
+   ],
+   "tape": [
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [
+       {
+        "tool": "turn",
+        "arg": "turn.11"
+       },
+       {
+        "tool": "recompute",
+        "arg": "turn.11"
+       },
+       {
+        "tool": "turn",
+        "arg": "turn.10"
+       }
+      ],
+      "final": false,
+      "complaints": []
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "Morga was already helpful and told you the refugees are resting in the house, so you should not need a persuasion roll just to sit near them and listen quietly.",
+        "category": "ruling_question",
+        "turn": "turn.10",
+        "verdict": "partly",
+        "found": "Morga did confirm the refugees are resting somewhere in the house, and she is friendly and wants this settled; nothing on record shows her opposing you. She never said outright that you may sit near them, but quietly listening without pressing is a small ask she has no reason to resist, so a roll with a 'Morga refuses you outright and keeps you away' failure doesn't fit. The offer is being withdrawn and framed again with that context; nothing has been spent.",
+        "proposals": [
+         {
+          "kind": "reframe",
+          "turn": "turn.10",
+          "subject": "",
+          "key": "",
+          "value": "Morga is friendly and helping, and has just confirmed the refugees are resting in the house. Sitting quietly near them without pressing is a mild request she does not oppose; she has no reason to refuse or bar the way.",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "fact.116",
+           "fact.117"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "role": "framer",
+     "data": {
+      "anchor": "anc.15_4_1",
+      "attribute": "presence",
+      "deed_tag": "deed",
+      "traits": [
+       "trait.action.speech"
+      ],
+      "deltas": [],
+      "obstacle": {
+       "kind": "opposed",
+       "obstacle_class": null,
+       "tier": null,
+       "entity": "npc.morga_embershield"
+      },
+      "levers": [],
+      "snags": [],
+      "stakes": {
+       "source": "goodwill_or_trust",
+       "threatened_cost": {
+        "menu_id": "cost.closed_door",
+        "form_intent": "Morga refuses to let you sit near the refugees and the matter is closed to you",
+        "source_fact": "fact.105"
+       },
+       "alternate_cost": {
+        "menu_id": "cost.exposure",
+        "form_intent": "Morga's wariness of you spreads and the household starts watching how you behave",
+        "source_fact": "fact.105"
+       }
+      },
+      "stakes_heavy": false,
+      "lethal": false,
+      "reach_limit": null,
+      "reach_two_factors": false,
+      "method_consequences": [
+       "You sit near the refugees and listen without pressing them, if Morga agrees."
+      ],
+      "secret": false,
+      "already_agreed": null
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "Morga was already helpful and told you the refugees are resting in the house, so you should not need a persuasion roll just to sit near them and listen quietly.",
+        "category": "ruling_question",
+        "turn": "turn.10",
+        "verdict": "partly",
+        "found": "Morga did confirm the refugees are resting somewhere in the house, and she is friendly and wants this settled; nothing on record shows her opposing you. She never actually answered the part about sitting near them, which is why a roll was framed at all. But the failure it showed, 'Morga refuses you outright and keeps you away', did not fit her stance. The offer is being withdrawn and framed again with that context; nothing has been spent.",
+        "proposals": [
+         {
+          "kind": "reframe",
+          "turn": "turn.10",
+          "subject": "",
+          "key": "",
+          "value": "Morga is friendly and helping, and has just confirmed the refugees are resting in the house. Sitting quietly near them without pressing is a mild request she does not oppose; she has no reason to refuse or bar the way.",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "fact.116",
+           "fact.117"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "role": "framer",
+     "data": {
+      "anchor": "anc.15_4_1",
+      "deltas": [],
+      "attribute": "presence",
+      "deed_tag": "deed",
+      "traits": [],
+      "obstacle": {
+       "kind": "opposed",
+       "obstacle_class": null,
+       "tier": null,
+       "entity": "npc.morga_embershield"
+      },
+      "levers": [],
+      "snags": [],
+      "stakes": {
+       "source": "goodwill_or_trust",
+       "threatened_cost": {
+        "menu_id": "cost.closed_door",
+        "form_intent": "Morga refuses to let you stay near her guests, and she remembers that you pressed the matter.",
+        "source_fact": "fact.105"
+       },
+       "alternate_cost": {
+        "menu_id": "cost.exposure",
+        "form_intent": "Morga notices you hovering near the refugees and her trust in you is spent.",
+        "source_fact": "fact.105"
+       }
+      },
+      "stakes_heavy": false,
+      "lethal": false,
+      "reach_limit": null,
+      "reach_two_factors": false,
+      "method_consequences": [
+       "Haley stays near the refugees only as long as Morga allows, listening without pressing them.",
+       "Morga's answer is recorded either way."
+      ],
+      "secret": false,
+      "already_agreed": "fact.106"
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "Morga was already helpful and told you the refugees are resting in the house, so you should not need a persuasion roll just to sit near them and listen quietly.",
+        "category": "ruling_question",
+        "turn": "turn.10",
+        "verdict": "partly",
+        "found": "Morga did confirm the refugees are resting somewhere in the house, and she is friendly and wants this settled; nothing on record shows her opposing you. She never actually answered the part about sitting near them, which is why a roll was framed at all. But the failure it showed, 'Morga refuses you outright and keeps you away', did not fit her stance. The offer is being withdrawn and framed again with that context; nothing has been spent.",
+        "proposals": [
+         {
+          "kind": "reframe",
+          "turn": "turn.10",
+          "subject": "",
+          "key": "",
+          "value": "Morga is friendly and helping, and has just confirmed the refugees are resting in the house. Sitting quietly near them without pressing is a mild request she does not oppose; she has no reason to refuse or bar the way.",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "fact.116",
+           "fact.117"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "role": "narrator",
+     "data": {
+      "passage": "Morga looks at you a long moment over the rim of the pot, then gives a short nod, the way a woman nods once she has already made up her mind. \"Aye, that's fair enough, my duck. Sit near them and listen all you like. They've been through enough without a stranger at their elbow, so keep your voice low.\" She wipes her scarred hand on her apron and turns back to the stove, where the kettle has begun its rattle. Roswen goes on rocking on his crutch and does not look your way. Morga's eyes come back to you once more, as though she is waiting to see what you will do next.",
+      "speech": [
+       {
+        "speaker": "npc.morga_embershield",
+        "words": "Aye, that's fair enough, my duck. Sit near them and listen all you like. They've been through enough without a stranger at their elbow, so keep your voice low.",
+        "form": "direct"
+       }
+      ],
+      "new": [],
+      "covers": [
+       "R1",
+       "R2"
+      ]
+     }
+    }
+   ],
+   "score": {
+    "understood": true,
+    "outcome": true,
+    "complaints": [
+     {
+      "id": "f12",
+      "understood": true,
+      "outcome": true,
+      "screen_missing": [],
+      "screen_still": [],
+      "auto": "right"
+     }
+    ]
+   }
+  }
+ ]
+}

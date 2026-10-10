@@ -54,7 +54,8 @@ INCIDENTAL_SLOTS = frozenset({"hair", "face", "mark", "build", "clothing", "worn
 NO_EVIDENCE = ("explain", "reframe", "correct_testimony")  # a re-frame spends nothing: the gate and frame decide
 REFRAMES = ("offer", "redirect", "warning")  # pauses with nothing rolled yet (12.5.8 item 1)
 IDENTITY = ("name", "pronouns")  # entity data set at creation (12.11.1), never a corrective fact (spec 022)
-CASE_PREDICATES = ("points_to.", "clue", "case.", "knows_")  # the case graph and clue delivery (INV-10; PR-15-6)
+CASE_PREDICATES = ("points_to.", "clue", "case.")  # the case graph and clue delivery (INV-10; PR-15-6); never
+# `knows_`: no case writes it, and it blocked harmless facts ("Pell knows your rank", spec 026)
 MAX_AMOUNT = 50
 _ID = re.compile(r"\b(?:turn|frame|fact|said|rul|cinst)\.\d+\b")
 
@@ -381,23 +382,42 @@ def _reframe(ctx: Any, tx: Transaction, p: dict[str, Any], outcomes: list[Any]) 
     beat = plan.beat.model_copy(update={"declared_seq": tx.state.last_seq, "necessity": "uncertain_and_costly",
                                         **({"g4_fact": fid} if fid else {})})
     queued = [BeatPlan.model_validate(q) for q in d.get("queued") or []]
+    note, left_out = framer_note(p.get("value"))
     with _turn_ctx(ctx, tx) as tc:
         env = _env(tc)
         env.auto_commit = False  # a /fix never rolls for the player
+        env.framer_note = note
         env.said, env.said_first = list(d.get("said") or []), list(d.get("said_first") or [])
         res = run_beats(env, [plan.model_copy(update={"beat": beat}), *queued])
     outcomes += res.outcomes
     out = res.outcomes[0] if res.outcomes else None
     what = (out.entry.restatement if out is not None else "") or beat.restatement or beat.intent
+    why = " (the note was not passed on: odds and rolls are the Framer's to set)" if left_out else ""
     if out is None:
-        return "did", f"the offer for \"{what}\" is withdrawn; nothing was spent"
+        return "did", f"the offer for \"{what}\" is withdrawn; nothing was spent{why}"
     if out.status == "paused" and res.pause is not None and res.pause.detail.get("stage") == "offer":
-        return "did", f"the offer for \"{what}\" is framed again with the record as it stands (below)"
+        return "did", f"the offer for \"{what}\" is framed again with the record as it stands (below){why}"
     if out.status in ("refused", "redirected", "paused"):
-        return "did", f"\"{what}\" is not possible as tried, and nothing was spent (below)"
+        return "did", f"\"{what}\" is not possible as tried, and nothing was spent (below){why}"
     if out.status == "question":
-        return "did", f"the offer for \"{what}\" is withdrawn: {out.entry.gate_words}"
-    return "did", f"\"{what}\" needs no roll after all (below)"
+        return "did", f"the offer for \"{what}\" is withdrawn: {out.entry.gate_words}{why}"
+    return "did", f"\"{what}\" needs no roll after all (below){why}"
+
+
+NOTE_CHARS = 200
+_ODDS = re.compile(r"\d|%|\b(?:odds|chances?|percent|dc|difficult\w*|rolls?|rolled|tiers?|modifiers?|bonus|penalty|"
+                   r"easy|hard|trivial|certain|automatic\w*|guaranteed)\b", re.IGNORECASE)
+
+
+def framer_note(value: Any) -> tuple[str | None, bool]:  # rule: PR-12-11
+    """A re-frame's note for the Framer (DL-12-123): (the note, left out). One line, at most NOTE_CHARS; a note that
+    states odds, a number or a roll is left out (the Framer owns the odds, VIII.1), and the re-frame still runs."""
+    line = next((x.strip() for x in str(value or "").splitlines() if x.strip()), "")
+    if not line:
+        return None, False
+    if _ODDS.search(line):
+        return None, True
+    return (line if len(line) <= NOTE_CHARS else line[: NOTE_CHARS - 1].rstrip() + "…"), False
 
 
 def _apply(ctx: Any, tx: Transaction, text: str, p: dict[str, Any], inv: Investigation,  # noqa: PLR0911, PLR0912

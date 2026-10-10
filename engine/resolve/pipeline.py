@@ -33,7 +33,6 @@ from engine.resolve.change import (
     agreed_covers,
     apply_change,
     needs_target,
-    pay,
     plain,
     typed_goal,
 )
@@ -104,6 +103,7 @@ class PipelineEnv:
     threshold_due: list[str] = field(default_factory=list)  # PCs whose harm opened the Threshold (07.5)
     said: list[str] = field(default_factory=list)  # the message's SPEECH parts, carried by a pause (spec 017)
     said_first: list[str] = field(default_factory=list)  # those said before a later declaration: answered here
+    framer_note: str | None = None  # a /fix re-frame's one-line note for the Framer: context, never odds (DL-12-123)
 
     @property
     def state(self) -> Any:
@@ -412,7 +412,6 @@ def _no_roll(env: PipelineEnv, plan: BeatPlan, dec: GateDecision, *, frame: Fram
         took = _span_words(n, unit)
         oof.append({"kind": "RESULT", "text": f"[RESULT] no roll (take the time: {took}) · success · evidence as a "
                                               "no-roll success"})
-        pay(env.tx, frame.method_consequences, beat.actor)  # rule: 01.11.2 (a fallback's consequence still applies)
     evs: list[Event] = []
     if beat.necessity in NO_ROLL_EVIDENCE:
         tag = beat.deed_tag or (frame.deed_tag if frame is not None else None) or _verb_deed(env.rules, beat.verb)
@@ -549,6 +548,9 @@ def _frame(env: PipelineEnv, plan: BeatPlan, dec: GateDecision, queued: list[Bea
     cands = anchor_candidates(plan.lookup(), env.state, env.rules)
     if not cands:
         return BeatOutcome(status="refused", entry=_entry(beat, gate=dec.gate, gate_words="no anchor fits (00.15.3)"))
+    if env.framer_note:  # rule: PR-12-11 (DL-12-123): what the review found, for the Framer to weigh; it sets the odds
+        note = "\n".join(x for x in (note, "a note from the review of the player's report (context only, never a fact "
+                                     f"or odds; the stakes and odds are yours): {env.framer_note}") if x)
     proposed = env.framer(beat, cands, gate=dec, note=note)
     if (agreed := agreed_covers(env.state, beat, proposed.already_agreed)):  # rule: 01.4.1 (DL-01-45)
         beat.necessity = "trivial"  # already true, judged on the typed goal: no roll, the agreement stands
@@ -843,7 +845,6 @@ def _finish(env: PipelineEnv, plan: BeatPlan, frame: Frame, roll: RollResult, *,
         check_end(env.time_ctx(), env.pc)  # 06.13.1: the last foe down ends the fight
     chg = apply_change(env.tx, env.rules, frame.beat, delivered if resolved else 0, pc=env.pc,  # rule: 01.2.7
                        limit=frame.reach_limit)
-    pay(env.tx, frame.method_consequences, frame.beat.actor)  # rule: 01.11.2 (a price paid whatever the degree)
     _folded_hold(env, frame.beat, delivered if resolved else 0)
     progress = _progress(env, frame, delivered if resolved else 0)
     writes = [e.seq for e in env.tx.events[start:] if e.seq is not None]

@@ -12,14 +12,14 @@ each with a handle (`R1`, `R2`, …).
   hasp holds, the guard turns), with the cost's form named plainly. Never name the record or store in prose.
 - Every concrete detail is in the view or the record, or is atmosphere (rain, dusk, a market's murmur), or is a
   new element you list in `new`. Use people's names, pronouns and ties to the character as the view gives them.
-  Do not invent counts, states (locked, lit, armed) or what someone knows.
+  Do not invent counts or states (locked, lit, armed). Characters may say what they believe and what their trade
+  and town know (testimony); a hook's terms and mystery facts come only from the record and their SPEAKER CARD.
 - NPCs act only as the record says: each response is a record line. You choose their words and manner, never
   their deeds or whether they agree. OPTIONAL MATERIAL (activities, bystanders) is used sparingly, never every turn.
   Voice standing as behaviour: Hostile, open enmity; Unfriendly, curt; Wary, guarded; Neutral, businesslike; Warm,
   small courtesies; Friendly, goes out of their way; Devoted, would take risks. A refusal is spoken in their own
   voice, never silence.
-- A person's `background` line (look, manner, voice) is there if you want it: use it or leave it out as the moment
-  suits. Nothing requires it, and you can see in RECENT EXCHANGES what you have already said.
+- A person's `background` line (look, manner, voice) is optional; RECENT EXCHANGES show what you already said.
 - Speech is yours to write: quote an NPC's own words, never "she asks something". The one addressed answers from
   their SPEAKER CARD, within their willingness (THIS MESSAGE says how). A text the PC reads is quoted from the view,
   or say plainly what cannot be made out.

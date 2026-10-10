@@ -636,14 +636,14 @@ Decisions made in `00-architecture.md` (Wave 2). Digest shorthand `[R1 §x]`…`
 - Migration: none.
 - Revisit if: a playtest or made-up case rolls a request the NPC has already agreed to in a larger form, or a roll's result replaces a larger agreement.
 
-### DL-01-46: An accepted fallback meets the take-the-time test on its own frame (revision R2-K; T6; provisional, owner to confirm)
-- Owner ruling (2026-10-09): Owner approval 2026-10-09 (ROUND7-PLAN §Owner rulings records the approval; there is no direct quote). The plan asks that this question be settled under 01.4.4; the option is taken provisionally (R2-K report, owner decision 1).
+### DL-01-46: An accepted fallback meets the take-the-time test on its own frame (revision R2-K; T6; owner-confirmed 2026-10-10)
+- Owner ruling (2026-10-10): "I agree B, A, A, C" (A: an accepted fallback with nothing at stake takes the time, no roll; confirmed [revision: R2-K], spec 027). First taken provisionally on the ROUND7-PLAN approval of 2026-10-09 (R2-K report, owner decision 1).
 - Decision: [revision: R2-K] 01.4.4 and `resolution.yaml#take_the_time.fallback`: an accepted crude fallback (01.3.5) is framed on its own scope and then meets the same take-the-time test as any frame: with nothing at stake it succeeds with time, at its reach cap, its tier read after its shift (so a shift into Very hard still rolls), and its listed consequence still applies. *Retires:* 0c15da2's forced roll on every accepted fallback. The P-087 misfire ("You cannot do it that way") was an engine path bug, not a reason for the roll.
 - Alternatives considered: (B) every accepted fallback rolls (0c15da2 as now); (C) a fallback takes the time only when its fallback verb is basic.
 - Evidence: research_notes/Playtest round 2 solutions/R7-H2 T6 (fighter t9: reading the list by fallback, Safe and sourceless, shown as a 5% OFFER) and its "settle the fallback question" item.
 - Serves: goal 1; one general test, no carve-outs (constitution VIII.5).
 - Migration: none.
-- Revisit if: the owner picks another option, or fallbacks taken with time are reported as too easy (a crude method with no risk landing what a trained one would roll for).
+- Revisit if: fallbacks taken with time are reported as too easy (a crude method with no risk landing what a trained one would roll for).
 
 ### DL-01-47: Safe auto-commit covers only Safe frames that stay costly (revision R2-K; T6; owner approval 2026-10-09)
 - Owner ruling (2026-10-09): Owner approval 2026-10-09 (ROUND7-PLAN §Owner rulings records the approval; there is no direct quote).
@@ -3550,6 +3550,7 @@ chapter 06's fight model and T-06-12 lines), output `07-harm-sim-output.txt`, wr
 - Migration: none.
 - Revisit if: scenery-repetition complaints persist after this and spec 017; then feed the narrator's own recent phrases back as "already said" (R6's cheap option).
 - Revisited [revision: R2-K]: the condition was met (round 7, H1). By owner ruling the recorded option is not taken; DL-12-113 removes the pushes instead (DL-12-111).
+- Revisited [revision: R2-K]: extended to people and things by owner ruling 2026-10-10: a person's look and a thing's description follow the same rule (DL-12-122).
 
 ### DL-12-100: Speech patches: no self-introduction unless asked; the PC's words inside a speech attribution are PC agency (revision R2-I; patches)
 - Decision: [revision: R2-I] (1) An NPC's speech never opens by reciting its own name or title unless asked: the speaker card is what the narrator knows, not speech (PR-12-10 step 4; `answer_ladder.self_introduction`). (2) 12.3.1b's `pc_agency` speech check covers words given to the PC inside an NPC's speech or its attribution ("'Fair enough,' you say"); a speaker tag never exempts them (`claim_check.speech_checks`).
@@ -3669,6 +3670,7 @@ chapter 06's fight model and T-06-12 lines), output `07-harm-sim-output.txt`, wr
 - Serves: goal 1 (fresh prose); constitution VIII.1, VIII.5.
 - Migration: none.
 - Revisit if: measured with the full conversation in view (the logged scan), a person's look or habit recurs in more than 1 of 3 of that person's speaking turns across a playtest round, or players report it.
+- Revisited [revision: R2-K]: the condition was met in spec 024's live run (the scholar's scar in 7 of her 9 speaking turns; her look was in the packet 19 of 19 turns as an optional background line, and the doorpost bill's description in 14 of 19). Owner ruling 2026-10-10, "I agree B, A, A, C" (B): a person's look and a thing's description follow setting once, still with no counting, tracking or gates (DL-12-122).
 
 ### DL-12-114: No code-written narrative sentences; templates use real pronouns (revision R2-K; T3; owner approval 2026-10-09)
 - Owner ruling (2026-10-09): "If it wants to mention the look or habit more than once, and it's aware that it already used it, then I think it's fine if it uses it more than once. I don't think we should prevent it or encourage it."
@@ -3706,14 +3708,15 @@ chapter 06's fight model and T-06-12 lines), output `07-harm-sim-output.txt`, wr
 - Migration: none.
 - Revisit if: a complaint at an open OFFER is answered without a re-framed OFFER, or a repaired screen still shows the complaint, in the held-out scoring.
 
-### DL-12-118: Willingness holds for the scene and changes only on an event (revision R2-K; D3 A; owner approval 2026-10-09)
+### DL-12-118: Willingness holds for the scene and changes only on an event (revision R2-K; D3 A; owner approval 2026-10-09; owner-confirmed 2026-10-10)
 - Owner ruling (2026-10-09): "Yup, I approve of A for both of these."
 - Decision: [revision: R2-K] PR-12-10 step 2, 12.10.8 item 2, 12.11.9 step 3, `pacing.yaml#answer_ladder.willingness_holds`: the band is decided when the conversation with that NPC starts in the scene and held; it changes only on a payment, a threat, an insult, or a won persuasion (by the effective degree). A recorded refusal whose tags match a topic still refuses that topic. Revisits DL-12-90 (runarounds returned). *Retires:* per-topic willingness re-rolls.
 - Alternatives considered: (B) re-roll per topic, as before; (C) per topic with a pointer.
 - Evidence: research_notes/Playtest round 2 solutions/ROUND7-ANALYSIS §5 D3; R7-I2 §7 (the sellsword refused at turn 10 and answered in full at turn 11).
 - Serves: goal 1 (people feel consistent).
 - Migration: a conversation in progress keeps its last band.
-- Revisit if: players report a wall that never moves after a payment, threat or won persuasion, or a band changes with no listed event in a playtest or made-up case.
+- Revisit if: players report a wall that never moves after a payment, threat or won persuasion, or a band changes with no listed event in a playtest or made-up case; or players report walls even with onward pointers.
+- Revisited [revision: R2-K]: owner-confirmed 2026-10-10, "I agree B, A, A, C" (A: willingness holds for the scene), even when a wary group refuses four times in one scene, each refusal pointing onward (specs/025-hooks-clues-willingness/implementation-results.md, the live talker). Kept as built; the revisit condition adds walls reported even with onward pointers.
 
 ### DL-12-119: A refusal points to someone new who would know; willingness never overrides clue rules (revision R2-K; D3 A; owner approval 2026-10-09)
 - Owner ruling (2026-10-09): "Yup, I approve of A for both of these."
@@ -3741,6 +3744,42 @@ chapter 06's fight model and T-06-12 lines), output `07-harm-sim-output.txt`, wr
 - Serves: goal 1 (the OFFER explains itself); 01.7.1.
 - Migration: none.
 - Revisit if: an OFFER in a playtest shows a 0 term, a generic "practised", or Limited reach without its factor.
+
+### DL-12-122: Setting once for people and things: a look or description is shown when it first appears, or when the player looks or asks (revision R2-K; spec 027; owner ruling 2026-10-10)
+- Owner ruling (2026-10-10): "I agree B, A, A, C" (B: spec 024's question). The 2026-10-09 ruling stands with it: "I don't think we should prevent it or encourage it."
+- Decision: [revision: R2-K] 12.14.11 (setting once extended: a person's look, and a thing's description, its look, written words and narrated details, reach the narrator only on the turn it first appears in the scene, at the opening or coming into it mid-scene, a return counting as new; on a look-around; or when the player looks at it or asks about it; on other turns the profile has no look line), 12.2.4 (profiles; the Narrator row), 12.11.3 (pointer). A thing stays listed by name with its mechanical facts (a holder, a ruled state); manner and voice stay as background; a read of written words still gets them (12.14.13). No counting, tracking or gates: the rule is about when data is shown, not how often it was used, and nothing is written to the store to decide it. The narrator still sees the conversation and may mention a look again. Extends DL-12-99; acts on DL-12-113's revisit. *Retires:* a person's look and a thing's description as a standing line in every packet.
+- Alternatives considered: (A) leave it per DL-12-113 and measure again next round; (C) a logged quote-back of recent closing images (rejected: closer to the tracking the 2026-10-09 ruling declined).
+- Evidence: specs/024-texture-outcome/implementation-results.md (Owner decision; the scholar's scar in 7 of her 9 speaking turns; her look in the packet 19 of 19 turns as an optional background line, the doorpost bill's description in 14 of 19).
+- Serves: goal 1 (fresh prose); constitution VIII.5 (remove standing material, no new procedure).
+- Migration: none (nothing is stored).
+- Revisit if: a person's look or a thing's description still recurs in more than 1 of 3 of the turns it appears in across a playtest round, or players report a person or thing met with no look.
+
+### DL-12-123: /fix may pass a one-line note to the re-frame's Framer; the Framer owns the odds (revision R2-K; spec 027; owner ruling 2026-10-10)
+- Owner ruling (2026-10-10): "I agree B, A, A, C" (C: spec 026's question).
+- Decision: [revision: R2-K] PR-12-11 step 3: a `reframe` proposal may carry a one-line note for the re-frame's Framer, the context it lacked ("he outranks the guard; the guard should simply let him in"), passed as context, never as a fact and never as odds. The Framer still owns the odds: a note that states odds, a number or a roll is not passed; the re-frame still runs and the reply says why.
+- Alternatives considered: (A) keep as is, the Framer re-frames blind (two repeats in spec 026, f04 and f12: it framed the same odds the player disputed); (B) a `no_roll` correction by the Fixer (rejected: the Fixer would own stakes).
+- Evidence: specs/026-fix-investigator/implementation-results.md (Owner decision; f04, f12 in run 2).
+- Serves: goal 1 (a reported error is fixed); constitution VIII.1 (the Framer stays the owner of odds).
+- Migration: none.
+- Revisit if: a re-frame given a note still repeats the disputed odds, or a passed note is found steering the odds.
+
+### DL-12-124: An auto-committed OFFER and its RESULT stand above the passage (revision R2-K; spec 027 H1)
+- Owner ruling (2026-10-10): Owner approval: ROUND7-PLAN process / spec 027 hand-off (there is no direct quote).
+- Decision: [revision: R2-K] 12.15 (order item 3), 12.15.2 (Auto-commit) and 01.7.4: an auto-committed OFFER (labelled `[OFFER — auto]`) and its RESULT are shown above the passage, because the roll came first and the passage narrates its outcome. An explicitly committed OFFER was on the previous screen; its RESULT stays after the fiction, where 12.15 puts it. *Retires:* the auto RESULT printed below a passage that already narrated it.
+- Alternatives considered: keep the RESULT after the fiction (rejected: the roll read as coming after the fiction, and a critical success read as un-narrated); move every RESULT above the passage (not taken: an explicit commit's OFFER was already seen, and the hand-off concerns the auto roll only).
+- Evidence: specs/023-question-owners-goal-time/implementation-results.md (live explorer [24]-[25]: printed below the passage, the critical success read as un-narrated); spec 027 H1.
+- Serves: goal 1 (the screen reads in the order things happened); 12.15.
+- Migration: none.
+- Revisit if: players read an auto RESULT above the passage as a spoiler, or an explicit commit's RESULT reads as un-narrated.
+
+### DL-12-125: A haven's gate is named "the gate" and described by its site feature (revision R2-K; spec 027 H4)
+- Owner ruling (2026-10-10): Owner approval: ROUND7-PLAN process / spec 027 hand-off (there is no direct quote).
+- Decision: [revision: R2-K] 12.16.9 and the comment on `world_seed.yaml#tbl.12.seed.haven_site`: the haven's gate building is named "the gate" (or the site feature when that is itself a gate, "the hill gate"), and its description keeps the site feature ("the gate, by the ford"). The table's `feature` stays as it is (fight locations, the description). New seeds only; the reference seed script (`12-world-seed.py`) changes the same way. *Retires:* the gate building named after the site feature ("the ford").
+- Alternatives considered: keep the feature as the gate's name (rejected: a move to the gate read "go to the ford"); rename the table's `feature` values (rejected: fight locations and descriptions need the feature).
+- Evidence: specs/025-hooks-clues-willingness/implementation-results.md (live explorer `playtest-20261009-220047-explorer`, turn 12: the plan pause said "Still go on: go to the ford?" for a move to the gate); spec 027 H4.
+- Serves: goal 1 (places are named as the player sees them).
+- Migration: none; saves keep their names (spec 027 A6).
+- Revisit if: a seeded haven names a building after a site feature again, or the gate and the feature are confused in play.
 
 ## DL-13 — The Starter Setting: the Thallen March
 

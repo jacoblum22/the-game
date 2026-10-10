@@ -543,10 +543,12 @@ def build_seed(seed, given=None):
     for b in hdef["buildings"]:
         bname = {"temple": "the temple of %s" % main_keeper["name"].split(",")[0], "shrine": "the shrine of %s" % main_keeper["name"].split(",")[0],
                  "inn": "the %s %s" % (dice.pick(["Drowned", "Golden", "Old", "Blue", "Crooked", "Last", "Sleeping", "Red"]), dice.pick(["Lamb", "Lantern", "Plough", "Bell", "Stag", "Barrel", "Hound", "Goose"])),
-                 "smithy": "the smithy", "hall": "the hall", "gate": hsite["feature"], "market": "the market square", "healer": "the healer's house"}[b]
+                 "smithy": "the smithy", "hall": "the hall", "gate": hsite["feature"] if "gate" in hsite["feature"] else "the gate", "market": "the market square", "healer": "the healer's house"}[b]
         bid = "%s.%s" % (hid, b)
         assert bid not in P, bid
-        P[bid] = place_record(bid, bname, "building", hid, 0, None, "safe", ["terrain.settlement." + tier], climate, bname, safe=True, rest_site="haven" if b == "inn" else None, settlement_scope=hid, discovered=True)
+        # [revision: R2-K] DL-12-125: the gate keeps the site feature in its description, never as its name
+        desc = "the gate, by %s" % hsite["feature"] if b == "gate" and bname != hsite["feature"] else bname
+        P[bid] = place_record(bid, bname, "building", hid, 0, None, "safe", ["terrain.settlement." + tier], climate, desc, safe=True, rest_site="haven" if b == "inn" else None, settlement_scope=hid, discovered=True)
         P[bid]["openness"] = "closed"
         blds[b] = bid
     holy = blds.get("temple") or blds.get("shrine")

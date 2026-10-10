@@ -400,7 +400,7 @@ def _judge(ctx: TurnContext, record: AdjudicationRecord, turn: _Turn, d: _Draft,
     blocking-list hits fail a sentence; the rest is logged (12.3.1b)."""
     tx = ctx.need_tx()
     rules = ctx.rules
-    idx = SceneIndex.of(tx.state, turn.items)
+    idx = SceneIndex.of(tx.state, turn.items, said=turn.heard)
     names = _names(ctx, list(tx.state.entities))
     must = [it.handle for it in turn.items if it.must_name]
     d.missing = coverage(d.passage, must)

@@ -225,8 +225,10 @@ def _play_menu(resp: Any, width: int) -> str:
     """Fiction, the blocks (without any listing of the choices of their own), the prompt when no block carries it,
     then the menu line (12.15.2)."""
     pause = resp.pause
-    parts = [resp.fiction.strip()] if resp.fiction else []
-    parts += [t.strip() for b in resp.oof_blocks if (t := strip_listing(b.text, pause)).strip()]
+    lead, rest = resp.split()  # an auto roll leads the passage (DL-12-124)
+    parts = [t.strip() for b in lead if (t := strip_listing(b.text, pause)).strip()]
+    parts += [resp.fiction.strip()] if resp.fiction else []
+    parts += [t.strip() for b in rest if (t := strip_listing(b.text, pause)).strip()]
     shown = "\n\n".join(parts)
     if pause.prompt and pause.prompt.strip() not in shown:
         parts.append(pause.prompt.strip())
@@ -242,10 +244,11 @@ def render_response(resp: Any, width: int) -> str:
     choices = bool(pause is not None and pause.choices)
     if choices and resp.phase == "play":  # 12.15.2: one menu line for every play pause
         return _play_menu(resp, width)
-    parts: list[str] = []
+    lead, rest = resp.split()  # an auto roll leads the passage (DL-12-124)
+    parts: list[str] = [b.text.strip() for b in lead]
     if resp.fiction:
         parts.append(resp.fiction.strip())
-    for b in resp.oof_blocks:
+    for b in rest:
         t = strip_listing(b.text, pause) if choices else b.text
         if t.strip():
             parts.append(t.strip())

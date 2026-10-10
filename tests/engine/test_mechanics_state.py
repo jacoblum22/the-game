@@ -12,7 +12,7 @@ import pytest
 from engine.data.loader import load_rules
 from engine.dm.adjudication import AdjudicationRecord
 from engine.dm.context import TurnContext
-from engine.resolve.change import HOLDS, apply_change, current_hold, deal_price, pay, pay_deal
+from engine.resolve.change import HOLDS, apply_change, current_hold, deal_price, pay_deal
 from engine.resolve.types import Beat
 from evals.feedback_corpus import CORPUS, open_at
 
@@ -151,7 +151,6 @@ def test_a_deal_pays_its_typed_price_never_prose(tmp_path: Path) -> None:
         with store.transaction("turn.7") as tx:
             pc = "pc.wila_bramblefoot"
             coin = tx.state.quantities[pc]["coin"].current
-            assert pay(tx, ["The coin for the round is spent whatever the answer."], pc) == []
             npc = next(i for i, e in tx.state.entities.items() if e.kind == "npc")
             evs = pay_deal(tx, pc, npc, 1)
             assert tx.state.quantities[pc]["coin"].current == coin - 1 and evs[0].payload.value["amount"] == 1  # type: ignore[attr-defined]

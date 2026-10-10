@@ -435,6 +435,8 @@ tables:
   - id: tbl.12.seed.haven_site
     name: "Where the haven stands (12.16.9)"
     die: d8
+    # feature: the site's feature (fight locations, the gate's description); the gate building is named "the gate"
+    #   ("the hill gate" when the feature is itself a gate), described "the gate, by the ford" [revision: R2-K] [DL-12-125]
     results:
       - {range: "1", option: river_ford, text: "at a ford of a river", terrain: [terrain.water.river], fight: ["chokepoint: the ford's one safe line", "hazard: the river (haz.swift_water)"], feature: "the ford"}
       - {range: "2", option: river_bridge, text: "at a bridge over a river", terrain: [terrain.water.river, terrain.road.bridge], fight: ["chokepoint: the bridge", "height: the bridge-house roof", "hazard: the river below (haz.swift_water)"], feature: "the bridge"}

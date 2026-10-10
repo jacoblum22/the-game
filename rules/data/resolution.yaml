@@ -65,8 +65,8 @@ stakes_flags:      # 01.6.9; DL-01-05
   heavy: {question: "Could that source deliver a Heavy (S3) setback?", true_for: ["fall of 20 ft or more", "hazard of severity S3+", "armed opponent with threat band >= PC power band acting against the PC", "loss of an item or ally not readily replaced", "lasting enmity of a powerful NPC or faction"], true_gives: dire, false_gives: risky, tie_break: true}
   lethal: {legal_when: [dire, lethal_context_recorded_before_declaration], true_when: "threatened cost is cost.harm (or cost.footing into a lethal hazard) from a source that can move the PC to Dying"}
   conflict_clause: "a beat whose failure is only the opponent's ordinary next action is Safe"
-reach_flags:       # 01.6.10
-  whole: {question: "Would the method, done well, achieve the whole stated intent?", false_gives: limited, tie_break: false}
+reach_flags:       # 01.6.10; [revision: R2-K] [DL-12-121]: whole's tie-break is true (Standard), Limited needs a cited factor
+  whole: {question: "Would the method, done well, achieve the whole stated intent?", false_gives: limited, tie_break: true}
   one_factor: {question: "Does exactly one effect factor (potency, quality, scale) stand against the method, unoffset?", true_gives: limited, tie_break: true}
   great_only_from: [amplifying_lever, license_or_effect_step, offer_trade]
 trades:            # 01.7.3; DL-01-14; once per beat, before commit
@@ -308,7 +308,7 @@ take_the_time:     # 01.4.4; DL-01-09; [revision: R2-K] [DL-01-44]: computed by 
   not_costly_when: [stakes_source_none, no_sourced_threatened_cost, no_clock_listening, not_conflict, retry_at_leisure]
   stakes_check: "a frame naming a sourced cost or a listening clock is costly whatever stakes.source says (logged)"
   time_charged: advance_time            # the RESULT says how long; never 'hidden check made'
-  fallback: same_test_on_own_scope      # provisional (DL-01-46); tier read after the fallback's shift
+  fallback: same_test_on_own_scope      # owner-confirmed 2026-10-10 [revision: R2-K] (DL-01-46); tier read after the fallback's shift
   time_multiplier: 2
   forbidden_tiers: [very_hard, legendary]
   requires: "uncertain and not costly"

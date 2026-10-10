@@ -64,6 +64,20 @@ class Response(BaseModel):
     budget_notice: str | None = None
     flags: Flags = Field(default_factory=Flags)
 
+    def split(self) -> tuple[list[OofBlock], list[OofBlock]]:  # rule: 12.15.2
+        """(blocks shown above the passage, blocks after it). An auto-committed OFFER and the RESULT blocks right after
+        it lead: the roll came first and the passage narrates its outcome (DL-12-124; printed below the passage, a
+        critical success read as never narrated, spec 023 live [25]). Everything else follows the passage (12.15)."""
+        bs = self.oof_blocks
+        i = next((n for n, b in enumerate(bs) if b.text.startswith("[OFFER — auto]")), None)
+        if i is None or not self.fiction:
+            return [], list(bs)
+        j = i + 1
+        while j < len(bs) and bs[j].kind == "RESULT":
+            j += 1
+        return bs[i:j], bs[:i] + bs[j:]
+
     def text(self) -> str:
-        """Everything shown, in order (fiction first, then the blocks; a pause block is always last, 12.15)."""
-        return "\n\n".join([self.fiction] * bool(self.fiction) + [b.text for b in self.oof_blocks])
+        """Everything shown, in order (an auto roll, the fiction, then the blocks; a pause block is always last, 12.15)."""
+        lead, rest = self.split()
+        return "\n\n".join([b.text for b in lead] + [self.fiction] * bool(self.fiction) + [b.text for b in rest])

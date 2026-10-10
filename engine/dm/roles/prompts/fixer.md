@@ -42,8 +42,10 @@ One entry in `complaints` per distinct complaint:
   - `correct_testimony` fact_id, value: a settled claim that is wrong; "" makes it their words again.
   - `refund` / `deduct` quantity, amount: a number that should have moved and did not, or moved wrongly.
   - `restore` quantity, turn: a number back to its value at the end of that turn.
-  - `reframe` (fact_id optional): the OFFER on screen is withdrawn (nothing is spent) and framed again after your other
-    corrections. Give `fact_id` when a fact on record makes the goal impossible: the game then refuses it.
+  - `reframe` (fact_id, value optional): the OFFER on screen is withdrawn (nothing is spent) and framed again after
+    your other corrections. Give `fact_id` when a fact on record makes the goal impossible: the game then refuses it.
+    `value` is one line for the Framer with the context it lacked ("he outranks the guard; the guard should simply let
+    him in"). The Framer still sets the stakes and odds: a note naming odds, a number or a roll is not passed.
   - `take_back` turn: undo that turn and everything after it; the player declares again. For a misread, a refused
     action that still cost something, or an unrolled turn whose OFFER is on screen.
   - `evidence`: the ids your tools returned that prove it. Numbers, conditions, possessions, positions or a ruling

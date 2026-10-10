@@ -486,13 +486,19 @@ def last_chance_block(menu: Menu) -> OofBlock:  # rule: 07.5.2
 
 
 def _fact_line(state: WorldState | None, fact_id: str | None, rules: Any = None) -> str:
-    """An established fact in words (`the Guard's siblings: two brothers`), or a plain phrase when unseen."""
+    """An established fact in words, by the shared sentence renderer (`Tam Harlan's eyes: milk-white`, `Belie cannot
+    read the writing`), or a plain phrase when unseen or not sayable; never a slug or "is False" (spec 026 hand-off)."""
+    from engine.audit.fallback import fact_sentence
+    from engine.text.render import slug_words
+
     f = state.facts.get(fact_id) if state is not None and fact_id else None
-    if f is None or f.visibility not in PLAYER_FACING:
-        return "something already settled stands against it"
-    who = _ent_name(state, f.subject) if state is not None else ""
-    pred = f.predicate.replace("_", " ").replace(".", " ")
-    return f"{who + chr(39) + 's ' if who else ''}{pred} is {f.value}, as already settled"
+    said = fact_sentence(state, f).rstrip(".") if f is not None and f.visibility in PLAYER_FACING else ""
+    if not said and state is not None and f is not None and f.visibility in PLAYER_FACING \
+            and f.predicate.startswith("detail.") \
+            and isinstance(f.value, str):  # a narrated detail has no journal sentence; its slot is a noun ("eyes")
+        who = _ent_name(state, f.subject)
+        said = f"{who}{chr(39) if who.endswith('s') else chr(39) + 's'} {slug_words(f.predicate)}: {f.value}"
+    return f"{said}, as already settled" if said else "something already settled stands against it"
 
 
 def _why(dec: GateDecision, state: WorldState | None, rules: Any) -> str:

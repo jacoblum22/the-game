@@ -406,6 +406,58 @@ LOOKS_AROUND = re.compile(r"\blook(?:s|ing)? (?:around|about|round)\b|\bsurround
                           r"|\bdescribe\b|\btake in the\b", re.IGNORECASE)
 
 
+# a look or an ask, then within a few words whom or what (DL-12-122): "I study the scholar's face", "who is Grza?",
+# "what does the bill say?", "ask Mago about the sellsword"; never "ask Grza about the road" (asking her, not about her)
+LOOKS_AT = re.compile(r"\b(?:look(?:s|ing)?|glanc\w*|stud(?:y|ies|ying)|examin\w*|inspect\w*|watch\w*|eyes?|"
+                      r"regard\w*|observ\w*|peer\w*|squint\w*|scan\w*|describ\w*|read(?:s|ing)?|"
+                      r"(?:ask\w*|know|tell|hear\w*|say|said)\b[^.?!\"]{0,30}?\babout|"  # never "sorry about the cask"
+                      r"who(?:'s| is| are)|what(?:'s| is| does))\b", re.IGNORECASE)
+
+
+def came_in(ctx: TurnContext) -> set[str]:  # rule: 12.14.11
+    """Who or what came into the scene this turn (DL-12-122): created this turn, or moved to the scene's place by an
+    event of this turn from somewhere else (a return after leaving counts). Read from the turn's own events, never
+    from a mark: nothing is tracked."""
+    st = ctx.state
+    place = st.scene.place_id if st.scene is not None else None
+    if place is None:
+        return set()
+    kinds = ("entity_created", "position_set")
+    evs = [(e, bool(ctx.turn_id) and e.turn_id == ctx.turn_id) for e in ctx.store.events(types=kinds)]
+    evs += [(e, True) for e in (ctx.tx.events if ctx.tx is not None else []) if e.type in kinds]  # staged: this turn
+    before: dict[str, str | None] = {}
+    out: set[str] = set()
+    for e, now in evs:
+        if e.type == "entity_created":
+            if now:
+                out.add(e.payload.entity.id)  # type: ignore[attr-defined]
+            continue
+        if e.type != "position_set" or e.payload.location is None:  # type: ignore[attr-defined]
+            continue
+        who, where = e.payload.entity, e.payload.location  # type: ignore[attr-defined]
+        if now and where == place and before.get(who) != place:
+            out.add(who)
+        before[who] = where
+    return out
+
+
+def looked_at(state: WorldState, record: AdjudicationRecord, player_message: str) -> set[str]:  # rule: 12.14.11
+    """Whom or what the player looks at or asks about this turn (DL-12-122): the target of an Observe beat, or a name
+    within a few words after a look or ask word (a person by name or label, a thing by a word of its name)."""
+    from engine.audit.text import content
+    from engine.dm.packet import THINGS
+    from engine.retrieve.scene import resolve_names
+
+    out = {t for b in record.beats if b.verb == "verb.observe" for t in b.targets}
+    things = {i: content(e.name or "") for i, e in state.entities.items() if e.kind in THINGS and i not in state.seals}
+    for m in LOOKS_AT.finditer(player_message):
+        window = " ".join(player_message[m.end():].split()[:6])
+        out.update(resolve_names(state, window))
+        said = content(window)
+        out.update(i for i, ws in things.items() if ws & said)
+    return out
+
+
 def draft(ctx: TurnContext, record: AdjudicationRecord, *, player_message: str = "",
           exchanges: Sequence[str | tuple[str, str]] = (), purpose: Purpose = "turn",
           revision: Revision | None = None, extra: Sequence[str] = (),
@@ -422,14 +474,16 @@ def draft(ctx: TurnContext, record: AdjudicationRecord, *, player_message: str =
     cards = load_cards_for(Role.NARRATOR, scene_situation_tags(st, ctx.rules), mode, triggers, rules=ctx.rules)
     msg = [record_text(st, record, player_message=player_message, purpose=purpose, rules=ctx.rules, items=its)]
     full = purpose != "turn" or bool(LOOKS_AROUND.search(player_message))  # setting once (DL-12-99)
-    if purpose in ("turn", "scene_open", "opening") and (setting := scene_setting(st, full=full)):
+    # people and things too (DL-12-122): on a later turn, looks only for who came in or whom the player looks at
+    shown = None if full else came_in(ctx) | looked_at(st, record, player_message)
+    if purpose in ("turn", "scene_open", "opening") and (setting := scene_setting(st, full=full, shown=shown or ())):
         msg.append(setting)
     msg.extend(extra)
     if revision is not None:  # the same packet, plus the whole draft and what failed (12.3.3)
         msg.append(revision_text(revision))
     message = "\n".join(msg)
     # the enums come from this packet (its record handles, the people present), so nothing outside it can be cited
-    view = view_for(Role.NARRATOR, st, view_ctx(message, exchanges, plain=False))
+    view = view_for(Role.NARRATOR, st, view_ctx(message, exchanges, plain=False, shown=shown))
     sctx = schema_context(st, ctx.rules).model_copy(update={"narrator_refs": [it.handle for it in its]})
     schema = build_schema(Role.NARRATOR, sctx)
     packet = build_packet(Role.NARRATOR, instructions=load_prompt("narrator"), cards=cards, view=view,

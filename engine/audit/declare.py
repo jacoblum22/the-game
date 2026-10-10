@@ -207,7 +207,9 @@ class SceneIndex(BaseModel):
     sealed: list[str] = Field(default_factory=list)  # sealed names and contents (whole phrases, lower case)
 
     @classmethod
-    def of(cls, state: Any, its: Sequence[Any] = ()) -> SceneIndex:  # rule: 12.3.1a
+    def of(cls, state: Any, its: Sequence[Any] = (), said: str = "") -> SceneIndex:  # rule: 12.3.1a
+        """`said`: the player's words this turn; a number they said is the PC's to hear back ("ten silver";
+        spec 024: 2 of 3 live revisions were the player's own offer)."""
         from engine.retrieve.scene import pc_id
         from engine.store.views import unnamed_label
 
@@ -247,6 +249,8 @@ class SceneIndex(BaseModel):
             if isinstance(v, dict):
                 known |= {w for x in v.values() if isinstance(x, str) for w in re.findall(r"[A-Z][\w'-]+", x)}
         numbers = {s: [q.current for q in qs.values()] for s, qs in state.quantities.items()}
+        numbers[pc or ""] = [*numbers.get(pc or "", []),
+                             *(n for w in tx.words(said) if (n := tx.number_in(w)) is not None)]
         facts: dict[str, str] = {}
         subj: dict[str, str] = {}
         for fid, f in state.facts.items():

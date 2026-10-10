@@ -158,6 +158,8 @@ def clause(subject: str | None, verb: str, obj: str | None = None, *, neg: bool 
 
 def slug_words(slug: str) -> str:
     """A predicate key as words: 'plane_s_iron' -> "plane's iron", 'sees_the_pc_coming' -> 'sees you coming'."""
+    # an index segment ("furniture.0") and the narrated-detail namespace ("detail.eyes") are not words (spec 023, 026)
+    slug = re.sub(r"\.\d+(?=\.|$)", "", re.sub(r"^detail\.", "", slug))
     p = re.sub(r"\b(?:the )?pc s\b", "your", slug.replace("_", " ").replace(".", " "))
     return re.sub(r"\b(\w+) s\b", r"\1's", re.sub(r"\b(?:the )?pc\b", "you", p)).strip()
 
