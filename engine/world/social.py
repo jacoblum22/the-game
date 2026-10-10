@@ -17,9 +17,11 @@ Commitments are facts of kind `commitment`, predicate `commitment.<fact id>`. Me
 
 from __future__ import annotations
 
+import re
 from collections.abc import Iterable, MutableSequence, Sequence
 from typing import Any, Literal, TypeVar
 
+from engine import ids
 from engine.data.loader import Rules
 from engine.gen import npc as gen_npc
 from engine.rng import Rng
@@ -247,6 +249,44 @@ def meet_npc(ctx: TimeContext, role: str | None, place: str | None, *, people: s
         stage(ctx, Event.of("position_set", rule_id="PR-12-5", entity=n.id, location=place))
     _add_to_cast(ctx, n.id)
     return n.id
+
+
+_GROUP = re.compile(r"(?:[^s]s|folk|people|men|women|children|crowd|kin)$", re.I)  # "the carters", "the refugees"
+
+
+def cast_described(ctx: TimeContext, words: str, place: str) -> str | None:  # rule: 12.2.4
+    # rule: 12.14.13
+    """The Director casts a description present (12.2.4 Director row; DL-12-110): the existing person or group it
+    names (name, alias, role or label: the seed's refugees), moved here; else a new unnamed group for a plural
+    description ("the carters", 12.14.13 T1a), else a walk-on with that role (PR-12-5). Never a random walk-on for a
+    stated purpose (round 7: "the carters" cast a sellsword, "the refugees" a labourer)."""
+    from engine.dm.mentions import bare, find_existing
+    from engine.gen.cast import alive
+
+    state = ctx.tx.state
+    label = bare(words)
+    if not label or place not in state.entities:
+        return None
+    found = find_existing(state, words, "npc")
+    if found is None:
+        found = next((i for i, e in state.entities.items() if e.kind == "npc" and e.data.get("group")
+                      and str(e.data.get("role") or "").lower() == label.lower()), None)
+    if found is not None and alive(state, found):
+        pos = state.positions.get(found)
+        if pos is None or pos.location != place:
+            stage(ctx, Event.of("position_set", rule_id="12.2.4", entity=found, location=place))
+        _add_to_cast(ctx, found)
+        return found
+    if not _GROUP.search(label):
+        return meet_npc(ctx, label, place, alias=label, reuse=False)
+    gid = ids.entity_id("npc", label, state.entities)
+    stage(ctx, Event.of("entity_created", rule_id="12.14.13", source="npc_generation", entity=EntityRecord(
+        id=gid, kind="npc", name=f"the {label}", visibility="shown",
+        data={"group": True, "role": label, "name_known": False, "pronouns": "they/them", "home": place,
+              "depth": "walk_on"})))
+    stage(ctx, Event.of("position_set", rule_id="12.14.13", entity=gid, location=place))
+    _add_to_cast(ctx, gid)
+    return gid
 
 
 def _add_to_cast(ctx: TimeContext, npc: str) -> None:  # rule: 12.6.6

@@ -38,6 +38,8 @@ MESSAGES = {
     Role.TESTIMONY: "npc.mara_voss: Mara Voss said: \"The night boat leaves from the north pier.\"",
     Role.FIXER: "THE PLAYER'S REPORT: \"Mara's coat was grey\"\nPEOPLE IN VIEW:\nnpc.mara_voss: Mara Voss (she/her)\n"
                 "INVESTIGATION SO FAR:\n[1] search('coat'):\nturn.3 (1/1 words) player: \"hi\" | Mara's blue coat.",
+    Role.CLUE: "THE QUESTION: \"Did he have enemies?\"\nOPEN CLUES (number: what a question must be about to reach it; "
+               "* = this person holds it):\n1*: who had cause to want the ferryman gone",
 }
 
 # The engine's JSON Schema subset (engine.llm.base.validate) plus annotation keywords.

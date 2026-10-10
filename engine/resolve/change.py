@@ -19,7 +19,6 @@ A slot may be an unnamed description ("the refugees", DL-12-97): the change is a
 
 from __future__ import annotations
 
-import re
 from collections.abc import Iterable
 from dataclasses import dataclass, field
 from typing import Any
@@ -260,37 +259,43 @@ def hold(tx: Any, rules: Any, held: str, holder: str, reach: int, beat_id: str |
                            source={"entity": holder, "beat_id": beat_id}).events
 
 
-_PAID = re.compile(r"\b(?:spent|paid|pays|handed over|hands over|changes hands|set (?:down )?on|laid (?:down )?on|"
-                   r"left (?:on|with)|on the (?:table|counter|bar|trestle))\b", re.IGNORECASE)
-_COIN = re.compile(r"\b(?:(\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+)?(?:[a-z]+\s+)?"
-                   r"(?:coins?|silver|copper|gold pieces?)\b", re.IGNORECASE)
-_NUM = {"one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "seven": 7, "eight": 8, "nine": 9, "ten": 10}
-
-
-def price(consequence: str) -> int:  # rule: 01.11.2
-    """The coin a method consequence hands over (01.11.2's price: a round, a bribe, a fee), else 0. An offer of coin is
-    no payment: the words must say the coin changed hands (spent, paid, set on the table)."""
-    # ponytail: read from the Framer's declared consequence (3 of 3 payments, 0 of 4 offers in the round-5/6 saves);
-    # a typed `price` field on the Framer's schema when it is next opened
-    m = _COIN.search(consequence)
-    if m is None or not _PAID.search(consequence):
-        return 0
-    n = (m.group(1) or "").lower()
-    return int(n) if n.isdigit() else _NUM.get(n, 1)
-
-
 def pay(tx: Any, consequences: Iterable[str], payer: str | None) -> list[Event]:  # rule: 01.11.2
-    """01.11.2 (DL-01-40): the coin the method hands over leaves the payer's `coin` at RECORD, whatever the degree;
-    never below 0 (what is not in the purse is not paid)."""
-    q = tx.state.quantities.get(payer or "", {}).get("coin")
-    amount = sum(price(c) for c in consequences)
-    if q is None or amount <= 0 or q.current <= 0:
-        return []
-    paid = min(amount, q.current)
-    ev = Event.of("quantity_changed", source="engine", rule_id="01.11.2", entity=payer, quantity="coin", delta=-paid,
-                  new_value=q.current - paid, reason="a price the method pays (01.11.2)")
-    tx.add(ev)
-    return [ev]
+    """Retired (spec 025; 15.7.1 item 3, DL-15-42): coin never leaves the purse because Framer prose says so (the
+    regex price, round 7 I2 §3). A deal's typed price is paid by `pay_deal`. Kept as a no-op until the pipeline's two
+    calls are removed (hand-off)."""
+    return []
+
+
+DEAL = "deal.price"  # the price record's predicate, on the payee (15.7.1 item 3)
+
+
+def deal_price(rules: Any, size: str | None, stated: int | None) -> int:  # rule: 15.7.1
+    """15.7.1 item 3 (DL-15-42; PR-12-12's price guard): what a deal costs: the player's stated amount kept inside the
+    price band of what is asked (request R1..R5 -> `economy.yaml#price_bands` 0..4), else that band's floor. A
+    spoken figure outside the band never reaches the purse."""
+    rung = int(str(size or "R1").lstrip("R") or 1)
+    bands = {int(b["band"]): b for b in rules.doc("economy")["price_bands"]}
+    b = bands.get(max(0, min(4, rung - 1)), bands[0])
+    lo, hi = int(b["min"]), int(b["max"] if b["max"] is not None else b["min"])
+    return max(lo, min(hi, int(stated))) if stated else lo
+
+
+def pay_deal(tx: Any, payer: str, payee: str, amount: int, *, kind: str = "coin", due: str = "now",
+             rule_id: str = "15.7.1") -> list[Event]:  # rule: 15.7.1
+    """An agreed deal's price record `{payer, payee, kind, amount, due, paid}` on the payee, and its payment as a typed
+    quantity change (01.11.2): never below 0 (what is not in the purse is not paid, and the record says so)."""
+    from engine.world.common import fact
+
+    q = tx.state.quantities.get(payer, {}).get(kind)
+    have = q.current if q is not None else 0
+    paid = min(amount, have) if have > 0 and due == "now" else 0
+    evs = [fact(tx, payee, DEAL, {"payer": payer, "payee": payee, "kind": kind, "amount": amount, "due": due,
+                                  "paid": paid}, rule_id=rule_id, source="ruling", visibility="shown")]
+    if paid:
+        evs.append(Event.of("quantity_changed", source="engine", rule_id="01.11.2", entity=payer, quantity=kind,
+                            delta=-paid, new_value=have - paid, reason="a deal's price paid (15.7.1)"))
+    tx.add_all(evs)
+    return evs
 
 
 def apply_change(tx: Any, rules: Any, beat: Beat, reach: int, *, pc: str | None = None,
@@ -390,4 +395,5 @@ def apply_change(tx: Any, rules: Any, beat: Beat, reach: int, *, pc: str | None 
 
 
 __all__ = ["HOLDS", "LADDER", "ChangeResult", "agreed_covers", "already_true", "apply_change", "current_hold", "hold", "hold_level",
-           "holder_of", "kinds", "needs_target", "pay", "plain", "price", "things_held", "typed_goal"]
+           "holder_of", "kinds", "needs_target", "pay", "pay_deal", "deal_price", "DEAL", "plain", "things_held",
+           "typed_goal"]

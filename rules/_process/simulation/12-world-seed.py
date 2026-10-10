@@ -686,7 +686,7 @@ def build_seed(seed, given=None):
         cons = next(f["consequence"] for f in template_for(fac["org_tags"][0])["fate_list"] if f["fate"] == "dies")
         fac["linchpins"].append({"npc": head["id"], "consequence": cons, "fates": fates, "sealed": True})
         if fac["full"]:
-            off = make_npc(dice, S, role="officer of %s" % fac["name"], people=people_for(next(npc_i), fac["role"]), home=home or region_id, member_of=[fac["id"]],
+            off = make_npc(dice, S, role="officer", people=people_for(next(npc_i), fac["role"]), home=home or region_id, member_of=[fac["id"]],
                            band=T22[fac["tier"]], role_tags=fac["patron_deeds"][:1], duty=fac["duties"][1 % len(fac["duties"])])
             fac["officers"].append(off["id"])
     priest = next(n for n in S["npcs"] if n["id"] == F["faith"]["officers"][0])
@@ -899,7 +899,7 @@ def build_seed(seed, given=None):
         if f["full"]:
             rum.append({"text": "Word is that %s will try to %s." % (f["name"][0].lower() + f["name"][1:] if f["name"].startswith("The ") else f["name"], f["goal"]["text"]), "truth": "true", "points_to": f["goal"]["clock"], "source": "hearsay"})
     for s in situations:
-        rum.append({"text": s["timeline"][0]["trace"].capitalize() + "; folk say it is only the beginning.", "truth": "true", "points_to": s["id"], "source": "eyewitness"})
+        rum.append({"text": s["timeline"][0]["trace"].capitalize() + ".", "truth": "true", "points_to": s["id"], "source": "eyewitness"})
     for sid in sites:
         src = "legend" if P[sid]["ring"] >= 3 else "hearsay"
         t = truth(src)
@@ -954,7 +954,7 @@ def build_seed(seed, given=None):
              # [revision: I-069 sweep] the lead's words are the first-trace rumor of the situation it points to (12.16.14 order:
              # the full factions' goals, then each situation's first trace); before, it always quoted the wound's
              {"lead": rum[len([f for f in factions if f['full']]) + _si]["text"], "points_to": situations[_si]["id"]},
-             {"lead": "%s is hiring, and asks no questions" % F["fourth"]["name"], "points_to": F["fourth"]["goal"]["clock"]}]
+             {"lead": "%s is hiring" % F["fourth"]["name"], "points_to": F["fourth"]["goal"]["clock"]}]
     regime = "%s spring" % climate
     opening = {"start": {"date": calendar["opening_date"], "watch": "dawn", "place": start_place[scene_key],
                          "weather": {"fact": "weather.today", "value": "rolled at the first dawn by h.10.weather in the %s regime (10.11.3)" % regime, "source": "engine"},

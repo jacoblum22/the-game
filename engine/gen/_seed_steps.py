@@ -514,7 +514,7 @@ def step8_cast(st: Rec, dice: Dice, A: Answers, names: Names) -> None:
         cons = next(f["consequence"] for f in tpl["fate_list"] if f["fate"] == "dies")
         fac["linchpins"].append({"npc": head["id"], "consequence": cons, "fates": fates, "sealed": True})
         if fac["full"]:
-            off = make_npc(dice, S, role="officer of {}".format(fac["name"]), people=people_for(fac["role"]),
+            off = make_npc(dice, S, role="officer", people=people_for(fac["role"]),
                            home=home or region_id, member_of=[fac["id"]], band=T22[fac["tier"]],
                            role_tags=fac["patron_deeds"][:1], duty=fac["duties"][1 % len(fac["duties"])])
             fac["officers"].append(off["id"])
@@ -784,7 +784,7 @@ def step11_rumors(st: Rec, dice: Dice, A: Answers, names: Names) -> None:
             rum.append({"text": "Word is that {} will try to {}.".format(fname, f["goal"]["text"]), "truth": "true",
                         "points_to": f["goal"]["clock"], "source": "hearsay"})
     for s in situations:
-        rum.append({"text": s["timeline"][0]["trace"].capitalize() + "; folk say it is only the beginning.", "truth": "true",
+        rum.append({"text": s["timeline"][0]["trace"].capitalize() + ".", "truth": "true",
                     "points_to": s["id"], "source": "eyewitness"})
     for sid in sites:
         src = "legend" if P[sid]["ring"] >= 3 else "hearsay"
@@ -856,7 +856,7 @@ def step13_opening(st: Rec, dice: Dice, A: Answers, names: Names, powers_dice: D
     si = 0 if first_target != situations[0]["id"] else 1
     leads = [{"lead": "the incident itself: {}".format(inc["text"]), "points_to": first_target},
              {"lead": st["rum"][len([f for f in factions if f["full"]]) + si]["text"], "points_to": situations[si]["id"]},
-             {"lead": "{} is hiring, and asks no questions".format(F["fourth"]["name"]), "points_to": F["fourth"]["goal"]["clock"]}]
+             {"lead": "{} is hiring".format(F["fourth"]["name"]), "points_to": F["fourth"]["goal"]["clock"]}]
     regime = f"{climate} spring"
     opening = {"start": {"date": calendar["opening_date"], "watch": "dawn", "place": start_place[scene_key],
                          "weather": {"fact": "weather.today",

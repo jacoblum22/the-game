@@ -136,7 +136,8 @@ def test_director_enums_fit_the_schema(tmp_path: Path) -> None:
                          lead_fires=en["lead_fires"])
     schema = director_schema(ctx)
     ok = {"cut_now": False, "next_scene": {"mode": "free", "place": en["places"][1], "agenda": "a", "hoped_answer": "",
-                                           "pillar": "social", "challenge_type": None, "cast": []}}
+                                           "pillar": "social", "challenge_type": None, "cast": [],
+                                           "cast_described": []}}
     assert validate(ok, schema) == []
     bad = {**ok, "next_scene": {**ok["next_scene"], "place": "loc.nowhere"}}
     assert validate(bad, schema)

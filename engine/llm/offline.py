@@ -1117,6 +1117,19 @@ def _checker(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:
     }
 
 
+def _clue(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:  # rule: PR-12-10
+    """The clue judgment offline (a test double for the meaning call, spec 025): a held clue whose about line shares
+    a content word with the question (uncertain -> yes, P16), else a clue shared on two words, else none."""
+    from engine.audit import text as words
+
+    m = re.search(r'^THE QUESTION: "(.*)"$', packet.message, re.MULTILINE)
+    q = words.content(m.group(1) if m else "")
+    hits = [(bool(held), len(q & words.content(about)), n)
+            for n, held, about in re.findall(r"^(\d)(\*?): (.*)$", packet.message, re.MULTILINE)]
+    ok = [h for h in hits if h[1] >= (1 if h[0] else 2)]
+    return {"about": max(ok)[2] if ok else "none"}
+
+
 ROLE_HEURISTICS: dict[Role, Callable[[dict[str, Any], Packet], dict[str, Any]]] = {
     Role.INTERPRET: _interpret,
     Role.READER: _reader,
@@ -1127,6 +1140,7 @@ ROLE_HEURISTICS: dict[Role, Callable[[dict[str, Any], Packet], dict[str, Any]]] 
     Role.CHECKER: _checker,
     Role.TESTIMONY: _testimony,
     Role.FIXER: _fixer,
+    Role.CLUE: _clue,
 }
 
 

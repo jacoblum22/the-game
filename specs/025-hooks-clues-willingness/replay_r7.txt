@@ -1,0 +1,23 @@
+spec 025 round-7 gates (clue judgment on haiku)
+== fighter turn.2-4: Magby (the offer's reporter, core holder of 'who makes the offer')
+  before: - knows: everyone in Hartwell goes to Pipwise Bramblewort when they need advice
+  before: - knows: Wikbit Bell-Ringer has lived in Hartwell longer than anyone can remember
+  before: - knows: trusts Wikbit Bell-Ringer more than anyone in Hartwell
+  after:  - knows: the offer of work: work: escorting a cart; pay: 85 coins (a job fee); where: The Tower of Falmouth
+  after:  - knows: everyone in Hartwell goes to Pipwise Bramblewort when they need advice
+  after:  - knows: Wikbit Bell-Ringer has lived in Hartwell longer than anyone can remember
+  after:  - knows: trusts Wikbit Bell-Ringer more than anyone in Hartwell
+  ask "Where's the danger worst?": Magby Applefoot answers what you asked, willingly (a plain question to a warm listener): in his own words, from what they know or have heard
+  ask 'What does the job pay?': Magby Applefoot answers what you asked, willingly (a plain question to a warm listener): in his own words, from what they know or have heard
+  ask 'Who is really making this offer?': Magby Applefoot tells you who makes the offer: Tobby Applefoot
+  GATE pay and place on Magby's card: True
+== explorer turn.2: Branine asked about the refugees (round 7: not routed, no clue)
+  Branine Brightford tells you who leads the refugees: Vorri Stonebeard | fact fact.98 | GATE clue delivered: True
+== explorer turn.8: Roswen refused (round 7: redirect to Morga, the loop)
+  Roswen Tumbottle does not know who leads the refugees, but Branine Brightford would
+  pointer: Branine Brightford | GATE never Morga or Roswen: True
+  the refugees exist: npc.case_incident_refugees_refugees at loc.silver_fells_greyley.gate
+  Director cast_described ['the refugees'] -> present: ['the refugees', 'Morga Embershield', 'Roswen Tumbottle'] | GATE refugees present: True
+== talker turn.9: the sellsword asked about Morri's Wolves (round 7: 'does not know what the omen shows, but Kerric Hartsmith would')
+  The sellsword between contracts answers what you asked, willingly (a plain question to a warm listener): in his own words, from what they know or have heard
+  GATE no case pointer: True

@@ -171,6 +171,21 @@ def case_covering(state: Any, role_words: str) -> Rec | None:  # rule: PR-12-10
     return None
 
 
+def about_line(state: Any, case: Rec, node: Rec, placement: Rec | None = None) -> str:  # rule: PR-12-10
+    # rule: 15.9.5
+    """What a question must be about to reach a placement (`investigation.yaml` placement `about`; DL-15-40): its
+    authored `about`, else the node's question (the words before ":"), never its answer, with the matter it belongs
+    to (the incident's text, or the question that built the case). The clue judgment reads only this line."""
+    if placement is not None and placement.get("about"):
+        return str(placement["about"])
+    q = str(node["fact"]).split(":", 1)[0].strip()
+    if q == "the way on":
+        q = "where the matter leads next (the way on)"
+    inc = ((state.meta.get("world.opening") or {}).get("inciting") or {}) if state is not None else {}
+    matter = str(inc.get("text") or "") if case.get("trigger") == "incident" else str(case.get("about") or "")
+    return f"{q} (the matter: {matter})" if matter else q
+
+
 def pointer(case: Rec, node_id: str | None = None, *, asked: str | None = None, state: Any = None) -> str | None:
     # rule: PR-12-10
     """Who (or where) to send the PC for a node of `case` (default: the first unfound necessary node): the holder of
@@ -229,6 +244,9 @@ def write_seeded(tx: Any, rec: Rec, *, source: str = "seed") -> None:  # rule: 1
     if rec.get("seed_cases"):
         merged = cases(st) | {c["id"]: c for c in rec["seed_cases"]}
         tx.add(meta(CASES, merged, "PR-15-6", source))
+    from engine.gen.hooks import write_terms
+
+    write_terms(tx, rec, source=source)  # PR-11-5 step 1: the hooks' terms, as their knowers' knowledge (DL-12-109)
 
 
 def world_rec(state: Any) -> Rec:
@@ -275,6 +293,7 @@ def case_for_question(tx: Any, role_words: str, place: str | None, *, lead_targe
     seed = (st.meta.get("world.seed") or {}).get("seed")
     tag = f"q{len(cases(st)) + 1:d}"
     case = reduced_case(reg, seed, opt, place, target, tag=tag)
+    case["about"] = role_words  # the matter its about lines name (`about_line`)
     write_seeded(tx, reg, source="engine")
     return case
 
@@ -360,5 +379,5 @@ def _copy(c: Rec) -> Rec:
     return copy.deepcopy(c)
 
 
-__all__ = ["CASES", "MIN_LIVE", "audit_cases", "case_covering", "case_for_question", "cases", "mark_found", "pointer",
+__all__ = ["CASES", "MIN_LIVE", "about_line", "audit_cases", "case_covering", "case_for_question", "cases", "mark_found", "pointer",
            "reduced_case", "story_option", "validate_case", "world_rec", "write_seeded"]

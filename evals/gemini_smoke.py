@@ -45,7 +45,7 @@ from engine.llm.gemini_schema import convert, problems  # noqa: E402
 
 FIXTURES = REPO_ROOT / "tests" / "engine" / "fixtures_gemini_schemas"
 ROLE_ORDER = [Role.INTERPRET, Role.READER, Role.FRAMER, Role.WORLD, Role.DIRECTOR, Role.NARRATOR, Role.CHECKER,
-              Role.TESTIMONY, Role.FIXER]
+              Role.TESTIMONY, Role.FIXER, Role.CLUE]
 
 SCENE = (
     "Test scene (a connectivity check, not a real game): Wren (pc.wren), a scout, stands in the village shrine "
@@ -64,6 +64,8 @@ MESSAGES = {
     Role.FIXER: "THE PLAYER'S REPORT: \"Wren's cloak was grey, not blue\"\nNOW: spring, the morning of day 1\n"
                 "PEOPLE IN VIEW:\npc.wren: Wren (she/her)\nINVESTIGATION SO FAR:\n[1] turn('turn.4'):\nturn.4 player: "
                 "\"I look at Wren.\"\ngame: \"Wren's blue cloak drips.\"",
+    Role.CLUE: "THE QUESTION: \"Did the shrine-keeper owe anyone?\"\nOPEN CLUES (number: what a question must be about "
+               "to reach it; * = this person holds it):\n1*: why the shrine-keeper fled",
 }
 
 

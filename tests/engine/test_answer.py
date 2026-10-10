@@ -94,9 +94,12 @@ def test_an_ordinary_question_is_a_willingness_line_never_a_pointer(seeded: Any)
     for i, topic in enumerate(topics):
         npc = people[i % len(people)]
         a = ask(seeded, npc, ("what_like", "where_is", "who_knows")[i % 3], f"what about {topic}?", topic=topic)
-        assert a.willingness in ("willing", "guarded", "unwilling") and a.pointer is None and a.fact_id is None
-        assert "but" not in a.line.split('"')[-1] and "would" not in a.line.split('"')[-1]  # no "but X would"
-    assert not [f for f in seeded.state.facts.values() if f.predicate.startswith(("points_to.", "knows_", "topic."))]
+        assert a.willingness in ("willing", "guarded", "unwilling") and a.fact_id is None
+        # no "but X would"; only a refusal points onward, once (spec 025, DL-12-119)
+        assert a.pointer is None or (a.willingness == "unwilling" and a.line.count("would know") == 1)
+        assert "but" not in a.line.split('"')[-1]
+    assert not [f for f in seeded.state.facts.values() if f.predicate.startswith(("points_to.", "knows_", "topic."))
+                and not f.predicate.startswith("topic.hook.")]  # a hook's seeded terms (spec 025) are not answers
     assert len(seeded.state.facts) - facts < len(topics)  # no world fact per answer (standing rolls only)
     assert seeded.rebuild() == seeded.state
 
@@ -141,7 +144,8 @@ def test_a_story_role_goes_to_the_case_graph(seeded: Any) -> None:
     assert cases(st)[case["id"]]["nodes"][0]["found"] is True
     for n in people:  # found: never delivered or pointed at again (DL-12-103; 232941 t5)
         again = ask(seeded, n, "who_is", '"Who is missing?"')
-        assert again.fact_id is None and again.pointer is None and again.willingness is not None
+        assert again.fact_id is None and again.willingness is not None
+        assert again.pointer != core and (again.pointer is None or again.willingness == "unwilling")  # D3's onward
 
 
 def test_who_is_a_role_is_cast_and_the_dm_side_points_until_told(seeded: Any) -> None:

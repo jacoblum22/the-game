@@ -3769,7 +3769,7 @@ npcs:
   stance: {toward: incident, stance: helps, why: holds a placement of the incident's case}
 - id: npc.kazek_graniteborn
   name: Kazek Graniteborn
-  role: officer of The lords of Hawkgate
+  role: officer
   people: creature.folk.dwarf
   gender: man
   pronouns: he/him
@@ -3874,7 +3874,7 @@ npcs:
   stance: {toward: incident, stance: hinders, why: has a reason to want it left alone}
 - id: npc.milie_thistlefoot
   name: Milie Thistlefoot
-  role: officer of The faithful of Oswen
+  role: officer
   people: creature.folk.halfling
   gender: man
   pronouns: he/him
@@ -3982,7 +3982,7 @@ npcs:
   stance: {toward: incident, stance: hinders, why: of the threat faction}
 - id: npc.murznak_red_hand
   name: Murznak Red-Hand
-  role: officer of The Horde of the Millwick
+  role: officer
   people: creature.folk.orc
   gender: woman
   pronouns: she/her
@@ -4092,7 +4092,7 @@ npcs:
   stance: {toward: incident, stance: helps, why: wants it settled and will help}
 - id: npc.ranella_whitefield
   name: Ranella Whitefield
-  role: officer of The council of Merestead
+  role: officer
   people: creature.folk.human
   gender: man
   pronouns: he/him
@@ -7069,8 +7069,8 @@ rumor_tables:
     truth: 'true', points_to: clk.high_fells.threat.goal, source: hearsay}
   - {range: '4', text: Word is that the council of Merestead will try to rid the streets of the gangs., truth: 'true', points_to: clk.high_fells.fourth.goal,
     source: hearsay}
-  - {range: '5', text: The levy called; folk say it is only the beginning., truth: 'true', points_to: sit.high_fells.wound, source: eyewitness}
-  - {range: '6', text: A savaged ewe; folk say it is only the beginning., truth: 'true', points_to: sit.high_fells.local, source: eyewitness}
+  - {range: '5', text: The levy called., truth: 'true', points_to: sit.high_fells.wound, source: eyewitness}
+  - {range: '6', text: A savaged ewe., truth: 'true', points_to: sit.high_fells.local, source: eyewitness}
   - {range: '7', text: At Shephollow's Undercroft lies the great beast of the place., truth: 'true', points_to: loc.high_fells_shephollows_undercroft,
     source: hearsay}
   - {range: '8', text: At The Caves of Crowton lies the one dragged down here., truth: 'true', points_to: loc.high_fells_caves_of_crowton,
@@ -7264,9 +7264,8 @@ opening:
       incident is the first step of the vow or a threat to the anchor bond'}
   leads:
   - {lead: 'the incident itself: the haven''s alarm sounds: something from the wound is at the gate', points_to: sit.high_fells.wound}
-  - {lead: A savaged ewe; folk say it is only the beginning., points_to: sit.high_fells.local}
-  - {lead: 'The council of Merestead is hiring, and asks no questions', points_to: clk.high_fells.fourth.goal, document: doc.lead_3,
-    names: Yagum Iron-Tusk}
+  - {lead: A savaged ewe., points_to: sit.high_fells.local}
+  - {lead: The council of Merestead is hiring, points_to: clk.high_fells.fourth.goal, document: doc.lead_3, names: Yagum Iron-Tusk}
   starting_state: {known_places: ring 0-3 areas and their known sites (rumor), status: 0 with every faction unless a creation tie sets
       it (02.9.5)}
   case: case.incident.alarm
