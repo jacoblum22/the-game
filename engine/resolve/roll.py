@@ -121,8 +121,9 @@ def read_result(frame: Frame, roll: RollResult, take_success_at_cost: bool | Non
     choices: list[str] = []
     if sev is not None:
         choices = [frame.threatened_cost.menu_id]
-        if sac and frame.alternate_cost is not None:
-            choices.append(frame.alternate_cost.menu_id)
+        if sac:  # 01.9.3 (DL-01-43): a price that reverses the goal carries no success-at-cost severity
+            choices = [c.menu_id for c in (frame.threatened_cost, frame.alternate_cost)
+                       if c is not None and c.on_success_at_cost] or choices
     return ReadResult(degree=roll.degree, near_miss=roll.near_miss, success_at_cost_taken=sac,
                       delivered_reach=reach,
                       cost_severity=sev, cost_choices=choices)

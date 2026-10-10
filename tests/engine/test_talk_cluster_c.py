@@ -48,14 +48,17 @@ def test_a_question_about_the_incident_goes_to_its_case(seeded: Any) -> None:
     assert a.pointer is None and case["nodes"][0]["fact"] in a.line, a
 
 
-def test_a_knowledge_question_to_the_one_asked_is_their_speech(seeded: Any) -> None:
-    from engine.dm.turn import speech_owns
+def test_a_question_about_a_person_here_is_never_the_oracles(seeded: Any) -> None:
+    """Spec 023 (01.15.1, DL-01-41; retires `speech_owns`/`_KNOWS_Q`): anything about a person present (what they
+    know, whether they are willing or able) is theirs, never a yes/no draw; an open world question still is."""
+    from engine.dm.turn import not_oracle
 
     npc = here(seeded)[0]
     st = seeded.state
-    assert speech_owns(st, npc, "knows the details of the ambush at the fortress", [npc])
-    assert not speech_owns(st, npc, "knows the details of the ambush", [])  # not asked: the Oracle's
-    assert not speech_owns(st, npc, "is locked", [npc])
+    assert not_oracle(st, npc, "knows the details of the ambush at the fortress", [npc])
+    assert not_oracle(st, npc, "knows the details of the ambush", [])  # present, even when not addressed
+    assert not_oracle(st, "world", "where the ambush happened")  # content: their words, as testimony
+    assert not not_oracle(st, "world", "is it raining at the pass")
 
 
 # ------------------------------------------------------------------------------------------- 5. a Recall

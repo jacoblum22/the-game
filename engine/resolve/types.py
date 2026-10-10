@@ -132,9 +132,9 @@ class ProposedFrame(BaseModel):
     stakes_source: str = "none"
     stakes_heavy: bool = False
     lethal: bool = False
-    reach_whole: bool = True
-    reach_one_factor: bool = False
+    reach_limit: str | None = None  # 01.6.10 (DL-12-121): the cited factor that makes reach Limited, in plain words
     reach_two_factors: bool = False  # 01.6.10: two effect factors unoffset, or a total potency: G4 (I-160a)
+    already_agreed: str | None = None  # 01.4.1 (DL-01-45): an `agreed` fact that covers this whole ask: no roll
     asks: str = "none"  # social.yaml#event_tags.asks: what a Talk request asks for, or none (12.11.9; I-176)
     threatened_cost: CostDecl | None = None
     alternate_cost: CostDecl | None = None
@@ -246,6 +246,7 @@ class Frame(BaseModel):
     lethal: bool = False
     reach: ReachRung
     reach_factors: list[str] = Field(default_factory=list)
+    reach_limit: str | None = None  # the cited factor a Limited reach names in the OFFER (01.6.10, DL-12-121)
     asks: str = "none"  # the Framer's event tag on a Talk request (social.yaml#event_tags.asks)
     trade: Trade = "none"
     threatened_cost: CostPreview

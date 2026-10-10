@@ -1,0 +1,41 @@
+# Reader golden set (35 lines; 35 scored, 0 without an answer)
+
+- verb: 88.6% (31/35)
+- gate: 97.1% (34/35)
+- necessity: not scored
+- against_will: 96.7% (29/30)
+- uses_power: 100.0% (30/30)
+- speech: 96.7% (29/30)
+- question_kind: 85.7% (30/35)
+- change_kind: 93.3% (28/30)
+- goals: 97.1% (34/35)
+- necessity as roll / no roll: not scored
+- issue lines (P-004 … P-123) verb: not scored, gate: not scored
+
+## Misses (verb, gate): 6
+- s002 verb: got verb.grapple, want verb.talk  (I keep hold of her sleeve. "Tell me the word, Dunwen. Now. A)
+- s003 goals: got ['persuade_to'], want ['learn']  (I twist her arm up behind her back and hiss, "One more swing)
+- s018 verb: got verb.move, want verb.talk  (I tell the guard I'm the new cook and walk past him into the)
+- s022 verb: got verb.move, want verb.sneak  (Keeping to the shadows, I follow the courier through the all)
+- s023 verb: got verb.observe, want verb.sneak  (While the clerk is out, I slip into the study and search the)
+- s033 gate: got G2, want G1  (I pick up the letter from the desk and read it. Who signed i)
+
+## Negation pairs (0 pairs, 0 lines)
+# Reader golden set (0 lines; 0 scored, 0 without an answer)
+
+- verb: not scored
+- gate: not scored
+- necessity: not scored
+- against_will: not scored
+- uses_power: not scored
+- speech: not scored
+- question_kind: not scored
+- change_kind: not scored
+- goals: not scored
+- necessity as roll / no roll: not scored
+- issue lines (P-004 … P-123) verb: not scored, gate: not scored
+
+## Misses (verb, gate): 0
+
+Reader's own verb before the facets choose the card: 66.7% (20/30)
+Computed gate where the beat and verb agree: 96.2% (25/26); lines where only one side has a beat (SPEECH vs a beat): 0

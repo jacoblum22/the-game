@@ -86,7 +86,7 @@ FRAMER = obj(
                  entity=nullable(enum("npc.gate_guard"))),
     levers=arr(enum("fact.f1", "fact.f2"), 2), snags=arr(enum("fact.f1", "fact.f2"), 2),
     stakes=obj(source=enum("source.harm", "source.loss", "none"), threatened_cost=COST, alternate_cost=nullable(COST)),
-    stakes_heavy=BOOL, lethal=BOOL, reach_whole=BOOL, reach_one_factor=BOOL,
+    stakes_heavy=BOOL, lethal=BOOL, reach_limit=nullable(STR),
     method_consequences=arr(STR), secret=BOOL,
 )
 WORLD = obj(responses=arr(obj(

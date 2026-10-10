@@ -241,12 +241,17 @@ def test_we_01_2_long_lost_sister(tmp_path: Path) -> None:
     assert s2.state.fact_value(tam2, "has_lost_sister.and") == o2.meaning
     deceive = s2.beat(intent="be let in", method="claim to be his lost sister", gate="G1", verb="verb.talk",
                       target=tam2)
-    f2 = frame(s2, deceive, anchor=TALK, attribute="presence",
-               obstacle={"kind": "opposed", "entity": tam2, "defense": "wits"}, snags=[o2.fact_id],
-               stakes_source="aware_opponent_or_observer", stakes_heavy=True,
-               threatened_cost={"menu_id": "cost.exposure", "source_fact": duty2},
-               alternate_cost={"menu_id": "cost.closed_door"})
-    assert numbers(f2) == (-1, 11, 45, 5, 10, 12) and f2.stakes == "dire"
+    kw2: dict[str, Any] = dict(anchor=TALK, attribute="presence",
+                               obstacle={"kind": "opposed", "entity": tam2, "defense": "wits"},
+                               stakes_source="aware_opponent_or_observer", stakes_heavy=True,
+                               threatened_cost={"menu_id": "cost.exposure", "source_fact": duty2},
+                               alternate_cost={"menu_id": "cost.closed_door"})
+    # spec 023 (01.15.8, DL-01-41): an Oracle answer is never a snag, so the card's "−2 claim plausibility" citing
+    # it is refused (hand-off: WE-01-2 branch B predates R2-K); the doubt is the guard's Wits defense
+    refusal = frame_check(ProposedFrame(**kw2, snags=[o2.fact_id]), deceive, state=s2.state, rules=s2.rules)
+    assert isinstance(refusal, FrameRefusal) and "never a snag" in refusal.reason
+    f2 = frame(s2, deceive, **kw2)
+    assert numbers(f2)[:2] == (1, 11) and f2.stakes == "dire"
     committed(s2, f2)
     assert roll_check(f2, FixedRng([17])).degree == "success"
 
@@ -452,7 +457,7 @@ def test_we_01_10_play_dead_then_torch(tmp_path: Path) -> None:
     kw: dict[str, Any] = dict(anchor=TALK, obstacle={"kind": "entity_defense", "entity": pack,
                                                        "defense": "intimidation"},
                               stakes_source="aware_opponent_or_observer", stakes_heavy=True, lethal=True,
-                              reach_one_factor=True,  # 01.6.11: harm from the pack, cited
+                              reach_limit="the whole pack: one torch",  # 01.6.11: harm from the pack, cited
                               threatened_cost={"menu_id": "cost.harm", "source_fact": lethal_ctx},
                               alternate_cost={"menu_id": "cost.footing"})
     tie = frame(s, roar, attribute="might", attribute_tie="presence", **kw)
@@ -491,7 +496,7 @@ def test_we_01_11_river_spirit(tmp_path: Path) -> None:
                           target=spirit),
               anchor=TALK, attribute="presence",
               obstacle={"kind": "opposed", "entity": spirit, "defense": "resolve", "defense_tag": "deed.influence"},
-              reach_one_factor=True, stakes_source="goodwill_or_trust", stakes_heavy=True,
+              reach_limit="the whole river: one voice", stakes_source="goodwill_or_trust", stakes_heavy=True,
               threatened_cost={"menu_id": "cost.closed_door"},
               alternate_cost={"menu_id": "cost.time", "source_fact": o2.fact_id})
     assert numbers(f)[:3] == (1, 16, 30) and (f.reach, f.stakes) == ("limited", "dire")
@@ -562,7 +567,7 @@ def test_we_01_16_elven_runes(tmp_path: Path) -> None:
     f = frame(s, s.beat(intent="learn what the stone says", method="read the carving's placement and wear",
                         gate="G1", verb="verb.observe"),
               anchor=OBSERVE, attribute="wits", obstacle={"kind": "tier", "id": "shrine.inscription", "tier": "easy"},
-              reach_whole=False, stakes_source="none", threatened_cost={"menu_id": "cost.drain"})
+              reach_limit="the words themselves", stakes_source="none", threatened_cost={"menu_id": "cost.drain"})
     assert numbers(f)[:3] == (3, 10, 70) and f.reach == "limited"
 
 

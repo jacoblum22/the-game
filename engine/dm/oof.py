@@ -227,12 +227,29 @@ def fact_short(state: WorldState | None, fact_id: str) -> str:  # rule: 12.15.2
         claim = " ".join(x for x in (about, pred.replace("_", " "), str(v)) if x)
         claim = claim if len(claim) <= 60 else claim[:57].rstrip() + "…"
         return f"{who[:1].upper()}{who[1:]} said: {claim}" if who else claim
-    if v is True or v in ("true", "yes"):
-        return words
-    if v is False or v in ("false", "no"):
-        head, _, rest = words.partition(" ")
-        return f"{head} not {rest}" if head in ("is", "are", "was", "were", "has", "have", "can") and rest else \
-            f"not {words}"
+    if isinstance(v, bool) or v in ("true", "yes", "false", "no"):
+        # the plain sentence, positive and with who it is about ("Magby is alert …"); a negated slug from an older
+        # record reads once, never "is not not alert" (01.15.8, DL-01-41; I3 §1)
+        from engine.resolve.oracle import positive
+
+        words, flipped = positive(words)
+        if (v is True or v in ("true", "yes")) == flipped:
+            head, _, rest = words.partition(" ")
+            words = f"{head} not {rest}" if head in ("is", "are", "was", "were", "has", "have", "can", "will",
+                                                    "does", "did") and rest else f"not {words}"
+        ent = getattr(state, "entities", {}).get(f.subject)
+        if ent is None or state is None:
+            who = ""
+        elif ent.kind in _PEOPLE:
+            who = _who(state, ent.id)
+        else:  # a thing or a place by the name the PC knows it ("the back door")
+            from engine.store.views import display_name
+            from engine.text.render import the_name
+
+            who = the_name(display_name(state, ent.id))
+        if who == "you":
+            words = re.sub(r"^is\b", "are", re.sub(r"^has\b", "have", words))
+        return f"{who} {words}".strip()
     if isinstance(v, int | float) and not isinstance(v, bool):
         return f"{words} {v}"
     if not isinstance(v, str) or not v.strip() or len(v) > 48:
@@ -254,11 +271,16 @@ def fact_short(state: WorldState | None, fact_id: str) -> str:  # rule: 12.15.2
 
 
 def _breakdown(f: Frame, rules: Any, state: WorldState | None = None) -> str:
+    """The Chance line's terms in plain words (12.15.2, DL-12-121): no term worth 0, competence by its tag (a PC's
+    floor at the root `deed` under the frame's own deed tag), never a generic "practised"."""
     m = f.modifier
-    parts = [f"{name_of(rules, f.attribute)} {_signed(m.attribute)}"]
+    parts = [f"{name_of(rules, f.attribute)} {_signed(m.attribute)}"] if m.attribute else []
     if m.competence:
         tag = m.competence_tag
-        word = "practised" if tag in (None, "deed") else f"trained ({name_of(rules, tag).lower()})"
+        if tag not in (None, "deed"):
+            word = f"trained ({name_of(rules, tag).lower()})"
+        else:  # the floor every PC holds: named by what this act is, else plainly
+            word = name_of(rules, f.deed_tag) if f.deed_tag not in (None, "deed") else "experience"
         parts.append(f"{word} {_signed(m.competence)}")
     if m.edge:
         parts.append(f"edge {_signed(m.edge)}")
@@ -280,11 +302,13 @@ def _chance_line(f: Frame, rules: Any, state: WorldState | None = None) -> str:
         return f"Chance: you can't judge how hard this is. {SECRET_WHY}"
     if f.long_shot:  # 01.6.13: the label wins; a natural-20-only chance says so too
         n20 = ", only on a natural 20" if o.only_natural_20 else ""
-        return (f"Chance: long shot — {o.success_or_better}%{n20} (failing badly is likelier: "
-                f"{o.critical_failure}%)")
+        sev = SEVERITY_WORDS.get(f.threatened_cost.on_critical_failure or "", "")
+        badly = f"failing badly ({sev})" if f.stakes == "safe" and sev else "failing badly"  # DL-12-121
+        return f"Chance: long shot — {o.success_or_better}%{n20} ({badly} is likelier: {o.critical_failure}%)"
     if o.only_natural_20:
         return "Chance: only by luck — 5%, and at best what you wanted"
-    return f"Chance: {chance_word(o.success_or_better)} — {o.success_or_better}%   ({_breakdown(f, rules, state)})"
+    terms = _breakdown(f, rules, state)
+    return f"Chance: {chance_word(o.success_or_better)} — {o.success_or_better}%" + (f"   ({terms})" if terms else "")
 
 
 _PEOPLE = ("pc", "npc", "companion", "adversary")
@@ -321,6 +345,9 @@ def goal_line(beat: Any, state: WorldState | None) -> str:  # rule: 12.15.2
                    and state is not None and state.entities[str(x)].kind in _PEOPLE), "")
     named = (_slot(state, c.what, act) if c else "") or (c.description if c and c.description else "") \
         or _slot(state, beat.target, act)
+    here = state.scene.place_id if state is not None and state.scene is not None else None
+    if kind == "move_to" and c is not None and c.description and c.what == here:  # a spot within the place here
+        named = c.description  # (live run 204702: "Go to the Golden Plough" while inside it, edging to the crowd)
     if kind in ("learn", "persuade_to") and person:  # toward whom (the person the words press)
         goal, named = ("Learn from " if kind == "learn" else "Persuade ") + person, person
     elif kind != "none" and named:
@@ -331,7 +358,8 @@ def goal_line(beat: Any, state: WorldState | None) -> str:  # rule: 12.15.2
         whom = _slot(state, c.whom, act) if c else ""
         if whom and kind in _PREP and whom != named:
             goal += f" {_PREP[kind]} {whom}"
-    else:
+    else:  # no typed goal (an unrolled beat): the verb toward a named slot, never a description first (DL-01-42)
+        named = _slot(state, beat.target, act) or (_slot(state, c.what, act) if c else "")
         goal = f"{_VERB_GOAL[beat.verb]} {named}" if named and beat.verb in _VERB_GOAL else ""
     words = str(getattr(beat, "how", None) or ("" if named else beat.intent) or "").strip().rstrip(".")
     words = to_player(words, state)  # "my knife" -> "your knife"
@@ -391,7 +419,8 @@ def offer_block(f: Frame, *, rules: Any = None, fate: int | None = None, lethal_
         rest.append(line.replace("harder (+0), and ", "") if not mp.dc_shift else line)
     rest.append(_chance_line(f, rules, state))
     reach = REACH_WORDS.get(f.reach, "what you wanted")
-    works = f"If it works: {reach}."
+    limit = player_words(f.reach_limit or "") if f.reach == "limited" else ""
+    works = f"If it works: {reach}" + (f" ({to_player(limit, state)})." if limit else ".")  # 01.6.10: its factor
     if o.critical_success and not f.secret:  # a critical success delivers one reach rung more (01.6.10)
         better = "more than you asked" if f.reach != "great" else "more than you asked, and then some"
         works += f"   Very well ({o.critical_success}%): {better}."
@@ -400,11 +429,12 @@ def offer_block(f: Frame, *, rules: Any = None, fate: int | None = None, lethal_
     if tc.on_failure:
         fails = f"If it fails: {'Danger: ' if f.stakes == 'dire' else ''}{_cost_clause(tc, state)} — " \
                 f"{SEVERITY_WORDS.get(tc.on_failure, tc.on_failure)}."
-    else:
-        fails = "If it fails: it just doesn't work."
+    else:  # a Safe frame (DL-12-121): a plain failure loses nothing; failing badly's cost and chance follow
+        fails = "If it fails: nothing lost."
     if tc.on_critical_failure and (o.critical_failure or f.secret):
         bad = f" ({o.critical_failure}%)" if not f.secret else ""
-        fails += f"   Badly{bad}: {_cost_clause(tc, state)} — {SEVERITY_WORDS.get(tc.on_critical_failure, '')}."
+        word = "Failing badly" if not tc.on_failure else "Badly"
+        fails += f"   {word}{bad}: {_cost_clause(tc, state)} — {SEVERITY_WORDS.get(tc.on_critical_failure, '')}."
     rest.append(fails)
     if f.lethal:
         rest.append(lethal_line or "THIS CAN KILL YOU.")
@@ -585,7 +615,8 @@ def near_miss_choices(frame: Frame, rules: Any = None) -> list[dict[str, str]]: 
     """Pause choices: success at a cost (threatened, then alternate), or take the failure, in words."""
     sac = cost_severity(frame.stakes, "failure", success_at_cost=True, rules=rules)
     fail = cost_severity(frame.stakes, "failure", rules=rules)
-    costs = [frame.threatened_cost] + ([frame.alternate_cost] if frame.alternate_cost else [])
+    costs = [c for c in (frame.threatened_cost, frame.alternate_cost)  # 01.9.3: never a price that undoes the goal
+             if c is not None and c.on_success_at_cost] or [frame.threatened_cost]
     # each label says whether the attempt lands, so a success and a failure with the same price differ (P-076)
     out = [{"id": f"success_at_cost:{c.menu_id}", "label": f"Succeed, and pay: {_price(rules, c, sac)}"}
            for c in costs]

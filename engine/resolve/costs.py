@@ -13,7 +13,7 @@ returned as `deferred` ({"advance_time": row}) for engine/time.
 from __future__ import annotations
 
 import re
-from collections.abc import Callable, Mapping
+from collections.abc import Callable, Mapping, Sequence
 from typing import Any, Literal, Protocol
 
 from pydantic import BaseModel, ConfigDict, Field
@@ -140,11 +140,11 @@ def source_menus(rules: Any, stakes_source: str) -> list[str] | None:  # rule: 0
 
 
 def first_fitting_cost(rules: Any, *, role: Literal["threatened", "alternate"], other: CostDecl | None = None,
-                       **kw: Any) -> CostDecl | None:  # rule: 01.13.1
+                       exclude: Sequence[str] = (), **kw: Any) -> CostDecl | None:  # rule: 01.13.1
     """The first entry in 01.13.1's tie order (then menu order) that `check_cost_decl` accepts uncited."""
     tie = list(_rules(rules).resolution.get("cost_selection", {}).get("tie_order", []))
     for m in dict.fromkeys([*tie, *menu(rules)]):
-        if m in menu(rules) and check_cost_decl(CostDecl(menu_id=m), role=role, rules=rules, other=other, **kw) is None:
+        if m in menu(rules) and m not in exclude and check_cost_decl(CostDecl(menu_id=m), role=role, rules=rules, other=other, **kw) is None:
             return CostDecl(menu_id=m)
     return None
 

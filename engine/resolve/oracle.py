@@ -14,6 +14,7 @@ is refused and `oracle.free_cap_hit.<scene>` is logged.
 
 from __future__ import annotations
 
+import re
 from collections.abc import Callable, Sequence
 from typing import Any, Literal
 
@@ -30,6 +31,24 @@ DM = "dm"
 FREE_FACTS_KEY = "oracle.free_facts"
 _POSSESS = frozenset({"carries", "carry", "carrying", "has", "have", "having", "holds", "hold", "holding", "wields",
                       "wielding", "owns", "possesses", "wears", "wearing", "armed"})
+
+
+_NEG = re.compile(r"\b(cannot)\b|\b(\w+)n[’']t\b|\bnot\s+|\bnever\s+", re.IGNORECASE)
+# the odds of the positive question when the asked one was negated ("unlikely he is not alert" = "likely he is")
+MIRROR = {"certain": "impossible", "impossible": "certain", "likely": "unlikely", "unlikely": "likely",
+          "even": "even", "remote": "likely"}  # ponytail: remote (10%) has no 90% rung; likely is the nearest
+
+
+def positive(predicate: str) -> tuple[str, bool]:  # rule: 01.15.8
+    """The question in its positive form and whether it was negated ("is not alert to …" -> ("is alert to …", True)):
+    an Oracle answer is stored positive and whole, so its label is never a double negative (round 7, I3 §1: "is not
+    not alert … while h")."""
+    m = _NEG.search(predicate)
+    if m is None:
+        return predicate, False
+    rep = "can" if m.group(1) else {"wo": "will", "ca": "can", "sha": "shall"}.get(
+        (m.group(2) or "").lower(), m.group(2) or "")
+    return re.sub(r"\s+", " ", f"{predicate[:m.start()]}{rep} {predicate[m.end():]}").strip(), True
 
 
 class OracleQuestion(BaseModel):

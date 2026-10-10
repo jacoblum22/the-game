@@ -24,6 +24,7 @@ from engine.dm.packet import build_packet
 from engine.dm.roles.prompts import load_prompt
 from engine.dm.schemas import SchemaContext, build_schema, defaults, prune, schema_context
 from engine.llm.base import Role, call_role
+from engine.resolve.change import agreed_covers
 from engine.resolve.costs import check_cost_decl
 from engine.resolve.frame import frame_check
 from engine.resolve.gate import GateDecision
@@ -75,11 +76,11 @@ def to_proposed(data: dict[str, Any], beat: Beat, state: WorldState) -> Proposed
         obstacle=obstacle, levers=[LeverCite(fact_id=f) for f in data.get("levers") or []],
         snags=[LeverCite(fact_id=f) for f in data.get("snags") or []],
         stakes_source=st.get("source") or st.get("stakes_source") or NONE, stakes_heavy=bool(data.get("stakes_heavy")),
-        lethal=bool(data.get("lethal")), reach_whole=bool(data.get("reach_whole")),
-        reach_one_factor=bool(data.get("reach_one_factor")), reach_two_factors=bool(data.get("reach_two_factors")),
+        lethal=bool(data.get("lethal")), reach_limit=data.get("reach_limit") or None,
+        reach_two_factors=bool(data.get("reach_two_factors")),
         asks=str(data.get("asks") or NONE), threatened_cost=cost(st.get("threatened_cost")),
         alternate_cost=cost(st.get("alternate_cost")), method_consequences=list(data.get("method_consequences") or []),
-        secret=bool(data.get("secret")))
+        secret=bool(data.get("secret")), already_agreed=data.get("already_agreed") or None)
 
 
 def default_frame(sctx: SchemaContext, schema: Schema, beat: Beat, state: WorldState, rules: Any) -> dict[str, Any]:
@@ -117,16 +118,39 @@ def pronoun_errors(data: dict[str, Any], state: WorldState, rules: Any) -> list[
             for h in precision_checks(t, idx=idx, rules=rules) if h.blocks]
 
 
-def beat_message(beat: Beat, gate: GateDecision, note: str | None = None) -> str:
-    lines = [f"beat: {beat.restatement or beat.intent}", f"intent: {beat.intent}", f"method: {beat.method}",
+def beat_message(beat: Beat, gate: GateDecision, note: str | None = None, state: WorldState | None = None) -> str:
+    fallback = gate.mode == "fallback"  # 01.3.5 (DL-01-43): framed on its own scope, its shift added once by code
+    lines = [f"beat: {beat.intent if fallback else beat.restatement or beat.intent}", f"intent: {beat.intent}",
+             f"method: {beat.method}",
              f"gate: {gate.gate} ({gate.mode}) verb: {gate.verb or beat.verb or 'none'} "
              f"licence: {gate.license or 'none'}", f"target: {beat.target or 'none'}",
              f"against their will: {'yes' if beat.against_will else 'no'}"]
+    c = beat.change
+    if c is not None and c.kind != NONE:
+        lines.append(f"goal: {c.kind} {' '.join(x for x in (c.what, c.whom, c.description) if x and x != NONE)}")
+    if fallback:
+        lines.append("an untrained fallback: rate only what this method itself can reach; code adds its shift")
+    record = target_record(state, beat.target) if state is not None else ""
+    if record:  # 12.11.1 (DL-12-108): what they can do is their record, never an Oracle answer
+        lines.append(record)
     if beat.assertion:
         lines.append(f"assertion (context only, never a fact): {beat.assertion}")
     if note:
         lines.append(note)
     return "\n".join(lines)
+
+
+def target_record(state: WorldState, target: str | None) -> str:  # rule: 12.11.1
+    """The target person's record for the Framer: their role and licences (the Framer's view carries no licences,
+    so a scribe's Letters could be contradicted, round 7 I3 §2)."""
+    ent = state.entities.get(target or "")
+    if ent is None or ent.kind not in ("npc", "companion", "adversary"):
+        return ""
+    role = ent.data.get("role") or ent.data.get("trade") or ent.data.get("occupation") or ""
+    lic = [x.license_id for x in state.licenses.get(ent.id, [])] or [
+        str(x.get("id")) for x in ent.data.get("licenses") or () if isinstance(x, dict) and x.get("id")]
+    parts = [f"role: {role}" if role else "", f"holds: {', '.join(lic)}" if lic else "holds no licences"]
+    return "target's record: " + "; ".join(p for p in parts if p)
 
 
 def framer_for(ctx: TurnContext) -> Any:
@@ -144,7 +168,7 @@ def framer_for(ctx: TurnContext) -> Any:
         cards = load_cards_for(Role.FRAMER, triggers=triggers,
                                extra_ids=[*anchor_card_ids(candidates, ctx.rules), *talk], rules=ctx.rules)
         packet = build_packet(Role.FRAMER, instructions=load_prompt("framer"), cards=cards, view=st, exchanges=[],
-                              message=beat_message(beat, gate, note), triggers=triggers,
+                              message=beat_message(beat, gate, note, st), triggers=triggers,
                               notes=anchor_menu(candidates, ctx.rules), focus=focus, rules=ctx.rules)
 
         calls: list[bool] = []
@@ -160,8 +184,8 @@ def framer_for(ctx: TurnContext) -> Any:
                 errs.append(f"obstacle kind {p.obstacle.kind} must set entity")
             if errs:
                 return errs
-            if trivial_class(p, ctx.rules, gate.verb or beat.verb):
-                return []  # a trivial class: the pipeline resolves it without a roll (01.4.1)
+            if trivial_class(p, ctx.rules, gate.verb or beat.verb) or agreed_covers(st, beat, p.already_agreed):
+                return []  # a trivial class or an agreement on record: the pipeline resolves it without a roll
             out = frame_check(p, beat, state=st, rules=ctx.rules, gate=gate, candidates=candidates,
                               store=ctx.store, staged=ctx.need_tx().events)
             if hasattr(out, "step"):

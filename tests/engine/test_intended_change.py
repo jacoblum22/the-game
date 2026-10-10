@@ -62,7 +62,7 @@ def test_each_kind_applies_on_success_scaled_by_reach(tmp_path: Path) -> None:
         apply_change(tx, rules, _beat(dock, "close", "obj.gate"), 1, pc=dock.pc)  # no partial form: whole at 1
         assert st.fact_value("obj.gate", "open") is False
         apply_change(tx, rules, _beat(dock, "persuade_to", dock.ferryman, intent="take me across"), 1, pc=dock.pc)
-        assert st.fact_value(dock.ferryman, "agreed").startswith("a smaller part")
+        assert st.fact_value(dock.ferryman, "agreed") == "take me across, in part"  # spec 023: no "a smaller part"
         apply_change(tx, rules, _beat(dock, "persuade_to", dock.ferryman, intent="take me across"), 2, pc=dock.pc)
         assert st.fact_value(dock.ferryman, "agreed") == "take me across"
         apply_change(tx, rules, _beat(dock, "hide", None, dock.watch), 2, pc=dock.pc)

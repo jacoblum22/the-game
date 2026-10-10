@@ -695,9 +695,9 @@ def _framer(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:
                                        "source_fact": None},
                    "alternate_cost": {"menu_id": alternate, "form_intent": forms.get(str(alternate), ""),
                                       "source_fact": None}},
-        "stakes_heavy": False, "lethal": False, "reach_whole": False, "reach_one_factor": False,
+        "stakes_heavy": False, "lethal": False, "reach_limit": None,
         "reach_two_factors": False, "asks": "none",
-        "method_consequences": [], "secret": False,
+        "method_consequences": [], "secret": False, "already_agreed": None,
     }
 
 

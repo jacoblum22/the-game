@@ -96,8 +96,8 @@ class SchemaContext(BaseModel):
     # source fact ({source: {"threatened", "threatened_cited", "alternate", "alternate_cited"}}); None = unpaired
     stakes_menus: dict[str, dict[str, list[str]]] | None = None
     cost_tie_order: list[str] = Field(default_factory=list)
-    reach_tie_whole: bool = False
-    reach_tie_one_factor: bool = True
+    snag_fact_ids: list[str] | None = None  # the lever facts less Oracle answers (01.15.8: never a snag); None = same
+    agreed_fact_ids: list[str] = Field(default_factory=list)  # the asked person's `agreed` facts (01.4.1, DL-01-45)
     # World
     npc_ids: list[str] = Field(default_factory=list)
     want_ids: list[str] = Field(default_factory=list)
@@ -314,16 +314,18 @@ def framer_schema(ctx: SchemaContext) -> Schema:  # rule: 01.5.1
         "nudge_fact": enum(facts, nullable=True) if ctx.obstacle_classes and not ctx.opposed_ids else None,
         "request_size": enum(REQUEST_SIZES) if ctx.social else None,  # 15.3.2: what the talk asks for
         "levers": arr(enum(facts), max_items=2),  # 01.6.8
-        "snags": arr(enum(facts), max_items=2),
+        "snags": arr(enum(facts if ctx.snag_fact_ids is None else ctx.snag_fact_ids), max_items=2),
         "stakes": _stakes(ctx, facts),  # 01.6.9 source, with the 01.6.11 / 01.13.1 costs that follow from it
         "stakes_heavy": BOOL,
         "lethal": BOOL,
-        "reach_whole": BOOL,  # 01.6.10
-        "reach_one_factor": BOOL,
+        # 01.6.10 (DL-12-121): Limited only with a cited factor, named in plain words; null = the whole intent
+        "reach_limit": STR_OR_NULL,
         "reach_two_factors": BOOL,  # 01.6.10 decision 2: two unoffset, or a total potency -> G4 (I-160a)
         "asks": enum(ctx.asks_tags, first=NONE) if ctx.social else None,  # 12.11.9 step 3(b): the request's tag
         "method_consequences": STRS,
         "secret": BOOL,
+        # 01.4.1 / 01.2.7 (DL-01-45): an agreement on record that already covers this whole ask: no roll
+        "already_agreed": enum(ctx.agreed_fact_ids, nullable=True) if ctx.agreed_fact_ids else None,
     })
 
 
@@ -519,8 +521,7 @@ def _framer_default(ctx: SchemaContext) -> dict[str, Any]:
         "stakes": {"source": NONE, "threatened_cost": {"menu_id": menu, "form_intent": "", "source_fact": None},
                    "alternate_cost": None},
         "stakes_heavy": False, "lethal": False,
-        "reach_whole": ctx.reach_tie_whole, "reach_one_factor": ctx.reach_tie_one_factor,
-        "reach_two_factors": False, "asks": NONE,
+        "reach_limit": None, "reach_two_factors": False, "asks": NONE, "already_agreed": None,
         "method_consequences": [], "secret": False,
     }
 
@@ -740,6 +741,7 @@ def schema_context(  # rule: 12.2.4
     ob_classes: list[str] = []
     opposed: list[str] = []
     social = False
+    agreed: list[str] = []
     if beat is not None and not isinstance(beat, Mapping) and getattr(beat, "actor", None):  # the Framer's beat
         tgt = beat.target if beat.target and beat.target != NONE else None
         cv = covering_verb(beat.verb, against_will=beat.against_will, speech=beat.speech)
@@ -751,6 +753,10 @@ def schema_context(  # rule: 12.2.4
         sources = [s for s in sources if s in by or s == OBSERVER]
         usable = [f for f in facts if fact_usable(state, f, beat.declared_seq or state.last_seq)
                   and lever_candidate(state, f)]
+        if beat.change is not None and beat.change.kind == "persuade_to":  # DL-01-45: judged on the typed goal
+            people = {x for x in (beat.change.what, beat.change.whom, tgt) if x}
+            agreed = [f.id for f in state.facts.values() if f.predicate == "agreed" and f.subject in people
+                      and state.current_fact_id(f.subject, "agreed") == f.id]
     if cost_menu_ids is not None:
         threatened = list(cost_menu_ids)
         alternate = list(dict.fromkeys([*threatened, *alternate]))
@@ -783,7 +789,6 @@ def schema_context(  # rule: 12.2.4
     def by_kind(*kinds: str) -> list[str]:
         return [eid for eid, e in state.entities.items() if e.kind in kinds and _visible(state, eid)]
 
-    reach = res.get("reach_flags", {})
     last = state.scene or state.last_scene
     pending = [c["id"] for c in pause.choices if "id" in c] if pause else []
     # 12.2.2: PENDING_ANSWER answers a pause point; with none open (no `pending_answer` field) it is not offered
@@ -825,8 +830,8 @@ def schema_context(  # rule: 12.2.4
         alternate_cost_menu_ids=alternate,
         stakes_menus=stakes_menus,
         cost_tie_order=list(res.get("cost_selection", {}).get("tie_order", [])),
-        reach_tie_whole=bool(reach.get("whole", {}).get("tie_break", False)),
-        reach_tie_one_factor=bool(reach.get("one_factor", {}).get("tie_break", True)),
+        snag_fact_ids=[f for f in usable if state.facts[f].source != "oracle"] if lever_fact_ids is None else None,
+        agreed_fact_ids=agreed,
         npc_ids=npcs,
         want_ids=wants,
         refusal_ids=refusals,

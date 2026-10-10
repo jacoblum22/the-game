@@ -1,0 +1,55 @@
+# Reader golden set (91 lines; 91 scored, 0 without an answer)
+
+- verb: 82.4% (75/91)
+- gate: 92.3% (84/91)
+- necessity: not scored
+- against_will: 95.2% (59/62)
+- uses_power: 100.0% (62/62)
+- speech: 96.8% (60/62)
+- question_kind: 84.6% (77/91)
+- change_kind: 87.1% (54/62)
+- goals: 82.4% (75/91)
+- necessity as roll / no roll: not scored
+- issue lines (P-004 … P-123) verb: 78.6% (11/14), gate: 92.9% (13/14)
+
+## Misses (verb, gate): 39
+- g002 verb: got verb.talk, want verb.move  (I step through, sword still out, and call to the strangers o)
+- g002 goals: got ['learn'], want ['move_to', 'learn']  (I step through, sword still out, and call to the strangers o)
+- g004 goals: got ['learn'], want ['harm']  (I hold my sword on the travellers and step toward the neares)
+- g005 verb: got verb.move, want verb.handle  (I draw my arming sword, shove the wicket open and step out t)
+- g005 goals: got ['move_to'], want ['open', 'move_to']  (I draw my arming sword, shove the wicket open and step out t)
+- g010 verb: got None, want verb.talk  (I gently turn the child's face toward me and say, "Hey. I'm )
+- g010 gate: got None, want G2  (I gently turn the child's face toward me and say, "Hey. I'm )
+- g010 goals: got [], want ['learn']  (I gently turn the child's face toward me and say, "Hey. I'm )
+- g016 goals: got ['none'], want ['learn']  (I look around for something here that would help me, like a )
+- g020 verb: got verb.move, want None  (I keep my voice gentle and sit on the bench so I'm lower tha)
+- g020 gate: got G1, want None  (I keep my voice gentle and sit on the bench so I'm lower tha)
+- g020 goals: got ['move_to'], want []  (I keep my voice gentle and sit on the bench so I'm lower tha)
+- … 27 more
+
+## Negation pairs (11 pairs, 22 lines)
+# Reader golden set (22 lines; 22 scored, 0 without an answer)
+
+- verb: 81.8% (18/22)
+- gate: 95.5% (21/22)
+- necessity: not scored
+- against_will: 95.0% (19/20)
+- uses_power: 100.0% (20/20)
+- speech: 100.0% (20/20)
+- question_kind: 95.5% (21/22)
+- change_kind: 95.0% (19/20)
+- goals: 90.9% (20/22)
+- necessity as roll / no roll: not scored
+- issue lines (P-004 … P-123) verb: not scored, gate: not scored
+
+## Misses (verb, gate): 7
+- g062 verb: got verb.move, want verb.force  (I shove past the guard into the hall.)
+- g071 verb: got verb.strike, want verb.handle  (I don't pick the lock. I knock on the cellar door and wait.)
+- g073 goals: got ['learn'], want ['none']  (I don't use any witch-sight, I just look around the room wit)
+- g078 verb: got verb.move, want verb.force  (I push the old man aside and step through the door.)
+- g080 verb: got None, want verb.sneak  (I pour the sleeping draught into the guard's cup when he loo)
+- g080 gate: got None, want G1  (I pour the sleeping draught into the guard's cup when he loo)
+- g080 goals: got [], want ['harm']  (I pour the sleeping draught into the guard's cup when he loo)
+
+Reader's own verb before the facets choose the card: 78.1% (50/64)
+Computed gate where the beat and verb agree: 100.0% (53/53); lines where only one side has a beat (SPEECH vs a beat): 7

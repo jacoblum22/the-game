@@ -31,6 +31,7 @@ from engine.resolve.types import (
     STAKES_LADDER,
     Alternative,
     Beat,
+    CostDecl,
     CostPreview,
     Frame,
     FrameRefusal,
@@ -332,13 +333,16 @@ def _frame_check(p: ProposedFrame, beat: Beat, state: Any, rules: Any, gate: Gat
     consequences = list(p.method_consequences)
     if price is not None and price.consequence and price.consequence not in consequences:
         consequences.append(price.consequence)
+    # 01.4.7 (DL-01-43): a secret frame is keyed on a `learn` goal, never on the verb label
+    secret = p.secret and beat.change is not None and beat.change.kind == "learn"
     return Frame(beat=beat, gate=GateRecord.model_validate({"class": g.gate, "verb": g.verb or beat.verb,
                                                                    "license": g.license, "mode": g.mode}),
-                 secret=p.secret, anchor=anchor["id"], deltas=deltas, signature=sig,
+                 secret=secret, anchor=anchor["id"], deltas=deltas, signature=sig,
                  precedent=found[-1].id if found else None, attribute=attr, alternative_attribute=alt_attr,
                  deed_tag=deed, traits=list(p.traits or beat.traits), obstacle_id=p.obstacle.id, dc_source=dc_source,
                  tier=tier, defender=defender, dc=dc, mode_price=price, levers=levers, snags=snags, stakes=stakes,
-                 lethal=lethal, reach=reach, reach_factors=factors, asks=p.asks, trade=p.trade, threatened_cost=tc,
+                 lethal=lethal, reach=reach, reach_factors=factors,
+                 reach_limit=(p.reach_limit or "").strip() or None if reach == "limited" else None, asks=p.asks, trade=p.trade, threatened_cost=tc,
                  alternate_cost=ac, method_consequences=consequences, modifier=mod, odds=o, base_odds=base_odds,
                  stored_dc_write=stored_write, notes=notes, obstacle_class=p.obstacle.obstacle_class,
                  nudge=p.obstacle.nudge, long_shot=long_shot, guard=guard, alternatives=alts)
@@ -698,6 +702,9 @@ def _levers(p: ProposedFrame, beat: Beat, state: Any, rules: Any, declared: int,
             raise _Refuse(7, "levers", f"{c.fact_id} is not an established fact")
         if not fact_usable(state, c.fact_id, declared):
             raise _Refuse(7, "levers", f"{c.fact_id} was established after the declaration (usable next beat)")
+    for c in cited_snags:  # rule: 01.15.8
+        if state.facts[c.fact_id].source == "oracle":  # DL-01-41: a d100 never authors a hindrance (I3 §1-2)
+            raise _Refuse(7, "snags", f"{c.fact_id} is an Oracle answer: never a snag (01.15.8)")
     # free facts (01.15.8)
     free = set(state.meta.get(FREE_FACTS_KEY, []))
     free_here = [c for c in p.levers if c.fact_id in free]
@@ -773,10 +780,8 @@ def _reach(p: ProposedFrame, levers: list[LeverCite], snags: list[LeverCite], st
            price: ModePrice | None) -> tuple[ReachRung, list[str]]:  # rule: 01.6.10
     factors: list[str] = []
     rung = "standard"
-    if not p.reach_whole:
-        rung, factors = "limited", [*factors, "not the whole intent"]
-    if p.reach_one_factor:
-        rung, factors = "limited", [*factors, "one effect factor against"]
+    if (p.reach_limit or "").strip():  # DL-12-121: Limited only with a cited factor; with none, Standard
+        rung, factors = "limited", [f"limited: {p.reach_limit.strip()}"]  # type: ignore[union-attr]
     amp = sum(1 for c in levers if c.type == "amplifying") - sum(1 for c in snags if c.type == "amplifying")
     if amp:
         rung = _step(REACH_LADDER, rung, amp)
@@ -796,15 +801,41 @@ def _reach(p: ProposedFrame, levers: list[LeverCite], snags: list[LeverCite], st
     return reach, factors
 
 
-# 01.9.3 "a consequence never negates a success": a price paid on success at a cost cannot be the person acted on
-# getting loose (playtest 20261008: a grapple "succeeded" and paid "she tears away", so the hold was both set and
-# gone). ponytail: a closed list of escape phrasings; a typed `form_subject` field would replace it if forms drift
+# 01.9.3 "a consequence never negates a success", generalised (DL-01-43): a price paid on success at a cost never
+# reverses the typed goal against the same target (playtest 20261008: a grapple "succeeded" and paid "she tears away";
+# round 7 talker t12: a round bought and paid "he turns the round down"). A closed door on the person a `persuade_to`
+# or `learn` presses reverses it by its menu; the other kinds by the form's words.
+# ponytail: closed lists of reversing phrasings per kind; a typed `form_subject` field would replace them if forms drift
 _UNDO = re.compile(
     r"\b(?:break|breaks|broke|pull|pulls|pulled|tear|tears|tore|wrench|wrenches|wrenched|twist|twists|twisted|"
     r"slip|slips|slipped|get|gets|got|wriggle|wriggles|wriggled|squirm|squirms|squirmed)\s+(?:\S+\s+){0,3}?"
     r"(?:free|away|loose|clear)\b"
     r"|\b(?:escape[sd]?|walk(?:s|ed)? (?:off|away)|refuses? to be held|(?:grip|hold) (?:on \S+ )?(?:slips|breaks|fails)"
     r"|lose (?:your|the) (?:grip|hold))\b", re.I)
+
+
+_REFUSE = re.compile(r"\b(?:refuses?|refused|turns? (?:you|it|that|the \w+|\w+) down|says? no|won[’']t|will not|"
+                     r"declines?|goes nowhere|tells? you nothing|says? nothing)\b", re.I)
+_REVERSES: dict[str, re.Pattern[str]] = {
+    "restrain": _UNDO,
+    "take": re.compile(r"\b(?:takes?|took|snatch(?:es|ed)?|grabs?|grabbed|pulls?|pulled|wrench(?:es|ed)?)\s+"
+                       r"(?:\S+\s+){0,2}?back\b|\b(?:drop|drops|dropped|lose|loses|lost) (?:it|the \w+)\b", re.I),
+    "open": re.compile(r"\b(?:shut|closed|locked|jams?|jammed|slams?|slammed|bars?|barred)\s+(?:again|shut|tight|"
+                       r"closed)\b|\b(?:re-?locks?|locks? again)\b", re.I),
+    "persuade_to": _REFUSE,
+    "learn": _REFUSE,
+}
+
+
+def reverses(cost: Any, beat: Beat, state: Any) -> bool:  # rule: 01.9.3
+    """The price would undo the beat's own typed goal against the same target (DL-01-43): never a success-at-a-cost
+    price. A closed door on the person a `persuade_to` or `learn` presses; else the kind's reversing words."""
+    c = beat.change
+    kind = c.kind if c is not None and c.kind != "none" else ("restrain" if _sets_hold(beat, state) else "none")
+    if kind in ("persuade_to", "learn") and cost.menu_id == "cost.closed_door" and beat.target not in (None, "none"):
+        return True
+    rx = _REVERSES.get(kind)
+    return bool(rx and rx.search(cost.form_intent or ""))
 
 
 def _sets_hold(beat: Beat, state: Any) -> bool:  # rule: 01.9.3
@@ -826,12 +857,6 @@ def _costs(p: ProposedFrame, beat: Beat, state: Any, rules: Any, stakes: str,
     bad = check_cost_decl(p.threatened_cost, role="threatened", **kw)  # type: ignore[arg-type]
     if bad:
         raise _Refuse(10, "threatened_cost", bad)
-    if _sets_hold(beat, state):  # rule: 01.9.3
-        # a form in which the held one gets loose would undo the beat's own success: its words are dropped (the screen
-        # names the cost's plain words) rather than the frame refused, so no Framer choice can force a re-ask
-        p = p.model_copy(update={k: c.model_copy(update={"form_intent": ""}) for k in ("threatened_cost",
-                                                                                     "alternate_cost")
-                                 if (c := getattr(p, k)) is not None and _UNDO.search(c.form_intent or "")})
     if stakes in ("risky", "dire") and p.alternate_cost is None:
         raise _Refuse(10, "alternate_cost", f"a {stakes} frame needs an alternate cost (01.6.11)")
     alt = p.alternate_cost if stakes != "safe" else None  # a safe frame's alternate waits for go big (01.7.3)
@@ -845,6 +870,18 @@ def _costs(p: ProposedFrame, beat: Beat, state: Any, rules: Any, stakes: str,
     ac = None
     if alt is not None:
         ac = CostPreview(**_fitted(alt, rules).model_dump(), on_success_at_cost=prev["on_success_at_cost"])
+    # rule: 01.9.3 (DL-01-43): a price that reverses the goal is never paid on a success at a cost; it still prices a
+    # failure. When no price is left for the close call, the first fitting one that does not reverse it is named.
+    if reverses(tc, beat, state):
+        tc.on_success_at_cost = None
+    if ac is not None and reverses(ac, beat, state):
+        ac = None
+    if ac is None and tc.on_success_at_cost is None and prev["on_success_at_cost"] is not None:
+        bad_menus = [m for m in ("cost.closed_door",) if reverses(CostDecl(menu_id=m), beat, state)]
+        fit = first_fitting_cost(role="alternate", other=p.threatened_cost, exclude=bad_menus,
+                                 **kw)  # type: ignore[arg-type]
+        if fit is not None:
+            ac = CostPreview(**fit.model_dump(), on_success_at_cost=prev["on_success_at_cost"])
     return tc, ac
 
 

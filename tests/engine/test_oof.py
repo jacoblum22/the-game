@@ -34,6 +34,8 @@ from engine.store.events import EntityRecord, Event
 from tests.engine.test_resolve_frame import check
 from tests.engine.test_resolve_scene import Scene
 
+LEARN = {"change": {"kind": "learn", "what": None}}  # 01.4.7 (spec 023): a secret frame is keyed on a learn goal
+
 
 @pytest.fixture
 def s(tmp_path: Path) -> Scene:
@@ -56,7 +58,7 @@ def test_offer_block_is_the_12_15_2_template(s: Scene) -> None:
     lines = [ln.strip() for ln in blk.text.splitlines()]
     assert blk.kind == "OFFER"
     assert lines[0] == "[OFFER] Do it."  # no slot and no player words: the intent (spec 020)
-    assert lines[1] == "Chance: even — 50%   (Agility +3, practised +1)"
+    assert lines[1] == "Chance: even — 50%   (Agility +3, experience +1)"
     assert lines[2] == "If it works: what you wanted.   Very well (5%): more than you asked."
     assert lines[3] == "If it fails: you tire — a setback.   Badly (5%): you tire — serious."
     assert lines[4] == "Close call (15%): get it anyway and pay (you get less far), or fail."
@@ -82,7 +84,7 @@ def test_offer_words_playtest_20261008(s: Scene) -> None:
     assert "Takes:" not in text and "fate 1" not in text
     assert "Whatever the roll: the knife is out whatever the roll" in text
     assert text.startswith("[OFFER] Slash at the guard.") and name not in text
-    secret = offer_block(check(s, secret=True), rules=s.rules, fate=1).text  # type: ignore[arg-type]
+    secret = offer_block(check(s, LEARN, secret=True), rules=s.rules, fate=1).text  # type: ignore[arg-type]
     assert "Chance: you can't judge how hard this is. (The odds would tell you what your character can't " in secret
     assert "Fate: 1 (no reroll: you won't see this die)" in secret
 
@@ -116,7 +118,7 @@ def test_offer_view_has_exactly_the_engine_api_fields(s: Scene) -> None:
 
 
 def test_offer_variants_secret_lethal_long_shot_auto(s: Scene) -> None:
-    secret = offer_block(check(s, secret=True), rules=s.rules)  # type: ignore[arg-type]
+    secret = offer_block(check(s, LEARN, secret=True), rules=s.rules)  # type: ignore[arg-type]
     assert "Chance: you can't judge how hard this is." in secret.text and "%" not in secret.text
     assert "Close call" not in secret.text  # I-143: the If lines stay, the odds and the close call do not
     lethal = _frame(s).model_copy(update={"lethal": True, "stakes": "dire"})
@@ -165,7 +167,7 @@ def test_result_block_states_the_outcome_once(s: Scene) -> None:
     assert paid[1].strip() == "It cost you: you tire — a setback."  # spec 016: no "Paid:" bookkeeping
     bare = result_block(f, roll, costs=[CostEntry(menu_id="cost.closed_door", severity="S2", form="")]).text
     assert bare.splitlines()[1].strip() == "It cost you: a door closes to you — a setback."
-    secret = check(s, secret=True)
+    secret = check(s, LEARN, secret=True)
     assert result_block(secret, roll).text == "[RESULT] hidden check made."  # type: ignore[arg-type]
 
 

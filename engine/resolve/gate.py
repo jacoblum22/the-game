@@ -351,17 +351,29 @@ def held_ids(state: Any, actor: str) -> list[str]:
     return [x.license_id for x in state.licenses.get(actor, []) if held_license(state, actor, x.license_id)]
 
 
+# a look at writing ("peek at the ledger", "glance over the notice") reads it as surely as "read" does
+LOOKS_AT = re.compile(r"\b(?:look|looks|looking|peek|peeks|peeking|glance|glances|glancing|scan|scans|scanning|skim|"
+                      r"skims|skimming|study|studies|studying|pore|pores|poring|check|checks|checking)\b"
+                      r"(?:\s+\w+){0,2}?\s+(?:at|over|through|down)\b", re.I)
+
+
 def reads_writing(beat: Beat, verb: str | None, state: Any = None) -> bool:  # rule: 02.4.6
-    """An Observe beat that reads writing: the reading words, and a target with words on record or writing named
-    in the method ("read a person or a scene" is Observe's own act, never letters)."""
+    """The PC's own method reads writing, whatever the verb label (DL-01-43: reading folded into a Talk, "I read the
+    list over his shoulder and ask the name", met no gate in round 7): a `learn` goal, or a look, whose method reads
+    (the reading words, or a look at a thing with writing) a target with words on record or writing it names.
+    Asking someone else to read (`persuade_to`) is their act, not the PC's; "read a person or a scene" is Observe's
+    own act, never letters."""
     from engine.retrieve.scene import READING, written_words
 
-    text = f"{beat.method} {beat.intent}"
-    if verb != "verb.observe" or not READING.search(text):
+    kind = beat.change.kind if beat.change is not None else "none"
+    if kind != "learn" and not (verb == "verb.observe" and kind == "none"):
         return False
-    on_record = (state is not None and beat.target in getattr(state, "entities", {})
-                 and written_words(state, str(beat.target)) is not None)
-    return on_record or bool(WRITING.search(text))
+    text = f"{beat.method} {beat.intent} {beat.how or ''}"
+    on_record = any(state is not None and x in getattr(state, "entities", {}) and written_words(state, str(x))
+                    is not None for x in (beat.target, beat.change.what if beat.change else None) if x)
+    # a look counts only when what it looks at is the writing (the next few words), or the target bears words
+    looks = any(on_record or WRITING.search(text[m.end():m.end() + 40]) for m in LOOKS_AT.finditer(text))
+    return looks or (bool(READING.search(text)) and (on_record or bool(WRITING.search(text))))
 
 
 def check_gate(beat: Beat, *, state: Any, rules: Any, store: Any = None, staged: Sequence[Event] = (),
