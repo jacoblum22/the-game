@@ -119,7 +119,10 @@ Use **one** `rules-worker` agent in a worktree. Its brief:
     - the family's "another example";
     - other people, verbs and scenes the same cause would break;
     - deliberately hard edge cases (a smaller ask in other words, a folded method, an open OFFER, an absent person,
-      a negated question).
+      a negated question);
+    - **every kind the game's data has**, enumerated from the data, not imagined. For example, every lead and
+      incident kind in `world_seed.yaml`, every verb, every gate reason. Round 8 found spec 025 had covered only the
+      lead kinds round 7 happened to show.
 
     A fix is accepted only if it passes these as well as the save it came from. Round 7 traced T3, T6 and T7 to fixes
     each accepted on the one case that prompted them: one surface, one wording, a tuned scoring set;
