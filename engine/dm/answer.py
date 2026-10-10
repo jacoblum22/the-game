@@ -265,7 +265,6 @@ def _sentence(st: Any, f: Any) -> str:
 
 
 HELD = "answers.willingness"  # meta {"scene": scene id, "npcs": {npc: {"band", "why"}}} (PR-12-10 step 2)
-BANDS = ("unwilling", "guarded", "willing")
 
 
 def held(st: Any, npc: str) -> dict[str, str] | None:
@@ -284,14 +283,6 @@ def _hold(ctx: Any, npc: str, band: str, why: str) -> tuple[str, str]:
         npcs[npc] = {"band": band, "why": why}
         ctx.need_tx().add(meta(HELD, {"scene": sc, "npcs": npcs}, "PR-12-10"))
     return band, why
-
-
-def step_band(ctx: Any, npc: str, steps: int, why: str) -> tuple[str, str]:  # rule: PR-12-10
-    """An event moves the held band (a payment: one step up): from the held band, else from a fresh decision."""
-    cur = held(ctx.need_tx().state, npc) or {}
-    band = str(cur.get("band") or willingness(ctx, npc)[0])
-    i = max(0, min(len(BANDS) - 1, BANDS.index(band) + steps))
-    return _hold(ctx, npc, BANDS[i], why)
 
 
 def _standing_moved(ctx: Any, npc: str) -> bool:
@@ -392,7 +383,9 @@ def ask(ctx: Any, knower: str, kind: str, topic: str | None, text: str, *, pc: s
     ref = refusal_pointer(ctx, knower, key_topic, about) if band == "unwilling" else None
     if ref is not None:  # the one pointer onward (DL-12-119): a person the narrator names, never a loop
         learn_name(ctx.time_ctx(), pc, ref, "told")
-        said += f"; and names one person who would know: {name(st, ref)}"
+        at = home_of(st, ref)  # where to find them, so the pointer leads somewhere (live 025: "where is Yipoo?")
+        said += f"; and names one person who would know: {name(st, ref)}" + (
+            f", found at {st.entities[at].name}" if at in st.entities else "")
     return Answer(said, f"{k_name} {said}", willingness=band, key=key, pointer=ref)
 
 
@@ -547,6 +540,6 @@ def volunteer(ctx: Any, knower: str, pc: str) -> Answer | None:  # rule: T-15-5
     return None
 
 
-__all__ = ["BANDS", "HELD", "INDEX", "STORY_ROLES", "WILL_WORDS", "Answer", "ask", "cast_who", "clue_case",
-           "deliver_count", "deliver_node", "held", "name", "refusal_pointer", "refused_on", "step_band", "topic_of",
+__all__ = ["HELD", "INDEX", "STORY_ROLES", "WILL_WORDS", "Answer", "ask", "cast_who", "clue_case",
+           "deliver_count", "deliver_node", "held", "name", "refusal_pointer", "refused_on", "topic_of",
            "volunteer", "who_answer", "willingness"]

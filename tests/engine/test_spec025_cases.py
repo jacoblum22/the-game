@@ -260,7 +260,9 @@ def test_c7_payment_moves_the_band_a_refusal_stays_on_its_topic(tmp_path: Path) 
     _scene(store)
     with turn(store) as ctx:
         ans._hold(ctx, npc, "guarded", "wary toward you")
-        assert ans.step_band(ctx, npc, 1, "paid")[0] == "willing"
+    paid = _talk(npc, status="no_roll")  # "here, a coin for your trouble": an offer accepted, paid (C19's path)
+    with turn(store) as ctx:
+        assert ans.willingness(ctx, npc, AdjudicationRecord(pc=PC), [paid])[0] == "willing"
     before = _rolls(store)
     a, _ = _ask(store, npc, "What's the price of salt?", topic="prices")
     assert a.willingness == "willing" and _rolls(store) == before
