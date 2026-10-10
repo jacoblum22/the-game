@@ -7,7 +7,7 @@ from typing import Any
 
 from engine.resolve.gate import GateDecision
 from engine.resolve.pipeline import BeatPlan, PipelineEnv, challenge_band, close_by_default, resume, run_beats
-from engine.resolve.types import Beat, CostDecl, Obstacle, ProposedFrame
+from engine.resolve.types import Beat, Change, CostDecl, Obstacle, ProposedFrame
 from tests.engine.test_turn_adjudication import D20
 from tests.fixtures.scene_dock import DockScene, build_dock
 
@@ -106,7 +106,8 @@ def test_open_near_miss_defaults_to_failure(tmp_path: Path) -> None:
 
 def test_redirect_offers_the_crude_fallback(tmp_path: Path) -> None:
     dock, rng = setup(tmp_path)
-    axe = plan(dock, "hew the mooring rope with the axe like a trained axeman", "verb.strike", uses_power=True)
+    axe = plan(dock, "hew the mooring rope with the axe like a trained axeman", "verb.strike", uses_power=True,
+               change=Change(kind="harm", description="the mooring rope"))  # spec 023: a typed goal
     with dock.store.transaction("turn.1") as tx:
         res = run_beats(env_for(dock, tx, rng, framer=stub_framer("might")), [axe])
     assert res.pause is not None and res.pause.kind == "redirect"
@@ -122,7 +123,8 @@ def test_redirect_offers_the_crude_fallback(tmp_path: Path) -> None:
 def test_accepted_fallback_rolls_even_from_a_no_roll_class(tmp_path: Path) -> None:
     """P-087: "Try it anyway" on a take-the-time beat was an unrolled success the narration then refused."""
     dock, rng = setup(tmp_path)
-    axe = plan(dock, "hew the mooring rope with the axe like a trained axeman", "verb.strike", uses_power=True)
+    axe = plan(dock, "hew the mooring rope with the axe like a trained axeman", "verb.strike", uses_power=True,
+               change=Change(kind="harm", description="the mooring rope"))  # spec 023: a typed goal
     with dock.store.transaction("turn.1") as tx:
         run_beats(env_for(dock, tx, rng, framer=stub_framer("might")), [axe])
     with dock.store.transaction("turn.2") as tx:

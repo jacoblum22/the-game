@@ -248,7 +248,7 @@ class ReaderResult(BaseModel):
         out: list[BeatPlan] = []
         now = self._now()
         single = len(now) == 1
-        # ponytail: a Talk beat "asks" when any part carries a question kind; per-beat kinds if two Talks differ
+        # ponytail: a beat of words "asks" when any part carries a question kind; per-beat kinds if two differ
         asks = any(p.question_kind not in (None, NONE) for p in self.parts if p.cls in ("DECLARATION", "SPEECH"))
         # spec 017: a conditional beat is part of the message's plan (it runs after what it waits on)
         for b in [b for b in self.beats if b in now or b.shape == "conditional"]:
@@ -263,7 +263,7 @@ class ReaderResult(BaseModel):
                         verb=b.verb, against_will=b.against_will, uses_power=b.uses_power, speech=b.speech,
                         holds=b.holds if b.holds not in (None, NONE) else None,
                         pressure=b.pressure or NONE,
-                        asks=asks and b.verb == "verb.talk", g4_fact=b.g4_fact, declared_seq=declared_seq,
+                        asks=asks and b.speech, g4_fact=b.g4_fact, declared_seq=declared_seq,  # DL-15-41: the words
                         change=b.change)
             out.append(BeatPlan(beat=beat, intent_verbs=list(b.intent_verbs),
                                 when="now" if b in now else "conditional"))

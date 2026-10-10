@@ -22,10 +22,10 @@ Split the message into parts in the player's order, one class each.
   is, is like, is for, says), `what_want` (what someone wants, thinks or would take), `who_knows` (who would
   know); else `none` (out-of-fiction questions are `none`). `topic`: what is asked about.
 
-## 2. Fact questions (01.3.8, 01.15.2)
-One entry per FICTION_QUESTION and per unknown fact a declaration leans on ("there's bound to be a rope"):
-subject id, predicate in plain words, odds rung from the place and people, never the player's wish (between
-two: the one less favourable to the player's hope).
+## 2. Fact questions (01.3.8, 01.15.1)
+Yes/no world questions only, per FICTION_QUESTION and unknown fact a declaration leans on ("surely a rope"):
+subject id, positive plain predicate, odds rung from the place and people, never the player's wish (between two:
+the less favourable). Never about anyone present or acted on; never what, where, who or how much.
 
 ## 3. Beats: one per goal (01.2.1–01.2.3; GUIDANCE 01.2.2)
 A goal is what the player wants to be different afterward, toward whom. One beat per goal, in the player's
@@ -64,9 +64,11 @@ hold or snatch the player wants for itself. SPEECH and questions make no beat.
   (item; from whom), `give` (item; to whom), `move_to` (place or person; who moves), `open`/`close`, `learn`
   (finding out: looking, reading, words pressing someone to tell; a plain question stays SPEECH),
   `persuade_to` (words asking someone else to act or give, whatever the act: "take me over", "open the gate"),
-  `restrain` (holding someone as the goal), `free`, `harm`, `hide` (who or what; from whom), `make`, `none`
-  (looking around, waiting, helping). `description`: people or things present with no id ("the refugees"),
-  else null. Searching for someone not here: Observe, never `move_to` the place you are in.
+  `restrain` (holding someone as the goal), `free`, `harm`, `hide` (who or what; from whom), `make`. A look
+  around, search or reading is `learn` (the place or thing); helping takes the helped act's kind; `none` only for
+  waiting or a free activity.
+  `description`: people or things present with no id ("the refugees"), else null. Searching for someone not
+  here: Observe, never `move_to` the place you are in.
 
 ## 4. The rest
 - `clarifying_question` (01.2.4): only when no target fits or two readings are different acts; else null.

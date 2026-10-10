@@ -45,7 +45,7 @@ from engine.dm.roles.reader import (
 )
 from engine.dm.testimony import settle_triggered
 from engine.dm.world_step import deliver_warnings, world_step
-from engine.resolve.oracle import OracleQuestion, ask_oracle
+from engine.resolve.oracle import MIRROR, OracleQuestion, ask_oracle, positive
 from engine.resolve.pipeline import (
     BeatOutcome,
     PipelineEnv,
@@ -308,9 +308,9 @@ def _adjudicate(ctx: TurnContext, rec: AdjudicationRecord, reader: ReaderResult,
         if tx.state.open_pause() is not None:
             _hold(rec)
             return outcomes
-    talked = [b.target for b in reader.beats if b.verb == "verb.talk" and b.target]  # their words, not the Oracle's
-    _fiction_questions(ctx, rec, [q for q in reader.fact_questions
-                                  if not speech_owns(tx.state, q.subject, q.predicate, talked)])
+    _fiction_questions(ctx, rec, reader.fact_questions,
+                       targets=[x for b in reader.beats for x in (b.target, *((b.change.what, b.change.whom)
+                                                                              if b.change else ())) if x])
     for part in rec.parts:
         if part.cls == "FICTION_QUESTION":
             part.handled = part.handled or "answered"
@@ -408,20 +408,52 @@ def _clarify(ctx: TurnContext, question: str) -> None:  # rule: 01.2.4
 # ------------------------------------------------------------------------------------------- questions
 
 
-def _fiction_questions(ctx: TurnContext, rec: AdjudicationRecord, questions: Sequence[FactQuestion]) -> None:
+PEOPLE = ("pc", "npc", "companion", "adversary")
+# what / where / how much / who: content nobody has written is its maker's or the speaker's testimony (PR-12-12),
+# never a yes/no draw (T-12-4; DL-12-109)
+_CONTENT_Q = re.compile(r"^\s*(?:what|where|how|who|whom|whose|which|when|why)\b", re.IGNORECASE)
+
+
+def not_oracle(st: Any, subject: str | None, predicate: str, targets: Sequence[str] = ()) -> str:  # rule: 01.15.1
+    """Why a fact question never goes to the Oracle (one owner per question, DL-01-41), or "": a person the beats
+    act on, a person present or the PC (their will is willingness, their ability their record, their noticing the
+    roll), or content nobody has written (the narrator answers it in words, as testimony)."""
+    if _CONTENT_Q.match(predicate):
+        return "content: answered in words as testimony"
+    ent = st.entities.get(subject or "")
+    pos = st.positions.get(pc_id(st) or "")
+    here = {*(st.scene.cast_present if st.scene is not None else []),
+            *(i for i, p in st.positions.items() if pos is not None and pos.location and p.location == pos.location)}
+    if ent is not None and ent.kind == "pc":  # the PC's own ability or knowledge is the sheet and the journal
+        # ponytail: a world question the Reader filed under the PC ("is there a well here") stays the Oracle's;
+        # only ability and knowledge words are read as about the PC. A typed question kind would replace this.
+        return "the PC's record answers it" if _PC_OWN.match(predicate) else ""
+    if ent is not None and ent.kind in PEOPLE and (subject in targets or subject in here):
+        return "about a person here: willingness, their record or the roll answers it"
+    return ""
+
+
+_PC_OWN = re.compile(r"^\s*(?:can|could|cannot|know|knows|remember|remembers|am|is able|has learned)\b", re.I)
+
+
+def _fiction_questions(ctx: TurnContext, rec: AdjudicationRecord, questions: Sequence[FactQuestion], *,
+                       targets: Sequence[str] = ()) -> None:
     # rule: 01.3.8
-    """01.3.8: from state (the permitted slice), else the World-Fact Oracle (PR-01-4). A settled key is read,
-    never re-asked (01.15.7), so the same question gets the same answer and no new draw."""
+    # rule: 01.15.1
+    """01.3.8: from state (the permitted slice), else the World-Fact Oracle (PR-01-4), which answers only open
+    questions about the world (`not_oracle`). A settled key is read, never re-asked (01.15.7), so the same question
+    gets the same answer and no new draw. The key is the question asked positive and whole (01.15.8)."""
     tx = ctx.need_tx()
     pc = rec.pc or "dm"
     rungs = [r["id"] for r in ctx.rules.resolution["oracle"]["rungs"]]
     for q in questions:
         st = tx.state
         subject = q.subject if q.subject in st.entities else WORLD
-        pred = ids.slug(q.predicate)[:60]
+        asked, flipped = positive(q.predicate)
+        pred = ids.slug(asked)
         fid = st.current_fact_id(subject, pred)
         if fid is not None and st.facts[fid].visibility != "sealed":
-            rec.oracle.append(OracleEntry(question=q.predicate, answer=_yes_no(st.facts[fid].value), fact_id=fid,
+            rec.oracle.append(OracleEntry(question=asked, answer=_yes_no(st.facts[fid].value), fact_id=fid,
                                           subject=subject, predicate=pred))
             continue
         from engine.dm.answer import who_answer
@@ -432,8 +464,13 @@ def _fiction_questions(ctx: TurnContext, rec: AdjudicationRecord, questions: Seq
                 rec.oracle.append(OracleEntry(question=q.predicate, answer=who[0], fact_id=who[1], subject=subject,
                                               predicate=pred))
             continue
+        why = not_oracle(st, q.subject, q.predicate, targets)
+        if why:
+            rec.notes.append(f"not asked of the Oracle: {q.predicate} ({why}; 01.15.1)")
+            continue
         odds = q.odds_rung if q.odds_rung and q.odds_rung in rungs else "even"
-        res = ask_oracle(OracleQuestion(subject=subject, predicate=pred, question=q.predicate, odds=odds, asker=pc),
+        odds = MIRROR.get(odds, odds) if flipped else odds  # "unlikely he is not alert" = "likely he is alert"
+        res = ask_oracle(OracleQuestion(subject=subject, predicate=pred, question=asked, odds=odds, asker=pc),
                          state=st, rules=ctx.rules, rng=ctx.rng, mint=tx.mint, store=ctx.store, staged=tx.events,
                          free_cap=ctx.free_cap)
         tx.add_all(res.events)
@@ -445,20 +482,8 @@ def _fiction_questions(ctx: TurnContext, rec: AdjudicationRecord, questions: Seq
             words += f", but {res.qualifier}"
         if res.extreme:
             words += ", and " + " ".join(str(w) for w in res.meaning)
-        rec.oracle.append(OracleEntry(question=q.predicate, answer=words, fact_id=res.fact_id, subject=subject,
+        rec.oracle.append(OracleEntry(question=asked, answer=words, fact_id=res.fact_id, subject=subject,
                                       predicate=pred))
-
-
-_KNOWS_Q = re.compile(r"^\s*(?:does\s+\S+\s+)?(?:knows?|has heard|heard|have heard|saw|seen|has seen|remembers?|"
-                      r"can tell|could tell)\b", re.IGNORECASE)
-
-
-def speech_owns(st: Any, subject: str | None, predicate: str, talked_to: Sequence[str]) -> bool:  # rule: 12.10.8
-    """A Reader fact question about what a person the PC is talking to knows ("the neighbour knows the details of
-    the ambush"): the NPC answers it in words, within their willingness (PR-12-10), as testimony; the World-Fact
-    Oracle never also settles it (one would say yes and the other no)."""
-    return bool(subject in talked_to and subject in st.entities
-                and st.entities[subject].kind in ("npc", "companion", "adversary") and _KNOWS_Q.match(predicate))
 
 
 def _yes_no(v: Any) -> str:

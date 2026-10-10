@@ -40,8 +40,9 @@ odds) and its label is a plain sentence. An Oracle answer is never a snag: the F
 ### US3 - Take the time (T6; 01.4.1, 01.4.4, 01.7.4, 12.15.3; DL-01-44, DL-01-46 provisional, DL-01-47)
 After framing, code computes COSTLY on the typed frame for every verb. Not costly: Safe stakes (source `none`, no
 snag raised them), no threatened or alternate cost sourced to a fact (a time cost counts only with a clock
-listening), no clock listening to time or exposure, no party who would act on a failure (01.4.1), no contest (no
-opposed or defense obstacle), outside a conflict, not lethal, and a final DC below Very hard. Then: no OFFER, no roll,
+listening), no clock listening to time or exposure, no contest (no opposed or defense obstacle; a `persuade_to`
+is always their will's), no attack on someone (06.2.1), outside a conflict, not lethal, and a final DC below Very
+hard. Whether an onlooker would act is the Framer's stakes source (01.6.9), not a separate code test. Then: no OFFER, no roll,
 success at Standard (a fallback at its reach cap), twice the mode's time through `advance_time`, evidence as a no-roll
 success, and a RESULT that says how long it took (never "hidden check made"). A frame whose source is `none` but which
 names a sourced cost is costly, and the disagreement is noted on the frame. "Already agreed" is the Framer's judgment
@@ -81,7 +82,7 @@ Seed cases from the R2-K checklist, then this spec's own. Each becomes a test in
 | C20 | edge (adversarial) | Framer cites an Oracle fact as a snag; another as a lever | snag refused; lever allowed |
 | C21 | edge | A plain question to a Neutral NPC labelled `verb.help` with `speech` | certain (no roll) |
 | C22 | edge | A Safe, sourceless frame in a conflict | rolls |
-| C23 | edge | A Safe frame with an Unfriendly NPC watching | costly (a party would act): rolls |
+| C23 | edge | A Safe frame with an Unfriendly NPC watching | costly (a party would act): rolls. *Amended in implementation:* costly when the Framer names the watcher as the stakes source; an Unfriendly bystander it does not name leaves the frame to take the time (01.6.9 makes the onlooker the Framer's judgment; code's coarse `parties_who_would_act` contradicted the explorer t12 gate) |
 | C24 | edge | Limited reach without a cited factor; with one | Standard; Limited and the OFFER names it |
 | C25 | edge | OFFER with attribute 0 and the PC's floor competence | no "+0", no "practised" |
 | C26 | edge | Take the time on a secret frame | no "hidden check made"; the time line |

@@ -27,11 +27,20 @@ from pydantic import BaseModel, Field
 
 from engine import ids
 from engine.dm.adjudication import BeatEntry, CostEntry, HarmEntry, PositionEntry
-from engine.resolve.change import ChangeResult, apply_change, needs_target, pay, plain
+from engine.resolve.change import NONE as NONE_KIND
+from engine.resolve.change import (
+    ChangeResult,
+    agreed_covers,
+    apply_change,
+    needs_target,
+    pay,
+    plain,
+    typed_goal,
+)
 from engine.resolve.costs import HarmHook, apply_cost, check_cost_decl, first_fitting_cost
 from engine.resolve.frame import auto_commit_allowed, commit_events, frame_check, offer_preview
 from engine.resolve.gate import GateDecision, check_gate, words, zero_reach
-from engine.resolve.necessity import necessity, trivial_class
+from engine.resolve.necessity import TAKE_THE_TIME, costly, necessity, trivial_class
 from engine.resolve.roll import read_result, roll_check
 from engine.resolve.rulings import RulingRecord, log_ruling
 from engine.resolve.types import REACH_VALUE, Beat, Frame, FrameRefusal, ProposedFrame, ReadResult, RollResult
@@ -329,6 +338,7 @@ def _entry(beat: Beat, **kw: Any) -> BeatEntry:
 def _start(env: PipelineEnv, plan: BeatPlan, queued: list[BeatPlan]) -> BeatOutcome:  # rule: PR-01-1
     beat = plan.beat
     tx = env.tx
+    typed_goal(env.state, beat)  # DL-01-42: a goal left `none` gets its verb's plain goal, before any test reads it
     # 2. GATE (01.3)
     dec = check_gate(beat, state=env.state, rules=env.rules, store=env.store, staged=tx.events, mint=tx.mint)
     env.add(*dec.events)
@@ -384,15 +394,28 @@ def _redirect(env: PipelineEnv, plan: BeatPlan, dec: GateDecision, queued: list[
                        oof=[{"kind": "REDIRECT", "text": words, "decision": decision_json(dec)}])
 
 
-def _no_roll(env: PipelineEnv, plan: BeatPlan, dec: GateDecision) -> BeatOutcome:  # rule: 01.4.1
+def _no_roll(env: PipelineEnv, plan: BeatPlan, dec: GateDecision, *, frame: Frame | None = None,
+             already: str = "") -> BeatOutcome:  # rule: 01.4.1
     """A no-roll class: the beat succeeds at Standard reach (never Great, never lethal), recorded; evidence only
-    for resolved bases (good idea, take the time, certain with cost; 03.3.1)."""
+    for resolved bases (good idea, take the time, certain with cost; 03.3.1). Taking the time (01.4.4, `frame` its
+    typed frame) spends twice the mode's time through `advance_time`, lands a fallback at its reach cap, and says
+    how long it took. `already`: an agreement on record covers the ask (DL-01-45): nothing is written."""
     beat = plan.beat
-    entry = _entry(beat, gate=dec.gate, gate_words=f"no roll: {beat.necessity}", reach="standard",
+    reach = min(REACH_VALUE.get(frame.reach, 2), 2) if frame is not None else 2
+    entry = _entry(beat, gate=dec.gate, gate_words=f"no roll: {beat.necessity}", reach=REACH_NAME[reach],
                    approach_words=(dec.verb or beat.verb or "") if dec.gate != "G2" else (dec.license or ""))
+    oof: list[dict[str, str]] = []
+    if frame is not None:  # rule: 01.4.4
+        unit = {"travel": "watch", "downtime": "day"}.get(_mode(env.state), "interval")
+        n = int((env.rules.resolution.get("take_the_time") or {}).get("time_multiplier", 2))
+        advance_time(env.time_ctx(), n, unit, f"take the time {beat.id} (01.4.4)")
+        took = _span_words(n, unit)
+        oof.append({"kind": "RESULT", "text": f"[RESULT] no roll (take the time: {took}) · success · evidence as a "
+                                              "no-roll success"})
+        pay(env.tx, frame.method_consequences, beat.actor)  # rule: 01.11.2 (a fallback's consequence still applies)
     evs: list[Event] = []
     if beat.necessity in NO_ROLL_EVIDENCE:
-        tag = beat.deed_tag or _verb_deed(env.rules, beat.verb)
+        tag = beat.deed_tag or (frame.deed_tag if frame is not None else None) or _verb_deed(env.rules, beat.verb)
         if tag:
             evs.append(evidence_event(env, beat, tag, frame=None, degree="success"))
         if beat.necessity == "good_idea":  # rule: 01.5.4
@@ -401,12 +424,30 @@ def _no_roll(env: PipelineEnv, plan: BeatPlan, dec: GateDecision) -> BeatOutcome
                                                result={"degree": None, "outcome": "success (good idea)"}),
                                   env.tx.mint, store=env.store, staged=env.tx.events, rule_id="01.5.4"))
     env.add(*evs)
-    if (dec.verb or beat.verb) == MOVE:
-        entry.positions = _moved(env, plan)
-    _change_entry(env, beat, entry, apply_change(env.tx, env.rules, beat, 2, pc=env.pc))  # rule: 01.2.7
-    _folded_hold(env, beat, 2)
+    if _moves(beat, dec.verb or beat.verb):
+        entry.positions = _moved(env, plan, reach)
+    res = ChangeResult(words=already) if already else apply_change(
+        env.tx, env.rules, beat, reach, pc=env.pc, limit=frame.reach_limit if frame is not None else None)
+    _change_entry(env, beat, entry, res)  # rule: 01.2.7
+    _folded_hold(env, beat, reach)
     mark_boundary(env.time_ctx(), "beat_end", {"beat": beat.id})
-    return BeatOutcome(status="no_roll", entry=entry)
+    if oof and (line := _change_line(entry)):
+        oof[0]["text"] += "\n" + " " * len("[RESULT] ") + line
+    return BeatOutcome(status="no_roll", entry=entry, oof=oof)
+
+
+def _moves(beat: Beat, verb: str | None) -> bool:  # rule: 01.2.7
+    """The beat takes its actor somewhere: a Move, or any beat whose typed goal is `move_to` its target (DL-01-42: the
+    goal, not the verb label; "I shoulder past the guard to the door" moves you)."""
+    c = beat.change
+    return verb == MOVE or (c is not None and c.kind == "move_to" and c.what not in (None, NONE_KIND)
+                            and c.what == beat.target)
+
+
+def _change_line(entry: BeatEntry) -> str:
+    from engine.dm.oof import change_result_line  # the `Now:` line (12.15.3; the dm layer renders)
+
+    return change_result_line(entry)
 
 
 BANDS = ("engaged", "close", "near", "far", "distant")  # 06.3.2, nearest first
@@ -509,6 +550,9 @@ def _frame(env: PipelineEnv, plan: BeatPlan, dec: GateDecision, queued: list[Bea
     if not cands:
         return BeatOutcome(status="refused", entry=_entry(beat, gate=dec.gate, gate_words="no anchor fits (00.15.3)"))
     proposed = env.framer(beat, cands, gate=dec, note=note)
+    if (agreed := agreed_covers(env.state, beat, proposed.already_agreed)):  # rule: 01.4.1 (DL-01-45)
+        beat.necessity = "trivial"  # already true, judged on the typed goal: no roll, the agreement stands
+        return _no_roll(env, plan, dec, already=agreed)
     if proposed.reach_two_factors:  # rule: 01.6.10 (I-160a): zero reach is G4 before the OFFER, nothing spent
         g4 = zero_reach(beat, rules=env.rules, verb=dec.verb, mint=env.tx.mint, store=env.store,
                         staged=env.tx.events)
@@ -570,6 +614,15 @@ def _checked(env: PipelineEnv, plan: BeatPlan, dec: GateDecision, proposed: Prop
                                         review_flag=True, result={"degree": None, "outcome": out.message}),
                            env.tx.mint, store=env.store, staged=env.tx.events, rule_id="01.5.4"))
         return BeatOutcome(status="refused", entry=_entry(beat, gate=dec.gate, gate_words=out.message))
+    why = costly(out, state=env.state, rules=env.rules, source=proposed.stakes_source)  # rule: 01.4.1 (DL-01-44)
+    if not why and proposed.trade == "none":  # a trade is made at an OFFER already shown: it rolls
+        beat.necessity = TAKE_THE_TIME  # rule: 01.4.4: nothing at stake: no OFFER, no roll, the time is spent
+        return _no_roll(env, plan, dec, frame=out)
+    if proposed.stakes_source == "none" and out.stakes == "safe" and any(" cited to " in w or "clock" in w
+                                                                         for w in why):
+        out.notes.append(f"stakes.source none, but costly: {'; '.join(why)} (01.4.1)")  # the disagreement, logged
+    if beat.change is None or beat.change.kind == NONE_KIND:  # rule: 01.2.7 (DL-01-42): never roll a goal-less beat
+        return BeatOutcome(status="question", entry=_entry(beat, gate="G0", gate_words=GOAL_ASK))
     return _offer(env, plan, proposed, out, cands, queued, warned=warned)
 
 
@@ -631,6 +684,7 @@ def _may_auto(env: PipelineEnv, frame: Frame) -> bool:  # rule: 07.3.6
                                        "target": frame.beat.actor, "stakes": frame.stakes, "lethal": frame.lethal})
 
 
+GOAL_ASK = "ask the player what they want to come of it: no goal was read, and a roll needs one (01.2.7)"
 CHANGE_ASK = ("How do you go about it instead? Say what your character does: another way, or something here you "
               "use. Nothing is spent, and this offer stays open until you do.")
 
@@ -724,11 +778,13 @@ def _answer_redirect(env: PipelineEnv, plan: BeatPlan, d: dict[str, Any], choice
     if not choice.startswith("accept:"):
         return BeatOutcome(status="withdrawn", entry=_entry(plan.beat, gate="G3", gate_words="another way chosen"))
     fb = d["fallback"]
-    # an accepted crude fallback is "a new frame on the fallback verb" with its DC shift and reach cap (01.3.5):
-    # it always rolls through an OFFER, never a no-roll class (playtest 20261007-192159: "take the time" made it
-    # an unrolled success the narration could not support, so the player got "You cannot do it that way")
+    # an accepted crude fallback is "a new frame on the fallback verb" with its DC shift and reach cap, on the
+    # fallback's own scope (01.3.5, DL-01-43): the Framer rates what the fallback method can reach ("pick out the
+    # numerals"), never the whole intent with the shift on top (fighter t9: hard + 5 for a nuisance, a 5% OFFER).
+    # Framed, it meets the same take-the-time test as any frame (DL-01-46, provisional; retires 0c15da2's forced roll)
+    scope = str(fb.get("method") or plan.beat.method)
     beat = plan.beat.model_copy(update={"mode": "fallback", "fallback_license": choice.split(":", 1)[1],
-                                        "verb": fb.get("verb"), "method": fb.get("method") or plan.beat.method,
+                                        "verb": fb.get("verb"), "method": scope, "intent": scope, "how": scope,
                                         "license": None, "necessity": ROLLS, "uses_power": False})
     return _start(env, plan.model_copy(update={"beat": beat}), queued)
 
@@ -776,7 +832,7 @@ def _finish(env: PipelineEnv, plan: BeatPlan, frame: Frame, roll: RollResult, *,
     delivered = max(0, read.delivered_reach + reach_delta) if read.delivered_reach else 0
     resolved = roll.degree in ("success", "critical_success") or read.success_at_cost_taken
     verb = frame.gate.verb or frame.beat.verb
-    moved = (_moved(env, plan, delivered) if resolved and verb == MOVE
+    moved = (_moved(env, plan, delivered) if resolved and _moves(frame.beat, verb)
              else _contact(env, frame, verb, delivered if resolved else 0) if verb in CONTACT else [])
     if resolved and verb not in ("verb.grapple", "verb.force") and _attacks(env, frame):  # rule: 06.4.3
         from engine.resolve.conflict import check_end, strike_harm
@@ -785,7 +841,8 @@ def _finish(env: PipelineEnv, plan: BeatPlan, frame: Frame, roll: RollResult, *,
         if hurt.amount or hurt.transition:
             env.harm_log.append(HarmEntry(target=str(frame.beat.target), words=said))
         check_end(env.time_ctx(), env.pc)  # 06.13.1: the last foe down ends the fight
-    chg = apply_change(env.tx, env.rules, frame.beat, delivered if resolved else 0, pc=env.pc)  # rule: 01.2.7
+    chg = apply_change(env.tx, env.rules, frame.beat, delivered if resolved else 0, pc=env.pc,  # rule: 01.2.7
+                       limit=frame.reach_limit)
     pay(env.tx, frame.method_consequences, frame.beat.actor)  # rule: 01.11.2 (a price paid whatever the degree)
     _folded_hold(env, frame.beat, delivered if resolved else 0)
     progress = _progress(env, frame, delivered if resolved else 0)

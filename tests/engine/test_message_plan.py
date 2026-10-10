@@ -93,6 +93,13 @@ def _game(tmp_path: Path, fixture: str, reader: dict[str, Any], faces: list[int]
     with gzip.open(FIXTURES / fixture, "rb") as src, path.open("wb") as dst:
         shutil.copyfileobj(src, dst)
     store = Store.open(path)
+    # spec 023 (01.4.4): these tests are about the plan, so each beat must stay costly: a clock listens to time
+    # (with nothing at stake the scripted frames would take the time and never pause at an OFFER)
+    from engine.store.clocks import create_clock
+    from tests.fixtures.scene_dock import WATCH_CLOCK
+
+    with store.transaction() as tx:
+        tx.add(create_clock(tx.state, WATCH_CLOCK, name="The night wears on", owner="12", rule_id="test"))
     model = ScriptedModel({Role.READER: [lambda schema, packet: reader], Role.FRAMER: [framer() for _ in range(4)]})
     rng = D20.of(store)
     rng.faces = list(faces)
@@ -157,11 +164,11 @@ def test_a_plan_stops_and_asks_when_the_pc_goes_down(tmp_path: Path, monkeypatch
     dock, rng = dock_setup(tmp_path)
     real = pl.apply_change
 
-    def falls(tx: Any, rules: Any, beat: Any, reach: int, pc: str | None = None) -> Any:
+    def falls(tx: Any, rules: Any, beat: Any, reach: int, pc: str | None = None, limit: str | None = None) -> Any:
         if beat.id == "beat.1":  # the first beat's result puts the PC down (a cost, a blow: the cause is not tested)
             tx.add(Event.of("fact_set", {"source": "ruling"}, source="test", rule_id="07.2.1", fact_id=tx.mint("fact"),
                             subject=dock.pc, predicate="down", value=True, visibility="shown"))
-        return real(tx, rules, beat, reach, pc=pc)
+        return real(tx, rules, beat, reach, pc=pc, limit=limit)
 
     monkeypatch.setattr(pl, "apply_change", falls)
     plans = [plan(dock, f"look around {i}", "verb.observe", n=i) for i in (1, 2)]

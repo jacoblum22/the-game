@@ -69,8 +69,8 @@ def framer(**over: Any) -> Fn:
             "deed_tag": enum_at(schema, "deed_tag")[0], "traits": [],
             "obstacle": {"kind": "tier", "obstacle_class": "other", "tier": "moderate", "entity": None},
             "nudge_why": None, "nudge": "0", "nudge_fact": None, "request_size": "R2", "levers": [], "snags": [],
-            "stakes_source": "none", "stakes_heavy": False, "lethal": False, "reach_whole": True,
-            "reach_one_factor": False, "reach_two_factors": False, "asks": "none",
+            "stakes_source": "none", "stakes_heavy": False, "lethal": False, "reach_limit": None,
+            "reach_two_factors": False, "asks": "none", "already_agreed": None,
             "threatened_cost": {"menu_id": "cost.time", "form_intent": "",
                                   "source_fact": None},
             "alternate_cost": None, "method_consequences": [], "secret": False}
@@ -143,7 +143,9 @@ def test_offer_before_roll_and_nothing_rolled_until_commit(tmp_path: Path) -> No
     assert res2.record.beats[0].beat_id == beat_id and res2.record.beats[0].degree == "success"
     # P-012: the committed roll states its outcome once (12.15.3)
     result = [o["text"] for o in res2.oof if o["kind"] == "RESULT"]
-    assert len(result) == 1 and result[0].startswith("[RESULT] d20 18 → ") and result[0].endswith("· success")
+    first = result[0].splitlines()[0] if result else ""
+    assert len(result) == 1 and first.startswith("[RESULT] d20 18 → ") and first.endswith("· success")
+    assert "Now: You are hidden from Sela Vey." in result[0]  # spec 023: the Sneak's goal is typed (hide)
     assert "evidence_recorded" in t and res2.turn_record.beats == [fid]
     assert dock.store.rebuild() == dock.state
 
@@ -393,7 +395,9 @@ def test_offline_model_plays_a_turn(tmp_path: Path) -> None:
     dock, ctx = setup(tmp_path, OfflineModel())
     res = run_turn(ctx, "I sneak past the guard toward the ferry. Is the ferry running tonight?")
     assert [p.cls for p in res.record.parts] == ["DECLARATION", "FICTION_QUESTION"]
-    assert res.record.oracle and res.pause is not None and res.pause.kind == "offer"
+    # spec 023 (01.15.1): a question the offline Reader puts about the ferryman here is his, not the Oracle's
+    assert (res.record.oracle or any("not asked of the Oracle" in n for n in res.record.notes))
+    assert res.pause is not None and res.pause.kind == "offer"
     assert dock.store.turn(res.turn_id) is not None and res.turn_record.model_calls
     assert dock.store.rebuild() == dock.state
 
@@ -562,7 +566,7 @@ def test_one_beat_offers_only_its_own_line_not_the_queued_tail() -> None:
 # ------------------------------------------------------------------------------------------- extended goals (P-082)
 
 
-def _track(tmp_path: Path, *shapes: str, reach_whole: bool = True) -> tuple[DockScene, TurnContext, list[Any]]:
+def _track(tmp_path: Path, *shapes: str, reach_limit: str | None = None) -> tuple[DockScene, TurnContext, list[Any]]:
     """Fighter playtest 20261007-191941 inputs 22-31: follow a track again and again; each success got the same
     "the mist hides it, press on?". Each turn: declare, commit, a success on the die."""
     model = ScriptedModel()
@@ -576,7 +580,7 @@ def _track(tmp_path: Path, *shapes: str, reach_whole: bool = True) -> tuple[Dock
         follow = beat("follow the track", "verb.move", target="obj.track_in_the_mud" if i == 0 else "obj.track",
                       verbs=("follow",), shape="now" if shape == "single" else shape)
         model.push(Role.READER, reader("DECLARATION", "I follow the track.", follow))
-        model.push(Role.FRAMER, framer(stakes_source="none", reach_whole=reach_whole))
+        model.push(Role.FRAMER, framer(stakes_source="none", reach_limit=reach_limit))
         model.push(Role.WORLD, QUIET_WORLD, QUIET_WORLD)
         run_turn(ctx, "I follow the track.")
         ctx.rng.faces = [18]  # type: ignore[attr-defined]
@@ -585,7 +589,7 @@ def _track(tmp_path: Path, *shapes: str, reach_whole: bool = True) -> tuple[Dock
 
 
 def test_an_extended_goal_shows_progress_each_stretch(tmp_path: Path) -> None:
-    dock, ctx, (b1, b2) = _track(tmp_path, "extended", "single", reach_whole=False)  # limited: 1 tick each
+    dock, ctx, (b1, b2) = _track(tmp_path, "extended", "single", reach_limit="the far edge of the mud")  # limited: 1 tick
     assert "a first stretch" in b1.progress and "never the same view" in b1.progress
     assert "more than halfway" in b2.progress  # the same goal, though the Reader said single
     [clock] = [c for c in dock.state.clocks.values() if c.kind == "progress"]

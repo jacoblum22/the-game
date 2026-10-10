@@ -6,7 +6,7 @@
     plain(state, beat.change, actor=..., pc=...)   # "Taking: the coin purse, from Murzak Red-Hand" (01.2.6, OFFER)
 
 Code writes what each kind's `applies` names: `take`/`give` the item's `holder` fact (reach 1: `contested_by`, a hand
-on it); `open`/`close` the thing's `open` fact; `persuade_to` the person's `agreed` fact (reach 1: a smaller part);
+on it); `open`/`close` the thing's `open` fact; `persuade_to` the person's `agreed` fact (reach 1: short of the cited factor; added to, never replacing, one on record);
 `hide` `hidden_from`; `restrain` applies 06.5.2's ladder condition on the held one (`cond.grabbed` S1/S2,
 `cond.restrained`, `cond.pinned`; its source the holder) and T-12-18's posture row is its face (engine/dm/scene_state.py);
 `free` ends the hold (engine/resolve/conflict.py `end_hold`); `move_to`, `harm` and `learn` already have their writers
@@ -138,7 +138,7 @@ def _act(beat: Beat) -> str:
 def already_true(state: Any, beat: Beat, *, pc: str | None = None) -> str:  # rule: 01.2.7
     # rule: 01.4.1
     """DL-01-36: the change already holds in the store, so it is certain (no roll, no OFFER); its words, or "".
-    The actor already holds the item; the person already agreed to this act; the thing is already open/closed."""
+    The actor already holds the item; the thing is already open/closed."""
     c = beat.change
     if c is None or c.kind == NONE:
         return ""
@@ -150,15 +150,53 @@ def already_true(state: Any, beat: Beat, *, pc: str | None = None) -> str:  # ru
     if c.kind in ("open", "close") and (t := _thing(state, beat)) is not None \
             and state.fact_value(t, "open") is (c.kind == "open"):
         return f"{_name(state, t, pc)} is already {'open' if c.kind == 'open' else 'closed'}"
-    if c.kind == "persuade_to" and (p := _person(state, beat)) is not None:
-        from engine.audit.text import covers
-
-        done = state.fact_value(p, "agreed")
-        act = _act(beat)  # the same act: each covers most of the other (a bigger ask is a new one)
-        if isinstance(done, str) and not done.startswith("a smaller part") and covers(done, act, ratio=0.6) \
-                and covers(act, done, ratio=0.6):
-            return f"Agreed already by {_name(state, p, pc)}: {done}"
+    # persuade_to: whether an agreement on record covers the ask is judged on the typed goal by the Framer
+    # (`already_agreed`, DL-01-45; pipeline `_agreed`), never by word overlap (retired: H2, Morga's narrower ask)
     return ""  # move_to: an approach is already no-roll open ground (the Move rubric) and ends beside (DL-12-98)
+
+
+def agreed_covers(state: Any, beat: Beat, fact_id: str | None) -> str:  # rule: 01.2.7
+    # rule: 01.4.1
+    """The Framer's judgment that an agreement on record already covers this whole ask (DL-01-45: the same act, or a
+    larger one containing it), checked by code: a current `agreed` fact of the person (never the actor) a
+    `persuade_to` asks. Its words for the record, or ""."""
+    f = state.facts.get(fact_id or "")
+    c = beat.change
+    if f is None or f.predicate != "agreed" or c is None or c.kind != "persuade_to" or f.subject == beat.actor \
+            or state.current_fact_id(f.subject, "agreed") != f.id or f.subject not in (c.what, c.whom, beat.target):
+        return ""
+    return f"Agreed already by {_name(state, f.subject, None)}: {f.value}"
+
+
+# DL-01-42: a goal the Reader left `none`, from the beat's verb when it has one plain goal (a look is `learn` on its
+# target or the place; a Help carries the helped goal, which only the Reader knows, so it is not guessed)
+_VERB_GOAL = {"verb.observe": "learn", "verb.recall": "learn", "verb.move": "move_to", "verb.exert": "move_to",
+              "verb.strike": "harm", "verb.force": "harm", "verb.grapple": "restrain", "verb.sneak": "hide"}
+
+
+def typed_goal(state: Any, beat: Beat) -> None:  # rule: 01.2.7
+    """Every rolled beat carries a typed goal (DL-01-42): a beat typed `none` gets its verb's plain goal in place
+    (words that press: `learn` for a question, else `persuade_to`). One still `none` is never framed as such: the
+    pipeline asks what the player wants (01.2.4)."""
+    c = beat.change
+    if c is not None and c.kind != NONE:
+        return
+    tgt = _id(beat.target)
+    place = state.scene.place_id if state.scene is not None else None
+    kind = _VERB_GOAL.get(beat.verb or "")
+    if kind is None and (beat.verb == "verb.talk" or beat.speech):  # an act asked for (a request, an offer, a plea)
+        person = tgt is not None and tgt in state.entities and state.entities[tgt].kind in PEOPLE
+        kind = "persuade_to" if person and beat.pressure in ("request", "offer", "plea") else "learn"
+    what, whom = tgt, None
+    if kind in ("learn", "move_to"):  # a look about, a climb or a step with nothing named: here
+        what = tgt or place
+    elif kind == "hide":
+        what, whom = beat.actor, tgt
+    elif kind == "restrain" and tgt is None:  # a Grapple at no one: breaking free of a hold
+        kind, what = "free", beat.actor
+    if kind is None or (what is None and kind != "hide"):
+        return
+    beat.change = Change(kind=kind, what=what, whom=whom, description=c.description if c is not None else None)
 
 
 _ASK = {"persuade_to": ("who", "persuade"), "restrain": ("who", "hold"), "take": ("what", "take"),
@@ -255,11 +293,13 @@ def pay(tx: Any, consequences: Iterable[str], payer: str | None) -> list[Event]:
     return [ev]
 
 
-def apply_change(tx: Any, rules: Any, beat: Beat, reach: int, *, pc: str | None = None) -> ChangeResult:
+def apply_change(tx: Any, rules: Any, beat: Beat, reach: int, *, pc: str | None = None,
+                 limit: str | None = None) -> ChangeResult:
     # rule: 01.2.7
     # rule: PR-01-3
     """Apply the beat's change at the delivered `reach` (1 partial, 2+ whole; 3-4 the kind's extra, which only
-    `restrain` has). Events are added to `tx`. A change code cannot apply is refused with the reason."""
+    `restrain` has). Events are added to `tx`. A change code cannot apply is refused with the reason. `limit`: the
+    factor a Limited frame cited (what a partial `persuade_to` does not grant)."""
     c = beat.change
     if (c is None or c.kind == NONE) and beat.verb == "verb.grapple" and beat.target in tx.state.entities \
             and tx.state.entities[beat.target].kind in PEOPLE:  # an untyped Grapple keeps hold (06.5.2's Decision)
@@ -317,12 +357,17 @@ def apply_change(tx: Any, rules: Any, beat: Beat, reach: int, *, pc: str | None 
     elif k == "persuade_to":
         who = _person(st, beat)  # either slot or the beat's target (live run 015), never the actor
         act = _act(beat)
-        part = act if reach >= 2 else f"a smaller part of it ({act})"
+        # reach 1: the act short of the factor the frame cited (01.6.10, DL-12-121; retires "a smaller part of it")
+        part = act if reach >= 2 else f"{act}, but not {limit}" if limit else f"{act}, in part"
         if who is None and c.description:  # "the refugees" (DL-12-97)
             return _described(tx, beat, "agreed", f"{c.description}: {part}", f"Agreed by {c.description}: {part}")
         if who is None:
             return ChangeResult(refused="no one named to persuade")
-        res.events.append(_fact(tx, beat, who, "agreed", part))
+        before = st.fact_value(who, "agreed")  # DL-01-45: a roll never replaces or shrinks an agreement on record
+        keep = isinstance(before, str) and before and before != part and not (  # a partial of this act grows
+            reach >= 2 and before.startswith(f"{act},"))
+        value = f"{before}; and {part}" if keep else part
+        res.events.append(_fact(tx, beat, who, "agreed", value))
         res.words = f"Agreed by {_name(st, who, pc)}: {part}"  # no verb to agree ("You agrees to ...", talker run)
     elif k == "hide":
         hidden = what or actor
@@ -344,5 +389,5 @@ def apply_change(tx: Any, rules: Any, beat: Beat, reach: int, *, pc: str | None 
     return res
 
 
-__all__ = ["HOLDS", "LADDER", "ChangeResult", "already_true", "apply_change", "current_hold", "hold", "hold_level",
-           "holder_of", "kinds", "needs_target", "pay", "plain", "price", "things_held"]
+__all__ = ["HOLDS", "LADDER", "ChangeResult", "agreed_covers", "already_true", "apply_change", "current_hold", "hold", "hold_level",
+           "holder_of", "kinds", "needs_target", "pay", "plain", "price", "things_held", "typed_goal"]

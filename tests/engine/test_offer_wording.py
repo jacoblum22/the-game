@@ -40,7 +40,7 @@ def test_offer_snapshot(s: Scene) -> None:
     assert isinstance(f, Frame), f
     lines = [ln.strip() for ln in offer_block(f, rules=s.rules, fate=1, state=s.state).text.splitlines()]
     assert lines[1:6] == [
-        "Chance: even — 50%   (Agility +3, practised +1, Ysrion is beating a rug +2, Ysrion is curt −2)",
+        "Chance: even — 50%   (Agility +3, experience +1, Ysrion is beating a rug +2, Ysrion is curt −2)",
         "If it works: what you wanted.   Very well (5%): more than you asked.",
         "If it fails: Danger: you lose your footing and your breath — serious.   Badly (5%): you lose your footing "
         "and your breath — grave.",  # the second snag raised the stakes (00.3.9(b))

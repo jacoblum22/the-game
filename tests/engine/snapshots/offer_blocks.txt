@@ -1,22 +1,22 @@
 == move_crowd
 [OFFER] Do it.
-        Chance: likely — 75%   (Agility +3, practised +1)
+        Chance: likely — 75%   (Agility +3, experience +1)
         If it works: what you wanted.   Very well (25%): more than you asked.
-        If it fails: it just doesn't work.   Badly (5%): something is used up — a nuisance.
+        If it fails: nothing lost.   Failing badly (5%): something is used up — a nuisance.
         Fate: 1 (you may spend one to reroll the die once you see it)
         Another way: with Endurance (65%) · with Might (65%)
 
 == move_crowd_one_snag
 [OFFER] Do it.
-        Chance: better than even — 55%   (Might +1, practised +1, crowd density: packed −2)
+        Chance: better than even — 55%   (Might +1, experience +1, crowd density: packed −2)
         If it works: what you wanted.   Very well (5%): more than you asked.
-        If it fails: it just doesn't work.   Badly (5%): something is used up — a nuisance.
+        If it fails: nothing lost.   Failing badly (5%): something is used up — a nuisance.
         Fate: 1 (you may spend one to reroll the die once you see it)
         Another way: with Agility (65%) · with Endurance (55%)
 
 == move_crowd_two_snags
 [OFFER] Do it.
-        Chance: better than even — 55%   (Might +1, practised +1, crowd density: packed −2)
+        Chance: better than even — 55%   (Might +1, experience +1, crowd density: packed −2)
         If it works: what you wanted.   Very well (5%): more than you asked.
         If it fails: Danger: something is used up — serious.   Badly (5%): something is used up — grave.
         Close call (15%): get it anyway and pay (you get only part of the way), or fail.
@@ -25,17 +25,17 @@
 
 == move_obstructed_guarded
 [OFFER] Do it.
-        Chance: unlikely — 30%   (Might +1, practised +1, crowd density: packed −2)
+        Chance: unlikely — 30%   (Might +1, experience +1, crowd density: packed −2)
         If it works: what you wanted.   Very well (5%): more than you asked.
-        If it fails: it just doesn't work.   Badly (25%): something is used up — a nuisance.
+        If it fails: nothing lost.   Failing badly (25%): something is used up — a nuisance.
         Fate: 1 (you may spend one to reroll the die once you see it)
         Another way: with Agility (40%) · with Endurance (30%)
 
 == observe_deliberate
 [OFFER] Do it.
-        Chance: even — 45%   (Wits +2, practised +1)
+        Chance: even — 45%   (Wits +2, experience +1)
         If it works: what you wanted.   Very well (5%): more than you asked.
-        If it fails: it just doesn't work.   Badly (10%): something is used up — a nuisance.
+        If it fails: nothing lost.   Failing badly (10%): something is used up — a nuisance.
         Fate: 1 (you may spend one to reroll the die once you see it)
         Another way: with Intellect (35%)
 
@@ -43,19 +43,19 @@
 [OFFER] Do it.
         Chance: you can't judge how hard this is. (The odds would tell you what your character can't know.)
         If it works: what you wanted.
-        If it fails: it just doesn't work.   Badly: something is used up — a nuisance.
+        If it fails: nothing lost.   Failing badly: something is used up — a nuisance.
         Fate: 1 (no reroll: you won't see this die)
 
 == recall_trade
 [OFFER] Do it.
-        Chance: unlikely — 35%   (Intellect +0, practised +1)
+        Chance: unlikely — 35%   (experience +1)
         If it works: what you wanted.   Very well (5%): more than you asked.
-        If it fails: it just doesn't work.   Badly (20%): something is used up — a nuisance.
+        If it fails: nothing lost.   Failing badly (20%): something is used up — a nuisance.
         Fate: 1 (you may spend one to reroll the die once you see it)
 
 == exert_climb_lever
 [OFFER] Do it.
-        Chance: even — 50%   (Might +1, practised +1, rope state: knotted +2)
+        Chance: even — 50%   (Might +1, experience +1, rope state: knotted +2)
         If it works: what you wanted.   Very well (5%): more than you asked.
         If it fails: something is used up — a setback.   Badly (5%): something is used up — serious.
         Close call (15%): get it anyway and pay (you get only part of the way), or fail.
@@ -64,7 +64,7 @@
 
 == exert_gap_dire
 [OFFER] Do it.
-        Chance: unlikely — 25%   (Agility +3, practised +1)
+        Chance: unlikely — 25%   (Agility +3, experience +1)
         If it works: what you wanted.   Very well (5%): more than you asked.
         If it fails: Danger: a long fall — serious.   Badly (30%): a long fall — grave.
         Close call (15%): get it anyway and pay (you slip), or fail.
@@ -73,7 +73,7 @@
 
 == exert_gap_lethal
 [OFFER] Do it.
-        Chance: unlikely — 25%   (Agility +3, practised +1)
+        Chance: unlikely — 25%   (Agility +3, experience +1)
         If it works: what you wanted.   Very well (5%): more than you asked.
         If it fails: Danger: a long fall — serious.   Badly (30%): a long fall — grave.
         THIS CAN KILL YOU.
@@ -83,14 +83,14 @@
 
 == force_reinforced_nudge
 [OFFER] Do it.
-        Chance: long shot — 15% (failing badly is likelier: 40%)
+        Chance: long shot — 15% (failing badly (a nuisance) is likelier: 40%)
         If it works: what you wanted.   Very well (5%): more than you asked.
-        If it fails: it just doesn't work.   Badly (40%): something is used up — a nuisance.
+        If it fails: nothing lost.   Failing badly (40%): something is used up — a nuisance.
         Fate: 1 (you may spend one to reroll the die once you see it)
 
 == force_flimsy_go_big
 [OFFER] Do it.
-        Chance: better than even — 65%   (Might +1, practised +1)
+        Chance: better than even — 65%   (Might +1, experience +1)
         If it works: more than you asked.   Very well (15%): more than you asked, and then some.
         If it fails: something is used up — a setback.   Badly (5%): something is used up — serious.
         Close call (15%): get it anyway and pay (you get less than you wanted), or fail.
@@ -98,40 +98,40 @@
 
 == handle_awkward
 [OFFER] Do it.
-        Chance: likely — 75%   (Agility +3, practised +1)
+        Chance: likely — 75%   (Agility +3, experience +1)
         If it works: what you wanted.   Very well (25%): more than you asked.
-        If it fails: it just doesn't work.   Badly (5%): something is used up — a nuisance.
+        If it fails: nothing lost.   Failing badly (5%): something is used up — a nuisance.
         Whatever the roll: noisy
         Fate: 1 (you may spend one to reroll the die once you see it)
         Another way: with Wits (70%) · with Intellect (60%) · with Presence (60%)
 
 == strike_small_object
 [OFFER] Do it.
-        Chance: even — 50%   (Agility +3, practised +1)
+        Chance: even — 50%   (Agility +3, experience +1)
         If it works: what you wanted.   Very well (5%): more than you asked.
-        If it fails: it just doesn't work.   Badly (5%): something is used up — a nuisance.
+        If it fails: nothing lost.   Failing badly (5%): something is used up — a nuisance.
         Fate: 1 (you may spend one to reroll the die once you see it)
         Another way: with Might (40%)
 
 == other_hard
 [OFFER] Do it.
-        Chance: long shot — 25% (failing badly is likelier: 30%)
+        Chance: long shot — 25% (failing badly (a nuisance) is likelier: 30%)
         If it works: what you wanted.   Very well (5%): more than you asked.
-        If it fails: it just doesn't work.   Badly (30%): something is used up — a nuisance.
+        If it fails: nothing lost.   Failing badly (30%): something is used up — a nuisance.
         Fate: 1 (you may spend one to reroll the die once you see it)
         Another way: with Endurance (15%) · with Might (15%)
 
 == other_legendary_long_shot
 [OFFER] Do it.
-        Chance: long shot — 5%, only on a natural 20 (failing badly is likelier: 90%)
+        Chance: long shot — 5%, only on a natural 20 (failing badly (a nuisance) is likelier: 90%)
         If it works: what you wanted.
-        If it fails: it just doesn't work.   Badly (90%): something is used up — a nuisance.
+        If it fails: nothing lost.   Failing badly (90%): something is used up — a nuisance.
         Fate: 1 (you may spend one to reroll the die once you see it)
         Another way: with Agility (5%) · with Endurance (5%)
 
 == talk_r2
 [OFFER] Talk to Guard.
-        Chance: even — 45%   (Presence +0, practised +1)
+        Chance: even — 45%   (experience +1)
         If it works: what you wanted.   Very well (5%): more than you asked.
         If it fails: a door closes to you — a setback.   Badly (10%): a door closes to you — serious.
         Close call (15%): get it anyway and pay (he gives half), or fail.
@@ -140,25 +140,25 @@
 
 == talk_r4
 [OFFER] Talk to Guard.
-        Chance: long shot — 15%   (Presence +0, practised +1)
+        Chance: long shot — 15%   (experience +1)
         If it works: what you wanted.   Very well (5%): more than you asked.
-        If it fails: it just doesn't work.   Badly (40%): something is used up — a nuisance.
+        If it fails: nothing lost.   Failing badly (40%): something is used up — a nuisance.
         Fate: 1 (you may spend one to reroll the die once you see it)
         Another way: with Might (20%) · with Intellect (15%)
 
 == strike_guard
 [OFFER] Strike Guard.
-        Chance: better than even — 60%   (Might +1, practised +1)
+        Chance: better than even — 60%   (Might +1, experience +1)
         If it works: what you wanted.   Very well (10%): more than you asked.
-        If it fails: it just doesn't work.   Badly (5%): something is used up — a nuisance.
+        If it fails: nothing lost.   Failing badly (5%): something is used up — a nuisance.
         Fate: 1 (you may spend one to reroll the die once you see it)
         Another way: with Agility (70%) · feint first (65%) · grapple instead (55%)
 
 == fallback_mode
 [OFFER] Do it.
         You're improvising without training: at best a partial result.
-        Chance: unlikely — 40%   (Might +1, practised +1)
+        Chance: unlikely — 40%   (Might +1, experience +1)
         If it works: what you wanted.   Very well (5%): more than you asked.
-        If it fails: it just doesn't work.   Badly (15%): something is used up — a nuisance.
+        If it fails: nothing lost.   Failing badly (15%): something is used up — a nuisance.
         Whatever the roll: loud
         Fate: 1 (you may spend one to reroll the die once you see it)

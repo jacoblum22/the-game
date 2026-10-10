@@ -96,10 +96,11 @@ def test_the_fighters_walking_in_place_is_one_approach_and_the_refugees_can_be_p
     look, ask = outs[2].record.beats[0], outs[2].record.beats[-1]  # the persuade as resolved after its OFFER
     assert look.gate_words == "no roll: trivial" and not look.positions
     assert ask.degree in ("success", "critical_success") and not ask.change_refused
-    # the frame's reach is limited ("partly what you wanted", as in the run): a smaller part, still applied
-    assert ask.changed == "Agreed by the refugees: a smaller part of it (the refugees come out and show themselves)"
+    # spec 023 (DL-12-121): the recorded frame was Limited by its tie-break, citing no factor: now Standard, applied
+    assert ask.changed == "Agreed by the refugees: the refugees come out and show themselves"
     place = str(store.state.scene.place_id)  # type: ignore[union-attr]
-    assert str(store.state.fact_value(place, "agreed.the_refugees")).startswith("the refugees: a smaller part")
+    assert str(store.state.fact_value(place, "agreed.the_refugees")) == \
+        "the refugees: the refugees come out and show themselves"
     # setting once (DL-12-99): the later turns of the scene carry the "already described" line, not the look again
     drafts = [p for p in _narrator_packets(model) if "SCENE SETTING" in p]  # repairs carry no setting
     assert len(drafts) >= 3 and all("already described this scene" in p and "- look:" not in p for p in drafts)
@@ -109,10 +110,16 @@ def test_a_redundant_persuade_is_certain_and_the_result_reads_plainly(tmp_path: 
     """Playtest 20261008-192926, input 20 (turn 5): "Tell them I'm good with locks..." after Ivas had agreed to carry
     Wila's word (fact.113): a 60% OFFER that could make her take offence. Haiku put the PC in `what`, so the result
     read "You agrees to Ivas carries word...". Now: no roll, no OFFER, the record says it is already agreed
-    (DL-01-36), and the plain words never make the PC the persuaded one. The message's second beat walks to the
-    Sleeping Goose: travel, so the narration frames the arrival (P-098)."""
+    (DL-01-36; spec 023, DL-01-45: judged by the Framer on the typed goal, checked by code, no word overlap), and
+    the plain words never make the PC the persuaded one. The message's second beat walks to the Sleeping Goose:
+    travel, so the narration frames the arrival (P-098)."""
+    from tests.engine.test_turn_adjudication import framer
+
     store, said = _open(tmp_path, "talker_ivas_turn5.db.gz")
-    model = ScriptedModel({Role.READER: said["turn.5"]["reader"]})
+    model = ScriptedModel({Role.READER: said["turn.5"]["reader"], Role.FRAMER: [framer(
+        already_agreed="fact.113", obstacle={"kind": "opposed", "obstacle_class": None, "tier": None,
+                                             "entity": "npc.ivas_terier"},
+        threatened_cost={"menu_id": "cost.closed_door", "form_intent": "", "source_fact": None})]})
     ctx = _ctx(store, model, faces=[15])
     res = _play(ctx, "Nothing more for now. Tell them I'm good with locks and quiet work. Then I head to the "
                      "Sleeping Goose to talk to the carters.")
@@ -138,7 +145,8 @@ def test_a_redundant_persuade_is_certain_and_the_result_reads_plainly(tmp_path: 
     with store.transaction("turn.x") as tx:
         got = apply_change(tx, ctx.rules, b, 2, pc=pc)
     assert got.words == "Agreed by Ivas Terier: Ivas tells the Circle my name tonight"
-    assert st.fact_value("npc.ivas_terier", "agreed") == "Ivas tells the Circle my name tonight"
+    assert st.fact_value("npc.ivas_terier", "agreed") == (  # spec 023 (DL-01-45): added, never replacing fact.113
+        "Ivas carries Wila's word to the Circle of Barrowham on his behalf; and Ivas tells the Circle my name tonight")
     assert plain(st, b.change, actor=pc, pc=pc) == "Persuading: Ivas Terier"
 
 

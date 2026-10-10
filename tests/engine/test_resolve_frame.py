@@ -113,7 +113,7 @@ def test_refusals_name_their_step(s: Scene) -> None:
             "lethal_context")
     refused(check(s, stakes_source="hazard", stakes_heavy=True, trade="go_big", threatened_cost={"menu_id": "cost.harm"},
                   alternate_cost={"menu_id": "cost.footing"}), 8, "not allowed from dire")
-    refused(check(s, obstacle={"kind": "tier", "tier": "moderate"}, reach_whole=False, stakes_source="hazard",
+    refused(check(s, obstacle={"kind": "tier", "tier": "moderate"}, reach_limit="the far bank", stakes_source="hazard",
                   trade="play_it_safe", threatened_cost={"menu_id": "cost.harm"},
                   alternate_cost={"menu_id": "cost.footing"}), 9, "Limited")
     refused(check(s, threatened_cost={"menu_id": "cost.nope"}), 10, "unknown cost")
@@ -126,19 +126,21 @@ def test_refusals_name_their_step(s: Scene) -> None:
 
 def test_a_cost_form_never_undoes_the_beats_own_success(s: Scene) -> None:
     """Playtest 20261008 fighter 19-22 (01.9.3: a cost never negates a success): a grapple taken as success at a
-    cost paid "she pulls her sleeve free ... as she tears away", so the narration had her both held and gone. A
-    form in which the one a grapple takes hold of gets loose is dropped (the cost's plain words stand), never
-    refused: spec 016, so no Framer choice can force a re-ask."""
+    cost paid "she pulls her sleeve free ... as she tears away", so the narration had her both held and gone. Spec
+    023 (DL-01-43, generalised to every kind): a price in which the one a grapple takes hold of gets loose still
+    prices a failure, but is never the success-at-a-cost price; another price is named for the close call, never
+    refused, so no Framer choice can force a re-ask."""
     grab = {"verb": "verb.grapple", "target": "npc.guard", "against_will": True}
     kw: dict[str, Any] = {"anchor": "anc.01_18_9", "attribute": "might",
                           "obstacle": {"kind": "opposed", "entity": "npc.guard"}}
     for undo in ("She pulls her sleeve free of your grip and you stumble as she tears away",
                  "She refuses to be held and walks off", "your grip on her slips and you go down"):
         f = check(s, grab, threatened_cost={"menu_id": "cost.drain", "form_intent": undo}, **kw)
-        assert isinstance(f, Frame) and f.threatened_cost.form_intent == "", f
+        assert isinstance(f, Frame) and f.threatened_cost.form_intent == undo, f
+        assert f.threatened_cost.on_success_at_cost is None and f.alternate_cost is not None, f
         f = check(s, grab, stakes_source="consumed_resource", threatened_cost={"menu_id": "cost.drain"},
                   alternate_cost={"menu_id": "cost.shortfall", "form_intent": undo}, **kw)
-        assert isinstance(f, Frame) and f.alternate_cost is not None and f.alternate_cost.form_intent == "", f
+        assert isinstance(f, Frame) and (f.alternate_cost is None or undo != f.alternate_cost.form_intent), f
     ok = check(s, grab, threatened_cost={"menu_id": "cost.drain", "form_intent": "the struggle leaves you winded"},
                **kw)
     assert isinstance(ok, Frame) and ok.threatened_cost.form_intent == "the struggle leaves you winded", ok
@@ -253,7 +255,7 @@ def test_trades_and_offer_view(s: Scene) -> None:
     assert v.odds == {"success_or_better_pct": 50, "critical_success_pct": 5, "critical_failure_pct": 5,
                       "near_miss_pct": 15}
     assert v.difficulty_words == "Moderate" and v.need == 11 and v.threatened_cost["severity_on_failure"] == "S2"
-    secret = check(s, secret=True)
+    secret = check(s, {"change": {"kind": "learn", "what": None}}, secret=True)  # 01.4.7: keyed on a learn goal
     assert isinstance(secret, Frame) and offer_preview(secret).difficulty_words == "hidden"
     assert not auto_commit_allowed(secret)
 
