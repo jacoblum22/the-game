@@ -124,6 +124,22 @@ def test_a_proposed_roll_pauses_on_the_offer_then_the_dm_narrates_the_result(tmp
     assert any(e.type == "frame_resolved" for e in game.store.events())
 
 
+def test_a_proposal_naming_no_one_takes_its_goal_from_the_dm_words_not_from_here(tmp_path: Path) -> None:
+    game, _ = to_play(tmp_path)
+    roll = {"tool": "propose_roll", "goal": "Find the trail on the road", "verb": "verb.observe", "target": "none",
+            "how": "reading the mud", "attribute": "wits", "difficulty": "hard", "why_uncertain": "rain",
+            "stakes": "risky", "nonlethal": False, "change_kind": "none", "change_what": "the trail",
+            "change_whom": ""}
+
+    def run(ctx: Any, t: Any, tx: Any) -> Any:
+        dm_tools.tool(ctx, t, roll)
+        p = tx.state.open_pause()
+        return p.detail["frame"]["beat"]["change"] if p is not None else t.rec.beats[-1].change
+
+    got = in_turn(game, run)
+    assert "the trail" in str(got) and "gate" not in str(got).lower(), got
+
+
 # ------------------------------------------------------------------------------------------- clues and secrets
 
 

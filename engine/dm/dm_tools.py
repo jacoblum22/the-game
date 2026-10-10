@@ -58,7 +58,8 @@ involved, then write the passage.
 Tools (each call is one object in `calls`; leave `calls` empty when you are done and write `passage`):
 - propose_roll: the player's character attempts something whose outcome is uncertain AND failure would cost
   something. Give the goal (what success achieves), the verb, the target id (or "none"), how they do it, why it is
-  uncertain, and the stakes; set nonlethal for a fight that should not kill (a bout to yield, subduing,
+  uncertain, and the stakes. change_kind and change_what say what success changes (change_what: an id, or a
+  short noun phrase like "the trail" or "the figure past the bend"); set nonlethal for a fight that should not kill (a bout to yield, subduing,
   knocking out). Code computes the odds. If a roll is needed the turn pauses on the odds screen: write
   only the lead-up in `passage` (never the outcome); you narrate the result next turn. With nothing at stake or a
   certain outcome, don't propose a roll: just narrate it.
@@ -411,14 +412,23 @@ def _propose_roll(ctx: TurnContext, t: Turn, c: dict[str, Any]) -> str:
     how = str(c.get("how") or "").strip() or None
     if c.get("nonlethal"):  # the harm rules read the words (engine/resolve/conflict.py NONLETHAL)
         how = f"{how or goal} (nonlethal)"
+    verb = str(c.get("verb") or "") or None
+    phrase = str(c.get("change_what") or "").strip()
+    if kind == "none" and target is None and verb not in ("verb.sneak", "verb.talk"):
+        # no slot named: the verb's plain goal toward the DM's words, never "here" by default (the OFFER's title
+        # read "Learn about the gate" for tracks on the road past it: fighter smoke 145810)
+        from engine.resolve.change import _VERB_GOAL
+
+        kind = _VERB_GOAL.get(str(verb), "none")
     change = None
     if kind != "none":
         if kind in ("harm", "restrain") and what not in st.entities:
             what = target
+        if what not in st.entities and target is None and not phrase:
+            phrase = goal[:1].lower() + goal[1:]
         change = Change(kind=kind, what=what if what in st.entities else None,
                         whom=whom if whom in st.entities else None,
-                        description=None if what in st.entities else goal)
-    verb = str(c.get("verb") or "") or None
+                        description=None if what in st.entities else (phrase or None))
     beat = Beat(id=tx.mint(ids.BEAT), actor=pc, intent=goal, method=how or goal, how=how, target=target,
                 restatement=goal[:1].upper() + goal[1:], verb=verb, speech=verb == "verb.talk",
                 against_will=bool(target and st.entities[target].kind in ("npc", "adversary")
