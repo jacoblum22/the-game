@@ -174,7 +174,7 @@ def test_scene_cut_frames_the_next_scene_next_turn(tmp_path: Path) -> None:
         return prune({"cut_now": False, "next_scene": {
             "mode": "site", "place": dock.place, "agenda": "Who waits at the far end of the quay?",
             "hoped_answer": "none", "pillar": enum_at(schema, "next_scene", "pillar")[0], "challenge_type": None,
-            "cast": [dock.ferryman]}, "push": "none", "lead": None}, schema)
+            "cast": [dock.ferryman], "cast_described": []}, "push": "none", "lead": None}, schema)
 
     model.push(Role.DIRECTOR, director)
     model.push(Role.READER, reader("DECLARATION", "I walk to the far end.", LOOK))
@@ -194,7 +194,7 @@ def test_the_players_cut_is_framed_this_turn(tmp_path: Path) -> None:
         return prune({"cut_now": True, "next_scene": {
             "mode": "site", "place": dock.place, "agenda": "Does the ferryman take you across?",
             "hoped_answer": "yes", "pillar": enum_at(schema, "next_scene", "pillar")[0], "challenge_type": None,
-            "cast": []}, "push": "none", "lead": None}, schema)
+            "cast": [], "cast_described": []}, "push": "none", "lead": None}, schema)
 
     model = ScriptedModel({Role.READER: [reader("DECLARATION", "Skip ahead to the ferry.", LOOK)],
                            Role.WORLD: [QUIET_WORLD], Role.DIRECTOR: [director]})

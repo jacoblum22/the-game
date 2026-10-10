@@ -35,6 +35,7 @@ class NextScene(BaseModel):
     pillar: str | None = None
     challenge_type: str | None = None
     cast: list[str] = Field(default_factory=list)
+    cast_described: list[str] = Field(default_factory=list)  # "the carters": cast present by description (DL-12-110)
 
 
 class DirectorDecision(BaseModel):
@@ -78,6 +79,7 @@ def direct(ctx: TurnContext, *, situation: str, player_message: str = "", happen
     d = dict(res.data)
     ns = dict(d.get("next_scene") or {})
     ns["cast"] = [c for c in ns.get("cast") or [] if isinstance(c, str)]
+    ns["cast_described"] = [c.strip() for c in ns.get("cast_described") or [] if isinstance(c, str) and c.strip()]
     push = d.get("push")
     return DirectorDecision(cut_now=bool(d.get("cut_now")), next_scene=NextScene.model_validate(ns),
                             push=push if push not in (None, NONE) else None, lead=d.get("lead") or None,
@@ -114,7 +116,11 @@ def frame_scene(ctx: TurnContext, d: DirectorDecision, *, reason: str, interrupt
     previous = st.last_scene.mode if st.last_scene else None
     mode = ns.mode or previous or "free"
     cast = [c for c in ns.cast if c != "new_npc" and c in st.entities]
-    if "new_npc" in ns.cast and place:  # PR-12-5: someone new in the scene (roster first, else a walk-on)
+    if place:  # 12.2.4 Director row (DL-12-110): who the agenda names, by description, present
+        from engine.world.social import cast_described
+
+        cast += [c for w in ns.cast_described[:2] if (c := cast_described(tctx, w, place)) and c not in cast]
+    if "new_npc" in ns.cast and place and not ns.cast_described:  # PR-12-5: someone new, no stated purpose
         from engine.world.social import meet_npc
 
         cast.append(meet_npc(tctx, None, place, reuse=False))

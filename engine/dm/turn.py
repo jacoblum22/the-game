@@ -182,6 +182,7 @@ def _turn(ctx: TurnContext, message: str, *, choice: str | None, dispute: bool =
                 reader = read_message(ctx, message, exchanges=exchanges)  # T2
                 rec.parts = [PartEntry.model_validate({"text": p.text, "class": p.cls, "question_kind": p.question_kind,
                                                        "topic": p.topic}) for p in reader.parts]
+                rec.player_quantity = reader.player_quantity  # 01.1.4: a deal's stated amount (15.7.1; spec 025)
                 rec.triggers = [t.id for t in get_active_triggers(tx.state, ctx.rules)]  # T3 (cards: per role)
                 beats = _adjudicate(ctx, rec, reader, message, oof)  # T4
                 if possible_dispute(message, reader.classes()):  # 12.3.6 item 1: fiction that may be a dispute

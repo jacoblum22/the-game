@@ -8,11 +8,12 @@ words by the narrator from the speaker card and the NPC's own testimony.
     who = who_answer(ctx, "who is missing")      # the DM-side "who is X?" (a FICTION_QUESTION): (words, fact id)
 
 Route (PR-12-10 step 1): "who is <role>" (their own name; a person asked about by name; a story role -> the case
-graph, building the reduced case when none is behind it; any other role -> casting), a question about a case -> the
-case graph (a holder delivers its placement and the node is found; anyone else names the holder of the node's core
-placement); everything else is the NPC's to answer in words: code gives only the willingness (step 2), remembered in
-the asked-and-answered index so a repeat keeps it. R2-D's rungs (the store, the knowledge pack, propose-and-ratify,
-the pointer) are retired as sources of speech (DL-12-90).
+graph, building the reduced case when none is behind it; any other role -> casting), a question judged about a clue
+(`clue_case`, one small model call; D2 A) -> the case graph (a holder delivers its placement and the node is found;
+anyone else names the holder of the node's core placement); everything else is the NPC's to answer in words: code
+gives only the willingness (step 2), decided when the talk starts and held for the scene (D3 A), an unwilling answer
+with one pointer onward. R2-D's rungs (the store, the knowledge pack, propose-and-ratify, the pointer) are retired as
+sources of speech (DL-12-90).
 """
 
 from __future__ import annotations
@@ -217,26 +218,33 @@ def _from_case(ctx: Any, knower: str, case: dict[str, Any], who: bool, pc: str, 
     return Answer(f"{dont} {what}, but {where} would", "", fid, ref)
 
 
-def case_about(st: Any, text: str, about: str | None, *, need: int = 2) -> dict[str, Any] | None:  # rule: PR-12-10
-    """The case a question is about: its subject asked about or named, or most of its story role's words used ("where
-    did the missing child go?"), or (the opening's incident case) `need` of the incident's own words ("what did the
-    rider say before he died?" asks about "a rider dies in the market with a message")."""
-    from engine.retrieve.scene import resolve_names
+def clue_case(ctx: Any, knower: str, text: str, about: str | None = None) -> dict[str, Any] | None:
+    # rule: PR-12-10
+    # rule: 15.9.5
+    """The case a question is about (PR-12-10 step 1, D2 A; DL-12-112): the case whose subject the question asks
+    about by id (typed, no call), else one small model call (`Role.CLUE`) over the question and the about lines of
+    each case's open node, the ones `knower` holds a live placement on marked and listed first. None: not about a
+    clue (the question is ordinary). Retires `case_about`'s word overlap (round 7: 0 clues in 38 questions; "signed"
+    matched "a sign of the rite")."""
+    from engine.dm.roles.clue import MAX_ITEMS, judge
+    from engine.gen.case import about_line
 
-    have = words.content(text)
-    incident = str(((st.meta.get("world.opening") or {}).get("inciting") or {}).get("text") or "")
-    named = [i for i in {*resolve_names(st, text), *([about] if about in st.entities else [])}]
+    st = ctx.need_tx().state
+    pc = active_pc(st)
+    open_: list[tuple[dict[str, Any], dict[str, Any], dict[str, Any] | None]] = []
     for c in cases(st).values():
-        sub = c["solution"]["subject"]
-        # another person's name is not the subject's ("Kerda Coldbrook" is not "Calda Coldbrook"; live run
-        # 20261008-173008: every question about Kerda went to Calda's case and pointed at the barrow)
-        own = have - {w for i in named if i != sub["id"] for w in words.content(st.entities[i].name)}
-        if about == sub["id"] or own & words.content(sub["words"]) or words.covers(sub["role"], text, ratio=0.6):
+        if about is not None and about == c["solution"]["subject"]["id"]:
             return c
-    for c in cases(st).values():
-        if c.get("trigger") == "incident" and incident and len(have & words.content(incident)) >= need:
-            return c
-    return None
+        node = open_node(c, False)
+        if node.get("found") and knower != pc:
+            continue  # a found clue is never delivered or pointed at again (DL-12-103)
+        held = next((p for p in node["placements"] if p["holder"] == knower and p.get("status") not in ("lost", "found")),
+                    None)
+        open_.append((c, node, held))
+    open_.sort(key=lambda x: x[2] is None)  # held first
+    open_ = open_[:MAX_ITEMS]
+    pick = judge(ctx, text, [(about_line(st, c, n, p), p is not None) for c, n, p in open_])
+    return open_[pick][0] if pick is not None else None
 
 
 def fact_words(st: Any, f: Any) -> str:
@@ -256,13 +264,44 @@ def _sentence(st: Any, f: Any) -> str:
 # ------------------------------------------------------------------------------------------- willingness
 
 
+HELD = "answers.willingness"  # meta {"scene": scene id, "npcs": {npc: {"band", "why"}}} (PR-12-10 step 2)
+
+
+def held(st: Any, npc: str) -> dict[str, str] | None:
+    """The band held for `npc` in the current scene, else None (a new scene decides afresh)."""
+    m = st.meta.get(HELD) or {}
+    sc = st.scene.scene_id if st.scene is not None else None
+    return (m.get("npcs") or {}).get(npc) if m.get("scene") == sc else None
+
+
+def _hold(ctx: Any, npc: str, band: str, why: str) -> tuple[str, str]:
+    st = ctx.need_tx().state
+    sc = st.scene.scene_id if st.scene is not None else None
+    m = st.meta.get(HELD) or {}
+    npcs = dict(m.get("npcs") or {}) if m.get("scene") == sc else {}
+    if npcs.get(npc) != {"band": band, "why": why}:
+        npcs[npc] = {"band": band, "why": why}
+        ctx.need_tx().add(meta(HELD, {"scene": sc, "npcs": npcs}, "PR-12-10"))
+    return band, why
+
+
+def _standing_moved(ctx: Any, npc: str) -> bool:
+    """An insult, a threat or a harm this turn: the NPC's standing toward the PC was stepped (15.1.5)."""
+    return any(e.type == "relationship_set" and getattr(e.payload, "a", None) == npc
+               and getattr(e.payload, "kind", None) == "standing" and getattr(e.payload, "steps", None)
+               for e in getattr(ctx.need_tx(), "events", ()))
+
+
 def willingness(ctx: Any, npc: str, record: Any = None, beats: Sequence[Any] = ()) -> tuple[str, str]:
     # rule: PR-12-10
     # rule: 12.11.9
-    """PR-12-10 step 2, first that applies: a recorded refusal whose tags match the event -> `unwilling` (the
-    refusal its reason); a resolved Talk frame on the NPC -> its outcome; 15.3.10's certainty test for a plain
-    question (a Neutral or warmer listener) -> `willing`; else `tbl.npc_action` by standing read only as a band
-    (`answer_ladder.willingness_by_row`). Returns (willingness, reason in words)."""
+    """PR-12-10 step 2, first that applies: a recorded refusal whose tags match the event -> `unwilling` for that
+    topic only (the refusal its reason; nothing held); a resolved Talk on the NPC this turn -> its outcome by the
+    effective degree (a won persuasion, an accepted payment or a threat that worked holds `willing` for the scene; a
+    failed one refuses this ask only); else the band **held for the scene** (DL-12-118) unless the NPC's standing
+    moved this turn; else decided now and held: 15.3.10's certainty test (a Neutral or warmer listener) -> `willing`,
+    else `tbl.npc_action` by standing read only as a band (`answer_ladder.willingness_by_row`). Returns (band,
+    reason in words). Retires per-topic re-rolls (round 7: unwilling at turn 10, fully willing at turn 11)."""
     from engine.dm.npc_layer import event_tags, motive_tags
     from engine.dm.roles.world import npc_motives
     from engine.resolve.tables import roll_table
@@ -279,19 +318,42 @@ def willingness(ctx: Any, npc: str, record: Any = None, beats: Sequence[Any] = (
     if talk is not None:
         if effective_degree(talk.entry) in ("failure", "critical_failure"):  # DL-01-48
             return "unwilling", "the talk did not move them"
-        return "willing", "the talk moved them"
+        return _hold(ctx, npc, "willing", "the talk moved them")
+    have = held(st, npc)
+    if have and not _standing_moved(ctx, npc):
+        return str(have["band"]), str(have["why"])
     sv = standing(st, npc)
     if sv is None:
         sv = first_interaction(ctx.time_ctx(), npc)
     sv = int(sv or 0)
     rung = {v: k for k, v in _RUNGS.items()}.get(sv, "neutral")
     if sv >= 0:
-        return "willing", f"a plain question to a {rung} listener"
+        return _hold(ctx, npc, "willing", f"a plain question to a {rung} listener")
     res = roll_table(NPC_TABLE, {"standing_modifier": sv}, rules=ctx.rules, state=st, rng=ctx.rng,
                      purpose=f"willingness of {npc} (PR-12-10)")
     ctx.need_tx().add_all(res.events)
     band = str(ctx.rules.pacing["answer_ladder"]["willingness_by_row"].get(str(res.roll), "guarded"))
-    return band, f"{rung} toward you"
+    return _hold(ctx, npc, band, f"{rung} toward you")
+
+
+def refused_on(st: Any, topic: str) -> set[str]:
+    """Everyone who refused the PC on `topic` (the asked-and-answered index: an `unwilling` answer filed under it)."""
+    idx = st.meta.get(INDEX) or {}
+    return {k.split("|", 1)[0] for k, v in idx.items() if k.rsplit("|", 1)[-1] == topic
+            and (v or {}).get("willingness") == "unwilling"}
+
+
+def refusal_pointer(ctx: Any, knower: str, topic: str, about: str | None) -> str | None:  # rule: PR-12-10
+    """A refusal points onward (DL-12-119): someone new who would know the topic (a cast person whose role or pack
+    knows it, in the settlement where it is asked), never the one asked or anyone who already refused the PC on it.
+    None: no one (the stuck answer, 12.8.5; nothing written)."""
+    from engine.gen.cast import cast
+
+    st = ctx.need_tx().state
+    pc = active_pc(st)
+    skip = refused_on(st, about or topic) | {knower, *([about] if about else [])}
+    here = home_of(st, pc) if pc in st.entities else None
+    return cast(st, None, scope=here, topic=topic, asker=knower, exclude=skip)
 
 
 # ------------------------------------------------------------------------------------------- asking
@@ -311,27 +373,30 @@ def ask(ctx: Any, knower: str, kind: str, topic: str | None, text: str, *, pc: s
     if a is not None:
         a.line, a.key = f"{k_name} {a.said}", key
         return a
+    band, why = willingness(ctx, knower, record, beats)  # held for the scene (DL-12-118): no per-topic re-roll
     idx = dict(st.meta.get(INDEX) or {})
     hit = idx.get(key) or {}
-    if hit.get("willingness"):
-        band, why = str(hit["willingness"]), str(hit.get("reason") or "")
-    else:
-        band, why = willingness(ctx, knower, record, beats)
-        idx[key] = {"willingness": band, "reason": why, "said": []}
+    if hit.get("willingness") != band or hit.get("reason") != why:
+        idx[key] = {**hit, "willingness": band, "reason": why, "said": list(hit.get("said") or [])}
         ctx.need_tx().add(meta(INDEX, idx, "PR-12-10"))
     said = will_words(st, knower, band, why)
-    return Answer(said, f"{k_name} {said}", willingness=band, key=key)
+    ref = refusal_pointer(ctx, knower, key_topic, about) if band == "unwilling" else None
+    if ref is not None:  # the one pointer onward (DL-12-119): a person the narrator names, never a loop
+        learn_name(ctx.time_ctx(), pc, ref, "told")
+        at = home_of(st, ref)  # where to find them, so the pointer leads somewhere (live 025: "where is Yipoo?")
+        said += f"; and names one person who would know: {name(st, ref)}" + (
+            f", found at {st.entities[at].name}" if at in st.entities else "")
+    return Answer(said, f"{k_name} {said}", willingness=band, key=key, pointer=ref)
 
 
 def _route(ctx: Any, knower: str, kind: str, about: str | None, text: str, pc: str,
            given: str | None = None) -> Answer | None:  # rule: PR-12-10
     """Step 1's consequential and casting routes; None: ordinary (the NPC's to answer in words)."""
-    st = ctx.need_tx().state
     if kind == "who_is" or about == knower or _OWN_NAME.search(text):
         a = _who(ctx, knower, text, about, pc, given)
         if a is not None:
             return a if a.said else None
-    case = case_about(st, text, about)
+    case = clue_case(ctx, knower, text, about)
     return _from_case(ctx, knower, case, False, pc, False) if case is not None else None
 
 
@@ -475,5 +540,6 @@ def volunteer(ctx: Any, knower: str, pc: str) -> Answer | None:  # rule: T-15-5
     return None
 
 
-__all__ = ["INDEX", "STORY_ROLES", "WILL_WORDS", "Answer", "ask", "case_about", "cast_who",
-           "deliver_count", "deliver_node", "name", "topic_of", "volunteer", "who_answer", "willingness"]
+__all__ = ["HELD", "INDEX", "STORY_ROLES", "WILL_WORDS", "Answer", "ask", "cast_who", "clue_case",
+           "deliver_count", "deliver_node", "held", "name", "refusal_pointer", "refused_on", "topic_of",
+           "volunteer", "who_answer", "willingness"]

@@ -514,6 +514,18 @@ def _judge_motive(ctx: TurnContext, npc: str, cands: dict[str, str], happened: s
     return next((k for k, v in cands.items() if tx.content(v) & said), None), []
 
 
+# a greeting or thanks, and nothing else (P3; `answer_ladder.willingness_line_never_on: [greeting, thanks]`)
+_GREETING = re.compile(r"^\W*(?:(?:hello|hi|hey|greetings|well met|good (?:morning|day|evening|night|morrow)|morning|"
+                       r"evening|thanks?(?: you)?|thank ye|many thanks|my thanks|cheers|farewell|goodbye|bye|"
+                       r"fare (?:ye |you )?well)\b(?:[\s,.!]+[\w'-]+){0,2}[\s,.!]*)+\W*$", re.I)  # "…, Mistress Ola"
+
+
+def greeting_only(record: AdjudicationRecord) -> bool:  # rule: PR-12-10
+    """The PC only greets or thanks (P3, DL-12-120): every spoken part is a greeting or thanks, no beat."""
+    said = [p for p in record.parts if p.cls == "SPEECH"]
+    return bool(said) and not record.beats and all(_GREETING.match(p.text.strip().strip('"“”')) for p in said)
+
+
 def _speech_only(record: AdjudicationRecord, beats: Sequence[Any], npc: str) -> bool:
     """The PC only spoke to `npc` this turn (plain speech or a question): no beat other than a Talk acts on them."""
     return not any(npc in b.entry.targets and "talk" not in (b.entry.approach_words or "") for b in beats)
@@ -563,7 +575,8 @@ def respond(ctx: TurnContext, record: AdjudicationRecord, beats: Sequence[Any], 
     practice_rows = {r["range"]: r for r in ctx.rules.table("tbl.npc_practice")["results"]}
     # the PC asked for something (a question, a request, a Talk): a refusing source is then said as a refusal
     asked = any(b.verb == "verb.talk" for b in record.beats) or any(
-        p.cls == "FICTION_QUESTION" or (p.cls == "SPEECH" and "?" in p.text) for p in record.parts)
+        p.cls == "FICTION_QUESTION" or (p.cls == "SPEECH" and ("?" in p.text or p.question_kind not in (None, "none")))
+        for p in record.parts)
     for npc in [*engaged, *bystanders]:
         if npc in skip or (npc in unresolved and npc not in talks):
             continue
@@ -582,16 +595,23 @@ def respond(ctx: TurnContext, record: AdjudicationRecord, beats: Sequence[Any], 
             action = talk_outcome(b.entry, offered)
             if degree in ("failure", "critical_failure"):
                 action = voiced_refusal(ctx, npc, "the talk did not move them")
+            elif offered and record.pc:  # 15.7.1 item 3 (DL-15-42): the accepted deal's typed price, paid now
+                from engine.resolve.change import deal_price, pay_deal
+
+                size = (fr.get("beat") or {}).get("request_size") or fr.get("request_size")
+                pay_deal(tx_, record.pc, npc, deal_price(ctx.rules, size, record.player_quantity))
             record.npc_actions.append(NpcActionEntry(npc=npc, action=action, source="talk_outcome",
                                                      source_ref=b.frame_id, tags=[practice]))
         elif is_addressed and _speech_only(record, beats, npc):
-            # plain speech or a question: willingness only, the words are the narrator's (PR-12-10 step 2)
-            band, why = ans.willingness(ctx, npc, record, beats)
-            said = ans.will_words(ctx.state, npc, band, why)
-            if not asked:  # plain speech asks nothing: they reply (12.11.9 step 4), within the same willingness
-                said = said.replace("answers what you asked", "replies").replace("refuses to answer what you asked",
-                                                                                 "turns you away")
-            answer_line(record, npc, ans.Answer(said, said, willingness=band))
+            # plain speech or a question: willingness only, the words are the narrator's (PR-12-10 step 2); a
+            # greeting or thanks gets no willingness line at all (P3; DL-12-120: `willingness_line_never_on`)
+            if asked or not greeting_only(record):
+                band, why = ans.willingness(ctx, npc, record, beats)
+                said = ans.will_words(ctx.state, npc, band, why)
+                if not asked:  # plain speech asks nothing: they reply (12.11.9 step 4), within the same willingness
+                    said = said.replace("answers what you asked", "replies").replace(
+                        "refuses to answer what you asked", "turns you away")
+                answer_line(record, npc, ans.Answer(said, said, willingness=band))
         else:
             row_def = practice_rows[practice]
             allowed = [int(x) for x in row_def["action_rows"]]

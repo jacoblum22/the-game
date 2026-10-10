@@ -12,7 +12,7 @@ import pytest
 from engine.data.loader import load_rules
 from engine.dm.adjudication import AdjudicationRecord
 from engine.dm.context import TurnContext
-from engine.resolve.change import HOLDS, apply_change, current_hold, pay, price
+from engine.resolve.change import HOLDS, apply_change, current_hold, deal_price, pay, pay_deal
 from engine.resolve.types import Beat
 from evals.feedback_corpus import CORPUS, open_at
 
@@ -141,21 +141,20 @@ def test_a_refused_turn_gives_the_foe_no_free_strike(tmp_path: Path) -> None:
         store.close()
 
 
-def test_a_price_the_method_pays_leaves_the_purse(tmp_path: Path) -> None:
-    """I3 §5 dsp 192926 d3: "The coin for the round is spent whatever the answer" is a coin write (01.11.2)."""
-    assert price("The coin for the round is spent whatever the answer.") == 1
-    assert price("the coins are on the table whatever the answer") == 1
-    assert price("three coins are spent on the guard") == 3
-    for offer in ("the three coins are named aloud as the price", "Ysrion hears the offer of payment whatever the roll.",
-                  "The hold on Murzak Red-Hand is kept while the purse is lifted"):
-        assert price(offer) == 0, offer
+def test_a_deal_pays_its_typed_price_never_prose(tmp_path: Path) -> None:
+    """Spec 025 (15.7.1 item 3, DL-15-42): Framer prose moves no coin (the regex price is retired); a deal's typed
+    price, from the band of the request, is a quantity change with a price record."""
+    rules = load_rules()
+    assert deal_price(rules, None, None) == 1 and deal_price(rules, "R2", 10) == 5 and deal_price(rules, "R2", 3) == 3
     store = open_at(CORPUS / "20261008-192926-talker.db.gz", "turn.7", tmp_path)
     try:
         with store.transaction("turn.7") as tx:
             pc = "pc.wila_bramblefoot"
             coin = tx.state.quantities[pc]["coin"].current
-            evs = pay(tx, ["The coin for the round is spent whatever the answer."], pc)
-            assert evs and tx.state.quantities[pc]["coin"].current == coin - 1
+            assert pay(tx, ["The coin for the round is spent whatever the answer."], pc) == []
+            npc = next(i for i, e in tx.state.entities.items() if e.kind == "npc")
+            evs = pay_deal(tx, pc, npc, 1)
+            assert tx.state.quantities[pc]["coin"].current == coin - 1 and evs[0].payload.value["amount"] == 1  # type: ignore[attr-defined]
             raise _Rollback
     except _Rollback:
         pass

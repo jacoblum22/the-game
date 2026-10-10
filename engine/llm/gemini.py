@@ -67,6 +67,7 @@ OUTPUT_TOKENS: dict[Role, int] = {
     Role.CHECKER: 1500,
     Role.TESTIMONY: 200,
     Role.FIXER: 1500,
+    Role.CLUE: 100,
 }
 # Thought tokens count against max_output_tokens (ai.google.dev "Token limits and max_output_tokens"); the cap
 # is only a runaway guard, so it is generous. Levels are relative allowances, not guarantees.

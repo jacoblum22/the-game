@@ -182,9 +182,21 @@ def put(tx: Transaction, entity: str, place: str) -> int:
 # -------------------------------------------------------------------------------------------- reading
 
 
-def place_kind(state: WorldState, place: str) -> str:
+def _pd(state: WorldState, place: str, key: str) -> Any:
+    """A place's record field; for a heard place realised on arrival, its `place.<key>` fact (PR-12-12's guard)."""
+    v = state.fact_value(place, f"place.{key}")
     e = state.entities.get(place)
-    return str(e.data.get("place_kind", "")) if e else ""
+    return v if v is not None else (e.data.get(key) if e else None)
+
+
+def heard(state: WorldState, place: str) -> bool:  # rule: PR-12-12
+    """A place known only by its name (write-on-mention, 00.6.6): no kind and no parent yet."""
+    e = state.entities.get(place)
+    return bool(e) and e.kind == "place" and not _pd(state, place, "place_kind")  # type: ignore[union-attr]
+
+
+def place_kind(state: WorldState, place: str) -> str:
+    return str(_pd(state, place, "place_kind") or "")
 
 
 def location(state: WorldState, entity: str | None = None) -> str | None:
@@ -221,7 +233,7 @@ def _implicit_links(state: WorldState, place: str) -> list[RouteLink]:
     e = state.entities.get(place)
     if e is None:
         return []
-    kind, parent = e.data.get("place_kind"), e.data.get("parent")
+    kind, parent = _pd(state, place, "place_kind"), _pd(state, place, "parent")
     out: list[RouteLink] = []
 
     def add(to: str, child_kind: str) -> None:
@@ -234,10 +246,14 @@ def _implicit_links(state: WorldState, place: str) -> list[RouteLink]:
     for oid, o in state.entities.items():
         if o.kind != "place" or oid == place:
             continue
-        ok, op = o.data.get("place_kind"), o.data.get("parent")
+        ok, op = _pd(state, oid, "place_kind"), _pd(state, oid, "parent")
         if op == place and ok in IMPLICIT_LINKS:
             add(oid, ok)
         elif kind == "building" and ok == "building" and op == parent:
+            add(oid, "building")
+        elif kind in ("building", "settlement") and heard(state, oid) and o.exists == "exists":
+            # PR-12-12's guard (DL-12-109): a place heard of in town is a passage away; it becomes a building of
+            # this settlement on arrival. ponytail: a heard place is taken as local; a distant one needs a route
             add(oid, "building")
     return out
 
@@ -321,6 +337,13 @@ def _arrival(ctx: TimeContext, pc: str, here: str | None, link: RouteLink, res: 
 def _arrive(ctx: TimeContext, pc: str, arrival: Arrival) -> None:  # rule: 10.1.5
     tx = ctx.tx
     place = arrival.place
+    if heard(tx.state, place):  # PR-12-12 (a): a place first heard in speech becomes a real site on arrival
+        here = arrival.from_place
+        town = here if place_kind(tx.state, here or "") == "settlement" else _pd(tx.state, here or "", "parent")
+        for key, value in (("place_kind", "building"), ("parent", town)):
+            if value:
+                stage(ctx, fact(tx, place, f"place.{key}", value, rule_id="PR-12-12", source="generation",
+                                visibility="background"))
     stage(ctx, Event.of("position_set", rule_id="10.1.1", entity=pc, location=place))
     if not is_discovered(tx.state, place):
         if place in tx.state.seals:

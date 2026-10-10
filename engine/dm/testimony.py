@@ -49,6 +49,20 @@ def said_by(state: Any, npc: str, *, topic: str | None = None, about: str | None
     return [r for r in mine if r["id"] in keep]
 
 
+def said_by_others(state: Any, npc: str, *, topic: str | None = None, about: str | None = None,
+                   k: int = 4) -> list[dict[str, Any]]:  # rule: PR-12-12
+    """PR-12-12 step 1's guard (DL-12-109): what *other* speakers said on the same topic (the question's topic key, or
+    the entity asked about), the newest `k`, oldest first, so a speaker's improvised details agree or knowingly
+    differ (R1 risk 4: a speaker never saw another's lines). Never the PC's own words."""
+    def on(r: dict[str, Any]) -> bool:
+        q = str(r.get("question") or "")
+        return bool((topic and q.endswith(f"|{topic}")) or (about and (about in (r.get("about") or [])
+                                                                       or q.endswith(f"|{about}"))))
+
+    pc = active_pc(state)
+    return [r for r in records(state) if r.get("speaker") not in (npc, pc, None) and on(r)][-k:]
+
+
 def overlap(a: str, b: str) -> float:
     """The share of `a`'s content words already in `b` (0 when `a` has fewer than three)."""
     wa, wb = words.content(a), words.content(b)
@@ -246,6 +260,13 @@ def settle(ctx: Any, said_id: str, record: Any = None) -> str | None:  # rule: P
             record.notes.append(f"testimony settled (none: {c['kind']}): nothing written")
         return None
     text = f"{c['subject'] if subject == 'world' else st.entities[subject].name} {c['predicate']} {c['value']}"
+    if _FIGURE.search(f"{c['predicate']} {c['value']}"):
+        # a price spoken outside a hook (DL-12-109): the deal's typed price comes from the band (15.7.1), never the
+        # words; the figure stays testimony and never reaches the purse
+        _mark(tx, said_id, settled="none", fact=None, route="price_band")
+        if record is not None:
+            record.notes.append(f"testimony settled (price band): {text}: the figure is not written")
+        return None
     pred = (ids.slug(c["predicate"]) or "is")[:60]  # the claim's own predicate; the value stays the value (I2 §1)
     route, true = "accepted", True
     case = _case_route(st, subject, text)
@@ -264,6 +285,7 @@ def settle(ctx: Any, said_id: str, record: Any = None) -> str | None:  # rule: P
         ev = fact(tx, subject, pred, c["value"], rule_id="PR-12-12", source="testimony", visibility="shown")
         tx.add(ev)
         fid = str(ev.payload.fact_id)  # type: ignore[attr-defined]
+        _place_there(tx, subject, c["value"])
     elif not true:
         ev = fact(tx, speaker if speaker in st.entities else "world", "wrong_about", text, rule_id="PR-12-12",
                   source="ruling", visibility="shown")
@@ -276,6 +298,29 @@ def settle(ctx: Any, said_id: str, record: Any = None) -> str | None:  # rule: P
     if record is not None:
         record.notes.append(f"testimony settled ({route}): {text} -> {'true' if true else 'false'}")
     return fid
+
+
+# a coin figure in a claim ("ten silver", "5 coins", "a hundred gold"): a price, settled by the band, never the words
+_FIGURE = re.compile(r"\b(?:\d+|one|two|three|four|five|six|seven|eight|nine|ten|twenty|fifty|a hundred|hundred)\s+"
+                     r"(?:\w+\s+)?(?:coins?|silver|gold|copper|crowns?|marks?)\b", re.I)
+
+
+def _place_there(tx: Any, subject: str, value: str) -> None:  # rule: PR-12-12
+    """A true claim that a person or group is at a known place puts them there (DL-12-109: the refugees "up at the
+    healer's house" are present on arrival; round 7 wrote it to `world`, where it changed nothing)."""
+    from engine.dm.mentions import find_existing
+
+    st = tx.state
+    e = st.entities.get(subject)
+    if e is None or e.kind not in PEOPLE:
+        return
+    m = re.search(r"\b(?:at|in|by|near|inside)\s+(.+)$", value, re.I)
+    place = find_existing(st, value.strip(" ."), "place") or (find_existing(st, m.group(1).strip(" ."), "place")
+                                                              if m else None)
+    if place is not None and (st.positions.get(subject) is None or st.positions[subject].location != place):
+        from engine.store.events import Event
+
+        tx.add(Event.of("position_set", source="engine", rule_id="PR-12-12", entity=subject, location=place))
 
 
 def _mark(tx: Any, said_id: str, **fields: Any) -> None:
@@ -296,5 +341,5 @@ def settle_triggered(ctx: Any, reader: Any, record: Any = None) -> list[str]:  #
     return out
 
 
-__all__ = ["INDEX", "SAID", "add_said", "get", "is_repeat", "overlap", "records", "said_by", "said_for", "settle",
-           "settle_triggered", "triggered"]
+__all__ = ["INDEX", "SAID", "add_said", "get", "is_repeat", "overlap", "records", "said_by", "said_by_others",
+           "said_for", "settle", "settle_triggered", "triggered"]

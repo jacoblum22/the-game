@@ -119,7 +119,7 @@ CHECKER = obj(
 SCHEMAS = {Role.INTERPRET: INTERPRET, Role.READER: READER, Role.FRAMER: FRAMER, Role.WORLD: WORLD,
            Role.DIRECTOR: DIRECTOR, Role.NARRATOR: NARRATOR, Role.CHECKER: CHECKER,
            Role.TESTIMONY: obj(subject=STR, predicate=STR, value=STR),
-           Role.FIXER: step_schema(final=True)}
+           Role.FIXER: step_schema(final=True), Role.CLUE: obj(about=enum("none", "1", "2", "3", "4"))}
 
 MODEL = OfflineModel()
 
