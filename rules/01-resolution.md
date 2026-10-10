@@ -170,7 +170,7 @@ change, 01.2.7). Test: *"Does the player want two different things changed, or o
 people?"* Yes → one beat per goal. No → one beat. A **method**, a supporting act, or force or movement **in service of
 a goal** is part of that goal's beat and is rolled as the goal: "I pin him to the wall and demand who sent him" is
 one beat (`learn`: who sent him), its method force against his will (12.2.2 facet `against_will`), never a Grapple
-beat followed by a Talk; "I walk over and ask the smith about the road" is one beat, the walk its method (01.4.1);
+beat followed by a Talk, and the facet never re-verbs it (01.18.7) [revision: R2-L; DL-01-49]; "I walk over and ask the smith about the road" is one beat, the walk its method (01.4.1);
 "I show her the abbot's seal and say he sent me" is one beat, the seal its method. Two goals are two beats, so no
 goal is lost ("grab the purse and punch her" is `take` and `harm`) [revision: R2-H; DL-01-34]. A step or gesture that
 only accompanies another act is part of that act's beat (00.12.6) [revision: R2-G; I-171]. The method's price is
@@ -216,7 +216,10 @@ OFFER, where the player sees it and can change it for free (class ii).
 the player's words plus relationship-state (06) leave exactly one legal candidate, it is that one; if
 several, the stated default applies (in conflict: the nearest engaged foe; otherwise: the most recently
 mentioned addressable element of the right kind); if none fits, ask (this counts as the one clarifying
-question). A beat never resolves against an unresolved target, and self-harm is never narrated unless a
+question). **The addressee is the Reader's too** [revision: R2-L; DL-01-53]: each speech or question part carries a typed
+addressee (an id, or none) and each ask its cost to the NPC (12.2.2), and code never replaces the addressee by word
+overlap, a role's head noun or whoever spoke last (round 8, R8-I2 §A: 6 of 17 speech-only turns went to the wrong
+person; the Reader's restatement named the right one in all 6). A beat never resolves against an unresolved target, and self-harm is never narrated unless a
 resolved result licenses it (a critical-failure cost). *Worst case (J):* the default picks the wrong one of
 several candidates; the OFFER names the target before commitment, so the player corrects it at no cost
 (class ii). [integration: 00.2.3 audit] [R3 01.9; R: ChatRPG v1 "self-inflicted trip" failure, R3 FP6]
@@ -553,6 +556,10 @@ Computation [D]:    necessity.{roll, reason}; reason ∈ uncertain_and_costly | 
                     take_the_time (01.4.4). Code checks `stakes.source: none` against the frame's
                     own costs: a frame naming a sourced cost or a listening clock is costly
                     whatever its source field says (the disagreement is logged).
+                    A cost's source is mechanical or it is no source [revision: R2-L;
+                    DL-01-51]: a clock, a person's record or stance, a hazard, a quantity or
+                    possession, a condition; a narrated incidental detail (T1a: "scuffed
+                    binding") never makes a frame costly (round 8, P4: turning a page rolled).
 Stakes:             —
 State writes:       frame.necessity
 Narration may not imply: success that the pipeline did not produce
@@ -657,8 +664,9 @@ Basis:              [R7 §2.15 Torchbearer Good Idea, §4.0 step 3] [R4 SG-05, S
 
 **01.4.4 Take the time.** `[D]` When a beat is UNCERTAIN but not COSTLY (no clock, observer, hazard or
 contest), the character succeeds given time: success at Standard reach, no roll, and the beat consumes
-**twice** the current mode's time per beat (site: 2 intervals; free: twice the activity's listed
-duration; travel: 2 watches; downtime: twice the listed days; conflict: never applies, because a
+**twice** the current mode's time per beat (site: 2 intervals; free: twice the activity's listed duration, in minutes, and for an unlisted beat 2 ×
+`take_the_time.free_unlisted_minutes` (5; provisional, owner decision R2-L-3), never site intervals [revision: R2-L;
+DL-01-50]; travel: 2 watches; downtime: twice the listed days; conflict: never applies, because a
 conflict is always costly). Time passes through `advance_time`, so every boundary runs (INV-15) — which
 is exactly how "taking the time" can become costly (an encounter check fires). An obstacle whose tier is
 Very hard or Legendary cannot be taken with time: those rungs require a roll whenever attempted, because
@@ -668,7 +676,9 @@ applies this after framing, for every verb, from 01.4.1's computed COSTLY; the t
 with time the same way. An **accepted fallback** (01.3.5) meets the same test on its own frame and scope, at its
 reach cap, with its tier read after its shift [revision: R2-K; DL-01-46; owner-confirmed 2026-10-10]. *Retires:* rolling every gated beat (round
 7, H2: 3 of 7 OFFERs had nothing at stake, and 0 no-roll successes in 13 saves since spec 007); the verb- and
-case-specific carve-outs this one test covers; the forced roll on every accepted fallback (0c15da2). [R: 5e "take 20" and PF2e "take your time"
+case-specific carve-outs this one test covers; the forced roll on every accepted fallback (0c15da2). Also retired [revision: R2-L; DL-01-50]: the 20-minute interval
+charged in free play (round 8, R8-I3: three such beats made an hour, the scene cut, and the woman the PC was talking
+to left the view). [R: 5e "take 20" and PF2e "take your time"
 lineage via R7 §2.8; DL-01-09]
 
 **01.4.5 Certain with cost.** `[D]` When the outcome is certain but a known, fixed cost attaches to the
@@ -1360,7 +1370,7 @@ DL-01-43]: no price (the threatened cost, the alternate, or a method consequence
 the same target ("he turns the round down" for a `persuade_to`; "she takes it back" for a `take`); code checks the
 price against the typed change, and FRAME names another. *Retires:* the guard that covered only holds (round 7, I3 §5).
 **The effective degree** [revision: R2-K; DL-01-48]: one function gives each beat's outcome, its degree except that a
-success at a cost taken counts as `success`, and every reader uses it: the NPC's response and willingness (12.11.9,
+success at a cost taken counts as `success`, and every reader uses it: the NPC's mood and ceiling [revision: R2-L] (12.11.9,
 PR-12-10), answers, scene state (T-12-18), evidence and generators. No reader checks the raw degree. A beat paused at
 this choice is unresolved: the narrator's record carries no degree and no "near miss" until the player chooses
 (12.2.6). *Retires:* degree-only checks (round 7, I1 §3: the talker paid for the round and the sellsword still turned
@@ -1855,7 +1865,7 @@ existence questions behind a search (sealed, 01.15.6). It is not asked for: esta
 re-rolled); things somebody is actively attempting (a fortune check, 01.6.7); content choices a
 `roll_table` answers better (who answers the door, what the rumor says — ch.12's tables); anything the
 DM could decide "for drama" (SG-12). **One owner per question** [revision: R2-K; DL-01-41]: nor is it asked about
-the beat's own target or a person present. Whether they are willing is their willingness (12.11.9; PR-12-10 step 2);
+the beat's own target or a person present. Whether they are willing is their mood and the ceiling (12.11.9; PR-12-10 step 2) [revision: R2-L];
 whether they can is their record (role, licences, competences; 12.11.1); whether they notice or resist is the roll
 itself (01.6.7); content nobody has written (what a job pays, where a thing is, who is involved) is its maker's
 (11.5.6, PR-15-6) or the speaker's testimony (PR-12-12). The Oracle answers only open questions about the world ("is
@@ -2152,7 +2162,12 @@ or a scholar (license).
 threaten, bargain, haggle, taunt, provoke, perform, inform, ask, surrender, yield. *Covers:* inform,
 persuade, deceive, intimidate, bargain, taunt, perform, yield. *Does not cover:* speaking a language not
 held (a language license; crude fallback: gesture, tone and shared nouns, DC +5, reach Limited).
-*Attribute:* Presence; Intellect for a reasoned argument; Might for physical menace. *Against:* the
+*Attribute:* Presence; Intellect for a reasoned argument; Might for physical menace. **Talk with menace stays Talk**
+[revision: R2-L; DL-01-49]: a shove, a raised fist or a grip on a collar that serves an intimidation or a demand is
+the Talk's method (Might for physical menace; 01.2.2), and its `against_will` facet never re-verbs the beat as a
+Grapple; the beat is a Grapple only when its typed goal is to hold or restrain (`restrain`, 01.2.7). *Retires:* the
+Talk → Grapple rewrite (`gate.covering_verb`; round 8: the fighter's intimidating shove became a grapple, the
+narrator was told "restrained", and a fight started). *Against:* the
 listener's defense — Resolve against persuasion, intimidation and taunts; Wits against deception —
 composed by ch.15 with standing and claim plausibility (doubtful claim: a snag; outrageous: reach
 Limited; known false to the listener: G4 for the belief intent). *Reach ladder:* 1 a small concession or

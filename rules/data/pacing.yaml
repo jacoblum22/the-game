@@ -77,7 +77,8 @@ claim_check:                              # 12.3
   on_exhausted: cut_and_render            # 12.3.3: after the revision, cut what still fails from the passage, quote what is still unquoted, render each uncovered must-name item; the plain fallback when nothing survives; RulingRecord kind rule_conflict, review_flag true only if a line was rendered [revision: R2-B] [revision: R2-J] [spec 019]
   element_tiers: {furniture: T1a, feature: T1a, person: T1a, item: T1a, document: T1a, knowledge: T1b, clue: T2, hazard: T2, adversary: T2}   # 12.14.13; a person, item or document is T2 when 12.14.13's question is clearly true; an uncertain kind is T1a [revision: R2-B; revision: R2-G]
   voice: [narrator, speech]               # 12.3.1b: speech = quoted or reported words with a declared speaker; testimony [revision: R2-G] [DL-12-81]
-  speech_checks: [speaker_present, speaker_not_pc, no_words_in_pc_mouth, not_a_repeat]   # the only checks on speech (not_a_repeat over the speaker's said records, 12.14.11 [revision: R2-H] [DL-12-90]); it is recorded as a `said` record on the speaker, never as a fact; season words are a precision check in both voices; no_words_in_pc_mouth covers words given to the PC inside an NPC's speech or its attribution [revision: R2-I] [DL-12-100]
+  speech_checks: [speaker_present, speaker_not_pc, no_words_in_pc_mouth]   # [revision: R2-L] [DL-12-138] not_a_repeat logs only (speech_logged)
+  speech_logged: [not_a_repeat]   # the only checks on speech (not_a_repeat over the speaker's said records, 12.14.11 [revision: R2-H] [DL-12-90]); it is recorded as a `said` record on the speaker, never as a fact; season words are a precision check in both voices; no_words_in_pc_mouth covers words given to the PC inside an NPC's speech or its attribution [revision: R2-I] [DL-12-100]
   blocking:                               # 12.3.1b item 2 (closed), the narrator's voice only, a certain subject only [revision: R2-G] [DL-12-80]
     - {item: 1, what: outcome against degree and reach, classes: [outcome, capability]}
     - {item: 2, what: harm, conditions and quantities, classes: [harm_condition, quantity]}
@@ -91,9 +92,10 @@ claim_check:                              # 12.3
   certain_subject: [unique_proper_name, declared_about_only_fit_in_scope, only_candidate_present]   # 12.3.1b item 4; else no verdict (DL-12-82)
   code_scans: [numerals, names_and_aliases, outcome_words, sealed_strings]   # the blocking checks that are code, every turn (12.3.1)
   precision_checks:                       # 12.3.2 "Precision, not class, decides blocking" [revision: R2-H] [DL-12-95]: a cheap code check blocks whatever its class when measured precise enough
+    unmeasured: log_only                  # [revision: R2-L] [DL-12-138]: a check with no recorded precision never blocks; code enforces it
     min_precision: 0.95                   # share of hits that are real errors on the narration gate corpus; re-measured each playtest round; below it, log only (OEQ-12-27)
     checks:
-      - {id: pronoun_certain_subject, class: identity, voices: [narrator], what: "a third-person pronoun whose antecedent is certain (12.3.1b item 4) against the subject's stored gender_pronouns (12.11.1)", fix: redraft}
+      - {id: pronoun_certain_subject, class: identity, voices: [narrator], what: "a third-person pronoun whose antecedent is certain (12.3.1b item 4) against the subject's stored gender_pronouns (12.11.1)", fix: redraft, precision: 0.0}   # [revision: R2-L] [DL-12-138]: round 8, 0 real of 3 blocks; logs only
       - {id: season_words, class: location_time, voices: [narrator, speech], what: "a season word or season-bound phrase naming a season other than the calendar line's, with no time-shift word in its clause", time_shift_words: [last, next, ago, coming, since, until, before, after, every, each, past, previous], fix: redraft, precision: 0.5}   # spec 019: 1 real of 2 hits on the round 2-6 saves' first drafts (evals/baselines/precision_audit.txt); logs until it reaches min_precision
       - {id: outcome_words, class: outcome, voices: [narrator], what: "a plain result phrase (fails, holds firm, it works, gives way) against the turn's one resolved beat, or its several when all went the same way (claims.passage_beat)", fix: redraft, precision: 0.1}   # spec 019: run over whole passages it hit 1 real of 10 in 5802 delivered sentences (specs/019-holistic-narration/measure_checks.txt): "a finger's width from" read as a miss; logs only
     adopted: "owner ruling 2026-10-09 (R2-H); precision to be confirmed by measurement"
@@ -251,6 +253,9 @@ lead_injection:                           # 12.8; T-12-8
     - cast_npc_with_unfulfilled_want_by_weight
     - region_rumor_pointing_to_existing_node
     - new_hook_from_ch11
+  director_pick_first: true             # [revision: R2-L] [DL-12-139] 12.8.2: the Director's lead.thread, else the ladder
+  never_known_thread: true
+  note_as: data                           # the thread, the form, the facts; never "toward X, through X"
   lead_tests: [concrete, actionable_now, connected]
   prohibitions: [solves_thread, costs_pc, threat_during_peak_or_relax]
   stuck_answer_leads: [2, 3]              # 12.8.5
@@ -301,7 +306,22 @@ npc:                                      # 12.11
     ends_on: engage                       # talks with or fights the PC, or responds with a deed; not re-rolled that scene
     material: optional                    # 12.14.12
     lever: current_only                   # an ended or stale activity is never a lever (01.6.8)
-  responds: [addressed, concerned]        # 12.11.9 step 3: concerned = a tag in social.yaml#event_tags.concerns bears on the NPC; nobody else reacts
+    empty_rows_shown: false               # [revision: R2-L] [DL-12-131]: a row that names no visible act is not in the narrator's view
+  responds: [addressed, concerned]        # RETIRED [revision: R2-L] [DL-12-126]: who reacts is the narrator's (12.11.9 step 4); kept until spec 028 removes its reader
+  reaction_layer:                         # 12.11.9 [revision: R2-L] [DL-12-126..DL-12-131]: code gives facts, the narrator decides reactions
+    code_gives: [roll_and_reach, state_changes, present_and_able_with_place_and_band, clue_learned, mood_per_npc, ceiling_per_ask, pointer_candidates]
+    narrator_decides: [who_answers, reaction_at_or_below_ceiling, price_from_wants, words, refusal_pointer_from_candidates]
+    not_listed: [dead, unconscious, departed]   # and a gagged person is not listed as able to speak
+    mood: {values: [open, guarded, closed], table: tbl.npc_mood, rolled: once_per_scene, up_on: [payment, won_persuasion], down_on: [threat, insult], step: 1}   # DL-12-127; builds on DL-12-118
+    ceiling: {table: tbl.npc_ceiling, frame_outcome_replaces: true, refusal_covering_ask: refuse, never_limits: clue_delivery}   # DL-12-128; T-12-19
+    cost: {values: [none, small, real, big], from: reader, request_size_map: {R1: none, R2: small, R3: real, R4: big, R5: big}, defeats_want: one_step_higher}   # 12.2.2; 15.3.2
+    declared_deeds: {kinds: [hand_over, take, leave, summon, attack], applied_when: [present_and_able, within_ceiling], escalate_only: [closed_after_threat_harm_or_insult, refuse_may_escalate], else: unsourced_change}   # DL-12-130, provisional (owner decision R2-L-2)
+    must_lines: spine_facts_only        # DL-12-131: roll and reach, state changes, clue learned, pause; never a reaction
+    retired: [npc_action_rows_as_orders, practice_clamp, acts_must_lines, code_written_refusals, refusal_gesture_lists, response_row_scene_writes, addressed_heuristics, last_spoke_with_fallback]
+    measure:                            # OEQ-12-28 [DL-12-133]: offline, hand-checked judge over logs
+      metrics: [grant_rate_by_mood_and_cost, ceiling_violations, mood_flips_without_event, repeat_ask_consistency, refusals_in_character, voice_distinctness, secret_leaks]
+      arms: [current_code, dial_and_ceiling, judgment_only]   # baseline on the round-8 saves first
+      fallback_when: {ceiling_violation_rate_above: 0.05, add: npc_intent_call_before_narration}   # research option 3
 
 details:                                  # 00.6.6a established details [revision: R2-E]
   slots:                                  # closed list; slot: persistence. scene slots are written by code only (T1c)
@@ -351,6 +371,7 @@ details:                                  # 00.6.6a established details [revisio
     # responses: a responding NPC's response (12.11.9 step 3) -> their manner, and their activity only when the body does
     # something else (squares up, turns away, takes cover); talk alone never changes the activity. A `by_practice` row replaces the
     # generic row whole; an empty entry keeps the activity (12.11.9 step 1: it ends when the NPC engages [revision: R2-H]).
+    responses_status: retired             # [revision: R2-L] [DL-12-126]: T-12-18's response rows no longer write scene state; kept until spec 028
     responses:
       talk: {success: {manner: willing}, failure: {manner: unmoved}}
       refusal: {manner: unwilling}
@@ -370,7 +391,10 @@ narration:                                # 12.14
   scene_open_max_words: 200
   recap_max_words: 120
   skip_max_words: 150
-  freshness: {said_overlap: 0.6, setting_once: on_arrival_then_optional, repetition_scan: log_only, scan_window: 10}   # 12.14.11 [revision: R2-E]; [revision: R2-K] [DL-12-113]: no usage marks, no quote-back; the repetition scan (images, openings, closings over the last scan_window deliveries) is a measure run on saves (specs/024-texture-outcome/measure.py), never a gate; the retired keys deleted by spec 024
+  freshness: {said_overlap: 0.6, said_repeat: log_only, setting_once: on_arrival_then_optional, same_place_scene_cut: not_an_arrival, repetition_scan: log_only, scan_window: 10}   # 12.14.11 [revision: R2-E]; [revision: R2-K] [DL-12-113]: no usage marks, no quote-back; the repetition scan (images, openings, closings over the last scan_window deliveries) is a measure run on saves (specs/024-texture-outcome/measure.py), never a gate; the retired keys deleted by spec 024
+  closing_line: none                      # 12.14.9 [revision: R2-L] [DL-12-131]: no mandatory "hand the moment back" instruction
+  answered_mark: none                     # 12.2.7 [revision: R2-L]: no unconditional "(answered)" on part lines
+  reading: {follows: beat_target, quote_exactly: never, no_text: ordinary_words_t1a}   # 12.10.5 [revision: R2-L] [DL-12-132]
   forbidden_recognition_phrasing: ["you gain", "you have unlocked", "your skill increases", "level", "experience", "class", "achievement", "stat names in any in-world voice", "bracketed or boxed text inside fiction", "a disembodied announcing voice"]
   must_name: [beat_outcome_and_change, cost_form, changed_harm_conditions_quantities_possessions_positions, direct_question_answer, clue_or_lead_delivered, pause]   # 12.14.12, closed [revision: R2-H] [DL-12-92]
   optional_material: [activities, postures, manners, details, other_npcs_reactions, crowd_mood, scene_texture, place_look_after_framing]   # shown as material, never required; no check requires it
@@ -390,11 +414,13 @@ feedback:                                 # 12.3.6, PR-12-11: the player's repor
     steps: {min: 3, max_steps: 6}         # a bounded read-only investigation before deciding
     tools: [turn_record, entity_state_and_provenance, transcript_search, recompute_frame, coin_and_inventory_ledger, said_vs_record, turn_model_io, dry_run, replay_turn]   # the last three [revision: R2-K] [DL-12-116] [DL-12-117] [verification: spec 026]
     proposals: [set_fact, remove_fact, restore_as_of_turn, refund, deduct, take_back_to_turn, correct_testimony, explain]   # rerender_display deleted [revision: R2-K] [DL-12-117] [verification: spec 026]
-    proposals_added: [reframe_open_offer, take_back_pending_turn]   # PR-12-11 step 3 [revision: R2-K] [DL-12-117]
+    proposals_added: [reframe_open_offer, take_back_pending_turn, reread_with_note]   # reread [revision: R2-L] [DL-12-136]   # PR-12-11 step 3 [revision: R2-K] [DL-12-117]
     dry_run: true                         # any proposal runs first on a copy of the snapshot (gate, necessity, frame, or the turn)
     check_screen: true                    # inspect what the player will see after the repair; iterate within max_steps
     sees: [people_card, plain_facts, turn_model_io, mechanics_digest]   # what the play roles see [DL-12-116]
-    mechanics_digest: [hold_is_a_condition, labels_never_penalties, refusals_never_facts, stagger, sheet_capability_outranks_oracle_fact]
+    mechanics_digest: [hold_is_a_condition, labels_never_penalties, refusals_never_facts, stagger, sheet_capability_outranks_oracle_fact, goal_first, attribute_knob, licence_glosses]   # last three [revision: R2-L] [DL-12-137]
+    marks_code_forced: true               # [revision: R2-L] [DL-12-137]: each narrator line marked code-forced or not
+    undo_reshows_scene: true              # [revision: R2-L] [DL-12-137]; the undone turn named by what happened, never a turn number
     open_offer: reframe                   # never explain only (12.3.6 item 4)
     code_guards: [no_conjured_coin, sealed_stays_sealed, mechanical_needs_evidence]
     scored_on: fresh_held_out_real_complaints_incl_open_offers   # the scorer checks the repaired screen (OEQ-12-26)
@@ -438,7 +464,7 @@ dm_questions:                             # 12.6.1; T-12-4 (first match)
   - {when: hook_terms, tool: hook_terms_written_at_making}        # [revision: R2-K] [DL-12-109] 11.5.6
   - {when: actor_with_capability_attempts, tool: fortune_check}
   - {when: which_of_several_specific_table_exists, tool: roll_table_specific}
-  - {when: npc_decision_undecided, tool: tbl.npc_action}
+  - {when: npc_decision_undecided, tool: narrator_within_mood_and_ceiling}   # [revision: R2-L] [DL-12-126] 12.11.5; tbl.npc_action retired
   - {when: yes_no_fact, tool: oracle, never_about: [beat_target, person_present], never_for: [what, where, how_much]}   # [revision: R2-K] [DL-12-108]
   - {when: meaning_form_or_and, tool: tbl.meaning}
   - {when: a_person_must_exist, tool: npc_generation}
@@ -450,13 +476,16 @@ answer_ladder:                            # 12.10.8, PR-12-10 [revision: R2-D] [
     consequential: "a story role, a case's solution, a sealed fact or a thread's knowledge -> the case graph only (PR-15-6; no case behind a story role -> the reduced case now); a non-holder points to the core placement's holder"
     who_is_role: "who is <role> (not a story role) -> casting (social.yaml#cast)"
     ordinary: "everything else (ordinary knowledge, what they want or think, who would know) -> willingness by code, words by the narrator"
-  willingness: [willing, guarded, unwilling]
-  clue_judgment: {call: small_model, asks: "is this question about what this person holds?", reads: [question, exchange, placement_about], uncertain: yes, on_yes: code_hands_clue_to_narrator}   # PR-12-10 step 1 [revision: R2-K] [DL-12-112]; word-overlap case_about retired
+  willingness: [willing, guarded, unwilling]   # [revision: R2-L] [DL-12-127]: read as mood, one to one: open, guarded, closed
+  mood: [open, guarded, closed]           # tbl.npc_mood; the ceiling per ask is tbl.npc_ceiling (T-12-19)
+  clue_judgment: {call: small_model, asks: "is this question about what this person holds?", reads: [question, exchange, placement_about], uncertain: yes, on_yes: learned_fact, per: message, before: question_cap}   # [revision: R2-L] [DL-15-44] [DL-15-45]   # PR-12-10 step 1 [revision: R2-K] [DL-12-112]; word-overlap case_about retired
   willingness_holds: scene               # PR-12-10 step 2 [revision: R2-K] [DL-12-118]: decided when the talk starts, held for the scene
   willingness_changes_on: [payment, threat, insult, won_persuasion]   # by the effective degree (01.9.3)
-  refusal_pointer: {to: someone_new_who_would_know, order: [live_placement_holder_on_topic, cast_person_whose_role_knows_it], never: already_refused_on_topic}   # [revision: R2-K] [DL-12-119]
+  refusal_pointer: {to: someone_new_who_would_know, order: [live_placement_holder_on_topic, cast_person_whose_role_knows_it], never: already_refused_on_topic, code_gives: candidates, narrator_picks: one_or_none}   # [revision: R2-K] [DL-12-119]
   willingness_line_never_on: [greeting, thanks]   # P3 [revision: R2-K] [DL-12-120]
-  willingness_source: [matching_refusal, talk_frame_outcome, certainty_test, npc_action_row]   # first that applies (PR-12-10 step 2); certainty_test = 15.3.10
+  willingness_source: [matching_refusal, talk_frame_outcome, certainty_test, npc_action_row]   # RETIRED [revision: R2-L]: mood_source and ceiling below
+  mood_source: [tbl.npc_mood]              # rolled once per scene, held (DL-12-127)
+  ceiling_source: [matching_refusal, talk_frame_outcome, tbl.npc_ceiling]   # first that applies (PR-12-10 step 2); certainty_test = 15.3.10
   willingness_by_row: {'1': unwilling, '2': unwilling, '3': unwilling, '4': guarded, '5': guarded, '6': guarded, '7': willing, '8': willing, '9': willing, '10': willing}   # tbl.npc_action with standing; the row's wording never scripts speech
   speaker_card: [question, willingness, knowledge_records_on_topic, pack_facts_on_topic, role_topics, public_news_in_scope, said_records]   # nothing sealed, no undelivered placement, no motive (INV-10)
   said_shown: 6                           # the speaker's most recent said records on the card, plus every one on the asked topic

@@ -1084,7 +1084,16 @@ an incident) also decides its **terms** in code: the **pay** (a job's fee from `
 08.8.8, never a figure the DM picks: economy AI-6), the **destination** (a place bound or created, 10), the
 **issuer** and the **people involved** (bound or cast, step 1). They are written as unsealed knowledge records on
 the cards of those who would know (the issuer, the contact, the reporter, a local of the destination), so a willing
-person has something to say. Everything else about the hook is improvised in character and stored as testimony
+person has something to say. **Every kind** [revision: R2-L; DL-12-135]: the terms are written for every lead and incident kind the data has, not
+only jobs and notices: each of `tbl.12.seed.inciting`'s eight (alarm, dying messenger, missing, offer, theft, omen,
+refugees, duel), the opening's situation and wound leads, each `tbl.12.seed.document` kind (hire, bounty, warning,
+charter), each lead-injection form (`tbl.lead_injection`), a rumor's `points_to` (11.6.4) and each creation-hook kind
+above. Kind by kind the terms are **who** (the people involved, by id), **what** (the act or event, as data),
+**where** (a place bound or created) and, where they exist, the **words** (what a message, a notice or a log says,
+as a `text` fact) and the **pay**; they are held, as unsealed knowledge, by the people and documents that would
+know. *Retires:* one-sentence leads with nothing behind them (round 8: the gate log and "a closed cart came in" had
+no terms, so the game stalled "waiting on your reading" and still marked the question answered). Everything else
+about the hook is improvised in character and stored as testimony
 (PR-12-12), settled only when the player acts on it. *Retires:* hooks with no terms (round 7, I2: "someone is
 hiring" with no job, pay or place; three Oracle answers said a list names "the worst place", which was never
 written) and yes/no answers to what, where and how much.

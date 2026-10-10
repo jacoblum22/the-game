@@ -76,7 +76,10 @@ context, trusted where a mistake does not break the game, and corrected when it 
 unreliable part to be constrained at every step. Eight rules govern every chapter and every revision:
 1. **Code owns the spine; the model owns language and judgment.** The spine is state, dice, rules
    arithmetic, secrets and clues, and what must be exact. Code does not author narrative content that a
-   model must repeat (prose, NPC lines, facts mislabelled from speech).
+   model must repeat (prose, NPC lines, facts mislabelled from speech). **Facts, not orders** [revision: R2-L; DL-00-09]:
+   code gives the narrator only facts it owns (the roll and what it achieved, state changes, who is present and able
+   and where, clue deliveries, each NPC's mood, and for an ask the ceiling, 12.11.9); who reacts, how, at what price
+   and in what words is the narrator's, and a MUST line carries only a spine fact.
 2. **Check by measured precision, only what breaks the game.** A check blocks only where its measured
    precision is high and its target would break the game (12.3.2; DL-12-95). Everything else is trusted,
    logged, or corrected by the player.
@@ -1002,9 +1005,10 @@ source (the delivering turn, the beat or the generator), and a **persistence**:
 4. **Who writes.** A `lasting` detail is written as narrated (PR-00-7 step 2) or by a generator. `scene` and
    `beat` details are written **by code**, never by the narrator (T1c), for the PC as for every present person:
    from the resolved beat by T-12-18's beat rows (a successful grapple writes the holder's `held` and the
-   target's `posture`) and from the default NPC layer by T-12-18's response rows (12.11.9's activity and
-   response). A write that changes a filled slot cites the beat's frame or the response's source as its
-   explaining event (item 2). A scene slot shown as a record line is cited, never improvised [revision: R2-F].
+   target's `posture`) and from the default NPC layer: the activity rolled once per scene (12.11.9 step 6) and a declared NPC deed code
+   applied (12.11.9 step 5); T-12-18's response rows are retired, so an NPC's reaction writes no slot [revision: R2-L;
+   DL-12-126]. A write that changes a filled slot cites the beat's frame or the deed's source as its explaining event
+   (item 2). A scene slot shown as a record line is cited, never improvised [revision: R2-F].
 5. **No usage marks** [revision: R2-K; DL-12-113]. Freshness is the narrator's judgment from the conversation it
    sees (12.14.11); no detail carries a `last_used` mark, and nothing counts or gates its use. *Retires:* the
    `last_used` projection [revision: R2-G] (round 7, H1: it fired 0 times on looks and habits).
@@ -1100,7 +1104,7 @@ which fixes how much time a beat consumes:
 |---|---|---|
 | `conflict` | beats happen within turns; time advances one round at each round's end | fights, chases in close pursuit |
 | `site` | each significant beat (one that resolves a check or a meaningful activity) = 1 interval; insignificant beats = 0 | dungeons, ruins, searching a building |
-| `free` | the activity's listed duration (ch.10 exploration activities, ch.15 social/investigation/downtime activities, ch.05 rituals, ch.07 rests); unlisted beats take no time | conversation, town scenes |
+| `free` | the activity's listed duration (ch.10 exploration activities, ch.15 social/investigation/downtime activities, ch.05 rituals, ch.07 rests); unlisted beats take no time, except taking the time (01.4.4: minutes, never intervals) [revision: R2-L; DL-01-50] | conversation, town scenes |
 | `travel` | each travel activity = 1 watch | overland, water, underground journeys |
 | `downtime` | each downtime activity = its listed days; the week is the planning unit | recovery, projects, training, trade |
 
@@ -1638,7 +1642,8 @@ method facets (12.2.2: `against_will`, `uses_power`, `speech`), the actor's held
 the beat only when its scope tags match the verb and the facets), the verb's `excludes` (an excluded method
 needs the listed license: G2 if held, else G3), active conditions (a forbidding condition: G4), the Framer's reach factors (01.6.10: two unoffset factors, or a
 total potency, route the beat to G4) [revision: R2-G; I-160a] and any cited
-G4 fact. No role proposes the gate class. A sheet knack ("intimidating", "a way with horses") is an edge, never
+G4 fact. No role proposes the gate class. The facets choose the license, never the verb: PARSE's verb stands, so talk with
+menace stays Talk (01.18.7) [revision: R2-L; DL-01-49]. A sheet knack ("intimidating", "a way with horses") is an edge, never
 a gate: it never moves a basic-verb beat to G2 or G3. No held license covering an excluded method: G3
 (SG-05). *Worst case (J, upstream):* the judgments left are PARSE's verb and facets (12.2.2); a wrong one
 puts the beat under the wrong card, which the OFFER names, or a licensed attempt is redirected

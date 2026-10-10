@@ -310,6 +310,9 @@ take_the_time:     # 01.4.4; DL-01-09; [revision: R2-K] [DL-01-44]: computed by 
   time_charged: advance_time            # the RESULT says how long; never 'hidden check made'
   fallback: same_test_on_own_scope      # owner-confirmed 2026-10-10 [revision: R2-K] (DL-01-46); tier read after the fallback's shift
   time_multiplier: 2
+  free_unit: minutes                    # [revision: R2-L] [DL-01-50]: never site intervals in free play
+  free_unlisted_minutes: 5             # an unlisted beat taken with time costs 2 x 5 minutes (provisional: owner decision R2-L-3)
+  cost_source: mechanical_only        # [revision: R2-L] [DL-01-51] 01.4.1: a narrated T1a detail never makes a frame costly
   forbidden_tiers: [very_hard, legendary]
   requires: "uncertain and not costly"
 limits:

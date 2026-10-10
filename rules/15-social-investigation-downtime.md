@@ -307,7 +307,7 @@ so nothing about the NPC is invented to suit the request [R4 §5.2 item 1 "seal 
 2. makes a deed an `impressed` memory when the NPC witnesses the PC serving it (T-15-2);
 3. is the target of a **Cultivate** day (15.13.6) and of favors that build standing;
 4. is a source for lead injection (12.8.2 source 5: "an NPC with an unfulfilled recorded want who could
-   plausibly seek the PC out") and for the NPC's own initiative (`tbl.npc_action` row 6, 12.11.5);
+   plausibly seek the PC out") and for the NPC's own initiative (the narrator's reaction from the want, 12.11.5) [revision: R2-L];
 5. is what a persuasion campaign's compromise asks for (15.8.2);
 6. makes a request that defeats it one rung larger and never certain (15.3.2, 15.3.10) [revision: I-074].
 *Serving a want* `[J:flag]`: *"Would the offered act or thing, if delivered, advance this want as written?"*
@@ -416,8 +416,8 @@ kinds (any act of theirs that knowingly brings it about, including helping anoth
 **15.2.5 Fears.** `[D]` [DL-15-12; DL-15-34; C:P12; revision: I-065] A fear (`tbl.npc_fear`) is what the NPC's courage gives way to. It matters in three
 places: (1) a **credible threat** that invokes a recorded fear is a Leverage term in intimidation (15.4.3)
 even with no weapon drawn ("the watch would be very interested in what is in your cellar" to an NPC who
-fears the law); (2) a want and a fear in conflict decide `tbl.npc_action` row 6 ("acts on their own want")
-toward the safer course; (3) a fear is a Precision **snag** on any request that would put the NPC in its
+fears the law); (2) a want and a fear in conflict: the NPC takes the safer course (the narrator's reaction within
+the ceiling, 12.11.5) [revision: R2-L]; (3) a fear is a Precision **snag** on any request that would put the NPC in its
 way (asking a man who fears the dark to hold the lantern in the crypt), unless a term offsets it. Item 3
 does not apply to a request whose Leverage term is that same fear: the threat is the term, and one fact is
 one term or one lever, never also a snag (15.3.5) [revision: I-074]. Fears
@@ -752,9 +752,10 @@ written as a fact or a commitment of the NPC's (`npc.<id>.agreed: <act>`, with i
 NPC's later conduct follows it unless a new fact releases them (12.11.4) [01.9; 01.18.7; DL-15-13].
 
 **Questions** [revision: R2-D] [DL-15-39; I-140]: a Talk, a certain beat or a plain SPEECH question that asks an NPC for
-information is a bundled beat (01.10). Of N questions, `deliver_count(N, reach)` (T-01-6) land in the player's rank,
+information is a bundled beat (01.10). One clue judgment runs first over all its questions together (PR-12-10 step 1),
+and a clue it finds is delivered outside the count [revision: R2-L; DL-15-45]. Of the N questions, `deliver_count(N, reach)` (T-01-6) land in the player's rank,
 and each landed one is answered by PR-12-10 (`social.yaml#delivery.information`): a consequential one by the case
-graph, any other in the NPC's own words within the willingness code set (12.10.8); Great adds one volunteered extra
+graph, any other in the NPC's own words at or below the ceiling code set (12.10.8) [revision: R2-L]; Great adds one volunteered extra
 [revision: R2-H; DL-12-90]. One question is N = 1, so any success lands it; a certain beat or SPEECH runs at Standard. "Yes, as asked" above
 is the act asked; it never makes the NPC know more than their speaker card holds (PR-12-10 step 3).
 
@@ -762,7 +763,8 @@ is the act asked; it never makes the NPC know more than their speaker card holds
 label: Talk, Help or another; 01.3.1, gates key on the goal and its method) [revision: R2-K; DL-15-41] is **certain**
 (01.4.1, no roll) when
 the request's **certainty size** is R1 and the NPC is Neutral or warmer, or the certainty size is at least
-**two rungs below** the ceiling (Warm: R1; Friendly: R1–R2; Devoted: R1–R3) — and no refusal covers it,
+**two rungs below** the ceiling (Warm: R1; Friendly: R1–R2; Devoted: R1–R3) — and no refusal covers it, the ask's ceiling (T-12-19, by the NPC's mood and its cost to them) reads
+*will help*, else the beat is framed as usual [revision: R2-L; DL-12-128; provisional, owner decision R2-L-1],
 and nothing in the scene would make granting it costly to them (`[J:flag]` *"Is there an established
 reason this NPC would hesitate now — a watcher, a superior, a fear, or a recorded want the request
 defeats (15.3.2)?"* True only with a cited fact or want id; true → roll) [revision: I-074]. The
@@ -1262,14 +1264,19 @@ characters do worst [R4 W4]:
    obligation (if the NPC is Wary or better). It never asks for what its record does not contain, and it
    never names a want the PC has not learned except as "something I need — and you might be the one to
    get it" (an invitation to read them, 15.6.1). `[J:enum]` *Which want could the PC serve?* — among open
-   wants, the highest-ranked whose object is reachable in state; uncertain → payment.
+   wants, the highest-ranked whose object is reachable in state; uncertain → payment. The price an NPC names at *helps for a price* (T-12-19) is the narrator's pick from
+   the same record (12.11.5); a coin price settles to the ask's band when paid [revision: R2-L; DL-12-129].
 2. **The walk-away is the floor.** A payment can be haggled down (15.7.2) to **half the price** and no
    lower; an obligation's size cannot be argued below the rung it replaces. An offer below the floor is a
    refusal of the deal (patience −1).
 3. **A deal carries a typed price** [revision: R2-K; DL-15-42]: once agreed, it writes a price record `{payer,
    payee, kind (coin, item, service, obligation), amount, due}` beside the agreement; paying it is a typed change (a
    quantity or possession write, 01.11.2), and a price left in words ("worth your while") takes the request's price
-   (15.3.2). *Retires:* the regex price parsed from the Framer's prose (round 7, I2 §3).
+   (15.3.2). *Retires:* the regex price parsed from the Framer's prose (round 7, I2 §3). **A payment is the paying
+   beat's consequence** [revision: R2-L; DL-15-47]: coin or goods the PC hands over move when the beat that hands them
+   resolves (a gift's amount from the Reader's quantity), before any NPC reaction is decided and whatever else the
+   same message asks; it is never a step of the reaction (round 8: three payments were skipped because the same talk
+   asked a question, and the purse stayed at 44).
    **Accepting the counter** applies the terms to the frame (15.3.5): the request then rolls at its
    effective size, or is certain (15.3.10). The NPC's acceptance of a deal is not itself the roll; the
    roll decides whether they *trust and agree* at the effective size.
@@ -1543,7 +1550,9 @@ Decisions (J):      1. REACHED [J:flag] "Is the PC at the holder (present with t
                     For a person holder asked a question, whether the question is ABOUT this
                     placement is one small model call over the question and the placement's
                     `about` line, never shared words (PR-12-10 step 1) [revision: R2-K;
-                    DL-15-40]; yes -> code hands the clue to the narrator to deliver.
+                    DL-15-40]; yes -> the clue is a `learned` fact the
+                    narrator conveys from a knower present, never an NPC "acts:"
+                    line (12.14.12) [revision: R2-L; DL-15-44].
                     2. For a person holder: the placement's request_size is within the person's ceiling
                        and no refusal covers telling (15.2.3); otherwise the clue is not core FOR THIS
                        ASK -- it is a request or an interrogation (15.8.4), and the other placements
@@ -1744,7 +1753,12 @@ questions — items asked and not delivered, 01.10.6); **People** (names learned
 wants, fears and refusals; what the PC has told them, including lies); **Places** (discovered, with notes);
 **Rumors heard** (text and source; truth unknown); **Lies told** (each lie record the PC made: claim,
 believers the PC knows of — never the clock); **Debts and promises** (commitments both ways, with due
-conditions). The journal is the only source for "what do I know about X?" besides origin knowledge
+conditions); **What you were told** [revision: R2-L; DL-15-46]: the `said` records spoken to the PC, each attributed
+(who said it, where, on which day) and grouped by thread or topic, testimony with its truth unknown. A "what do I
+know about X?" lookup searches the thread text, the said records and the knowledge records, never names alone
+("X and Y" is split), so the baker's word that the miller's daughter left with a tinker is found under the daughter.
+*Retires:* the name-only lookup (round 8: "what do I know" gave one line and ignored the winter and the banners). The
+journal is the only source for "what do I know about X?" besides origin knowledge
 (12.10.5).
 
 **15.9.17 `record_knowledge` semantics.** `[D]` `record_knowledge(knower, fact, how)` (00.14.2 #14; owner 15)
@@ -2193,7 +2207,9 @@ for 02's lost bond and 07's curse lifts)
 6. **Validate** 15.9.4 (1–5); a failure regenerates the failing node's placements (at most three tries),
    then logs a `rule_conflict` and adds generic placements (PR-15-7).
 7. Write everything sealed; write the thread (11) with `clue_placements`; give the narrator the case's
-   atmosphere tag.
+   atmosphere tag. A case built for a hook also writes the hook's terms for its kind (11.5.6) on the cards of those
+   who would know, and a person on stage in the hook's role is bound as its subject by id (12.16.16) [revision: R2-L;
+   DL-12-135; DL-15-43].
 **Reduced profile (Milestone 1)** [revision: R2-D] [DL-15-38; DL-15-37]: for the seed's inciting incident (12.16.16)
 and for a story-role question with no case behind it (who is missing, who did it, who sent them; PR-12-10 step 1), the
 case is built at once with `investigation.yaml#reduced_case`: the subject cast first (00.11 `cast`), else generated
@@ -2282,7 +2298,8 @@ direct, reveals_lead, invites, status} → reserve (2 per necessary node) → fa
 delivers} → opposition clock (with omens naming placements). Validity: 15.9.4.
 
 **T-15-15 Journal sections** (`investigation.yaml#journal`): Cases (clues, leads, theories, open questions) ·
-People · Places · Rumors heard · Lies told · Debts and promises. Visibility: shown (00.6.3).
+People · Places · What you were told (attributed testimony) [revision: R2-L; DL-15-46] · Rumors heard · Lies told ·
+Debts and promises. Visibility: shown (00.6.3).
 
 **T-15-16 Downtime activities** (`downtime.yaml#activities`).
 
