@@ -410,8 +410,6 @@ def _propose_roll(ctx: TurnContext, t: Turn, c: dict[str, Any]) -> str:
     what, whom = _id(st, c.get("change_what")), _id(st, c.get("change_whom"))
     goal = str(c.get("goal") or "").strip() or "act"
     how = str(c.get("how") or "").strip() or None
-    if c.get("nonlethal"):  # the harm rules read the words (engine/resolve/conflict.py NONLETHAL)
-        how = f"{how or goal} (nonlethal)"
     verb = str(c.get("verb") or "") or None
     phrase = str(c.get("change_what") or "").strip()
     if kind == "none" and target is None and verb not in ("verb.sneak", "verb.talk"):
@@ -429,7 +427,10 @@ def _propose_roll(ctx: TurnContext, t: Turn, c: dict[str, Any]) -> str:
         change = Change(kind=kind, what=what if what in st.entities else None,
                         whom=whom if whom in st.entities else None,
                         description=None if what in st.entities else (phrase or None))
-    beat = Beat(id=tx.mint(ids.BEAT), actor=pc, intent=goal, method=how or goal, how=how, target=target,
+    method = how or goal
+    if c.get("nonlethal") and verb in ("verb.strike", "verb.grapple", "verb.force"):
+        method += " (nonlethal)"  # the harm rules read the method's words (engine/resolve/conflict.py NONLETHAL)
+    beat = Beat(id=tx.mint(ids.BEAT), actor=pc, intent=goal, method=method, how=how, target=target,
                 restatement=goal[:1].upper() + goal[1:], verb=verb, speech=verb == "verb.talk",
                 against_will=bool(target and st.entities[target].kind in ("npc", "adversary")
                                   and verb in ("verb.strike", "verb.grapple", "verb.force")),
