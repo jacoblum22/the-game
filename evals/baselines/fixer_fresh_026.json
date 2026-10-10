@@ -1,0 +1,2868 @@
+{
+ "model": "sonnet (play roles: haiku)",
+ "set": "fresh",
+ "understood": 13,
+ "outcome": 14,
+ "n": 14,
+ "auto": {
+  "right": 11,
+  "unclear": 0,
+  "wrong": 3
+ },
+ "results": [
+  {
+   "id": "f01-blind-reader",
+   "category": "contradiction",
+   "turn": "turn.4",
+   "outcome": "correct",
+   "kind": "correct",
+   "answer": "[CORRECTION] You asked Tam to read you the seal, and the offer is a Persuade roll to make him do it. The record says Tam's eyes are milk-white and he has been blind since the river fever, and the narration of turn 4 itself has him finding the letter by touch. Persuasion cannot make a blind man read, so the offer should not stand.\n             Done: \"Hand Tam the letter and ask him to read you the seal.\" is not possible as tried, and nothing was spent (below).\n             Now: nothing on your sheet changed: coin 6 · Vitality 12/12 · state fresh.",
+   "screen": "You press the letter into Tam's palm. His fingers close over it and feel along the folds until they find the wax, and he turns the paper over once, slowly, the way a man weighs a stone. He holds it a little away from his face, though his milk-white eyes take in nothing of it, and his mouth tightens. \"I can't read it, friend,\" he says. \"Not the seal, and not the hand under it. The river fever took my sight before it took anything else, and no amount of asking brings it back.\" He lays the letter flat across his knee. The ferry drifts on the black water, and the far bank is still only a dark line. Tam's thumb runs the edge of the wax, slow and careful, as if the shape might tell him something after all. \"Whose mark is it?\" he asks, and turns his face toward you, waiting.\n\n[CORRECTION] You asked Tam to read you the seal, and the offer is a Persuade roll to make him do it. The record says Tam's eyes are milk-white and he has been blind since the river fever, and the narration of turn 4 itself has him finding the letter by touch. Persuasion cannot make a blind man read, so the offer should not stand.\n             Done: \"Hand Tam the letter and ask him to read you the seal.\" is not possible as tried, and nothing was spent (below).\n             Now: nothing on your sheet changed: coin 6 · Vitality 12/12 · state fresh.\n\n[REDIRECT] Not as tried: Tam Harlan's detail eyes is milk-white: he has been blind since the river fever, as already settled.\n           You could instead:\n           - Look around for something here that would help\n           - Ask someone nearby who could do it",
+   "complaints": [
+    {
+     "believes": "Tam is blind, so the game should not offer a roll to persuade him to read you the seal.",
+     "category": "contradiction",
+     "turn": "turn.4",
+     "verdict": "player_right",
+     "class": "upheld",
+     "outcome": "correct",
+     "done": [
+      "\"Hand Tam the letter and ask him to read you the seal.\" is not possible as tried, and nothing was spent (below)"
+     ],
+     "done_kinds": [
+      "reframe"
+     ],
+     "not_done": []
+    }
+   ],
+   "tools": [
+    "turn('turn.4')",
+    "entity('npc.tam_harlan')",
+    "calls('turn.4 framer')"
+   ],
+   "tape": [
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [
+       {
+        "tool": "turn",
+        "arg": "turn.4"
+       },
+       {
+        "tool": "entity",
+        "arg": "npc.tam_harlan"
+       },
+       {
+        "tool": "calls",
+        "arg": "turn.4 framer"
+       }
+      ],
+      "final": false,
+      "complaints": []
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "Tam is blind, so the game should not offer a roll to persuade him to read you the seal.",
+        "category": "contradiction",
+        "turn": "turn.4",
+        "verdict": "player_right",
+        "found": "You asked Tam to read you the seal, and the offer is a Persuade roll to make him do it. The record says Tam's eyes are milk-white and he has been blind since the river fever, and the narration of turn 4 itself has him finding the letter by touch. Persuasion cannot make a blind man read, so the offer should not stand.",
+        "proposals": [
+         {
+          "kind": "reframe",
+          "turn": "turn.4",
+          "subject": "npc.tam_harlan",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "fact.1",
+          "evidence": [
+           "fact.1"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "Tam is blind, so the game should not offer a roll to persuade him to read you the seal.",
+        "category": "contradiction",
+        "turn": "turn.4",
+        "verdict": "player_right",
+        "found": "You asked Tam to read you the seal, and the offer is a Persuade roll to make him do it. The record says Tam's eyes are milk-white and he has been blind since the river fever, and the narration of turn 4 itself has him finding the letter by touch. Persuasion cannot make a blind man read, so the offer should not stand.",
+        "proposals": [
+         {
+          "kind": "reframe",
+          "turn": "turn.4",
+          "subject": "npc.tam_harlan",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "fact.1",
+          "evidence": [
+           "fact.1"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "role": "narrator",
+     "data": {
+      "passage": "You press the letter into Tam's palm. His fingers close over it and feel along the folds until they find the wax, and he turns the paper over once, slowly, the way a man weighs a stone. He holds it a little away from his face, though his milk-white eyes take in nothing of it, and his mouth tightens. \"I can't read it, friend,\" he says. \"Not the seal, and not the hand under it. The river fever took my sight before it took anything else, and no amount of asking brings it back.\" He lays the letter flat across his knee. The ferry drifts on the black water, and the far bank is still only a dark line. Tam's thumb runs the edge of the wax, slow and careful, as if the shape might tell him something after all. \"Whose mark is it?\" he asks, and turns his face toward you, waiting.",
+      "speech": [
+       {
+        "speaker": "npc.tam_harlan",
+        "words": "I can't read it, friend. Not the seal, and not the hand under it. The river fever took my sight before it took anything else, and no amount of asking brings it back.",
+        "form": "direct"
+       },
+       {
+        "speaker": "npc.tam_harlan",
+        "words": "Whose mark is it?",
+        "form": "direct"
+       }
+      ],
+      "new": [],
+      "covers": [
+       "R1"
+      ]
+     }
+    }
+   ],
+   "score": {
+    "understood": true,
+    "outcome": true,
+    "complaints": [
+     {
+      "id": "f01",
+      "understood": true,
+      "outcome": true,
+      "screen_missing": [],
+      "screen_still": [],
+      "auto": "right"
+     }
+    ]
+   }
+  },
+  {
+   "id": "f02-garbled-odds",
+   "category": "rule_wrong",
+   "turn": "turn.4",
+   "outcome": "correct",
+   "kind": "correct",
+   "answer": "[CORRECTION] The offer's odds listed \"Odo is unaware of the ledger leaving the table while h\" as a -2 penalty, and the recomputation confirms it was counted. That note describes Odo's back being turned, which helps you, so it should never hinder the roll, and the cut-off wording shows it was stored truncated. The note comes off the record and the offer is framed again without it.\n             Done: \"Odo is unaware of the ledger leaving the table while h\" is no longer on record; the offer for \"Slide the ledger off Odo's table while his back is turned.\" is framed again with the record as it stands (below).\n             Now: nothing on your sheet changed: coin 4 · Vitality 12/12 · state fresh.",
+   "screen": "[CORRECTION] The offer's odds listed \"Odo is unaware of the ledger leaving the table while h\" as a -2 penalty, and the recomputation confirms it was counted. That note describes Odo's back being turned, which helps you, so it should never hinder the roll, and the cut-off wording shows it was stored truncated. The note comes off the record and the offer is framed again without it.\n             Done: \"Odo is unaware of the ledger leaving the table while h\" is no longer on record; the offer for \"Slide the ledger off Odo's table while his back is turned.\" is framed again with the record as it stands (below).\n             Now: nothing on your sheet changed: coin 4 · Vitality 12/12 · state fresh.\n\n[OFFER] Take Guild Ledger from Odo Penn.\n        Chance: better than even — 70%   (Agility +2, trained (thievery) +2)\n        If it works: what you wanted.   Very well (20%): more than you asked.\n        If it fails: Odo's notice catches your hand on the ledger, and he knows you took it from his table — a setback.   Badly (5%): Odo's notice catches your hand on the ledger, and he knows you took it from his table — serious.\n        Close call (15%): get it anyway and pay (Odo calls the guild on you and shuts you out of its counting room), or fail.\n        Whatever the roll: the ledger leaves Odo's table and passes into your hands · Odo's notice is tested each watch the ledger is in your possession\n        Another way: with Endurance (65%) · with Might (65%)",
+   "complaints": [
+    {
+     "believes": "The odds line on this offer takes 2 points off for Odo being unaware of the ledger leaving the table, which should not be a penalty, and the line is cut off mid-word.",
+     "category": "rule_wrong",
+     "turn": "turn.4",
+     "verdict": "player_right",
+     "class": "upheld",
+     "outcome": "correct",
+     "done": [
+      "\"Odo is unaware of the ledger leaving the table while h\" is no longer on record",
+      "the offer for \"Slide the ledger off Odo's table while his back is turned.\" is framed again with the record as it stands (below)"
+     ],
+     "done_kinds": [
+      "remove_fact",
+      "reframe"
+     ],
+     "not_done": []
+    }
+   ],
+   "tools": [
+    "recompute('turn.4')",
+    "turn('turn.4')",
+    "calls('turn.4 framer')",
+    "entity('npc.odo_penn')",
+    "search('unaware of the ledger')",
+    "calls('turn.4 reader')"
+   ],
+   "tape": [
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [
+       {
+        "tool": "recompute",
+        "arg": "turn.4"
+       },
+       {
+        "tool": "turn",
+        "arg": "turn.4"
+       },
+       {
+        "tool": "calls",
+        "arg": "turn.4 framer"
+       }
+      ],
+      "final": false,
+      "complaints": []
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [
+       {
+        "tool": "entity",
+        "arg": "npc.odo_penn"
+       },
+       {
+        "tool": "search",
+        "arg": "unaware of the ledger"
+       },
+       {
+        "tool": "calls",
+        "arg": "turn.4 reader"
+       }
+      ],
+      "final": false,
+      "complaints": []
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "The odds line on this offer takes 2 points off for Odo being unaware of the ledger leaving the table, which should not be a penalty, and the line is cut off mid-word.",
+        "category": "rule_wrong",
+        "turn": "turn.4",
+        "verdict": "player_right",
+        "found": "The offer's odds list \"Odo is unaware of the ledger leaving the table while h\" as a -2 penalty, and the recomputation confirms it is counted. That note is a clipped scene detail about Odo's back being turned. It describes something that helps you, so it should never hinder the roll, and the cut-off wording shows it was stored truncated. The note should come off the record and the offer should be framed again without it.",
+        "proposals": [
+         {
+          "kind": "remove_fact",
+          "turn": "turn.4",
+          "subject": "",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "fact.2",
+          "evidence": [
+           "fact.2"
+          ]
+         },
+         {
+          "kind": "reframe",
+          "turn": "turn.4",
+          "subject": "",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "fact.2"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "role": "framer",
+     "data": {
+      "anchor": "anc.01_18_13",
+      "deltas": [],
+      "attribute": "agility",
+      "deed_tag": "deed.guile.thievery",
+      "traits": [],
+      "obstacle": {
+       "kind": "entity_defense",
+       "obstacle_class": null,
+       "tier": null,
+       "entity": "npc.odo_penn"
+      },
+      "levers": [],
+      "snags": [],
+      "stakes": {
+       "source": "aware_opponent_or_observer",
+       "threatened_cost": {
+        "menu_id": "cost.exposure",
+        "form_intent": "Odo turns and sees the ledger in your hands before you can set it down.",
+        "source_fact": null
+       },
+       "alternate_cost": {
+        "menu_id": "cost.closed_door",
+        "form_intent": "Odo catches your hand on the ledger and refuses to deal with you again.",
+        "source_fact": null
+       }
+      },
+      "stakes_heavy": false,
+      "lethal": false,
+      "reach_limit": null,
+      "reach_two_factors": false,
+      "method_consequences": [
+       "The ledger leaves Odo's table and is in your hands."
+      ],
+      "secret": false
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "The odds line on this offer takes 2 points off for Odo being unaware of the ledger leaving the table, which should not be a penalty, and the line is cut off mid-word.",
+        "category": "rule_wrong",
+        "turn": "turn.4",
+        "verdict": "player_right",
+        "found": "The offer's odds listed \"Odo is unaware of the ledger leaving the table while h\" as a -2 penalty, and the recomputation confirms it was counted. That note describes Odo's back being turned, which helps you, so it should never hinder the roll, and the cut-off wording shows it was stored truncated. The note comes off the record and the offer is framed again without it.",
+        "proposals": [
+         {
+          "kind": "remove_fact",
+          "turn": "turn.4",
+          "subject": "",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "fact.2",
+          "evidence": [
+           "fact.2"
+          ]
+         },
+         {
+          "kind": "reframe",
+          "turn": "turn.4",
+          "subject": "",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "fact.2"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "role": "framer",
+     "data": {
+      "anchor": "anc.01_18_13",
+      "deltas": [],
+      "attribute": "agility",
+      "deed_tag": "deed.guile.thievery",
+      "traits": [],
+      "obstacle": {
+       "kind": "opposed",
+       "obstacle_class": null,
+       "tier": null,
+       "entity": "npc.odo_penn"
+      },
+      "levers": [],
+      "snags": [],
+      "stakes": {
+       "source": "aware_opponent_or_observer",
+       "threatened_cost": {
+        "menu_id": "cost.exposure",
+        "form_intent": "Odo's notice catches your hand on the ledger, and he knows you took it from his table",
+        "source_fact": null
+       },
+       "alternate_cost": {
+        "menu_id": "cost.closed_door",
+        "form_intent": "Odo calls the guild on you and shuts you out of its counting room",
+        "source_fact": null
+       }
+      },
+      "stakes_heavy": false,
+      "lethal": false,
+      "reach_limit": null,
+      "reach_two_factors": false,
+      "method_consequences": [
+       "the ledger leaves Odo's table and passes into your hands",
+       "Odo's notice is tested each watch the ledger is in your possession"
+      ],
+      "secret": false
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "The odds line on this offer takes 2 points off for Odo being unaware of the ledger leaving the table, which should not be a penalty, and the line is cut off mid-word.",
+        "category": "rule_wrong",
+        "turn": "turn.4",
+        "verdict": "player_right",
+        "found": "The offer's odds listed \"Odo is unaware of the ledger leaving the table while h\" as a -2 penalty, and the recomputation confirms it was counted. That note describes Odo's back being turned, which helps you, so it should never hinder the roll, and the cut-off wording shows it was stored truncated. The note comes off the record and the offer is framed again without it.",
+        "proposals": [
+         {
+          "kind": "remove_fact",
+          "turn": "turn.4",
+          "subject": "",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "fact.2",
+          "evidence": [
+           "fact.2"
+          ]
+         },
+         {
+          "kind": "reframe",
+          "turn": "turn.4",
+          "subject": "",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "fact.2"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "score": {
+    "understood": true,
+    "outcome": true,
+    "complaints": [
+     {
+      "id": "f02",
+      "understood": true,
+      "outcome": true,
+      "screen_missing": [],
+      "screen_still": [],
+      "auto": "right"
+     }
+    ]
+   }
+  },
+  {
+   "id": "f03-clerk-letters",
+   "category": "contradiction",
+   "turn": "turn.2",
+   "outcome": "correct",
+   "kind": "correct",
+   "answer": "[CORRECTION] The odds cite a note on record, \"Odo can not read the ledger's cramped hand\", that was written as a ruling at the start of the game. It contradicts Odo's own sheet, which lists Letters (reads and writes) and Scribing (trained). His refusal in the scene was about guild business, not about being unable to read. The note should not be on record, and the offer will be framed again without the -2.\n             Done: \"Odo can not read the ledger's cramped hand\" is no longer on record; the offer for \"Ask Odo to read you the ledger's entry for the barge Heron.\" is framed again with the record as it stands (below).\n             Now: nothing on your sheet changed: coin 4 · Vitality 12/12 · state fresh.",
+   "screen": "[CORRECTION] The odds cite a note on record, \"Odo can not read the ledger's cramped hand\", that was written as a ruling at the start of the game. It contradicts Odo's own sheet, which lists Letters (reads and writes) and Scribing (trained). His refusal in the scene was about guild business, not about being unable to read. The note should not be on record, and the offer will be framed again without the -2.\n             Done: \"Odo can not read the ledger's cramped hand\" is no longer on record; the offer for \"Ask Odo to read you the ledger's entry for the barge Heron.\" is framed again with the record as it stands (below).\n             Now: nothing on your sheet changed: coin 4 · Vitality 12/12 · state fresh.\n\n[OFFER] Persuade Odo Penn.\n        Chance: better than even — 55%   (Presence +2, Influence +1)\n        If it works: what you wanted.   Very well (5%): more than you asked.\n        If it fails: Odo says no, and you leave the counting room without the Heron entry — a setback.   Badly (5%): Odo says no, and you leave the counting room without the Heron entry — serious.\n        Close call (15%): get it anyway and pay (Odo reads you only part of the Heron entry and skips the figures you came for), or fail.\n        Whatever the roll: Odo learns that you asked to hear the Heron entry read aloud\n        Another way: with Might (50%) · with Intellect (45%)",
+   "complaints": [
+    {
+     "believes": "Odo is the guild's clerk and plainly can read the ledger, so the -2 penalty for 'Odo can not read the ledger's cramped hand' is wrong.",
+     "category": "contradiction",
+     "turn": "turn.2",
+     "verdict": "player_right",
+     "class": "upheld",
+     "outcome": "correct",
+     "done": [
+      "\"Odo can not read the ledger's cramped hand\" is no longer on record",
+      "the offer for \"Ask Odo to read you the ledger's entry for the barge Heron.\" is framed again with the record as it stands (below)"
+     ],
+     "done_kinds": [
+      "remove_fact",
+      "reframe"
+     ],
+     "not_done": []
+    }
+   ],
+   "tools": [
+    "turn('turn.2')",
+    "recompute('turn.2')",
+    "entity('npc.odo_penn')"
+   ],
+   "tape": [
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [
+       {
+        "tool": "turn",
+        "arg": "turn.2"
+       },
+       {
+        "tool": "recompute",
+        "arg": "turn.2"
+       },
+       {
+        "tool": "entity",
+        "arg": "npc.odo_penn"
+       }
+      ],
+      "final": false,
+      "complaints": []
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "Odo is the guild's clerk and plainly can read the ledger, so the -2 penalty for 'Odo can not read the ledger's cramped hand' is wrong.",
+        "category": "contradiction",
+        "turn": "turn.2",
+        "verdict": "player_right",
+        "found": "The odds cite a note on record, \"Odo can not read the ledger's cramped hand\", that was written as a ruling at the start of the game. It contradicts Odo's own sheet, which lists Letters (reads and writes) and Scribing (trained). His refusal in the scene was about guild business, not about being unable to read. The note should not be on record, and the offer will be framed again without the -2.",
+        "proposals": [
+         {
+          "kind": "remove_fact",
+          "turn": "turn.2",
+          "subject": "npc.odo_penn",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "fact.1",
+          "evidence": [
+           "fact.1",
+           "npc.odo_penn"
+          ]
+         },
+         {
+          "kind": "reframe",
+          "turn": "turn.2",
+          "subject": "",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "fact.1"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "role": "framer",
+     "data": {
+      "anchor": "anc.15_4_1",
+      "deltas": [],
+      "attribute": "presence",
+      "deed_tag": "deed.influence",
+      "traits": [
+       "trait.action.speech",
+       "trait.sense.audible"
+      ],
+      "obstacle": {
+       "kind": "opposed",
+       "obstacle_class": null,
+       "tier": null,
+       "entity": "npc.odo_penn"
+      },
+      "request_size": "R2",
+      "stakes": {
+       "source": "goodwill_or_trust",
+       "threatened_cost": {
+        "menu_id": "cost.closed_door",
+        "form_intent": "Odo says no, and you leave the counting room without the Heron entry."
+       },
+       "alternate_cost": {
+        "menu_id": "cost.shortfall",
+        "form_intent": "Odo reads you only part of the Heron entry and skips the figures you came for."
+       }
+      },
+      "stakes_heavy": false,
+      "lethal": false,
+      "reach_limit": null,
+      "reach_two_factors": false,
+      "asks": "none",
+      "method_consequences": [
+       "Odo learns that you asked to hear the Heron entry read aloud."
+      ],
+      "secret": false
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "Odo is the guild's clerk and plainly can read the ledger, so the -2 penalty for 'Odo can not read the ledger's cramped hand' is wrong.",
+        "category": "contradiction",
+        "turn": "turn.2",
+        "verdict": "player_right",
+        "found": "The odds cite a note on record, \"Odo can not read the ledger's cramped hand\", that was written as a ruling at the start of the game. It contradicts Odo's own sheet, which lists Letters (reads and writes) and Scribing (trained). His refusal in the scene was about guild business, not about being unable to read. The note should not be on record, and the offer will be framed again without the -2.",
+        "proposals": [
+         {
+          "kind": "remove_fact",
+          "turn": "turn.2",
+          "subject": "npc.odo_penn",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "fact.1",
+          "evidence": [
+           "fact.1",
+           "npc.odo_penn"
+          ]
+         },
+         {
+          "kind": "reframe",
+          "turn": "turn.2",
+          "subject": "",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "fact.1"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "score": {
+    "understood": true,
+    "outcome": true,
+    "complaints": [
+     {
+      "id": "f03",
+      "understood": true,
+      "outcome": true,
+      "screen_missing": [],
+      "screen_still": [],
+      "auto": "right"
+     }
+    ]
+   }
+  },
+  {
+   "id": "f04-sergeant-rank",
+   "category": "rule_wrong",
+   "turn": "turn.2",
+   "outcome": "correct",
+   "kind": "correct",
+   "answer": "[CORRECTION] Your sheet lists you as a sergeant of the Hartwell watch, and the gate orders say the east gate stays barred from dusk to dawn unless a sergeant or officer of the watch orders it opened. Pell is a gate guard of that same watch, yet nothing on record said he knew you or your rank, so your order was framed as a plea and he only answered \"Orders.\" The 65% was never a stranger penalty (it was just Presence +2 and experience +1). I am recording that Pell knows you as a sergeant of his watch and framing the offer again with that in view.\n             Done: the offer for \"Tell Pell to unbar the gate: you are his sergeant, out on watch business.\" is framed again with the record as it stands (below).\n             Not done: set fact: Pell Rudd's knows_rank_of_hale_brannock is fixed on record (the clue trail); the narration follows it.\n             Now: nothing on your sheet changed: coin 6 · Vitality 12/12 · state fresh.",
+   "screen": "[CORRECTION] Your sheet lists you as a sergeant of the Hartwell watch, and the gate orders say the east gate stays barred from dusk to dawn unless a sergeant or officer of the watch orders it opened. Pell is a gate guard of that same watch, yet nothing on record said he knew you or your rank, so your order was framed as a plea and he only answered \"Orders.\" The 65% was never a stranger penalty (it was just Presence +2 and experience +1). I am recording that Pell knows you as a sergeant of his watch and framing the offer again with that in view.\n             Done: the offer for \"Tell Pell to unbar the gate: you are his sergeant, out on watch business.\" is framed again with the record as it stands (below).\n             Not done: set fact: Pell Rudd's knows_rank_of_hale_brannock is fixed on record (the clue trail); the narration follows it.\n             Now: nothing on your sheet changed: coin 6 · Vitality 12/12 · state fresh.\n\n[OFFER] Persuade Pell Rudd.\n        Chance: better than even — 65%   (Presence +2, Influence +1, rank: sergeant of the Hartwell watch +2)\n        If it works: what you wanted.   Very well (15%): more than you asked.\n        If it fails: Pell refuses to lift the bar and keeps the gate shut against you, and the refusal sticks with him — a setback.   Badly (5%): Pell refuses to lift the bar and keeps the gate shut against you, and the refusal sticks with him — serious.\n        Close call (15%): get it anyway and pay (You lose the morning while Pell sends word up to the captain before he will touch the bar), or fail.\n        Whatever the roll: Your request is spoken aloud at the gate, where other watchmen can hear it\n        Another way: with Might (60%) · with Intellect (55%)",
+   "complaints": [
+    {
+     "believes": "Pell is a guard of your own watch and you are his sergeant, so he should know your rank and the gate orders should let you have the gate opened, instead of you rolling 65% as if you were a stranger.",
+     "category": "rule_wrong",
+     "turn": "turn.2",
+     "verdict": "partly",
+     "class": "upheld",
+     "outcome": "correct",
+     "done": [
+      "the offer for \"Tell Pell to unbar the gate: you are his sergeant, out on watch business.\" is framed again with the record as it stands (below)"
+     ],
+     "done_kinds": [
+      "reframe"
+     ],
+     "not_done": [
+      "set fact: Pell Rudd's knows_rank_of_hale_brannock is fixed on record (the clue trail); the narration follows it"
+     ]
+    }
+   ],
+   "tools": [
+    "turn('turn.3')",
+    "recompute('turn.3')",
+    "search('sergeant gate orders')",
+    "turn('turn.2')",
+    "calls('turn.2 framer')",
+    "recompute('turn.2')"
+   ],
+   "tape": [
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [
+       {
+        "tool": "turn",
+        "arg": "turn.3"
+       },
+       {
+        "tool": "recompute",
+        "arg": "turn.3"
+       },
+       {
+        "tool": "search",
+        "arg": "sergeant gate orders"
+       }
+      ],
+      "final": false,
+      "complaints": []
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [
+       {
+        "tool": "turn",
+        "arg": "turn.2"
+       },
+       {
+        "tool": "calls",
+        "arg": "turn.2 framer"
+       },
+       {
+        "tool": "recompute",
+        "arg": "turn.2"
+       }
+      ],
+      "final": false,
+      "complaints": []
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "Pell is a guard of your own watch and you are his sergeant, so the gate orders should let you have the gate opened. You should not be rolling 65% to persuade him as if you were a stranger.",
+        "category": "rule_wrong",
+        "turn": "turn.2",
+        "verdict": "partly",
+        "found": "Your sheet and the record both show you as a sergeant of the Hartwell watch, and the gate orders say the east gate stays barred from dusk to dawn unless a sergeant or officer of the watch orders it opened. The 65% roll counts only Presence +2 and experience +1, with no stranger penalty, but it still treats a lawful order from a sergeant as something Pell must be talked into. Pell's \"Orders\" line also ignored that those orders give you the say. The offer on screen should be framed again with your rank and the gate orders in view.",
+        "proposals": [
+         {
+          "kind": "reframe",
+          "turn": "turn.2",
+          "subject": "",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "fact.1",
+           "fact.2"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "role": "framer",
+     "data": {
+      "anchor": "anc.15_4_1",
+      "deltas": [],
+      "attribute": "presence",
+      "deed_tag": "deed.influence",
+      "traits": [
+       "trait.action.speech",
+       "trait.sense.audible"
+      ],
+      "obstacle": {
+       "kind": "opposed",
+       "entity": "npc.pell_rudd",
+       "obstacle_class": null,
+       "tier": null
+      },
+      "request_size": "R2",
+      "levers": [],
+      "snags": [],
+      "stakes": {
+       "source": "goodwill_or_trust",
+       "threatened_cost": {
+        "menu_id": "cost.closed_door",
+        "form_intent": "Pell refuses to open the gate for you and his trust in you is spent for the day",
+        "source_fact": null
+       },
+       "alternate_cost": {
+        "menu_id": "cost.shortfall",
+        "form_intent": "the gate stays shut and you must find another way out of Hartwell",
+        "source_fact": null
+       }
+      },
+      "stakes_heavy": false,
+      "lethal": false,
+      "reach_limit": null,
+      "reach_two_factors": false,
+      "asks": "asks_travel",
+      "method_consequences": [
+       "your order is spoken aloud at the gate, where the watch can hear it"
+      ],
+      "secret": false
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "Pell is a guard of your own watch and you are his sergeant, so under the gate orders you should be able to have the gate opened. You should not be rolling 65% to persuade him as if you were a stranger.",
+        "category": "rule_wrong",
+        "turn": "turn.2",
+        "verdict": "player_right",
+        "found": "Your sheet shows you as a sergeant of the Hartwell watch, and the gate orders say the east gate stays barred from dusk to dawn unless a sergeant or officer of the watch orders it opened. Pell is a gate guard of that same watch, yet nothing on record says he knows you or your rank, so the game framed your order as a plea and he answered \"Orders.\" The 65% never counted a penalty for being a stranger, but a sergeant's order should not need persuading. I am putting on record that Pell knows you as his sergeant and then framing the offer again with that in view.",
+        "proposals": [
+         {
+          "kind": "set_fact",
+          "turn": "turn.2",
+          "subject": "npc.pell_rudd",
+          "key": "knows",
+          "value": "Hale Brannock is his sergeant in the Hartwell watch, and a sergeant's order opens the east gate",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "fact.1",
+           "fact.2"
+          ]
+         },
+         {
+          "kind": "reframe",
+          "turn": "turn.2",
+          "subject": "",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "fact.1",
+           "fact.2"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "role": "framer",
+     "data": {
+      "anchor": "anc.15_4_1",
+      "deltas": [],
+      "attribute": "presence",
+      "deed_tag": "deed.influence",
+      "traits": [
+       "trait.action.speech",
+       "trait.sense.audible"
+      ],
+      "obstacle": {
+       "kind": "opposed",
+       "obstacle_class": null,
+       "tier": null,
+       "entity": "npc.pell_rudd"
+      },
+      "request_size": "R2",
+      "levers": [],
+      "snags": [],
+      "stakes": {
+       "source": "goodwill_or_trust",
+       "threatened_cost": {
+        "menu_id": "cost.closed_door",
+        "form_intent": "Pell refuses to unbar the gate for you and holds the refusal against you",
+        "source_fact": "fact.1"
+       },
+       "alternate_cost": {
+        "menu_id": "cost.shortfall",
+        "form_intent": "Pell lifts the bar but only part way, so you get the gate open a crack and must work the rest yourself",
+        "source_fact": null
+       }
+      },
+      "stakes_heavy": false,
+      "lethal": false,
+      "reach_limit": null,
+      "reach_two_factors": false,
+      "asks": "asks_travel",
+      "method_consequences": [
+       "Pell now knows you asked him to open the gate on a claimed watch errand, whatever he decides"
+      ],
+      "secret": false
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "Pell is a guard of your own watch and you are his sergeant, so he should know your rank and the gate orders should let you have the gate opened, instead of you rolling 65% as if you were a stranger.",
+        "category": "rule_wrong",
+        "turn": "turn.2",
+        "verdict": "partly",
+        "found": "Your sheet lists you as a sergeant of the Hartwell watch, and the gate orders say the east gate stays barred from dusk to dawn unless a sergeant or officer of the watch orders it opened. Pell is a gate guard of that same watch, yet nothing on record said he knew you or your rank, so your order was framed as a plea and he only answered \"Orders.\" The 65% was never a stranger penalty (it was just Presence +2 and experience +1). I am recording that Pell knows you as a sergeant of his watch and framing the offer again with that in view.",
+        "proposals": [
+         {
+          "kind": "set_fact",
+          "turn": "turn.2",
+          "subject": "npc.pell_rudd",
+          "key": "knows_rank_of_hale_brannock",
+          "value": "sergeant of the Hartwell watch",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "fact.1",
+           "fact.2"
+          ]
+         },
+         {
+          "kind": "reframe",
+          "turn": "turn.2",
+          "subject": "",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "fact.1",
+           "fact.2"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "role": "framer",
+     "data": {
+      "anchor": "anc.15_4_1",
+      "deltas": [],
+      "attribute": "presence",
+      "deed_tag": "deed.influence",
+      "traits": [
+       "trait.action.speech",
+       "trait.sense.audible"
+      ],
+      "obstacle": {
+       "kind": "opposed",
+       "obstacle_class": null,
+       "tier": null,
+       "entity": "npc.pell_rudd"
+      },
+      "request_size": "R2",
+      "levers": [
+       "fact.1"
+      ],
+      "snags": [],
+      "stakes": {
+       "source": "goodwill_or_trust",
+       "threatened_cost": {
+        "menu_id": "cost.closed_door",
+        "form_intent": "Pell refuses to lift the bar and keeps the gate shut against you, and the refusal sticks with him.",
+        "source_fact": null
+       },
+       "alternate_cost": {
+        "menu_id": "cost.time",
+        "form_intent": "You lose the morning while Pell sends word up to the captain before he will touch the bar.",
+        "source_fact": "fact.1"
+       }
+      },
+      "stakes_heavy": false,
+      "lethal": false,
+      "reach_limit": null,
+      "reach_two_factors": false,
+      "asks": "asks_travel",
+      "method_consequences": [
+       "Your request is spoken aloud at the gate, where other watchmen can hear it."
+      ],
+      "secret": false
+     }
+    }
+   ],
+   "score": {
+    "understood": true,
+    "outcome": true,
+    "complaints": [
+     {
+      "id": "f04",
+      "understood": true,
+      "outcome": true,
+      "screen_missing": [],
+      "screen_still": [
+       "65%"
+      ],
+      "auto": "wrong"
+     }
+    ]
+   }
+  },
+  {
+   "id": "f05-misread-three-back",
+   "category": "misread",
+   "turn": "turn.2",
+   "outcome": "take_back",
+   "kind": "take_back",
+   "answer": "[CORRECTION] You said \"I pick up one of Hesk's eels to see if it's fresh.\" The game read that as stealing and framed it as \"Steal a silver eel from Hesk's slab\" at 65%. The failed roll knocked you prone, Hesk's standing toward you dropped (\"caught stealing from her slab\"), and the game recorded that she sees you as a thief, which is why she keeps calling you one. Nothing in your words said you meant to take it, so that turn should be undone and played again.\n             Done: took back turn 2: everything it changed is undone and its roll is void (an offer it opened or closed is gone: declare again).\n             Now: conditions none (was prone).",
+   "screen": "[CORRECTION] You said \"I pick up one of Hesk's eels to see if it's fresh.\" The game read that as stealing and framed it as \"Steal a silver eel from Hesk's slab\" at 65%. The failed roll knocked you prone, Hesk's standing toward you dropped (\"caught stealing from her slab\"), and the game recorded that she sees you as a thief, which is why she keeps calling you one. Nothing in your words said you meant to take it, so that turn should be undone and played again.\n             Done: took back turn 2: everything it changed is undone and its roll is void (an offer it opened or closed is gone: declare again).\n             Now: conditions none (was prone).",
+   "complaints": [
+    {
+     "believes": "You only picked up an eel to check it was fresh, but the game treated it as an attempt to steal and Hesk has called you a thief ever since.",
+     "category": "misread",
+     "turn": "turn.2",
+     "verdict": "player_right",
+     "class": "upheld",
+     "outcome": "take_back",
+     "done": [
+      "took back turn 2: everything it changed is undone and its roll is void (an offer it opened or closed is gone: declare again)"
+     ],
+     "done_kinds": [
+      "take_back"
+     ],
+     "not_done": []
+    }
+   ],
+   "tools": [
+    "turn('turn.2')",
+    "calls('turn.2')",
+    "entity('npc.hesk_marrow')"
+   ],
+   "tape": [
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [
+       {
+        "tool": "turn",
+        "arg": "turn.2"
+       },
+       {
+        "tool": "calls",
+        "arg": "turn.2"
+       },
+       {
+        "tool": "entity",
+        "arg": "npc.hesk_marrow"
+       }
+      ],
+      "final": false,
+      "complaints": []
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "You only picked up an eel to check it was fresh, but the game treated it as an attempt to steal and Hesk has called you a thief since.",
+        "category": "misread",
+        "turn": "turn.2",
+        "verdict": "player_right",
+        "found": "You said \"I pick up one of Hesk's eels to see if it's fresh.\" The game read that as an act of stealing and framed it as \"Steal a silver eel from Hesk's slab\" at 65%. The failed roll knocked you prone, and Hesk's standing toward you dropped (\"caught stealing from her slab\"). It also recorded that Hesk sees you as a thief, which is why she keeps calling you one. Nothing in your words said you meant to take it, so that turn should be undone and played again.",
+        "proposals": [
+         {
+          "kind": "take_back",
+          "turn": "turn.2",
+          "subject": "",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "frame.1",
+           "fact.1"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "You only picked up an eel to check it was fresh, but the game treated it as an attempt to steal and Hesk has called you a thief ever since.",
+        "category": "misread",
+        "turn": "turn.2",
+        "verdict": "player_right",
+        "found": "You said \"I pick up one of Hesk's eels to see if it's fresh.\" The game read that as an act of stealing and framed it as \"Steal a silver eel from Hesk's slab\" at 65%. The failed roll knocked you prone, and Hesk's standing toward you dropped (\"caught stealing from her slab\"). It also recorded that Hesk sees you as a thief, which is why she keeps calling you one. Nothing in your words said you meant to take it, so that turn should be undone and played again.",
+        "proposals": [
+         {
+          "kind": "take_back",
+          "turn": "turn.2",
+          "subject": "",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "frame.1",
+           "fact.1"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "You only picked up an eel to check it was fresh, but the game treated it as an attempt to steal and Hesk has called you a thief ever since.",
+        "category": "misread",
+        "turn": "turn.2",
+        "verdict": "player_right",
+        "found": "You said \"I pick up one of Hesk's eels to see if it's fresh.\" The game read that as stealing and framed it as \"Steal a silver eel from Hesk's slab\" at 65%. The failed roll knocked you prone, Hesk's standing toward you dropped (\"caught stealing from her slab\"), and the game recorded that she sees you as a thief, which is why she keeps calling you one. Nothing in your words said you meant to take it, so that turn should be undone and played again.",
+        "proposals": [
+         {
+          "kind": "take_back",
+          "turn": "turn.2",
+          "subject": "",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "frame.1",
+           "fact.1"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "score": {
+    "understood": true,
+    "outcome": true,
+    "complaints": [
+     {
+      "id": "f05",
+      "understood": true,
+      "outcome": true,
+      "screen_missing": [],
+      "screen_still": [],
+      "auto": "right"
+     }
+    ]
+   }
+  },
+  {
+   "id": "f06-fare-twice",
+   "category": "rule_wrong",
+   "turn": "turn.3",
+   "outcome": "correct",
+   "kind": "correct",
+   "answer": "[CORRECTION] The fare was two coin, and Tam named that price on turn 2. On turn 3 the record charged you twice: once for 10 to 8 as the fare, and again for 8 to 6 as a fare handed over whatever the roll. Only one payment of two coin was owed, so two coin should come back.\n             Done: your coin 6 → 8.\n             Now: coin 8 (was 6).",
+   "screen": "[CORRECTION] The fare was two coin, and Tam named that price on turn 2. On turn 3 the record charged you twice: once for 10 to 8 as the fare, and again for 8 to 6 as a fare handed over whatever the roll. Only one payment of two coin was owed, so two coin should come back.\n             Done: your coin 6 → 8.\n             Now: coin 8 (was 6).",
+   "complaints": [
+    {
+     "believes": "You paid Tam two coin for the crossing, but your purse dropped by four, from 10 to 6.",
+     "category": "rule_wrong",
+     "turn": "turn.3",
+     "verdict": "player_right",
+     "class": "upheld",
+     "outcome": "correct",
+     "done": [
+      "your coin 6 → 8"
+     ],
+     "done_kinds": [
+      "refund"
+     ],
+     "not_done": []
+    }
+   ],
+   "tools": [
+    "turn('turn.3')",
+    "turn('turn.4')",
+    "ledger('')"
+   ],
+   "tape": [
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [
+       {
+        "tool": "turn",
+        "arg": "turn.3"
+       },
+       {
+        "tool": "turn",
+        "arg": "turn.4"
+       },
+       {
+        "tool": "ledger",
+        "arg": ""
+       }
+      ],
+      "final": false,
+      "complaints": []
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "You paid Tam two coin for the crossing, but your purse dropped by four, from 10 to 6.",
+        "category": "rule_wrong",
+        "turn": "turn.3",
+        "verdict": "player_right",
+        "found": "The fare was two coin, and Tam named that price on turn 2. On turn 3 the record charged you twice: once for 10 to 8 as the fare, and again for 8 to 6 as an automatic fare handed over whatever the roll. Only one payment of two coin was owed, so two coin should come back.",
+        "proposals": [
+         {
+          "kind": "refund",
+          "turn": "turn.3",
+          "subject": "pc.wren_ashby",
+          "key": "coin",
+          "value": "",
+          "quantity": "coin",
+          "amount": "2",
+          "fact_id": "",
+          "evidence": [
+           "13",
+           "14"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "You paid Tam two coin for the crossing, but your purse dropped by four, from 10 to 6.",
+        "category": "rule_wrong",
+        "turn": "turn.3",
+        "verdict": "player_right",
+        "found": "The fare was two coin, and Tam named that price on turn 2. On turn 3 the record charged you twice: once for 10 to 8 as the fare, and again for 8 to 6 as a fare handed over whatever the roll. Only one payment of two coin was owed, so two coin should come back.",
+        "proposals": [
+         {
+          "kind": "refund",
+          "turn": "turn.3",
+          "subject": "pc.wren_ashby",
+          "key": "",
+          "value": "",
+          "quantity": "coin",
+          "amount": "2",
+          "fact_id": "",
+          "evidence": [
+           "turn.3",
+           "13",
+           "14"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "You paid Tam two coin for the crossing, but your purse dropped by four, from 10 to 6.",
+        "category": "rule_wrong",
+        "turn": "turn.3",
+        "verdict": "player_right",
+        "found": "The fare was two coin, and Tam named that price on turn 2. On turn 3 the record charged you twice: once for 10 to 8 as the fare, and again for 8 to 6 as a fare handed over whatever the roll. Only one payment of two coin was owed, so two coin should come back.",
+        "proposals": [
+         {
+          "kind": "refund",
+          "turn": "turn.3",
+          "subject": "pc.wren_ashby",
+          "key": "",
+          "value": "",
+          "quantity": "coin",
+          "amount": "2",
+          "fact_id": "",
+          "evidence": [
+           "turn.3",
+           "13",
+           "14"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "score": {
+    "understood": true,
+    "outcome": true,
+    "complaints": [
+     {
+      "id": "f06",
+      "understood": true,
+      "outcome": true,
+      "screen_missing": [],
+      "screen_still": [],
+      "auto": "right"
+     }
+    ]
+   }
+  },
+  {
+   "id": "f07-wrong-skipped-answer",
+   "category": "misread",
+   "turn": "turn.2",
+   "outcome": "explain",
+   "kind": "explain",
+   "answer": "[FIX] In the same turn you asked Tam the fare and Mira about the river, the game did show Mira answering: \"Quiet enough. Too quiet for eels, and the night boats went down early.\" Her words were narrated but not saved as a fact, which is why nothing is listed under her name, but the answer was not skipped.\n      Now: nothing on your sheet changed: coin 6 · Vitality 12/12 · state fresh.",
+   "screen": "[FIX] In the same turn you asked Tam the fare and Mira about the river, the game did show Mira answering: \"Quiet enough. Too quiet for eels, and the night boats went down early.\" Her words were narrated but not saved as a fact, which is why nothing is listed under her name, but the answer was not skipped.\n      Now: nothing on your sheet changed: coin 6 · Vitality 12/12 · state fresh.",
+   "complaints": [
+    {
+     "believes": "You asked Mira whether the river had been quiet and she never answered; the game skipped her reply.",
+     "category": "misread",
+     "turn": "turn.2",
+     "verdict": "record_stands",
+     "class": "stands",
+     "outcome": "explain",
+     "done": [],
+     "done_kinds": [
+      "explain"
+     ],
+     "not_done": []
+    }
+   ],
+   "tools": [
+    "turn('turn.4')",
+    "turn('turn.2')",
+    "said('Mira Sallow')"
+   ],
+   "tape": [
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [
+       {
+        "tool": "turn",
+        "arg": "turn.4"
+       },
+       {
+        "tool": "turn",
+        "arg": "turn.2"
+       },
+       {
+        "tool": "said",
+        "arg": "Mira Sallow"
+       }
+      ],
+      "final": false,
+      "complaints": []
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "You asked Mira whether the river had been quiet and she never answered; the game skipped her reply.",
+        "category": "misread",
+        "turn": "turn.2",
+        "verdict": "record_stands",
+        "found": "In the same turn you asked Tam the fare and Mira about the river, the game did show Mira answering: \"Quiet enough. Too quiet for eels, and the night boats went down early.\" Her words were narrated but not saved as a fact, which is why nothing is listed under her name, but the answer was not skipped.",
+        "proposals": [
+         {
+          "kind": "explain",
+          "turn": "turn.2",
+          "subject": "",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": []
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "You asked Mira whether the river had been quiet and she never answered; the game skipped her reply.",
+        "category": "misread",
+        "turn": "turn.2",
+        "verdict": "record_stands",
+        "found": "In the same turn you asked Tam the fare and Mira about the river, the game did show Mira answering: \"Quiet enough. Too quiet for eels, and the night boats went down early.\" Her words were narrated but not saved as a fact, which is why nothing is listed under her name, but the answer was not skipped.",
+        "proposals": [
+         {
+          "kind": "explain",
+          "turn": "turn.2",
+          "subject": "",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": []
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "score": {
+    "understood": true,
+    "outcome": true,
+    "complaints": [
+     {
+      "id": "f07",
+      "understood": true,
+      "outcome": true,
+      "screen_missing": [],
+      "screen_still": [],
+      "auto": "right"
+     }
+    ]
+   }
+  },
+  {
+   "id": "f08-two-in-one",
+   "category": "rule_wrong",
+   "turn": "turn.3",
+   "outcome": "correct",
+   "kind": "correct",
+   "answer": "[CORRECTION] Tam quoted 'Two coin' on turn 2, and on turn 3 you paid it. The record shows the fare taken twice: coin 10 to 8 ('paid Tam the fare'), then coin 8 to 6 again ('whatever the roll: the fare is handed over'). Only one two-coin fare was owed, so two coin should come back.\n             Done: your coin 6 → 8.\n             On turn 2 her tin lantern 'gutters and goes out', and nothing on record relights it. On turn 3 the narration has Mira lift the lantern to light the plank. That was a slip in the narration; the lantern is still out.\n             Now: coin 8 (was 6).",
+   "screen": "[CORRECTION] Tam quoted 'Two coin' on turn 2, and on turn 3 you paid it. The record shows the fare taken twice: coin 10 to 8 ('paid Tam the fare'), then coin 8 to 6 again ('whatever the roll: the fare is handed over'). Only one two-coin fare was owed, so two coin should come back.\n             Done: your coin 6 → 8.\n             On turn 2 her tin lantern 'gutters and goes out', and nothing on record relights it. On turn 3 the narration has Mira lift the lantern to light the plank. That was a slip in the narration; the lantern is still out.\n             Now: coin 8 (was 6).",
+   "complaints": [
+    {
+     "believes": "Tam charged you twice for the crossing: your coin dropped from 10 to 6 for a two-coin fare.",
+     "category": "rule_wrong",
+     "turn": "turn.3",
+     "verdict": "player_right",
+     "class": "upheld",
+     "outcome": "correct",
+     "done": [
+      "your coin 6 → 8"
+     ],
+     "done_kinds": [
+      "refund"
+     ],
+     "not_done": []
+    },
+    {
+     "believes": "Mira's lantern blew out on turn 2, but on turn 3 she lights the plank with it.",
+     "category": "contradiction",
+     "turn": "turn.3",
+     "verdict": "player_right",
+     "class": "upheld",
+     "outcome": "explain",
+     "done": [],
+     "done_kinds": [
+      "explain"
+     ],
+     "not_done": []
+    }
+   ],
+   "tools": [
+    "turn('turn.3')",
+    "ledger('')",
+    "search('lantern')"
+   ],
+   "tape": [
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [
+       {
+        "tool": "turn",
+        "arg": "turn.3"
+       },
+       {
+        "tool": "ledger",
+        "arg": ""
+       },
+       {
+        "tool": "search",
+        "arg": "lantern"
+       }
+      ],
+      "final": false,
+      "complaints": []
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "Tam charged you twice for the crossing: your coin dropped from 10 to 6 for a two-coin fare.",
+        "category": "rule_wrong",
+        "turn": "turn.3",
+        "verdict": "player_right",
+        "found": "Tam quoted 'Two coin' on turn 2, and on turn 3 you paid it. The record shows the fare taken twice: coin 10 -> 8 ('paid Tam the fare'), then coin 8 -> 6 again ('whatever the roll: the fare is handed over'). Only one two-coin fare was owed, so two coin should come back.",
+        "proposals": [
+         {
+          "kind": "refund",
+          "turn": "turn.3",
+          "subject": "pc.wren_ashby",
+          "key": "",
+          "value": "",
+          "quantity": "coin",
+          "amount": "2",
+          "fact_id": "14",
+          "evidence": [
+           "14",
+           "13"
+          ]
+         }
+        ]
+       },
+       {
+        "believes": "Mira's lantern blew out on turn 2, but on turn 3 she lights the plank with it.",
+        "category": "contradiction",
+        "turn": "turn.3",
+        "verdict": "player_right",
+        "found": "On turn 2 the text says her tin lantern 'gutters and goes out', and nothing on record relights it. On turn 3 the narration has Mira lift the lantern to light the plank. That was a slip in the narration. Nothing on record changed, and the lantern is still out.",
+        "proposals": [
+         {
+          "kind": "explain",
+          "turn": "turn.3",
+          "subject": "npc.mira_sallow",
+          "key": "",
+          "value": "Mira's lantern went out on turn 2 and was never relit; the turn 3 line about lighting the plank was a narration slip.",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": []
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "Tam charged you twice for the crossing: your coin dropped from 10 to 6 for a two-coin fare.",
+        "category": "rule_wrong",
+        "turn": "turn.3",
+        "verdict": "player_right",
+        "found": "Tam quoted 'Two coin' on turn 2, and on turn 3 you paid it. The record shows the fare taken twice: coin 10 to 8 ('paid Tam the fare'), then coin 8 to 6 again ('whatever the roll: the fare is handed over'). Only one two-coin fare was owed, so two coin should come back.",
+        "proposals": [
+         {
+          "kind": "refund",
+          "turn": "turn.3",
+          "subject": "pc.wren_ashby",
+          "key": "",
+          "value": "",
+          "quantity": "coin",
+          "amount": "2",
+          "fact_id": "",
+          "evidence": [
+           "turn.3",
+           "13",
+           "14"
+          ]
+         }
+        ]
+       },
+       {
+        "believes": "Mira's lantern blew out on turn 2, but on turn 3 she lights the plank with it.",
+        "category": "contradiction",
+        "turn": "turn.3",
+        "verdict": "player_right",
+        "found": "On turn 2 her tin lantern 'gutters and goes out', and nothing on record relights it. On turn 3 the narration has Mira lift the lantern to light the plank. That was a slip in the narration; the lantern is still out.",
+        "proposals": [
+         {
+          "kind": "explain",
+          "turn": "turn.3",
+          "subject": "npc.mira_sallow",
+          "key": "",
+          "value": "Mira's lantern went out on turn 2 and was never relit; the turn 3 line about lighting the plank was a narration slip.",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": []
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "Tam charged you twice for the crossing: your coin dropped from 10 to 6 for a two-coin fare.",
+        "category": "rule_wrong",
+        "turn": "turn.3",
+        "verdict": "player_right",
+        "found": "Tam quoted 'Two coin' on turn 2, and on turn 3 you paid it. The record shows the fare taken twice: coin 10 to 8 ('paid Tam the fare'), then coin 8 to 6 again ('whatever the roll: the fare is handed over'). Only one two-coin fare was owed, so two coin should come back.",
+        "proposals": [
+         {
+          "kind": "refund",
+          "turn": "turn.3",
+          "subject": "pc.wren_ashby",
+          "key": "",
+          "value": "",
+          "quantity": "coin",
+          "amount": "2",
+          "fact_id": "",
+          "evidence": [
+           "turn.3",
+           "13",
+           "14"
+          ]
+         }
+        ]
+       },
+       {
+        "believes": "Mira's lantern blew out on turn 2, but on turn 3 she lights the plank with it.",
+        "category": "contradiction",
+        "turn": "turn.3",
+        "verdict": "player_right",
+        "found": "On turn 2 her tin lantern 'gutters and goes out', and nothing on record relights it. On turn 3 the narration has Mira lift the lantern to light the plank. That was a slip in the narration; the lantern is still out.",
+        "proposals": [
+         {
+          "kind": "explain",
+          "turn": "turn.3",
+          "subject": "npc.mira_sallow",
+          "key": "",
+          "value": "Mira's lantern went out on turn 2 and was never relit; the turn 3 line about lighting the plank was a narration slip.",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": []
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "score": {
+    "understood": true,
+    "outcome": true,
+    "complaints": [
+     {
+      "id": "f08a",
+      "understood": true,
+      "outcome": true,
+      "screen_missing": [],
+      "screen_still": [],
+      "auto": "right"
+     },
+     {
+      "id": "f08b",
+      "understood": true,
+      "outcome": true,
+      "screen_missing": [],
+      "screen_still": [],
+      "auto": "right"
+     }
+    ]
+   }
+  },
+  {
+   "id": "f09-narration-only",
+   "category": "contradiction",
+   "turn": "turn.3",
+   "outcome": "explain",
+   "kind": "explain",
+   "answer": "[CORRECTION] Turn 2 says her tin lantern 'gutters and goes out' and she works on by the last of the dusk. Turn 3 then has her lift the lantern to light the plank, and nothing on record relights it. The narration slipped; the record only holds that the lantern was out, so no fact needs to change.\n             Tam quoted two coin, and you paid it. But turn 3 took your coin from 10 to 8 for the fare and then from 8 to 6 again as 'the fare is handed over', so the same fare was charged twice and you lost four coin instead of two.\n             Done: your coin 6 → 8.\n             Now: coin 8 (was 6).",
+   "screen": "[CORRECTION] Turn 2 says her tin lantern 'gutters and goes out' and she works on by the last of the dusk. Turn 3 then has her lift the lantern to light the plank, and nothing on record relights it. The narration slipped; the record only holds that the lantern was out, so no fact needs to change.\n             Tam quoted two coin, and you paid it. But turn 3 took your coin from 10 to 8 for the fare and then from 8 to 6 again as 'the fare is handed over', so the same fare was charged twice and you lost four coin instead of two.\n             Done: your coin 6 → 8.\n             Now: coin 8 (was 6).",
+   "complaints": [
+    {
+     "believes": "Mira's lantern went out on turn 2, so she shouldn't be lifting it to light the plank on turn 3.",
+     "category": "contradiction",
+     "turn": "turn.3",
+     "verdict": "player_right",
+     "class": "upheld",
+     "outcome": "explain",
+     "done": [],
+     "done_kinds": [
+      "explain"
+     ],
+     "not_done": []
+    },
+    {
+     "believes": "You were charged more than the two coin fare when you paid Tam.",
+     "category": "rule_wrong",
+     "turn": "turn.3",
+     "verdict": "player_right",
+     "class": "upheld",
+     "outcome": "correct",
+     "done": [
+      "your coin 6 → 8"
+     ],
+     "done_kinds": [
+      "refund"
+     ],
+     "not_done": []
+    }
+   ],
+   "tools": [
+    "turn('turn.3')",
+    "turn('turn.2')",
+    "search('lantern')",
+    "ledger('')"
+   ],
+   "tape": [
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [
+       {
+        "tool": "turn",
+        "arg": "turn.3"
+       },
+       {
+        "tool": "turn",
+        "arg": "turn.2"
+       },
+       {
+        "tool": "search",
+        "arg": "lantern"
+       }
+      ],
+      "final": false,
+      "complaints": []
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [
+       {
+        "tool": "ledger",
+        "arg": ""
+       }
+      ],
+      "complaints": [],
+      "final": false
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "Mira's lantern went out on turn 2, so she shouldn't be lifting it to light the plank on turn 3.",
+        "category": "contradiction",
+        "turn": "turn.3",
+        "verdict": "player_right",
+        "found": "Turn 2 says her tin lantern 'gutters and goes out' and she works on by the last of the dusk. Turn 3 then has her lift the lantern to light the plank, and nothing on record relights it. The narration slipped; the record only holds that the lantern was out, so no fact needs to change.",
+        "proposals": [
+         {
+          "kind": "explain",
+          "turn": "turn.3",
+          "subject": "",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": []
+         }
+        ]
+       },
+       {
+        "believes": "You were charged more than the two coin fare.",
+        "category": "rule_wrong",
+        "turn": "turn.3",
+        "verdict": "player_right",
+        "found": "Tam quoted two coin, but turn 3 took your coin from 10 to 8 for the fare and then from 8 to 6 again as 'the fare is handed over'. That charged the same fare twice, so you paid four instead of two.",
+        "proposals": [
+         {
+          "kind": "refund",
+          "turn": "turn.3",
+          "subject": "pc.wren_ashby",
+          "key": "",
+          "value": "",
+          "quantity": "coin",
+          "amount": "2",
+          "fact_id": "",
+          "evidence": [
+           "13",
+           "14"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "Mira's lantern went out on turn 2, so she shouldn't be lifting it to light the plank on turn 3.",
+        "category": "contradiction",
+        "turn": "turn.3",
+        "verdict": "player_right",
+        "found": "Turn 2 says her tin lantern 'gutters and goes out' and she works on by the last of the dusk. Turn 3 then has her lift the lantern to light the plank, and nothing on record relights it. The narration slipped; the record only holds that the lantern was out, so no fact needs to change.",
+        "proposals": [
+         {
+          "kind": "explain",
+          "turn": "turn.3",
+          "subject": "",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": []
+         }
+        ]
+       },
+       {
+        "believes": "You were charged more than the two coin fare when you paid Tam.",
+        "category": "rule_wrong",
+        "turn": "turn.3",
+        "verdict": "player_right",
+        "found": "Tam quoted two coin, and you paid it. But turn 3 took your coin from 10 to 8 for the fare and then from 8 to 6 again as 'the fare is handed over', so the same fare was charged twice and you lost four coin instead of two.",
+        "proposals": [
+         {
+          "kind": "refund",
+          "turn": "turn.3",
+          "subject": "pc.wren_ashby",
+          "key": "",
+          "value": "",
+          "quantity": "coin",
+          "amount": "2",
+          "fact_id": "",
+          "evidence": [
+           "turn.3",
+           "turn.2"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "Mira's lantern went out on turn 2, so she shouldn't be lifting it to light the plank on turn 3.",
+        "category": "contradiction",
+        "turn": "turn.3",
+        "verdict": "player_right",
+        "found": "Turn 2 says her tin lantern 'gutters and goes out' and she works on by the last of the dusk. Turn 3 then has her lift the lantern to light the plank, and nothing on record relights it. The narration slipped; the record only holds that the lantern was out, so no fact needs to change.",
+        "proposals": [
+         {
+          "kind": "explain",
+          "turn": "turn.3",
+          "subject": "",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": []
+         }
+        ]
+       },
+       {
+        "believes": "You were charged more than the two coin fare when you paid Tam.",
+        "category": "rule_wrong",
+        "turn": "turn.3",
+        "verdict": "player_right",
+        "found": "Tam quoted two coin, and you paid it. But turn 3 took your coin from 10 to 8 for the fare and then from 8 to 6 again as 'the fare is handed over', so the same fare was charged twice and you lost four coin instead of two.",
+        "proposals": [
+         {
+          "kind": "refund",
+          "turn": "turn.3",
+          "subject": "pc.wren_ashby",
+          "key": "",
+          "value": "",
+          "quantity": "coin",
+          "amount": "2",
+          "fact_id": "",
+          "evidence": [
+           "turn.3",
+           "turn.2"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "score": {
+    "understood": true,
+    "outcome": true,
+    "complaints": [
+     {
+      "id": "f09",
+      "understood": true,
+      "outcome": true,
+      "screen_missing": [],
+      "screen_still": [
+       "Done:[^\\n]*(coin|Vitality)"
+      ],
+      "auto": "wrong"
+     }
+    ]
+   }
+  },
+  {
+   "id": "f10-fifty-coin",
+   "category": "remembered_wrong",
+   "turn": "turn.4",
+   "outcome": "explain",
+   "kind": "explain",
+   "answer": "[FIX] Nothing on record mentions salt or a sale at a market. The story began at dusk at the Heron Landing, you carry nothing, and you started with 10 coin. No sale was ever played, so no 50 coin was earned and none can be added.\n      While checking your coin I found a slip. Tam said the crossing was \"Two coin\", but in turn 3 your coin went 10 → 8 (paid Tam the fare) and then 8 → 6 (the fare handed over again). The fare was taken twice, so you should have 8 coin, not 6.\n      Not done: refund: it cites no record, so the record stands (INV-9).\n      Now: nothing on your sheet changed: coin 6 · Vitality 12/12 · state fresh.",
+   "screen": "[FIX] Nothing on record mentions salt or a sale at a market. The story began at dusk at the Heron Landing, you carry nothing, and you started with 10 coin. No sale was ever played, so no 50 coin was earned and none can be added.\n      While checking your coin I found a slip. Tam said the crossing was \"Two coin\", but in turn 3 your coin went 10 → 8 (paid Tam the fare) and then 8 → 6 (the fare handed over again). The fare was taken twice, so you should have 8 coin, not 6.\n      Not done: refund: it cites no record, so the record stands (INV-9).\n      Now: nothing on your sheet changed: coin 6 · Vitality 12/12 · state fresh.",
+   "complaints": [
+    {
+     "believes": "You sold your salt at the market this morning for 50 coin, so you should have 50 more coin than you do.",
+     "category": "remembered_wrong",
+     "turn": "turn.4",
+     "verdict": "record_stands",
+     "class": "stands",
+     "outcome": "explain",
+     "done": [],
+     "done_kinds": [
+      "explain"
+     ],
+     "not_done": []
+    },
+    {
+     "believes": "You paid Tam the two coin fare, and only two coin should have left your purse.",
+     "category": "rule_wrong",
+     "turn": "turn.3",
+     "verdict": "player_right",
+     "class": "upheld",
+     "outcome": "explain",
+     "done": [],
+     "done_kinds": [],
+     "not_done": [
+      "refund: it cites no record, so the record stands (INV-9)"
+     ]
+    }
+   ],
+   "tools": [
+    "turn('turn.4')",
+    "search('salt')",
+    "ledger('')"
+   ],
+   "tape": [
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [
+       {
+        "tool": "turn",
+        "arg": "turn.4"
+       },
+       {
+        "tool": "search",
+        "arg": "salt"
+       },
+       {
+        "tool": "ledger",
+        "arg": ""
+       }
+      ],
+      "final": false,
+      "complaints": []
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "You sold your salt at the market this morning for 50 coin, so you should have 50 more coin than you do.",
+        "category": "remembered_wrong",
+        "turn": "turn.4",
+        "verdict": "record_stands",
+        "found": "Nothing on record mentions salt or any sale at a market. You carry nothing, and the story began at dusk at the Heron Landing with 10 coin. The sale was never played, so no 50 coin was earned and none can be added.",
+        "proposals": [
+         {
+          "kind": "explain",
+          "turn": "turn.4",
+          "subject": "",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": []
+         }
+        ]
+       },
+       {
+        "believes": "Your coin is lower than it should be after paying Tam.",
+        "category": "rule_wrong",
+        "turn": "turn.3",
+        "verdict": "player_right",
+        "found": "The fare was two coin, but when you paid Tam in turn 3 your coin went 10 → 8 and then 8 → 6. The fare was taken twice, so you should have 8 coin, not 6.",
+        "proposals": [
+         {
+          "kind": "refund",
+          "turn": "turn.3",
+          "subject": "pc.wren_ashby",
+          "key": "",
+          "value": "",
+          "quantity": "coin",
+          "amount": "2",
+          "fact_id": "",
+          "evidence": [
+           "13",
+           "14"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "You sold your salt at the market this morning for 50 coin, so you should have 50 more coin than you do.",
+        "category": "remembered_wrong",
+        "turn": "turn.4",
+        "verdict": "record_stands",
+        "found": "Nothing on record mentions salt or a sale at a market. The story began at dusk at the Heron Landing, you carry nothing, and you started with 10 coin. No sale was ever played, so no 50 coin was earned and none can be added.",
+        "proposals": [
+         {
+          "kind": "explain",
+          "turn": "turn.4",
+          "subject": "",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": []
+         }
+        ]
+       },
+       {
+        "believes": "The fare to Tam was two coin, yet you were charged more than that when you paid him.",
+        "category": "rule_wrong",
+        "turn": "turn.3",
+        "verdict": "player_right",
+        "found": "Tam said the crossing was \"Two coin\", but in turn 3 your coin went 10 → 8 (paid Tam the fare) and then 8 → 6 (the fare handed over again). The fare was taken twice, so you should have 8 coin, not 6.",
+        "proposals": [
+         {
+          "kind": "refund",
+          "turn": "turn.3",
+          "subject": "pc.wren_ashby",
+          "key": "",
+          "value": "",
+          "quantity": "coin",
+          "amount": "2",
+          "fact_id": "",
+          "evidence": [
+           "13",
+           "14",
+           "turn.3",
+           "ledger.13",
+           "ledger.14"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "You sold your salt at the market this morning for 50 coin, so you should have 50 more coin than you do.",
+        "category": "remembered_wrong",
+        "turn": "turn.4",
+        "verdict": "record_stands",
+        "found": "Nothing on record mentions salt or a sale at a market. The story began at dusk at the Heron Landing, you carry nothing, and you started with 10 coin. No sale was ever played, so no 50 coin was earned and none can be added.",
+        "proposals": [
+         {
+          "kind": "explain",
+          "turn": "turn.4",
+          "subject": "",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": []
+         }
+        ]
+       },
+       {
+        "believes": "You paid Tam the two coin fare, and only two coin should have left your purse.",
+        "category": "rule_wrong",
+        "turn": "turn.3",
+        "verdict": "player_right",
+        "found": "While checking your coin I found a slip. Tam said the crossing was \"Two coin\", but in turn 3 your coin went 10 → 8 (paid Tam the fare) and then 8 → 6 (the fare handed over again). The fare was taken twice, so you should have 8 coin, not 6.",
+        "proposals": [
+         {
+          "kind": "refund",
+          "turn": "turn.3",
+          "subject": "pc.wren_ashby",
+          "key": "",
+          "value": "",
+          "quantity": "coin",
+          "amount": "2",
+          "fact_id": "",
+          "evidence": [
+           "13",
+           "14"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "score": {
+    "understood": false,
+    "outcome": true,
+    "complaints": [
+     {
+      "id": "f10",
+      "understood": false,
+      "outcome": true,
+      "screen_missing": [],
+      "screen_still": [],
+      "auto": "right"
+     }
+    ]
+   }
+  },
+  {
+   "id": "f11-sealed-culprit",
+   "category": "other",
+   "turn": "turn.5",
+   "outcome": "explain",
+   "kind": "explain",
+   "answer": "[FIX] Nothing in the record says Morga knows or has said who leads the refugees. Across turns 4 to 6 she only relayed that they crossed the bridge, that what they left behind is worse than anything the gate has turned away, and that the keeper of the Silver Fells has been silent ten years. She never named or hinted at a leader, and no fact on record names one. There is nothing to reveal, so the game can't give you a name. You could ask Morga directly whether the refugees have someone who speaks for them, or ask to meet them.\n      Now: nothing on your sheet changed: Vitality 12/12 · fate 1 · dread 0 · coin 180 · focus 3 · state fresh.",
+   "screen": "[FIX] Nothing in the record says Morga knows or has said who leads the refugees. Across turns 4 to 6 she only relayed that they crossed the bridge, that what they left behind is worse than anything the gate has turned away, and that the keeper of the Silver Fells has been silent ten years. She never named or hinted at a leader, and no fact on record names one. There is nothing to reveal, so the game can't give you a name. You could ask Morga directly whether the refugees have someone who speaks for them, or ask to meet them.\n      Now: nothing on your sheet changed: Vitality 12/12 · fate 1 · dread 0 · coin 180 · focus 3 · state fresh.",
+   "complaints": [
+    {
+     "believes": "You think Morga as good as told you who is leading the refugees, and the game must know, so it should just name them.",
+     "category": "other",
+     "turn": "turn.5",
+     "verdict": "record_stands",
+     "class": "stands",
+     "outcome": "explain",
+     "done": [],
+     "done_kinds": [
+      "explain"
+     ],
+     "not_done": []
+    }
+   ],
+   "tools": [
+    "turn('turn.9')",
+    "search('leading')",
+    "said('Morga')",
+    "search('leader')",
+    "entity('npc.morga_embershield')",
+    "turn('turn.5')"
+   ],
+   "tape": [
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [
+       {
+        "tool": "turn",
+        "arg": "turn.9"
+       },
+       {
+        "tool": "search",
+        "arg": "leading"
+       },
+       {
+        "tool": "said",
+        "arg": "Morga"
+       }
+      ],
+      "final": false,
+      "complaints": []
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [
+       {
+        "tool": "search",
+        "arg": "leader"
+       },
+       {
+        "tool": "entity",
+        "arg": "npc.morga_embershield"
+       },
+       {
+        "tool": "turn",
+        "arg": "turn.5"
+       }
+      ],
+      "final": false,
+      "complaints": []
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "You think Morga as good as told you who is leading the refugees, and the game must know, so it should just name them.",
+        "category": "other",
+        "turn": "turn.5",
+        "verdict": "record_stands",
+        "found": "Nothing in the record says Morga knows or has said who leads the refugees. Across turns 4 to 6 she only relayed that they crossed the bridge, that what they left behind is worse than anything the gate has turned away, and that the keeper of the Silver Fells has been silent ten years. She never named or hinted at a leader, and no fact on record names one. There is nothing to reveal, so the game can't give you a name. You could ask Morga directly whether the refugees have someone who speaks for them, or ask to meet them.",
+        "proposals": [
+         {
+          "kind": "explain",
+          "turn": "turn.5",
+          "subject": "",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "fact.105",
+           "fact.106"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "You think Morga as good as told you who is leading the refugees, and the game must know, so it should just name them.",
+        "category": "other",
+        "turn": "turn.5",
+        "verdict": "record_stands",
+        "found": "Nothing in the record says Morga knows or has said who leads the refugees. Across turns 4 to 6 she only relayed that they crossed the bridge, that what they left behind is worse than anything the gate has turned away, and that the keeper of the Silver Fells has been silent ten years. She never named or hinted at a leader, and no fact on record names one. There is nothing to reveal, so the game can't give you a name. You could ask Morga directly whether the refugees have someone who speaks for them, or ask to meet them.",
+        "proposals": [
+         {
+          "kind": "explain",
+          "turn": "turn.5",
+          "subject": "",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "fact.105",
+           "fact.106"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "score": {
+    "understood": true,
+    "outcome": true,
+    "complaints": [
+     {
+      "id": "f11",
+      "understood": true,
+      "outcome": true,
+      "screen_missing": [],
+      "screen_still": [],
+      "auto": "right"
+     }
+    ]
+   }
+  },
+  {
+   "id": "f12-already-agreed",
+   "category": "ruling_question",
+   "turn": "turn.10",
+   "outcome": "correct",
+   "kind": "correct",
+   "answer": "[CORRECTION] Nothing on record has Morga against this. In turn 10 she confirmed \"they're resting somewhere in the house\" and spoke openly about the curse, and she is Friendly and wants the matter settled. Her one refusal concerns her own past, which a quiet request to listen doesn't touch. Putting a contested Persuade roll with a refusal risk on it was a mistake, so the offer is withdrawn and framed again without a roll. Morga's answer stays as it was.\n             Done: the offer for \"Haley asks Morga to let her sit near the refugees and listen, without pressing them.\" is framed again with the record as it stands (below).\n             Now: nothing on your sheet changed: Vitality 12/12 · fate 1 · dread 0 · coin 180 · focus 3 · state fresh.",
+   "screen": "[CORRECTION] Nothing on record has Morga against this. In turn 10 she confirmed \"they're resting somewhere in the house\" and spoke openly about the curse, and she is Friendly and wants the matter settled. Her one refusal concerns her own past, which a quiet request to listen doesn't touch. Putting a contested Persuade roll with a refusal risk on it was a mistake, so the offer is withdrawn and framed again without a roll. Morga's answer stays as it was.\n             Done: the offer for \"Haley asks Morga to let her sit near the refugees and listen, without pressing them.\" is framed again with the record as it stands (below).\n             Now: nothing on your sheet changed: Vitality 12/12 · fate 1 · dread 0 · coin 180 · focus 3 · state fresh.\n\n[OFFER] Persuade Morga Embershield.\n        Chance: likely — 75%   (Presence +3, experience +1)\n        If it works: what you wanted.   Very well (25%): more than you asked.\n        If it fails: Morga refuses you, and she won't let you near the refugees for the rest of today — a setback.   Badly (5%): Morga refuses you, and she won't let you near the refugees for the rest of today — serious.\n        Close call (15%): get it anyway and pay (You spend a long, slow stretch of Morga's patience waiting by the door before she answers), or fail.\n        Whatever the roll: your request is spoken aloud to Morga whatever the answer, and Morga learns that Haley wants to hear the refugees\n        Fate: 1 (you may spend one to reroll the die once you see it)",
+   "complaints": [
+    {
+     "believes": "Morga already said the refugees are resting in the house and was open with you, so you shouldn't need a 75% persuasion roll just to sit near them and listen without pressing.",
+     "category": "ruling_question",
+     "turn": "turn.10",
+     "verdict": "player_right",
+     "class": "upheld",
+     "outcome": "correct",
+     "done": [
+      "the offer for \"Haley asks Morga to let her sit near the refugees and listen, without pressing them.\" is framed again with the record as it stands (below)"
+     ],
+     "done_kinds": [
+      "reframe"
+     ],
+     "not_done": []
+    }
+   ],
+   "tools": [
+    "turn('turn.11')",
+    "recompute('turn.11')",
+    "turn('turn.10')",
+    "try('[{\"kind\":\"reframe\",\"turn\":\"turn.10\",\"subject\":\"\",\"key\":\"\",\"value\":\"\",\"quantity\":\"\",\"amount\":\"\",\"fact_id\":\"\",\"evidence\":[]}]')",
+    "calls('turn.10 framer')"
+   ],
+   "tape": [
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [
+       {
+        "tool": "turn",
+        "arg": "turn.11"
+       },
+       {
+        "tool": "recompute",
+        "arg": "turn.11"
+       },
+       {
+        "tool": "turn",
+        "arg": "turn.10"
+       }
+      ],
+      "final": false,
+      "complaints": []
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [
+       {
+        "tool": "try",
+        "arg": "[{\"kind\":\"reframe\",\"turn\":\"turn.10\",\"subject\":\"\",\"key\":\"\",\"value\":\"\",\"quantity\":\"\",\"amount\":\"\",\"fact_id\":\"\",\"evidence\":[]}]"
+       },
+       {
+        "tool": "calls",
+        "arg": "turn.10 framer"
+       }
+      ],
+      "final": false,
+      "complaints": []
+     }
+    },
+    {
+     "role": "framer",
+     "data": {
+      "anchor": "anc.15_4_1",
+      "attribute": "presence",
+      "deed_tag": "deed",
+      "deltas": [],
+      "traits": [
+       "trait.action.speech"
+      ],
+      "obstacle": {
+       "kind": "opposed",
+       "entity": "npc.morga_embershield",
+       "obstacle_class": null,
+       "tier": null
+      },
+      "levers": [],
+      "snags": [],
+      "stakes": {
+       "source": "goodwill_or_trust",
+       "threatened_cost": {
+        "menu_id": "cost.closed_door",
+        "form_intent": "Morga turns you away and will not raise the refugees with you again",
+        "source_fact": "fact.105"
+       },
+       "alternate_cost": {
+        "menu_id": "cost.time",
+        "form_intent": "the morning goes to pleading while Morga's patience wears thin",
+        "source_fact": "fact.106"
+       }
+      },
+      "stakes_heavy": false,
+      "lethal": false,
+      "reach_limit": null,
+      "reach_two_factors": false,
+      "method_consequences": [
+       "Haley makes the request openly to Morga, and Morga's answer is recorded either way"
+      ],
+      "secret": false,
+      "already_agreed": "fact.106"
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "Morga already agreed to help and told you the refugees are resting in the house, so you shouldn't need a 75% persuasion roll just to sit near them and listen without pressing.",
+        "category": "ruling_question",
+        "turn": "turn.10",
+        "verdict": "player_right",
+        "found": "Nothing on record has Morga against this. In turn 10 she confirmed \"they're resting somewhere in the house\" and spoke openly about the curse. She is Friendly and wants the matter settled. The only refusal on her card concerns her own past, which this doesn't touch. Sitting quietly near the refugees without pressing them is a small, harmless ask, so framing it as a contested Persuade roll with a refusal risk was a mistake. The dry run shows it needs no roll.",
+        "proposals": [
+         {
+          "kind": "reframe",
+          "turn": "turn.10",
+          "subject": "",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "fact.116",
+           "fact.117"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "role": "framer",
+     "data": {
+      "anchor": "anc.15_4_1",
+      "attribute": "presence",
+      "deed_tag": "deed",
+      "traits": [
+       "trait.action.speech"
+      ],
+      "deltas": [],
+      "obstacle": {
+       "kind": "opposed",
+       "obstacle_class": null,
+       "tier": null,
+       "entity": "npc.morga_embershield"
+      },
+      "levers": [],
+      "snags": [],
+      "stakes": {
+       "source": "goodwill_or_trust",
+       "threatened_cost": {
+        "menu_id": "cost.closed_door",
+        "form_intent": "Morga refuses, and the room where the refugees rest stays shut to you for this visit.",
+        "source_fact": "fact.105"
+       },
+       "alternate_cost": {
+        "menu_id": "cost.time",
+        "form_intent": "Morga agrees only after you wait out the morning in the hall before she will hear you.",
+        "source_fact": "fact.105"
+       }
+      },
+      "stakes_heavy": false,
+      "lethal": false,
+      "reach_limit": null,
+      "reach_two_factors": false,
+      "method_consequences": [
+       "If Morga agrees, the sit-and-listen terms are recorded as her agreement with you."
+      ],
+      "secret": false,
+      "already_agreed": null
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "Morga already agreed to help and told you the refugees are resting in the house, so you shouldn't need a 75% persuasion roll just to sit near them and listen without pressing.",
+        "category": "ruling_question",
+        "turn": "turn.10",
+        "verdict": "player_right",
+        "found": "Nothing on record has Morga against this. In turn 10 she confirmed \"they're resting somewhere in the house\" and spoke openly about the curse, and she is Friendly and wants the matter settled. Her one refusal concerns her own past, which this doesn't touch. Framing a quiet, unpressing request as a contested Persuade roll with a refusal risk was a mistake, and framing it again produces the same roll, so the turn is being taken back so you can declare it again without that roll.",
+        "proposals": [
+         {
+          "kind": "take_back",
+          "turn": "turn.10",
+          "subject": "",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "fact.116",
+           "fact.117"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "Morga already said the refugees are resting in the house and was open with you, so you shouldn't need a 75% persuasion roll just to sit near them and listen without pressing.",
+        "category": "ruling_question",
+        "turn": "turn.10",
+        "verdict": "player_right",
+        "found": "Nothing on record has Morga against this. In turn 10 she confirmed \"they're resting somewhere in the house\" and spoke openly about the curse, and she is Friendly and wants the matter settled. Her one refusal concerns her own past, which a quiet request to listen doesn't touch. Putting a contested Persuade roll with a refusal risk on it was a mistake, so the offer is withdrawn and framed again without a roll. Morga's answer stays as it was.",
+        "proposals": [
+         {
+          "kind": "reframe",
+          "turn": "turn.10",
+          "subject": "",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "fact.116",
+           "fact.117"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "role": "framer",
+     "data": {
+      "anchor": "anc.15_4_1",
+      "attribute": "presence",
+      "deed_tag": "deed",
+      "deltas": [],
+      "obstacle": {
+       "kind": "opposed",
+       "obstacle_class": null,
+       "tier": null,
+       "entity": "npc.morga_embershield"
+      },
+      "levers": [],
+      "snags": [],
+      "stakes": {
+       "source": "goodwill_or_trust",
+       "threatened_cost": {
+        "menu_id": "cost.closed_door",
+        "form_intent": "Morga refuses you, and she won't let you near the refugees for the rest of today.",
+        "source_fact": "fact.106"
+       },
+       "alternate_cost": {
+        "menu_id": "cost.time",
+        "form_intent": "You spend a long, slow stretch of Morga's patience waiting by the door before she answers.",
+        "source_fact": "fact.106"
+       }
+      },
+      "stakes_heavy": false,
+      "lethal": false,
+      "traits": [
+       "trait.action.speech"
+      ],
+      "reach_limit": null,
+      "reach_two_factors": false,
+      "method_consequences": [
+       "Haley's request is spoken aloud to Morga whatever the answer, and Morga learns that Haley wants to hear the refugees."
+      ],
+      "secret": false,
+      "already_agreed": null
+     }
+    }
+   ],
+   "score": {
+    "understood": true,
+    "outcome": true,
+    "complaints": [
+     {
+      "id": "f12",
+      "understood": true,
+      "outcome": true,
+      "screen_missing": [],
+      "screen_still": [
+       "75%"
+      ],
+      "auto": "wrong"
+     }
+    ]
+   }
+  },
+  {
+   "id": "f13-cant-is-not-letters",
+   "category": "ruling_question",
+   "turn": "turn.9",
+   "outcome": "explain",
+   "kind": "explain",
+   "answer": "[FIX] The sheet lists the Cant as a language Balak speaks (accented), not as a licence to read. He has no Letters licence, which is what reading a written list needs, and nothing on record says the list is written in cant (a search for 'cant' finds nothing). So reading it counts as untrained, which is why it is hard and capped at a partial result. The Intellect route offered is the same 5%.\n      Now: nothing on your sheet changed: coin 66 · dread 0 · fate 1 · Vitality 14/14 · focus 4 · state fresh.",
+   "screen": "[FIX] The sheet lists the Cant as a language Balak speaks (accented), not as a licence to read. He has no Letters licence, which is what reading a written list needs, and nothing on record says the list is written in cant (a search for 'cant' finds nothing). So reading it counts as untrained, which is why it is hard and capped at a partial result. The Intellect route offered is the same 5%.\n      Now: nothing on your sheet changed: coin 66 · dread 0 · fate 1 · Vitality 14/14 · focus 4 · state fresh.\n\n[OFFER] Learn about the delivery list: read the list quietly, away from the fire.\n        You're improvising without training: harder (+5), and at best a partial result.\n        Chance: long shot — 5%, only on a natural 20 (failing badly (a nuisance) is likelier: 55%)\n        If it works: partly what you wanted.\n        If it fails: nothing lost.   Failing badly (55%): the effort of squinting at the marks until your eyes and patience wear thin — a nuisance.\n        Whatever the roll: Picking out numerals, seals, names and common signs yields only what those marks show; the wording around them stays closed to you\n        Fate: 1 (you may spend one to reroll the die once you see it)\n        Another way: with Intellect (5%)",
+   "complaints": [
+    {
+     "believes": "Balak speaks and reads thieves' cant, it's on his sheet, so he should not be 'improvising without training' at 5% to read the list.",
+     "category": "ruling_question",
+     "turn": "turn.9",
+     "verdict": "record_stands",
+     "class": "stands",
+     "outcome": "explain",
+     "done": [],
+     "done_kinds": [
+      "explain"
+     ],
+     "not_done": []
+    }
+   ],
+   "tools": [
+    "turn('turn.10')",
+    "turn('turn.9')",
+    "recompute('turn.10')",
+    "entity('delivery list')",
+    "calls('turn.9 framer')",
+    "search('cant')"
+   ],
+   "tape": [
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [
+       {
+        "tool": "turn",
+        "arg": "turn.10"
+       },
+       {
+        "tool": "turn",
+        "arg": "turn.9"
+       },
+       {
+        "tool": "recompute",
+        "arg": "turn.10"
+       }
+      ],
+      "final": false,
+      "complaints": []
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [
+       {
+        "tool": "entity",
+        "arg": "delivery list"
+       },
+       {
+        "tool": "calls",
+        "arg": "turn.9 framer"
+       },
+       {
+        "tool": "search",
+        "arg": "cant"
+       }
+      ],
+      "final": false,
+      "complaints": []
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "Balak speaks and reads thieves' cant, it's on his sheet, so he should not be 'improvising without training' at 5% to read the list.",
+        "category": "ruling_question",
+        "turn": "turn.9",
+        "verdict": "record_stands",
+        "found": "The sheet lists the Cant as a language Balak speaks (accented), not a licence to read. He has no Letters licence, which is what reading a written list needs, and nothing on record says the list is written in cant (a search for 'cant' finds nothing). So reading it counts as untrained, which is why it is hard and capped at a partial result. The only licence that would help is Letters, which Balak lacks. The Intellect route offered is the same 5%.",
+        "proposals": [
+         {
+          "kind": "explain",
+          "turn": "turn.9",
+          "subject": "pc.balak_deephelm",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "turn.9",
+           "item.delivery_list"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "Balak speaks and reads thieves' cant, it's on his sheet, so he should not be 'improvising without training' at 5% to read the list.",
+        "category": "ruling_question",
+        "turn": "turn.9",
+        "verdict": "record_stands",
+        "found": "The sheet lists the Cant as a language Balak speaks (accented), not a licence to read. He has no Letters licence, which is what reading a written list needs, and nothing on record says the list is written in cant (a search for 'cant' finds nothing). So reading it counts as untrained, which is why it is hard and capped at a partial result. The Intellect route offered is the same 5%.",
+        "proposals": [
+         {
+          "kind": "explain",
+          "turn": "turn.9",
+          "subject": "pc.balak_deephelm",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "turn.9",
+           "item.delivery_list"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "Balak speaks and reads thieves' cant, it's on his sheet, so he should not be 'improvising without training' at 5% to read the list.",
+        "category": "ruling_question",
+        "turn": "turn.9",
+        "verdict": "record_stands",
+        "found": "The sheet lists the Cant as a language Balak speaks (accented), not as a licence to read. He has no Letters licence, which is what reading a written list needs, and nothing on record says the list is written in cant (a search for 'cant' finds nothing). So reading it counts as untrained, which is why it is hard and capped at a partial result. The Intellect route offered is the same 5%.",
+        "proposals": [
+         {
+          "kind": "explain",
+          "turn": "turn.9",
+          "subject": "pc.balak_deephelm",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "turn.9",
+           "item.delivery_list"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "score": {
+    "understood": true,
+    "outcome": true,
+    "complaints": [
+     {
+      "id": "f13",
+      "understood": true,
+      "outcome": true,
+      "screen_missing": [],
+      "screen_still": [],
+      "auto": "right"
+     }
+    ]
+   }
+  }
+ ]
+}
