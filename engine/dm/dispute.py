@@ -370,6 +370,9 @@ def _reframe(ctx: Any, tx: Transaction, p: dict[str, Any], outcomes: list[Any]) 
     fid = str(p.get("fact_id") or "").strip()
     if fid and (fid not in tx.state.facts or fid in tx.state.seals or tx.state.facts[fid].value is None):
         return "not", f"re-frame: {fid} is not a fact on record"
+    if fid and tx.state.facts[fid].source == "oracle":  # 01.15.1, 01.15.8: a coin flip never rules a goal out
+        return "not", (f"re-frame: {fid} is a yes/no Oracle answer, never a reason a goal is impossible; what someone "
+                       "can do is their record (their card)")
     tx.add(Event.of("pause_closed", source="correction", rule_id="12.5.8", pause_id=pause.pause_id,
                     choice="withdraw", by="withdrawn"))
     tx.add(Event.of("offer_logged", source="correction", rule_id="01.7.1", frame_id=None, shown_at=tx.state.time.now,
@@ -521,7 +524,7 @@ def settle_dispute(ctx: Any, text: str, **_: Any) -> DisputeResult:  # rule: 12.
     """PR-12-11 from the store. `ctx`: anything with `store`, `state`, `rules`, optional `tx` (the turn's open
     transaction; else a one-shot one), `model` (the Fixer's, routed by role) and `record_call`."""
     inv = investigate(ctx, text)  # one snapshot: nothing is written while the Fixer looks (dry runs use a copy)
-    with _tx(ctx) as tx:
+    with _tx(ctx) as tx, _as_checked(ctx, inv):
         return _settle(ctx, tx, text, inv)
 
 
@@ -620,17 +623,70 @@ def screen(sx: Any, res: DisputeResult) -> str:  # rule: PR-12-11
     return "\n".join(parts)
 
 
-def preview(ctx: Any, text: str, complaints: list[dict[str, Any]], calls: list[tuple[str, str, str]]) -> str:
+class _Tape:
+    """The play roles' answers in a dry run, kept so the real application gives the same ones (`_Again`): the screen
+    the Fixer checked is the screen the player gets (a re-frame's Framer could otherwise answer differently)."""
+
+    def __init__(self, inner: Any) -> None:
+        self.inner, self.answers = inner, []
+        self.provider = getattr(inner, "provider", "tape")
+
+    def fill(self, role: Any, schema: dict[str, Any], packet: Any, *, turn_id: str | None, attempt: int,
+             seq: int = 0) -> Any:
+        res = self.inner.fill(role, schema, packet, turn_id=turn_id, attempt=attempt, seq=seq)
+        self.answers.append((role, res.data))
+        return res
+
+
+class _Again:
+    """Serves a dry run's taped answers, role by role and in order, then the real model."""
+
+    def __init__(self, answers: list[tuple[Any, Any]], inner: Any) -> None:
+        self.answers, self.inner = list(answers), inner
+        self.provider = getattr(inner, "provider", "again")
+
+    def fill(self, role: Any, schema: dict[str, Any], packet: Any, *, turn_id: str | None, attempt: int,
+             seq: int = 0) -> Any:
+        from engine.llm.offline import ScriptedModel
+
+        k = next((i for i, (r, _) in enumerate(self.answers) if r == role), None)
+        if k is None:
+            return self.inner.fill(role, schema, packet, turn_id=turn_id, attempt=attempt, seq=seq)
+        _, data = self.answers.pop(k)
+        return ScriptedModel({role: [data]}, fallback=False).fill(role, schema, packet, turn_id=turn_id,
+                                                                  attempt=attempt, seq=seq)
+
+
+@contextmanager
+def _as_checked(ctx: Any, inv: Investigation) -> Iterator[None]:
+    """The decision applied for real is the one the Fixer last saw on the screen: its play-role answers are reused."""
+    model = getattr(ctx, "model", None)
+    if not inv.tape or inv.previewed != inv.complaints or model is None:
+        yield
+        return
+    ctx.model = _Again(inv.tape, model)
+    try:
+        yield
+    finally:
+        ctx.model = model
+
+
+def preview(ctx: Any, text: str, complaints: list[dict[str, Any]], calls: list[tuple[str, str, str]],
+            tape: list[Any] | None = None) -> str:
     # rule: PR-12-11
     """PR-12-11 steps 4 and 6 (DL-12-117): a decision applied on a copy, validation included, and the screen the
-    player would then see. The real game is untouched."""
+    player would then see. The real game is untouched. `tape`, when given, receives the play roles' answers."""
     with sandbox(ctx) as sx, sx.store.transaction(getattr(ctx, "turn_id", None)) as tx:
         sx.tx = tx
+        taped = _Tape(sx.model)
+        sx.model = taped  # type: ignore[assignment]
         try:
             return screen(sx, _settle(sx, tx, text, Investigation(complaints=complaints, calls=list(calls)),
                                       log=False))
         finally:
             sx.tx = None
+            if tape is not None:
+                tape[:] = [a for a in taped.answers if getattr(a[0], "value", a[0]) != "fixer"]
 
 
 def dispute(ctx: Any, text: str, **_: Any) -> str:  # rule: 12.3.6

@@ -49,6 +49,8 @@ class Investigation:
     complaints: list[dict[str, Any]] = field(default_factory=list)
     calls: list[tuple[str, str, str]] = field(default_factory=list)  # (tool, arg, output)
     checks: list[str] = field(default_factory=list)  # the screens shown after each decision (dry runs)
+    previewed: list[dict[str, Any]] = field(default_factory=list)  # the decision the last screen showed
+    tape: list[Any] = field(default_factory=list)  # that dry run's play-role answers, reused when it is applied
 
     @property
     def seen(self) -> str:
@@ -357,7 +359,13 @@ def _search_tool(ctx: Any, arg: str) -> str:
         sents = [s for s in re.split(r"(?<=[.!?\"”])\s+", flat) if any(w in s.lower() for w in words)][:2]
         out.append(f"{tr.turn_id} ({n}/{len(words)} words) player: \"{_flat(tr.input_verbatim, 160)}\" | "
                    + " … ".join(_flat(s, 220) for s in sents))
-    return "\n".join(out) or f"no turn holds any of: {', '.join(words)}"
+    state = ctx.state  # the record too, not only what was said on screen (a standing order, a rank)
+    hits = [(sum(1 for w in words if w in t.lower()), f, t) for f in state.facts.values()
+            if visible(state, f) and f.value is not None and (t := plain_fact(state, f))]
+    facts = [f"  {fact_line(ctx.store, state, f)}" for n, f, _ in sorted(hits, key=lambda h: -h[0]) if n][:6]
+    if facts:
+        out += ["facts on record holding them:", *facts]
+    return "\n".join(out) or f"no turn or fact holds any of: {', '.join(words)}"
 
 
 def _frames_for(store: Any, state: Any, arg: str) -> list[tuple[str, int, str | None, dict[str, Any]]]:
@@ -672,12 +680,14 @@ def _check(ctx: Any, text: str, head: str, log: list[str], decided: list[dict[st
     from engine.dm.dispute import preview
 
     for _ in range(CHECKS):
+        tape: list[Any] = []
         try:
-            screen = preview(ctx, text, decided, out.calls)
+            screen = preview(ctx, text, decided, out.calls, tape)
         except Exception as e:  # noqa: BLE001 - a dry run that fails leaves the decision as it is
             out.checks.append(f"(the dry run failed: {type(e).__name__})")
             return decided
         out.checks.append(screen)
+        out.previewed, out.tape = decided, tape
         keep = {"calls": [], "final": True, "complaints": decided}
         data = _ask(ctx, step_schema(final=True), "\n".join([
             head, "INVESTIGATION SO FAR:", *log, "YOUR DECISION:", json.dumps(decided, ensure_ascii=False, sort_keys=True),

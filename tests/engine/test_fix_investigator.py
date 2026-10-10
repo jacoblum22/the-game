@@ -202,6 +202,47 @@ def test_the_screen_check_revises_a_decision_that_leaves_the_complaint_up(tmp_pa
         store.close()
 
 
+class _Counting(OfflineModel):
+    def __init__(self) -> None:
+        super().__init__()
+        self.roles: list[Role] = []
+
+    def fill(self, role: Role, schema: dict[str, Any], packet: Any, **kw: Any) -> Any:
+        self.roles.append(role)
+        return super().fill(role, schema, packet, **kw)
+
+
+def test_what_the_fixer_checked_is_what_is_applied(tmp_path: Path) -> None:
+    """Held-out f04 (spec 026's first Sonnet run): the dry run's Framer answered 55%, the real re-frame's 65%, so the
+    answer named odds the screen did not show. The real application now reuses the checked dry run's answers."""
+    store = open_at(FIGHTER7, "turn.12", tmp_path)
+    play = _Counting()
+    decision = _decide(_p("remove_fact", fact_id="fact.113", evidence=["fact.113"]), _p("reframe"), turn="turn.11")
+    fixer = ScriptedModel({Role.FIXER: [_look(("turn", "turn.11"), ("entity", "Belie"), ("ledger", "")), decision,
+                                        decision]}, fallback=False)
+    try:
+        play_dispute(TurnContext.for_store(store, model=Routed(play, {Role.FIXER: fixer}), rules=RULES), "Belie reads")
+        assert play.roles.count(Role.FRAMER) == 1  # the dry run's; the real re-frame reused its answer
+        assert store.state.open_pause() is not None and store.state.open_pause().detail["stage"] == "offer"
+    finally:
+        store.close()
+
+
+def test_an_oracle_answer_never_rules_a_goal_out(tmp_path: Path) -> None:
+    """Round-7 dsp.2 in spec 026's Sonnet run: the Fixer re-framed Belie's OFFER into a refusal on fact.113, a coin
+    flip that contradicts her Letters. Code refuses an Oracle answer as the reason (01.15.1, 01.15.8)."""
+    store = open_at(FIGHTER7, "turn.12", tmp_path)
+    try:
+        ctx = TurnContext.for_store(store, model=OfflineModel(), rules=RULES)
+        shown = preview(ctx, "Belie can't read", [{"believes": "", "category": "other", "turn": "turn.11",
+                                                   "verdict": "player_right", "found": "x",
+                                                   "proposals": [_p("reframe", fact_id="fact.113")]}], [])
+        assert "fact.113 is a yes/no Oracle answer, never a reason a goal is impossible" in shown
+        assert "[OFFER] Persuade Belie Greenwort." in shown  # the OFFER stays until a real repair
+    finally:
+        store.close()
+
+
 # ------------------------------------------------------------------------------------------- US5: the spine
 
 

@@ -1,0 +1,691 @@
+{
+ "model": "sonnet (play roles: haiku)",
+ "set": "round7",
+ "understood": 2,
+ "outcome": 3,
+ "n": 3,
+ "auto": {
+  "right": 3,
+  "unclear": 0,
+  "wrong": 0
+ },
+ "results": [
+  {
+   "id": "r7-fighter-dsp1",
+   "category": "other",
+   "turn": "turn.5",
+   "outcome": "correct",
+   "kind": "correct",
+   "answer": "[CORRECTION] The offer on screen cited a note about Magby that was stored cut off: \"Magby is alert to a hand reaching into his coat pocket while h\". The odds line printed that fragment with extra wording in front, which gave the doubled \"not\" and the broken ending. The broken note is removed and the offer is framed again. The new offer's odds now list only your Endurance and thievery training, so the chance reads 75%; Magby's watchfulness is kept on record as a plain note.\n             Done: \"Magby is alert to a hand reaching into his coat pocket while h\" is no longer on record; Magby Applefoot's guarding is watchful of his coat pocket on record; the offer for \"Balak takes the delivery list from Magby's coat by picking his pocket while Magby faces the fire.\" is framed again with the record as it stands (below).\n             Now: nothing on your sheet changed: coin 66 · dread 0 · fate 1 · Vitality 14/14 · focus 4 · state fresh.",
+   "screen": "[CORRECTION] The offer on screen cited a note about Magby that was stored cut off: \"Magby is alert to a hand reaching into his coat pocket while h\". The odds line printed that fragment with extra wording in front, which gave the doubled \"not\" and the broken ending. The broken note is removed and the offer is framed again. The new offer's odds now list only your Endurance and thievery training, so the chance reads 75%; Magby's watchfulness is kept on record as a plain note.\n             Done: \"Magby is alert to a hand reaching into his coat pocket while h\" is no longer on record; Magby Applefoot's guarding is watchful of his coat pocket on record; the offer for \"Balak takes the delivery list from Magby's coat by picking his pocket while Magby faces the fire.\" is framed again with the record as it stands (below).\n             Now: nothing on your sheet changed: coin 66 · dread 0 · fate 1 · Vitality 14/14 · focus 4 · state fresh.\n\n[OFFER] Take the delivery list from Magby Applefoot: pick his pocket.\n        Chance: likely — 75%   (Endurance +2, trained (thievery) +2)\n        If it works: what you wanted.   Very well (25%): more than you asked.\n        If it fails: Danger: Magby turns, feels your hand at his coat or sees you there, and the room marks you — serious.   Badly (5%): Magby turns, feels your hand at his coat or sees you there, and the room marks you — grave.\n        Close call (15%): get it anyway and pay (Magby cuts off the company's dealings with you and turns its officers against you), or fail.\n        Whatever the roll: Your hand goes into his coat pocket whatever the roll, and contact there can be felt by him if he turns\n        Fate: 1 (you may spend one to reroll the die once you see it)\n        Another way: with Might (65%) · with Agility (60%)",
+   "complaints": [
+    {
+     "believes": "The odds line on the pickpocket offer is garbled: it says \"is not not alert\" and breaks off mid-word.",
+     "category": "other",
+     "turn": "turn.5",
+     "verdict": "player_right",
+     "class": "upheld",
+     "outcome": "correct",
+     "done": [
+      "\"Magby is alert to a hand reaching into his coat pocket while h\" is no longer on record",
+      "Magby Applefoot's guarding is watchful of his coat pocket on record",
+      "the offer for \"Balak takes the delivery list from Magby's coat by picking his pocket while Magby faces the fire.\" is framed again with the record as it stands (below)"
+     ],
+     "done_kinds": [
+      "remove_fact",
+      "set_fact",
+      "reframe"
+     ],
+     "not_done": []
+    }
+   ],
+   "tools": [
+    "turn('turn.6')",
+    "recompute('turn.6')",
+    "calls('turn.6 framer')",
+    "recompute('turn.5')",
+    "turn('turn.5')",
+    "calls('turn.5 framer')"
+   ],
+   "tape": [
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [
+       {
+        "tool": "turn",
+        "arg": "turn.6"
+       },
+       {
+        "tool": "recompute",
+        "arg": "turn.6"
+       },
+       {
+        "tool": "calls",
+        "arg": "turn.6 framer"
+       }
+      ],
+      "final": false,
+      "complaints": []
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [
+       {
+        "tool": "recompute",
+        "arg": "turn.5"
+       },
+       {
+        "tool": "turn",
+        "arg": "turn.5"
+       },
+       {
+        "tool": "calls",
+        "arg": "turn.5 framer"
+       }
+      ],
+      "final": false,
+      "complaints": []
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "The odds line on the pickpocket offer is garbled: it says \"is not not alert\" and breaks off mid-word.",
+        "category": "other",
+        "turn": "turn.5",
+        "verdict": "player_right",
+        "found": "The offer on screen cites a note about Magby that was stored cut off: \"Magby is alert to a hand reaching into his coat pocket while h\". The odds line printed that fragment with extra wording in front, which gave the doubled \"not\" and the broken ending. The penalty itself (−2 for Magby being watchful) is sound and the odds are right; only the wording of the note was bad, so the offer is framed again from a complete note.",
+        "proposals": [
+         {
+          "kind": "remove_fact",
+          "turn": "turn.5",
+          "subject": "",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "fact.106",
+          "evidence": [
+           "fact.106"
+          ]
+         },
+         {
+          "kind": "set_fact",
+          "turn": "turn.5",
+          "subject": "npc.magby_applefoot",
+          "key": "watchfulness",
+          "value": "alert to a hand reaching into his coat pocket",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "fact.106"
+          ]
+         },
+         {
+          "kind": "reframe",
+          "turn": "turn.5",
+          "subject": "",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "fact.106"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "role": "framer",
+     "data": {
+      "anchor": "anc.01_18_13",
+      "deltas": [],
+      "attribute": "agility",
+      "deed_tag": "deed.guile.thievery",
+      "traits": [],
+      "obstacle": {
+       "kind": "opposed",
+       "obstacle_class": null,
+       "tier": null,
+       "entity": "npc.magby_applefoot"
+      },
+      "levers": [],
+      "snags": [],
+      "stakes": {
+       "source": "aware_opponent_or_observer",
+       "threatened_cost": {
+        "menu_id": "cost.exposure",
+        "form_intent": "your hand slides into his coat and Magby turns and sees it",
+        "source_fact": "fact.103"
+       },
+       "alternate_cost": {
+        "menu_id": "cost.closed_door",
+        "form_intent": "Magby sees you as a thief and will not name the place on the list to you",
+        "source_fact": "fact.103"
+       }
+      },
+      "stakes_heavy": false,
+      "lethal": false,
+      "reach_limit": null,
+      "reach_two_factors": false,
+      "method_consequences": [
+       "your hand stays inside Magby's coat for the whole attempt"
+      ],
+      "secret": false
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "The odds line on the pickpocket offer is garbled: it says \"is not not alert\" and breaks off mid-word.",
+        "category": "other",
+        "turn": "turn.5",
+        "verdict": "player_right",
+        "found": "The offer on screen cites a note about Magby that was stored cut off: \"Magby is alert to a hand reaching into his coat pocket while h\". The odds line printed that fragment with extra wording in front, which gave the doubled \"not\" and the broken ending. Magby did tug the list against his coat when you leaned in, so he really is watchful of his pocket and the penalty should stay; only the wording was bad, so the note is replaced with a complete one and the offer is framed again.",
+        "proposals": [
+         {
+          "kind": "remove_fact",
+          "turn": "turn.5",
+          "subject": "",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "fact.106",
+          "evidence": [
+           "fact.106"
+          ]
+         },
+         {
+          "kind": "set_fact",
+          "turn": "turn.5",
+          "subject": "npc.magby_applefoot",
+          "key": "guarding",
+          "value": "watchful of his coat pocket",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "fact.106"
+          ]
+         },
+         {
+          "kind": "reframe",
+          "turn": "turn.5",
+          "subject": "",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "fact.106"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "role": "framer",
+     "data": {
+      "anchor": "anc.01_18_13",
+      "deltas": [],
+      "attribute": "agility",
+      "deed_tag": "deed.guile.thievery",
+      "traits": [],
+      "obstacle": {
+       "kind": "opposed",
+       "obstacle_class": null,
+       "tier": null,
+       "entity": "npc.magby_applefoot"
+      },
+      "levers": [],
+      "snags": [],
+      "stakes": {
+       "source": "aware_opponent_or_observer",
+       "threatened_cost": {
+        "menu_id": "cost.exposure",
+        "form_intent": "Magby sees your hand at his coat pocket and knows you were there.",
+        "source_fact": null
+       },
+       "alternate_cost": {
+        "menu_id": "cost.closed_door",
+        "form_intent": "Magby sees you as a thief and refuses to deal with you again.",
+        "source_fact": "fact.103"
+       }
+      },
+      "stakes_heavy": false,
+      "lethal": false,
+      "reach_limit": null,
+      "reach_two_factors": false,
+      "method_consequences": [
+       "On success the delivery list is in your hand and out of Magby's coat.",
+       "On failure Magby notices a hand at his coat pocket."
+      ],
+      "secret": false
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "The odds line on the pickpocket offer is garbled: it says \"is not not alert\" and breaks off mid-word.",
+        "category": "other",
+        "turn": "turn.5",
+        "verdict": "player_right",
+        "found": "The offer on screen cited a note about Magby that was stored cut off: \"Magby is alert to a hand reaching into his coat pocket while h\". The odds line printed that fragment with extra wording in front, which gave the doubled \"not\" and the broken ending. The broken note is removed and the offer is framed again. The new offer's odds now list only your Endurance and thievery training, so the chance reads 75%; Magby's watchfulness is kept on record as a plain note.",
+        "proposals": [
+         {
+          "kind": "remove_fact",
+          "turn": "turn.5",
+          "subject": "",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "fact.106",
+          "evidence": [
+           "fact.106"
+          ]
+         },
+         {
+          "kind": "set_fact",
+          "turn": "turn.5",
+          "subject": "npc.magby_applefoot",
+          "key": "guarding",
+          "value": "watchful of his coat pocket",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "fact.106"
+          ]
+         },
+         {
+          "kind": "reframe",
+          "turn": "turn.5",
+          "subject": "",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "fact.106"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "role": "framer",
+     "data": {
+      "anchor": "anc.01_18_13",
+      "deltas": [],
+      "attribute": "agility",
+      "deed_tag": "deed.guile.thievery",
+      "traits": [],
+      "obstacle": {
+       "kind": "opposed",
+       "obstacle_class": null,
+       "tier": null,
+       "entity": "npc.magby_applefoot"
+      },
+      "levers": [],
+      "snags": [],
+      "stakes": {
+       "source": "aware_opponent_or_observer",
+       "threatened_cost": {
+        "menu_id": "cost.exposure",
+        "form_intent": "Magby turns, feels your hand at his coat or sees you there, and the room marks you",
+        "source_fact": null
+       },
+       "alternate_cost": {
+        "menu_id": "cost.closed_door",
+        "form_intent": "Magby cuts off the company's dealings with you and turns its officers against you",
+        "source_fact": null
+       }
+      },
+      "stakes_heavy": true,
+      "lethal": false,
+      "reach_limit": null,
+      "reach_two_factors": false,
+      "method_consequences": [
+       "Your hand goes into his coat pocket whatever the roll, and contact there can be felt by him if he turns."
+      ],
+      "secret": false
+     }
+    }
+   ],
+   "score": {
+    "understood": true,
+    "outcome": true,
+    "complaints": [
+     {
+      "id": "r7f1",
+      "understood": true,
+      "outcome": true,
+      "screen_missing": [],
+      "screen_still": [],
+      "auto": "right"
+     }
+    ]
+   }
+  },
+  {
+   "id": "r7-fighter-dsp2",
+   "category": "rule_wrong",
+   "turn": "turn.11",
+   "outcome": "correct",
+   "kind": "correct",
+   "answer": "[CORRECTION] Belie told you \"I can't read that... Not a line of it,\" and the record holds that she cannot read the writing on the delivery list. Persuasion cannot change that, so the offer to Persuade her to read it should not have been put up, and her inability should not count as a −2 penalty on the odds. The offer is withdrawn and the request is refused on that fact.\n             Done: \"Walk to Belie Greenwort and quietly ask her to read the delivery list, showing it low out of Magby's view.\" is not possible as tried, and nothing was spent (below).\n             Now: nothing on your sheet changed: coin 66 · dread 0 · fate 1 · Vitality 14/14 · focus 4 · state fresh.",
+   "screen": "Belie Greenwort's eyes drop to the sheet for the space of a breath, long enough to take in the crowded lines, and then she turns her face toward the wall. Her finger rests on the edge of her papers without pushing them any nearer. \"Mark me, there's nothing in those marks I could make into words for you. Tuck it under your coat, now.\" Her voice stays low and rough, and she does not lift her eyes to yours again. Across the hall the soldier off duty keeps at her footwork, the flags dull under her boots, and the officer of The Kingsholt Company of Merchants stays bowed over his cup. Magby has not turned from the coals. His stick stands planted against the hearthstone, and the fire throws its light across the floor between you. Belie's pen lies where it fell, its nib dry against the open sheet. She waits, her hands flat on the table, to see what becomes of the list.\n\n[CORRECTION] Belie told you \"I can't read that... Not a line of it,\" and the record holds that she cannot read the writing on the delivery list. Persuasion cannot change that, so the offer to Persuade her to read it should not have been put up, and her inability should not count as a −2 penalty on the odds. The offer is withdrawn and the request is refused on that fact.\n             Done: \"Walk to Belie Greenwort and quietly ask her to read the delivery list, showing it low out of Magby's view.\" is not possible as tried, and nothing was spent (below).\n             Now: nothing on your sheet changed: coin 66 · dread 0 · fate 1 · Vitality 14/14 · focus 4 · state fresh.\n\n[REDIRECT] Not as tried: can read the writing on the delivery list is False, as already settled.\n           You could instead:\n           - Look around for something here that would help\n           - Ask someone nearby who could do it",
+   "complaints": [
+    {
+     "believes": "Belie said she can't read the list at all, so the offer to Persuade her into reading it makes no sense, and her inability shows up as a penalty instead of ruling the ask out.",
+     "category": "rule_wrong",
+     "turn": "turn.11",
+     "verdict": "player_right",
+     "class": "upheld",
+     "outcome": "correct",
+     "done": [
+      "\"Walk to Belie Greenwort and quietly ask her to read the delivery list, showing it low out of Magby's view.\" is not possible as tried, and nothing was spent (below)"
+     ],
+     "done_kinds": [
+      "reframe"
+     ],
+     "not_done": []
+    }
+   ],
+   "tools": [
+    "turn('turn.12')",
+    "turn('turn.11')",
+    "recompute('turn.12')"
+   ],
+   "tape": [
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [
+       {
+        "tool": "turn",
+        "arg": "turn.12"
+       },
+       {
+        "tool": "turn",
+        "arg": "turn.11"
+       },
+       {
+        "tool": "recompute",
+        "arg": "turn.12"
+       }
+      ],
+      "final": false,
+      "complaints": []
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "Belie said she can't read the list at all, so the offer to Persuade her into reading it makes no sense, and her inability shows up as a penalty instead of ruling the ask out.",
+        "category": "rule_wrong",
+        "turn": "turn.11",
+        "verdict": "player_right",
+        "found": "Belie told you \"I can't read that... Not a line of it,\" and the record holds that she cannot read the writing on the delivery list. Persuasion cannot change that, so the offer to Persuade her to read it should not have been put up, and her inability should not count as a −2 penalty on the odds. The offer is withdrawn and the request is refused on that fact.",
+        "proposals": [
+         {
+          "kind": "reframe",
+          "turn": "turn.11",
+          "subject": "npc.belie_greenwort",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "fact.113",
+          "evidence": [
+           "fact.113"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "Belie said she can't read the list at all, so the offer to Persuade her into reading it makes no sense, and her inability shows up as a penalty instead of ruling the ask out.",
+        "category": "rule_wrong",
+        "turn": "turn.11",
+        "verdict": "player_right",
+        "found": "Belie told you \"I can't read that... Not a line of it,\" and the record holds that she cannot read the writing on the delivery list. Persuasion cannot change that, so the offer to Persuade her to read it should not have been put up, and her inability should not count as a −2 penalty on the odds. The offer is withdrawn and the request is refused on that fact.",
+        "proposals": [
+         {
+          "kind": "reframe",
+          "turn": "turn.11",
+          "subject": "npc.belie_greenwort",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "fact.113",
+          "evidence": [
+           "fact.113"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "role": "narrator",
+     "data": {
+      "passage": "You keep the list low and lean in again, the page angled toward her and away from the fire. Belie Greenwort's eyes move over the sheet only long enough to take in the crowded lines, and then she shakes her head, slowly, the way a tired person does. \"Mark me, I still can't read it. Fold it away before he turns round.\" Her pen rolls a little across the open paper and stops against her thumb. Magby has not turned from the coals, his stick planted against the hearthstone, and the warmth of the fire does nothing to ease the look on her face. She sits without moving, her hands flat on her papers, and waits to see what you will do with the page.",
+      "speech": [
+       {
+        "speaker": "npc.belie_greenwort",
+        "words": "Mark me, I still can't read it. Fold it away before he turns round.",
+        "form": "direct"
+       }
+      ],
+      "new": [],
+      "covers": [
+       "R1"
+      ]
+     }
+    },
+    {
+     "role": "narrator",
+     "data": {
+      "passage": "Belie Greenwort's eyes drop to the sheet for the space of a breath, long enough to take in the crowded lines, and then she turns her face toward the wall. Her finger rests on the edge of her papers without pushing them any nearer. \"Mark me, there's nothing in those marks I could make into words for you. Tuck it under your coat, now.\" Her voice stays low and rough, and she does not lift her eyes to yours again. Across the hall the soldier off duty keeps at her footwork, the flags dull under her boots, and the officer of The Kingsholt Company of Merchants stays bowed over his cup. Magby has not turned from the coals. His stick stands planted against the hearthstone, and the fire throws its light across the floor between you. Belie's pen lies where it fell, its nib dry against the open sheet. She waits, her hands flat on the table, to see what becomes of the list.",
+      "speech": [
+       {
+        "speaker": "npc.belie_greenwort",
+        "words": "Mark me, there's nothing in those marks I could make into words for you. Tuck it under your coat, now.",
+        "form": "direct"
+       }
+      ],
+      "new": [],
+      "covers": [
+       "R1"
+      ]
+     }
+    }
+   ],
+   "score": {
+    "understood": true,
+    "outcome": true,
+    "complaints": [
+     {
+      "id": "r7f2",
+      "understood": true,
+      "outcome": true,
+      "screen_missing": [],
+      "screen_still": [],
+      "auto": "right"
+     }
+    ]
+   }
+  },
+  {
+   "id": "r7-talker-dsp1",
+   "category": "contradiction",
+   "turn": "turn.12",
+   "outcome": "explain",
+   "kind": "explain",
+   "answer": "[FIX] You're right that the narration switched. In the turns at the hearth (9 to 13) the sellsword is mostly \"they\"/\"their\", but the barrow-track reply says \"He drops his voice to a rasp\". The record for Dilie Hayburrow gives he/him throughout, so \"he\" and \"his\" are correct and the \"they\" lines were the slip in the narration. Nothing on the record needs to change; the sellsword is a he, and later narration should use he/him.\n      Now: nothing on your sheet changed: Vitality 12/12 · fate 1 · dread 0 · coin 43 · focus 5 · state fresh.",
+   "screen": "[FIX] You're right that the narration switched. In the turns at the hearth (9 to 13) the sellsword is mostly \"they\"/\"their\", but the barrow-track reply says \"He drops his voice to a rasp\". The record for Dilie Hayburrow gives he/him throughout, so \"he\" and \"his\" are correct and the \"they\" lines were the slip in the narration. Nothing on the record needs to change; the sellsword is a he, and later narration should use he/him.\n      Now: nothing on your sheet changed: Vitality 12/12 · fate 1 · dread 0 · coin 43 · focus 5 · state fresh.",
+   "complaints": [
+    {
+     "believes": "The sellsword between contracts is called \"they\" in some replies and \"he\"/\"his\" in others, and you want one pronoun used throughout.",
+     "category": "contradiction",
+     "turn": "turn.12",
+     "verdict": "player_right",
+     "class": "upheld",
+     "outcome": "explain",
+     "done": [],
+     "done_kinds": [
+      "explain"
+     ],
+     "not_done": []
+    }
+   ],
+   "tools": [
+    "turn('turn.14')",
+    "entity('npc.dilie_hayburrow')",
+    "calls('turn.14 narrator')"
+   ],
+   "tape": [
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [
+       {
+        "tool": "turn",
+        "arg": "turn.14"
+       },
+       {
+        "tool": "entity",
+        "arg": "npc.dilie_hayburrow"
+       },
+       {
+        "tool": "calls",
+        "arg": "turn.14 narrator"
+       }
+      ],
+      "final": false,
+      "complaints": []
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "The sellsword between contracts is called \"they\" in some replies and \"he\"/\"his\" in others, and you want one pronoun used throughout.",
+        "category": "contradiction",
+        "turn": "turn.12",
+        "verdict": "player_right",
+        "found": "You're right that the narration switched. In the turns at the hearth (9 to 13) the sellsword is mostly \"they\"/\"their\", but the barrow-track reply says \"He drops his voice to a rasp\". The record for Dilie Hayburrow gives he/him throughout, so \"he\" and \"his\" are correct and the \"they\" lines were the slip in the narration. Nothing on the record needs to change; the sellsword is a he, and later narration should use he/him.",
+        "proposals": [
+         {
+          "kind": "explain",
+          "turn": "turn.12",
+          "subject": "npc.dilie_hayburrow",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "npc.dilie_hayburrow"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "The sellsword between contracts is called \"they\" in some replies and \"he\"/\"his\" in others, and you want one pronoun used throughout.",
+        "category": "contradiction",
+        "turn": "turn.12",
+        "verdict": "player_right",
+        "found": "You're right that the narration switched. In the turns at the hearth (9 to 13) the sellsword is mostly \"they\"/\"their\", but the barrow-track reply says \"He drops his voice to a rasp\". The record for Dilie Hayburrow gives he/him throughout, so \"he\" and \"his\" are correct and the \"they\" lines were the slip in the narration. Nothing on the record needs to change; the sellsword is a he, and later narration should use he/him.",
+        "proposals": [
+         {
+          "kind": "explain",
+          "turn": "turn.12",
+          "subject": "npc.dilie_hayburrow",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "npc.dilie_hayburrow"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "score": {
+    "understood": false,
+    "outcome": true,
+    "complaints": [
+     {
+      "id": "r7t1",
+      "understood": false,
+      "outcome": true,
+      "screen_missing": [],
+      "screen_still": [],
+      "auto": "right"
+     }
+    ]
+   }
+  }
+ ]
+}

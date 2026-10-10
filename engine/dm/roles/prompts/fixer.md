@@ -13,7 +13,7 @@ Each answer may ask for up to 3 tool calls (`calls`), each `{tool, arg}`:
 - `turn` `turn.N`: the player's words, what the game showed, and the record: rolls (with the effective degree), the
   OFFER and its cited facts, rulings (a refused beat is a `g4` ruling), every write in plain words, undone ones REVERTED.
 - `entity` an id or a name: the people card (a thing: its description), the sheet, every fact with source and turn.
-- `search` some words: the turns whose text holds them.
+- `search` some words: the turns whose text holds them, and the facts on record that do.
 - `recompute` `frame.K` or `turn.N`: a roll's or the open OFFER's numbers, cited bonuses and penalties, and code's
   recomputation from the rules.
 - `ledger` (blank for the player's character): every change to their numbers, what they carry, coin named in frames.
