@@ -350,3 +350,12 @@ everything.
 - **Spec 026 merged.** /fix on 13 fresh held-out complaints (untuned): 13/0/1 by the after-screen scorer, 12/2/0 by hand; round-7 disputes 3/0/0; round-6 12/2/1. Suite 1908. Hand-offs: gate refusal words as slugs ("can read ... is False"); dispute guard blocks harmless knows_ facts; a Framer "favour" size offset the rank bonus. Owner question: let /fix pass a one-line note to the re-frame (C recommended).
 - **All four round-7 specs merged** (023-026). Next: a cleanup pass for the hand-offs, then the round-8 playtest.
 - **Spec 027 cleanup merged.** Owner B/A/A/C applied; all hand-offs fixed. Look lines: scar 16/16 -> 1/16. Suite 1942. Owner question: an order from a superior backed by standing orders is framed as a favour to persuade (the guard at 65%). Next: round-8 playtest.
+
+## Round 8 and the DM-with-tools experiment (2026-10-10)
+
+- **Round 8** traced 9 of 9 wrong NPC reactions to code's orders to the narrator (`ROUND8-ANALYSIS.md`). Owner approved F-A "facts, not orders" (`ROUND8-PLAN.md`). R2-L rules wave merged (119b64f); the pronoun check is now log-only.
+- **Spec 029 merged (2e82133).** Every lead and incident kind (52) has its terms; the incident's actor is on stage; the journal has "what you were told"; one clue judgment per message. Suite 2026.
+- **Spec 028 (F-A)** is WIP, saved on `worktree-agent-a69784d59c0902f10` (3e94efe), not gated. On hold until the experiment's result, like spec 030.
+- **Owner approved the experiment** (`EXPERIMENT-DM-WITH-TOOLS.md`): one DM model with tools over the code spine vs the pipeline. MVP plan given: prototype, then head-to-head, then the owner picks a design, then build the full ~60-turn session on it.
+- **Spec 031 prototype merged (bb35b77).** Behind `--dm-engine dm-tools` (default unchanged). Suite 2032 passed, validator 0. Smoke runs (5, no crashes): DM 1.1–3.0 calls/turn, 10.6–21 s/turn vs the pipeline's 3.2–3.4 calls and 34–45 s. Gaps: people only in prose can't be targeted; no Director (scene cuts, time); `state`/`recall` unused; resume reverts to the pipeline.
+- **In flight:** head-to-head, 3 arms (pipeline / DM-tools secrets hidden / visible) × talker, fighter, explorer + scripted lines, Sonnet agent. Results go to `EXPERIMENT-DM-WITH-TOOLS-RESULTS.md`.
