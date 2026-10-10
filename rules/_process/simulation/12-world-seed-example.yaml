@@ -3735,7 +3735,7 @@ npcs:
   secrets:
   - {fact: sec.tible_of_the_wet_warren.1, text: knows where something valuable lies, gate: 'standing Devoted, or a clue found by play
       (15.9)'}
-  voice: {register: nervous, habit: mutters to a pet or a charm}
+  voice: {register: nervous, habit: now and then mutters to a pet or a charm}
   detail: a habit of counting under their breath
   demeanor: weary
   lifestyle: comfortable
@@ -3789,7 +3789,7 @@ npcs:
   - {kind: refusal.duty, text: never hears a commoner's suit at table, strength: absolute}
   secrets:
   - {fact: sec.kazek_graniteborn.1, text: loves someone they must not, gate: 'standing Devoted, or a clue found by play (15.9)'}
-  voice: {register: flowery, habit: brings up an old deed of theirs}
+  voice: {register: flowery, habit: now and then brings up an old deed of theirs}
   detail: a crutch
   demeanor: ambitious
   lifestyle: comfortable
@@ -3840,7 +3840,7 @@ npcs:
   - {kind: refusal.duty, text: never refuses a challenge to single combat, strength: absolute}
   secrets:
   - {fact: sec.milby_greenfoot.1, text: knows where something valuable lies, gate: 'standing Devoted, or a clue found by play (15.9)'}
-  voice: {register: jovial, habit: mutters to a pet or a charm}
+  voice: {register: jovial, habit: now and then mutters to a pet or a charm}
   detail: a sailor's tattoos
   demeanor: bored
   lifestyle: comfortable
@@ -3894,7 +3894,7 @@ npcs:
   - {kind: refusal.duty, text: never leaves the weak undefended when asked, strength: absolute}
   secrets:
   - {fact: sec.milie_thistlefoot.1, text: loves someone they must not, gate: 'standing Devoted, or a clue found by play (15.9)'}
-  voice: {register: rough, habit: never says no outright}
+  voice: {register: rough, habit: now and then dodges a plain no}
   detail: short and very broad
   demeanor: suspicious
   lifestyle: comfortable
@@ -3945,7 +3945,7 @@ npcs:
   - {kind: refusal.duty, text: never sells the family land, strength: absolute}
   secrets:
   - {fact: sec.brugnak_three_scar.1, text: is hiding a person, gate: 'standing Devoted, or a clue found by play (15.9)'}
-  voice: {register: cold, habit: speaks of themselves by name}
+  voice: {register: cold, habit: now and then speaks of themselves by name}
   detail: a notched ear
   demeanor: ambitious
   lifestyle: comfortable
@@ -4002,7 +4002,7 @@ npcs:
   - {kind: refusal.duty, text: never shuts the door on kin, strength: absolute}
   secrets:
   - {fact: sec.murznak_red_hand.1, text: is not who they claim to be, gate: 'standing Devoted, or a clue found by play (15.9)'}
-  voice: {register: cold, habit: calls everyone by a nickname}
+  voice: {register: cold, habit: now and then calls everyone by a nickname}
   detail: the smell of woodsmoke
   demeanor: ambitious
   lifestyle: comfortable
@@ -4053,7 +4053,7 @@ npcs:
   - {kind: refusal.duty, text: never opens the gate after curfew without the reeve's seal, strength: absolute}
   secrets:
   - {fact: sec.yagum_iron_tusk.1, text: is hiding a person, gate: 'standing Devoted, or a clue found by play (15.9)'}
-  voice: {register: flowery, habit: repeats your last word back}
+  voice: {register: flowery, habit: now and then repeats your last word back}
   detail: short and very broad
   demeanor: weary
   lifestyle: comfortable
@@ -4112,7 +4112,7 @@ npcs:
   - {kind: refusal.duty, text: never lets a prisoner go without a hearing, strength: absolute}
   secrets:
   - {fact: sec.ranella_whitefield.1, text: secretly serves a faction, gate: 'standing Devoted, or a clue found by play (15.9)'}
-  voice: {register: terse, habit: counts on their fingers while thinking}
+  voice: {register: terse, habit: now and then counts on their fingers while thinking}
   detail: a badly set broken nose
   demeanor: stern
   lifestyle: comfortable
@@ -4170,7 +4170,7 @@ npcs:
   - {kind: refusal.duty, text: never refuses a challenge to single combat, strength: absolute}
   secrets:
   - {fact: sec.samo_applefoot.1, text: knows where something valuable lies, gate: 'standing Devoted, or a clue found by play (15.9)'}
-  voice: {register: flowery, habit: calls everyone by a nickname}
+  voice: {register: flowery, habit: now and then calls everyone by a nickname}
   detail: a badly set broken nose
   demeanor: bored
   lifestyle: comfortable
@@ -4229,7 +4229,7 @@ npcs:
   - {kind: refusal.duty, text: never refuses sanctuary to one who asks it, strength: absolute}
   secrets:
   - {fact: sec.mila_greenhill.1, text: is being blackmailed, gate: 'standing Devoted, or a clue found by play (15.9)'}
-  voice: {register: rough, habit: clicks their tongue when displeased}
+  voice: {register: rough, habit: now and then clicks their tongue when displeased}
   detail: unusual height
   demeanor: fearful
   lifestyle: comfortable
@@ -4285,7 +4285,7 @@ npcs:
   - {kind: refusal.bribe, text: will not take a bribe}
   secrets:
   - {fact: sec.harin_deepdelve.1, text: committed a crime that is still sought, gate: 'standing Devoted, or a clue found by play (15.9)'}
-  voice: {register: terse, habit: swears by a saint or a god}
+  voice: {register: terse, habit: now and then swears by a saint or a god}
   detail: a fresh black eye
   demeanor: flustered
   lifestyle: modest
@@ -4341,7 +4341,7 @@ npcs:
   - {kind: refusal.fight, text: will not fight}
   secrets:
   - {fact: sec.falkin_greenfoot.1, text: loves someone they must not, gate: 'standing Devoted, or a clue found by play (15.9)'}
-  voice: {register: cold, habit: repeats your last word back}
+  voice: {register: cold, habit: now and then repeats your last word back}
   detail: a ledger always under one arm
   demeanor: proud
   lifestyle: modest
@@ -4397,7 +4397,7 @@ npcs:
   - {kind: refusal.duty, text: never opens the gate after the night watch, strength: absolute}
   secrets:
   - {fact: sec.loran_millbrook.1, text: keeps a forbidden faith or practice, gate: 'standing Devoted, or a clue found by play (15.9)'}
-  voice: {register: flowery, habit: laughs before bad news}
+  voice: {register: flowery, habit: now and then laughs before bad news}
   detail: hands that never stop moving
   demeanor: fearful
   lifestyle: modest
@@ -4456,7 +4456,7 @@ npcs:
   - {kind: refusal.family, text: will not betray their family}
   secrets:
   - {fact: sec.kazain_ironborn.1, text: committed a crime that is still sought, gate: 'standing Devoted, or a clue found by play (15.9)'}
-  voice: {register: formal, habit: gets names slightly wrong}
+  voice: {register: formal, habit: now and then gets names slightly wrong}
   detail: mud to the knees
   demeanor: bored
   lifestyle: modest
@@ -4514,7 +4514,7 @@ npcs:
   - {kind: refusal.oath, text: will not lie under oath}
   secrets:
   - {fact: sec.zzirik_swift.1, text: owes a dangerous debt, gate: 'standing Devoted, or a clue found by play (15.9)'}
-  voice: {register: formal, habit: mutters to a pet or a charm}
+  voice: {register: formal, habit: now and then mutters to a pet or a charm}
   detail: a dry cough
   demeanor: proud
   lifestyle: modest
@@ -4570,7 +4570,7 @@ npcs:
   - {kind: refusal.past, text: will not speak of their past}
   secrets:
   - {fact: sec.ranan_brightsmith.1, text: once betrayed someone who trusted them, gate: 'standing Devoted, or a clue found by play (15.9)'}
-  voice: {register: plain, habit: apologizes constantly}
+  voice: {register: plain, habit: now and then apologizes for nothing}
   detail: ink-stained fingers
   demeanor: flustered
   lifestyle: modest
@@ -4630,7 +4630,7 @@ npcs:
   - {kind: refusal.past, text: will not speak of their past}
   secrets:
   - {fact: sec.alo_thornwell.1, text: knows where something valuable lies, gate: 'standing Devoted, or a clue found by play (15.9)'}
-  voice: {register: flowery, habit: laughs before bad news}
+  voice: {register: flowery, habit: now and then laughs before bad news}
   detail: eyes of two colors
   demeanor: grieving
   lifestyle: modest
@@ -4683,7 +4683,7 @@ npcs:
   - {kind: refusal.past, text: will not speak of their past}
   secrets:
   - {fact: sec.magwen_thistlefoot.1, text: is not who they claim to be, gate: 'standing Devoted, or a clue found by play (15.9)'}
-  voice: {register: jovial, habit: speaks of themselves by name}
+  voice: {register: jovial, habit: now and then speaks of themselves by name}
   detail: silver-streaked hair though young
   demeanor: cheerful
   lifestyle: comfortable
@@ -4745,7 +4745,7 @@ npcs:
   - {kind: refusal.past, text: will not speak of their past}
   secrets:
   - {fact: sec.selda_thornwell.1, text: is not who they claim to be, gate: 'standing Devoted, or a clue found by play (15.9)'}
-  voice: {register: nervous, habit: uses old-fashioned courtesies}
+  voice: {register: nervous, habit: now and then uses old-fashioned courtesies}
   detail: paint on their hands
   demeanor: sly
   lifestyle: comfortable
@@ -4806,7 +4806,7 @@ npcs:
   secrets:
   - {fact: sec.sketaa_of_the_reed_clan.1, text: committed a crime that is still sought, gate: 'standing Devoted, or a clue found by
       play (15.9)'}
-  voice: {register: rough, habit: never says no outright}
+  voice: {register: rough, habit: now and then dodges a plain no}
   detail: a strange perfume
   demeanor: sly
   lifestyle: comfortable
@@ -4863,7 +4863,7 @@ npcs:
   secrets:
   - {fact: sec.ymmulf_of_the_long_winter.1, text: committed a crime that is still sought, gate: 'standing Devoted, or a clue found by
       play (15.9)'}
-  voice: {register: flowery, habit: apologizes constantly}
+  voice: {register: flowery, habit: now and then apologizes for nothing}
   detail: a strange perfume
   demeanor: bored
   lifestyle: comfortable
@@ -7288,7 +7288,7 @@ documents:
     none to go toward a war-band of The Horde of the Millwick after dark. Lights have been seen there. Report anything seen to Loran
     Millbrook at the quay.', table: tbl.12.seed.document}
 - {id: doc.lead_3, kind: document, option: hire, at: loc.high_fells_merestead.gate, text: 'WANTED: able hands for a journey into the
-    hills. Good coin, no questions. Ask for Yagum Iron-Tusk at the market square. The council of Merestead', table: tbl.12.seed.document}
+    hills. Good coin, no questions. Ask for Yagum Iron-Tusk at the market square. Posted by The council of Merestead.', table: tbl.12.seed.document}
 - {id: doc.notice, kind: document, option: warning, at: loc.high_fells_merestead.gate, text: 'By order of The lords of Hawkgate: none
     to go toward Shephollow''s Undercroft after dark. The watch cannot answer for it. Report anything seen to Loran Millbrook at the
     quay.', table: tbl.12.seed.document}

@@ -24,6 +24,7 @@ from typing import Any
 
 from engine import ids
 from engine.audit import text as words
+from engine.dm.adjudication import effective_degree
 from engine.dm.testimony import INDEX
 from engine.gen._seed_packs import pack_data
 from engine.gen.case import case_covering, case_for_question, cases, mark_found, pointer, story_option
@@ -49,6 +50,14 @@ WILL_WORDS = {
     "guarded": "answers what you asked, guardedly ({why}): a part of it, short, in their own words",
     "unwilling": "refuses to answer what you asked ({why}): a refusal in their own voice, never a stock formula",
 }
+
+
+def will_words(st: Any, npc: str, band: str, why: str) -> str:  # rule: PR-12-10
+    """The willingness line in the NPC's own pronouns ("in his own words"; DL-12-114: round 7's sellsword, he/him,
+    drifted to "they" beside "in their own words")."""
+    from engine.dm.packet import own_words, pronoun_words
+
+    return own_words(WILL_WORDS[band].format(why=why), pronoun_words(st, npc))
 
 
 @dataclass
@@ -268,7 +277,7 @@ def willingness(ctx: Any, npc: str, record: Any = None, beats: Sequence[Any] = (
     talk = next((b for b in beats if b.status in ("resolved", "no_roll") and npc in (b.entry.targets or [])
                  and "talk" in (b.entry.approach_words or "")), None)
     if talk is not None:
-        if talk.entry.degree in ("failure", "critical_failure"):
+        if effective_degree(talk.entry) in ("failure", "critical_failure"):  # DL-01-48
             return "unwilling", "the talk did not move them"
         return "willing", "the talk moved them"
     sv = standing(st, npc)
@@ -310,7 +319,7 @@ def ask(ctx: Any, knower: str, kind: str, topic: str | None, text: str, *, pc: s
         band, why = willingness(ctx, knower, record, beats)
         idx[key] = {"willingness": band, "reason": why, "said": []}
         ctx.need_tx().add(meta(INDEX, idx, "PR-12-10"))
-    said = WILL_WORDS[band].format(why=why)
+    said = will_words(st, knower, band, why)
     return Answer(said, f"{k_name} {said}", willingness=band, key=key)
 
 

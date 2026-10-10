@@ -62,13 +62,15 @@ def _sentence(text: str) -> str:
     return sentence(plain(text))
 
 
-def _beat_line(b: BeatEntry, pc: str | None, names: Mapping[str, str]) -> str:
+def _beat_line(b: BeatEntry, pc: str | None, names: Mapping[str, str], paused: bool = False) -> str:
     """The beat from its typed fields: the actor, the Reader's verb and the target (never the restatement's words),
-    then its result."""
+    then its result; a beat the open pause holds has none yet (12.2.6; DL-12-115)."""
     with_target, alone = BEAT_VERBS.get(b.verb, BEAT_VERBS[None])
     target = next((t for t in b.targets if t != b.actor), None)
     act = clause(b.actor or pc, with_target if target else alone, who(target, names=names, pc=pc) if target else None,
                  names=names, pc=pc)
+    if paused:
+        return sentence(act)
     if b.degree is None:  # no roll; the gate's own words (redirects, options) belong to the OOF block, not here
         # a no-roll success says so; refused or withdrawn says not yet; a paused or unrolled beat has no result
         # an accepted G3 fallback that resolved is not a refusal (P-087)

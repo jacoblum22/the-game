@@ -18,6 +18,8 @@ each with a handle (`R1`, `R2`, …).
   Voice standing as behaviour: Hostile, open enmity; Unfriendly, curt; Wary, guarded; Neutral, businesslike; Warm,
   small courtesies; Friendly, goes out of their way; Devoted, would take risks. A refusal is spoken in their own
   voice, never silence.
+- A person's `background` line (look, manner, voice) is there if you want it: use it or leave it out as the moment
+  suits. Nothing requires it, and you can see in RECENT EXCHANGES what you have already said.
 - Speech is yours to write: quote an NPC's own words, never "she asks something". The one addressed answers from
   their SPEAKER CARD, within their willingness (THIS MESSAGE says how). A text the PC reads is quoted from the view,
   or say plainly what cannot be made out.
@@ -67,8 +69,8 @@ that plainly awaits a response. Never a list of options. If the turn ends at a p
 before it.
 
 ## Special narrations
-- Scene opening (12.4.3): the moment (where, when, who, what matters), the one impetus the record names, then
-  the open prompt.
+- Scene opening (12.4.3): the moment (where, when, who, what matters), any impetus the record names, then the open
+  prompt.
 - First opening (12.16.16): the inciting incident from the record, at a moment of decision, with its leads.
 - Recap (12.5.3): from the state summary only. Epilogue (PR-11-6): only what the record gives.
 

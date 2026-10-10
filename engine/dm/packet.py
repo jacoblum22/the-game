@@ -55,7 +55,10 @@ ROLE_EXCHANGES = {Role.DIRECTOR: 2, Role.WORLD: 1}
 MAX_DATA_KEYS = 12
 MAX_VALUE_CHARS = 160
 WATCHES = ("morning", "afternoon", "evening", "night")
-_DESCRIPTIVE_KEYS = ("pronouns", "desc", "landmarks", "hazards", "openness", "role", "detail", "demeanor")  # first under the cap
+_DESCRIPTIVE_KEYS = ("pronouns", "desc", "landmarks", "hazards", "openness", "role", "age")  # first under the cap
+# a person's look, manner and voice: one background line, never standing traits (12.11.3; DL-12-113)
+_BACKGROUND = frozenset({"detail", "demeanor", "voice"})
+_TEMPLATED = frozenset({"age"})  # rolled from a person table with "their" in it ("young (in their teens)")
 # What drives a person, never the narrator's (12.10.1 world layer; 15.2.1 fields, 12.16.11 knowledge pack)
 MOTIVES = frozenset({"wants", "refusals", "fears", "secrets", "knowledge", "beliefs", "ties", "knowledge_scope"})
 CARD_CHARS = 600  # one scene card line, ~150 tokens (view_budget.scene_cards / max_scene_cards)
@@ -63,6 +66,66 @@ CARD_CHARS = 600  # one scene card line, ~150 tokens (view_budget.scene_cards / 
 
 class PacketError(ValueError):
     """A packet that breaks the 00.15.4 caps (a caller bug, never a model failure)."""
+
+
+# ---------------------------------------------------------------- a person's own pronouns (12.11.1; DL-12-114)
+
+# subject, possessive, object, reflexive, independent
+_PRONOUNS = {"she": ("she", "her", "her", "herself", "hers"), "he": ("he", "his", "him", "himself", "his"),
+             "it": ("it", "its", "it", "itself", "its"), "you": ("you", "your", "you", "yourself", "yours")}
+_NEUTRAL = re.compile(r"\b(their|them|themselves|theirs)\b", re.IGNORECASE)
+
+
+def pronouns_of(pronouns: Any) -> tuple[str, ...] | None:
+    """A stored pronoun line ("she/her") as its five forms; None when unrecorded or they/them (the template's own
+    words already fit)."""
+    return _PRONOUNS.get(str(pronouns or "").split("/")[0].strip().lower())
+
+
+def pronoun_words(state: WorldState, eid: str | None) -> tuple[str, ...] | None:
+    """The person's pronoun forms (the PC: you, your); None when unrecorded, they/them or not a person."""
+    if eid is not None and eid == pc_id(state):
+        return _PRONOUNS["you"]
+    e = state.entities.get(eid or "")
+    return pronouns_of(e.data.get("pronouns")) if e is not None and e.kind in (*CAST_KINDS, "pc") else None
+
+
+def own_words(text: str, forms: tuple[str, ...] | None) -> str:  # rule: 12.11.1
+    """Template text about one person in their own pronouns: "going about their morning work" → "going about his
+    morning work" (oracles.yaml's person tables; DL-12-114). Only their / them / themselves / theirs, never `they`
+    (verb agreement), and only on template-derived text, never on free text that may speak of others."""
+    if not forms:
+        return text
+    by = {"their": forms[1], "them": forms[2], "themselves": forms[3], "theirs": forms[4]}
+
+    def sub(m: re.Match[str]) -> str:
+        w = by[m.group(1).lower()]
+        return w[:1].upper() + w[1:] if m.group(1)[:1].isupper() else w
+
+    return _NEUTRAL.sub(sub, text)
+
+
+_OCCASIONAL = ("now and then", "now and again", "sometimes", "at times", "once in a while", "often")
+
+
+def background_line(data: Mapping[str, Any]) -> str:  # rule: 12.11.3
+    # rule: 12.14.11
+    """A person's look, manner and voice as background (12.11.3; DL-12-113): one line the narrator may use or leave
+    out, never must-use and never counted; the habit worded as occasional; the person's own pronouns."""
+    forms = pronouns_of(data.get("pronouns"))
+    bits = [f"look: {data['detail']}" if data.get("detail") else "",
+            f"manner: {data['demeanor']}" if data.get("demeanor") else ""]
+    v = data.get("voice")
+    if isinstance(v, Mapping):
+        habit = str(v.get("habit") or "").strip()
+        if habit and not habit.lower().startswith(_OCCASIONAL):
+            habit = f"now and then {habit}"
+        voice = ", ".join(x for x in (str(v.get("register") or ""), habit) if x)
+        bits.append(f"voice: {voice}" if voice else "")
+    elif v:
+        bits.append(f"voice: {v}")
+    bits = [own_words(_short(b), forms) for b in bits if b]
+    return "  background (use or leave out as you like; nothing requires it): " + "; ".join(bits) if bits else ""
 
 
 # ---------------------------------------------------------------- view
@@ -355,8 +418,8 @@ def scene_setting(state: WorldState, *, full: bool = True) -> str:  # rule: 12.4
                  "looks around or asks; people here act only as the record says):", f"- place: {place.name}"]
     else:
         lines = ["SCENE SETTING (what the character sees here; describe the place from this, naming ordinary "
-                 "furniture of such a place as needed; people here act only as the record says, so show how they "
-                 "look and stand):", "- place: " + "; ".join(_place_bits(place))]
+                 "furniture of such a place as needed; people here act only as the record says, and how they look "
+                 "is yours to use or leave):", "- place: " + "; ".join(_place_bits(place))]
         if d.get("look"):  # the seed pack (12.16.9): the layout is read from the store, never invented (12.4.3)
             lines.append(f"- look: {d['look']}")
         if d.get("furniture"):
@@ -381,11 +444,14 @@ def scene_setting(state: WorldState, *, full: bool = True) -> str:  # rule: 12.4
     for i in cast_order(state, [i for i in cast_present(state) if i not in state.seals]):  # met mid-scene too (P-056)
         ed = state.entities[i].data
         # pronouns first: a person squeezed out of the view's full profiles keeps them (playtest 20261008-145410:
-        # Ysrion, she/her, narrated "he" all game; the pronoun precision check, 12.3.2)
-        look = ", ".join(str(ed[k]) for k in ("pronouns", "age", "detail", "demeanor") if ed.get(k))
+        # Ysrion, she/her, narrated "he" all game; the pronoun precision check, 12.3.2). The look only when the place
+        # is described (setting once, DL-12-99; DL-12-113): later turns carry who they are, not how they look.
+        keys = ("pronouns", "age", "detail", "demeanor") if full else ("pronouns",)
+        look = own_words(", ".join(str(ed[k]) for k in keys if ed.get(k)), pronouns_of(ed.get("pronouns")))
         who = display_name(state, i)
         role = f", the {ed['role']}" if ed.get("role") and str(ed["role"]) not in who else ""
-        call = "" if name_known(state, i) else f'; call them "{who}", as every other screen does'  # P-095
+        # never a label to repeat word for word ("as every other screen does", P-095 retired by DL-12-114)
+        call = "" if name_known(state, i) else "; name not known to the character"
         present[i] = f"- present: {who}{role}" + (f" ({look})" if look else "") + call
         short[i] = who + (f" ({ed['role']})" if role else "")
     budget = view_budget()  # the cast budget, as the view's (R2-A2): the rest share one line
@@ -394,12 +460,9 @@ def scene_setting(state: WorldState, *, full: bool = True) -> str:  # rule: 12.4
     rest = {i: short[i] for i in present if i not in shown}
     if rest:
         lines.append("- " + also_here(rest, budget["cast_line"], ids=False))
-    from engine.dm.incident import incident_line
-
-    matter = incident_line(state)  # the opening incident's person, as the character knows it (P-067)
-    if matter:
-        lines.append(f"- the matter at hand (the character knows): {matter}")
-    now = (state.time.model_dump(mode="json").get("now") or {})
+    # no "the matter at hand: X brought the word." here: a code sentence in every packet (DL-12-114; round 7: 44 of
+    # 44 packets, voiced from nowhere at the temple). The incident's reporter is a field of the opening note only.
+    now =(state.time.model_dump(mode="json").get("now") or {})
     watch = now.get("watch")
     when = WATCHES[watch] if isinstance(watch, int) and 0 <= watch < len(WATCHES) else None
     weather = next((f for f in state.facts.values() if f.subject == "world" and f.predicate == "weather"), None)
@@ -480,19 +543,23 @@ def _entity_lines(view: Mapping[str, Any], e: Mapping[str, Any]) -> list[str]:
         return [f"{eid}: {e['slice']}"]
     lines = [f"{eid}: {e.get('name', '')}"]
     lines.append(f"  name: {e.get('name', '')}")
+    data = e.get("data") or {}
+    forms = pronouns_of(data.get("pronouns"))
     if e.get("name_unknown"):  # rule: 12.10.2
-        lines.append(f"  the character does not know their name: call them \"{e.get('name', '')}\" (the words "
-                     "every other screen uses; add how they look if you like), never by a name (not even one "
-                     "in the id) until the record says they gave it")
+        # no label to repeat word for word, no look to add (DL-12-114): the narrator's own words, never a name
+        lines.append(own_words("  the character does not know their name: never call them by a name (not even one "
+                               "in the id) until the record says it was given", forms))
     if e.get("exists") not in (None, "exists"):
         lines.append(f"  state: {e['exists']}")
     if e.get("tags"):
         lines.append(f"  tags: {_short(e['tags'])}")
-    data = e.get("data") or {}
     keys = [k for k in _DESCRIPTIVE_KEYS if k in data] + [k for k in data if k not in _DESCRIPTIVE_KEYS]
-    for k, v in [(k, data[k]) for k in keys][:MAX_DATA_KEYS]:
+    for k, v in [(k, data[k]) for k in keys if k not in _BACKGROUND][:MAX_DATA_KEYS]:
         if k not in ("name", "name_known"):
-            lines.append(f"  {k}: {_short(v)}")
+            lines.append(f"  {k}: {own_words(_short(v), forms) if k in _TEMPLATED else _short(v)}")
+    bg = background_line(data)
+    if bg:
+        lines.append(bg)
     qs = (view.get("quantities") or {}).get(eid, {})
     if qs:
         lines.append("  quantities: " + "; ".join(
@@ -620,9 +687,12 @@ def speaker_card(state: WorldState, npc: str, *, topic: str | None = None, about
     if roles:
         out.append("- their trade's common knowledge: " + "; ".join(roles))
     if news:
-        out.append("- public news anyone here may know: " + "; ".join(_short(x) for x in news))
+        # the gist, never a seeded sentence to recite (round 7: Kerric spoke the situation's text word for word)
+        out.append("- public news anyone here may know (the gist; in the speaker's own words, never these): "
+                   + "; ".join(_short(x) for x in news))
     if said:
-        out.append("- they already said (never contradict or repeat these unprompted; build on them):")
+        out.append(f"- {display_name(state, npc)} already said (never contradict or repeat these unprompted; build on "
+                   "them):")
         out += [f"  - \"{_short(r['words'])}\"" for r in said]
     named = [ln for ln in identity_lines(state, [], "\n".join([*known, *(str(r["words"]) for r in said)]))
              if not ln.startswith(f"  - {display_name(state, npc)}:")]

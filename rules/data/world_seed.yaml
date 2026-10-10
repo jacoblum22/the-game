@@ -663,10 +663,10 @@ tables:
     die: d4
     note: "a document is an entity (kind document; T1 of common value, unless a case placement makes it a clue holder) with a `text` fact written at seed time, posted at the first place of its kind's `posted_at` that the haven has. When a lead points to a document, {target} is the lead's target and {contact} the person (else the place) it sends the PC to, so the text names where the lead goes. {issuer} is the faction or person who posts it, {haven} the haven, {year} the seed's year; the other fields are rolled from `fields`. Reading delivers the text first (12.10.5)."
     results:
-      - {range: "1", option: hire, text: "WANTED: able hands for {task}. Good coin, no questions. Ask for {contact} at {contact_place}. {issuer}", posted_at: [gate, market, inn]}
+      - {range: "1", option: hire, text: "WANTED: able hands for {task}. Good coin, no questions. Ask for {contact} at {contact_place}. Posted by {issuer}.", posted_at: [gate, market, inn]}
       - {range: "2", option: warning, text: "By order of {issuer}: none to go toward {target} after dark. {reason} Report anything seen to {contact} at {contact_place}.", posted_at: [gate, hall]}
       - {range: "3", option: charter, text: "Charter of {haven}: {issuer} holds the right of {right}, sealed in {year}. Disputes go to {contact} at {contact_place}.", posted_at: [hall, temple]}
-      - {range: "4", option: bounty, text: "BOUNTY: {reward} for word of {target}. Bring proof to {contact} at {contact_place}. {issuer}", posted_at: [gate, market, inn]}
+      - {range: "4", option: bounty, text: "BOUNTY: {reward} for word of {target}. Bring proof to {contact} at {contact_place}. Posted by {issuer}.", posted_at: [gate, market, inn]}
     fields:
       task: ["guarding the roads", "a journey into the hills", "clearing an old place", "carrying a sealed message", "escorting a cart", "a matter best discussed in private"]
       reason: ["Two have not come back.", "Lights have been seen there.", "The watch cannot answer for it.", "It is not safe, whatever the old folk say.", "Tracks were found that no one can name.", "This is the second warning."]

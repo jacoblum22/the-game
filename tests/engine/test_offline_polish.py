@@ -181,7 +181,7 @@ def test_opening_keeps_the_inciting_incident_and_offers_the_leads(tmp_path: Path
     assert incident[:1].upper() + incident[1:] in r.fiction
     narr = [row for row in game.store.model_calls(r.turn_id) if row["role"] == "narrator"]
     packet = str(narr[-1]["request"])
-    assert "a lead to make noticeable:" in packet and "a lead to make noticeable: the incident itself" not in packet
+    assert "a lead to make noticeable (its gist" in packet and "the incident itself" not in packet.split("ADJUDICATION RECORD")[-1].split("SCENE SETTING")[0]  # spec 024: a gist
 
 
 def test_offline_framer_changes_approach_when_asked() -> None:
