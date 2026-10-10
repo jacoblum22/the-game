@@ -33,7 +33,7 @@ def test_pronoun_hit_on_the_only_person_named() -> None:
     [h] = precision_checks("Murzak twists and shrugs the grab off, and you lose your footing against his weight.",
                            idx=IDX, rules=RULES)
     assert (h.check, h.words, h.store_value, h.subject, h.blocks) == (
-        "pronoun_certain_subject", "his", "she/her", "npc.murzak", True)
+        "pronoun_certain_subject", "his", "she/her", "npc.murzak", False)  # R2-L DL-12-138: 0 of 3 real in round 8, logs only
     assert "she/her" in h.why
     assert hits("His grip tightens on the rug.", "Murzak Red-Hand turns to face you.")  # the sentence before
 
@@ -108,4 +108,4 @@ def test_a_check_measured_below_min_precision_is_log_only() -> None:
     low = [{**c, "precision": 0.5} if c["id"] == "season_words" else c for c in pc["checks"]]
     rules = SimpleNamespace(pacing={"claim_check": {"precision_checks": {**pc, "checks": low}}})
     assert hits("Snow lies on the winter fields.", rules=rules) == [("season_words", "narrator", "winter", False)]
-    assert hits("Murzak loses his footing.", rules=rules)[0][3] is True  # the other check still blocks
+    assert hits("Murzak loses his footing.", rules=rules)[0][3] is False  # pronoun check measured 0.0 in round 8 (DL-12-138): logs too

@@ -1498,8 +1498,9 @@ these reasons, and the narration may imply no other (`Narration may not imply` f
    downtime duty (T-16-15);
 5. a breaking point (16.6) or a betrayal (16.6.6);
 6. when none of these settles what it does and it must do something (a stranger insults it; a guard asks
-   it its business), chapter 12's `tbl.npc_action` (12.11.5: d10 + its standing toward the asker), with the
-   DM choosing which of its recorded drives or traits the row expresses.
+   it its business), chapter 12's default NPC layer (12.11.5, 12.11.9: its mood toward the asker and, for an ask,
+   the ceiling, T-12-19), the narrator choosing the reaction within it from its recorded drives and traits
+   [revision: R2-L; DL-12-126].
 *Never* because the DM thinks it "would" (12.11.4's agreeable-NPC failure in reverse: an ally that acts on
 its own initiative is a second PC). An ally acting against its recorded personality — a merciful companion
 killing a prisoner unasked, a coward charging — is impossible without a loyalty trigger: it would need a

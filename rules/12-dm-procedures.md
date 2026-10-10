@@ -228,6 +228,15 @@ Decisions (J):      1. [J:enum] The message's parts, each classified (a message 
                          beat's method, not a beat of its own (01.2.2) [revision: R2-J; DL-01-37].
                        (`rests_on` is retired [revision: R2-J; DL-12-102]: code finds PR-12-12's
                          triggers from the beat itself.)
+                       For every SPEECH part and every question part as well [revision: R2-L;
+                       DL-01-53]: addressee — the id of the person the words are for, or none
+                         (said to the room, to nobody in particular, or unclear); a move-then-ask
+                         addresses the move's target; code never re-guesses it by word overlap
+                         or by who spoke last;
+                       cost — for each ask of an NPC (a request, or a question asking them to
+                         tell something): what granting it costs THEM, one of none · small · real
+                         · big (15.3.2's R1 · R2 · R3 · R4-R5; telling, by what telling costs the
+                         teller); the ceiling reads it (T-12-19).
                        Nothing else is proposed. The gate class, the license and the would-be
                        license (00.12.3, PR-01-5), the roll test (01.4.1) and the DC (01.6.4) are
                        computed by the engine; the PC's knacks reach PARSE as words, never as gates.
@@ -237,7 +246,7 @@ Narration may not imply: that SPEECH was a persuasion attempt (no roll was made)
 Worst case (J):     a SPEECH part classified DECLARATION → a roll test that answers "no roll" (no
                     effect) or an OFFER the player can withdraw for free (class ii); a DECLARATION
                     classified SPEECH → the persuasion attempt is not resolved; the NPC's response
-                    comes from its reaction/action table (12.11.5) and the player may declare the
+                    is the narrator's, within its ceiling (12.11.5) [revision: R2-L] and the player may declare the
                     attempt next turn (class iv). A SAFETY part missed → caught at T10's safety
                     screen of the draft (12.5.6) [editor: E2-032], which is [D] against the lines list.
                     A wrong verb or facet puts the beat under the wrong card: the OFFER names the
@@ -353,10 +362,10 @@ its own projection of it, respecting the three layers of 12.10.1 (`get_state(sce
 | Reader (PARSE) | the message, the last two exchanges, the names and aliases of the scene and spotlight entities, the PC's knacks as words, the open pause | setting prose, profiles, scene cards |
 | Framer (rolled beats only) | the beat; the target's and the place's profiles (their details are levers, 12.14.13); positions and conditions; anchor cards; candidate facts filtered by code | the PC sheet (the modifier is computed), the cast list, setting prose |
 | World and the NPC layer | world truth for the present NPCs minus seals: motives, memories, knowledge; off-screen clocks; scene cards; the player's message and the last exchange [revision: R2-J; DL-12-104] | setting prose |
-| Narrator | **the PC-knowledge layer only**: the adjudication record with handles, the setting and seeded looks (on arrival and at scene framing; on later turns of the scene only as optional material marked described, 12.14.11) [revision: R2-I; DL-12-99], profiles (no usage marks; habits as background; a person's look and a thing's description only when it first appears, on a look-around, or when the player looks at or asks about it, 12.14.11) [revision: R2-K; DL-12-122], the spotlight as the PC knows it, at most 2 scene cards, the calendar line pinned first; the name, pronouns and bond of everyone named or mentioned, present or absent (item 3) [revision: R2-J; DL-12-104]; the **speaker card** of each NPC the PC asked or addressed this turn (PR-12-10 step 3: willingness, their ordinary knowledge on the topic, public news, their recent `said` records); and the optional material, marked as such (12.14.12) [revision: R2-H; DL-12-90; DL-12-92] | motives, `truth`, sealed content, undelivered case placements, background the PC has not perceived or learned (beyond a speaker card's ordinary knowledge) |
+| Narrator | **the PC-knowledge layer only**: the adjudication record with handles, the setting and seeded looks (on arrival at a place, a same-place scene cut not counting [revision: R2-L; DL-12-140]; on later turns of the scene only as optional material marked described, 12.14.11) [revision: R2-I; DL-12-99], profiles (no usage marks; habits as background; a person's look and a thing's description only when it first appears, on a look-around, or when the player looks at or asks about it, 12.14.11) [revision: R2-K; DL-12-122], the spotlight as the PC knows it, at most 2 scene cards, the calendar line pinned first; the name, pronouns and bond of everyone named or mentioned, present or absent (item 3) [revision: R2-J; DL-12-104]; every present and able NPC's place, range band and mood, and for an ask its ceiling and pointer candidates (12.11.9) [revision: R2-L; DL-12-126]; the **speaker card** of each NPC the PC asked or addressed this turn (PR-12-10 step 3: mood and ceiling, their ordinary knowledge on the topic, public news, their recent `said` records); and the optional material, marked as such (12.14.12) [revision: R2-H; DL-12-90; DL-12-92] | motives, `truth`, sealed content, undelivered case placements, background the PC has not perceived or learned (beyond a speaker card's ordinary knowledge) |
 | Checker | the passage with its side list (12.3.1), the player's message and the last exchange [revision: R2-J; DL-12-104], compact profiles of the named, spotlight and created ids | rule cards outside 12.3, setting prose, the narrator's reasoning |
-| Director | threads, clocks, cast weights, scene cards; the player's message and the last two exchanges [revision: R2-J; DL-12-104]; it may cast a **description** present in the scene for a stated purpose ("the carters", "the refugees"; 01.2.7's unnamed description, no group entity), never a random walk-on for it [revision: R2-K; DL-12-110] | older verbatim exchanges |
-| Fixer (`/fix`, PR-12-11) [revision: R2-J; DL-12-105] | the player's report and, through read-only tools, the record: turn records, entity state and provenance, the whole transcript, a recomputed frame, the coin and inventory ledger, the `said` records against the record; and everything the play roles see [revision: R2-K; DL-12-116]: the shared people card (role, licences and competences, stance, standing, bonds), facts in plain words, that turn's model inputs and outputs, and a short mechanics digest | sealed content beyond its permitted slice (INV-10); any write |
+| Director | threads, clocks, cast weights, scene cards; the player's message and the last two exchanges [revision: R2-J; DL-12-104]; it casts by **id** [revision: R2-L; DL-12-134]: a person present, by their id, or `new` with `{group: yes or no, role}` when nobody present fits a stated purpose ("the refugees" is one group entity), never a description code then matches by words, and never a random walk-on for it [revision: R2-K; DL-12-110] | older verbatim exchanges |
+| Fixer (`/fix`, PR-12-11) [revision: R2-J; DL-12-105] | the player's report and, through read-only tools, the record: turn records, entity state and provenance, the whole transcript, a recomputed frame, the coin and inventory ledger, the `said` records against the record; and everything the play roles see [revision: R2-K; DL-12-116]: the shared people card (role, licences and competences, stance, standing, bonds), facts in plain words, that turn's model inputs and outputs with each narrator line marked code-forced or not, and a short mechanics digest with goal-first, the attribute knob and licence glosses [revision: R2-L; DL-12-137] | sealed content beyond its permitted slice (INV-10); any write |
 
 Sealed content reaches no view except as its permitted slice (INV-10); a leak test on every Narrator packet
 checks that no `truth`, motive or sealed string is in it. The narrator cannot cite what its view does not show,
@@ -399,7 +408,9 @@ three properties, each `[J:flag]`, each true only when the named evidence exists
    message and the characters answer as people do (12.10.8); no check demands an answer to a statement, or to a
    question already answered in other words [revision: R2-J; DL-12-101]. *Retires:* the answered-question check (word
    overlap, about 6% precise: 28 of 30 repair targets, and the player's own line echoed back; round 6, I1 §2 and §7)
-   and "every part must be answered" bookkeeping.
+   and "every part must be answered" bookkeeping. No part line is marked `(answered)` by code: a part's status is
+   shown only when code knows it (paused, pending) [revision: R2-L; DL-12-131]; *retires* the unconditional mark
+   (round 8, R8-D1 row 45: on 98 of 160 part lines, with no answer behind some).
 2. **Not substituted** — no part is resolved as a different action than the player declared (a "search
    the desk" is not resolved as "search the room"; a Talk to persuade is not resolved as an intimidation).
    Evidence: each frame's neutral restatement (01.2.6) matches the player's words, or the stated assumed
@@ -426,23 +437,20 @@ closed source (01.11.3):
 1. **Adversaries and hostile NPCs in conflict** act on their turns from their behavior priority lists
    (ch.09) by PR-06-6, an adversary's turn [revision: I-030]; their attacks are rolled by the engine against the PC's defenses (00.3.3).
 2. **NPCs present** follow the default NPC layer (12.11.9) [revision: R2-B; DL-12-43; I-140; revision: R2-H;
-   DL-12-93]. Each NPC's activity is rolled once per scene and is optional material. Only an NPC the PC addressed, or
-   whom the event concerns (a matching tag, `social.yaml#event_tags.concerns`), responds, within the scene's
-   practice, and the response comes from (a) a resolved Talk frame's delivered outcome (ch.15), or for a question the
-   PC asked, PR-12-10 (the case graph for a consequential question; otherwise willingness only, the words being the
-   narrator's) [revision: R2-D; DL-12-60; revision: R2-H; DL-12-90], else (b) an established want or refusal whose
-   tags match the event's (`social.yaml#event_tags`; 12.11.9 step 3(b)) [revision: R2-G; DL-12-87], else (c)
-   `roll_table(tbl.npc_action)` with the NPC's standing as context (12.11.5). **An addressed NPC always answers**, in
-   words, or with a refusal spoken in their own voice. An addressed answer and each response deed are record lines the
-   narration cites (12.14.12). The DM chooses the *words*; the source decides *whether* and *what is done*.
+   DL-12-93; revision: R2-L; DL-12-126]. Code gives facts: who is present and able, and where; each NPC's mood toward
+   the PC, held for the scene; for an ask, the ceiling (a resolved Talk frame's delivered outcome, else T-12-19 by mood
+   and cost) with pointer candidates for a refusal; and for a question the PC asked, PR-12-10 (the case graph for a
+   consequential question; a clue delivery is a `learned` fact) [revision: R2-D; DL-12-60; revision: R2-H; DL-12-90].
+   The narrator decides who reacts, how, at or below the ceiling, and in what words; a reaction that changes the
+   spine is declared and applied by 12.11.9 step 5. No reaction is a must-name line (12.14.12).
 3. **Clocks** that ticked from this turn's costs, consequences or `auto_ticks` render their omens
    (INV-14), and completions run (00.8, PR-00-3).
 4. **Fired triggers** in 12.2.3's order (lead injection, pacing pushes, offers).
 5. **Time**: the beat's time cost is applied by its mode (00.7.3); any boundary crossed runs its
    handlers (INV-15); an interrupt halts and frames a new moment (00.7.8).
-*Worst case (J, 2c vs 2b):* an NPC acts from a table where a recorded want applied — one NPC action of
-ordinary weight, reversible by the next exchange (class iv); the NPC's record is in the packet, so the
-claim check flags a response contradicting a recorded refusal [R4 W4; R5 P-06].
+*Worst case (J, step 2):* a reaction that fits the NPC's record less well than another would, inside the ceiling
+(class iv); a deed beyond the ceiling is not applied (12.11.9 step 5), and ceiling violations are measured
+(OEQ-12-28) [R4 W4; R5 P-06; revision: R2-L].
 
 **12.2.10 Read before you narrate.** `[D]` Any quantity, condition, harm state, position, possession,
 clock state or standing the narration mentions is read from the narrator view fetched *after* this turn's
@@ -494,7 +502,7 @@ The claim classes (closed list) and what each is checked against:
 | `clock` | an omen; "the alarm is spreading"; a completion | clock state, the omen the engine selected |
 | `attitude` | "she warms to you"; "he's furious" | standing rung, NPC memory, the frame's delivered reach |
 | `outcome` | "you make it across"; "the lock gives"; "it costs you" | the frame's degree, delivered reach, the chosen cost form |
-| `action` | a deed that changes something: "the guard steps aside"; "your companion cuts the rope"; "the merchant pockets the coin and leaves" (a continuing activity is `position`) | the act's closed source in this turn's adjudication record (12.2.9): a behavior list, a Talk frame's outcome, a recorded want or refusal, a `tbl.npc_action` row, a clock or trigger; for an ally, one of 16.13.3's six reasons [revision: I-030] |
+| `action` | a deed that changes something: "the guard steps aside"; "your companion cuts the rope"; "the merchant pockets the coin and leaves" (a continuing activity is `position`) | the act's closed source in this turn's adjudication record (12.2.9): a behavior list, a Talk frame's outcome, a declared NPC deed code applied within the ceiling (12.11.9 step 5) [revision: R2-L; DL-12-130], a clock or trigger; for an ally, one of 16.13.3's six reasons [revision: I-030] |
 | `sealed` | anything matching a sealed fact's content | the sealed partition (a match is a leak) |
 
 **Which claims block** is 12.3.1b's closed list; every other claim is judged only to be logged [revision: R2-G].
@@ -540,10 +548,11 @@ claim-log record `{turn, sentence, class, verdict, store_value}` is kept for rev
    the narrator's voice. Speech is **testimony**: it is recorded as a `said` record on the speaker `{speaker,
    turn, words, about}`, never as a fact about the world, and it is never checked for truth, for what the speaker
    knows (12.10.6) or for secrets. The narrator never sees sealed content (INV-10), so a "leak" in speech is only a
-   claim, and it may be false. Speech is checked for four things only, all by code: the speaker is present in the
+   claim, and it may be false. Speech is checked for four things only, all by code (the fourth only logs): the speaker is present in the
    scene, the speaker is not the PC, no words are put in the PC's mouth beyond what the player said
    (`pc_agency`; this covers words given to the PC inside an NPC's speech or its attribution, "'Fair enough,' you
-   say": a speaker tag never exempts them [revision: R2-I; DL-12-100]), and the words do not repeat a line the speaker already said (their `said` records, 12.14.11)
+   say": a speaker tag never exempts them [revision: R2-I; DL-12-100]), and, logged only, whether the words repeat a line the speaker already said (their `said` records, 12.14.11;
+   demoted by measured precision, right 0-1 times of 2 in round 8 [revision: R2-L; DL-12-138])
    [revision: R2-H; DL-12-90]; season words are scanned in speech too (item 2.7). Speech never unseals anything, never delivers a clue (a clue is delivered only by its placement,
    15.9), and never writes a fact. A name heard in speech that matches the entity's stored name is known to the PC
    from then on (a knowledge record, `how: heard`); any other name stays a said claim. A said claim becomes world
@@ -567,7 +576,9 @@ claim-log record `{turn, sentence, class, verdict, store_value}` is kept for rev
       word against the calendar line, in the narrator's voice and in speech alike [revision: R2-H; DL-12-95]. A precision check blocks only while
       its measured precision is at least `claim_check.precision_checks.min_precision`, measured on whole passages;
       below that it is logged (round 6, I1 §7: the one season block was a false positive, speech about a past
-      winter) [revision: R2-J; DL-12-101].
+      winter) [revision: R2-J; DL-12-101]. **A check with no measured precision only logs**, and code enforces it: a
+      check blocks only with a recorded `precision` at or above the minimum [revision: R2-L; DL-12-138]. The pronoun
+      check, right 0 of 3 times in round 8, is demoted to a log (all 5 round-8 rewrites were false blocks).
    A change on the list with no write this turn is `unsourced_change` and is cut (an NPC who "pockets the coin and
    leaves" changes a quantity and a position). Owed blocks (12.3.2), must-name coverage (12.3.1a) and the safety
    screen (12.5.6, not a claim check) are unchanged.
@@ -744,7 +755,8 @@ code (PR-12-11) [revision: R2-H; DL-12-94; revision: R2-J; DL-12-105].
      record error by 12.3.4. The write is the corrected value, never the complaint's words, and it is never shown to
      a character as what they know [revision: R2-J; DL-12-105].
    - **At an open OFFER** [revision: R2-K; DL-12-117]: a complaint about a frame still on screen is answered by
-     re-framing it (PR-12-11 step 3), never by an explanation alone; nothing has been spent.
+     re-framing it, or re-reading the message when the complaint is how it was read (PR-12-11 step 3) [revision: R2-L;
+     DL-12-136], never by an explanation alone; nothing has been spent.
    - **Take back and redo the beat**: by 12.5.8, within the scene, or past its start under 12.5.8's take-back
      limit when the evidence is code-confirmed and nothing irreversible followed.
    - **Explain**: when the evidence shows the player is mistaken, or asks why a ruling stands, answer OOF with the
@@ -1035,7 +1047,8 @@ fictional flavor than the player wanted — same weight by construction; the pla
 5. **Nothing else.** A committed roll is final (01.8.5); "I didn't like that result" is not a take-back.
 Every rewind restores the store from the write history and logs the voided frames, and **every restore** (a
 take-back, a rewind, a correction, a refund) **shows a `Now:` line** with each shown value it changed
-(`Now: Vitality 9 · purse 12 coins`; 12.15.9), never a silent restore [revision: R2-J; DL-12-106; round 6, I3 §2: a
+(`Now: Vitality 9 · purse 12 coins`; 12.15.9), and a take-back re-shows the scene (PR-12-11 step 6) [revision: R2-L;
+DL-12-137], never a silent restore [revision: R2-J; DL-12-106; round 6, I3 §2: a
 take-back silently restored Vitality]; RNG draws are never
 "un-drawn" (the log keeps them, marked void) [R5 SC-06; 01.8.5].
 
@@ -1078,7 +1091,7 @@ the DM may not decide it; it settles it by the first matching tool of T-12-4 and
 narrating it. False only when a fact id, canon line or scene type can be named that settles it, or the
 thing is an incidental detail of something in view (T1a, 12.14.13), which is written as narrated. Uncertain →
 true (SG-12). **One owner per question** [revision: R2-K; DL-12-108]: about a person the beat acts on, their will is their
-willingness (12.11.9), their ability is their record (role, licences, competences; 12.11.1), and content nobody has
+mood and ceiling (12.11.9) [revision: R2-L], their ability is their record (role, licences, competences; 12.11.1), and content nobody has
 written is its maker's (11.5.6) or their testimony (PR-12-12); none of these goes to the Oracle (01.15.1).
 **Proposing a candidate and letting the Oracle settle it is not choosing; stating it unsettled is**
 [revision: R2-B; DL-12-40]: ordinary knowledge (T1b) in the narrator's voice may be proposed and settled by the Oracle
@@ -1097,11 +1110,11 @@ ferryman is home *because the scene needs him*" — that is the DM choosing what
 | answered by a fact, canon, or scene type | read it (Certain / Impossible) | the smithy has a forge |
 | who is <role>, for an ordinary role (a story role goes to the case graph, PR-12-10 step 1) | casting: 00.11 `cast` (`social.yaml#cast`) [revision: R2-D] | who keeps the ferry here? |
 | what <NPC> knows about <topic> | asked in play: PR-12-10 (the case graph if consequential; otherwise the NPC answers in words, testimony), settled by PR-12-12 only if it comes to matter; for what an NPC acts on: 12.10.6 [revision: R2-D; revision: R2-H] | what does the innkeeper know of the north road? |
-| whether a person the beat acts on is willing, or able [revision: R2-K; DL-12-108] | their willingness (12.11.9; PR-12-10 step 2) or their record (role, licences, competences; 12.11.1); never the Oracle (01.15.1) | will the smith mend the sword? can the scribe read? |
+| whether a person the beat acts on is willing, or able [revision: R2-K; DL-12-108] | their mood and the ceiling (12.11.9; PR-12-10 step 2) [revision: R2-L] or their record (role, licences, competences; 12.11.1); never the Oracle (01.15.1) | will the smith mend the sword? can the scribe read? |
 | a hook's terms: what it pays, where it goes, who issued it, who is involved [revision: R2-K; DL-12-109] | written when the hook is made (11.5.6); anything else about it is testimony (PR-12-12) | what does the ferryman's notice pay? |
 | whether an actor with known capability manages something | fortune check (01.6.7) | does the messenger outrun the storm? |
 | which of several things, from a *specific* table in data | `roll_table(<specific table>)` — region tables (12.16), encounter tables (10), rumor tables (11), loot (08), NPC tables (12.11) | who is drinking at the inn tonight |
-| what an NPC does when no want, refusal or frame decides it | `roll_table(tbl.npc_action, {standing})` (12.11.5) | the dockhand, after the PC's question |
+| what an NPC does when no frame, behavior list or clue rule decides it | the narrator, within the NPC's mood and, for an ask, the ceiling (12.11.5; T-12-19) [revision: R2-L; DL-12-126] | the dockhand, after the PC's question |
 | whether something is so, yes or no: an open question about the world, never about the beat's own target or a person present (01.15.1) [revision: R2-K] | `oracle(question, rung, fact_key)` (01.15) | is the ferryman home? |
 | what something means, what form it takes, what "and" comes with a yes-and | `roll_table(tbl.meaning)` (12.6.7) | what the strange event is about |
 | a person who must exist now | NPC generation (12.11.1) | the clerk behind the counter |
@@ -1333,7 +1346,8 @@ R: specs/001-action-resolution-probe/probe-results.md (soft-lock at turns 6–8)
 
 **12.8.2 Lead injection.** `[D]` + `[J:enum]` When `trg.lead_injection` fires, the DM must, in this turn's
 world responses (12.2.9 step 4), deliver **one lead** (PR-12-3):
-1. **Source** `[D]`, first eligible in this specificity ladder (`pacing.yaml#lead_injection.source_ladder`):
+1. **Source** `[D]`: the Director's pick when it has chosen a thread (its `lead.thread`: that thread's unfound
+   placement, else its fallback) [revision: R2-L; DL-12-139]; else the first eligible in this specificity ladder (`pacing.yaml#lead_injection.source_ladder`):
    1. an unfound clue placement of the thread the PC is pursuing in this scene (the scene agenda's thread);
    2. that thread's proactive fallback bang (ch.11);
    3. an unfound clue placement of another active thread, highest list weight first (an ally's personal
@@ -1351,11 +1365,12 @@ world responses (12.2.9 step 4), deliver **one lead** (PR-12-3):
    3 and 4) or "someone seeks you out" (sources 2, 5, 6, 7).
 3. **Write** the facts that make it a lead (the clue unsealed through its gate, the NPC's approach, the
    rumor heard: `record_knowledge` for the PC), and reset the counter to 0.
-4. **Narrate** it as fiction in this turn; no OOF line is needed.
+4. **Narrate** it as fiction in this turn; no OOF line is needed. The narrator gets it as data (the thread, the form,
+   the facts), never a template sentence ("it points toward X, through X") [revision: R2-L; DL-12-139].
 **A lead must be** `[J:flag]` ×3, each true only with the named evidence: **concrete** (it names a person,
 place, object or event by id); **actionable now** (the PC can pursue it from where they are, this scene or
 next); **connected** (it points to a thread, clock or node in state). A lead must **not** solve the thread
-(it is a way forward, not the answer), cost the PC anything, or be a threat during PEAK or RELAX (forms tagged
+(it is a way forward, not the answer), re-push a lead the PC already holds [revision: R2-L; DL-12-139], cost the PC anything, or be a threat during PEAK or RELAX (forms tagged
 `threat` are excluded from the roll then; `tbl.lead_injection`'s `phase_substitute`) [verification: V2b-016]. *Worst case (J):* an awkward form — the same lead arrives
 less naturally (class i); a source judged ineligible that was eligible — a less specific lead arrives,
 still concrete and real (class i) [C:P16; R5 P-08, P-41; R6 B-R4; R4 R-12].
@@ -1529,7 +1544,12 @@ every delivered item; every fact narrated as perceived that the PC could later c
 covers the entity; knowledge covers the PC's awareness of it); every name learned; every rumor heard
 (`rumor` id; its truth stays sealed). The journal (ch.15, `available`) is the render of these records,
 and is the only source for answering "what do I know about X?" (besides the PC's origin knowledge, which
-is a free Recall of established facts, 00.12.6).
+is a free Recall of established facts, 00.12.6). **Reading follows the beat's target** [revision: R2-L; DL-12-132]:
+what the PC reads is the beat's typed target (01.2.5), never a written thing guessed from the message's words or the
+only notice in view. Its stored words are a fact given to the narrator (`how: read`), which renders them as the moment
+needs; no instruction says to quote them exactly. A written thing with no stored words gets ordinary words (T1a,
+12.14.13), never words that point toward anything hidden. *Retires:* the reading line's guess and its "quote its words
+exactly" order (round 8, R8-D1 row 36: 0 of 6 right; the gate log read as the hire notice).
 
 **12.10.6 NPC knowledge.** `[J:flag]` + `[D]` An NPC knows a fact only when one of these is true (first
 match): (a) a knowledge record says so; (b) the NPC is in the `witnesses` of the beat or event that
@@ -1568,13 +1588,14 @@ Recall part, or a SPEECH question, carrying `question_kind` and `topic`, 12.2.2)
 three ways, before the draft:
 1. **Consequential questions go only through the case graph** (unchanged; strict): a story role, a case's solution,
    a sealed fact, a thread's knowledge. A placement holder delivers by 15.9.5–15.9.7; whether a question to a holder is about the clue they hold is
-   judged by one small model call, never by shared words, and on a yes code hands the clue to the narrator to
-   deliver (PR-12-10 step 1) [revision: R2-K; DL-12-112]; anyone else says so and points
+   judged by one small model call, never by shared words, and on a yes the clue is a `learned` fact the narrator
+   conveys (PR-12-10 step 1; 12.14.12) [revision: R2-K; DL-12-112; revision: R2-L; DL-15-44]; anyone else says so and points
    to the holder of the node's core placement. Nothing else delivers a clue, and a clue the PC already has is never delivered again (PR-12-10) [revision: R2-J;
    DL-12-103].
-2. **Willingness is code's**: standing, request size and recorded refusals (12.11.9; 15.3.2, 15.3.10) give
-   `willing`, `guarded` or `unwilling`, with its reason, decided when the talk starts and held for the scene (PR-12-10
-   step 2) [revision: R2-K; DL-12-118].
+2. **Mood and ceiling are code's** [revision: R2-L; DL-12-127; DL-12-128]: the NPC's mood toward the PC (`open`,
+   `guarded`, `closed`; 12.11.9 step 2), held for the scene (PR-12-10 step 2) [revision: R2-K; DL-12-118], and for a
+   question asking them to tell something, the ceiling by its cost to them (T-12-19). The reaction within it is the
+   narrator's.
 3. **Words are the narrator's.** It voices the NPC in character from what the NPC knows (their knowledge records,
    12.10.6; their seeded knowledge pack, 12.16.11; their role's common knowledge; public news in their scope; the
    scene) **and what they have already said** (their `said` records, 12.3.1b), all on the speaker card in the
@@ -1588,7 +1609,8 @@ whatever its tone, so a hedge ("folk say", "I could not say") is a characterisat
 NPC, never the default [revision: R2-I; DL-12-96]. **"I don't know" is the character's
 choice**: rare, in their
 voice, with a natural redirect ("ask at the harbour; they hear everything"); a redirect is testimony like any other,
-never a code pointer, except a refusal's one pointer onward (PR-12-10 step 2) [revision: R2-K; DL-12-119]. Code never scripts the content of an ordinary answer: no record line says what the NPC knows or
+never a code pointer, except a refusal's pointer, which the narrator picks from code's candidates (PR-12-10 step 2)
+[revision: R2-K; DL-12-119; revision: R2-L; DL-12-129]. Code never scripts the content of an ordinary answer: no record line says what the NPC knows or
 does not know. Testimony becomes world truth only when it matters (PR-12-12). *Worst case (J):* an NPC says something
 false or at odds with the world — it is testimony (characters can be wrong), it binds nothing until PR-12-12 settles
 it, clues stay strict, and the player can `/fix` (class iv). *Evidence:* ROUND3-ANALYSIS S1: the ladder's record lines
@@ -1692,26 +1714,30 @@ they know it) and standing (12.14.7). Dialogue reveals only what the NPC knows (
 a mechanic. Voice is the DM's free craft — "give every creature life" [R: https://www.dungeonworldsrd.com/gamemastering/];
 **decisions are not** (12.11.4–12.11.5) [R4 S3 vs W4].
 
-**12.11.4 NPCs can say no.** `[D]` An NPC's compliance comes only from: a resolved Talk frame's delivered
-outcome (ch.15); a recorded want the request serves; or `tbl.npc_action` for requests that meet no
-resistance. A recorded **refusal** is honored unless a frame's delivered reach overcomes it under ch.15's
+**12.11.4 NPCs can say no.** `[D]` [revision: R2-L; DL-12-128] An NPC never does more for the PC than its
+**ceiling**: for an ask a rolled Talk frame resolved, the frame's delivered outcome (ch.15); for any other ask, the
+cell of T-12-19 for the NPC's **mood** (12.11.9 step 2) and the ask's **cost to them** (12.2.2). The narrator chooses
+the reaction at or below it (12.11.5). A recorded **refusal** that covers the ask makes the ceiling *refuses*, and is honored unless a frame's delivered reach overcomes it under ch.15's
 rules; an NPC at Unfriendly or Hostile does not volunteer help. An agreeable-sounding NPC who nonetheless
 refuses is correct play, not unkindness: LLM-voiced characters are measurably biased toward engagement and
-agreement, and the remedy is pre-committed state. A refusal points onward to someone new who would know, and never overrides
-clue rules (PR-12-10 step 2) [revision: R2-K; DL-12-119] [R4 W4; R: https://arxiv.org/abs/2606.20708].
+agreement, and the remedy is state decided before the prose: the mood and the ceiling, never a scripted reaction. A refusal may
+point onward, to someone the narrator picks from code's candidates, and never overrides clue rules (PR-12-10 step 2)
+[revision: R2-K; DL-12-119; revision: R2-L; DL-12-129]. *Retires:* `tbl.npc_action` as a source of compliance
+[revision: R2-L; DL-12-126] [R4 W4; R: https://arxiv.org/abs/2606.20708].
 
-**12.11.5 NPC decisions when nothing else decides.** `[D]` + `[J:enum]` When an NPC must act and no frame,
-want, refusal or behavior list settles what they do (12.2.9 (2c)), the engine rolls `tbl.npc_action`: d10
-+ the NPC's standing toward the PC, clamped 1–10. Rows: 1 escalates (threatens, calls for others, attacks
-only if able and the row's tag allows); 2 ends the exchange and withdraws; 3 hinders quietly (delays,
-misdirects); 4 wants something first (names a price); 5 carries on with their own business; 6 acts on
-their own want; 7 asks the PC something; 8 offers partial help; 9 helps as asked; 10 helps beyond what was
-asked. The DM chooses the words and, `[J:enum]`, which of the NPC's recorded wants or traits the row
-expresses. A row never overrides a recorded refusal and never resolves something a frame should resolve
-(a request the NPC would resist is a Talk beat, not a table roll). Whether an NPC **lies** is never a row:
-15.6.2's reason-to-lie flag decides it first, from a cited field of the NPC's record; no reason → it tells what
-it knows within T-15-1's *share* row [revision: I-030]. *Worst case (J):* the row expressed
-through a less fitting want — the same weight of response (class i) [R5 P-06].
+**12.11.5 NPC decisions when nothing else decides.** `[J]` [revision: R2-L; DL-12-126; DL-12-129] When an NPC
+reacts and no frame, behavior list (conflict, 12.2.9 step 1) or clue rule settles it, **the narrator decides**, from
+the facts code gives (12.11.9 steps 1-3): the NPC's mood toward the PC, for an ask the ceiling (T-12-19), their record
+(wants, fears, refusals, memories, voice) and the scene. It chooses who answers, the reaction at or below the ceiling,
+the **price** (from the NPC's wants: something the PC could do or give, else coin, which settles to the ask's price
+band when paid, 15.3.2), the words, and whom a refusal points to, from code's candidates or nobody. A reaction that
+changes the spine is declared and applied by 12.11.9 step 5. Whether an NPC **lies** is never the narrator's mood call:
+15.6.2's reason-to-lie flag decides it first, from a cited field of the NPC's record; no reason → it tells what it
+knows within T-15-1's *share* row [revision: I-030]. *Retires:* `tbl.npc_action` (d10 + standing → ten scripted rows:
+escalates, withdraws, hinders, names a price, …) and `tbl.npc_practice`'s clamp as orders to the narrator; their rows
+were right 1 time in 4, including "flees or takes cover" for a man just killed (round 8, R8-D1 rows 28 and 32; R8-I2
+§9). *Worst case (J):* a reaction a little kinder or harsher than the record suggests, inside the ceiling (class iv);
+the mood and ceiling are logged, violations are measured (OEQ-12-28), and the player can `/fix` [R5 P-06].
 
 **12.11.6 Standing moves only in steps from sources.** `[D]` [DL-12-10; DL-12-25; revision: I-065] Standing changes only through: a Talk frame's
 delivered reach (ch.15); a cost (`cost.closed_door`, 01.13.9); a deed the NPC witnessed or heard of whose
@@ -1744,63 +1770,76 @@ situation timelines. When the PC returns, the NPC's record reflects those result
 DM needs to know something the World Turn did not settle ("is she still at the mill?"), it asks the Oracle
 with a time scope (01.15.7) — it never invents an off-screen life.
 
-**12.11.9 Every present NPC has a default.** `[D]` [DL-12-43; DL-12-90; DL-12-93; C:I; R4 W4; R5 P-06; revision: R2-B;
-revision: R2-H] Code, not the narrator, decides what each present NPC *does* and whether they are *willing*; the
-narrator chooses their words (12.10.8). This is 12.2.9's step 2 in full:
-1. **Activity: once per scene, optional** [revision: R2-H; DL-12-93]. When an NPC enters the scene (present when it
+**12.11.9 Every present NPC has a default: facts from code, reactions from the narrator.** `[D]` + `[J]` [DL-12-43;
+DL-12-90; DL-12-93; C:I; C:VIII; R4 W4; R5 P-06; revision: R2-B; revision: R2-H; revision: R2-L; DL-12-126] Code gives
+the narrator only **facts it owns**; the narrator decides how people react. This is 12.2.9's step 2 in full:
+1. **Present and able** `[D]`. Code lists who is present, where (their place and range band to the PC, 12.14.6), and
+   able to react. The dead, the unconscious and the departed are not listed, and someone gagged is not listed as able
+   to speak. Only a listed person reacts, so nobody dead flees and nobody gone answers.
+2. **Mood** `[D]` [revision: R2-L; DL-12-127]. Each listed NPC has a **mood** toward the PC, `open`, `guarded` or
+   `closed`, rolled once per scene on `tbl.npc_mood` (d10 + their standing toward the PC, 12.11.6, clamped 1-10:
+   1-3 closed, 4-6 guarded, 7-10 open; at Neutral 30% / 30% / 40%) the first time the scene needs it, and held for the
+   scene (DL-12-118, the owner's D3). It moves one step only on an **event**: a payment or a won persuasion (a Talk
+   frame's success by its effective degree, 01.9.3) moves it up; a threat or an insult moves it down. Nothing else moves
+   it: not a new topic, not a repeated ask, not the narrator. It replaces the willingness band (`willing` = open,
+   `guarded` = guarded, `unwilling` = closed). Standing (12.11.6) still changes only by its own sources.
+3. **The ceiling** `[D]` [revision: R2-L; DL-12-128]. For each ask the PC makes of an NPC (a request, or a question
+   asking them to tell something), code gives the **ceiling**, the most this person will do: a resolved Talk frame's
+   delivered outcome when a frame rolled for the ask (ch.15); otherwise the cell of T-12-19 (`tbl.npc_ceiling`) for
+   their mood and the ask's **cost to them** (the Reader's field, 12.2.2). A recorded refusal that covers the ask makes
+   it *refuses* (12.11.4); a clue the person holds is delivered by its own rule whatever the ceiling (PR-12-10 step 1;
+   15.9.5). With a refusal, code gives the **pointer candidates**: real people who would know or could help, never
+   someone who already refused the PC on it (PR-12-10 step 2).
+4. **The narrator decides** `[J]` [revision: R2-L; DL-12-129]: who answers (the Reader's addressee, 12.2.2, or its own
+   judgment when none is given; others present usually go on with what they were doing, and may react when the moment
+   plainly concerns them); each reaction, at or below the ceiling; the price, from the NPC's wants (12.11.5); the
+   words, in the NPC's voice (12.11.3), from the speaker card (12.10.8); and whom a refusal points to, from the
+   candidates, or nobody. An NPC the PC addressed who is present and able responds somehow: in words, with a refusal
+   in their own voice, or with a plain act the player can see; never a stock formula. A walk-on who answers for the
+   first time has their voice rolled then (12.11.1's tables).
+5. **Deeds that change the spine** `[D]` [revision: R2-L; DL-12-130; provisional, owner decision R2-L-2]. A reaction
+   that changes state (an item or coin handed over or taken, the NPC leaving, a summons for others, an attack) is
+   declared by the narrator as a typed change on its side list (12.3.1) and applied by code only when the NPC is
+   present and able and the change is within the ceiling: a handover or a service at *will help*, at *helps for a
+   price* once the price is paid, or in part at *partial*; a summons or an attack only from a `closed` mood after a
+   threat, a harm or an insult this scene, or at *refuses, may escalate*; leaving is always within it. A change code
+   does not apply is `unsourced_change` and cut (12.3.1b item 2). In conflict, adversaries act from their behavior
+   lists (12.2.9 step 1).
+6. **Activity: once per scene, optional** [revision: R2-H; DL-12-93]. When an NPC enters the scene (present when it
    opens, or joining it), code rolls their activity **once** for the scene on `tbl.npc_activity`, from **their own
    role's cell only** (12.11.1) × watch (00.7.1); a role without a cell uses `other`, never another role's rows. It is
    the NPC's `activity` detail (00.6.6a) [revision: R2-F], scene state (T1c, 12.14.13) and **optional material**
-   (12.14.12): the narrator may use it, and nothing requires it. It **ends when the NPC engages** (talks with or
-   fights the PC, or responds with a deed) and is not re-rolled that scene; the slot then holds only what a response
-   writes (T-12-18), and it expires at scene end. An ended activity, or one carried unchanged from before the NPC last
+   (12.14.12): the narrator may use it, and nothing requires it. **An activity that says nothing is not shown**
+   [revision: R2-L; DL-12-131]: a row that names no act anyone could see ("is on an errand", "is going about his
+   morning work") is kept in state but left out of the narrator's view (round 8, R8-D1 row 31: 64% of activity lines
+   said nothing). It **ends when the NPC engages** (talks with or fights the PC, or reacts with a deed) and is not
+   re-rolled that scene; it expires at scene end. An ended activity, or one carried unchanged from before the NPC last
    engaged, is never a citable lever (01.6.8). Narrating it is a `position` claim, checked against presence and this
    line; a deed that changes something stays an `action` claim (12.3.1) [I-128]. An unnamed crowd's collective
-   reaction (heads turn, talk stops) is atmosphere (12.3.1) unless it changes something the PC could act on (the
-   crowd parts, blocks the way, sends for the watch); then it is the crowd practice's response, with a record line.
-   Its subject is the scene's place: code writes it as a `scene` fact `crowd_response` on the place, from the crowd
-   practice's row, and the crowd is never a person and has no profile [revision: R2-G; DL-12-87; I-176].
-2. **Practice.** Each turn the scene has one practice, fixed by code from the scene and the beat in
-   `tbl.npc_practice`'s order: fight, trade, greeting, conversation, crowd, work. The practice gives the legal
-   responses: the `tbl.npc_action` rows it allows.
-3. **Who responds, and the choice.** An NPC responds this turn only when the PC **addressed** them, or the event
-   **concerns** them: one of the event's tags (below) is in `social.yaml#event_tags.concerns` and bears on them (it
-   names them or what they hold, their kin, master, secret or standing, or a recorded refusal or want of theirs), or
-   the practice is fight and they are within its reach [revision: R2-H; DL-12-93]. Every other present NPC does
-   nothing new and says nothing: no reaction line, no interjection, whichever way they face. An NPC who responds
-   takes the first that applies: (a) a resolved frame's delivered outcome; (b) a
-   recorded refusal or want that matches the event (12.2.9 (b)), matched by **tags** [revision: R2-G; DL-12-87;
-   I-176]: code tags the event from the beat's verb, facets, target, topic, terms and pressure mark, and from the
-   request's one `asks` tag (the Framer's `[J:enum]` on a Talk request), all from the closed list
-   `social.yaml#event_tags`; each refusal kind and want object carries its tags there. A matching refusal is spoken
-   (step 4); a want the event serves (`offers_payment`, `offers_help`) takes row 9 for a request, else row 8; a want it
-   defeats (`harms`, `threatens`, `against_kin`, `asks_against_master`) takes row 2, row 1 at Hostile; a want it only
-   engages takes row 6. The World call runs only as the fallback, when no tag matches and the event is ambiguous (two
-   or more motives with opposite rows); (c) `tbl.npc_action` by standing (12.11.5), where a rolled row the practice
-   does not allow moves to the nearest row it does (toward row 5 on a tie). **For a question or plain speech the source
-   gives willingness only** (12.10.8; PR-12-10 step 2) [revision: R2-H; DL-12-90]: the rows' talk wordings ("asks the
-   PC something", "wants something first", "misdirects") no longer script what is said; rows 1–3 read `unwilling`, 4–6
-   `guarded`, 7–10 `willing`; the band holds for the scene and changes only on an event (PR-12-10 step 2), and a
-   plain greeting or thanks gets no willingness line [revision: R2-K; DL-12-118; DL-12-120]. For an act asked of them, or an event that concerns them, the row is the deed. The
-   response writes the NPC's manner by T-12-18's response rows, and their activity only when the body does something
-   else (squares up, turns away, takes cover); talk alone never changes the activity (a practice row replaces the
-   generic row whole; an empty entry keeps the activity) [revision: R2-F].
-4. **An addressed NPC always answers.** An NPC the PC addressed this turn responds in words, never with silence:
-   within the willingness code gave, in words the narrator chooses from the speaker card (12.10.8), or, when the
-   source refuses (a recorded refusal, a failed frame, an `unwilling` row), with a **refusal spoken in their own
-   voice**: the reason (their recorded refusal, else the row) said in their own voice (their register, 12.11.3; the habit is
-   never required) [revision: R2-K; DL-12-113], with its pointer onward (PR-12-10 step 2), never a stock formula. A walk-on who answers for the first time has their voice rolled then (12.11.1's tables). A
-   deed still needs its source [I-140].
-5. **Acceptance is code.** Whether an NPC agrees to what the PC asks is decided by the source in step 3 (a frame's
-   outcome, a refusal honored by 12.11.4, a want the request serves, the row), never by the narrator.
-6. **Standing changes tone and willingness, never truth.** Standing (12.11.6) moves the row (12.11.5) and colours the
+   reaction (heads turn, talk stops, people back away) is the narrator's (12.3.1); one that changes something the PC
+   could act on (the crowd blocks the way, someone sends for the watch) is a declared change on the scene's place,
+   applied by step 5, and the crowd is never a person and has no profile [revision: R2-G; DL-12-87; I-176; revision:
+   R2-L; DL-12-130].
+7. **State before reactions** [revision: R2-L; DL-15-47]. The turn's state changes (the beats' outcomes, payments,
+   harm, departures) are applied before any reaction is decided, so a reaction always sees what is true now. A payment
+   is the paying beat's consequence (15.7.1 item 3), never a step of a reaction.
+8. **Standing changes the odds and the tone, never truth.** Standing (12.11.6) moves the mood roll and colours the
    words. It never changes what is true or what the NPC knows (12.10.6); whether they lie is 15.6.2's alone.
 
-An addressed NPC's answer and each response deed are must-name record lines (12.14.12, 12.3.1a); an activity, a manner
-and a non-addressed NPC's reaction are optional material [revision: R2-H; DL-12-92]. LLM-voiced characters drift
-toward engagement and agreement; willingness and deeds decided before the prose are the remedy (12.11.4), and the
-words stay the character's. *Evidence:* ROUND3-ANALYSIS S2: idle activity lines every turn in all four runs, officers
-beating rugs in a hall, and NPCs interjecting with their backs turned.
+**MUST is only for spine facts** [revision: R2-L; DL-12-131]: the roll and what it achieved, the state changes, a clue
+the PC learns and a pause are must-name lines (12.14.12); an NPC's reaction, words, gesture, manner and activity never
+are. LLM-voiced characters drift toward engagement and agreement; mood and ceiling decided before the prose are the
+remedy (12.11.4), and the words and the judgment stay the narrator's. *Retires* [revision: R2-L; DL-12-126]: the
+scene's practice (`tbl.npc_practice`) and its clamp; `tbl.npc_action` rows as deeds or as willingness; the
+"X acts: …" MUST lines; code-written refusals and their example gesture lists; T-12-18's response-row scene writes
+(one wrote "pointedly ignoring you" as a fact); the `addressed` / `concerned` gate on who may react, with the addressee
+guessed by word overlap or by "whoever spoke last"; and "acceptance is code" read as code choosing the reaction (code
+still owns acceptance, through the roll and the ceiling). *Evidence:* ROUND8-ANALYSIS T1 and T3; R8-D1: in 9 of 9
+traced wrong outputs the narrator was obeying a wrong code line; code's reaction orders were right 8 of 24 times
+(33%); left without an order, the narrator picked the right speaker 14 of 14 times. ROUND3-ANALYSIS S2 (idle activity
+lines every turn, NPCs interjecting with their backs turned) still governs activities. *Worst case (J):* a speaker or a
+reaction that fits less well than another would, inside the ceiling (class iv): nothing beyond the ceiling is
+applied (step 5), the mood and ceiling are logged and measured (OEQ-12-28), and the player can `/fix`.
 
 ### 12.12 The ruling ledger in use
 
@@ -2017,11 +2056,14 @@ form is named plainly (01.12.2). A success is narrated as the character's doing.
 sharpened beyond the frame: the degree, the delivered reach and the cost are exactly as resolved (01.7.2)
 [R5 P-16; R2 ch.12 ("failure moves the plot forward")].
 
-**12.14.9 The open prompt.** `[D]` [DL-12-20; C:P16; revision: I-065] Every DM response that is not a pause point ends by handing the moment
-back to the player: a direct question to the character ("What do you do?" or a situation-specific one:
-"The ferryman holds out his hand. Do you pay?") or an unresolved image that plainly awaits a response.
-Never a numbered list of options; examples only under 12.8.6. Pause points end with their own OOF block
-instead (12.15).
+**12.14.9 The open prompt.** `[J]` [DL-12-20; C:P16; revision: I-065; revision: R2-L; DL-12-131] Every DM response
+that is not a pause point leaves the moment open to the player: it stops where the character can act. How it ends is
+the narrator's choice: a question to the character when one is natural ("The ferryman holds out his hand. Do you
+pay?"), an image that awaits a response, or simply the last thing that happened. Never a numbered list of options;
+examples only under 12.8.6. Pause points end with their own OOF block instead (12.15). Code adds no closing
+instruction to the packet. *Retires:* the mandatory "end by handing the moment back" line in every packet, whose slot
+drove the same closing beat turn after turn ("hands hover"; round 8, R8-D1 row 37, P6). *Worst case (J):* an ending that leaves
+the player unsure it is their turn: harmless and seen at once (class i).
 
 **12.14.10 Length.** `[D]` Narration word limits (`pacing.yaml#narration`), excluding OOF blocks: a beat's
 narration ≤ **200** words; a conflict turn ≤ **150**; a scene opening ≤ **200**; a recap ≤ **120**; a time
@@ -2041,13 +2083,16 @@ of the last ten deliveries for repeated images, openings and closings is **logge
 ("an NPC's recorded habit"), and the quote-back of earlier images and openings (round 7, H1: the marks fired 0
 times; the habit was in the view in 42 of 44 narrator packets). **Said lines** [revision: R2-H; DL-12-90]: an NPC never repeats a line it already said.
 Each `said` record (12.3.1b) stays on its speaker, and a speech span whose content words overlap one of
-the speaker's `said` records by more than `narration.freshness.said_overlap` is redrafted (a code scan), unless the
-player asked them to say it again. **Setting once** [revision: R2-I; DL-12-99]: a place's stored look, furniture and
-exits (12.16.9) reach the narrator on arrival or at scene framing (12.4.3) and are then marked described; on later
+the speaker's `said` records by more than `narration.freshness.said_overlap` is logged (a code scan that no longer blocks: right 0-1
+times of 2 in round 8) [revision: R2-L; DL-12-138], unless the player asked them to say it again. **Setting once** [revision: R2-I; DL-12-99]: a place's stored look, furniture and
+exits (12.16.9) reach the narrator on arrival at a place, or when a scene is framed at a place the PC has just come to
+(12.4.3), and are then marked described; a scene cut at the same place is not an arrival, so they stay optional
+material [revision: R2-L; DL-12-140]; on later
 turns of the scene they are optional material only (12.14.12), not restated unless the PC looks again or asks.
 **People and things too** [revision: R2-K; DL-12-122]: a person's look, and a thing's description (how it looks,
 its written words, narrated details about it), reach the narrator only on the turn the person or thing first
-appears in the scene (the scene opens, or it comes into the scene; a return after leaving is a new appearance), on
+appears in the scene (it comes into the scene, or a scene opens at a place the PC has just come to; a return after leaving is a
+new appearance; a new scene at the same place with the same people is not [revision: R2-L; DL-12-140]), on
 a look-around, or when the player looks at it or asks about it. On other turns its profile has no look line.
 Nothing is counted, marked or gated: the narrator still sees the conversation and may mention the look again if it
 chooses. A thing stays listed by name, with its mechanical facts (a holder, a ruled state), every turn; manner and
@@ -2062,9 +2107,10 @@ revision: I-065; revision: R2-H] (from 01.12.2, restated so this card stands alo
 [revision: R2-K; DL-12-115]: its degree and delivered reach, the typed intended
 change it applied (01.2.7), and the form of every cost paid; (2) **what changed**: harm, conditions and quantities,
 a possession or a coarse position (every visible condition applied; every changed range band or positional flag
-involving the PC; one omen per sensed or hidden clock tick), including a change an NPC's response deed made; (3) the
-**answer that carries a fact or clue**: a case's delivery or a cast person (PR-12-10), in the asked character's
-voice, or a FICTION_QUESTION's settled fact in the narrator's (01.3.8) [revision: R2-B]; an ordinary answer in
+involving the PC; one omen per sensed or hidden clock tick), including a change a declared NPC deed made (12.11.9 step 5) [revision: R2-L]; (3) the
+**fact the PC learns**: a clue delivered as a `learned` fact (PR-12-10; 15.9.5), conveyed by any knower present
+or as the method finds it, the narrator choosing who [revision: R2-L; DL-15-44]; a cast person (PR-12-10); or a
+FICTION_QUESTION's settled fact in the narrator's voice (01.3.8) [revision: R2-B]; an ordinary answer in
 speech is the character's and is not a must-name item [revision: R2-J; DL-12-103]; (4) a **clue delivered** or a lead
 injected; (5) a **pause** (its one block, 12.14.9). Each is an adjudication-record line with a handle; coverage checks
 every turn that the passage's side list covers it (12.3.1a) [revision: R2-J], and 12.3.3 states an uncited one by its rendered line. Missing any
@@ -2072,7 +2118,9 @@ of these is also a claim-check failure of the sweep (12.4.8).
 **Optional material** is everything else code supplies: NPCs' activities, postures and manners, detail slots, other
 present NPCs' reactions, the crowd's mood, scene texture, and a place's look and furniture after the turn they were first given (12.14.11,
 setting once) [revision: R2-I]. The view lists it as material the narrator may use, never as
-a line it must cite; no check requires it, and leaving it out is never a coverage failure. A sentence that does use it
+a line it must cite; no check requires it, and leaving it out is never a coverage failure. **MUST is only for spine
+facts** [revision: R2-L; DL-12-131]: nothing about an NPC's reaction, words, gesture, manner or activity is a
+must-name line, and no instruction requires a closing line, a quoted text or a gesture. A sentence that does use it
 is checked like any other (12.3.1b). *Evidence:* ROUND3-ANALYSIS S2: with every code line mandatory, idle activity
 lines appeared every turn in all four runs and NPCs spoke out of turn.
 
@@ -2140,7 +2188,9 @@ and closes."), then:
   Another way:  shove through (45%) · wait for it to thin (no roll, takes an hour)
 ```
 
-**Lines, from frame fields [D].** *Title*: the beat's typed goal in plain words, rendered by code from its kind and slots, then the method as the
+**Lines, from frame fields [D].** *Title*: the beat's typed goal in plain words, rendered by code from its kind and slots (for a `persuade_to` goal,
+the person and the act asked, "Get her to tell you about the cart", never the place or the verb alone, "Persuade the
+market square" [revision: R2-L; DL-01-52]), then the method as the
 player put it (01.2.6); never the Reader's raw `method` field [revision: R2-J; DL-01-39]. Every rolled beat has a
 typed goal (01.2.7), so a title is never built from a description ("Talk to a coin on the table") [revision: R2-K;
 DL-01-42]. *Chance*: the band word, a dash, the
@@ -2156,7 +2206,8 @@ failure (01.6.11, 01.9.2). **On a Safe frame** [revision: R2-K; DL-12-121], wher
 line says so and states what failing badly costs, with its chance ("If it fails: nothing lost. Failing badly (a
 nuisance): 5%"). A Safe frame reaches an OFFER only when it stays costly (01.4.4, 01.7.4). *Close call*: the near-miss percentage and the alternate cost (01.9.3); omitted when
 0 and on a hidden roll. *Takes*: action, time, every method consequence (loud → noisy), whether it rides on
-an earlier result, and fate. *Another way*: up to three approaches the engine computes with no model call
+an earlier result, and fate (omitted on a secret frame, where fate cannot be spent, 01.16.3: never "no reroll"
+[revision: R2-L; DL-12-141]). *Another way*: up to three approaches the engine computes with no model call
 (the verb's alternative attributes and sibling anchors whose DC is stored, opposed or the same obstacle class),
 each with its chance or "no roll".
 
@@ -2208,10 +2259,11 @@ A beat that needed no roll shows its necessity reason (01.4.1) in place of the d
 yield evidence, so the player sees that a free yes earns nothing toward recognition [revision: I-054]:
 ```
 [RESULT] no roll (certain: Neutral, R1) · granted · no evidence
-[RESULT] no roll (take the time: two intervals) · success · evidence as a no-roll success
+[RESULT] no roll: you take the time (10 minutes) · success
 ```
 `no evidence` is printed for every `trivial` or riding no-roll beat (03.2.6); the no-roll successes of
-03.3.2 D1 (good idea, take the time, certain with cost) print `evidence as a no-roll success`. Either is
+03.3.2 D1 (good idea, take the time, certain with cost) print nothing more: they count as evidence, and the wording "evidence as a no-roll success" is retired
+[revision: R2-L; DL-12-141]. A take-the-time line gives the time in plain units (minutes in free play, 01.4.4). Either is
 followed, after the player's choice or when no choice exists, by the changes to shown state:
 ```
 [RESULT] Changed: Vitality 13 → 10 · bleeding (S1) · arrows 6 → 5 · Focus 4 → 3 · fate 1 → 2
@@ -2573,11 +2625,15 @@ names (who is missing, who the message was for, who makes the offer, who the cha
 omen, the thing itself), cast from the cast where the role fits (00.11 `cast`), else generated by 12.11.1 (a missing
 child, elder or priest, by d6). Two necessary nodes (the subject; the way on, toward the first lead's target), three
 placements and one reserve each, and the first node's core placement held at the opening place (by a reporter there:
-a cast NPC whose home it is, else a walk-on). All sealed. **Documents**: the hire lead's notice and one more notice (a
+a cast NPC whose home it is, else a walk-on). All sealed. **The incident's actor is the person on stage** [revision: R2-L; DL-15-43]: when the opening shows the
+incident's actor (the challenger, the rider, the one making the offer, the refugees' speaker), that person is the
+case's subject entity, cast into the opening by id in the incident's role with their identity sealed, never a second
+person the narrator or the Director invents (round 8: the sealed case's challenger was not the youth on stage).
+**Documents**: the hire lead's notice and one more notice (a
 warning, a charter or a bounty) are written from `tbl.12.seed.document`, each a `document` entity with a `text` fact,
 delivered first when read (12.10.5). When a lead points to a document, its text names where the lead goes: who to ask,
 and where. **Data, not sentences** [revision: R2-K; DL-12-109; DL-12-114]: each lead, notice and the
-incident carry their terms (11.5.6) as data; the incident's reporter, place and subject are fields the narrator may
+incident carry their terms (11.5.6) as data, for every kind the data has [revision: R2-L; DL-12-135]; the incident's reporter, place and subject are fields the narrator may
 use, never a code sentence ("X brought the word") in every scene setting, and a faction is given by its name and
 what it does, never a verbatim label to repeat ("the officer of The Order of the Grey Hand").
 
@@ -2625,12 +2681,12 @@ record. A pause point (12.2.6) jumps to T7 with what has been resolved so far, t
 | **T2** | CLASSIFY | Split the message into parts; classify each (SAFETY, SESSION, DISPUTE, PENDING_ANSWER, OOF_QUESTION, FICTION_QUESTION, DECLARATION, SPEECH); order them. SAFETY first: act on it before anything else. | — | 12.2.2, 12.5 |
 | **T3** | LOAD | `get_active_triggers()`; `get_state(scene, narrator)`; `load_cards(situation tags, mode, triggers)` within the packet cap. The core checklist is always present. | 30, 8, 31 | 12.2.3, 12.2.4 |
 | **T4** | ADJUDICATE | For each SESSION / DISPUTE / OOF part: answer it (12.5, 12.3.6). For each PENDING_ANSWER: resume the paused pipeline. For each FICTION_QUESTION: 01.3.8 (state → canon → Oracle, PR-01-4); a fact question about the beat's own target or a person present is never asked: willingness, the record or the roll answers it (01.15.1) [revision: R2-K; DL-12-108]. For each DECLARATION: PR-01-1 (PARSE … CONSEQUENCE) per beat, up to three, `find_rulings` before any adaptation. Stop at the first pause point reached. | 1–6, 29 | 01.1–01.15 |
-| **T5** | WORLD | World responses in fixed order: adversaries (conflict), NPCs present by the default NPC layer (activity, practice, frame → want/refusal → `tbl.npc_action`; the addressed NPC always answers) [revision: R2-B], clocks and omens, fired triggers (lead injection, pacing push, offers), time and boundaries (`advance_time` / `mark_boundary`). Each from its closed source only. | 7, 21–23 | 12.2.9, 12.11.9, 01.11.3 |
+| **T5** | WORLD | World responses in fixed order: adversaries (conflict), NPCs present by the default NPC layer: facts only (present and able, mood, the ceiling for an ask, pointer candidates), the narrator deciding each reaction (12.11.9) [revision: R2-B; revision: R2-L; DL-12-126], clocks and omens, fired triggers (lead injection, pacing push, offers), time and boundaries (`advance_time` / `mark_boundary`). Each from its closed source only. | 7, 21–23 | 12.2.9, 12.11.9, 01.11.3 |
 | **T6** | WRITE | All state writes not already made: RECORD of every beat (01.12.1), evidence by **PR-03-1** for every resolved beat, rulings, NPC memories, knowledge records, `beat_end` marks; a cut scene is always marked `scene_end`, since ch.03's settlement hangs on it [integration: IR ch.03 to 12]. Then re-read the narrator view. | 9–18, 25, 29 | 12.2.8, 12.2.10 |
 | **T7** | DRAFT | Draft the narration as declared sentences (12.3.1) [revision: R2-B] from the adjudication record and the fresh narrator view only: fiction first, then OOF blocks (12.15). Name everything 12.14.12 requires. Respect length (12.14.10). | — | 12.14 |
 | **T8** | MENTION | Write each declared new element by its tier (12.14.13) [revision: R2-B]: T1a on mention (`create_entity` / `set_fact`; NPCs via 12.11.1), T1b in the narrator's voice once the Oracle settles it (in speech, a `said` record; PR-12-12) [revision: R2-H], T2 only if this turn's record holds it. Ask the Oracle or roll the table for a consequential property the draft needs that is unsettled; an incidental one is written as drafted. For an existing entity, diff each stated property against its profile (PR-00-7 step 2) [revision: R2-E]. Redraft a sentence if an answer changes it. | 6, 7, 9, 10 | 00.6.6, 00.6.6a, PR-00-7 |
 | **T9** | CHECK | Resolve declarations into claims and compute coverage (12.3.1, 12.3.1a) [revision: R2-B]; `check_claims` on narrator-voice claims with a certain subject; fix each blocking failure by its rule and log the rest (12.3.1b, 12.3.2) [revision: R2-G]; re-check only the redrafted sentences; at most two redrafts, then cut and render (12.3.3). | 32 | 12.3 |
-| **T10** | SCREEN | Input fidelity ×3 (12.2.7); next step exists (01.11.4); safety screen against lines, veils and flags (12.5.6); PC agency (12.14.3); no mechanics in fiction (12.14.4); open prompt or one pause block last (12.14.9). Any failure → back to T7. | — | 12.2.7, 12.5.6, 12.14 |
+| **T10** | SCREEN | Input fidelity ×3 (12.2.7); next step exists (01.11.4); safety screen against lines, veils and flags (12.5.6); PC agency (12.14.3); no mechanics in fiction (12.14.4); one pause block last when the turn pauses (12.14.9) [revision: R2-L; DL-12-131]. Any failure → back to T7. | — | 12.2.7, 12.5.6, 12.14 |
 | **T11** | DELIVER | Send the response. | — | 12.15 |
 | **T12** | RECORD | Store the delivered response verbatim; store the `said` records (12.3.1b); no usage marks are set (12.14.11) [revision: R2-K]; update turn counters (dead air, 12.4.2); if a scene cut was reached, `mark_boundary(scene_end)` then frame the next scene (PR-12-7) in the *next* response unless the cut was the player's own request in this message. | 35, 22 | 12.2.5, 12.4 |
 
@@ -2639,12 +2695,13 @@ record. A pause point (12.2.6) jumps to T7 with what has been resolved so far, t
    the quote marks; check coverage and quoting (12.3.1a); scan the narrator's voice, over the whole passage, for
    numerals, names and aliases, outcome words and sealed strings (and the OOF blocks' state values). A paused beat has
    no outcome line to cover (12.2.6) [revision: R2-K; DL-12-115].
-2. Speech: check that the speaker is present and is not the PC, that no words are put in the PC's mouth, and that it
-   is not a line the speaker already said; record each speech, whole, as a `said` record on its speaker (12.3.1b item
+2. Speech: check that the speaker is present and is not the PC, that no words are put in the PC's mouth (a repeat of a line
+   the speaker already said is logged, never blocked [revision: R2-L; DL-12-138]); record each speech, whole, as a `said` record on its speaker (12.3.1b item
    1). Nothing else in speech is judged.
 3. Judge each narrator-voice claim with a certain subject (12.3.1b item 4) that is on the blocking list; log the
    rest. `check_claims(claims)` → a verdict per claim (12.3.2): support against the packet and the record,
-   contradiction against the whole store. A precision check blocks only where measured precise (12.3.1b item 2.7).
+   contradiction against the whole store. A precision check blocks only where measured precise (12.3.1b item 2.7); a check with no measured precision only
+   logs [revision: R2-L; DL-12-138].
 4. For each `new` element: write it by its tier (12.14.13): T1a on mention (only the stated properties); T2 not in
    this turn's record, in the narrator's voice → cut.
 5. For each `undetermined`: incidental → write it as narrated; consequential → ask the Oracle or roll the settling
@@ -2656,7 +2713,8 @@ record. A pause point (12.2.6) jumps to T7 with what has been resolved so far, t
    what it finds; it never changes the delivered turn.
 
 **PR-12-3 Lead injection.** `[D]` + `[J:flag]` (when `trg.lead_injection` fires; 12.8.2)
-1. Walk the source ladder (12.8.2 step 1) and take the first eligible source; ties at a rung go to the
+1. Take the Director's pick when it has chosen a thread (12.8.2 step 1) [revision: R2-L; DL-12-139]; else walk the
+   source ladder and take the first eligible source, never a thread whose lead the PC already holds; ties at a rung go to the
    higher list weight, then to the stalest rotation axis (12.9.2), then `roll_table` on the tied set.
 2. `roll_table(tbl.lead_injection, {phase})` for the form (threat-tagged forms excluded in RELAX and
    PEAK). Fit test `[J:flag]`; re-roll once; then the fallback form.
@@ -2746,8 +2804,11 @@ R2-D's rungs (the store, the knowledge pack, propose-and-ratify, the pointer) ar
 1. **Route** `[D]` + `[J:flag]`. A topic given as an entity resolves to topics by `social.yaml#common_knowledge.entity_topics`.
    **About the clue** `[J:flag]` [revision: R2-K; DL-12-112; DL-15-40]: when the asked NPC holds an unfound
    placement, one small model call reads the question and the exchange beside that placement's `about` line (PR-15-6)
-   and answers *"Is this question about what this person holds?"*. Yes → the consequential route below, and code
-   hands the clue to the narrator to deliver; no → the question goes on down this list. Uncertain → yes (P16). The call
+   and answers *"Is this question about what this person holds?"*. Yes → the consequential route below, and the clue is a `learned` fact the narrator conveys from a knower present
+   (12.14.12), never an NPC "acts:" line [revision: R2-L; DL-15-44]; no → the question goes on down this list. Uncertain → yes (P16).
+   **One judgment per message** [revision: R2-L; DL-15-45]: the call reads all the message's question parts together,
+   with the exchange, and runs before the question cap (T-15-5's `deliver_count`), which caps only ordinary answers, so a
+   clue is never dropped by the cap. *Retires:* per-part clue calls and first-question-wins routing (round 8, P9). The call
    sees no sealed content beyond the `about` line. *Retires:* word-overlap case routing (`case_about`; round 7, I2:
    0 clues delivered in 38 questions, and "signed" matched "a sign of the rite").
    - **consequential** (a story role such as who is missing, who did it or who sent them; a case's solution; a sealed
@@ -2761,28 +2822,29 @@ R2-D's rungs (the store, the knowledge pack, propose-and-ratify, the pointer) ar
      4) [revision: R2-J; DL-12-103];
    - everything else (ordinary knowledge, what the NPC wants or thinks, who would know) is the NPC's to answer in
      words: steps 2–5.
-2. **Willingness** `[D]` (12.11.9 step 3), first that applies: a recorded refusal whose tags match the question
-   (`social.yaml#event_tags`) → `unwilling`, the refusal its reason; a Talk frame → its delivered items (failure:
-   `unwilling`); a SPEECH question that 15.3.10's certainty test would pass (a Neutral or warmer listener, an R1
-   request, no hesitation) → `willing`; else `roll_table(tbl.npc_action, {standing})` read as a willingness band only
-   (`answer_ladder.willingness_by_row`: rows 1–3 `unwilling`, 4–6 `guarded`, 7–10 `willing`). **It holds for the scene**
-   [revision: R2-K; DL-12-118]: the band is decided when the conversation starts (the first question or request to
+2. **Mood and ceiling** `[D]` (12.11.9 steps 2-3) [revision: R2-L; DL-12-127; DL-12-128]: the asked NPC's mood
+   (`tbl.npc_mood`) and, for a question asking them to tell something, the ceiling, first that applies: a recorded
+   refusal whose tags match the question (`social.yaml#event_tags`) → *refuses*, the refusal its reason; a Talk frame →
+   its delivered items (failure: *refuses*); else T-12-19 by mood and the question's cost to them (12.2.2). The old bands
+   map one to one (`willing` = open, `guarded` = guarded, `unwilling` = closed); `tbl.npc_action` read as a band is
+   retired. **It holds for the scene**
+   [revision: R2-K; DL-12-118]: the mood is decided when the scene first needs it (the first question or request to
    this NPC in the scene) and held; it changes only on an event: a payment, a threat, an insult, or a won persuasion
    (a Talk frame's success by its effective degree, 01.9.3). A recorded refusal whose tags match a topic still refuses
    that topic. *Retires:* per-topic willingness re-rolls (round 7, I2 §7: the sellsword refused at turn 10 and
-   answered in full at turn 11). **A refusal points onward** [revision: R2-K; DL-12-119]: code gives an unwilling answer one pointer,
-   someone new who would know (the holder of a live placement on the topic, else a cast person whose role knows it),
-   never someone who already refused the PC on it; the narrator voices it. **Never over clue rules**
-   [DL-12-119]: a band never blocks a delivery 15.9.5 allows; only a recorded refusal that covers telling does
+   answered in full at turn 11). **A refusal points onward** [revision: R2-K; DL-12-119]: code gives a refusal its **pointer candidates**, real people who would know (the holder of a live placement on the
+   topic, else a cast person whose role knows it), never someone who already refused the PC on it; the narrator picks
+   one, or none, and voices it [revision: R2-L; DL-12-129]. **Never over clue rules**
+   [DL-12-119]: a mood or a ceiling never blocks a delivery 15.9.5 allows; only a recorded refusal that covers telling does
    (15.9.5 decision 2). Great or better reach
    adds one volunteered extra from the NPC's record (a want, a fear, a tie or a lead; T-15-5 row 3).
-3. **Speaker card** `[D]`: the narrator view shows, for the asked NPC, the question and the willingness line (none when the PC only greets or
+3. **Speaker card** `[D]`: the narrator view shows, for the asked NPC, the question, the mood and the ceiling [revision: R2-L] (none when the PC only greets or
    thanks: plain speech that asks nothing, 15.3.10) [revision: R2-K; DL-12-120], then
    what the NPC knows — their knowledge records and the ordinary facts of their pack on the topic first, their role's
    common-knowledge topics, public news in their scope — and their recent `said` records
    (`answer_ladder.said_shown`, and every one on this topic). Never anything sealed, an undelivered placement or a
    motive (INV-10).
-4. **Voice** `[J]` (the narrator): the answer in character, within the willingness, from the card first. Beyond the
+4. **Voice** `[J]` (the narrator): the answer in character, at or below the ceiling, from the card first [revision: R2-L]. Beyond the
    card the NPC still answers **plainly and with ordinary confidence** about ordinary things, as people do. Every
    ordinary claim is testimony settled lazily (PR-12-12) whatever its tone, so a hedge protects nothing: a hedge ("I
    only hear it", "folk say", "I could not say") is a characterisation choice for a cautious or gossipy NPC, not the
@@ -2814,16 +2876,22 @@ configuration, not rule (DL-12-105).
    its commit (12.3.6 item 5); the coin and inventory ledger; what a character said against the record (the `said`
    records and their settlement). **Everything the play roles see** [revision: R2-K; DL-12-116]: one shared **people
    card** per person (role, licences and competences, stance, standing, bonds: the card the Reader, the Framer and the
-   narrator read), facts in plain words (never slugs), and that turn's model inputs and outputs (what each role was
-   given and returned). A short **mechanics digest** goes with the report: a hold is a condition (06.5.2); a scene
+   narrator read), facts in plain words (never slugs), and that turn's model inputs and outputs (what each role was given and returned), each narrator line **marked
+   code-forced** (a fact or order code wrote) or not, so a complaint about the narration is traced to its source
+   [revision: R2-L; DL-12-137]. A short **mechanics digest** goes with the report: a hold is a condition (06.5.2); a scene
    label is never a penalty (01.6.8); a refusal is never a fact (PR-12-12); Stagger (06); a capability on the sheet
-   outranks an Oracle fact (01.15.1). The tools never write, and show sealed content only as its permitted slice
+   outranks an Oracle fact (01.15.1); one beat per goal, the goal first (01.2.2); the attribute knob (01.18.7: Might for
+   physical menace, Intellect for a reasoned argument); a gloss for each licence and knack on the turn ("Push: spend
+   Focus for reach") [revision: R2-L; DL-12-137]. The tools never write, and show sealed content only as its permitted slice
    (INV-10). Code does not pre-decide, or pin the report by a number or a name in it.
 3. **Propose** `[J:enum]`: what the player believes, what the record shows, and corrections from a broad list: set or
    remove a fact; restore state as of turn N; refund or deduct; re-frame an OFFER still on screen (`reframe`: gate, necessity and frame run again with the correction; it may carry a one-line note for the
    re-frame's Framer, the context it lacked ("he outranks the guard; the guard should simply let him in"), never a
    fact and never odds: the Framer still owns the odds, so a note that states odds, a number or a roll is not passed,
-   the re-frame still runs and the reply says why [revision: R2-K; DL-12-123]) and take back
+   the re-frame still runs and the reply says why [revision: R2-K; DL-12-123]); **re-read** it [revision: R2-L;
+   DL-12-136]: the Reader runs again on the original message with the Fixer's one-line note ("the player addressed the
+   captain, not the clerk"; "the shove was to intimidate"), and gate, necessity and frame follow from the new reading;
+   the note is context, never a typed field, a fact or odds and take back
    an unrolled pending turn [revision: R2-K; DL-12-117]; take back to turn N (12.5.8);
    correct testimony (a `said` record or its settlement); explain (with the turn and its words, or the frame and its
    reasons). Several may be proposed together.
@@ -2844,7 +2912,10 @@ configuration, not rule (DL-12-105).
    or restored (12.5.8). Every report gets a plain answer, never "logged" alone; a CHOICE follows when reliance
    applies (12.3.4 step 3). **Check the screen** [revision: R2-K; DL-12-117]: before replying, the Fixer looks at what
    the player will see after the repair (the re-framed OFFER, the restored values); if the complaint still stands
-   there, it iterates within the step budget (`feedback.investigate.max_steps`).
+   there, it iterates within the step budget (`feedback.investigate.max_steps`). **An undo re-shows the scene** [revision:
+   R2-L; DL-12-137]: after a take-back the reply shows where things stand (the place, who is present, the open pause or
+   the last delivered moment), so the player never redeclares blind, and it names the undone turn by what happened in
+   it, never by an internal turn number.
 7. **Log** the dispute record and its review-log entry (12.3.6 item 6), with the tool calls made; a correction also
    logs 12.3.4 step 4's record and a ruling with `review_flag: true`.
 *Retires:* the one-shot understanding call over the player-visible transcript, its fixed outcome table, code
@@ -2853,7 +2924,9 @@ pre-deciding the subject ("vitality 18"), complaints settled one after another, 
 DL-12-117] Also retired: `rerender` (it could not change what the player saw), "explain only" for a complaint at an
 open OFFER, an entity tool that hid role and licences, and scoring on the tuning set: the investigator is scored on
 fresh, held-out real complaints, including disputes at an open OFFER, by a scorer that checks the repaired screen
-(OEQ-12-26; round 7, H2: 4 right of 7 held out, against 10 of 15 on the tuning set). *Worst case (J):* the investigation
+(OEQ-12-26; round 7, H2: 4 right of 7 held out, against 10 of 15 on the tuning set). Also retired [revision: R2-L;
+DL-12-136]: the odds-only rebuild (round 8: a shove labelled "Persuade" was rebuilt twice with the same reading, then
+undone with no scene shown). *Worst case (J):* the investigation
 misreads the complaint or proposes the wrong correction — the reply restates what was found and shows `Now:`, so the
 player sees it at once and reports again (class ii); a mechanical change without evidence is refused by validation,
 never applied (INV-9).
@@ -2883,7 +2956,7 @@ made world truth or found false — only at the moment it matters, once.
    (00.6); or **none** when the words state nothing about the world. **A speaker's refusal, opinion, want, feeling or
    intention is never a world fact** ("I will not name the sum in this square"; "he's a fool"; "I'd sooner you
    left"): the call returns none, nothing is written, and it is never a lever or a snag (01.6.8). A refusal is the
-   NPC's own, shaping only that NPC's willingness (PR-12-10 step 2; 12.11.9); it never makes an act impossible. The
+   NPC's own, shaping only that NPC's ceiling (PR-12-10 step 2; 12.11.9) [revision: R2-L]; it never makes an act impossible. The
    call judges nothing else. *Retires:* settling a speaker's own refusal as a fact that the Framer then cited as a −2
    snag, and a testimony call with no pronouns (17 of 26 claims lost their subject; round 6, I2 §1).
 3. **Route by tier** `[D]`, first that applies:
@@ -2932,8 +3005,9 @@ any paraphrase here (00.1.4 item 5).
 | T-12-14 | Every ch.12 number | `pacing.yaml` (including `world_time`, 12.7.7 [revision: I-085]) |
 | T-12-15 | The world seed's steps and questions | 12.16.3; `world_seed.yaml#steps`, `#questions` (below) |
 | T-12-16 | What the rules read from a region, and the seed check | 12.16.17; `world_seed.yaml#requirements` (below) |
-| T-12-17 | A present NPC's activity by role and watch; the scene practices and their legal responses | 12.11.9; `oracles.yaml#tbl.npc_activity`, `#tbl.npc_practice` [revision: R2-B] |
-| T-12-18 | Scene state from a resolved beat and an NPC's response | below; 00.6.6a, 12.11.9; `pacing.yaml#details.scene_writes` [revision: R2-F] |
+| T-12-17 | A present NPC's activity by role and watch (the scene practices are retired) | 12.11.9; `oracles.yaml#tbl.npc_activity`; `#tbl.npc_practice` retired [revision: R2-B; revision: R2-L] |
+| T-12-18 | Scene state from a resolved beat and an NPC's response (response rows retired) | below; 00.6.6a, 12.11.9; `pacing.yaml#details.scene_writes` [revision: R2-F; revision: R2-L] |
+| T-12-19 | The ceiling: the most an NPC will do for an ask (mood × cost to them) | below; 12.11.4, 12.11.9; `oracles.yaml#tbl.npc_ceiling`, `#tbl.npc_mood` [revision: R2-L; DL-12-128] |
 
 **T-12-1 The always-loaded checklist** (this is the card that travels with every turn; about 250 words;
 `pacing.yaml#packet.core_checklist` holds the same text).
@@ -3118,7 +3192,7 @@ clears at scene end (12.4.8 step 8).
 |---|---|---|---|---|
 | Move | any | in a conflict (ch.06): one band toward or away from the target (PR-06-4); outside one, an approach to someone or something present ends beside it (`band.engaged`) in one beat (01.4.1) [revision: R2-I; DL-12-98] | — | — |
 | Observe, Recall, Exert, Evade, Sneak, Handle, Endure, Setup | any | — | — | — |
-| Talk | any | — | — | — (the target's response writes: below) |
+| Talk | any | — | — | — (talk writes no slot; the listener's reaction is the narrator's, 12.11.9) [revision: R2-L] |
 | Strike | any | melee: engaged on the attempt (06.3.5) | — | manner: on guard against {actor} |
 | Grapple | success, reach 1–2 | engaged on the attempt (06.3.5, 06.5.2) | held: {target} in a grip | posture: held fast by {actor} (the face of `cond.grabbed`) [revision: R2-J] |
 | Grapple | success, reach 3 | engaged on the attempt | held: {target} restrained | posture: restrained by {actor} (the face of `cond.restrained`) [revision: R2-J] |
@@ -3133,36 +3207,37 @@ clears at scene end (12.4.8 step 8).
 A posture is the visible face of a beat's outcome and never a ch.07 condition; when a condition is applied
 (06.5.2's `grabbed`, 06.5.3's `prone`) it governs the mechanics (00.6.6a item 1).
 
-**Responses** (12.11.9 step 3: an engaged or addressed NPC's response writes their manner, and their activity
-only when the body does something else: squares up, turns away, takes cover; talk alone never changes the
-activity. "—" keeps that slot).
+**Responses: retired** [revision: R2-L; DL-12-126]. An NPC's reaction no longer writes scene state: their manner
+and any change of activity are the narrator's, never stored as fact, and a reaction that changes the spine is a
+declared typed change (12.11.9 step 5). *Retires:* the response rows (Talk frame success *willing* / failure
+*unmoved*, recorded refusal *unwilling*, `tbl.npc_action` rows 1-10 from *squaring up to you; hostile* to *warm*) and
+the practice rows (`tbl.npc_practice`: fight, trade, greeting, conversation, crowd, work), which stored code's guesses
+about reactions as facts that outlived their turn ("pointedly ignoring you"; round 8, R8-D1 row 32).
+`pacing.yaml#details.scene_writes.responses` is kept, marked retired, until spec 028 removes its reader.
 
-| Source | Activity | Manner |
-|---|---|---|
-| Talk frame, success | — | willing |
-| Talk frame, failure | — | unmoved |
-| Recorded refusal | — | unwilling |
-| Recorded want | — | — |
-| `tbl.npc_action` row 1 | squaring up to you | hostile |
-| `tbl.npc_action` row 2 | turning away from you | closed off |
-| `tbl.npc_action` row 3 | — | guarded |
-| `tbl.npc_action` row 4 | — | calculating |
-| `tbl.npc_action` rows 5–6 | — | — |
-| `tbl.npc_action` row 7 | — | curious |
-| `tbl.npc_action` row 8 | — | helpful |
-| `tbl.npc_action` row 9 | — | friendly |
-| `tbl.npc_action` row 10 | — | warm |
+**T-12-19 The ceiling: the most an NPC will do for an ask** (`oracles.yaml#tbl.npc_ceiling`; 12.11.4, 12.11.9 step 3)
+[revision: R2-L; DL-12-128]. Looked up, never rolled: the NPC's **mood** (12.11.9 step 2, `tbl.npc_mood`) × the ask's
+**cost to them** (12.2.2, the Reader's field: `none` = 15.3.2's R1, `small` = R2, `real` = R3, `big` = R4-R5; one step
+higher when granting it defeats a recorded want, 15.3.2). The narrator's reaction is at or below the cell, in this
+order: *will help* > *helps for a price* > *partial* > *partial or refuses* > *refuses*. *Refuses, may escalate* is a
+refusal that also allows a threat, a summons or, from a hostile record, violence (12.11.9 step 5).
 
-**Practice rows** (`tbl.npc_practice`): under the scene's practice, a listed row replaces the generic row whole.
+| Mood \ cost to them | none | small | real | big |
+|---|---|---|---|---|
+| open | will help | will help | helps for a price | partial or refuses |
+| guarded | will help | helps for a price | partial or refuses | refuses |
+| closed | partial | refuses | refuses | refuses, may escalate |
 
-| Practice | Rows it replaces (row: activity; manner) |
-|---|---|
-| fight | 2: taking cover; frightened · 3: getting in the way; guarded · 5: keeping clear and watching; wary · 6: looking to their own; wary · 8: shouting a warning; alarmed · 9: helping you; willing |
-| trade | 2: —; unwilling · 3: —; hard-nosed · 4: —; calculating · 5: —; busy · 8: —; grudging · 9: —; businesslike · 10: —; generous |
-| greeting | 2: —; curt · 3: —; wary · 5: —; polite · 6: —; preoccupied |
-| conversation | 3: —; evasive · 5: —; distracted · 6: —; insistent |
-| crowd | 1: calling for the watch; alarmed · 2: backing away; uneasy · 3: blocking the way; guarded · 5: —; watchful · 7: —; curious · 8: stepping up to help; helpful |
-| work | 2: moving off; — · 3: —; pointedly ignoring you |
+A rolled Talk frame's delivered outcome replaces the cell for the ask it resolved; a recorded refusal that covers the
+ask makes it *refuses*; a clue delivery is never limited by it (PR-12-10 step 1). *Helps for a price*: the narrator
+names the price from the NPC's wants (12.11.5); paid, it is an event (the mood moves up) and the help follows.
+*Partial*: some of what was asked, or all of it later or on a condition. *Examples* (ROUND8-PROPOSAL §3): a wary
+dockhand asked to watch your cart overnight (guarded, real): "After the bell the dock master walks it himself. Come
+at first light and I'll tell you what the night watch says." A friend asked to lie to the watch for you (open, real):
+"I'll say it. You'll owe me, and you'll tell me why", unless her card says she never lies to the watch; then she
+refuses, in her own voice. A hostile guard offered a bribe (closed): the payment is an event, so his mood moves to
+guarded, and the bribe now reaches *partial*: he pockets the coin and looks away for a count of a hundred, no longer.
+Code moves the coin; the narrator writes the scene.
 
 ---
 
@@ -3426,7 +3501,9 @@ becomes principal)*; modifiers: Wren arrives as a customer (+1); no others → 2
 (−1)**. The question is SPEECH plus a FICTION_QUESTION about Osric's knowledge: does he know Hob drinks
 here? Role knowledge (a barkeeper knows his regulars) → (d) common knowledge of the role → yes, and
 whether he *tells* is his decision: no frame (Wren did not try to persuade), no want or refusal yet →
-`tbl.npc_action` d10 = 5 + standing −1 = **4** → "wants something first: names a price". Voice: not yet
+his mood: `tbl.npc_mood` d10 = 5 + standing −1 = **4** → guarded; whether a regular drinks here is private but
+harmless to tell (cost small, R2), so the ceiling is *helps for a price* (T-12-19), and the narrator names the price
+[revision: R2-L; DL-12-128]. Voice: not yet
 recorded (walk-on) — the DM voices him plainly; after this second-scene interaction trigger he will gain
 want, fear, voice and refusal.
 > The barkeeper doesn't look up from his ledger. "Hob? Might do. Might not." He turns a page. "Memory's a
@@ -3803,3 +3880,4 @@ destination in the project record (proposed: `rules/_process/issue-ledger.md` at
 | OEQ-12-25 | Do characters who speak freely stay consistent and useful? | 12.10.8, PR-12-10, PR-12-12 (testimony; `said` fed back; lazy settlement at Likely) [revision: R2-H] | **T-12-TESTIMONY**: live runs and `evals/longhorizon.py`: per 100 NPC lines, self-contradictions of a speaker's own `said` records, repeated lines, "I don't know" answers and runarounds (a redirect to someone who also does not know); per 100 settlements, the share found false; add a code check when self-contradictions exceed 2 per 100 lines |
 | OEQ-12-26 | Does the investigator answer real complaints? | 12.3.6, PR-12-11 (a bounded read-only investigation, proposals validated by code) [revision: R2-H; revision: R2-J; DL-12-105] | **T-12-UNDERSTAND**: the `/fix` lines of the persona runs (`evals/playtests/*.findings.jsonl`), the 15 round-6 live disputes (I3 §5) and held-out complaints from the next playtests, plus planted cases: share whose restatement the owner judges right (target 90%), share answered plainly (target 100%), wrong-passage rate |
 | OEQ-12-27 | Are the precision checks precise? | pronoun of a certain subject; season words (`claim_check.precision_checks`, min 0.95) [revision: R2-H] | **T-12-PRECISION**: the narration gate corpus and live runs: each check's hits judged real or false; demote below 0.95, and promote any other cheap code check measured above it |
+| OEQ-12-28 | Do NPCs stay within their ceiling, and stay themselves, when the narrator decides? | mood rolled once per scene and the ceiling grid T-12-19; no extra model call [revision: R2-L; DL-12-133] | **T-12-AGREE**: an offline judge, hand-checked, over logs: the grant rate by mood × cost, ceiling violations, mood flips with no event, repeat-ask consistency, refusals that stay in character, voice distinctness, secret leaks; baseline on the round-8 saves, then the same seeded scenes three ways (today's code, dial and ceiling, judgment only). Ceiling violations above 5% add one small NPC-intent call before narration (research option 3) |

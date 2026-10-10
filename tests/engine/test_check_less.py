@@ -87,16 +87,16 @@ def test_blocking_list_classes_block_and_others_log_only() -> None:
     assert not blocks("identity", predicate="gender", value="woman")  # identity blocks for a name only
 
 
-def test_a_pronoun_clash_on_a_certain_subject_now_redrafts(tmp_path: Path) -> None:
-    """Spec 011 logged a pronoun clash; spec 016 (12.3.2 "Precision, not class", DL-12-95) makes the pronoun of a
-    certain subject a precision check: logged with its verdict (OEQ-12-27) and the sentence revised (spec 019: the
-    subject is certain from the sentence before; still wrong after the revision, it is cut)."""
+def test_a_pronoun_clash_on_a_certain_subject_is_logged_not_blocked(tmp_path: Path) -> None:
+    """Spec 016 made the pronoun of a certain subject a precision check; round 8 measured it 0 real of 3 blocks, so
+    R2-L (DL-12-138, "a check with no measured precision never blocks") makes it log only: the clash is logged with
+    its verdict (OEQ-12-27) and the passage is delivered as drafted."""
     say = _say(_s("Sela Vey keeps to the stair."), _s("He leans on the pole by the stair."))
     model = look_model(narrator=[say, say])
     _, ctx = setup(tmp_path, model)
     out = play_turn(ctx, "I look over the quay.")
-    assert "He leans" not in out.response.fiction
-    assert any(e.get("check") == "pronoun_certain_subject" and e["verdict"] == "contradicted" and e["blocks"]
+    assert "He leans" in out.response.fiction
+    assert any(e.get("check") == "pronoun_certain_subject" and e["verdict"] == "logged" and not e["blocks"]
                and e["store_value"] == "she/her" for e in out.turn_record.claim_log)
 
 

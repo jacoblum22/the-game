@@ -63,6 +63,25 @@ entries are append-only once other chapters cite them (`[DL-CC-NN]`).
 - Serves: constitution VIII.7.
 - Migration: none.
 - Revisit if: a round finds a fix that passed its labelled cases but failed in play on a case of a kind the set did not cover; then widen the case kinds.
+- Revisited [revision: R2-L]: the condition was met (round 8, T2: the terms fix covered only the lead kinds round 7 showed). Acted on by DL-00-10.
+
+### DL-00-09: Facts, not orders: code gives the narrator only facts it owns; MUST is only for spine facts (revision R2-L; F-A; owner approval 2026-10-10)
+- Owner ruling (2026-10-10): on the analysis, "A lot of these problems seem to go back to the code forcing an incorrect view on the narrator." Then: "I think you're right about the deeper solution, I think it might be necessary. Let's think about it more, and potentially look for solutions for the trade-off." On the proposal: "I approve of A. I don't like the code telling us exactly what someone should say or how they should react if they're often wrong. And I really don't like the forced texture either."
+- Decision: [revision: R2-L] 00's working stance item 1 (and 12.11.9, 12.14.12): code gives the narrator the roll and what it achieved, state changes, who is present and able and where, clue deliveries, each NPC's mood and for an ask the ceiling; who reacts, how, at what price and in what words is the narrator's; a MUST line carries only a spine fact. It applies VIII.1 to NPC reactions and texture (DL-12-126, DL-12-131).
+- Alternatives considered: keep code's orders where they are usually right (rejected: the narrator obeys every order, so a wrong one always reaches the player).
+- Evidence: research_notes/Playtest round 2 solutions/ROUND8-ANALYSIS (9 of 9 traced wrong outputs obeyed a code line); ROUND8-PROPOSAL; round8-investigation/R8-D1.
+- Serves: constitution VIII.1, VIII.5.
+- Migration: none.
+- Revisit if: a playtest round traces a wrong output to a code-written order again, or the OEQ-12-28 judge measures ceiling violations above 5%.
+
+### DL-00-10: Breadth cases are enumerated from every kind the data has (revision R2-L; process; revisits DL-00-08)
+- Owner ruling (2026-10-10): Owner approval: ROUND8-PLAN §Owner rulings (T2, T4, T5 and the patches follow earlier rulings, Principle VIII and ROUND7-PLAN; the owner was told they would proceed; there is no direct quote).
+- Decision: [revision: R2-L] Each wave's engine checklist and each spec's made-up and edge cases are enumerated from the data's own kinds (every lead and incident kind, every mood × cost cell, every gate reason), not imagined from the round's playtest. R2-L's report does so for specs 028-030.
+- Alternatives considered: keep imagined made-up cases (rejected: round 7's terms fix covered only the lead kinds round 7 showed, and T2 recurred).
+- Evidence: research_notes/Playtest round 2 solutions/ROUND8-ANALYSIS T2 "Why it recurred".
+- Serves: constitution VIII.7.
+- Migration: none.
+- Revisit if: a round finds a fix that passed its cases but failed on a kind the data has that the case list did not enumerate.
 
 ## DL-00A — Architecture
 
@@ -582,6 +601,7 @@ Decisions made in `00-architecture.md` (Wave 2). Digest shorthand `[R1 §x]`…`
 - Serves: goal 1 (clean OFFERs and prose); goal 2 (the player sees what changed).
 - Migration: none.
 - Revisit if: players misread an OFFER title rendered from slots more than once per run.
+- Revisited [revision: R2-L]: the condition was met (round 8: "Persuade the market square"). Acted on by DL-01-52.
 
 ### DL-01-40: A price the method pays is a write (revision R2-J; F5)
 - Decision: [revision: R2-J] 01.11.2: coin handed over, a consumable used or an item given is deducted from the store at RECORD, whatever the degree, and shown in RESULT's `Changed:` line; words alone never pay it.
@@ -590,6 +610,7 @@ Decisions made in `00-architecture.md` (Wave 2). Digest shorthand `[R1 §x]`…`
 - Serves: goal 2 (the spine stays exact).
 - Migration: none.
 - Revisit if: never; a missed deduction is an engine bug.
+- Revisited [revision: R2-L]: round 8 found payments narrated and not written (an engine bug as recorded); the cause was payment inside the reaction step, so DL-15-47 makes a payment the paying beat's consequence.
 
 ### DL-01-41: One owner per question: the Oracle never answers about the beat's own target, and its answer is never a snag (revision R2-K; T1; owner approval 2026-10-09)
 - Owner ruling (2026-10-09): "1 is good."
@@ -626,6 +647,7 @@ Decisions made in `00-architecture.md` (Wave 2). Digest shorthand `[R1 §x]`…`
 - Serves: goal 1 (no screen for nothing); 01.4.1's worst case (a skipped roll grants one Standard success).
 - Migration: none.
 - Revisit if: a seeded sweep of the golden set and the round-1 to round-7 saves still finds a Safe, sourceless, retryable frame that rolls (target 0 below Very hard), or players report a free success that should have cost something.
+- Revisited [revision: R2-L]: the condition was met (round 8, P4: a Safe frame rolled on a narrated cost). Acted on by DL-01-51.
 
 ### DL-01-45: "Already agreed" is judged on the typed goal; a roll never shrinks an agreement (revision R2-K; T6; owner approval 2026-10-09)
 - Owner ruling (2026-10-09): Owner approval 2026-10-09 (ROUND7-PLAN §Owner rulings records the approval; there is no direct quote).
@@ -662,6 +684,51 @@ Decisions made in `00-architecture.md` (Wave 2). Digest shorthand `[R1 §x]`…`
 - Serves: goal 2; C:VII.
 - Migration: none.
 - Revisit if: a playtest or made-up case shows a success at a cost read as a failure anywhere, or narration states an outcome before the player's choice.
+
+### DL-01-49: Talk with menace stays Talk; the facets never re-verb a beat (revision R2-L; T1)
+- Owner ruling (2026-10-10): "A lot of these problems seem to go back to the code forcing an incorrect view on the narrator."
+- Decision: [revision: R2-L] 01.18.7, 01.2.2, 00.12.3: a shove, a raised fist or a grip that serves an intimidation or a demand is the Talk's method (Might for physical menace); `against_will` never turns a Talk into a Grapple; a Grapple needs a hold or restrain goal. *Retires:* the Talk → Grapple rewrite (`gate.covering_verb`).
+- Alternatives considered: keep the rewrite for hands on a person (rejected: it turned an intimidation into a pin and a fight).
+- Evidence: research_notes/Playtest round 2 solutions/ROUND8-ANALYSIS T1 (fighter [18]-[24]).
+- Serves: goal 1; constitution VIII.1 (the Reader owns reading).
+- Migration: none.
+- Revisit if: a playtest shows a Talk beat resolved under another verb's card, or a restraint the player meant resolved as Talk.
+
+### DL-01-50: Taking the time in free play costs minutes, not intervals (revision R2-L; P2)
+- Owner ruling (2026-10-10): Owner approval: ROUND8-PLAN §Owner rulings (T2, T4, T5 and the patches follow earlier rulings, Principle VIII and ROUND7-PLAN; the owner was told they would proceed; there is no direct quote).
+- Decision: [revision: R2-L] 01.4.4, 00.7.3 free row, `resolution.yaml#take_the_time` (`free_unit: minutes`, `free_unlisted_minutes: 5`, provisional: owner decision R2-L-3): twice the activity's listed duration in minutes, and for an unlisted beat 2 × 5 minutes.
+- Alternatives considered: keep intervals (rejected: three beats made an hour and cut the scene mid-conversation); zero time for unlisted beats (rejected: taking the time must cost something).
+- Evidence: research_notes/Playtest round 2 solutions/round8-investigation/R8-I3 §5b (three 20-minute charges, the scene cut on the hour).
+- Serves: goal 1.
+- Migration: none.
+- Revisit if: a playtest shows a free-play scene cut or a boundary crossed by take-the-time charges alone, or players report time passing oddly fast in talk.
+
+### DL-01-51: Only mechanical costs make a frame costly (revision R2-L; P4; revisits DL-01-44)
+- Owner ruling (2026-10-10): Owner approval: ROUND8-PLAN §Owner rulings (T2, T4, T5 and the patches follow earlier rulings, Principle VIII and ROUND7-PLAN; the owner was told they would proceed; there is no direct quote).
+- Decision: [revision: R2-L] 01.4.1, `resolution.yaml#take_the_time.cost_source: mechanical_only`: a cost's source is a clock, a person's record or stance, a hazard, a quantity or possession, or a condition; a narrated incidental detail (T1a) never makes a frame costly.
+- Alternatives considered: trust the Framer's cited source (rejected: it cited "scuffed binding", so turning a page rolled).
+- Evidence: research_notes/Playtest round 2 solutions/ROUND8-ANALYSIS P4; DL-01-44's revisit (fired).
+- Serves: goal 1.
+- Migration: none.
+- Revisit if: a seeded sweep or a playtest finds a Safe frame that rolls on a non-mechanical source.
+
+### DL-01-52: A persuade title names the person and the act asked (revision R2-L; P3; revisits DL-01-39)
+- Owner ruling (2026-10-10): Owner approval: ROUND8-PLAN §Owner rulings (T2, T4, T5 and the patches follow earlier rulings, Principle VIII and ROUND7-PLAN; the owner was told they would proceed; there is no direct quote).
+- Decision: [revision: R2-L] 12.15.2 *Title*: for a `persuade_to` goal, the person and the act asked ("Get her to tell you about the cart"), never the place or the verb alone.
+- Alternatives considered: keep the slot render as is (rejected: "Persuade the market square").
+- Evidence: research_notes/Playtest round 2 solutions/ROUND8-ANALYSIS P3; round8-investigation/R8-I3 (Reader row 47).
+- Serves: goal 1.
+- Migration: none.
+- Revisit if: players misread a persuade title more than once per run.
+
+### DL-01-53: The Reader returns a typed addressee per speech or question part and the cost to the NPC of an ask (revision R2-L; F-A, T1)
+- Owner ruling (2026-10-10): on the analysis, "A lot of these problems seem to go back to the code forcing an incorrect view on the narrator." Then: "I think you're right about the deeper solution, I think it might be necessary. Let's think about it more, and potentially look for solutions for the trade-off." On the proposal: "I approve of A. I don't like the code telling us exactly what someone should say or how they should react if they're often wrong. And I really don't like the forced texture either."
+- Decision: [revision: R2-L] 12.2.2, 01.2.5, `pacing.yaml#npc.reaction_layer.cost`: addressee (an id, or none; a move-then-ask addresses the move's target) and cost (none, small, real, big = R1, R2, R3, R4-R5 of 15.3.2). Code never re-guesses the addressee. *Retires:* `npc_layer.addressed`'s heuristics (word overlap, role head noun, "last spoke with", `present[0]`).
+- Alternatives considered: keep the heuristic with the Reader as a tie-break (rejected: the Reader named the right person in all 6 wrong cases).
+- Evidence: research_notes/Playtest round 2 solutions/round8-investigation/R8-I2 §A, §11; R8-D1 (addressee 40 of 45 right, the 5 wrong were the worst errors).
+- Serves: constitution VIII.1, VIII.4.
+- Migration: none.
+- Revisit if: a playtest shows a wrong addressee where the Reader's field was right, or the Reader's cost disagrees with the Framer's size on the same ask more than 1 time in 5.
 
 ## DL-02 — Character
 
@@ -3256,6 +3323,7 @@ chapter 06's fight model and T-06-12 lines), output `07-harm-sim-output.txt`, wr
 - Migration: none to stored state; an NPC already present when this lands gets an activity at the next scene entry.
 - Revisit if: the unanswered-address rate is above 0, three NPCs refusing in a row share a line, a seeded replay does not reproduce NPC responses, or more than one practice routinely fits a turn (then split the order by place type).
 - Superseded in part [revision: R2-H] (DL-12-90, DL-12-93): an activity is rolled once per scene from the NPC's own role cell, is optional material and ends when the NPC engages; only an addressed or concerned NPC responds; for a question or plain speech the source gives willingness only, and `tbl.npc_action`'s talk wordings no longer script speech.
+- Amended [revision: R2-L]: the practice and `tbl.npc_action` no longer decide responses, and "an addressed NPC always answers" is the narrator's (12.11.9 step 4). Superseded in part by DL-12-126.
 
 ### DL-12-44: An honest "I don't know" plus a real person or place who would know counts as a success at Limited reach or better (revision R2-B; owner ruling D2, I-153; superseded in part by R2-H, DL-12-90)
 - Decision: [revision: R2-B] Owner ruling D2, 2026-10-08, recorded now; the procedure that applies it (the answering ladder in 12.10, with the asked-and-answered index) is written in wave R2-D, so no rule text changes in R2-B. A successful Talk, Observe or Recall whose answer the NPC or the PC does not know delivers, at Limited reach or better, the honest "don't know" plus a real lead: an existing person or place who would know, chosen by casting from the store (never invented by the narrator). The ladder therefore never has to invent a fact to make a success pay, and it never ends empty. I-153 stays open until R2-D writes the procedure.
@@ -3459,6 +3527,7 @@ chapter 06's fight model and T-06-12 lines), output `07-harm-sim-output.txt`, wr
 - Serves: C:I (responses decided by code before the prose); cost (the World call leaves the default path); replay determinism.
 - Migration: none to stored state; existing wants and refusals match by their table result and kind id.
 - Revisit if: more than 1 engaged NPC in 10 falls to the World fallback, or a want object or refusal kind added later has no tags (the data check fails).
+- Amended [revision: R2-L]: the tags still match recorded refusals and wants to an ask (a covering refusal makes the ceiling *refuses*), but no longer pick a `tbl.npc_action` row, and the crowd's response is the narrator's, a declared change when it alters something (DL-12-126, DL-12-130).
 
 ### DL-12-88: Reader policy confirmed: accompanying gestures are part of the act, plain questions are speech, every question part has a kind, and `against_will` without a stated will (revision R2-G; I-171, I-172, I-173, I-174)
 - Decision: [revision: R2-G] The label audit's readings become rule text. I-171: a step, posture or gesture that only accompanies another act is part of that act's beat; a move with its own destination is a Move beat (00.12.6, 01.2.2, 12.2.2). I-172: a question is SPEECH unless its words request an act or object or carry pressure (threat, offer, plea, insistence); the listener's wariness does not make it a request (12.2.2, 15.3.10). I-173: each question part has its own `question_kind`; an imperative demand for information is a question part, a phatic check is not, a declared Recall or Observe is a beat (12.2.2 decision 3). I-174: with no will stated, `against_will` is true when the act takes, restrains, moves or harms a person or what they hold without evident consent, false for contact that leaves them free (12.2.2).
@@ -3501,6 +3570,7 @@ chapter 06's fight model and T-06-12 lines), output `07-harm-sim-output.txt`, wr
 - Serves: goal 1; the lever cap (01.6.8) stays honest.
 - Migration: none; activities expire at scene end as before.
 - Revisit if: scenes feel static (players report present NPCs as furniture), or a concerned NPC fails to react to an event about them.
+- Amended [revision: R2-L]: the activity part stands (empty rows are not shown, DL-12-131); "only an addressed or concerned NPC responds" is retired as a gate, and who reacts is the narrator's (DL-12-126).
 
 ### DL-12-94: The feedback loop understands first, then verifies, and answers every report in plain words (revision R2-H; owner ruling 2026-10-09, S3)
 - Decision: [revision: R2-H] Owner ruling 2026-10-09 ("I definitely agree with S1 and S2. I agree with S3, but I'm surprised that it's not figuring out what the player is talking about when they point out an error and it can directly read the whole transcript. S4 seems fine for now, although I think we could modify it later if this fix doesn't work." The owner also prefers structural fixes over patches). 12.3.6 and PR-12-11: one model call reads the report with the whole transcript (past `feedback.understand_call.transcript_budget_tokens`, 30000, the scene cards plus search hits) and returns `{believes, happened, category, turn, quote}`; the answer restates the complaint; code then verifies against the record and the store. Code no longer pins a report first by a number or a name (`feedback.locate_call` retired). A new category, `ruling_question`, covers "why didn't the success give me the purse?" (12.2.2's DISPUTE). Every report gets a plain answer: corrected, explained, or "I can't find that; did you mean …?"; never "logged" alone. Act on fiction, explain on mechanics, as INV-9's split already says. The understanding call is tested on the real complaint corpus (the persona runs' `/fix` lines) beside planted cases (OEQ-12-26).
@@ -3551,6 +3621,7 @@ chapter 06's fight model and T-06-12 lines), output `07-harm-sim-output.txt`, wr
 - Revisit if: scenery-repetition complaints persist after this and spec 017; then feed the narrator's own recent phrases back as "already said" (R6's cheap option).
 - Revisited [revision: R2-K]: the condition was met (round 7, H1). By owner ruling the recorded option is not taken; DL-12-113 removes the pushes instead (DL-12-111).
 - Revisited [revision: R2-K]: extended to people and things by owner ruling 2026-10-10: a person's look and a thing's description follow the same rule (DL-12-122).
+- Revisited [revision: R2-L]: met in substance (round 8: same-place scene cuts re-described the room 4 of 9 times). Acted on by DL-12-140.
 
 ### DL-12-100: Speech patches: no self-introduction unless asked; the PC's words inside a speech attribution are PC agency (revision R2-I; patches)
 - Decision: [revision: R2-I] (1) An NPC's speech never opens by reciting its own name or title unless asked: the speaker card is what the narrator knows, not speech (PR-12-10 step 4; `answer_ladder.self_introduction`). (2) 12.3.1b's `pc_agency` speech check covers words given to the PC inside an NPC's speech or its attribution ("'Fair enough,' you say"); a speaker tag never exempts them (`claim_check.speech_checks`).
@@ -3583,6 +3654,7 @@ chapter 06's fight model and T-06-12 lines), output `07-harm-sim-output.txt`, wr
 - Serves: goal 1 (talk that is not a wall); C:I (clues stay strict).
 - Migration: none.
 - Revisit if: an NPC withholds an ordinary answer the player needed more than once per run with no line from code.
+- Revisited [revision: R2-L]: the condition was met (round 8: the gate log and the roster withheld three times). The cause was missing terms; acted on by DL-12-135, and code answer lines are now `learned` facts (DL-15-44).
 
 ### DL-12-104: Context per role: the situation plus a short guidance digest; conversation for Director, World and Checker; identity lines for everyone named (revision R2-J; F3)
 - Decision: [revision: R2-J] 12.2.4: each role gets the situation and a short guidance digest for its own judgment; the core and the id-sorted situation cards are not sent to model calls; a card reaches a call only where code knows it applies. The Director, the World and the Checker get the player's message and recent exchanges. Everyone named or mentioned, present or absent, gets an identity line (name, pronouns, bond) in the narrator's and the testimony call's view. A lead line is shown only when new or relevant. 12.14.2: the narrator uses names, pronouns and bonds and is never told to write around names or kinship. The owner, quoted in DL-00-06: "an LLM that can see the conversation wouldn't repeat that".
@@ -3634,6 +3706,7 @@ chapter 06's fight model and T-06-12 lines), output `07-harm-sim-output.txt`, wr
 - Serves: goal 1 (people have something to say); goal 2 (money and destinations exact); constitution VIII.1 and VIII.3.
 - Migration: none for saves; existing hooks get terms when next activated.
 - Revisit if: a playtest or made-up case shows a hook question (pay, place, issuer, who) answered by a dodge or a coin flip, two speakers contradicting a written term, or a spoken price paid outside its band.
+- Revisited [revision: R2-L]: the condition was met (round 8: "whose cart?" dodged three times; the situation lead had no terms). Acted on by DL-12-135 (every kind).
 
 ### DL-12-110: The Director may cast a description present in the scene (revision R2-K; T2; owner approval 2026-10-09)
 - Owner ruling (2026-10-09): "It feels like potentially we could just let the LLM have people make up the amount, who posted it, where he was seen, etc. if it's not decided by a pre-existing fact, unless you think that could cause problems or something, in which case your solution seems good." (the T2 split as approved).
@@ -3643,6 +3716,7 @@ chapter 06's fight model and T-06-12 lines), output `07-harm-sim-output.txt`, wr
 - Serves: goal 1; P16.
 - Migration: none.
 - Revisit if: a lead or a player's stated purpose names a group that the Director cannot bring into the scene in a playtest or made-up case.
+- Revisited [revision: R2-L]: the condition was met (round 8: groups became one person, one youth became three). Superseded by DL-12-134 (casting by id).
 
 ### DL-12-111: Revisit notes acted on in R2-K (revision R2-K; process)
 - Owner ruling (2026-10-09): "every fix must also pass made up cases, including cases specifically design to test edge cases. Revisit the revisit notes too."
@@ -3680,6 +3754,7 @@ chapter 06's fight model and T-06-12 lines), output `07-harm-sim-output.txt`, wr
 - Serves: goal 1; constitution VIII.1.
 - Migration: none.
 - Revisit if: a code-written sentence or label shows up verbatim in narration in a playtest, or a pronoun-neutral template is found for a person with stored pronouns.
+- Revisited [revision: R2-L]: the condition was met (labels: "the sellsword between contracts" in narration; "more than they seem" in RESULT). Acted on by DL-12-126 (facts as data) and engine P1 (spec 030).
 
 ### DL-12-115: A paused beat is unresolved in the narrator's record (revision R2-K; T4; owner approval 2026-10-09)
 - Owner ruling (2026-10-09): "4 seems good."
@@ -3698,6 +3773,7 @@ chapter 06's fight model and T-06-12 lines), output `07-harm-sim-output.txt`, wr
 - Serves: constitution VIII.8.
 - Migration: none.
 - Revisit if: on fresh held-out real complaints, fewer than 5 of 7 are repaired right and visibly, or a repair hinges on a field the Fixer could not see.
+- Revisited [revision: R2-L]: the condition was met (round 8: /fix right 3 of 6). Acted on by DL-12-136 and DL-12-137.
 
 ### DL-12-117: `/fix` dry-runs, re-frames an open OFFER, takes back an unrolled turn, checks the screen, and iterates within its budget; code guards only the spine (revision R2-K; T7; owner approval 2026-10-09)
 - Owner ruling (2026-10-09): "the goal was to make slash fix work just like you… you seem to figure out what the problem is, and it seems like you're able to to potentially revert it if necessary."
@@ -3707,6 +3783,7 @@ chapter 06's fight model and T-06-12 lines), output `07-harm-sim-output.txt`, wr
 - Serves: constitution VIII.8.
 - Migration: none.
 - Revisit if: a complaint at an open OFFER is answered without a re-framed OFFER, or a repaired screen still shows the complaint, in the held-out scoring.
+- Revisited [revision: R2-L]: the condition was met (round 8: a re-frame kept the complaint; an undo showed no scene). Acted on by DL-12-136 and DL-12-137.
 
 ### DL-12-118: Willingness holds for the scene and changes only on an event (revision R2-K; D3 A; owner approval 2026-10-09; owner-confirmed 2026-10-10)
 - Owner ruling (2026-10-09): "Yup, I approve of A for both of these."
@@ -3717,6 +3794,7 @@ chapter 06's fight model and T-06-12 lines), output `07-harm-sim-output.txt`, wr
 - Migration: a conversation in progress keeps its last band.
 - Revisit if: players report a wall that never moves after a payment, threat or won persuasion, or a band changes with no listed event in a playtest or made-up case; or players report walls even with onward pointers.
 - Revisited [revision: R2-K]: owner-confirmed 2026-10-10, "I agree B, A, A, C" (A: willingness holds for the scene), even when a wary group refuses four times in one scene, each refusal pointing onward (specs/025-hooks-clues-willingness/implementation-results.md, the live talker). Kept as built; the revisit condition adds walls reported even with onward pointers.
+- Amended [revision: R2-L]: not fired in round 8; the band is now the NPC's mood (`open`, `guarded`, `closed`), held and moved exactly as here (DL-12-127).
 
 ### DL-12-119: A refusal points to someone new who would know; willingness never overrides clue rules (revision R2-K; D3 A; owner approval 2026-10-09)
 - Owner ruling (2026-10-09): "Yup, I approve of A for both of these."
@@ -3726,6 +3804,7 @@ chapter 06's fight model and T-06-12 lines), output `07-harm-sim-output.txt`, wr
 - Serves: goal 1; P16.
 - Migration: none.
 - Revisit if: a refusal points back to someone who already refused, or a reachable core clue is withheld by a rolled band, in a playtest or made-up case.
+- Revisited [revision: R2-L]: in substance (round 8: a core clue withheld by `deliver_count`, a code cap, not a band). The condition now reads "withheld by any code cap"; DL-15-45 acts on it, and the pointer is the narrator's pick from code's candidates (DL-12-129).
 
 ### DL-12-120: No willingness line on a plain greeting or thanks (revision R2-K; P3; owner approval 2026-10-09)
 - Owner ruling (2026-10-09): Owner approval 2026-10-09 (ROUND7-PLAN §Owner rulings records the approval; there is no direct quote).
@@ -3753,6 +3832,7 @@ chapter 06's fight model and T-06-12 lines), output `07-harm-sim-output.txt`, wr
 - Serves: goal 1 (fresh prose); constitution VIII.5 (remove standing material, no new procedure).
 - Migration: none (nothing is stored).
 - Revisit if: a person's look or a thing's description still recurs in more than 1 of 3 of the turns it appears in across a playtest round, or players report a person or thing met with no look.
+- Revisited [revision: R2-L]: met in substance (the notice text through the reading path; looks through scene re-openings). Acted on by DL-12-132 and DL-12-140.
 
 ### DL-12-123: /fix may pass a one-line note to the re-frame's Framer; the Framer owns the odds (revision R2-K; spec 027; owner ruling 2026-10-10)
 - Owner ruling (2026-10-10): "I agree B, A, A, C" (C: spec 026's question).
@@ -3762,6 +3842,7 @@ chapter 06's fight model and T-06-12 lines), output `07-harm-sim-output.txt`, wr
 - Serves: goal 1 (a reported error is fixed); constitution VIII.1 (the Framer stays the owner of odds).
 - Migration: none.
 - Revisit if: a re-frame given a note still repeats the disputed odds, or a passed note is found steering the odds.
+- Revisited [revision: R2-L]: the condition was met in kind (round 8: a rebuild could not change the reading). Acted on by DL-12-136 (re-read with the note).
 
 ### DL-12-124: An auto-committed OFFER and its RESULT stand above the passage (revision R2-K; spec 027 H1)
 - Owner ruling (2026-10-10): Owner approval: ROUND7-PLAN process / spec 027 hand-off (there is no direct quote).
@@ -3780,6 +3861,159 @@ chapter 06's fight model and T-06-12 lines), output `07-harm-sim-output.txt`, wr
 - Serves: goal 1 (places are named as the player sees them).
 - Migration: none; saves keep their names (spec 027 A6).
 - Revisit if: a seeded haven names a building after a site feature again, or the gate and the feature are confused in play.
+
+### DL-12-126: Facts, not orders: the default NPC layer gives the narrator facts and the narrator decides reactions (revision R2-L; F-A; owner approval 2026-10-10)
+- Owner ruling (2026-10-10): on the analysis, "A lot of these problems seem to go back to the code forcing an incorrect view on the narrator." Then: "I think you're right about the deeper solution, I think it might be necessary. Let's think about it more, and potentially look for solutions for the trade-off." On the proposal: "I approve of A. I don't like the code telling us exactly what someone should say or how they should react if they're often wrong. And I really don't like the forced texture either."
+- Decision: [revision: R2-L] 12.11.9 (rewritten), 12.11.5, 12.11.4, 12.2.9 step 2, PR-12-1 T5, T-12-4, T-12-18, 16's ally item 6, `pacing.yaml#npc.reaction_layer`: code gives the narrator only facts it owns (the roll and what it achieved, state changes, who is present and able and where, clue deliveries as `learned` facts, each NPC's mood, and for an ask the ceiling with pointer candidates); the narrator decides who answers, each reaction at or below the ceiling, the price, the words and whom a refusal points to. *Retires:* `tbl.npc_action` and `tbl.npc_practice` as orders (both `lifecycle: retired`, kept until spec 028 removes their readers), the practice clamp, the "X acts: …" MUST lines, code-written refusals and their gesture lists, T-12-18's response-row scene writes, the `addressed`/`concerned` gate and its heuristics. Amends DL-12-43, DL-12-87 and DL-12-93 in part.
+- Alternatives considered: keep code's reaction orders and patch each wrong one (rejected: 8 of 24 right, and every wrong one was narrated as ordered); judgment only, no code stance (rejected: the research shows models cave and over-agree, so the stance must live partly outside the model; kept as the comparison arm, OEQ-12-28); an NPC-intent model call every turn (research option 3; held as the fallback above 5% violations, DL-12-133).
+- Evidence: research_notes/Playtest round 2 solutions/ROUND8-PROPOSAL.md §1-3; ROUND8-ANALYSIS.md T1, T3 (9 of 9 traced wrong outputs obeyed a code line); round8-investigation/R8-D1 (46 kinds; reaction orders 33% right; 14 of 14 right speakers with no order); R8-I2 §9-11; R8-R1.
+- Serves: constitution VIII.1, VIII.5; goal 1.
+- Migration: none.
+- Revisit if: OEQ-12-28's offline judge finds ceiling violations above 5% of asks, mood flips with no event in more than 1 scene in 20, or a playtest round traces a wrong NPC reaction to a code-written line again.
+
+### DL-12-127: Each NPC has a mood toward the PC, rolled once per scene and moved only by an event (revision R2-L; F-A; builds on DL-12-118, D3)
+- Owner ruling (2026-10-10): "I approve of A. I don't like the code telling us exactly what someone should say or how they should react if they're often wrong. And I really don't like the forced texture either."
+- Decision: [revision: R2-L] 12.11.9 step 2, 12.10.8 item 2, PR-12-10 step 2, `oracles.yaml#tbl.npc_mood`, `pacing.yaml#npc.reaction_layer.mood`: `open`, `guarded` or `closed`, d10 + standing (clamped 1-10; 1-3 closed, 4-6 guarded, 7-10 open: at Neutral 30/30/40%), rolled the first time the scene needs it and held for the scene; one step up on a payment or a won persuasion, one step down on a threat or an insult; nothing else moves it. It replaces the willingness band one to one (`willing` = open), so DL-12-118's odds and holding rule carry over unchanged.
+- Alternatives considered: keep three willingness words as orders (rejected: the band was right, the orders built on it were not); a five-step mood (rejected: the grid needs only three rows, and the band's odds are already measured in play).
+- Evidence: research_notes/Playtest round 2 solutions/ROUND8-PROPOSAL §3; R8-R1 (tabletop: a disposition is rolled once and moves only on an in-fiction event); R8-D1 row 21 (the band: 5 of 5 refusals coherent).
+- Serves: goal 1; constitution VIII.1 (dice and state are code's).
+- Migration: none.
+- Revisit if: a playtest or the OEQ-12-28 judge finds a mood that changed with no listed event, or players report an NPC whose warmth never moves after a payment or a won persuasion.
+
+### DL-12-128: The ceiling: the most an NPC will do for an ask, from mood × cost to them (T-12-19) (revision R2-L; F-A; owner approval 2026-10-10)
+- Owner ruling (2026-10-10): on the analysis, "A lot of these problems seem to go back to the code forcing an incorrect view on the narrator." Then: "I think you're right about the deeper solution, I think it might be necessary. Let's think about it more, and potentially look for solutions for the trade-off." On the proposal: "I approve of A. I don't like the code telling us exactly what someone should say or how they should react if they're often wrong. And I really don't like the forced texture either."
+- Decision: [revision: R2-L] 12.11.4, 12.11.9 step 3, T-12-19, `oracles.yaml#tbl.npc_ceiling`, 15.3.10: for an ask a rolled Talk frame resolved, its delivered outcome; otherwise the grid cell for the NPC's mood and the ask's cost to them (none, small, real, big = R1, R2, R3, R4-R5; one step higher when granting defeats a recorded want). The narrator reacts at or below it. A recorded refusal covering the ask makes it *refuses*; a clue delivery is never limited by it. **Provisional (owner decision R2-L-1):** asks that roll today still roll, and a certain ask (15.3.10) also needs the cell to read *will help*, else it is framed as usual.
+- Alternatives considered: the grid answers every ask, with no social rolls for requests (rejected for now: it would retire ch.15's request machinery, which the plan did not ask for; option C of R2-L-1); a plain ask answered by the grid and a roll only when the PC presses (option B of R2-L-1, held for the owner).
+- Evidence: research_notes/Playtest round 2 solutions/ROUND8-PLAN §1 F-A (the grid); ROUND8-PROPOSAL §3 (the grid and its three examples); R8-R1 (the size of the ask for the NPC matters).
+- Serves: goal 1; goal 2 (NPCs stay consistent).
+- Migration: none.
+- Revisit if: the OEQ-12-28 judge finds ceiling violations above 5% (then add the NPC-intent call, DL-12-133), or a playtest shows a grant above its cell, or the owner rules R2-L-1 otherwise.
+
+### DL-12-129: The narrator decides who answers, the price from the NPC's wants, the words, and whom a refusal points to from code's candidates (revision R2-L; F-A)
+- Owner ruling (2026-10-10): "I approve of A. I don't like the code telling us exactly what someone should say or how they should react if they're often wrong. And I really don't like the forced texture either."
+- Decision: [revision: R2-L] 12.11.9 step 4, 12.11.5, PR-12-10 step 2, 15.7.1 item 1, `pacing.yaml#answer_ladder.refusal_pointer`: who answers is the Reader's addressee or the narrator's judgment; the price is named from the NPC's wants (a coin price settles to the ask's band when paid); a refusal's pointer is the narrator's pick from code's candidates (people who would know, never one who already refused), or none. An addressed NPC who is present and able responds somehow, never with a stock formula. *Retires:* code choosing the speaker, code-written refusal lines, and the single code pointer as an order.
+- Alternatives considered: code picks the speaker from the Reader's addressee (rejected: the narrator already sees the addressee and picked the right speaker 14 of 14 times); free pointers with no candidate list (rejected: runarounds, DL-12-119).
+- Evidence: research_notes/Playtest round 2 solutions/round8-investigation/R8-D1 §4 (14 of 14), rows 22-25; R8-I2 §A (wrong speakers from word overlap).
+- Serves: goal 1; constitution VIII.1.
+- Migration: none.
+- Revisit if: a playtest shows two NPCs answering one question at once, an addressed NPC ignored with no visible act, or a refusal pointing to someone not on the candidate list.
+
+### DL-12-130: A reaction that changes the spine is declared by the narrator and applied by code within the ceiling (revision R2-L; F-A; provisional, owner decision R2-L-2)
+- Owner ruling (2026-10-10): "I approve of A. I don't like the code telling us exactly what someone should say or how they should react if they're often wrong. And I really don't like the forced texture either."
+- Decision: [revision: R2-L] 12.11.9 step 5, 12.3.1 (`action` source), `pacing.yaml#npc.reaction_layer.declared_deeds`: a handover, a taking, a departure, a summons or an attack chosen by the narrator is a typed change on its side list; code applies it when the NPC is present and able and the change is within the ceiling (a summons or an attack only from a closed mood after a threat, harm or insult, or at *refuses, may escalate*); otherwise it is `unsourced_change` and cut, as before. Provisional until the owner rules R2-L-2.
+- Alternatives considered: speech and gesture only, every state change from code (option B of R2-L-2: no NPC could leave or hand anything over unless code decided it, which brings code's reaction orders back); deeds written freely as narrated (option C: the spine would follow prose, against VIII.1).
+- Evidence: research_notes/Playtest round 2 solutions/round8-investigation/R8-D1 §5 (risk: the narrator inventing deeds); 12.3.1b item 2 (`unsourced_change`).
+- Serves: goal 2 (the spine stays exact); constitution VIII.1.
+- Migration: none.
+- Revisit if: a playtest shows an NPC deed narrated but not applied that the player relied on, or an applied deed above its ceiling; or the owner rules R2-L-2 otherwise.
+
+### DL-12-131: Forced texture is retired and MUST is only for spine facts (revision R2-L; F-A; owner approval 2026-10-10)
+- Owner ruling (2026-10-10): "I approve of A. I don't like the code telling us exactly what someone should say or how they should react if they're often wrong. And I really don't like the forced texture either."
+- Decision: [revision: R2-L] 12.14.9 (no mandatory closing line), 12.14.12 (MUST only for the roll and its reach, state changes, a learned clue, a pause), 12.2.7 (no unconditional "(answered)"), 12.11.9 step 6 (an activity that says nothing is not shown), 12.10.5 (no "quote exactly"), PR-12-1 T10, `pacing.yaml#narration` (`closing_line: none`, `answered_mark: none`), `#npc.activity.empty_rows_shown: false`. *Retires:* example gesture lists in refusal orders, "quote exactly", the "end by handing the moment back" line (P6), empty activity lines, the unconditional "(answered)".
+- Alternatives considered: keep the closing line but vary it (rejected: its slot is what drove the repeated closings); keep activity lines and filter the worst (rejected: 64% said nothing).
+- Evidence: research_notes/Playtest round 2 solutions/round8-investigation/R8-D1 rows 31, 33, 36, 37, 41, 45 (all 8 refusals used the same gesture; 64% of activity lines said nothing; "(answered)" on 98 of 160 part lines); ROUND8-ANALYSIS P6.
+- Serves: constitution VIII.5 (remove friction first).
+- Migration: none.
+- Revisit if: a playtest round shows the same closing or gesture in more than 1 of 3 turns of a run, or a code-written instruction about style found in a narrator packet.
+
+### DL-12-132: Reading follows the beat's target; no "quote exactly" (revision R2-L; T1)
+- Owner ruling (2026-10-10): "A lot of these problems seem to go back to the code forcing an incorrect view on the narrator."
+- Decision: [revision: R2-L] 12.10.5, `pacing.yaml#narration.reading`: what the PC reads is the beat's typed target; its stored words are a `how: read` fact the narrator renders as the moment needs; a thing with no stored words gets ordinary words (T1a), never words that point toward anything hidden. *Retires:* the reading line's word-matched guess and the lone-notice fallback.
+- Alternatives considered: improve the word matcher (rejected: the Reader already names the target; VIII.7).
+- Evidence: research_notes/Playtest round 2 solutions/round8-investigation/R8-I1 symptom 1 and 5; R8-D1 row 36 (0 of 6).
+- Serves: goal 1; constitution VIII.1.
+- Migration: none.
+- Revisit if: a playtest shows a written thing read that is not the beat's target, or a stored text misquoted in a way the player relies on.
+
+### DL-12-133: NPC agreeableness is measured offline; above 5% ceiling violations add an NPC-intent call (revision R2-L; F-A measurement)
+- Owner ruling (2026-10-10): on the analysis, "A lot of these problems seem to go back to the code forcing an incorrect view on the narrator." Then: "I think you're right about the deeper solution, I think it might be necessary. Let's think about it more, and potentially look for solutions for the trade-off." On the proposal: "I approve of A. I don't like the code telling us exactly what someone should say or how they should react if they're often wrong. And I really don't like the forced texture either."
+- Decision: [revision: R2-L] OEQ-12-28, `pacing.yaml#npc.reaction_layer.measure`: an offline judge, hand-checked, over logs measures the grant rate by mood × cost, ceiling violations, mood flips with no event, repeat-ask consistency, refusals in character, voice distinctness and secret leaks; baseline on the round-8 saves, then the same seeded scenes three ways (today's code, dial and ceiling, judgment only). If ceiling violations exceed 5%, one small "what does this NPC intend" call is added before narration (research option 3).
+- Alternatives considered: a live per-turn check of every reaction (rejected: VIII.2, nothing is measured precise yet); no measurement (rejected: agreeableness under the model's judgment is unmeasured, R8-D1 §5).
+- Evidence: research_notes/Playtest round 2 solutions/ROUND8-PLAN §1 (measurement and fallback); ROUND8-PROPOSAL §4; R8-R1 (sycophancy and multi-turn caving).
+- Serves: constitution VIII.2, VIII.7; the Gemini Flash caution in VIII.
+- Migration: none.
+- Revisit if: the measured violation rate exceeds 5% (add the call), or the judge's own agreement with hand labels falls below 0.9 (fix the judge first).
+
+### DL-12-134: The Director casts by id: a person present, or a new one with group and role (revision R2-L; T1; revisits DL-12-110)
+- Owner ruling (2026-10-10): "A lot of these problems seem to go back to the code forcing an incorrect view on the narrator."
+- Decision: [revision: R2-L] 12.2.4 Director row: casting returns a present person's id, or `new` with `{group, role}` when nobody present fits a stated purpose; never a description code then matches by words. *Retires:* `cast_described`, the `_GROUP` regex and description matching (one youth became three people).
+- Alternatives considered: keep description casting and widen the matcher (rejected: it minted duplicates from strings).
+- Evidence: research_notes/Playtest round 2 solutions/round8-investigation/R8-I2 X1 and §8 (DL-12-110 fired); R8-I3 (each scene cut cast the challenger again).
+- Serves: goal 1; constitution VIII.1.
+- Migration: none.
+- Revisit if: a playtest shows one person present as two entities, or a stated group the Director could not bring into the scene.
+
+### DL-12-135: Every lead and incident kind gets its terms when made, held by those who would know (revision R2-L; T2; revisits DL-12-109)
+- Owner ruling (2026-10-10): Owner approval: ROUND8-PLAN §Owner rulings (T2, T4, T5 and the patches follow earlier rulings, Principle VIII and ROUND7-PLAN; the owner was told they would proceed; there is no direct quote).
+- Decision: [revision: R2-L] 11.5.6, 12.16.16, PR-15-6 step 7: the terms (who, what, where, and where they exist the words and the pay) are written for every kind the data has: the eight incidents, the opening's situation and wound leads, the four document kinds, each lead-injection form, a rumor's `points_to` and each creation-hook kind, as unsealed knowledge on the cards of the people and documents that would know. *Retires:* one-sentence leads and reporter-only incidents.
+- Alternatives considered: add terms for the kinds round 8 showed (rejected: that is how round 7's fix missed these kinds; DL-00-10).
+- Evidence: research_notes/Playtest round 2 solutions/ROUND8-ANALYSIS T2; round8-investigation/R8-I2 C and §8 (DL-12-109 fired: "whose cart?" dodged three times).
+- Serves: goal 1; constitution VIII.1.
+- Migration: none.
+- Revisit if: a playtest or a made-up case of any listed kind shows a lead question (who, what, where, the words, the pay) answered by a dodge or a stall.
+
+### DL-12-136: /fix may re-read the message with the Fixer's note (revision R2-L; T4; revisits DL-12-116, DL-12-117, DL-12-123)
+- Owner ruling (2026-10-10): Owner approval: ROUND8-PLAN §Owner rulings (T2, T4, T5 and the patches follow earlier rulings, Principle VIII and ROUND7-PLAN; the owner was told they would proceed; there is no direct quote).
+- Decision: [revision: R2-L] PR-12-11 step 3, 12.3.6 item 4, `pacing.yaml#feedback.investigate.proposals_added: reread_with_note`: a rebuild may re-run the Reader on the original message with the Fixer's one-line note, and gate, necessity and frame follow from the new reading; the note is context, never a typed field, a fact or odds. *Retires:* the odds-only rebuild.
+- Alternatives considered: let the Fixer write the reading fields itself (rejected: the Reader owns reading; the note is enough context).
+- Evidence: research_notes/Playtest round 2 solutions/ROUND8-ANALYSIS T4; round8-investigation/R8-I3 (a shove labelled "Persuade" rebuilt twice the same way).
+- Serves: constitution VIII.8.
+- Migration: none.
+- Revisit if: on held-out complaints about a reading (who, what, which goal), fewer than 4 of 5 are repaired by a re-read, or a note is found steering the odds.
+
+### DL-12-137: /fix re-shows the scene after an undo, marks code-forced lines, and its digest glosses goals, attributes and licences (revision R2-L; T4)
+- Owner ruling (2026-10-10): Owner approval: ROUND8-PLAN §Owner rulings (T2, T4, T5 and the patches follow earlier rulings, Principle VIII and ROUND7-PLAN; the owner was told they would proceed; there is no direct quote).
+- Decision: [revision: R2-L] PR-12-11 steps 2 and 6, 12.2.4 Fixer row, 12.5.8, `pacing.yaml#feedback.investigate` (`marks_code_forced`, `undo_reshows_scene`, digest `goal_first`, `attribute_knob`, `licence_glosses`): a take-back re-shows where things stand and names the undone turn by what happened, never a turn number; each narrator line is marked code-forced or not; the digest adds one beat per goal (01.2.2), the attribute knob (01.18.7) and licence glosses ("Push: spend Focus for reach").
+- Alternatives considered: leave the Fixer to infer which lines code forced (rejected: it blamed the narration for code's lines).
+- Evidence: research_notes/Playtest round 2 solutions/ROUND8-ANALYSIS T4; round8-investigation/R8-I3 (undo left the player redeclaring blind; "took back turn N").
+- Serves: constitution VIII.8.
+- Migration: none.
+- Revisit if: a take-back in a playtest is followed by a player question about where things stand, or a /fix reply blames the narration for a line marked code-forced.
+
+### DL-12-138: Only precise checks block: a check with no measured precision only logs; the pronoun and repeat checks are demoted (revision R2-L; T5)
+- Owner ruling (2026-10-10): Owner approval: ROUND8-PLAN §Owner rulings (T2, T4, T5 and the patches follow earlier rulings, Principle VIII and ROUND7-PLAN; the owner was told they would proceed; there is no direct quote).
+- Decision: [revision: R2-L] 12.3.1b items 1 and 2.7, 12.14.11, PR-12-2 steps 2-3, `pacing.yaml#claim_check` (`unmeasured: log_only`, pronoun `precision: 0.0`, `not_a_repeat` in `speech_logged`): code enforces that a check blocks only with a recorded precision at or above `min_precision`. *Retires:* the two blocking checks (pronoun: 0 of 3; repeat: 0-1 of 2; all 5 round-8 rewrites were false).
+- Alternatives considered: keep them blocking until re-measured (rejected: VIII.2 makes measurement the gate, and they measured near zero).
+- Evidence: research_notes/Playtest round 2 solutions/ROUND8-ANALYSIS T5; round8-investigation/R8-I1.
+- Serves: constitution VIII.2.
+- Migration: none.
+- Revisit if: a demoted check measures at or above `min_precision` on whole passages (promote it), or a round shows a pronoun or repeat error the player reports more than once per run.
+
+### DL-12-139: The lead injection takes the Director's pick (revision R2-L; P5)
+- Owner ruling (2026-10-10): Owner approval: ROUND8-PLAN §Owner rulings (T2, T4, T5 and the patches follow earlier rulings, Principle VIII and ROUND7-PLAN; the owner was told they would proceed; there is no direct quote).
+- Decision: [revision: R2-L] 12.8.2 step 1, PR-12-3 step 1, `pacing.yaml#lead_injection` (`director_pick_first`, `never_known_thread`, `note_as: data`): when the Director has chosen a thread, its unfound placement or fallback is the source; the ladder runs only otherwise, never re-pushes a lead the PC already holds, and the note is data, never "toward X, through X".
+- Alternatives considered: keep the ladder first (rejected: it overrode a typed choice and re-pushed a known hook).
+- Evidence: research_notes/Playtest round 2 solutions/round8-investigation/R8-I1 lead injection (turn 8 and 14).
+- Serves: goal 1 (no dead ends that matter).
+- Migration: none.
+- Revisit if: a playtest shows an injected lead the PC already held, or a Director pick ignored.
+
+### DL-12-140: Setting once also holds on a same-place scene cut (revision R2-L; P7; revisits DL-12-99, DL-12-122)
+- Owner ruling (2026-10-10): Owner approval: ROUND8-PLAN §Owner rulings (T2, T4, T5 and the patches follow earlier rulings, Principle VIII and ROUND7-PLAN; the owner was told they would proceed; there is no direct quote).
+- Decision: [revision: R2-L] 12.14.11, 12.2.4 Narrator row, `pacing.yaml#narration.freshness.same_place_scene_cut: not_an_arrival`: a place's look reaches the narrator on arrival at a place, and a person's look on a new appearance; a scene cut at the same place is neither.
+- Alternatives considered: re-describe on every scene id (rejected: the room was re-described 4 of 9 times).
+- Evidence: research_notes/Playtest round 2 solutions/round8-investigation/R8-I1 §DL-12-99 and §DL-12-122 (fired in substance).
+- Serves: constitution VIII.5.
+- Migration: none.
+- Revisit if: a place's look or a person's look recurs on a same-place scene cut in a playtest, or players report a new place met with no look.
+
+### DL-12-141: RESULT and Fate wording in plain words (revision R2-L; P8)
+- Owner ruling (2026-10-10): Owner approval: ROUND8-PLAN §Owner rulings (T2, T4, T5 and the patches follow earlier rulings, Principle VIII and ROUND7-PLAN; the owner was told they would proceed; there is no direct quote).
+- Decision: [revision: R2-L] 12.15.3 (a take-the-time success prints `[RESULT] no roll: you take the time (10 minutes) · success`, no "evidence as a no-roll success"), 12.15.2 (fate omitted on a secret frame, never "no reroll").
+- Alternatives considered: explain the jargon in the glossary (rejected: the line should not need it).
+- Evidence: research_notes/Playtest round 2 solutions/round8-investigation/R8-I1 symptom 7; R8-I3 §6.
+- Serves: goal 1 (plain screens).
+- Migration: none.
+- Revisit if: a playtest shows a RESULT or OFFER line with a rules term the glossary has to explain, or players ask what a fate line means.
+
+### DL-12-142: Revisit notes acted on in R2-L (revision R2-L; process)
+- Owner ruling (2026-10-10): Owner approval: ROUND8-PLAN §Owner rulings (T2, T4, T5 and the patches follow earlier rulings, Principle VIII and ROUND7-PLAN; the owner was told they would proceed; there is no direct quote).
+- Decision: [revision: R2-L] Recorded revisit conditions met by round 8 (ROUND8-ANALYSIS §1) are acted on here, each with a `Revisited` line: DL-01-39 (titles: DL-01-52), DL-01-40 (a payment not written: DL-15-47), DL-01-44 (a Safe frame rolled on a narrated cost: DL-01-51), DL-12-103 and DL-12-109 (dodged lead questions: DL-12-135, DL-12-126), DL-12-110 (casting: DL-12-134), DL-12-114 (code labels in narration: DL-12-126, engine P1 in spec 030), DL-12-116, DL-12-117, DL-12-123 (/fix: DL-12-136, DL-12-137), DL-12-99 and DL-12-122 (same-place cut: DL-12-140), DL-15-42 (unpaid deals: DL-15-47), DL-12-119 (a core clue withheld by a code cap: DL-15-45 widens its condition), DL-00-08 (a fix fitted to the shown kinds: DL-00-10). DL-12-118 did not fire and is carried by DL-12-127.
+- Alternatives considered: leave the older entries as written (rejected: DL-00-08 requires acting on met conditions).
+- Evidence: research_notes/Playtest round 2 solutions/ROUND8-ANALYSIS §1; round8-investigation/R8-I2 §8; R8-I1 revisit table.
+- Serves: constitution VIII.7.
+- Migration: none.
+- Revisit if: a later round finds a met revisit condition that no wave acted on.
 
 ## DL-13 — The Starter Setting: the Thallen March
 
@@ -4271,6 +4505,7 @@ chapter 06's fight model and T-06-12 lines), output `07-harm-sim-output.txt`, wr
 - Migration: none.
 - Revisit if: talker personas report Standard Talks as stingy compared with Observe.
 - Superseded in part [revision: R2-H] (DL-12-90): each landed question is answered by PR-12-10 without ladder depth: by the case graph when consequential, else in the NPC's own words within the willingness code sets; Great still adds one volunteered extra.
+- Amended [revision: R2-L]: one clue judgment per message runs before the count, and the count caps ordinary answers only (DL-15-45).
 
 ### DL-15-40: Whether a question reaches a person's placement is judged by meaning; placements carry an `about` line (revision R2-K; D2 A; owner approval 2026-10-09)
 - Owner ruling (2026-10-09): "Yup, I approve of A for both of these."
@@ -4298,6 +4533,52 @@ chapter 06's fight model and T-06-12 lines), output `07-harm-sim-output.txt`, wr
 - Serves: goal 2 (coin exact; AI-6).
 - Migration: none.
 - Revisit if: a deal in a playtest is agreed with no price record, or a payment is narrated but not written.
+- Revisited [revision: R2-L]: the condition was met (round 8: three payments not written). Acted on by DL-15-47.
+
+### DL-15-43: The incident's actor is the person on stage (revision R2-L; T2)
+- Owner ruling (2026-10-10): Owner approval: ROUND8-PLAN §Owner rulings (T2, T4, T5 and the patches follow earlier rulings, Principle VIII and ROUND7-PLAN; the owner was told they would proceed; there is no direct quote).
+- Decision: [revision: R2-L] 12.16.16, PR-15-6 step 7: the opening's incident actor shown on stage is the case's subject entity, cast by id in the incident's role with identity sealed; never a second person.
+- Alternatives considered: let the case cast its own subject (rejected: the sealed challenger was not the youth on stage).
+- Evidence: research_notes/Playtest round 2 solutions/round8-investigation/R8-I2 X2.
+- Serves: goal 2 (the case and the scene agree).
+- Migration: none.
+- Revisit if: a playtest or made-up case of any of the eight incidents shows the case's subject differing from the actor the opening shows.
+
+### DL-15-44: Clue delivery is a learned fact, not an NPC act (revision R2-L; T2, F-A)
+- Owner ruling (2026-10-10): Owner approval: ROUND8-PLAN §Owner rulings (T2, T4, T5 and the patches follow earlier rulings, Principle VIII and ROUND7-PLAN; the owner was told they would proceed; there is no direct quote).
+- Decision: [revision: R2-L] 15.9.5, PR-12-10 step 1, 12.10.8 item 1, 12.14.12 item 3, `pacing.yaml#answer_ladder.clue_judgment.on_yes: learned_fact`: a delivered clue is a `learned` fact the narrator must convey, from any knower present or as the method finds it; never an NPC "acts:" line naming a speaker.
+- Alternatives considered: keep the act line (rejected: 3 of 5 such lines named the wrong speaker; the `learned` channel fired 0 times in 85 calls).
+- Evidence: research_notes/Playtest round 2 solutions/round8-investigation/R8-D1 rows 12, 23; §3.
+- Serves: goal 2; constitution VIII.1.
+- Migration: none.
+- Revisit if: a playtest shows a delivered clue the narration did not convey, or a clue voiced by someone who could not know it.
+
+### DL-15-45: One clue judgment per message, before the question cap (revision R2-L; P9; amends DL-15-39)
+- Owner ruling (2026-10-10): Owner approval: ROUND8-PLAN §Owner rulings (T2, T4, T5 and the patches follow earlier rulings, Principle VIII and ROUND7-PLAN; the owner was told they would proceed; there is no direct quote).
+- Decision: [revision: R2-L] PR-12-10 step 1, T-15-5's questions rule, `social.yaml#delivery.information.clue_judgment_first`: one judgment reads every question part together and runs before `deliver_count`, which then caps ordinary answers only; a clue is never dropped by the cap. Amends DL-15-39 (the count still applies to ordinary answers).
+- Alternatives considered: per-part calls after the cap (rejected: the cap dropped Betric's clue before the clue check saw it).
+- Evidence: research_notes/Playtest round 2 solutions/ROUND8-ANALYSIS P9; round8-investigation/R8-I2 B.
+- Serves: goal 2 (core clues never fail).
+- Migration: none.
+- Revisit if: a playtest or made-up multi-part question ("X, and who is Y?") drops a clue it should deliver, or the judgment's precision or recall falls below 0.9 on the made-up set.
+
+### DL-15-46: The journal shows what you were told, attributed (revision R2-L; T2)
+- Owner ruling (2026-10-10): Owner approval: ROUND8-PLAN §Owner rulings (T2, T4, T5 and the patches follow earlier rulings, Principle VIII and ROUND7-PLAN; the owner was told they would proceed; there is no direct quote).
+- Decision: [revision: R2-L] 15.9.16, T-15-15, `investigation.yaml#journal` (`journal.told`, `lookup`): the said records spoken to the PC, each attributed and grouped by thread or topic; "what do I know about X?" searches thread text, said records and knowledge records, never names alone. *Retires:* the name-only lookup.
+- Alternatives considered: keep the journal to found clues and names (rejected: what people said was invisible).
+- Evidence: research_notes/Playtest round 2 solutions/ROUND8-ANALYSIS T2 (explorer [19]-[21]); R8-I2 §11 (journal).
+- Serves: goal 1.
+- Migration: none.
+- Revisit if: a player asks "what do I know" and the answer omits a told fact on that thread or person.
+
+### DL-15-47: A payment is the paying beat's consequence, applied before any reaction (revision R2-L; T3; revisits DL-15-42, DL-01-40)
+- Owner ruling (2026-10-10): "A lot of these problems seem to go back to the code forcing an incorrect view on the narrator."
+- Decision: [revision: R2-L] 15.7.1 item 3, 12.11.9 step 7: coin or goods the PC hands over move when the beat that hands them resolves (a gift's amount from the Reader's quantity), before any NPC reaction is decided and whatever else the message asks. *Retires:* payment as a branch of the reaction checklist.
+- Alternatives considered: keep payment in the reaction step and fix its order (rejected: any order there can skip it again).
+- Evidence: research_notes/Playtest round 2 solutions/ROUND8-ANALYSIS T3 (three payments skipped, purse at 44); R8-I2 X3.
+- Serves: goal 2 (coin exact).
+- Migration: none.
+- Revisit if: a payment in a playtest is narrated but not written, or written after a reaction that ignored it.
 
 ## DL-16 — Companions and Allies
 
