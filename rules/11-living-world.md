@@ -1079,6 +1079,15 @@ first placement is the place; `debt` → a commitment of kind debt with a credit
 `enemy` → a faction tie at −2 (11.3) or an NPC enemy, and a situation from template `the_enemy`;
 `question` → a sealed fact with a case. A lost bond's sealed fate (02.9.2) is kept sealed with its gate
 as a clue of the case it belongs to.
+**Terms are written when the hook is made** [revision: R2-K; DL-12-109]. Making any hook (a lead, a notice, an offer,
+an incident) also decides its **terms** in code: the **pay** (a job's fee from `economy.yaml#job_fees` by its band,
+08.8.8, never a figure the DM picks: economy AI-6), the **destination** (a place bound or created, 10), the
+**issuer** and the **people involved** (bound or cast, step 1). They are written as unsealed knowledge records on
+the cards of those who would know (the issuer, the contact, the reporter, a local of the destination), so a willing
+person has something to say. Everything else about the hook is improvised in character and stored as testimony
+(PR-12-12), settled only when the player acts on it. *Retires:* hooks with no terms (round 7, I2: "someone is
+hiring" with no job, pay or place; three Oracle answers said a list names "the worst place", which was never
+written) and yes/no answers to what, where and how much.
 
 **11.5.7 Fallbacks.** `[T]` + `[D]` Every thread holds at least one **fallback**, a proactive node that
 comes to the PC [R6 B-13; R5 P-41]: `{trigger, form, delivers}`. Triggers (closed): the thread becomes
@@ -2094,7 +2103,8 @@ is voiced in fiction; the herald already told the player what is due).
 
 **PR-11-5 Making and activating a hook.** `[D]`
 1. Make: write the thread at `seeded` with its text, source, the entities it names (unbound allowed), and
-   how it reaches the PC (a rumor, a person, a letter) — a trace written at once.
+   how it reaches the PC (a rumor, a person, a letter) — a trace written at once; and its **terms** (11.5.6):
+   pay, destination, issuer and people, as unsealed knowledge on the cards of those who would know [revision: R2-K].
 2. Activate (the PC takes it up): bind entities, reusing first (11.5.6 step 1); generate the case (PR-15-6):
    ≥ 3 placements per necessary conclusion, ≥ 2 holder kinds, one core, reserves and fallbacks; rank
    (11.5.3); opposing clock if its source has a threat; reward if promised; fallback (11.5.7); progress

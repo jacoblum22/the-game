@@ -997,21 +997,22 @@ source (the delivering turn, the beat or the generator), and a **persistence**:
    [revision: R2-G]. A value that restates the stored one is a no-op.
 3. **No separate cap** [revision: R2-G; DL-12-70]. One value per slot (item 2) bounds an entity's details: a person
    has at most 8 `lasting` and 4 `scene` slots, an object 3. The view orders them by salience (2 for a seeded or
-   generated detail, one cited in a record line or as a lever, or a pinned correction (12.3.6), else 1), then by
-   last use, within the profile budget (12.2.4).
+   generated detail, one cited in a record line or as a lever, or a pinned correction (12.3.6), else 1), then
+   newest written, within the profile budget (12.2.4) [revision: R2-K].
 4. **Who writes.** A `lasting` detail is written as narrated (PR-00-7 step 2) or by a generator. `scene` and
    `beat` details are written **by code**, never by the narrator (T1c), for the PC as for every present person:
    from the resolved beat by T-12-18's beat rows (a successful grapple writes the holder's `held` and the
    target's `posture`) and from the default NPC layer by T-12-18's response rows (12.11.9's activity and
    response). A write that changes a filled slot cites the beat's frame or the response's source as its
    explaining event (item 2). A scene slot shown as a record line is cited, never improvised [revision: R2-F].
-5. **Usage marks.** Each delivered sentence that states a detail sets the detail's `last_used` to that turn (a
-   projection over the log, not a new fact); freshness (12.14.11) and the view's order read it [revision: R2-G].
+5. **No usage marks** [revision: R2-K; DL-12-113]. Freshness is the narrator's judgment from the conversation it
+   sees (12.14.11); no detail carries a `last_used` mark, and nothing counts or gates its use. *Retires:* the
+   `last_used` projection [revision: R2-G] (round 7, H1: it fired 0 times on looks and habits).
 6. **Details are ordinary.** A detail can be cited as a lever under 00.3.9's cap and never creates value, a clue or
    a hazard (12.14.13).
 *Worst case (J):* a detail filed under the wrong slot — a later sentence about the right slot is written as new, or
 reads as a contradiction and is redrafted to the store (class i); a junk detail fills a slot — the closed list and
-one value per slot bound it, and it falls out of the view by last use (class i) [revision: R2-G].
+one value per slot bound it, and it falls out of the view by age (class i) [revision: R2-G; revision: R2-K].
 
 **00.6.7 Assertion is not fact.** `[D]` [DL-00A-22; DL-00A-01; revision: I-065] A player's statement about the world is stored only as the
 beat's `assertion` context in the frame, never as a fact (SG-06). Facts come from exactly six sources:

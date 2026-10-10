@@ -55,6 +55,15 @@ entries are append-only once other chapters cite them (`[DL-CC-NN]`).
 - Migration: none.
 - Revisit if: a role's accuracy drops on the golden or held-out sets once its digest replaces the core.
 
+### DL-00-08: Every fix passes made-up and edge cases, and each round re-checks the revisit notes (revision R2-K; process; owner ruling 2026-10-09)
+- Owner ruling (2026-10-09): "every fix must also pass made up cases, including cases specifically design to test edge cases. Revisit the revisit notes too."
+- Decision: [revision: R2-K] Every engine spec that implements a rules change writes and labels made-up cases (breadth beyond the playtest that found the problem) and edge cases (built to break the fix) before implementing, and is accepted on them plus a held-out set, never on the reported save alone. Each rules wave and each playtest round re-checks every recorded "Revisit if" condition and acts on any that is met (DL-12-111 records this wave's). Each R2-K decision's "Revisit if" is written as a checkable condition for that purpose.
+- Alternatives considered: accept fixes on the round's own cases (rejected: spec 018's 60% overlap and spec 022's tuning-set score shipped that way).
+- Evidence: research_notes/Playtest round 2 solutions/ROUND7-ANALYSIS.md §6 ("each fix was fitted to the last round's cases and accepted on those cases alone"); R7-H1, R7-H2.
+- Serves: constitution VIII.7.
+- Migration: none.
+- Revisit if: a round finds a fix that passed its labelled cases but failed in play on a case of a kind the set did not cover; then widen the case kinds.
+
 ## DL-00A — Architecture
 
 Decisions made in `00-architecture.md` (Wave 2). Digest shorthand `[R1 §x]`…`[R7 §x]` per 00.1.6.
@@ -514,6 +523,7 @@ Decisions made in `00-architecture.md` (Wave 2). Digest shorthand `[R1 §x]`…`
 - Evidence: P-024; synthesis §4 D7; lane D P3.
 - Serves: goal 1 (no pause for a choice that cannot cost more than a nuisance).
 - Revisit if: the owner reverses D7, or logs show players turning it off after an auto-rolled failure.
+- Amended [revision: R2-K]: DL-01-47 limits auto-commit to Safe frames that stay costly; the rest take the time (DL-01-44).
 
 ### DL-01-33: Computed-gate gaps closed: zero reach routes to G4 from the Framer's factors, `extended` is a shape, and the engine's readings of 15.3.10 and 15.3.2 stand (revision R2-G; I-160)
 - Decision: [revision: R2-G] (a) 01.6.10 decision 2 and 00.12.3: since no role proposes a gate class, the Framer's reach factors route a beat to G4 when two unoffset factors (or a total potency) stand against it, before the OFFER, with no roll and nothing spent, and 01.3.7's redirect. (b) 12.2.2 decision 3's shape gains `extended` (01.2.2; a clock, 01.14.6), matching the engine's fourth value. (c) 15.3.10: a plain question is SPEECH (12.2.2, I-172) and never reaches the hesitation test, which applies to requests only; this documents the engine's behaviour. (d) 15.3.2: the request size is the Framer's pick (R1-R5), as the engine does.
@@ -547,6 +557,7 @@ Decisions made in `00-architecture.md` (Wave 2). Digest shorthand `[R1 §x]`…`
 - Serves: goal 2 (every roll can deliver); C:VII (outcomes are written before prose).
 - Migration: none.
 - Revisit if: a playtest shows a rolled beat whose success applied nothing, or an already-true change rolled.
+- Revisited [revision: R2-K]: the condition was met in round 7 (Morga's narrower ask rolled); acted on by DL-01-45 (typed, not textual) and DL-01-42.
 
 ### DL-01-37: One beat per goal: a method, force or movement in service of a goal is that goal's beat (revision R2-J; F2; owner approval 2026-10-09; conflict clause provisional)
 - Decision: [revision: R2-J] 01.2.2 splits a declaration by **goal** (what is to be different, and toward whom), not by act. A method, a supporting act, or force or movement in service of a goal is part of that goal's beat and is rolled as the goal ("I pin him to the wall and demand who sent him" is one `learn` beat whose method is force against his will). Two goals stay two beats (DL-01-34's "grab the purse and punch her"). In a conflict, a move or leap that ch.06 prices as an action with its own roll stays a sequential beat before the goal's beat (provisional, owner to confirm), and the goal's beat is always framed. The same rule governs 01.2.7 item 1, 12.2.2's `change` field and 12.13.3's split tell. The owner's direction, quoted in constitution VIII: "analyse things holistically, not individually". Retires the test "if one part failed, could the other part still be attempted?" and "two changes are two beats" read act by act.
@@ -579,6 +590,78 @@ Decisions made in `00-architecture.md` (Wave 2). Digest shorthand `[R1 §x]`…`
 - Serves: goal 2 (the spine stays exact).
 - Migration: none.
 - Revisit if: never; a missed deduction is an engine bug.
+
+### DL-01-41: One owner per question: the Oracle never answers about the beat's own target, and its answer is never a snag (revision R2-K; T1; owner approval 2026-10-09)
+- Owner ruling (2026-10-09): "1 is good."
+- Decision: [revision: R2-K] 01.15.1, 01.15.8, 01.3.1 (G0), 01.6.8 decision 1: a person the beat acts on is answered by their willingness (will), their record (ability: role, licences, competences) or the roll (noticing, resisting); content nobody has written goes to its maker (11.5.6) or is testimony (PR-12-12). The Oracle answers only open questions about the world. An Oracle answer is never a snag, and its OFFER label is the plain sentence written with it. Ch.12's side is DL-12-108. *Retires:* pre-frame Oracle questions about the target, Oracle booleans standing in for content, snags authored by a d100, and slug labels.
+- Alternatives considered: drop only the snag and keep the target questions (rejected: the answer still contradicts the record in narration, as Belie's "I can't read" did); let the Oracle consult the record first (rejected: two authorities for one question).
+- Evidence: research_notes/Playtest round 2 solutions/ROUND7-ANALYSIS.md §2 T1; round7-investigation/R7-I3-mechanics-fix.md §1-2 (4 of 8 Oracle answers were about the beat's own target, all 4 contradicted something; fact.113 made a Letters-holding scribe illiterate; "is not not alert"); R7-I2-npcs.md §1d.
+- Serves: goal 2 (the spine stays consistent); constitution VIII.1.
+- Migration: none; facts already written stay, and are no longer cited as snags.
+- Revisit if: a seeded sweep over the round-7 saves and the made-up cases finds any Oracle question whose subject is the beat's target or a present person, or any OFFER term built from an Oracle fact.
+
+### DL-01-42: Every rolled beat carries a typed goal (revision R2-K; T5; owner approval 2026-10-09)
+- Owner ruling (2026-10-09): Owner approval 2026-10-09 (ROUND7-PLAN §Owner rulings records the approval; there is no direct quote).
+- Decision: [revision: R2-K] 01.2.7 step 1 and 12.15.2's title: `none` is only for beats that do not roll; a Help beat carries the helped beat's goal and a look around is `learn` on the place; a beat whose goal cannot be typed is folded or clarified, never framed as `none`. Builds on round 6's goal-first rule (DL-01-37, DL-01-39) and does not undo it. *Retires:* rolled `change: none` and description-first OFFER titles.
+- Alternatives considered: let the OFFER fall back to the description (rejected: "Talk to a coin on the table"; no `Now:`; nothing for success to protect).
+- Evidence: research_notes/Playtest round 2 solutions/ROUND7-ANALYSIS.md §2 T5; R7-I3 §5 (3 of 7 rolled OFFERs had `change: none`).
+- Serves: goal 2 (every roll can deliver); C:VII.
+- Migration: none.
+- Revisit if: any rolled beat in a playtest or the made-up set carries `change: none`, or an OFFER title is not rendered from a typed goal.
+
+### DL-01-43: Gates, checks and prices key on the goal and its method; a fallback is framed on its own scope (revision R2-K; T5; owner approval 2026-10-09)
+- Owner ruling (2026-10-09): Owner approval 2026-10-09 (ROUND7-PLAN §Owner rulings records the approval; there is no direct quote).
+- Decision: [revision: R2-K] 01.3.1 (computed from the typed goal and every method it relies on), 02.4.6 (Letters on any reading, whatever the verb), 01.4.7 (secret frames keyed on a `learn` goal), 15.3.10 (certain talk on a `persuade_to` goal, DL-15-41), 01.9.3 generalised (no price may reverse the typed goal against the same target; code checks it and FRAME names another), 01.3.5 and 12.15.2 (a fallback is framed on its own scope, its difficulty counted once). *Retires:* verb-only gate keys (`gate.reads_writing` on `verb.observe`, `certain_talk`, secret frames keyed on verbs), the hold-only success guard, and double-counted fallback difficulty.
+- Alternatives considered: add reading as its own beat whenever it is mentioned (rejected: it re-opens the act-by-act split DL-01-37 retired); keep the guard for holds only (rejected: "he turns the round down" negated a success).
+- Evidence: research_notes/Playtest round 2 solutions/R7-I3 §5-7 (the list read inside a Talk beat met no gate and was stolen before the PC learned he could not read; a near miss priced with the goal's own refusal; a 5% fallback with its difficulty counted twice); ROUND7-ANALYSIS §2 T5.
+- Serves: goal 2; C:V (licences are literal).
+- Migration: none.
+- Revisit if: a made-up or playtest case reads, hears or persuades through a verb other than the one the gate keys on and the gate does not run, or a near-miss price reverses the goal.
+
+### DL-01-44: Take the time is computed by code on the typed frame, for every verb (revision R2-K; T6; owner approval 2026-10-09)
+- Owner ruling (2026-10-09): Owner approval 2026-10-09 (ROUND7-PLAN §Owner rulings records the approval; there is no direct quote). The plan's wording: take the time comes back, decided on the Framer's typed stakes.
+- Decision: [revision: R2-K] 01.4.1 Computation and 01.4.4: after framing, a frame with no stakes source, no sourced threatened cost, no clock listening, outside a conflict, below Very hard and retryable at leisure is not costly: no OFFER, no roll, success at Standard, twice the mode's time charged through `advance_time`, and a RESULT that says how long it took (12.15.3), secret or not. Code checks `stakes.source: none` against the frame's own costs: a named sourced cost or a listening clock makes it costly (logged). Data: `resolution.yaml#take_the_time`. *Retires:* rolling every gated beat, "hidden check made" for a beat with nothing at stake, and the verb- and case-specific carve-outs this test covers (approach and already-true stay as readings of decision 1).
+- Alternatives considered: let the Reader propose take the time again (rejected: spec 007 removed it for a reason, and a model-proposed no-roll is a leniency risk); keep Safe auto-commit as the answer (rejected: it still spends a die and can still fail).
+- Evidence: research_notes/Playtest round 2 solutions/round7-investigation/R7-H2-rolls-fix-history.md T6 (3 clean cases of 7 OFFERs; 0 no-roll successes in 13 saves since spec 007; Safe frames 43-60% of committed rolls); R7-I3 §4.
+- Serves: goal 1 (no screen for nothing); 01.4.1's worst case (a skipped roll grants one Standard success).
+- Migration: none.
+- Revisit if: a seeded sweep of the golden set and the round-1 to round-7 saves still finds a Safe, sourceless, retryable frame that rolls (target 0 below Very hard), or players report a free success that should have cost something.
+
+### DL-01-45: "Already agreed" is judged on the typed goal; a roll never shrinks an agreement (revision R2-K; T6; owner approval 2026-10-09)
+- Owner ruling (2026-10-09): Owner approval 2026-10-09 (ROUND7-PLAN §Owner rulings records the approval; there is no direct quote).
+- Decision: [revision: R2-K] 01.2.7 step 1, 01.4.1's already-true reading and `resolution.yaml#intended_change.before_framing.already_true_judged_on`: an `agreed` record holds the person, the act and its size; a new `persuade_to` to the same person whose act is the same as, or smaller than and contained in, one on record is already true (no roll, no OFFER); a roll never replaces or shrinks an agreement on record. This revisits DL-01-36, whose condition ("an already-true change rolled") was met. *Retires:* the two-way 60% word overlap.
+- Alternatives considered: loosen the overlap threshold (rejected: still text, still misses subset asks).
+- Evidence: research_notes/Playtest round 2 solutions/R7-H2 T6, explorer t10 (Morga's agreement fact.106; the narrower ask rolled; the limited success superseded it with "a smaller part of it").
+- Serves: goal 1; goal 2.
+- Migration: none.
+- Revisit if: a playtest or made-up case rolls a request the NPC has already agreed to in a larger form, or a roll's result replaces a larger agreement.
+
+### DL-01-46: An accepted fallback meets the take-the-time test on its own frame (revision R2-K; T6; provisional, owner to confirm)
+- Owner ruling (2026-10-09): Owner approval 2026-10-09 (ROUND7-PLAN §Owner rulings records the approval; there is no direct quote). The plan asks that this question be settled under 01.4.4; the option is taken provisionally (R2-K report, owner decision 1).
+- Decision: [revision: R2-K] 01.4.4 and `resolution.yaml#take_the_time.fallback`: an accepted crude fallback (01.3.5) is framed on its own scope and then meets the same take-the-time test as any frame: with nothing at stake it succeeds with time, at its reach cap, its tier read after its shift (so a shift into Very hard still rolls), and its listed consequence still applies. *Retires:* 0c15da2's forced roll on every accepted fallback. The P-087 misfire ("You cannot do it that way") was an engine path bug, not a reason for the roll.
+- Alternatives considered: (B) every accepted fallback rolls (0c15da2 as now); (C) a fallback takes the time only when its fallback verb is basic.
+- Evidence: research_notes/Playtest round 2 solutions/R7-H2 T6 (fighter t9: reading the list by fallback, Safe and sourceless, shown as a 5% OFFER) and its "settle the fallback question" item.
+- Serves: goal 1; one general test, no carve-outs (constitution VIII.5).
+- Migration: none.
+- Revisit if: the owner picks another option, or fallbacks taken with time are reported as too easy (a crude method with no risk landing what a trained one would roll for).
+
+### DL-01-47: Safe auto-commit covers only Safe frames that stay costly (revision R2-K; T6; owner approval 2026-10-09)
+- Owner ruling (2026-10-09): Owner approval 2026-10-09 (ROUND7-PLAN §Owner rulings records the approval; there is no direct quote).
+- Decision: [revision: R2-K] 01.7.4 and `resolution.yaml#auto_commit.only_when_costly`: a Safe frame that is not costly takes the time (DL-01-44) and never reaches an OFFER; auto-commit stays for Safe frames whose failure costs at most a nuisance but cannot be retried at leisure (a one-time chance, a contest). Amends DL-01-32, whose purpose (no pause for a nuisance) take the time now serves for most of its frames.
+- Alternatives considered: retire auto-commit outright (rejected: Safe-but-costly frames remain, and D7 stands).
+- Evidence: research_notes/Playtest round 2 solutions/R7-H2 T6 (Safe auto-commit hid the remaining Safe rolls behind a shorter screen).
+- Serves: goal 1.
+- Migration: none; the preference is unchanged.
+- Revisit if: logs show no Safe-but-costly frame auto-committing over a full playtest round (then retire the preference), or the owner revisits D7.
+
+### DL-01-48: One effective degree, read everywhere; a paused beat is unresolved until the player chooses (revision R2-K; T4; owner approval 2026-10-09)
+- Owner ruling (2026-10-09): "4 seems good."
+- Decision: [revision: R2-K] 01.9.3: one function gives each beat's effective degree, the degree except that a success at a cost taken counts as `success`, and every reader uses it (the NPC's response and willingness, answers, scene state, evidence, generators); no reader checks the raw degree. A beat paused at the choice carries no degree and no "near miss" in the narrator's record until the player chooses (12.2.6; DL-12-115). *Retires:* degree-only checks and "a near miss" narrated before the choice.
+- Alternatives considered: patch the three readers one by one (rejected: the next reader would repeat it).
+- Evidence: research_notes/Playtest round 2 solutions/ROUND7-ANALYSIS §2 T4; round7-investigation/R7-I1-narration.md §3 and R7-I2 §7 F (the talker paid for the round and the sellsword turned it down; the narration ran ahead of the choice).
+- Serves: goal 2; C:VII.
+- Migration: none.
+- Revisit if: a playtest or made-up case shows a success at a cost read as a failure anywhere, or narration states an outcome before the player's choice.
 
 ## DL-02 — Character
 
@@ -3392,6 +3475,7 @@ chapter 06's fight model and T-06-12 lines), output `07-harm-sim-output.txt`, wr
 - Serves: C:I (what matters is still decided by code: clues, willingness, deeds); goal 1 (NPCs who sound like people); R2-G's ruling that speech is testimony (DL-12-81), whose machinery this removes.
 - Migration: none to stored state. Stored "does not know" records stay as NPC memory. `pacing.yaml#answer_ladder.repeat_pointer_limit` and `social.yaml#delivery.information.ladder_depth` stay, retired in place, until spec 013 removes their reader (`engine/dm/answer.py`).
 - Revisit if: OEQ-12-25 shows more than 2 self-contradictions or repeated lines per 100 NPC lines, or runarounds return.
+- Revisited [revision: R2-K]: runarounds returned (round 7, I2 §1c); acted on by DL-12-118 and DL-12-119.
 - Superseded in part [revision: R2-I] (DL-12-96): beyond the card an NPC speaks plainly and with ordinary confidence; R2-H's hedged hearsay wording in PR-12-10 step 4 and 12.10.8 is replaced, a hedge being a characterisation choice.
 
 ### DL-12-91: Truth is settled lazily: testimony becomes world truth only when it matters (revision R2-H; owner ruling 2026-10-09, S1; D1's T1b loosened)
@@ -3465,6 +3549,7 @@ chapter 06's fight model and T-06-12 lines), output `07-harm-sim-output.txt`, wr
 - Serves: goal 1 (fresh narration).
 - Migration: none.
 - Revisit if: scenery-repetition complaints persist after this and spec 017; then feed the narrator's own recent phrases back as "already said" (R6's cheap option).
+- Revisited [revision: R2-K]: the condition was met (round 7, H1). By owner ruling the recorded option is not taken; DL-12-113 removes the pushes instead (DL-12-111).
 
 ### DL-12-100: Speech patches: no self-introduction unless asked; the PC's words inside a speech attribution are PC agency (revision R2-I; patches)
 - Decision: [revision: R2-I] (1) An NPC's speech never opens by reciting its own name or title unless asked: the speaker card is what the narrator knows, not speech (PR-12-10 step 4; `answer_ladder.self_introduction`). (2) 12.3.1b's `pc_agency` speech check covers words given to the PC inside an NPC's speech or its attribution ("'Fair enough,' you say"); a speaker tag never exempts them (`claim_check.speech_checks`).
@@ -3513,6 +3598,7 @@ chapter 06's fight model and T-06-12 lines), output `07-harm-sim-output.txt`, wr
 - Serves: goal 2; constitution VIII.8 (the player is part of error correction).
 - Migration: `feedback.understand_call` and `feedback.outcomes` stay in data, marked retired, until spec 022 replaces the code.
 - Revisit if: on the complaint corpus plus the 15 live disputes and new held-out complaints, fewer than 12 of 15 are graded right and clear.
+- Revisited [revision: R2-K]: met (4 of 7 held out); acted on by DL-12-116 and DL-12-117.
 
 ### DL-12-106: Every restore shows a `Now:` line (revision R2-J; F5)
 - Decision: [revision: R2-J] 12.5.8, 12.15.9: every restore (a take-back, a rewind, a correction, a refund) shows a `Now:` line with each shown value it changed; no restore is silent.
@@ -3529,6 +3615,132 @@ chapter 06's fight model and T-06-12 lines), output `07-harm-sim-output.txt`, wr
 - Serves: goal 1 (the person who brought the PC the job talks to them).
 - Migration: standing already rolled stays.
 - Revisit if: the owner prefers another option.
+
+### DL-12-108: One owner per question, ch.12's side; odds labels in plain words (revision R2-K; T1; owner approval 2026-10-09)
+- Owner ruling (2026-10-09): "1 is good."
+- Decision: [revision: R2-K] 12.6.1, T-12-4 (two new rows: a target's will or ability goes to willingness or the record; a hook's terms to its making; the Oracle row narrowed to open questions about the world), PR-12-1 T4, 12.15.2 (a lever or snag is named by the plain sentence written with its fact, never a slug), `pacing.yaml#dm_questions`. Ch.01's side is DL-01-41. *Retires:* `_KNOWS_Q` and the pre-frame fact questions about the target; slug labels (`turn.py:421`, `oof.py:234`).
+- Alternatives considered: keep the questions and check them against the record (rejected: two authorities for one question).
+- Evidence: research_notes/Playtest round 2 solutions/R7-I3 §1-2; R7-I2 §7 B.
+- Serves: goal 2; constitution VIII.1.
+- Migration: none.
+- Revisit if: a playtest or made-up case shows an OFFER term or a narration line built from an Oracle answer about the beat's target, or a slug in a Chance line.
+
+### DL-12-109: A hook's terms are written when it is made; everything else is testimony, with four guards (revision R2-K; T2; owner approval 2026-10-09)
+- Owner ruling (2026-10-09): "It feels like potentially we could just let the LLM have people make up the amount, who posted it, where he was seen, etc. if it's not decided by a pre-existing fact, unless you think that could cause problems or something, in which case your solution seems good." Then, after the research: "I approve everything else you said."
+- Decision: [revision: R2-K] 11.5.6 and PR-11-5: making a hook (a lead, a notice, an offer, an incident) also decides in code its pay (`economy.yaml#job_fees`, 08.8.8; economy AI-6), destination, issuer and people, written as unsealed knowledge on the cards of those who would know. Everything else is improvised in character as testimony (PR-12-12). Guards (PR-12-12, `pacing.yaml#testimony.guards`): a speaker sees what others said on the topic; a price spoken outside a hook settles from the price band (08.8.2); a place first heard in speech becomes a real site when the PC travels there; a what, where or how-much claim is never settled by a yes/no Oracle. 12.16.16 and T-12-4 point here. *Retires:* hooks with no terms, Oracle booleans for content, and yes/no answers to what, where and how much.
+- Alternatives considered: let characters improvise everything, including the pay (the owner's first idea; rejected after the research: narrated money then spent, and contradictions between speakers, are the known failure modes, and coin may not enter from narration, AI-6); write every detail at creation (rejected: heavy, and still incomplete).
+- Evidence: research_notes/Playtest round 2 solutions/ROUND7-ANALYSIS §2 T2 and §6 (T2 research); round7-investigation/R7-R1-improvised-details.md (Option 2); R7-I2 §1, §3-5, §7 A.
+- Serves: goal 1 (people have something to say); goal 2 (money and destinations exact); constitution VIII.1 and VIII.3.
+- Migration: none for saves; existing hooks get terms when next activated.
+- Revisit if: a playtest or made-up case shows a hook question (pay, place, issuer, who) answered by a dodge or a coin flip, two speakers contradicting a written term, or a spoken price paid outside its band.
+
+### DL-12-110: The Director may cast a description present in the scene (revision R2-K; T2; owner approval 2026-10-09)
+- Owner ruling (2026-10-09): "It feels like potentially we could just let the LLM have people make up the amount, who posted it, where he was seen, etc. if it's not decided by a pre-existing fact, unless you think that could cause problems or something, in which case your solution seems good." (the T2 split as approved).
+- Decision: [revision: R2-K] 12.2.4's Director row: for a stated purpose ("the carters", "the refugees" the lead promised), the Director casts an unnamed description present in the scene (01.2.7's description: no group entity; an individual only when one is addressed or a clue needs one). *Retires:* random walk-ons for a stated purpose (`director.py:120`).
+- Alternatives considered: cast a named individual every time (rejected: the people the lead names are a group).
+- Evidence: research_notes/Playtest round 2 solutions/R7-I2 §4 and §7 C (the refugees and the carters never appeared).
+- Serves: goal 1; P16.
+- Migration: none.
+- Revisit if: a lead or a player's stated purpose names a group that the Director cannot bring into the scene in a playtest or made-up case.
+
+### DL-12-111: Revisit notes acted on in R2-K (revision R2-K; process)
+- Owner ruling (2026-10-09): "every fix must also pass made up cases, including cases specifically design to test edge cases. Revisit the revisit notes too."
+- Decision: [revision: R2-K] Recorded revisit conditions met by round 7 are acted on here: DL-12-99 (scenery repetition persisted; acted on by DL-12-113, which by owner ruling takes the opposite of the recorded "feed back already said" option), DL-01-36 (an already-true change rolled; DL-01-45), DL-12-105 (fewer than 12 of 15 right on held-out complaints: 4 of 7; DL-12-116, DL-12-117), DL-12-90 (runarounds returned: Morga, Roswen, Morga; DL-12-118, DL-12-119). Each of those entries carries a `Revisited` line. The project-wide rule is DL-00-08.
+- Alternatives considered: leave the older entries as written (rejected: H1 found two met conditions nobody acted on).
+- Evidence: research_notes/Playtest round 2 solutions/ROUND7-ANALYSIS §6; R7-H1 (DL-12-99 and handoff §4 met, not acted on); R7-H2 T6, T7.
+- Serves: constitution VIII.7 (diagnose from evidence).
+- Migration: none.
+- Revisit if: a later round finds a met revisit condition that no wave acted on.
+
+### DL-12-112: A question to a clue holder is judged by meaning, by one small model call; code delivers the clue (revision R2-K; D2 A; owner approval 2026-10-09)
+- Owner ruling (2026-10-09): "Yup, I approve of A for both of these."
+- Decision: [revision: R2-K] 12.10.8 item 1 and PR-12-10 step 1: when the asked NPC holds an unfound placement, one small model call reads the question and the exchange beside the placement's plain-words `about` line (PR-15-6) and answers "is this question about what this person holds?"; yes routes it to the case graph and code hands the clue to the narrator to deliver, so the secret stays in code; uncertain → yes (P16). `pacing.yaml#answer_ladder.clue_judgment`. Ch.15's side is DL-15-40. *Retires:* word-overlap case routing (`case_about`).
+- Alternatives considered: (B) the clue sits on the holder's card and the narrator reveals it when it fits (rejected by the owner's choice of A: the secret would leave code); (C) tightened word matching (rejected: 0 of 38).
+- Evidence: research_notes/Playtest round 2 solutions/ROUND7-ANALYSIS §5 D2; R7-I2 §7 E (0 clues delivered in 38 questions; "signed" matched "a sign of the rite").
+- Serves: goal 1 (mysteries move); goal 2 (clues stay strict, INV-10).
+- Migration: placements without an `about` line use their content's topic until regenerated.
+- Revisit if: on the made-up clue-question set (paraphrases, indirect asks, near misses) the judgment's precision or recall falls below 0.9, or a sealed string reaches the narrator through it.
+
+### DL-12-113: Texture is background: no push, no usage tracking, no gates (revision R2-K; T3; owner ruling 2026-10-09)
+- Owner ruling (2026-10-09): "If it wants to mention the look or habit more than once, and it's aware that it already used it, then I think it's fine if it uses it more than once. I don't think we should prevent it or encourage it."
+- Decision: [revision: R2-K] 12.11.3 (a habit is background, never must-use, worded as occasional), 12.11.9 step 4 (a refusal never requires the habit), 12.14.11 (rewritten: freshness is the narrator's judgment from the conversation it sees; no usage marks, no freshness block quoting images or openings back; a repetition scan is logged as a measure only), 12.2.4 (profiles without usage marks; looks not repeated on every `present:` line), 00.6.6a item 5, PR-12-1 T12, `oracles.yaml#tbl.npc_voice_habit` (rows worded "now and then"), `pacing.yaml` (`habit_max_per_scene` and the marks marked retired). Supersedes DL-12-76 in part. The analysis's "offer once per scene, tracked by code" is not adopted: the owner ruled against tracking. *Retires:* the habit exemption as a forced callback, the raw voice and detail push, the habit inside refusal lines, the once-per-scene cap, and `last_used` marks.
+- Alternatives considered: offer each look and habit once per scene and mark it used (the analysis's fix; rejected by the owner's ruling); keep the marks and populate them for looks (rejected: tracking).
+- Evidence: research_notes/Playtest round 2 solutions/R7-H1 (the marks fired 0 times; the habit exemption; the refusal line requires the habit); R7-I1 §1 (the habit in 42 of 44 packets; 16 of 21 speaking turns).
+- Serves: goal 1 (fresh prose); constitution VIII.1, VIII.5.
+- Migration: none.
+- Revisit if: measured with the full conversation in view (the logged scan), a person's look or habit recurs in more than 1 of 3 of that person's speaking turns across a playtest round, or players report it.
+
+### DL-12-114: No code-written narrative sentences; templates use real pronouns (revision R2-K; T3; owner approval 2026-10-09)
+- Owner ruling (2026-10-09): "If it wants to mention the look or habit more than once, and it's aware that it already used it, then I think it's fine if it uses it more than once. I don't think we should prevent it or encourage it."
+- Decision: [revision: R2-K] 12.16.16 (the incident's reporter, place and subject, each lead and notice, and a faction's name and role are data the narrator may use, never a code sentence such as "X brought the word" or a verbatim label to repeat) and 12.11.1 (code-written text about an NPC uses their stored pronouns, never "call them" or "their morning work" for a person whose pronouns are known). *Retires:* `incident_line` in every SCENE SETTING, verbatim faction labels, and pronoun-neutral template strings.
+- Alternatives considered: keep the line and show it only when relevant (rejected: it is still a code sentence to repeat).
+- Evidence: research_notes/Playtest round 2 solutions/R7-I1 §1, §5; R7-I2 §2, §5, §7 D, G ("brought the word" in 44 of 44 packets; the sellsword's they-drift).
+- Serves: goal 1; constitution VIII.1.
+- Migration: none.
+- Revisit if: a code-written sentence or label shows up verbatim in narration in a playtest, or a pronoun-neutral template is found for a person with stored pronouns.
+
+### DL-12-115: A paused beat is unresolved in the narrator's record (revision R2-K; T4; owner approval 2026-10-09)
+- Owner ruling (2026-10-09): "4 seems good."
+- Decision: [revision: R2-K] 12.2.6, 12.14.12 item 1 and PR-12-2 step 1: a beat paused before its outcome (an OFFER, a near-miss choice, a redirect) carries no degree, no "near miss" and no result words in the narrator's record; the narration stops at the moment before it, and the outcome is written after the choice by the effective degree (DL-01-48).
+- Alternatives considered: show the raw result and tell the narrator not to resolve it (rejected: the record contradicted itself in round 7).
+- Evidence: research_notes/Playtest round 2 solutions/R7-I1 §3 (talker turn 12: "result: failure, a near miss" before the choice).
+- Serves: goal 2; the player's choice is real.
+- Migration: none.
+- Revisit if: narration at a pause states or implies the outcome in a playtest or made-up case.
+
+### DL-12-116: `/fix` sees what the play roles see (revision R2-K; T7; owner approval 2026-10-09)
+- Owner ruling (2026-10-09): "the goal was to make slash fix work just like you… you seem to figure out what the problem is, and it seems like you're able to to potentially revert it if necessary."
+- Decision: [revision: R2-K] 12.2.4's Fixer row and PR-12-11 step 2: one shared people card (role, licences and competences, stance, standing, bonds; the card the play roles read), facts in plain words, that turn's model inputs and outputs, and a short mechanics digest (holds are conditions; labels are never penalties; refusals are never facts; Stagger; a capability on the sheet outranks an Oracle fact). Revisits DL-12-105, whose condition was met (4 of 7 right on held-out complaints). *Retires:* an entity tool that hid role and licences, and scoring on the tuning set.
+- Alternatives considered: add fields to the entity tool one complaint at a time (rejected: the shared card removes the gap for every role at once).
+- Evidence: research_notes/Playtest round 2 solutions/R7-I3 §3; R7-H2 T7 (Belie's licence invisible; 10/3/2 on the tuning set, 4/1/2 of 7 held out).
+- Serves: constitution VIII.8.
+- Migration: none.
+- Revisit if: on fresh held-out real complaints, fewer than 5 of 7 are repaired right and visibly, or a repair hinges on a field the Fixer could not see.
+
+### DL-12-117: `/fix` dry-runs, re-frames an open OFFER, takes back an unrolled turn, checks the screen, and iterates within its budget; code guards only the spine (revision R2-K; T7; owner approval 2026-10-09)
+- Owner ruling (2026-10-09): "the goal was to make slash fix work just like you… you seem to figure out what the problem is, and it seems like you're able to to potentially revert it if necessary."
+- Decision: [revision: R2-K] PR-12-11 steps 3, 4 and 6, 12.3.6 item 4, 12.5.8 item 1, `pacing.yaml#feedback.investigate`: proposals add `reframe` (gate, necessity and frame re-run with the correction on an OFFER still on screen) and taking back an unrolled pending turn; any proposal can be dry-run on a copy of the snapshot and its result inspected first; before replying the Fixer checks the screen the player will see and iterates within `max_steps`; code validates only the spine (no conjured coin, sealed stays sealed, mechanical changes need evidence: INV-9, INV-10). Scored on fresh, held-out real complaints including open OFFERs, by a scorer that checks the repaired screen. *Retires:* `rerender`, "explain only" at an open OFFER (since spec 014), and outcome-class scoring.
+- Alternatives considered: keep explain-only at an open OFFER and let the player withdraw (rejected: the broken OFFER is shown again).
+- Evidence: research_notes/Playtest round 2 solutions/R7-I3 §3 (no proposal could re-frame a pending OFFER; rerender scans only committed frames); R7-H2 T7.
+- Serves: constitution VIII.8.
+- Migration: none.
+- Revisit if: a complaint at an open OFFER is answered without a re-framed OFFER, or a repaired screen still shows the complaint, in the held-out scoring.
+
+### DL-12-118: Willingness holds for the scene and changes only on an event (revision R2-K; D3 A; owner approval 2026-10-09)
+- Owner ruling (2026-10-09): "Yup, I approve of A for both of these."
+- Decision: [revision: R2-K] PR-12-10 step 2, 12.10.8 item 2, 12.11.9 step 3, `pacing.yaml#answer_ladder.willingness_holds`: the band is decided when the conversation with that NPC starts in the scene and held; it changes only on a payment, a threat, an insult, or a won persuasion (by the effective degree). A recorded refusal whose tags match a topic still refuses that topic. Revisits DL-12-90 (runarounds returned). *Retires:* per-topic willingness re-rolls.
+- Alternatives considered: (B) re-roll per topic, as before; (C) per topic with a pointer.
+- Evidence: research_notes/Playtest round 2 solutions/ROUND7-ANALYSIS §5 D3; R7-I2 §7 (the sellsword refused at turn 10 and answered in full at turn 11).
+- Serves: goal 1 (people feel consistent).
+- Migration: a conversation in progress keeps its last band.
+- Revisit if: players report a wall that never moves after a payment, threat or won persuasion, or a band changes with no listed event in a playtest or made-up case.
+
+### DL-12-119: A refusal points to someone new who would know; willingness never overrides clue rules (revision R2-K; D3 A; owner approval 2026-10-09)
+- Owner ruling (2026-10-09): "Yup, I approve of A for both of these."
+- Decision: [revision: R2-K] PR-12-10 step 2, 12.10.8, 12.11.4, 12.11.9 step 4, `pacing.yaml#answer_ladder.refusal_pointer`: code gives an unwilling answer one pointer, the holder of a live placement on the topic, else a cast person whose role knows it, never someone who already refused the PC on it; the narrator voices it. This narrows 12.10.8's "never a code pointer" to refusals. A band never blocks a delivery 15.9.5 allows; only a recorded refusal that covers telling does.
+- Alternatives considered: leave the redirect to the narrator (rejected: Morga, Roswen, Morga).
+- Evidence: research_notes/Playtest round 2 solutions/R7-I2 §1c and §7 (the redirect loop); ROUND7-ANALYSIS §5 D3 (C's pointer kept with A).
+- Serves: goal 1; P16.
+- Migration: none.
+- Revisit if: a refusal points back to someone who already refused, or a reachable core clue is withheld by a rolled band, in a playtest or made-up case.
+
+### DL-12-120: No willingness line on a plain greeting or thanks (revision R2-K; P3; owner approval 2026-10-09)
+- Owner ruling (2026-10-09): Owner approval 2026-10-09 (ROUND7-PLAN §Owner rulings records the approval; there is no direct quote).
+- Decision: [revision: R2-K] PR-12-10 step 3, 12.11.9 step 3, `pacing.yaml#answer_ladder.willingness_line_never_on`: plain speech that asks nothing (a greeting, thanks) gets no willingness line on the speaker card.
+- Alternatives considered: none considered; a spec-021 hand-off still live.
+- Evidence: research_notes/Playtest round 2 solutions/ROUND7-ANALYSIS §3 P3; R7-I2 (no willingness line without a question part).
+- Serves: goal 1.
+- Migration: none.
+- Revisit if: a greeting or thanks produces a refusal or a guarded tone with no cause in a playtest.
+
+### DL-12-121: OFFER wording: no "+0" or generic "practised"; Safe frames say what failing badly costs; Limited reach only with a cited factor (revision R2-K; P2; owner approval 2026-10-09)
+- Owner ruling (2026-10-09): Owner approval 2026-10-09 (ROUND7-PLAN §Owner rulings records the approval; there is no direct quote).
+- Decision: [revision: R2-K] 12.15.2 (Chance terms in plain words, no term worth 0, competence by its tag; If it works names Limited's cited factor; on a Safe frame If it fails says a plain failure costs nothing and states failing badly's cost and chance) and 01.6.10 (decision 1's tie-break is now Standard: Limited needs a cited factor). *Retires:* the "a smaller part of it (…)" template and Limited by default.
+- Alternatives considered: keep Limited as the tie-break (rejected: it shrank asks with no reason shown, including Morga's agreement).
+- Evidence: research_notes/Playtest round 2 solutions/ROUND7-ANALYSIS §3 P2; R7-I3 §5-6.
+- Serves: goal 1 (the OFFER explains itself); 01.7.1.
+- Migration: none.
+- Revisit if: an OFFER in a playtest shows a 0 term, a generic "practised", or Limited reach without its factor.
 
 ## DL-13 — The Starter Setting: the Thallen March
 
@@ -4020,6 +4232,33 @@ chapter 06's fight model and T-06-12 lines), output `07-harm-sim-output.txt`, wr
 - Migration: none.
 - Revisit if: talker personas report Standard Talks as stingy compared with Observe.
 - Superseded in part [revision: R2-H] (DL-12-90): each landed question is answered by PR-12-10 without ladder depth: by the case graph when consequential, else in the NPC's own words within the willingness code sets; Great still adds one volunteered extra.
+
+### DL-15-40: Whether a question reaches a person's placement is judged by meaning; placements carry an `about` line (revision R2-K; D2 A; owner approval 2026-10-09)
+- Owner ruling (2026-10-09): "Yup, I approve of A for both of these."
+- Decision: [revision: R2-K] 15.9.5 decision 1 (for a person holder asked a question, ABOUT is one small model call over the question and the placement's `about` line, never shared words; yes → code hands the clue to the narrator) and PR-15-6 step 3 (each person placement gets a plain-words `about` line; `investigation.yaml` placement field). Ch.12's side is DL-12-112.
+- Alternatives considered: as DL-12-112.
+- Evidence: research_notes/Playtest round 2 solutions/R7-I2 §7 E.
+- Serves: goal 1; INV-10.
+- Migration: as DL-12-112.
+- Revisit if: as DL-12-112.
+
+### DL-15-41: Certain talk keys on the typed `persuade_to` goal, not the verb label (revision R2-K; T5; owner approval 2026-10-09)
+- Owner ruling (2026-10-09): Owner approval 2026-10-09 (ROUND7-PLAN §Owner rulings records the approval; there is no direct quote).
+- Decision: [revision: R2-K] 15.3.10: a social beat is any beat whose typed goal is `persuade_to`, whatever its verb label (Talk, Help or another); the certainty test runs on it. *Retires:* `certain_talk` keyed on `verb.talk`.
+- Alternatives considered: keep the verb key and fix the Reader's labels (rejected: the next label slip repeats it).
+- Evidence: research_notes/Playtest round 2 solutions/R7-H2 T6 (Morga's ask typed `verb.help`; `certain_talk` never ran).
+- Serves: goal 1; DL-01-43.
+- Migration: none.
+- Revisit if: a `persuade_to` beat under another verb label skips 15.3.10 in a playtest or made-up case.
+
+### DL-15-42: A deal carries a typed price (revision R2-K; T2; owner approval 2026-10-09)
+- Owner ruling (2026-10-09): "It feels like potentially we could just let the LLM have people make up the amount, who posted it, where he was seen, etc. if it's not decided by a pre-existing fact, unless you think that could cause problems or something, in which case your solution seems good." (the T2 split as approved).
+- Decision: [revision: R2-K] 15.7.1 item 3: an agreed deal writes a price record {payer, payee, kind, amount, due}; paying it is a typed change (a quantity or possession write, 01.11.2); a price left in words takes the request's price (15.3.2). *Retires:* the regex price parsed from Framer prose.
+- Alternatives considered: parse the price from speech (rejected: "worth your while" was never priced or charged).
+- Evidence: research_notes/Playtest round 2 solutions/R7-I2 §3.
+- Serves: goal 2 (coin exact; AI-6).
+- Migration: none.
+- Revisit if: a deal in a playtest is agreed with no price record, or a payment is narrated but not written.
 
 ## DL-16 — Companions and Allies
 

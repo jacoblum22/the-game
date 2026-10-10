@@ -304,7 +304,11 @@ setup:             # 01.14.9
   critical_failure: "target forewarned: a snag fact on the intended follow-up"
   duration: {conflict: "until used or end of the setter's next turn", outside: "until used or scene_end"}
   condition_knob: [cond.distracted, cond.off_balance, cond.exposed, cond.blinded]
-take_the_time:     # 01.4.4; DL-01-09
+take_the_time:     # 01.4.4; DL-01-09; [revision: R2-K] [DL-01-44]: computed by code on the typed frame, every verb
+  not_costly_when: [stakes_source_none, no_sourced_threatened_cost, no_clock_listening, not_conflict, retry_at_leisure]
+  stakes_check: "a frame naming a sourced cost or a listening clock is costly whatever stakes.source says (logged)"
+  time_charged: advance_time            # the RESULT says how long; never 'hidden check made'
+  fallback: same_test_on_own_scope      # provisional (DL-01-46); tier read after the fallback's shift
   time_multiplier: 2
   forbidden_tiers: [very_hard, legendary]
   requires: "uncertain and not costly"
@@ -319,6 +323,7 @@ auto_commit:       # 01.7.4 [revision: R2-C; DL-01-32, D7 assumed, owner to conf
   default: true     # a creation-time preference (T-14-1); the player may turn it off
   allowed_when: [stakes_safe, not_lethal, not_secret, no_mode_price, not_long_shot, success_or_better_at_least_50]
   never: [risky, dire, lethal]
+  only_when_costly: true           # [revision: R2-K] [DL-01-47]: a Safe frame that is not costly takes the time and never reaches an OFFER
 
 frame_guards:      # [revision: R2-C; DL-01-29] 00.3.9(b), 01.6.8, 01.6.13
   cited_precision_snags_max: 1     # a further fitting hindering fact applies as a Protective snag (stakes +1)
@@ -383,6 +388,8 @@ intended_change:   # 01.2.7 [revision: R2-H] [DL-01-34]: each beat's typed inten
   descriptions: "a whom/what slot may hold an unnamed description of people or things present ('the refugees', 'the queue'): the change is a scene fact about it, the narrator voices whoever speaks; no group entity, no spokesperson; consequential -> the case or casting picks an individual (01.2.7)"   # [revision: R2-I] [DL-12-97]
   before_framing:                    # 01.2.7 step 1 [revision: R2-I] [DL-01-36]
     already_true: certain            # the change already holds in the store: no roll, no OFFER (01.4.1: trivial)
+    already_true_judged_on: typed_goal   # [revision: R2-K] [DL-01-45]: agreed {person, act, size}; same or smaller contained act -> already true; a roll never shrinks an agreement; word overlap retired
+    rolled_beat_needs_goal: true     # [revision: R2-K] [DL-01-42]: `none` only on beats that do not roll
     no_valid_target: [description, ask_who]
     rule: "never offer a roll whose success has nothing to deliver"
   slot_ids: in_scope                 # ids from the Reader's view (scene and spotlight entities) or a place the PC knows

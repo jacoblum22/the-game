@@ -259,10 +259,15 @@ holds a clue) do the case and casting pick an individual (12.14.13).
    ids in scope. A message with two goals is two beats; a method in service of a goal is not a change of its own (01.2.2)
    [revision: R2-J; DL-01-37]. **Before framing** `[D]` [revision: R2-I;
    DL-01-36]: a change **already true** in the store (the actor already holds the item; `npc.<id>.agreed` already
-   holds the same act; the door is already open; the actor is already beside the target) is certain: no roll and no
+   holds the same act, or a larger act that contains it (judged on the typed goal, 01.4.1) [revision: R2-K; DL-01-45]; the door is already open; the actor is already beside the target) is certain: no roll and no
    OFFER, the beat narrated as already so (01.4.1). A change with **no valid target** is settled before anything is
    framed: by a description (above), else by asking "who?" (01.2.5's clarifying question). A roll is never offered
-   whose success would have nothing to deliver.
+   whose success would have nothing to deliver. **Every rolled beat carries a typed goal** [revision: R2-K;
+   DL-01-42]: `none` is only for a beat that does not roll (Ready, a free activity); a Help beat carries the helped
+   beat's goal, and a look around is `learn` on the place. A beat whose goal cannot be typed is folded into the goal it
+   serves (01.2.2) or clarified (01.2.4), never framed as `none`. *Retires:* rolled `change: none` (round 7, I3 §5: 3 of
+   7 rolled OFFERs had no goal, so the title came from a description, no `Now:` was shown, and the near miss was priced
+   with the goal's own refusal).
 2. **Apply on success** `[D]` at RECORD (PR-01-3 step 5); **reach scales it** (`intended_change.reach`): delivered
    reach 1 gives the partial form (`take`: a hand on it, still contested; `move_to`: part of the way, one band in a conflict;
    `persuade_to`: a smaller act; `restrain`: a grip; `learn`: 01.10's count), reach 2 or more the whole change, and
@@ -301,7 +306,8 @@ Decisions (J):      1. Gate class [J:enum], first match wins (the test order is 
                        G0 Question — true only when the player asks about the world or the character's
                           knowledge and describes no act (out-of-fiction questions included). False when
                           any observable act is described (then the act is gated and any embedded
-                          unknown fact is queued to the Oracle).
+                          unknown fact is queued to the Oracle, unless it is about
+                          the beat's own target or a person present: 01.15.1 [revision: R2-K; DL-01-41]).
                        G4 Impossible — true only when one of the four G4 tests (01.3.7) holds.
                        G1 Basic — true only when the method is within the `covers` list of one of the
                           fifteen verbs in data/basic_verbs.yaml AND not within that verb's `excludes`
@@ -340,10 +346,16 @@ Anchor:             no
 Basis:              [C:VII] [R7 §4.0 step 2, §4.4] [R4 SG-05, SG-07] [R1 01.B] [00.12.2–00.12.3]
 ```
 **Computed, not proposed** [revision: R2-C] [DL-01-30]. The engine runs the tests above as a pure function of the
-beat's verb, method facets and target (12.2.2), the actor's held licenses, the verb's `excludes`, active
+beat's typed goal, its verb and every method facet the goal relies on, and its target (12.2.2) [revision: R2-K], the actor's held licenses, the verb's `excludes`, active
 conditions and any cited G4 fact (00.12.3). No role proposes the gate class or the license; a sheet knack is an
 edge, never a gate. The judgment left is PARSE's verb and facets, whose worst case is the wrong card,
 named in the OFFER and changed for free (class ii).
+**Gates key on the goal and its method** [revision: R2-K; DL-01-43]: the tests run on the typed goal (01.2.7) and on
+every method that goal relies on, not on the verb label. Reading writing meets Letters (02.4.6) whether the player
+phrased it as a look or inside a Talk ("I read the list over his shoulder and ask him the name"); a method folded
+into a goal (01.2.2) is still gated as itself. Every other check keyed on what is being done reads the same pair: a
+secret frame (01.4.7), certain talk (15.3.10), the OFFER title (12.15.2). *Retires:* verb-only gate keys (round 7, I3
+§7: the list read inside a Talk beat met no gate, and the fighter stole it before learning he could not read).
 
 **01.3.2 What counts as a license.** `[D]` [DL-00A-19; C:V; revision: I-065] A license is any held entry of the 00.12.1 schema: an
 ability (`ab.*`), a spell, a calling capability, a training license (`lic.training.*`), a language
@@ -393,7 +405,7 @@ each is shown in the OFFER with its price.
 |---|---|---|---|
 | **stretch** | a holder of license L | (a) L's `stretch` is not null; (b) `[J:flag]` *"Does the new use perform the same operation that L's `principle` sentence names, only on a different target, scale or form?"* — true only when the principle's verb and its object category both still apply (a principle "push metal away from you" stretches to pushing a metal door; not to pulling, not to pushing wood); (c) the stretched use grants none of the seven sensitive upgrades (01.3.3) that L's scope does not already grant | DC + `stretch.dc_shift` (shown as its own line); Focus + `stretch.cost_add`; reach capped at `stretch.reach_cap` |
 | **emulate** | a holder of a *domain* license D | (a) D's `emulate` is not null; (b) the technique is in `emulate.allowed_for`; (c) a fact records that the actor *witnessed* the technique (00.12.4); (d) the actor does not already hold it | DC + `emulate.dc_shift`; Focus × `emulate.cost_mult`; reach capped at `emulate.reach_cap`; on a critical failure `emulate.crit_fail` applies in place of the READ cost when it is worse; success ticks `emulate.learn_clock` by delivered reach and grants nothing else (INV-7) |
-| **crude fallback** | anyone, on a G3 beat | the license that would cover the beat has `crude_fallback` not `none`, and the player accepts it at OFFER | a new frame on the fallback verb; DC = that verb's DC for this obstacle (01.6.4) + `dc_shift` (0, 5 or 10, shown as "improvised +N"); reach capped at `reach_cap`; the listed `consequence` (e.g. `trait.sense.loud`) becomes a method consequence |
+| **crude fallback** | anyone, on a G3 beat | the license that would cover the beat has `crude_fallback` not `none`, and the player accepts it at OFFER | a new frame on the fallback verb and on **the fallback's own scope** (what it can reach: "pick out the numbers", not "read the list"), never the whole intent re-framed with the shift on top [revision: R2-K; DL-01-43]; DC = that verb's DC for this obstacle (01.6.4) + `dc_shift` (0, 5 or 10, shown as "improvised +N"); reach capped at `reach_cap`; the listed `consequence` (e.g. `trait.sense.loud`) becomes a method consequence |
 
 Tie-break for stretch (b) and emulate (c): false (SG-05, "does this grant something? → no"). A license
 entry missing one of these fields reads as `stretch: null`, `emulate: null`, `crude_fallback: none`, and
@@ -533,7 +545,14 @@ Decisions (J):      1. UNCERTAIN [J:flag]: "Given the established facts, could t
                     Tie-break for 1 and 2: TRUE (roll). Tie-break for 3: FALSE (roll).
 Computation [D]:    necessity.{roll, reason}; reason ∈ uncertain_and_costly | riding | trivial |
                     good_idea | impossible | take_the_time | certain_with_cost; a Talk beat whose computed
-                    social DC is certain (15.3.10) does not roll [revision: R2-C]
+                    social DC is certain (15.3.10) does not roll [revision: R2-C].
+                    COSTLY is computed by code on the typed frame, after framing, for every
+                    verb [revision: R2-K; DL-01-44]: no stakes source (01.6.9), no threatened cost
+                    with a source, no clock listening to the beat or to time, outside a conflict,
+                    and a failure that can be retried at leisure -> not costly: reason
+                    take_the_time (01.4.4). Code checks `stakes.source: none` against the frame's
+                    own costs: a frame naming a sourced cost or a listening clock is costly
+                    whatever its source field says (the disagreement is logged).
 Stakes:             —
 State writes:       frame.necessity
 Narration may not imply: success that the pipeline did not produce
@@ -561,7 +580,12 @@ The no-roll classes are closed: **trivial** (01.4.1 decision 1 false), **free ac
 
 **Already true, and approaching** [revision: R2-I; DL-01-36; DL-12-98]: two everyday readings of decision 1, not new
 classes. A beat whose typed change (01.2.7) is **already true** in the store cannot fail: it is `trivial`, with no
-roll and no OFFER (persuading someone whose `agreed` fact already holds the same request). **Approaching** someone or
+roll and no OFFER (persuading someone whose `agreed` fact already holds the same request). **Judged on the typed goal**
+[revision: R2-K; DL-01-45]: an `agreed` record holds the person, the act and its size; a new `persuade_to` with the
+same person whose act is the same as, or smaller than and contained in, an act on record is already true, and a roll
+never replaces or shrinks an agreement on record. *Retires:* the two-way 60% word overlap (round 7, H2: Morga had
+agreed to let Haley hear the refugees; the narrower ask "sit and listen" rolled, and its limited success shrank the
+agreement). **Approaching** someone or
 something present in the scene, outside a conflict, is Move / open ground: one beat, no roll, no band-by-band steps,
 ending beside it (T-12-18), unless something obstructs it (an obstacle on the way, or a hostile watcher who would act
 on it, decision 2); then it is framed like any Move. Range bands are tracked step by step only in a conflict (ch.06).
@@ -638,7 +662,13 @@ duration; travel: 2 watches; downtime: twice the listed days; conflict: never ap
 conflict is always costly). Time passes through `advance_time`, so every boundary runs (INV-15) — which
 is exactly how "taking the time" can become costly (an encounter check fires). An obstacle whose tier is
 Very hard or Legendary cannot be taken with time: those rungs require a roll whenever attempted, because
-"experts often fail" is not a function of patience. [R: 5e "take 20" and PF2e "take your time"
+"experts often fail" is not a function of patience. **Decided on the typed frame** [revision: R2-K; DL-01-44]: code
+applies this after framing, for every verb, from 01.4.1's computed COSTLY; the time is charged through
+`advance_time`, and the RESULT says how long it took (never "hidden check made"); a beat on a secret frame is taken
+with time the same way. An **accepted fallback** (01.3.5) meets the same test on its own frame and scope, at its
+reach cap, with its tier read after its shift [provisional, DL-01-46]. *Retires:* rolling every gated beat (round
+7, H2: 3 of 7 OFFERs had nothing at stake, and 0 no-roll successes in 13 saves since spec 007); the verb- and
+case-specific carve-outs this one test covers; the forced roll on every accepted fallback (0c15da2). [R: 5e "take 20" and PF2e "take your time"
 lineage via R7 §2.8; DL-01-09]
 
 **01.4.5 Certain with cost.** `[D]` When the outcome is certain but a known, fixed cost attaches to the
@@ -664,7 +694,9 @@ Observe beat is always still available. Symmetrically, an NPC's notice is the DC
 
 ```
 Trigger [T]:        an Observe, Recall, or Talk-to-read beat whose target's existence, truth or nature
-                    is sealed or undetermined
+                    is sealed or undetermined; keyed on the typed goal (`learn` about such a
+                    target) and its method, not the verb label [revision: R2-K; DL-01-43]; a
+                    secret frame with nothing at stake is taken with time (01.4.4)
 Loads in:           investigation, social, exploration
 License check:      as gated
 Decisions (J):      1. [J:flag] "Would seeing the die, the DC or the odds tell the player something the
@@ -940,7 +972,8 @@ Decisions (J):      1. NAME THE FACT [J:flag] per candidate: "Is there a fact id
                        `said` record before it is settled never counts). A scene-state label is
                        never a lever or a snag: a posture, manner or activity (T-12-18; "straining
                        against you", "on guard", "sly", "works at her forge"); nor is a speaker's
-                       refusal or opinion, or a dispute's words. Where a condition stands behind a
+                       refusal or opinion, or a dispute's words; nor
+                       an Oracle answer (01.15.8) [revision: R2-K; DL-01-41]. Where a condition stands behind a
                        label (a hold, 06.5.2), the condition counts, through its own entry, once.
                        *Retires:* "every hindering fact is a snag" read over scene labels (round
                        6, I3 §4: "straining against you" was −2 on 12 of 26 fight frames) and
@@ -1048,7 +1081,9 @@ Decisions (J):      1. WHOLE [J:flag]: "Would this method, done well, achieve th
                        a total potency counts two, 01.3.7 test 3 [revision: I-073]).
                     GREAT is never picked: it is reached only by an Amplifying lever, a license or effect
                     step, or the OFFER trade (01.7.3).
-                    Tie-break for 1: false (LIMITED); for 2: true (LIMITED).
+                    Tie-break for 1: true (STANDARD): LIMITED needs a cited factor (an
+                    effect factor, a snag, a mode's reach cap, or a named part of the intent the
+                    method cannot reach) [revision: R2-K; DL-12-121]; for 2: true (LIMITED).
 Computation [D]:    reach rung after Amplifying levers/snags, effect steps (±2 cap from effects) and the
                     trade, clamped Limited…Great at framing; READ may deliver 0…4 (T-01-4).
 Stakes:             —
@@ -1177,7 +1212,10 @@ may revisit odds display and menus; DL-01-32) [revision: R2-G]; the player may t
 is S1), not lethal, not secret, not a long shot (01.6.13), carries no mode price (no fallback, stretch or
 emulate) and shows success-or-better ≥ 50% rolls without waiting (`offer.choice = auto`); the OFFER is
 still written to the log and shown with the result, labelled `[OFFER — auto]` (12.15.2). A Risky, Dire or
-lethal frame is never auto-committed (00.13.2); every other frame waits for an explicit commit.
+lethal frame is never auto-committed (00.13.2); every other frame waits for an explicit commit. **Only Safe
+frames that remain costly** [revision: R2-K; DL-01-47]: a Safe frame that is not costly never reaches an OFFER (take
+the time, 01.4.4), so auto-commit covers only Safe frames whose failure costs at most a nuisance but cannot be retried
+at leisure (a one-time chance, a contest).
 
 ### 01.8 ROLL — the degree
 
@@ -1316,7 +1354,16 @@ severity: S1 Safe, S2 Risky, S3 Dire), choosing between the threatened cost and 
 FRAME (01.6.11). A success-at-cost is a success for every downstream rule (evidence, generation,
 clocks) with degree recorded as `failure` and `success_at_cost_taken: true`; generators that key on
 degree treat it as `success`. The cost may never negate the success ("a consequence never negates a
-success") [R: https://bladesinthedark.com/consequences-harm; R7 §4.3]. On a Safe frame, taking the
+success"). **Generalised** [revision: R2-K;
+DL-01-43]: no price (the threatened cost, the alternate, or a method consequence) may reverse the typed goal against
+the same target ("he turns the round down" for a `persuade_to`; "she takes it back" for a `take`); code checks the
+price against the typed change, and FRAME names another. *Retires:* the guard that covered only holds (round 7, I3 §5).
+**The effective degree** [revision: R2-K; DL-01-48]: one function gives each beat's outcome, its degree except that a
+success at a cost taken counts as `success`, and every reader uses it: the NPC's response and willingness (12.11.9,
+PR-12-10), answers, scene state (T-12-18), evidence and generators. No reader checks the raw degree. A beat paused at
+this choice is unresolved: the narrator's record carries no degree and no "near miss" until the player chooses
+(12.2.6). *Retires:* degree-only checks (round 7, I1 §3: the talker paid for the round and the sellsword still turned
+it down) and "a near miss" narrated before the choice [R: https://bladesinthedark.com/consequences-harm; R7 §4.3]. On a Safe frame, taking the
 failure is always free; on a Risky or Dire frame, taking the failure costs the same severity as
 success-at-cost does, so the choice is *whether the attempt lands*, not how much it hurts.
 
@@ -1806,7 +1853,14 @@ by canon or scene logic**. It is asked for: G0 questions (01.3.8); facts embedde
 existence questions behind a search (sealed, 01.15.6). It is not asked for: established facts (never
 re-rolled); things somebody is actively attempting (a fortune check, 01.6.7); content choices a
 `roll_table` answers better (who answers the door, what the rumor says — ch.12's tables); anything the
-DM could decide "for drama" (SG-12). Test: *"Is there a fact id that answers it, or does canon/scene
+DM could decide "for drama" (SG-12). **One owner per question** [revision: R2-K; DL-01-41]: nor is it asked about
+the beat's own target or a person present. Whether they are willing is their willingness (12.11.9; PR-12-10 step 2);
+whether they can is their record (role, licences, competences; 12.11.1); whether they notice or resist is the roll
+itself (01.6.7); content nobody has written (what a job pays, where a thing is, who is involved) is its maker's
+(11.5.6, PR-15-6) or the speaker's testimony (PR-12-12). The Oracle answers only open questions about the world ("is
+it raining at the pass?", "is there a rope in the loft?"). *Retires:* pre-frame Oracle questions about the target
+and Oracle booleans standing in for content (round 7, I3 §1-2: all 4 such answers contradicted the record; Belie, a
+scribe holding Letters, was rolled unable to read). Test: *"Is there a fact id that answers it, or does canon/scene
 type settle it?"* True → no roll (Certain or Impossible, or read the fact). *Worst case (J):* a question that
 canon or the scene settles is rolled instead of read; its odds still come from the scene, so it departs from
 the settled answer only on a long-odds roll, and a contradiction with recorded canon is caught by the
@@ -1916,7 +1970,10 @@ is judged a re-ask and read from the existing answer (the player is told which f
 something else), or a rephrased re-ask is rolled while the engine still refuses an identical key
 (class iv). [integration: 00.2.3 audit] [R7 §6; 00.12.7]
 
-**01.15.8 Oracle facts and levers.** `[D]` [DL-01-26; DL-00A-10; revision: I-065] An Oracle answer to a question asked *before* a declaration
+**01.15.8 Oracle facts and levers.** `[D]` [DL-01-26; DL-00A-10; revision: I-065] **Never a snag** [revision: R2-K;
+DL-01-41]: an Oracle answer is never a snag, and its label in the OFFER is the plain sentence written with the answer
+("Magby is alert"), never a slug or a cut predicate (12.15.2). *Retires:* snags authored by a d100 and the garbled
+label ("is not not alert ... while h -2", round 7, I3 §1). An Oracle answer to a question asked *before* a declaration
 is an established fact and may be a lever for that declaration. An answer to a question *embedded in* a
 declaration may make the method possible (the rope exists, so the swing has something to swing on) but
 is not a lever for that same beat; it may be one from the next beat on (00.3.9a).

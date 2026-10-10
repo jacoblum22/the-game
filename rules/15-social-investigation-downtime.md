@@ -758,7 +758,9 @@ graph, any other in the NPC's own words within the willingness code set (12.10.8
 [revision: R2-H; DL-12-90]. One question is N = 1, so any success lands it; a certain beat or SPEECH runs at Standard. "Yes, as asked" above
 is the act asked; it never makes the NPC know more than their speaker card holds (PR-12-10 step 3).
 
-**15.3.10 When talk needs no roll.** `[D]` + `[J:flag]` [DL-15-33; DL-15-34; revision: I-065] A social beat is **certain** (01.4.1, no roll) when
+**15.3.10 When talk needs no roll.** `[D]` + `[J:flag]` [DL-15-33; DL-15-34; revision: I-065] A social beat (any beat whose typed goal is `persuade_to`, whatever its verb
+label: Talk, Help or another; 01.3.1, gates key on the goal and its method) [revision: R2-K; DL-15-41] is **certain**
+(01.4.1, no roll) when
 the request's **certainty size** is R1 and the NPC is Neutral or warmer, or the certainty size is at least
 **two rungs below** the ceiling (Warm: R1; Friendly: R1–R2; Devoted: R1–R3) — and no refusal covers it,
 and nothing in the scene would make granting it costly to them (`[J:flag]` *"Is there an established
@@ -1264,7 +1266,11 @@ characters do worst [R4 W4]:
 2. **The walk-away is the floor.** A payment can be haggled down (15.7.2) to **half the price** and no
    lower; an obligation's size cannot be argued below the rung it replaces. An offer below the floor is a
    refusal of the deal (patience −1).
-3. **Accepting the counter** applies the terms to the frame (15.3.5): the request then rolls at its
+3. **A deal carries a typed price** [revision: R2-K; DL-15-42]: once agreed, it writes a price record `{payer,
+   payee, kind (coin, item, service, obligation), amount, due}` beside the agreement; paying it is a typed change (a
+   quantity or possession write, 01.11.2), and a price left in words ("worth your while") takes the request's price
+   (15.3.2). *Retires:* the regex price parsed from the Framer's prose (round 7, I2 §3).
+   **Accepting the counter** applies the terms to the frame (15.3.5): the request then rolls at its
    effective size, or is certain (15.3.10). The NPC's acceptance of a deal is not itself the roll; the
    roll decides whether they *trust and agree* at the effective size.
 4. **A patron's job reverses the deal** [revision: I-091]: when the NPC (or 11's faction commission) asks the
@@ -1534,6 +1540,10 @@ Decisions (J):      1. REACHED [J:flag] "Is the PC at the holder (present with t
                        method kind (T-15-13)?" True only with the holder's id in the scene and a
                        matching method. Uncertain -> true (the tie-break that keeps the case moving;
                        P16).
+                    For a person holder asked a question, whether the question is ABOUT this
+                    placement is one small model call over the question and the placement's
+                    `about` line, never shared words (PR-12-10 step 1) [revision: R2-K;
+                    DL-15-40]; yes -> code hands the clue to the narrator to deliver.
                     2. For a person holder: the placement's request_size is within the person's ceiling
                        and no refusal covers telling (15.2.3); otherwise the clue is not core FOR THIS
                        ASK -- it is a request or an interrogation (15.8.4), and the other placements
@@ -2175,7 +2185,8 @@ for 02's lost bond and 07's curse lifts)
    contents; at least one set satisfiable without lore).
 3. **Placements**: for each necessary node, three or more, by `tbl.15.placement_holders` × the case's
    places and cast: at least two holder kinds, two methods, one core, two places; persons' `request_size`
-   by what telling costs them; rolled placements' `detect_tier` by how hidden. Each placement's
+   by what telling costs them, and a plain-words `about` line (what a question must be about to reach it), which
+   PR-12-10's judgment reads [revision: R2-K; DL-15-40]; rolled placements' `detect_tier` by how hidden. Each placement's
    `reveals_lead` links onward (the graph's edges). Two reserve placements per necessary node.
 4. **Entry**: at least one placement reachable from the case's starting place is core.
 5. **Fallback(s)** and the **opposition clock** with omens, each omen stage naming a placement.
