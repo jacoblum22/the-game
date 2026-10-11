@@ -664,7 +664,7 @@ def changed_line(state: WorldState, pc: str, events: Sequence[Any]) -> str:  # r
     for eid in others:
         name = _ent_name(state, eid) or (state.entities[eid].name if eid in state.entities and name_known(state, eid)
                                          else "your opponent")
-        parts.append(f"{name} {state_words(state, eid)}")
+        parts.append(f"{name} is {state_words(state, eid)}")  # [spec 032 P8b] "your opponent worn" had no verb
     return "Changed: " + " · ".join(parts) if parts else ""
 
 

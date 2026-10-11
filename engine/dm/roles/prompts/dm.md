@@ -21,8 +21,9 @@ Tools (each call is one object in `calls`; leave `calls` empty when you are done
   (`what` item id from `who`, default the character, to `to`), new_item (`what` a short name, held by `to`), condition_add / condition_remove (`who`,
   `what` condition id), npc_leaves (`who`, optional `to` place id), new_npc (`what` their role, e.g. "a ferryman"),
   travel (`to` a reachable place id), rest (`what`: breather, rest_short or rest_long), fact (`who` subject id,
-  `what` a short predicate, `note` the value), fight (`who` turns on the character; the blows are rolled, not
-  written). A person not on record who is named by what they are is put here for you. Code refuses only what the game can't hold and tells you why.
+  `what` a short predicate, `note` the value), fight (`who` turns on the character; `to` is how far apart you have put
+  them: engaged = within arm's reach or a weapon drawn, close, near = across a room, far = across a field, distant;
+  empty means near; the blows are rolled, not written). A person not on record who is named by what they are is put here for you. Code refuses only what the game can't hold and tells you why.
 - recall: search memory (past turns, what people said, what the character knows) for `query`.
 - reveal_clue: the player asks `npc` (an id) a question that may touch a mystery. Code says whether that person
   holds a clue about it, and if so gives the exact clue to deliver. Deliver it in their voice. Never invent clues.

@@ -177,3 +177,51 @@ The 12 cells of T-12-19 (3 moods x 4 costs): N1-N12, plus the 4 repeat-ask probe
 both arms. Measures: M1 grant rate by mood and cost, M2 ceiling violations (the pushover rate), M3 in-character
 refusals, M5 repeat caving, M8 voice distinctness, M10 leaks. The cost of each ask is **fixed by the cell** (not read
 from the DM's `asks`), so the ceiling log's weakness (the DM listing its own asks) cannot hide a violation.
+
+
+## P8b. Fights and costs (written BEFORE the fixes; the held-out set is spent and is not used here)
+
+Traced causes (from `heldout_run/heldout.json`, the P7 saves and a replay of H07 offline):
+(1) `code_framer` asked `schema_context` for the cost menu without `cost_menu_ids`, so in a scene with no scene facts the
+menu was `cost.twist` alone and every `propose_roll` was refused ("cost.twist only when no other entry is a candidate"):
+H07/H10/H11 had no roll, so no foe turn. (2) A fallback of `threatened[0]` of the first source = `cost.harm` (tie order)
+whenever the DM's `fail_cost` was not legal in any source: "you get hurt" for reading tracks (talker turn.9: the DM said
+`cost.time`, no clock existed). (3) `code_framer` never sets `trait.delivery.melee`, so a PC melee Strike writes no contact
+band (`_contact`): the seeded `near` stays and the foe's first acts are band moves. (4) `changed_line` writes
+"<name> <state>" with no verb ("your opponent worn"). Rule 06.3.9: the DM sets each participant's start band from the
+scene; unestablished is `near`.
+
+Data enumerated: foe action kinds (`foe_beat`): break free (held; miss / success / critical), stand (prone), move toward
+(band `close`/`near`/`far`/`distant` -> one nearer), close to `engaged`, strike (miss / hit / critical hit): 11 kinds.
+Starting ranges (`conflict.BANDS`): engaged, close, near, far, distant. Informational verbs (basic_verbs covers "search,
+study, listen, read", "common knowledge"): `verb.observe`, `verb.recall`. Cost ids (9): the DM's `fail_cost` enum.
+State words (`state_words`): fresh, worn, bloodied, staggered, down, dying, dead, "down and dying", "down, out cold".
+
+- **R1-R5 starting range (made-up).** `change fight who=<foe> to=<band>` for each of the 5 bands seeds exactly that band; the
+  first foe turn is a strike for `engaged`, "closes in, now at arm's reach" for `close`, "moves toward you" for the other three.
+- **R6 default.** `change fight` with no `to`: band `near` (06.3.9). **R7 edge.** `to` is not a band ("across the moon"): the fight
+  starts at `near`, the output says so, nothing is refused (no new block). **R8 edge.** `to` given for a foe already fighting:
+  the band is unchanged (06.3.9 is the start only). **R9 edge.** `to` is an id-like or capitalised word ("Close"): read as `close`.
+- **M1-M3 melee contact (made-up, the P7 fighter trace).** A PC `verb.strike` / `verb.grapple` / `verb.force` at a person in
+  the room with no range stated: after the roll the pair is `engaged`; the foe's first turn is a strike, never "moves toward you".
+- **M4 edge.** A strike after `change fight to=near` (a thrown knife across the room): no melee trait, the band stays `near`,
+  the foe's first turn is "moves toward you". **M5 edge.** A strike with the foe already `close`: melee, engaged after the roll.
+- **X1-X4 exchange endings (data: open pause stages offer, near_miss, go-big re-offer; settled).** With the OFFER open, with a near-miss
+  menu open, after `go_big` (the same offer shown again): zero foe turns and no time spent. The answer that settles the roll:
+  exactly one foe turn per foe (two foes: two turns, one each).
+- **K1-K11 every foe action kind.** One exchange each, state set by the case (hold, prone, each band, die forced): exactly one
+  foe turn, the words below. K1 held, fails to break free; K2 held, breaks free; K3 held, critical (tears free, PC off
+  balance); K4 prone, stands; K5-K8 `close`/`near`/`far`/`distant`: one band nearer (K5 reaches `engaged`: "closes in");
+  K9 engaged, misses; K10 hits (Vitality drops); K11 critical hit (one rung more). K12 edge: a downed foe gives no turn.
+- **C1-C9 a scene with no scene facts (the held-out refusal).** Strike at an engaged foe in a bare scene, one case per
+  `fail_cost` id (9): the roll is OFFERED (never "NOT POSSIBLE"), and the threatened cost is the DM's when legal there.
+  **C10 edge.** The refusal text, if a frame ever fails, never names `cost.twist` unless the twist is the DM's own choice.
+- **I1-I10 informational verbs.** `verb.observe` x 5 DM choices (none, harm, time, exposure, drain), `verb.recall` x 5: the framed
+  threatened cost is the DM's choice when legal in some source, else the first legal of the verb's list in the data, and
+  `cost.harm` only when the DM chose it AND it is legal; "you get hurt" never appears for a failed read when the DM chose
+  `cost.time`/`cost.exposure`/`cost.drain` or nothing. **I11 edge.** A listening clock exists (`cost.time` becomes legal): the
+  threatened cost is `cost.time`. **I12 edge.** No cost of the verb's list is legal and the DM asked for risky: the roll is
+  Safe (made at once, failure costs nothing), not harm.
+- **L1-L9 the Changed line.** For each state word, a hurt foe with a known name: "Changed: Milby is worn"; with an unknown name:
+  "your opponent is worn". **L10 edge.** The PC and the foe both lose Vitality in a beat: "Vitality 12 → 9 · bloodied · Milby is
+  worn". **L11 edge.** A foe that is dead / down and dying: "is dead", "is down and dying".
