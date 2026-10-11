@@ -14,7 +14,7 @@ from __future__ import annotations
 
 import re
 from collections.abc import Callable, Mapping, Sequence
-from typing import Any, Literal, Protocol
+from typing import Any, Literal, NamedTuple, Protocol
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -291,6 +291,14 @@ def _apply(menu_id: str, sev: str, write: str, entry: Mapping[str, Any], frame: 
                      "S3": ("condition", "damaged"), "S4": ("condition", "broken"),
                      "S5": ("exists", "destroyed")}[sev]
         return [_fact_ev(state, mint, item, pred, val, fid)], 0, None
+    if menu_id == "cost.footing" and p.get("stated"):  # rule: 01.13.7 [spec 033 DL-01-60]
+        # the form is the DM's pick after the roll, among the options that can land; code writes exactly that
+        # option, and without a pick defers the options (never reads a form from words)
+        foe = _footing_foe(state, frame)
+        shown = [o.id for o in footing_options(state, frame, sev)]
+        if form is None or form not in shown:
+            return [], 0, {"footing_options": shown, "severity": sev, "opponent": foe}
+        return footing_events(state, rules, mint, form, actor=actor, foe=foe, sev=sev, fid=fid), 0, None
     if menu_id == "cost.footing":  # rule: 01.13.7
         conds = re.findall(r"cond\.[a-z_]+", write)
         cond = form if form in conds else (conds[0] if conds and not form else None)
@@ -358,3 +366,117 @@ def _exposure(sev: str, entry: Mapping[str, Any], state: Any, rules: Any, mint: 
     if clock is not None:
         evs += _tick(state, rules, clock, "cost.exposure", sev, fid)
     return evs
+
+# ------------------------------------------------------------------------------------------- footing (stated)
+
+
+class FootingOption(NamedTuple):
+    id: str  # `off_balance`, `lose:flag.hidden`, `prone`, `grabbed`, `band_back`, `slide:<place id>`, ...
+    words: str  # what the DM is shown on the answer turn
+
+
+_FLAGS = ("flag.in_cover", "flag.elevated", "flag.hidden")
+_BAND_ORDER = ("engaged", "close", "near", "far", "distant")  # 06.3.2 (conflict.BANDS; not imported at top: no cycle)
+PENDING_FOOTING = "footing_pending"  # meta key: the deferred footing cost waiting for the DM's pick
+
+
+def _footing_foe(state: Any, frame: Frame) -> str | None:
+    """The opponent a hold needs (06.5.2): the defender or the beat's target when it is a person who can hold."""
+    foe = frame.defender or frame.beat.target
+    ent = state.entities.get(foe) if foe and foe != frame.beat.actor else None
+    return foe if ent is not None and ent.kind in ("npc", "adversary") else None
+
+
+def footing_options(state: Any, frame: Frame, sev: str) -> list[FootingOption]:  # rule: 01.13.7
+    """[spec 033 DL-01-60] The footing forms of severity `sev` that can land NOW (cases C5), the default first.
+    Pure state: an engaged opponent, a held flag, a recorded band, an exit or place on record. Reads no words."""
+    from engine.resolve import conflict
+
+    actor, foe = frame.beat.actor, _footing_foe(state, frame)
+    band = conflict._band(state, actor, foe) if foe else None
+    here = conflict._here(state, actor)
+    exits = [x for x in (state.entities[here].data.get("exits") or [] if here in state.entities else [])
+             if x in state.entities and x not in state.seals]
+    flags = state.positions[actor].flags if actor in state.positions else []
+    out: list[FootingOption] = []
+    if sev == "S1":
+        out.append(FootingOption("off_balance", "off balance until the end of the next turn"))
+        out += [FootingOption(f"lose:{f}", f"loses {f.removeprefix('flag.').replace('_', ' ')}")
+                for f in _FLAGS if f in flags]
+    elif sev == "S2":
+        out.append(FootingOption("prone", "knocked down"))
+        if foe and band == "engaged":
+            out.append(FootingOption("grabbed", f"caught and held by {foe}"))
+        if foe and band in _BAND_ORDER[:-1]:
+            out.append(FootingOption("band_back", f"driven one band back from {foe}"))
+        out += [FootingOption(f"slide:{x}", f"slides to {state.entities[x].name}") for x in exits]
+    elif sev == "S3":
+        out += [FootingOption("restrained", "tangled or held fast"), FootingOption("cornered", "backed into a corner"),
+                FootingOption("slowed", "hobbled for the scene")]
+        if foe and band in _BAND_ORDER[:-1]:
+            out.append(FootingOption("separated", f"cut off, two bands from {foe}"))
+    elif sev == "S4":
+        out.append(FootingOption("pinned", "pinned down"))
+        out += [FootingOption(f"lower:{x}", f"falls to {state.entities[x].name}") for x in exits
+                if state.entities[x].data.get("lower")]
+        if foe:
+            out.append(FootingOption("controlled", f"held in {foe}'s control"))
+    elif sev == "S5":
+        out.append(FootingOption("trapped", "trapped until freed"))
+        out += [FootingOption(f"swept:{x}", f"swept away to {e.name}") for x, e in state.entities.items()
+                if e.kind == "place" and x != here and x not in exits and x not in state.seals][:3]
+    return out
+
+
+def footing_events(state: Any, rules: Any, mint: Callable[[str], str], opt: str, *, actor: str, foe: str | None,
+                   sev: str, fid: str | None) -> list[Event]:  # rule: 01.13.7
+    """Exactly the option's writes (nothing is chosen here)."""
+    from engine.resolve import conflict
+
+    src = {"frame_id": fid}
+    held = {"entity": foe, "frame_id": fid} if foe else src
+    cond = {"off_balance": ("cond.off_balance", src), "prone": ("cond.prone", {"entity": actor, "frame_id": fid}),
+            "grabbed": ("cond.grabbed", held), "restrained": ("cond.restrained", held), "slowed": ("cond.slowed", src),
+            "pinned": ("cond.pinned", held), "controlled": ("cond.restrained", held),
+            "trapped": ("cond.restrained", src)}.get(opt)
+    if cond is not None:
+        return list(apply_condition(state, mint, rules, actor, cond[0], severity=sev, source=cond[1]).events)
+    kind, _, arg = opt.partition(":")
+    if kind == "lose":
+        return [Event.of("position_set", source=fid or "cost", rule_id="01.13.7", entity=actor, flags_remove=[arg])]
+    if opt == "cornered":
+        return [Event.of("position_set", source=fid or "cost", rule_id="01.13.7", entity=actor,
+                         flags_add=["flag.cornered"])]
+    if opt in ("band_back", "separated") and foe:
+        cur = conflict._band(state, actor, foe) or "engaged"
+        band = _BAND_ORDER[min(_BAND_ORDER.index(cur) + (1 if opt == "band_back" else 2), 4)]
+        return [Event.of("position_set", source=fid or "cost", rule_id="01.13.7", entity=actor,
+                         location=conflict._here(state, actor), band_to={foe: band}),
+                Event.of("position_set", source=fid or "cost", rule_id="01.13.7", entity=foe, band_to={actor: band})]
+    if kind in ("slide", "lower", "swept") and arg in state.entities:
+        evs = [_fact_ev(state, mint, actor, "footing", f"{kind} to {state.entities[arg].name}", fid)]
+        if state.entities[actor].kind != "pc":  # the PC changes place by a scene cut, never by this write
+            evs.append(Event.of("position_set", source=fid or "cost", rule_id="01.13.7", entity=actor, location=arg))
+        return evs
+    raise CostRefused(f"cost.footing: {opt!r} is not a footing form")
+
+
+def apply_footing(tx: Any, rules: Any, pending: Mapping[str, Any], option: str | None) -> tuple[str, bool]:
+    # rule: 01.13.7
+    """[spec 033 DL-01-60] Write the DM's `cost_form` exactly. `pending` is `pending_footing(state)`; an option
+    omitted, or not among those shown, takes the first that can land and the caller logs `not_chosen:cost_form`.
+    Returns (the option written, whether the default was taken)."""
+    opts = list(pending["options"])
+    defaulted = option not in opts
+    pick: str = opts[0] if defaulted else str(option)
+    tx.add_all(footing_events(tx.state, rules, tx.mint, pick, actor=pending["actor"], foe=pending.get("opponent"),
+                              sev=pending["severity"], fid=pending.get("frame_id")))
+    tx.add(Event.of("meta_set", source="engine", rule_id="01.13.7", key=PENDING_FOOTING, value=None))
+    return pick, defaulted
+
+
+def pending_footing(state: Any) -> dict[str, Any] | None:  # rule: 01.13.7
+    """The footing cost waiting for the DM's pick (a stated beat deferred it), or None."""
+    v = state.meta.get(PENDING_FOOTING)
+    return dict(v) if isinstance(v, dict) else None
+

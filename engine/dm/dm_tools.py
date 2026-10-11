@@ -680,8 +680,6 @@ def _propose_roll(ctx: TurnContext, t: Turn, c: dict[str, Any]) -> str:
                         whom=whom if whom in st.entities else None,
                         description=None if what in st.entities else (phrase or None))
     method = how or goal
-    if c.get("nonlethal") and verb in ("verb.strike", "verb.grapple", "verb.force"):
-        method += " (nonlethal)"  # the harm rules read the method's words (engine/resolve/conflict.py NONLETHAL)
     beat = Beat(id=tx.mint(ids.BEAT), actor=pc, intent=goal, method=method, how=how, target=target,
                 restatement=goal[:1].upper() + goal[1:], verb=verb,
                 title=goal[:1].upper() + goal[1:] if str(c.get("goal") or "").strip() else None, speech=verb == "verb.talk",

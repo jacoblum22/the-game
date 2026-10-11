@@ -52,14 +52,16 @@ _T, _N, _SO = "engine.dm.testimony.", "engine.dm.npc_layer.", "engine.world.soci
 
 # qualified name -> Entry. Functions are wrapped; module-level patterns, tuples and dicts are proxied.
 DENY: dict[str, Entry] = {
-    # P2a: positions, contact, fight start, hold release, penalty details (R1 R2 R5)
-    _P + "_AWAY": _e("D1", "P2a"), _P + "_moved": _e("D1 A3", "P2a"),
-    _P + "_DOWN": _e("D2 A2", "P2a"), _P + "_contact": _e("D2 A1", "P2a"),
-    _P + "_FREEING": _e("D3 A13", "P2a"), _P + "_cleanse": _e("D3 A13", "P2a"),
-    _P + "_cost_params": _e("A15 A16", "P2a"),
-    _R + "start": _e("A4 A5", "P2a", only_from="engine.dm.dm_tools._fight"),
-    _R + "NONLETHAL": _e("D5", "P2a"), _R + "UNARMED": _e("D5", "P2a"), _R + "weapon": _e("D5", "P2a"),
-    _C + "_VERB_GOAL": _e("A11 A12", "P2a"), _C + "_person": _e("D15 N4", "P2a"),
+    # P2a: positions, contact, fight start, hold release, penalty details (R1 R2 R5); `_cleanse` and `_person` stay
+    # called (they run on a stated beat without a word test), so only their word reads are denied
+    _P + "_AWAY": _e("D1", "P2a", mode="raise"), _P + "_moved": _e("D1 A3", "P2a", mode="raise"),
+    _P + "_DOWN": _e("D2 A2", "P2a", mode="raise"), _P + "_contact": _e("D2 A1", "P2a", mode="raise"),
+    _P + "_FREEING": _e("D3 A13", "P2a", mode="raise"), _P + "_freeing_words": _e("D3 A13", "P2a", mode="raise"),
+    _P + "_cost_params": _e("A15 A16", "P2a", mode="raise"),
+    _R + "start": _e("A4 A5", "P2a", mode="raise", only_from="engine.dm.dm_tools._fight"),
+    _R + "NONLETHAL": _e("D5", "P2a", mode="raise"), _R + "UNARMED": _e("D5", "P2a", mode="raise"),
+    _R + "weapon": _e("D5", "P2a", mode="raise"), _R + "strike_harm_by_words": _e("D5", "P2a", mode="raise"),
+    _C + "_VERB_GOAL": _e("A11 A12", "P2a", mode="raise"), _C + "typed_goal": _e("A11 A12", "P2a", mode="raise"),
     # P3: the foe's choice (R3)
     _R + "foe_beat": _e("A7 A8 A9", "P3"), "engine.dm.world_step.foes_act": _e("A7 A8 A9", "P3"),
     # P5: leads and witnesses are told, never spawned (R4)

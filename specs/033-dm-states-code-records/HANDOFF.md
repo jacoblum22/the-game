@@ -77,4 +77,16 @@ Guard traps for every phase:
     owes anchors `[verb_anchor(verb, rules)]`.
 17. Open for rules/P7: `covered_by_effect` sees only condition-carried effects (`eff.movement_mode` also covers climb and
     swim); `reverses_goal` has no `restrain` row; the tools path never sets `asks`, so plain questions always roll.
+- P2a (29cb7aa): positions only from `stated.position` (`pipeline._stated_position`); Strike/Grapple write no band; Force
+  ladder by reach (C2) from `stated.force`; no code-started fight for a stated beat; untyped Grapple holds nothing;
+  `change_kind=free` ends holds (`end_hold`); weapon/nonlethal from `stated` (`strike_harm_by_words` pipeline-only);
+  costs: `fail_on` for exposure/gear/closed_door (default target or wielded item, `env.defaults` gets
+  `not_chosen:fail_on`); footing deferred: `costs.footing_options`/`pending_footing` (meta `footing_pending`)/
+  `apply_footing(tx, rules, pending, cost_form)` -> (option, defaulted). Stated `change_kind=none` rolls (no GOAL_ASK).
+18. P3: show `footing_pending` options on COST TO SHAPE, call `apply_footing`, log `not_chosen:cost_form` when defaulted.
+    Drain `PipelineEnv.env.defaults` into `screen.dm_tools.defaults` on the propose and answer turns (not done yet).
+19. Footing with no opponent: `restrained`/`trapped` write a hold with no holder entity (source = frame) and S3's default
+    is `restrained`: watch in P7. `lower:` options need `data["lower"]` on a place; none generated today.
+20. Guard rows found only by reach flicker: `oof.price_line` COST/SEVERITY_WORDS and `redirect_block:_LEARN` (F) were
+    removed as unreached at this merge; re-add as F when P3's foe path reaches them again.
 

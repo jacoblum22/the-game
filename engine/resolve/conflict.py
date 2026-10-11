@@ -164,22 +164,43 @@ def state_words(st: Any, eid: str) -> str:  # rule: 07.1.1
     return descriptor(st, eid)
 
 
-def strike_harm(tx: Any, rules: Any, rng: Any, frame: Any, delivered: int) -> tuple[Any, str]:  # rule: 06.4.3
+def weapon_of(rules: Any, st: Any, item: str | None) -> dict[str, Any]:  # rule: 06.4.4
+    """[spec 033 R5] The weight of the weapon the DM STATED (`Stated.weapon`: an item id, "unarmed", or None for no
+    weapon): the item's tags against the weights' `item_tags`; an item no weight lists (a stool, a bottle) strikes as
+    unarmed. Reads no words."""
+    weights = list(rules.doc("conflict")["weapon_weights"])
+    e = st.entities.get(item or "")
+    tags = set(e.tags) if e is not None else set()
+    for w in weights:
+        if any(t == it or t.startswith(it + ".") for t in tags for it in w.get("item_tags") or ()):
+            return w  # type: ignore[no-any-return]
+    return next(w for w in weights if w["id"] == "unarmed")  # ponytail: an improvised weapon strikes as unarmed
+
+
+def strike_harm_by_words(tx: Any, rules: Any, rng: Any, frame: Any, delivered: int) -> tuple[Any, str]:  # rule: 06.4.3
+    """The pipeline's Strike harm: the weapon and the harm mode read from the beat's words (06.4.4, 06.4.8). The
+    dm-tools path never calls this (it passes `Stated.weapon` and `Stated.nonlethal` to `strike_harm`)."""
+    beat = frame.beat
+    text = f"{beat.method} {beat.intent}"
+    return strike_harm(tx, rules, rng, frame, delivered, w=weapon(rules, tx.state, beat.actor, text),
+                       mode="nonlethal" if NONLETHAL.search(text) else "lethal")
+
+
+def strike_harm(tx: Any, rules: Any, rng: Any, frame: Any, delivered: int, *, w: dict[str, Any],
+                mode: str) -> tuple[Any, str]:  # rule: 06.4.3
     # rule: PR-06-3
-    """A landed Strike: the weapon's base severity shifted by (delivered reach - 2) rungs, then `apply_harm` on
-    the target in the harm mode the words ask for (lethal unless the player said otherwise, 06.4.8)."""
+    """A landed Strike: the weapon's (`w`) base severity shifted by (delivered reach - 2) rungs, then `apply_harm`
+    on the target in the harm `mode` (lethal unless nonlethal was stated, 06.4.8)."""
     from engine.harm.apply import SEVERITIES, apply_harm, shift
     from engine.harm.ctx import HarmCtx
 
     # ponytail: no dealer-side pass (06.4.6), mastery (06.4.5) or called shots; harm.physical only
     beat = frame.beat
-    text = f"{beat.method} {beat.intent}"
-    w = weapon(rules, tx.state, beat.actor, text)
     sev = shift(str(w["base_severity"]), delivered - 2) or (SEVERITIES[0] if delivered < 2 else SEVERITIES[-1])
     ensure_vitality(tx, rules, beat.target)
     res = apply_harm(HarmCtx.of(tx, rules, rng), beat.target, severity=sev, harm_tags=["harm.physical"],
                      source=beat.actor, frame_id=frame.id, lethal=frame.lethal,
-                     mode="nonlethal" if NONLETHAL.search(text) else "lethal")
+                     mode=mode)
     tx.add_all(res.events)
     return res, state_words(tx.state, beat.target)
 

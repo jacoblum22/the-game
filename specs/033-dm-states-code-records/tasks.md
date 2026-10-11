@@ -60,20 +60,20 @@ Phases, lanes, models and waves: `plan.md` section 5. Cases: `cases.md` (C1-C12)
 - [x] T064 Tests (offline) and HANDOFF-E.md.
 
 ## P2a resolve: positions, contact, fight start, costs (Sonnet, W2, lane: `pipeline.py`, `change.py`, `conflict.py`, `costs.py`)
-- [ ] T020 `pipeline._finish`: stated beats skip `_moved`/`_contact`; `_stated_position` writes `stated.position` on
+- [x] T020 `pipeline._finish`: stated beats skip `_moved`/`_contact`; `_stated_position` writes `stated.position` on
   success (C1.d).
-- [ ] T021 Force ladder from `stated.force` (C2); no `_DOWN`.
-- [ ] T022 `change.apply_change`: no untyped Grapple restrain and no `_person` name resolution for stated beats
+- [x] T021 Force ladder from `stated.force` (C2); no `_DOWN`.
+- [x] T022 `change.apply_change`: no untyped Grapple restrain and no `_person` name resolution for stated beats
   (C1.g); `change_kind=free` ends the actor's hold.
-- [ ] T023 `_cleanse` without `_FREEING` for stated beats.
-- [ ] T024 RESULT line: `entry.positions` words from the stated band or Force result (formatting only).
-- [ ] T025 `_roll`: no `conflict.start` for stated beats (R2).
-- [ ] T026 `conflict.strike_harm(weapon=, mode=)`, `weapon_of(rules, st, item)`; no `NONLETHAL`/`UNARMED` for stated
+- [x] T023 `_cleanse` without `_FREEING` for stated beats.
+- [x] T024 RESULT line: `entry.positions` words from the stated band or Force result (formatting only).
+- [x] T025 `_roll`: no `conflict.start` for stated beats (R2).
+- [x] T026 `conflict.strike_harm(weapon=, mode=)`, `weapon_of(rules, st, item)`; no `NONLETHAL`/`UNARMED` for stated
   beats (C1.e, C1.f).
-- [ ] T027 `_consequence`: params from `stated.fail_on` (no `_cost_params`); REFUSED data for missing sources (C5).
-- [ ] T028 `costs`: footing with no form on a stated beat returns the deferred options; `footing_options`,
+- [x] T027 `_consequence`: params from `stated.fail_on` (no `_cost_params`); REFUSED data for missing sources (C5).
+- [x] T028 `costs`: footing with no form on a stated beat returns the deferred options; `footing_options`,
   `apply_footing` (C5 options table).
-- [ ] T029 Tests C1.d-g, C2, C3 (engine side), C5; move P2a's DENY entries to `raise`; HANDOFF-P2a.md.
+- [x] T029 Tests C1.d-g, C2, C3 (engine side), C5; move P2a's DENY entries to `raise`; HANDOFF-P2a.md.
 
 ## P2b resolve: gate, necessity, frame, anchors (Sonnet, W2, lane: `gate.py`, `necessity.py`, `frame.py`, `retrieve/anchors.py`, `retrieve/scene.py`)
 - [x] T035 `gate.check_gate`/`compute_gate`: stated `reads`, `approach` (exact entry), `covered_by` (C1.b, C1.c).

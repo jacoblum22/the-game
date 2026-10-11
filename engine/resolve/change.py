@@ -115,7 +115,7 @@ def _person(state: Any, beat: Beat) -> str | None:  # rule: 01.2.7
     for x in (c.what, c.whom, beat.target):
         if x and x != beat.actor and x in state.entities and state.entities[x].kind in PEOPLE:
             return x
-    if not c.description:
+    if not c.description or beat.stated is not None:  # [spec 033 R1] a stated beat names its person by id, never by words
         return None
     from engine.retrieve.scene import resolve_names, scene_scope
 
@@ -299,8 +299,10 @@ def apply_change(tx: Any, rules: Any, beat: Beat, reach: int, *, pc: str | None 
     `restrain` has). Events are added to `tx`. A change code cannot apply is refused with the reason. `limit`: the
     factor a Limited frame cited (what a partial `persuade_to` does not grant)."""
     c = beat.change
-    if (c is None or c.kind == NONE) and beat.verb == "verb.grapple" and beat.target in tx.state.entities \
-            and tx.state.entities[beat.target].kind in PEOPLE:  # an untyped Grapple keeps hold (06.5.2's Decision)
+    if (c is None or c.kind == NONE) and beat.stated is None and beat.verb == "verb.grapple" \
+            and beat.target in tx.state.entities \
+            and tx.state.entities[beat.target].kind in PEOPLE:  # an untyped Grapple keeps hold (06.5.2's Decision;
+        # a stated Grapple holds only when the DM states `change_kind=restrain`, spec 033 A12)
         c = beat.change = Change(kind="restrain", what=beat.target)
     if c is None or c.kind == NONE or reach < 1:
         return ChangeResult()
@@ -380,6 +382,12 @@ def apply_change(tx: Any, rules: Any, beat: Beat, reach: int, *, pc: str | None 
         res.words = f"{w} {'held fast' if level <= 2 else 'restrained' if level == 3 else 'pinned'} by " \
                     f"{_name(st, actor, pc)}"
     elif k == "free":
+        if beat.stated is not None:  # [spec 033 R1] the DM's `free`: the holds on the freed one end
+            from engine.resolve.conflict import end_hold, holds
+
+            for holder, held in holds(st):
+                if held == (what or actor):
+                    end_hold(tx, rules, holder, held, "breaks free (06.5.2)")
         res.words = f"the hold on {_name(st, what or actor, pc)} ends"
     elif k == "make":
         return ChangeResult(refused="making or mending things is not built yet (ch.08)")

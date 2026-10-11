@@ -104,6 +104,7 @@ class PipelineEnv:
     said: list[str] = field(default_factory=list)  # the message's SPEECH parts, carried by a pause (spec 017)
     said_first: list[str] = field(default_factory=list)  # those said before a later declaration: answered here
     framer_note: str | None = None  # a /fix re-frame's one-line note for the Framer: context, never odds (DL-12-123)
+    defaults: list[str] = field(default_factory=list)  # [spec 033 D3] `not_chosen:{field}`: details code defaulted
 
     @property
     def state(self) -> Any:
@@ -338,7 +339,8 @@ def _entry(beat: Beat, **kw: Any) -> BeatEntry:
 def _start(env: PipelineEnv, plan: BeatPlan, queued: list[BeatPlan]) -> BeatOutcome:  # rule: PR-01-1
     beat = plan.beat
     tx = env.tx
-    typed_goal(env.state, beat)  # DL-01-42: a goal left `none` gets its verb's plain goal, before any test reads it
+    if beat.stated is None:  # [spec 033 R1] a stated beat's goal is the DM's `change_kind`; never defaulted by verb
+        typed_goal(env.state, beat)  # DL-01-42: a goal left `none` gets its verb's plain goal, before any test reads it
     # 2. GATE (01.3)
     dec = check_gate(beat, state=env.state, rules=env.rules, store=env.store, staged=tx.events, mint=tx.mint)
     env.add(*dec.events)
@@ -423,7 +425,9 @@ def _no_roll(env: PipelineEnv, plan: BeatPlan, dec: GateDecision, *, frame: Fram
                                                result={"degree": None, "outcome": "success (good idea)"}),
                                   env.tx.mint, store=env.store, staged=env.tx.events, rule_id="01.5.4"))
     env.add(*evs)
-    if _moves(beat, dec.verb or beat.verb):
+    if beat.stated is not None:  # [spec 033 R1] the DM's stated position, nothing guessed from the words
+        entry.positions = _stated_position(env, beat)
+    elif _moves(beat, dec.verb or beat.verb):
         entry.positions = _moved(env, plan, reach)
     res = ChangeResult(words=already) if already else apply_change(
         env.tx, env.rules, beat, reach, pc=env.pc, limit=frame.reach_limit if frame is not None else None)
@@ -531,6 +535,56 @@ def _contact(env: PipelineEnv, frame: Frame, verb: str | None, delivered: int) -
     return [PositionEntry(entity=str(tgt), words=f"driven back, {_BAND_WORDS[band]} you")]
 
 
+def _stated_position(env: PipelineEnv, beat: Beat) -> list[PositionEntry]:  # rule: PR-06-4
+    # rule: 06.3.5
+    """[spec 033 R1] The band the DM STATED for this beat (`Stated.position`: mover, band, the other), written both
+    ways. Only a resolved beat reaches here; nothing is read from the beat's words or the verb."""
+    stated = beat.stated
+    if stated is None or stated.position is None:
+        return []
+    mover, band, other = stated.position
+    st = env.state
+    if mover not in st.entities or other not in st.entities:
+        return []
+    from engine.resolve.change import _name
+    from engine.resolve.conflict import _here
+
+    env.add(Event.of("position_set", source=beat.id, rule_id="PR-06-4", entity=mover, location=_here(st, mover),
+                     band_to={other: band}),
+            Event.of("position_set", source=beat.id, rule_id="PR-06-4", entity=other, band_to={mover: band}))
+    return [PositionEntry(entity=mover, words=f"{band_words(st, band)} {_name(st, other, env.pc)}")]
+
+
+def _force_ladder(env: PipelineEnv, frame: Frame, delivered: int) -> list[PositionEntry]:  # rule: 06.5.3
+    """[spec 033 R2] A landed Force on a creature by the DM's `force` (cases C2): reach 1 off balance; reach 2 pushed one
+    band (the link breaks) or prone; reach 3+ pushed two bands, or prone and off balance. A push starts from the
+    recorded band (engaged when none is recorded). No word of the beat is read."""
+    from engine.resolve.conflict import _band, _here
+    from engine.store.conditions import apply_condition
+
+    beat, st = frame.beat, env.state
+    assert beat.stated is not None
+    actor, tgt = beat.actor, beat.target
+    ent = st.entities.get(tgt or "") if tgt != actor else None
+    if delivered < 1 or ent is None or ent.kind not in _CREATURES:
+        return []
+    src = {"entity": actor, "beat_id": beat.id}
+    prone = beat.stated.force == "prone"
+    conds = (["cond.off_balance"] if delivered == 1 or (prone and delivered >= 3) else []) + (
+        ["cond.prone"] if prone and delivered >= 2 else [])
+    for c in conds:
+        env.add(*apply_condition(st, env.tx.mint, env.rules, str(tgt), c, severity="S1", source=src,
+                                 rule_id="06.5.3").events)
+    if prone or delivered < 2:
+        return []
+    cur = _band(st, actor, str(tgt)) or "engaged"
+    band = BANDS[min(BANDS.index(cur) + (1 if delivered == 2 else 2), 4)]
+    env.add(Event.of("position_set", source=beat.id, rule_id="06.5.3", entity=actor, location=_here(st, actor),
+                     band_to={str(tgt): band}),
+            Event.of("position_set", source=beat.id, rule_id="06.5.3", entity=str(tgt), band_to={actor: band}))
+    return [PositionEntry(entity=str(tgt), words=f"driven back, {_BAND_WORDS[band]} you")]
+
+
 def _verb_deed(rules: Any, verb: str | None) -> str | None:
     aid = verb_anchor(verb, rules)
     tags = rules.anchors.get(aid, {}).get("deed_tags", ()) if aid else ()
@@ -623,7 +677,9 @@ def _checked(env: PipelineEnv, plan: BeatPlan, dec: GateDecision, proposed: Prop
     if proposed.stakes_source == "none" and out.stakes == "safe" and any(" cited to " in w or "clock" in w
                                                                          for w in why):
         out.notes.append(f"stakes.source none, but costly: {'; '.join(why)} (01.4.1)")  # the disagreement, logged
-    if beat.change is None or beat.change.kind == NONE_KIND:  # rule: 01.2.7 (DL-01-42): never roll a goal-less beat
+    if beat.stated is None and (beat.change is None or beat.change.kind == NONE_KIND):
+        # rule: 01.2.7 (DL-01-42): never roll a goal-less beat (a stated beat's goal is the DM's own `goal` words;
+        # `change_kind=none` is its statement that nothing recorded changes: spec 033 A12)
         return BeatOutcome(status="question", entry=_entry(beat, gate="G0", gate_words=GOAL_ASK))
     return _offer(env, plan, proposed, out, cands, queued, warned=warned)
 
@@ -806,8 +862,8 @@ def _attacks(env: PipelineEnv, frame: Frame) -> bool:  # rule: 06.2.1
 
 
 def _roll(env: PipelineEnv, plan: BeatPlan, frame: Frame, queued: list[BeatPlan]) -> BeatOutcome:  # rule: PR-01-3
-    if _attacks(env, frame):  # 06.2.1: the attack is committed, so the fight starts (or the target joins it)
-        from engine.resolve.conflict import start
+    if frame.beat.stated is None and _attacks(env, frame):  # 06.2.1: the attack is committed, so the fight starts
+        from engine.resolve.conflict import start  # (a stated beat: only the DM's `change fight` starts one)
 
         start(env.time_ctx(), env.pc, [str(frame.beat.target)], "the PC attacks (06.2.1)")
     roll = roll_check(frame, env.rng)
@@ -834,12 +890,23 @@ def _finish(env: PipelineEnv, plan: BeatPlan, frame: Frame, roll: RollResult, *,
     delivered = max(0, read.delivered_reach + reach_delta) if read.delivered_reach else 0
     resolved = roll.degree in ("success", "critical_success") or read.success_at_cost_taken
     verb = frame.gate.verb or frame.beat.verb
-    moved = (_moved(env, plan, delivered) if resolved and _moves(frame.beat, verb)
-             else _contact(env, frame, verb, delivered if resolved else 0) if verb in CONTACT else [])
+    stated = frame.beat.stated
+    if stated is not None:  # [spec 033 R1 R2] positions are the DM's: its stated band, and Force's stated ladder
+        moved = _stated_position(env, frame.beat) if resolved else []
+        if resolved and verb == "verb.force":
+            moved += _force_ladder(env, frame, delivered)
+    else:
+        moved = (_moved(env, plan, delivered) if resolved and _moves(frame.beat, verb)
+                 else _contact(env, frame, verb, delivered if resolved else 0) if verb in CONTACT else [])
     if resolved and verb not in ("verb.grapple", "verb.force") and _attacks(env, frame):  # rule: 06.4.3
-        from engine.resolve.conflict import check_end, strike_harm
+        from engine.resolve.conflict import check_end, strike_harm, strike_harm_by_words, weapon_of
 
-        hurt, said = strike_harm(env.tx, env.rules, env.rng, frame, delivered)
+        if stated is not None:  # [spec 033 R5] the DM's weapon and lethality
+            hurt, said = strike_harm(env.tx, env.rules, env.rng, frame, delivered,
+                                     w=weapon_of(env.rules, env.state, stated.weapon),
+                                     mode="nonlethal" if stated.nonlethal else "lethal")
+        else:
+            hurt, said = strike_harm_by_words(env.tx, env.rules, env.rng, frame, delivered)
         if hurt.amount or hurt.transition:
             env.harm_log.append(HarmEntry(target=str(frame.beat.target), words=said))
         check_end(env.time_ctx(), env.pc)  # 06.13.1: the last foe down ends the fight
@@ -916,12 +983,18 @@ def _change_entry(env: PipelineEnv, beat: Beat, entry: BeatEntry, res: ChangeRes
 _FREEING = re.compile(r"\b(free|loose|escape|break|slip|wriggle|wrench|pull away|get up|stand)\b", re.IGNORECASE)
 
 
+def _freeing_words(beat: Beat) -> bool:
+    """The pipeline's guess that a beat's words aim at a condition (never reached on the dm-tools path)."""
+    return bool(_FREEING.search(f"{beat.intent} {beat.method}"))
+
+
 PROGRESS_SEGMENTS = 4  # 00.8.3 "a scene's worth"
 
 
-def _same_goal(a: str | None, b: str | None) -> bool:
+def _same_goal(a: str | None, b: str | None, *, exact: bool = False) -> bool:
     # ponytail: id-prefix match ("obj.track" ~ "obj.track_in_the_damp_earth"); a named-goal key if it misfires
-    return bool(a and b) and (a == b or a.startswith(f"{b}_") or b.startswith(f"{a}_"))  # type: ignore[union-attr]
+    # `exact` (a stated beat, spec 033): the same id only, no prefix guess
+    return bool(a and b) and (a == b or (not exact and (a.startswith(f"{b}_") or b.startswith(f"{a}_"))))  # type: ignore[union-attr]
 
 
 def _progress(env: PipelineEnv, frame: Frame, delivered: int) -> str:  # rule: 01.14.6
@@ -938,13 +1011,14 @@ def _progress(env: PipelineEnv, frame: Frame, delivered: int) -> str:  # rule: 0
     if tgt is None or delivered < 1:
         return ""
     verb = frame.gate.verb or beat.verb
+    exact = beat.stated is not None
     clock = next((c for c in st.clocks.values() if c.kind == "progress" and c.status == "active"
-                  and _same_goal(c.owner, tgt)), None)
+                  and _same_goal(c.owner, tgt, exact=exact)), None)
     if clock is None:
         earlier = [x.resolved for x in st.frames.values() if x.resolved and (
             x.resolved.get("degree") in ("success", "critical_success") or x.resolved.get("success_at_cost_taken"))
             and (x.frame.get("gate") or {}).get("verb") == verb
-            and _same_goal((x.frame.get("beat") or {}).get("target"), tgt)]
+            and _same_goal((x.frame.get("beat") or {}).get("target"), tgt, exact=exact)]
         if beat.shape != "extended" and not (earlier and _mode(st) != "conflict"):
             return ""
         before = sum(REACH_VALUE.get(str((r.get("delivered") or {}).get("reach")), 0) for r in earlier)
@@ -980,8 +1054,9 @@ def _cleanse(env: PipelineEnv, frame: Frame) -> None:  # rule: 00.9.1
             continue
         checks = [c for c in cdef.get("cleanse") or () if (c.get("check") or {}).get("verb") == verb]
         holder = (inst.source or {}).get("entity")
-        aimed = beat.target in (None, "", "none", beat.actor, holder) or bool(
-            _FREEING.search(f"{beat.intent} {beat.method}"))
+        aimed = beat.target in (None, "", "none", beat.actor, holder) or (
+            beat.change is not None and beat.change.kind == "free" if beat.stated is not None
+            else _freeing_words(beat))  # [spec 033 R1] stated: the DM's `change_kind=free`, no word test
         # ponytail: "aimed at the condition" is a target/word heuristic; a beat field naming the condition would be exact
         if checks and aimed:
             env.add(*remove_condition(env.state, env.rules, inst.instance_id, checks[0].get("means") or "cleansed",
@@ -998,7 +1073,9 @@ def _consequence(env: PipelineEnv, frame: Frame, read: ReadResult,
     notes: list[str] = []
     for m in order:
         app = apply_cost(frame, read, m, state=env.state, rules=env.rules, mint=env.tx.mint,
-                         params=_cost_params(env, frame, m), harm_hook=env.harm_hook, rng=env.rng,
+                         params=(_stated_cost_params(env, frame, m) if frame.beat.stated is not None
+                                 else _cost_params(env, frame, m)),
+                         harm_hook=env.harm_hook, rng=env.rng,
                          mode=_mode(env.state))
         if app.refused:
             notes.append(f"{m}: {app.refused}")
@@ -1009,6 +1086,36 @@ def _consequence(env: PipelineEnv, frame: Frame, read: ReadResult,
         return [CostEntry(menu_id=m, severity=app.severity, form=form or (decl.form_intent if decl else ""))], \
             app.reach_delta, notes
     return [], 0, notes  # no candidate could land (01.13.1): nothing is paid, and none is narrated as paid
+
+
+def _stated_cost_params(env: PipelineEnv, frame: Frame, menu: str) -> dict[str, Any]:
+    """[spec 033 R5] A15 A16: who notices, which item and who refuses come from the DM's `fail_on`. Omitted, the
+    logged default (`not_chosen:fail_on`, read from state only): the one acted against (exposure, closed_door), the
+    wielded or first held item (gear); with none of those the cost cannot land and the next candidate is tried."""
+    from engine.resolve.change import holder_of
+
+    st = env.state
+    actor = frame.beat.actor
+    target = frame.beat.target if frame.beat.target and frame.beat.target != "none" else None
+    fo = frame.beat.stated.fail_on if frame.beat.stated else None
+    p: dict[str, Any] = {"stated": True}
+    if menu not in ("cost.exposure", "cost.gear", "cost.closed_door"):
+        return p
+    if fo is None or (menu == "cost.gear" and holder_of(st, fo) != actor):  # nothing usable stated: the default
+        env.defaults.append("not_chosen:fail_on")
+    if menu == "cost.exposure":
+        other = fo or frame.defender or target
+        if other and st.entities.get(other) and st.entities[other].kind in ("npc", "adversary", "companion"):
+            p["observer"] = other
+    elif menu == "cost.gear":
+        held = [f.value for f in st.facts.values() if f.subject == actor and f.predicate in ("wields", "holds", "carries")]
+        item = fo if fo and holder_of(st, fo) == actor else next(
+            (v for v in held if isinstance(v, str) and v in st.entities), None)
+        if item:
+            p["item"] = item
+    elif fo or target:
+        p["target"] = fo or target
+    return p
 
 
 def _cost_params(env: PipelineEnv, frame: Frame, menu: str) -> dict[str, Any]:
@@ -1050,6 +1157,14 @@ def _span_words(amount: int, unit: str) -> str:  # rule: 12.14.4
 
 
 def _deferred(env: PipelineEnv, deferred: dict[str, Any], frame: Frame) -> str:
+    if "footing_options" in deferred:  # [spec 033 DL-01-60] the DM picks the form on the answer turn
+        from engine.resolve.costs import PENDING_FOOTING
+
+        env.add(Event.of("meta_set", source=frame.id or "cost", rule_id="01.13.7", key=PENDING_FOOTING,
+                         value={"actor": frame.beat.actor, "opponent": deferred.get("opponent"),
+                                "frame_id": frame.id, "severity": deferred["severity"],
+                                "options": list(deferred["footing_options"])}))
+        return ""
     if "advance_time" in deferred:  # rule: 01.13.5
         (unit, amount), = dict(deferred["advance_time"]).items()
         advance_time(env.time_ctx(), int(amount), str(unit), f"cost.time {frame.id}")
