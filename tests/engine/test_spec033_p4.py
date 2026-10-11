@@ -143,17 +143,32 @@ def test_c8_pc_literal_is_the_pc_and_you_or_the_player_are_only_words(tmp_path: 
     assert len(new_ids(game, before)) == 2
 
 
-def test_c8_two_entities_with_one_name_are_ambiguous_so_a_walk_on_is_made(tmp_path: Path) -> None:
+def test_c8_two_entities_with_one_name_are_refused_with_their_ids_and_the_id_then_works(tmp_path: Path) -> None:
+    """[spec 033 P10, owner: "what if there are two wolfhounds?"] Exact-name arithmetic: 2+ bearers = refuse, list ids."""
     game, _ = to_play(tmp_path)
-    twin = game.store.state.entities[npc_here(game)].name
+    first = npc_here(game)
+    twin = game.store.state.entities[first].name
 
-    def dup(ctx: Any, t: Any, tx: Any) -> str | None:
+    def dup(ctx: Any, t: Any, tx: Any) -> None:
         tx.add(Event.of("entity_created", source="engine", rule_id="PR-00-7",
                         entity=EntityRecord(id="npc.twin_of_a_name", kind="npc", name=twin, visibility="shown", data={})))
-        return dm_tools._party(ctx, t, twin, person=True, as_="she")
 
-    got = in_turn(game, dup)
-    assert got not in (npc_here(game), "npc.twin_of_a_name", None)
+    in_turn(game, dup)
+    before = set(game.store.state.entities)
+    (out,), _ = go(game, roll(verb="verb.talk", target=twin, goal="ask", how="ask"))
+    assert out.startswith("REFUSED: Two on record are called") and first in out and "npc.twin_of_a_name" in out
+    assert out.rstrip().endswith("Use the id.") and new_ids(game, before) == []  # nothing written, no third one made
+    (ok,), _ = go(game, roll(verb="verb.talk", target=first, goal="ask", how="ask"))
+    assert not ok.startswith("REFUSED"), ok
+
+
+def test_c8_new_npc_with_a_name_already_borne_is_still_made_and_told(tmp_path: Path) -> None:
+    game, _ = to_play(tmp_path)
+    twin = game.store.state.entities[npc_here(game)].name
+    before = set(game.store.state.entities)
+    (out,), _ = go(game, change(kind="new_npc", what="a ferryman", name=twin, **{"as": "he"}))
+    (eid,) = new_ids(game, before)
+    assert out.startswith("done") and f"Another is already called {twin!r}; use {eid} for this one." in out
 
 
 def test_c8_a_sealed_entitys_exact_name_does_not_resolve(tmp_path: Path) -> None:

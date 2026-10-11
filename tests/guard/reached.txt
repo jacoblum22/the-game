@@ -65,8 +65,10 @@ engine.dm.context TurnContext.turn_id
 engine.dm.dispute _turns
 engine.dm.dm_tools Turn.<lambda>
 engine.dm.dm_tools __create_fn__
+engine.dm.dm_tools _accepted_attack
 engine.dm.dm_tools _acting
 engine.dm.dm_tools _along
+engine.dm.dm_tools _ambiguous
 engine.dm.dm_tools _args
 engine.dm.dm_tools _asks
 engine.dm.dm_tools _attack_starts_fight
@@ -107,6 +109,7 @@ engine.dm.dm_tools _recall
 engine.dm.dm_tools _reveal_clue
 engine.dm.dm_tools _roll
 engine.dm.dm_tools _run
+engine.dm.dm_tools _same_name
 engine.dm.dm_tools _state
 engine.dm.dm_tools _stated
 engine.dm.dm_tools _sync_scene
