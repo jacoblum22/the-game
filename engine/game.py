@@ -568,12 +568,15 @@ class Game:
         return self._after_creation(new_character(self.ctx))
 
     def _dispute(self, text: str) -> Response:
+        from engine.dm import dm_tools
+        from engine.dm.dispute import play_dm_dispute
         from engine.dm.turn import play_dispute
 
         if flow_of(self.store.state) in ("seed", "creation") or self._pc() is None:
             raise ValueError("there is nothing in play to dispute yet")
         first = self._settle_pending()
-        out = play_dispute(self.ctx, text)
+        # spec 032 G11: the same Fixer; a dm-tools game's re-frame plays the DM's turn again (no Narrator call)
+        out = (play_dm_dispute if dm_tools.enabled(self.ctx) else play_dispute)(self.ctx, text)
         return self._merge(first, self._after_turn(out.response))
 
     def _set_pref(self, key: str, value: Any) -> None:

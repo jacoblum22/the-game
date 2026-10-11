@@ -116,7 +116,6 @@ GROUPS = [
     ("E5 sealed secrets outside the clue rule (per incident kind)", "P5"),
     ("I12 log-only: item named in the passage with no change call", "P5"),
     ("S1-S12 resuming keeps the engine", "P2"),
-    ("X1-X22 /fix on dm-tools turns", "P6"),
     ("N1-N16 NPC agency after the fixes", "P7"),
 ]
 

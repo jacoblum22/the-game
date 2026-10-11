@@ -22,6 +22,7 @@ from __future__ import annotations
 
 import json
 import re
+from collections import Counter
 from dataclasses import dataclass, field
 from types import SimpleNamespace
 from typing import Any
@@ -31,7 +32,7 @@ from engine.dm.schemas import STR, STRS, Schema, arr, enum, obj
 
 TOOLS = ("turn", "entity", "search", "recompute", "ledger", "said", "calls", "try", "replay")
 PROPOSALS = ("set_fact", "remove_fact", "restore", "refund", "deduct", "reframe", "take_back", "correct_testimony",
-             "explain")
+             "remove_condition", "explain")
 CATEGORIES = ("remembered_wrong", "rule_wrong", "contradiction", "misread", "ruling_question", "other")  # 12.3.6 item 2
 VERDICTS = ("player_right", "partly", "record_stands", "unclear")
 PLAYER_FACING = ("shown", "available")
@@ -41,7 +42,8 @@ CHECKS = 2  # PR-12-11 step 6: the screen after the repair is checked, and the d
 OUT_CHARS = 2400  # one tool output, at most
 WIDE = {"calls": 3600, "try": 3000, "replay": 3000}  # tools that show a whole screen or packet
 SKIP_PREDICATES = ("trg.", "log.", "closed.", "lethal", "dc.")
-CALL_ROLES = ("reader", "framer", "narrator", "interpret", "testimony", "checker")  # the PC-knowledge roles (INV-10)
+CALL_ROLES = ("reader", "framer", "narrator", "interpret", "testimony", "checker",  # the PC-knowledge roles (INV-10)
+              "dm")  # spec 032: the DM, its PRIVATE lines (the secrets arm) never shown
 
 
 @dataclass
@@ -165,6 +167,23 @@ def sheet(state: Any, rules: Any, eid: str | None) -> dict[str, str]:
     return out
 
 
+def cond_origins(store: Any, state: Any, rules: Any, eid: str) -> list[str]:  # rule: PR-12-11
+    """Each condition on `eid` with where it came from: the event, its turn, the roll or source and the rule (spec 032
+    P6: a Fixer with no origin view made one up). `cinst.N` is what `remove_condition` takes."""
+    first = {}
+    for e in store.events(types=["condition_applied"]):
+        first.setdefault(getattr(e.payload, "instance_id", ""), e)
+    out = []
+    for c in state.conditions_on(eid):
+        e = first.get(c.instance_id)
+        src = c.source or {}
+        out.append(f"  {c.instance_id}: {_cond_name(rules, c.condition_id)} ({c.condition_id} {c.severity})"
+                   + (f", put on at {e.seq} in {e.turn_id or 'setup'} (rule {e.rule_id})" if e is not None else "")
+                   + (f" by {src['frame_id']}" if src.get("frame_id") else "")
+                   + (f", source {name(state, str(src['entity']))}" if src.get("entity") else ""))
+    return out
+
+
 def _cond_name(rules: Any, cid: str) -> str:
     try:
         return str(rules.condition(cid).get("name") or cid).lower()
@@ -282,7 +301,32 @@ def _event_line(store: Any, state: Any, e: Any) -> str | None:  # noqa: PLR0911,
         return f"  {e.seq} reverted {len(p.reverted)} writes: {_flat(p.reason, 120)}"
     if t == "knowledge_recorded" and p.fact_id in state.facts:
         return f"  {e.seq} {name(state, p.knower)} learned {p.fact_id} ({p.how}){mark}"
+    if t == "entity_created" and p.entity.kind in ("npc", "companion", "adversary", "item", "object") \
+            and p.entity.id not in state.seals:  # spec 032 G11: someone or something made this turn (a DM's prose)
+        return f"  {e.seq} new on record: {name(state, p.entity.id)} ({p.entity.id}){mark}"
     return None
+
+
+def dm_log(tr: Any) -> list[str]:  # rule: PR-12-11
+    """A dm-tools turn's tool log (spec 032 G11): each DM tool call, its arguments and what code answered; a call code
+    refused twice is DROPPED (not done). The secrets arm's PRIVATE lines are never shown (INV-10)."""
+    s = ((tr.screen or {}).get("dm_tools") or {}) if tr is not None else {}
+    if not s:
+        return []
+    tools = list(s.get("tools") or [])
+    drop = Counter((r.get("tool"), r.get("args")) for r in s.get("dropped") or [])
+    marks = [""] * len(tools)
+    for i in reversed(range(len(tools))):  # the last breach of a call is the one dropped
+        k = (tools[i].get("tool"), tools[i].get("args"))
+        if drop[k]:
+            drop[k] -= 1
+            marks[i] = " [DROPPED: not done]"
+    out = [("the /fix re-run's " if s.get("fix") else "") + "DM tool calls (the DM model asked; code answered):"
+           if tools else "DM tool calls: none (the DM wrote the passage alone)"]
+    for i, c in enumerate(tools):
+        said = " / ".join(x for x in str(c.get("out") or "").splitlines() if "PRIVATE" not in x)
+        out.append(f"  [{i + 1}] {c.get('tool')} {c.get('args')} -> {_flat(said, 300)}{marks[i]}")
+    return out
 
 
 def _tid(arg: str) -> str:
@@ -303,6 +347,7 @@ def _turn_tool(ctx: Any, arg: str) -> str:
             line = _event_line(store, state, e)
             if line:
                 lines.append(line)
+    lines += dm_log(tr)
     if tr.model_calls:
         lines.append(f"model calls this turn: {', '.join(sorted({c.split('.')[3] for c in tr.model_calls if c.count('.') >= 4}))}"
                      " (use `calls`)")
@@ -327,6 +372,8 @@ def _entity_tool(ctx: Any, arg: str) -> str:
         lines.append(f"{name(state, eid)}" + (f": {_flat(e.data.get('desc'), 160)}" if e.data.get("desc") else ""))
     if (sl := sheet_line(state, rules, eid)):
         lines.append(f"sheet: {sl}")
+    if (origins := cond_origins(store, state, rules, eid)):
+        lines += ["conditions on record (where each came from):", *origins]
     lines.append("facts on record:")
     mine = [f for f in state.facts.values() if f.subject == eid and visible(state, f) and f.value is not None]
     lines += [f"  {fact_line(store, state, f)}" for f in mine[-30:]] or ["  (none)"]
@@ -477,6 +524,14 @@ def _calls_tool(ctx: Any, arg: str) -> str:  # rule: PR-12-11
     for r in rows:
         packet = str((r.get("request") or {}).get("packet") or "")
         data = (r.get("response") or {}).get("data")
+        msg = _section(packet, "THIS MESSAGE") or packet
+        if r.get("role") == "dm" or msg.startswith("SITUATION\n"):  # spec 032 G11 (before P2 the DM ran as narrator):
+            # the DM's situation once (PRIVATE lines never), then each answer
+            sit = msg.split("\n\nRECENT CONVERSATION")[0]
+            given = "" if r is not rows[0] else " / ".join(x for x in sit.splitlines() if "PRIVATE" not in x)
+            out.append(f"dm ({r.get('model_id')})" + (f" was shown: {_flat(given, 1400)}" if given else ", next step"))
+            out.append(f"  returned: {_flat(json.dumps(data, ensure_ascii=False), 900)}")
+            continue
         out.append(f"{r.get('role')} ({r.get('model_id')}) was given: "
                    f"{_flat(_section(packet, 'THIS MESSAGE') or packet[-600:], 700)}")
         if want:
@@ -504,7 +559,9 @@ def _try_tool(ctx: Any, arg: str, text: str = "", inv: Investigation | None = No
 
 def _replay_tool(ctx: Any, arg: str) -> str:  # rule: PR-12-11
     """A turn played again on a copy (DL-12-117): turn N taken back there, then its own words run through the
-    Reader, gate, necessity and frame; the beats as read and framed. Nothing changes in the game."""
+    Reader, gate, necessity and frame; the beats as read and framed (a dm-tools game: the DM's turn again, its tool
+    calls and passage). Nothing changes in the game."""
+    from engine.dm import dm_tools
     from engine.dm.dispute import _take_back, sandbox
     from engine.dm.narration import pause_blocks
     from engine.dm.turn import run_turn
@@ -520,6 +577,14 @@ def _replay_tool(ctx: Any, arg: str) -> str:  # rule: PR-12-11
             sx.tx = None
         if why:
             return f"cannot replay {tid} on a copy: {why}"
+        if dm_tools.enabled(sx):  # spec 032 G11: the DM plays it again (the pipeline's Reader would be another game)
+            if any(e.turn_id == tid and e.type == "pause_closed" and getattr(e.payload, "by", "") == "option"
+                   for e in ctx.store.events(types=["pause_closed"])):
+                return f"{tid} answered an offer ({tr.input_verbatim!r}); replay the turn that opened it"
+            out = dm_tools.play_turn(sx, tr.input_verbatim)
+            return "\n".join([f"{tid} played again by the DM on a copy (nothing kept): \"{_flat(tr.input_verbatim, 300)}\"",
+                              *dm_log(out.turn_record), f"  passage: \"{_flat(out.response.fiction, 900)}\"",
+                              *(f"  {_flat(b.text, 600)}" for b in out.response.oof_blocks)])
         adj = run_turn(sx, tr.input_verbatim)
         lines = [f"{tid} replayed on a copy (nothing kept): \"{_flat(tr.input_verbatim, 300)}\""]
         lines += [f"  beat: \"{_flat(b.restatement, 140)}\" · {str(b.verb or '').removeprefix('verb.')} · gate {b.gate}"
@@ -600,6 +665,7 @@ def opening(ctx: Any, text: str) -> str:
         f"{getattr(ctx, 'turn_id', None) or 'now'}",
         "THE PLAYER'S CHARACTER:", *([f"- {pc}: {me[0]}", *me[1:]] if me else ["- none"]),
         f"  sheet: {sheet_line(state, ctx.rules, pc)}",
+        *(cond_origins(ctx.store, state, ctx.rules, pc) if pc else []),
         "PEOPLE IN VIEW (the people card every role reads):", *(people or ["- no one"]),
         offer,
         "LAST TURNS (oldest first; use `turn` for the full record):",

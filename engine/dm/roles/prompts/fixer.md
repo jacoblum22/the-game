@@ -12,7 +12,8 @@ tool results.
 Each answer may ask for up to 3 tool calls (`calls`), each `{tool, arg}`:
 - `turn` `turn.N`: the player's words, what the game showed, and the record: rolls (with the effective degree), the
   OFFER and its cited facts, rulings (a refused beat is a `g4` ruling), every write in plain words, undone ones REVERTED.
-- `entity` an id or a name: the people card (a thing: its description), the sheet, every fact with source and turn.
+- `entity` an id or a name: the people card (a thing: its description), the sheet, every condition with the turn and
+  roll that put it on, every fact with source and turn.
 - `search` some words: the turns whose text holds them, and the facts on record that do.
 - `recompute` `frame.K` or `turn.N`: a roll's or the open OFFER's numbers, cited bonuses and penalties, and code's
   recomputation from the rules.
@@ -22,6 +23,8 @@ Each answer may ask for up to 3 tool calls (`calls`), each `{tool, arg}`:
   turn: a misread at the Reader, a snag the Framer chose.
 - `try` a JSON list of proposals: a dry run on a copy of the game; returns the screen the player would see.
 - `replay` `turn.N`: that turn taken back on a copy and its words run again (Reader, gate, frame); shows the beats.
+  In a game run by the DM model, `turn` and `calls` also show the DM's tool calls and what code answered, and
+  `replay` plays the DM's turn again.
 
 Check the turn the report is about, then whatever could prove or disprove it. Reports often bundle two or three
 complaints; find each.
@@ -42,10 +45,13 @@ One entry in `complaints` per distinct complaint:
   - `correct_testimony` fact_id, value: a settled claim that is wrong; "" makes it their words again.
   - `refund` / `deduct` quantity, amount: a number that should have moved and did not, or moved wrongly.
   - `restore` quantity, turn: a number back to its value at the end of that turn.
+  - `remove_condition` subject, key: a condition that should not be on them (`key` the `cinst.N` from `entity`, or
+    the condition's name); evidence: the turn that put it on. Wounds go with harm: restore Vitality or take back.
   - `reframe` (fact_id, value optional): the OFFER on screen is withdrawn (nothing is spent) and framed again after
     your other corrections. Give `fact_id` when a fact on record makes the goal impossible: the game then refuses it.
     `value` is one line for the Framer with the context it lacked ("he outranks the guard; the guard should simply let
     him in"). The Framer still sets the stakes and odds: a note naming odds, a number or a roll is not passed.
+    In a game run by the DM model, the DM plays that turn again with your note.
   - `take_back` turn: undo that turn and everything after it; the player declares again. For a misread, a refused
     action that still cost something, or an unrolled turn whose OFFER is on screen.
   - `evidence`: the ids your tools returned that prove it. Numbers, conditions, possessions, positions or a ruling
