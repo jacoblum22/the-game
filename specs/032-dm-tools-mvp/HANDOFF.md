@@ -12,7 +12,7 @@ Fixed (P5a, was: a footing cost at S3+ made a self-held `cond.pinned`): `costs.p
 Fixed (P5a): `_party` maps pc / the pc / you / the player (any case) to the PC (no more NPC "the pc"). `gate.py` G4 reason is now "pinned (cinst.1) forbids verb.strike" (the player's REDIRECT already named the condition, via `oof._why`).
 Gate (P5a): `test_resolve_costs.py` footing 70 cells + `test_spec032_p5a.py` 12, all green; ruff and pyright clean on touched files; full pytest exit 0 (about 2.5 h under machine load, not 3 min). No recording changed: the pipeline recording and `offline_seed11_dmtools` stay as they were.
 Next, P5b (the rest of P5): `said` via `add_said`, `carries:`/`Not here:`, log-only checks, leak audit tokens, empty dm turn records.
-Not run yet: P6.4 (`evals/feedback_corpus.py --set dmtools --model sonnet`); the orchestrator runs it.
+P6.4 done (orchestrator): live /fix, Sonnet, 9 labelled: understood 8/9, outcome 8/9 (auto 7 right, 1 unclear, 1 wrong: dmo1, a "learn from" teacher) -> `evals/baselines/fixer_dmtools_032.json`.
 Traps:
 1. The world step runs once per exchange (`t.world_done`); a re-ask rebuilds `situation()`.
 2. `t.beats` must be extended wherever a tool resolves a beat.
