@@ -361,3 +361,14 @@ everything.
 - **In flight:** head-to-head, 3 arms (pipeline / DM-tools secrets hidden / visible) × talker, fighter, explorer + scripted lines, Sonnet agent. Results go to `EXPERIMENT-DM-WITH-TOOLS-RESULTS.md`.
 - **Head-to-head done** (`EXPERIMENT-DM-WITH-TOOLS-RESULTS.md`). DM-tools vs pipeline: tokens in per turn 14.5–15.6k vs 45.4k; 13.5–15.2 s vs 35.4 s; contradictions 5/3 vs 10; real player problems 12/11 vs 21; repetition 6/6 vs 11. Gaps: no foe counter-strikes, no time or world step, told facts not reaching the journal, prose-only people not targetable.
 - **Owner decision: A.** Build the MVP on DM-tools; the pipeline is frozen (specs 028 and 030 shelved). Spec 032 `032-dm-tools-mvp` closes the gaps, ports `evals/npc_agency.py` for a confirming test with forced costly asks, then makes dm-tools the default. It runs in Sonnet slices under the new agent setup (ce118da); slice 1 (design) is in flight.
+- **Spec 032 P1–P8 built on `spec032-base`** (2415 passed). Confirming test: dm-tools 0.40x tokens and 0.46x time per turn; contradictions 5 vs 8; /fix 6 vs 1; no caves in costly asks (priced deals); held-out 1 of 6 prose targets and 3 of 6 fights before P8 (the set is now seen). Live /fix on dm-tools: 8/9.
+- **Owner rulings:**
+  - Moods are decided by the DM and pushover is observed, not gated.
+  - The DM ends scenes.
+  - **Constitution 3.1.0, VIII.9: code never deduces the story.** No inference of story state from actions or words, and no word matching for decisions.
+  - The DM picks foe actions; leads and witnesses are facts to the DM.
+  - Search stays search.
+  - Keyword measures leave the engine for model-judged evals.
+  - The pipeline is deleted after the switch.
+- Inventories: `spec032-investigation/fiction-inference-inventory.md` and `word-matching-inventory.md`.
+- **Spec 033 `033-dm-states-code-records`:** the design slice (Opus) is in flight.
