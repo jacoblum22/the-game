@@ -380,3 +380,12 @@ everything.
     - R rules R2-M e77cc07 (DL-06-40/41, DL-01-60..62, DL-12-160..162; T-06-16).
     - P1 contract f79f337.
   - W2 running: P2a (positions, fights, costs), P2b (gate, frame, anchors), P4 (people, testimony).
+  - W2 merged, full pytest 2554 passed:
+    - P2b 9012bbf: gate, necessity, frame and anchors read stated fields.
+    - P2a c302aaf: positions only from the DM; no code-started fights; Force ladder; footing deferred to the DM's pick.
+    - P4: identity by exact id/pc/name; walk-ons from `as`; keyword measures deleted. P4 needed a second agent for its tests.
+  - W3 running: P3 (the foe call after the result, the reach refusal, COST TO SHAPE) and P5 (leads, witnesses, retire).
+  - Watch in P7:
+    - "you" or a made-up id in a person slot makes a walk-on;
+    - an omitted S3 footing defaults to a holder-less `restrained`;
+    - plain questions always roll.
