@@ -216,7 +216,9 @@ OFFER, where the player sees it and can change it for free (class ii).
 the player's words plus relationship-state (06) leave exactly one legal candidate, it is that one; if
 several, the stated default applies (in conflict: the nearest engaged foe; otherwise: the most recently
 mentioned addressable element of the right kind); if none fits, ask (this counts as the one clarifying
-question). **The addressee is the Reader's too** [revision: R2-L; DL-01-53]: each speech or question part carries a typed
+question). These defaults are the Reader's to apply (with tools, the DM names the target: an id, `"pc"`, or a recorded
+name exactly); code never picks a target by matching words, mentions or recency (constitution VIII.9) [revision: R2-M;
+DL-12-161]. **The addressee is the Reader's too** [revision: R2-L; DL-01-53]: each speech or question part carries a typed
 addressee (an id, or none) and each ask its cost to the NPC (12.2.2), and code never replaces the addressee by word
 overlap, a role's head noun or whoever spoke last (round 8, R8-I2 §A: 6 of 17 speech-only turns went to the wrong
 person; the Reader's restatement named the right one in all 6). A beat never resolves against an unresolved target, and self-harm is never narrated unless a
@@ -1368,7 +1370,9 @@ degree treat it as `success`. The cost may never negate the success ("a conseque
 success"). **Generalised** [revision: R2-K;
 DL-01-43]: no price (the threatened cost, the alternate, or a method consequence) may reverse the typed goal against
 the same target ("he turns the round down" for a `persuade_to`; "she takes it back" for a `take`); code checks the
-price against the typed change, and FRAME names another. *Retires:* the guard that covered only holds (round 7, I3 §5).
+price against the typed change by cost id, from `resolution.yaml#reverses_goal` (a closed door on the person a
+`persuade_to` or `learn` presses; the other kinds list none), never by the price's words [revision: R2-M; DL-01-61],
+and FRAME names another. *Retires:* the guard that covered only holds (round 7, I3 §5).
 **The effective degree** [revision: R2-K; DL-01-48]: one function gives each beat's outcome, its degree except that a
 success at a cost taken counts as `success`, and every reader uses it: the NPC's mood and ceiling [revision: R2-L] (12.11.9,
 PR-12-10), answers, scene state (T-12-18), evidence and generators. No reader checks the raw degree. A beat paused at
@@ -1666,6 +1670,7 @@ listening clock is established. *False for:* a scene with no one to notice.
 | S3 | `cond.restrained` **or** `flag.cornered` **or** `cond.slowed` (scene), **or** separated: two bands from allies or goal | tangled, backed into the corner, hobbled, cut off |
 | S4 | `cond.pinned`, **or** moved into the next lower or worse place (a fall into the pit, the river's current), **or** held in the opponent's control | pinned beneath, over the edge, dragged off |
 | S5 | trapped: `cond.restrained` (duration until_cleansed) inside a hazard's reach, or swept to a distant place | buried in the collapse, carried off by the flood |
+**The form is the DM's pick** [revision: R2-M; DL-01-60]. The severity is known only after the roll, so on the answer turn the DM is shown the options of the read severity that can land now (`grabbed` and the opponent's control need an engaged opponent; losing a flag needs the flag held; one band back and separated need a recorded band; a slide, a lower place or a distant place needs that exit or place on record) and picks one; code writes exactly that option. Omitted, or not among those shown: the first listed option that can land (S1 `cond.off_balance`, S2 `cond.prone`, S3 `cond.restrained`, S4 `cond.pinned`, S5 trapped), logged as `not_chosen:cost_form`. Code never reads the form from the narration's or the frame's words (constitution VIII.9).
 Moving the actor into a hazard does not also deal harm as part of this cost; the hazard then acts on its
 own cadence (10), which the OFFER must have shown.
 

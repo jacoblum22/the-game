@@ -1524,11 +1524,12 @@ And for the case: every necessary node is reachable from at least one placement 
 reach from where the case begins, and the case carries at least one fallback. During play,
 `h.15.placement_audit` (`scene_end`, phase 6, before 12's lead audit at phase 7) recomputes, for each
 unfound necessary node, its **live** placements (holder exists, is not destroyed, dead or departed beyond
-reach, and the placement is not `lost`); when fewer than **two** are live, it places one reserve placement
-in the world (sealed; a new witness, a copy of the letter, a second traveller who saw), and when the
-reserve is spent it generates one by PR-15-7. The Alexandrian's rule — "for any conclusion you want the
-PCs to make, include at least three clues" — becomes an invariant the engine keeps true, not advice the
-narrator must remember [R: https://thealexandrian.net/wordpress/1118/roleplaying-games/three-clue-rule;
+reach, and the placement is not `lost`); when fewer than **two** are live, it tells the DM once, with the node id
+(WITNESS NEEDED; told again only after a new shortfall), and places nothing [revision: R2-M; DL-12-160]: the DM brings
+the reserve in with its own tools (a walk-on or a document with `knows: <node id>` takes the node's reserve placement:
+a new witness, a copy of the letter, a second traveller who saw), and when the reserve is spent PR-15-7 generates a
+new one for the DM to use. Code spawns no person or document in play (constitution VIII.9). The Alexandrian's rule — "for any conclusion you want the
+PCs to make, include at least three clues" — becomes an invariant the engine audits and puts before the DM each time it slips, not advice the narrator must remember [R: https://thealexandrian.net/wordpress/1118/roleplaying-games/three-clue-rule;
 R6 B-13; R5 P-41; 12.8.4; DL-15-24]. **Reduced profile** [revision: R2-D] [DL-15-38]: a reduced case (PR-15-6) holds
 2 necessary nodes meeting items 1–4 with **one** reserve each, and its entry core placement is at the place where it
 began; `h.15.placement_audit` runs for reduced cases from Milestone 1 (full cases from Milestone 6), so the Three Clue

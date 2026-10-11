@@ -15,9 +15,10 @@ schema_version: 1
 
 verbs:
   - id: verb.move
+    target_kinds: [object, person]   # [revision: R2-M] [DL-01-62]: what the target slot may be (person, object); a person-only slot defaults `as` to they
     name: Move
     covers: [reposition, dash, withdraw, slip through a crowd, travel on foot, "retreat (withdraw from a conflict; outcome per ch.07)"]
-    excludes: [{what: flying or teleporting, needs: "a license (movement_mode or spell)"}]
+    excludes: [{what: flying or teleporting, needs: "a license (movement_mode or spell)", covered_by: [], covered_by_effect: [eff.movement_mode]}]
     attribute: agility
     alt_attributes: [{attribute: might, when: "forcing a way through"}, {attribute: endurance, when: "long hauls"}]
     reach_unit: position or distance
@@ -62,9 +63,10 @@ verbs:
       - {vs: verb.evade, test: going where you choose (move) or getting out of the way of a specific threat (evade)}
     lifecycle: provisional
   - id: verb.observe
+    target_kinds: [object, person]   # [revision: R2-M] [DL-01-62]: what the target slot may be (person, object); a person-only slot defaults `as` to they
     name: Observe
     covers: [search, study, listen, track by sight, read a person or a scene]
-    excludes: [{what: reading an unknown script, needs: "a language or training license"}, {what: magical sight, needs: "a license"}]
+    excludes: [{what: reading an unknown script, needs: "a language or training license", covered_by: [lic.training.lore_languages]}, {what: magical sight, needs: "a license", covered_by: [lic.training.arcane_divination, lic.training.divine_revelation]}]
     attribute: wits
     alt_attributes: [{attribute: intellect, when: "sustained study of a thing"}]
     reach_unit: information units (P17)
@@ -108,9 +110,10 @@ verbs:
       - {vs: passive noticing, test: casual looking is free and only compares notice to concealment (01.4.6)}
     lifecycle: provisional
   - id: verb.recall
+    target_kinds: []   # [revision: R2-M] [DL-01-62]: what the target slot may be (person, object); a person-only slot defaults `as` to they
     name: Recall
     covers: [common knowledge of one's origin, culture and trade]
-    excludes: [{what: specialist lore, needs: "a training license"}]
+    excludes: [{what: specialist lore, needs: "a training license", covered_by: [lic.training.lore_arcana, lic.training.lore_bestiary, lic.training.lore_engineering, lic.training.lore_history, lic.training.lore_investigation, lic.training.lore_languages, lic.training.lore_law, lic.training.lore_medicine, lic.training.lore_religion]}]
     attribute: intellect
     alt_attributes: []
     reach_unit: information units
@@ -145,9 +148,10 @@ verbs:
       - {vs: licensed lore, test: any adult of that background (recall) or a scholar (training license)}
     lifecycle: provisional
   - id: verb.talk
+    target_kinds: [person]   # [revision: R2-M] [DL-01-62]: what the target slot may be (person, object); a person-only slot defaults `as` to they
     name: Talk
     covers: [inform, persuade, deceive, intimidate, bargain, taunt, perform, "yield (surrender on terms; outcome per ch.07)"]
-    excludes: [{what: speaking a language not held, needs: "a language license (fallback: gesture, tone, shared nouns)"}]
+    excludes: [{what: speaking a language not held, needs: "a language license (fallback: gesture, tone, shared nouns)", covered_by: []}]
     attribute: presence
     alt_attributes: [{attribute: intellect, when: "reasoned argument"}, {attribute: might, when: "physical menace"}]
     reach_unit: standing steps or the NPC's action (ch.15)
@@ -189,9 +193,10 @@ verbs:
       - {vs: verb.sneak, test: making them believe something false (talk) or making them not notice (sneak)}
     lifecycle: provisional
   - id: verb.strike
+    target_kinds: [person, object]   # [revision: R2-M] [DL-01-62]: what the target slot may be (person, object); a person-only slot defaults `as` to they
     name: Strike
     covers: [hit with body, weapon or improvised object, shoot, throw]
-    excludes: [{what: weapon techniques, needs: "an ability license"}]
+    excludes: [{what: weapon techniques, needs: "an ability license", covered_by: [lic.training.martial_archery, lic.training.martial_axe, lic.training.martial_blade, lic.training.martial_bludgeon, lic.training.martial_polearm, lic.training.martial_shield, lic.training.martial_thrown, lic.training.martial_unarmed]}]
     attribute: might
     alt_attributes: [{attribute: agility, when: "finesse, aimed or thrown"}]
     reach_unit: harm severity steps
@@ -235,6 +240,7 @@ verbs:
           Great-reach clause'}
     lifecycle: provisional
   - id: verb.grapple
+    target_kinds: [person]   # [revision: R2-M] [DL-01-62]: what the target slot may be (person, object); a person-only slot defaults `as` to they
     name: Grapple
     covers: [seize, hold, pin, restrain, snatch a held item, mount a large creature]
     excludes: []
@@ -271,9 +277,10 @@ verbs:
       - {vs: verb.force, test: the actor keeps hold (grapple) or the target is moved away or down (force)}
     lifecycle: provisional
   - id: verb.force
+    target_kinds: [person, object]   # [revision: R2-M] [DL-01-62]: what the target slot may be (person, object); a person-only slot defaults `as` to they
     name: Force
     covers: [shove, trip, topple, break, burst, pry]
-    excludes: [{what: picking a lock, needs: "lic.training.guile_thievery (or equivalent)"}]
+    excludes: [{what: picking a lock, needs: "lic.training.guile_thievery (or equivalent)", covered_by: [lic.training.guile_thievery]}]
     attribute: might
     alt_attributes: []
     reach_unit: condition or object state
@@ -315,6 +322,7 @@ verbs:
       - {vs: verb.handle, test: overcoming the object's resistance (force) or using it as meant (handle)}
     lifecycle: provisional
   - id: verb.exert
+    target_kinds: [object]   # [revision: R2-M] [DL-01-62]: what the target slot may be (person, object); a person-only slot defaults `as` to they
     name: Exert
     covers: [climb, jump, swim, lift, balance, run far]
     excludes: []
@@ -360,6 +368,7 @@ verbs:
       - {vs: verb.force, test: the body's own movement or burden (exert) or defeating an object's resistance (force)}
     lifecycle: provisional
   - id: verb.evade
+    target_kinds: []   # [revision: R2-M] [DL-01-62]: what the target slot may be (person, object); a person-only slot defaults `as` to they
     name: Evade
     covers: [dodge, duck, take cover, get clear of a hazard]
     excludes: []
@@ -398,9 +407,10 @@ verbs:
       - {vs: verb.endure, test: getting out of the way (evade) or taking it and holding out (endure)}
     lifecycle: provisional
   - id: verb.sneak
+    target_kinds: [person]   # [revision: R2-M] [DL-01-62]: what the target slot may be (person, object); a person-only slot defaults `as` to they
     name: Sneak
     covers: [hide, move quietly, conceal an object, palm]
-    excludes: [{what: disguise as a specific person, needs: "a license"}]
+    excludes: [{what: disguise as a specific person, needs: "a license", covered_by: [lic.training.guile_disguise]}]
     attribute: agility
     alt_attributes: [{attribute: wits, when: "blending into a crowd or picking the moment"}]
     reach_unit: exposure-clock effect
@@ -435,9 +445,10 @@ verbs:
       - {vs: verb.observe, test: avoiding notice (sneak) or gaining it (observe)}
     lifecycle: provisional
   - id: verb.handle
+    target_kinds: [object, person]   # [revision: R2-M] [DL-01-62]: what the target slot may be (person, object); a person-only slot defaults `as` to they
     name: Handle
     covers: [use an object as its nature suggests, crude making and repair, "first aid (stabilize only)", calm or lead an animal, ride]
-    excludes: [{what: surgery, needs: "a medicine license"}, {what: smithing and fine crafts, needs: "a craft license"}, {what: lockpicking, needs: "a training license"}, {what: mounted combat, needs: "a license"}]
+    excludes: [{what: surgery, needs: "a medicine license", covered_by: [lic.training.lore_medicine]}, {what: smithing and fine crafts, needs: "a craft license", covered_by: [lic.training.craft_alchemy, lic.training.craft_artifice, lic.training.craft_building, lic.training.craft_cookery, lic.training.craft_enchanting, lic.training.craft_jewelcraft, lic.training.craft_leathercraft, lic.training.craft_scribing, lic.training.craft_smithing, lic.training.craft_textiles, lic.training.craft_woodcraft]}, {what: lockpicking, needs: "a training license", covered_by: [lic.training.guile_thievery]}, {what: mounted combat, needs: "a license", covered_by: [lic.training.martial_mounted]}]
     attribute: agility
     alt_attributes: [{attribute: wits, when: "improvised use"}, {attribute: intellect, when: "knowledge-driven use"}, {attribute: presence, when: "animals"}, {attribute: by_license, when: "a small working of magic (05.7.6): the school's casting attribute (integration: IR ch.05 to 01)"}]
     reach_unit: object or condition state
@@ -476,6 +487,7 @@ verbs:
           fallback handle, reach limited)'}
     lifecycle: provisional
   - id: verb.endure
+    target_kinds: [object]   # [revision: R2-M] [DL-01-62]: what the target slot may be (person, object); a person-only slot defaults `as` to they
     name: Endure
     covers: [resist cold, resist poison, resist disease, resist fear, resist pain, hold breath, keep going]
     excludes: []
@@ -509,6 +521,7 @@ verbs:
       - {vs: verb.exert, test: holding out (endure) or acting in a burst (exert)}
     lifecycle: provisional
   - id: verb.setup
+    target_kinds: [person, object]   # [revision: R2-M] [DL-01-62]: what the target slot may be (person, object); a person-only slot defaults `as` to they
     name: Setup
     covers: ["create a lever for yourself or an ally (feint, distract, blind, prepare)"]
     excludes: []
@@ -545,6 +558,7 @@ verbs:
       - {vs: verb.help, test: creating a fact in the world (setup) or lending effort to another's roll (help)}
     lifecycle: provisional
   - id: verb.help
+    target_kinds: [person]   # [revision: R2-M] [DL-01-62]: what the target slot may be (person, object); a person-only slot defaults `as` to they
     name: Help
     covers: ["give a Precision lever to another's attempt (only if the helper could attempt it alone)"]
     excludes: []
@@ -573,9 +587,10 @@ verbs:
       - {vs: group action, test: help assists one roll; a group action is one roll for several actors (01.14.7)}
     lifecycle: provisional
   - id: verb.ready
+    target_kinds: []   # [revision: R2-M] [DL-01-62]: what the target slot may be (person, object); a person-only slot defaults `as` to they
     name: Ready
     covers: [hold an action for a stated trigger]
-    excludes: [{what: reactions beyond ch.06's, needs: "an ability"}]
+    excludes: [{what: reactions beyond ch.06's, needs: "an ability", covered_by: []}]
     attribute: none
     alt_attributes: []
     reach_unit: none

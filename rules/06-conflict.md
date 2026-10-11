@@ -436,11 +436,13 @@ the classification is a stored fact the player can question. A feature the scene
 but narration has not established ("surely there's a chandelier") is a G0 question for the Oracle
 (00.12.7), asked **before** the frame, never granted by the asking (SG-06).
 
-**06.3.9 Framing positions at the start.** `[J:rung]` + `[D]` [DL-06-07; R5 CF-03; revision: I-065] At `conflict_start` the DM sets each
-participant's band to the PC from what the scene has established: a participant the PC was speaking
+**06.3.9 Framing positions at the start.** `[J:rung]` + `[D]` [DL-06-07; R5 CF-03; revision: I-065] At `conflict_start` the DM **states** each
+participant's band to the PC [revision: R2-M; DL-06-41] (with tools: `change fight` with `to`, and `change position`
+for anyone placed otherwise; code never reads a band from the scene's words, constitution VIII.9), guided by what the
+scene has established: a participant the PC was speaking
 with at arm's length is `band.engaged` only if a weapon was already at a throat, else `band.close`;
 someone across a room is `near`; someone across a field or on a far wall is `far`. Default when
-unestablished: `band.near`. Flags are set only from recorded facts (a participant on a gallery feature
+the DM states none: `band.near`, logged (`not_chosen:fight.to`). Flags are set only from recorded facts (a participant on a gallery feature
 gets `flag.elevated`). *Worst case (J):* one band (class i).
 
 **06.3.10 Size.** `[D]` [DL-06-30; C:VII; revision: I-065] Every creature has a **size** from a six-rung ladder stored in its template
@@ -767,7 +769,7 @@ next rung, or an ability (01.18.8 "distinguish").
 
 **06.5.3 Shove, trip and throw (Force).** `[D]` [DL-00A-19; C:P8; revision: I-065] *Anchor: yes.* Card 01.18.10, against the higher of
 Might or Agility defense. Ladder: 1 → `cond.off_balance`; 2 → pushed **one band** away (the engagement
-link breaks) **or** `cond.prone`, the actor's choice declared in the beat; 3 → pushed two bands, or
+link breaks) **or** `cond.prone`, the actor's choice declared in the beat (undeclared: pushed, logged as `not_chosen:force`) [revision: R2-M; DL-06-41]; 3 → pushed two bands, or
 prone and off-balance; 4 → as 3 and a follow-up lever. **Into or off something:** when a recorded
 `hazard` or `height` feature lies where the push sends the target (`[J:flag]`: *"Is the feature in
 the target's group or named as behind it?"*; uncertain → false; *worst case:* one push that should have
@@ -1104,24 +1106,32 @@ feature's state wrong by one step of the object ladder, class i): the feature ta
 
 ### 06.9 Running the opposition
 
-**06.9.1 The DM never chooses for an adversary.** `[D]` On an adversary's turn the DM does not pick
-its action, its target or its mercy. The engine evaluates the adversary's **behavior priority list**
-(09: `behaviors.yaml`, `priority_list [{when, do}]`) top to bottom and takes the first row whose `when`
-is true of the current state, for each of its two actions. The DM's part is narration, and the three
-classification flags this part names. Where a real choice between equal options remains, the engine
-rolls (INV-4). This is the counter to the two measured failures of AI referees in fights: picking
-targets that make no sense, and declining to press [R4 §9 06 item 4, §6.2 item 3; R: https://arxiv.org/abs/2502.19519; R3 §06.8].
+**06.9.1 The DM chooses for each adversary, from the acts legal now.** `[D]` + `[J:enum]` [revision: R2-M; DL-06-40]
+An adversary acts **after** the PC's beat in the exchange has resolved, so the PC's result (a grapple that holds it, a
+shove off the ledge, a blow that drops it) is already state when its act is chosen. For each able adversary the engine
+lists the acts its state allows now (T-06-16) and the DM picks one act and its target, and whether a Strike is
+nonlethal (06.4.8); with tools this is one extra DM call per settled fight exchange (owner ruling 2026-10-10, D2). The
+engine checks legality, frames and rolls the act (06.9.2) and applies its result (harm, holds, positions); narration
+follows the result and cannot soften it (INV-2). **What the DM omits is defaulted and logged** (`not_chosen:<field>`):
+the act is the first legal row of the adversary's behavior list (09, else 06.9.4), the target the PC; a pick outside
+the listed acts counts as omitted. Code never infers an adversary's choice from the narration or the scene's words
+(constitution VIII.9). *Worst case (J):* a weak pick (an unhurt adversary waits when it should strike): one adversary turn spent in the PC's favor, open in the log and counted by the passivity measure below (class i). *Retired rationale, kept as a watch:* this card once took the choice from the DM entirely,
+because measured AI referees in fights picked targets that made no sense and declined to press [R4 §9 06 item 4, §6.2
+item 3; R: https://arxiv.org/abs/2502.19519; R3 §06.8]. The DM now sees only legal acts, which answers the first; the
+second is watched by the **passivity measure** (spec 033 P7): the share of turns an engaged adversary strikes, and the
+`wait` and `yield` picks made for adversaries that are unhurt. *Transition:* the pipeline engine keeps evaluating the
+lists itself until its deletion spec.
 
 **06.9.2 An adversary's beat.** `[D]` [DL-06-16; C:I; revision: I-065] Each adversary action is a frame built by the engine with
 `offer.choice: auto` (a fortune check, 01.6.7): verb and attribute from the template's attack entry;
-target by 06.9.3; levers and snags **cited by the engine** in this fixed order until two of each are
+target as the DM picked it (06.9.1; 06.9.3 is its guidance) [revision: R2-M]; levers and snags **cited by the engine** in this fixed order until two of each are
 cited: (1) conditions on the target that grant levers (T-06-10), (2) flags (T-06-4), (3) a lever fact
 the adversary's own earlier Setup created; snags per 06.4.7. Stakes: Safe. Reach: Standard. `lethal`:
 legal only under chapter 07's lethal warning (00.3.14). Before the roll the PC is offered Fend and any
 reaction ability whose trigger fits (06.6); after it, the harm is applied by the engine and cannot be
 softened by narration (INV-2, 01.8.5).
 
-**06.9.3 Attention: who it goes for.** `[D]` Unless the behavior row names its target ("the one
+**06.9.3 Attention: who it goes for.** `[D]` [revision: R2-M; DL-06-40] Guidance shown to the DM for its target pick (06.9.1); the DM's pick stands, and an omitted target is the PC. Unless the behavior row names its target ("the one
 holding the lantern", "whoever harmed its master"), an adversary's target is the first of:
 1. the participant its **objective** names (06.13.2: the captive it came to take, the PC it was paid
    to kill);
@@ -1130,13 +1140,12 @@ holding the lantern", "whoever harmed its master"), an adversary's target is the
 3. the enemy that dealt it the most harm since its last turn, wherever it is;
 4. the **nearest** enemy by band — if several, the PC before a companion;
 5. an engine roll among those still tied.
-A **Dying PC** is a target only for a side whose objective or `defeat_disposition` is `kill` (07.6.1); every
-other side's attention passes over it to the next enemy [integration: IR ch.07 to 06].
+A **Dying PC** is a target only for a side whose objective or `defeat_disposition` is `kill` (07.6.1); every other side's attention passes over it to the next enemy [integration: IR ch.07 to 06]; this binds the DM's pick too.
 An ability that says it "draws attention" (a taunt, a challenge) adds to the attention score: a
 successful Talk taunt adds harm-equivalent equal to twice the delivered reach, so position 2 and 3
-can be bought [R3 §06.8; DL-06-16]. *Narration may not imply* an intention the list did not produce.
+can be bought [R3 §06.8; DL-06-16]. *Narration may not imply* an intention the DM's pick did not state.
 
-**06.9.4 Default behavior lists.** `[D]` [DL-06-16; revision: I-065] Until chapter 09's lists exist, and whenever an adversary has
+**06.9.4 Default behavior lists.** `[D]` [DL-06-16; revision: I-065] [revision: R2-M; DL-06-40] Every behavior list is guidance shown to the DM and the logged default for an omitted pick (06.9.1); the acts it may pick are T-06-16's. Until chapter 09's lists exist, and whenever an adversary has
 none, the engine uses one of four defaults by the template's `role`
 (`data/conflict.yaml#default_behaviors`; each `do` is a macro of T-06-1 actions):
 
@@ -1149,6 +1158,21 @@ none, the engine uses one of four defaults by the template's `role`
 | 5. not engaged with its target → Move toward it (Withdraw first if engaged elsewhere) | 5. target in cover and a second action remains → Aim | 5. target is prone or `grabbed` by it → Strike | |
 | 6. engaged, an ally also engaged with the target, target not flanked → Flank (once) | 6. shoot the target | 6. it has a grab attack and the target is not held → Grapple | |
 | 7. Strike the target | 7. else Defend | 7. Strike the target | |
+
+**T-06-16 Adversary acts legal now** [revision: R2-M; DL-06-40]. The acts the DM may pick for an able adversary
+(06.9.1), by its state after the PC's beat; melee only until chapter 09's lists add windup, flank, aim, reload, shoot
+and defend. `close_in` is a Move to engage (PR-06-4); `withdraw` and `flee` are 06.12's ways out (`flee` leaves the
+scene); `stand` rises from prone; `break_free` is 06.5.2's; `yield` is 06.11.7's; `wait` spends the turn.
+
+| Adversary state | strike | close_in | withdraw | stand | break_free | grapple | flee | yield | wait |
+|---|---|---|---|---|---|---|---|---|---|
+| engaged, free | yes | no | yes | no | no | yes | yes | yes | yes |
+| close, near or far, free | no | yes | no | no | no | no | yes | yes | yes |
+| prone | no | no | no | yes | no | no | no | yes | yes |
+| grabbed by the PC | yes | no | no | no | yes | yes | no | yes | yes |
+| restrained by the PC | yes (a close-quarters weapon) | no | no | no | yes | no | no | yes | yes |
+| pinned by the PC | no | no | no | no | yes | no | no | yes | yes |
+Down, dead or fled: no acts, and the DM is not asked. A Dying PC is a legal target only as 06.9.3 allows.
 
 **06.9.5 Heavy blows are announced.** `[D]` + `[T]` + `[N]` An adversary attack whose **base severity
 is S4 or more**, and every adversary attack with a shape (06.8), is a **heavy blow**. A heavy blow
@@ -1176,7 +1200,7 @@ windup, one resistance or vulnerability, its nerve, its weak spot if it has one.
 **06.9.7 No hidden adjustment.** `[D]` Once `conflict_start` has run, nothing about the opposition
 changes except through this chapter's state: harm, conditions, positions, the morale clock, and
 reinforcements on a clock whose omens were rendered. The DM may not add or remove a foe, alter
-Vitality, or have an adversary "hold back", however the fight is going [R1 §4 T-5; 01.7.2]. Difficulty
+Vitality, or have an adversary "hold back" in secret, however the fight is going (its acts are picked openly and logged, 06.9.1) [revision: R2-M] [R1 §4 T-5; 01.7.2]. Difficulty
 is set before the fight, by 09's advisory, and telegraphed (07).
 
 ### 06.10 Mobs, swarms and the solo curve
@@ -1626,8 +1650,8 @@ against the tier the template states (default Hard), Risky.
 
 **PR-06-1 Starting a conflict.** `[D]` (at `conflict_start`; handler `h.06.tempo_setup`)
 1. List participants; assign sides; record each side's objective (06.13.2).
-2. For each participant other than the PC: set its band to the PC, its group and its flags from
-   recorded scene facts (06.3.9), with `set_position`. Write engagement links for any pair already at
+2. For each participant other than the PC: set its band to the PC as the DM states it (06.3.9; default near, logged)
+   [revision: R2-M], and its group and flags from recorded scene facts, with `set_position`. Write engagement links for any pair already at
    blade's reach.
 3. Run the unaware test per participant (06.2.4); apply `cond.surprised`.
 4. Create the opposing side's morale clock at its nerve's size (06.11.2), unless `fearless`.
@@ -1686,11 +1710,11 @@ against the tier the template states (default Hard), Risky.
 **PR-06-6 An adversary's turn.** `[D]` + `[N]`
 1. `turn_start`. If the adversary cannot act (`stunned`, `unconscious`), skip to step 6.
 2. Actions available: 2, less `dazed` or `surprised`.
-3. For each action: evaluate the behavior list (09, else 06.9.4) top to bottom against current
-   state; take the first true row; resolve its macro: a Move by PR-06-4; an attack by PR-06-3 with
-   the target from 06.9.3; a Windup by writing the fact and its tell; a break row by 06.11.5.
+3. For each action: take the DM's pick (06.9.1, from T-06-16), else the first true legal row of the behavior
+   list (09, else 06.9.4), logged as a default [revision: R2-M; DL-06-40]; resolve it: a Move by PR-06-4; an attack
+   by PR-06-3 with the target the DM picked, else the PC; a Windup by writing the fact and its tell; a break row by 06.11.5.
 4. A row that cannot be carried out (no path, no reach) is skipped for this action and logged.
-5. Never re-evaluate a resolved action; never substitute an action the list did not produce.
+5. Never re-evaluate a resolved action; never substitute an action the DM's pick (or the logged default) did not produce.
 6. `turn_end`. The narration packet holds: what it did, bands and flags changed, conditions applied,
    harm as the fiction of its severity, its tell if it wound up, any morale omen.
 

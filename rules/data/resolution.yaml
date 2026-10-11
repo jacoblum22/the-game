@@ -419,6 +419,12 @@ intended_change:   # 01.2.7 [revision: R2-H] [DL-01-34]: each beat's typed inten
   split: "one beat per goal: two goals in one message are two beats; a method, or force or movement in service of a goal, is that goal's beat and is rolled as the goal, never a change of its own (01.2.2, 01.2.7)"   # [revision: R2-J] [DL-01-37]
   log: [restatement, verb, ids_in_scope, kind, slots]   # Laya-ready: a short-input decision with at most 20 options, logged with its inputs
 
+reverses_goal:     # 01.9.3 [revision: R2-M] [DL-01-61]: per typed change kind, the cost ids that undo the goal when
+                   # paid on the goal's own target; a success at a cost never pays one. Ids only: no price's words
+                   # are read (constitution VIII.9). Kinds not listed have none.
+  persuade_to: [cost.closed_door]
+  learn: [cost.closed_door]
+
 attribute_rubric:  # 01.6.1 [revision: R2-H] [DL-01-35]
   lift_or_carry:
     when: "a beat whose typed change is take, or whose method lifts, carries or palms a thing (Exert, Force, Handle or Sneak)"
