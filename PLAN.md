@@ -7,11 +7,10 @@ The session is good enough to show someone.
 ## Decided (owner, 2026-10-11)
 - **Rules:** D&D 5e, the 2014 rules. The model already knows them, so we don't paste in a rulebook.
 - **DM model:** Sonnet (`claude-sonnet-5-5`). Test cheaper models later.
-- **Characters:** a few ready-made level-1 characters.
 - **Interface:** a plain terminal chat.
 - **Tools:** roll, a character sheet with a fight tracker, and a rules lookup.
 - **Content:** SRD 5.1 only, so the product can be sold as is, credited under its licence.
-- **Characters:** a fighter, a rogue and a wizard, each with its SRD subclass.
+- **Characters:** three ready-made level-1 characters: a fighter, a rogue and a wizard, each with its SRD subclass.
 - **The adventure:** the DM improvises from a one-paragraph opening written for each character.
 - **Paying for the model:** the same way as the old playtests, through the Claude Code CLI on the owner's
   subscription. The Claude Agent SDK runs the CLI with real tool calls. Switching to an API key later is a
