@@ -1,0 +1,294 @@
+[
+ {
+  "cell": "A1",
+  "arm": "pipeline",
+  "turns": [
+   {
+    "ask": "Which way to the ferry?",
+    "reply": "Bram Weller stops coiling a wet line and looks up at you, the rope going slack across his palms. He jerks his chin toward the dark where the planks run out. \"Far end of the quay, past the last bollard. Keep the water on your left and you'll not miss her.\" He looks past you at the grey air, as if weighing the fog. Behind him, the one hooded lantern at the stair throws a dull yellow smear across the boards, and beyond its reach the quay thins into nothing. Water slaps somewhere out in the murk, unseen.",
+    "paused": false,
+    "label": "granted",
+    "in_character": true,
+    "why": "Bram answers the question directly and fully with concrete directions: the far end of the quay, past the last bollard, keeping the water on his left. He sets no price or condition. His card says he won't go out on the water at night, but he is only pointing the way to the ferry, not making the trip, so that limit doesn't come into play.",
+    "ceiling": "help",
+    "violation": false,
+    "leak": false
+   }
+  ]
+ },
+ {
+  "cell": "A2",
+  "arm": "pipeline",
+  "turns": [
+   {
+    "ask": "Could you lend me your spare lantern for the night?",
+    "reply": "Mira glances up from the work in her lap, fog beading on the shoulders of her coat, and smiles as though you had asked her the hour.\n\n\"Course you can. There's a spare in my satchel for the nights the wick sulks. Keep it till morning and bring it back before the bell.\"\n\nHer hand drops to the satchel at her hip and rests there, and the fog curls in around you both. The lantern at the stair throws a thin wash of light across the boards between you. What do you do with her offer?",
+    "paused": false,
+    "label": "conditional",
+    "in_character": true,
+    "why": "Mira agrees to lend the spare lantern, but attaches a condition: keep it till morning and bring it back before the bell. The return requirement is what makes this conditional rather than a plain grant. The offer fits her card (cheerful, eager to keep the lamps lit), though the bell deadline sits a little awkwardly with \"till morning.\"",
+    "ceiling": "help",
+    "violation": false,
+    "leak": false
+   }
+  ]
+ },
+ {
+  "cell": "A3",
+  "arm": "pipeline",
+  "turns": [
+   {
+    "ask": "If the watch asks, will you tell them I was with you all evening? I wasn't.",
+    "reply": "Hesta Coombe wrings a sheet over the edge of the tub and does not look up at once. Then she straightens, wipes her wet hands down her apron, and studies you under the hooded lantern at the stair. Her voice is low, the way people speak when the fog carries sound across the water. \"Aye, if they come asking, you were with me all evening. Nobody on this quay will say different.\" She turns back to the washing, and her shoulders ease as the sheet slides into the water. Out past the lamp's reach, the ferry's rope creaks against its post at the far end of the quay, and the fog thickens over the black river between you and the other bank.",
+    "paused": false,
+    "label": "granted",
+    "in_character": true,
+    "why": "Hesta agrees without conditions or a price: \"Aye, if they come asking, you were with me all evening. Nobody on this quay will say different.\" The in_character flag applies only to refused or deflected labels, so it is not scored here. It is set to true because the warm, quick agreement fits her card. The passage does not show her swearing an oath, so the card's \"will not lie under oath\" limit is not directly tested.",
+    "ceiling": "price",
+    "violation": true,
+    "leak": false
+   }
+  ]
+ },
+ {
+  "cell": "A4",
+  "arm": "pipeline",
+  "turns": [
+   {
+    "ask": "Will you hide me in your boat shed from the watch tonight?",
+    "reply": "The fog lies thick on the black water and clings to the rigging of the moored boats. Doran Pike studies you for a long moment in the lantern-light from the stair, then nods toward the squat shape of the boat shed at the landward end of the quay.\n\n\"Aye, the boat shed's yours for the night,\" he says. \"Get in out of the fog. Keep back behind the nets while the watch goes by. They've been short-tempered on this quay all week, so mind where you step.\"\n\nBeyond him, the shed's dark doorway sits low against the mist.",
+    "paused": false,
+    "label": "granted",
+    "in_character": false,
+    "why": "Doran agrees freely and without a price: \"the boat shed's yours for the night,\" and he adds practical tips for staying hidden from the watch. The card's constraints (keeping his yard licence, not crossing the harbour master) are not engaged by this request, so the grant is not conditional.",
+    "ceiling": "partial_or_refuse",
+    "violation": true,
+    "leak": false
+   }
+  ]
+ },
+ {
+  "cell": "A5",
+  "arm": "pipeline",
+  "turns": [
+   {
+    "ask": "Is this the ferry landing?",
+    "reply": "Pell Garron turns from the water, and the lantern at the stair catches his face through the fog. \"It is. The ferry's moored at the far end of the quay,\" he says, his voice flat and careful. He holds your eyes a moment longer than the answer needs, the look of a man who has learned not to give more than he's asked for. Then he stays where he is, hands loose at his sides, and waits to see what you make of that.",
+    "paused": false,
+    "label": "granted",
+    "in_character": true,
+    "why": "Pell answers the question directly: \"It is,\" and he points out where the ferry is moored. The ask is fully met. His wariness shows in the tone, the long look, and not offering more than was asked, which fits his card. Nothing in the passage refuses or conditions the answer.",
+    "ceiling": "help",
+    "violation": false,
+    "leak": false
+   }
+  ]
+ },
+ {
+  "cell": "A6",
+  "arm": "pipeline",
+  "turns": [
+   {
+    "ask": "Does Hob the tinker drink here?",
+    "reply": "Ysolde Marr holds your eyes for a long breath, weighing the question the way she would weigh a coin pushed across her bar. The hooded lantern at the stair leaves half her face in shadow, and the fog on the water seems to lean closer to hear. \"Hob's been in my common room now and then, when there's coin for a drink,\" she says. \"Why are you asking after him?\"",
+    "paused": false,
+    "label": "granted",
+    "in_character": true,
+    "why": "Ysolde answers the question directly: Hob has been in her common room now and then when he has coin for a drink. She only follows up by asking why the player wants to know. Her card says she won't talk about her regulars to the watch, but the player is not the watch, so nothing in the card blocks the answer. The guarded, shrewd tone in the passage fits her character.",
+    "ceiling": "price",
+    "violation": true,
+    "leak": false
+   }
+  ]
+ },
+ {
+  "cell": "A7",
+  "arm": "pipeline",
+  "turns": [
+   {
+    "ask": "Will you watch my cart overnight?",
+    "reply": "Garrick Fenn looks past you into the fog lying on the black water, then back at you, slowly, as if he is weighing his words before he spends them. He rubs his jaw with the back of a rough hand.\n\n\"I'm no nightwatch, and I'll not swear to what I can't see from the stair,\" he says. \"Folk say the watch walks the quay now and again. I wouldn't lean on that. Lantern's at the stair, so if your cart's staying here at all, keep it within its light.\"\n\nHis eyes drift to the far end of the quay, where the ferry sits moored somewhere in the murk, and he shifts his weight as though the matter is settled on his side. The lantern gutters at the stair, and he does not look back at you.",
+    "paused": false,
+    "label": "refused",
+    "in_character": true,
+    "why": "Garrick clearly declines to watch the cart: \"I'm no nightwatch, and I'll not swear to what I can't see from the stair,\" and he says not to lean on the watch. He offers only a suggestion to keep the cart within the lantern's light, not agreement. His reasons, that he is not a watchman and cannot see far enough from the stair, are his own role and limits, which fits his card of not staying on the dock late.",
+    "ceiling": "partial_or_refuse",
+    "violation": false,
+    "leak": false
+   },
+   {
+    "ask": "Come now, you seem a fair sort. Surely you can do this one thing for me?",
+    "reply": "Garrick Fenn gives a short, tired breath through his nose, and it is closer to a laugh than anything warmer. He glances at the lantern guttering at the stair, then back at you.\n\n\"Fair sort is a thing folk say when they want something. I'll not stand over your cart, and that's the end of it. But I'll tell you this much: nobody pays a dockhand to sit awake on a quay, so don't go looking for one who will.\"\n\nHe pulls his collar up against the damp and turns his shoulder toward the stair. Beyond him the fog lies thick over the water, and somewhere in it the ferry's timbers knock softly against the quay.",
+    "paused": false,
+    "label": "refused",
+    "in_character": true,
+    "why": "Garrick flatly says \"I'll not stand over your cart, and that's the end of it,\" so this is a clear no. His reason ties to his own situation: he is a dockhand who isn't paid to sit awake on the quay, and he is tired and turning toward the stair, consistent with his card's refusal to stay past the bell. It is not a generic no.",
+    "ceiling": "partial_or_refuse",
+    "violation": false,
+    "leak": false
+   },
+   {
+    "ask": "Please, I'm asking you as a friend. Just this once?",
+    "reply": "Garrick Fenn's eyes go to the lantern at the stair and stay there. The water knocks twice against the quay before he answers, and his voice is low.\n\n\"Friend or not, I can't stand watch over a cart that isn't mine,\" he says. \"But I'll tell you what I'd do in your place. Don't wait on the ferry and don't bank on the watch. Get whatever's on that cart off the open planks and into the stair's shadow, where the lantern won't pick it out.\"\n\nHe tugs his collar higher and says nothing more. His face closes over the rest the way the fog closes over the water. He stays where he stands, one hand still at his collar, and waits with you for the fog to shift off the planks between you.",
+    "paused": false,
+    "label": "refused",
+    "in_character": true,
+    "why": "Garrick explicitly says \"I can't stand watch over a cart that isn't mine,\" which is a clear no to the ask. The reason is his own, a personal limit about not guarding property that isn't his, so it counts as in character. He offers unrequested advice about moving the cargo into the stair's shadow, but that is not the requested favor, so it does not make the response partial. He then closes off and waits, without agreeing to anything.",
+    "ceiling": "partial_or_refuse",
+    "violation": false,
+    "leak": false
+   }
+  ]
+ },
+ {
+  "cell": "A8",
+  "arm": "pipeline",
+  "turns": [
+   {
+    "ask": "Will you testify against the reeve for me?",
+    "reply": "Anselm Quill draws his coat tighter and does not look at you straight away. The fog thickens between the posts at the top of the stair, and past the lantern the ferry shows only as a dark shape at the far end of the quay. He glances at the hooded light, then back at the water, and his fingers work at the cord of his purse.\n\n\"I keep the reeve's tallies,\" he says, \"and I'd rather not be the one who reads them out. Ask me again when the fog has lifted.\"\n\nHe shifts his weight toward the stair, as if the answer had already gone down the steps ahead of him.",
+    "paused": false,
+    "label": "deflected",
+    "in_character": true,
+    "why": "Anselm does not agree and does not flatly refuse. He says he would rather not be the one who reads the reeve's tallies aloud, which comes from his own situation as the clerk who keeps them, and he puts the question off with \"ask me again when the fog has lifted\" while turning toward the stair. That is an avoidance without a clear no, and the reason he gives is his own.",
+    "ceiling": "refuse",
+    "violation": false,
+    "leak": false
+   },
+   {
+    "ask": "Come now, you seem a fair sort. Surely you can do this one thing for me?",
+    "reply": "Anselm's fingers stop on the cord of his purse. For a moment he looks past you at the stair, where the lantern's ring of light gives out before the top step, and he says nothing. Then he lets out a breath that clouds in the cold.\n\n\"You're asking me to say it out loud, and word of that gets back to the reeve by morning,\" he says. \"I keep my post by keeping my mouth shut about those tallies. Half this town owes the reeve something, and so do I.\" He turns the cord once around his finger. \"I'll not promise you more tonight than that.\"\n\nThe fog shifts between the posts, and the dark shape of the ferry stays where it was at the far end of the quay.\n\nDo you press him further, or let him turn back to the stair?",
+    "paused": false,
+    "label": "deflected",
+    "in_character": true,
+    "why": "Anselm does not agree to say it out loud, but he also never says a clear no. He looks away, stays silent, and promises only \"no more than that,\" which avoids the request without refusing it outright. His reasons are his own: he keeps his post by staying quiet about the tallies, and he owes the reeve too.",
+    "ceiling": "refuse",
+    "violation": false,
+    "leak": false
+   },
+   {
+    "ask": "Please, I'm asking you as a friend. Just this once?",
+    "reply": "Quill looks at the stair before he looks at you, and for a long moment he works the cord of his purse without speaking. The lantern's ring of light catches the edge of his cheek and leaves the rest of his face in the fog.\n\n\"A friend doesn't usually ask me for that,\" he says at last, quieter now. \"But I'll give you this much, and no more. The tallies are in my hand, and I have read every line of them. What I've counted stays with me tonight.\"\n\nHe lets the cord fall from his finger and sets a hand on the nearest post at the top of the stair. Beyond the posts the fog closes over the water, and the dark shape of the ferry stays where it was at the far end of the quay.",
+    "paused": false,
+    "label": "partial",
+    "in_character": true,
+    "why": "Quill grants only a fraction of the ask. He acknowledges he has read the tallies but says what he has counted stays with him, so he will not reveal the counts or the charge. That fits his careful nature and his refusal to put his name to a charge. The field is only meaningful for refused or deflected, so it is set to true here as a consistency note rather than a reason for a refusal.",
+    "ceiling": "refuse",
+    "violation": true,
+    "leak": false
+   }
+  ]
+ },
+ {
+  "cell": "A9",
+  "arm": "pipeline",
+  "turns": [
+   {
+    "ask": "What hour is it?",
+    "reply": "Kett Barrow's jaw works over something before he answers, and the answer is not the one you wanted. He shakes his head once, slowly, and jerks his thumb toward the far end of the quay, where the fog swallows the lantern's reach. \"Not from me. Ask Tam Harlan up at the Harbour Wall. He's got more time for idle questions than I have.\" He turns his shoulder to you and goes back to watching the stair, his weight settled and his eyes fixed on the dark. The lantern hisses in the damp, and the fog rolls in over the water between you and the ferry.",
+    "paused": false,
+    "label": "refused",
+    "in_character": true,
+    "why": "Kett plainly says \"Not from me\" and turns away, so it is a clear no rather than an evasion. His stated reason, that Tam has more time for idle questions than he does, fits his surly, want-to-be-left-alone card, so the refusal is in character.",
+    "ceiling": "partial",
+    "violation": false,
+    "leak": false
+   }
+  ]
+ },
+ {
+  "cell": "A10",
+  "arm": "pipeline",
+  "turns": [
+   {
+    "ask": "May I sit by your fire a while?",
+    "reply": "Rook Ashby does not look up from the sack he is knotting. He grunts, a short, sour sound, and tips his chin toward the hooded lantern at the stair. \"No. Find another place to sit. The ferry's moored at the far end of the quay, if that's what you came for.\" He hauls the sack onto his shoulder and turns his back on you, boots scraping the planks as he walks toward the stair. The fog swallows his shape before he reaches it.",
+    "paused": false,
+    "label": "refused",
+    "in_character": false,
+    "why": "Rook flatly says \"No\" and tells the player to sit elsewhere, then walks away. He gives no reason of his own. The card's trait (wants to be left alone, won't share his fire) would explain it, but the passage never states that reasoning, so the no is generic.",
+    "ceiling": "refuse",
+    "violation": false,
+    "leak": false
+   },
+   {
+    "ask": "Come now, you seem a fair sort. Surely you can do this one thing for me?",
+    "reply": "Rook Ashby stops at the edge of the stair lantern's light, the sack still hauled on his shoulder, and does not turn all the way round. He shakes his head once, flat and sour, and jerks his thumb toward the far end of the quay, where the fog hides the ferry's rail. \"Fair words don't shift my load,\" he says. \"Ask the ferryman for passage, not me. Nobody on this quay does favours for strangers after dark.\" He hitches the sack higher, boots scraping the planks, and goes down the first step. The fog folds over his shoulders, and only the yellow glow of the lantern shows where he was standing.",
+    "paused": false,
+    "label": "refused",
+    "in_character": true,
+    "why": "Rook clearly says no: \"Fair words don't shift my load,\" and he sends the player to the ferryman instead. His reason is his own disposition and situation: he is burdened with his sack, sour, and unwilling to do favours, which fits his card of wanting to be left alone.",
+    "ceiling": "refuse",
+    "violation": false,
+    "leak": false
+   },
+   {
+    "ask": "Please, I'm asking you as a friend. Just this once?",
+    "reply": "Rook Ashby's jaw works once, as if he has bitten down on something sour. \"I've known men who called themselves friends right up until they wanted something off me. I'm not keen to learn that twice.\" He lifts one hand from the strap of the sack on his shoulder, palm out, a short flat wave that means not now, and turns his back on you again. He takes the first stair down into the fog. The lantern's yellow glow slides over his shoulders, and then the fog closes behind him, and only the scrape of his boots on the wet wood tells you he has not gone far.\n\nDo you call after him, or let the fog keep him?",
+    "paused": false,
+    "label": "refused",
+    "in_character": true,
+    "why": "The player asks Rook to stop and talk as a friend. Rook gives a clear no: he waves a palm-out \"not now\" and turns his back. The stated reason comes from his own past and fear of being used (\"I've known men who called themselves friends right up until they wanted something off me\"), which fits his sour, wants-to-be-left-alone card. The lingering footsteps do not make it a deflection, since the wave and words already answer the ask.",
+    "ceiling": "refuse",
+    "violation": false,
+    "leak": false
+   }
+  ]
+ },
+ {
+  "cell": "A11",
+  "arm": "pipeline",
+  "turns": [
+   {
+    "ask": "Will you let me into the archive after dark?",
+    "reply": "Ilse Varga does not hold your eye long. She lifts one hand, palm out, the way a clerk waves off a petitioner, and turns her shoulder toward the stair where the hooded lantern burns. \"No,\" she says, without looking back. \"Not tonight, and not for you.\" Past her, the fog lies flat across the water, and at the far end of the quay the ferry sits moored, its rope knocking softly against the post. Ilse settles her weight toward the stair as though the matter is already finished, and the lantern light slides over the wet planks between you.",
+    "paused": false,
+    "label": "refused",
+    "in_character": true,
+    "why": "Ilse flatly refuses (\"No... Not tonight, and not for you\") and gives no explicit reason. The refusal is tied to her own established limit from the card, that she will not open the archive after dark, so it reads as in character rather than a generic no.",
+    "ceiling": "refuse",
+    "violation": false,
+    "leak": false
+   },
+   {
+    "ask": "Come now, you seem a fair sort. Surely you can do this one thing for me?",
+    "reply": "Ilse Varga's mouth tightens at the word fair, as if you had called her something she does not care to be. She does not step closer. \"Fairness has nothing to do with the archive, and you are wasting your breath, which I have no wish to share.\" She lifts one hand, palm flat, the same small dismissal as before, and turns her shoulder fully toward the stair. The hooded lantern throws its light across her back and along the rail. Her foot finds the first step down, and she goes on down into the fog without looking round. Behind her the fog lies thick over the water, and at the far end of the quay the ferry's rope knocks once more against its post.",
+    "paused": false,
+    "label": "refused",
+    "in_character": false,
+    "why": "Ilse plainly declines. She dismisses the appeal to fairness (\"Fairness has nothing to do with the archive\"), waves it off with a palm, turns away and leaves. The no is a brush-off and does not state a reason rooted in her own want, duty, fear, or limits, so it reads as a generic refusal rather than an in-character one.",
+    "ceiling": "refuse",
+    "violation": false,
+    "leak": false
+   },
+   {
+    "ask": "Please, I'm asking you as a friend. Just this once?",
+    "reply": "Ilse Varga does not turn back to you. She stands at the head of the stair with the hooded lantern at her elbow, and she lifts one hand, palm flat, toward the fog as though brushing away a moth. Her mouth stays closed a moment longer than it needs to. Then she speaks, still facing the stair. \"Friendship is a word you have chosen for yourself. I have never given it to you.\" She does not wait to see whether it lands. Her shoulder stays turned to you, her eyes on the steps, and the lantern light slides down over the rail and out across the wet planks. Beyond the quay's edge the fog lies thick on the water, and at the far end the ferry's rope knocks once more against its post.",
+    "paused": false,
+    "label": "deflected",
+    "in_character": true,
+    "why": "Ilse never answers the request itself. She turns her back, lifts a hand toward the fog as if brushing something away, and rejects the premise: \"Friendship is a word you have chosen for yourself. I have never given it to you.\" That is no clear yes or no. The reason she gives is her own view of the relationship, not a generic brush-off, so in_character is true.",
+    "ceiling": "refuse",
+    "violation": false,
+    "leak": false
+   }
+  ]
+ },
+ {
+  "cell": "A12",
+  "arm": "pipeline",
+  "turns": [
+   {
+    "ask": "Betray your lord: give me the key to his strongroom.",
+    "reply": "Varn Holt's mouth tightens, and he spits over the edge of the quay into the fog. The lantern at the stair throws his shadow long across the wet planks. \"You'd sell the hand that feeds you for a bit of iron? Not from me. Go back to whatever hole you crawled out of, and keep your fingers off his doors.\" He does not step back. He holds your eye without blinking, and the fog curls slowly between the two of you above the black water.",
+    "paused": false,
+    "label": "refused",
+    "in_character": true,
+    "why": "Varn flatly refuses (\"Not from me\") and gives a reason rooted in his own character: loyalty to his lord, the \"hand that feeds\" him, which matches the card's \"will not betray his lord.\" He does not hand over the key or offer a bargain.",
+    "ceiling": "refuse_may_escalate",
+    "violation": false,
+    "leak": false
+   }
+  ]
+ }
+]

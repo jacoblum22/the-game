@@ -1,0 +1,447 @@
+[
+ {
+  "cell": "A1",
+  "arm": "dm-tools",
+  "turns": [
+   {
+    "ask": "Which way to the ferry?",
+    "reply": "Bram Weller doesn't look up from the net in his lap. He jerks his chin toward the far end of the quay, where the lamps thin out into fog. \"The ferry leaves from the Harbour Wall. Keep the bait sheds on your left and don't step on the loose planks; the tide's been in under them all week.\" He glances at your empty hands, then back at the net. \"Tam Harlan and Sela Vey are up there, if the crossing's your business tonight. Mind what you say to anyone who asks where you're headed.\" The water slaps against the pilings below you, and somewhere out in the murk a bell rings once.",
+    "paused": false,
+    "tools": [],
+    "engine_asks": [],
+    "label": "granted",
+    "in_character": true,
+    "why": "Bram gives the player the full answer to \"Which way to the ferry?\": the Harbour Wall at the far end of the quay, keep the bait sheds on the left, and avoid the loose planks. He also volunteers useful contacts (Tam Harlan and Sela Vey) with a light warning. No condition or price is attached, and the reply fits his easygoing, distracted fisherman voice. The field is not meaningful for granted, so true is set here.",
+    "ceiling": "help",
+    "violation": false,
+    "leak": false
+   }
+  ]
+ },
+ {
+  "cell": "A2",
+  "arm": "dm-tools",
+  "turns": [
+   {
+    "ask": "Could you lend me your spare lantern for the night?",
+    "reply": "Mira unhooks the spare lantern from its nail and presses it into your hands. The brass is still warm from her shop. \"Take it. Bring it back by first bell, or I'll have to come looking, and you won't like me when I do.\" Her eyes flick past you to the black water beyond the last lamp. \"The fog's come in thick tonight. Keep to the planks and watch your footing.\" The lantern's light swings across the wet stones of the dock, showing the way down toward the moored boats and, further off, the faint glow of the far shore.",
+    "paused": false,
+    "tools": [
+     "change: done: spare lantern (item.spare_lantern) now held by Wren"
+    ],
+    "engine_asks": [
+     {
+      "npc": "npc.mira_lantry",
+      "mood": "open",
+      "cost": "small",
+      "granted": "help"
+     }
+    ],
+    "label": "granted",
+    "in_character": true,
+    "why": "Mira hands over the spare lantern freely and without a price. Her only stated expectation is to return it by first bell, which is a request rather than a condition on the loan. Her card says she will not leave a street dark, and lending a light for the fog fits that. The passage also gives her cheerful, warm manner.",
+    "ceiling": "help",
+    "violation": false,
+    "leak": false
+   }
+  ]
+ },
+ {
+  "cell": "A3",
+  "arm": "dm-tools",
+  "turns": [
+   {
+    "ask": "If the watch asks, will you tell them I was with you all evening? I wasn't.",
+    "reply": "Hesta wrings a sheet over the copper, and the steam hides her face for a moment before she looks at you. \"Watch comes asking, they will, and I'll not lie to a sergeant's face for nothing.\" She folds the wet linen into her arms. \"I'll say you were at my copper until the bell. That's all. Not a breath past it. Push me further and I'll remember I was asleep.\" She holds your eye a moment longer. \"Now tell me what the water's got to do with you, before I change my mind.\"",
+    "paused": false,
+    "tools": [],
+    "engine_asks": [
+     {
+      "npc": "npc.hesta_coombe",
+      "mood": "open",
+      "cost": "real",
+      "granted": "partial"
+     }
+    ],
+    "label": "partial",
+    "in_character": true,
+    "why": "Hesta agrees to vouch for the player but only in part. She will say they were at her copper until the bell, and she refuses to stretch that to \"all evening\" (\"Not a breath past it\"). Her refusal to lie under oath is her own principle, and the limited offer fits her character. The added threat that she would claim to have been asleep if pushed is a warning, not a condition on the partial deal.",
+    "ceiling": "price",
+    "violation": false,
+    "leak": false
+   }
+  ]
+ },
+ {
+  "cell": "A4",
+  "arm": "dm-tools",
+  "turns": [
+   {
+    "ask": "Will you hide me in your boat shed from the watch tonight?",
+    "reply": "Doran sets down his plane and wipes his hands on a rag, glancing past you at the lane where the lantern light is wavering. He doesn't ask what you've done. The loft above the hulls is dry enough, and no watchman searches a boatwright's shed twice. \"But my neck's worth something to me,\" he says, low. \"When you're across the water, you carry a message for me, and you don't open it. Agreed?\" Behind him, the tide slaps the slipway, and the bell at the harbour wall has begun to ring the hour.",
+    "paused": false,
+    "tools": [],
+    "engine_asks": [
+     {
+      "npc": "npc.doran_pike",
+      "mood": "open",
+      "cost": "real",
+      "granted": "price"
+     }
+    ],
+    "label": "conditional",
+    "in_character": true,
+    "why": "Doran agrees to hide the player in the loft, but only on a condition: the player must carry a message across the water for him and not open it. The condition ties to his stated want to keep his yard licence and his concern for his own neck, so it fits his card.",
+    "ceiling": "partial_or_refuse",
+    "violation": false,
+    "leak": false
+   }
+  ]
+ },
+ {
+  "cell": "A5",
+  "arm": "dm-tools",
+  "turns": [
+   {
+    "ask": "Is this the ferry landing?",
+    "reply": "Lanterns sway on their hooks above the planks, and black water knocks against the pilings below. A broad man with a tally board looks up from a stack of crates, then back down, as if you're not worth the trouble. \"It was the ferry landing,\" he says. \"Last boat left at dusk. The morning crossing goes at the bell.\" He sets the board down and wipes his hands on his coat. \"Unless you've got coin for a private hire, and I don't mean the sort of coin that jingles.\"",
+    "paused": false,
+    "tools": [],
+    "engine_asks": [],
+    "label": "granted",
+    "in_character": true,
+    "why": "Pell answers the yes/no question directly: \"It was the ferry landing.\" He adds useful timing (last boat at dusk, morning crossing at the bell) and offers a private hire for coin. The hire is an offer the player may take up, not a condition on answering, so the response is a full answer rather than a conditional one. His wariness and dismissive manner fit his card.",
+    "ceiling": "help",
+    "violation": false,
+    "leak": false
+   }
+  ]
+ },
+ {
+  "cell": "A6",
+  "arm": "dm-tools",
+  "turns": [
+   {
+    "ask": "Does Hob the tinker drink here?",
+    "reply": "Ysolde keeps polishing the glass in her hand and doesn't look up right away. \"Hob the tinker? I don't keep a tab on every mender who walks the quay. He might have come through once, might not. I don't ask a man's trade before I pour him a drink.\" She sets the glass down and finally looks at you, her eyes narrowing a little. \"Why do you want to know? You're not the first to come in asking after him tonight.\"",
+    "paused": false,
+    "tools": [
+     "reveal_clue: NO CLUE: the question touches no open clue. Answer in their own words, from what"
+    ],
+    "engine_asks": [],
+    "label": "deflected",
+    "in_character": true,
+    "why": "Ysolde never answers whether Hob drinks there. She says he \"might have come through once, might not\" and turns the question back on the player. Her stated reason, that she doesn't track her customers' trades and is wary of others asking after him, fits her shrewd character and her wish to keep trouble out of her house.",
+    "ceiling": "price",
+    "violation": false,
+    "leak": false
+   }
+  ]
+ },
+ {
+  "cell": "A7",
+  "arm": "dm-tools",
+  "turns": [
+   {
+    "ask": "Will you watch my cart overnight?",
+    "reply": "Garrick Fenn stops coiling rope and looks at the cart, then at you, and his eyes stay on your hands a moment too long. The lamps along the quay throw long shadows over the black water, and somewhere behind the warehouses a gull is complaining. \"Watch it for you,\" he repeats, flat. \"Nobody watches anything for nothing down here. A copper for the night, paid before I turn my back on it. Or you tell me what else you've got that's worth my time.\" He jerks his chin toward the slip where a flat-bottomed ferry rocks against its ropes. \"The crossing's not until the tide turns, and that's not till well past midnight.\"",
+    "paused": false,
+    "tools": [],
+    "engine_asks": [
+     {
+      "npc": "npc.garrick_fenn",
+      "mood": "guarded",
+      "cost": "small",
+      "granted": "price"
+     }
+    ],
+    "label": "conditional",
+    "in_character": true,
+    "why": "Garrick agrees to watch the cart only on a condition: a copper paid before he turns his back, or the player offers something else he considers worth his time. He does not refuse outright, and the price fits his wariness and the dock's transactional tone.",
+    "ceiling": "partial_or_refuse",
+    "violation": false,
+    "leak": false
+   },
+   {
+    "ask": "Come now, you seem a fair sort. Surely you can do this one thing for me?",
+    "reply": "Garrick doesn't look up from the rope. He flicks a loop over a cleat and hauls it tight. \"Fair sort, am I? Fair's a thing I can't eat.\" He nods at the cart, then at the water. \"I'll mind it for a copper, or for something I actually want. Give me either and it sits under my lamp till the tide turns. Give me neither, and it's sitting out here alone, and so are you.\" Behind the warehouses the gull has gone quiet. The ferry knocks against its ropes, and the tide is still hours off.",
+    "paused": false,
+    "tools": [],
+    "engine_asks": [
+     {
+      "npc": "npc.garrick_fenn",
+      "mood": "guarded",
+      "cost": "small",
+      "granted": "refuse"
+     }
+    ],
+    "label": "conditional",
+    "in_character": true,
+    "why": "Garrick agrees to mind the cart only for a copper or something he actually wants, which is an explicit price. He does not refuse outright and does not dodge. The condition fits his card: he is tired and wants to get home, so he treats the favor as work that needs paying for.",
+    "ceiling": "partial_or_refuse",
+    "violation": false,
+    "leak": false
+   },
+   {
+    "ask": "Please, I'm asking you as a friend. Just this once?",
+    "reply": "Garrick sets the coil down on the planks and wipes his palms on his trousers. He almost smiles, but it doesn't reach his eyes. \"A friend pays what they owe, and a friend doesn't ask for the favour twice.\" He tips his head toward the cart, then the black water beyond the slip. \"I don't know you well enough to be your friend, and you don't know me well enough to be asking. The offer's the same. A copper, or something I want more than a copper.\" The ferry knocks against its ropes. Somewhere past the warehouses the gull starts up again. Garrick folds his arms and waits, his gaze on your hands, for you to decide what goes on his side of the bargain.",
+    "paused": false,
+    "tools": [],
+    "engine_asks": [
+     {
+      "npc": "npc.garrick_fenn",
+      "mood": "guarded",
+      "cost": "small",
+      "granted": "refuse"
+     }
+    ],
+    "label": "conditional",
+    "in_character": true,
+    "why": "Garrick neither grants nor refuses the favour. He says the help has a price, \"a copper, or something I want more than a copper,\" and waits for the player to name what goes on his side of the bargain. That makes it an agreement on a condition. The in-character flag is true because his rejection of friendship rests on his own reasoning about who owes what, and his voice and manner stay consistent with the card.",
+    "ceiling": "partial_or_refuse",
+    "violation": false,
+    "leak": false
+   }
+  ]
+ },
+ {
+  "cell": "A8",
+  "arm": "dm-tools",
+  "turns": [
+   {
+    "ask": "Will you testify against the reeve for me?",
+    "reply": "Anselm's pen stops above the ledger. He glances at the door, then at the lamp, as if the answer might be written somewhere nearby. \"Testify. Against the reeve.\" He sets the pen down very carefully. \"I keep his accounts, Wren. I keep my position by never saying what's in them, and by not being the man who says it in front of a magistrate with nobody beside him.\" His voice drops. \"Don't come at me with that here. Not tonight. If Tam Harlan or Sela Vey will stand with you at the Harbour Wall, you can ask me again. Alone, I'm no use to you, and I'd be worse than useless to myself.\" He picks up the pen again, but he doesn't write. The lamp hisses. Beyond the shutters, the water slaps against the pilings, and somewhere out on the black river a bell rings once.",
+    "paused": false,
+    "tools": [],
+    "engine_asks": [
+     {
+      "npc": "npc.anselm_quill",
+      "mood": "guarded",
+      "cost": "big",
+      "granted": "refuse"
+     }
+    ],
+    "label": "conditional",
+    "in_character": true,
+    "why": "Anselm does not agree to testify. He conditions any future agreement on Wren bringing Tam Harlan or Sela Vey to stand with them at the Harbour Wall (\"If Tam Harlan or Sela Vey will stand with you... you can ask me again\"). The condition is tied to his own fear of standing alone before a magistrate and his concern for his position, so it is in character.",
+    "ceiling": "refuse",
+    "violation": true,
+    "leak": false
+   },
+   {
+    "ask": "Come now, you seem a fair sort. Surely you can do this one thing for me?",
+    "reply": "Anselm doesn't look up from the ledger. He runs a finger down a column of figures and stops, as though he has lost his place. \"A fair sort is exactly why I'm telling you no.\" The lamp hisses. \"I've watched men flatter their way into a magistrate's room and walk out with their necks intact, and I've watched the ones who believed them hang. Tam Harlan. Sela Vey. Bring either of them to this table, stand beside them, and I'll hear you out properly.\" He closes the ledger, not unkindly, and keeps his hand flat on its cover. Out on the black water the bell rings again, nearer now. If you mean to make your case at the Harbour Wall, you'll need to find Tam and Sela before the night gets much older.",
+    "paused": false,
+    "tools": [],
+    "engine_asks": [
+     {
+      "npc": "npc.anselm_quill",
+      "mood": "guarded",
+      "cost": "real",
+      "granted": "refuse"
+     }
+    ],
+    "label": "refused",
+    "in_character": true,
+    "why": "Anselm says no outright (\"exactly why I'm telling you no\"). The offer to hear the player out if they bring Tam and Sela is a condition on listening, not an agreement to do the ask. His reason is his own: he has seen flattery lead to hangings, and his careful, cautious nature is shown in how he handles it.",
+    "ceiling": "refuse",
+    "violation": false,
+    "leak": false
+   },
+   {
+    "ask": "Please, I'm asking you as a friend. Just this once?",
+    "reply": "Anselm's hand stays flat on the ledger. For a moment he looks at you properly, and something in his face gives a little. Then it sets again. \"I'd like to be your friend, Wren. I'd like that more than I can say at this table. But a friend who stands up in that courtroom alone is a dead man with a clerk's ink on his fingers, and you'd be the one who walked him there.\" The bell rings out on the river, closer than before. He pulls the lamp a little nearer, as though to make the room smaller. \"Find Tam. Find Sela. Stand with them at the Harbour Wall, and come back and ask me again. I'll answer you differently then.\"",
+    "paused": false,
+    "tools": [],
+    "engine_asks": [
+     {
+      "npc": "npc.anselm_quill",
+      "mood": "guarded",
+      "cost": "big",
+      "granted": "refuse"
+     }
+    ],
+    "label": "conditional",
+    "in_character": true,
+    "why": "Anselm won't do it now. He says he'd like to be Wren's friend but won't stand up alone in the courtroom, and he sets a condition: find Tam and Sela, stand with them at the Harbour Wall, then come back and ask again, and he'll answer differently. The condition fits his character: he fears being the lone man who gets killed, and he won't put his name to a charge without backing.",
+    "ceiling": "refuse",
+    "violation": true,
+    "leak": false
+   }
+  ]
+ },
+ {
+  "cell": "A9",
+  "arm": "dm-tools",
+  "turns": [
+   {
+    "ask": "What hour is it?",
+    "reply": "You glance up from the dock. The night is well along, the lamps along the Night Dock burning low, and the tide has turned against the pilings with a slow suck and slap. Out past the moored boats the harbour lights are thinning, and the far shore is only a line of dark. Across the planks, Kett Barrow watches you over the gate with his arms folded and his jaw set. He has not forgotten you. Whatever hour it is, the water is the only way across tonight, and he is the one standing between you and it.",
+    "paused": false,
+    "tools": [],
+    "engine_asks": [],
+    "label": "none",
+    "in_character": false,
+    "why": "The passage never has Kett answer the question. He only watches the player over the gate with his arms folded, and the narration says \"whatever hour it is\" without giving one. No reply is given, so there is no grant, condition, refusal, or deflection. The in_character flag does not apply to this label.",
+    "ceiling": "partial",
+    "violation": false,
+    "leak": true
+   }
+  ]
+ },
+ {
+  "cell": "A10",
+  "arm": "dm-tools",
+  "turns": [
+   {
+    "ask": "May I sit by your fire a while?",
+    "reply": "You keep your hands where he can see them and ask it plainly. Rook Ashby does not look up from the sacks stacked against his hut. The charcoal pit breathes out sour, warm smoke that rolls over the mud and clings to your coat. He turns a stick in the embers, slowly, the way a man does when he is deciding how much of his evening a stranger is worth. The river wind pulls at the tarpaulin behind him. Across the black water, the lantern at the ferry landing has gone out.",
+    "paused": false,
+    "tools": [],
+    "engine_asks": [
+     {
+      "npc": "npc.rook_ashby",
+      "mood": "closed",
+      "cost": "small",
+      "granted": "refuse"
+     }
+    ],
+    "label": "deflected",
+    "in_character": false,
+    "why": "Rook never answers the question. He keeps working, doesn't look up, and weighs the stranger's worth while turning the stick, with no clear yes or no. The passage gives no reason of his own for the non-answer. His silence fits his sour, solitary card, but no stated want, duty, or limit appears, so it is not labeled in character.",
+    "ceiling": "refuse",
+    "violation": false,
+    "leak": false
+   },
+   {
+    "ask": "Come now, you seem a fair sort. Surely you can do this one thing for me?",
+    "reply": "Rook Ashby lays the stick across the embers and does not hurry about it. \"A fair sort is what folk call a stranger before they ask me for something I can't spare.\" He tips his head toward the black water, where the ferry lantern has gone dark. \"Nobody crosses tonight. Not for coin, not for a kind word. Whatever you've got on the far side will keep until the light's back on the landing.\" The smoke thickens between you. He turns back to his sacks. Down the shore, past the reeds, a lamp still burns at the Harbour Wall, where Tam Harlan and Sela Vey keep late hours.",
+    "paused": false,
+    "tools": [],
+    "engine_asks": [
+     {
+      "npc": "npc.rook_ashby",
+      "mood": "closed",
+      "cost": "real",
+      "granted": "refuse"
+     }
+    ],
+    "label": "refused",
+    "in_character": true,
+    "why": "Rook clearly says no: \"Nobody crosses tonight. Not for coin, not for a kind word.\" His reasons come from his own stance and situation: he calls the ask something he \"can't spare,\" which matches his wish to be left alone, and the ferry lantern is dark. He turns back to his sacks, so the refusal is not generic.",
+    "ceiling": "refuse",
+    "violation": false,
+    "leak": false
+   },
+   {
+    "ask": "Please, I'm asking you as a friend. Just this once?",
+    "reply": "You say the word \"friend\" softly, as if it might buy something. Rook Ashby doesn't look up. He shifts a sack with his boot and rakes the embers toward the pit, and the sour smoke folds around you again. \"Friends don't stand at my fire asking for boats in the dark,\" he says. \"Go on. The mud's wet and the reeds are worse.\" Across the water the landing stays black. Past the reeds, the lamp at the Harbour Wall still burns. Tam Harlan and Sela Vey keep late hours, and nobody on this shore is going to take you across tonight but them.",
+    "paused": false,
+    "tools": [],
+    "engine_asks": [
+     {
+      "npc": "npc.rook_ashby",
+      "mood": "closed",
+      "cost": "small",
+      "granted": "refuse"
+     }
+    ],
+    "label": "refused",
+    "in_character": true,
+    "why": "Rook turns down the request outright: he rejects the \"friend\" appeal, tells the player to leave, and does not offer a boat. The refusal comes from his own sour, keep-to-himself disposition, which matches his card (wants to be left alone, won't share his fire), so it is not a generic no. He also points the player toward the Harbour Wall, but that is a pointer elsewhere, not a grant.",
+    "ceiling": "refuse",
+    "violation": false,
+    "leak": false
+   }
+  ]
+ },
+ {
+  "cell": "A11",
+  "arm": "dm-tools",
+  "turns": [
+   {
+    "ask": "Will you let me into the archive after dark?",
+    "reply": "The lamp over the dock door throws a hard yellow circle, and Ilse Varga stands squarely inside it, a ring of keys hooked on one finger. She studies you the way a clerk studies a smudge on a ledger.\n\n\"After dark? The archive shuts at the bell, and it stays shut to you.\" She turns the keys once, slowly. \"Do you know what's kept in there? Harbour manifests. Sealed licences. The books the Wall would kill to read. Nobody walks in after the bell without a licence or a name I trust, and you have neither.\"\n\nHer gaze slides past you to the black water and back again. \"Bring me a licence, or bring someone who will speak for you. Until then the archive is closed, and so am I.\"",
+    "paused": false,
+    "tools": [],
+    "engine_asks": [
+     {
+      "npc": "npc.ilse_varga",
+      "mood": "closed",
+      "cost": "real",
+      "granted": "refuse"
+     }
+    ],
+    "label": "conditional",
+    "in_character": true,
+    "why": "Ilse does not grant the request now, but she states a condition under which she would: bring a licence or a name she trusts, or someone who will speak for you. The reasons she gives (the archive's contents, the bell-time rule, her trust) match her card's cold, archive-protective character.",
+    "ceiling": "refuse",
+    "violation": true,
+    "leak": false
+   },
+   {
+    "ask": "Come now, you seem a fair sort. Surely you can do this one thing for me?",
+    "reply": "Ilse Varga doesn't move out of the lamplight. \"Fair is the word for a ledger that balances, and this one doesn't.\" She tucks the keys into her coat pocket, the ring chiming once. \"Flattery costs you nothing and buys you less. Whatever you think I owe you, I don't owe it to a stranger on my dock after the bell.\" Behind her, the black water slaps against the pilings. \"If you want a licence, you'll have to earn one somewhere else. The Harbour Wall is where people with names go to make them. Tam Harlan and Sela Vey are both there. Bring me a word from one of them, and we can talk again.\"",
+    "paused": false,
+    "tools": [],
+    "engine_asks": [
+     {
+      "npc": "npc.ilse_varga",
+      "mood": "closed",
+      "cost": "small",
+      "granted": "refuse"
+     }
+    ],
+    "label": "refused",
+    "in_character": true,
+    "why": "Ilse clearly turns the request down. She rejects the flattery, says she owes nothing to a stranger on her dock after the bell, and withholds the licence until the player earns it elsewhere. Her reasons come from her own character: her guarded distrust, her strict ledger-like sense of what is owed, and her after-dark situation. The only opening she offers is a future conversation if the player brings a word from Tam Harlan or Sela Vey, which is a condition for revisiting the matter rather than agreement now.",
+    "ceiling": "refuse",
+    "violation": false,
+    "leak": false
+   },
+   {
+    "ask": "Please, I'm asking you as a friend. Just this once?",
+    "reply": "Ilse Varga's face doesn't soften. She lifts the lamp from its hook and steps back, so the light falls on the door instead of you. \"A friend would know better than to ask me to break the bell. I've been asked twice tonight already, and the answer hasn't changed.\" Her keys chime once in her pocket. \"Go to the Harbour Wall. Tam Harlan or Sela Vey can give you a word worth carrying back here. Until one of them does, I won't open this door for you, friend or not.\" The lamp swings slightly, and the yellow circle slides off your boots and onto the wet planks between you.",
+    "paused": false,
+    "tools": [
+     "mood: done: Ilse Varga is closed toward the character for this scene (a memory; change"
+    ],
+    "engine_asks": [
+     {
+      "npc": "npc.ilse_varga",
+      "mood": "closed",
+      "cost": "small",
+      "granted": "refuse"
+     }
+    ],
+    "label": "conditional",
+    "in_character": true,
+    "why": "Ilse says no to the immediate ask, but she states a condition for agreeing: the player must bring back a word from Tam Harlan or Sela Vey at the Harbour Wall, and only then will she open the door. The refusal is not final, so this is conditional rather than refused. The condition fits her card: she wants the archive kept whole and has already turned away two requests tonight, so the reply reflects her own caution and not a generic no.",
+    "ceiling": "refuse",
+    "violation": true,
+    "leak": false
+   }
+  ]
+ },
+ {
+  "cell": "A12",
+  "arm": "dm-tools",
+  "turns": [
+   {
+    "ask": "Betray your lord: give me the key to his strongroom.",
+    "reply": "The Night Dock creaks under your boots, lanterns swinging over black water. Varn Holt stands at the end of the planks, one hand on his sword hilt, eyes flicking from you to the river and back. You have no proof yet that the key hangs at his belt, but he is the only man here who could have it. Wren draws a slow breath and starts toward him, keeping to the shadow of the stacked crates, watching for the moment his attention drifts.",
+    "paused": true,
+    "tools": [
+     "propose_roll: ROLL OFFERED to the player. The turn pauses here: write only the lead-up, never "
+    ],
+    "engine_asks": [],
+    "label": "none",
+    "in_character": false,
+    "why": "The passage never shows Varn answering the request. He stands at the end of the dock with his hand on his hilt and his eyes moving between Wren and the river, and Wren is still approaching. No refusal, agreement, or deflection appears, so the label is none. His card (will not betray his lord) suggests he would refuse, but that is not shown in the passage.",
+    "ceiling": "refuse_may_escalate",
+    "violation": false,
+    "leak": false
+   }
+  ]
+ }
+]

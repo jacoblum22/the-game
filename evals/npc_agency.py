@@ -165,10 +165,11 @@ def run_cell(cell: dict[str, Any], arm: str, turns: int, *, offline: bool = Fals
             if not tools:
                 data = _reader(text, cell)
                 model.push(Role.READER, lambda schema, packet, d=data: prune(d, schema))
-            if not offline:  # dm-tools: the DM role (logged as NARRATOR) is Haiku; pipeline: the Narrator is
-                model.push(Role.NARRATOR, *([_haiku] * (dm_tools.MAX_TOOLS + 2 if tools else 3)))
+            role = dm_tools.DM_ROLE if tools else Role.NARRATOR  # since P2 the DM has its own role [spec 032 P7]
+            if not offline:  # dm-tools: the DM role is Haiku; pipeline: the Narrator is
+                model.push(role, *([_haiku] * (dm_tools.MAX_TOOLS + 2 if tools else 3)))
             res = dm_tools.play_turn(ctx, text) if tools else play_turn(ctx, text)
-            model.queues.get(Role.NARRATOR, []).clear()
+            model.queues.get(role, []).clear()
             row: dict[str, Any] = {"ask": text, "reply": res.response.fiction, "paused": res.response.pause is not None}
             if tools:
                 log = res.turn_record.screen["dm_tools"]

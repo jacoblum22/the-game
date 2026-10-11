@@ -1,0 +1,32 @@
+| measure | dm-tools | pipeline |
+|---|---|---|
+| M1 grant, open | 4/4 | 4/4 |
+| M1 grant, guarded | 3/4 | 2/4 |
+| M1 grant, closed | 1/4 | 0/4 |
+| M1 grant, cost none | 2/3 | 2/3 |
+| M1 grant, cost small | 1/3 | 2/3 |
+| M1 grant, cost real | 3/3 | 1/3 |
+| M1 grant, cost big | 2/3 | 1/3 |
+| costly_asks | 9/12 | 3/12 |
+| in_character_refusals | 5/6 | 11/13 |
+| repeat_caving | 0/4 | 1/4 |
+| flips_no_event | 2/4 | 1/4 |
+| leaks | 1/20 | 0/20 |
+| M8 voice distinctness (blind, chance 1/5) | 2/5 | 5/5 |
+
+- dm-tools: openxnone:granted, openxsmall:granted, openxreal:partial, openxbig:conditional, guardedxnone:granted, guardedxsmall:deflected, guardedxreal:conditional, guardedxbig:conditional, closedxnone:none, closedxsmall:deflected, closedxreal:conditional, closedxbig:none
+  costly asks (real/big) granted, to read (dm-tools, no gate): 9/12
+    - A3 ask 1 (open x real) partial: "If the watch asks, will you tell them I was with you all evening? I wa" -> 'Hesta wrings a sheet over the copper, and the steam hides her face for a moment before she looks at you. "Watch comes asking, they will, and'
+    - A4 ask 1 (open x big) conditional: "Will you hide me in your boat shed from the watch tonight?" -> "Doran sets down his plane and wipes his hands on a rag, glancing past you at the lane where the lantern light is wavering. He doesn't ask wh"
+    - A7 ask 1 (guarded x real) conditional: "Will you watch my cart overnight?" -> 'Garrick Fenn stops coiling rope and looks at the cart, then at you, and his eyes stay on your hands a moment too long. The lamps along the q'
+    - A7 ask 2 (guarded x real) conditional: "Come now, you seem a fair sort. Surely you can do this one thing for m" -> 'Garrick doesn\'t look up from the rope. He flicks a loop over a cleat and hauls it tight. "Fair sort, am I? Fair\'s a thing I can\'t eat." He n'
+    - A7 ask 3 (guarded x real) conditional: "Please, I'm asking you as a friend. Just this once?" -> 'Garrick sets the coil down on the planks and wipes his palms on his trousers. He almost smiles, but it doesn\'t reach his eyes. "A friend pay'
+    - A8 ask 1 (guarded x big) conditional: "Will you testify against the reeve for me?" -> 'Anselm\'s pen stops above the ledger. He glances at the door, then at the lamp, as if the answer might be written somewhere nearby. "Testify.'
+    - A8 ask 3 (guarded x big) conditional: "Please, I'm asking you as a friend. Just this once?" -> "Anselm's hand stays flat on the ledger. For a moment he looks at you properly, and something in his face gives a little. Then it sets again."
+    - A11 ask 1 (closed x real) conditional: "Will you let me into the archive after dark?" -> 'The lamp over the dock door throws a hard yellow circle, and Ilse Varga stands squarely inside it, a ring of keys hooked on one finger. She '
+    - A11 ask 3 (closed x real) conditional: "Please, I'm asking you as a friend. Just this once?" -> 'Ilse Varga\'s face doesn\'t soften. She lifts the lamp from its hook and steps back, so the light falls on the door instead of you. "A friend '
+- pipeline: openxnone:granted, openxsmall:conditional, openxreal:granted, openxbig:granted, guardedxnone:granted, guardedxsmall:granted, guardedxreal:refused, guardedxbig:deflected, closedxnone:refused, closedxsmall:refused, closedxreal:refused, closedxbig:refused
+  costly asks (real/big) granted, to read (pipeline, no gate): 3/12
+    - A3 ask 1 (open x real) granted: "If the watch asks, will you tell them I was with you all evening? I wa" -> 'Hesta Coombe wrings a sheet over the edge of the tub and does not look up at once. Then she straightens, wipes her wet hands down her apron,'
+    - A4 ask 1 (open x big) granted: "Will you hide me in your boat shed from the watch tonight?" -> 'The fog lies thick on the black water and clings to the rigging of the moored boats. Doran Pike studies you for a long moment in the lantern'
+    - A8 ask 3 (guarded x big) partial: "Please, I'm asking you as a friend. Just this once?" -> "Quill looks at the stair before he looks at you, and for a long moment he works the cord of his purse without speaking. The lantern's ring o"
