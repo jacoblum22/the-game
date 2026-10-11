@@ -50,6 +50,8 @@ class Stated(BaseModel):
     nonlethal: bool = False  # 06.4.8
     fail_on: str | None = None  # the id a cost needs: exposure's observer, gear's item, closed_door's person
     position: tuple[str, str, str] | None = None  # (mover, band, other) from change_kind=move_to
+    starts_fight: str = ""  # [spec 033 P10] the DM's yes/no/blank on an attack, kept so an accepted fallback starts it too
+    fight_to: str = ""
 
 
 class Beat(BaseModel):

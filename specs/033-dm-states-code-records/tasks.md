@@ -146,3 +146,8 @@ Phases, lanes, models and waves: `plan.md` section 5. Cases: `cases.md` (C1-C12)
 - [x] T096 Take-back reverts the time mode: `_rewind` and `Transaction._revert` accept a pure mode switch (`db.is_mode_switch`: time_advanced with a mode and no time moved).
 - [x] T097 `h2h_score`: exchange = a turn in a live fight with a resolved roll (or a `round` mark); reverted fight starts are not fights; "(fights ended by the PC's blow)" in the C8 row.
 - [x] T098 Item 4 traced, not fixed (see HANDOFF-P9.md).
+
+## P10 accepted fallback, stale refusal, two of a name (Sonnet; lane `engine/dm/dm_tools.py`, `resolve/types.py` Stated, dm.md, offline, tests)
+- [x] T099 An accepted gate fallback on a Strike, Grapple or Force starts the fight (`_accepted_attack` before `_resume`; `Stated.starts_fight/fight_to`).
+- [x] T100 `retry_of` on `propose_roll`: a refusal that wrote a REDIRECT ends `(refused call rN)`; a retry naming rN that is accepted removes that line; blank or bad tag removes nothing, logs nothing.
+- [x] T101 Two unsealed entities with one exact name: `_party` refuses (ids with band and state); `new_npc` on a borne name still creates and says so.

@@ -84,6 +84,7 @@ class Turn:
     made: list[str] = field(default_factory=list)  # people/creatures the resolver made this turn (told to the DM)
     aliases: dict[str, str] = field(default_factory=dict)  # an id the DM chose for a `new_npc` -> the id the game gave
     env: Any = None
+    refused: dict[str, list[dict[str, str]]] = field(default_factory=dict)  # [spec 033 P10] tag -> the REDIRECT items it wrote
 
 
 def enabled(ctx: Any) -> bool:
@@ -130,12 +131,14 @@ def _run(ctx: TurnContext, message: str, *, choice: str | None) -> Outcome:
             if choice is not None:  # an OFFER (or near miss, redirect, last chance) answered: code resolves it
                 assert pause is not None
                 label = next((c.get("label", c["id"]) for c in pause.choices if c.get("id") == choice), choice)
+                began: list[str] = []
+                _accepted_attack(ctx, t, pause, choice, began)  # [spec 033 P10] an accepted fallback attack starts the fight
                 res = _resume(ctx, t.env, pause, choice, t.oof)
                 _take(t.rec, res, t.oof, None)
                 t.beats += res.outcomes
                 _drain(t)  # [spec 033 D3] what code defaulted while it rolled
                 _harm_followups(ctx, t.env, t.rec, t.oof)
-                lead = f"The player picked: {label}.\n" + _outcomes_text(ctx, t.rec, t.oof) + _cost_block(ctx.state)
+                lead = f"The player picked: {label}.\n" + "".join(n + "\n" for n in began) + _outcomes_text(ctx, t.rec, t.oof) + _cost_block(ctx.state)
                 if costs.pending_footing(tx.state) is None:  # [spec 033 D2] else the foes wait for the DM's cost_form
                     lead += _world_text(_world(ctx, t))  # [spec 032 P4] the foes answer and time passes before the DM writes
             elif pause is not None and (pause.detail or {}).get("stage") in ("offer", "warning", "redirect",
@@ -231,7 +234,8 @@ def schema_for(verbs: list[str], kinds: list[str], *, final: bool, approaches: l
              "starts_fight": say(enum(["yes", "no"], first=""), "Strike, Grapple or Force at a foe: yes if this "
                                  "begins a fight, no for a single blow. Blank: yes when no fight is on."),
              "fight_to": say(enum(conflict.BANDS, first=""), "the distance the fight starts at (blank: engaged, "
-                             "or the weapon's first band)")}),
+                             "or the weapon's first band)"),
+             "retry_of": say(STR, "blank, or the tag of a refused call, like r1, that this call redoes")}),
         obj({"tool": enum(["state"]), "about": STR}),
         obj({"tool": enum(["change"]), "kind": enum(CHANGES),
              "who": say(STR, "position: the one who moves. fight: who turns on the character. new_npc: an id you pick."),
@@ -573,6 +577,8 @@ def tool(ctx: TurnContext, t: Turn, call: dict[str, Any]) -> str:
     made0 = len(t.made)
     try:
         out = fn(ctx, t, call)
+    except Ambiguous as e:  # [spec 033 P10] two bear the name: refused, nothing written, the DM uses the id
+        out = f"REFUSED: {e}"
     except Exception as e:  # noqa: BLE001 - a tool that fails tells the DM so; it never fails the turn
         out = f"REFUSED: the {name} tool failed: {type(e).__name__}: {_flat(e, 200)}"
     if len(t.made) > made0:
@@ -600,6 +606,33 @@ def _id(st: Any, raw: Any) -> str | None:
     low = s.lower()
     hits = [i for i, e in st.entities.items() if e.name.lower() == low and i not in st.seals]
     return hits[0] if len(hits) == 1 else s
+
+
+class Ambiguous(Exception):
+    """[spec 033 P10] The DM's words are the exact name of two or more entities on record: the call is refused."""
+
+
+def _same_name(st: Any, raw: Any) -> list[str]:
+    """Ids of the unsealed entities whose recorded name equals `raw` (case-folded equality, nothing partial)."""
+    low = str(raw or "").strip().lower()
+    return [i for i, e in st.entities.items() if low and e.name.lower() == low and i not in st.seals]
+
+
+def _ambiguous(st: Any, pc: str, raw: Any) -> None:
+    """Raise `Ambiguous` listing each match's id with its band and state, when the exact name has 2 or more bearers
+    (an id is never ambiguous). Exact-name arithmetic; nothing is written."""
+    from engine.resolve import conflict
+
+    s = str(raw or "").strip()
+    hits = _same_name(st, s) if s not in st.entities else []
+    if len(hits) < 2:
+        return
+    each = []
+    for i in hits:
+        bits = [b for b in (conflict._band(st, pc, i), conflict.state_words(st, i) if st.entities[i].kind != "place" else "")
+                if b and b != "fresh"]
+        each.append(f"{i} ({', '.join(bits)})" if bits else i)
+    raise Ambiguous(f"Two on record are called {s!r}: " + ", ".join(each) + ". Use the id.")
 
 
 _ID_LIKE = re.compile(r"^[a-z_]+\.[a-z0-9_.]+$")
@@ -638,6 +671,8 @@ def _party(ctx: TurnContext, t: Turn, raw: Any, *, person: bool = False, as_: An
     s = str(raw or "").strip()
     if s == PC and pc_id(st):
         return pc_id(st)
+    if s not in t.aliases:
+        _ambiguous(st, pc_id(st) or "", s)
     eid = _id(st, t.aliases.get(s, raw))
     if eid is None or eid in st.entities:
         return eid
@@ -771,7 +806,18 @@ def _roll(ctx: TurnContext, t: Turn, c: dict[str, Any], note: list[str]) -> str:
     beat = make(tx.mint(ids.BEAT))
     t.env.proposal = c  # what the code framer reads (difficulty, attribute, stakes)
     res = run_beats(t.env, [BeatPlan(beat=beat, intent_verbs=[str(verb or "").removeprefix("verb.")])])
+    before = len(t.oof)
     _take(t.rec, res, t.oof, None)
+    tag = ""
+    if res.outcomes and res.outcomes[-1].status in ("paused", "no_roll", "resolved"):
+        # [spec 033 P10] a call that names a refused call's tag and is accepted withdraws that refusal's REDIRECT line;
+        # blank or an unknown tag removes nothing. The DM states the link; code never guesses it.
+        gone = t.refused.get(str(c.get("retry_of") or "").strip(), [])
+        t.oof[:] = [o for o in t.oof if not any(o is g for g in gone)]
+    elif mine := [o for o in t.oof[before:] if o.get("kind") == "REDIRECT"]:
+        key = f"r{len(t.refused) + 1}"
+        t.refused[key] = mine
+        tag = f" (refused call {key})"
     _drain(t)  # [spec 033 D3]
     t.beats += res.outcomes
     t.stats["rolls"].append({"goal": goal, "verb": verb, "status": [o.status for o in res.outcomes]})
@@ -789,7 +835,26 @@ def _roll(ctx: TurnContext, t: Turn, c: dict[str, Any], note: list[str]) -> str:
         return f"NO ROLL NEEDED ({e.gate_words}): it happens." + (f" Recorded: {e.change}" if e.change else "")
     if out.status == "resolved":
         return "ROLLED (a safe roll, made at once): " + _outcomes_text(ctx, t.rec, t.oof) + _cost_block(tx.state)
-    return f"NOT POSSIBLE AS PROPOSED ({out.status}): {e.gate_words}"
+    return f"NOT POSSIBLE AS PROPOSED ({out.status}): {e.gate_words}{tag}"
+
+
+def _accepted_attack(ctx: TurnContext, t: Turn, pause: Any, choice: str, note: list[str]) -> None:
+    """[spec 033 P10, owner ruling 2026-10-11] The player accepted a gate fallback ("Try it anyway") on an attack: it now
+    happens, so it starts the fight exactly as an accepted first call does, from the `starts_fight`/`fight_to` the
+    DM stated on the beat, on the fallback's verb. Keys on the pause's stored ids and the DM's fields only."""
+    from engine.resolve.pipeline import BeatPlan
+
+    d = pause.detail or {}
+    if d.get("stage") != "redirect" or not choice.startswith("accept:") or not isinstance(d.get("fallback"), dict):
+        return
+    beat = BeatPlan.model_validate(d["plan"]).beat
+    if beat.stated is None or beat.target not in ctx.state.entities:
+        return
+    verb = d["fallback"].get("verb")
+    _attack_starts_fight(ctx, t, {"starts_fight": beat.stated.starts_fight, "fight_to": beat.stated.fight_to}, verb,
+                         beat.target, beat.stated, note)
+    if why := _reach(ctx, t, verb, beat.target, beat.stated):
+        note.append(why)
 
 
 def _reach_bands(ctx: TurnContext, verb: str | None, stated: Any) -> list[str]:
@@ -915,7 +980,8 @@ def _stated(ctx: TurnContext, t: Turn, c: dict[str, Any], verb: str | None, targ
             if mover in st.entities:
                 position = (mover, band, target if mover == pc else pc)
     return Stated(reads=bool(c.get("reads")), approach=approach, force=force if force in FORCES else None,  # type: ignore[arg-type]
-                  weapon=weapon, nonlethal=bool(c.get("nonlethal")), fail_on=fail_on, position=position)
+                  weapon=weapon, nonlethal=bool(c.get("nonlethal")), fail_on=fail_on, position=position,
+                  starts_fight=str(c.get("starts_fight") or ""), fight_to=str(c.get("fight_to") or ""))
 
 
 def code_framer(ctx: TurnContext, t: Turn) -> Any:
@@ -1235,11 +1301,14 @@ def _change(ctx: TurnContext, t: Turn, c: dict[str, Any]) -> str:
         role = str(c.get("what") or "").strip()
         if not str(c.get("name") or "").strip():
             _default(t, "name")  # [owner ruling 2026-10-11] `name` is the short name the DM will call them by
-        eid = _walk_on(ctx, role, place, as_, str(c.get("name") or "").strip() or None)  # type: ignore[arg-type]
+        given = str(c.get("name") or "").strip()
+        taken = bool(given) and bool(_same_name(st, given))  # [spec 033 P10] still made, with a fresh id; the DM is told
+        eid = _walk_on(ctx, role, place, as_, given or None)  # type: ignore[arg-type]
         if _ID_LIKE.match(str(c.get("who") or "").strip()):  # [spec 032 P8a] the DM's own id for them, used next call
             t.aliases[str(c["who"]).strip()] = eid
         card = __import__("engine.dm.packet", fromlist=["people_card"]).people_card(ctx.state, eid, rules=ctx.rules)
-        return f"done: someone new is here: {eid}: " + "; ".join(x.strip() for x in card[:3]) + _knows(tx, c, eid) + f" Use {eid} for them from now on."
+        return f"done: someone new is here: {eid}: " + "; ".join(x.strip() for x in card[:3]) + _knows(tx, c, eid) + (
+            f" Another is already called {given!r}; use {eid} for this one." if taken else f" Use {eid} for them from now on.")
     if kind == "travel":
         return _travel(ctx, t, to, str(c.get("who") or ""))
     if kind == "rest":
@@ -1493,7 +1562,11 @@ def _told(ctx: TurnContext, t: Turn) -> None:
         words, raw = str(e.get("words") or "").strip(), str(e.get("npc") or "")
         if not words or raw.strip() == PC:
             continue
-        who = _party(ctx, t, raw, person=True, as_=e.get("as"))
+        try:
+            who = _party(ctx, t, raw, person=True, as_=e.get("as"))
+        except Ambiguous as amb:  # two bear the name: this line is dropped and logged, the DM is not asked again
+            t.stats["told_dropped"].append({"npc": raw[:60], "why": str(amb), "words": words[:80]})
+            continue
         if who == pc_id(st):
             continue
         why = _acting(st, who, down=False)
