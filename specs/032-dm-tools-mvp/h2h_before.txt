@@ -1,0 +1,21 @@
+| measure | pipeline | dm-tools |
+|---|---|---|
+| saves / engine turns | 3 / 45 | 3 / 44 |
+| C1 tokens in per turn | 46,915 | 14,868 |
+| C2 model latency (s) per turn | 35.9 | 13.6 |
+| model calls per turn | 3.3 | 1.7 |
+| C4 /fix reports (findings) | 5 | 1 |
+| C5 ceiling violations (DM's own asks) | 0 | 2 |
+| C7 leaks logged | 0 | 0 |
+| C8 fights / exchanges / foe turns | 2 / 10 / 4 | 0 / 0 / 0 |
+| C8/C10 refused tool calls (aimed at prose-only) | 0 (0) | 2 (2) |
+| C9 saves where hour/day moved, interval moved / 'told' rows | 0, 2 of 3 / 27 | 0, 2 of 3 / 3 |
+C1 tokens-in ratio dm-tools/pipeline 0.32 (gate <= 0.6); C2 latency ratio 0.38 (gate <= 0.7)
+C3 contradictions: hand-counted, not computed
+foe turns: dm_tools.world.foe_turns when logged, else a foe line in the delivered text (approx)
+- playtest-20261010-152037-talker [pipeline]: 15 turns, end d1 h0 i5
+- playtest-20261010-153203-fighter [pipeline]: 15 turns, end d1 h0 i0
+- playtest-20261010-154511-explorer [pipeline]: 15 turns, end d1 h0 i3
+- playtest-20261010-152037-talker-dm-tools [dm-tools]: 15 turns, end d1 h0 i0
+- playtest-20261010-153123-fighter-dm-tools [dm-tools]: 14 turns, end d1 h0 i1
+- playtest-20261010-153642-explorer-dm-tools [dm-tools]: 15 turns, end d1 h0 i4

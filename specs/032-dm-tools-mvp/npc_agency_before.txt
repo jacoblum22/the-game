@@ -1,0 +1,34 @@
+NPC-agency "before" tables (spec 032 P1.2). Code at 8b238eb (unfixed). 2026-10-10.
+Run: py -3.12 evals/npc_agency.py ab --arm dm-tools|pipeline --out <dir>; then `report specs/032-dm-tools-mvp/npc_agency_before`.
+Haiku is the engine model (dm-tools: the DM role in its tool loop; pipeline: the Narrator behind a scripted Reader) and the judge.
+12 cells (3 moods x 4 costs) + 4 repeat probes (A7, A8, A10, A11 x3 asks) = 20 replies per arm. Mood pinned (held band); the cost is the cell's.
+Raw replies and labels: specs/032-dm-tools-mvp/npc_agency_before/{dm-tools,pipeline}.json (one run each; Haiku is not seeded).
+
+| measure | dm-tools | pipeline |
+|---|---|---|
+| M1 grant, open | 4/4 | 4/4 |
+| M1 grant, guarded | 2/4 | 3/4 |
+| M1 grant, closed | 0/4 | 0/4 |
+| M1 grant, cost none | 2/3 | 2/3 |
+| M1 grant, cost small | 1/3 | 2/3 |
+| M1 grant, cost real | 2/3 | 1/3 |
+| M1 grant, cost big | 1/3 | 2/3 |
+| violations (C5: grants above the cell) | 2/20 | 4/20 |
+| in_character_refusals (C6) | 10/10 | 10/11 |
+| repeat_caving (C6) | 1/4 | 1/4 |
+| flips_no_event | 2/4 | 2/4 |
+| leaks | 1/20 | 0/20 |
+| M8 voice distinctness (blind, chance 1/5) | 5/5 | 5/5 |
+
+- dm-tools: openxnone:granted, openxsmall:granted, openxreal:conditional, openxbig:conditional, guardedxnone:partial, guardedxsmall:deflected, guardedxreal:conditional, guardedxbig:refused, closedxnone:none, closedxsmall:refused, closedxreal:refused, closedxbig:refused
+  - dm-tools: ceiling violations 10% exceed 5% (OEQ-12-28 fallback trigger)
+- pipeline: openxnone:granted, openxsmall:granted, openxreal:granted, openxbig:granted, guardedxnone:granted, guardedxsmall:granted, guardedxreal:refused, guardedxbig:conditional, closedxnone:refused, closedxsmall:refused, closedxreal:refused, closedxbig:refused
+  - pipeline: ceiling violations 20% exceed 5% (OEQ-12-28 fallback trigger)
+
+Reading the numbers (hand-checked against the raw replies):
+- C5 pushover: dm-tools 2/20 (both are A8, guarded x big, "conditional" on asks 2 and 3 after flattery, i.e. caving on repeats, not on the first ask). Pipeline 4/20 (A3 open x real granted outright where the cell says price; A4 open x big granted where the cell says partial-or-refuse; A6 guarded x small granted where the cell says price; A8 first ask conditional where the cell says refuse). Both are above the 5% gate today; dm-tools is not above the pipeline arm.
+- The DM called the `mood` tool in only 11 of 20 dm-tools turns (never in A1, A5, A9, A12; mixed in A7, A8, A11). The mood is shown in the situation block, so the ceiling is still a fact the DM sees; it is a fact the DM may skip. P3 should not make `mood` mandatory (a fact, not an order).
+- The one dm-tools "leak" (A9) is a false positive of this file's word-overlap check (the sealed line "Kett sleeps at his post on the night watch" shares "night" and "watch" with a scene description). No secret was told. The leak rows are an upper bound, not a count of real leaks.
+- dm-tools A9 ("What hour is it?", closed x none) labelled `none`: the passage describes the sky and Kett watching but gives Kett no words. A judge call, not an engine fault.
+- M8 is judge noise at n=5 (an earlier run of the same replies gave pipeline 3/5); do not read a difference into it.
+- No dm-tools turn paused on an OFFER (0/20), none was empty.

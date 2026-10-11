@@ -1,0 +1,171 @@
+# Spec 032 held-out set: 24 labelled items, written in P1 BEFORE any fix exists and before any model saw them.
+# Only phase P7 runs it (gate C11: at least 80 percent pass, set here, never lowered). No phase tunes on it; if one
+# does, P7 says the set is spent. The labels are plain-language checks a scorer (or a person) applies to the DM's
+# tool calls, the turn log and the passage. `check` names the thing looked at; `pass` is the whole rule.
+# Mix (cases.md): 6 prose-only targets (R), 6 fight exchanges (F), 6 said/told passages (J), 3 presence (Q), 3 pronoun (Q).
+# Scenes are fresh: none comes from the traced fighter, talker or explorer saves.
+# body_sha256 (below) is the sha256 of every line after "items:"; test_spec032_cases.py::test_heldout_is_24_items... checks it.
+# Verbs covered by R: strike, talk, observe, sneak, grapple, force (6 of the 15). Question kinds covered by J: 6 of 7.
+body_sha256: 90f162d06276802a779f992ee5da53633564652be906eaf9b03dfd9f9b85989f
+items:
+  # ---- R: a target who exists only in the DM's prose ------------------------------------------------------
+  - id: H01
+    kind: prose_target
+    verb: verb.strike
+    scene: "On the wet quay a wolfhound the DM just described is lunging at the PC. No entity exists for it."
+    player: "I swing my cudgel at the hound before it reaches me."
+    check: propose_roll
+    pass: "a propose_roll for verb.strike is accepted (not REFUSED: no one on record); the hound exists as one creature afterwards."
+  - id: H02
+    kind: prose_target
+    verb: verb.talk
+    scene: "At the market the DM described a woman selling eels from a barrel. She is not a recorded person."
+    player: "I try to talk the eel seller down to half price for the whole barrel."
+    check: propose_roll
+    pass: "the roll or the plain answer is about the eel seller as a person (made as a walk-on here, name unknown); no REFUSED line; no second, target-less retry."
+  - id: H03
+    kind: prose_target
+    verb: verb.observe
+    scene: "A rider sits motionless on the far ridge, described by the DM in the last passage only."
+    player: "I study the rider on the ridge: who are they, what do they carry?"
+    check: propose_roll_or_answer
+    pass: "if a roll is proposed it is accepted with the rider as target; if not, the passage describes the rider without inventing a name the DM then cannot use. No REFUSED line."
+  - id: H04
+    kind: prose_target
+    verb: verb.sneak
+    scene: "A sentry paces the wall above the postern gate (prose only, not recorded)."
+    player: "I creep along the wall's shadow and slip past the sentry to the postern."
+    check: propose_roll
+    pass: "propose_roll with verb.sneak is accepted with the sentry as the opposing person (made as a walk-on); no REFUSED line."
+  - id: H05
+    kind: prose_target
+    verb: verb.grapple
+    scene: "A drunk lurched out of the tavern door at the PC in the last passage (prose only)."
+    player: "I grab the drunk by the collar and pin him against the wall."
+    check: propose_roll
+    pass: "propose_roll with verb.grapple is accepted with the drunk as target; no REFUSED line."
+  - id: H06
+    kind: prose_target
+    verb: verb.force
+    scene: "The cellar hatch the DM described is stuck fast under a rotten beam (prose only, no item recorded)."
+    player: "I put my shoulder to the hatch and heave it open."
+    check: propose_roll
+    pass: "propose_roll with verb.force is accepted with the hatch as a thing (or no target and the hatch in change_what); no REFUSED line about the hatch."
+  # ---- F: fight exchanges (a recorded foe, a conflict on, the PC able) -----------------------------------
+  - id: H07
+    kind: fight_exchange
+    scene: "Conflict on. Marek Voss (bandit, recorded) is engaged with the PC; both able."
+    player: "I cut at Marek's sword arm."
+    check: foe_turns
+    pass: "after the PC's roll resolves (or the pause is answered) Marek takes exactly 1 foe turn this exchange, applied by code; the passage shows its result without inventing harm."
+  - id: H08
+    kind: fight_exchange
+    scene: "Conflict on. A knocked-down PC at 5 of 12 Vitality; Marek stands over them, engaged."
+    player: "I roll clear, grab my axe from the dirt, and swing at him again."
+    check: propose_roll
+    pass: "the DM makes a propose_roll for the swing in this turn (does not stop at a lead-up with zero tool calls); the roll targets Marek."
+  - id: H09
+    kind: fight_exchange
+    scene: "Conflict on. Marek is engaged. The PC is not attacking."
+    player: "I shout for the watch at the top of my lungs."
+    check: foe_turns
+    pass: "a turn was spent, so Marek takes exactly 1 foe turn this exchange; no refused or withdrawn beat spent it."
+  - id: H10
+    kind: fight_exchange
+    scene: "Conflict on. Marek is engaged. A side alley opens to the left."
+    player: "I break away and run down the alley."
+    check: foe_turns
+    pass: "bands widen; Marek closes one band (a foe turn that moves, not a strike); no hit lands while he is not engaged."
+  - id: H11
+    kind: fight_exchange
+    scene: "Conflict on. Marek has 1 of 8 Vitality, engaged."
+    player: "I drive my knife into his thigh."
+    check: foe_turns
+    pass: "if the PC's blow downs or kills Marek, 0 foe turns this exchange and the fight ends (conflict_end); if it fails, exactly 1 foe turn."
+  - id: H12
+    kind: fight_exchange
+    scene: "Conflict on. Two foes: Marek (down already) and Sill Orren (able, engaged)."
+    player: "I turn on Sill and hammer at his guard."
+    check: foe_turns
+    pass: "exactly 1 foe turn this exchange (Sill's); Marek, down, does not act."
+  # ---- J: what an NPC says reaches the journal (the DM lists `said` or the code records it) -----------------
+  - id: H13
+    kind: said
+    question_kind: who_is
+    passage: "Ola Brandt the ferrywoman spits into the water. \"Tam Harlan? Keeps the north landing, owes half the town, drinks with the watch.\""
+    people_here: [Ola Brandt]
+    check: said
+    pass: "one said record, speaker Ola Brandt, content about Tam Harlan (keeps the north landing, owes half the town); a hearsay record, not a world fact."
+  - id: H14
+    kind: said
+    question_kind: where_is
+    passage: "The chandler wipes his hands. \"The girl? Went up the mill road at dusk, alone. I'd not follow after dark.\""
+    people_here: [the chandler (walk-on, name unknown)]
+    check: said
+    pass: "one said record, speaker the chandler (by role), content: the girl went up the mill road at dusk alone."
+  - id: H15
+    kind: said
+    question_kind: what_happened
+    passage: "Mother Aldis folds her hands. \"The roof came down at midnight. Three beams. No one inside, thank the saints.\""
+    people_here: [Mother Aldis]
+    check: said
+    pass: "one said record, speaker Mother Aldis, content: the roof fell at midnight, three beams, no one inside."
+  - id: H16
+    kind: said
+    question_kind: what_like
+    passage: "Corvin shrugs, \"Quiet at the east gate. The bell rings at six; the guard changes at seven; nobody looks at you.\""
+    people_here: [Corvin]
+    check: said
+    pass: "one said record, speaker Corvin, content: the east gate is quiet, the bell at six, the guard changes at seven."
+  - id: H17
+    kind: said
+    question_kind: what_want
+    passage: "Brother Hale will not meet your eyes. \"I want the lamps lit, that is all. And I will not open the vault for you, not tonight.\""
+    people_here: [Brother Hale]
+    check: said
+    pass: "one said record, speaker Brother Hale, content: wants the lamps lit; will not open the vault tonight. Not written as a world fact."
+  - id: H18
+    kind: said_edge
+    question_kind: who_knows
+    passage: "\"Ask Pell at the smithy,\" says the carter, \"or ask no one. The butcher, gone from here a month, used to know it all, but he is not here to ask.\""
+    people_here: [the carter]
+    check: said
+    pass: "one said record, speaker the carter, content: ask Pell at the smithy; nothing is recorded for the butcher (absent, not a speaker)."
+  # ---- Q: presence ---------------------------------------------------------------------------------------
+  - id: H19
+    kind: presence
+    scene: "Nan the cook left the scene two exchanges ago and is in the kitchen across the yard (met, elsewhere). The PC stands in the yard with Joss."
+    player: "I look around the yard."
+    check: not_here
+    pass: "the passage does not have Nan speak, act or be seen in the yard; if she is mentioned she is not present."
+  - id: H20
+    kind: presence
+    scene: "The old guard Dowl is dead (recorded) on the floor of the gatehouse. The PC enters."
+    player: "I ask Dowl whether the gate was locked last night."
+    check: not_here
+    pass: "Dowl does not answer; the DM either refuses the act or narrates the silence of the dead; no tool call treats Dowl as a living actor."
+  - id: H21
+    kind: presence
+    scene: "The PC has never met an innkeeper named Odo. The inn has a barmaid (recorded)."
+    player: "I ask the barmaid, then call out for Odo."
+    check: not_here
+    pass: "Odo is not narrated as present and speaking unless the DM first makes him a walk-on; no invented prior meeting; the barmaid answers."
+  # ---- Q: pronouns (record fixes the pronoun; the passage must keep it) -------------------------------------
+  - id: H22
+    kind: pronoun
+    record: "Imre Cass, she/her, a courier."
+    player: "I hand Imre the sealed letter and ask her to carry it north."
+    check: pronoun
+    pass: "the passage refers to Imre only with she/her/herself; any he/him/his for her fails."
+  - id: H23
+    kind: pronoun
+    record: "The Vane twins, they/them (a group of two)."
+    player: "I ask the twins whether they saw who left the cart."
+    check: pronoun
+    pass: "the passage refers to the twins with they/them/their; singular she/he for the pair fails."
+  - id: H24
+    kind: pronoun
+    record: "The marsh heron, it/its (a creature, mind: animal)."
+    player: "I watch the heron."
+    check: pronoun
+    pass: "the passage refers to the heron with it/its (or the noun); he/she for the heron fails."
