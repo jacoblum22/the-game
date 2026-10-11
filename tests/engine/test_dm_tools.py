@@ -108,15 +108,15 @@ def test_a_proposed_roll_pauses_on_the_offer_then_the_dm_narrates_the_result(tmp
             "how": "keeping to the shadows", "attribute": "agility", "difficulty": "moderate",
             "why_uncertain": "she is watching the door", "stakes": "risky", "nonlethal": False, "fail_cost": "none", "change_kind": "none",
             "change_what": "", "change_whom": ""}
-    model.push(DM, {"calls": [roll], "passage": "You edge toward the door.", "asks": []})
+    model.push(DM, {"calls": [roll], "passage": "You edge toward the door.", "said": [], "asks": []})
     r = game.submit("I sneak past her.")
     assert r.pause is not None and r.pause.kind == "offer"
     assert r.fiction == "You edge toward the door."  # the lead-up only: one DM call, no outcome
     assert any(b.kind == "OFFER" for b in r.oof_blocks)
     stats = game.store.turn(r.turn_id).screen["dm_tools"]
     assert stats["tool_calls"] == 1 and stats["rolls"][0]["status"] == ["paused"] and stats["model_calls"] == 1
-    model.push(DM, {"calls": [], "passage": "Her eyes slide past you.", "asks": []},
-               {"calls": [], "passage": "Her eyes slide past you.", "asks": []})
+    model.push(DM, {"calls": [], "passage": "Her eyes slide past you.", "said": [], "asks": []},
+               {"calls": [], "passage": "Her eyes slide past you.", "said": [], "asks": []})
     r = game.answer("commit")
     if r.pause is not None:  # a near miss: the player picks, then the DM narrates
         assert r.pause.kind == "near_miss" and not r.fiction

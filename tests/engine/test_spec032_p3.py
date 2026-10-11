@@ -245,7 +245,7 @@ def test_o10_o12_the_offer_title_is_the_dms_goal_words_else_the_default(tmp_path
     game, model = to_play(tmp_path)
     call = roll(target="the pale beast", stakes="dire", change_kind="harm", change_what="the pale beast",
                 goal="Hurt the beast before its lunge lands")
-    model.push(DM, {"calls": [call], "passage": "It gathers itself.", "asks": []})
+    model.push(DM, {"calls": [call], "passage": "It gathers itself.", "said": [], "asks": []})
     r = game.submit("I charge the beast.")
     offer = next(b for b in r.oof_blocks if b.kind == "OFFER")
     assert "Hurt the beast before its lunge lands" in offer.text

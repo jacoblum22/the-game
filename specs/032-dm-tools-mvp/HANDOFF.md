@@ -1,24 +1,22 @@
-# HANDOFF 032 (P1-P4 + P5a + P6 done, merged on branch spec032-base)
+# HANDOFF 032 (P1-P4, P5a, P5b, P6 done on branch spec032-base)
 Owner rulings, 2026-10-10 (they override the spec docs; tagged `[owner ruling 2026-10-10]`):
 - **Scene ends are the DM's call** (the `end_scene` tool; code only does the bookkeeping; travel and time jumps still open a scene).
 - **Moods are decided by the DM** (the `mood` tool records them as memory; no roll and no ceiling grid).
 - **Pushover is observed, not gated.** Principle: fix only what is seen in play.
-Done:
-- **P3:** the `_party` resolver for prose-only people and creatures; `change fight`; one revision then drop (`screen.dm_tools.dropped`); `fail_cost`; `Beat.title`; item echo.
-- **P4:** `engine/dm/dm_world.py` (`world_step`: foe turn, time, omens, triggers, lead), `end_scene`, the FIGHT block (`_fight_block`), site-mode time (read `state.time.mode`, not `scene.mode`). Moods retired to DM memory.
-- **P6:** dm-tools `/fix` via `dispute.play_dm_dispute`; a reframe re-runs `_dm_loop` with the Fixer's note (no clue, no world step); the Fixer sees `dm_log`, `cond_origins`, and `remove_fact cinst.N`.
-Live (orchestrator, P3 and P4 code): fighter and talker runs, 0 crashes; time moves; about 20k tokens in and 2.4 calls per turn; no fight came up (the persona didn't attack).
-Fixed (P5a, was: a footing cost at S3+ made a self-held `cond.pinned`): `costs.py` `cost.footing`: a hold (`exclusion_group: hold`: grabbed, restrained, pinned) is sourced to the opponent (`frame.defender or beat.target`, an npc or adversary); with none, the deferred non-hold forms are written (S4: "move to next lower/worse place"). The real save's turn.4 now pins the PC by the woman. Pipeline and dm-tools both go through `apply_cost`.
-Fixed (P5a): `_party` maps pc / the pc / you / the player (any case) to the PC (no more NPC "the pc"). `gate.py` G4 reason is now "pinned (cinst.1) forbids verb.strike" (the player's REDIRECT already named the condition, via `oof._why`).
-Gate (P5a): `test_resolve_costs.py` footing 70 cells + `test_spec032_p5a.py` 12, all green; ruff and pyright clean on touched files; full pytest exit 0 (about 2.5 h under machine load, not 3 min). No recording changed: the pipeline recording and `offline_seed11_dmtools` stay as they were.
-Next, P5b (the rest of P5): `said` via `add_said`, `carries:`/`Not here:`, log-only checks, leak audit tokens, empty dm turn records.
-P6.4 done (orchestrator): live /fix, Sonnet, 9 labelled: understood 8/9, outcome 8/9 (auto 7 right, 1 unclear, 1 wrong: dmo1, a "learn from" teacher) -> `evals/baselines/fixer_dmtools_032.json`.
+Done earlier: P3 (`_party`, `change fight`, one revision then drop), P4 (`dm_world.py` world step, `end_scene`, FIGHT block), P5a (footing hold needs a holder; `pc` resolves to the PC; G4 refusals name the condition), P6 (`/fix` on dm-tools turns; live 8/9 understood).
+Done P5b (`dm_tools.py`; tests `test_spec032_p5b.py` 50 cases; xfail groups J, Q, L, E5, I12 removed):
+- **said:** required `said:[{npc,words}]` (cap 6, `[]` when no one spoke; the contract test needs required == properties, so scripted DM dicts need `"said": []`) in the DM schema -> `_told` -> `testimony.add_said` (about=[speaker], question unset). Dropped and logged in `told_dropped`: dead/absent/unknown speaker, words not in the passage (cover 0.8), repeat, a delivered clue. The PC's own words skip silently.
+- **context:** per-person `carries:`, `state:` (non-fresh), `Not here:` (met = any scene card's cast; elsewhere/dead/gone), a PC `hurt:` line (staggered says the next blow wounds).
+- **log-only** (`screen.dm_tools.log_only`, also `TurnRecord.claim_log`): `pronoun` (via `_pronoun_hit`), `absent_named`, `item_unbacked`. 0 hits on 72 real passages (`evals/baselines/log_only_032.md`), so precision is unmeasured; do not promote.
+- **leak audit** drops every entity name token. TurnRecord now fills `said`, `claim_log`, `draft_versions`.
+- `dm.md` and the schema changed: only `offline_seed11_dmtools` was re-recorded (offline `_dm` now quotes a line and lists it).
+Left: P5.5 live (talker + explorer 15 turns on Haiku: told rows, log-only counts, tokens/turn vs P4); P7.
+Traces: (1) staggered PC with no warning: `dm_tools._run` never calls `narration.owed`, so the `[STATUS]` exits card (07.3.7) the pipeline adds at narration.py:888 is never shown; fix is 3 lines in `_run`, left unfixed (outside lane C). (2) hall register: see the report (a POINTER clue + the DM's own earlier lines in RECENT CONVERSATION).
 Traps:
-1. The world step runs once per exchange (`t.world_done`); a re-ask rebuilds `situation()`.
-2. `t.beats` must be extended wherever a tool resolves a beat.
-3. Stats keys: `moods`, `scene_ends`, `world{foe_turns,facts,reasked}`.
-4. A `dm.md` or schema change means re-recording ONLY `offline_seed11_dmtools`. The pipeline recording (which holds the Fixer schema and prompt) stays byte-equal.
-5. P6 imports `Turn`, `_env`, `_dm_loop`, `Outcome`, `HARM_OWNED`, `ENGINE`, `play_turn` and `enabled` from `dm_tools`. Keep the names, and keep the `tools[]`/`dropped[]` shapes.
-6. Working-copy files are CRLF (autocrlf; the index is LF). The Edit tool writes LF, which git normalizes; never heredoc Python.
-7. The DM cannot add a condition to the PC (`change condition_add` refuses); tests pin the PC with `apply_condition` in a transaction.
-8. `pytest -q -q` hides the summary line: read the exit code.
+1. Name-token removal leaves 7 of 8 incident kinds' core secrets (only a name) un-auditable (L3); a name-only secret needs a different check.
+2. A harm-dead NPC stays in `People here` (exists still "exists"); the `state: dead` line is the only sign.
+3. The world step runs once per exchange (`t.world_done`); a re-ask rebuilds `situation()` and replaces `said_raw`.
+4. `_log_only` swallows its own exceptions (`check_failed`); keep it returning nothing.
+5. Stats keys: `moods`, `scene_ends`, `world`, `said`, `told_dropped`, `log_only`. P6 imports `Turn`, `_env`, `_dm_loop`, `Outcome`, `HARM_OWNED`, `ENGINE`, `play_turn`, `enabled`.
+6. Working-copy files are CRLF; scripted edits go through the Edit tool or a Python rewrite with `newline=""`; `pytest -q -q` hides the summary line.
+7. `dm.md` or schema change means re-recording ONLY `offline_seed11_dmtools`.

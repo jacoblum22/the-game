@@ -212,9 +212,9 @@ def test_f14_f17_f19_f20_when_the_foe_does_not_act(tmp_path: Path) -> None:
 def test_f16_f21_an_npc_or_a_creature_turns_on_the_pc_and_the_foe_strikes_in_the_same_turn(tmp_path: Path) -> None:
     game, model = play(tmp_path)
     who = npc_here(game)
-    model.push(DM, {"calls": [change(kind="fight", who=who)], "passage": "He squares up to you.", "asks": []},
-               {"calls": [], "passage": "He squares up to you.", "asks": []},
-               {"calls": [], "passage": "He lunges; the blow is dealt.", "asks": []})
+    model.push(DM, {"calls": [change(kind="fight", who=who)], "passage": "He squares up to you.", "said": [], "asks": []},
+               {"calls": [], "passage": "He squares up to you.", "said": [], "asks": []},
+               {"calls": [], "passage": "He lunges; the blow is dealt.", "said": [], "asks": []})
     r = game.submit("I say something he does not like.")
     stats = stats_of(game, r)
     assert fighting(game) and len(stats["world"]["foe_turns"]) == 1 and stats["world"]["reasked"] == 1
@@ -222,8 +222,8 @@ def test_f16_f21_an_npc_or_a_creature_turns_on_the_pc_and_the_foe_strikes_in_the
     assert r.fiction == "He lunges; the blow is dealt."
     # F21: a creature is a foe too
     game2, model2 = play(tmp_path / "b")
-    model2.push(DM, {"calls": [change(kind="fight", who="the pale beast")], "passage": "It crouches.", "asks": []},
-                {"calls": [], "passage": "It crouches.", "asks": []}, {"calls": [], "passage": "It springs.", "asks": []})
+    model2.push(DM, {"calls": [change(kind="fight", who="the pale beast")], "passage": "It crouches.", "said": [], "asks": []},
+                {"calls": [], "passage": "It crouches.", "said": [], "asks": []}, {"calls": [], "passage": "It springs.", "said": [], "asks": []})
     r = game2.submit("I wave at the pale beast.")
     assert BEAST in conflict.record(game2.store.state)["foes"]
     assert stats_of(game2, r)["world"]["foe_turns"][0]["foe"] == BEAST
@@ -237,11 +237,11 @@ def test_f11_the_fighter_save_replayed_starts_the_fight_and_the_foe_answers(tmp_
     assert fx["conflict_start_boundaries"] == 0  # what the old code did
     game, model = play(tmp_path)
     call = roll(**json.loads(fx["turns"]["turn.9"]["tools"][0]["args"]))
-    model.push(DM, {"calls": [call], "passage": "You gather yourself.", "asks": []})
+    model.push(DM, {"calls": [call], "passage": "You gather yourself.", "said": [], "asks": []})
     r = game.submit("I strike the beast in the clearing.")
     assert r.pause is not None and r.pause.kind == "offer"
     assert stats_of(game, r)["world"]["foe_turns"] == []  # F17: nothing while the offer is open
-    model.push(DM, {"calls": [], "passage": "Steel meets the beast.", "asks": []})
+    model.push(DM, {"calls": [], "passage": "Steel meets the beast.", "said": [], "asks": []})
     r = game.answer("commit")
     assert r.pause is None  # (seed 7: the roll resolves; no near miss)
     marks = [e for e in game.store.events(types=["boundary_marked"]) if e.payload.boundary == "conflict_start"]  # type: ignore[attr-defined]
@@ -348,11 +348,11 @@ def test_t8_t9_t10_beat_end_dead_air_and_the_lead(tmp_path: Path) -> None:
 def test_t11_t12_a_paused_turn_spends_no_time_and_the_clock_moves_from_hour_zero(tmp_path: Path) -> None:
     game, model = play(tmp_path)
     t0 = rounds(game)
-    model.push(DM, {"calls": [roll(verb="verb.exert", goal="climb the wall", how="hand over hand")], "passage": "You move.", "asks": []})
+    model.push(DM, {"calls": [roll(verb="verb.exert", goal="climb the wall", how="hand over hand")], "passage": "You move.", "said": [], "asks": []})
     r = game.submit("I climb the wall.")
     assert r.pause is not None and rounds(game) == t0  # T11 (the first turn's mode switch costs nothing)
     assert clock.mode_of(game.store.state.time.mode) == "site"  # A1: a dm-tools place scene runs in site mode
-    model.push(DM, {"calls": [], "passage": "It lands.", "asks": []}, {"calls": [], "passage": "It lands.", "asks": []})
+    model.push(DM, {"calls": [], "passage": "It lands.", "said": [], "asks": []}, {"calls": [], "passage": "It lands.", "said": [], "asks": []})
     game.answer("commit")
     assert rounds(game) > t0  # the answer turn spends time
     t1 = rounds(game)
@@ -463,7 +463,7 @@ def test_mood_is_the_dms_call_a_memory_with_no_roll_and_no_ceiling(tmp_path: Pat
     assert json.loads(moods)[1]["was"] == "closed"
     assert "ask_cost" not in json.dumps(dm_tools.step_schema(game.ctx, final=False))
     # the grants the DM lists are observations: logged with the mood held, nothing is gated
-    model.push(DM, {"calls": [], "passage": "He nods.", "asks": [{"npc": npc, "cost": "big", "granted": "help"}]})
+    model.push(DM, {"calls": [], "passage": "He nods.", "said": [], "asks": [{"npc": npc, "cost": "big", "granted": "help"}]})
     r = game.submit("Will you hide me from the watch?")
     asks = stats_of(game, r)["asks"]
     assert asks[0]["granted"] == "help" and asks[0]["cost"] == "big" and "ceiling" not in asks[0]

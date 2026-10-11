@@ -60,7 +60,8 @@ def journal(game: Game) -> str:
 
 def play(game: Game, model: ScriptedModel, message: str, data: dict[str, Any]) -> Any:
     """One scripted DM turn through `Game.submit` (queued twice: a world fact re-asks the final passage)."""
-    model.push(DM, {"calls": [], "asks": [], **data}, {"calls": [], "asks": [], **data})
+    full = {"calls": [], "said": [], "asks": [], **data}
+    model.push(DM, full, full)
     try:
         return game.submit(message)
     finally:

@@ -28,7 +28,7 @@ ROLL = {"tool": "propose_roll", "goal": "slip past the guard unseen", "verb": "v
 
 
 def say(passage: str, *calls: dict[str, Any]) -> dict[str, Any]:
-    return {"calls": list(calls), "passage": passage, "asks": []}
+    return {"calls": list(calls), "passage": passage, "said": [], "asks": []}
 
 
 def p(kind: str, **kw: Any) -> dict[str, Any]:

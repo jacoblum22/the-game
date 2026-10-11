@@ -107,14 +107,14 @@ Edits `dm_tools.py` (`situation`, `_audit`, final schema `said`, `_told`), `test
       `costs.py`); `_party` resolves "pc / the pc / you / the player" to the PC; a G4 condition refusal names the condition
       ("pinned (cinst.1) forbids verb.strike", `gate.py`). Tests: `test_resolve_costs.py` (footing x severity x foe),
       `test_spec032_p5a.py` (incl. the real save turn.4).
-- [ ] P5.1 `said` in the final-answer schema (cap 6) + `_told` -> `testimony.add_said`; drop-and-log for bad speakers.
+- [x] P5.1 `said` in the final-answer schema (cap 6) + `_told` -> `testimony.add_said`; drop-and-log for bad speakers.
       Cases J1-J14 (question kinds 7 walked); the journal shows them (J12 on the talker save).
-- [ ] P5.2 `situation()`: `carries:` per person, `Not here:` line; token delta measured before/after (report).
+- [x] P5.2 `situation()`: `carries:` per person, `Not here:` line; token delta measured before/after (report).
       Cases Q1-Q8.
-- [ ] P5.3 Log-only checks `pronoun`, `absent_named`, `item_unbacked` into `screen.dm_tools.log_only`; never block (grep
+- [x] P5.3 Log-only checks `pronoun`, `absent_named`, `item_unbacked` into `screen.dm_tools.log_only`; never block (grep
       proves no return path alters the passage). Label 40 passages by hand from the three round saves for precision;
       write the table. Cases Q9-Q14, I12.
-- [ ] P5.4 Leak audit: drop all entity name tokens (display name, aliases). Cases L1-L6 including the 10 false flags
+- [x] P5.4 Leak audit: drop all entity name tokens (display name, aliases). Cases L1-L6 including the 10 false flags
       from the head-to-head saves (copy the two flagged passages as fixtures).
 - [ ] P5.5 Live: talker + explorer 15 turns on Haiku; report told rows per run, log-only counts, leaks, tokens/turn.
 Gate: J/P/L/I cases green; no check blocks; tokens in per turn within +10% of P4's.

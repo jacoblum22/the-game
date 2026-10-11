@@ -212,11 +212,9 @@ def schema_for(verbs: list[str], kinds: list[str], *, final: bool) -> Schema:
         obj({"tool": enum(["end_scene"]), "why": STR}),
     ]
     call = {"anyOf": calls}
-    out = obj({"calls": arr(call, max_items=0 if final else PER_STEP), "passage": STR,
-               "said": arr(obj({"npc": STR, "words": STR}), max_items=SAID_MAX),  # [spec 032 P5] G3
-               "asks": arr(obj({"npc": STR, "cost": enum(COSTS), "granted": enum(GRANTS)}), max_items=4)})
-    out["required"].remove("said")  # the DM may omit it when no one spoke (J10)
-    return out
+    return obj({"calls": arr(call, max_items=0 if final else PER_STEP), "passage": STR,
+                "said": arr(obj({"npc": STR, "words": STR}), max_items=SAID_MAX),  # [spec 032 P5] G3; [] when none
+                "asks": arr(obj({"npc": STR, "cost": enum(COSTS), "granted": enum(GRANTS)}), max_items=4)})
 
 
 def _dm_loop(ctx: TurnContext, t: Turn, message: str, exchanges: list[tuple[str, str]], lead: str) -> str:
