@@ -20,13 +20,15 @@ npc_agency, 20 replies per arm (`npc_agency_before.txt`, raw in `npc_agency_befo
 
 | | dm-tools | pipeline |
 |---|---|---|
-| C5 grants above the cell | 2/20 (10%) | 4/20 (20%) |
+| costly asks (real/big) granted in any form, observation only (owner ruling 2026-10-10: no pushover gate, no ceiling grid) | 6/12 | 5/12 |
 | C6 in-character refusals | 10/10 | 10/11 |
 | C6 repeat-ask caving | 1/4 | 1/4 |
 | M1 grant open / guarded / closed | 4/4, 2/4, 0/4 | 4/4, 3/4, 0/4 |
 | leaks (heuristic, one false positive in dm-tools) | 1/20 | 0/20 |
 
-Both arms are above the 5% gate; dm-tools is not above the pipeline arm. The DM called `mood` in 11 of 20 turns.
+Each granted costly ask is listed with its cell and turn in `npc_agency_before.txt` (and by `report`) for the owner to read. The DM called `mood` in 11 of 20 turns.
+`h2h_score` prints the same kind of observation: grants of real/big asks and mood changes, with turn ids (dm-tools saves: 3 costly grants, 0 mood changes; the pipeline
+logs no `asks`, so it shows 0, which means unlogged, not none). The mood-change check cannot see events.
 
 h2h_score on the 6 existing head-to-head saves (3 personas per arm; `h2h_before.txt`): tokens in per turn 14,868 vs 46,915 (ratio 0.32,
 gate 0.6, already met); latency 13.6 s vs 35.9 s (ratio 0.38, gate 0.7, met); /fix reports 1 vs 5; fights 0 vs 2 with 0 vs 4 foe turns

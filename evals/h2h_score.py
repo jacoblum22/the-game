@@ -5,7 +5,7 @@
 Reads each save's `model_calls`, `turns.record.screen.dm_tools`, `events`, and (when found) the run's
 `findings.jsonl` (`<stamp>-claude-<persona>[-tag].findings.jsonl`, for the /fix count). Prints one table, one column
 per arm (pipeline / dm-tools, summed over the saves given), under 40 lines, then one line per save. The gates it
-feeds: C1 tokens in, C2 latency, C4 /fix count, C5 ceiling violations, C7 leaks, C8 fights, C9 world, C10 refusals.
+feeds: C1 tokens in, C2 latency, C4 /fix count, C7 leaks, C8 fights, C9 world, C10 refusals.
 Contradictions (C3) are hand-counted and not computed here. Read-only; no model calls."""
 
 from __future__ import annotations
@@ -37,6 +37,18 @@ def score_save(path: Path, findings_dir: Path | None = None) -> dict[str, Any]:
                        "sum(coalesce(latency_ms,0)) from model_calls group by turn_id").fetchall()
     c = {t: (n, tin or 0, ms or 0) for t, n, tin, ms in calls if t in turns}
     dm = [((json.loads(rec or "{}").get("screen") or {}).get("dm_tools") or {}) for _, rec, _ in turns.values()]
+    # owner ruling 2026-10-10: no ceiling gate. Observations only: each grant of a costly ask, each mood change.
+    costly: list[str] = []
+    changes: list[str] = []
+    seen: dict[str, str] = {}
+    for tid, d in zip(turns, dm, strict=True):
+        for a in d.get("asks") or []:
+            if a.get("cost") in ("real", "big") and a.get("granted") in ("help", "price", "partial"):
+                costly.append(f"{tid} {a.get('npc')} cost {a.get('cost')} -> {a.get('granted')} (mood {a.get('mood')})")
+        for m in [*(d.get("ceilings") or []), *(d.get("asks") or [])]:
+            if m.get("npc") and m.get("mood") and seen.setdefault(m["npc"], m["mood"]) != m["mood"]:
+                changes.append(f"{tid} {m['npc']} {seen[m['npc']]} -> {m['mood']} (event not checked)")
+                seen[m["npc"]] = m["mood"]
     refusals = [r for d in dm for r in d.get("refusals") or []]
     # fights: conflict_start .. conflict_end boundaries by turn; an exchange is a player turn inside a fight
     marks = db.execute("select turn_id, json_extract(payload,'$.boundary') from events where type='boundary_marked' "
@@ -70,7 +82,7 @@ def score_save(path: Path, findings_dir: Path | None = None) -> dict[str, Any]:
             "tokens_in": sum(v[1] for v in c.values()), "latency_ms": sum(v[2] for v in c.values()),
             "timed_turns": len(c), "fix": fix, "refusals": len(refusals),
             "prose_refusals": sum(PROSE_ONLY in str(r.get("why", "")) for r in refusals),
-            "ceiling_violations": sum(len(d.get("ceiling_violations") or []) for d in dm),
+            "costly_grants": costly, "mood_changes": changes,
             "leaks": sum(len(d.get("leaks") or []) for d in dm), "fights": starts_n,
             "fight_exchanges": len(fight), "foe_turns": foe_turns,
             "time_moved": any(a["from"].get("hour") != a["to"].get("hour") or a["from"].get("day") != a["to"].get("day")
@@ -105,7 +117,8 @@ def table(rows: list[dict[str, Any]]) -> str:
            col("C2 model latency (s) per turn", lambda a: f"{_sum(a, 'latency_ms') / 1000 / max(1, _sum(a, 'timed_turns')):.1f}"),
            col("model calls per turn", lambda a: f"{_sum(a, 'calls') / max(1, _sum(a, 'timed_turns')):.1f}"),
            col("C4 /fix reports (findings)", lambda a: "n/a" if any(r["fix"] is None for r in a) else str(_sum(a, "fix"))),
-           col("C5 ceiling violations (DM's own asks)", lambda a: str(_sum(a, "ceiling_violations"))),
+           col("observed (no gate): costly-ask grants / mood changes",
+               lambda a: f"{sum(len(r['costly_grants']) for r in a)} / {sum(len(r['mood_changes']) for r in a)}"),
            col("C7 leaks logged", lambda a: str(_sum(a, "leaks"))),
            col("C8 fights / exchanges / foe turns", lambda a: f"{_sum(a, 'fights')} / {_sum(a, 'fight_exchanges')} / {_sum(a, 'foe_turns')}"),
            col("C8/C10 refused tool calls (aimed at prose-only)", lambda a: f"{_sum(a, 'refusals')} ({_sum(a, 'prose_refusals')})"),
@@ -114,7 +127,8 @@ def table(rows: list[dict[str, Any]]) -> str:
     return "\n".join(out + ([ratio] if ratio else []) +
                      ["C3 contradictions: hand-counted, not computed",
                       "foe turns: dm_tools.world.foe_turns when logged, else a foe line in the delivered text (approx)"] +
-                     [f"- {r['save']} [{r['arm']}]: {r['turns']} turns, end {r['last_time']}" for r in rows])
+                     [f"- {r['save']} [{r['arm']}]: {r['turns']} turns, end {r['last_time']}" for r in rows] +
+                     [f"  observe {r['save']}: {x}" for r in rows for x in r["costly_grants"] + r["mood_changes"]][:10])
 
 
 def main(argv: list[str]) -> int:

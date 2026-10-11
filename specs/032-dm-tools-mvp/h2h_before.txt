@@ -5,7 +5,7 @@
 | C2 model latency (s) per turn | 35.9 | 13.6 |
 | model calls per turn | 3.3 | 1.7 |
 | C4 /fix reports (findings) | 5 | 1 |
-| C5 ceiling violations (DM's own asks) | 0 | 2 |
+| observed (no gate): costly-ask grants / mood changes | 0 / 0 | 3 / 0 |
 | C7 leaks logged | 0 | 0 |
 | C8 fights / exchanges / foe turns | 2 / 10 / 4 | 0 / 0 / 0 |
 | C8/C10 refused tool calls (aimed at prose-only) | 0 (0) | 2 (2) |
@@ -19,3 +19,6 @@ foe turns: dm_tools.world.foe_turns when logged, else a foe line in the delivere
 - playtest-20261010-152037-talker-dm-tools [dm-tools]: 15 turns, end d1 h0 i0
 - playtest-20261010-153123-fighter-dm-tools [dm-tools]: 14 turns, end d1 h0 i1
 - playtest-20261010-153642-explorer-dm-tools [dm-tools]: 15 turns, end d1 h0 i4
+  observe playtest-20261010-152037-talker-dm-tools: turn.9 npc.kazain_ironhelm cost real -> partial (mood open)
+  observe playtest-20261010-152037-talker-dm-tools: turn.15 npc.valas_vasande cost real -> partial (mood guarded)
+  observe playtest-20261010-153642-explorer-dm-tools: turn.9 npc.grimga_granitehelm cost real -> price (mood open)

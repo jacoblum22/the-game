@@ -2,7 +2,7 @@
 Done (P1.1-P1.6 ticked): evals/npc_agency.py (arms pipeline, dm-tools; `--offline`), evals/h2h_score.py, heldout.yaml (24 items, body
 hash in header, pinned by a test), tests/engine/test_spec032_cases.py (tables walked, 14 strict-xfail groups), tests/evals/test_spec032_harness.py,
 fixture tests/fixtures/spec032_fighter_turns.json. Numbers and deviations: implementation-results-P1.md. Branch: this worktree's.
-Before (Haiku, unfixed): npc_agency pushover dm-tools 2/20, pipeline 4/20 (gate 5%: both above); in-character refusals 10/10 vs 10/11; repeat caving
+Before (Haiku, unfixed): costly asks granted (observation, no gate per owner ruling) dm-tools 6/12, pipeline 5/12, listed in npc_agency_before.txt; in-character refusals 10/10 vs 10/11; repeat caving
 1/4 each. h2h saves: tokens-in ratio 0.32 and latency ratio 0.38 (C1/C2 already met); /fix 1 vs 5; fights 0 vs 2; prose-only refusals 2 vs 0;
 hour/day moved 0 of 3 saves both arms; told rows 3 vs 27. Files: specs/032-dm-tools-mvp/{npc_agency_before.txt,h2h_before.txt}.
 Next: P3 (needs P2) -> P4 -> P5; P6 after P3; P7 re-runs `npc_agency.py ab` both arms + `h2h_score.py` + heldout.yaml (only P7 reads it).

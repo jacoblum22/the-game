@@ -14,7 +14,7 @@ Arms: `dm-tools` (spec 031: one DM role in a tool loop, `engine/dm/dm_tools.py`;
 (the Reader -> ... -> Narrator turn at this commit; the Reader is scripted: one SPEECH part, so no frame rolls; Haiku is
 the Narrator; every other role is offline). The judge labels each reply: granted, conditional (for a price or on a
 condition), partial, refused, deflected or none, and whether a refusal gives the person's own reason. Measures: M1
-grant rate by mood and cost, M2 ceiling violations (against the cell), M3 in-character refusals, M4 flips with no
+grant rate by mood and cost, M2 costly asks (real/big) that were granted, listed to be read (observation, no gate), M3 in-character refusals, M4 flips with no
 event (repeat probes), M5 repeat-ask caving, M8 voice distinctness (blind attribution of five lines to five cards),
 M10 secret leaks (code)."""
 
@@ -277,8 +277,12 @@ def summarize(runs: list[dict[str, Any]]) -> dict[str, Any]:
             flips.append(len({x in GRANT for x in labs}) > 1)
     return {"grant_by_mood": rows, "grant_by_cost": cols,
             "cells": {c["id"]: f"{c['mood']}x{c['cost']}:{t['label']}" for c, t in first},
-            "violations": _rate([t["violation"] for _, t in allt]),
-            "violation_share": sum(t["violation"] for _, t in allt) / max(1, len(allt)),
+            # owner ruling 2026-10-10: no ceiling gate; costly asks that were granted are listed to be read
+            "costly_grants": [f"{r['cell']} ask {i + 1} ({by_id[r['cell']]['mood']} x {by_id[r['cell']]['cost']}) {t['label']}: "
+                              f"\"{t['ask'][:70]}\" -> {t['reply'][:140]!r}"
+                              for r in runs for i, t in enumerate(r["turns"])
+                              if by_id[r["cell"]]["cost"] in ("real", "big") and t["label"] in GRANT],
+            "costly_asks": _rate([t["label"] in GRANT for c, t in allt if c["cost"] in ("real", "big")]),
             "in_character_refusals": _rate([bool(t.get("in_character")) for t in refusals]),
             "repeat_caving": _rate(caved), "flips_no_event": _rate(flips),
             "leaks": _rate([t["leak"] for _, t in allt])}
@@ -318,7 +322,7 @@ def cmd_report(out_dir: Path, *, voice: bool = True) -> int:
     arms = {p.stem: json.loads(p.read_text(encoding="utf-8")) for p in sorted(out_dir.glob("*.json"))
             if p.stem in ARMS}
     sums = {a: summarize(r) for a, r in arms.items()}
-    keys = ["violations", "in_character_refusals", "repeat_caving", "flips_no_event", "leaks"]
+    keys = ["costly_asks", "in_character_refusals", "repeat_caving", "flips_no_event", "leaks"]
     print("| measure | " + " | ".join(sums) + " |\n|---|" + "---|" * len(sums))
     for m in GRID:
         print(f"| M1 grant, {m} | " + " | ".join(s["grant_by_mood"][m] for s in sums.values()) + " |")
@@ -331,8 +335,8 @@ def cmd_report(out_dir: Path, *, voice: bool = True) -> int:
     print()
     for a, s in sums.items():
         print(f"- {a}: " + ", ".join(s["cells"].values()))
-        if s["violation_share"] > 0.05:
-            print(f"  - {a}: ceiling violations {s['violation_share']:.0%} exceed 5% (OEQ-12-28 fallback trigger)")
+        print(f"  costly asks (real/big) granted, to read ({a}, no gate): {s['costly_asks']}")
+        print("".join(f"    - {x}\n" for x in s["costly_grants"]), end="")
     return 0
 
 
