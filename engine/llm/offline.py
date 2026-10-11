@@ -1154,15 +1154,17 @@ def _dm(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:  # rule: spec
                 "why_uncertain": f"{who} will resist", "stakes": "risky", "nonlethal": False,
                 "fail_cost": "none", "change_kind": "harm" if verb == "verb.strike" else "restrain", "change_what": people[0][0],
                 "change_whom": ""}
-        return {"calls": [call], "passage": passage, "asks": []}
+        return {"calls": [call], "passage": passage, "said": [], "asks": []}
     if "ROLL OFFERED" in msg:  # the lead-up only; the turn pauses
-        return {"calls": [], "passage": "You steady yourself and the moment hangs.", "asks": []}
+        return {"calls": [], "passage": "You steady yourself and the moment hangs.", "said": [], "asks": []}
     lead = re.search(r"WHAT JUST HAPPENED\n(.*)", msg)
-    passage = (f"{who[:1].upper()}{who[1:]} turns to you and answers without hurry, in few words." if who else
+    line = "I have little to tell you."
+    passage = (f"{who[:1].upper()}{who[1:]} turns to you and answers without hurry, in few words: \"{line}\"" if who else
                "The place is quiet around you; nothing stirs that you can see.")
     if lead and lead.group(1).strip():
         passage = f"The moment passes. {passage}"
-    return {"calls": [], "passage": passage + " What do you do?", "asks": []}
+    return {"calls": [], "passage": passage + " What do you do?",
+            "said": [{"npc": people[0][0], "words": line}] if who else [], "asks": []}
 
 
 ROLE_HEURISTICS: dict[Role, Callable[[dict[str, Any], Packet], dict[str, Any]]] = {

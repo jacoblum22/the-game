@@ -578,7 +578,7 @@ DEFAULTS: dict[Role, Callable[[SchemaContext], dict[str, Any]]] = {
     # no judgment: the question is not about a clue (PR-12-10 step 1; spec 025)
     Role.CLUE: lambda ctx: {"about": "none", "part": "none"},
     # nothing asked of the tools and no passage: dm_tools.call_role passes its own default (the last passage)
-    Role.DM: lambda ctx: {"calls": [], "passage": "", "asks": []},
+    Role.DM: lambda ctx: {"calls": [], "passage": "", "said": [], "asks": []},
 }
 
 

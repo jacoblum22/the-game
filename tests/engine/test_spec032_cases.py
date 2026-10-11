@@ -109,11 +109,6 @@ def test_heldout_is_24_items_with_the_stated_mix_and_an_unchanged_body() -> None
 # ------------------------------------------------------------------------------------ later phases: one xfail each
 
 GROUPS = [
-    ("J1-J14 said/told reaches the journal", "P5"),
-    ("Q1-Q14 presence and pronouns", "P5"),
-    ("L1-L6 leak audit without name tokens", "P5"),
-    ("E5 sealed secrets outside the clue rule (per incident kind)", "P5"),
-    ("I12 log-only: item named in the passage with no change call", "P5"),
     ("S1-S12 resuming keeps the engine", "P2"),
     ("N1-N16 NPC agency after the fixes", "P7"),
 ]

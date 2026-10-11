@@ -9,6 +9,8 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
+import pytest
+
 from engine.dm import dm_tools
 from engine.dm.adjudication import AdjudicationRecord
 from engine.game import Game, GameConfig
@@ -172,7 +174,8 @@ def test_reveal_clue_delivers_a_held_clue(tmp_path: Path) -> None:
     assert game.store.state.knowledge.get(pc)  # the PC learned it (a fact on record), not just words
 
 
-def test_secrets_are_hidden_by_default_visible_on_the_arm_and_leaks_are_logged(tmp_path: Path) -> None:
+def test_secrets_are_hidden_by_default_visible_on_the_arm_and_leaks_are_logged(tmp_path: Path,
+                                                                               monkeypatch: pytest.MonkeyPatch) -> None:
     game, _ = to_play(tmp_path)
     npc, _, node = _holder_here(game)
     assert node["fact"] in dm_tools.secrets(game.store.state, npc)
@@ -180,8 +183,13 @@ def test_secrets_are_hidden_by_default_visible_on_the_arm_and_leaks_are_logged(t
     game.ctx.config = {**game.ctx.config, "dm_secrets": "visible"}
     assert f"PRIVATE (they know this; the player does not): {node['fact']}" in dm_tools.situation(game.ctx)
 
+    # [spec 032 P5] the overlap drops name tokens: this case's own fact is only names ("who the challenger is:
+    # Urogg Long-Spear"), so the real leak is a made-up secret with enough content words (cases L2, L3)
+    secret = "the ferryman buried the stolen ledger beneath the abandoned mill before dawn"
+    monkeypatch.setattr(dm_tools, "secrets", lambda st, eid: [secret] if eid == npc else [])
+
     def leak(ctx: Any, t: Any, tx: Any) -> list[Any]:
-        dm_tools._audit(ctx, t, f"She leans in and says: {node['fact']}")
+        dm_tools._audit(ctx, t, f"She leans in and says: {secret}")
         return t.stats["leaks"]
 
     leaks = in_turn(game, leak)

@@ -37,6 +37,7 @@ from engine.store.records import TurnRecord
 
 ENGINE = "dm-tools"
 MAX_TOOLS, PER_STEP = 6, 3
+SAID_MAX = 6  # the lines a passage may list as said
 TOOLS = ("propose_roll", "state", "change", "recall", "reveal_clue", "mood", "end_scene")
 CHANGES = ("coin", "give_item", "new_item", "condition_add", "condition_remove", "npc_leaves", "new_npc", "travel",
            "rest", "fact", "fight")  # [spec 032 P3] fight: a person turns on the PC
@@ -69,7 +70,10 @@ class Turn:
     log: list[tuple[str, str, str]] = field(default_factory=list)  # (tool, args, output)
     stats: dict[str, Any] = field(default_factory=lambda: {
         "tool_calls": 0, "steps": 0, "refusals": [], "moods": [], "leaks": [], "clues": [], "rolls": [], "dropped": [],
-        "scene_ends": [], "world": {"foe_turns": [], "facts": [], "reasked": 0}})
+        "scene_ends": [], "world": {"foe_turns": [], "facts": [], "reasked": 0},
+        "said": [], "told_dropped": [], "log_only": []})  # [spec 032 P5] the told records, what was dropped, the checks
+    said_raw: list[Any] = field(default_factory=list)  # the DM's final-answer `said` list, as written
+    told: list[dict[str, Any]] = field(default_factory=list)  # the said entries written (TurnRecord.said's shape)
     beats: list[Any] = field(default_factory=list)  # the BeatOutcomes of this turn (the world step reads their status)
     world_done: bool = False  # the world step runs once per exchange
     paused: bool = False
@@ -144,7 +148,9 @@ def _run(ctx: TurnContext, message: str, *, choice: str | None) -> Outcome:
             if tx.state.open_pause() is None:
                 _turn_end(ctx, t.rec, t.oof)
                 _harm_followups(ctx, t.env, t.rec, t.oof)
+            _told(ctx, t, passage)  # [spec 032 P5] what people said: testimony records
             _audit(ctx, t, passage)
+            _log_only(ctx, t, passage, message, exchanges, lead)
             events = list(tx.events)
         finally:
             ctx.tx = None
@@ -162,7 +168,11 @@ def _run(ctx: TurnContext, message: str, *, choice: str | None) -> Outcome:
                    tools=[{"tool": a, "args": b, "out": o[:300]} for a, b, o in t.log])
     tr = TurnRecord(turn_id=turn_id, input_verbatim=message, writes=t.rec.write_seqs,
                     beats=[b.frame_id for b in t.rec.beats if b.frame_id], delivered_verbatim=resp.text(),
-                    model_calls=list(ctx.call_ids), screen={"dm_tools": t.stats},
+                    model_calls=list(ctx.call_ids), screen={"dm_tools": t.stats}, said=t.told,
+                    claim_log=[{"turn": turn_id, "sentence": i, "class": h["kind"], "verdict": "logged",
+                                "store_value": h["text"]} for i, h in enumerate(t.stats["log_only"])],
+                    draft_versions=[{"kind": "dm_tools", "text": passage, "steps": t.stats["steps"],
+                                     "tools": t.stats["tool_calls"]}],
                     cost_usd=float(sum(c.get("cost_usd") or 0.0 for c in calls)),
                     latency_ms=int(t.stats["latency_ms"]),
                     pause=({"kind": pause.kind, "frame_id": pause.frame_id,
@@ -202,8 +212,11 @@ def schema_for(verbs: list[str], kinds: list[str], *, final: bool) -> Schema:
         obj({"tool": enum(["end_scene"]), "why": STR}),
     ]
     call = {"anyOf": calls}
-    return obj({"calls": arr(call, max_items=0 if final else PER_STEP), "passage": STR,
-                "asks": arr(obj({"npc": STR, "cost": enum(COSTS), "granted": enum(GRANTS)}), max_items=4)})
+    out = obj({"calls": arr(call, max_items=0 if final else PER_STEP), "passage": STR,
+               "said": arr(obj({"npc": STR, "words": STR}), max_items=SAID_MAX),  # [spec 032 P5] G3
+               "asks": arr(obj({"npc": STR, "cost": enum(COSTS), "granted": enum(GRANTS)}), max_items=4)})
+    out["required"].remove("said")  # the DM may omit it when no one spoke (J10)
+    return out
 
 
 def _dm_loop(ctx: TurnContext, t: Turn, message: str, exchanges: list[tuple[str, str]], lead: str) -> str:
@@ -220,7 +233,7 @@ def _dm_loop(ctx: TurnContext, t: Turn, message: str, exchanges: list[tuple[str,
         packet = Packet(instructions=load_prompt("dm"), message=_message(ctx, t, message, exchanges, lead, note))
         schema = step_schema(ctx, final=final)
         res = call_role(ctx.model, DM_ROLE, schema, packet, turn_id=ctx.turn_id, recorder=ctx.record_call,
-                        default={"calls": [], "passage": str(data.get("passage") or ""), "asks": []})
+                        default={"calls": [], "passage": str(data.get("passage") or ""), "said": [], "asks": []})
         data = dict(res.data or {})
         t.stats["steps"] += 1
         calls = [c for c in data.get("calls") or [] if isinstance(c, dict)][:PER_STEP]
@@ -236,6 +249,7 @@ def _dm_loop(ctx: TurnContext, t: Turn, message: str, exchanges: list[tuple[str,
         if t.paused and data.get("passage"):  # the lead-up came with the proposal: no second call
             break
     _asks(ctx, t, data.get("asks") or [])
+    t.said_raw = list(data.get("said") or [])  # [spec 032 P5] the last answer is the delivered one
     return str(data.get("passage") or "")
 
 
@@ -248,9 +262,10 @@ def _reask(ctx: TurnContext, t: Turn, message: str, exchanges: list[tuple[str, s
     packet = Packet(instructions=load_prompt("dm"),
                     message=_message(ctx, t, message, exchanges, "\n".join(x for x in (lead, world) if x), note))
     res = call_role(ctx.model, DM_ROLE, step_schema(ctx, final=True), packet, turn_id=ctx.turn_id,
-                    recorder=ctx.record_call, default={"calls": [], "passage": passage, "asks": []})
+                    recorder=ctx.record_call, default={"calls": [], "passage": passage, "said": t.said_raw, "asks": []})
     t.stats["steps"] += 1
     t.stats["world"]["reasked"] += 1
+    t.said_raw = list((res.data or {}).get("said") or [])  # the final passage replaces the draft, and its lines
     return str((res.data or {}).get("passage") or passage)
 
 
@@ -298,7 +313,9 @@ def situation(ctx: TurnContext) -> str:
     from engine.dm.fixer import sheet_line
     from engine.dm.oof import when_words
     from engine.dm.packet import people_card
+    from engine.harm.state import descriptor
     from engine.resolve.change import holder_of
+    from engine.resolve.conflict import state_words
     from engine.retrieve.scene import pc_id
     from engine.world.places import location, reachable
     from engine.world.scenes import cast_present
@@ -318,16 +335,27 @@ def situation(ctx: TurnContext) -> str:
                   f"  sheet: {sheet_line(st, rules, pc)}"]
         held = [i for i, e in st.entities.items() if e.kind in ("item", "object", "clue") and holder_of(st, i) == pc]
         lines.append("  carries: " + (", ".join(f"{_name(st, i)} ({i})" for i in held) or "nothing on record"))
+        hurt = descriptor(st, pc)  # [spec 032 P5, traced: a staggered PC read only as a word inside the sheet line]
+        if hurt != "fresh":
+            lines.append(f"  hurt: {hurt}" + (" (0 Vitality: the next blow wounds)" if hurt == "staggered" else ""))
     people = cast_present(st) if sc is not None else []
     lines.append("People here:" if people else "People here: no one")
+    carried = _carried(st, people)
     for eid in people:
         card = people_card(st, eid, rules=rules)
         lines += [f"- {eid}: {card[0] if card else _name(st, eid)}", *card[1:]]
+        if carried.get(eid):
+            lines.append("  carries: " + _list(st, carried[eid]))
+        if (hurt_words := state_words(st, eid)) != "fresh":  # a body or a downed person here is not talking
+            lines.append(f"  state: {hurt_words}")
         m = _held_mood(st, eid)
         lines.append(f"  mood toward you: {m} ({(held_band(st, eid) or {}).get('why')})" if m else
                      "  mood toward you: not set (decide it, record it with `mood`)")
         if secrets_visible(ctx):
             lines += [f"  PRIVATE (they know this; the player does not): {s}" for s in secrets(st, eid)]
+    away = _not_here(st, people)
+    if away:
+        lines.append("Not here: " + "; ".join(away))
     if here:
         exits = [f"{_name(st, x.to)} ({x.to})" for x in reachable(st, here) if x.to != here]
         lines.append("Exits: " + (", ".join(exits[:8]) or "none known"))
@@ -335,6 +363,47 @@ def situation(ctx: TurnContext) -> str:
     if threads:
         lines.append("Open threads: " + "; ".join(_flat(x["text"] or x["name"], 160) for x in threads))
     return "\n".join(lines)
+
+
+def _carried(st: Any, people: list[str]) -> dict[str, list[str]]:
+    """What each person here carries (items and objects they hold; never a sealed thing), one pass over the things."""
+    from engine.resolve.change import holder_of
+
+    out: dict[str, list[str]] = {}
+    for i, e in st.entities.items():
+        if e.kind in ("item", "object") and i not in st.seals and (h := holder_of(st, i)) in people:
+            out.setdefault(h, []).append(i)
+    return out
+
+
+def _list(st: Any, ids_: list[str], cap: int = 6) -> str:
+    more = f", and {len(ids_) - cap} more" if len(ids_) > cap else ""
+    return ", ".join(f"{_name(st, i)} ({i})" for i in ids_[:cap]) + more
+
+
+def _not_here(st: Any, here: list[str], cap: int = 6) -> list[str]:
+    """People the character has met (in any scene's cast, or a bond) who are not in this scene, with where or why:
+    elsewhere, dead, gone. Never-met people are not listed [spec 032 G6]."""
+    from engine.harm.state import DEAD, harm_state
+    from engine.retrieve.scene import pc_id
+
+    pc = pc_id(st)
+    met = dict.fromkeys(c for card in st.scene_cards.values() for c in card.cast)
+    out = []
+    for eid in met:
+        e = st.entities.get(eid)
+        if e is None or eid == pc or eid in here or e.kind not in ("npc", "companion", "adversary"):
+            continue
+        pos = st.positions.get(eid)
+        where = pos.location if pos is not None else None
+        if e.exists == "dead" or harm_state(st, eid) == DEAD:
+            why = "dead"
+        elif e.exists != "exists":
+            why = "gone"
+        else:
+            why = f"at {_name(st, where)}" if where in st.entities else "elsewhere"
+        out.append(f"{_name(st, eid)} ({eid}): {why}")
+    return out[-cap:]
 
 
 def _fight_block(st: Any, pc: str | None) -> list[str]:
@@ -424,6 +493,11 @@ def _id(st: Any, raw: Any) -> str | None:
 
 
 _ID_LIKE = re.compile(r"^[a-z_]+\.[a-z0-9_.]+$")
+_PC_WORDS = re.compile(r"^(pc|the pc|you|the player|player)$")  # the DM's words for the player character
+
+
+def _squash(raw: Any) -> str:
+    return re.sub(r"\s+", " ", str(raw or "").strip().lower())
 
 
 def _labels(e: Any) -> list[str]:
@@ -447,8 +521,7 @@ def _party(ctx: TurnContext, t: Turn, raw: Any, *, person: bool = False) -> str 
     st = tx.state
     from engine.retrieve.scene import pc_id
 
-    if re.sub(r"\s+", " ", str(raw or "").strip().lower()) in ("pc", "the pc", "you", "the player", "player") \
-            and pc_id(st):  # the DM's words for the player character (a name is matched by `_id`)
+    if _PC_WORDS.match(_squash(raw)) and pc_id(st):  # the DM's words for the player character (a name is matched by `_id`)
         return pc_id(st)
     eid = _id(st, raw)
     if eid is None or eid in st.entities:
@@ -1001,24 +1074,131 @@ _STOPS = frozenset("that this with from have they them then into were your there
                    "their been being because while where whom".split())
 
 
-def _content(text: str) -> set[str]:
-    return {w for w in _WORD.findall(text.lower()) if w not in _STOPS}
+def _content(text: str, drop: frozenset[str] = frozenset()) -> set[str]:
+    return {w for w in _WORD.findall(text.lower()) if w not in _STOPS and w not in drop}
+
+
+def _name_tokens(st: Any) -> frozenset[str]:
+    """Every word of every entity's name, display name and aliases: a name in the passage and in a secret is not a
+    leak (spec 032 G9: the 10 false flags were a person's name plus "matter")."""
+    toks: set[str] = set()
+    for eid, e in st.entities.items():
+        for n in (e.name, _name(st, eid), *[a for a in e.data.get("aliases", []) if isinstance(a, str)]):
+            toks |= set(_WORD.findall(str(n or "").lower()))
+    return frozenset(toks)
 
 
 def _audit(ctx: TurnContext, t: Turn, passage: str) -> None:
-    """Secret leaks (measured, never blocked): a present person's private case fact whose content words mostly
-    appear in the passage, when no clue tool delivered it this turn."""
+    """Secret leaks (measured, never blocked): a present person's private case fact whose content words (names
+    removed) mostly appear in the passage, when no clue tool delivered it this turn."""
     from engine.world.scenes import cast_present
 
     st = ctx.state
-    said = _content(passage)
+    names = _name_tokens(st)
+    said = _content(passage, names)
     delivered = " ".join(c["learned"] for c in t.stats["clues"]).lower()
     for eid in cast_present(st) if st.scene is not None else []:
         for s in secrets(st, eid):
             body = s.split(":", 1)[-1]
-            words = _content(body)
+            words = _content(body, names)
             if len(words) >= 3 and len(words & said) / len(words) >= 0.6 and body.strip().lower()[:40] not in delivered:
                 t.stats["leaks"].append({"npc": eid, "secret": s[:200]})
+
+
+# ------------------------------------------------------------------------------------------- told, and the log-only checks
+
+
+def _speaker(st: Any, raw: Any) -> str | None:
+    """Who the DM means by `npc` in a said entry: an id, a name, else the one person here with that label."""
+    from engine.dm.mentions import bare
+    from engine.world.scenes import cast_present
+
+    eid = _id(st, raw)
+    if eid in st.entities:
+        return eid
+    want = bare(str(raw or "")).lower()
+    here = [i for i in (cast_present(st) if st.scene is not None else []) if want and want in _labels(st.entities[i])]
+    return here[0] if len(here) == 1 else eid
+
+
+def _told(ctx: TurnContext, t: Turn, passage: str) -> None:
+    """What people said, as testimony (spec 032 G3): each `said` entry becomes a record on the speaker (place and day),
+    shown in the journal as "what you were told"; never a world fact. Dropped and logged (`told_dropped`), never
+    written: a speaker that is unknown, dead, gone or not here; words not in the passage; a line the speaker already
+    said; a line that is the clue `reveal_clue` delivered (that is a learned fact). The character's own words, and an
+    empty line, are skipped without a log."""
+    from engine.audit import text as atx
+    from engine.dm import testimony
+    from engine.retrieve.scene import pc_id
+
+    st, rules = ctx.state, ctx.rules
+    limit = float((((rules.pacing.get("narration") or {}).get("freshness") or {}).get("said_overlap")) or 0.6)
+    clues = " ".join(c["learned"] for c in t.stats["clues"])
+    keep: list[dict[str, Any]] = []
+    for e in [x for x in t.said_raw if isinstance(x, dict)][:SAID_MAX]:
+        words, raw = str(e.get("words") or "").strip(), str(e.get("npc") or "")
+        who = _speaker(st, raw)
+        if not words or who == pc_id(st) or _PC_WORDS.match(_squash(raw)):
+            continue
+        why = (_acting(st, who, down=False)
+               or ("the words are not in the passage" if not atx.covers(words, passage, ratio=0.8) else "")
+               or ("said before" if testimony.is_repeat(st, rules, who, words)
+                   or any(k["speaker"] == who and testimony.overlap(words, k["words"]) > limit for k in keep) else "")
+               or ("delivered as a clue" if clues and testimony.overlap(clues, words) > limit else ""))
+        if why:
+            t.stats["told_dropped"].append({"npc": raw[:60], "why": why, "words": words[:80]})
+        else:
+            keep.append({"speaker": who, "turn": ctx.turn_id, "words": words, "about": [who], "question": None})
+    for sid, k in zip(testimony.add_said(ctx, keep), keep, strict=True):
+        t.stats["said"].append({"id": sid, "speaker": k["speaker"], "words": k["words"][:120]})
+    t.told = keep
+
+
+_GIVEN = r"(?:hands|gives|passes|slides|tosses|throws|presses|pushes|presents)"
+_GIVE = re.compile(rf"\b{_GIVEN}\s+you\s+(?:an?|the|some|two|three|his|her|their)\s+([a-z'-]+(?:\s[a-z'-]+)?)|"
+                   rf"\b{_GIVEN}\s+(?:an?|the|some|two|three|his|her|their)\s+([a-z'-]+(?:\s[a-z'-]+)?)"
+                   r"\s+(?:into|to|across|over)\s+your\b", re.IGNORECASE)
+_MOVES = ("give_item", "new_item", "coin")
+
+
+def _log_only(ctx: TurnContext, t: Turn, passage: str, message: str, exchanges: list[tuple[str, str]],
+              lead: str) -> None:
+    """The checks that only log (spec 032 FR-09, DL-12-138): none returns anything the turn uses, so none can change or
+    block the passage. `pronoun` (a named person's sentence uses the other pronoun than the record's), `absent_named`
+    (a person who is neither here nor in the recent talk, tools or this turn's lead), `item_unbacked` (a thing handed
+    over with no give_item, new_item or coin call that worked this turn). Precision is measured by hand
+    (evals/baselines/log_only_032.md); none is promoted here."""
+    from engine.audit.claims import _QUOTE_RE, _pronoun_hit
+    from engine.audit.declare import SceneIndex, name_spans
+    from engine.world.scenes import cast_present
+
+    out = t.stats["log_only"]
+    try:
+        st = ctx.state
+        idx = SceneIndex.of(st)
+        here = set(cast_present(st)) if st.scene is not None else set()
+        talk = " ".join([message, lead, *(f"{i} {o}" for i, o in exchanges),
+                         *(f"{a} {b} {o}" for a, b, o in t.log)]).lower()
+        backed = any(a == "change" and any(f'"kind": "{k}"' in b for k in _MOVES) and o.startswith("done")
+                     for a, b, o in t.log)
+        before: list[str] = []
+        named: set[str] = set()
+        for sent in re.split(r"(?<=[.!?])\s+", passage.strip()):
+            narr = _QUOTE_RE.sub(" ", sent)
+            if hit := _pronoun_hit(narr, before, idx, ()):
+                out.append({"kind": "pronoun", "text": sent[:160], "who": hit[1], "word": hit[0]})
+            for _, _, eid in name_spans(narr, idx):
+                e = st.entities.get(eid)
+                if e is None or e.kind not in ("npc", "companion", "adversary") or eid in here or eid in named:
+                    continue
+                if not any(re.search(rf"\b{re.escape(n)}\b", talk) for n in idx.aliases.get(eid, [])):
+                    named.add(eid)
+                    out.append({"kind": "absent_named", "text": sent[:160], "who": eid})
+            if not backed and (g := _GIVE.search(narr)):
+                out.append({"kind": "item_unbacked", "text": sent[:160], "item": (g.group(1) or g.group(2)).strip()})
+            before.append(narr)
+    except Exception as e:  # noqa: BLE001 - a log-only check never fails the turn
+        out.append({"kind": "check_failed", "text": f"{type(e).__name__}: {_flat(e, 120)}"})
 
 
 def _name(st: Any, eid: str | None) -> str:

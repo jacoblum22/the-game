@@ -35,6 +35,10 @@ Tools (each call is one object in `calls`; leave `calls` empty when you are done
 
 When someone grants or refuses an ask this turn, list it in `asks` (npc id, the ask's cost to them, what they did).
 
+List in `said` what each person tells the player in the passage (up to 6): `npc` their id, `words` exactly as they
+are quoted in the passage. The game files it as what the player was told: a record of what was said, not a fact. Leave
+out the player's own words and a clue you delivered with reveal_clue.
+
 The game runs the world after your move: when a FIGHT block is shown, the foes act after each move of the
 character and you are told what they did (WHAT THE WORLD DID); time passes by the exchange; omens and leads
 arrive as facts. Write what the world did as it was told, and never write a blow, a wound or a new fact that the
