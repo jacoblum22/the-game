@@ -231,21 +231,17 @@ def inconclusive_streak(ctx: TimeContext) -> HandlerResult:  # rule: 12.8.1
 # ------------------------------------------------------------------------------------- lead injection
 
 
-def inject_lead(ctx: TimeContext, *, form_misfit: bool = False) -> LeadInjection:  # rule: PR-12-3
-    """PR-12-3: the first eligible source on the ladder, a form from `tbl.lead_injection` (threat forms excluded
-    in PEAK and RELAX), then the writes: a fact naming the lead, `knowledge_recorded` for the PC, the counter
-    reset, the trigger lowered and the injection logged. `form_misfit` (the DM's fit test said no twice) takes
-    the fallback form."""
+def lead_candidates(ctx: TimeContext, *, rng: Any = None) -> tuple[int, str | None, str | None]:  # rule: PR-12-3
+    """[spec 033 P5] PR-12-3 step 1, read-only: (rung index, source id, thread) of the first eligible source on the
+    ladder; a source of None is the last rung (a new hook, which code never writes). A tie at a rung goes to `rng`
+    when given (the pipeline), else to the first listed (the dm-tools path writes nothing here)."""
     from engine.world.scenes import scene_info
     from engine.world.social import cast_list, thread_list
-    tx, rules, rng = ctx.tx, ctx.rules, ctx.rng
-    if rng is None:
-        raise WorldError("lead injection needs ctx.rng")
-    state = tx.state
+    state = ctx.tx.state
     pc = active_pc(state)
     if pc is None:
         raise WorldError("no PC")
-    ladder = list(rules.pacing["lead_injection"]["source_ladder"])
+    ladder = list(ctx.rules.pacing["lead_injection"]["source_ladder"])
     threads = {t["id"]: t for t in thread_list(state) if t["status"] == "active"}
     scene_thread = scene_info(state).get("thread")
     queue = list(state.meta.get("fallback_queue") or [])
@@ -256,7 +252,7 @@ def inject_lead(ctx: TimeContext, *, form_misfit: bool = False) -> LeadInjection
             return None
         top = max(w for _, w in items)
         tied = [i for i, w in items if w == top]
-        return tied[0] if len(tied) == 1 else rng.choice(tied, "lead injection: tie at a rung")
+        return tied[0] if len(tied) == 1 or rng is None else rng.choice(tied, "lead injection: tie at a rung")
 
     pick: tuple[int, str | None, str | None] | None = None  # (rung index, source id, thread)
     for i, rung in enumerate(ladder):
@@ -291,7 +287,45 @@ def inject_lead(ctx: TimeContext, *, form_misfit: bool = False) -> LeadInjection
             pick = (i, src, thr)
             break
     assert pick is not None
-    i, src, thr = pick
+    return pick
+
+
+def lead_bookkeeping(ctx: TimeContext, out: LeadInjection) -> None:  # rule: PR-12-3
+    """[spec 033 P5] What telling or writing a lead costs: the counter back to 0, the trigger lowered, the injection
+    logged. No world write."""
+    tx = ctx.tx
+    stage(ctx, meta("inconclusive", {"count": 0, "since": tx.peek_seq()}, "PR-12-3"),
+          *lower_trigger(tx, LEAD_TRIGGER, rule_id="PR-12-3"),
+          meta("lead_injection", {"scene_id": tx.state.scene.scene_id if tx.state.scene else None,
+                                  **out.model_dump(include={"source_rung", "source_id", "form_roll", "facts"})},
+               "PR-12-3"))
+
+
+def lead_due(ctx: TimeContext) -> LeadInjection:  # rule: PR-12-3
+    """[spec 033 P5] PR-12-3 steps 1, 2 and 4 on the dm-tools path: the source, the form (a logged roll) and the
+    counter reset. No fact, no knowledge, no person or document: the DM is told and brings the lead in itself."""
+    if ctx.rng is None:
+        raise WorldError("lead injection needs ctx.rng")
+    i, src, thr = lead_candidates(ctx)
+    form, form_roll, _ = _lead_form(ctx, i + 1, False)
+    out = LeadInjection(rung=i + 1, source_rung=str(ctx.rules.pacing["lead_injection"]["source_ladder"][i]),
+                        source_id=src, thread=thr, form=form, form_roll=form_roll, not_built=src is None)
+    lead_bookkeeping(ctx, out)
+    return out
+
+
+def inject_lead(ctx: TimeContext, *, form_misfit: bool = False) -> LeadInjection:  # rule: PR-12-3
+    """PR-12-3 (the pipeline): the first eligible source on the ladder, a form from `tbl.lead_injection` (threat forms
+    excluded in PEAK and RELAX), then the writes: a fact naming the lead, `knowledge_recorded` for the PC, the counter
+    reset, the trigger lowered and the injection logged. `form_misfit` (the DM's fit test said no twice) takes
+    the fallback form. The dm-tools path never calls it: it tells (`lead_due`)."""
+    tx, rules, rng = ctx.tx, ctx.rules, ctx.rng
+    if rng is None:
+        raise WorldError("lead injection needs ctx.rng")
+    state = tx.state
+    pc = active_pc(state)
+    ladder = list(rules.pacing["lead_injection"]["source_ladder"])
+    i, src, thr = lead_candidates(ctx, rng=rng)
     form, form_roll, how = _lead_form(ctx, i + 1, form_misfit)
     facts: list[str] = []
     if src is not None:
@@ -304,11 +338,7 @@ def inject_lead(ctx: TimeContext, *, form_misfit: bool = False) -> LeadInjection
         facts.append(fid)
     out = LeadInjection(rung=i + 1, source_rung=ladder[i], source_id=src, thread=thr, form=form, form_roll=form_roll,
                         facts=facts, not_built=src is None)
-    stage(ctx, meta("inconclusive", {"count": 0, "since": tx.peek_seq()}, "PR-12-3"),
-          *lower_trigger(tx, LEAD_TRIGGER, rule_id="PR-12-3"),
-          meta("lead_injection", {"scene_id": state.scene.scene_id if state.scene else None,
-                                  **out.model_dump(include={"source_rung", "source_id", "form_roll", "facts"})},
-               "PR-12-3"))
+    lead_bookkeeping(ctx, out)
     if src is not None or thr is not None:
         from engine.world.social import feature
         feature(ctx, [x for x in (src, thr) if x])

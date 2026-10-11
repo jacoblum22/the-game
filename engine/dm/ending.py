@@ -28,7 +28,7 @@ from engine.dm.adjudication import AdjudicationRecord
 from engine.dm.context import TurnContext
 from engine.dm.response import Choice, Flags, OofBlock, Pause, Response
 from engine.dm.seed_flow import PHASE_KEY, close_pause, open_pause, present_pause
-from engine.store.events import PauseRecord
+from engine.store.events import Event, PauseRecord
 from engine.store.projection import WorldState
 from engine.store.records import TurnRecord
 
@@ -210,18 +210,39 @@ def answer_ending(ctx: TurnContext, choice_id: str) -> Response:  # rule: 11.13.
 # ------------------------------------------------------------------------------------------- retiring
 
 
-def ask_retire(ctx: TurnContext) -> Response:  # rule: 11.13.1
-    """11.13.1 "always": the player may retire the character, out of fiction. Confirmed first (it cannot be
-    undone); a pause of flow `retire` (kind clarify) holds the question."""
-    from engine.dm.seed_flow import flow_tx
+def retire_command(message: str) -> bool:  # rule: 11.13.1
+    """[spec 033 R9] The one exact command that asks to retire in a dm-tools game; any other message goes to the DM,
+    which opens the question itself (`end_game`). Code never reads a wish to retire from the player's words."""
+    return message.strip().casefold() == "/retire"
 
-    name = ctx.store.state.entities[_pc(ctx.store.state) or ""].name
+
+def open_retire(tx: Any) -> tuple[PauseRecord, OofBlock]:  # rule: 11.13.1
+    """The confirmation pause, written in `tx` (a flow transaction, or the DM's own turn for `end_game`)."""
+    name = tx.state.entities[_pc(tx.state) or ""].name
     text = (f"[RETIRE] Retire {name}? Their story ends here and the epilogue is told; you can then make a new "
             "character in this world.\n" + "\n".join(f"  {i}) {c.label}" for i, c in enumerate(RETIRE_CHOICES, 1)))
     block = OofBlock(kind="CLARIFY", text=text)
+    p = open_pause(tx, "clarify", f"Retire {name}?", RETIRE_CHOICES, "keep_playing",
+                   {"flow": RETIRE_FLOW, "blocks": [block.model_dump()]}, "11.13.1")
+    return p, block
+
+
+def ask_retire(ctx: TurnContext, *, withdraw: bool = False) -> Response:  # rule: 11.13.1
+    """11.13.1 "always": the player may retire the character, out of fiction. Confirmed first (it cannot be
+    undone); a pause of flow `retire` (kind clarify) holds the question. `withdraw` (dm-tools `/retire`): a roll on
+    offer is withdrawn first, as any new message withdraws it (12.2.6); any other open question is answered first."""
+    from engine.dm.seed_flow import flow_tx
+
+    open_ = ctx.store.state.open_pause()
+    if open_ is not None and not (withdraw and open_.detail.get("stage") in ("offer", "warning")):
+        return present_pause(open_, "play", [oof.note_block("Answer the open question first, then retire.")])
     with flow_tx(ctx) as tx:
-        p = open_pause(tx, "clarify", f"Retire {name}?", RETIRE_CHOICES, "keep_playing",
-                       {"flow": RETIRE_FLOW, "blocks": [block.model_dump()]}, "11.13.1")
+        if open_ is not None:  # the same two events as `close_by_default`
+            tx.add(Event.of("pause_closed", source="engine", rule_id="12.2.6", pause_id=open_.pause_id,
+                            choice=open_.default_choice, by="withdrawn"))
+            tx.add(Event.of("offer_logged", source="engine", rule_id="01.7.1", frame_id=None,
+                            shown_at=tx.state.time.now, choice="withdraw"))
+        p, block = open_retire(tx)
     return Response(phase="play", oof_blocks=[block], pause=Pause.of(p))
 
 
@@ -247,24 +268,29 @@ def answer_retire(ctx: TurnContext, choice_id: str) -> Response:  # rule: 11.13.
     return Response(phase="play", oof_blocks=[oof.note_block("Then the story goes on. What do you do?")])
 
 
-def retire_choice(message: str) -> str:
-    """A typed answer to the retirement question: a number, an id, or yes/no words."""
+def retire_choice(message: str, exact: bool = False) -> str | None:
+    """A typed answer to the retirement question: a number, an id, or yes/no words. `exact` (dm-tools): a number,
+    an id or a label only, else None (the question is shown again)."""
     from engine.dm.roles.interpret import direct_choice
 
     hit = direct_choice(message, RETIRE_CHOICES)
     if hit and hit[0] in ("retire", "keep_playing"):
         return hit[0]
+    if exact:
+        return None
     low = message.strip().lower()
     return "retire" if low.startswith(("y", "retire", "i retire")) else "keep_playing"
 
 
-def ending_choice(message: str) -> str | None:
-    """A typed answer to the ending menu: a number, an id, a label, or plain words."""
+def ending_choice(message: str, exact: bool = False) -> str | None:
+    """A typed answer to the ending menu: a number, an id, a label, or plain words (`exact`, dm-tools: not the words)."""
     from engine.dm.roles.interpret import direct_choice
 
     hit = direct_choice(message, MENU)
     if hit and hit[0] in {c.id for c in MENU}:
         return hit[0]
+    if exact:
+        return None
     low = message.lower()
     if "character" in low or "someone" in low:
         return "new_character"
@@ -276,5 +302,5 @@ def ending_choice(message: str) -> str | None:
 
 
 __all__ = ["DONE", "ENDINGS", "FLOW", "MENU", "RETIRE_FLOW", "answer_ending", "answer_retire", "ask_retire",
-           "ending_choice", "ending_due", "is_retire", "legend", "present_ending", "retire_choice", "run_epilogue",
-           "summary"]
+           "ending_choice", "ending_due", "is_retire", "legend", "open_retire", "present_ending", "retire_choice",
+           "retire_command", "run_epilogue", "summary"]

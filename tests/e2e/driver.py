@@ -243,7 +243,7 @@ class Driver:
         """Retire by choice: the confirmation (resumed), the epilogue and ending menu (resumed), then a new
         character in the same world (its creation step resumed) and the new opening."""
         r = self.settle(self.last) if self.last.pause is not None and self.last.phase == "play" else self.last
-        r = self.call("submit", "I retire.")
+        r = self.call("submit", "/retire" if self.game.config.engine == "dm-tools" else "I retire.")
         assert r.pause is not None and [c.id for c in r.pause.choices] == ["retire", "keep_playing"], r.text()
         r = self.call("answer", "retire")
         assert r.phase == "ending" and r.pause is not None and r.pause.kind == "ending", r.text()

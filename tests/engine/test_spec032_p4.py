@@ -332,11 +332,10 @@ def test_t8_t9_t10_beat_end_dead_air_and_the_lead(tmp_path: Path) -> None:
             assert int(game.store.state.meta.get("dead_air") or 0) in (n, 0)
         marks1 = len([e for e in game.store.events(types=["boundary_marked"]) if e.payload.boundary == "beat_end"])  # type: ignore[attr-defined]
         assert marks1 - marks0 == 1  # T9: one beat end for a plain exchange
-        if any(f.startswith("A lead arrives") for f in facts):
+        if any(f.startswith("LEAD DUE") for f in facts):
             lead_at = n
             break
-    assert lead_at == RULES.pacing["lead_injection"]["threshold"]  # T8: raised by the streak, written by inject_lead
-    assert int(game.store.state.meta.get("dead_air") or 0) == 0  # the lead wrote facts: not a quiet exchange (T9)
+    assert lead_at == RULES.pacing["lead_injection"]["threshold"]  # T8: raised by the streak, told (spec 033 P5)
     # T10: a refused beat spends no time and writes no beat end
     before = rounds(game)
     step(game, beats=[outcome("refused")])
