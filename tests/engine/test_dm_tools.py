@@ -51,6 +51,13 @@ def npc_here(game: Game) -> str:
     return cast_present(game.store.state)[0]
 
 
+def engage(game: Game, other: str) -> None:
+    """[spec 033 06.4.3] The DM states the character is engaged with `other` (a melee attack needs a recorded band)."""
+    from engine.resolve import conflict
+
+    in_turn(game, lambda ctx, t, tx: conflict._set_band(tx, pc_id(tx.state) or "", other, "engaged", "test"))
+
+
 def change(**kw: Any) -> dict[str, Any]:
     return {"tool": "change", "kind": "", "who": "", "what": "", "to": "", "amount": 0, "note": "", **kw}
 

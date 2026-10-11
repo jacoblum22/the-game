@@ -28,7 +28,7 @@ from engine.time.scheduler import TimeContext
 from engine.world.common import fact
 from engine.world.scenes import cast_present, end_scene, start_scene
 from engine.world.social import cast_described
-from tests.engine.test_dm_tools import DM, change, in_turn, npc_here
+from tests.engine.test_dm_tools import DM, change, engage, in_turn, npc_here
 from tests.engine.test_spec032_cases import RULES
 from tests.engine.test_spec032_p3 import roll
 from tests.engine.test_spec032_p4 import play, rounds, start_fight, stats_of, step
@@ -109,6 +109,7 @@ def test_r6_to_r9_default_unknown_running_and_capitalised(tmp_path: Path) -> Non
 def test_x1_to_x4_a_foe_acts_only_when_the_roll_is_settled(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     game, model = play(tmp_path)
     foe = start_fight(game)
+    engage(game, foe)
     before = rounds(game)
     model.push(DM, turn_with(roll(verb="verb.strike", target=foe, fail_cost="cost.harm")))
     r = game.submit("I swing at her.")

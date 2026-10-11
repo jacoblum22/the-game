@@ -246,6 +246,15 @@ def foe_schema(legal: dict[str, list[str]]) -> Schema:
     return obj({"foes": arr({"anyOf": one} if one else STR, max_items=len(one))})
 
 
+def _paused_note(ctx: TurnContext) -> str:
+    """What the DM is told once a tool paused the turn: the open pause is a roll offered, or the retire question."""
+    p = ctx.state.open_pause()
+    if p is not None and p.kind == "clarify":
+        return "The player is asked whether to retire the character: write only a short closing line, never the ending."
+    return ("A roll is now offered to the player: write only the lead-up to the attempt (or nothing), never its "
+            "outcome.")
+
+
 def _dm_loop(ctx: TurnContext, t: Turn, message: str, exchanges: list[tuple[str, str]], lead: str) -> str:
     """The bounded tool loop: at most MAX_TOOLS tool calls, PER_STEP per answer, then the passage."""
     made = 0
@@ -253,8 +262,7 @@ def _dm_loop(ctx: TurnContext, t: Turn, message: str, exchanges: list[tuple[str,
     for _ in range(MAX_TOOLS + 1):
         final = made >= MAX_TOOLS or t.paused
         note = ("Write the passage now (no tool calls are left)." if final and not t.paused else
-                "A roll is now offered to the player: write only the lead-up to the attempt (or nothing), never its "
-                "outcome." if t.paused else
+                _paused_note(ctx) if t.paused else
                 f"You may make up to {MAX_TOOLS - made} more tool call(s), {PER_STEP} per answer; with no calls, "
                 "`passage` is delivered.")
         packet = Packet(instructions=load_prompt("dm"), message=_message(ctx, t, message, exchanges, lead, note))
@@ -289,7 +297,7 @@ def foe_message(ctx: TurnContext, t: Turn, legal: dict[str, list[str]]) -> str:
     lead = _outcomes_text(ctx, t.rec, t.oof) + "\n" + "\n".join(_fight_block(ctx.state, pc, legal))
     note = ("Choose what each foe listed does now: `act` from its own acts, `target` (an id; empty is the character) "
             "and `nonlethal`. Write no passage.")
-    return _message(ctx, t, "", [], lead, note)
+    return _message(ctx, t, "", [], lead, note, fight=False)
 
 
 def _reask(ctx: TurnContext, t: Turn, message: str, exchanges: list[tuple[str, str]], lead: str, passage: str,
@@ -371,11 +379,11 @@ def _args(c: dict[str, Any]) -> str:
 
 
 def _message(ctx: TurnContext, t: Turn, message: str, exchanges: list[tuple[str, str]], lead: str,
-             note: str) -> str:
+             note: str, *, fight: bool = True) -> str:
     convo = [f"PLAYER: {i}\nGAME: {_flat(o, 1200)}" for i, o in exchanges]
     done = [f"[{n + 1}] {a} {b}\n -> {o}" for n, (a, b, o) in enumerate(t.log)]
     return "\n\n".join(x for x in [
-        "SITUATION\n" + situation(ctx),
+        "SITUATION\n" + situation(ctx, fight=fight),
         "RECENT CONVERSATION (oldest first)\n" + ("\n\n".join(convo) or "(the story has just begun)"),
         lead and "WHAT JUST HAPPENED\n" + lead,
         message and f"THE PLAYER'S MESSAGE\n{message}",
@@ -383,7 +391,7 @@ def _message(ctx: TurnContext, t: Turn, message: str, exchanges: list[tuple[str,
         note] if x)
 
 
-def situation(ctx: TurnContext) -> str:
+def situation(ctx: TurnContext, *, fight: bool = True) -> str:
     """The compact situation: place and time, the PC (card and sheet), who is here (people card and mood), exits,
     open threads, the scene, and (the secrets arm) each present person's private knowledge."""
     from engine.dm.answer import held as held_band
@@ -402,7 +410,7 @@ def situation(ctx: TurnContext) -> str:
     pc = pc_id(st)
     here = location(st) if pc else None
     lines = [f"Now: {when_words(st.time.now)}; at {_name(st, here)} ({here})" if here else "Now: nowhere on record"]
-    lines += _fight_block(st, pc)
+    lines += _fight_block(st, pc) if fight else []
     sc = st.scene
     if sc is not None and (sc.agenda or sc.hoped_answer):
         lines.append(f"Scene: {sc.agenda}" + (f" (hoped: {sc.hoped_answer})" if sc.hoped_answer else ""))
