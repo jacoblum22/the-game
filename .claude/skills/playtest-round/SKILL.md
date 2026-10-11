@@ -119,6 +119,8 @@ carries state between slices. Commit each slice's worktree before starting the n
     the previous slice's branch. Merge the last slice's branch.
   - The handoff between slices is the ticked `tasks.md` plus `specs/<feature>/HANDOFF.md`. Don't paste earlier
     reports into the next brief.
+  - Slices in parallel (separate file lanes) must say so in their briefs. Each then writes `HANDOFF-<slice>.md`,
+    so the merge doesn't conflict. When merging, fold them into `HANDOFF.md` and delete the per-slice files.
   - If a slice stops at the turn cap (its output is marked partial), resume it with `SendMessage`. Don't restart it.
 - Each runs in its own worktree with explicit **file lanes**.
 - **At most 2 in parallel**, because of usage limits.
