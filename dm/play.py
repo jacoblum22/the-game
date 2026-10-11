@@ -287,7 +287,9 @@ class Creation:
                 return answer("finish_character", a, "the opening is empty", True)
             self.draft["opening"] = a["opening"].strip()
             self.done = True
-            return answer("finish_character", a, "Done. The game starts now; say nothing more.")
+            # asking for silence after a tool call made the model repeat the call (8 of 16 replays); one exact line: 0 of 16
+            return answer("finish_character", a, 'Done. Now reply with exactly this line and nothing else: '
+                          '"Your character is complete."')
 
         return [srd_options, roll_ability_scores, build_character, finish_character]
 
