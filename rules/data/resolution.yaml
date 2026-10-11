@@ -218,6 +218,17 @@ cost_selection:    # 01.13.1
   candidates: "entries whose fits_when is true, each citing a fact id of its source"
   order: [already_threatened_in_scene, most_directly_engaged_source, not_last_entry_paid_on_this_obstacle, twist_last]
   tie_order: [cost.harm, cost.footing, cost.exposure, cost.time, cost.gear, cost.drain, cost.closed_door]
+  # [revision: spec 032 P8b] [DL-01-54]: what a verb's failure most plainly costs, in order. The code framer (no Framer model) takes the DM's
+  # choice when legal, else the first entry here that check_cost_decl accepts; none legal on a risky roll = a Safe roll. Reading is never harm.
+  verb_costs:
+    verb.observe: [cost.time, cost.exposure, cost.drain]
+    verb.recall: [cost.time, cost.drain]
+    verb.talk: [cost.closed_door, cost.exposure, cost.time]
+    verb.strike: [cost.harm, cost.footing, cost.exposure]
+    verb.grapple: [cost.harm, cost.footing, cost.exposure]
+    verb.force: [cost.harm, cost.footing, cost.gear, cost.exposure]
+    verb.exert: [cost.harm, cost.footing, cost.drain]
+    verb.sneak: [cost.exposure, cost.time]
   per_beat: 1
   declared_at: FRAME        # threatened (all rolled frames) + alternate (Risky and Dire)
 

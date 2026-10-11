@@ -52,8 +52,6 @@ DM_ROLE = Role.DM  # spec 032 FR-13: its own role (schema, prompt file dm.md, of
 MOOD = {"willing": "open", "guarded": "guarded", "unwilling": "closed"}  # the held band -> the DM's word
 BAND = {v: k for k, v in MOOD.items()}
 OUT_CHARS = 1600
-PREFERRED_COST = {"verb.strike": "cost.harm", "verb.grapple": "cost.harm", "verb.force": "cost.harm",
-                  "verb.exert": "cost.harm", "verb.sneak": "cost.exposure", "verb.talk": "cost.closed_door"}
 
 
 @dataclass
@@ -692,13 +690,18 @@ def code_framer(ctx: TurnContext, t: Turn) -> Any:
     the DM's typed proposal (attribute, difficulty tier, stakes) where the rules accept it; else the plain default."""
     from engine.dm.roles.framer import default_frame, to_proposed
     from engine.dm.schemas import build_schema, schema_context
+    from engine.resolve.costs import menu
     from engine.resolve.frame import frame_check
     from engine.retrieve.scene import focus_ids
 
     def propose(beat: Any, candidates: list[str], *, gate: Any, note: str | None = None) -> Any:
         st = ctx.state
+        # [spec 032 P8b] the whole cost menu, not "the entries with a scene fact to cite": the structural fits (01.13.1)
+        # decide here. Left out, a scene with no scene facts offered the twist alone and every roll was refused
+        # (held-out H07, H10, H11: no roll, so no foe turn).
         sctx = schema_context(st, ctx.rules, anchors=candidates, beat=beat, message=beat.intent,
-                              focus=focus_ids(st, beat.intent, beat.target))
+                              focus=focus_ids(st, beat.intent, beat.target),
+                              cost_menu_ids=[k for k, c in menu(ctx.rules).items() if not c.get("alternate_only")])
         schema = build_schema(Role.FRAMER, sctx)
         base = default_frame(sctx, schema, beat, st, ctx.rules)
         p = dict(getattr(t.env, "proposal", None) or {})
@@ -716,19 +719,24 @@ def code_framer(ctx: TurnContext, t: Turn) -> Any:
         cands = []
         fc = str(p.get("fail_cost") or "")
         fc = fc if fc.startswith("cost.") or not fc else f"cost.{fc}"
-        # the DM's own `fail_cost` first (when the rules' menu has it), then the verb's plain risk (spec 032 G8)
-        wants = [w for w in dict.fromkeys((fc, PREFERRED_COST.get(str(beat.verb), ""))) if w]
-        if stakes != "safe" and sctx.stakes_menus:  # the first stakes source the rules accept here (01.6.9)
+        # the DM's own `fail_cost` first (when legal), then the verb's plain failures in the rules' order (spec 032 G8;
+        # `cost_selection.verb_costs`: a look costs time or effort, never harm). [spec 032 P8b]
+        plain = list((ctx.rules.resolution["cost_selection"].get("verb_costs") or {}).get(str(beat.verb), []))
+        wants = [w for w in dict.fromkeys((fc, *plain)) if w]
+        home = ctx.rules.resolution.get("stakes_cost_menus") or {}
+        if stakes != "safe" and sctx.stakes_menus:
+            usable = [(src, m) for src, m in sctx.stakes_menus.items() if src != "none" and m["threatened"] and m["alternate"]]
             for want in wants or [""]:
-                for src, m in sctx.stakes_menus.items():
-                    if src != "none" and m["threatened"] and m["alternate"] and (want in m["threatened"] or not cands):
-                        # ponytail: the cost a verb most plainly risks (a fight risks harm, a sneak being noticed)
-                        threat = want if want in m["threatened"] else m["threatened"][0]
-                        alt = next((x for x in m["alternate"] if x != threat), m["alternate"][0])
-                        cands.append({**d, "stakes_heavy": stakes == "dire", "stakes": {
-                            "source": src, "threatened_cost": {"menu_id": threat, "form_intent": "",
-                                                               "source_fact": None},
-                            "alternate_cost": {"menu_id": alt, "form_intent": "", "source_fact": None}}})
+                fits = [(src, m) for src, m in usable if want in m["threatened"]]
+                if not fits and not plain and not cands:  # a verb with no list: the first source's first cost, as before
+                    fits = usable[:1]
+                if fits:  # the source that lists the cost first is the one it most directly follows (01.13.1)
+                    src, m = min(fits, key=lambda x: (home.get(x[0]) or []).index(want) if want in (home.get(x[0]) or []) else 99)
+                    threat = want if want in m["threatened"] else m["threatened"][0]
+                    alt = next((x for x in [*m["alternate"], "cost.shortfall"] if x != threat), None)  # the shortfall is open to every source
+                    cands.append({**d, "stakes_heavy": stakes == "dire", "stakes": {
+                        "source": src, "threatened_cost": {"menu_id": threat, "form_intent": "", "source_fact": None},
+                        "alternate_cost": {"menu_id": alt, "form_intent": "", "source_fact": None}}})
         for cand in (*cands, d, base):
             try:
                 prop = to_proposed(cand, beat, st)
@@ -898,7 +906,7 @@ def _change(ctx: TurnContext, t: Turn, c: dict[str, Any]) -> str:
     if kind in ("condition_add", "condition_remove"):
         return _condition(ctx, who, str(c.get("what") or ""), add=kind == "condition_add", pc=pc)
     if kind == "fight":
-        return _fight(ctx, who, pc)
+        return _fight(ctx, who, pc, str(c.get("to") or ""))
     if kind == "npc_leaves":
         why = _acting(st, who)
         if why:
@@ -1012,9 +1020,10 @@ def _give(ctx: TurnContext, *, item: str | None, giver: str, to: str | None) -> 
 HARM_OWNED = ("cond.wound_arm", "cond.wound_body", "cond.wound_head", "cond.wound_leg", "cond.unconscious")
 
 
-def _fight(ctx: TurnContext, who: str | None, pc: str) -> str:
+def _fight(ctx: TurnContext, who: str | None, pc: str, rng: str = "") -> str:
     """A person the DM has turn on the PC: the conflict starts (spec 032 G7). No foe action here (the world step runs
-    it); nothing is done to the PC without a roll or the foe's own turn."""
+    it); nothing is done to the PC without a roll or the foe's own turn. `rng` is the starting range the scene has
+    established, the DM's to set (06.3.9): a band id; empty or unknown starts at `near`, the rule's default."""
     from engine.resolve import conflict
 
     tx = ctx.need_tx()
@@ -1022,9 +1031,14 @@ def _fight(ctx: TurnContext, who: str | None, pc: str) -> str:
     if why:
         return f"REFUSED: {why}"
     assert who is not None
+    band = rng.strip().lower().removeprefix("band.")
+    if band in conflict.BANDS and who not in conflict.record(tx.state).get("foes", []):  # the start only, not a running fight
+        conflict._set_band(tx, pc, who, band, "06.3.9")
     if not conflict.start(ctx.time_ctx(), pc, [who], f"the DM: {_name(tx.state, who)} turns on the character"):
         return f"{_name(tx.state, who)} is already in the fight (or cannot be a foe)."
-    return (f"done: a fight begins; {_name(tx.state, who)} turns on the character. Blows are not struck by your words: "
+    at = conflict._band(tx.state, pc, who) or "near"
+    ranged = "" if band in conflict.BANDS or not band else f" (`{rng}` is not a range: {', '.join(conflict.BANDS)})"
+    return (f"done: a fight begins; {_name(tx.state, who)} turns on the character, at range {at}{ranged}. Blows are not struck by your words: "
             "the game has them act when your turn ends and tells you what lands. Write the lead-up only; the "
             "character's reply is a roll.")
 

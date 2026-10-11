@@ -19,3 +19,8 @@ Traps:
 4. Held-out J items score the speaker and a topic word, not the exact words; the walk-ons (H14, H18) are made in setup. The set is spent if anything is tuned on it.
 5. Working-copy files are CRLF; edit with the Edit tool or a Python rewrite with `newline=""`; `pytest -q -q` hides the summary line.
 6. dm.md or schema change means re-recording ONLY `offline_seed11_dmtools`. Name-token leak audit cannot see name-only secrets (L3).
+P8 (merged by the orchestrator):
+- **P8a:** no name matching in code. A non-id target or speaker becomes a walk-on with a returned id, listed in the situation. Verb target kinds come from `basic_verbs.yaml`; an object target is text, never refused. `travel who=` lists the ids who come along.
+- **P8b:** the full cost menu goes to `code_framer` (the 0-foe-turn cause). The DM's `fail_cost` wins; the fallback is `resolution.yaml#cost_selection.verb_costs` (DL-01-54, provisional). `change fight to=<range>` sets the start band. `changed_line` "is".
+- **Owner ruling 2026-10-10:** code never infers story state from actions or names. P8b's melee-trait inference (a Strike writes the contact band) is removed, with its M tests. Inventory: `research_notes/.../spec032-investigation/fiction-inference-inventory.md`.
+- Left: ANIMAL compound matching still sets a walk-on's `mind: animal` from its words (P8a). Exact-name resolution in `_id` is kept.

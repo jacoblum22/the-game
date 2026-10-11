@@ -730,6 +730,14 @@ Decisions made in `00-architecture.md` (Wave 2). Digest shorthand `[R1 §x]`…`
 - Migration: none.
 - Revisit if: a playtest shows a wrong addressee where the Reader's field was right, or the Reader's cost disagrees with the Framer's size on the same ask more than 1 time in 5.
 
+### DL-01-54: A verb's failure costs what it plainly risks, in the rules' order (spec 032 P8b; refines 01.13.1)
+- Decision: [revision: spec 032 P8b] `resolution.yaml#cost_selection.verb_costs` lists, per verb, the costs its failure most plainly risks (observe and recall: time, exposure, effort; strike and grapple: harm, footing, exposure; and so on). Where the Framer is the code framer (the DM-with-tools engine), the threatened cost is the DM's own `fail_cost` when `check_cost_decl` accepts it, else the first entry of the verb's list that it accepts; a risky roll with none legal is a Safe roll. A look is never made to cost harm by a fallback. The Framer model path is unchanged.
+- Alternatives considered: the first cost in the tie order whatever the verb (rejected: it gave "you get hurt" for reading tracks, talker turn.9 of playtest 20261010-193046).
+- Evidence: specs/032-dm-tools-mvp/heldout_run/heldout.json (H07, H10, H11: every proposal refused for want of a cost); evals/playtests/20261010-193046-claude-talker-dm-tools.md [24].
+- Serves: constitution VIII.1.
+- Migration: none.
+- Revisit if: a playtest shows a look or a recall that should have cost something the list lacks, or a Safe roll where a cost was due.
+
 ## DL-02 — Character
 
 ### DL-02-01: Three paths through one procedure; the fast path is the default offered
