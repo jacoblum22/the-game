@@ -16,14 +16,14 @@ BRAKKA = {"name": "Brakka", "race": "dwarf", "class": "fighter", "ability_method
                       "feature.fighter-fighting-style": ["Dueling"], "class.equipment.1": ["a"],
                       "class.equipment.2": [{"option": "a", "picks": ["Longsword"]}], "class.equipment.3": ["a"],
                       "class.equipment.4": ["b"], "background.languages": ["Giant", "Goblin"],
-                      "background.equipment.1": ["Amulet"]}}
+                      "background.equipment.1": ["Amulet"], "background.equipment.prayer": ["Prayer book"]}}
 
 WREN = {"name": "Wren", "race": "elf", "class": "wizard", "ability_method": "standard_array",
         "base_scores": dict(zip(create.ABILITIES, [8, 14, 13, 15, 12, 10])),
         "choices": {"trait.high-elf-cantrip": ["Prestidigitation"], "trait.extra-language": ["Draconic"],
                     "class.proficiencies.1": ["Arcana", "Investigation"], "class.equipment.1": ["a"],
                     "class.equipment.2": ["a"], "class.equipment.3": ["a"], "background.languages": ["Celestial", "Giant"],
-                    "background.equipment.1": ["Emblem"]},
+                    "background.equipment.1": ["Emblem"], "background.equipment.prayer": ["b"]},
         "cantrips": ["Fire Bolt", "Mage Hand", "Light"],
         "spells": ["Burning Hands", "Detect Magic", "Mage Armor", "Magic Missile", "Shield", "Sleep"],
         "prepared": ["Mage Armor", "Magic Missile", "Shield", "Sleep"]}
@@ -33,7 +33,7 @@ HILDA = {"name": "Hilda", "race": "dwarf", "class": "cleric", "ability_method": 
          "choices": {"trait.tool-proficiency": ["a"], "class.proficiencies.1": ["Medicine", "History"],
                      "class.equipment.1": ["Warhammer"], "class.equipment.2": ["Chain Mail"], "class.equipment.3": ["a"],
                      "class.equipment.4": ["a"], "class.equipment.5": ["Reliquary"],
-                     "background.languages": ["Celestial", "Giant"], "background.equipment.1": ["Amulet"]},
+                     "background.languages": ["Celestial", "Giant"], "background.equipment.1": ["Amulet"], "background.equipment.prayer": ["a"]},
          "cantrips": ["Sacred Flame", "Guidance", "Spare the Dying"],
          "prepared": ["Guiding Bolt", "Healing Word", "Shield of Faith", "Sanctuary"]}
 
@@ -57,6 +57,11 @@ def test_fighter_matches_the_hand_made_sheet() -> None:
     assert s["attacks"][0].startswith("Longsword: +4 to hit, 1d8+4")  # Dueling +2
     assert "Athletics +4*" in s["skills"] and "Insight +4*" in s["skills"] and "Religion +1*" in s["skills"]
     assert s["resources"]["Second Wind"]["recharge"] == "short" and s["coins_cp"] == 1500
+    # the Acolyte's gear, including what the dataset lacks; an explorer's pack adds no vestments or incense
+    assert {k: s["items"].get(k) for k in ("Vestments", "Stick of incense", "Prayer book", "Clothes, common", "Pouch")} \
+        == {"Vestments": 1, "Stick of incense": 5, "Prayer book": 1, "Clothes, common": 1, "Pouch": 1}
+    assert "Prayer wheel" in built(WREN)["items"]
+    assert "Heavy Armor" in create.options_text("dwarf", "cleric")  # granted by the Life Domain, shown up front
 
 
 def test_wizard() -> None:

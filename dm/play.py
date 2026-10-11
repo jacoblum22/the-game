@@ -48,7 +48,7 @@ class Game:
         self.sheet: dict[str, Any] = data["sheet"]
         self.fight: dict[str, Any] | None = data.get("fight")
         self.session_id: str | None = data.get("session_id")
-        self.transcript: list[dict[str, str]] = data.get("transcript", [])
+        self.transcript: list[dict[str, Any]] = data.get("transcript", [])
         self.model: str = data.get("model", MODEL)
         self.path = path
 
@@ -203,28 +203,29 @@ async def turn(client: ClaudeSDKClient, game: Game | Creation, text: str) -> Non
 class Creation:
     """The DM talks the player through making a level-1 character; create.py checks the choices and does the math."""
 
-    def __init__(self) -> None:
+    def __init__(self, path: Path) -> None:
         self.rolled: list[int] | None = None
         self.draft: dict[str, Any] | None = None
         self.done = False
         self.session_id: str | None = None
-        self.transcript: list[dict[str, str]] = []
+        self.transcript: list[dict[str, Any]] = []
+        self.path = path
 
     def log(self, kind: str, text: str) -> None:
         self.transcript.append({"kind": kind, "text": text})
-        if kind == "tool":
-            print(f"  [{text}]")
 
-    def save(self) -> None:
-        pass  # ponytail: creation isn't resumable; the finished sheet goes into the play save
+    def save(self) -> None:  # creation can't be resumed; the save keeps its transcript, and play continues the file
+        self.path.write_text(json.dumps({"creation_only": True, "transcript": self.transcript}, indent=1,
+                                        ensure_ascii=False), encoding="utf-8")
 
     def tools(self) -> list[Any]:
-        def ok(text: str) -> dict[str, Any]:
-            return {"content": [{"type": "text", "text": text}]}
-
-        def no(text: str) -> dict[str, Any]:
-            self.log("refused", text)
-            return {"content": [{"type": "text", "text": text}], "is_error": True}
+        def answer(name: str, a: dict[str, Any], text: str, error: bool = False, show: str = "") -> dict[str, Any]:
+            """Record the call and its full result, so creation can be traced later."""
+            self.transcript.append({"kind": "call", "tool": name, "input": a, "result": text, "error": error})
+            if show:
+                print(f"  [{show}]")
+            self.save()
+            return {"content": [{"type": "text", "text": text}]} | ({"is_error": True} if error else {})
 
         @tool("srd_options", "What the SRD offers. No arguments: every race, class and the background. race only: that "
               "race in full. class only: that class in full. race and class: every choice that character needs, "
@@ -232,15 +233,15 @@ class Creation:
               {"type": "object", "properties": {"race": {"type": "string"}, "class": {"type": "string"}}})
         async def srd_options(a: dict[str, Any]) -> dict[str, Any]:
             try:
-                return ok(create.options_text(a.get("race") or "", a.get("class") or ""))
+                return answer("srd_options", a, create.options_text(a.get("race") or "", a.get("class") or ""))
             except create.Bad as e:
-                return no(str(e))
+                return answer("srd_options", a, str(e), True)
 
         @tool("roll_ability_scores", "Roll the six ability scores: 4d6, drop the lowest, six times. Once per "
               "character; the player sees every die.", {"type": "object", "properties": {}})
         async def roll_ability_scores(a: dict[str, Any]) -> dict[str, Any]:
             if self.rolled:
-                return no(f"already rolled: {self.rolled}; scores are rolled once")
+                return answer("roll_ability_scores", a, f"already rolled: {self.rolled}; scores are rolled once", True)
             lines, rolled = [], []
             for _ in range(6):
                 dice = sorted(m.roll("4d6")["parts"][0]["rolls"], reverse=True)
@@ -248,8 +249,7 @@ class Creation:
                 lines.append(f"4d6 {dice} drop {dice[3]} = {rolled[-1]}")
             self.rolled = rolled
             text = "ability scores rolled: " + "; ".join(lines) + f". Scores: {rolled}"
-            self.log("tool", text)
-            return ok(text)
+            return answer("roll_ability_scores", a, text, show=text)
 
         @tool("build_character", "Check a full set of choices and work out the sheet. Returns the sheet, or every "
               "problem at once. Fields: name, race, class, ability_method (standard_array, point_buy or rolled), "
@@ -260,29 +260,30 @@ class Creation:
         async def build_character(a: dict[str, Any]) -> dict[str, Any]:
             sheet, errs = create.build(a["character"], self.rolled)
             if not sheet:
-                return no("NOT BUILT. Problems:\n- " + "\n- ".join(errs))
+                return answer("build_character", a, "NOT BUILT. Problems:\n- " + "\n- ".join(errs), True)
             self.draft = sheet
-            self.log("tool", f"built {sheet['name']}, {sheet['summary']}")
-            return ok("BUILT. Show the player this sheet and ask for a yes before finish_character:\n"
-                      + sheet_text(sheet) + "\n" + m.status(sheet))
+            return answer("build_character", a, "BUILT. Show the player this sheet and ask for a yes before "
+                          "finish_character:\n" + sheet_text(sheet) + "\n" + m.status(sheet),
+                          show=f"built {sheet['name']}, {sheet['summary']}")
 
         @tool("finish_character", "After the player has said yes to the built sheet: write the one-paragraph "
               "opening that starts their adventure. Play begins with it.",
               {"type": "object", "properties": {"opening": {"type": "string"}}, "required": ["opening"]})
         async def finish_character(a: dict[str, Any]) -> dict[str, Any]:
             if not self.draft:
-                return no("no character built yet: use build_character")
+                return answer("finish_character", a, "no character built yet: use build_character", True)
             if not str(a.get("opening") or "").strip():
-                return no("the opening is empty")
+                return answer("finish_character", a, "the opening is empty", True)
             self.draft["opening"] = a["opening"].strip()
             self.done = True
-            return ok("Done. The game starts now; say nothing more.")
+            return answer("finish_character", a, "Done. The game starts now; say nothing more.")
 
         return [srd_options, roll_ability_scores, build_character, finish_character]
 
 
-async def create_character(model: str) -> dict[str, Any]:
-    c = Creation()
+async def create_character(model: str, path: Path) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+    """Returns the finished sheet and the creation transcript, which the play save continues."""
+    c = Creation(path)
     server = create_sdk_mcp_server("dm", tools=c.tools())
     SAVES.mkdir(exist_ok=True)
     opts = ClaudeAgentOptions(
@@ -301,7 +302,7 @@ async def create_character(model: str) -> dict[str, Any]:
                 c.log("player", line)
                 await turn(client, c, line)
     assert c.draft
-    return c.draft
+    return c.draft, c.transcript
 
 
 async def main() -> None:
@@ -311,13 +312,21 @@ async def main() -> None:
     ap.add_argument("--model", default=MODEL)
     args = ap.parse_args()
     sys.stdout.reconfigure(encoding="utf-8")  # type: ignore[attr-defined]
+    stamp = time.strftime("%Y%m%d-%H%M%S")
     if args.resume:
-        game = Game(json.loads(args.resume.read_text(encoding="utf-8")), args.resume)
+        data = json.loads(args.resume.read_text(encoding="utf-8"))
+        if "sheet" not in data:
+            ap.error("that save stopped during character creation, which can't be resumed; start again with new")
+        game = Game(data, args.resume)
+    elif args.character == "new":
+        SAVES.mkdir(exist_ok=True)
+        path = SAVES / f"new-{stamp}.json"  # one file: creation, then play
+        sheet, transcript = await create_character(args.model, path)
+        game = Game({"sheet": sheet, "model": args.model, "transcript": transcript}, path)
     elif args.character:
-        sheet = (await create_character(args.model) if args.character == "new"
-                 else json.loads((HERE / "characters" / f"{args.character}.json").read_text(encoding="utf-8")))
+        sheet = json.loads((HERE / "characters" / f"{args.character}.json").read_text(encoding="utf-8"))
         name = sheet["name"].split()[0].lower()
-        game = Game({"sheet": sheet, "model": args.model}, SAVES / f"{name}-{time.strftime('%Y%m%d-%H%M%S')}.json")
+        game = Game({"sheet": sheet, "model": args.model}, SAVES / f"{name}-{stamp}.json")
     else:
         ap.error("pick a character (fighter, rogue, wizard), make one (new), or --resume a save")
 

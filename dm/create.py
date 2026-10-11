@@ -27,6 +27,11 @@ CASTING = {  # class: (ability, how spells are chosen)
 SPELLBOOK_SIZE = 6  # wizard: six 1st-level wizard spells
 RACE_CANTRIPS = {"infernal-legacy": ("thaumaturgy", "CHA")}  # tiefling: Thaumaturgy at 1st level
 SUBCLASS_PROFS = {"life": ["heavy-armor"]}  # Life Domain: Bonus Proficiency
+# The SRD Acolyte's gear the dataset leaves out: a prayer book or prayer wheel, 5 sticks of incense, vestments.
+ACOLYTE_PRAYER = {"desc": "a prayer book or prayer wheel", "choose": 1, "type": "equipment", "from": {
+    "option_set_type": "options_array",
+    "options": [{"option_type": "string", "string": "Prayer book"}, {"option_type": "string", "string": "Prayer wheel"}]}}
+ACOLYTE_ITEMS = {"Vestments": 1, "Stick of incense": 5}
 
 
 def mod(score: int) -> int:
@@ -81,6 +86,8 @@ def choices_for(race: str, cls: str) -> list[tuple[str, str, dict[str, Any]]]:
         out.append(("background.languages", f"{b['name']} languages", b["language_options"]))
     for i, cs in enumerate(b["starting_equipment_options"], 1):
         out.append((f"background.equipment.{i}", f"{b['name']} equipment", cs))
+    if b["index"] == "acolyte":
+        out.append(("background.equipment.prayer", f"{b['name']} equipment", ACOLYTE_PRAYER))
     return out
 
 
@@ -225,6 +232,10 @@ def build(ch: dict[str, Any], rolled: list[int] | None = None) -> tuple[dict[str
     if errs:
         return None, errs
     sheet = _sheet(ch, name, p, scores, M, prof, prof_ids, skills, saves, expertise, items, chosen, spells)
+    if b["index"] == "acolyte":  # items the dataset lacks are kept by name
+        named = Counter(ACOLYTE_ITEMS) + Counter(g["text"] for g in chosen["background.equipment.prayer"])
+        for n, q in named.items():
+            sheet["items"][n] = sheet["items"].get(n, 0) + q
     return sheet, []
 
 
@@ -541,6 +552,20 @@ def options_text(race: str = "", cls: str = "") -> str:
         p = parts(race, cls)
         lines = [(f"Choices for a {(p['subrace'] or p['race'])['name']} {p['class']['name']} with the "
                   f"{p['background']['name']} background. Put each in build_character's choices under its id."), METHODS]
+        r, sub, c, sc, b = p["race"], p["subrace"], p["class"], p["subclass"], p["background"]
+        P = srd.table("Proficiencies")
+        auto = [x["index"] for x in c["proficiencies"] + (r.get("starting_proficiencies") or []) + b["starting_proficiencies"]]
+        auto += [x["index"] for t in p["traits"] for x in t.get("proficiencies", [])]
+        auto += SUBCLASS_PROFS.get(sc["index"], []) if sc else []
+        lines.append("Comes automatically (no choice needed):")
+        lines.append("- Proficiencies: " + ", ".join(dict.fromkeys(P[i]["name"] for i in auto)))
+        lines.append(f"- Ability increases: {_bonus_text(r['ability_bonuses'] + (sub['ability_bonuses'] if sub else []))}"
+                     f"; speed {r['speed']} ft; languages " + ", ".join(x["name"] for x in r["languages"]))
+        lines.append("- Racial traits: " + ", ".join(t["name"] for t in p["traits"]))
+        lines.append("- Level-1 features: " + ", ".join(f["name"] for f in p["features"])
+                     + (f" (subclass: {sc['name']})" if sc else ""))
+        lines.append(f"- {b['name']}: feature {b['feature']['name']}; 15 gp; common clothes, a pouch, vestments, "
+                     "5 sticks of incense")
         for cid, what, cs in choices_for(race, cls):
             lines.append(srd.set_text(cs, f"[{cid}] {what}"))
         sr = spell_rules(race, cls)
