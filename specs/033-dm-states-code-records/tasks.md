@@ -140,3 +140,9 @@ Phases, lanes, models and waves: `plan.md` section 5. Cases: `cases.md` (C1-C12)
 - [x] T092 `_position` refuses who==what, a `what` that is not pc or an entity id, and a `to` that is neither a band nor a place id, each with one example; plain schema descriptions.
 - [x] T093 `new_npc` `name` = the short name; `not_chosen:name`; result ends "Use <id> for them from now on."
 - [x] T094 dm.md (at most 800 words), offline `_dm`, tests (`test_spec033_p8.py`), dmtools replay re-recorded, `reached.txt` regenerated.
+
+## P9 fixes from the no-foe-turns trace (Sonnet; lane `engine/dm/dm_tools.py`, `dispute.py`, `store/db.py`, `evals/h2h_score.py`, tests)
+- [x] T095 Fight start after the gate: `_roll` pre-reads `check_gate` (no writes); only G1/G2/accepted-fallback starts the fight and checks reach; a refused strike writes no fight, band or default.
+- [x] T096 Take-back reverts the time mode: `_rewind` and `Transaction._revert` accept a pure mode switch (`db.is_mode_switch`: time_advanced with a mode and no time moved).
+- [x] T097 `h2h_score`: exchange = a turn in a live fight with a resolved roll (or a `round` mark); reverted fight starts are not fights; "(fights ended by the PC's blow)" in the C8 row.
+- [x] T098 Item 4 traced, not fixed (see HANDOFF-P9.md).

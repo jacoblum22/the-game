@@ -32,4 +32,11 @@ condition effects; the tools path never sets `asks`.
 26. `_fight` tells a joined newcomer "already in the fight (or cannot be a foe)" (wording only). A companion target gets
     the band default but never starts a fight. Any dm-tools path change: `py -3.12 -m tests.guard.census reached` (13 min).
 27. Follow-ups: the fixer's entity view should show `name_known: false`; reach weapons (spear at close).
+- P9 (5b4b7f9): `_roll` reads `check_gate` first; only G1/G2 (or an accepted fallback) runs `_attack_starts_fight`
+  then `_reach`, so a refused attack starts no fight. Take-back restores the time mode (`db.is_mode_switch`,
+  `Transaction._revert`, `dispute._rewind`). h2h_score counts fights not reverted, exchanges with a resolved roll
+  in a live fight, and fights ended by the PC's blow. 2643 passed.
+28. Open: accepting a crude fallback in `_resume` starts no fight (the blow lands as `starts_fight: no`). A refused
+    call's "[REDIRECT] Not as tried" stays in `t.oof` all turn (`_take` in `_roll`; `turn_blocks` shows it) even
+    when the DM's retry was accepted; clearing it needs a DM-stated link (`retry_of`), not a match.
 

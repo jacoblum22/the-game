@@ -702,6 +702,7 @@ def _propose_roll(ctx: TurnContext, t: Turn, c: dict[str, Any]) -> str:
 
 def _roll(ctx: TurnContext, t: Turn, c: dict[str, Any], note: list[str]) -> str:
     from engine.dm.turn import _take
+    from engine.resolve.gate import check_gate
     from engine.resolve.pipeline import BeatPlan, run_beats
     from engine.resolve.types import Beat, Change
 
@@ -731,11 +732,6 @@ def _roll(ctx: TurnContext, t: Turn, c: dict[str, Any], note: list[str]) -> str:
     stated = _stated(ctx, t, c, verb, target)
     if isinstance(stated, str):
         return stated
-    _attack_starts_fight(ctx, t, c, verb, target, stated, note)
-    if str(c.get("change_kind") or "") != "move_to":  # a move is the way to get in reach
-        why = _reach(ctx, t, verb, target, stated)
-        if why:
-            return why
     kind = str(c.get("change_kind") or "none")
     raw_t = str(c.get("target") or "").strip()
     what, whom = (target if raw_t and str(c.get(k) or "").strip() == raw_t else _id(st, c.get(k))
@@ -753,12 +749,26 @@ def _roll(ctx: TurnContext, t: Turn, c: dict[str, Any], note: list[str]) -> str:
                         whom=whom if whom in st.entities else None,
                         description=None if what in st.entities else (phrase or None))
     method = how or goal
-    beat = Beat(id=tx.mint(ids.BEAT), actor=pc, intent=goal, method=method, how=how, target=target,
-                restatement=goal[:1].upper() + goal[1:], verb=verb,
-                title=goal[:1].upper() + goal[1:] if str(c.get("goal") or "").strip() else None, speech=verb == "verb.talk",
-                against_will=bool(target and st.entities[target].kind in ("npc", "adversary")
-                                  and verb in ("verb.strike", "verb.grapple", "verb.force")),
-                declared_seq=st.last_seq, change=change, stated=stated)
+
+    def make(bid: str) -> Beat:
+        return Beat(id=bid, actor=pc, intent=goal, method=method, how=how, target=target,
+                    restatement=goal[:1].upper() + goal[1:], verb=verb,
+                    title=goal[:1].upper() + goal[1:] if str(c.get("goal") or "").strip() else None,
+                    speech=verb == "verb.talk",
+                    against_will=bool(target and st.entities[target].kind in ("npc", "adversary")
+                                      and verb in ("verb.strike", "verb.grapple", "verb.force")),
+                    declared_seq=st.last_seq, change=change, stated=stated)
+
+    # [spec 033 P9] gate -> start the fight -> reach -> offer. A refused attack never happened: it starts no fight and
+    # writes no band (the pipeline below gives the refusal). The gate here is the pipeline's own, read without writing.
+    dec = check_gate(make(""), state=st, rules=ctx.rules)
+    if dec.gate in ("G1", "G2") or (dec.gate == "G3" and dec.rolls_possible):
+        _attack_starts_fight(ctx, t, c, verb, target, stated, note)
+        if kind != "move_to":  # a move is the way to get in reach
+            why = _reach(ctx, t, verb, target, stated)
+            if why:
+                return why
+    beat = make(tx.mint(ids.BEAT))
     t.env.proposal = c  # what the code framer reads (difficulty, attribute, stakes)
     res = run_beats(t.env, [BeatPlan(beat=beat, intent_verbs=[str(verb or "").removeprefix("verb.")])])
     _take(t.rec, res, t.oof, None)

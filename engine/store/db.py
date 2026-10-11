@@ -94,6 +94,12 @@ REVERTIBLE = frozenset({
 TAKE_BACK_EXTRA = frozenset({"scene_started", "scene_ended", "time_advanced", "boundary_marked"})
 
 
+def is_mode_switch(ev: Event) -> bool:
+    """[spec 033 P9] A `set_mode` event: it moves the time mode and no time. A rewind reverts it with the writes it came with."""
+    p = ev.payload
+    return ev.type == "time_advanced" and bool(getattr(p, "mode", None)) and p.to == p.from_  # type: ignore[union-attr]
+
+
 class TxParticipant(Protocol):
     """Something with in-memory state that must roll back with a transaction (the RNG streams)."""
 
@@ -180,7 +186,7 @@ class Transaction:
             if s in self.state.reverted:
                 raise Rejected(f"writes_reverted: seq {s} is already reverted")
             target = staged.get(s) or self.store.event(s)
-            if target is None or target.type not in allowed:
+            if target is None or (target.type not in allowed and not is_mode_switch(target)):
                 raise Rejected(f"writes_reverted: seq {s} is not a revertible write")
         try:
             self.state = self.store._replay(before=min(p.reverted), extra=[*self.events, ev])  # noqa: SLF001
