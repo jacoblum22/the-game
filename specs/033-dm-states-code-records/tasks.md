@@ -146,3 +146,8 @@ Phases, lanes, models and waves: `plan.md` section 5. Cases: `cases.md` (C1-C12)
 - [x] T096 Take-back reverts the time mode: `_rewind` and `Transaction._revert` accept a pure mode switch (`db.is_mode_switch`: time_advanced with a mode and no time moved).
 - [x] T097 `h2h_score`: exchange = a turn in a live fight with a resolved roll (or a `round` mark); reverted fight starts are not fights; "(fights ended by the PC's blow)" in the C8 row.
 - [x] T098 Item 4 traced, not fixed (see HANDOFF-P9.md).
+
+## P11 fixes from live check 3 (Sonnet; lane `costs.py`, `change.py`, `world_step._foe_turn`, `foe_act.py`, tests)
+- [x] T110 `cost.time` in conflict mode with no listening clock: the time row lookup refuses (`CostRefused`, existing fallback) instead of crashing; `listening_clock` is an established stakes source only when an active clock lists `cost.time` or `cost.exposure`.
+- [x] T111 `take` / `give` of a thing the DM named only in words make the item from the DM words (`change._made`); no "Not applied".
+- [x] T112 Every foe act shows one RESULT line in words (miss, hold, move); `foe_act.act` returns `FoeDone(said, harm, pick, roll)`; the roll shows only via `world_step.SHOW_FOE_ROLL` (off).

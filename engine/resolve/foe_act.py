@@ -3,12 +3,12 @@ the legal acts (T-06-16), rolls the pick (06.9.2) and writes its result. Nothing
 
     legal_acts(st, foe, pc)                         # T-06-16: the acts legal for the foe now, in table order
     default_act(rules, st, foe, pc, legal)          # the logged default: first behavior-list row that maps to a legal act
-    act(tctx, rng, foe, pick, target, nonlethal)    # -> (what it did in words, the harm or None), like conflict.foe_beat
+    act(tctx, rng, foe, pick, target, nonlethal)    # -> FoeDone(said, harm, pick, roll): conflict.foe_beat's pair + more
 """
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, NamedTuple
 
 from engine.resolve import conflict
 from engine.resolve.change import HOLDS
@@ -75,10 +75,28 @@ def _name(st: Any, eid: str) -> str:
     return str(st.entities[eid].name)
 
 
-def act(tctx: TimeContext, rng: Any, foe: str, pick: str, target: str, nonlethal: bool = False
-        ) -> tuple[str, Any]:  # rule: 06.9.2
+class FoeDone(NamedTuple):
+    """What a foe's act came to [spec 033 P11]: its words, the harm (a landed strike's HarmResult) or None, the act
+    picked, and the roll of a strike or grapple (`d20`, `total`, the target's `guard`; None for the rest). The roll is
+    recorded here and not displayed: world_step decides whether a foe's roll shows (06.9.6)."""
+
+    said: str
+    harm: Any
+    pick: str
+    roll: dict[str, int] | None
+
+
+def act(tctx: TimeContext, rng: Any, foe: str, pick: str, target: str, nonlethal: bool = False) -> FoeDone:
+    roll: dict[str, int] = {}
+    said, harm = _act(tctx, rng, foe, pick, target, nonlethal, roll)
+    return FoeDone(said, harm, pick, roll or None)
+
+
+def _act(tctx: TimeContext, rng: Any, foe: str, pick: str, target: str, nonlethal: bool,
+         roll: dict[str, int]) -> tuple[str, Any]:  # rule: 06.9.2
     """Do `pick` (legal; the caller checked) against `target`: the words of what the foe did, and the harm (a landed
-    strike's HarmResult) or None. Each roll is the foe's own line against the target's defense (06.9.2)."""
+    strike's HarmResult) or None. Each roll is the foe's own line against the target's defense (06.9.2); a strike or
+    grapple leaves its roll in `roll`."""
     from engine.harm.apply import apply_harm, shift
     from engine.harm.ctx import HarmCtx
     from engine.harm.dice import degree
@@ -123,7 +141,9 @@ def act(tctx: TimeContext, rng: Any, foe: str, pick: str, target: str, nonlethal
         from engine.resolve.change import hold
 
         natural = int(rng.d(20, f"foe grapple {foe} (06.5.2)"))
-        deg, _ = degree(natural, int(line["atk"]), _defense(rules, st, target, "might", "deed.martial"))
+        grip = _defense(rules, st, target, "might", "deed.martial")
+        deg, _ = degree(natural, int(line["atk"]), grip)
+        roll.update(d20=natural, total=natural + int(line["atk"]), guard=int(grip))
         if deg not in ("success", "critical_success"):
             return f"grabs at {you} and misses", None
         tx.add_all(hold(tx, rules, target, foe, 3 if deg == "critical_success" else 2))
@@ -132,6 +152,7 @@ def act(tctx: TimeContext, rng: Any, foe: str, pick: str, target: str, nonlethal
     guard = _defense(rules, st, target, "agility", "deed.martial")
     natural = int(rng.d(20, f"foe strike {foe} (06.9.2)"))
     deg, _ = degree(natural, int(line["atk"]), guard)
+    roll.update(d20=natural, total=natural + int(line["atk"]), guard=int(guard))
     if deg not in ("success", "critical_success"):
         return f"strikes at {you} and misses", None
     sev = f"S{int(line['sev'])}"

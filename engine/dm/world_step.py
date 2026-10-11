@@ -32,6 +32,7 @@ from engine.time.scheduler import advance_time
 from engine.world.social import record_knowledge
 
 NPC_TABLE = "tbl.npc_action"
+SHOW_FOE_ROLL = False  # [spec 033 P11] the owner decides whether a foe's roll shows (06.9.6 keeps a foe's number sealed)
 RESOLVED = ("resolved", "no_roll")
 
 
@@ -62,6 +63,13 @@ def world_step(ctx: TurnContext, record: AdjudicationRecord, *, beats: Sequence[
     beat_time(ctx, record, beats, fought=bool(acted))
 
 
+def _roll_line(roll: dict[str, int] | None) -> str:
+    """The one place a foe's roll could be shown: `d20 N → T vs <the target's Guard>`. Empty while SHOW_FOE_ROLL is off."""
+    if not (SHOW_FOE_ROLL and roll):
+        return ""
+    return f"d20 {roll['d20']} → {roll['total']} vs {roll['guard']}"
+
+
 def _foe_turn(ctx: TurnContext, record: AdjudicationRecord, foe: str, oof: list[dict[str, str]] | None, *,
               do: Any = None, target: str | None = None, ref: str = "beh.default_melee") -> None:
     # rule: 06.9.2
@@ -74,7 +82,8 @@ def _foe_turn(ctx: TurnContext, record: AdjudicationRecord, foe: str, oof: list[
     tx = ctx.need_tx()
     start = len(tx.events)
     who = target or record.pc or ""
-    said, res = (do or foe_beat)(ctx.time_ctx(), ctx.rng, foe, who)
+    said, res, *more = (do or foe_beat)(ctx.time_ctx(), ctx.rng, foe, who)
+    picked, roll = (more + [None, None])[:2]  # the dm-tools path's FoeDone carries the act and the roll (foe_act.py)
     record.npc_actions.append(NpcActionEntry(npc=foe, action=said, source="behavior", source_ref=ref))
     if res is not None and oof is not None:
         # whose numbers moved: "<foe> strikes · hit · Changed: Vitality 4 → 0" read as the foe's Vitality (playtest
@@ -87,7 +96,10 @@ def _foe_turn(ctx: TurnContext, record: AdjudicationRecord, foe: str, oof: list[
                 if added and res.transition not in ("dying_step", "threshold") else "")
         oof.append({"kind": "RESULT", "text": " · ".join(x for x in (
             f"[RESULT] {_name(ctx.state, foe)} strikes {'you' if who == record.pc else _name(ctx.state, who)}",
-            "hit", changed, load, down) if x)})
+            _roll_line(roll), "hit", changed, load, down) if x)})
+    elif picked and oof is not None:  # [spec 033 P11] a miss, a hold, a move: one line in words, never silent
+        oof.append({"kind": "RESULT", "text": " · ".join(x for x in (
+            f"[RESULT] {_name(ctx.state, foe)} {said}", _roll_line(roll)) if x)})
     if res is not None and res.threshold and oof is not None:  # rule: PR-07-5
         from engine.dm.turn import _env, _harm_followups
 

@@ -305,7 +305,8 @@ def test_framer_stakes_pair_the_source_with_its_costs(tmp_path: Any) -> None:
             tx.add(entity("pc", "Wren", tx=tx))
             tx.add(entity("place", "Salt Harbor", tx=tx))
             tx.add(Event.of("clock_created", source="test", clock=ClockRecord(
-                id="clk.dusk", name="dusk", kind="danger", segments=4, tick_sources=[])))
+                id="clk.dusk", name="dusk", kind="danger", segments=4,  # [spec 033 P11] a clock must listen to count
+                tick_sources=[{"on": "cost.exposure", "ticks": "U(severity)"}])))
             tx.add(fact(tx, "loc.salt_harbor", "crates", "stacked high on the quay"))
             sid = tx.mint("scn")
             tx.add(Event.of("scene_started", scene_id=sid, scene={
