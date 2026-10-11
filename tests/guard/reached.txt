@@ -260,6 +260,7 @@ engine.dm.turn _turn_end
 engine.dm.turn _wake
 engine.dm.turn recent_exchanges
 engine.dm.world_step _foe_turn
+engine.dm.world_step _roll_line
 engine.dm.world_step beat_time
 engine.dm.world_step clock_omens
 engine.dm.world_step deliver_warnings
@@ -455,6 +456,8 @@ engine.resolve.costs structural_fit
 engine.resolve.costs uncited_by_stakes
 engine.resolve.costs uncited_candidates
 engine.resolve.foe_act <module>
+engine.resolve.foe_act FoeDone
+engine.resolve.foe_act _act
 engine.resolve.foe_act act
 engine.resolve.foe_act default_act
 engine.resolve.foe_act kills
