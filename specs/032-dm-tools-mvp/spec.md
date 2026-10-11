@@ -101,8 +101,9 @@ the report says which gate failed and the default does not move.
   is a fact for the DM.
 - **FR-05** After the time step, code gathers: clock omens (`world_step.clock_omens`), fired triggers
   (`fired_triggers`), a due lead injection (`inject_lead`, written as the pipeline writes it), and a due cut
-  (`cut_due`). These are given to the DM as plain facts (what ticked, what arrived, why the scene ended). A cut
-  ends the scene and opens the next at the PC's place with no agenda.
+  (`cut_due`). These are given to the DM as plain facts (what ticked, what arrived). [owner ruling 2026-10-10] Scene ends are the DM's call:
+  an `end_scene` tool; code only does the bookkeeping (time, per-scene resets, the new scene record). No code cut rules,
+  no Director call. Travel and time jumps still open a scene.
 - **FR-06** The DM's final answer has a `said` list (person, words). Code writes each as a `said` record with place
   and day; an entry whose speaker is absent, dead or unknown is dropped and logged (spine: presence).
 - **FR-07** `new_item` returns, as a fact, any existing item of the same name held by a person here. `give_item`,
@@ -149,8 +150,8 @@ Headline numbers first. The default flips only if **all** hold; each is a number
 | C2 speed | model latency per engine turn, dm-tools / pipeline | at most 0.7 |
 | C3 contradictions | hand-counted per the results note's rules, 3 personas x 15 turns | dm-tools at most the pipeline's count |
 | C4 `/fix` load | `/fix` reports per run | dm-tools at most the pipeline's |
-| C5 pushover | npc_agency: grants above the T-12-19 cell, 12 cells + repeats | at most 5% (OEQ-12-28's own trigger) and not above the pipeline arm |
-| C6 mood held | in-character refusals; repeat-ask caving | not worse than the pipeline arm |
+| C5 pushover [owner ruling 2026-10-10] | npc_agency: costly-ask grants and mood changes with no event, 12 cells + repeats | observed, not gated: listed for the owner to read (moods are the DM's, no ceiling grid, no T-12-19 use) |
+| C6 mood held [owner ruling 2026-10-10] | in-character refusals; repeat-ask caving | observed, not gated |
 | C7 leaks | real secret leaks (names excluded) | 0 |
 | C8 fights | foe turns per fight exchange (fighter run) | 1.0 each exchange while a foe is able; 0 prose-only targets refused |
 | C9 world | clock hour advances on a 15-turn talker run; journal "told" rows | more than 0; at least one per NPC answer that carried information |
@@ -167,8 +168,8 @@ The pipeline scripted run (46+ minutes) is skipped; C10 is a stability gate, not
 ## Assumptions (recorded instead of clarifying; flagged in HANDOFF for the owner)
 
 - A1 **One significant exchange = one beat** of time in the scene's mode (site: one interval; conflict: one round).
-- A2 **No Director model call** in dm-tools. Scene cuts are code-only (conflict_end, time_jump, interrupt, place
-  change, dead air). `agenda_answered` and `player_cut` have no meaning without an agenda; the DM's `travel` is the
+- A2 **No Director model call** in dm-tools. [owner ruling 2026-10-10] The DM ends scenes with `end_scene`; no code cut triggers (the old list: conflict_end, time_jump, interrupt, place
+  change, dead air, is superseded; travel and time jumps still open a scene). `agenda_answered` and `player_cut` have no meaning without an agenda; the DM's `travel` is the
   player's cut.
 - A3 The **DM lists what was said** (`said`) rather than code parsing quotations. The DM can omit one; that costs a
   thinner journal, never a wrong fact.

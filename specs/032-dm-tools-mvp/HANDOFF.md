@@ -1,16 +1,9 @@
-# HANDOFF 032 (P1 + P2 done, merged on branch spec032-base)
-Owner rulings, 2026-10-10 (they override spec.md, plan.md and tasks.md wherever those disagree; P3 updates the docs first):
+# HANDOFF 032 (P1 + P2 + P3 done; branch of the P3 worktree)
+Owner rulings, 2026-10-10 (they override spec.md, plan.md and tasks.md wherever those disagree; P3 updated the docs, tagged `[owner ruling 2026-10-10]`):
 - **Scene ends are the DM's call.** It uses an `end_scene` tool. Code only does the bookkeeping: time, per-scene resets and the new scene record. No code cut rules (no dead air or interrupt heuristics) and no Director call. Travel and time jumps still open a scene.
 - **Moods are decided by the DM**, not rolled. The DM records them with the `mood` tool (memory, not a rule; it can change them). No mood roll and no ceiling grid. Retire T-12-19 use in dm-tools.
 - **Pushover is observed, not gated.** Costly-ask grants and mood changes with no event are listed for the owner to read. Principle: fix only what is seen in play.
-P2 (R+G): Role.DM (prompt engine/dm/roles/prompts/dm.md; `dm_tools.schema_for` is the one schema builder; offline `_dm`); `saved_engine()` in
-game.py (the save's engine wins; missing = pipeline); `play new --engine`; recording offline_seed11_dmtools.json; S1-S12 tests. pytest 2071+4 skipped.
-P1 (E): evals/npc_agency.py (pipeline, dm-tools; --offline), evals/h2h_score.py, heldout.yaml (24, hash pinned; only P7 reads it),
-test_spec032_cases.py (14 strict-xfail groups by phase), test_spec032_harness.py. Before: h2h tokens 0.32x, latency 0.38x; /fix 1 vs 5; fights 0 vs 2;
-prose-only refusals 2 vs 0; hour/day moved 0/3 both; told rows 3 vs 27. Files: npc_agency_before.txt, h2h_before.txt, implementation-results-P1/P2.md.
-Next: P3 (lane T) -> P4 -> P5 (dm_tools.py shared, in order); P6 after P3; P7 last.
-Traps: (1) new Role needs prompt .md, WORD_BUDGET, BUILDERS+DEFAULTS, gemini OUTPUT_TOKENS, cards GUIDANCE, offline heuristic, gemini fixture,
-contract MESSAGES, test_llm_offline SCHEMAS, gemini_smoke. (2) DM packet/prompt change: re-record only the dm recording (`python -m tests.replay.record_games`).
-(3) only `amount` is exempt from INV-3; any other number in the DM schema fails the contract. (4) Game._answer routes disputes to the pipeline (P6).
-(5) `mood` was called in 11/20 turns; don't make tools mandatory. (6) flip the fighter fixture asserts in P3 (target accepted) and P4 (conflict_start).
-(7) the npc_agency leak check is a loose overlap (upper bound). (8) use the Edit tool for strings with escapes; Python heredocs corrupt `\n`.
+P3 (T): `_party` resolver (prose-only people/creatures made; creature by ANIMAL head noun), `change fight`, one revision then drop (`screen.dm_tools.dropped`), `fail_cost`, `Beat.title`, new_item echo, E7 and harm-owned conditions. Tests test_spec032_p3.py (29). xfail groups left: the GROUPS table in test_spec032_cases.py (F, T, C, J, Q, L, E5, I12, X, N; S is P2's, its row was never removed).
+P3.7 live Haiku fighter run NOT run (no claude CLI/API key in that worktree); do it where the API exists (5 samples of turn 9/12/11 contexts).
+Next: P4 (lane W: world step; build `end_scene` instead of cut triggers; flip the fixture's conflict_start assert; the G7 prompt sentence) -> P5; P6 after P3 (does not edit dm_tools.py); P7 last.
+Traps: (1) dm.md/schema change means re-record only the dm recording: `record('offline_seed11_dmtools')` from tests.replay.record_games (pipeline recording must stay byte-equal). (2) every schema field is required (`obj`): new DM fields need a `none` value, and tests/offline `_dm` plans must carry them. (3) `Beat.title` is `exclude_if None`: do not drop that or pipeline events change. (4) `mood` tool and `_asks` still use T-12-19; retire per the ruling (P4/P5). (5) `_party` creates only for creatures or person verbs/slots; a roster match elsewhere is refused as not here. (6) dm_tools.py, npc_layer.py and most engine files are CRLF: use Edit, or a script that keeps CRLF. (7) the REFUSED trace used the fixture (saves are not in the worktree). (8) `world_step` must call `conflict.start` only through `change fight`/the PC's committed attack; `change fight` does no foe action. (9) only `amount` is exempt from INV-3. (10) `ANIMAL` gained beast words (affects `is_animal` for pipeline narrator mentions too; replay unchanged).

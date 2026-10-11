@@ -1152,7 +1152,7 @@ def _dm(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:  # rule: spec
         call = {"tool": "propose_roll", "goal": f"{verb.removeprefix('verb.').capitalize()} {who}", "verb": verb,
                 "target": people[0][0], "how": said_text[:80], "attribute": "might", "difficulty": "",
                 "why_uncertain": f"{who} will resist", "stakes": "risky", "nonlethal": False,
-                "change_kind": "harm" if verb == "verb.strike" else "restrain", "change_what": people[0][0],
+                "fail_cost": "none", "change_kind": "harm" if verb == "verb.strike" else "restrain", "change_what": people[0][0],
                 "change_whom": ""}
         return {"calls": [call], "passage": passage, "asks": []}
     if "ROLL OFFERED" in msg:  # the lead-up only; the turn pauses

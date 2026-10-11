@@ -104,7 +104,7 @@ def test_a_proposed_roll_pauses_on_the_offer_then_the_dm_narrates_the_result(tmp
     npc = npc_here(game)
     roll = {"tool": "propose_roll", "goal": "slip past the guard unseen", "verb": "verb.sneak", "target": npc,
             "how": "keeping to the shadows", "attribute": "agility", "difficulty": "moderate",
-            "why_uncertain": "she is watching the door", "stakes": "risky", "nonlethal": False, "change_kind": "none",
+            "why_uncertain": "she is watching the door", "stakes": "risky", "nonlethal": False, "fail_cost": "none", "change_kind": "none",
             "change_what": "", "change_whom": ""}
     model.push(DM, {"calls": [roll], "passage": "You edge toward the door.", "asks": []})
     r = game.submit("I sneak past her.")
@@ -128,7 +128,7 @@ def test_a_proposal_naming_no_one_takes_its_goal_from_the_dm_words_not_from_here
     game, _ = to_play(tmp_path)
     roll = {"tool": "propose_roll", "goal": "Find the trail on the road", "verb": "verb.observe", "target": "none",
             "how": "reading the mud", "attribute": "wits", "difficulty": "hard", "why_uncertain": "rain",
-            "stakes": "risky", "nonlethal": False, "change_kind": "none", "change_what": "the trail",
+            "stakes": "risky", "nonlethal": False, "fail_cost": "none", "change_kind": "none", "change_what": "the trail",
             "change_whom": ""}
 
     def run(ctx: Any, t: Any, tx: Any) -> Any:

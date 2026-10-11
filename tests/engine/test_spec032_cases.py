@@ -35,7 +35,7 @@ TURN_STATES = ("plain_talk", "offer_open", "rolled_resolved", "change_calls", "r
 
 def test_enumerated_tables_have_their_counted_lengths() -> None:
     assert len(RULES.ids("verb.")) == 15  # R1-R15
-    assert len(dm_tools.CHANGES) == 10  # R24-R33 (11 with the new `fight`, built in P4)
+    assert len(dm_tools.CHANGES) == 11  # R24-R34: the 10 kinds plus `fight` (P3)
     assert len(RULES.ids("cond.")) == 33  # K1-K33
     assert len(RULES.ids("cost.")) == 9  # O1-O9
     assert len(FOE_OUTCOMES) == 6 and len([i for i in RULES.ids("beh.") if i.startswith("beh.default_")]) == 4  # F1-F6, F22-F25
@@ -69,14 +69,14 @@ def _fixture() -> dict[str, Any]:
     return json.loads(FIX.read_text(encoding="utf-8"))
 
 
-def test_fighter_save_prose_only_target_was_refused_and_no_fight_started() -> None:
-    """The traced facts of save playtest-20261010-153123-fighter-dm-tools (turns 9, 11, 12). P3 flips the first two
-    asserts (the target is made, the roll accepted); P4 flips the third (a conflict_start exists)."""
+def test_fighter_save_was_refused_on_prose_only_targets_and_started_no_fight() -> None:
+    """The traced facts of save playtest-20261010-153123-fighter-dm-tools (turns 9, 11, 12), as recorded. P3 flipped
+    the acceptance (test_spec032_p3.py::test_r16: the same calls now roll); P4 flips the last assert (conflict_start)."""
     fx = _fixture()["turns"]
     for turn, target in (("turn.9", "the beast in the clearing"), ("turn.12", "the pale beast")):
         first = fx[turn]["tools"][0]
         assert first["tool"] == "propose_roll" and target in first["args"]
-        assert first["out"].startswith("REFUSED: no one or nothing on record")
+        assert first["out"].startswith("REFUSED: no one or nothing on record")  # what the old code did
         assert len(fx[turn]["refusals"]) == 1
         assert "target" not in json.loads(fx[turn]["tools"][1]["args"])  # the retry dropped the target
     assert fx["turn.11"]["tools"] == []  # the dead end: a three-act message and zero tool calls
@@ -107,17 +107,14 @@ def test_heldout_is_24_items_with_the_stated_mix_and_an_unchanged_body() -> None
 # ------------------------------------------------------------------------------------ later phases: one xfail each
 
 GROUPS = [
-    ("R1-R33 prose-only people accepted as targets", "P3"),
     ("F1-F26 the foe turn, bands, outcomes, harm ladder", "P4"),
-    ("O1-O12 OFFER words and fail_cost fallback", "P3"),
     ("T1-T12 time per mode, interrupts, clocks, leads", "P4"),
     ("C1-C7 scene cuts per trigger", "P4"),
     ("J1-J14 said/told reaches the journal", "P5"),
-    ("I1-I12 items: give, new, coin", "P3"),
     ("Q1-Q14 presence and pronouns", "P5"),
     ("L1-L6 leak audit without name tokens", "P5"),
-    ("E1-E8 one revision, then drop; nothing done to the PC without a roll", "P5"),
-    ("K1-K33 conditions on an NPC and on the PC", "P3"),
+    ("E5 sealed secrets outside the clue rule (per incident kind)", "P5"),
+    ("I12 log-only: item named in the passage with no change call", "P5"),
     ("S1-S12 resuming keeps the engine", "P2"),
     ("X1-X22 /fix on dm-tools turns", "P6"),
     ("N1-N16 NPC agency after the fixes", "P7"),

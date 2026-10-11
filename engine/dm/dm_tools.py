@@ -38,7 +38,10 @@ ENGINE = "dm-tools"
 MAX_TOOLS, PER_STEP = 6, 3
 TOOLS = ("propose_roll", "state", "change", "recall", "reveal_clue", "mood")
 CHANGES = ("coin", "give_item", "new_item", "condition_add", "condition_remove", "npc_leaves", "new_npc", "travel",
-           "rest", "fact")
+           "rest", "fact", "fight")  # [spec 032 P3] fight: a person turns on the PC
+FAIL_COSTS = ("cost.closed_door", "cost.drain", "cost.exposure", "cost.footing", "cost.gear", "cost.harm",
+              "cost.shortfall", "cost.time", "cost.twist")  # the 9 cost ids (a test pins them to the rules)
+PERSON_VERBS = ("verb.talk", "verb.strike", "verb.grapple", "verb.help")  # a prose-only target is a person for these
 COSTS = ("none", "small", "real", "big")
 GRANTS = ("help", "price", "partial", "refuse")  # what the DM had the NPC do for an ask (for ceiling logging)
 STAKES = ("safe", "risky", "dire")
@@ -64,8 +67,9 @@ class Turn:
     log: list[tuple[str, str, str]] = field(default_factory=list)  # (tool, args, output)
     stats: dict[str, Any] = field(default_factory=lambda: {"tool_calls": 0, "steps": 0, "refusals": [],
                                                            "ceilings": [], "ceiling_violations": [], "leaks": [],
-                                                           "clues": [], "rolls": []})
+                                                           "clues": [], "rolls": [], "dropped": []})
     paused: bool = False
+    made: list[str] = field(default_factory=list)  # people/creatures the resolver made this turn (told to the DM)
     env: Any = None
 
 
@@ -175,7 +179,7 @@ def schema_for(verbs: list[str], kinds: list[str], *, final: bool) -> Schema:
     calls = [
         obj({"tool": enum(["propose_roll"]), "goal": STR, "verb": enum(verbs), "target": STR, "how": STR,
              "attribute": STR, "difficulty": STR, "why_uncertain": STR, "stakes": enum(STAKES),
-             "nonlethal": {"type": "boolean"},
+             "nonlethal": {"type": "boolean"}, "fail_cost": enum(["none", *FAIL_COSTS]),
              "change_kind": enum(kinds), "change_what": STR, "change_whom": STR}),
         obj({"tool": enum(["state"]), "about": STR}),
         obj({"tool": enum(["change"]), "kind": enum(CHANGES), "who": STR, "what": STR, "to": STR,
@@ -320,12 +324,22 @@ def tool(ctx: TurnContext, t: Turn, call: dict[str, Any]) -> str:
           "reveal_clue": _reveal_clue, "mood": _mood}.get(name)
     if fn is None:
         return f"no tool {name!r}"
+    made0 = len(t.made)
     try:
         out = fn(ctx, t, call)
     except Exception as e:  # noqa: BLE001 - a tool that fails tells the DM so; it never fails the turn
         out = f"REFUSED: the {name} tool failed: {type(e).__name__}: {_flat(e, 200)}"
+    if len(t.made) > made0:
+        out += "\n(New on record, here now: " + "; ".join(t.made[made0:]) + ". Use these ids from now on.)"
     if out.startswith("REFUSED"):
-        t.stats["refusals"].append({"tool": name, "args": _args(call), "why": out[:200]})
+        row = {"tool": name, "kind": str(call.get("kind") or ""), "args": _args(call), "why": out[:200]}
+        # [spec 032 P3] one revision, then drop: a second breach of the same tool (or one with no call left to revise
+        # it in) is logged; the turn goes on without it
+        if any((r["tool"], r["kind"]) == (name, row["kind"]) for r in t.stats["refusals"]) \
+                or t.stats["tool_calls"] + 1 >= MAX_TOOLS:
+            t.stats["dropped"].append(row)
+            out += "\nDROPPED: this call is not done; carry on without it."
+        t.stats["refusals"].append(row)
     return out if len(out) <= OUT_CHARS else out[:OUT_CHARS] + "…"
 
 
@@ -341,7 +355,59 @@ def _id(st: Any, raw: Any) -> str | None:
     return hits[0] if len(hits) == 1 else s
 
 
-def _acting(st: Any, eid: str | None, *, here: bool = True) -> str:
+_ID_LIKE = re.compile(r"^[a-z_]+\.[a-z0-9_.]+$")
+
+
+def _labels(e: Any) -> list[str]:
+    from engine.dm.mentions import bare
+
+    raw = [e.name, e.data.get("role"), *[a for a in e.data.get("aliases", []) if isinstance(a, str)]]
+    return [bare(str(x)).lower() for x in raw if x]
+
+
+def _party(ctx: TurnContext, t: Turn, raw: Any, *, person: bool = False) -> str | None:
+    """A person or creature from what the DM wrote (spec 032 G4): the id, else a name/alias/role match (the one here
+    first), else made now at the scene's place when `person` (the slot takes a person) or the words name a creature:
+    a named NPC or a creature through `mentions.write_mentions`, a described person (or group) through
+    `social.cast_described`. A string that is not made is returned as written (the caller refuses it)."""
+    from engine.dm.mentions import Mention, bare, find_existing, write_mentions
+    from engine.dm.npc_layer import ANIMAL, is_animal
+    from engine.world.scenes import cast_present
+    from engine.world.social import cast_described
+
+    tx = ctx.need_tx()
+    st = tx.state
+    eid = _id(st, raw)
+    if eid is None or eid in st.entities:
+        return eid
+    s = str(raw).strip()
+    want = bare(s).lower()
+    creature = ANIMAL.match(want)
+    present = cast_present(st) if st.scene is not None else []
+    here = [i for i in present if want in _labels(st.entities[i])]
+    if not here and creature:  # "the pale beast" is the "beast in the clearing" already here
+        head = str(creature.group("head")).lower()
+        here = [i for i in present if is_animal(st, i)
+                and head in re.findall(r"[a-z']+", " ".join(_labels(st.entities[i])))]
+    if here:
+        return here[0]
+    found = find_existing(st, s, "npc")  # elsewhere: the one on record (the caller says it is not here)
+    place = st.scene.place_id if st.scene is not None else None
+    if found or _ID_LIKE.match(s) or not (person or creature) or place not in st.entities:
+        return found or s
+    named = want and s[:1].isupper() and not re.match(r"(?i)(the|a|an|some|one|this|that)\s", s)
+    if creature or named:
+        res = write_mentions([Mention(kind="npc", name=s)], tx=tx, rules=ctx.rules, rng=ctx.rng, place=place)
+        new = (res.created.get(s) or res.reused.get(s))
+    else:
+        new = cast_described(ctx.time_ctx(), s, place)  # type: ignore[arg-type]
+    if new is None:
+        return s
+    t.made.append(f"{_name(st, new)} ({new})")
+    return new
+
+
+def _acting(st: Any, eid: str | None, *, here: bool = True, down: bool = True) -> str:
     """Why `eid` cannot act now (unknown, dead, down, gone or not here), or ""."""
     from engine.harm.state import DEAD, harm_state, is_down
     from engine.retrieve.scene import pc_id
@@ -352,7 +418,7 @@ def _acting(st: Any, eid: str | None, *, here: bool = True) -> str:
     e = st.entities[eid]
     if e.exists != "exists" or harm_state(st, eid) == DEAD:
         return f"{_name(st, eid)} is dead or gone"
-    if is_down(st, eid) or st.fact_value(eid, "defeated"):
+    if down and (is_down(st, eid) or st.fact_value(eid, "defeated")):
         return f"{_name(st, eid)} is down and cannot act"
     if here and eid != pc_id(st) and st.scene is not None and eid not in cast_present(st):
         return f"{_name(st, eid)} is not here"
@@ -371,14 +437,21 @@ def _propose_roll(ctx: TurnContext, t: Turn, c: dict[str, Any]) -> str:
         return "REFUSED: no player character"
     if st.open_pause() is not None:
         return "REFUSED: a roll is already offered this turn"
-    target = _id(st, c.get("target"))
+    verb = str(c.get("verb") or "") or None
+    target = _party(ctx, t, c.get("target"), person=verb in PERSON_VERBS)
     if target is not None and target not in st.entities:
-        return f"REFUSED: no one or nothing on record called {target!r} (use an id from the situation, or none)"
+        return (f"REFUSED: no one or nothing on record called {target!r} (use an id from the situation, or none; "
+                "for a thing, leave `target` empty and say it in `how`)")
+    if target is not None and st.entities[target].kind in ("npc", "companion", "adversary"):
+        why = _acting(st, target, down=False)  # a downed foe can still be struck; the dead and the absent cannot
+        if why:
+            return f"REFUSED: {why}"
     kind = str(c.get("change_kind") or "none")
-    what, whom = _id(st, c.get("change_what")), _id(st, c.get("change_whom"))
+    raw_t = str(c.get("target") or "").strip()
+    what, whom = (target if raw_t and str(c.get(k) or "").strip() == raw_t else _id(st, c.get(k))
+                  for k in ("change_what", "change_whom"))
     goal = str(c.get("goal") or "").strip() or "act"
     how = str(c.get("how") or "").strip() or None
-    verb = str(c.get("verb") or "") or None
     phrase = str(c.get("change_what") or "").strip()
     if kind == "none" and target is None and verb not in ("verb.sneak", "verb.talk"):
         # no slot named: the verb's plain goal toward the DM's words, never "here" by default (the OFFER's title
@@ -399,7 +472,8 @@ def _propose_roll(ctx: TurnContext, t: Turn, c: dict[str, Any]) -> str:
     if c.get("nonlethal") and verb in ("verb.strike", "verb.grapple", "verb.force"):
         method += " (nonlethal)"  # the harm rules read the method's words (engine/resolve/conflict.py NONLETHAL)
     beat = Beat(id=tx.mint(ids.BEAT), actor=pc, intent=goal, method=method, how=how, target=target,
-                restatement=goal[:1].upper() + goal[1:], verb=verb, speech=verb == "verb.talk",
+                restatement=goal[:1].upper() + goal[1:], verb=verb,
+                title=goal[:1].upper() + goal[1:] if str(c.get("goal") or "").strip() else None, speech=verb == "verb.talk",
                 against_will=bool(target and st.entities[target].kind in ("npc", "adversary")
                                   and verb in ("verb.strike", "verb.grapple", "verb.force")),
                 declared_seq=st.last_seq, change=change)
@@ -451,17 +525,21 @@ def code_framer(ctx: TurnContext, t: Turn) -> Any:
             ob["tier"] = tier
         stakes = str(p.get("stakes") or "safe")
         cands = []
+        fc = str(p.get("fail_cost") or "")
+        fc = fc if fc.startswith("cost.") or not fc else f"cost.{fc}"
+        # the DM's own `fail_cost` first (when the rules' menu has it), then the verb's plain risk (spec 032 G8)
+        wants = [w for w in dict.fromkeys((fc, PREFERRED_COST.get(str(beat.verb), ""))) if w]
         if stakes != "safe" and sctx.stakes_menus:  # the first stakes source the rules accept here (01.6.9)
-            for src, m in sctx.stakes_menus.items():
-                if src != "none" and m["threatened"] and m["alternate"]:
-                    # ponytail: the cost a verb most plainly risks first (a fight risks harm, a sneak being noticed)
-                    want = PREFERRED_COST.get(str(beat.verb), "")
-                    threat = want if want in m["threatened"] else m["threatened"][0]
-                    alt = next((x for x in m["alternate"] if x != threat), m["alternate"][0])
-                    cands.append({**d, "stakes_heavy": stakes == "dire", "stakes": {
-                        "source": src, "threatened_cost": {"menu_id": threat, "form_intent": "",
-                                                           "source_fact": None},
-                        "alternate_cost": {"menu_id": alt, "form_intent": "", "source_fact": None}}})
+            for want in wants or [""]:
+                for src, m in sctx.stakes_menus.items():
+                    if src != "none" and m["threatened"] and m["alternate"] and (want in m["threatened"] or not cands):
+                        # ponytail: the cost a verb most plainly risks (a fight risks harm, a sneak being noticed)
+                        threat = want if want in m["threatened"] else m["threatened"][0]
+                        alt = next((x for x in m["alternate"] if x != threat), m["alternate"][0])
+                        cands.append({**d, "stakes_heavy": stakes == "dire", "stakes": {
+                            "source": src, "threatened_cost": {"menu_id": threat, "form_intent": "",
+                                                               "source_fact": None},
+                            "alternate_cost": {"menu_id": alt, "form_intent": "", "source_fact": None}}})
         for cand in (*cands, d, base):
             try:
                 prop = to_proposed(cand, beat, st)
@@ -517,7 +595,7 @@ def _reveal_clue(ctx: TurnContext, t: Turn, c: dict[str, Any]) -> str:
     from engine.dm.player_text import clean
 
     st = ctx.state
-    npc = _id(st, c.get("npc"))
+    npc = _party(ctx, t, c.get("npc"), person=True)
     why = _acting(st, npc)
     if why:
         return f"REFUSED: {why}"
@@ -542,7 +620,7 @@ def _mood(ctx: TurnContext, t: Turn, c: dict[str, Any]) -> str:
     from engine.dm.answer import willingness
 
     st = ctx.state
-    npc = _id(st, c.get("npc"))
+    npc = _party(ctx, t, c.get("npc"), person=True)
     why = _acting(st, npc)
     if why:
         return f"REFUSED: {why}"
@@ -600,24 +678,39 @@ def _change(ctx: TurnContext, t: Turn, c: dict[str, Any]) -> str:
     kind = str(c.get("kind") or "")
     pc = t.rec.pc or ""
     who, what, to = _id(st, c.get("who")), _id(st, c.get("what")), _id(st, c.get("to"))
+    if kind in ("coin", "give_item", "condition_add", "condition_remove", "npc_leaves", "fight", "fact"):
+        who = _party(ctx, t, c.get("who"), person=kind != "fact")  # a fact's subject may be a thing: not made
+    if kind in ("coin", "give_item", "new_item"):
+        to = _party(ctx, t, c.get("to"), person=True)
     amount = int(c.get("amount") or 0)
     if kind == "coin":
         return _coin(ctx, t, payer=who, payee=to, amount=amount)
     if kind == "give_item":
         return _give(ctx, item=what, giver=who or pc, to=to)
     if kind == "new_item":
+        from engine.dm.mentions import bare
+        from engine.resolve.change import PEOPLE, holder_of
+
         name = str(c.get("what") or "").strip()
         holder = to or pc
         why = _acting(st, holder)
         if why or not name:
             return f"REFUSED: {why or 'name the item'}"
+        twin = next((i for i, e in st.entities.items()
+                     if e.kind in ("item", "object") and bare(e.name).lower() == bare(name).lower()
+                     and st.entities.get(str(holder_of(st, i))) is not None
+                     and st.entities[str(holder_of(st, i))].kind in PEOPLE), None)
         eid = ids.entity_id("item", name, st.entities)
         tx.add(Event.of("entity_created", source="engine", rule_id="00.6.6",
                         entity=EntityRecord(id=eid, kind="item", name=name, visibility="shown")))
         tx.add(_fact(tx, eid, "holder", holder))
-        return f"done: {name} ({eid}) now held by {_name(tx.state, holder)}"
+        echo = (f"\nNOTE: {_name(st, holder_of(st, twin))} already holds {_name(st, twin)} ({twin}); if you meant "
+                f"that one, use give_item with it instead of a second {name}.") if twin else ""
+        return f"done: {name} ({eid}) now held by {_name(tx.state, holder)}" + echo
     if kind in ("condition_add", "condition_remove"):
-        return _condition(ctx, who, str(c.get("what") or ""), add=kind == "condition_add")
+        return _condition(ctx, who, str(c.get("what") or ""), add=kind == "condition_add", pc=pc)
+    if kind == "fight":
+        return _fight(ctx, who, pc)
     if kind == "npc_leaves":
         why = _acting(st, who)
         if why:
@@ -726,7 +819,26 @@ def _give(ctx: TurnContext, *, item: str | None, giver: str, to: str | None) -> 
     return f"done: {_name(st, to)} now holds {_name(st, item)}"
 
 
-def _condition(ctx: TurnContext, who: str | None, cid: str, *, add: bool) -> str:
+HARM_OWNED = ("cond.wound_arm", "cond.wound_body", "cond.wound_head", "cond.wound_leg", "cond.unconscious")
+
+
+def _fight(ctx: TurnContext, who: str | None, pc: str) -> str:
+    """A person the DM has turn on the PC: the conflict starts (spec 032 G7). No foe action here (the world step runs
+    it); nothing is done to the PC without a roll or the foe's own turn."""
+    from engine.resolve import conflict
+
+    tx = ctx.need_tx()
+    why = _acting(tx.state, who)
+    if why:
+        return f"REFUSED: {why}"
+    assert who is not None
+    if not conflict.start(ctx.time_ctx(), pc, [who], f"the DM: {_name(tx.state, who)} turns on the character"):
+        return f"{_name(tx.state, who)} is already in the fight (or cannot be a foe)."
+    return (f"done: a fight begins; {_name(tx.state, who)} turns on the character. Blows are not struck by your words: "
+            "write the lead-up and the moment before the first exchange, and the character's reply is a roll.")
+
+
+def _condition(ctx: TurnContext, who: str | None, cid: str, *, add: bool, pc: str = "") -> str:
     from engine.store.conditions import apply_condition, remove_condition
 
     tx = ctx.need_tx()
@@ -736,6 +848,10 @@ def _condition(ctx: TurnContext, who: str | None, cid: str, *, add: bool) -> str
     cid = cid if cid.startswith("cond.") else f"cond.{ids.slug(cid)}"
     if cid not in ctx.rules.ids("cond."):
         return f"REFUSED: no condition {cid!r} in the rules (e.g. {', '.join(ctx.rules.ids('cond.')[:8])})"
+    if cid in HARM_OWNED:
+        return f"REFUSED: {cid} comes from harm (a blow or a roll sets it); the DM does not add or lift it"
+    if add and who == pc:
+        return "REFUSED: nothing is done to the character without a roll or a foe's turn (no condition from the DM)"
     if add:
         res = apply_condition(st, tx.mint, ctx.rules, who, cid, source={"kind": "dm"})
         tx.add_all(res.events)

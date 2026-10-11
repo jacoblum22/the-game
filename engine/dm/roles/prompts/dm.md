@@ -9,8 +9,9 @@ involved, then write the passage.
 
 Tools (each call is one object in `calls`; leave `calls` empty when you are done and write `passage`):
 - propose_roll: the player's character attempts something whose outcome is uncertain AND failure would cost
-  something. Give the goal (what success achieves), the verb, the target id (or "none"), how they do it, why it is
-  uncertain, and the stakes. change_kind and change_what say what success changes (change_what: an id, or a
+  something. Give the goal (the act in your own short words: it is the title the player sees), the verb, the
+  target (an id, or what they are: "the pale beast", "the carter at the well" is put here for you; or "none"), how
+  they do it, why it is uncertain, the stakes, and `fail_cost` (what failure would cost, a cost id or "none"). change_kind and change_what say what success changes (change_what: an id, or a
   short noun phrase like "the trail" or "the figure past the bend"); set nonlethal for a fight that should not kill (a bout to yield, subduing,
   knocking out). Code computes the odds. If a roll is needed the turn pauses on the odds screen: write
   only the lead-up in `passage` (never the outcome); you narrate the result next turn. With nothing at stake or a
@@ -20,7 +21,8 @@ Tools (each call is one object in `calls`; leave `calls` empty when you are done
   (`what` item id from `who`, default the character, to `to`), new_item (`what` a short name, held by `to`), condition_add / condition_remove (`who`,
   `what` condition id), npc_leaves (`who`, optional `to` place id), new_npc (`what` their role, e.g. "a ferryman"),
   travel (`to` a reachable place id), rest (`what`: breather, rest_short or rest_long), fact (`who` subject id,
-  `what` a short predicate, `note` the value). Code refuses only what the game can't hold and tells you why.
+  `what` a short predicate, `note` the value), fight (`who` turns on the character; the blows are rolled, not
+  written). A person not on record who is named by what they are is put here for you. Code refuses only what the game can't hold and tells you why.
 - recall: search memory (past turns, what people said, what the character knows) for `query`.
 - reveal_clue: the player asks `npc` (an id) a question that may touch a mystery. Code says whether that person
   holds a clue about it, and if so gives the exact clue to deliver. Deliver it in their voice. Never invent clues.

@@ -65,18 +65,18 @@ Trap: the stored config of old saves has no `engine` key; never read `GameConfig
 
 Edits `engine/dm/dm_tools.py` (tools, schema, prompt text), `engine/resolve/types.py` (`Beat.title`), `engine/dm/oof.py`
 (`goal_line` reads `title`), tests. Trace first, then fix.
-- [ ] P3.1 **Trace** in the fighter save and the talker/explorer scripted saves every `REFUSED` (list them by reason);
+- [x] P3.1 **Trace** in the fighter save and the talker/explorer scripted saves every `REFUSED` (list them by reason);
       tabulate into `implementation-results-P3.md` before coding. Confirm the conflict never started (P1.6 fixture).
-- [ ] P3.2 The resolver `_party` (plan G4) used by propose_roll, mood, reveal_clue, change; reuse
+- [x] P3.2 The resolver `_party` (plan G4) used by propose_roll, mood, reveal_clue, change; reuse
       `mentions.write_mentions` / `cast_described`; creature vs person by the ANIMAL test. Cases R1-R33.
-- [ ] P3.3 `change kind=fight` (an NPC turns on the PC): `conflict.start`; no foe action here (P4 runs it). F16 minimal.
-- [ ] P3.4 One revision then drop (E1-E8): the tool loop already returns `REFUSED`; add `screen.dm_tools.dropped` when a
+- [x] P3.3 `change kind=fight` (an NPC turns on the PC): `conflict.start`; no foe action here (P4 runs it). F16 minimal.
+- [x] P3.4 One revision then drop (E1-E8): the tool loop already returns `REFUSED`; add `screen.dm_tools.dropped` when a
       call fails twice; `condition_add` on the PC outside a roll/foe turn is refused (E7); harm-owned conditions refused.
       Conditions K1-K33 walked.
-- [ ] P3.5 OFFER words: `fail_cost` enum in the `propose_roll` schema; `code_framer` honours it when `frame_check` accepts;
+- [x] P3.5 OFFER words: `fail_cost` enum in the `propose_roll` schema; `code_framer` honours it when `frame_check` accepts;
       `Beat.title` + `oof.goal_line` (the pipeline never sets it). O1-O12. Replay: check pipeline packets are byte-equal.
-- [ ] P3.6 Items (G5): `new_item` echo of a same-named held item; `give_item` cases I1-I11.
-- [ ] P3.7 Live check on Haiku: re-run the fighter persona 15 turns; report refusals (expect 0 prose-only), `conflict_start`
+- [x] P3.6 Items (G5): `new_item` echo of a same-named held item; `give_item` cases I1-I11.
+- [ ] P3.7 (NOT RUN: no claude CLI or API key in the P3 worktree; offline replay of the fixture calls is test_r16) Live check on Haiku: re-run the fighter persona 15 turns; report refusals (expect 0 prose-only), `conflict_start`
       present, OFFER titles. The fighter save's turn 9/12 contexts replayed (5 samples) for target resolution.
 Gate: R/O/I/E/K cases green; suite green; live fighter run shows a `conflict_start`.
 
@@ -86,8 +86,9 @@ New `engine/dm/dm_world.py`; small hooks in `dm_tools._run/_dm_loop` and the sit
 - [ ] P4.1 **Trace** what scene mode the pipeline's Director gives place scenes and what `beat_cost` returns for it; decide the
       dm-tools scene mode (assumption A1); write the finding into `implementation-results-P4.md`.
 - [ ] P4.2 `world_step(ctx, t)` per plan: foes (`foes_act`), time (`beat_cost`, `beat_end`, `note_turn`), omens, triggers,
-      lead (`inject_lead`), cut (`cut_due` in {time_jump, interrupt, conflict_end, dead_air}); facts returned as plain words.
-      Cases F1-F26, T1-T12, C1-C7.
+      lead (`inject_lead`), facts returned as plain words. [owner ruling 2026-10-10] Cut rules dropped: build the `end_scene` tool instead (DM calls it; code does time,
+      per-scene resets, the new scene record; no Director call; travel and time jumps still open a scene).
+      Cases F1-F26, T1-T12; C1-C7 become `end_scene` cases (tool ends the scene; no cut without the call).
 - [ ] P4.3 Wire it: after `_resume` on an answer turn; after the tool phase on a free turn; re-ask once only when a fact exists;
       never on an open pause (F17). Zero extra calls when no conflict and no fact (F20).
 - [ ] P4.4 FIGHT block in `situation()`: foes, `state_words`, bands, PC harm state; prompt sentence for G7 (plan G7 wording).
@@ -95,7 +96,7 @@ New `engine/dm/dm_world.py`; small hooks in `dm_tools._run/_dm_loop` and the sit
       context: report k/5 proposing the roll (F12).
 - [ ] P4.6 Live: fighter + talker personas 15 turns each on Haiku. Report foe turns per exchange (target 1.0), hours advanced,
       extra calls per turn, tokens/turn (C1/C2 trend).
-Gate: F/T/C cases green; suite; live fighter shows a foe strike each fight exchange; talker clock advances.
+Gate: F/T and `end_scene` cases green; suite; live fighter shows a foe strike each fight exchange; talker clock advances; no code cut fires.
 
 ## P5 - Records and context: told, presence, pronouns, items, leak audit (lane C; Sonnet; about 35-55 turns)
 
@@ -135,6 +136,7 @@ Runs only after P1-P6 are merged into one branch. Edits `evals/`, `specs/`, and 
       dm-tools} (6 runs, in parallel). Use the commands in `specs/031-dm-with-tools/implementation-results.md`.
 - [ ] P7.3 `evals/longhorizon.py --mode scripted --lines 60 --model claude --engine dm-tools` (dm-tools only; skip the pipeline
       run). Report engine errors, refused tool calls, leak flags, told rows.
+- [ ] P7.0 [owner ruling 2026-10-10] Pushover and mood gates (C5/C6) are observed, not gated: list costly-ask grants and mood changes with no event in the report; do not fail the flip on them.
 - [ ] P7.4 Run `heldout.yaml` once; report k/24 by family; no tuning afterwards.
 - [ ] P7.5 `h2h_score.py` headline table first (gates C1-C11), then hand-counted contradictions by the results note's rules
       (3 saves per arm), then the one-paragraph read. Write `implementation-results.md` with the table on top.

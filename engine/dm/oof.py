@@ -338,6 +338,8 @@ def goal_line(beat: Any, state: WorldState | None) -> str:  # rule: 12.15.2
     put it ("Learn from Dunwen Redmore: twist her arm up behind her back"). Never the restatement or the Reader's
     `method` field (DL-01-39): those are internal and garble when printed (I1 §3). With no slot to name and no words
     of the player's (a scripted or defaulted beat), the beat's intent stands in."""
+    if getattr(beat, "title", None):  # the DM's own words (spec 032 G8)
+        return str(beat.title).strip().rstrip(".")
     c = beat.change
     kind = c.kind if c is not None and c.kind in _GOAL else "none"
     act = beat.actor

@@ -44,7 +44,7 @@ def world_step(ctx, t, *, message) -> list[str]:   # facts for the DM, in plain 
     time  = _exchange_time(ctx, rec, fought=bool(foes))   # beat_cost(mode) + beat_end + note_turn(quiet)
     omens = world_step.clock_omens / fired_triggers # record.omens, record.triggers
     lead  = inject_lead(tctx) if trigger_raised(st, "trg.lead_injection")
-    cut   = scenes.cut_due(st, rules) in {time_jump, interrupt, conflict_end, dead_air}  # code only
+    # no cut rule here: the DM ends scenes with the end_scene tool [owner ruling 2026-10-10]
     return facts   # "The beast strikes you and lands it: you are bloodied (Vitality 4 -> 1)." / "An hour passes." / ...
 ```
 
@@ -56,8 +56,8 @@ to act), `deliver_learning` (Reader parts), the Director model. The DM sees outc
   reads as `free`, and `beat_cost(free)` is 0, which alone would keep the clock at hour 0. The phase traces what mode
   the pipeline's Director gives a place scene and gives dm-tools scenes `site` (conflict while a fight runs,
   `travel` while travelling). Assumption A1 holds only if that trace agrees.
-- **Cut:** `end_scene(reason)` then the existing `_open_scene` next turn. Moods are held per scene, so a cut re-rolls
-  `mood`. No agenda is written. The DM is told the reason as a fact ("The scene changed: time passed").
+- **Cut:** [owner ruling 2026-10-10] the DM calls the `end_scene` tool; code only does the bookkeeping (`scenes.end_scene`, time, per-scene resets,
+  then `_open_scene` next turn). No `cut_due` rules, no dead-air or interrupt heuristics. Moods are the DM's (`mood` tool, memory, changeable; no roll, no ceiling grid, no T-12-19). No agenda is written.
 - **Cost:** in a fight one extra DM call per exchange (the re-ask). Outside a fight, none unless a fact was produced.
 
 ### G4: the resolver (lane T, `dm_tools.py`)

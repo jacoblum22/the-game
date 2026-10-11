@@ -45,6 +45,8 @@ class Beat(BaseModel):
     actor: str
     intent: str
     method: str
+    title: str | None = Field(default=None, exclude_if=lambda v: v is None)  # the OFFER's goal words as the DM wrote them (dm-tools; the pipeline never sets it, so its dumps
+    # and recorded events do not change)
     how: str | None = None  # 01.2.6: the method in the player's own words, verbatim from the message (DL-01-39)
     assertion: str | None = None  # context only, never a fact (INV-9)
     shape: Shape = "single"
