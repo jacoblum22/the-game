@@ -1,6 +1,7 @@
 """Play D&D 5e (2014, SRD) in the terminal with an AI DM.
 
     py -3.12 -m dm.play fighter            # or rogue, wizard
+    py -3.12 -m dm.play new                # make a character with the DM first
     py -3.12 -m dm.play --resume saves/<file>.json
 
 In play: type what your character does. /sheet shows your sheet, /quit saves and exits.
@@ -14,12 +15,21 @@ import asyncio
 import json
 import sys
 import time
+from collections.abc import Callable
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any
 
-from claude_agent_sdk import (AssistantMessage, ClaudeAgentOptions, ClaudeSDKClient, ResultMessage, TextBlock,
-                              create_sdk_mcp_server, tool)
+from claude_agent_sdk import (
+    AssistantMessage,
+    ClaudeAgentOptions,
+    ClaudeSDKClient,
+    ResultMessage,
+    TextBlock,
+    create_sdk_mcp_server,
+    tool,
+)
 
+from dm import create
 from dm import mechanics as m
 
 HERE = Path(__file__).parent
@@ -87,6 +97,13 @@ class Game:
                   "restore_slot": {"type": "integer", "minimum": 1, "maximum": 9},
                   "use_resource": {"type": "string", "description": "a feature name exactly as on the sheet, e.g. Second Wind"},
                   "restore_resource": {"type": "string"},
+                  "resource_amount": {"type": "integer", "minimum": 1,
+                                      "description": "how much of a pool to use or restore (e.g. Lay on Hands HP); default 1"},
+                  "prepare_spells": {**_NAMES, "description": "the new prepared list; only together with long_rest"},
+                  "spellbook_add": {**_NAMES, "description": "wizard: spells copied into the spellbook (record the gold too)"},
+                  "ac_set": {"type": "integer", "minimum": 0, "description": "the PC's AC from now on, e.g. after Mage Armor"},
+                  "ac_reason": {"type": "string", "description": "what sets it, e.g. 'Mage Armor: 13 + DEX'"},
+                  "ac_reset": {"type": "boolean", "description": "AC back to the sheet's normal value"},
                   "items_gained": _ITEMS, "items_lost": _ITEMS,
                   "coin_change_gp": {"type": "number", "description": "money gained (+) or spent (-), in gp; 0.1 = 1 sp"},
                   "conditions_added": _NAMES, "conditions_removed": _NAMES,
@@ -142,17 +159,22 @@ class Game:
 
 def sheet_text(s: dict[str, Any]) -> str:
     lines = [f"{s['name']}: {s['summary']}",
+             *(f"{k.capitalize()}: {s[k]}" for k in ("alignment", "personality", "appearance") if s.get(k)),
              f"AC {s['ac']} ({s['ac_note']}); speed {s['speed']}; proficiency bonus +{s['proficiency_bonus']}",
              "Abilities: " + ", ".join(f"{k} {v}" for k, v in s["abilities"].items()),
              f"Saving throws: {s['saving_throws']}", f"Skills: {s['skills']}",
              f"Passive Perception {s['passive_perception']}; senses: {s['senses']}",
              f"Languages: {s['languages']}", f"Proficiencies: {s['proficiencies']}",
              "Attacks:", *(f"- {x}" for x in s["attacks"])]
-    sp = s.get("spellcasting")
-    if sp:
+    sp = s.get("spellcasting") or {}
+    if sp.get("ability"):
         lines += [f"Spellcasting ({sp['ability']}): save DC {sp['save_dc']}, spell attack +{sp['attack_bonus']}",
-                  "Cantrips: " + ", ".join(sp["cantrips"]), "Spellbook: " + ", ".join(sp["spellbook"]),
-                  "Prepared: " + ", ".join(sp["prepared"]), sp["notes"]]
+                  "Cantrips: " + ", ".join(sp["cantrips"])]
+        if sp.get("known"):
+            lines.append("Spells known: " + ", ".join(sp["known"]))
+        lines.append(sp["notes"] + (" Prepared spells and the spellbook are in the status." if "prepared" in sp else ""))
+    if sp.get("racial_cantrips"):
+        lines.append("Racial cantrips: " + ", ".join(sp["racial_cantrips"]))
     lines += ["Features:", *(f"- {x}" for x in s["features"])]
     return "\n".join(lines)
 
@@ -163,8 +185,8 @@ def system_prompt(sheet: dict[str, Any]) -> str:
             + "\n\n## The opening\n" + sheet["opening"])
 
 
-async def turn(client: ClaudeSDKClient, game: Game, text: str) -> None:
-    await client.query(f"[Status now]\n{game.status()}\n\n{text}")
+async def turn(client: ClaudeSDKClient, game: Game | Creation, text: str) -> None:
+    await client.query(f"[Status now]\n{game.status()}\n\n{text}" if isinstance(game, Game) else text)
     async for msg in client.receive_response():
         if isinstance(msg, AssistantMessage):
             for b in msg.content:
@@ -178,9 +200,113 @@ async def turn(client: ClaudeSDKClient, game: Game, text: str) -> None:
     game.save()
 
 
+class Creation:
+    """The DM talks the player through making a level-1 character; create.py checks the choices and does the math."""
+
+    def __init__(self) -> None:
+        self.rolled: list[int] | None = None
+        self.draft: dict[str, Any] | None = None
+        self.done = False
+        self.session_id: str | None = None
+        self.transcript: list[dict[str, str]] = []
+
+    def log(self, kind: str, text: str) -> None:
+        self.transcript.append({"kind": kind, "text": text})
+        if kind == "tool":
+            print(f"  [{text}]")
+
+    def save(self) -> None:
+        pass  # ponytail: creation isn't resumable; the finished sheet goes into the play save
+
+    def tools(self) -> list[Any]:
+        def ok(text: str) -> dict[str, Any]:
+            return {"content": [{"type": "text", "text": text}]}
+
+        def no(text: str) -> dict[str, Any]:
+            self.log("refused", text)
+            return {"content": [{"type": "text", "text": text}], "is_error": True}
+
+        @tool("srd_options", "What the SRD offers. No arguments: every race, class and the background. race only: that "
+              "race in full. class only: that class in full. race and class: every choice that character needs, "
+              "with ids, options and spell lists.",
+              {"type": "object", "properties": {"race": {"type": "string"}, "class": {"type": "string"}}})
+        async def srd_options(a: dict[str, Any]) -> dict[str, Any]:
+            try:
+                return ok(create.options_text(a.get("race") or "", a.get("class") or ""))
+            except create.Bad as e:
+                return no(str(e))
+
+        @tool("roll_ability_scores", "Roll the six ability scores: 4d6, drop the lowest, six times. Once per "
+              "character; the player sees every die.", {"type": "object", "properties": {}})
+        async def roll_ability_scores(a: dict[str, Any]) -> dict[str, Any]:
+            if self.rolled:
+                return no(f"already rolled: {self.rolled}; scores are rolled once")
+            lines, rolled = [], []
+            for _ in range(6):
+                dice = sorted(m.roll("4d6")["parts"][0]["rolls"], reverse=True)
+                rolled.append(sum(dice[:3]))
+                lines.append(f"4d6 {dice} drop {dice[3]} = {rolled[-1]}")
+            self.rolled = rolled
+            text = "ability scores rolled: " + "; ".join(lines) + f". Scores: {rolled}"
+            self.log("tool", text)
+            return ok(text)
+
+        @tool("build_character", "Check a full set of choices and work out the sheet. Returns the sheet, or every "
+              "problem at once. Fields: name, race, class, ability_method (standard_array, point_buy or rolled), "
+              "base_scores {STR..CHA} before racial increases, choices {id: [entries]} with the ids from srd_options "
+              "(each entry an option letter or exact name, or {option, picks} for an option with a further choice), "
+              "cantrips, spells (known or spellbook), prepared, and optional alignment, personality, appearance.",
+              {"type": "object", "properties": {"character": {"type": "object"}}, "required": ["character"]})
+        async def build_character(a: dict[str, Any]) -> dict[str, Any]:
+            sheet, errs = create.build(a["character"], self.rolled)
+            if not sheet:
+                return no("NOT BUILT. Problems:\n- " + "\n- ".join(errs))
+            self.draft = sheet
+            self.log("tool", f"built {sheet['name']}, {sheet['summary']}")
+            return ok("BUILT. Show the player this sheet and ask for a yes before finish_character:\n"
+                      + sheet_text(sheet) + "\n" + m.status(sheet))
+
+        @tool("finish_character", "After the player has said yes to the built sheet: write the one-paragraph "
+              "opening that starts their adventure. Play begins with it.",
+              {"type": "object", "properties": {"opening": {"type": "string"}}, "required": ["opening"]})
+        async def finish_character(a: dict[str, Any]) -> dict[str, Any]:
+            if not self.draft:
+                return no("no character built yet: use build_character")
+            if not str(a.get("opening") or "").strip():
+                return no("the opening is empty")
+            self.draft["opening"] = a["opening"].strip()
+            self.done = True
+            return ok("Done. The game starts now; say nothing more.")
+
+        return [srd_options, roll_ability_scores, build_character, finish_character]
+
+
+async def create_character(model: str) -> dict[str, Any]:
+    c = Creation()
+    server = create_sdk_mcp_server("dm", tools=c.tools())
+    SAVES.mkdir(exist_ok=True)
+    opts = ClaudeAgentOptions(
+        system_prompt=(HERE / "create_prompt.md").read_text(encoding="utf-8"), model=model, tools=[],
+        mcp_servers={"dm": server}, setting_sources=[], strict_mcp_config=True, max_turns=40, cwd=str(SAVES),
+        allowed_tools=[f"mcp__dm__{n}" for n in ("srd_options", "roll_ability_scores", "build_character",
+                                                 "finish_character")])
+    print("Character creation. Talk to the DM; /quit exits.")
+    async with ClaudeSDKClient(options=opts) as client:
+        await turn(client, c, "[Start] Greet the player and begin making their character.")
+        while not c.done:
+            line = (await asyncio.to_thread(input, "\n> ")).strip()
+            if line == "/quit":
+                sys.exit(0)
+            if line:
+                c.log("player", line)
+                await turn(client, c, line)
+    assert c.draft
+    return c.draft
+
+
 async def main() -> None:
     ap = argparse.ArgumentParser(description="Play with the AI DM.")
-    ap.add_argument("character", nargs="?", choices=("fighter", "rogue", "wizard"))
+    ap.add_argument("character", nargs="?", choices=("fighter", "rogue", "wizard", "new"))
     ap.add_argument("--resume", type=Path, help="a save file to continue")
     ap.add_argument("--model", default=MODEL)
     args = ap.parse_args()
@@ -188,11 +314,12 @@ async def main() -> None:
     if args.resume:
         game = Game(json.loads(args.resume.read_text(encoding="utf-8")), args.resume)
     elif args.character:
-        sheet = json.loads((HERE / "characters" / f"{args.character}.json").read_text(encoding="utf-8"))
+        sheet = (await create_character(args.model) if args.character == "new"
+                 else json.loads((HERE / "characters" / f"{args.character}.json").read_text(encoding="utf-8")))
         name = sheet["name"].split()[0].lower()
         game = Game({"sheet": sheet, "model": args.model}, SAVES / f"{name}-{time.strftime('%Y%m%d-%H%M%S')}.json")
     else:
-        ap.error("pick a character (fighter, rogue, wizard) or --resume a save")
+        ap.error("pick a character (fighter, rogue, wizard), make one (new), or --resume a save")
 
     server = create_sdk_mcp_server("dm", tools=game.tools())
     SAVES.mkdir(exist_ok=True)

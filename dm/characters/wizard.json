@@ -51,6 +51,10 @@
       "Shield",
       "Sleep"
     ],
+    "class": "wizard",
+    "max_level": 1,
+    "prepare_count": 4,
+    "prepare_from": "spellbook",
     "notes": "Prepare 4 spells from the spellbook after a long rest. Ritual Casting: Detect Magic can be cast as a ritual (10 minutes longer, no slot) straight from the spellbook, prepared or not."
   },
   "features": [

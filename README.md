@@ -14,6 +14,7 @@ Requires Python 3.12 and a Claude login in Claude Code (the DM runs on it throug
 
     py -3.12 -m pip install -r requirements.txt
     py -3.12 -m dm.play fighter        # or rogue, wizard
+    py -3.12 -m dm.play new            # make your own character with the DM first
     py -3.12 -m dm.play --resume saves/<file>.json
 
 Tests: `py -3.12 -m pytest -q tests`

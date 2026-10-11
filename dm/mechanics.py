@@ -12,7 +12,7 @@ import random
 import re
 from typing import Any
 
-_TERM = re.compile(r"\s*([+-])?\s*(?:(\d*)d(\d+)|(\d+))\s*", re.I)
+_TERM = re.compile(r"\s*([+-])?\s*(?:(\d*)d(\d+)|(\d+))\s*", re.IGNORECASE)
 
 
 class Refused(Exception):
@@ -113,6 +113,10 @@ def change_pc(sheet: dict[str, Any], ch: dict[str, Any]) -> tuple[dict[str, Any]
         back = [n for n, r in s.get("resources", {}).items() if r["recharge"] == "short" and r["left"] < r["max"]]
         for n in back:
             s["resources"][n]["left"] = s["resources"][n]["max"]
+        for lvl, slot in s.get("spell_slots", {}).items():
+            if slot.get("recharge") == "short" and slot["left"] < slot["max"]:
+                slot["left"] = slot["max"]
+                back.append(f"level-{lvl} spell slots")
         out.append("short rest" + (f": {', '.join(back)} restored" if back else ""))
 
     n = _int("hit_dice_spent")
@@ -195,15 +199,18 @@ def change_pc(sheet: dict[str, Any], ch: dict[str, Any]) -> tuple[dict[str, Any]
             slot["left"] += delta
             out.append(f"level-{lvl} spell slots: {slot['left']}/{slot['max']}")
 
-    for key, delta in (("use_resource", -1), ("restore_resource", 1)):
+    amount = ch.get("resource_amount") or 1
+    if not isinstance(amount, int) or amount < 1:
+        raise Refused("resource_amount must be a whole number of 1 or more")
+    for key, sign in (("use_resource", -1), ("restore_resource", 1)):
         name = ch.get(key)
         if name:
             res = s.get("resources", {}).get(name)
             if not res:
                 raise Refused(f"no resource {name!r}; the sheet has: {', '.join(s.get('resources', {})) or 'none'}")
-            if delta < 0 and res["left"] == 0:
-                raise Refused(f"{name} is used up (0/{res['max']}); it comes back on a {res['recharge']} rest")
-            res["left"] = min(res["max"], res["left"] + delta)
+            if sign < 0 and res["left"] < amount:
+                raise Refused(f"{name} has {res['left']}/{res['max']} left; it comes back on a {res['recharge']} rest")
+            res["left"] = min(res["max"], res["left"] + sign * amount)
             out.append(f"{name}: {res['left']}/{res['max']}")
 
     for it in ch.get("items_lost") or []:
@@ -239,6 +246,20 @@ def change_pc(sheet: dict[str, Any], ch: dict[str, Any]) -> tuple[dict[str, Any]
         _remove(s, c)
         out.append(f"condition removed: {c}")
 
+    if ch.get("prepare_spells") is not None:
+        out.append(_prepare(s, ch["prepare_spells"], bool(ch.get("long_rest"))))
+    for name in ch.get("spellbook_add") or []:
+        out.append(_spellbook_add(s, name))
+    if ch.get("ac_reset"):
+        s["ac_now"] = None
+        out.append(f"AC back to {s['ac']}")
+    if ch.get("ac_set") is not None:
+        v, why = ch["ac_set"], str(ch.get("ac_reason") or "").strip()
+        if not isinstance(v, int) or v < 0 or not why:
+            raise Refused("ac_set needs a whole number and ac_reason (what sets it, e.g. 'Mage Armor: 13 + DEX')")
+        s["ac_now"] = {"value": v, "reason": why}
+        out.append(f"AC now {v} ({why})")
+
     xp = _int("xp_gained")
     if xp:
         s["xp"] += xp
@@ -247,6 +268,59 @@ def change_pc(sheet: dict[str, Any], ch: dict[str, Any]) -> tuple[dict[str, Any]
     if not out:
         raise Refused("nothing to change: pass at least one field")
     return s, out
+
+
+def _max_slot_level(s: dict[str, Any]) -> int:
+    return max((int(k) for k, v in s.get("spell_slots", {}).items() if v["max"]), default=0)
+
+
+def _srd_spell(name: str) -> dict[str, Any]:
+    from dm import srd
+
+    try:
+        return srd.spell(name)
+    except srd.Bad:
+        raise Refused(f"no SRD spell {name!r}") from None
+
+
+def _prepare(s: dict[str, Any], names: list[str], long_rest: bool) -> str:
+    sc = s.get("spellcasting") or {}
+    if "prepare_count" not in sc:
+        raise Refused("this character doesn't prepare spells")
+    if not long_rest:
+        raise Refused("prepared spells change when a long rest finishes: pass prepare_spells together with long_rest")
+    always, picked = set(sc.get("always_prepared", [])), []
+    for n in names:
+        sp = _srd_spell(n)
+        if sp["name"] in always or sp["name"] in picked:
+            continue
+        if sc["prepare_from"] == "spellbook":
+            if sp["name"] not in sc["spellbook"]:
+                raise Refused(f"{sp['name']} is not in the spellbook: {', '.join(sc['spellbook'])}")
+        elif not any(c["index"] == sc["class"] for c in sp["classes"]):
+            raise Refused(f"{sp['name']} is not on the {sc['class']} spell list")
+        if not 1 <= sp["level"] <= _max_slot_level(s):
+            raise Refused(f"{sp['name']} is level {sp['level']}; prepared spells are level 1-{_max_slot_level(s)}")
+        picked.append(sp["name"])
+    if not 1 <= len(picked) <= sc["prepare_count"]:
+        raise Refused(f"prepare 1 to {sc['prepare_count']} spells (always-prepared spells don't count)")
+    sc["prepared"] = picked
+    return "prepared: " + ", ".join(picked)
+
+
+def _spellbook_add(s: dict[str, Any], name: str) -> str:
+    sc = s.get("spellcasting") or {}
+    if "spellbook" not in sc:
+        raise Refused("only a wizard has a spellbook")
+    sp = _srd_spell(name)
+    if not any(c["index"] == "wizard" for c in sp["classes"]):
+        raise Refused(f"{sp['name']} is not a wizard spell")
+    if not 1 <= sp["level"] <= _max_slot_level(s):
+        raise Refused(f"{sp['name']} is level {sp['level']}; a wizard can copy spells of level 1-{_max_slot_level(s)}")
+    if sp["name"] in sc["spellbook"]:
+        raise Refused(f"{sp['name']} is already in the spellbook")
+    sc["spellbook"].append(sp["name"])
+    return f"{sp['name']} copied into the spellbook (record the cost: 50 gp and 2 hours per spell level)"
 
 
 def _add(s: dict[str, Any], c: str) -> None:
@@ -263,10 +337,15 @@ def status(s: dict[str, Any]) -> str:
     """What changes during play, for the DM every turn and for the player on request."""
     hp = s["hp"]
     lines = [f"HP {hp['current']}/{hp['max']}" + (f" (+{hp['temp']} temporary)" if hp["temp"] else "")
-             + f" · AC {s['ac']} · hit dice {s['hit_dice']['left']}/{s['hit_dice']['max']} {s['hit_dice']['die']}"
+             + f" · AC {ac_text(s)} · hit dice {s['hit_dice']['left']}/{s['hit_dice']['max']} {s['hit_dice']['die']}"
              + f" · XP {s['xp']}"]
     if s.get("spell_slots"):
         lines.append("Spell slots: " + ", ".join(f"level {k}: {v['left']}/{v['max']}" for k, v in s["spell_slots"].items()))
+    sc = s.get("spellcasting") or {}
+    if sc.get("prepared") is not None:
+        lines.append("Prepared spells: " + ", ".join(sc.get("always_prepared", []) + sc["prepared"]))
+    if sc.get("spellbook"):
+        lines.append("Spellbook: " + ", ".join(sc["spellbook"]))
     if s.get("resources"):
         lines.append("Features: " + ", ".join(f"{k} {v['left']}/{v['max']} ({v['recharge']} rest)"
                                               for k, v in s["resources"].items()))
@@ -277,6 +356,11 @@ def status(s: dict[str, Any]) -> str:
     lines.append("Money: " + coins_text(s["coins_cp"]))
     lines.append("Items: " + ", ".join(f"{n}" + (f" ×{q}" if q > 1 else "") for n, q in s["items"].items()))
     return "\n".join(lines)
+
+
+def ac_text(s: dict[str, Any]) -> str:
+    now = s.get("ac_now")
+    return f"{now['value']} ({now['reason']}; normally {s['ac']})" if now else str(s["ac"])
 
 
 # ---------- the fight tracker ----------
@@ -366,7 +450,7 @@ def fight_text(f: dict[str, Any] | None, pc_sheet: dict[str, Any]) -> str:
         mark = "→" if i == f["turn"] else " "
         if c["pc"]:
             lines.append(f"{mark} {c['name']} (the PC, initiative {c['initiative']}): HP {pc_sheet['hp']['current']}/"
-                         f"{pc_sheet['hp']['max']}, AC {pc_sheet['ac']}")
+                         f"{pc_sheet['hp']['max']}, AC {(pc_sheet.get('ac_now') or {}).get('value', pc_sheet['ac'])}")
         else:
             lines.append(f"{mark} {_creature_text(c)}")
     return "\n".join(lines)
