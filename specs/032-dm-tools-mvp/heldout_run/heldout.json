@@ -1,0 +1,1688 @@
+[
+ {
+  "id": "H01",
+  "kind": "prose_target",
+  "player": "I swing my cudgel at the hound before it reaches me.",
+  "ents": {},
+  "turns": [
+   {
+    "input": "I swing my cudgel at the hound before it reaches me.",
+    "passage": "You haul the cudgel up and round as the hound leaves the crates, the wood whistling through the rain. The quay stones are slick under your heels, and the wolfhound is already in the air, a grey wall of fur and teeth with a low growl tearing out of it. Water sprays from its coat. Her eyes are fixed on your throat. There is no time to think it over; the swing is already yours, and the next heartbeat belongs to the hound.",
+    "tools": [
+     {
+      "tool": "change",
+      "args": "{\"kind\": \"new_item\", \"who\": \"pc.wren\", \"what\": \"cudgel\", \"to\": \"pc.wren\", \"amount\": 1, \"note\": \"Wren's declared weapon; she has it in hand.\"}",
+      "out": "done: cudgel (item.cudgel) now held by Wren"
+     },
+     {
+      "tool": "propose_roll",
+      "args": "{\"goal\": \"Meet the hound with the cudgel\", \"verb\": \"verb.strike\", \"target\": \"the wolfhound\", \"how\": \"Wren plants her feet on the wet stones and swings the cudgel low and hard across the hound's path before its jaws close on her.\", \"attribute\": \"fresh\", \"difficulty\": \"risky\", \"why_uncertain\": \"The hound is fast and large, the stones are slick with rain, and it is already in the air.\", \"stakes\": \"risky\", \"fail_cost\": \"cost.harm\", \"change_kind\": \"harm\", \"change_what\": \"the wolfhound\", \"change_whom\": \"the wolfhound\"}",
+      "out": "NOT POSSIBLE AS PROPOSED (refused): PR-01-2 step 10 (threatened_cost): cost.twist only when no other entry is a candidate (cost.drain, cost.time, cost.exposure, cost.closed_door fit)\n(New on record, here now: the wolfhound (npc.lom_underhill). Use these ids from now on.)"
+     },
+     {
+      "tool": "propose_roll",
+      "args": "{\"goal\": \"Meet the hound with the cudgel\", \"verb\": \"verb.strike\", \"target\": \"npc.lom_underhill\", \"how\": \"Wren plants her feet on the wet stones and swings the cudgel low and hard across the hound's path before its jaws close on her.\", \"attribute\": \"fresh\", \"difficulty\": \"risky\", \"why_uncertain\": \"The hound is fast and large, the stones are slick with rain, and it is already in the air.\", \"stakes\": \"risky\", \"fail_cost\": \"cost.drain\", \"change_kind\": \"harm\", \"change_what\": \"the wolfhound\", \"change_whom\": \"npc.lom_underhill\"}",
+      "out": "NOT POSSIBLE AS PROPOSED (refused): PR-01-2 step 10 (threatened_cost): cost.twist only when no other entry is a candidate (cost.drain, cost.time, cost.exposure, cost.closed_door fit)"
+     },
+     {
+      "tool": "mood",
+      "args": "{\"npc\": \"npc.lom_underhill\", \"mood\": \"closed\", \"why\": \"charging to bite her on the quay\"}",
+      "out": "done: the wolfhound is closed toward the character for this scene (a memory; change it when the fiction does)."
+     },
+     {
+      "tool": "propose_roll",
+      "args": "{\"goal\": \"Meet the hound with the cudgel\", \"verb\": \"verb.strike\", \"target\": \"npc.lom_underhill\", \"how\": \"Wren plants her feet on the wet stones and swings the cudgel low and hard across the hound's path before its jaws close on her.\", \"attribute\": \"fresh\", \"difficulty\": \"risky\", \"why_uncertain\": \"The hound is fast and large, the stones are slick with rain, and it is already in the air.\", \"stakes\": \"risky\", \"nonlethal\": true, \"fail_cost\": \"cost.drain\", \"change_kind\": \"harm\", \"change_what\": \"the wolfhound\", \"change_whom\": \"npc.lom_underhill\"}",
+      "out": "NOT POSSIBLE AS PROPOSED (refused): PR-01-2 step 10 (threatened_cost): cost.twist only when no other entry is a candidate (cost.drain, cost.time, cost.exposure, cost.closed_door fit)"
+     },
+     {
+      "tool": "propose_roll",
+      "args": "{\"goal\": \"Meet the hound with the cudgel\", \"verb\": \"verb.strike\", \"target\": \"npc.lom_underhill\", \"how\": \"Wren plants her feet on the wet stones and swings the cudgel low and hard across the hound's path before its jaws close on her.\", \"attribute\": \"fresh\", \"difficulty\": \"risky\", \"why_uncertain\": \"The hound is fast and large, the stones are slick with rain, and it is already in the air.\", \"stakes\": \"risky\", \"nonlethal\": true, \"fail_cost\": \"cost.exposure\", \"change_kind\": \"harm\", \"change_what\": \"the wolfhound\", \"change_whom\": \"npc.lom_underhill\"}",
+      "out": "NOT POSSIBLE AS PROPOSED (refused): PR-01-2 step 10 (threatened_cost): cost.twist only when no other entry is a candidate (cost.drain, cost.time, cost.exposure, cost.closed_door fit)"
+     }
+    ],
+    "refusals": [],
+    "said": [],
+    "told_dropped": [],
+    "log_only": [],
+    "foe_turns": [],
+    "paused": false
+   }
+  ],
+  "after": {
+   "ents": {
+    "npc.tam_harlan": [
+     "Tam Harlan",
+     "ferryman",
+     "exists"
+    ],
+    "npc.sela_vey": [
+     "Sela Vey",
+     "harbour watch",
+     "exists"
+    ],
+    "npc.lom_underhill": [
+     "Lom Underhill",
+     "wolfhound",
+     "exists"
+    ]
+   },
+   "fight_live": false,
+   "pc_vit": 13,
+   "down": []
+  },
+  "verdict": "fail",
+  "note": "hound entities afterwards: []"
+ },
+ {
+  "id": "H02",
+  "kind": "prose_target",
+  "player": "I try to talk the eel seller down to half price for the whole barrel.",
+  "ents": {},
+  "turns": [
+   {
+    "input": "I try to talk the eel seller down to half price for the whole barrel.",
+    "passage": "You hold up two fingers' worth of coin and name half. Orla doesn't look at the coin. She looks at your face, then down the quay toward the other stalls, and laughs once through her nose. \"Last week's catch, those are. Mine went into the brine this morning.\" She slaps a wet hand on the barrel rim, and eels slide and knot under the lid. \"Half for the lot? Go and buy your cheap ones, then. Two-thirds and I'll bag them myself before the lamps go out.\" Her thumb rests on the scale pan, and she waits for you to answer.",
+    "tools": [
+     {
+      "tool": "change",
+      "args": "{\"kind\": \"new_npc\", \"who\": \"npc.eel_seller\", \"what\": \"an eel seller at a wooden barrel\", \"to\": \"loc.the_eel_market\", \"note\": \"Wet-sleeved seller who named a price for the whole barrel.\"}",
+      "out": "done: someone new is here: npc.orla_tanner: an eel seller at a wooden barrel (she/her): an eel seller at a wooden barrel; can: no licences on record"
+     },
+     {
+      "tool": "propose_roll",
+      "args": "{\"goal\": \"Haggle the barrel down to half\", \"verb\": \"verb.talk\", \"target\": \"npc.eel_seller\", \"how\": \"Wren offers half the asked price for the whole barrel, pointing at the slack eels and the other sellers' cheaper stalls to press her case\", \"why_uncertain\": \"The seller knows her eels are fresh and her price is fair; she may hold firm or take offense at a lowball\", \"stakes\": \"risky\", \"nonlethal\": true, \"fail_cost\": \"cost.time\", \"change_kind\": \"persuade_to\", \"change_what\": \"the price of the whole barrel\", \"change_whom\": \"npc.eel_seller\"}",
+      "out": "REFUSED: no one or nothing on record called 'npc.eel_seller' (use an id from the situation, or none; for a thing, leave `target` empty and say it in `how`)"
+     },
+     {
+      "tool": "propose_roll",
+      "args": "{\"goal\": \"Haggle the barrel down to half\", \"verb\": \"verb.talk\", \"target\": \"npc.orla_tanner\", \"how\": \"Wren offers half the asked price for the whole barrel, pointing at the slack eels and the other sellers' cheaper stalls to press her case\", \"attribute\": \"focus\", \"difficulty\": \"hard\", \"why_uncertain\": \"The seller knows her eels are fresh and her price is fair; she may hold firm or take offense at a lowball\", \"stakes\": \"risky\", \"nonlethal\": true, \"fail_cost\": \"cost.time\", \"change_kind\": \"persuade_to\", \"change_what\": \"the price of the whole barrel\", \"change_whom\": \"npc.orla_tanner\"}",
+      "out": "NOT POSSIBLE AS PROPOSED (refused): PR-01-2 step 10 (threatened_cost): cost.twist only when no other entry is a candidate (cost.drain, cost.time, cost.exposure, cost.closed_door fit)"
+     },
+     {
+      "tool": "mood",
+      "args": "{\"npc\": \"npc.orla_tanner\", \"mood\": \"guarded\", \"why\": \"eyes your purse; wary of a lowball\"}",
+      "out": "done: an eel seller at a wooden barrel is guarded toward the character for this scene (a memory; change it when the fiction does)."
+     },
+     {
+      "tool": "propose_roll",
+      "args": "{\"goal\": \"Haggle the barrel down to half\", \"verb\": \"verb.talk\", \"target\": \"npc.orla_tanner\", \"how\": \"Wren offers half the asked price for the whole barrel, pointing at the slack eels and the cheaper stalls down the quay to press her case\", \"attribute\": \"focus\", \"difficulty\": \"normal\", \"why_uncertain\": \"Orla knows her eels are fresh and her price is fair; she may hold firm or take offense at a lowball\", \"stakes\": \"risky\", \"nonlethal\": true, \"fail_cost\": \"cost.time\", \"change_kind\": \"persuade_to\", \"change_what\": \"the price of the whole barrel\", \"change_whom\": \"npc.orla_tanner\"}",
+      "out": "NOT POSSIBLE AS PROPOSED (refused): PR-01-2 step 10 (threatened_cost): cost.twist only when no other entry is a candidate (cost.drain, cost.time, cost.exposure, cost.closed_door fit)"
+     },
+     {
+      "tool": "propose_roll",
+      "args": "{\"goal\": \"Haggle the barrel down to half\", \"verb\": \"verb.talk\", \"target\": \"npc.orla_tanner\", \"how\": \"Wren offers half the asked price for the whole barrel, pointing at the slack eels and the cheaper stalls down the quay to press her case\", \"attribute\": \"focus\", \"difficulty\": \"normal\", \"why_uncertain\": \"Orla knows her eels are fresh and her price is fair; she may hold firm or take offense at a lowball\", \"stakes\": \"risky\", \"nonlethal\": true, \"fail_cost\": \"cost.exposure\", \"change_kind\": \"persuade_to\", \"change_what\": \"the price of the whole barrel\", \"change_whom\": \"npc.orla_tanner\"}",
+      "out": "NOT POSSIBLE AS PROPOSED (refused): PR-01-2 step 10 (threatened_cost): cost.twist only when no other entry is a candidate (cost.drain, cost.time, cost.exposure, cost.closed_door fit)"
+     }
+    ],
+    "refusals": [
+     {
+      "tool": "propose_roll",
+      "kind": "",
+      "args": "{\"goal\": \"Haggle the barrel down to half\", \"verb\": \"verb.talk\", \"target\": \"npc.eel_seller\", \"how\": \"Wren offers half the asked price for the whole barrel, pointing at the slack eels and the other sellers' cheaper stalls to press her case\", \"why_uncertain\": \"The seller knows her eels are fresh and her price is fair; she may hold firm or take offense at a lowball\", \"stakes\": \"risky\", \"nonlethal\": true, \"fail_cost\": \"cost.time\", \"change_kind\": \"persuade_to\", \"change_what\": \"the price of the whole barrel\", \"change_whom\": \"npc.eel_seller\"}",
+      "why": "REFUSED: no one or nothing on record called 'npc.eel_seller' (use an id from the situation, or none; for a thing, leave `target` empty and say it in `how`)"
+     }
+    ],
+    "said": [
+     {
+      "id": "said.1",
+      "speaker": "npc.orla_tanner",
+      "words": "Last week's catch, those are. Mine went into the brine this morning."
+     },
+     {
+      "id": "said.2",
+      "speaker": "npc.orla_tanner",
+      "words": "Half for the lot? Go and buy your cheap ones, then. Two-thirds and I'll bag them myself before the lamps go out."
+     }
+    ],
+    "told_dropped": [],
+    "log_only": [],
+    "foe_turns": [],
+    "paused": false
+   }
+  ],
+  "after": {
+   "ents": {
+    "npc.tam_harlan": [
+     "Tam Harlan",
+     "ferryman",
+     "exists"
+    ],
+    "npc.sela_vey": [
+     "Sela Vey",
+     "harbour watch",
+     "exists"
+    ],
+    "npc.orla_tanner": [
+     "Orla Tanner",
+     "an eel seller at a wooden barrel",
+     "exists"
+    ]
+   },
+   "fight_live": false,
+   "pc_vit": 13,
+   "down": []
+  },
+  "verdict": "fail",
+  "note": "REFUSED: REFUSED: no one or nothing on record called 'npc.eel_seller' (use an id from the situation, or none; for a thing, leave "
+ },
+ {
+  "id": "H03",
+  "kind": "prose_target",
+  "player": "I study the rider on the ridge: who are they, what do they carry?",
+  "ents": {},
+  "turns": [
+   {
+    "input": "I study the rider on the ridge: who are they, what do they carry?",
+    "passage": "You shade your eyes and hold still in the scrub, watching the crest against the bruised sky. The rider does not move. The grey horse shifts once, and in the last of the light you make out a dark cloak with no clear colours, a hood hiding the face, and a long bundle lashed behind the saddle, wrapped in oilcloth. The shape is too far off to name. Your eyes already ache from the strain, and the rider's head has turned, slowly, toward the stretch of road where you lie. You can keep watching and risk being seen, or slip back down the slope toward the road while the dusk still hides you.",
+    "tools": [
+     {
+      "tool": "propose_roll",
+      "args": "{\"goal\": \"Study the rider on the ridge\", \"verb\": \"verb.observe\", \"target\": \"the rider on the grey horse\", \"how\": \"Wren shades her eyes against the failing light and watches the crest, searching for the rider's colours, face, and whatever is strapped to the saddle, staying low so she is not noticed.\", \"attribute\": \"focus\", \"difficulty\": \"moderate\", \"why_uncertain\": \"The ridge is far off, the light is dying, and the rider is still; the detail she needs may be out of reach, and watching too hard could draw their eye.\", \"stakes\": \"risky\", \"fail_cost\": \"cost.exposure\", \"change_kind\": \"learn\", \"change_what\": \"the rider on the ridge\", \"change_whom\": \"pc.wren\"}",
+      "out": "REFUSED: no one or nothing on record called 'the rider on the grey horse' (use an id from the situation, or none; for a thing, leave `target` empty and say it in `how`)"
+     },
+     {
+      "tool": "propose_roll",
+      "args": "{\"goal\": \"Study the rider on the ridge\", \"verb\": \"verb.observe\", \"how\": \"Wren shades her eyes against the failing light and watches the crest, searching for the rider's colours, face, and whatever is strapped to the grey horse's saddle, keeping low so she is not noticed.\", \"attribute\": \"focus\", \"difficulty\": \"moderate\", \"why_uncertain\": \"The ridge is far off, the light is dying, and the rider is still; the detail she needs may be out of reach, and watching too hard could draw their eye.\", \"stakes\": \"risky\", \"fail_cost\": \"cost.exposure\", \"change_kind\": \"learn\", \"change_what\": \"the rider on the ridge\", \"change_whom\": \"pc.wren\"}",
+      "out": "NOT POSSIBLE AS PROPOSED (refused): PR-01-2 step 10 (threatened_cost): cost.twist only when no other entry is a candidate (cost.drain, cost.time, cost.exposure fit)"
+     },
+     {
+      "tool": "propose_roll",
+      "args": "{\"goal\": \"Study the rider on the ridge\", \"verb\": \"verb.observe\", \"how\": \"Wren shades her eyes against the failing light and watches the crest, searching for the rider's colours, face, and whatever is strapped behind the saddle of the grey horse, keeping low so she is not noticed.\", \"attribute\": \"focus\", \"difficulty\": \"moderate\", \"why_uncertain\": \"The ridge is far off, the light is dying, and the rider is still; the detail she needs may be out of reach, and watching too hard could draw their eye.\", \"stakes\": \"risky\", \"fail_cost\": \"cost.exposure\", \"change_kind\": \"learn\", \"change_what\": \"the rider on the ridge\", \"change_whom\": \"pc.wren\"}",
+      "out": "NOT POSSIBLE AS PROPOSED (refused): PR-01-2 step 10 (threatened_cost): cost.twist only when no other entry is a candidate (cost.drain, cost.time, cost.exposure fit)"
+     }
+    ],
+    "refusals": [
+     {
+      "tool": "propose_roll",
+      "kind": "",
+      "args": "{\"goal\": \"Study the rider on the ridge\", \"verb\": \"verb.observe\", \"target\": \"the rider on the grey horse\", \"how\": \"Wren shades her eyes against the failing light and watches the crest, searching for the rider's colours, face, and whatever is strapped to the saddle, staying low so she is not noticed.\", \"attribute\": \"focus\", \"difficulty\": \"moderate\", \"why_uncertain\": \"The ridge is far off, the light is dying, and the rider is still; the detail she needs may be out of reach, and watching too hard could draw their eye.\", \"stakes\": \"risky\", \"fail_cost\": \"cost.exposure\", \"change_kind\": \"learn\", \"change_what\": \"the rider on the ridge\", \"change_whom\": \"pc.wren\"}",
+      "why": "REFUSED: no one or nothing on record called 'the rider on the grey horse' (use an id from the situation, or none; for a thing, leave `target` empty and say it in `how`)"
+     }
+    ],
+    "said": [],
+    "told_dropped": [],
+    "log_only": [],
+    "foe_turns": [],
+    "paused": false
+   }
+  ],
+  "after": {
+   "ents": {
+    "npc.tam_harlan": [
+     "Tam Harlan",
+     "ferryman",
+     "exists"
+    ],
+    "npc.sela_vey": [
+     "Sela Vey",
+     "harbour watch",
+     "exists"
+    ]
+   },
+   "fight_live": false,
+   "pc_vit": 13,
+   "down": []
+  },
+  "verdict": "fail",
+  "note": "REFUSED: REFUSED: no one or nothing on record called 'the rider on the grey horse' (use an id from the situation, or none; for a "
+ },
+ {
+  "id": "H04",
+  "kind": "prose_target",
+  "player": "I creep along the wall's shadow and slip past the sentry to the postern.",
+  "ents": {},
+  "turns": [
+   {
+    "input": "I creep along the wall's shadow and slip past the sentry to the postern.",
+    "passage": "You press yourself into the wall's shadow, shoulder against cold stone, and let your breath go slow. The sentry reaches the end of his pace and turns, and his lantern drags a pale arc across the stones a single stride from your boot. Beyond the gap he has been guarding, the postern door waits in deep shadow, its iron latch a dark shape you could reach in a dozen quiet steps. But his path runs straight across the open ground between you and it, and his boots ring on every stone he crosses. The next turn of the lantern is only a few breaths away.",
+    "tools": [
+     {
+      "tool": "propose_roll",
+      "args": "{\"goal\": \"Slip past the sentry to the postern\", \"verb\": \"verb.sneak\", \"target\": \"the sentry on the wall-walk\", \"how\": \"Keep to the wall's shadow, placing each step where the lantern's swing doesn't reach, and pass beneath the sentry's path to the postern door.\", \"attribute\": \"dexterity\", \"difficulty\": \"moderate\", \"why_uncertain\": \"The sentry paces back and forth and his lantern swings across the wall; one glance in the wrong moment gives you away.\", \"stakes\": \"risky\", \"nonlethal\": true, \"fail_cost\": \"cost.exposure\", \"change_kind\": \"move_to\", \"change_what\": \"the postern door\", \"change_whom\": \"pc.wren\"}",
+      "out": "REFUSED: no one or nothing on record called 'the sentry on the wall-walk' (use an id from the situation, or none; for a thing, leave `target` empty and say it in `how`)"
+     },
+     {
+      "tool": "propose_roll",
+      "args": "{\"goal\": \"Slip past the sentry to the postern\", \"verb\": \"verb.sneak\", \"how\": \"Keep to the wall's shadow, placing each step where the lantern's swing doesn't reach, and pass beneath the paced path of the sentry on the wall-walk to the postern door.\", \"attribute\": \"dexterity\", \"difficulty\": \"moderate\", \"why_uncertain\": \"The sentry paces back and forth and his lantern swings across the wall; one glance in the wrong moment gives you away.\", \"stakes\": \"risky\", \"nonlethal\": true, \"fail_cost\": \"cost.exposure\", \"change_kind\": \"move_to\", \"change_what\": \"the postern door\", \"change_whom\": \"pc.wren\"}",
+      "out": "NOT POSSIBLE AS PROPOSED (refused): PR-01-2 step 10 (threatened_cost): cost.twist only when no other entry is a candidate (cost.drain, cost.time, cost.exposure fit)"
+     },
+     {
+      "tool": "propose_roll",
+      "args": "{\"goal\": \"Slip past the sentry to the postern\", \"verb\": \"verb.sneak\", \"how\": \"Keep to the wall's shadow, placing each step where the lantern's swing does not reach, and pass beneath the paced path of the sentry on the wall-walk to the postern door.\", \"attribute\": \"dexterity\", \"difficulty\": \"moderate\", \"why_uncertain\": \"The sentry paces back and forth and his lantern swings across the wall; one glance in the wrong moment gives you away.\", \"stakes\": \"risky\", \"nonlethal\": true, \"fail_cost\": \"cost.exposure\", \"change_kind\": \"move_to\", \"change_what\": \"the postern door\", \"change_whom\": \"pc.wren\"}",
+      "out": "NOT POSSIBLE AS PROPOSED (refused): PR-01-2 step 10 (threatened_cost): cost.twist only when no other entry is a candidate (cost.drain, cost.time, cost.exposure fit)"
+     },
+     {
+      "tool": "change",
+      "args": "{\"kind\": \"new_npc\", \"who\": \"npc.wall_sentry\", \"what\": \"a sentry pacing the wall-walk above the postern gate\", \"to\": \"loc.the_postern_wall\", \"note\": \"Lantern-bearing sentry on the wall-walk; not yet on record.\"}",
+      "out": "done: someone new is here: npc.quill_kettle: a sentry pacing the wall-walk above the postern gate (she/her): a sentry pacing the wall-walk above the postern gate; can: no licences on record"
+     },
+     {
+      "tool": "propose_roll",
+      "args": "{\"goal\": \"Slip past the sentry to the postern\", \"verb\": \"verb.sneak\", \"target\": \"npc.quill_kettle\", \"how\": \"Keep to the wall's shadow, placing each step where the lantern's swing doesn't reach, and pass beneath the sentry's paced path to the postern door.\", \"attribute\": \"dexterity\", \"difficulty\": \"moderate\", \"why_uncertain\": \"The sentry paces back and forth and his lantern swings across the wall; one glance in the wrong moment gives you away.\", \"stakes\": \"risky\", \"nonlethal\": true, \"fail_cost\": \"cost.exposure\", \"change_kind\": \"move_to\", \"change_what\": \"the postern door\", \"change_whom\": \"pc.wren\"}",
+      "out": "NOT POSSIBLE AS PROPOSED (refused): PR-01-2 step 10 (threatened_cost): cost.twist only when no other entry is a candidate (cost.drain, cost.time, cost.exposure, cost.closed_door fit)"
+     },
+     {
+      "tool": "mood",
+      "args": "{\"npc\": \"npc.quill_kettle\", \"mood\": \"guarded\", \"why\": \"on watch; wary of anything moving in the dark\"}",
+      "out": "done: a sentry pacing the wall-walk above the postern gate is guarded toward the character for this scene (a memory; change it when the fiction does)."
+     }
+    ],
+    "refusals": [
+     {
+      "tool": "propose_roll",
+      "kind": "",
+      "args": "{\"goal\": \"Slip past the sentry to the postern\", \"verb\": \"verb.sneak\", \"target\": \"the sentry on the wall-walk\", \"how\": \"Keep to the wall's shadow, placing each step where the lantern's swing doesn't reach, and pass beneath the sentry's path to the postern door.\", \"attribute\": \"dexterity\", \"difficulty\": \"moderate\", \"why_uncertain\": \"The sentry paces back and forth and his lantern swings across the wall; one glance in the wrong moment gives you away.\", \"stakes\": \"risky\", \"nonlethal\": true, \"fail_cost\": \"cost.exposure\", \"change_kind\": \"move_to\", \"change_what\": \"the postern door\", \"change_whom\": \"pc.wren\"}",
+      "why": "REFUSED: no one or nothing on record called 'the sentry on the wall-walk' (use an id from the situation, or none; for a thing, leave `target` empty and say it in `how`)"
+     }
+    ],
+    "said": [],
+    "told_dropped": [],
+    "log_only": [],
+    "foe_turns": [],
+    "paused": false
+   }
+  ],
+  "after": {
+   "ents": {
+    "npc.tam_harlan": [
+     "Tam Harlan",
+     "ferryman",
+     "exists"
+    ],
+    "npc.sela_vey": [
+     "Sela Vey",
+     "harbour watch",
+     "exists"
+    ],
+    "npc.quill_kettle": [
+     "Quill Kettle",
+     "a sentry pacing the wall-walk above the postern gate",
+     "exists"
+    ]
+   },
+   "fight_live": false,
+   "pc_vit": 13,
+   "down": []
+  },
+  "verdict": "fail",
+  "note": "REFUSED: REFUSED: no one or nothing on record called 'the sentry on the wall-walk' (use an id from the situation, or none; for a "
+ },
+ {
+  "id": "H05",
+  "kind": "prose_target",
+  "player": "I grab the drunk by the collar and pin him against the wall.",
+  "ents": {},
+  "turns": [
+   {
+    "input": "I grab the drunk by the collar and pin him against the wall.",
+    "passage": "You catch his collar as he staggers into you, turn your hip under his arm, and steer him back against the cold tavern wall. He outweighs you, and he reeks of spirits, but the fight has already drained out of him. His knees fold half a step and he sags against the stone, blinking at you as if you were a ghost. The wet cobbles glisten under your boots. \"Easy, easy,\" he slurs, palms open. \"Didn't mean to fall on you. Didn't mean anything.\" His eyes slide past your shoulder toward the tavern door, where voices are rising inside.",
+    "tools": [
+     {
+      "tool": "propose_roll",
+      "args": "{\"goal\": \"Pin the drunk against the wall\", \"verb\": \"verb.grapple\", \"target\": \"the drunk who lurched out of the tavern door\", \"how\": \"Wren catches his collar mid-stagger, turns her weight under his arm, and drives him back against the tavern wall without drawing a blade.\", \"attribute\": \"exert\", \"difficulty\": \"moderate\", \"why_uncertain\": \"He is drunk and loose, but he is larger than she is and flailing, and wet cobbles could take her footing as well as his.\", \"stakes\": \"risky\", \"nonlethal\": true, \"fail_cost\": \"cost.footing\"}",
+      "out": "NOT POSSIBLE AS PROPOSED (refused): PR-01-2 step 10 (threatened_cost): cost.twist only when no other entry is a candidate (cost.drain, cost.time, cost.exposure, cost.closed_door fit)\n(New on record, here now: the drunk who lurched out of the tavern door (npc.edda_eastry). Use these ids from now on.)"
+     },
+     {
+      "tool": "propose_roll",
+      "args": "{\"goal\": \"Pin the drunk against the wall\", \"verb\": \"verb.grapple\", \"target\": \"npc.edda_eastry\", \"how\": \"Wren catches his collar mid-stagger, turns her weight under his arm, and drives him back against the tavern wall without drawing a blade.\", \"attribute\": \"exert\", \"difficulty\": \"moderate\", \"why_uncertain\": \"He is drunk and loose, but he is larger than she is and flailing, and wet cobbles could take her footing as well as his.\", \"stakes\": \"risky\", \"nonlethal\": true, \"fail_cost\": \"cost.drain\", \"change_whom\": \"npc.edda_eastry\"}",
+      "out": "NOT POSSIBLE AS PROPOSED (refused): PR-01-2 step 10 (threatened_cost): cost.twist only when no other entry is a candidate (cost.drain, cost.time, cost.exposure, cost.closed_door fit)"
+     },
+     {
+      "tool": "mood",
+      "args": "{\"npc\": \"npc.edda_eastry\", \"mood\": \"guarded\", \"why\": \"drunk, startled, seized by a stranger\"}",
+      "out": "done: the drunk who lurched out of the tavern door is guarded toward the character for this scene (a memory; change it when the fiction does)."
+     },
+     {
+      "tool": "propose_roll",
+      "args": "{\"goal\": \"Pin the drunk to the wall\", \"verb\": \"verb.force\", \"target\": \"npc.edda_eastry\", \"how\": \"Wren keeps her grip on his collar, turns her weight under his arm, and presses him back against the tavern wall with a forearm, no blade drawn.\", \"attribute\": \"exert\", \"difficulty\": \"moderate\", \"why_uncertain\": \"He is drunk and loose, but he is larger than she is and flailing, and the wet cobbles could take her footing as well as his.\", \"stakes\": \"risky\", \"nonlethal\": true, \"fail_cost\": \"cost.drain\", \"change_what\": \"the drunk pinned to the wall\", \"change_whom\": \"npc.edda_eastry\"}",
+      "out": "NOT POSSIBLE AS PROPOSED (refused): PR-01-2 step 10 (threatened_cost): cost.twist only when no other entry is a candidate (cost.drain, cost.time, cost.exposure, cost.closed_door fit)"
+     },
+     {
+      "tool": "propose_roll",
+      "args": "{\"goal\": \"Pin the drunk against the wall\", \"verb\": \"verb.grapple\", \"target\": \"npc.edda_eastry\", \"how\": \"Wren keeps her grip on his collar, turns her weight under his arm, and drives him back against the tavern wall without drawing a blade.\", \"attribute\": \"exert\", \"difficulty\": \"moderate\", \"why_uncertain\": \"He is drunk and loose, but he is larger than she is and flailing, and the wet cobbles could take her footing as well as his.\", \"stakes\": \"risky\", \"nonlethal\": true, \"fail_cost\": \"cost.time\", \"change_kind\": \"move_to\", \"change_what\": \"the drunk pinned against the tavern wall\", \"change_whom\": \"npc.edda_eastry\"}",
+      "out": "NOT POSSIBLE AS PROPOSED (refused): PR-01-2 step 10 (threatened_cost): cost.twist only when no other entry is a candidate (cost.drain, cost.time, cost.exposure, cost.closed_door fit)"
+     }
+    ],
+    "refusals": [],
+    "said": [
+     {
+      "id": "said.1",
+      "speaker": "npc.edda_eastry",
+      "words": "Easy, easy. Didn't mean to fall on you. Didn't mean anything."
+     }
+    ],
+    "told_dropped": [],
+    "log_only": [],
+    "foe_turns": [],
+    "paused": false
+   }
+  ],
+  "after": {
+   "ents": {
+    "npc.tam_harlan": [
+     "Tam Harlan",
+     "ferryman",
+     "exists"
+    ],
+    "npc.sela_vey": [
+     "Sela Vey",
+     "harbour watch",
+     "exists"
+    ],
+    "npc.edda_eastry": [
+     "Edda Eastry",
+     "drunk who lurched out of the tavern door",
+     "exists"
+    ]
+   },
+   "fight_live": false,
+   "pc_vit": 13,
+   "down": []
+  },
+  "verdict": "pass",
+  "note": "accepted"
+ },
+ {
+  "id": "H06",
+  "kind": "prose_target",
+  "player": "I put my shoulder to the hatch and heave it open.",
+  "ents": {},
+  "turns": [
+   {
+    "input": "I put my shoulder to the hatch and heave it open.",
+    "passage": "You set your shoulder under the hatch at the foot of the stair and brace your boots on the damp stone. Wood groans somewhere above you. The rotten beam pinning the hatch from the top shifts, and a fine rain of grit sifts down past your collar. Under your palm the timber is cold and soft, swollen tight in its frame. Nothing about it wants to move quickly, and there is no sound from the room beyond it.",
+    "tools": [
+     {
+      "tool": "propose_roll",
+      "args": "{\"goal\": \"Force the stuck hatch\", \"verb\": \"verb.force\", \"target\": \"the stuck hatch\", \"how\": \"Set your shoulder to the swollen hatch and heave, working it against the rotten beam that pins it.\", \"attribute\": \"strength\", \"difficulty\": \"moderate\", \"why_uncertain\": \"The damp has swollen the timber and the beam is rotten; it may give way or may hold fast.\", \"stakes\": \"risky\", \"fail_cost\": \"cost.time\", \"change_kind\": \"open\", \"change_what\": \"the cellar hatch\"}",
+      "out": "REFUSED: no one or nothing on record called 'the stuck hatch' (use an id from the situation, or none; for a thing, leave `target` empty and say it in `how`)"
+     },
+     {
+      "tool": "propose_roll",
+      "args": "{\"goal\": \"Force the stuck hatch\", \"verb\": \"verb.force\", \"how\": \"Set your shoulder to the swollen cellar hatch at the foot of the stair and heave, working it against the rotten beam that pins it from above.\", \"attribute\": \"strength\", \"difficulty\": \"moderate\", \"why_uncertain\": \"The damp has swollen the timber and the beam is rotten; it may give way or may hold fast.\", \"stakes\": \"risky\", \"fail_cost\": \"cost.time\", \"change_kind\": \"open\", \"change_what\": \"the cellar hatch\"}",
+      "out": "NOT POSSIBLE AS PROPOSED (refused): PR-01-2 step 10 (threatened_cost): cost.twist only when no other entry is a candidate (cost.drain, cost.time, cost.exposure fit)"
+     },
+     {
+      "tool": "propose_roll",
+      "args": "{\"goal\": \"Force the stuck hatch\", \"verb\": \"verb.force\", \"how\": \"Set your shoulder to the swollen cellar hatch at the foot of the stair and heave, working it against the rotten beam that pins it from above.\", \"attribute\": \"strength\", \"difficulty\": \"moderate\", \"why_uncertain\": \"The damp has swollen the timber and the beam is rotten; it may give way or may hold fast.\", \"stakes\": \"risky\", \"fail_cost\": \"cost.time\", \"change_kind\": \"open\", \"change_what\": \"the cellar hatch\"}",
+      "out": "NOT POSSIBLE AS PROPOSED (refused): PR-01-2 step 10 (threatened_cost): cost.twist only when no other entry is a candidate (cost.drain, cost.time, cost.exposure fit)"
+     },
+     {
+      "tool": "propose_roll",
+      "args": "{\"goal\": \"Force the stuck hatch\", \"verb\": \"verb.force\", \"how\": \"Set your shoulder to the swollen cellar hatch at the foot of the stair and heave, working it against the rotten beam that pins it from above.\", \"attribute\": \"strength\", \"difficulty\": \"moderate\", \"why_uncertain\": \"The damp has swollen the timber and the beam is rotten; it may give way or may hold fast.\", \"stakes\": \"risky\", \"fail_cost\": \"cost.time\", \"change_kind\": \"open\", \"change_what\": \"the cellar hatch\"}",
+      "out": "NOT POSSIBLE AS PROPOSED (refused): PR-01-2 step 10 (threatened_cost): cost.twist only when no other entry is a candidate (cost.drain, cost.time, cost.exposure fit)"
+     },
+     {
+      "tool": "propose_roll",
+      "args": "{\"goal\": \"Force the stuck hatch\", \"verb\": \"verb.force\", \"how\": \"Wren sets her shoulder under the swollen cellar hatch at the foot of the stair and heaves, working it against the rotten beam that pins it from above.\", \"attribute\": \"strength\", \"difficulty\": \"moderate\", \"why_uncertain\": \"The damp has swollen the timber and the beam is rotten; it may give way or may hold fast.\", \"stakes\": \"risky\", \"nonlethal\": true, \"fail_cost\": \"cost.drain\", \"change_kind\": \"open\", \"change_what\": \"the cellar hatch\"}",
+      "out": "NOT POSSIBLE AS PROPOSED (refused): PR-01-2 step 10 (threatened_cost): cost.twist only when no other entry is a candidate (cost.drain, cost.time, cost.exposure fit)"
+     }
+    ],
+    "refusals": [
+     {
+      "tool": "propose_roll",
+      "kind": "",
+      "args": "{\"goal\": \"Force the stuck hatch\", \"verb\": \"verb.force\", \"target\": \"the stuck hatch\", \"how\": \"Set your shoulder to the swollen hatch and heave, working it against the rotten beam that pins it.\", \"attribute\": \"strength\", \"difficulty\": \"moderate\", \"why_uncertain\": \"The damp has swollen the timber and the beam is rotten; it may give way or may hold fast.\", \"stakes\": \"risky\", \"fail_cost\": \"cost.time\", \"change_kind\": \"open\", \"change_what\": \"the cellar hatch\"}",
+      "why": "REFUSED: no one or nothing on record called 'the stuck hatch' (use an id from the situation, or none; for a thing, leave `target` empty and say it in `how`)"
+     }
+    ],
+    "said": [],
+    "told_dropped": [],
+    "log_only": [],
+    "foe_turns": [],
+    "paused": false
+   }
+  ],
+  "after": {
+   "ents": {
+    "npc.tam_harlan": [
+     "Tam Harlan",
+     "ferryman",
+     "exists"
+    ],
+    "npc.sela_vey": [
+     "Sela Vey",
+     "harbour watch",
+     "exists"
+    ]
+   },
+   "fight_live": false,
+   "pc_vit": 13,
+   "down": []
+  },
+  "verdict": "fail",
+  "note": "REFUSED: REFUSED: no one or nothing on record called 'the stuck hatch' (use an id from the situation, or none; for a thing, leave"
+ },
+ {
+  "id": "H07",
+  "kind": "fight_exchange",
+  "player": "I cut at Marek's sword arm.",
+  "ents": {
+   "Marek Voss": "npc.marek_voss"
+  },
+  "turns": [
+   {
+    "input": "I cut at Marek's sword arm.",
+    "passage": "You drop low and step inside his reach, the blade angled at the wrist of the hand that holds his sword. Marek's eyes flick down to your steel before you have finished the movement, and his grip tightens on the hilt. Wet cobbles shine under the one lamp at the alley's mouth. Behind him, the second man shifts his weight, waiting to see which way this goes. Marek's voice is flat and tired. \"You've made your choice, then.\" His shoulder begins to turn, and the space between your blade and his arm is already closing.",
+    "tools": [
+     {
+      "tool": "propose_roll",
+      "args": "{\"goal\": \"Cut at Marek's sword arm\", \"verb\": \"verb.strike\", \"target\": \"npc.marek_voss\", \"how\": \"A quick cut low and inside, aimed at the wrist and forearm of the hand holding his blade, to take the sword out of the fight.\", \"attribute\": \"Agility\", \"difficulty\": \"standard\", \"why_uncertain\": \"Marek is armed and watching, and a bandit who has stayed on his feet in an alley fight will read the cut coming and twist away from it.\", \"stakes\": \"risky\", \"fail_cost\": \"cost.harm\", \"change_kind\": \"harm\", \"change_what\": \"sword arm\", \"change_whom\": \"npc.marek_voss\"}",
+      "out": "NOT POSSIBLE AS PROPOSED (refused): PR-01-2 step 10 (threatened_cost): cost.twist only when no other entry is a candidate (cost.drain, cost.time, cost.exposure, cost.closed_door fit)"
+     },
+     {
+      "tool": "mood",
+      "args": "{\"npc\": \"npc.marek_voss\", \"mood\": \"closed\", \"why\": \"you drew steel on him in the alley\"}",
+      "out": "done: Marek Voss is closed toward the character for this scene (a memory; change it when the fiction does)."
+     },
+     {
+      "tool": "propose_roll",
+      "args": "{\"goal\": \"Cut at Marek's sword arm\", \"verb\": \"verb.strike\", \"target\": \"npc.marek_voss\", \"how\": \"A quick cut low and inside, aimed at the wrist and forearm of the hand holding his blade, to take the sword out of the fight.\", \"attribute\": \"Agility\", \"difficulty\": \"standard\", \"why_uncertain\": \"Marek is armed and watching, and a bandit who has stayed on his feet in an alley fight will read the cut coming and twist away from it.\", \"stakes\": \"risky\", \"fail_cost\": \"cost.exposure\", \"change_kind\": \"harm\", \"change_what\": \"sword arm\", \"change_whom\": \"npc.marek_voss\"}",
+      "out": "NOT POSSIBLE AS PROPOSED (refused): PR-01-2 step 10 (threatened_cost): cost.twist only when no other entry is a candidate (cost.drain, cost.time, cost.exposure, cost.closed_door fit)"
+     },
+     {
+      "tool": "propose_roll",
+      "args": "{\"goal\": \"Cut at Marek's sword arm\", \"verb\": \"verb.strike\", \"target\": \"npc.marek_voss\", \"how\": \"A quick cut low and inside, aimed at the wrist and forearm of the hand holding his blade, to take the sword out of the fight.\", \"attribute\": \"Agility\", \"difficulty\": \"standard\", \"why_uncertain\": \"Marek is armed and watching, and a bandit who has stayed on his feet in an alley fight will read the cut coming and twist away from it.\", \"stakes\": \"risky\", \"fail_cost\": \"cost.drain\", \"change_kind\": \"harm\", \"change_what\": \"sword arm\", \"change_whom\": \"npc.marek_voss\"}",
+      "out": "NOT POSSIBLE AS PROPOSED (refused): PR-01-2 step 10 (threatened_cost): cost.twist only when no other entry is a candidate (cost.drain, cost.time, cost.exposure, cost.closed_door fit)"
+     },
+     {
+      "tool": "propose_roll",
+      "args": "{\"goal\": \"Cut at Marek's sword arm\", \"verb\": \"verb.strike\", \"target\": \"npc.marek_voss\", \"how\": \"A quick cut low and inside, aimed at the wrist and forearm of the hand holding his blade, to take the sword out of the fight.\", \"attribute\": \"Agility\", \"difficulty\": \"standard\", \"why_uncertain\": \"Marek is armed and watching, and a bandit who has stayed on his feet in an alley fight will read the cut coming and twist away from it.\", \"stakes\": \"risky\", \"fail_cost\": \"cost.time\", \"change_kind\": \"harm\", \"change_what\": \"sword arm\", \"change_whom\": \"npc.marek_voss\"}",
+      "out": "NOT POSSIBLE AS PROPOSED (refused): PR-01-2 step 10 (threatened_cost): cost.twist only when no other entry is a candidate (cost.drain, cost.time, cost.exposure, cost.closed_door fit)"
+     },
+     {
+      "tool": "propose_roll",
+      "args": "{\"goal\": \"Cut at Marek's sword arm\", \"verb\": \"verb.strike\", \"target\": \"npc.marek_voss\", \"how\": \"A quick cut low and inside, aimed at the wrist and forearm of the hand holding his blade, to take the sword out of the fight.\", \"attribute\": \"Agility\", \"difficulty\": \"standard\", \"why_uncertain\": \"Marek is armed and watching, and a bandit who has stayed on his feet in an alley fight may read the cut coming and pull his arm clear.\", \"stakes\": \"risky\", \"fail_cost\": \"cost.harm\", \"change_kind\": \"harm\", \"change_what\": \"sword arm\", \"change_whom\": \"npc.marek_voss\"}",
+      "out": "NOT POSSIBLE AS PROPOSED (refused): PR-01-2 step 10 (threatened_cost): cost.twist only when no other entry is a candidate (cost.drain, cost.time, cost.exposure, cost.closed_door fit)"
+     }
+    ],
+    "refusals": [],
+    "said": [
+     {
+      "id": "said.1",
+      "speaker": "npc.marek_voss",
+      "words": "You've made your choice, then."
+     }
+    ],
+    "told_dropped": [],
+    "log_only": [],
+    "foe_turns": [],
+    "paused": false
+   }
+  ],
+  "after": {
+   "ents": {
+    "npc.tam_harlan": [
+     "Tam Harlan",
+     "ferryman",
+     "exists"
+    ],
+    "npc.sela_vey": [
+     "Sela Vey",
+     "harbour watch",
+     "exists"
+    ],
+    "npc.marek_voss": [
+     "Marek Voss",
+     "bandit",
+     "exists"
+    ]
+   },
+   "fight_live": true,
+   "pc_vit": 13,
+   "down": []
+  },
+  "verdict": "fail",
+  "note": "0 foe turns: []"
+ },
+ {
+  "id": "H08",
+  "kind": "fight_exchange",
+  "player": "I roll clear, grab my axe from the dirt, and swing at him again.",
+  "ents": {
+   "Marek Voss": "npc.marek_voss"
+  },
+  "turns": [
+   {
+    "input": "I roll clear, grab my axe from the dirt, and swing at him again.",
+    "passage": "You throw yourself sideways across the grit as Marek's blade bites the air where your throat was. Your shoulder grinds on stone and the world tilts, but your fingers find the haft of your axe in the dirt. Marek is already turning, boots wide, his breath hissing through his teeth. There is no time to rise cleanly; you have one swing, from the ground, while he is still closing.",
+    "tools": [
+     {
+      "tool": "propose_roll",
+      "args": "{\"goal\": \"Roll clear and swing the axe at Marek\", \"verb\": \"verb.strike\", \"target\": \"npc.marek_voss\", \"how\": \"Roll away from Marek's blade across the grit, snatch the axe from the dirt, and swing it at him while still off-balance\", \"attribute\": \"Vitality\", \"difficulty\": \"risky\", \"why_uncertain\": \"Wren is bloodied and prone, and must get up, grab a weapon and strike before Marek's blade lands\", \"stakes\": \"dire\", \"fail_cost\": \"cost.harm\", \"change_kind\": \"harm\", \"change_what\": \"Marek's guard and footing\", \"change_whom\": \"npc.marek_voss\"}",
+      "out": "NOT POSSIBLE AS PROPOSED (refused): PR-01-2 step 10 (threatened_cost): cost.twist only when no other entry is a candidate (cost.drain, cost.time, cost.exposure, cost.closed_door fit)"
+     },
+     {
+      "tool": "change",
+      "args": "{\"kind\": \"fact\", \"who\": \"npc.marek_voss\", \"what\": \"attitude toward Wren\", \"to\": \"hostile\", \"note\": \"He is trying to kill her; he stands over her with blade raised.\"}",
+      "out": "done: recorded attitude_toward_wren for Marek Voss"
+     },
+     {
+      "tool": "propose_roll",
+      "args": "{\"goal\": \"Roll clear and swing the axe at Marek\", \"verb\": \"verb.strike\", \"target\": \"npc.marek_voss\", \"how\": \"Roll away from Marek's blade across the grit, snatch the axe from the dirt, and swing it at him while still off-balance\", \"attribute\": \"Vitality\", \"difficulty\": \"risky\", \"why_uncertain\": \"Wren is bloodied and prone, and must get up, grab a weapon and strike before Marek's blade lands\", \"stakes\": \"dire\", \"fail_cost\": \"cost.drain\", \"change_kind\": \"harm\", \"change_what\": \"Marek's guard and footing\", \"change_whom\": \"npc.marek_voss\"}",
+      "out": "ROLL OFFERED to the player. The turn pauses here: write only the lead-up, never the outcome."
+     }
+    ],
+    "refusals": [],
+    "said": [],
+    "told_dropped": [
+     {
+      "npc": "npc.marek_voss",
+      "why": "the words are not in the passage",
+      "words": "Stay down, girl. This ends where you lie."
+     }
+    ],
+    "log_only": [],
+    "foe_turns": [],
+    "paused": true
+   },
+   {
+    "input": "commit",
+    "passage": "Your axe bites true. The blade takes Marek across the ribs and he reels back a step, a dark seam opening in his coat, his face twisting more with fury than pain. He does not run. Before you can get your feet under you, his counter comes low and fast, and it lands: a hot, numbing jolt through your side and the taste of copper in your mouth. You are bloodied. The cold grit is under your palm, and your breath comes short. Marek is bloodied too, breathing hard, his blade hanging ready between you. He keeps his eyes on your hands, not your face.",
+    "tools": [
+     {
+      "tool": "mood",
+      "args": "{\"npc\": \"npc.marek_voss\", \"mood\": \"closed\", \"why\": \"Wren cut him and he means to finish her\"}",
+      "out": "done: Marek Voss is closed toward the character for this scene (a memory; change it when the fiction does)."
+     }
+    ],
+    "refusals": [],
+    "said": [],
+    "told_dropped": [
+     {
+      "npc": "npc.marek_voss",
+      "why": "the words are not in the passage",
+      "words": "You should have stayed down."
+     }
+    ],
+    "log_only": [],
+    "foe_turns": [
+     {
+      "foe": "npc.marek_voss",
+      "did": "strikes you and lands it: you are bloodied"
+     }
+    ],
+    "paused": false
+   }
+  ],
+  "after": {
+   "ents": {
+    "npc.tam_harlan": [
+     "Tam Harlan",
+     "ferryman",
+     "exists"
+    ],
+    "npc.sela_vey": [
+     "Sela Vey",
+     "harbour watch",
+     "exists"
+    ],
+    "npc.marek_voss": [
+     "Marek Voss",
+     "bandit",
+     "exists"
+    ]
+   },
+   "fight_live": true,
+   "pc_vit": 2,
+   "down": []
+  },
+  "verdict": "pass",
+  "note": "propose_roll at Marek (verb.strike)"
+ },
+ {
+  "id": "H09",
+  "kind": "fight_exchange",
+  "player": "I shout for the watch at the top of my lungs.",
+  "ents": {
+   "Marek Voss": "npc.marek_voss"
+  },
+  "turns": [
+   {
+    "input": "I shout for the watch at the top of my lungs.",
+    "passage": "You fill your lungs and scream for the watch. The word cracks off the wet brick of the Alley and bounces back at you. Above, a shutter bangs open and a voice calls down to ask what the trouble is. Marek Voss does not wait to hear the answer. He snarls at you to shut your mouth and comes on, blade held low, the way a man moves when he means to finish something quickly. Your side burns where his blade caught you, and the distance between you is shrinking by the breath.",
+    "tools": [
+     {
+      "tool": "mood",
+      "args": "{\"npc\": \"npc.marek_voss\", \"mood\": \"closed\", \"why\": \"she is shouting for the watch; he means to finish this fast\"}",
+      "out": "done: Marek Voss is closed toward the character for this scene (a memory; change it when the fiction does)."
+     }
+    ],
+    "refusals": [],
+    "said": [
+     {
+      "id": "said.1",
+      "speaker": "npc.marek_voss",
+      "words": "Shut your mouth."
+     }
+    ],
+    "told_dropped": [],
+    "log_only": [],
+    "foe_turns": [
+     {
+      "foe": "npc.marek_voss",
+      "did": "strikes you and lands it: you are worn"
+     }
+    ],
+    "paused": false
+   }
+  ],
+  "after": {
+   "ents": {
+    "npc.tam_harlan": [
+     "Tam Harlan",
+     "ferryman",
+     "exists"
+    ],
+    "npc.sela_vey": [
+     "Sela Vey",
+     "harbour watch",
+     "exists"
+    ],
+    "npc.marek_voss": [
+     "Marek Voss",
+     "bandit",
+     "exists"
+    ]
+   },
+   "fight_live": true,
+   "pc_vit": 8,
+   "down": []
+  },
+  "verdict": "pass",
+  "note": "1 foe turn"
+ },
+ {
+  "id": "H10",
+  "kind": "fight_exchange",
+  "player": "I break away and run down the alley.",
+  "ents": {
+   "Marek Voss": "npc.marek_voss"
+  },
+  "turns": [
+   {
+    "input": "I break away and run down the alley.",
+    "passage": "You drop your weight and wrench sideways, driving your elbow back toward Marek's ribs. The brick bites into your shoulder. His fingers lock tighter on your coat, and his breath is hot against your ear. Somewhere past his arm, the mouth of the side alley yawns in the lamplight, a stride away and wet with rain. Your heart hammers. Marek grunts, shifting his heavier stance to pin your hip against the wall, and you feel the moment for a clean break narrowing with every second he holds you.",
+    "tools": [
+     {
+      "tool": "propose_roll",
+      "args": "{\"goal\": \"Break free and run for the side alley\", \"verb\": \"verb.evade\", \"target\": \"npc.marek_voss\", \"how\": \"Twist out of Marek's grip, drive an elbow back, and dive into the side alley before he can close again.\", \"attribute\": \"dexterity\", \"difficulty\": \"standard\", \"why_uncertain\": \"He has you pinned hard against the wall and he is quick on his feet; one slip and he keeps hold of you.\", \"stakes\": \"risky\", \"nonlethal\": true, \"fail_cost\": \"cost.footing\", \"change_kind\": \"move_to\", \"change_what\": \"the side alley\", \"change_whom\": \"pc.wren\"}",
+      "out": "NOT POSSIBLE AS PROPOSED (refused): PR-01-2 step 10 (threatened_cost): cost.twist only when no other entry is a candidate (cost.drain, cost.time, cost.exposure, cost.closed_door fit)"
+     },
+     {
+      "tool": "mood",
+      "args": "{\"npc\": \"npc.marek_voss\", \"mood\": \"closed\", \"why\": \"you are fighting his hold and trying to run\"}",
+      "out": "done: Marek Voss is closed toward the character for this scene (a memory; change it when the fiction does)."
+     },
+     {
+      "tool": "propose_roll",
+      "args": "{\"goal\": \"Break free and run for the side alley\", \"verb\": \"verb.evade\", \"target\": \"npc.marek_voss\", \"how\": \"Twist out of Marek's grip, drive an elbow back, and dive into the side alley before he can close again.\", \"attribute\": \"dexterity\", \"difficulty\": \"standard\", \"why_uncertain\": \"He has you pinned hard against the wall and he is quick on his feet; one slip and he keeps hold of you.\", \"stakes\": \"risky\", \"nonlethal\": true, \"fail_cost\": \"cost.drain\", \"change_kind\": \"move_to\", \"change_what\": \"the side alley\", \"change_whom\": \"pc.wren\"}",
+      "out": "NOT POSSIBLE AS PROPOSED (refused): PR-01-2 step 10 (threatened_cost): cost.twist only when no other entry is a candidate (cost.drain, cost.time, cost.exposure, cost.closed_door fit)"
+     },
+     {
+      "tool": "propose_roll",
+      "args": "{\"goal\": \"Break free and run for the side alley\", \"verb\": \"verb.evade\", \"target\": \"npc.marek_voss\", \"how\": \"Twist out of Marek's grip, drive an elbow back, and dive into the side alley before he can close again.\", \"attribute\": \"dexterity\", \"difficulty\": \"standard\", \"why_uncertain\": \"He has you pinned hard against the wall and he is quick on his feet; one slip and he keeps hold of you.\", \"stakes\": \"risky\", \"nonlethal\": true, \"fail_cost\": \"cost.exposure\", \"change_kind\": \"move_to\", \"change_what\": \"the side alley\", \"change_whom\": \"pc.wren\"}",
+      "out": "NOT POSSIBLE AS PROPOSED (refused): PR-01-2 step 10 (threatened_cost): cost.twist only when no other entry is a candidate (cost.drain, cost.time, cost.exposure, cost.closed_door fit)"
+     },
+     {
+      "tool": "propose_roll",
+      "args": "{\"goal\": \"Break free and run for the side alley\", \"verb\": \"verb.move\", \"target\": \"the side alley\", \"how\": \"Twist out of Marek's grip, drive an elbow back, and dive into the side alley before he can close again.\", \"attribute\": \"dexterity\", \"difficulty\": \"standard\", \"why_uncertain\": \"He has you pinned hard against the wall and he is quick on his feet; one slip and he keeps hold of you.\", \"stakes\": \"risky\", \"nonlethal\": true, \"fail_cost\": \"cost.drain\", \"change_kind\": \"move_to\", \"change_what\": \"the side alley\", \"change_whom\": \"pc.wren\"}",
+      "out": "REFUSED: no one or nothing on record called 'the side alley' (use an id from the situation, or none; for a thing, leave `target` empty and say it in `how`)"
+     },
+     {
+      "tool": "propose_roll",
+      "args": "{\"goal\": \"Break free and run for the side alley\", \"verb\": \"verb.evade\", \"target\": \"npc.marek_voss\", \"how\": \"Twist out of Marek's grip, drive an elbow back, and dive into the side alley before he can close again.\", \"attribute\": \"dexterity\", \"difficulty\": \"standard\", \"why_uncertain\": \"He has you pinned hard against the wall and he is quick on his feet; one slip and he keeps hold of you.\", \"stakes\": \"risky\", \"nonlethal\": true, \"fail_cost\": \"cost.exposure\", \"change_what\": \"the side alley\", \"change_whom\": \"pc.wren\"}",
+      "out": "NOT POSSIBLE AS PROPOSED (refused): PR-01-2 step 10 (threatened_cost): cost.twist only when no other entry is a candidate (cost.drain, cost.time, cost.exposure, cost.closed_door fit)"
+     }
+    ],
+    "refusals": [
+     {
+      "tool": "propose_roll",
+      "kind": "",
+      "args": "{\"goal\": \"Break free and run for the side alley\", \"verb\": \"verb.move\", \"target\": \"the side alley\", \"how\": \"Twist out of Marek's grip, drive an elbow back, and dive into the side alley before he can close again.\", \"attribute\": \"dexterity\", \"difficulty\": \"standard\", \"why_uncertain\": \"He has you pinned hard against the wall and he is quick on his feet; one slip and he keeps hold of you.\", \"stakes\": \"risky\", \"nonlethal\": true, \"fail_cost\": \"cost.drain\", \"change_kind\": \"move_to\", \"change_what\": \"the side alley\", \"change_whom\": \"pc.wren\"}",
+      "why": "REFUSED: no one or nothing on record called 'the side alley' (use an id from the situation, or none; for a thing, leave `target` empty and say it in `how`)"
+     }
+    ],
+    "said": [],
+    "told_dropped": [],
+    "log_only": [],
+    "foe_turns": [],
+    "paused": false
+   }
+  ],
+  "after": {
+   "ents": {
+    "npc.tam_harlan": [
+     "Tam Harlan",
+     "ferryman",
+     "exists"
+    ],
+    "npc.sela_vey": [
+     "Sela Vey",
+     "harbour watch",
+     "exists"
+    ],
+    "npc.marek_voss": [
+     "Marek Voss",
+     "bandit",
+     "exists"
+    ]
+   },
+   "fight_live": true,
+   "pc_vit": 13,
+   "down": []
+  },
+  "verdict": "fail",
+  "note": "0 foe turns: []"
+ },
+ {
+  "id": "H11",
+  "kind": "fight_exchange",
+  "player": "I drive my knife into his thigh.",
+  "ents": {
+   "Marek Voss": "npc.marek_voss"
+  },
+  "turns": [
+   {
+    "input": "I drive my knife into his thigh.",
+    "passage": "You close the last step before he can square his shoulders, your body tucked under the reach of his blade arm. Marek's breath hitches, and his free hand slaps against the wet brick to keep him upright. Your knife is already angling low, aimed at the meat of his thigh where his guard has gone slack. The alley is narrow and stinking of rain and smoke, and the lamp above the door gutters. Marek's eyes drop to your hand, and he tightens his grip on the blade, waiting to see whether you commit.",
+    "tools": [
+     {
+      "tool": "propose_roll",
+      "args": "{\"goal\": \"Stab Marek's thigh\", \"verb\": \"verb.strike\", \"target\": \"npc.marek_voss\", \"how\": \"Wren steps inside his reach and drives her knife into his thigh, aiming low where his guard is already failing.\", \"attribute\": \"Thievery\", \"difficulty\": \"moderate\", \"why_uncertain\": \"Marek is wounded and unsteady, but he is still armed and on his feet, and a rushed knife thrust can miss or glance off.\", \"stakes\": \"risky\", \"fail_cost\": \"cost.harm\", \"change_kind\": \"harm\", \"change_what\": \"npc.marek_voss\", \"change_whom\": \"npc.marek_voss\"}",
+      "out": "NOT POSSIBLE AS PROPOSED (refused): PR-01-2 step 10 (threatened_cost): cost.twist only when no other entry is a candidate (cost.drain, cost.time, cost.exposure, cost.closed_door fit)"
+     },
+     {
+      "tool": "propose_roll",
+      "args": "{\"goal\": \"Stab Marek's thigh\", \"verb\": \"verb.strike\", \"target\": \"npc.marek_voss\", \"how\": \"Wren steps inside his reach and drives her knife into his thigh, aiming low where his guard is already failing.\", \"attribute\": \"Thievery\", \"difficulty\": \"moderate\", \"why_uncertain\": \"Marek is wounded and unsteady, but he is still armed and on his feet, and a rushed knife thrust can miss or glance off.\", \"stakes\": \"risky\", \"fail_cost\": \"cost.exposure\", \"change_kind\": \"harm\", \"change_what\": \"npc.marek_voss\", \"change_whom\": \"npc.marek_voss\"}",
+      "out": "NOT POSSIBLE AS PROPOSED (refused): PR-01-2 step 10 (threatened_cost): cost.twist only when no other entry is a candidate (cost.drain, cost.time, cost.exposure, cost.closed_door fit)"
+     },
+     {
+      "tool": "mood",
+      "args": "{\"npc\": \"npc.marek_voss\", \"mood\": \"closed\", \"why\": \"bleeding, cornered, knows he is losing\"}",
+      "out": "done: Marek Voss is closed toward the character for this scene (a memory; change it when the fiction does)."
+     },
+     {
+      "tool": "propose_roll",
+      "args": "{\"goal\": \"Stab Marek's thigh\", \"verb\": \"verb.strike\", \"target\": \"npc.marek_voss\", \"how\": \"Wren steps inside his reach and drives her knife into his thigh, aiming low where his guard is already failing.\", \"attribute\": \"Thievery\", \"difficulty\": \"moderate\", \"why_uncertain\": \"Marek is wounded and unsteady, but he is still armed and on his feet, and a rushed knife thrust can miss or glance off.\", \"stakes\": \"risky\", \"fail_cost\": \"cost.drain\", \"change_kind\": \"harm\", \"change_what\": \"npc.marek_voss\", \"change_whom\": \"npc.marek_voss\"}",
+      "out": "NOT POSSIBLE AS PROPOSED (refused): PR-01-2 step 10 (threatened_cost): cost.twist only when no other entry is a candidate (cost.drain, cost.time, cost.exposure, cost.closed_door fit)"
+     }
+    ],
+    "refusals": [],
+    "said": [],
+    "told_dropped": [],
+    "log_only": [],
+    "foe_turns": [],
+    "paused": false
+   }
+  ],
+  "after": {
+   "ents": {
+    "npc.tam_harlan": [
+     "Tam Harlan",
+     "ferryman",
+     "exists"
+    ],
+    "npc.sela_vey": [
+     "Sela Vey",
+     "harbour watch",
+     "exists"
+    ],
+    "npc.marek_voss": [
+     "Marek Voss",
+     "bandit",
+     "exists"
+    ]
+   },
+   "fight_live": true,
+   "pc_vit": 13,
+   "down": []
+  },
+  "verdict": "fail",
+  "note": "fight went on; 0 foe turns (want 1)"
+ },
+ {
+  "id": "H12",
+  "kind": "fight_exchange",
+  "player": "I turn on Sill and hammer at his guard.",
+  "ents": {
+   "Marek Voss": "npc.marek_voss",
+   "Sill Orren": "npc.sill_orren"
+  },
+  "turns": [
+   {
+    "input": "I turn on Sill and hammer at his guard.",
+    "passage": "You step inside Sill's reach and drive your fists at the guard he has raised, one blow after another, hunting for the gap where his forearms part. He grunts and shoulders back, boots grinding over the cobbles, his eyes never leaving yours. Behind him the alley is quiet, and Marek lies still in the dirt. Sill sets his feet and waits for your next opening.",
+    "tools": [
+     {
+      "tool": "propose_roll",
+      "args": "{\"goal\": \"Hammer through Sill's guard\", \"verb\": \"verb.strike\", \"target\": \"npc.sill_orren\", \"how\": \"Wren turns her full attention on Sill and drives rapid blows at the guard he has raised, looking for the gap where his arms part.\", \"attribute\": \"force\", \"difficulty\": \"moderate\", \"why_uncertain\": \"Sill is fresh and braced; a guard that holds costs her time, but a clumsy opening leaves her exposed.\", \"stakes\": \"risky\", \"fail_cost\": \"cost.footing\", \"change_kind\": \"harm\", \"change_what\": \"Sill Orren's guard\", \"change_whom\": \"npc.sill_orren\"}",
+      "out": "ROLL OFFERED to the player. The turn pauses here: write only the lead-up, never the outcome."
+     }
+    ],
+    "refusals": [],
+    "said": [],
+    "told_dropped": [],
+    "log_only": [],
+    "foe_turns": [],
+    "paused": true
+   },
+   {
+    "input": "commit",
+    "passage": "",
+    "tools": [],
+    "refusals": [],
+    "said": [],
+    "told_dropped": [],
+    "log_only": [],
+    "foe_turns": [],
+    "paused": true
+   },
+   {
+    "input": "success_at_cost:cost.footing",
+    "passage": "Your heel skids on loose grit and the cobbles come up hard. You land on your side, palms scraping stone. Sill's fist cracks the air a hand above your head, close enough to stir your hair, and he overbalances a half-step past you. He turns, breathing hard, his guard coming back up. Behind him Marek lies still in the dirt, and the lamp at the alley's mouth gutters in the wind. Sill sets his feet and watches your hands, not your face, waiting for you to rise.",
+    "tools": [
+     {
+      "tool": "mood",
+      "args": "{\"npc\": \"npc.sill_orren\", \"mood\": \"closed\", \"why\": \"she is beating him down and he is still on his feet\"}",
+      "out": "done: Sill Orren is closed toward the character for this scene (a memory; change it when the fiction does)."
+     },
+     {
+      "tool": "mood",
+      "args": "{\"npc\": \"npc.marek_voss\", \"mood\": \"closed\", \"why\": \"she put him out cold in the dirt\"}",
+      "out": "REFUSED: Marek Voss is down and cannot act"
+     }
+    ],
+    "refusals": [
+     {
+      "tool": "mood",
+      "kind": "",
+      "args": "{\"npc\": \"npc.marek_voss\", \"mood\": \"closed\", \"why\": \"she put him out cold in the dirt\"}",
+      "why": "REFUSED: Marek Voss is down and cannot act"
+     }
+    ],
+    "said": [],
+    "told_dropped": [
+     {
+      "npc": "npc.sill_orren",
+      "why": "the words are not in the passage",
+      "words": "Stay down, girl. You've done enough."
+     }
+    ],
+    "log_only": [],
+    "foe_turns": [
+     {
+      "foe": "npc.sill_orren",
+      "did": "strikes at you and misses"
+     }
+    ],
+    "paused": false
+   }
+  ],
+  "after": {
+   "ents": {
+    "npc.tam_harlan": [
+     "Tam Harlan",
+     "ferryman",
+     "exists"
+    ],
+    "npc.sela_vey": [
+     "Sela Vey",
+     "harbour watch",
+     "exists"
+    ],
+    "npc.marek_voss": [
+     "Marek Voss",
+     "bandit",
+     "exists"
+    ],
+    "npc.sill_orren": [
+     "Sill Orren",
+     "bandit",
+     "exists"
+    ]
+   },
+   "fight_live": true,
+   "pc_vit": 13,
+   "down": [
+    "npc.marek_voss"
+   ]
+  },
+  "verdict": "pass",
+  "note": "Sill acted once"
+ },
+ {
+  "id": "H13",
+  "kind": "said",
+  "player": "I ask Ola Brandt what she knows about a man called Tam Harlan.",
+  "ents": {
+   "Ola Brandt": "npc.ola_brandt"
+  },
+  "turns": [
+   {
+    "input": "I ask Ola Brandt what she knows about a man called Tam Harlan.",
+    "passage": "Ola doesn't turn from the water right away. She works the pole once more, slow, before she answers. \"Tam Harlan pays his fare in coppers that are too clean, and he never sits down while he waits. That's what I know about him, and it's more than I'd tell a stranger who comes asking after dark.\" Her eyes move over you, to your hands, then to the lantern hanging by the ferry door. \"Who sent you? And don't say the mayor's office. I'd hear the boots coming from the road.\"",
+    "tools": [
+     {
+      "tool": "reveal_clue",
+      "args": "{\"npc\": \"npc.ola_brandt\", \"question\": \"What does Ola Brandt know about Tam Harlan?\"}",
+      "out": "NO CLUE: the question touches no open clue. Answer in their own words, from what they would know."
+     },
+     {
+      "tool": "mood",
+      "args": "{\"npc\": \"npc.ola_brandt\", \"mood\": \"guarded\", \"why\": \"a stranger asking after Tam Harlan on the landing at night\"}",
+      "out": "done: Ola Brandt is guarded toward the character for this scene (a memory; change it when the fiction does)."
+     }
+    ],
+    "refusals": [],
+    "said": [
+     {
+      "id": "said.1",
+      "speaker": "npc.ola_brandt",
+      "words": "Tam Harlan pays his fare in coppers that are too clean, and he never sits down while he waits. That's what I know about "
+     },
+     {
+      "id": "said.2",
+      "speaker": "npc.ola_brandt",
+      "words": "Who sent you? And don't say the mayor's office. I'd hear the boots coming from the road."
+     }
+    ],
+    "told_dropped": [],
+    "log_only": [],
+    "foe_turns": [],
+    "paused": false
+   }
+  ],
+  "after": {
+   "ents": {
+    "npc.tam_harlan": [
+     "Tam Harlan",
+     "ferryman",
+     "exists"
+    ],
+    "npc.sela_vey": [
+     "Sela Vey",
+     "harbour watch",
+     "exists"
+    ],
+    "npc.ola_brandt": [
+     "Ola Brandt",
+     "ferrywoman",
+     "exists"
+    ]
+   },
+   "fight_live": false,
+   "pc_vit": 13,
+   "down": []
+  },
+  "verdict": "pass",
+  "note": "2 record(s) from the speaker, on topic (['harlan', 'tam'])"
+ },
+ {
+  "id": "H14",
+  "kind": "said",
+  "player": "I ask the chandler where the girl went.",
+  "ents": {
+   "the chandler": "npc.harl_oakes"
+  },
+  "turns": [
+   {
+    "input": "I ask the chandler where the girl went.",
+    "passage": "The chandler sets down his trimming knife and studies you across the counter of candles for a long moment. \"Where she goes once the shutters are up is her business, and I don't hand my business to strangers.\" He wipes his palms on his apron again, slower this time. \"You've not said who you are to her, and I've not asked. Keep it that way.\" Behind him, a ledger lies open beside a stack of wicks, and the back door stands ajar onto the dark yard. He has not yet told you to leave.",
+    "tools": [
+     {
+      "tool": "reveal_clue",
+      "args": "{\"npc\": \"npc.harl_oakes\", \"question\": \"Where did the girl go?\"}",
+      "out": "NO CLUE: the question touches no open clue. Answer in their own words, from what they would know."
+     },
+     {
+      "tool": "mood",
+      "args": "{\"npc\": \"npc.harl_oakes\", \"mood\": \"guarded\", \"why\": \"a stranger asking after the girl at closing\"}",
+      "out": "done: the chandler is guarded toward the character for this scene (a memory; change it when the fiction does)."
+     }
+    ],
+    "refusals": [],
+    "said": [
+     {
+      "id": "said.1",
+      "speaker": "npc.harl_oakes",
+      "words": "Where she goes once the shutters are up is her business, and I don't hand my business to strangers."
+     },
+     {
+      "id": "said.2",
+      "speaker": "npc.harl_oakes",
+      "words": "You've not said who you are to her, and I've not asked. Keep it that way."
+     }
+    ],
+    "told_dropped": [],
+    "log_only": [
+     {
+      "kind": "pronoun",
+      "text": "The chandler sets down his trimming knife and studies you across the counter of candles for a long moment.",
+      "who": "npc.harl_oakes",
+      "word": "his"
+     }
+    ],
+    "foe_turns": [],
+    "paused": false
+   }
+  ],
+  "after": {
+   "ents": {
+    "npc.tam_harlan": [
+     "Tam Harlan",
+     "ferryman",
+     "exists"
+    ],
+    "npc.sela_vey": [
+     "Sela Vey",
+     "harbour watch",
+     "exists"
+    ],
+    "npc.harl_oakes": [
+     "Harl Oakes",
+     "chandler",
+     "exists"
+    ]
+   },
+   "fight_live": false,
+   "pc_vit": 13,
+   "down": []
+  },
+  "verdict": "judge",
+  "note": "2 record(s) from the right speaker; no topic word of ['mill', 'road', 'dusk', 'alone', 'girl']"
+ },
+ {
+  "id": "H15",
+  "kind": "said",
+  "player": "I ask Mother Aldis what happened to the roof.",
+  "ents": {
+   "Mother Aldis": "npc.mother_aldis"
+  },
+  "turns": [
+   {
+    "input": "I ask Mother Aldis what happened to the roof.",
+    "passage": "Mother Aldis does not turn toward the ruin right away. She looks at the gap where the slates used to be, then at you, as if weighing how much of the answer you have earned. \"The roof went the winter the bell cracked,\" she says. \"Snow sat on it too long, and then one night it simply let go. We were lucky. No one was under it but the rats.\" Her folded hands tighten a little. \"Why does a stranger ask after a roof at this hour?\"",
+    "tools": [
+     {
+      "tool": "reveal_clue",
+      "args": "{\"npc\": \"npc.mother_aldis\", \"question\": \"What happened to the roof of the chapel?\"}",
+      "out": "NO CLUE: the question touches no open clue. Answer in their own words, from what they would know."
+     },
+     {
+      "tool": "mood",
+      "args": "{\"npc\": \"npc.mother_aldis\", \"mood\": \"guarded\", \"why\": \"a stranger asking about the ruin at night\"}",
+      "out": "done: Mother Aldis is guarded toward the character for this scene (a memory; change it when the fiction does)."
+     }
+    ],
+    "refusals": [],
+    "said": [
+     {
+      "id": "said.1",
+      "speaker": "npc.mother_aldis",
+      "words": "The roof went the winter the bell cracked. Snow sat on it too long, and then one night it simply let go. We were lucky. "
+     },
+     {
+      "id": "said.2",
+      "speaker": "npc.mother_aldis",
+      "words": "Why does a stranger ask after a roof at this hour?"
+     }
+    ],
+    "told_dropped": [],
+    "log_only": [],
+    "foe_turns": [],
+    "paused": false
+   }
+  ],
+  "after": {
+   "ents": {
+    "npc.tam_harlan": [
+     "Tam Harlan",
+     "ferryman",
+     "exists"
+    ],
+    "npc.sela_vey": [
+     "Sela Vey",
+     "harbour watch",
+     "exists"
+    ],
+    "npc.mother_aldis": [
+     "Mother Aldis",
+     "abbess",
+     "exists"
+    ]
+   },
+   "fight_live": false,
+   "pc_vit": 13,
+   "down": []
+  },
+  "verdict": "pass",
+  "note": "2 record(s) from the speaker, on topic (['roof'])"
+ },
+ {
+  "id": "H16",
+  "kind": "said",
+  "player": "I ask Corvin what the east gate is like.",
+  "ents": {
+   "Corvin": "npc.corvin"
+  },
+  "turns": [
+   {
+    "input": "I ask Corvin what the east gate is like.",
+    "passage": "You catch Corvin's eye across the hearth and ask him what the east gate is like. He turns his cup slowly in his hands before he answers. \"Busy by day, dead by night. Two guards with a brazier, and they check every cart that goes through, even the honest ones. The bell rings at the second hour and the bar comes down, so if you're thinking of leaving tonight, you've missed it.\" He pauses, studying your face. \"Carts and wagons queue up on the Night Dock road in the morning. Lots of talk there, if you listen.\"",
+    "tools": [
+     {
+      "tool": "mood",
+      "args": "{\"npc\": \"npc.corvin\", \"mood\": \"open\", \"why\": \"answers a plain question from a stranger without suspicion\"}",
+      "out": "done: Corvin is open toward the character for this scene (a memory; change it when the fiction does)."
+     }
+    ],
+    "refusals": [],
+    "said": [
+     {
+      "id": "said.1",
+      "speaker": "npc.corvin",
+      "words": "Busy by day, dead by night. Two guards with a brazier, and they check every cart that goes through, even the honest ones"
+     },
+     {
+      "id": "said.2",
+      "speaker": "npc.corvin",
+      "words": "Carts and wagons queue up on the Night Dock road in the morning. Lots of talk there, if you listen."
+     }
+    ],
+    "told_dropped": [],
+    "log_only": [],
+    "foe_turns": [],
+    "paused": false
+   }
+  ],
+  "after": {
+   "ents": {
+    "npc.tam_harlan": [
+     "Tam Harlan",
+     "ferryman",
+     "exists"
+    ],
+    "npc.sela_vey": [
+     "Sela Vey",
+     "harbour watch",
+     "exists"
+    ],
+    "npc.corvin": [
+     "Corvin",
+     "traveller",
+     "exists"
+    ]
+   },
+   "fight_live": false,
+   "pc_vit": 13,
+   "down": []
+  },
+  "verdict": "pass",
+  "note": "2 record(s) from the speaker, on topic (['guard'])"
+ },
+ {
+  "id": "H17",
+  "kind": "said",
+  "player": "I ask Brother Hale what he wants.",
+  "ents": {
+   "Brother Hale": "npc.brother_hale"
+  },
+  "turns": [
+   {
+    "input": "I ask Brother Hale what he wants.",
+    "passage": "You ask Brother Hale plainly what he wants. His hand stays on the iron ring of the vault door, and for a long moment he studies the flagstones instead of you. The lantern on the wall gutters. \"Want?\" he says at last, and his voice is thinner than his cassock. \"I want the night to be quiet, Wren. I want the stair to stay shut and the dead to stay where they were put.\" He glances once toward the dark at the top of the steps, then back down. \"I'm not your enemy. But I'm not your ally tonight, either.\"",
+    "tools": [],
+    "refusals": [],
+    "said": [
+     {
+      "id": "said.1",
+      "speaker": "npc.brother_hale",
+      "words": "Want? I want the night to be quiet, Wren. I want the stair to stay shut and the dead to stay where they were put. I'm no"
+     }
+    ],
+    "told_dropped": [],
+    "log_only": [],
+    "foe_turns": [],
+    "paused": false
+   }
+  ],
+  "after": {
+   "ents": {
+    "npc.tam_harlan": [
+     "Tam Harlan",
+     "ferryman",
+     "exists"
+    ],
+    "npc.sela_vey": [
+     "Sela Vey",
+     "harbour watch",
+     "exists"
+    ],
+    "npc.brother_hale": [
+     "Brother Hale",
+     "sexton",
+     "exists"
+    ]
+   },
+   "fight_live": false,
+   "pc_vit": 13,
+   "down": []
+  },
+  "verdict": "judge",
+  "note": "1 record(s) from the right speaker; no topic word of ['lamp', 'vault']"
+ },
+ {
+  "id": "H18",
+  "kind": "said_edge",
+  "player": "I ask the carter who might know where the butcher went.",
+  "ents": {
+   "the carter": "npc.nim_mire"
+  },
+  "turns": [
+   {
+    "input": "I ask the carter who might know where the butcher went.",
+    "passage": "Nim Mire spits the straw into the dust and doesn't look at you right away. The shaft creaks as he shifts his weight. You can see he's weighing whether you're worth the trouble. Eventually he jerks his chin toward the south road. Behind him, the cart's canvas flaps in the wind. He says he's not the one to ask, but he gives you a name anyway. Tam Harlan was asking after the butcher this morning, and Sela Vey was with him. They've gone down to the Night Dock. He glances at you once more before turning back to his straw. \"Don't tell them I sent you.\"",
+    "tools": [
+     {
+      "tool": "mood",
+      "args": "{\"npc\": \"npc.nim_mire\", \"mood\": \"guarded\", \"why\": \"asked about a missing man; wary of getting involved\"}",
+      "out": "done: the carter is guarded toward the character for this scene (a memory; change it when the fiction does)."
+     },
+     {
+      "tool": "reveal_clue",
+      "args": "{\"npc\": \"npc.nim_mire\", \"question\": \"Who might know where the butcher went?\"}",
+      "out": "NO CLUE: the question touches no open clue. Answer in their own words, from what they would know."
+     }
+    ],
+    "refusals": [],
+    "said": [
+     {
+      "id": "said.1",
+      "speaker": "npc.nim_mire",
+      "words": "If you want a name, Tam Harlan was asking after him this morning, and Sela Vey was with him. They've gone down to the Ni"
+     }
+    ],
+    "told_dropped": [
+     {
+      "npc": "npc.nim_mire",
+      "why": "the words are not in the passage",
+      "words": "The butcher? Half the road owes him money and the other half is glad he's gone. "
+     }
+    ],
+    "log_only": [
+     {
+      "kind": "pronoun",
+      "text": "The shaft creaks as he shifts his weight.",
+      "who": "npc.nim_mire",
+      "word": "he"
+     },
+     {
+      "kind": "item_unbacked",
+      "text": "He says he's not the one to ask, but he gives you a name anyway.",
+      "item": "name anyway"
+     },
+     {
+      "kind": "absent_named",
+      "text": "Tam Harlan was asking after the butcher this morning, and Sela Vey was with him.",
+      "who": "npc.tam_harlan"
+     },
+     {
+      "kind": "absent_named",
+      "text": "Tam Harlan was asking after the butcher this morning, and Sela Vey was with him.",
+      "who": "npc.sela_vey"
+     }
+    ],
+    "foe_turns": [],
+    "paused": false
+   }
+  ],
+  "after": {
+   "ents": {
+    "npc.tam_harlan": [
+     "Tam Harlan",
+     "ferryman",
+     "exists"
+    ],
+    "npc.sela_vey": [
+     "Sela Vey",
+     "harbour watch",
+     "exists"
+    ],
+    "npc.nim_mire": [
+     "Nim Mire",
+     "carter",
+     "exists"
+    ]
+   },
+   "fight_live": false,
+   "pc_vit": 13,
+   "down": []
+  },
+  "verdict": "judge",
+  "note": "1 record(s) from the right speaker; no topic word of ['pell', 'smith']"
+ },
+ {
+  "id": "H19",
+  "kind": "presence",
+  "player": "I look around the yard.",
+  "ents": {
+   "Joss": "npc.joss",
+   "Nan": "npc.nan"
+  },
+  "turns": [
+   {
+    "input": "I look around the yard.",
+    "passage": "The Yard is a square of packed earth under a sky gone the color of slate. A lamp hangs from a post by the stable doors, and its light pools over a cart with one wheel off, a rain barrel with a split stave, and crates that smell of hay and tar. The kitchen door is still swinging on its hinge where Nan went through. Along the far wall, harness hangs on pegs, most of it cracked and waiting for repair. Joss is forking straw into a barrow. He stops and watches you take in the place, his jaw working over something he has not said yet.",
+    "tools": [],
+    "refusals": [],
+    "said": [],
+    "told_dropped": [
+     {
+      "npc": "npc.joss",
+      "why": "the words are not in the passage",
+      "words": "You're not here to muck out, are you?"
+     }
+    ],
+    "log_only": [],
+    "foe_turns": [],
+    "paused": false
+   }
+  ],
+  "after": {
+   "ents": {
+    "npc.tam_harlan": [
+     "Tam Harlan",
+     "ferryman",
+     "exists"
+    ],
+    "npc.sela_vey": [
+     "Sela Vey",
+     "harbour watch",
+     "exists"
+    ],
+    "npc.joss": [
+     "Joss",
+     "stable hand",
+     "exists"
+    ],
+    "npc.nan": [
+     "Nan",
+     "cook",
+     "exists"
+    ]
+   },
+   "fight_live": false,
+   "pc_vit": 13,
+   "down": []
+  },
+  "verdict": "judge",
+  "note": "Nan is mentioned: ['The kitchen door is still swinging on its hinge where Nan went through.']"
+ },
+ {
+  "id": "H20",
+  "kind": "presence",
+  "player": "I ask Dowl whether the gate was locked last night.",
+  "ents": {
+   "Dowl": "npc.dowl"
+  },
+  "turns": [
+   {
+    "input": "I ask Dowl whether the gate was locked last night.",
+    "passage": "You crouch beside Dowl and say his name, low, then louder. His eyes stay open and fixed on the rafters, and the only answer is the draft whistling through the gatehouse door. The cold lantern at his side has no oil left to tell you anything. Beyond the body, the iron bar of the gate hangs against its brackets, and the wood around the lock looks scraped, though you cannot yet tell whether by a key or by something else. Whatever Dowl saw last night went out with him.",
+    "tools": [],
+    "refusals": [],
+    "said": [],
+    "told_dropped": [],
+    "log_only": [],
+    "foe_turns": [],
+    "paused": false
+   }
+  ],
+  "after": {
+   "ents": {
+    "npc.tam_harlan": [
+     "Tam Harlan",
+     "ferryman",
+     "exists"
+    ],
+    "npc.sela_vey": [
+     "Sela Vey",
+     "harbour watch",
+     "exists"
+    ],
+    "npc.dowl": [
+     "Dowl",
+     "guard",
+     "dead"
+    ]
+   },
+   "fight_live": false,
+   "pc_vit": 13,
+   "down": []
+  },
+  "verdict": "judge",
+  "note": "read the passage for Dowl speaking: ['You crouch beside Dowl and say his name, low, then louder.', 'Whatever Dowl saw last night went out with him.']"
+ },
+ {
+  "id": "H21",
+  "kind": "presence",
+  "player": "I ask the barmaid, then call out for Odo.",
+  "ents": {
+   "Wenna Rask": "npc.wenna_rask"
+  },
+  "turns": [
+   {
+    "input": "I ask the barmaid, then call out for Odo.",
+    "passage": "You lean on the counter and ask the barmaid what the town is like after dark. Wenna Rask keeps polishing the mug, slower now, her eyes flicking to the door before they settle on you. Then you call out for Odo. The name carries across the common room, past the hearth and the few drinkers nursing their ale. Nobody answers. A pair of heads turn, then turn back to their cups. Wenna sets the mug down with a careful click. \"Asking after people after dark marks you, stranger. Who sent you, and what does Odo owe you?\" She waits, her cloth still in her hand, for your answer.",
+    "tools": [
+     {
+      "tool": "mood",
+      "args": "{\"npc\": \"npc.wenna_rask\", \"mood\": \"guarded\", \"why\": \"a stranger asking questions after dark\"}",
+      "out": "done: Wenna Rask is guarded toward the character for this scene (a memory; change it when the fiction does)."
+     }
+    ],
+    "refusals": [],
+    "said": [
+     {
+      "id": "said.1",
+      "speaker": "npc.wenna_rask",
+      "words": "Asking after people after dark marks you, stranger. Who sent you, and what does Odo owe you?"
+     }
+    ],
+    "told_dropped": [],
+    "log_only": [],
+    "foe_turns": [],
+    "paused": false
+   }
+  ],
+  "after": {
+   "ents": {
+    "npc.tam_harlan": [
+     "Tam Harlan",
+     "ferryman",
+     "exists"
+    ],
+    "npc.sela_vey": [
+     "Sela Vey",
+     "harbour watch",
+     "exists"
+    ],
+    "npc.wenna_rask": [
+     "Wenna Rask",
+     "barmaid",
+     "exists"
+    ]
+   },
+   "fight_live": false,
+   "pc_vit": 13,
+   "down": []
+  },
+  "verdict": "pass",
+  "note": "barmaid answers; Odo absent"
+ },
+ {
+  "id": "H22",
+  "kind": "pronoun",
+  "player": "I hand Imre the sealed letter and ask her to carry it north.",
+  "ents": {
+   "Imre Cass": "npc.imre_cass"
+  },
+  "turns": [
+   {
+    "input": "I hand Imre the sealed letter and ask her to carry it north.",
+    "passage": "You slide the sealed letter across the counter. Imre Cass turns it over once, reads the wax seal without breaking it, and tucks it inside her coat. Her eyes stay on your hands. \"North is a long ride and a dear one this season,\" she says. \"I carry for coin, and I carry it first. Show me the price and we'll talk about the road.\" Beside her boots the satchel shifts, and somewhere behind the post door a bell rings for the last cart out.",
+    "tools": [
+     {
+      "tool": "mood",
+      "args": "{\"npc\": \"npc.imre_cass\", \"mood\": \"guarded\", \"why\": \"sealed letter, north, wants paying first\"}",
+      "out": "done: Imre Cass is guarded toward the character for this scene (a memory; change it when the fiction does)."
+     }
+    ],
+    "refusals": [],
+    "said": [
+     {
+      "id": "said.1",
+      "speaker": "npc.imre_cass",
+      "words": "North is a long ride and a dear one this season. I carry for coin, and I carry it first. Show me the price and we'll tal"
+     }
+    ],
+    "told_dropped": [],
+    "log_only": [],
+    "foe_turns": [],
+    "paused": false
+   }
+  ],
+  "after": {
+   "ents": {
+    "npc.tam_harlan": [
+     "Tam Harlan",
+     "ferryman",
+     "exists"
+    ],
+    "npc.sela_vey": [
+     "Sela Vey",
+     "harbour watch",
+     "exists"
+    ],
+    "npc.imre_cass": [
+     "Imre Cass",
+     "courier",
+     "exists"
+    ]
+   },
+   "fight_live": false,
+   "pc_vit": 13,
+   "down": []
+  },
+  "verdict": "pass",
+  "note": "no wrong pronoun"
+ },
+ {
+  "id": "H23",
+  "kind": "pronoun",
+  "player": "I ask the twins whether they saw who left the cart.",
+  "ents": {
+   "The Vane twins": "npc.the_vane_twins"
+  },
+  "turns": [
+   {
+    "input": "I ask the twins whether they saw who left the cart.",
+    "passage": "You put the question to the Vane twins, standing by the splintered wheel. They glance at each other before either answers, the same look passing between them twice. One of them shrugs and keeps their eyes on the cart's broken axle rather than on you. The other wipes their hands on a rag and says the road is busy at night and most people are not looking at anything. Neither offers more. The cart still sits tilted in the ditch, and the wheel rut leads off toward the trees.",
+    "tools": [],
+    "refusals": [],
+    "said": [],
+    "told_dropped": [
+     {
+      "npc": "npc.the_vane_twins",
+      "why": "the words are not in the passage",
+      "words": "The road is busy at night, and most folk aren't looking at anything."
+     }
+    ],
+    "log_only": [],
+    "foe_turns": [],
+    "paused": false
+   }
+  ],
+  "after": {
+   "ents": {
+    "npc.tam_harlan": [
+     "Tam Harlan",
+     "ferryman",
+     "exists"
+    ],
+    "npc.sela_vey": [
+     "Sela Vey",
+     "harbour watch",
+     "exists"
+    ],
+    "npc.the_vane_twins": [
+     "The Vane twins",
+     "twins",
+     "exists"
+    ]
+   },
+   "fight_live": false,
+   "pc_vit": 13,
+   "down": []
+  },
+  "verdict": "pass",
+  "note": "no wrong pronoun"
+ },
+ {
+  "id": "H24",
+  "kind": "pronoun",
+  "player": "I watch the heron.",
+  "ents": {
+   "The marsh heron": "npc.the_marsh_heron"
+  },
+  "turns": [
+   {
+    "input": "I watch the heron.",
+    "passage": "You settle down in the reeds and watch the heron. It does not move. Night has thinned the marsh to silver and black, and the only sounds are insects and the slow suck of mud somewhere behind you. Its grey neck stays folded, its yellow eye fixed on the water. Then, faster than you can follow, its beak snaps down and comes up with a silver flick, and it swallows without ceasing to watch you. Far to the east, past the drowned posts, a lantern wavers at the Night Dock, where Tam and Sela are waiting for word from you.",
+    "tools": [],
+    "refusals": [],
+    "said": [],
+    "told_dropped": [],
+    "log_only": [
+     {
+      "kind": "absent_named",
+      "text": "Far to the east, past the drowned posts, a lantern wavers at the Night Dock, where Tam and Sela are waiting for word from you.",
+      "who": "npc.tam_harlan"
+     },
+     {
+      "kind": "absent_named",
+      "text": "Far to the east, past the drowned posts, a lantern wavers at the Night Dock, where Tam and Sela are waiting for word from you.",
+      "who": "npc.sela_vey"
+     }
+    ],
+    "foe_turns": [],
+    "paused": false
+   }
+  ],
+  "after": {
+   "ents": {
+    "npc.tam_harlan": [
+     "Tam Harlan",
+     "ferryman",
+     "exists"
+    ],
+    "npc.sela_vey": [
+     "Sela Vey",
+     "harbour watch",
+     "exists"
+    ],
+    "npc.the_marsh_heron": [
+     "The marsh heron",
+     "heron",
+     "exists"
+    ]
+   },
+   "fight_live": false,
+   "pc_vit": 13,
+   "down": []
+  },
+  "verdict": "pass",
+  "note": "no wrong pronoun"
+ }
+]
