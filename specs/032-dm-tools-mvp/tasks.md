@@ -118,11 +118,13 @@ Gate: J/P/L/I cases green; no check blocks; tokens in per turn within +10% of P4
 
 Edits `engine/dm/dispute.py`, `engine/dm/fixer.py`, `engine/game.py` (`_dispute` only), tests. Does not edit `dm_tools.py`
 (imports `code_framer`).
-- [ ] P6.1 **Trace** `/fix` on a dm-tools save for each of the 5 turn states (X1-X5): what the Fixer sees, what `preview`
+- [x] P6.1 **Trace** `/fix` on a dm-tools save for each of the 5 turn states (X1-X5): what the Fixer sees, what `preview`
       and `reframe` do, what the correction turn records. Write what breaks (not what might).
-- [ ] P6.2 Smallest change per plan G11: DM tool log as Fixer evidence; `reframe` env from the code framer for dm-tools; the
+- [x] P6.2 Smallest change per plan G11: DM tool log as Fixer evidence; `reframe` env from the code framer for dm-tools; the
       dispute turn marked in `screen.dm_tools`; fall back to rendering the answer without a Narrator call if needed.
-- [ ] P6.3 Cases X1-X22 (20-cell matrix offline; X21 no Framer call; X22 no clue delivered).
+- [x] P6.3 Cases X1-X22 (20-cell matrix offline; X21 no Framer call; X22 no clue delivered).
+- [x] P6.5 [coordinator, pinned-trace.md] the Fixer sees each condition's origin (`entity`, the opening) and can
+      propose `remove_condition` (evidence required; wounds refused); the 175211 pinned complaint is a real case.
 - [ ] P6.4 Live (Sonnet Fixer): the 4 saved head-to-head complaints and 4 new made-up complaints on dm-tools saves; report k/8
       repaired-or-explained and the pipeline's number for the same kinds from `evals/baselines/fixer_*`.
 Gate: matrix green; suite; live k/8 reported honestly (target at least the pipeline's rate).
