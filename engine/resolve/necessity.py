@@ -84,7 +84,8 @@ def plain_reading(beat: Beat, verb: str | None, state: Any) -> bool:  # rule: 01
     from engine.retrieve.scene import cannot_read, written_words
 
     tgt = beat.target
-    return (reads_writing(beat, verb, state) and tgt is not None and tgt in state.entities
+    reads = beat.stated.reads if beat.stated is not None else reads_writing(beat, verb, state)  # [spec 033 R7] the DM's field
+    return (reads and tgt is not None and tgt in state.entities
             and written_words(state, tgt) is not None and not cannot_read(state, beat.actor, tgt))
 
 

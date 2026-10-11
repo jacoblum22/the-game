@@ -104,6 +104,29 @@ def excluded_by(verb: Any, method: str) -> Any | None:  # rule: 01.3.1
     return None
 
 
+def stated_exclusion(rules: Any, approach: str) -> Any | None:  # rule: 00.12.3
+    """[spec 033 R7] The `excludes` entry (of any verb) whose `what` is exactly `approach`, which the dm-tools DM
+    states ("plain" names none). Exact equality: no word of the beat is read."""
+    for v in rules.basic_verbs.values():
+        for e in v.get("excludes") or ():
+            if e.get("what") == approach:
+                return e
+    return None
+
+
+def active_effects(state: Any, rules: Any, actor: str) -> set[str]:  # rule: 00.12.3
+    """The effect ids an active condition on `actor` carries (`modifies[].effect_id`): what an exclusion's
+    `covered_by_effect` is checked against.
+    ponytail: conditions only; a licence rank's `effects` are not collected anywhere in the engine yet."""
+    out: set[str] = set()
+    for inst in state.conditions_on(actor):
+        try:
+            out |= {str(m.get("effect_id")) for m in rules.condition(inst.condition_id).get("modifies") or ()}
+        except Exception:  # noqa: BLE001 - an unknown condition id carries no effect here
+            continue
+    return out
+
+
 def excluded_anywhere(rules: Any, verb_id: str | None, method: str) -> Any | None:  # rule: 01.3.1
     """The beat's own verb's `excludes` first, then every other verb's: "pick the lock" read as Handle is still
     the method Force names as needing Thievery."""
@@ -219,20 +242,36 @@ def _tongue(rules: Any, method: str, needs: str) -> list[str]:  # rule: PR-01-5
 
 def compute_gate(verb: str | None, *, against_will: bool = False, uses_power: bool = False, speech: bool = False,
                  method: str = "", held: Sequence[str] = (), rules: Any, reading: bool = False,
-                 literacy_known: bool = False, deed_tag: str | None = None) -> Computed:  # rule: 00.12.3
+                 literacy_known: bool = False, deed_tag: str | None = None, approach: str | None = None,
+                 effects: Iterable[str] = ()) -> Computed:  # rule: 00.12.3
     """00.12.3's computation, pure. A *need* is an excluded method (any verb's `excludes`, matched literally), a
     supernatural or licensed technique (`uses_power`), or reading writing once literacy is on record. With a need,
     a held covering license gives G2, else G3 naming the would-be license (PR-01-5 step 1, looked up by code).
-    Without one, the act is the basic verb's (G1), or G2 when a held license is the trained form of that verb."""
+    Without one, the act is the basic verb's (G1), or G2 when a held license is the trained form of that verb.
+    `approach` [spec 033 R7]: the dm-tools DM's stated method ("plain", or one `excludes` entry exactly). Set, it
+    replaces the word matching: the exclusion is that entry, covered by a held licence in its `covered_by` or an
+    active effect in its `covered_by_effect` (`effects`), else G3 naming `needs`; nothing is guessed from `method`."""
     v = covering_verb(verb, against_will=against_will, speech=speech)
     if v is None or v not in rules.basic_verbs:
         if uses_power:
             v = None
         else:
-            return Computed("G3", v, would_be_license(method, rules, deed_tag), f"no basic verb {verb!r} fits")
-    ex = excluded_anywhere(rules, v, method)
+            return Computed("G3", v, None if approach is not None else would_be_license(method, rules, deed_tag),
+                            f"no basic verb {verb!r} fits")
+    ex = stated_exclusion(rules, approach) if approach is not None and approach != "plain" else (
+        excluded_anywhere(rules, v, method) if approach is None else None)
     need: str | None = None
     wanted: str | None = None
+    if ex is not None and approach is not None:
+        need = f"{ex['what']} needs {ex.get('needs')}"
+        cover = [str(x) for x in ex.get("covered_by") or ()]
+        if (hit := next((x for x in cover if x in held), None)) is not None:
+            return Computed("G2", v, hit, f"held license {hit} covers it ({need})")
+        if (eff := next((x for x in ex.get("covered_by_effect") or () if x in set(effects)), None)) is not None:
+            return Computed("G2", v, None, f"the active effect {eff} covers it ({need})")
+        names = "; ".join(f"{(_lic(rules, x) or {}).get('name', x)} ({x})" for x in cover)
+        return Computed("G3", v, cover[0] if len(cover) == 1 else None,
+                        f"no held license covers it ({need})" + (f"; licenses that cover it: {names}" if names else ""))
     if ex is not None:
         need = f"{ex['what']} needs {ex.get('needs')}"
         named = _LIC.findall(str(ex.get("needs") or "")) or _tongue(rules, method, str(ex.get("needs") or ""))
@@ -246,7 +285,7 @@ def compute_gate(verb: str | None, *, against_will: bool = False, uses_power: bo
         if cover:
             return Computed("G2", v, cover, f"held license {cover} is the trained form of {v}")
         return Computed("G1", v, None, f"{v} covers it")
-    wanted = wanted or would_be_license(method, rules, deed_tag)
+    wanted = wanted or (None if approach is not None else would_be_license(method, rules, deed_tag))
     if wanted and wanted in held:
         return Computed("G2", v, wanted, f"held license {wanted} covers it ({need})")
     if wanted is None and uses_power and (cover := _power_cover(rules, held)) is not None:
@@ -398,11 +437,16 @@ def check_gate(beat: Beat, *, state: Any, rules: Any, store: Any = None, staged:
             return GateDecision(gate="G2", verb=beat.verb, license=beat.license, mode=beat.mode,
                                 reason=f"held license {beat.license} ({beat.mode})")
     langs = any(x.startswith("lic.lang.") for x in held_ids(state, beat.actor))
-    c = compute_gate(beat.verb, against_will=beat.against_will, uses_power=beat.uses_power, speech=beat.speech,
-                     method=f"{beat.method} {beat.intent}", held=held, rules=rules,
-                     reading=reads_writing(beat, covering_verb(beat.verb, against_will=beat.against_will,
-                                                               speech=beat.speech), state),
-                     literacy_known=langs, deed_tag=beat.deed_tag)
+    if beat.stated is not None:  # [spec 033 R7] the DM's `reads` and `approach`; the beat's words are not read
+        c = compute_gate(beat.verb, against_will=beat.against_will, uses_power=beat.uses_power, speech=beat.speech,
+                         held=held, rules=rules, reading=beat.stated.reads, literacy_known=langs,
+                         approach=beat.stated.approach, effects=active_effects(state, rules, beat.actor))
+    else:
+        c = compute_gate(beat.verb, against_will=beat.against_will, uses_power=beat.uses_power, speech=beat.speech,
+                         method=f"{beat.method} {beat.intent}", held=held, rules=rules,
+                         reading=reads_writing(beat, covering_verb(beat.verb, against_will=beat.against_will,
+                                                                   speech=beat.speech), state),
+                         literacy_known=langs, deed_tag=beat.deed_tag)
     # G4 (01.3.7): a condition that forbids the method, or an established fact the Reader cites
     g4: tuple[str, str, Literal["fact", "condition"]] | None = None
     forbid = forbidden_by_condition(beat, state=state, rules=rules, verb=c.verb,

@@ -111,8 +111,12 @@ def _intent_hits(anchor: Mapping[str, Any], verbs: set[str], text: str) -> int:
 def score_anchor(anchor: Mapping[str, Any], beat: Any, deed_tags: Iterable[str], situation_tags: Iterable[str],
                  weights: Mapping[str, int]) -> tuple[int, bool]:  # rule: 00.15.3
     """(score, keyed): `keyed` is true when an intent verb or deed tag matched (situation alone is not enough)."""
-    verbs, text = _intent_phrases(beat)
-    intent = _intent_hits(anchor, verbs, text)
+    if _get(beat, "stated"):  # [spec 033 R10] the dm-tools DM stated the beat: its verb's id, not its words, keys the anchor
+        stems = {str(v).lower() for v in _get(beat, "intent_verbs", []) or []}
+        intent = sum(1 for p in anchor.get("intent_verbs", []) if str(p).lower() in stems)
+    else:
+        verbs, text = _intent_phrases(beat)
+        intent = _intent_hits(anchor, verbs, text)
     deeds = list(deed_tags)
     deed = any(_is_prefix(a, b) for a in anchor.get("deed_tags", []) for b in deeds)
     sit = any(_is_prefix(a, s) for a in anchor.get("situation_tags", []) for s in situation_tags)

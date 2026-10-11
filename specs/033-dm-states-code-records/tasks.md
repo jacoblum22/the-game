@@ -76,12 +76,12 @@ Phases, lanes, models and waves: `plan.md` section 5. Cases: `cases.md` (C1-C12)
 - [ ] T029 Tests C1.d-g, C2, C3 (engine side), C5; move P2a's DENY entries to `raise`; HANDOFF-P2a.md.
 
 ## P2b resolve: gate, necessity, frame, anchors (Sonnet, W2, lane: `gate.py`, `necessity.py`, `frame.py`, `retrieve/anchors.py`, `retrieve/scene.py`)
-- [ ] T035 `gate.check_gate`/`compute_gate`: stated `reads`, `approach` (exact entry), `covered_by` (C1.b, C1.c).
-- [ ] T036 `necessity.plain_reading` from `stated.reads`.
-- [ ] T037 `frame`: lift by take only plus the DM's attribute; `reverses` structural plus `reverses_goal`; `_fitted`
+- [x] T035 `gate.check_gate`/`compute_gate`: stated `reads`, `approach` (exact entry), `covered_by` (C1.b, C1.c).
+- [x] T036 `necessity.plain_reading` from `stated.reads`.
+- [x] T037 `frame`: lift by take only plus the DM's attribute; `reverses` structural plus `reverses_goal`; `_fitted`
   no-op for stated beats.
-- [ ] T038 Anchors: a helper the code framer uses (`[verb_anchor]`); `retrieve/scene.focus_of(beat)` ids only.
-- [ ] T039 Tests C1.b, C1.c, C5 reversal; DENY entries to `raise`; HANDOFF-P2b.md.
+- [x] T038 Anchors: a helper the code framer uses (`[verb_anchor]`); `retrieve/scene.focus_of(beat)` ids only.
+- [x] T039 Tests C1.b, C1.c, C5 reversal; DENY entries to `raise`; HANDOFF-P2b.md.
 
 ## P4 people and testimony (Sonnet, W2, lane: `dm_tools.py` identity/testimony/measures/change kinds; `world/social.py`; `gen/case.py` `place_on`)
 - [ ] T030 `_party`/`_walk_on`/`target_kinds` per plan 3 R6; `"pc"` literal; `as` defaults from data (C8).

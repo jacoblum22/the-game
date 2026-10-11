@@ -65,12 +65,15 @@ DENY: dict[str, Entry] = {
     # P5: leads and witnesses are told, never spawned (R4)
     "engine.world.pacing.inject_lead": _e("A19", "P5"), "engine.gen.case.audit_cases": _e("A20", "P5"),
     # P2b: beat-text decisions (R7), search by id (R10)
-    _S + "_STOP": _e("D6", "P2b"), _S + "excluded_by": _e("D6", "P2b"), _S + "excluded_anywhere": _e("D6", "P2b"),
-    _S + "would_be_license": _e("D6", "P2b"), _S + "_tongue": _e("D6", "P2b"), _S + "WRITING": _e("D7", "P2b"),
-    _S + "LOOKS_AT": _e("D8", "P2b"), _S + "reads_writing": _e("D8", "P2b"),
-    _W + "READING": _e("D10", "P2b"), _W + "_PROPER_RUN": _e("D17", "P2b"), _W + "resolve_names": _e("D17", "P2b"),
-    _W + "focus_ids": _e("D18", "P2b"), "engine.retrieve.anchors._intent_hits": _e("D20", "P2b"),
-    _F + "_LIFT": _e("D11", "P2b"), _F + "_UNDO": _e("D12", "P2b"), _F + "_REFUSE": _e("D12", "P2b"),
+    # (`resolve_names` and `_PROPER_RUN` left the list: `recall`'s codex search still lists candidates with them, class S)
+    _S + "_STOP": _e("D6", "P2b", mode="raise"), _S + "excluded_by": _e("D6", "P2b", mode="raise"),
+    _S + "excluded_anywhere": _e("D6", "P2b", mode="raise"), _S + "would_be_license": _e("D6", "P2b", mode="raise"),
+    _S + "_tongue": _e("D6", "P2b", mode="raise"), _S + "WRITING": _e("D7", "P2b", mode="raise"),
+    _S + "LOOKS_AT": _e("D8", "P2b", mode="raise"), _S + "reads_writing": _e("D8", "P2b", mode="raise"),
+    _W + "READING": _e("D10", "P2b", mode="raise"), _W + "focus_ids": _e("D18", "P2b", mode="raise"),
+    "engine.retrieve.anchors._intent_hits": _e("D20", "P2b", mode="raise"),
+    _F + "_LIFT": _e("D11", "P2b", mode="raise"), _F + "_UNDO": _e("D12", "P2b", mode="raise"),
+    _F + "_REFUSE": _e("D12", "P2b", mode="raise"),
     # P4: identity, walk-ons, testimony, the measures that leave the engine (R6 R8 R11)
     _D + "_NAME": _e("D21", "P4"), _D + "_PC_WORDS": _e("D21", "P4"),
     _D + "_PERSON_KIND": _e("D24", "P4"), _D + "_THING_KIND": _e("D24", "P4"),
@@ -95,12 +98,14 @@ DENY: dict[str, Entry] = {
 # P code-made strings, ? undecided) and the inventory id.
 WATCH: dict[str, str] = {
     "engine.retrieve.scene.scene_facts": "? D19",
-    "engine.resolve.frame._fitted": "? D13",
-    "engine.resolve.frame.lift_or_carry": "? D11 (the take branch stays)",
-    "engine.resolve.frame.reverses": "? D12 (the structural branch stays)",
-    "engine.resolve.necessity.plain_reading": "? D9 (uses reads_writing)",
-    "engine.resolve.necessity.certain_talk": "? D9",
-    "engine.resolve.necessity.looks_here": "? D9",
+    "engine.retrieve.scene.resolve_names": "S D17 (recall's search lists candidates; the DM judges)",
+    "engine.retrieve.scene._PROPER_RUN": "S D17",
+    "engine.resolve.frame._fitted": "P D13 (exact equality with the menu example)",
+    "engine.resolve.frame.lift_or_carry": "P D11 (stated: the typed take only)",
+    "engine.resolve.frame.reverses": "P D12 (stated: reverses_goal over cost ids)",
+    "engine.resolve.necessity.plain_reading": "P D9 (stated: stated.reads)",
+    "engine.resolve.necessity.certain_talk": "P D9 (typed fields and recorded standing; no words)",
+    "engine.resolve.necessity.looks_here": "P D9 (ids: the target is the mover place)",
     "engine.resolve.oracle.positive": "? D14",
     "engine.resolve.oracle._POSSESS": "? D14", "engine.resolve.oracle._NEG": "? D14",
     "engine.resolve.pipeline._same_goal": "P D4",

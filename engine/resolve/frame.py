@@ -354,24 +354,35 @@ _LIFT = re.compile(r"\b(?:lift|carr(?:y|ies|ied|ying)|palm|pick\w* up|heave|haul
 
 def lift_or_carry(rules: Any, beat: Beat) -> Any | None:  # rule: 01.6.1
     """`resolution.yaml#attribute_rubric.lift_or_carry` when it applies (DL-01-35): a beat whose typed change is
-    `take`, or an Exert, Force, Handle or Sneak whose method lifts, carries or palms a thing; else None."""
+    `take`, or an Exert, Force, Handle or Sneak whose method lifts, carries or palms a thing; else None.
+    [spec 033 R7] A stated beat lifts by its typed `take` only: its method's words are not read."""
     spec = (rules.resolution.get("attribute_rubric") or {}).get("lift_or_carry")
     if not spec:
         return None
     take = beat.change is not None and beat.change.kind == "take"
-    lifts = beat.verb in _LIFT_VERBS and bool(_LIFT.search(f"{beat.method} {beat.intent}"))
-    return spec if take or lifts else None
+    return spec if take or (beat.stated is None and _lifts_by_words(beat)) else None
 
 
-def lift_attribute(spec: Any, rules: Any, state: Any, beat: Beat, actor: Any, proposed: str,
-                   comp: int) -> str:  # rule: 01.6.1
-    """The method's words pick (heave: Might; palm, quick and quiet: Agility; carry far: Endurance); else the allowed
-    attribute with the best computed odds, the proposed one kept on a tie (the OFFER lists the others)."""
+def _lifts_by_words(beat: Beat) -> bool:  # the pipeline's reading of the method (spec 033 R7)
+    return beat.verb in _LIFT_VERBS and bool(_LIFT.search(f"{beat.method} {beat.intent}"))
+
+
+def _attribute_by_words(spec: Any, beat: Beat) -> str | None:  # the pipeline's reading of the method (spec 033 R7)
     text = f"{beat.method} {beat.intent}"
     for attr, words in (spec.get("words") or {}).items():
         for w in words:
             if re.search(r"\b" + r"\w*\s+".join(map(re.escape, str(w).split())) + r"\w*", text, re.IGNORECASE):
                 return str(attr)
+    return None
+
+
+def lift_attribute(spec: Any, rules: Any, state: Any, beat: Beat, actor: Any, proposed: str,
+                   comp: int) -> str:  # rule: 01.6.1
+    """The method's words pick (heave: Might; palm, quick and quiet: Agility; carry far: Endurance); else the allowed
+    attribute with the best computed odds, the proposed one kept on a tie (the OFFER lists the others). A stated beat
+    skips the words: the DM's attribute stands unless another allowed one has better odds [spec 033 R7]."""
+    if beat.stated is None and (by_words := _attribute_by_words(spec, beat)) is not None:
+        return by_words
     caps = _caps(rules)
     base_max = int(caps["base_pc"]["max"] if actor.kind == "pc" else caps["base_non_pc"]["max"])
     edge = min(int(caps["edge"]["max"]), int(actor.data.get("edge", 0) or 0))
@@ -827,13 +838,22 @@ _REVERSES: dict[str, re.Pattern[str]] = {
 }
 
 
-def reverses(cost: Any, beat: Beat, state: Any) -> bool:  # rule: 01.9.3
+def reverses(cost: Any, beat: Beat, state: Any, rules: Any) -> bool:  # rule: 01.9.3
     """The price would undo the beat's own typed goal against the same target (DL-01-43): never a success-at-a-cost
-    price. A closed door on the person a `persuade_to` or `learn` presses; else the kind's reversing words."""
+    price. A stated beat [spec 033 R7]: the cost ids `resolution.yaml#reverses_goal` lists for the change kind, on a
+    named target (ids only; no price's words are read). Else a closed door on the person a `persuade_to` or `learn`
+    presses, or the kind's reversing words."""
     c = beat.change
     kind = c.kind if c is not None and c.kind != "none" else ("restrain" if _sets_hold(beat, state) else "none")
+    if beat.stated is not None:
+        return cost.menu_id in ((rules.resolution.get("reverses_goal") or {}).get(kind) or ()) \
+            and beat.target not in (None, "none")
     if kind in ("persuade_to", "learn") and cost.menu_id == "cost.closed_door" and beat.target not in (None, "none"):
         return True
+    return _reverses_by_words(cost, kind)
+
+
+def _reverses_by_words(cost: Any, kind: str) -> bool:  # the pipeline's reading of the price's words (spec 033 R7)
     rx = _REVERSES.get(kind)
     return bool(rx and rx.search(cost.form_intent or ""))
 
@@ -872,12 +892,12 @@ def _costs(p: ProposedFrame, beat: Beat, state: Any, rules: Any, stakes: str,
         ac = CostPreview(**_fitted(alt, rules).model_dump(), on_success_at_cost=prev["on_success_at_cost"])
     # rule: 01.9.3 (DL-01-43): a price that reverses the goal is never paid on a success at a cost; it still prices a
     # failure. When no price is left for the close call, the first fitting one that does not reverse it is named.
-    if reverses(tc, beat, state):
+    if reverses(tc, beat, state, rules):
         tc.on_success_at_cost = None
-    if ac is not None and reverses(ac, beat, state):
+    if ac is not None and reverses(ac, beat, state, rules):
         ac = None
     if ac is None and tc.on_success_at_cost is None and prev["on_success_at_cost"] is not None:
-        bad_menus = [m for m in ("cost.closed_door",) if reverses(CostDecl(menu_id=m), beat, state)]
+        bad_menus = [m for m in ("cost.closed_door",) if reverses(CostDecl(menu_id=m), beat, state, rules)]
         fit = first_fitting_cost(role="alternate", other=p.threatened_cost, exclude=bad_menus,
                                  **kw)  # type: ignore[arg-type]
         if fit is not None:
