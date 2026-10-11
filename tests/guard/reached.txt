@@ -64,14 +64,17 @@ engine.dm.dm_tools _carried
 engine.dm.dm_tools _change
 engine.dm.dm_tools _coin
 engine.dm.dm_tools _condition
+engine.dm.dm_tools _cost_block
 engine.dm.dm_tools _default
 engine.dm.dm_tools _dm_loop
+engine.dm.dm_tools _drain
 engine.dm.dm_tools _end_scene
 engine.dm.dm_tools _env
 engine.dm.dm_tools _fact
 engine.dm.dm_tools _fight
 engine.dm.dm_tools _fight_block
 engine.dm.dm_tools _flat
+engine.dm.dm_tools _footing
 engine.dm.dm_tools _give
 engine.dm.dm_tools _held_mood
 engine.dm.dm_tools _id
@@ -83,7 +86,9 @@ engine.dm.dm_tools _not_here
 engine.dm.dm_tools _open_scene
 engine.dm.dm_tools _outcomes_text
 engine.dm.dm_tools _party
+engine.dm.dm_tools _position
 engine.dm.dm_tools _propose_roll
+engine.dm.dm_tools _reach
 engine.dm.dm_tools _reask
 engine.dm.dm_tools _recall
 engine.dm.dm_tools _reveal_clue
@@ -98,6 +103,8 @@ engine.dm.dm_tools _world
 engine.dm.dm_tools _world_text
 engine.dm.dm_tools approaches
 engine.dm.dm_tools code_framer
+engine.dm.dm_tools foe_message
+engine.dm.dm_tools foe_schema
 engine.dm.dm_tools play_answer
 engine.dm.dm_tools play_turn
 engine.dm.dm_tools schema_for
@@ -109,6 +116,7 @@ engine.dm.dm_tools target_kinds
 engine.dm.dm_tools tool
 engine.dm.dm_world <module>
 engine.dm.dm_world _foe_facts
+engine.dm.dm_world _foes
 engine.dm.dm_world _lead
 engine.dm.dm_world _time
 engine.dm.dm_world _up
@@ -223,7 +231,6 @@ engine.dm.world_step clock_omens
 engine.dm.world_step deliver_warnings
 engine.dm.world_step exits
 engine.dm.world_step fired_triggers
-engine.dm.world_step foes_act
 engine.game Game._record
 engine.gen._data load
 engine.gen._seed_lib Dice.__init__
@@ -370,7 +377,6 @@ engine.resolve.conflict active
 engine.resolve.conflict check_end
 engine.resolve.conflict end_hold
 engine.resolve.conflict ensure_vitality
-engine.resolve.conflict foe_beat
 engine.resolve.conflict holds
 engine.resolve.conflict record
 engine.resolve.conflict start
@@ -388,11 +394,17 @@ engine.resolve.costs check_cost_decl
 engine.resolve.costs cost_severity
 engine.resolve.costs established_stakes_sources
 engine.resolve.costs menu
+engine.resolve.costs pending_footing
 engine.resolve.costs severity_previews
 engine.resolve.costs source_menus
 engine.resolve.costs structural_fit
 engine.resolve.costs uncited_by_stakes
 engine.resolve.costs uncited_candidates
+engine.resolve.foe_act <module>
+engine.resolve.foe_act act
+engine.resolve.foe_act legal_acts
+engine.resolve.foe_act pc_open
+engine.resolve.frame _atom_true
 engine.resolve.frame _attr_id
 engine.resolve.frame _attr_name
 engine.resolve.frame _caps
@@ -432,6 +444,7 @@ engine.resolve.frame resolve_anchor
 engine.resolve.frame reverses
 engine.resolve.frame rolling_tiers
 engine.resolve.frame status
+engine.resolve.frame status_applies
 engine.resolve.frame stored_dc_key
 engine.resolve.frame tag_chain
 engine.resolve.frame verb_classes
@@ -491,7 +504,6 @@ engine.resolve.pipeline _reach_words
 engine.resolve.pipeline _recheck
 engine.resolve.pipeline _rides
 engine.resolve.pipeline _roll
-engine.resolve.pipeline _same_goal
 engine.resolve.pipeline _span_words
 engine.resolve.pipeline _start
 engine.resolve.pipeline _stated_cost_params
@@ -735,7 +747,6 @@ engine.world.places location
 engine.world.places move
 engine.world.places place_kind
 engine.world.places reachable
-engine.world.scenes _adjustments
 engine.world.scenes _narration
 engine.world.scenes _scoped
 engine.world.scenes agenda_answer

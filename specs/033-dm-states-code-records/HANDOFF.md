@@ -106,4 +106,18 @@ Guard traps for every phase:
 23. LEAD/WITNESS told in the same exchange reach the DM through `_reask`; the `_dm_loop` note after `end_game` still says
     "A roll is now offered" (P3 lane). Live: count how often the DM acts on LEAD DUE / WITNESS NEEDED; a mistyped
     `knows` id only gets a NOTE. The lead form roll is a logged dice draw even when the DM ignores the lead.
+- P3 (26ef6c6): `dm_world._foes` makes the extra DM call (`foe_schema`, `dm_tools.foe_message`) after the exchange
+  settles; picks checked by `foe_act.legal_acts` (T-06-16, Dying PC only for `kill`); omitted/illegal ->
+  `foe_act.default_act`, logged `not_chosen:foes.<id>`; `_foe_turn(do=, target=, ref=)`; the tools path never calls
+  `foes_act`/`foe_beat`. `foe_turns` rows carry `act`/`picked_by`; `stats.world.foe_calls`. COST TO SHAPE on the
+  answer turn (`_cost_block`, `_footing` -> `apply_footing`) lands BEFORE the foe call. `_drain(t)` moves
+  `PipelineEnv.defaults` into the stats. `dm_tools._reach` refuses a melee Strike/Grapple/Force on a target not
+  engaged (also when no band is recorded). Offline DM states `change position engaged` before a melee roll.
+24. P6: delete the `_reach` fixture in `tests/engine/conftest.py` (`NEEDS_NO_REACH_CHECK`: test_spec032_p3, p4, p5a,
+    p8a, p8b) by giving those tests a recorded engaged band or a `change position` step. The foe call shows the FIGHT
+    block twice (SITUATION and the lead): drop the plain one in `foe_message` if wanted. Reach weapons (spear at close)
+    not allowed yet; a companion target has no band test. The `_dm_loop` note after `end_game` still says "A roll is
+    now offered".
+25. The recorded game now hits no DENY entry at all; the runtime test's aliveness assert was dropped (planted tests
+    prove the guard is alive).
 

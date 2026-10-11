@@ -1163,7 +1163,7 @@ def _deferred(env: PipelineEnv, deferred: dict[str, Any], frame: Frame) -> str:
         env.add(Event.of("meta_set", source=frame.id or "cost", rule_id="01.13.7", key=PENDING_FOOTING,
                          value={"actor": frame.beat.actor, "opponent": deferred.get("opponent"),
                                 "frame_id": frame.id, "severity": deferred["severity"],
-                                "options": list(deferred["footing_options"])}))
+                                "options": list(deferred["footing_options"]), "words": dict(deferred.get("words") or {})}))
         return ""
     if "advance_time" in deferred:  # rule: 01.13.5
         (unit, amount), = dict(deferred["advance_time"]).items()

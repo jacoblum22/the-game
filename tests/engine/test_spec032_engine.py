@@ -196,8 +196,8 @@ def ask(message: str, *, final: bool = False) -> dict[str, Any]:
 
 def test_the_offline_dm_proposes_one_roll_for_an_attack_and_talks_otherwise() -> None:
     hit = ask(f"{PEOPLE}\nTHE PLAYER'S MESSAGE\nI attack the ferry-keeper.\n\n{FRESH}")
-    assert [c["tool"] for c in hit["calls"]] == ["propose_roll"] and hit["calls"][0]["target"] == "npc.ada_sol"
-    assert hit["calls"][0]["verb"] == "verb.strike" and hit["passage"]
+    assert [c["tool"] for c in hit["calls"]] == ["change", "propose_roll"] and hit["calls"][1]["target"] == "npc.ada_sol"  # P3: the move first
+    assert hit["calls"][1]["verb"] == "verb.strike" and hit["calls"][0]["to"] == "engaged" and hit["passage"]
     talk = ask(f"{PEOPLE}\nTHE PLAYER'S MESSAGE\nI ask her about the ferry.\n\n{FRESH}")
     assert talk["calls"] == [] and talk["passage"].startswith("The ferry-keeper") and talk["passage"].endswith("do?")
 

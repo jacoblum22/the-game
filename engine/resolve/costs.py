@@ -295,9 +295,11 @@ def _apply(menu_id: str, sev: str, write: str, entry: Mapping[str, Any], frame: 
         # the form is the DM's pick after the roll, among the options that can land; code writes exactly that
         # option, and without a pick defers the options (never reads a form from words)
         foe = _footing_foe(state, frame)
-        shown = [o.id for o in footing_options(state, frame, sev)]
+        opts = footing_options(state, frame, sev)
+        shown = [o.id for o in opts]
         if form is None or form not in shown:
-            return [], 0, {"footing_options": shown, "severity": sev, "opponent": foe}
+            return [], 0, {"footing_options": shown, "severity": sev, "opponent": foe,
+                           "words": {o.id: o.words for o in opts}}  # [spec 033 P3] shown on COST TO SHAPE
         return footing_events(state, rules, mint, form, actor=actor, foe=foe, sev=sev, fid=fid), 0, None
     if menu_id == "cost.footing":  # rule: 01.13.7
         conds = re.findall(r"cond\.[a-z_]+", write)

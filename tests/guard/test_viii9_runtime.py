@@ -20,7 +20,7 @@ from tests.guard.viii9 import DENY, Entry, Guard, Viii9Violation, _resolve
 def test_the_recorded_dm_tools_game_hits_no_raise_entry_and_the_guard_is_alive() -> None:
     g = census.play_recorded(Guard(mode="raise"))
     assert g.raised() == [], "\n".join(f"constitution VIII.9: {h['name']} ({h['inv']})" for h in g.raised()[:10])
-    assert g.hits, "the guard recorded nothing: it is not patching"  # P0: every entry is still `log`
+    # no hit at all is the goal once P2a-P5 removed the guesses; the planted tests below prove the guard is alive
 
 
 def test_every_deny_entry_resolves_and_has_a_known_phase() -> None:

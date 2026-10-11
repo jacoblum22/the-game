@@ -96,15 +96,15 @@ Phases, lanes, models and waves: `plan.md` section 5. Cases: `cases.md` (C1-C12)
   `offline_seed11_dmtools`; HANDOFF-P4.md.
 
 ## P3 foes and the answer turn (Sonnet, W3, lane: `resolve/foe_act.py`, `dm_world.py` foe part, `dm_tools.py` turn flow)
-- [ ] T040 `resolve/foe_act.py`: `legal_acts`, `foe_act` (C4 table), reusing `foe_beat`'s pieces and `change.hold`.
-- [ ] T041 FIGHT block: per foe id, band, conditions, state words, legal acts.
-- [ ] T042 `foes` intake: last step's list; stored in the pause `detail["foes"]` when a roll pauses; run by
+- [x] T040 `resolve/foe_act.py`: `legal_acts`, `foe_act` (C4 table), reusing `foe_beat`'s pieces and `change.hold`.
+- [x] T041 FIGHT block: per foe id, band, conditions, state words, legal acts.
+- [x] T042 `foes` intake: last step's list; stored in the pause `detail["foes"]` when a roll pauses; run by (retired by D2: the foe call `dm_world._foes` runs after the exchange settles)
   `dm_world.world_step` in place of `ws.foes_act`; lapses reported; `check_end`.
-- [ ] T043 COST TO SHAPE on the answer turn from P2a's deferred options; `cost_form` applied by `apply_footing`.
-- [ ] T044 One re-ask for missing picks (foes and cost form together), then wait / nothing, logged in
+- [x] T043 COST TO SHAPE on the answer turn from P2a's deferred options; `cost_form` applied by `apply_footing`.
+- [x] T044 One re-ask for missing picks (foes and cost form together), then wait / nothing, logged in (retired by D2/D3: no re-ask; omitted or illegal picks default and log `not_chosen:foes.<id>`)
   `stats.world.missing_picks`.
-- [ ] T045 Stats: `foe_turns` rows carry `picked_by: dm|lapsed|waited`.
-- [ ] T046 Tests C4, C5 (answer-turn side); DENY (`foe_beat`, `foes_act`) to `raise`; HANDOFF-P3.md.
+- [x] T045 Stats: `foe_turns` rows carry `picked_by: dm|lapsed|waited`.
+- [x] T046 Tests C4, C5 (answer-turn side); DENY (`foe_beat`, `foes_act`) to `raise`; HANDOFF-P3.md.
 
 ## P5 leads, witnesses, retire (Sonnet, W3 parallel with P3, lane per plan 5)
 - [x] T050 `pacing.lead_candidates` (read-only) and the bookkeeping half of `inject_lead` (lower trigger, reset

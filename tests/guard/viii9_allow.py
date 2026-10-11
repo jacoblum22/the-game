@@ -162,7 +162,6 @@ ALLOW: dict[str, dict[str, tuple[str, str]]] = {
     },
     "engine.resolve.conflict": {
         "end_hold:words:resolve.change.HOLDS": ("P", "enum or table of code ids"),
-        "foe_beat:words:BANDS": ("pending:P3", "R3: the DM picks the foe's act"),
         "holds:words:resolve.change.HOLDS": ("P", "enum or table of code ids"),
         "strike_harm:words:harm.apply.SEVERITIES": ("P", "enum or table of code ids"),
     },
@@ -170,7 +169,12 @@ ALLOW: dict[str, dict[str, tuple[str, str]]] = {
         "_apply:re:findall": ("P", "parses a code-made string (cost DSL, rule atom, table range, id, slug, list of ids)"),
         "_apply:re:search": ("P", "parses a code-made string (cost DSL, rule atom, table range, id, slug, list of ids)"),
     },
+    "engine.resolve.foe_act": {
+        "legal_acts:words:resolve.change.HOLDS": ("P", "enum or table of code ids"),
+    },
     "engine.resolve.frame": {
+        "_atom_true:pattern:_ATOM": ("P", "parses a code-made string (cost DSL, rule atom, table range, id, slug, list of ids)"),
+        "_atom_true:re:findall": ("P", "parses a code-made string (cost DSL, rule atom, table range, id, slug, list of ids)"),
         "_frame_check:words:resolve.types.STAKES_LADDER": ("P", "enum or table of code ids"),
         "_reach:words:resolve.types.REACH_LADDER": ("P", "enum or table of code ids"),
         "_stakes:words:resolve.types.STAKES_LADDER": ("P", "enum or table of code ids"),

@@ -35,7 +35,7 @@ def fixed(degree: str) -> Callable[..., RollResult]:
 
 
 def play(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, over: dict[str, Any], degree: str = "success",
-         setup: Callable[[Any, str, str], None] | None = None) -> tuple[Any, str, str]:
+         setup: Callable[[Any, str, str], None] | None = None, engaged: bool = True) -> tuple[Any, str, str]:
     """One proposed roll whose die is fixed at `degree`, offered then committed. Returns (game, npc, pc)."""
     game, model = to_play(tmp_path)
     npc, pc = npc_here(game), pc_id(game.store.state) or ""
@@ -43,6 +43,9 @@ def play(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, over: dict[str, Any], 
         setup(game, npc, pc)
     monkeypatch.setattr(pl, "roll_check", fixed(degree))
     call = {**BASE, "target": npc, **{k: (npc if v == "@npc" else pc if v == "@pc" else v) for k, v in over.items()}}
+    if call["verb"] in ("verb.strike", "verb.grapple", "verb.force") and engaged:  # 06.4.3: in reach first (P3)
+        with game.store.transaction("turn.900") as tx:
+            conflict._set_band(tx, pc, npc, "engaged", "06.3.9")
     model.push(Role.DM, {"calls": [call], "passage": "Lead-up.", "said": [], "asks": []})
     r = game.submit("I act.")
     assert r.pause is not None and r.pause.kind == "offer"
@@ -99,7 +102,7 @@ def test_a_strike_or_grapple_writes_no_band_and_starts_no_fight(tmp_path: Path, 
                                                                  verb: str) -> None:
     game, npc, pc = play(tmp_path, monkeypatch, {"verb": verb, "change_kind": "harm" if verb == "verb.strike" else "none"})
     st = game.store.state
-    assert conflict._band(st, pc, npc) is None and conflict._band(st, npc, pc) is None
+    assert conflict._band(st, pc, npc) == "engaged" == conflict._band(st, npc, pc)  # as the DM left it: nothing written
     assert not conflict.record(st) and not conflict.active(st)  # only the DM's `change fight` starts one
 
 
@@ -157,6 +160,7 @@ def test_the_method_text_is_unchanged_by_nonlethal(tmp_path: Path) -> None:
     npc = npc_here(game)
 
     def run(ctx: Any, t: Any, tx: Any) -> str:
+        conflict._set_band(tx, t.rec.pc, npc, "engaged", "06.3.9")
         dm_tools._propose_roll(ctx, t, {**BASE, "target": npc, "nonlethal": True, "how": "with the flat of the blade",
                                         "change_kind": "harm"})
         return str(Beat.model_validate(tx.state.open_pause().detail["frame"]["beat"]).method)
@@ -218,23 +222,13 @@ def test_force_push_moves_the_target_by_reach_from_the_stated_force(tmp_path: Pa
     game, npc, pc = play(tmp_path / "b", monkeypatch, over, "critical_success")  # reach 3: two bands
     assert conflict._band(game.store.state, pc, npc) == "near"
     game, npc, pc = play(tmp_path / "c", monkeypatch, over, "failure")
-    assert conflict._band(game.store.state, pc, npc) is None and conds(game, npc) == []
-
-
-def test_force_push_starts_from_the_recorded_band(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
-    def engaged(game: Any, npc: str, pc: str) -> None:
-        with game.store.transaction("turn.901") as tx:
-            conflict._set_band(tx, pc, npc, "close", "06.3.9")
-
-    game, npc, pc = play(tmp_path, monkeypatch, {"verb": "verb.force", "force": "push", "change_kind": "harm"},
-                         setup=engaged)
-    assert conflict._band(game.store.state, pc, npc) == "near"
+    assert conflict._band(game.store.state, pc, npc) == "engaged" and conds(game, npc) == []
 
 
 def test_force_prone_knocks_down_without_moving(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     over = {"verb": "verb.force", "force": "prone", "change_kind": "harm", "goal": "Shove him back"}
     game, npc, pc = play(tmp_path, monkeypatch, over)
-    assert conds(game, npc) == ["cond.prone"] and conflict._band(game.store.state, pc, npc) is None
+    assert conds(game, npc) == ["cond.prone"] and conflict._band(game.store.state, pc, npc) == "engaged"
     game, npc, pc = play(tmp_path / "b", monkeypatch, over, "critical_success")
     assert conds(game, npc) == ["cond.prone"]  # prone and off balance: the condition rules fold off balance into prone
 
@@ -330,6 +324,9 @@ def change_event_flag(pc: str) -> Any:
 
 def test_a_failed_stated_footing_defers_its_options_and_apply_footing_writes_exactly_the_pick(
         tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    from engine.dm import dm_tools
+
+    monkeypatch.setattr(dm_tools, "_footing", lambda ctx, t: None)  # hold the deferral: the flow (P3) is tested elsewhere
     game, npc, pc = play(tmp_path, monkeypatch, {"change_kind": "harm", "fail_cost": "cost.footing"}, "failure")
     pend = costs.pending_footing(game.store.state)
     assert pend is not None and pend["severity"] == "S2" and pend["options"][0] == "prone"
@@ -342,6 +339,9 @@ def test_a_failed_stated_footing_defers_its_options_and_apply_footing_writes_exa
 
 
 def test_apply_footing_defaults_to_the_first_option_that_can_land(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    from engine.dm import dm_tools
+
+    monkeypatch.setattr(dm_tools, "_footing", lambda ctx, t: None)
     game, npc, pc = play(tmp_path, monkeypatch, {"change_kind": "harm", "fail_cost": "cost.footing"}, "failure")
     pend = costs.pending_footing(game.store.state)
     assert pend is not None
