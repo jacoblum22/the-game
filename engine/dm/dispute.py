@@ -360,7 +360,9 @@ def _reframe(ctx: Any, tx: Transaction, p: dict[str, Any], outcomes: list[Any]) 
     # rule: 12.5.8
     """PR-12-11 step 3, 12.3.6 item 4 (DL-12-117): the OFFER on screen withdrawn (nothing was spent) and its beat run
     through gate, necessity and frame again, declared now so the corrections applied before it count. `fact_id`: a
-    fact on record that makes the goal impossible (the gate refuses, G4). Never rolls (auto-commit off)."""
+    fact on record that makes the goal impossible (the gate refuses, G4). Never rolls (auto-commit off). A dm-tools
+    game plays the DM's turn again instead (`_replay_dm`, spec 032 G11)."""
+    from engine.dm import dm_tools
     from engine.dm.turn import _env
     from engine.resolve.pipeline import BeatPlan, run_beats
 
@@ -384,6 +386,10 @@ def _reframe(ctx: Any, tx: Transaction, p: dict[str, Any], outcomes: list[Any]) 
     queued = [BeatPlan.model_validate(q) for q in d.get("queued") or []]
     note, left_out = framer_note(p.get("value"))
     with _turn_ctx(ctx, tx) as tc:
+        if dm_tools.enabled(tc):
+            what = beat.title or beat.restatement or beat.intent
+            why = " (the note was not passed on: odds and rolls are the DM's to set)" if left_out else ""
+            return _replay_dm(tc, tx, pause, what, note, fid, outcomes, why)
         env = _env(tc)
         env.auto_commit = False  # a /fix never rolls for the player
         env.framer_note = note
@@ -404,8 +410,78 @@ def _reframe(ctx: Any, tx: Transaction, p: dict[str, Any], outcomes: list[Any]) 
     return "did", f"\"{what}\" needs no roll after all (below){why}"
 
 
+@dataclass
+class Replayed:
+    """A dm-tools turn played again by a re-frame (spec 032 G11): the DM's passage, the blocks and beats code owed
+    it, and its stats (`screen.dm_tools`). Sits in `DisputeResult.outcomes` beside the pipeline's beat outcomes."""
+
+    passage: str
+    oof: list[dict[str, str]]
+    beats: list[Any]
+    stats: dict[str, Any]
+
+
+class _NoClue:
+    """A correction never delivers a clue (INV-10; spec 032 X22): the DM's `reveal_clue` calls are dropped before
+    code sees them."""
+
+    def __init__(self, inner: Any) -> None:
+        self.inner = inner
+        self.provider = getattr(inner, "provider", "noclue")
+
+    def fill(self, role: Any, schema: dict[str, Any], packet: Any, *, turn_id: str | None, attempt: int,
+             seq: int = 0) -> Any:
+        res = self.inner.fill(role, schema, packet, turn_id=turn_id, attempt=attempt, seq=seq)
+        data = res.data
+        if isinstance(data, dict) and isinstance(data.get("calls"), list):
+            keep = [c for c in data["calls"] if not (isinstance(c, dict) and c.get("tool") == "reveal_clue")]
+            if len(keep) < len(data["calls"]):
+                return res.model_copy(update={"data": {**data, "calls": keep}})
+        return res
+
+
+def _replay_dm(tc: Any, tx: Transaction, pause: Any, what: str, note: str | None, fid: str, outcomes: list[Any],
+               why: str) -> tuple[str, str]:  # rule: PR-12-11
+    """Spec 032 G11, a re-frame on a dm-tools game: the OFFER is withdrawn (by the caller) and the DM plays that turn
+    again: the player's own words, the Fixer's note, what the turn's other tool calls already did (kept); any new
+    OFFER is framed by code (`dm_tools.code_framer`, no Framer call). Never rolls for the player; never a clue."""
+    from engine.dm import dm_tools
+    from engine.dm.adjudication import AdjudicationRecord
+    from engine.dm.fixer import dm_log, plain_fact
+    from engine.dm.turn import recent_exchanges
+
+    opened = next((e for e in tc.store.events(types=["pause_opened"])
+                   if getattr(e.payload, "pause_id", None) == pause.pause_id), None)
+    tr = tc.store.turn(opened.turn_id) if opened is not None and opened.turn_id else None
+    t = dm_tools.Turn(rec=AdjudicationRecord(turn_id=tx.turn_id or "", pc=pc_of(tx.state)))
+    t.env = dm_tools._env(tc, t)
+    t.env.auto_commit = False
+    lead = "\n".join(x for x in [
+        f'The player used /fix on the roll offered for "{what}". That offer is withdrawn; nothing was spent.',
+        note and f"The game's investigator found: {note}",
+        fid and f"On record, so it cannot work as tried: {plain_fact(tx.state, tx.state.facts[fid])}",
+        "\n".join(dm_log(tr)[1:]) and "That turn's tool calls (what code did stays done; only the roll is "
+                                      "withdrawn):\n" + "\n".join(dm_log(tr)[1:]),
+        "Play the player's message again with this in mind: propose a roll only if one is still needed. A correction "
+        "never gives a clue."] if x)
+    model = tc.model
+    tc.model = _NoClue(model)
+    try:
+        passage = dm_tools._dm_loop(tc, t, tr.input_verbatim if tr is not None else what,
+                                    recent_exchanges(tc.store, tx.turn_id or "", n=6), lead)
+    finally:
+        tc.model = model
+    # ponytail: no world step or time here (a /fix is out of fiction); the player's next turn takes them
+    outcomes.append(Replayed(passage=passage, oof=t.oof, beats=list(t.rec.beats), stats={
+        **t.stats, "tools": [{"tool": a, "args": b, "out": o[:300]} for a, b, o in t.log]}))
+    if tx.state.open_pause() is not None:
+        return "did", f"the offer for \"{what}\" is withdrawn and the turn played again with the record as it " \
+                      f"stands (below){why}"
+    return "did", f"the offer for \"{what}\" is withdrawn (nothing was spent) and the turn played again (below){why}"
+
+
 NOTE_CHARS = 200
-_ODDS = re.compile(r"\d|%|\b(?:odds|chances?|percent|dc|difficult\w*|rolls?|rolled|tiers?|modifiers?|bonus|penalty|"
+_ODDS =re.compile(r"\d|%|\b(?:odds|chances?|percent|dc|difficult\w*|rolls?|rolled|tiers?|modifiers?|bonus|penalty|"
                    r"easy|hard|trivial|certain|automatic\w*|guaranteed)\b", re.IGNORECASE)
 
 
@@ -465,6 +541,9 @@ def _apply(ctx: Any, tx: Transaction, text: str, p: dict[str, Any], inv: Investi
         if why := _set_quantity(tx, pc, q, new, f"correction ({kind}): {_flat(text, 100)}"):
             return "not", f"{kind}: {why}"
         return "did", f"your {q} {cur} → {new}"
+    if kind == "remove_fact" and str(p.get("fact_id") or "").startswith("cinst."):  # spec 032 P6: a wrong
+        # condition off the sheet (a footing cost's self-held pin); no new kind, so the Fixer schema is unchanged
+        return _remove_condition(st, tx, p, text, ctx.rules)
     if kind in ("remove_fact", "correct_testimony"):
         fid = str(p.get("fact_id") or "")
         f = st.facts.get(fid)
@@ -515,6 +594,25 @@ def _apply(ctx: Any, tx: Transaction, text: str, p: dict[str, Any], inv: Investi
         _write(tx, subject, pred, value, cur, "12.3.6", visibility=vis)
         return "did", f"{_what(st, subject, pred)} is {value} on record"
     return "not", f"{kind}: not a correction the game makes"
+
+
+def _remove_condition(st: WorldState, tx: Transaction, p: dict[str, Any], text: str,
+                      rules: Any) -> tuple[str, str]:
+    # rule: PR-12-11
+    """`remove_fact` with a `cinst.N` (spec 032 P6, pinned-trace.md): that condition off whoever has it, as a
+    correction write; evidence was checked by the caller (INV-9). A wound or unconsciousness is the harm ladder's."""
+    from engine.dm.dm_tools import HARM_OWNED
+    from engine.dm.fixer import _cond_name
+
+    inst = st.conditions.get(str(p.get("fact_id") or ""))
+    if inst is None or inst.target in st.seals:
+        return "not", f"remove: no condition {p.get('fact_id')!r} on record"
+    if inst.condition_id in HARM_OWNED:
+        return "not", "remove: a wound goes with Vitality; restore it or take the turn back"
+    tx.add(Event.of("condition_removed", source="correction", rule_id="12.3.6", instance_id=inst.instance_id,
+                    reason=f"correction: {_flat(text, 100)}"))
+    whose = "you are" if inst.target == pc_of(st) else f"{name(st, inst.target)} is"
+    return "did", f"{whose} no longer {_cond_name(rules, inst.condition_id)}"
 
 
 def _flat(s: Any, n: int) -> str:
@@ -636,6 +734,7 @@ def screen(sx: Any, res: DisputeResult) -> str:  # rule: PR-12-11
     from engine.dm.narration import pause_blocks
 
     parts = [res.text]
+    parts += [out.passage for out in res.outcomes if isinstance(out, Replayed) and out.passage]
     parts += [o["text"] for out in res.outcomes for o in out.oof if o.get("kind") in ("REDIRECT", "RESULT", "NOTE")]
     pause = sx.state.open_pause()
     if pause is not None:
@@ -712,6 +811,58 @@ def preview(ctx: Any, text: str, complaints: list[dict[str, Any]], calls: list[t
 def dispute(ctx: Any, text: str, **_: Any) -> str:  # rule: 12.3.6
     """engine/dm/context.py `DisputeHandler`: the OOF answer text."""
     return settle_dispute(ctx, text).text
+
+
+def play_dm_dispute(ctx: Any, text: str) -> Any:  # rule: 12.3.6
+    # rule: PR-12-11
+    """`/fix` on a dm-tools game (spec 032 G11): the same investigation and repair (`settle_dispute`) in a turn of its
+    own, marked `screen.dm_tools.fix`. No Narrator call: the answer is its blocks, and a re-frame's prose is the DM's
+    passage (`_replay_dm`). Returns `dm_tools.Outcome`."""
+    from engine.dm import oof as oofm
+    from engine.dm.adjudication import AdjudicationRecord, PartEntry
+    from engine.dm.dm_tools import Outcome
+    from engine.dm.narration import shown_pause, turn_blocks
+    from engine.dm.response import Flags, Response
+    from engine.harm.threshold import ending_state
+    from engine.store.records import Part, TurnRecord
+
+    store = ctx.store
+    turn_id = store.new_turn_id()
+    store.save_turn(TurnRecord(turn_id=turn_id, input_verbatim=text))
+    ctx.call_ids = []
+    with store.transaction(turn_id) as tx:
+        ctx.tx = tx
+        try:
+            rec = AdjudicationRecord(turn_id=turn_id, pc=pc_of(tx.state))
+            res = settle_dispute(ctx, text)
+            events = list(tx.events)
+        finally:
+            ctx.tx = None
+    rec.add_writes(events)
+    again = [o for o in res.outcomes if isinstance(o, Replayed)]
+    rec.parts = [PartEntry.model_validate({"text": text, "class": "DISPUTE", "handled": "answered"})]
+    rec.beats = [b for o in again for b in o.beats]
+    st = store.state
+    pause = st.open_pause()
+    blocks, owned = turn_blocks(ctx, [*({"kind": b.kind, "text": b.text} for b in res.blocks),
+                                      *(i for o in again for i in o.oof)], rec, pause)
+    resp = Response(turn_id=turn_id, phase="ending" if ending_state(st) else "play",
+                    fiction="\n\n".join(o.passage.strip() for o in again if o.passage.strip()),
+                    oof_blocks=oofm.ordered(blocks), pause=shown_pause(pause, owned) if pause is not None else None,
+                    flags=Flags())
+    calls = store.model_calls(turn_id)
+    stats = {**(again[-1].stats if again else {}), "fix": True, "kind": res.kind, "model_calls": len(calls),
+             "tokens_in": sum(int(c.get("tokens_in") or 0) for c in calls),
+             "tokens_out": sum(int(c.get("tokens_out") or 0) for c in calls),
+             "latency_ms": sum(int(c.get("latency_ms") or 0) for c in calls)}
+    tr = TurnRecord(turn_id=turn_id, input_verbatim=text, parts=[Part.model_validate({"text": text, "class": "DISPUTE"})],
+                    writes=rec.write_seqs, beats=[b.frame_id for b in rec.beats if b.frame_id],
+                    delivered_verbatim=resp.text(), model_calls=list(ctx.call_ids), screen={"dm_tools": stats},
+                    cost_usd=float(sum(c.get("cost_usd") or 0.0 for c in calls)), latency_ms=int(stats["latency_ms"]),
+                    pause=({"kind": pause.kind, "frame_id": pause.frame_id,
+                            "options": [c.get("id", "") for c in pause.choices]} if pause is not None else None))
+    store.save_turn(tr)
+    return Outcome(response=resp, turn_record=tr)
 
 
 # ------------------------------------------------------------------------------------------- the log (item 6)

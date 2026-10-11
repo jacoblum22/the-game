@@ -8,7 +8,8 @@
 
 Sets (`tests/fixtures/feedback_corpus/`): `fresh` (spec 026: 13 made-up and edge complaints, labelled before
 implementation; the headline), `round7` (the round-7 live /fix reports), `round6` (the seven round-6 reports holding
-I3 §5's 15 disputes), `heldout` (spec 022's 7) and `corpus` (spec 014's 11). Each report runs through the whole turn
+I3 §5's 15 disputes), `heldout` (spec 022's 7), `corpus` (spec 014's 11) and `dmtools` (spec 032 P6: the head-to-head
+dm-tools saves' complaints and made-up ones; a dm-tools save runs its own /fix turn, `play_dm_dispute`). Each report runs through the whole turn
 loop (`play_dispute`, the /fix command) on its save cut back to just before it (`open_at`), with the given model as
 the Fixer and `--engine-model` as the play roles (a re-frame calls the Framer), on a throwaway copy. Scored per
 complaint: understood (category and turn as expected), the outcome class (`upheld`: the player is right; `stands`:
@@ -37,7 +38,7 @@ sys.path.insert(0, str(ROOT))
 
 CORPUS = ROOT / "tests" / "fixtures" / "feedback_corpus"
 SETS = {"corpus": "corpus.json", "round6": "round6.json", "heldout": "heldout.json", "fresh": "fresh.json",
-        "round7": "round7.json"}
+        "round7": "round7.json", "dmtools": "dmtools.json"}
 BARE = ("Say which fact or roll is wrong", "Which statement, and when?")
 
 
@@ -115,14 +116,18 @@ def _class(rec: dict[str, Any]) -> str:
 def run_item(item: dict[str, Any], model: Any, rules: Any, tmp: Path) -> dict[str, Any]:
     """One report through the whole turn loop (the /fix command) on its cut save: the screen after it, the
     complaints as logged, the tools used, and the model answers (taped)."""
+    from engine.dm import dm_tools
     from engine.dm.context import TurnContext
+    from engine.dm.dispute import play_dm_dispute
     from engine.dm.turn import play_dispute
 
     store = open_at(CORPUS / item["save"], item["turn"], tmp)
     taped = Taped(model)
     try:
-        ctx = TurnContext.for_store(store, model=taped, rules=rules)
-        out = play_dispute(ctx, item["report"])
+        made = dict(next(store.events(types=["game_created"])).payload.config or {})  # type: ignore[attr-defined]
+        ctx = TurnContext.for_store(store, model=taped, rules=rules,  # the save's engine (spec 032 FR-11)
+                                    config={k: made[k] for k in ("engine", "dm_secrets") if made.get(k)})
+        out = (play_dm_dispute if dm_tools.enabled(ctx) else play_dispute)(ctx, item["report"])
         recs = [r for r in store.state.meta.get("corrections") or [] if isinstance(r, dict)
                 and r.get("type") == "dispute"]
         recs = [r for r in recs if r.get("report") == recs[-1].get("report")] if recs else []

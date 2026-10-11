@@ -1,9 +1,24 @@
-# HANDOFF 032 (P1 + P2 + P3 done; branch of the P3 worktree)
-Owner rulings, 2026-10-10 (they override spec.md, plan.md and tasks.md wherever those disagree; P3 updated the docs, tagged `[owner ruling 2026-10-10]`):
-- **Scene ends are the DM's call.** It uses an `end_scene` tool. Code only does the bookkeeping: time, per-scene resets and the new scene record. No code cut rules (no dead air or interrupt heuristics) and no Director call. Travel and time jumps still open a scene.
-- **Moods are decided by the DM**, not rolled. The DM records them with the `mood` tool (memory, not a rule; it can change them). No mood roll and no ceiling grid. Retire T-12-19 use in dm-tools.
-- **Pushover is observed, not gated.** Costly-ask grants and mood changes with no event are listed for the owner to read. Principle: fix only what is seen in play.
-P3 (T): `_party` resolver (prose-only people/creatures made; creature by ANIMAL head noun), `change fight`, one revision then drop (`screen.dm_tools.dropped`), `fail_cost`, `Beat.title`, new_item echo, E7 and harm-owned conditions. Tests test_spec032_p3.py (29). xfail groups left: the GROUPS table in test_spec032_cases.py (F, T, C, J, Q, L, E5, I12, X, N; S is P2's, its row was never removed).
-P3.7 live Haiku fighter run NOT run (no claude CLI/API key in that worktree); do it where the API exists (5 samples of turn 9/12/11 contexts).
-Next: P4 (lane W: world step; build `end_scene` instead of cut triggers; flip the fixture's conflict_start assert; the G7 prompt sentence) -> P5; P6 after P3 (does not edit dm_tools.py); P7 last.
-Traps: (1) dm.md/schema change means re-record only the dm recording: `record('offline_seed11_dmtools')` from tests.replay.record_games (pipeline recording must stay byte-equal). (2) every schema field is required (`obj`): new DM fields need a `none` value, and tests/offline `_dm` plans must carry them. (3) `Beat.title` is `exclude_if None`: do not drop that or pipeline events change. (4) `mood` tool and `_asks` still use T-12-19; retire per the ruling (P4/P5). (5) `_party` creates only for creatures or person verbs/slots; a roster match elsewhere is refused as not here. (6) dm_tools.py, npc_layer.py and most engine files are CRLF: use Edit, or a script that keeps CRLF. (7) the REFUSED trace used the fixture (saves are not in the worktree). (8) `world_step` must call `conflict.start` only through `change fight`/the PC's committed attack; `change fight` does no foe action. (9) only `amount` is exempt from INV-3. (10) `ANIMAL` gained beast words (affects `is_animal` for pipeline narrator mentions too; replay unchanged).
+# HANDOFF 032 (P1-P4 + P6 done, merged on branch spec032-base)
+Owner rulings, 2026-10-10 (they override the spec docs; tagged `[owner ruling 2026-10-10]`):
+- **Scene ends are the DM's call** (the `end_scene` tool; code only does the bookkeeping; travel and time jumps still open a scene).
+- **Moods are decided by the DM** (the `mood` tool records them as memory; no roll and no ceiling grid).
+- **Pushover is observed, not gated.** Principle: fix only what is seen in play.
+Done:
+- **P3:** the `_party` resolver for prose-only people and creatures; `change fight`; one revision then drop (`screen.dm_tools.dropped`); `fail_cost`; `Beat.title`; item echo.
+- **P4:** `engine/dm/dm_world.py` (`world_step`: foe turn, time, omens, triggers, lead), `end_scene`, the FIGHT block (`_fight_block`), site-mode time (read `state.time.mode`, not `scene.mode`). Moods retired to DM memory.
+- **P6:** dm-tools `/fix` via `dispute.play_dm_dispute`; a reframe re-runs `_dm_loop` with the Fixer's note (no clue, no world step); the Fixer sees `dm_log`, `cond_origins`, and `remove_fact cinst.N`.
+Live (orchestrator, P3 and P4 code): fighter and talker runs, 0 crashes; time moves; about 20k tokens in and 2.4 calls per turn; no fight came up (the persona didn't attack).
+Traced: a footing cost at S3+ makes a self-held `cond.pinned` (`costs.py:294-301`, source = the actor; old, Feature 004). Report: `research_notes/Playtest round 2 solutions/spec032-investigation/pinned-trace.md`.
+Next, P5 (lane C, split into slices):
+- **P5a:** the root fix in `costs.py` (a hold needs a real holder, the opponent; with none, use the row's non-hold form).
+- **P5a also:** `_party` resolves "pc" to the PC (`change coin to="pc"` made an NPC "the pc").
+- **P5a also:** the refusal text names the condition.
+- **P5b:** the P5 tasks (`said` via `add_said`, carries, "Not here", log-only checks, leak audit tokens, empty dm turn records).
+Not run yet: P6.4 (`evals/feedback_corpus.py --set dmtools --model sonnet`); the orchestrator runs it.
+Traps:
+1. The world step runs once per exchange (`t.world_done`); a re-ask rebuilds `situation()`.
+2. `t.beats` must be extended wherever a tool resolves a beat.
+3. Stats keys: `moods`, `scene_ends`, `world{foe_turns,facts,reasked}`.
+4. A `dm.md` or schema change means re-recording ONLY `offline_seed11_dmtools`. The pipeline recording (which holds the Fixer schema and prompt) stays byte-equal.
+5. P6 imports `Turn`, `_env`, `_dm_loop`, `Outcome`, `HARM_OWNED`, `ENGINE`, `play_turn` and `enabled` from `dm_tools`. Keep the names, and keep the `tools[]`/`dropped[]` shapes.
+6. `dm_tools.py` is CRLF. Use the Edit tool or a script that keeps CRLF; never heredoc Python.
