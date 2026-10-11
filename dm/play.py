@@ -36,10 +36,12 @@ HERE = Path(__file__).parent
 SAVES = HERE.parent / "saves"
 MODEL = "claude-sonnet-5-5"
 # The Claude Code program adds its own notes to every session. Run the DM outside any git repo (no git or worktree
-# notes) and switch off the notes that have switches: the developer's memory, CLAUDE.md files and the token count.
+# notes) and switch off the notes that have switches: the developer's memory, CLAUDE.md files, the token count and
+# the mid-turn "the user hasn't heard from you in a while" nudge.
 DM_HOME = Path.home() / "AppData" / "Local" / "the-game-dm"
 DM_ENV = {"CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1", "CLAUDE_CODE_DISABLE_CLAUDE_MDS": "1",
-          "CLAUDE_CODE_TOTAL_TOKENS_REMINDER": "off", "CLAUDE_CODE_DISABLE_GIT_INSTRUCTIONS": "1"}
+          "CLAUDE_CODE_TOTAL_TOKENS_REMINDER": "off", "CLAUDE_CODE_DISABLE_GIT_INSTRUCTIONS": "1",
+          "CLAUDE_CODE_SILENT_TURN_REMINDER": "0"}
 
 
 def lookup_tool(record: Callable[[dict[str, Any], str], None]) -> Any:
