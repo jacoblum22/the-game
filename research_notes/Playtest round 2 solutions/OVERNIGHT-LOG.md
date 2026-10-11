@@ -389,3 +389,16 @@ everything.
     - "you" or a made-up id in a person slot makes a walk-on;
     - an omitted S3 footing defaults to a holder-less `restrained`;
     - plain questions always roll.
+- **Spec 033, 2026-10-11:**
+  - W3 merged: P5 leads/witnesses/retire; P3 foe acts after the result (2614 passed).
+  - P6 strict guard: 62 DENY raise; allow-list 110 P / 58 F / 11 S; 2616 passed.
+  - Live check 1 (`specs/033.../live-check-1.md`): 0 fights in 4 persona games. Melee refused for unrecorded bands; position fields swapped; duplicate creature.
+  - Owner ruling 2026-10-11, "Field on attacks": an attack roll states whether it starts a fight; a blank starts one (logged); it is ignored in a live fight. The owner also asked that this not break anything mid-fight.
+  - R2-M2 (DL-06-42) and P8 merged (a6538a7, 2638 passed).
+  - Name leak traced and fixed: `changed_line` showed a rolled name the PC had never learned.
+  - Live check 2:
+    - fighter25 started 2 fights with no refusals;
+    - held-out set: 19 pass / 4 judge / 1 fail (was 14/6/4); fight items 6/6;
+    - 0 foe turns, because the PC's first blow killed the lone foe;
+    - trace `trace-no-foe-turns.md`: fight started before the gate; take-back leaves the mode at conflict; h2h exchange count wrong.
+  - P9 running.
