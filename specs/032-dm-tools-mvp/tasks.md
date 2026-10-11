@@ -29,19 +29,19 @@ Parallel plan: `P1 || P2`, then `P3 -> P4 -> P5`, with `P6` free to start after 
 ## P1 - Harness and labelled sets (lane E; Sonnet; about 30-45 turns; parallel with P2)
 
 Goal: the measuring tools exist and the held-out set is labelled **before any fix**. Edits only `evals/`, `specs/032-dm-tools-mvp/`, `tests/evals/`.
-- [ ] P1.1 Port `evals/npc_agency.py` and `evals/baselines/npc_agency_round8.json` from `3e94efe` (`git show`); add the
+- [x] P1.1 Port `evals/npc_agency.py` and `evals/baselines/npc_agency_round8.json` from `3e94efe` (`git show`); add the
       `dm-tools` arm (real `dm_tools.play_turn`, Haiku through `ask_claude`) and keep `pipeline` as the file's `old` arm;
       drop `ceiling`/`judgment` arms and `ceiling_lines`. Cost per cell is fixed by the cell (`cases.md` N).
-- [ ] P1.2 Run both arms once on the **unfixed** code (12 cells + 4 repeats each): save the tables under
+- [x] P1.2 Run both arms once on the **unfixed** code (12 cells + 4 repeats each): save the tables under
       `specs/032-dm-tools-mvp/npc_agency_before.txt`. This is the "before" for C5/C6.
-- [ ] P1.3 `evals/h2h_score.py`: reads saves (`model_calls`, `turns.record.screen.dm_tools`, `findings.jsonl`) and prints
+- [x] P1.3 `evals/h2h_score.py`: reads saves (`model_calls`, `turns.record.screen.dm_tools`, `findings.jsonl`) and prints
       the headline table (spec gates C1-C10 inputs) in under 40 lines. A test over a tiny fixture save.
-- [ ] P1.4 Write `heldout.yaml` (24 items, `cases.md` rule) with labels, **no model run**. Commit it with its hash
+- [x] P1.4 Write `heldout.yaml` (24 items, `cases.md` rule) with labels, **no model run**. Commit it with its hash
       in the file header.
-- [ ] P1.5 Write the cases-as-tests skeletons `tests/engine/test_spec032_cases.py` that walk the data tables
+- [x] P1.5 Write the cases-as-tests skeletons `tests/engine/test_spec032_cases.py` that walk the data tables
       (verbs 15, change kinds 10/11, conditions 33, cost ids 9, foe outcomes 6, cut triggers 7, cells 12, pronoun sets 4,
       question kinds 7) and assert the lengths. Cases for later phases are `xfail(strict=True)` with the case id.
-- [ ] P1.6 Re-run the two traced facts as a test fixture: copy the fighter save's turn 9 and 12 tool logs and assert
+- [x] P1.6 Re-run the two traced facts as a test fixture: copy the fighter save's turn 9 and 12 tool logs and assert
       "no conflict_start" so P3's fix flips it (the save it came from).
 Gate: the harness runs end to end with `--offline` stand-ins in a test; the before-table exists; the held-out file has a
 hash and is not read again until P7.

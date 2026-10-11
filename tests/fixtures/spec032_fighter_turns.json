@@ -1,0 +1,55 @@
+{
+ "save": "playtest-20261010-153123-fighter-dm-tools",
+ "turns": {
+  "turn.9": {
+   "input": "I burst out of the trees and charge the beast with my mace.",
+   "tools": [
+    {
+     "args": "{\"goal\": \"Strike the beast before it can take you, and drive it off or down\", \"verb\": \"verb.strike\", \"target\": \"the beast in the clearing\", \"how\": \"Burst out of the alders at a run, mace raised, and swing at the great pale-hided beast before it can turn fully to face you\", \"attribute\": \"push\", \"difficulty\": \"hard\", \"why_uncertain\": \"The beast is far heavier than you and already alert, and you are charging across uneven ground, so your blow may land badly or not at all\", \"stakes\": \"dire\", \"change_kind\": \"harm\", \"change_what\": \"the beast in the clearing\", \"change_whom\": \"the beast in the clearing\"}",
+     "out": "REFUSED: no one or nothing on record called 'the beast in the clearing' (use an id from the situation, or none)",
+     "tool": "propose_roll"
+    },
+    {
+     "args": "{\"goal\": \"Strike the beast before it can take you, and drive it off or down\", \"verb\": \"verb.strike\", \"how\": \"Burst out of the alders at a run, mace raised, and swing at the great pale-hided beast before it can turn fully to face you\", \"attribute\": \"push\", \"difficulty\": \"hard\", \"why_uncertain\": \"The beast is far heavier than you and already alert, and you are charging across uneven ground, so your blow may land badly or not at all\", \"stakes\": \"dire\", \"change_what\": \"the beast in the clearing\"}",
+     "out": "ROLL OFFERED to the player. The turn pauses here: write only the lead-up, never the outcome.",
+     "tool": "propose_roll"
+    }
+   ],
+   "refusals": [
+    {
+     "args": "{\"goal\": \"Strike the beast before it can take you, and drive it off or down\", \"verb\": \"verb.strike\", \"target\": \"the beast in the clearing\", \"how\": \"Burst out of the alders at a run, mace raised, and swing at the great pale-hided beast before it can turn fully to face you\", \"attribute\": \"push\", \"difficulty\": \"hard\", \"why_uncertain\": \"The beast is far heavier than you and already alert, and you are charging across uneven ground, so your blow may land badly or not at all\", \"stakes\": \"dire\", \"change_kind\": \"harm\", \"change_what\": \"the beast in the clearing\", \"change_whom\": \"the beast in the clearing\"}",
+     "tool": "propose_roll",
+     "why": "REFUSED: no one or nothing on record called 'the beast in the clearing' (use an id from the situation, or none)"
+    }
+   ]
+  },
+  "turn.11": {
+   "input": "I roll away from its head and scramble for my mace, then swing at it again.",
+   "tools": [],
+   "refusals": []
+  },
+  "turn.12": {
+   "input": "I grab the mace and swing at the beast.",
+   "tools": [
+    {
+     "args": "{\"goal\": \"Reach the mace and bring it round into the beast before it commits its weight to a killing bite\", \"verb\": \"verb.strike\", \"target\": \"the pale beast\", \"how\": \"Scramble across the crushed grass to the mace, come up off one knee with ribs grinding, and swing the iron in a flat arc at the beast's head as it gathers to lunge.\", \"attribute\": \"Martial\", \"difficulty\": \"hard\", \"why_uncertain\": \"Bracken hides the haft, you are wounded and gasping, and the beast is already moving; one bad step and it closes on your throat.\", \"stakes\": \"dire\", \"change_kind\": \"harm\", \"change_what\": \"the pale beast\", \"change_whom\": \"the pale beast\"}",
+     "out": "REFUSED: no one or nothing on record called 'the pale beast' (use an id from the situation, or none)",
+     "tool": "propose_roll"
+    },
+    {
+     "args": "{\"goal\": \"Reach the mace and bring it round into the beast before it commits its weight to a killing bite\", \"verb\": \"verb.strike\", \"how\": \"Scramble across the crushed grass to the mace, come up off one knee with ribs grinding, and swing the iron in a flat arc at the beast's head as it gathers to lunge.\", \"attribute\": \"Martial\", \"difficulty\": \"hard\", \"why_uncertain\": \"Bracken hides the haft, you are wounded and gasping, and the beast is already moving; one bad step and it closes on your throat.\", \"stakes\": \"dire\", \"change_what\": \"the beast's lunge\"}",
+     "out": "ROLL OFFERED to the player. The turn pauses here: write only the lead-up, never the outcome.",
+     "tool": "propose_roll"
+    }
+   ],
+   "refusals": [
+    {
+     "args": "{\"goal\": \"Reach the mace and bring it round into the beast before it commits its weight to a killing bite\", \"verb\": \"verb.strike\", \"target\": \"the pale beast\", \"how\": \"Scramble across the crushed grass to the mace, come up off one knee with ribs grinding, and swing the iron in a flat arc at the beast's head as it gathers to lunge.\", \"attribute\": \"Martial\", \"difficulty\": \"hard\", \"why_uncertain\": \"Bracken hides the haft, you are wounded and gasping, and the beast is already moving; one bad step and it closes on your throat.\", \"stakes\": \"dire\", \"change_kind\": \"harm\", \"change_what\": \"the pale beast\", \"change_whom\": \"the pale beast\"}",
+     "tool": "propose_roll",
+     "why": "REFUSED: no one or nothing on record called 'the pale beast' (use an id from the situation, or none)"
+    }
+   ]
+  }
+ },
+ "conflict_start_boundaries": 0
+}
