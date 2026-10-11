@@ -392,6 +392,39 @@ def audit_cases(tx: Any, emit: Any = None) -> list[str]:  # rule: 15.9.4
     return placed
 
 
+def place_on(tx: Any, node_id: str, holder: str, *, at: str | None = None) -> str | None:  # rule: 15.9.4
+    """[spec 033 R4] The DM's own person or item holds necessary node `node_id`: the node's unplaced reserve entry
+    (else a PR-15-7 generic placement) is placed on `holder`, at `at` (default the holder's place). Nothing is
+    created and nothing is guessed. Returns the placement id, or None when no case holds that node."""
+    allc = cases(tx.state)
+    for cid, c0 in allc.items():
+        c = _copy(c0)
+        node = next((n for n in c["nodes"] if n["id"] == node_id), None)
+        if node is None:
+            continue
+        pos = tx.state.positions.get(holder)
+        where = at or (pos.location if pos is not None else None)
+        person = tx.state.entities[holder].kind in ("npc", "companion", "adversary")
+        k = len(node.get("audit_log") or []) + 1
+        spare = next((r for r in node["reserve"] if r.get("status") != "placed"), None)
+        if spare is not None:
+            spare["status"] = "placed"
+            p = dict(spare, id=spare["id"] + f".{k:d}", holder=holder, holder_kind="person" if person else "object",
+                     at=where, status="unfound")
+            how = "reserve"
+        else:
+            p = {"id": f"{node_id}.g{k:d}", "holder": holder, "holder_kind": "person" if person else "object",
+                 "method": "inquiry" if person else "search", "access": "core", "at": where, "content": node["fact"],
+                 "status": "unfound", "sealed": True}
+            how = "PR-15-7"
+        node["placements"].append(p)
+        node.setdefault("audit_log", []).append({"placed": p["id"], "how": how, "by": "dm"})
+        allc[cid] = c
+        tx.add(meta(CASES, allc, "15.9.4"))
+        return str(p["id"])
+    return None
+
+
 def _copy(c: Rec) -> Rec:
     import copy
 

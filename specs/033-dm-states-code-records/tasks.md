@@ -84,14 +84,14 @@ Phases, lanes, models and waves: `plan.md` section 5. Cases: `cases.md` (C1-C12)
 - [x] T039 Tests C1.b, C1.c, C5 reversal; DENY entries to `raise`; HANDOFF-P2b.md.
 
 ## P4 people and testimony (Sonnet, W2, lane: `dm_tools.py` identity/testimony/measures/change kinds; `world/social.py`; `gen/case.py` `place_on`)
-- [ ] T030 `_party`/`_walk_on`/`target_kinds` per plan 3 R6; `"pc"` literal; `as` defaults from data (C8).
-- [ ] T031 `meet_npc(..., pronouns=, name=)`; creature walk-ons without `ANIMAL`.
-- [ ] T032 `_change`: `new_npc` (`name`, `as`, `knows` via `gen/case.place_on`), `new_item knows`, `npc_leaves`
+- [x] T030 `_party`/`_walk_on`/`target_kinds` per plan 3 R6; `"pc"` literal; `as` defaults from data (C8).
+- [x] T031 `meet_npc(..., pronouns=, name=)`; creature walk-ons without `ANIMAL`.
+- [x] T032 `_change`: `new_npc` (`name`, `as`, `knows` via `gen/case.place_on`), `new_item knows`, `npc_leaves`
   without a first-reachable default, `fight` requires `to`; the Strike/Grapple/Force reach refusal in
-  `_propose_roll` from `conflict._band` (C3); twin advice by
+  `_propose_roll` from `conflict._band` (C3; NOT done in P4, left to P2a: `_propose_roll` is its lane); twin advice by
   exact name (C3, C7 placement, C8).
-- [ ] T033 `_told` spine-only (C9).
-- [ ] T034 Delete `_audit`, `_log_only`, `_content`, `_name_tokens` and their stats; `code_framer` focus and anchors
+- [x] T033 `_told` spine-only (C9).
+- [x] T034 Delete `_audit`, `_log_only`, `_content`, `_name_tokens` and their stats; `code_framer` focus and anchors
   from T038's helpers (if P2b has not merged, ids inline). Tests C8, C9; DENY to `raise`; re-record
   `offline_seed11_dmtools`; HANDOFF-P4.md.
 

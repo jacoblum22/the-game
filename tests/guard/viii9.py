@@ -46,6 +46,10 @@ def _e(inv: str, phase: str, **kw: Any) -> Entry:
     return Entry(inv, phase, **kw)
 
 
+def _r(inv: str) -> Entry:  # a phase that has made its entry unreachable: a hit now raises
+    return Entry(inv, "P4", "raise")
+
+
 _P, _R, _S, _W = "engine.resolve.pipeline.", "engine.resolve.conflict.", "engine.resolve.gate.", "engine.retrieve.scene."
 _F, _C, _M, _D = "engine.resolve.frame.", "engine.resolve.change.", "engine.dm.mentions.", "engine.dm.dm_tools."
 _T, _N, _SO = "engine.dm.testimony.", "engine.dm.npc_layer.", "engine.world.social."
@@ -77,20 +81,15 @@ DENY: dict[str, Entry] = {
     _F + "_LIFT": _e("D11", "P2b", mode="raise"), _F + "_UNDO": _e("D12", "P2b", mode="raise"),
     _F + "_REFUSE": _e("D12", "P2b", mode="raise"),
     # P4: identity, walk-ons, testimony, the measures that leave the engine (R6 R8 R11)
-    _D + "_NAME": _e("D21", "P4"), _D + "_PC_WORDS": _e("D21", "P4"),
-    _D + "_PERSON_KIND": _e("D24", "P4"), _D + "_THING_KIND": _e("D24", "P4"),
-    _D + "_audit": _e("M", "P4"), _D + "_log_only": _e("M", "P4"), _D + "_content": _e("M", "P4"),
-    _D + "_name_tokens": _e("M", "P4"),
-    _M + "write_mentions": _e("D30 A22", "P4"), _M + "find_existing": _e("D30 A22", "P4"), _M + "bare": _e("D31", "P4"), _M + "_proper": _e("D31", "P4"),
-    _M + "_slug": _e("D31", "P4"), _M + "_ARTICLE": _e("D31", "P4"), _M + "_HELD_BY": _e("D32", "P4"),
-    _M + "_holder": _e("D32", "P4"), _M + "_NPC_KEYS": _e("D33", "P4"), _M + "_PRONOUNS": _e("D33", "P4"),
-    _M + "_GENDERS": _e("D33", "P4"), _M + "_npc": _e("D33", "P4"),
-    _N + "ANIMAL": _e("D34 N2", "P4"), _N + "is_animal": _e("D34 N2", "P4"), _N + "role_key": _e("D34", "P4"),
-    "engine.gen.npc.role_implies": _e("D33 (census)", "P4"),  # the census found it: role words -> age and pronouns
-    _SO + "find_npc": _e("D35", "P4"), _SO + "_GROUP": _e("D35", "P4"), _SO + "cast_described": _e("D35 A24", "P4"),
-    _T + "overlap": _e("D36", "P4"), _T + "is_repeat": _e("D36", "P4"), _T + "_named": _e("D37", "P4"),
-    _T + "_premise": _e("D37", "P4"), _T + "_BEYOND": _e("D38", "P4"), _T + "_OWN_WILL": _e("D38", "P4"),
-    _T + "_case_route": _e("D38", "P4"), _T + "_FIGURE": _e("D39", "P4"), _T + "_place_there": _e("D39 A25", "P4"),
+    _M + "write_mentions": _r("D30 A22"), _M + "find_existing": _r("D30 A22"), _M + "bare": _r("D31"),
+    _M + "_proper": _r("D31"), _M + "_slug": _r("D31"), _M + "_ARTICLE": _r("D31"), _M + "_HELD_BY": _r("D32"),
+    _M + "_holder": _r("D32"), _M + "_NPC_KEYS": _r("D33"), _M + "_PRONOUNS": _r("D33"), _M + "_GENDERS": _r("D33"),
+    _M + "_npc": _r("D33"), _N + "ANIMAL": _r("D34 N2"), _N + "is_animal": _r("D34 N2"), _N + "role_key": _r("D34"),
+    "engine.gen.npc.role_implies": _r("D33 (census)"),  # the census found it: role words -> age and pronouns
+    _SO + "find_npc": _r("D35"), _SO + "_GROUP": _r("D35"), _SO + "cast_described": _r("D35 A24"),
+    _T + "overlap": _r("D36"), _T + "is_repeat": _r("D36"), _T + "_named": _r("D37"), _T + "_premise": _r("D37"),
+    _T + "_BEYOND": _r("D38"), _T + "_OWN_WILL": _r("D38"), _T + "_case_route": _r("D38"), _T + "_FIGURE": _r("D39"),
+    _T + "_place_there": _r("D39 A25"),
     # P5: retire by `/retire` or the DM (R9); runs in the game shell, so its scope is the whole submit
     "engine.dm.ending._RETIRE": _e("D43", "P5", scope="shell"),
     "engine.dm.ending.is_retire": _e("D43", "P5", scope="shell"),

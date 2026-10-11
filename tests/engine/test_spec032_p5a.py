@@ -14,14 +14,24 @@ from tests.engine.test_dm_tools import change, in_turn, npc_here, to_play
 from tests.engine.test_spec032_p3 import roll, run
 
 
-@pytest.mark.parametrize("words", ["pc", "PC", "the pc", "the PC", "you", "You", " the  pc ", "the player"])
-def test_the_pcs_own_words_are_the_pc(tmp_path: Path, words: str) -> None:
+def test_the_literal_pc_is_the_pc(tmp_path: Path) -> None:
     game, _ = to_play(tmp_path)
     pc = pc_id(game.store.state) or ""
     before = set(game.store.state.entities)
-    assert in_turn(game, lambda ctx, t, tx: dm_tools._party(ctx, t, words, person=True)) == pc
-    assert in_turn(game, lambda ctx, t, tx: dm_tools._party(ctx, t, words)) == pc
-    assert set(game.store.state.entities) == before  # no NPC called "the pc"
+    assert in_turn(game, lambda ctx, t, tx: dm_tools._party(ctx, t, "pc", person=True)) == pc
+    assert in_turn(game, lambda ctx, t, tx: dm_tools._party(ctx, t, "pc")) == pc
+    assert set(game.store.state.entities) == before  # no NPC called "pc"
+
+
+@pytest.mark.parametrize("words", ["PC", "the pc", "you", "the player"])
+def test_other_words_for_the_pc_are_words_not_the_pc(tmp_path: Path, words: str) -> None:
+    """[spec 033 R6, C8] Only the literal `pc` (or the id or exact name) is the character: "you" in a person slot is a
+    walk-on, logged `not_chosen:as` (P7 counts them)."""
+    game, _ = to_play(tmp_path)
+    pc = pc_id(game.store.state) or ""
+    before = set(game.store.state.entities)
+    got = in_turn(game, lambda ctx, t, tx: (dm_tools._party(ctx, t, words, person=True), t.stats["defaults"]))
+    assert got[0] != pc and got[0] not in before and "not_chosen:as" in got[1]
 
 
 def test_the_pcs_name_is_the_pc(tmp_path: Path) -> None:

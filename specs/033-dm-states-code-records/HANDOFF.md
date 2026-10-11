@@ -89,4 +89,13 @@ Guard traps for every phase:
     is `restrained`: watch in P7. `lower:` options need `data["lower"]` on a place; none generated today.
 20. Guard rows found only by reach flicker: `oof.price_line` COST/SEVERITY_WORDS and `redirect_block:_LEARN` (F) were
     removed as unreached at this merge; re-add as F when P3's foe path reaches them again.
+- P4 (8402fc1): `_party(..., as_=)` takes an exact id, "pc", or an exact case-folded name one unsealed entity bears;
+  else a walk-on by `as` (none in a person slot = they, `not_chosen:as`). `_walk_on` never reuses; role = the DM's words.
+  `target_kinds` from data. `new_npc` name/as/knows; `new_item` knows (`_knows` -> `gen/case.place_on`); `npc_leaves`
+  without `to` -> `OFF_SCENE`, logged; `_fight` to / recorded band / near. `_told` spine-only (only an unknown, dead,
+  gone or absent speaker is dropped). `_audit`/`_log_only`/`_name_tokens` and stats `leaks`/`log_only` gone.
+21. T032's Strike/Grapple/Force REACH REFUSAL (06.4.3, from `conflict._band`) was done by neither P2a nor P4: P3 owns it.
+22. Foes named in a fight or roll need `"as": "creature"` (else a person walk-on); re-found only by id or exact name.
+    `mood`, `reveal_clue`, `travel who` have no `as`: unknown words there make a they walk-on (logged). A made-up id
+    (npc.hal) is aliased for that turn only: a new person next turn unless the DM uses the returned id. Watch in P7.
 
