@@ -156,7 +156,7 @@ def test_f13_f18_a_foe_that_cannot_act_is_skipped_and_the_fight_ends(tmp_path: P
     a = start_fight(game)
 
     def second(ctx: Any, t: Any, tx: Any) -> str:
-        b = dm_tools._party(ctx, t, "the pale beast")
+        b = dm_tools._party(ctx, t, "the pale beast", as_="creature")
         assert b is not None
         conflict.start(ctx.time_ctx(), who(tx.state), [str(b)], "joins")
         return str(b)
@@ -222,7 +222,7 @@ def test_f16_f21_an_npc_or_a_creature_turns_on_the_pc_and_the_foe_strikes_in_the
     assert r.fiction == "He lunges; the blow is dealt."
     # F21: a creature is a foe too
     game2, model2 = play(tmp_path / "b")
-    model2.push(DM, {"calls": [change(kind="fight", who="the pale beast")], "passage": "It crouches.", "said": [], "asks": []},
+    model2.push(DM, {"calls": [change(kind="fight", who="the pale beast", **{"as": "creature"})], "passage": "It crouches.", "said": [], "asks": []},
                 {"calls": [], "passage": "It crouches.", "said": [], "asks": []}, {"calls": [], "passage": "It springs.", "said": [], "asks": []})
     r = game2.submit("I wave at the pale beast.")
     assert BEAST in conflict.record(game2.store.state)["foes"]
@@ -236,7 +236,7 @@ def test_f11_the_fighter_save_replayed_starts_the_fight_and_the_foe_answers(tmp_
     fx = json.loads(FIX.read_text(encoding="utf-8"))
     assert fx["conflict_start_boundaries"] == 0  # what the old code did
     game, model = play(tmp_path)
-    call = roll(**json.loads(fx["turns"]["turn.9"]["tools"][0]["args"]))
+    call = roll(**json.loads(fx["turns"]["turn.9"]["tools"][0]["args"]), **{"as": "creature"})  # [spec 033 R6] the DM says it is a creature
     model.push(DM, {"calls": [call], "passage": "You gather yourself.", "said": [], "asks": []})
     r = game.submit("I strike the beast in the clearing.")
     assert r.pause is not None and r.pause.kind == "offer"

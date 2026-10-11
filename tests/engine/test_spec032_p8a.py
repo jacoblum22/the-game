@@ -1,5 +1,6 @@
 """Spec 032 P8a: the people and things the DM names. Cases P1-P15 of specs/032-dm-tools-mvp/cases.md (section P8a), on the
-offline scripted DM. Written before the code; none of the 24 seen held-out items is a case here."""
+offline scripted DM. [spec 033 P4] Rewritten to R6/R8: kinds come from data, a new person or creature is made only when
+the DM says so with `as`, the same words are matched only as an exact id or exact recorded name, `said` is spine-only."""
 
 from __future__ import annotations
 
@@ -9,7 +10,7 @@ from typing import Any
 import pytest
 
 from engine.dm import dm_tools
-from engine.dm.npc_layer import ANIMAL, is_animal
+from engine.dm.npc_layer import is_animal
 from engine.game import Game
 from engine.harm.state import DEAD
 from engine.world.common import fact
@@ -60,7 +61,8 @@ def test_p2_every_verb_times_a_person_a_creature_a_thing_is_never_refused_as_unk
         tmp_path: Path, verb: str, phrase: str, what: str) -> None:
     game, _ = to_play(tmp_path)
     before = set(game.store.state.entities)
-    outs, _ = go(game, roll(verb=verb, target=phrase, goal="act", how="act"))
+    extra = {"as": "creature"} if what == "creature" else {}  # [spec 033 R6] the DM says what it is
+    outs, _ = go(game, roll(verb=verb, target=phrase, goal="act", how="act", **extra))
     assert not (outs[0].startswith("REFUSED") and "on record" in outs[0]), outs[0]
     made = new_ids(game, before)
     st = game.store.state
@@ -86,15 +88,24 @@ def test_p3_h02_the_dms_own_id_for_a_new_npc_is_the_person_made(tmp_path: Path) 
 
 @pytest.mark.parametrize(("verb", "ident"), [("verb.observe", "npc.rider_on_the_ridge"), ("verb.sneak", "npc.watch_sentry"),
                                              ("verb.talk", "npc.hooded_pilgrim")])
-def test_p4_an_invented_looking_id_is_the_dm_naming_a_walk_on(tmp_path: Path, verb: str, ident: str) -> None:
+def test_p4_an_unknown_id_with_as_is_the_dm_naming_a_walk_on(tmp_path: Path, verb: str, ident: str) -> None:
+    """[spec 033 R6] A made-up id is a walk-on when the DM says `as` (any verb, person slot or not); the same words
+    twice in one turn are the one person. Without `as`, an object slot leaves the word alone."""
     game, _ = to_play(tmp_path)
     before = set(game.store.state.entities)
-    outs, _ = go(game, roll(verb=verb, target=ident, goal="act", how="act"))
-    assert not (outs[0].startswith("REFUSED") and "on record" in outs[0]), outs[0]
+    outs, _ = go(game, roll(verb=verb, target=ident, goal="act", how="act", **{"as": "she"}),
+                 roll(verb=verb, target=ident, goal="act", how="act", **{"as": "she"}))
+    assert not any(o.startswith("REFUSED") and "on record" in o for o in outs), outs
     made = new_ids(game, before)
     assert len(made) == 1 and game.store.state.entities[made[0]].kind == "npc" and made[0] in cast_present(game.store.state)
-    again, _ = go(game, roll(verb=verb, target=ident, goal="act", how="act"))  # the same words: the same person
-    assert new_ids(game, before) == made
+    assert game.store.state.entities[made[0]].data["pronouns"] == "she/her"
+
+
+def test_p4b_an_object_slot_without_as_makes_nobody(tmp_path: Path) -> None:
+    game, _ = to_play(tmp_path)
+    before = set(game.store.state.entities)
+    go(game, roll(verb="verb.observe", target="npc.rider_on_the_ridge", goal="look", how="look"))
+    assert new_ids(game, before) == []
 
 
 def test_p5_an_invented_object_id_is_not_refused_and_makes_no_person(tmp_path: Path) -> None:
@@ -107,7 +118,8 @@ def test_p5_an_invented_object_id_is_not_refused_and_makes_no_person(tmp_path: P
 
 
 def test_p6_nothing_is_matched_the_dm_uses_the_id_and_the_situation_shows_it(tmp_path: Path) -> None:
-    """The same person called by a second name next turn is a new walk-on; the id in the situation is the way back."""
+    """The same person called by a second name next turn is a new walk-on (no head-noun matching); the id in the situation
+    is the way back. [spec 033 R6] The role is the DM's words as given."""
     game, _ = to_play(tmp_path)
     first = in_turn(game, lambda ctx, t, tx: dm_tools._party(ctx, t, "the rider on the grey horse", person=True))
     second = in_turn(game, lambda ctx, t, tx: dm_tools._party(ctx, t, "the horseman", person=True))
@@ -116,7 +128,7 @@ def test_p6_nothing_is_matched_the_dm_uses_the_id_and_the_situation_shows_it(tmp
     assert first in seen and second in seen and "rider on the grey horse" in seen  # id and the DM's words
     assert in_turn(game, lambda ctx, t, tx: dm_tools._party(ctx, t, first, person=True)) == first  # by id: that entity
     roles = [str(e.data.get("role")) for e in game.store.state.entities.values()]
-    assert "rider on the grey horse" in roles and "horseman" in roles
+    assert "the rider on the grey horse" in roles and "the horseman" in roles
 
 
 def test_p6b_a_hundred_ways_of_introducing_someone_all_work_because_nothing_is_matched(tmp_path: Path) -> None:
@@ -144,45 +156,36 @@ def test_p7_a_strike_at_a_door_to_open_it_is_an_object_not_a_person(tmp_path: Pa
     assert new_ids(game, before) == []
 
 
-@pytest.mark.parametrize(("phrase", "animal"), [("the wolfhound", True), ("a sheepdog", True), ("the deerhound", True),
-                                                ("the houndsman", False), ("the dogcatcher", False), ("the horse trader", False)])
-def test_p8_compound_beast_words_are_creatures_and_their_people_are_not(phrase: str, animal: bool) -> None:
-    import re
-
-    assert bool(ANIMAL.match(re.sub(r"^(?:the|a|an)\s+", "", phrase))) is animal
-
-
-def said(game: Game, entries: list[dict[str, str]], passage: str, setup: Any = None) -> dict[str, Any]:
+def said(game: Game, entries: list[dict[str, str]], setup: Any = None) -> dict[str, Any]:
     def fn(ctx: Any, t: Any, tx: Any) -> dict[str, Any]:
         if setup:
             setup(ctx, t, tx)
         t.said_raw = entries
-        dm_tools._told(ctx, t, passage)
+        dm_tools._told(ctx, t)
         return t.stats
 
     return in_turn(game, fn)
 
 
-def test_p9_p10_a_described_speaker_present_in_the_passage_becomes_a_walk_on(tmp_path: Path) -> None:
+def test_p9_p10_a_new_speaker_the_dm_names_with_as_becomes_a_walk_on_and_the_line_is_kept(tmp_path: Path) -> None:
     game, _ = to_play(tmp_path)
-    passage = ('The carter at the trough spits. "Toll-house is shut since the flood." Beyond him the Longbridge man '
-               'nods. "Ask for Wenna if you cross."')
     before = set(game.store.state.entities)
-    stats = said(game, [{"npc": "the carter at the trough", "words": "Toll-house is shut since the flood."},
-                        {"npc": "npc.longbridge_man", "words": "Ask for Wenna if you cross."}], passage)
+    stats = said(game, [{"npc": "the carter at the trough", "as": "he", "words": "Toll-house is shut since the flood."},
+                        {"npc": "npc.longbridge_man", "as": "she", "words": "Ask for Wenna if you cross."}])
     assert stats["told_dropped"] == [] and len(stats["said"]) == 2, stats
     made = new_ids(game, before)
     assert len(made) == 2 and {s["speaker"] for s in stats["said"]} == set(made)
     assert all(m in cast_present(game.store.state) for m in made)
 
 
-def test_p11_a_line_not_in_the_passage_is_dropped_whoever_says_it(tmp_path: Path) -> None:
+def test_p11_a_line_is_kept_as_given_no_passage_check_and_no_as_means_they_logged(tmp_path: Path) -> None:
+    """[spec 033 C9] No check of the words against a passage, earlier lines or clues; code only records."""
     game, _ = to_play(tmp_path)
-    before = set(game.store.state.entities)
-    stats = said(game, [{"npc": "the ghost of nobody", "words": "I saw the smoke from the hill at dawn."}],
-                 "A voice carries, but you cannot make out the words.")
-    assert len(stats["told_dropped"]) == 1 and stats["said"] == []
-    assert new_ids(game, before) == []  # no one is made for a line that was not written
+    stats = said(game, [{"npc": "the ghost of nobody", "words": "I saw the smoke from the hill at dawn."}])
+    assert stats["told_dropped"] == [] and len(stats["said"]) == 1
+    assert "not_chosen:as" in stats["defaults"]
+    again = said(game, [{"npc": "the ghost of nobody", "words": "I saw the smoke from the hill at dawn."}])
+    assert len(again["said"]) == 1  # a line repeated from earlier is kept too
 
 
 @pytest.mark.parametrize("by", ["id", "name"])
@@ -201,7 +204,7 @@ def test_p12_a_speaker_on_record_elsewhere_or_dead_is_dropped_and_not_made_twice
         if state == "dead":
             tx.add(fact(tx, pick, "harm_state", DEAD, rule_id="07.1.3"))
 
-    stats = said(game, [{"npc": label, "words": words}], f'{label} says: "{words}" You wait.', setup=kill)
+    stats = said(game, [{"npc": label, "words": words}], setup=kill)
     assert stats["said"] == [] and len(stats["told_dropped"]) == 1, stats
     assert ("dead" if state == "dead" else "not here") in stats["told_dropped"][0]["why"]
     assert new_ids(game, before) == []  # no second person
@@ -229,7 +232,7 @@ def test_p13_the_named_companion_walks_with_the_character_across_two_travels(tmp
     assert out[0].startswith("done"), out[0]
     assert where(game, comp) == second and comp in cast_present(game.store.state)
     assert dm_tools._acting(game.store.state, comp) == ""  # still here: she can be asked, her lines are filed
-    stats = said(game, [{"npc": comp, "words": "The road bends past the mill."}], f'{name}: "The road bends past the mill."')
+    stats = said(game, [{"npc": comp, "words": "The road bends past the mill."}])
     assert len(stats["said"]) == 1 and stats["told_dropped"] == []
 
 

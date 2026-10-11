@@ -22,7 +22,7 @@ from engine.world.scenes import cast_present
 from tests.engine.test_dm_tools import DM, change, in_turn, npc_here, to_play
 from tests.engine.test_spec032_cases import FIX, RULES
 
-BEAST = "npc.pale_beast"
+BEAST = "npc.the_pale_beast"
 
 
 def roll(**kw: Any) -> dict[str, Any]:
@@ -57,7 +57,7 @@ def test_r1_to_r15_a_creature_in_prose_is_one_creature_here_for_every_verb(tmp_p
     for verb in RULES.ids("verb."):  # the 15 verbs
         def one(ctx: Any, t: Any, tx: Any, verb: str = verb) -> tuple[str | None, str | None]:
             # [P8a] nothing is matched: the same words in one turn are one creature (the code's own memo); the next
-            # turn's words are a new one unless the DM uses the id
+            # turn's same words are the same creature only because they are its exact recorded name (01.2.5)
             first = dm_tools._party(ctx, t, "the pale beast", person=dm_tools.target_is_person(RULES, verb, None),
                                     as_="creature")  # [spec 033 R6] `as` says it is a creature; no head-noun test
             return first, dm_tools._party(ctx, t, "the pale beast")
@@ -66,7 +66,7 @@ def test_r1_to_r15_a_creature_in_prose_is_one_creature_here_for_every_verb(tmp_p
         assert a == b and a is not None
         assert dm_tools._id(game.store.state, a) == a  # by its id it is found again
         seen.append(a)
-    assert seen[0] == BEAST and len(set(seen)) == len(seen)
+    assert set(seen) == {BEAST}  # exact recorded name: one creature for all 15 verbs
     e = ent(game, BEAST)
     assert e.data["mind"] == "animal" and is_animal(game.store.state, BEAST)
     assert game.store.state.positions[BEAST].location == here and BEAST in cast_present(game.store.state)
