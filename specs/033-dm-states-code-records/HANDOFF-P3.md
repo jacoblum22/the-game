@@ -1,14 +1,14 @@
-# HANDOFF 033 P3 (foes and the answer turn) - WIP, cut at the turn cap
-DONE (brief items): 1 foe call `dm_world._foes` (+ `dm_tools.foe_message`, `_fight_block(st, pc, legal)`, `foe_schema`); 2-3 `engine/resolve/foe_act.py`
-(`legal_acts`, `default_act`, `act`, `holders`, `kills`); omitted/illegal -> `_default(t, "foes.<id>")`, no re-ask; 4 `world_step._foe_turn(do=, target=, ref=)`
-used by tools, `ws.foes_act` no longer called, DENY `foe_beat`/`foes_act` flipped to raise (viii9.py), `pending:P3` row deleted, `foe_beat:words:BANDS` re-listed class P;
-5 `foe_turns` rows `{foe, did, act, picked_by}`, `stats.world.foe_calls`; 6 `_cost_block`, `_footing` (apply_footing, logs `not_chosen:cost_form`), `costs` pending now carries `words`;
-7 `_drain(t)` after run_beats and `_resume`; 8 `_reach` in `_propose_roll` (skipped for change_kind move_to). Offline DM states `change position engaged` before a melee propose_roll.
-TESTS: new `tests/engine/test_spec033_p3.py` (31 tests; 29 passed at last run, 2 failing, below); `tests/engine/conftest.py` autouse fixture turns `_reach` off except in test_spec033_p3;
-p2a/p4/p8b/engine tests adapted. Guard: `tests/guard` 74 passed after the DENY flip (not re-run after later edits). Do not commit tests/guard/reached.txt.
-LEFT: (a) fix 2 failing tests in test_spec033_p3.py: `test_a_pinning_grapple_then_the_foe_cannot_strike` (a critical grapple gives cond.restrained, so strike stays legal; assert the list matches the held rung and use `seen` from a callable
-pick, whose `seen` was empty - check the foe call fires with the callable) and `test_a_push_off_the_ledge...` (expect band `close`; use a callable pick that asserts the FIGHT block shows `acts now: close_in, flee, yield, wait` and returns close_in; a schema-invalid pick like strike is replaced by the offline double, so it is picked_by dm).
-(b) Run full pytest in background (`PYTHONUTF8=1 py -3.12 -m pytest -q -p no:cacheprovider | tail -3`), ruff + pyright on touched files (dm_world lambda in loop may hit B023). (c) Re-record `offline_seed11_dmtools` locally if replay fails; `offline_seed11` must stay byte-equal.
-(d) Tick T040-T046 in tasks.md (T042/T044 are retired by D2). (e) Update dm_world.py header docstring (still says `foes_act`). (f) edit dm.md only if the FIGHT wording needs it (no change made).
-TRAPS: Bash tool collapses `\\` in heredocs - write edit scripts with the Write tool; scratchpad has stale dbg*.py files (use unique names). Edit tool on CRLF files can merge lines; prefer python replace with encoding utf-8.
-Footing is applied after the DM loop, so foes act on the pre-footing state (band_back lands after the foe's act). Foe companions: target check has no band test. Reach: None band is refused; reach weapons (spear at close) not yet allowed. `flee` puts the foe at `elsewhere`; verify cast_present drops it (the flee test passed). P5: dm_world `_foes` sits before `_up`; P5 adds its call line in world_step near `trigger_raised`.
+# HANDOFF 033 P3 (foes and the answer turn) - FINAL
+DONE: T040-T046 ticked (T042/T044 retired by D2/D3). Foe call `dm_world._foes` (DM picks each able foe's act from `foe_act.legal_acts`, T-06-16; code rolls it);
+omitted/illegal pick -> `foe_act.default_act`, logged `not_chosen:foes.<id>`, no re-ask. `foe_turns` rows `{foe, did, act, picked_by}`, `stats.world.foe_calls`.
+COST TO SHAPE (`_cost_block`) + `_footing` (apply_footing, logs `not_chosen:cost_form`). Reach refusal `_reach` in `_propose_roll` (skipped for change_kind move_to).
+FOOTING ORDER FIXED: `_world` calls `_footing` before `world_step`; on an answer turn with a pending footing the lead's world step is skipped, so the DM loop picks
+`cost_form`, then footing lands, then the foes act, then `_reask` (call order: DM answer with cost_form, foe call, final passage). Test `test_the_footing_lands_before_the_foe_acts`.
+TESTS: `test_spec033_p3.py` 33 passed. Two former failures rewritten (pinned foe: state built with cond.pinned, FIGHT block lists `break_free, yield, wait`; push: callable pick reads the FIGHT block).
+GATES: tests/engine 2185 passed; full pytest 2585 passed, 5 skipped, 2 xfailed (with the local reached.txt); guard 74 passed with a locally regenerated reached.txt (NOT committed; orchestrator regenerates). ruff clean (B023 fixed with default args).
+pyright: only env noise (pydantic/pytest/yaml unresolved) on touched files; one real error fixed. `offline_seed11_dmtools.json` RE-RECORDED (extra foe call per fight exchange); `offline_seed11.json` byte-equal.
+GUARD EDITS: `census.py` probe states `change position engaged` before the grapple (else 06.4.3 refuses it and hold code goes unreached); `viii9_allow.py`: + foe_act.legal_acts HOLDS, + frame._atom_true (_ATOM, re.findall), - conflict.foe_beat BANDS (no longer reached).
+FOR P6: `tests/engine/conftest.py` still turns `_reach` off for 5 modules (NEEDS_NO_REACH_CHECK: test_spec032_p3, p4, p5a, p8a, p8b; ~25 tests propose melee with no recorded band). Give each an engaged band or a `change position` step, then delete the fixture.
+TRAPS: the foe message shows the FIGHT block twice (SITUATION's plain one and the legal-acts one in the lead); read the last. The offline double replaces a schema-invalid pick (e.g. strike for a pinned foe), so picked_by is dm. Foe companions as targets have no band test. Reach: a None band is refused; reach weapons (spear at close) not yet allowed.
+LIVE RUN: watch `not_chosen:foes.*` and `not_chosen:cost_form` counts (D3) and the strike share while engaged (D1/P7). One extra DM call per settled fight exchange (D2) plus the reask when the world produced facts.
+P5 runs in `dm_world._lead/_witness`; P3 touched only `_foes` there and the header docstring.

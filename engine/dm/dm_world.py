@@ -3,9 +3,9 @@ outcomes as plain words; it gives no orders and calls no model.
 
     facts = world_step(ctx, t)    # t: the dm_tools Turn (rec, oof, beats, stats); [] when a pause is open
 
-In the pipeline's order (engine/dm/world_step.py, reused, not rebuilt): the foes answer (`foes_act`: the conflict's
-own foe turn, harm by code), the exchange costs its mode's time (`beat_time`, or one `beat_cost` for an exchange with
-no beat), the beat counter and dead air move, clocks that ticked give their omens, raised triggers give their warnings,
+In the pipeline's order (engine/dm/world_step.py, reused, not rebuilt): the foes answer (`_foes`: the DM picks
+each able foe's act from the acts legal now, T-06-16; code rolls it and applies the harm), the exchange costs
+its mode's time (`beat_time`, or one `beat_cost` for an exchange with no beat), the beat counter and dead air move, clocks that ticked give their omens, raised triggers give their warnings,
 and a raised lead injection is written (`inject_lead`). Scene ends are the DM's call (the `end_scene` tool): nothing
 here cuts a scene. [owner ruling 2026-10-10]
 """
@@ -139,7 +139,7 @@ def _foes(ctx: TurnContext, t: Any, rec: Any, oof: list[dict[str, str]]) -> dict
                 dm_tools._default(t, f"foes.{foe}.target")
         nonlethal = bool(p.get("nonlethal"))
         ws._foe_turn(ctx, rec, foe, oof, target=target, ref=f"{by}:{pick}",
-                     do=lambda tc, rng, f, who: foe_act.act(tc, rng, f, pick, who, nonlethal))
+                     do=lambda tc, rng, f, who, pick=pick, nonlethal=nonlethal: foe_act.act(tc, rng, f, pick, who, nonlethal))
         done[foe] = (pick, by)
     check_end(ctx.time_ctx(), pc)
     return done

@@ -110,6 +110,7 @@ def _run(ctx: TurnContext, message: str, *, choice: str | None) -> Outcome:
     from engine.dm.narration import owed, shown_pause, turn_blocks
     from engine.dm.turn import _harm_followups, _resume, _take, _turn_end, recent_exchanges
     from engine.harm.threshold import ending_state
+    from engine.resolve import costs
     from engine.resolve.pipeline import close_by_default
     from engine.retrieve.scene import pc_id
 
@@ -135,7 +136,8 @@ def _run(ctx: TurnContext, message: str, *, choice: str | None) -> Outcome:
                 _drain(t)  # [spec 033 D3] what code defaulted while it rolled
                 _harm_followups(ctx, t.env, t.rec, t.oof)
                 lead = f"The player picked: {label}.\n" + _outcomes_text(ctx, t.rec, t.oof) + _cost_block(ctx.state)
-                lead += _world_text(_world(ctx, t))  # [spec 032 P4] the foes answer and time passes before the DM writes
+                if costs.pending_footing(tx.state) is None:  # [spec 033 D2] else the foes wait for the DM's cost_form
+                    lead += _world_text(_world(ctx, t))  # [spec 032 P4] the foes answer and time passes before the DM writes
             elif pause is not None and (pause.detail or {}).get("stage") in ("offer", "warning", "redirect",
                                                                                  "near_miss", "plan"):
                 res = close_by_default(t.env, pause)  # new words with an offer open: it is withdrawn (12.2.6)
@@ -150,7 +152,7 @@ def _run(ctx: TurnContext, message: str, *, choice: str | None) -> Outcome:
                 facts = _world(ctx, t)  # a no-op on an answer turn (it ran before the loop)
                 if facts and tx.state.open_pause() is None:  # one more call, only when the world produced a fact (F20)
                     passage = _reask(ctx, t, message if choice is None else "", exchanges, lead, passage, facts)
-            _footing(ctx, t)  # [spec 033 DL-01-60] the DM's pick of the deferred footing form lands
+            _footing(ctx, t)  # [spec 033 DL-01-60] a footing still pending (no world step ran) lands here
             _sync_scene(ctx, t)
             if tx.state.open_pause() is None:
                 _turn_end(ctx, t.rec, t.oof)
@@ -315,6 +317,7 @@ def _world(ctx: TurnContext, t: Turn) -> list[str]:
     if t.world_done or ctx.state.open_pause() is not None:
         return []
     t.world_done = True
+    _footing(ctx, t)  # [spec 033 D2] the character's result includes the footing: the foes act on it
     facts = dm_world.world_step(ctx, t)
     if dm_world.time_jumped(ctx):
         _open_scene(ctx, "time_jump")

@@ -81,6 +81,7 @@ def play_probe(tmp: Path, guard: Guard | None = None) -> Guard:
         ("I step away from them and retreat to the door.",
          [dm(sure(verb="verb.move", goal="withdraw", target=npc, how="I retreat away from them", attribute="body",
                   change_kind="move_to", change_what="far"))]),
+        ("I step up to them.", [dm(change(kind="position", who="pc", what=npc, to="engaged"))]),  # 06.4.3: reach first
         ("I grab the person and hold them.",
          [dm(sure(verb="verb.grapple", goal="hold", target=npc, how="grab and restrain", change_kind="restrain"))]),
         ("I free myself, wriggling out.",

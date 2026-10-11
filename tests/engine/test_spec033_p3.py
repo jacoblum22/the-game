@@ -14,12 +14,11 @@ from engine.resolve import conflict, costs, foe_act
 from engine.resolve import pipeline as pl
 from engine.retrieve.scene import pc_id
 from engine.store.conditions import apply_condition
-from engine.store.events import Event
 from engine.world.common import fact
 from tests.engine.test_dm_tools import DM, in_turn, npc_here, to_play
 from tests.engine.test_spec032_cases import RULES
 from tests.engine.test_spec032_p4 import fighting, play, start_fight, step
-from tests.engine.test_spec033_p2a import BASE, conds, fixed, hold_on
+from tests.engine.test_spec033_p2a import BASE, conds, fixed
 
 
 def pick(foe: str, act: str, target: str = "", nonlethal: bool = False) -> dict[str, Any]:
@@ -212,7 +211,7 @@ def test_two_foes_one_omitted(tmp_path: Path) -> None:
 
     game, model = play(tmp_path)
     a, b = cast_present(game.store.state)[:2]
-    pc = pc_id(game.store.state)
+    pc = pc_id(game.store.state) or ""
     assert in_turn(game, lambda ctx, t, tx: conflict.start(ctx.time_ctx(), pc, [a, b], "test"))
     model.push(DM, pick(a, "flee"))
     _, t = step(game)
@@ -277,42 +276,39 @@ def stats(game: Game, r: Any) -> dict[str, Any]:
     return dict(tr.screen["dm_tools"])
 
 
-def test_a_pinning_grapple_then_the_foe_cannot_strike(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+def looking(seen: list[str], reply: dict[str, Any]) -> Any:
+    """A DM pick that records the foe call's message (the FIGHT block it was shown) and answers `reply`."""
+
+    def look(schema: Any, packet: Any) -> dict[str, Any]:
+        seen.append(packet.message)
+        return reply
+
+    return look
+
+
+def listed(message: str, foe: str) -> str:
+    return message.split(f"- {foe}:")[-1].split("acts now: ")[1].split("\n")[0]
+
+
+def test_a_pinned_foe_is_shown_no_strike(tmp_path: Path) -> None:
+    """T-06-16: a foe pinned by the PC may only break free, yield or wait (a restrained one may still strike, so the
+    state is built with the rung that removes it)."""
     seen: list[str] = []
-
-    def foe_pick(npc: str) -> Any:
-        def look(schema: Any, packet: Any) -> dict[str, Any]:
-            seen.append(packet.message)
-            return pick(npc, "strike")
-
-        return look
-
-    game, model = to_play(tmp_path)
-    npc, pc = npc_here(game), pc_id(game.store.state) or ""
-    start_fight(game, npc)
-    band(game, pc, npc, "engaged")
-    monkeypatch.setattr(pl, "roll_check", fixed("critical_success"))
-    call = {**BASE, "target": npc, "verb": "verb.grapple", "change_kind": "restrain", "change_what": npc}
-    model.push(DM, {"calls": [call], "passage": "Lead-up.", "said": [], "asks": []})
-    r = game.submit("I grab him.")
-    assert r.pause is not None
-    # the hold the grapple wrote: whatever its rung, the foe's list is read from the state it left
-    model.push(DM, foe_pick(npc), {"calls": [], "passage": "Result.", "said": [], "asks": []},
-               {"calls": [], "passage": "Result.", "said": [], "asks": []})
-    r = game.answer("commit")
-    held = [c for c in conds(game, npc) if c in ("cond.grabbed", "cond.restrained", "cond.pinned")]
-    assert held, "the grapple held the foe"
-    listed = seen[0].split(f"- {npc}:")[1].split("acts now: ")[1].split("\n")[0]
-    assert "break_free" in listed
-    if "cond.pinned" in held:
-        assert "strike" not in listed
-        assert stats(game, r)["world"]["foe_turns"][0]["act"] != "strike"
-    assert stats(game, r)["world"]["foe_calls"] == 1 and stats(game, r)["model_calls"] >= 3
+    game, model = play(tmp_path)
+    foe, pc = start_fight(game), pc_id(game.store.state) or ""
+    band(game, pc, foe, "engaged")
+    cond_on(game, foe, "cond.pinned", pc)
+    model.push(DM, looking(seen, pick(foe, "strike")))
+    _, t = step(game)
+    assert listed(seen[0], foe) == "break_free, yield, wait"
+    assert t.stats["world"]["foe_calls"] == 1
+    assert row(t, foe)["act"] != "strike"  # the offline double's schema check replaced the pick outside the list
 
 
 def test_a_push_off_the_ledge_leaves_the_foe_only_to_close_in(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
-    """A critical Force push sends the foe two bands away: the strike the DM asks for is outside its list, so the
-    foe takes the first legal row (close in) and the default is logged."""
+    """A critical Force push sends the foe away: the foe call's FIGHT block lists only the acts of a foe not engaged
+    (close_in, flee, yield, wait), and the DM's close_in is rolled by code as picked."""
+    seen: list[str] = []
     game, model = to_play(tmp_path)
     npc, pc = npc_here(game), pc_id(game.store.state) or ""
     start_fight(game, npc)
@@ -323,13 +319,13 @@ def test_a_push_off_the_ledge_leaves_the_foe_only_to_close_in(tmp_path: Path, mo
     model.push(DM, {"calls": [call], "passage": "Lead-up.", "said": [], "asks": []})
     r = game.submit("I shove him.")
     assert r.pause is not None
-    model.push(DM, pick(npc, "strike"), {"calls": [], "passage": "Result.", "said": [], "asks": []},
+    model.push(DM, looking(seen, pick(npc, "close_in")), {"calls": [], "passage": "Result.", "said": [], "asks": []},
                {"calls": [], "passage": "Result.", "said": [], "asks": []})
     r = game.answer("commit")
-    assert conflict._band(game.store.state, pc, npc) in ("near", "engaged")  # pushed two bands, then it closed one
+    assert listed(seen[0], npc) == "close_in, flee, yield, wait"
     s = stats(game, r)
-    assert s["world"]["foe_turns"][0]["act"] == "close_in" and s["world"]["foe_turns"][0]["picked_by"] == "default"
-    assert f"not_chosen:foes.{npc}" in s["defaults"]
+    assert s["world"]["foe_turns"][0]["act"] == "close_in" and s["world"]["foe_turns"][0]["picked_by"] == "dm"
+    assert conflict._band(game.store.state, pc, npc) == "close"  # pushed two bands, then it closed one
 
 
 def test_the_pcs_result_that_downs_the_foe_ends_its_turn(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
@@ -381,7 +377,7 @@ def fail_footing(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, cost_form: str
     model.push(DM, {"calls": [call], "passage": "Lead-up.", "said": [], "asks": []})
     r = game.submit("I swing.")
     assert r.pause is not None and costs.pending_footing(game.store.state) is None
-    model.push(DM, foe_pick(npc), watch, watch)
+    model.push(DM, watch, foe_pick(npc), watch)  # the DM's cost_form first, then the foe call, then the passage
     r = game.answer("commit")
     return game, npc, pc, r, seen
 
@@ -464,3 +460,22 @@ def test_a_non_creature_target_or_none_passes_the_reach_check(tmp_path: Path) ->
                 dm_tools._reach(ctx, t, "verb.strike", hatch, stated) if hatch else "")
 
     assert in_turn(game, go) == ("", "", "")
+
+
+def test_the_footing_lands_before_the_foe_acts(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """D2: the PC's result includes the footing. A band_back footing puts the foe one band off, so the foe call lists
+    the acts of a foe not engaged and does not list strike."""
+    seen: list[str] = []
+    game, model = to_play(tmp_path)
+    npc, pc = npc_here(game), pc_id(game.store.state) or ""
+    start_fight(game, npc)
+    band(game, pc, npc, "engaged")
+    monkeypatch.setattr(pl, "roll_check", fixed("failure"))
+    call = {**BASE, "target": npc, "change_kind": "harm", "fail_cost": "cost.footing"}
+    model.push(DM, {"calls": [call], "passage": "Lead-up.", "said": [], "asks": []})
+    assert game.submit("I swing.").pause is not None
+    cost = {"calls": [], "passage": "Result.", "said": [], "asks": [], "cost_form": "band_back"}
+    model.push(DM, cost, looking(seen, pick(npc, "close_in")), {"calls": [], "passage": "Result.", "said": [], "asks": []})
+    r = game.answer("commit")
+    assert "strike" not in listed(seen[0], npc) and "close_in" in listed(seen[0], npc)
+    assert stats(game, r)["world"]["foe_turns"][0]["picked_by"] == "dm"
