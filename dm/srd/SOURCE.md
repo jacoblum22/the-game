@@ -11,4 +11,5 @@ LLC and available at https://dnd.wizards.com/resources/systems-reference-documen
 under the Creative Commons Attribution 4.0 International License available at
 https://creativecommons.org/licenses/by/4.0/legalcode.
 
-Known gap: the Acolyte's prayer book, 5 sticks of incense and vestments are missing from its starting equipment.
+Known gap: the Acolyte's prayer book (or prayer wheel), 5 sticks of incense and vestments are missing from its
+starting equipment. `dm/create.py` adds them (`ACOLYTE_PRAYER`, `ACOLYTE_ITEMS`); the data here stays unchanged.
