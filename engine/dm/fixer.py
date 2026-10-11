@@ -32,7 +32,7 @@ from engine.dm.schemas import STR, STRS, Schema, arr, enum, obj
 
 TOOLS = ("turn", "entity", "search", "recompute", "ledger", "said", "calls", "try", "replay")
 PROPOSALS = ("set_fact", "remove_fact", "restore", "refund", "deduct", "reframe", "take_back", "correct_testimony",
-             "remove_condition", "explain")
+             "explain")
 CATEGORIES = ("remembered_wrong", "rule_wrong", "contradiction", "misread", "ruling_question", "other")  # 12.3.6 item 2
 VERDICTS = ("player_right", "partly", "record_stands", "unclear")
 PLAYER_FACING = ("shown", "available")
@@ -169,7 +169,7 @@ def sheet(state: Any, rules: Any, eid: str | None) -> dict[str, str]:
 
 def cond_origins(store: Any, state: Any, rules: Any, eid: str) -> list[str]:  # rule: PR-12-11
     """Each condition on `eid` with where it came from: the event, its turn, the roll or source and the rule (spec 032
-    P6: a Fixer with no origin view made one up). `cinst.N` is what `remove_condition` takes."""
+    P6: a Fixer with no origin view made one up). `remove_fact` with a `cinst.N` takes one off."""
     first = {}
     for e in store.events(types=["condition_applied"]):
         first.setdefault(getattr(e.payload, "instance_id", ""), e)
@@ -665,7 +665,9 @@ def opening(ctx: Any, text: str) -> str:
         f"{getattr(ctx, 'turn_id', None) or 'now'}",
         "THE PLAYER'S CHARACTER:", *([f"- {pc}: {me[0]}", *me[1:]] if me else ["- none"]),
         f"  sheet: {sheet_line(state, ctx.rules, pc)}",
-        *(cond_origins(ctx.store, state, ctx.rules, pc) if pc else []),
+        *(cond_origins(ctx.store, state, ctx.rules, pc) if pc else []),  # spec 032 P6 (pinned-trace.md)
+        *(["  a wrong one comes off with `remove_fact`, fact_id its cinst id, evidence the turn that put it on"]
+          if pc and state.conditions_on(pc) else []),
         "PEOPLE IN VIEW (the people card every role reads):", *(people or ["- no one"]),
         offer,
         "LAST TURNS (oldest first; use `turn` for the full record):",

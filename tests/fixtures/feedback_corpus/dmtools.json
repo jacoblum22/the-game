@@ -19,7 +19,7 @@
                 "screen": {"must": ["Now:", "(?i)morning"]}}},
   {"id": "dm-pinned", "save": "dmtools-175211-fighter.db.gz", "turn": "turn.16", "kind": "real: a wrong condition with no holder (pinned-trace.md)",
    "report": "The game says I'm \"pinned\" and must break free, but nobody has grabbed me. I'm behind the bar with the woman. Who is pinning me?",
-   "expected": {"complaints": [{"id": "dmp1", "turn": ["turn.4", "turn.15"], "class": "upheld", "done": ["remove_condition"], "why": "cinst.1 came from turn.4's footing cost (S4) with the PC as its own holder; no one holds the PC"}],
+   "expected": {"complaints": [{"id": "dmp1", "turn": ["turn.4", "turn.15"], "class": "upheld", "done": ["remove_fact"], "why": "cinst.1 came from turn.4's footing cost (S4) with the PC as its own holder; no one holds the PC"}],
                 "screen": {"must": ["Now:", "(?i)turn 4|push|crowd|footing|fall"], "must_not": ["(?i)turn 10|the woman.{0,40}hold.{0,20}you"]}}},
   {"id": "dm-clue-name", "save": "dmtools-152037-talker-secrets.db.gz", "turn": "turn.3", "kind": "made-up: a clue the DM delivered, doubted",
    "report": "Did Ivette actually tell me the missing boy's name? I don't think I have it.",
@@ -35,7 +35,7 @@
                 "screen": {"must": ["Now:"], "must_not": ["Learn from Kazain Ironhelm"]}}},
   {"id": "dm-prone", "save": "dmtools-153123-fighter-secrets.db.gz", "turn": "turn.11", "kind": "made-up: a condition the passage ended, with an OFFER open",
    "report": "The last passage has me heaving myself up out of the mud, but my sheet still says I'm prone.",
-   "expected": {"complaints": [{"id": "dmr1", "turn": ["turn.10", "turn.8"], "class": "upheld", "done": ["remove_condition"], "why": "prone came from turn.8's footing cost; turn.10's passage stands the PC up"}],
+   "expected": {"complaints": [{"id": "dmr1", "turn": ["turn.10", "turn.8"], "class": "upheld", "done": ["remove_fact"], "why": "prone came from turn.8's footing cost; turn.10's passage stands the PC up"}],
                 "screen": {"must": ["Now:"]}}}
  ]
 }

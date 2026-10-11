@@ -168,7 +168,7 @@ DM tool log for that turn, `Now:` shown, no crash. Live (Sonnet): the 4 saved co
 explained; reported as k/4 against the pipeline's. X21 edge: `/fix` with an OFFER open reframes with the code
 framer (no Framer model call). X22 edge: `/fix` right after a clue: a correction never delivers a clue (INV-10).
 X23 real (P6, pinned-trace.md): save 175211 turn.16, "pinned" with no holder: the Fixer sees `cinst.1` came from
-turn.4's footing cost and `remove_condition` takes it off (`Now:` shows it). Live set: `evals/feedback_corpus.py --set dmtools`
+turn.4's footing cost and `remove_fact` with that `cinst.1` takes it off (`Now:` shows it). Live set: `evals/feedback_corpus.py --set dmtools`
 (4 saved, the pinned one, 4 made-up; labelled in tests/fixtures/feedback_corpus/dmtools.json before any run).
 
 ## N. NPC agency and the mood-and-cost probe (G13)

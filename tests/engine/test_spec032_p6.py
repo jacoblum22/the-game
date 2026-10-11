@@ -1,5 +1,5 @@
 """Spec 032 P6 (lane F): `/fix` on dm-tools turns. Cases X1-X22 of specs/032-dm-tools-mvp/cases.md, the condition
-origin view and `remove_condition` (the pinned trace), and the head-to-head saves' complaints, with a scripted Fixer
+origin view and removing one (`remove_fact` with a `cinst.N`; the pinned trace), and the head-to-head saves' complaints, with a scripted Fixer
 over the offline stand-in. The live k/8 run is `evals/feedback_corpus.py --set dmtools --model sonnet`."""
 
 from __future__ import annotations
@@ -233,7 +233,7 @@ def test_pinned_real_case_the_origin_is_shown_and_the_pin_removed(tmp_path: Path
     on the PC with the PC as holder; the Fixer could not see where it came from or remove it."""
     report = ("The game says I'm \"pinned\" and must break free, but nobody has grabbed me. I'm behind the bar with "
               "the woman. Who is pinning me?")
-    fix = decide(p("remove_condition", key="cinst.1", evidence=["turn.4"]), turn="turn.4")
+    fix = decide(p("remove_fact", fact_id="cinst.1", evidence=["turn.4"]), turn="turn.4")
     out, store, fixer = _fix_on_save(tmp_path, "dmtools-175211-fighter.db.gz", "turn.16", report,
                                      [look(("entity", "pc")), fix, fix])
     try:
@@ -248,31 +248,31 @@ def test_pinned_real_case_the_origin_is_shown_and_the_pin_removed(tmp_path: Path
         assert out.turn_record.screen["dm_tools"]["kind"] == "corrected"
         # the same path as every proposal: the correction is ledgered and can be taken back like any write
         recs = [r for r in st.meta.get("corrections") or [] if isinstance(r, dict) and r.get("type") == "dispute"]
-        assert recs and "remove_condition" in recs[-1].get("done_kinds", [])
+        assert recs and "remove_fact" in recs[-1].get("done_kinds", [])
     finally:
         store.close()
 
 
-def test_remove_condition_guards(tmp_path: Path) -> None:
+def test_removing_a_condition_guards(tmp_path: Path) -> None:
     game, model = to_play(tmp_path)
     model.push(DM, say("You fall.", change(kind="condition_add", who=npc_here(game), what="cond.prone")),
                say("She falls."))
     r = game.submit("I trip her.")
     tid = r.turn_id
     inst = next(c for c in game.store.state.conditions.values() if c.condition_id == "cond.prone")
-    cases = [  # (proposal, removed?)
-        (p("remove_condition", key=inst.instance_id), False),  # no evidence: INV-9
-        (p("remove_condition", key="cond.prone", evidence=[tid]), False),  # not on the PC (the default subject)
-        (p("remove_condition", key="cinst.999", evidence=[tid]), False),  # no such condition
-        (p("remove_condition", subject=inst.target, key="prone", evidence=[tid]), True),  # by name on someone
+    cases = [  # (proposal, looked at its holder, removed?)
+        (p("remove_fact", fact_id=inst.instance_id, evidence=[tid]), False, False),  # its id never seen: INV-9
+        (p("remove_fact", fact_id="cinst.999", evidence=[tid]), True, False),  # no such condition
+        (p("remove_fact", fact_id=inst.instance_id, evidence=[tid]), True, True),  # seen: off, on whoever has it
     ]
-    for prop, removed in cases:
-        model.push(FIX, look(("turn", tid)), *[decide(prop, turn=tid)] * 2)
+    for prop, looked, removed in cases:
+        calls = [("turn", tid), ("entity", inst.target)] if looked else [("turn", tid)]
+        model.push(FIX, look(*calls), *[decide(prop, turn=tid)] * 2)
         out = game.dispute("she is not prone")
         assert (inst.instance_id not in game.store.state.conditions) is removed, (prop, out.text())
 
 
-def test_remove_condition_refuses_a_wound(tmp_path: Path) -> None:
+def test_removing_a_condition_refuses_a_wound(tmp_path: Path) -> None:
     from engine.dm.dispute import _remove_condition
     from engine.store.events import ConditionInstance
 
@@ -283,7 +283,7 @@ def test_remove_condition_refuses_a_wound(tmp_path: Path) -> None:
                              remaining="until:treated")
     st.conditions["cinst.77"] = inst
     with game.store.transaction(None) as tx:
-        status, words = _remove_condition(st, tx, p("remove_condition", key="cinst.77"), "", RULES)
+        status, words = _remove_condition(st, tx, p("remove_fact", fact_id="cinst.77"), "", RULES)
     assert status == "not" and "Vitality" in words
 
 

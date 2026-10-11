@@ -541,6 +541,9 @@ def _apply(ctx: Any, tx: Transaction, text: str, p: dict[str, Any], inv: Investi
         if why := _set_quantity(tx, pc, q, new, f"correction ({kind}): {_flat(text, 100)}"):
             return "not", f"{kind}: {why}"
         return "did", f"your {q} {cur} → {new}"
+    if kind == "remove_fact" and str(p.get("fact_id") or "").startswith("cinst."):  # spec 032 P6: a wrong
+        # condition off the sheet (a footing cost's self-held pin); no new kind, so the Fixer schema is unchanged
+        return _remove_condition(st, tx, p, text, ctx.rules)
     if kind in ("remove_fact", "correct_testimony"):
         fid = str(p.get("fact_id") or "")
         f = st.facts.get(fid)
@@ -562,8 +565,6 @@ def _apply(ctx: Any, tx: Transaction, text: str, p: dict[str, Any], inv: Investi
             return "did", (f"{what} is reworded on record: \"{value}\"" if value else
                            f"{what} (\"{_flat(f.value, 80)}\") is their words again, not a settled fact")
         return "did", f"\"{_flat(said, 120)}\" is no longer on record"
-    if kind == "remove_condition":  # spec 032 P6: a wrong condition off the sheet (a footing cost's self-held pin)
-        return _remove_condition(st, tx, p, text, ctx.rules)
     if kind == "set_fact":
         from engine.dm.fixer import resolve
         from engine.store.details import slot_of
@@ -598,23 +599,16 @@ def _apply(ctx: Any, tx: Transaction, text: str, p: dict[str, Any], inv: Investi
 def _remove_condition(st: WorldState, tx: Transaction, p: dict[str, Any], text: str,
                       rules: Any) -> tuple[str, str]:
     # rule: PR-12-11
-    """`remove_condition` (spec 032 P6): `key` a `cinst.N`, or a condition id or name on `subject` (default the PC);
-    evidence was checked by the caller (INV-9). A wound or unconsciousness is the harm ladder's, never removed here."""
+    """`remove_fact` with a `cinst.N` (spec 032 P6, pinned-trace.md): that condition off whoever has it, as a
+    correction write; evidence was checked by the caller (INV-9). A wound or unconsciousness is the harm ladder's."""
     from engine.dm.dm_tools import HARM_OWNED
-    from engine.dm.fixer import _cond_name, resolve
+    from engine.dm.fixer import _cond_name
 
-    key = str(p.get("key") or "").strip()
-    who = resolve(st, str(p.get("subject") or "")) if p.get("subject") else pc_of(st)
-    if key in st.conditions:
-        inst = st.conditions[key]
-    else:
-        want = key.lower().removeprefix("cond.").replace(" ", "_")
-        inst = next((c for c in st.conditions_on(who or "") if want and want in (
-            c.condition_id.removeprefix("cond."), _cond_name(rules, c.condition_id).replace(" ", "_"))), None)
+    inst = st.conditions.get(str(p.get("fact_id") or ""))
     if inst is None or inst.target in st.seals:
-        return "not", f"remove condition: no condition {key!r} on record" + (f" on {name(st, who)}" if who else "")
+        return "not", f"remove: no condition {p.get('fact_id')!r} on record"
     if inst.condition_id in HARM_OWNED:
-        return "not", "remove condition: a wound goes with Vitality; restore it or take the turn back"
+        return "not", "remove: a wound goes with Vitality; restore it or take the turn back"
     tx.add(Event.of("condition_removed", source="correction", rule_id="12.3.6", instance_id=inst.instance_id,
                     reason=f"correction: {_flat(text, 100)}"))
     whose = "you are" if inst.target == pc_of(st) else f"{name(st, inst.target)} is"
