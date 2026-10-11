@@ -55,4 +55,16 @@ Guard traps for every phase:
 11. P3: behavior lists hold rows outside T-06-16 (Windup, Flank, Reload): skip them, else `wait`. A Dying PC is a legal
     target only for a `kill` side. An IDLE exchange makes no foe call.
 12. P5: 12.8.4's stalled-thread fallback is code-fired; check the tools path never reaches it.
+- P1 (c07a2ed): `Stated`/`Beat.stated` (None on the pipeline, excluded from dumps); schema fields per the final contract
+  table in P1's report (copied in tasks.md P1 notes if present): as/force/weapon/nonlethal/reads/approach/fail_on/
+  move_to+change_whom; `change position` wired (`_position`); `end_game` stub; `cost_form` schema only; `foe_schema(legal)`
+  for P3 (unused yet). `schemas.SchemaContext.approaches` = the 13 whole `excludes.what` strings. dm.md 780 words.
+  Full pytest 2517 passed.
+13. Every schema object is all-required: "omitted" arrives as "", "none", "plain" or false. `ScriptedModel._dm_defaults`
+    fills missing DM keys so old scripted tests stay valid.
+14. P2a: `_VERB_GOAL` is gone (untyped beat -> Change None). `_propose_roll` still appends " (nonlethal)" to the method:
+    P2a removes it and switches harm to `stated.nonlethal/weapon/force`. Nothing reads `stated` yet. `_position` has no
+    reach refusal.
+15. P4: `_party`, `_walk_on`, `new_npc`, `new_item`, `_fight` ignore `as`/`name`/`knows`; P4 logs `not_chosen:as`.
+    P2b: nothing reads `stated.reads`/`stated.approach` yet; approach values are whole `excludes.what` strings.
 

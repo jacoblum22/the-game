@@ -38,6 +38,20 @@ class Change(BaseModel):
     description: str | None = None  # people or things present with no id ("the refugees"; DL-12-97)
 
 
+class Stated(BaseModel):
+    """What the dm-tools DM stated about a beat [spec 033 R13]. Set by `dm_tools._propose_roll`; when `Beat.stated` is
+    set every guessing helper on the resolve path reads these fields instead of the beat's words. Omitted fields hold
+    the documented default (logged `not_chosen:{field}` by the intake); the pipeline's beats carry None."""
+
+    reads: bool = False  # the act is reading writing (02.4.6)
+    approach: str = "plain"  # "plain", or one verb `excludes` entry exactly (00.12.3)
+    force: Literal["push", "prone"] | None = None  # Force's choice (06.5.3); the intake defaults it to push
+    weapon: str | None = None  # an item id the actor holds, or "unarmed"; None = not a Strike
+    nonlethal: bool = False  # 06.4.8
+    fail_on: str | None = None  # the id a cost needs: exposure's observer, gear's item, closed_door's person
+    position: tuple[str, str, str] | None = None  # (mover, band, other) from change_kind=move_to
+
+
 class Beat(BaseModel):
     """One beat after PARSE and the Reader's GATE proposal (00.13.1 `beat` + `gate` candidates)."""
 
@@ -72,6 +86,7 @@ class Beat(BaseModel):
     necessity: str = "uncertain_and_costly"
     declared_seq: int = 0  # the last event seq before the declaration: levers and snags must be older
     change: Change | None = None  # 01.2.7 (PARSE); None: untyped (a beat from before spec 015)
+    stated: Stated | None = Field(default=None, exclude_if=lambda v: v is None)  # [spec 033] the dm-tools DM's typed fields; the pipeline never sets it
 
 
 class LeverCite(BaseModel):

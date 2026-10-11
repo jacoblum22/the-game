@@ -154,15 +154,16 @@ def test_r24_to_r34_each_change_kind_with_a_person_in_prose(tmp_path: Path) -> N
         "rest": change(kind="rest", who="the ghost", what="breather"),
         "fact": change(kind="fact", who="the clerk", what="owes_money", note="three crowns"),
         "fight": change(kind="fight", who="the pale beast"),
+        "position": change(kind="position", who="the sentry", to="far"),  # [spec 033]
     }
-    assert set(kinds) == set(dm_tools.CHANGES) and len(kinds) == 11  # a new kind without a case fails
+    assert set(kinds) == set(dm_tools.CHANGES) and len(kinds) == 12  # a new kind without a case fails
     in_turn(game, lambda ctx, t, tx: dm_tools.tool(ctx, t, change(kind="condition_add", who=npc, what="cond.dazed")))
     made = {}
     for k, c in kinds.items():
         before = set(game.store.state.entities)
         outs, t = run(game, c)
         made[k] = (outs[0], set(game.store.state.entities) - before)
-    people = {"coin", "give_item", "new_item", "condition_add", "npc_leaves", "fight"}
+    people = {"coin", "give_item", "new_item", "condition_add", "npc_leaves", "fight", "position"}
     for k in people:
         assert made[k][0].startswith("done") or made[k][0].startswith("REFUSED: "), (k, made[k][0])
         assert not made[k][0].startswith("REFUSED: no one or nothing on record"), (k, made[k][0])

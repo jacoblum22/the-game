@@ -1139,6 +1139,11 @@ def _dm(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:  # rule: spec
     """The dm-tools game master offline: a harmful or forceful act aimed at someone here asks for one roll
     (`propose_roll`, once: the tool results then list it, or the schema has no calls left); anything else is a
     short talk passage in the first person present there. Deterministic; reads only the DM packet's sections."""
+    props = schema.get("properties", {})
+    if "foes" in props:  # [spec 033 D2] the foe-act call: each foe strikes when it may, else its first legal act
+        one = [b["properties"] for b in (props["foes"].get("items") or {}).get("anyOf", [])]
+        return {"foes": [{"foe": p["foe"]["enum"][0], "act": "strike" if "strike" in p["act"]["enum"] else p["act"]["enum"][0],
+                          "target": "pc", "nonlethal": False} for p in one]}
     msg = packet.message
     said = re.search(r"THE PLAYER'S MESSAGE\n(.*?)(?:\n\n|$)", msg, re.DOTALL)
     said_text = said.group(1).strip() if said else ""
@@ -1150,13 +1155,16 @@ def _dm(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:  # rule: spec
     if people and fresh and calls_max != 0 and verb in ("verb.strike", "verb.grapple", "verb.force"):
         passage = f"You gather yourself and move on {who}; the moment hangs on whether it lands."
         call = {"tool": "propose_roll", "goal": f"{verb.removeprefix('verb.').capitalize()} {who}", "verb": verb,
-                "target": people[0][0], "how": said_text[:80], "attribute": "might", "difficulty": "",
+                "target": people[0][0], "as": "none", "how": said_text[:80], "attribute": "might", "difficulty": "",
                 "why_uncertain": f"{who} will resist", "stakes": "risky", "nonlethal": False,
-                "fail_cost": "none", "change_kind": "harm" if verb == "verb.strike" else "restrain", "change_what": people[0][0],
+                "force": "push" if verb == "verb.force" else "none", "weapon": "unarmed" if verb == "verb.strike" else "",
+                "reads": False, "approach": "plain", "fail_cost": "none", "fail_on": "",
+                "change_kind": "harm" if verb == "verb.strike" else "restrain", "change_what": people[0][0],
                 "change_whom": ""}
-        return {"calls": [call], "passage": passage, "said": [], "asks": []}
+        return {"calls": [call], "passage": passage, "said": [], "asks": [], "cost_form": ""}
     if "ROLL OFFERED" in msg:  # the lead-up only; the turn pauses
-        return {"calls": [], "passage": "You steady yourself and the moment hangs.", "said": [], "asks": []}
+        return {"calls": [], "passage": "You steady yourself and the moment hangs.", "said": [], "asks": [],
+                "cost_form": ""}
     lead = re.search(r"WHAT JUST HAPPENED\n(.*)", msg)
     line = "I have little to tell you."
     passage = (f"{who[:1].upper()}{who[1:]} turns to you and answers without hurry, in few words: \"{line}\"" if who else
@@ -1164,7 +1172,7 @@ def _dm(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:  # rule: spec
     if lead and lead.group(1).strip():
         passage = f"The moment passes. {passage}"
     return {"calls": [], "passage": passage + " What do you do?",
-            "said": [{"npc": people[0][0], "words": line}] if who else [], "asks": []}
+            "said": [{"npc": people[0][0], "words": line, "as": "none"}] if who else [], "asks": [], "cost_form": ""}
 
 
 ROLE_HEURISTICS: dict[Role, Callable[[dict[str, Any], Packet], dict[str, Any]]] = {
@@ -1214,6 +1222,18 @@ class ScriptExhausted(ModelError):
     """A ScriptedModel queue ran out and fallback is off."""
 
 
+def _dm_defaults(data: dict[str, Any], schema: dict[str, Any]) -> dict[str, Any]:
+    """A scripted DM step with the contract's omitted fields filled in (each call by its own `tool` branch, so nothing
+    is re-read as another tool; a value already given is kept, a call or step that is not valid is left as it was)."""
+    props = schema.get("properties", {})
+    if "calls" not in props:
+        return data
+    branches = {b["properties"]["tool"]["enum"][0]: b for b in props["calls"]["items"]["anyOf"]}
+    calls = [conform(c, branches[c["tool"]], schema) if isinstance(c, dict) and c.get("tool") in branches else c
+             for c in data.get("calls") or []]
+    return {**conform({**data, "calls": []}, schema, schema), "calls": calls}
+
+
 class ScriptedModel:
     """Per-role response queues for tests. A queued item is the response data (served as is, unvalidated),
     an exception instance (raised), or a callable `(schema, packet) -> data`. Empty queue → OfflineModel
@@ -1246,4 +1266,6 @@ class ScriptedModel:
             if isinstance(item, BaseException):
                 raise item
             data = item(schema, packet) if callable(item) else item
+            if role is Role.DM and isinstance(data, dict):  # [spec 033] a scripted DM step names only what it means;
+                data = _dm_defaults(data, schema)  # the contract's other (required) fields hold their defaults
         return _result(self.provider, role, schema, packet, data, turn_id, attempt, watch, seq)

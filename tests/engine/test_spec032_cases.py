@@ -35,7 +35,7 @@ TURN_STATES = ("plain_talk", "offer_open", "rolled_resolved", "change_calls", "r
 
 def test_enumerated_tables_have_their_counted_lengths() -> None:
     assert len(RULES.ids("verb.")) == 15  # R1-R15
-    assert len(dm_tools.CHANGES) == 11  # R24-R34: the 10 kinds plus `fight` (P3)
+    assert len(dm_tools.CHANGES) == 12  # R24-R34: the 10 kinds plus `fight` (P3) and `position` (spec 033)
     assert len(RULES.ids("cond.")) == 33  # K1-K33
     assert len(RULES.ids("cost.")) == 9  # O1-O9
     assert len(FOE_OUTCOMES) == 6 and len([i for i in RULES.ids("beh.") if i.startswith("beh.default_")]) == 4  # F1-F6, F22-F25

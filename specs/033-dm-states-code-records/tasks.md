@@ -24,18 +24,18 @@ Phases, lanes, models and waves: `plan.md` section 5. Cases: `cases.md` (C1-C12)
 - [x] T006 HANDOFF-P0.md.
 
 ## P1 contract (Sonnet, W1, lane: `dm_tools.py` schema/intake/dispatch, `resolve/types.py`, `dm.md`, `llm/offline.py`)
-- [ ] T010 `schema_for`: the plan 2 table's fields (`as`, `force`, `weapon`, `reads`, `approach` enum from data,
+- [x] T010 `schema_for`: the plan 2 table's fields (`as`, `force`, `weapon`, `reads`, `approach` enum from data,
   `fail_on`; step `foes[]` with the act enum, `cost_form`; change `name`, `as`, `knows`, kind `position`; tool
   `end_game`; `said[].as`). A test pins the schema to the contract table.
-- [ ] T011 `resolve/types.py`: `Stated` (plan 1) and `Beat.stated: Stated | None = None`; `_propose_roll` fills it
+- [x] T011 `resolve/types.py`: `Stated` (plan 1) and `Beat.stated: Stated | None = None`; `_propose_roll` fills it
   (validation of enums only; behavior is the later phases'). REFUSED for Force without `force`, an unknown
   `approach`, a `weapon` the actor does not hold.
-- [ ] T012 Dispatch stubs: `end_game` and `change position` return "not available yet" until P5/P2a wire them
+- [x] T012 Dispatch stubs: `end_game` and `change position` return "not available yet" until P5/P2a wire them
   (`position` is wired here if trivial: one `position_set` event; then P2a only adds the reach refusal).
-- [ ] T013 `dm.md` = `contracts/dm.md.draft` (edit for anything the schema changed; at most 800 words; a test counts).
-- [ ] T014 Offline DM heuristic (`llm/offline.py` `Role.DM`): emits the new fields where its acts need them (fight
+- [x] T013 `dm.md` = `contracts/dm.md.draft` (edit for anything the schema changed; at most 800 words; a test counts).
+- [x] T014 Offline DM heuristic (`llm/offline.py` `Role.DM`): emits the new fields where its acts need them (fight
   `to`, `foes` with a strike while a FIGHT block is shown, `as` for words). Re-record `offline_seed11_dmtools` only.
-- [ ] T015 HANDOFF-P1.md.
+- [x] T015 HANDOFF-P1.md.
 
 ## R rules (Opus, W1, lane `rules/`; follow CLAUDE.md's rules conventions; the orchestrator commits)
 - [ ] T090 06.9.1 rewritten (plan 4) with the retired rationale and its watch measure; 06.9.3, 06.9.4 as guidance and

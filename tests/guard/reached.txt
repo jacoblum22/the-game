@@ -40,6 +40,7 @@ engine.data.loader load_rules
 engine.dm.adjudication AdjudicationRecord.add_writes
 engine.dm.adjudication AdjudicationRecord.write_seqs
 engine.dm.adjudication WriteRef.of
+engine.dm.answer _hold
 engine.dm.answer clue_judgment
 engine.dm.answer held
 engine.dm.answer name
@@ -78,7 +79,9 @@ engine.dm.dm_tools _change
 engine.dm.dm_tools _coin
 engine.dm.dm_tools _condition
 engine.dm.dm_tools _content
+engine.dm.dm_tools _default
 engine.dm.dm_tools _dm_loop
+engine.dm.dm_tools _end_scene
 engine.dm.dm_tools _env
 engine.dm.dm_tools _fact
 engine.dm.dm_tools _fight
@@ -89,6 +92,7 @@ engine.dm.dm_tools _held_mood
 engine.dm.dm_tools _id
 engine.dm.dm_tools _log_only
 engine.dm.dm_tools _message
+engine.dm.dm_tools _mood
 engine.dm.dm_tools _name
 engine.dm.dm_tools _name_tokens
 engine.dm.dm_tools _not_here
@@ -102,12 +106,14 @@ engine.dm.dm_tools _reveal_clue
 engine.dm.dm_tools _run
 engine.dm.dm_tools _squash
 engine.dm.dm_tools _state
+engine.dm.dm_tools _stated
 engine.dm.dm_tools _sync_scene
 engine.dm.dm_tools _told
 engine.dm.dm_tools _travel
 engine.dm.dm_tools _walk_on
 engine.dm.dm_tools _world
 engine.dm.dm_tools _world_text
+engine.dm.dm_tools approaches
 engine.dm.dm_tools code_framer
 engine.dm.dm_tools play_answer
 engine.dm.dm_tools play_turn
@@ -398,7 +404,6 @@ engine.llm.base <lambda>
 engine.llm.base CallSequence.next_call_seq
 engine.llm.base Packet.render
 engine.llm.base Packet.sections
-engine.llm.base Packet.with_reask
 engine.llm.base Stopwatch.__init__
 engine.llm.base Stopwatch.ms
 engine.llm.base _check
@@ -417,6 +422,8 @@ engine.llm.offline OfflineModel.propose
 engine.llm.offline ScriptedModel.fill
 engine.llm.offline _clue
 engine.llm.offline _dm
+engine.llm.offline _dm_defaults
+engine.llm.offline _pick_enum
 engine.llm.offline _result
 engine.llm.offline conform
 engine.llm.offline primary_verb
