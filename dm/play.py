@@ -29,7 +29,7 @@ from claude_agent_sdk import (
     tool,
 )
 
-from dm import create
+from dm import create, lookup
 from dm import mechanics as m
 
 HERE = Path(__file__).parent
@@ -40,6 +40,22 @@ MODEL = "claude-sonnet-5-5"
 DM_HOME = Path.home() / "AppData" / "Local" / "the-game-dm"
 DM_ENV = {"CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1", "CLAUDE_CODE_DISABLE_CLAUDE_MDS": "1",
           "CLAUDE_CODE_TOTAL_TOKENS_REMINDER": "off", "CLAUDE_CODE_DISABLE_GIT_INSTRUCTIONS": "1"}
+
+
+def lookup_tool(record: Callable[[dict[str, Any], str], None]) -> Any:
+    """The rules lookup, shared by creation and play. `record` keeps the call and its result in the transcript."""
+    @tool("lookup", "Look up the exact SRD 5.1 text of a spell, monster stat block, condition, magic item, piece of "
+          "equipment, rules section, class feature or racial trait, by its name. If there's no entry by that name, "
+          "the names and rules sections that contain it are listed.",
+          {"type": "object", "properties": {
+              "name": {"type": "string", "description": "e.g. Goblin, Shield, Grappled, Cover, Longsword, Sneak Attack"},
+              "kind": {"type": "string", "enum": list(lookup.KINDS), "description": "optional: only this kind"}},
+           "required": ["name"]})
+    async def lookup_(a: dict[str, Any]) -> dict[str, Any]:
+        text = lookup.lookup(a.get("name") or "", a.get("kind") or "")
+        record(a, text)
+        return {"content": [{"type": "text", "text": text}]}
+    return lookup_
 
 
 def dm_options(cwd: str, **kw: Any) -> ClaudeAgentOptions:
@@ -165,7 +181,11 @@ class Game:
                 return text
             return self.run("fight", go)
 
-        return [roll, change_pc, add_combatants, change_creature, next_turn, end_fight]
+        def record(a: dict[str, Any], text: str) -> None:
+            self.transcript.append({"kind": "call", "tool": "lookup", "input": a, "result": text})
+            self.save()
+
+        return [roll, change_pc, add_combatants, change_creature, next_turn, end_fight, lookup_tool(record)]
 
 
 def sheet_text(s: dict[str, Any]) -> str:
@@ -291,7 +311,10 @@ class Creation:
             return answer("finish_character", a, 'Done. Now reply with exactly this line and nothing else: '
                           '"Your character is complete."')
 
-        return [srd_options, roll_ability_scores, build_character, finish_character]
+        def record(a: dict[str, Any], text: str) -> None:
+            answer("lookup", a, text)
+
+        return [srd_options, roll_ability_scores, build_character, finish_character, lookup_tool(record)]
 
 
 async def create_character(model: str, path: Path) -> tuple[dict[str, Any], list[dict[str, Any]]]:
@@ -302,7 +325,7 @@ async def create_character(model: str, path: Path) -> tuple[dict[str, Any], list
         str(DM_HOME), system_prompt=(HERE / "create_prompt.md").read_text(encoding="utf-8"), model=model,
         mcp_servers={"dm": server},
         allowed_tools=[f"mcp__dm__{n}" for n in ("srd_options", "roll_ability_scores", "build_character",
-                                                 "finish_character")])
+                                                 "finish_character", "lookup")])
     print("Character creation. Talk to the DM; /quit exits.")
     async with ClaudeSDKClient(options=opts) as client:
         await turn(client, c, "[Start] Greet the player and begin making their character.")
@@ -347,7 +370,7 @@ async def main() -> None:
     opts = dm_options(
         game.cwd, system_prompt=system_prompt(game.sheet), model=game.model, mcp_servers={"dm": server},
         allowed_tools=[f"mcp__dm__{n}" for n in ("roll", "change_pc", "add_combatants", "change_creature",
-                                                 "next_turn", "end_fight")],
+                                                 "next_turn", "end_fight", "lookup")],
         resume=game.session_id)
     print(f"{game.sheet['name']}, {game.sheet['summary']}. Saving to {game.path}. /sheet shows your sheet, /quit exits.")
     async with ClaudeSDKClient(options=opts) as client:

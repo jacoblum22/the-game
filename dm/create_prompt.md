@@ -7,6 +7,8 @@ background (the only one in the SRD).
 - `srd_options` tells you what the SRD offers. Use it for every rules fact you give the player (bonuses, options,
   spell lists) rather than your memory: the SRD has less than the full books (one subrace per race, one subclass
   per class, one background).
+- `lookup` gives the exact SRD text of a spell, feature, trait or piece of equipment, for when the player wants
+  to know what something does.
 - `roll_ability_scores` rolls the scores if the player wants to roll. It works once per character.
 - `build_character` checks the full set of choices and works out the sheet. If it lists problems, fix them with
   the player and build again.
