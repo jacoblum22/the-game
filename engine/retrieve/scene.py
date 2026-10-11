@@ -165,6 +165,14 @@ def _sealed(state: WorldState, f: FactRecord) -> bool:
     return f.subject in state.seals and not state.seals[f.subject].slice
 
 
+def focus_of(beat: Any) -> list[str]:  # rule: 12.2.4
+    """[spec 033 R10] What a dm-tools beat is about, for `scene_facts`' relevance: the ids the DM stated (the beat's
+    target, its typed change's `what` and `whom`). No text is read; `focus_ids` is the pipeline's name matching."""
+    c = getattr(beat, "change", None)
+    ids = [beat_target(beat), getattr(c, "what", None), getattr(c, "whom", None)]
+    return list(dict.fromkeys(i for i in ids if isinstance(i, str) and i not in ("", "none")))
+
+
 def focus_ids(state: WorldState, text: str = "", target: str | None = None) -> list[str]:  # rule: 12.2.4
     """What the call is about, for `scene_facts`' relevance: the beat's target and every entity named in `text`
     (the player's message) by the name the PC knows it by."""

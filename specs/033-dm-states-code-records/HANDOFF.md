@@ -67,4 +67,14 @@ Guard traps for every phase:
     reach refusal.
 15. P4: `_party`, `_walk_on`, `new_npc`, `new_item`, `_fight` ignore `as`/`name`/`knows`; P4 logs `not_chosen:as`.
     P2b: nothing reads `stated.reads`/`stated.approach` yet; approach values are whole `excludes.what` strings.
+- P2b (764dbbd): gate checks `stated.approach` vs every verb's `excludes` (G2 if a `covered_by` licence is held or a
+  `covered_by_effect` active, else G3 naming `needs`); reading = `stated.reads`; necessity `certain_talk`/`looks_here`
+  structural (stay called); frame lift/attribute/reversal by typed fields and `reverses_goal` (`reverses(cost, beat,
+  state, rules)` now needs `rules`); anchors keyed by exact `intent_verbs` ids; `scene.focus_of(beat)`. Word paths kept
+  in `_*_by_words` helpers that only the pipeline calls. `resolve_names`/`_PROPER_RUN` are WATCH class S (recall search).
+16. `words:re:findall` and `words:_STOP` rows are `pending:P2a` (only `pipeline._moved` reaches `gate.words`): P2a's
+    merge must delete them if it removes that call. `code_framer` has `focus=focus_of(beat)` (P4 merge touch); P4 still
+    owes anchors `[verb_anchor(verb, rules)]`.
+17. Open for rules/P7: `covered_by_effect` sees only condition-carried effects (`eff.movement_mode` also covers climb and
+    swim); `reverses_goal` has no `restrain` row; the tools path never sets `asks`, so plain questions always roll.
 

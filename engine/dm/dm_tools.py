@@ -776,7 +776,7 @@ def code_framer(ctx: TurnContext, t: Turn) -> Any:
     from engine.dm.schemas import build_schema, schema_context
     from engine.resolve.costs import menu
     from engine.resolve.frame import frame_check
-    from engine.retrieve.scene import focus_ids
+    from engine.retrieve.scene import focus_of
 
     def propose(beat: Any, candidates: list[str], *, gate: Any, note: str | None = None) -> Any:
         st = ctx.state
@@ -784,7 +784,7 @@ def code_framer(ctx: TurnContext, t: Turn) -> Any:
         # decide here. Left out, a scene with no scene facts offered the twist alone and every roll was refused
         # (held-out H07, H10, H11: no roll, so no foe turn).
         sctx = schema_context(st, ctx.rules, anchors=candidates, beat=beat, message=beat.intent,
-                              focus=focus_ids(st, beat.intent, beat.target),
+                              focus=focus_of(beat),
                               cost_menu_ids=[k for k, c in menu(ctx.rules).items() if not c.get("alternate_only")])
         schema = build_schema(Role.FRAMER, sctx)
         base = default_frame(sctx, schema, beat, st, ctx.rules)

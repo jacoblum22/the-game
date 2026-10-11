@@ -148,7 +148,6 @@ engine.dm.fixer play_turns
 engine.dm.fixer resolve
 engine.dm.fixer sheet
 engine.dm.fixer sheet_line
-engine.dm.fixer turn_no
 engine.dm.fixer visible
 engine.dm.mentions _npc
 engine.dm.mentions _one
@@ -161,7 +160,6 @@ engine.dm.narration _for_beat
 engine.dm.narration _item_block
 engine.dm.narration _labelled
 engine.dm.narration _pc_fate
-engine.dm.narration _redirect
 engine.dm.narration owed
 engine.dm.narration pause_blocks
 engine.dm.narration shown_pause
@@ -175,7 +173,6 @@ engine.dm.oof _price
 engine.dm.oof _signed
 engine.dm.oof _view
 engine.dm.oof _who
-engine.dm.oof _why
 engine.dm.oof chance_word
 engine.dm.oof change_result_line
 engine.dm.oof changed_line
@@ -191,8 +188,6 @@ engine.dm.oof offer_title
 engine.dm.oof ordered
 engine.dm.oof player_words
 engine.dm.oof price_line
-engine.dm.oof redirect_block
-engine.dm.oof redirect_options
 engine.dm.oof result_block
 engine.dm.oof short_text
 engine.dm.oof status_block
@@ -512,7 +507,6 @@ engine.resolve.frame competence
 engine.resolve.frame fact_usable
 engine.resolve.frame frame_check
 engine.resolve.frame legal_trades
-engine.resolve.frame lift_attribute
 engine.resolve.frame lift_or_carry
 engine.resolve.frame offer_preview
 engine.resolve.frame opposed_by
@@ -524,25 +518,18 @@ engine.resolve.frame stored_dc_key
 engine.resolve.frame tag_chain
 engine.resolve.frame verb_classes
 engine.resolve.gate GateDecision.rolls_possible
-engine.resolve.gate _fallback_option
 engine.resolve.gate _fallback_shift
 engine.resolve.gate _lic
-engine.resolve.gate _paths
 engine.resolve.gate _plain_cover
 engine.resolve.gate _restricts
-engine.resolve.gate _ruling
 engine.resolve.gate _stem
-engine.resolve.gate _valid_alternatives
-engine.resolve.gate build_redirect
+engine.resolve.gate active_effects
 engine.resolve.gate check_gate
 engine.resolve.gate compute_gate
 engine.resolve.gate covering_verb
-engine.resolve.gate excluded_anywhere
-engine.resolve.gate excluded_by
 engine.resolve.gate forbidden_by_condition
 engine.resolve.gate held_ids
 engine.resolve.gate held_license
-engine.resolve.gate reads_writing
 engine.resolve.gate words
 engine.resolve.necessity _present
 engine.resolve.necessity _standing
@@ -564,7 +551,6 @@ engine.resolve.pipeline PipelineResult.extend
 engine.resolve.pipeline __create_fn__
 engine.resolve.pipeline _able
 engine.resolve.pipeline _answer_offer
-engine.resolve.pipeline _answer_redirect
 engine.resolve.pipeline _attack
 engine.resolve.pipeline _attacks
 engine.resolve.pipeline _change_entry
@@ -590,7 +576,6 @@ engine.resolve.pipeline _open
 engine.resolve.pipeline _progress
 engine.resolve.pipeline _reach_words
 engine.resolve.pipeline _recheck
-engine.resolve.pipeline _redirect
 engine.resolve.pipeline _rides
 engine.resolve.pipeline _roll
 engine.resolve.pipeline _same_goal
@@ -599,7 +584,6 @@ engine.resolve.pipeline _start
 engine.resolve.pipeline _then
 engine.resolve.pipeline band_words
 engine.resolve.pipeline challenge_band
-engine.resolve.pipeline decision_json
 engine.resolve.pipeline evidence_event
 engine.resolve.pipeline harm_hook_for
 engine.resolve.pipeline resume
@@ -612,11 +596,6 @@ engine.resolve.roll delivered_reach
 engine.resolve.roll is_near_miss
 engine.resolve.roll read_result
 engine.resolve.roll roll_check
-engine.resolve.rulings _taken_ids
-engine.resolve.rulings find_rulings
-engine.resolve.rulings gate_signature
-engine.resolve.rulings log_ruling
-engine.resolve.rulings precedent_for
 engine.resolve.rulings signature
 engine.resolve.tables _bounds
 engine.resolve.tables _clamp_total
@@ -628,10 +607,7 @@ engine.resolve.tables roll_table
 engine.resolve.types Beat.<lambda>
 engine.resolve.types Frame.record
 engine.retrieve.anchors _get
-engine.retrieve.anchors _intent_hits
-engine.retrieve.anchors _intent_phrases
 engine.retrieve.anchors _is_prefix
-engine.retrieve.anchors _norm
 engine.retrieve.anchors _retrieval
 engine.retrieve.anchors anchor_candidates
 engine.retrieve.anchors beat_deed_tags
@@ -646,8 +622,9 @@ engine.retrieve.scene _nameable
 engine.retrieve.scene _norm
 engine.retrieve.scene _sealed
 engine.retrieve.scene alias_index
+engine.retrieve.scene beat_target
 engine.retrieve.scene fit
-engine.retrieve.scene focus_ids
+engine.retrieve.scene focus_of
 engine.retrieve.scene pc_id
 engine.retrieve.scene resolve_names
 engine.retrieve.scene scene_facts
@@ -681,7 +658,6 @@ engine.store.db Store.model_calls
 engine.store.db Store.new_turn_id
 engine.store.db Store.record_model_call
 engine.store.db Store.record_rng_draw
-engine.store.db Store.rulings
 engine.store.db Store.save_turn
 engine.store.db Store.snapshot
 engine.store.db Store.transaction
@@ -714,7 +690,6 @@ engine.store.events Payload.check
 engine.store.events Payload.created_ids
 engine.store.events QuantityChanged.check
 engine.store.events RulingLogged._keys
-engine.store.events RulingLogged.created_ids
 engine.store.events SceneEnded.check
 engine.store.events SceneStarted.check
 engine.store.projection WorldState.conditions_on
@@ -741,7 +716,6 @@ engine.store.projection _pause_opened
 engine.store.projection _position_set
 engine.store.projection _quantity_changed
 engine.store.projection _quantity_defined
-engine.store.projection _ruling
 engine.store.projection _scene_ended
 engine.store.projection _scene_started
 engine.store.projection _seq
