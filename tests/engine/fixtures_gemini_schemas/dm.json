@@ -1,0 +1,299 @@
+{
+ "type": "object",
+ "properties": {
+  "calls": {
+   "type": "array",
+   "items": {
+    "anyOf": [
+     {
+      "type": "object",
+      "properties": {
+       "tool": {
+        "type": "string",
+        "enum": [
+         "propose_roll"
+        ]
+       },
+       "goal": {
+        "type": "string"
+       },
+       "verb": {
+        "type": "string",
+        "enum": [
+         "verb.endure",
+         "verb.evade",
+         "verb.exert",
+         "verb.force",
+         "verb.grapple",
+         "verb.handle",
+         "verb.help",
+         "verb.move",
+         "verb.observe",
+         "verb.ready",
+         "verb.recall",
+         "verb.setup",
+         "verb.sneak",
+         "verb.strike",
+         "verb.talk"
+        ]
+       },
+       "target": {
+        "type": "string"
+       },
+       "how": {
+        "type": "string"
+       },
+       "attribute": {
+        "type": "string"
+       },
+       "difficulty": {
+        "type": "string"
+       },
+       "why_uncertain": {
+        "type": "string"
+       },
+       "stakes": {
+        "type": "string",
+        "enum": [
+         "safe",
+         "risky",
+         "dire"
+        ]
+       },
+       "nonlethal": {
+        "type": "boolean"
+       },
+       "change_kind": {
+        "type": "string",
+        "enum": [
+         "take",
+         "give",
+         "move_to",
+         "open",
+         "close",
+         "learn",
+         "persuade_to",
+         "restrain",
+         "free",
+         "harm",
+         "hide",
+         "make",
+         "none"
+        ]
+       },
+       "change_what": {
+        "type": "string"
+       },
+       "change_whom": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "tool",
+       "goal",
+       "verb",
+       "target",
+       "how",
+       "attribute",
+       "difficulty",
+       "why_uncertain",
+       "stakes",
+       "nonlethal",
+       "change_kind",
+       "change_what",
+       "change_whom"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "type": "object",
+      "properties": {
+       "tool": {
+        "type": "string",
+        "enum": [
+         "state"
+        ]
+       },
+       "about": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "tool",
+       "about"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "type": "object",
+      "properties": {
+       "tool": {
+        "type": "string",
+        "enum": [
+         "change"
+        ]
+       },
+       "kind": {
+        "type": "string",
+        "enum": [
+         "coin",
+         "give_item",
+         "new_item",
+         "condition_add",
+         "condition_remove",
+         "npc_leaves",
+         "new_npc",
+         "travel",
+         "rest",
+         "fact"
+        ]
+       },
+       "who": {
+        "type": "string"
+       },
+       "what": {
+        "type": "string"
+       },
+       "to": {
+        "type": "string"
+       },
+       "amount": {
+        "type": "integer"
+       },
+       "note": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "tool",
+       "kind",
+       "who",
+       "what",
+       "to",
+       "amount",
+       "note"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "type": "object",
+      "properties": {
+       "tool": {
+        "type": "string",
+        "enum": [
+         "recall"
+        ]
+       },
+       "query": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "tool",
+       "query"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "type": "object",
+      "properties": {
+       "tool": {
+        "type": "string",
+        "enum": [
+         "reveal_clue"
+        ]
+       },
+       "npc": {
+        "type": "string"
+       },
+       "question": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "tool",
+       "npc",
+       "question"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "type": "object",
+      "properties": {
+       "tool": {
+        "type": "string",
+        "enum": [
+         "mood"
+        ]
+       },
+       "npc": {
+        "type": "string"
+       },
+       "ask_cost": {
+        "type": "string",
+        "enum": [
+         "none",
+         "small",
+         "real",
+         "big"
+        ]
+       }
+      },
+      "required": [
+       "tool",
+       "npc",
+       "ask_cost"
+      ],
+      "additionalProperties": false
+     }
+    ]
+   },
+   "maxItems": 3
+  },
+  "passage": {
+   "type": "string"
+  },
+  "asks": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "properties": {
+     "npc": {
+      "type": "string"
+     },
+     "cost": {
+      "type": "string",
+      "enum": [
+       "none",
+       "small",
+       "real",
+       "big"
+      ]
+     },
+     "granted": {
+      "type": "string",
+      "enum": [
+       "help",
+       "price",
+       "partial",
+       "refuse"
+      ]
+     }
+    },
+    "required": [
+     "npc",
+     "cost",
+     "granted"
+    ],
+    "additionalProperties": false
+   },
+   "maxItems": 4
+  }
+ },
+ "required": [
+  "calls",
+  "passage",
+  "asks"
+ ],
+ "additionalProperties": false
+}

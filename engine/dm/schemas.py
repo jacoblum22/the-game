@@ -441,6 +441,13 @@ def _fixer_default() -> dict[str, Any]:
     return default()
 
 
+def _dm_schema(ctx: SchemaContext) -> Schema:
+    """Spec 032: the dm-tools game master's step (tool calls, then the passage); the body lives with its tools."""
+    from engine.dm.dm_tools import schema_for
+
+    return schema_for(sorted(ctx.verbs), ctx.change_kinds, final=False)  # sorted: the order `rules.ids` gives
+
+
 BUILDERS: dict[Role, Callable[[SchemaContext], Schema]] = {
     Role.INTERPRET: interpret_schema,
     Role.READER: reader_schema,
@@ -452,6 +459,7 @@ BUILDERS: dict[Role, Callable[[SchemaContext], Schema]] = {
     Role.TESTIMONY: testimony_schema,
     Role.FIXER: _fixer_schema,
     Role.CLUE: clue_schema,
+    Role.DM: _dm_schema,
 }
 
 
@@ -569,6 +577,8 @@ DEFAULTS: dict[Role, Callable[[SchemaContext], dict[str, Any]]] = {
     Role.FIXER: lambda ctx: _fixer_default(),
     # no judgment: the question is not about a clue (PR-12-10 step 1; spec 025)
     Role.CLUE: lambda ctx: {"about": "none", "part": "none"},
+    # nothing asked of the tools and no passage: dm_tools.call_role passes its own default (the last passage)
+    Role.DM: lambda ctx: {"calls": [], "passage": "", "asks": []},
 }
 
 
@@ -870,7 +880,7 @@ def schema_context(  # rule: 12.2.4
     )
 
 
-NUMERIC_ALLOWED = ("player_quantity",)
+NUMERIC_ALLOWED = ("player_quantity", "amount")  # amount: the dm-tools DM's coin change (spec 031; code checks it)
 
 
 def numeric_fields(schema: Mapping[str, Any], path: str = "$") -> list[str]:

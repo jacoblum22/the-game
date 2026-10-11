@@ -28,6 +28,7 @@ from engine import ids
 from engine.dm.adjudication import AdjudicationRecord
 from engine.dm.context import TurnContext
 from engine.dm.response import Flags, Response
+from engine.dm.roles.prompts import load_prompt
 from engine.dm.schemas import STR, Schema, arr, enum, obj
 from engine.llm.base import Packet, Role, call_role
 from engine.store.events import EntityRecord, Event
@@ -41,47 +42,11 @@ CHANGES = ("coin", "give_item", "new_item", "condition_add", "condition_remove",
 COSTS = ("none", "small", "real", "big")
 GRANTS = ("help", "price", "partial", "refuse")  # what the DM had the NPC do for an ask (for ceiling logging)
 STAKES = ("safe", "risky", "dire")
-DM_ROLE = Role.NARRATOR  # ponytail: the DM's calls are logged under the narrator role; a Role.DM needs a schema,
-# prompt, packet and offline heuristic per role in the contract tests. Add it if the prototype is kept.
+DM_ROLE = Role.DM  # spec 032 FR-13: its own role (schema, prompt file dm.md, offline heuristic, per-role model)
 MOOD = {"willing": "open", "guarded": "guarded", "unwilling": "closed"}
 OUT_CHARS = 1600
 PREFERRED_COST = {"verb.strike": "cost.harm", "verb.grapple": "cost.harm", "verb.force": "cost.harm",
                   "verb.exert": "cost.harm", "verb.sneak": "cost.exposure", "verb.talk": "cost.closed_door"}
-
-PROMPT = """You are the game master of a text tabletop RPG, played in a terminal by one player. You run the world:
-the people, the places, what happens. Code keeps the mechanical spine (dice, odds, coin, items, conditions, who is
-where, time, clues) and you reach it through tools. You own the words and the judgment.
-
-Each turn, read the player's message and the recent conversation, decide what happens, call tools when the spine is
-involved, then write the passage.
-
-Tools (each call is one object in `calls`; leave `calls` empty when you are done and write `passage`):
-- propose_roll: the player's character attempts something whose outcome is uncertain AND failure would cost
-  something. Give the goal (what success achieves), the verb, the target id (or "none"), how they do it, why it is
-  uncertain, and the stakes. change_kind and change_what say what success changes (change_what: an id, or a
-  short noun phrase like "the trail" or "the figure past the bend"); set nonlethal for a fight that should not kill (a bout to yield, subduing,
-  knocking out). Code computes the odds. If a roll is needed the turn pauses on the odds screen: write
-  only the lead-up in `passage` (never the outcome); you narrate the result next turn. With nothing at stake or a
-  certain outcome, don't propose a roll: just narrate it.
-- state: read the sheet ("pc"), a person or thing (its id), "here" (place, people, exits), or "time".
-- change: apply a state change the fiction makes: coin (who pays `who`, who receives `to`, `amount`), give_item
-  (`what` item id from `who`, default the character, to `to`), new_item (`what` a short name, held by `to`), condition_add / condition_remove (`who`,
-  `what` condition id), npc_leaves (`who`, optional `to` place id), new_npc (`what` their role, e.g. "a ferryman"),
-  travel (`to` a reachable place id), rest (`what`: breather, rest_short or rest_long), fact (`who` subject id,
-  `what` a short predicate, `note` the value). Code refuses only what the game can't hold and tells you why.
-- recall: search memory (past turns, what people said, what the character knows) for `query`.
-- reveal_clue: the player asks `npc` (an id) a question that may touch a mystery. Code says whether that person
-  holds a clue about it, and if so gives the exact clue to deliver. Deliver it in their voice. Never invent clues.
-- mood: a person's mood toward the player's character (rolled by dice, held for the scene) and the most they will
-  do for an ask of a given cost to them (`ask_cost`). These are facts about the person: their reaction is at or
-  below that ceiling, in their own voice.
-
-When someone grants or refuses an ask this turn, list it in `asks` (npc id, the ask's cost to them, what they did).
-
-The passage: second person ("you"), present tense, 60-180 words. Answer what the player did or asked; people speak
-in their own voices; end on something the player can act on, never a menu. Never decide the player character's
-words, feelings or choices beyond what they declared. Use names the player knows. Never mention tools, ids, dice
-or rules in the passage."""
 
 
 @dataclass
@@ -202,8 +167,11 @@ def _env(ctx: TurnContext, t: Turn) -> Any:
 
 
 def step_schema(ctx: TurnContext, *, final: bool) -> Schema:
-    verbs = ctx.rules.ids("verb.")
-    kinds = list(ctx.rules.resolution["intended_change"]["kinds"])
+    return schema_for(ctx.rules.ids("verb."), list(ctx.rules.resolution["intended_change"]["kinds"]), final=final)
+
+
+def schema_for(verbs: list[str], kinds: list[str], *, final: bool) -> Schema:
+    """The DM step's schema (`Role.DM`'s builder in engine/dm/schemas.py calls this with the SchemaContext's lists)."""
     calls = [
         obj({"tool": enum(["propose_roll"]), "goal": STR, "verb": enum(verbs), "target": STR, "how": STR,
              "attribute": STR, "difficulty": STR, "why_uncertain": STR, "stakes": enum(STAKES),
@@ -232,7 +200,7 @@ def _dm_loop(ctx: TurnContext, t: Turn, message: str, exchanges: list[tuple[str,
                 "outcome." if t.paused else
                 f"You may make up to {MAX_TOOLS - made} more tool call(s), {PER_STEP} per answer; with no calls, "
                 "`passage` is delivered.")
-        packet = Packet(instructions=PROMPT, message=_message(ctx, t, message, exchanges, lead, note))
+        packet = Packet(instructions=load_prompt("dm"), message=_message(ctx, t, message, exchanges, lead, note))
         schema = step_schema(ctx, final=final)
         res = call_role(ctx.model, DM_ROLE, schema, packet, turn_id=ctx.turn_id, recorder=ctx.record_call,
                         default={"calls": [], "passage": str(data.get("passage") or ""), "asks": []})

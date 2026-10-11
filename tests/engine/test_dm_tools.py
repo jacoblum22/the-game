@@ -23,7 +23,7 @@ from engine.world.places import location
 from engine.world.scenes import cast_present
 from tests.engine.test_game import quick_start, seed_oracle
 
-DM = Role.NARRATOR  # dm_tools.DM_ROLE
+DM = Role.DM  # dm_tools.DM_ROLE
 
 
 def to_play(tmp_path: Path, **cfg: Any) -> tuple[Game, ScriptedModel]:

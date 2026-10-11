@@ -7,6 +7,7 @@ from typing import Any
 
 import pytest
 
+from engine.dm.dm_tools import schema_for
 from engine.dm.fixer import step_schema
 from engine.llm.base import Packet, Role, call_role, validate
 from engine.llm.offline import (
@@ -120,7 +121,8 @@ SCHEMAS = {Role.INTERPRET: INTERPRET, Role.READER: READER, Role.FRAMER: FRAMER, 
            Role.DIRECTOR: DIRECTOR, Role.NARRATOR: NARRATOR, Role.CHECKER: CHECKER,
            Role.TESTIMONY: obj(subject=STR, predicate=STR, value=STR),
            Role.FIXER: step_schema(final=True), Role.CLUE: obj(about=enum("none", "1", "2", "3", "4"),
-                                                      part=enum("none", "1", "2", "3", "4", "5", "6"))}
+                                                      part=enum("none", "1", "2", "3", "4", "5", "6")),
+           Role.DM: schema_for(["verb.strike", "verb.talk"], ["harm", "none"], final=False)}
 
 MODEL = OfflineModel()
 

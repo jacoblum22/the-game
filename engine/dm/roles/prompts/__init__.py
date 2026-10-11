@@ -18,7 +18,7 @@ PROMPT_DIR = Path(__file__).parent
 ROLES: tuple[str, ...] = tuple(r.value for r in Role)
 # checker: the diff audit (009 B); reader: + the typed intended change (spec 015, 01.2.7)
 WORD_BUDGET: dict[str, int] = {r: 700 for r in ROLES} | {"narrator": 1000, "checker": 550, "reader": 1000,
-                                                    "fixer": 950}  # spec 020: the goal rule (~10k tokens of cards replaced); spec 022: the Fixer's tool manual
+                                                    "fixer": 950, "dm": 800}  # spec 020: the goal rule (~10k tokens of cards replaced); spec 022: the Fixer's tool manual
 # spec 026: the Fixer's dry run, calls, replay, reframe and mechanics digest (800 -> 950)
 
 

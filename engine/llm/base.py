@@ -28,6 +28,7 @@ class Role(StrEnum):
     TESTIMONY = "testimony"  # PR-12-12 step 2: a said claim stated as {subject, predicate, value} (spec 013)
     FIXER = "fixer"  # PR-12-11: investigates a player's report with read-only tools, proposes corrections (spec 022)
     CLUE = "clue"  # PR-12-10 step 1: is a question to an NPC about a clue a case holds? (spec 025, D2 A)
+    DM = "dm"  # spec 032: the one game master of the dm-tools engine (engine/dm/dm_tools.py): tool calls, then the passage
 
 
 class Outcome(StrEnum):

@@ -1135,6 +1135,36 @@ def _clue(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:  # rule: PR
     return {"about": best[3] if best else "none", "part": str(best[4]) if best and len(qs) > 1 else "none"}
 
 
+def _dm(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:  # rule: spec 032 (FR-13)
+    """The dm-tools game master offline: a harmful or forceful act aimed at someone here asks for one roll
+    (`propose_roll`, once: the tool results then list it, or the schema has no calls left); anything else is a
+    short talk passage in the first person present there. Deterministic; reads only the DM packet's sections."""
+    msg = packet.message
+    said = re.search(r"THE PLAYER'S MESSAGE\n(.*?)(?:\n\n|$)", msg, re.DOTALL)
+    said_text = said.group(1).strip() if said else ""
+    people = re.findall(r"(?m)^- (npc\.[\w.]+): ([^(\n]+?)(?: \(|,|$)", msg)
+    who = people[0][1].strip() if people else ""
+    calls_max = (schema.get("properties", {}).get("calls") or {}).get("maxItems")
+    fresh = "TOOL RESULTS THIS TURN\n(none yet)" in msg
+    verb = (primary_verb(said_text) or ("", []))[0]
+    if people and fresh and calls_max != 0 and verb in ("verb.strike", "verb.grapple", "verb.force"):
+        passage = f"You gather yourself and move on {who}; the moment hangs on whether it lands."
+        call = {"tool": "propose_roll", "goal": f"{verb.removeprefix('verb.').capitalize()} {who}", "verb": verb,
+                "target": people[0][0], "how": said_text[:80], "attribute": "might", "difficulty": "",
+                "why_uncertain": f"{who} will resist", "stakes": "risky", "nonlethal": False,
+                "change_kind": "harm" if verb == "verb.strike" else "restrain", "change_what": people[0][0],
+                "change_whom": ""}
+        return {"calls": [call], "passage": passage, "asks": []}
+    if "ROLL OFFERED" in msg:  # the lead-up only; the turn pauses
+        return {"calls": [], "passage": "You steady yourself and the moment hangs.", "asks": []}
+    lead = re.search(r"WHAT JUST HAPPENED\n(.*)", msg)
+    passage = (f"{who[:1].upper()}{who[1:]} turns to you and answers without hurry, in few words." if who else
+               "The place is quiet around you; nothing stirs that you can see.")
+    if lead and lead.group(1).strip():
+        passage = f"The moment passes. {passage}"
+    return {"calls": [], "passage": passage + " What do you do?", "asks": []}
+
+
 ROLE_HEURISTICS: dict[Role, Callable[[dict[str, Any], Packet], dict[str, Any]]] = {
     Role.INTERPRET: _interpret,
     Role.READER: _reader,
@@ -1146,6 +1176,7 @@ ROLE_HEURISTICS: dict[Role, Callable[[dict[str, Any], Packet], dict[str, Any]]] 
     Role.TESTIMONY: _testimony,
     Role.FIXER: _fixer,
     Role.CLUE: _clue,
+    Role.DM: _dm,
 }
 
 

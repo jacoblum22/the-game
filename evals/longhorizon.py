@@ -324,14 +324,14 @@ def run_aged(seed: int, scenes: int, model: str, tmp: Path) -> list[str]:
         r = d.settle(d.call("submit", "I look around."))
         calls = d.game.store.model_calls(r.turn_id) if r.turn_id else []
         out.append(_fmt_views(f"scene {mark}", view_tokens(calls)))
-        narrator = next(((c.get("request") or {}).get("packet") or "" for c in calls if c["role"] == "narrator"), "")
+        narrator = next(((c.get("request") or {}).get("packet") or "" for c in calls if c["role"] in ("narrator", "dm")), "")
         narrator_sections.append({name: tokens(t) for name, t in sections(narrator)})
         absent = truth.get(f"npc.aged_{mark // 2}")  # an absent NPC named: the spotlight and scene cards fill (12.2.4)
         if absent:
             r = d.settle(d.call("submit", f"I ask around about {absent['name']}."))
             calls = d.game.store.model_calls(r.turn_id) if r.turn_id else []
             out.append(_fmt_views(f"scene {mark}, an absent NPC named", view_tokens(calls)))
-            narrator = next(((c.get("request") or {}).get("packet") or "" for c in calls if c["role"] == "narrator"),
+            narrator = next(((c.get("request") or {}).get("packet") or "" for c in calls if c["role"] in ("narrator", "dm")),
                             "")
             spot_sections.append({name: tokens(t) for name, t in sections(narrator)})
         for label, k in (("oldest", 1), ("middle", mark // 2), ("newest", mark - 1)):

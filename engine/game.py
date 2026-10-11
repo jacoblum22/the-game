@@ -27,6 +27,7 @@ import re
 import secrets
 import sqlite3
 import tempfile
+from collections.abc import Mapping
 from pathlib import Path
 from typing import Any
 
@@ -87,6 +88,15 @@ class ReplayResult(BaseModel):
     inputs: int = 0  # API calls re-driven
 
 
+def saved_engine(config: GameConfig, stored: Mapping[str, Any] | None) -> GameConfig:
+    """The play engine and the secrets arm belong to the save (spec 032 FR-11): what `game_created` stored wins over
+    the caller's config, and a save without the key is a pipeline save (A7). Never read the default of `GameConfig`
+    here: it flips to dm-tools later and would silently turn old saves into dm-tools games."""
+    stored = stored or {}
+    return config.model_copy(update={"engine": str(stored.get("engine") or "pipeline"),
+                                     "dm_secrets": str(stored.get("dm_secrets") or "hidden")})
+
+
 class Game:
     """One world in one SQLite file, with its characters. Build with `Game.new` / `Game.open`."""
 
@@ -141,6 +151,8 @@ class Game:
         config = config or GameConfig()
         model = model or config.model()
         store = Store.open(path)
+        created: Any = next(store.events(types=["game_created"])).payload
+        config = saved_engine(config, created.config)  # spec 032 FR-11
         game = cls(store, config, model)
         return game, game._call("open", None, game._resume)
 
@@ -322,8 +334,8 @@ class Game:
         whose outcome differs from the recorded one."""
         if not inputs or inputs[0]["kind"] != "new":
             return ReplayResult(identical=False, divergence="no recorded inputs: this game cannot be replayed")
-        cfg = GameConfig.model_validate({k: v for k, v in (made["config"] or {}).items()
-                                         if k in GameConfig.model_fields})
+        cfg = saved_engine(GameConfig.model_validate({k: v for k, v in (made["config"] or {}).items()
+                                                      if k in GameConfig.model_fields}), made["config"])
         rules = load_rules()
         done = 0
         with tempfile.TemporaryDirectory(prefix="replay-") as tmp:

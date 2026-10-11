@@ -12,7 +12,7 @@ import json
 import tempfile
 from pathlib import Path
 
-from engine.game import Game
+from engine.game import Game, GameConfig
 from tests.e2e.driver import Driver
 
 GAMES = Path(__file__).resolve().parent / "games"
@@ -28,7 +28,16 @@ def offline_seed11(path: Path) -> None:
     d.game.close()
 
 
-RECIPES = {"offline_seed11": offline_seed11}
+def offline_seed11_dmtools(path: Path) -> None:
+    """Spec 032: the same play on the dm-tools engine (the offline `Role.DM` heuristic: talk, and one roll offer)."""
+    d = Driver.start(path, seed=11, config=GameConfig(offline=True, engine="dm-tools"))
+    d.play(20)
+    d.retire_and_continue()
+    d.play(4)
+    d.game.close()
+
+
+RECIPES = {"offline_seed11": offline_seed11, "offline_seed11_dmtools": offline_seed11_dmtools}
 
 
 def record(name: str) -> Path:

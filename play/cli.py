@@ -164,6 +164,7 @@ class App:
     offline: bool = False
     game_cls: Any = None
     config: Callable[[bool], Any] | None = None
+    engine: str | None = None  # `new --engine`: a new game's play engine (an old save keeps its own, spec 032)
     width: int = field(default_factory=terminal_width)
 
     # ---- io
@@ -186,10 +187,12 @@ class App:
         return self.game_cls
 
     def _config(self) -> Any:
-        if self.config is not None:
-            return self.config(self.offline)
         # offline=True swaps every model role for the free stand-in (contracts/model-calls.md "Offline stand-in")
-        return importlib.import_module("engine.game").GameConfig(offline=self.offline)
+        cfg = (self.config(self.offline) if self.config is not None
+               else importlib.import_module("engine.game").GameConfig(offline=self.offline))
+        if not self.engine:
+            return cfg
+        return {**cfg, "engine": self.engine} if isinstance(cfg, dict) else cfg.model_copy(update={"engine": self.engine})
 
     def start(self, path: Path, *, new: bool) -> int:
         try:
@@ -534,7 +537,9 @@ def _parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="python -m play", description="Play the game in the terminal.",
                                 epilog="--offline (any command) plays with the free stand-in model: no key, no cost.")
     sub = p.add_subparsers(dest="cmd")
-    sub.add_parser("new", help="start a new game").add_argument("name", nargs="?")
+    new = sub.add_parser("new", help="start a new game")
+    new.add_argument("name", nargs="?")
+    new.add_argument("--engine", choices=("pipeline", "dm-tools"), help="the play engine of this new game")
     sub.add_parser("continue", help="continue a game (the latest if no name)").add_argument("name", nargs="?")
     sub.add_parser("replay", help="replay a game and check it is identical").add_argument("name", nargs="?")
     sub.add_parser("report", help="per-turn report of a game").add_argument("name", nargs="?")
@@ -547,7 +552,7 @@ def main(argv: Sequence[str] | None = None, *, stdin: TextIO | None = None, stdo
     offline = "--offline" in args
     ns = _parser().parse_args([a for a in args if a != "--offline"])
     app = App(stdin or sys.stdin, stdout or sys.stdout, saves or SAVES, offline=offline, game_cls=game_cls,
-              config=config)
+              config=config, engine=getattr(ns, "engine", None))
     try:
         if ns.cmd == "new":
             return app.new(ns.name)

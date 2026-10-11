@@ -40,6 +40,8 @@ MESSAGES = {
                 "INVESTIGATION SO FAR:\n[1] search('coat'):\nturn.3 (1/1 words) player: \"hi\" | Mara's blue coat.",
     Role.CLUE: "THE QUESTION: \"Did he have enemies?\"\nOPEN CLUES (number: what a question must be about to reach it; "
                "* = this person holds it):\n1*: who had cause to want the ferryman gone",
+    Role.DM: "People here:\n- npc.mara_voss: Mara Voss (she/her)\n\nTHE PLAYER'S MESSAGE\nI hit Mara Voss.\n\n"
+             "TOOL RESULTS THIS TURN\n(none yet)",
 }
 
 # The engine's JSON Schema subset (engine.llm.base.validate) plus annotation keywords.

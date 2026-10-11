@@ -43,6 +43,7 @@ GUIDANCE: dict[Role, tuple[str, ...]] = {
     Role.CHECKER: ("12.3.1",),
     Role.TESTIMONY: (),  # PR-12-12 step 2: its prompt and the said words are the whole packet
     Role.CLUE: (),  # PR-12-10 step 1: its prompt, the question and the about lines are the whole packet
+    Role.DM: (),  # spec 032: the dm-tools DM reads its own situation block, no cards
 }
 TALK_CARD = "15.3.2"  # request size: a Talk frame's card (12.2.4 item 2)
 

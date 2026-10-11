@@ -247,7 +247,8 @@ def write_findings(path: Path, player: Player, save: Path, code: int) -> int:
         calls = dict(db.execute("select role, count(*) from model_calls group by role").fetchall())
         turns = db.execute("select count(*) from turns").fetchone()[0]
         rows.append({"kind": "stats", "turns": turns, "calls": calls,
-                     "narrator_per_turn": round(calls.get("narrator", 0) / turns, 2) if turns else None})
+                     "narrator_per_turn": round(calls.get("narrator", 0) / turns, 2) if turns else None,
+                     "dm_per_turn": round(calls.get("dm", 0) / turns, 2) if turns else None})  # spec 032: Role.DM
         rows.append(turn_costs(db))
         dm = [json.loads(r[0] or "{}").get("screen", {}).get("dm_tools") for r in db.execute("select record from turns")]
         dm = [d for d in dm if d]

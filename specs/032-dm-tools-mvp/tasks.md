@@ -50,15 +50,15 @@ hash and is not read again until P7.
 
 Edits `engine/llm/base.py`, `engine/game.py`, `engine/dm/schemas.py`, `engine/llm/offline.py`, a new `engine/dm/prompts/dm.md`
 (or wherever the pipeline keeps role prompts: find it), `tests/contract/`, `play/cli.py`; one line in `dm_tools.py` (`DM_ROLE`).
-- [ ] P2.1 `Role.DM` + prompt file + schema registration + packet; `DM_ROLE = Role.DM`; per-role model config works
+- [x] P2.1 `Role.DM` + prompt file + schema registration + packet; `DM_ROLE = Role.DM`; per-role model config works
       (`GameConfig.models`), calls recorded under `dm`. Move `PROMPT` text out of the code. (FR-13)
-- [ ] P2.2 Offline heuristic for the DM role: a deterministic plan (talk passage; `propose_roll` when the message has an
+- [x] P2.2 Offline heuristic for the DM role: a deterministic plan (talk passage; `propose_roll` when the message has an
       attack verb) so offline games and `tests/e2e` run dm-tools turns. Contract test for the role.
-- [ ] P2.3 `Game.open` reads the stored `engine`/`dm_secrets` (missing -> pipeline/hidden); `--engine` on `play new`
+- [x] P2.3 `Game.open` reads the stored `engine`/`dm_secrets` (missing -> pipeline/hidden); `--engine` on `play new`
       (new game only). Cases S1-S12 as tests (including the 3x3 matrix and the open-OFFER resume). (FR-11)
-- [ ] P2.4 Update harness readers that look at `role='narrator'` for dm-tools (`evals/playtest.py`, `longhorizon.py`,
+- [x] P2.4 Update harness readers that look at `role='narrator'` for dm-tools (`evals/playtest.py`, `longhorizon.py`,
       `tests/e2e/driver.py`); one dm-tools game recorded into `tests/replay/` (new recording; the pipeline ones stay).
-- [ ] P2.5 Gates: suite, replay for the existing recordings unchanged (pipeline packets untouched), ruff, pyright.
+- [x] P2.5 Gates: suite, replay for the existing recordings unchanged (pipeline packets untouched), ruff, pyright.
 Trap: the stored config of old saves has no `engine` key; never read `GameConfig().engine` when opening a store.
 
 ## P3 - Tools make the DM's words real (lane T; Sonnet; about 40-60 turns)
