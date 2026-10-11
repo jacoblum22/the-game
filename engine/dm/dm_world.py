@@ -101,7 +101,7 @@ def _lead(ctx: TurnContext, rec: Any) -> list[str]:
         rec.notes.append(f"lead injection held: {exc}")
         return []
     st = ctx.state
-    names = [_name(st, i) for i in (inj.thread, inj.source_id) if i in st.entities]
+    names = list(dict.fromkeys(_name(st, i) for i in (inj.thread, inj.source_id) if i in st.entities))  # one line once
     return [f"A lead arrives, in the form: {inj.form}." + (f" On record with it: {', '.join(names)}." if names else "")
             + " It is now known to the character; work it into the scene."]
 

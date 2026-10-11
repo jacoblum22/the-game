@@ -102,7 +102,7 @@ def play_answer(ctx: TurnContext, choice_id: str) -> Outcome:
 def _run(ctx: TurnContext, message: str, *, choice: str | None) -> Outcome:
     from engine.dm import dm_world
     from engine.dm import oof as oofm
-    from engine.dm.narration import shown_pause, turn_blocks
+    from engine.dm.narration import owed, shown_pause, turn_blocks
     from engine.dm.turn import _harm_followups, _resume, _take, _turn_end, recent_exchanges
     from engine.harm.threshold import ending_state
     from engine.resolve.pipeline import close_by_default
@@ -161,6 +161,9 @@ def _run(ctx: TurnContext, message: str, *, choice: str | None) -> Outcome:
     resp = Response(turn_id=turn_id, phase="ending" if ending_state(st) else "play", fiction=passage.strip(),
                     oof_blocks=oofm.ordered(blocks), pause=shown_pause(pause, owned) if pause is not None else None,
                     flags=Flags())
+    extra = owed(ctx, t.rec, resp.text())  # [spec 032 P5b trace] a staggered PC is shown [STATUS], as in the pipeline
+    if extra:
+        resp.oof_blocks = oofm.ordered([*resp.oof_blocks, *extra])
     calls = store.model_calls(turn_id)
     t.stats.update(model_calls=len(calls), tokens_in=sum(int(c.get("tokens_in") or 0) for c in calls),
                    tokens_out=sum(int(c.get("tokens_out") or 0) for c in calls),
