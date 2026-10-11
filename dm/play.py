@@ -168,7 +168,8 @@ class Game:
                 return text
             return self.run("fight", go)
 
-        @tool("next_turn", "Move the fight to the next combatant in initiative order and show whose turn it is.",
+        @tool("next_turn", "Start the next combatant's turn in initiative order (after add_combatants, the first "
+              "combatant's) and show whose turn it is.",
               {"type": "object", "properties": {}})
         async def next_turn(a: dict[str, Any]) -> dict[str, Any]:
             def go() -> str:

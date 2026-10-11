@@ -71,7 +71,12 @@ def test_fight_order_and_turns() -> None:
     f, _ = m.add_combatants(None, "Brakka", [{"name": "pc", "initiative": 12},
                                              {"name": "Goblin 1", "initiative": 15, "hp": 7, "ac": 15},
                                              {"name": "Goblin 2", "initiative": 8, "hp": 7, "ac": 15}])
-    assert [c["name"] for c in f["order"]] == ["Goblin 1", "Brakka", "Goblin 2"] and f["turn"] == 0
+    assert [c["name"] for c in f["order"]] == ["Goblin 1", "Brakka", "Goblin 2"] and f["turn"] == -1
+    f, text = m.next_turn(f)  # the first next_turn starts the first combatant's turn, not the second's
+    assert "Goblin 1" in text and f["round"] == 1
+    f, _ = m.add_combatants(f, "Brakka", [{"name": "Goblin 3", "initiative": 20, "hp": 7, "ac": 15}])
+    assert f["order"][f["turn"]]["name"] == "Goblin 1"  # an arrival doesn't move whose turn it is
+    f, _ = m.change_creature(f, {"name": "Goblin 3", "remove": True})
     f, text = m.next_turn(f)
     assert "Brakka" in text
     f, _ = m.change_creature(f, {"name": "Goblin 1", "damage": 9})

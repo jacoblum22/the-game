@@ -367,8 +367,9 @@ def ac_text(s: dict[str, Any]) -> str:
 
 def add_combatants(fight: dict[str, Any] | None, pc_name: str, combatants: list[dict[str, Any]]) -> tuple[dict[str, Any], str]:
     """Start a fight or add arrivals. Each combatant: name, initiative, and (not for the PC) hp and ac. The PC is
-    the entry named `pc`. Order is by initiative, highest first; ties keep the order given (the DM settles ties)."""
-    f = copy.deepcopy(fight) if fight else {"round": 1, "turn": 0, "order": []}
+    the entry named `pc`. Order is by initiative, highest first; ties keep the order given (the DM settles ties).
+    A new fight starts with nobody's turn yet (turn -1): the first next_turn starts the first combatant's turn."""
+    f = copy.deepcopy(fight) if fight else {"round": 1, "turn": -1, "order": []}
     names = {c["name"] for c in f["order"]}
     new = []
     for c in combatants:
@@ -384,11 +385,12 @@ def add_combatants(fight: dict[str, Any] | None, pc_name: str, combatants: list[
         names.add(name)
         new.append({"name": name, "initiative": c["initiative"], "pc": is_pc, "hp": c.get("hp"), "max_hp": c.get("hp"),
                     "ac": c.get("ac"), "conditions": []})
-    current = f["order"][f["turn"]]["name"] if f["order"] else None
+    current = f["order"][f["turn"]]["name"] if f["turn"] >= 0 else None
     f["order"] = sorted(f["order"] + new, key=lambda c: -c["initiative"])  # stable: ties keep the given order
     if current:
         f["turn"] = next(i for i, c in enumerate(f["order"]) if c["name"] == current)
-    return f, ("Fight started. " if not fight else "Added to the fight. ") + "Order: " + order_text(f)
+    return f, ("Fight started. " if not fight else "Added to the fight. ") + "Order: " + order_text(f) + (
+        ". Nobody has had a turn yet: next_turn starts the first one." if f["turn"] < 0 else "")
 
 
 def change_creature(fight: dict[str, Any] | None, ch: dict[str, Any]) -> tuple[dict[str, Any], str]:
@@ -445,7 +447,8 @@ def next_turn(fight: dict[str, Any] | None) -> tuple[dict[str, Any], str]:
 def fight_text(f: dict[str, Any] | None, pc_sheet: dict[str, Any]) -> str:
     if not f:
         return "No fight is on."
-    lines = [f"FIGHT, round {f['round']}. In initiative order (→ = whose turn it is):"]
+    lines = [f"FIGHT, round {f['round']}. In initiative order (→ = whose turn it is"
+             + ("; nobody's yet, next_turn starts the first" if f["turn"] < 0 else "") + "):"]
     for i, c in enumerate(f["order"]):
         mark = "→" if i == f["turn"] else " "
         if c["pc"]:
