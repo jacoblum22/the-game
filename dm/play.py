@@ -35,6 +35,16 @@ from dm import mechanics as m
 HERE = Path(__file__).parent
 SAVES = HERE.parent / "saves"
 MODEL = "claude-sonnet-5-5"
+# The Claude Code program adds its own notes to every session. Run the DM outside any git repo (no git or worktree
+# notes) and switch off the notes that have switches: the developer's memory, CLAUDE.md files and the token count.
+DM_HOME = Path.home() / "AppData" / "Local" / "the-game-dm"
+DM_ENV = {"CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1", "CLAUDE_CODE_DISABLE_CLAUDE_MDS": "1",
+          "CLAUDE_CODE_TOTAL_TOKENS_REMINDER": "off", "CLAUDE_CODE_DISABLE_GIT_INSTRUCTIONS": "1"}
+
+
+def dm_options(cwd: str, **kw: Any) -> ClaudeAgentOptions:
+    Path(cwd).mkdir(parents=True, exist_ok=True)
+    return ClaudeAgentOptions(tools=[], setting_sources=[], strict_mcp_config=True, max_turns=40, cwd=cwd, env=DM_ENV, **kw)
 
 _INT = {"type": "integer", "minimum": 0}
 _ITEMS = {"type": "array", "items": {"type": "object", "properties": {"item": {"type": "string"},
@@ -50,12 +60,13 @@ class Game:
         self.session_id: str | None = data.get("session_id")
         self.transcript: list[dict[str, Any]] = data.get("transcript", [])
         self.model: str = data.get("model", MODEL)
+        self.cwd: str = data.get("cwd", str(SAVES))  # where the DM's session lives; saves from before 2026-10-11 used saves/
         self.path = path
 
     def save(self) -> None:
         self.path.parent.mkdir(exist_ok=True)
         data = {"sheet": self.sheet, "fight": self.fight, "session_id": self.session_id, "model": self.model,
-                "transcript": self.transcript}
+                "cwd": self.cwd, "transcript": self.transcript}
         self.path.write_text(json.dumps(data, indent=1, ensure_ascii=False), encoding="utf-8")
 
     def log(self, kind: str, text: str) -> None:
@@ -285,10 +296,9 @@ async def create_character(model: str, path: Path) -> tuple[dict[str, Any], list
     """Returns the finished sheet and the creation transcript, which the play save continues."""
     c = Creation(path)
     server = create_sdk_mcp_server("dm", tools=c.tools())
-    SAVES.mkdir(exist_ok=True)
-    opts = ClaudeAgentOptions(
-        system_prompt=(HERE / "create_prompt.md").read_text(encoding="utf-8"), model=model, tools=[],
-        mcp_servers={"dm": server}, setting_sources=[], strict_mcp_config=True, max_turns=40, cwd=str(SAVES),
+    opts = dm_options(
+        str(DM_HOME), system_prompt=(HERE / "create_prompt.md").read_text(encoding="utf-8"), model=model,
+        mcp_servers={"dm": server},
         allowed_tools=[f"mcp__dm__{n}" for n in ("srd_options", "roll_ability_scores", "build_character",
                                                  "finish_character")])
     print("Character creation. Talk to the DM; /quit exits.")
@@ -322,21 +332,21 @@ async def main() -> None:
         SAVES.mkdir(exist_ok=True)
         path = SAVES / f"new-{stamp}.json"  # one file: creation, then play
         sheet, transcript = await create_character(args.model, path)
-        game = Game({"sheet": sheet, "model": args.model, "transcript": transcript}, path)
+        game = Game({"sheet": sheet, "model": args.model, "transcript": transcript, "cwd": str(DM_HOME)}, path)
     elif args.character:
         sheet = json.loads((HERE / "characters" / f"{args.character}.json").read_text(encoding="utf-8"))
         name = sheet["name"].split()[0].lower()
-        game = Game({"sheet": sheet, "model": args.model}, SAVES / f"{name}-{stamp}.json")
+        game = Game({"sheet": sheet, "model": args.model, "cwd": str(DM_HOME)}, SAVES / f"{name}-{stamp}.json")
     else:
         ap.error("pick a character (fighter, rogue, wizard), make one (new), or --resume a save")
 
     server = create_sdk_mcp_server("dm", tools=game.tools())
     SAVES.mkdir(exist_ok=True)
-    opts = ClaudeAgentOptions(
-        system_prompt=system_prompt(game.sheet), model=game.model, tools=[], mcp_servers={"dm": server},
+    opts = dm_options(
+        game.cwd, system_prompt=system_prompt(game.sheet), model=game.model, mcp_servers={"dm": server},
         allowed_tools=[f"mcp__dm__{n}" for n in ("roll", "change_pc", "add_combatants", "change_creature",
                                                  "next_turn", "end_fight")],
-        setting_sources=[], strict_mcp_config=True, max_turns=40, cwd=str(SAVES), resume=game.session_id)
+        resume=game.session_id)
     print(f"{game.sheet['name']}, {game.sheet['summary']}. Saving to {game.path}. /sheet shows your sheet, /quit exits.")
     async with ClaudeSDKClient(options=opts) as client:
         if game.session_id:
