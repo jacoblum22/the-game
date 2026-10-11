@@ -103,6 +103,10 @@ Gate: F/T and `end_scene` cases green; suite; live fighter shows a foe strike ea
 
 Edits `dm_tools.py` (`situation`, `_audit`, final schema `said`, `_told`), `tests`. No change to `codex.py`/`testimony.py`
 (reused as is).
+- [x] P5a [pinned-trace] Three traced bugs: `cost.footing` hold needs a real holder (the opponent; none: the row's non-hold form,
+      `costs.py`); `_party` resolves "pc / the pc / you / the player" to the PC; a G4 condition refusal names the condition
+      ("pinned (cinst.1) forbids verb.strike", `gate.py`). Tests: `test_resolve_costs.py` (footing x severity x foe),
+      `test_spec032_p5a.py` (incl. the real save turn.4).
 - [ ] P5.1 `said` in the final-answer schema (cap 6) + `_told` -> `testimony.add_said`; drop-and-log for bad speakers.
       Cases J1-J14 (question kinds 7 walked); the journal shows them (J12 on the talker save).
 - [ ] P5.2 `situation()`: `carries:` per person, `Not here:` line; token delta measured before/after (report).

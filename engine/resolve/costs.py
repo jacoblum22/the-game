@@ -294,10 +294,19 @@ def _apply(menu_id: str, sev: str, write: str, entry: Mapping[str, Any], frame: 
     if menu_id == "cost.footing":  # rule: 01.13.7
         conds = re.findall(r"cond\.[a-z_]+", write)
         cond = form if form in conds else (conds[0] if conds and not form else None)
-        if cond is None:  # a non-condition form (a slide, a flag lost, swept away): the caller writes it
-            return [], 0, {"footing": write, "severity": sev}
+        # [verification: pinned-trace] a hold needs a real holder (06.5.2): the opponent; the PC held itself, unreleasable
+        foe = frame.defender or frame.beat.target
+        ent = state.entities.get(foe) if foe and foe != actor else None
+        foe = foe if ent is not None and ent.kind in ("npc", "adversary") else None
+        holds = lambda c: rules.condition(c).get("exclusion_group") == "hold"  # noqa: E731
+        if cond is None or (holds(cond) and not foe):  # a non-condition form (a slide, a flag lost, swept away)
+            alts = write if foe else " OR ".join(  # no opponent: the row's non-hold forms only
+                a for a in write.split(" OR ") if "opponent" not in a and not any(holds(c) for c in re.findall(
+                    r"cond\.[a-z_]+", a))) or write
+            return [], 0, {"footing": alts, "severity": sev}
+        src = foe if holds(cond) else actor
         res = apply_condition(state, mint, rules, p.get("target", actor), cond, severity=sev,
-                              source={"entity": actor, "frame_id": fid})
+                              source={"entity": src, "frame_id": fid})
         return list(res.events), 0, None
     if menu_id == "cost.closed_door":  # rule: 01.13.9
         obstacle = p.get("obstacle") or frame.obstacle_id or frame.beat.target or "obstacle"
