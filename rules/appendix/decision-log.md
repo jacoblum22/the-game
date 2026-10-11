@@ -738,6 +738,33 @@ Decisions made in `00-architecture.md` (Wave 2). Digest shorthand `[R1 §x]`…`
 - Migration: none.
 - Revisit if: a playtest shows a look or a recall that should have cost something the list lacks, or a Safe roll where a cost was due.
 
+### DL-01-60: The footing form is the DM's pick after the roll, among those that can land; default logged (revision R2-M; spec 033)
+- Owner ruling (2026-10-10), constitution 3.1.0 VIII.9 "Code never deduces the story": "Code should absolutely not be doing that sort of thing… there are a million different ways that this could go down"; on word matching, "we need to remove all instances of [word matching]". D3: default everything the DM omits, but log each default as `not_chosen:{field}` so P7 can count them; no refusals for omitted details; defaults simple and never read prose.
+- Decision: [revision: R2-M] 01.13.7: the severity is known only after the roll, so on the answer turn the DM is shown the read severity's options that can land now (an engaged opponent, a held flag, a recorded band, an exit or place on record) and picks one; code writes exactly that option. Omitted or not shown: the first listed option that can land (S1 off balance, S2 prone, S3 restrained, S4 pinned, S5 trapped), logged `not_chosen:cost_form`. *Retires:* the first-option pick and any word test on the form; the plan's re-ask and "nothing structural" for an omitted form (spec A2).
+- Alternatives considered: pick at propose time (rejected: the options differ by severity); re-ask then write nothing (rejected by D3).
+- Evidence: specs/033-dm-states-code-records/ (spec.md R1-R13, plan.md sections 2 and 4, cases.md C5).
+- Serves: constitution VIII.9.
+- Migration: none for saves. The pipeline engine keeps its own guessing paths until its deletion spec (spec 033 R13); these rules describe the target both engines answer to.
+- Revisit if: P7 counts `not_chosen:cost_form` on more than a third of footing costs.
+
+### DL-01-61: A price reverses the goal by cost id, from data (revision R2-M; spec 033)
+- Owner ruling (2026-10-10), constitution 3.1.0 VIII.9 "Code never deduces the story": "Code should absolutely not be doing that sort of thing… there are a million different ways that this could go down"; on word matching, "we need to remove all instances of [word matching]".
+- Decision: [revision: R2-M] 01.9.3: the check that no price reverses the typed goal reads `resolution.yaml#reverses_goal` (persuade_to and learn: `cost.closed_door` on the same person; other kinds none), never the price's words. *Retires:* the per-kind reversing phrase lists (`frame.reverses` word path).
+- Alternatives considered: keep the phrase lists for restrain, take and open (rejected by VIII.9: typed costs and DM-picked forms carry no "breaks free" form to match).
+- Evidence: specs/033-dm-states-code-records/ (spec.md R1-R13, plan.md sections 2 and 4, cases.md C5 "Reversal").
+- Serves: constitution VIII.9.
+- Migration: none for saves. The pipeline engine keeps its own guessing paths until its deletion spec (spec 033 R13); these rules describe the target both engines answer to.
+- Revisit if: a playtest shows a success at a cost whose price undid the goal by a cost id the table lacks.
+
+### DL-01-62: Exclusions name their licenses, and verbs their target kinds, in data (revision R2-M; spec 033)
+- Owner ruling (2026-10-10), constitution 3.1.0 VIII.9 "Code never deduces the story": "Code should absolutely not be doing that sort of thing… there are a million different ways that this could go down"; on word matching, "we need to remove all instances of [word matching]".
+- Decision: [revision: R2-M] `basic_verbs.yaml`: each verb gains `target_kinds` (person, object; the C1 table) and each `excludes` entry gains `covered_by` (the license ids that make the method G2; empty where none does) and, for flight, `covered_by_effect: [eff.movement_mode]`. 00.12.3: an excluded method needs a license in `covered_by` (or the effect); the method is a stated field (the Reader's, with tools the DM's `approach`), never found in the beat's words. A person-only slot defaults the DM's `as` to they. *Retires:* `excluded_by`, `would_be_license` and target kinds derived by matching words in `against` and `targets`.
+- Alternatives considered: map `needs` prose to licenses in code (rejected by VIII.9).
+- Evidence: specs/033-dm-states-code-records/ (spec.md R1-R13, plan.md sections 2 and 4, cases.md C1).
+- Serves: constitution VIII.9.
+- Migration: none.
+- Revisit if: a license or ability is added that covers an excluded method and no `covered_by` names it.
+
 ## DL-02 — Character
 
 ### DL-02-01: Three paths through one procedure; the fast path is the default offered
@@ -1881,6 +1908,24 @@ row), output `06-conflict-sim-output.txt`, write-up `06-conflict-sim.md`.
 - Serves: goal 2 (holds do what the rules say); C:I.
 - Migration: a save with a hold written only as scene words gets no condition; the hold ends at scene end as before.
 - Revisit if: a held foe acts outside its condition's limits in a playtest after spec 022.
+
+### DL-06-40: The DM chooses each adversary's act from the acts legal now, after the PC's result (revision R2-M; spec 033)
+- Owner ruling (2026-10-10), constitution 3.1.0 VIII.9 "Code never deduces the story": "Code should absolutely not be doing that sort of thing… there are a million different ways that this could go down"; on word matching, "we need to remove all instances of [word matching]". D1 = (a): the DM sees only the foe acts legal now; P7 measures passivity (strike share while engaged, waits and yields while unhurt). D2 = (b): "what if you grapple them on your turn and make their move impossible? Or push them off a ledge? ... we have to decide what the enemy does on their turn, even if it costs an extra Haiku call."
+- Decision: [revision: R2-M] 06.9.1 rewritten: after the PC's beat in the exchange resolves, the engine lists each able adversary's legal acts (new T-06-16: strike, close_in, withdraw, stand, break_free, grapple, flee, yield, wait, by state) and the DM picks the act, the target and nonlethal; the engine checks legality, rolls and applies the result. Omitted (or a pick outside the list): the first legal row of the behavior list, target the PC, logged `not_chosen:<field>`. 06.9.3 and 06.9.4, 09.7.1 and the behavior lists become guidance shown to the DM and the logged default; 06.9.2, 06.9.7, PR-06-6, WE-09-3 and ch.07's design intent follow. *Retires:* "the DM never chooses for an adversary" (its research rationale is kept in 06.9.1 as a watch) and, on the tools path, declaring foe acts with the PC's move and the lapse logic (spec A1).
+- Alternatives considered: the DM declares foe acts with the PC's move and acts made illegal lapse (rejected by D2: the PC's grapple or shove changes what the foe can do); the DM picks from the whole option set with refusals (rejected by D1); keep code's lists (rejected by VIII.9).
+- Evidence: specs/033-dm-states-code-records/ (spec.md R1-R13, plan.md sections 2 and 4, cases.md C4).
+- Serves: constitution VIII.9.
+- Migration: none for saves. The pipeline engine keeps its own guessing paths until its deletion spec (spec 033 R13); these rules describe the target both engines answer to.
+- Revisit if: the P7 passivity measure shows engaged adversaries striking on fewer turns than the 06.9.4 default would, or unhurt adversaries waiting or yielding, in two playtests running.
+
+### DL-06-41: The DM states the start band and the Force outcome; defaults logged (revision R2-M; spec 033)
+- Owner ruling (2026-10-10), constitution 3.1.0 VIII.9 "Code never deduces the story": "Code should absolutely not be doing that sort of thing… there are a million different ways that this could go down"; on word matching, "we need to remove all instances of [word matching]". D3: default everything the DM omits, but log each default as `not_chosen:{field}` so P7 can count them; no refusals for omitted details; defaults simple and never read prose.
+- Decision: [revision: R2-M] 06.3.9: the DM states each participant's start band (with tools, `change fight` with `to`; `change position` for anyone placed otherwise); code never reads it from the scene's words; the default when none is stated is `band.near`, logged `not_chosen:fight.to`. PR-06-1 step 2 follows. 06.5.3: Force's push or prone is the actor's declared choice; undeclared, push, logged `not_chosen:force`. *Retires:* reading a start band or a hold from the narration, and the refusals the plan gave for an omitted `to` or `force` (spec A3).
+- Alternatives considered: refuse a fight start with no band (rejected by D3); infer the band from the scene (rejected by VIII.9).
+- Evidence: specs/033-dm-states-code-records/ (spec.md R1-R13, plan.md sections 2 and 4, cases.md C2, C3).
+- Serves: constitution VIII.9.
+- Migration: none for saves. The pipeline engine keeps its own guessing paths until its deletion spec (spec 033 R13); these rules describe the target both engines answer to.
+- Revisit if: P7 counts `not_chosen:fight.to` on more than a third of fight starts (the contract line is not reaching the DM).
 
 ## DL-07 — Harm, Recovery, and Death
 
@@ -4022,6 +4067,33 @@ chapter 06's fight model and T-06-12 lines), output `07-harm-sim-output.txt`, wr
 - Serves: constitution VIII.7.
 - Migration: none.
 - Revisit if: a later round finds a met revisit condition that no wave acted on.
+
+### DL-12-160: Leads and witnesses are facts told to the DM; code never spawns (revision R2-M; spec 033)
+- Owner ruling (2026-10-10), constitution 3.1.0 VIII.9 "Code never deduces the story": "Code should absolutely not be doing that sort of thing… there are a million different ways that this could go down"; on word matching, "we need to remove all instances of [word matching]".
+- Decision: [revision: R2-M] 12.8.2 and PR-12-3: when `trg.lead_injection` fires, the DM is told the thread, the source and the form (LEAD DUE) and the inconclusive counter resets; code writes nothing and spawns no one; the DM brings the lead in with its own tools or holds it, and the streak counts again. 15.9.4: a necessary node short of live placements is told to the DM once per shortfall (WITNESS NEEDED, with the node id); the DM's walk-on or document with `knows: <node id>` takes the reserve; nothing is placed by code. *Retires:* the lead write step (the NPC's approach, the clue unsealed, the rumor heard) and the audit's placing of a reserve in the world.
+- Alternatives considered: keep the spawn with the DM narrating it (rejected by VIII.9: a person appears whom no one chose).
+- Evidence: specs/033-dm-states-code-records/ (spec.md R1-R13, plan.md sections 2 and 4, cases.md C6, C7).
+- Serves: constitution VIII.9; C:P16 (the streak still raises the lead each time).
+- Migration: none for saves. The pipeline engine keeps its own guessing paths until its deletion spec (spec 033 R13); these rules describe the target both engines answer to.
+- Revisit if: P7 shows the DM ignoring a told lead on three triggers running in one game (a soft-lock risk, C:P16).
+
+### DL-12-161: Code never deduces the story from words: targets, people, elements, testimony (revision R2-M; spec 033)
+- Owner ruling (2026-10-10), constitution 3.1.0 VIII.9 "Code never deduces the story": "Code should absolutely not be doing that sort of thing… there are a million different ways that this could go down"; on word matching, "we need to remove all instances of [word matching]".
+- Decision: [revision: R2-M] Rule text that told code to infer story state from words is retired: 01.2.5 (target defaults are the Reader's; with tools the DM names an id, `"pc"` or a recorded name exactly); 00.6.6 (elements are declared, never found by scanning prose); PR-12-5 steps 1-2 and the pronoun rule (an existing NPC only when named by id or exact name; role, name and pronouns as the DM states, `as` default they, logged); PR-12-12 step 1 (triggers by ids; with tools code settles no testimony, the DM records a fact). Search may find candidates a model then judges; a match never decides.
+- Alternatives considered: keep matching with a confidence threshold (rejected by VIII.9 and the owner's words).
+- Evidence: specs/033-dm-states-code-records/ (spec.md R1-R13, plan.md sections 2 and 4, cases.md C8, C9); research_notes/Playtest round 2 solutions/spec032-investigation/fiction-inference-inventory.md and word-matching-inventory.md.
+- Serves: constitution VIII.9.
+- Migration: none for saves. The pipeline engine keeps its own guessing paths until its deletion spec (spec 033 R13); these rules describe the target both engines answer to.
+- Revisit if: the spec 033 guard finds a word matcher that decides on the tools path.
+
+### DL-12-162: Retire by `/retire` or the DM's `end_game`; no word test (revision R2-M; spec 033)
+- Owner ruling (2026-10-10), constitution 3.1.0 VIII.9 "Code never deduces the story": "Code should absolutely not be doing that sort of thing… there are a million different ways that this could go down"; on word matching, "we need to remove all instances of [word matching]".
+- Decision: [revision: R2-M] 11.13.1: besides reflections and session starts, the player retires at any time by the exact command `/retire`, and the DM's `end_game` tool opens the same confirmation when the player asks in the fiction; code never reads a wish to retire from the player's words. *Retires:* the retire phrase test on the tools path.
+- Alternatives considered: the phrase test with a confirmation (rejected by VIII.9; the confirmation still makes a DM false positive harmless).
+- Evidence: specs/033-dm-states-code-records/ (spec.md R1-R13, plan.md sections 2 and 4, cases.md C10).
+- Serves: constitution VIII.9.
+- Migration: none for saves. The pipeline engine keeps its own guessing paths until its deletion spec (spec 033 R13); these rules describe the target both engines answer to.
+- Revisit if: a player in a playtest tries to retire and neither path opens the confirmation.
 
 ## DL-13 — The Starter Setting: the Thallen March
 

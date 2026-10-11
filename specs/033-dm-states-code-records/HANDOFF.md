@@ -44,3 +44,15 @@ Guard traps for every phase:
    stay called; P2b settles `certain_talk`/`looks_here`, not in plan R7).
 9. New finds: `anchors._intent_hits` (D20) -> P2b; `gen.npc.role_implies` (role words imply age/pronouns) -> P4.
    A21 (`npc_leaves` default place in `_change`) has no function to deny: P4 deletes it. `classify_seed.py` dies after P6.
+- R (R2-M, report `rules/_process/reports/R2-M-report.md` has the engine checklist per phase): DL-06-40 foe acts picked by
+  the DM after the result from new T-06-16 (omitted/outside = first legal behavior-list row, target PC, logged
+  `not_chosen:foes.<id>`); DL-06-41 start band default near (`not_chosen:fight.to`), Force default push
+  (`not_chosen:force`); DL-01-60 footing form picked after the roll among options that can land, default first that can
+  land (`not_chosen:cost_form`); DL-01-61 `resolution.yaml#reverses_goal`; DL-01-62 `basic_verbs.yaml` `target_kinds`,
+  `covered_by` (+ `covered_by_effect` for flight); DL-12-160 leads/witnesses told never spawned; DL-12-161 no deduction
+  from words; DL-12-162 retire by `/retire` or `end_game`. Both replays re-recorded at the merge (GUIDANCE size only).
+10. Plan contract cells REFUSED (force, fight `to`) and re-ask (`cost_form`) are superseded by D3 in the rules.
+11. P3: behavior lists hold rows outside T-06-16 (Windup, Flank, Reload): skip them, else `wait`. A Dying PC is a legal
+    target only for a `kill` side. An IDLE exchange makes no foe call.
+12. P5: 12.8.4's stalled-thread fallback is code-fired; check the tools path never reaches it.
+

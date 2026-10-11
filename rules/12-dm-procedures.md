@@ -1344,8 +1344,9 @@ restated ride) (01.11.4). A conclusive beat resets the counter to 0. When it rea
 `trg.lead_injection`, which the DM must handle in the turn it is returned (12.2.3) [C:P16;
 R: specs/001-action-resolution-probe/probe-results.md (soft-lock at turns 6–8)].
 
-**12.8.2 Lead injection.** `[D]` + `[J:enum]` When `trg.lead_injection` fires, the DM must, in this turn's
-world responses (12.2.9 step 4), deliver **one lead** (PR-12-3):
+**12.8.2 Lead injection.** `[D]` + `[J:enum]` When `trg.lead_injection` fires, the DM is
+told of **one lead** (PR-12-3) and brings it into this turn's world responses (12.2.9 step 4) with its own tools; code
+spawns nothing [revision: R2-M; DL-12-160]:
 1. **Source** `[D]`: the Director's pick when it has chosen a thread (its `lead.thread`: that thread's unfound
    placement, else its fallback) [revision: R2-L; DL-12-139]; else the first eligible in this specificity ladder (`pacing.yaml#lead_injection.source_ladder`):
    1. an unfound clue placement of the thread the PC is pursuing in this scene (the scene agenda's thread);
@@ -1363,8 +1364,9 @@ world responses (12.2.9 step 4), deliver **one lead** (PR-12-3):
    offer, …). `[J:flag]` *"Can this source plausibly arrive in this form here and now?"* False → roll once
    more; a second misfit takes the form "a detail you had overlooked" (always compatible with sources 1,
    3 and 4) or "someone seeks you out" (sources 2, 5, 6, 7).
-3. **Write** the facts that make it a lead (the clue unsealed through its gate, the NPC's approach, the
-   rumor heard: `record_knowledge` for the PC), and reset the counter to 0.
+3. **Tell** the DM the facts that would make it a lead (the clue and its gate, the NPC who could approach, the
+   rumor), and reset the counter to 0. Code writes none of them (constitution VIII.9); what the DM brings in is recorded through
+   its tools (`reveal_clue`, a walk-on, a fact) [revision: R2-M; DL-12-160].
 4. **Narrate** it as fiction in this turn; no OOF line is needed. The narrator gets it as data (the thread, the form,
    the facts), never a template sentence ("it points toward X, through X") [revision: R2-L; DL-12-139].
 **A lead must be** `[J:flag]` ×3, each true only with the named evidence: **concrete** (it names a person,
@@ -1655,7 +1657,7 @@ A faction's tier is never written into the field: a head or officer lends it onl
 faction's matter (03.4.3). So a principal met in the far rings is opposition of the far rings, and a clerk
 there is not; no band is chosen.
 
-**The pronoun rule.** Gender and pronouns are rolled at walk-on because narration needs them immediately —
+**The pronoun rule.** Gender and pronouns are set at walk-on, as the DM states them (omitted: they, logged; PR-12-5) [revision: R2-M], because narration needs them immediately —
 the project's own probe introduced an unearned pronoun that its self-assessment missed [C:P13]. A
 pronoun never appears in narration for an NPC whose gender is not in the store; until then the narration
 uses the role or descriptor. Code-written text about an NPC (record lines, templates, table rows such as
@@ -2720,9 +2722,12 @@ record. A pause point (12.2.6) jumps to T7 with what has been resolved so far, t
    PEAK). Fit test `[J:flag]`; re-roll once; then the fallback form.
 3. Apply the three lead tests (concrete, actionable now, connected) and the three prohibitions (does not
    solve the thread, costs nothing, is not a threat during PEAK or RELAX [verification: V2b-016]). A failing lead → the next source.
-4. Write: unseal the clue through its gate, or write the NPC's approach, or the rumor heard;
-   `record_knowledge(pc, …)`; set the inconclusive counter to 0.
-5. Narrate it in this turn's world responses (T5 → T7). Log the injection in the scene log
+4. **Tell the DM** [revision: R2-M; DL-12-160]: the thread, the source (an id) and the form, as facts (LEAD
+   DUE); set the inconclusive counter to 0. Code writes nothing in the world and spawns no one (constitution VIII.9): the
+   DM brings the lead in with its own tools (a walk-on with `knows`, `reveal_clue`, a fact) or holds it when the
+   fiction does not allow, and then the streak counts again. With no open thread on record, the DM is told so. A lead
+   due while a roll is offered is told after the roll resolves.
+5. The DM narrates what it brought in, in this turn's world responses (T5 → T7). Log the injection in the scene log
    (`lead_injection: {source_rung, source_id, form_roll, facts}`); it is not a ruling, because nothing
    was adjudicated.
 
@@ -2744,10 +2749,11 @@ record. A pause point (12.2.6) jumps to T7 with what has been resolved so far, t
    it (12.3.6 item 6) [revision: R2-G]; check the review list's Principle III candidate rule (12.12.4).
 
 **PR-12-5 Generating an NPC and the first meeting.** `[D]` + `[J:enum]` (12.11)
-1. Check the region roster and the cast list for an existing NPC who fits (`[J:flag]`); if one does, use
-   them and stop.
-2. Walk-on: role (from the narration, else `tbl.npc_role` with the place's tags) → name (region table,
-   else `tbl.name_given` + `tbl.name_family`) → gender and pronouns → age band → distinctive detail →
+1. An existing NPC is used only when the DM names them, by id or by a recorded name exactly; the roster and the
+   cast list are shown to it for that choice. Code never matches a role or a description to someone on record
+   (constitution VIII.9) [revision: R2-M; DL-12-161].
+2. Walk-on (never reuses anyone): role (as the DM states it, else `tbl.npc_role` with the place's tags) → name (the DM's, else region table,
+   else `tbl.name_given` + `tbl.name_family`) → gender and pronouns (the DM's `as`; omitted: they, logged) → age band → distinctive detail →
    demeanor. `create_entity(kind npc, …)`; add to the cast list at weight 1.
 3. At first interaction: the reaction roll (12.11.2) → `set_relationship`.
 4. On a recurring trigger: want, fear, voice register and habit, refusal, knowledge scope.
@@ -2934,7 +2940,7 @@ never applied (INV-9).
 **PR-12-12 Settling testimony when it matters.** `[D]` + `[J:enum]` as marked (12.10.8, 12.3.1b; `pacing.yaml#testimony`)
 [revision: R2-H] [DL-12-91]. What a character says is a `said` record, never a world fact (12.3.1b). It is settled —
 made world truth or found false — only at the moment it matters, once.
-1. **Triggers** `[D]` (closed list; code finds each from the beat and the `said` records in scope) [revision: R2-J;
+1. **Triggers** `[D]` (closed list; code finds each from the beat and the `said` records in scope, by ids, never by matching a record's words against names or places (constitution VIII.9) [revision: R2-M; DL-12-161]; with tools code settles no testimony: a told thing becomes true when the DM records it with `change fact`) [revision: R2-J;
    DL-12-102]. Only when the player **acts on a specific claim**:
    (a) **travel**: the PC sets out for a place, or a person at a place, that a `said` record names and the store does
    not hold as the PC knows it;

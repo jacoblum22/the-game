@@ -970,8 +970,7 @@ established details (00.6.6a) [revision: R2-E]. Properties the narration implies
 now; properties it does not imply stay **undetermined** until first needed: then an incidental one is written as
 first narrated and a consequential one is settled by the Oracle (00.12.7), by 12.14.13's tiers [revision: R2-B],
 with odds set by the facts established at that moment [R4 SG-13; R: https://ianbicking.org/blog/2025/07/intra-llm-text-adventure].
-*Worst case (J):* an atmospheric detail is recorded needlessly (harmless), or a relevant one is not (the
-claim-vs-state check in ch.12 catches the narrated-but-unrecorded element, class iv).
+*Worst case (J):* an atmospheric detail is recorded needlessly (harmless), or a relevant one is not (the claim-vs-state check in ch.12 catches the narrated-but-unrecorded element, class iv). The DM declares each element (PR-00-7's `new` list; with tools, `change new_npc`, `new_item` or a fact); code never finds one by scanning the prose for names, nouns or pronouns (constitution VIII.9) [revision: R2-M; DL-12-161].
 
 **00.6.6a Established details.** `[D]` + `[J:enum]` [DL-12-70; R: https://arxiv.org/html/2606.16014; revision: R2-E]
 A **detail** is an incidental, concrete property of an addressable entity (T1a, 12.14.13): the smith's scarred
@@ -1640,7 +1639,9 @@ chapter refers to [R7 §4.0 step 2]:
 **The class is computed, never proposed** [revision: R2-C]. The engine computes it from the beat's verb, its three
 method facets (12.2.2: `against_will`, `uses_power`, `speech`), the actor's held licenses (a license covers
 the beat only when its scope tags match the verb and the facets), the verb's `excludes` (an excluded method
-needs the listed license: G2 if held, else G3), active conditions (a forbidding condition: G4), the Framer's reach factors (01.6.10: two unoffset factors, or a
+needs a license in the entry's `covered_by` list, or an active effect in `covered_by_effect`: G2 if held, else G3; the
+method is a stated field, the Reader's or with tools the DM's `approach`, never found in the beat's words, constitution
+VIII.9 [revision: R2-M; DL-01-62]), active conditions (a forbidding condition: G4), the Framer's reach factors (01.6.10: two unoffset factors, or a
 total potency, route the beat to G4) [revision: R2-G; I-160a] and any cited
 G4 fact. No role proposes the gate class. The facets choose the license, never the verb: PARSE's verb stands, so talk with
 menace stays Talk (01.18.7) [revision: R2-L; DL-01-49]. A sheet knack ("intimidating", "a way with horses") is an edge, never
