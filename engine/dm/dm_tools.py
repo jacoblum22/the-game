@@ -445,6 +445,11 @@ def _party(ctx: TurnContext, t: Turn, raw: Any, *, person: bool = False) -> str 
 
     tx = ctx.need_tx()
     st = tx.state
+    from engine.retrieve.scene import pc_id
+
+    if re.sub(r"\s+", " ", str(raw or "").strip().lower()) in ("pc", "the pc", "you", "the player", "player") \
+            and pc_id(st):  # the DM's words for the player character (a name is matched by `_id`)
+        return pc_id(st)
     eid = _id(st, raw)
     if eid is None or eid in st.entities:
         return eid

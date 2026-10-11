@@ -408,7 +408,9 @@ def check_gate(beat: Beat, *, state: Any, rules: Any, store: Any = None, staged:
     forbid = forbidden_by_condition(beat, state=state, rules=rules, verb=c.verb,
                                     license=c.license if c.gate == "G2" else None)
     if forbid is not None:
-        g4 = (forbid[0], f"an active condition forbids {forbid[1]}", "condition")
+        inst = state.conditions.get(forbid[0])  # [verification: pinned-trace] the refusal names the condition
+        name = str(inst.condition_id).removeprefix("cond.").replace("_", " ") if inst else "an active condition"
+        g4 = (forbid[0], f"{name} ({forbid[0]}) forbids {forbid[1]}", "condition")
     elif beat.g4_fact and beat.g4_fact in state.facts:
         g4 = (beat.g4_fact, "success requires an established fact to be false", "fact")
     elif beat.g4_fact and beat.g4_fact in set(canon_impossible):

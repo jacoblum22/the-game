@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+from typing import Any, cast
 
 import pytest
 
@@ -111,3 +112,38 @@ def test_exposure_and_time(tmp_path: Path) -> None:
     rd2 = read_result(f2, _roll(1, "critical_failure", False))
     t = apply_cost(f2, rd2, "cost.time", state=s2.state, rules=s2.rules, mint=lambda p: p, mode="free")
     assert t.deferred == {"advance_time": {"intervals": 1}, "mode": "free"}
+
+
+@pytest.mark.parametrize("sev", ["S1", "S2", "S3", "S4", "S5"])
+@pytest.mark.parametrize("foe", [True, False])
+@pytest.mark.parametrize("form", [None, "cond.grabbed", "cond.restrained", "cond.pinned", "cond.prone",
+                                  "cond.off_balance", "cond.slowed"])
+def test_footing_hold_needs_a_holder(tmp_path: Path, sev: str, foe: bool, form: str | None) -> None:
+    """[verification: pinned-trace] a footing hold is held by the opponent; with none, the row's non-hold form."""
+    s = Scene.new(tmp_path)
+    npc = s.npc("Brute") if foe else None
+    f = _frame(s)
+    f.beat.target = npc
+    rd = read_result(f, _roll(5, "failure", False)).model_copy(update={"cost_severity": sev,
+                                                                       "cost_choices": ["cost.footing"]})
+    app = apply_cost(f, rd, "cost.footing", state=s.state, rules=s.rules, mint=lambda p: p, form=form)
+    for e in (e for e in app.events if e.type == "condition_applied"):
+        inst = cast(Any, e.payload).instance
+        hold = s.rules.condition(inst.condition_id).get("exclusion_group") == "hold"
+        assert inst.source.get("entity") == (npc if hold else s.pc), (sev, form, inst.source)
+    if app.deferred and "footing" in app.deferred and not foe:
+        assert "cond.grabbed" not in app.deferred["footing"] and "opponent" not in app.deferred["footing"]
+
+
+def test_footing_pinned_by_the_foe(tmp_path: Path) -> None:
+    s = Scene.new(tmp_path)
+    npc = s.npc("Brute")
+    f = _frame(s)
+    f.beat.target = npc
+    rd = read_result(f, _roll(5, "failure", False)).model_copy(update={"cost_severity": "S4",
+                                                                       "cost_choices": ["cost.footing"]})
+    app = apply_cost(f, rd, "cost.footing", state=s.state, rules=s.rules, mint=lambda p: p)
+    assert [cast(Any, e.payload).instance.source["entity"] for e in app.events] == [npc]
+    f.beat.target = None
+    app = apply_cost(f, rd, "cost.footing", state=s.state, rules=s.rules, mint=lambda p: p)
+    assert not app.events and app.deferred == {"footing": "move to next lower/worse place", "severity": "S4"}
