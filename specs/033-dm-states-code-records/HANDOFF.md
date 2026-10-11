@@ -27,3 +27,20 @@ Traps:
 4. `dm_tools.py` is touched by P1, P4, P3, P5: stay inside the function lanes in plan 5; merge order is fixed there.
 5. Re-record only `offline_seed11_dmtools`, never from two parallel phases. Files are CRLF in the working copy.
 6. P0's census may find word matchers the inventories missed: assign each to a lane, else P6.
+
+DONE W1 so far (orchestrator fold):
+- E (07d05ea): `evals/turn_judge.py` replaces the keyword measures (leak, ask, mood, pronoun, absent), Haiku per sampled
+  turn; precision from hand verdicts in `evals/baselines/turn_judge_hand.yaml` (not created; "unmeasured" under 20 per
+  measure). npc_agency M10 and h2h_score read the judge cache. Nothing in evals reads `_audit`/`_log_only` any more.
+- P0 (3e710a6): `tests/guard/` (viii9.py DENY 71, all `log`; scan.py + viii9_allow.py 235 hits: 100 P, 55 F, 7 S,
+  73 `pending:<phase>`; census.py; reach-census.md). Full pytest 2498 passed, 5 skipped, 2 xfailed. Ruff on tests/guard needs
+  `ruff check --config "include=['tests/guard/**/*.py']" tests/guard`.
+Guard traps for every phase:
+7. A phase that removes code deletes its `pending:<phase>` rows in `tests/guard/viii9_allow.py` and flips its DENY entries
+   to `mode="raise"`; stale rows FAIL the static test. New word-reading code must be listed or (better) not exist.
+   Regenerate `tests/guard/reached.txt` with `py -3.12 -m tests.guard.census reached`. P6 sets `STRICT = True`.
+8. `dm_tools.tool` swallows exceptions: the runtime test asserts `g.raised()`. Deny only code a phase stops calling
+   (`_fitted`, `lift_or_carry`, `reverses`, `plain_reading`, `certain_talk`, `looks_here`, `apply_change`, `typed_goal`
+   stay called; P2b settles `certain_talk`/`looks_here`, not in plan R7).
+9. New finds: `anchors._intent_hits` (D20) -> P2b; `gen.npc.role_implies` (role words imply age/pronouns) -> P4.
+   A21 (`npc_leaves` default place in `_change`) has no function to deny: P4 deletes it. `classify_seed.py` dies after P6.
