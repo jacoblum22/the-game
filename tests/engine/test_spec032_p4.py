@@ -22,7 +22,7 @@ from engine.store.conditions import apply_condition
 from engine.time import clock
 from engine.world.common import fact
 from engine.world.scenes import cast_present
-from tests.engine.test_dm_tools import DM, change, in_turn, npc_here, to_play
+from tests.engine.test_dm_tools import DM, change, engage, in_turn, npc_here, to_play
 from tests.engine.test_spec032_cases import FIX, RULES
 from tests.engine.test_spec032_p3 import BEAST, roll
 
@@ -184,7 +184,7 @@ def test_f14_f17_f19_f20_when_the_foe_does_not_act(tmp_path: Path) -> None:
     # F20: no conflict, no foe turn
     facts, t = step(game)
     assert facts == [] and t.stats["world"]["foe_turns"] == []
-    start_fight(game)
+    engage(game, start_fight(game))
     # a refused or withdrawn beat spends nothing: no foe answers it (01.3.6); a spoken turn (no beat) does
     _, t = step(game, beats=[outcome("refused")])
     assert t.stats["world"]["foe_turns"] == []
@@ -241,6 +241,8 @@ def test_f11_the_fighter_save_replayed_offers_the_roll_and_code_starts_no_fight(
     game, model = play(tmp_path)
     call = roll(**json.loads(fx["turns"]["turn.9"]["tools"][0]["args"]), **{"as": "creature"})  # [spec 033 R6] the DM says it is a creature
     model.push(DM, {"calls": [call], "passage": "You gather yourself.", "said": [], "asks": []})
+    in_turn(game, lambda ctx, t, tx: dm_tools.tool(ctx, t, call))  # the beast is made (not in reach yet, 06.4.3) ...
+    engage(game, next(i for i in game.store.state.entities if "beast" in i))  # ... the DM states the reach
     r = game.submit("I strike the beast in the clearing.")
     assert r.pause is not None and r.pause.kind == "offer"
     assert stats_of(game, r)["world"]["foe_turns"] == []  # F17: nothing while the offer is open
@@ -259,6 +261,7 @@ def test_f22_f25_f26_the_foe_line_defaults_and_the_nonlethal_words(tmp_path: Pat
     assert "beh.default_melee" in (conflict.foe_beat.__doc__ or "")
     game, _ = play(tmp_path)  # F26: the DM's nonlethal flag reaches the words the harm rules read
     npc = npc_here(game)
+    engage(game, npc)
     run_roll(game, roll(verb="verb.strike", target=npc, nonlethal=True))
     st = game.store.state
     assert st.open_pause() is not None  # [spec 033 R5] the flag rides in `stated`, the method text is not edited
@@ -409,6 +412,7 @@ def test_end_scene_is_refused_in_a_fight_or_under_an_offer(tmp_path: Path) -> No
     out = in_turn(game, lambda ctx, t, tx: dm_tools.tool(ctx, t, {"tool": "end_scene", "why": "x"}))
     assert out.startswith("REFUSED") and "fight" in out
     game2, _ = play(tmp_path / "b")
+    engage(game2, npc_here(game2))
 
     def go(ctx: Any, t: Any, tx: Any) -> str:
         dm_tools.tool(ctx, t, roll(verb="verb.strike", target=npc_here(game2)))

@@ -10,7 +10,7 @@ import pytest
 from engine.dm import dm_tools
 from engine.retrieve.scene import pc_id
 from engine.store.conditions import apply_condition
-from tests.engine.test_dm_tools import change, in_turn, npc_here, to_play
+from tests.engine.test_dm_tools import change, engage, in_turn, npc_here, to_play
 from tests.engine.test_spec032_p3 import roll, run
 
 
@@ -59,6 +59,7 @@ def test_a_refusal_from_a_condition_names_it(tmp_path: Path) -> None:
     with game.store.transaction("turn.900") as tx:  # the DM cannot pin the PC; a foe's hold does
         tx.add_all(apply_condition(tx.state, tx.mint, game.ctx.rules, pc, "cond.pinned",
                                    source={"entity": foe}).events)
+    engage(game, foe)
     outs, _ = run(game, roll(target=foe))
     assert "pinned (cinst." in outs[0] and "forbids verb.strike" in outs[0], outs[0]
     assert "an active condition" not in outs[0]

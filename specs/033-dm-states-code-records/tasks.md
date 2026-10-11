@@ -119,12 +119,12 @@ Phases, lanes, models and waves: `plan.md` section 5. Cases: `cases.md` (C1-C12)
 - [x] T056 DENY (`inject_lead`, `audit_cases`, `is_retire` under dm-tools) to `raise`; HANDOFF-P5.md.
 
 ## P6 guard strict and gates (Sonnet, W4, lane `tests/guard/` plus fixes for guard hits)
-- [ ] T070 Assemble `games_033.py` from the phases' game functions; every `cases.md` row runs under the guard.
-- [ ] T071 All DENY entries `raise`; no `pending` allow-list entries; review every allow-list reason (P, F, S only).
-- [ ] T072 Planted-failure tests (C12) green.
-- [ ] T073 Re-record `offline_seed11_dmtools`; full pytest, ruff, pyright; `validate_ruleset.py` 0/0.
-- [ ] T074 Prompt word count test (at most 800) and the schema-vs-contract test green.
-- [ ] T075 Pipeline unchanged: the pipeline recordings and tests pass untouched (R13). HANDOFF.md.
+- [x] T070 Assemble `games_033.py` from the phases' game functions; every `cases.md` row runs under the guard.
+- [x] T071 All DENY entries `raise`; no `pending` allow-list entries; review every allow-list reason (P, F, S only).
+- [x] T072 Planted-failure tests (C12) green.
+- [x] T073 Re-record `offline_seed11_dmtools`; full pytest, ruff, pyright; `validate_ruleset.py` 0/0.
+- [x] T074 Prompt word count test (at most 800) and the schema-vs-contract test green.
+- [x] T075 Pipeline unchanged: the pipeline recordings and tests pass untouched (R13). HANDOFF.md.
 
 ## P7 re-check (orchestrator runs live; Sonnet scores; W5)
 - [ ] T080 Live: fresh talker, fighter, explorer personas on dm-tools (Haiku engine, Sonnet player), `VIII9_GUARD=log`.

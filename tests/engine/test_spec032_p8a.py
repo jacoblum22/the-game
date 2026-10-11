@@ -63,7 +63,8 @@ def test_p2_every_verb_times_a_person_a_creature_a_thing_is_never_refused_as_unk
     before = set(game.store.state.entities)
     extra = {"as": "creature"} if what == "creature" else {}  # [spec 033 R6] the DM says what it is
     outs, _ = go(game, roll(verb=verb, target=phrase, goal="act", how="act", **extra))
-    assert not (outs[0].startswith("REFUSED") and "on record" in outs[0]), outs[0]
+    # (cases C1.a) a melee verb on a stranger is refused for reach (06.4.3) after the walk-on is made; never as unknown
+    assert not (outs[0].startswith("REFUSED") and "on record" in outs[0] and "not in reach" not in outs[0]), outs[0]
     made = new_ids(game, before)
     st = game.store.state
     if what == "creature":

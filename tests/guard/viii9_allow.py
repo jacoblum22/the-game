@@ -7,16 +7,16 @@ pattern, a module-level list of three or more string literals) is listed here on
     P  parses a code-made string: an id, a rule atom, the cost DSL, a table range; or a table or enum of code ids
     F  formats text for the player or the DM; it decides nothing about the story
     S  keyword search that lists candidates; the DM model judges, a match never decides
-    pending:<phase>  a word matcher or a guess that the named spec 033 phase removes (P2a P2b P3 P4 P5)
+    pending:<phase>  (spec 033 P0..P5 only) a word matcher a phase removes; none remains since P6
 
-Constitution VIII.9 (code never deduces the story) allows P, F and S. From P6 (`STRICT = True`) any `pending` fails.
+Constitution VIII.9 (code never deduces the story) allows P, F and S. With `STRICT = True` (P6) any `pending` fails.
 A phase that removes the code also removes its entries here: an entry the scanner no longer finds is stale and fails.
 New code that reads words must be listed with a class, or (better) not exist.
 """
 
 from __future__ import annotations
 
-STRICT = False  # P6 sets this True: no `pending:*` entry may remain
+STRICT = True  # P6: no `pending:*` entry may remain
 
 ALLOW: dict[str, dict[str, tuple[str, str]]] = {
     "engine.abilities.recharge": {
@@ -81,7 +81,15 @@ ALLOW: dict[str, dict[str, tuple[str, str]]] = {
         "_for_beat:words:_PER_BEAT": ("F", "block layout for the player"),
         "turn_blocks:words:_PAUSE_ITEM": ("F", "block layout for the player"),
     },
+    "engine.dm.answer": {
+        "_from_case:words:PEOPLE": ("P", "enum or table of code ids"),
+    },
     "engine.dm.oof": {
+        "price_line:words:COST_WORDS": ("F", "out-of-fiction text for the player's menus and lines"),
+        "price_line:words:SEVERITY_WORDS": ("F", "out-of-fiction text for the player's menus and lines"),
+        "to_player:re:escape": ("F", "first person to second person in text shown to the player; decides nothing"),
+        "to_player:re:search": ("F", "first person to second person in text shown to the player; decides nothing"),
+        "to_player:re:sub": ("F", "first person to second person in text shown to the player; decides nothing"),
         "_chance_line:words:SEVERITY_WORDS": ("F", "out-of-fiction text for the player's menus and lines"),
         "_cost_clause:words:COST_WORDS": ("F", "out-of-fiction text for the player's menus and lines"),
         "_price:words:SEVERITY_WORDS": ("F", "out-of-fiction text for the player's menus and lines"),
@@ -111,11 +119,17 @@ ALLOW: dict[str, dict[str, tuple[str, str]]] = {
         "people_card:words:_STATION": ("F", "packet card text"),
     },
     "engine.dm.player_text": {
+        "name_ids:pattern:_ID": ("F", "data ids shown as display names; the name is looked up by the id"),
+        "name_ids:pattern:_SNAKE": ("F", "snake_case shown as plain words"),
+        "strip_citations:pattern:_PAREN": ("F", "rule citations removed from text shown to the player"),
+        "strip_citations:re:sub": ("F", "rule citations removed from text shown to the player"),
         "second_person:pattern:_SUBJ_VERB": ("F", "second-person rewrite of shown text"),
         "second_person:pattern:_SUBJ_VERB_PC": ("F", "second-person rewrite of shown text"),
         "second_person:re:sub": ("F", "second-person rewrite of shown text"),
     },
     "engine.dm.schemas": {
+        "clue_schema:words:CLUE_ITEMS": ("P", "enum of the schema's own digits"),
+        "clue_schema:words:CLUE_PARTS": ("P", "enum of the schema's own digits"),
         "framer_schema:words:NUDGES": ("P", "enum or table of code ids"),
         "framer_schema:words:REQUEST_SIZES": ("P", "enum or table of code ids"),
     },
@@ -166,10 +180,14 @@ ALLOW: dict[str, dict[str, tuple[str, str]]] = {
         "strike_harm:words:harm.apply.SEVERITIES": ("P", "enum or table of code ids"),
     },
     "engine.resolve.costs": {
+        "footing_events:words:_BAND_ORDER": ("P", "enum or table of code ids"),
+        "footing_options:words:_BAND_ORDER": ("P", "enum or table of code ids"),
+        "footing_options:words:_FLAGS": ("P", "enum or table of code ids"),
         "_apply:re:findall": ("P", "parses a code-made string (cost DSL, rule atom, table range, id, slug, list of ids)"),
         "_apply:re:search": ("P", "parses a code-made string (cost DSL, rule atom, table range, id, slug, list of ids)"),
     },
     "engine.resolve.foe_act": {
+        "default_act:words:_DO_ACT": ("P", "enum or table of code ids"),
         "legal_acts:words:resolve.change.HOLDS": ("P", "enum or table of code ids"),
     },
     "engine.resolve.frame": {
@@ -200,14 +218,14 @@ ALLOW: dict[str, dict[str, tuple[str, str]]] = {
         "_able:words:_CREATURES": ("P", "enum or table of code ids"),
         "_finish:words:CONTACT": ("P", "enum or table of code ids"),
         "_force_ladder:words:BANDS": ("P", "enum or table of code ids"),
-        "_force_ladder:words:_BAND_WORDS": ("P", "enum or table of code ids"),
+        "_force_ladder:words:_BAND_WORDS": ("F", "band id to the phrase shown (T-12-11)"),
         "_force_ladder:words:_CREATURES": ("P", "enum or table of code ids"),
         "_folded_hold:words:resolve.change.PEOPLE": ("P", "enum or table of code ids"),
         "_no_roll:words:NO_ROLL_EVIDENCE": ("P", "enum or table of code ids"),
         "_no_roll:words:resolve.types.REACH_VALUE": ("P", "enum or table of code ids"),
         "_progress:words:resolve.types.REACH_VALUE": ("P", "enum or table of code ids"),
         "_span_words:words:time.clock.ROUNDS": ("P", "enum or table of code ids"),
-        "band_words:words:_BAND_WORDS": ("P", "enum or table of code ids"),
+        "band_words:words:_BAND_WORDS": ("F", "band id to the phrase shown (T-12-11)"),
     },
     "engine.resolve.roll": {
         "degree:words:resolve.types.DEGREES": ("P", "enum or table of code ids"),
@@ -226,9 +244,6 @@ ALLOW: dict[str, dict[str, tuple[str, str]]] = {
         "resolve_names:pattern:_PROPER_RUN": ("S", "recall: the codex search names candidates; the DM judges"),
         "resolve_names:re:escape": ("S", "recall: the codex search names candidates; the DM judges"),
         "resolve_names:re:finditer": ("S", "recall: the codex search names candidates; the DM judges"),
-        "resolve_names:pattern:_PROPER_RUN": ("pending:P2b", "R10: focus is ids"),
-        "resolve_names:re:escape": ("pending:P2b", "R10: focus is ids"),
-        "resolve_names:re:finditer": ("pending:P2b", "R10: focus is ids"),
         "scene_facts:words:WRITTEN": ("P", "enum or table of code ids"),
         "written_words:words:WRITTEN": ("P", "enum or table of code ids"),
     },

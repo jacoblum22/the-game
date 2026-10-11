@@ -19,7 +19,7 @@ from engine.retrieve.scene import pc_id
 from engine.store.events import Event
 from engine.world.common import fact
 from engine.world.scenes import cast_present
-from tests.engine.test_dm_tools import DM, change, in_turn, npc_here, to_play
+from tests.engine.test_dm_tools import DM, change, engage, in_turn, npc_here, to_play
 from tests.engine.test_spec032_cases import FIX, RULES
 
 BEAST = "npc.the_pale_beast"
@@ -77,6 +77,10 @@ def test_r16_the_fighter_save_calls_are_accepted_and_the_beast_is_one_entity(tmp
     fx = json.loads(FIX.read_text(encoding="utf-8"))["turns"]
     game, _ = to_play(tmp_path)
     args9 = {"tool": "propose_roll", "as": "creature", **json.loads(fx["turn.9"]["tools"][0]["args"])}
+    outs, t = run(game, args9)  # the creature is made; not in reach yet (06.4.3)
+    assert outs[0].startswith("REFUSED") and "not in reach" in outs[0]
+    beasts = [i for i, e in game.store.state.entities.items() if "beast" in i]
+    engage(game, beasts[0])  # the DM states the reach, then makes the same attack: found by its exact name
     outs, t = run(game, args9)
     assert outs[0].startswith("ROLL OFFERED") and t.stats["refusals"] == []
     beasts = [i for i, e in game.store.state.entities.items() if "beast" in i]
@@ -86,6 +90,10 @@ def test_r16_the_fighter_save_calls_are_accepted_and_the_beast_is_one_entity(tmp
     game2, _ = to_play(tmp_path / "b")
     args12 = {"tool": "propose_roll", "as": "creature", **json.loads(fx["turn.12"]["tools"][0]["args"])}
     outs, t = run(game2, args12)
+    if outs[0].startswith("REFUSED"):  # a melee verb: the creature is made, then the DM states the reach
+        assert "not in reach" in outs[0]
+        engage(game2, next(i for i in game2.store.state.entities if "beast" in i))
+        outs, t = run(game2, args12)
     assert outs[0].startswith("ROLL OFFERED") and t.stats["refusals"] == []
 
 
@@ -225,8 +233,10 @@ def test_o_the_nine_cost_ids_are_the_schema_menu() -> None:
 
 def _offer_cost(tmp_path: Path, fail_cost: str) -> tuple[str, dict[str, Any]]:
     game, _ = to_play(tmp_path)
-    outs, _ = run(game, roll(target="the pale beast", stakes="dire", fail_cost=fail_cost, change_kind="harm",
-                             change_what="the pale beast", goal="Drive the beast off the cart"))
+    foe = npc_here(game)
+    engage(game, foe)  # 06.4.3: the DM states the reach before the attack
+    outs, _ = run(game, roll(target=foe, stakes="dire", fail_cost=fail_cost, change_kind="harm",
+                             change_what=foe, goal="Drive the beast off the cart"))
     p = game.store.state.open_pause()
     assert outs[0].startswith("ROLL OFFERED") and p is not None
     pr = p.detail["proposed"]
@@ -249,7 +259,9 @@ def test_o_at_least_one_cost_is_actually_chosen_by_the_dm(tmp_path: Path) -> Non
 
 def test_o10_o12_the_offer_title_is_the_dms_goal_words_else_the_default(tmp_path: Path) -> None:
     game, model = to_play(tmp_path)
-    call = roll(target="the pale beast", stakes="dire", change_kind="harm", change_what="the pale beast",
+    foe = npc_here(game)
+    engage(game, foe)
+    call = roll(target=foe, stakes="dire", change_kind="harm", change_what=foe,
                 goal="Hurt the beast before its lunge lands")
     model.push(DM, {"calls": [call], "passage": "It gathers itself.", "said": [], "asks": []})
     r = game.submit("I charge the beast.")

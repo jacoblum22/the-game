@@ -176,13 +176,30 @@ def table(rec: Guard, probe: Guard) -> list[str]:
     return lines
 
 
-def write_reached(*games: Guard) -> list[str]:
-    """`tests/guard/reached.txt`: every top-level engine function the games reached during a dm-tools turn."""
+def reach_lines(g: Guard) -> set[str]:
+    """`module top-level function` for every engine function the game reached during a dm-tools turn."""
     from tests.guard.scan import toplevel
 
-    found = {f"{mod} {toplevel(q)}" for g in games for (scope, name) in g.reach if scope == "turn"
-             for mod, q in [g.parts[name]]}
-    lines = sorted(found)
+    return {f"{mod} {toplevel(q)}" for (scope, name) in g.reach if scope == "turn" for mod, q in [g.parts[name]]}
+
+
+def games_reach() -> set[str]:
+    """What the guarded test games (tests/guard/games_033.py: the cases) reached: pytest run with VIII9_REACH_FILE."""
+    import os
+    import subprocess
+
+    from tests.guard.games_033 import GUARDED
+
+    out = Path(tempfile.mkdtemp(prefix="viii9r-")) / "reach.txt"
+    files = [f"tests/engine/{m}.py" for m in GUARDED]
+    subprocess.run([sys.executable, "-m", "pytest", "-q", "-p", "no:cacheprovider", *files], check=False,
+                   env={**os.environ, "VIII9_REACH_FILE": str(out), "PYTHONUTF8": "1"})
+    return set(out.read_text(encoding="utf-8").splitlines()) if out.exists() else set()
+
+
+def write_reached(*games: Guard, extra: frozenset[str] | set[str] = frozenset()) -> list[str]:
+    """`tests/guard/reached.txt`: every top-level engine function the games reached during a dm-tools turn."""
+    lines = sorted(set().union(*(reach_lines(g) for g in games), extra))
     head = "# functions reached in a dm-tools turn by tests/guard/census.py (the recorded game + the probe)"
     REACHED.write_text("\n".join([head, *lines]) + "\n", encoding="utf-8")
     return lines
@@ -192,7 +209,7 @@ def main() -> None:
     which = sys.argv[1] if len(sys.argv) > 1 else "table"
     with tempfile.TemporaryDirectory(prefix="viii9p-") as tmp:
         if which == "reached":
-            lines = write_reached(play_recorded(), play_probe(Path(tmp)))
+            lines = write_reached(play_recorded(), play_probe(Path(tmp)), extra=games_reach())
             print(f"{len(lines)} functions -> {REACHED}")
         elif which == "table":
             print("\n".join(table(play_recorded(), play_probe(Path(tmp)))))
