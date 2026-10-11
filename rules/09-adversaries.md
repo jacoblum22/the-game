@@ -765,7 +765,7 @@ same encounter, five honest answers.
 ### 09.7 Behavior: the DM never chooses for an adversary
 
 **09.7.1 Behavior lists.** `[D]` A **behavior list** (`beh.09.*`, `data/behaviors.yaml`, 40 lists) is a flat,
-first-match priority list of rows `{when, do, arg, note}` [R4 SG-10; 06.9.1]. On each of an adversary's two
+first-match priority list of rows `{when, do, arg, note}` [R4 SG-10; 06.9.1]. It is guidance shown to the DM, who picks each act from those legal now (06.9.1, T-06-16), and the logged default when the DM omits a pick [revision: R2-M; DL-06-40]; as the default: On each of an adversary's two
 actions, the engine evaluates the rows top to bottom and takes the **first row whose `when` is true** of the
 current state and whose `do` is legal; it never skips a true row for a "better" one, never combines rows, and
 never chooses where a row leaves a choice (06.9.3's attention picks the target; the engine rolls any tie,
@@ -1805,7 +1805,7 @@ P3 character who has just broken its barrow's seal. Rows (09.7.1):
 *Boundary.* Had the PC rushed it in round 1 (engaged before its turn), row 2 is false (`not_engaged` fails) and
 it strikes at once: whether the dead rise depends on what the PC does first. *Non-example.* "It's a dramatic
 moment, it should use its draining touch." The list says `strike (primary)`; the primary is the blade. Drama
-does not choose rows (06.9.1).
+does not choose rows: the row is the default, and the DM's own pick from the legal acts stands, logged (06.9.1) [revision: R2-M].
 
 ### WE-09-4 A morale break, and prisoners
 

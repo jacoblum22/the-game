@@ -1852,7 +1852,7 @@ the largest structural retirement Principle VI could ask for: everything the cha
 wholesale, and only bounded channels carry value forward [C:VI; R6 D-R2 step 5; 04.11.4].
 
 **11.13.1 When: seams, offers and forced ends.** `[D]` + `[T]`
-- **Always:** the player may retire the character at any `reflection` or session start (out of fiction).
+- **Always:** the player may retire the character at any `reflection` or session start (out of fiction), and at any time by the exact command `/retire`; the DM's `end_game` tool opens the same confirmation when the player asks in the fiction. Code never reads a wish to retire from the player's words (constitution VIII.9) [revision: R2-M; DL-12-162].
 - **Offered** (never forced; 04.7's protocol: accept, decline, defer — a deferred offer returns at the
   next seam), at the next reflection after any of these: `apotheosis_available(pc)` becomes true (04.11.4);
   the long vow (02.9.1) is kept; a thread of rank extreme or epic is completed, or one of rank formidable is

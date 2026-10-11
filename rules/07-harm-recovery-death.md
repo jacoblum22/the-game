@@ -46,8 +46,9 @@ a gamble the player took and lost [R6 §C.3 C-R1…C-R3; BRIEF A2 #3].
 
 **Why leniency cannot enter.** (a) Harm is applied by `apply_harm` from a frame committed before the
 roll; narration restates the result [R4 §6.2 items 1–2; INV-2]. (b) Every transition is a `[T]` on
-tracked state: Vitality 0, load 3, step 4. (c) Adversaries do not choose whether to press: their
-behavior lists and their `defeat_disposition` decide (06.9.1; 09). (d) Defeat outcomes are a table keyed
+tracked state: Vitality 0, load 3, step 4. (c) Whether an adversary presses is the DM's open pick from the
+acts legal now, logged and watched for passivity, and its `defeat_disposition` decides what defeat means (06.9.1; 09)
+[revision: R2-M]. (d) Defeat outcomes are a table keyed
 to the victor's nature, executed as state writes, so "defeat" cannot quietly become "a lucky escape"
 [R4 §6.2 item 5]. (e) The last-chance options are built by the engine from requirements in data, and
 the DM may strike one only by citing a fact from a closed list of reasons. (f) The one place softness is

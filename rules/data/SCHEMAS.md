@@ -112,7 +112,7 @@ Owner 00 (core); owner-blocks 02, 04–11, 15, 16 (02 amended at integration). K
 
 ## basic_verbs.yaml
 Owner 00 (listed fields) / 01 (`anchor`). Keys: `verbs`, `free_activities`.
-- **Verb**: `id` verb.*, `name`, `covers` [str], `excludes` [{what, needs}], `attribute`
+- **Verb**: `id` verb.*, `name`, `covers` [str], `target_kinds` [person|object] (who or what the target slot may be; [revision: R2-M]), `excludes` [{what, needs, `covered_by` [lic.*] (the licenses that make the method G2, 00.12.3; empty = none does), `covered_by_effect`? [eff.*]}], `attribute`
   (attr|by_method|none), `alt_attributes` [{attribute, when}], `reach_unit`, `traits` [tag], `anchor`
   (01: {rule_id, knobs [{knob (T-00-20), default, allowed_deltas}], degree_table, obstacle_classes? [{id, base
   (a tier id or by_hazard), examples}] (01.6.5, at most six) [revision: R2-C]}), `lifecycle`.
@@ -130,7 +130,7 @@ reach_delta}], `read_costs` [{stakes, degree, severities [S1..S5]}], `cost_menu`
 standard_form, heavy_form, fits_when, effect_refs}], `delivery_counts` [{reach, formula}],
 `oracle` {rungs [{id, yes_on?, roll}], doubles}, `fate` {max, start, earn [str], spend [{use, cost}]},
 `auto_commit` {default, allowed_when, never}; optional `frame_guards` (00.3.9(b), 01.6.13) and `stakes_cost_menus`
-{source: [cost.*]} (01.6.11) [revision: R2-C].
+{source: [cost.*]} (01.6.11) [revision: R2-C]; `reverses_goal` {kind: [cost.*]} (01.9.3) [revision: R2-M].
 
 ## origins.yaml
 Owner 02 (owner-block 13; setting origins pass PR-02-9). Key `origins`. **Origin**: `id` orig.*, `name`, `tags`, `attribute_rules`

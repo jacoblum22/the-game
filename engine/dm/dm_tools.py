@@ -1043,6 +1043,8 @@ def _change(ctx: TurnContext, t: Turn, c: dict[str, Any]) -> str:
     if kind == "position":
         return _position(ctx, t, c)
     if kind == "fight":
+        if not str(c.get("to") or "").strip():
+            _default(t, "fight.to")  # [spec 033 D3] near
         return _fight(ctx, who, pc, str(c.get("to") or ""))
     if kind == "npc_leaves":
         why = _acting(st, who)
