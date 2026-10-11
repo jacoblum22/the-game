@@ -71,6 +71,7 @@ class SchemaContext(BaseModel):
     oracle_rungs: list[str] = Field(default_factory=list)
     verbs: list[str] = Field(default_factory=list)
     change_kinds: list[str] = Field(default_factory=list)  # resolution.yaml#intended_change.kinds (01.2.7)
+    approaches: list[str] = Field(default_factory=list)  # the verbs' `excludes` entries (dm-tools `approach`, 00.12.3)
     change_ids: list[str] = Field(default_factory=list)  # slot ids: scope, the things people here hold
     # Framer
     anchor_ids: list[str] = Field(default_factory=list)
@@ -445,7 +446,8 @@ def _dm_schema(ctx: SchemaContext) -> Schema:
     """Spec 032: the dm-tools game master's step (tool calls, then the passage); the body lives with its tools."""
     from engine.dm.dm_tools import schema_for
 
-    return schema_for(sorted(ctx.verbs), ctx.change_kinds, final=False)  # sorted: the order `rules.ids` gives
+    return schema_for(sorted(ctx.verbs), ctx.change_kinds, final=False,  # sorted: the order `rules.ids` gives
+                      approaches=ctx.approaches)
 
 
 BUILDERS: dict[Role, Callable[[SchemaContext], Schema]] = {
@@ -578,7 +580,7 @@ DEFAULTS: dict[Role, Callable[[SchemaContext], dict[str, Any]]] = {
     # no judgment: the question is not about a clue (PR-12-10 step 1; spec 025)
     Role.CLUE: lambda ctx: {"about": "none", "part": "none"},
     # nothing asked of the tools and no passage: dm_tools.call_role passes its own default (the last passage)
-    Role.DM: lambda ctx: {"calls": [], "passage": "", "said": [], "asks": []},
+    Role.DM: lambda ctx: {"calls": [], "passage": "", "said": [], "asks": [], "cost_form": ""},
 }
 
 
@@ -833,6 +835,7 @@ def schema_context(  # rule: 12.2.4
         oracle_rungs=[r["id"] for r in res.get("oracle", {}).get("rungs", [])],
         verbs=list(rules.basic_verbs),
         change_kinds=kinds(rules),
+        approaches=list(dict.fromkeys(str(e["what"]) for v in rules.basic_verbs.values() for e in v.get("excludes") or ())),
         change_ids=list(dict.fromkeys([*scope, *things_held(state, scope)])),
         anchor_ids=anchor_ids,
         default_anchor=default_anchor,

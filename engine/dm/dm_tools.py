@@ -30,7 +30,7 @@ from engine.dm.adjudication import AdjudicationRecord
 from engine.dm.context import TurnContext
 from engine.dm.response import Flags, Response
 from engine.dm.roles.prompts import load_prompt
-from engine.dm.schemas import STR, Schema, arr, enum, obj
+from engine.dm.schemas import BOOL, STR, Schema, arr, enum, obj
 from engine.llm.base import Packet, Role, call_role
 from engine.store.events import EntityRecord, Event
 from engine.store.records import TurnRecord
@@ -38,9 +38,12 @@ from engine.store.records import TurnRecord
 ENGINE = "dm-tools"
 MAX_TOOLS, PER_STEP = 6, 3
 SAID_MAX = 6  # the lines a passage may list as said
-TOOLS = ("propose_roll", "state", "change", "recall", "reveal_clue", "mood", "end_scene")
+TOOLS = ("propose_roll", "state", "change", "recall", "reveal_clue", "mood", "end_scene", "end_game")
 CHANGES = ("coin", "give_item", "new_item", "condition_add", "condition_remove", "npc_leaves", "new_npc", "travel",
-           "rest", "fact", "fight")  # [spec 032 P3] fight: a person turns on the PC
+           "rest", "fact", "fight", "position")  # [spec 032 P3] fight: a person turns on the PC; [spec 033] position
+AS_KINDS = ("he", "she", "they", "creature", "thing")  # [spec 033] what unrecorded words are: pronouns, or kind
+FORCES = ("push", "prone")  # 06.5.3: Force's two options
+FOE_ACTS = ("strike", "close_in", "withdraw", "stand", "break_free", "grapple", "flee", "yield", "wait")  # 06.9.4
 FAIL_COSTS = ("cost.closed_door", "cost.drain", "cost.exposure", "cost.footing", "cost.gear", "cost.harm",
               "cost.shortfall", "cost.time", "cost.twist")  # the 9 cost ids (a test pins them to the rules)
 _PERSON_KIND = re.compile(r"listener|watcher|creature|animal|person|helper|character|target's|entity|observer", re.I)
@@ -70,7 +73,8 @@ class Turn:
     stats: dict[str, Any] = field(default_factory=lambda: {
         "tool_calls": 0, "steps": 0, "refusals": [], "moods": [], "leaks": [], "clues": [], "rolls": [], "dropped": [],
         "scene_ends": [], "world": {"foe_turns": [], "facts": [], "reasked": 0},
-        "said": [], "told_dropped": [], "log_only": []})  # [spec 032 P5] the told records, what was dropped, the checks
+        "said": [], "told_dropped": [], "log_only": [],
+        "defaults": []})  # [spec 033 D3] `not_chosen:{field}`: each detail the DM left out and code defaulted  # [spec 032 P5] the told records, what was dropped, the checks
     said_raw: list[Any] = field(default_factory=list)  # the DM's final-answer `said` list, as written
     told: list[dict[str, Any]] = field(default_factory=list)  # the said entries written (TurnRecord.said's shape)
     beats: list[Any] = field(default_factory=list)  # the BeatOutcomes of this turn (the world step reads their status)
@@ -196,28 +200,49 @@ def _env(ctx: TurnContext, t: Turn) -> Any:
 
 
 def step_schema(ctx: TurnContext, *, final: bool) -> Schema:
-    return schema_for(ctx.rules.ids("verb."), list(ctx.rules.resolution["intended_change"]["kinds"]), final=final)
+    return schema_for(ctx.rules.ids("verb."), list(ctx.rules.resolution["intended_change"]["kinds"]), final=final,
+                      approaches=approaches(ctx.rules))
 
 
-def schema_for(verbs: list[str], kinds: list[str], *, final: bool) -> Schema:
-    """The DM step's schema (`Role.DM`'s builder in engine/dm/schemas.py calls this with the SchemaContext's lists)."""
+def approaches(rules: Any) -> list[str]:
+    """The specialist methods a verb names as needing a licence (basic_verbs.yaml `excludes`, whole entries): the
+    values of `propose_roll.approach` besides "plain" (00.12.3)."""
+    return list(dict.fromkeys(str(e["what"]) for v in rules.basic_verbs.values() for e in v.get("excludes") or ()))
+
+
+def schema_for(verbs: list[str], kinds: list[str], *, final: bool, approaches: list[str] | None = None) -> Schema:
+    """The DM step's schema (`Role.DM`'s builder in engine/dm/schemas.py calls this with the SchemaContext's lists).
+    Every property of an object is required (schemas.obj), so an omitted detail is written as "" / "none" / "plain" /
+    false; code then holds the documented default and logs `not_chosen:{field}` [spec 033 D3]."""
     calls = [
-        obj({"tool": enum(["propose_roll"]), "goal": STR, "verb": enum(verbs), "target": STR, "how": STR,
-             "attribute": STR, "difficulty": STR, "why_uncertain": STR, "stakes": enum(STAKES),
-             "nonlethal": {"type": "boolean"}, "fail_cost": enum(["none", *FAIL_COSTS]),
+        obj({"tool": enum(["propose_roll"]), "goal": STR, "verb": enum(verbs), "target": STR,
+             "as": enum(AS_KINDS, first="none"), "how": STR, "attribute": STR, "difficulty": STR, "why_uncertain": STR,
+             "stakes": enum(STAKES), "nonlethal": BOOL, "force": enum(FORCES, first="none"), "weapon": STR,
+             "reads": BOOL, "approach": enum(approaches or (), first="plain"),
+             "fail_cost": enum(["none", *FAIL_COSTS]), "fail_on": STR,
              "change_kind": enum(kinds), "change_what": STR, "change_whom": STR}),
         obj({"tool": enum(["state"]), "about": STR}),
-        obj({"tool": enum(["change"]), "kind": enum(CHANGES), "who": STR, "what": STR, "to": STR,
-             "amount": {"type": "integer"}, "note": STR}),
+        obj({"tool": enum(["change"]), "kind": enum(CHANGES), "who": STR, "what": STR, "to": STR, "name": STR,
+             "as": enum(AS_KINDS, first="none"), "knows": STR, "amount": {"type": "integer"}, "note": STR}),
         obj({"tool": enum(["recall"]), "query": STR}),
         obj({"tool": enum(["reveal_clue"]), "npc": STR, "question": STR}),
         obj({"tool": enum(["mood"]), "npc": STR, "mood": enum(list(BAND)), "why": STR}),
         obj({"tool": enum(["end_scene"]), "why": STR}),
+        obj({"tool": enum(["end_game"]), "why": STR}),
     ]
     call = {"anyOf": calls}
     return obj({"calls": arr(call, max_items=0 if final else PER_STEP), "passage": STR,
-                "said": arr(obj({"npc": STR, "words": STR}), max_items=SAID_MAX),  # [spec 032 P5] G3; [] when none
-                "asks": arr(obj({"npc": STR, "cost": enum(COSTS), "granted": enum(GRANTS)}), max_items=4)})
+                "said": arr(obj({"npc": STR, "words": STR, "as": enum(AS_KINDS, first="none")}), max_items=SAID_MAX),
+                "asks": arr(obj({"npc": STR, "cost": enum(COSTS), "granted": enum(GRANTS)}), max_items=4),
+                "cost_form": STR})  # cost_form: one option id of a COST TO SHAPE line, on the answer turn (P3)
+
+
+def foe_schema(legal: dict[str, list[str]]) -> Schema:
+    """[spec 033 D2] The foe-act call: after the character's result is settled, the DM picks what each foe still able
+    to act does. `legal` maps each foe id to the acts legal for it now (`FOE_ACTS` filtered by state, P3); a foe's
+    `act` can be nothing else. `target` defaults to the character; `nonlethal` to false."""
+    one = [obj({"foe": enum([f]), "act": enum(acts), "target": STR, "nonlethal": BOOL}) for f, acts in legal.items()]
+    return obj({"foes": arr({"anyOf": one} if one else STR, max_items=len(one))})
 
 
 def _dm_loop(ctx: TurnContext, t: Turn, message: str, exchanges: list[tuple[str, str]], lead: str) -> str:
@@ -234,7 +259,8 @@ def _dm_loop(ctx: TurnContext, t: Turn, message: str, exchanges: list[tuple[str,
         packet = Packet(instructions=load_prompt("dm"), message=_message(ctx, t, message, exchanges, lead, note))
         schema = step_schema(ctx, final=final)
         res = call_role(ctx.model, DM_ROLE, schema, packet, turn_id=ctx.turn_id, recorder=ctx.record_call,
-                        default={"calls": [], "passage": str(data.get("passage") or ""), "said": [], "asks": []})
+                        default={"calls": [], "passage": str(data.get("passage") or ""), "said": [], "asks": [],
+                                 "cost_form": ""})
         data = dict(res.data or {})
         t.stats["steps"] += 1
         calls = [c for c in data.get("calls") or [] if isinstance(c, dict)][:PER_STEP]
@@ -263,7 +289,8 @@ def _reask(ctx: TurnContext, t: Turn, message: str, exchanges: list[tuple[str, s
     packet = Packet(instructions=load_prompt("dm"),
                     message=_message(ctx, t, message, exchanges, "\n".join(x for x in (lead, world) if x), note))
     res = call_role(ctx.model, DM_ROLE, step_schema(ctx, final=True), packet, turn_id=ctx.turn_id,
-                    recorder=ctx.record_call, default={"calls": [], "passage": passage, "said": t.said_raw, "asks": []})
+                    recorder=ctx.record_call, default={"calls": [], "passage": passage, "said": t.said_raw, "asks": [],
+                                                       "cost_form": ""})
     t.stats["steps"] += 1
     t.stats["world"]["reasked"] += 1
     t.said_raw = list((res.data or {}).get("said") or [])  # the final passage replaces the draft, and its lines
@@ -459,7 +486,8 @@ def _held_mood(st: Any, eid: str) -> str | None:
 def tool(ctx: TurnContext, t: Turn, call: dict[str, Any]) -> str:
     name = str(call.get("tool") or "")
     fn = {"propose_roll": _propose_roll, "state": _state, "change": _change, "recall": _recall,
-          "reveal_clue": _reveal_clue, "mood": _mood, "end_scene": _end_scene}.get(name)
+          "reveal_clue": _reveal_clue, "mood": _mood, "end_scene": _end_scene,
+          "end_game": _end_game}.get(name)
     if fn is None:
         return f"no tool {name!r}"
     made0 = len(t.made)
@@ -620,18 +648,21 @@ def _propose_roll(ctx: TurnContext, t: Turn, c: dict[str, Any]) -> str:
     kinds = target_kinds(ctx.rules, verb)
     target = _party(ctx, t, c.get("target"), person=target_is_person(ctx.rules, verb, str(c.get("change_kind") or "")),
                     names_ok="person" in kinds)
-    stated = str(c.get("target") or "").strip()
+    words = str(c.get("target") or "").strip()
     if target is not None and target not in st.entities:
         if "person" in kinds and "object" not in kinds:  # a person the game could not put here (no place open)
             return (f"REFUSED: no one on record called {target!r} (use an id from the situation, or none)")
         # [spec 032 P8a] a feature or obstacle in words (the stuck hatch): the act is on it, never refused
         target = None
         if not str(c.get("change_what") or "").strip():
-            c = {**c, "change_what": stated if not _ID_LIKE.match(stated) else stated.partition(".")[2].replace("_", " ")}
+            c = {**c, "change_what": words if not _ID_LIKE.match(words) else words.partition(".")[2].replace("_", " ")}
     if target is not None and st.entities[target].kind in ("npc", "companion", "adversary"):
         why = _acting(st, target, down=False)  # a downed foe can still be struck; the dead and the absent cannot
         if why:
             return f"REFUSED: {why}"
+    stated = _stated(ctx, t, c, verb, target)
+    if isinstance(stated, str):
+        return stated
     kind = str(c.get("change_kind") or "none")
     raw_t = str(c.get("target") or "").strip()
     what, whom = (target if raw_t and str(c.get(k) or "").strip() == raw_t else _id(st, c.get(k))
@@ -639,12 +670,6 @@ def _propose_roll(ctx: TurnContext, t: Turn, c: dict[str, Any]) -> str:
     goal = str(c.get("goal") or "").strip() or "act"
     how = str(c.get("how") or "").strip() or None
     phrase = str(c.get("change_what") or "").strip()
-    if kind == "none" and target is None and verb not in ("verb.sneak", "verb.talk"):
-        # no slot named: the verb's plain goal toward the DM's words, never "here" by default (the OFFER's title
-        # read "Learn about the gate" for tracks on the road past it: fighter smoke 145810)
-        from engine.resolve.change import _VERB_GOAL
-
-        kind = _VERB_GOAL.get(str(verb), "none")
     change = None
     if kind != "none":
         if kind in ("harm", "restrain") and what not in st.entities:
@@ -662,7 +687,7 @@ def _propose_roll(ctx: TurnContext, t: Turn, c: dict[str, Any]) -> str:
                 title=goal[:1].upper() + goal[1:] if str(c.get("goal") or "").strip() else None, speech=verb == "verb.talk",
                 against_will=bool(target and st.entities[target].kind in ("npc", "adversary")
                                   and verb in ("verb.strike", "verb.grapple", "verb.force")),
-                declared_seq=st.last_seq, change=change)
+                declared_seq=st.last_seq, change=change, stated=stated)
     t.env.proposal = c  # what the code framer reads (difficulty, attribute, stakes)
     res = run_beats(t.env, [BeatPlan(beat=beat, intent_verbs=[str(verb or "").removeprefix("verb.")])])
     _take(t.rec, res, t.oof, None)
@@ -683,6 +708,65 @@ def _propose_roll(ctx: TurnContext, t: Turn, c: dict[str, Any]) -> str:
     if out.status == "resolved":
         return "ROLLED (a safe roll, made at once): " + _outcomes_text(ctx, t.rec, t.oof)
     return f"NOT POSSIBLE AS PROPOSED ({out.status}): {e.gate_words}"
+
+
+def _default(t: Turn, field_: str) -> None:
+    """[spec 033 D3] The DM left a detail out and code holds its documented default: count it for the owner."""
+    t.stats["defaults"].append(f"not_chosen:{field_}")
+
+
+def _stated(ctx: TurnContext, t: Turn, c: dict[str, Any], verb: str | None, target: str | None) -> Any:
+    """The DM's typed fields as `Stated` (resolve/types.py), or a REFUSED string for a value that is not one of the
+    legal ones. Omitted details take the contract's default and are logged (D3); nothing here reads prose."""
+    from engine.resolve import conflict
+    from engine.resolve.change import holder_of
+    from engine.resolve.types import Stated
+
+    st = ctx.state
+    pc = t.rec.pc or ""
+    approach = str(c.get("approach") or "plain")
+    approach = "plain" if approach == "none" else approach
+    if approach != "plain" and approach not in approaches(ctx.rules):
+        return f"REFUSED: approach {approach!r} is not one of: plain, " + "; ".join(approaches(ctx.rules))
+    force = str(c.get("force") or "none")
+    if verb == "verb.force":
+        if force not in FORCES:
+            _default(t, "force")
+            force = "push"
+    else:
+        force = "none"
+    weapon = None
+    if verb == "verb.strike":
+        w = str(c.get("weapon") or "").strip()
+        wid = _id(st, w) if w else None
+        if w and w.lower() != "unarmed" and holder_of(st, wid or "") != pc:
+            held = [i for i, e in st.entities.items() if e.kind in ("item", "object") and holder_of(st, i) == pc]
+            return f"REFUSED: the character does not hold {w!r} (hold: {', '.join(held) or 'nothing'}; or unarmed)"
+        if w:
+            weapon = "unarmed" if w.lower() == "unarmed" else wid
+        else:
+            _default(t, "weapon")
+            wielded = st.fact_value(pc, "wields")
+            weapon = wielded if isinstance(wielded, str) and wielded in st.entities else "unarmed"
+    fail_on = _id(st, c.get("fail_on"))
+    fail_on = fail_on if fail_on in st.entities else None
+    if fail_on is None and str(c.get("fail_cost") or "") in ("cost.exposure", "cost.gear", "cost.closed_door"):
+        _default(t, "fail_on")
+    position = None
+    if str(c.get("change_kind") or "") == "move_to":
+        band = str(c.get("change_what") or "").strip().lower().removeprefix("band.")
+        if _id(st, c.get("change_what")) in st.entities and st.entities[str(_id(st, c.get("change_what")))].kind == "place":
+            return "REFUSED: move_to takes a band (" + ", ".join(conflict.BANDS) + "); to go to a place use travel"
+        if band in conflict.BANDS and target in st.entities:
+            mover = pc
+            if str(c.get("change_whom") or "").strip():
+                mover = _id(st, c.get("change_whom")) or pc
+            else:
+                _default(t, "change_whom")
+            if mover in st.entities:
+                position = (mover, band, target if mover == pc else pc)
+    return Stated(reads=bool(c.get("reads")), approach=approach, force=force if force in FORCES else None,  # type: ignore[arg-type]
+                  weapon=weapon, nonlethal=bool(c.get("nonlethal")), fail_on=fail_on, position=position)
 
 
 def code_framer(ctx: TurnContext, t: Turn) -> Any:
@@ -851,6 +935,57 @@ def _end_scene(ctx: TurnContext, t: Turn, c: dict[str, Any]) -> str:
     return "done: that scene ends and a new one opens here (moods you set last scene are cleared; set them again if they matter)."
 
 
+def _end_game(ctx: TurnContext, t: Turn, c: dict[str, Any]) -> str:
+    """Stub until spec 033 P5 opens the retirement confirmation (11.13.1)."""
+    return "not available yet: ending the character's story is not wired in this build; carry on."
+
+
+def _position(ctx: TurnContext, t: Turn, c: dict[str, Any]) -> str:
+    """`change position` [spec 033 R1]: the DM puts someone at a band to another person, or an NPC at a place. Writes
+    what it is told, nothing else (the reach refusal is P2a's). Omitted: `who` = the character, `what` = the other
+    party (the one foe in a fight, or the one other person here; an NPC's is the character)."""
+    from engine.resolve import conflict
+    from engine.world.scenes import cast_present
+
+    tx = ctx.need_tx()
+    st = tx.state
+    pc = t.rec.pc or ""
+    if str(c.get("who") or "").strip():
+        who = _party(ctx, t, c.get("who"), person=True)
+    else:
+        _default(t, "who")
+        who = pc
+    why = _acting(st, who, down=False)
+    if why:
+        return f"REFUSED: {why}"
+    assert who is not None
+    to = str(c.get("to") or "").strip()
+    band = to.lower().removeprefix("band.")
+    if band in conflict.BANDS:
+        other = _id(st, c.get("what")) if str(c.get("what") or "").strip() else None
+        if other is None:
+            if who != pc:
+                other = pc
+            else:
+                near = [x for x in (conflict.record(st).get("foes") or cast_present(st)) if x != pc]
+                other = near[0] if len(near) == 1 else None
+            if other is None:
+                return "REFUSED: say who the band is to, in `what` (an id)"
+            _default(t, "what")
+        why = _acting(st, other, down=False)
+        if why:
+            return f"REFUSED: {why}"
+        conflict._set_band(tx, who, other, band, "06.3.9")
+        return f"done: {_name(st, who)} is now {band} to {_name(st, other)}"
+    dest = _id(st, to)
+    if dest in st.entities and st.entities[str(dest)].kind == "place":
+        if who == pc:
+            return "REFUSED: the character goes to another place by travel, not by position"
+        tx.add(Event.of("position_set", source="engine", rule_id="12.4.1", entity=who, location=dest))
+        return f"done: {_name(st, who)} is now at {_name(st, dest)}"
+    return f"REFUSED: `to` is a band ({', '.join(conflict.BANDS)}) or a place id; got {to!r}"
+
+
 def _asks(ctx: TurnContext, t: Turn, asks: list[Any]) -> None:
     """Log each ask the DM says it granted or refused, with the mood it holds for that person (an observation for the
     owner to read: costly asks granted; never a gate, never blocks) [owner ruling 2026-10-10]."""
@@ -905,6 +1040,8 @@ def _change(ctx: TurnContext, t: Turn, c: dict[str, Any]) -> str:
         return f"done: {name} ({eid}) now held by {_name(tx.state, holder)}" + echo
     if kind in ("condition_add", "condition_remove"):
         return _condition(ctx, who, str(c.get("what") or ""), add=kind == "condition_add", pc=pc)
+    if kind == "position":
+        return _position(ctx, t, c)
     if kind == "fight":
         return _fight(ctx, who, pc, str(c.get("to") or ""))
     if kind == "npc_leaves":

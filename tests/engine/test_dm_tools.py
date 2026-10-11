@@ -126,11 +126,11 @@ def test_a_proposed_roll_pauses_on_the_offer_then_the_dm_narrates_the_result(tmp
     assert any(e.type == "frame_resolved" for e in game.store.events())
 
 
-def test_a_proposal_naming_no_one_takes_its_goal_from_the_dm_words_not_from_here(tmp_path: Path) -> None:
+def test_a_proposal_naming_no_one_takes_its_change_from_the_dm_words_not_from_here(tmp_path: Path) -> None:
     game, _ = to_play(tmp_path)
     roll = {"tool": "propose_roll", "goal": "Find the trail on the road", "verb": "verb.observe", "target": "none",
             "how": "reading the mud", "attribute": "wits", "difficulty": "hard", "why_uncertain": "rain",
-            "stakes": "risky", "nonlethal": False, "fail_cost": "none", "change_kind": "none", "change_what": "the trail",
+            "stakes": "risky", "nonlethal": False, "fail_cost": "none", "change_kind": "learn", "change_what": "the trail",
             "change_whom": ""}
 
     def run(ctx: Any, t: Any, tx: Any) -> Any:
