@@ -1,0 +1,85 @@
+{
+  "name": "Brakka Ironvein",
+  "summary": "Hill dwarf fighter 1, acolyte background",
+  "opening": "Brakka Ironvein served six years as a guard at the Temple of the Anvil Father in Greyhollow, a mining town cut into a cold mountainside. Three days ago three miners went down into the old north workings, which were sealed a generation ago, and none came back. Last night a fourth man came up out of the dark alone, babbling about lights that walk, then died before dawn. The town council will brick up the mine entrance at sunrise tomorrow, missing miners or not. The temple's prior, an old dwarf named Hessa, has asked Brakka to go down before then and bring back whoever can still be brought back. It is late afternoon, and Brakka stands at the mine mouth with a lantern borrowed from the temple.",
+  "level": 1,
+  "race": "Hill dwarf",
+  "class": "Fighter",
+  "background": "Acolyte",
+  "ac": 18,
+  "ac_note": "chain mail 16 + shield 2",
+  "speed": "25 ft (not reduced by heavy armor)",
+  "abilities": {
+    "STR": "15 (+2)",
+    "DEX": "10 (+0)",
+    "CON": "16 (+3)",
+    "INT": "8 (-1)",
+    "WIS": "14 (+2)",
+    "CHA": "12 (+1)"
+  },
+  "proficiency_bonus": 2,
+  "saving_throws": "STR +4*, DEX +0, CON +5*, INT -1, WIS +2, CHA +1 (* proficient)",
+  "skills": "Athletics +4, Insight +4, Perception +4, Religion +1; all others use the plain ability modifier",
+  "passive_perception": 14,
+  "senses": "darkvision 60 ft",
+  "languages": "Common, Dwarvish, Giant, Goblin",
+  "proficiencies": "all armor, shields, simple and martial weapons; battleaxe, handaxe, light hammer, warhammer; smith's tools",
+  "attacks": [
+    "Longsword: +4 to hit, 1d8+4 slashing (Dueling included); 1d10+2 if wielded in two hands (then no shield, no Dueling)",
+    "Light crossbow: +2 to hit, 1d8 piercing, range 80/320, loading, two-handed"
+  ],
+  "features": [
+    "Fighting Style (Dueling): +2 damage with a melee weapon held in one hand and no other weapon",
+    "Second Wind: bonus action, regain 1d10+1 HP; once per short rest",
+    "Dwarven Resilience: advantage on saves against poison, resistance to poison damage",
+    "Stonecunning: History checks about the origin of stonework: +3 total (double proficiency bonus)",
+    "Dwarven Toughness: +1 HP per level (included)",
+    "Shelter of the Faithful (Acolyte): free healing and care at temples of the Anvil Father; support from its priests"
+  ],
+  "hp": {
+    "max": 14,
+    "current": 14,
+    "temp": 0
+  },
+  "hit_dice": {
+    "die": "d10",
+    "max": 1,
+    "left": 1
+  },
+  "resources": {
+    "Second Wind": {
+      "max": 1,
+      "left": 1,
+      "recharge": "short"
+    }
+  },
+  "conditions": [],
+  "death_saves": {
+    "successes": 0,
+    "failures": 0
+  },
+  "xp": 0,
+  "coins_cp": 1500,
+  "items": {
+    "Chain mail (worn)": 1,
+    "Longsword": 1,
+    "Shield": 1,
+    "Light crossbow": 1,
+    "Crossbow bolts": 20,
+    "Backpack": 1,
+    "Bedroll": 1,
+    "Mess kit": 1,
+    "Tinderbox": 1,
+    "Torch": 10,
+    "Rations (1 day)": 10,
+    "Waterskin": 1,
+    "Hempen rope (50 ft)": 1,
+    "Holy symbol of the Anvil Father": 1,
+    "Prayer book": 1,
+    "Stick of incense": 5,
+    "Vestments": 1,
+    "Common clothes": 1,
+    "Belt pouch": 1,
+    "Hooded lantern (borrowed)": 1
+  }
+}

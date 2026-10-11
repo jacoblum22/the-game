@@ -1,0 +1,49 @@
+{
+  "name": "Pip Thistledown",
+  "summary": "Lightfoot halfling rogue 1, acolyte background",
+  "opening": "Pip Thistledown was left as a baby on the steps of the Sisters of the Sheaf, a harvest temple in Lowmarket, a crowded river city of barges and warehouses. Pip grew up sweeping its floors, learning its prayers, and quietly learning to pick the pockets of the people who came to hear them. Two nights ago someone broke into the temple and stole its silver reliquary, the one thing of value the sisters own. Mother Abenna, who raised Pip, believes it was taken to be sold and has asked Pip, of all people, to get it back without the city watch finding out how. Pip has one lead: a dockside fence called Old Corrow, who is said to hold court at the Drowned Lantern tavern after dark. It is just past sunset, and Pip is outside the tavern's door.",
+  "level": 1,
+  "race": "Lightfoot halfling",
+  "class": "Rogue",
+  "background": "Acolyte",
+  "ac": 14,
+  "ac_note": "leather armor 11 + DEX 3",
+  "speed": "25 ft",
+  "abilities": {"STR": "8 (-1)", "DEX": "17 (+3)", "CON": "14 (+2)", "INT": "12 (+1)", "WIS": "13 (+1)", "CHA": "11 (+0)"},
+  "proficiency_bonus": 2,
+  "saving_throws": "STR -1, DEX +5*, CON +2, INT +3*, WIS +1, CHA +0 (* proficient)",
+  "skills": "Stealth +7 (expertise), Sleight of Hand +5, Perception +3, Insight +3, Religion +3, Deception +2; all others use the plain ability modifier",
+  "passive_perception": 13,
+  "senses": "normal",
+  "languages": "Common, Halfling, Elvish, Dwarvish, Thieves' Cant",
+  "proficiencies": "light armor; simple weapons, hand crossbows, longswords, rapiers, shortswords; thieves' tools +7 (expertise)",
+  "attacks": [
+    "Rapier: +5 to hit, 1d8+3 piercing (finesse)",
+    "Shortbow: +5 to hit, 1d6+3 piercing, range 80/320, two-handed",
+    "Dagger (2): +5 to hit, 1d4+3 piercing, finesse, light, thrown 20/60"
+  ],
+  "features": [
+    "Sneak Attack: once per turn, +1d6 damage on a hit with a finesse or ranged weapon if the attack has advantage, or if an enemy of the target is within 5 ft of it and Pip doesn't have disadvantage",
+    "Expertise: Stealth and thieves' tools",
+    "Thieves' Cant: secret language and signs of thieves",
+    "Lucky: when Pip rolls a natural 1 on an attack roll, ability check or saving throw, reroll the die and use the new roll",
+    "Brave: advantage on saves against being frightened",
+    "Halfling Nimbleness: can move through the space of any creature larger than Pip",
+    "Naturally Stealthy: can try to hide when obscured only by a creature at least one size larger",
+    "Shelter of the Faithful (Acolyte): free healing and care at temples of the Sheaf; support from its sisters"
+  ],
+  "hp": {"max": 10, "current": 10, "temp": 0},
+  "hit_dice": {"die": "d8", "max": 1, "left": 1},
+  "resources": {},
+  "conditions": [],
+  "death_saves": {"successes": 0, "failures": 0},
+  "xp": 0,
+  "coins_cp": 1500,
+  "items": {
+    "Leather armor (worn)": 1, "Rapier": 1, "Shortbow": 1, "Arrows": 20, "Quiver": 1, "Dagger": 2,
+    "Thieves' tools": 1, "Backpack": 1, "Bag of ball bearings": 1, "String (10 ft)": 1, "Bell": 1, "Candle": 5,
+    "Crowbar": 1, "Hammer": 1, "Piton": 10, "Hooded lantern": 1, "Flask of oil": 2, "Rations (1 day)": 5,
+    "Tinderbox": 1, "Waterskin": 1, "Hempen rope (50 ft)": 1, "Holy symbol of the Sheaf": 1, "Prayer book": 1,
+    "Stick of incense": 5, "Vestments": 1, "Common clothes": 1, "Belt pouch": 1
+  }
+}

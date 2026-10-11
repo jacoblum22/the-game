@@ -1,0 +1,113 @@
+{
+  "name": "Wren Fennimore",
+  "summary": "Rock gnome wizard 1, acolyte background",
+  "opening": "Wren Fennimore keeps the archive at the Lantern House, a small temple of the god of lost things that collects old books, maps and letters. A week ago the temple's bell-keeper in Mirefold, a fen village two days' walk away, stopped sending her monthly letters. Yesterday a peat-cutter from Mirefold arrived at the temple door, frightened, saying the village bells now ring by themselves every night and that the bell-keeper has locked herself in the bell tower and won't come down. The high keeper has sent Wren to find out what is happening and to bring back the tower's old record book, which the temple wants kept safe. It is a grey morning, and Wren has just reached the edge of Mirefold on the causeway road, where the reeds are taller than a gnome.",
+  "level": 1,
+  "race": "Rock gnome",
+  "class": "Wizard",
+  "background": "Acolyte",
+  "ac": 11,
+  "ac_note": "no armor: 10 + DEX 1; Mage Armor makes it 14",
+  "speed": "25 ft",
+  "abilities": {
+    "STR": "8 (-1)",
+    "DEX": "13 (+1)",
+    "CON": "15 (+2)",
+    "INT": "17 (+3)",
+    "WIS": "12 (+1)",
+    "CHA": "10 (+0)"
+  },
+  "proficiency_bonus": 2,
+  "saving_throws": "STR -1, DEX +1, CON +2, INT +5*, WIS +3*, CHA +0 (* proficient)",
+  "skills": "Arcana +5, Investigation +5, Religion +5, Insight +3; all others use the plain ability modifier",
+  "passive_perception": 11,
+  "senses": "darkvision 60 ft",
+  "languages": "Common, Gnomish, Draconic, Celestial",
+  "proficiencies": "daggers, darts, slings, quarterstaffs, light crossbows; tinker's tools",
+  "attacks": [
+    "Fire Bolt (cantrip): +5 spell attack, 1d10 fire, range 120 ft; ignites flammable objects not worn or carried",
+    "Quarterstaff: +1 to hit, 1d6-1 bludgeoning (1d8-1 in two hands)"
+  ],
+  "spellcasting": {
+    "ability": "INT",
+    "save_dc": 13,
+    "attack_bonus": 5,
+    "cantrips": [
+      "Fire Bolt",
+      "Mage Hand",
+      "Light"
+    ],
+    "spellbook": [
+      "Burning Hands",
+      "Detect Magic",
+      "Mage Armor",
+      "Magic Missile",
+      "Shield",
+      "Sleep"
+    ],
+    "prepared": [
+      "Mage Armor",
+      "Magic Missile",
+      "Shield",
+      "Sleep"
+    ],
+    "notes": "Prepare 4 spells from the spellbook after a long rest. Ritual Casting: Detect Magic can be cast as a ritual (10 minutes longer, no slot) straight from the spellbook, prepared or not."
+  },
+  "features": [
+    "Arcane Recovery: once per day, when finishing a short rest, regain one level-1 spell slot",
+    "Gnome Cunning: advantage on INT, WIS and CHA saving throws against magic",
+    "Artificer's Lore: History checks about magic items, alchemical objects or technological devices: +7 total (double proficiency bonus)",
+    "Tinker: with tinker's tools, can spend 1 hour and 10 gp of materials to build a Tiny clockwork toy, fire starter or music box",
+    "Shelter of the Faithful (Acolyte): free healing and care at temples of the god of lost things; support from its keepers"
+  ],
+  "hp": {
+    "max": 8,
+    "current": 8,
+    "temp": 0
+  },
+  "hit_dice": {
+    "die": "d6",
+    "max": 1,
+    "left": 1
+  },
+  "spell_slots": {
+    "1": {
+      "max": 2,
+      "left": 2
+    }
+  },
+  "resources": {
+    "Arcane Recovery": {
+      "max": 1,
+      "left": 1,
+      "recharge": "long"
+    }
+  },
+  "conditions": [],
+  "death_saves": {
+    "successes": 0,
+    "failures": 0
+  },
+  "xp": 0,
+  "coins_cp": 1500,
+  "items": {
+    "Quarterstaff": 1,
+    "Component pouch": 1,
+    "Spellbook": 1,
+    "Tinker's tools": 1,
+    "Backpack": 1,
+    "Holy symbol of the god of lost things": 1,
+    "Prayer book": 1,
+    "Stick of incense": 5,
+    "Vestments": 1,
+    "Common clothes": 1,
+    "Belt pouch": 1,
+    "Waterskin": 1,
+    "Bedroll": 1,
+    "Mess kit": 1,
+    "Tinderbox": 1,
+    "Torch": 10,
+    "Rations (1 day)": 10,
+    "Hempen rope (50 ft)": 1
+  }
+}
