@@ -1,7 +1,8 @@
 # The Game
 
-A TTRPG run by an AI Dungeon Master. The DM model reads our own rules and follows them, and calls tools for the parts
-that must be exact: rolls, damage and state. The rules are our own system, designed to be run by an AI.
+A TTRPG run by an AI Dungeon Master. The DM model follows the rules and calls tools for the parts that must be
+exact: rolls, damage and state. For the MVP the rules are D&D 5e (2014, SRD 5.1 content only); a system of our own,
+designed for an AI DM, may replace it later. See `PLAN.md`.
 
 Fresh start, 2026-10-11.
 - `LESSONS.md`: what the first build taught us.
