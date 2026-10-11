@@ -72,13 +72,14 @@ class Turn:
     log: list[tuple[str, str, str]] = field(default_factory=list)  # (tool, args, output)
     stats: dict[str, Any] = field(default_factory=lambda: {
         "tool_calls": 0, "steps": 0, "refusals": [], "moods": [], "clues": [], "rolls": [], "dropped": [],
-        "scene_ends": [], "world": {"foe_turns": [], "facts": [], "reasked": 0},
+        "scene_ends": [], "world": {"foe_turns": [], "facts": [], "reasked": 0, "foe_calls": 0},
         "said": [], "told_dropped": [],
         "defaults": []})  # [spec 033 D3] `not_chosen:{field}`: each detail the DM left out and code defaulted  # [spec 032 P5] the told records, what was dropped, the checks
     said_raw: list[Any] = field(default_factory=list)  # the DM's final-answer `said` list, as written
     told: list[dict[str, Any]] = field(default_factory=list)  # the said entries written (TurnRecord.said's shape)
     beats: list[Any] = field(default_factory=list)  # the BeatOutcomes of this turn (the world step reads their status)
     world_done: bool = False  # the world step runs once per exchange
+    cost_form: str = ""  # [spec 033 P3] the footing option the DM picked in its last answer ("" = none)
     paused: bool = False
     made: list[str] = field(default_factory=list)  # people/creatures the resolver made this turn (told to the DM)
     aliases: dict[str, str] = field(default_factory=dict)  # an id the DM chose for a `new_npc` -> the id the game gave
@@ -131,8 +132,9 @@ def _run(ctx: TurnContext, message: str, *, choice: str | None) -> Outcome:
                 res = _resume(ctx, t.env, pause, choice, t.oof)
                 _take(t.rec, res, t.oof, None)
                 t.beats += res.outcomes
+                _drain(t)  # [spec 033 D3] what code defaulted while it rolled
                 _harm_followups(ctx, t.env, t.rec, t.oof)
-                lead = f"The player picked: {label}.\n" + _outcomes_text(ctx, t.rec, t.oof)
+                lead = f"The player picked: {label}.\n" + _outcomes_text(ctx, t.rec, t.oof) + _cost_block(ctx.state)
                 lead += _world_text(_world(ctx, t))  # [spec 032 P4] the foes answer and time passes before the DM writes
             elif pause is not None and (pause.detail or {}).get("stage") in ("offer", "warning", "redirect",
                                                                                  "near_miss", "plan"):
@@ -148,6 +150,7 @@ def _run(ctx: TurnContext, message: str, *, choice: str | None) -> Outcome:
                 facts = _world(ctx, t)  # a no-op on an answer turn (it ran before the loop)
                 if facts and tx.state.open_pause() is None:  # one more call, only when the world produced a fact (F20)
                     passage = _reask(ctx, t, message if choice is None else "", exchanges, lead, passage, facts)
+            _footing(ctx, t)  # [spec 033 DL-01-60] the DM's pick of the deferred footing form lands
             _sync_scene(ctx, t)
             if tx.state.open_pause() is None:
                 _turn_end(ctx, t.rec, t.oof)
@@ -258,6 +261,7 @@ def _dm_loop(ctx: TurnContext, t: Turn, message: str, exchanges: list[tuple[str,
                         default={"calls": [], "passage": str(data.get("passage") or ""), "said": [], "asks": [],
                                  "cost_form": ""})
         data = dict(res.data or {})
+        t.cost_form = str(data.get("cost_form") or "")
         t.stats["steps"] += 1
         calls = [c for c in data.get("calls") or [] if isinstance(c, dict)][:PER_STEP]
         if final or not calls:
@@ -276,6 +280,16 @@ def _dm_loop(ctx: TurnContext, t: Turn, message: str, exchanges: list[tuple[str,
     return str(data.get("passage") or "")
 
 
+def foe_message(ctx: TurnContext, t: Turn, legal: dict[str, list[str]]) -> str:
+    """[spec 033 D2] The foe call's message: the situation, what just settled, and the FIGHT block with each able foe's
+    legal acts."""
+    pc = t.rec.pc
+    lead = _outcomes_text(ctx, t.rec, t.oof) + "\n" + "\n".join(_fight_block(ctx.state, pc, legal))
+    note = ("Choose what each foe listed does now: `act` from its own acts, `target` (an id; empty is the character) "
+            "and `nonlethal`. Write no passage.")
+    return _message(ctx, t, "", [], lead, note)
+
+
 def _reask(ctx: TurnContext, t: Turn, message: str, exchanges: list[tuple[str, str]], lead: str, passage: str,
            facts: list[str]) -> str:
     """One more DM call, no tools: the final passage, told what the world did after the draft (spec 032 P4)."""
@@ -288,6 +302,7 @@ def _reask(ctx: TurnContext, t: Turn, message: str, exchanges: list[tuple[str, s
                     recorder=ctx.record_call, default={"calls": [], "passage": passage, "said": t.said_raw, "asks": [],
                                                        "cost_form": ""})
     t.stats["steps"] += 1
+    t.cost_form = str((res.data or {}).get("cost_form") or "") or t.cost_form
     t.stats["world"]["reasked"] += 1
     t.said_raw = list((res.data or {}).get("said") or [])  # the final passage replaces the draft, and its lines
     return str((res.data or {}).get("passage") or passage)
@@ -305,6 +320,41 @@ def _world(ctx: TurnContext, t: Turn) -> list[str]:
         _open_scene(ctx, "time_jump")
         facts.append("Time has jumped on; a new scene begins here.")
     return facts
+
+
+def _drain(t: Turn) -> None:
+    """[spec 033 D3] The `not_chosen:{field}` lines the resolver logged on `PipelineEnv.defaults` join the turn's stats."""
+    t.stats["defaults"] += t.env.defaults
+    t.env.defaults.clear()
+
+
+def _cost_block(st: Any) -> str:
+    """[spec 033 DL-01-60] COST TO SHAPE: the footing forms that can land, after a failed roll's severity is known. The
+    DM picks one in `cost_form` (its answer); omitted or not listed, code takes the first and logs it."""
+    from engine.resolve import costs
+
+    pend = costs.pending_footing(st)
+    if pend is None:
+        return ""
+    words = pend.get("words") or {}
+    return (f"\nCOST TO SHAPE: the roll cost the character their footing (severity {pend['severity']}). Pick the form it "
+            "takes in `cost_form`, one id below; the game writes exactly that:\n"
+            + "\n".join(f"- {o}: {words.get(o, o)}" for o in pend["options"]))
+
+
+def _footing(ctx: TurnContext, t: Turn) -> None:
+    """[spec 033 DL-01-60] Write the footing form the DM picked (`apply_footing`); log `not_chosen:cost_form` when code
+    took the default. Held back while a pause is open (the DM is shown the options on the answer that follows)."""
+    from engine.resolve import costs
+
+    tx = ctx.need_tx()
+    pend = costs.pending_footing(tx.state)
+    if pend is None or tx.state.open_pause() is not None:
+        return
+    _, defaulted = costs.apply_footing(tx, ctx.rules, pend, t.cost_form or None)
+    if defaulted:
+        _default(t, "cost_form")
+    t.cost_form = ""
 
 
 def _world_text(facts: list[str]) -> str:
@@ -430,8 +480,10 @@ def _not_here(st: Any, here: list[str], cap: int = 6) -> list[str]:
     return out[-cap:]
 
 
-def _fight_block(st: Any, pc: str | None) -> list[str]:
-    """The fight, in words (spec 032 G7): each foe's state and band to the character, and the character's own state."""
+def _fight_block(st: Any, pc: str | None, legal: dict[str, list[str]] | None = None) -> list[str]:
+    """The fight, in words (spec 032 G7): each foe's state and band to the character, and the character's own state.
+    [spec 033 D2] With `legal` (the foe call): only the foes able to act, each with its conditions and the acts legal
+    for it now (T-06-16)."""
     from engine.resolve.conflict import record as conflict
     from engine.resolve.conflict import state_words
 
@@ -439,11 +491,18 @@ def _fight_block(st: Any, pc: str | None) -> list[str]:
     if not rec or not pc:
         return []
     pos = st.positions.get(pc)
-    out = ["FIGHT: a fight is on. After each move of the character the game has the foes act and tells you what they "
-           "did; a blow's result is never yours to write. The character's attack is a `propose_roll`."]
+    out = ["FIGHT: a fight is on. After each move of the character settles you are asked what each foe does, from the "
+           "acts legal for it; the game rolls it and tells you the result, which is never yours to write. The "
+           "character's attack is a `propose_roll`."]
     for f in rec.get("foes", []):
+        if legal is not None and f not in legal:
+            continue
         band = str((pos.band_to.get(f) if pos else None) or "near").removeprefix("band.")
-        out.append(f"- {f}: {_name(st, f)}, {state_words(st, f)}; {band} to the character")
+        line = f"- {f}: {_name(st, f)}, {state_words(st, f)}; {band} to the character"
+        if legal is not None:
+            conds = ", ".join(c.condition_id.removeprefix("cond.") for c in st.conditions_on(f)) or "none"
+            line += f"; conditions: {conds}; acts now: {', '.join(legal[f])}"
+        out.append(line)
     out.append(f"- the character is {state_words(st, pc)}")
     return out
 
@@ -641,6 +700,10 @@ def _propose_roll(ctx: TurnContext, t: Turn, c: dict[str, Any]) -> str:
     stated = _stated(ctx, t, c, verb, target)
     if isinstance(stated, str):
         return stated
+    if str(c.get("change_kind") or "") != "move_to":  # a move is the way to get in reach
+        why = _reach(ctx, t, verb, target, stated)
+        if why:
+            return why
     kind = str(c.get("change_kind") or "none")
     raw_t = str(c.get("target") or "").strip()
     what, whom = (target if raw_t and str(c.get(k) or "").strip() == raw_t else _id(st, c.get(k))
@@ -667,6 +730,7 @@ def _propose_roll(ctx: TurnContext, t: Turn, c: dict[str, Any]) -> str:
     t.env.proposal = c  # what the code framer reads (difficulty, attribute, stakes)
     res = run_beats(t.env, [BeatPlan(beat=beat, intent_verbs=[str(verb or "").removeprefix("verb.")])])
     _take(t.rec, res, t.oof, None)
+    _drain(t)  # [spec 033 D3]
     t.beats += res.outcomes
     t.stats["rolls"].append({"goal": goal, "verb": verb, "status": [o.status for o in res.outcomes]})
     out = res.outcomes[-1] if res.outcomes else None
@@ -682,8 +746,30 @@ def _propose_roll(ctx: TurnContext, t: Turn, c: dict[str, Any]) -> str:
     if out.status == "no_roll":
         return f"NO ROLL NEEDED ({e.gate_words}): it happens." + (f" Recorded: {e.change}" if e.change else "")
     if out.status == "resolved":
-        return "ROLLED (a safe roll, made at once): " + _outcomes_text(ctx, t.rec, t.oof)
+        return "ROLLED (a safe roll, made at once): " + _outcomes_text(ctx, t.rec, t.oof) + _cost_block(tx.state)
     return f"NOT POSSIBLE AS PROPOSED ({out.status}): {e.gate_words}"
+
+
+def _reach(ctx: TurnContext, t: Turn, verb: str | None, target: str | None, stated: Any) -> str:
+    """[spec 033 T032, 06.4.3] A melee Strike, a Grapple or a Force needs the target in reach: the recorded band
+    (`conflict._band`) is one the weapon covers (engaged; a Strike's weapon bands and a thrown weapon's bands, T-06-6).
+    A rule's arithmetic on recorded state, so it is refused, not defaulted. The message names the move to state first."""
+    from engine.resolve import conflict
+
+    st = ctx.state
+    pc = t.rec.pc or ""
+    if verb not in ("verb.strike", "verb.grapple", "verb.force") or target is None or target == pc             or st.entities[target].kind not in ("npc", "adversary", "companion"):
+        return ""
+    band = conflict._band(st, pc, target)
+    ok = {"engaged"}
+    if verb == "verb.strike":
+        w = conflict.weapon_of(ctx.rules, st, stated.weapon)
+        ok = {str(b).split()[0].removeprefix("band.") for b in [*(w.get("bands") or ()), *(w.get("thrown_bands") or ())]}
+    if band in ok:
+        return ""
+    return (f"REFUSED: {_name(st, target)} is not in reach (" + (f"{band} to the character" if band else "no position is recorded")
+            + "). State the move first: `change` position `to` engaged with `what` " + target + " when nothing stops it, or a "
+            "`propose_roll` with change_kind move_to (change_what a band) when someone contests it; then make the attack.")
 
 
 def _default(t: Turn, field_: str) -> None:

@@ -166,7 +166,7 @@ ALLOW: dict[str, dict[str, tuple[str, str]]] = {
     },
     "engine.resolve.conflict": {
         "end_hold:words:resolve.change.HOLDS": ("P", "enum or table of code ids"),
-        "foe_beat:words:BANDS": ("pending:P3", "R3: the DM picks the foe's act"),
+        "foe_beat:words:BANDS": ("P", "enum or table of code ids"),
         "holds:words:resolve.change.HOLDS": ("P", "enum or table of code ids"),
         "strike_harm:words:harm.apply.SEVERITIES": ("P", "enum or table of code ids"),
     },

@@ -142,7 +142,10 @@ def test_x5_two_foes_answer_one_each(tmp_path: Path) -> None:
 # ------------------------------------------------------------------------------------------- K: every foe action kind
 
 
-def one_turn(game: Game, nat: int | None = None) -> list[str]:
+def one_turn(game: Game, nat: int | None = None, pick: tuple[str, str] | None = None) -> list[str]:
+    """One foe's turn. `pick` = (foe, act): the DM's choice for it [spec 033 D2]; none = the DM omits it (the default)."""
+    if pick is not None:
+        game.ctx.model.push(DM, {"foes": [{"foe": pick[0], "act": pick[1], "target": "", "nonlethal": False}]})  # type: ignore[union-attr]
     _, t = step(game, nat=nat)
     did = [x["did"] for x in t.stats["world"]["foe_turns"]]
     assert len(did) == 1, did  # one foe, one act
@@ -168,7 +171,7 @@ def test_k1_to_k3_a_held_foe_fails_succeeds_or_tears_free(tmp_path: Path) -> Non
         st = game.store.state
         line = conflict._line(RULES, st.entities[foe])
         n = nat_for(want, int(line["atk"]), _defense(RULES, st, pc, "might", "deed.martial"))
-        assert words in one_turn(game, n)[0], want
+        assert words in one_turn(game, n, (foe, "break_free"))[0], want  # the DM picks break free for the held foe
 
 
 def test_k4_a_prone_foe_stands(tmp_path: Path) -> None:

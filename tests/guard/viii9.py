@@ -67,7 +67,8 @@ DENY: dict[str, Entry] = {
     _R + "weapon": _e("D5", "P2a", mode="raise"), _R + "strike_harm_by_words": _e("D5", "P2a", mode="raise"),
     _C + "_VERB_GOAL": _e("A11 A12", "P2a", mode="raise"), _C + "typed_goal": _e("A11 A12", "P2a", mode="raise"),
     # P3: the foe's choice (R3)
-    _R + "foe_beat": _e("A7 A8 A9", "P3"), "engine.dm.world_step.foes_act": _e("A7 A8 A9", "P3"),
+    _R + "foe_beat": _e("A7 A8 A9", "P3", mode="raise"),
+    "engine.dm.world_step.foes_act": _e("A7 A8 A9", "P3", mode="raise"),
     # P5: leads and witnesses are told, never spawned (R4)
     "engine.world.pacing.inject_lead": _e("A19", "P5"), "engine.gen.case.audit_cases": _e("A20", "P5"),
     # P2b: beat-text decisions (R7), search by id (R10)

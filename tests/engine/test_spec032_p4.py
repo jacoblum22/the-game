@@ -110,9 +110,10 @@ def test_f1_to_f6_the_foe_turn_by_state(tmp_path: Path) -> None:
 
 
 def test_f1_f2_a_held_foe_breaks_free_and_a_prone_foe_stands(tmp_path: Path) -> None:
-    game, _ = play(tmp_path)
+    game, model = play(tmp_path)
     foe = start_fight(game)
     pc = who(game.store.state)
+    model.push(DM, {"foes": [{"foe": foe, "act": "break_free", "target": "", "nonlethal": False}]})  # [spec 033 D2]
 
     def hold(ctx: Any, t: Any, tx: Any) -> None:
         tx.add_all(apply_condition(tx.state, tx.mint, ctx.rules, foe, "cond.grabbed", source={"kind": "x", "entity": pc}).events)
@@ -121,7 +122,7 @@ def test_f1_f2_a_held_foe_breaks_free_and_a_prone_foe_stands(tmp_path: Path) -> 
     facts, _ = step(game, nat=20)
     assert "free" in facts[0]  # F1
     game2, _ = play(tmp_path / "b")
-    foe2 = start_fight(game2)
+    foe2 = start_fight(game2)  # no pick: the default is the first legal row of beh.default_melee, which is `stand`
 
     def prone(ctx: Any, t: Any, tx: Any) -> None:
         tx.add_all(apply_condition(tx.state, tx.mint, ctx.rules, foe2, "cond.prone", source={"kind": "x"}).events)
@@ -214,11 +215,13 @@ def test_f16_f21_an_npc_or_a_creature_turns_on_the_pc_and_the_foe_strikes_in_the
     who = npc_here(game)
     model.push(DM, {"calls": [change(kind="fight", who=who)], "passage": "He squares up to you.", "said": [], "asks": []},
                {"calls": [], "passage": "He squares up to you.", "said": [], "asks": []},
+               {"foes": [{"foe": who, "act": "close_in", "target": "", "nonlethal": False}]},  # the foe call [spec 033 D2]
                {"calls": [], "passage": "He lunges; the blow is dealt.", "said": [], "asks": []})
     r = game.submit("I say something he does not like.")
     stats = stats_of(game, r)
     assert fighting(game) and len(stats["world"]["foe_turns"]) == 1 and stats["world"]["reasked"] == 1
-    assert stats["model_calls"] == 3  # the tool step, the draft, and the one re-ask; none more
+    assert stats["model_calls"] == 4  # the tool step, the draft, the foe call, and the one re-ask; none more
+    assert stats["world"]["foe_calls"] == 1 and stats["world"]["foe_turns"][0]["picked_by"] == "dm"
     assert r.fiction == "He lunges; the blow is dealt."
     # F21: a creature is a foe too
     game2, model2 = play(tmp_path / "b")

@@ -62,32 +62,37 @@ def world_step(ctx: TurnContext, record: AdjudicationRecord, *, beats: Sequence[
     beat_time(ctx, record, beats, fought=bool(acted))
 
 
-def _foe_turn(ctx: TurnContext, record: AdjudicationRecord, foe: str, oof: list[dict[str, str]] | None) -> None:
+def _foe_turn(ctx: TurnContext, record: AdjudicationRecord, foe: str, oof: list[dict[str, str]] | None, *,
+              do: Any = None, target: str | None = None, ref: str = "beh.default_melee") -> None:
     # rule: 06.9.2
-    """One foe's beat (engine/resolve/conflict.py), its act for the narration and its RESULT line for the player."""
+    """One foe's beat (engine/resolve/conflict.py), its act for the narration and its RESULT line for the player.
+    [spec 033 P3] `do` (dm-tools: the DM's pick, engine/resolve/foe_act.py) replaces the pipeline's own choice, aimed at
+    `target` (default the PC)."""
     from engine.dm.oof import changed_line
     from engine.resolve.conflict import foe_beat
 
     tx = ctx.need_tx()
     start = len(tx.events)
-    said, res = foe_beat(ctx.time_ctx(), ctx.rng, foe, record.pc or "")
-    record.npc_actions.append(NpcActionEntry(npc=foe, action=said, source="behavior", source_ref="beh.default_melee"))
+    who = target or record.pc or ""
+    said, res = (do or foe_beat)(ctx.time_ctx(), ctx.rng, foe, who)
+    record.npc_actions.append(NpcActionEntry(npc=foe, action=said, source="behavior", source_ref=ref))
     if res is not None and oof is not None:
         # whose numbers moved: "<foe> strikes · hit · Changed: Vitality 4 → 0" read as the foe's Vitality (playtest
         # 20261008-135049); the PC's fall to Down moves no number, so it is said
-        changed = changed_line(ctx.state, record.pc or "", tx.events[start:])
-        down = "you go Down" if res.transition == "down" else ""
+        changed = changed_line(ctx.state, who, tx.events[start:])
+        down = ("you go Down" if who == record.pc else f"{_name(ctx.state, who)} goes Down") if res.transition == "down" else ""
         # the wound load a blow added while Staggered (07.2.4): one heavy blow at 0/3 is a knockout (problem 13)
         added = int((res.wound or {}).get("load") or 0)
         load = (f"wound load {res.load - added} → {res.load}"
                 if added and res.transition not in ("dying_step", "threshold") else "")
         oof.append({"kind": "RESULT", "text": " · ".join(x for x in (
-            f"[RESULT] {_name(ctx.state, foe)} strikes you", "hit", changed, load, down) if x)})
+            f"[RESULT] {_name(ctx.state, foe)} strikes {'you' if who == record.pc else _name(ctx.state, who)}",
+            "hit", changed, load, down) if x)})
     if res is not None and res.threshold and oof is not None:  # rule: PR-07-5
         from engine.dm.turn import _env, _harm_followups
 
         env = _env(ctx)
-        env.threshold_due.append(record.pc or "")
+        env.threshold_due.append(who)
         _harm_followups(ctx, env, record, oof)
 
 
