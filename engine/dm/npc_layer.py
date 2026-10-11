@@ -33,7 +33,7 @@ _TRADE = re.compile(r"\b(buy|buys|sell|sells|price|prices|cost|costs|coin|coins|
 # a creature, not a person: no activity from the people's tables, never addressed (12.11.9 is for people).
 # [spec 032 P3] beast words added: the DM's "the pale beast" is a creature, not a walk-on person.
 # ponytail: a word list; a creature-kind field on mentioned entities would replace it
-ANIMAL = re.compile(r"^(?:[\w'-]+\s+){0,2}?(?P<head>dogs?|hounds?|curs?|pupp(?:y|ies)|cats?|kittens?|horses?|ponies|pony|"
+ANIMAL = re.compile(r"^(?:[\w'-]+\s+){0,2}?(?P<head>[a-z]*dogs?|[a-z]*hounds?|curs?|pupp(?:y|ies)|cats?|kittens?|horses?|ponies|pony|"
                     r"mules?|donkeys?|goats?|sheep|cows?|oxen|ox|pigs?|hens?|chickens?|geese|goose|ducks?|birds?|"
                     r"crows?|ravens?|rats?|mice|mouse|wolf|wolves|hawks?|falcons?|owls?|beasts?|creatures?|monsters?|brutes?|animals?|bears?|boars?)"
                     r"(?:$|[,;]|\s+(?:at|of|with|in|on|by|from|that|who|always)\b)", re.I)  # the head noun only

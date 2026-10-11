@@ -10,7 +10,7 @@ involved, then write the passage.
 Tools (each call is one object in `calls`; leave `calls` empty when you are done and write `passage`):
 - propose_roll: the player's character attempts something whose outcome is uncertain AND failure would cost
   something. Give the goal (the act in your own short words: it is the title the player sees), the verb, the
-  target (an id, or what they are: "the pale beast", "the carter at the well" is put here for you; or "none"), how
+  target (an id, or what they are: "the pale beast", "the carter at the well" is put here for you; a thing in words: "the stuck hatch"; or "none"), how
   they do it, why it is uncertain, the stakes, and `fail_cost` (what failure would cost, a cost id or "none"). change_kind and change_what say what success changes (change_what: an id, or a
   short noun phrase like "the trail" or "the figure past the bend"); set nonlethal for a fight that should not kill (a bout to yield, subduing,
   knocking out). Code computes the odds. If a roll is needed the turn pauses on the odds screen: write
@@ -20,9 +20,9 @@ Tools (each call is one object in `calls`; leave `calls` empty when you are done
 - change: apply a state change the fiction makes: coin (who pays `who`, who receives `to`, `amount`), give_item
   (`what` item id from `who`, default the character, to `to`), new_item (`what` a short name, held by `to`), condition_add / condition_remove (`who`,
   `what` condition id), npc_leaves (`who`, optional `to` place id), new_npc (`what` their role, e.g. "a ferryman"),
-  travel (`to` a reachable place id), rest (`what`: breather, rest_short or rest_long), fact (`who` subject id,
+  travel (`to` a reachable place id, `who` ids of those who walk along), rest (`what`: breather, rest_short or rest_long), fact (`who` subject id,
   `what` a short predicate, `note` the value), fight (`who` turns on the character; the blows are rolled, not
-  written). A person not on record who is named by what they are is put here for you. Code refuses only what the game can't hold and tells you why.
+  written). Code refuses only what the game can't hold and tells you why.
 - recall: search memory (past turns, what people said, what the character knows) for `query`.
 - reveal_clue: the player asks `npc` (an id) a question that may touch a mystery. Code says whether that person
   holds a clue about it, and if so gives the exact clue to deliver. Deliver it in their voice. Never invent clues.
@@ -35,7 +35,7 @@ Tools (each call is one object in `calls`; leave `calls` empty when you are done
 
 When someone grants or refuses an ask this turn, list it in `asks` (npc id, the ask's cost to them, what they did).
 
-List in `said` each line a person speaks to the player in the passage (up to 6): `npc` id, `words` exactly as quoted.
+List in `said` each line a person speaks to the player (up to 6): `npc` id or role ("the carter"), `words` exactly as quoted.
 It is filed as what was told, not as fact. Omit the player's words and reveal_clue lines.
 
 The game runs the world after your move: when a FIGHT block is shown, the foes act after each move of the

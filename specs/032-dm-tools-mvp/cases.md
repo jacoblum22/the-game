@@ -177,3 +177,51 @@ The 12 cells of T-12-19 (3 moods x 4 costs): N1-N12, plus the 4 repeat-ask probe
 both arms. Measures: M1 grant rate by mood and cost, M2 ceiling violations (the pushover rate), M3 in-character
 refusals, M5 repeat caving, M8 voice distinctness, M10 leaks. The cost of each ask is **fixed by the cell** (not read
 from the DM's `asks`), so the ceiling log's weakness (the DM listing its own asks) cannot hide a violation.
+
+## P8a. The people and things the DM names (written before the code; the 24 held-out items are SEEN and are not tuned on)
+
+Traced causes (heldout.json, P7 saves): H02 the DM made the seller with `new_npc who=npc.eel_seller` (the game gave her `npc.orla_tanner`),
+then aimed the roll at `npc.eel_seller`: `_party` returns an id-shaped string as written, so it was refused. H03/H04 `PERSON_VERBS` is a hand
+list (talk, strike, grapple, help): sneak and observe are not in it, so "the rider on the grey horse" is returned as written and refused. H06
+force is not in it either: "the stuck hatch" refused, and a strike at a hatch would have been made a person. H01 the wolfhound was made, but as
+a human NPC ("Lom Underhill", role wolfhound): `ANIMAL` matches the head noun only after a space, so "wolfhound" is no creature (the scorer's
+"no hound entity" is that). The three P7 `said` drops: `_told` never makes a speaker; `travel` moves only the PC (Dunbert).
+Rule being built: each verb's target kinds come from `rules/data/basic_verbs.yaml` (the `against` text and the `targets` knob: person,
+object, both with the first-named kind first), the DM's `change_kind` slot kinds (`resolution.yaml#intended_change`) break a tie, and an object or
+a feature is never refused: the roll is on the obstacle named in words. A person or creature named in prose is made as a walk-on.
+
+Enumerated from the data: the 15 verbs x {a person phrase, a creature phrase, an object phrase} = 45 cells; the 4 `said` speaker shapes
+(id, role phrase, invented id, name) x 5 states (here, elsewhere, dead, not in the passage, repeated).
+- P1 data: `target_kinds` for the 15 verbs equals what the YAML says (talk, grapple, sneak, help person-only; strike, force, setup person then
+  object; observe, handle, move object then person; exert, endure object; recall, evade, ready none).
+- P2 matrix: 15 verbs x person ("the sentry on the wall-walk"), creature ("the wolfhound"), object ("the stuck hatch") through `_party`+`_propose_roll`:
+  never "no one or nothing on record"; a person phrase for a verb that takes a person is one walk-on; a creature is `mind: animal`; an object
+  phrase for an object-first verb makes no entity.
+- P3 real (H02 replay): `new_npc who=npc.eel_seller` then `propose_roll talk target=npc.eel_seller`: the roll targets the one seller made, not a second.
+- P4 edge: an invented-looking id never made by `new_npc` (`npc.rider_on_the_ridge`, observe; `npc.watch_sentry`, sneak) is the DM naming a walk-on.
+- P5 edge: an invented object id (`object.stuck_hatch`, force) is not refused and makes no person.
+- P6 edge: an invented id whose words match someone here (`npc.harbour_watch` -> Sela Vey) is that person, not a second one.
+- P7 made-up: strike at "the stuck door" with `change_kind=open` is an object (no person called "stuck door").
+- P8 made-up: "the wolfhound", "a sheepdog", "the deerhound" are creatures; "the houndsman", "the dogcatcher", "the horse trader" are people.
+- P9 real (J, P7 explorer): `said` by "the carter at the trough", present in the passage and not on record: made as a walk-on, the line is filed.
+- P10 edge: `said` by an invented id (`npc.longbridge_man`) whose words are in the passage: made, filed.
+- P11 edge: `said` by a role phrase that is nowhere in the passage ("the ghost of nobody"): dropped, "no one on record".
+- P12 edge: `said` by someone recorded elsewhere or dead (by name or by the role phrase): dropped ("not here" / "dead"), no second person made.
+- P13 real (B, P7 talker): `travel` with `who="Dunbert"` takes her along; two travels in a row, she is still here, `reveal_clue` works, her lines are filed.
+- P14 edge: `travel` with no `who`: nobody else moves (explicit, no code guess); `travel` with a `who` that is not here, dead or unknown: travel
+  still happens, the output says who stayed and why.
+- P15 edge: `travel` with `who` naming two people (comma list) takes both.
+
+### P8a revision [orchestrator design steer, same day]: code does no name matching
+
+Fragility ruling: an exact id (or the exact name, or the id the DM chose for `new_npc` this turn) is that entity; anything else the DM names is
+NEW. Code makes a minimal walk-on with the DM's words as its role/alias and tells the DM its id ("(New on record, here now: <words> (<id>). Use
+these ids from now on.)"); the situation block lists it with the id. Changed cases (the tests carry the same numbers):
+- P6 replaces the old P6: "the rider on the grey horse" then "the horseman" are two walk-ons; the situation shows both ids and the DM's words;
+  using the id is that entity. P6b: 100 ways of introducing someone (10 adjectives x 10 roles, incl. invented `npc.` ids): 100 distinct walk-ons, nothing refused.
+- P8 stays for the *kind* only (`ANIMAL`: a made walk-on is a creature, `mind: animal`); it is never used to find an existing entity.
+- P11: a said line that is not verbatim in the passage is dropped whoever the speaker is; a verbatim line by an unrecorded speaker (any words) is a new walk-on's.
+- P12: a speaker on record elsewhere or dead is dropped when named by id (or exact name); a role phrase for them is a new person (the DM must use the id).
+- P13-P15: `travel` `who` is a comma list of ids (an exact name also works); the old head-noun/role matching cases are gone with the code.
+Removed from the code: `_labels`/`_speaker` label matching, `find_existing`/`cast_described` reuse in `_party`, the head-noun reuse of P3 ("the pale beast" ->
+"the beast in the clearing"), the group walk-on for plurals. P3 tests R1/R16/R17-R20 were rewritten for it.

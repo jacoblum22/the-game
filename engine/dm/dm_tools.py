@@ -43,7 +43,8 @@ CHANGES = ("coin", "give_item", "new_item", "condition_add", "condition_remove",
            "rest", "fact", "fight")  # [spec 032 P3] fight: a person turns on the PC
 FAIL_COSTS = ("cost.closed_door", "cost.drain", "cost.exposure", "cost.footing", "cost.gear", "cost.harm",
               "cost.shortfall", "cost.time", "cost.twist")  # the 9 cost ids (a test pins them to the rules)
-PERSON_VERBS = ("verb.talk", "verb.strike", "verb.grapple", "verb.help")  # a prose-only target is a person for these
+_PERSON_KIND = re.compile(r"listener|watcher|creature|animal|person|helper|character|target's|entity|observer", re.I)
+_THING_KIND = re.compile(r"\bobjects?\b|obstacle|\bthing\b|environment|trail|terrain|hazard", re.I)
 COSTS = ("none", "small", "real", "big")
 GRANTS = ("help", "price", "partial", "refuse")  # what the DM had the NPC do for an ask (logged, never gated)
 STAKES = ("safe", "risky", "dire")
@@ -78,6 +79,7 @@ class Turn:
     world_done: bool = False  # the world step runs once per exchange
     paused: bool = False
     made: list[str] = field(default_factory=list)  # people/creatures the resolver made this turn (told to the DM)
+    aliases: dict[str, str] = field(default_factory=dict)  # an id the DM chose for a `new_npc` -> the id the game gave
     env: Any = None
 
 
@@ -494,6 +496,7 @@ def _id(st: Any, raw: Any) -> str | None:
 
 
 _ID_LIKE = re.compile(r"^[a-z_]+\.[a-z0-9_.]+$")
+_NAME = re.compile(r"(?![Tt]he\s|[Aa]n?\s|[Ss]ome\s|[Oo]ne\s|[Tt]his\s|[Tt]hat\s)[A-Z]")  # a capitalised name, not an article
 _PC_WORDS = re.compile(r"^(pc|the pc|you|the player|player)$")  # the DM's words for the player character
 
 
@@ -501,57 +504,88 @@ def _squash(raw: Any) -> str:
     return re.sub(r"\s+", " ", str(raw or "").strip().lower())
 
 
-def _labels(e: Any) -> list[str]:
+def target_kinds(rules: Any, verb: str | None) -> tuple[str, ...]:
+    """What a verb's target can be, read from its rules entry (basic_verbs.yaml): "person" and/or "object", the kind
+    named first in the `targets` knob, else in `against`/`eligibility`, first. A verb with no target slot gives ()."""
+    entry = rules.basic_verbs.get(verb) if verb else None
+    if not isinstance(entry, dict):
+        return ()
+    a = entry.get("anchor") or {}
+    knob = next((k for k in a.get("knobs", []) if k.get("knob") == "targets"), {})
+    kinds: list[str] = []
+    for seg in (str(knob.get("default") or ""), str(a.get("against") or ""), str(a.get("eligibility") or "")):
+        hits = sorted((m.start(), k) for k, rx in (("person", _PERSON_KIND), ("object", _THING_KIND))
+                      if (m := rx.search(seg)))
+        kinds += [k for _, k in hits if k not in kinds]
+    return tuple(kinds)
+
+
+def target_is_person(rules: Any, verb: str | None, change_kind: str | None) -> bool:
+    """Is a target the DM names (and that is not on record) a person? From the verb's kinds; for a verb that takes
+    both, the first slot of the DM's `change_kind` (resolution.yaml: `persuade_to`, `restrain`, `free` take a person;
+    `open`, `close`, `take`, `give`, `make` a thing) decides, else the kind the verb names first."""
+    kinds = target_kinds(rules, verb)
+    if len(kinds) == 2:
+        slots = ((rules.resolution["intended_change"]["kinds"].get(change_kind or "") or {}).get("slots") or [""])
+        if slots[0] == "person" or slots[0].startswith(("thing", "item")):
+            return slots[0] == "person"
+    return kinds[:1] == ("person",)
+
+
+def _party(ctx: TurnContext, t: Turn, raw: Any, *, person: bool = False, names_ok: bool = False) -> str | None:
+    """A person or creature from what the DM wrote [spec 032 G4, P8a]. An exact id (or the exact name, or the id the DM
+    chose for a `new_npc` this turn) is that entity. Anything else is the DM naming someone new: when the slot takes a
+    person (`names_ok`: a capitalised name does too) or the words are a creature's, a walk-on is made at the scene's
+    place with the DM's words as its description, and `t.made` tells the DM its id. No name, role or head-noun
+    matching: the DM maps "the horseman" to an id from the situation. A thing in words is returned as written."""
     from engine.dm.mentions import bare
-
-    raw = [e.name, e.data.get("role"), *[a for a in e.data.get("aliases", []) if isinstance(a, str)]]
-    return [bare(str(x)).lower() for x in raw if x]
-
-
-def _party(ctx: TurnContext, t: Turn, raw: Any, *, person: bool = False) -> str | None:
-    """A person or creature from what the DM wrote (spec 032 G4): the id, else a name/alias/role match (the one here
-    first), else made now at the scene's place when `person` (the slot takes a person) or the words name a creature:
-    a named NPC or a creature through `mentions.write_mentions`, a described person (or group) through
-    `social.cast_described`. A string that is not made is returned as written (the caller refuses it)."""
-    from engine.dm.mentions import Mention, bare, find_existing, write_mentions
-    from engine.dm.npc_layer import ANIMAL, is_animal
-    from engine.world.scenes import cast_present
-    from engine.world.social import cast_described
+    from engine.dm.npc_layer import ANIMAL
+    from engine.retrieve.scene import pc_id
 
     tx = ctx.need_tx()
     st = tx.state
-    from engine.retrieve.scene import pc_id
-
-    if _PC_WORDS.match(_squash(raw)) and pc_id(st):  # the DM's words for the player character (a name is matched by `_id`)
+    if _PC_WORDS.match(_squash(raw)) and pc_id(st):  # the DM's words for the player character
         return pc_id(st)
-    eid = _id(st, raw)
+    s = str(raw or "").strip()
+    eid = _id(st, t.aliases.get(s, raw))
     if eid is None or eid in st.entities:
         return eid
-    s = str(raw).strip()
-    want = bare(s).lower()
-    creature = ANIMAL.match(want)
-    present = cast_present(st) if st.scene is not None else []
-    here = [i for i in present if want in _labels(st.entities[i])]
-    if not here and creature:  # "the pale beast" is the "beast in the clearing" already here
-        head = str(creature.group("head")).lower()
-        here = [i for i in present if is_animal(st, i)
-                and head in re.findall(r"[a-z']+", " ".join(_labels(st.entities[i])))]
-    if here:
-        return here[0]
-    found = find_existing(st, s, "npc")  # elsewhere: the one on record (the caller says it is not here)
+    words = s
+    if _ID_LIKE.match(s):  # an id the DM made up: its words say who or what it is
+        prefix, _, tail = s.partition(".")
+        words, person = tail.replace("_", " ").replace(".", " "), prefix in ("npc", "companion", "adversary")
     place = st.scene.place_id if st.scene is not None else None
-    if found or _ID_LIKE.match(s) or not (person or creature) or place not in st.entities:
-        return found or s
-    named = want and s[:1].isupper() and not re.match(r"(?i)(the|a|an|some|one|this|that)\s", s)
-    if creature or named:
-        res = write_mentions([Mention(kind="npc", name=s)], tx=tx, rules=ctx.rules, rng=ctx.rng, place=place)
-        new = (res.created.get(s) or res.reused.get(s))
-    else:
-        new = cast_described(ctx.time_ctx(), s, place)  # type: ignore[arg-type]
-    if new is None:
-        return s
-    t.made.append(f"{_name(st, new)} ({new})")
+    creature = bool(ANIMAL.match(bare(words).lower()))
+    if not (person or creature or (names_ok and _NAME.match(words))) or place not in st.entities:
+        return words
+    new = _walk_on(ctx, words, place)  # type: ignore[arg-type]
+    t.aliases[s] = new  # the same words again in this turn are the same person
+    t.made.append(f"{words} ({new})")
     return new
+
+
+def _walk_on(ctx: TurnContext, words: str, place: str) -> str:
+    """A minimal walk-on at `place` described by the DM's words: a creature (`mind: animal`, no rolled person), a named
+    person (the name given), else a walk-on with that role (PR-12-5). Never reuses anyone."""
+    from engine.dm.mentions import Mention, bare, write_mentions
+    from engine.dm.npc_layer import ANIMAL
+    from engine.world.social import meet_npc
+
+    tx = ctx.need_tx()
+    label = bare(words)
+    if ANIMAL.match(label.lower()):
+        eid = ids.entity_id("npc", label, tx.state.entities)
+        tx.add(Event.of("entity_created", source="engine", rule_id="PR-00-7", entity=EntityRecord(
+            id=eid, kind="npc", name=label, visibility="shown",
+            data={"mind": "animal", "role": label, "name_known": False, "home": place})))
+        tx.add(Event.of("position_set", source="engine", rule_id="PR-00-7", entity=eid, location=place))
+        return eid
+    if _NAME.match(words):
+        res = write_mentions([Mention(kind="npc", name=words)], tx=tx, rules=ctx.rules, rng=ctx.rng, place=place)
+        found = res.created.get(words) or res.reused.get(words)
+        if found:
+            return found
+    return meet_npc(ctx.time_ctx(), label, place, alias=label, reuse=False)
 
 
 def _acting(st: Any, eid: str | None, *, here: bool = True, down: bool = True) -> str:
@@ -585,10 +619,17 @@ def _propose_roll(ctx: TurnContext, t: Turn, c: dict[str, Any]) -> str:
     if st.open_pause() is not None:
         return "REFUSED: a roll is already offered this turn"
     verb = str(c.get("verb") or "") or None
-    target = _party(ctx, t, c.get("target"), person=verb in PERSON_VERBS)
+    kinds = target_kinds(ctx.rules, verb)
+    target = _party(ctx, t, c.get("target"), person=target_is_person(ctx.rules, verb, str(c.get("change_kind") or "")),
+                    names_ok="person" in kinds)
+    stated = str(c.get("target") or "").strip()
     if target is not None and target not in st.entities:
-        return (f"REFUSED: no one or nothing on record called {target!r} (use an id from the situation, or none; "
-                "for a thing, leave `target` empty and say it in `how`)")
+        if "person" in kinds and "object" not in kinds:  # a person the game could not put here (no place open)
+            return (f"REFUSED: no one on record called {target!r} (use an id from the situation, or none)")
+        # [spec 032 P8a] a feature or obstacle in words (the stuck hatch): the act is on it, never refused
+        target = None
+        if not str(c.get("change_what") or "").strip():
+            c = {**c, "change_what": stated if not _ID_LIKE.match(stated) else stated.partition(".")[2].replace("_", " ")}
     if target is not None and st.entities[target].kind in ("npc", "companion", "adversary"):
         why = _acting(st, target, down=False)  # a downed foe can still be struck; the dead and the absent cannot
         if why:
@@ -878,10 +919,12 @@ def _change(ctx: TurnContext, t: Turn, c: dict[str, Any]) -> str:
         place = st.scene.place_id if st.scene else None
         role = str(c.get("what") or "").strip() or None
         eid = meet_npc(ctx.time_ctx(), role, place, reuse=False)
+        if _ID_LIKE.match(str(c.get("who") or "").strip()):  # [spec 032 P8a] the DM's own id for them, used next call
+            t.aliases[str(c["who"]).strip()] = eid
         card = __import__("engine.dm.packet", fromlist=["people_card"]).people_card(ctx.state, eid, rules=ctx.rules)
         return f"done: someone new is here: {eid}: " + "; ".join(x.strip() for x in card[:3])
     if kind == "travel":
-        return _travel(ctx, t, to)
+        return _travel(ctx, t, to, str(c.get("who") or ""))
     if kind == "rest":
         from engine.dm.turn import REST_WORDS, _rest
 
@@ -1012,7 +1055,24 @@ def _condition(ctx: TurnContext, who: str | None, cid: str, *, add: bool, pc: st
     return f"done: {cid} ends on {_name(st, who)}"
 
 
-def _travel(ctx: TurnContext, t: Turn, to: str | None) -> str:
+def _along(st: Any, raw: str) -> tuple[list[str], list[str]]:
+    """Who the DM says walks with the character [spec 032 P8a]: ids, one or a comma list. Returns the ones who can
+    come (here, alive, up) and a line for each who cannot. Nobody is guessed: only those named, by id."""
+    ok: list[str] = []
+    stay: list[str] = []
+    for p in (x.strip() for x in re.split(r"\s*[,;]\s*", raw)):
+        if not p or _PC_WORDS.match(_squash(p)):
+            continue
+        eid = _id(st, p)
+        why = _acting(st, eid)
+        if why:
+            stay.append(why)
+        elif eid not in ok:
+            ok.append(str(eid))
+    return ok, stay
+
+
+def _travel(ctx: TurnContext, t: Turn, to: str | None, along: str = "") -> str:
     from engine.world.places import location, move, reachable
 
     st = ctx.state
@@ -1021,10 +1081,16 @@ def _travel(ctx: TurnContext, t: Turn, to: str | None) -> str:
     if to not in ways:
         return f"REFUSED: {to!r} is not reachable from here (reachable: {', '.join(sorted(ways)) or 'none'})"
     assert to is not None
+    who, stay = _along(st, along.strip())
     arrival = move(ctx.time_ctx(), to, end_scene=True)
+    if arrival.arrived:  # the named walk with the character; the rest stay where they were
+        for eid in who:
+            ctx.need_tx().add(Event.of("position_set", source="engine", rule_id="10.1.1", entity=eid, location=to))
     _open_scene(ctx)
     return (f"done: the character travels to {_name(ctx.state, to)}" + ("" if arrival.arrived else
                                                                          " (interrupted on the way)")
+            + (f"\nWith the character: {', '.join(_name(ctx.state, e) for e in who)}." if who and arrival.arrived else "")
+            + "".join(f"\nDid not come: {why}." for why in stay)
             + "\n" + situation(ctx))
 
 
@@ -1109,19 +1175,6 @@ def _audit(ctx: TurnContext, t: Turn, passage: str) -> None:
 # ------------------------------------------------------------------------------------------- told, and the log-only checks
 
 
-def _speaker(st: Any, raw: Any) -> str | None:
-    """Who the DM means by `npc` in a said entry: an id, a name, else the one person here with that label."""
-    from engine.dm.mentions import bare
-    from engine.world.scenes import cast_present
-
-    eid = _id(st, raw)
-    if eid in st.entities:
-        return eid
-    want = bare(str(raw or "")).lower()
-    here = [i for i in (cast_present(st) if st.scene is not None else []) if want and want in _labels(st.entities[i])]
-    return here[0] if len(here) == 1 else eid
-
-
 def _told(ctx: TurnContext, t: Turn, passage: str) -> None:
     """What people said, as testimony (spec 032 G3): each `said` entry becomes a record on the speaker (place and day),
     shown in the journal as "what you were told"; never a world fact. Dropped and logged (`told_dropped`), never
@@ -1138,9 +1191,11 @@ def _told(ctx: TurnContext, t: Turn, passage: str) -> None:
     keep: list[dict[str, Any]] = []
     for e in [x for x in t.said_raw if isinstance(x, dict)][:SAID_MAX]:
         words, raw = str(e.get("words") or "").strip(), str(e.get("npc") or "")
-        who = _speaker(st, raw)
+        who = _id(st, t.aliases.get(raw.strip(), raw))
         if not words or who == pc_id(st) or _PC_WORDS.match(_squash(raw)):
             continue
+        if who not in st.entities and atx.covers(words, passage, ratio=0.8):
+            who = _party(ctx, t, raw, person=True)  # [spec 032 P8a] not an id on record: the DM names a new walk-on
         why = (_acting(st, who, down=False)
                or ("the words are not in the passage" if not atx.covers(words, passage, ratio=0.8) else "")
                or ("said before" if testimony.is_repeat(st, rules, who, words)
