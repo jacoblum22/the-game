@@ -717,7 +717,7 @@ def test_a_strike_that_lands_hurts_the_target_starts_the_fight_and_the_foe_answe
     assert st.quantities[dock.watch]["vitality"].current == 2  # T-09-3 band 1: 5, less a light blade's S2 (3)
     assert b.harm and b.harm[0].target == dock.watch and b.harm[0].words == "bloodied"
     result = next(o["text"] for o in res.oof if o["kind"] == "RESULT")
-    assert "Sela Vey bloodied" in result and "→ 2" not in result, result
+    assert "Sela Vey is bloodied" in result and "→ 2" not in result, result
     assert any(a.npc == dock.watch and a.source == "behavior" for a in res.record.npc_actions)
     # the second blow drops her: a walk-on struck to 0 is dead (07.2.10), and the fight is over (06.13.1)
     model.push(Role.READER, reader("DECLARATION", "I stab her again.", STAB))

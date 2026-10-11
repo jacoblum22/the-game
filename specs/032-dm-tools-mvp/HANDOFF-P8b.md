@@ -8,7 +8,7 @@ Done (cases: `cases.md` section P8b; tests: `tests/engine/test_spec032_p8b.py`, 
 - Start range: 06.3.9 says the DM sets it, so `change fight` takes `to` = engaged|close|near|far|distant (unknown/empty = near, no refusal; ignored for a fight already running). dm.md says so.
 - P7 "first foe acts were moves": `code_framer` never set `trait.delivery.melee`, so a PC Strike wrote no contact band (`_contact`). Now a Strike with the pair at no band/engaged/close gets the trait; after `change fight to=near` it stays ranged.
 - "Changed: your opponent worn": `oof.changed_line` now "<name> is <state>" (shared with the pipeline).
-- Gates: p8b 50 pass; ruff clean and pyright clean (no new errors; pydantic/pytest unresolved is the env) on touched files; validator 0/0; full pytest: see the report.
+- Gates: p8b 50 pass; ruff clean and pyright clean (no new errors; pydantic/pytest unresolved is the env) on touched files; validator 0/0; full pytest: 2348 passed, 2 failed (prompt word budget, an old "bloodied" string), both fixed after; affected files re-run 167 passed.
 - Re-recorded BOTH games: dmtools (dm.md changed) and `offline_seed11` whose ONLY diff is `rules_hash` (resolution.yaml gained `verb_costs`).
 Not done: tasks.md has no P8 rows (nothing ticked). Live re-run of the fighter/talker personas and of held-out is NOT done (the set is spent; do not tune on it).
 Traps for the merge with P8a: I edited only `code_framer` (the cost/trait block), `_fight` + one line in `_change` (`_fight(..., str(c.get("to")))`), and removed the `PREFERRED_COST` constant at the top of dm_tools.py;
