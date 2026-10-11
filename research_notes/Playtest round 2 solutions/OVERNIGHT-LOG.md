@@ -372,3 +372,11 @@ everything.
   - The pipeline is deleted after the switch.
 - Inventories: `spec032-investigation/fiction-inference-inventory.md` and `word-matching-inventory.md`.
 - **Spec 033 `033-dm-states-code-records`:** the design slice (Opus) is in flight.
+- **Spec 033 progress (branch `spec033-base`):**
+  - Design faa9c4c. Owner rulings D1 (a) legal foe acts only, D2 foe acts picked after the PC's result (one extra call), D3 default omitted details but log `not_chosen:*` (19f95d6).
+  - W1 merged, full pytest 2517 passed, validator 0/0:
+    - E (turn_judge) 07d05ea.
+    - P0 guard census cec6faa.
+    - R rules R2-M e77cc07 (DL-06-40/41, DL-01-60..62, DL-12-160..162; T-06-16).
+    - P1 contract f79f337.
+  - W2 running: P2a (positions, fights, costs), P2b (gate, frame, anchors), P4 (people, testimony).
