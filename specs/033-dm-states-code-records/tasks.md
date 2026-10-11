@@ -7,21 +7,21 @@ Phases, lanes, models and waves: `plan.md` section 5. Cases: `cases.md` (C1-C12)
 (`def game_<phase>(...)`; P6 assembles). Tag code with `[spec 033 <phase>]`.
 
 ## P0 guard census (Sonnet, W1, lane `tests/guard/`)
-- [ ] T001 `tests/guard/viii9.py`: `DENY` table (plan 3, R12) with every inventory function and pattern of reach Y/A
+- [x] T001 `tests/guard/viii9.py`: `DENY` table (plan 3, R12) with every inventory function and pattern of reach Y/A
   from both inventories, each with its inventory id and `only_from` (only `conflict.start` <- `dm_tools._fight`);
   patch helpers (functions raise; patterns and word lists swapped for raising stand-ins); `VIII9_GUARD` log/raise.
-- [ ] T002 `sys.setprofile` reach recorder (engine modules only) and a pytest fixture that plays
+- [x] T002 `sys.setprofile` reach recorder (engine modules only) and a pytest fixture that plays
   `offline_seed11_dmtools` (the `tests/replay/record_games.py` recipe on a temp path) under it.
-- [ ] T003 Census: run it in log mode; write `specs/033-dm-states-code-records/reach-census.md` (at most 60 lines):
+- [x] T003 Census: run it in log mode; write `specs/033-dm-states-code-records/reach-census.md` (at most 60 lines):
   which DENY entries are reached, by which tool path; settle the low-confidence items (D13 D14 D16 D19 D20 D46 D53 D54,
   `world_step.deliver_learning`, `oracle.positive`, `codex` search, `audit.text` primitives); list reached
   word-matchers the inventories missed, each assigned to a phase lane (else P6).
-- [ ] T004 Static scanner (`tests/guard/test_viii9_static.py`): AST rules of plan 3 R12; `viii9_allow.py` seeded with
+- [x] T004 Static scanner (`tests/guard/test_viii9_static.py`): AST rules of plan 3 R12; `viii9_allow.py` seeded with
   today's hits, each classed P, F, S or `pending:<phase>`; the test fails on any unlisted hit and (from P6) on any
   `pending`.
-- [ ] T005 Runtime test (`tests/guard/test_viii9_runtime.py`): in `raise` mode, entries still `log` are recorded,
+- [x] T005 Runtime test (`tests/guard/test_viii9_runtime.py`): in `raise` mode, entries still `log` are recorded,
   not raised; the test asserts no `raise` entry is hit. Planted-call tests for C12.
-- [ ] T006 HANDOFF-P0.md.
+- [x] T006 HANDOFF-P0.md.
 
 ## P1 contract (Sonnet, W1, lane: `dm_tools.py` schema/intake/dispatch, `resolve/types.py`, `dm.md`, `llm/offline.py`)
 - [ ] T010 `schema_for`: the plan 2 table's fields (`as`, `force`, `weapon`, `reads`, `approach` enum from data,

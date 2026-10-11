@@ -74,7 +74,7 @@ def play_probe(tmp: Path, guard: Guard | None = None) -> Guard:
     g = guard or Guard()
     game, model = to_play(tmp)
     npc = cast_present(game.store.state)[0]
-    steps: list[tuple[str, list[dict[str, Any]]]] = [  # (the player's message, the DM's step responses)
+    steps: list[tuple[str, list[Any]]] = [  # (the player's message, the DM's step responses)
         ("I read the notice on the wall.",
          [dm(sure(verb="verb.observe", goal="read the notice", target="the notice", how="read the inscription",
                   attribute="mind", change_kind="learn"))]),
