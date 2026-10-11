@@ -28,7 +28,8 @@ BEAST = "npc.the_pale_beast"
 def roll(**kw: Any) -> dict[str, Any]:
     base = {"tool": "propose_roll", "goal": "hit it", "verb": "verb.strike", "target": "", "how": "swing hard",
             "attribute": "might", "difficulty": "hard", "why_uncertain": "it is quick", "stakes": "risky",
-            "nonlethal": False, "fail_cost": "none", "change_kind": "none", "change_what": "", "change_whom": ""}
+            "nonlethal": False, "fail_cost": "none", "change_kind": "none", "change_what": "", "change_whom": "",
+            "starts_fight": "no", "fight_to": ""}  # [owner ruling 2026-10-11] "no": one blow; these tests are about the roll
     return {**base, **kw}
 
 
@@ -77,12 +78,9 @@ def test_r16_the_fighter_save_calls_are_accepted_and_the_beast_is_one_entity(tmp
     fx = json.loads(FIX.read_text(encoding="utf-8"))["turns"]
     game, _ = to_play(tmp_path)
     args9 = {"tool": "propose_roll", "as": "creature", **json.loads(fx["turn.9"]["tools"][0]["args"])}
-    outs, t = run(game, args9)  # the creature is made; not in reach yet (06.4.3)
-    assert outs[0].startswith("REFUSED") and "not in reach" in outs[0]
-    beasts = [i for i, e in game.store.state.entities.items() if "beast" in i]
-    engage(game, beasts[0])  # the DM states the reach, then makes the same attack: found by its exact name
-    outs, t = run(game, args9)
-    assert outs[0].startswith("ROLL OFFERED") and t.stats["refusals"] == []
+    outs, t = run(game, args9)  # the creature is made; the attack left starts_fight blank: the fight starts at engaged
+    assert outs[0].startswith("A fight begins") and "ROLL OFFERED" in outs[0] and t.stats["refusals"] == []
+    assert "not_chosen:fight.starts" in t.stats["defaults"]
     beasts = [i for i, e in game.store.state.entities.items() if "beast" in i]
     assert len(beasts) == 1 and ent(game, beasts[0]).data["mind"] == "animal"
     # [P8a] the creature's id is what the DM uses next turn: found exactly
@@ -90,11 +88,7 @@ def test_r16_the_fighter_save_calls_are_accepted_and_the_beast_is_one_entity(tmp
     game2, _ = to_play(tmp_path / "b")
     args12 = {"tool": "propose_roll", "as": "creature", **json.loads(fx["turn.12"]["tools"][0]["args"])}
     outs, t = run(game2, args12)
-    if outs[0].startswith("REFUSED"):  # a melee verb: the creature is made, then the DM states the reach
-        assert "not in reach" in outs[0]
-        engage(game2, next(i for i in game2.store.state.entities if "beast" in i))
-        outs, t = run(game2, args12)
-    assert outs[0].startswith("ROLL OFFERED") and t.stats["refusals"] == []
+    assert "ROLL OFFERED" in outs[0] and t.stats["refusals"] == []
 
 
 def test_r17_r18_r19_r23_described_people_are_walk_ons_groups_or_reused(tmp_path: Path) -> None:

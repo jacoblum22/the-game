@@ -215,15 +215,29 @@ def schema_for(verbs: list[str], kinds: list[str], *, final: bool, approaches: l
     """The DM step's schema (`Role.DM`'s builder in engine/dm/schemas.py calls this with the SchemaContext's lists).
     Every property of an object is required (schemas.obj), so an omitted detail is written as "" / "none" / "plain" /
     false; code then holds the documented default and logs `not_chosen:{field}` [spec 033 D3]."""
+    from engine.resolve import conflict
+
+    def say(sch: Schema | None, text: str) -> Schema | None:
+        return {**sch, "description": text} if sch else sch
+
     calls = [
         obj({"tool": enum(["propose_roll"]), "goal": STR, "verb": enum(verbs), "target": STR,
              "as": enum(AS_KINDS, first="none"), "how": STR, "attribute": STR, "difficulty": STR, "why_uncertain": STR,
              "stakes": enum(STAKES), "nonlethal": BOOL, "force": enum(FORCES, first="none"), "weapon": STR,
              "reads": BOOL, "approach": enum(approaches or (), first="plain"),
              "fail_cost": enum(["none", *FAIL_COSTS]), "fail_on": STR,
-             "change_kind": enum(kinds), "change_what": STR, "change_whom": STR}),
+             "change_kind": enum(kinds), "change_what": STR, "change_whom": STR,
+             # [owner ruling 2026-10-11] every attack roll says whether it starts a fight, and at what distance
+             "starts_fight": say(enum(["yes", "no"], first=""), "Strike, Grapple or Force at a foe: yes if this "
+                                 "begins a fight, no for a single blow. Blank: yes when no fight is on."),
+             "fight_to": say(enum(conflict.BANDS, first=""), "the distance the fight starts at (blank: engaged, "
+                             "or the weapon's first band)")}),
         obj({"tool": enum(["state"]), "about": STR}),
-        obj({"tool": enum(["change"]), "kind": enum(CHANGES), "who": STR, "what": STR, "to": STR, "name": STR,
+        obj({"tool": enum(["change"]), "kind": enum(CHANGES),
+             "who": say(STR, "position: the one who moves. fight: who turns on the character. new_npc: an id you pick."),
+             "what": say(STR, "position: the other party, pc or an id (default: the character). new_npc: what they are."),
+             "to": say(STR, "position: a band (engaged, close, near, far, distant) or a place id. fight: the start band."),
+             "name": say(STR, "new_npc: the short name you will call them by, like 'the wolfhound' or 'Odo'."),
              "as": enum(AS_KINDS, first="none"), "knows": STR, "amount": {"type": "integer"}, "note": STR}),
         obj({"tool": enum(["recall"]), "query": STR}),
         obj({"tool": enum(["reveal_clue"]), "npc": STR, "question": STR}),
@@ -681,6 +695,12 @@ def _acting(st: Any, eid: str | None, *, here: bool = True, down: bool = True) -
 
 
 def _propose_roll(ctx: TurnContext, t: Turn, c: dict[str, Any]) -> str:
+    note: list[str] = []
+    out = _roll(ctx, t, c, note)
+    return " ".join(note) + " " + out if note else out
+
+
+def _roll(ctx: TurnContext, t: Turn, c: dict[str, Any], note: list[str]) -> str:
     from engine.dm.turn import _take
     from engine.resolve.pipeline import BeatPlan, run_beats
     from engine.resolve.types import Beat, Change
@@ -711,6 +731,7 @@ def _propose_roll(ctx: TurnContext, t: Turn, c: dict[str, Any]) -> str:
     stated = _stated(ctx, t, c, verb, target)
     if isinstance(stated, str):
         return stated
+    _attack_starts_fight(ctx, t, c, verb, target, stated, note)
     if str(c.get("change_kind") or "") != "move_to":  # a move is the way to get in reach
         why = _reach(ctx, t, verb, target, stated)
         if why:
@@ -761,26 +782,71 @@ def _propose_roll(ctx: TurnContext, t: Turn, c: dict[str, Any]) -> str:
     return f"NOT POSSIBLE AS PROPOSED ({out.status}): {e.gate_words}"
 
 
-def _reach(ctx: TurnContext, t: Turn, verb: str | None, target: str | None, stated: Any) -> str:
-    """[spec 033 T032, 06.4.3] A melee Strike, a Grapple or a Force needs the target in reach: the recorded band
-    (`conflict._band`) is one the weapon covers (engaged; a Strike's weapon bands and a thrown weapon's bands, T-06-6).
-    A rule's arithmetic on recorded state, so it is refused, not defaulted. The message names the move to state first."""
+def _reach_bands(ctx: TurnContext, verb: str | None, stated: Any) -> list[str]:
+    """The bands an attack with this verb and weapon can reach, the first the one it takes by default (T-06-6)."""
+    from engine.resolve import conflict
+
+    if verb != "verb.strike":
+        return ["engaged"]
+    w = conflict.weapon_of(ctx.rules, ctx.state, stated.weapon)
+    return list(dict.fromkeys(str(b).split()[0].removeprefix("band.") for b in [*(w.get("bands") or ()),
+                                                                                *(w.get("thrown_bands") or ())]))
+
+
+def _attack_starts_fight(ctx: TurnContext, t: Turn, c: dict[str, Any], verb: str | None, target: str | None,
+                         stated: Any, note: list[str]) -> None:
+    """[owner ruling 2026-10-11] A Strike, Grapple or Force at an able npc or adversary says whether it starts a fight
+    (`starts_fight` yes/no) and at what band (`fight_to`). Blank `starts_fight` with no fight on = yes, logged. The fight
+    is started by `_fight`, the code `change fight` uses, BEFORE the reach check. Blank `fight_to` = the first band the
+    weapon reaches (engaged for a Grapple, a Force, a melee Strike), unless a band is already recorded: that stays.
+    A target already in the live fight changes nothing: no restart, no band, no Vitality, no default logged. A
+    newcomer to a live fight is joined as `change fight` joins it (`conflict.start`: Vitality if it has none, a band,
+    the foes list; the conflict id, mode and the other foes are untouched). Keys on the DM's verb and ids only."""
     from engine.resolve import conflict
 
     st = ctx.state
     pc = t.rec.pc or ""
-    if verb not in ("verb.strike", "verb.grapple", "verb.force") or target is None or target == pc             or st.entities[target].kind not in ("npc", "adversary", "companion"):
+    if (verb not in ("verb.strike", "verb.grapple", "verb.force") or target is None or target == pc
+            or st.entities[target].kind not in conflict.FOES or target in conflict.record(st).get("foes", [])):
+        return
+    say = str(c.get("starts_fight") or "").strip().lower()
+    if say == "no" or _acting(st, target):  # a single blow; or a downed foe (struck, not fought)
+        return
+    if say != "yes":
+        _default(t, "fight.starts")
+    given = str(c.get("fight_to") or "").strip().lower().removeprefix("band.")
+    if given not in conflict.BANDS:
+        _default(t, "fight.to")
+        given = "" if conflict._band(st, pc, target) else _reach_bands(ctx, verb, stated)[0]
+    live = conflict.active(st)
+    out = _fight(ctx, target, pc, given)
+    if out.startswith("done") and not live:
+        note.append(f"A fight begins with {_name(ctx.state, target)}, at range {conflict._band(ctx.state, pc, target)}.")
+
+
+def _reach(ctx: TurnContext, t: Turn, verb: str | None, target: str | None, stated: Any) -> str:
+    """[spec 033 T032, 06.4.3] A melee Strike, a Grapple or a Force needs the target in reach: the recorded band
+    (`conflict._band`) is one the weapon covers (engaged; a Strike's weapon bands and a thrown weapon's bands, T-06-6).
+    [owner ruling 2026-10-11, D3] No band on record is an omitted detail: the first reachable band is written and
+    logged `not_chosen:position`. Only a RECORDED band out of reach is refused, with the one call that fixes it."""
+    from engine.resolve import conflict
+
+    st = ctx.state
+    pc = t.rec.pc or ""
+    if verb not in ("verb.strike", "verb.grapple", "verb.force") or target is None or target == pc \
+            or st.entities[target].kind not in ("npc", "adversary", "companion"):
         return ""
     band = conflict._band(st, pc, target)
-    ok = {"engaged"}
-    if verb == "verb.strike":
-        w = conflict.weapon_of(ctx.rules, st, stated.weapon)
-        ok = {str(b).split()[0].removeprefix("band.") for b in [*(w.get("bands") or ()), *(w.get("thrown_bands") or ())]}
+    ok = _reach_bands(ctx, verb, stated)
+    if band is None:
+        conflict._set_band(ctx.need_tx(), pc, target, ok[0], "06.3.9")
+        _default(t, "position")
+        return ""
     if band in ok:
         return ""
-    return (f"REFUSED: {_name(st, target)} is not in reach (" + (f"{band} to the character" if band else "no position is recorded")
-            + "). State the move first: `change` position `to` engaged with `what` " + target + " when nothing stops it, or a "
-            "`propose_roll` with change_kind move_to (change_what a band) when someone contests it; then make the attack.")
+    return (f"REFUSED: {_name(st, target)} is not in reach ({band} to the character). State the move first: "
+            f"`change kind=position who=pc to={ok[0]} what={target}` when nothing stops it, or a `propose_roll` with "
+            "change_kind move_to (change_what a band) when someone contests it; then make the attack.")
 
 
 def _default(t: Turn, field_: str) -> None:
@@ -1046,8 +1112,13 @@ def _position(ctx: TurnContext, t: Turn, c: dict[str, Any]) -> str:
     assert who is not None
     to = str(c.get("to") or "").strip()
     band = to.lower().removeprefix("band.")
+    ex = _position_example(st, pc)
     if band in conflict.BANDS:
-        other = _id(st, c.get("what")) if str(c.get("what") or "").strip() else None
+        raw = str(c.get("what") or "").strip()
+        other = (pc if raw == PC else _id(st, raw)) if raw else None
+        if other is not None and (other == who or other not in st.entities):
+            return ("REFUSED: `what` is the other party (pc or an id), "
+                    + ("not the one who moves" if other == who else f"not {raw!r}") + f". For example: {ex}")
         if other is None:
             if who != pc:
                 other = pc
@@ -1068,7 +1139,16 @@ def _position(ctx: TurnContext, t: Turn, c: dict[str, Any]) -> str:
             return "REFUSED: the character goes to another place by travel, not by position"
         tx.add(Event.of("position_set", source="engine", rule_id="12.4.1", entity=who, location=dest))
         return f"done: {_name(st, who)} is now at {_name(st, dest)}"
-    return f"REFUSED: `to` is a band ({', '.join(conflict.BANDS)}) or a place id; got {to!r}"
+    return f"REFUSED: `to` is a band ({', '.join(conflict.BANDS)}) or a place id; got {to!r}. For example: {ex}"
+
+
+def _position_example(st: Any, pc: str) -> str:
+    """One exact `change position` call from the recorded state: the character to the first other person here."""
+    from engine.resolve import conflict
+    from engine.world.scenes import cast_present
+
+    near = [x for x in (conflict.record(st).get("foes") or cast_present(st)) if x != pc]
+    return f"`change kind=position who=pc to=engaged what={near[0] if near else 'npc.x'}`"
 
 
 def _asks(ctx: TurnContext, t: Turn, asks: list[Any]) -> None:
@@ -1143,11 +1223,13 @@ def _change(ctx: TurnContext, t: Turn, c: dict[str, Any]) -> str:
         if as_ == "thing":
             return "REFUSED: a thing is not someone (new_item makes things)"
         role = str(c.get("what") or "").strip()
+        if not str(c.get("name") or "").strip():
+            _default(t, "name")  # [owner ruling 2026-10-11] `name` is the short name the DM will call them by
         eid = _walk_on(ctx, role, place, as_, str(c.get("name") or "").strip() or None)  # type: ignore[arg-type]
         if _ID_LIKE.match(str(c.get("who") or "").strip()):  # [spec 032 P8a] the DM's own id for them, used next call
             t.aliases[str(c["who"]).strip()] = eid
         card = __import__("engine.dm.packet", fromlist=["people_card"]).people_card(ctx.state, eid, rules=ctx.rules)
-        return f"done: someone new is here: {eid}: " + "; ".join(x.strip() for x in card[:3]) + _knows(tx, c, eid)
+        return f"done: someone new is here: {eid}: " + "; ".join(x.strip() for x in card[:3]) + _knows(tx, c, eid) + f" Use {eid} for them from now on."
     if kind == "travel":
         return _travel(ctx, t, to, str(c.get("who") or ""))
     if kind == "rest":

@@ -1160,11 +1160,8 @@ def _dm(schema: dict[str, Any], packet: Packet) -> dict[str, Any]:  # rule: spec
                 "force": "push" if verb == "verb.force" else "none", "weapon": "unarmed" if verb == "verb.strike" else "",
                 "reads": False, "approach": "plain", "fail_cost": "none", "fail_on": "",
                 "change_kind": "harm" if verb == "verb.strike" else "restrain", "change_what": people[0][0],
-                "change_whom": ""}
-        # 06.4.3: a melee attack needs the target in reach, so the move is stated first (position engaged)
-        move = {"tool": "change", "kind": "position", "who": "pc", "what": people[0][0], "to": "engaged", "name": "",
-                "as": "none", "knows": "", "amount": 0, "note": ""}
-        return {"calls": [move, call], "passage": passage, "said": [], "asks": [], "cost_form": ""}
+                "change_whom": "", "starts_fight": "yes", "fight_to": "engaged"}  # [owner ruling 2026-10-11]
+        return {"calls": [call], "passage": passage, "said": [], "asks": [], "cost_form": ""}
     if "ROLL OFFERED" in msg:  # the lead-up only; the turn pauses
         return {"calls": [], "passage": "You steady yourself and the moment hangs.", "said": [], "asks": [],
                 "cost_form": ""}
