@@ -16,7 +16,7 @@ the Narrator; every other role is offline). The judge labels each reply: granted
 condition), partial, refused, deflected or none, and whether a refusal gives the person's own reason. Measures: M1
 grant rate by mood and cost, M2 costly asks (real/big) that were granted, listed to be read (observation, no gate), M3 in-character refusals, M4 flips with no
 event (repeat probes), M5 repeat-ask caving, M8 voice distinctness (blind attribution of five lines to five cards),
-M10 secret leaks (code)."""
+M10 secret leaks (the turn judge, `evals/turn_judge.py`, with its measured precision; spec 033 R11)."""
 
 from __future__ import annotations
 
@@ -36,6 +36,7 @@ sys.path.insert(0, str(ROOT))
 # imported once here, before the worker threads (a first import from two threads at once fails half-initialised)
 import engine.dm.turn  # noqa: E402, F401
 from engine.llm.offline import conform  # noqa: E402, F401
+from evals import turn_judge  # noqa: E402
 from evals.playtest import ask_claude  # noqa: E402, F401
 from tests.fixtures.scene_dock import build_dock  # noqa: E402, F401
 
@@ -45,7 +46,7 @@ GRID = {"open": {"none": "help", "small": "help", "real": "price", "big": "parti
 STANDING = {"open": 1, "guarded": -1, "closed": -3}  # the pin's standing, so the relationship agrees with the band
 BAND = {"open": "willing", "guarded": "guarded", "closed": "unwilling"}  # the held willingness (answer.HELD)
 ARMS = ("pipeline", "dm-tools")
-LABELS = ("granted", "conditional", "partial", "refused", "deflected", "none")
+LABELS = ("granted", "priced", "partial", "refused", "deflected", "none")  # [spec 033 R11] a priced deal is not a cave
 HAIKU = "haiku"
 
 # one asked person per cell: name, role, pronouns, demeanor, want, refusal, secret (sealed: never in a reply)
@@ -184,8 +185,9 @@ def run_cell(cell: dict[str, Any], arm: str, turns: int, *, offline: bool = Fals
 
 JUDGE_SYSTEM = (
     "You label how a tabletop RPG character answered a request. Read the character card, the player's ask and the "
-    "passage. Label the asked character's response: granted (does or agrees to do all of it, freely), conditional "
-    "(agrees for a price or on a condition), partial (gives some of it, or later), refused (says no or will not), "
+    "passage. Label the asked character's response: granted (does or agrees to do all of it, freely, nothing asked "
+    "in return), priced (agrees only for a price or on a condition that the passage states; a priced deal is not a "
+    "cave), partial (gives some of it, or later), refused (says no or will not), "
     "deflected (avoids answering without a clear no), none (does not respond at all). in_character: for refused or "
     "deflected only, true when the refusal gives a reason that is the character's own (a want, a duty, a fear, a "
     "limit, their situation or a person), false for a generic no. Judge only the asked character.")
@@ -210,14 +212,14 @@ def violates(label: str, ceiling: str) -> bool:  # T-12-19's order: help > price
     if ceiling in ("price", "partial", "partial_or_refuse"):
         return label == "granted"
     if ceiling in ("refuse", "refuse_may_escalate"):
-        return label in ("granted", "conditional", "partial")
+        return label in ("granted", "priced", "conditional", "partial")
     return False
 
 
-def leaked(cell: dict[str, Any], text: str) -> bool:  # M10: the sealed secret's distinctive words in the reply
-    words = [w for w in re.findall(r"[a-z]{5,}", cell["secret"].lower()) if w not in cell["name"].lower()]
-    low = text.lower()
-    return sum(w in low for w in words) >= max(2, len(words) // 2 + 1)
+def leaked(cell: dict[str, Any], text: str, *, offline: bool = False) -> bool:
+    """M10: the turn judge's leak rubric on the reply [spec 033 R11; the word-overlap check is gone]."""
+    return turn_judge.verdict("leak", {"secrets": f"- {cell['secret']}", "passage": text},
+                              offline=offline)["label"] == "leaked"
 
 
 # ------------------------------------------------------------------------------------------------ commands
@@ -252,7 +254,7 @@ def _label_offline(r: dict[str, Any]) -> dict[str, Any]:
     for t in r["turns"]:
         t.update(label="none", in_character=False, why="offline", ceiling=GRID[c["mood"]][c["cost"]])
         t["violation"] = violates(t["label"], t["ceiling"])
-        t["leak"] = leaked(c, t["reply"])
+        t["leak"] = leaked(c, t["reply"], offline=True)
     return r
 
 
@@ -260,7 +262,7 @@ def _rate(xs: list[bool]) -> str:
     return f"{sum(xs)}/{len(xs)}" if xs else "-"
 
 
-GRANT = ("granted", "conditional", "partial")
+GRANT = ("granted", "priced", "conditional", "partial")  # "conditional": runs saved before spec 033
 
 
 def summarize(runs: list[dict[str, Any]]) -> dict[str, Any]:
@@ -283,7 +285,10 @@ def summarize(runs: list[dict[str, Any]]) -> dict[str, Any]:
                               f"\"{t['ask'][:70]}\" -> {t['reply'][:140]!r}"
                               for r in runs for i, t in enumerate(r["turns"])
                               if by_id[r["cell"]]["cost"] in ("real", "big") and t["label"] in GRANT],
-            "costly_asks": _rate([t["label"] in GRANT for c, t in allt if c["cost"] in ("real", "big")]),
+            # [spec 033 R11] a priced deal is not a cave: caves are `granted` and `partial`, priced is counted apart
+            "costly_asks": _rate([t["label"] in ("granted", "partial") for c, t in allt if c["cost"] in ("real", "big")]),
+            "costly_priced": _rate([t["label"] in ("priced", "conditional") for c, t in allt
+                                    if c["cost"] in ("real", "big")]),
             "in_character_refusals": _rate([bool(t.get("in_character")) for t in refusals]),
             "repeat_caving": _rate(caved), "flips_no_event": _rate(flips),
             "leaks": _rate([t["leak"] for _, t in allt])}
@@ -323,7 +328,7 @@ def cmd_report(out_dir: Path, *, voice: bool = True) -> int:
     arms = {p.stem: json.loads(p.read_text(encoding="utf-8")) for p in sorted(out_dir.glob("*.json"))
             if p.stem in ARMS}
     sums = {a: summarize(r) for a, r in arms.items()}
-    keys = ["costly_asks", "in_character_refusals", "repeat_caving", "flips_no_event", "leaks"]
+    keys = ["costly_asks", "costly_priced", "in_character_refusals", "repeat_caving", "flips_no_event", "leaks"]
     print("| measure | " + " | ".join(sums) + " |\n|---|" + "---|" * len(sums))
     for m in GRID:
         print(f"| M1 grant, {m} | " + " | ".join(s["grant_by_mood"][m] for s in sums.values()) + " |")
@@ -336,8 +341,10 @@ def cmd_report(out_dir: Path, *, voice: bool = True) -> int:
     print()
     for a, s in sums.items():
         print(f"- {a}: " + ", ".join(s["cells"].values()))
-        print(f"  costly asks (real/big) granted, to read ({a}, no gate): {s['costly_asks']}")
+        print(f"  costly asks (real/big) caved or partial {s['costly_asks']}, priced {s['costly_priced']} "
+              f"({a}, to read, no gate)")
         print("".join(f"    - {x}\n" for x in s["costly_grants"]), end="")
+    print(f"leaks (M10): {turn_judge.precision('leak', turn_judge.load_hand())}")
     return 0
 
 
@@ -373,11 +380,12 @@ def baseline(saves: list[Path]) -> int:
             said = re.search(r'THE PLAYER\'S MESSAGE: "(.*)"', packet)
             rows.append({"save": save.stem, "turn": turn, "npc": m.group(1), "band": band,
                          "ask": said.group(1) if said else "", "passage": passage,
-                         "leak": any(s.lower()[:40] in passage.lower() for s in secrets)})
+                         "secrets": "\n".join(f"- {x[:240]}" for x in secrets)})
         con.close()
 
     def lab(r: dict[str, Any]) -> dict[str, Any]:
         r.update(judge(f"{r['npc']} (from the save)", r["ask"], r["passage"]))
+        r["leak"] = turn_judge.verdict("leak", {"secrets": r.pop("secrets"), "passage": r["passage"]})["label"] == "leaked"
         return r
 
     with ThreadPoolExecutor(4) as pool:
@@ -395,7 +403,7 @@ def baseline(saves: list[Path]) -> int:
         labs = [r["label"] in GRANT for r in grp]
         flips += sum(1 for a, b in zip(labs, labs[1:], strict=False) if a != b)
     print(f"\nM4 grant-side flips within a save for the same NPC (no event check; bands as played): {flips}")
-    print(f"M10 leaks (a sealed fact's first 40 characters in a reply): {_rate([r['leak'] for r in rows])}")
+    print(f"M10 leaks (turn judge; {turn_judge.precision('leak', turn_judge.load_hand())}): {_rate([r['leak'] for r in rows])}")
     print(f"rows: {len(rows)} -> {out}")
     return 0
 

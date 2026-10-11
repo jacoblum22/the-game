@@ -51,13 +51,13 @@ Phases, lanes, models and waves: `plan.md` section 5. Cases: `cases.md` (C1-C12)
 - [ ] T097 HANDOFF-R.md.
 
 ## E measures (Sonnet, W1, lane `evals/`, `tests/evals/`)
-- [ ] T060 `evals/turn_judge.py`: seeded sample of turns per save; one Haiku call per turn and measure with the fixed
+- [x] T060 `evals/turn_judge.py`: seeded sample of turns per save; one Haiku call per turn and measure with the fixed
   rubric (plan 3 R11); JSON verdicts cached per (save, turn, measure); offline stand-in for tests.
-- [ ] T061 `evals/baselines/turn_judge_hand.yaml` format and the precision report (`count (p, n)`; "precision
+- [x] T061 `evals/baselines/turn_judge_hand.yaml` format and the precision report (`count (p, n)`; "precision
   unmeasured" under 20).
-- [ ] T062 `npc_agency.py`: M10 from the judge (delete `leaked`); the ask rubric labels priced deals `priced`.
-- [ ] T063 `h2h_score.py`: C7 from the judge; read `round` boundaries and `screen.dm_tools.said` (032 trap 1).
-- [ ] T064 Tests (offline) and HANDOFF-E.md.
+- [x] T062 `npc_agency.py`: M10 from the judge (delete `leaked`); the ask rubric labels priced deals `priced`.
+- [x] T063 `h2h_score.py`: C7 from the judge; read `round` boundaries and `screen.dm_tools.said` (032 trap 1).
+- [x] T064 Tests (offline) and HANDOFF-E.md.
 
 ## P2a resolve: positions, contact, fight start, costs (Sonnet, W2, lane: `pipeline.py`, `change.py`, `conflict.py`, `costs.py`)
 - [ ] T020 `pipeline._finish`: stated beats skip `_moved`/`_contact`; `_stated_position` writes `stated.position` on

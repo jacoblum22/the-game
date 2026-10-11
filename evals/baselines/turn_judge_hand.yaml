@@ -1,0 +1,8 @@
+# Hand verdicts for evals/turn_judge.py (spec 033 R11). One row per judged turn you checked by hand.
+#   save:    the save's file stem (as in evals/baselines/turn_judge/<save>.json)
+#   turn:    the turn id, e.g. turn.7        measure: leak | ask | mood | pronoun | absent
+#   judge:   the label the judge gave        hand:    the label you give it (same labels; null = not checked yet)
+# A measure prints "precision unmeasured" until it has 20 rows with a hand label.
+# Labels: leak none|leaked; ask none|caved|priced|refused_way|refused; mood none|caused|uncaused;
+#         pronoun none|slip; absent none|absent_speaks.
+verdicts: []
