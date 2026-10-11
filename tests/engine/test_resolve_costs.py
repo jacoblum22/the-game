@@ -114,6 +114,29 @@ def test_exposure_and_time(tmp_path: Path) -> None:
     assert t.deferred == {"advance_time": {"intervals": 1}, "mode": "free"}
 
 
+def test_conflict_time_without_clock_refuses_not_crashes(tmp_path: Path) -> None:
+    """[spec 033 P11] T-01-9's conflict row is the string "listening clock only": no row, so the cost is refused."""
+    s = Scene.new(tmp_path)
+    f = _frame(s, stakes_source="none", threatened_cost={"menu_id": "cost.time", "source_fact": s.fact(
+        "world", "night", "young")}, alternate_cost=None)
+    rd = read_result(f, _roll(1, "critical_failure", False))
+    t = apply_cost(f, rd, "cost.time", state=s.state, rules=s.rules, mint=lambda p: p, mode="conflict")
+    assert t.refused is not None and "conflict" in t.refused
+
+
+def test_listening_clock_source_needs_a_clock_that_listens(tmp_path: Path) -> None:
+    """[spec 033 P11] 01.6.9: an active clock that lists neither cost.time nor cost.exposure is not listening."""
+    from engine.resolve.costs import established_stakes_sources
+
+    s = Scene.new(tmp_path)
+    s.apply([Event.of("clock_created", source="test", clock=ClockRecord(
+        id="clk.goal", name="goal", kind="progress", segments=4, tick_sources=[{"on": "frame", "ticks": 1}]))])
+    assert "listening_clock" not in established_stakes_sources(s.state, s.rules, s.pc)
+    s.apply([Event.of("clock_created", source="test", clock=ClockRecord(
+        id="clk.alarm", name="alarm", kind="danger", segments=6, tick_sources=[{"on": "cost.time", "ticks": 1}]))])
+    assert "listening_clock" in established_stakes_sources(s.state, s.rules, s.pc)
+
+
 @pytest.mark.parametrize("sev", ["S1", "S2", "S3", "S4", "S5"])
 @pytest.mark.parametrize("foe", [True, False])
 @pytest.mark.parametrize("form", [None, "cond.grabbed", "cond.restrained", "cond.pinned", "cond.prone",

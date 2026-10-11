@@ -25,7 +25,7 @@ from typing import Any
 
 from engine import ids
 from engine.resolve.types import Beat, Change
-from engine.store.events import Event
+from engine.store.events import EntityRecord, Event
 
 NONE = "none"
 HOLDER_FACTS = ("holder", "carried_on", "held_by", "carried_by")  # the change writes `holder`; narration wrote the rest
@@ -216,6 +216,15 @@ def needs_target(state: Any, beat: Beat) -> str:  # rule: 01.2.5
     return f"ask the player {q} they mean: nothing here was named to {verb}"
 
 
+def _made(tx: Any, words: str) -> str:  # rule: 00.6.6
+    """[spec 033 P11] A thing the DM named only in words: the item is made from those words (as a walk-on is), never
+    matched against existing names (an exact id or name is read upstream). Returns its id."""
+    eid = ids.entity_id("item", words, tx.state.entities)
+    tx.add(Event.of("entity_created", source="engine", rule_id="00.6.6",
+                    entity=EntityRecord(id=eid, kind="item", name=words, visibility="shown")))
+    return eid
+
+
 def _described(tx: Any, beat: Beat, kind: str, value: Any, words: str) -> ChangeResult:  # rule: 01.2.7
     """DL-12-97: a change on an unnamed description is a scene fact on the scene's place (cleared at scene end)."""
     st = tx.state
@@ -315,9 +324,12 @@ def apply_change(tx: Any, rules: Any, beat: Beat, reach: int, *, pc: str | None 
     already = already_true(st, beat, pc=pc)
     if already:  # certain, nothing to write (DL-01-36)
         return ChangeResult(words=already)
+    k = c.kind
+    if what is None and k in ("take", "give") and c.description:  # [spec 033 P11] named in words: make it
+        what = _made(tx, c.description)
+        st = tx.state
     w = _name(st, what, pc)
     res = ChangeResult()
-    k = c.kind
     if k == "take":
         if what is None or st.entities[what].kind not in THINGS:
             return ChangeResult(refused="nothing on record by that name to take")

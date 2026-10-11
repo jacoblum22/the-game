@@ -118,7 +118,8 @@ def established_stakes_sources(state: Any, rules: Any, actor: str, beat: Any = N
     from engine.resolve.necessity import parties_who_would_act
 
     sources = ["none", *_rules(rules).resolution["stakes_flags"]["source"]["sources"]]
-    clock = any(c.status == "active" for c in state.clocks.values())
+    # [spec 033 P11] a listening clock listens for a cost the source may threaten (01.6.11), not just any active clock
+    clock = any(_listening_clocks(state, on) for on in source_menus(rules, "listening_clock") or ())
     actors = bool(parties_who_would_act(state, actor, beat))
     return [s for s in sources if (s != "listening_clock" or clock) and (s != OBSERVER or actors)]
 
@@ -277,7 +278,8 @@ def _apply(menu_id: str, sev: str, write: str, entry: Mapping[str, Any], frame: 
         clock = p.get("clock") or _nearest_clock(state, "cost.time")
         if clock is not None:
             return _tick(state, rules, clock, "cost.time", sev, fid), 0, None
-        row = (rules.resolution["time_cost"].get(mode) or {}).get(sev)
+        tc = rules.resolution["time_cost"].get(mode)  # [spec 033 P11] conflict's row is a string: no row, refuse
+        row = tc.get(sev) if isinstance(tc, Mapping) else None
         if not isinstance(row, Mapping):
             raise CostRefused(f"cost.time: no listening clock and no {mode} time row")
         return [], 0, {"advance_time": dict(row), "mode": mode}

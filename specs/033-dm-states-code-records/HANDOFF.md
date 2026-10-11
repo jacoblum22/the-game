@@ -39,4 +39,14 @@ condition effects; the tools path never sets `asks`.
 28. Open: accepting a crude fallback in `_resume` starts no fight (the blow lands as `starts_fight: no`). A refused
     call's "[REDIRECT] Not as tried" stays in `t.oof` all turn (`_take` in `_roll`; `turn_blocks` shows it) even
     when the DM's retry was accepted; clearing it needs a DM-stated link (`retry_of`), not a match.
+- P10 (be2a45c): `_accepted_attack` starts the fight for an accepted attack fallback (Stated gained `starts_fight`,
+  `fight_to`); `propose_roll.retry_of` + "(refused call rN)" tags remove a retried refusal's REDIRECT; `_party` raises
+  `Ambiguous` for two-of-one-name ("Two on record are called 'x': ids... Use the id"); `new_npc` on a taken name says
+  "Another is already called 'x'; use <id>". `_id` alone (change_what/what/to in `_change`) is still unchecked.
+- P11 (1fafe9f): `costs.py` time_cost non-mapping row -> CostRefused; `listening_clock` needs a clock listening for
+  cost.time/exposure (pipeline Framer schema enum shrank: offline_seed11 re-recorded, schema_hash only); take/give of
+  a thing named only in words makes the item (`change._made`); every foe act shows a RESULT line;
+  `foe_act.act` -> `FoeDone(said, harm, pick, roll)`; `world_step.SHOW_FOE_ROLL = False`, `_roll_line()` is the switch.
+29. OWNER RULINGS 2026-10-11 (after live check 3): foe attacks SHOW the roll (die, total with the sealed bonus folded
+    in, the PC's defence), hit or miss; the Fend/reaction step before a foe attack (06.9.2) is added NOW.
 

@@ -151,3 +151,7 @@ Phases, lanes, models and waves: `plan.md` section 5. Cases: `cases.md` (C1-C12)
 - [x] T099 An accepted gate fallback on a Strike, Grapple or Force starts the fight (`_accepted_attack` before `_resume`; `Stated.starts_fight/fight_to`).
 - [x] T100 `retry_of` on `propose_roll`: a refusal that wrote a REDIRECT ends `(refused call rN)`; a retry naming rN that is accepted removes that line; blank or bad tag removes nothing, logs nothing.
 - [x] T101 Two unsealed entities with one exact name: `_party` refuses (ids with band and state); `new_npc` on a borne name still creates and says so.
+## P11 fixes from live check 3 (Sonnet; lane `costs.py`, `change.py`, `world_step._foe_turn`, `foe_act.py`, tests)
+- [x] T110 `cost.time` in conflict mode with no listening clock: the time row lookup refuses (`CostRefused`, existing fallback) instead of crashing; `listening_clock` is an established stakes source only when an active clock lists `cost.time` or `cost.exposure`.
+- [x] T111 `take` / `give` of a thing the DM named only in words make the item from the DM words (`change._made`); no "Not applied".
+- [x] T112 Every foe act shows one RESULT line in words (miss, hold, move); `foe_act.act` returns `FoeDone(said, harm, pick, roll)`; the roll shows only via `world_step.SHOW_FOE_ROLL` (off).
