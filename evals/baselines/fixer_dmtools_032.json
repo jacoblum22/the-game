@@ -1,0 +1,1307 @@
+{
+ "model": "sonnet (play roles: haiku)",
+ "set": "dmtools",
+ "understood": 8,
+ "outcome": 8,
+ "n": 9,
+ "auto": {
+  "right": 7,
+  "unclear": 1,
+  "wrong": 1
+ },
+ "results": [
+  {
+   "id": "dm-kazain",
+   "category": "contradiction",
+   "turn": "turn.12",
+   "outcome": "explain",
+   "kind": "explain",
+   "answer": "[FIX] You're right. In the record Kazain only nodded toward the stairs and told you to come up once the room had emptied, and he kept his seat with the ledger through turns 10 to 12. Nothing on record has him going upstairs. The closing line of turn 12, 'Kazain has not yet come down from the stairs', was a narration slip, not something that happened. Nothing on your sheet or in the facts needs changing; Kazain is still at his table.\n      Now: nothing on your sheet changed: coin 44 · dread 0 · fate 1 · Vitality 12/12 · focus 5 · state fresh.",
+   "screen": "[FIX] You're right. In the record Kazain only nodded toward the stairs and told you to come up once the room had emptied, and he kept his seat with the ledger through turns 10 to 12. Nothing on record has him going upstairs. The closing line of turn 12, 'Kazain has not yet come down from the stairs', was a narration slip, not something that happened. Nothing on your sheet or in the facts needs changing; Kazain is still at his table.\n      Now: nothing on your sheet changed: coin 44 · dread 0 · fate 1 · Vitality 12/12 · focus 5 · state fresh.",
+   "complaints": [
+    {
+     "believes": "Magby's last line says Kazain has not yet come down from the stairs, but he never went upstairs. He is still at his table with the ledger and only told you to come up later.",
+     "category": "contradiction",
+     "turn": "turn.12",
+     "verdict": "player_right",
+     "class": "upheld",
+     "outcome": "explain",
+     "done": [],
+     "done_kinds": [
+      "explain"
+     ],
+     "not_done": []
+    }
+   ],
+   "tools": [
+    "turn('turn.13')",
+    "turn('turn.9')",
+    "search('stairs')"
+   ],
+   "tape": [
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [
+       {
+        "tool": "turn",
+        "arg": "turn.13"
+       },
+       {
+        "tool": "turn",
+        "arg": "turn.9"
+       },
+       {
+        "tool": "search",
+        "arg": "stairs"
+       }
+      ],
+      "final": false,
+      "complaints": []
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "Magby's last line says Kazain has not yet come down from the stairs, but he never went upstairs. He is still at his table with the ledger and only told you to come up later.",
+        "category": "contradiction",
+        "turn": "turn.12",
+        "verdict": "player_right",
+        "found": "You're right. In the record Kazain only nodded toward the stairs and told you to come up once the room had emptied, and he kept his seat with the ledger through turns 10 to 12. Nothing on record has him going upstairs. The closing line of turn 12, 'Kazain has not yet come down from the stairs', was a narration slip, not something that happened. Nothing on your sheet or in the facts needs changing; Kazain is still at his table.",
+        "proposals": [
+         {
+          "kind": "explain",
+          "turn": "turn.12",
+          "subject": "npc.kazain_ironhelm",
+          "key": "",
+          "value": "Kazain never went upstairs; he is still at his table with the ledger and invited Flaas to come up later. The line in turn 12 was a narration slip.",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "turn.9",
+           "turn.10",
+           "turn.12"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "Magby's last line says Kazain has not yet come down from the stairs, but he never went upstairs. He is still at his table with the ledger and only told you to come up later.",
+        "category": "contradiction",
+        "turn": "turn.12",
+        "verdict": "player_right",
+        "found": "You're right. In the record Kazain only nodded toward the stairs and told you to come up once the room had emptied, and he kept his seat with the ledger through turns 10 to 12. Nothing on record has him going upstairs. The closing line of turn 12, 'Kazain has not yet come down from the stairs', was a narration slip, not something that happened. Nothing on your sheet or in the facts needs changing; Kazain is still at his table.",
+        "proposals": [
+         {
+          "kind": "explain",
+          "turn": "turn.12",
+          "subject": "npc.kazain_ironhelm",
+          "key": "",
+          "value": "Kazain never went upstairs; he is still at his table with the ledger and invited Flaas to come up later. The line in turn 12 was a narration slip.",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "turn.9",
+           "turn.10",
+           "turn.12"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "score": {
+    "understood": true,
+    "outcome": true,
+    "complaints": [
+     {
+      "id": "dmk1",
+      "understood": true,
+      "outcome": true,
+      "screen_missing": [],
+      "screen_still": [],
+      "auto": "right"
+     }
+    ]
+   }
+  },
+  {
+   "id": "dm-bowl",
+   "category": "contradiction",
+   "turn": "turn.9",
+   "outcome": "explain",
+   "kind": "explain",
+   "answer": "[FIX] You had already delivered the bread and broth to Agnes in turns 6 to 8, and in turn 9 you said you'd promised to go back. Tobbo's line \"Agnes will be wanting her broth. Take the bowl up to her\" ignored that; the narration slipped. Nothing on record is wrong, so no numbers or facts change.\n      Tobbo said that in turn 5, when you first came to him, before you went down the lane with the food. At that point it was an offer to cover the cost, which fits the order of events. It was not repeated after you brought the food, so there is nothing to correct.\n      Now: nothing on your sheet changed: Vitality 12/12 · fate 1 · dread 0 · coin 44 · focus 5 · state fresh.",
+   "screen": "[FIX] You had already delivered the bread and broth to Agnes in turns 6 to 8, and in turn 9 you said you'd promised to go back. Tobbo's line \"Agnes will be wanting her broth. Take the bowl up to her\" ignored that; the narration slipped. Nothing on record is wrong, so no numbers or facts change.\n      Tobbo said that in turn 5, when you first came to him, before you went down the lane with the food. At that point it was an offer to cover the cost, which fits the order of events. It was not repeated after you brought the food, so there is nothing to correct.\n      Now: nothing on your sheet changed: Vitality 12/12 · fate 1 · dread 0 · coin 44 · focus 5 · state fresh.",
+   "complaints": [
+    {
+     "believes": "Tobbo tells you to take the bowl up to Agnes even though you already brought her the bread and broth and sat with her.",
+     "category": "contradiction",
+     "turn": "turn.9",
+     "verdict": "player_right",
+     "class": "upheld",
+     "outcome": "explain",
+     "done": [],
+     "done_kinds": [
+      "explain"
+     ],
+     "not_done": []
+    },
+    {
+     "believes": "Tobbo says \"I will pay for the bread and the broth\" as if you hadn't brought it yet.",
+     "category": "misread",
+     "turn": "turn.5",
+     "verdict": "record_stands",
+     "class": "stands",
+     "outcome": "explain",
+     "done": [],
+     "done_kinds": [
+      "explain"
+     ],
+     "not_done": []
+    }
+   ],
+   "tools": [
+    "turn('turn.10')",
+    "turn('turn.9')",
+    "search('bread broth')",
+    "turn('turn.5')",
+    "ledger('')",
+    "calls('turn.9')"
+   ],
+   "tape": [
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [
+       {
+        "tool": "turn",
+        "arg": "turn.10"
+       },
+       {
+        "tool": "turn",
+        "arg": "turn.9"
+       },
+       {
+        "tool": "search",
+        "arg": "bread broth"
+       }
+      ],
+      "final": false,
+      "complaints": []
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [
+       {
+        "tool": "turn",
+        "arg": "turn.5"
+       },
+       {
+        "tool": "ledger",
+        "arg": ""
+       },
+       {
+        "tool": "calls",
+        "arg": "turn.9"
+       }
+      ],
+      "final": false,
+      "complaints": []
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "Tobbo tells you to take the bowl up to Agnes even though you already brought her the bread and broth and sat with her.",
+        "category": "contradiction",
+        "turn": "turn.9",
+        "verdict": "player_right",
+        "found": "You had already delivered the bread and broth to Agnes in turns 6 to 8, and in turn 9 you said you'd promised to go back. Tobbo's line \"Agnes will be wanting her broth. Take the bowl up to her\" ignored that; the narration slipped. Nothing on record is wrong, so no numbers or facts change.",
+        "proposals": [
+         {
+          "kind": "explain",
+          "turn": "turn.9",
+          "subject": "",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "turn.9",
+           "turn.7"
+          ]
+         }
+        ]
+       },
+       {
+        "believes": "Tobbo says \"I will pay for the bread and the broth\" as if you hadn't brought it yet.",
+        "category": "misread",
+        "turn": "turn.5",
+        "verdict": "record_stands",
+        "found": "Tobbo said that in turn 5, when you first came to him, before you went down the lane with the food. At that point it was an offer to cover the cost, which fits the order of events. It was not repeated after you brought the food, so there is nothing to correct.",
+        "proposals": [
+         {
+          "kind": "explain",
+          "turn": "turn.5",
+          "subject": "",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "turn.5"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "Tobbo tells you to take the bowl up to Agnes even though you already brought her the bread and broth and sat with her.",
+        "category": "contradiction",
+        "turn": "turn.9",
+        "verdict": "player_right",
+        "found": "You had already delivered the bread and broth to Agnes in turns 6 to 8, and in turn 9 you said you'd promised to go back. Tobbo's line \"Agnes will be wanting her broth. Take the bowl up to her\" ignored that; the narration slipped. Nothing on record is wrong, so no numbers or facts change.",
+        "proposals": [
+         {
+          "kind": "explain",
+          "turn": "turn.9",
+          "subject": "",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "turn.9",
+           "turn.7"
+          ]
+         }
+        ]
+       },
+       {
+        "believes": "Tobbo says \"I will pay for the bread and the broth\" as if you hadn't brought it yet.",
+        "category": "misread",
+        "turn": "turn.5",
+        "verdict": "record_stands",
+        "found": "Tobbo said that in turn 5, when you first came to him, before you went down the lane with the food. At that point it was an offer to cover the cost, which fits the order of events. It was not repeated after you brought the food, so there is nothing to correct.",
+        "proposals": [
+         {
+          "kind": "explain",
+          "turn": "turn.5",
+          "subject": "",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "turn.5"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "score": {
+    "understood": true,
+    "outcome": true,
+    "complaints": [
+     {
+      "id": "dmb1",
+      "understood": true,
+      "outcome": true,
+      "screen_missing": [],
+      "screen_still": [],
+      "auto": "right"
+     }
+    ]
+   }
+  },
+  {
+   "id": "dm-worn",
+   "category": "other",
+   "turn": "turn.8",
+   "outcome": "explain",
+   "kind": "explain",
+   "answer": "[FIX] The record is correct: your punch landed as a light blow on Milby, and he is now marked as worn. The result line printed that state as a bare word, \"your opponent worn\", so it read like a clipped sentence. The wording slipped, but nothing about the fight needs to change.\n      Now: nothing on your sheet changed: coin 44 · dread 0 · fate 1 · Vitality 12/12 · focus 5 · state fresh · conditions prone.",
+   "screen": "[FIX] The record is correct: your punch landed as a light blow on Milby, and he is now marked as worn. The result line printed that state as a bare word, \"your opponent worn\", so it read like a clipped sentence. The wording slipped, but nothing about the fight needs to change.\n      Now: nothing on your sheet changed: coin 44 · dread 0 · fate 1 · Vitality 12/12 · focus 5 · state fresh · conditions prone.",
+   "complaints": [
+    {
+     "believes": "The result line at the end of the punch turn says \"Changed: your opponent worn\", which reads as cut off or garbled. It should say plainly that Milby was hurt or worn down.",
+     "category": "other",
+     "turn": "turn.8",
+     "verdict": "partly",
+     "class": "upheld",
+     "outcome": "explain",
+     "done": [],
+     "done_kinds": [
+      "explain"
+     ],
+     "not_done": []
+    }
+   ],
+   "tools": [
+    "turn('turn.9')",
+    "turn('turn.8')",
+    "entity('npc.milby_fairwort')"
+   ],
+   "tape": [
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [
+       {
+        "tool": "turn",
+        "arg": "turn.9"
+       },
+       {
+        "tool": "turn",
+        "arg": "turn.8"
+       },
+       {
+        "tool": "entity",
+        "arg": "npc.milby_fairwort"
+       }
+      ],
+      "final": false,
+      "complaints": []
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "The result line at the end of the punch turn says \"Changed: your opponent worn\", which reads as cut off or garbled. It should say plainly that Milby was hurt or worn down.",
+        "category": "other",
+        "turn": "turn.8",
+        "verdict": "partly",
+        "found": "The record is correct: your punch landed as a light blow on Milby, and he is now marked as worn. The result line printed that state as a bare word, \"your opponent worn\", so it read like a clipped sentence. The wording slipped, but nothing about the fight needs to change.",
+        "proposals": [
+         {
+          "kind": "explain",
+          "turn": "turn.8",
+          "subject": "",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": []
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "The result line at the end of the punch turn says \"Changed: your opponent worn\", which reads as cut off or garbled. It should say plainly that Milby was hurt or worn down.",
+        "category": "other",
+        "turn": "turn.8",
+        "verdict": "partly",
+        "found": "The record is correct: your punch landed as a light blow on Milby, and he is now marked as worn. The result line printed that state as a bare word, \"your opponent worn\", so it read like a clipped sentence. The wording slipped, but nothing about the fight needs to change.",
+        "proposals": [
+         {
+          "kind": "explain",
+          "turn": "turn.8",
+          "subject": "",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": []
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "score": {
+    "understood": true,
+    "outcome": true,
+    "complaints": [
+     {
+      "id": "dmw1",
+      "understood": true,
+      "outcome": true,
+      "screen_missing": [],
+      "screen_still": [],
+      "auto": "right"
+     }
+    ]
+   }
+  },
+  {
+   "id": "dm-afternoon",
+   "category": "contradiction",
+   "turn": "turn.4",
+   "outcome": "explain",
+   "kind": "explain",
+   "answer": "[FIX] The game's clock does say it is the morning of day 1, and nothing in the record moved it forward. The line \"The light is still good, though the afternoon will not hold it long\" in the turn 4 passage was a slip in the narration. It is still morning, and the clock stands.\n      Now: nothing on your sheet changed: Vitality 12/12 · fate 1 · dread 0 · coin 44 · focus 5 · state fresh.",
+   "screen": "[FIX] The game's clock does say it is the morning of day 1, and nothing in the record moved it forward. The line \"The light is still good, though the afternoon will not hold it long\" in the turn 4 passage was a slip in the narration. It is still morning, and the clock stands.\n      Now: nothing on your sheet changed: Vitality 12/12 · fate 1 · dread 0 · coin 44 · focus 5 · state fresh.",
+   "complaints": [
+    {
+     "believes": "The passage said the afternoon light won't last, but the game's clock says it is still the morning of day 1, so the two disagree.",
+     "category": "contradiction",
+     "turn": "turn.4",
+     "verdict": "player_right",
+     "class": "upheld",
+     "outcome": "explain",
+     "done": [],
+     "done_kinds": [
+      "explain"
+     ],
+     "not_done": []
+    }
+   ],
+   "tools": [
+    "turn('turn.5')",
+    "search('afternoon')",
+    "calls('turn.5 narrator')"
+   ],
+   "tape": [
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [
+       {
+        "tool": "turn",
+        "arg": "turn.5"
+       },
+       {
+        "tool": "search",
+        "arg": "afternoon"
+       },
+       {
+        "tool": "calls",
+        "arg": "turn.5 narrator"
+       }
+      ],
+      "final": false,
+      "complaints": []
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "The passage said the afternoon light won't last, but the game's clock says it is still the morning of day 1, so the two disagree.",
+        "category": "contradiction",
+        "turn": "turn.4",
+        "verdict": "player_right",
+        "found": "The game's clock does say it is the morning of day 1, and nothing in the record moved it forward. The line \"The light is still good, though the afternoon will not hold it long\" in the turn 4 passage was a slip in the narration. It is still morning, and the clock stands.",
+        "proposals": [
+         {
+          "kind": "explain",
+          "turn": "turn.4",
+          "subject": "",
+          "key": "",
+          "value": "It is still the morning of day 1; the mention of afternoon in the passage was a narration slip, not a change in time.",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": []
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "The passage said the afternoon light won't last, but the game's clock says it is still the morning of day 1, so the two disagree.",
+        "category": "contradiction",
+        "turn": "turn.4",
+        "verdict": "player_right",
+        "found": "The game's clock does say it is the morning of day 1, and nothing in the record moved it forward. The line \"The light is still good, though the afternoon will not hold it long\" in the turn 4 passage was a slip in the narration. It is still morning, and the clock stands.",
+        "proposals": [
+         {
+          "kind": "explain",
+          "turn": "turn.4",
+          "subject": "",
+          "key": "",
+          "value": "It is still the morning of day 1; the mention of afternoon in the passage was a narration slip, not a change in time.",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": []
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "score": {
+    "understood": true,
+    "outcome": true,
+    "complaints": [
+     {
+      "id": "dma1",
+      "understood": true,
+      "outcome": true,
+      "screen_missing": [],
+      "screen_still": [],
+      "auto": "right"
+     }
+    ]
+   }
+  },
+  {
+   "id": "dm-pinned",
+   "category": "rule_wrong",
+   "turn": "turn.15",
+   "outcome": "correct",
+   "kind": "correct",
+   "answer": "[CORRECTION] Nobody is pinning you. The 'pinned' condition was put on back in turn 4, when your roll failed badly and you lost your footing in the crowd. The game filed that fall as a hold, and the source is listed as yourself. It has no real holder, and it is what blocked your lunge at Eliard in turn 15. The condition should come off.\n             Done: you are no longer pinned.\n             Now: conditions none (was pinned (held by Kerey Ashley)).",
+   "screen": "[CORRECTION] Nobody is pinning you. The 'pinned' condition was put on back in turn 4, when your roll failed badly and you lost your footing in the crowd. The game filed that fall as a hold, and the source is listed as yourself. It has no real holder, and it is what blocked your lunge at Eliard in turn 15. The condition should come off.\n             Done: you are no longer pinned.\n             Now: conditions none (was pinned (held by Kerey Ashley)).",
+   "complaints": [
+    {
+     "believes": "You are told you are pinned and must break free, but nobody has grabbed you, so you want to know who is pinning you.",
+     "category": "rule_wrong",
+     "turn": "turn.15",
+     "verdict": "player_right",
+     "class": "upheld",
+     "outcome": "correct",
+     "done": [
+      "you are no longer pinned"
+     ],
+     "done_kinds": [
+      "remove_fact"
+     ],
+     "not_done": []
+    }
+   ],
+   "tools": [
+    "turn('turn.4')",
+    "turn('turn.15')",
+    "entity('pc.kerey_ashley')"
+   ],
+   "tape": [
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [
+       {
+        "tool": "turn",
+        "arg": "turn.4"
+       },
+       {
+        "tool": "turn",
+        "arg": "turn.15"
+       },
+       {
+        "tool": "entity",
+        "arg": "pc.kerey_ashley"
+       }
+      ],
+      "final": false,
+      "complaints": []
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "You are told you are pinned and must break free, but nobody has grabbed you, so you want to know who is pinning you.",
+        "category": "rule_wrong",
+        "turn": "turn.15",
+        "verdict": "player_right",
+        "found": "Nobody is pinning you. The 'pinned' condition was put on back in turn 4, when your roll failed badly and you lost your footing in the crowd. The game filed that fall as a hold, and the source is listed as yourself. It has no real holder, and it is what blocked your lunge at Eliard in turn 15. The condition should come off.",
+        "proposals": [
+         {
+          "kind": "remove_fact",
+          "turn": "turn.4",
+          "subject": "pc.kerey_ashley",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "cinst.1",
+          "evidence": [
+           "cinst.1",
+           "turn.4"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "You are told you are pinned and must break free, but nobody has grabbed you, so you want to know who is pinning you.",
+        "category": "rule_wrong",
+        "turn": "turn.15",
+        "verdict": "player_right",
+        "found": "Nobody is pinning you. The 'pinned' condition was put on back in turn 4, when your roll failed badly and you lost your footing in the crowd. The game filed that fall as a hold, and the source is listed as yourself. It has no real holder, and it is what blocked your lunge at Eliard in turn 15. The condition should come off.",
+        "proposals": [
+         {
+          "kind": "remove_fact",
+          "turn": "turn.4",
+          "subject": "pc.kerey_ashley",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "cinst.1",
+          "evidence": [
+           "cinst.1",
+           "turn.4"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "score": {
+    "understood": true,
+    "outcome": true,
+    "complaints": [
+     {
+      "id": "dmp1",
+      "understood": true,
+      "outcome": true,
+      "screen_missing": [],
+      "screen_still": [],
+      "auto": "right"
+     }
+    ]
+   }
+  },
+  {
+   "id": "dm-clue-name",
+   "category": "other",
+   "turn": "turn.2",
+   "outcome": "explain",
+   "kind": "explain",
+   "answer": "[FIX] She did tell you. When you asked who was missing, Ivette answered: \"Falo. Falo Hayfoot. He is a boy of the lanes, and his mother has been sick these three weeks.\" The record shows Nedett learned this name by being told it, so he has it. She did not know what he was doing yesterday and sent you to Hobly, who keeps the ledger.\n      Now: nothing on your sheet changed: coin 44 · dread 0 · fate 1 · Vitality 12/12 · focus 5 · state fresh.",
+   "screen": "[FIX] She did tell you. When you asked who was missing, Ivette answered: \"Falo. Falo Hayfoot. He is a boy of the lanes, and his mother has been sick these three weeks.\" The record shows Nedett learned this name by being told it, so he has it. She did not know what he was doing yesterday and sent you to Hobly, who keeps the ledger.\n      Now: nothing on your sheet changed: coin 44 · dread 0 · fate 1 · Vitality 12/12 · focus 5 · state fresh.",
+   "complaints": [
+    {
+     "believes": "Ivette never actually told you the missing boy's name, and you don't have it.",
+     "category": "other",
+     "turn": "turn.2",
+     "verdict": "record_stands",
+     "class": "stands",
+     "outcome": "explain",
+     "done": [],
+     "done_kinds": [
+      "explain"
+     ],
+     "not_done": []
+    }
+   ],
+   "tools": [
+    "turn('turn.2')",
+    "turn('turn.3')",
+    "entity('npc.rosett_applebottle')"
+   ],
+   "tape": [
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [
+       {
+        "tool": "turn",
+        "arg": "turn.2"
+       },
+       {
+        "tool": "turn",
+        "arg": "turn.3"
+       },
+       {
+        "tool": "entity",
+        "arg": "npc.rosett_applebottle"
+       }
+      ],
+      "final": false,
+      "complaints": []
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "Ivette never actually told you the missing boy's name, and you don't have it.",
+        "category": "other",
+        "turn": "turn.2",
+        "verdict": "record_stands",
+        "found": "She did tell you. When you asked who was missing, Ivette answered: \"Falo. Falo Hayfoot. He is a boy of the lanes, and his mother has been sick these three weeks.\" The record shows Nedett learned this name by being told it, so he has it. She did not know what he was doing yesterday and sent you to Hobly, who keeps the ledger.",
+        "proposals": [
+         {
+          "kind": "explain",
+          "turn": "turn.2",
+          "subject": "",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "fact.118",
+          "evidence": [
+           "fact.118"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "Ivette never actually told you the missing boy's name, and you don't have it.",
+        "category": "other",
+        "turn": "turn.2",
+        "verdict": "record_stands",
+        "found": "She did tell you. When you asked who was missing, Ivette answered: \"Falo. Falo Hayfoot. He is a boy of the lanes, and his mother has been sick these three weeks.\" The record shows Nedett learned this name by being told it, so he has it. She did not know what he was doing yesterday and sent you to Hobly, who keeps the ledger.",
+        "proposals": [
+         {
+          "amount": "",
+          "evidence": [
+           "fact.118"
+          ],
+          "fact_id": "fact.118",
+          "key": "",
+          "kind": "explain",
+          "quantity": "",
+          "subject": "",
+          "turn": "turn.2",
+          "value": ""
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "score": {
+    "understood": true,
+    "outcome": true,
+    "complaints": [
+     {
+      "id": "dmc1",
+      "understood": true,
+      "outcome": true,
+      "screen_missing": [],
+      "screen_still": [],
+      "auto": "right"
+     }
+    ]
+   }
+  },
+  {
+   "id": "dm-new-npc",
+   "category": "other",
+   "turn": "turn.14",
+   "outcome": "explain",
+   "kind": "explain",
+   "answer": "[FIX] Vorak Stonedelve first appears in the turn where you walked to the quay gate and asked whether there was a gatekeeper or anyone nearby to talk to. The narration introduced him then: \"A dwarf in a worn leather jerkin leans on the post... This is Vorak Stonedelve, the warden who keeps the gate by night and day.\" Nothing earlier in the story named a gate warden, but he was added in answer to your question, and he stands there alongside Captain Helo Varande. Nothing on record is wrong, so nothing changes.\n      Now: nothing on your sheet changed: Vitality 12/12 · fate 1 · dread 0 · coin 44 · focus 5 · state fresh.",
+   "screen": "[FIX] Vorak Stonedelve first appears in the turn where you walked to the quay gate and asked whether there was a gatekeeper or anyone nearby to talk to. The narration introduced him then: \"A dwarf in a worn leather jerkin leans on the post... This is Vorak Stonedelve, the warden who keeps the gate by night and day.\" Nothing earlier in the story named a gate warden, but he was added in answer to your question, and he stands there alongside Captain Helo Varande. Nothing on record is wrong, so nothing changes.\n      Now: nothing on your sheet changed: Vitality 12/12 · fate 1 · dread 0 · coin 44 · focus 5 · state fresh.",
+   "complaints": [
+    {
+     "believes": "You think the warden Vorak came out of nowhere, because nobody mentioned a warden at the quay gate before he showed up.",
+     "category": "other",
+     "turn": "turn.14",
+     "verdict": "record_stands",
+     "class": "stands",
+     "outcome": "explain",
+     "done": [],
+     "done_kinds": [
+      "explain"
+     ],
+     "not_done": []
+    }
+   ],
+   "tools": [
+    "turn('turn.14')",
+    "entity('npc.vorak_stonedelve')",
+    "search('warden')"
+   ],
+   "tape": [
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [
+       {
+        "tool": "turn",
+        "arg": "turn.14"
+       },
+       {
+        "tool": "entity",
+        "arg": "npc.vorak_stonedelve"
+       },
+       {
+        "tool": "search",
+        "arg": "warden"
+       }
+      ],
+      "final": false,
+      "complaints": []
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "You think the warden Vorak came out of nowhere, because nobody mentioned a warden at the quay gate before he showed up.",
+        "category": "other",
+        "turn": "turn.14",
+        "verdict": "record_stands",
+        "found": "Vorak Stonedelve first appears in the turn where you walked to the quay gate and asked whether there was a gatekeeper or anyone nearby to talk to. The narration introduced him then: \"A dwarf in a worn leather jerkin leans on the post... This is Vorak Stonedelve, the warden who keeps the gate by night and day.\" Nothing earlier in the story named a gate warden, but he was added in answer to your question, and he stands there alongside Captain Helo Varande. Nothing on record is wrong, so nothing changes.",
+        "proposals": [
+         {
+          "kind": "explain",
+          "turn": "turn.14",
+          "subject": "",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": []
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "You think the warden Vorak came out of nowhere, because nobody mentioned a warden at the quay gate before he showed up.",
+        "category": "other",
+        "turn": "turn.14",
+        "verdict": "record_stands",
+        "found": "Vorak Stonedelve first appears in the turn where you walked to the quay gate and asked whether there was a gatekeeper or anyone nearby to talk to. The narration introduced him then: \"A dwarf in a worn leather jerkin leans on the post... This is Vorak Stonedelve, the warden who keeps the gate by night and day.\" Nothing earlier in the story named a gate warden, but he was added in answer to your question, and he stands there alongside Captain Helo Varande. Nothing on record is wrong, so nothing changes.",
+        "proposals": [
+         {
+          "kind": "explain",
+          "turn": "turn.14",
+          "subject": "",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": []
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "score": {
+    "understood": true,
+    "outcome": true,
+    "complaints": [
+     {
+      "id": "dmn1",
+      "understood": true,
+      "outcome": true,
+      "screen_missing": [],
+      "screen_still": [],
+      "auto": "right"
+     }
+    ]
+   }
+  },
+  {
+   "id": "dm-offer-title",
+   "category": "other",
+   "turn": "turn.9",
+   "outcome": "explain",
+   "kind": "explain",
+   "answer": "[FIX] The heading is only the game's label for a goal of finding something out from someone. The offer itself matches your action in turn 8: it reads \"Make Kazain account for the ledger entry dated before the wagons reached the ford\", with you keeping your voice low and your finger beside the early date, pressing him to explain it quietly or be asked aloud. Nothing in the offer treats this as something other than a quiet question to Kazain, and the odds (50%, Presence +3, Influence +1) count only what applies.\n      Now: nothing on your sheet changed: coin 44 · dread 0 · fate 1 · Vitality 12/12 · focus 5 · state fresh.",
+   "screen": "[FIX] The heading is only the game's label for a goal of finding something out from someone. The offer itself matches your action in turn 8: it reads \"Make Kazain account for the ledger entry dated before the wagons reached the ford\", with you keeping your voice low and your finger beside the early date, pressing him to explain it quietly or be asked aloud. Nothing in the offer treats this as something other than a quiet question to Kazain, and the odds (50%, Presence +3, Influence +1) count only what applies.\n      Now: nothing on your sheet changed: coin 44 · dread 0 · fate 1 · Vitality 12/12 · focus 5 · state fresh.\n\n[OFFER] Learn from Kazain Ironhelm: Flaas keeps her voice low, lays her finger beside the early date on Valas's copy, and presses him to explain it quietly or face being asked aloud before the room.\n        Chance: even — 50%   (Presence +3, Influence +1)\n        If it works: what you wanted.   Very well (5%): more than you asked.\n        If it fails: a door closes to you — a setback.   Badly (5%): a door closes to you — serious.\n        Close call (15%): get it anyway and pay (you are noticed), or fail.\n        Fate: 1 (you may spend one to reroll the die once you see it)\n        Another way: with Intellect (35%) · with Might (35%)",
+   "complaints": [
+    {
+     "believes": "The offer is headed \"Learn from Kazain Ironhelm\", but you are only quietly asking him to explain the early ledger date, so the heading doesn't match what you're doing.",
+     "category": "other",
+     "turn": "turn.9",
+     "verdict": "record_stands",
+     "class": "stands",
+     "outcome": "explain",
+     "done": [],
+     "done_kinds": [
+      "explain"
+     ],
+     "not_done": []
+    }
+   ],
+   "tools": [
+    "turn('turn.9')",
+    "recompute('turn.9')",
+    "calls('turn.9 framer')",
+    "turn('turn.8')",
+    "calls('turn.8 framer')",
+    "recompute('turn.8')"
+   ],
+   "tape": [
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [
+       {
+        "tool": "turn",
+        "arg": "turn.9"
+       },
+       {
+        "tool": "recompute",
+        "arg": "turn.9"
+       },
+       {
+        "tool": "calls",
+        "arg": "turn.9 framer"
+       }
+      ],
+      "final": false,
+      "complaints": []
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [
+       {
+        "tool": "turn",
+        "arg": "turn.8"
+       },
+       {
+        "tool": "calls",
+        "arg": "turn.8 framer"
+       },
+       {
+        "tool": "recompute",
+        "arg": "turn.8"
+       }
+      ],
+      "final": false,
+      "complaints": []
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "The offer is headed \"Learn from Kazain Ironhelm\", but you are only quietly asking him to explain the early ledger date, so the heading doesn't match what you're doing.",
+        "category": "other",
+        "turn": "turn.9",
+        "verdict": "record_stands",
+        "found": "The heading is only the game's label for a goal of finding something out from someone. The offer itself matches your action in turn 8: it reads \"Make Kazain account for the ledger entry dated before the wagons reached the ford\", with you keeping your voice low and your finger beside the early date, pressing him to explain it quietly or be asked aloud. Nothing in the offer treats this as something other than a quiet question to Kazain, and the odds (50%, Presence +3, Influence +1) count only what applies.",
+        "proposals": [
+         {
+          "kind": "explain",
+          "turn": "turn.9",
+          "subject": "",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "turn.8",
+           "recompute turn.8"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "The offer is headed \"Learn from Kazain Ironhelm\", but you are only quietly asking him to explain the early ledger date, so the heading doesn't match what you're doing.",
+        "category": "other",
+        "turn": "turn.9",
+        "verdict": "record_stands",
+        "found": "The heading is only the game's label for a goal of finding something out from someone. The offer itself matches your action in turn 8: it reads \"Make Kazain account for the ledger entry dated before the wagons reached the ford\", with you keeping your voice low and your finger beside the early date, pressing him to explain it quietly or be asked aloud. Nothing in the offer treats this as something other than a quiet question to Kazain, and the odds (50%, Presence +3, Influence +1) count only what applies.",
+        "proposals": [
+         {
+          "kind": "explain",
+          "turn": "turn.9",
+          "subject": "",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "",
+          "evidence": [
+           "turn.8",
+           "recompute turn.8"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "score": {
+    "understood": false,
+    "outcome": false,
+    "complaints": [
+     {
+      "id": "dmo1",
+      "understood": false,
+      "outcome": false,
+      "screen_missing": [],
+      "screen_still": [
+       "Learn from Kazain Ironhelm"
+      ],
+      "auto": "wrong"
+     }
+    ]
+   }
+  },
+  {
+   "id": "dm-prone",
+   "category": "contradiction",
+   "turn": "turn.10",
+   "outcome": "explain",
+   "kind": "explain",
+   "answer": "[FIX] The fall came from the cost you took in turn 8 (\"you lose your footing\"), which put prone on you. In turn 10 you wrote that you scramble up, and the passage says you \"plant a hand in the mud and heave yourself up\", but nothing took the condition off, so the sheet kept showing prone while the story had you on your feet. The condition should come off; the offer on screen already has you rising and swinging.\n      Not done: remove fact: cinst.1 was not looked at, so the record stands (INV-9).\n      Now: nothing on your sheet changed: coin 44 · dread 0 · fate 1 · Vitality 12/12 · focus 5 · state fresh · conditions prone.",
+   "screen": "[FIX] The fall came from the cost you took in turn 8 (\"you lose your footing\"), which put prone on you. In turn 10 you wrote that you scramble up, and the passage says you \"plant a hand in the mud and heave yourself up\", but nothing took the condition off, so the sheet kept showing prone while the story had you on your feet. The condition should come off; the offer on screen already has you rising and swinging.\n      Not done: remove fact: cinst.1 was not looked at, so the record stands (INV-9).\n      Now: nothing on your sheet changed: coin 44 · dread 0 · fate 1 · Vitality 12/12 · focus 5 · state fresh · conditions prone.\n\n[OFFER] Hurt the officer: You scramble up out of the mud and swing again at the officer's jaw while his hand is still moving toward his belt.\n        Chance: better than even — 60%   (Martial +1)\n        If it works: what you wanted.   Very well (10%): more than you asked.\n        If it fails: you are noticed — a setback.   Badly (5%): you are noticed — serious.\n        Close call (15%): get it anyway and pay (you lose your footing), or fail.\n        Fate: 1 (you may spend one to reroll the die once you see it)\n        Another way: feint first (65%) · grapple instead (60%) · shove instead (60%)",
+   "complaints": [
+    {
+     "believes": "The passage has me getting up out of the mud, but my sheet still says I'm prone.",
+     "category": "contradiction",
+     "turn": "turn.10",
+     "verdict": "player_right",
+     "class": "upheld",
+     "outcome": "explain",
+     "done": [],
+     "done_kinds": [],
+     "not_done": [
+      "remove fact: cinst.1 was not looked at, so the record stands (INV-9)"
+     ]
+    }
+   ],
+   "tools": [
+    "turn('turn.10')",
+    "turn('turn.11')",
+    "turn('turn.8')"
+   ],
+   "tape": [
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [
+       {
+        "tool": "turn",
+        "arg": "turn.10"
+       },
+       {
+        "tool": "turn",
+        "arg": "turn.11"
+       },
+       {
+        "tool": "turn",
+        "arg": "turn.8"
+       }
+      ],
+      "final": false,
+      "complaints": []
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "The passage has me getting up out of the mud, but my sheet still says I'm prone.",
+        "category": "contradiction",
+        "turn": "turn.10",
+        "verdict": "player_right",
+        "found": "The fall came from the cost you took in turn 8 (you lose your footing), which put prone on you. In turn 10 you wrote that you scramble up, and the passage says you 'plant a hand in the mud and heave yourself up'. Nothing took the condition off, so the sheet still shows prone while the story has you on your feet.",
+        "proposals": [
+         {
+          "kind": "remove_fact",
+          "turn": "turn.8",
+          "subject": "",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "cinst.1",
+          "evidence": [
+           "turn.8",
+           "turn.10"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "The passage has me getting up out of the mud, but my sheet still says I'm prone.",
+        "category": "contradiction",
+        "turn": "turn.10",
+        "verdict": "player_right",
+        "found": "The fall came from the cost you took in turn 8 (\"you lose your footing\"), which put prone on you. In turn 10 you wrote that you scramble up, and the passage says you \"plant a hand in the mud and heave yourself up\", but nothing took the condition off, so the sheet kept showing prone while the story had you on your feet. The condition should come off; the offer on screen already has you rising and swinging.",
+        "proposals": [
+         {
+          "kind": "remove_fact",
+          "turn": "turn.8",
+          "subject": "",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "cinst.1",
+          "evidence": [
+           "cinst.1",
+           "turn.8",
+           "turn.10"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "role": "fixer",
+     "data": {
+      "calls": [],
+      "final": true,
+      "complaints": [
+       {
+        "believes": "The passage has me getting up out of the mud, but my sheet still says I'm prone.",
+        "category": "contradiction",
+        "turn": "turn.10",
+        "verdict": "player_right",
+        "found": "The fall came from the cost you took in turn 8 (\"you lose your footing\"), which put prone on you. In turn 10 you wrote that you scramble up, and the passage says you \"plant a hand in the mud and heave yourself up\", but nothing took the condition off, so the sheet kept showing prone while the story had you on your feet. The condition should come off; the offer on screen already has you rising and swinging.",
+        "proposals": [
+         {
+          "kind": "remove_fact",
+          "turn": "turn.8",
+          "subject": "",
+          "key": "",
+          "value": "",
+          "quantity": "",
+          "amount": "",
+          "fact_id": "cinst.1",
+          "evidence": [
+           "turn.8"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "score": {
+    "understood": true,
+    "outcome": true,
+    "complaints": [
+     {
+      "id": "dmr1",
+      "understood": true,
+      "outcome": true,
+      "screen_missing": [],
+      "screen_still": [],
+      "auto": "unclear"
+     }
+    ]
+   }
+  }
+ ]
+}
