@@ -1,5 +1,7 @@
 <!--
 Sync Impact Report
+Version change: 3.0.0 → 3.1.0 (MINOR: VIII.9 added, "code never deduces the story": no inference of story
+  state from actions or words, no word matching for decisions. Owner ruling 2026-10-10, spec 032.)
 Version change: 2.0.0 → 3.0.0 (MAJOR: the project's stance toward the model is redefined. The owner directed
   it on 2026-10-08/09 and approved recording it here and in rules/00-architecture.md.)
 Added principles:
@@ -442,6 +444,15 @@ get too in the weeds"; "analyse things holistically, not individually".
 8. **The player is part of error correction.** The feedback loop (`/fix`) MUST understand a report, go
    back and check the record, repair visibly, and answer plainly. It is the safety net that lets the rest
    of the system be loose, so its quality is measured on real complaints.
+9. **Code never deduces the story.** Code MUST NOT infer story state from actions or words: positions,
+   range, presence, who comes along, who holds whom, a person's identity, an enemy's choice, a cost's form,
+   or anything else a reader of the scene would judge. Only the DM model sets these, through a tool or by
+   choosing a rule's option; code records what it is told and does the arithmetic (dice, harm, a rule's
+   stated result of a roll). Code MUST NOT decide anything by word matching (regexes, keyword lists, name,
+   alias, head-noun or content-word overlap) over natural-language text; parsing code-made ids and tokens is
+   fine. When code and the story disagree, give the DM a tool or a field to state it, never an inference.
+   Owner, 2026-10-10: "Code should absolutely not be doing that sort of thing… there are a million
+   different ways that this could go down"; "we need to remove all instances of [word matching]".
 
 *What VIII keeps:* structured state, typed goals (intended changes), clues and cases, dice, and the
 feedback loop.
@@ -903,4 +914,4 @@ bumps follow semantic versioning: MAJOR for backward-incompatible principle remo
 redefinitions, MINOR for new principles/patterns or materially expanded guidance, PATCH for
 wording or clarification only.
 
-**Version**: 3.0.0 | **Ratified**: 2026-09-27 | **Last Amended**: 2026-10-09
+**Version**: 3.1.0 | **Ratified**: 2026-09-27 | **Last Amended**: 2026-10-10

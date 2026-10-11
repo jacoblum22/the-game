@@ -36,6 +36,14 @@ re-reads it.
   `general-purpose`, which starts at 60k tokens per turn against 12–27k for these.
 - The model, slicing and handoff rules are in `.claude/skills/playtest-round/SKILL.md` ("Agents").
 
+## Code never deduces the story (constitution VIII.9, owner 2026-10-10)
+- Code MUST NOT infer story state from actions or words: positions, range, presence, companions, holds, identity,
+  an enemy's choice, a cost's form. Only the DM model sets these, through a tool or by choosing a rule's option.
+  Code records what it is told and does the arithmetic.
+- Code MUST NOT decide anything by word matching over natural-language text: regexes, keyword lists, or name,
+  alias, head-noun or word-overlap matching. Parsing code-made ids and tokens is fine.
+- When code and the story disagree, add a DM tool or field. Never add an inference.
+
 ## Code checks (`engine/`, `play/`, `evals/`, `tests/`)
 Cloud sessions install `requirements-dev.txt` automatically (`.claude/hooks/session-start.sh`). Before
 pushing code, run `ruff check .`, `pyright` and `python -m pytest -q -p no:cacheprovider` (about 3 minutes;
