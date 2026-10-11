@@ -1,4 +1,0 @@
-11-escalation-check.py: weeks for an outgrown tier-3 faction's regional 'win a power' clock (12 segments)
-  highest rating 5 (force 5, cunning 2, wealth 1, sway 2), rising        weeks p10/median/p90 (24, 35.0, 50); seasons (13 weeks) at the median 2.7
-  highest rating 4 (force 4, cunning 3, wealth 1, sway 2), flourishing   weeks p10/median/p90 (31, 45.0, 63); seasons (13 weeks) at the median 3.5
-  highest rating 4, entrenched (-1 on goal)                              weeks p10/median/p90 (34, 51.0, 74); seasons (13 weeks) at the median 3.9

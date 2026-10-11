@@ -4,25 +4,18 @@ Thumbs.db
 desktop.ini
 *.log
 
-# Python (feature 001: action-resolution-probe)
+# Python
 __pycache__/
 *.pyc
 .venv/
 venv/
-*.egg-info/
-.pytest_cache/
 
-# Secrets / local config
+# Secrets / local
 .env
-*.session.json
-*.scenario.json
-
-rules/_process/index.tsv
 .claude/worktrees/
 
-# Feature 004: game saves
+# Old playtest saves (first build)
 saves/
 *.db
 *.db-wal
 *.db-shm
-engine/data/_cache/

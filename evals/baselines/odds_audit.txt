@@ -1,4 +1,0 @@
-# Odds audit: 42 rolled golden beats x 3 PCs -> 483 frames (0 proposals refused by frame_check)
-- non-Dire unopposed OFFERs with critical failure above success: 66, of them not labelled long shot: 0 (target 0)
-- frames where the guard turned a Precision snag Protective: 114
-- frames with >= 3 distinct odds (the frame and its alternatives): 17/483 (3.5%); Wren (uneven attributes) 17/161 (10.6%); attacks on a person 11/45 (24.4%); the -1 and +0 PCs have equal attributes, so only a sibling verb can differ

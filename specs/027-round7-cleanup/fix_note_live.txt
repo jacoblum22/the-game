@@ -1,3 +1,0 @@
-f04              understood=Y outcome=Y auto=wrong   (correct; 4 tools) STILL=['65%']
-f12              understood=Y outcome=Y auto=right   (correct; 3 tools)
-complaints 2: understood 2/2; outcome class 2/2; auto {'right': 1, 'unclear': 0, 'wrong': 1}

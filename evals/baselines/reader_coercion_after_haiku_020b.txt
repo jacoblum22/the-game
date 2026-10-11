@@ -1,6 +1,0 @@
-- playtest-20261008-233000-fighter.db#turn.2: PASS (1 now-beat learn, verb.grapple, gate G1, against_will True) :: I grab Dunwen's arm. "Who was that face in the crowd? Tell me the word
-- playtest-20261008-233000-fighter.db#turn.5: PASS (1 now-beat learn, verb.grapple, gate G1, against_will True) :: I keep hold of her sleeve. "Tell me the word, Dunwen. Now. And then I'
-- playtest-20261008-233000-fighter.db#turn.7: PASS (1 now-beat learn, verb.grapple, gate G1, against_will True) :: I twist her arm up behind her back and hiss, "One more swing and I'll 
-- playtest-20261008-233000-fighter.db#turn.11: PASS (1 now-beat persuade_to, verb.grapple, gate G1, against_will True) :: I wrench the arm higher. "The rest of it, Dunwen. All of it, or I brea
-- playtest-20261008-135049-fighter.db#turn.2: PASS (1 now-beat learn, verb.grapple, gate G1, against_will True) :: I grab Eliia Terence by the sleeve and demand to know who the rider wa
-after: 5/5 single-goal coercion messages give one rolled goal beat
