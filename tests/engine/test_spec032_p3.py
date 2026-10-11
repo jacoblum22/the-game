@@ -58,7 +58,8 @@ def test_r1_to_r15_a_creature_in_prose_is_one_creature_here_for_every_verb(tmp_p
         def one(ctx: Any, t: Any, tx: Any, verb: str = verb) -> tuple[str | None, str | None]:
             # [P8a] nothing is matched: the same words in one turn are one creature (the code's own memo); the next
             # turn's words are a new one unless the DM uses the id
-            first = dm_tools._party(ctx, t, "the pale beast", person=dm_tools.target_is_person(RULES, verb, None))
+            first = dm_tools._party(ctx, t, "the pale beast", person=dm_tools.target_is_person(RULES, verb, None),
+                                    as_="creature")  # [spec 033 R6] `as` says it is a creature; no head-noun test
             return first, dm_tools._party(ctx, t, "the pale beast")
 
         a, b = in_turn(game, one)
@@ -75,7 +76,7 @@ def test_r16_the_fighter_save_calls_are_accepted_and_the_beast_is_one_entity(tmp
     """Turn 9 and 12 of save playtest-20261010-153123-fighter-dm-tools: the calls that were REFUSED."""
     fx = json.loads(FIX.read_text(encoding="utf-8"))["turns"]
     game, _ = to_play(tmp_path)
-    args9 = {"tool": "propose_roll", **json.loads(fx["turn.9"]["tools"][0]["args"])}
+    args9 = {"tool": "propose_roll", "as": "creature", **json.loads(fx["turn.9"]["tools"][0]["args"])}
     outs, t = run(game, args9)
     assert outs[0].startswith("ROLL OFFERED") and t.stats["refusals"] == []
     beasts = [i for i, e in game.store.state.entities.items() if "beast" in i]
@@ -83,7 +84,7 @@ def test_r16_the_fighter_save_calls_are_accepted_and_the_beast_is_one_entity(tmp
     # [P8a] the creature's id is what the DM uses next turn: found exactly
     assert in_turn(game, lambda ctx, t, tx: dm_tools._party(ctx, t, beasts[0])) == beasts[0]
     game2, _ = to_play(tmp_path / "b")
-    args12 = {"tool": "propose_roll", **json.loads(fx["turn.12"]["tools"][0]["args"])}
+    args12 = {"tool": "propose_roll", "as": "creature", **json.loads(fx["turn.12"]["tools"][0]["args"])}
     outs, t = run(game2, args12)
     assert outs[0].startswith("ROLL OFFERED") and t.stats["refusals"] == []
 
@@ -181,7 +182,7 @@ def test_r24_to_r34_each_change_kind_with_a_person_in_prose(tmp_path: Path) -> N
 
 def test_r_a_fact_about_a_creature_or_a_known_alias_is_accepted(tmp_path: Path) -> None:
     game, _ = to_play(tmp_path)
-    outs, _ = run(game, change(kind="fact", who="the pale beast", what="limps", note="left foreleg"))
+    outs, _ = run(game, change(kind="fact", who="the pale beast", what="limps", note="left foreleg", **{"as": "creature"}))
     assert outs[0].startswith("done: recorded limps")
 
 
@@ -298,15 +299,17 @@ def test_i1_to_i11_items_move_only_between_people_who_hold_and_are_here(tmp_path
     assert loose.startswith("done")
 
 
-def test_i6_i10_a_new_item_named_like_a_held_one_echoes_the_held_one(tmp_path: Path) -> None:
+def test_i6_i10_a_new_item_named_like_a_held_one_is_a_new_item_without_advice(tmp_path: Path) -> None:
+    """[spec 033 D29] No twin advice (it matched names): the second knife is its own record; the situation shows the
+    DM what each person carries."""
     game, _ = to_play(tmp_path)
     pc = pc_id(game.store.state)
     npc = npc_here(game)
     first, _ = run(game, change(kind="new_item", what="a bone knife", to=npc))
     assert first[0].startswith("done") and "NOTE" not in first[0]
     second, _ = run(game, change(kind="new_item", what="a bone knife", to=pc))
-    assert second[0].startswith("done") and "NOTE" in second[0] and "item.a_bone_knife)" in second[0]
-    assert "already holds" in second[0] and "give_item" in second[0]
+    assert second[0].startswith("done") and "NOTE" not in second[0] and "already holds" not in second[0]
+    assert "item.a_bone_knife" in game.store.state.entities and second[0] != first[0]
 
 
 def test_i11_a_loose_item_here_can_be_given_by_anyone(tmp_path: Path) -> None:
@@ -336,7 +339,7 @@ def test_e1_to_e4_a_second_breach_is_dropped_and_logged_the_first_is_not(tmp_pat
     cases = {
         "E4 no source": [change(kind="coin", who="", to=pc, amount=3)] * 2,
         "E3 not owned": [change(kind="give_item", what=sword, who=npc, to=pc)] * 2,
-        "E1 unknown": [change(kind="npc_leaves", who="loc.nobody")] * 2,  # [P8a] an `npc.` id is a walk-on now
+        "E1 unknown": [change(kind="give_item", what="item.nothing_at_all", who=npc, to=pc)] * 2,
     }
     for name, calls in cases.items():
         outs, t = run(game, *calls)

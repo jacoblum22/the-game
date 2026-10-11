@@ -152,11 +152,14 @@ def role_implies(role: str | None) -> tuple[str | None, tuple[str, str] | None]:
 
 def walk_on(rng: SeedRng, *, role: str | None = None, home: str | None = None, people: str | None = None,
             name_tables: Sequence[dict[str, Any]] = (), given_used: set[str] | None = None,
-            existing_ids: Iterable[str] = (), member_of: Sequence[str] = (), role_tags: Sequence[str] = ()) -> NPC:
+            existing_ids: Iterable[str] = (), member_of: Sequence[str] = (), role_tags: Sequence[str] = (),
+            name: str | None = None, pronouns: str | None = None) -> NPC:
     """# rule: PR-12-5 step 2 -- role, name, gender and pronouns, age band, one detail, demeanor.
 
     `role` is the narration's ("the innkeeper"); else tbl.npc_role. `people` is an origin id
     (orig.people.*): its region name table is used when `name_tables` (the seed's `names`) holds one.
+    [spec 033 R6] `name` and `pronouns` ("she/her", "he/him", "they/them") are the dm-tools DM's own words: given, they
+    are kept as stated and the role is never read for age or pronouns (`role_implies` is the pipeline's).
     """
     dice = Dice(rng)
     origins = _origins()
@@ -164,13 +167,17 @@ def walk_on(rng: SeedRng, *, role: str | None = None, home: str | None = None, p
         role = str(_roll(dice, "tbl.npc_role")["result"])
     tabs = [t for t in name_tables if people and t["people"] == people]
     used = given_used if given_used is not None else set()
-    name = person_name(dice, list(tabs), people or "", used) if tabs else generic_name(dice)
+    rolled_name = person_name(dice, list(tabs), people or "", used) if tabs else generic_name(dice)
     g = _roll(dice, "tbl.npc_gender")
     age = _roll(dice, "tbl.npc_age")["result"]
-    implied_age, implied_g = role_implies(role)  # the role's own words win over the rolls (PR-12-5: implied kept)
-    age = implied_age or age
-    if implied_g:
-        g = {"result": implied_g[0], "pronouns": implied_g[1]}
+    if pronouns:  # [spec 033 R6] stated by the DM (`as`), never implied by the role's words
+        g = {"result": {"she/her": "woman", "he/him": "man"}.get(pronouns, "person"), "pronouns": pronouns}
+    else:
+        implied_age, implied_g = role_implies(role)  # the role's own words win over the rolls (PR-12-5: implied kept)
+        age = implied_age or age
+        if implied_g:
+            g = {"result": implied_g[0], "pronouns": implied_g[1]}
+    name = name or rolled_name
     detail = _roll(dice, "tbl.npc_detail")["result"]
     demeanor = _roll(dice, "tbl.npc_demeanor")["result"]
     taken = set(existing_ids)

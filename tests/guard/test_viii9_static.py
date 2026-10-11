@@ -36,7 +36,7 @@ def test_the_scan_finds_the_known_matchers() -> None:
     reached = reached_functions()
     assert sum(len(v) for v in reached.values()) > 500
     keys = {h.key for h in scan()}
-    assert "engine.dm.dm_tools:_party:pattern:_NAME" in keys
+    assert "engine.dm.dm_tools:_change:pattern:_ID_LIKE" in keys
     assert "engine.resolve.gate:reads_writing:pattern:WRITING" in keys
 
 

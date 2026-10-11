@@ -60,7 +60,7 @@ def test_a_planted_call_fails_with_viii9_and_the_inventory_id(name: str) -> None
 
 
 def test_an_unarmed_hit_outside_a_dm_tools_turn_is_not_a_hit() -> None:
-    name = "engine.dm.dm_tools._audit"
+    name = "engine.dm.testimony.overlap"
     g = _planted(name, DENY[name])
     with g:
         _touch_safely(name)
@@ -96,7 +96,7 @@ def call_start_elsewhere() -> None:
 
 
 def test_log_mode_writes_jsonl_and_never_raises(tmp_path: Path) -> None:
-    name = "engine.dm.dm_tools._audit"
+    name = "engine.dm.testimony.overlap"
     out = tmp_path / "hits.jsonl"
     e = Entry("M", "P4", "raise")
     g = Guard(deny={name: e}, watch={}, mode="log", jsonl=out, record_reach=False)

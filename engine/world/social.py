@@ -220,11 +220,13 @@ def find_npc(state: WorldState, role: str, place: str | None) -> str | None:  # 
 
 
 def meet_npc(ctx: TimeContext, role: str | None, place: str | None, *, people: str | None = None,
-             reuse: bool = True, alias: str | None = None) -> str:  # rule: PR-12-5
+             reuse: bool = True, alias: str | None = None, name: str | None = None,
+             pronouns: str | None = None) -> str:  # rule: PR-12-5
     """PR-12-5 steps 1-2: the roster first (`find_npc`), else a walk-on (12.11.1): role (else `tbl.npc_role`),
     name (the region's table for its people, else the generic tables), gender and pronouns, age, detail and
     demeanor, all rolled and written at once (`create_entity`), positioned at `place`, added to the cast list
-    at weight 1. Returns the NPC's entity id."""
+    at weight 1. Returns the NPC's entity id. [spec 033 R6] `name` and `pronouns` are the dm-tools DM's own
+    (kept as stated, never rolled or implied by the role's words)."""
     state = ctx.tx.state
     if reuse and role and (found := find_npc(state, role, place)):
         _add_to_cast(ctx, found)
@@ -237,7 +239,7 @@ def meet_npc(ctx: TimeContext, role: str | None, place: str | None, *, people: s
     used = {str(e.name).split()[0] for e in state.entities.values() if e.kind == "npc" and e.name}
     n = gen_npc.walk_on(LoggedSeedRng(rng, "walk-on (PR-12-5)"), role=role, home=place, people=people,
                         name_tables=state.meta.get("world.names") or [], given_used=used,
-                        existing_ids=state.entities.keys())
+                        existing_ids=state.entities.keys(), name=name, pronouns=pronouns)
     data = n.model_dump(exclude={"id", "name", "sealed_fields", "wants", "fears", "refusals", "secrets", "voice",
                                  "knowledge_scope", "ties", "licenses"}, by_alias=True)
     data["name_known"] = False  # 12.10.2: a walk-on's name is learned in play

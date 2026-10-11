@@ -217,7 +217,7 @@ def run_item(item: dict[str, Any], *, offline: bool = False) -> dict[str, Any]:
             ctx.model.queues.get(dm_tools.DM_ROLE, []).clear()
             s = res.turn_record.screen["dm_tools"]
             turns.append({"input": say, "passage": res.response.fiction, "tools": s["tools"], "refusals": s["refusals"],
-                          "said": s["said"], "told_dropped": s["told_dropped"], "log_only": s["log_only"],
+                          "said": s["said"], "told_dropped": s["told_dropped"],
                           "foe_turns": s["world"]["foe_turns"], "paused": res.response.pause is not None})
             pause = dock.store.state.open_pause()
             if pause is None:
