@@ -83,19 +83,20 @@ Gate: R/O/I/E/K cases green; suite green; live fighter run shows a `conflict_sta
 ## P4 - The world step: fights, time, clocks, leads, cuts, the dead end (lane W; Sonnet, Opus if the re-ask ordering fights the pause logic; about 45-70 turns)
 
 New `engine/dm/dm_world.py`; small hooks in `dm_tools._run/_dm_loop` and the situation's FIGHT block (agreed with lane C: the FIGHT block is P4's, the rest of `situation()` is P5's).
-- [ ] P4.1 **Trace** what scene mode the pipeline's Director gives place scenes and what `beat_cost` returns for it; decide the
+- [x] P4.1 **Trace** what scene mode the pipeline's Director gives place scenes and what `beat_cost` returns for it; decide the
       dm-tools scene mode (assumption A1); write the finding into `implementation-results-P4.md`.
-- [ ] P4.2 `world_step(ctx, t)` per plan: foes (`foes_act`), time (`beat_cost`, `beat_end`, `note_turn`), omens, triggers,
+- [x] P4.2 `world_step(ctx, t)` per plan: foes (`foes_act`), time (`beat_cost`, `beat_end`, `note_turn`), omens, triggers,
       lead (`inject_lead`), facts returned as plain words. [owner ruling 2026-10-10] Cut rules dropped: build the `end_scene` tool instead (DM calls it; code does time,
       per-scene resets, the new scene record; no Director call; travel and time jumps still open a scene).
       Cases F1-F26, T1-T12; C1-C7 become `end_scene` cases (tool ends the scene; no cut without the call).
-- [ ] P4.3 Wire it: after `_resume` on an answer turn; after the tool phase on a free turn; re-ask once only when a fact exists;
+- [x] P4.3 Wire it: after `_resume` on an answer turn; after the tool phase on a free turn; re-ask once only when a fact exists;
       never on an open pause (F17). Zero extra calls when no conflict and no fact (F20).
-- [ ] P4.4 FIGHT block in `situation()`: foes, `state_words`, bands, PC harm state; prompt sentence for G7 (plan G7 wording).
-- [ ] P4.5 Replay the fighter save's turns 9-15 on the code (offline scripted DM): F11. 5 live Haiku samples of the turn-11
+- [x] P4.4 FIGHT block in `situation()`: foes, `state_words`, bands, PC harm state; prompt sentence for G7 (plan G7 wording).
+- [~] P4.5 (offline replay F11 done, `test_spec032_p4.py`; the 5 live samples are NOT run: no claude CLI, see implementation-results-P4.md) Replay the fighter save's turns 9-15 on the code (offline scripted DM): F11. 5 live Haiku samples of the turn-11
       context: report k/5 proposing the roll (F12).
-- [ ] P4.6 Live: fighter + talker personas 15 turns each on Haiku. Report foe turns per exchange (target 1.0), hours advanced,
+- [ ] P4.6 (NOT run: no claude CLI in the P4 worktree) Live: fighter + talker personas 15 turns each on Haiku. Report foe turns per exchange (target 1.0), hours advanced,
       extra calls per turn, tokens/turn (C1/C2 trend).
+- [x] P4.7 [owner ruling 2026-10-10] Mood roll and the T-12-19 ceiling retired in `dm_tools` (`mood` tool = the DM's memory; `_asks` = observation).
 Gate: F/T and `end_scene` cases green; suite; live fighter shows a foe strike each fight exchange; talker clock advances; no code cut fires.
 
 ## P5 - Records and context: told, presence, pronouns, items, leak audit (lane C; Sonnet; about 35-55 turns)

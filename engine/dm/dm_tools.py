@@ -5,15 +5,16 @@
     out.response                                               # the delivered Response (same shape as the pipeline)
 
 Code keeps the spine: the dice and odds (`resolve/`: gate, necessity, frame, OFFER, roll, read, cost), state (coin,
-items, conditions, positions, presence, time), memory, the case graph and clue delivery (spec 029), the mood and the
-ceiling (T-12-19, given as facts, never enforced). The DM model owns language and judgment: who answers, how people
-react, what needs a roll, the passage. Bypassed here (not deleted): the Reader, Framer, Director, World, Checker,
+items, conditions, positions, presence, time), memory, the case graph and clue delivery (spec 029), the world step
+(foes, time, omens, leads: engine/dm/dm_world.py). The DM model owns language and judgment: who answers, how people
+react and what mood they are in (the `mood` tool: a memory it may change), what needs a roll, when a scene ends
+(`end_scene`), the passage. Bypassed here (not deleted): the Reader, Framer, Director, World, Checker,
 narrator record lines, `npc_layer` and the answer ladder. `/fix` stays the pipeline's (engine/dm/dispute.py).
 
 Each turn: the DM sees the situation (who is here with their people card and mood, the place, the PC sheet, open
 threads, the scene) and the recent conversation, calls up to MAX_TOOLS tools (PER_STEP per answer), then writes the
 passage. A `propose_roll` that needs a roll pauses the turn on the code-rendered OFFER; the next `play_answer` rolls
-and the DM narrates the result. Per-turn stats (tool calls, refusals, ceilings, secret leaks) go to
+and the DM narrates the result. Per-turn stats (tool calls, refusals, moods, world, secret leaks) go to
 `TurnRecord.screen["dm_tools"]`.
 """
 
@@ -36,17 +37,18 @@ from engine.store.records import TurnRecord
 
 ENGINE = "dm-tools"
 MAX_TOOLS, PER_STEP = 6, 3
-TOOLS = ("propose_roll", "state", "change", "recall", "reveal_clue", "mood")
+TOOLS = ("propose_roll", "state", "change", "recall", "reveal_clue", "mood", "end_scene")
 CHANGES = ("coin", "give_item", "new_item", "condition_add", "condition_remove", "npc_leaves", "new_npc", "travel",
            "rest", "fact", "fight")  # [spec 032 P3] fight: a person turns on the PC
 FAIL_COSTS = ("cost.closed_door", "cost.drain", "cost.exposure", "cost.footing", "cost.gear", "cost.harm",
               "cost.shortfall", "cost.time", "cost.twist")  # the 9 cost ids (a test pins them to the rules)
 PERSON_VERBS = ("verb.talk", "verb.strike", "verb.grapple", "verb.help")  # a prose-only target is a person for these
 COSTS = ("none", "small", "real", "big")
-GRANTS = ("help", "price", "partial", "refuse")  # what the DM had the NPC do for an ask (for ceiling logging)
+GRANTS = ("help", "price", "partial", "refuse")  # what the DM had the NPC do for an ask (logged, never gated)
 STAKES = ("safe", "risky", "dire")
 DM_ROLE = Role.DM  # spec 032 FR-13: its own role (schema, prompt file dm.md, offline heuristic, per-role model)
-MOOD = {"willing": "open", "guarded": "guarded", "unwilling": "closed"}
+MOOD = {"willing": "open", "guarded": "guarded", "unwilling": "closed"}  # the held band -> the DM's word
+BAND = {v: k for k, v in MOOD.items()}
 OUT_CHARS = 1600
 PREFERRED_COST = {"verb.strike": "cost.harm", "verb.grapple": "cost.harm", "verb.force": "cost.harm",
                   "verb.exert": "cost.harm", "verb.sneak": "cost.exposure", "verb.talk": "cost.closed_door"}
@@ -65,9 +67,11 @@ class Turn:
     rec: AdjudicationRecord
     oof: list[dict[str, str]] = field(default_factory=list)
     log: list[tuple[str, str, str]] = field(default_factory=list)  # (tool, args, output)
-    stats: dict[str, Any] = field(default_factory=lambda: {"tool_calls": 0, "steps": 0, "refusals": [],
-                                                           "ceilings": [], "ceiling_violations": [], "leaks": [],
-                                                           "clues": [], "rolls": [], "dropped": []})
+    stats: dict[str, Any] = field(default_factory=lambda: {
+        "tool_calls": 0, "steps": 0, "refusals": [], "moods": [], "leaks": [], "clues": [], "rolls": [], "dropped": [],
+        "scene_ends": [], "world": {"foe_turns": [], "facts": [], "reasked": 0}})
+    beats: list[Any] = field(default_factory=list)  # the BeatOutcomes of this turn (the world step reads their status)
+    world_done: bool = False  # the world step runs once per exchange
     paused: bool = False
     made: list[str] = field(default_factory=list)  # people/creatures the resolver made this turn (told to the DM)
     env: Any = None
@@ -92,6 +96,7 @@ def play_answer(ctx: TurnContext, choice_id: str) -> Outcome:
 
 
 def _run(ctx: TurnContext, message: str, *, choice: str | None) -> Outcome:
+    from engine.dm import dm_world
     from engine.dm import oof as oofm
     from engine.dm.narration import shown_pause, turn_blocks
     from engine.dm.turn import _harm_followups, _resume, _take, _turn_end, recent_exchanges
@@ -117,8 +122,10 @@ def _run(ctx: TurnContext, message: str, *, choice: str | None) -> Outcome:
                 label = next((c.get("label", c["id"]) for c in pause.choices if c.get("id") == choice), choice)
                 res = _resume(ctx, t.env, pause, choice, t.oof)
                 _take(t.rec, res, t.oof, None)
+                t.beats += res.outcomes
                 _harm_followups(ctx, t.env, t.rec, t.oof)
                 lead = f"The player picked: {label}.\n" + _outcomes_text(ctx, t.rec, t.oof)
+                lead += _world_text(_world(ctx, t))  # [spec 032 P4] the foes answer and time passes before the DM writes
             elif pause is not None and (pause.detail or {}).get("stage") in ("offer", "warning", "redirect",
                                                                                  "near_miss", "plan"):
                 res = close_by_default(t.env, pause)  # new words with an offer open: it is withdrawn (12.2.6)
@@ -126,8 +133,13 @@ def _run(ctx: TurnContext, message: str, *, choice: str | None) -> Outcome:
                 lead = "The roll offered last turn was not taken (withdrawn; nothing spent)."
             if tx.state.scene is None and tx.state.open_pause() is None:
                 _open_scene(ctx)
+            if tx.state.scene is not None:
+                dm_world.ensure_site(ctx)
             if tx.state.open_pause() is None:  # a near miss or last chance opened by the answer: the menu first
                 passage = _dm_loop(ctx, t, message if choice is None else "", exchanges, lead)
+                facts = _world(ctx, t)  # a no-op on an answer turn (it ran before the loop)
+                if facts and tx.state.open_pause() is None:  # one more call, only when the world produced a fact (F20)
+                    passage = _reask(ctx, t, message if choice is None else "", exchanges, lead, passage, facts)
             _sync_scene(ctx, t)
             if tx.state.open_pause() is None:
                 _turn_end(ctx, t.rec, t.oof)
@@ -186,7 +198,8 @@ def schema_for(verbs: list[str], kinds: list[str], *, final: bool) -> Schema:
              "amount": {"type": "integer"}, "note": STR}),
         obj({"tool": enum(["recall"]), "query": STR}),
         obj({"tool": enum(["reveal_clue"]), "npc": STR, "question": STR}),
-        obj({"tool": enum(["mood"]), "npc": STR, "ask_cost": enum(COSTS)}),
+        obj({"tool": enum(["mood"]), "npc": STR, "mood": enum(list(BAND)), "why": STR}),
+        obj({"tool": enum(["end_scene"]), "why": STR}),
     ]
     call = {"anyOf": calls}
     return obj({"calls": arr(call, max_items=0 if final else PER_STEP), "passage": STR,
@@ -226,6 +239,40 @@ def _dm_loop(ctx: TurnContext, t: Turn, message: str, exchanges: list[tuple[str,
     return str(data.get("passage") or "")
 
 
+def _reask(ctx: TurnContext, t: Turn, message: str, exchanges: list[tuple[str, str]], lead: str, passage: str,
+           facts: list[str]) -> str:
+    """One more DM call, no tools: the final passage, told what the world did after the draft (spec 032 P4)."""
+    world = _world_text(facts).strip() + "\nYOUR DRAFT PASSAGE:\n" + passage
+    note = ("Write the final passage now (no tool calls). It replaces your draft: keep what still holds and weave in "
+            "what the world did, agreeing with it exactly.")
+    packet = Packet(instructions=load_prompt("dm"),
+                    message=_message(ctx, t, message, exchanges, "\n".join(x for x in (lead, world) if x), note))
+    res = call_role(ctx.model, DM_ROLE, step_schema(ctx, final=True), packet, turn_id=ctx.turn_id,
+                    recorder=ctx.record_call, default={"calls": [], "passage": passage, "asks": []})
+    t.stats["steps"] += 1
+    t.stats["world"]["reasked"] += 1
+    return str((res.data or {}).get("passage") or passage)
+
+
+def _world(ctx: TurnContext, t: Turn) -> list[str]:
+    """The world step once per exchange (engine/dm/dm_world.py); a time jump (a rest, a day) opens a new scene."""
+    from engine.dm import dm_world
+
+    if t.world_done or ctx.state.open_pause() is not None:
+        return []
+    t.world_done = True
+    facts = dm_world.world_step(ctx, t)
+    if dm_world.time_jumped(ctx):
+        _open_scene(ctx, "time_jump")
+        facts.append("Time has jumped on; a new scene begins here.")
+    return facts
+
+
+def _world_text(facts: list[str]) -> str:
+    return ("\nWHAT THE WORLD DID (the game rolled and recorded these; the passage must agree with them):\n"
+            + "\n".join(f"- {f}" for f in facts)) if facts else ""
+
+
 def _args(c: dict[str, Any]) -> str:
     return json.dumps({k: v for k, v in c.items() if k != "tool" and v not in ("", None, "none", 0)},
                       ensure_ascii=False)
@@ -247,6 +294,7 @@ def _message(ctx: TurnContext, t: Turn, message: str, exchanges: list[tuple[str,
 def situation(ctx: TurnContext) -> str:
     """The compact situation: place and time, the PC (card and sheet), who is here (people card and mood), exits,
     open threads, the scene, and (the secrets arm) each present person's private knowledge."""
+    from engine.dm.answer import held as held_band
     from engine.dm.fixer import sheet_line
     from engine.dm.oof import when_words
     from engine.dm.packet import people_card
@@ -260,6 +308,7 @@ def situation(ctx: TurnContext) -> str:
     pc = pc_id(st)
     here = location(st) if pc else None
     lines = [f"Now: {when_words(st.time.now)}; at {_name(st, here)} ({here})" if here else "Now: nowhere on record"]
+    lines += _fight_block(st, pc)
     sc = st.scene
     if sc is not None and (sc.agenda or sc.hoped_answer):
         lines.append(f"Scene: {sc.agenda}" + (f" (hoped: {sc.hoped_answer})" if sc.hoped_answer else ""))
@@ -275,7 +324,8 @@ def situation(ctx: TurnContext) -> str:
         card = people_card(st, eid, rules=rules)
         lines += [f"- {eid}: {card[0] if card else _name(st, eid)}", *card[1:]]
         m = _held_mood(st, eid)
-        lines.append(f"  mood toward you: {m}" if m else "  mood toward you: not yet rolled (use `mood`)")
+        lines.append(f"  mood toward you: {m} ({(held_band(st, eid) or {}).get('why')})" if m else
+                     "  mood toward you: not set (decide it, record it with `mood`)")
         if secrets_visible(ctx):
             lines += [f"  PRIVATE (they know this; the player does not): {s}" for s in secrets(st, eid)]
     if here:
@@ -285,6 +335,24 @@ def situation(ctx: TurnContext) -> str:
     if threads:
         lines.append("Open threads: " + "; ".join(_flat(x["text"] or x["name"], 160) for x in threads))
     return "\n".join(lines)
+
+
+def _fight_block(st: Any, pc: str | None) -> list[str]:
+    """The fight, in words (spec 032 G7): each foe's state and band to the character, and the character's own state."""
+    from engine.resolve.conflict import record as conflict
+    from engine.resolve.conflict import state_words
+
+    rec = conflict(st)
+    if not rec or not pc:
+        return []
+    pos = st.positions.get(pc)
+    out = ["FIGHT: a fight is on. After each move of the character the game has the foes act and tells you what they "
+           "did; a blow's result is never yours to write. The character's attack is a `propose_roll`."]
+    for f in rec.get("foes", []):
+        band = str((pos.band_to.get(f) if pos else None) or "near").removeprefix("band.")
+        out.append(f"- {f}: {_name(st, f)}, {state_words(st, f)}; {band} to the character")
+    out.append(f"- the character is {state_words(st, pc)}")
+    return out
 
 
 def secrets_visible(ctx: Any) -> bool:
@@ -312,7 +380,7 @@ def _held_mood(st: Any, eid: str) -> str | None:
     from engine.dm.answer import held
 
     h = held(st, eid)
-    return f"{MOOD.get(str(h['band']), h['band'])} ({h['why']})" if h else None
+    return MOOD.get(str(h["band"]), h["band"]) if h else None
 
 
 # ------------------------------------------------------------------------------------------- tools
@@ -321,7 +389,7 @@ def _held_mood(st: Any, eid: str) -> str | None:
 def tool(ctx: TurnContext, t: Turn, call: dict[str, Any]) -> str:
     name = str(call.get("tool") or "")
     fn = {"propose_roll": _propose_roll, "state": _state, "change": _change, "recall": _recall,
-          "reveal_clue": _reveal_clue, "mood": _mood}.get(name)
+          "reveal_clue": _reveal_clue, "mood": _mood, "end_scene": _end_scene}.get(name)
     if fn is None:
         return f"no tool {name!r}"
     made0 = len(t.made)
@@ -480,6 +548,7 @@ def _propose_roll(ctx: TurnContext, t: Turn, c: dict[str, Any]) -> str:
     t.env.proposal = c  # what the code framer reads (difficulty, attribute, stakes)
     res = run_beats(t.env, [BeatPlan(beat=beat, intent_verbs=[str(verb or "").removeprefix("verb.")])])
     _take(t.rec, res, t.oof, None)
+    t.beats += res.outcomes
     t.stats["rolls"].append({"goal": goal, "verb": verb, "status": [o.status for o in res.outcomes]})
     out = res.outcomes[-1] if res.outcomes else None
     if out is None:
@@ -617,7 +686,9 @@ def _reveal_clue(ctx: TurnContext, t: Turn, c: dict[str, Any]) -> str:
 
 
 def _mood(ctx: TurnContext, t: Turn, c: dict[str, Any]) -> str:
-    from engine.dm.answer import willingness
+    """The DM decides a person's mood toward the character and the game remembers it for the scene (the held band,
+    answers.willingness); it may change it when the fiction does. No roll, no ceiling [owner ruling 2026-10-10]."""
+    from engine.dm.answer import _hold
 
     st = ctx.state
     npc = _party(ctx, t, c.get("npc"), person=True)
@@ -625,34 +696,36 @@ def _mood(ctx: TurnContext, t: Turn, c: dict[str, Any]) -> str:
     if why:
         return f"REFUSED: {why}"
     assert npc is not None
-    band, reason = willingness(ctx, npc)
-    mood = MOOD.get(band, band)
-    cost = str(c.get("ask_cost") or "none")
-    cell = ceiling(ctx.rules, mood, cost)
-    t.stats["ceilings"].append({"npc": npc, "mood": mood, "cost": cost, "ceiling": cell})
-    return (f"{_name(st, npc)}: mood toward you {mood} ({reason}). For an ask that costs them {cost}: at most "
-            f"'{_cell_words(ctx.rules, cell)}'. A fact about them, not an order: react at or below it, in their voice.")
+    word = str(c.get("mood") or "").strip().lower()
+    if word not in BAND:
+        return f"REFUSED: mood is one of {', '.join(BAND)}"
+    reason = str(c.get("why") or "").strip() or "the DM's call"
+    was = _held_mood(st, npc)
+    _hold(ctx, npc, BAND[word], reason)
+    t.stats["moods"].append({"npc": npc, "was": was, "mood": word, "why": reason[:160]})
+    return f"done: {_name(st, npc)} is {word} toward the character for this scene (a memory; change it when the fiction does)."
 
 
-def ceiling(rules: Any, mood: str, cost: str) -> str:
-    """T-12-19: the cell for (mood, cost), a lookup in `oracles.yaml#tbl.npc_ceiling`."""
-    tbl = rules.table("tbl.npc_ceiling")
-    row = next((r for r in tbl["results"] if r["range"] == mood), None)
-    return str((row or {}).get("by_cost", {}).get(cost, "partial"))
+def _end_scene(ctx: TurnContext, t: Turn, c: dict[str, Any]) -> str:
+    """The DM ends the scene [owner ruling 2026-10-10]. Code does the bookkeeping only: the scene_end handlers (time,
+    per-scene resets: held moods, dead air) and the new scene record here. No cut rule asks for it."""
+    from engine.resolve.conflict import record as conflict
 
-
-def _cell_words(rules: Any, cell: str) -> str:
-    return str(rules.table("tbl.npc_ceiling").get("cells", {}).get(cell, cell))
-
-
-_GRANT_RANK = {"help": 0, "price": 1, "partial": 2, "partial_or_refuse": 3, "refuse": 4, "refuse_may_escalate": 4}
+    st = ctx.state
+    if st.scene is None:
+        return "REFUSED: no scene is open"
+    if st.open_pause() is not None:
+        return "REFUSED: a roll is offered; the scene cannot end under it"
+    if conflict(st):
+        return "REFUSED: a fight is on; the scene ends when the fight does"
+    _open_scene(ctx, "player_cut")
+    t.stats["scene_ends"].append(str(c.get("why") or "")[:160])
+    return "done: that scene ends and a new one opens here (moods you set last scene are cleared; set them again if they matter)."
 
 
 def _asks(ctx: TurnContext, t: Turn, asks: list[Any]) -> None:
-    """Log each ask the DM says it granted against the ceiling (never blocks): a grant above the cell is a
-    violation. The cell comes from the mood held for the scene (rolled now if it was not)."""
-    from engine.dm.answer import willingness
-
+    """Log each ask the DM says it granted or refused, with the mood it holds for that person (an observation for the
+    owner to read: costly asks granted; never a gate, never blocks) [owner ruling 2026-10-10]."""
     st = ctx.state
     for a in asks:
         if not isinstance(a, dict):
@@ -660,13 +733,8 @@ def _asks(ctx: TurnContext, t: Turn, asks: list[Any]) -> None:
         npc = _id(st, a.get("npc"))
         if npc not in st.entities or _acting(st, npc):
             continue
-        band, _ = willingness(ctx, npc)
-        cell = ceiling(ctx.rules, MOOD.get(band, band), str(a.get("cost") or "none"))
-        granted = str(a.get("granted") or "refuse")
-        row = {"npc": npc, "mood": MOOD.get(band, band), "cost": a.get("cost"), "ceiling": cell, "granted": granted}
-        t.stats.setdefault("asks", []).append(row)
-        if _GRANT_RANK.get(granted, 4) < _GRANT_RANK.get(cell, 4):
-            t.stats["ceiling_violations"].append(row)
+        t.stats.setdefault("asks", []).append({"npc": npc, "mood": _held_mood(st, npc), "cost": a.get("cost"),
+                                               "granted": str(a.get("granted") or "refuse")})
 
 
 # ------------------------------------------------------------------------------------------- change
@@ -835,7 +903,8 @@ def _fight(ctx: TurnContext, who: str | None, pc: str) -> str:
     if not conflict.start(ctx.time_ctx(), pc, [who], f"the DM: {_name(tx.state, who)} turns on the character"):
         return f"{_name(tx.state, who)} is already in the fight (or cannot be a foe)."
     return (f"done: a fight begins; {_name(tx.state, who)} turns on the character. Blows are not struck by your words: "
-            "write the lead-up and the moment before the first exchange, and the character's reply is a roll.")
+            "the game has them act when your turn ends and tells you what lands. Write the lead-up only; the "
+            "character's reply is a roll.")
 
 
 def _condition(ctx: TurnContext, who: str | None, cid: str, *, add: bool, pc: str = "") -> str:
@@ -880,8 +949,9 @@ def _travel(ctx: TurnContext, t: Turn, to: str | None) -> str:
             + "\n" + situation(ctx))
 
 
-def _open_scene(ctx: TurnContext) -> None:
-    """A scene at the PC's place when none is open (no Director: no agenda; the DM frames it in words)."""
+def _open_scene(ctx: TurnContext, reason: str = "player_cut") -> None:
+    """A scene at the PC's place when none is open (no Director: no agenda; the DM frames it in words). Its time mode
+    is `site` (a fight in progress keeps `conflict`): an exchange is an interval (spec 032 A1, dm_world.ensure_site)."""
     from engine.world.places import location
     from engine.world.scenes import end_scene, start_scene
 
@@ -890,9 +960,9 @@ def _open_scene(ctx: TurnContext) -> None:
     from engine.time import clock
 
     if st.scene is not None:
-        end_scene(ctx.time_ctx(), "player_cut")
-    mode = clock.mode_of(ctx.state.time.mode)
-    start_scene(ctx.time_ctx(), place=place, mode="free" if mode == "travel" else mode, agenda="")
+        end_scene(ctx.time_ctx(), reason)
+    start_scene(ctx.time_ctx(), place=place, agenda="",
+                mode="conflict" if clock.mode_of(ctx.state.time.mode) == "conflict" else "site")
 
 
 def _sync_scene(ctx: TurnContext, t: Turn) -> None:
@@ -957,5 +1027,5 @@ def _flat(s: Any, n: int | None = None) -> str:
     return x if n is None or len(x) <= n else x[:n] + "…"
 
 
-__all__ = ["ENGINE", "MAX_TOOLS", "Outcome", "ceiling", "enabled", "play_answer", "play_turn", "secrets",
+__all__ = ["ENGINE", "MAX_TOOLS", "Outcome", "enabled", "play_answer", "play_turn", "secrets",
            "situation", "step_schema", "tool"]

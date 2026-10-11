@@ -256,7 +256,7 @@ def write_findings(path: Path, player: Player, save: Path, code: int) -> int:
             rows.append({"kind": "dm_tools", "turns": len(dm), **{k: sum(int(d.get(k) or 0) for d in dm) for k in
                                                                 ("tool_calls", "steps", "model_calls")},
                          **{k: [x for d in dm for x in d.get(k) or []] for k in
-                            ("refusals", "ceiling_violations", "leaks", "clues", "rolls")},
+                            ("refusals", "moods", "leaks", "clues", "rolls")},
                          "asks": sum(len(d.get("asks") or []) for d in dm)})
         db.close()
     path.write_text("".join(json.dumps(r) + "\n" for r in rows), encoding="utf-8")

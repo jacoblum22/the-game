@@ -45,7 +45,7 @@ def score_save(path: Path, findings_dir: Path | None = None) -> dict[str, Any]:
         for a in d.get("asks") or []:
             if a.get("cost") in ("real", "big") and a.get("granted") in ("help", "price", "partial"):
                 costly.append(f"{tid} {a.get('npc')} cost {a.get('cost')} -> {a.get('granted')} (mood {a.get('mood')})")
-        for m in [*(d.get("ceilings") or []), *(d.get("asks") or [])]:
+        for m in [*(d.get("moods") or []), *(d.get("asks") or [])]:
             if m.get("npc") and m.get("mood") and seen.setdefault(m["npc"], m["mood"]) != m["mood"]:
                 changes.append(f"{tid} {m['npc']} {seen[m['npc']]} -> {m['mood']} (event not checked)")
                 seen[m["npc"]] = m["mood"]

@@ -58,8 +58,9 @@ def test_the_nine_cost_ids_are_the_menu() -> None:
 def test_twelve_cells_are_three_moods_by_four_costs() -> None:
     assert {(c["mood"], c["cost"]) for c in npc_agency.CELLS} == {(m, k) for m in ("open", "guarded", "closed")
                                                                   for k in ("none", "small", "real", "big")}
-    for c in npc_agency.CELLS:  # the ceiling the harness scores against is T-12-19's cell
-        assert npc_agency.GRID[c["mood"]][c["cost"]] == dm_tools.ceiling(RULES, c["mood"], c["cost"])
+    rows = {r["range"]: r["by_cost"] for r in RULES.table("tbl.npc_ceiling")["results"]}
+    for c in npc_agency.CELLS:  # the harness reads T-12-19's cell as an observation; dm-tools no longer uses it
+        assert npc_agency.GRID[c["mood"]][c["cost"]] == rows[c["mood"]][c["cost"]]
 
 
 # ------------------------------------------------------------------------------------ the traced save (P1.6)
@@ -71,7 +72,8 @@ def _fixture() -> dict[str, Any]:
 
 def test_fighter_save_was_refused_on_prose_only_targets_and_started_no_fight() -> None:
     """The traced facts of save playtest-20261010-153123-fighter-dm-tools (turns 9, 11, 12), as recorded. P3 flipped
-    the acceptance (test_spec032_p3.py::test_r16: the same calls now roll); P4 flips the last assert (conflict_start)."""
+    the acceptance (test_spec032_p3.py::test_r16: the same calls now roll); P4 flipped the last one: this is what the OLD
+    code did (no conflict_start); test_spec032_p4.py::test_f11 replays the call and the fight starts."""
     fx = _fixture()["turns"]
     for turn, target in (("turn.9", "the beast in the clearing"), ("turn.12", "the pale beast")):
         first = fx[turn]["tools"][0]
@@ -107,9 +109,6 @@ def test_heldout_is_24_items_with_the_stated_mix_and_an_unchanged_body() -> None
 # ------------------------------------------------------------------------------------ later phases: one xfail each
 
 GROUPS = [
-    ("F1-F26 the foe turn, bands, outcomes, harm ladder", "P4"),
-    ("T1-T12 time per mode, interrupts, clocks, leads", "P4"),
-    ("C1-C7 scene cuts per trigger", "P4"),
     ("J1-J14 said/told reaches the journal", "P5"),
     ("Q1-Q14 presence and pronouns", "P5"),
     ("L1-L6 leak audit without name tokens", "P5"),
