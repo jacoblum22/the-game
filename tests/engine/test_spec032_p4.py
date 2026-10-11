@@ -229,10 +229,10 @@ def test_f16_f21_an_npc_or_a_creature_turns_on_the_pc_and_the_foe_strikes_in_the
     assert stats_of(game2, r)["world"]["foe_turns"][0]["foe"] == BEAST
 
 
-def test_f11_the_fighter_save_replayed_starts_the_fight_and_the_foe_answers(tmp_path: Path) -> None:
+def test_f11_the_fighter_save_replayed_offers_the_roll_and_code_starts_no_fight(tmp_path: Path) -> None:
     """The saved fighter turns 9 and 12 (REFUSED, no fight, `conflict_start_boundaries == 0` in the old save): on the
-    code, the same call offers the roll, the answer starts the fight (conflict_start), and the foe answers that
-    exchange. P4 flips the fixture's last assert."""
+    code, the same call offers the roll and the answer resolves it. [spec 033 R2 A4: only the DM's `change fight`
+    starts a fight, so the attack no longer starts one and no foe answers.]"""
     fx = json.loads(FIX.read_text(encoding="utf-8"))
     assert fx["conflict_start_boundaries"] == 0  # what the old code did
     game, model = play(tmp_path)
@@ -245,11 +245,8 @@ def test_f11_the_fighter_save_replayed_starts_the_fight_and_the_foe_answers(tmp_
     r = game.answer("commit")
     assert r.pause is None  # (seed 7: the roll resolves; no near miss)
     marks = [e for e in game.store.events(types=["boundary_marked"]) if e.payload.boundary == "conflict_start"]  # type: ignore[attr-defined]
-    assert len(marks) == 1
-    foes = conflict.record(game.store.state)["foes"]
-    assert len(foes) == 1 and "beast" in foes[0] and game.store.state.entities[foes[0]].data["mind"] == "animal"
-    # the beast answered the exchange the fight began in (the answer turn's world step), once
-    assert [x["foe"] for x in stats_of(game, r)["world"]["foe_turns"]] == foes
+    assert marks == [] and conflict.record(game.store.state) == {}  # [spec 033 R2] code starts no fight
+    assert stats_of(game, r)["world"]["foe_turns"] == []
 
 
 def test_f22_f25_f26_the_foe_line_defaults_and_the_nonlethal_words(tmp_path: Path) -> None:
@@ -259,10 +256,11 @@ def test_f22_f25_f26_the_foe_line_defaults_and_the_nonlethal_words(tmp_path: Pat
     assert "beh.default_melee" in (conflict.foe_beat.__doc__ or "")
     game, _ = play(tmp_path)  # F26: the DM's nonlethal flag reaches the words the harm rules read
     npc = npc_here(game)
-    _, t = run_roll(game, roll(verb="verb.strike", target=npc, nonlethal=True))
-    assert conflict.NONLETHAL.search(t.rec.beats[-1].restatement + " (nonlethal)")
+    run_roll(game, roll(verb="verb.strike", target=npc, nonlethal=True))
     st = game.store.state
-    assert st.open_pause() is not None and "(nonlethal)" in json.dumps(st.open_pause().detail["plan"])  # type: ignore[union-attr]
+    assert st.open_pause() is not None  # [spec 033 R5] the flag rides in `stated`, the method text is not edited
+    plan = st.open_pause().detail["plan"]  # type: ignore[union-attr]
+    assert "(nonlethal)" not in json.dumps(plan) and plan["beat"]["stated"]["nonlethal"] is True
 
 
 def run_roll(game: Game, call: dict[str, Any]) -> tuple[str, Any]:
