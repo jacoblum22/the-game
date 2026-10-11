@@ -138,14 +138,14 @@ Gate: matrix green; suite; live k/8 reported honestly (target at least the pipel
 
 Runs only after P1-P6 are merged into one branch. Edits `evals/`, `specs/`, and (only if the gates pass) `engine/game.py`,
 `play/cli.py`, tests that assume the default.
-- [ ] P7.1 Re-run the P1.2 NPC-agency arms on the fixed code (12 cells + 4 repeats, both arms, Haiku): the "after" tables.
-- [ ] P7.2 Persona runs, 15 turns, `--quick-setup`, Haiku engine, Sonnet player: talker, fighter, explorer x {pipeline,
+- [x] P7.1 Re-run the P1.2 NPC-agency arms on the fixed code (12 cells + 4 repeats, both arms, Haiku): the "after" tables.
+- [x] P7.2 Persona runs, 15 turns, `--quick-setup`, Haiku engine, Sonnet player: talker, fighter, explorer x {pipeline,
       dm-tools} (6 runs, in parallel). Use the commands in `specs/031-dm-with-tools/implementation-results.md`.
-- [ ] P7.3 `evals/longhorizon.py --mode scripted --lines 60 --model claude --engine dm-tools` (dm-tools only; skip the pipeline
+- [x] P7.3 `evals/longhorizon.py --mode scripted --lines 60 --model claude --engine dm-tools` (dm-tools only; skip the pipeline
       run). Report engine errors, refused tool calls, leak flags, told rows.
-- [ ] P7.0 [owner ruling 2026-10-10] Pushover and mood gates (C5/C6) are observed, not gated: list costly-ask grants and mood changes with no event in the report; do not fail the flip on them.
-- [ ] P7.4 Run `heldout.yaml` once; report k/24 by family; no tuning afterwards.
-- [ ] P7.5 `h2h_score.py` headline table first (gates C1-C11), then hand-counted contradictions by the results note's rules
+- [x] P7.0 [owner ruling 2026-10-10] Pushover and mood gates (C5/C6) are observed, not gated: list costly-ask grants and mood changes with no event in the report; do not fail the flip on them.
+- [ ] P7.4 Run `heldout.yaml` once; report k/24 by family; no tuning afterwards. (Runner built: `evals/heldout_032.py`, offline test green; the live run is the orchestrator's and has NOT been done.)
+- [x] P7.5 `h2h_score.py` headline table first (gates C1-C11), then hand-counted contradictions by the results note's rules
       (3 saves per arm), then the one-paragraph read. Write `implementation-results.md` with the table on top.
 - [ ] P7.6 If **all** gates pass: flip `GameConfig.engine = "dm-tools"`, add `engine="pipeline"` where tests test the pipeline,
       run the suite both ways, re-record replays that change, update `CLAUDE.md`/docs one line, `OVERNIGHT-LOG` line.
