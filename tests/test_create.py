@@ -135,3 +135,10 @@ def test_hand_made_wizard_prepares_from_its_spellbook() -> None:
     w = json.loads((Path(__file__).parent.parent / "dm" / "characters" / "wizard.json").read_text(encoding="utf-8"))
     w, _ = m.change_pc(w, {"long_rest": True, "prepare_spells": ["Burning Hands", "Detect Magic", "Shield", "Sleep"]})
     assert "Prepared spells: Burning Hands" in m.status(w)
+
+
+def test_games_started_in_the_same_second_get_separate_saves(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    from dm import play
+    monkeypatch.setattr(play, "SAVES", tmp_path)
+    names = [play.new_save("wren-20261011-161351").name for _ in range(3)]
+    assert names == ["wren-20261011-161351.json", "wren-20261011-161351-2.json", "wren-20261011-161351-3.json"]

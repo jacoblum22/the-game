@@ -342,6 +342,20 @@ async def create_character(model: str, path: Path) -> tuple[dict[str, Any], list
     return c.draft, c.transcript
 
 
+def new_save(stem: str) -> Path:
+    """A save file no other game has: two games started in the same second get stem.json and stem-2.json. The file
+    is created here, so a second game can't pick the same name before the first one's first save."""
+    SAVES.mkdir(exist_ok=True)
+    n = 1
+    while True:
+        path = SAVES / (f"{stem}-{n}.json" if n > 1 else f"{stem}.json")
+        try:
+            path.open("x").close()
+            return path
+        except FileExistsError:
+            n += 1
+
+
 async def main() -> None:
     ap = argparse.ArgumentParser(description="Play with the AI DM.")
     ap.add_argument("character", nargs="?", choices=("fighter", "rogue", "wizard", "new"))
@@ -356,14 +370,13 @@ async def main() -> None:
             ap.error("that save stopped during character creation, which can't be resumed; start again with new")
         game = Game(data, args.resume)
     elif args.character == "new":
-        SAVES.mkdir(exist_ok=True)
-        path = SAVES / f"new-{stamp}.json"  # one file: creation, then play
+        path = new_save(f"new-{stamp}")  # one file: creation, then play
         sheet, transcript = await create_character(args.model, path)
         game = Game({"sheet": sheet, "model": args.model, "transcript": transcript, "cwd": str(DM_HOME)}, path)
     elif args.character:
         sheet = json.loads((HERE / "characters" / f"{args.character}.json").read_text(encoding="utf-8"))
         name = sheet["name"].split()[0].lower()
-        game = Game({"sheet": sheet, "model": args.model, "cwd": str(DM_HOME)}, SAVES / f"{name}-{stamp}.json")
+        game = Game({"sheet": sheet, "model": args.model, "cwd": str(DM_HOME)}, new_save(f"{name}-{stamp}"))
     else:
         ap.error("pick a character (fighter, rogue, wizard), make one (new), or --resume a save")
 
