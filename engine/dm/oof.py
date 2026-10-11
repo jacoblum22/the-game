@@ -659,11 +659,11 @@ def changed_line(state: WorldState, pc: str, events: Sequence[Any]) -> str:  # r
     parts = [f"{_SHOWN_QTY[q]} {first[q]} → {v}" for q, v in last.items() if first[q] != v]
     if "vitality" in last:
         parts.append(descriptor(state, pc))
-    from engine.store.views import name_known
+    from engine.store.views import display_name
 
     for eid in others:
-        name = _ent_name(state, eid) or (state.entities[eid].name if eid in state.entities and name_known(state, eid)
-                                         else "your opponent")
+        # the name as the PC knows it (12.10.2): a rolled name the PC never learned leaked here (live check 1, trace-name-mixup)
+        name = display_name(state, eid) if _ent_name(state, eid) else "your opponent"
         parts.append(f"{name} is {state_words(state, eid)}")  # [spec 032 P8b] "your opponent worn" had no verb
     return "Changed: " + " · ".join(parts) if parts else ""
 

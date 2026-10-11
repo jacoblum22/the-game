@@ -330,7 +330,9 @@ def test_l1_to_l11_the_changed_line_says_who_is_in_what_state(tmp_path: Path, wo
         return SimpleNamespace(type="quantity_changed", payload=SimpleNamespace(entity=eid, quantity=q, new_value=3, delta=-2))
 
     assert changed_line(game.store.state, pc, [ev(foe)]) == f"Changed: your opponent is {word}"
-    name = game.store.state.entities[known].name
+    from engine.store.views import display_name, name_known
+    name = display_name(game.store.state, known)  # the name as the PC knows it, never a rolled name it has not learned
+    assert not name_known(game.store.state, known) and name != game.store.state.entities[known].name  # trace-name-mixup
     assert changed_line(game.store.state, pc, [ev(known)]) == f"Changed: {name} is {word}"
     both = changed_line(game.store.state, pc, [ev(pc), ev(known)])  # L10: the PC's numbers first, then the foe in words
     assert both.endswith(f" · {name} is {word}") and both.startswith("Changed: Vitality")
