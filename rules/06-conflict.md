@@ -222,6 +222,14 @@ sets every participant's band to the PC and flags from the scene's established p
 creates the opposing side's **morale clock** (06.11.2); marks who is `cond.surprised` (06.2.4); and runs
 the tempo check. The narration of the opening must state each participant's band to the PC and every
 flag on the PC (12.14.6).
+**The attack roll states whether it starts the fight** `[D]` [revision: R2-M2; DL-06-42] With tools, every attack roll
+(Strike, Grapple, Force) at an able creature or person carries a field: *starts the fight*, yes or no, and the start
+band. Left blank with no fight on: the fight starts, at the default band, logged `not_chosen:fight.starts` (and
+`not_chosen:fight.to` for the band). With a fight already on, the field is ignored. The DM may still start a fight any
+other way, whenever it likes (an ambush, a foe striking first), with `change fight`. Code never decides that a fight
+began from the words of a beat, only from this field, the tool, or its logged default (constitution VIII.9). Default
+start band by the chosen verb and weapon ids: `band.engaged` for a Grapple, a Force or a melee Strike; the weapon's
+first band (T-06-6) for a ranged Strike.
 
 **06.2.2 Tempo.** `[D]` Handler `h.06.tempo_setup`. Tempo is the one value Wits derives (00.4.4).
 - Each adversary has a static **tempo DC** = `10 + Wits + competence(deed.martial.tactics.reading or
@@ -442,7 +450,9 @@ for anyone placed otherwise; code never reads a band from the scene's words, con
 scene has established: a participant the PC was speaking
 with at arm's length is `band.engaged` only if a weapon was already at a throat, else `band.close`;
 someone across a room is `near`; someone across a field or on a far wall is `far`. Default when
-the DM states none: `band.near`, logged (`not_chosen:fight.to`). Flags are set only from recorded facts (a participant on a gallery feature
+the DM states none [revision: R2-M2; DL-06-42]: for a fight started by an attack roll, the band of the attack's own
+default (06.2.1: `band.engaged` for a Grapple, a Force or a melee Strike; the weapon's first band for a ranged
+Strike); for a fight started by `change fight` alone, `band.near`; each logged (`not_chosen:fight.to`). Flags are set only from recorded facts (a participant on a gallery feature
 gets `flag.elevated`). *Worst case (J):* one band (class i).
 
 **06.3.10 Size.** `[D]` [DL-06-30; C:VII; revision: I-065] Every creature has a **size** from a six-rung ladder stored in its template
@@ -506,6 +516,10 @@ License check:      basic verb: verb.strike (anchor card 01.18.8). From the sadd
 Decisions (J):      1. IN REACH [D after a J:enum of weapon]: the weapon's bands (T-06-6) must include
                        the band to the target. If not: G4 for this beat, redirect "Move first (1
                        action), or throw it, or pick another target". Nothing is spent.
+                       [revision: R2-M2; DL-06-42] Only a RECORDED band out of reach refuses. A band never
+                       recorded is an omitted detail (D3): a melee Strike at someone with no band on record
+                       takes `band.engaged`, logged `not_chosen:fight.to`, and the attack goes ahead. The
+                       roll also carries the start-the-fight field (06.2.1).
                     2. ATTRIBUTE [J:enum] Might | Agility. Agility only when the weapon is `finesse`,
                        thrown or shot (T-06-7), or the method is unarmed and precise. Default Might.
                        When both fit equally the frame uses the lower and names the other (00.4.5).
@@ -731,7 +745,8 @@ next rung, or an ability (01.18.8 "distinguish").
 
 **06.5.2 Grapple: seize and hold.** `[D]` + `[J:enum]` [DL-00A-19; C:P8; revision: I-065] *Anchor: yes.* Card 01.18.9.
 - **Needs** a free hand (or an `entangling` weapon, or jaws) and `band.engaged`. Against a larger
-  target: 06.3.10.
+  target: 06.3.10. No band on record to the target: `band.engaged`, logged; a recorded band short of it refuses
+  [revision: R2-M2; DL-06-42]. The roll carries the start-the-fight field (06.2.1).
 - **Ladder** (delivered reach): 1 → `cond.grabbed` S1; 2 → `cond.grabbed` S2; 3 → `cond.restrained`;
   4 → `cond.pinned`. The condition's source is the holder; its duration is `while` the hold lasts.
 - **The hold is state, not words** [revision: R2-J; DL-06-31]. Code applies the ladder's condition to the held one at
@@ -769,7 +784,8 @@ next rung, or an ability (01.18.8 "distinguish").
 
 **06.5.3 Shove, trip and throw (Force).** `[D]` [DL-00A-19; C:P8; revision: I-065] *Anchor: yes.* Card 01.18.10, against the higher of
 Might or Agility defense. Ladder: 1 → `cond.off_balance`; 2 → pushed **one band** away (the engagement
-link breaks) **or** `cond.prone`, the actor's choice declared in the beat (undeclared: pushed, logged as `not_chosen:force`) [revision: R2-M; DL-06-41]; 3 → pushed two bands, or
+link breaks) **or** `cond.prone`, the actor's choice declared in the beat (undeclared: pushed, logged as `not_chosen:force`) [revision: R2-M; DL-06-41]; the roll carries the
+start-the-fight field (06.2.1) and, with no band on record, takes `band.engaged`, logged [revision: R2-M2; DL-06-42]; 3 → pushed two bands, or
 prone and off-balance; 4 → as 3 and a follow-up lever. **Into or off something:** when a recorded
 `hazard` or `height` feature lies where the push sends the target (`[J:flag]`: *"Is the feature in
 the target's group or named as behind it?"*; uncertain → false; *worst case:* one push that should have
@@ -1649,8 +1665,10 @@ against the tier the template states (default Hard), Risky.
 ## Procedures
 
 **PR-06-1 Starting a conflict.** `[D]` (at `conflict_start`; handler `h.06.tempo_setup`)
+0. The trigger is the DM's `change fight`, or an attack roll whose start-the-fight field says yes or is left blank
+   with no fight on (06.2.1) [revision: R2-M2; DL-06-42]; code never starts a fight from a beat's words.
 1. List participants; assign sides; record each side's objective (06.13.2).
-2. For each participant other than the PC: set its band to the PC as the DM states it (06.3.9; default near, logged)
+2. For each participant other than the PC: set its band to the PC as the DM states it (06.3.9; default by the opening attack's verb and weapon, else near, logged)
    [revision: R2-M], and its group and flags from recorded scene facts, with `set_position`. Write engagement links for any pair already at
    blade's reach.
 3. Run the unaware test per participant (06.2.4); apply `cond.surprised`.

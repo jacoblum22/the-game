@@ -90,14 +90,21 @@ spawn, first reachable, infer; checked `--refs` of 06.9.1, 06.9.3, 06.3.9, 01.13
   `knows: <node id>` takes the reserve. 11.13.1: `/retire` exact or `end_game`; no `is_retire` regex. Check that the
   tools path never reaches 12.8.4's stalled-thread fallback bang (a code-fired event).
 
+## R2-M2: the attack roll starts the fight (owner ruling 2026-10-11, "Field on attacks")
+- Cause: live-check-1 (0 fights in 4 games; only `change fight` started one; 6 strikes refused "no position recorded").
+- Edited, tagged `[revision: R2-M2]`: 06.2.1 (new paragraph: the start-the-fight field on Strike, Grapple and Force; blank
+  with no fight on = starts, logged `not_chosen:fight.starts`; default band engaged for Grapple, Force, melee Strike,
+  the weapon's first band for a ranged Strike; `change fight` still starts one any time), 06.3.9 (default band),
+  06.4.3 decision 1 (only a RECORDED band out of reach refuses; no band on record takes engaged, logged), 06.5.2,
+  06.5.3, PR-06-1 (step 0 triggers; step 2 default). DL-06-42 added (DL-06-43/44 unused).
+- Appendix re-assembled, anchors recompiled, cards compiled last. Validator 0 ERROR / 0 WARN. Replays not re-recorded.
+- Engine (P8) to do: the field on attack tools; log `not_chosen:fight.starts`/`fight.to`; unrecorded band -> engaged
+  for melee; refuse only a recorded band out of reach. GUIDANCE grew again: re-record replays once after merge.
+
 ## Handoff
-- Done (single, last slice): T090-T097. Rules 06.9.1-06.9.4, 06.9.7, T-06-16 (new), PR-06-6, PR-06-1, 06.3.9, 06.5.3,
-  01.13.7, 01.9.3, 01.2.5, 00.12.3, 00.6.6, 09.7.1, WE-09-3, ch.07 intent (c), 11.13.1, 12.8.2, PR-12-3, PR-12-5 and
-  the pronoun rule, PR-12-12, 15.9.4. Data: `basic_verbs.yaml` (`target_kinds`, `covered_by`, `covered_by_effect`),
-  `resolution.yaml#reverses_goal`, SCHEMAS.md. DL-06-40, DL-06-41, DL-01-60..62, DL-12-160..162.
-- Appendix re-assembled, anchors recompiled, cards compiled last. Validator 0 ERROR / 0 WARN.
-- Next: engine phases per the checklist above (P1 contract table defaults; P2a, P2b, P3, P4, P5).
-- Traps: (1) the replay recordings offline_seed11 and offline_seed11_dmtools diverge (GUIDANCE grew with the rule
-  cards); re-record once, after the merge, never from two phases. (2) Working copy is CRLF; write new lines as CRLF.
-  (3) The plan's REFUSED/re-ask cells for `force`, fight `to` and `cost_form` are superseded by D3 in the rules.
-  (4) Behavior-list defaults include non-melee rows (Windup, Flank, Reload): P3 skips rows outside T-06-16.
+- Done: R2-M (T090-T097; DL-06-40, -41, DL-01-60..62, DL-12-160..162) and R2-M2 (DL-06-42: attack roll states
+  whether it starts the fight; unrecorded band = engaged, logged; only a recorded band out of reach refuses).
+  Cards: 06.2.1, 06.3.9, 06.4.3, 06.5.2, 06.5.3, PR-06-1. Appendix, anchors, cards compiled; validator 0 ERROR / 0 WARN.
+- Next: engine P8 (field on attack tools, defaults, logs); orchestrator re-records the two replays once after merge.
+- Traps: working copy is CRLF; the plan's REFUSED cells for `force`, fight `to`, `cost_form` are superseded by D3;
+  behavior-list defaults include non-melee rows (P3 skips rows outside T-06-16).
